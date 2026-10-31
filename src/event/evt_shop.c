@@ -802,11 +802,11 @@ void point_disp(WinMgrEntry* entry) {
 #endif
     PSMTXTrans(m, 124.0f + entry->x, entry->y - 38.0f, 0.0f);
     iconNumberDispGx(m, wp->points, FALSE, shop_point_num_color);
-    diff = pouch->mShopPoints - wp->points;
+    diff = pouch->shopPoints - wp->points;
     if (diff) {
         diff /= 10;
         if (!diff) {
-            diff = pouch->mShopPoints > wp->points ? 1 : -1;
+            diff = pouch->shopPoints > wp->points ? 1 : -1;
         }
         wp->points += diff;
     }
@@ -1084,7 +1084,7 @@ USER_FUNC(point_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
     PouchData* pouch = pouchGetPtr();
     ShopWork* wp = _wp;
-    wp->points = pouch->mShopPoints;
+    wp->points = pouch->shopPoints;
     if (on) {
         winMgrOpen(wp->win[2]);
     } else {
@@ -1100,7 +1100,7 @@ USER_FUNC(point_disp_onoff) {
 USER_FUNC(point_wait) {
     ShopWork* wp = _wp;
     PouchData* pouch = pouchGetPtr();
-    if (wp->points != pouch->mShopPoints) {
+    if (wp->points != pouch->shopPoints) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
         return EVT_RETURN_BLOCK;
     }
@@ -1125,7 +1125,7 @@ USER_FUNC(shop_flag_onoff) {
 USER_FUNC(get_shop_point) {
     EvtWord* args = event->args;
     PouchData* pouch = pouchGetPtr();
-    evtSetValue(event, args[0], pouch->mShopPoints);
+    evtSetValue(event, args[0], pouch->shopPoints);
     return EVT_RETURN_DONE;
 }
 
@@ -1150,9 +1150,9 @@ USER_FUNC(add_shop_point) {
     if (!strncmp(gp->currentMapName, "rsh_03", 6) && swGet(0xFC) && rshSaleMs < 900000) { // GSWF_SHOP_RSH_03_DOUBLE_POINTS_SALE
         add *= 2;
     }
-    pouch->mShopPoints += add;
-    if (pouch->mShopPoints > 300) {
-        pouch->mShopPoints = 300;
+    pouch->shopPoints += add;
+    if (pouch->shopPoints > 300) {
+        pouch->shopPoints = 300;
     }
     return EVT_RETURN_DONE;
 }
@@ -1160,7 +1160,7 @@ USER_FUNC(add_shop_point) {
 /** Clears Mario's shop points and the prizes claimed, after the 300-point prize. */
 USER_FUNC(reset_shop_point) {
     PouchData* pouch = pouchGetPtr();
-    pouch->mShopPoints = 0;
+    pouch->shopPoints = 0;
     pouch->shopPointRewardFlags = 0;
     return EVT_RETURN_DONE;
 }
@@ -1180,8 +1180,8 @@ USER_FUNC(chk_shop_point) {
     s32 v;
 
     for (p = shopPointList; (v = p->pts) != -1; i++, p++) {
-        if (v <= pouch->mShopPoints && !(pouch->shopPointRewardFlags & (1 << i))) {
-            if (pouch->mShopPoints != 300) {
+        if (v <= pouch->shopPoints && !(pouch->shopPointRewardFlags & (1 << i))) {
+            if (pouch->shopPoints != 300) {
                 evtSetValue(event, args[0], 0);
                 evtSetValue(event, args[1], p->item);
                 evtSetValue(event, args[2], (EvtWord)msgSearch(itemDataTable[p->item].name));
@@ -1209,7 +1209,7 @@ USER_FUNC(exchange_shop_point) {
     s32 v;
 
     for (p = shopPointList; (v = p->pts) != -1; i++, p++) {
-        if (v <= pouch->mShopPoints && !(pouch->shopPointRewardFlags & (1 << i))) {
+        if (v <= pouch->shopPoints && !(pouch->shopPointRewardFlags & (1 << i))) {
             pouch->shopPointRewardFlags |= (1 << i);
             return EVT_RETURN_DONE;
         }

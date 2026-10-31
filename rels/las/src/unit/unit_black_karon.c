@@ -54,14 +54,14 @@ static EvtWord wait_event[6];
  * names its parts, status table and init script.
  */
 BattleUnitKind unit_black_karon = {
-    UNIT_DARK_BONES, // mUnitType
+    UNIT_DARK_BONES, // unitType
     "btl_un_black_karon", // name
     20, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    34, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    34, // level
+    0, // bonusExp
     3, // bonusCoin
     100, // bonusCoinRate
     3, // baseCoin
@@ -96,7 +96,7 @@ BattleUnitKind unit_black_karon = {
     kUndead, // attributeFlags
     &regist, // statusVulnerability
     6, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -157,9 +157,9 @@ static BattleWeapon weapon_honenoko_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -181,7 +181,7 @@ static BattleWeapon weapon_honenoko_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -194,9 +194,9 @@ static BattleWeapon weapon_honenoko_link_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -218,7 +218,7 @@ static BattleWeapon weapon_honenoko_link_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -226,7 +226,7 @@ static BattleWeapon weapon_honenoko_link_attack = {
  * Setup used to spawn a Dry Bones (called by the Dark Bones): unit kind, alliance, position and turn phase.
  */
 static BattleUnitSetup entry_honenoko = {
-    &unit_karon, // mUnitKindParams
+    &unit_karon, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -964,7 +964,7 @@ static USER_FUNC(honenoko_copy_status) {
     BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
     BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
 
-    unit2->mSizeChangeTurns = unit1->mSizeChangeTurns;
-    unit2->mSizeChangeStrength = unit1->mSizeChangeStrength;
+    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
+    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
     return EVT_RETURN_DONE;
 }

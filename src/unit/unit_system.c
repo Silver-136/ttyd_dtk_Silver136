@@ -27,14 +27,14 @@ static BattleUnitKindPart parts[] = {
  * it exists to run battle-wide scripts.
  */
 BattleUnitKind unit_system = {
-    UNIT_SYSTEM, // mUnitType
+    UNIT_SYSTEM, // unitType
     "btl_un_system", // name
     999, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    0, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    0, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -69,7 +69,7 @@ BattleUnitKind unit_system = {
     kNoGravityBob | kActsInZeroGravity | kUnitNoHpGauge | kUnitNoncombatant | kUnitHpFixed, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };

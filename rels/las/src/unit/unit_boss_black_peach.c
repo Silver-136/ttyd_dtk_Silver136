@@ -241,14 +241,14 @@ EvtWord queen_hand_small_wait_event[6];
  * names its parts, status table and init script.
  */
 BattleUnitKind unit_boss_black_peach = {
-    UNIT_SHADOW_QUEEN_PEACH, // mUnitType
+    UNIT_SHADOW_QUEEN_PEACH, // unitType
     "btl_un_black_peach", // name
     150, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    0, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    0, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -283,7 +283,7 @@ BattleUnitKind unit_boss_black_peach = {
     0, // attributeFlags
     &peach_regist, // statusVulnerability
     7, // numParts
-    peach_parts, // mParts
+    peach_parts, // parts
     peach_init_event, // initEventCode
     peach_data_table, // dataTable
 };
@@ -385,9 +385,9 @@ BattleWeapon weapon_peach_black_thunder_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {7, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -410,7 +410,7 @@ BattleWeapon weapon_peach_black_thunder_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -430,9 +430,9 @@ BattleWeapon weapon_peach_black_energy_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -460,7 +460,7 @@ BattleWeapon weapon_peach_black_energy_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -477,9 +477,9 @@ BattleWeapon weapon_peach_drain_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {7, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -501,7 +501,7 @@ BattleWeapon weapon_peach_drain_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -513,9 +513,9 @@ BattleWeapon weapon_peach_dark_drag_attack = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -537,7 +537,7 @@ BattleWeapon weapon_peach_dark_drag_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -549,9 +549,9 @@ BattleWeapon weapon_peach_dark_drag_last_attack = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -574,7 +574,7 @@ BattleWeapon weapon_peach_dark_drag_last_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -586,9 +586,9 @@ BattleWeapon weapon_peach_dark_charge_attack = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -610,7 +610,7 @@ BattleWeapon weapon_peach_dark_charge_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -627,9 +627,9 @@ BattleWeapon weapon_peach_black_wave_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {7, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -651,7 +651,7 @@ BattleWeapon weapon_peach_black_wave_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -667,9 +667,9 @@ BattleWeapon weapon_peach_black_sigh_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -697,7 +697,7 @@ BattleWeapon weapon_peach_black_sigh_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -713,9 +713,9 @@ BattleWeapon weapon_peach_black_temptation_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -744,7 +744,7 @@ BattleWeapon weapon_peach_black_temptation_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -760,9 +760,9 @@ BattleWeapon weapon_peach_black_poison_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -791,7 +791,7 @@ BattleWeapon weapon_peach_black_poison_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -808,9 +808,9 @@ BattleWeapon weapon_peach_black_press_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {7, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -832,7 +832,7 @@ BattleWeapon weapon_peach_black_press_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -849,9 +849,9 @@ BattleWeapon weapon_peach_black_1000hand_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -877,7 +877,7 @@ BattleWeapon weapon_peach_black_1000hand_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1511,7 +1511,7 @@ BattleUnitKindPart queen_hand_small_parts[] = {
 
 /** Setup used to spawn the Shadow Queen: unit kind, alliance, position and turn phase. */
 BattleUnitSetup entry_shadow_queen = {
-    &unit_boss_shadow_queen, // mUnitKindParams
+    &unit_boss_shadow_queen, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -1523,7 +1523,7 @@ BattleUnitSetup entry_shadow_queen = {
 
 /** Setup used to spawn the Shadow Queen's first big hand: unit kind, alliance, position and turn phase. */
 BattleUnitSetup entry_shadow_hand_1 = {
-    &unit_boss_shadow_hand_1, // mUnitKindParams
+    &unit_boss_shadow_hand_1, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -1535,7 +1535,7 @@ BattleUnitSetup entry_shadow_hand_1 = {
 
 /** Setup used to spawn the Shadow Queen's second big hand: unit kind, alliance, position and turn phase. */
 BattleUnitSetup entry_shadow_hand_2 = {
-    &unit_boss_shadow_hand_2, // mUnitKindParams
+    &unit_boss_shadow_hand_2, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -1547,7 +1547,7 @@ BattleUnitSetup entry_shadow_hand_2 = {
 
 /** Setup used to spawn the Shadow Queen's small hand: unit kind, alliance, position and turn phase. */
 BattleUnitSetup entry_shadow_hand_small = {
-    &unit_boss_shadow_hand_small, // mUnitKindParams
+    &unit_boss_shadow_hand_small, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase

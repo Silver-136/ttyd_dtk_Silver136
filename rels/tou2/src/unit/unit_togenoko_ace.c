@@ -63,14 +63,14 @@ static EvtWord wait_event[6];
  * and event data table.
  */
 BattleUnitKind unit_togenoko_ace = {
-    UNIT_DARK_KOOPATROL, // mUnitType
+    UNIT_DARK_KOOPATROL, // unitType
     "btl_un_togenoko_ace", // name
     25, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    30, // mLevel
-    1, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    30, // level
+    1, // bonusExp
     3, // bonusCoin
     70, // bonusCoinRate
     2, // baseCoin
@@ -105,7 +105,7 @@ BattleUnitKind unit_togenoko_ace = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -364,9 +364,9 @@ static BattleWeapon weapon_togenoko_normal_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -389,7 +389,7 @@ static BattleWeapon weapon_togenoko_normal_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -402,9 +402,9 @@ static BattleWeapon weapon_togenoko_shell_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -427,7 +427,7 @@ static BattleWeapon weapon_togenoko_shell_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -439,9 +439,9 @@ static BattleWeapon weapon_togenoko_charge = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -463,7 +463,7 @@ static BattleWeapon weapon_togenoko_charge = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -575,7 +575,7 @@ EVT_END()
  * position.
  */
 static BattleUnitSetup entry_togenoko = {
-    &unit_togenoko_ace, // mUnitKindParams
+    &unit_togenoko_ace, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase

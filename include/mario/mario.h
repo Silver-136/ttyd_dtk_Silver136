@@ -428,8 +428,8 @@ typedef struct MarioWork {
     s32 screenZ;                   // 0x170
     Vec floorMove;                 // 0x174, per-frame position correction: moving floor, evt_mario_set_hosei_xyz
     f32 baseSpeed;                 // 0x180, same on US
-    f32 mBaseWalkSpeed;            // 0x184
-    f32 mBaseDashSpeed;            // 0x188, same on US
+    f32 baseWalkSpeed;            // 0x184
+    f32 baseDashSpeed;            // 0x188, same on US
     f32 moveDist;                  // 0x18C, distance to move this frame (marioMove)
 #ifdef VERSION_G8ME01
     f32 jumpStartSpeed;            // 0x190 US only (+4 from here): baseSpeed at jump start

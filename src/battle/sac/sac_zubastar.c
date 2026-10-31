@@ -64,7 +64,7 @@ typedef struct ZSLine {
 typedef struct ZubaStarWork {
     /* 0x000 */ u8 pad0[0x4];
     /* 0x004 */ s32 phase;
-    /* 0x008 */ s32 f8;
+    /* 0x008 */ s32 phaseCount;
     /* 0x00C */ s32 acTimer;
     /* 0x010 */ s32 level;
     /* 0x014 */ s32 count;
@@ -78,10 +78,10 @@ typedef struct ZubaStarWork {
     /* 0x084 */ f32 gauge;
     /* 0x088 */ f32 gaugeV;
     /* 0x08C */ f32 gaugeAcc;
-    /* 0x090 */ f32 f90;
+    /* 0x090 */ f32 unused90;
     /* 0x094 */ Vec gaugePos; // gauge screen position
     /* 0x0A0 */ u8 alpha;
-    /* 0x0A1 */ u8 fa1;
+    /* 0x0A1 */ u8 gaugeBlink;
     /* 0x0A4 */ s32 sfx;
     /* 0x0A8 */ ZSObj* ptrs[200];
     /* 0x3C8 */ ZSLine lines[16];
@@ -115,9 +115,9 @@ BattleWeapon weapon_zubastar = {
     6, // baseSpCost
     0, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPower_ZubaStar, // hpDamageFn
     {0, 3, 6, 9, 12, 15, 0, 0}, // hpDamageWork
@@ -138,7 +138,7 @@ BattleWeapon weapon_zubastar = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_ZubaStar, // mAttackEvtScript
+    marioAttackEvent_ZubaStar, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy);
@@ -175,7 +175,7 @@ static USER_FUNC(main_star) {
         w->timer = 0;
         w->eff = effStarStoneEntry(6, 0.0f, -1000.0f, 0.0f, 1.0f);
         BtlUnit_GetPos(mario, &w->pos.x, &w->pos.y, &w->pos.z);
-        w->pos.y += mario->mSizeMultiplier * mario->mHeight + 37.0f;
+        w->pos.y += mario->sizeMultiplier * mario->height + 37.0f;
         w->start = w->pos;
         w->end = w->pos;
         w->end.y += 50.0f;
@@ -437,7 +437,7 @@ USER_FUNC(zubastar_main) {
         break;
     case 5:
         w->phase = 6;
-        w->f8 = 0;
+        w->phaseCount = 0;
         if (w->gaugeState == 0) {
             w->gaugeState = 5;
         }
@@ -504,7 +504,7 @@ USER_FUNC(zubastar_main) {
     case 21:
         if (w->cursor.timer == 20) {
             w->phase = 25;
-            w->f8 = 0;
+            w->phaseCount = 0;
         }
         break;
     case 25: {
@@ -596,8 +596,8 @@ USER_FUNC(zubastar_main) {
     }
     case 26:
         if (w->cursor.timer == 30) {
-            w->f8++;
-            if (w->f8 >= 3) {
+            w->phaseCount++;
+            if (w->phaseCount >= 3) {
                 w->phase = 33;
             } else {
                 w->phase = 25;
@@ -628,13 +628,13 @@ USER_FUNC(zubastar_main) {
     case 36:
         if (w->cursor.timer == 30) {
             w->phase = 38;
-            w->f8 = 60;
+            w->phaseCount = 60;
             btl_camera_shake_h(0, 5.0f, 5.0f, 60, 0);
         }
         break;
     case 38:
-        w->f8--;
-        if (w->f8 <= 0) {
+        w->phaseCount--;
+        if (w->phaseCount <= 0) {
             w->phase = 40;
         }
         break;
@@ -730,12 +730,12 @@ USER_FUNC(zubastar_main) {
         w->gaugeState = 6;
         w->gaugeTimer = 0;
         w->gaugePos = (Vec){-1000.0f, 0.0f, 0.0f};
-        w->f90 = 200.0f;
+        w->unused90 = 200.0f;
         w->gauge = 0.0f;
         w->gaugeV = 0.0f;
         w->gaugeAcc = -1.0f;
         w->alpha = 255;
-        w->fa1 = 0;
+        w->gaugeBlink = 0;
         break;
     case 6:
         w->gaugeTimer++;
@@ -757,9 +757,9 @@ USER_FUNC(zubastar_main) {
         if (w->gaugeV < 0.0f) {
             w->gaugeV = 0.0f;
         }
-        w->fa1++;
-        if (w->fa1 >= 8) {
-            w->fa1 = 0;
+        w->gaugeBlink++;
+        if (w->gaugeBlink >= 8) {
+            w->gaugeBlink = 0;
         }
         if (w->gauge <= 0.0f) {
             w->gauge = 0.0f;
@@ -780,7 +780,7 @@ USER_FUNC(zubastar_main) {
         w->gauge = 100.0f;
         w->gaugeV = 0.0f;
         w->gaugeAcc = 0.0f;
-        w->fa1 = 0;
+        w->gaugeBlink = 0;
         w->gaugeTimer++;
         w->gaugePos.x = intplGetValue(EASING_QUADRATIC_OUT, 50.0f, -1000.0f, w->gaugeTimer, 30);
         if (w->gaugeTimer >= 30) {
@@ -1018,7 +1018,7 @@ void zubastar_disp2D(CameraId cam, void* param) {
     ZSLine* l;
     s32 i;
     if (w->gaugeState >= 5) {
-        s32 icon = (w->fa1 <= 3U) ? ICON_BUTTON_A : ICON_BUTTON_A_PRESSED;
+        s32 icon = (w->gaugeBlink <= 3U) ? ICON_BUTTON_A : ICON_BUTTON_A_PRESSED;
         Vec pos = {0.0f, 0.0f, 0.0f};
         pos.x = w->gaugePos.x - 200.0f;
         pos.y = 60.0f + w->gaugePos.y;

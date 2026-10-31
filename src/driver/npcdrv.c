@@ -116,13 +116,13 @@ void npcReleaseFiledNpc(void) {
             if (entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_READY && animPoseGetAnimPosePtr(entry->poseId)->paperId == -1) {
                 if (entry->poseId >= 0) {
                     pose = animPoseGetAnimPosePtr(entry->poseId);
-                    field->mFlags = pose->flags;
+                    field->flags = pose->flags;
                     field->peraRotY = pose->peraRotY;
                     field->rotationY = pose->rotationY;
                     field->scaleZFlip = pose->scaleZFlip;
                     field->peraTargetRotY = pose->peraTargetRotY;
-                    strcpy(field->mModelName, animPoseGetAnimBaseDataPtr(entry->poseId)->fileName);
-                    strcpy(field->mAnimName, animPoseGetCurrentAnim(entry->poseId)->name);
+                    strcpy(field->modelName, animPoseGetAnimBaseDataPtr(entry->poseId)->fileName);
+                    strcpy(field->animName, animPoseGetCurrentAnim(entry->poseId)->name);
                     animPoseRelease(entry->poseId);
                     field++; // next release_wp entry
                     entry->poseId = -1;
@@ -149,10 +149,10 @@ void npcRecoveryFiledNpc(void) {
         entry = wp->entries;
         for (i = 0; i < wp->total; i++, entry++) {
             if (entry->flags & NPC_FLAG_IN_USE && entry->flags & NPC_FLAG_READY && entry->poseId == -1) {
-                entry->poseId = animPoseEntry(field->mModelName, 0);
-                animPoseSetAnim(entry->poseId, field->mAnimName, TRUE);
+                entry->poseId = animPoseEntry(field->modelName, 0);
+                animPoseSetAnim(entry->poseId, field->animName, TRUE);
                 pose = animPoseGetAnimPosePtr(entry->poseId);
-                pose->flags = field->mFlags;
+                pose->flags = field->flags;
                 pose->peraRotY = field->peraRotY;
                 pose->rotationY = field->rotationY;
                 pose->scaleZFlip = field->scaleZFlip;
@@ -2133,7 +2133,7 @@ void fbatTalkMode(void) {
     }
 }
 
-#define NPC_ENEMY_LEVEL(npc) ((npc)->battleInfo.groupSetup->enemyData->mUnitKindParams->mLevel)
+#define NPC_ENEMY_LEVEL(npc) ((npc)->battleInfo.groupSetup->enemyData->unitKindParams->level)
 
 void marioChgMoveMotion(void);
 
@@ -2226,13 +2226,13 @@ void fbatBattleMode(void) {
             info = &data->info;
             if (!(cur->battleInfo.battleFlags & NPC_BATTLE_NO_BUMP_ATTACK)) {
                 if (pouchEquipCheckBadge(ITEM_BUMP_ATTACK) &&
-                    cur->battleInfo.groupSetup->enemyData->mUnitKindParams->mLevel < pouch->level) {
+                    cur->battleInfo.groupSetup->enemyData->unitKindParams->level < pouch->level) {
                     skip = TRUE;
                     win = TRUE;
                     goto decided;
                 }
                 if (pouchEquipCheckBadge(ITEM_FIRST_ATTACK) && ((u32)data->hitKind & FBAT_HIT_MARIO_FIRST) &&
-                    cur->battleInfo.groupSetup->enemyData->mUnitKindParams->mLevel < pouch->level) {
+                    cur->battleInfo.groupSetup->enemyData->unitKindParams->level < pouch->level) {
                     skip = TRUE;
                     win = TRUE;
                     goto decided;
@@ -2274,7 +2274,7 @@ void fbatBattleMode(void) {
             if (!gp->inBattle) {
                 data->merleeCoinBonus = 0;
                 result = BattleInformationGetResult(&data->info);
-                if (pouch->mMerleeNextCurseType == 4 && result == BATTLE_RESULT_WIN) {
+                if (pouch->merleeNextCurseType == 4 && result == BATTLE_RESULT_WIN) {
                     data->subState = 3;
                     data->merleeCoinBonus = 1;
                     evt = evtEntry(_evt_majinai_coin_up_effect, 0, 0);
@@ -3034,7 +3034,7 @@ void npcSetupBattleInfo(NpcEntry* npc, NpcSetupBattleInfo* setup) {
         }
         npc->baseCoinCount = 0;
         if (info->groupSetup) {
-            npc->baseCoinCount = info->groupSetup->enemyData->mUnitKindParams->baseCoin;
+            npc->baseCoinCount = info->groupSetup->enemyData->unitKindParams->baseCoin;
         }
         npc->flags |= NPC_FLAG_STOP_FOR_EVENT;
     }
@@ -3281,7 +3281,7 @@ USER_FUNC(_check) {
     EvtWord* args = event->args;
     s32 index = *args++;
 
-    if (pouchGetPtr()->mMerleeCurseUsesRemaining) {
+    if (pouchGetPtr()->merleeCurseUsesRemaining) {
         evtSetValue(event, index, 0);
     } else {
         evtSetValue(event, index, 1);

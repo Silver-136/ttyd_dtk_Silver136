@@ -55,7 +55,7 @@ USER_FUNC(_get_defence_ac_result) {
     s32 var = args[0];
     s32 result = 0;
 
-    switch (wp->actionCommands.mDefenseResult) {
+    switch (wp->actionCommands.defenseResult) {
         case 1:
             result = 2;
             break;
@@ -83,9 +83,9 @@ USER_FUNC(_config_key_record) {
     BattleWork* wp = _battleWorkPointer;
     BattleWorkPad* pad = &wp->actionCommands.pad;
 
-    wp->actionCommands.mDefenseResult = 4;
+    wp->actionCommands.defenseResult = 4;
     BtlPad_WorkInit(pad);
-    pad->mButtonsPressedHistory[0] = record;
+    pad->buttonsPressedHistory[0] = record;
     return EVT_RETURN_DONE;
 }
 
@@ -94,14 +94,14 @@ USER_FUNC(_config_key_record) {
  * 10 HP, level 1, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
 BattleUnitKind unit_lecture_christine = {
-    UNIT_TUTORIAL_GOOMBELLA, // mUnitType
+    UNIT_TUTORIAL_GOOMBELLA, // unitType
     "btl_un_christine", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -136,7 +136,7 @@ BattleUnitKind unit_lecture_christine = {
     kUnitNoHpGauge, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -188,7 +188,7 @@ static BattleUnitKindPart parts[] = {
 
 /** Setup entry that adds Prof. Frankly at (0, 0, -45) when the tutorial battle starts. */
 BattleUnitSetup entry_lecture_frankli = {
-    &unit_lecture_frankli, // mUnitKindParams
+    &unit_lecture_frankli, // unitKindParams
     ALLIANCE_NEUTRAL, // alliance
     {0}, // pad_05
     BATTLE_PHASE_BEFORE_PLAYER, // attackPhase
@@ -304,9 +304,9 @@ BattleWeapon lec_weapon_zutsuki_1 = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {1, 1, 1, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -328,7 +328,7 @@ BattleWeapon lec_weapon_zutsuki_1 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -341,9 +341,9 @@ BattleWeapon lec_weapon_zutsuki_2 = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {1, 1, 1, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -365,7 +365,7 @@ BattleWeapon lec_weapon_zutsuki_2 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -592,7 +592,7 @@ USER_FUNC(_set_lecture_mode) {
     s32 id = BattleTransID(event, UNIT_ID_MARIO);
     BattleUnit* unit = BattleGetUnitPtr(wp, id);
 
-    unit->mAttributeFlags |= kUnitHpFixed;
+    unit->attributeFlags |= kUnitHpFixed;
     wp->lectureMode = 1;
     return EVT_RETURN_DONE;
 }

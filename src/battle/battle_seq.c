@@ -127,7 +127,7 @@ const BattleWeapon weapon_lucky_start = {
     3, // fpRegenTime
     2, // fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -228,7 +228,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
-            if ((unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL) &&
+            if ((unit->statusFlags & UNIT_STATUS_FLAG_PERIL) &&
                 !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
                 !BtlUnit_GetBelong(unit)) {
                 if (unit->currentKind == UNIT_MARIO ||
@@ -256,7 +256,7 @@ void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience) {
         for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             unit = BattleGetUnitPtr(wp, i);
             if (unit) {
-                if ((unit->mStatusFlags & UNIT_STATUS_FLAG_DANGER) &&
+                if ((unit->statusFlags & UNIT_STATUS_FLAG_DANGER) &&
                     !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
                     !BtlUnit_GetBelong(unit)) {
                     if (unit->currentKind == UNIT_MARIO ||
@@ -436,7 +436,7 @@ void btlseqFirstAct(BattleWork* wp) {
             wp->flags |= BATTLE_FLAG_FIRST_ATTACK;
             BattleGetFirstAttackUnit(wp, &a, &b);
             wp->activeUnitId = a->unitId;
-            a->mTokenFlags |= kCurrentlyActing;
+            a->tokenFlags |= kCurrentlyActing;
             evt = evtEntry(b->damageEventCode, 10, EVENT_START_IMMEDIATE);
             if (evt) {
                 evt->unitId = b->unitId;
@@ -445,7 +445,7 @@ void btlseqFirstAct(BattleWork* wp) {
             }
             a->flags |= BATTLE_UNIT_FLAG_ACTING;
             if (type < FIRST_ATTACK_ENEMY) {
-                a->attackEventCode = _GetFirstAttackWeapon(type)->mAttackEvtScript;
+                a->attackEventCode = _GetFirstAttackWeapon(type)->attackEvtScript;
                 a->attackEventFlags = 0;
                 BattleStatusWindowEventOff();
             }
@@ -1600,7 +1600,7 @@ void btlseqTurn(BattleWork* wp) {
                 if ((unit && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL))) && (unit->currentHp > 0)) {
                     BtlUnit_GetStatus(unit, STATUS_HP_REGEN, &turns, &strength);
                     if (strength > 0) {
-                        if (!(unit->mAttributeFlags & kUnitHpFixed)) {
+                        if (!(unit->attributeFlags & kUnitHpFixed)) {
                             unit->hpGauge.prevHp = unit->currentHp;
                             BtlUnit_RecoverHp(unit, strength);
                             unit->hpGauge.targetHp = unit->currentHp;
@@ -1611,7 +1611,7 @@ void btlseqTurn(BattleWork* wp) {
                             BtlUnit_RecoverHp(unit, strength);
                         }
                         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &hpX, &hpY, &hpZ);
-                        hpY += unit->mSizeMultiplier * (BtlUnit_GetHeight(unit) + 5);
+                        hpY += unit->sizeMultiplier * (BtlUnit_GetHeight(unit) + 5);
                         effRecoveryEntry(0, strength, hpX, hpY, hpZ);
                         evt = evtEntry(subsetevt_regeneration, 10, 0);
                         if (evt) {
@@ -1641,7 +1641,7 @@ void btlseqTurn(BattleWork* wp) {
                     if (strength > 0) {
                         BtlUnit_RecoverFp(unit, strength);
                         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &fpX, &fpY, &fpZ);
-                        fpY += unit->mSizeMultiplier * (BtlUnit_GetHeight(unit) + 5);
+                        fpY += unit->sizeMultiplier * (BtlUnit_GetHeight(unit) + 5);
                         effRecoveryEntry(1, strength, fpX, fpY, fpZ);
                         evt = evtEntry(subsetevt_regeneration, 10, 0);
                         if (evt) {
@@ -1687,7 +1687,7 @@ void btlseqTurn(BattleWork* wp) {
                             unit->currentHp = unit->maxHp;
                         }
                         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &heartX, &heartY, &heartZ);
-                        heartY += unit->mSizeMultiplier * BtlUnit_GetHeight(unit);
+                        heartY += unit->sizeMultiplier * BtlUnit_GetHeight(unit);
                         effRecoveryEntry(0, n, heartX, heartY, heartZ);
                         evt = evtEntry(subsetevt_happy_heart, 10, 0);
                         if (evt) {
@@ -1729,7 +1729,7 @@ void btlseqTurn(BattleWork* wp) {
                     if (n > 0) {
                         BtlUnit_RecoverFp(unit, n);
                         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &flowerX, &flowerY, &flowerZ);
-                        flowerY += unit->mSizeMultiplier * BtlUnit_GetHeight(unit);
+                        flowerY += unit->sizeMultiplier * BtlUnit_GetHeight(unit);
                         effRecoveryEntry(1, n, flowerX, flowerY, flowerZ);
                         evt = evtEntry(subsetevt_happy_flower, 10, 0);
                         if (evt) {
@@ -1914,7 +1914,7 @@ void btlseqMove(BattleWork* wp) {
             case 0x5000002:
                 pouch = pouchGetPtr();
                 mario = BattleGetMarioPtr(wp);
-                if (pouch->mMerleeNextCurseType != 2 || BattleGetSeq(wp, SEQ_PHASE) != BATTLE_PHASE_ENEMY) {
+                if (pouch->merleeNextCurseType != 2 || BattleGetSeq(wp, SEQ_PHASE) != BATTLE_PHASE_ENEMY) {
                     BattleIncSeq(wp, SEQ_MOVE);
                     BattleIncSeq(wp, SEQ_MOVE);
                     loop = TRUE;
@@ -1986,7 +1986,7 @@ void btlseqMove(BattleWork* wp) {
                 for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (unit) {
-                        unit->mTokenFlags &= 0x80002000;
+                        unit->tokenFlags &= 0x80002000;
                         unit->totalHpDamageTaken = 0;
                         unit->hpDamageTaken = 0;
                         unit->hpDamageCount = 0;
@@ -2004,7 +2004,7 @@ void btlseqMove(BattleWork* wp) {
                         unit = BattleGetUnitPtr(wp, id);
                         if (unit && unit->movesRemaining > 0) {
                             state = unit->moveState;
-                            if (state != 10 && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->mAttributeFlags & kUndead))) {
+                            if (state != 10 && (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->attributeFlags & kUndead))) {
                                 if (state != 1) {
                                     break;
                                 }
@@ -2014,7 +2014,7 @@ void btlseqMove(BattleWork* wp) {
                     }
                 }
                 wp->activeUnitId = id;
-                BattleGetUnitPtr(wp, id)->mTokenFlags |= kCurrentlyActing;
+                BattleGetUnitPtr(wp, id)->tokenFlags |= kCurrentlyActing;
                 BattleIncSeq(wp, SEQ_MOVE);
                 BattleSetSeq(wp, SEQ_ACT, 0x6000000);
                 for (i = 0; i < BATTLE_UNIT_MAX; i++) {
@@ -2063,7 +2063,7 @@ void btlseqMove(BattleWork* wp) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (unit) {
                         BtlUnit_SetTotalHitDamage(unit, 0);
-                        unit->mTokenFlags &= ~kCurrentlyActing;
+                        unit->tokenFlags &= ~kCurrentlyActing;
                     }
                 }
                 end = BattlePhaseEndCheck();
@@ -2174,9 +2174,9 @@ void btlseqAct(BattleWork* wp) {
                 }
                 if (cantMove) {
                     BattleSetSeq(wp, SEQ_ACT, 0x6000003);
-                } else if (unit->mAttributeFlags & kVeiled) {
+                } else if (unit->attributeFlags & kVeiled) {
                     BattleSetSeq(wp, SEQ_ACT, 0x6000004);
-                } else if (unit->currentKind == UNIT_VIVIAN && (BattleGetMarioPtr(wp)->mAttributeFlags & kVeiled)) {
+                } else if (unit->currentKind == UNIT_VIVIAN && (BattleGetMarioPtr(wp)->attributeFlags & kVeiled)) {
                     BattleSetSeq(wp, SEQ_ACT, 0x6000004);
                 } else if (unit->flippedTurns) {
                     BattleSetSeq(wp, SEQ_ACT, 0x6000005);
@@ -2223,7 +2223,7 @@ void btlseqAct(BattleWork* wp) {
             }
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
             evt = NULL;
-            if ((wp->flags & BATTLE_FLAG_ZERO_GRAVITY_UNUSED) && !(unit->mAttributeFlags & kActsInZeroGravity) &&
+            if ((wp->flags & BATTLE_FLAG_ZERO_GRAVITY_UNUSED) && !(unit->attributeFlags & kActsInZeroGravity) &&
                 !(unit->attackEventFlags & ACT_EVENT_IN_ZERO_GRAVITY) && !(unit->attackEventFlags & ACT_EVENT_ALWAYS)) {
                 evt = evtEntry(btldefaultevt_CantMoveZeroGravity, 10, 0);
             } else if (unit->attackEventFlags & ACT_EVENT_ALWAYS) {
@@ -2235,12 +2235,12 @@ void btlseqAct(BattleWork* wp) {
             } else if (!BtlUnit_CheckStatus(unit, STATUS_SLEEP) &&
                 !BtlUnit_CheckStatus(unit, STATUS_STOP) &&
                 !BtlUnit_CheckStatus(unit, STATUS_FREEZE) &&
-                (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->mAttributeFlags & kUndead))) {
+                (!BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) || (unit->attributeFlags & kUndead))) {
                 // BUG: irand(100) < 0 never holds, so an electrified unit never runs btldefaultevt_BiribiriMove
                 if (BtlUnit_CheckStatus(unit, STATUS_ELECTRIC) && irand(100) < 0) {
                     evt = evtEntry(btldefaultevt_BiribiriMove, 10, 0);
                 } else if (BtlUnit_CheckStatus(unit, STATUS_CONFUSE) && irand(100) < 50) {
-                    unit->mTokenFlags |= kConfusedAction;
+                    unit->tokenFlags |= kConfusedAction;
                     evt = evtEntry(unit->confusionEventCode, 10, 0);
                 } else {
                     evt = evtEntry(unit->attackEventCode, 10, 0);
@@ -2277,9 +2277,9 @@ void btlseqAct(BattleWork* wp) {
             unit = BattleGetUnitPtr(wp, wp->activeUnitId);
             if (unit) {
                 unit->flags &= ~BATTLE_UNIT_FLAG_ACTING;
-                if (unit->mTokenFlags & kChargeExpended) {
+                if (unit->tokenFlags & kChargeExpended) {
                     BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
-                    unit->mTokenFlags &= ~kChargeExpended;
+                    unit->tokenFlags &= ~kChargeExpended;
                 }
                 if (wp->majinaiState == 1) {
                     wp->majinaiState = 0;
@@ -2317,14 +2317,14 @@ void btlseqAct(BattleWork* wp) {
                         }
                         if (unit->movesRemaining <= 0) {
                             unit->moveState = 10;
-                            if (!(unit->mTokenFlags & kHasRallyWinkStatus)) {
+                            if (!(unit->tokenFlags & kHasRallyWinkStatus)) {
                                 unit->activeTurns = 0;
                             } else {
-                                unit->mTokenFlags &= ~kHasRallyWinkStatus;
+                                unit->tokenFlags &= ~kHasRallyWinkStatus;
                             }
                             if (!BtlUnit_GetBelong(unit) && unit->attackPhase == BATTLE_PHASE_PLAYER &&
                                 !BattlePhaseEndCheck() && !(wp->flags & BATTLE_FLAG_RESET_TURN)) {
-                                unit->mMoveColorLv = 0x60;
+                                unit->moveColorLv = 0x60;
                             }
                         }
                     }
@@ -2413,7 +2413,7 @@ void btlseqTurnFirstProcess(BattleWork* wp) {
         if (unit) {
             unit->activeTurns++;
             BtlUnit_ResetMoveStatus(unit);
-            kind = unit->mKindParams;
+            kind = unit->kindParams;
             unit->movePriority = kind->turnOrder + irand(kind->turnOrderVariance) - kind->turnOrderVariance / 2;
             if (BtlUnit_CheckStatusFlag(unit, UNIT_STATUS_FLAG_DEFEND)) {
                 BtlUnit_OffStatusFlag(unit, UNIT_STATUS_FLAG_DEFEND);
@@ -2438,15 +2438,15 @@ void btlseqPhaseFirstProcess(BattleWork* wp) {
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
-            unit->mMoveColorLv = 0xFF;
+            unit->moveColorLv = 0xFF;
             if (unit->moveState == 10 && !BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
                 continue;
             }
             if (unit->attackPhase == BattleGetSeq(wp, SEQ_PHASE) &&
-                !(unit->mAttributeFlags & kNoTurn)) {
+                !(unit->attributeFlags & kNoTurn)) {
                 wp->movePriorityQueue[count] = unit->unitId;
                 unit->protectId = -1;
-                for (part = unit->mParts; part; part = part->mNextPart) {
+                for (part = unit->parts; part; part = part->nextPart) {
                     if (part->poseId != -1) {
                         part->poseSound.flag = 1;
                     }
@@ -2531,7 +2531,7 @@ void battleMakePhaseEvtTable(BattleWork* wp) {
     count = 0;
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && !(unit->mAttributeFlags & kNoTurn)) {
+        if (unit && !(unit->attributeFlags & kNoTurn)) {
             table[count].unitId = i;
             BtlUnit_GetHomePos(unit, &x, &y, &z);
             if (x >= 0.0f) {
@@ -2676,10 +2676,10 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
         if (wp->alliances[i].allianceId & 1) {
             for (j = 0; j < BATTLE_UNIT_MAX; j++) {
                 unit = BattleGetUnitPtr(wp, j);
-                if (unit && unit->mAlliance == i &&
+                if (unit && unit->alliance == i &&
                     !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
-                    !(unit->mAttributeFlags & kInactive) &&
-                    !(unit->mAttributeFlags & kUnitNoncombatant)) {
+                    !(unit->attributeFlags & kInactive) &&
+                    !(unit->attributeFlags & kUnitNoncombatant)) {
                     break;
                 }
             }
@@ -2692,10 +2692,10 @@ BOOL BattleCheckConcluded(BattleWork* wp) {
         if (wp->alliances[i].allianceId & 2) {
             for (j = 0; j < BATTLE_UNIT_MAX; j++) {
                 unit = BattleGetUnitPtr(wp, j);
-                if (unit && unit->mAlliance == i &&
-                    (unit->mAttributeFlags & kUnitLeader) &&
+                if (unit && unit->alliance == i &&
+                    (unit->attributeFlags & kUnitLeader) &&
                     !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) &&
-                    !(unit->mAttributeFlags & kUnitNoncombatant)) {
+                    !(unit->attributeFlags & kUnitNoncombatant)) {
                     break;
                 }
             }
@@ -2723,8 +2723,8 @@ void _mapobj_data_touch_scale(s32 layer) {
 
     for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
         obj = &wp->stageObjects[i];
-        if (obj->id > 0 && obj->data->mLayer == layer) {
-            obj->mFlags |= 2;
+        if (obj->id > 0 && obj->data->layer == layer) {
+            obj->flags |= 2;
         }
     }
 }
@@ -2795,9 +2795,9 @@ USER_FUNC(_set_haikei_entry_scale) {
                 }
                 for (i = 0; i < 32; i++) {
                     obj = &wp->stageObjects[i];
-                    if (obj->id > 0 && obj->data->mLayer == 0) {
+                    if (obj->id > 0 && obj->data->layer == 0) {
                         mapObjScale(obj->data->name, sx / 100.0f, sy / 100.0f, 1.0f);
-                        obj->mFlags |= 2;
+                        obj->flags |= 2;
                     }
                 }
             }
@@ -2831,9 +2831,9 @@ USER_FUNC(_set_haikei_entry_scale) {
                 }
                 for (i = 0; i < 32; i++) {
                     obj = &wp->stageObjects[i];
-                    if (obj->id > 0 && obj->data->mLayer == 1) {
+                    if (obj->id > 0 && obj->data->layer == 1) {
                         mapObjScale(obj->data->name, sx / 100.0f, sy / 100.0f, 1.0f);
-                        obj->mFlags |= 2;
+                        obj->flags |= 2;
                     }
                 }
             }

@@ -365,9 +365,9 @@ void marioSetForceMove(f32 dir, s32 time, f32 speed) {
         return;
     } else {
 #ifdef VERSION_G8ME01
-        marioChgMot(speed >= mp->mBaseDashSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
+        marioChgMot(speed >= mp->baseDashSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
 #else
-        marioChgMot(speed > mp->mBaseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
+        marioChgMot(speed > mp->baseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
 #endif
         mp->moveDirection = dir;
         mp->directionView = dir;

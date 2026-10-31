@@ -73,14 +73,14 @@ EvtWord dead_subevent[48];
  * parts and init event.
  */
 BattleUnitKind unit_boss_gesso = {
-    UNIT_BLOOPER, // mUnitType
+    UNIT_BLOOPER, // unitType
     "btl_un_gesso", // name
     12, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    41, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    41, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -115,7 +115,7 @@ BattleUnitKind unit_boss_gesso = {
     kUnitNoSpin, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -358,7 +358,7 @@ EVT_END()
  * starts off-screen on the enemy side until the Blooper moves it into place.
  */
 BattleUnitSetup entry_gesso_left_arm_entry_data = {
-    &unit_boss_gesso_left_arm, // mUnitKindParams
+    &unit_boss_gesso_left_arm, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -373,7 +373,7 @@ BattleUnitSetup entry_gesso_left_arm_entry_data = {
  * starts off-screen on the enemy side until the Blooper moves it into place.
  */
 BattleUnitSetup entry_gesso_right_arm_entry_data = {
-    &unit_boss_gesso_right_arm, // mUnitKindParams
+    &unit_boss_gesso_right_arm, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -590,9 +590,9 @@ BattleWeapon weapon_gesso_ikasumi_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -615,7 +615,7 @@ BattleWeapon weapon_gesso_ikasumi_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -771,9 +771,9 @@ USER_FUNC(_test_rtn) {
         target->mScale.y -= 0.02f;
         target->mScale.z -= 0.02f;
     }
-    target->mPosition.x += 0.1f * keyGetStickX(2);
-    target->mPosition.y += 0.1f * keyGetSubStickY(2);
-    target->mPosition.z -= 0.1f * keyGetStickY(2);
+    target->position.x += 0.1f * keyGetStickX(2);
+    target->position.y += 0.1f * keyGetSubStickY(2);
+    target->position.z -= 0.1f * keyGetStickY(2);
     BattlePadMultiCheckTrigger(2, PAD_BUTTON_A);
     return EVT_RETURN_BLOCK;
 }

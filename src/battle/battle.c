@@ -441,7 +441,7 @@ BattleUnit* BattleGetMarioPtr(BattleWork* wp) {
     BattleUnit* unit;
     for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit != NULL && unit->currentKind == UNIT_MARIO && unit->mAlliance == ALLIANCE_PLAYER) {
+        if (unit != NULL && unit->currentKind == UNIT_MARIO && unit->alliance == ALLIANCE_PLAYER) {
             return unit;
         }
     }
@@ -455,7 +455,7 @@ BattleUnit* BattleGetPartyPtr(BattleWork* wp) {
     for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit != NULL && !(unit->flags & BATTLE_UNIT_FLAG_SWAPPED_OUT) && unit->currentKind >= TYPE_PARTNER_MIN &&
-            unit->currentKind < TYPE_PARTNER_MAX && unit->mAlliance == ALLIANCE_PLAYER) {
+            unit->currentKind < TYPE_PARTNER_MAX && unit->alliance == ALLIANCE_PLAYER) {
             return unit;
         }
     }
@@ -477,7 +477,7 @@ BattleUnit* BattleGetPartnerPtr(BattleWork* wp, BattleUnit* unit) {
 BOOL BattlePartyAnimeLoad(s32 partyId) {
     BattleUnitSetup* setup = &entryunit_party[partyId - TYPE_PARTNER_MIN];
 
-    return animEffectAsync(setup->mUnitKindParams->mParts->modelName, 1);
+    return animEffectAsync(setup->unitKindParams->parts->modelName, 1);
 }
 
 /**
@@ -521,7 +521,7 @@ BattleUnit* BattleChangeParty(BattleWork* wp) {
     unit->activeTurns = party->activeTurns;
     BtlUnit_SetParamToPouch(party);
     party->flags |= BATTLE_UNIT_FLAG_SWAPPED_OUT;
-    unit->mMoveColorLv = party->mMoveColorLv;
+    unit->moveColorLv = party->moveColorLv;
     unit->moveColorLvDisp = party->moveColorLvDisp;
     return unit;
 }
@@ -1003,64 +1003,64 @@ u8 BattleMajinaiCheck(void) {
     PouchData* pouch = pouchGetPtr();
     BattleWork* wp = _battleWorkPointer;
     s32 r;
-    if (pouch->mMerleeCurseUsesRemaining == 0) {
+    if (pouch->merleeCurseUsesRemaining == 0) {
         return 0;
     }
-    if (pouch->mTurnsUntilMerleeActivation < 0) {
-        pouch->mMerleeNextCurseType = 0;
-        pouch->mTurnsUntilMerleeActivation = irand(5) + 6;
-        pouch->mTurnsUntilMerleeActivation--;
+    if (pouch->turnsUntilMerleeActivation < 0) {
+        pouch->merleeNextCurseType = 0;
+        pouch->turnsUntilMerleeActivation = irand(5) + 6;
+        pouch->turnsUntilMerleeActivation--;
         return 0;
     }
-    if (pouch->mMerleeNextCurseType != 0) {
-        return pouch->mMerleeNextCurseType;
+    if (pouch->merleeNextCurseType != 0) {
+        return pouch->merleeNextCurseType;
     }
-    pouch->mTurnsUntilMerleeActivation--;
-    if (pouch->mTurnsUntilMerleeActivation > 0) {
+    pouch->turnsUntilMerleeActivation--;
+    if (pouch->turnsUntilMerleeActivation > 0) {
         return 0;
     }
-    pouch->mTurnsUntilMerleeActivation = 0;
+    pouch->turnsUntilMerleeActivation = 0;
     if (wp->fbatInfo->setup->battleFlags & NPC_BATTLE_MERLEE_SAFE_CURSE_UNUSED) {
         r = irand(100);
         if (r < 45) {
-            pouch->mMerleeNextCurseType = 1;
+            pouch->merleeNextCurseType = 1;
         } else if (r < 90) {
-            pouch->mMerleeNextCurseType = 2;
+            pouch->merleeNextCurseType = 2;
         } else {
-            pouch->mMerleeNextCurseType = 3;
+            pouch->merleeNextCurseType = 3;
         }
     } else {
         r = irand(100);
         if (r < 30) {
-            pouch->mMerleeNextCurseType = 1;
+            pouch->merleeNextCurseType = 1;
         } else if (r < 60) {
-            pouch->mMerleeNextCurseType = 2;
+            pouch->merleeNextCurseType = 2;
         } else if (r < 80) {
-            pouch->mMerleeNextCurseType = 3;
+            pouch->merleeNextCurseType = 3;
         } else {
-            pouch->mMerleeNextCurseType = 4;
+            pouch->merleeNextCurseType = 4;
         }
     }
-    return pouch->mMerleeNextCurseType;
+    return pouch->merleeNextCurseType;
 }
 
 /** Uses up one of Merlee's charms and resets the countdown for the next. */
 void BattleMajinaiDone(void) {
     PouchData* pouch = pouchGetPtr();
-    pouch->mMerleeCurseUsesRemaining--;
-    if (pouch->mMerleeCurseUsesRemaining != 0) {
-        pouch->mTurnsUntilMerleeActivation = -1;
-        pouch->mMerleeNextCurseType = 0;
+    pouch->merleeCurseUsesRemaining--;
+    if (pouch->merleeCurseUsesRemaining != 0) {
+        pouch->turnsUntilMerleeActivation = -1;
+        pouch->merleeNextCurseType = 0;
     } else {
-        pouch->mTurnsUntilMerleeActivation = -1;
-        pouch->mMerleeNextCurseType = 0;
+        pouch->turnsUntilMerleeActivation = -1;
+        pouch->merleeNextCurseType = 0;
     }
 }
 
 /** Flags the battle when Merlee's last charm has been used, so the end-of-charm notice can show. */
 void BattleMajinaiEndCheck(void) {
     BattleWork* wp = _battleWorkPointer;
-    if (pouchGetPtr()->mMerleeCurseUsesRemaining == 0) {
+    if (pouchGetPtr()->merleeCurseUsesRemaining == 0) {
         wp->flags |= BATTLE_FLAG_MAJINAI_END;
     }
 }

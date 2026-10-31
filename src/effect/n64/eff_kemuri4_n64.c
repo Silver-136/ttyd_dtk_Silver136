@@ -28,7 +28,7 @@ typedef struct EffKemuri4N64Work {
     f32 rotSpeed;    // 0x60
     f32 moveScale;   // 0x64
     f32 holdOnStay;  // 0x68, 1.0 at entry, 0 once velocity < 0; while set, type 0 puffs freeze (timer held) while Mario is in MARIO_MOTION_STAY
-    f32 field_6C;    // 0x6C
+    f32 reserved_6C;    // 0x6C
     f32 velocity;    // 0x70
     f32 accel;       // 0x74
     f32 accel2;      // 0x78
@@ -109,7 +109,7 @@ EffectEntry* effKemuri4N64Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 fl
     for (i = 0; i < 1; i++, work++) {
         work->active = 1;
         work->type = type;
-        work->field_6C = 0.0f;
+        work->reserved_6C = 0.0f;
         work->position.x = x;
         work->position.y = y;
         work->position.z = z;

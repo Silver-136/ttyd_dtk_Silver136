@@ -40,14 +40,14 @@ EvtWord lecture_end_event[51];
  * 10 HP, level 1, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
 BattleUnitKind unit_lecture_frankli = {
-    UNIT_TUTORIAL_FRANKLY_B2, // mUnitType
+    UNIT_TUTORIAL_FRANKLY_B2, // unitType
     "btl_un_frankli", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -82,7 +82,7 @@ BattleUnitKind unit_lecture_frankli = {
     kUnitNoHpGauge | kUnitNoncombatant, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -141,9 +141,9 @@ BattleWeapon _lec_weapon_jump = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioJumpLv, // hpDamageFn
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
@@ -165,7 +165,7 @@ BattleWeapon _lec_weapon_jump = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    lecAttackEvent_Jump, // mAttackEvtScript
+    lecAttackEvent_Jump, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -179,9 +179,9 @@ BattleWeapon _lec_weapon_hammer = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -203,7 +203,7 @@ BattleWeapon _lec_weapon_hammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    lecAttackEvent_Hammer, // mAttackEvtScript
+    lecAttackEvent_Hammer, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

@@ -9,34 +9,34 @@
 
 typedef struct BattleStageObjectData {
     char* name; //0x0
-    u16 mSpawnSpecialUnitType; //0x4
-    u16 mLayer; //0x8
-    Vec mPosition; //0xC
-    u8 mNumFramesToStartFalling; //0x14
-    u8 mNumFramesToFall; //0x15
+    u16 spawnSpecialUnitType; //0x4
+    u16 layer; //0x8
+    Vec position; //0xC
+    u8 numFramesToStartFalling; //0x14
+    u8 numFramesToFall; //0x15
     u8 pad_16[2]; //0x16
 } BattleStageObjectData;
 
 typedef struct BattleStageObject {
     s32 id; //0x0
-    Vec mPosition; //0x4
-    Vec positionOffset; //0x10, added to mPosition for mapObjTranslate
-    Vec mRotation; //0x1C
+    Vec position; //0x4
+    Vec positionOffset; //0x10, added to position for mapObjTranslate
+    Vec rotation; //0x1C
     Vec positionOffset2; //0x28, second offset (btlevtcmd stage-object position)
     Vec prevPosition; //0x34, change detection
     Vec prevPositionOffset; //0x40
     Vec prevRotation; //0x4C
     Vec prevPositionOffset2; //0x58
     BattleStageObjectData* data; //0x64
-    u32 mFlags; //0x68
-    s32 mBattleUnitIdx; //0x6C
-    u8 mNumFramesToStartFalling; //0x70
-    u8 mNumFramesFalling; //0x71
+    u32 flags; //0x68
+    s32 battleUnitIdx; //0x6C
+    u8 numFramesToStartFalling; //0x70
+    u8 numFramesFalling; //0x71
     u8 reserved_72; //0x72, only set to 0
-    u8 mShakePeriodLength; //0x73
-    u8 mShakePeriodPosition; //0x74
+    u8 shakePeriodLength; //0x73
+    u8 shakePeriodPosition; //0x74
     u8 pad_75[3]; //0x75, never accessed
-    f32 mShakeAngle; //0x78
+    f32 shakeAngle; //0x78
 } BattleStageObject;
 
 // one weapon of the stage tables; the tables initialise `weapon`

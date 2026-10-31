@@ -169,14 +169,14 @@ BattleUnitKindPart unitpartsdata_Mario[] = {
  * three parts, Mario's hit sounds, required for clearing the battle and shown without an enemy HP gauge.
  */
 BattleUnitKind unitdata_Mario = {
-    UNIT_MARIO, // mUnitType
+    UNIT_MARIO, // unitType
     "btl_un_mario", // name
     10, // maxHp
     5, // maxFp
-    5, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    5, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -211,7 +211,7 @@ BattleUnitKind unitdata_Mario = {
     kUnitLeader | kUnitNoHpGauge, // attributeFlags
     &regist, // statusVulnerability
     3, // numParts
-    unitpartsdata_Mario, // mParts
+    unitpartsdata_Mario, // parts
     init_event, // initEventCode
     data_table_mario, // dataTable
 };

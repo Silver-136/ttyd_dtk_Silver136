@@ -56,8 +56,8 @@ static USER_FUNC(togezo_copy_status) {
     BattleUnit* sourceUnit = BattleGetUnitPtr(wp, sourceId);
     BattleUnit* destinationUnit = BattleGetUnitPtr(wp, destinationId);
 
-    destinationUnit->mSizeChangeTurns = sourceUnit->mSizeChangeTurns;
-    destinationUnit->mSizeChangeStrength = sourceUnit->mSizeChangeStrength;
+    destinationUnit->sizeChangeTurns = sourceUnit->sizeChangeTurns;
+    destinationUnit->sizeChangeStrength = sourceUnit->sizeChangeStrength;
     return EVT_RETURN_DONE;
 }
 
@@ -66,14 +66,14 @@ static USER_FUNC(togezo_copy_status) {
  * data table.
  */
 BattleUnitKind unit_jyugem = {
-    UNIT_LAKITU, // mUnitType
+    UNIT_LAKITU, // unitType
     "btl_un_jyugem", // name
     5, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    11, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    11, // level
+    0, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -108,7 +108,7 @@ BattleUnitKind unit_jyugem = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     2, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -215,9 +215,9 @@ static BattleWeapon weapon_jyugem_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -239,7 +239,7 @@ static BattleWeapon weapon_jyugem_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -248,7 +248,7 @@ static BattleWeapon weapon_jyugem_attack = {
  * kind, side, turn phase and starting position.
  */
 static BattleUnitSetup entry_togezo = {
-    &unit_togezo, // mUnitKindParams
+    &unit_togezo, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase

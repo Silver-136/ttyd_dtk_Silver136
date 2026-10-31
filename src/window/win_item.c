@@ -187,7 +187,7 @@ void winItemInit(WindowWork* w) {
     w->item.mailScroll = w->item.mailScrollTgt = 0.0f;
     for (i = 0; i < w->item.mailNum; i++) {
         w->item.mail[i].kind = w->item.mailNum - i - 1;
-        w->item.mail[i].id = pouchGetPtr()->mEmailIds[w->item.mailNum - i - 1];
+        w->item.mail[i].id = pouchGetPtr()->emailIds[w->item.mailNum - i - 1];
     }
     w->item.useItem = 0;
     winMakeSkipList(w);

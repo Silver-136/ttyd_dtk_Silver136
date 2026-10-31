@@ -2431,9 +2431,9 @@ USER_FUNC(senteresa_mario_spd) {
     f32 scale = (20 - g_nNumHarituku[0]) / 20.0f;
 
     if (mp->currMotionId == MARIO_MOTION_WALK) {
-        mp->baseSpeed = mp->mBaseWalkSpeed * scale;
+        mp->baseSpeed = mp->baseWalkSpeed * scale;
     } else if (mp->currMotionId == MARIO_MOTION_DASH) {
-        mp->baseSpeed = mp->mBaseDashSpeed * scale;
+        mp->baseSpeed = mp->baseDashSpeed * scale;
     }
     return EVT_RETURN_DONE;
 }

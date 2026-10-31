@@ -77,14 +77,14 @@ static USER_FUNC(_set_draw_callback) {
 
 /** Unit data of the Bob-ulk: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_giant_bomb = {
-    UNIT_BOB_ULK, // mUnitType
+    UNIT_BOB_ULK, // unitType
     "btl_un_giant_bomb", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    34, // mLevel
-    2, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    34, // level
+    2, // bonusExp
     5, // bonusCoin
     70, // bonusCoinRate
     0, // baseCoin
@@ -119,7 +119,7 @@ BattleUnitKind unit_giant_bomb = {
     0, // attributeFlags
     &regist, // statusVulnerability
     2, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -137,9 +137,9 @@ static BattleWeapon weapon_heavy_bomb_super_explosion = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -162,7 +162,7 @@ static BattleWeapon weapon_heavy_bomb_super_explosion = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 50, 50, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -177,9 +177,9 @@ static BattleWeapon weapon_heavy_bomb_guard = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -204,7 +204,7 @@ static BattleWeapon weapon_heavy_bomb_guard = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -216,9 +216,9 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -242,7 +242,7 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -254,9 +254,9 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -278,7 +278,7 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -834,7 +834,7 @@ EVT_END()
 
 static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling) {
     BattleUnitPart* part = userdata;
-    BattleUnit* unit = part->mOwner;
+    BattleUnit* unit = part->owner;
     const char* name;
     s32 poseId;
 

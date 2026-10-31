@@ -38,7 +38,7 @@ void* BattleEnemyUseItemCheck(BattleUnit* self) {
     if (weapon == NULL) {
         return NULL;
     }
-    if ((self->mTokenFlags & kConfusedAction) && !(weapon->special & SPECIAL_CONFUSED_ACTION)) {
+    if ((self->tokenFlags & kConfusedAction) && !(weapon->special & SPECIAL_CONFUSED_ACTION)) {
         return NULL;
     }
     switch (itemId) {
@@ -105,12 +105,12 @@ void* _check_hp_recover_item(BattleUnit* self) {
     weapon = itemDataTable[itemId].battle_params;
     BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
                         weapon->targetClassFlags, weapon->targetPropertyFlags,
-                        (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
+                        (s32)(s8)wp->alliances[self->alliance].attackDirection);
     for (i = 0; i < targets->numTargets; i++) {
         unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
-        if (!(self->mAttributeFlags & kInactive)) {
+        if (!(self->attributeFlags & kInactive)) {
             if (unit->currentHp < unit->maxHp) {
-                return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                return itemDataTable[itemId].battle_params->attackEvtScript;
             }
         }
     }
@@ -132,14 +132,14 @@ void* _check_fp_recover_item(BattleUnit* self) {
     weapon = itemDataTable[itemId].battle_params;
     BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
                         weapon->targetClassFlags, weapon->targetPropertyFlags,
-                        (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
+                        (s32)(s8)wp->alliances[self->alliance].attackDirection);
     for (i = 0; i < targets->numTargets; i++) {
         s32 max;
         unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
-        if (!(self->mAttributeFlags & kInactive)) {
+        if (!(self->attributeFlags & kInactive)) {
             max = BtlUnit_GetMaxFp(unit);
             if (BtlUnit_GetFp(unit) < max) {
-                return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                return itemDataTable[itemId].battle_params->attackEvtScript;
             }
         }
     }
@@ -164,22 +164,22 @@ void* _check_attack_item(BattleUnit* self) {
     weapon = itemDataTable[itemId].battle_params;
     BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
                         weapon->targetClassFlags, weapon->targetPropertyFlags,
-                        (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
+                        (s32)(s8)wp->alliances[self->alliance].attackDirection);
     if (targets->numTargets <= 0) {
         return NULL;
     }
     if (itemId == ITEM_POW_BLOCK || itemId == ITEM_EARTH_QUAKE) {
         for (i = 0; i < targets->numTargets; i++) {
             unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
-            if (unit->currentKind == UNIT_KOOPS && !(self->mAttributeFlags & kInactive) && !BtlUnit_CanActStatus(unit)) {
-                return itemDataTable[itemId].battle_params->mAttackEvtScript;
+            if (unit->currentKind == UNIT_KOOPS && !(self->attributeFlags & kInactive) && !BtlUnit_CanActStatus(unit)) {
+                return itemDataTable[itemId].battle_params->attackEvtScript;
             }
         }
     }
     if (irand(100) >= wp->turnCount * 20) {
         return NULL;
     }
-    return itemDataTable[itemId].battle_params->mAttackEvtScript;
+    return itemDataTable[itemId].battle_params->attackEvtScript;
 }
 
 /**
@@ -201,38 +201,38 @@ void* _check_status_attack_item(BattleUnit* self) {
     weapon = itemDataTable[itemId].battle_params;
     BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
                         weapon->targetClassFlags, weapon->targetPropertyFlags,
-                        (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
+                        (s32)(s8)wp->alliances[self->alliance].attackDirection);
     if (targets->numTargets <= 0) {
         return NULL;
     }
     for (i = 0; i < targets->numTargets; i++) {
         unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
-        if (!(self->mAttributeFlags & kInactive)) {
+        if (!(self->attributeFlags & kInactive)) {
             switch (itemId) {
             case ITEM_SLEEPY_SHEEP:
             case ITEM_STOPWATCH:
                 if (BtlUnit_CanActStatus(unit)) {
-                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                    return itemDataTable[itemId].battle_params->attackEvtScript;
                 }
                 break;
             case ITEM_MINI_MR_MINI:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_TINY)) {
-                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                    return itemDataTable[itemId].battle_params->attackEvtScript;
                 }
                 break;
             case ITEM_MR_SOFTENER:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN)) {
-                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                    return itemDataTable[itemId].battle_params->attackEvtScript;
                 }
                 break;
             case ITEM_RUIN_POWDER:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_CONFUSE)) {
-                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                    return itemDataTable[itemId].battle_params->attackEvtScript;
                 }
                 break;
             case ITEM_DIZZY_DIAL:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_DIZZY)) {
-                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                    return itemDataTable[itemId].battle_params->attackEvtScript;
                 }
                 break;
             }
@@ -260,37 +260,37 @@ void* _check_status_support_item(BattleUnit* self) {
     weapon = itemDataTable[itemId].battle_params;
     BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
                         weapon->targetClassFlags, weapon->targetPropertyFlags,
-                        (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
+                        (s32)(s8)wp->alliances[self->alliance].attackDirection);
     if (targets->numTargets <= 0) {
         return NULL;
     }
     for (i = 0; i < targets->numTargets; i++) {
         unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
-        if (!(self->mAttributeFlags & kInactive)) {
+        if (!(self->attributeFlags & kInactive)) {
             switch (itemId) {
             case ITEM_POWER_PUNCH:
                 if (BtlUnit_CanActStatus(unit) && !BtlUnit_CheckStatus(unit, STATUS_HUGE)) {
-                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                    return itemDataTable[itemId].battle_params->attackEvtScript;
                 }
                 break;
             case ITEM_COURAGE_SHELL:
                 if (!BtlUnit_CheckStatus(unit, STATUS_DEFENSE_UP)) {
-                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                    return itemDataTable[itemId].battle_params->attackEvtScript;
                 }
                 break;
             case ITEM_BOOS_SHEET:
                 if (!BtlUnit_CheckStatus(unit, STATUS_INVISIBLE)) {
-                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                    return itemDataTable[itemId].battle_params->attackEvtScript;
                 }
                 break;
             case ITEM_VOLT_SHROOM:
                 if (!BtlUnit_CheckStatus(unit, STATUS_ELECTRIC)) {
-                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                    return itemDataTable[itemId].battle_params->attackEvtScript;
                 }
                 break;
             case ITEM_REPEL_CAPE:
                 if (!BtlUnit_CheckStatus(unit, STATUS_DODGY)) {
-                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                    return itemDataTable[itemId].battle_params->attackEvtScript;
                 }
                 break;
             }
@@ -317,13 +317,13 @@ void* _check_status_recover_item(BattleUnit* self) {
     weapon = itemDataTable[itemId].battle_params;
     BattleSamplingEnemy(targets, weapon, self->unitId, BtlUnit_GetEnemyBelong(self),
                         weapon->targetClassFlags, weapon->targetPropertyFlags,
-                        (s32)(s8)wp->alliances[self->mAlliance].attackDirection);
+                        (s32)(s8)wp->alliances[self->alliance].attackDirection);
     if (targets->numTargets <= 0) {
         return NULL;
     }
     for (i = 0; i < targets->numTargets; i++) {
         unit = BattleGetUnitPtr(wp, targets->targets[targets->targetIndices[i]].unitIdx);
-        if (!(self->mAttributeFlags & kInactive)) {
+        if (!(self->attributeFlags & kInactive)) {
             switch (itemId) {
             case ITEM_TASTY_TONIC:
                 if (BtlUnit_CheckStatus(unit, STATUS_SLEEP) ||
@@ -337,7 +337,7 @@ void* _check_status_recover_item(BattleUnit* self) {
                     BtlUnit_CheckStatus(unit, STATUS_TINY) ||
                     BtlUnit_CheckStatus(unit, STATUS_DEFENSE_DOWN) ||
                     BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
-                    return itemDataTable[itemId].battle_params->mAttackEvtScript;
+                    return itemDataTable[itemId].battle_params->attackEvtScript;
                 }
                 break;
             }

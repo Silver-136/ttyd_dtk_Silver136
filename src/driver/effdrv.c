@@ -338,7 +338,7 @@ EffectSet* effGetSet(const char* name) {
 
 /**
  * per-key interpolation and the GQR5 setup were inlines in the original:
- * inline locals take the low registers, last declared lowest (qv0 f9 .. qm1 f12 above dt f8 / s f7 / s3 f6 / s2
+ * inline locals take the low registers, last declared lowest (qv0 f9 .. qm1 f12 above dt phaseCount / s f7 / s3 f6 / s2
  * f5; gqr r9 under the key-offset temp r10)
  */
 // Hermite interpolation of the 22 channels of two keys into buf (MayaHermitKey: value at +2, in/out tangents at

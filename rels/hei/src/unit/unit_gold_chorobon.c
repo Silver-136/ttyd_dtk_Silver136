@@ -50,14 +50,14 @@ static EvtWord wait_event[6];
  * 10 HP, level 27, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
 BattleUnitKind unit_gold_chorobon = {
-    UNIT_GOLD_FUZZY, // mUnitType
+    UNIT_GOLD_FUZZY, // unitType
     "btl_un_gold_chorobon", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    27, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    27, // level
+    0, // bonusExp
     10, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -92,7 +92,7 @@ BattleUnitKind unit_gold_chorobon = {
     kUnitLeader, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -194,9 +194,9 @@ BattleWeapon weapon_gold_chorobon_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -218,7 +218,7 @@ BattleWeapon weapon_gold_chorobon_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -286,7 +286,7 @@ EVT_END()
  * when the Gold Fuzzy calls for backup.
  */
 BattleUnitSetup entry_chorogun = {
-    &unit_chorobon_gundan, // mUnitKindParams
+    &unit_chorobon_gundan, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase

@@ -306,9 +306,9 @@ typedef struct NpcEntry {
 } NpcEntry;
 
 typedef struct NpcFieldEntry {
-    char mModelName[64];                // 0x0
-    char mAnimName[64];                 // 0x40
-    u32 mFlags;                         // 0x80
+    char modelName[64];                // 0x0
+    char animName[64];                 // 0x40
+    u32 flags;                         // 0x80
     f32 peraRotY;                       // 0x84, AnimPose fields saved by npcReleaseFiledNpc
     f32 rotationY;                      // 0x88
     f32 scaleZFlip;                     // 0x8C

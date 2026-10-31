@@ -157,9 +157,9 @@ void BSE_Sleep(BattleUnit* unit) {
         }
         wk = (f32*)unit->sleepEff->userdata;
         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &x, &y, &z);
-        dx = 0.5f * (unit->mSizeMultiplier * BtlUnit_GetWidth(unit));
-        dy = 0.95f * (unit->mSizeMultiplier * BtlUnit_GetHeight(unit));
-        if (unit->mAttributeFlags & kCeiling) {
+        dx = 0.5f * (unit->sizeMultiplier * BtlUnit_GetWidth(unit));
+        dy = 0.95f * (unit->sizeMultiplier * BtlUnit_GetHeight(unit));
+        if (unit->attributeFlags & kCeiling) {
             dy = 0.0f;
         }
         x += dx;
@@ -200,8 +200,8 @@ void BSE_Biribiri(BattleUnit* unit) {
         }
         wk = (f32*)unit->sparkEff->userdata;
         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &x, &y, &z);
-        dy = unit->mSizeMultiplier * (BtlUnit_GetHeight(unit) / 2);
-        if (unit->mAttributeFlags & kCeiling) {
+        dy = unit->sizeMultiplier * (BtlUnit_GetHeight(unit) / 2);
+        if (unit->attributeFlags & kCeiling) {
             dy = 0.0f;
         }
         y += dy;
@@ -242,9 +242,9 @@ void BSE_Fire(BattleUnit* unit) {
         }
         wk = (f32*)unit->fireEff->userdata;
         BtlUnit_GetPartsWorldPos(BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit)), &x, &y, &z);
-        x += unit->mSizeMultiplier * (unit->mKindParams->burnFlameOffset.x * (unit->faceDirection >= 0 ? 1.0f : -1.0f));
-        y += unit->mKindParams->burnFlameOffset.y * unit->mSizeMultiplier;
-        z += unit->mKindParams->burnFlameOffset.z * unit->mSizeMultiplier;
+        x += unit->sizeMultiplier * (unit->kindParams->burnFlameOffset.x * (unit->faceDirection >= 0 ? 1.0f : -1.0f));
+        y += unit->kindParams->burnFlameOffset.y * unit->sizeMultiplier;
+        z += unit->kindParams->burnFlameOffset.z * unit->sizeMultiplier;
         wk[1] = x;
         wk[2] = y;
         wk[3] = z + 5.0f;
@@ -282,10 +282,10 @@ void BSE_Freeze(BattleUnit* unit) {
         wk = (f32*)unit->iceEff->userdata;
         {
             BattleUnitPart* parts = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
-            widthScale = unit->mWidth / 20.0f;
-            heightScale = unit->mHeight / 36.0f;
+            widthScale = unit->width / 20.0f;
+            heightScale = unit->height / 36.0f;
             scale = widthScale <= heightScale ? widthScale : heightScale;
-            scale *= unit->mSizeMultiplier;
+            scale *= unit->sizeMultiplier;
             wk[4] = scale;
             BtlUnit_GetPartsWorldPos(parts, &x, &y, &z);
         }
@@ -314,7 +314,7 @@ void BSE_Kagegakure(BattleUnit* unit) {
     f32 x, y, z;
     BOOL on = FALSE;
 
-    if ((_battleWorkPointer->dispFlags & BATTLE_DISP_FLAG_COMMAND_MENU) && (unit->mAttributeFlags & kVeiled)) {
+    if ((_battleWorkPointer->dispFlags & BATTLE_DISP_FLAG_COMMAND_MENU) && (unit->attributeFlags & kVeiled)) {
         on = TRUE;
     }
     if (on) {
@@ -347,7 +347,7 @@ void BSE_KagegakureDelete(BattleUnit* unit) {
  * battle_seq.c calls it with active 1 for every living unit whose Burn strength is above 0.
  */
 void BSE_TurnFirstProcessEffectEntry(BattleUnit* unit, s16 active) {
-    unit->mBurnDamageFlameState = 1;
+    unit->burnDamageFlameState = 1;
     unit->mbBurnDamageFlameActive = active;
 }
 
@@ -367,7 +367,7 @@ BOOL BSE_TurnFirstProcessEffectMain(BattleUnit* unit) {
     u16 state;
 
     part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
-    state = unit->mBurnDamageFlameState;
+    state = unit->burnDamageFlameState;
     if (state == 0) {
         return FALSE;
     }
@@ -379,26 +379,26 @@ BOOL BSE_TurnFirstProcessEffectMain(BattleUnit* unit) {
     case 1:
         switch (state) {
         case 1:
-            unit->mBurnDamageFlameState = state + 1;
-            unit->mBurnDamageFlameScale = 1.0f;
+            unit->burnDamageFlameState = state + 1;
+            unit->burnDamageFlameScale = 1.0f;
             BtlUnit_GetPartsWorldPos(part, &x, &y, &z);
             z += 5.0f;
-            unit->mBurnDamageFlameEff = effFireEntry(0, 0, x, y, z, unit->mBurnDamageFlameScale);
-            unit->mBurnDamageFlameAnimTimer = 0;
+            unit->burnDamageFlameEff = effFireEntry(0, 0, x, y, z, unit->burnDamageFlameScale);
+            unit->burnDamageFlameAnimTimer = 0;
             break;
         case 2:
-            work = (f32*)unit->mBurnDamageFlameEff->userdata;
-            unit->mBurnDamageFlameAnimTimer++;
-            unit->mBurnDamageFlameScale = 1.6f * sinfd(unit->mBurnDamageFlameAnimTimer * 3) + 0.4f;
-            work[9] = unit->mBurnDamageFlameScale;
-            if (unit->mBurnDamageFlameAnimTimer >= 60) {
-                unit->mBurnDamageFlameState++;
+            work = (f32*)unit->burnDamageFlameEff->userdata;
+            unit->burnDamageFlameAnimTimer++;
+            unit->burnDamageFlameScale = 1.6f * sinfd(unit->burnDamageFlameAnimTimer * 3) + 0.4f;
+            work[9] = unit->burnDamageFlameScale;
+            if (unit->burnDamageFlameAnimTimer >= 60) {
+                unit->burnDamageFlameState++;
             }
             break;
         case 3:
-            effDelete(unit->mBurnDamageFlameEff);
-            unit->mBurnDamageFlameEff = NULL;
-            unit->mBurnDamageFlameState = 0;
+            effDelete(unit->burnDamageFlameEff);
+            unit->burnDamageFlameEff = NULL;
+            unit->burnDamageFlameState = 0;
             if (!BtlUnit_CheckShadowGuard(unit)) {
                 BattleDamageDirect(-5, unit, NULL, 1, 0, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_FIRE, 0, 1);
             }
@@ -557,7 +557,7 @@ void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed) {
     id = unit->currentKind;
     if (id == UNIT_MARIO) {
         msg->flags |= 1;
-    } else if (id >= TYPE_PARTNER_MIN && id < TYPE_PARTNER_MAX && unit->mAlliance == ALLIANCE_PLAYER) {
+    } else if (id >= TYPE_PARTNER_MIN && id < TYPE_PARTNER_MAX && unit->alliance == ALLIANCE_PLAYER) {
         msg->flags |= 2;
     } else {
         msg->flags |= 4;

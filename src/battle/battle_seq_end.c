@@ -219,7 +219,7 @@ void btlseqEnd(BattleWork* wp) {
         BattleSeqEndWork* nw;
         btlsubResetMoveColorLvAll(wp);
         mu = BattleGetMarioPtr(wp);
-        marioBelong = mu->mAlliance;
+        marioBelong = mu->alliance;
         enemyBelong = BtlUnit_GetEnemyBelong(mu);
         flags = wp->flags;
         if (flags & BATTLE_FLAG_DEMO_TIMEOUT) {
@@ -322,7 +322,7 @@ void btlseqEnd(BattleWork* wp) {
                 BtlUnit_SetStatus(mario, i, 0, 0);
             }
         }
-        if ((u32)mario->mAttributeFlags & kVeiled) {
+        if ((u32)mario->attributeFlags & kVeiled) {
             BattleUnit* p2 = BattleGetPartyPtr(wp);
             EventEntry* e;
             if (!p2) break;
@@ -343,7 +343,7 @@ void btlseqEnd(BattleWork* wp) {
         BattleInformationSetDropMaterial(info);
         pp = pouchGetPtr();
         mario = BattleGetMarioPtr(wp);
-        if (pp->mMerleeNextCurseType == 3) {
+        if (pp->merleeNextCurseType == 3) {
             EventEntry* e;
             wp->majinaiState = 3;
             BattleMajinaiDone();
@@ -451,13 +451,13 @@ void btlseqEnd(BattleWork* wp) {
             }
             if ((work->timer & 3) == 0 || work->timer >= 1000) {
                 work->expDisp = work->expDisp - 1;
-                pouch->mStarPoints = pouch->mStarPoints + 1;
+                pouch->starPoints = pouch->starPoints + 1;
                 if ((work->timer & 7) == 0) {
                     psndSFXOn("SFX_STAR_POINT_GET1");
                 }
             }
-            if (pouch->mStarPoints < 100) break;
-            pouch->mStarPoints = 0;
+            if (pouch->starPoints < 100) break;
+            pouch->starPoints = 0;
             work->levelUp = 1;
             if (pouch->level + 1 < 99) break;
             work->expDisp = 0;
@@ -670,10 +670,10 @@ void btlseqEnd(BattleWork* wp) {
         ok = 1;
         mario = BattleGetMarioPtr(wp);
         party2 = BattleGetPartyPtr(wp);
-        if (((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_PERIL)) {
+        if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
             ok = 0;
         } else if (party2) {
-            if (((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_PERIL) ||
+            if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL) ||
                 BtlUnit_CheckStatus(party2, STATUS_INSTANT_KILL)) {
                 ok = 0;
             }
@@ -692,10 +692,10 @@ void btlseqEnd(BattleWork* wp) {
         mario = BattleGetMarioPtr(wp);
         party = BattleGetPartyPtr(wp);
         if (mario) {
-            effRecoveryEntry(4, 0, mario->mPosition.x, 40.0f + mario->mPosition.y, mario->mPosition.z);
+            effRecoveryEntry(4, 0, mario->position.x, 40.0f + mario->position.y, mario->position.z);
         }
         if (party) {
-            effRecoveryEntry(4, 0, party->mPosition.x, 40.0f + party->mPosition.y, party->mPosition.z);
+            effRecoveryEntry(4, 0, party->position.x, 40.0f + party->position.y, party->position.z);
         }
         break;
     }
@@ -704,7 +704,7 @@ void btlseqEnd(BattleWork* wp) {
         if (work->timer == 0x78) {
             BattleUnit* mario = BattleGetMarioPtr(wp);
             if (mario) {
-                effRecoveryEntry(5, 0, mario->mPosition.x, 40.0f + mario->mPosition.y, mario->mPosition.z);
+                effRecoveryEntry(5, 0, mario->position.x, 40.0f + mario->position.y, mario->position.z);
             }
         }
         if (work->timer > 0) break;
@@ -732,10 +732,10 @@ void btlseqEnd(BattleWork* wp) {
         NpcBattleInfo* fd = wp->fbatInfo->setup;
         BattleUnit* mario = BattleGetMarioPtr(wp);
         BattleUnit* party = BattleGetPartyPtr(wp);
-        if (((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_PERIL)) {
+        if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
             ok = 0;
         } else if (party) {
-            if (((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->mStatusFlags & UNIT_STATUS_FLAG_PERIL) ||
+            if (((u32)mario->statusFlags & UNIT_STATUS_FLAG_DANGER) || ((u32)mario->statusFlags & UNIT_STATUS_FLAG_PERIL) ||
                 BtlUnit_CheckStatus(party, STATUS_INSTANT_KILL)) {
                 ok = 0;
             }
@@ -1498,19 +1498,19 @@ USER_FUNC(_disable_enemy_unit_disp) {
         kind = unit->currentKind;
         if (kind == UNIT_SYSTEM) continue;
         if (kind == UNIT_MARIO) continue;
-        if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX && unit->mAlliance == ALLIANCE_PLAYER && kind != UNIT_BOBBERY) continue;
+        if (kind >= TYPE_PARTNER_MIN && kind < TYPE_PARTNER_MAX && unit->alliance == ALLIANCE_PLAYER && kind != UNIT_BOBBERY) continue;
         data = BtlUnit_GetData(unit, UNIT_DATA_BATTLE_END_HIDE_EVENT);
         if (data) {
             evt = evtEntry(data, 10, 0);
             evt->unitId = unit->unitId;
         } else if (unit->currentKind != UNIT_BOBBERY) {
-            unit->mAttributeFlags |= (kUnitHidden | kUnitNoShadow);
+            unit->attributeFlags |= (kUnitHidden | kUnitNoShadow);
         }
     }
     obj = BattleSearchObjectPtr("if_body");
     if (obj) {
         wp->stageObjectWork.flags |= STAGE_FLAG_NO_IRON_FRAME;
-        obj->mFlags |= 1;
+        obj->flags |= 1;
         mapGrpFlagOn("if_body", MAP_OBJ_FLAG_HIDDEN);
         mapGrpFlagOn("if_wire", MAP_OBJ_FLAG_HIDDEN);
     }
@@ -1668,7 +1668,7 @@ USER_FUNC(_lvup_spot_move) {
     case 1:
         switch (n) {
         case 0:
-            e->pos.x = 0.5f * BattleGetMarioPtr(_battleWorkPointer)->mPosition.x;
+            e->pos.x = 0.5f * BattleGetMarioPtr(_battleWorkPointer)->position.x;
             e->pos.y = -20.0f;
             break;
         case 1:
@@ -1792,8 +1792,8 @@ USER_FUNC(_lvup_object_select_move) {
         event->userdata[1] = 60;
         event->userdata[2] = obj->pos.x;
         event->userdata[3] = obj->pos.z;
-        event->userdata[4] = mario->mPosition.x;
-        event->userdata[5] = mario->mPosition.z;
+        event->userdata[4] = mario->position.x;
+        event->userdata[5] = mario->position.z;
     }
     event->userdata[0]++;
     if (event->userdata[0] < event->userdata[1]) {
@@ -2020,7 +2020,7 @@ void _lvup_select_object_disp(CameraId camId, void* param) {
 void _check_audience_battle_end_exec(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleGroupSetup* group = wp->fbatInfo->setup->groupSetup;
-    s32 level = group->enemyData[0].mUnitKindParams->mLevel;
+    s32 level = group->enemyData[0].unitKindParams->level;
     s32 turn;
     s32 sum;
     s32 i;
@@ -2036,7 +2036,7 @@ void _check_audience_battle_end_exec(void) {
     sum = 0;
     unit = group->enemyData;
     for (i = 0; i < group->numEnemies; i++, unit++) {
-        sum += unit->mUnitKindParams->mLevel;
+        sum += unit->unitKindParams->level;
     }
     limit = sum * 2 / lv / 3;
     if (turn < limit) {
@@ -2107,7 +2107,7 @@ USER_FUNC(_check_guard_koura) {
     id = evtGetValue(event, args[0]);
     out = args[1];
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    if (!(unit->mAttributeFlags & kShellShielded)) {
+    if (!(unit->attributeFlags & kShellShielded)) {
         evtSetValue(event, out, -1);
         return 2;
     }

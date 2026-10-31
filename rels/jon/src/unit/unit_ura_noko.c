@@ -48,14 +48,14 @@ static EvtWord wait_event[6];
  * names its parts, status table and init script.
  */
 BattleUnitKind unit_ura_noko = {
-    UNIT_SHADY_KOOPA, // mUnitType
+    UNIT_SHADY_KOOPA, // unitType
     "btl_un_ura_noko", // name
     8, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    17, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    17, // level
+    0, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -90,7 +90,7 @@ BattleUnitKind unit_ura_noko = {
     kUnitLeader, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -210,9 +210,9 @@ static BattleWeapon weapon_nokonoko_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -235,7 +235,7 @@ static BattleWeapon weapon_nokonoko_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -248,9 +248,9 @@ static BattleWeapon weapon_ura_noko_ura_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -273,7 +273,7 @@ static BattleWeapon weapon_ura_noko_ura_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -784,7 +784,7 @@ static USER_FUNC(eff_aura) {
     work->position.x = x;
     work->position.y = y;
     work->position.z = z;
-    work->baseScale = unit->mSizeMultiplier;
+    work->baseScale = unit->sizeMultiplier;
     return EVT_RETURN_BLOCK;
 }
 

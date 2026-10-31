@@ -50,14 +50,14 @@ static EvtWord wait_event[6];
  * but no battle group of Boggly Woods places it.
  */
 static BattleUnitKind unit_pakkun_flower = {
-    UNIT_PIRANHA_PLANT, // mUnitType
+    UNIT_PIRANHA_PLANT, // unitType
     "btl_un_pakkun_flower", // name
     15, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    33, // mLevel
-    1, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    33, // level
+    1, // bonusExp
     3, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -89,7 +89,7 @@ static BattleUnitKind unit_pakkun_flower = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     (BattleDataEntry*)data_table, // dataTable
 };
@@ -140,7 +140,7 @@ static BattleUnitKindPart parts[] = {
         {0.0f, 40.0f, 0.0f}, // hitBaseOffset
         {0}, // hitCursorBaseOffset
         20, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -162,9 +162,9 @@ static BattleWeapon weapon_pakkun_flower_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {9, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -186,7 +186,7 @@ static BattleWeapon weapon_pakkun_flower_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

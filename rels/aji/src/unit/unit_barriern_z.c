@@ -117,14 +117,14 @@ static EvtWord wait_event[116];
 
 /** Unit data of the Z-Yux: 7 HP, level 27; the battle starts it from init_event. */
 BattleUnitKind unit_barriern_z = {
-    UNIT_Z_YUX, // mUnitType
+    UNIT_Z_YUX, // unitType
     "btl_un_barriern_z", // name
     7, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    27, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    27, // level
+    0, // bonusExp
     3, // bonusCoin
     70, // bonusCoinRate
     0, // baseCoin
@@ -159,7 +159,7 @@ BattleUnitKind unit_barriern_z = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     11, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -223,9 +223,9 @@ static BattleWeapon weapon_wakka_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -247,7 +247,7 @@ static BattleWeapon weapon_wakka_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -260,9 +260,9 @@ static BattleWeapon weapon_wawawa_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -284,7 +284,7 @@ static BattleWeapon weapon_wawawa_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -293,7 +293,7 @@ static BattleWeapon weapon_wawawa_attack = {
  * around the Z-Yux.
  */
 static BattleUnitSetup entry_barriern_satellite = {
-    &unit_barriern_z_satellite, // mUnitKindParams
+    &unit_barriern_z_satellite, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -1994,9 +1994,9 @@ static USER_FUNC(_check_satellite) {
 
             BtlUnit_GetPos(unit, &x, &y, &z);
             ud[1] = x;
-            ud[2] = y - 32.0f * unit->mSizeMultiplier;
+            ud[2] = y - 32.0f * unit->sizeMultiplier;
             ud[3] = 10.0f + z;
-            ud[4] = 1.8f * unit->mSizeMultiplier;
+            ud[4] = 1.8f * unit->sizeMultiplier;
         }
     }
     return EVT_RETURN_DONE;

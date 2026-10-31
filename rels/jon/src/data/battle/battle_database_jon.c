@@ -390,40 +390,40 @@ BattleStageObjectData jon_btlobject_data[] = {
  */
 BattleStageData jon_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_00_3", // mSpecificStageDataDir
-        2, // mNumObjects
-        jon_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_00_3", // specificStageDataDir
+        2, // numObjects
+        jon_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_00_3", // mSpecificStageDataDir
-        2, // mNumObjects
-        &jon_btlobject_data[2], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_00_3", // specificStageDataDir
+        2, // numObjects
+        &jon_btlobject_data[2], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_00_3", // mSpecificStageDataDir
-        2, // mNumObjects
-        &jon_btlobject_data[4], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_00_3", // specificStageDataDir
+        2, // numObjects
+        &jon_btlobject_data[4], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_00_3", // mSpecificStageDataDir
-        2, // mNumObjects
-        &jon_btlobject_data[6], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_00_3", // specificStageDataDir
+        2, // numObjects
+        &jon_btlobject_data[6], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -434,7 +434,7 @@ BattleStageData jon_btlstage_data[] = {
 /** Enemy lineup of formation 1 of BTLNO_JON_100_ZONBABA, in the Pit of 100 Trials, floor 100: Bonetail. */
 BattleUnitSetup btlparty_jon_jon_100_01_off_1[] = {
     {
-        &unit_boss_zonbaba, // mUnitKindParams
+        &unit_boss_zonbaba, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -462,7 +462,7 @@ BattleGroupSetup btlgrp_jon_jon_100_01_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_01, in the Pit of 100 Trials, floors 1, 6: Gloomba. */
 BattleUnitSetup btlparty_jon_jon_01_01_off_1[] = {
     {
-        &unit_yami_kuriboo, // mUnitKindParams
+        &unit_yami_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -491,7 +491,7 @@ BattleGroupSetup btlgrp_jon_jon_01_01_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_JON_01, in the Pit of 100 Trials, floors 1, 6: Gloomba, Spania. */
 BattleUnitSetup btlparty_jon_jon_01_01_off_2[] = {
     {
-        &unit_yami_kuriboo, // mUnitKindParams
+        &unit_yami_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -501,7 +501,7 @@ BattleUnitSetup btlparty_jon_jon_01_01_off_2[] = {
         battle_item_yami_kuriboo, // itemDropTable
     },
     {
-        &unit_hannya, // mUnitKindParams
+        &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -532,7 +532,7 @@ BattleGroupSetup btlgrp_jon_jon_01_01_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_01_01_off_3[] = {
     {
-        &unit_yami_kuriboo, // mUnitKindParams
+        &unit_yami_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -542,7 +542,7 @@ BattleUnitSetup btlparty_jon_jon_01_01_off_3[] = {
         battle_item_yami_kuriboo, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -571,7 +571,7 @@ BattleGroupSetup btlgrp_jon_jon_01_01_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_02, in the Pit of 100 Trials, floors 2, 7: Spinia x5. */
 BattleUnitSetup btlparty_jon_jon_01_02_off_1[] = {
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -581,7 +581,7 @@ BattleUnitSetup btlparty_jon_jon_01_02_off_1[] = {
         battle_item_hinnya, // itemDropTable
     },
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -591,7 +591,7 @@ BattleUnitSetup btlparty_jon_jon_01_02_off_1[] = {
         battle_item_hinnya, // itemDropTable
     },
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -601,7 +601,7 @@ BattleUnitSetup btlparty_jon_jon_01_02_off_1[] = {
         battle_item_hinnya, // itemDropTable
     },
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -611,7 +611,7 @@ BattleUnitSetup btlparty_jon_jon_01_02_off_1[] = {
         battle_item_hinnya, // itemDropTable
     },
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -640,7 +640,7 @@ BattleGroupSetup btlgrp_jon_jon_01_02_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_JON_02, in the Pit of 100 Trials, floors 2, 7: Spinia, Gloomba. */
 BattleUnitSetup btlparty_jon_jon_01_02_off_2[] = {
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -650,7 +650,7 @@ BattleUnitSetup btlparty_jon_jon_01_02_off_2[] = {
         battle_item_hinnya, // itemDropTable
     },
     {
-        &unit_yami_kuriboo, // mUnitKindParams
+        &unit_yami_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -681,7 +681,7 @@ BattleGroupSetup btlgrp_jon_jon_01_02_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_01_02_off_3[] = {
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -691,7 +691,7 @@ BattleUnitSetup btlparty_jon_jon_01_02_off_3[] = {
         battle_item_hinnya, // itemDropTable
     },
     {
-        &unit_hannya, // mUnitKindParams
+        &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -701,7 +701,7 @@ BattleUnitSetup btlparty_jon_jon_01_02_off_3[] = {
         battle_item_hannya, // itemDropTable
     },
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -711,7 +711,7 @@ BattleUnitSetup btlparty_jon_jon_01_02_off_3[] = {
         battle_item_hinnya, // itemDropTable
     },
     {
-        &unit_hannya, // mUnitKindParams
+        &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -721,7 +721,7 @@ BattleUnitSetup btlparty_jon_jon_01_02_off_3[] = {
         battle_item_hannya, // itemDropTable
     },
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -750,7 +750,7 @@ BattleGroupSetup btlgrp_jon_jon_01_02_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_03, in the Pit of 100 Trials, floors 3, 8: Spania x4. */
 BattleUnitSetup btlparty_jon_jon_01_03_off_1[] = {
     {
-        &unit_hannya, // mUnitKindParams
+        &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -760,7 +760,7 @@ BattleUnitSetup btlparty_jon_jon_01_03_off_1[] = {
         battle_item_hannya, // itemDropTable
     },
     {
-        &unit_hannya, // mUnitKindParams
+        &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -770,7 +770,7 @@ BattleUnitSetup btlparty_jon_jon_01_03_off_1[] = {
         battle_item_hannya, // itemDropTable
     },
     {
-        &unit_hannya, // mUnitKindParams
+        &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -780,7 +780,7 @@ BattleUnitSetup btlparty_jon_jon_01_03_off_1[] = {
         battle_item_hannya, // itemDropTable
     },
     {
-        &unit_hannya, // mUnitKindParams
+        &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -809,7 +809,7 @@ BattleGroupSetup btlgrp_jon_jon_01_03_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_JON_03, in the Pit of 100 Trials, floors 3, 8: Spania, Gloomba. */
 BattleUnitSetup btlparty_jon_jon_01_03_off_2[] = {
     {
-        &unit_hannya, // mUnitKindParams
+        &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -819,7 +819,7 @@ BattleUnitSetup btlparty_jon_jon_01_03_off_2[] = {
         battle_item_hannya, // itemDropTable
     },
     {
-        &unit_yami_kuriboo, // mUnitKindParams
+        &unit_yami_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -850,7 +850,7 @@ BattleGroupSetup btlgrp_jon_jon_01_03_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_01_03_off_3[] = {
     {
-        &unit_hannya, // mUnitKindParams
+        &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -860,7 +860,7 @@ BattleUnitSetup btlparty_jon_jon_01_03_off_3[] = {
         battle_item_hannya, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -870,7 +870,7 @@ BattleUnitSetup btlparty_jon_jon_01_03_off_3[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_hannya, // mUnitKindParams
+        &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -880,7 +880,7 @@ BattleUnitSetup btlparty_jon_jon_01_03_off_3[] = {
         battle_item_hannya, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -909,7 +909,7 @@ BattleGroupSetup btlgrp_jon_jon_01_03_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_04, in the Pit of 100 Trials, floors 4, 9: Dull Bones x4. */
 BattleUnitSetup btlparty_jon_jon_01_04_off_1[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -919,7 +919,7 @@ BattleUnitSetup btlparty_jon_jon_01_04_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -929,7 +929,7 @@ BattleUnitSetup btlparty_jon_jon_01_04_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -939,7 +939,7 @@ BattleUnitSetup btlparty_jon_jon_01_04_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -970,7 +970,7 @@ BattleGroupSetup btlgrp_jon_jon_01_04_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_01_04_off_2[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -980,7 +980,7 @@ BattleUnitSetup btlparty_jon_jon_01_04_off_2[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_yami_kuriboo, // mUnitKindParams
+        &unit_yami_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1011,7 +1011,7 @@ BattleGroupSetup btlgrp_jon_jon_01_04_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_01_04_off_3[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1021,7 +1021,7 @@ BattleUnitSetup btlparty_jon_jon_01_04_off_3[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1031,7 +1031,7 @@ BattleUnitSetup btlparty_jon_jon_01_04_off_3[] = {
         battle_item_hinnya, // itemDropTable
     },
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1060,7 +1060,7 @@ BattleGroupSetup btlgrp_jon_jon_01_04_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_05, in the Pit of 100 Trials, floors 5, 10: Fuzzy x5. */
 BattleUnitSetup btlparty_jon_jon_01_05_off_1[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1070,7 +1070,7 @@ BattleUnitSetup btlparty_jon_jon_01_05_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1080,7 +1080,7 @@ BattleUnitSetup btlparty_jon_jon_01_05_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1090,7 +1090,7 @@ BattleUnitSetup btlparty_jon_jon_01_05_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1100,7 +1100,7 @@ BattleUnitSetup btlparty_jon_jon_01_05_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1129,7 +1129,7 @@ BattleGroupSetup btlgrp_jon_jon_01_05_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_JON_05, in the Pit of 100 Trials, floors 5, 10: Fuzzy x2, Gloomba. */
 BattleUnitSetup btlparty_jon_jon_01_05_off_2[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1139,7 +1139,7 @@ BattleUnitSetup btlparty_jon_jon_01_05_off_2[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_yami_kuriboo, // mUnitKindParams
+        &unit_yami_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1149,7 +1149,7 @@ BattleUnitSetup btlparty_jon_jon_01_05_off_2[] = {
         battle_item_yami_kuriboo, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1181,7 +1181,7 @@ BattleGroupSetup btlgrp_jon_jon_01_05_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_01_05_off_3[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1191,7 +1191,7 @@ BattleUnitSetup btlparty_jon_jon_01_05_off_3[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1201,7 +1201,7 @@ BattleUnitSetup btlparty_jon_jon_01_05_off_3[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1211,7 +1211,7 @@ BattleUnitSetup btlparty_jon_jon_01_05_off_3[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1240,7 +1240,7 @@ BattleGroupSetup btlgrp_jon_jon_01_05_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_11, in the Pit of 100 Trials, floors 11, 16: Paragloomba x2. */
 BattleUnitSetup btlparty_jon_jon_11_01_off_1[] = {
     {
-        &unit_yami_patakuri, // mUnitKindParams
+        &unit_yami_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1250,7 +1250,7 @@ BattleUnitSetup btlparty_jon_jon_11_01_off_1[] = {
         battle_item_yami_patakuri, // itemDropTable
     },
     {
-        &unit_yami_patakuri, // mUnitKindParams
+        &unit_yami_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1282,7 +1282,7 @@ BattleGroupSetup btlgrp_jon_jon_11_01_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_11_01_off_2[] = {
     {
-        &unit_yami_patakuri, // mUnitKindParams
+        &unit_yami_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1292,7 +1292,7 @@ BattleUnitSetup btlparty_jon_jon_11_01_off_2[] = {
         battle_item_yami_patakuri, // itemDropTable
     },
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1302,7 +1302,7 @@ BattleUnitSetup btlparty_jon_jon_11_01_off_2[] = {
         battle_item_piders, // itemDropTable
     },
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1334,7 +1334,7 @@ BattleGroupSetup btlgrp_jon_jon_11_01_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_11_01_off_3[] = {
     {
-        &unit_yami_patakuri, // mUnitKindParams
+        &unit_yami_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1344,7 +1344,7 @@ BattleUnitSetup btlparty_jon_jon_11_01_off_3[] = {
         battle_item_yami_patakuri, // itemDropTable
     },
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1354,7 +1354,7 @@ BattleUnitSetup btlparty_jon_jon_11_01_off_3[] = {
         battle_item_sambo, // itemDropTable
     },
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1383,7 +1383,7 @@ BattleGroupSetup btlgrp_jon_jon_11_01_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_12, in the Pit of 100 Trials, floors 12, 17: Cleft x4. */
 BattleUnitSetup btlparty_jon_jon_11_02_off_1[] = {
     {
-        &unit_monochrome_sinemon, // mUnitKindParams
+        &unit_monochrome_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1393,7 +1393,7 @@ BattleUnitSetup btlparty_jon_jon_11_02_off_1[] = {
         battle_item_monochrome_kurokumorn, // itemDropTable
     },
     {
-        &unit_monochrome_sinemon, // mUnitKindParams
+        &unit_monochrome_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1403,7 +1403,7 @@ BattleUnitSetup btlparty_jon_jon_11_02_off_1[] = {
         battle_item_monochrome_kurokumorn, // itemDropTable
     },
     {
-        &unit_monochrome_sinemon, // mUnitKindParams
+        &unit_monochrome_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1413,7 +1413,7 @@ BattleUnitSetup btlparty_jon_jon_11_02_off_1[] = {
         battle_item_monochrome_kurokumorn, // itemDropTable
     },
     {
-        &unit_monochrome_sinemon, // mUnitKindParams
+        &unit_monochrome_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1445,7 +1445,7 @@ BattleGroupSetup btlgrp_jon_jon_11_02_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_11_02_off_2[] = {
     {
-        &unit_monochrome_sinemon, // mUnitKindParams
+        &unit_monochrome_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1455,7 +1455,7 @@ BattleUnitSetup btlparty_jon_jon_11_02_off_2[] = {
         battle_item_monochrome_kurokumorn, // itemDropTable
     },
     {
-        &unit_monochrome_sinemon, // mUnitKindParams
+        &unit_monochrome_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1465,7 +1465,7 @@ BattleUnitSetup btlparty_jon_jon_11_02_off_2[] = {
         battle_item_monochrome_kurokumorn, // itemDropTable
     },
     {
-        &unit_yami_patakuri, // mUnitKindParams
+        &unit_yami_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1497,7 +1497,7 @@ BattleGroupSetup btlgrp_jon_jon_11_02_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_11_02_off_3[] = {
     {
-        &unit_monochrome_sinemon, // mUnitKindParams
+        &unit_monochrome_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1507,7 +1507,7 @@ BattleUnitSetup btlparty_jon_jon_11_02_off_3[] = {
         battle_item_monochrome_kurokumorn, // itemDropTable
     },
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1517,7 +1517,7 @@ BattleUnitSetup btlparty_jon_jon_11_02_off_3[] = {
         battle_item_piders, // itemDropTable
     },
     {
-        &unit_monochrome_kurokumorn, // mUnitKindParams
+        &unit_monochrome_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1546,7 +1546,7 @@ BattleGroupSetup btlgrp_jon_jon_11_02_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_13, in the Pit of 100 Trials, floors 13, 18: Pokey x4. */
 BattleUnitSetup btlparty_jon_jon_11_03_off_1[] = {
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1556,7 +1556,7 @@ BattleUnitSetup btlparty_jon_jon_11_03_off_1[] = {
         battle_item_sambo, // itemDropTable
     },
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1566,7 +1566,7 @@ BattleUnitSetup btlparty_jon_jon_11_03_off_1[] = {
         battle_item_sambo, // itemDropTable
     },
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1576,7 +1576,7 @@ BattleUnitSetup btlparty_jon_jon_11_03_off_1[] = {
         battle_item_sambo, // itemDropTable
     },
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1605,7 +1605,7 @@ BattleGroupSetup btlgrp_jon_jon_11_03_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_JON_13, in the Pit of 100 Trials, floors 13, 18: Pokey, Dark Puff. */
 BattleUnitSetup btlparty_jon_jon_11_03_off_2[] = {
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1615,7 +1615,7 @@ BattleUnitSetup btlparty_jon_jon_11_03_off_2[] = {
         battle_item_sambo, // itemDropTable
     },
     {
-        &unit_monochrome_kurokumorn, // mUnitKindParams
+        &unit_monochrome_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1646,7 +1646,7 @@ BattleGroupSetup btlgrp_jon_jon_11_03_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_11_03_off_3[] = {
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1656,7 +1656,7 @@ BattleUnitSetup btlparty_jon_jon_11_03_off_3[] = {
         battle_item_sambo, // itemDropTable
     },
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1666,7 +1666,7 @@ BattleUnitSetup btlparty_jon_jon_11_03_off_3[] = {
         battle_item_piders, // itemDropTable
     },
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1676,7 +1676,7 @@ BattleUnitSetup btlparty_jon_jon_11_03_off_3[] = {
         battle_item_piders, // itemDropTable
     },
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1705,7 +1705,7 @@ BattleGroupSetup btlgrp_jon_jon_11_03_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_14, in the Pit of 100 Trials, floors 14, 19: Dark Puff x3. */
 BattleUnitSetup btlparty_jon_jon_11_04_off_1[] = {
     {
-        &unit_monochrome_kurokumorn, // mUnitKindParams
+        &unit_monochrome_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1715,7 +1715,7 @@ BattleUnitSetup btlparty_jon_jon_11_04_off_1[] = {
         battle_item_monochrome_kurokumorn, // itemDropTable
     },
     {
-        &unit_monochrome_kurokumorn, // mUnitKindParams
+        &unit_monochrome_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1725,7 +1725,7 @@ BattleUnitSetup btlparty_jon_jon_11_04_off_1[] = {
         battle_item_monochrome_kurokumorn, // itemDropTable
     },
     {
-        &unit_monochrome_kurokumorn, // mUnitKindParams
+        &unit_monochrome_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1756,7 +1756,7 @@ BattleGroupSetup btlgrp_jon_jon_11_04_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_11_04_off_2[] = {
     {
-        &unit_monochrome_kurokumorn, // mUnitKindParams
+        &unit_monochrome_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1766,7 +1766,7 @@ BattleUnitSetup btlparty_jon_jon_11_04_off_2[] = {
         battle_item_monochrome_kurokumorn, // itemDropTable
     },
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1776,7 +1776,7 @@ BattleUnitSetup btlparty_jon_jon_11_04_off_2[] = {
         battle_item_sambo, // itemDropTable
     },
     {
-        &unit_monochrome_kurokumorn, // mUnitKindParams
+        &unit_monochrome_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1808,7 +1808,7 @@ BattleGroupSetup btlgrp_jon_jon_11_04_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_11_04_off_3[] = {
     {
-        &unit_monochrome_kurokumorn, // mUnitKindParams
+        &unit_monochrome_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1818,7 +1818,7 @@ BattleUnitSetup btlparty_jon_jon_11_04_off_3[] = {
         battle_item_monochrome_kurokumorn, // itemDropTable
     },
     {
-        &unit_yami_patakuri, // mUnitKindParams
+        &unit_yami_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1847,7 +1847,7 @@ BattleGroupSetup btlgrp_jon_jon_11_04_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_15, in the Pit of 100 Trials, floors 15, 20: Pider x4. */
 BattleUnitSetup btlparty_jon_jon_11_05_off_1[] = {
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1857,7 +1857,7 @@ BattleUnitSetup btlparty_jon_jon_11_05_off_1[] = {
         battle_item_piders, // itemDropTable
     },
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1867,7 +1867,7 @@ BattleUnitSetup btlparty_jon_jon_11_05_off_1[] = {
         battle_item_piders, // itemDropTable
     },
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1877,7 +1877,7 @@ BattleUnitSetup btlparty_jon_jon_11_05_off_1[] = {
         battle_item_piders, // itemDropTable
     },
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1908,7 +1908,7 @@ BattleGroupSetup btlgrp_jon_jon_11_05_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_11_05_off_2[] = {
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1918,7 +1918,7 @@ BattleUnitSetup btlparty_jon_jon_11_05_off_2[] = {
         battle_item_piders, // itemDropTable
     },
     {
-        &unit_yami_patakuri, // mUnitKindParams
+        &unit_yami_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1949,7 +1949,7 @@ BattleGroupSetup btlgrp_jon_jon_11_05_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_11_05_off_3[] = {
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1959,7 +1959,7 @@ BattleUnitSetup btlparty_jon_jon_11_05_off_3[] = {
         battle_item_piders, // itemDropTable
     },
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1969,7 +1969,7 @@ BattleUnitSetup btlparty_jon_jon_11_05_off_3[] = {
         battle_item_sambo, // itemDropTable
     },
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1979,7 +1979,7 @@ BattleUnitSetup btlparty_jon_jon_11_05_off_3[] = {
         battle_item_piders, // itemDropTable
     },
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2008,7 +2008,7 @@ BattleGroupSetup btlgrp_jon_jon_11_05_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_21, in the Pit of 100 Trials, floors 21, 26: Spiky Gloomba x3. */
 BattleUnitSetup btlparty_jon_jon_21_01_off_1[] = {
     {
-        &unit_yami_togekuri, // mUnitKindParams
+        &unit_yami_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2018,7 +2018,7 @@ BattleUnitSetup btlparty_jon_jon_21_01_off_1[] = {
         battle_item_yami_togekuri, // itemDropTable
     },
     {
-        &unit_yami_togekuri, // mUnitKindParams
+        &unit_yami_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2028,7 +2028,7 @@ BattleUnitSetup btlparty_jon_jon_21_01_off_1[] = {
         battle_item_yami_togekuri, // itemDropTable
     },
     {
-        &unit_yami_togekuri, // mUnitKindParams
+        &unit_yami_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2060,7 +2060,7 @@ BattleGroupSetup btlgrp_jon_jon_21_01_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_21_01_off_2[] = {
     {
-        &unit_yami_togekuri, // mUnitKindParams
+        &unit_yami_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2070,7 +2070,7 @@ BattleUnitSetup btlparty_jon_jon_21_01_off_2[] = {
         battle_item_yami_togekuri, // itemDropTable
     },
     {
-        &unit_yami_togekuri, // mUnitKindParams
+        &unit_yami_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2080,7 +2080,7 @@ BattleUnitSetup btlparty_jon_jon_21_01_off_2[] = {
         battle_item_yami_togekuri, // itemDropTable
     },
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2090,7 +2090,7 @@ BattleUnitSetup btlparty_jon_jon_21_01_off_2[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2122,7 +2122,7 @@ BattleGroupSetup btlgrp_jon_jon_21_01_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_21_01_off_3[] = {
     {
-        &unit_yami_togekuri, // mUnitKindParams
+        &unit_yami_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2132,7 +2132,7 @@ BattleUnitSetup btlparty_jon_jon_21_01_off_3[] = {
         battle_item_yami_togekuri, // itemDropTable
     },
     {
-        &unit_yami_togekuri, // mUnitKindParams
+        &unit_yami_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2142,7 +2142,7 @@ BattleUnitSetup btlparty_jon_jon_21_01_off_3[] = {
         battle_item_yami_togekuri, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2152,7 +2152,7 @@ BattleUnitSetup btlparty_jon_jon_21_01_off_3[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2181,7 +2181,7 @@ BattleGroupSetup btlgrp_jon_jon_21_01_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_22, in the Pit of 100 Trials, floors 22, 27: Bandit x5. */
 BattleUnitSetup btlparty_jon_jon_21_02_off_1[] = {
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2191,7 +2191,7 @@ BattleUnitSetup btlparty_jon_jon_21_02_off_1[] = {
         battle_item_borodo, // itemDropTable
     },
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2201,7 +2201,7 @@ BattleUnitSetup btlparty_jon_jon_21_02_off_1[] = {
         battle_item_borodo, // itemDropTable
     },
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2211,7 +2211,7 @@ BattleUnitSetup btlparty_jon_jon_21_02_off_1[] = {
         battle_item_borodo, // itemDropTable
     },
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2221,7 +2221,7 @@ BattleUnitSetup btlparty_jon_jon_21_02_off_1[] = {
         battle_item_borodo, // itemDropTable
     },
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2253,7 +2253,7 @@ BattleGroupSetup btlgrp_jon_jon_21_02_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_21_02_off_2[] = {
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2263,7 +2263,7 @@ BattleUnitSetup btlparty_jon_jon_21_02_off_2[] = {
         battle_item_borodo, // itemDropTable
     },
     {
-        &unit_yami_togekuri, // mUnitKindParams
+        &unit_yami_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2294,7 +2294,7 @@ BattleGroupSetup btlgrp_jon_jon_21_02_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_21_02_off_3[] = {
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2304,7 +2304,7 @@ BattleUnitSetup btlparty_jon_jon_21_02_off_3[] = {
         battle_item_borodo, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2314,7 +2314,7 @@ BattleUnitSetup btlparty_jon_jon_21_02_off_3[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2324,7 +2324,7 @@ BattleUnitSetup btlparty_jon_jon_21_02_off_3[] = {
         battle_item_borodo, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2334,7 +2334,7 @@ BattleUnitSetup btlparty_jon_jon_21_02_off_3[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2363,7 +2363,7 @@ BattleGroupSetup btlgrp_jon_jon_21_02_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_23, in the Pit of 100 Trials, floors 23, 28: Lakitu x4. */
 BattleUnitSetup btlparty_jon_jon_21_03_off_1[] = {
     {
-        &unit_jyugem, // mUnitKindParams
+        &unit_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2373,7 +2373,7 @@ BattleUnitSetup btlparty_jon_jon_21_03_off_1[] = {
         battle_item_jyugem, // itemDropTable
     },
     {
-        &unit_jyugem, // mUnitKindParams
+        &unit_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2383,7 +2383,7 @@ BattleUnitSetup btlparty_jon_jon_21_03_off_1[] = {
         battle_item_jyugem, // itemDropTable
     },
     {
-        &unit_jyugem, // mUnitKindParams
+        &unit_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2393,7 +2393,7 @@ BattleUnitSetup btlparty_jon_jon_21_03_off_1[] = {
         battle_item_jyugem, // itemDropTable
     },
     {
-        &unit_jyugem, // mUnitKindParams
+        &unit_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2425,7 +2425,7 @@ BattleGroupSetup btlgrp_jon_jon_21_03_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_21_03_off_2[] = {
     {
-        &unit_jyugem, // mUnitKindParams
+        &unit_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2435,7 +2435,7 @@ BattleUnitSetup btlparty_jon_jon_21_03_off_2[] = {
         battle_item_jyugem, // itemDropTable
     },
     {
-        &unit_yami_togekuri, // mUnitKindParams
+        &unit_yami_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2467,7 +2467,7 @@ BattleGroupSetup btlgrp_jon_jon_21_03_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_21_03_off_3[] = {
     {
-        &unit_jyugem, // mUnitKindParams
+        &unit_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2477,7 +2477,7 @@ BattleUnitSetup btlparty_jon_jon_21_03_off_3[] = {
         battle_item_jyugem, // itemDropTable
     },
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2487,7 +2487,7 @@ BattleUnitSetup btlparty_jon_jon_21_03_off_3[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2497,7 +2497,7 @@ BattleUnitSetup btlparty_jon_jon_21_03_off_3[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_jyugem, // mUnitKindParams
+        &unit_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2526,7 +2526,7 @@ BattleGroupSetup btlgrp_jon_jon_21_03_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_24, in the Pit of 100 Trials, floors 24, 29: Bob-omb x4. */
 BattleUnitSetup btlparty_jon_jon_21_04_off_1[] = {
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2536,7 +2536,7 @@ BattleUnitSetup btlparty_jon_jon_21_04_off_1[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2546,7 +2546,7 @@ BattleUnitSetup btlparty_jon_jon_21_04_off_1[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2556,7 +2556,7 @@ BattleUnitSetup btlparty_jon_jon_21_04_off_1[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2588,7 +2588,7 @@ BattleGroupSetup btlgrp_jon_jon_21_04_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_21_04_off_2[] = {
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2598,7 +2598,7 @@ BattleUnitSetup btlparty_jon_jon_21_04_off_2[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_yami_togekuri, // mUnitKindParams
+        &unit_yami_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2608,7 +2608,7 @@ BattleUnitSetup btlparty_jon_jon_21_04_off_2[] = {
         battle_item_yami_togekuri, // itemDropTable
     },
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2639,7 +2639,7 @@ BattleGroupSetup btlgrp_jon_jon_21_04_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_21_04_off_3[] = {
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2649,7 +2649,7 @@ BattleUnitSetup btlparty_jon_jon_21_04_off_3[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2659,7 +2659,7 @@ BattleUnitSetup btlparty_jon_jon_21_04_off_3[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2669,7 +2669,7 @@ BattleUnitSetup btlparty_jon_jon_21_04_off_3[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2698,7 +2698,7 @@ BattleGroupSetup btlgrp_jon_jon_21_04_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_25, in the Pit of 100 Trials, floors 25, 30: Boo x4. */
 BattleUnitSetup btlparty_jon_jon_21_05_off_1[] = {
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2708,7 +2708,7 @@ BattleUnitSetup btlparty_jon_jon_21_05_off_1[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2718,7 +2718,7 @@ BattleUnitSetup btlparty_jon_jon_21_05_off_1[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2728,7 +2728,7 @@ BattleUnitSetup btlparty_jon_jon_21_05_off_1[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2760,7 +2760,7 @@ BattleGroupSetup btlgrp_jon_jon_21_05_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_21_05_off_2[] = {
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2770,7 +2770,7 @@ BattleUnitSetup btlparty_jon_jon_21_05_off_2[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2780,7 +2780,7 @@ BattleUnitSetup btlparty_jon_jon_21_05_off_2[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_yami_togekuri, // mUnitKindParams
+        &unit_yami_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2811,7 +2811,7 @@ BattleGroupSetup btlgrp_jon_jon_21_05_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_21_05_off_3[] = {
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2821,7 +2821,7 @@ BattleUnitSetup btlparty_jon_jon_21_05_off_3[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2831,7 +2831,7 @@ BattleUnitSetup btlparty_jon_jon_21_05_off_3[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2841,7 +2841,7 @@ BattleUnitSetup btlparty_jon_jon_21_05_off_3[] = {
         battle_item_borodo, // itemDropTable
     },
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2870,7 +2870,7 @@ BattleGroupSetup btlgrp_jon_jon_21_05_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_31, in the Pit of 100 Trials, floors 31, 36: Dark Koopa x2. */
 BattleUnitSetup btlparty_jon_jon_31_01_off_1[] = {
     {
-        &unit_yami_noko, // mUnitKindParams
+        &unit_yami_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2880,7 +2880,7 @@ BattleUnitSetup btlparty_jon_jon_31_01_off_1[] = {
         battle_item_yami_noko, // itemDropTable
     },
     {
-        &unit_yami_noko, // mUnitKindParams
+        &unit_yami_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2912,7 +2912,7 @@ BattleGroupSetup btlgrp_jon_jon_31_01_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_31_01_off_2[] = {
     {
-        &unit_yami_noko, // mUnitKindParams
+        &unit_yami_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2922,7 +2922,7 @@ BattleUnitSetup btlparty_jon_jon_31_01_off_2[] = {
         battle_item_yami_noko, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2932,7 +2932,7 @@ BattleUnitSetup btlparty_jon_jon_31_01_off_2[] = {
         battle_item_patamet, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2964,7 +2964,7 @@ BattleGroupSetup btlgrp_jon_jon_31_01_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_31_01_off_3[] = {
     {
-        &unit_yami_noko, // mUnitKindParams
+        &unit_yami_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2974,7 +2974,7 @@ BattleUnitSetup btlparty_jon_jon_31_01_off_3[] = {
         battle_item_yami_noko, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2984,7 +2984,7 @@ BattleUnitSetup btlparty_jon_jon_31_01_off_3[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3013,7 +3013,7 @@ BattleGroupSetup btlgrp_jon_jon_31_01_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_32, in the Pit of 100 Trials, floors 32, 37: Hyper Cleft x3. */
 BattleUnitSetup btlparty_jon_jon_31_02_off_1[] = {
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3023,7 +3023,7 @@ BattleUnitSetup btlparty_jon_jon_31_02_off_1[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3033,7 +3033,7 @@ BattleUnitSetup btlparty_jon_jon_31_02_off_1[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3065,7 +3065,7 @@ BattleGroupSetup btlgrp_jon_jon_31_02_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_31_02_off_2[] = {
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3075,7 +3075,7 @@ BattleUnitSetup btlparty_jon_jon_31_02_off_2[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3085,7 +3085,7 @@ BattleUnitSetup btlparty_jon_jon_31_02_off_2[] = {
         battle_item_ura_noko, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3117,7 +3117,7 @@ BattleGroupSetup btlgrp_jon_jon_31_02_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_31_02_off_3[] = {
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3127,7 +3127,7 @@ BattleUnitSetup btlparty_jon_jon_31_02_off_3[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3137,7 +3137,7 @@ BattleUnitSetup btlparty_jon_jon_31_02_off_3[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3166,7 +3166,7 @@ BattleGroupSetup btlgrp_jon_jon_31_02_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_33, in the Pit of 100 Trials, floors 33, 38: Parabuzzy x4. */
 BattleUnitSetup btlparty_jon_jon_31_03_off_1[] = {
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3176,7 +3176,7 @@ BattleUnitSetup btlparty_jon_jon_31_03_off_1[] = {
         battle_item_patamet, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3186,7 +3186,7 @@ BattleUnitSetup btlparty_jon_jon_31_03_off_1[] = {
         battle_item_patamet, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3196,7 +3196,7 @@ BattleUnitSetup btlparty_jon_jon_31_03_off_1[] = {
         battle_item_patamet, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3228,7 +3228,7 @@ BattleGroupSetup btlgrp_jon_jon_31_03_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_31_03_off_2[] = {
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3238,7 +3238,7 @@ BattleUnitSetup btlparty_jon_jon_31_03_off_2[] = {
         battle_item_patamet, // itemDropTable
     },
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3248,7 +3248,7 @@ BattleUnitSetup btlparty_jon_jon_31_03_off_2[] = {
         battle_item_ura_noko, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3258,7 +3258,7 @@ BattleUnitSetup btlparty_jon_jon_31_03_off_2[] = {
         battle_item_patamet, // itemDropTable
     },
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3290,7 +3290,7 @@ BattleGroupSetup btlgrp_jon_jon_31_03_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_31_03_off_3[] = {
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3300,7 +3300,7 @@ BattleUnitSetup btlparty_jon_jon_31_03_off_3[] = {
         battle_item_patamet, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3329,7 +3329,7 @@ BattleGroupSetup btlgrp_jon_jon_31_03_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_34, in the Pit of 100 Trials, floors 34, 39: Shady Koopa x4. */
 BattleUnitSetup btlparty_jon_jon_31_04_off_1[] = {
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3339,7 +3339,7 @@ BattleUnitSetup btlparty_jon_jon_31_04_off_1[] = {
         battle_item_ura_noko, // itemDropTable
     },
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3349,7 +3349,7 @@ BattleUnitSetup btlparty_jon_jon_31_04_off_1[] = {
         battle_item_ura_noko, // itemDropTable
     },
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3359,7 +3359,7 @@ BattleUnitSetup btlparty_jon_jon_31_04_off_1[] = {
         battle_item_ura_noko, // itemDropTable
     },
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3391,7 +3391,7 @@ BattleGroupSetup btlgrp_jon_jon_31_04_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_31_04_off_2[] = {
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3401,7 +3401,7 @@ BattleUnitSetup btlparty_jon_jon_31_04_off_2[] = {
         battle_item_ura_noko, // itemDropTable
     },
     {
-        &unit_yami_noko, // mUnitKindParams
+        &unit_yami_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3411,7 +3411,7 @@ BattleUnitSetup btlparty_jon_jon_31_04_off_2[] = {
         battle_item_yami_noko, // itemDropTable
     },
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3443,7 +3443,7 @@ BattleGroupSetup btlgrp_jon_jon_31_04_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_31_04_off_3[] = {
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3453,7 +3453,7 @@ BattleUnitSetup btlparty_jon_jon_31_04_off_3[] = {
         battle_item_ura_noko, // itemDropTable
     },
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3463,7 +3463,7 @@ BattleUnitSetup btlparty_jon_jon_31_04_off_3[] = {
         battle_item_ura_noko, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3492,7 +3492,7 @@ BattleGroupSetup btlgrp_jon_jon_31_04_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_35, in the Pit of 100 Trials, floors 35, 40: Flower Fuzzy x5. */
 BattleUnitSetup btlparty_jon_jon_31_05_off_1[] = {
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3502,7 +3502,7 @@ BattleUnitSetup btlparty_jon_jon_31_05_off_1[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3512,7 +3512,7 @@ BattleUnitSetup btlparty_jon_jon_31_05_off_1[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3522,7 +3522,7 @@ BattleUnitSetup btlparty_jon_jon_31_05_off_1[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3532,7 +3532,7 @@ BattleUnitSetup btlparty_jon_jon_31_05_off_1[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3564,7 +3564,7 @@ BattleGroupSetup btlgrp_jon_jon_31_05_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_31_05_off_2[] = {
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3574,7 +3574,7 @@ BattleUnitSetup btlparty_jon_jon_31_05_off_2[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3584,7 +3584,7 @@ BattleUnitSetup btlparty_jon_jon_31_05_off_2[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_yami_noko, // mUnitKindParams
+        &unit_yami_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3616,7 +3616,7 @@ BattleGroupSetup btlgrp_jon_jon_31_05_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_31_05_off_3[] = {
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3626,7 +3626,7 @@ BattleUnitSetup btlparty_jon_jon_31_05_off_3[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3657,7 +3657,7 @@ BattleGroupSetup btlgrp_jon_jon_31_05_off_3 = {
  */
 BattleUnitSetup btlparty_jon_jon_41_01_off_1[] = {
     {
-        &unit_yami_pata, // mUnitKindParams
+        &unit_yami_pata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3667,7 +3667,7 @@ BattleUnitSetup btlparty_jon_jon_41_01_off_1[] = {
         battle_item_yami_patakuri, // itemDropTable
     },
     {
-        &unit_yami_pata, // mUnitKindParams
+        &unit_yami_pata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3677,7 +3677,7 @@ BattleUnitSetup btlparty_jon_jon_41_01_off_1[] = {
         battle_item_yami_patakuri, // itemDropTable
     },
     {
-        &unit_yami_pata, // mUnitKindParams
+        &unit_yami_pata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3687,7 +3687,7 @@ BattleUnitSetup btlparty_jon_jon_41_01_off_1[] = {
         battle_item_yami_patakuri, // itemDropTable
     },
     {
-        &unit_yami_pata, // mUnitKindParams
+        &unit_yami_pata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3719,7 +3719,7 @@ BattleGroupSetup btlgrp_jon_jon_41_01_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_41_01_off_2[] = {
     {
-        &unit_yami_pata, // mUnitKindParams
+        &unit_yami_pata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3729,7 +3729,7 @@ BattleUnitSetup btlparty_jon_jon_41_01_off_2[] = {
         battle_item_yami_patakuri, // itemDropTable
     },
     {
-        &unit_yami_pata, // mUnitKindParams
+        &unit_yami_pata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3739,7 +3739,7 @@ BattleUnitSetup btlparty_jon_jon_41_01_off_2[] = {
         battle_item_yami_patakuri, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3771,7 +3771,7 @@ BattleGroupSetup btlgrp_jon_jon_41_01_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_41_01_off_3[] = {
     {
-        &unit_yami_pata, // mUnitKindParams
+        &unit_yami_pata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3781,7 +3781,7 @@ BattleUnitSetup btlparty_jon_jon_41_01_off_3[] = {
         battle_item_yami_patakuri, // itemDropTable
     },
     {
-        &unit_yami_pata, // mUnitKindParams
+        &unit_yami_pata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3791,7 +3791,7 @@ BattleUnitSetup btlparty_jon_jon_41_01_off_3[] = {
         battle_item_yami_patakuri, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3820,7 +3820,7 @@ BattleGroupSetup btlgrp_jon_jon_41_01_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_42, in the Pit of 100 Trials, floors 42, 47: Bulky Bob-omb x4. */
 BattleUnitSetup btlparty_jon_jon_41_02_off_1[] = {
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3830,7 +3830,7 @@ BattleUnitSetup btlparty_jon_jon_41_02_off_1[] = {
         battle_item_heavy_bom, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3840,7 +3840,7 @@ BattleUnitSetup btlparty_jon_jon_41_02_off_1[] = {
         battle_item_heavy_bom, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3850,7 +3850,7 @@ BattleUnitSetup btlparty_jon_jon_41_02_off_1[] = {
         battle_item_heavy_bom, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3879,7 +3879,7 @@ BattleGroupSetup btlgrp_jon_jon_41_02_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_JON_42, in the Pit of 100 Trials, floors 42, 47: Bulky Bob-omb x2. */
 BattleUnitSetup btlparty_jon_jon_41_02_off_2[] = {
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3889,7 +3889,7 @@ BattleUnitSetup btlparty_jon_jon_41_02_off_2[] = {
         battle_item_heavy_bom, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3921,7 +3921,7 @@ BattleGroupSetup btlgrp_jon_jon_41_02_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_41_02_off_3[] = {
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3931,7 +3931,7 @@ BattleUnitSetup btlparty_jon_jon_41_02_off_3[] = {
         battle_item_heavy_bom, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3941,7 +3941,7 @@ BattleUnitSetup btlparty_jon_jon_41_02_off_3[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3970,7 +3970,7 @@ BattleGroupSetup btlgrp_jon_jon_41_02_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_43, in the Pit of 100 Trials, floors 43, 48: Lava Bubble x3. */
 BattleUnitSetup btlparty_jon_jon_41_03_off_1[] = {
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3980,7 +3980,7 @@ BattleUnitSetup btlparty_jon_jon_41_03_off_1[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -3990,7 +3990,7 @@ BattleUnitSetup btlparty_jon_jon_41_03_off_1[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4022,7 +4022,7 @@ BattleGroupSetup btlgrp_jon_jon_41_03_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_41_03_off_2[] = {
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4032,7 +4032,7 @@ BattleUnitSetup btlparty_jon_jon_41_03_off_2[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4042,7 +4042,7 @@ BattleUnitSetup btlparty_jon_jon_41_03_off_2[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_yami_pata, // mUnitKindParams
+        &unit_yami_pata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4074,7 +4074,7 @@ BattleGroupSetup btlgrp_jon_jon_41_03_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_41_03_off_3[] = {
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4084,7 +4084,7 @@ BattleUnitSetup btlparty_jon_jon_41_03_off_3[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4094,7 +4094,7 @@ BattleUnitSetup btlparty_jon_jon_41_03_off_3[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4104,7 +4104,7 @@ BattleUnitSetup btlparty_jon_jon_41_03_off_3[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4133,7 +4133,7 @@ BattleGroupSetup btlgrp_jon_jon_41_03_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_44, in the Pit of 100 Trials, floors 44, 49: Poison Pokey x4. */
 BattleUnitSetup btlparty_jon_jon_41_04_off_1[] = {
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4143,7 +4143,7 @@ BattleUnitSetup btlparty_jon_jon_41_04_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4153,7 +4153,7 @@ BattleUnitSetup btlparty_jon_jon_41_04_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4163,7 +4163,7 @@ BattleUnitSetup btlparty_jon_jon_41_04_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4195,7 +4195,7 @@ BattleGroupSetup btlgrp_jon_jon_41_04_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_41_04_off_2[] = {
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4205,7 +4205,7 @@ BattleUnitSetup btlparty_jon_jon_41_04_off_2[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4215,7 +4215,7 @@ BattleUnitSetup btlparty_jon_jon_41_04_off_2[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4225,7 +4225,7 @@ BattleUnitSetup btlparty_jon_jon_41_04_off_2[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4257,7 +4257,7 @@ BattleGroupSetup btlgrp_jon_jon_41_04_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_41_04_off_3[] = {
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4267,7 +4267,7 @@ BattleUnitSetup btlparty_jon_jon_41_04_off_3[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_yami_pata, // mUnitKindParams
+        &unit_yami_pata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4298,7 +4298,7 @@ BattleGroupSetup btlgrp_jon_jon_41_04_off_3 = {
  */
 BattleUnitSetup btlparty_jon_jon_41_05_off_1[] = {
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4308,7 +4308,7 @@ BattleUnitSetup btlparty_jon_jon_41_05_off_1[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4339,7 +4339,7 @@ BattleGroupSetup btlgrp_jon_jon_41_05_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_41_05_off_2[] = {
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4349,7 +4349,7 @@ BattleUnitSetup btlparty_jon_jon_41_05_off_2[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4359,7 +4359,7 @@ BattleUnitSetup btlparty_jon_jon_41_05_off_2[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4369,7 +4369,7 @@ BattleUnitSetup btlparty_jon_jon_41_05_off_2[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4401,7 +4401,7 @@ BattleGroupSetup btlgrp_jon_jon_41_05_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_41_05_off_3[] = {
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4411,7 +4411,7 @@ BattleUnitSetup btlparty_jon_jon_41_05_off_3[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4421,7 +4421,7 @@ BattleUnitSetup btlparty_jon_jon_41_05_off_3[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4431,7 +4431,7 @@ BattleUnitSetup btlparty_jon_jon_41_05_off_3[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4460,7 +4460,7 @@ BattleGroupSetup btlgrp_jon_jon_41_05_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_51, in the Pit of 100 Trials, floors 51, 56: Badge Bandit x3. */
 BattleUnitSetup btlparty_jon_jon_51_01_off_1[] = {
     {
-        &unit_badge_borodo, // mUnitKindParams
+        &unit_badge_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4470,7 +4470,7 @@ BattleUnitSetup btlparty_jon_jon_51_01_off_1[] = {
         battle_item_badge_borodo, // itemDropTable
     },
     {
-        &unit_badge_borodo, // mUnitKindParams
+        &unit_badge_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4480,7 +4480,7 @@ BattleUnitSetup btlparty_jon_jon_51_01_off_1[] = {
         battle_item_badge_borodo, // itemDropTable
     },
     {
-        &unit_badge_borodo, // mUnitKindParams
+        &unit_badge_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4512,7 +4512,7 @@ BattleGroupSetup btlgrp_jon_jon_51_01_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_51_01_off_2[] = {
     {
-        &unit_badge_borodo, // mUnitKindParams
+        &unit_badge_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4522,7 +4522,7 @@ BattleUnitSetup btlparty_jon_jon_51_01_off_2[] = {
         battle_item_badge_borodo, // itemDropTable
     },
     {
-        &unit_badge_borodo, // mUnitKindParams
+        &unit_badge_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4532,7 +4532,7 @@ BattleUnitSetup btlparty_jon_jon_51_01_off_2[] = {
         battle_item_badge_borodo, // itemDropTable
     },
     {
-        &unit_bllizard, // mUnitKindParams
+        &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4564,7 +4564,7 @@ BattleGroupSetup btlgrp_jon_jon_51_01_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_51_01_off_3[] = {
     {
-        &unit_badge_borodo, // mUnitKindParams
+        &unit_badge_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4574,7 +4574,7 @@ BattleUnitSetup btlparty_jon_jon_51_01_off_3[] = {
         battle_item_badge_borodo, // itemDropTable
     },
     {
-        &unit_badge_borodo, // mUnitKindParams
+        &unit_badge_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4584,7 +4584,7 @@ BattleUnitSetup btlparty_jon_jon_51_01_off_3[] = {
         battle_item_badge_borodo, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4613,7 +4613,7 @@ BattleGroupSetup btlgrp_jon_jon_51_01_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_52, in the Pit of 100 Trials, floors 52, 57: Ice Puff x4. */
 BattleUnitSetup btlparty_jon_jon_51_02_off_1[] = {
     {
-        &unit_bllizard, // mUnitKindParams
+        &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4623,7 +4623,7 @@ BattleUnitSetup btlparty_jon_jon_51_02_off_1[] = {
         battle_item_bllizard, // itemDropTable
     },
     {
-        &unit_bllizard, // mUnitKindParams
+        &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4633,7 +4633,7 @@ BattleUnitSetup btlparty_jon_jon_51_02_off_1[] = {
         battle_item_bllizard, // itemDropTable
     },
     {
-        &unit_bllizard, // mUnitKindParams
+        &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4643,7 +4643,7 @@ BattleUnitSetup btlparty_jon_jon_51_02_off_1[] = {
         battle_item_bllizard, // itemDropTable
     },
     {
-        &unit_bllizard, // mUnitKindParams
+        &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4675,7 +4675,7 @@ BattleGroupSetup btlgrp_jon_jon_51_02_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_51_02_off_2[] = {
     {
-        &unit_bllizard, // mUnitKindParams
+        &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4685,7 +4685,7 @@ BattleUnitSetup btlparty_jon_jon_51_02_off_2[] = {
         battle_item_bllizard, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4695,7 +4695,7 @@ BattleUnitSetup btlparty_jon_jon_51_02_off_2[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_bllizard, // mUnitKindParams
+        &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4727,7 +4727,7 @@ BattleGroupSetup btlgrp_jon_jon_51_02_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_51_02_off_3[] = {
     {
-        &unit_bllizard, // mUnitKindParams
+        &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4737,7 +4737,7 @@ BattleUnitSetup btlparty_jon_jon_51_02_off_3[] = {
         battle_item_bllizard, // itemDropTable
     },
     {
-        &unit_sinemon, // mUnitKindParams
+        &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4766,7 +4766,7 @@ BattleGroupSetup btlgrp_jon_jon_51_02_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_53, in the Pit of 100 Trials, floors 53, 58: Dark Boo x4. */
 BattleUnitSetup btlparty_jon_jon_51_03_off_1[] = {
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4776,7 +4776,7 @@ BattleUnitSetup btlparty_jon_jon_51_03_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4786,7 +4786,7 @@ BattleUnitSetup btlparty_jon_jon_51_03_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4796,7 +4796,7 @@ BattleUnitSetup btlparty_jon_jon_51_03_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4828,7 +4828,7 @@ BattleGroupSetup btlgrp_jon_jon_51_03_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_51_03_off_2[] = {
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4838,7 +4838,7 @@ BattleUnitSetup btlparty_jon_jon_51_03_off_2[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_badge_borodo, // mUnitKindParams
+        &unit_badge_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4848,7 +4848,7 @@ BattleUnitSetup btlparty_jon_jon_51_03_off_2[] = {
         battle_item_badge_borodo, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4880,7 +4880,7 @@ BattleGroupSetup btlgrp_jon_jon_51_03_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_51_03_off_3[] = {
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4890,7 +4890,7 @@ BattleUnitSetup btlparty_jon_jon_51_03_off_3[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4900,7 +4900,7 @@ BattleUnitSetup btlparty_jon_jon_51_03_off_3[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_burst_wanwan, // mUnitKindParams
+        &unit_burst_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4929,7 +4929,7 @@ BattleGroupSetup btlgrp_jon_jon_51_03_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_54, in the Pit of 100 Trials, floors 54, 59: Red Chomp x3. */
 BattleUnitSetup btlparty_jon_jon_51_04_off_1[] = {
     {
-        &unit_burst_wanwan, // mUnitKindParams
+        &unit_burst_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4939,7 +4939,7 @@ BattleUnitSetup btlparty_jon_jon_51_04_off_1[] = {
         battle_item_burst_wanwan, // itemDropTable
     },
     {
-        &unit_burst_wanwan, // mUnitKindParams
+        &unit_burst_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4949,7 +4949,7 @@ BattleUnitSetup btlparty_jon_jon_51_04_off_1[] = {
         battle_item_burst_wanwan, // itemDropTable
     },
     {
-        &unit_burst_wanwan, // mUnitKindParams
+        &unit_burst_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4981,7 +4981,7 @@ BattleGroupSetup btlgrp_jon_jon_51_04_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_51_04_off_2[] = {
     {
-        &unit_burst_wanwan, // mUnitKindParams
+        &unit_burst_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -4991,7 +4991,7 @@ BattleUnitSetup btlparty_jon_jon_51_04_off_2[] = {
         battle_item_burst_wanwan, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5001,7 +5001,7 @@ BattleUnitSetup btlparty_jon_jon_51_04_off_2[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_burst_wanwan, // mUnitKindParams
+        &unit_burst_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5033,7 +5033,7 @@ BattleGroupSetup btlgrp_jon_jon_51_04_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_51_04_off_3[] = {
     {
-        &unit_burst_wanwan, // mUnitKindParams
+        &unit_burst_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5043,7 +5043,7 @@ BattleUnitSetup btlparty_jon_jon_51_04_off_3[] = {
         battle_item_burst_wanwan, // itemDropTable
     },
     {
-        &unit_bllizard, // mUnitKindParams
+        &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5053,7 +5053,7 @@ BattleUnitSetup btlparty_jon_jon_51_04_off_3[] = {
         battle_item_bllizard, // itemDropTable
     },
     {
-        &unit_bllizard, // mUnitKindParams
+        &unit_bllizard, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5082,7 +5082,7 @@ BattleGroupSetup btlgrp_jon_jon_51_04_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_55, in the Pit of 100 Trials, floors 55, 60: Moon Cleft x4. */
 BattleUnitSetup btlparty_jon_jon_51_05_off_1[] = {
     {
-        &unit_sinemon, // mUnitKindParams
+        &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5092,7 +5092,7 @@ BattleUnitSetup btlparty_jon_jon_51_05_off_1[] = {
         battle_item_sinemon, // itemDropTable
     },
     {
-        &unit_sinemon, // mUnitKindParams
+        &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5102,7 +5102,7 @@ BattleUnitSetup btlparty_jon_jon_51_05_off_1[] = {
         battle_item_sinemon, // itemDropTable
     },
     {
-        &unit_sinemon, // mUnitKindParams
+        &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5112,7 +5112,7 @@ BattleUnitSetup btlparty_jon_jon_51_05_off_1[] = {
         battle_item_sinemon, // itemDropTable
     },
     {
-        &unit_sinemon, // mUnitKindParams
+        &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5144,7 +5144,7 @@ BattleGroupSetup btlgrp_jon_jon_51_05_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_51_05_off_2[] = {
     {
-        &unit_sinemon, // mUnitKindParams
+        &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5154,7 +5154,7 @@ BattleUnitSetup btlparty_jon_jon_51_05_off_2[] = {
         battle_item_sinemon, // itemDropTable
     },
     {
-        &unit_sinemon, // mUnitKindParams
+        &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5164,7 +5164,7 @@ BattleUnitSetup btlparty_jon_jon_51_05_off_2[] = {
         battle_item_sinemon, // itemDropTable
     },
     {
-        &unit_burst_wanwan, // mUnitKindParams
+        &unit_burst_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5196,7 +5196,7 @@ BattleGroupSetup btlgrp_jon_jon_51_05_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_51_05_off_3[] = {
     {
-        &unit_sinemon, // mUnitKindParams
+        &unit_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5206,7 +5206,7 @@ BattleUnitSetup btlparty_jon_jon_51_05_off_3[] = {
         battle_item_sinemon, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5216,7 +5216,7 @@ BattleUnitSetup btlparty_jon_jon_51_05_off_3[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5245,7 +5245,7 @@ BattleGroupSetup btlgrp_jon_jon_51_05_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_61, in the Pit of 100 Trials, floors 61, 66: Dark Lakitu x3. */
 BattleUnitSetup btlparty_jon_jon_61_01_off_1[] = {
     {
-        &unit_hyper_jyugem, // mUnitKindParams
+        &unit_hyper_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5255,7 +5255,7 @@ BattleUnitSetup btlparty_jon_jon_61_01_off_1[] = {
         battle_item_hyper_jyugem, // itemDropTable
     },
     {
-        &unit_hyper_jyugem, // mUnitKindParams
+        &unit_hyper_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5265,7 +5265,7 @@ BattleUnitSetup btlparty_jon_jon_61_01_off_1[] = {
         battle_item_hyper_jyugem, // itemDropTable
     },
     {
-        &unit_hyper_jyugem, // mUnitKindParams
+        &unit_hyper_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5297,7 +5297,7 @@ BattleGroupSetup btlgrp_jon_jon_61_01_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_61_01_off_2[] = {
     {
-        &unit_hyper_jyugem, // mUnitKindParams
+        &unit_hyper_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5307,7 +5307,7 @@ BattleUnitSetup btlparty_jon_jon_61_01_off_2[] = {
         battle_item_hyper_jyugem, // itemDropTable
     },
     {
-        &unit_hyper_jyugem, // mUnitKindParams
+        &unit_hyper_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5317,7 +5317,7 @@ BattleUnitSetup btlparty_jon_jon_61_01_off_2[] = {
         battle_item_hyper_jyugem, // itemDropTable
     },
     {
-        &unit_dark_keeper, // mUnitKindParams
+        &unit_dark_keeper, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5349,7 +5349,7 @@ BattleGroupSetup btlgrp_jon_jon_61_01_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_61_01_off_3[] = {
     {
-        &unit_hyper_jyugem, // mUnitKindParams
+        &unit_hyper_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5359,7 +5359,7 @@ BattleUnitSetup btlparty_jon_jon_61_01_off_3[] = {
         battle_item_hyper_jyugem, // itemDropTable
     },
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5388,7 +5388,7 @@ BattleGroupSetup btlgrp_jon_jon_61_01_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_62, in the Pit of 100 Trials, floors 62, 67: Dry Bones x4. */
 BattleUnitSetup btlparty_jon_jon_61_02_off_1[] = {
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5398,7 +5398,7 @@ BattleUnitSetup btlparty_jon_jon_61_02_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5408,7 +5408,7 @@ BattleUnitSetup btlparty_jon_jon_61_02_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5418,7 +5418,7 @@ BattleUnitSetup btlparty_jon_jon_61_02_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5450,7 +5450,7 @@ BattleGroupSetup btlgrp_jon_jon_61_02_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_61_02_off_2[] = {
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5460,7 +5460,7 @@ BattleUnitSetup btlparty_jon_jon_61_02_off_2[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_dark_keeper, // mUnitKindParams
+        &unit_dark_keeper, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5492,7 +5492,7 @@ BattleGroupSetup btlgrp_jon_jon_61_02_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_61_02_off_3[] = {
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5502,7 +5502,7 @@ BattleUnitSetup btlparty_jon_jon_61_02_off_3[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_ice_pakkun, // mUnitKindParams
+        &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5512,7 +5512,7 @@ BattleUnitSetup btlparty_jon_jon_61_02_off_3[] = {
         battle_item_ice_pakkun, // itemDropTable
     },
     {
-        &unit_ice_pakkun, // mUnitKindParams
+        &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5541,7 +5541,7 @@ BattleGroupSetup btlgrp_jon_jon_61_02_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_63, in the Pit of 100 Trials, floors 63, 68: Dark Wizzerd x3. */
 BattleUnitSetup btlparty_jon_jon_61_03_off_1[] = {
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5551,7 +5551,7 @@ BattleUnitSetup btlparty_jon_jon_61_03_off_1[] = {
         battle_item_super_mahorn, // itemDropTable
     },
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5561,7 +5561,7 @@ BattleUnitSetup btlparty_jon_jon_61_03_off_1[] = {
         battle_item_super_mahorn, // itemDropTable
     },
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5593,7 +5593,7 @@ BattleGroupSetup btlgrp_jon_jon_61_03_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_61_03_off_2[] = {
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5603,7 +5603,7 @@ BattleUnitSetup btlparty_jon_jon_61_03_off_2[] = {
         battle_item_super_mahorn, // itemDropTable
     },
     {
-        &unit_dark_keeper, // mUnitKindParams
+        &unit_dark_keeper, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5613,7 +5613,7 @@ BattleUnitSetup btlparty_jon_jon_61_03_off_2[] = {
         battle_item_dark_keeper, // itemDropTable
     },
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5645,7 +5645,7 @@ BattleGroupSetup btlgrp_jon_jon_61_03_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_61_03_off_3[] = {
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5655,7 +5655,7 @@ BattleUnitSetup btlparty_jon_jon_61_03_off_3[] = {
         battle_item_super_mahorn, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5665,7 +5665,7 @@ BattleUnitSetup btlparty_jon_jon_61_03_off_3[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5694,7 +5694,7 @@ BattleGroupSetup btlgrp_jon_jon_61_03_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_64, in the Pit of 100 Trials, floors 64, 69: Frost Piranha x4. */
 BattleUnitSetup btlparty_jon_jon_61_04_off_1[] = {
     {
-        &unit_ice_pakkun, // mUnitKindParams
+        &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5704,7 +5704,7 @@ BattleUnitSetup btlparty_jon_jon_61_04_off_1[] = {
         battle_item_ice_pakkun, // itemDropTable
     },
     {
-        &unit_ice_pakkun, // mUnitKindParams
+        &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5714,7 +5714,7 @@ BattleUnitSetup btlparty_jon_jon_61_04_off_1[] = {
         battle_item_ice_pakkun, // itemDropTable
     },
     {
-        &unit_ice_pakkun, // mUnitKindParams
+        &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5724,7 +5724,7 @@ BattleUnitSetup btlparty_jon_jon_61_04_off_1[] = {
         battle_item_ice_pakkun, // itemDropTable
     },
     {
-        &unit_ice_pakkun, // mUnitKindParams
+        &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5756,7 +5756,7 @@ BattleGroupSetup btlgrp_jon_jon_61_04_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_61_04_off_2[] = {
     {
-        &unit_ice_pakkun, // mUnitKindParams
+        &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5766,7 +5766,7 @@ BattleUnitSetup btlparty_jon_jon_61_04_off_2[] = {
         battle_item_ice_pakkun, // itemDropTable
     },
     {
-        &unit_hyper_jyugem, // mUnitKindParams
+        &unit_hyper_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5776,7 +5776,7 @@ BattleUnitSetup btlparty_jon_jon_61_04_off_2[] = {
         battle_item_hyper_jyugem, // itemDropTable
     },
     {
-        &unit_hyper_jyugem, // mUnitKindParams
+        &unit_hyper_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5808,7 +5808,7 @@ BattleGroupSetup btlgrp_jon_jon_61_04_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_61_04_off_3[] = {
     {
-        &unit_ice_pakkun, // mUnitKindParams
+        &unit_ice_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5818,7 +5818,7 @@ BattleUnitSetup btlparty_jon_jon_61_04_off_3[] = {
         battle_item_ice_pakkun, // itemDropTable
     },
     {
-        &unit_dark_keeper, // mUnitKindParams
+        &unit_dark_keeper, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5847,7 +5847,7 @@ BattleGroupSetup btlgrp_jon_jon_61_04_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_65, in the Pit of 100 Trials, floors 65, 70: Dark Craw x3. */
 BattleUnitSetup btlparty_jon_jon_61_05_off_1[] = {
     {
-        &unit_dark_keeper, // mUnitKindParams
+        &unit_dark_keeper, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5857,7 +5857,7 @@ BattleUnitSetup btlparty_jon_jon_61_05_off_1[] = {
         battle_item_dark_keeper, // itemDropTable
     },
     {
-        &unit_dark_keeper, // mUnitKindParams
+        &unit_dark_keeper, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5867,7 +5867,7 @@ BattleUnitSetup btlparty_jon_jon_61_05_off_1[] = {
         battle_item_dark_keeper, // itemDropTable
     },
     {
-        &unit_dark_keeper, // mUnitKindParams
+        &unit_dark_keeper, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5899,7 +5899,7 @@ BattleGroupSetup btlgrp_jon_jon_61_05_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_61_05_off_2[] = {
     {
-        &unit_dark_keeper, // mUnitKindParams
+        &unit_dark_keeper, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5909,7 +5909,7 @@ BattleUnitSetup btlparty_jon_jon_61_05_off_2[] = {
         battle_item_dark_keeper, // itemDropTable
     },
     {
-        &unit_hyper_jyugem, // mUnitKindParams
+        &unit_hyper_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5938,7 +5938,7 @@ BattleGroupSetup btlgrp_jon_jon_61_05_off_2 = {
 /** Enemy lineup of formation 3 of BTLNO_JON_65, in the Pit of 100 Trials, floors 65, 70: Dark Craw x2. */
 BattleUnitSetup btlparty_jon_jon_61_05_off_3[] = {
     {
-        &unit_dark_keeper, // mUnitKindParams
+        &unit_dark_keeper, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5948,7 +5948,7 @@ BattleUnitSetup btlparty_jon_jon_61_05_off_3[] = {
         battle_item_dark_keeper, // itemDropTable
     },
     {
-        &unit_dark_keeper, // mUnitKindParams
+        &unit_dark_keeper, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5977,7 +5977,7 @@ BattleGroupSetup btlgrp_jon_jon_61_05_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_71, in the Pit of 100 Trials, floors 71, 76: Wizzerd x3. */
 BattleUnitSetup btlparty_jon_jon_71_01_off_1[] = {
     {
-        &unit_mahorn, // mUnitKindParams
+        &unit_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5987,7 +5987,7 @@ BattleUnitSetup btlparty_jon_jon_71_01_off_1[] = {
         battle_item_mahorn, // itemDropTable
     },
     {
-        &unit_mahorn, // mUnitKindParams
+        &unit_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -5997,7 +5997,7 @@ BattleUnitSetup btlparty_jon_jon_71_01_off_1[] = {
         battle_item_mahorn, // itemDropTable
     },
     {
-        &unit_mahorn, // mUnitKindParams
+        &unit_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6029,7 +6029,7 @@ BattleGroupSetup btlgrp_jon_jon_71_01_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_71_01_off_2[] = {
     {
-        &unit_mahorn, // mUnitKindParams
+        &unit_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6039,7 +6039,7 @@ BattleUnitSetup btlparty_jon_jon_71_01_off_2[] = {
         battle_item_mahorn, // itemDropTable
     },
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6049,7 +6049,7 @@ BattleUnitSetup btlparty_jon_jon_71_01_off_2[] = {
         battle_item_togenoko_ace, // itemDropTable
     },
     {
-        &unit_mahorn, // mUnitKindParams
+        &unit_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6081,7 +6081,7 @@ BattleGroupSetup btlgrp_jon_jon_71_01_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_71_01_off_3[] = {
     {
-        &unit_mahorn, // mUnitKindParams
+        &unit_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6091,7 +6091,7 @@ BattleUnitSetup btlparty_jon_jon_71_01_off_3[] = {
         battle_item_mahorn, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6101,7 +6101,7 @@ BattleUnitSetup btlparty_jon_jon_71_01_off_3[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6132,7 +6132,7 @@ BattleGroupSetup btlgrp_jon_jon_71_01_off_3 = {
  */
 BattleUnitSetup btlparty_jon_jon_71_02_off_1[] = {
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6142,7 +6142,7 @@ BattleUnitSetup btlparty_jon_jon_71_02_off_1[] = {
         battle_item_togenoko_ace, // itemDropTable
     },
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6152,7 +6152,7 @@ BattleUnitSetup btlparty_jon_jon_71_02_off_1[] = {
         battle_item_togenoko_ace, // itemDropTable
     },
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6184,7 +6184,7 @@ BattleGroupSetup btlgrp_jon_jon_71_02_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_71_02_off_2[] = {
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6194,7 +6194,7 @@ BattleUnitSetup btlparty_jon_jon_71_02_off_2[] = {
         battle_item_togenoko_ace, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6204,7 +6204,7 @@ BattleUnitSetup btlparty_jon_jon_71_02_off_2[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6236,7 +6236,7 @@ BattleGroupSetup btlgrp_jon_jon_71_02_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_71_02_off_3[] = {
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6246,7 +6246,7 @@ BattleUnitSetup btlparty_jon_jon_71_02_off_3[] = {
         battle_item_togenoko_ace, // itemDropTable
     },
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6256,7 +6256,7 @@ BattleUnitSetup btlparty_jon_jon_71_02_off_3[] = {
         battle_item_togenoko_ace, // itemDropTable
     },
     {
-        &unit_mahorn, // mUnitKindParams
+        &unit_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6285,7 +6285,7 @@ BattleGroupSetup btlgrp_jon_jon_71_02_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_73, in the Pit of 100 Trials, floors 73, 78: Phantom Ember x5. */
 BattleUnitSetup btlparty_jon_jon_71_03_off_1[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6295,7 +6295,7 @@ BattleUnitSetup btlparty_jon_jon_71_03_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6305,7 +6305,7 @@ BattleUnitSetup btlparty_jon_jon_71_03_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6315,7 +6315,7 @@ BattleUnitSetup btlparty_jon_jon_71_03_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6325,7 +6325,7 @@ BattleUnitSetup btlparty_jon_jon_71_03_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6357,7 +6357,7 @@ BattleGroupSetup btlgrp_jon_jon_71_03_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_71_03_off_2[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6367,7 +6367,7 @@ BattleUnitSetup btlparty_jon_jon_71_03_off_2[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6377,7 +6377,7 @@ BattleUnitSetup btlparty_jon_jon_71_03_off_2[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6387,7 +6387,7 @@ BattleUnitSetup btlparty_jon_jon_71_03_off_2[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_mahorn, // mUnitKindParams
+        &unit_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6419,7 +6419,7 @@ BattleGroupSetup btlgrp_jon_jon_71_03_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_71_03_off_3[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6429,7 +6429,7 @@ BattleUnitSetup btlparty_jon_jon_71_03_off_3[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6439,7 +6439,7 @@ BattleUnitSetup btlparty_jon_jon_71_03_off_3[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6449,7 +6449,7 @@ BattleUnitSetup btlparty_jon_jon_71_03_off_3[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6478,7 +6478,7 @@ BattleGroupSetup btlgrp_jon_jon_71_03_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_74, in the Pit of 100 Trials, floors 74, 79: Swoopula x4. */
 BattleUnitSetup btlparty_jon_jon_71_04_off_1[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6488,7 +6488,7 @@ BattleUnitSetup btlparty_jon_jon_71_04_off_1[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6498,7 +6498,7 @@ BattleUnitSetup btlparty_jon_jon_71_04_off_1[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6508,7 +6508,7 @@ BattleUnitSetup btlparty_jon_jon_71_04_off_1[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6540,7 +6540,7 @@ BattleGroupSetup btlgrp_jon_jon_71_04_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_71_04_off_2[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6550,7 +6550,7 @@ BattleUnitSetup btlparty_jon_jon_71_04_off_2[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6560,7 +6560,7 @@ BattleUnitSetup btlparty_jon_jon_71_04_off_2[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_mahorn, // mUnitKindParams
+        &unit_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6570,7 +6570,7 @@ BattleUnitSetup btlparty_jon_jon_71_04_off_2[] = {
         battle_item_mahorn, // itemDropTable
     },
     {
-        &unit_mahorn, // mUnitKindParams
+        &unit_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6602,7 +6602,7 @@ BattleGroupSetup btlgrp_jon_jon_71_04_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_71_04_off_3[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6612,7 +6612,7 @@ BattleUnitSetup btlparty_jon_jon_71_04_off_3[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6622,7 +6622,7 @@ BattleUnitSetup btlparty_jon_jon_71_04_off_3[] = {
         battle_item_togenoko_ace, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6632,7 +6632,7 @@ BattleUnitSetup btlparty_jon_jon_71_04_off_3[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6661,7 +6661,7 @@ BattleGroupSetup btlgrp_jon_jon_71_04_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_75, in the Pit of 100 Trials, floors 75, 80: Chain-Chomp x4. */
 BattleUnitSetup btlparty_jon_jon_71_05_off_1[] = {
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6671,7 +6671,7 @@ BattleUnitSetup btlparty_jon_jon_71_05_off_1[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6681,7 +6681,7 @@ BattleUnitSetup btlparty_jon_jon_71_05_off_1[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6691,7 +6691,7 @@ BattleUnitSetup btlparty_jon_jon_71_05_off_1[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6723,7 +6723,7 @@ BattleGroupSetup btlgrp_jon_jon_71_05_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_71_05_off_2[] = {
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6733,7 +6733,7 @@ BattleUnitSetup btlparty_jon_jon_71_05_off_2[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6743,7 +6743,7 @@ BattleUnitSetup btlparty_jon_jon_71_05_off_2[] = {
         battle_item_togenoko_ace, // itemDropTable
     },
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6775,7 +6775,7 @@ BattleGroupSetup btlgrp_jon_jon_71_05_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_71_05_off_3[] = {
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6785,7 +6785,7 @@ BattleUnitSetup btlparty_jon_jon_71_05_off_3[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6795,7 +6795,7 @@ BattleUnitSetup btlparty_jon_jon_71_05_off_3[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_mahorn, // mUnitKindParams
+        &unit_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6824,7 +6824,7 @@ BattleGroupSetup btlgrp_jon_jon_71_05_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_81, in the Pit of 100 Trials, floors 81, 86: Spunia x4. */
 BattleUnitSetup btlparty_jon_jon_81_01_off_1[] = {
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6834,7 +6834,7 @@ BattleUnitSetup btlparty_jon_jon_81_01_off_1[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6844,7 +6844,7 @@ BattleUnitSetup btlparty_jon_jon_81_01_off_1[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -6854,7 +6854,7 @@ BattleUnitSetup btlparty_jon_jon_81_01_off_1[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -6886,7 +6886,7 @@ BattleGroupSetup btlgrp_jon_jon_81_01_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_81_01_off_2[] = {
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6896,7 +6896,7 @@ BattleUnitSetup btlparty_jon_jon_81_01_off_2[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6906,7 +6906,7 @@ BattleUnitSetup btlparty_jon_jon_81_01_off_2[] = {
         battle_item_churantalar, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6916,7 +6916,7 @@ BattleUnitSetup btlparty_jon_jon_81_01_off_2[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6948,7 +6948,7 @@ BattleGroupSetup btlgrp_jon_jon_81_01_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_81_01_off_3[] = {
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6958,7 +6958,7 @@ BattleUnitSetup btlparty_jon_jon_81_01_off_3[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_pakkun_flower, // mUnitKindParams
+        &unit_pakkun_flower, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6968,7 +6968,7 @@ BattleUnitSetup btlparty_jon_jon_81_01_off_3[] = {
         battle_item_pakkun_flower, // itemDropTable
     },
     {
-        &unit_yamitogedaruma, // mUnitKindParams
+        &unit_yamitogedaruma, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -6997,7 +6997,7 @@ BattleGroupSetup btlgrp_jon_jon_81_01_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_82, in the Pit of 100 Trials, floors 82, 87: Dark Bristle x2. */
 BattleUnitSetup btlparty_jon_jon_81_02_off_1[] = {
     {
-        &unit_yamitogedaruma, // mUnitKindParams
+        &unit_yamitogedaruma, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7007,7 +7007,7 @@ BattleUnitSetup btlparty_jon_jon_81_02_off_1[] = {
         battle_item_yamitogedaruma, // itemDropTable
     },
     {
-        &unit_yamitogedaruma, // mUnitKindParams
+        &unit_yamitogedaruma, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7039,7 +7039,7 @@ BattleGroupSetup btlgrp_jon_jon_81_02_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_81_02_off_2[] = {
     {
-        &unit_yamitogedaruma, // mUnitKindParams
+        &unit_yamitogedaruma, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7049,7 +7049,7 @@ BattleUnitSetup btlparty_jon_jon_81_02_off_2[] = {
         battle_item_yamitogedaruma, // itemDropTable
     },
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7059,7 +7059,7 @@ BattleUnitSetup btlparty_jon_jon_81_02_off_2[] = {
         battle_item_churantalar, // itemDropTable
     },
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7069,7 +7069,7 @@ BattleUnitSetup btlparty_jon_jon_81_02_off_2[] = {
         battle_item_churantalar, // itemDropTable
     },
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -7101,7 +7101,7 @@ BattleGroupSetup btlgrp_jon_jon_81_02_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_81_02_off_3[] = {
     {
-        &unit_yamitogedaruma, // mUnitKindParams
+        &unit_yamitogedaruma, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7111,7 +7111,7 @@ BattleUnitSetup btlparty_jon_jon_81_02_off_3[] = {
         battle_item_yamitogedaruma, // itemDropTable
     },
     {
-        &unit_yamitogedaruma, // mUnitKindParams
+        &unit_yamitogedaruma, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7121,7 +7121,7 @@ BattleUnitSetup btlparty_jon_jon_81_02_off_3[] = {
         battle_item_yamitogedaruma, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7150,7 +7150,7 @@ BattleGroupSetup btlgrp_jon_jon_81_02_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_83, in the Pit of 100 Trials, floors 83, 88: Arantula x4. */
 BattleUnitSetup btlparty_jon_jon_81_03_off_1[] = {
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7160,7 +7160,7 @@ BattleUnitSetup btlparty_jon_jon_81_03_off_1[] = {
         battle_item_churantalar, // itemDropTable
     },
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7170,7 +7170,7 @@ BattleUnitSetup btlparty_jon_jon_81_03_off_1[] = {
         battle_item_churantalar, // itemDropTable
     },
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7180,7 +7180,7 @@ BattleUnitSetup btlparty_jon_jon_81_03_off_1[] = {
         battle_item_churantalar, // itemDropTable
     },
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -7212,7 +7212,7 @@ BattleGroupSetup btlgrp_jon_jon_81_03_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_81_03_off_2[] = {
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7222,7 +7222,7 @@ BattleUnitSetup btlparty_jon_jon_81_03_off_2[] = {
         battle_item_churantalar, // itemDropTable
     },
     {
-        &unit_pakkun_flower, // mUnitKindParams
+        &unit_pakkun_flower, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7232,7 +7232,7 @@ BattleUnitSetup btlparty_jon_jon_81_03_off_2[] = {
         battle_item_pakkun_flower, // itemDropTable
     },
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7264,7 +7264,7 @@ BattleGroupSetup btlgrp_jon_jon_81_03_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_81_03_off_3[] = {
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7274,7 +7274,7 @@ BattleUnitSetup btlparty_jon_jon_81_03_off_3[] = {
         battle_item_churantalar, // itemDropTable
     },
     {
-        &unit_churantalar, // mUnitKindParams
+        &unit_churantalar, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7284,7 +7284,7 @@ BattleUnitSetup btlparty_jon_jon_81_03_off_3[] = {
         battle_item_churantalar, // itemDropTable
     },
     {
-        &unit_yamitogedaruma, // mUnitKindParams
+        &unit_yamitogedaruma, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7313,7 +7313,7 @@ BattleGroupSetup btlgrp_jon_jon_81_03_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_84, in the Pit of 100 Trials, floors 84, 89: Piranha Plant x4. */
 BattleUnitSetup btlparty_jon_jon_81_04_off_1[] = {
     {
-        &unit_pakkun_flower, // mUnitKindParams
+        &unit_pakkun_flower, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7323,7 +7323,7 @@ BattleUnitSetup btlparty_jon_jon_81_04_off_1[] = {
         battle_item_pakkun_flower, // itemDropTable
     },
     {
-        &unit_pakkun_flower, // mUnitKindParams
+        &unit_pakkun_flower, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7333,7 +7333,7 @@ BattleUnitSetup btlparty_jon_jon_81_04_off_1[] = {
         battle_item_pakkun_flower, // itemDropTable
     },
     {
-        &unit_pakkun_flower, // mUnitKindParams
+        &unit_pakkun_flower, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7343,7 +7343,7 @@ BattleUnitSetup btlparty_jon_jon_81_04_off_1[] = {
         battle_item_pakkun_flower, // itemDropTable
     },
     {
-        &unit_pakkun_flower, // mUnitKindParams
+        &unit_pakkun_flower, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7375,7 +7375,7 @@ BattleGroupSetup btlgrp_jon_jon_81_04_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_81_04_off_2[] = {
     {
-        &unit_pakkun_flower, // mUnitKindParams
+        &unit_pakkun_flower, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7385,7 +7385,7 @@ BattleUnitSetup btlparty_jon_jon_81_04_off_2[] = {
         battle_item_pakkun_flower, // itemDropTable
     },
     {
-        &unit_yamitogedaruma, // mUnitKindParams
+        &unit_yamitogedaruma, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7395,7 +7395,7 @@ BattleUnitSetup btlparty_jon_jon_81_04_off_2[] = {
         battle_item_yamitogedaruma, // itemDropTable
     },
     {
-        &unit_pakkun_flower, // mUnitKindParams
+        &unit_pakkun_flower, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7427,7 +7427,7 @@ BattleGroupSetup btlgrp_jon_jon_81_04_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_81_04_off_3[] = {
     {
-        &unit_pakkun_flower, // mUnitKindParams
+        &unit_pakkun_flower, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7437,7 +7437,7 @@ BattleUnitSetup btlparty_jon_jon_81_04_off_3[] = {
         battle_item_pakkun_flower, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7447,7 +7447,7 @@ BattleUnitSetup btlparty_jon_jon_81_04_off_3[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -7457,7 +7457,7 @@ BattleUnitSetup btlparty_jon_jon_81_04_off_3[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -7486,7 +7486,7 @@ BattleGroupSetup btlgrp_jon_jon_81_04_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_85, in the Pit of 100 Trials, floors 85, 90: Spunia x4. */
 BattleUnitSetup btlparty_jon_jon_81_05_off_1[] = {
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7496,7 +7496,7 @@ BattleUnitSetup btlparty_jon_jon_81_05_off_1[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7506,7 +7506,7 @@ BattleUnitSetup btlparty_jon_jon_81_05_off_1[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -7516,7 +7516,7 @@ BattleUnitSetup btlparty_jon_jon_81_05_off_1[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -7545,7 +7545,7 @@ BattleGroupSetup btlgrp_jon_jon_81_05_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_JON_85, in the Pit of 100 Trials, floors 85, 90: Spunia x3. */
 BattleUnitSetup btlparty_jon_jon_81_05_off_2[] = {
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7555,7 +7555,7 @@ BattleUnitSetup btlparty_jon_jon_81_05_off_2[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7565,7 +7565,7 @@ BattleUnitSetup btlparty_jon_jon_81_05_off_2[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -7594,7 +7594,7 @@ BattleGroupSetup btlgrp_jon_jon_81_05_off_2 = {
 /** Enemy lineup of formation 3 of BTLNO_JON_85, in the Pit of 100 Trials, floors 85, 90: Spunia x5. */
 BattleUnitSetup btlparty_jon_jon_81_05_off_3[] = {
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7604,7 +7604,7 @@ BattleUnitSetup btlparty_jon_jon_81_05_off_3[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7614,7 +7614,7 @@ BattleUnitSetup btlparty_jon_jon_81_05_off_3[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7624,7 +7624,7 @@ BattleUnitSetup btlparty_jon_jon_81_05_off_3[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -7634,7 +7634,7 @@ BattleUnitSetup btlparty_jon_jon_81_05_off_3[] = {
         battle_item_hennya, // itemDropTable
     },
     {
-        &unit_hennya, // mUnitKindParams
+        &unit_hennya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7666,7 +7666,7 @@ BattleGroupSetup btlgrp_jon_jon_81_05_off_3 = {
  */
 BattleUnitSetup btlparty_jon_jon_91_01_off_1[] = {
     {
-        &unit_mahorn_custom, // mUnitKindParams
+        &unit_mahorn_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7676,7 +7676,7 @@ BattleUnitSetup btlparty_jon_jon_91_01_off_1[] = {
         battle_item_mahorn_custom, // itemDropTable
     },
     {
-        &unit_mahorn_custom, // mUnitKindParams
+        &unit_mahorn_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7686,7 +7686,7 @@ BattleUnitSetup btlparty_jon_jon_91_01_off_1[] = {
         battle_item_mahorn_custom, // itemDropTable
     },
     {
-        &unit_mahorn_custom, // mUnitKindParams
+        &unit_mahorn_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7696,7 +7696,7 @@ BattleUnitSetup btlparty_jon_jon_91_01_off_1[] = {
         battle_item_mahorn_custom, // itemDropTable
     },
     {
-        &unit_mahorn_custom, // mUnitKindParams
+        &unit_mahorn_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7706,7 +7706,7 @@ BattleUnitSetup btlparty_jon_jon_91_01_off_1[] = {
         battle_item_mahorn_custom, // itemDropTable
     },
     {
-        &unit_mahorn_custom, // mUnitKindParams
+        &unit_mahorn_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7738,7 +7738,7 @@ BattleGroupSetup btlgrp_jon_jon_91_01_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_91_01_off_2[] = {
     {
-        &unit_mahorn_custom, // mUnitKindParams
+        &unit_mahorn_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7748,7 +7748,7 @@ BattleUnitSetup btlparty_jon_jon_91_01_off_2[] = {
         battle_item_mahorn_custom, // itemDropTable
     },
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7758,7 +7758,7 @@ BattleUnitSetup btlparty_jon_jon_91_01_off_2[] = {
         battle_item_dokugassun, // itemDropTable
     },
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7790,7 +7790,7 @@ BattleGroupSetup btlgrp_jon_jon_91_01_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_91_01_off_3[] = {
     {
-        &unit_mahorn_custom, // mUnitKindParams
+        &unit_mahorn_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7800,7 +7800,7 @@ BattleUnitSetup btlparty_jon_jon_91_01_off_3[] = {
         battle_item_mahorn_custom, // itemDropTable
     },
     {
-        &unit_mahorn_custom, // mUnitKindParams
+        &unit_mahorn_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7810,7 +7810,7 @@ BattleUnitSetup btlparty_jon_jon_91_01_off_3[] = {
         battle_item_mahorn_custom, // itemDropTable
     },
     {
-        &unit_basabasa_green, // mUnitKindParams
+        &unit_basabasa_green, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7839,7 +7839,7 @@ BattleGroupSetup btlgrp_jon_jon_91_01_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_92, in the Pit of 100 Trials, floors 92, 96: Poison Puff x4. */
 BattleUnitSetup btlparty_jon_jon_91_02_off_1[] = {
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7849,7 +7849,7 @@ BattleUnitSetup btlparty_jon_jon_91_02_off_1[] = {
         battle_item_dokugassun, // itemDropTable
     },
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7859,7 +7859,7 @@ BattleUnitSetup btlparty_jon_jon_91_02_off_1[] = {
         battle_item_dokugassun, // itemDropTable
     },
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -7869,7 +7869,7 @@ BattleUnitSetup btlparty_jon_jon_91_02_off_1[] = {
         battle_item_dokugassun, // itemDropTable
     },
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7901,7 +7901,7 @@ BattleGroupSetup btlgrp_jon_jon_91_02_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_91_02_off_2[] = {
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7911,7 +7911,7 @@ BattleUnitSetup btlparty_jon_jon_91_02_off_2[] = {
         battle_item_dokugassun, // itemDropTable
     },
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7921,7 +7921,7 @@ BattleUnitSetup btlparty_jon_jon_91_02_off_2[] = {
         battle_item_dokugassun, // itemDropTable
     },
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -7931,7 +7931,7 @@ BattleUnitSetup btlparty_jon_jon_91_02_off_2[] = {
         battle_item_dokugassun, // itemDropTable
     },
     {
-        &unit_giant_bomb, // mUnitKindParams
+        &unit_giant_bomb, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7963,7 +7963,7 @@ BattleGroupSetup btlgrp_jon_jon_91_02_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_91_02_off_3[] = {
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7973,7 +7973,7 @@ BattleUnitSetup btlparty_jon_jon_91_02_off_3[] = {
         battle_item_dokugassun, // itemDropTable
     },
     {
-        &unit_basabasa_green, // mUnitKindParams
+        &unit_basabasa_green, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7983,7 +7983,7 @@ BattleUnitSetup btlparty_jon_jon_91_02_off_3[] = {
         battle_item_basabasa_green, // itemDropTable
     },
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -7993,7 +7993,7 @@ BattleUnitSetup btlparty_jon_jon_91_02_off_3[] = {
         battle_item_dokugassun, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8022,7 +8022,7 @@ BattleGroupSetup btlgrp_jon_jon_91_02_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_93, in the Pit of 100 Trials, floors 93, 97: Bob-ulk x4. */
 BattleUnitSetup btlparty_jon_jon_91_03_off_1[] = {
     {
-        &unit_giant_bomb, // mUnitKindParams
+        &unit_giant_bomb, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8032,7 +8032,7 @@ BattleUnitSetup btlparty_jon_jon_91_03_off_1[] = {
         battle_item_giant_bomb, // itemDropTable
     },
     {
-        &unit_giant_bomb, // mUnitKindParams
+        &unit_giant_bomb, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8042,7 +8042,7 @@ BattleUnitSetup btlparty_jon_jon_91_03_off_1[] = {
         battle_item_giant_bomb, // itemDropTable
     },
     {
-        &unit_giant_bomb, // mUnitKindParams
+        &unit_giant_bomb, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -8052,7 +8052,7 @@ BattleUnitSetup btlparty_jon_jon_91_03_off_1[] = {
         battle_item_giant_bomb, // itemDropTable
     },
     {
-        &unit_giant_bomb, // mUnitKindParams
+        &unit_giant_bomb, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8084,7 +8084,7 @@ BattleGroupSetup btlgrp_jon_jon_91_03_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_91_03_off_2[] = {
     {
-        &unit_giant_bomb, // mUnitKindParams
+        &unit_giant_bomb, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8094,7 +8094,7 @@ BattleUnitSetup btlparty_jon_jon_91_03_off_2[] = {
         battle_item_giant_bomb, // itemDropTable
     },
     {
-        &unit_giant_bomb, // mUnitKindParams
+        &unit_giant_bomb, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8104,7 +8104,7 @@ BattleUnitSetup btlparty_jon_jon_91_03_off_2[] = {
         battle_item_giant_bomb, // itemDropTable
     },
     {
-        &unit_mahorn_custom, // mUnitKindParams
+        &unit_mahorn_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8136,7 +8136,7 @@ BattleGroupSetup btlgrp_jon_jon_91_03_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_91_03_off_3[] = {
     {
-        &unit_giant_bomb, // mUnitKindParams
+        &unit_giant_bomb, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8146,7 +8146,7 @@ BattleUnitSetup btlparty_jon_jon_91_03_off_3[] = {
         battle_item_giant_bomb, // itemDropTable
     },
     {
-        &unit_giant_bomb, // mUnitKindParams
+        &unit_giant_bomb, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8156,7 +8156,7 @@ BattleUnitSetup btlparty_jon_jon_91_03_off_3[] = {
         battle_item_giant_bomb, // itemDropTable
     },
     {
-        &unit_giant_bomb, // mUnitKindParams
+        &unit_giant_bomb, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -8166,7 +8166,7 @@ BattleUnitSetup btlparty_jon_jon_91_03_off_3[] = {
         battle_item_giant_bomb, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8195,7 +8195,7 @@ BattleGroupSetup btlgrp_jon_jon_91_03_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_JON_94, in the Pit of 100 Trials, floors 94, 98: Swampire x5. */
 BattleUnitSetup btlparty_jon_jon_91_04_off_1[] = {
     {
-        &unit_basabasa_green, // mUnitKindParams
+        &unit_basabasa_green, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8205,7 +8205,7 @@ BattleUnitSetup btlparty_jon_jon_91_04_off_1[] = {
         battle_item_basabasa_green, // itemDropTable
     },
     {
-        &unit_basabasa_green, // mUnitKindParams
+        &unit_basabasa_green, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8215,7 +8215,7 @@ BattleUnitSetup btlparty_jon_jon_91_04_off_1[] = {
         battle_item_basabasa_green, // itemDropTable
     },
     {
-        &unit_basabasa_green, // mUnitKindParams
+        &unit_basabasa_green, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8225,7 +8225,7 @@ BattleUnitSetup btlparty_jon_jon_91_04_off_1[] = {
         battle_item_basabasa_green, // itemDropTable
     },
     {
-        &unit_basabasa_green, // mUnitKindParams
+        &unit_basabasa_green, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8235,7 +8235,7 @@ BattleUnitSetup btlparty_jon_jon_91_04_off_1[] = {
         battle_item_basabasa_green, // itemDropTable
     },
     {
-        &unit_basabasa_green, // mUnitKindParams
+        &unit_basabasa_green, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8267,7 +8267,7 @@ BattleGroupSetup btlgrp_jon_jon_91_04_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_91_04_off_2[] = {
     {
-        &unit_basabasa_green, // mUnitKindParams
+        &unit_basabasa_green, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8277,7 +8277,7 @@ BattleUnitSetup btlparty_jon_jon_91_04_off_2[] = {
         battle_item_basabasa_green, // itemDropTable
     },
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8287,7 +8287,7 @@ BattleUnitSetup btlparty_jon_jon_91_04_off_2[] = {
         battle_item_dokugassun, // itemDropTable
     },
     {
-        &unit_dokugassun, // mUnitKindParams
+        &unit_dokugassun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8319,7 +8319,7 @@ BattleGroupSetup btlgrp_jon_jon_91_04_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_91_04_off_3[] = {
     {
-        &unit_basabasa_green, // mUnitKindParams
+        &unit_basabasa_green, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8329,7 +8329,7 @@ BattleUnitSetup btlparty_jon_jon_91_04_off_3[] = {
         battle_item_basabasa_green, // itemDropTable
     },
     {
-        &unit_mahorn_custom, // mUnitKindParams
+        &unit_mahorn_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8339,7 +8339,7 @@ BattleUnitSetup btlparty_jon_jon_91_04_off_3[] = {
         battle_item_mahorn_custom, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8349,7 +8349,7 @@ BattleUnitSetup btlparty_jon_jon_91_04_off_3[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8380,7 +8380,7 @@ BattleGroupSetup btlgrp_jon_jon_91_04_off_3 = {
  */
 BattleUnitSetup btlparty_jon_jon_91_05_off_1[] = {
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8390,7 +8390,7 @@ BattleUnitSetup btlparty_jon_jon_91_05_off_1[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8400,7 +8400,7 @@ BattleUnitSetup btlparty_jon_jon_91_05_off_1[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -8410,7 +8410,7 @@ BattleUnitSetup btlparty_jon_jon_91_05_off_1[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -8420,7 +8420,7 @@ BattleUnitSetup btlparty_jon_jon_91_05_off_1[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -8451,7 +8451,7 @@ BattleGroupSetup btlgrp_jon_jon_91_05_off_1 = {
  */
 BattleUnitSetup btlparty_jon_jon_91_05_off_2[] = {
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8461,7 +8461,7 @@ BattleUnitSetup btlparty_jon_jon_91_05_off_2[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8471,7 +8471,7 @@ BattleUnitSetup btlparty_jon_jon_91_05_off_2[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -8481,7 +8481,7 @@ BattleUnitSetup btlparty_jon_jon_91_05_off_2[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -8491,7 +8491,7 @@ BattleUnitSetup btlparty_jon_jon_91_05_off_2[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -8522,7 +8522,7 @@ BattleGroupSetup btlgrp_jon_jon_91_05_off_2 = {
  */
 BattleUnitSetup btlparty_jon_jon_91_05_off_3[] = {
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8532,7 +8532,7 @@ BattleUnitSetup btlparty_jon_jon_91_05_off_3[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -8542,7 +8542,7 @@ BattleUnitSetup btlparty_jon_jon_91_05_off_3[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -8552,7 +8552,7 @@ BattleUnitSetup btlparty_jon_jon_91_05_off_3[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -8562,7 +8562,7 @@ BattleUnitSetup btlparty_jon_jon_91_05_off_3[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase

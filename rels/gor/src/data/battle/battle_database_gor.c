@@ -48,20 +48,20 @@ BattleStageObjectData gor_btlobject_data[] = {
  */
 BattleStageData gor_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_00_0", // mSpecificStageDataDir
-        4, // mNumObjects
-        gor_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_00_0", // specificStageDataDir
+        4, // numObjects
+        gor_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100070, 0x10000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_00_4", // mSpecificStageDataDir
-        2, // mNumObjects
-        &gor_btlobject_data[4], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_00_4", // specificStageDataDir
+        2, // numObjects
+        &gor_btlobject_data[4], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x210006F, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -71,7 +71,7 @@ BattleStageData gor_btlstage_data[] = {
 
 BattleUnitSetup btlparty_gor_gor_00_01_off_1[] = {
     {
-        &unit_boss_kanbu1, // mUnitKindParams
+        &unit_boss_kanbu1, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -94,7 +94,7 @@ BattleGroupSetup btlgrp_gor_gor_00_01_off_1 = {
 
 BattleUnitSetup btlparty_gor_gor_02_ac_lecture[] = {
     {
-        &unit_lecture_christine, // mUnitKindParams
+        &unit_lecture_christine, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -117,7 +117,7 @@ BattleGroupSetup btlgrp_gor_gor_02_ac_lecture = {
 
 BattleUnitSetup btlparty_gor_gor_02_sac_lecture[] = {
     {
-        &unit_lecture_frankli_sac, // mUnitKindParams
+        &unit_lecture_frankli_sac, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -140,7 +140,7 @@ BattleGroupSetup btlgrp_gor_gor_02_sac_lecture = {
 
 BattleUnitSetup btlparty_gor_gor_02_01_off_1[] = {
     {
-        &unit_monban, // mUnitKindParams
+        &unit_monban, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase

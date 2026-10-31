@@ -26,7 +26,7 @@ typedef struct EffRubbleN64Work {
     f32 rotVelZ;  // 0x34
     f32 rotVelY;  // 0x38
     f32 scale;    // 0x3C
-    s32 unk40;    // 0x40
+    s32 counter;    // 0x40
     s32 alpha;    // 0x44
     s32 lifetime; // 0x48
     s32 frame;    // 0x4C
@@ -133,7 +133,7 @@ EffectEntry* effRubbleN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 
     work->rotVelZ = -20.0f;
     work->alpha = 255;
     work->scale = 2.0f * scale;
-    work->unk40 = 0;
+    work->counter = 0;
     return effect;
 }
 

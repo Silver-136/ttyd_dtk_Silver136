@@ -49,7 +49,7 @@ typedef struct WinMarioState {
     s32 hammerHold; // 0x18C, frames the hammer pose holds (30 once the swing reaches loop time 0.89); the pose time only follows retraceCount while 0
     s32 mode;   // 0x190, 0 = Mario page, 1 = special move list (A on the star power row); switched on in winMarioMain, opens the list in the draw
     s32 specialCursor; // 0x194, cursor in the special move list (wraps at specialCount); selects the superActionTable help and help box y
-    s32 specialCount; // 0x198, number of star powers obtained (bits of mStarPowersObtained); list length, SP orb count, star power rows reachable
+    s32 specialCount; // 0x198, number of star powers obtained (bits of starPowersObtained); list length, SP orb count, star power rows reachable
 } WinMarioState;
 
 typedef struct WinPartyState {
@@ -179,16 +179,16 @@ typedef struct WinLogState {
     s16 badgeIds[100];          // 0xEB8, badge ids - 0xF0
     WinLogPage recipe;          // 0xF80 (US 0xF84)
     s16 recipeIds[58];          // 0xFB4, item ids - 0xB3
-    f32 f1028;                  // 0x1028
-    f32 f102C;                  // 0x102C
-    f32 f1030;                  // 0x1030
-    f32 f1034;                  // 0x1034
+    f32 enemyX;                  // 0x1028
+    f32 enemyTx;                  // 0x102C
+    f32 enemyY;                  // 0x1030
+    f32 enemyTy;                  // 0x1034
     s32 enemyNum;               // 0x1038
     s32 enemyKnown;             // 0x103C
     s32 enemySel;               // 0x1040
     s32 enemyPage;              // 0x1044
-    f32 f1048;                  // 0x1048
-    f32 f104C;                  // 0x104C
+    f32 enemyScroll;                  // 0x1048
+    f32 enemyScrollTgt;                  // 0x104C
     WinSortEnt enemy[0xD8];     // 0x1050, tattle log
     struct MonosiriWork* mono;  // 0x1200
     u8 pad_1204[0x1208 - 0x1204]; // 0x1204

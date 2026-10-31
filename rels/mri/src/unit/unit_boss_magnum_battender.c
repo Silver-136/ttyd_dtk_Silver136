@@ -102,14 +102,14 @@ static EvtWord wait_event_r[18];
  * init event and event table.
  */
 BattleUnitKind unit_boss_magnum_battender = {
-    UNIT_MAGNUS, // mUnitType
+    UNIT_MAGNUS, // unitType
     "btl_un_magnum_battender", // name
     30, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    68, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    68, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -144,7 +144,7 @@ BattleUnitKind unit_boss_magnum_battender = {
     0, // attributeFlags
     &regist, // statusVulnerability
     3, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -310,9 +310,9 @@ BattleWeapon weapon_batten_stamp_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -335,7 +335,7 @@ BattleWeapon weapon_batten_stamp_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -355,9 +355,9 @@ BattleWeapon weapon_batten_shake_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -379,7 +379,7 @@ BattleWeapon weapon_batten_shake_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -388,7 +388,7 @@ BattleWeapon weapon_batten_shake_attack = {
  * used by arm_bunri_event, arm_return_event.
  */
 static BattleUnitSetup entry_rocket_punch = {
-    &unit_boss_rocket_punch, // mUnitKindParams
+    &unit_boss_rocket_punch, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -1183,9 +1183,9 @@ static BattleWeapon weapon_batten_rocket_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -1207,7 +1207,7 @@ static BattleWeapon weapon_batten_rocket_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

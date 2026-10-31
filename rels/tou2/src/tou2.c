@@ -741,7 +741,7 @@ USER_FUNC(evt_tou_get_fighter_tribe) {
     s32 id = evtGetValue(event, args[0]);
     s32 idx = evtGetValue(event, args[1]);
     s32 setupId = fighterDt[id].setupId;
-    TattleEntry* tattle = battleGetUnitMonosiriPtr(btlsetup_tou_tbl[setupId].select->groupSetup->enemyData[idx].mUnitKindParams->mUnitType);
+    TattleEntry* tattle = battleGetUnitMonosiriPtr(btlsetup_tou_tbl[setupId].select->groupSetup->enemyData[idx].unitKindParams->unitType);
     NpcTribeInfo* tribe;
     const char* name;
     BOOL found = FALSE;

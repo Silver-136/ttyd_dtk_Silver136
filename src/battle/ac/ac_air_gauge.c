@@ -65,7 +65,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
     AirGaugeWork* pw = (AirGaugeWork*)ac->work;
     BattleACDispParams* disp = &ac->disp;
 
-    switch (ac->mAcState) {
+    switch (ac->acState) {
         case 0:
             memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
@@ -77,7 +77,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
             ac->outputParams[0] = 0;
             ac->outputParams[2] = 0;
             ac->outputParams[1] = 0;
-            ac->mAcState = 99;
+            ac->acState = 99;
             ac->result = AC_RESULT_RUNNING;
             pw->gauge = 0.0f;
             pw->presses = 0;
@@ -87,7 +87,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
         case 99:
             break;
         case 100:
-            if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
+            if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
                     ac->setupParam = ac->params[3] / 2;
                     ac->outputParams[0] = 0;
@@ -112,11 +112,11 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
                     }
                     ac->outputParams[2] = 100;
                 }
-                ac->mAcState = 1001;
+                ac->acState = 1001;
                 break;
             }
             BattleAcGaugeSeInit();
-            ac->mAcState = 1000;
+            ac->acState = 1000;
         case 1000:
             pw->frame++;
             if (BattlePadCheckNow(PAD_BUTTON_A)) {
@@ -131,7 +131,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
                 pw->holdFrames = 0;
             }
             pw->gauge -= _GetGaugeDecValue();
-            if (ac->mAcUnit->badgesEquipped.AutoCommand) {
+            if (ac->acUnit->badgesEquipped.AutoCommand) {
                 pw->presses = 1;
                 pw->gauge = 100.0f;
             }
@@ -143,7 +143,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
             }
             BattleAcGaugeSeUpdate(pw->gauge);
             if (pw->frame >= ac->params[1]) {
-                if (ac->mAcUnit->badgesEquipped.AutoCommand) {
+                if (ac->acUnit->badgesEquipped.AutoCommand) {
                     pw->presses = 1;
                     pw->gauge = 100.0f;
                 }
@@ -155,7 +155,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
                     return 0;
                 }
                 ac->result = AC_RESULT_SUCCESS;
-                ac->mResultCount++;
+                ac->resultCount++;
                 if (pw->gauge < (f32)ac->params[3]) {
                     ac->outputParams[0] = 1;
                 } else if (ac->params[2] <= 2) {
@@ -174,7 +174,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
                     ac->outputParams[0] = 5;
                 }
                 ac->outputParams[2] = (s32)pw->gauge;
-                ac->mAcState = 1002;
+                ac->acState = 1002;
             }
             break;
         case 1001:
@@ -182,7 +182,7 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
             if (ac->setupParam < 0) {
                 if (ac->outputParams[0] > 0) {
                     ac->result = AC_RESULT_SUCCESS;
-                    ac->mResultCount++;
+                    ac->resultCount++;
                 } else {
                     ac->result = 0;
                 }
@@ -192,11 +192,11 @@ s32 battleAcMain_AirGauge(BattleWork* work) {
         case 1002:
             BattleAcGaugeSeDelete();
             pw->endWait = 60;
-            ac->mAcState = 1003;
+            ac->acState = 1003;
         case 1003:
             pw->endWait--;
             if (pw->endWait <= 0) {
-                ac->mAcState = 1004;
+                ac->acState = 1004;
             }
             break;
         case 1004:
@@ -256,7 +256,7 @@ void battleAcDisp_AirGauge(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleACDispParams* disp = &work->actionCommands.disp;
     s32 i;
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
         case 100:
@@ -284,7 +284,7 @@ void battleAcDisp_AirGauge(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: jumps to the end state, which stops the gauge sound and slides the display out. */
 void battleAcDelete_AirGauge(BattleWork* work) {
-    work->actionCommands.mAcState = 1002;
+    work->actionCommands.acState = 1002;
 }
 
 /**

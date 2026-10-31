@@ -165,14 +165,14 @@ BattleUnitKindPart unitpartsdata_Party_Sanders[] = {
  * one part, the partner hit sounds, no enemy HP gauge.
  */
 BattleUnitKind unitdata_Party_Sanders = {
-    UNIT_BOBBERY, // mUnitType
+    UNIT_BOBBERY, // unitType
     "btl_un_sanders", // name
     10, // maxHp
     5, // maxFp
-    5, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    5, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -207,7 +207,7 @@ BattleUnitKind unitdata_Party_Sanders = {
     kUnitNoHpGauge, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    unitpartsdata_Party_Sanders, // mParts
+    unitpartsdata_Party_Sanders, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -284,9 +284,9 @@ BattleWeapon partyWeapon_SandersFirstAttack = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {4, 4, 5, 5, 6, 6, 0, 0}, // hpDamageWork
@@ -309,7 +309,7 @@ BattleWeapon partyWeapon_SandersFirstAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partySandersAttack_FirstAttack, // mAttackEvtScript
+    partySandersAttack_FirstAttack, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -326,9 +326,9 @@ BattleWeapon partyWeapon_SandersNormalAttack = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {1, 4, 2, 5, 3, 6, 0, 0}, // hpDamageWork
@@ -351,7 +351,7 @@ BattleWeapon partyWeapon_SandersNormalAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partySandersAttack_NormalAttack, // mAttackEvtScript
+    partySandersAttack_NormalAttack, // attackEvtScript
     {0, 10, 10, 100, 10, 10, 10, 5, 10, 0, 0, 0}, // stageEffectRates
 };
 
@@ -369,9 +369,9 @@ BattleWeapon partyWeapon_SandersTimeBombSet = {
     3, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -393,7 +393,7 @@ BattleWeapon partyWeapon_SandersTimeBombSet = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partySandersAttack_TimeBombSet, // mAttackEvtScript
+    partySandersAttack_TimeBombSet, // attackEvtScript
     {0}, // stageEffectRates
 };
 
@@ -412,9 +412,9 @@ BattleWeapon partyWeapon_SandersCounterSet = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -436,7 +436,7 @@ BattleWeapon partyWeapon_SandersCounterSet = {
     1, // holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partySandersAttack_CounterSet, // mAttackEvtScript
+    partySandersAttack_CounterSet, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 5, 5, 100, 20, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
@@ -459,12 +459,12 @@ BattleWeapon partyWeapon_SandersSuperBombAttack = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetACOutputParam, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -487,7 +487,7 @@ BattleWeapon partyWeapon_SandersSuperBombAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partySandersAttack_SuperBombAttack, // mAttackEvtScript
+    partySandersAttack_SuperBombAttack, // attackEvtScript
     {0, 50, 50, 100, 20, 25, 25, 10, 10, 5, 0, 0}, // stageEffectRates
 };
 
@@ -1594,7 +1594,7 @@ EVT_END()
  * acting before the player's turn, placed off stage until the throw moves it.
  */
 BattleUnitSetup entry_bomzou = {
-    &unit_bomzou, // mUnitKindParams
+    &unit_bomzou, // unitKindParams
     ALLIANCE_NEUTRAL, // alliance
     {0}, // pad_05
     BATTLE_PHASE_BEFORE_PLAYER, // attackPhase
@@ -1692,9 +1692,9 @@ USER_FUNC(_get_bomb_hit_position) {
     unit = BattleGetUnitPtr(wp, BattleTransID(event, targetId));
     dir = unit->faceDirection;
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    pos.x += dir * (unit->bintaHitOffset.x * unit->mSizeMultiplier);
-    pos.y += unit->bintaHitOffset.y * unit->mSizeMultiplier;
-    pos.z += unit->bintaHitOffset.z * unit->mSizeMultiplier;
+    pos.x += dir * (unit->bintaHitOffset.x * unit->sizeMultiplier);
+    pos.y += unit->bintaHitOffset.y * unit->sizeMultiplier;
+    pos.z += unit->bintaHitOffset.z * unit->sizeMultiplier;
     evtSetFloat(event, outX, pos.x);
     evtSetFloat(event, outY, pos.y);
     evtSetFloat(event, outZ, pos.z);
@@ -1751,27 +1751,27 @@ USER_FUNC(_shot_move) {
         f32 x, y, z;
 
         BtlUnit_GetPos(unit, &x, &y, &z);
-        unit->mMoveCurrentPos.x = x;
-        unit->mMoveCurrentPos.y = y;
-        unit->mMoveCurrentPos.z = z;
+        unit->moveCurrentPos.x = x;
+        unit->moveCurrentPos.y = y;
+        unit->moveCurrentPos.z = z;
         unit->mMoveDirection = angleABf(0.0f, 0.0f, 1.0f, 0.0f);
-        unit->mFallAccel = 0.2f;
-        unit->mMoveSpeedY = 0.8f * (0.9f * (speed * cosfd(angle)));
-        unit->mMoveSpeedXZ = 0.8f * (0.75f * (speed * sinfd(angle)));
+        unit->fallAccel = 0.2f;
+        unit->moveSpeedY = 0.8f * (0.9f * (speed * cosfd(angle)));
+        unit->moveSpeedXZ = 0.8f * (0.75f * (speed * sinfd(angle)));
     }
-    unit->mMoveCurrentPos.y += unit->mMoveSpeedY;
-    unit->mMoveSpeedY -= unit->mFallAccel;
-    btlMovePos(unit->mMoveSpeedXZ, unit->mMoveDirection, &unit->mMoveCurrentPos.x, &unit->mMoveCurrentPos.z);
-    BtlUnit_SetPos(unit, unit->mMoveCurrentPos.x, unit->mMoveCurrentPos.y, unit->mMoveCurrentPos.z);
-    floor = BattleGetFloorHeight(wp, unit->mMoveCurrentPos.x, unit->mMoveCurrentPos.y, unit->mMoveCurrentPos.z);
-    if (unit->mMoveCurrentPos.y > floor) {
+    unit->moveCurrentPos.y += unit->moveSpeedY;
+    unit->moveSpeedY -= unit->fallAccel;
+    btlMovePos(unit->moveSpeedXZ, unit->mMoveDirection, &unit->moveCurrentPos.x, &unit->moveCurrentPos.z);
+    BtlUnit_SetPos(unit, unit->moveCurrentPos.x, unit->moveCurrentPos.y, unit->moveCurrentPos.z);
+    floor = BattleGetFloorHeight(wp, unit->moveCurrentPos.x, unit->moveCurrentPos.y, unit->moveCurrentPos.z);
+    if (unit->moveCurrentPos.y > floor) {
         return EVT_RETURN_BLOCK;
     }
-    BtlUnit_SetPos(unit, unit->mMoveCurrentPos.x, floor, unit->mMoveCurrentPos.z);
-    evtSetValue(event, outX, unit->mMoveCurrentPos.x);
+    BtlUnit_SetPos(unit, unit->moveCurrentPos.x, floor, unit->moveCurrentPos.z);
+    evtSetValue(event, outX, unit->moveCurrentPos.x);
     evtSetValue(event, outY, floor);
-    evtSetValue(event, outZ, unit->mMoveCurrentPos.z);
-    evtSetFloat(event, outSpeed, unit->mMoveSpeedXZ);
+    evtSetValue(event, outZ, unit->moveCurrentPos.z);
+    evtSetFloat(event, outSpeed, unit->moveSpeedXZ);
     return EVT_RETURN_YIELD;
 }
 

@@ -53,14 +53,14 @@ static EvtWord wait_event[13];
  * and event table.
  */
 static BattleUnitKind unit_dokugassun = {
-    UNIT_POISON_PUFF, // mUnitType
+    UNIT_POISON_PUFF, // unitType
     "btl_un_dokugassun", // name
     15, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    34, // mLevel
-    2, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    34, // level
+    2, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
     2, // baseCoin
@@ -92,7 +92,7 @@ static BattleUnitKind unit_dokugassun = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     (BattleDataEntry*)data_table, // dataTable
 };
@@ -138,7 +138,7 @@ static BattleUnitKindPart parts[] = {
         {0.0f, 25.0f, 0.0f}, // hitBaseOffset
         {0.0f, 30.0f, 0.0f}, // hitCursorBaseOffset
         30, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -190,9 +190,9 @@ static BattleWeapon weapon_dokugassun_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {8, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -214,7 +214,7 @@ static BattleWeapon weapon_dokugassun_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -234,9 +234,9 @@ static BattleWeapon weapon_dokugassun_poisongas_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {10, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -261,7 +261,7 @@ static BattleWeapon weapon_dokugassun_poisongas_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -458,7 +458,7 @@ static USER_FUNC(eff_poison_barrier) {
         wk->g2 = 115;
         wk->b2 = 100;
         wk->a2 = 255;
-        wk->scale = unit->mSizeMultiplier;
+        wk->scale = unit->sizeMultiplier;
     }
     return EVT_RETURN_DONE;
 }

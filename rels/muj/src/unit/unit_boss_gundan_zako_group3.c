@@ -119,9 +119,9 @@ USER_FUNC(zakogun_ext_init3) {
         zakogun[i].home.y = 0.0f;
         zakogun[i].home.z = -80.0f + 4.0f * (i / 12) + (5.0f * rand() / 32767.0f - 2.5f);
         kanbu = BattleGetUnitPtr(_battleWorkPointer, zakogun_get_kanbu_id());
-        dx = zakogun[i].home.x - kanbu->mHomePosition.x;
-        dy = zakogun[i].home.y - kanbu->mHomePosition.y;
-        dz = zakogun[i].home.z - kanbu->mHomePosition.z;
+        dx = zakogun[i].home.x - kanbu->homePosition.x;
+        dy = zakogun[i].home.y - kanbu->homePosition.y;
+        dz = zakogun[i].home.z - kanbu->homePosition.z;
         dist = sqrt(dx * dx + dy * dy + dz * dz);
         if (dist <= 30.0f) {
             zakogun[i].home.x += 30.0f * (dx / dist);
@@ -145,14 +145,14 @@ USER_FUNC(zakogun_ext_init3) {
  * init event and event table.
  */
 BattleUnitKind unit_boss_gundan_zako_group3 = {
-    UNIT_X_NAUTS_CRUMP_FORMATION3, // mUnitType
+    UNIT_X_NAUTS_CRUMP_FORMATION3, // unitType
     "btl_un_gundan_zako_group3", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    0, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    0, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -187,7 +187,7 @@ BattleUnitKind unit_boss_gundan_zako_group3 = {
     kUnitNoSpin, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -261,9 +261,9 @@ BattleWeapon weapon_gundan_zako_group3_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -285,7 +285,7 @@ BattleWeapon weapon_gundan_zako_group3_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -530,10 +530,10 @@ void zakogun_ext_main3(void) {
                 }
                 break;
             case 15:
-                zako->pos.x = zako->home.x + (unit->mPosition.x - unit->mHomePosition.x);
+                zako->pos.x = zako->home.x + (unit->position.x - unit->homePosition.x);
                 zako->pos.y = zako->home.y;
-                if (zako->pos.y < unit->mPosition.y) {
-                    zako->pos.y = unit->mPosition.y;
+                if (zako->pos.y < unit->position.y) {
+                    zako->pos.y = unit->position.y;
                 }
                 zako->pos.z = zako->home.z;
                 break;
@@ -743,7 +743,7 @@ USER_FUNC(zakogun_attack3_2) {
             work->speed -= 0.06f;
             if (work->targetId != -1) {
                 BattleUnit* target = BattleGetUnitPtr(_battleWorkPointer, work->targetId);
-                if (work->pos.x <= target->mPosition.x) {
+                if (work->pos.x <= target->position.x) {
                     unit->work[UNIT_WORK_REACHED_TARGET] = 1;
                 }
             }

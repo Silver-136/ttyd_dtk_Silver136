@@ -26,10 +26,10 @@ typedef struct BattleSpotWork {
 } BattleSpotWork;
 
 typedef struct BattleStageData {
-    char* mGlobalStageDataDir; //0x0
-    char* mSpecificStageDataDir; //0x4
-    u32 mNumObjects; //0x8
-    BattleStageObjectData* mObjects; //0xC
+    char* globalStageDataDir; //0x0
+    char* specificStageDataDir; //0x4
+    u32 numObjects; //0x8
+    BattleStageObjectData* objects; //0xC
     BattleWeapon bgAWeapon; //0x10, background A1/A2 falling
     BattleWeapon bgBWeapon; //0xD0, background B falling
     void* initEvt; //0x190

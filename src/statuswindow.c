@@ -262,7 +262,7 @@ void gaugeDisp(s32 sp, f32 x, f32 y) {
 
     max = 0;
     for (i = 0; i < sizeof(gauge_back) / sizeof(gauge_back[0]); i++) {
-        if (pouchGetPtr()->mStarPowersObtained & (1 << i)) {
+        if (pouchGetPtr()->starPowersObtained & (1 << i)) {
             max += 100;
         }
     }
@@ -287,7 +287,7 @@ void gaugeDisp(s32 sp, f32 x, f32 y) {
     }
     for (i = 0; i < sizeof(gauge_back) / sizeof(gauge_back[0]); i++) {
         Vec pos2;
-        if (!(pouchGetPtr()->mStarPowersObtained & (1 << i))) {
+        if (!(pouchGetPtr()->starPowersObtained & (1 << i))) {
             break;
         }
         pos2.x = x + (f32)(i * 32);
@@ -326,7 +326,7 @@ void statusWinDisp(CameraId camId, void* param) {
 
     e = alwaysDt;
     for (i = 0; i < sizeof(alwaysDt) / sizeof(alwaysDt[0]); i++, e++) {
-        if (e->iconId == ICON_STATUS_SP_BANNER && !pouchGetPtr()->mStarPowersObtained) {
+        if (e->iconId == ICON_STATUS_SP_BANNER && !pouchGetPtr()->starPowersObtained) {
             break;
         }
         if (!blinkOn) {

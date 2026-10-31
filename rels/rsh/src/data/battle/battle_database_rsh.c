@@ -43,10 +43,10 @@ BattleStageObjectData rsh_btlobject_data[] = {
  */
 BattleStageData rsh_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_06_0", // mSpecificStageDataDir
-        7, // mNumObjects
-        rsh_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_06_0", // specificStageDataDir
+        7, // numObjects
+        rsh_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgA2Evt
@@ -57,7 +57,7 @@ BattleStageData rsh_btlstage_data[] = {
 
 BattleUnitSetup btlparty_rsh_rsh_06_01_off_1[] = {
     {
-        &unit_boss_moamoa, // mUnitKindParams
+        &unit_boss_moamoa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase

@@ -392,7 +392,7 @@ USER_FUNC(evt_nannpc_init) {
         p->name[0] = 0;
         p->pose = NULL;
         p->flags = 0;
-        p->field_16 = 0;
+        p->flags2 = 0;
         p->pos = (Vec){0.0f, -1000.0f, 0.0f};
         p->target = (Vec){0.0f, -1000.0f, 0.0f};
         p->hosei = (Vec){0.0f, 0.0f, 0.0f};
@@ -471,7 +471,7 @@ USER_FUNC(evt_nannpc_entry) {
             strcpy((char*)p->name, str);
             p->pose = &pose[i];
             p->flags = 0;
-            p->field_16 = 0;
+            p->flags2 = 0;
             p->pos = (Vec){0.0f, -1000.0f, 0.0f};
             p->target = (Vec){0.0f, -1000.0f, 0.0f};
             p->hosei = (Vec){0.0f, 0.0f, 0.0f};

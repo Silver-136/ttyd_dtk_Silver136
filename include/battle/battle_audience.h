@@ -29,11 +29,11 @@ typedef enum AudienceMemberType {
 #pragma enumsalwaysint on
 
 typedef struct StarPowerInfo {
-    struct BattleWeapon* mWeapon; // 0x0
-    f32 mSpAcSuccessMultiplier;   // 0x4
-    u8 mStylishCommandMultiplier; // 0x8
+    struct BattleWeapon* weapon; // 0x0
+    f32 spAcSuccessMultiplier;   // 0x4
+    u8 stylishCommandMultiplier; // 0x8
     s8 reserved_09;               // 0x9, copied from BattleWeapon.reserved_19, never read
-    s8 mBingoSlotChance;          // 0xA
+    s8 bingoSlotChance;          // 0xA
     s8 pad_0B;                    // 0xB, never accessed
 } StarPowerInfo;
 
@@ -109,9 +109,9 @@ typedef struct BattleAudienceMember {
     Vec velocity;              // 0x78, added to position each frame
     Vec accel;                 // 0x84, added to velocity
     Vec facingDir;             // 0x90, (0,0,-1) rotated by the member matrix; dot-product facing test
-    Vec mRotation;             // 0x9C
-    Vec mRotationOffset;       // 0xA8
-    Vec mHomePosition;         // 0xB4
+    Vec rotation;             // 0x9C
+    Vec rotationOffset;       // 0xA8
+    Vec homePosition;         // 0xB4
     f32 drawPosX;              // 0xC0, position + hop (+ bob), used as the thrown-item origin
     f32 drawPosY;              // 0xC4
     f32 drawPosZ;              // 0xC8
@@ -156,7 +156,7 @@ typedef struct BattleAudienceItem {
     s32 state;              // 0x4
     s32 timer;              // 0x8, per-state frame timer
     s32 audienceId;         // 0xC, member that threw it
-    ItemType mItemType;     // 0x10
+    ItemType itemType;     // 0x10
     Vec position;           // 0x14
     f32 scale;              // 0x20
     f32 rotZ;               // 0x24
@@ -194,19 +194,19 @@ typedef struct BattleAudienceSound {
     u8 kind;                       // 0x8
     u8 pad_09[0xC - 0x9];          // 0x9, never accessed
     s32 duration;                  // 0xC
-    s32 mFadeoutTime;              // 0x10
-    s32 mForceFadeTimer;           // 0x14
-    s32 mForceFadeLength;          // 0x18
-    u8 mBaseSfxVolume;             // 0x1C
-    u8 mCurrentBaseSfxVolume;      // 0x1D
-    u8 mVolumeMultiplier;          // 0x1E
-    u8 mFadeStartVolumeMultiplier; // 0x1F
-    u8 mFadeEndVolumeMultiplier;   // 0x20
+    s32 fadeoutTime;              // 0x10
+    s32 forceFadeTimer;           // 0x14
+    s32 forceFadeLength;          // 0x18
+    u8 baseSfxVolume;             // 0x1C
+    u8 currentBaseSfxVolume;      // 0x1D
+    u8 volumeMultiplier;          // 0x1E
+    u8 fadeStartVolumeMultiplier; // 0x1F
+    u8 fadeEndVolumeMultiplier;   // 0x20
     u8 pad_21[3];                  // 0x21, never accessed
 } BattleAudienceSound;
 
 typedef struct BattleAudienceWindow {
-    u8 mActive;             // 0x0
+    u8 active;             // 0x0
     u8 pad_01[0x8 - 0x1];   // 0x1, never accessed
     f32 x;                  // 0x8, window x
     f32 y;                  // 0xC, window y
@@ -250,21 +250,21 @@ typedef struct BattleAudience {
     BattleAudienceStar starpower[100]; // 0x10E7C
     BattleAudienceSound sounds[24];    // 0x133FC
     BattleAudienceWindow window;       // 0x1375C
-    f32 mAudienceDeltaMultiplier;      // 0x13778
-    f32 mTargetAudienceCount;          // 0x1377C
-    f32 mAddedAudienceCount;           // 013780
-    s32 mCurrentAudienceIntCount;      // 0x13784
-    s32 mCurrentAudienceIntCountRight; // 0x13788
-    s32 mCurrentAudienceIntCountLeft;  // 0x1378C
-    s32 mMaxAudience;                  // 0x13790
+    f32 audienceDeltaMultiplier;      // 0x13778
+    f32 targetAudienceCount;          // 0x1377C
+    f32 addedAudienceCount;           // 013780
+    s32 currentAudienceIntCount;      // 0x13784
+    s32 currentAudienceIntCountRight; // 0x13788
+    s32 currentAudienceIntCountLeft;  // 0x1378C
+    s32 maxAudience;                  // 0x13790
     s32 typeWeights[12];               // 0x13794, per-type audience weights (BattleAudienceSettingAudience)
     s32 starPowerGain;                 // 0x137C4, star power gained this action
     StarPowerInfo* impendingBonuses;   // 0x137C8, copy of the last StarPowerInfo (BattleAudience_ApRecoveryBuild)
     s32 crowdPleasedStreak;            // 0x137CC, consecutive good actions, capped at 2
     s32 crowdDispleasedStreak;         // 0x137D0, consecutive bad actions, capped at 5
-    s32 mNumStylishCommandsThisAttack; // 0x137D4
+    s32 numStylishCommandsThisAttack; // 0x137D4
     u8 pad_137D8[0x137DC - 0x137D8];   // 0x137D8, never accessed
-    s32 mCheckPhaseReactionState;      // 0x137DC
+    s32 checkPhaseReactionState;      // 0x137DC
     s32 phaseSub;                      // 0x137E0, phase sub-state
     s32 presentItemNo;                 // 0x137E4
     s32 presentItemType;               // 0x137E8
@@ -273,11 +273,11 @@ typedef struct BattleAudience {
     s32 itemThrowMax;                  // 0x137F4, throw limit rolled at battle start (0-3; 10000 when forced)
     s32 presentHitCount;               // 0x137F8, thrown items that landed, capped at 3; adds to presentWeapon damage
     BattleWeapon presentWeapon;        // 0x137FC, BattleWeapon copy (0xC0) for a thrown hazard item, passed to BattleCheckDamage
-    s32 mItemOnMemberId;               // 0x138BC
-    Vec mItemOnMemberPos;              // 0x138C0
+    s32 itemOnMemberId;               // 0x138BC
+    Vec itemOnMemberPos;              // 0x138C0
     s32 phaseList[14];                 // 0x138CC
     s32 phaseListCount;                // 0x13904
-    s32 mTurnEndPhaseEventChance;      // 0x13908
+    s32 turnEndPhaseEventChance;      // 0x13908
     s32 joyLevel;                      // 0x1390C, audience joy level
     BOOL excited;                      // 0x13910, if toads are cheering
 } BattleAudience;

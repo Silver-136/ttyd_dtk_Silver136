@@ -377,7 +377,7 @@ void kpa2DMain(void) {
     spd = __fabsf(t);
     {
         f32 ang = angleABf(0.0f, 0.0f, t, 0.0f);
-        f32 mx = mp->mBaseDashSpeed * mp->playerGravity;
+        f32 mx = mp->baseDashSpeed * mp->playerGravity;
         if (spd > mx) {
             spd = mx;
         }

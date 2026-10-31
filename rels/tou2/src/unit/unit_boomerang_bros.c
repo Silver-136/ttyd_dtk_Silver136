@@ -51,14 +51,14 @@ static EvtWord wait_event[6];
  * its size, offsets, damage sounds, status vulnerability, parts and init event.
  */
 BattleUnitKind unit_boomerang_bros = {
-    UNIT_BOOMERANG_BRO, // mUnitType
+    UNIT_BOOMERANG_BRO, // unitType
     "btl_un_boomerang_bros", // name
     7, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    20, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    20, // level
+    0, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
     2, // baseCoin
@@ -93,7 +93,7 @@ BattleUnitKind unit_boomerang_bros = {
     0, // attributeFlags
     &regist, // statusVulnerability
     4, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -173,9 +173,9 @@ BattleWeapon weapon_boomerang_bros_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -197,7 +197,7 @@ BattleWeapon weapon_boomerang_bros_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -210,9 +210,9 @@ BattleWeapon weapon_boomerang_bros_renzoku_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -234,7 +234,7 @@ BattleWeapon weapon_boomerang_bros_renzoku_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

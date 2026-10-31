@@ -133,10 +133,10 @@ BattleStageObjectData muj_btlobject_data[] = {
  */
 BattleStageData muj_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_05_1", // mSpecificStageDataDir
-        6, // mNumObjects
-        muj_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_05_1", // specificStageDataDir
+        6, // numObjects
+        muj_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgBEvt
@@ -144,10 +144,10 @@ BattleStageData muj_btlstage_data[] = {
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_05_2", // mSpecificStageDataDir
-        8, // mNumObjects
-        &muj_btlobject_data[6], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_05_2", // specificStageDataDir
+        8, // numObjects
+        &muj_btlobject_data[6], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgBEvt
@@ -155,20 +155,20 @@ BattleStageData muj_btlstage_data[] = {
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_05_5", // mSpecificStageDataDir
-        8, // mNumObjects
-        &muj_btlobject_data[14], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_05_5", // specificStageDataDir
+        8, // numObjects
+        &muj_btlobject_data[14], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_05_0", // mSpecificStageDataDir
-        9, // mNumObjects
-        &muj_btlobject_data[22], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_05_0", // specificStageDataDir
+        9, // numObjects
+        &muj_btlobject_data[22], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x210006F, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgBEvt
@@ -179,7 +179,7 @@ BattleStageData muj_btlstage_data[] = {
 
 BattleUnitSetup btlparty_muj_muj_cortez[] = {
     {
-        &unit_boss_cortez, // mUnitKindParams
+        &unit_boss_cortez, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -202,7 +202,7 @@ BattleGroupSetup btlgrp_muj_muj_cortez = {
 
 BattleUnitSetup btlparty_muj_muj_kanbu[] = {
     {
-        &unit_boss_gundan_zako_group1, // mUnitKindParams
+        &unit_boss_gundan_zako_group1, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -212,7 +212,7 @@ BattleUnitSetup btlparty_muj_muj_kanbu[] = {
         battle_item_gundan_zako, // itemDropTable
     },
     {
-        &unit_boss_kanbu3, // mUnitKindParams
+        &unit_boss_kanbu3, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -235,7 +235,7 @@ BattleGroupSetup btlgrp_muj_muj_kanbu = {
 
 BattleUnitSetup btlparty_muj_muj_01_01[] = {
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -245,7 +245,7 @@ BattleUnitSetup btlparty_muj_muj_01_01[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -255,7 +255,7 @@ BattleUnitSetup btlparty_muj_muj_01_01[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -278,7 +278,7 @@ BattleGroupSetup btlgrp_muj_muj_01_01 = {
 
 BattleUnitSetup btlparty_muj_muj_05_01[] = {
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -288,7 +288,7 @@ BattleUnitSetup btlparty_muj_muj_05_01[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -298,7 +298,7 @@ BattleUnitSetup btlparty_muj_muj_05_01[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -321,7 +321,7 @@ BattleGroupSetup btlgrp_muj_muj_05_01 = {
 
 BattleUnitSetup btlparty_muj_muj_05_02[] = {
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -331,7 +331,7 @@ BattleUnitSetup btlparty_muj_muj_05_02[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -341,7 +341,7 @@ BattleUnitSetup btlparty_muj_muj_05_02[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -364,7 +364,7 @@ BattleGroupSetup btlgrp_muj_muj_05_02 = {
 
 BattleUnitSetup btlparty_muj_muj_00_01[] = {
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -374,7 +374,7 @@ BattleUnitSetup btlparty_muj_muj_00_01[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -384,7 +384,7 @@ BattleUnitSetup btlparty_muj_muj_00_01[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -408,7 +408,7 @@ BattleGroupSetup btlgrp_muj_muj_00_01 = {
 
 BattleUnitSetup btlparty_muj_muj_02_01_off_01[] = {
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -432,7 +432,7 @@ BattleGroupSetup btlgrp_muj_muj_02_01_off_01 = {
 
 BattleUnitSetup btlparty_muj_muj_02_01_off_02[] = {
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -442,7 +442,7 @@ BattleUnitSetup btlparty_muj_muj_02_01_off_02[] = {
         battle_item_green_chorobon, // itemDropTable
     },
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -466,7 +466,7 @@ BattleGroupSetup btlgrp_muj_muj_02_01_off_02 = {
 
 BattleUnitSetup btlparty_muj_muj_02_01_off_03[] = {
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -476,7 +476,7 @@ BattleUnitSetup btlparty_muj_muj_02_01_off_03[] = {
         battle_item_green_chorobon, // itemDropTable
     },
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -486,7 +486,7 @@ BattleUnitSetup btlparty_muj_muj_02_01_off_03[] = {
         battle_item_green_chorobon, // itemDropTable
     },
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -510,7 +510,7 @@ BattleGroupSetup btlgrp_muj_muj_02_01_off_03 = {
 
 BattleUnitSetup btlparty_muj_muj_02_01_off_04[] = {
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -520,7 +520,7 @@ BattleUnitSetup btlparty_muj_muj_02_01_off_04[] = {
         battle_item_green_chorobon, // itemDropTable
     },
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -530,7 +530,7 @@ BattleUnitSetup btlparty_muj_muj_02_01_off_04[] = {
         battle_item_green_chorobon, // itemDropTable
     },
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -540,7 +540,7 @@ BattleUnitSetup btlparty_muj_muj_02_01_off_04[] = {
         battle_item_green_chorobon, // itemDropTable
     },
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -564,7 +564,7 @@ BattleGroupSetup btlgrp_muj_muj_02_01_off_04 = {
 
 BattleUnitSetup btlparty_muj_muj_02_04_off_01[] = {
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -588,7 +588,7 @@ BattleGroupSetup btlgrp_muj_muj_02_04_off_01 = {
 
 BattleUnitSetup btlparty_muj_muj_02_04_off_02[] = {
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -598,7 +598,7 @@ BattleUnitSetup btlparty_muj_muj_02_04_off_02[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -622,7 +622,7 @@ BattleGroupSetup btlgrp_muj_muj_02_04_off_02 = {
 
 BattleUnitSetup btlparty_muj_muj_02_04_off_03[] = {
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -632,7 +632,7 @@ BattleUnitSetup btlparty_muj_muj_02_04_off_03[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -642,7 +642,7 @@ BattleUnitSetup btlparty_muj_muj_02_04_off_03[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -666,7 +666,7 @@ BattleGroupSetup btlgrp_muj_muj_02_04_off_03 = {
 
 BattleUnitSetup btlparty_muj_muj_02_07_off_01[] = {
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -676,7 +676,7 @@ BattleUnitSetup btlparty_muj_muj_02_07_off_01[] = {
         battle_item_green_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -700,7 +700,7 @@ BattleGroupSetup btlgrp_muj_muj_02_07_off_01 = {
 
 BattleUnitSetup btlparty_muj_muj_02_07_off_02[] = {
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -710,7 +710,7 @@ BattleUnitSetup btlparty_muj_muj_02_07_off_02[] = {
         battle_item_green_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -720,7 +720,7 @@ BattleUnitSetup btlparty_muj_muj_02_07_off_02[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -744,7 +744,7 @@ BattleGroupSetup btlgrp_muj_muj_02_07_off_02 = {
 
 BattleUnitSetup btlparty_muj_muj_02_07_off_03[] = {
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -754,7 +754,7 @@ BattleUnitSetup btlparty_muj_muj_02_07_off_03[] = {
         battle_item_green_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -764,7 +764,7 @@ BattleUnitSetup btlparty_muj_muj_02_07_off_03[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -774,7 +774,7 @@ BattleUnitSetup btlparty_muj_muj_02_07_off_03[] = {
         battle_item_green_chorobon, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -798,7 +798,7 @@ BattleGroupSetup btlgrp_muj_muj_02_07_off_03 = {
 
 BattleUnitSetup btlparty_muj_muj_03_01_off_01[] = {
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -808,7 +808,7 @@ BattleUnitSetup btlparty_muj_muj_03_01_off_01[] = {
         battle_item_poison_pakkun, // itemDropTable
     },
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -832,7 +832,7 @@ BattleGroupSetup btlgrp_muj_muj_03_01_off_01 = {
 
 BattleUnitSetup btlparty_muj_muj_03_01_off_02[] = {
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -842,7 +842,7 @@ BattleUnitSetup btlparty_muj_muj_03_01_off_02[] = {
         battle_item_poison_pakkun, // itemDropTable
     },
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -852,7 +852,7 @@ BattleUnitSetup btlparty_muj_muj_03_01_off_02[] = {
         battle_item_poison_pakkun, // itemDropTable
     },
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -876,7 +876,7 @@ BattleGroupSetup btlgrp_muj_muj_03_01_off_02 = {
 
 BattleUnitSetup btlparty_muj_muj_03_01_off_03[] = {
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -886,7 +886,7 @@ BattleUnitSetup btlparty_muj_muj_03_01_off_03[] = {
         battle_item_poison_pakkun, // itemDropTable
     },
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -896,7 +896,7 @@ BattleUnitSetup btlparty_muj_muj_03_01_off_03[] = {
         battle_item_poison_pakkun, // itemDropTable
     },
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -920,7 +920,7 @@ BattleGroupSetup btlgrp_muj_muj_03_01_off_03 = {
 
 BattleUnitSetup btlparty_muj_muj_03_02_off_01[] = {
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -930,7 +930,7 @@ BattleUnitSetup btlparty_muj_muj_03_02_off_01[] = {
         battle_item_poison_pakkun, // itemDropTable
     },
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -954,7 +954,7 @@ BattleGroupSetup btlgrp_muj_muj_03_02_off_01 = {
 
 BattleUnitSetup btlparty_muj_muj_03_02_off_02[] = {
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -964,7 +964,7 @@ BattleUnitSetup btlparty_muj_muj_03_02_off_02[] = {
         battle_item_poison_pakkun, // itemDropTable
     },
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -974,7 +974,7 @@ BattleUnitSetup btlparty_muj_muj_03_02_off_02[] = {
         battle_item_poison_pakkun, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -998,7 +998,7 @@ BattleGroupSetup btlgrp_muj_muj_03_02_off_02 = {
 
 BattleUnitSetup btlparty_muj_muj_03_02_off_03[] = {
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1008,7 +1008,7 @@ BattleUnitSetup btlparty_muj_muj_03_02_off_03[] = {
         battle_item_poison_pakkun, // itemDropTable
     },
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1018,7 +1018,7 @@ BattleUnitSetup btlparty_muj_muj_03_02_off_03[] = {
         battle_item_poison_pakkun, // itemDropTable
     },
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1042,7 +1042,7 @@ BattleGroupSetup btlgrp_muj_muj_03_02_off_03 = {
 
 BattleUnitSetup btlparty_muj_muj_03_04_off_01[] = {
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1052,7 +1052,7 @@ BattleUnitSetup btlparty_muj_muj_03_04_off_01[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1076,7 +1076,7 @@ BattleGroupSetup btlgrp_muj_muj_03_04_off_01 = {
 
 BattleUnitSetup btlparty_muj_muj_03_04_off_02[] = {
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1086,7 +1086,7 @@ BattleUnitSetup btlparty_muj_muj_03_04_off_02[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1096,7 +1096,7 @@ BattleUnitSetup btlparty_muj_muj_03_04_off_02[] = {
         battle_item_poison_pakkun, // itemDropTable
     },
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1120,7 +1120,7 @@ BattleGroupSetup btlgrp_muj_muj_03_04_off_02 = {
 
 BattleUnitSetup btlparty_muj_muj_03_04_off_03[] = {
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1130,7 +1130,7 @@ BattleUnitSetup btlparty_muj_muj_03_04_off_03[] = {
         battle_item_flower_chorobon, // itemDropTable
     },
     {
-        &unit_poison_pakkun, // mUnitKindParams
+        &unit_poison_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1140,7 +1140,7 @@ BattleUnitSetup btlparty_muj_muj_03_04_off_03[] = {
         battle_item_poison_pakkun, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase

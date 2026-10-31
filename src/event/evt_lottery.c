@@ -12,7 +12,7 @@ BOOL dbg_lotteryinfo;
 static s32 lotteryUnused;
 
 lottery_info* lotteryGetPtr(void) {
-    return &gp->mLotteryInfo;
+    return &gp->lotteryInfo;
 }
 
 USER_FUNC(evt_lottery) {
@@ -26,7 +26,7 @@ USER_FUNC(evt_lottery) {
     OSTime now = OSGetTime();
 
     dbg_lotteryinfo = TRUE;
-    lot = &gp->mLotteryInfo;
+    lot = &gp->lotteryInfo;
 
     lot->flags &= ~LOTTERY_FLAG_MATCH4;
     lot->flags &= ~LOTTERY_FLAG_MATCH3;
@@ -178,7 +178,7 @@ USER_FUNC(evt_lottery) {
 USER_FUNC(evt_lottery_buy) {
     EvtWord* args = event->args;
     OSTime now = OSGetTime();
-    lottery_info* lot = &gp->mLotteryInfo;
+    lottery_info* lot = &gp->lotteryInfo;
 
     do {
         lot->number = rand() % 10000;
@@ -207,13 +207,13 @@ USER_FUNC(evt_lottery_buy) {
 }
 
 USER_FUNC(evt_lottery_flag) {
-    evtSetValue(event, event->args[0], gp->mLotteryInfo.flags);
+    evtSetValue(event, event->args[0], gp->lotteryInfo.flags);
     return EVT_RETURN_DONE;
 }
 
 /** Writes today's drawn number to args[0] (-1 after a clock error). */
 USER_FUNC(evt_lottery_todaynum) {
-    evtSetValue(event, event->args[0], gp->mLotteryInfo.todayNum);
+    evtSetValue(event, event->args[0], gp->lotteryInfo.todayNum);
     return EVT_RETURN_DONE;
 }
 
@@ -223,11 +223,11 @@ USER_FUNC(evt_lottery_todaynum) {
  */
 USER_FUNC(evt_lottery_error_check) {
     OSCalendarTime a, b;
-    // FAKE: g is a spare copy of gp; &gp->mLotteryInfo changes the object
+    // FAKE: g is a spare copy of gp; &gp->lotteryInfo changes the object
     GlobalWork* g = gp;
     EvtWord* args = event->args;
     OSTime now = OSGetTime();
-    lottery_info* lot = &g->mLotteryInfo;
+    lottery_info* lot = &g->lotteryInfo;
     u16 flags = lot->flags;
     BOOL err = FALSE;
 

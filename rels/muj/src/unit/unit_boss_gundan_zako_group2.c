@@ -101,14 +101,14 @@ static EvtWord wait_event[6];
  * init event and event table.
  */
 BattleUnitKind unit_boss_gundan_zako_group2 = {
-    UNIT_X_NAUTS_CRUMP_FORMATION2, // mUnitType
+    UNIT_X_NAUTS_CRUMP_FORMATION2, // unitType
     "btl_un_gundan_zako_group2", // name
     6, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    0, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    0, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -143,7 +143,7 @@ BattleUnitKind unit_boss_gundan_zako_group2 = {
     kCeiling | kUnitNoSpin, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -220,9 +220,9 @@ BattleWeapon weapon_gundan_zako_group2_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -244,7 +244,7 @@ BattleWeapon weapon_gundan_zako_group2_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -263,9 +263,9 @@ BattleWeapon weapon_gundan_zako_group2_yusuri_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -287,7 +287,7 @@ BattleWeapon weapon_gundan_zako_group2_yusuri_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -549,7 +549,7 @@ USER_FUNC(down_ceil) {
         *ceil &= ~STAGE_OBJ_FLAG_IRON_FRAME_GONE;
         work->sfx = work->sfx = psndSFXOn("SFX_BOSS_TEAM_3RD_MOVE_CAILING1");
     }
-    body->mPosition.y = wire->mPosition.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->steps - work->timer, work->steps);
+    body->position.y = wire->position.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->steps - work->timer, work->steps);
     work->timer--;
     if (work->timer < 0) {
         psndSFXOff(work->sfx);
@@ -572,7 +572,7 @@ USER_FUNC(up_ceil) {
         *ceil |= STAGE_OBJ_FLAG_IRON_FRAME_GONE;
         work->sfx = psndSFXOn("SFX_BOSS_TEAM_3RD_MOVE_CAILING1");
     }
-    body->mPosition.y = wire->mPosition.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->steps - work->timer, work->steps);
+    body->position.y = wire->position.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->steps - work->timer, work->steps);
     work->timer--;
     if (work->timer < 0) {
         psndSFXOff(work->sfx);
@@ -594,10 +594,10 @@ USER_FUNC(shake_ceil) {
         work->end = (Vec){0.0f, 135.0f, 0.0f};
         work->timer = 0;
     }
-    body->mPosition.y = wire->mPosition.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->timer, 9);
+    body->position.y = wire->position.y = intplGetValue(EASING_QUADRATIC_OUT, work->start.y, work->end.y, work->timer, 9);
     work->timer++;
     if (work->timer > 17) {
-        body->mPosition.y = wire->mPosition.y = 130.0f;
+        body->position.y = wire->position.y = 130.0f;
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
@@ -655,16 +655,16 @@ void zakogun_ext_main2(void) {
                 zakogun_set_pose(zako, 0x25, 4, 6);
                 break;
             case 5:
-                zako->pos.x = zako->home.x = body->mPosition.x - 250.0f + i * 20.0f;
-                zako->pos.y = zako->home.y = body->mPosition.y - 35.0f;
+                zako->pos.x = zako->home.x = body->position.x - 250.0f + i * 20.0f;
+                zako->pos.y = zako->home.y = body->position.y - 35.0f;
                 zako->pos.z = zako->home.z = 0.0f;
                 zako->state = 10;
                 break;
             case 10:
-                zako->pos.x = zako->home.x = body->mPosition.x + unit->mPosition.x - 250.0f + i * 20.0f;
-                zako->pos.y = zako->home.y = body->mPosition.y - 35.0f;
-                if (zako->pos.y < unit->mPosition.y) {
-                    zako->pos.y = unit->mPosition.y;
+                zako->pos.x = zako->home.x = body->position.x + unit->position.x - 250.0f + i * 20.0f;
+                zako->pos.y = zako->home.y = body->position.y - 35.0f;
+                if (zako->pos.y < unit->position.y) {
+                    zako->pos.y = unit->position.y;
                 }
                 zako->pos.z = zako->home.z = -10.0f;
                 break;
@@ -801,8 +801,8 @@ void zakogun_ext_main2(void) {
                 zako->state = 65;
                 zako->timer = 120;
             case 65:
-                zako->pos.x = body->mPosition.x - 250.0f + i * 20.0f;
-                zako->pos.y = body->mPosition.y - 35.0f;
+                zako->pos.x = body->position.x - 250.0f + i * 20.0f;
+                zako->pos.y = body->position.y - 35.0f;
                 zako->pos.z = 0.0f;
                 zako->timer--;
                 if (zako->timer < 0) {

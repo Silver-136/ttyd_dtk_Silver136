@@ -197,14 +197,14 @@ BattleUnit* zakogun_get_ptr(void) {
  * init event and event table.
  */
 BattleUnitKind unit_boss_gundan_zako_group1 = {
-    UNIT_X_NAUTS_CRUMP_FORMATION1, // mUnitType
+    UNIT_X_NAUTS_CRUMP_FORMATION1, // unitType
     "btl_un_gundan_zako_group1", // name
     6, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    0, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    0, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -239,7 +239,7 @@ BattleUnitKind unit_boss_gundan_zako_group1 = {
     kUnitNoSpin, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -314,9 +314,9 @@ BattleWeapon weapon_gundan_zako_group1_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -338,7 +338,7 @@ BattleWeapon weapon_gundan_zako_group1_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -634,8 +634,8 @@ void zakogun_ext_init(void) {
     work->flag = 0;
     body = BattleSearchObjectPtr("if_body");
     wire = BattleSearchObjectPtr("if_wire");
-    wire->mPosition = (Vec){0.0f, 250.0f, 0.0f};
-    body->mPosition = wire->mPosition;
+    wire->position = (Vec){0.0f, 250.0f, 0.0f};
+    body->position = wire->position;
     *flags |= STAGE_OBJ_FLAG_IRON_FRAME_GONE | STAGE_OBJ_FLAG_NO_IRON_FRAME_FALL;
 }
 
@@ -758,7 +758,7 @@ void zakogun_ext_main1(void) {
             zako->poseCount = 0;
         }
         if (i == 1 && zako->state >= 35 && zako->state < 80) {
-            unit->mPosition.x = zako->pos.x;
+            unit->position.x = zako->pos.x;
         }
         switch (zako->state) {
             case 0:
@@ -781,9 +781,9 @@ void zakogun_ext_main1(void) {
                 zako->state = 12;
                 zako->rot.y = 0.0f;
             case 12:
-                x = unit->mHomePosition.x;
-                y = unit->mHomePosition.y;
-                z = unit->mHomePosition.z;
+                x = unit->homePosition.x;
+                y = unit->homePosition.y;
+                z = unit->homePosition.z;
                 switch (i) {
                     case 0:
                         zako->target.x = x - 10.0f;
@@ -868,9 +868,9 @@ void zakogun_ext_main1(void) {
                 }
                 break;
             case 16:
-                x = unit->mHomePosition.x;
-                y = unit->mHomePosition.y;
-                z = unit->mHomePosition.z;
+                x = unit->homePosition.x;
+                y = unit->homePosition.y;
+                z = unit->homePosition.z;
                 zako->start.x = zako->pos.x;
                 zako->start.y = zako->pos.y;
                 zako->start.z = zako->pos.z;
@@ -1091,7 +1091,7 @@ void zakogun_ext_main1(void) {
                 zako->state = 12;
                 zako->rot.y = 180.0f;
                 zako->start = zako->pos;
-                unit->mPosition = unit->mHomePosition;
+                unit->position = unit->homePosition;
                 btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
                 break;
             case 80:

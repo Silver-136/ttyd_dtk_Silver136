@@ -31,7 +31,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
     PowerGaugeWork* tw = (PowerGaugeWork*)ac->work;
     BattleACDispParams* disp = &ac->disp;
 
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 99:
             break;
         case 0:
@@ -43,13 +43,13 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
             disp->color = (GXColor){255, 255, 255, 255};
             tw->counter = 0;
             work->actionCommands.outputParams[0] = 0;
-            work->actionCommands.mAcState = 99;
+            work->actionCommands.acState = 99;
             work->actionCommands.result = AC_RESULT_RUNNING;
             tw->limit = 100;
             tw->gauge = 0.0f;
             break;
         case 100:
-            if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+            if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
                     work->actionCommands.setupParam = 30;
                     work->actionCommands.outputParams[0] = 0;
@@ -57,10 +57,10 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
                     work->actionCommands.outputParams[0] = irand(ac->params[1] - 1) + 1;
                     work->actionCommands.setupParam = 30;
                 }
-                work->actionCommands.mAcState = 1001;
+                work->actionCommands.acState = 1001;
                 break;
             }
-            work->actionCommands.mAcState = 1000;
+            work->actionCommands.acState = 1000;
         case 1000:
             tw->counter++;
             if (tw->counter > tw->limit) {
@@ -76,7 +76,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
                     work->actionCommands.result &= ~AC_RESULT_SUCCESS;
                 } else {
                     work->actionCommands.result = AC_RESULT_SUCCESS;
-                    work->actionCommands.mResultCount++;
+                    work->actionCommands.resultCount++;
                     if (ac->params[1] <= 1) {
                         work->actionCommands.outputParams[0] = 1;
                     } else if (tw->gauge < (f32)ac->params[3]) {
@@ -95,7 +95,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
                         work->actionCommands.outputParams[0] = 5;
                     }
                 }
-                work->actionCommands.mAcState = 1002;
+                work->actionCommands.acState = 1002;
             }
             break;
         case 1001:
@@ -103,7 +103,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
             if (work->actionCommands.setupParam < 0) {
                 if (work->actionCommands.outputParams[0] > 0) {
                     work->actionCommands.result = AC_RESULT_SUCCESS;
-                    work->actionCommands.mResultCount++;
+                    work->actionCommands.resultCount++;
                 } else {
                     work->actionCommands.result = 0;
                 }
@@ -111,15 +111,15 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
             }
             break;
         case 1002:
-            work->actionCommands.mAcState = 1003;
+            work->actionCommands.acState = 1003;
         case 1003:
             work->actionCommands.doneFlags |= AC_DONE_FLAG_FINISHED;
             tw->timer = 60;
-            work->actionCommands.mAcState = 1004;
+            work->actionCommands.acState = 1004;
         case 1004:
             tw->timer--;
             if (tw->timer <= 0) {
-                work->actionCommands.mAcState = 1005;
+                work->actionCommands.acState = 1005;
             }
             break;
         case 1005:
@@ -149,7 +149,7 @@ void battleAcDisp_PowerGaugeLv(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleACDispParams* disp = &work->actionCommands.disp;
     s32 i = 4;
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - AC_SLIDE_TIMER_AT(disp, i), 20);
         case 100:
@@ -181,7 +181,7 @@ void battleAcDelete_PowerGaugeLv(BattleWork* work) {
     if (work->actionCommands.doneFlags & AC_DONE_FLAG_FINISHED) {
         return;
     }
-    work->actionCommands.mAcState = 1003;
+    work->actionCommands.acState = 1003;
 }
 
 /**
@@ -208,7 +208,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
     disp->gaugeRatio = ratio;
     BattleAcDrawGauge((s32)x, (s32)y, disp->gaugeRatio, 0xB2, work->actionCommands.params[1], work->actionCommands.params[2], work->actionCommands.params[3], work->actionCommands.params[4], 0);
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 99:
         case 100:
         case 1002:

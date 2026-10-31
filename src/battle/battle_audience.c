@@ -62,11 +62,11 @@ const AudWArr R_num_audience_type_weights = {{20,40,20,5,3,2,1,1,1,1,1}};
     if ((sound)->sfxId != -1) {                                                                     \
         (sound)->flags |= AUD_SOUND_FLAG_PLAYING;                                                   \
         (sound)->duration = (dur);                                                                  \
-        (sound)->mFadeoutTime = (fade);                                                             \
-        (sound)->mBaseSfxVolume = (sound)->mCurrentBaseSfxVolume = psndSFX_get_vol((sound)->sfxId); \
-        (sound)->mForceFadeLength = 0;                                                              \
-        (sound)->mForceFadeTimer = 0;                                                               \
-        (sound)->mVolumeMultiplier = 100;                                                           \
+        (sound)->fadeoutTime = (fade);                                                             \
+        (sound)->baseSfxVolume = (sound)->currentBaseSfxVolume = psndSFX_get_vol((sound)->sfxId); \
+        (sound)->forceFadeLength = 0;                                                              \
+        (sound)->forceFadeTimer = 0;                                                               \
+        (sound)->volumeMultiplier = 100;                                                           \
     }
 
 void psndSFX_vol(s32 id, s32 vol);
@@ -143,7 +143,7 @@ BattleWeapon weapon_data_akikan = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -176,7 +176,7 @@ BattleWeapon weapon_data_brick = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -209,7 +209,7 @@ BattleWeapon weapon_data_bone = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -242,7 +242,7 @@ BattleWeapon weapon_data_hammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 #pragma force_active reset
@@ -329,11 +329,11 @@ void BattleAudience_Init(void) {
     BattleAudienceGuestTPLRead(0, AUDIENCE_LUIGI, "audience_luigi.tpl");
     BattleAudienceSetThrowItemMax();
 
-    audience->mTurnEndPhaseEventChance = 0;
+    audience->turnEndPhaseEventChance = 0;
 
-    audience->mCurrentAudienceIntCountLeft = 0;
-    audience->mCurrentAudienceIntCountRight = 0;
-    audience->mCurrentAudienceIntCount = 0;
+    audience->currentAudienceIntCountLeft = 0;
+    audience->currentAudienceIntCountRight = 0;
+    audience->currentAudienceIntCount = 0;
 
     for (i = 0; i < 10; i++) {
         for (j = 0; j < 10; j++) {
@@ -341,7 +341,7 @@ void BattleAudience_Init(void) {
             if ((u8)BattleAudience_GetExist(index) == TRUE) {
                 status = BattleAudienceGetPtr(index)->status;
                 if (status != AUDIENCE_STATUS_ESCAPE && status != AUDIENCE_STATUS_ENTER) {
-                    audience->mCurrentAudienceIntCountRight++;
+                    audience->currentAudienceIntCountRight++;
                 }
             }
         }
@@ -353,14 +353,14 @@ void BattleAudience_Init(void) {
             if ((u8)BattleAudience_GetExist(index) == TRUE) {
                 status = BattleAudienceGetPtr(index)->status;
                 if (status != AUDIENCE_STATUS_ESCAPE && status != AUDIENCE_STATUS_ENTER) {
-                    audience->mCurrentAudienceIntCountLeft++;
+                    audience->currentAudienceIntCountLeft++;
                 }
             }
         }
     }
 
-    audience->mCurrentAudienceIntCount = audience->mCurrentAudienceIntCountRight + audience->mCurrentAudienceIntCountLeft;
-    window->count = (f32)audience->mCurrentAudienceIntCount;
+    audience->currentAudienceIntCount = audience->currentAudienceIntCountRight + audience->currentAudienceIntCountLeft;
+    window->count = (f32)audience->currentAudienceIntCount;
     BattleAudienceSoundNoiseAlways();
     BattleAudienceSoundSetVol(2, 60, 180);
     audience->excited = FALSE;
@@ -398,7 +398,7 @@ void BattleAudience_Main(void) {
  */
 void BattleAudience_ActInit(void) {
     BattleAudience* audience = BattleAudienceBaseGetPtr();
-    audience->mNumStylishCommandsThisAttack = 0;
+    audience->numStylishCommandsThisAttack = 0;
     audience->flags &= ~AUDIENCE_FLAG_AC_GOOD;
     audience->flags &= ~AUDIENCE_FLAG_AC_BAD;
     audience->flags &= ~AUDIENCE_FLAG_GUARD_GOOD;
@@ -433,7 +433,7 @@ void BattleAudience_PerAct(void) {
             good = 1;
             audience->crowdPleasedStreak++;
             if (audience->crowdPleasedStreak > 2) audience->crowdPleasedStreak = 2;
-            delta = audience->crowdPleasedStreak * audience->impendingBonuses->mSpAcSuccessMultiplier;
+            delta = audience->crowdPleasedStreak * audience->impendingBonuses->spAcSuccessMultiplier;
             audience->crowdDispleasedStreak = 0;
             total += delta;
         } else if (!(audience->flags & AUDIENCE_FLAG_KILL_ENEMY)) {
@@ -473,7 +473,7 @@ void BattleAudience_PerAct(void) {
     }
     if (audience->impendingBonuses && ((audience->flags & AUDIENCE_FLAG_ACROBAT_GOOD) || (audience->flags & AUDIENCE_FLAG_ACROBAT_BAD))) {
         if (audience->flags & AUDIENCE_FLAG_ACROBAT_GOOD) {
-            delta = audience->impendingBonuses->mStylishCommandMultiplier * (audience->mNumStylishCommandsThisAttack * 2);
+            delta = audience->impendingBonuses->stylishCommandMultiplier * (audience->numStylishCommandsThisAttack * 2);
             total += delta;
             if (delta >= 30.0f) BattleAudienceAddPhaseEvtList(0);
             if (delta >= 40.0f) BattleAudienceAddPhaseEvtList(3);
@@ -487,7 +487,7 @@ void BattleAudience_PerAct(void) {
         audience->event = evtEntry(&msg_puni_all_escape, 0, EVENT_START_IMMEDIATE);
         audience->flags &= ~AUDIENCE_FLAG_PUNI_ESCAPE;
     }
-    BattleAudienceAddTargetNum(audience->mAudienceDeltaMultiplier * (0.01f * total), 0.0f);
+    BattleAudienceAddTargetNum(audience->audienceDeltaMultiplier * (0.01f * total), 0.0f);
     BattleAudience_ActInit();
 }
 
@@ -561,7 +561,7 @@ void BattleAudience_PerPhase(u32 value) {
     if (value == BATTLE_PHASE_ENEMY) {
         BattleAudienceSetThrowItemMax();
         audience->flags |= AUDIENCE_FLAG_PHASE_REACTION;
-        audience->mCheckPhaseReactionState = 0;
+        audience->checkPhaseReactionState = 0;
     }
 }
 
@@ -595,11 +595,11 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
     if (!(audience->flags & AUDIENCE_FLAG_PHASE_REACTION)) {
         return FALSE;
     }
-    switch (audience->mCheckPhaseReactionState) {
+    switch (audience->checkPhaseReactionState) {
         case 0:
-            audience->mCheckPhaseReactionState = 5;
+            audience->checkPhaseReactionState = 5;
             if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL) {
-                audience->mCheckPhaseReactionState = 15;
+                audience->checkPhaseReactionState = 15;
                 break;
             }
             /* fallthrough */
@@ -614,9 +614,9 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                 }
             }
             if (counter >= 1) {
-                audience->mCheckPhaseReactionState = 6;
+                audience->checkPhaseReactionState = 6;
             } else {
-                audience->mCheckPhaseReactionState = 7;
+                audience->checkPhaseReactionState = 7;
             }
             /* fallthrough */
         case 6:
@@ -629,36 +629,36 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                 }
             }
             if (i == 200) { // no Bulky Bob-omb is still firing
-                if (audience->mCheckPhaseReactionState == 6) {
-                    audience->mCheckPhaseReactionState = 8;
+                if (audience->checkPhaseReactionState == 6) {
+                    audience->checkPhaseReactionState = 8;
                 } else {
-                    audience->mCheckPhaseReactionState = 13;
+                    audience->checkPhaseReactionState = 13;
                 }
             }
             break;
         case 8:
             audience->event = evtEntry(&msg_heavy_bomb_fire, 0, EVENT_START_IMMEDIATE);
-            audience->mCheckPhaseReactionState = 9;
+            audience->checkPhaseReactionState = 9;
             break;
         case 9:
             if (!evtCheckID(audience->event->eventId)) {
                 audience->event = NULL;
-                audience->mCheckPhaseReactionState = 10;
+                audience->checkPhaseReactionState = 10;
             }
             break;
         case 10:
             if (audience->flags & AUDIENCE_FLAG_PUNI_ESCAPE) {
                 audience->event = evtEntry(&msg_puni_all_escape, 0, EVENT_START_IMMEDIATE);
                 audience->flags &= ~AUDIENCE_FLAG_PUNI_ESCAPE;
-                audience->mCheckPhaseReactionState = 11;
+                audience->checkPhaseReactionState = 11;
             } else {
-                audience->mCheckPhaseReactionState = 15;
+                audience->checkPhaseReactionState = 15;
             }
             break;
         case 11:
             if (!evtCheckID(audience->event->eventId)) {
                 audience->event = NULL;
-                audience->mCheckPhaseReactionState = 15;
+                audience->checkPhaseReactionState = 15;
             }
             break;
         case 13:
@@ -693,7 +693,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                         break;
                     case 3:
                         if (pe->typeWeights[AUDIENCE_PUNI]) {
-                            for (i = 0; i < audience->mMaxAudience; ) {
+                            for (i = 0; i < audience->maxAudience; ) {
                                 if (!(u8)BattleAudience_GetExist(i)) {
                                     BattleAudienceAddPhaseEvtList(3);
                                     break;
@@ -800,7 +800,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
             } else {
                 pe->phaseListCount = 0;
             }
-            audience->mCheckPhaseReactionState = 12;
+            audience->checkPhaseReactionState = 12;
             pe->phaseSub = 0;
             /* fallthrough */
         case 12:
@@ -1017,7 +1017,7 @@ u8 BattleAudience_CheckReactionPerPhase(void) {
                         break;
                 }
             } else {
-                audience->mCheckPhaseReactionState = 15;
+                audience->checkPhaseReactionState = 15;
             }
             break;
         case 15:
@@ -1060,7 +1060,7 @@ void BattleAudience_Disp(void) {
         dispEntry(CAMERA_3D, 0.0f, 1, BattleAudienceDispItem, NULL);
         dispEntry(CAMERA_2D, 499.0f, 0, BattleAudienceDispApSrc, NULL);
     }
-    if (pouchGetPtr()->mStarPowersObtained) {
+    if (pouchGetPtr()->starPowersObtained) {
         dispEntry(CAMERA_2D, 499.0f, 1, BattleAudienceDispWin, NULL);
     }
 }
@@ -1083,14 +1083,14 @@ void BattleAudience_End(void) {
         fileFree(obj);
     }
 
-    if (pouchGetPtr()->mStarPowersObtained) {
-        if (audience->mTargetAudienceCount < 0.0f) {
-            audience->mTargetAudienceCount = 0.0f;
+    if (pouchGetPtr()->starPowersObtained) {
+        if (audience->targetAudienceCount < 0.0f) {
+            audience->targetAudienceCount = 0.0f;
         }
-        if (audience->mTargetAudienceCount > (f32)audience->mMaxAudience) {
-            audience->mTargetAudienceCount = (f32)audience->mMaxAudience;
+        if (audience->targetAudienceCount > (f32)audience->maxAudience) {
+            audience->targetAudienceCount = (f32)audience->maxAudience;
         }
-        pouchSetAudienceNum(audience->mTargetAudienceCount);
+        pouchSetAudienceNum(audience->targetAudienceCount);
     }
 #ifdef VERSION_G8ME01
     // US frees the star-power bonus info allocated in BattleAudience_ApRecoveryBuild
@@ -1136,38 +1136,38 @@ void BattleAudienceSettingAudience(void) {
 
     delta = R_audience_delta_multiplier;
     switch (pouch->rank) {
-    case 0: audience->mMaxAudience = 50; break;
-    case 1: audience->mMaxAudience = 100; break;
-    case 2: audience->mMaxAudience = 150; break;
-    case 3: audience->mMaxAudience = 200; break;
+    case 0: audience->maxAudience = 50; break;
+    case 1: audience->maxAudience = 100; break;
+    case 2: audience->maxAudience = 150; break;
+    case 3: audience->maxAudience = 200; break;
     }
-    if (pouchGetPtr()->mStarPowersObtained == 0) {
-        audience->mMaxAudience = 0;
+    if (pouchGetPtr()->starPowersObtained == 0) {
+        audience->maxAudience = 0;
     }
     i = pouch->level - 1;
     lim = 64;
     if (i < 65) lim = i;
-    audience->mAudienceDeltaMultiplier = delta.v[lim];
+    audience->audienceDeltaMultiplier = delta.v[lim];
 
     if (bflags->flags & BATTLE_DEBUG_AUDIENCE_NUM) {
-        audience->mTargetAudienceCount = (f32)bflags->audienceNum;
-        if (audience->mTargetAudienceCount > (f32)audience->mMaxAudience) {
-            audience->mTargetAudienceCount = (f32)audience->mMaxAudience;
+        audience->targetAudienceCount = (f32)bflags->audienceNum;
+        if (audience->targetAudienceCount > (f32)audience->maxAudience) {
+            audience->targetAudienceCount = (f32)audience->maxAudience;
         }
     } else {
         f32 base = pouchGetAudienceNum();
-        audience->mTargetAudienceCount = (pouchGetAudienceNum() - audience->mAudienceDeltaMultiplier) * (f32)(-13 + irand(10) + irand(10)) * 0.01f + base;
+        audience->targetAudienceCount = (pouchGetAudienceNum() - audience->audienceDeltaMultiplier) * (f32)(-13 + irand(10) + irand(10)) * 0.01f + base;
     }
 
     switch (rec->mode) {
     case 0: case 1:
-        audience->mAddedAudienceCount = 0.0f;
+        audience->addedAudienceCount = 0.0f;
         break;
     case 4:
-        audience->mAddedAudienceCount = 0.5f * audience->mTargetAudienceCount;
+        audience->addedAudienceCount = 0.5f * audience->targetAudienceCount;
         break;
     case 2: case 3: case 5: case 6:
-        audience->mAddedAudienceCount = (f32)audience->mMaxAudience - audience->mTargetAudienceCount;
+        audience->addedAudienceCount = (f32)audience->maxAudience - audience->targetAudienceCount;
         break;
     }
 
@@ -1265,9 +1265,9 @@ void BattleAudienceSettingAudience(void) {
         break;
     }
     memset(counts, 0, sizeof(counts));
-    ar = (s32)(audience->mTargetAudienceCount + audience->mAddedAudienceCount);
+    ar = (s32)(audience->targetAudienceCount + audience->addedAudienceCount);
     if (ar < 0) ar = 0;
-    if (ar > audience->mMaxAudience) ar = audience->mMaxAudience;
+    if (ar > audience->maxAudience) ar = audience->maxAudience;
     used = 0;
     sum = 0;
     for (i = 0; i < 12; i++) sum += weights[i];
@@ -1396,9 +1396,9 @@ void BattleAudienceCtrlProcess(void) {
     u8 status;
     s32 order[200];
 
-    audience->mCurrentAudienceIntCountLeft = 0;
-    audience->mCurrentAudienceIntCountRight = 0;
-    audience->mCurrentAudienceIntCount = 0;
+    audience->currentAudienceIntCountLeft = 0;
+    audience->currentAudienceIntCountRight = 0;
+    audience->currentAudienceIntCount = 0;
 
     for (i = 0; i < 10; i++) {
         for (j = 0; j < 10; j++) {
@@ -1406,7 +1406,7 @@ void BattleAudienceCtrlProcess(void) {
             if ((u8)BattleAudience_GetExist(index) == TRUE) {
                 status = BattleAudienceGetPtr(index)->status;
                 if (status != AUDIENCE_STATUS_ESCAPE && status != AUDIENCE_STATUS_ENTER) {
-                    audience->mCurrentAudienceIntCountRight++;
+                    audience->currentAudienceIntCountRight++;
                 }
             }
         }
@@ -1418,13 +1418,13 @@ void BattleAudienceCtrlProcess(void) {
             if ((u8)BattleAudience_GetExist(index) == TRUE) {
                 status = BattleAudienceGetPtr(index)->status;
                 if (status != AUDIENCE_STATUS_ESCAPE && status != AUDIENCE_STATUS_ENTER) {
-                    audience->mCurrentAudienceIntCountLeft++;
+                    audience->currentAudienceIntCountLeft++;
                 }
             }
         }
     }
 
-    audience->mCurrentAudienceIntCount = audience->mCurrentAudienceIntCountRight + audience->mCurrentAudienceIntCountLeft;
+    audience->currentAudienceIntCount = audience->currentAudienceIntCountRight + audience->currentAudienceIntCountLeft;
 
     i = 0;
     member = BattleAudienceGetPtr(0);
@@ -1522,7 +1522,7 @@ BOOL BattleAudienceItemOn(s32 index, u16 itemId, s32 numItems) {
                 item->flags |= AUDIENCE_ITEM_FLAG_ACTIVE;
                 item->state = 0;
                 item->audienceId = index;
-                item->mItemType = itemId;
+                item->itemType = itemId;
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_ITEM_ON);
                 member->itemId = i;
                 return TRUE;
@@ -1603,7 +1603,7 @@ BattleUnit* BattleAudienceDetectTargetPlayer(void) {
         unit = wp->units[i];
         if (unit != NULL) {
             part = BattleGetUnitPartsPtr(i, BtlUnit_GetBodyPartsId(unit));
-            if (unit->mAlliance == ALLIANCE_PLAYER && unit->currentHp > 0 && !(part->attributes & kNotTargetable)) {
+            if (unit->alliance == ALLIANCE_PLAYER && unit->currentHp > 0 && !(part->attributes & kNotTargetable)) {
                 ids[count++] = i;
             }
         }
@@ -1646,7 +1646,7 @@ void BattleAudienceItemCtrlProcess(void) {
         switch (it->state) {
         case 0: {
             it->flags |= AUDIENCE_ITEM_FLAG_VISIBLE;
-            if (it->mItemType == ITEM_NULL) {
+            if (it->itemType == ITEM_NULL) {
                 // FAKE: s32 view of the BattleAudienceItemKind table (tbl[2j] = type, tbl[2j+1] = chance); field access changes the object
                 s32* tbl = (s32*)kd->itemTable;
                 s32 cnt = 0;
@@ -1675,7 +1675,7 @@ void BattleAudienceItemCtrlProcess(void) {
                     }
                     acc += tbl[j * 2 + 1];
                 }
-                it->mItemType = tbl[j * 2];
+                it->itemType = tbl[j * 2];
             }
             it->timer = i + 180;
             it->scale = 1.0f;
@@ -1762,7 +1762,7 @@ void BattleAudienceItemCtrlProcess(void) {
                 it->velocity.x += it->accel.x;
                 it->velocity.y += it->accel.y;
                 it->velocity.z += it->accel.z;
-                if (it->mItemType == ITEM_AUDIENCE_HAMMER) {
+                if (it->itemType == ITEM_AUDIENCE_HAMMER) {
                     it->rotZ += 18.0f;
                 }
                 it->timer--;
@@ -1782,7 +1782,7 @@ void BattleAudienceItemCtrlProcess(void) {
             if (it->flags & AUDIENCE_ITEM_FLAG_HARMLESS_UNUSED) {
                 it->mode = 0;
             }
-            if (it->mItemType >= ITEM_THUNDER_BOLT && it->mItemType < ITEM_MAX && pouchGetEmptyHaveItemCnt() <= 0) {
+            if (it->itemType >= ITEM_THUNDER_BOLT && it->itemType < ITEM_MAX && pouchGetEmptyHaveItemCnt() <= 0) {
                 it->mode = 0;
             }
             if (it->mode != 0) {
@@ -1794,13 +1794,13 @@ void BattleAudienceItemCtrlProcess(void) {
                     it->state = 4;
                     goto s4;
                 }
-                if (it->mItemType >= ITEM_MIN && it->mItemType < ITEM_MAX) {
+                if (it->itemType >= ITEM_MIN && it->itemType < ITEM_MAX) {
                     BattleAudience_SetPresentItemType(0);
-                } else if (it->mItemType >= ITEM_AUDIENCE_CAN && it->mItemType < BADGE_MIN) {
+                } else if (it->itemType >= ITEM_AUDIENCE_CAN && it->itemType < BADGE_MIN) {
                     BattleAudience_SetPresentItemType(1);
                 }
                 BattleAudience_SetPresentTargetUnitId(BtlUnit_GetUnitId((BattleUnit*)aud));
-                switch (it->mItemType) {
+                switch (it->itemType) {
                 case ITEM_AUDIENCE_CAN:
                     memcpy(&base->presentWeapon, &weapon_data_akikan, sizeof(BattleWeapon));
                     base->presentWeapon.hpDamageWork[0] = base->presentHitCount + base->presentWeapon.hpDamageWork[0] - 1;
@@ -1818,7 +1818,7 @@ void BattleAudienceItemCtrlProcess(void) {
                     base->presentWeapon.hpDamageWork[0] = base->presentHitCount + base->presentWeapon.hpDamageWork[0] - 1;
                     break;
                 }
-                BattleAudience_SetPresentItemNo(it->mItemType);
+                BattleAudience_SetPresentItemNo(it->itemType);
                 switch (BattleAudience_GetPresentItemType()) {
                 case 0:
                     it->flags &= ~AUDIENCE_ITEM_FLAG_VISIBLE;
@@ -2110,26 +2110,26 @@ BOOL BattleAudienceApSrcEntry(void) {
 void BattleAudienceWinCtrlProcess(void) {
     BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceWindow* win = BattleAudienceWinGetPtr();
-    f32 diff = (f32)base->mCurrentAudienceIntCount - win->count;
+    f32 diff = (f32)base->currentAudienceIntCount - win->count;
     f32 step;
 
     if (diff != 0.0f) {
         if (diff > 0.0f) {
             step = (0.1f * diff < 0.1f) ? 0.1f : 0.1f * diff;
             win->count += step;
-            if ((f32)base->mCurrentAudienceIntCount - win->count < 0.0f) {
-                win->count = (f32)base->mCurrentAudienceIntCount;
+            if ((f32)base->currentAudienceIntCount - win->count < 0.0f) {
+                win->count = (f32)base->currentAudienceIntCount;
             }
         } else {
             step = (0.1f * diff > -0.1f) ? 0.1f : -0.1f * diff;
             win->count -= step;
-            if ((f32)base->mCurrentAudienceIntCount - win->count > 0.0f) {
-                win->count = (f32)base->mCurrentAudienceIntCount;
+            if ((f32)base->currentAudienceIntCount - win->count > 0.0f) {
+                win->count = (f32)base->currentAudienceIntCount;
             }
         }
     }
 
-    if (win->mActive) {
+    if (win->active) {
         win->slideTimer++;
         if (win->slideTimer > 15) {
             win->slideTimer = 15;
@@ -2338,16 +2338,16 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
                 }
             }
         }
-        ox = m->mRotationOffset.x * m->scale.x;
-        oy = m->mRotationOffset.y * m->scale.y;
-        oz = m->mRotationOffset.z * m->scale.z;
+        ox = m->rotationOffset.x * m->scale.x;
+        oy = m->rotationOffset.y * m->scale.y;
+        oz = m->rotationOffset.z * m->scale.z;
         PSMTXScale(scl, m->scale.x, m->scale.y, m->scale.z);
         // FAKE: block-local degrees-to-radians temporary (shadows s32 k); the constant written directly changes the object
         {
             f32 k = 0.017453289f;
-            a0 = m->mRotation.x * k;
-            a1 = m->mRotation.y * k;
-            a2 = m->mRotation.z * k;
+            a0 = m->rotation.x * k;
+            a1 = m->rotation.y * k;
+            a2 = m->rotation.z * k;
         }
         sx = sin(a0);
         cx = cos(a0);
@@ -2443,7 +2443,7 @@ void BattleAudienceDispItem(CameraId camId, void* param) {
     item = BattleAudienceItemGetPtr(0);
     for (; i < 100; i++, item++) {
         if ((item->flags & AUDIENCE_ITEM_FLAG_ACTIVE) && (item->flags & AUDIENCE_ITEM_FLAG_VISIBLE)) {
-            iconId = itemDataTable[item->mItemType].icon_id;
+            iconId = itemDataTable[item->itemType].icon_id;
             PSMTXTrans(mtx, 0.0f, -20.0f, 0.0f);
             PSMTXRotRad(rot, 'z', 0.017453292f * item->rotZ);
             PSMTXConcat(rot, mtx, mtx);
@@ -2526,7 +2526,7 @@ BOOL BattleAudience_Entry(s32 index, AudienceMemberType type, u8 status) {
         t = (index % 20) * 25 + rand() * 10 / 0x7fff;
         x = t - 0xeb;
         m->position.x = x;
-        m->mHomePosition.x = x;
+        m->homePosition.x = x;
         BattleAudience_Entry_Sub(index, type, status);
     } else {
         if (index % 2 == 1) {
@@ -2541,7 +2541,7 @@ BOOL BattleAudience_Entry(s32 index, AudienceMemberType type, u8 status) {
         m->flags = AUDIENCE_MEMBER_FLAG_USED | AUDIENCE_MEMBER_FLAG_DISP | AUDIENCE_MEMBER_FLAG_WIDE;
         x = 12.5f + (f32)((index % 20) * 25 - 230) + (f32)(rand() * 10 / 0x7fff) - 5.0f;
         m->position.x = x;
-        m->mHomePosition.x = x;
+        m->homePosition.x = x;
         BattleAudience_Entry_Sub(index, type, status);
         m[1].flags = AUDIENCE_MEMBER_FLAG_USED | AUDIENCE_MEMBER_FLAG_WIDE_SUB;
     }
@@ -2573,12 +2573,12 @@ void BattleAudience_Entry_Sub(s32 index, s32 type, u8 status) {
     row = index / 20;
     y = stage->audienceSizeY;
     m->position.y = y;
-    m->mHomePosition.y = y;
+    m->homePosition.y = y;
     z = 0.1f * (f32)(index % 20) + (f32)(row * 30 + 0x73);
     m->position.z = z;
-    m->mHomePosition.z = z;
+    m->homePosition.z = z;
     if (m->type == AUDIENCE_PIRANHA_PLANT) {
-        m->mHomePosition.z += 0.2f;
+        m->homePosition.z += 0.2f;
         m->position.z += 0.2f;
     }
     if (m->status == AUDIENCE_STATUS_ENTER) {
@@ -2587,8 +2587,8 @@ void BattleAudience_Entry_Sub(s32 index, s32 type, u8 status) {
     m->accel = (Vec){0.0f, 0.0f, 0.0f};
     m->velocity = m->accel;
     m->facingDir = (Vec){0.0f, 0.0f, -1.0f};
-    m->mRotation = (Vec){0.0f, 0.0f, 0.0f};
-    m->mRotationOffset = (Vec){0.0f, 0.0f, 0.0f};
+    m->rotation = (Vec){0.0f, 0.0f, 0.0f};
+    m->rotationOffset = (Vec){0.0f, 0.0f, 0.0f};
     m->scale = (Vec){1.0f, 1.0f, 1.0f};
     m->baseScale = (Vec){1.0f, 1.0f, 1.0f};
     m->dispOffset = (Vec){0.0f, 0.0f, 0.0f};
@@ -2670,9 +2670,9 @@ void BattleAudience_GetHomePosition(s32 index, f32* x, f32* y, f32* z) {
     BattleAudienceMember* member;
 
     member = BattleAudienceGetPtr(index);
-    *x = member->mHomePosition.x;
-    *y = member->mHomePosition.y;
-    *z = member->mHomePosition.z;
+    *x = member->homePosition.x;
+    *y = member->homePosition.y;
+    *z = member->homePosition.z;
 }
 
 /** Reads member index's rotation in degrees (used by Cortez's battle script). */
@@ -2680,9 +2680,9 @@ void BattleAudience_GetRotate(s32 index, f32* x, f32* y, f32* z) {
     BattleAudienceMember* member;
 
     member = BattleAudienceGetPtr(index);
-    *x = member->mRotation.x;
-    *y = member->mRotation.y;
-    *z = member->mRotation.z;
+    *x = member->rotation.x;
+    *y = member->rotation.y;
+    *z = member->rotation.z;
 }
 
 /** Moves member index to (x, y, z); used by audience scripts, Clock Out and the Shadow Queen battle. */
@@ -2700,9 +2700,9 @@ void BattleAudience_SetRotate(s32 index, f32 x, f32 y, f32 z) {
     BattleAudienceMember* member;
 
     member = BattleAudienceGetPtr(index);
-    member->mRotation.x = x;
-    member->mRotation.y = y;
-    member->mRotation.z = z;
+    member->rotation.x = x;
+    member->rotation.y = y;
+    member->rotation.z = z;
 }
 
 /**
@@ -2712,9 +2712,9 @@ void BattleAudience_SetRotateOffset(s32 index, f32 x, f32 y, f32 z) {
     BattleAudienceMember* member;
 
     member = BattleAudienceGetPtr(index);
-    member->mRotationOffset.x = x;
-    member->mRotationOffset.y = y;
-    member->mRotationOffset.z = z;
+    member->rotationOffset.x = x;
+    member->rotationOffset.y = y;
+    member->rotationOffset.z = z;
 }
 
 /**
@@ -2736,28 +2736,28 @@ void BattleAudience_GetItemOn(s32* memberId, f32* x, f32* y, f32* z, ItemType* i
             item = BattleAudienceItemGetPtr(member->itemId);
             if (item->state <= 4 || item->state == 7) {
                 if (memberId) {
-                    audience->mItemOnMemberId = i;
+                    audience->itemOnMemberId = i;
                     *memberId = i;
                 }
-                audience->mItemOnMemberPos.x = member->position.x;
-                audience->mItemOnMemberPos.y = member->position.y;
-                audience->mItemOnMemberPos.z = member->position.z + 3.0f;
+                audience->itemOnMemberPos.x = member->position.x;
+                audience->itemOnMemberPos.y = member->position.y;
+                audience->itemOnMemberPos.z = member->position.z + 3.0f;
 
                 if (x) {
-                    *x = audience->mItemOnMemberPos.x;
+                    *x = audience->itemOnMemberPos.x;
                 }
                 if (y) {
-                    *y = audience->mItemOnMemberPos.y;
+                    *y = audience->itemOnMemberPos.y;
                 }
                 if (z) {
-                    *z = audience->mItemOnMemberPos.z;
+                    *z = audience->itemOnMemberPos.z;
                 }
 
                 if (itemType) {
                     if (member->itemId < 0) {
                         *itemType = ITEM_NULL;
                     } else {
-                        *itemType = audience->items[member->itemId].mItemType;
+                        *itemType = audience->items[member->itemId].itemType;
                     }
                 }
                 return;
@@ -2777,26 +2777,26 @@ void BattleAudience_GetItemOn2(s32* memberId, f32* x, f32* y, f32* z, ItemType* 
     BattleAudienceMember* member;
 
     audience = BattleAudienceBaseGetPtr();
-    member = BattleAudienceGetPtr(audience->mItemOnMemberId);
+    member = BattleAudienceGetPtr(audience->itemOnMemberId);
     if (memberId) {
-        *memberId = audience->mItemOnMemberId;
+        *memberId = audience->itemOnMemberId;
     }
 
     if (x) {
-        *x = audience->mItemOnMemberPos.x;
+        *x = audience->itemOnMemberPos.x;
     }
     if (y) {
-        *y = audience->mItemOnMemberPos.y;
+        *y = audience->itemOnMemberPos.y;
     }
     if (z) {
-        *z = audience->mItemOnMemberPos.z;
+        *z = audience->itemOnMemberPos.z;
     }
 
     if (itemType) {
         if (member->itemId < 0) {
             *itemType = ITEM_NULL;
         } else {
-            *itemType = audience->items[member->itemId].mItemType;
+            *itemType = audience->items[member->itemId].itemType;
         }
     }
 }
@@ -2860,7 +2860,7 @@ void BattleAudience_ChangeStatus(s32 index, s32 status) {
             member->colorG = 0;
             member->colorR = 0;
             member->colorA = 0xFF;
-            member->mRotation = (Vec){0.0f, 0.0f, 0.0f};
+            member->rotation = (Vec){0.0f, 0.0f, 0.0f};
             member->dispOffset = (Vec){0.0f, 0.0f, 0.0f};
             member->baseScale = (Vec){1.0f, 1.0f, 1.0f};
             member->velocity = (Vec){0.0f, 0.0f, 0.0f};
@@ -3149,7 +3149,7 @@ s32 BattleAudience_NoUsedFCHaitiRand(void) {
  * and Shadow Queen battles use it.
  */
 s32 BattleAudience_GetAudienceNum(void) {
-    return BattleAudienceBaseGetPtr()->mCurrentAudienceIntCount;
+    return BattleAudienceBaseGetPtr()->currentAudienceIntCount;
 }
 
 /**
@@ -3248,8 +3248,8 @@ void BattleAudience_ApRecoveryBuild(StarPowerInfo* info) {
         sum += audience_kind[i].spWeight * (f32)BattleAudience_GetPPAudienceNumKind(i);
     }
     root = sqrt(sum);
-    a = info->mSpAcSuccessMultiplier;
-    b = (f32)info->mStylishCommandMultiplier;
+    a = info->spAcSuccessMultiplier;
+    b = (f32)info->stylishCommandMultiplier;
     cnt = 0.0f;
     if (a > 0.0f) {
         cnt += 1.0f;
@@ -3257,17 +3257,17 @@ void BattleAudience_ApRecoveryBuild(StarPowerInfo* info) {
     if (b > 0.0f) {
         cnt += 1.0f;
     }
-    if (mario->mStatusFlags & UNIT_STATUS_FLAG_PERIL) {
+    if (mario->statusFlags & UNIT_STATUS_FLAG_PERIL) {
         mm = 3.0f;
-    } else if (mario->mStatusFlags & UNIT_STATUS_FLAG_DANGER) {
+    } else if (mario->statusFlags & UNIT_STATUS_FLAG_DANGER) {
         mm = 2.0f;
     } else {
         mm = 1.0f;
     }
     if (party != NULL) {
-        if (party->mStatusFlags & UNIT_STATUS_FLAG_PERIL) {
+        if (party->statusFlags & UNIT_STATUS_FLAG_PERIL) {
             pm = 2.0f;
-        } else if (party->mStatusFlags & UNIT_STATUS_FLAG_DANGER) {
+        } else if (party->statusFlags & UNIT_STATUS_FLAG_DANGER) {
             pm = 1.5f;
         } else {
             pm = 1.0f;
@@ -3280,7 +3280,7 @@ void BattleAudience_ApRecoveryBuild(StarPowerInfo* info) {
     } else {
         audience->starPowerGain = audience->starPowerGain + (s32)((mm * (cnt * (scale * root * (a + b)))) * pm);
     }
-    if (irand(100) < (u8)info->mBingoSlotChance) {
+    if (irand(100) < (u8)info->bingoSlotChance) {
         BattleBreakSlot_PointInc();
     }
 }
@@ -3290,7 +3290,7 @@ void BattleAudience_ApRecoveryBuild(StarPowerInfo* info) {
  * used by the action-command help and battle end.
  */
 void BattleAudience_WinSetActive(u8 active) {
-    BattleAudienceWinGetPtr()->mActive = active;
+    BattleAudienceWinGetPtr()->active = active;
 }
 
 /**
@@ -3306,12 +3306,12 @@ void BattleAudienceNumToTarget(void) {
     if (audience->flags & AUDIENCE_FLAG_EVENT_CTRL) {
         return;
     }
-    num = audience->mTargetAudienceCount + audience->mAddedAudienceCount;
+    num = audience->targetAudienceCount + audience->addedAudienceCount;
     if (num < 0) {
         num = 0;
     }
-    if (num > audience->mMaxAudience) {
-        num = audience->mMaxAudience;
+    if (num > audience->maxAudience) {
+        num = audience->maxAudience;
     }
     BattleAudienceAddAudienceNum(num - BattleAudienceNumToTargetSub());
 }
@@ -3342,36 +3342,36 @@ s32 BattleAudienceNumToTargetSub(void) {
 void BattleAudienceAddTargetNum(f32 value, f32 value2) {
     BattleAudience* audience = BattleAudienceBaseGetPtr();
 
-    audience->mAddedAudienceCount += value2;
-    if (audience->mAddedAudienceCount > 0.0f && value < 0.0f) {
-        audience->mAddedAudienceCount += value;
-        if (audience->mAddedAudienceCount < 0.0f) {
-            value = audience->mAddedAudienceCount;
-            audience->mAddedAudienceCount = 0.0f;
+    audience->addedAudienceCount += value2;
+    if (audience->addedAudienceCount > 0.0f && value < 0.0f) {
+        audience->addedAudienceCount += value;
+        if (audience->addedAudienceCount < 0.0f) {
+            value = audience->addedAudienceCount;
+            audience->addedAudienceCount = 0.0f;
         } else {
             value = 0.0f;
         }
-    } else if (audience->mAddedAudienceCount < 0.0f && value > 0.0f) {
-        audience->mAddedAudienceCount += value;
-        if (audience->mAddedAudienceCount > 0.0f) {
-            value = audience->mAddedAudienceCount;
-            audience->mAddedAudienceCount = 0.0f;
+    } else if (audience->addedAudienceCount < 0.0f && value > 0.0f) {
+        audience->addedAudienceCount += value;
+        if (audience->addedAudienceCount > 0.0f) {
+            value = audience->addedAudienceCount;
+            audience->addedAudienceCount = 0.0f;
         } else {
             value = 0.0f;
         }
     }
     BattleAudienceAddTargetNumSub(value);
-    if (audience->mTargetAudienceCount < 0.0f) {
-        audience->mTargetAudienceCount = 0.0f;
+    if (audience->targetAudienceCount < 0.0f) {
+        audience->targetAudienceCount = 0.0f;
     }
-    if (audience->mTargetAudienceCount > audience->mMaxAudience) {
-        audience->mTargetAudienceCount = audience->mMaxAudience;
+    if (audience->targetAudienceCount > audience->maxAudience) {
+        audience->targetAudienceCount = audience->maxAudience;
     }
-    if (audience->mAddedAudienceCount < -1000.0f) {
-        audience->mAddedAudienceCount = -1000.0f;
+    if (audience->addedAudienceCount < -1000.0f) {
+        audience->addedAudienceCount = -1000.0f;
     }
-    if (audience->mAddedAudienceCount > 1000.0f) {
-        audience->mAddedAudienceCount = 1000.0f;
+    if (audience->addedAudienceCount > 1000.0f) {
+        audience->addedAudienceCount = 1000.0f;
     }
 }
 
@@ -3399,20 +3399,20 @@ void BattleAudienceAddTargetNumSub(f32 value) {
             }
         }
         if (subtract > 0.0f) {
-            skew = (s32)(((audience->mTargetAudienceCount / audience->mAudienceDeltaMultiplier) - 1.0f) / 0.25f);
+            skew = (s32)(((audience->targetAudienceCount / audience->audienceDeltaMultiplier) - 1.0f) / 0.25f);
             if (skew >= 1) {
-                audience->mTargetAudienceCount += subtract / (skew + 1);
+                audience->targetAudienceCount += subtract / (skew + 1);
                 continue;
             }
         }
         if (subtract < 0.0f) {
-            skew = (s32)(((audience->mTargetAudienceCount / audience->mAudienceDeltaMultiplier) - 1.0f) / 0.25f);
+            skew = (s32)(((audience->targetAudienceCount / audience->audienceDeltaMultiplier) - 1.0f) / 0.25f);
             if (skew <= -1) {
-                audience->mTargetAudienceCount -= subtract / (skew - 1);
+                audience->targetAudienceCount -= subtract / (skew - 1);
                 continue;
             }
         }
-        audience->mTargetAudienceCount += subtract;
+        audience->targetAudienceCount += subtract;
     }
 }
 
@@ -3438,7 +3438,7 @@ s32 BattleAudienceAddAudienceNum(s32 num) {
     audience = BattleAudienceBaseGetPtr();
     total = 0;
     added = 0;
-    if (pouchGetPtr()->mStarPowersObtained == 0) {
+    if (pouchGetPtr()->starPowersObtained == 0) {
         return 0;
     }
     if (num == 0) {
@@ -3501,7 +3501,7 @@ void BattleAudiencePuniAllEscape(void) {
         member = BattleAudienceGetPtr(i);
         if ((u8)BattleAudience_GetEscapeChangeOK(i) && member->type == AUDIENCE_PUNI) {
             BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_ESCAPE);
-            audience->mAddedAudienceCount -= 1.0f;
+            audience->addedAudienceCount -= 1.0f;
             count++;
         }
     }
@@ -3516,14 +3516,14 @@ void BattleAudienceAddPuni(s32 num) {
     s32 i;
 
     audience = BattleAudienceBaseGetPtr();
-    if (pouchGetPtr()->mStarPowersObtained != 0 && audience->typeWeights[AUDIENCE_PUNI] > 0 && num > 0 && !(wp->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE)) {
+    if (pouchGetPtr()->starPowersObtained != 0 && audience->typeWeights[AUDIENCE_PUNI] > 0 && num > 0 && !(wp->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE)) {
         for (i = 0; i < num; i++) {
             s32 id = BattleAudience_NoUsedFCHaitiRand();
             if (id == -1) {
                 return;
             }
             if (BattleAudience_Entry(id, AUDIENCE_PUNI, AUDIENCE_STATUS_ENTER) == TRUE) {
-                audience->mAddedAudienceCount += 1.0f;
+                audience->addedAudienceCount += 1.0f;
             }
         }
     }
@@ -3871,11 +3871,11 @@ void BattleAudienceSoundNoiseAlways(void) {
         if (sound->sfxId != -1) {
             sound->flags |= AUD_SOUND_FLAG_PLAYING;
             sound->duration = -1;
-            sound->mFadeoutTime = 0;
-            sound->mBaseSfxVolume = sound->mCurrentBaseSfxVolume = psndSFX_get_vol(sound->sfxId);
-            sound->mForceFadeLength = 0;
-            sound->mForceFadeTimer = 0;
-            sound->mVolumeMultiplier = 100;
+            sound->fadeoutTime = 0;
+            sound->baseSfxVolume = sound->currentBaseSfxVolume = psndSFX_get_vol(sound->sfxId);
+            sound->forceFadeLength = 0;
+            sound->forceFadeTimer = 0;
+            sound->volumeMultiplier = 100;
             audience->flags |= AUDIENCE_FLAG_NOISE_ON;
         }
     }
@@ -4064,18 +4064,18 @@ void BattleAudienceSoundHandBeat(void) {
     if (sound->sfxId != -1) {
         sound->flags |= AUD_SOUND_FLAG_PLAYING;
         sound->duration = -1;
-        sound->mFadeoutTime = 0;
-        sound->mForceFadeLength = 0;
-        sound->mForceFadeTimer = 0;
+        sound->fadeoutTime = 0;
+        sound->forceFadeLength = 0;
+        sound->forceFadeTimer = 0;
         if (sum == 0) {
             right = 0;
         } else {
             right = 75.0f + sum * (26.0f + irand(26)) / 200.0f;
         }
         psndSFX_vol(sound->sfxId, right);
-        sound->mCurrentBaseSfxVolume = right;
-        sound->mBaseSfxVolume = right;
-        sound->mVolumeMultiplier = 100;
+        sound->currentBaseSfxVolume = right;
+        sound->baseSfxVolume = right;
+        sound->volumeMultiplier = 100;
     }
 }
 
@@ -4252,11 +4252,11 @@ void BattleAudienceSoundSetVol(s32 index, u8 vol, s32 length) {
     BattleAudienceSound* sound;
 
     sound = BattleAudienceSoundGetPtr(index);
-    sound->mFadeStartVolumeMultiplier = sound->mVolumeMultiplier;
-    sound->mFadeEndVolumeMultiplier = vol;
-    sound->mForceFadeTimer = 0;
-    sound->mForceFadeLength = length;
-    sound->mFadeoutTime = 0;
+    sound->fadeStartVolumeMultiplier = sound->volumeMultiplier;
+    sound->fadeEndVolumeMultiplier = vol;
+    sound->forceFadeTimer = 0;
+    sound->forceFadeLength = length;
+    sound->fadeoutTime = 0;
 }
 
 /**
@@ -4367,22 +4367,22 @@ void BattleAudienceSoundMain(void) {
             sound->flags &= ~AUD_SOUND_FLAG_PLAYING;
             continue;
         }
-        if (sound->mForceFadeLength > 0) {
-            sound->mForceFadeTimer++;
-            sound->mVolumeMultiplier = intplGetValue(EASING_LINEAR, sound->mFadeStartVolumeMultiplier, sound->mFadeEndVolumeMultiplier, sound->mForceFadeTimer, sound->mForceFadeLength);
-            psndSFX_vol(sound->sfxId, (u8)(sound->mCurrentBaseSfxVolume * sound->mVolumeMultiplier / 100));
-            if (sound->mForceFadeTimer >= sound->mForceFadeLength) {
-                sound->mForceFadeLength = 0;
+        if (sound->forceFadeLength > 0) {
+            sound->forceFadeTimer++;
+            sound->volumeMultiplier = intplGetValue(EASING_LINEAR, sound->fadeStartVolumeMultiplier, sound->fadeEndVolumeMultiplier, sound->forceFadeTimer, sound->forceFadeLength);
+            psndSFX_vol(sound->sfxId, (u8)(sound->currentBaseSfxVolume * sound->volumeMultiplier / 100));
+            if (sound->forceFadeTimer >= sound->forceFadeLength) {
+                sound->forceFadeLength = 0;
             }
         }
         if (sound->duration > 0) {
-            if (sound->duration == sound->mFadeoutTime) {
-                sound->mFadeStartVolumeMultiplier = sound->mVolumeMultiplier;
-                sound->mFadeEndVolumeMultiplier = 0;
+            if (sound->duration == sound->fadeoutTime) {
+                sound->fadeStartVolumeMultiplier = sound->volumeMultiplier;
+                sound->fadeEndVolumeMultiplier = 0;
             }
-            if (sound->duration <= sound->mFadeoutTime) {
-                sound->mVolumeMultiplier = intplGetValue(EASING_LINEAR, sound->mFadeStartVolumeMultiplier, sound->mFadeEndVolumeMultiplier, sound->mFadeoutTime - sound->duration, sound->mFadeoutTime);
-                psndSFX_vol(sound->sfxId, (u8)(sound->mCurrentBaseSfxVolume * sound->mVolumeMultiplier / 100));
+            if (sound->duration <= sound->fadeoutTime) {
+                sound->volumeMultiplier = intplGetValue(EASING_LINEAR, sound->fadeStartVolumeMultiplier, sound->fadeEndVolumeMultiplier, sound->fadeoutTime - sound->duration, sound->fadeoutTime);
+                psndSFX_vol(sound->sfxId, (u8)(sound->currentBaseSfxVolume * sound->volumeMultiplier / 100));
             }
             sound->duration--;
         }
@@ -4429,11 +4429,11 @@ void BattleAudienceNoiseMain(void) {
         sound->kind = 4;
     }
     if (!(audience->flags & AUDIENCE_FLAG_NOISE_ON)) {
-        sound->mCurrentBaseSfxVolume = 0;
+        sound->currentBaseSfxVolume = 0;
     } else if (num == 0) {
-        sound->mCurrentBaseSfxVolume = 0;
+        sound->currentBaseSfxVolume = 0;
     } else {
-        sound->mCurrentBaseSfxVolume = 63.0f + 63.0f * num / 200.0f;
+        sound->currentBaseSfxVolume = 63.0f + 63.0f * num / 200.0f;
     }
 }
 
@@ -4513,9 +4513,9 @@ void BattleAudience_Case_AcrobatGood(void) {
         BattleAudienceSoundClap(180, 120);
         BattleAudienceJoy(1);
     }
-    audience->mNumStylishCommandsThisAttack++;
-    if (audience->mNumStylishCommandsThisAttack > 5) {
-        audience->mNumStylishCommandsThisAttack = 5;
+    audience->numStylishCommandsThisAttack++;
+    if (audience->numStylishCommandsThisAttack > 5) {
+        audience->numStylishCommandsThisAttack = 5;
     }
     audience->flags |= AUDIENCE_FLAG_ACROBAT_GOOD;
 }
@@ -4551,7 +4551,7 @@ void BattleAudience_Case_MarioBigDamage(s32 damage) {
  * the target size grows by 5% of the level's audience factor.
  */
 void BattleAudience_Case_MarioPinch(void) {
-    BattleAudienceAddTargetNum(0.049999997f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(0.049999997f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
 }
 
 /**
@@ -4559,12 +4559,12 @@ void BattleAudience_Case_MarioPinch(void) {
  * the target size grows by 15% of the level's audience factor.
  */
 void BattleAudience_Case_MarioDanger(void) {
-    BattleAudienceAddTargetNum(0.14999999f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(0.14999999f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
 }
 
 /** A partner was knocked out (damage code): the target size drops by 25% of the level's audience factor. */
 void BattleAudience_Case_PartyDown(void) {
-    BattleAudienceAddTargetNum(-0.25f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(-0.25f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
 }
 
 /** Empty hook for a new Power Bounce record (battle_mario.c). */
@@ -4588,24 +4588,24 @@ void BattleAudience_Case_TurnEnd(void) {
     group = wp->fbatInfo->setup->groupSetup;
     setup = group->enemyData;
     if (!(audience->flags & AUDIENCE_FLAG_EVENT_CTRL)) {
-        audience->mTurnEndPhaseEventChance += 3;
-        if (audience->mTurnEndPhaseEventChance > 100) {
-            audience->mTurnEndPhaseEventChance = 100;
+        audience->turnEndPhaseEventChance += 3;
+        if (audience->turnEndPhaseEventChance > 100) {
+            audience->turnEndPhaseEventChance = 100;
         }
         for (i = 0; i < group->numEnemies; i++, setup++) {
-            sum += setup->mUnitKindParams->mLevel;
+            sum += setup->unitKindParams->level;
         }
-        turns = sum * 2 / mario->mLevel;
+        turns = sum * 2 / mario->level;
         if (turns < 5) {
             turns = 5;
         }
         if (wp->turnCount >= turns) {
-            BattleAudienceAddTargetNum(-0.049999997f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+            BattleAudienceAddTargetNum(-0.049999997f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
         }
         if (wp->turnCount == turns) {
             BattleAudienceAddPhaseEvtList(6);
         }
-        if (irand(100) < audience->mTurnEndPhaseEventChance) {
+        if (irand(100) < audience->turnEndPhaseEventChance) {
             if (wp->turnCount >= turns) {
                 BattleAudienceAddPhaseEvtList(1);
             }
@@ -4615,7 +4615,7 @@ void BattleAudience_Case_TurnEnd(void) {
             BattleAudienceAddPhaseEvtList(11);
             BattleAudienceAddPhaseEvtList(12);
             BattleAudienceAddPhaseEvtList(13);
-            audience->mTurnEndPhaseEventChance = 0;
+            audience->turnEndPhaseEventChance = 0;
         }
         BattleAudienceNumToTarget();
     }
@@ -4633,7 +4633,7 @@ void BattleAudience_Case_Appeal(BattleUnit* unit) {
         BattleAudienceSoundClap(180, 60);
         BattleAudienceJoy(0);
     }
-    BattleAudienceAddTargetNum(0.049999997f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(0.049999997f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
 }
 
 /** Empty hook for the start of a run-away attempt (battle_event_default.c). */
@@ -4645,7 +4645,7 @@ void BattleAudience_Case_Escape(void) {
  * the crowd noise swells to full and the crowd boos.
  */
 void BattleAudience_Case_Escape_Good(void) {
-    BattleAudienceAddTargetNum(-0.099999994f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(-0.099999994f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
     BattleAudienceSoundSetVol(2, 100, 30);
     BattleAudienceSoundBooing();
 }
@@ -4654,7 +4654,7 @@ void BattleAudience_Case_Escape_Good(void) {
  * A run-away attempt failed: the target size drops by 20% of the level's audience factor and the crowd boos.
  */
 void BattleAudience_Case_Escape_Bad(void) {
-    BattleAudienceAddTargetNum(-0.19999999f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(-0.19999999f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
     BattleAudienceSoundBooing();
 }
 
@@ -4676,7 +4676,7 @@ void BattleAudience_Case_EnemyNoDamage(void) {
  * and the X-Nauts may throw rocks next phase (from the damage code).
  */
 void BattleAudience_Case_Countered(void) {
-    BattleAudienceAddTargetNum(-0.099999994f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(-0.099999994f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
     BattleAudienceAddPhaseEvtList(5);
 }
 
@@ -4685,7 +4685,7 @@ void BattleAudience_Case_Countered(void) {
  * the target size grows by 5% of the level's audience factor.
  */
 void BattleAudience_Case_HaikeiSet(void) {
-    BattleAudienceAddTargetNum(0.049999997f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(0.049999997f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
 }
 
 /**
@@ -4693,7 +4693,7 @@ void BattleAudience_Case_HaikeiSet(void) {
  * the target size grows by 15% of the level's audience factor (battle_seq_end.c).
  */
 void BattleAudience_Case_GreatVictory(void) {
-    BattleAudienceAddTargetNum(0.14999999f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(0.14999999f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
 }
 
 /**
@@ -4701,12 +4701,12 @@ void BattleAudience_Case_GreatVictory(void) {
  * rate being the turns saved (battle_seq_end.c).
  */
 void BattleAudience_Case_FastVictory(f32 rate) {
-    BattleAudienceAddTargetNum(0.01f * (5.0f * rate) * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(0.01f * (5.0f * rate) * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
 }
 
 /** A stage object fell onto the stage: the target size grows by 5% of the level's audience factor. */
 void BattleAudience_Case_FallObject_Stage(void) {
-    BattleAudienceAddTargetNum(0.049999997f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(0.049999997f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
 }
 
 /**
@@ -4743,7 +4743,7 @@ void BattleAudience_Case_FallObject_Aud(s32 index, u8 type) {
                 no = BattleAudience_GetAudienceNoFromOffset(index, near[i][0], near[i][1]);
                 if (no != -1 && (u8)BattleAudience_GetEscapeChangeOK(no)) {
                     BattleAudience_ChangeStatus(no, AUDIENCE_STATUS_ESCAPE);
-                    audience->mTargetAudienceCount -= 1.0f;
+                    audience->targetAudienceCount -= 1.0f;
                 }
             }
             break;
@@ -4755,7 +4755,7 @@ void BattleAudience_Case_FallObject_Aud(s32 index, u8 type) {
                 no = BattleAudience_GetAudienceNoFromOffset(index, far[i][0], far[i][1]);
                 if (no != -1 && (u8)BattleAudience_GetEscapeChangeOK(no)) {
                     BattleAudience_ChangeStatus(no, AUDIENCE_STATUS_ESCAPE);
-                    audience->mTargetAudienceCount -= 1.0f;
+                    audience->targetAudienceCount -= 1.0f;
                 }
             }
             break;
@@ -4766,7 +4766,7 @@ void BattleAudience_Case_FallObject_Aud(s32 index, u8 type) {
             for (i = 0; i < 200; i++) {
                 if ((u8)BattleAudience_GetEscapeChangeOK(i)) {
                     BattleAudience_ChangeStatus(i, AUDIENCE_STATUS_ESCAPE);
-                    audience->mTargetAudienceCount -= 1.0f;
+                    audience->targetAudienceCount -= 1.0f;
                 }
             }
             /* fallthrough */
@@ -4774,7 +4774,7 @@ void BattleAudience_Case_FallObject_Aud(s32 index, u8 type) {
             if ((u8)BattleAudience_GetSysCtrl(index) == TRUE && BattleAudienceGetPtr(index)->status != AUDIENCE_STATUS_INTRUDE) {
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
             }
-            audience->mTargetAudienceCount -= 1.0f;
+            audience->targetAudienceCount -= 1.0f;
             break;
     }
     BattleAudiencePuniAllEscape();
@@ -4782,12 +4782,12 @@ void BattleAudience_Case_FallObject_Aud(s32 index, u8 type) {
 
 /** Mario's side struck first: the target size grows by 2% of the level's audience factor (battle_seq.c). */
 void BattleAudience_Case_FirstAttack_Good(void) {
-    BattleAudienceAddTargetNum(0.02f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(0.02f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
 }
 
 /** The enemy struck first: the target size drops by 5% of the level's audience factor (battle_seq.c). */
 void BattleAudience_Case_FirstAttack_Bad(void) {
-    BattleAudienceAddTargetNum(-0.049999997f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+    BattleAudienceAddTargetNum(-0.049999997f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
 }
 
 /**

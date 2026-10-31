@@ -153,14 +153,14 @@ BattleUnitKindPart unitpartsdata_Party_Vivian[] = {
  * a floating unit with one part, the partner hit sounds and no enemy HP gauge.
  */
 BattleUnitKind unitdata_Party_Vivian = {
-    UNIT_VIVIAN, // mUnitType
+    UNIT_VIVIAN, // unitType
     "btl_un_vivian", // name
     10, // maxHp
     5, // maxFp
-    5, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    5, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -195,7 +195,7 @@ BattleUnitKind unitdata_Party_Vivian = {
     kFloating | kUnitNoHpGauge, // attributeFlags
     &regist.d, // statusVulnerability
     1, // numParts
-    unitpartsdata_Party_Vivian, // mParts
+    unitpartsdata_Party_Vivian, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -249,7 +249,7 @@ USER_FUNC(battle_evt_majo_disp_on) {
             v.x = px;
             v.y = py - 200.0f;
             v.z = pz;
-            unit->mPosition = v;
+            unit->position = v;
         }
         animEffectAsync("p_bibi", 1);
     }
@@ -257,7 +257,7 @@ USER_FUNC(battle_evt_majo_disp_on) {
         case 0:
             part->shadowScale = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, event->userdata[1], 30);
             if (event->userdata[1] == 0) {
-                psndSFXOn_3D("SFX_BTL_VIVIAN_SHADOW1_1", &unit->mPosition);
+                psndSFXOn_3D("SFX_BTL_VIVIAN_SHADOW1_1", &unit->position);
             }
             event->userdata[1]++;
             if (event->userdata[1] > 15) {
@@ -277,7 +277,7 @@ USER_FUNC(battle_evt_majo_disp_on) {
                 v.x = px;
                 v.y = py;
                 v.z = pz;
-                unit->mPosition = v;
+                unit->position = v;
             }
             animPoseSetEffect(pose, "p_bibi", 1);
             animPoseSetEffectAnim(pose, "PM_B_2", 1);
@@ -422,9 +422,9 @@ BattleWeapon partyWeapon_VivianNormalAttack = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {3, 3, 4, 4, 5, 5, 0, 0}, // hpDamageWork
@@ -448,7 +448,7 @@ BattleWeapon partyWeapon_VivianNormalAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
-    partyVivianAttack_NormalAttack, // mAttackEvtScript
+    partyVivianAttack_NormalAttack, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 4, 2, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -471,12 +471,12 @@ BattleWeapon partyWeapon_VivianShadowGuard = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0, 2, 2, 3, 3, 4, 0, 0}, // hpDamageWork
@@ -498,7 +498,7 @@ BattleWeapon partyWeapon_VivianShadowGuard = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyVivianAttack_ShadowGuard, // mAttackEvtScript
+    partyVivianAttack_ShadowGuard, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -516,9 +516,9 @@ BattleWeapon partyWeapon_VivianMagicalPowder = {
     6, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetACOutputParam, // hpDamageFn
     {0}, // hpDamageWork
@@ -543,7 +543,7 @@ BattleWeapon partyWeapon_VivianMagicalPowder = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
-    partyVivianAttack_MagicalPowder, // mAttackEvtScript
+    partyVivianAttack_MagicalPowder, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -562,12 +562,12 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -592,7 +592,7 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    partyVivianAttack_CharmKissAttack, // mAttackEvtScript
+    partyVivianAttack_CharmKissAttack, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -1358,7 +1358,7 @@ USER_FUNC(battle_evt_majo_disp_off) {
             if (animPoseGetLoopTimes(animPoseGetAnimPosePtr(pose)->paperId) >= 1.0f) {
                 event->userdata[0]++;
                 event->userdata[1] = 0;
-                psndSFXOn_3D("SFX_BTL_VIVIAN_SHADOW1_2", &unit->mPosition);
+                psndSFXOn_3D("SFX_BTL_VIVIAN_SHADOW1_2", &unit->position);
                 if (flag2 != 0) {
                     part->attributes |= kHidden;
                 }
@@ -1369,7 +1369,7 @@ USER_FUNC(battle_evt_majo_disp_off) {
             event->userdata[1]++;
             if (event->userdata[1] > 20) {
                 part->shadowScale = 0.0f;
-                unit->mPosition.y -= 500.0f;
+                unit->position.y -= 500.0f;
                 animPoseSetEffect(pose, NULL, 1);
                 animPoseSetPaperAnimGroup(pose, NULL, 1);
                 return EVT_RETURN_DONE;
@@ -1492,11 +1492,11 @@ USER_FUNC(_get_vivian_attack_position) {
     self = BattleGetUnitPtr(wp, BattleTransID(event, UNIT_ID_SELF));
     target = BattleGetUnitPtr(wp, BattleTransID(event, targetId));
     BtlUnit_GetScale(target, &sx, &sy, &sz);
-    ix = (s32)((f32)target->faceDirection * (target->mKindParams->vivianOffsetX * sx));
-    iy = (s32)(target->mKindParams->vivianOffsetZ * sz);
-    x += -30.0f * self->mSizeMultiplier * (f32)self->faceDirection + ix;
+    ix = (s32)((f32)target->faceDirection * (target->kindParams->vivianOffsetX * sx));
+    iy = (s32)(target->kindParams->vivianOffsetZ * sz);
+    x += -30.0f * self->sizeMultiplier * (f32)self->faceDirection + ix;
     z = z + iy;
-    y -= 20.0f * self->mSizeMultiplier;
+    y -= 20.0f * self->sizeMultiplier;
     floor = BattleGetFloorHeight(wp, x, y, z);
     if (floor > y) {
         y = (s32)floor;

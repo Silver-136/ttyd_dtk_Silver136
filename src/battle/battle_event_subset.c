@@ -1612,9 +1612,9 @@ USER_FUNC(_add_star_point_disp_offset) {
     y = evtGetValue(event, yi);
     zi = args[3];
     z = evtGetValue(event, zi);
-    x += unit->mKindParams->starPointDispOffset.x;
-    y += unit->mKindParams->starPointDispOffset.y;
-    z += unit->mKindParams->starPointDispOffset.z;
+    x += unit->kindParams->starPointDispOffset.x;
+    y += unit->kindParams->starPointDispOffset.y;
+    z += unit->kindParams->starPointDispOffset.z;
     evtSetValue(event, xi, x);
     evtSetValue(event, yi, y);
     evtSetValue(event, zi, z);
@@ -1689,7 +1689,7 @@ USER_FUNC(_binta_effect) {
 
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    eff = effWhirlwindN64Entry(dir < 0, NULL, unit->mSizeMultiplier, 90);
+    eff = effWhirlwindN64Entry(dir < 0, NULL, unit->sizeMultiplier, 90);
     ((EffWhirlwindN64Work*)eff->userdata)->position.x = pos.x;
     ((EffWhirlwindN64Work*)eff->userdata)->position.y = pos.y;
     ((EffWhirlwindN64Work*)eff->userdata)->position.z = pos.z;

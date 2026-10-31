@@ -3192,10 +3192,10 @@ void puniModeRecover(PuniData* p) {
         case 0: {
             int r = puniPositionCheck(p);
             if (r != 0) {
-                p->reserved_58C = r;
-                p->reserved_590 = p->pos;
+                p->recoverReason = r;
+                p->recoverFromPos = p->pos;
                 puniPositionRecover(p);
-                p->reserved_59C = p->pos;
+                p->recoverToPos = p->pos;
             }
             {
                 Vec puni_recover_vel = {0.0f, 0.0f, 0.0f};
@@ -3553,12 +3553,12 @@ void puniModeFall(PuniData* p) {
             }
             p->modeStep = 2;
         } else if (p->pos.y <= -1000.0f) {
-            p->reserved_590 = p->pos;
+            p->recoverFromPos = p->pos;
             p->pos = Punigp->recoverPos;
             p->pos.x += randf(0.0f, 2.0f) - 1.0f;
             p->pos.z += randf(0.0f, 2.0f) - 1.0f;
             p->prevPos = p->pos;
-            p->reserved_59C = p->pos;
+            p->recoverToPos = p->pos;
             p->modeVar0 = 0x10;
             {
                 Vec v = {0.0f, 0.0f, 0.0f};
@@ -3971,13 +3971,13 @@ void puniModePrehagure(PuniData* p) {
                 }
             }
             if (res != 0) {
-                p->reserved_58C = res;
-                p->reserved_590 = p->pos;
+                p->recoverReason = res;
+                p->recoverFromPos = p->pos;
                 p->pos = Punigp->recoverPos;
                 p->pos.x += randf(0.0f, 2.0f) - 1.0f;
                 p->pos.z += randf(0.0f, 2.0f) - 1.0f;
                 p->prevPos = p->pos;
-                p->reserved_59C = p->pos;
+                p->recoverToPos = p->pos;
             }
             p->modeStep = 1;
             break;
@@ -4610,10 +4610,10 @@ static inline void puniModeCheckPos(PuniData* p) {
         case 0: {
             s32 r = puniPositionCheck(p);
             if (r != 0) {
-                p->reserved_58C = r;
-                p->reserved_590 = p->pos;
+                p->recoverReason = r;
+                p->recoverFromPos = p->pos;
                 puniPositionRecover(p);
-                p->reserved_59C = p->pos;
+                p->recoverToPos = p->pos;
             }
             p->modeStep = 1;
             break;
@@ -5958,19 +5958,19 @@ USER_FUNC(evt_puni_setup) {
         if (i == 1) {
             if (!swGet(GSWF_MRI_PUNIO_IN_PUNI_GROUP)) continue; // GSWF_MRI_PUNIO_JOINED
             if (swGet(GSWF_MRI03_PUNIO_WAITING_AT_CELL)) continue; // GSWF_MRI_PUNIO_WAITING_AT_JAIL
-            Punigp->reserved_364 = p;
+            Punigp->guidePuni = p;
             p->flags |= PUNI_FLAG_NPC_GUIDE;
         } else if (i == 2) {
             if (!swGet(GSWF_MRI_PETUNI_IN_PUNI_GROUP)) continue; // GSWF_MRI_PETUNI_JOINED
-            Punigp->reserved_368 = p;
+            Punigp->sisterPuni = p;
             p->flags |= PUNI_FLAG_NPC_GUIDE_SISTER;
         } else if (i == 4) {
             if (!swGet(GSWF_MRI_RIVAL_IN_PUNI_GROUP)) continue; // GSWF_MRI_PUNIPER_JOINED
-            Punigp->reserved_370 = p;
+            Punigp->rivalPuni = p;
             p->flags |= PUNI_FLAG_NPC_RIVAL;
         } else if (i == 3) {
             if (!swGet(GSWF_MRI_JABBI_IN_PUNI_GROUP)) continue; // GSWF_MRI_JABBLE_JOINED
-            Punigp->reserved_36C = p;
+            Punigp->jabbiPuni = p;
             p->flags |= PUNI_FLAG_NPC_CHIBI_TOGE;
         } else {
             if (swByteGet(GSW_MRI_PUNI_FOLLOWERS) + 5 <= i) continue; // GSW_MRI_PUNI_FOLLOWER_COUNT
@@ -6378,25 +6378,25 @@ USER_FUNC(evt_puni_init_puni) {
         if (chk != 0 && swGet(GSWF_MRI03_PUNIO_WAITING_AT_CELL) != 0) { // GSWF_MRI_PUNIO_WAITING_AT_JAIL
             return EVT_RETURN_DONE;
         }
-        Punigp->reserved_364 = p;
+        Punigp->guidePuni = p;
         p->flags |= PUNI_FLAG_NPC_GUIDE;
     } else if (idx == 2) {
         if (chk != 0 && swGet(GSWF_MRI_PETUNI_IN_PUNI_GROUP) == 0) { // GSWF_MRI_PETUNI_JOINED
             return EVT_RETURN_DONE;
         }
-        Punigp->reserved_368 = p;
+        Punigp->sisterPuni = p;
         p->flags |= PUNI_FLAG_NPC_GUIDE_SISTER;
     } else if (idx == 4) {
         if (chk != 0 && swGet(GSWF_MRI_RIVAL_IN_PUNI_GROUP) == 0) { // GSWF_MRI_PUNIPER_JOINED
             return EVT_RETURN_DONE;
         }
-        Punigp->reserved_370 = p;
+        Punigp->rivalPuni = p;
         p->flags |= PUNI_FLAG_NPC_RIVAL;
     } else if (idx == 3) {
         if (chk != 0 && swGet(GSWF_MRI_JABBI_IN_PUNI_GROUP) == 0) { // GSWF_MRI_JABBLE_JOINED
             return EVT_RETURN_DONE;
         }
-        Punigp->reserved_36C = p;
+        Punigp->jabbiPuni = p;
         p->flags |= PUNI_FLAG_NPC_CHIBI_TOGE;
     } else {
         if (chk != 0 && swByteGet(GSW_MRI_PUNI_FOLLOWERS) + 5 <= idx) { // GSW_MRI_PUNI_FOLLOWER_COUNT

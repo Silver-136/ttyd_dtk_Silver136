@@ -140,7 +140,7 @@ BattleWeapon weapon_doku_kinoko = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -170,7 +170,7 @@ BattleWeapon weapon_doku_kinoko_fp = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -497,13 +497,13 @@ void BattleBreakSlot_Main(void) {
                     case 0:
                     case 1:
                     case 2:
-                        updown = BattleAudienceAddAudienceNum(aud->mMaxAudience / 2);
+                        updown = BattleAudienceAddAudienceNum(aud->maxAudience / 2);
                         break;
                     case 3:
-                        updown = BattleAudienceAddAudienceNum(aud->mMaxAudience);
+                        updown = BattleAudienceAddAudienceNum(aud->maxAudience);
                         break;
                     case 4:
-                        updown = BattleAudienceAddAudienceNum(-aud->mMaxAudience);
+                        updown = BattleAudienceAddAudienceNum(-aud->maxAudience);
                         break;
                 }
                 if (_battleWorkPointer->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
@@ -893,7 +893,7 @@ void BattleBreakSlot_PointInc(void) {
     BreakSlotReel* reel2;
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
 
-    if (pouchGetPtr()->mStarPowersObtained == 0) {
+    if (pouchGetPtr()->starPowersObtained == 0) {
         return;
     }
     reel = BattleBreakSlotReelGetPtr(slot->reelNo);

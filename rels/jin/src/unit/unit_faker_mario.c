@@ -177,13 +177,13 @@ USER_FUNC(_save_param) {
             p = &params[3];
             break;
     }
-    p->size = party->mSizeMultiplier;
-    p->statusFlags = party->mStatusFlags;
+    p->size = party->sizeMultiplier;
+    p->statusFlags = party->statusFlags;
 #ifdef VERSION_G8ME01
     p->commandDisabled[0] = party->usCommandDisabled[0];
     p->commandDisabled[1] = party->usCommandDisabled[1];
 #endif
-    p->status = *(FakerStatus*)&party->mSleepTurns;
+    p->status = *(FakerStatus*)&party->sleepTurns;
     p->maxHp = party->maxHp;
     p->currentHp = party->currentHp;
     p->maxFp = party->maxFp;
@@ -215,13 +215,13 @@ USER_FUNC(_load_param) {
             p = &params[3];
             break;
     }
-    party->mSizeMultiplier = p->size;
-    party->mStatusFlags = p->statusFlags;
+    party->sizeMultiplier = p->size;
+    party->statusFlags = p->statusFlags;
 #ifdef VERSION_G8ME01
     party->usCommandDisabled[0] = p->commandDisabled[0];
     party->usCommandDisabled[1] = p->commandDisabled[1];
 #endif
-    *(FakerStatus*)&party->mSleepTurns = p->status;
+    *(FakerStatus*)&party->sleepTurns = p->status;
     party->maxHp = p->maxHp;
     party->currentHp = p->currentHp;
     party->maxFp = p->maxFp;
@@ -234,14 +234,14 @@ USER_FUNC(_load_param) {
  * 40 HP, level 54, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
 BattleUnitKind unit_faker_mario = {
-    UNIT_DOOPLISS_CHAPTER4_FIGHT2, // mUnitType
+    UNIT_DOOPLISS_CHAPTER4_FIGHT2, // unitType
     "btl_un_rampell", // name
     40, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    54, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    54, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -276,7 +276,7 @@ BattleUnitKind unit_faker_mario = {
     0, // attributeFlags
     &regist_fmario, // statusVulnerability
     1, // numParts
-    parts_fmario, // mParts
+    parts_fmario, // parts
     init_event_fmario, // initEventCode
     data_table_fmario, // dataTable
 };
@@ -362,9 +362,9 @@ static BattleWeapon weapon_masao_jump = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -386,7 +386,7 @@ static BattleWeapon weapon_masao_jump = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -399,9 +399,9 @@ static BattleWeapon weapon_masao_hammer = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -423,7 +423,7 @@ static BattleWeapon weapon_masao_hammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -436,9 +436,9 @@ static BattleWeapon weapon_masao_kururin_jump = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -460,7 +460,7 @@ static BattleWeapon weapon_masao_kururin_jump = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -473,9 +473,9 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -497,13 +497,13 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
 /** Setup entry that adds the Goombella double to Doopliss's battle. */
 BattleUnitSetup entry_gullible_christine = {
-    &unit_gullible_christine, // mUnitKindParams
+    &unit_gullible_christine, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -515,7 +515,7 @@ BattleUnitSetup entry_gullible_christine = {
 
 /** Setup entry that adds the Koops double to Doopliss's battle. */
 BattleUnitSetup entry_gullible_nokotarou = {
-    &unit_gullible_nokotarou, // mUnitKindParams
+    &unit_gullible_nokotarou, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -527,7 +527,7 @@ BattleUnitSetup entry_gullible_nokotarou = {
 
 /** Setup entry that adds the Flurrie double to Doopliss's battle. */
 BattleUnitSetup entry_gullible_clauda = {
-    &unit_gullible_clauda, // mUnitKindParams
+    &unit_gullible_clauda, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -539,7 +539,7 @@ BattleUnitSetup entry_gullible_clauda = {
 
 /** Setup entry that adds the Yoshi double to Doopliss's battle. */
 BattleUnitSetup entry_gullible_yoshi = {
-    &unit_gullible_yoshi, // mUnitKindParams
+    &unit_gullible_yoshi, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase

@@ -92,10 +92,10 @@ typedef struct PuniWork {
     f32 stuckTop1;               // 0x358
     f32 stuckBottom1;               // 0x35C
     struct PuniData* marioPuni;  // 0x360
-    struct PuniData* reserved_364;  // 0x364
-    struct PuniData* reserved_368;  // 0x368
-    struct PuniData* reserved_36C;  // 0x36C
-    struct PuniData* reserved_370;  // 0x370
+    struct PuniData* guidePuni;  // 0x364
+    struct PuniData* sisterPuni;  // 0x368
+    struct PuniData* jabbiPuni;  // 0x36C
+    struct PuniData* rivalPuni;  // 0x370
     PuniTarget targets[10];   // 0x374
     s32 allMode;               // 0x43C
     s32 prevAllMode;               // 0x440
@@ -209,9 +209,9 @@ typedef struct PuniData {
     s16 attacked;                       // 0x586
     s16 hitRate;                        // 0x588
     s16 hitRateGuard;                   // 0x58A
-    s32 reserved_58C;                   // 0x58C
-    Vec reserved_590;                   // 0x590
-    Vec reserved_59C;                   // 0x59C
+    s32 recoverReason;                   // 0x58C
+    Vec recoverFromPos;                   // 0x590
+    Vec recoverToPos;                   // 0x59C
 } PuniData;
 
 typedef struct PuniMap {

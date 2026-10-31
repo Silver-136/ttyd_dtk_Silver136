@@ -39,14 +39,14 @@ static EvtWord wait_event[12];
 
 /** Unit data of the Dark Puff: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_monochrome_kurokumorn = {
-    UNIT_DARK_PUFF, // mUnitType
+    UNIT_DARK_PUFF, // unitType
     "btl_un_monochrome_kurokumorn", // name
     3, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    10, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    10, // level
+    0, // bonusExp
     1, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -81,7 +81,7 @@ BattleUnitKind unit_monochrome_kurokumorn = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -131,9 +131,9 @@ static BattleWeapon weapon_kurokumorn_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -155,7 +155,7 @@ static BattleWeapon weapon_kurokumorn_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -172,9 +172,9 @@ static BattleWeapon weapon_kurokumorn_thunder_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -199,7 +199,7 @@ static BattleWeapon weapon_kurokumorn_thunder_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // galeForceChance..fpRegenTime
     0, // fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

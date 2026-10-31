@@ -123,20 +123,20 @@ BattleStageObjectData gra_btlobject_data[] = {
  */
 BattleStageData gra_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_04_0", // mSpecificStageDataDir
-        10, // mNumObjects
-        gra_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_04_0", // specificStageDataDir
+        10, // numObjects
+        gra_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_04_1", // mSpecificStageDataDir
-        11, // mNumObjects
-        &gra_btlobject_data[10], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_04_1", // specificStageDataDir
+        11, // numObjects
+        &gra_btlobject_data[10], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -152,7 +152,7 @@ BattleStageData gra_btlstage_data[] = {
  */
 BattleUnitSetup btlparty_gra_gra_00_01_off_1[] = {
     {
-        &unit_faker_mario_gra, // mUnitKindParams
+        &unit_faker_mario_gra, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -180,7 +180,7 @@ BattleGroupSetup btlgrp_gra_gra_00_01_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_GRA_01_01, in Twilight Trail (gra_01): Hyper Goomba x3. */
 BattleUnitSetup btlparty_gra_gra_01_01_off_1[] = {
     {
-        &unit_hyper_kuriboo, // mUnitKindParams
+        &unit_hyper_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -190,7 +190,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_off_1[] = {
         battle_item_hyper_kuriboo, // itemDropTable
     },
     {
-        &unit_hyper_kuriboo, // mUnitKindParams
+        &unit_hyper_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -200,7 +200,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_off_1[] = {
         battle_item_hyper_kuriboo, // itemDropTable
     },
     {
-        &unit_hyper_kuriboo, // mUnitKindParams
+        &unit_hyper_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -232,7 +232,7 @@ BattleGroupSetup btlgrp_gra_gra_01_01_off_1 = {
  */
 BattleUnitSetup btlparty_gra_gra_01_01_on_1[] = {
     {
-        &unit_hyper_kuriboo, // mUnitKindParams
+        &unit_hyper_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -242,7 +242,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_on_1[] = {
         battle_item_hyper_kuriboo, // itemDropTable
     },
     {
-        &unit_hyper_kuriboo, // mUnitKindParams
+        &unit_hyper_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -252,7 +252,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_on_1[] = {
         battle_item_hyper_kuriboo, // itemDropTable
     },
     {
-        &unit_hyper_kuriboo, // mUnitKindParams
+        &unit_hyper_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -284,7 +284,7 @@ BattleGroupSetup btlgrp_gra_gra_01_01_on_1 = {
  */
 BattleUnitSetup btlparty_gra_gra_01_01_on_2[] = {
     {
-        &unit_hyper_kuriboo, // mUnitKindParams
+        &unit_hyper_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -294,7 +294,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_on_2[] = {
         battle_item_hyper_kuriboo, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -304,7 +304,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_on_2[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -336,7 +336,7 @@ BattleGroupSetup btlgrp_gra_gra_01_01_on_2 = {
  */
 BattleUnitSetup btlparty_gra_gra_01_01_on_3[] = {
     {
-        &unit_hyper_kuriboo, // mUnitKindParams
+        &unit_hyper_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -346,7 +346,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_on_3[] = {
         battle_item_hyper_kuriboo, // itemDropTable
     },
     {
-        &unit_hyper_togekuri, // mUnitKindParams
+        &unit_hyper_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -356,7 +356,7 @@ BattleUnitSetup btlparty_gra_gra_01_01_on_3[] = {
         battle_item_hyper_togekuri, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -385,7 +385,7 @@ BattleGroupSetup btlgrp_gra_gra_01_01_on_3 = {
 /** Enemy lineup of formation 1 of BTLNO_GRA_01_03, in Twilight Trail (gra_01): Hyper Paragoomba x3. */
 BattleUnitSetup btlparty_gra_gra_01_03_off_1[] = {
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -395,7 +395,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_off_1[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -405,7 +405,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_off_1[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -437,7 +437,7 @@ BattleGroupSetup btlgrp_gra_gra_01_03_off_1 = {
  */
 BattleUnitSetup btlparty_gra_gra_01_03_on_1[] = {
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -447,7 +447,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_1[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -457,7 +457,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_1[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -489,7 +489,7 @@ BattleGroupSetup btlgrp_gra_gra_01_03_on_1 = {
  */
 BattleUnitSetup btlparty_gra_gra_01_03_on_2[] = {
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -499,7 +499,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_2[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -509,7 +509,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_2[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -519,7 +519,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_2[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -551,7 +551,7 @@ BattleGroupSetup btlgrp_gra_gra_01_03_on_2 = {
  */
 BattleUnitSetup btlparty_gra_gra_01_03_on_3[] = {
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -561,7 +561,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_3[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -571,7 +571,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_3[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -581,7 +581,7 @@ BattleUnitSetup btlparty_gra_gra_01_03_on_3[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -610,7 +610,7 @@ BattleGroupSetup btlgrp_gra_gra_01_03_on_3 = {
 /** Enemy lineup of formation 1 of BTLNO_GRA_01_04, in Twilight Trail (gra_01): Hyper Spiky Goomba x3. */
 BattleUnitSetup btlparty_gra_gra_01_04_off_1[] = {
     {
-        &unit_hyper_togekuri, // mUnitKindParams
+        &unit_hyper_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -620,7 +620,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_off_1[] = {
         battle_item_hyper_togekuri, // itemDropTable
     },
     {
-        &unit_hyper_togekuri, // mUnitKindParams
+        &unit_hyper_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -630,7 +630,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_off_1[] = {
         battle_item_hyper_togekuri, // itemDropTable
     },
     {
-        &unit_hyper_togekuri, // mUnitKindParams
+        &unit_hyper_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -662,7 +662,7 @@ BattleGroupSetup btlgrp_gra_gra_01_04_off_1 = {
  */
 BattleUnitSetup btlparty_gra_gra_01_04_on_1[] = {
     {
-        &unit_hyper_togekuri, // mUnitKindParams
+        &unit_hyper_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -672,7 +672,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_1[] = {
         battle_item_hyper_togekuri, // itemDropTable
     },
     {
-        &unit_hyper_togekuri, // mUnitKindParams
+        &unit_hyper_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -682,7 +682,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_1[] = {
         battle_item_hyper_togekuri, // itemDropTable
     },
     {
-        &unit_hyper_togekuri, // mUnitKindParams
+        &unit_hyper_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -714,7 +714,7 @@ BattleGroupSetup btlgrp_gra_gra_01_04_on_1 = {
  */
 BattleUnitSetup btlparty_gra_gra_01_04_on_2[] = {
     {
-        &unit_hyper_togekuri, // mUnitKindParams
+        &unit_hyper_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -724,7 +724,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_2[] = {
         battle_item_hyper_togekuri, // itemDropTable
     },
     {
-        &unit_hyper_togekuri, // mUnitKindParams
+        &unit_hyper_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -734,7 +734,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_2[] = {
         battle_item_hyper_togekuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -744,7 +744,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_2[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -776,7 +776,7 @@ BattleGroupSetup btlgrp_gra_gra_01_04_on_2 = {
  */
 BattleUnitSetup btlparty_gra_gra_01_04_on_3[] = {
     {
-        &unit_hyper_togekuri, // mUnitKindParams
+        &unit_hyper_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -786,7 +786,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_3[] = {
         battle_item_hyper_togekuri, // itemDropTable
     },
     {
-        &unit_hyper_kuriboo, // mUnitKindParams
+        &unit_hyper_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -796,7 +796,7 @@ BattleUnitSetup btlparty_gra_gra_01_04_on_3[] = {
         battle_item_hyper_kuriboo, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -825,7 +825,7 @@ BattleGroupSetup btlgrp_gra_gra_01_04_on_3 = {
 /** Enemy lineup of formation 1 of BTLNO_GRA_03_01, in Twilight Trail (gra_03): Hyper Paragoomba x2. */
 BattleUnitSetup btlparty_gra_gra_03_01_off_1[] = {
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -835,7 +835,7 @@ BattleUnitSetup btlparty_gra_gra_03_01_off_1[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -867,7 +867,7 @@ BattleGroupSetup btlgrp_gra_gra_03_01_off_1 = {
  */
 BattleUnitSetup btlparty_gra_gra_03_01_off_2[] = {
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -877,7 +877,7 @@ BattleUnitSetup btlparty_gra_gra_03_01_off_2[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -887,7 +887,7 @@ BattleUnitSetup btlparty_gra_gra_03_01_off_2[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -916,7 +916,7 @@ BattleGroupSetup btlgrp_gra_gra_03_01_off_2 = {
 /** Enemy lineup of formation 1 of BTLNO_GRA_03_04, in Twilight Trail (gra_03): Crazee Dayzee x2. */
 BattleUnitSetup btlparty_gra_gra_03_04_off_1[] = {
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -926,7 +926,7 @@ BattleUnitSetup btlparty_gra_gra_03_04_off_1[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -958,7 +958,7 @@ BattleGroupSetup btlgrp_gra_gra_03_04_off_1 = {
  */
 BattleUnitSetup btlparty_gra_gra_03_04_off_2[] = {
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -968,7 +968,7 @@ BattleUnitSetup btlparty_gra_gra_03_04_off_2[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -978,7 +978,7 @@ BattleUnitSetup btlparty_gra_gra_03_04_off_2[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1010,7 +1010,7 @@ BattleGroupSetup btlgrp_gra_gra_03_04_off_2 = {
  */
 BattleUnitSetup btlparty_gra_gra_03_04_off_3[] = {
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1020,7 +1020,7 @@ BattleUnitSetup btlparty_gra_gra_03_04_off_3[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_hyper_togekuri, // mUnitKindParams
+        &unit_hyper_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1030,7 +1030,7 @@ BattleUnitSetup btlparty_gra_gra_03_04_off_3[] = {
         battle_item_hyper_togekuri, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1059,7 +1059,7 @@ BattleGroupSetup btlgrp_gra_gra_03_04_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_GRA_03_05, in Twilight Trail (gra_03): Crazee Dayzee x4. */
 BattleUnitSetup btlparty_gra_gra_03_05_off_1[] = {
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1069,7 +1069,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_1[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1079,7 +1079,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_1[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1089,7 +1089,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_1[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1121,7 +1121,7 @@ BattleGroupSetup btlgrp_gra_gra_03_05_off_1 = {
  */
 BattleUnitSetup btlparty_gra_gra_03_05_off_2[] = {
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1131,7 +1131,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_2[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1141,7 +1141,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_2[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1173,7 +1173,7 @@ BattleGroupSetup btlgrp_gra_gra_03_05_off_2 = {
  */
 BattleUnitSetup btlparty_gra_gra_03_05_off_3[] = {
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1183,7 +1183,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_3[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1193,7 +1193,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_3[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_hyper_patakuri, // mUnitKindParams
+        &unit_hyper_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1203,7 +1203,7 @@ BattleUnitSetup btlparty_gra_gra_03_05_off_3[] = {
         battle_item_hyper_patakuri, // itemDropTable
     },
     {
-        &unit_hyper_togekuri, // mUnitKindParams
+        &unit_hyper_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1234,7 +1234,7 @@ BattleGroupSetup btlgrp_gra_gra_03_05_off_3 = {
  */
 BattleUnitSetup btlparty_gra_gra_04_02_off_1[] = {
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1244,7 +1244,7 @@ BattleUnitSetup btlparty_gra_gra_04_02_off_1[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1254,7 +1254,7 @@ BattleUnitSetup btlparty_gra_gra_04_02_off_1[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1283,7 +1283,7 @@ BattleGroupSetup btlgrp_gra_gra_04_02_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_GRA_04_02, in Twilight Trail (gra_04): Crazee Dayzee, Hyper Cleft. */
 BattleUnitSetup btlparty_gra_gra_04_02_off_2[] = {
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1293,7 +1293,7 @@ BattleUnitSetup btlparty_gra_gra_04_02_off_2[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1325,7 +1325,7 @@ BattleGroupSetup btlgrp_gra_gra_04_02_off_2 = {
  */
 BattleUnitSetup btlparty_gra_gra_04_02_off_3[] = {
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1335,7 +1335,7 @@ BattleUnitSetup btlparty_gra_gra_04_02_off_3[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1345,7 +1345,7 @@ BattleUnitSetup btlparty_gra_gra_04_02_off_3[] = {
         battle_item_pansy, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1374,7 +1374,7 @@ BattleGroupSetup btlgrp_gra_gra_04_02_off_3 = {
 /** Enemy lineup of formation 1 of BTLNO_GRA_05_01, in Twilight Trail (gra_05): Hyper Cleft x2. */
 BattleUnitSetup btlparty_gra_gra_05_01_off_1[] = {
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1384,7 +1384,7 @@ BattleUnitSetup btlparty_gra_gra_05_01_off_1[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1415,7 +1415,7 @@ BattleGroupSetup btlgrp_gra_gra_05_01_off_1 = {
  */
 BattleUnitSetup btlparty_gra_gra_05_01_off_2[] = {
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1425,7 +1425,7 @@ BattleUnitSetup btlparty_gra_gra_05_01_off_2[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1435,7 +1435,7 @@ BattleUnitSetup btlparty_gra_gra_05_01_off_2[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1464,7 +1464,7 @@ BattleGroupSetup btlgrp_gra_gra_05_01_off_2 = {
 /** Enemy lineup of formation 1 of BTLNO_GRA_05_03, in Twilight Trail (gra_05): Hyper Cleft x3. */
 BattleUnitSetup btlparty_gra_gra_05_03_off_1[] = {
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1474,7 +1474,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_1[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1484,7 +1484,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_1[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1515,7 +1515,7 @@ BattleGroupSetup btlgrp_gra_gra_05_03_off_1 = {
  */
 BattleUnitSetup btlparty_gra_gra_05_03_off_2[] = {
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1525,7 +1525,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_2[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1535,7 +1535,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_2[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_twinkling_pansy, // mUnitKindParams
+        &unit_twinkling_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1567,7 +1567,7 @@ BattleGroupSetup btlgrp_gra_gra_05_03_off_2 = {
  */
 BattleUnitSetup btlparty_gra_gra_05_03_off_3[] = {
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1577,7 +1577,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_3[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1587,7 +1587,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_3[] = {
         battle_item_hyper_sinemon, // itemDropTable
     },
     {
-        &unit_pansy, // mUnitKindParams
+        &unit_pansy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1597,7 +1597,7 @@ BattleUnitSetup btlparty_gra_gra_05_03_off_3[] = {
         battle_item_twinkling_pansy, // itemDropTable
     },
     {
-        &unit_hyper_sinemon, // mUnitKindParams
+        &unit_hyper_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase

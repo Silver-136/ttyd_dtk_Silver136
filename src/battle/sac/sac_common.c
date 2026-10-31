@@ -146,7 +146,7 @@ USER_FUNC(sac_handbeat) {
     BattleAudienceSoundSetVol(4, volPer, 1);
     if (!handBeatEnable) {
         sound = BattleAudienceSoundGetPtr(4);
-        sound->mFadeoutTime = sound->duration = 180;
+        sound->fadeoutTime = sound->duration = 180;
         return EVT_RETURN_DONE;
     }
     if (count < 0) {
@@ -200,7 +200,7 @@ USER_FUNC(sac_cheer) {
     }
     if (!cheerEnable) {
         sound = BattleAudienceSoundGetPtr(4);
-        sound->mFadeoutTime = sound->duration = 180;
+        sound->fadeoutTime = sound->duration = 180;
         return EVT_RETURN_DONE;
     }
     if (count < 0) {
@@ -234,7 +234,7 @@ USER_FUNC(sac_enemy_slide_go) {
 
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && unit->mAlliance == ALLIANCE_ENEMY) {
+        if (unit && unit->alliance == ALLIANCE_ENEMY) {
             evt = evtEntry(enemy_slide_go_evt, 0, EVENT_START_IMMEDIATE);
             evt->unitId = i;
         }
@@ -250,7 +250,7 @@ USER_FUNC(sac_enemy_slide_return) {
 
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(wp, i);
-        if (unit && unit->mAlliance == ALLIANCE_ENEMY) {
+        if (unit && unit->alliance == ALLIANCE_ENEMY) {
             evt = evtEntry(enemy_slide_return_evt, 0, EVENT_START_IMMEDIATE);
             evt->unitId = i;
         }

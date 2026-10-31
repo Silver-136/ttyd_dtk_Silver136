@@ -125,60 +125,60 @@ BattleStageObjectData jin_btlobject_data[] = {
  */
 BattleStageData jin_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_04_3", // mSpecificStageDataDir
-        2, // mNumObjects
-        jin_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_04_3", // specificStageDataDir
+        2, // numObjects
+        jin_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_04_3", // mSpecificStageDataDir
-        4, // mNumObjects
-        &jin_btlobject_data[2], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_04_3", // specificStageDataDir
+        4, // numObjects
+        &jin_btlobject_data[2], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_04_2", // mSpecificStageDataDir
-        2, // mNumObjects
-        &jin_btlobject_data[6], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_04_2", // specificStageDataDir
+        2, // numObjects
+        &jin_btlobject_data[6], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_04_4", // mSpecificStageDataDir
-        6, // mNumObjects
-        &jin_btlobject_data[8], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_04_4", // specificStageDataDir
+        6, // numObjects
+        &jin_btlobject_data[8], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_04_5", // mSpecificStageDataDir
-        2, // mNumObjects
-        &jin_btlobject_data[14], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_04_5", // specificStageDataDir
+        2, // numObjects
+        &jin_btlobject_data[14], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_04_6", // mSpecificStageDataDir
-        2, // mNumObjects
-        &jin_btlobject_data[16], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_04_6", // specificStageDataDir
+        2, // numObjects
+        &jin_btlobject_data[16], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -188,7 +188,7 @@ BattleStageData jin_btlstage_data[] = {
 
 BattleUnitSetup btlparty_jin_jin_04_ramper[] = {
     {
-        &unit_boss_rampell, // mUnitKindParams
+        &unit_boss_rampell, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -211,7 +211,7 @@ BattleGroupSetup btlgrp_jin_jin_04_ramper = {
 
 BattleUnitSetup btlparty_jin_jin_01_faker_mario[] = {
     {
-        &unit_faker_mario, // mUnitKindParams
+        &unit_faker_mario, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -234,7 +234,7 @@ BattleGroupSetup btlgrp_jin_jin_01_faker_mario = {
 
 BattleUnitSetup btlparty_jin_jin_00_atmic_teresa[] = {
     {
-        &unit_atmic_teresa, // mUnitKindParams
+        &unit_atmic_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -262,7 +262,7 @@ BattleGroupSetup btlgrp_jin_jin_00_atmic_teresa = {
  */
 BattleUnitSetup btlparty_jin_jin_00_01_off_1[] = {
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -295,7 +295,7 @@ BattleGroupSetup btlgrp_jin_jin_00_01_off_1 = {
  */
 BattleUnitSetup btlparty_jin_jin_00_01_off_2[] = {
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -305,7 +305,7 @@ BattleUnitSetup btlparty_jin_jin_00_01_off_2[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -338,7 +338,7 @@ BattleGroupSetup btlgrp_jin_jin_00_01_off_2 = {
  */
 BattleUnitSetup btlparty_jin_jin_00_01_off_3[] = {
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -348,7 +348,7 @@ BattleUnitSetup btlparty_jin_jin_00_01_off_3[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -358,7 +358,7 @@ BattleUnitSetup btlparty_jin_jin_00_01_off_3[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -391,7 +391,7 @@ BattleGroupSetup btlgrp_jin_jin_00_01_off_3 = {
  */
 BattleUnitSetup btlparty_jin_jin_00_01_off_4[] = {
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -401,7 +401,7 @@ BattleUnitSetup btlparty_jin_jin_00_01_off_4[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -411,7 +411,7 @@ BattleUnitSetup btlparty_jin_jin_00_01_off_4[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -421,7 +421,7 @@ BattleUnitSetup btlparty_jin_jin_00_01_off_4[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -454,7 +454,7 @@ BattleGroupSetup btlgrp_jin_jin_00_01_off_4 = {
  */
 BattleUnitSetup btlparty_jin_jin_01_01_off_1[] = {
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -464,7 +464,7 @@ BattleUnitSetup btlparty_jin_jin_01_01_off_1[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -496,7 +496,7 @@ BattleGroupSetup btlgrp_jin_jin_01_01_off_1 = {
  */
 BattleUnitSetup btlparty_jin_jin_01_01_off_2[] = {
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -506,7 +506,7 @@ BattleUnitSetup btlparty_jin_jin_01_01_off_2[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -516,7 +516,7 @@ BattleUnitSetup btlparty_jin_jin_01_01_off_2[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -548,7 +548,7 @@ BattleGroupSetup btlgrp_jin_jin_01_01_off_2 = {
  */
 BattleUnitSetup btlparty_jin_jin_01_01_off_3[] = {
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -558,7 +558,7 @@ BattleUnitSetup btlparty_jin_jin_01_01_off_3[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -568,7 +568,7 @@ BattleUnitSetup btlparty_jin_jin_01_01_off_3[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -600,7 +600,7 @@ BattleGroupSetup btlgrp_jin_jin_01_01_off_3 = {
  */
 BattleUnitSetup btlparty_jin_jin_01_03_off_1[] = {
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -610,7 +610,7 @@ BattleUnitSetup btlparty_jin_jin_01_03_off_1[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -642,7 +642,7 @@ BattleGroupSetup btlgrp_jin_jin_01_03_off_1 = {
  */
 BattleUnitSetup btlparty_jin_jin_01_03_off_2[] = {
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -652,7 +652,7 @@ BattleUnitSetup btlparty_jin_jin_01_03_off_2[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -662,7 +662,7 @@ BattleUnitSetup btlparty_jin_jin_01_03_off_2[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -672,7 +672,7 @@ BattleUnitSetup btlparty_jin_jin_01_03_off_2[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -704,7 +704,7 @@ BattleGroupSetup btlgrp_jin_jin_01_03_off_2 = {
  */
 BattleUnitSetup btlparty_jin_jin_01_03_off_3[] = {
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -714,7 +714,7 @@ BattleUnitSetup btlparty_jin_jin_01_03_off_3[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -743,7 +743,7 @@ BattleGroupSetup btlgrp_jin_jin_01_03_off_3 = {
 // These Swoopers start flying (unitWork[0] = 1), unlike the ceiling groups above.
 BattleUnitSetup btlparty_jin_jin_03_01_off_1[] = {
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -753,7 +753,7 @@ BattleUnitSetup btlparty_jin_jin_03_01_off_1[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -782,7 +782,7 @@ BattleGroupSetup btlgrp_jin_jin_03_01_off_1 = {
 /** Enemy lineup of formation 1 that no battle selects: Swooper x2. */
 BattleUnitSetup btlparty_jin_jin_03_02_off_1[] = {
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -792,7 +792,7 @@ BattleUnitSetup btlparty_jin_jin_03_02_off_1[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -821,7 +821,7 @@ BattleGroupSetup btlgrp_jin_jin_03_02_off_1 = {
 /** Enemy lineup of formation 1 that no battle selects: Boo x2. */
 BattleUnitSetup btlparty_jin_jin_07_01_off_1[] = {
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -831,7 +831,7 @@ BattleUnitSetup btlparty_jin_jin_07_01_off_1[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -860,7 +860,7 @@ BattleGroupSetup btlgrp_jin_jin_07_01_off_1 = {
 /** Enemy lineup of formation 2 that no battle selects: Boo x3. */
 BattleUnitSetup btlparty_jin_jin_07_01_off_2[] = {
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -870,7 +870,7 @@ BattleUnitSetup btlparty_jin_jin_07_01_off_2[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -880,7 +880,7 @@ BattleUnitSetup btlparty_jin_jin_07_01_off_2[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -909,7 +909,7 @@ BattleGroupSetup btlgrp_jin_jin_07_01_off_2 = {
 /** Enemy lineup of formation 1 that no battle selects: Boo x2. */
 BattleUnitSetup btlparty_jin_jin_07_02_off_1[] = {
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -919,7 +919,7 @@ BattleUnitSetup btlparty_jin_jin_07_02_off_1[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -948,7 +948,7 @@ BattleGroupSetup btlgrp_jin_jin_07_02_off_1 = {
 /** Enemy lineup of formation 2 that no battle selects: Boo x3. */
 BattleUnitSetup btlparty_jin_jin_07_02_off_2[] = {
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -958,7 +958,7 @@ BattleUnitSetup btlparty_jin_jin_07_02_off_2[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -968,7 +968,7 @@ BattleUnitSetup btlparty_jin_jin_07_02_off_2[] = {
         battle_item_teresa, // itemDropTable
     },
     {
-        &unit_teresa, // mUnitKindParams
+        &unit_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -997,7 +997,7 @@ BattleGroupSetup btlgrp_jin_jin_07_02_off_2 = {
 /** Enemy lineup of formation 1 of BTLNO_JIN_09_01, in Creepy Steeple (jin_09): Buzzy Beetle. */
 BattleUnitSetup btlparty_jin_jin_09_01_off_1[] = {
     {
-        &unit_met, // mUnitKindParams
+        &unit_met, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1026,7 +1026,7 @@ BattleGroupSetup btlgrp_jin_jin_09_01_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_JIN_10_01, in Creepy Steeple (jin_10): Buzzy Beetle x2. */
 BattleUnitSetup btlparty_jin_jin_10_01_off_1[] = {
     {
-        &unit_met, // mUnitKindParams
+        &unit_met, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1036,7 +1036,7 @@ BattleUnitSetup btlparty_jin_jin_10_01_off_1[] = {
         battle_item_met, // itemDropTable
     },
     {
-        &unit_met, // mUnitKindParams
+        &unit_met, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1065,7 +1065,7 @@ BattleGroupSetup btlgrp_jin_jin_10_01_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_JIN_10_02, in Creepy Steeple (jin_10): Spike Top. */
 BattleUnitSetup btlparty_jin_jin_10_02_off_1[] = {
     {
-        &unit_togemet, // mUnitKindParams
+        &unit_togemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1094,7 +1094,7 @@ BattleGroupSetup btlgrp_jin_jin_10_02_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_JIN_10_03, in Creepy Steeple (jin_10): Buzzy Beetle. */
 BattleUnitSetup btlparty_jin_jin_10_03_off_1[] = {
     {
-        &unit_met, // mUnitKindParams
+        &unit_met, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1123,7 +1123,7 @@ BattleGroupSetup btlgrp_jin_jin_10_03_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_JIN_10_04, in Creepy Steeple (jin_10): Buzzy Beetle x4. */
 BattleUnitSetup btlparty_jin_jin_10_04_off_1[] = {
     {
-        &unit_met, // mUnitKindParams
+        &unit_met, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1133,7 +1133,7 @@ BattleUnitSetup btlparty_jin_jin_10_04_off_1[] = {
         battle_item_met, // itemDropTable
     },
     {
-        &unit_met, // mUnitKindParams
+        &unit_met, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1143,7 +1143,7 @@ BattleUnitSetup btlparty_jin_jin_10_04_off_1[] = {
         battle_item_met, // itemDropTable
     },
     {
-        &unit_met, // mUnitKindParams
+        &unit_met, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1153,7 +1153,7 @@ BattleUnitSetup btlparty_jin_jin_10_04_off_1[] = {
         battle_item_met, // itemDropTable
     },
     {
-        &unit_met, // mUnitKindParams
+        &unit_met, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1182,7 +1182,7 @@ BattleGroupSetup btlgrp_jin_jin_10_04_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_JIN_10_05, in Creepy Steeple (jin_10): Spike Top x2. */
 BattleUnitSetup btlparty_jin_jin_10_05_off_1[] = {
     {
-        &unit_togemet, // mUnitKindParams
+        &unit_togemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1192,7 +1192,7 @@ BattleUnitSetup btlparty_jin_jin_10_05_off_1[] = {
         battle_item_togemet, // itemDropTable
     },
     {
-        &unit_togemet, // mUnitKindParams
+        &unit_togemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1221,7 +1221,7 @@ BattleGroupSetup btlgrp_jin_jin_10_05_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_JIN_10_06, in Creepy Steeple (jin_10): Buzzy Beetle x2, Spike Top. */
 BattleUnitSetup btlparty_jin_jin_10_06_off_1[] = {
     {
-        &unit_met, // mUnitKindParams
+        &unit_met, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1231,7 +1231,7 @@ BattleUnitSetup btlparty_jin_jin_10_06_off_1[] = {
         battle_item_met, // itemDropTable
     },
     {
-        &unit_met, // mUnitKindParams
+        &unit_met, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1241,7 +1241,7 @@ BattleUnitSetup btlparty_jin_jin_10_06_off_1[] = {
         battle_item_met, // itemDropTable
     },
     {
-        &unit_togemet, // mUnitKindParams
+        &unit_togemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase

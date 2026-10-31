@@ -38,8 +38,8 @@ static USER_FUNC(killer_copy_status) {
     BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
     BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
 
-    unit2->mSizeChangeTurns = unit1->mSizeChangeTurns;
-    unit2->mSizeChangeStrength = unit1->mSizeChangeStrength;
+    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
+    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
     return EVT_RETURN_DONE;
 }
 
@@ -48,14 +48,14 @@ static USER_FUNC(killer_copy_status) {
  * status vulnerability, init event and event table.
  */
 BattleUnitKind unit_super_killer_cannon = {
-    UNIT_BOMBSHELL_BILL_BLASTER, // mUnitType
+    UNIT_BOMBSHELL_BILL_BLASTER, // unitType
     "btl_un_super_killer_cannon", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    31, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    31, // level
+    0, // bonusExp
     1, // bonusCoin
     70, // bonusCoinRate
     3, // baseCoin
@@ -90,7 +90,7 @@ BattleUnitKind unit_super_killer_cannon = {
     0, // attributeFlags
     &regist, // statusVulnerability
     3, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -138,7 +138,7 @@ static BattleUnitKindPart parts[] = {
  * used by friend_event.
  */
 static BattleUnitSetup entry_killer = {
-    &unit_super_killer, // mUnitKindParams
+    &unit_super_killer, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase

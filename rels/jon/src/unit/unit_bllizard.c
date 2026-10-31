@@ -49,14 +49,14 @@ static EvtWord wait_event[12];
 
 /** Unit data of the Ice Puff: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_bllizard = {
-    UNIT_ICE_PUFF, // mUnitType
+    UNIT_ICE_PUFF, // unitType
     "btl_un_bllizard", // name
     9, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    25, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    25, // level
+    0, // bonusExp
     4, // bonusCoin
     70, // bonusCoinRate
     0, // baseCoin
@@ -91,7 +91,7 @@ BattleUnitKind unit_bllizard = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -141,9 +141,9 @@ static BattleWeapon weapon_bllizard_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -165,7 +165,7 @@ static BattleWeapon weapon_bllizard_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -182,9 +182,9 @@ static BattleWeapon weapon_bllizard_bllizard_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -214,7 +214,7 @@ static BattleWeapon weapon_bllizard_bllizard_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -655,9 +655,9 @@ static USER_FUNC(eff_ice_barrier) {
     eff = (EffectEntry*)unit->work[UNIT_WORK_BARRIER_EFFECT];
     BtlUnit_GetPos(unit, &x, &y, &z);
     ((EffKumokumoN64Particle*)eff->userdata)->x = x;
-    ((EffKumokumoN64Particle*)eff->userdata)->y = 10.0f * unit->mSizeMultiplier + y;
+    ((EffKumokumoN64Particle*)eff->userdata)->y = 10.0f * unit->sizeMultiplier + y;
     ((EffKumokumoN64Particle*)eff->userdata)->z = z;
-    ((EffKumokumoN64Particle*)eff->userdata)->scale = unit->mSizeMultiplier;
+    ((EffKumokumoN64Particle*)eff->userdata)->scale = unit->sizeMultiplier;
     return EVT_RETURN_DONE;
 }
 

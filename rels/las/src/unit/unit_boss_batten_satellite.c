@@ -52,9 +52,9 @@ BattleWeapon weapon_batten_satellite_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -76,7 +76,7 @@ BattleWeapon weapon_batten_satellite_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -85,14 +85,14 @@ BattleWeapon weapon_batten_satellite_attack = {
  * names its parts, status table and init script.
  */
 BattleUnitKind unit_boss_batten_satellite = {
-    UNIT_GRODUS_X, // mUnitType
+    UNIT_GRODUS_X, // unitType
     "btl_un_batten_satellite", // name
     3, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    0, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    0, // level
+    0, // bonusExp
     1, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -127,7 +127,7 @@ BattleUnitKind unit_boss_batten_satellite = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };

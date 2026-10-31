@@ -53,14 +53,14 @@ static f32 tanf(f32 x) {
  * table.
  */
 BattleUnitKind unit_wanawana = {
-    UNIT_UNUSED_WANAWANA, // mUnitType
+    UNIT_UNUSED_WANAWANA, // unitType
     "btl_un_wanawana", // name
     2, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     1, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -95,7 +95,7 @@ BattleUnitKind unit_wanawana = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -208,7 +208,7 @@ void replace_disp(CameraId camera, void* param) {
  * paper texture with an identity matrix for draw type 0 and clears the paper texture for any other type.
  */
 void replace_callback(BattleUnitPart* part, s32 type) {
-    WanaWork* wp = (WanaWork*)part->mOwner->countersetWeapon;
+    WanaWork* wp = (WanaWork*)part->owner->countersetWeapon;
 
     if (wp->ready) {
         Mtx mtx;

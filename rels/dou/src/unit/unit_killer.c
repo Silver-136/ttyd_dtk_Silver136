@@ -29,14 +29,14 @@ static EvtWord wait_event[6];
 
 /** Unit data of the Bullet Bill: 2 HP, level 1; the battle starts it from init_event. */
 BattleUnitKind unit_killer = {
-    UNIT_BULLET_BILL, // mUnitType
+    UNIT_BULLET_BILL, // unitType
     "btl_un_killer", // name
     2, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     70, // bonusCoinRate
     0, // baseCoin
@@ -71,7 +71,7 @@ BattleUnitKind unit_killer = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -121,9 +121,9 @@ static BattleWeapon weapon_killer_charge_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -145,7 +145,7 @@ static BattleWeapon weapon_killer_charge_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

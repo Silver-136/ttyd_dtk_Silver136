@@ -103,14 +103,14 @@ static EvtWord wait_event[386];
  * status vulnerability, init event and event table.
  */
 BattleUnitKind unit_super_mahorn = {
-    UNIT_DARK_WIZZERD, // mUnitType
+    UNIT_DARK_WIZZERD, // unitType
     "btl_un_super_mahorn", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    33, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    33, // level
+    0, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
     2, // baseCoin
@@ -145,7 +145,7 @@ BattleUnitKind unit_super_mahorn = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     5, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -155,14 +155,14 @@ BattleUnitKind unit_super_mahorn = {
  * and event table.
  */
 static BattleUnitKind unit_super_mahorn_bunsin = {
-    UNIT_DARK_WIZZERD_CLONE, // mUnitType
+    UNIT_DARK_WIZZERD_CLONE, // unitType
     "btl_un_super_mahorn_bunsin", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, 0, // mBonusExp..bonusCoin
+    1, // dangerHP
+    1, // perilHP
+    1, // level
+    0, 0, // bonusExp..bonusCoin
     70, // bonusCoinRate
     0, // baseCoin
     50, // runRate
@@ -193,7 +193,7 @@ static BattleUnitKind unit_super_mahorn_bunsin = {
     kFloating | kNoDamageNumber, // attributeFlags
     &regist, // statusVulnerability
     5, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     (BattleDataEntry*)data_table_bunsin, // dataTable
 };
@@ -275,9 +275,9 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -299,7 +299,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -319,9 +319,9 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -344,7 +344,7 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -359,9 +359,9 @@ static BattleWeapon weapon_mahorn_attack_punch = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -383,7 +383,7 @@ static BattleWeapon weapon_mahorn_attack_punch = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -398,9 +398,9 @@ static BattleWeapon weapon_mahorn_trans_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -424,7 +424,7 @@ static BattleWeapon weapon_mahorn_trans_magic = {
     3, // invisibleTime
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -439,9 +439,9 @@ static BattleWeapon weapon_mahorn_yokeyoke_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -464,7 +464,7 @@ static BattleWeapon weapon_mahorn_yokeyoke_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -479,9 +479,9 @@ static BattleWeapon weapon_mahorn_dekadeka_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -505,7 +505,7 @@ static BattleWeapon weapon_mahorn_dekadeka_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -520,9 +520,9 @@ static BattleWeapon weapon_mahorn_katikati_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -547,7 +547,7 @@ static BattleWeapon weapon_mahorn_katikati_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -559,9 +559,9 @@ static BattleWeapon weapon_mahorn_recover_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -582,7 +582,7 @@ static BattleWeapon weapon_mahorn_recover_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -591,7 +591,7 @@ static BattleWeapon weapon_mahorn_recover_magic = {
  * placed off-screen at first; used by spawn_event.
  */
 static BattleUnitSetup entry_mahorn = {
-    &unit_super_mahorn_bunsin, // mUnitKindParams
+    &unit_super_mahorn_bunsin, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -2029,10 +2029,10 @@ static USER_FUNC(eff_magic) {
     f32 z;
 
     BtlUnit_GetPos(unit, &x, &y, &z);
-    x += unit->mSizeMultiplier * unit->faceDirection;
-    y += 18.0f * unit->mSizeMultiplier;
+    x += unit->sizeMultiplier * unit->faceDirection;
+    y += 18.0f * unit->sizeMultiplier;
     z += 5.0f;
-    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->mSizeMultiplier, mahorn_fabs((a - x) / time));
+    unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)effMahorn2Entry(0, x, y, z, a, y, z, unit->sizeMultiplier, mahorn_fabs((a - x) / time));
     return EVT_RETURN_DONE;
 }
 
@@ -2045,7 +2045,7 @@ static USER_FUNC(mahorn_copy_status) {
     BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
 
     unit2->currentHp = unit1->currentHp;
-    memcpy(&unit2->mSleepTurns, &unit1->mSleepTurns, 0x1E);
+    memcpy(&unit2->sleepTurns, &unit1->sleepTurns, 0x1E);
     unit2->hpGauge.prevHp = unit2->currentHp;
     unit2->hpGauge.targetHp = unit2->currentHp;
     unit2->hpGauge.barRatio = unit2->hpGauge.trailRatio = (f32)unit2->currentHp / unit2->maxHp;
@@ -2077,18 +2077,18 @@ static USER_FUNC(mahorn_shuffle) {
         BattleUnit* ub = kamecs[b];
         f32 tmp;
 
-        tmp = ua->mPosition.x;
-        ua->mPosition.x = ub->mPosition.x;
-        ub->mPosition.x = tmp;
-        tmp = ua->mHomePosition.x;
-        ua->mHomePosition.x = ub->mHomePosition.x;
-        ub->mHomePosition.x = tmp;
-        tmp = ua->mPosition.z;
-        ua->mPosition.z = ub->mPosition.z;
-        ub->mPosition.z = tmp;
-        tmp = ua->mHomePosition.z;
-        ua->mHomePosition.z = ub->mHomePosition.z;
-        ub->mHomePosition.z = tmp;
+        tmp = ua->position.x;
+        ua->position.x = ub->position.x;
+        ub->position.x = tmp;
+        tmp = ua->homePosition.x;
+        ua->homePosition.x = ub->homePosition.x;
+        ub->homePosition.x = tmp;
+        tmp = ua->position.z;
+        ua->position.z = ub->position.z;
+        ub->position.z = tmp;
+        tmp = ua->homePosition.z;
+        ua->homePosition.z = ub->homePosition.z;
+        ub->homePosition.z = tmp;
     }
     return EVT_RETURN_DONE;
 }
@@ -2206,16 +2206,16 @@ static USER_FUNC(hand_ctrl) {
     for (j = 0, i = 2; i <= 5; i++, j++) {
         part = BtlUnit_GetPartsPtr(unit, i);
         dest = (f32*)unit->work[j];
-        scale = &part->mBaseScale;
-        x = part->mPositionOffset.x * scale->x;
-        y = part->mPositionOffset.y * scale->y;
-        z = part->mPositionOffset.z * scale->z;
+        scale = &part->baseScale;
+        x = part->positionOffset.x * scale->x;
+        y = part->positionOffset.y * scale->y;
+        z = part->positionOffset.z * scale->z;
         x += (dest[0] - x) / 10.0f;
         y += (dest[1] - y) / 10.0f;
         z += (dest[2] - z) / 10.0f;
-        part->mPositionOffset.x = x;
-        part->mPositionOffset.y = y;
-        part->mPositionOffset.z = z;
+        part->positionOffset.x = x;
+        part->positionOffset.y = y;
+        part->positionOffset.z = z;
     }
     return EVT_RETURN_DONE;
 }
@@ -2279,7 +2279,7 @@ static USER_FUNC(mahorn_get_live_num) {
 
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && unit->mAlliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && unit->alliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
             num++;
         }
     }

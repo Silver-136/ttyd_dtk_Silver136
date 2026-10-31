@@ -51,14 +51,14 @@ static EvtWord normal_attack_event[365];
  * 5 HP, level 20, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
 BattleUnitKind unit_boss_kanbu1 = {
-    UNIT_LORD_CRUMP_PROLOGUE, // mUnitType
+    UNIT_LORD_CRUMP_PROLOGUE, // unitType
     "btl_un_kanbu1", // name
     5, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    20, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    20, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -93,7 +93,7 @@ BattleUnitKind unit_boss_kanbu1 = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -151,9 +151,9 @@ BattleWeapon weapon_kanbu1_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -175,7 +175,7 @@ BattleWeapon weapon_kanbu1_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -184,7 +184,7 @@ BattleWeapon weapon_kanbu1_attack = {
  * (his init script places her at (-140, 0, 5)).
  */
 BattleUnitSetup entry_npc_christine = {
-    &unit_npc_christine, // mUnitKindParams
+    &unit_npc_christine, // unitKindParams
     ALLIANCE_NEUTRAL, // alliance
     {0}, // pad_05
     BATTLE_PHASE_BEFORE_PLAYER, // attackPhase

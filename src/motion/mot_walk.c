@@ -90,7 +90,7 @@ f32 marioGetWalkSpd(void) {
     MarioWork* mario;
 
     mario = marioGetPtr();
-    walkSpeed = mario->mBaseWalkSpeed;
+    walkSpeed = mario->baseWalkSpeed;
     if (mario->flags & MARIO_FLAG_PAPER_MODE) {
         stickDir1 = mario->wStickDir1;
         stickDir2 = mario->wStickDir2;
@@ -112,11 +112,11 @@ f32 marioGetDashSpd(void) {
     s8 stickDir1;
 
     mario = marioGetPtr();
-    dashSpeed = mario->mBaseDashSpeed;
+    dashSpeed = mario->baseDashSpeed;
     if (mario->flags & MARIO_FLAG_PAPER_MODE) {
         stickDir1 = mario->wStickDir1;
         stickDir2 = mario->wStickDir2;
-        dashSpeed = mario->mBaseWalkSpeed;
+        dashSpeed = mario->baseWalkSpeed;
 
         if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1) {
             dashSpeed *= 0.5f;

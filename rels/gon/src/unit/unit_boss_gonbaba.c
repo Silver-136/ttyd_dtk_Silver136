@@ -104,9 +104,9 @@ BattleWeapon weapon_gonbaba_fumituke_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPower_Gonbaba, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -129,7 +129,7 @@ BattleWeapon weapon_gonbaba_fumituke_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 10, 0, 0, 0}, // stageEffectRates
 };
 
@@ -149,9 +149,9 @@ BattleWeapon weapon_gonbaba_firebreath_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPower_Gonbaba, // hpDamageFn
     {4, 50, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -173,7 +173,7 @@ BattleWeapon weapon_gonbaba_firebreath_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -185,9 +185,9 @@ BattleWeapon weapon_gonbaba_kamituki_attack = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -208,7 +208,7 @@ BattleWeapon weapon_gonbaba_kamituki_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -368,7 +368,7 @@ static BattleUnitKindPart parts[] = {
         {230.0f, 36.0f, 60.0f}, // hitBaseOffset
         {230.0f, 36.0f, 60.0f}, // hitCursorBaseOffset
         20, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -384,7 +384,7 @@ static BattleUnitKindPart parts[] = {
         {250.0f, 110.0f, 25.0f}, // hitBaseOffset
         {250.0f, 110.0f, 25.0f}, // hitCursorBaseOffset
         20, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -401,7 +401,7 @@ static BattleUnitKindPart parts[] = {
         {230.0f, 36.0f, 60.0f}, // hitBaseOffset
         {230.0f, 36.0f, 60.0f}, // hitCursorBaseOffset
         20, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -417,7 +417,7 @@ static BattleUnitKindPart parts[] = {
         {250.0f, 110.0f, 25.0f}, // hitBaseOffset
         {250.0f, 110.0f, 25.0f}, // hitCursorBaseOffset
         20, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -434,7 +434,7 @@ static BattleUnitKindPart parts[] = {
         {0.0f, 0.0f, 0.0f}, // hitBaseOffset
         {0.0f, 0.0f, 0.0f}, // hitCursorBaseOffset
         20, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr

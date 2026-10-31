@@ -48,14 +48,14 @@ static EvtWord wait_event[6];
  * event data table.
  */
 BattleUnitKind unit_iron_sinemon2 = {
-    UNIT_IRON_CLEFT_GREEN, // mUnitType
+    UNIT_IRON_CLEFT_GREEN, // unitType
     "btl_un_iron_sinemon2", // name
     6, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    18, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    18, // level
+    0, // bonusExp
     2, // bonusCoin
     100, // bonusCoinRate
     1, // baseCoin
@@ -90,7 +90,7 @@ BattleUnitKind unit_iron_sinemon2 = {
     kUnitLeader, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event2, // initEventCode
     data_table, // dataTable
 };
@@ -164,9 +164,9 @@ static BattleWeapon weapon_iron_sinemon_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -188,7 +188,7 @@ static BattleWeapon weapon_iron_sinemon_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

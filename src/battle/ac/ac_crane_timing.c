@@ -47,13 +47,13 @@ s32 battleAcMain_CraneTiming(BattleWork* work) {
     autoCommand = FALSE;
     cw = (CraneTimingWork*)ac->work;
     disp = &ac->disp;
-    if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
+    if (work->actionCommands.acUnit->badgesEquipped.AutoCommand) {
         autoCommand = TRUE;
     }
     unit = BattleGetUnitPtr(work, work->actionCommands.params[CRANE_PARAM_UNIT_ID]);
     BtlUnit_GetPartsPtr(unit, work->actionCommands.params[CRANE_PARAM_PARTS_ID]);
 
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 0:
             memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
@@ -64,7 +64,7 @@ s32 battleAcMain_CraneTiming(BattleWork* work) {
             cw->range = irand(work->actionCommands.params[CRANE_PARAM_RANDOM_RANGE]);
             cw->button = PAD_BUTTON_A;
             work->actionCommands.outputParams[0] = 0;
-            work->actionCommands.mAcState = 99;
+            work->actionCommands.acState = 99;
             work->actionCommands.result = AC_RESULT_RUNNING;
             break;
         case 100:
@@ -74,7 +74,7 @@ s32 battleAcMain_CraneTiming(BattleWork* work) {
             cw->basePos = cw->pos;
             cw->frame = 0;
             cw->speed = 1.5f;
-            work->actionCommands.mAcState = 1000;
+            work->actionCommands.acState = 1000;
         case 1000:
             if (cw->delay != 0) {
                 cw->delay--;
@@ -107,25 +107,25 @@ s32 battleAcMain_CraneTiming(BattleWork* work) {
                     work->actionCommands.result = 0;
                 } else {
                     work->actionCommands.result = AC_RESULT_SUCCESS;
-                    work->actionCommands.mResultCount++;
+                    work->actionCommands.resultCount++;
                 }
-                work->actionCommands.mAcState = 1002;
+                work->actionCommands.acState = 1002;
                 break;
             }
             if (cw->frame >= work->actionCommands.params[CRANE_PARAM_MAX_FRAMES]) {
                 work->actionCommands.result = 0;
-                work->actionCommands.mAcState = 1002;
+                work->actionCommands.acState = 1002;
             }
             break;
         case 1002:
             cw->endTimer = 60;
-            work->actionCommands.mAcState = 1003;
+            work->actionCommands.acState = 1003;
         case 1003:
             cw->endTimer--;
             if (cw->endTimer > 0) {
                 break;
             }
-            work->actionCommands.mAcState = 1004;
+            work->actionCommands.acState = 1004;
             break;
         case 1004:
             work->actionCommands.maincb = NULL;
@@ -148,5 +148,5 @@ void battleAcDisp_CraneTiming(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: starts the 60-frame wait after which the command clears its callbacks. */
 void battleAcDelete_CraneTiming(BattleWork* work) {
-    work->actionCommands.mAcState = 1002;
+    work->actionCommands.acState = 1002;
 }

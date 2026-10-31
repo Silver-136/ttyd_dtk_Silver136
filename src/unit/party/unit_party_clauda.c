@@ -79,9 +79,9 @@ BattleWeapon partyWeapon_ClaudaNormalAttack = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -104,7 +104,7 @@ BattleWeapon partyWeapon_ClaudaNormalAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyClaudaAttack_NormalAttack, // mAttackEvtScript
+    partyClaudaAttack_NormalAttack, // attackEvtScript
     {0, 20, 20, 100, 20, 10, 2, 5, 10, 0, 0, 0}, // stageEffectRates
 };
 
@@ -123,9 +123,9 @@ BattleWeapon partyWeapon_ClaudaBreathAttack = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {1, 2, 2, 3, 3, 4, 0, 0}, // hpDamageWork
@@ -149,7 +149,7 @@ BattleWeapon partyWeapon_ClaudaBreathAttack = {
     100, // galeForceChance
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
-    partyClaudaAttack_BreathAttack, // mAttackEvtScript
+    partyClaudaAttack_BreathAttack, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -173,12 +173,12 @@ BattleWeapon partyWeapon_ClaudaPredationAttack = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetACOutputParam, // hpDamageFn
     {0, 1, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -200,7 +200,7 @@ BattleWeapon partyWeapon_ClaudaPredationAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyClaudaAttack_PredationAttack, // mAttackEvtScript
+    partyClaudaAttack_PredationAttack, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -218,9 +218,9 @@ BattleWeapon partyWeapon_ClaudaKumogakureAttack = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -244,7 +244,7 @@ BattleWeapon partyWeapon_ClaudaKumogakureAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    partyClaudaAttack_KumoGuard, // mAttackEvtScript
+    partyClaudaAttack_KumoGuard, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -303,14 +303,14 @@ BattleUnitKindPart unitpartsdata_Party_Clauda[] = {
  * partner stats.
  */
 BattleUnitKind unitdata_Party_Clauda = {
-    UNIT_FLURRIE, // mUnitType
+    UNIT_FLURRIE, // unitType
     "btl_un_clauda", // name
     10, // maxHp
     5, // maxFp
-    5, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    5, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -345,7 +345,7 @@ BattleUnitKind unitdata_Party_Clauda = {
     kFloating | kUnitNoHpGauge, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    unitpartsdata_Party_Clauda, // mParts
+    unitpartsdata_Party_Clauda, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -1418,8 +1418,8 @@ static USER_FUNC(_clauda_breath_effect_ready) {
     id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    pos.x += unit->mSizeMultiplier * (unit->faceDirection * 20);
-    pos.y += 25.0f * unit->mSizeMultiplier;
+    pos.x += unit->sizeMultiplier * (unit->faceDirection * 20);
+    pos.y += 25.0f * unit->sizeMultiplier;
     if (unit->faceDirection >= 0) {
         eff = effKumokumoN64Entry(0, 60, pos.x, pos.y, pos.z, 0.0f, 2.0f, 1.0f);
     } else {
@@ -1451,8 +1451,8 @@ static USER_FUNC(_clauda_breath_effect_fire) {
     unit = BattleGetUnitPtr(wp, id);
     var = args[0];
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    pos.x += unit->mSizeMultiplier * (unit->faceDirection * 25);
-    pos.y += 15.0f * unit->mSizeMultiplier;
+    pos.x += unit->sizeMultiplier * (unit->faceDirection * 25);
+    pos.y += 15.0f * unit->sizeMultiplier;
     if (unit->faceDirection >= 0) {
         eff = effKumokumoN64Entry(0, 0, pos.x, pos.y, pos.z, 0.0f, -2.0f, 1.0f);
     } else {
@@ -1547,10 +1547,10 @@ USER_FUNC(_get_clauda_kiss_hit_position) {
     target = BattleGetUnitPtr(wp, BattleTransID(event, targetId));
     dir = target->faceDirection;
     BtlUnit_GetPos(target, &pos.x, &pos.y, &pos.z);
-    pos.x += dir * (target->kissHitOffset.x * target->mSizeMultiplier);
-    pos.y += target->kissHitOffset.y * target->mSizeMultiplier;
-    pos.z += target->kissHitOffset.z * target->mSizeMultiplier;
-    pos.y -= 30.0f * unit->mSizeMultiplier;
+    pos.x += dir * (target->kissHitOffset.x * target->sizeMultiplier);
+    pos.y += target->kissHitOffset.y * target->sizeMultiplier;
+    pos.z += target->kissHitOffset.z * target->sizeMultiplier;
+    pos.y -= 30.0f * unit->sizeMultiplier;
     floorPos = pos;
     floorPos.y = BattleGetFloorHeight(wp, floorPos.x, floorPos.y, floorPos.z);
     if (floorPos.y > pos.y) {

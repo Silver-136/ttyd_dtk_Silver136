@@ -37,14 +37,14 @@ static EvtWord wait_event[6];
  * 6 HP, level 26, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
 static BattleUnitKind unit_sinemon = {
-    UNIT_MOON_CLEFT, // mUnitType
+    UNIT_MOON_CLEFT, // unitType
     "btl_un_sinemon", // name
     6, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    26, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    26, // level
+    0, // bonusExp
     3, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -76,7 +76,7 @@ static BattleUnitKind unit_sinemon = {
     kUnitLeader, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     (BattleDataEntry*)data_table, // dataTable
 };
@@ -130,7 +130,7 @@ static BattleUnitKindPart parts[] = {
         {0.0f, 25.0f, 0.0f}, // hitBaseOffset
         {0.0f, 30.0f, 0.0f}, // hitCursorBaseOffset
         20, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -149,9 +149,9 @@ static BattleWeapon weapon_sinemon_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -173,7 +173,7 @@ static BattleWeapon weapon_sinemon_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

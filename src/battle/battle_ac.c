@@ -77,10 +77,10 @@ void BattleActionCommandDeclareACResult(BattleWork* work, BattleWeapon* weapon, 
         BattleAudience_Case_ActionCommandBad(weapon);
         break;
     default:
-        info->mWeapon = weapon;
-        info->mSpAcSuccessMultiplier = 0.25f * (f32)result + 0.5f;
+        info->weapon = weapon;
+        info->spAcSuccessMultiplier = 0.25f * (f32)result + 0.5f;
         info->reserved_09 = weapon->reserved_19;
-        info->mBingoSlotChance = weapon->mBingoSlotChance;
+        info->bingoSlotChance = weapon->bingoSlotChance;
         BattleAudience_Case_ActionCommandGood(weapon);
         break;
     }
@@ -95,10 +95,10 @@ void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 se
     ActionCommandEntry* entry;
 
     entry = ActionCommandList;
-    work->actionCommands.mAcUnit = unit;
+    work->actionCommands.acUnit = unit;
     work->actionCommands.setupFlags = setupFlags;
-    work->actionCommands.mAcState = 0;
-    work->actionCommands.mResultCount = 0;
+    work->actionCommands.acState = 0;
+    work->actionCommands.resultCount = 0;
     work->actionCommands.result = AC_RESULT_RUNNING;
     work->actionCommands.maincb = NULL;
     work->actionCommands.dispcb = NULL;
@@ -109,7 +109,7 @@ void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 se
     for (; entry->id; entry++) {
         if (entry->id == id) {
             work->actionCommands.maincb = entry->main;
-            if (!(work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+            if (!(work->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
                 work->actionCommands.dispcb = entry->disp;
             }
             work->actionCommands.resultcb = entry->result;
@@ -121,7 +121,7 @@ void BattleActionCommandSetup(BattleWork* work, s32 id, BattleUnit* unit, s32 se
 
 /** Starts the prepared action command (state 100 tells its main callback to begin). */
 void BattleActionCommandStart(BattleWork* work) {
-    work->actionCommands.mAcState = 100;
+    work->actionCommands.acState = 100;
 }
 
 /** Ends the active action command early through its delete callback. */
@@ -146,7 +146,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     done = 0;
     wp = _battleWorkPointer;
     pad = &wp->actionCommands.pad;
-    wp->actionCommands.mDefenseResult = 0;
+    wp->actionCommands.defenseResult = 0;
     diff = unit->badgesEquipped.Unsimplifier + 3;
     diff -= unit->badgesEquipped.Simplifier;
     if (diff < 0) {
@@ -162,10 +162,10 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
         if (wp->actionCommands.countdown > 0) {
             wp->actionCommands.countdown--;
             done = 1;
-            wp->actionCommands.mDefenseResult = 5;
+            wp->actionCommands.defenseResult = 5;
         } else if (unit->badgesEquipped.AutoCommand) {
             done = 1;
-            wp->actionCommands.mDefenseResult = 5;
+            wp->actionCommands.defenseResult = 5;
         } else {
             for (i = 0; i < superguard; i++) {
                 if (BattleACPadCheckRecordTrigger(i, PAD_BUTTON_B)) {
@@ -184,7 +184,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
                 }
                 if (count < 2) {
                     done = 1;
-                    wp->actionCommands.mDefenseResult = 5;
+                    wp->actionCommands.defenseResult = 5;
                 }
             }
         }
@@ -193,7 +193,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     if (!done) {
         if (wp->actionCommands.countdown > 0) {
             wp->actionCommands.countdown--;
-            wp->actionCommands.mDefenseResult = 4;
+            wp->actionCommands.defenseResult = 4;
         } else {
             count = 0;
             for (i = 0; i < 15; i++) {
@@ -205,7 +205,7 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
                 }
             }
             if (count >= 2) {
-                wp->actionCommands.mDefenseResult = 1;
+                wp->actionCommands.defenseResult = 1;
             } else {
                 for (i = 0; i < normal; i++) {
                     if (BattleACPadCheckRecordTrigger(i, PAD_BUTTON_A)) {
@@ -214,28 +214,28 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
                 }
                 if (i >= normal) {
                     if (count > 0) {
-                        wp->actionCommands.mDefenseResult = 1;
+                        wp->actionCommands.defenseResult = 1;
                     } else {
-                        wp->actionCommands.mDefenseResult = 2;
+                        wp->actionCommands.defenseResult = 2;
                     }
                 } else {
-                    wp->actionCommands.mDefenseResult = 4;
+                    wp->actionCommands.defenseResult = 4;
                 }
             }
         }
     }
     BtlPad_WorkInit(pad);
-    return wp->actionCommands.mDefenseResult;
+    return wp->actionCommands.defenseResult;
 }
 
 /** Returns the buttons in mask that were newly pressed chan frames ago in the action-command pad history. */
 s32 BattleACPadCheckRecordTrigger(s32 frame, s32 mask) {
-    return _battleWorkPointer->actionCommands.pad.mButtonsPressedHistory[frame] & mask;
+    return _battleWorkPointer->actionCommands.pad.buttonsPressedHistory[frame] & mask;
 }
 
 /** Returns the last guard result from BattleActionCommandCheckDefence (5 Superguard, 4 Guard, 2 none, 1 mashed). */
 s32 BattleActionCommandGetDefenceResult(void) {
-    return _battleWorkPointer->actionCommands.mDefenseResult;
+    return _battleWorkPointer->actionCommands.defenseResult;
 }
 
 /**
@@ -244,13 +244,13 @@ s32 BattleActionCommandGetDefenceResult(void) {
  */
 void BattleActionCommandResetDefenceResult(void) {
     BattleWork* wp = _battleWorkPointer;
-    wp->actionCommands.mDefenseResult = 0;
+    wp->actionCommands.defenseResult = 0;
     BtlPad_WorkInit(&wp->actionCommands.pad);
 }
 
 /** Returns the action-command difficulty level 0-6 after Simplifier/Unsimplifier adjustments. */
 s32 BattleActionCommandGetDifficulty(BattleWork* work) {
-    return work->actionCommands.mAcDifficulty;
+    return work->actionCommands.acDifficulty;
 }
 
 /**
@@ -260,7 +260,7 @@ s32 BattleActionCommandGetDifficulty(BattleWork* work) {
 void BattleActionCommandSetDifficulty(BattleWork* work, BattleUnit* unit, s32 difficulty) {
     s32 adjusted;
 
-    work->actionCommands.mBaseAcDifficulty = difficulty;
+    work->actionCommands.baseAcDifficulty = difficulty;
     adjusted = difficulty - unit->badgesEquipped.Simplifier;
     adjusted += unit->badgesEquipped.Unsimplifier;
     if (adjusted < 0) {
@@ -269,7 +269,7 @@ void BattleActionCommandSetDifficulty(BattleWork* work, BattleUnit* unit, s32 di
     if (adjusted > 6) {
         adjusted = 6;
     }
-    work->actionCommands.mAcDifficulty = adjusted;
+    work->actionCommands.acDifficulty = adjusted;
 }
 
 /**
@@ -280,7 +280,7 @@ s32 BattleActionCommandGetPrizeLv(BattleWork* work, BattleUnit* unit, s32 lv) {
     if (unit != NULL && (u8)unit->damageCode == DAMAGE_CODE_NO_DAMAGE) {
         return -1;
     }
-    lv += work->actionCommands.mAcDifficulty;
+    lv += work->actionCommands.acDifficulty;
     lv--;
     if (lv < 0) {
         lv = 0;

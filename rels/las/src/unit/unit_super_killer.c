@@ -30,14 +30,14 @@ static EvtWord wait_event[6];
  * status vulnerability, init event and event table.
  */
 BattleUnitKind unit_super_killer = {
-    UNIT_BOMBSHELL_BILL, // mUnitType
+    UNIT_BOMBSHELL_BILL, // unitType
     "btl_un_super_killer", // name
     3, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     70, // bonusCoinRate
     0, // baseCoin
@@ -72,7 +72,7 @@ BattleUnitKind unit_super_killer = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -122,9 +122,9 @@ static BattleWeapon weapon_killer_charge_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -146,7 +146,7 @@ static BattleWeapon weapon_killer_charge_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

@@ -77,7 +77,7 @@ static void actionCommandDisp(f32 x, f32 y) {
 
 /** Called by btlevtcmd_StopAC: starts the 60-frame end wait. */
 void battleAcDelete_TimingA(BattleWork* work) {
-    work->actionCommands.mAcState = 1000;
+    work->actionCommands.acState = 1000;
 }
 
 /**
@@ -88,7 +88,7 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleACDispParams* disp = &work->actionCommands.disp;
     int iconSlot;
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             // no break: case 100 sets iconX to 30.0f, so the icon does not slide in
@@ -126,26 +126,26 @@ s32 battleAcResult_TimingA(BattleWork* work) {
     s32 successFrame = battleAcTimingA_GetSuccessFrame(work);
     s32 count = 0;
     s32 i;
-    if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+    if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
         // irand(100) is never negative: a confused auto-play always fails
         if (irand(100) >= 0) {
             work->actionCommands.result = 0;
         } else {
             work->actionCommands.result = AC_RESULT_SUCCESS;
-            work->actionCommands.mResultCount++;
+            work->actionCommands.resultCount++;
         }
         return work->actionCommands.result;
     }
-    if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
+    if (work->actionCommands.acUnit->badgesEquipped.AutoCommand) {
         work->actionCommands.result = AC_RESULT_SUCCESS;
-        work->actionCommands.mResultCount++;
+        work->actionCommands.resultCount++;
         return work->actionCommands.result;
     }
     work->actionCommands.result = 0;
     if (work->flags & BATTLE_FLAG_LECTURE_JUMP) {
         work->actionCommands.outputParams[0] = 3;
         work->actionCommands.result = AC_RESULT_SUCCESS;
-        work->actionCommands.mResultCount++;
+        work->actionCommands.resultCount++;
         return work->actionCommands.result;
     }
     for (i = 0; i < 20; i++) {
@@ -172,7 +172,7 @@ s32 battleAcResult_TimingA(BattleWork* work) {
     }
     work->actionCommands.outputParams[0] = 3;
     work->actionCommands.result = AC_RESULT_SUCCESS;
-    work->actionCommands.mResultCount++;
+    work->actionCommands.resultCount++;
     return work->actionCommands.result;
 }
 
@@ -180,7 +180,7 @@ s32 battleAcTimingA_GetSuccessFrame(BattleWork* work) {
     s32 diff = BattleActionCommandGetDifficulty(work);
     TimingAEntry* e = _ac_timing_a_timing_tbl[diff];
     s32 ret = e->value;
-    s32 count = work->actionCommands.mResultCount;
+    s32 count = work->actionCommands.resultCount;
     if (((TimingAWork*)work->actionCommands.work)->flags & 2) {
         if (count >= 100000) {
             return 0;
@@ -206,13 +206,13 @@ s32 battleAcMain_TimingA(BattleWork* work) {
     TimingAWork* tw = (TimingAWork*)ac->work;
     BattleACDispParams* disp = &ac->disp;
 
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 0:
             memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
             disp->iconY = 0.0f;
             disp->slideTimer = 20;
-            work->actionCommands.mAcState = 99;
+            work->actionCommands.acState = 99;
             // FAKE: flags reached through a second cast of the work buffer instead of tw; tw->flags changes the object
             ((TimingAWork*)work->actionCommands.work)->flags &= ~1;
             work->actionCommands.outputParams[0] = 0;
@@ -221,11 +221,11 @@ s32 battleAcMain_TimingA(BattleWork* work) {
             break;
         case 1000:
             tw->endTimer = 60;
-            work->actionCommands.mAcState = 1001;
+            work->actionCommands.acState = 1001;
         case 1001:
             tw->endTimer--;
             if (tw->endTimer <= 0) {
-                work->actionCommands.mAcState = 1002;
+                work->actionCommands.acState = 1002;
             }
             break;
         case 1002:

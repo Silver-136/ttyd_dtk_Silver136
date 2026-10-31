@@ -77,13 +77,13 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
     autoCommand = FALSE;
     cw = (PendulumWork*)ac->work;
     disp = &ac->disp;
-    if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
+    if (work->actionCommands.acUnit->badgesEquipped.AutoCommand) {
         autoCommand = TRUE;
     }
     unit = BattleGetUnitPtr(work, work->actionCommands.params[PENDULUM_PARAM_UNIT_ID]);
     BtlUnit_GetPartsPtr(unit, work->actionCommands.params[PENDULUM_PARAM_PARTS_ID]);
 
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 0:
             memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
@@ -100,7 +100,7 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             work->actionCommands.outputParams[1] = _get_angle_hp(50);
             work->actionCommands.outputParams[2] = _get_angle_hp(0);
             cw->rate = 50;
-            work->actionCommands.mAcState = 99;
+            work->actionCommands.acState = 99;
             work->actionCommands.result = AC_RESULT_RUNNING;
             cw->sfxId = -1;
             break;
@@ -113,13 +113,13 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             cw->frame = 0;
             cw->unk20 = 0.5f;
             cw->flag = 1;
-            work->actionCommands.mAcState = 1000;
+            work->actionCommands.acState = 1000;
         case 1000:
             cw->frame++;
             cw->ang360 = (f32)(((cw->cur + cw->vel) % (work->actionCommands.params[PENDULUM_PARAM_PERIOD] * 2)) * 360 /
                                (work->actionCommands.params[PENDULUM_PARAM_PERIOD] * 2));
             cw->angle = reviseAngle(45.0f * sinfd(cw->ang360));
-            pad = &_battleWorkPointer->padWork[0].mPadData[0];
+            pad = &_battleWorkPointer->padWork[0].padData[0];
             accel = 0.0f;
             if (cw->ang360 >= 90.0f && cw->ang360 < 270.0f) {
                 dir = -1.0f;
@@ -187,13 +187,13 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             if (BattlePadCheckTrigger(cw->button) || inRange) {
                 work->actionCommands.outputParams[0] = 1;
                 work->actionCommands.result = AC_RESULT_SUCCESS;
-                work->actionCommands.mResultCount++;
-                work->actionCommands.mAcState = 1002;
+                work->actionCommands.resultCount++;
+                work->actionCommands.acState = 1002;
                 break;
             }
             if (cw->frame > work->actionCommands.params[PENDULUM_PARAM_MAX_FRAMES]) {
                 work->actionCommands.result = 0;
-                work->actionCommands.mAcState = 1002;
+                work->actionCommands.acState = 1002;
             }
             break;
         case 1002:
@@ -202,13 +202,13 @@ s32 battleAcMain_PendulumCraneTiming(BattleWork* work) {
             if (cw->sfxId != 0xFFFFFFFF) {
                 psndSFXOff(cw->sfxId);
             }
-            work->actionCommands.mAcState = 1003;
+            work->actionCommands.acState = 1003;
         case 1003:
             cw->endTimer--;
             if (cw->endTimer > 0) {
                 break;
             }
-            work->actionCommands.mAcState = 1004;
+            work->actionCommands.acState = 1004;
             break;
         case 1004:
             work->actionCommands.maincb = NULL;
@@ -236,7 +236,7 @@ void battleAcDisp_PendulumCraneTiming(CameraId cameraId, void* param) {
     BattleWork* w = _battleWorkPointer;
     BattleActions* ac = &w->actionCommands;
     disp = &ac->disp;
-    switch (ac->mAcState) {
+    switch (ac->acState) {
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
         case 100:
@@ -266,7 +266,7 @@ void battleAcDelete_PendulumCraneTiming(BattleWork* work) {
     if (work->actionCommands.doneFlags & AC_DONE_FLAG_FINISHED) {
         return;
     }
-    work->actionCommands.mAcState = 1002;
+    work->actionCommands.acState = 1002;
 }
 
 /**

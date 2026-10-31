@@ -90,7 +90,7 @@ static USER_FUNC(alpha_set_func) {
 USER_FUNC(cam_displacement) {
     CamRoadWork* work = camRoadGetWorkPtr();
 
-    work->f_19c[10] = 1.7f;
+    work->tuning[10] = 1.7f;
     return EVT_RETURN_DONE;
 }
 

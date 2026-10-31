@@ -473,7 +473,7 @@ BattleWeapon ItemWeaponData_CookingItem = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Recovery, // mAttackEvtScript
+    ItemEvent_Recovery, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -486,9 +486,9 @@ BattleWeapon ItemWeaponData_Kinoko = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -510,7 +510,7 @@ BattleWeapon ItemWeaponData_Kinoko = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Recovery, // mAttackEvtScript
+    ItemEvent_Recovery, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -523,9 +523,9 @@ BattleWeapon ItemWeaponData_Kinkyuu_Kinoko = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -547,7 +547,7 @@ BattleWeapon ItemWeaponData_Kinkyuu_Kinoko = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Recovery, // mAttackEvtScript
+    ItemEvent_Recovery, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -560,9 +560,9 @@ BattleWeapon ItemWeaponData_Super_Kinoko = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -584,7 +584,7 @@ BattleWeapon ItemWeaponData_Super_Kinoko = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Recovery, // mAttackEvtScript
+    ItemEvent_Recovery, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -597,9 +597,9 @@ BattleWeapon ItemWeaponData_Ultra_Kinoko = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -621,7 +621,7 @@ BattleWeapon ItemWeaponData_Ultra_Kinoko = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Recovery, // mAttackEvtScript
+    ItemEvent_Recovery, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -634,9 +634,9 @@ BattleWeapon ItemWeaponData_Sinabita_Kinoko = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -658,7 +658,7 @@ BattleWeapon ItemWeaponData_Sinabita_Kinoko = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Recovery, // mAttackEvtScript
+    ItemEvent_Recovery, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -671,9 +671,9 @@ BattleWeapon ItemWeaponData_Honey_Syrup = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -695,7 +695,7 @@ BattleWeapon ItemWeaponData_Honey_Syrup = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Recovery, // mAttackEvtScript
+    ItemEvent_Recovery, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -708,9 +708,9 @@ BattleWeapon ItemWeaponData_Maple_Syrup = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -732,7 +732,7 @@ BattleWeapon ItemWeaponData_Maple_Syrup = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Recovery, // mAttackEvtScript
+    ItemEvent_Recovery, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -745,9 +745,9 @@ BattleWeapon ItemWeaponData_Royal_Jelly = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -769,7 +769,7 @@ BattleWeapon ItemWeaponData_Royal_Jelly = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Recovery, // mAttackEvtScript
+    ItemEvent_Recovery, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -782,9 +782,9 @@ BattleWeapon ItemWeaponData_Tankobu = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -806,7 +806,7 @@ BattleWeapon ItemWeaponData_Tankobu = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Recovery, // mAttackEvtScript
+    ItemEvent_Recovery, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -938,9 +938,9 @@ BattleWeapon ItemWeaponData_Pow_Block = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -962,7 +962,7 @@ BattleWeapon ItemWeaponData_Pow_Block = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Pow_Block, // mAttackEvtScript
+    ItemEvent_Pow_Block, // attackEvtScript
     {0, 100, 100, 100, 75, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 };
 
@@ -1050,9 +1050,9 @@ BattleWeapon ItemWeaponData_Fire_Flower = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -1075,7 +1075,7 @@ BattleWeapon ItemWeaponData_Fire_Flower = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Fire_Flower, // mAttackEvtScript
+    ItemEvent_Fire_Flower, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1184,9 +1184,9 @@ BattleWeapon ItemWeaponData_Kaminari_Dokkan = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -1209,7 +1209,7 @@ BattleWeapon ItemWeaponData_Kaminari_Dokkan = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Kaminari_Dokkan, // mAttackEvtScript
+    ItemEvent_Kaminari_Dokkan, // attackEvtScript
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1222,9 +1222,9 @@ BattleWeapon ItemWeaponData_Kaminari_Gorogoro = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -1247,7 +1247,7 @@ BattleWeapon ItemWeaponData_Kaminari_Gorogoro = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Kaminari_Gorogoro, // mAttackEvtScript
+    ItemEvent_Kaminari_Gorogoro, // attackEvtScript
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1423,9 +1423,9 @@ BattleWeapon ItemWeaponData_Kirakira_Otoshi = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -1447,7 +1447,7 @@ BattleWeapon ItemWeaponData_Kirakira_Otoshi = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Kirakira_Otoshi, // mAttackEvtScript
+    ItemEvent_Kirakira_Otoshi, // attackEvtScript
     {0, 10, 10, 100, 10, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1556,9 +1556,9 @@ BattleWeapon ItemWeaponData_Koorino_Ibuki = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -1584,7 +1584,7 @@ BattleWeapon ItemWeaponData_Koorino_Ibuki = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Koorino_Ibuki, // mAttackEvtScript
+    ItemEvent_Koorino_Ibuki, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1695,9 +1695,9 @@ BattleWeapon ItemWeaponData_Yurayura_Jishin = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -1719,7 +1719,7 @@ BattleWeapon ItemWeaponData_Yurayura_Jishin = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Yurayura_Jishin, // mAttackEvtScript
+    ItemEvent_Yurayura_Jishin, // attackEvtScript
     {0, 100, 100, 100, 75, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 };
 
@@ -1807,9 +1807,9 @@ BattleWeapon ItemWeaponData_Teresano_Fuku = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -1833,7 +1833,7 @@ BattleWeapon ItemWeaponData_Teresano_Fuku = {
     2, // invisibleTime
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Teresano_Fuku, // mAttackEvtScript
+    ItemEvent_Teresano_Fuku, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1866,9 +1866,9 @@ BattleWeapon ItemWeaponData_Biribiri_Kinoko = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -1893,7 +1893,7 @@ BattleWeapon ItemWeaponData_Biribiri_Kinoko = {
     0, 0, 0, 0, 0, 0, 0, 0, // galeForceChance..fpRegenTime
     0, // fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Biribiri_Kinoko, // mAttackEvtScript
+    ItemEvent_Biribiri_Kinoko, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1926,9 +1926,9 @@ BattleWeapon ItemWeaponData_Teki_Yokeeru = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -1952,7 +1952,7 @@ BattleWeapon ItemWeaponData_Teki_Yokeeru = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Teki_Yokeeru, // mAttackEvtScript
+    ItemEvent_Teki_Yokeeru, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1965,9 +1965,9 @@ BattleWeapon ItemWeaponData_Madowaseno_Kona = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -1992,7 +1992,7 @@ BattleWeapon ItemWeaponData_Madowaseno_Kona = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Madowaseno_Kona, // mAttackEvtScript
+    ItemEvent_Madowaseno_Kona, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2036,9 +2036,9 @@ BattleWeapon ItemWeaponData_Nemure_Yoikoyo = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2062,7 +2062,7 @@ BattleWeapon ItemWeaponData_Nemure_Yoikoyo = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowChance..invisibleTime
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Nemure_Yoikoyo, // mAttackEvtScript
+    ItemEvent_Nemure_Yoikoyo, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2143,9 +2143,9 @@ BattleWeapon ItemWeaponData_Stop_Watch = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2170,7 +2170,7 @@ BattleWeapon ItemWeaponData_Stop_Watch = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Stop_Watch, // mAttackEvtScript
+    ItemEvent_Stop_Watch, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2202,9 +2202,9 @@ BattleWeapon ItemWeaponData_Guruguru_Memawashi = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2228,7 +2228,7 @@ BattleWeapon ItemWeaponData_Guruguru_Memawashi = {
     0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Guruguru_Memawashi, // mAttackEvtScript
+    ItemEvent_Guruguru_Memawashi, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2241,9 +2241,9 @@ BattleWeapon ItemWeaponData_Dekadeka_Drink = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2268,7 +2268,7 @@ BattleWeapon ItemWeaponData_Dekadeka_Drink = {
     0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Dekadeka_Drink, // mAttackEvtScript
+    ItemEvent_Dekadeka_Drink, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2281,9 +2281,9 @@ BattleWeapon ItemWeaponData_Katikati_Koura = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2309,7 +2309,7 @@ BattleWeapon ItemWeaponData_Katikati_Koura = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Katikati_Koura, // mAttackEvtScript
+    ItemEvent_Katikati_Koura, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2406,9 +2406,9 @@ BattleWeapon ItemWeaponData_Suitooru = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -2430,7 +2430,7 @@ BattleWeapon ItemWeaponData_Suitooru = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Suitooru, // mAttackEvtScript
+    ItemEvent_Suitooru, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2513,9 +2513,9 @@ BattleWeapon ItemWeaponData_Teki_Kyouka = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2537,7 +2537,7 @@ BattleWeapon ItemWeaponData_Teki_Kyouka = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Teki_Kyouka, // mAttackEvtScript
+    ItemEvent_Teki_Kyouka, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2550,9 +2550,9 @@ BattleWeapon ItemWeaponData_Minimini_Kun = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2577,7 +2577,7 @@ BattleWeapon ItemWeaponData_Minimini_Kun = {
     0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Minimini_Kun, // mAttackEvtScript
+    ItemEvent_Minimini_Kun, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2590,9 +2590,9 @@ BattleWeapon ItemWeaponData_Funyafunya_Kun = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2618,7 +2618,7 @@ BattleWeapon ItemWeaponData_Funyafunya_Kun = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Funyafunya_Kun, // mAttackEvtScript
+    ItemEvent_Funyafunya_Kun, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2631,9 +2631,9 @@ BattleWeapon ItemWeaponData_Sukkiri_Drink = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2672,7 +2672,7 @@ BattleWeapon ItemWeaponData_Sukkiri_Drink = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Sukkiri_Drink, // mAttackEvtScript
+    ItemEvent_Sukkiri_Drink, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2705,9 +2705,9 @@ BattleWeapon ItemWeaponData_Jiwajiwa_Kinoko = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2732,7 +2732,7 @@ BattleWeapon ItemWeaponData_Jiwajiwa_Kinoko = {
     2, // hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Jiwajiwa_Kinoko, // mAttackEvtScript
+    ItemEvent_Jiwajiwa_Kinoko, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2765,9 +2765,9 @@ BattleWeapon ItemWeaponData_Jiwajiwa_Syrup = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2791,7 +2791,7 @@ BattleWeapon ItemWeaponData_Jiwajiwa_Syrup = {
     10, // fpRegenTime
     2, // fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Jiwajiwa_Syrup, // mAttackEvtScript
+    ItemEvent_Jiwajiwa_Syrup, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2854,9 +2854,9 @@ BattleWeapon ItemWeaponData_Irekaeeru = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2879,7 +2879,7 @@ BattleWeapon ItemWeaponData_Irekaeeru = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Irekaeeru, // mAttackEvtScript
+    ItemEvent_Irekaeeru, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2936,9 +2936,9 @@ BattleWeapon ItemWeaponData_Attiike_Shisshi = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2962,7 +2962,7 @@ BattleWeapon ItemWeaponData_Attiike_Shisshi = {
     0, 0, 0, 0, 0, 0, 0, 0, // galeForceChance..fpRegenTime
     0, // fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Attiike_Shisshi, // mAttackEvtScript
+    ItemEvent_Attiike_Shisshi, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3073,9 +3073,9 @@ BattleWeapon ItemWeaponData_Naniga_Okorukana = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3097,7 +3097,7 @@ BattleWeapon ItemWeaponData_Naniga_Okorukana = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Naniga_Okorukana, // mAttackEvtScript
+    ItemEvent_Naniga_Okorukana, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3127,9 +3127,9 @@ BattleWeapon ItemWeaponData_Shikaeshino_Kona = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3152,7 +3152,7 @@ BattleWeapon ItemWeaponData_Shikaeshino_Kona = {
     3, // paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Shikaeshino_Kona, // mAttackEvtScript
+    ItemEvent_Shikaeshino_Kona, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3165,9 +3165,9 @@ BattleWeapon ItemWeaponData_Kameno_Noroi = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3192,7 +3192,7 @@ BattleWeapon ItemWeaponData_Kameno_Noroi = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Kameno_Noroi, // mAttackEvtScript
+    ItemEvent_Kameno_Noroi, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3291,9 +3291,9 @@ BattleWeapon ItemWeaponData_SpaceFood = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3317,7 +3317,7 @@ BattleWeapon ItemWeaponData_SpaceFood = {
     0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3330,9 +3330,9 @@ BattleWeapon ItemWeaponData_IceCandy = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3357,7 +3357,7 @@ BattleWeapon ItemWeaponData_IceCandy = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3370,9 +3370,9 @@ BattleWeapon ItemWeaponData_NancyFrappe = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3397,7 +3397,7 @@ BattleWeapon ItemWeaponData_NancyFrappe = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3410,9 +3410,9 @@ BattleWeapon ItemWeaponData_SnowRabbit = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3437,7 +3437,7 @@ BattleWeapon ItemWeaponData_SnowRabbit = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3450,9 +3450,9 @@ BattleWeapon ItemWeaponData_TeaKinoko = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3480,7 +3480,7 @@ BattleWeapon ItemWeaponData_TeaKinoko = {
     2, // hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3493,9 +3493,9 @@ BattleWeapon ItemWeaponData_FirstLovePuddingBiribiri = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3520,7 +3520,7 @@ BattleWeapon ItemWeaponData_FirstLovePuddingBiribiri = {
     0, 0, 0, 0, 0, 0, 0, 0, // galeForceChance..fpRegenTime
     0, // fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3533,9 +3533,9 @@ BattleWeapon ItemWeaponData_FirstLovePuddingTrans = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3559,7 +3559,7 @@ BattleWeapon ItemWeaponData_FirstLovePuddingTrans = {
     2, // invisibleTime
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3572,9 +3572,9 @@ BattleWeapon ItemWeaponData_FirstLovePuddingSleep = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3598,7 +3598,7 @@ BattleWeapon ItemWeaponData_FirstLovePuddingSleep = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowChance..invisibleTime
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3611,9 +3611,9 @@ BattleWeapon ItemWeaponData_StarryDinner = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3638,7 +3638,7 @@ BattleWeapon ItemWeaponData_StarryDinner = {
     2, // hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3651,9 +3651,9 @@ BattleWeapon ItemWeaponData_KararinaPasta = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3676,7 +3676,7 @@ BattleWeapon ItemWeaponData_KararinaPasta = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3689,9 +3689,9 @@ BattleWeapon ItemWeaponData_MeromeroCake = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3717,7 +3717,7 @@ BattleWeapon ItemWeaponData_MeromeroCake = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3730,9 +3730,9 @@ BattleWeapon ItemWeaponData_PeachTaltBiribiri = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3757,7 +3757,7 @@ BattleWeapon ItemWeaponData_PeachTaltBiribiri = {
     0, 0, 0, 0, 0, 0, 0, 0, // galeForceChance..fpRegenTime
     0, // fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3770,9 +3770,9 @@ BattleWeapon ItemWeaponData_PeachTaltDodge = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3796,7 +3796,7 @@ BattleWeapon ItemWeaponData_PeachTaltDodge = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3809,9 +3809,9 @@ BattleWeapon ItemWeaponData_PeachTaltSleep = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3835,7 +3835,7 @@ BattleWeapon ItemWeaponData_PeachTaltSleep = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowChance..invisibleTime
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3848,9 +3848,9 @@ BattleWeapon ItemWeaponData_BiribiriCandy = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3875,7 +3875,7 @@ BattleWeapon ItemWeaponData_BiribiriCandy = {
     0, 0, 0, 0, 0, 0, 0, 0, // galeForceChance..fpRegenTime
     0, // fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3888,9 +3888,9 @@ BattleWeapon ItemWeaponData_HealthySalad = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3929,7 +3929,7 @@ BattleWeapon ItemWeaponData_HealthySalad = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3942,9 +3942,9 @@ BattleWeapon ItemWeaponData_FreshJuice = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -3983,7 +3983,7 @@ BattleWeapon ItemWeaponData_FreshJuice = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -3996,9 +3996,9 @@ BattleWeapon ItemWeaponData_RedKararing = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -4021,7 +4021,7 @@ BattleWeapon ItemWeaponData_RedKararing = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -4034,9 +4034,9 @@ BattleWeapon ItemWeaponData_FutarideForever = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -4061,7 +4061,7 @@ BattleWeapon ItemWeaponData_FutarideForever = {
     2, // hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_RecoveryAndStatus, // mAttackEvtScript
+    ItemEvent_RecoveryAndStatus, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -4210,9 +4210,9 @@ BattleWeapon ItemWeaponData_NancyDynamite = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {7, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -4235,7 +4235,7 @@ BattleWeapon ItemWeaponData_NancyDynamite = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_ThrowAttack, // mAttackEvtScript
+    ItemEvent_ThrowAttack, // attackEvtScript
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
@@ -4248,9 +4248,9 @@ BattleWeapon ItemWeaponData_CoconutsBomb = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {7, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -4273,7 +4273,7 @@ BattleWeapon ItemWeaponData_CoconutsBomb = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_ThrowAttack, // mAttackEvtScript
+    ItemEvent_ThrowAttack, // attackEvtScript
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
@@ -4286,9 +4286,9 @@ BattleWeapon ItemWeaponData_KachikachiDish = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -4310,7 +4310,7 @@ BattleWeapon ItemWeaponData_KachikachiDish = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_ThrowAttack, // mAttackEvtScript
+    ItemEvent_ThrowAttack, // attackEvtScript
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
@@ -4323,9 +4323,9 @@ BattleWeapon ItemWeaponData_BomberEgg = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -4348,7 +4348,7 @@ BattleWeapon ItemWeaponData_BomberEgg = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_ThrowAttack, // mAttackEvtScript
+    ItemEvent_ThrowAttack, // attackEvtScript
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
@@ -4391,9 +4391,9 @@ BattleWeapon ItemWeaponData_PoisonKinoko = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerHPHalf2, // hpDamageFn
     {7, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -4418,7 +4418,7 @@ BattleWeapon ItemWeaponData_PoisonKinoko = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_Poison_Kinoko, // mAttackEvtScript
+    ItemEvent_Poison_Kinoko, // attackEvtScript
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
@@ -4498,9 +4498,9 @@ USER_FUNC(_rank_up) {
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, id));
 
     if (unit) {
-        unit->mLevel += 5;
-        if (unit->mLevel > 99) {
-            unit->mLevel = 99;
+        unit->level += 5;
+        if (unit->level > 99) {
+            unit->level = 99;
         }
     }
     return EVT_RETURN_DONE;
@@ -4558,8 +4558,8 @@ USER_FUNC(_naniga_okorukana_check) {
 
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    if (!(unit->mAttributeFlags & kVeiled)) {
-        if (unit->mAttributeFlags & kCeiling) {
+    if (!(unit->attributeFlags & kVeiled)) {
+        if (unit->attributeFlags & kCeiling) {
             pos.y -= 5.0f;
         } else {
             pos.y += BtlUnit_GetHeight(unit) + 20;
@@ -4615,11 +4615,11 @@ USER_FUNC(_get_throw_first_pos) {
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
     pos.y += 10.0f;
-    if (!(unit->mAttributeFlags & kVeiled)) {
-        if (unit->mAttributeFlags & kCeiling) {
+    if (!(unit->attributeFlags & kVeiled)) {
+        if (unit->attributeFlags & kCeiling) {
             pos.y -= 5.0f;
         } else {
-            pos.y += unit->mSizeMultiplier * BtlUnit_GetHeight(unit);
+            pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit);
         }
     }
     evtSetFloat(event, ox, pos.x);
@@ -4815,9 +4815,9 @@ BattleWeapon ItemWeaponData_LastDinner = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -4839,7 +4839,7 @@ BattleWeapon ItemWeaponData_LastDinner = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    ItemEvent_LastDinner, // mAttackEvtScript
+    ItemEvent_LastDinner, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

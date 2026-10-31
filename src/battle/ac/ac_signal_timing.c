@@ -102,7 +102,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
     BOOL good;
     u32 btn;
     BOOL done;
-    if (ac->mAcUnit->badgesEquipped.AutoCommand) {
+    if (ac->acUnit->badgesEquipped.AutoCommand) {
         autoCommand = 1;
     }
     sfxPi = "SFX_AC_PI1";
@@ -112,7 +112,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
     do {
         loop = 0;
         got = 0;
-        switch (ac->mAcState) {
+        switch (ac->acState) {
             case 0:
                 ac->result = AC_RESULT_RUNNING;
                 memset(disp, 0, sizeof(BattleACDispParams));
@@ -169,7 +169,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                         w->button = w->buttons[0];
                 }
 
-                ac->mAcState = 99;
+                ac->acState = 99;
                 break;
 
             case 99:
@@ -180,7 +180,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                     work->actionCommands.countdown--;
                     ac->result = AC_RESULT_SUCCESS;
                     loop = 1;
-                    ac->mAcState = 1002;
+                    ac->acState = 1002;
                     break;
                 }
                 w->rangeStart = w->index * work->actionCommands.params[SIGNAL_PARAM_STEP];
@@ -188,20 +188,20 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 w->okStart = w->rangeStart;
                 j = _get_ok_frame_range(w->difficulty) - 1;
                 w->okEnd = w->okStart + j;
-                ac->mAcState = 1000;
+                ac->acState = 1000;
 
             case 1000:
                 w->nextRangeEnd = ((w->next + 1) * work->actionCommands.params[SIGNAL_PARAM_STEP]) - 1;
                 w->next++;
                 if (w->next < (work->actionCommands.params[SIGNAL_PARAM_LEAD] + 1)) {
-                    if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
+                    if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
                         psndSFXOn(sfxPi);
                     }
-                } else if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
+                } else if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
                     psndSFXOn(sfxPone);
                 }
                 w->pressed = 0;
-                ac->mAcState = 1001;
+                ac->acState = 1001;
 
             case 1001:
                 w->frame++;
@@ -248,7 +248,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                         work->actionCommands.outputParams[SIGNAL_OUT_RESULT] = 1;
                         if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
                             w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = 1;
-                            if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
+                            if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
                                 psndSFXOn(sfxOk);
                             }
                         }
@@ -259,13 +259,13 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                                 ac->result |= AC_RESULT_SUCCESS;
                             }
                             loop = 1;
-                            ac->mAcState = 1002;
+                            ac->acState = 1002;
                         }
                     } else if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
                         w->misses++;
                         if (w->frame >= w->rangeStart) {
                             w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = -1;
-                            if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
+                            if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
                                 psndSFXOn(sfxNg2);
                             }
                             work->actionCommands.outputParams[SIGNAL_OUT_RESULT] = -1;
@@ -280,7 +280,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                     if ((w->index >= work->actionCommands.params[SIGNAL_PARAM_LEAD]) && (w->index < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD]))) {
                         w->misses++;
                         w->results[w->index - work->actionCommands.params[SIGNAL_PARAM_LEAD]] = -1;
-                        if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction))) {
+                        if (!((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction))) {
                             psndSFXOn(sfxNg);
                         }
                     }
@@ -301,7 +301,7 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 }
                 if (w->frame >= (w->next * work->actionCommands.params[SIGNAL_PARAM_STEP])) {
                     if (w->next < (work->actionCommands.params[SIGNAL_PARAM_COUNT] + work->actionCommands.params[SIGNAL_PARAM_LEAD])) {
-                        ac->mAcState = 1000;
+                        ac->acState = 1000;
                     } else {
                         work->actionCommands.outputParams[SIGNAL_OUT_HITS] = w->hits;
                         ac->result &= ~AC_RESULT_RUNNING;
@@ -309,13 +309,13 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                             ac->result |= AC_RESULT_SUCCESS;
                         }
                         loop = 1;
-                        ac->mAcState = 1002;
+                        ac->acState = 1002;
                     }
                 }
                 break;
 
             case 1002:
-                ac->mAcState = 1003;
+                ac->acState = 1003;
                 break;
 
             case 1003:
@@ -325,13 +325,13 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
                 work->actionCommands.doneFlags |= 1;
                 w->okFlag = 0;
                 w->endTimer = 60;
-                ac->mAcState = 1005;
+                ac->acState = 1005;
                 break;
 
             case 1005:
                 w->endTimer--;
                 if (w->endTimer <= 0) {
-                    ac->mAcState = 1006;
+                    ac->acState = 1006;
                 }
                 break;
 
@@ -360,7 +360,7 @@ void battleAcDisp_SignalTiming(CameraId cameraId, void* param) {
     BattleActions* ac = &work->actionCommands;
     BattleACDispParams* disp = &ac->disp;
 
-    switch (ac->mAcState) {
+    switch (ac->acState) {
         case 99:
         case 100:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
@@ -392,7 +392,7 @@ void battleAcDisp_SignalTiming(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: marks the command done and starts the 60-frame end wait. */
 void battleAcDelete_SignalTiming(BattleWork* work) {
-    work->actionCommands.mAcState = 1004;
+    work->actionCommands.acState = 1004;
 }
 
 /**

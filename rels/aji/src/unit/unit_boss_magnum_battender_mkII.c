@@ -141,14 +141,14 @@ static EvtWord wait_event_r[18];
 
 /** Unit data of Magnus von Grapple 2.0: 70 HP, level 84; the battle starts it from init_event. */
 BattleUnitKind unit_boss_magnum_battender_mkII = {
-    UNIT_MAGNUS2_0, // mUnitType
+    UNIT_MAGNUS2_0, // unitType
     "btl_un_magnum_battender_mkii", // name
     70, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    84, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    84, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -183,7 +183,7 @@ BattleUnitKind unit_boss_magnum_battender_mkII = {
     0, // attributeFlags
     &regist, // statusVulnerability
     4, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -297,9 +297,9 @@ BattleWeapon weapon_batten_drill_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -321,7 +321,7 @@ BattleWeapon weapon_batten_drill_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -338,9 +338,9 @@ BattleWeapon weapon_batten_boomerang_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -362,7 +362,7 @@ BattleWeapon weapon_batten_boomerang_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -379,9 +379,9 @@ BattleWeapon weapon_batten_aud_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -403,13 +403,13 @@ BattleWeapon weapon_batten_aud_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
 /** Setup for the X-Punch fists that Magnus von Grapple 2.0 spawns when he splits off his arms. */
 static BattleUnitSetup entry_rocket_punch = {
-    &unit_boss_rocket_punch_mkII, // mUnitKindParams
+    &unit_boss_rocket_punch_mkII, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -676,7 +676,7 @@ USER_FUNC(aud_suikomi) {
             BattleAudience_SetAnim(ids[i], 9, FALSE);
             mem->interpFramesTotal = i * 3 + 60;
             mem->counter = 0;
-            mem->mRotation.y = 0.0f;
+            mem->rotation.y = 0.0f;
             list[i] = ids[i];
         }
         BtlUnit_GetPos(BattleGetUnitPtr(_battleWorkPointer, id), &x, &y, &z);
@@ -689,7 +689,7 @@ USER_FUNC(aud_suikomi) {
         for (j = 0; j < 20; j++) {
             if (i == list[j]) {
                 mem = BattleAudienceGetPtr(i);
-                mem->mRotation.y += 19.0f;
+                mem->rotation.y += 19.0f;
                 if (mem->interpFrameCounter < mem->interpFramesTotal) {
                     mem->interpFrameCounter++;
                 } else {
@@ -697,9 +697,9 @@ USER_FUNC(aud_suikomi) {
                     mem->flags &= ~4;
                     mem->flags |= AUDIENCE_MEMBER_FLAG_NOT_EXIST;
                 }
-                mem->position.x = intplGetValue(EASING_QUADRATIC_OUT, mem->mHomePosition.x, x2, mem->interpFrameCounter, mem->interpFramesTotal);
-                mem->position.y = intplGetValue(EASING_CUBIC_IN, mem->mHomePosition.y, y2, mem->interpFrameCounter, mem->interpFramesTotal);
-                mem->position.z = intplGetValue(EASING_QUADRATIC_OUT, mem->mHomePosition.z, z2, mem->interpFrameCounter, mem->interpFramesTotal);
+                mem->position.x = intplGetValue(EASING_QUADRATIC_OUT, mem->homePosition.x, x2, mem->interpFrameCounter, mem->interpFramesTotal);
+                mem->position.y = intplGetValue(EASING_CUBIC_IN, mem->homePosition.y, y2, mem->interpFrameCounter, mem->interpFramesTotal);
+                mem->position.z = intplGetValue(EASING_QUADRATIC_OUT, mem->homePosition.z, z2, mem->interpFrameCounter, mem->interpFramesTotal);
                 mem->baseScale.x = mem->baseScale.y = intplGetValue(EASING_QUADRATIC_OUT, 1.0f, 0.65f, mem->interpFrameCounter, mem->interpFramesTotal);
                 break;
             }
@@ -769,7 +769,7 @@ USER_FUNC(aud_fire_hit) {
             mem->position = (Vec){x, y, z};
             mem->interpFramesTotal = 0;
             mem->counter = 0;
-            mem->mRotation.y = 0.0f;
+            mem->rotation.y = 0.0f;
             mem->baseScale.x = mem->baseScale.y = 1.0f;
             mem->flags |= 4;
             evt = evtEntry(aud_hit_event, 0, EVENT_START_IMMEDIATE);
@@ -822,7 +822,7 @@ USER_FUNC(aud_fire_no_hit) {
             mem->position = (Vec){x, y, z};
             mem->interpFramesTotal = 0;
             mem->counter = 0;
-            mem->mRotation.y = 0.0f;
+            mem->rotation.y = 0.0f;
             mem->baseScale.x = mem->baseScale.y = 1.0f;
             mem->flags |= 4;
             evt = evtEntry(aud_hit_event, 0, EVENT_START_IMMEDIATE);
@@ -2056,9 +2056,9 @@ static BattleWeapon weapon_batten_rocket_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {9, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -2080,7 +2080,7 @@ static BattleWeapon weapon_batten_rocket_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

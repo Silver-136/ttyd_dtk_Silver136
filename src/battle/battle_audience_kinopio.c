@@ -188,7 +188,7 @@ void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
     } else {
         BattleAudience_SetAnim(index, 1, FALSE);
     }
-    r = (base->mTargetAudienceCount + base->mAddedAudienceCount) / base->mAudienceDeltaMultiplier;
+    r = (base->targetAudienceCount + base->addedAudienceCount) / base->audienceDeltaMultiplier;
     if (r >= 0.75f) {
         speed = 1.0f;
         scale = speed;
@@ -294,8 +294,8 @@ void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
     if (m->flags & AUDIENCE_MEMBER_FLAG_ATTACKED) {
         m->flags &= ~(AUDIENCE_MEMBER_FLAG_TARGETED | AUDIENCE_MEMBER_FLAG_ATTACKED);
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
-        if (!(BattleAudienceItemGetPtr(0)->mItemType >= ITEM_AUDIENCE_CAN && BattleAudienceItemGetPtr(0)->mItemType < BADGE_MIN)) {
-            BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+        if (!(BattleAudienceItemGetPtr(0)->itemType >= ITEM_AUDIENCE_CAN && BattleAudienceItemGetPtr(0)->itemType < BADGE_MIN)) {
+            BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
         }
     } else if (!(m->flags & AUDIENCE_MEMBER_FLAG_TARGETED)) {
         switch (m->itemId) {
@@ -349,10 +349,10 @@ void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front) {
         BattleAudience_SetAnim(index, 1, FALSE);
     }
     if (m->timer <= 15) {
-        m->mRotation.y = 12.0f * (f32)m->timer;
+        m->rotation.y = 12.0f * (f32)m->timer;
     }
     if (m->timer >= 30) {
-        m->mRotation.y = 12.0f * (f32)(45 - m->timer);
+        m->rotation.y = 12.0f * (f32)(45 - m->timer);
     }
     if (m->timer > 45) {
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT);
@@ -495,7 +495,7 @@ void BattleAudienceCtrlProcessKinopioJoyJump2(s32 index, s32 front) {
         m->hopAccel = -0.2f;
         m->step++;
     case 2:
-        m->mRotation.y += 20.0f;
+        m->rotation.y += 20.0f;
         if (0.0f == m->hopAccel) {
             m->counter--;
             if (m->counter <= 0) {
@@ -529,8 +529,8 @@ void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
         m->itemId = -1;
         item->flags = 0;
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
-        if (!(BattleAudienceItemGetPtr(0)->mItemType >= ITEM_AUDIENCE_CAN && BattleAudienceItemGetPtr(0)->mItemType < BADGE_MIN)) {
-            BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+        if (!(BattleAudienceItemGetPtr(0)->itemType >= ITEM_AUDIENCE_CAN && BattleAudienceItemGetPtr(0)->itemType < BADGE_MIN)) {
+            BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
         }
     } else if (!(m->flags & AUDIENCE_MEMBER_FLAG_TARGETED) && (bw->flags & BATTLE_FLAG_COMMAND_INPUT)) {
         item = BattleAudienceItemGetPtr(m->itemId);
@@ -557,8 +557,8 @@ void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front) {
     if (m->flags & AUDIENCE_MEMBER_FLAG_ATTACKED) {
         m->flags &= ~(AUDIENCE_MEMBER_FLAG_TARGETED | AUDIENCE_MEMBER_FLAG_ATTACKED);
         BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_DAMAGE);
-        if (!(BattleAudienceItemGetPtr(0)->mItemType >= ITEM_AUDIENCE_CAN && BattleAudienceItemGetPtr(0)->mItemType < BADGE_MIN)) {
-            BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->mAudienceDeltaMultiplier, 0.0f);
+        if (!(BattleAudienceItemGetPtr(0)->itemType >= ITEM_AUDIENCE_CAN && BattleAudienceItemGetPtr(0)->itemType < BADGE_MIN)) {
+            BattleAudienceAddTargetNum(-0.14999999f * BattleAudienceBaseGetPtr()->audienceDeltaMultiplier, 0.0f);
         }
     } else {
         if (m->flags & AUDIENCE_MEMBER_FLAG_TARGETED) {
@@ -648,9 +648,9 @@ void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
     if (m->type == AUDIENCE_PIRANHA_PLANT) {
         switch (m->step) {
         case 0:
-            m->position.x = m->mHomePosition.x;
+            m->position.x = m->homePosition.x;
             m->position.y = -100.0f;
-            m->position.z = m->mHomePosition.z;
+            m->position.z = m->homePosition.z;
             m->velocity.x = 0.0f;
             m->velocity.y = 0.0f;
             m->velocity.z = 0.0f;
@@ -667,8 +667,8 @@ void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
             }
             break;
         case 2:
-            if (m->position.y >= m->mHomePosition.y) {
-                m->position.y = m->mHomePosition.y;
+            if (m->position.y >= m->homePosition.y) {
+                m->position.y = m->homePosition.y;
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT);
                 m->step++;
             }
@@ -678,7 +678,7 @@ void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
         switch (m->step) {
         case 0:
             m->position.x = (f32)(irand(400) - 200);
-            m->position.y = m->mHomePosition.y;
+            m->position.y = m->homePosition.y;
             m->position.z = 1000.0f;
             m->velocity.x = 0.0f;
             m->velocity.y = 0.0f;
@@ -689,8 +689,8 @@ void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
         case 1:
             m->counter--;
             if (m->counter <= 0) {
-                dx = m->mHomePosition.x - m->position.x;
-                dz = m->mHomePosition.z - m->position.z;
+                dx = m->homePosition.x - m->position.x;
+                dz = m->homePosition.z - m->position.z;
                 {
                     f32 d = (f32)sqrt(dx * dx + dz * dz);
                     m->velocity.x = 10.0f * (dx / d);
@@ -706,9 +706,9 @@ void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
         case 2:
             m->counterF += m->workF1;
             if (m->counterF >= m->workF2) {
-                m->position.x = m->mHomePosition.x;
-                m->position.y = m->mHomePosition.y;
-                m->position.z = m->mHomePosition.z;
+                m->position.x = m->homePosition.x;
+                m->position.y = m->homePosition.y;
+                m->position.z = m->homePosition.z;
                 BattleAudience_ChangeStatus(index, AUDIENCE_STATUS_WAIT);
             }
             break;
@@ -855,7 +855,7 @@ static BattleWeapon weapon_teresa_trans = {
     2, // invisibleTime
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -885,9 +885,9 @@ void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front) {
         unit = m->targetUnit;
         parts = BattleGetUnitPartsPtr(BtlUnit_GetUnitId(unit), BtlUnit_GetBodyPartsId(unit));
         m->counter++;
-        m->position.x = intplGetValue(EASING_CUBIC_OUT, m->mHomePosition.x, 0.0f, m->counter, 60);
-        m->position.y = intplGetValue(EASING_CUBIC_OUT, m->mHomePosition.y, 80.0f, m->counter, 60);
-        m->position.z = intplGetValue(EASING_CUBIC_OUT, m->mHomePosition.z, 100.0f, m->counter, 60);
+        m->position.x = intplGetValue(EASING_CUBIC_OUT, m->homePosition.x, 0.0f, m->counter, 60);
+        m->position.y = intplGetValue(EASING_CUBIC_OUT, m->homePosition.y, 80.0f, m->counter, 60);
+        m->position.z = intplGetValue(EASING_CUBIC_OUT, m->homePosition.z, 100.0f, m->counter, 60);
         if (m->counter >= 60) {
             BattleAudience_SetAnim(index, 7, FALSE);
             BtlUnit_GetHitPos(unit, parts, &x, &y, &z);
@@ -1006,7 +1006,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
         }
         break;
     case 15:
-        m->mRotation.y = camGetPtr(CAMERA_3D)->viewYaw;
+        m->rotation.y = camGetPtr(CAMERA_3D)->viewYaw;
         if (__fabs(m->position.x) >= 450.0) {
             m->step = 16;
             m->counter = 35;
@@ -1045,7 +1045,7 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
     case 25:
         if (!evtCheckID(m->statusTimer)) {
             m->step = 30;
-            m->mRotation.y = 0.0f;
+            m->rotation.y = 0.0f;
         }
         break;
     case 30:
@@ -1157,7 +1157,7 @@ void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
         m->step++;
     case 1:
         m->counter--;
-        m->mRotation.y += 6.0f;
+        m->rotation.y += 6.0f;
         if (m->counter == 15) {
             BattleAudience_SetAnim(index, 14, FALSE);
             BattleAudienceSoundSing(index);
@@ -1175,7 +1175,7 @@ void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
             effOnpuN64Entry(0, m->position.x + (f32)irand(200) - 100.0f, y, z);
         }
         if (m->counter <= 0) {
-            for (i = 0; i < base->mMaxAudience; i++) {
+            for (i = 0; i < base->maxAudience; i++) {
                 if (index != i) {
                     BattleAudienceCtrlProcessKinopioSingSub(i);
                 }
@@ -1186,7 +1186,7 @@ void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
         break;
     case 3:
         m->counter--;
-        m->mRotation.y += 6.0f;
+        m->rotation.y += 6.0f;
         if (m->counter <= 15) {
             BattleAudience_SetAnim(index, 1, FALSE);
         }
@@ -1349,7 +1349,7 @@ void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front) {
         break;
     case 3:
         BattleAudience_Delete(index);
-        base->mTargetAudienceCount -= 1.0f;
+        base->targetAudienceCount -= 1.0f;
         break;
     }
 }
@@ -1372,7 +1372,7 @@ void BattleAudienceCtrlProcessKinopioFireSub(s32 index) {
             }
         } else if (m->status != AUDIENCE_STATUS_SHELL) {
             BattleAudience_Delete(index);
-            base->mTargetAudienceCount -= 1.0f;
+            base->targetAudienceCount -= 1.0f;
         }
     }
 }
@@ -1438,7 +1438,7 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
     case 4:
         t = BattleAudienceGetPtr(m->targetMemberId);
         t->flags = 0;
-        base->mTargetAudienceCount -= 1.0f;
+        base->targetAudienceCount -= 1.0f;
         BattleAudienceSoundPakkunEat(index);
         m->step++;
         break;
@@ -1487,9 +1487,9 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
         if (m->position.y <= -100.0f) {
             k = m->statusTimer;
             pz = 0.1f * (f32)(k % 20) + (f32)(k / 20 * 30 + 115);
-            m->mHomePosition.x = m->position.x = (f32)((rand() * 10 / 32767) + (k % 20 * 25 - 235));
-            m->mHomePosition.y = stage->audienceSizeY;
-            m->mHomePosition.z = m->position.z = pz;
+            m->homePosition.x = m->position.x = (f32)((rand() * 10 / 32767) + (k % 20 * 25 - 235));
+            m->homePosition.y = stage->audienceSizeY;
+            m->homePosition.z = m->position.z = pz;
             m->step++;
         }
         break;
@@ -1501,7 +1501,7 @@ void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
         break;
     case 11:
         if (m->position.y >= stage->audienceSizeY) {
-            m->position.y = m->mHomePosition.y = stage->audienceSizeY;
+            m->position.y = m->homePosition.y = stage->audienceSizeY;
             m->velocity.y = 0.0f;
             m->step = 99;
             m->counter = 10;

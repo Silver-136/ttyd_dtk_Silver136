@@ -25,14 +25,14 @@ static EvtWord wait_event[6];
  * its size, offsets, damage sounds, status vulnerability, parts and init event.
  */
 BattleUnitKind unit_act_kinopio = {
-    UNIT_EPILOGUE_MALE_TOAD, // mUnitType
+    UNIT_EPILOGUE_MALE_TOAD, // unitType
     "btl_un_act_kinopio", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -67,7 +67,7 @@ BattleUnitKind unit_act_kinopio = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };

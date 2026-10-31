@@ -57,8 +57,8 @@ static USER_FUNC(honenoko_copy_status) {
     BattleUnit* sourceUnit = BattleGetUnitPtr(wp, sourceId);
     BattleUnit* destinationUnit = BattleGetUnitPtr(wp, destinationId);
 
-    destinationUnit->mSizeChangeTurns = sourceUnit->mSizeChangeTurns;
-    destinationUnit->mSizeChangeStrength = sourceUnit->mSizeChangeStrength;
+    destinationUnit->sizeChangeTurns = sourceUnit->sizeChangeTurns;
+    destinationUnit->sizeChangeStrength = sourceUnit->sizeChangeStrength;
     return EVT_RETURN_DONE;
 }
 
@@ -67,14 +67,14 @@ static USER_FUNC(honenoko_copy_status) {
  * event data table.
  */
 BattleUnitKind unit_honenoko = {
-    UNIT_DULL_BONES, // mUnitType
+    UNIT_DULL_BONES, // unitType
     "btl_un_honenoko", // name
     1, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    9, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    9, // level
+    0, // bonusExp
     0, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -109,7 +109,7 @@ BattleUnitKind unit_honenoko = {
     0, // attributeFlags
     &regist, // statusVulnerability
     4, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -165,9 +165,9 @@ static BattleWeapon weapon_honenoko_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -189,7 +189,7 @@ static BattleWeapon weapon_honenoko_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -198,7 +198,7 @@ static BattleWeapon weapon_honenoko_attack = {
  * position.
  */
 static BattleUnitSetup entry_honenoko = {
-    &unit_honenoko, // mUnitKindParams
+    &unit_honenoko, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase

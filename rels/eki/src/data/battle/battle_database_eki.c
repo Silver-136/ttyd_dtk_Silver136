@@ -100,10 +100,10 @@ BattleStageObjectData eki_btlobject_data[] = {
  */
 BattleStageData eki_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_06_1", // mSpecificStageDataDir
-        8, // mNumObjects
-        eki_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_06_1", // specificStageDataDir
+        8, // numObjects
+        eki_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -113,10 +113,10 @@ BattleStageData eki_btlstage_data[] = {
         1, // disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_06_1", // mSpecificStageDataDir
-        4, // mNumObjects
-        &eki_btlobject_data[8], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_06_1", // specificStageDataDir
+        4, // numObjects
+        &eki_btlobject_data[8], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -126,20 +126,20 @@ BattleStageData eki_btlstage_data[] = {
         1, // disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_06_2", // mSpecificStageDataDir
-        4, // mNumObjects
-        &eki_btlobject_data[12], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_06_2", // specificStageDataDir
+        4, // numObjects
+        &eki_btlobject_data[12], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_06_3", // mSpecificStageDataDir
-        8, // mNumObjects
-        &eki_btlobject_data[16], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_06_3", // specificStageDataDir
+        8, // numObjects
+        &eki_btlobject_data[16], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x210006F, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -149,7 +149,7 @@ BattleStageData eki_btlstage_data[] = {
 
 BattleUnitSetup btlparty_eki_eki_06_01_off_1[] = {
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -159,7 +159,7 @@ BattleUnitSetup btlparty_eki_eki_06_01_off_1[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -169,7 +169,7 @@ BattleUnitSetup btlparty_eki_eki_06_01_off_1[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -193,7 +193,7 @@ BattleGroupSetup btlgrp_eki_eki_06_01_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_02_01_off_1[] = {
     {
-        &unit_kurokumorn, // mUnitKindParams
+        &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -203,7 +203,7 @@ BattleUnitSetup btlparty_eki_eki_02_01_off_1[] = {
         battle_item_kurokumorn, // itemDropTable
     },
     {
-        &unit_kurokumorn, // mUnitKindParams
+        &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -227,7 +227,7 @@ BattleGroupSetup btlgrp_eki_eki_02_01_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_02_02_off_1[] = {
     {
-        &unit_kurokumorn, // mUnitKindParams
+        &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -237,7 +237,7 @@ BattleUnitSetup btlparty_eki_eki_02_02_off_1[] = {
         battle_item_kurokumorn, // itemDropTable
     },
     {
-        &unit_kurokumorn, // mUnitKindParams
+        &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -247,7 +247,7 @@ BattleUnitSetup btlparty_eki_eki_02_02_off_1[] = {
         battle_item_kurokumorn, // itemDropTable
     },
     {
-        &unit_kurokumorn, // mUnitKindParams
+        &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -271,7 +271,7 @@ BattleGroupSetup btlgrp_eki_eki_02_02_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_02_03_off_1[] = {
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -281,7 +281,7 @@ BattleUnitSetup btlparty_eki_eki_02_03_off_1[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -305,7 +305,7 @@ BattleGroupSetup btlgrp_eki_eki_02_03_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_03_01_off_1[] = {
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -315,7 +315,7 @@ BattleUnitSetup btlparty_eki_eki_03_01_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -339,7 +339,7 @@ BattleGroupSetup btlgrp_eki_eki_03_01_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_03_02_off_1[] = {
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -349,7 +349,7 @@ BattleUnitSetup btlparty_eki_eki_03_02_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -359,7 +359,7 @@ BattleUnitSetup btlparty_eki_eki_03_02_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -383,7 +383,7 @@ BattleGroupSetup btlgrp_eki_eki_03_02_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_03_03_off_1[] = {
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -393,7 +393,7 @@ BattleUnitSetup btlparty_eki_eki_03_03_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_kurokumorn, // mUnitKindParams
+        &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -403,7 +403,7 @@ BattleUnitSetup btlparty_eki_eki_03_03_off_1[] = {
         battle_item_kurokumorn, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -427,7 +427,7 @@ BattleGroupSetup btlgrp_eki_eki_03_03_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_03_05_off_1[] = {
     {
-        &unit_kurokumorn, // mUnitKindParams
+        &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -437,7 +437,7 @@ BattleUnitSetup btlparty_eki_eki_03_05_off_1[] = {
         battle_item_kurokumorn, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -461,7 +461,7 @@ BattleGroupSetup btlgrp_eki_eki_03_05_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_03_07_off_1[] = {
     {
-        &unit_kurokumorn, // mUnitKindParams
+        &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -471,7 +471,7 @@ BattleUnitSetup btlparty_eki_eki_03_07_off_1[] = {
         battle_item_kurokumorn, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -481,7 +481,7 @@ BattleUnitSetup btlparty_eki_eki_03_07_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -491,7 +491,7 @@ BattleUnitSetup btlparty_eki_eki_03_07_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_kurokumorn, // mUnitKindParams
+        &unit_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -515,7 +515,7 @@ BattleGroupSetup btlgrp_eki_eki_03_07_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_04_01_off_1[] = {
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -525,7 +525,7 @@ BattleUnitSetup btlparty_eki_eki_04_01_off_1[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -535,7 +535,7 @@ BattleUnitSetup btlparty_eki_eki_04_01_off_1[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -559,7 +559,7 @@ BattleGroupSetup btlgrp_eki_eki_04_01_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_04_02_off_1[] = {
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -569,7 +569,7 @@ BattleUnitSetup btlparty_eki_eki_04_02_off_1[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -579,7 +579,7 @@ BattleUnitSetup btlparty_eki_eki_04_02_off_1[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -603,7 +603,7 @@ BattleGroupSetup btlgrp_eki_eki_04_02_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_04_06_off_1[] = {
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -613,7 +613,7 @@ BattleUnitSetup btlparty_eki_eki_04_06_off_1[] = {
         battle_item_patatogemet, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -637,7 +637,7 @@ BattleGroupSetup btlgrp_eki_eki_04_06_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_04_03_off_1[] = {
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -647,7 +647,7 @@ BattleUnitSetup btlparty_eki_eki_04_03_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -671,7 +671,7 @@ BattleGroupSetup btlgrp_eki_eki_04_03_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_04_04_off_1[] = {
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -681,7 +681,7 @@ BattleUnitSetup btlparty_eki_eki_04_04_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -691,7 +691,7 @@ BattleUnitSetup btlparty_eki_eki_04_04_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -701,7 +701,7 @@ BattleUnitSetup btlparty_eki_eki_04_04_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -725,7 +725,7 @@ BattleGroupSetup btlgrp_eki_eki_04_04_off_1 = {
 
 BattleUnitSetup btlparty_eki_eki_04_05_off_1[] = {
     {
-        &unit_sambo_mummy, // mUnitKindParams
+        &unit_sambo_mummy, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -735,7 +735,7 @@ BattleUnitSetup btlparty_eki_eki_04_05_off_1[] = {
         battle_item_sambo_mummy, // itemDropTable
     },
     {
-        &unit_patatogemet, // mUnitKindParams
+        &unit_patatogemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase

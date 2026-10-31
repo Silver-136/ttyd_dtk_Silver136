@@ -161,14 +161,14 @@ BattleUnitKindPart unitpartsdata_Party_Nokotarou[] = {
  * status table, body part and init script. No HP gauge is drawn over him; his HP comes from the partner stats.
  */
 BattleUnitKind unitdata_Party_Nokotarou = {
-    UNIT_KOOPS, // mUnitType
+    UNIT_KOOPS, // unitType
     "btl_un_nokotarou", // name
     10, // maxHp
     5, // maxFp
-    5, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    5, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -203,7 +203,7 @@ BattleUnitKind unitdata_Party_Nokotarou = {
     kUnitNoHpGauge, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    unitpartsdata_Party_Nokotarou, // mParts
+    unitpartsdata_Party_Nokotarou, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -321,9 +321,9 @@ BattleWeapon partyWeapon_NokotarouFirstAttack = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {2, 2, 3, 3, 5, 5, 0, 0}, // hpDamageWork
@@ -346,7 +346,7 @@ BattleWeapon partyWeapon_NokotarouFirstAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyNokotarouAttack_FirstAttack, // mAttackEvtScript
+    partyNokotarouAttack_FirstAttack, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -364,9 +364,9 @@ BattleWeapon partyWeapon_NokotarouKouraAttack = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {1, 2, 2, 3, 3, 5, 0, 0}, // hpDamageWork
@@ -389,7 +389,7 @@ BattleWeapon partyWeapon_NokotarouKouraAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyNokotarouAttack_NormalAttack, // mAttackEvtScript
+    partyNokotarouAttack_NormalAttack, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 4, 2, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -412,12 +412,12 @@ BattleWeapon partyWeapon_NokotarouSyubibinKoura = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {1, 2, 2, 3, 3, 5, 0, 0}, // hpDamageWork
@@ -440,7 +440,7 @@ BattleWeapon partyWeapon_NokotarouSyubibinKoura = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyNokotarouAttack_SyubibinKoura, // mAttackEvtScript
+    partyNokotarouAttack_SyubibinKoura, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -462,9 +462,9 @@ BattleWeapon partyWeapon_NokotarouKouraGuard = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0, 2, 2, 3, 3, 4, 0, 0}, // hpDamageWork
@@ -486,7 +486,7 @@ BattleWeapon partyWeapon_NokotarouKouraGuard = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyNokotarouAttack_KouraGuard, // mAttackEvtScript
+    partyNokotarouAttack_KouraGuard, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -505,12 +505,12 @@ BattleWeapon partyWeapon_NokotarouTsuranukiKoura = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    3, // mStylishCommandMultiplier
+    3, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetACOutputParam, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -532,7 +532,7 @@ BattleWeapon partyWeapon_NokotarouTsuranukiKoura = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyNokotarouAttack_TsuranukiKoura, // mAttackEvtScript
+    partyNokotarouAttack_TsuranukiKoura, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -1896,7 +1896,7 @@ EVT_END()
  * player, placed off screen until the move positions it.
  */
 BattleUnitSetup entry_koura = {
-    &unit_koura, // mUnitKindParams
+    &unit_koura, // unitKindParams
     ALLIANCE_PLAYER, // alliance
     {0}, // pad_05
     BATTLE_PHASE_BEFORE_PLAYER, // attackPhase
@@ -1972,9 +1972,9 @@ USER_FUNC(_color_lv_set) {
     value = evtGetValue(event, index);
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
     if (set) {
-        unit->mMoveColorLv = value;
+        unit->moveColorLv = value;
     } else {
-        evtSetValue(event, index, unit->mMoveColorLv);
+        evtSetValue(event, index, unit->moveColorLv);
     }
     return EVT_RETURN_DONE;
 }
@@ -1998,7 +1998,7 @@ USER_FUNC(_tsuranuki_effect_control) {
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
     part = BtlUnit_GetPartsPtr(unit, 1);
     if (isFirstCall) {
-        event->userdatap[0] = effNokotarouEntry(0, 1000, pos.x, pos.y, pos.z, unit->mSizeMultiplier);
+        event->userdatap[0] = effNokotarouEntry(0, 1000, pos.x, pos.y, pos.z, unit->sizeMultiplier);
         part->work[PARTS_WORK_EFFECT_END] = 0;
         part->work[PARTS_WORK_CHARGE_LEVEL] = 0;
         event->userdata[1] = 0;
@@ -2020,7 +2020,7 @@ USER_FUNC(_tsuranuki_effect_control) {
     {
         f32 size = 2.0f + 0.006f * event->userdata[1];
 
-        size *= unit->mSizeMultiplier;
+        size *= unit->sizeMultiplier;
         effect = event->userdatap[0];
         ((EffNokotarouWork*)effect->userdata)->position.x = pos.x;
         ((EffNokotarouWork*)effect->userdata)->position.y = pos.y;
@@ -2046,7 +2046,7 @@ static USER_FUNC(_check_guard_koura) {
     id = evtGetValue(event, args[0]);
     index = args[1];
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    if (!(unit->mAttributeFlags & kShellShielded)) {
+    if (!(unit->attributeFlags & kShellShielded)) {
         evtSetValue(event, index, -1);
         return EVT_RETURN_DONE;
     }

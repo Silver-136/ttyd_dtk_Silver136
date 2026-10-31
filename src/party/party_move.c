@@ -278,7 +278,7 @@ f32 partyGetTargetMovespd(s32 id) {
         if (mario->baseSpeed > 0.0f) {
             return mario->baseSpeed;
         }
-        return mario->mBaseDashSpeed;
+        return mario->baseDashSpeed;
     }
     far = FALSE;
     other = anotherPartyGetPtr(id != 0);
@@ -295,7 +295,7 @@ f32 partyGetTargetMovespd(s32 id) {
     if (mario->baseSpeed > 0.0f) {
         return mario->baseSpeed;
     }
-    return mario->mBaseDashSpeed;
+    return mario->baseDashSpeed;
 }
 
 f32 partyGetTargetMovespd2(PartyEntry* party) {
@@ -307,13 +307,13 @@ f32 partyGetTargetMovespd2(PartyEntry* party) {
         if (mario->baseSpeed > 0.0f) {
             return mario->baseSpeed;
         }
-        return mario->mBaseDashSpeed;
+        return mario->baseDashSpeed;
     }
     if (party->trigFlags & PARTY_TRIG_FOLLOW_CLOSE) {
         if (mario->baseSpeed > 0.0f) {
             return mario->baseSpeed;
         }
-        return mario->mBaseDashSpeed;
+        return mario->baseDashSpeed;
     }
     far = FALSE;
     other = partyGetPtr(marioGetPartyId());
@@ -329,7 +329,7 @@ f32 partyGetTargetMovespd2(PartyEntry* party) {
     if (mario->baseSpeed > 0.0f) {
         return mario->baseSpeed;
     }
-    return mario->mBaseDashSpeed;
+    return mario->baseDashSpeed;
 }
 
 void partyNextReadId(s32 id) {

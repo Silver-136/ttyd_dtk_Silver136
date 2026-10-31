@@ -44,14 +44,14 @@ static EvtWord wait_event_spark[27];
  * parts and init event.
  */
 BattleUnitKind unit_bomhei = {
-    UNIT_BOB_OMB, // mUnitType
+    UNIT_BOB_OMB, // unitType
     "btl_un_bomhei", // name
     4, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    12, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    12, // level
+    0, // bonusExp
     1, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -86,7 +86,7 @@ BattleUnitKind unit_bomhei = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -194,9 +194,9 @@ static BattleWeapon weapon_bomhei_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -218,7 +218,7 @@ static BattleWeapon weapon_bomhei_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -231,9 +231,9 @@ static BattleWeapon weapon_bomhei_bomb = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -255,7 +255,7 @@ static BattleWeapon weapon_bomhei_bomb = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

@@ -76,18 +76,18 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     memset(unit, 0, sizeof(BattleUnit));
     BattleSetUnitPtr(wp, i, unit);
     unit->unitId = i;
-    unit->mKindParams = setup->mUnitKindParams;
-    unit->dataTable = unit->mKindParams->dataTable;
-    unit->initialKind = setup->mUnitKindParams->mUnitType;
-    unit->currentKind = setup->mUnitKindParams->mUnitType;
+    unit->kindParams = setup->unitKindParams;
+    unit->dataTable = unit->kindParams->dataTable;
+    unit->initialKind = setup->unitKindParams->unitType;
+    unit->currentKind = setup->unitKindParams->unitType;
     BattleStatusEffectInit(unit);
     BattleStatusIconInit(unit);
     BattleStatusChangeInfoWorkInit(unit);
     unit->groupSetupId = -1;
-    unit->mAlliance = setup->alliance;
-    unit->mLevel = unit->mKindParams->mLevel;
+    unit->alliance = setup->alliance;
+    unit->level = unit->kindParams->level;
     if (unit->currentKind == UNIT_MARIO || (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX)) {
-        unit->mLevel = pouchGetPtr()->level;
+        unit->level = pouchGetPtr()->level;
     }
     unit->attackPhase = setup->attackPhase;
     unit->unisonPhaseEventCode = NULL;
@@ -105,85 +105,85 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     BtlUnit_SetRotateOffset(unit, 0.0f, 0.0f, 0.0f);
     BtlUnit_SetScale(unit, 1.0f, 1.0f, 1.0f);
     BtlUnit_SetBaseScale(unit, 1.0f, 1.0f, 1.0f);
-    unit->offsetCenter = unit->mKindParams->centerOffset;
-    unit->heldItemBaseOffset = unit->mKindParams->heldItemBaseOffset;
-    unit->bintaHitOffset = unit->mKindParams->bintaHitOffset;
-    unit->kissHitOffset = unit->mKindParams->kissHitOffset;
-    unit->baseMaxHp = setup->mUnitKindParams->maxHp;
+    unit->offsetCenter = unit->kindParams->centerOffset;
+    unit->heldItemBaseOffset = unit->kindParams->heldItemBaseOffset;
+    unit->bintaHitOffset = unit->kindParams->bintaHitOffset;
+    unit->kissHitOffset = unit->kindParams->kissHitOffset;
+    unit->baseMaxHp = setup->unitKindParams->maxHp;
     unit->maxHp = unit->baseMaxHp;
-    unit->currentHp = setup->mUnitKindParams->maxHp;
-    unit->baseMaxFp = setup->mUnitKindParams->maxFp;
+    unit->currentHp = setup->unitKindParams->maxHp;
+    unit->baseMaxFp = setup->unitKindParams->maxFp;
     unit->maxFp = unit->baseMaxFp;
-    unit->currentFp = setup->mUnitKindParams->maxFp;
-    unit->mSizeMultiplier = 1.0f;
-    unit->mTokenFlags = 0;
-    unit->mStatusFlags = 0;
+    unit->currentFp = setup->unitKindParams->maxFp;
+    unit->sizeMultiplier = 1.0f;
+    unit->tokenFlags = 0;
+    unit->statusFlags = 0;
     unit->protectId = -1;
     BtlUnit_HpGaugeInit(unit);
-    unit->mWidth = unit->mKindParams->width;
-    unit->mHeight = unit->mKindParams->height;
-    unit->mStatusIconOffset[0] = unit->mKindParams->hitOffset[0];
-    unit->mStatusIconOffset[1] = unit->mKindParams->hitOffset[1];
-    unit->mHpGaugeOffset[0] = unit->mKindParams->hpGaugeOffset[0];
-    unit->mHpGaugeOffset[1] = unit->mKindParams->hpGaugeOffset[1];
-    unit->cutBaseOffset = unit->mKindParams->cutBaseOffset;
-    unit->cutWidth = unit->mKindParams->cutWidth;
-    unit->cutHeight = unit->mKindParams->cutHeight;
-    unit->swallowRate = unit->mKindParams->swallowChance;
-    unit->swallowAttribute = unit->mKindParams->swallowAttributes;
+    unit->width = unit->kindParams->width;
+    unit->height = unit->kindParams->height;
+    unit->statusIconOffset[0] = unit->kindParams->hitOffset[0];
+    unit->statusIconOffset[1] = unit->kindParams->hitOffset[1];
+    unit->hpGaugeOffset[0] = unit->kindParams->hpGaugeOffset[0];
+    unit->hpGaugeOffset[1] = unit->kindParams->hpGaugeOffset[1];
+    unit->cutBaseOffset = unit->kindParams->cutBaseOffset;
+    unit->cutWidth = unit->kindParams->cutWidth;
+    unit->cutHeight = unit->kindParams->cutHeight;
+    unit->swallowRate = unit->kindParams->swallowChance;
+    unit->swallowAttribute = unit->kindParams->swallowAttributes;
     BtlUnit_ClearStatus(unit);
-    unit->mAttributeFlags = unit->mKindParams->attributeFlags;
-    unit->vulnStatus = (BattleVulnerableStatus*)unit->mKindParams->statusVulnerability;
+    unit->attributeFlags = unit->kindParams->attributeFlags;
+    unit->vulnStatus = (BattleVulnerableStatus*)unit->kindParams->statusVulnerability;
     unit->maxMoveCount = 1;
     unit->movesRemaining = 1;
     unit->moveDirection = 0;
-    unit->faceDirection = wp->alliances[unit->mAlliance].attackDirection;
+    unit->faceDirection = wp->alliances[unit->alliance].attackDirection;
     unit->work[0] = setup->unitWork[0];
     unit->work[1] = setup->unitWork[1];
     unit->work[2] = setup->unitWork[2];
     unit->work[3] = setup->unitWork[3];
 
-    n = (u8)unit->mKindParams->numParts;
+    n = (u8)unit->kindParams->numParts;
     part = (BattleUnitPart*)BattleAlloc(n * sizeof(BattleUnitPart));
     memset(part, 0, n * sizeof(BattleUnitPart));
-    unit->mParts = part;
-    kpart = unit->mKindParams->mParts;
+    unit->parts = part;
+    kpart = unit->kindParams->parts;
     while (TRUE) {
-        part->mKindPartParams = kpart;
-        part->mOwner = unit;
-        part->attributes = part->mKindPartParams->attributes;
-        part->counterAttributes = part->mKindPartParams->counterAttributes;
+        part->kindPartParams = kpart;
+        part->owner = unit;
+        part->attributes = part->kindPartParams->attributes;
+        part->counterAttributes = part->kindPartParams->counterAttributes;
         if (part->attributes & kMainPart) {
-            unit->talkPartId = part->mKindPartParams->partNum;
+            unit->talkPartId = part->kindPartParams->partNum;
         }
-        part->defense = part->mKindPartParams->defense;
-        part->defenseAttr = part->mKindPartParams->defenseAttr;
-        part->shadowSize = part->mKindPartParams->shadowSize;
-        part->reserved_1A4 = part->mKindPartParams->reserved_32;
+        part->defense = part->kindPartParams->defense;
+        part->defenseAttr = part->kindPartParams->defenseAttr;
+        part->shadowSize = part->kindPartParams->shadowSize;
+        part->hitHeight = part->kindPartParams->hitHeight;
         part->shadowScale = 1.0f;
         part->moveDirection = 0;
-        part->faceDirection = wp->alliances[unit->mAlliance].attackDirection;
-        part->mPositionOffset.x = part->mKindPartParams->positionOffset.x;
-        part->mPositionOffset.y = part->mKindPartParams->positionOffset.y;
-        part->mPositionOffset.z = part->mKindPartParams->positionOffset.z;
+        part->faceDirection = wp->alliances[unit->alliance].attackDirection;
+        part->positionOffset.x = part->kindPartParams->positionOffset.x;
+        part->positionOffset.y = part->kindPartParams->positionOffset.y;
+        part->positionOffset.z = part->kindPartParams->positionOffset.z;
         BtlUnit_SetPartsBaseScale(part, 1.0f, 1.0f, 1.0f);
         BtlUnit_SetPartsScale(part, 1.0f, 1.0f, 1.0f);
         BtlUnit_SetPartsBaseRotate(part, 0.0f, 0.0f, 0.0f);
         BtlUnit_SetPartsRotate(part, 0.0f, 0.0f, 0.0f);
         BtlUnit_SetPartsRotateOffset(part, 0.0f, 0.0f, 0.0f);
         part->rotationOrder = 0;
-        part->mHitBaseOffset.x = part->mKindPartParams->hitBaseOffset.x;
-        part->mHitBaseOffset.y = part->mKindPartParams->hitBaseOffset.y;
-        part->mHitBaseOffset.z = part->mKindPartParams->hitBaseOffset.z;
-        part->mHitOffset.x = 0.0f;
-        part->mHitOffset.y = 0.0f;
-        part->mHitOffset.z = 0.0f;
-        part->mHitCursorBaseOffset.x = part->mKindPartParams->hitCursorBaseOffset.x;
-        part->mHitCursorBaseOffset.y = part->mKindPartParams->hitCursorBaseOffset.y;
-        part->mHitCursorBaseOffset.z = part->mKindPartParams->hitCursorBaseOffset.z;
-        part->mHitCursorOffset.x = 0.0f;
-        part->mHitCursorOffset.y = 0.0f;
-        part->mHitCursorOffset.z = 0.0f;
+        part->hitBaseOffset.x = part->kindPartParams->hitBaseOffset.x;
+        part->hitBaseOffset.y = part->kindPartParams->hitBaseOffset.y;
+        part->hitBaseOffset.z = part->kindPartParams->hitBaseOffset.z;
+        part->hitOffset.x = 0.0f;
+        part->hitOffset.y = 0.0f;
+        part->hitOffset.z = 0.0f;
+        part->hitCursorBaseOffset.x = part->kindPartParams->hitCursorBaseOffset.x;
+        part->hitCursorBaseOffset.y = part->kindPartParams->hitCursorBaseOffset.y;
+        part->hitCursorBaseOffset.z = part->kindPartParams->hitCursorBaseOffset.z;
+        part->hitCursorOffset.x = 0.0f;
+        part->hitCursorOffset.y = 0.0f;
+        part->hitCursorOffset.z = 0.0f;
         part->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
         part->hitOffsetX = setup->hitOffsetX;
         part->poseTable = kpart->poseTable;
@@ -194,19 +194,19 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
         part->poseType = 0;
         part->poseState = 0;
         part->handle = -1;
-        part->partName = part->mKindPartParams->partName;
+        part->partName = part->kindPartParams->partName;
         if (--n <= 0) break;
         body = part;
         part++;
-        body->mNextPart = part;
+        body->nextPart = part;
         kpart++;
     }
-    part->mNextPart = NULL;
+    part->nextPart = NULL;
 
     body = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
     unit->talkPose = BtlUnit_GetPoseNameFromType(body, POSE_TYPE_TALK);
     unit->stayPose = BtlUnit_GetPoseNameFromType(body, POSE_TYPE_NEUTRAL);
-    unit->mMoveColorLv = 0xFF;
+    unit->moveColorLv = 0xFF;
     unit->moveColorLvDisp = 0xFF;
     btlDispEntAnime(unit);
     unit->countersetWeapon = NULL;
@@ -220,8 +220,8 @@ BattleUnit* BtlUnit_Entry(BattleUnitSetup* setup) {
     }
     BtlUnit_SetParamFromPouch(unit);
     unit->initEventId = 0;
-    if (unit->mKindParams->initEventCode) {
-        evt = evtEntry(unit->mKindParams->initEventCode, 10, 0);
+    if (unit->kindParams->initEventCode) {
+        evt = evtEntry(unit->kindParams->initEventCode, 10, 0);
         evt->unitId = unit->unitId;
         unit->initEventId = evt->eventId;
     }
@@ -283,7 +283,7 @@ BOOL BtlUnit_Delete(BattleUnit* unit) {
         smartFree(unit->screenTexBuf);
         unit->screenTexBuf = NULL;
     }
-    for (part = unit->mParts; part; part = part->mNextPart) {
+    for (part = unit->parts; part; part = part->nextPart) {
         if (part->handle != -1) {
             part->handle = -1;
         }
@@ -292,7 +292,7 @@ BOOL BtlUnit_Delete(BattleUnit* unit) {
             animPoseRelease(part->poseId);
         }
     }
-    BattleFree(unit->mParts);
+    BattleFree(unit->parts);
     BattleFree(unit);
     BattleSetUnitPtr(wp, i, NULL);
     return TRUE;
@@ -348,16 +348,16 @@ s32 BtlUnit_GetUnitId(BattleUnit* unit) {
 
 /** Finds the part with the given part number; a negative number, a one-part unit or no match gives the first part. */
 BattleUnitPart* BtlUnit_GetPartsPtr(BattleUnit* unit, s32 partNum) {
-    BattleUnitPart* part = unit->mParts;
+    BattleUnitPart* part = unit->parts;
 
     if (partNum < 0) {
         return part;
     }
-    if (!part->mNextPart) {
+    if (!part->nextPart) {
         return part;
     }
-    for (; part; part = part->mNextPart) {
-        if (part->mKindPartParams->partNum == partNum) {
+    for (; part; part = part->nextPart) {
+        if (part->kindPartParams->partNum == partNum) {
             return part;
         }
     }
@@ -370,9 +370,9 @@ s32 BtlUnit_GetBodyPartsId(BattleUnit* unit) {
     s32 ret = -1;
 
     if (unit) {
-        for (part = unit->mParts; part; part = part->mNextPart) {
+        for (part = unit->parts; part; part = part->nextPart) {
             if (part->attributes & kMainPart) {
-                ret = part->mKindPartParams->partNum;
+                ret = part->kindPartParams->partNum;
                 break;
             }
         }
@@ -382,23 +382,23 @@ s32 BtlUnit_GetBodyPartsId(BattleUnit* unit) {
 
 /** Reads the unit's battle position (stage coordinates). */
 void BtlUnit_GetPos(BattleUnit* unit, f32* x, f32* y, f32* z) {
-    *x = unit->mPosition.x;
-    *y = unit->mPosition.y;
-    *z = unit->mPosition.z;
+    *x = unit->position.x;
+    *y = unit->position.y;
+    *z = unit->position.z;
 }
 
 /** Sets the unit's battle position (stage coordinates). */
 void BtlUnit_SetPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    unit->mPosition.x = x;
-    unit->mPosition.y = y;
-    unit->mPosition.z = z;
+    unit->position.x = x;
+    unit->position.y = y;
+    unit->position.z = z;
 }
 
 /** Moves the unit's battle position by the given amounts. */
 void BtlUnit_AddPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    unit->mPosition.x += x;
-    unit->mPosition.y += y;
-    unit->mPosition.z += z;
+    unit->position.x += x;
+    unit->position.y += y;
+    unit->position.z += z;
 }
 
 /**
@@ -406,23 +406,23 @@ void BtlUnit_AddPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
  * see BtlUnit_GetPartsWorldPos).
  */
 void BtlUnit_GetPartsPos(BattleUnitPart* part, f32* x, f32* y, f32* z) {
-    *x = part->mPosition.x;
-    *y = part->mPosition.y;
-    *z = part->mPosition.z;
+    *x = part->position.x;
+    *y = part->position.y;
+    *z = part->position.z;
 }
 
 /** Sets a part's own position field. */
 void BtlUnit_SetPartsPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    part->mPosition.x = x;
-    part->mPosition.y = y;
-    part->mPosition.z = z;
+    part->position.x = x;
+    part->position.y = y;
+    part->position.z = z;
 }
 
 /** Moves a part's own position field by the given amounts. */
 void BtlUnit_AddPartsPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    part->mPosition.x += x;
-    part->mPosition.y += y;
-    part->mPosition.z += z;
+    part->position.x += x;
+    part->position.y += y;
+    part->position.z += z;
 }
 
 /**
@@ -430,13 +430,13 @@ void BtlUnit_AddPartsPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
  * otherwise the unit's position plus the part's offset, with x mirrored by the unit's facing direction.
  */
 void BtlUnit_GetPartsWorldPos(BattleUnitPart* part, f32* x, f32* y, f32* z) {
-    BattleUnit* unit = part->mOwner;
+    BattleUnit* unit = part->owner;
     f32 ux, ox, uy, oy, uz, oz;
 
     if (part->attributes & kAbsolutePosition) {
-        *x = part->mPosition.x;
-        *y = part->mPosition.y;
-        *z = part->mPosition.z;
+        *x = part->position.x;
+        *y = part->position.y;
+        *z = part->position.z;
     } else {
         BtlUnit_GetPos(unit, &ux, &uy, &uz);
         BtlUnit_GetPartsOffsetPos(part, &ox, &oy, &oz);
@@ -452,58 +452,58 @@ void BtlUnit_GetPartsWorldPos(BattleUnitPart* part, f32* x, f32* y, f32* z) {
  */
 void BtlUnit_GetHitPos(BattleUnit* unit, BattleUnitPart* part, f32* x, f32* y, f32* z) {
     f32 y_multiply = 1.0f;
-    s32 direction = _battleWorkPointer->alliances[unit->mAlliance].attackDirection;
+    s32 direction = _battleWorkPointer->alliances[unit->alliance].attackDirection;
     BtlUnit_GetPartsWorldPos(part, x, y, z);
     //add hit base offset
-    *x = ((f32)direction * (part->mHitBaseOffset.x * unit->mSizeMultiplier)) + *x;
-    *y = (y_multiply * (part->mHitBaseOffset.y * unit->mSizeMultiplier)) + *y;
-    *z = (part->mHitBaseOffset.z * unit->mSizeMultiplier) + *z;
+    *x = ((f32)direction * (part->hitBaseOffset.x * unit->sizeMultiplier)) + *x;
+    *y = (y_multiply * (part->hitBaseOffset.y * unit->sizeMultiplier)) + *y;
+    *z = (part->hitBaseOffset.z * unit->sizeMultiplier) + *z;
     //add hit offset
-    *x = ((f32)direction * (part->mHitOffset.x * unit->mSizeMultiplier)) + *x;
-    *y = (y_multiply * (part->mHitOffset.y * unit->mSizeMultiplier)) + *y;
-    *z = (part->mHitOffset.z * unit->mSizeMultiplier) + *z;
+    *x = ((f32)direction * (part->hitOffset.x * unit->sizeMultiplier)) + *x;
+    *y = (y_multiply * (part->hitOffset.y * unit->sizeMultiplier)) + *y;
+    *z = (part->hitOffset.z * unit->sizeMultiplier) + *z;
 }
 
 /** Sets the extra hit offset added on top of a part's base hit offset. */
 void BtlUnit_SetHitOffset(BattleUnit* unit, BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    part->mHitOffset.x = x;
-    part->mHitOffset.y = y;
-    part->mHitOffset.z = z;
+    part->hitOffset.x = x;
+    part->hitOffset.y = y;
+    part->hitOffset.z = z;
 }
 
 /** Sets the extra offset of the target cursor shown over a part. */
 void BtlUnit_SetHitCursorOffset(BattleUnit* unit, BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    part->mHitCursorOffset.x = x;
-    part->mHitCursorOffset.y = y;
-    part->mHitCursorOffset.z = z;
+    part->hitCursorOffset.x = x;
+    part->hitCursorOffset.y = y;
+    part->hitCursorOffset.z = z;
 }
 
 /** Reads the unit's home position, the spot it returns to after acting. */
 void BtlUnit_GetHomePos(BattleUnit* unit, f32* x, f32* y, f32* z) {
-    *x = unit->mHomePosition.x;
-    *y = unit->mHomePosition.y;
-    *z = unit->mHomePosition.z;
+    *x = unit->homePosition.x;
+    *y = unit->homePosition.y;
+    *z = unit->homePosition.z;
 }
 
 /** Sets the unit's home position, the spot it returns to after acting. */
 void BtlUnit_SetHomePos(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    unit->mHomePosition.x = x;
-    unit->mHomePosition.y = y;
-    unit->mHomePosition.z = z;
+    unit->homePosition.x = x;
+    unit->homePosition.y = y;
+    unit->homePosition.z = z;
 }
 
 /** Moves the unit's home position by the given amounts. */
 void BtlUnit_AddHomePos(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    unit->mHomePosition.x += x;
-    unit->mHomePosition.y += y;
-    unit->mHomePosition.z += z;
+    unit->homePosition.x += x;
+    unit->homePosition.y += y;
+    unit->homePosition.z += z;
 }
 
 /** Sets a part's home position. */
 void BtlUnit_SetPartsHomePos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    part->mHomePosition.x = x;
-    part->mHomePosition.y = y;
-    part->mHomePosition.z = z;
+    part->homePosition.x = x;
+    part->homePosition.y = y;
+    part->homePosition.z = z;
 }
 
 /** Sets the unit's rotation in degrees, each axis normalised to 0..360 with 360 folded to 0. */
@@ -514,108 +514,108 @@ void BtlUnit_SetRotate(BattleUnit* unit, f32 x, f32 y, f32 z) {
     if (new_x >= 360.0f) {
         new_x = 0.0f;
     }
-    unit->mRotation.x = new_x;
+    unit->rotation.x = new_x;
 
     new_y = reviseAngle(y);
     if (new_y >= 360.0f) {
         new_y = 0.0f;
     }
-    unit->mRotation.y = new_y;
+    unit->rotation.y = new_y;
 
     new_z = reviseAngle(z);
     if (new_z >= 360.0f) {
         new_z = 0.0f;
     }
-    unit->mRotation.z = new_z;
+    unit->rotation.z = new_z;
 }
 
 /** Reads the unit's rotation in degrees. */
 void BtlUnit_GetRotate(BattleUnit* unit, f32* x, f32* y, f32* z) {
-    *x = unit->mRotation.x;
-    *y = unit->mRotation.y;
-    *z = unit->mRotation.z;
+    *x = unit->rotation.x;
+    *y = unit->rotation.y;
+    *z = unit->rotation.z;
 }
 
 /** Turns the unit by the given degrees, normalising each axis to 0..360. */
 void BtlUnit_AddRotate(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    unit->mRotation.x = reviseAngle(unit->mRotation.x + x);
-    if (unit->mRotation.x >= 360.0f) {
-        unit->mRotation.x = 0.0f;
+    unit->rotation.x = reviseAngle(unit->rotation.x + x);
+    if (unit->rotation.x >= 360.0f) {
+        unit->rotation.x = 0.0f;
     }
-    unit->mRotation.y = reviseAngle(unit->mRotation.y + y);
-    if (unit->mRotation.y >= 360.0f) {
-        unit->mRotation.y = 0.0f;
+    unit->rotation.y = reviseAngle(unit->rotation.y + y);
+    if (unit->rotation.y >= 360.0f) {
+        unit->rotation.y = 0.0f;
     }
-    unit->mRotation.z = reviseAngle(unit->mRotation.z + z);
-    if (unit->mRotation.z >= 360.0f) {
-        unit->mRotation.z = 0.0f;
+    unit->rotation.z = reviseAngle(unit->rotation.z + z);
+    if (unit->rotation.z >= 360.0f) {
+        unit->rotation.z = 0.0f;
     }
 }
 
 /** Sets a part's rotation in degrees (not normalised). */
 void BtlUnit_SetPartsRotate(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    part->mRotation.x = x;
-    part->mRotation.y = y;
-    part->mRotation.z = z;
+    part->rotation.x = x;
+    part->rotation.y = y;
+    part->rotation.z = z;
 }
 
 /** Reads a part's rotation in degrees. */
 void BtlUnit_GetPartsRotate(BattleUnitPart* part, f32* x, f32* y, f32* z) {
-    *x = part->mRotation.x;
-    *y = part->mRotation.y;
-    *z = part->mRotation.z;
+    *x = part->rotation.x;
+    *y = part->rotation.y;
+    *z = part->rotation.z;
 }
 
 /** Turns a part by the given degrees, wrapping each axis back into 0..360 once. */
 void BtlUnit_AddPartsRotate(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    part->mRotation.x += x;
-    if (part->mRotation.x > 360.0f) {
-        part->mRotation.x -= 360.0f;
-    } else if (part->mRotation.x < 0.0f) {
-        part->mRotation.x += 360.0f;
+    part->rotation.x += x;
+    if (part->rotation.x > 360.0f) {
+        part->rotation.x -= 360.0f;
+    } else if (part->rotation.x < 0.0f) {
+        part->rotation.x += 360.0f;
     }
 
-    part->mRotation.y += y;
-    if (part->mRotation.y > 360.0f) {
-        part->mRotation.y -= 360.0f;
-    } else if (part->mRotation.y < 0.0f) {
-        part->mRotation.y += 360.0f;
+    part->rotation.y += y;
+    if (part->rotation.y > 360.0f) {
+        part->rotation.y -= 360.0f;
+    } else if (part->rotation.y < 0.0f) {
+        part->rotation.y += 360.0f;
     }
 
-    part->mRotation.z += z;
-    if (part->mRotation.z > 360.0f) {
-        part->mRotation.z -= 360.0f;
-    } else if (part->mRotation.z < 0.0f) {
-        part->mRotation.z += 360.0f;
+    part->rotation.z += z;
+    if (part->rotation.z > 360.0f) {
+        part->rotation.z -= 360.0f;
+    } else if (part->rotation.z < 0.0f) {
+        part->rotation.z += 360.0f;
     }
 }
 
 /** Sets the unit's base rotation in degrees (normalised), applied under its animated rotation. */
 void BtlUnit_SetBaseRotate(BattleUnit* unit, f32 x, f32 y, f32 z) {
-    unit->mBaseRotation.x = reviseAngle(x);
-    unit->mBaseRotation.y = reviseAngle(y);
-    unit->mBaseRotation.z = reviseAngle(z);
+    unit->baseRotation.x = reviseAngle(x);
+    unit->baseRotation.y = reviseAngle(y);
+    unit->baseRotation.z = reviseAngle(z);
 }
 
 /** Reads the unit's base rotation in degrees. */
 void BtlUnit_GetBaseRotate(BattleUnit* unit, f32* x, f32* y, f32* z) {
-    *x = unit->mBaseRotation.x;
-    *y = unit->mBaseRotation.y;
-    *z = unit->mBaseRotation.z;
+    *x = unit->baseRotation.x;
+    *y = unit->baseRotation.y;
+    *z = unit->baseRotation.z;
 }
 
 /** Sets a part's base rotation in degrees. */
 void BtlUnit_SetPartsBaseRotate(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    part->mBaseRotation.x = x;
-    part->mBaseRotation.y = y;
-    part->mBaseRotation.z = z;
+    part->baseRotation.x = x;
+    part->baseRotation.y = y;
+    part->baseRotation.z = z;
 }
 
 /** Reads a part's base rotation in degrees. */
 void BtlUnit_GetPartsBaseRotate(BattleUnitPart* part, f32* x, f32* y, f32* z) {
-    *x = part->mBaseRotation.x;
-    *y = part->mBaseRotation.y;
-    *z = part->mBaseRotation.z;
+    *x = part->baseRotation.x;
+    *y = part->baseRotation.y;
+    *z = part->baseRotation.z;
 }
 
 /**
@@ -625,13 +625,13 @@ void BtlUnit_GetPartsBaseRotate(BattleUnitPart* part, f32* x, f32* y, f32* z) {
 void BtlUnit_SetRotateOffset(BattleUnit* unit, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        unit->mRotationOffset.x = x;
+        unit->rotationOffset.x = x;
     }
     if (noValue != y) {
-        unit->mRotationOffset.y = y;
+        unit->rotationOffset.y = y;
     }
     if (noValue != z) {
-        unit->mRotationOffset.z = z;
+        unit->rotationOffset.z = z;
     }
 }
 
@@ -639,34 +639,34 @@ void BtlUnit_SetRotateOffset(BattleUnit* unit, f32 x, f32 y, f32 z) {
 void BtlUnit_SetPartsRotateOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        part->mRotationOffset.x = x;
+        part->rotationOffset.x = x;
     }
     if (noValue != y) {
-        part->mRotationOffset.y = y;
+        part->rotationOffset.y = y;
     }
     if (noValue != z) {
-        part->mRotationOffset.z = z;
+        part->rotationOffset.z = z;
     }
 }
 
 /** Moves a part's rotation pivot offset by the given amounts. */
 void BtlUnit_AddPartsRotateOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    part->mRotationOffset.x += x;
-    part->mRotationOffset.y += y;
-    part->mRotationOffset.z += z;
+    part->rotationOffset.x += x;
+    part->rotationOffset.y += y;
+    part->rotationOffset.z += z;
 }
 
 /** Sets the unit's base scale (its normal size, multiplied with the animated scale); -250000000.0 keeps an axis. */
 void BtlUnit_SetBaseScale(BattleUnit* unit, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        unit->mBaseScale.x = x;
+        unit->baseScale.x = x;
     }
     if (noValue != y) {
-        unit->mBaseScale.y = y;
+        unit->baseScale.y = y;
     }
     if (noValue != z) {
-        unit->mBaseScale.z = z;
+        unit->baseScale.z = z;
     }
 }
 
@@ -709,13 +709,13 @@ void BtlUnit_AddScale(BattleUnit* unit, f32 x, f32 y, f32 z) {
 void BtlUnit_SetPartsBaseScale(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        part->mBaseScale.x = x;
+        part->baseScale.x = x;
     }
     if (noValue != y) {
-        part->mBaseScale.y = y;
+        part->baseScale.y = y;
     }
     if (noValue != z) {
-        part->mBaseScale.z = z;
+        part->baseScale.z = z;
     }
 }
 
@@ -749,17 +749,17 @@ void BtlUnit_AddPartsScale(BattleUnitPart* part, f32 x, f32 y, f32 z) {
 
 /** Returns the unit's width, copied from its kind data at entry. */
 s32 BtlUnit_GetWidth(BattleUnit* unit) {
-    return unit->mWidth;
+    return unit->width;
 }
 
 /** Returns the unit's current height, copied from its kind data at entry unless a script changed it. */
 s32 BtlUnit_GetHeight(BattleUnit* unit) {
-    return unit->mHeight;
+    return unit->height;
 }
 
 /** Overrides the unit's height. */
 void BtlUnit_SetHeight(BattleUnit* unit, s16 height) {
-    unit->mHeight = height;
+    unit->height = height;
 }
 
 /**
@@ -769,67 +769,67 @@ void BtlUnit_SetHeight(BattleUnit* unit, s16 height) {
 void BtlUnit_SetOffsetPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        unit->mPositionOffset.x = x;
+        unit->positionOffset.x = x;
     }
     if (noValue != y) {
-        unit->mPositionOffset.y = y;
+        unit->positionOffset.y = y;
     }
     if (noValue != z) {
-        unit->mPositionOffset.z = z;
+        unit->positionOffset.z = z;
     }
 }
 
 /** Reads a part's offset from its unit's position. */
 void BtlUnit_GetPartsOffsetPos(BattleUnitPart* part, f32* x, f32* y, f32* z) {
-    *x = part->mPositionOffset.x;
-    *y = part->mPositionOffset.y;
-    *z = part->mPositionOffset.z;
+    *x = part->positionOffset.x;
+    *y = part->positionOffset.y;
+    *z = part->positionOffset.z;
 }
 
 /** Sets a part's offset from its unit's position; an axis passed as -250000000.0 is left unchanged. */
 void BtlUnit_SetPartsOffsetPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        part->mPositionOffset.x = x;
+        part->positionOffset.x = x;
     }
     if (noValue != y) {
-        part->mPositionOffset.y = y;
+        part->positionOffset.y = y;
     }
     if (noValue != z) {
-        part->mPositionOffset.z = z;
+        part->positionOffset.z = z;
     }
 }
 
 /** Moves a part's offset from its unit's position by the given amounts. */
 void BtlUnit_AddPartsOffsetPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
-    part->mPositionOffset.x += x;
-    part->mPositionOffset.y += y;
-    part->mPositionOffset.z += z;
+    part->positionOffset.x += x;
+    part->positionOffset.y += y;
+    part->positionOffset.z += z;
 }
 
 void BtlUnit_SetDispOffset(BattleUnit* unit, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        unit->mDisplayOffset.x = x;
+        unit->displayOffset.x = x;
     }
     if (noValue != y) {
-        unit->mDisplayOffset.y = y;
+        unit->displayOffset.y = y;
     }
     if (noValue != z) {
-        unit->mDisplayOffset.z = z;
+        unit->displayOffset.z = z;
     }
 }
 
 void BtlUnit_SetPartsDispOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        part->mDisplayOffset.x = x;
+        part->displayOffset.x = x;
     }
     if (noValue != y) {
-        part->mDisplayOffset.y = y;
+        part->displayOffset.y = y;
     }
     if (noValue != z) {
-        part->mDisplayOffset.z = z;
+        part->displayOffset.z = z;
     }
 }
 
@@ -837,13 +837,13 @@ void BtlUnit_SetPartsDispOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
 void BtlUnit_AddPartsDispOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        part->mDisplayOffset.x += x;
+        part->displayOffset.x += x;
     }
     if (noValue != y) {
-        part->mDisplayOffset.y += y;
+        part->displayOffset.y += y;
     }
     if (noValue != z) {
-        part->mDisplayOffset.z += z;
+        part->displayOffset.z += z;
     }
 }
 
@@ -851,13 +851,13 @@ void BtlUnit_AddPartsDispOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
 void BtlUnit_SetMoveStartPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        unit->mMoveStartPos.x = x;
+        unit->moveStartPos.x = x;
     }
     if (noValue != y) {
-        unit->mMoveStartPos.y = y;
+        unit->moveStartPos.y = y;
     }
     if (noValue != z) {
-        unit->mMoveStartPos.z = z;
+        unit->moveStartPos.z = z;
     }
 }
 
@@ -865,13 +865,13 @@ void BtlUnit_SetMoveStartPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
 void BtlUnit_SetPartsMoveStartPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        part->mMoveStartPos.x = x;
+        part->moveStartPos.x = x;
     }
     if (noValue != y) {
-        part->mMoveStartPos.y = y;
+        part->moveStartPos.y = y;
     }
     if (noValue != z) {
-        part->mMoveStartPos.z = z;
+        part->moveStartPos.z = z;
     }
 }
 
@@ -879,13 +879,13 @@ void BtlUnit_SetPartsMoveStartPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
 void BtlUnit_SetMoveCurrentPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        unit->mMoveCurrentPos.x = x;
+        unit->moveCurrentPos.x = x;
     }
     if (noValue != y) {
-        unit->mMoveCurrentPos.y = y;
+        unit->moveCurrentPos.y = y;
     }
     if (noValue != z) {
-        unit->mMoveCurrentPos.z = z;
+        unit->moveCurrentPos.z = z;
     }
 }
 
@@ -893,13 +893,13 @@ void BtlUnit_SetMoveCurrentPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
 void BtlUnit_SetPartsMoveCurrentPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        part->mMoveCurrentPos.x = x;
+        part->moveCurrentPos.x = x;
     }
     if (noValue != y) {
-        part->mMoveCurrentPos.y = y;
+        part->moveCurrentPos.y = y;
     }
     if (noValue != z) {
-        part->mMoveCurrentPos.z = z;
+        part->moveCurrentPos.z = z;
     }
 }
 
@@ -907,13 +907,13 @@ void BtlUnit_SetPartsMoveCurrentPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
 void BtlUnit_SetMoveTargetPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        unit->mMoveTargetPos.x = x;
+        unit->moveTargetPos.x = x;
     }
     if (noValue != y) {
-        unit->mMoveTargetPos.y = y;
+        unit->moveTargetPos.y = y;
     }
     if (noValue != z) {
-        unit->mMoveTargetPos.z = z;
+        unit->moveTargetPos.z = z;
     }
 }
 
@@ -921,44 +921,44 @@ void BtlUnit_SetMoveTargetPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
 void BtlUnit_SetPartsMoveTargetPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
-        part->mMoveTargetPos.x = x;
+        part->moveTargetPos.x = x;
     }
     if (noValue != y) {
-        part->mMoveTargetPos.y = y;
+        part->moveTargetPos.y = y;
     }
     if (noValue != z) {
-        part->mMoveTargetPos.z = z;
+        part->moveTargetPos.z = z;
     }
 }
 
 /** Sets the gravity used by the unit's scripted jumps and falls. */
 void BtlUnit_SetFallAccel(BattleUnit* unit, f32 fallAccel) {
-    unit->mFallAccel = fallAccel;
+    unit->fallAccel = fallAccel;
 }
 
 /** Sets the gravity used by a part's scripted jumps and falls. */
 void BtlUnit_SetPartsFallAccel(BattleUnitPart* part, f32 fallAccel) {
-    part->mFallAccel = fallAccel;
+    part->fallAccel = fallAccel;
 }
 
 /** Sets the horizontal speed of the unit's scripted moves. */
 void BtlUnit_SetMoveSpeed(BattleUnit* unit, f32 moveSpeedXZ) {
-    unit->mMoveSpeedXZ = moveSpeedXZ;
+    unit->moveSpeedXZ = moveSpeedXZ;
 }
 
 /** Sets the horizontal speed of a part's scripted moves. */
 void BtlUnit_SetPartsMoveSpeed(BattleUnitPart* part, f32 moveSpeedXZ) {
-    part->mMoveSpeedXZ = moveSpeedXZ;
+    part->moveSpeedXZ = moveSpeedXZ;
 }
 
 /** Sets the vertical speed of the unit's scripted jumps. */
 void BtlUnit_SetJumpSpeed(BattleUnit* unit, f32 moveSpeedY) {
-    unit->mMoveSpeedY = moveSpeedY;
+    unit->moveSpeedY = moveSpeedY;
 }
 
 /** Returns the unit's alliance: which side it fights on. */
 s8 BtlUnit_GetBelong(BattleUnit* unit) {
-    return unit->mAlliance;
+    return unit->alliance;
 }
 
 /**
@@ -968,7 +968,7 @@ s8 BtlUnit_GetBelong(BattleUnit* unit) {
 void _CheckMoveCount(BattleUnit* unit) {
     s8 maxmoves;
 
-    if (!(unit->mTokenFlags & kCurrentlyActing)) {
+    if (!(unit->tokenFlags & kCurrentlyActing)) {
         maxmoves = unit->maxMovesThisTurn;
         if (maxmoves > 0 && maxmoves == unit->movesRemaining) {
             BtlUnit_ResetMoveStatus(unit);
@@ -987,91 +987,91 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
 
     switch (type) {
         case STATUS_SLEEP:
-            status_strength = unit->mSleepTurns;
+            status_strength = unit->sleepTurns;
             status_turns = status_strength;
             break;
         case STATUS_STOP:
-            status_strength = unit->mStopTurns;
+            status_strength = unit->stopTurns;
             status_turns = status_strength;
             break;
         case STATUS_DIZZY:
-            status_strength = unit->mDizzyTurns;
+            status_strength = unit->dizzyTurns;
             status_turns = status_strength;
             break;
         case STATUS_POISON:
-            status_turns = unit->mPoisonTurns;
-            status_strength = unit->mPoisonStrength;
+            status_turns = unit->poisonTurns;
+            status_strength = unit->poisonStrength;
             break;
         case STATUS_CONFUSE:
-            status_strength = unit->mConfusionTurns;
+            status_strength = unit->confusionTurns;
             status_turns = status_strength;
             break;
         case STATUS_ELECTRIC:
-            status_strength = unit->mElectricTurns;
+            status_strength = unit->electricTurns;
             status_turns = status_strength;
             break;
         case STATUS_DODGY:
-            status_strength = unit->mDodgyTurns;
+            status_strength = unit->dodgyTurns;
             status_turns = status_strength;
             break;
         case STATUS_BURN:
-            status_strength = unit->mBurnTurns;
+            status_strength = unit->burnTurns;
             status_turns = status_strength;
             break;
         case STATUS_FREEZE:
-            status_strength = unit->mFreezeTurns;
+            status_strength = unit->freezeTurns;
             status_turns = status_strength;
             break;
         case STATUS_HUGE:
-            if (unit->mSizeChangeStrength > 0) {
-                status_turns = unit->mSizeChangeTurns;
-                status_strength = unit->mSizeChangeStrength;
+            if (unit->sizeChangeStrength > 0) {
+                status_turns = unit->sizeChangeTurns;
+                status_strength = unit->sizeChangeStrength;
             }
             break;
         case STATUS_TINY:
-            if (unit->mSizeChangeStrength < 0) {
-                status_turns = unit->mSizeChangeTurns;
-                status_strength = unit->mSizeChangeStrength;
+            if (unit->sizeChangeStrength < 0) {
+                status_turns = unit->sizeChangeTurns;
+                status_strength = unit->sizeChangeStrength;
             }
             break;
         case STATUS_ATTACK_UP:
-            if (unit->mAtkChangeStrength > 0) {
-                status_turns = unit->mAtkChangeTurns;
-                status_strength = unit->mAtkChangeStrength;
+            if (unit->atkChangeStrength > 0) {
+                status_turns = unit->atkChangeTurns;
+                status_strength = unit->atkChangeStrength;
             }
             break;
         case STATUS_ATTACK_DOWN:
-            if (unit->mAtkChangeStrength < 0) {
-                status_turns = unit->mAtkChangeTurns;
-                status_strength = unit->mAtkChangeStrength;
+            if (unit->atkChangeStrength < 0) {
+                status_turns = unit->atkChangeTurns;
+                status_strength = unit->atkChangeStrength;
             }
             break;
         case STATUS_DEFENSE_UP:
-            if (unit->mDefChangeStrength > 0) {
-                status_turns = unit->mDefChangeTurns;
-                status_strength = unit->mDefChangeStrength;
+            if (unit->defChangeStrength > 0) {
+                status_turns = unit->defChangeTurns;
+                status_strength = unit->defChangeStrength;
             }
             break;
         case STATUS_DEFENSE_DOWN:
-            if (unit->mDefChangeStrength < 0) {
-                status_turns = unit->mDefChangeTurns;
-                status_strength = unit->mDefChangeStrength;
+            if (unit->defChangeStrength < 0) {
+                status_turns = unit->defChangeTurns;
+                status_strength = unit->defChangeStrength;
             }
             break;
         case STATUS_FAST:
-            status_strength = unit->mFastTurns;
+            status_strength = unit->fastTurns;
             status_turns = status_strength;
             break;
         case STATUS_SLOW:
-            status_strength = unit->mSlowTurns;
+            status_strength = unit->slowTurns;
             status_turns = status_strength;
             break;
         case STATUS_CHARGE:
-            status_strength = unit->mChargeStrength;
+            status_strength = unit->chargeStrength;
             status_turns = status_strength;
             break;
         case STATUS_ALLERGIC:
-            status_strength = unit->mAllergicTurns;
+            status_strength = unit->allergicTurns;
             status_turns = status_strength;
             break;
         case STATUS_FLIPPED:
@@ -1079,27 +1079,27 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
             status_turns = status_strength;
             break;
         case STATUS_INVISIBLE:
-            status_strength = unit->mInvisibleTurns;
+            status_strength = unit->invisibleTurns;
             status_turns = status_strength;
             break;
         case STATUS_PAYBACK:
-            status_strength = unit->mPaybackTurns;
+            status_strength = unit->paybackTurns;
             status_turns = status_strength;
             break;
         case STATUS_HOLD_FAST:
-            status_strength = unit->mHoldFastTurns;
+            status_strength = unit->holdFastTurns;
             status_turns = status_strength;
             break;
         case STATUS_HP_REGEN:
-            status_turns = unit->mHpRegenTurns;
-            status_strength = unit->mHpRegenStrength;
+            status_turns = unit->hpRegenTurns;
+            status_strength = unit->hpRegenStrength;
             break;
         case STATUS_FP_REGEN:
-            status_turns = unit->mFpRegenTurns;
-            status_strength = unit->mFpRegenStrength;
+            status_turns = unit->fpRegenTurns;
+            status_strength = unit->fpRegenStrength;
             break;
         case STATUS_INSTANT_KILL:
-            status_strength = unit->mInstantKillStrength;
+            status_strength = unit->instantKillStrength;
             status_turns = status_strength;
             break;
         default:
@@ -1116,129 +1116,129 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
 BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
     switch (type) {
         case STATUS_SLEEP:
-            unit->mSleepTurns = turns;
-            unit->mSleepStrength = 0;
+            unit->sleepTurns = turns;
+            unit->sleepStrength = 0;
             break;
         case STATUS_STOP:
-            unit->mStopTurns = turns;
+            unit->stopTurns = turns;
             break;
         case STATUS_DIZZY:
-            unit->mDizzyTurns = turns;
+            unit->dizzyTurns = turns;
             break;
         case STATUS_POISON:
-            unit->mPoisonTurns = turns;
-            unit->mPoisonStrength = strength;
+            unit->poisonTurns = turns;
+            unit->poisonStrength = strength;
             break;
         case STATUS_CONFUSE:
-            unit->mConfusionTurns = turns;
+            unit->confusionTurns = turns;
             break;
         case STATUS_ELECTRIC:
-            unit->mElectricTurns = turns;
+            unit->electricTurns = turns;
             break;
         case STATUS_DODGY:
-            unit->mDodgyTurns = turns;
+            unit->dodgyTurns = turns;
             break;
         case STATUS_BURN:
-            if (unit->mFreezeTurns) {
-                unit->mFreezeTurns = 0;
+            if (unit->freezeTurns) {
+                unit->freezeTurns = 0;
                 return FALSE;
             }
-            unit->mBurnTurns = turns;
+            unit->burnTurns = turns;
             break;
         case STATUS_FREEZE:
-            if (unit->mBurnTurns) {
-                unit->mBurnTurns = 0;
+            if (unit->burnTurns) {
+                unit->burnTurns = 0;
                 return FALSE;
             }
-            unit->mFreezeTurns = turns;
+            unit->freezeTurns = turns;
             break;
         case STATUS_HUGE:
         case STATUS_TINY:
             if (!strength) {
                 if (type == STATUS_HUGE) {
-                    if (unit->mSizeChangeStrength >= 0) {
-                        unit->mSizeChangeTurns = 0;
-                        unit->mSizeChangeStrength = 0;
+                    if (unit->sizeChangeStrength >= 0) {
+                        unit->sizeChangeTurns = 0;
+                        unit->sizeChangeStrength = 0;
                         return FALSE;
                     }
-                } else if (unit->mSizeChangeStrength <= 0) {
-                    unit->mSizeChangeTurns = 0;
-                    unit->mSizeChangeStrength = 0;
+                } else if (unit->sizeChangeStrength <= 0) {
+                    unit->sizeChangeTurns = 0;
+                    unit->sizeChangeStrength = 0;
                     return FALSE;
                 }
                 return FALSE;
             }
-            unit->mSizeChangeTurns = turns;
-            unit->mSizeChangeStrength = strength;
+            unit->sizeChangeTurns = turns;
+            unit->sizeChangeStrength = strength;
             break;
         case STATUS_ATTACK_UP:
             if (!strength) {
-                if (unit->mAtkChangeStrength >= 0) {
-                    unit->mAtkChangeTurns = 0;
-                    unit->mAtkChangeStrength = 0;
+                if (unit->atkChangeStrength >= 0) {
+                    unit->atkChangeTurns = 0;
+                    unit->atkChangeStrength = 0;
                 }
                 return FALSE;
             }
-            unit->mAtkChangeTurns = turns;
-            unit->mAtkChangeStrength = strength;
+            unit->atkChangeTurns = turns;
+            unit->atkChangeStrength = strength;
             break;
         case STATUS_ATTACK_DOWN:
             if (!strength) {
-                if (unit->mAtkChangeStrength <= 0) {
-                    unit->mAtkChangeTurns = 0;
-                    unit->mAtkChangeStrength = 0;
+                if (unit->atkChangeStrength <= 0) {
+                    unit->atkChangeTurns = 0;
+                    unit->atkChangeStrength = 0;
                 }
                 return FALSE;
             }
-            unit->mAtkChangeTurns = turns;
-            unit->mAtkChangeStrength = strength;
+            unit->atkChangeTurns = turns;
+            unit->atkChangeStrength = strength;
             break;
         case STATUS_DEFENSE_UP:
         case STATUS_DEFENSE_DOWN:
             if (strength > 0) {
-                if (unit->mDefChangeStrength < 0) {
-                    unit->mDefChangeTurns = 0;
-                    unit->mDefChangeStrength = 0;
+                if (unit->defChangeStrength < 0) {
+                    unit->defChangeTurns = 0;
+                    unit->defChangeStrength = 0;
                     return FALSE;
                 }
-                unit->mDefChangeTurns = turns;
-                unit->mDefChangeStrength = strength;
+                unit->defChangeTurns = turns;
+                unit->defChangeStrength = strength;
             } else if (strength == 0) {
                 if (type == STATUS_DEFENSE_DOWN) {
-                    if (unit->mDefChangeStrength <= 0) {
-                        unit->mDefChangeTurns = 0;
-                        unit->mDefChangeStrength = 0;
+                    if (unit->defChangeStrength <= 0) {
+                        unit->defChangeTurns = 0;
+                        unit->defChangeStrength = 0;
                     }
-                } else if (unit->mDefChangeStrength >= 0) {
-                    unit->mDefChangeTurns = 0;
-                    unit->mDefChangeStrength = 0;
+                } else if (unit->defChangeStrength >= 0) {
+                    unit->defChangeTurns = 0;
+                    unit->defChangeStrength = 0;
                 }
                 return FALSE;
             } else {
-                if (unit->mDefChangeStrength > 0) {
-                    unit->mDefChangeTurns = 0;
-                    unit->mDefChangeStrength = 0;
+                if (unit->defChangeStrength > 0) {
+                    unit->defChangeTurns = 0;
+                    unit->defChangeStrength = 0;
                     return FALSE;
                 }
-                unit->mDefChangeTurns = turns;
-                unit->mDefChangeStrength = strength;
+                unit->defChangeTurns = turns;
+                unit->defChangeStrength = strength;
             }
             break;
         case STATUS_CHARGE:
-            unit->mChargeStrength += strength;
-            if (unit->mChargeStrength < 0) {
-                unit->mChargeStrength = 0;
+            unit->chargeStrength += strength;
+            if (unit->chargeStrength < 0) {
+                unit->chargeStrength = 0;
                 return FALSE;
             }
-            if (unit->mChargeStrength > 99) {
-                unit->mChargeStrength = 99;
+            if (unit->chargeStrength > 99) {
+                unit->chargeStrength = 99;
             }
             break;
         case STATUS_ALLERGIC:
             if (turns > 0) {
-                unit->mAllergicTurns = turns;
+                unit->allergicTurns = turns;
             } else {
-                unit->mAllergicTurns = 0;
+                unit->allergicTurns = 0;
                 return FALSE;
             }
             break;
@@ -1246,55 +1246,55 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
             unit->flippedTurns = turns;
             break;
         case STATUS_INVISIBLE:
-            unit->mInvisibleTurns = turns;
+            unit->invisibleTurns = turns;
             break;
         case STATUS_PAYBACK:
             if (turns > 0) {
-                unit->mPaybackTurns = turns;
+                unit->paybackTurns = turns;
             } else {
-                unit->mPaybackTurns = 0;
+                unit->paybackTurns = 0;
                 return FALSE;
             }
             break;
         case STATUS_HOLD_FAST:
-            unit->mHoldFastTurns = turns;
+            unit->holdFastTurns = turns;
             break;
         case STATUS_FAST:
-            if (unit->mSlowTurns > 0) {
+            if (unit->slowTurns > 0) {
                 if (turns > 0) {
-                    unit->mSlowTurns = 0;
+                    unit->slowTurns = 0;
                     _CheckMoveCount(unit);
                     return FALSE;
                 }
-                unit->mFastTurns = turns;
+                unit->fastTurns = turns;
             } else {
-                unit->mFastTurns = turns;
+                unit->fastTurns = turns;
             }
             _CheckMoveCount(unit);
             break;
         case STATUS_SLOW:
-            if (unit->mFastTurns > 0) {
+            if (unit->fastTurns > 0) {
                 if (turns > 0) {
-                    unit->mFastTurns = 0;
+                    unit->fastTurns = 0;
                     _CheckMoveCount(unit);
                     return FALSE;
                 }
-                unit->mSlowTurns = turns;
+                unit->slowTurns = turns;
             } else {
-                unit->mSlowTurns = turns;
+                unit->slowTurns = turns;
             }
             _CheckMoveCount(unit);
             break;
         case STATUS_HP_REGEN:
-            unit->mHpRegenTurns = turns;
-            unit->mHpRegenStrength = strength;
+            unit->hpRegenTurns = turns;
+            unit->hpRegenStrength = strength;
             break;
         case STATUS_FP_REGEN:
-            unit->mFpRegenTurns = turns;
-            unit->mFpRegenStrength = strength;
+            unit->fpRegenTurns = turns;
+            unit->fpRegenStrength = strength;
             break;
         case STATUS_INSTANT_KILL:
-            unit->mInstantKillStrength = turns;
+            unit->instantKillStrength = turns;
             break;
         default:
             break;
@@ -1302,9 +1302,9 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
     return TRUE;
 }
 
-// the 0x1E bytes from mSleepTurns are every status's turns and strength
+// the 0x1E bytes from sleepTurns are every status's turns and strength
 void BtlUnit_ClearStatus(BattleUnit* unit) {
-    memset(&unit->mSleepTurns, 0, sizeof(BtlStatusCopy));
+    memset(&unit->sleepTurns, 0, sizeof(BtlStatusCopy));
     BtlUnit_SetStatus(unit, STATUS_CHARGE, 1, -99);
     BattleStatusChangeInfoWorkInit(unit);
 }
@@ -1337,7 +1337,7 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
             } else {
                 turns = 0;
             }
-            unit->mSleepTurns = turns;
+            unit->sleepTurns = turns;
             if (!turns) {
                 return TRUE;
             }
@@ -1385,8 +1385,8 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
             if (!turns) {
                 strength = 0;
             }
-            unit->mSizeChangeTurns = turns;
-            unit->mSizeChangeStrength = strength;
+            unit->sizeChangeTurns = turns;
+            unit->sizeChangeStrength = strength;
             if (!turns) {
                 return TRUE;
             }
@@ -1403,8 +1403,8 @@ BOOL BtlUnit_CheckRecoveryStatus(BattleUnit* unit, s8 type) {
             if (!turns) {
                 strength = 0;
             }
-            unit->mAtkChangeTurns = turns;
-            unit->mAtkChangeStrength = strength;
+            unit->atkChangeTurns = turns;
+            unit->atkChangeStrength = strength;
             if (!turns) {
                 return TRUE;
             }
@@ -1452,19 +1452,19 @@ BOOL BtlUnit_CheckStatus(BattleUnit* unit, s8 type) {
 /** Tests the unit's status flags (flipped, danger, peril, ...); a NULL unit gives 0. */
 s32 BtlUnit_CheckStatusFlag(BattleUnit* unit, s32 flags) {
     if (unit) {
-        return unit->mStatusFlags & flags;
+        return unit->statusFlags & flags;
     }
     return 0;
 }
 
 /** Sets status flags (flipped, danger, peril, ...) on the unit. */
 void BtlUnit_OnStatusFlag(BattleUnit* unit, s32 flags) {
-    unit->mStatusFlags |= flags;
+    unit->statusFlags |= flags;
 }
 
 /** Clears status flags on the unit. */
 void BtlUnit_OffStatusFlag(BattleUnit* unit, s32 flags) {
-    unit->mStatusFlags &= ~flags;
+    unit->statusFlags &= ~flags;
 }
 
 s32 BtlUnit_CheckUnitFlag(BattleUnit* unit, s32 flags) {
@@ -1564,9 +1564,9 @@ void BtlUnit_GetTalkTogePos(s32 unitId, f32* x, f32* y, f32* z) {
     f32 posX, posY, posZ;
 
     BtlUnit_GetPos(unit, &posX, &posY, &posZ);
-    posX += unit->faceDirection * (unit->mKindParams->talkTogeBaseOffset.x + unit->togeOffset.x);
-    posY += unit->mKindParams->talkTogeBaseOffset.y + unit->togeOffset.y;
-    posZ += unit->mKindParams->talkTogeBaseOffset.z + unit->togeOffset.z;
+    posX += unit->faceDirection * (unit->kindParams->talkTogeBaseOffset.x + unit->togeOffset.x);
+    posY += unit->kindParams->talkTogeBaseOffset.y + unit->togeOffset.y;
+    posZ += unit->kindParams->talkTogeBaseOffset.z + unit->togeOffset.z;
     *x = posX;
     *y = posY;
     *z = posZ;
@@ -1574,7 +1574,7 @@ void BtlUnit_GetTalkTogePos(s32 unitId, f32* x, f32* y, f32* z) {
 
 /** Returns the opposing alliance: 0 and 1 swap, any other alliance is returned unchanged. */
 s32 BtlUnit_GetEnemyBelong(BattleUnit* unit) {
-    s32 belong = unit->mAlliance;
+    s32 belong = unit->alliance;
     switch (belong) {
         case ALLIANCE_PLAYER:
             belong = ALLIANCE_ENEMY;
@@ -1606,7 +1606,7 @@ void BtlUnit_SetTotalHitDamage(BattleUnit* unit, s16 damage) {
  * it must be on the player's side, not the Shell Shield, and not asleep, stopped, frozen, KO'd or flipped.
  */
 BOOL BtlUnit_GetACPossibility(BattleUnit* unit) {
-    if (unit->mAlliance) {
+    if (unit->alliance) {
         return FALSE;
     }
     if (unit->currentKind == UNIT_SHELL_SHIELD) {
@@ -1676,8 +1676,8 @@ void BtlUnit_SetParamFromPouch(BattleUnit* unit) {
         unit->currentHp = *(s16*)((u8*)pouch->partyData + BattleTransPartyId(unit->currentKind) * sizeof(PouchPartyData) + offsetof(PouchPartyData, currentHP)); // FAKE: byte-offset load so the field offset folds into the index (mulli/addi/lhax), as in the target
         BtlUnit_ReviseHpFp(unit);
         info = &wp->partyInfo[unit->currentKind - TYPE_PARTNER_MIN];
-        unit->mSizeMultiplier = info->sizeMultiplier;
-        unit->mStatusFlags = info->statusFlags;
+        unit->sizeMultiplier = info->sizeMultiplier;
+        unit->statusFlags = info->statusFlags;
         unit->statusTurns = info->statusTurns;
 #ifdef VERSION_G8ME01
         unit->usCommandDisabled[0] = info->usCommandDisabled[0];
@@ -1740,8 +1740,8 @@ void BtlUnit_SetParamToPouch(BattleUnit* unit) {
         s32 id = BattleTransPartyId(unit->currentKind);
         *(s16*)((u8*)pouch + id * sizeof(PouchPartyData) + offsetof(PouchPartyData, currentHP)) = unit->currentHp; // FAKE: byte-offset store so the field offset folds into the index (mulli/addi/sthx), as in the target
         info = &wp->partyInfo[unit->currentKind - TYPE_PARTNER_MIN];
-        info->sizeMultiplier = unit->mSizeMultiplier;
-        info->statusFlags = unit->mStatusFlags;
+        info->sizeMultiplier = unit->sizeMultiplier;
+        info->statusFlags = unit->statusFlags;
         info->statusTurns = unit->statusTurns;
 #ifdef VERSION_G8ME01
         info->usCommandDisabled[0] = unit->usCommandDisabled[0];
@@ -1751,25 +1751,25 @@ void BtlUnit_SetParamToPouch(BattleUnit* unit) {
 }
 
 void BtlUnit_CheckPinchStatus(BattleUnit* unit, BOOL noAudience) {
-    if (unit->currentHp <= unit->mKindParams->mPerilHP && unit->currentHp < unit->maxHp) {
-        if (!(unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL)) {
-            unit->mStatusFlags |= UNIT_STATUS_FLAG_PERIL;
+    if (unit->currentHp <= unit->kindParams->perilHP && unit->currentHp < unit->maxHp) {
+        if (!(unit->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
+            unit->statusFlags |= UNIT_STATUS_FLAG_PERIL;
             if (!noAudience && unit->currentKind == UNIT_MARIO) {
                 BattleAudience_Case_MarioDanger();
             }
         }
-    } else if (unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL) {
-        unit->mStatusFlags &= ~UNIT_STATUS_FLAG_PERIL;
+    } else if (unit->statusFlags & UNIT_STATUS_FLAG_PERIL) {
+        unit->statusFlags &= ~UNIT_STATUS_FLAG_PERIL;
     }
-    if (unit->currentHp <= unit->mKindParams->mDangerHP && unit->currentHp < unit->maxHp) {
-        if (!(unit->mStatusFlags & UNIT_STATUS_FLAG_DANGER)) {
-            unit->mStatusFlags |= UNIT_STATUS_FLAG_DANGER;
-            if (!(unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL) && !noAudience && unit->currentKind == UNIT_MARIO) {
+    if (unit->currentHp <= unit->kindParams->dangerHP && unit->currentHp < unit->maxHp) {
+        if (!(unit->statusFlags & UNIT_STATUS_FLAG_DANGER)) {
+            unit->statusFlags |= UNIT_STATUS_FLAG_DANGER;
+            if (!(unit->statusFlags & UNIT_STATUS_FLAG_PERIL) && !noAudience && unit->currentKind == UNIT_MARIO) {
                 BattleAudience_Case_MarioPinch();
             }
         }
-    } else if (unit->mStatusFlags & UNIT_STATUS_FLAG_DANGER) {
-        unit->mStatusFlags &= ~UNIT_STATUS_FLAG_DANGER;
+    } else if (unit->statusFlags & UNIT_STATUS_FLAG_DANGER) {
+        unit->statusFlags &= ~UNIT_STATUS_FLAG_DANGER;
     }
 }
 
@@ -1782,7 +1782,7 @@ s32 BtlUnit_GetExp(BattleUnit* unit) {
     BattleWork* wp = _battleWorkPointer;
     PouchData* pouch = pouchGetPtr();
     s32 level = pouch->level;
-    s32 unitLevel = unit->mLevel;
+    s32 unitLevel = unit->level;
     FieldBattleInfo* fbat = wp->fbatInfo;
     f32 scale;
 
@@ -1808,7 +1808,7 @@ s32 BtlUnit_GetExp(BattleUnit* unit) {
     }
     {
         f32 t = scale * (f32)(unitLevel - level);
-        return (s32)(t / 2.0f) + unit->mKindParams->mBonusExp;
+        return (s32)(t / 2.0f) + unit->kindParams->bonusExp;
     }
 }
 
@@ -1819,9 +1819,9 @@ s32 BtlUnit_GetCoin(BattleUnit* unit) {
     if (!unit) {
         return 0;
     }
-    coins = unit->mKindParams->baseCoin;
-    for (i = 0; i < unit->mKindParams->bonusCoin; i++) {
-        if (irand(100) < unit->mKindParams->bonusCoinRate) {
+    coins = unit->kindParams->baseCoin;
+    for (i = 0; i < unit->kindParams->bonusCoin; i++) {
+        if (irand(100) < unit->kindParams->bonusCoinRate) {
             coins++;
         }
     }
@@ -2117,7 +2117,7 @@ void BtlUnit_SetCommandAnimPose(BattleUnit* unit) {
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, BtlUnit_GetBodyPartsId(unit));
     BOOL special = FALSE;
 
-    if (!(unit->mStatusFlags & (UNIT_STATUS_FLAG_DANGER | UNIT_STATUS_FLAG_PERIL)) && _GetStatusPoseType(unit) == POSE_TYPE_NORMAL) {
+    if (!(unit->statusFlags & (UNIT_STATUS_FLAG_DANGER | UNIT_STATUS_FLAG_PERIL)) && _GetStatusPoseType(unit) == POSE_TYPE_NORMAL) {
         special = TRUE;
     }
     if (special) {
@@ -2201,14 +2201,14 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
         if (entry->time <= state->time && entry->time > state->prevTime) {
             if (entry->flags & 1) {
                 if (entry->callback) {
-                    id = entry->callback(part->mOwner, entry, state);
+                    id = entry->callback(part->owner, entry, state);
                 } else {
-                    id = BtlUnit_snd_se(part->mOwner, entry->sfxName, EVT_NULLPTR, entry->pitch);
+                    id = BtlUnit_snd_se(part->owner, entry->sfxName, EVT_NULLPTR, entry->pitch);
                 }
                 vol = 0x7F;
                 psndSFX_vol(id, vol);
                 state->count++;
-                if (part->mOwner->attackPhase != BattleGetSeq(wp, SEQ_PHASE)) {
+                if (part->owner->attackPhase != BattleGetSeq(wp, SEQ_PHASE)) {
                     f64 k; // FAKE: spare temporary assigned inside the multiplication; vol = dv * 0.7 changes the object
                     dv = (f64)(u32)vol;
                     vol = dv * (k = 0.7);
@@ -2216,9 +2216,9 @@ void BtlUnit_ControlPoseSoundMain(BattleUnitPart* part) {
                 }
             } else {
                 if (entry->callback) {
-                    entry->callback(part->mOwner, entry, state);
+                    entry->callback(part->owner, entry, state);
                 } else {
-                    BtlUnit_snd_se(part->mOwner, entry->sfxName, EVT_NULLPTR, entry->pitch);
+                    BtlUnit_snd_se(part->owner, entry->sfxName, EVT_NULLPTR, entry->pitch);
                 }
                 state->count++;
             }
@@ -2345,7 +2345,7 @@ s32 BtlUnit_EnemyItemCanUseCheck(s32 item) {
 }
 
 BOOL BtlUnit_CheckShadowGuard(BattleUnit* unit) {
-    if (unit->mAttributeFlags & kVeiled) {
+    if (unit->attributeFlags & kVeiled) {
         return TRUE;
     }
     if (unit->currentKind == UNIT_VIVIAN && unit->work[VIVIAN_WORK_HIDE_TURNS] > 0) {

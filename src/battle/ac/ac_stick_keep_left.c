@@ -48,11 +48,11 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
     autoCommand = 0;
     cw = (SklWork*)work->actionCommands.work;
     disp = &work->actionCommands.disp;
-    if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
+    if (work->actionCommands.acUnit->badgesEquipped.AutoCommand) {
         autoCommand = 1;
     }
     work->actionCommands.params[3] = 0;
-    if (work->actionCommands.mAcState != 0) {
+    if (work->actionCommands.acState != 0) {
         if (work->actionCommands.params[2] != 0) {
             work->actionCommands.params[3] = 1;
         } else {
@@ -66,7 +66,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
         if (work->actionCommands.params[3] != 0) {
             break;
         }
-        switch (work->actionCommands.mAcState) {
+        switch (work->actionCommands.acState) {
             case 0:
                 work->actionCommands.result = AC_RESULT_RUNNING;
                 cw->idx = 0;
@@ -82,16 +82,16 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                 for (i = 0; i < 12; i++) {
                     cw->sfx[i] = -1;
                 }
-                work->actionCommands.mAcState = 99;
+                work->actionCommands.acState = 99;
                 break;
             case 99:
                 break;
             case 100:
                 cw->timer = 120;
-                work->actionCommands.mAcState = 1000;
+                work->actionCommands.acState = 1000;
                 // fallthrough
             case 1000:
-                if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+                if ((work->actionCommands.setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
                     if (work->actionCommands.setupFlags & AC_SETUP_FLAG_RETRIES) {
                         work->actionCommands.setupParam--;
                         if (work->actionCommands.setupParam >= 0) {
@@ -103,7 +103,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                         work->actionCommands.result = 0;
                     } else {
                         work->actionCommands.result = AC_RESULT_SUCCESS;
-                        work->actionCommands.mResultCount++;
+                        work->actionCommands.resultCount++;
                     }
                     return 0;
                 }
@@ -111,11 +111,11 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     if (--cw->timer <= 0) {
                         work->actionCommands.result = 0;
                         loop = 1;
-                        work->actionCommands.mAcState = 1003;
+                        work->actionCommands.acState = 1003;
                     }
                 } else {
                     work->actionCommands.outputParams[0] = 1;
-                    work->actionCommands.mAcState = 1001;
+                    work->actionCommands.acState = 1001;
                     cw->timer = 1;
                     cw->idx = 1;
                     work->actionCommands.outputParams[1] = 0;
@@ -126,7 +126,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     work->actionCommands.countdown--;
                     loop = 1;
                     work->actionCommands.result = AC_RESULT_SUCCESS;
-                    work->actionCommands.mAcState = 1003;
+                    work->actionCommands.acState = 1003;
                 }
                 cw->timer--;
                 if (cw->timer < 0) {
@@ -134,7 +134,7 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     work->actionCommands.outputParams[1]++;
                     if (cw->idx >= work->actionCommands.params[0] + 2) {
                         work->actionCommands.result &= ~AC_RESULT_RUNNING;
-                        work->actionCommands.mAcState = 1003;
+                        work->actionCommands.acState = 1003;
                         work->actionCommands.outputParams[2] = 2;
                         if (work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL) {
                             work->actionCommands.result |= AC_RESULT_SUCCESS;
@@ -182,16 +182,16 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                         work->actionCommands.result |= AC_RESULT_SUCCESS;
                         work->actionCommands.result &= ~AC_RESULT_RUNNING;
                         loop = 1;
-                        work->actionCommands.mAcState = 1003;
+                        work->actionCommands.acState = 1003;
                     } else if (ok) {
                         work->actionCommands.result |= AC_RESULT_SUCCESS;
                         work->actionCommands.result &= ~AC_RESULT_RUNNING;
                         loop = 1;
-                        work->actionCommands.mAcState = 1003;
+                        work->actionCommands.acState = 1003;
                     } else if (!(work->actionCommands.acFlags & AC_STICK_KEEP_LEFT_FLAG_NO_EARLY_RELEASE_FAIL)) {
                         work->actionCommands.result &= ~AC_RESULT_RUNNING;
                         loop = 1;
-                        work->actionCommands.mAcState = 1003;
+                        work->actionCommands.acState = 1003;
                     }
                 }
                 break;
@@ -204,16 +204,16 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
                     }
                 }
             }
-                work->actionCommands.mAcState = 1004;
+                work->actionCommands.acState = 1004;
                 break;
             case 1005:
                 cw->endTimer = 60;
-                work->actionCommands.mAcState = 1006;
+                work->actionCommands.acState = 1006;
                 break;
             case 1006:
                 cw->endTimer--;
                 if (cw->endTimer <= 0) {
-                    work->actionCommands.mAcState = 1007;
+                    work->actionCommands.acState = 1007;
                 }
                 break;
             case 1007:
@@ -243,7 +243,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
     SklWork* cw = (SklWork*)ac->work;
     BattleACDispParams* disp = &ac->disp;
 
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 99:
         case 100:
         case 1000:
@@ -284,7 +284,7 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
 
 /** Called by btlevtcmd_StopAC: starts the slide-out and the 60-frame end wait. */
 void battleAcDelete_StickKeepLeft(BattleWork* work) {
-    work->actionCommands.mAcState = 1005;
+    work->actionCommands.acState = 1005;
 }
 
 /**
@@ -313,7 +313,7 @@ static void actionCommandDisp(f32 x, f32 y, s32 unused) {
     camGetPtr(CAMERA_2D);
     count = ac->params[0];
     idx = ((SklWork*)ac->work)->idx - 1;
-    switch (ac->mAcState) {
+    switch (ac->acState) {
         case 0:
         case 99:
         case 100: {

@@ -490,8 +490,8 @@ void main_weapon(s32 idx) {
         }
         wp->state = 2;
         BtlUnit_GetPos(mario, &wp->pos.x, &wp->pos.y, &wp->pos.z);
-        wp->pos.x += 20.0f * mario->mSizeMultiplier;
-        wp->pos.y += 28.0f * mario->mSizeMultiplier;
+        wp->pos.x += 20.0f * mario->sizeMultiplier;
+        wp->pos.y += 28.0f * mario->sizeMultiplier;
         wp->vel = (Vec){10.0f * (f32)cos(ang), 10.0f * (f32)sin(ang), 0.0f};
         for (i = 0; i < 7; i++) {
             GenkiRing* r = &w->ring[i];
@@ -780,7 +780,7 @@ void main_star0(s32 idx) {
         s->timer = 0;
         s->eff = effStarStoneEntry(idx, 0.0f, -1000.0f, 0.0f, 1.0f);
         BtlUnit_GetPos(mario, &s->pos.x, &s->pos.y, &s->pos.z);
-        s->pos.y += mario->mSizeMultiplier * mario->mHeight + 37.0f;
+        s->pos.y += mario->sizeMultiplier * mario->height + 37.0f;
         s->start = s->pos;
         s->end = s->pos;
         s->end.y += 30.0f;
@@ -881,7 +881,7 @@ void main_star1(void) {
         w->star[0].timer = 0;
         w->star[0].eff = effStarStoneEntry(4, 0.0f, -1000.0f, 0.0f, 1.0f);
         BtlUnit_GetPos(mario, &w->star[0].pos.x, &w->star[0].pos.y, &w->star[0].pos.z);
-        w->star[0].pos.y += mario->mSizeMultiplier * mario->mHeight + 37.0f;
+        w->star[0].pos.y += mario->sizeMultiplier * mario->height + 37.0f;
         w->star[0].start = w->star[0].pos;
         w->star[0].end = w->star[0].pos;
         w->star[0].end.y += 50.0f;

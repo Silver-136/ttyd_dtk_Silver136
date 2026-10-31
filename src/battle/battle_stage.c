@@ -29,7 +29,7 @@ typedef struct ScreenWork {
     f32 yTarget;       // 0x1C
     s32 count;         // 0x20
     s32 mode;          // 0x24
-    f32 field_28;      // 0x28
+    f32 param;      // 0x28
 } ScreenWork;
 
 //.sbss
@@ -924,7 +924,7 @@ USER_FUNC(tou_gamen_screen_tev_init) {
     screen_wp->x = screen_wp->xTarget = 0.0f;
     screen_wp->y = screen_wp->yTarget = 0.0f;
     screen_wp->count = 0;
-    screen_wp->field_28 = -1.0f;
+    screen_wp->param = -1.0f;
     if (evtGetValue(event, GSW_STORY_PROGRESS) == STG3_31_GRUBBAS_PLANS) {
         screen_wp->mode = 1;
     }

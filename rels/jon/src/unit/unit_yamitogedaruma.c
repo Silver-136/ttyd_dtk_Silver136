@@ -40,14 +40,14 @@ static EvtWord wait_event[102];
  * names its parts, status table and init script.
  */
 BattleUnitKind unit_yamitogedaruma = {
-    UNIT_DARK_BRISTLE, // mUnitType
+    UNIT_DARK_BRISTLE, // unitType
     "btl_un_yamitogedaruma", // name
     8, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    34, // mLevel
-    1, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    34, // level
+    1, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
     2, // baseCoin
@@ -82,7 +82,7 @@ BattleUnitKind unit_yamitogedaruma = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -195,9 +195,9 @@ static BattleWeapon weapon_togedaruma_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {8, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -219,7 +219,7 @@ static BattleWeapon weapon_togedaruma_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

@@ -95,14 +95,14 @@ static PoseTableEntry pose_table_1[] = {
  * explodes when its fuse runs out or when it is destroyed.
  */
 BattleUnitKind unit_bomzou = {
-    UNIT_BOMB_SQUAD_BOMB, // mUnitType
+    UNIT_BOMB_SQUAD_BOMB, // unitType
     "btl_un_bomzou", // name
     1, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -137,7 +137,7 @@ BattleUnitKind unit_bomzou = {
     kNoDamageNumber | kUnitNoHpGauge | kUnitNoncombatant, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -173,7 +173,7 @@ BattleWeapon weapon_bomzou_explosion = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 10, 10, 100, 30, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 

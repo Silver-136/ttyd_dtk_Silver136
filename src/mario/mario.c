@@ -289,11 +289,11 @@ void marioSetSpec(void) {
     if (wp->characterId == CHARACTER_PEACH) {
         wp->wPlayerCollisionBox.x = 20.0f;
         wp->wPlayerCollisionBox.y = 47.0f;
-        wp->mBaseWalkSpeed = 1.0f;
-        wp->mBaseDashSpeed = 2.0f;
+        wp->baseWalkSpeed = 1.0f;
+        wp->baseDashSpeed = 2.0f;
     } else if (wp->characterId == CHARACTER_BOWSER) {
-        wp->mBaseWalkSpeed = 1.0f;
-        wp->mBaseDashSpeed = 2.25f;
+        wp->baseWalkSpeed = 1.0f;
+        wp->baseDashSpeed = 2.25f;
     } else {
         if (!(wp->flags & MARIO_FLAG_BG_MODE)) {
             wp->wPlayerCollisionBox.x = 20.0f;
@@ -302,8 +302,8 @@ void marioSetSpec(void) {
             wp->wPlayerCollisionBox.x = 10.0f;
             wp->wPlayerCollisionBox.y = 25.9f;
         }
-        wp->mBaseWalkSpeed = 1.0f;
-        wp->mBaseDashSpeed = 2.25f;
+        wp->baseWalkSpeed = 1.0f;
+        wp->baseDashSpeed = 2.25f;
     }
 }
 
@@ -858,11 +858,11 @@ void marioInit(void) {
     mp->paperAnimGroupId[2] = -1;
     mp->paperPoseId = -1;
     if (!mp->characterId) {
-        mp->mBaseWalkSpeed = 1.0f;
-        mp->mBaseDashSpeed = 2.25f;
+        mp->baseWalkSpeed = 1.0f;
+        mp->baseDashSpeed = 2.25f;
     } else {
-        mp->mBaseWalkSpeed = 1.0f;
-        mp->mBaseDashSpeed = 2.0f;
+        mp->baseWalkSpeed = 1.0f;
+        mp->baseDashSpeed = 2.0f;
     }
     mp->currPartySlotId[0] = -1;
     mp->currPartySlotId[1] = -1;
@@ -969,11 +969,11 @@ void marioReInit(void) {
     wp->paperAnimGroupId[2] = anim2;
     wp->paperPoseId = poseId;
     if (!wp->characterId) {
-        wp->mBaseWalkSpeed = 1.0f;
-        wp->mBaseDashSpeed = 2.25f;
+        wp->baseWalkSpeed = 1.0f;
+        wp->baseDashSpeed = 2.25f;
     } else {
-        wp->mBaseWalkSpeed = 1.0f;
-        wp->mBaseDashSpeed = 2.0f;
+        wp->baseWalkSpeed = 1.0f;
+        wp->baseDashSpeed = 2.0f;
     }
     marioSetSpec();
     wp->flags &= ~MARIO_FLAG_ACTIVE;
@@ -1537,7 +1537,7 @@ void marioMoveMain(void) {
         spd = toMovedir(wp->displayDirection);
     }
     if (!(wp->flags & MARIO_FLAG_PAPER_MODE) && (wp->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING))) {
-        vx = wp->mBaseDashSpeed * wp->playerGravity;
+        vx = wp->baseDashSpeed * wp->playerGravity;
         if (dist > vx) {
             dist = vx;
         }

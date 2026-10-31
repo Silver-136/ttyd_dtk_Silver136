@@ -141,7 +141,7 @@ s32 _get_present_item(EventEntry* event, BOOL isFirstCall) {
     s32 id = BattleAudience_GetPresentTargetUnitId();
     BattleUnit* unit = BattleGetUnitPtr(wp, id);
 
-    if (unit->mAlliance == ALLIANCE_PLAYER) {
+    if (unit->alliance == ALLIANCE_PLAYER) {
         pouchGetItem(item);
     } else if (unit->heldItem == ITEM_NULL) {
         unit->heldItem = item;
@@ -211,7 +211,7 @@ s32 _get_item_announce(EventEntry* event, BOOL isFirstCall) {
         f32 z;
 
         BtlUnit_GetPos(unit, &x, &y, &z);
-        y = y + (unit->mSizeMultiplier * (f32)BtlUnit_GetHeight(unit) + 8.0f);
+        y = y + (unit->sizeMultiplier * (f32)BtlUnit_GetHeight(unit) + 8.0f);
         event->userdatap[1] = itemEntry(NULL, item, ITEM_TYPE_STILL_NO_TOUCH, -1, NULL, x, y, z);
         event->userdata[2] = 90;
     } else {

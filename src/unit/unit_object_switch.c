@@ -22,14 +22,14 @@ static EvtWord init_event[25];
  * map switch the player can hit during a battle. It never takes a turn.
  */
 BattleUnitKind unit_object_switch = {
-    UNIT_UNUSED_SWITCH,     // mUnitType
+    UNIT_UNUSED_SWITCH,     // unitType
     "btl_un_switch",        // name
     999,                    // maxHp
     0,                      // maxFp
-    1,                      // mDangerHP
-    1,                      // mPerilHP
-    2,                      // mLevel
-    0,                      // mBonusExp
+    1,                      // dangerHP
+    1,                      // perilHP
+    2,                      // level
+    0,                      // bonusExp
     0,                      // bonusCoin
     0,                      // bonusCoinRate
     0,                      // baseCoin
@@ -64,7 +64,7 @@ BattleUnitKind unit_object_switch = {
     kUnitMapObject | kNoGravityBob | kActsInZeroGravity | kUnitNoHpGauge | kUnitNoncombatant, // attributeFlags
     &regist,                // statusVulnerability
     1,                      // numParts
-    parts,                  // mParts
+    parts,                  // parts
     init_event,             // initEventCode
     data_table,             // dataTable
 };
@@ -101,7 +101,7 @@ static BattleUnitKindPart parts[] = {
         {0.0f, 25.0f, 0.0f},  // hitBaseOffset
         {0.0f, 30.0f, 0.0f},  // hitCursorBaseOffset
         20,                   // shadowSize
-        30,                   // reserved_32
+        30,                   // hitHeight
         255,                  // baseAlpha
         &defence,             // defense
         &defence_attr,        // defenseAttr
@@ -184,7 +184,7 @@ USER_FUNC(_rumble_switch) {
     if (isFirstCall) {
         event->userdata[0] = 0;
     }
-    object->mPosition.y += _data[event->userdata[0]];
+    object->position.y += _data[event->userdata[0]];
     event->userdata[0]++;
     if ((u32)event->userdata[0] >= 34) {
         return EVT_RETURN_DONE;

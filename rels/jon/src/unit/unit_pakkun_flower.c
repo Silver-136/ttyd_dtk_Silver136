@@ -44,14 +44,14 @@ static EvtWord wait_event[6];
 
 /** Unit data of the Piranha Plant: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_pakkun_flower = {
-    UNIT_PIRANHA_PLANT, // mUnitType
+    UNIT_PIRANHA_PLANT, // unitType
     "btl_un_pakkun_flower", // name
     15, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    33, // mLevel
-    1, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    33, // level
+    1, // bonusExp
     3, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -86,7 +86,7 @@ BattleUnitKind unit_pakkun_flower = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -136,9 +136,9 @@ static BattleWeapon weapon_pakkun_flower_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {9, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -160,7 +160,7 @@ static BattleWeapon weapon_pakkun_flower_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

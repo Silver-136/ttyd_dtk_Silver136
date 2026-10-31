@@ -156,10 +156,10 @@ BattleStageObjectData dou_btlobject_data[] = {
  */
 BattleStageData dou_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_05_4", // mSpecificStageDataDir
-        5, // mNumObjects
-        dou_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_05_4", // specificStageDataDir
+        5, // numObjects
+        dou_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -169,10 +169,10 @@ BattleStageData dou_btlstage_data[] = {
         1, // disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_05_4", // mSpecificStageDataDir
-        2, // mNumObjects
-        &dou_btlobject_data[5], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_05_4", // specificStageDataDir
+        2, // numObjects
+        &dou_btlobject_data[5], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -182,20 +182,20 @@ BattleStageData dou_btlstage_data[] = {
         1, // disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_05_5", // mSpecificStageDataDir
-        8, // mNumObjects
-        &dou_btlobject_data[7], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_05_5", // specificStageDataDir
+        8, // numObjects
+        &dou_btlobject_data[7], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_05_3", // mSpecificStageDataDir
-        13, // mNumObjects
-        &dou_btlobject_data[15], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_05_3", // specificStageDataDir
+        13, // numObjects
+        &dou_btlobject_data[15], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgA2Evt
@@ -206,10 +206,10 @@ BattleStageData dou_btlstage_data[] = {
         1, // disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_05_3", // mSpecificStageDataDir
-        12, // mNumObjects
-        &dou_btlobject_data[28], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_05_3", // specificStageDataDir
+        12, // numObjects
+        &dou_btlobject_data[28], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgA2Evt
@@ -220,10 +220,10 @@ BattleStageData dou_btlstage_data[] = {
         1, // disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_05_3", // mSpecificStageDataDir
-        11, // mNumObjects
-        &dou_btlobject_data[40], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_05_3", // specificStageDataDir
+        11, // numObjects
+        &dou_btlobject_data[40], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgA2Evt
@@ -237,7 +237,7 @@ BattleStageData dou_btlstage_data[] = {
 
 BattleUnitSetup btlparty_dou_dou_00_01_off_1[] = {
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -247,7 +247,7 @@ BattleUnitSetup btlparty_dou_dou_00_01_off_1[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -257,7 +257,7 @@ BattleUnitSetup btlparty_dou_dou_00_01_off_1[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -281,7 +281,7 @@ BattleGroupSetup btlgrp_dou_dou_00_01_off_1 = {
 
 BattleUnitSetup btlparty_dou_dou_01_01_off_01[] = {
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -291,7 +291,7 @@ BattleUnitSetup btlparty_dou_dou_01_01_off_01[] = {
         battle_item_hermos, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -301,7 +301,7 @@ BattleUnitSetup btlparty_dou_dou_01_01_off_01[] = {
         battle_item_hermos, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -325,7 +325,7 @@ BattleGroupSetup btlgrp_dou_dou_01_01_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_02_01_off_01[] = {
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -335,7 +335,7 @@ BattleUnitSetup btlparty_dou_dou_02_01_off_01[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -359,7 +359,7 @@ BattleGroupSetup btlgrp_dou_dou_02_01_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_02_02_off_01[] = {
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -369,7 +369,7 @@ BattleUnitSetup btlparty_dou_dou_02_02_off_01[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -379,7 +379,7 @@ BattleUnitSetup btlparty_dou_dou_02_02_off_01[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -389,7 +389,7 @@ BattleUnitSetup btlparty_dou_dou_02_02_off_01[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -413,7 +413,7 @@ BattleGroupSetup btlgrp_dou_dou_02_02_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_03_01_off_01[] = {
     {
-        &unit_killer_cannon, // mUnitKindParams
+        &unit_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -423,7 +423,7 @@ BattleUnitSetup btlparty_dou_dou_03_01_off_01[] = {
         battle_item_killer_cannon, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -447,7 +447,7 @@ BattleGroupSetup btlgrp_dou_dou_03_01_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_03_99_off_01[] = {
     {
-        &unit_killer, // mUnitKindParams
+        &unit_killer, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -457,7 +457,7 @@ BattleUnitSetup btlparty_dou_dou_03_99_off_01[] = {
         battle_item_killer, // itemDropTable
     },
     {
-        &unit_killer, // mUnitKindParams
+        &unit_killer, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -481,7 +481,7 @@ BattleGroupSetup btlgrp_dou_dou_03_99_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_03_02_off_01[] = {
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -491,7 +491,7 @@ BattleUnitSetup btlparty_dou_dou_03_02_off_01[] = {
         battle_item_heavy_bom, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -515,7 +515,7 @@ BattleGroupSetup btlgrp_dou_dou_03_02_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_03_03_off_01[] = {
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -525,7 +525,7 @@ BattleUnitSetup btlparty_dou_dou_03_03_off_01[] = {
         battle_item_heavy_bom, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -535,7 +535,7 @@ BattleUnitSetup btlparty_dou_dou_03_03_off_01[] = {
         battle_item_heavy_bom, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -559,7 +559,7 @@ BattleGroupSetup btlgrp_dou_dou_03_03_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_05_01_off_01[] = {
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -569,7 +569,7 @@ BattleUnitSetup btlparty_dou_dou_05_01_off_01[] = {
         battle_item_hermos, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -593,7 +593,7 @@ BattleGroupSetup btlgrp_dou_dou_05_01_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_05_02_off_01[] = {
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -603,7 +603,7 @@ BattleUnitSetup btlparty_dou_dou_05_02_off_01[] = {
         battle_item_patamet, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -627,7 +627,7 @@ BattleGroupSetup btlgrp_dou_dou_05_02_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_06_01_off_01[] = {
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -637,7 +637,7 @@ BattleUnitSetup btlparty_dou_dou_06_01_off_01[] = {
         battle_item_patamet, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -647,7 +647,7 @@ BattleUnitSetup btlparty_dou_dou_06_01_off_01[] = {
         battle_item_patamet, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -671,7 +671,7 @@ BattleGroupSetup btlgrp_dou_dou_06_01_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_06_02_off_01[] = {
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -681,7 +681,7 @@ BattleUnitSetup btlparty_dou_dou_06_02_off_01[] = {
         battle_item_patamet, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -691,7 +691,7 @@ BattleUnitSetup btlparty_dou_dou_06_02_off_01[] = {
         battle_item_patamet, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -701,7 +701,7 @@ BattleUnitSetup btlparty_dou_dou_06_02_off_01[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -725,7 +725,7 @@ BattleGroupSetup btlgrp_dou_dou_06_02_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_06_03_off_01[] = {
     {
-        &unit_patamet, // mUnitKindParams
+        &unit_patamet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -749,7 +749,7 @@ BattleGroupSetup btlgrp_dou_dou_06_03_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_07_01_off_01[] = {
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -759,7 +759,7 @@ BattleUnitSetup btlparty_dou_dou_07_01_off_01[] = {
         battle_item_hermos, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -769,7 +769,7 @@ BattleUnitSetup btlparty_dou_dou_07_01_off_01[] = {
         battle_item_hermos, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -793,7 +793,7 @@ BattleGroupSetup btlgrp_dou_dou_07_01_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_08_01_off_01[] = {
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -803,7 +803,7 @@ BattleUnitSetup btlparty_dou_dou_08_01_off_01[] = {
         battle_item_heavy_bom, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -813,7 +813,7 @@ BattleUnitSetup btlparty_dou_dou_08_01_off_01[] = {
         battle_item_heavy_bom, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -823,7 +823,7 @@ BattleUnitSetup btlparty_dou_dou_08_01_off_01[] = {
         battle_item_heavy_bom, // itemDropTable
     },
     {
-        &unit_heavy_bom, // mUnitKindParams
+        &unit_heavy_bom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -847,7 +847,7 @@ BattleGroupSetup btlgrp_dou_dou_08_01_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_09_01_off_01[] = {
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -857,7 +857,7 @@ BattleUnitSetup btlparty_dou_dou_09_01_off_01[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -867,7 +867,7 @@ BattleUnitSetup btlparty_dou_dou_09_01_off_01[] = {
         battle_item_bubble, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -891,7 +891,7 @@ BattleGroupSetup btlgrp_dou_dou_09_01_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_09_02_off_01[] = {
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -901,7 +901,7 @@ BattleUnitSetup btlparty_dou_dou_09_02_off_01[] = {
         battle_item_hermos, // itemDropTable
     },
     {
-        &unit_hermos, // mUnitKindParams
+        &unit_hermos, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -911,7 +911,7 @@ BattleUnitSetup btlparty_dou_dou_09_02_off_01[] = {
         battle_item_hermos, // itemDropTable
     },
     {
-        &unit_bubble, // mUnitKindParams
+        &unit_bubble, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -935,7 +935,7 @@ BattleGroupSetup btlgrp_dou_dou_09_02_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_12_01_off_01[] = {
     {
-        &unit_killer_cannon, // mUnitKindParams
+        &unit_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -945,7 +945,7 @@ BattleUnitSetup btlparty_dou_dou_12_01_off_01[] = {
         battle_item_killer_cannon, // itemDropTable
     },
     {
-        &unit_killer_cannon, // mUnitKindParams
+        &unit_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -969,7 +969,7 @@ BattleGroupSetup btlgrp_dou_dou_12_01_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_12_99_off_01[] = {
     {
-        &unit_killer, // mUnitKindParams
+        &unit_killer, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -979,7 +979,7 @@ BattleUnitSetup btlparty_dou_dou_12_99_off_01[] = {
         battle_item_killer, // itemDropTable
     },
     {
-        &unit_killer, // mUnitKindParams
+        &unit_killer, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1003,7 +1003,7 @@ BattleGroupSetup btlgrp_dou_dou_12_99_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_13_01_off_01[] = {
     {
-        &unit_killer_cannon, // mUnitKindParams
+        &unit_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1013,7 +1013,7 @@ BattleUnitSetup btlparty_dou_dou_13_01_off_01[] = {
         battle_item_killer_cannon, // itemDropTable
     },
     {
-        &unit_killer_cannon, // mUnitKindParams
+        &unit_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1037,7 +1037,7 @@ BattleGroupSetup btlgrp_dou_dou_13_01_off_01 = {
 
 BattleUnitSetup btlparty_dou_dou_13_99_off_01[] = {
     {
-        &unit_killer, // mUnitKindParams
+        &unit_killer, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1047,7 +1047,7 @@ BattleUnitSetup btlparty_dou_dou_13_99_off_01[] = {
         battle_item_killer, // itemDropTable
     },
     {
-        &unit_killer, // mUnitKindParams
+        &unit_killer, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase

@@ -1031,7 +1031,7 @@ void yoshiFlyMove(PartyEntry* party) {
     z = -mario->mot.yoshi.velZ;
     x = mario->mot.yoshi.velX;
     spd = 0.1f * distABf(0.0f, 0.0f, x, z);
-    max = mario->mBaseDashSpeed * one;
+    max = mario->baseDashSpeed * one;
     if (spd >= max) {
         spd = max;
     }
@@ -1389,9 +1389,9 @@ void getStick(PartyEntry* party, f32* angle, f32* speed) {
     *angle = ang;
     if (dist > 0.0f) {
         if (x * x + y * y > 3025) {
-            dist = 1.5f * (mario->mBaseDashSpeed * marioGetMoveRate(ang));
+            dist = 1.5f * (mario->baseDashSpeed * marioGetMoveRate(ang));
         } else {
-            dist = 1.5f * (mario->mBaseWalkSpeed * marioGetMoveRate(ang));
+            dist = 1.5f * (mario->baseWalkSpeed * marioGetMoveRate(ang));
         }
         if (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER) {
             mario->flags |= MARIO_FLAG_IN_SHALLOW_WATER;

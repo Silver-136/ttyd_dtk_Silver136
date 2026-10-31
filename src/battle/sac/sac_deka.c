@@ -569,7 +569,7 @@ static void main_star(void) {
         w->starTimer = 0;
         w->eff = effStarStoneEntry(0, 0.0f, -1000.0f, 0.0f, 1.0f);
         BtlUnit_GetPos(mario, &w->starPos.x, &w->starPos.y, &w->starPos.z);
-        w->starPos.y += mario->mSizeMultiplier * mario->mHeight + 37.0f;
+        w->starPos.y += mario->sizeMultiplier * mario->height + 37.0f;
         w->from = w->starPos;
         w->to = w->starPos;
         w->to.y += 50.0f;
@@ -745,7 +745,7 @@ void main_enemy(void) {
 
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         unit = BattleGetUnitPtr(bw, i);
-        if (unit && unit->mAlliance == ALLIANCE_ENEMY) {
+        if (unit && unit->alliance == ALLIANCE_ENEMY) {
             main_enemy_sub(unit, &n);
         }
     }
@@ -772,9 +772,9 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
     BattleUnitPart* part;
     s32 i2;
 
-    unit->mRotationOffset = unit->offsetCenter;
+    unit->rotationOffset = unit->offsetCenter;
     w->enemyVel[*n].y -= 1.25f;
-    x = unit->mPosition.x;
+    x = unit->position.x;
     if (x >= 250.0f) {
         xc = 250.0f;
     } else if (x <= 0.0f) {
@@ -787,16 +787,16 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
         x0 = step * i + w->min.x;
         if (xc >= x0 && xc < x0 + step) {
             y = (xc - x0) / step * (m->disp[0][i + 1].y - m->disp[0][i].y) + m->disp[0][i].y;
-            if (unit->mPosition.y < y) {
-                if ((unit->mAttributeFlags & kCeiling) && y < 120.0f) {
+            if (unit->position.y < y) {
+                if ((unit->attributeFlags & kCeiling) && y < 120.0f) {
                     break;
                 }
                 if (m->vel[0][i].y > 0.0f) {
                     if (w->enemyVel[*n].y < 0.0f) {
                         w->enemyVel[*n].y = 0.0f;
                     }
-                    unit->mPosition.y = y;
-                    unit->mRotation.z = 0.0f;
+                    unit->position.y = y;
+                    unit->rotation.z = 0.0f;
                     w->enemyRot[*n] = 0.0f;
                     w->enemyVel[*n].y += 0.5f * m->vel[0][i].y;
                     i2 = BtlUnit_GetBodyPartsId(unit);
@@ -807,15 +807,15 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
                     if (part->attributes & kClone) {
                         continue;
                     }
-                    if (!(unit->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+                    if (!(unit->attributeFlags & kInactive) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
                         BtlUnit_SetAnimType(part, POSE_TYPE_DAMAGE);
                     }
-                    effSmallStarEntry(0, 2, xc, unit->mPosition.y, unit->mPosition.z, 0.0f, -1.0f, 0.0f);
-                    BtlUnit_snd_se(unit, unit->mKindParams->damageSfxName, EVT_NULLPTR, 0);
-                    if (unit->mAttributeFlags & kUnitNoSpin) {
+                    effSmallStarEntry(0, 2, xc, unit->position.y, unit->position.z, 0.0f, -1.0f, 0.0f);
+                    BtlUnit_snd_se(unit, unit->kindParams->damageSfxName, EVT_NULLPTR, 0);
+                    if (unit->attributeFlags & kUnitNoSpin) {
                         continue;
                     }
-                    if (unit->mAttributeFlags & kInactive) {
+                    if (unit->attributeFlags & kInactive) {
                         continue;
                     }
                     if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
@@ -829,16 +829,16 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
             }
         }
     }
-    unit->mPosition.x = x;
-    unit->mPosition.x += w->enemyVel[*n].x;
-    unit->mPosition.y += w->enemyVel[*n].y;
-    unit->mPosition.z += w->enemyVel[*n].z;
-    unit->mRotation.z += w->enemyRot[*n];
-    if (unit->mPosition.y < unit->mHomePosition.y) {
-        unit->mPosition.y = unit->mHomePosition.y;
+    unit->position.x = x;
+    unit->position.x += w->enemyVel[*n].x;
+    unit->position.y += w->enemyVel[*n].y;
+    unit->position.z += w->enemyVel[*n].z;
+    unit->rotation.z += w->enemyRot[*n];
+    if (unit->position.y < unit->homePosition.y) {
+        unit->position.y = unit->homePosition.y;
         w->enemyVel[*n].y = 0.0f;
-        if (!(unit->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
-            unit->mRotation.z = 0.0f;
+        if (!(unit->attributeFlags & kInactive) && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+            unit->rotation.z = 0.0f;
             w->enemyRot[*n] = 0.0f;
         }
     }

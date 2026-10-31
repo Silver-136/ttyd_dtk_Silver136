@@ -53,14 +53,14 @@ static EvtWord wait_event[6];
  * parts and init event.
  */
 BattleUnitKind unit_patapata = {
-    UNIT_PARATROOPA, // mUnitType
+    UNIT_PARATROOPA, // unitType
     "btl_un_patapata", // name
     4, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    9, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    9, // level
+    0, // bonusExp
     0, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -95,7 +95,7 @@ BattleUnitKind unit_patapata = {
     kFloating | kUnitLeader, // attributeFlags
     &regist_patapata, // statusVulnerability
     1, // numParts
-    parts_patapata, // mParts
+    parts_patapata, // parts
     init_event_patapata, // initEventCode
     data_table_patapata, // dataTable
 };
@@ -109,9 +109,9 @@ static BattleWeapon weapon_patapata_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -133,7 +133,7 @@ static BattleWeapon weapon_patapata_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -551,7 +551,7 @@ static BattleUnitKindPart parts[] = {
         {0.0f, 30.0f, 0.0f}, // hitBaseOffset
         {0.0f, 40.0f, 0.0f}, // hitCursorBaseOffset
         20, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -570,9 +570,9 @@ static BattleWeapon weapon_nokonoko_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -595,7 +595,7 @@ static BattleWeapon weapon_nokonoko_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

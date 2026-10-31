@@ -271,14 +271,14 @@ USER_FUNC(evt_win_party_lankdown_chk) {
 
 /** Allocates and clears the 32 window slots at boot (called from mariost.c). */
 void winMgrInit(void) {
-    wp->mNumEntries = 32;
-    wp->mEntries = (WinMgrEntry*)__memAlloc(HEAP_DEFAULT, wp->mNumEntries * sizeof(WinMgrEntry));
-    memset(wp->mEntries, 0, wp->mNumEntries * sizeof(WinMgrEntry));
+    wp->numEntries = 32;
+    wp->entries = (WinMgrEntry*)__memAlloc(HEAP_DEFAULT, wp->numEntries * sizeof(WinMgrEntry));
+    memset(wp->entries, 0, wp->numEntries * sizeof(WinMgrEntry));
 }
 
 /** Clears every window slot; called on a map change so no window survives into the next map. */
 void winMgrReInit(void) {
-    memset(wp->mEntries, 0, wp->mNumEntries * sizeof(WinMgrEntry));
+    memset(wp->entries, 0, wp->numEntries * sizeof(WinMgrEntry));
 }
 
 /**
@@ -327,8 +327,8 @@ void winMgrMain(void) {
     WinMgrEntry* entry;
     int i;
 
-    entry = wp->mEntries;
-    for (i = 0; i < wp->mNumEntries; i++, entry++) {
+    entry = wp->entries;
+    for (i = 0; i < wp->numEntries; i++, entry++) {
         if (entry->flags & WINMGR_FLAG_ACTIVE) {
             winMgrSeq(entry);
             if (entry->description->main) {
@@ -439,8 +439,8 @@ s32 winMgrEntry(WinMgrDesc* desc) {
     WinMgrEntry* entry;
     int i;
 
-    entry = wp->mEntries;
-    for (i = 0; i < wp->mNumEntries; i++, entry++) {
+    entry = wp->entries;
+    for (i = 0; i < wp->numEntries; i++, entry++) {
         if (!(entry->flags & WINMGR_FLAG_ACTIVE)) {
             break;
         }
@@ -465,7 +465,7 @@ s32 winMgrEntry(WinMgrDesc* desc) {
 void winMgrSetParam(s32 id, void* param) {
     WinMgrEntry* entry;
 
-    entry = &wp->mEntries[id];
+    entry = &wp->entries[id];
     if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->param = param;
     }
@@ -475,7 +475,7 @@ void winMgrSetParam(s32 id, void* param) {
 void winMgrOpen(s32 id) {
     WinMgrEntry* entry;
 
-    entry = &wp->mEntries[id];
+    entry = &wp->entries[id];
     if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->state = 1;
         entry->timer = 0;
@@ -489,7 +489,7 @@ void winMgrOpen(s32 id) {
 void winMgrClose(s32 id) {
     WinMgrEntry* entry;
 
-    entry = &wp->mEntries[id];
+    entry = &wp->entries[id];
     if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->state = 2;
         entry->timer = 0;
@@ -500,7 +500,7 @@ void winMgrClose(s32 id) {
 void winMgrCloseAutoDelete(s32 id) {
     WinMgrEntry* entry;
 
-    entry = &wp->mEntries[id];
+    entry = &wp->entries[id];
     if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->state = 2;
         entry->timer = 0;
@@ -510,18 +510,18 @@ void winMgrCloseAutoDelete(s32 id) {
 
 /** Frees a window slot at once, without an animation. */
 void winMgrDelete(s32 id) {
-    wp->mEntries[id].flags &= ~WINMGR_FLAG_ACTIVE;
+    wp->entries[id].flags &= ~WINMGR_FLAG_ACTIVE;
 }
 
 BOOL winMgrAction(s32 id) {
-    return (wp->mEntries[id].flags >> 2) & 1;
+    return (wp->entries[id].flags >> 2) & 1;
 }
 
 /** Moves and resizes a window (x, y is the top left corner, y up) if the slot is in use. */
 void winMgrSetSize(s32 id, s32 x, s32 y, s32 width, s32 height) {
     WinMgrEntry* entry;
 
-    entry = &wp->mEntries[id];
+    entry = &wp->entries[id];
     if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->x = x;
         entry->y = y;
@@ -534,7 +534,7 @@ void winMgrSetSize(s32 id, s32 x, s32 y, s32 width, s32 height) {
 void winMgrSetPriority(s32 id, s32 priority) {
     WinMgrEntry* entry;
 
-    entry = &wp->mEntries[id];
+    entry = &wp->entries[id];
     if (entry->flags & WINMGR_FLAG_ACTIVE) {
         entry->priority = priority;
     }
@@ -542,7 +542,7 @@ void winMgrSetPriority(s32 id, s32 priority) {
 
 /** The window slot for an id (no range or in-use check). */
 WinMgrEntry* winMgrGetPtr(s32 id) {
-    return &wp->mEntries[id];
+    return &wp->entries[id];
 }
 
 /** Resets a help window: scroll back to the top, no line count, no message. */
@@ -1191,7 +1191,7 @@ void select_main(WinMgrEntry* entry) {
             sel->state++;
             break;
         case 1:
-            if (wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING) {
+            if (wp->entries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING) {
                 break;
             }
             prev = sel->cursor;
@@ -1258,7 +1258,7 @@ void select_main(WinMgrEntry* entry) {
             sel->state++;
             break;
         case 3:
-            if (wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING) {
+            if (wp->entries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING) {
                 break;
             }
             for (i = 0; i < sel->numDescriptors; i++) {
@@ -1303,7 +1303,7 @@ void select_disp(WinMgrEntry* entry) {
     tmp = white;
     iconcol = tmp;
 
-    if (!(wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
+    if (!(wp->entries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
@@ -1527,7 +1527,7 @@ void select_disp_party(WinMgrEntry* entry) {
     tmp = white;
     iconcol = tmp;
 
-    if (!(wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
+    if (!(wp->entries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
@@ -1632,7 +1632,7 @@ void select_disp_mario(WinMgrEntry* entry) {
     tmp = white;
     iconcol = tmp;
 
-    if (!(wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
+    if (!(wp->entries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(entry->x + 304, 274 - entry->y, entry->width, entry->height - 50);
@@ -1756,7 +1756,7 @@ void select_disp_luigi(WinMgrEntry* entry) {
     Mtx mtx;
     Mtx scale;
 
-    if (!(wp->mEntries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
+    if (!(wp->entries[sel->descriptorId[0]].flags & WINMGR_FLAG_ANIMATING)) {
         GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         GXGetScissor(&left, &top, &wd, &ht);
         GXSetScissor(ent->x + 304, 274 - ent->y, ent->width, ent->height - 50);
@@ -1881,7 +1881,7 @@ void select_disp2(WinMgrEntry* entry) {
             msg = msgSearch("msg_window_select_7");
             break;
     }
-    if (!(wp->mEntries[sel->descriptorId[1]].flags & WINMGR_FLAG_ANIMATING)) {
+    if (!(wp->entries[sel->descriptorId[1]].flags & WINMGR_FLAG_ANIMATING)) {
 #ifdef VERSION_G8ME01
         Mtx trans;
         Mtx scale;
@@ -1918,7 +1918,7 @@ void select_main3(WinMgrEntry* entry) {
 void select_disp3(WinMgrEntry* entry) {
     WinMgrSelect* sel = entry->param;
 
-    if (!(wp->mEntries[sel->descriptorId[2]].flags & WINMGR_FLAG_ANIMATING)) {
+    if (!(wp->entries[sel->descriptorId[2]].flags & WINMGR_FLAG_ANIMATING)) {
         ItemData* item = &itemDataTable[sel->items[sel->cursor].id];
         entry->msg = msgSearch(item->description);
         winMgrHelpDraw(entry);
@@ -1934,7 +1934,7 @@ void select_disp3_party(WinMgrEntry* entry) {
     s32 id;
 
     pouch = pouchGetPtr();
-    if (!(wp->mEntries[sel->descriptorId[2]].flags & WINMGR_FLAG_ANIMATING)) {
+    if (!(wp->entries[sel->descriptorId[2]].flags & WINMGR_FLAG_ANIMATING)) {
         if (sel->items[sel->cursor].flags & SELECT_ITEM_DISABLED) {
             help = "helperr";
         } else {
@@ -1959,7 +1959,7 @@ void select_disp3_mario(WinMgrEntry* entry) {
     const char* help;
 
     pouchGetPtr();
-    if (!(wp->mEntries[sel->descriptorId[2]].flags & WINMGR_FLAG_ANIMATING)) {
+    if (!(wp->entries[sel->descriptorId[2]].flags & WINMGR_FLAG_ANIMATING)) {
         if (sel->items[sel->cursor].flags & SELECT_ITEM_DISABLED) {
             if (sel->items[sel->cursor].flags & SELECT_ITEM_OVER_MAX) {
                 help = "helperr2";

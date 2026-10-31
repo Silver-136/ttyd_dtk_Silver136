@@ -17,7 +17,7 @@ void FontDrawString(f32 x, f32 y, const char* str);
 typedef struct TwodEntry {
     char name[0x10];  // 0x0
     u16 flags;        // 0x10
-    u16 unk12;        // 0x12
+    u16 flags2;        // 0x12
     f32 x;            // 0x14
     f32 y;            // 0x18
     f32 baseX;        // 0x1C
@@ -106,7 +106,7 @@ s32 evt_twoddisp_init(EventEntry* evt, BOOL isFirstCall) {
         p = &twodPtr[i];
         p->name[0] = 0;
         p->flags = 0;
-        p->unk12 = 0;
+        p->flags2 = 0;
         p->x = 0.0f;
         p->baseX = 0.0f;
         p->y = 0.0f;
@@ -139,7 +139,7 @@ s32 evt_twoddisp_entry(EventEntry* evt, BOOL isFirstCall) {
         if (p->name[0] == 0) {
             strcpy(p->name, name);
             p->flags = 1;
-            p->unk12 = 0;
+            p->flags2 = 0;
             p->x = 0.0f;
             p->baseX = 0.0f;
             p->y = 0.0f;

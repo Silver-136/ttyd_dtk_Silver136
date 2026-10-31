@@ -85,7 +85,7 @@ void battleCameraMain(void) {
 
     part2 = 0; // FAKE: dead store, moves part2's variable record first so its case-8 web is a split temp (target r27)
     unit = BattleGetMarioPtr(wp); // FAKE: real zero-code first web of unit (the self-assign below emits nothing), so the case-8 unit web is a split temp (target r26)
-    unit->mPosition.x = unit->mPosition.x;
+    unit->position.x = unit->position.x;
     dX = 0.0f;
     dY = 0.0f;
     dZ = 0.0f;
@@ -579,7 +579,7 @@ void battleCameraMoveTo(s32 applyOffsets, s32 clampX, f32 x, f32 y, f32 z, f32 a
     }
     if (applyOffsets == 1) {
         if (wp->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
-            f32 mz = mario->mHomePosition.z;
+            f32 mz = mario->homePosition.z;
             f32 ox = 0.0f;
             f32 oy = 0.25f * -mz;
             f32 oz = mz;

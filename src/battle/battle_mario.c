@@ -157,9 +157,9 @@ BattleWeapon marioDefaultWeapon_Jump = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioJumpLv, // hpDamageFn
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
@@ -181,7 +181,7 @@ BattleWeapon marioDefaultWeapon_Jump = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_NormalJump, // mAttackEvtScript
+    marioAttackEvent_NormalJump, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 4, 2, 1, 1, 0, 0, 0}, // stageEffectRates
 #else
@@ -200,9 +200,9 @@ BattleWeapon marioWeapon_KururinJump = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioJumpLv, // hpDamageFn
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
@@ -224,7 +224,7 @@ BattleWeapon marioWeapon_KururinJump = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_KururinJump, // mAttackEvtScript
+    marioAttackEvent_KururinJump, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 4, 5, 1, 1, 0, 0, 0}, // stageEffectRates
 #else
@@ -245,9 +245,9 @@ BattleWeapon marioWeapon_KururinJump2 = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioJumpLv, // hpDamageFn
 #ifdef VERSION_G8ME01
@@ -273,7 +273,7 @@ BattleWeapon marioWeapon_KururinJump2 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_KururinJump, // mAttackEvtScript
+    marioAttackEvent_KururinJump, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 5, 5, 100, 0, 20, 10, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
@@ -296,12 +296,12 @@ BattleWeapon marioWeapon_JyabaraJump = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioJumpLv, // hpDamageFn
 #ifdef VERSION_G8ME01
@@ -327,7 +327,7 @@ BattleWeapon marioWeapon_JyabaraJump = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_JyabaraJump, // mAttackEvtScript
+    marioAttackEvent_JyabaraJump, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 5, 5, 100, 0, 20, 10, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
@@ -350,12 +350,12 @@ BattleWeapon marioWeapon_JyabaraJumpFailed = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -377,7 +377,7 @@ BattleWeapon marioWeapon_JyabaraJumpFailed = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_JyabaraJump, // mAttackEvtScript
+    marioAttackEvent_JyabaraJump, // attackEvtScript
     {0, 50, 50, 100, 0, 0, 0, 50, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -392,9 +392,9 @@ BattleWeapon marioDefaultWeapon_FirstAttackKaitenHammer = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -417,7 +417,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackKaitenHammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_FirstAttackKaitenHammer, // mAttackEvtScript
+    marioAttackEvent_FirstAttackKaitenHammer, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -428,9 +428,9 @@ BattleWeapon marioDefaultWeapon_FirstAttackUltraHammer = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -453,7 +453,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackUltraHammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_FirstAttackKaitenHammer, // mAttackEvtScript
+    marioAttackEvent_FirstAttackKaitenHammer, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -470,9 +470,9 @@ BattleWeapon marioDefaultWeapon_Hammer = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -494,7 +494,7 @@ BattleWeapon marioDefaultWeapon_Hammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_NormalHammer, // mAttackEvtScript
+    marioAttackEvent_NormalHammer, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 3, 3, 100, 3, 6, 2, 3, 3, 0, 0, 0}, // stageEffectRates
 #else
@@ -513,9 +513,9 @@ BattleWeapon marioWeapon_KaitenHammer = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -538,7 +538,7 @@ BattleWeapon marioWeapon_KaitenHammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_KaitenHammer, // mAttackEvtScript
+    marioAttackEvent_KaitenHammer, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 6, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -576,7 +576,7 @@ BattleWeapon marioWeapon_KaitenHammerInvolved = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -595,12 +595,12 @@ BattleWeapon marioWeapon_UltraHammer = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -623,7 +623,7 @@ BattleWeapon marioWeapon_UltraHammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_KaitenHammer, // mAttackEvtScript
+    marioAttackEvent_KaitenHammer, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 6, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -661,7 +661,7 @@ BattleWeapon marioWeapon_UltraHammerInvolved = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -676,12 +676,12 @@ BattleWeapon marioWeapon_UltraHammerFinish = {
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -704,7 +704,7 @@ BattleWeapon marioWeapon_UltraHammerFinish = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_KaitenHammer, // mAttackEvtScript
+    marioAttackEvent_KaitenHammer, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 5, 0, 0}, // stageEffectRates
 };
 
@@ -718,9 +718,9 @@ BattleWeapon badgeWeapon_TugitugiJump = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
     {0, 0, 1, 1, 2, 2, 241, 1}, // hpDamageWork
@@ -742,7 +742,7 @@ BattleWeapon badgeWeapon_TugitugiJump = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_TugiTugiJump, // mAttackEvtScript
+    marioAttackEvent_TugiTugiJump, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 2, 2, 0, 0, 0}, // stageEffectRates
 #else
@@ -760,9 +760,9 @@ BattleWeapon badgeWeapon_GatsunJump = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 240, 2}, // hpDamageWork
@@ -784,7 +784,7 @@ BattleWeapon badgeWeapon_GatsunJump = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_GatsunJump, // mAttackEvtScript
+    marioAttackEvent_GatsunJump, // attackEvtScript
     {0, 25, 25, 100, 25, 25, 25, 5, 25, 5, 0, 0}, // stageEffectRates
 };
 
@@ -798,9 +798,9 @@ BattleWeapon badgeWeapon_DokanJump = {
     6, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 332, 4}, // hpDamageWork
@@ -822,7 +822,7 @@ BattleWeapon badgeWeapon_DokanJump = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_DokanJump, // mAttackEvtScript
+    marioAttackEvent_DokanJump, // attackEvtScript
     {0, 25, 25, 100, 25, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 };
 
@@ -836,9 +836,9 @@ BattleWeapon badgeWeapon_RenzokuJump = {
     3, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
     {0, 0, 1, 1, 2, 2, 242, 1}, // hpDamageWork
@@ -860,7 +860,7 @@ BattleWeapon badgeWeapon_RenzokuJump = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_RenzokuJump, // mAttackEvtScript
+    marioAttackEvent_RenzokuJump, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 2, 2, 0, 0, 0}, // stageEffectRates
 #else
@@ -879,12 +879,12 @@ BattleWeapon badgeWeapon_TatsumakiJump = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    3, // mStylishCommandMultiplier
+    3, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapJump1, // hpDamageFn
     {0, 1, 1, 3, 2, 5, 243, 1}, // hpDamageWork
@@ -906,7 +906,7 @@ BattleWeapon badgeWeapon_TatsumakiJump = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_TatsumakiJump, // mAttackEvtScript
+    marioAttackEvent_TatsumakiJump, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -939,7 +939,7 @@ BattleWeapon badgeWeapon_TatsumakiJumpInvolved = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -952,9 +952,9 @@ BattleWeapon badgeWeapon_MiniminiFumi = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioJumpLv, // hpDamageFn
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
@@ -979,7 +979,7 @@ BattleWeapon badgeWeapon_MiniminiFumi = {
     0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_MiniminiFumi, // mAttackEvtScript
+    marioAttackEvent_MiniminiFumi, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 6, 5, 1, 1, 0, 0, 0}, // stageEffectRates
 #else
@@ -996,9 +996,9 @@ BattleWeapon badgeWeapon_NemuraseFumi = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioJumpLv, // hpDamageFn
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
@@ -1022,7 +1022,7 @@ BattleWeapon badgeWeapon_NemuraseFumi = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowChance..invisibleTime
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_NemuraseFumi, // mAttackEvtScript
+    marioAttackEvent_NemuraseFumi, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 6, 5, 1, 1, 0, 0, 0}, // stageEffectRates
 #else
@@ -1039,9 +1039,9 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioJumpLv, // hpDamageFn
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
@@ -1067,7 +1067,7 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_FunyafunyaJump, // mAttackEvtScript
+    marioAttackEvent_FunyafunyaJump, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 6, 5, 1, 1, 0, 0, 0}, // stageEffectRates
 #else
@@ -1085,9 +1085,9 @@ BattleWeapon badgeWeapon_GatsunHammer = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 247, 2}, // hpDamageWork
@@ -1109,7 +1109,7 @@ BattleWeapon badgeWeapon_GatsunHammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_GatsunHammer, // mAttackEvtScript
+    marioAttackEvent_GatsunHammer, // attackEvtScript
     {0, 25, 25, 100, 25, 25, 25, 5, 25, 5, 0, 0}, // stageEffectRates
 };
 
@@ -1123,9 +1123,9 @@ BattleWeapon badgeWeapon_DokanHammer = {
     6, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 333, 4}, // hpDamageWork
@@ -1147,7 +1147,7 @@ BattleWeapon badgeWeapon_DokanHammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_GatsunHammer, // mAttackEvtScript
+    marioAttackEvent_GatsunHammer, // attackEvtScript
     {0, 25, 25, 100, 25, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 };
 
@@ -1165,12 +1165,12 @@ BattleWeapon badgeWeapon_JishinHammer = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
     {0xFFFFFFFF, 0, 0xFFFFFFFF, 0, 0xFFFFFFFF, 0, 248, 2}, // hpDamageWork
@@ -1192,7 +1192,7 @@ BattleWeapon badgeWeapon_JishinHammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_JishinHammer, // mAttackEvtScript
+    marioAttackEvent_JishinHammer, // attackEvtScript
     {0, 50, 50, 100, 50, 25, 25, 5, 25, 5, 0, 0}, // stageEffectRates
 };
 
@@ -1206,9 +1206,9 @@ BattleWeapon badgeWeapon_UltraJishinHammer = {
     7, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
     {3, 6, 3, 6, 3, 6, 334, 4}, // hpDamageWork
@@ -1230,7 +1230,7 @@ BattleWeapon badgeWeapon_UltraJishinHammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_UltraJishinHammer, // mAttackEvtScript
+    marioAttackEvent_UltraJishinHammer, // attackEvtScript
     {0, 50, 50, 100, 50, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 };
 
@@ -1244,9 +1244,9 @@ BattleWeapon badgeWeapon_HammerNageru = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
     {0, 1, 1, 3, 2, 5, 249, 1}, // hpDamageWork
@@ -1268,7 +1268,7 @@ BattleWeapon badgeWeapon_HammerNageru = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_HammerNageru, // mAttackEvtScript
+    marioAttackEvent_HammerNageru, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1281,9 +1281,9 @@ BattleWeapon badgeWeapon_TsuranukiNaguri = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -1305,7 +1305,7 @@ BattleWeapon badgeWeapon_TsuranukiNaguri = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_TsuranukiHammer, // mAttackEvtScript
+    marioAttackEvent_TsuranukiHammer, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 25, 25, 100, 0, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
@@ -1322,9 +1322,9 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -1349,7 +1349,7 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_NormalHammer, // mAttackEvtScript
+    marioAttackEvent_NormalHammer, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 5, 5, 100, 0, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
@@ -1367,12 +1367,12 @@ BattleWeapon badgeWeapon_FireNaguri = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerOverlapHammer1, // hpDamageFn
     {0xFFFFFFFF, 3, 0, 3, 1, 3, 252, 2}, // hpDamageWork
@@ -1397,7 +1397,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_FireNaguri, // mAttackEvtScript
+    marioAttackEvent_FireNaguri, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
@@ -1419,12 +1419,12 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
     {1, 5, 2, 5, 3, 5, 0, 0}, // hpDamageWork
@@ -1449,7 +1449,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_FireNaguri, // mAttackEvtScript
+    marioAttackEvent_FireNaguri, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
@@ -1466,9 +1466,9 @@ BattleWeapon badgeWeapon_IceNaguri = {
     3, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -1494,7 +1494,7 @@ BattleWeapon badgeWeapon_IceNaguri = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_IceNaguri, // mAttackEvtScript
+    marioAttackEvent_IceNaguri, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 5, 5, 100, 0, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
@@ -1512,9 +1512,9 @@ BattleWeapon badgeWeapon_Charge = {
     1, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -1537,7 +1537,7 @@ BattleWeapon badgeWeapon_Charge = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_NormalCharge, // mAttackEvtScript
+    marioAttackEvent_NormalCharge, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1552,9 +1552,9 @@ BattleWeapon badgeWeapon_ChargeP = {
     1, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -1577,7 +1577,7 @@ BattleWeapon badgeWeapon_ChargeP = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_NormalChargeP, // mAttackEvtScript
+    marioAttackEvent_NormalChargeP, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1592,9 +1592,9 @@ BattleWeapon badgeWeapon_SuperCharge = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -1617,7 +1617,7 @@ BattleWeapon badgeWeapon_SuperCharge = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_SuperCharge, // mAttackEvtScript
+    marioAttackEvent_SuperCharge, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1632,9 +1632,9 @@ BattleWeapon badgeWeapon_SuperChargeP = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -1657,7 +1657,7 @@ BattleWeapon badgeWeapon_SuperChargeP = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_SuperChargeP, // mAttackEvtScript
+    marioAttackEvent_SuperChargeP, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1693,7 +1693,7 @@ BattleWeapon badgeWeapon_2KaiItem = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1725,7 +1725,7 @@ BattleWeapon badgeWeapon_3KaiItem = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1764,7 +1764,7 @@ BattleWeapon badgeWeapon_DefenceCommand = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1803,7 +1803,7 @@ BattleWeapon badgeWeapon_DefenceCommandP = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1819,9 +1819,9 @@ BattleWeapon marioWeapon_BakuGame = {
     2, // baseSpCost
     0, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -1845,7 +1845,7 @@ BattleWeapon marioWeapon_BakuGame = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_BakuGame, // mAttackEvtScript
+    marioAttackEvent_BakuGame, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1861,9 +1861,9 @@ BattleWeapon marioWeapon_Scissor = {
     4, // baseSpCost
     0, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPower_Scissor, // hpDamageFn
     {0}, // hpDamageWork
@@ -1884,7 +1884,7 @@ BattleWeapon marioWeapon_Scissor = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_Scissor, // mAttackEvtScript
+    marioAttackEvent_Scissor, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1900,9 +1900,9 @@ BattleWeapon marioWeapon_ZubaStar = {
     6, // baseSpCost
     0, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPower_ZubaStar, // hpDamageFn
     {0, 3, 6, 9, 12, 15, 0, 0}, // hpDamageWork
@@ -1923,7 +1923,7 @@ BattleWeapon marioWeapon_ZubaStar = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_ZubaStar, // mAttackEvtScript
+    marioAttackEvent_ZubaStar, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1942,9 +1942,9 @@ BattleWeapon marioWeapon_Genki0 = {
     1, // baseSpCost
     0, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -1965,7 +1965,7 @@ BattleWeapon marioWeapon_Genki0 = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_Genki0, // mAttackEvtScript
+    marioAttackEvent_Genki0, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -1981,9 +1981,9 @@ BattleWeapon marioWeapon_Genki1 = {
     5, // baseSpCost
     0, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2004,7 +2004,7 @@ BattleWeapon marioWeapon_Genki1 = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_Genki1, // mAttackEvtScript
+    marioAttackEvent_Genki1, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2020,9 +2020,9 @@ BattleWeapon marioWeapon_Deka = {
     2, // baseSpCost
     0, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPower_Deka, // hpDamageFn
     {0}, // hpDamageWork
@@ -2043,7 +2043,7 @@ BattleWeapon marioWeapon_Deka = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_Deka, // mAttackEvtScript
+    marioAttackEvent_Deka, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2062,9 +2062,9 @@ BattleWeapon marioWeapon_Muki = {
     3, // baseSpCost
     0, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2085,7 +2085,7 @@ BattleWeapon marioWeapon_Muki = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_Muki, // mAttackEvtScript
+    marioAttackEvent_Muki, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2101,9 +2101,9 @@ BattleWeapon marioWeapon_Suki = {
     2, // baseSpCost
     0, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -2125,7 +2125,7 @@ BattleWeapon marioWeapon_Suki = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_Suki, // mAttackEvtScript
+    marioAttackEvent_Suki, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -6637,7 +6637,7 @@ USER_FUNC(_whirlwind_effect) {
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &pos[0], &pos[1], &pos[2]);
-    eff = effWhirlwindN64Entry(unit->faceDirection < 0, NULL, unit->mSizeMultiplier, life);
+    eff = effWhirlwindN64Entry(unit->faceDirection < 0, NULL, unit->sizeMultiplier, life);
     ((EffWhirlwindN64Work*)eff->userdata)->position.x = pos[0];
     ((EffWhirlwindN64Work*)eff->userdata)->position.y = pos[1];
     ((EffWhirlwindN64Work*)eff->userdata)->position.z = pos[2];
@@ -6674,7 +6674,7 @@ USER_FUNC(_jump_star_effect) {
             dx = 10.0f;
         }
         BtlUnit_GetPos(unit, &pos[0], &pos[1], &pos[2]);
-        pos[0] += dx * unit->mSizeMultiplier;
+        pos[0] += dx * unit->sizeMultiplier;
         pos[1] += (f32)(step * 8 / 10);
         size = 0.1f * step + 0.8f;
         if (size > 2.0f) {
@@ -6740,9 +6740,9 @@ USER_FUNC(_tatsumaki_effect) {
     case 0:
         ud[0]++;
         ud[1] = 0;
-        ud[2] = (s32)unit->mPosition.x;
-        ud[3] = (s32)unit->mPosition.y - 40;
-        ud[4] = (s32)unit->mPosition.z;
+        ud[2] = (s32)unit->position.x;
+        ud[3] = (s32)unit->position.y - 40;
+        ud[4] = (s32)unit->position.z;
         ud[5] = (EvtWord)effKamekiTornadeN64Entry(0, 90, ud[2], ud[3], ud[4], 3.0f);
         ud[6] = (EvtWord)effKamekiTornadeN64Entry(0, 90, ud[2], ud[3], ud[4], 3.0f);
         ud[7] = psndSFXOn("SFX_BTL_JUMP_TATUMAKI2");
@@ -6779,8 +6779,8 @@ USER_FUNC(_record_renzoku_count) {
     BattleActRecord* rec = &_battleWorkPointer->actRecord;
     PouchData* pouch = pouchGetPtr();
     if (n > rec->powerBounceCombo) {
-        if (n > pouch->mPowerBounceRecord) {
-            pouch->mPowerBounceRecord = n;
+        if (n > pouch->powerBounceRecord) {
+            pouch->powerBounceRecord = n;
             BattleAudience_Case_JumpNewRecord();
         }
         if (n > 100) {
@@ -6808,7 +6808,7 @@ USER_FUNC(mario_get_renzoku_count_max) {
         evtSetValue(event, ret, 0);
         return EVT_RETURN_DONE;
     }
-    max = unit->mKindParams->pbSoftCap;
+    max = unit->kindParams->pbSoftCap;
     if (count < max) {
         evtSetValue(event, ret, max);
         return EVT_RETURN_DONE;
@@ -6851,9 +6851,9 @@ USER_FUNC(_hammer_star_effect) {
         rot = 10.0f;
     }
     BtlUnit_GetPos(unit, &pos[0], &pos[1], &pos[2]);
-    pos[1] += unit->mSizeMultiplier * (0.85f * BtlUnit_GetHeight(unit));
-    pos[0] += unit->mSizeMultiplier * (26.0f * -sinfd(angle));
-    pos[1] += unit->mSizeMultiplier * (26.0f * cosfd(angle));
+    pos[1] += unit->sizeMultiplier * (0.85f * BtlUnit_GetHeight(unit));
+    pos[0] += unit->sizeMultiplier * (26.0f * -sinfd(angle));
+    pos[1] += unit->sizeMultiplier * (26.0f * cosfd(angle));
     effEnergyEntry(type, 30, pos[0], pos[1], pos[0], 0.08f * event->userdata[0] + 0.1f, rot, 0.05f);
     if (event->userdata[0] < 12) {
         event->userdata[0]++;
@@ -6954,7 +6954,7 @@ USER_FUNC(_fire_wave) {
 USER_FUNC(_majinai_powerup_check) {
     BattleWork* wp = _battleWorkPointer;
     s32 ret = *event->args;
-    if (pouchGetPtr()->mMerleeNextCurseType != 1) {
+    if (pouchGetPtr()->merleeNextCurseType != 1) {
         evtSetValue(event, ret, 0);
     } else {
         evtSetValue(event, ret, 1);

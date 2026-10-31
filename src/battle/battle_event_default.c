@@ -1065,7 +1065,7 @@ USER_FUNC(_check_pose_stay) {
     if (unit->currentKind == UNIT_MARIO) {
         stay = TRUE;
         if (wp->badgeEquippedFlags & BATTLE_BADGE_QUICK_CHANGE) {
-            if (!(unit->mTokenFlags & kConfusedAction)) {
+            if (!(unit->tokenFlags & kConfusedAction)) {
                 stay = FALSE;
             }
         }
@@ -1097,10 +1097,10 @@ USER_FUNC(_btl_escape_reset_move_color_lv_player_unit_all) {
     BattleUnit* unit;
 
     unit = BattleGetMarioPtr(wp);
-    unit->mMoveColorLv = 0xFF;
+    unit->moveColorLv = 0xFF;
     unit = BattleGetPartyPtr(wp);
     if (unit) {
-        unit->mMoveColorLv = 0xFF;
+        unit->moveColorLv = 0xFF;
     }
     return EVT_RETURN_DONE;
 }
@@ -1116,7 +1116,7 @@ USER_FUNC(_set_escape_ac_hlp_msg) {
 USER_FUNC(_get_escape_rate) {
     BattleWork* wp = _battleWorkPointer;
     evtSetValue(event, event->args[0],
-                wp->fbatInfo->setup->groupSetup->enemyData->mUnitKindParams->runRate);
+                wp->fbatInfo->setup->groupSetup->enemyData->unitKindParams->runRate);
     return EVT_RETURN_DONE;
 }
 

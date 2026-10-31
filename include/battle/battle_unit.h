@@ -12,7 +12,7 @@
 
 struct BattleWeapon;
 
-// BattleUnit.mAlliance: the side a unit fights on.
+// BattleUnit.alliance: the side a unit fights on.
 typedef enum BattleUnitAlliance {
     ALLIANCE_PLAYER,  // Mario and his partners
     ALLIANCE_ENEMY,
@@ -60,21 +60,21 @@ typedef enum PartsAttribute_Flags {          // 32-bit size
     kHidden = (1 << 24),                     // 0x1000000, not drawn
     kNoShadow = (1 << 25),                   // 0x2000000, no shadow
     kMotionBlur = (1 << 26),                 // 0x4000000, also drawn with btlUnitPartsBlurDisp
-    kIgnoreUnitSize = (1 << 27),             // 0x8000000, scaled without the unit's mSizeMultiplier
-    kAbsolutePosition = (1 << 28),           // 0x10000000, mPosition is the world position, not an offset from the unit
+    kIgnoreUnitSize = (1 << 27),             // 0x8000000, scaled without the unit's sizeMultiplier
+    kAbsolutePosition = (1 << 28),           // 0x10000000, position is the world position, not an offset from the unit
     kImmuneToDamageAndStatus = (1 << 29),   // 0x20000000, no HP/FP damage and no status (battle_damage.c)
     kImmuneToNegativeStatus = (1 << 30),    // 0x40000000, sleep, stop, poison, ... and instant kill blocked
     kImmuneToStatus = (1 << 31)             // 0x80000000, no status at all
 } PartsAttribute_Flags;
 
-// BattleUnit.mStatusFlags (BtlUnit_*StatusFlag, btlevtcmd_On/Off/CheckStatusFlag). Danger = 5 HP, Peril = 1 HP as in
+// BattleUnit.statusFlags (BtlUnit_*StatusFlag, btlevtcmd_On/Off/CheckStatusFlag). Danger = 5 HP, Peril = 1 HP as in
 // the US game text (the original sound and audience symbol names say "pinch" and "danger" for the two states).
 typedef enum BattleUnitStatusFlags {
     UNIT_STATUS_FLAG_FLIPPED = (1 << 0),   // 0x1, set by the flip damage scripts: cannot act, guard or get an AC
     UNIT_STATUS_FLAG_DEFEND = (1 << 24),   // 0x1000000, Defend command: +1 defense until the next turn
     UNIT_STATUS_FLAG_HUSTLE = (1 << 25),   // 0x2000000, _set_hustle: the next action costs no move
-    UNIT_STATUS_FLAG_DANGER = (1 << 28),   // 0x10000000, HP <= mDangerHP (BtlUnit_CheckPinchStatus)
-    UNIT_STATUS_FLAG_PERIL = (1 << 29),    // 0x20000000, HP <= mPerilHP
+    UNIT_STATUS_FLAG_DANGER = (1 << 28),   // 0x10000000, HP <= dangerHP (BtlUnit_CheckPinchStatus)
+    UNIT_STATUS_FLAG_PERIL = (1 << 29),    // 0x20000000, HP <= perilHP
 } BattleUnitStatusFlags;
 
 typedef enum BattleUnit_Flags {
@@ -582,7 +582,7 @@ typedef struct BattleUnitKindPart {
     Vec hitBaseOffset;                             // 0x18
     Vec hitCursorBaseOffset;                       // 0x24
     s16 shadowSize;                                // 0x30, -> BattleWorkUnitPart.shadowSize
-    s16 reserved_32;                               // 0x32, -> BattleWorkUnitPart.reserved_1A4, never read
+    s16 hitHeight;                               // 0x32, -> BattleWorkUnitPart.hitHeight, never read
     s16 baseAlpha;                                 // 0x34
     BattleUnitDefense* defense;                    // 0x38
     BattleUnitDefenseAttr* defenseAttr;            // 0x3C
@@ -668,26 +668,26 @@ typedef enum BattlePartAnimFlags {
 } BattlePartAnimFlags;
 
 typedef struct BattleWorkUnitPart {
-    struct BattleWorkUnitPart* mNextPart;                  // 0x0
-    BattleUnitKindPart* mKindPartParams;                   // 0x4
+    struct BattleWorkUnitPart* nextPart;                  // 0x0
+    BattleUnitKindPart* kindPartParams;                   // 0x4
     const char* partName;                                  // 0x8
-    Vec mHomePosition;                                     // 0xC
-    Vec mPosition;                                         // 0x18
-    Vec mPositionOffset;                                   // 0x24
-    Vec mDisplayOffset;                                    // 0x30
-    Vec mBaseRotation;                                     // 0x3C
-    Vec mRotation;                                         // 0x48
-    Vec mRotationOffset;                                   // 0x54
+    Vec homePosition;                                     // 0xC
+    Vec position;                                         // 0x18
+    Vec positionOffset;                                   // 0x24
+    Vec displayOffset;                                    // 0x30
+    Vec baseRotation;                                     // 0x3C
+    Vec rotation;                                         // 0x48
+    Vec rotationOffset;                                   // 0x54
     Vec mScale;                                            // 0x60
-    Vec mBaseScale;                                        // 0x68
+    Vec baseScale;                                        // 0x68
     f32 shadowScale;                                       // 0x78, extra shadow size multiplier
-    Vec mMoveStartPos;                                     // 0x7C
-    Vec mMoveCurrentPos;                                   // 0x88
-    Vec mMoveTargetPos;                                    // 0x94
+    Vec moveStartPos;                                     // 0x7C
+    Vec moveCurrentPos;                                   // 0x88
+    Vec moveTargetPos;                                    // 0x94
     s32 moveTotalFrames;                                        // 0xA0, frame count of the current parts move/jump
-    f32 mMoveSpeedXZ;                                      // 0xA4
-    f32 mFallAccel;                                        // 0xA8
-    f32 moveSpeedY;                                        // 0xAC, jump vertical speed, minus mFallAccel per frame
+    f32 moveSpeedXZ;                                      // 0xA4
+    f32 fallAccel;                                        // 0xA8
+    f32 moveSpeedY;                                        // 0xAC, jump vertical speed, minus fallAccel per frame
     f32 moveAngle;                                         // 0xB0, XZ angle to the move target
     f32 moveDistance;                                      // 0xB4, XZ distance to the move target (then the per-frame remainder)
     f32 moveFrame;                                         // 0xB8, current frame of an interpolated parts move
@@ -698,13 +698,13 @@ typedef struct BattleWorkUnitPart {
     u8 pad_DC[0xF8 - 0xDC];                                // 0xDC, never accessed
     BtlPoseSoundTable moveSndTable;                        // 0xF8, btlevtcmd_SetPartsJump/Run/Walk/DiveSound
     EvtWord work[16];                                      // 0x130, part work words (btlevtcmd_SetPartsWork / GetPartsWork): numbers and table pointers
-    Vec mHitBaseOffset;                                    // 0x170, copied from the kind part's hitBaseOffset
-    Vec mHitOffset;                                        // 0x17C
-    Vec mHitCursorBaseOffset;                              // 0x188, copied from the kind part's hitCursorBaseOffset
-    Vec mHitCursorOffset;                                  // 0x194
+    Vec hitBaseOffset;                                    // 0x170, copied from the kind part's hitBaseOffset
+    Vec hitOffset;                                        // 0x17C
+    Vec hitCursorBaseOffset;                              // 0x188, copied from the kind part's hitCursorBaseOffset
+    Vec hitCursorOffset;                                  // 0x194
     s16 hitOffsetX;                                        // 0x1A0, target-cursor X offset (btl_hitoffsetx)
     s16 shadowSize;                                        // 0x1A2, from kind part 0x30; scales shadowEntry
-    s16 reserved_1A4;                                      // 0x1A4, copied from BattleUnitKindPart.reserved_32, never read
+    s16 hitHeight;                                      // 0x1A4, copied from BattleUnitKindPart.hitHeight, never read
     u16 gravityTimer;                                      // 0x1A6, frame counter for the gravity bob offset
     u16 floatTimer;                                        // 0x1A8, frame counter for the floating offset
     u8 pad_1AA[0x1AC - 0x1AA];                             // 0x1AA, never accessed
@@ -726,7 +726,7 @@ typedef struct BattleWorkUnitPart {
     BattleWorkUnitPartBlur blurWork;                       // 0x21C
     BtlPartPoseSound poseSound;                            // 0x4D0, btlevtcmd_AnimeSetPoseSoundTable
     s32 handle;                                            // 0x4E8, -1 at entry, reset to -1 on unit delete; never set otherwise in C
-    struct BattleUnit* mOwner;                             // 0x4EC
+    struct BattleUnit* owner;                             // 0x4EC
     GXColor color;                                         // 0x4F0
     GXColor dispColor;                                     // 0x4F4, color with alpha = baseAlpha * color.a
     f32 dispZOffset;                                       // 0x4F8, added to z for the display sort
@@ -811,19 +811,19 @@ typedef struct StChgInfo {
 } StChgInfo;                  // status-change message queue entry
 
 typedef struct BtlStatusCopy {
-    u8 data[0x1E]; // BattleUnit status turns/strengths from mSleepTurns, copied as one block
+    u8 data[0x1E]; // BattleUnit status turns/strengths from sleepTurns, copied as one block
 } BtlStatusCopy;
 
 typedef struct BattleUnit {
     s32 unitId;                                  // 0x0
     BattleUnitType initialKind;                  // 0x4
     BattleUnitType currentKind;                  // 0x8
-    s8 mAlliance;                                // 0xC
-    u8 mLevel;                                   // 0xD
+    s8 alliance;                                // 0xC
+    u8 level;                                   // 0xD
     s8 groupSetupId;                             // 0xE
     u8 pad_0F;                                   // 0xF, never accessed
-    struct BattleUnitKind* mKindParams;          // 0x10
-    BattleUnitPart* mParts;                  // 0x14
+    struct BattleUnitKind* kindParams;          // 0x10
+    BattleUnitPart* parts;                  // 0x14
     BattleDataEntry* dataTable;                  // 0x18
     s32 flags;                                   // 0x1C
     s8 moveState;                                // 0x20
@@ -836,96 +836,96 @@ typedef struct BattleUnit {
     u8 pad_27;                                   // 0x27, never accessed
     s32 movePriority;                            // 0x28
     s32 attackPhase;                             // 0x2C
-    Vec mHomePosition;                           // 0x30
-    Vec mPosition;                               // 0x3C
-    Vec mPositionOffset;                         // 0x48
-    Vec mDisplayOffset;                          // 0x54
-    Vec mBaseRotation;                           // 0x60
-    Vec mRotation;                               // 0x6C
-    Vec mRotationOffset;                         // 0x78
+    Vec homePosition;                           // 0x30
+    Vec position;                               // 0x3C
+    Vec positionOffset;                         // 0x48
+    Vec displayOffset;                          // 0x54
+    Vec baseRotation;                           // 0x60
+    Vec rotation;                               // 0x6C
+    Vec rotationOffset;                         // 0x78
     Vec offsetCenter;                            // 0x84
     Vec mScale;                                  // 0x90
-    Vec mBaseScale;                              // 0x9C
+    Vec baseScale;                              // 0x9C
     Vec togeOffset;                              // 0xA8
     Vec heldItemBaseOffset;                      // 0xB4, copied from BattleUnitKind.heldItemBaseOffset
     Vec heldItemOffset;                          // 0xC0
-    s16 mWidth;                                  // 0xCC
-    s16 mHeight;                                 // 0xCE
-    s16 mStatusIconOffset[2];                    // 0xD0
-    s16 mHpGaugeOffset[2];                       // 0xD4
+    s16 width;                                  // 0xCC
+    s16 height;                                 // 0xCE
+    s16 statusIconOffset[2];                    // 0xD0
+    s16 hpGaugeOffset[2];                       // 0xD4
     Vec cutBaseOffset;                           // 0xD8
     f32 cutWidth;                                // 0xE4
     f32 cutHeight;                               // 0xE8
     Vec bintaHitOffset;                          // 0xEC, Love Slap
     Vec kissHitOffset;                           // 0xF8, Lip Lock
-    BattleUnitAttribute_Flags mAttributeFlags;   // 0x104
+    BattleUnitAttribute_Flags attributeFlags;   // 0x104
     s16 maxHp;                                   // 0x108
     s16 baseMaxHp;                               // 0x10A
     s16 currentHp;                               // 0x10C
     s16 maxFp;                                   // 0x10E
     s16 baseMaxFp;                               // 0x110
     s16 currentFp;                               // 0x112
-    f32 mSizeMultiplier;                         // 0x114
+    f32 sizeMultiplier;                         // 0x114
     union {
         struct {
-            s8 mSleepTurns;                              // 0x118
-            s8 mSleepStrength;                           // 0x119
-            s8 mStopTurns;                               // 0x11A
-            s8 mDizzyTurns;                              // 0x11B
-            s8 mPoisonTurns;                             // 0x11C
-            s8 mPoisonStrength;                          // 0x11D
-            s8 mConfusionTurns;                          // 0x11E
-            s8 mElectricTurns;                           // 0x11F
-            s8 mDodgyTurns;                              // 0x120
-            s8 mBurnTurns;                               // 0x121
-            s8 mFreezeTurns;                             // 0x122
-            s8 mSizeChangeTurns;                         // 0x123
-            s8 mSizeChangeStrength;                      // 0x124
-            s8 mAtkChangeTurns;                          // 0x125
-            s8 mAtkChangeStrength;                       // 0x126
-            s8 mDefChangeTurns;                          // 0x127
-            s8 mDefChangeStrength;                       // 0x128
-            s8 mChargeStrength;                          // 0x129
-            s8 mAllergicTurns;                           // 0x12A
+            s8 sleepTurns;                              // 0x118
+            s8 sleepStrength;                           // 0x119
+            s8 stopTurns;                               // 0x11A
+            s8 dizzyTurns;                              // 0x11B
+            s8 poisonTurns;                             // 0x11C
+            s8 poisonStrength;                          // 0x11D
+            s8 confusionTurns;                          // 0x11E
+            s8 electricTurns;                           // 0x11F
+            s8 dodgyTurns;                              // 0x120
+            s8 burnTurns;                               // 0x121
+            s8 freezeTurns;                             // 0x122
+            s8 sizeChangeTurns;                         // 0x123
+            s8 sizeChangeStrength;                      // 0x124
+            s8 atkChangeTurns;                          // 0x125
+            s8 atkChangeStrength;                       // 0x126
+            s8 defChangeTurns;                          // 0x127
+            s8 defChangeStrength;                       // 0x128
+            s8 chargeStrength;                          // 0x129
+            s8 allergicTurns;                           // 0x12A
             s8 flippedTurns;                             // 0x12B, turn count left until flipping back
-            s8 mInvisibleTurns;                          // 0x12C
-            s8 mPaybackTurns;                            // 0x12D
-            s8 mHoldFastTurns;                           // 0x12E
-            s8 mFastTurns;                               // 0x12F
-            s8 mSlowTurns;                               // 0x130
-            s8 mHpRegenTurns;                            // 0x131
-            s8 mHpRegenStrength;                         // 0x132
-            s8 mFpRegenTurns;                            // 0x133
-            s8 mFpRegenStrength;                         // 0x134
-            s8 mInstantKillStrength;                     // 0x135
+            s8 invisibleTurns;                          // 0x12C
+            s8 paybackTurns;                            // 0x12D
+            s8 holdFastTurns;                           // 0x12E
+            s8 fastTurns;                               // 0x12F
+            s8 slowTurns;                               // 0x130
+            s8 hpRegenTurns;                            // 0x131
+            s8 hpRegenStrength;                         // 0x132
+            s8 fpRegenTurns;                            // 0x133
+            s8 fpRegenStrength;                         // 0x134
+            s8 instantKillStrength;                     // 0x135
         };
         BtlStatusCopy statusTurns;                // 0x118, the 0x1E status bytes as one block (party info save/restore)
     };
     u8 pad_136[2];                               // 0x136, never accessed
-    s32 mStatusFlags;                            // 0x138
+    s32 statusFlags;                            // 0x138
 #ifdef VERSION_G8ME01
     u16 usCommandDisabled[2]; // US only (+4 from here): per-unit turns left for the two command blocks JP keeps in BattleWork commandDisabled[3..4]
 #endif
     s32 protectId;                               // 0x13C
     BattleVulnerableStatus* vulnStatus;          // 0x140
-    Vec mMoveStartPos;                           // 0x144
-    Vec mMoveCurrentPos;                         // 0x150
-    Vec mMoveTargetPos;                          // 0x15C
+    Vec moveStartPos;                           // 0x144
+    Vec moveCurrentPos;                         // 0x150
+    Vec moveTargetPos;                          // 0x15C
     s32 moveFrames;                              // 0x168, move/jump frame count (BEC_MVFRAME)
-    f32 mMoveSpeedXZ;                            // 0x16C
-    f32 mFallAccel;                              // 0x170
-    f32 mMoveSpeedY;                             // 0x174
+    f32 moveSpeedXZ;                            // 0x16C
+    f32 fallAccel;                              // 0x170
+    f32 moveSpeedY;                             // 0x174
     f32 mMoveDirection;                          // 0x178
-    f32 mMoveDistance;                           // 0x17C, XZ distance of the move (mMoveSpeedXZ = this / moveFrames)
-    f32 mMoveTotalFrames;                        // 0x180, moveFrames at the move start (as f32)
+    f32 moveDistance;                           // 0x17C, XZ distance of the move (moveSpeedXZ = this / moveFrames)
+    f32 moveTotalFrames;                        // 0x180, moveFrames at the move start (as f32)
     s8 moveDirection;                            // 0x184
     s8 faceDirection;                            // 0x185
     u8 pad_186[0x188 - 0x186];                   // 0x186 (US 0x18A), never accessed
     BecSndWork moveSnd;                          // 0x188 (US 0x18C)
-    Vec mJumpStep;                               // 0x1A4 (US 0x1A8), per-frame XZ/Y step of btlevtcmd_MarioJumpPosition
-    f32 mJumpAngle;                              // 0x1B0 (US 0x1B4), arc angle in degrees
-    f32 mJumpAngleStep;                          // 0x1B4 (US 0x1B8), arc angle added per frame
-    f32 mJumpBaseY;                              // 0x1B8 (US 0x1BC), last Y position of the jump
+    Vec jumpStep;                               // 0x1A4 (US 0x1A8), per-frame XZ/Y step of btlevtcmd_MarioJumpPosition
+    f32 jumpAngle;                              // 0x1B0 (US 0x1B4), arc angle in degrees
+    f32 jumpAngleStep;                          // 0x1B4 (US 0x1B8), arc angle added per frame
+    f32 jumpBaseY;                              // 0x1B8 (US 0x1BC), last Y position of the jump
     u8 pad_1BC[0x1C0 - 0x1BC];                   // 0x1BC (US 0x1C0), never accessed
     BtlPoseSoundTable moveSndTable;              // 0x1C0 (US 0x1C4), jump names + run/walk/dive entries (btlevtcmd_SetJump/Run/Walk/DiveSound)
     BattleWorkHpGauge hpGauge;                   // 0x1F8
@@ -943,7 +943,7 @@ typedef struct BattleUnit {
     s8 superguardCountTaken;                     // 0x26F (US 0x273), attacker's superguardedCount when this unit superguarded it
     s32 damagePattern;                           // 0x270, damage pattern of the last hit (selects the hurt pose), 0 when cleared
     s32 damageCode;                              // 0x274
-    BattleUnitToken_Flags mTokenFlags;           // 0x278
+    BattleUnitToken_Flags tokenFlags;           // 0x278
     s32 superguardedCount;                       // 0x27C (US 0x280), times this unit was superguarded this turn; weapon special 0x20 subtracts it from damage
     s32 totalDamageDealt;                        // 0x280, damage this unit dealt as attacker
     s32 initEventId;                             // 0x284
@@ -975,8 +975,8 @@ typedef struct BattleUnit {
     ItemType heldItem;                           // 0x304, 4 bytes
     ItemDropData* dropTable;                     // 0x308
     u8 stolenCoins;                              // 0x30C, coins a Bandit (borodo) stole; dropped back as its held coin item
-    u8 mMoveColorLv;                             // 0x30D
-    u8 moveColorLvDisp;                          // 0x30E, current move colour level, ramps toward mMoveColorLv
+    u8 moveColorLv;                             // 0x30D
+    u8 moveColorLvDisp;                          // 0x30E, current move colour level, ramps toward moveColorLv
     u8 pad_30F;                                  // 0x30F, never accessed
     struct BattleWeapon* countersetWeapon;       // 0x310
     void (*deleteFunc)(struct BattleUnit*);      // 0x314 (US 0x318), called by BtlUnit_Delete
@@ -987,25 +987,25 @@ typedef struct BattleUnit {
     EffectEntry* iceEff;                         // 0x328
     EffectEntry* sparkEff;                       // 0x32C
     struct IconEntry* kageIcon;                  // 0x330, BSE_Kagegakure
-    u16 mBurnDamageFlameState;                   // 0x334
+    u16 burnDamageFlameState;                   // 0x334
     u16 mbBurnDamageFlameActive;                 // 0x336
-    s32 mBurnDamageFlameAnimTimer;               // 0x338
-    f32 mBurnDamageFlameScale;                   // 0x33C
-    EffectEntry* mBurnDamageFlameEff;            // 0x340
-    BattleWorkStatusIcon mStatusIconWork;        // 0x344
+    s32 burnDamageFlameAnimTimer;               // 0x338
+    f32 burnDamageFlameScale;                   // 0x33C
+    EffectEntry* burnDamageFlameEff;            // 0x340
+    BattleWorkStatusIcon statusIconWork;        // 0x344
     StChgInfo statusChangeInfo[6];               // 0xAE4, BattleStatusChangeInfoWorkInit
     s32 stageObjectId;                           // 0xB2C
 } BattleUnit;
 
 typedef struct BattleUnitKind {
-    BattleUnitType mUnitType;                 // 0x0
+    BattleUnitType unitType;                 // 0x0
     const char* name;                         // 0x4
     s16 maxHp;                                // 0x8
     s16 maxFp;                                // 0xA
-    u8 mDangerHP;                             // 0xC
-    u8 mPerilHP;                              // 0xD
-    u8 mLevel;                                // 0xE
-    u8 mBonusExp;                             // 0xF
+    u8 dangerHP;                             // 0xC
+    u8 perilHP;                              // 0xD
+    u8 level;                                // 0xE
+    u8 bonusExp;                             // 0xF
     u8 bonusCoin;                             // 0x10
     u8 bonusCoinRate;                         // 0x11
     u8 baseCoin;                              // 0x12
@@ -1040,14 +1040,14 @@ typedef struct BattleUnitKind {
     u32 attributeFlags;                       // 0xAC
     StatusVulnerability* statusVulnerability; // 0xB0
     s8 numParts;                              // 0xB4
-    BattleUnitKindPart* mParts;               // 0xB8
+    BattleUnitKindPart* parts;               // 0xB8
     void* initEventCode;                      // 0xBC
     BattleDataEntry* dataTable;               // 0xC0
 } BattleUnitKind;
 
 typedef struct BattleUnitSetup {
-    BattleUnitKind* mUnitKindParams; // 0x0
-    s8 alliance;                     // 0x4, -> BattleUnit.mAlliance (BtlUnit_Entry); 2 for stage objects
+    BattleUnitKind* unitKindParams; // 0x0
+    s8 alliance;                     // 0x4, -> BattleUnit.alliance (BtlUnit_Entry); 2 for stage objects
     u8 pad_05[3];                    // 0x5, never read
     s32 attackPhase;                 // 0x8, -> BattleUnit.attackPhase
     Vec position;                    // 0xC, -> unit pos/offset pos/home pos

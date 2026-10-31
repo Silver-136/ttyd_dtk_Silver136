@@ -157,28 +157,28 @@ void BattleStatusIconDisp(CameraId camId, void* param);
 
 /** Clears the unit's status icon work; called from BtlUnit_Entry. */
 void BattleStatusIconInit(BattleUnit* unit) {
-    memset(&unit->mStatusIconWork, 0, sizeof(BattleWorkStatusIcon));
+    memset(&unit->statusIconWork, 0, sizeof(BattleWorkStatusIcon));
 }
 
 void BattleStatusIconMain(BattleUnit* unit) {
-    BattleWorkStatusIcon* icon = &unit->mStatusIconWork;
+    BattleWorkStatusIcon* icon = &unit->statusIconWork;
     BattleWork* work = _battleWorkPointer;
     u32 i;
 
-    icon->mNumStatusIcons = 0;
+    icon->numStatusIcons = 0;
     if (work->flags & BATTLE_FLAG_FORCE_STATUS_ICONS_UNUSED || work->dispFlags & 1) {
-        BtlUnit_GetPos(unit, &icon->mPosition.x, &icon->mPosition.y, &icon->mPosition.z);
-        icon->mPosition.x += ((f32)(unit->mStatusIconOffset[0]) * unit->mSizeMultiplier);
-        icon->mPosition.y += ((f32)(unit->mStatusIconOffset[1]) * unit->mSizeMultiplier);
-        icon->mScreenSpaceOffset.x = 13.440001f;
-        icon->mScreenSpaceOffset.z = 0.0f;
-        icon->mFlags = 0;
-        if (!(unit->mAttributeFlags & kCeiling)) {
-            icon->mDistanceBetweenIcons = 25.6f;
-            icon->mScreenSpaceOffset.y = 19.200001f;
+        BtlUnit_GetPos(unit, &icon->position.x, &icon->position.y, &icon->position.z);
+        icon->position.x += ((f32)(unit->statusIconOffset[0]) * unit->sizeMultiplier);
+        icon->position.y += ((f32)(unit->statusIconOffset[1]) * unit->sizeMultiplier);
+        icon->screenSpaceOffset.x = 13.440001f;
+        icon->screenSpaceOffset.z = 0.0f;
+        icon->flags = 0;
+        if (!(unit->attributeFlags & kCeiling)) {
+            icon->distanceBetweenIcons = 25.6f;
+            icon->screenSpaceOffset.y = 19.200001f;
         } else {
-            icon->mDistanceBetweenIcons = 25.6f;
-            icon->mScreenSpaceOffset.y = 0.0f;
+            icon->distanceBetweenIcons = 25.6f;
+            icon->screenSpaceOffset.y = 0.0f;
         }
 
         for (i = 0; i < 0x17; i++) {
@@ -204,16 +204,16 @@ void BattleStatusIconMain(BattleUnit* unit) {
             IconDispTableEntry* d = &_disp_table[i];
 #endif
 #ifdef VERSION_G8ME01
-            e = &icon->mIcons[icon->mNumStatusIcons];
+            e = &icon->icons[icon->numStatusIcons];
 #else
-            BattleWorkStatusIconEntry* e = &icon->mIcons[icon->mNumStatusIcons];
+            BattleWorkStatusIconEntry* e = &icon->icons[icon->numStatusIcons];
 #endif
             if (d->id == -1) break;
             if (d->callback(unit, d, e)) {
-                icon->mNumStatusIcons++;
+                icon->numStatusIcons++;
             }
         }
-        if (icon->mNumStatusIcons > 0) {
+        if (icon->numStatusIcons > 0) {
             dispEntry(CAMERA_2D, 901.0f, 1, BattleStatusIconDisp, unit);
         }
     }
@@ -230,24 +230,24 @@ void BattleStatusIconDelete(BattleUnit* unit) {
  * rotation and colour (skipped while STATUS_ICON_HIDDEN), and the remaining turn count beside it.
  */
 void BattleStatusIconDisp(CameraId camId, void* param) {
-    BattleWorkStatusIcon* icon = &((BattleUnit*)param)->mStatusIconWork;
+    BattleWorkStatusIcon* icon = &((BattleUnit*)param)->statusIconWork;
     GXColor col = {0xFF, 0xFF, 0xFF, 0xFF};
     Vec screen, p, n;
     Mtx m, trans, scale, npivot, pivot, rx, ry, rz, nm;
     BattleWorkStatusIconEntry* e;
     s32 i;
 
-    btlGetScreenPoint(&icon->mPosition, &screen);
-    for (i = icon->mNumStatusIcons - 1; i >= 0; i--) {
-        e = &icon->mIcons[i];
+    btlGetScreenPoint(&icon->position, &screen);
+    for (i = icon->numStatusIcons - 1; i >= 0; i--) {
+        e = &icon->icons[i];
         p = screen;
-        p.y += icon->mDistanceBetweenIcons * (f32)i;
-        p.y += icon->mScreenSpaceOffset.y;
-        p.x += icon->mScreenSpaceOffset.x;
-        p.z += icon->mScreenSpaceOffset.z;
+        p.y += icon->distanceBetweenIcons * (f32)i;
+        p.y += icon->screenSpaceOffset.y;
+        p.x += icon->screenSpaceOffset.x;
+        p.z += icon->screenSpaceOffset.z;
         p.z -= (f32)(-(i * 2));
         if (!(e->flags & STATUS_ICON_NO_PLATE)) {
-            if (!(icon->mFlags & 1)) {
+            if (!(icon->flags & 1)) {
                 btlDispTexPlane(p.x, p.y, p.z, 0.8f, 0.8f, VERSION_PICK(0x23, 0x30), col, 0);
             } else {
                 btlDispTexPlane(p.x, p.y, p.z, 0.8f, -0.8f, VERSION_PICK(0x23, 0x30), col, 0);
@@ -327,10 +327,10 @@ BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusI
     s8 turns, strength;
     Vec v;
     if (!BtlUnit_CheckStatus(unit, type)) {
-        unit->mStatusIconWork.dizzyAngle = 0.0f;
+        unit->statusIconWork.dizzyAngle = 0.0f;
         return FALSE;
     }
-    unit->mStatusIconWork.dizzyAngle += 4.0f;
+    unit->statusIconWork.dizzyAngle += 4.0f;
     BtlUnit_GetStatus(unit, type, &turns, &strength);
     entry->type = type;
     entry->turns = turns >= 0 ? turns : -turns;
@@ -338,7 +338,7 @@ BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusI
     entry->scale = (Vec){1.0f,1.0f,1.0f};
     entry->pivot = (Vec){0.0f,0.0f,0.0f};
     v = (Vec){0.0f,0.0f,0.0f};
-    v.z = unit->mStatusIconWork.dizzyAngle;
+    v.z = unit->statusIconWork.dizzyAngle;
     entry->rot = v;
     entry->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
     entry->flags = disp->something2;
@@ -354,7 +354,7 @@ BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIc
     int type = disp->id;
     s8 turns, strength;
     if (!BtlUnit_CheckStatus(unit, type)) {
-        unit->mStatusIconWork.allergyBlinkTimer = 0;
+        unit->statusIconWork.allergyBlinkTimer = 0;
         return FALSE;
     }
     BtlUnit_GetStatus(unit, type, &turns, &strength);
@@ -367,8 +367,8 @@ BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIc
     entry->color = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
     entry->flags = disp->something2;
     entry->trans = (Vec){0.0f,0.0f,0.0f};
-    unit->mStatusIconWork.allergyBlinkTimer++;
-    if (unit->mStatusIconWork.allergyBlinkTimer & 0x10) {
+    unit->statusIconWork.allergyBlinkTimer++;
+    if (unit->statusIconWork.allergyBlinkTimer & 0x10) {
         entry->flags |= STATUS_ICON_HIDDEN;
     }
     return TRUE;
@@ -383,29 +383,29 @@ BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusI
     s32 type = disp->id;
     s8 turns, strength;
     if (!BtlUnit_CheckStatus(unit, disp->id)) {
-        unit->mStatusIconWork.elecState = 0;
-        unit->mStatusIconWork.elecTimer = 0;
+        unit->statusIconWork.elecState = 0;
+        unit->statusIconWork.elecTimer = 0;
         return FALSE;
     }
     entry->scale = (Vec){1.0f,1.0f,1.0f};
-    switch (unit->mStatusIconWork.elecState) {
+    switch (unit->statusIconWork.elecState) {
         case 0:
-            unit->mStatusIconWork.elecState++;
-            unit->mStatusIconWork.elecTimer = irand(6) + 4;
+            unit->statusIconWork.elecState++;
+            unit->statusIconWork.elecTimer = irand(6) + 4;
         case 1:
             entry->scale = (Vec){1.0f,1.0f,1.0f};
-            unit->mStatusIconWork.elecTimer--;
-            if (unit->mStatusIconWork.elecTimer < 0) {
-                unit->mStatusIconWork.elecState++;
-                unit->mStatusIconWork.elecTimer = irand(100) + 30;
+            unit->statusIconWork.elecTimer--;
+            if (unit->statusIconWork.elecTimer < 0) {
+                unit->statusIconWork.elecState++;
+                unit->statusIconWork.elecTimer = irand(100) + 30;
             }
             break;
         case 2:
             entry->scale = (Vec){0.8f,0.8f,1.0f};
-            unit->mStatusIconWork.elecTimer--;
-            if (unit->mStatusIconWork.elecTimer < 0) {
-                unit->mStatusIconWork.elecTimer = irand(6) + 4;
-                unit->mStatusIconWork.elecState = 1;
+            unit->statusIconWork.elecTimer--;
+            if (unit->statusIconWork.elecTimer < 0) {
+                unit->statusIconWork.elecTimer = irand(6) + 4;
+                unit->statusIconWork.elecState = 1;
             }
             break;
     }
@@ -433,11 +433,11 @@ BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkSta
     s32 t;
     s8 turns, strength;
     if (type == STATUS_HP_REGEN) {
-        ctr = &unit->mStatusIconWork.hpRegenTimer;
+        ctr = &unit->statusIconWork.hpRegenTimer;
         c0 = (GXColor){0xED, 0x14, 0x5B, 0xFF};
         c1 = (GXColor){0xFF, 0xEA, 0x05, 0xFF};
     } else if (type == STATUS_FP_REGEN) {
-        ctr = &unit->mStatusIconWork.fpRegenTimer;
+        ctr = &unit->statusIconWork.fpRegenTimer;
         c0 = (GXColor){0x3D, 0xD1, 0x09, 0xFF};
         c1 = (GXColor){0x61, 0xE9, 0xE7, 0xFF};
     } else {

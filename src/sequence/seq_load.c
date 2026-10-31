@@ -937,8 +937,8 @@ void loadDraw(CameraId camera, void* param) {
         u16 flags = save->data.flags;
         s16 level = save->data.pouch.level;
         OSTime time = save->data.global.retraceLocalTime;
-        u16 stars = save->data.pouch.mStarPowersObtained;
-        s32 gsw0 = save->data.global.mGSW0;
+        u16 stars = save->data.pouch.starPowersObtained;
+        s32 gsw0 = save->data.global.gSW0;
         char* name = (char*)save->data.global.playerName;
 #endif
         const char* str;
@@ -948,8 +948,8 @@ void loadDraw(CameraId camera, void* param) {
         flags = save->data.flags;
         level = save->data.pouch.level;
         time = save->data.global.retraceLocalTime;
-        stars = save->data.pouch.mStarPowersObtained;
-        gsw0 = save->data.global.mGSW0;
+        stars = save->data.pouch.starPowersObtained;
+        gsw0 = save->data.global.gSW0;
         name = (char*)save->data.global.playerName;
 #endif
 

@@ -155,7 +155,7 @@ void marioChgMoveMotion(void) {
     if (!mario->baseSpeed) {
         marioChgStayMotion();
     }
-    if (mario->baseSpeed > mario->mBaseWalkSpeed) {
+    if (mario->baseSpeed > mario->baseWalkSpeed) {
         marioChgMot(MARIO_MOTION_DASH);
     } else {
         marioChgMot(MARIO_MOTION_WALK);
@@ -847,7 +847,7 @@ void marioLandOn(void) {
             marioChgMot(MARIO_MOTION_STAY);
             return;
         }
-        marioChgMot(mario->baseSpeed > mario->mBaseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
+        marioChgMot(mario->baseSpeed > mario->baseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
         return;
     }
     if (flags & MARIO_FLAG_PAPER_MODE) {

@@ -66,7 +66,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         part = target->currentTarget = BtlUnit_GetPartsPtr(target, BtlUnit_GetBodyPartsId(target));
     }
     target->damagePattern = pattern;
-    if (target->mAttributeFlags & kUnitNoSpin) {
+    if (target->attributeFlags & kUnitNoSpin) {
         // FAKE: (u32) casts give unsigned compares; without them the object changes
         if ((u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_L || (u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_R ||
             (u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_L_LAST || (u32)target->damagePattern == ATTACKPATTERN_CHUCHURINA_BINTA_R_LAST) {
@@ -97,7 +97,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                     break;
             }
             if (BtlUnit_GetBelong(target) == ALLIANCE_PLAYER) {
-                if (damage != 0 && !(target->mAttributeFlags & kNoDamageNumber)) {
+                if (damage != 0 && !(target->attributeFlags & kNoDamageNumber)) {
                     effDamageStarEntry(0, damage, x - 8.0f, 5.0f + y, z, 10.0f, 30.0f);
                 }
                 if (fpDamage != 0) {
@@ -108,7 +108,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                     }
                 }
             } else {
-                if (damage != 0 && !(target->mAttributeFlags & kNoDamageNumber)) {
+                if (damage != 0 && !(target->attributeFlags & kNoDamageNumber)) {
                     effDamageStarEntry(0, damage, x, 10.0f + y, z, 10.0f, -30.0f);
                 }
                 if (fpDamage != 0) {
@@ -120,7 +120,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                 }
             }
             if (unitId != -5 && attacker && attacker->badgesEquipped.MegaRush &&
-                attacker->currentHp <= attacker->mKindParams->mPerilHP) {
+                attacker->currentHp <= attacker->kindParams->perilHP) {
                 f32 x2, y2, z2;
                 BtlUnit_GetHitPos(target, part, &x2, &y2, &z2);
                 effFukidashiEntry(0, 0, NULL, x2, y2, z2, 10.0f, 0.0f, 0x3c);
@@ -159,7 +159,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
             f32 x, y, z;
             BtlUnit_RecoverFp(target, n);
             BtlUnit_GetPos(target, &x, &y, &z);
-            y += target->mSizeMultiplier * BtlUnit_GetHeight(target) + 5.0f;
+            y += target->sizeMultiplier * BtlUnit_GetHeight(target) + 5.0f;
             effRecoveryEntry(1, n, x, y, z);
         }
     }
@@ -181,19 +181,19 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
             if (damage > 0) {
                 switch ((u8)result) {
                     case DAMAGE_CODE_FIRE:
-                        psndSFXOn_3D(target->mKindParams->fireDamageSfxName, &pos);
-                        psndSFXOn_3D(target->mKindParams->damageSfxName, &pos);
+                        psndSFXOn_3D(target->kindParams->fireDamageSfxName, &pos);
+                        psndSFXOn_3D(target->kindParams->damageSfxName, &pos);
                         break;
                     case DAMAGE_CODE_ICE:
-                        psndSFXOn_3D(target->mKindParams->iceDamageSfxName, &pos);
-                        psndSFXOn_3D(target->mKindParams->damageSfxName, &pos);
+                        psndSFXOn_3D(target->kindParams->iceDamageSfxName, &pos);
+                        psndSFXOn_3D(target->kindParams->damageSfxName, &pos);
                         break;
                     case DAMAGE_CODE_ELECTRIC:
-                        psndSFXOn_3D(target->mKindParams->electricDamageSfxName, &pos);
-                        psndSFXOn_3D(target->mKindParams->damageSfxName, &pos);
+                        psndSFXOn_3D(target->kindParams->electricDamageSfxName, &pos);
+                        psndSFXOn_3D(target->kindParams->damageSfxName, &pos);
                         break;
                     default:
-                        psndSFXOn_3D(target->mKindParams->damageSfxName, &pos);
+                        psndSFXOn_3D(target->kindParams->damageSfxName, &pos);
                         break;
                 }
             }
@@ -208,7 +208,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     target->fpDamageTaken = fpDamage;
     target->fpLost = fpDamage;
     target->totalFpDamageTaken += target->fpDamageTaken;
-    if (!(target->mAttributeFlags & kUnitHpFixed) && !(part->attributes & kNoHpLoss)) {
+    if (!(target->attributeFlags & kUnitHpFixed) && !(part->attributes & kNoHpLoss)) {
         target->hpGauge.prevHp = target->currentHp;
         target->currentHp -= target->hpDamageTaken;
         if (target->currentHp > target->maxHp) {
@@ -254,8 +254,8 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     }
     if (flag && (damage > 0 || fpDamage > 0) && BtlUnit_CheckStatus(target, STATUS_SLEEP) && irand(100) < 50) {
         f32 x, y, z;
-        target->mSleepTurns = 1;
-        target->mSleepStrength = 100;
+        target->sleepTurns = 1;
+        target->sleepStrength = 100;
         BtlUnit_CheckRecoveryStatus(target, STATUS_SLEEP);
         BtlUnit_GetPos(target, &x, &y, &z);
         y += BtlUnit_GetHeight(target) / 2;
@@ -268,7 +268,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
         target->currentHp = 0;
         if (result & DAMAGE_RESULT_FINAL_HIT) {
             result |= DAMAGE_RESULT_ZERO_HP;
-            if (target->mAttributeFlags & kUndead) {
+            if (target->attributeFlags & kUndead) {
                 switch ((u8)result) {
                     case DAMAGE_CODE_FIRE:
                     case DAMAGE_CODE_EXPLOSION:
@@ -298,7 +298,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
                     BattleAudience_Case_PartyDown();
                 }
                 if (target->currentKind >= UNIT_GOOMBA && target->currentKind < UNIT_UNUSED_TREE) {
-                    BattleAudience_Case_KillEnemy(target->mLevel);
+                    BattleAudience_Case_KillEnemy(target->level);
                     BattleAudience_Case_FinalAttack();
                 }
             }
@@ -307,7 +307,7 @@ void BattleDamageDirect(s32 unitId, BattleUnit* target, BattleUnitPart* part, s3
     } else if ((u32)target->damagePattern == ATTACKPATTERN_BLOW) {
         target->damagePattern = ATTACKPATTERN_NULL;
     }
-    target->mTokenFlags |= kDamagedThisTurn;
+    target->tokenFlags |= kDamagedThisTurn;
     BattleRunHitEvent(target, result);
 }
 
@@ -398,7 +398,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
     s8 strength;
     BattleWeaponDamageFn fn;
 
-    if (target->mTokenFlags & kBodyguarding) {
+    if (target->tokenFlags & kBodyguarding) {
         flags |= DAMAGE_RESULT_GUARD_RETURN;
     }
     element = weapon->element;
@@ -437,10 +437,10 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
                 goto skip;
             }
         }
-        if (attacker->currentHp <= attacker->mKindParams->mPerilHP && attacker->badgesEquipped.MegaRush) {
+        if (attacker->currentHp <= attacker->kindParams->perilHP && attacker->badgesEquipped.MegaRush) {
             damage += attacker->badgesEquipped.MegaRush * 5;
         }
-        if (attacker->currentHp <= attacker->mKindParams->mDangerHP && attacker->badgesEquipped.PowerRush) {
+        if (attacker->currentHp <= attacker->kindParams->dangerHP && attacker->badgesEquipped.PowerRush) {
             damage += attacker->badgesEquipped.PowerRush * 2;
         }
         if (attacker->badgesEquipped.IcePower && (part->attributes & kWeakToIcePower)) {
@@ -454,7 +454,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
                 damage = 0;
             }
         }
-        attacker->mTokenFlags |= kChargeExpended;
+        attacker->tokenFlags |= kChargeExpended;
     }
     if ((weapon->special & SPECIAL_STATUS_POWER) && BtlUnit_CheckStatus(attacker, STATUS_HUGE)) {
         BtlUnit_GetStatus(attacker, STATUS_HUGE, &turns, &strength);
@@ -570,7 +570,7 @@ skip:
     if (target->badgesEquipped.DoublePain) {
         damage *= target->badgesEquipped.DoublePain + 1;
     }
-    if (target->badgesEquipped.LastStand && target->currentHp <= target->mKindParams->mDangerHP) {
+    if (target->badgesEquipped.LastStand && target->currentHp <= target->kindParams->dangerHP) {
         n = target->badgesEquipped.LastStand + 1;
         damage = (damage + n - 1) / n;
     }
@@ -602,7 +602,7 @@ skip:
         return 0;
     }
     if (flags & DAMAGE_RESULT_FINAL_HIT) {
-        if ((weapon->special & SPECIAL_FORCE_RESULT_10000) || !(target->mAttributeFlags & UNIT_ATTR_NO_LAST_HIT_RESULT)) {
+        if ((weapon->special & SPECIAL_FORCE_RESULT_10000) || !(target->attributeFlags & UNIT_ATTR_NO_LAST_HIT_RESULT)) {
             *result |= 0x10000;
         }
     }
@@ -1120,7 +1120,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
 
     if (ok) {
         BtlUnit_GetPos(unit, &x, &y, &z);
-        if (unit->mAttributeFlags & kCeiling) {
+        if (unit->attributeFlags & kCeiling) {
             y -= BtlUnit_GetHeight(unit) / 2;
         } else {
             y += BtlUnit_GetHeight(unit) / 2;
@@ -1439,7 +1439,7 @@ s32 BattleSetStatusDamageFromWeapon(BattleUnit* attacker, BattleUnit* target, Ba
                     break;
                 case STATUS_GALE_FORCE:
                     if (rate > 0) {
-                        levelDiff = attacker->mLevel - target->mLevel;
+                        levelDiff = attacker->level - target->level;
                     }
                     break;
             }
@@ -1466,7 +1466,7 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
         return 1;
     }
     if (weapon->special & SPECIAL_CHARGEABLE) {
-        attacker->mTokenFlags |= kChargeExpended;
+        attacker->tokenFlags |= kChargeExpended;
     }
     if ((part->attributes & kClone) && !(weapon->special & SPECIAL_CONTACTS_CLONES)) {
         return 2;
@@ -1474,10 +1474,10 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
     if (weapon->special & SPECIAL_CANNOT_MISS) {
         return 1;
     }
-    if (BtlUnit_CheckStatus(target, STATUS_INVISIBLE) || (target->mAttributeFlags & kPermanentlyInvisible)) {
+    if (BtlUnit_CheckStatus(target, STATUS_INVISIBLE) || (target->attributeFlags & kPermanentlyInvisible)) {
         return 4;
     }
-    if (target->mAttributeFlags & kVeiled) {
+    if (target->attributeFlags & kVeiled) {
         return 4;
     }
     if ((part->counterAttributes & kCounterPreemptiveFrontSpiky) && !(weapon->counterResistFlags & COUNTER_RESIST_PREEMPTIVE_SPIKY) && !attacker->badgesEquipped.SpikeShield) {
@@ -1503,7 +1503,7 @@ s32 BattlePreCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPar
             }
         }
     }
-    if (target->currentHp <= target->mKindParams->mDangerHP && target->badgesEquipped.CloseCall) {
+    if (target->currentHp <= target->kindParams->dangerHP && target->badgesEquipped.CloseCall) {
         for (n = target->badgesEquipped.CloseCall; n > 0; n--) {
             if (irand(100) >= 67) {
                 return 3;
@@ -1732,10 +1732,10 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             pattern = ATTACKPATTERN_NULL;
         }
         if (pattern == ATTACKPATTERN_KAITEN_HAMMER || pattern == ATTACKPATTERN_ULTRA_HAMMER) {
-            if (target->mAttributeFlags & kUnitNoHammerKnockback) {
+            if (target->attributeFlags & kUnitNoHammerKnockback) {
                 pattern = ATTACKPATTERN_NULL;
             }
-            if (irand(100) >= target->mKindParams->hammerKnockbackChance) {
+            if (irand(100) >= target->kindParams->hammerKnockbackChance) {
                 pattern = ATTACKPATTERN_NULL;
             }
             if (!(flags & DAMAGE_RESULT_AC_SUCCESS)) {
@@ -1780,7 +1780,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         if (!cw.count) {
             cw.count = 1;
         }
-        if (attacker->mAlliance == ALLIANCE_PLAYER) {
+        if (attacker->alliance == ALLIANCE_PLAYER) {
             BattleAudience_Case_Countered();
         }
         if (cw.holdFast) {
@@ -1821,22 +1821,22 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
         if (unit->protectId != *unitIdx) {
             continue;
         }
-        if (unit->mTokenFlags & kDamagedThisTurn) {
+        if (unit->tokenFlags & kDamagedThisTurn) {
             continue;
         }
-        if (unit->mTokenFlags & kProtectedByBodyguard) {
+        if (unit->tokenFlags & kProtectedByBodyguard) {
             continue;
         }
         if (!BtlUnit_CanGuardStatus(unit)) {
             continue;
         }
-        n = (u8)unit->mKindParams->numParts;
-        part = unit->mParts;
+        n = (u8)unit->kindParams->numParts;
+        part = unit->parts;
         for (j = 0; j < n; j++) {
             if (part->attributes & kGuardTargetPart) {
                 break;
             }
-            part = part->mNextPart;
+            part = part->nextPart;
         }
         if (j < n) {
             break;
@@ -1845,13 +1845,13 @@ void BattleAttackDeclare(s32* unitIdx, s32* partIdx) {
     if (i < BATTLE_UNIT_MAX) {
         BattleGetUnitPtr(wp, *unitIdx)->damagePattern = ATTACKPATTERN_NULL;
         BattleRunHitEvent(BattleGetUnitPtr(wp, *unitIdx), DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_PROTECTED);
-        BattleGetUnitPtr(wp, *unitIdx)->mTokenFlags |= kProtectedByBodyguard;
+        BattleGetUnitPtr(wp, *unitIdx)->tokenFlags |= kProtectedByBodyguard;
         wp->flags |= BATTLE_FLAG_GUARD_MOVE;
         unit->damagePattern = ATTACKPATTERN_NULL;
         BattleRunHitEvent(unit, DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_BODYGUARD_MOVE);
-        unit->mTokenFlags |= kBodyguarding;
+        unit->tokenFlags |= kBodyguarding;
         *unitIdx = i;
-        *partIdx = part->mKindPartParams->partNum;
+        *partIdx = part->kindPartParams->partNum;
     }
 }
 
@@ -1881,22 +1881,22 @@ void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
         if (unit->protectId != unitIdx) {
             continue;
         }
-        if (unit->mTokenFlags & kDamagedThisTurn) {
+        if (unit->tokenFlags & kDamagedThisTurn) {
             continue;
         }
-        if (unit->mTokenFlags & kProtectedByBodyguard) {
+        if (unit->tokenFlags & kProtectedByBodyguard) {
             continue;
         }
         if (!BtlUnit_CanGuardStatus(unit)) {
             continue;
         }
-        n = (u8)unit->mKindParams->numParts;
-        part = unit->mParts;
+        n = (u8)unit->kindParams->numParts;
+        part = unit->parts;
         for (j = 0; j < n; j++) {
             if (part->attributes & kGuardTargetPart) {
                 break;
             }
-            part = part->mNextPart;
+            part = part->nextPart;
         }
         if (j < n) {
             break;
@@ -1905,13 +1905,13 @@ void __declare(s32 unitIdx, s32 partIdx, s32* outUnit, s32* outPart) {
     if (i < BATTLE_UNIT_MAX) {
         BattleGetUnitPtr(wp, unitIdx)->damagePattern = ATTACKPATTERN_NULL;
         BattleRunHitEvent(BattleGetUnitPtr(wp, unitIdx), DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_PROTECTED);
-        BattleGetUnitPtr(wp, unitIdx)->mTokenFlags |= kProtectedByBodyguard;
+        BattleGetUnitPtr(wp, unitIdx)->tokenFlags |= kProtectedByBodyguard;
         wp->flags |= BATTLE_FLAG_GUARD_MOVE;
         unit->damagePattern = ATTACKPATTERN_NULL;
         BattleRunHitEvent(unit, DAMAGE_RESULT_GUARD_RETURN | DAMAGE_CODE_BODYGUARD_MOVE);
-        unit->mTokenFlags |= kBodyguarding;
+        unit->tokenFlags |= kBodyguarding;
         *outUnit = i;
-        *outPart = part->mKindPartParams->partNum;
+        *outPart = part->kindPartParams->partNum;
     }
 }
 

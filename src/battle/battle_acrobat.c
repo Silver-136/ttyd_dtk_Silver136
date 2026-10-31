@@ -18,13 +18,13 @@ void _accrobat_timing_icon_disp(CameraId camId, void* param);
  */
 s32 BattleAcrobatStart(BattleWork* work, s32 unitId, s32 windowStartFrame,
                         s32 windowEndFrame, s32 endFrame, s32 earlyFrames) {
-    work->mStylishCurFrame = 0;
-    work->mStylishWindowStart = windowStartFrame;
-    work->mStylishWindowEnd = windowEndFrame;
-    work->mStylishEndFrame = endFrame;
-    work->mStylishUnitId = unitId;
-    work->mStylishResult = 0;
-    work->mStylishEarlyFrames = earlyFrames;
+    work->stylishCurFrame = 0;
+    work->stylishWindowStart = windowStartFrame;
+    work->stylishWindowEnd = windowEndFrame;
+    work->stylishEndFrame = endFrame;
+    work->stylishUnitId = unitId;
+    work->stylishResult = 0;
+    work->stylishEarlyFrames = earlyFrames;
     return 0;
 }
 
@@ -33,49 +33,49 @@ s32 BattleAcrobatMain(BattleWork* work) {
     BOOL doSimplified;
     s32 i;
 
-    unit = BattleGetUnitPtr(work, work->mStylishUnitId);
+    unit = BattleGetUnitPtr(work, work->stylishUnitId);
     doSimplified = FALSE;
-    work->mStylishCurFrame++;
+    work->stylishCurFrame++;
     if (!unit) {
-        work->mStylishResult = 1;
+        work->stylishResult = 1;
         return EVT_RETURN_YIELD;
     }
-    if (unit->mTokenFlags & kConfusedAction) {
-        work->mStylishResult = 1;
+    if (unit->tokenFlags & kConfusedAction) {
+        work->stylishResult = 1;
         return EVT_RETURN_YIELD;
     }
-    if ((work->badgeEquippedFlags & BATTLE_BADGE_TIMING_TUTOR) && (work->mStylishCurFrame > work->mStylishWindowStart && work->mStylishCurFrame <= work->mStylishWindowEnd)) {
+    if ((work->badgeEquippedFlags & BATTLE_BADGE_TIMING_TUTOR) && (work->stylishCurFrame > work->stylishWindowStart && work->stylishCurFrame <= work->stylishWindowEnd)) {
         Vec pos = { 0 };
-        pos.x = unit->mPosition.x;
-        pos.y = unit->mPosition.y;
-        pos.z = 15.0f + unit->mPosition.z;
+        pos.x = unit->position.x;
+        pos.y = unit->position.y;
+        pos.z = 15.0f + unit->position.z;
         dispEntry(CAMERA_3D, dispCalcZ(&pos), 1, _accrobat_timing_icon_disp, unit);
     }
-    if (unit->badgesEquipped.AutoCommand && (work->mStylishCurFrame > work->mStylishWindowStart && work->mStylishCurFrame <= work->mStylishWindowEnd)) {
+    if (unit->badgesEquipped.AutoCommand && (work->stylishCurFrame > work->stylishWindowStart && work->stylishCurFrame <= work->stylishWindowEnd)) {
         doSimplified = TRUE;
     }
-    if (work->mStylishCurFrame <= 1 && work->mStylishEarlyFrames > 0) {
-        for (i = 0; i < work->mStylishEarlyFrames; ++i) {
+    if (work->stylishCurFrame <= 1 && work->stylishEarlyFrames > 0) {
+        for (i = 0; i < work->stylishEarlyFrames; ++i) {
             if (BattlePadCheckRecordTrigger(i, PAD_BUTTON_A)) {
-                work->mStylishResult = -1;
+                work->stylishResult = -1;
                 return EVT_RETURN_YIELD;
             }
         }
     }
     if (BattlePadCheckTrigger(PAD_BUTTON_A) || doSimplified) {
-        if (work->mStylishCurFrame <= work->mStylishWindowStart) {
-            work->mStylishResult = -1;
+        if (work->stylishCurFrame <= work->stylishWindowStart) {
+            work->stylishResult = -1;
             return EVT_RETURN_YIELD;
         }
-        if (work->mStylishCurFrame <= work->mStylishWindowEnd) {
-            work->mStylishResult = 2;
+        if (work->stylishCurFrame <= work->stylishWindowEnd) {
+            work->stylishResult = 2;
             return EVT_RETURN_YIELD;
         }
-        work->mStylishResult = -2;
+        work->stylishResult = -2;
         return EVT_RETURN_YIELD;
     }
-    if (work->mStylishCurFrame >= work->mStylishEndFrame) {
-        work->mStylishResult = 1;
+    if (work->stylishCurFrame >= work->stylishEndFrame) {
+        work->stylishResult = 1;
         return EVT_RETURN_YIELD;
     }
     return EVT_RETURN_BLOCK;
@@ -94,7 +94,7 @@ void _accrobat_timing_icon_disp(CameraId camId, void* param) {
 
 /** Copies the last Stylish check result and the frame it was decided on to the script helper's outputs. */
 s32 BattleAcrobatGetResult(BattleWork* work, s32* result, s32* curFrame) {
-    *result = work->mStylishResult;
-    *curFrame = work->mStylishCurFrame;
+    *result = work->stylishResult;
+    *curFrame = work->stylishCurFrame;
     return EVT_RETURN_DONE;
 }

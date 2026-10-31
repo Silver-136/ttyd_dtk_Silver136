@@ -380,10 +380,10 @@ void winLogInit(WindowWork* w) {
         }
     }
     w->log.enemySel = 0;
-    w->log.f1028 = w->log.f102C = 0.0f;
-    w->log.f1030 = w->log.f1034 = 0.0f;
+    w->log.enemyX = w->log.enemyTx = 0.0f;
+    w->log.enemyY = w->log.enemyTy = 0.0f;
     w->log.enemyPage = 0;
-    w->log.f1048 = w->log.f104C = 0.0f;
+    w->log.enemyScroll = w->log.enemyScrollTgt = 0.0f;
     w->log.enemyKnown = 0;
     for (i = 1; i < 0xD8; i++) {
         t = battleGetUnitMonosiriPtr(i);
@@ -837,8 +837,8 @@ s32 winLogMain(WindowWork* w) {
             }
             w->log.menu[w->log.cursor].state = 20;
             w->log.state = 0;
-            w->log.f102C = 320.0f;
-            w->log.f1034 = -240.0f;
+            w->log.enemyTx = 320.0f;
+            w->log.enemyTy = -240.0f;
         } else if (w->buttonRep & PAD_TRIGGER_L) {
             w->log.enemyPage--;
             if (w->log.enemyPage < 0) w->log.enemyPage = 0;

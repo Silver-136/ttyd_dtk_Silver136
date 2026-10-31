@@ -113,7 +113,7 @@ void fileGarbageDataAdrClear(FileEntry* entry) {
                 ADDR_WORD(pose->groupVisibility) -= (AddrWord)data;
                 ADDR_WORD(pose->nodeData) -= (AddrWord)data;
                 ADDR_WORD(pose->groups) -= (AddrWord)data;
-                ADDR_WORD(pose->mpAnims) -= (AddrWord)data;
+                ADDR_WORD(pose->anims) -= (AddrWord)data;
             }
             break;
         case FILE_TYPE_ANIM_DATA_UNUSED:
@@ -168,9 +168,9 @@ void fileGarbageDataAdrClear(FileEntry* entry) {
         case FILE_TYPE_ANIM:
             pose = data;
             if ((void*)pose->shapes >= data) {
-                n = pose->mAnimCount;
+                n = pose->animCount;
                 for (j = 0; j < n; j++) {
-                    e = &pose->mpAnims[j];
+                    e = &pose->anims[j];
                     q = (u8*)e->data;
                     e->data = (AnimData*)(q - (AddrWord)data);
                     anim = (AnimData*)q;
@@ -209,7 +209,7 @@ void fileGarbageDataAdrClear(FileEntry* entry) {
                 ADDR_WORD(pose->groupVisibility) -= (AddrWord)data;
                 ADDR_WORD(pose->nodeData) -= (AddrWord)data;
                 ADDR_WORD(pose->groups) -= (AddrWord)data;
-                ADDR_WORD(pose->mpAnims) -= (AddrWord)data;
+                ADDR_WORD(pose->anims) -= (AddrWord)data;
             }
             break;
         case 6:
@@ -315,7 +315,7 @@ void fileGarbageDataAdrSet(void* data, s32 type) {
                 ADDR_WORD(pose->groupVisibility) += (AddrWord)data;
                 ADDR_WORD(pose->nodeData) += (AddrWord)data;
                 ADDR_WORD(pose->groups) += (AddrWord)data;
-                ADDR_WORD(pose->mpAnims) += (AddrWord)data;
+                ADDR_WORD(pose->anims) += (AddrWord)data;
             }
             break;
         case FILE_TYPE_ANIM_DATA_UNUSED:
@@ -395,11 +395,11 @@ void fileGarbageDataAdrSet(void* data, s32 type) {
                 ADDR_WORD(pose->groupVisibility) += (AddrWord)data;
                 ADDR_WORD(pose->nodeData) += (AddrWord)data;
                 ADDR_WORD(pose->groups) += (AddrWord)data;
-                ADDR_WORD(pose->mpAnims) += (AddrWord)data;
-                n = pose->mAnimCount;
+                ADDR_WORD(pose->anims) += (AddrWord)data;
+                n = pose->animCount;
                 for (j = 0; j < n; j++) {
-                    ADDR_WORD(pose->mpAnims[j].data) += (AddrWord)data;
-                    q = (u8*)pose->mpAnims[j].data;
+                    ADDR_WORD(pose->anims[j].data) += (AddrWord)data;
+                    q = (u8*)pose->anims[j].data;
                     anim = (AnimData*)q;
                     if ((void*)anim->loopInfo < q) {
                         ADDR_WORD(anim->loopInfo) += (AddrWord)q;

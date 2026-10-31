@@ -296,7 +296,7 @@ StatusEffectType _GetStatusPoseType(BattleUnit* unit) {
     s32* table = _status_pose_table;
     StatusEffectType type;
 
-    if (unit->mAttributeFlags & kInactive) {
+    if (unit->attributeFlags & kInactive) {
         return STATUS_INSTANT_KILL;
     }
     while (1) {
@@ -391,35 +391,35 @@ void btlDispMain(void) {
 next:
         loop = unit->moveColorLvDisp;
         BtlUnit_OffUnitFlag(unit, BATTLE_UNIT_FLAG_MOVE_COLOR_FADING);
-        if (loop != unit->mMoveColorLv) {
+        if (loop != unit->moveColorLv) {
             BtlUnit_OnUnitFlag(unit, BATTLE_UNIT_FLAG_MOVE_COLOR_FADING);
-            if (unit->mMoveColorLv > loop) {
+            if (unit->moveColorLv > loop) {
                 loop += 12;
-                if (loop > unit->mMoveColorLv) loop = unit->mMoveColorLv;
+                if (loop > unit->moveColorLv) loop = unit->moveColorLv;
             } else {
                 loop -= 2;
-                if (loop < unit->mMoveColorLv) loop = unit->mMoveColorLv;
+                if (loop < unit->moveColorLv) loop = unit->moveColorLv;
             }
         }
         unit->moveColorLvDisp = loop;
         BtlUnit_HpGaugeMain(unit);
-        unit->mSizeMultiplier = 1.0f;
+        unit->sizeMultiplier = 1.0f;
         BtlUnit_GetStatus(unit, STATUS_TINY, &turns, &strength);
         if (turns > 0 && strength < 0) {
             scale = 0.5f * strength + 1.0f;
             if (scale < 0.5f) scale = 0.5f;
-            unit->mSizeMultiplier *= scale;
+            unit->sizeMultiplier *= scale;
         }
         BtlUnit_GetStatus(unit, STATUS_HUGE, &turns, &strength);
         if (turns > 0 && strength > 0) {
             scale = 1.0f + strength;
             if (scale > 2.0f) scale = 2.0f;
-            unit->mSizeMultiplier *= scale;
+            unit->sizeMultiplier *= scale;
         }
         BattleStatusEffectMain(unit);
         BattleStatusIconMain(unit);
 
-        for (part = unit->mParts; part; part = part->mNextPart) {
+        for (part = unit->parts; part; part = part->nextPart) {
             if (part->poseId == -1) continue;
             poseName = part->poseName;
             if (!(part->animFlags & PART_ANIM_EVENT_POSE)) {
@@ -427,10 +427,10 @@ next:
                 if (unit->currentKind >= UNIT_GOOMBA && unit->currentKind < UNIT_UNUSED_TREE) {
                     poseName = searchPoseTbl(part->poseTable, type);
                 } else {
-                    if (type == POSE_TYPE_NORMAL && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & UNIT_STATUS_FLAG_PERIL)) {
+                    if (type == POSE_TYPE_NORMAL && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->statusFlags & UNIT_STATUS_FLAG_PERIL)) {
                         poseName = BtlUnit_GetPoseNameFromType(part, POSE_TYPE_PERIL);
                         if (!poseName) poseName = searchPoseTbl(part->poseTable, POSE_TYPE_NORMAL);
-                    } else if (type == POSE_TYPE_NORMAL && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->mStatusFlags & UNIT_STATUS_FLAG_DANGER)) {
+                    } else if (type == POSE_TYPE_NORMAL && !BtlUnit_CheckStatus(unit, STATUS_HOLD_FAST) && (unit->statusFlags & UNIT_STATUS_FLAG_DANGER)) {
                         poseName = BtlUnit_GetPoseNameFromType(part, POSE_TYPE_DANGER);
                         if (!poseName) poseName = searchPoseTbl(part->poseTable, POSE_TYPE_NORMAL);
                     } else {
@@ -498,16 +498,16 @@ next:
             BtlUnit_GetPartsWorldPos(part, &wx, &wy, &wz);
             animPoseMain(part->poseId);
             zpos = (Vec){wx, wy, wz + part->dispZOffset};
-            part->dispColor.a = part->mKindPartParams->baseAlpha;
-            if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || (unit->mAttributeFlags & kPermanentlyInvisible)) {
+            part->dispColor.a = part->kindPartParams->baseAlpha;
+            if (BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) || (unit->attributeFlags & kPermanentlyInvisible)) {
                 part->dispColor.a = (part->dispColor.a << 7) / 255;
             }
             part->dispColor.a = part->dispColor.a * part->color.a / 255;
             part->dispColor.r = part->color.r;
             part->dispColor.g = part->color.g;
             part->dispColor.b = part->color.b;
-            if (!(unit->mAttributeFlags & kUnitHidden) && !(part->attributes & kHidden)) {
-                if (!(part->attributes & kMainPart) || !(unit->mAttributeFlags & kVeiled)) {
+            if (!(unit->attributeFlags & kUnitHidden) && !(part->attributes & kHidden)) {
+                if (!(part->attributes & kMainPart) || !(unit->attributeFlags & kVeiled)) {
                     if (part->dispColor.a < 0xFF || animPoseTestXLU(part->poseId)) {
                         if (!(part->animFlags & PART_ANIM_NO_DISP)) {
                             dispEntry(CAMERA_3D, dispCalcZ(&zpos), 2, (DispCallback)btlUnitPartsDisp, part);
@@ -522,7 +522,7 @@ next:
                     dispEntry(CAMERA_3D, wz, 2, (DispCallback)btlUnitPartsBlurDisp, part);
                 }
             }
-            if (!(unit->mAttributeFlags & kUnitNoShadow) && !(part->attributes & kNoShadow)) {
+            if (!(unit->attributeFlags & kUnitNoShadow) && !(part->attributes & kNoShadow)) {
                 BtlUnit_GetPartsWorldPos(part, &ppos.x, &ppos.y, &ppos.z);
                 spos = ppos;
                 if ((unit->flags & BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER) && (partner = BattleGetPartnerPtr(wp, unit)) != NULL) {
@@ -543,7 +543,7 @@ next:
                 }
                 if (scale > 1.0) scale = 1.0f;
                 if (scale < 0.1f) scale = 0.1f;
-                scale = scale * ((f32)part->shadowSize * unit->mScale.x * part->mScale.x * unit->mSizeMultiplier);
+                scale = scale * ((f32)part->shadowSize * unit->mScale.x * part->mScale.x * unit->sizeMultiplier);
                 scale = scale * part->shadowScale;
                 if ((unit->flags & BATTLE_UNIT_FLAG_SHADOW_WITH_PARTNER) && scale < 16.0f) scale = 16.0f;
                 if (scale < 10.0f) scale = 8.0f;
@@ -634,21 +634,21 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
     part = param;
     wp = _battleWorkPointer;
     zscale = 1.0f;
-    unit = part->mOwner;
+    unit = part->owner;
     if (part->poseId < 0) return;
     // FAKE: dead int guard (COLOURING W). part becomes a multi-def named local (not folded back into the param), so it
     // numbers above unit, and gz adds wp's missing neighbour; the arm is deleted after colouring and leaves no code.
     gz = 0;
     if (gz != 0) part = (BattleUnitPart*)unit;
 
-    PSMTXTrans(uTN, -unit->mRotationOffset.x, -unit->mRotationOffset.y, -unit->mRotationOffset.z);
-    PSMTXTrans(uT, unit->mRotationOffset.x, unit->mRotationOffset.y, unit->mRotationOffset.z);
-    PSMTXTrans(uDisp, unit->mDisplayOffset.x, unit->mDisplayOffset.y, unit->mDisplayOffset.z);
-    PSMTXTrans(uPos, unit->mPosition.x, unit->mPosition.y, unit->mPosition.z);
-    PSMTXRotRad(uRx, 'x', 0.017453292f * (unit->mRotation.x + unit->mBaseRotation.x));
-    PSMTXRotRad(uRy, 'y', 0.017453292f * (unit->mRotation.y + unit->mBaseRotation.y));
-    PSMTXRotRad(uRz, 'z', 0.017453292f * (unit->mRotation.z + unit->mBaseRotation.z));
-    PSMTXScale(uS, unit->mSizeMultiplier * (unit->mBaseScale.x * unit->mScale.x), unit->mSizeMultiplier * (unit->mBaseScale.y * unit->mScale.y), unit->mBaseScale.z * unit->mScale.z);
+    PSMTXTrans(uTN, -unit->rotationOffset.x, -unit->rotationOffset.y, -unit->rotationOffset.z);
+    PSMTXTrans(uT, unit->rotationOffset.x, unit->rotationOffset.y, unit->rotationOffset.z);
+    PSMTXTrans(uDisp, unit->displayOffset.x, unit->displayOffset.y, unit->displayOffset.z);
+    PSMTXTrans(uPos, unit->position.x, unit->position.y, unit->position.z);
+    PSMTXRotRad(uRx, 'x', 0.017453292f * (unit->rotation.x + unit->baseRotation.x));
+    PSMTXRotRad(uRy, 'y', 0.017453292f * (unit->rotation.y + unit->baseRotation.y));
+    PSMTXRotRad(uRz, 'z', 0.017453292f * (unit->rotation.z + unit->baseRotation.z));
+    PSMTXScale(uS, unit->sizeMultiplier * (unit->baseScale.x * unit->mScale.x), unit->sizeMultiplier * (unit->baseScale.y * unit->mScale.y), unit->baseScale.z * unit->mScale.z);
     PSMTXIdentity(uM);
     PSMTXConcat(uS, uM, uM);
     PSMTXConcat(uTN, uM, uM);
@@ -661,31 +661,31 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
     angle = 270.0f;
     if (part->attributes & kAbsolutePosition) {
         if (part->faceDirection >= 0) angle = 90.0f;
-        x = part->mPosition.x;
-        y = part->mPosition.y + getGravityDispOffset(part) + getFloatDispOffset(part);
-        z = part->mPosition.z;
+        x = part->position.x;
+        y = part->position.y + getGravityDispOffset(part) + getFloatDispOffset(part);
+        z = part->position.z;
         cam = camGetCurPtr();
         a = angleABf(cam->cameraPos.x, cam->cameraPos.z, cam->cameraAt.x, cam->cameraAt.z);
         dir = reviseAngle(a - angleABf(cam->cameraPos.x, cam->cameraPos.z, x, z));
-        PSMTXTrans(pTN2, -part->mRotationOffset.x, -part->mRotationOffset.y, -part->mRotationOffset.z);
-        PSMTXTrans(pT2, part->mRotationOffset.x, part->mRotationOffset.y, part->mRotationOffset.z);
-        PSMTXRotRad(pRx2, 'x', 0.017453292f * (part->mRotation.x + part->mBaseRotation.x));
-        PSMTXRotRad(pRy2, 'y', 0.017453292f * (dir + (part->mRotation.y + part->mBaseRotation.y)));
-        PSMTXRotRad(pRz2, 'z', 0.017453292f * (part->mRotation.z + part->mBaseRotation.z));
+        PSMTXTrans(pTN2, -part->rotationOffset.x, -part->rotationOffset.y, -part->rotationOffset.z);
+        PSMTXTrans(pT2, part->rotationOffset.x, part->rotationOffset.y, part->rotationOffset.z);
+        PSMTXRotRad(pRx2, 'x', 0.017453292f * (part->rotation.x + part->baseRotation.x));
+        PSMTXRotRad(pRy2, 'y', 0.017453292f * (dir + (part->rotation.y + part->baseRotation.y)));
+        PSMTXRotRad(pRz2, 'z', 0.017453292f * (part->rotation.z + part->baseRotation.z));
         PSMTXTrans(pPos2, x, y, z);
         rotY = reviseAngle(-1.0f * angle - 90.0f);
-        z = reviseAngle(part->mBaseRotation.y + (rotY + part->mRotation.y));
+        z = reviseAngle(part->baseRotation.y + (rotY + part->rotation.y));
         cam = camGetCurPtr();
         camAngle = angleABf(cam->cameraPos.x, cam->cameraPos.z, cam->cameraAt.x, cam->cameraAt.z);
         a = reviseAngle(z + camAngle);
         if (a >= 90.0f && a <= 270.0f) {
             zscale *= -1.0f;
-            PSMTXRotRad(pRy2, 'y', 0.017453292f * ((dir + (part->mRotation.y + part->mBaseRotation.y)) - 2.0f * (180.0f - (a - camAngle))));
+            PSMTXRotRad(pRy2, 'y', 0.017453292f * ((dir + (part->rotation.y + part->baseRotation.y)) - 2.0f * (180.0f - (a - camAngle))));
         }
         if (part->attributes & kIgnoreUnitSize) {
-            PSMTXScale(pS2, part->mBaseScale.x * part->mScale.x, part->mBaseScale.y * part->mScale.y, zscale * (part->mBaseScale.z * part->mScale.z));
+            PSMTXScale(pS2, part->baseScale.x * part->mScale.x, part->baseScale.y * part->mScale.y, zscale * (part->baseScale.z * part->mScale.z));
         } else {
-            PSMTXScale(pS2, unit->mSizeMultiplier * (part->mBaseScale.x * part->mScale.x), unit->mSizeMultiplier * (part->mBaseScale.y * part->mScale.y), zscale * (part->mBaseScale.z * part->mScale.z));
+            PSMTXScale(pS2, unit->sizeMultiplier * (part->baseScale.x * part->mScale.x), unit->sizeMultiplier * (part->baseScale.y * part->mScale.y), zscale * (part->baseScale.z * part->mScale.z));
         }
         PSMTXIdentity(pM);
         PSMTXConcat(pS2, pM, pM);
@@ -706,31 +706,31 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
         } else if (dir < 0.0f) {
             dir = -1.0f;
         } else {
-            dir = wp->alliances[unit->mAlliance].attackDirection;
+            dir = wp->alliances[unit->alliance].attackDirection;
         }
-        ex = part->mPositionOffset.x * dir + unit->mPosition.x;
-        ey = unit->mPosition.y + part->mPositionOffset.y + getGravityDispOffset(part) + getFloatDispOffset(part);
-        ez = unit->mPosition.z + part->mPositionOffset.z;
+        ex = part->positionOffset.x * dir + unit->position.x;
+        ey = unit->position.y + part->positionOffset.y + getGravityDispOffset(part) + getFloatDispOffset(part);
+        ez = unit->position.z + part->positionOffset.z;
         dir = 0.0f;
-        if (part->mOwner->mAttributeFlags & kUnitFaceCamera) {
+        if (part->owner->attributeFlags & kUnitFaceCamera) {
             cam = camGetCurPtr();
             a = angleABf(cam->cameraPos.x, cam->cameraPos.z, cam->cameraAt.x, cam->cameraAt.z);
             dir = reviseAngle(a - angleABf(cam->cameraPos.x, cam->cameraPos.z, ex, ez));
         }
-        PSMTXTrans(pTN, -part->mRotationOffset.x, -part->mRotationOffset.y, -part->mRotationOffset.z);
-        PSMTXTrans(pT, part->mRotationOffset.x, part->mRotationOffset.y, part->mRotationOffset.z);
-        PSMTXRotRad(pRx, 'x', 0.017453292f * (part->mRotation.x + part->mBaseRotation.x));
-        PSMTXRotRad(pRy, 'y', 0.017453292f * (dir + (part->mRotation.y + part->mBaseRotation.y)));
-        PSMTXRotRad(pRz, 'z', 0.017453292f * (part->mRotation.z + part->mBaseRotation.z));
+        PSMTXTrans(pTN, -part->rotationOffset.x, -part->rotationOffset.y, -part->rotationOffset.z);
+        PSMTXTrans(pT, part->rotationOffset.x, part->rotationOffset.y, part->rotationOffset.z);
+        PSMTXRotRad(pRx, 'x', 0.017453292f * (part->rotation.x + part->baseRotation.x));
+        PSMTXRotRad(pRy, 'y', 0.017453292f * (dir + (part->rotation.y + part->baseRotation.y)));
+        PSMTXRotRad(pRz, 'z', 0.017453292f * (part->rotation.z + part->baseRotation.z));
         PSMTXTrans(pPos, ex, ey, ez);
-        PSMTXTrans(pDisp, part->mDisplayOffset.x, part->mDisplayOffset.y, part->mDisplayOffset.z);
+        PSMTXTrans(pDisp, part->displayOffset.x, part->displayOffset.y, part->displayOffset.z);
         rotY = reviseAngle(-1.0f * angle - 90.0f);
-        if (!(part->mOwner->flags & BATTLE_UNIT_FLAG_SOLID_MODEL)) {
-            a = reviseAngle(rotY + unit->mRotation.y + part->mRotation.y + unit->mBaseRotation.y + part->mBaseRotation.y);
+        if (!(part->owner->flags & BATTLE_UNIT_FLAG_SOLID_MODEL)) {
+            a = reviseAngle(rotY + unit->rotation.y + part->rotation.y + unit->baseRotation.y + part->baseRotation.y);
             cam = camGetCurPtr();
             a = reviseAngle(a + angleABf(cam->cameraPos.x, cam->cameraPos.z, cam->cameraAt.x, cam->cameraAt.z));
             if (a >= 90.0f && a <= 270.0f) {
-                PSMTXScale(uS, unit->mSizeMultiplier * (unit->mBaseScale.x * unit->mScale.x), unit->mSizeMultiplier * (unit->mBaseScale.y * unit->mScale.y), -1.0f * (unit->mBaseScale.z * unit->mScale.z));
+                PSMTXScale(uS, unit->sizeMultiplier * (unit->baseScale.x * unit->mScale.x), unit->sizeMultiplier * (unit->baseScale.y * unit->mScale.y), -1.0f * (unit->baseScale.z * unit->mScale.z));
                 PSMTXIdentity(uM);
                 PSMTXConcat(uS, uM, uM);
                 PSMTXConcat(uTN, uM, uM);
@@ -770,7 +770,7 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
                 PSMTXConcat(uDisp, uMtx, uMtx);
             }
         }
-        PSMTXScale(pS, part->mBaseScale.x * part->mScale.x, part->mBaseScale.y * part->mScale.y, zscale * (part->mBaseScale.z * part->mScale.z));
+        PSMTXScale(pS, part->baseScale.x * part->mScale.x, part->baseScale.y * part->mScale.y, zscale * (part->baseScale.z * part->mScale.z));
         PSMTXIdentity(uM);
         PSMTXConcat(uMtx, uM, uM);
         PSMTXConcat(pS, uM, uM);
@@ -909,7 +909,7 @@ void btlUnitStolenItemDisp(CameraId camId, void* param) {
     s32 item = unit->heldItem;
 
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    pos.y += 5.0f + unit->mSizeMultiplier * (f32)BtlUnit_GetHeight(unit);
+    pos.y += 5.0f + unit->sizeMultiplier * (f32)BtlUnit_GetHeight(unit);
     // FAKE: float-first cast of iconDispGx; the plain call changes the object
     ((void (*)(f32, Vec*, s16, u16))iconDispGx)(1.0f, &pos, 0, itemDataTable[item].icon_id);
 }
@@ -985,11 +985,11 @@ void btlDispEntAnime(BattleUnit* unit) {
     BattleUnitPart* part;
     const char* name;
 
-    for (part = unit->mParts; part; part = part->mNextPart) {
+    for (part = unit->parts; part; part = part->nextPart) {
         if (!part->poseTable) {
             part->poseId = -1;
         } else {
-            name = part->mKindPartParams->modelName;
+            name = part->kindPartParams->modelName;
             if (!name) {
                 part->poseId = -1;
             } else {
@@ -1044,11 +1044,11 @@ void btlDispPoseAnime(BattleUnitPart* part) {
 void gravityOffsetControl(BattleUnitPart* part) {
     BOOL active = TRUE;
     BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit = part->mOwner;
+    BattleUnit* unit = part->owner;
 
     if (!(wp->flags & BATTLE_FLAG_ZERO_GRAVITY_UNUSED)) {
         active = FALSE;
-    } else if (unit->mAttributeFlags & (kFloating | kNoGravityBob)) {
+    } else if (unit->attributeFlags & (kFloating | kNoGravityBob)) {
         active = FALSE;
     }
     if (active) {
@@ -1070,7 +1070,7 @@ f32 getGravityDispOffset(BattleUnitPart* part) {
 
 void floatOffsetControl(BattleUnitPart* part) {
     BOOL active = TRUE;
-    BattleUnit* unit = part->mOwner;
+    BattleUnit* unit = part->owner;
 
     if (!(unit->flags & BATTLE_UNIT_FLAG_FLOAT_CAPABLE)) {
         active = FALSE;
@@ -1126,7 +1126,7 @@ void _pose_def(BattleUnitPart* part) {
         case 0:
             part->poseState = 1;
             animPoseSetEffect(part->poseId, NULL, 0);
-            if (part->mOwner->flags & BATTLE_UNIT_FLAG_SOLID_MODEL) {
+            if (part->owner->flags & BATTLE_UNIT_FLAG_SOLID_MODEL) {
                 animPoseSetMaterialLightFlagOn(part->poseId, MATERIAL_LIGHT_PAPER_CRAFT);
             }
             break;

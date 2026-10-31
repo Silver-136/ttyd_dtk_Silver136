@@ -59,14 +59,14 @@ static EvtWord _body_param_set[49];
 
 /** Unit data of the Pokey: 4 HP, level 11; the battle starts it from init_event. */
 static BattleUnitKind unit_sambo = {
-    UNIT_POKEY, // mUnitType
+    UNIT_POKEY, // unitType
     "btl_un_sambo", // name
     4, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    11, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    11, // level
+    0, // bonusExp
     1, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -98,7 +98,7 @@ static BattleUnitKind unit_sambo = {
     0, // attributeFlags
     &regist, // statusVulnerability
     5, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     (BattleDataEntry*)data_table, // dataTable
 };
@@ -143,9 +143,9 @@ static BattleWeapon weapon_sambo_head_attack_4 = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -167,7 +167,7 @@ static BattleWeapon weapon_sambo_head_attack_4 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -180,9 +180,9 @@ static BattleWeapon weapon_sambo_head_attack_3 = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -204,7 +204,7 @@ static BattleWeapon weapon_sambo_head_attack_3 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -219,9 +219,9 @@ static BattleWeapon weapon_sambo_head_attack_2 = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -243,7 +243,7 @@ static BattleWeapon weapon_sambo_head_attack_2 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -259,9 +259,9 @@ static BattleWeapon weapon_sambo_head_attack_1 = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -283,7 +283,7 @@ static BattleWeapon weapon_sambo_head_attack_1 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -296,9 +296,9 @@ static BattleWeapon weapon_sambo_spike_attack_4 = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -320,7 +320,7 @@ static BattleWeapon weapon_sambo_spike_attack_4 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -333,9 +333,9 @@ static BattleWeapon weapon_sambo_spike_attack_3 = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -357,7 +357,7 @@ static BattleWeapon weapon_sambo_spike_attack_3 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -370,9 +370,9 @@ static BattleWeapon weapon_sambo_spike_attack_2 = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -394,7 +394,7 @@ static BattleWeapon weapon_sambo_spike_attack_2 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -532,7 +532,7 @@ static BattleUnitKindPart parts[] = {
         {0.0f, 84.0f, 0.0f}, // hitBaseOffset
         {0.0f, 90.0f, 0.0f}, // hitCursorBaseOffset
         20, // shadowSize
-        90, // reserved_32
+        90, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -548,7 +548,7 @@ static BattleUnitKindPart parts[] = {
         {0.0f, 64.0f, 0.0f}, // hitBaseOffset
         {0.0f, 70.0f, 0.0f}, // hitCursorBaseOffset
         20, // shadowSize
-        70, // reserved_32
+        70, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -564,7 +564,7 @@ static BattleUnitKindPart parts[] = {
         {0.0f, 44.0f, 0.0f}, // hitBaseOffset
         {0.0f, 50.0f, 0.0f}, // hitCursorBaseOffset
         20, // shadowSize
-        50, // reserved_32
+        50, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -580,7 +580,7 @@ static BattleUnitKindPart parts[] = {
         {0.0f, 24.0f, 0.0f}, // hitBaseOffset
         {0.0f, 30.0f, 0.0f}, // hitCursorBaseOffset
         20, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -596,7 +596,7 @@ static BattleUnitKindPart parts[] = {
         {0}, // hitBaseOffset
         {0}, // hitCursorBaseOffset
         20, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -1766,7 +1766,7 @@ EVT_END()
 
 /** Setup for the new Pokey a Pokey calls in with its call-for-help move. */
 static BattleUnitSetup entry_sambo = {
-    &unit_sambo, // mUnitKindParams
+    &unit_sambo, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase

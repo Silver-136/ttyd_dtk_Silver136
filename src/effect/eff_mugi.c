@@ -34,7 +34,7 @@ typedef struct effMugiKemuriData {
     f32 dirZ; //0x50
     s32 timer; //0x54
     s32 alpha; //0x58
-    f32 field_0x5C; //0x5C
+    f32 flip; //0x5C
     s32 poseId; //0x60
 } effMugiKemuriData;
 
@@ -134,7 +134,7 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
         data->rot.y = angle;
         data->rot.x = 0.0f;
         data->rot.z = 0.0f;
-        data->field_0x5C = ((rand() % 100) >> 4) & 1;
+        data->flip = ((rand() % 100) >> 4) & 1;
         {
             f32 rad = (6.2831855f * reviseAngle(angle + (dir ? -90 : 90))) / 360.0f;
             data->dirX = (f32)sin(rad);

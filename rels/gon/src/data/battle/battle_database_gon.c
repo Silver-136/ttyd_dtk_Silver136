@@ -98,10 +98,10 @@ BattleStageObjectData gon_btlobject_data[] = {
  */
 BattleStageData gon_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_5", // mSpecificStageDataDir
-        2, // mNumObjects
-        gon_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_5", // specificStageDataDir
+        2, // numObjects
+        gon_btlobject_data, // objects
         { // bgAWeapon
             NULL, // name
             0, // icon
@@ -113,9 +113,9 @@ BattleStageData gon_btlstage_data[] = {
             0, // baseSpCost
             2, // superguardsAllowed
             0.0f, // reserved_14
-            0, // mStylishCommandMultiplier
+            0, // stylishCommandMultiplier
             0, // reserved_19
-            0, // mBingoSlotChance
+            0, // bingoSlotChance
             0, // reserved_1B
             NULL, // hpDamageFn
             {0}, // hpDamageWork
@@ -178,7 +178,7 @@ BattleStageData gon_btlstage_data[] = {
             0, // fpRegenTime
             0, // fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         },
         { // bgBWeapon
@@ -192,9 +192,9 @@ BattleStageData gon_btlstage_data[] = {
             0, // baseSpCost
             2, // superguardsAllowed
             0.0f, // reserved_14
-            0, // mStylishCommandMultiplier
+            0, // stylishCommandMultiplier
             0, // reserved_19
-            0, // mBingoSlotChance
+            0, // bingoSlotChance
             0, // reserved_1B
             weaponGetPowerDefault, // hpDamageFn
             {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -257,17 +257,17 @@ BattleStageData gon_btlstage_data[] = {
             0, // fpRegenTime
             0, // fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         },
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_6", // mSpecificStageDataDir
-        2, // mNumObjects
-        &gon_btlobject_data[8], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_6", // specificStageDataDir
+        2, // numObjects
+        &gon_btlobject_data[8], // objects
         { // bgAWeapon
             NULL, // name
             0, // icon
@@ -279,9 +279,9 @@ BattleStageData gon_btlstage_data[] = {
             0, // baseSpCost
             2, // superguardsAllowed
             0.0f, // reserved_14
-            0, // mStylishCommandMultiplier
+            0, // stylishCommandMultiplier
             0, // reserved_19
-            0, // mBingoSlotChance
+            0, // bingoSlotChance
             0, // reserved_1B
             NULL, // hpDamageFn
             {0}, // hpDamageWork
@@ -344,7 +344,7 @@ BattleStageData gon_btlstage_data[] = {
             0, // fpRegenTime
             0, // fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         },
         { // bgBWeapon
@@ -358,9 +358,9 @@ BattleStageData gon_btlstage_data[] = {
             0, // baseSpCost
             2, // superguardsAllowed
             0.0f, // reserved_14
-            0, // mStylishCommandMultiplier
+            0, // stylishCommandMultiplier
             0, // reserved_19
-            0, // mBingoSlotChance
+            0, // bingoSlotChance
             0, // reserved_1B
             weaponGetPowerDefault, // hpDamageFn
             {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -423,17 +423,17 @@ BattleStageData gon_btlstage_data[] = {
             0, // fpRegenTime
             0, // fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         },
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_3", // mSpecificStageDataDir
-        2, // mNumObjects
-        &gon_btlobject_data[2], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_3", // specificStageDataDir
+        2, // numObjects
+        &gon_btlobject_data[2], // objects
         { // bgAWeapon
             NULL, // name
             0, // icon
@@ -445,9 +445,9 @@ BattleStageData gon_btlstage_data[] = {
             0, // baseSpCost
             2, // superguardsAllowed
             0.0f, // reserved_14
-            0, // mStylishCommandMultiplier
+            0, // stylishCommandMultiplier
             0, // reserved_19
-            0, // mBingoSlotChance
+            0, // bingoSlotChance
             0, // reserved_1B
             NULL, // hpDamageFn
             {0}, // hpDamageWork
@@ -510,7 +510,7 @@ BattleStageData gon_btlstage_data[] = {
             0, // fpRegenTime
             0, // fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         },
         { // bgBWeapon
@@ -524,9 +524,9 @@ BattleStageData gon_btlstage_data[] = {
             0, // baseSpCost
             2, // superguardsAllowed
             0.0f, // reserved_14
-            0, // mStylishCommandMultiplier
+            0, // stylishCommandMultiplier
             0, // reserved_19
-            0, // mBingoSlotChance
+            0, // bingoSlotChance
             0, // reserved_1B
             weaponGetPowerDefault, // hpDamageFn
             {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -589,17 +589,17 @@ BattleStageData gon_btlstage_data[] = {
             0, // fpRegenTime
             0, // fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         },
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_3", // mSpecificStageDataDir
-        2, // mNumObjects
-        &gon_btlobject_data[4], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_3", // specificStageDataDir
+        2, // numObjects
+        &gon_btlobject_data[4], // objects
         { // bgAWeapon
             NULL, // name
             0, // icon
@@ -611,9 +611,9 @@ BattleStageData gon_btlstage_data[] = {
             0, // baseSpCost
             2, // superguardsAllowed
             0.0f, // reserved_14
-            0, // mStylishCommandMultiplier
+            0, // stylishCommandMultiplier
             0, // reserved_19
-            0, // mBingoSlotChance
+            0, // bingoSlotChance
             0, // reserved_1B
             NULL, // hpDamageFn
             {0}, // hpDamageWork
@@ -676,7 +676,7 @@ BattleStageData gon_btlstage_data[] = {
             0, // fpRegenTime
             0, // fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         },
         { // bgBWeapon
@@ -690,9 +690,9 @@ BattleStageData gon_btlstage_data[] = {
             0, // baseSpCost
             2, // superguardsAllowed
             0.0f, // reserved_14
-            0, // mStylishCommandMultiplier
+            0, // stylishCommandMultiplier
             0, // reserved_19
-            0, // mBingoSlotChance
+            0, // bingoSlotChance
             0, // reserved_1B
             weaponGetPowerDefault, // hpDamageFn
             {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -755,17 +755,17 @@ BattleStageData gon_btlstage_data[] = {
             0, // fpRegenTime
             0, // fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         },
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_3", // mSpecificStageDataDir
-        2, // mNumObjects
-        &gon_btlobject_data[6], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_3", // specificStageDataDir
+        2, // numObjects
+        &gon_btlobject_data[6], // objects
         { // bgAWeapon
             NULL, // name
             0, // icon
@@ -777,9 +777,9 @@ BattleStageData gon_btlstage_data[] = {
             0, // baseSpCost
             2, // superguardsAllowed
             0.0f, // reserved_14
-            0, // mStylishCommandMultiplier
+            0, // stylishCommandMultiplier
             0, // reserved_19
-            0, // mBingoSlotChance
+            0, // bingoSlotChance
             0, // reserved_1B
             NULL, // hpDamageFn
             {0}, // hpDamageWork
@@ -842,7 +842,7 @@ BattleStageData gon_btlstage_data[] = {
             0, // fpRegenTime
             0, // fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         },
         { // bgBWeapon
@@ -856,9 +856,9 @@ BattleStageData gon_btlstage_data[] = {
             0, // baseSpCost
             2, // superguardsAllowed
             0.0f, // reserved_14
-            0, // mStylishCommandMultiplier
+            0, // stylishCommandMultiplier
             0, // reserved_19
-            0, // mBingoSlotChance
+            0, // bingoSlotChance
             0, // reserved_1B
             weaponGetPowerDefault, // hpDamageFn
             {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -921,7 +921,7 @@ BattleStageData gon_btlstage_data[] = {
             0, // fpRegenTime
             0, // fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         },
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -931,7 +931,7 @@ BattleStageData gon_btlstage_data[] = {
 
 BattleUnitSetup btlparty_gon_gon_02_02_off_1[] = {
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -941,7 +941,7 @@ BattleUnitSetup btlparty_gon_gon_02_02_off_1[] = {
         battle_item_patapata, // itemDropTable
     },
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -951,7 +951,7 @@ BattleUnitSetup btlparty_gon_gon_02_02_off_1[] = {
         battle_item_patapata, // itemDropTable
     },
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -975,7 +975,7 @@ BattleGroupSetup btlgrp_gon_gon_02_02_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_02_03_off_1[] = {
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -985,7 +985,7 @@ BattleUnitSetup btlparty_gon_gon_02_03_off_1[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1009,7 +1009,7 @@ BattleGroupSetup btlgrp_gon_gon_02_03_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_02_04_off_1[] = {
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1019,7 +1019,7 @@ BattleUnitSetup btlparty_gon_gon_02_04_off_1[] = {
         battle_item_patapata, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1029,7 +1029,7 @@ BattleUnitSetup btlparty_gon_gon_02_04_off_1[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1053,7 +1053,7 @@ BattleGroupSetup btlgrp_gon_gon_02_04_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_03_01_off_1[] = {
     {
-        &unit_red_honenoko, // mUnitKindParams
+        &unit_red_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1063,7 +1063,7 @@ BattleUnitSetup btlparty_gon_gon_03_01_off_1[] = {
         battle_item_red_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1073,7 +1073,7 @@ BattleUnitSetup btlparty_gon_gon_03_01_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1083,7 +1083,7 @@ BattleUnitSetup btlparty_gon_gon_03_01_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1093,7 +1093,7 @@ BattleUnitSetup btlparty_gon_gon_03_01_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1116,7 +1116,7 @@ BattleGroupSetup btlgrp_gon_gon_03_01_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_04_01_off_1[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1126,7 +1126,7 @@ BattleUnitSetup btlparty_gon_gon_04_01_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1150,7 +1150,7 @@ BattleGroupSetup btlgrp_gon_gon_04_01_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_04_02_off_1[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1160,7 +1160,7 @@ BattleUnitSetup btlparty_gon_gon_04_02_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1170,7 +1170,7 @@ BattleUnitSetup btlparty_gon_gon_04_02_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1180,7 +1180,7 @@ BattleUnitSetup btlparty_gon_gon_04_02_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1204,7 +1204,7 @@ BattleGroupSetup btlgrp_gon_gon_04_02_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_04_03_off_1[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1214,7 +1214,7 @@ BattleUnitSetup btlparty_gon_gon_04_03_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1224,7 +1224,7 @@ BattleUnitSetup btlparty_gon_gon_04_03_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1248,7 +1248,7 @@ BattleGroupSetup btlgrp_gon_gon_04_03_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_06_03_off_1[] = {
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1258,7 +1258,7 @@ BattleUnitSetup btlparty_gon_gon_06_03_off_1[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1268,7 +1268,7 @@ BattleUnitSetup btlparty_gon_gon_06_03_off_1[] = {
         battle_item_patapata, // itemDropTable
     },
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1293,7 +1293,7 @@ BattleGroupSetup btlgrp_gon_gon_06_03_off_1 = {
 // The third unit below is a Paragoomba with the Paratroopa item-drop table.
 BattleUnitSetup btlparty_gon_gon_06_04_off_1[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1303,7 +1303,7 @@ BattleUnitSetup btlparty_gon_gon_06_04_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1313,7 +1313,7 @@ BattleUnitSetup btlparty_gon_gon_06_04_off_1[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1337,7 +1337,7 @@ BattleGroupSetup btlgrp_gon_gon_06_04_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_08_01_off_1[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1347,7 +1347,7 @@ BattleUnitSetup btlparty_gon_gon_08_01_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1371,7 +1371,7 @@ BattleGroupSetup btlgrp_gon_gon_08_01_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_08_03_off_1[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1381,7 +1381,7 @@ BattleUnitSetup btlparty_gon_gon_08_03_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1405,7 +1405,7 @@ BattleGroupSetup btlgrp_gon_gon_08_03_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_08_05_off_1[] = {
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1415,7 +1415,7 @@ BattleUnitSetup btlparty_gon_gon_08_05_off_1[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1439,7 +1439,7 @@ BattleGroupSetup btlgrp_gon_gon_08_05_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_09_01_off_1[] = {
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1449,7 +1449,7 @@ BattleUnitSetup btlparty_gon_gon_09_01_off_1[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1459,7 +1459,7 @@ BattleUnitSetup btlparty_gon_gon_09_01_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1483,7 +1483,7 @@ BattleGroupSetup btlgrp_gon_gon_09_01_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_09_02_off_1[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1493,7 +1493,7 @@ BattleUnitSetup btlparty_gon_gon_09_02_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1503,7 +1503,7 @@ BattleUnitSetup btlparty_gon_gon_09_02_off_1[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1527,7 +1527,7 @@ BattleGroupSetup btlgrp_gon_gon_09_02_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_09_04_off_1[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1537,7 +1537,7 @@ BattleUnitSetup btlparty_gon_gon_09_04_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1547,7 +1547,7 @@ BattleUnitSetup btlparty_gon_gon_09_04_off_1[] = {
         battle_item_honenoko, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1557,7 +1557,7 @@ BattleUnitSetup btlparty_gon_gon_09_04_off_1[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1581,7 +1581,7 @@ BattleGroupSetup btlgrp_gon_gon_09_04_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_10_01_off_1[] = {
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1591,7 +1591,7 @@ BattleUnitSetup btlparty_gon_gon_10_01_off_1[] = {
         battle_item_togekuri, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1601,7 +1601,7 @@ BattleUnitSetup btlparty_gon_gon_10_01_off_1[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1611,7 +1611,7 @@ BattleUnitSetup btlparty_gon_gon_10_01_off_1[] = {
         battle_item_patapata, // itemDropTable
     },
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1635,7 +1635,7 @@ BattleGroupSetup btlgrp_gon_gon_10_01_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_10_02_off_1[] = {
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1645,7 +1645,7 @@ BattleUnitSetup btlparty_gon_gon_10_02_off_1[] = {
         battle_item_patapata, // itemDropTable
     },
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1655,7 +1655,7 @@ BattleUnitSetup btlparty_gon_gon_10_02_off_1[] = {
         battle_item_patapata, // itemDropTable
     },
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1679,7 +1679,7 @@ BattleGroupSetup btlgrp_gon_gon_10_02_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_10_03_off_1[] = {
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1689,7 +1689,7 @@ BattleUnitSetup btlparty_gon_gon_10_03_off_1[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1699,7 +1699,7 @@ BattleUnitSetup btlparty_gon_gon_10_03_off_1[] = {
         battle_item_togekuri, // itemDropTable
     },
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1709,7 +1709,7 @@ BattleUnitSetup btlparty_gon_gon_10_03_off_1[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_patapata, // mUnitKindParams
+        &unit_patapata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1733,7 +1733,7 @@ BattleGroupSetup btlgrp_gon_gon_10_03_off_1 = {
 
 BattleUnitSetup btlparty_gon_gon_11_01_off_1[] = {
     {
-        &unit_boss_gonbaba, // mUnitKindParams
+        &unit_boss_gonbaba, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase

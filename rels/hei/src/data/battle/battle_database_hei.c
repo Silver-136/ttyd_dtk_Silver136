@@ -186,110 +186,110 @@ BattleStageObjectData hei_btlobject_data[] = {
  */
 BattleStageData hei_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_0", // mSpecificStageDataDir
-        13, // mNumObjects
-        hei_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_0", // specificStageDataDir
+        13, // numObjects
+        hei_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x210006F, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_4", // mSpecificStageDataDir
-        6, // mNumObjects
-        &hei_btlobject_data[13], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_4", // specificStageDataDir
+        6, // numObjects
+        &hei_btlobject_data[13], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x210006F, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_4", // mSpecificStageDataDir
-        6, // mNumObjects
-        &hei_btlobject_data[19], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_4", // specificStageDataDir
+        6, // numObjects
+        &hei_btlobject_data[19], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_4", // mSpecificStageDataDir
-        6, // mNumObjects
-        &hei_btlobject_data[25], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_4", // specificStageDataDir
+        6, // numObjects
+        &hei_btlobject_data[25], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x210006F, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_4", // mSpecificStageDataDir
-        6, // mNumObjects
-        &hei_btlobject_data[31], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_4", // specificStageDataDir
+        6, // numObjects
+        &hei_btlobject_data[31], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_4", // mSpecificStageDataDir
-        6, // mNumObjects
-        &hei_btlobject_data[37], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_4", // specificStageDataDir
+        6, // numObjects
+        &hei_btlobject_data[37], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x210006F, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_4", // mSpecificStageDataDir
-        6, // mNumObjects
-        &hei_btlobject_data[43], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_4", // specificStageDataDir
+        6, // numObjects
+        &hei_btlobject_data[43], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_1", // mSpecificStageDataDir
-        3, // mNumObjects
-        &hei_btlobject_data[49], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_1", // specificStageDataDir
+        3, // numObjects
+        &hei_btlobject_data[49], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_1", // mSpecificStageDataDir
-        3, // mNumObjects
-        &hei_btlobject_data[52], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_1", // specificStageDataDir
+        3, // numObjects
+        &hei_btlobject_data[52], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_1", // mSpecificStageDataDir
-        2, // mNumObjects
-        &hei_btlobject_data[55], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_1", // specificStageDataDir
+        2, // numObjects
+        &hei_btlobject_data[55], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x210006F, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_01_2", // mSpecificStageDataDir
-        2, // mNumObjects
-        &hei_btlobject_data[57], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_01_2", // specificStageDataDir
+        2, // numObjects
+        &hei_btlobject_data[57], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -300,7 +300,7 @@ BattleStageData hei_btlstage_data[] = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_01_01, in Petal Meadows: Goomba x2, Spiky Goomba, Paragoomba. */
 BattleUnitSetup btlparty_hei_hei_01_01_off_1[] = {
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -310,7 +310,7 @@ BattleUnitSetup btlparty_hei_hei_01_01_off_1[] = {
         battle_item_kuriboo, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -320,7 +320,7 @@ BattleUnitSetup btlparty_hei_hei_01_01_off_1[] = {
         battle_item_kuriboo, // itemDropTable
     },
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -330,7 +330,7 @@ BattleUnitSetup btlparty_hei_hei_01_01_off_1[] = {
         battle_item_togekuri, // itemDropTable
     },
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -359,7 +359,7 @@ BattleGroupSetup btlgrp_hei_hei_01_01_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_02_02, in Petal Meadows: Paragoomba, Koopa Troopa. */
 BattleUnitSetup btlparty_hei_hei_02_02_off_1[] = {
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -369,7 +369,7 @@ BattleUnitSetup btlparty_hei_hei_02_02_off_1[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -398,7 +398,7 @@ BattleGroupSetup btlgrp_hei_hei_02_02_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_02_03, in Petal Meadows: Koopa Troopa, Goomba. */
 BattleUnitSetup btlparty_hei_hei_02_03_off_1[] = {
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -408,7 +408,7 @@ BattleUnitSetup btlparty_hei_hei_02_03_off_1[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -437,7 +437,7 @@ BattleGroupSetup btlgrp_hei_hei_02_03_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_02_04, in Petal Meadows: Spiky Goomba, Koopa Troopa. */
 BattleUnitSetup btlparty_hei_hei_02_04_off_1[] = {
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -447,7 +447,7 @@ BattleUnitSetup btlparty_hei_hei_02_04_off_1[] = {
         battle_item_togekuri, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -476,7 +476,7 @@ BattleGroupSetup btlgrp_hei_hei_02_04_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_03_01, in Petal Meadows: Bald Cleft x2. */
 BattleUnitSetup btlparty_hei_hei_03_01_off_1[] = {
     {
-        &unit_sinnosuke, // mUnitKindParams
+        &unit_sinnosuke, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -486,7 +486,7 @@ BattleUnitSetup btlparty_hei_hei_03_01_off_1[] = {
         battle_item_sinnosuke, // itemDropTable
     },
     {
-        &unit_sinnosuke, // mUnitKindParams
+        &unit_sinnosuke, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -514,7 +514,7 @@ BattleGroupSetup btlgrp_hei_hei_03_01_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_04_01, in Petal Meadows: Paragoomba x3. */
 BattleUnitSetup btlparty_hei_hei_04_01_off_1[] = {
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -524,7 +524,7 @@ BattleUnitSetup btlparty_hei_hei_04_01_off_1[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -534,7 +534,7 @@ BattleUnitSetup btlparty_hei_hei_04_01_off_1[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -563,7 +563,7 @@ BattleGroupSetup btlgrp_hei_hei_04_01_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_HEI_04_01, in Petal Meadows: Paragoomba, Koopa Troopa. */
 BattleUnitSetup btlparty_hei_hei_04_01_off_2[] = {
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -573,7 +573,7 @@ BattleUnitSetup btlparty_hei_hei_04_01_off_2[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -602,7 +602,7 @@ BattleGroupSetup btlgrp_hei_hei_04_01_off_2 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_04_02, in Petal Meadows: Koopa Troopa x2. */
 BattleUnitSetup btlparty_hei_hei_04_02_off_1[] = {
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -612,7 +612,7 @@ BattleUnitSetup btlparty_hei_hei_04_02_off_1[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -641,7 +641,7 @@ BattleGroupSetup btlgrp_hei_hei_04_02_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_HEI_04_02, in Petal Meadows: Koopa Troopa x3. */
 BattleUnitSetup btlparty_hei_hei_04_02_off_2[] = {
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -651,7 +651,7 @@ BattleUnitSetup btlparty_hei_hei_04_02_off_2[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -661,7 +661,7 @@ BattleUnitSetup btlparty_hei_hei_04_02_off_2[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -690,7 +690,7 @@ BattleGroupSetup btlgrp_hei_hei_04_02_off_2 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_05_01, in Petal Meadows: Bristle x2. */
 BattleUnitSetup btlparty_hei_hei_05_01_off_1[] = {
     {
-        &unit_togedaruma, // mUnitKindParams
+        &unit_togedaruma, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -700,7 +700,7 @@ BattleUnitSetup btlparty_hei_hei_05_01_off_1[] = {
         battle_item_togedaruma, // itemDropTable
     },
     {
-        &unit_togedaruma, // mUnitKindParams
+        &unit_togedaruma, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -728,7 +728,7 @@ BattleGroupSetup btlgrp_hei_hei_05_01_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_06_02, in Petal Meadows: Koopa Troopa, Spiky Goomba. */
 BattleUnitSetup btlparty_hei_hei_06_02_off_1[] = {
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -738,7 +738,7 @@ BattleUnitSetup btlparty_hei_hei_06_02_off_1[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -767,7 +767,7 @@ BattleGroupSetup btlgrp_hei_hei_06_02_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_06_03, in Petal Meadows: Paragoomba, Koopa Troopa x2. */
 BattleUnitSetup btlparty_hei_hei_06_03_off_1[] = {
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -777,7 +777,7 @@ BattleUnitSetup btlparty_hei_hei_06_03_off_1[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -787,7 +787,7 @@ BattleUnitSetup btlparty_hei_hei_06_03_off_1[] = {
         battle_item_nokonoko, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -816,7 +816,7 @@ BattleGroupSetup btlgrp_hei_hei_06_03_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_HEI_06_03, in Petal Meadows: Paragoomba x2, Koopa Troopa. */
 BattleUnitSetup btlparty_hei_hei_06_03_off_2[] = {
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -826,7 +826,7 @@ BattleUnitSetup btlparty_hei_hei_06_03_off_2[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -836,7 +836,7 @@ BattleUnitSetup btlparty_hei_hei_06_03_off_2[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_nokonoko, // mUnitKindParams
+        &unit_nokonoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -865,7 +865,7 @@ BattleGroupSetup btlgrp_hei_hei_06_03_off_2 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_07_01, in Petal Meadows: Cleft x4. */
 BattleUnitSetup btlparty_hei_hei_07_01_off_1[] = {
     {
-        &unit_monochrome_sinemon, // mUnitKindParams
+        &unit_monochrome_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -875,7 +875,7 @@ BattleUnitSetup btlparty_hei_hei_07_01_off_1[] = {
         battle_item_monochrome_sinemon, // itemDropTable
     },
     {
-        &unit_monochrome_sinemon, // mUnitKindParams
+        &unit_monochrome_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -885,7 +885,7 @@ BattleUnitSetup btlparty_hei_hei_07_01_off_1[] = {
         battle_item_monochrome_sinemon, // itemDropTable
     },
     {
-        &unit_monochrome_sinemon, // mUnitKindParams
+        &unit_monochrome_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -895,7 +895,7 @@ BattleUnitSetup btlparty_hei_hei_07_01_off_1[] = {
         battle_item_monochrome_sinemon, // itemDropTable
     },
     {
-        &unit_monochrome_sinemon, // mUnitKindParams
+        &unit_monochrome_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -923,7 +923,7 @@ BattleGroupSetup btlgrp_hei_hei_07_01_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_08_01 and BTLNO_HEI_08_02, in Petal Meadows: Fuzzy x4. */
 BattleUnitSetup btlparty_hei_hei_08_01_off_1[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -933,7 +933,7 @@ BattleUnitSetup btlparty_hei_hei_08_01_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -943,7 +943,7 @@ BattleUnitSetup btlparty_hei_hei_08_01_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -953,7 +953,7 @@ BattleUnitSetup btlparty_hei_hei_08_01_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -981,7 +981,7 @@ BattleGroupSetup btlgrp_hei_hei_08_01_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_09_01, in Petal Meadows: Fuzzy x2. */
 BattleUnitSetup btlparty_hei_hei_09_01_off_1[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -991,7 +991,7 @@ BattleUnitSetup btlparty_hei_hei_09_01_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1020,7 +1020,7 @@ BattleGroupSetup btlgrp_hei_hei_09_01_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_HEI_09_01, in Petal Meadows: Fuzzy x3. */
 BattleUnitSetup btlparty_hei_hei_09_01_off_2[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1030,7 +1030,7 @@ BattleUnitSetup btlparty_hei_hei_09_01_off_2[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1040,7 +1040,7 @@ BattleUnitSetup btlparty_hei_hei_09_01_off_2[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1069,7 +1069,7 @@ BattleGroupSetup btlgrp_hei_hei_09_01_off_2 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_09_03, in Petal Meadows: Fuzzy x2. */
 BattleUnitSetup btlparty_hei_hei_09_03_off_1[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1079,7 +1079,7 @@ BattleUnitSetup btlparty_hei_hei_09_03_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1108,7 +1108,7 @@ BattleGroupSetup btlgrp_hei_hei_09_03_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_HEI_09_03, in Petal Meadows: Fuzzy x3. */
 BattleUnitSetup btlparty_hei_hei_09_03_off_2[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1118,7 +1118,7 @@ BattleUnitSetup btlparty_hei_hei_09_03_off_2[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1128,7 +1128,7 @@ BattleUnitSetup btlparty_hei_hei_09_03_off_2[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1157,7 +1157,7 @@ BattleGroupSetup btlgrp_hei_hei_09_03_off_2 = {
 // The initial group contains only Gold Fuzzy; its damage event summons the horde later.
 BattleUnitSetup btlparty_hei_hei_10_01_off_1[] = {
     {
-        &unit_gold_chorobon, // mUnitKindParams
+        &unit_gold_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1185,7 +1185,7 @@ BattleGroupSetup btlgrp_hei_hei_10_01_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_11_01, in Petal Meadows: Fuzzy x2. */
 BattleUnitSetup btlparty_hei_hei_11_01_off_1[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1195,7 +1195,7 @@ BattleUnitSetup btlparty_hei_hei_11_01_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1224,7 +1224,7 @@ BattleGroupSetup btlgrp_hei_hei_11_01_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_HEI_11_01, in Petal Meadows: Fuzzy x3. */
 BattleUnitSetup btlparty_hei_hei_11_01_off_2[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1234,7 +1234,7 @@ BattleUnitSetup btlparty_hei_hei_11_01_off_2[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1244,7 +1244,7 @@ BattleUnitSetup btlparty_hei_hei_11_01_off_2[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1273,7 +1273,7 @@ BattleGroupSetup btlgrp_hei_hei_11_01_off_2 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_11_03, in Petal Meadows: Fuzzy x2. */
 BattleUnitSetup btlparty_hei_hei_11_03_off_1[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1283,7 +1283,7 @@ BattleUnitSetup btlparty_hei_hei_11_03_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1312,7 +1312,7 @@ BattleGroupSetup btlgrp_hei_hei_11_03_off_1 = {
 /** Enemy lineup of formation 2 of BTLNO_HEI_11_03, in Petal Meadows: Fuzzy x3. */
 BattleUnitSetup btlparty_hei_hei_11_03_off_2[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1322,7 +1322,7 @@ BattleUnitSetup btlparty_hei_hei_11_03_off_2[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1332,7 +1332,7 @@ BattleUnitSetup btlparty_hei_hei_11_03_off_2[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1361,7 +1361,7 @@ BattleGroupSetup btlgrp_hei_hei_11_03_off_2 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_12_01 and BTLNO_HEI_12_02, in Petal Meadows: Fuzzy x4. */
 BattleUnitSetup btlparty_hei_hei_12_01_off_1[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1371,7 +1371,7 @@ BattleUnitSetup btlparty_hei_hei_12_01_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1381,7 +1381,7 @@ BattleUnitSetup btlparty_hei_hei_12_01_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1391,7 +1391,7 @@ BattleUnitSetup btlparty_hei_hei_12_01_off_1[] = {
         battle_item_chorobon, // itemDropTable
     },
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1419,7 +1419,7 @@ BattleGroupSetup btlgrp_hei_hei_12_01_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_13_02, in Petal Meadows: Goomba, Spiky Goomba. */
 BattleUnitSetup btlparty_hei_hei_13_02_off_1[] = {
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1429,7 +1429,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_off_1[] = {
         battle_item_kuriboo, // itemDropTable
     },
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1458,7 +1458,7 @@ BattleGroupSetup btlgrp_hei_hei_13_02_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_13_02, in Petal Meadows: Goomba x3. */
 BattleUnitSetup btlparty_hei_hei_13_02_on_1[] = {
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1468,7 +1468,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_1[] = {
         battle_item_kuriboo, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1478,7 +1478,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_1[] = {
         battle_item_kuriboo, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1507,7 +1507,7 @@ BattleGroupSetup btlgrp_hei_hei_13_02_on_1 = {
 /** Enemy lineup of formation 2 of BTLNO_HEI_13_02, in Petal Meadows: Goomba x4. */
 BattleUnitSetup btlparty_hei_hei_13_02_on_2[] = {
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1517,7 +1517,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_2[] = {
         battle_item_kuriboo, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1527,7 +1527,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_2[] = {
         battle_item_kuriboo, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1537,7 +1537,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_2[] = {
         battle_item_kuriboo, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1566,7 +1566,7 @@ BattleGroupSetup btlgrp_hei_hei_13_02_on_2 = {
 /** Enemy lineup of formation 3 of BTLNO_HEI_13_02, in Petal Meadows: Goomba x5. */
 BattleUnitSetup btlparty_hei_hei_13_02_on_3[] = {
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1576,7 +1576,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_3[] = {
         battle_item_kuriboo, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1586,7 +1586,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_3[] = {
         battle_item_kuriboo, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1596,7 +1596,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_3[] = {
         battle_item_kuriboo, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1606,7 +1606,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_3[] = {
         battle_item_kuriboo, // itemDropTable
     },
     {
-        &unit_kuriboo, // mUnitKindParams
+        &unit_kuriboo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1635,7 +1635,7 @@ BattleGroupSetup btlgrp_hei_hei_13_02_on_3 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_13_03, in Petal Meadows: Spiky Goomba x2. */
 BattleUnitSetup btlparty_hei_hei_13_03_off_1[] = {
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1645,7 +1645,7 @@ BattleUnitSetup btlparty_hei_hei_13_03_off_1[] = {
         battle_item_togekuri, // itemDropTable
     },
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1674,7 +1674,7 @@ BattleGroupSetup btlgrp_hei_hei_13_03_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_13_03, in Petal Meadows: Spiky Goomba x2. */
 BattleUnitSetup btlparty_hei_hei_13_03_on_1[] = {
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1684,7 +1684,7 @@ BattleUnitSetup btlparty_hei_hei_13_03_on_1[] = {
         battle_item_togekuri, // itemDropTable
     },
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1713,7 +1713,7 @@ BattleGroupSetup btlgrp_hei_hei_13_03_on_1 = {
 /** Enemy lineup of formation 2 of BTLNO_HEI_13_03, in Petal Meadows: Spiky Goomba x3. */
 BattleUnitSetup btlparty_hei_hei_13_03_on_2[] = {
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1723,7 +1723,7 @@ BattleUnitSetup btlparty_hei_hei_13_03_on_2[] = {
         battle_item_togekuri, // itemDropTable
     },
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1733,7 +1733,7 @@ BattleUnitSetup btlparty_hei_hei_13_03_on_2[] = {
         battle_item_togekuri, // itemDropTable
     },
     {
-        &unit_togekuri, // mUnitKindParams
+        &unit_togekuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1762,7 +1762,7 @@ BattleGroupSetup btlgrp_hei_hei_13_03_on_2 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_13_04, in Petal Meadows: Paragoomba x2. */
 BattleUnitSetup btlparty_hei_hei_13_04_off_1[] = {
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1772,7 +1772,7 @@ BattleUnitSetup btlparty_hei_hei_13_04_off_1[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1801,7 +1801,7 @@ BattleGroupSetup btlgrp_hei_hei_13_04_off_1 = {
 /** Enemy lineup of formation 1 of BTLNO_HEI_13_04, in Petal Meadows: Paragoomba x2. */
 BattleUnitSetup btlparty_hei_hei_13_04_on_1[] = {
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1811,7 +1811,7 @@ BattleUnitSetup btlparty_hei_hei_13_04_on_1[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1840,7 +1840,7 @@ BattleGroupSetup btlgrp_hei_hei_13_04_on_1 = {
 /** Enemy lineup of formation 2 of BTLNO_HEI_13_04, in Petal Meadows: Paragoomba x4. */
 BattleUnitSetup btlparty_hei_hei_13_04_on_2[] = {
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1850,7 +1850,7 @@ BattleUnitSetup btlparty_hei_hei_13_04_on_2[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1860,7 +1860,7 @@ BattleUnitSetup btlparty_hei_hei_13_04_on_2[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1870,7 +1870,7 @@ BattleUnitSetup btlparty_hei_hei_13_04_on_2[] = {
         battle_item_patakuri, // itemDropTable
     },
     {
-        &unit_patakuri, // mUnitKindParams
+        &unit_patakuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase

@@ -124,8 +124,8 @@ BattleStageObject* BattleSearchObjectPtr(const char* name) {
 void BattleStageObjectInit(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageData* stage = wp->fbatInfo->setup->stageData;
-    s32 numObjects = stage->mNumObjects;
-    BattleStageObjectData* data = stage->mObjects;
+    s32 numObjects = stage->numObjects;
+    BattleStageObjectData* data = stage->objects;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
     s32 countA1 = 0;
     s32 countA2 = 0;
@@ -193,8 +193,8 @@ void BattleStageObjectInit(void) {
             }
             obj->data = data;
             obj->id = id;
-            obj->mBattleUnitIdx = -1;
-            switch (obj->data->mLayer) {
+            obj->battleUnitIdx = -1;
+            switch (obj->data->layer) {
                 case 0:
                     countA1++;
                     break;
@@ -211,38 +211,38 @@ void BattleStageObjectInit(void) {
                     hasIronFrame = TRUE;
                     break;
             }
-            switch (obj->data->mLayer) {
+            switch (obj->data->layer) {
                 case 0:
                 case 1:
                 case 6:
                 case 7:
-                    obj->mPosition = data->mPosition;
+                    obj->position = data->position;
                     break;
                 case 2:
                 case 3:
-                    obj->mPosition = data->mPosition;
+                    obj->position = data->position;
                     break;
             }
-            obj->mRotation.x = obj->mRotation.y = obj->mRotation.z = 0.0f;
+            obj->rotation.x = obj->rotation.y = obj->rotation.z = 0.0f;
             obj->prevPosition = (Vec){999.0f, 999.0f, 999.0f};
             obj->prevPositionOffset = (Vec){999.0f, 999.0f, 999.0f};
             obj->prevRotation = (Vec){999.0f, 999.0f, 999.0f};
             obj->prevPositionOffset2 = (Vec){999.0f, 999.0f, 999.0f};
             mapGrpFlagOff(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
-            switch (data->mSpawnSpecialUnitType) {
+            switch (data->spawnSpecialUnitType) {
                 case 0:
                     unit = BtlUnit_Entry(&_entry_tree_data);
                     unit->stageObjectId = obj->id;
-                    obj->mBattleUnitIdx = unit->unitId;
-                    BtlUnit_SetPos(unit, obj->mPosition.x, obj->mPosition.y, obj->mPosition.z);
-                    BtlUnit_SetHomePos(unit, obj->mPosition.x, obj->mPosition.y, obj->mPosition.z);
+                    obj->battleUnitIdx = unit->unitId;
+                    BtlUnit_SetPos(unit, obj->position.x, obj->position.y, obj->position.z);
+                    BtlUnit_SetHomePos(unit, obj->position.x, obj->position.y, obj->position.z);
                     break;
                 case 1:
                     unit = BtlUnit_Entry(&_entry_switch_data);
                     unit->stageObjectId = obj->id;
-                    obj->mBattleUnitIdx = unit->unitId;
-                    BtlUnit_SetPos(unit, obj->mPosition.x, obj->mPosition.y, obj->mPosition.z);
-                    BtlUnit_SetHomePos(unit, obj->mPosition.x, obj->mPosition.y, obj->mPosition.z);
+                    obj->battleUnitIdx = unit->unitId;
+                    BtlUnit_SetPos(unit, obj->position.x, obj->position.y, obj->position.z);
+                    BtlUnit_SetHomePos(unit, obj->position.x, obj->position.y, obj->position.z);
                     break;
                 case 2:
                     break;
@@ -264,9 +264,9 @@ void BattleStageObjectInit(void) {
             }
             obj->data = data;
             obj->id = id;
-            obj->mBattleUnitIdx = -1;
-            obj->mPosition = data->mPosition;
-            obj->mRotation.x = obj->mRotation.y = obj->mRotation.z = 0.0f;
+            obj->battleUnitIdx = -1;
+            obj->position = data->position;
+            obj->rotation.x = obj->rotation.y = obj->rotation.z = 0.0f;
             obj->prevPosition = (Vec){999.0f, 999.0f, 999.0f};
             obj->prevPositionOffset = (Vec){999.0f, 999.0f, 999.0f};
             obj->prevRotation = (Vec){999.0f, 999.0f, 999.0f};
@@ -284,16 +284,16 @@ void BattleStageObjectInit(void) {
     }
     obj->data = data;
     obj->id = id;
-    obj->mBattleUnitIdx = -1;
-    obj->mPosition = data->mPosition;
-    obj->mPosition.y = BattleStageGetPtr()->stageSizeY;
-    obj->mRotation.x = obj->mRotation.y = obj->mRotation.z = 0.0f;
+    obj->battleUnitIdx = -1;
+    obj->position = data->position;
+    obj->position.y = BattleStageGetPtr()->stageSizeY;
+    obj->rotation.x = obj->rotation.y = obj->rotation.z = 0.0f;
     obj->prevPosition = (Vec){999.0f, 999.0f, 999.0f};
     obj->prevPositionOffset = (Vec){999.0f, 999.0f, 999.0f};
     obj->prevRotation = (Vec){999.0f, 999.0f, 999.0f};
     obj->prevPositionOffset2 = (Vec){999.0f, 999.0f, 999.0f};
     mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
-    obj->mFlags |= 1;
+    obj->flags |= 1;
     id++;
 
     j = 0;
@@ -310,15 +310,15 @@ void BattleStageObjectInit(void) {
         }
         obj->data = data;
         obj->id = id;
-        obj->mBattleUnitIdx = -1;
-        obj->mPosition = data->mPosition;
-        obj->mRotation.x = obj->mRotation.y = obj->mRotation.z = 0.0f;
+        obj->battleUnitIdx = -1;
+        obj->position = data->position;
+        obj->rotation.x = obj->rotation.y = obj->rotation.z = 0.0f;
         obj->prevPosition = (Vec){999.0f, 999.0f, 999.0f};
         obj->prevPositionOffset = (Vec){999.0f, 999.0f, 999.0f};
         obj->prevRotation = (Vec){999.0f, 999.0f, 999.0f};
         obj->prevPositionOffset2 = (Vec){999.0f, 999.0f, 999.0f};
         mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
-        obj->mFlags |= 1;
+        obj->flags |= 1;
         id++;
         j++;
     }
@@ -381,8 +381,8 @@ void BattleStageObjectMain(void) {
             continue;
         }
         changed = FALSE;
-        if (obj->mPosition.x != obj->prevPosition.x || obj->mPosition.y != obj->prevPosition.y || obj->mPosition.z != obj->prevPosition.z) {
-            obj->prevPosition = obj->mPosition;
+        if (obj->position.x != obj->prevPosition.x || obj->position.y != obj->prevPosition.y || obj->position.z != obj->prevPosition.z) {
+            obj->prevPosition = obj->position;
             changed = TRUE;
         }
         if (obj->positionOffset.x != obj->prevPositionOffset.x || obj->positionOffset.y != obj->prevPositionOffset.y || obj->positionOffset.z != obj->prevPositionOffset.z) {
@@ -393,15 +393,15 @@ void BattleStageObjectMain(void) {
             obj->prevPositionOffset2 = obj->positionOffset2;
             changed = TRUE;
         }
-        if (obj->mRotation.x != obj->prevRotation.x || obj->mRotation.y != obj->prevRotation.y || obj->mRotation.z != obj->prevRotation.z) {
-            obj->prevRotation = obj->mRotation;
+        if (obj->rotation.x != obj->prevRotation.x || obj->rotation.y != obj->prevRotation.y || obj->rotation.z != obj->prevRotation.z) {
+            obj->prevRotation = obj->rotation;
             changed = TRUE;
         }
-        if (obj->mFlags & 2) {
-            obj->mFlags &= ~2;
+        if (obj->flags & 2) {
+            obj->flags &= ~2;
             changed = TRUE;
         }
-        switch (obj->data->mLayer) {
+        switch (obj->data->layer) {
             case 2:
                 if (sw->bgRotation.x != sw->bgRotationPrev.x ||
                     sw->bgRotation.y != sw->bgRotationPrev.y ||
@@ -411,7 +411,7 @@ void BattleStageObjectMain(void) {
                 }
                 break;
         }
-        switch (obj->data->mLayer) {
+        switch (obj->data->layer) {
             case 0:
             case 1:
             case 4:
@@ -420,18 +420,18 @@ void BattleStageObjectMain(void) {
             case 7:
                 if (changed) {
                     mapObjTranslate(obj->data->name,
-                        obj->positionOffset2.x + (obj->mPosition.x + obj->positionOffset.x),
-                        obj->positionOffset2.y + (obj->mPosition.y + obj->positionOffset.y),
-                        obj->positionOffset2.z + (obj->mPosition.z + obj->positionOffset.z));
-                    mapObjRotate(obj->data->name, obj->mRotation.x, obj->mRotation.y, obj->mRotation.z);
+                        obj->positionOffset2.x + (obj->position.x + obj->positionOffset.x),
+                        obj->positionOffset2.y + (obj->position.y + obj->positionOffset.y),
+                        obj->positionOffset2.z + (obj->position.z + obj->positionOffset.z));
+                    mapObjRotate(obj->data->name, obj->rotation.x, obj->rotation.y, obj->rotation.z);
                 }
                 break;
             case 2:
                 if (changed) {
                     mapObjTranslate(obj->data->name,
-                        obj->positionOffset2.x + (obj->mPosition.x + obj->positionOffset.x),
-                        obj->positionOffset2.y + (obj->mPosition.y + obj->positionOffset.y),
-                        obj->positionOffset2.z + (obj->mPosition.z + obj->positionOffset.z));
+                        obj->positionOffset2.x + (obj->position.x + obj->positionOffset.x),
+                        obj->positionOffset2.y + (obj->position.y + obj->positionOffset.y),
+                        obj->positionOffset2.z + (obj->position.z + obj->positionOffset.z));
                     mapObjTranslate(obj->data->name, 0.0f, -obj->positionOffset.y, 0.0f);
                     mapObjRotate(obj->data->name, sw->bgRotation.x, sw->bgRotation.y, sw->bgRotation.z);
                     mapObjTranslate(obj->data->name, 0.0f, obj->positionOffset.y, 0.0f);
@@ -440,16 +440,16 @@ void BattleStageObjectMain(void) {
             case 3:
                 if (changed) {
                     mapObjTranslate(obj->data->name,
-                        obj->positionOffset2.x + (obj->mPosition.x + obj->positionOffset.x),
-                        obj->positionOffset2.y + (obj->mPosition.y + obj->positionOffset.y),
-                        obj->positionOffset2.z + (obj->mPosition.z + obj->positionOffset.z));
-                    mapObjTranslate(obj->data->name, 0.0f, -obj->mPosition.y, 0.0f);
-                    mapObjRotate(obj->data->name, obj->mRotation.x, obj->mRotation.y, obj->mRotation.z);
-                    mapObjTranslate(obj->data->name, 0.0f, obj->mPosition.y, 0.0f);
+                        obj->positionOffset2.x + (obj->position.x + obj->positionOffset.x),
+                        obj->positionOffset2.y + (obj->position.y + obj->positionOffset.y),
+                        obj->positionOffset2.z + (obj->position.z + obj->positionOffset.z));
+                    mapObjTranslate(obj->data->name, 0.0f, -obj->position.y, 0.0f);
+                    mapObjRotate(obj->data->name, obj->rotation.x, obj->rotation.y, obj->rotation.z);
+                    mapObjTranslate(obj->data->name, 0.0f, obj->position.y, 0.0f);
                 }
                 break;
         }
-        if (obj->mFlags & 1) {
+        if (obj->flags & 1) {
             if (!(mapGetMapObj(obj->data->name)->flags & MAP_OBJ_FLAG_HIDDEN)) {
                 mapGrpFlagOn(obj->data->name, MAP_OBJ_FLAG_HIDDEN);
             }
@@ -566,7 +566,7 @@ BattleWeaponData _nozzle_at_base_mario = {{
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 }};
 
@@ -599,7 +599,7 @@ BattleWeaponData _nozzle_at_base_monster = {{
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 }};
 
@@ -639,7 +639,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -670,7 +670,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -701,7 +701,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -732,7 +732,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
         },
@@ -772,7 +772,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -803,7 +803,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -834,7 +834,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -865,7 +865,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
         },
@@ -905,7 +905,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -936,7 +936,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -967,7 +967,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -998,7 +998,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
         },
@@ -1038,7 +1038,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1069,7 +1069,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1100,7 +1100,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1131,7 +1131,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
         },
@@ -1173,7 +1173,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
             0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
             0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         }},
         {0, 10, 0, 0, 0, 0, 0, 0, 10},
@@ -1206,7 +1206,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1237,7 +1237,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1268,7 +1268,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1299,7 +1299,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1330,7 +1330,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1361,7 +1361,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1392,7 +1392,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1423,7 +1423,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1454,7 +1454,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
         },
@@ -1488,7 +1488,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
             0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
             0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         }},
         {10, 10, 0, 0, 0, 10, 0, 0, 10},
@@ -1521,7 +1521,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1552,7 +1552,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1583,7 +1583,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1614,7 +1614,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1645,7 +1645,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1676,7 +1676,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1707,7 +1707,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1738,7 +1738,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1769,7 +1769,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
         },
@@ -1803,7 +1803,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
             0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
             0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         }},
         {10, 10, 10, 10, 10, 10, 0, 0, 10},
@@ -1836,7 +1836,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1867,7 +1867,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1898,7 +1898,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1929,7 +1929,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1960,7 +1960,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -1991,7 +1991,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -2022,7 +2022,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -2053,7 +2053,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -2084,7 +2084,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
         },
@@ -2118,7 +2118,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
             0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
             0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
             {0}, // pad_AE
-            NULL, // mAttackEvtScript
+            NULL, // attackEvtScript
             {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
         }},
         {10, 10, 10, 10, 10, 10, 10, 10, 10},
@@ -2151,7 +2151,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -2182,7 +2182,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -2213,7 +2213,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -2244,7 +2244,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -2275,7 +2275,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -2306,7 +2306,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 -99, 0, 0, 0, 0, 0, 0, -99, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -2337,7 +2337,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -2368,7 +2368,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
             {{
@@ -2399,7 +2399,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
                 0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
                 0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
                 {0}, // pad_AE
-                NULL, // mAttackEvtScript
+                NULL, // attackEvtScript
                 {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
             }},
         },
@@ -2693,9 +2693,9 @@ USER_FUNC(_set_mobj_rotate_x) {
             case 1:
                 for (j = 0; j < BATTLE_STAGE_OBJECT_MAX; j++) {
                     obj = &wp->stageObjects[j];
-                    if (obj->id > 0 && obj->data->mLayer == layer) {
-                        obj->mNumFramesToStartFalling = obj->data->mNumFramesToStartFalling;
-                        obj->mNumFramesFalling = 0;
+                    if (obj->id > 0 && obj->data->layer == layer) {
+                        obj->numFramesToStartFalling = obj->data->numFramesToStartFalling;
+                        obj->numFramesFalling = 0;
                     }
                 }
                 break;
@@ -2713,22 +2713,22 @@ USER_FUNC(_set_mobj_rotate_x) {
             fall3 = "SFX_BTL_STAGE_SET_FALL3";
             for (i = 0; i < BATTLE_STAGE_OBJECT_MAX; i++) {
                 obj = &wp->stageObjects[i];
-                if (obj->id > 0 && obj->data->mLayer == layer) {
-                    if (obj->mNumFramesToStartFalling) {
-                        obj->mNumFramesToStartFalling--;
+                if (obj->id > 0 && obj->data->layer == layer) {
+                    if (obj->numFramesToStartFalling) {
+                        obj->numFramesToStartFalling--;
                         busy = TRUE;
                         _mobj_shake_main(obj);
                     } else {
-                        if (obj->mNumFramesFalling == 0) {
+                        if (obj->numFramesFalling == 0) {
                             if (layer == 0) {
-                                psndSFXOn_3D(fall1, &obj->mPosition);
+                                psndSFXOn_3D(fall1, &obj->position);
                             } else {
-                                psndSFXOn_3D(fall3, &obj->mPosition);
+                                psndSFXOn_3D(fall3, &obj->position);
                             }
                         }
-                        obj->mNumFramesFalling++;
-                        obj->mRotation.x = intpl_sub(EASING_CUBIC_IN, obj->mShakeAngle, 90.0f, obj->mNumFramesFalling, obj->data->mNumFramesToFall);
-                        if (obj->mNumFramesFalling < obj->data->mNumFramesToFall) {
+                        obj->numFramesFalling++;
+                        obj->rotation.x = intpl_sub(EASING_CUBIC_IN, obj->shakeAngle, 90.0f, obj->numFramesFalling, obj->data->numFramesToFall);
+                        if (obj->numFramesFalling < obj->data->numFramesToFall) {
                             busy = TRUE;
                         }
                     }
@@ -2820,11 +2820,11 @@ USER_FUNC(_mobj_destroy) {
     layer = evtGetValue(event, event->args[0]);
     for (i = 0; i < 32; i++) {
         obj = &wp->stageObjects[i];
-        if (obj->id > 0 && obj->data->mLayer == layer) {
-            obj->mFlags |= 1;
-            unit = BattleGetUnitPtr(wp, obj->mBattleUnitIdx);
+        if (obj->id > 0 && obj->data->layer == layer) {
+            obj->flags |= 1;
+            unit = BattleGetUnitPtr(wp, obj->battleUnitIdx);
             if (unit) {
-                for (part = unit->mParts; part; part = part->mNextPart) {
+                for (part = unit->parts; part; part = part->nextPart) {
                     part->attributes |= kNotTargetable;
                 }
             }
@@ -2897,26 +2897,26 @@ USER_FUNC(_bgset_kemuri_effect) {
         args++;
         args--;
         obj = &wp->stageObjects[i];
-        if (obj->id > 0 && obj->data->mLayer == layer) {
-            x = obj->mPosition.x;
-            y = obj->mPosition.y;
-            z = obj->mPosition.z;
+        if (obj->id > 0 && obj->data->layer == layer) {
+            x = obj->position.x;
+            y = obj->position.y;
+            z = obj->position.z;
             switch (layer) {
                 case 0:
                     z += 30.0f;
                     effKemuri1N64Entry(3, x, y, z, 0.0f);
-                    psndSFXOn_3D(sfxA1, &obj->mPosition);
+                    psndSFXOn_3D(sfxA1, &obj->position);
                     break;
                 case 1:
                     z += 15.0f;
                     effKemuri1N64Entry(0, x, y, z, 0.0f);
-                    psndSFXOn_3D(sfxA2, &obj->mPosition);
+                    psndSFXOn_3D(sfxA2, &obj->position);
                     break;
                 case 2:
                     z += 30.0f;
                     effKemuri1N64Entry(3, x, y, z, 0.0f);
                     effKemuri1N64Entry(4, x, y, z, 0.0f);
-                    psndSFXOn_3D(sfxB, &obj->mPosition);
+                    psndSFXOn_3D(sfxB, &obj->position);
                     break;
             }
         }
@@ -2941,16 +2941,16 @@ USER_FUNC(_set_mobj_shake_init) {
     layer = evtGetValue(event, event->args[0]);
     for (i = 0; i < 32; i++) {
         obj = &wp->stageObjects[i];
-        if (obj->id > 0 && obj->data->mLayer == layer) {
+        if (obj->id > 0 && obj->data->layer == layer) {
             obj->reserved_72 = 0;
-            obj->mShakePeriodLength = irand(10) + 60;
+            obj->shakePeriodLength = irand(10) + 60;
             if (irand(100) & 1) {
                 position = 0;
             } else {
-                position = obj->mShakePeriodLength / 2;
+                position = obj->shakePeriodLength / 2;
             }
-            obj->mShakePeriodPosition = position;
-            obj->mShakeAngle = 0.0f;
+            obj->shakePeriodPosition = position;
+            obj->shakeAngle = 0.0f;
         }
     }
     return EVT_RETURN_DONE;
@@ -2980,7 +2980,7 @@ USER_FUNC(_set_mobj_shake) {
         case 1:
             for (i = 0; i < 32; i++) {
                 obj = &wp->stageObjects[i];
-                if (obj->id > 0 && obj->data->mLayer == layer) {
+                if (obj->id > 0 && obj->data->layer == layer) {
                     _mobj_shake_main(obj);
                 }
             }
@@ -2993,12 +2993,12 @@ USER_FUNC(_set_mobj_shake) {
 
 /** Advances one piece's wobble a frame: rotation.x swings +-5 degrees as a sine over its shake period. */
 void _mobj_shake_main(BattleStageObject* obj) {
-    obj->mShakePeriodPosition++;
-    if (obj->mShakePeriodPosition >= obj->mShakePeriodLength) {
-        obj->mShakePeriodPosition = 0;
+    obj->shakePeriodPosition++;
+    if (obj->shakePeriodPosition >= obj->shakePeriodLength) {
+        obj->shakePeriodPosition = 0;
     }
-    obj->mShakeAngle = 5.0f * sinfd(obj->mShakePeriodPosition * 360 / obj->mShakePeriodLength);
-    obj->mRotation.x = obj->mShakeAngle;
+    obj->shakeAngle = 5.0f * sinfd(obj->shakePeriodPosition * 360 / obj->shakePeriodLength);
+    obj->rotation.x = obj->shakeAngle;
 }
 
 /**
@@ -3268,10 +3268,10 @@ USER_FUNC(_fall_frame) {
     body = BattleSearchObjectPtr("if_body");
     if (isFirstCall) {
         event->userWork[2] = 0;
-        event->userWork[3] = body->mPosition.y;
+        event->userWork[3] = body->position.y;
     }
     event->userWork[2]++;
-    body->mPosition.y = intpl_sub(EASING_CUBIC_IN, event->userWork[3], 0.0f, event->userWork[2] * event->userWork[2] / 60, 60);
+    body->position.y = intpl_sub(EASING_CUBIC_IN, event->userWork[3], 0.0f, event->userWork[2] * event->userWork[2] / 60, 60);
     if (event->userWork[2] < 60) {
         return EVT_RETURN_BLOCK;
     }
@@ -3431,69 +3431,69 @@ USER_FUNC(_nozzle_work_effect) {
                 angle1 = _get_nozzle_dir(0);
                 if (sw->nozzleDir[0]) {
                     if (sfx) {
-                        event->userWork[5] = psndSFXOn_3D(sfx, &obj->mPosition);
+                        event->userWork[5] = psndSFXOn_3D(sfx, &obj->position);
                     } else {
                         event->userWork[5] = -1;
                     }
                     // FAKE: the sum goes through rot first; rot = reviseAngle(90.0f + angle1) changes the object
                     rot = 90.0f + angle1;
                     rot = reviseAngle(rot);
-                    z = 10.0f * sinfd(angle1) + obj->mPosition.z;
-                    event->userWork[1] = (EvtWord)effNozleEntry(effType, obj->mPosition.x - 10.0f * cosfd(angle1), 12.0f + obj->mPosition.y, z, -80.0f, rot, 90);
+                    z = 10.0f * sinfd(angle1) + obj->position.z;
+                    event->userWork[1] = (EvtWord)effNozleEntry(effType, obj->position.x - 10.0f * cosfd(angle1), 12.0f + obj->position.y, z, -80.0f, rot, 90);
                 } else {
                     if (sfx) {
-                        event->userWork[5] = psndSFXOn_3D(sfx, &obj->mPosition);
+                        event->userWork[5] = psndSFXOn_3D(sfx, &obj->position);
                     } else {
                         event->userWork[5] = -1;
                     }
-                    event->userWork[1] = (EvtWord)effNozleEntry(effType, obj->mPosition.x, 20.0f + obj->mPosition.y, 8.0f + obj->mPosition.z, 0.0f, 0.0f, 90);
+                    event->userWork[1] = (EvtWord)effNozleEntry(effType, obj->position.x, 20.0f + obj->position.y, 8.0f + obj->position.z, 0.0f, 0.0f, 90);
                     if (fog == 0) {
-                        effConfettiN64Entry(4, 90, obj->mPosition.x, 20.0f + obj->mPosition.y, 8.0f + obj->mPosition.z, 1.0f);
+                        effConfettiN64Entry(4, 90, obj->position.x, 20.0f + obj->position.y, 8.0f + obj->position.z, 1.0f);
                     }
                 }
                 obj = BattleSearchObjectPtr("nozzle_c");
                 angle2 = _get_nozzle_dir(1);
                 if (sw->nozzleDir[1]) {
                     if (sfx) {
-                        event->userWork[6] = psndSFXOn_3D(sfx, &obj->mPosition);
+                        event->userWork[6] = psndSFXOn_3D(sfx, &obj->position);
                     } else {
                         event->userWork[6] = -1;
                     }
                     rot = reviseAngle(90.0f + angle2);
-                    z = 10.0f * sinfd(angle2) + obj->mPosition.z;
-                    event->userWork[2] = (EvtWord)effNozleEntry(effType, obj->mPosition.x - 10.0f * cosfd(angle2), 12.0f + obj->mPosition.y, z, -80.0f, rot, 90);
+                    z = 10.0f * sinfd(angle2) + obj->position.z;
+                    event->userWork[2] = (EvtWord)effNozleEntry(effType, obj->position.x - 10.0f * cosfd(angle2), 12.0f + obj->position.y, z, -80.0f, rot, 90);
                 } else {
                     if (sfx) {
-                        event->userWork[6] = psndSFXOn_3D(sfx, &obj->mPosition);
+                        event->userWork[6] = psndSFXOn_3D(sfx, &obj->position);
                     } else {
                         event->userWork[6] = -1;
                     }
-                    event->userWork[2] = (EvtWord)effNozleEntry(effType, obj->mPosition.x, 20.0f + obj->mPosition.y, 8.0f + obj->mPosition.z, 0.0f, 0.0f, 90);
+                    event->userWork[2] = (EvtWord)effNozleEntry(effType, obj->position.x, 20.0f + obj->position.y, 8.0f + obj->position.z, 0.0f, 0.0f, 90);
                     if (fog == 0) {
-                        effConfettiN64Entry(4, 90, obj->mPosition.x, 20.0f + obj->mPosition.y, 8.0f + obj->mPosition.z, 1.0f);
+                        effConfettiN64Entry(4, 90, obj->position.x, 20.0f + obj->position.y, 8.0f + obj->position.z, 1.0f);
                     }
                 }
                 obj = BattleSearchObjectPtr("nozzle_r");
                 angle3 = _get_nozzle_dir(2);
                 if (sw->nozzleDir[2]) {
                     if (sfx) {
-                        event->userWork[7] = psndSFXOn_3D(sfx, &obj->mPosition);
+                        event->userWork[7] = psndSFXOn_3D(sfx, &obj->position);
                     } else {
                         event->userWork[7] = -1;
                     }
                     // FAKE: z and rot swap roles here (z holds the angle); the left/centre nozzle form changes the object
                     z = reviseAngle(90.0f + angle3);
-                    rot = 10.0f * sinfd(angle3) + obj->mPosition.z;
-                    event->userWork[3] = (EvtWord)effNozleEntry(effType, obj->mPosition.x - 10.0f * cosfd(angle3), 12.0f + obj->mPosition.y, rot, -80.0f, z, 90);
+                    rot = 10.0f * sinfd(angle3) + obj->position.z;
+                    event->userWork[3] = (EvtWord)effNozleEntry(effType, obj->position.x - 10.0f * cosfd(angle3), 12.0f + obj->position.y, rot, -80.0f, z, 90);
                 } else {
                     if (sfx) {
-                        event->userWork[7] = psndSFXOn_3D(sfx, &obj->mPosition);
+                        event->userWork[7] = psndSFXOn_3D(sfx, &obj->position);
                     } else {
                         event->userWork[7] = -1;
                     }
-                    event->userWork[3] = (EvtWord)effNozleEntry(effType, obj->mPosition.x, 20.0f + obj->mPosition.y, 8.0f + obj->mPosition.z, 0.0f, 0.0f, 90);
+                    event->userWork[3] = (EvtWord)effNozleEntry(effType, obj->position.x, 20.0f + obj->position.y, 8.0f + obj->position.z, 0.0f, 0.0f, 90);
                     if (fog == 0) {
-                        effConfettiN64Entry(4, 90, obj->mPosition.x, 20.0f + obj->mPosition.y, 8.0f + obj->mPosition.z, 1.0f);
+                        effConfettiN64Entry(4, 90, obj->position.x, 20.0f + obj->position.y, 8.0f + obj->position.z, 1.0f);
                     }
                 }
                 started = TRUE;
@@ -3507,7 +3507,7 @@ USER_FUNC(_nozzle_work_effect) {
                     sw->fogEffect = effNozleEntry(3, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1000);
                     event->userWork[3] = (EvtWord)sw->fogEffect;
                     sw->fogTimer = 2;
-                    event->userWork[5] = psndSFXOn_3D("SFX_BTL_STAGE_DRYICE1", &BattleSearchObjectPtr("nozzle_c")->mPosition);
+                    event->userWork[5] = psndSFXOn_3D("SFX_BTL_STAGE_DRYICE1", &BattleSearchObjectPtr("nozzle_c")->position);
                     started = TRUE;
                     event->userWork[6] = -1;
                     event->userWork[7] = -1;
@@ -3909,7 +3909,7 @@ USER_FUNC(_object_fall_attack) {
             }
             weapon = &e->weapon.weapon;
             e->kind = 0;
-            if (pouchGetPtr()->mStarPowersObtained && !(BattleAudienceBaseGetPtr()->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS) && e->type != STAGE_FALL_BOWSER_STATUE && e->type != STAGE_FALL_METEOR) {
+            if (pouchGetPtr()->starPowersObtained && !(BattleAudienceBaseGetPtr()->flags & AUDIENCE_FLAG_NO_AUDIENCE_EVENTS) && e->type != STAGE_FALL_BOWSER_STATUE && e->type != STAGE_FALL_METEOR) {
                 if ((wp->debug.flags & BATTLE_DEBUG_FORCE_FALL_ON_AUDIENCE) || irand(100) < 10) {
                     e->kind = 1;
                     e->partId = -1;

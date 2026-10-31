@@ -148,14 +148,14 @@ BattleUnitKindPart unitpartsdata_Party_Chuchurina[] = {
  * status table, four parts and init script. No HP gauge is drawn over her; her HP comes from the partner stats.
  */
 BattleUnitKind unitdata_Party_Chuchurina = {
-    UNIT_MS_MOWZ, // mUnitType
+    UNIT_MS_MOWZ, // unitType
     "btl_un_chuchurina", // name
     10, // maxHp
     5, // maxFp
-    5, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    5, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -190,7 +190,7 @@ BattleUnitKind unitdata_Party_Chuchurina = {
     kUnitNoHpGauge, // attributeFlags
     &regist, // statusVulnerability
     4, // numParts
-    unitpartsdata_Party_Chuchurina, // mParts
+    unitpartsdata_Party_Chuchurina, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -249,9 +249,9 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -274,7 +274,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyChuchurinaAttack_NormalAttack, // mAttackEvtScript
+    partyChuchurinaAttack_NormalAttack, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 4, 3, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -292,9 +292,9 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -317,7 +317,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyChuchurinaAttack_NormalAttack, // mAttackEvtScript
+    partyChuchurinaAttack_NormalAttack, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 4, 3, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -335,9 +335,9 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetACOutputParam, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -360,7 +360,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyChuchurinaAttack_NormalAttack, // mAttackEvtScript
+    partyChuchurinaAttack_NormalAttack, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 4, 2, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -378,9 +378,9 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetACOutputParam, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -403,7 +403,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyChuchurinaAttack_NormalAttack, // mAttackEvtScript
+    partyChuchurinaAttack_NormalAttack, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 4, 2, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -427,12 +427,12 @@ BattleWeapon partyWeapon_ChuchurinaMadowaseAttack = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    3, // mStylishCommandMultiplier
+    3, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -456,7 +456,7 @@ BattleWeapon partyWeapon_ChuchurinaMadowaseAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
-    partyChuchurinaAttack_MadowaseAttack, // mAttackEvtScript
+    partyChuchurinaAttack_MadowaseAttack, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -474,9 +474,9 @@ BattleWeapon partyWeapon_ChuchurinaItemSteal = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -499,7 +499,7 @@ BattleWeapon partyWeapon_ChuchurinaItemSteal = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyChuchurinaAttack_ItemSteal, // mAttackEvtScript
+    partyChuchurinaAttack_ItemSteal, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -517,9 +517,9 @@ BattleWeapon partyWeapon_ChuchurinaKiss = {
     10, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -541,7 +541,7 @@ BattleWeapon partyWeapon_ChuchurinaKiss = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyChuchurinaAttack_Kiss, // mAttackEvtScript
+    partyChuchurinaAttack_Kiss, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -2237,9 +2237,9 @@ USER_FUNC(_get_binta_hit_position) {
     target = BattleGetUnitPtr(wp, BattleTransID(event, targetId));
     dir = target->faceDirection;
     BtlUnit_GetPos(target, &pos.x, &pos.y, &pos.z);
-    pos.x += dir * (target->bintaHitOffset.x * target->mSizeMultiplier);
-    pos.y += target->bintaHitOffset.y * target->mSizeMultiplier;
-    pos.z += target->bintaHitOffset.z * target->mSizeMultiplier;
+    pos.x += dir * (target->bintaHitOffset.x * target->sizeMultiplier);
+    pos.y += target->bintaHitOffset.y * target->sizeMultiplier;
+    pos.z += target->bintaHitOffset.z * target->sizeMultiplier;
     evtSetFloat(event, outX, pos.x);
     evtSetFloat(event, outY, pos.y);
     evtSetFloat(event, outZ, pos.z);
@@ -2288,11 +2288,11 @@ USER_FUNC(_get_itemsteal_param) {
     wp = _battleWorkPointer;
     out2 = args[2];
     unit = BattleGetUnitPtr(wp, BattleTransID(event, id));
-    rate = 80 - (wp->actionCommands.mAcDifficulty - 3) * 20;
+    rate = 80 - (wp->actionCommands.acDifficulty - 3) * 20;
     if (rate <= 5) {
         rate = 5;
     }
-    resist = 100 - unit->mKindParams->itemStealParam;
+    resist = 100 - unit->kindParams->itemStealParam;
     evtSetValue(event, out1, rate);
     evtSetValue(event, out2, resist);
     return EVT_RETURN_DONE;

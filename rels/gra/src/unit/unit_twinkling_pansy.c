@@ -36,14 +36,14 @@ static EvtWord wait_event[6];
  * 20 HP, level 100, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
 BattleUnitKind unit_twinkling_pansy = {
-    UNIT_AMAZY_DAYZEE, // mUnitType
+    UNIT_AMAZY_DAYZEE, // unitType
     "btl_un_twinkling_pansy", // name
     20, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    100, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    100, // level
+    0, // bonusExp
     5, // bonusCoin
     70, // bonusCoinRate
     5, // baseCoin
@@ -78,7 +78,7 @@ BattleUnitKind unit_twinkling_pansy = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -132,9 +132,9 @@ static BattleWeapon weapon_twinkling_pansy_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {20, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -158,7 +158,7 @@ static BattleWeapon weapon_twinkling_pansy_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowChance..invisibleTime
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

@@ -116,70 +116,70 @@ BattleStageObjectData aji_btlobject_data[] = {
 /** The seven battle arenas of the X-Naut Fortress, each with its model folders and the objects it uses. */
 BattleStageData aji_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_07_5", // mSpecificStageDataDir
-        5, // mNumObjects
-        aji_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_07_5", // specificStageDataDir
+        5, // numObjects
+        aji_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_07_1", // mSpecificStageDataDir
-        3, // mNumObjects
-        &aji_btlobject_data[5], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_07_1", // specificStageDataDir
+        3, // numObjects
+        &aji_btlobject_data[5], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_07_1", // mSpecificStageDataDir
-        3, // mNumObjects
-        &aji_btlobject_data[8], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_07_1", // specificStageDataDir
+        3, // numObjects
+        &aji_btlobject_data[8], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_07_1", // mSpecificStageDataDir
-        3, // mNumObjects
-        &aji_btlobject_data[11], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_07_1", // specificStageDataDir
+        3, // numObjects
+        &aji_btlobject_data[11], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_07_2", // mSpecificStageDataDir
-        3, // mNumObjects
-        &aji_btlobject_data[17], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_07_2", // specificStageDataDir
+        3, // numObjects
+        &aji_btlobject_data[17], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_07_3", // mSpecificStageDataDir
-        3, // mNumObjects
-        &aji_btlobject_data[14], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_07_3", // specificStageDataDir
+        3, // numObjects
+        &aji_btlobject_data[14], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_07_6", // mSpecificStageDataDir
-        7, // mNumObjects
-        &aji_btlobject_data[20], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_07_6", // specificStageDataDir
+        7, // numObjects
+        &aji_btlobject_data[20], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgBEvt
@@ -191,7 +191,7 @@ BattleStageData aji_btlstage_data[] = {
 /** Enemy of the boss fight in the boss room: Magnus von Grapple 2.0. */
 BattleUnitSetup btlparty_aji_aji_mbmkII[] = {
     {
-        &unit_boss_magnum_battender_mkII, // mUnitKindParams
+        &unit_boss_magnum_battender_mkII, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -216,7 +216,7 @@ BattleGroupSetup btlgrp_aji_aji_mbmkII = {
 /** Enemies of the generic fortress group, used by the debug battle entries: 2 Elite X-Naut. */
 BattleUnitSetup btlparty_aji_aji_zako[] = {
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -226,7 +226,7 @@ BattleUnitSetup btlparty_aji_aji_zako[] = {
         battle_item_gundan_zako_elite, // itemDropTable
     },
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -252,7 +252,7 @@ BattleGroupSetup btlgrp_aji_aji_zako = {
 
 BattleUnitSetup btlparty_aji_aji_01_01_off_1[] = {
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -262,7 +262,7 @@ BattleUnitSetup btlparty_aji_aji_01_01_off_1[] = {
         battle_item_gundan_zako_elite, // itemDropTable
     },
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -286,7 +286,7 @@ BattleGroupSetup btlgrp_aji_aji_01_01_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_01_02_off_1[] = {
     {
-        &unit_gundan_zako, // mUnitKindParams
+        &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -296,7 +296,7 @@ BattleUnitSetup btlparty_aji_aji_01_02_off_1[] = {
         battle_item_gundan_zako, // itemDropTable
     },
     {
-        &unit_gundan_zako, // mUnitKindParams
+        &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -306,7 +306,7 @@ BattleUnitSetup btlparty_aji_aji_01_02_off_1[] = {
         battle_item_gundan_zako, // itemDropTable
     },
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -330,7 +330,7 @@ BattleGroupSetup btlgrp_aji_aji_01_02_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_01_03_off_1[] = {
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -340,7 +340,7 @@ BattleUnitSetup btlparty_aji_aji_01_03_off_1[] = {
         battle_item_gundan_zako_elite, // itemDropTable
     },
     {
-        &unit_gundan_zako, // mUnitKindParams
+        &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -350,7 +350,7 @@ BattleUnitSetup btlparty_aji_aji_01_03_off_1[] = {
         battle_item_gundan_zako, // itemDropTable
     },
     {
-        &unit_gundan_zako, // mUnitKindParams
+        &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -360,7 +360,7 @@ BattleUnitSetup btlparty_aji_aji_01_03_off_1[] = {
         battle_item_gundan_zako, // itemDropTable
     },
     {
-        &unit_gundan_zako, // mUnitKindParams
+        &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -384,7 +384,7 @@ BattleGroupSetup btlgrp_aji_aji_01_03_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_01_04_off_1[] = {
     {
-        &unit_gundan_zako_magician, // mUnitKindParams
+        &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -394,7 +394,7 @@ BattleUnitSetup btlparty_aji_aji_01_04_off_1[] = {
         battle_item_gundan_zako_magician, // itemDropTable
     },
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -418,7 +418,7 @@ BattleGroupSetup btlgrp_aji_aji_01_04_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_01_05_off_1[] = {
     {
-        &unit_barriern_z, // mUnitKindParams
+        &unit_barriern_z, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -428,7 +428,7 @@ BattleUnitSetup btlparty_aji_aji_01_05_off_1[] = {
         battle_item_barriern_z, // itemDropTable
     },
     {
-        &unit_gundan_zako_magician, // mUnitKindParams
+        &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -452,7 +452,7 @@ BattleGroupSetup btlgrp_aji_aji_01_05_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_01_06_off_1[] = {
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -462,7 +462,7 @@ BattleUnitSetup btlparty_aji_aji_01_06_off_1[] = {
         battle_item_gundan_zako_elite, // itemDropTable
     },
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -472,7 +472,7 @@ BattleUnitSetup btlparty_aji_aji_01_06_off_1[] = {
         battle_item_gundan_zako_elite, // itemDropTable
     },
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -482,7 +482,7 @@ BattleUnitSetup btlparty_aji_aji_01_06_off_1[] = {
         battle_item_gundan_zako_elite, // itemDropTable
     },
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -506,7 +506,7 @@ BattleGroupSetup btlgrp_aji_aji_01_06_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
     {
-        &unit_gundan_zako, // mUnitKindParams
+        &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -516,7 +516,7 @@ BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
         battle_item_gundan_zako, // itemDropTable
     },
     {
-        &unit_barriern_z, // mUnitKindParams
+        &unit_barriern_z, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -526,7 +526,7 @@ BattleUnitSetup btlparty_aji_aji_01_07_off_1[] = {
         battle_item_barriern_z, // itemDropTable
     },
     {
-        &unit_barriern_z, // mUnitKindParams
+        &unit_barriern_z, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -550,7 +550,7 @@ BattleGroupSetup btlgrp_aji_aji_01_07_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_01_08_off_1[] = {
     {
-        &unit_gundan_zako, // mUnitKindParams
+        &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -560,7 +560,7 @@ BattleUnitSetup btlparty_aji_aji_01_08_off_1[] = {
         battle_item_gundan_zako, // itemDropTable
     },
     {
-        &unit_gundan_zako, // mUnitKindParams
+        &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -570,7 +570,7 @@ BattleUnitSetup btlparty_aji_aji_01_08_off_1[] = {
         battle_item_gundan_zako, // itemDropTable
     },
     {
-        &unit_gundan_zako_magician, // mUnitKindParams
+        &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -580,7 +580,7 @@ BattleUnitSetup btlparty_aji_aji_01_08_off_1[] = {
         battle_item_gundan_zako_magician, // itemDropTable
     },
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -604,7 +604,7 @@ BattleGroupSetup btlgrp_aji_aji_01_08_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_04_01_off_1[] = {
     {
-        &unit_barriern_custom, // mUnitKindParams
+        &unit_barriern_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -614,7 +614,7 @@ BattleUnitSetup btlparty_aji_aji_04_01_off_1[] = {
         battle_item_barriern_custom, // itemDropTable
     },
     {
-        &unit_barriern_custom, // mUnitKindParams
+        &unit_barriern_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -637,7 +637,7 @@ BattleGroupSetup btlgrp_aji_aji_04_01_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_06_01_off_1[] = {
     {
-        &unit_gundan_zako_magician, // mUnitKindParams
+        &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -647,7 +647,7 @@ BattleUnitSetup btlparty_aji_aji_06_01_off_1[] = {
         battle_item_gundan_zako_magician, // itemDropTable
     },
     {
-        &unit_gundan_zako_magician, // mUnitKindParams
+        &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -671,7 +671,7 @@ BattleGroupSetup btlgrp_aji_aji_06_01_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_08_01_off_1[] = {
     {
-        &unit_gundan_zako_magician, // mUnitKindParams
+        &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -681,7 +681,7 @@ BattleUnitSetup btlparty_aji_aji_08_01_off_1[] = {
         battle_item_gundan_zako_magician, // itemDropTable
     },
     {
-        &unit_barriern, // mUnitKindParams
+        &unit_barriern, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -691,7 +691,7 @@ BattleUnitSetup btlparty_aji_aji_08_01_off_1[] = {
         battle_item_barriern, // itemDropTable
     },
     {
-        &unit_barriern_z, // mUnitKindParams
+        &unit_barriern_z, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -715,7 +715,7 @@ BattleGroupSetup btlgrp_aji_aji_08_01_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_09_01_off_1[] = {
     {
-        &unit_gundan_zako, // mUnitKindParams
+        &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -725,7 +725,7 @@ BattleUnitSetup btlparty_aji_aji_09_01_off_1[] = {
         battle_item_gundan_zako, // itemDropTable
     },
     {
-        &unit_gundan_zako, // mUnitKindParams
+        &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -735,7 +735,7 @@ BattleUnitSetup btlparty_aji_aji_09_01_off_1[] = {
         battle_item_gundan_zako, // itemDropTable
     },
     {
-        &unit_gundan_zako, // mUnitKindParams
+        &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -745,7 +745,7 @@ BattleUnitSetup btlparty_aji_aji_09_01_off_1[] = {
         battle_item_gundan_zako, // itemDropTable
     },
     {
-        &unit_gundan_zako, // mUnitKindParams
+        &unit_gundan_zako, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -755,7 +755,7 @@ BattleUnitSetup btlparty_aji_aji_09_01_off_1[] = {
         battle_item_gundan_zako, // itemDropTable
     },
     {
-        &unit_gundan_zako_magician, // mUnitKindParams
+        &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -779,7 +779,7 @@ BattleGroupSetup btlgrp_aji_aji_09_01_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_10_01_off_1[] = {
     {
-        &unit_barriern_custom, // mUnitKindParams
+        &unit_barriern_custom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -802,7 +802,7 @@ BattleGroupSetup btlgrp_aji_aji_10_01_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_13_01_off_1[] = {
     {
-        &unit_gundan_zako_magician, // mUnitKindParams
+        &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -812,7 +812,7 @@ BattleUnitSetup btlparty_aji_aji_13_01_off_1[] = {
         battle_item_gundan_zako_magician, // itemDropTable
     },
     {
-        &unit_gundan_zako_magician, // mUnitKindParams
+        &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -822,7 +822,7 @@ BattleUnitSetup btlparty_aji_aji_13_01_off_1[] = {
         battle_item_gundan_zako_magician, // itemDropTable
     },
     {
-        &unit_gundan_zako_magician, // mUnitKindParams
+        &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -832,7 +832,7 @@ BattleUnitSetup btlparty_aji_aji_13_01_off_1[] = {
         battle_item_gundan_zako_magician, // itemDropTable
     },
     {
-        &unit_gundan_zako_magician, // mUnitKindParams
+        &unit_gundan_zako_magician, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -856,7 +856,7 @@ BattleGroupSetup btlgrp_aji_aji_13_01_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_13_02_off_1[] = {
     {
-        &unit_barriern_z, // mUnitKindParams
+        &unit_barriern_z, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -866,7 +866,7 @@ BattleUnitSetup btlparty_aji_aji_13_02_off_1[] = {
         battle_item_barriern_z, // itemDropTable
     },
     {
-        &unit_barriern_z, // mUnitKindParams
+        &unit_barriern_z, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -890,7 +890,7 @@ BattleGroupSetup btlgrp_aji_aji_13_02_off_1 = {
 
 BattleUnitSetup btlparty_aji_aji_15_01_off_1[] = {
     {
-        &unit_gundan_zako_elite, // mUnitKindParams
+        &unit_gundan_zako_elite, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1345,7 +1345,7 @@ static USER_FUNC(_space_rotate) {
     BattleStageObject* obj = BattleSearchObjectPtr(name);
 
     // Draw the current phase before advancing and wrapping the counter.
-    obj->mRotation.z = 360.0f * step / total;
+    obj->rotation.z = 360.0f * step / total;
     step++;
     if (step >= total) {
         step = 0;

@@ -120,10 +120,10 @@ BattleStageObjectData tou_btlobject_data[] = {
  */
 BattleStageData tou_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_03_0", // mSpecificStageDataDir
-        6, // mNumObjects
-        tou_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_03_0", // specificStageDataDir
+        6, // numObjects
+        tou_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgBEvt
@@ -134,10 +134,10 @@ BattleStageData tou_btlstage_data[] = {
         1, // disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_03_0", // mSpecificStageDataDir
-        8, // mNumObjects
-        &tou_btlobject_data[6], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_03_0", // specificStageDataDir
+        8, // numObjects
+        &tou_btlobject_data[6], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgBEvt
@@ -152,7 +152,7 @@ BattleStageData tou_btlstage_data[] = {
 /** Enemy lineup of the Goomba Bros. match (BTLNO_TOU_01_01): Goomba Bros. x5. */
 BattleUnitSetup btlparty_tou_tou_rank_19[] = {
     {
-        &unit_kurikuri, // mUnitKindParams
+        &unit_kurikuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -162,7 +162,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
         battle_item_kurikuri, // itemDropTable
     },
     {
-        &unit_kurikuri, // mUnitKindParams
+        &unit_kurikuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -172,7 +172,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
         battle_item_kurikuri, // itemDropTable
     },
     {
-        &unit_kurikuri, // mUnitKindParams
+        &unit_kurikuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -182,7 +182,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
         battle_item_kurikuri, // itemDropTable
     },
     {
-        &unit_kurikuri, // mUnitKindParams
+        &unit_kurikuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -192,7 +192,7 @@ BattleUnitSetup btlparty_tou_tou_rank_19[] = {
         battle_item_kurikuri, // itemDropTable
     },
     {
-        &unit_kurikuri, // mUnitKindParams
+        &unit_kurikuri, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -220,7 +220,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_19 = {
 /** Enemy lineup of the KP Koopas match (BTLNO_TOU_01_02): KP Koopa x2, KP Paratroopa. */
 BattleUnitSetup btlparty_tou_tou_rank_18[] = {
     {
-        &unit_nokonoko_fighter, // mUnitKindParams
+        &unit_nokonoko_fighter, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -230,7 +230,7 @@ BattleUnitSetup btlparty_tou_tou_rank_18[] = {
         battle_item_nokonoko_fighter, // itemDropTable
     },
     {
-        &unit_nokonoko_fighter, // mUnitKindParams
+        &unit_nokonoko_fighter, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -240,7 +240,7 @@ BattleUnitSetup btlparty_tou_tou_rank_18[] = {
         battle_item_nokonoko_fighter, // itemDropTable
     },
     {
-        &unit_patapata_fighter, // mUnitKindParams
+        &unit_patapata_fighter, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -268,7 +268,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_18 = {
 /** Enemy lineup of the Pokey Triplets match (BTLNO_TOU_01_03): Pokey x3. */
 BattleUnitSetup btlparty_tou_tou_rank_17[] = {
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -278,7 +278,7 @@ BattleUnitSetup btlparty_tou_tou_rank_17[] = {
         battle_item_sambo, // itemDropTable
     },
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -288,7 +288,7 @@ BattleUnitSetup btlparty_tou_tou_rank_17[] = {
         battle_item_sambo, // itemDropTable
     },
     {
-        &unit_sambo, // mUnitKindParams
+        &unit_sambo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -316,7 +316,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_17 = {
 /** Enemy lineup of the Dead Bones match (BTLNO_TOU_01_04): Dull Bones x3. */
 BattleUnitSetup btlparty_tou_tou_rank_16[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -326,7 +326,7 @@ BattleUnitSetup btlparty_tou_tou_rank_16[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -336,7 +336,7 @@ BattleUnitSetup btlparty_tou_tou_rank_16[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -364,7 +364,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_16 = {
 /** Enemy lineup of the Spike Storm match (BTLNO_TOU_01_05): Spiny x2, Lakitu. */
 BattleUnitSetup btlparty_tou_tou_rank_15[] = {
     {
-        &unit_togezo, // mUnitKindParams
+        &unit_togezo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -374,7 +374,7 @@ BattleUnitSetup btlparty_tou_tou_rank_15[] = {
         battle_item_kurokumorn, // itemDropTable
     },
     {
-        &unit_togezo, // mUnitKindParams
+        &unit_togezo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -384,7 +384,7 @@ BattleUnitSetup btlparty_tou_tou_rank_15[] = {
         battle_item_dokugassun, // itemDropTable
     },
     {
-        &unit_jyugem, // mUnitKindParams
+        &unit_jyugem, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -412,7 +412,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_15 = {
 /** Enemy lineup of the Mind-Bogglers match (BTLNO_TOU_01_06): Pale Piranha, Dark Puff, Pider. */
 BattleUnitSetup btlparty_tou_tou_rank_14[] = {
     {
-        &unit_monochrome_pakkun, // mUnitKindParams
+        &unit_monochrome_pakkun, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -422,7 +422,7 @@ BattleUnitSetup btlparty_tou_tou_rank_14[] = {
         battle_item_togezo, // itemDropTable
     },
     {
-        &unit_monochrome_kurokumorn, // mUnitKindParams
+        &unit_monochrome_kurokumorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -432,7 +432,7 @@ BattleUnitSetup btlparty_tou_tou_rank_14[] = {
         battle_item_togezo, // itemDropTable
     },
     {
-        &unit_piders, // mUnitKindParams
+        &unit_piders, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -460,7 +460,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_14 = {
 /** Enemy lineup of the Punk Rocks match (BTLNO_TOU_01_07): H. Bald Cleft x3. */
 BattleUnitSetup btlparty_tou_tou_rank_13[] = {
     {
-        &unit_hyper_sinnosuke, // mUnitKindParams
+        &unit_hyper_sinnosuke, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -470,7 +470,7 @@ BattleUnitSetup btlparty_tou_tou_rank_13[] = {
         battle_item_hyper_sinnosuke, // itemDropTable
     },
     {
-        &unit_hyper_sinnosuke, // mUnitKindParams
+        &unit_hyper_sinnosuke, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -480,7 +480,7 @@ BattleUnitSetup btlparty_tou_tou_rank_13[] = {
         battle_item_hyper_sinnosuke, // itemDropTable
     },
     {
-        &unit_hyper_sinnosuke, // mUnitKindParams
+        &unit_hyper_sinnosuke, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -508,7 +508,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_13 = {
 /** Enemy lineup of the Bob-omb Squad match (BTLNO_TOU_01_08): Bob-omb x4. */
 BattleUnitSetup btlparty_tou_tou_rank_12[] = {
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -518,7 +518,7 @@ BattleUnitSetup btlparty_tou_tou_rank_12[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -528,7 +528,7 @@ BattleUnitSetup btlparty_tou_tou_rank_12[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -538,7 +538,7 @@ BattleUnitSetup btlparty_tou_tou_rank_12[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_bomhei, // mUnitKindParams
+        &unit_bomhei, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -566,7 +566,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_12 = {
 /** Enemy lineup of the Hand-It-Overs match (BTLNO_TOU_01_09): Bandit x2, Big Bandit x2. */
 BattleUnitSetup btlparty_tou_tou_rank_11[] = {
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -576,7 +576,7 @@ BattleUnitSetup btlparty_tou_tou_rank_11[] = {
         battle_item_borodo, // itemDropTable
     },
     {
-        &unit_borodo, // mUnitKindParams
+        &unit_borodo, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -586,7 +586,7 @@ BattleUnitSetup btlparty_tou_tou_rank_11[] = {
         battle_item_borodo, // itemDropTable
     },
     {
-        &unit_borodo_king, // mUnitKindParams
+        &unit_borodo_king, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -596,7 +596,7 @@ BattleUnitSetup btlparty_tou_tou_rank_11[] = {
         battle_item_borodo_king, // itemDropTable
     },
     {
-        &unit_borodo_king, // mUnitKindParams
+        &unit_borodo_king, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -624,7 +624,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_11 = {
 /** Enemy lineup of the Armored Harriers match (BTLNO_TOU_01_10): Iron Cleft x2. */
 BattleUnitSetup btlparty_tou_tou_rank_10[] = {
     {
-        &unit_iron_sinemon, // mUnitKindParams
+        &unit_iron_sinemon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -634,7 +634,7 @@ BattleUnitSetup btlparty_tou_tou_rank_10[] = {
         battle_item_iron_sinemon, // itemDropTable
     },
     {
-        &unit_iron_sinemon2, // mUnitKindParams
+        &unit_iron_sinemon2, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -662,7 +662,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_10 = {
 /** Enemy lineup of the Tiny Spinies match (BTLNO_TOU_01_11): R. S. Buzzy x2. */
 BattleUnitSetup btlparty_tou_tou_rank_9[] = {
     {
-        &unit_crimson_togemet, // mUnitKindParams
+        &unit_crimson_togemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -672,7 +672,7 @@ BattleUnitSetup btlparty_tou_tou_rank_9[] = {
         battle_item_hyper_togemet, // itemDropTable
     },
     {
-        &unit_crimson_togemet, // mUnitKindParams
+        &unit_crimson_togemet, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -700,7 +700,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_9 = {
 /** Enemy lineup of the Poker Faces match (BTLNO_TOU_01_12): Bristle x2. */
 BattleUnitSetup btlparty_tou_tou_rank_8[] = {
     {
-        &unit_togedaruma, // mUnitKindParams
+        &unit_togedaruma, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -710,7 +710,7 @@ BattleUnitSetup btlparty_tou_tou_rank_8[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_togedaruma, // mUnitKindParams
+        &unit_togedaruma, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -738,7 +738,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_8 = {
 /** Enemy lineup of the Shellshockers match (BTLNO_TOU_01_13): Shady Koopa x2, S. Paratroopa. */
 BattleUnitSetup btlparty_tou_tou_rank_7[] = {
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -748,7 +748,7 @@ BattleUnitSetup btlparty_tou_tou_rank_7[] = {
         battle_item_ura_noko, // itemDropTable
     },
     {
-        &unit_ura_pata, // mUnitKindParams
+        &unit_ura_pata, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -758,7 +758,7 @@ BattleUnitSetup btlparty_tou_tou_rank_7[] = {
         battle_item_ura_noko, // itemDropTable
     },
     {
-        &unit_ura_noko, // mUnitKindParams
+        &unit_ura_noko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -786,7 +786,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_7 = {
 /** Enemy lineup of The Fuzz match (BTLNO_TOU_01_14): Fuzzy, Green Fuzzy, Flower Fuzzy. */
 BattleUnitSetup btlparty_tou_tou_rank_6[] = {
     {
-        &unit_chorobon, // mUnitKindParams
+        &unit_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -796,7 +796,7 @@ BattleUnitSetup btlparty_tou_tou_rank_6[] = {
         battle_item_kamec, // itemDropTable
     },
     {
-        &unit_green_chorobon, // mUnitKindParams
+        &unit_green_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -806,7 +806,7 @@ BattleUnitSetup btlparty_tou_tou_rank_6[] = {
         battle_item_kamec, // itemDropTable
     },
     {
-        &unit_flower_chorobon, // mUnitKindParams
+        &unit_flower_chorobon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -836,7 +836,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_6 = {
  */
 BattleUnitSetup btlparty_tou_tou_rank_5[] = {
     {
-        &unit_kamec_red, // mUnitKindParams
+        &unit_kamec_red, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -846,7 +846,7 @@ BattleUnitSetup btlparty_tou_tou_rank_5[] = {
         battle_item_hammer_bros, // itemDropTable
     },
     {
-        &unit_kamec_white, // mUnitKindParams
+        &unit_kamec_white, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -856,7 +856,7 @@ BattleUnitSetup btlparty_tou_tou_rank_5[] = {
         battle_item_fire_bros, // itemDropTable
     },
     {
-        &unit_kamec_green, // mUnitKindParams
+        &unit_kamec_green, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -884,7 +884,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_5 = {
 /** Enemy lineup of the Craw-Daddy match (BTLNO_TOU_01_16): Dark Craw. */
 BattleUnitSetup btlparty_tou_tou_rank_4[] = {
     {
-        &unit_dark_keeper, // mUnitKindParams
+        &unit_dark_keeper, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -914,7 +914,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_4 = {
  */
 BattleUnitSetup btlparty_tou_tou_rank_3[] = {
     {
-        &unit_hammer_bros, // mUnitKindParams
+        &unit_hammer_bros, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -924,7 +924,7 @@ BattleUnitSetup btlparty_tou_tou_rank_3[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_fire_bros, // mUnitKindParams
+        &unit_fire_bros, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -934,7 +934,7 @@ BattleUnitSetup btlparty_tou_tou_rank_3[] = {
         battle_item_bomhei, // itemDropTable
     },
     {
-        &unit_boomerang_bros, // mUnitKindParams
+        &unit_boomerang_bros, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -962,7 +962,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_3 = {
 /** Enemy lineup of the Chomp Country match (BTLNO_TOU_01_18): Red Chomp x2. */
 BattleUnitSetup btlparty_tou_tou_rank_2[] = {
     {
-        &unit_burst_wanwan, // mUnitKindParams
+        &unit_burst_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -972,7 +972,7 @@ BattleUnitSetup btlparty_tou_tou_rank_2[] = {
         battle_item_burst_wanwan, // itemDropTable
     },
     {
-        &unit_burst_wanwan, // mUnitKindParams
+        &unit_burst_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1000,7 +1000,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_2 = {
 /** Enemy lineup of the Koopinator match (BTLNO_TOU_01_19): D. Koopatrol. */
 BattleUnitSetup btlparty_tou_tou_rank_1[] = {
     {
-        &unit_togenoko_ace, // mUnitKindParams
+        &unit_togenoko_ace, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1028,7 +1028,7 @@ BattleGroupSetup btlgrp_tou_tou_rank_1 = {
 /** Enemy lineup of the Wings of Night match (BTLNO_TOU_01_20): Swooper x4. */
 BattleUnitSetup btlparty_tou_tou_add_1[] = {
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1038,7 +1038,7 @@ BattleUnitSetup btlparty_tou_tou_add_1[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1048,7 +1048,7 @@ BattleUnitSetup btlparty_tou_tou_add_1[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1058,7 +1058,7 @@ BattleUnitSetup btlparty_tou_tou_add_1[] = {
         battle_item_basabasa, // itemDropTable
     },
     {
-        &unit_basabasa, // mUnitKindParams
+        &unit_basabasa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1086,7 +1086,7 @@ BattleGroupSetup btlgrp_tou_tou_add_1 = {
 /** Enemy lineup of the Destructors match (BTLNO_TOU_01_21): Spinia x2, Spania x2. */
 BattleUnitSetup btlparty_tou_tou_add_2[] = {
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1096,7 +1096,7 @@ BattleUnitSetup btlparty_tou_tou_add_2[] = {
         battle_item_monban, // itemDropTable
     },
     {
-        &unit_hannya, // mUnitKindParams
+        &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1106,7 +1106,7 @@ BattleUnitSetup btlparty_tou_tou_add_2[] = {
         battle_item_monban, // itemDropTable
     },
     {
-        &unit_hinnya, // mUnitKindParams
+        &unit_hinnya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1116,7 +1116,7 @@ BattleUnitSetup btlparty_tou_tou_add_2[] = {
         battle_item_monban, // itemDropTable
     },
     {
-        &unit_hannya, // mUnitKindParams
+        &unit_hannya, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1144,7 +1144,7 @@ BattleGroupSetup btlgrp_tou_tou_add_2 = {
 /** Enemy lineup of the boss fight against Macho Grubba (BTLNO_TOU_01_23): Macho Grubba. */
 BattleUnitSetup btlparty_tou_tou_boss[] = {
     {
-        &unit_boss_macho_gance, // mUnitKindParams
+        &unit_boss_macho_gance, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1172,7 +1172,7 @@ BattleGroupSetup btlgrp_tou_tou_boss = {
 /** Enemy lineup of the title match against Rawk Hawk (BTLNO_TOU_01_22): Rawk Hawk. */
 BattleUnitSetup btlparty_tou_tou_champ[] = {
     {
-        &unit_boss_champion, // mUnitKindParams
+        &unit_boss_champion, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1200,7 +1200,7 @@ BattleGroupSetup btlgrp_tou_tou_champ = {
 /** Enemy lineup of Bowser's surprise intrusion fight (BTLNO_TOU_01_24): Bowser. */
 BattleUnitSetup btlparty_tou_tou_koopa[] = {
     {
-        &unit_boss_koopa_tou, // mUnitKindParams
+        &unit_boss_koopa_tou, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase

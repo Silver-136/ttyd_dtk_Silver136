@@ -130,9 +130,9 @@ static BattleWeapon weapon = {
     2, // baseSpCost
     0, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -156,7 +156,7 @@ static BattleWeapon weapon = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_BakuGame, // mAttackEvtScript
+    marioAttackEvent_BakuGame, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -187,7 +187,7 @@ static USER_FUNC(main_star) {
         w->star.timer = 0;
         w->star.eff = effStarStoneEntry(1, 0.0f, -1000.0f, 0.0f, 1.0f);
         BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
-        w->star.pos.y += mario->mSizeMultiplier * (f32)mario->mHeight + 37.0f;
+        w->star.pos.y += mario->sizeMultiplier * (f32)mario->height + 37.0f;
         w->star.from = w->star.pos;
         w->star.to = w->star.pos;
         w->star.to.y += 50.0f;
@@ -354,12 +354,12 @@ USER_FUNC(bakuGameMain) {
         flag = 1;
         for (i = 0; i < BATTLE_UNIT_MAX; i++) {
             u = BattleGetUnitPtr(bw, i);
-            if (u != NULL && u->mAlliance == ALLIANCE_ENEMY) {
-                if ((f32)u->mWidth >= 100.0f) {
+            if (u != NULL && u->alliance == ALLIANCE_ENEMY) {
+                if ((f32)u->width >= 100.0f) {
                     flag = 1;
                     break;
                 }
-                if (!(u->mAttributeFlags & kCeiling)) {
+                if (!(u->attributeFlags & kCeiling)) {
                     flag = 0;
                 }
             }
@@ -679,7 +679,7 @@ state_end:
             bakuGameMarioSurprise(mario, party);
             btl_camera_shake_h(0, 4.0f, 0.0f, 10, 4);
             psndSFXOn("SFX_BTL_SAC_TIME2");
-            BtlUnit_snd_se_pos(mario, "SFX_VOICE_MARIO_SURPRISED1", 0x7F, 0, &mario->mPosition);
+            BtlUnit_snd_se_pos(mario, "SFX_VOICE_MARIO_SURPRISED1", 0x7F, 0, &mario->position);
         }
         break;
     case 10:
@@ -772,7 +772,7 @@ state_end:
                 mario->faceDirection = 1;
                 w->to = w->pos;
                 w->from = w->to;
-                w->to.y += 30.0f * mario->mSizeMultiplier;
+                w->to.y += 30.0f * mario->sizeMultiplier;
             }
             if (w->frame >= 8 && w->frame < 13) {
                 w->pos.y = intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->frame - 8, 4);
@@ -796,19 +796,19 @@ state_end:
                 }
                 for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     u = BattleGetUnitPtr(bw, i);
-                    if (u != NULL && !(u->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
-                        u->mAlliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u)) {
+                    if (u != NULL && !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
+                        u->alliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u)) {
                         if (w->frame == 0) {
                             BtlUnit_SetBodyAnimType(u, POSE_TYPE_TALK);
                         }
                         if (w->frame == 26) {
                             btlDispPoseAnime(BtlUnit_GetPartsPtr(u, BtlUnit_GetBodyPartsId(u)));
-                            if (!(u->mAttributeFlags & kFloating) && !(u->mAttributeFlags & kCeiling)) {
+                            if (!(u->attributeFlags & kFloating) && !(u->attributeFlags & kCeiling)) {
                                 BtlUnit_GetHomePos(u, &hx, &hy, &hz);
                                 BtlUnit_SetPos(u, hx, hy, hz);
                             }
                         }
-                        if (w->frame >= 26 && !(u->mAttributeFlags & kFloating) && !(u->mAttributeFlags & kCeiling)) {
+                        if (w->frame >= 26 && !(u->attributeFlags & kFloating) && !(u->attributeFlags & kCeiling)) {
                             BtlUnit_GetHomePos(u, &hx, &hy, &hz);
                             BtlUnit_SetPos(u, hx, hy + w->hpos.y, hz);
                         }
@@ -1004,9 +1004,9 @@ state_end:
             if (!(w->flags & 1)) {
                 for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                     u = BattleGetUnitPtr(bw, i);
-                    if (u != NULL && u->mAlliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u) &&
-                        !(u->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
-                        !(u->mAttributeFlags & kFloating) && !(u->mAttributeFlags & kCeiling)) {
+                    if (u != NULL && u->alliance == ALLIANCE_ENEMY && BtlUnit_CanActStatus(u) &&
+                        !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL) &&
+                        !(u->attributeFlags & kFloating) && !(u->attributeFlags & kCeiling)) {
                         BtlUnit_GetHomePos(u, &hx, &hy, &hz);
                         BtlUnit_SetPos(u, hx, hy + w->hpos.y, hz);
                     }
@@ -1061,7 +1061,7 @@ state_end:
             w->hstate = 10;
         }
         if (w->throwTarget == 0) {
-            BtlUnit_snd_se_pos(mario, "SFX_VOICE_MARIO_SURPRISED1", 0x7F, 0, &mario->mPosition);
+            BtlUnit_snd_se_pos(mario, "SFX_VOICE_MARIO_SURPRISED1", 0x7F, 0, &mario->position);
         }
         break;
     case 40:
@@ -1224,7 +1224,7 @@ void bakuGameEnemySurpriseReset(void) {
 
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         u = BattleGetUnitPtr(wp, i);
-        if (u != NULL && u->mAlliance == ALLIANCE_ENEMY && !(u->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
+        if (u != NULL && u->alliance == ALLIANCE_ENEMY && !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
             btlDispPoseAnime(BtlUnit_GetPartsPtr(u, BtlUnit_GetBodyPartsId(u)));
         }
     }
@@ -1290,7 +1290,7 @@ void bakuGameEnemySurprise(void) {
 
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         u = BattleGetUnitPtr(wp, i);
-        if (u != NULL && u->mAlliance == ALLIANCE_ENEMY && !(u->mAttributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
+        if (u != NULL && u->alliance == ALLIANCE_ENEMY && !(u->attributeFlags & kInactive) && !BtlUnit_CheckStatus(u, STATUS_INSTANT_KILL)) {
             BtlUnit_SetBodyAnimType(u, POSE_TYPE_DAMAGE);
         }
     }

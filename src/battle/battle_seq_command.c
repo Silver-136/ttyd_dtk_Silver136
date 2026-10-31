@@ -127,7 +127,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[0].type = 0;
         cmd->act[0].enabled = 1;
         cmd->act[0].disableReason = 0;
-        if (unit->mAttributeFlags & kVeiled) {
+        if (unit->attributeFlags & kVeiled) {
             cmd->act[0].enabled = 0;
             cmd->act[0].disableReason = 3;
         }
@@ -189,7 +189,7 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[num].type = 1;
         cmd->act[num].enabled = 1;
         cmd->act[num].disableReason = 0;
-        if (unit->mAttributeFlags & kVeiled) {
+        if (unit->attributeFlags & kVeiled) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
@@ -254,11 +254,11 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[num].icon = ICON_BTL_CMD_ITEM;
         num++;
     }
-    if (unit->currentKind == UNIT_MARIO && pouch->mStarPowersObtained != 0) {
+    if (unit->currentKind == UNIT_MARIO && pouch->starPowersObtained != 0) {
         cmd->act[num].type = 4;
         cmd->act[num].enabled = 1;
         cmd->act[num].disableReason = 0;
-        if (unit->mAttributeFlags & kVeiled) {
+        if (unit->attributeFlags & kVeiled) {
             cmd->act[num].enabled = 0;
             cmd->act[num].disableReason = 3;
         }
@@ -617,7 +617,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
             }
             break;
         case 4: {
-            u16 starPowers = pouch->mStarPowersObtained;
+            u16 starPowers = pouch->starPowersObtained;
             s32 j;
             for (j = 0; j < 16; j++) {
                 if ((starPowers & (1 << j)) && superActionTable[j]) {
@@ -728,7 +728,7 @@ s32 _btlcmd_CheckWeaponTargetNum(BattleWork* wp, BattleUnit* unit, BattleWeapon*
     if (weapon == NULL) {
         return 0;
     }
-    if (weapon->mAttackEvtScript == NULL) {
+    if (weapon->attackEvtScript == NULL) {
         return 0;
     }
     if (!BtlUnit_CheckWeaponCost(unit, weapon)) {
@@ -779,7 +779,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         BtlUnit_CanActStatus(party);
         cmd->operation[0].icon = _battleGetPartyIcon(party->currentKind);
         cmd->operation[0].help = "btl_hlp_cmd_operation_changeparty";
-        if (unit->mAttributeFlags & kVeiled) {
+        if (unit->attributeFlags & kVeiled) {
             cmd->operation[0].enabled = 0;
             cmd->operation[0].disableReason = 3;
         }
@@ -790,7 +790,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[0].cost = 0;
         num = 1;
     }
-    if (pouch->mStarPowersObtained != 0) {
+    if (pouch->starPowersObtained != 0) {
         cmd->operation[num].type = 5;
         cmd->operation[num].enabled = 1;
         cmd->operation[num].name = msgSearch("btl_cmd_op_appeal");
@@ -817,7 +817,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[num].name = msgSearch(weapon->name);
         cmd->operation[num].icon = ICON_BTL_CMD_CHARGE;
         cmd->operation[num].help = weapon->description;
-        if (unit->mAttributeFlags & kVeiled) {
+        if (unit->attributeFlags & kVeiled) {
             cmd->operation[num].enabled = 0;
             cmd->operation[num].disableReason = 3;
         }
@@ -840,7 +840,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[num].name = msgSearch(weapon->name);
         cmd->operation[num].icon = ICON_BTL_CMD_SUPER_CHARGE;
         cmd->operation[num].help = weapon->description;
-        if (unit->mAttributeFlags & kVeiled) {
+        if (unit->attributeFlags & kVeiled) {
             cmd->operation[num].enabled = 0;
             cmd->operation[num].disableReason = 3;
         }
@@ -853,7 +853,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     cmd->operation[num].disableReason = 0;
     cmd->operation[num].cost = 0;
     cmd->operation[num].help = "btl_hlp_cmd_operation_defend";
-    if (unit->mAttributeFlags & kVeiled) {
+    if (unit->attributeFlags & kVeiled) {
         cmd->operation[num].enabled = 0;
         cmd->operation[num].disableReason = 3;
     }
@@ -869,7 +869,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[idx].disableReason = 1;
     }
     cmd->operation[idx].help = "btl_hlp_cmd_operation_escape";
-    if (unit->mAttributeFlags & kVeiled) {
+    if (unit->attributeFlags & kVeiled) {
         cmd->operation[idx].enabled = 0;
         cmd->operation[idx].disableReason = 3;
     }
@@ -1084,7 +1084,7 @@ s32 _btlcmd_SelectWeaponDecide(BattleWork* wp, s32 type, s32 index) {
     weapon = wp->commandMenu.weapon[index].weapon;
     // FAKE: (s32) cast on the s8 attackDirection passed as s8; dropping it changes the object
     BattleSamplingEnemy(targets, weapon, wp->activeUnitId, BtlUnit_GetEnemyBelong(unit), weapon->targetClassFlags,
-        weapon->targetPropertyFlags, (s32)wp->alliances[unit->mAlliance].attackDirection);
+        weapon->targetPropertyFlags, (s32)wp->alliances[unit->alliance].attackDirection);
     targets->currentTarget = 0;
     if (weapon->targetPropertyFlags & (TARGET_PROP_SAME_SIDE_FIRST | TARGET_PROP_OPPOSITE_SIDE_FIRST)) {
         selected = -1;
@@ -1678,7 +1678,7 @@ BOOL BattleCommandCheckChangePositionEnable(BattleWork* wp) {
         BtlUnit_CheckStatus(unit, STATUS_FREEZE) || BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
         return FALSE;
     }
-    if (unit->mAttributeFlags & kVeiled) {
+    if (unit->attributeFlags & kVeiled) {
         return FALSE;
     }
     unit = BattleGetPartyPtr(wp);
@@ -2292,7 +2292,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
         pos1.x = t->posX;
         pos1.y = t->posY;
         pos1.z = t->posZ;
-        if (!(unit->mAttributeFlags & kCeiling)) {
+        if (!(unit->attributeFlags & kCeiling)) {
             btlGetScreenPoint(&pos1, &screen1);
             icon.x = screen1.x;
             icon.y = screen1.y;
@@ -2336,7 +2336,7 @@ void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param) {
             pos2.x = t2->posX;
             pos2.y = t2->posY;
             pos2.z = t2->posZ;
-            if (!(unit2->mAttributeFlags & kCeiling)) {
+            if (!(unit2->attributeFlags & kCeiling)) {
                 btlGetScreenPoint(&pos2, &screen2);
                 icon.x = screen2.x;
                 icon.y = screen2.y;
@@ -2418,11 +2418,11 @@ void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* par
     icon.y = screen.y;
     icon.z = 0.0f;
     iconDispGx(&icon, ICON_FLAG_2D, ICON_TARGET_CURSOR, 1.0f);
-    len = strlen(msgSearch(unit->mKindParams->name));
+    len = strlen(msgSearch(unit->kindParams->name));
     w = 6.25f * len;
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xCF}, icon.x - w, 80.0f + icon.y, 12.5f * len, 32.0f, 10.0f);
     FontDrawStart();
-    FontDrawString(3.0f + icon.x - w, 77.0f + icon.y, msgSearch(unit->mKindParams->name));
+    FontDrawString(3.0f + icon.x - w, 77.0f + icon.y, msgSearch(unit->kindParams->name));
 }
 
 #pragma dont_inline on
@@ -2503,20 +2503,20 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
         case 1:
             unit->attackEventFlags = 0;
             if (unit->currentKind == UNIT_MARIO) {
-                unit->attackEventCode = badgeWeapon_Charge.mAttackEvtScript;
+                unit->attackEventCode = badgeWeapon_Charge.attackEvtScript;
                 BtlActRec_AddCount(&wp->actRecord.marioCharges);
             } else {
-                unit->attackEventCode = badgeWeapon_ChargeP.mAttackEvtScript;
+                unit->attackEventCode = badgeWeapon_ChargeP.attackEvtScript;
                 BtlActRec_AddCount(&wp->actRecord.partnerCharges);
             }
             break;
         case 2:
             unit->attackEventFlags = 0;
             if (unit->currentKind == UNIT_MARIO) {
-                unit->attackEventCode = badgeWeapon_SuperCharge.mAttackEvtScript;
+                unit->attackEventCode = badgeWeapon_SuperCharge.attackEvtScript;
                 BtlActRec_AddCount(&wp->actRecord.marioSuperCharges);
             } else {
-                unit->attackEventCode = badgeWeapon_SuperChargeP.mAttackEvtScript;
+                unit->attackEventCode = badgeWeapon_SuperChargeP.attackEvtScript;
                 BtlActRec_AddCount(&wp->actRecord.partnerSuperCharges);
             }
             break;
@@ -2554,7 +2554,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
     case 6:
         _btlcmd_GetCursorPtr(cmd, type, &cursor);
         weapon = cmd->weapon[cursor->absPos].weapon;
-        unit->attackEventCode = weapon->mAttackEvtScript;
+        unit->attackEventCode = weapon->attackEvtScript;
         unit->attackEventFlags = 0;
         if (!unit->attackEventCode) {
             unit->attackEventCode = btldefaultevt_Wait;
@@ -2700,14 +2700,14 @@ s32 _check_present_item(void) {
     case ITEM_HEART:
         BtlUnit_RecoverHp(unit, 1);
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-        pos.y += unit->mSizeMultiplier * BtlUnit_GetHeight(unit) + 5.0f;
+        pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit) + 5.0f;
         effRecoveryEntry(0, 1, pos.x, pos.y, pos.z);
         BattleAudience_SetPresentItemNo(0);
         return 0;
     case ITEM_FLOWER:
         BtlUnit_RecoverFp(unit, 1);
         BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-        pos.y += unit->mSizeMultiplier * BtlUnit_GetHeight(unit) + 5.0f;
+        pos.y += unit->sizeMultiplier * BtlUnit_GetHeight(unit) + 5.0f;
         effRecoveryEntry(1, 1, pos.x, pos.y, pos.z);
         BattleAudience_SetPresentItemNo(0);
         return 0;
@@ -2757,22 +2757,22 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
         if (!battleCheckUnitMonosiriFlag(wp->units[i])) {
             continue;
         }
-        if (unit->mAttributeFlags & kUnitNoHpGauge) {
+        if (unit->attributeFlags & kUnitNoHpGauge) {
             continue;
         }
         if (!(wp->commandMenu.flags & CMD_MENU_ENEMY_HP) && !(unit->flags & BATTLE_UNIT_FLAG_SHOW_HP)) {
             continue;
         }
-        position.x = unit->mPosition.x;
-        position.y = unit->mPosition.y;
-        position.z = unit->mPosition.z;
+        position.x = unit->position.x;
+        position.y = unit->position.y;
+        position.z = unit->position.z;
         if (wp->flags & BATTLE_FLAG_COMMAND_INPUT) {
-            position.x = unit->mHomePosition.x;
-            position.y = unit->mHomePosition.y;
-            position.z = unit->mHomePosition.z;
+            position.x = unit->homePosition.x;
+            position.y = unit->homePosition.y;
+            position.z = unit->homePosition.z;
         }
-        position.x += (f32)unit->mHpGaugeOffset[0];
-        position.y += (f32)unit->mHpGaugeOffset[1];
+        position.x += (f32)unit->hpGaugeOffset[0];
+        position.y += (f32)unit->hpGaugeOffset[1];
         btlGetScreenPoint(&position, &screen);
         if ((unit->flags & BATTLE_UNIT_FLAG_SHOW_HP) && (unit->hpGauge.flags & HP_GAUGE_FLAG_TIMED) && unit->hpGauge.visibleTimer < 20) {
             color.a = intplGetValue(EASING_LINEAR, 0.0f, 255.0f, unit->hpGauge.visibleTimer, 20);
@@ -2829,7 +2829,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         unit->moveState = 0;
     }
     BattleAcHelpSetDispType(0);
-    if (unit->mAlliance) {
+    if (unit->alliance) {
         return subsetevt_confuse_flustered;
     }
     if (unit->currentKind != UNIT_MARIO && (unit->currentKind < TYPE_PARTNER_MIN || unit->currentKind >= TYPE_PARTNER_MAX)) {
@@ -2907,7 +2907,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
         }
         wp->weaponTargets.currentTarget = irand(wp->weaponTargets.numTargets);
         wp->flags |= BATTLE_FLAG_ACT_DECIDED_UNUSED;
-        return weapon->mAttackEvtScript;
+        return weapon->attackEvtScript;
     case 5:
         _btlcmd_MakeOperationTable(wp);
         {
@@ -2947,14 +2947,14 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
             return btldefaultevt_Escape;
         case 1:
             if (unit->currentKind == UNIT_MARIO) {
-                return badgeWeapon_Charge.mAttackEvtScript;
+                return badgeWeapon_Charge.attackEvtScript;
             }
-            return badgeWeapon_ChargeP.mAttackEvtScript;
+            return badgeWeapon_ChargeP.attackEvtScript;
         case 2:
             if (unit->currentKind == UNIT_MARIO) {
-                return badgeWeapon_SuperCharge.mAttackEvtScript;
+                return badgeWeapon_SuperCharge.attackEvtScript;
             }
-            return badgeWeapon_SuperChargeP.mAttackEvtScript;
+            return badgeWeapon_SuperChargeP.attackEvtScript;
         case 8:
             return BtlUnit_GetData(unit, UNIT_DATA_WAKEUP_EVENT);
         case 0:
@@ -3026,7 +3026,7 @@ BOOL BattleCommandAttackAudienceCheck(void) {
     s32 id;
 
     if (BattlePadCheckTrigger(PAD_BUTTON_X) && !(wp->flags & BATTLE_FLAG_ZERO_GRAVITY_UNUSED)) {
-        if (BattleGetMarioPtr(wp)->mAttributeFlags & kVeiled) {
+        if (BattleGetMarioPtr(wp)->attributeFlags & kVeiled) {
             return FALSE;
         }
         BattleAudience_GetItemOn(&id, NULL, NULL, NULL, NULL);

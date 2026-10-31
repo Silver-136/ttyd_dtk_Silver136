@@ -14,7 +14,7 @@ typedef struct EffBreakWork {
     Vec position;  // 0x4
     s32 timer;     // 0x10
     f32 offsetY;   // 0x14
-    s32 field_0x18; // 0x18, only set to 0
+    s32 counter; // 0x18, only set to 0
     s32 state;     // 0x1C
     f32 scale;     // 0x20
 } EffBreakWork;
@@ -125,7 +125,7 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
         w->position.y = 0.0f;
         w->position.z = 0.0f;
         w->offsetY = 10.0f;
-        w->field_0x18 = 0;
+        w->counter = 0;
         w->timer = (i - 1) * 21;
         w->state = 0;
     }

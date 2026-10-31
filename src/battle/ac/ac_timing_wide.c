@@ -35,11 +35,11 @@ s32 battleAcMain_TimingWide(BattleWork* work) {
     s32 autoCmd = 0;
     s32 pressed;
 
-    if (ac->mAcUnit->badgesEquipped.AutoCommand) {
+    if (ac->acUnit->badgesEquipped.AutoCommand) {
         autoCmd = 1;
     }
 
-    switch (ac->mAcState) {
+    switch (ac->acState) {
         case 0:
             memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
@@ -76,11 +76,11 @@ s32 battleAcMain_TimingWide(BattleWork* work) {
             ac->outputParams[0] = 0;
             ac->outputParams[1] = 0;
             ac->outputParams[2] = 0;
-            ac->mAcState = 99;
+            ac->acState = 99;
             ac->result = AC_RESULT_RUNNING;
             break;
         case 100:
-            if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
+            if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
                 // irand(100) is never negative: a confused auto-play always presses outside the window
                 if (irand(100) >= 0) {
                     ac->setupParam = 0;
@@ -93,13 +93,13 @@ s32 battleAcMain_TimingWide(BattleWork* work) {
                 } else {
                     ac->setupParam = ac->params[2] + irand(ac->params[3] - ac->params[2]);
                 }
-                ac->mAcState = 0x3EA;
+                ac->acState = 0x3EA;
                 tw->state = 2;
             } else {
                 if (ac->params[0] == 4) {
-                    ac->mAcState = 0x3E8;
+                    ac->acState = 0x3E8;
                 } else {
-                    ac->mAcState = 0x3E9;
+                    ac->acState = 0x3E9;
                 }
                 tw->state = 1;
             }
@@ -107,17 +107,17 @@ s32 battleAcMain_TimingWide(BattleWork* work) {
         case 0x3E8:
             if (BattlePadCheckTrigger(tw->button)) {
                 ac->outputParams[1] = 1;
-                ac->mAcState = 0x3E9;
+                ac->acState = 0x3E9;
             }
             break;
         case 0x3E9:
             tw->frame++;
             if (tw->frame > ac->params[1]) {
                 ac->result = 0;
-                ac->mAcState = 0x3EC;
+                ac->acState = 0x3EC;
                 tw->state = 4;
                 if (ac->acFlags & AC_TIMING_WIDE_FLAG_HOLD_AFTER_RESULT) {
-                    ac->mAcState = 0x3EB;
+                    ac->acState = 0x3EB;
                     tw->state = 3;
                 }
             } else {
@@ -155,16 +155,16 @@ s32 battleAcMain_TimingWide(BattleWork* work) {
                 if (pressed) {
                     if (ac->outputParams[2]) {
                         ac->result = AC_RESULT_SUCCESS;
-                        ac->mResultCount++;
+                        ac->resultCount++;
                         ac->outputParams[0] = 1;
                     } else {
                         ac->result = 0;
                         ac->outputParams[0] = -1;
                     }
-                    ac->mAcState = 0x3EC;
+                    ac->acState = 0x3EC;
                     tw->state = 4;
                     if (ac->acFlags & AC_TIMING_WIDE_FLAG_HOLD_AFTER_RESULT) {
-                        ac->mAcState = 0x3EB;
+                        ac->acState = 0x3EB;
                         tw->state = 3;
                     }
                 }
@@ -180,7 +180,7 @@ s32 battleAcMain_TimingWide(BattleWork* work) {
             if (ac->setupParam < 0) {
                 if (tw->frame >= ac->params[2] && tw->frame < ac->params[3]) {
                     ac->result = AC_RESULT_SUCCESS;
-                    ac->mResultCount++;
+                    ac->resultCount++;
                     ac->outputParams[0] = 1;
                 } else {
                     ac->result = 0;
@@ -193,12 +193,12 @@ s32 battleAcMain_TimingWide(BattleWork* work) {
             break;
         case 0x3EC:
             tw->endTimer = 60;
-            ac->mAcState = 0x3ED;
+            ac->acState = 0x3ED;
             tw->state = 5;
         case 0x3ED:
             tw->endTimer--;
             if (tw->endTimer <= 0) {
-                ac->mAcState = 0x3EE;
+                ac->acState = 0x3EE;
                 tw->state = 6;
             }
             break;
@@ -272,7 +272,7 @@ void battleAcDisp_TimingWide(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: starts the 60-frame end wait. */
 void battleAcDelete_TimingWide(BattleWork* work) {
-    work->actionCommands.mAcState = 0x3EC;
+    work->actionCommands.acState = 0x3EC;
 }
 
 // Draws a button icon at the command's icon position. A macro: as an inline function the object

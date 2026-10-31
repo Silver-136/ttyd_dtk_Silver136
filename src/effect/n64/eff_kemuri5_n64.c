@@ -28,7 +28,7 @@ typedef struct EffKemuri5N64Work {
     f32 velY;      // 0x34
     f32 accelY;    // 0x38
     f32 accelY2;   // 0x3C
-    f32 field_40;  // 0x40
+    f32 reserved_40;  // 0x40
     f32 dirX;      // 0x44
     f32 dirZ;      // 0x48
 } EffKemuri5N64Work;
@@ -70,7 +70,7 @@ EffectEntry* effKemuri5N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     for (i = 0, ang = 0; i < 8; i++, work++) {
 
         work->active = 1;
-        work->field_40 = 0.0f;
+        work->reserved_40 = 0.0f;
         work->position.x = x;
         work->position.y = y;
         work->position.z = z;

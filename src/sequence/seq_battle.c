@@ -162,17 +162,17 @@ void seq_battleMain(SequenceWork* work) {
             }
             switch (pouch->rank) {
                 case 0:
-                    bmapLoad(bti01, stage->mSpecificStageDataDir);
+                    bmapLoad(bti01, stage->specificStageDataDir);
                     break;
                 case 1:
-                    bmapLoad(bti02, stage->mSpecificStageDataDir);
+                    bmapLoad(bti02, stage->specificStageDataDir);
                     break;
                 case 2:
-                    bmapLoad(bti03, stage->mSpecificStageDataDir);
+                    bmapLoad(bti03, stage->specificStageDataDir);
                     break;
                 case 3:
                 default:
-                    bmapLoad(bti04, stage->mSpecificStageDataDir);
+                    bmapLoad(bti04, stage->specificStageDataDir);
                     break;
             }
             wait = FALSE;

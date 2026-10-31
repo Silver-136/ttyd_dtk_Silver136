@@ -48,14 +48,14 @@ static EvtWord wait_event_nokotarou[6];
  * 10 HP, level 0, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
 BattleUnitKind unit_gullible_nokotarou = {
-    UNIT_KOOPS_CHAPTER4, // mUnitType
+    UNIT_KOOPS_CHAPTER4, // unitType
     "btl_un_gullible_nokotarou", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    0, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    0, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -90,7 +90,7 @@ BattleUnitKind unit_gullible_nokotarou = {
     kUnitNoncombatant, // attributeFlags
     &regist_nokotarou, // statusVulnerability
     1, // numParts
-    parts_nokotarou, // mParts
+    parts_nokotarou, // parts
     init_event_nokotarou, // initEventCode
     data_table_nokotarou, // dataTable
 };
@@ -103,9 +103,9 @@ static BattleWeapon enemyWeapon_NokotarouKouraAttack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerFromGulliblePartyAttackLv, // hpDamageFn
     {2, 3, 5, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -128,7 +128,7 @@ static BattleWeapon enemyWeapon_NokotarouKouraAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -140,9 +140,9 @@ static BattleWeapon enemyWeapon_NokotarouShubibinAttack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerFromGulliblePartyAttackLv, // hpDamageFn
     {2, 3, 5, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -165,7 +165,7 @@ static BattleWeapon enemyWeapon_NokotarouShubibinAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

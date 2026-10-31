@@ -239,14 +239,14 @@ BattleUnitKindPart unitpartsdata_Party_Yoshi[] = {
  * seven parts, the partner hit sounds and no enemy HP gauge.
  */
 BattleUnitKind unitdata_Party_Yoshi = {
-    UNIT_YOSHI, // mUnitType
+    UNIT_YOSHI, // unitType
     "btl_un_yoshi", // name
     10, // maxHp
     5, // maxFp
-    5, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    5, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -281,7 +281,7 @@ BattleUnitKind unitdata_Party_Yoshi = {
     kUnitNoHpGauge, // attributeFlags
     &regist, // statusVulnerability
     7, // numParts
-    unitpartsdata_Party_Yoshi, // mParts
+    unitpartsdata_Party_Yoshi, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -341,9 +341,9 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
@@ -365,7 +365,7 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyYoshiAttack_NormalAttack, // mAttackEvtScript
+    partyYoshiAttack_NormalAttack, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 10, 10, 100, 10, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
@@ -387,9 +387,9 @@ BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {2, 4, 3, 5, 3, 6, 0, 0}, // hpDamageWork
@@ -412,7 +412,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyYoshiAttack_Nomikomi, // mAttackEvtScript
+    partyYoshiAttack_Nomikomi, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -434,9 +434,9 @@ BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {2, 4, 3, 5, 3, 6, 0, 0}, // hpDamageWork
@@ -459,7 +459,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyYoshiAttack_Nomikomi, // mAttackEvtScript
+    partyYoshiAttack_Nomikomi, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 5, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -478,9 +478,9 @@ BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {0}, // hpDamageWork
@@ -502,7 +502,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyYoshiAttack_Nomikomi, // mAttackEvtScript
+    partyYoshiAttack_Nomikomi, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -520,9 +520,9 @@ BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     2, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -545,7 +545,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyYoshiAttack_Nomikomi, // mAttackEvtScript
+    partyYoshiAttack_Nomikomi, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -579,7 +579,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -598,12 +598,12 @@ BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
@@ -628,7 +628,7 @@ BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
-    partyYoshiAttack_EggAttack, // mAttackEvtScript
+    partyYoshiAttack_EggAttack, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 6, 3, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -650,9 +650,9 @@ BattleWeapon partyWeapon_YoshiCallGuard = {
     6, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {1, 1, 1, 1, 1, 1, 0, 0}, // hpDamageWork
@@ -674,7 +674,7 @@ BattleWeapon partyWeapon_YoshiCallGuard = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyYoshiAttack_CallGuard, // mAttackEvtScript
+    partyYoshiAttack_CallGuard, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 20, 20, 100, 20, 40, 5, 5, 20, 5, 0, 0}, // stageEffectRates
 #else
@@ -2162,28 +2162,28 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_calc_param) {
     unit = BattleGetUnitPtr(wp, id);
     outFrames = args[5];
     if (speed > 0.0f) {
-        unit->mMoveSpeedXZ = speed;
+        unit->moveSpeedXZ = speed;
     }
-    if (unit->mMoveSpeedXZ <= 0.0f) {
-        unit->mMoveSpeedXZ = 1.0f;
+    if (unit->moveSpeedXZ <= 0.0f) {
+        unit->moveSpeedXZ = 1.0f;
     }
     BtlUnit_SetMoveTargetPos(unit, tx, ty, tz);
     BtlUnit_GetPos(unit, &x, &y, &z);
     BtlUnit_SetMoveStartPos(unit, x, y, z);
     BtlUnit_SetMoveCurrentPos(unit, x, y, z);
     unit->mMoveDirection = angleABf(x, z, tx, tz);
-    unit->mMoveDistance = distABf(x, z, tx, tz);
+    unit->moveDistance = distABf(x, z, tx, tz);
     if (tx - x > 0.0f) {
         unit->moveDirection = 1;
     } else if (tx - x < 0.0f) {
         unit->moveDirection = -1;
     }
-    unit->mMoveDistance = __fabs(tx - x);
+    unit->moveDistance = __fabs(tx - x);
     unit->moveFrames = 180;
-    unit->mMoveTotalFrames = (f32)unit->moveFrames;
-    unit->mMoveSpeedY = 0.0f;
-    unit->mMoveSpeedXZ = unit->mMoveDistance / (f32)unit->moveFrames;
-    evtSetFloat(event, outSpeed, unit->mMoveSpeedXZ);
+    unit->moveTotalFrames = (f32)unit->moveFrames;
+    unit->moveSpeedY = 0.0f;
+    unit->moveSpeedXZ = unit->moveDistance / (f32)unit->moveFrames;
+    evtSetFloat(event, outSpeed, unit->moveSpeedXZ);
     evtSetValue(event, outFrames, unit->moveFrames);
     return EVT_RETURN_DONE;
 }
@@ -2209,28 +2209,28 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
         event->userdata[1] = 20;
         event->userdata[2] = 0;
     }
-    if (unit->mMoveCurrentPos.x != unit->mMoveTargetPos.x) {
-        if (__fabs(unit->mMoveTargetPos.x - unit->mMoveCurrentPos.x) < unit->mMoveSpeedXZ) {
-            unit->mMoveCurrentPos.x = unit->mMoveTargetPos.x;
+    if (unit->moveCurrentPos.x != unit->moveTargetPos.x) {
+        if (__fabs(unit->moveTargetPos.x - unit->moveCurrentPos.x) < unit->moveSpeedXZ) {
+            unit->moveCurrentPos.x = unit->moveTargetPos.x;
         } else {
-            unit->mMoveCurrentPos.x += unit->mMoveSpeedXZ * unit->moveDirection;
+            unit->moveCurrentPos.x += unit->moveSpeedXZ * unit->moveDirection;
         }
     }
-    if (unit->mMoveCurrentPos.z != unit->mMoveTargetPos.z) {
-        if (__fabs(unit->mMoveTargetPos.z - unit->mMoveCurrentPos.z) < unit->mMoveSpeedXZ) {
-            unit->mMoveCurrentPos.z = unit->mMoveTargetPos.z;
-        } else if (unit->mMoveTargetPos.z - unit->mMoveStartPos.z > 0.0f) {
-            unit->mMoveCurrentPos.z += unit->mMoveSpeedXZ;
+    if (unit->moveCurrentPos.z != unit->moveTargetPos.z) {
+        if (__fabs(unit->moveTargetPos.z - unit->moveCurrentPos.z) < unit->moveSpeedXZ) {
+            unit->moveCurrentPos.z = unit->moveTargetPos.z;
+        } else if (unit->moveTargetPos.z - unit->moveStartPos.z > 0.0f) {
+            unit->moveCurrentPos.z += unit->moveSpeedXZ;
         } else {
-            unit->mMoveCurrentPos.z -= unit->mMoveSpeedXZ;
+            unit->moveCurrentPos.z -= unit->moveSpeedXZ;
         }
     }
-    sweatAngle = 10.0f * sinfd(180.0f + 360.0f * (unit->mMoveTotalFrames - (f32)(unit->moveFrames % 90)) / 90.0f);
+    sweatAngle = 10.0f * sinfd(180.0f + 360.0f * (unit->moveTotalFrames - (f32)(unit->moveFrames % 90)) / 90.0f);
     BtlUnit_GetPartsPtr(unit, 1);
-    unit->mMoveCurrentPos.y = unit->mMoveSpeedY + (unit->mMoveStartPos.y + (unit->mMoveTargetPos.y - unit->mMoveStartPos.y) * (unit->mMoveTotalFrames - (f32)unit->moveFrames) / unit->mMoveTotalFrames);
-    unit->mMoveSpeedY = sweatAngle;
-    unit->work[UNIT_WORK_STEP_PITCH_SCALE] = (s32)(75.0f - 25.0f * sinfd(360.0f * (unit->mMoveTotalFrames - (f32)(unit->moveFrames % 90)) / 90.0f));
-    BtlUnit_SetPos(unit, unit->mMoveCurrentPos.x, unit->mMoveCurrentPos.y, unit->mMoveCurrentPos.z);
+    unit->moveCurrentPos.y = unit->moveSpeedY + (unit->moveStartPos.y + (unit->moveTargetPos.y - unit->moveStartPos.y) * (unit->moveTotalFrames - (f32)unit->moveFrames) / unit->moveTotalFrames);
+    unit->moveSpeedY = sweatAngle;
+    unit->work[UNIT_WORK_STEP_PITCH_SCALE] = (s32)(75.0f - 25.0f * sinfd(360.0f * (unit->moveTotalFrames - (f32)(unit->moveFrames % 90)) / 90.0f));
+    BtlUnit_SetPos(unit, unit->moveCurrentPos.x, unit->moveCurrentPos.y, unit->moveCurrentPos.z);
     event->userdata[1]++;
     if (event->userdata[1] > 20) {
         event->userdata[1] = 0;
@@ -2239,18 +2239,18 @@ USER_FUNC(btl_yoshi_yoroyoro_jump_move) {
         } else {
             sweatAngle = 50.0f;
         }
-        event->userdata[2] = (EvtWord)effSweatN64Entry(1, unit->mMoveCurrentPos.x, unit->mMoveCurrentPos.y + unit->mSizeMultiplier * (0.5f * BtlUnit_GetHeight(unit)), unit->mMoveCurrentPos.z, 5.0f * unit->mSizeMultiplier, sweatAngle, 16);
+        event->userdata[2] = (EvtWord)effSweatN64Entry(1, unit->moveCurrentPos.x, unit->moveCurrentPos.y + unit->sizeMultiplier * (0.5f * BtlUnit_GetHeight(unit)), unit->moveCurrentPos.z, 5.0f * unit->sizeMultiplier, sweatAngle, 16);
     } else {
         eff = (EffectEntry*)event->userdata[2];
         if (event->userdata[1] < 16) {
-            ((EffSweatN64Work*)eff->userdata)->position.x = unit->mMoveCurrentPos.x;
-            ((EffSweatN64Work*)eff->userdata)->position.y = unit->mMoveCurrentPos.y + unit->mSizeMultiplier * (0.5f * BtlUnit_GetHeight(unit));
-            ((EffSweatN64Work*)eff->userdata)->position.z = unit->mMoveCurrentPos.z;
+            ((EffSweatN64Work*)eff->userdata)->position.x = unit->moveCurrentPos.x;
+            ((EffSweatN64Work*)eff->userdata)->position.y = unit->moveCurrentPos.y + unit->sizeMultiplier * (0.5f * BtlUnit_GetHeight(unit));
+            ((EffSweatN64Work*)eff->userdata)->position.z = unit->moveCurrentPos.z;
         }
     }
     unit->moveFrames--;
     if (unit->moveFrames <= 0) {
-        BtlUnit_SetPos(unit, unit->mMoveTargetPos.x, unit->mMoveTargetPos.y, unit->mMoveTargetPos.z);
+        BtlUnit_SetPos(unit, unit->moveTargetPos.x, unit->moveTargetPos.y, unit->moveTargetPos.z);
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
@@ -2285,9 +2285,9 @@ USER_FUNC(_get_nomikomi_hit_position) {
     unit = BattleGetUnitPtr(wp, BattleTransID(event, targetId));
     dir = unit->faceDirection;
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    pos.x += dir * (unit->bintaHitOffset.x * unit->mSizeMultiplier);
-    pos.y += unit->bintaHitOffset.y * unit->mSizeMultiplier;
-    pos.z += unit->bintaHitOffset.z * unit->mSizeMultiplier;
+    pos.x += dir * (unit->bintaHitOffset.x * unit->sizeMultiplier);
+    pos.y += unit->bintaHitOffset.y * unit->sizeMultiplier;
+    pos.z += unit->bintaHitOffset.z * unit->sizeMultiplier;
     evtSetFloat(event, outX, pos.x);
     evtSetFloat(event, outY, pos.y);
     evtSetFloat(event, outZ, pos.z);

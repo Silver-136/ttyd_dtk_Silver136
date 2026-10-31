@@ -74,14 +74,14 @@ static EvtWord normal_attack_event[365];
  * status vulnerability, init event and event table.
  */
 BattleUnitKind unit_boss_kanbu3 = {
-    UNIT_LORD_CRUMP_CHAPTER5, // mUnitType
+    UNIT_LORD_CRUMP_CHAPTER5, // unitType
     "btl_un_kanbu3", // name
     30, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    57, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    57, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -116,7 +116,7 @@ BattleUnitKind unit_boss_kanbu3 = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -185,9 +185,9 @@ BattleWeapon weapon_kanbu3_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -209,7 +209,7 @@ BattleWeapon weapon_kanbu3_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -221,9 +221,9 @@ BattleWeapon weapon_kanbu3_charge = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -245,13 +245,13 @@ BattleWeapon weapon_kanbu3_charge = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
 /** Spawn setup for the X-Naut PhD (unit_gundan_zako_magician): enemy side, placed off-screen at first. */
 BattleUnitSetup entry_kenkyu = {
-    &unit_gundan_zako_magician, // mUnitKindParams
+    &unit_gundan_zako_magician, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -266,7 +266,7 @@ BattleUnitSetup entry_kenkyu = {
  * used by call_event.
  */
 BattleUnitSetup entry_group1 = {
-    &unit_boss_gundan_zako_group1, // mUnitKindParams
+    &unit_boss_gundan_zako_group1, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -281,7 +281,7 @@ BattleUnitSetup entry_group1 = {
  * used by damage_event, call_event.
  */
 BattleUnitSetup entry_group2 = {
-    &unit_boss_gundan_zako_group2, // mUnitKindParams
+    &unit_boss_gundan_zako_group2, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -296,7 +296,7 @@ BattleUnitSetup entry_group2 = {
  * used by dead_event, call_event.
  */
 BattleUnitSetup entry_group3 = {
-    &unit_boss_gundan_zako_group3, // mUnitKindParams
+    &unit_boss_gundan_zako_group3, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase

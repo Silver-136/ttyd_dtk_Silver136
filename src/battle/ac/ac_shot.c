@@ -80,7 +80,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
     sw = (ShotWork*)ac->work;
     do {
         loop = 0;
-        switch (ac->mAcState) {
+        switch (ac->acState) {
             case 0: {
                 BattleUnit* unit;
                 s32 i;
@@ -98,7 +98,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                 ac->setupParam = 30;
                 unit = BattleGetUnitPtr(work, ac->params[SHOT_PARAM_UNIT_ID]);
                 BtlUnit_GetPos(unit, &sw->unitPos.x, &sw->unitPos.y, &sw->unitPos.z);
-                sw->unitPos.y = sw->unitPos.y + 0.5 * (unit->mSizeMultiplier * (f32)BtlUnit_GetHeight(unit));
+                sw->unitPos.y = sw->unitPos.y + 0.5 * (unit->sizeMultiplier * (f32)BtlUnit_GetHeight(unit));
                 ac->outputParams[0] = 0;
                 ac->outputParams[3] = 0;
                 for (i = 0; i < 3; i++) {
@@ -106,7 +106,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     sw->spin[i] = 0.0f;
                 }
                 sw->sfxId = -1;
-                ac->mAcState = 99;
+                ac->acState = 99;
                 break;
             }
             case 99:
@@ -114,10 +114,10 @@ s32 battleAcMain_Shot(BattleWork* work) {
                 break;
             case 100:
                 sw->timer = 360;
-                ac->mAcState = 1000;
+                ac->acState = 1000;
                 sw->sfxId = psndSFXOn(sfx);
             case 1000:
-                if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
+                if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
                     f32 range;
                     s32 r;
                     if (ac->setupFlags & AC_SETUP_FLAG_RETRIES) {
@@ -155,14 +155,14 @@ s32 battleAcMain_Shot(BattleWork* work) {
                         shotRecord(ac, sw);
                         if (sw->idx >= ac->params[SHOT_PARAM_COUNT]) {
                             ac->result = 0;
-                            ac->mAcState = 1002;
+                            ac->acState = 1002;
                         } else {
                             sw->timer = 360;
                         }
                         loop = 1;
                     }
                 } else if (!ac->outputParams[0]) {
-                    ac->mAcState = 1001;
+                    ac->acState = 1001;
                 }
                 if (sw->vel) {
                     sw->pos += sw->vel;
@@ -188,9 +188,9 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     if (sw->idx >= ac->params[SHOT_PARAM_COUNT]) {
                         ac->countdown--;
                         ac->result = AC_RESULT_SUCCESS;
-                        ac->mAcState = 1002;
+                        ac->acState = 1002;
                     } else {
-                        ac->mAcState = 1000;
+                        ac->acState = 1000;
                     }
                     loop = 1;
                 }
@@ -202,10 +202,10 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     ac->outputParams[1] = (s32)((sw->minV + sw->maxV) / 2.0f);
                     shotRecord(ac, sw);
                     if (sw->idx >= ac->params[SHOT_PARAM_COUNT]) {
-                        ac->mAcState = 1002;
+                        ac->acState = 1002;
                         ac->result = AC_RESULT_SUCCESS;
                     } else {
-                        ac->mAcState = 1000;
+                        ac->acState = 1000;
                     }
                 } else if (!BattlePadCheckNow(PAD_BUTTON_A)) {
                     ac->outputParams[1] = (s32)(sw->maxV * sw->speed / 100.0f);
@@ -215,18 +215,18 @@ s32 battleAcMain_Shot(BattleWork* work) {
                     shotRecord(ac, sw);
                     if (sw->idx >= ac->params[SHOT_PARAM_COUNT]) {
                         ac->result = AC_RESULT_SUCCESS;
-                        ac->mAcState = 1002;
+                        ac->acState = 1002;
                     } else {
-                        ac->mAcState = 1000;
+                        ac->acState = 1000;
                     }
                 }
                 break;
             case 1002:
-                ac->mAcState = 1003;
+                ac->acState = 1003;
                 break;
             case 1004:
                 sw->endTimer = 60;
-                ac->mAcState = 1005;
+                ac->acState = 1005;
                 if (sw->sfxId != -1) {
                     psndSFXOff(sw->sfxId);
                 }
@@ -234,7 +234,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
             case 1005:
                 sw->endTimer--;
                 if (sw->endTimer <= 0) {
-                    ac->mAcState = 1006;
+                    ac->acState = 1006;
                 }
                 break;
             case 1006:
@@ -245,7 +245,7 @@ s32 battleAcMain_Shot(BattleWork* work) {
                 break;
         }
     } while (loop);
-    if (ac->mAcState == 1000 || ac->mAcState == 1001) {
+    if (ac->acState == 1000 || ac->acState == 1001) {
         dispEntry(CAMERA_2D, 900.0f, 1, _disp_target_mark, work);
     }
     dispEntry(CAMERA_2D, 900.0f, 1, _disp_target_mark_afterimage, work);
@@ -267,7 +267,7 @@ void battleAcDisp_Shot(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleActions* ac = &work->actionCommands;
     BattleACDispParams* disp = &ac->disp;
-    switch (ac->mAcState) {
+    switch (ac->acState) {
         case 99:
         case 100:
         case 1000:
@@ -297,7 +297,7 @@ void battleAcDisp_Shot(CameraId cameraId, void* param) {
 
 /** Called by btlevtcmd_StopAC: stops the cursor sound and starts the 60-frame end wait. */
 void battleAcDelete_Shot(BattleWork* work) {
-    work->actionCommands.mAcState = 1004;
+    work->actionCommands.acState = 1004;
 }
 
 /** Resets the display state: the gauge off screen to the left with a 20-frame slide, white colour, empty fill. */

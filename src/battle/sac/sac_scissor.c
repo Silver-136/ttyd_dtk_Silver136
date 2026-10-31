@@ -61,7 +61,7 @@ typedef struct ScissorWork {
     /* 0x099 */ u8 pad99[3];
     /* 0x09C */ struct ScissorStars {
         /* 0x09C */ s32 count;
-        /* 0x0A0 */ s32 unkA0;
+        /* 0x0A0 */ s32 unusedA0;
         /* 0x0A4 */ f32 prevStickX;
         /* 0x0A8 */ f32 prevStickY;
         /* 0x0AC */ f32 stickX;
@@ -119,9 +119,9 @@ BattleWeapon weapon_scissor = {
     4, // baseSpCost
     0, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPower_Scissor, // hpDamageFn
     {0}, // hpDamageWork
@@ -142,7 +142,7 @@ BattleWeapon weapon_scissor = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_Scissor, // mAttackEvtScript
+    marioAttackEvent_Scissor, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -158,9 +158,9 @@ BattleWeapon weapon_scissor_finish = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -182,7 +182,7 @@ BattleWeapon weapon_scissor_finish = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -628,7 +628,7 @@ u32 weaponGetPower_Scissor(BattleUnit* a, BattleWeapon* b, BattleUnit* unit, Bat
     if (unit == NULL) {
         return 0;
     }
-    if (unit->mAlliance == ALLIANCE_ENEMY) {
+    if (unit->alliance == ALLIANCE_ENEMY) {
         for (i = 0; i < 16; i++) {
             if (w->unitIds[i] == BtlUnit_GetUnitId(unit)) {
                 return w->power[i];
@@ -675,7 +675,7 @@ s32 star_control(EventEntry* evt, BOOL first) {
         w->phaseStep = 0;
         w->eff = effStarStoneEntry(3, 0.0f, -1000.0f, 0.0f, 1.0f);
         BtlUnit_GetPos(mario, &w->pos.x, &w->pos.y, &w->pos.z);
-        w->pos.y += mario->mSizeMultiplier * (f32)mario->mHeight + 37.0f;
+        w->pos.y += mario->sizeMultiplier * (f32)mario->height + 37.0f;
         w->from = w->pos;
         w->to = w->pos;
         w->to.y += 50.0f;
@@ -893,7 +893,7 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
         w->stars.prevStickX = 0.0f;
         w->stars.stickY = 0.0f;
         w->stars.stickX = 0.0f;
-        w->stars.unkA0 = 0;
+        w->stars.unusedA0 = 0;
         w->stars.velX = 0.0f;
         w->stars.velY = 0.0f;
         memset(buf, 0, 0x1000);
@@ -1062,16 +1062,16 @@ void scissor_damage_sub(BattleUnit* unit, s32* out) {
     f32 hw, hh, w, h, sign;
     f32 ratio;
     hits = 0;
-    if (unit->mAttributeFlags & kCeiling) {
+    if (unit->attributeFlags & kCeiling) {
         sign = -1.0f;
     } else {
         sign = 1.0f;
     }
-    w = unit->cutWidth * unit->mSizeMultiplier;
-    h = unit->cutHeight * unit->mSizeMultiplier;
+    w = unit->cutWidth * unit->sizeMultiplier;
+    h = unit->cutHeight * unit->sizeMultiplier;
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    pos.x = unit->cutBaseOffset.x * unit->mSizeMultiplier + pos.x;
-    pos.y = sign * (unit->cutBaseOffset.y * unit->mSizeMultiplier) + pos.y;
+    pos.x = unit->cutBaseOffset.x * unit->sizeMultiplier + pos.x;
+    pos.y = sign * (unit->cutBaseOffset.y * unit->sizeMultiplier) + pos.y;
     hh = 0.5f * -h;
     hw = 0.5f * w;
     for (i = 0; i < 10; i++) {

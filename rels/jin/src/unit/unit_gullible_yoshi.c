@@ -33,14 +33,14 @@ static EvtWord wait_event_yoshi[7];
  * 10 HP, level 0, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
 BattleUnitKind unit_gullible_yoshi = {
-    UNIT_YOSHI_CHAPTER4, // mUnitType
+    UNIT_YOSHI_CHAPTER4, // unitType
     "btl_un_gullible_yoshi", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    0, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    0, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -75,7 +75,7 @@ BattleUnitKind unit_gullible_yoshi = {
     kUnitNoncombatant, // attributeFlags
     &regist_yoshi, // statusVulnerability
     1, // numParts
-    parts_yoshi, // mParts
+    parts_yoshi, // parts
     init_event_yoshi, // initEventCode
     data_table_yoshi, // dataTable
 };
@@ -88,9 +88,9 @@ static BattleWeapon enemyWeapon_YoshiNormalAttack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerFromGulliblePartyAttackLv, // hpDamageFn
     {1, 1, 1, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -112,7 +112,7 @@ static BattleWeapon enemyWeapon_YoshiNormalAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

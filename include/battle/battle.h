@@ -87,7 +87,7 @@ typedef struct BattleDebugCtrl {
     s32 flags;        // 0x0, BattleDebugFlags
     s32 pad_04;       // 0x4, never accessed
     s32 pad_08;       // 0x8, never accessed
-    s32 audienceNum;  // 0xC, mTargetAudienceCount when flags & 0x10000
+    s32 audienceNum;  // 0xC, targetAudienceCount when flags & 0x10000
     s32 audienceKind; // 0x10, 1..: forced audience kind
     s32 slotItem;     // 0x14, item_appear_force when flags & 0x80000
 } BattleDebugCtrl;
@@ -163,10 +163,10 @@ struct BattleAlliance {
 };
 
 typedef struct BattleWorkPartyInfo {
-    f32 sizeMultiplier;       // 0x0, saved BattleUnit.mSizeMultiplier
-    BtlStatusCopy statusTurns;     // 0x4, saved from BattleUnit.mSleepTurns
+    f32 sizeMultiplier;       // 0x0, saved BattleUnit.sizeMultiplier
+    BtlStatusCopy statusTurns;     // 0x4, saved from BattleUnit.sleepTurns
     u8 pad_22[0x24 - 0x22];   // 0x22, never accessed
-    s32 statusFlags;          // 0x24, saved BattleUnit.mStatusFlags
+    s32 statusFlags;          // 0x24, saved BattleUnit.statusFlags
 #ifdef VERSION_G8ME01
     u16 usCommandDisabled[2]; // US only: saved BattleUnit usCommandDisabled
 #endif
@@ -255,13 +255,13 @@ struct BattleWork {
     BattleWorkPad padWork[4];           // 0xF2C
     BattleCommand commandMenu;          // 0x171C
     BattleActions actionCommands;       // 0x1C90
-    s32 mStylishCurFrame;               // 0x271C
-    s32 mStylishWindowStart;            // 0x2720
-    s32 mStylishWindowEnd;              // 0x2724
-    s32 mStylishEndFrame;               // 0x2728
-    s32 mStylishUnitId;                 // 0x272C
-    s32 mStylishResult;                 // 0x2730
-    s32 mStylishEarlyFrames;            // 0xA2734
+    s32 stylishCurFrame;               // 0x271C
+    s32 stylishWindowStart;            // 0x2720
+    s32 stylishWindowEnd;              // 0x2724
+    s32 stylishEndFrame;               // 0x2728
+    s32 stylishUnitId;                 // 0x272C
+    s32 stylishResult;                 // 0x2730
+    s32 stylishEarlyFrames;            // 0xA2734
     FieldBattleInfo* fbatInfo;          // 0x2738
     s32 statusWindowOff;                // 0x273C
     s32 lectureMode;                    // 0x2740

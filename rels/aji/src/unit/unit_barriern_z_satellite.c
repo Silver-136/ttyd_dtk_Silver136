@@ -27,14 +27,14 @@ static EvtWord attack_event[5];
 static EvtWord wait_event[56];
 
 BattleUnitKind unit_barriern_z_satellite = {
-    UNIT_MINI_Z_YUX, // mUnitType
+    UNIT_MINI_Z_YUX, // unitType
     "btl_un_barriern_satellite_z", // name
     2, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    0, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    0, // level
+    0, // bonusExp
     0, // bonusCoin
     70, // bonusCoinRate
     0, // baseCoin
@@ -69,7 +69,7 @@ BattleUnitKind unit_barriern_z_satellite = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     6, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };

@@ -124,14 +124,14 @@ BattleUnitKindPart unitpartsdata_Party_Christine[] = {
  * status table, body part and init script. No HP gauge is drawn over her; her HP comes from the partner stats.
  */
 BattleUnitKind unitdata_Party_Christine = {
-    UNIT_GOOMBELLA, // mUnitType
+    UNIT_GOOMBELLA, // unitType
     "btl_un_christine", // name
     10, // maxHp
     5, // maxFp
-    5, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    5, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -166,7 +166,7 @@ BattleUnitKind unitdata_Party_Christine = {
     kUnitNoHpGauge, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    unitpartsdata_Party_Christine, // mParts
+    unitpartsdata_Party_Christine, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -227,9 +227,9 @@ BattleWeapon partyWeapon_ChristineNormalAttack = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
@@ -251,7 +251,7 @@ BattleWeapon partyWeapon_ChristineNormalAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyChristineAttack_NormalAttack, // mAttackEvtScript
+    partyChristineAttack_NormalAttack, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 4, 2, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -272,9 +272,9 @@ BattleWeapon partyWeapon_ChristineMonosiri = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -296,7 +296,7 @@ BattleWeapon partyWeapon_ChristineMonosiri = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyChristineAttack_Monosiri, // mAttackEvtScript
+    partyChristineAttack_Monosiri, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -315,12 +315,12 @@ BattleWeapon partyWeapon_ChristineRenzokuAttack = {
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
 #ifdef VERSION_G8ME01
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
 #else
-    2, // mStylishCommandMultiplier
+    2, // stylishCommandMultiplier
 #endif
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromPartyAttackLv, // hpDamageFn
     {1, 1, 2, 2, 3, 3, 0, 0}, // hpDamageWork
@@ -342,7 +342,7 @@ BattleWeapon partyWeapon_ChristineRenzokuAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    partyChristineAttack_RenzokuAttack, // mAttackEvtScript
+    partyChristineAttack_RenzokuAttack, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 5, 0, 0}, // stageEffectRates
 #else
@@ -364,9 +364,9 @@ BattleWeapon partyWeapon_ChristineKiss = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -390,7 +390,7 @@ BattleWeapon partyWeapon_ChristineKiss = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowChance..invisibleTime
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    partyChristineAttack_Kiss, // mAttackEvtScript
+    partyChristineAttack_Kiss, // attackEvtScript
 #ifdef VERSION_G8ME01
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
@@ -1574,11 +1574,11 @@ USER_FUNC(_set_hustle) {
         if (unit->movesRemaining <= 0) {
             unit->movesRemaining++;
             unit->moveState = 0;
-            unit->mMoveColorLv = 0xFF;
+            unit->moveColorLv = 0xFF;
             if (unit->maxMovesThisTurn <= 0) {
                 unit->maxMovesThisTurn = 1;
                 if (BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
-                    unit->mTokenFlags |= kHasRallyWinkStatus;
+                    unit->tokenFlags |= kHasRallyWinkStatus;
                 }
             }
         } else {

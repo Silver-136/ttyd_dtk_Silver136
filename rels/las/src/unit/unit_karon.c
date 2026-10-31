@@ -58,8 +58,8 @@ static USER_FUNC(honenoko_copy_status) {
     BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
     BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
 
-    unit2->mSizeChangeTurns = unit1->mSizeChangeTurns;
-    unit2->mSizeChangeStrength = unit1->mSizeChangeStrength;
+    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
+    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
     return EVT_RETURN_DONE;
 }
 
@@ -68,14 +68,14 @@ static USER_FUNC(honenoko_copy_status) {
  * status vulnerability, init event and event table.
  */
 BattleUnitKind unit_karon = {
-    UNIT_DRY_BONES, // mUnitType
+    UNIT_DRY_BONES, // unitType
     "btl_un_karon", // name
     8, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    30, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    30, // level
+    0, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
     2, // baseCoin
@@ -110,7 +110,7 @@ BattleUnitKind unit_karon = {
     kUndead, // attributeFlags
     &regist, // statusVulnerability
     6, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -167,9 +167,9 @@ static BattleWeapon weapon_honenoko_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -191,7 +191,7 @@ static BattleWeapon weapon_honenoko_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -206,9 +206,9 @@ static BattleWeapon weapon_honenoko_link_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -230,7 +230,7 @@ static BattleWeapon weapon_honenoko_link_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -239,7 +239,7 @@ static BattleWeapon weapon_honenoko_link_attack = {
  * used by call_friend_event.
  */
 static BattleUnitSetup entry_honenoko = {
-    &unit_karon, // mUnitKindParams
+    &unit_karon, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase

@@ -173,7 +173,7 @@ void btlsubResetMoveColorLvAll(BattleWork* work) {
         unit = BattleGetUnitPtr(w2, i);
         c = 0xFF;
         if (unit) {
-            unit->mMoveColorLv = c;
+            unit->moveColorLv = c;
         }
     }
 }

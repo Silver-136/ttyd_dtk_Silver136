@@ -28,14 +28,14 @@ static EvtWord wait_event[6];
  * status vulnerability, init event and event table.
  */
 BattleUnitKind unit_boss_honeduka = {
-    UNIT_CORTEZ_BONE_PILE, // mUnitType
+    UNIT_CORTEZ_BONE_PILE, // unitType
     "btl_un_honeduka", // name
     100, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    0, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    0, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -70,7 +70,7 @@ BattleUnitKind unit_boss_honeduka = {
     kUnitNoSpin | kUnitNoHpGauge | kUnitNoncombatant | kUnitHpFixed, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };

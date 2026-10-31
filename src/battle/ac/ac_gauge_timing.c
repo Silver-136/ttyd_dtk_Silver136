@@ -57,11 +57,11 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
     autoCommand = FALSE;
     cw = (GaugeWork*)ac->work;
     disp = &ac->disp;
-    if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
+    if (work->actionCommands.acUnit->badgesEquipped.AutoCommand) {
         autoCommand = TRUE;
     }
 
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 0:
             memset(disp, 0, sizeof(BattleACDispParams));
             disp->iconX = -300.0f;
@@ -72,7 +72,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             cw->frame = 0;
             cw->cnt = 0;
             work->actionCommands.outputParams[0] = 0;
-            work->actionCommands.mAcState = 99;
+            work->actionCommands.acState = 99;
             work->actionCommands.result = AC_RESULT_RUNNING;
             cw->maxFrames = work->actionCommands.params[GAUGE_PARAM_MAX_FRAMES];
             cw->inRange = 0;
@@ -112,7 +112,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
         case 99:
             break;
         case 100:
-            if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.mAcUnit->mTokenFlags & kConfusedAction)) {
+            if ((work->actionCommands.setupFlags & 1) && (work->actionCommands.acUnit->tokenFlags & kConfusedAction)) {
                 if (irand(100) >= 0) {
                     work->actionCommands.setupParam = 30;
                     cw->passed = 0;
@@ -120,13 +120,13 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                     cw->passed = 1;
                     work->actionCommands.setupParam = 30;
                 }
-                work->actionCommands.mAcState = 1002;
+                work->actionCommands.acState = 1002;
                 break;
             }
             if (cw->hold) {
-                work->actionCommands.mAcState = 1001;
+                work->actionCommands.acState = 1001;
             } else {
-                work->actionCommands.mAcState = 1000;
+                work->actionCommands.acState = 1000;
             }
         case 1000:
         case 1001:
@@ -135,7 +135,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                 case 0:
                     if (!cw->hold && BattlePadCheckNow(cw->button)) {
                         cw->phase = 1;
-                        work->actionCommands.mAcState = 1001;
+                        work->actionCommands.acState = 1001;
                         cw->frame = 0;
                         work->actionCommands.outputParams[0] = 1;
                     }
@@ -152,22 +152,22 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
                     }
                     break;
             }
-            if (work->actionCommands.mAcState == 1000) {
+            if (work->actionCommands.acState == 1000) {
                 if (cw->frame > 120) {
                     work->actionCommands.result = 0;
                     cw->gauge = 0.0f;
-                    work->actionCommands.mAcState = 1003;
+                    work->actionCommands.acState = 1003;
                     work->actionCommands.outputParams[0] = 2;
                     break;
                 }
             } else {
                 if (cw->frame > cw->maxFrames) {
                     work->actionCommands.result = 0;
-                    work->actionCommands.mAcState = 1003;
+                    work->actionCommands.acState = 1003;
                     break;
                 }
             }
-            if (work->actionCommands.mAcState == 1000) {
+            if (work->actionCommands.acState == 1000) {
                 break;
             }
             if (cw->timer <= 0) {
@@ -258,12 +258,12 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             if (cw->phase == 2) {
                 if (cw->inRange) {
                     work->actionCommands.result = AC_RESULT_SUCCESS;
-                    work->actionCommands.mResultCount++;
+                    work->actionCommands.resultCount++;
                 } else {
                     work->actionCommands.result = 0;
                     work->actionCommands.result &= ~AC_RESULT_SUCCESS;
                 }
-                work->actionCommands.mAcState = 1003;
+                work->actionCommands.acState = 1003;
             }
             break;
         case 1002:
@@ -271,7 +271,7 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             if (work->actionCommands.setupParam < 0) {
                 if (cw->passed) {
                     work->actionCommands.result = AC_RESULT_SUCCESS;
-                    work->actionCommands.mResultCount++;
+                    work->actionCommands.resultCount++;
                 } else {
                     work->actionCommands.result = 0;
                 }
@@ -280,18 +280,18 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
             }
             break;
         case 1003:
-            work->actionCommands.mAcState = 1004;
+            work->actionCommands.acState = 1004;
         case 1004:
             work->actionCommands.doneFlags |= 1;
             cw->endTimer = 60;
-            work->actionCommands.mAcState = 1005;
+            work->actionCommands.acState = 1005;
             if (cw->sfxId != -1) {
                 psndSFXOff(cw->sfxId);
             }
         case 1005:
             cw->endTimer--;
             if (cw->endTimer <= 0) {
-                work->actionCommands.mAcState = 1006;
+                work->actionCommands.acState = 1006;
             }
             break;
         case 1006:
@@ -317,7 +317,7 @@ void battleAcDisp_GaugeTiming(CameraId cameraId, void* param) {
     BattleActions* ac = &((BattleWork*)param)->actionCommands;
     BattleACDispParams* disp = &ac->disp;
 
-    switch (ac->mAcState) {
+    switch (ac->acState) {
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
         case 100:
@@ -347,7 +347,7 @@ void battleAcDisp_GaugeTiming(CameraId cameraId, void* param) {
 /** Called by btlevtcmd_StopAC: unless the command already finished, starts the end wait and stops its sound. */
 void battleAcDelete_GaugeTiming(BattleWork* work) {
     if (!(work->actionCommands.doneFlags & 1)) {
-        work->actionCommands.mAcState = 1004;
+        work->actionCommands.acState = 1004;
     }
 }
 
@@ -459,7 +459,7 @@ static void actionCommandDisp(f32 x, f32 y) {
             break;
     }
 
-    switch (ac->mAcState) {
+    switch (ac->acState) {
         case 99:
         case 100:
         case 1003:

@@ -43,21 +43,21 @@ static USER_FUNC(killer_copy_status) {
     BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
     BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
 
-    unit2->mSizeChangeTurns = unit1->mSizeChangeTurns;
-    unit2->mSizeChangeStrength = unit1->mSizeChangeStrength;
+    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
+    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
     return EVT_RETURN_DONE;
 }
 
 /** Unit data of the Bill Blaster: 5 HP, level 22; the battle starts it from init_event. */
 BattleUnitKind unit_killer_cannon = {
-    UNIT_BILL_BLASTER, // mUnitType
+    UNIT_BILL_BLASTER, // unitType
     "btl_un_killer_cannon", // name
     5, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    22, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    22, // level
+    0, // bonusExp
     3, // bonusCoin
     70, // bonusCoinRate
     3, // baseCoin
@@ -92,7 +92,7 @@ BattleUnitKind unit_killer_cannon = {
     0, // attributeFlags
     &regist, // statusVulnerability
     3, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -143,7 +143,7 @@ static BattleUnitKindPart parts[] = {
  * barrel.
  */
 static BattleUnitSetup entry_killer = {
-    &unit_killer, // mUnitKindParams
+    &unit_killer, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase

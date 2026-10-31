@@ -66,7 +66,7 @@ typedef struct AnimKeyframe {
 
 typedef struct AnimTexDelta {
     u8 step;    // 0x0, AnimTexMtx index step
-    u8 bindAdd; // 0x1, added to mTexBindIdx
+    u8 bindAdd; // 0x1, added to texBindIdx
     u8 pad_2[2];
     f32 transS; // 0x4
     f32 transT; // 0x8
@@ -112,25 +112,25 @@ typedef struct AnimTexBind {
 } AnimTexBind;
 
 struct AnimTexMtx {
-    u8 mTexBindIdx; // 0x0
+    u8 texBindIdx; // 0x0
     u8 align[3];    // 0x1, padding
-    f32 mTransS;    // 0x4
-    f32 mTransT;    // 0x8
-    f32 mScaleS;    // 0xC
-    f32 mScaleT;    // 0x10
-    f32 mRotate;    // 0x14
+    f32 transS;    // 0x4
+    f32 transT;    // 0x8
+    f32 scaleS;    // 0xC
+    f32 scaleT;    // 0x10
+    f32 rotate;    // 0x14
 };
 
 // end "AnimPoseData" substructs
 struct AnimPoseNode {
-    Vec mTranslation;         // 0x0
+    Vec translation;         // 0x0
     Vec mScale;               // 0xC
-    Vec mRot1;                // 0x18
-    Vec mRot2;                // 0x24
-    Vec mRotationCenter;      // 0x30
-    Vec mScaleCenter;         // 0x3C
-    Vec mRotationTranslation; // 0x48
-    Vec mScaleTranslation;    // 0x54
+    Vec rot1;                // 0x18
+    Vec rot2;                // 0x24
+    Vec rotationCenter;      // 0x30
+    Vec scaleCenter;         // 0x3C
+    Vec rotationTranslation; // 0x48
+    Vec scaleTranslation;    // 0x54
 };
 
 typedef struct AnimPoseGroup {
@@ -145,10 +145,10 @@ typedef struct AnimPoseGroup {
 
 // this is the structure of the actual stored files
 typedef struct AnimationPoseData {
-    u32 mSize;                     // 0x0
+    u32 size;                     // 0x0
     char fileName[64];             // 0x4
     char textureName[64];          // 0x44
-    char mBuildTime[64];           // 0x84
+    char buildTime[64];           // 0x84
     u32 flags;                     // 0xC4
     s32 radius;                    // 0xC8
     s32 height;                    // 0xCC
@@ -156,19 +156,19 @@ typedef struct AnimationPoseData {
     Vec bboxMax;                   // 0xDC
     s32 shapeCount;                // 0xE8
     u8 pad_EC[0xF0 - 0xEC];    // 0xEC, no access found
-    u32 mBufferPosNum;             // 0xF0
-    u32 mBufferPosIdxNum;          // 0xF4
-    u32 mBufferNrmNum;             // 0xF8
-    u32 mBufferNrmIdxNum;          // 0xFC
+    u32 bufferPosNum;             // 0xF0
+    u32 bufferPosIdxNum;          // 0xF4
+    u32 bufferNrmNum;             // 0xF8
+    u32 bufferNrmIdxNum;          // 0xFC
     u8 pad_100[0x12C - 0x100]; // 0x100, no access found
-    u32 mBufferTexAnimNum;         // 0x12C
+    u32 bufferTexAnimNum;         // 0x12C
     s32 texDataCount;              // 0x130
     s32 texBindCount;              // 0x134
     u8 pad_138[0x13C - 0x138]; // 0x138, no access found
-    u32 mBufferVisibilityNum;      // 0x13C
-    u32 mBufferNodeNum;            // 0x140
+    u32 bufferVisibilityNum;      // 0x13C
+    u32 bufferNodeNum;            // 0x140
     s32 groupCount;                // 0x144
-    s32 mAnimCount;                // 0x148
+    s32 animCount;                // 0x148
     AnimPoseShape* shapes;         // 0x14C
     AnimDrawCallEntry* drawCalls;  // 0x150, finished name
     Vec* bufferVtxPos;             // 0x154
@@ -186,7 +186,7 @@ typedef struct AnimationPoseData {
     s8* groupVisibility;           // 0x1A0, copied into the pose buffer each keyframe reset
     f32* nodeData;        // 0x1A4, copied into the pose buffer each keyframe reset
     AnimPoseGroup* groups;         // 0x1A8
-    AnimTableEntry* mpAnims;       // 0x1AC
+    AnimTableEntry* anims;       // 0x1AC
 } AnimationPoseData;
 
 // AnimationPose.flags, named from their setters and drawing consumers. The kururing capture in evt_mobj
@@ -238,23 +238,23 @@ typedef struct AnimationPose {
     s32 lastFrameZero;                  // 0x3C
     f32 lastFrameTime;                  // 0x40
     f32 localTimeRate;                  // 0x44
-    Vec* mpBufferVtxPos;                // 0x48
-    Vec* mpVtxArrayPos;                 // 0x4C
-    Vec* mpBufferVtxNrm;                // 0x50
-    Vec* mpVtxArrayNrm;                 // 0x54
-    s8* mpBufferGroupVisibility;        // 0x58
-    s8* mpGroupVisibility;              // 0x5C
-    f32* mpBufferNode;         // 0x60
-    f32* mpNodes;              // 0x64
-    AnimTexMtx* mpBufferTexAnimEntries; // 0x68
-    AnimTexMtx* mpTexAnimEntries;       // 0x6C
+    Vec* bufferVtxPos;                // 0x48
+    Vec* vtxArrayPos;                 // 0x4C
+    Vec* bufferVtxNrm;                // 0x50
+    Vec* vtxArrayNrm;                 // 0x54
+    s8* bufferGroupVisibility;        // 0x58
+    s8* groupVisibility;              // 0x5C
+    f32* bufferNode;         // 0x60
+    f32* nodes;              // 0x64
+    AnimTexMtx* bufferTexAnimEntries; // 0x68
+    AnimTexMtx* texAnimEntries;       // 0x6C
     f32 peraRotY;                       // 0x70, base Y rotation for the paper turn (flags & 8)
     f32 rotationY;                      // 0x74
     f32 scaleZFlip;                     // 0x78, -1.0f mirrors Z (NpcEntry wScaleZ_flip)
     f32 peraTargetRotY;                 // 0x7C, rotationY turns toward this; animPoseGetPeraEnd checks it
     s32 curKeyValue;                    // 0x80, AnimValueKey.value of valueKeyIdx; not read in C
     f32 loopTime;                       // 0x84
-    OSTime mLocalTimeInit;              // 0x88
+    OSTime localTimeInit;              // 0x88
     s32 paperId;                        // 0x90
     s32 paperAnimIdx;                  // 0x94, paper anim index from animPoseGetAnimIdx, -1 = none (not a string; passed to animPoseSetAnim as its name arg)
     struct smartEntry* paperCapture0;   // 0x98, smartEntry of the paper capture texture
@@ -309,13 +309,13 @@ typedef struct AnimationWork {
     s32 totalTextures;                // 0xC
     AnimationPose* poses;             // 0x10
     s32 totalPoses;                   // 0x14
-    AnimationPose* mpCurPose;         // 0x18
-    AnimData* mpCurAnimData;          // 0x1C
-    AnimationPoseData* mpCurPoseData; // 0x20
-    void* mpTexDatas[2];              // 0x24
-    void* mpCurTexData;               // 0x2C
-    GXTexObj* mpTexObjs[2];           // 0x30
-    GXTexObj* mpCurTexObj;            // 0x38
+    AnimationPose* curPose;         // 0x18
+    AnimData* curAnimData;          // 0x1C
+    AnimationPoseData* curPoseData; // 0x20
+    void* texDatas[2];              // 0x24
+    void* curTexData;               // 0x2C
+    GXTexObj* texObjs[2];           // 0x30
+    GXTexObj* curTexObj;            // 0x38
     Mtx paperMtx[3];                  // 0x3C
     Mtx* paperMtxPtr[3];              // 0xCC
     u32 paperTexMode0;                   // 0xD8, animSetPaperTexObj a7 (both fields get it); == 0 tested with texChange1 in the paper draw path
@@ -323,9 +323,9 @@ typedef struct AnimationWork {
     s32 currDispMode;                 // 0xE0
     u8 pad_E4[0xE8 - 0xE4];       // 0xE4, never accessed
     u32 mbUseFloatScratch;            // 0xE8
-    Vec* mpFloatScratch;              // 0xEC
-    s32 mFloatScratchRP;              // 0xF0
-    s32 mFloatScratchWP;              // 0xF4
+    Vec* floatScratch;              // 0xEC
+    s32 floatScratchRP;              // 0xF0
+    s32 floatScratchWP;              // 0xF4
     Vec* vtxArrayPos;                 // 0xF8
     Vec* vtxArrayNrm;                 // 0xFC
     FileEntry* mp_ag2tg;              // 0x100

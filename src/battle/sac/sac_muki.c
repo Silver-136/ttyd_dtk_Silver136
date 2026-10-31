@@ -112,9 +112,9 @@ static BattleWeapon weapon = {
     3, // baseSpCost
     0, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     5, // reserved_19
-    100, // mBingoSlotChance
+    100, // bingoSlotChance
     50, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -135,7 +135,7 @@ static BattleWeapon weapon = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    marioAttackEvent_Muki, // mAttackEvtScript
+    marioAttackEvent_Muki, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -658,7 +658,7 @@ static void main_star(void) {
         w->star.timer = 0;
         w->star.eff = effStarStoneEntry(2, 0.0f, -1000.0f, 0.0f, 1.0f);
         BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
-        w->star.pos.y += mario->mSizeMultiplier * (f32)mario->mHeight + 37.0f;
+        w->star.pos.y += mario->sizeMultiplier * (f32)mario->height + 37.0f;
         w->star.from = w->star.pos;
         w->star.to = w->star.pos;
         w->star.to.y += 50.0f;

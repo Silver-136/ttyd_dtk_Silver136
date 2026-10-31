@@ -114,19 +114,19 @@ typedef enum AcGaugeTimingFlags {
 } AcGaugeTimingFlags;
 
 typedef struct BattleActions {
-    struct BattleUnit* mAcUnit;      // 0x0
+    struct BattleUnit* acUnit;      // 0x0
     s32 setupFlags;                  // 0x4, BattleActionCommandSetup a4; bit0: auto-play while confused
     s32 setupParam;                  // 0x8, BattleActionCommandSetup a5
-    s32 mAcState;                    // 0xC
+    s32 acState;                    // 0xC
     BattleACMainCallback maincb;     // 0x10
     BattleACResultCallback resultcb; // 0x14
     DispCallback dispcb;             // 0x18
     BattleACDeleteCallback deletecb; // 0x1C
-    s32 mDefenseResult;              // 0x20
-    s32 mResultCount;                // 0x24
+    s32 defenseResult;              // 0x20
+    s32 resultCount;                // 0x24
     s32 result;                      // 0x28, BattleACResultFlags
-    s8 mBaseAcDifficulty;            // 0x2C
-    u8 mAcDifficulty;                // 0x2D
+    s8 baseAcDifficulty;            // 0x2C
+    u8 acDifficulty;                // 0x2D
     u8 pad_2E[2];                    // 0x2E, never accessed
     s32 doneFlags;                   // 0x30, bit 1: AC finished (delete handler forces the end state otherwise)
     u32 acFlags;                     // 0x34, btlevtcmd_AcSetFlag; Ac<Command>Flags above

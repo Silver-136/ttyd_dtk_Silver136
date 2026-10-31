@@ -37,14 +37,14 @@ static EvtWord attack_event[2];
  * cracking and breaking.
  */
 BattleUnitKind unit_koura = {
-    UNIT_SHELL_SHIELD, // mUnitType
+    UNIT_SHELL_SHIELD, // unitType
     "btl_un_koura", // name
     8, // maxHp
     0, // maxFp
-    5, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    5, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -79,7 +79,7 @@ BattleUnitKind unit_koura = {
     kUnitNoncombatant, // attributeFlags
     &regist, // statusVulnerability
     2, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };

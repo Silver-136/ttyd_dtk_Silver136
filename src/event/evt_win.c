@@ -212,11 +212,11 @@ void unitwin_point_disp(WinMgrEntry* entry) {
             GXColor c = {0xFF, 0xFF, 0xFF, 0xFF};
             iconNumberDispGx(trans, wp->coinDisp, 0, c);
         }
-        d = pouch->mShopPoints - wp->coinDisp;
+        d = pouch->shopPoints - wp->coinDisp;
         if (d) {
             d /= 10;
             if (!d) {
-                d = pouch->mShopPoints > wp->coinDisp ? 1 : -1;
+                d = pouch->shopPoints > wp->coinDisp ? 1 : -1;
             }
             wp->coinDisp += d;
         }
@@ -650,10 +650,10 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
         PSMTXTrans(mtx, -126.0f, -168.0f, 0.0f);
         iconNumberDispGx(mtx, wp->coinDisp, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
         if (!(gp->retraceCount & 3)) {
-            if ((delta = pouch->mShineSpriteCount - wp->coinDisp)) {
+            if ((delta = pouch->shineSpriteCount - wp->coinDisp)) {
                 delta /= 10;
                 if (!delta) {
-                    delta = pouch->mShineSpriteCount > wp->coinDisp ? 1 : -1;
+                    delta = pouch->shineSpriteCount > wp->coinDisp ? 1 : -1;
                 }
                 wp->coinDisp += delta;
             }

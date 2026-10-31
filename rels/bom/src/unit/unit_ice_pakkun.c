@@ -46,14 +46,14 @@ static EvtWord wait_event[6];
 
 /** Unit data of the Frost Piranha: 10 HP, level 26; the battle starts it from init_event. */
 BattleUnitKind unit_ice_pakkun = {
-    UNIT_FROST_PIRANHA, // mUnitType
+    UNIT_FROST_PIRANHA, // unitType
     "btl_un_ice_pakkun", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    26, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    26, // level
+    0, // bonusExp
     3, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -88,7 +88,7 @@ BattleUnitKind unit_ice_pakkun = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -143,9 +143,9 @@ static BattleWeapon weapon_ice_pakkun_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -170,7 +170,7 @@ static BattleWeapon weapon_ice_pakkun_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

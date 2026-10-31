@@ -405,35 +405,35 @@ typedef struct PouchData {
     f32 audienceCount;                 // 0x84
     s16 rank;                          // 0x88
     s16 level;                         // 0x8A
-    u16 mStarPowersObtained;           // 0x8C, bitmask
+    u16 starPowersObtained;           // 0x8C, bitmask
     s16 baseMaxHP;                     // 0x8E
     s16 baseMaxFP;                     // 0x90
     s16 availableBP;                   // 0x92
     s16 maximumBP;                     // 0x94
-    s16 mStarPoints;                   // 0x96
+    s16 starPoints;                   // 0x96
     s8 jumpLevel;                      // 0x98
     s8 hammerLevel;                    // 0x99
-    s16 mStarPieceCount;               // 0x9A
-    s16 mShineSpriteCount;             // 0x9C
-    u16 mPowerBounceRecord;            // 0x9E, Pit of 100 Trials
+    s16 starPieceCount;               // 0x9A
+    s16 shineSpriteCount;             // 0x9C
+    u16 powerBounceRecord;            // 0x9E, Pit of 100 Trials
     s16 keyItems[MAX_KEY_ITEMS];       // 0xA0
     s16 heldItems[MAX_HELD_ITEMS];     // 0x192
     s16 storedItems[MAX_STORED_ITEMS]; // 0x1BA
     s16 badges[MAX_BADGES];            // 0x1FA
     s16 equippedBadges[MAX_BADGES];    // 0x38A
-    u8 mEmailIds[100];                 // 0x51A
+    u8 emailIds[100];                 // 0x51A
     u8 pad_57E[2];                 // 0x57E, never accessed
-    u32 mEmailReceivedFlags[4];        // 0x580
-    u32 mEmailReadFlags[4];            // 0x590
+    u32 emailReceivedFlags[4];        // 0x580
+    u32 emailReadFlags[4];            // 0x590
     u8 pad_5A0[0x10];              // 0x5A0, never accessed
-    s16 mShopPoints;                   // 0x5B0
+    s16 shopPoints;                   // 0x5B0
     u8 pad_5B2[2];                 // 0x5B2, never accessed
     u32 shopPointRewardFlags; //0x5B4, bit i = shop point reward i claimed (evt_shop.c)
-    u8 mMerleeCurseUsesRemaining;      // 0x5B8
-    s8 mTurnsUntilMerleeActivation;    // 0x5B9
-    u8 mMerleeNextCurseType;           // 0x5BA
-    u8 mSuperBowserCoins;              // 0x5BB
-    u32 mSuperBowserScore;             // 0x5BC
+    u8 merleeCurseUsesRemaining;      // 0x5B8
+    s8 turnsUntilMerleeActivation;    // 0x5B9
+    u8 merleeNextCurseType;           // 0x5BA
+    u8 superBowserCoins;              // 0x5BB
+    u32 superBowserScore;             // 0x5BC
     char yoshiName[16];                // 0x5C0
     u8 pad_5D0[4];                 // 0x5D0, never accessed
 } PouchData;

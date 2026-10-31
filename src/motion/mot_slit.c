@@ -529,14 +529,14 @@ static inline BOOL slitContinueChk(void) {
 }
 
 #ifdef VERSION_G8ME01
-#define SPEEDCHK_COND(m) ((m)->baseSpeed >= (m)->mBaseDashSpeed || (m)->controlStickSensitivity)
+#define SPEEDCHK_COND(m) ((m)->baseSpeed >= (m)->baseDashSpeed || (m)->controlStickSensitivity)
 #else
-#define SPEEDCHK_COND(m) ((m)->baseSpeed >= (m)->mBaseDashSpeed)
+#define SPEEDCHK_COND(m) ((m)->baseSpeed >= (m)->baseDashSpeed)
 #endif
 
 // Back from dashing to walking speed.
 static inline void slitSpeedDown(MarioWork* m) {
-    m->baseSpeed = m->mBaseWalkSpeed;
+    m->baseSpeed = m->baseWalkSpeed;
     if (!(m->trigFlags & MARIO_TRIG_FLAG_SLIT_KEEP_POSE)) {
         marioChgPose("M_R_1");
     }
@@ -550,7 +550,7 @@ static inline void slitSpeedDown(MarioWork* m) {
  */
 static inline f32 slitWalkSpeed(void) {
     MarioWork* p = marioGetPtr();
-    f32 spd = p->mBaseWalkSpeed;
+    f32 spd = p->baseWalkSpeed;
     if (p->flags & MARIO_FLAG_PAPER_MODE) {
         if (p->mot.slit.timer != 0) {
             return spd;
@@ -688,7 +688,7 @@ void mot_slit(void) {
             }
             m->directionView = toMovedirSimple(m->displayDirection);
         }
-        if (m->baseSpeed >= m->mBaseDashSpeed) {
+        if (m->baseSpeed >= m->baseDashSpeed) {
             slitSpeedDown(m);
         }
         m->displayDirection = 270.0f;
@@ -718,7 +718,7 @@ void mot_slit(void) {
             }
             break;
         }
-        if (m->baseSpeed >= m->mBaseDashSpeed) {
+        if (m->baseSpeed >= m->baseDashSpeed) {
             slitSpeedDown(m);
         }
         if (marioChkKey()) {

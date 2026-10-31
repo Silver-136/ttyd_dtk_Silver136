@@ -75,9 +75,9 @@ BattleWeapon weapon_kamec_obaba_attack_magic = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -99,7 +99,7 @@ BattleWeapon weapon_kamec_obaba_attack_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -111,9 +111,9 @@ BattleWeapon weapon_kamec_obaba_dekadeka_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -138,7 +138,7 @@ BattleWeapon weapon_kamec_obaba_dekadeka_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -150,9 +150,9 @@ BattleWeapon weapon_kamec_obaba_biribiri_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -177,7 +177,7 @@ BattleWeapon weapon_kamec_obaba_biribiri_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // galeForceChance..fpRegenTime
     0, // fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -189,9 +189,9 @@ BattleWeapon weapon_kamec_obaba_katikati_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -217,7 +217,7 @@ BattleWeapon weapon_kamec_obaba_katikati_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -229,9 +229,9 @@ BattleWeapon weapon_kamec_obaba_trans_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -255,7 +255,7 @@ BattleWeapon weapon_kamec_obaba_trans_magic = {
     3, // invisibleTime
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -267,9 +267,9 @@ BattleWeapon weapon_kamec_obaba_recover_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -291,7 +291,7 @@ BattleWeapon weapon_kamec_obaba_recover_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -300,14 +300,14 @@ BattleWeapon weapon_kamec_obaba_recover_magic = {
  * names its parts, status table and init script.
  */
 BattleUnitKind unit_boss_kamec_obaba = {
-    UNIT_KAMMY_KOOPA, // mUnitType
+    UNIT_KAMMY_KOOPA, // unitType
     "btl_un_kamec_obaba", // name
     50, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    48, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    48, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -342,7 +342,7 @@ BattleUnitKind unit_boss_kamec_obaba = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     2, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -1247,14 +1247,14 @@ USER_FUNC(eff_magic_support) {
     BtlUnit_GetPos(unit, &x, &y, &z);
     switch (type) {
         case 0:
-            x += 30.0f * unit->mSizeMultiplier * unit->faceDirection;
-            y += 10.0f * unit->mSizeMultiplier;
+            x += 30.0f * unit->sizeMultiplier * unit->faceDirection;
+            y += 10.0f * unit->sizeMultiplier;
             z += 5.0f;
             effStardustEntry(6, 5, 30, x, y, z, 40.0f, 40.0f);
             break;
         case 1:
-            x += 30.0f * unit->mSizeMultiplier * unit->faceDirection;
-            y += 50.0f * unit->mSizeMultiplier;
+            x += 30.0f * unit->sizeMultiplier * unit->faceDirection;
+            y += 50.0f * unit->sizeMultiplier;
             z += 5.0f;
             effStardustEntry(6, 5, 30, x, y, z, 40.0f, 40.0f);
             break;
@@ -1286,12 +1286,12 @@ static USER_FUNC(eff_magic) {
 
     BtlUnit_GetPos(unit, &x, &y, &z);
     // from the tip of the wand
-    x += 28.0f * unit->mSizeMultiplier * unit->faceDirection;
-    y += 20.0f * unit->mSizeMultiplier;
+    x += 28.0f * unit->sizeMultiplier * unit->faceDirection;
+    y += 20.0f * unit->sizeMultiplier;
     z += 5.0f;
     eff = effMagic1N64Entry(0, type, x, y, z, tx, ty, tz);
     unit->work[KAMEC_OBABA_WORK_MAGIC_EFFECT] = (EvtWord)eff;
-    ((EffMagic1N64Work*)eff->userdata)->scale = unit->mSizeMultiplier;
+    ((EffMagic1N64Work*)eff->userdata)->scale = unit->sizeMultiplier;
     return EVT_RETURN_DONE;
 }
 
@@ -1315,10 +1315,10 @@ static USER_FUNC(eff_staff) {
         return EVT_RETURN_DONE;
     }
     wk = ((EffectEntry*)unit->work[KAMEC_OBABA_WORK_STAFF_EFFECT])->userdata;
-    wk[10] = unit->mSizeMultiplier;
+    wk[10] = unit->sizeMultiplier;
     BtlUnit_GetPos(unit, &x, &y, &z);
-    wk[2] = x + 30.0f * unit->mSizeMultiplier * unit->faceDirection;
-    wk[3] = y + 35.0f * unit->mSizeMultiplier;
+    wk[2] = x + 30.0f * unit->sizeMultiplier * unit->faceDirection;
+    wk[3] = y + 35.0f * unit->sizeMultiplier;
     wk[4] = 5.0f + z;
     return EVT_RETURN_BLOCK;
 }

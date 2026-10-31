@@ -275,10 +275,10 @@ BattleStageObjectData las_btlobject_data[] = {
  */
 BattleStageData las_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_08_5", // mSpecificStageDataDir
-        9, // mNumObjects
-        las_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_08_5", // specificStageDataDir
+        9, // numObjects
+        las_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x210006F, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgBEvt
@@ -286,70 +286,70 @@ BattleStageData las_btlstage_data[] = {
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_08_0", // mSpecificStageDataDir
-        2, // mNumObjects
-        &las_btlobject_data[9], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_08_0", // specificStageDataDir
+        2, // numObjects
+        &las_btlobject_data[9], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_08_0", // mSpecificStageDataDir
-        4, // mNumObjects
-        &las_btlobject_data[11], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_08_0", // specificStageDataDir
+        4, // numObjects
+        &las_btlobject_data[11], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_08_2", // mSpecificStageDataDir
-        1, // mNumObjects
-        &las_btlobject_data[15], // mObjects
-        {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
-        {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
-        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
-        0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
-    },
-    {
-        "bti_01", // mGlobalStageDataDir
-        "stg_08_2", // mSpecificStageDataDir
-        3, // mNumObjects
-        &las_btlobject_data[16], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_08_2", // specificStageDataDir
+        1, // numObjects
+        &las_btlobject_data[15], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_08_4", // mSpecificStageDataDir
-        6, // mNumObjects
-        &las_btlobject_data[19], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_08_2", // specificStageDataDir
+        3, // numObjects
+        &las_btlobject_data[16], // objects
+        {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
+        {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
+        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
+        0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
+    },
+    {
+        "bti_01", // globalStageDataDir
+        "stg_08_4", // specificStageDataDir
+        6, // numObjects
+        &las_btlobject_data[19], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_08_4", // mSpecificStageDataDir
-        1, // mNumObjects
-        &las_btlobject_data[25], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_08_4", // specificStageDataDir
+        1, // numObjects
+        &las_btlobject_data[25], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
         0, 0, 0, 0, // reserved_1B0..disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_08_6", // mSpecificStageDataDir
-        8, // mNumObjects
-        &las_btlobject_data[26], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_08_6", // specificStageDataDir
+        8, // numObjects
+        &las_btlobject_data[26], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100070, 0x10000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x210006F, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         stg_08_6_init_event, // initEvt
@@ -359,10 +359,10 @@ BattleStageData las_btlstage_data[] = {
         1, // disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_08_1", // mSpecificStageDataDir
-        2, // mNumObjects
-        &las_btlobject_data[34], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_08_1", // specificStageDataDir
+        2, // numObjects
+        &las_btlobject_data[34], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         stg_08_1_init_event, // initEvt
@@ -372,10 +372,10 @@ BattleStageData las_btlstage_data[] = {
         1, // disableBgBDestroy
     },
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_08_3", // mSpecificStageDataDir
-        2, // mNumObjects
-        &las_btlobject_data[36], // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_08_3", // specificStageDataDir
+        2, // numObjects
+        &las_btlobject_data[36], // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -385,7 +385,7 @@ BattleStageData las_btlstage_data[] = {
 
 BattleUnitSetup btlparty_las_las_05_01[] = {
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -395,7 +395,7 @@ BattleUnitSetup btlparty_las_las_05_01[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -405,7 +405,7 @@ BattleUnitSetup btlparty_las_las_05_01[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_black_karon, // mUnitKindParams
+        &unit_black_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -415,7 +415,7 @@ BattleUnitSetup btlparty_las_las_05_01[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -425,7 +425,7 @@ BattleUnitSetup btlparty_las_las_05_01[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -448,7 +448,7 @@ BattleGroupSetup btlgrp_las_las_05_01 = {
 
 BattleUnitSetup btlparty_las_las_17_01_off_1[] = {
     {
-        &unit_honenoko, // mUnitKindParams
+        &unit_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -471,7 +471,7 @@ BattleGroupSetup btlgrp_las_las_17_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_17_02_off_1[] = {
     {
-        &unit_red_honenoko, // mUnitKindParams
+        &unit_red_honenoko, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -494,7 +494,7 @@ BattleGroupSetup btlgrp_las_las_17_02_off_1 = {
 
 BattleUnitSetup btlparty_las_las_17_03_off_1[] = {
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -517,7 +517,7 @@ BattleGroupSetup btlgrp_las_las_17_03_off_1 = {
 
 BattleUnitSetup btlparty_las_las_17_04_off_1[] = {
     {
-        &unit_black_karon, // mUnitKindParams
+        &unit_black_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -540,7 +540,7 @@ BattleGroupSetup btlgrp_las_las_17_04_off_1 = {
 
 BattleUnitSetup btlparty_las_las_09_rampell[] = {
     {
-        &unit_boss_rampell_las, // mUnitKindParams
+        &unit_boss_rampell_las, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -563,7 +563,7 @@ BattleGroupSetup btlgrp_las_las_09_rampell = {
 
 BattleUnitSetup btlparty_las_las_bunbaba[] = {
     {
-        &unit_boss_bunbaba, // mUnitKindParams
+        &unit_boss_bunbaba, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -586,7 +586,7 @@ BattleGroupSetup btlgrp_las_las_bunbaba = {
 
 BattleUnitSetup btlparty_las_las_28_batten_leader[] = {
     {
-        &unit_boss_batten_leader, // mUnitKindParams
+        &unit_boss_batten_leader, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -609,7 +609,7 @@ BattleGroupSetup btlgrp_las_las_28_batten_leader = {
 
 BattleUnitSetup btlparty_las_las_28_koopa[] = {
     {
-        &unit_boss_koopa, // mUnitKindParams
+        &unit_boss_koopa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -632,7 +632,7 @@ BattleGroupSetup btlgrp_las_las_28_koopa = {
 
 BattleUnitSetup btlparty_las_las_29_black_peach_1[] = {
     {
-        &unit_boss_black_peach, // mUnitKindParams
+        &unit_boss_black_peach, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -655,7 +655,7 @@ BattleGroupSetup btlgrp_las_las_29_black_peach_1 = {
 
 BattleUnitSetup btlparty_las_las_29_black_peach_2[] = {
     {
-        &unit_boss_black_peach, // mUnitKindParams
+        &unit_boss_black_peach, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -678,7 +678,7 @@ BattleGroupSetup btlgrp_las_las_29_black_peach_2 = {
 
 BattleUnitSetup btlparty_las_las_01_01_off_1[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -688,7 +688,7 @@ BattleUnitSetup btlparty_las_las_01_01_off_1[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -712,7 +712,7 @@ BattleGroupSetup btlgrp_las_las_01_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_01_02_off_1[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -722,7 +722,7 @@ BattleUnitSetup btlparty_las_las_01_02_off_1[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -732,7 +732,7 @@ BattleUnitSetup btlparty_las_las_01_02_off_1[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -756,7 +756,7 @@ BattleGroupSetup btlgrp_las_las_01_02_off_1 = {
 
 BattleUnitSetup btlparty_las_las_01_03_off_1[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -766,7 +766,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_1[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -776,7 +776,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_1[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -786,7 +786,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_1[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -810,7 +810,7 @@ BattleGroupSetup btlgrp_las_las_01_03_off_1 = {
 
 BattleUnitSetup btlparty_las_las_01_01_off_2[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -820,7 +820,7 @@ BattleUnitSetup btlparty_las_las_01_01_off_2[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -844,7 +844,7 @@ BattleGroupSetup btlgrp_las_las_01_01_off_2 = {
 
 BattleUnitSetup btlparty_las_las_01_02_off_2[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -854,7 +854,7 @@ BattleUnitSetup btlparty_las_las_01_02_off_2[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -864,7 +864,7 @@ BattleUnitSetup btlparty_las_las_01_02_off_2[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -888,7 +888,7 @@ BattleGroupSetup btlgrp_las_las_01_02_off_2 = {
 
 BattleUnitSetup btlparty_las_las_01_03_off_2[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -898,7 +898,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_2[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -908,7 +908,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_2[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -918,7 +918,7 @@ BattleUnitSetup btlparty_las_las_01_03_off_2[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -942,7 +942,7 @@ BattleGroupSetup btlgrp_las_las_01_03_off_2 = {
 
 BattleUnitSetup btlparty_las_las_02_01_off_1[] = {
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -952,7 +952,7 @@ BattleUnitSetup btlparty_las_las_02_01_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -976,7 +976,7 @@ BattleGroupSetup btlgrp_las_las_02_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_02_02_off_1[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -986,7 +986,7 @@ BattleUnitSetup btlparty_las_las_02_02_off_1[] = {
         battle_item_basabasa_chururu, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -996,7 +996,7 @@ BattleUnitSetup btlparty_las_las_02_02_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1020,7 +1020,7 @@ BattleGroupSetup btlgrp_las_las_02_02_off_1 = {
 
 BattleUnitSetup btlparty_las_las_02_03_off_1[] = {
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1030,7 +1030,7 @@ BattleUnitSetup btlparty_las_las_02_03_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1040,7 +1040,7 @@ BattleUnitSetup btlparty_las_las_02_03_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1064,7 +1064,7 @@ BattleGroupSetup btlgrp_las_las_02_03_off_1 = {
 
 BattleUnitSetup btlparty_las_las_02_04_off_1[] = {
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1074,7 +1074,7 @@ BattleUnitSetup btlparty_las_las_02_04_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1084,7 +1084,7 @@ BattleUnitSetup btlparty_las_las_02_04_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1094,7 +1094,7 @@ BattleUnitSetup btlparty_las_las_02_04_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1118,7 +1118,7 @@ BattleGroupSetup btlgrp_las_las_02_04_off_1 = {
 
 BattleUnitSetup btlparty_las_las_02_05_off_1[] = {
     {
-        &unit_super_killer_cannon, // mUnitKindParams
+        &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1128,7 +1128,7 @@ BattleUnitSetup btlparty_las_las_02_05_off_1[] = {
         battle_item_super_killer_cannon, // itemDropTable
     },
     {
-        &unit_super_killer_cannon, // mUnitKindParams
+        &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1152,7 +1152,7 @@ BattleGroupSetup btlgrp_las_las_02_05_off_1 = {
 
 BattleUnitSetup btlparty_las_las_02_06_off_1[] = {
     {
-        &unit_super_killer_cannon, // mUnitKindParams
+        &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1162,7 +1162,7 @@ BattleUnitSetup btlparty_las_las_02_06_off_1[] = {
         battle_item_super_killer_cannon, // itemDropTable
     },
     {
-        &unit_super_killer_cannon, // mUnitKindParams
+        &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1186,7 +1186,7 @@ BattleGroupSetup btlgrp_las_las_02_06_off_1 = {
 
 BattleUnitSetup btlparty_las_las_02_99_off_1[] = {
     {
-        &unit_super_killer, // mUnitKindParams
+        &unit_super_killer, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1196,7 +1196,7 @@ BattleUnitSetup btlparty_las_las_02_99_off_1[] = {
         battle_item_super_killer, // itemDropTable
     },
     {
-        &unit_super_killer, // mUnitKindParams
+        &unit_super_killer, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1220,7 +1220,7 @@ BattleGroupSetup btlgrp_las_las_02_99_off_1 = {
 
 BattleUnitSetup btlparty_las_las_03_01_off_1[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1244,7 +1244,7 @@ BattleGroupSetup btlgrp_las_las_03_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_03_02_off_1[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1268,7 +1268,7 @@ BattleGroupSetup btlgrp_las_las_03_02_off_1 = {
 
 BattleUnitSetup btlparty_las_las_03_03_off_1[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1292,7 +1292,7 @@ BattleGroupSetup btlgrp_las_las_03_03_off_1 = {
 
 BattleUnitSetup btlparty_las_las_03_01_off_2[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1316,7 +1316,7 @@ BattleGroupSetup btlgrp_las_las_03_01_off_2 = {
 
 BattleUnitSetup btlparty_las_las_03_02_off_2[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1340,7 +1340,7 @@ BattleGroupSetup btlgrp_las_las_03_02_off_2 = {
 
 BattleUnitSetup btlparty_las_las_03_03_off_2[] = {
     {
-        &unit_basabasa_chururu, // mUnitKindParams
+        &unit_basabasa_chururu, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1364,7 +1364,7 @@ BattleGroupSetup btlgrp_las_las_03_03_off_2 = {
 
 BattleUnitSetup btlparty_las_las_04_01_off_1[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1388,7 +1388,7 @@ BattleGroupSetup btlgrp_las_las_04_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_06_01_off_1[] = {
     {
-        &unit_super_killer_cannon, // mUnitKindParams
+        &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1398,7 +1398,7 @@ BattleUnitSetup btlparty_las_las_06_01_off_1[] = {
         battle_item_super_killer_cannon, // itemDropTable
     },
     {
-        &unit_super_killer_cannon, // mUnitKindParams
+        &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1422,7 +1422,7 @@ BattleGroupSetup btlgrp_las_las_06_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_06_02_off_1[] = {
     {
-        &unit_super_killer_cannon, // mUnitKindParams
+        &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1432,7 +1432,7 @@ BattleUnitSetup btlparty_las_las_06_02_off_1[] = {
         battle_item_super_killer_cannon, // itemDropTable
     },
     {
-        &unit_super_killer_cannon, // mUnitKindParams
+        &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1456,7 +1456,7 @@ BattleGroupSetup btlgrp_las_las_06_02_off_1 = {
 
 BattleUnitSetup btlparty_las_las_06_03_off_1[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1466,7 +1466,7 @@ BattleUnitSetup btlparty_las_las_06_03_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1490,7 +1490,7 @@ BattleGroupSetup btlgrp_las_las_06_03_off_1 = {
 
 BattleUnitSetup btlparty_las_las_06_04_off_1[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1500,7 +1500,7 @@ BattleUnitSetup btlparty_las_las_06_04_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1510,7 +1510,7 @@ BattleUnitSetup btlparty_las_las_06_04_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1520,7 +1520,7 @@ BattleUnitSetup btlparty_las_las_06_04_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1544,7 +1544,7 @@ BattleGroupSetup btlgrp_las_las_06_04_off_1 = {
 
 BattleUnitSetup btlparty_las_las_06_05_off_1[] = {
     {
-        &unit_super_killer_cannon, // mUnitKindParams
+        &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1554,7 +1554,7 @@ BattleUnitSetup btlparty_las_las_06_05_off_1[] = {
         battle_item_super_killer_cannon, // itemDropTable
     },
     {
-        &unit_super_killer_cannon, // mUnitKindParams
+        &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1578,7 +1578,7 @@ BattleGroupSetup btlgrp_las_las_06_05_off_1 = {
 
 BattleUnitSetup btlparty_las_las_06_06_off_1[] = {
     {
-        &unit_super_killer_cannon, // mUnitKindParams
+        &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1588,7 +1588,7 @@ BattleUnitSetup btlparty_las_las_06_06_off_1[] = {
         battle_item_super_killer_cannon, // itemDropTable
     },
     {
-        &unit_super_killer_cannon, // mUnitKindParams
+        &unit_super_killer_cannon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1612,7 +1612,7 @@ BattleGroupSetup btlgrp_las_las_06_06_off_1 = {
 
 BattleUnitSetup btlparty_las_las_06_99_off_1[] = {
     {
-        &unit_super_killer, // mUnitKindParams
+        &unit_super_killer, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1622,7 +1622,7 @@ BattleUnitSetup btlparty_las_las_06_99_off_1[] = {
         battle_item_super_killer, // itemDropTable
     },
     {
-        &unit_super_killer, // mUnitKindParams
+        &unit_super_killer, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1646,7 +1646,7 @@ BattleGroupSetup btlgrp_las_las_06_99_off_1 = {
 
 BattleUnitSetup btlparty_las_las_07_01_off_1[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1656,7 +1656,7 @@ BattleUnitSetup btlparty_las_las_07_01_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1666,7 +1666,7 @@ BattleUnitSetup btlparty_las_las_07_01_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1690,7 +1690,7 @@ BattleGroupSetup btlgrp_las_las_07_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_07_02_off_1[] = {
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1700,7 +1700,7 @@ BattleUnitSetup btlparty_las_las_07_02_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1710,7 +1710,7 @@ BattleUnitSetup btlparty_las_las_07_02_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1734,7 +1734,7 @@ BattleGroupSetup btlgrp_las_las_07_02_off_1 = {
 
 BattleUnitSetup btlparty_las_las_07_03_off_1[] = {
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1744,7 +1744,7 @@ BattleUnitSetup btlparty_las_las_07_03_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_karon, // mUnitKindParams
+        &unit_karon, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1754,7 +1754,7 @@ BattleUnitSetup btlparty_las_las_07_03_off_1[] = {
         battle_item_karon, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -1778,7 +1778,7 @@ BattleGroupSetup btlgrp_las_las_07_03_off_1 = {
 
 BattleUnitSetup btlparty_las_las_09_01_off_1[] = {
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1788,7 +1788,7 @@ BattleUnitSetup btlparty_las_las_09_01_off_1[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1812,7 +1812,7 @@ BattleGroupSetup btlgrp_las_las_09_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_09_02_off_1[] = {
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1822,7 +1822,7 @@ BattleUnitSetup btlparty_las_las_09_02_off_1[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1832,7 +1832,7 @@ BattleUnitSetup btlparty_las_las_09_02_off_1[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1856,7 +1856,7 @@ BattleGroupSetup btlgrp_las_las_09_02_off_1 = {
 
 BattleUnitSetup btlparty_las_las_19_01_off_1[] = {
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1880,7 +1880,7 @@ BattleGroupSetup btlgrp_las_las_19_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_19_02_off_1[] = {
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1890,7 +1890,7 @@ BattleUnitSetup btlparty_las_las_19_02_off_1[] = {
         battle_item_super_mahorn, // itemDropTable
     },
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1914,7 +1914,7 @@ BattleGroupSetup btlgrp_las_las_19_02_off_1 = {
 
 BattleUnitSetup btlparty_las_las_19_03_off_1[] = {
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1924,7 +1924,7 @@ BattleUnitSetup btlparty_las_las_19_03_off_1[] = {
         battle_item_super_mahorn, // itemDropTable
     },
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1934,7 +1934,7 @@ BattleUnitSetup btlparty_las_las_19_03_off_1[] = {
         battle_item_super_mahorn, // itemDropTable
     },
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1958,7 +1958,7 @@ BattleGroupSetup btlgrp_las_las_19_03_off_1 = {
 
 BattleUnitSetup btlparty_las_las_20_01_off_1[] = {
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1982,7 +1982,7 @@ BattleGroupSetup btlgrp_las_las_20_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_21_01_off_1[] = {
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -1992,7 +1992,7 @@ BattleUnitSetup btlparty_las_las_21_01_off_1[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2016,7 +2016,7 @@ BattleGroupSetup btlgrp_las_las_21_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_21_02_off_1[] = {
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2026,7 +2026,7 @@ BattleUnitSetup btlparty_las_las_21_02_off_1[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2050,7 +2050,7 @@ BattleGroupSetup btlgrp_las_las_21_02_off_1 = {
 
 BattleUnitSetup btlparty_las_las_22_01_off_1[] = {
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2060,7 +2060,7 @@ BattleUnitSetup btlparty_las_las_22_01_off_1[] = {
         battle_item_super_mahorn, // itemDropTable
     },
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2084,7 +2084,7 @@ BattleGroupSetup btlgrp_las_las_22_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_22_02_off_1[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2094,7 +2094,7 @@ BattleUnitSetup btlparty_las_las_22_02_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2104,7 +2104,7 @@ BattleUnitSetup btlparty_las_las_22_02_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -2114,7 +2114,7 @@ BattleUnitSetup btlparty_las_las_22_02_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -2138,7 +2138,7 @@ BattleGroupSetup btlgrp_las_las_22_02_off_1 = {
 
 BattleUnitSetup btlparty_las_las_22_03_off_1[] = {
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2148,7 +2148,7 @@ BattleUnitSetup btlparty_las_las_22_03_off_1[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2172,7 +2172,7 @@ BattleGroupSetup btlgrp_las_las_22_03_off_1 = {
 
 BattleUnitSetup btlparty_las_las_24_01_off_1[] = {
     {
-        &unit_wanwan, // mUnitKindParams
+        &unit_wanwan, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2182,7 +2182,7 @@ BattleUnitSetup btlparty_las_las_24_01_off_1[] = {
         battle_item_wanwan, // itemDropTable
     },
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2206,7 +2206,7 @@ BattleGroupSetup btlgrp_las_las_24_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_25_01_off_1[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2230,7 +2230,7 @@ BattleGroupSetup btlgrp_las_las_25_01_off_1 = {
 
 BattleUnitSetup btlparty_las_las_25_02_off_1[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2240,7 +2240,7 @@ BattleUnitSetup btlparty_las_las_25_02_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2250,7 +2250,7 @@ BattleUnitSetup btlparty_las_las_25_02_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -2274,7 +2274,7 @@ BattleGroupSetup btlgrp_las_las_25_02_off_1 = {
 
 BattleUnitSetup btlparty_las_las_25_03_off_1[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2284,7 +2284,7 @@ BattleUnitSetup btlparty_las_las_25_03_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2294,7 +2294,7 @@ BattleUnitSetup btlparty_las_las_25_03_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -2304,7 +2304,7 @@ BattleUnitSetup btlparty_las_las_25_03_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2328,7 +2328,7 @@ BattleGroupSetup btlgrp_las_las_25_03_off_1 = {
 
 BattleUnitSetup btlparty_las_las_25_04_off_1[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2338,7 +2338,7 @@ BattleUnitSetup btlparty_las_las_25_04_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2362,7 +2362,7 @@ BattleGroupSetup btlgrp_las_las_25_04_off_1 = {
 
 BattleUnitSetup btlparty_las_las_25_05_off_1[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2372,7 +2372,7 @@ BattleUnitSetup btlparty_las_las_25_05_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2382,7 +2382,7 @@ BattleUnitSetup btlparty_las_las_25_05_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_super_mahorn, // mUnitKindParams
+        &unit_super_mahorn, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2406,7 +2406,7 @@ BattleGroupSetup btlgrp_las_las_25_05_off_1 = {
 
 BattleUnitSetup btlparty_las_las_25_06_off_1[] = {
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2416,7 +2416,7 @@ BattleUnitSetup btlparty_las_las_25_06_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -2426,7 +2426,7 @@ BattleUnitSetup btlparty_las_las_25_06_off_1[] = {
         battle_item_phantom, // itemDropTable
     },
     {
-        &unit_phantom, // mUnitKindParams
+        &unit_phantom, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -3546,7 +3546,7 @@ USER_FUNC(_gear_rotate) {
     BattleStageObject* obj1 = BattleSearchObjectPtr(name1);
     BattleStageObject* obj2 = BattleSearchObjectPtr(name2);
 
-    obj2->mRotation.z = obj1->mRotation.z = 360.0f * frame / total;
+    obj2->rotation.z = obj1->rotation.z = 360.0f * frame / total;
     frame += step;
     if (frame >= total) {
         frame = 0;

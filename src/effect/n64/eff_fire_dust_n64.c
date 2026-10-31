@@ -28,8 +28,8 @@ typedef struct EffFireDustWork {
     s32 r, g, b;    // 0x50
     s32 ca;         // 0x5c
     f32 scale;      // 0x60
-    f32 unk64;      // 0x64
-    f32 unk68;      // 0x68
+    f32 phase1;      // 0x64
+    f32 phase2;      // 0x68
 } EffFireDustWork;
 
 /** Fire-dust particle size over its 20-step cycle: swells to 1.5 then shrinks (the ten steps are listed twice). */
@@ -187,8 +187,8 @@ void effFireDustMain(EffectEntry* effect) {
                 p->targetVel.x = 0.5f * p->vel.x;
                 p->targetVel.y = 0.5f * p->vel.y;
                 p->targetVel.z = 0.5f * p->vel.z;
-                p->unk64 = (f32)(rand() % 15);
-                p->unk68 = (f32)(rand() % 15);
+                p->phase1 = (f32)(rand() % 15);
+                p->phase2 = (f32)(rand() % 15);
                 p->rot = 0.0f;
                 p->alpha = 255;
             }
@@ -197,8 +197,8 @@ void effFireDustMain(EffectEntry* effect) {
             p->position.x += p->vel.x;
             p->position.y += p->vel.y;
             p->position.z += p->vel.z;
-            p->unk64 += 0.2f;
-            p->unk68 += 0.6f;
+            p->phase1 += 0.2f;
+            p->phase2 += 0.6f;
             p->vel.x += 0.04f * (p->targetVel.x - p->vel.x);
             p->vel.y += 0.04f * (p->targetVel.y - p->vel.y);
             p->vel.z += 0.04f * (p->targetVel.z - p->vel.z);

@@ -514,7 +514,7 @@ void marioReInit_roll(void) {
     mario = marioGetPtr();
     mario->wPlayerCollisionBox.x = 14.8f;
     mario->wPlayerCollisionBox.y = 14.8f;
-    mario->mBaseDashSpeed = rollData[0];
+    mario->baseDashSpeed = rollData[0];
     marioGetPtr()->motRoll->spdX = 0.0f;
     marioGetPtr()->motRoll->spdZ = 0.0f;
     mario->rotOfs.x = -6.0f;
@@ -620,7 +620,7 @@ void mot_roll(void) {
         m = marioGetPtr();
         m->wPlayerCollisionBox.x = 14.8f;
         m->wPlayerCollisionBox.y = 14.8f;
-        m->mBaseDashSpeed = rollData[0];
+        m->baseDashSpeed = rollData[0];
         marioGetPtr()->motRoll->spdX = 0.0f;
         marioGetPtr()->motRoll->spdZ = 0.0f;
         m->rotOfs.x = -6.0f;

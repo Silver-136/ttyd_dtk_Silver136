@@ -170,14 +170,14 @@ static USER_FUNC(_steal_item) {
  * its size, offsets, damage sounds, status vulnerability, parts and init event.
  */
 BattleUnitKind unit_borodo_king = {
-    UNIT_BIG_BANDIT, // mUnitType
+    UNIT_BIG_BANDIT, // unitType
     "btl_un_borodo_king", // name
     8, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    13, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    13, // level
+    0, // bonusExp
     3, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -212,7 +212,7 @@ BattleUnitKind unit_borodo_king = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -226,9 +226,9 @@ static BattleWeapon weapon_borodo_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -250,7 +250,7 @@ static BattleWeapon weapon_borodo_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

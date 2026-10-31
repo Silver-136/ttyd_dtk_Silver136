@@ -156,9 +156,9 @@ typedef struct BattleWeapon {
     s8 baseSpCost;                    // 0x12
     u8 superguardsAllowed;            // 0x13
     f32 reserved_14;                  // 0x14, 1.0f in every weapon table, never read
-    s8 mStylishCommandMultiplier;     // 0x18
+    s8 stylishCommandMultiplier;     // 0x18
     s8 reserved_19;                   // 0x19, 1 (5 on player moves); copied to StarPowerInfo.weaponParam, never read
-    s8 mBingoSlotChance;              // 0x1A
+    s8 bingoSlotChance;              // 0x1A
     s8 reserved_1B;                   // 0x1B, 1 (50 on player moves), never read
     BattleWeaponDamageFn hpDamageFn;                 // 0x1C
     u32 hpDamageWork[8];              // 0x20
@@ -221,7 +221,7 @@ typedef struct BattleWeapon {
     s8 fpRegenTime;                   // 0xAC
     s8 fpRegenStrength;               // 0xAD
     u8 pad_AE[0xB0 - 0xAE];           // 0xAE, always 0, never accessed
-    void* mAttackEvtScript;           // 0xB0
+    void* attackEvtScript;           // 0xB0
     u8 stageEffectRates[0xC0 - 0xB4]; // 0xB4, btlevtcmd_WeaponAftereffect: [0..3] A1+A2 / A1 / A2 / none fall weights, [4] B destroy, [5] nozzle turn, [6] nozzle fire, [7] iron frame fall, [8] object fall (%), [9..11] unused
 } BattleWeapon;
 

@@ -67,14 +67,14 @@ EvtWord _act_atmic_teresa_press_attack[188];
  * its size, offsets, damage sounds, status vulnerability, parts and init event.
  */
 BattleUnitKind unit_act_mario = {
-    UNIT_EPILOGUE_DOOPLISS_MARIO, // mUnitType
+    UNIT_EPILOGUE_DOOPLISS_MARIO, // unitType
     "btl_un_act_mario", // name
     10, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    1, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    1, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -109,7 +109,7 @@ BattleUnitKind unit_act_mario = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -214,7 +214,7 @@ EVT_END()
  */
 BattleUnitSetup entry_unit_data[] = {
     {
-        &unit_act_clauda, // mUnitKindParams
+        &unit_act_clauda, // unitKindParams
         ALLIANCE_PLAYER, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -224,7 +224,7 @@ BattleUnitSetup entry_unit_data[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_act_teresa, // mUnitKindParams
+        &unit_act_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -234,7 +234,7 @@ BattleUnitSetup entry_unit_data[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_act_teresa, // mUnitKindParams
+        &unit_act_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -244,7 +244,7 @@ BattleUnitSetup entry_unit_data[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_act_atmic_teresa, // mUnitKindParams
+        &unit_act_atmic_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -254,7 +254,7 @@ BattleUnitSetup entry_unit_data[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_act_kinopio, // mUnitKindParams
+        &unit_act_kinopio, // unitKindParams
         ALLIANCE_NEUTRAL, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -264,7 +264,7 @@ BattleUnitSetup entry_unit_data[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_act_kinopio, // mUnitKindParams
+        &unit_act_kinopio, // unitKindParams
         ALLIANCE_NEUTRAL, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -274,7 +274,7 @@ BattleUnitSetup entry_unit_data[] = {
         NULL, // itemDropTable
     },
     {
-        &unit_act_kinopiko, // mUnitKindParams
+        &unit_act_kinopiko, // unitKindParams
         ALLIANCE_NEUTRAL, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -284,7 +284,7 @@ BattleUnitSetup entry_unit_data[] = {
         NULL, // itemDropTable
     },
     {
-        &unitdata_Party_Christine, // mUnitKindParams
+        &unitdata_Party_Christine, // unitKindParams
         ALLIANCE_NEUTRAL, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -782,8 +782,8 @@ static USER_FUNC(_clauda_breath_effect_fire) {
     unit = BattleGetUnitPtr(wp, id);
     var = args[0];
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    pos.x += unit->mSizeMultiplier * (unit->faceDirection * 25);
-    pos.y += 15.0f * unit->mSizeMultiplier;
+    pos.x += unit->sizeMultiplier * (unit->faceDirection * 25);
+    pos.y += 15.0f * unit->sizeMultiplier;
     eff = effKumokumoN64Entry(0, 0, pos.x, pos.y, pos.z, 0.0f, -2.0f, 1.0f);
     ((EffKumokumoN64Particle*)eff->userdata)->r1 = 76;
     ((EffKumokumoN64Particle*)eff->userdata)->g1 = 167;
@@ -807,8 +807,8 @@ static USER_FUNC(_clauda_breath_effect_ready) {
     id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-    pos.x += unit->mSizeMultiplier * (unit->faceDirection * 20);
-    pos.y += 25.0f * unit->mSizeMultiplier;
+    pos.x += unit->sizeMultiplier * (unit->faceDirection * 20);
+    pos.y += 25.0f * unit->sizeMultiplier;
     eff = effKumokumoN64Entry(0, 60, pos.x, pos.y, pos.z, 0.0f, 2.0f, 1.0f);
     ((EffKumokumoN64Particle*)eff->userdata)->r1 = 76;
     ((EffKumokumoN64Particle*)eff->userdata)->g1 = 167;

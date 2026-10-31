@@ -42,29 +42,29 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
     }
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         BattleUnit* unit = BattleGetUnitPtr(wp, i);
-        if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && !(unit->mAttributeFlags & kUnitNeverTargetable)) {
-            part = unit->mParts;
-            np2 = unit->mKindParams->numParts & 0xFF;
+        if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && !(unit->attributeFlags & kUnitNeverTargetable)) {
+            part = unit->parts;
+            np2 = unit->kindParams->numParts & 0xFF;
             for (j = 0; j < np2; j++) {
                 s32 dir;
                 f32 x, y, z;
                 f32 ox, oy, oz;
                 if (part->attributes & kNotTargetable) {
-                    part = part->mNextPart;
+                    part = part->nextPart;
                     continue;
                 }
-                kp = part->mKindPartParams;
+                kp = part->kindPartParams;
                 dir = part->faceDirection;
                 BtlUnit_GetPartsWorldPos(part, &x, &y, &z);
-                if (!(unit->mAttributeFlags & kCeiling)) {
-                    y += part->mPositionOffset.y * unit->mSizeMultiplier;
+                if (!(unit->attributeFlags & kCeiling)) {
+                    y += part->positionOffset.y * unit->sizeMultiplier;
                 }
                 ox = x;
                 oy = y;
                 oz = 5.0f + z;
-                x += dir * (unit->mSizeMultiplier * (part->mHitCursorBaseOffset.x + part->mHitCursorOffset.x));
-                y += unit->mSizeMultiplier * (part->mHitCursorBaseOffset.y + part->mHitCursorOffset.y);
-                z += unit->mSizeMultiplier * (part->mHitCursorBaseOffset.z + part->mHitCursorOffset.z);
+                x += dir * (unit->sizeMultiplier * (part->hitCursorBaseOffset.x + part->hitCursorOffset.x));
+                y += unit->sizeMultiplier * (part->hitCursorBaseOffset.y + part->hitCursorOffset.y);
+                z += unit->sizeMultiplier * (part->hitCursorBaseOffset.z + part->hitCursorOffset.z);
                 t->unitIdx = i;
                 t->partIdx = kp->partNum;
                 t->posX = x;
@@ -72,7 +72,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 t->posZ = z;
                 t->score = 0;
                 t->reserved_20 = -1;
-                if ((unit->mAttributeFlags & kUnitMapObject) && !(part->attributes & kIgnoreMapObjectOffset)) {
+                if ((unit->attributeFlags & kUnitMapObject) && !(part->attributes & kIgnoreMapObjectOffset)) {
                     t->score += d->direction * 300;
                 }
                 t->score += part->hitOffsetX * dir;
@@ -85,7 +85,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 } else {
                     t->side = 1;
                 }
-                part = part->mNextPart;
+                part = part->nextPart;
                 n++;
                 t++;
             }
@@ -156,13 +156,13 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (flags & TARGET_CLASS_NO_OPPOSITE_SIDE) {
-                if (d->belong == unit->mAlliance) {
+                if (d->belong == unit->alliance) {
                     ok = FALSE;
                     break;
                 }
             }
             if (flags & TARGET_CLASS_NO_OWN_SIDE) {
-                if (d->belong != unit->mAlliance && unit->mAlliance != ALLIANCE_NEUTRAL) {
+                if (d->belong != unit->alliance && unit->alliance != ALLIANCE_NEUTRAL) {
                     ok = FALSE;
                     break;
                 }
@@ -231,25 +231,25 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (d->propFlags & TARGET_PROP_NO_FLOATING2) {
-                if (unit->mAttributeFlags & kFloating) {
+                if (unit->attributeFlags & kFloating) {
                     ok = FALSE;
                     break;
                 }
             }
             if (d->propFlags & TARGET_PROP_NO_CEILING) {
-                if (unit->mAttributeFlags & kCeiling) {
+                if (unit->attributeFlags & kCeiling) {
                     ok = FALSE;
                     break;
                 }
             }
             if (d->propFlags & TARGET_PROP_NO_FLOATING) {
-                if (unit->mAttributeFlags & kFloating) {
+                if (unit->attributeFlags & kFloating) {
                     ok = FALSE;
                     break;
                 }
             }
             if (d->propFlags & TARGET_PROP_NO_GROUNDED) {
-                u32 a = unit->mAttributeFlags;
+                u32 a = unit->attributeFlags;
                 if (!(a & kFloating) && !(a & kCeiling)) {
                     ok = FALSE;
                     break;
@@ -282,7 +282,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                 }
             }
             if (d->propFlags & TARGET_PROP_NO_SHELL_SHIELDED) {
-                if (unit->mAttributeFlags & kShellShielded) {
+                if (unit->attributeFlags & kShellShielded) {
                     ok = FALSE;
                     break;
                 }
@@ -357,7 +357,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
                         if (!(op->attributes & VERSION_PICK(0x10, 0x40)) && !(op->attributes & kShellTosslikeCannotTarget)) {
                             u1 = BattleGetUnitPtr(wp, d->unitId);
                             u2 = BattleGetUnitPtr(wp, o4->unitIdx);
-                            if (!(u1->mTokenFlags & kConfusedAction) || u1 != u2) {
+                            if (!(u1->tokenFlags & kConfusedAction) || u1 != u2) {
                                 ok4 = FALSE;
                                 break;
                             }
@@ -433,7 +433,7 @@ BOOL BattleSamplingEnemy(BattleWorkWeaponTargets* d, BattleWeapon* weapon, s32 u
     d->classFlags = classFlags;
     d->propFlags = propFlags;
     d->direction = direction;
-    if (BattleGetUnitPtr(_battleWorkPointer, unitId)->mTokenFlags & kConfusedAction) {
+    if (BattleGetUnitPtr(_battleWorkPointer, unitId)->tokenFlags & kConfusedAction) {
         if ((d->classFlags & TARGET_CLASS_NO_OPPOSITE_SIDE) && !(d->classFlags & TARGET_CLASS_NO_OWN_SIDE)) {
             r = TRUE;
             d->classFlags &= ~TARGET_CLASS_NO_OPPOSITE_SIDE;
@@ -492,10 +492,10 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
                 f32 t = 0.4f * i;
                 w[id] = (0.5f + t) * w[id];
             }
-            if ((flags & TARGET_WEIGHT_OWN_SIDE) && active->mAlliance == unit->mAlliance) {
+            if ((flags & TARGET_WEIGHT_OWN_SIDE) && active->alliance == unit->alliance) {
                 w[id] = 1.5f * w[id];
             }
-            if ((flags & TARGET_WEIGHT_OPPOSITE_SIDE) && active->mAlliance != unit->mAlliance && unit->mAlliance != ALLIANCE_NEUTRAL) {
+            if ((flags & TARGET_WEIGHT_OPPOSITE_SIDE) && active->alliance != unit->alliance && unit->alliance != ALLIANCE_NEUTRAL) {
                 w[id] = 1.5f * w[id];
             }
             if (flags & TARGET_WEIGHT_LOW_HP_RATIO) {
@@ -510,11 +510,11 @@ void BattleChoiceSamplingEnemy(BattleWorkWeaponTargets* d, u32 flags, s32* unitO
             if (flags & TARGET_WEIGHT_HIGH_HP) {
                 w[id] = (1.0f + 0.05f * unit->currentHp) * w[id];
             }
-            if ((flags & TARGET_WEIGHT_IN_PERIL) && unit->currentHp <= unit->mKindParams->mPerilHP) {
+            if ((flags & TARGET_WEIGHT_IN_PERIL) && unit->currentHp <= unit->kindParams->perilHP) {
                 w[id] = 1.5f * w[id];
             }
             if (d->weapon) {
-                if (unit->mAttributeFlags & kInactive) {
+                if (unit->attributeFlags & kInactive) {
                     w[id] = 1;
                 }
                 switch (d->weapon->itemId) {
@@ -630,7 +630,7 @@ void BattleGetFirstAttackUnit(BattleWork* wp, BattleUnit** attacker, BattleUnit*
     s32 i;
     for (i = 0; i < BATTLE_UNIT_MAX; i++) {
         found = BattleGetUnitPtr(wp, i);
-        if (found && found->mAlliance == ALLIANCE_ENEMY) {
+        if (found && found->alliance == ALLIANCE_ENEMY) {
             break;
         }
     }

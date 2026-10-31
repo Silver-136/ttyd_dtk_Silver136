@@ -51,10 +51,10 @@ BattleStageObjectData pik_btlobject_data[] = {
 /** The Poshley Heights battle stage (bti_01 backdrop, stg_06_4 scenery). */
 BattleStageData pik_btlstage_data[] = {
     {
-        "bti_01", // mGlobalStageDataDir
-        "stg_06_4", // mSpecificStageDataDir
-        2, // mNumObjects
-        pik_btlobject_data, // mObjects
+        "bti_01", // globalStageDataDir
+        "stg_06_4", // specificStageDataDir
+        2, // numObjects
+        pik_btlobject_data, // objects
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, NULL, {0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgAWeapon
         {NULL, 0, {0}, 0, NULL, 100, 0, 0, 2, 0.0f, 0, 0, 0, 0, weaponGetPowerDefault, {1, 0, 0, 0, 0, 0, 0, 0}, NULL, {0}, 0x2100060, 0x20000000, 0, 26, 3, 2, NULL, 0, 0x7FF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {0}, NULL, {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}}, // bgBWeapon
         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, // initEvt..bgCEvt
@@ -64,7 +64,7 @@ BattleStageData pik_btlstage_data[] = {
 
 BattleUnitSetup btlparty_pik_pik_06_01_off_1[] = {
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -74,7 +74,7 @@ BattleUnitSetup btlparty_pik_pik_06_01_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -98,7 +98,7 @@ BattleGroupSetup btlgrp_pik_pik_06_01_off_1 = {
 
 BattleUnitSetup btlparty_pik_pik_06_02_off_1[] = {
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -108,7 +108,7 @@ BattleUnitSetup btlparty_pik_pik_06_02_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -118,7 +118,7 @@ BattleUnitSetup btlparty_pik_pik_06_02_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -142,7 +142,7 @@ BattleGroupSetup btlgrp_pik_pik_06_02_off_1 = {
 
 BattleUnitSetup btlparty_pik_pik_06_03_off_1[] = {
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -166,7 +166,7 @@ BattleGroupSetup btlgrp_pik_pik_06_03_off_1 = {
 
 BattleUnitSetup btlparty_pik_pik_06_04_off_1[] = {
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -176,7 +176,7 @@ BattleUnitSetup btlparty_pik_pik_06_04_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -200,7 +200,7 @@ BattleGroupSetup btlgrp_pik_pik_06_04_off_1 = {
 
 BattleUnitSetup btlparty_pik_pik_06_05_off_1[] = {
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -210,7 +210,7 @@ BattleUnitSetup btlparty_pik_pik_06_05_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -234,7 +234,7 @@ BattleGroupSetup btlgrp_pik_pik_06_05_off_1 = {
 
 BattleUnitSetup btlparty_pik_pik_06_06_off_1[] = {
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -244,7 +244,7 @@ BattleUnitSetup btlparty_pik_pik_06_06_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -254,7 +254,7 @@ BattleUnitSetup btlparty_pik_pik_06_06_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -264,7 +264,7 @@ BattleUnitSetup btlparty_pik_pik_06_06_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -288,7 +288,7 @@ BattleGroupSetup btlgrp_pik_pik_06_06_off_1 = {
 
 BattleUnitSetup btlparty_pik_pik_06_07_off_1[] = {
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -312,7 +312,7 @@ BattleGroupSetup btlgrp_pik_pik_06_07_off_1 = {
 
 BattleUnitSetup btlparty_pik_pik_06_08_off_1[] = {
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -322,7 +322,7 @@ BattleUnitSetup btlparty_pik_pik_06_08_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -332,7 +332,7 @@ BattleUnitSetup btlparty_pik_pik_06_08_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -356,7 +356,7 @@ BattleGroupSetup btlgrp_pik_pik_06_08_off_1 = {
 
 BattleUnitSetup btlparty_pik_pik_06_09_off_1[] = {
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -366,7 +366,7 @@ BattleUnitSetup btlparty_pik_pik_06_09_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         BATTLE_PHASE_ENEMY, // attackPhase
@@ -376,7 +376,7 @@ BattleUnitSetup btlparty_pik_pik_06_09_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase
@@ -386,7 +386,7 @@ BattleUnitSetup btlparty_pik_pik_06_09_off_1[] = {
         battle_item_purple_teresa, // itemDropTable
     },
     {
-        &unit_purple_teresa, // mUnitKindParams
+        &unit_purple_teresa, // unitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
         0x4000004, // attackPhase

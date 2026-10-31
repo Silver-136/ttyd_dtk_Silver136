@@ -318,8 +318,8 @@ typedef struct PartyEntry {
     s8 subStickY;                       // 0x15B, negated
     s8 triggerL;                        // 0x15C
     s8 triggerR;                        // 0x15D
-    s8 reserved_15E;                    // 0x15E, cleared with the controller state, never read
-    s8 reserved_15F;                    // 0x15F, cleared with the controller state, never read
+    s8 analogA;                    // 0x15E, cleared with the controller state, never read
+    s8 analogB;                    // 0x15F, cleared with the controller state, never read
     MarioWork* playerPtr;               // 0x160
     s32 camId;                          // 0x164
     u32 yoshiPsndSFXId;                 // 0x168

@@ -2612,8 +2612,8 @@ void partyClearCont(PartyEntry* party) {
     party->subStickY = 0;
     party->triggerL = 0;
     party->triggerR = 0;
-    party->reserved_15E = 0;
-    party->reserved_15F = 0;
+    party->analogA = 0;
+    party->analogB = 0;
     party->buttonHold = 0;
     party->buttonTrg = 0;
     party->buttonRepeat = 0;
@@ -2637,8 +2637,8 @@ void partyUpdateKeyData(PartyEntry* party) {
     party->subStickY = -gp->substickY[port];
     party->triggerL = gp->triggerLeft[port];
     party->triggerR = gp->triggerRight[port];
-    party->reserved_15E = 0;
-    party->reserved_15F = 0;
+    party->analogA = 0;
+    party->analogB = 0;
     party->buttonHold = gp->button[port];
     party->buttonTrg = gp->buttonNew[port];
     party->buttonRepeat = gp->buttonRepeat[port];

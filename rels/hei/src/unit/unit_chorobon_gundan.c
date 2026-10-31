@@ -99,14 +99,14 @@ BattleUnit* chorogun_get_ptr(void) {
  * 20 HP, level 19, with its size, sounds and the links to its parts, status vulnerability and scripts.
  */
 BattleUnitKind unit_chorobon_gundan = {
-    UNIT_FUZZY_HORDE, // mUnitType
+    UNIT_FUZZY_HORDE, // unitType
     "btl_un_chorobon_gundan", // name
     20, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    19, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    19, // level
+    0, // bonusExp
     5, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -141,7 +141,7 @@ BattleUnitKind unit_chorobon_gundan = {
     kUnitLeader | kUnitNoSpin, // attributeFlags
     &regist.v, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -197,9 +197,9 @@ BattleWeapon weapon_chorobon_gundan_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -221,7 +221,7 @@ BattleWeapon weapon_chorobon_gundan_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -569,9 +569,9 @@ void chorogun_ext_main(void) {
             c->state = 21;
             break;
         case 21:
-            d = unit->mPosition.x - unit->mHomePosition.x + intplGetValue(EASING_LINEAR, c->pos.x, unit->mHomePosition.x, n, 1000);
-            tz = unit->mPosition.z - unit->mHomePosition.z + intplGetValue(EASING_LINEAR, c->pos.z, unit->mHomePosition.z, n, 1000);
-            if ((*pose->mtx)[1][3] <= unit->mPosition.y) {
+            d = unit->position.x - unit->homePosition.x + intplGetValue(EASING_LINEAR, c->pos.x, unit->homePosition.x, n, 1000);
+            tz = unit->position.z - unit->homePosition.z + intplGetValue(EASING_LINEAR, c->pos.z, unit->homePosition.z, n, 1000);
+            if ((*pose->mtx)[1][3] <= unit->position.y) {
                 dx2 = d - (*pose->mtx)[0][3];
                 dz2 = tz - (*pose->mtx)[2][3];
                 d = sqrt(dx2 * dx2 + dz2 * dz2);
@@ -582,7 +582,7 @@ void chorogun_ext_main(void) {
                 c->vel.x = c->speed * (dx2 / d);
                 c->vel.y = c->speed;
                 c->vel.z = c->speed * (dz2 / d);
-                (*pose->mtx)[1][3] = unit->mPosition.y;
+                (*pose->mtx)[1][3] = unit->position.y;
             } else {
                 c->vel.y += -0.5f;
             }
@@ -884,8 +884,8 @@ USER_FUNC(chorogun_escape) {
 
     for (i = 0; i < extGetPoseNum(); i++, pose++) {
         if (chorogun[i].flags & 1) {
-            dx = unit->mHomePosition.x - (*pose->mtx)[0][3];
-            dz = unit->mHomePosition.z - (*pose->mtx)[2][3];
+            dx = unit->homePosition.x - (*pose->mtx)[0][3];
+            dz = unit->homePosition.z - (*pose->mtx)[2][3];
             d = dx * dx + dz * dz;
             if (n >= 50) {
                 if (d <= 2500.0f) {

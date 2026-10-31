@@ -50,14 +50,14 @@ static EvtWord wait_event_ceil[6];
 
 /** Unit data of the Spike Top: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_togemet = {
-    UNIT_SPIKE_TOP, // mUnitType
+    UNIT_SPIKE_TOP, // unitType
     "btl_un_togemet", // name
     5, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    17, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    17, // level
+    0, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -92,7 +92,7 @@ BattleUnitKind unit_togemet = {
     0, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -197,9 +197,9 @@ static BattleWeapon weapon_met_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -221,7 +221,7 @@ static BattleWeapon weapon_met_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -234,9 +234,9 @@ static BattleWeapon weapon_met_ceil_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -258,7 +258,7 @@ static BattleWeapon weapon_met_ceil_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

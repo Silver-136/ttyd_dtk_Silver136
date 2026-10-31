@@ -115,14 +115,14 @@ static USER_FUNC(eff_magic_get_posX) {
  * and event data table.
  */
 BattleUnitKind unit_kamec_green = {
-    UNIT_GREEN_MAGIKOOPA, // mUnitType
+    UNIT_GREEN_MAGIKOOPA, // unitType
     "btl_un_kamec_green", // name
     7, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    17, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    17, // level
+    0, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
     2, // baseCoin
@@ -157,7 +157,7 @@ BattleUnitKind unit_kamec_green = {
     0, // attributeFlags
     &regist, // statusVulnerability
     2, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -375,9 +375,9 @@ static BattleWeapon weapon_kamec_attack_magic = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -399,7 +399,7 @@ static BattleWeapon weapon_kamec_attack_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -411,9 +411,9 @@ static BattleWeapon weapon_kamec_dekadeka_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -438,7 +438,7 @@ static BattleWeapon weapon_kamec_dekadeka_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // ohkoChance..galeForceChance
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -450,9 +450,9 @@ static BattleWeapon weapon_kamec_biribiri_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -477,7 +477,7 @@ static BattleWeapon weapon_kamec_biribiri_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // galeForceChance..fpRegenTime
     0, // fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -489,9 +489,9 @@ static BattleWeapon weapon_kamec_trans_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -515,7 +515,7 @@ static BattleWeapon weapon_kamec_trans_magic = {
     3, // invisibleTime
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -527,9 +527,9 @@ static BattleWeapon weapon_kamec_katikati_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -555,7 +555,7 @@ static BattleWeapon weapon_kamec_katikati_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -567,9 +567,9 @@ static BattleWeapon weapon_kamec_recover_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -590,7 +590,7 @@ static BattleWeapon weapon_kamec_recover_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -605,9 +605,9 @@ static BattleWeapon weapon_kamec_all_recover_magic = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -627,7 +627,7 @@ static BattleWeapon weapon_kamec_all_recover_magic = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -636,7 +636,7 @@ static BattleWeapon weapon_kamec_all_recover_magic = {
  * and starting position.
  */
 static BattleUnitSetup entry_kamec = {
-    &unit_kamec_green_bunsin, // mUnitKindParams
+    &unit_kamec_green_bunsin, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -1867,12 +1867,12 @@ static USER_FUNC(eff_magic) {
 
     BtlUnit_GetPos(unit, &x, &y, &z);
     // from the tip of the wand
-    x += 25.0f * unit->mSizeMultiplier * unit->faceDirection;
-    y += 20.0f * unit->mSizeMultiplier;
+    x += 25.0f * unit->sizeMultiplier * unit->faceDirection;
+    y += 20.0f * unit->sizeMultiplier;
     z += 5.0f;
     eff = effMagic1N64Entry(0, type, x, y, z, tx, ty, tz);
     unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)eff;
-    ((EffMagic1N64Work*)eff->userdata)->scale = unit->mSizeMultiplier;
+    ((EffMagic1N64Work*)eff->userdata)->scale = unit->sizeMultiplier;
     return EVT_RETURN_DONE;
 }
 
@@ -1892,10 +1892,10 @@ static USER_FUNC(eff_staff2) {
         return EVT_RETURN_DONE;
     }
     wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;
-    wk[13] = unit->mSizeMultiplier;
+    wk[13] = unit->sizeMultiplier;
     BtlUnit_GetPos(unit, &x, &y, &z);
-    wk[1] = x + 22.5f * unit->mSizeMultiplier * unit->faceDirection;
-    wk[2] = y + 40.0f * unit->mSizeMultiplier;
+    wk[1] = x + 22.5f * unit->sizeMultiplier * unit->faceDirection;
+    wk[2] = y + 40.0f * unit->sizeMultiplier;
     wk[3] = 5.0f + z;
     return EVT_RETURN_BLOCK;
 }
@@ -1916,10 +1916,10 @@ static USER_FUNC(eff_staff1) {
         return EVT_RETURN_DONE;
     }
     wk = ((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->userdata;
-    wk[10] = unit->mSizeMultiplier;
+    wk[10] = unit->sizeMultiplier;
     BtlUnit_GetPos(unit, &x, &y, &z);
-    wk[2] = x + 22.5f * unit->mSizeMultiplier * unit->faceDirection;
-    wk[3] = y + 40.0f * unit->mSizeMultiplier;
+    wk[2] = x + 22.5f * unit->sizeMultiplier * unit->faceDirection;
+    wk[3] = y + 40.0f * unit->sizeMultiplier;
     wk[4] = 5.0f + z;
     return EVT_RETURN_BLOCK;
 }
@@ -1938,7 +1938,7 @@ static USER_FUNC(kamec_copy_status) {
 
     // the copy shares the real magikoopa's hp and status
     unit2->currentHp = unit1->currentHp;
-    memcpy(&unit2->mSleepTurns, &unit1->mSleepTurns, 0x1E);
+    memcpy(&unit2->sleepTurns, &unit1->sleepTurns, 0x1E);
     unit2->hpGauge.prevHp = unit2->currentHp;
     unit2->hpGauge.targetHp = unit2->currentHp;
     unit2->hpGauge.barRatio = unit2->hpGauge.trailRatio = (f32)unit2->currentHp / unit2->maxHp;
@@ -1970,18 +1970,18 @@ static USER_FUNC(kamec_shuffle) {
         BattleUnit* ub = kamecs[b];
         f32 tmp;
 
-        tmp = ua->mPosition.x;
-        ua->mPosition.x = ub->mPosition.x;
-        ub->mPosition.x = tmp;
-        tmp = ua->mHomePosition.x;
-        ua->mHomePosition.x = ub->mHomePosition.x;
-        ub->mHomePosition.x = tmp;
-        tmp = ua->mPosition.z;
-        ua->mPosition.z = ub->mPosition.z;
-        ub->mPosition.z = tmp;
-        tmp = ua->mHomePosition.z;
-        ua->mHomePosition.z = ub->mHomePosition.z;
-        ub->mHomePosition.z = tmp;
+        tmp = ua->position.x;
+        ua->position.x = ub->position.x;
+        ub->position.x = tmp;
+        tmp = ua->homePosition.x;
+        ua->homePosition.x = ub->homePosition.x;
+        ub->homePosition.x = tmp;
+        tmp = ua->position.z;
+        ua->position.z = ub->position.z;
+        ub->position.z = tmp;
+        tmp = ua->homePosition.z;
+        ua->homePosition.z = ub->homePosition.z;
+        ub->homePosition.z = tmp;
     }
     return EVT_RETURN_DONE;
 }
@@ -2027,7 +2027,7 @@ static USER_FUNC(kamec_get_live_num) {
 
     for (i = 0; i < 64; i++) {
         unit = wp->units[i];
-        if (unit != NULL && unit->mAlliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+        if (unit != NULL && unit->alliance == ALLIANCE_ENEMY && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
             num++;
         }
     }

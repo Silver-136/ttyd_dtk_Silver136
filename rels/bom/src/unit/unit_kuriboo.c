@@ -32,14 +32,14 @@ static EvtWord wait_event[6];
 
 /** Unit data of the Goomba: 2 HP, level 7; the battle starts it from init_event. */
 BattleUnitKind unit_kuriboo = {
-    UNIT_GOOMBA, // mUnitType
+    UNIT_GOOMBA, // unitType
     "btl_un_kuriboo", // name
     2, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    7, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    7, // level
+    0, // bonusExp
     1, // bonusCoin
     60, // bonusCoinRate
     0, // baseCoin
@@ -74,7 +74,7 @@ BattleUnitKind unit_kuriboo = {
     kUnitLeader, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -154,9 +154,9 @@ static BattleWeapon weapon_kuriboo_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {1, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -178,7 +178,7 @@ static BattleWeapon weapon_kuriboo_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

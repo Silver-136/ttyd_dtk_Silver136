@@ -52,8 +52,8 @@ struct WinMgrEntry {
 };
 
 typedef struct WinMgrWork {
-    s32 mNumEntries; //0x0
-    WinMgrEntry* mEntries; //0x4
+    s32 numEntries; //0x0
+    WinMgrEntry* entries; //0x4
 } WinMgrWork;
 
 // WinMgrSelectItem.flags

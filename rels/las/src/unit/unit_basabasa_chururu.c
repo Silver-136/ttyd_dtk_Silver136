@@ -41,14 +41,14 @@ static EvtWord wait_event[6];
  * names its parts, status table and init script.
  */
 BattleUnitKind unit_basabasa_chururu = {
-    UNIT_SWOOPULA, // mUnitType
+    UNIT_SWOOPULA, // unitType
     "btl_un_basabasa_chururu", // name
     9, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    30, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    30, // level
+    0, // bonusExp
     4, // bonusCoin
     70, // bonusCoinRate
     0, // baseCoin
@@ -83,7 +83,7 @@ BattleUnitKind unit_basabasa_chururu = {
     kCeiling | kUnitLeader | kUnitFaceCamera, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -108,9 +108,9 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -130,7 +130,7 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -241,9 +241,9 @@ static BattleWeapon weapon_basabasa_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -265,7 +265,7 @@ static BattleWeapon weapon_basabasa_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

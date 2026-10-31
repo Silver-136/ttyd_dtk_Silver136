@@ -1379,13 +1379,13 @@ f32 marioChkOverhead(void) {
 #ifdef VERSION_G8ME01
                     {
                         /* FAKE: redundant second test reproduces the target's double beq */
-                        s32 m = w->baseSpeed > w->mBaseWalkSpeed ? 2 : 1;
+                        s32 m = w->baseSpeed > w->baseWalkSpeed ? 2 : 1;
                         if (m != w->prevMotionId && m != w->prevMotionId) {
-                            marioChgMot(w->baseSpeed > w->mBaseWalkSpeed ? 2 : 1);
+                            marioChgMot(w->baseSpeed > w->baseWalkSpeed ? 2 : 1);
                         }
                     }
 #else
-                    marioChgMot(w->baseSpeed > w->mBaseWalkSpeed ? 2 : 1);
+                    marioChgMot(w->baseSpeed > w->baseWalkSpeed ? 2 : 1);
 #endif
                 }
             }
@@ -2707,7 +2707,7 @@ void marioCheckWallShip(f32 dx, f32 dz) {
     old = pos;
     w->position = pos;
     marioChkWallAround(&w->position, 0, dx, dz, w->wPlayerCollisionBox.z, 4.0f);
-    max = w->mBaseDashSpeed;
+    max = w->baseDashSpeed;
     PSVECSubtract(&w->position, &old, &diff);
     mag = PSVECMag(&diff);
     if (mag > max) {

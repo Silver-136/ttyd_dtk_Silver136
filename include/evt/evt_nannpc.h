@@ -18,7 +18,7 @@ typedef struct NanNPC {
     s8 name[0x10];    // 0x0
     struct ExtdrvPose* pose; // 0x10, its extdrv pose
     u16 flags;        // 0x14
-    u16 field_16;     // 0x16
+    u16 flags2;     // 0x16
     Vec pos;          // 0x18
     union {
         Vec hosei;    // 0x24, display offset (evt_nannpc_set_hosei_position)

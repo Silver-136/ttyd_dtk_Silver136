@@ -68,8 +68,8 @@ static USER_FUNC(bubble_copy_status) {
     if (unit2->currentHp > unit2->maxHp) {
         unit2->currentHp = unit2->maxHp;
     }
-    unit2->mSizeChangeTurns = unit1->mSizeChangeTurns;
-    unit2->mSizeChangeStrength = unit1->mSizeChangeStrength;
+    unit2->sizeChangeTurns = unit1->sizeChangeTurns;
+    unit2->sizeChangeStrength = unit1->sizeChangeStrength;
     unit2->hpGauge.prevHp = unit2->currentHp;
     unit2->hpGauge.targetHp = unit2->currentHp;
     unit2->hpGauge.barRatio = unit2->hpGauge.trailRatio = (f32)unit2->currentHp / unit2->maxHp;
@@ -78,14 +78,14 @@ static USER_FUNC(bubble_copy_status) {
 
 /** Unit data of the Ember: 8 HP, level 20; the battle starts it from init_event. */
 BattleUnitKind unit_hermos = {
-    UNIT_EMBER, // mUnitType
+    UNIT_EMBER, // unitType
     "btl_un_hermos", // name
     8, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    20, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    20, // level
+    0, // bonusExp
     3, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -120,7 +120,7 @@ BattleUnitKind unit_hermos = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     2, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -207,9 +207,9 @@ static BattleWeapon weapon_bubble_attack = {
     0, 0, // baseFpCost..baseSpCost
     1, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -233,7 +233,7 @@ static BattleWeapon weapon_bubble_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -246,9 +246,9 @@ static BattleWeapon weapon_bubble_fire_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -273,7 +273,7 @@ static BattleWeapon weapon_bubble_fire_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -293,9 +293,9 @@ static BattleWeapon weapon_bubble_all_fire_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {2, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -320,13 +320,13 @@ static BattleWeapon weapon_bubble_all_fire_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
 /** Setup for the Ember that splits off when the Ember is hit by fire or an explosion. */
 static BattleUnitSetup entry_bubble = {
-    &unit_hermos, // mUnitKindParams
+    &unit_hermos, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -628,13 +628,13 @@ static USER_FUNC(eff_fire) {
     if (wk != NULL) {
         BtlUnit_GetPartsPos(part, &x, &y, &z);
         wk->position = (Vec){x, y, z};
-        wk->scaleX += 0.1f * unit->mSizeMultiplier;
-        if (wk->scaleX >= unit->mSizeMultiplier) {
-            wk->scaleX = unit->mSizeMultiplier;
+        wk->scaleX += 0.1f * unit->sizeMultiplier;
+        if (wk->scaleX >= unit->sizeMultiplier) {
+            wk->scaleX = unit->sizeMultiplier;
         }
-        wk->scaleY += 0.1f * unit->mSizeMultiplier;
-        if (wk->scaleY >= unit->mSizeMultiplier) {
-            wk->scaleY = unit->mSizeMultiplier;
+        wk->scaleY += 0.1f * unit->sizeMultiplier;
+        if (wk->scaleY >= unit->sizeMultiplier) {
+            wk->scaleY = unit->sizeMultiplier;
         }
     }
     return EVT_RETURN_BLOCK;
@@ -769,7 +769,7 @@ static USER_FUNC(eff_all_fire) {
     if (isFirstCall) {
         eff2[index] = effFireEntry(6, 120, 0.0f, -1000.0f, 0.0f, 1.0f);
         ((EffFireWork*)eff2[index]->userdata)->scaleX = 2.0f;
-        ((EffFireWork*)eff2[index]->userdata)->scaleY = unit->mSizeMultiplier * scales[index];
+        ((EffFireWork*)eff2[index]->userdata)->scaleY = unit->sizeMultiplier * scales[index];
     }
     wk = eff2[index]->userdata;
     if (wk != NULL) {

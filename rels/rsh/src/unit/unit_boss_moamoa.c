@@ -171,14 +171,14 @@ void moamoa_mainUnitIdClear(void) {
  * parts and init event.
  */
 BattleUnitKind unit_boss_moamoa = {
-    UNIT_SMORG, // mUnitType
+    UNIT_SMORG, // unitType
     "btl_un_moamoa", // name
     50, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    78, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    78, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -213,7 +213,7 @@ BattleUnitKind unit_boss_moamoa = {
     kUnitNoSpin, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -303,7 +303,7 @@ static BattleUnitKindPart parts[] = {
  * Spawn setup for Smorg's tentacle A: starts off-screen on the enemy side; the main body moves it into place.
  */
 BattleUnitSetup entry_boss_moamoa_tentacle_a = {
-    &unit_boss_moamoa_tentacle_a, // mUnitKindParams
+    &unit_boss_moamoa_tentacle_a, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -317,7 +317,7 @@ BattleUnitSetup entry_boss_moamoa_tentacle_a = {
  * Spawn setup for Smorg's tentacle B: starts off-screen on the enemy side; the main body moves it into place.
  */
 BattleUnitSetup entry_boss_moamoa_tentacle_b = {
-    &unit_boss_moamoa_tentacle_b, // mUnitKindParams
+    &unit_boss_moamoa_tentacle_b, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -331,7 +331,7 @@ BattleUnitSetup entry_boss_moamoa_tentacle_b = {
  * Spawn setup for Smorg's tentacle C: starts off-screen on the enemy side; the main body moves it into place.
  */
 BattleUnitSetup entry_boss_moamoa_tentacle_c = {
-    &unit_boss_moamoa_tentacle_c, // mUnitKindParams
+    &unit_boss_moamoa_tentacle_c, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -346,7 +346,7 @@ BattleUnitSetup entry_boss_moamoa_tentacle_c = {
  * the main body moves it onto its own position.
  */
 BattleUnitSetup entry_boss_moamoa_mouth = {
-    &unit_boss_moamoa_mouth, // mUnitKindParams
+    &unit_boss_moamoa_mouth, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -369,9 +369,9 @@ BattleWeapon weapon_moamoa_tsunami_attack = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {0}, // hpDamageWork
@@ -392,7 +392,7 @@ BattleWeapon weapon_moamoa_tsunami_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 

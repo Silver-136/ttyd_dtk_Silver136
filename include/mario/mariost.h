@@ -61,7 +61,7 @@ typedef struct GlobalWork {
     OSTime systemLv2Time; //0x58
     OSTime systemLv3Time; //0x60
     CountdownWork countdown; //0x68
-    lottery_info mLotteryInfo; //0xA8
+    lottery_info lotteryInfo; //0xA8
     u8 pad_E8[0xF8 - 0xE8]; //0xE8
     FadeType mapFadeOutType; //0xF8
     s32 mapFadeOutDuration; //0xFC
@@ -82,11 +82,11 @@ typedef struct GlobalWork {
     s32 language; //0x16C, Language
     u16 fbWidth; //0x170
     u16 efbHeight; //0x172
-    s32 mGSW0; //0x174
-    u32 mGSWF[0x100]; //0x178, global saved work flags (GSWF)
-    u8 mGSW[0x800]; //0x578
-    u32 mLSWF[0x10]; //0xD78
-    u8 mLSW[0x400]; //0xDB8
+    s32 gSW0; //0x174
+    u32 gSWF[0x100]; //0x178, global saved work flags (GSWF)
+    u8 gSW[0x800]; //0x578
+    u32 lSWF[0x10]; //0xD78
+    u8 lSW[0x400]; //0xDB8
     s32 lastSlot; //0x11B8, last used save slot, start cursor on load screen
     u8 playerName[0x11D0 - 0x11BC]; //0x11BC
     s32 saveSlot; //0x11D0
@@ -111,8 +111,8 @@ typedef struct GlobalWork {
     u8 rumbleForcedOffLatch[4]; //0x12EC, rumble cut latch
     OSTime rumbleForcedOffTime[4]; //0x12F0, time rumble was cut
     u8 rumbleHardStop[4]; //0x1310, stop motor hard (PADControlMotor 2)
-    OSTick mDeltaGame; //0x1314
-    OSTick mDeltaRender; //0x1318
+    OSTick deltaGame; //0x1314
+    OSTick deltaRender; //0x1318
     u8 pad_131C[0x1324 - 0x131C]; //0x131C
 // controller state kept by the key functions (system.c)
     BOOL keyDataValid; //0x1324, key data valid (system.c)

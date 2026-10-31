@@ -29,14 +29,14 @@ static EvtWord wait_event[2];
  * tree on the battle stage which the player can hit. It never takes a turn.
  */
 BattleUnitKind unit_object_tree = {
-    UNIT_UNUSED_TREE, // mUnitType
+    UNIT_UNUSED_TREE, // unitType
     "btl_un_tree", // name
     999, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    2, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    2, // level
+    0, // bonusExp
     0, // bonusCoin
     0, // bonusCoinRate
     0, // baseCoin
@@ -71,7 +71,7 @@ BattleUnitKind unit_object_tree = {
     kUnitMapObject | kNoGravityBob | kActsInZeroGravity | kUnitNoHpGauge | kUnitNoncombatant, // attributeFlags
     &regist, // statusVulnerability
     1, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -194,7 +194,7 @@ USER_FUNC(_rumble_tree) {
     if (isFirstCall) {
         event->userdata[0] = 0;
     }
-    object->mPosition.y += _data[event->userdata[0]];
+    object->position.y += _data[event->userdata[0]];
     event->userdata[0]++;
     if ((u32)event->userdata[0] >= 34) {
         return EVT_RETURN_DONE;
@@ -219,9 +219,9 @@ USER_FUNC(_turn_tree) {
     }
     event->userdata[0] += 3;
     if (event->userdata[0] > 90) {
-        object->mRotation.x = 0.0f;
+        object->rotation.x = 0.0f;
         return EVT_RETURN_DONE;
     }
-    object->mRotation.x = event->userdata[0];
+    object->rotation.x = event->userdata[0];
     return EVT_RETURN_BLOCK;
 }

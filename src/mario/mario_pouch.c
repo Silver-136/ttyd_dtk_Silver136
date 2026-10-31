@@ -260,11 +260,11 @@ BOOL pouchGetItem(ItemType type) {
         return 1;
     }
     if (type == ITEM_STAR_PIECE) {
-        mpp->mStarPieceCount++;
+        mpp->starPieceCount++;
         return 1;
     }
     if (type == ITEM_SHINE_SPRITE) {
-        mpp->mShineSpriteCount++;
+        mpp->shineSpriteCount++;
         return 1;
     }
     if (type == ITEM_BOOTS || type == ITEM_SUPER_BOOTS || type == ITEM_ULTRA_BOOTS) {
@@ -793,24 +793,24 @@ s32 pouchSetCoin(s32 coins) {
 
 /** Number of Shine Sprites Mario carries (super coin: the Japanese name). */
 s32 pouchGetSuperCoin(void) {
-    return mpp->mShineSpriteCount;
+    return mpp->shineSpriteCount;
 }
 
 /** Sets the Shine Sprite count (super coin: the Japanese name) and returns it. */
 s32 pouchSetSuperCoin(s32 count) {
-    mpp->mShineSpriteCount = count;
-    return mpp->mShineSpriteCount;
+    mpp->shineSpriteCount = count;
+    return mpp->shineSpriteCount;
 }
 
 /** Number of Star Pieces Mario carries. */
 s32 pouchGetStarPiece(void) {
-    return mpp->mStarPieceCount;
+    return mpp->starPieceCount;
 }
 
 /** Adds Star Pieces (negative to spend) without a clamp; returns the new count. */
 s32 pouchAddStarPiece(s32 count) {
-    mpp->mStarPieceCount += count;
-    return mpp->mStarPieceCount;
+    mpp->starPieceCount += count;
+    return mpp->starPieceCount;
 }
 
 /** Adds HP to Mario (negative for damage), clamped to 0..maximumHP; returns the new HP. */
@@ -1072,7 +1072,7 @@ void pouchRevisePartyParam(void) {
 
 /** Mario's Star Points toward the next level, for the status window. */
 s16 pouchGetStarPoint(void) {
-    return mpp->mStarPoints;
+    return mpp->starPoints;
 }
 
 /** Wears the badge in list slot index by copying it into the same slot of equippedBadges; FALSE for an empty slot. */
@@ -1152,16 +1152,16 @@ s32 pouchArriveBadge(s32 id) {
  * and restarts her countdown (majinai: charm).
  */
 void pouchMajinaiInit(s32 curseCount) {
-    if (mpp->mMerleeCurseUsesRemaining < curseCount) {
-        mpp->mMerleeCurseUsesRemaining = (u8)curseCount;
-        mpp->mTurnsUntilMerleeActivation = -1;
-        mpp->mMerleeNextCurseType = 0;
+    if (mpp->merleeCurseUsesRemaining < curseCount) {
+        mpp->merleeCurseUsesRemaining = (u8)curseCount;
+        mpp->turnsUntilMerleeActivation = -1;
+        mpp->merleeNextCurseType = 0;
     }
 }
 
 /** Coin counter of Bowser's side-scrolling stages (0-99). */
 s32 pouchGetKpaCoin(void) {
-    return mpp->mSuperBowserCoins;
+    return mpp->superBowserCoins;
 }
 
 /**
@@ -1170,9 +1170,9 @@ s32 pouchGetKpaCoin(void) {
  */
 BOOL pouchAddKpaCoin(s32 coins) {
     BOOL ret = FALSE;
-    mpp->mSuperBowserCoins += coins;
-    if (mpp->mSuperBowserCoins >= 100) {
-        mpp->mSuperBowserCoins -= 100;
+    mpp->superBowserCoins += coins;
+    if (mpp->superBowserCoins >= 100) {
+        mpp->superBowserCoins -= 100;
         ret = TRUE;
     }
     return ret;
@@ -1180,22 +1180,22 @@ BOOL pouchAddKpaCoin(s32 coins) {
 
 /** Score of Bowser's side-scrolling stages, shown by the kpa rel. */
 u32 pouchGetKpaScore(void) {
-    return mpp->mSuperBowserScore;
+    return mpp->superBowserScore;
 }
 
 /** Adds to the score of Bowser's side-scrolling stages (kpa_act.c), capped at 999999. */
 void pouchAddKpaScore(u32 score) {
-    mpp->mSuperBowserScore += score;
-    if (mpp->mSuperBowserScore > 999999) {
-        mpp->mSuperBowserScore = 999999;
+    mpp->superBowserScore += score;
+    if (mpp->superBowserScore > 999999) {
+        mpp->superBowserScore = 999999;
     }
 }
 
 void pouchGetStarStone(u32 id) {
-    if (!mpp->mStarPowersObtained) {
+    if (!mpp->starPowersObtained) {
         mpp->audienceCount = 2.0f;
     }
-    mpp->mStarPowersObtained |= 1 << id;
+    mpp->starPowersObtained |= 1 << id;
     mpp->maximumSP = (s16)(100 * (id + 1));
     if (mpp->maximumSP < 0) {
         mpp->maximumSP = 0;
@@ -1209,7 +1209,7 @@ s32 pouchReceiveMailCount(void) {
     s32 i, count;
 
     for (count = 0, i = 0; i < 99; i++) {
-        if (mpp->mEmailReceivedFlags[i / 32] & (1 << (i % 32))) {
+        if (mpp->emailReceivedFlags[i / 32] & (1 << (i % 32))) {
             count++;
         }
     }
@@ -1223,21 +1223,21 @@ void pouchReceiveMail(s32 mailId) {
     index = mailId / 32;
     shift = mailId % 32;
     count = pouchReceiveMailCount();
-    mpp->mEmailReceivedFlags[index] |= (1 << shift);
-    mpp->mEmailIds[count] = (u8)mailId;
+    mpp->emailReceivedFlags[index] |= (1 << shift);
+    mpp->emailIds[count] = (u8)mailId;
 }
 
 void pouchOpenMail(s32 mailId) {
-    mpp->mEmailReadFlags[mailId / 32] |= (1 << (mailId % 32));
+    mpp->emailReadFlags[mailId / 32] |= (1 << (mailId % 32));
 }
 
 /** Mail state for the mail menu: 2 when read, 1 when received but unread, 0 when not received. */
 u32 pouchCheckMail(s32 mailId) {
     s32 mask = (1 << (mailId % 32));
-    if (mpp->mEmailReadFlags[mailId / 32] & mask) {
+    if (mpp->emailReadFlags[mailId / 32] & mask) {
         return 2;
     } else {
-        return (mpp->mEmailReceivedFlags[mailId / 32] & mask) != 0;
+        return (mpp->emailReceivedFlags[mailId / 32] & mask) != 0;
     }
 }
 

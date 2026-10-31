@@ -18,13 +18,13 @@ typedef struct BattleWorkStatusIconEntry {
 } BattleWorkStatusIconEntry;
 
 typedef struct BattleWorkStatusIcon {
-    Vec mPosition; //0x0
-    Vec mScreenSpaceOffset; //0xC
-    f32 mDistanceBetweenIcons; //0x18
-    s32 mFlags; //0x1C
-    BattleWorkStatusIconEntry mIcons[28]; //0x20
+    Vec position; //0x0
+    Vec screenSpaceOffset; //0xC
+    f32 distanceBetweenIcons; //0x18
+    s32 flags; //0x1C
+    BattleWorkStatusIconEntry icons[28]; //0x20
     f32 dizzyAngle; //0x790, _bsi_guruguru: +4 per frame
-    s16 mNumStatusIcons; //0x794
+    s16 numStatusIcons; //0x794
     s16 allergyBlinkTimer; //0x796, _bsi_allergy
     s16 hpRegenTimer; //0x798
     s16 fpRegenTimer; //0x79A

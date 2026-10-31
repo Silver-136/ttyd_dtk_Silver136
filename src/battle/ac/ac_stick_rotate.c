@@ -109,7 +109,7 @@ s32 _CalcRollDir(void) {
 // Ends the command: clears AC_RESULT_RUNNING (AC_RESULT_SUCCESS stays as it is) and moves to the end state 1002
 static inline void stickRotateFail(BattleWork* work) {
     work->actionCommands.result &= ~AC_RESULT_RUNNING;
-    work->actionCommands.mAcState = 1002;
+    work->actionCommands.acState = 1002;
 }
 
 /**
@@ -130,7 +130,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
 
     do {
         restart = FALSE;
-        switch (ac->mAcState) {
+        switch (ac->acState) {
             case 0:
                 ac->result = AC_RESULT_RUNNING;
                 memset(disp, 0, sizeof(BattleACDispParams));
@@ -143,13 +143,13 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                 sw->iconTimer = 0;
                 sw->slow = 0;
                 sw->stall = 0;
-                ac->mAcState = 99;
+                ac->acState = 99;
                 break;
             case 99:
                 break;
             case 100:
                 sw->timer = 120;
-                ac->mAcState = 1000;
+                ac->acState = 1000;
                 sw->roll = 0;
                 sw->count = 0;
                 ac->outputParams[0] = 0;
@@ -158,7 +158,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                     sw->iconB = 2;
                 }
             case 1000:
-                if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->mAcUnit->mTokenFlags & kConfusedAction)) {
+                if ((ac->setupFlags & AC_SETUP_FLAG_CONFUSED_AUTO) && (ac->acUnit->tokenFlags & kConfusedAction)) {
                     if (ac->setupFlags & AC_SETUP_FLAG_RETRIES) {
                         ac->setupParam--;
                         if (ac->setupParam >= 0) {
@@ -170,7 +170,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                         ac->result = 0;
                     } else {
                         ac->result = AC_RESULT_SUCCESS;
-                        ac->mResultCount++;
+                        ac->resultCount++;
                     }
                     return 0;
                 }
@@ -182,11 +182,11 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                         }
                         ac->result = 0;
                         restart = TRUE;
-                        ac->mAcState = 1002;
+                        ac->acState = 1002;
                         break;
                     }
                 }
-                ac->mAcState = 1001;
+                ac->acState = 1001;
                 sw->prevDir = 0;
                 ac->outputParams[0]++;
                 sw->timer = work->actionCommands.params[STICK_ROTATE_PARAM_START_TIME];
@@ -201,7 +201,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                     ac->countdown--;
                     ac->result = AC_RESULT_SUCCESS;
                     restart = TRUE;
-                    ac->mAcState = 1002;
+                    ac->acState = 1002;
                     ac->outputParams[0] = work->actionCommands.params[STICK_ROTATE_PARAM_MAX_COUNT];
                 }
                 sw->timer--;
@@ -215,7 +215,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                     }
                     ac->result &= ~AC_RESULT_RUNNING;
                     restart = TRUE;
-                    ac->mAcState = 1002;
+                    ac->acState = 1002;
                     break;
                 }
                 sw->dir = _GetInputDir();
@@ -225,7 +225,7 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                     }
                     ac->result &= ~AC_RESULT_RUNNING;
                     restart = TRUE;
-                    ac->mAcState = 1002;
+                    ac->acState = 1002;
                     break;
                 }
                 if (sw->dir == 0) {
@@ -323,18 +323,18 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
                 break;
             }
             case 1002:
-                ac->mAcState = 1003;
+                ac->acState = 1003;
                 break;
             case 1003:
                 break;
             case 1004:
                 sw->endTimer = 60;
                 disp->slideTimer = 60;
-                ac->mAcState = 1005;
+                ac->acState = 1005;
             case 1005:
                 sw->endTimer--;
                 if (sw->endTimer <= 0) {
-                    ac->mAcState = 1006;
+                    ac->acState = 1006;
                 }
                 break;
             case 1006:
@@ -370,7 +370,7 @@ void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
     } else {
         fn = actionCommandDisp2;
     }
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 99:
             disp->iconX = intplGetValue(EASING_QUADRATIC_OUT, -300.0f, 30.0f, 20 - disp->slideTimer, 20);
             fn(disp->iconX, disp->iconY);
@@ -444,7 +444,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     StickRotateWork* sw = (StickRotateWork*)ac->work;
     Vec v0, v1, v2, v3, v4, v5;
 
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 99:
         case 100:
             DRAW_STICK_ICON(v0, ICON_STICK_NEUTRAL);
@@ -483,7 +483,7 @@ void actionCommandDisp2(f32 x, f32 y) {
     StickRotateWork* sw = (StickRotateWork*)ac->work;
     Vec v0, v1, v2;
 
-    switch (work->actionCommands.mAcState) {
+    switch (work->actionCommands.acState) {
         case 99:
         case 100:
             DRAW_STICK_ICON(v0, ICON_STICK_NEUTRAL);
@@ -524,5 +524,5 @@ void actionCommandDisp2(f32 x, f32 y) {
 #pragma auto_inline reset
 /** Called by btlevtcmd_StopAC: starts the slide-out and the 60-frame end wait. */
 void battleAcDelete_StickRotate(BattleWork* work) {
-    work->actionCommands.mAcState = 1004;
+    work->actionCommands.acState = 1004;
 }

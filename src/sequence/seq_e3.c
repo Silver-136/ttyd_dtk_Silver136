@@ -106,7 +106,7 @@ void seq_e3Init(SequenceWork* seq) {
     wp->curScreen = 0;
     wp->nextScreen = 0;
     wp->scenario = 0;
-    wp->reserved_64 = 270.0f;
+    wp->poseRotY = 270.0f;
     OSCreateAlarm(&wp->alarm);
 #ifdef VERSION_G8ME01
     OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 300, alarm_handler);

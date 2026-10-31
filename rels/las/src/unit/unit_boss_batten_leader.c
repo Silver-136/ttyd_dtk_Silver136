@@ -240,9 +240,9 @@ BattleWeapon weapon_batten_leader_thunder = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {7, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -265,7 +265,7 @@ BattleWeapon weapon_batten_leader_thunder = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -281,9 +281,9 @@ BattleWeapon weapon_batten_leader_fire = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -312,7 +312,7 @@ BattleWeapon weapon_batten_leader_fire = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastTime..invisibleChance
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -329,9 +329,9 @@ BattleWeapon weapon_batten_leader_ice = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -357,7 +357,7 @@ BattleWeapon weapon_batten_leader_ice = {
     0, 0, 0, 0, 0, 0, 0, 0, // slowTime..hpRegenTime
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -369,9 +369,9 @@ BattleWeapon weapon_batten_leader_shikaeshi = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -394,7 +394,7 @@ BattleWeapon weapon_batten_leader_shikaeshi = {
     3, // paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -406,9 +406,9 @@ BattleWeapon weapon_batten_leader_yokeyoke = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -432,7 +432,7 @@ BattleWeapon weapon_batten_leader_yokeyoke = {
     0, 0, 0, 0, 0, 0, 0, 0, // chargeStrength..paybackTime
     0, 0, 0, 0, 0, 0, 0, // holdFastTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -449,9 +449,9 @@ BattleWeapon weapon_batten_leader_stop = {
     0, // superguardsAllowed
 #endif
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -475,7 +475,7 @@ BattleWeapon weapon_batten_leader_stop = {
     0, 0, 0, 0, 0, 0, 0, 0, // frightChance..hpRegenStrength
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -484,14 +484,14 @@ BattleWeapon weapon_batten_leader_stop = {
  * names its parts, status table and init script.
  */
 BattleUnitKind unit_boss_batten_leader = {
-    UNIT_GRODUS, // mUnitType
+    UNIT_GRODUS, // unitType
     "btl_un_batten_leader", // name
     50, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    87, // mLevel
-    0, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    87, // level
+    0, // bonusExp
     0, // bonusCoin
     100, // bonusCoinRate
     0, // baseCoin
@@ -526,7 +526,7 @@ BattleUnitKind unit_boss_batten_leader = {
     0, // attributeFlags
     &regist, // statusVulnerability
     7, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     data_table, // dataTable
 };
@@ -808,10 +808,10 @@ static USER_FUNC(eff_staff) {
 
     wk = effSyuryouEntry(0, 90, 0.0f, -1000.0f, 0.0f)->userdata;
     BtlUnit_GetPos(unit, &x, &y, &z);
-    wk[1] = x + 6.0f * (unit->mSizeMultiplier * unit->faceDirection);
-    wk[2] = y + 68.0f * unit->mSizeMultiplier;
+    wk[1] = x + 6.0f * (unit->sizeMultiplier * unit->faceDirection);
+    wk[2] = y + 68.0f * unit->sizeMultiplier;
     wk[3] = 5.0f + z;
-    wk[4] = unit->mSizeMultiplier;
+    wk[4] = unit->sizeMultiplier;
     return EVT_RETURN_DONE;
 }
 /**
@@ -904,10 +904,10 @@ USER_FUNC(check_satellite) {
 
             BtlUnit_GetPos(unit, &ex, &ey, &ez);
             ud[1] = ex;
-            ud[2] = ey - 12.5f * unit->mSizeMultiplier;
+            ud[2] = ey - 12.5f * unit->sizeMultiplier;
             ud[3] = 10.0f + ez;
 
-            ud[4] = 2.5f * unit->mSizeMultiplier;
+            ud[4] = 2.5f * unit->sizeMultiplier;
         }
         part->attributes |= kImmuneToNegativeStatus;
         part2->attributes |= kImmuneToDamageAndStatus;
@@ -979,7 +979,7 @@ USER_FUNC(battleGetBattenSatelliteInitPos) {
 
 /** Setup used to spawn one of Grodus's satellites: unit kind, alliance, position and turn phase. */
 BattleUnitSetup entry_batten_satellite = {
-    &unit_boss_batten_satellite, // mUnitKindParams
+    &unit_boss_batten_satellite, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
@@ -2851,7 +2851,7 @@ void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
     s32 idx;
 
     poseId = part->poseId;
-    unit = part->mOwner;
+    unit = part->owner;
 
     if (strcmp("locator6", animPoseGetGroupName(poseId, group)) == 0) {
         idx = 0;

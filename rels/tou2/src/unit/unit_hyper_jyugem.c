@@ -59,8 +59,8 @@ static USER_FUNC(togezo_copy_status) {
     BattleUnit* sourceUnit = BattleGetUnitPtr(wp, sourceId);
     BattleUnit* destinationUnit = BattleGetUnitPtr(wp, destinationId);
 
-    destinationUnit->mSizeChangeTurns = sourceUnit->mSizeChangeTurns;
-    destinationUnit->mSizeChangeStrength = sourceUnit->mSizeChangeStrength;
+    destinationUnit->sizeChangeTurns = sourceUnit->sizeChangeTurns;
+    destinationUnit->sizeChangeStrength = sourceUnit->sizeChangeStrength;
     return EVT_RETURN_DONE;
 }
 
@@ -69,14 +69,14 @@ static USER_FUNC(togezo_copy_status) {
  * event data table.
  */
 static BattleUnitKind unit_hyper_jyugem = {
-    UNIT_DARK_LAKITU, // mUnitType
+    UNIT_DARK_LAKITU, // unitType
     "btl_un_hyper_jyugem", // name
     13, // maxHp
     0, // maxFp
-    1, // mDangerHP
-    1, // mPerilHP
-    26, // mLevel
-    1, // mBonusExp
+    1, // dangerHP
+    1, // perilHP
+    26, // level
+    1, // bonusExp
     2, // bonusCoin
     70, // bonusCoinRate
     1, // baseCoin
@@ -108,7 +108,7 @@ static BattleUnitKind unit_hyper_jyugem = {
     kFloating, // attributeFlags
     &regist, // statusVulnerability
     2, // numParts
-    parts, // mParts
+    parts, // parts
     init_event, // initEventCode
     (BattleDataEntry*)data_table, // dataTable
 };
@@ -210,7 +210,7 @@ static BattleUnitKindPart parts[] = {
         {0.0f, 35.0f, 0.0f}, // hitBaseOffset
         {0.0f, 50.0f, 0.0f}, // hitCursorBaseOffset
         20, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -226,7 +226,7 @@ static BattleUnitKindPart parts[] = {
         {0}, // hitBaseOffset
         {0}, // hitCursorBaseOffset
         20, // shadowSize
-        30, // reserved_32
+        30, // hitHeight
         255, // baseAlpha
         &defence, // defense
         &defence_attr, // defenseAttr
@@ -245,9 +245,9 @@ static BattleWeapon weapon_jyugem_attack = {
     0, 0, // baseFpCost..baseSpCost
     2, // superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
@@ -269,7 +269,7 @@ static BattleWeapon weapon_jyugem_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -281,9 +281,9 @@ static BattleWeapon weapon_jyugem_charge = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-    1, // mStylishCommandMultiplier
+    1, // stylishCommandMultiplier
     1, // reserved_19
-    1, // mBingoSlotChance
+    1, // bingoSlotChance
     1, // reserved_1B
     NULL, // hpDamageFn
     {0}, // hpDamageWork
@@ -305,7 +305,7 @@ static BattleWeapon weapon_jyugem_charge = {
     0, 0, 0, 0, 0, 0, 0, 0, // fastChance..holdFastTime
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
-    NULL, // mAttackEvtScript
+    NULL, // attackEvtScript
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
@@ -314,7 +314,7 @@ static BattleWeapon weapon_jyugem_charge = {
  * friend_event: unit kind, side, turn phase and starting position.
  */
 static BattleUnitSetup entry_togezo = {
-    &unit_hyper_togezo, // mUnitKindParams
+    &unit_hyper_togezo, // unitKindParams
     ALLIANCE_ENEMY, // alliance
     {0}, // pad_05
     BATTLE_PHASE_ENEMY, // attackPhase
