@@ -1320,7 +1320,7 @@ typedef struct MapAnimLightData2 {
     MapAnimKey5 keys[1];
 } MapAnimLightData2;
 
-static inline void mapMainMatKeys_(MapAnim* a_, MapAnimMatData* d, u8* obj) {
+static inline void mapMainMatKeys_(MapAnim* a_, MapAnimMatData* d, MapMaterial* obj) {
     int n, c;
     f32 cur;
     for (n = 1; n < d->keyCount; n++) {
@@ -1336,17 +1336,17 @@ static inline void mapMainMatKeys_(MapAnim* a_, MapAnimMatData* d, u8* obj) {
 
         for (c = 0; c < 5; c++) {
             if (k0->ch[c].step) {
-                ((MapMaterial*)obj)->xforms[d->idx].ch[c] = k0->ch[c].value;
+                obj->xforms[d->idx].ch[c] = k0->ch[c].value;
             } else {
-                ((MapMaterial*)obj)->xforms[d->idx].ch[c] = mapHermiteCh(cur, k0->time, k1->time, &k0->ch[c], &k1->ch[c]);
+                obj->xforms[d->idx].ch[c] = mapHermiteCh(cur, k0->time, k1->time, &k0->ch[c], &k1->ch[c]);
             }
         }
-        ((MapMaterial*)obj)->xforms[d->idx].cx = d->u;
-        ((MapMaterial*)obj)->xforms[d->idx].cy = d->v;
+        obj->xforms[d->idx].cx = d->u;
+        obj->xforms[d->idx].cy = d->v;
         break;
     }
 }
-static inline void mapMainAlphaKeys_(MapAnim* a_, MapAnimAlphaData* d, u8* obj) {
+static inline void mapMainAlphaKeys_(MapAnim* a_, MapAnimAlphaData* d, MapMaterial* obj) {
     int n;
     f32 cur;
     for (n = 1; n < d->keyCount; n++) {
@@ -1364,9 +1364,9 @@ static inline void mapMainAlphaKeys_(MapAnim* a_, MapAnimAlphaData* d, u8* obj) 
         }
 
         if (k0->ch[0].step) {
-            ((MapMaterial*)obj)->blendColor.r = (u8)(255.0f - 255.0f * k0->ch[0].value);
+            obj->blendColor.r = (u8)(255.0f - 255.0f * k0->ch[0].value);
         } else {
-            ((MapMaterial*)obj)->blendColor.r = (u8)(255.0f - 255.0f * mapHermiteCh(cur, k0->time, k1->time, &k0->ch[0], &k1->ch[0]));
+            obj->blendColor.r = (u8)(255.0f - 255.0f * mapHermiteCh(cur, k0->time, k1->time, &k0->ch[0], &k1->ch[0]));
         }
 
         break;
@@ -1434,7 +1434,7 @@ static inline void mapMainLight_lc(MapAnim* anim, LightEntry* lp, MapAnimLightDa
     }
 }
 
-static inline u8* mapMainFindTbl_(const char* name) {
+static inline MapMaterial* mapMainFindTbl_(const char* name) {
     MapEntry* entry;
     MapWork* wp;
     int j;
@@ -1450,7 +1450,7 @@ static inline u8* mapMainFindTbl_(const char* name) {
         for (j = 0; j < entry->materialNameTable->count; j++) {
             mat = &entry->materialNameTable->entries[j];
             if (!strcmp(mat->name, name)) {
-                return (u8*)mat->data;
+                return mat->data;
             }
         }
     }
@@ -1460,7 +1460,7 @@ static inline u8* mapMainFindTbl_(const char* name) {
 // A macro, not an inline function: as a function mapMain changes (together with mapMainAlpha).
 #define mapMainMat(a_, i_, b_, x_)           \
 {                                            \
-    u8* obj;                                 \
+    MapMaterial* obj;                                 \
     strcpy(b_, (const char*)i_->name);       \
     if (x_) {                                \
         strcat(b_, x_);                      \
@@ -1473,7 +1473,7 @@ static inline u8* mapMainFindTbl_(const char* name) {
 
 #define mapMainAlpha(a_, i_, b_, x_)           \
 {                                              \
-    u8* obj;                                   \
+    MapMaterial* obj;                                   \
     strcpy(b_, (const char*)i_->name);         \
     if (x_) {                                  \
         strcat(b_, x_);                        \

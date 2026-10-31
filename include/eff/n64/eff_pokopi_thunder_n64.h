@@ -1,3 +1,4 @@
+#include "driver/camdrv.h"
 #pragma once
 
 #include <dolphin/mtx.h>
@@ -26,7 +27,7 @@ typedef struct EffPokopiThunderN64Work {
     f32 w[12];    // 0xE0
     s32 seed;     // 0x110
     f32 length;   // 0x114
-    s32 cameraId; // 0x118
+    CameraId cameraId; // 0x118
 } EffPokopiThunderN64Work;
 
 EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 x2, f32 y2, f32 z2, f32 scale);

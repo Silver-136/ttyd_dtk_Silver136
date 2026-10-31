@@ -215,7 +215,7 @@ void setupDataBase(const char* areaName, const char* mapName) {
                 btl = -1;
                 area = areaDataPtr(areaName);
                 if (strcmp(btlSetup, "BTLNO_INVALID")) {
-                    btl = dbGetDefData((NpcTerritoryInfo*)area->btlSetupNoTbl, btlSetup);
+                    btl = dbGetDefData(area->btlSetupNoTbl, btlSetup);
                 }
                 npcSetBattleInfo(npc, btl);
                 if (tribe->stayAnim) {

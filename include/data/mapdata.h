@@ -3,6 +3,8 @@
 #include <dolphin/types.h>
 #include "evt/evt_word.h"
 
+struct NpcTerritoryInfo;
+
 typedef struct MapData {
     const char* mapName;
     EvtWord* eventAddr;
@@ -12,7 +14,7 @@ typedef struct AreaData {
     const char* areaName;
     const char* areaJpName;
     void* btlSetupTbl;   // BattleSetupData table, set by relSetBtlAddr
-    void* btlSetupNoTbl; // NpcTerritoryInfo table, set by relSetBtlAddr
+    struct NpcTerritoryInfo* btlSetupNoTbl; // NpcTerritoryInfo table, set by relSetBtlAddr
     MapData* maps[];
 } AreaData;
 

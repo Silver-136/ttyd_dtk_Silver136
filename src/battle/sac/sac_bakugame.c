@@ -75,7 +75,7 @@ typedef struct BakuWork {
     s32 poseId;         // 0xEC
     s32 fuseTimer;      // 0xF0, frames until the bomb goes off (540-659 at the start)
     s32 pressWait;      // 0xF4, frames before a button press counts again
-    u8 weapon[0xC0];    // 0xF8
+    BattleWeapon weapon;    // 0xF8
     s32 sfx1;           // 0x1B8
     s32 sfx2;           // 0x1BC
     s32 hstate;         // 0x1C0
@@ -261,9 +261,9 @@ USER_FUNC(bakuGameDecideWeapon) {
     v = evtGetValue(event, args[1]);
     w = GetBakuGamePtr();
 
-    wp = (BattleWeapon*)w->weapon;
+    wp = &w->weapon;
     q = &wp->sleepChance;
-    memcpy(w->weapon, &weapon, sizeof(BattleWeapon));
+    memcpy(&w->weapon, &weapon, sizeof(BattleWeapon));
 
     q[2] = 100;
     if (v != -1) {
@@ -272,7 +272,7 @@ USER_FUNC(bakuGameDecideWeapon) {
             // FAKE: same-value second def of q (q == &wp->sleepChance already). It keeps q a named multi-def
             // pointer (addi r28) with no in-block copy. That keeps the q addi at height 1, so lis issues before
             // `mr w,r3` and takes r4, as in the target.
-            q = &w->weapon[0x80];
+            q = &w->weapon.sleepChance;
         } else {
             q[2] = 100;
         }
@@ -281,7 +281,7 @@ USER_FUNC(bakuGameDecideWeapon) {
         q[2] = 0;
         q[3] = 0;
     }
-    evtSetValue(event, args[2], (EvtWord)w->weapon);
+    evtSetValue(event, args[2], (EvtWord)&w->weapon);
     return EVT_RETURN_DONE;
 }
 
@@ -328,7 +328,7 @@ USER_FUNC(bakuGameMain) {
             b->hp = 100.0f;
             b->scale = 0.0f;
         }
-        memcpy(w->weapon, &weapon, sizeof(BattleWeapon));
+        memcpy(&w->weapon, &weapon, sizeof(BattleWeapon));
         flag = 1;
         for (i = 0; i < 64; i++) {
             u = BattleGetUnitPtr(bw, i);

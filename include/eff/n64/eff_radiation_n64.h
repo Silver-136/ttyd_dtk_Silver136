@@ -1,3 +1,4 @@
+#include "driver/camdrv.h"
 #pragma once
 
 #include "driver/effdrv.h"
@@ -39,7 +40,7 @@ typedef struct EffRadiationN64Work {
     f32 yVel;       // 0x8C
     s32 delay;      // 0x90
     s32 flag;       // 0x94
-    s32 camera;     // 0x98
+    CameraId camera;     // 0x98
 } EffRadiationN64Work;
 
 EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale);

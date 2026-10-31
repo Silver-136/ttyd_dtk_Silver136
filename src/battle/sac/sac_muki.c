@@ -79,7 +79,7 @@ typedef struct MukiWork {
     Muki3D o3d[9];         // 0x78
     MukiObj obj[9];        // 0x1bc
     SacStarStone star;     // 0x3b4
-    u8 weapon[0xc0];       // 0x408
+    BattleWeapon weapon;       // 0x408
 } MukiWork;
 
 static void disp_3D_alpha(CameraId cam, void* param);
@@ -928,20 +928,20 @@ static USER_FUNC(set_weapon) {
     s32 type = evtGetValue(event, args[0]);
     s32 power = evtGetValue(event, args[1]);
     MukiWork* w = get_ptr();
-    memcpy(w->weapon, &weapon, sizeof(BattleWeapon));
+    memcpy(&w->weapon, &weapon, sizeof(BattleWeapon));
     switch (type) {
     case 0:
-        w->weapon[0x96] = 100;
-        w->weapon[0x97] = 3;
-        w->weapon[0x98] = power;
+        w->weapon.atkChangeChance = 100;
+        w->weapon.atkChangeTime = 3;
+        w->weapon.atkChangeStrength = power;
         break;
     case 1:
-        w->weapon[0x99] = 100;
-        w->weapon[0x9a] = 3;
-        w->weapon[0x9b] = power;
+        w->weapon.defChangeChance = 100;
+        w->weapon.defChangeTime = 3;
+        w->weapon.defChangeStrength = power;
         break;
     }
-    evtSetValue(event, args[2], (EvtWord)w->weapon);
+    evtSetValue(event, args[2], (EvtWord)&w->weapon);
     return 2;
 }
 

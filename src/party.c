@@ -602,7 +602,6 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
     return slot;
 }
 
-void partyVivianTailStart(PartyEntry* party);
 void driveParty(PartyEntry* party);
 s32 partyHelloMain(PartyEntry* party);
 static void partyShadowOn(PartyEntry* party) {
@@ -1280,7 +1279,6 @@ s32 partyGoodbyeMain(PartyEntry* party) {
     return 0;
 }
 
-void partyVivianTailStop(PartyEntry* party);
 
 static inline void partyChgRunM(PartyEntry* party) {
     party->scale = (Vec){1.0f, 1.0f, 1.0f};

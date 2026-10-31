@@ -62,7 +62,7 @@ typedef struct SukiWork {
     SukiBtn btn2[7];    // 0x184
     SacStarStone star;  // 0x22C
     s32 effMode;        // 0x280
-    u8 weapon[0xC0];    // 0x284
+    BattleWeapon weapon;    // 0x284
     u8 pad344[0x4C8 - 0x344];
 } SukiWork;
 
@@ -616,9 +616,9 @@ static USER_FUNC(set_weapon) {
     s32 idx = evtGetValue(event, args[0]);
     SukiWork* w = get_ptr();
     OhkoRateTbl tbl = ohko_rate_tbl;
-    memcpy(w->weapon, &weapon, sizeof(BattleWeapon));
-    w->weapon[0x9E] = tbl.rate[idx - 1];
-    evtSetValue(event, args[1], (EvtWord)w->weapon);
+    memcpy(&w->weapon, &weapon, sizeof(BattleWeapon));
+    w->weapon.ohkoChance = tbl.rate[idx - 1];
+    evtSetValue(event, args[1], (EvtWord)&w->weapon);
     return 2;
 }
 

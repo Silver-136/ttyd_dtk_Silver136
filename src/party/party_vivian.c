@@ -64,7 +64,6 @@ void mot_vivian(void) {
     }
 }
 
-void partyVivianTailStart(PartyEntry* party);
 
 void mot_vivian_post(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());

@@ -1,3 +1,4 @@
+#include "driver/camdrv.h"
 #pragma once
 
 #include "driver/effdrv.h"
@@ -16,7 +17,7 @@ typedef struct EffRippleN64Work {
     f32 unk28;    // 0x28
     f32 rx;       // 0x2C
     f32 rz;       // 0x30
-    s32 cameraId; // 0x34, dispEntry camera
+    CameraId cameraId; // 0x34, dispEntry camera
 } EffRippleN64Work;
 
 EffectEntry* effRippleN64Entry(s32 type, f32 x, f32 y, f32 z, f32 yOffset);

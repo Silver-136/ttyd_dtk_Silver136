@@ -1,3 +1,4 @@
+#include "driver/camdrv.h"
 #pragma once
 
 #include "driver/effdrv.h"
@@ -15,7 +16,7 @@ typedef struct ItemGetWork {
     Vec velocity; // 0x24
     f32 angle;    // 0x30
     s32 alpha;    // 0x34
-    s32 camera;   // 0x38
+    CameraId camera;   // 0x38
 } ItemGetWork;
 
 EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z);

@@ -12,3 +12,6 @@ void vivianShadow(struct PartyEntry* party);
 void vivianUnhold(struct PartyEntry* party);
 void vivian_move(struct PartyEntry* party);
 void vivian_use(struct PartyEntry* party);
+
+void partyVivianTailStart(struct PartyEntry* party);
+void partyVivianTailStop(struct PartyEntry* party);

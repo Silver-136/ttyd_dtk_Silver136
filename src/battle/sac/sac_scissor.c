@@ -42,6 +42,10 @@ typedef struct ScissorTri {
     f32 y[3]; // 0xC
 } ScissorTri;
 
+typedef struct Pt {
+    f32 x, y;
+} Pt;
+
 typedef struct ScissorWork {
     /* 0x000 */ u32 flags;
     /* 0x004 */ u8 pad0[8];
@@ -75,7 +79,7 @@ typedef struct ScissorWork {
     /* 0x108 */ f32 timerDispX;
     /* 0x10C */ f32 timerDispY;
     /* 0x110 */ u8 pad110[4];
-    /* 0x114 */ void* points; // cursor path as Pt pairs (0x1000 bytes, up to 0x200 points)
+    /* 0x114 */ Pt* points; // cursor path as Pt pairs (0x1000 bytes, up to 0x200 points)
     /* 0x118 */ struct ScissorTri* tris; // triangle list (0x3000 bytes), drawn by scissor_disp_region
     /* 0x11C */ s32 phase;
     /* 0x120 */ s32 phaseStep;
@@ -89,9 +93,7 @@ typedef struct ScissorWork {
     /* 0x170 */ smartEntry* smart;
 } ScissorWork;
 
-typedef struct Pt {
-    f32 x, y;
-} Pt;
+
 ScissorWork* GetScissorPtr(void);
 void scissor_disp_region(CameraId camera, void* param);
 void scissor_capture(CameraId camera, void* param);
@@ -823,7 +825,7 @@ GXColor HSV2RGB(GXColor hsv);
 
 s32 scissor_control(EventEntry* evt, BOOL first) {
     ScissorWork* w = GetScissorPtr();
-    Pt* buf = (Pt*)w->points;
+    Pt* buf = w->points;
     Pt* p;
     f32 ox, oy;
     s32 i, k;
