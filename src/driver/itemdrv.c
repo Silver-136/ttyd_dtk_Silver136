@@ -188,7 +188,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
     if (!entry) return FALSE;
     if (entry->flags2 & ITEM_FLAG2_SUNK) return FALSE;
     if (mario->characterId == CHARACTER_BOWSER) {
-        if (!(mario->stageFlags & 1)) {
+        if (!(mario->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING)) {
             if (marioStGetSystemLevel() != 0) return FALSE;
             if (mario->flags & (MARIO_FLAG_CTRL_OFF | MARIO_FLAG_KEY_OFF)) return FALSE;
         }

@@ -24,6 +24,10 @@ typedef struct {
     u32 checksum2; //0x1FFC
 } CardMetadata;
 
+// CardSaveSlot.data.flags: erased slot and failure to validate either saved copy.
+#define CARD_SAVE_FLAG_ERASED (1 << 0)
+#define CARD_SAVE_FLAG_NO_VALID_COPY (1 << 1)
+
 typedef struct {
     struct {
         u16 flags; //0x0

@@ -33,6 +33,11 @@ typedef enum KpaWorkFlags {
     KPA_WORK_FLAG_DEAD = (1 << 28),          // 0x10000000, evt_koopa_chk_dead
 } KpaWorkFlags;
 
+#define KPA_BODY_NOT_BOWSER (-1)
+#define KPA_BODY_DRY 0
+#define KPA_BODY_PARTLY_SUBMERGED 1
+#define KPA_BODY_SUBMERGED 2
+
 typedef struct KpaWork {
     u32 flags;                    // 0x000, KpaWorkFlags
     s32 level;                    // 0x004, kpaGetLevel/kpaSetLevel (0..3)

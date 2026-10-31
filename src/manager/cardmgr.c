@@ -351,7 +351,7 @@ void cardErase(s32 slotNo) {
         wp->flags |= CARD_FLAG_ERASE;
         save = wp->writeBuf;
         memset(save, 0, sizeof(save->data));
-        save->data.flags |= 1;
+        save->data.flags |= CARD_SAVE_FLAG_ERASED;
         check_sum(save);
     }
 }
@@ -417,8 +417,8 @@ void cardWrite(s32 slot) {
         memcpy(&save->data.badgeShop, bdsw, sizeof(BadgeShopWork));
         memcpy(&save->data.parlor, yuwp, sizeof(PiantaParlorWork));
         memcpy(&save->data.informant, &_jdt.readFlags, sizeof(_jdt.readFlags));
-        save->data.flags &= ~1;
-        save->data.flags &= ~2;
+        save->data.flags &= ~CARD_SAVE_FLAG_ERASED;
+        save->data.flags &= ~CARD_SAVE_FLAG_NO_VALID_COPY;
         check_sum(save);
     }
 }
@@ -663,7 +663,7 @@ void read_main(void) {
                 if (saveType != -1) {
                     memcard_read(&wp->data->saves[wp->opSlot], sizeof(CardSaveSlot), (s32)(sizeof(CardMetadata) + (wp->opSlot * sizeof(CardSaveSlot)) + (saveType * (sizeof(CardSaveSlot) * 4))));
                 } else {
-                    wp->data->saves[wp->opSlot].data.flags |= 2;
+                    wp->data->saves[wp->opSlot].data.flags |= CARD_SAVE_FLAG_NO_VALID_COPY;
                 }
                 break;
             case 11:
@@ -765,7 +765,7 @@ void read_all_main(void) {
                 if (saveType != -1) {
                     memcard_read(&wp->data->saves[wp->opSlot], sizeof(CardSaveSlot), (s32)(sizeof(CardMetadata) + (wp->opSlot * sizeof(CardSaveSlot)) + (saveType * (sizeof(CardSaveSlot) * 4))));
                 } else {
-                    wp->data->saves[wp->opSlot].data.flags |= 2;
+                    wp->data->saves[wp->opSlot].data.flags |= CARD_SAVE_FLAG_NO_VALID_COPY;
                 }
                 wp->opSlot++;
                 if (wp->opSlot < 4) {
@@ -1095,7 +1095,7 @@ static void make_data(void) {
             save = wp->writeBuf;
         }
         memset(save, 0, sizeof(save->data));
-        save->data.flags |= 1;
+        save->data.flags |= CARD_SAVE_FLAG_ERASED;
         check_sum(save);
     }
 }

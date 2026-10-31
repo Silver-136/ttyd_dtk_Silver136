@@ -2,6 +2,8 @@
  * Easy file handling for loading data from the disc, instead of having to call DVD functions directly and handle errors.
  */
 #include "manager/dvdmgr.h"
+
+#define DVD_PRIORITY_CHUNK_BYTES 0x40000
 #include "memory.h"
 #include "system.h"
 #include <dolphin/os.h>
@@ -81,8 +83,8 @@ void DVDMgrMain(void) {
         if (!(entry->status & DVDMGR_UNK_ERROR2) && entry->status & DVDMGR_READING) {
             size = entry->bytesLeft;
             if (entry->priority) {
-                if (size > 0x40000) {
-                    size = 0x40000;
+                if (size > DVD_PRIORITY_CHUNK_BYTES) {
+                    size = DVD_PRIORITY_CHUNK_BYTES;
                 }
             }
 

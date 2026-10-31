@@ -965,7 +965,7 @@ s32 marioRollChgChk(void) {
 
 void marioChgMotJump2(void) {
     MarioWork* mario = marioGetPtr();
-    if (kpaGetBodyStatus() != 2 && mario->currMotionId != MARIO_MOTION_ROLL) {
+    if (kpaGetBodyStatus() != KPA_BODY_SUBMERGED && mario->currMotionId != MARIO_MOTION_ROLL) {
         marioChgMot(MARIO_MOTION_JUMP_NPC);
     }
 }

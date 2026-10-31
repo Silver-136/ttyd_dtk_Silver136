@@ -340,13 +340,17 @@ typedef enum MarioCharacter {
     CHARACTER_BOWSER,
 } MarioCharacter;
 
+// MarioWork.stageFlags for Bowser maps.
+#define KPA_STAGE_FLAG_SIDE_SCROLLING (1 << 0)
+#define KPA_STAGE_FLAG_KPA03 (1 << 1)
+
 typedef struct MarioWork {
     u32 flags;                     // 0x0
     u32 dispFlags;                 // 0x4, MarioDispFlags
     u32 rollFlags;                 // 0x8, mot_roll: 0x10 while rolling (motion 0x16), 0 when done; evt_mario waits for 0
     u32 trigFlags;                 // 0xC
     s32 peachFlags;                // 0x10, PeachFlags
-    u32 stageFlags;                // 0x14, Bowser stages: bit0 clear = side view (kpaGetStageViewType), bit1 = kpaGetStageType
+    u32 stageFlags;                // 0x14, Bowser stages: bit0 set = side-scrolling view (kpaGetStageViewType returns 0), bit1 = kpa_03
     const char* animName;          // 0x18
     const char* paperAnimName;     // 0x1C
     void* reserved_20;             // 0x20, only cleared (marioInit, Vivian hide)

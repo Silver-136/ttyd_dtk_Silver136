@@ -1898,7 +1898,7 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
     }
     count = 2;
     if (mp->characterId == CHARACTER_BOWSER) {
-        if (mp->stageFlags & 1) {
+        if (mp->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) {
             count = 3;
             heights[0] = 0.75f * mp->wPlayerCollisionBox.y;
             heights[1] = 0.5f * mp->wPlayerCollisionBox.y;

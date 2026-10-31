@@ -59,7 +59,7 @@ static inline void kpaFireEntry2(Vec pos) {
         dir = (mp->displayDirection >= 90.0f && mp->displayDirection <= 270.0f) ? 1.0f : -1.0f;
         scale = kpaGetBaseScale(kpaGetLevel());
         x = 40.0f * dir * scale + pos.x;
-        t = (marioGetPtr()->stageFlags & 1) ^ 1;
+        t = (marioGetPtr()->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) ^ 1;
         y = pos.y + (20.0f * scale + (t == 1 ? 6.0f : 0.0f));
         z = pos.z;
         type = 7;
@@ -150,7 +150,7 @@ void kpaMSetMutekiTimer(void) {
 }
 
 void kpaChgPose(const char* a, const char* b) {
-    s32 v = (marioGetPtr()->stageFlags & 1) ^ 1;
+    s32 v = (marioGetPtr()->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) ^ 1;
     marioChgPose(v == 1 ? a : b);
 }
 
@@ -183,17 +183,17 @@ s32 kpaGetBodyStatus(void) {
     MarioWork* mp = marioGetPtr();
     s32 st;
     if (mp->characterId != CHARACTER_BOWSER) {
-        return -1;
+        return KPA_BODY_NOT_BOWSER;
     }
-    st = 0;
+    st = KPA_BODY_DRY;
     if (strcmp(gp->currentMapName, "kpa_03") == 0) {
         if (mp->position.y > 370.0f) {
-            return 0;
+            return KPA_BODY_DRY;
         }
         if (mp->position.y + mp->wPlayerCollisionBox.y < 370.0f) {
-            st = 2;
+            st = KPA_BODY_SUBMERGED;
         } else {
-            st = 1;
+            st = KPA_BODY_PARTLY_SUBMERGED;
         }
     }
     return st;
@@ -213,13 +213,13 @@ static inline void kpaSetJumpParams(MarioWork* mp, f32 velocityY, f32 accelerati
 }
 
 s32 kpaGetStageViewType(void) {
-    return !(marioGetPtr()->stageFlags & 1);
+    return !(marioGetPtr()->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING);
 }
 
 s32 kpaCamFollow(void) {
     MarioWork* mp = marioGetPtr();
     s32 v;
-    if (marioBgmodeChk() == 1 || (v = (marioGetPtr()->stageFlags & 1) ^ 1, v == 1)) {
+    if (marioBgmodeChk() == 1 || (v = (marioGetPtr()->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) ^ 1, v == 1)) {
         return 0;
     }
     if (mp->position.y > 76.0f) {
@@ -245,15 +245,15 @@ void kpaPreInit(void) {
     if (strcmp(gp->currentMapName, "kpa_02") == 0 || strcmp(gp->currentMapName, "kpa_03") == 0 ||
         strcmp(gp->currentMapName, "kpa_04") == 0 || strcmp(gp->currentMapName, "kpa_05") == 0 ||
         strcmp(gp->currentMapName, "kpa_06") == 0) {
-        mp->stageFlags |= 1;
+        mp->stageFlags |= KPA_STAGE_FLAG_SIDE_SCROLLING;
     } else {
-        mp->stageFlags &= ~1;
+        mp->stageFlags &= ~KPA_STAGE_FLAG_SIDE_SCROLLING;
     }
     mp = marioGetPtr();
     if (strcmp(gp->currentMapName, "kpa_03") == 0) {
-        mp->stageFlags |= 2;
+        mp->stageFlags |= KPA_STAGE_FLAG_KPA03;
     } else {
-        mp->stageFlags &= ~2;
+        mp->stageFlags &= ~KPA_STAGE_FLAG_KPA03;
     }
     fireefp = NULL;
 }
@@ -261,7 +261,7 @@ void kpaPreInit(void) {
 f32 __fabsf(f32);
 
 void kpaMain(void) {
-    if (marioGetPtr()->stageFlags & 1) {
+    if (marioGetPtr()->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) {
         kpa2DMain();
     } else {
         kpa3DMain();
@@ -838,7 +838,7 @@ void kpaFireMain(void) {
         dir = (mp->displayDirection >= 90.0f && mp->displayDirection <= 270.0f) ? 1.0f : -1.0f;
         scale = kpaGetBaseScale(kpaGetLevel());
         f30 = 40.0f * dir * scale + mp->position.x;
-        t = (marioGetPtr()->stageFlags & 1) ^ 1;
+        t = (marioGetPtr()->stageFlags & KPA_STAGE_FLAG_SIDE_SCROLLING) ^ 1;
         y = mp->position.y + (20.0f * scale + (t == 1 ? 6.0f : 0.0f));
         z = mp->position.z;
         ((EffGonbabaBreathWork*)fireefp->userdata)->position.x = f30;

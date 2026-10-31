@@ -252,7 +252,7 @@ void loadMain(SequenceWork* seq) {
     wp->cardCode = code;
     for (i = 0; i < 4; i++) {
         flags = cardGetFilePtr()->saves[i].data.flags;
-        if (!(flags & 1) || (flags & 2)) {
+        if (!(flags & CARD_SAVE_FLAG_ERASED) || (flags & CARD_SAVE_FLAG_NO_VALID_COPY)) {
             break;
         }
     }
@@ -264,7 +264,7 @@ void loadMain(SequenceWork* seq) {
     wp->flags &= ~LOAD_FLAG_NO_COPY;
     for (i = 0; i < 4; i++) {
         flags = cardGetFilePtr()->saves[i].data.flags;
-        if (!(flags & 1) && !(flags & 2)) {
+        if (!(flags & CARD_SAVE_FLAG_ERASED) && !(flags & CARD_SAVE_FLAG_NO_VALID_COPY)) {
             break;
         }
     }
@@ -293,9 +293,9 @@ void loadMain(SequenceWork* seq) {
                     case 1:
                     case 2:
                     case 3:
-                        if (flags & 2) {
+                        if (flags & CARD_SAVE_FLAG_NO_VALID_COPY) {
                             SFX(PSND_SFX_CURSOR_CANCEL1);
-                        } else if (flags & 1) {
+                        } else if (flags & CARD_SAVE_FLAG_ERASED) {
                             wp->state = 0x1e;
                             SFX(PSND_SFX_CURSOR_OK1);
                         } else {
@@ -307,7 +307,7 @@ void loadMain(SequenceWork* seq) {
                         if (!(wp->flags & LOAD_FLAG_NO_DELETE)) {
                             for (i = 0; i < 4; i++) {
                                 flags = cardGetFilePtr()->saves[i].data.flags;
-                                if (!(flags & 1) || (flags & 2)) {
+                                if (!(flags & CARD_SAVE_FLAG_ERASED) || (flags & CARD_SAVE_FLAG_NO_VALID_COPY)) {
                                     break;
                                 }
                             }
@@ -324,7 +324,7 @@ void loadMain(SequenceWork* seq) {
                         if (!(wp->flags & LOAD_FLAG_NO_COPY)) {
                             for (i = 0; i < 4; i++) {
                                 flags = cardGetFilePtr()->saves[i].data.flags;
-                                if (!(flags & 2) && !(flags & 1)) {
+                                if (!(flags & CARD_SAVE_FLAG_NO_VALID_COPY) && !(flags & CARD_SAVE_FLAG_ERASED)) {
                                     break;
                                 }
                             }
@@ -488,7 +488,7 @@ void loadMain(SequenceWork* seq) {
             } else if (trg & PAD_BUTTON_A) {
                 if (prev < 4) {
                     flags = cardGetFilePtr()->saves[wp->slot].data.flags;
-                    if ((flags & 2) || !(flags & 1)) {
+                    if ((flags & CARD_SAVE_FLAG_NO_VALID_COPY) || !(flags & CARD_SAVE_FLAG_ERASED)) {
                         SFX(PSND_SFX_CURSOR_OK1);
                         wp->state++;
                     } else {
@@ -543,7 +543,7 @@ void loadMain(SequenceWork* seq) {
             } else if (trg & PAD_BUTTON_A) {
                 if (prev < 4) {
                     flags = cardGetFilePtr()->saves[wp->slot].data.flags;
-                    if (!(flags & 2) && !(flags & 1)) {
+                    if (!(flags & CARD_SAVE_FLAG_NO_VALID_COPY) && !(flags & CARD_SAVE_FLAG_ERASED)) {
                         wp->state = 0x33;
                         wp->copyFrom = wp->slot;
                         wp->copyTo = (wp->copyFrom + 1) % 4;
@@ -956,7 +956,7 @@ void loadDraw(CameraId camera, void* param) {
         if (i == wp->slot) {
             FontDrawColor((GXColor){0, 0, 0, 255});
         }
-        if (flags & 2) {
+        if (flags & CARD_SAVE_FLAG_NO_VALID_COPY) {
 #ifdef VERSION_G8ME01
             if ((u32)gp->language == LANGUAGE_JP) {
                 str = "\x82\xB1\x82\xED\x82\xEA\x82\xC4\x82\xA2\x82\xDC\x82\xB7";
@@ -968,7 +968,7 @@ void loadDraw(CameraId camera, void* param) {
             FontDrawMessage(win1[0]->x - w / 2.0f, 28.0f + win1[0]->y, str);
             str = msgSearch("msg_mcard_kowaretitle");
             FontDrawString(win1[0]->x - FontGetMessageWidth(str) / 2, 70.0f + win1[0]->y, str);
-        } else if (flags & 1) {
+        } else if (flags & CARD_SAVE_FLAG_ERASED) {
             if ((u32)gp->language == LANGUAGE_JP) {
                 str = "\x83\x6A\x83\x85\x81\x5B\x83\x51\x81\x5B\x83\x80";
             } else {
@@ -990,7 +990,7 @@ void loadDraw(CameraId camera, void* param) {
 #else
             str = "\202\261\202\355\202\352\202\304\202\242\202\334\202\267";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
-        } else if (flags & 1) {
+        } else if (flags & CARD_SAVE_FLAG_ERASED) {
             str = "\203j\203\205\201[\203Q\201[\203\200";
             FontDrawString(win1->x - FontGetMessageWidth(str) / 2.0f, 12.0f + win1->y, str);
         } else if (gsw0 == 0) {

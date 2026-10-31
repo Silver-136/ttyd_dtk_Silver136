@@ -125,7 +125,7 @@ USER_FUNC(memcard_file_existance) {
     EvtWord* args = event->args;
     s32 slot = evtGetValue(event, args[0]) - 1;
 
-    if (cardGetFilePtr()->saves[slot].data.flags & 1) {
+    if (cardGetFilePtr()->saves[slot].data.flags & CARD_SAVE_FLAG_ERASED) {
         evtSetValue(event, args[1], 0);
     } else {
         evtSetValue(event, args[1], 1);

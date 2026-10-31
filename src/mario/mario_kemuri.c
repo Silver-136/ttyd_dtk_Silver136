@@ -62,7 +62,7 @@ void mario_kemuri(void) {
                         left_or_right = left_or_right == 0;
                     }
                 } else if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
-                    if (kpaGetBodyStatus() <= 0 && mario->characterId != CHARACTER_PEACH) {
+                    if (kpaGetBodyStatus() <= KPA_BODY_DRY && mario->characterId != CHARACTER_PEACH) {
                         kemuri();
                     }
                 }

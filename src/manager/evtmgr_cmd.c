@@ -79,6 +79,8 @@ s32 evt_do(EventEntry* entry) { // 5
     return EVT_RETURN_DONE;
 }
 
+#define EVT_LOOP_LITERAL_CUTOFF (-10000000)
+
 s32 evt_while(EventEntry* entry) { // 6
     s32 depth = entry->loopDepth;
     s32 counter = entry->loopCounters[depth];
@@ -87,7 +89,7 @@ s32 evt_while(EventEntry* entry) { // 6
         entry->nextCommand = entry->loopStartPtrs[depth];
         return EVT_RETURN_DONE;
     }
-    if (counter >= -10000000) {
+    if (counter >= EVT_LOOP_LITERAL_CUTOFF) {
         entry->loopCounters[depth] = --counter;
     } else {
         s32 var = evtGetValue(entry, counter);

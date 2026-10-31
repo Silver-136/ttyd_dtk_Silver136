@@ -50,7 +50,7 @@ static inline s32 kpa_stay_chk(void) {
     if (!(m2->buttonTrg & PAD_BUTTON_A)) {
         return 0;
     }
-    if (kpaGetBodyStatus() == 2) {
+    if (kpaGetBodyStatus() == KPA_BODY_SUBMERGED) {
         marioChgMot(MARIO_MOTION_KPA_SWIM);
         return 1;
     }
@@ -123,9 +123,9 @@ f32 kpaStickSpd(s32 dash) {
         }
     } else {
         if (dash == 0) {
-            max = kpaGetBodyStatus() == 2 ? 0.2f : 1.3f;
+            max = kpaGetBodyStatus() == KPA_BODY_SUBMERGED ? 0.2f : 1.3f;
         } else {
-            max = kpaGetBodyStatus() == 2 ? 0.633f : 2.3f;
+            max = kpaGetBodyStatus() == KPA_BODY_SUBMERGED ? 0.633f : 2.3f;
         }
         if (stick * spd > 0.0f) {
             spd += 0.002f * stick;
@@ -222,14 +222,14 @@ void kpa_walk(void) {
             marioChgMot(MARIO_MOTION_STAY);
             return;
         }
-        if (kpaGetBodyStatus() == 2) {
+        if (kpaGetBodyStatus() == KPA_BODY_SUBMERGED) {
             m->mot.kpa.animFrame++;
             if (m->mot.kpa.animFrame > 0x50) {
                 m->mot.kpa.animFrame = 0;
             }
             m->poseTime = m->mot.kpa.animFrame / 2;
             animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], (f32)m->poseTime);
-            if (kpaGetBodyStatus() == 0) {
+            if (kpaGetBodyStatus() == KPA_BODY_DRY) {
                 if (m->multiTimer % 40 == 0) {
                     psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_MOVE2), &m->position);
                 } else if (m->multiTimer % 20 == 0) {
@@ -237,7 +237,7 @@ void kpa_walk(void) {
                 }
                 m->multiTimer++;
             }
-        } else if (kpaGetBodyStatus() == 0) {
+        } else if (kpaGetBodyStatus() == KPA_BODY_DRY) {
             if (m->multiTimer % 40 == 0) {
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_MOVE2), &m->position);
             } else if (m->multiTimer % 20 == 0) {
@@ -296,7 +296,7 @@ void kpa_dash(void) {
             marioChgMot(MARIO_MOTION_STAY);
             return;
         }
-        if (kpaGetBodyStatus() == 2) {
+        if (kpaGetBodyStatus() == KPA_BODY_SUBMERGED) {
             m->mot.kpa.animFrame++;
             if (m->mot.kpa.animFrame > 0x50) {
                 m->mot.kpa.animFrame = 0;
@@ -304,7 +304,7 @@ void kpa_dash(void) {
             m->poseTime = m->mot.kpa.animFrame / 2;
             animPoseSetLocalTime(m->paperAnimGroupId[marioAnimeId()], (f32)m->poseTime);
         }
-        if (kpaGetBodyStatus() == 0) {
+        if (kpaGetBodyStatus() == KPA_BODY_DRY) {
             if (m->multiTimer % 30 == 0) {
                 psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_KUPPA_MOVE2), &m->position);
             } else if (m->multiTimer % 15 == 0) {
@@ -424,10 +424,10 @@ void kpa_fall(void) {
         break;
     }
     m->airTimer++;
-    if (kpaGetStageType() == 1 && kpaGetBodyStatus() <= 1) {
+    if (kpaGetStageType() == 1 && kpaGetBodyStatus() <= KPA_BODY_PARTLY_SUBMERGED) {
         m->kpaWork->flags |= KPA_WORK_FLAG_WATER_FALL_SFX;
     }
-    if (kpaGetBodyStatus() == 2) {
+    if (kpaGetBodyStatus() == KPA_BODY_SUBMERGED) {
         m = marioGetPtr();
         if (m->currMotionId != MARIO_MOTION_KPA_SWIM) {
             marioChgMot2(MARIO_MOTION_KPA_SWIM);
@@ -733,7 +733,7 @@ void kpa_swim(void) {
     if (kpaFireAttackCheck() == 1) {
         m->wStickDir1 = 0;
         m->wStickDir2 = 0;
-    } else if (kpaGetBodyStatus() == 2 && (m->buttonTrg & PAD_BUTTON_A)) {
+    } else if (kpaGetBodyStatus() == KPA_BODY_SUBMERGED && (m->buttonTrg & PAD_BUTTON_A)) {
         s32 st = m->currSubMotionId;
         if (st >= 0 && st <= 1 && m->position.y < 280.0f) {
             m->currSubMotionId = 0;
@@ -804,7 +804,7 @@ void kpa_swim(void) {
     case 11:
         v = marioMakeJumpPara();
         m->position.y += v;
-        if (kpaGetBodyStatus() == 1) {
+        if (kpaGetBodyStatus() == KPA_BODY_PARTLY_SUBMERGED) {
             m->jumpVelocityY += 0.06f * (-2.0f - m->jumpVelocityY);
             m->jumpAccelerationY = 0.0f;
             m->jumpJerkY = 0.0f;
@@ -867,7 +867,7 @@ void kpa_swim(void) {
         }
         break;
     case 0x1F: {
-        f32 d = (2.0f - m->jumpVelocityY) * (f32)(kpaGetBodyStatus() == 2);
+        f32 d = (2.0f - m->jumpVelocityY) * (f32)(kpaGetBodyStatus() == KPA_BODY_SUBMERGED);
         if (d) {
             d = 2.6f;
         } else {
