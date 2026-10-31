@@ -374,13 +374,13 @@ void smartInit(void) {
     memset(wp->ptr, 0, (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32);
     memset(wp->work, 0, sizeof(wp->work));
     e = wp->work;
-    for (i = 0; i < 0x800; i++, e++) {
+    for (i = 0; i < (s32)(sizeof(wp->work) / sizeof(wp->work[0])); i++, e++) {
         e->next = e + 1;
         e->prev = e - 1;
     }
     wp->head = &wp->work[0];
     wp->head->prev = NULL;
-    wp->tail = &wp->work[0x7FF];
+    wp->tail = &wp->work[sizeof(wp->work) / sizeof(wp->work[0]) - 1];
     wp->tail->next = NULL;
     wp->waitsync = 0;
     g_bFirstSmartAlloc = FALSE;
@@ -396,13 +396,13 @@ void smartReInit(void) {
     memset(wp->ptr, 0, (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32);
     memset(wp->work, 0, sizeof(wp->work));
     e = wp->work;
-    for (i = 0; i < 0x800; i++, e++) {
+    for (i = 0; i < (s32)(sizeof(wp->work) / sizeof(wp->work[0])); i++, e++) {
         e->next = e + 1;
         e->prev = e - 1;
     }
     wp->head = &wp->work[0];
     wp->head->prev = NULL;
-    wp->tail = &wp->work[0x7FF];
+    wp->tail = &wp->work[sizeof(wp->work) / sizeof(wp->work[0]) - 1];
     wp->tail->next = NULL;
     g_bFirstSmartAlloc = FALSE;
 }

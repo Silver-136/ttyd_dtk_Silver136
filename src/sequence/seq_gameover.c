@@ -245,7 +245,7 @@ EVT_BEGIN(evt_gameover)
 #ifdef VERSION_G8ME01
     END_IF
 #endif
-    CALL(evt_cam_ctrl_onoff, 4, 1)
+    CALL(evt_cam_ctrl_onoff, CAMERA_3D, 1)
     CALL(evt_cam3d_evt_set, 0, 208, 653, 0, 91, -30, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_map_playanim, STRING("anm_hokori"), MAP_ANIM_PLAY_LOOP, 0)

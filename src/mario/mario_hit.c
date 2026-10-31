@@ -571,7 +571,7 @@ void marioChkGnd2(void) {
                         // FAKE: no-op (s8) casts of the s8 stick fields; the plain fields change the object
                         s32 sx = (s8)w->wStickDir1;
                         s32 sy = (s8)w->wStickDir2;
-                        if (sx * sx + sy * sy > 0xbd1) {
+                        if (sx * sx + sy * sy > (55 * 55)) {
                             marioChgMot(MARIO_MOTION_DASH);
                         } else {
                             marioChgMot(MARIO_MOTION_WALK);

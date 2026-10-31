@@ -497,7 +497,7 @@ static inline f32 slitWalkSpeed(void) {
         {
             int a = p->wStickDir1;
             int b = p->wStickDir2;
-            if (a * a + b * b <= 0xbd1) {
+            if (a * a + b * b <= (55 * 55)) {
                 spd *= 0.5f;
             }
 

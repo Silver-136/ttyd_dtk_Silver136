@@ -854,7 +854,7 @@ void JUTFontSetup(u16 font) {
         size = DVDMgrGetLength(dvd);
 #ifdef VERSION_G8ME01
         maxsize = size;
-        for (j = 0; j < 7; j++) {
+        for (j = 0; j < (s32)(sizeof(fontname) / sizeof(fontname[0])); j++) {
             sprintf(path, "%s/font/%s.bfn", getMarioStDvdRoot(), fontname[j]);
             other = DVDMgrOpen(path, 2, 0);
             if (other) {

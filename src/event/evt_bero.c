@@ -18,6 +18,7 @@
 #include "libc_decls.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_case.h"
+#include "driver/casedrv.h"
 #include "evt/evt_fade.h"
 #include "evt/evt_map.h"
 #include "evt/evt_mario.h"
@@ -486,19 +487,19 @@ USER_FUNC(evt_bero_get_info_num) {
     if (bero->caseType == -1) {
         switch (bero->type & BERO_TYPE_KIND_MASK) {
             case 0xF00:
-                event->lwData[10] = 0; // CASE_STAND_ON
+                event->lwData[10] = CASE_STAND_ON; // CASE_STAND_ON
                 break;
             case 0:
-                event->lwData[10] = 10; // CASE_PUSH
+                event->lwData[10] = CASE_PUSH; // CASE_PUSH
                 break;
             case 1:
-                event->lwData[10] = 9; // CASE_FRONT_A
+                event->lwData[10] = CASE_FRONT_A; // CASE_FRONT_A
                 break;
             case 2:
-                event->lwData[10] = 4; // CASE_JUMP_FROM_A
+                event->lwData[10] = CASE_JUMP_FROM_A; // CASE_JUMP_FROM_A
                 break;
             case 3:
-                event->lwData[10] = 7; // CASE_STAND_ON_STICK_UP
+                event->lwData[10] = CASE_STAND_ON_STICK_UP; // CASE_STAND_ON_STICK_UP
                 break;
         }
     }
