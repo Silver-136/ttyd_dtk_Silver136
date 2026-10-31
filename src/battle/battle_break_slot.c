@@ -258,7 +258,6 @@ void BattleBreakSlot_Init(void) {
     s32 i;
 
     memset(wp, 0, sizeof(BreakSlotWork));
-    // FAKE: i is set before wp->phase and the reel pointer; `for (i = 0; ...)` changes the object
     i = 0;
     wp->phase = 0;
     reel = BattleBreakSlotReelGetPtr(0);
@@ -268,16 +267,16 @@ void BattleBreakSlot_Init(void) {
     }
     reel = BattleBreakSlotReelGetPtr(0);
     reel->numCards = 8;
-    reel->cards = BattleAlloc(reel->numCards * sizeof(s32));
-    memcpy(reel->cards, &c1, reel->numCards * sizeof(s32));
+    reel->cards = BattleAlloc(reel->numCards * 4);
+    memcpy(reel->cards, &c1, reel->numCards * 4);
     reel = BattleBreakSlotReelGetPtr(1);
     reel->numCards = 8;
-    reel->cards = BattleAlloc(reel->numCards * sizeof(s32));
-    memcpy(reel->cards, &c2, reel->numCards * sizeof(s32));
+    reel->cards = BattleAlloc(reel->numCards * 4);
+    memcpy(reel->cards, &c2, reel->numCards * 4);
     reel = BattleBreakSlotReelGetPtr(2);
     reel->numCards = 5;
-    reel->cards = BattleAlloc(reel->numCards * sizeof(s32));
-    memcpy(reel->cards, &c3, reel->numCards * sizeof(s32));
+    reel->cards = BattleAlloc(reel->numCards * 4);
+    memcpy(reel->cards, &c3, reel->numCards * 4);
 }
 
 void BattleBreakSlot_Main(void) {

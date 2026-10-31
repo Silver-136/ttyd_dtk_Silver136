@@ -2471,7 +2471,6 @@ void battleSortPhaseMoveTable(BattleWork* wp, s32 count) {
     f32 x1, y1, z1;
     f32 x2, y2, z2;
     s32 tmp;
-    // FAKE: wp copied into a void* and cast back at every use; using wp directly changes the object
     void* w;
 
     w = (void*)wp;

@@ -1341,10 +1341,10 @@ void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
     f32 nx;
     f32 ny;
     f32 nz;
-    MarioWork* player = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
 
-    w = player->wPlayerCollisionBox.x;
-    // FAKE: the (f32) casts on the w * dx and w * -dz products keep them separate multiplies (no fused multiply-add); without them the object changes
+    w = mario->wPlayerCollisionBox.x;
+    // (f32)(w * d) keeps the product a separate fmuls (no fmadds), as in the target
     rad = (3.1415927f * 90.0f) / 180.0f;
     dx = (f32)sin(rad);
     dz = (f32)cos(rad);

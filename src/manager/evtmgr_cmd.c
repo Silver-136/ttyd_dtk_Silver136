@@ -2362,7 +2362,6 @@ EvtWord evtGetValue(EventEntry* entry, EvtWord index) {
         index += EVTDAT_UF_BASE;
         mask = (1 << (index % 32));
         data = entry->ufBase[index / 32];
-        // FAKE: result stored back into index; return (mask & data) != 0 changes the object
         index = (mask & data);
         return !(index == 0);
     }

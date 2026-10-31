@@ -3050,7 +3050,6 @@ USER_FUNC(_get_msg) {
     switch (wp->commandMenu.disableReason) {
         case 1:
             msg = "btl_msg_cmderror_no_fp";
-            // FAKE: empty if that only reads event->args (twice); without it case 1 is scheduled differently
             if (!event->args && !event->args) {}
             break;
         case 2:
@@ -3070,7 +3069,7 @@ USER_FUNC(_get_msg) {
             break;
     }
     evtSetValue(event, index, (EvtWord)msg);
-    return EVT_RETURN_DONE;
+    return 2;
 }
 
 /**

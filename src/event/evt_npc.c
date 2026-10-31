@@ -1398,7 +1398,6 @@ USER_FUNC(evt_npc_flag_onoff) {
     npc = evtNpcNameToPtr(event, name);
     switch (type) {
         case 0:
-            // FAKE: no-op (u32) cast; the plain form changes the object
             npc->flags &= (u32)~mask;
             break;
         case 1:

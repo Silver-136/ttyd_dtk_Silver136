@@ -39,13 +39,13 @@ void effRippleDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx mtx;
     Mtx scale;
     Mtx rotX;
+    Mtx rotZ;
     GXTexObj texObj;
 
     camera = camGetPtr(cameraId);
-    // FAKE: type is read through a cast of userdata before work is set; reading work->type changes the object
     type = ((EffRippleN64Work*)effect->userdata)->type;
     work = effect->userdata;
-    if (type == 10 || type == 20 || type == 1 || type == 2 || type == 3 || type == 30) {
+    if (type == 10 || type == 20 || (u32)(type - 1) <= 2 || type == 30) {
         effGetTexObj(0x5B, &texObj);
     } else {
         effGetTexObjN64(0x21, &texObj);
@@ -71,7 +71,6 @@ void effRippleDisp(CameraId cameraId, EffectEntry* effect) {
     } else {
         GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, work->alpha});
     }
-    // FAKE: the type local is reused for the scroll offset; passing work->offset directly changes the object
     type = work->offset;
     PSMTXScale(scale, 0.03125f, 0.03125f, 0.0f);
     PSMTXTrans(mtx, 0.0f, type, 0.0f);

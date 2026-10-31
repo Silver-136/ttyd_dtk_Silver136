@@ -1412,7 +1412,6 @@ void _draw_select_one_to_upgrade_text(CameraId camId, void* param) {
     const char* msg;
     u16 lines;
     s32 width;
-    // FAKE: 0.0f and -148.0f held in locals (zero, y); writing the literals changes the object
     f32 y;
     f32 zero = 0.0f;
 

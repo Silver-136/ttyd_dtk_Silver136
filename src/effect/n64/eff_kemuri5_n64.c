@@ -117,12 +117,14 @@ void effKemuri5Main(EffectEntry* effect) {
         }
         anyActive = 1;
         work->angle = reviseAngle(12.0f + work->angle);
-        // FAKE: sin result in a block-scoped temporary; writing it into the assignment changes the object
         {
             f32 sv = (f32)sin(6.2831855f * work->angle / 360.0f);
             work->scale.x = 0.1f * sv + work->baseScaleX;
         }
-        work->scale.y = 0.1f * (f32)cos(6.2831855f * work->angle / 360.0f) + work->baseScaleY;
+        {
+            f32 cv = (f32)cos(6.2831855f * work->angle / 360.0f);
+            work->scale.y = 0.1f * cv + work->baseScaleY;
+        }
         work->speed *= 0.83f;
         work->position.x = work->speed * work->dirX + work->position.x;
         work->position.z = work->speed * work->dirZ + work->position.z;

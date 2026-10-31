@@ -463,14 +463,14 @@ void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 strength, 
     u8 u, t;
 
     for (i = 0; i < 6; i++) {
-        n = _get_pri((s8)(u8)e[i].type); // FAKE: no-op (s8)(u8) round trip on the s8 type (lbz, extsb at the call), as in the target
-        if (pri >= (s8)n) {
+        s32 cur = e[i].type;
+
+        n = _get_pri(cur);
+        if (pri >= (s8)n)
             break;
-        }
     }
-    if (i >= 6) {
+    if (i >= 6)
         return;
-    }
     tmp.type = type;
     tmp.strength = strength;
     tmp.changed = changed;
@@ -484,19 +484,18 @@ void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 strength, 
         }
     }
     j = 0;
-    n = 0;
+    n = j;
     t = 0;
     for (i = 0; i < 6; i++) {
-        if (e[i].type == -1) {
+        if (e[i].type == -1)
             break;
-        }
         e[i].stagger = t;
         e[i].reserved_04 = j;
         t += 10;
         n++;
     }
-    // FAKE: goto chain for a plain if/else; if (t != 0) { u = 0x50; } else { u = 0x3C; } changes the object
-    if (t == 0) goto L3;
+    if (t == 0)
+        goto L3;
     u = 0x50;
     goto Ld;
 L3:
@@ -677,11 +676,10 @@ void _st_chg_msg_disp(void) {
     width = FontGetMessageWidthLine((const char*)st->text, &lines);
     lines++;
     col0 = (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
-    // FAKE: y doubles as a 0.0f temporary; x = 0.0f - (width / 2) changes the object
     y = 0.0f;
     x = y - (width / 2);
     y = -120.0f;
-    // FAKE: called through a cast prototype with the color's address (no caller copy); passing col0 by value changes the object
+    // the color is passed by address here (same ABI as by-value GXColor)
     ((WakuColByRefFunc)windowDispGX_Waku_col)(0, &col0, x - 20.0f, ((lines - 1) * 29) + -117.0f, (f32)(width + 40), (f32)(lines * 29 + 1), 10.0f);
     FontDrawStart();
     FontDrawMessage(x, (s32)y + (lines - 1) * 29, (const char*)st->text);

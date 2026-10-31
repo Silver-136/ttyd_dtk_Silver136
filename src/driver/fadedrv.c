@@ -1323,10 +1323,13 @@ void disp_dummy_black(CameraId camId, void* param) {
  * scripts and sequences wait on it.
  */
 BOOL fadeIsFinish(void) {
+    FadeEntry* entry;
+
     if (wp->lastEntryId == -1) {
         return TRUE;
     }
-    return (*(u16*)((u8*)wp + wp->lastEntryId * sizeof(FadeEntry) + offsetof(FadeWork, entries[0].flags)) >> 1) & 1; // FAKE: byte-offset load so the entries offset folds into the index (mulli/addi/lhzx), as in the target
+    entry = &wp->entries[wp->lastEntryId];
+    return (entry->flags >> 1) & 1; // FADE_ENTRY_FINISHED
 }
 
 /** Stops fade slot id at once: releases its animation poses and captured image and resets it to the defaults. */

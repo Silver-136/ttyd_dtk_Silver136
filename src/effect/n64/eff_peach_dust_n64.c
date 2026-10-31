@@ -271,11 +271,9 @@ void effPeachDustDisp(CameraId cameraId, EffectEntry* effect) {
         if (off >= 36) {
             off = 0;
         }
-        // FAKE: k and h hold the 1.4f/0.7f factors in a block of their own; the literal factors change the object
         {
             f32 k = 1.4f;
             f32 h = 0.7f;
-
             r = color_rotation_data[off++] * k;
             g = color_rotation_data[off++] * h;
             b = color_rotation_data[off++] * h;

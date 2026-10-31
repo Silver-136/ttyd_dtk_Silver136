@@ -96,7 +96,7 @@ USER_FUNC(camdir) {
 USER_FUNC(evt_gazigazi_move_position) {
     EvtWord* args = event->args;
     const char* name;
-    f32 x0, y0, z0, x1, y1, z1;
+    f32 y0, x0, z0, x1, y1, z1;
     s32 msec;
     s32 mode;
     NpcEntry* npc;
@@ -117,7 +117,6 @@ USER_FUNC(evt_gazigazi_move_position) {
     }
     elapsed = OSTicksToMilliseconds((u32)gp->renderTime - event->userdata[0]);
     if (elapsed < msec) {
-        // FAKE: no-op (s32) casts of elapsed; dropping them changes the object
         x0 = intplGetValue(mode, x0, x1, (s32)elapsed, msec);
         y0 = intplGetValue(mode, y0, y1, (s32)elapsed, msec);
         z0 = intplGetValue(mode, z0, z1, (s32)elapsed, msec);

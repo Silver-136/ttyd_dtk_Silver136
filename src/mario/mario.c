@@ -539,7 +539,6 @@ BOOL marioChkCtrl(void) {
 }
 
 BOOL N_marioChkUseParty(void) {
-    // FAKE: (u16) cast on the u32 buttonNew (all tested bits are in the low half); the plain test changes the object
     if ((u16)gp->buttonNew[0] & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT | PAD_BUTTON_DOWN | PAD_BUTTON_UP | PAD_BUTTON_START)) {
         return TRUE;
     }
@@ -1600,11 +1599,10 @@ void marioChgDamagePose(void) {
     MarioMotion mot = wp->currMotionId;
 
     if (mot != MARIO_MOTION_SHIP && mot != MARIO_MOTION_ROLL && mot != MARIO_MOTION_PLANE && mot != MARIO_MOTION_JABARA && mot != MARIO_MOTION_YOSHI) {
-        // FAKE: switch with a single case 0 for the slit test; the plain if changes the object
         switch (wp->dispFlags & MARIO_DISP_FLAG_SLIT) {
-        case 0:
-            marioChgPose("M_D_1");
-            break;
+            case 0:
+                marioChgPose("M_D_1");
+                break;
         }
     }
 }
@@ -1803,7 +1801,6 @@ BOOL marioChkInScreen(s32 x, s32 y) {
     if (x >= 0 && x <= 600 && y >= 0 && y <= 535) {
         valid = TRUE;
     }
-    // FAKE: redundant compare with FALSE; return valid changes the object
     return valid != FALSE;
 }
 

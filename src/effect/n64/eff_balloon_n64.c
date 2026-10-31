@@ -159,7 +159,7 @@ void effBalloonMain(EffectEntry* effect) {
 void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera = camGetPtr(cameraId);
     EffBalloonN64Work* work = effect->userdata;
-    s32 lifetime;
+    s32 type;
     effN64Vtx* vtx = (effN64Vtx*)smartAlloc(sizeof(effN64Vtx) * 32, 3)->address;
     Vec v0;
     Vec v1;
@@ -172,12 +172,11 @@ void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx b;
     s32 i;
 
-    // the texture follows the remaining lifetime (0, 1, other), not the entry's type
-    lifetime = work->lifetime;
-    if (lifetime == 0) {
+    type = work->lifetime;
+    if (type == 0) {
         effGetTexObjN64(0x5F, &texObj);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
-    } else if (lifetime == 1) {
+    } else if (type == 1) {
         effGetTexObjN64(0x5E, &texObj);
         GXLoadTexObj(&texObj, GX_TEXMAP0);
     } else {
@@ -193,7 +192,7 @@ void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ONE);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, (GXTevColorArg)12);
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
     PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
     memcpy(vtx, &balloon_vtx[1], sizeof(effN64Vtx));
@@ -232,7 +231,6 @@ void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
         OSs16tof32(&vtx[i + 2].z, &v2.z);
         PSMTXMultVec(mtx, &v2, &v2);
         OSInitFastCast();
-        // FAKE: element pointer cast instead of &vtx[i + 2].x; the plain form changes the object
         OSf32tos16(&v2.x, (s16*)&vtx[i + 2]);
         OSf32tos16(&v2.y, &vtx[i + 2].y);
         OSf32tos16(&v2.z, &vtx[i + 2].z);
@@ -243,7 +241,7 @@ void effBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetCurrentMtx(GX_PNMTX0);
     GXSetCullMode(GX_CULL_NONE);
     effSetVtxDescN64(vtx);
-    if (lifetime < 100) {
+    if (type < 100) {
         GXBegin(GX_TRIANGLES, GX_VTXFMT0, 3);
         tri1(0x15, 2, 1, 0);
         for (i = 0; i < 19; i++) {

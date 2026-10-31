@@ -199,9 +199,9 @@ void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx mac;
     Mtx m7c;
     GXTexObj texObj;
-    Vec eye = { 0.0f, 0.0f, 1000.0f };
-    Vec up = { 0.0f, 1.0f, 0.0f };
-    Vec target = { 0.0f, 0.0f, 0.0f };
+    Vec eye = {0.0f, 0.0f, 1000.0f};
+    Vec up = {0.0f, 1.0f, 0.0f};
+    Vec target = {0.0f, 0.0f, 0.0f};
     f32 scale;
     f32 d;
     f32 h;
@@ -225,9 +225,8 @@ void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
     PSMTXScale(m16c, scale, scale, scale);
     PSMTXConcat(m19c, m13c, m19c);
     PSMTXConcat(m19c, m16c, m7c);
-    // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     cs = (0, (f32)cos(6.2831855f * camGetPtr(cameraId)->viewYaw / 360.0f));
-    s = (f32)sin(6.2831855f * camGetPtr(cameraId)->viewYaw / 360.0f);
+    s = (0, (f32)sin(6.2831855f * camGetPtr(cameraId)->viewYaw / 360.0f));
     PSMTXTrans(m19c, 2.0f * s, 0.0f, -cs * 2.0f);
     PSMTXConcat(m19c, m7c, m7c);
     GXSetTevColor(GX_TEVREG0, white);
@@ -267,15 +266,16 @@ void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
     w = 64.0f;
     sh = alpha * 0x80 / 0xFF;
     al = alpha * 0xFF / 0xFF;
+
     for (i = 0; i < 2; i++) {
         if (i == 0) {
             PSMTXConcat(camera->view, m7c, m19c);
             PSMTXTrans(m13c, 2.0f, -2.0f, 0.0f);
             PSMTXConcat(m19c, m13c, m19c);
-            GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0, 0, 0, sh });
+            GXSetChanMatColor(GX_COLOR0A0, (GXColor){0, 0, 0, sh});
         } else {
             PSMTXConcat(camera->view, m7c, m19c);
-            GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, al });
+            GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, al});
         }
         GXLoadPosMtxImm(m19c, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
@@ -295,6 +295,7 @@ void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadTexObj(&texObj, GX_TEXMAP1);
     d = 10.666667f;
     h = 42.666668f;
+
     work++;
     for (i = 1; i < effect->count; i++, work++) {
         for (pass = 0; pass < 2; pass++) {
@@ -312,13 +313,13 @@ void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXConcat(m10c, m19c, m10c);
                 PSMTXRotRad(m13c, 'z', work->angle);
                 PSMTXConcat(m10c, m13c, m10c);
-                GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0, 0, 0, al });
+                GXSetChanMatColor(GX_COLOR0A0, (GXColor){0, 0, 0, al});
             } else {
                 PSMTXTrans(m19c, work->position.x, work->position.y, work->position.z);
                 PSMTXConcat(m7c, m19c, m10c);
                 PSMTXRotRad(m13c, 'z', work->angle);
                 PSMTXConcat(m10c, m13c, m10c);
-                GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0xFF, 0xFF, 0xFF, work->alpha * 0xFF / 0xFF });
+                GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, work->alpha * 0xFF / 0xFF});
             }
             PSMTXConcat(camera->view, m10c, m19c);
             GXLoadPosMtxImm(m19c, GX_PNMTX0);

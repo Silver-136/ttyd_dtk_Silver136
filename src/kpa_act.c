@@ -120,7 +120,7 @@ static inline void kpaSetScoreStr(s32 score, Vec* pos) {
     s32 j;
     s32 n;
     s32 i;
-    for (i = 0; i < KPA_SCORE_SLOT_COUNT; i++) {
+    for (i = 0; i < 50; i++) {
         if (ksdp[i].timer == 0) {
             d[0] = score / 10000;
             t = score % 10000;
@@ -131,7 +131,6 @@ static inline void kpaSetScoreStr(s32 score, Vec* pos) {
             d[3] = t / 10;
             d[4] = t % 10;
             p = ksdp[i].str;
-            // FAKE: str is a spare second pointer to ksdp[i].str (only writes the terminator); ksdp[i].str[n] changes the object
             str = ksdp[i].str;
             n = 0;
             for (j = 0; j < 5; j++) {
@@ -180,7 +179,6 @@ void kpaAddScore(s32 score) {
  * Used for stomped enemies (npcdrv) and power-ups (evt_mobj).
  */
 void kpaAddScorePos(s32 score, Vec* pos) {
-    // FAKE: sc is a spare copy of score; clamping score itself (as kpaAddScore does) changes the object
     s32 sc = score;
     if (score > 10000) {
         sc = 10000;

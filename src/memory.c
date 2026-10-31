@@ -198,7 +198,6 @@ void battleMapAlloc(void) {
 
     R_battlemapalloc_size = 0x64000;
     entry = (_mapAlloc)(mapalloc_base_ptr, 0x64000);
-    // FAKE: size is a spare copy of R_battlemapalloc_size (read before the stores); reading it at its use changes the object
     size = R_battlemapalloc_size;
     R_battlemapalloc_base_ptr = entry;
     entry->next = NULL;

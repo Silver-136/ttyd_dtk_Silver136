@@ -416,7 +416,6 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
 
 /** The left/right pair of a glyph's four outline copies, 2 px either side of an integer x, y. */
 static inline void fontDrawPairXI(u16 code, s16 x, s16 y) {
-    // FAKE: spare s16 copies of the s16 parameters (and a no-op cast); using x and y directly changes the object
     s16 iy = y;
     s16 ix = x;
     _JUTFont_DrawPos(code, ix - 2, (s16)iy);
@@ -425,7 +424,6 @@ static inline void fontDrawPairXI(u16 code, s16 x, s16 y) {
 
 /** The down/up pair of outline copies for an integer position; see fontDrawPairXI. */
 static inline void fontDrawPairYI(u16 code, s16 x, s16 y) {
-    // FAKE: spare s16 copies of the s16 parameters; using x and y directly changes the object
     s16 iy = y;
     s16 ix = x;
     _JUTFont_DrawPos(code, ix, iy - 2);
@@ -436,7 +434,6 @@ static inline void fontDrawPairYI(u16 code, s16 x, s16 y) {
 static inline void fontDrawPairX(u16 code, f32 x, f32 y) {
     s16 ix = x;
     s16 iy = y;
-    // FAKE: no-op (s16) casts on iy; the plain argument changes the object
     _JUTFont_DrawPos(code, ix - 2, (s16)iy);
     _JUTFont_DrawPos(code, ix + 2, (s16)iy);
 }
@@ -445,7 +442,6 @@ static inline void fontDrawPairX(u16 code, f32 x, f32 y) {
 static inline void fontDrawPairY(u16 code, f32 x, f32 y) {
     s16 ix = x;
     s16 iy = y;
-    // FAKE: no-op (s16) casts on ix; the plain argument changes the object
     _JUTFont_DrawPos(code, (s16)ix, iy - 2);
     _JUTFont_DrawPos(code, (s16)ix, iy + 2);
 }

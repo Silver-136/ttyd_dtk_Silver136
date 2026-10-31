@@ -1416,7 +1416,6 @@ void object_entry(void) {
     GenkiWork* w = get_ptr();
     s32 i;
     for (i = 0; i < 10; i++) {
-        // FAKE: pointer to the state field; plain w->object[i].state changes the object
         s32* p = &w->object[i].state;
         if (*p == 0) {
             *p = 1;

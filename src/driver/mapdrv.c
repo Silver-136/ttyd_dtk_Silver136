@@ -201,20 +201,41 @@ void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
             sampler->tex->width = desc->textureHeader->width;
             sampler->tex->height = desc->textureHeader->height;
             switch (desc->textureHeader->format) {
-                case 4: sampler->tex->format = 0; break;
-                // FAKE: unreachable empty `if (!k) { }` between two cases; removing it changes the object
-                if (!k) {
-                }
-                case 5: sampler->tex->format = 1; break;
-                case 6: sampler->tex->format = 2; break;
-                case 14: sampler->tex->format = 3; break;
-                case 0: sampler->tex->format = 4; break;
-                case 1: sampler->tex->format = 5; break;
-                case 2: sampler->tex->format = 6; break;
-                case 3: sampler->tex->format = 7; break;
-                case 8: sampler->tex->format = 8; break;
-                case 9: sampler->tex->format = 9; break;
-                case 10: sampler->tex->format = 10; break;
+                case 4:
+                    sampler->tex->format = 0;
+                    break;
+                    if (!k) {
+                    }
+                case 5:
+                    sampler->tex->format = 1;
+                    break;
+                case 6:
+                    sampler->tex->format = 2;
+                    break;
+                case 14:
+                    sampler->tex->format = 3;
+                    break;
+                case 0:
+                    sampler->tex->format = 4;
+                    break;
+                case 1:
+                    sampler->tex->format = 5;
+                    break;
+                case 2:
+                    sampler->tex->format = 6;
+                    break;
+                case 3:
+                    sampler->tex->format = 7;
+                    break;
+                case 8:
+                    sampler->tex->format = 8;
+                    break;
+                case 9:
+                    sampler->tex->format = 9;
+                    break;
+                case 10:
+                    sampler->tex->format = 10;
+                    break;
             }
         }
     }
@@ -1427,7 +1448,6 @@ static inline void mapMainAlphaKeys_(MapAnim* a_, MapAnimAlphaData* d, MapMateri
         MapAnimKey4* k0 = &d->keys[n - 1];
         MapAnimKey4* k1 = &d->keys[n];
 
-        // FAKE: cur is loaded before the test, which reads d->keys[n] instead of k1; the test of mapMainMatKeys_ changes the object
         cur = a_->time;
         if (cur <= d->keys[n].time) {
             cur = a_->time;
@@ -1438,9 +1458,9 @@ static inline void mapMainAlphaKeys_(MapAnim* a_, MapAnimAlphaData* d, MapMateri
         }
 
         if (k0->ch[0].step) {
-            obj->blendColor.r = (u8)(255.0f - 255.0f * k0->ch[0].value);
+            ((MapMaterial*)obj)->blendColor.r = (u8)(255.0f - 255.0f * k0->ch[0].value);
         } else {
-            obj->blendColor.r = (u8)(255.0f - 255.0f * mapHermiteCh(cur, k0->time, k1->time, &k0->ch[0], &k1->ch[0]));
+            ((MapMaterial*)obj)->blendColor.r = (u8)(255.0f - 255.0f * mapHermiteCh(cur, k0->time, k1->time, (MapAnimKeyCh*)&k0->ch[0], (MapAnimKeyCh*)&k1->ch[0]));
         }
 
         break;
@@ -3521,7 +3541,6 @@ MapFileJoint* mapSearchDmdJointSub2(MapFileJoint* joint, const char* name, const
  * Used to find the map and hit roots named in the information chunk.
  */
 MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name) {
-    // FAKE: no-op (s32) cast; name[0] != '|' changes the object
     if ((s32)name[0] != '|') {
         return mapSearchDmdJointSub(joint, name);
     }

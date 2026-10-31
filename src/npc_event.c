@@ -209,7 +209,6 @@ USER_FUNC(_2d_get_dead_jump_offset) {
     } else {
         d = 1.0f;
     }
-    // FAKE: spare temporary k for 20.0f * d; the plain (s32)(20.0f * d) changes the object
     k = 20.0f;
     k *= d;
     evtSetValue(event, out, (s32)k);
@@ -2433,7 +2432,6 @@ static void piders_draw_yarn_sub(CameraId cameraId, void* param) {
     b.x = npc->position.x;
     b.y = 30.0f + npc->position.y;
     b.z = npc->position.z;
-    // FAKE: spare copies p, q of a, b; drawing from a and b directly changes the object
     p = a;
     q = b;
     GXSetCullMode(GX_CULL_NONE);

@@ -1726,7 +1726,6 @@ USER_FUNC(evt_koopa_fire) {
     MarioWork* mp = marioGetPtr();
     if (isFirstCall) {
         event->userdata[0] = 0;
-        // FAKE: s32 -> f32 -> s32 round trip; assigning sysMsec2Frame directly changes the object
         event->userdata[2] = (f32)sysMsec2Frame(evtGetValue(event, args[0]));
         kpaAttackStart();
         marioChgMot(MARIO_MOTION_STAY);

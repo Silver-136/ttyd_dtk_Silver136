@@ -1138,7 +1138,6 @@ void BattleConsumeReserveItem(void) {
     s32 i;
     wp = _battleWorkPointer;
     for (i = 0; i < 4; i++) {
-        // FAKE: (s32) cast before the zero test; the plain test changes the object
         if ((s32)wp->reserveItems[i] != 0) {
             pouchRemoveItem(wp->reserveItems[i]);
         }

@@ -495,7 +495,7 @@ GXColor shadow_col[8] ATTRIBUTE_ALIGN(32) = {
  */
 void puniLoadTev(void) {
     GXColor blend;
-    // FAKE: unused color locals retained; removing them changes the object.
+    // unused in the game too, but their initialisers are part of the original .rodata
     GXColor unused0 = {0xFF, 0xFF, 0xFF, 0xFF};
     GXColor unused1 = {0xFF, 0xFF, 0xFF, 0xFF};
     GXColor fogColor = {0xFF, 0xFF, 0xFF, 0xFF};

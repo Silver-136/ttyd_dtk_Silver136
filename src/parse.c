@@ -122,6 +122,7 @@ void parsePopNext(void) {
  */
 BOOL parseGet1Next(s32 type, void* data) {
     s32* posp;
+    char* dst;
     s32 i;
     s32 end;
     s8* p;
@@ -130,29 +131,29 @@ BOOL parseGet1Next(s32 type, void* data) {
     BOOL result = TRUE;
     s32* posStack;
     s32 state;
+    s32 j;
     s32 n;
     s8 c;
 
     switch (type) {
-    case PARSE_VEC:
-        result *= parseGet1Next(PARSE_FLOAT, data);
-        result *= parseGet1Next(PARSE_FLOAT, (f32*)data + 1);
-        result *= parseGet1Next(PARSE_FLOAT, (f32*)data + 2);
-        return result;
+        case PARSE_VEC:
+            result *= parseGet1Next(PARSE_FLOAT, data);
+            result *= parseGet1Next(PARSE_FLOAT, (f32*)data + 1);
+            result *= parseGet1Next(PARSE_FLOAT, (f32*)data + 2);
+            return result;
     }
 
-    // FAKE: posStack is a spare copy of parse.pos; indexing parse.pos directly changes the object
     posStack = parse.pos;
     state = 0;
-    p = parse.ptr;
+    p = (s8*)parse.ptr;
     i = posStack[parse.depth];
     end = parse.end[parse.depth];
     posp = posStack + parse.depth;
     for (; i < end; i++) {
         if (p[i] == '/' && p[i + 1] == '/') {
             for (; i < end; i++) {
-                // BUG: '/n' is a multi-character constant, not '\n', so no character matches it: after a //
-                // comment the scan runs to the end of the range and the value is not found.
+                // BUG: '/n' (a two-character constant, 0x2F6E) where '\n' was meant; it never equals
+                // a char, so a // comment runs to the end of the block instead of the end of the line.
                 if (p[i] == '/n') {
                     break;
                 }
@@ -175,30 +176,30 @@ BOOL parseGet1Next(s32 type, void* data) {
         return FALSE;
     }
     switch (type) {
-    case PARSE_STRING:
-        n = 0;
-        for (i = start; i < end; i++) {
-            if (p[i] == '"') {
-                for (i++; i < end; i++) {
-                    if (p[i] == '"') {
-                        break;
+        case PARSE_STRING:
+            n = 0;
+            for (i = start; i < end; i++) {
+                if (p[i] == '"') {
+                    for (i++; i < end; i++) {
+                        if (p[i] == '"') {
+                            break;
+                        }
+                        ((char*)data)[n] = p[i];
+                        n++;
                     }
-                    ((char*)data)[n] = p[i];
-                    n++;
                 }
             }
-        }
-        ((char*)data)[n] = 0;
-        *posp = i;
-        break;
-    case PARSE_INT:
-        sscanf((char*)&p[start], "%d", data);
-        *posp = stop;
-        break;
-    case PARSE_FLOAT:
-        sscanf((char*)&p[start], "%f", data);
-        *posp = stop;
-        break;
+            ((char*)data)[n] = 0;
+            *posp = i;
+            break;
+        case PARSE_INT:
+            sscanf((char*)&p[start], "%d", data);
+            *posp = stop;
+            break;
+        case PARSE_FLOAT:
+            sscanf((char*)&p[start], "%f", data);
+            *posp = stop;
+            break;
     }
     return TRUE;
 }

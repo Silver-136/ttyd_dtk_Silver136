@@ -162,8 +162,8 @@ void bero_clear_Offset(void) {
  * values 0-15 are already indices, anything else is taken as a hit object name and looked up in BeroINFOARR.
  */
 // FAKE: `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object
-s32 bero_id_filter(EvtWord id) {
-    BeroEntry** temp, **table = BeroINFOARR;
+s32 bero_id_filter(EvtWord id) { // 1:1, cursed function, do not touch
+    BeroEntry **temp, **table = BeroINFOARR;
     s32 newId = id;
     const char *string, *test;
 
@@ -1179,7 +1179,6 @@ USER_FUNC(evt_bero_move_mario_speed) {
     dy = -(speed * c);
     dist = speed * frames;
     ox = s * dist;
-    // FAKE: spare temporary for BeroSX; using BeroSX directly changes the object
     sx = BeroSX;
     marioGetPtr()->position.x = sx + ox;
     oy = -(c * dist);
@@ -1211,7 +1210,7 @@ USER_FUNC(evt_bero_move_mario_speed) {
 /** Replaces entrance args[0] (index or hit name) in BeroINFOARR with the BeroEntry pointer args[1]. */
 // FAKE: `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object
 USER_FUNC(evt_bero_overwrite) {
-    BeroEntry** temp, **table = BeroINFOARR;
+    BeroEntry **temp, **table = BeroINFOARR;
     EvtWord* args = event->args;
     EvtWord id = evtGetValue(event, args[0]);
     s32 newId = id;

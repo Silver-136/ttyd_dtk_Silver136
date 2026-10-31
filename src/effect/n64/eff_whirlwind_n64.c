@@ -120,7 +120,6 @@ EffectEntry* effWhirlwindN64Entry(s32 type, MarioWork* target, f32 scale, s32 li
                 work->vel.x = (rand() % 2 * 2 - 1) * 4;
                 work->vel.y = 0.0f;
                 work->vel.z = (rand() % 2 * 2 - 1) * 4;
-                // FAKE: spare temporary for 0.25f; the plain literal changes the object
                 quarter = 0.25f;
                 work->scale = 0.5f + 0.5f * ((f32)(i - 1) * quarter);
                 work->rot.x = 25 * i;

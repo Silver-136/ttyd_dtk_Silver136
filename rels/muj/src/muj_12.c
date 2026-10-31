@@ -834,7 +834,7 @@ USER_FUNC(muj_item_move_3d_position) {
     }
     elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
     if (elapsed < frames) {
-        // FAKE: reuse the expired first-call parameter; direct elapsed arguments change the object.
+        // the elapsed time is kept in the (dead) isFirstCall parameter
         isFirstCall = elapsed;
         item->position.x = intplGetValue(mode, event->userdataf[1], x, isFirstCall, frames);
         item->position.y = intplGetValue(mode, event->userdataf[2], y, isFirstCall, frames);

@@ -1998,39 +1998,37 @@ u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4))) = { // battle tex id per sw
  */
 USER_FUNC(yoshi_original_color_anim_set) {
     BattleWork* wp = _battleWorkPointer;
+    EvtWord* args = event->args;
     BattleUnitPart* part;
     const char* name;
-    EvtWord* args = event->args;
     s32 id;
 
-    if (part && part) { // FAKE: empty test of the uninitialised part pointer; removing it changes codegen
-    }
-    id = evtGetValue(event, args[0]);
+    id = evtGetValue(event, *args++);
     id = BattleTransID(event, id);
     BattleGetUnitPtr(wp, id);
-    switch (pouchGetPartyColor(PARTNER_YOSHI)) {
-    case 1:
-        name = "c_babyyoshi2";
-        break;
-    case 2:
-        name = "c_babyyoshi3";
-        break;
-    case 3:
-        name = "c_babyyoshi4";
-        break;
-    case 4:
-        name = "c_babyyoshi5";
-        break;
-    case 5:
-        name = "c_babyyoshi6";
-        break;
-    case 6:
-        name = "c_babyyoshi7";
-        break;
-    case 0:
-    default:
-        name = NULL;
-        break;
+    switch (pouchGetPartyColor(4)) {
+        case 1:
+            name = "c_babyyoshi2";
+            break;
+        case 2:
+            name = "c_babyyoshi3";
+            break;
+        case 3:
+            name = "c_babyyoshi4";
+            break;
+        case 4:
+            name = "c_babyyoshi5";
+            break;
+        case 5:
+            name = "c_babyyoshi6";
+            break;
+        case 6:
+            name = "c_babyyoshi7";
+            break;
+        case 0:
+        default:
+            name = NULL;
+            break;
     }
     if (isFirstCall) {
         if (name == NULL) {

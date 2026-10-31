@@ -51,7 +51,6 @@ EffectEntry* effRotHammerFailN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z) {
     zero = 0.0f;
     effect->callback = effRotHammerFailMain;
     work->lifetime = time;
-    // FAKE: child = work + 1 through a pointer step and back; the plain assignment changes the object
     child = work++;
     child = work;
     work--;

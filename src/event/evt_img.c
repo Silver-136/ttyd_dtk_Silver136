@@ -161,11 +161,10 @@ USER_FUNC(evt_img_set_virtual_point) {
     f32 z = evtGetFloat(event, args[3]);
     ImageEntry* img = imgNameToPtr(name, gp->inBattle != 0);
     Vec tmp;
-    Vec pos = { 0.0f, 0.0f, 0.0f };
+    Vec pos = {0.0f, 0.0f, 0.0f};
     pos.x = x;
     pos.y = y;
     pos.z = z;
-    // FAKE: spare copy of pos; passing &pos changes the object
     tmp = pos;
     imgSetVirtualPoint(img, &tmp);
     return EVT_RETURN_DONE;

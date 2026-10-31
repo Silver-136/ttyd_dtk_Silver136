@@ -298,8 +298,7 @@ void partyLeft(PartyId partnerId) {
 /** TRUE when the partner has been recruited (pouch partyData flag 1); FALSE for ids 8 and up (followers). */
 BOOL partyChkJoin(PartyId partnerId) {
     BOOL ret = FALSE;
-    if (partnerId < PARTNER_COUNT) {
-        // FAKE: spare u32 temporary; assigning ret directly changes the object
+    if (partnerId < 8) {
         u32 joined = pouchGetPtr()->partyData[partnerId].flags & POUCH_PARTY_FLAG_JOINED;
         ret = joined;
     }

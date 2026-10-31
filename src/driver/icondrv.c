@@ -407,7 +407,6 @@ void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale) 
     CameraEntry* camera;
     IconBinData* data;
     IconEntry* ep;
-
     camera = camGetCurPtr();
     ep = &entry;
     if ((!icon_tpl_ok) || (!icon_bin_ok)) {
@@ -415,13 +414,12 @@ void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale) 
     }
     PSMTXTrans(transmtx, position->x, position->y, position->z);
     PSMTXScale(scalemtx, scale, scale, scale);
-    PSMTXRotRad(rotmtx, 'y', MTXDegToRad(-camera->viewYaw));
+    PSMTXRotRad(rotmtx, 'y', (-camera->viewYaw) * 0.01745329252f);
     PSMTXConcat(transmtx, rotmtx, mtx);
     PSMTXConcat(mtx, scalemtx, mtx);
     PSMTXConcat(camera->view, mtx, mtx);
     entry.color = (GXColor){0xFF, 0xFF, 0xFF, alpha};
     entry.uflags = flags;
-    // FAKE: iconId++ then iconId-- (no net change); without them the object changes
     iconId++;
     iconId--;
     entry.iconId = iconId;
@@ -438,7 +436,7 @@ void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale) 
             total += data->frames[i].delay;
         }
 
-        t = (s32)gp->retraceCount % total;
+        t = ((s32)gp->retraceCount) % total;
         for (i = 0; i < data->numIcons; i++) {
             if (t < data->frames[i].delay) {
                 entry.tplId = data->frames[i].tplId;
@@ -446,7 +444,7 @@ void iconDispGxAlpha(Vec* position, s16 flags, u16 iconId, u8 alpha, f32 scale) 
             }
             t -= data->frames[i].delay;
         }
-    }
+    };
     iconGX(mtx, ep);
 }
 

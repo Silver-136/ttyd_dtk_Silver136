@@ -179,67 +179,65 @@ void effKissMain(EffectEntry* effect) {
     }
     work++;
     switch (type) {
-    case 0:
-    case 3:
-        for (i = 1; i < effect->count; i++, work++) {
-            work->position.x += work->vx;
-            work->position.y += work->vy;
-            work->vx *= 0.9f;
-            work->vy *= 0.9f;
-        }
-        break;
-    case 1:
-        ang = 6.2831855f * ang;
-        for (i = 1; i < effect->count; i++, work++) {
-            if ((u32)work->frame < 24) {
-                f32 aa;
-                f32 r;
-                aa = kuri_kiss[work->frame * 3] / 32.0f;
-                aa *= 1.2f;
-                r = ang / 360.0f;
-                work->position.x = aa * (f32)sin(r);
-                work->position.y = aa * (f32)cos(r);
-                work->scaleX = kuri_kiss[work->frame * 3 + 1] / 32.0f;
-                work->scaleY = kuri_kiss[work->frame * 3 + 2] / 32.0f;
-                work->rotation = kuri_kiss_r[work->frame];
-                work->frame++;
+        case 0:
+        case 3:
+            for (i = 1; i < effect->count; i++, work++) {
+                work->position.x += work->vx;
+                work->position.y += work->vy;
+                work->vx *= 0.9f;
+                work->vy *= 0.9f;
             }
-        }
-        break;
-    case 2:
-        ang = 6.2831855f * ang;
-        for (i = 1; i < effect->count; i++, work++) {
-            if ((u32)work->frame < 39) {
-                rad = ang / 360.0f;
-                a = kura_kiss[work->frame * 3] / 32.0f;
-                a *= 1.2f;
-                work->position.x = a * (f32)sin(rad);
-                work->position.y = a * (f32)cos(rad);
-                work->scaleX = kura_kiss[work->frame * 3 + 1] / 32.0f;
-                work->scaleY = kura_kiss[work->frame * 3 + 2] / 32.0f;
-                work->frame++;
+            break;
+        case 1:
+            ang = 6.2831855f * ang;
+            for (i = 1; i < effect->count; i++, work++) {
+                if ((u32)work->frame < 24) {
+                    f32 aa;
+                    f32 r;
+                    aa = kuri_kiss[work->frame * 3] / 32.0f;
+                    aa *= 1.2f;
+                    r = ang / 360.0f;
+                    work->position.x = aa * (f32)sin(r);
+                    work->position.y = aa * (f32)cos(r);
+                    work->scaleX = kuri_kiss[work->frame * 3 + 1] / 32.0f;
+                    work->scaleY = kuri_kiss[work->frame * 3 + 2] / 32.0f;
+                    work->rotation = kuri_kiss_r[work->frame];
+                    work->frame++;
+                }
             }
-        }
-        break;
-    case 4:
-        work->position.x += 0.2f;
-        {
-            // FAKE: spare local s for the sine; __fabsf((f32)sin(...)) in place changes the object
-            f32 s = sin(9.424778f * (f32)work->frame / 60.0f);
-
-            work->position.y = 2.0f * __fabsf(s);
-        }
-        work->rotation = 12.0f * (f32)sin(9.424778f * (f32)work->frame / 60.0f);
-        work->frame++;
-        break;
-    case 5:
-        for (i = 1; i < effect->count; i++, work++) {
-            work->position.x += work->vx;
-            work->position.y += work->vy;
-            work->vx *= 0.9f;
-            work->vy *= 0.9f;
-        }
-        break;
+            break;
+        case 2:
+            ang = 6.2831855f * ang;
+            for (i = 1; i < effect->count; i++, work++) {
+                if ((u32)work->frame < 39) {
+                    rad = ang / 360.0f;
+                    a = kura_kiss[work->frame * 3] / 32.0f;
+                    a *= 1.2f;
+                    work->position.x = a * (f32)sin(rad);
+                    work->position.y = a * (f32)cos(rad);
+                    work->scaleX = kura_kiss[work->frame * 3 + 1] / 32.0f;
+                    work->scaleY = kura_kiss[work->frame * 3 + 2] / 32.0f;
+                    work->frame++;
+                }
+            }
+            break;
+        case 4:
+            work->position.x += 0.2f;
+            {
+                f32 s = sin(9.424778f * (f32)work->frame / 60.0f);
+                work->position.y = 2.0f * __fabsf(s);
+            }
+            work->rotation = 12.0f * (f32)sin(9.424778f * (f32)work->frame / 60.0f);
+            work->frame++;
+            break;
+        case 5:
+            for (i = 1; i < effect->count; i++, work++) {
+                work->position.x += work->vx;
+                work->position.y += work->vy;
+                work->vx *= 0.9f;
+                work->vy *= 0.9f;
+            }
+            break;
     }
     if (type == 4 || type == 5) {
         dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, (DispCallback)effKissDisp2, effect);

@@ -1308,13 +1308,10 @@ void npcSetStayPose(char* name) {
     PartyEntry* party;
     NpcEntry* npc;
 
-    // FAKE: the first character is read through an s8 cast; name[0] changes the object
-    if (*(s8*)name == 0) {
+    if (*(s8*)name == 0)
         return;
-    }
-    if (!strcmp(name, "(^x^)party")) {
+    if (!strcmp(name, "(^x^)party"))
         return;
-    }
     if (!strcmp(name, "party")) {
         party = partyGetPtr(marioGetPartyId());
         if (party) {
@@ -1329,7 +1326,7 @@ void npcSetStayPose(char* name) {
         marioChgPose(MarioStayPose);
     } else {
         npc = npcNameToPtr(name);
-        if (npc->flags & NPC_FLAG_TALK_POSE) {
+        if (npc->flags & NPC_FLAG_TALK_ANIM) {
             animPoseSetAnim(npc->poseId, npc->stayAnim, TRUE);
         }
     }

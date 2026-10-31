@@ -9,7 +9,6 @@
 static inline s32 _caseEntry(s32 conditionId, BOOL flag, const char* hitObjName, u32 swFlag,
                              void* evtCode, EvtWord* lwData, s32 priority) {
     CaseSetup setup;
-    // FAKE: spare pointer to setup; using setup directly changes the object
     CaseSetup* ptr = &setup;
 
     if (flag) {
@@ -33,7 +32,6 @@ static inline s32 _caseEntry(s32 conditionId, BOOL flag, const char* hitObjName,
 static inline s32 _evtCaseEntry(EventEntry* event, s32 conditionId, BOOL flag,
                                 const char* hitObjName, u32 swFlag, void* evtCode, s32 priority) {
     CaseSetup setup;
-    // FAKE: spare pointer to setup; using setup directly changes the object
     CaseSetup* ptr = &setup;
 
     if (flag) {

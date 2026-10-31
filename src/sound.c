@@ -1065,8 +1065,8 @@ void SoundEfxSetVolume(s32 chan, u8 vol) {
 
 /** Returns the volume last set for the effect on chan. */
 u8 SoundEfxGetVolume(s32 chan) {
-    s32 off = chan * sizeof(SoundEffect);
-    return (u8)*(u16*)((u8*)sound.effects + off + offsetof(SoundEffect, vol)); // FAKE: byte-offset load from the chan * sizeof offset (sound.effects[chan].vol schedules differently)
+    SoundEffect* sfx = &sound.effects[chan];
+    return sfx->vol;
 }
 
 /** Sets the reverb send of the effect on chan. */
@@ -1285,7 +1285,7 @@ static void SoundDVDStopCh(s32 chan) {
 }
 
 /** Applies pan and the current volume of DVD audio channel chan to the hardware stream volume. */
-static void SoundDVDSetPanCh(s32 chan, u8 pan) {
+static void SoundDVDSetPanCh(s32 chan, u8 pan) { // I think this is the correct func name
     f32 left, right;
     SoundDVD* dvd;
 
@@ -1296,7 +1296,6 @@ static void SoundDVDSetPanCh(s32 chan, u8 pan) {
     if (pan < 64) {
         right = (((f32)pan * dvd->vol) / 63.0f);
     }
-    // FAKE: sign-bit test for pan >= 64; the plain comparison changes the object
     if (!((u32)(pan - 64) >> 31)) {
         left = (((f32)(127 - pan) * dvd->vol) / 63.0f);
     }
