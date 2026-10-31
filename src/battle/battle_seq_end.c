@@ -75,7 +75,7 @@ void _GetExpIcon_Init(BattleSeqEndWork* work);
 
 typedef struct SeqEndUnitSetup {
     u8* kind;                 // 0x0
-    u8 field_0x4[0x30 - 0x4]; // 0x4
+    u8 setupRest[0x30 - 0x4]; // 0x4
 } SeqEndUnitSetup;
 
 typedef struct SeqEndGroup {

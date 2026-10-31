@@ -31,7 +31,7 @@ typedef struct MotJabaraWork {
     u32 flags;          // 0x00: MotJabaraFlags
     f32 swingAccel;     // 0x04: added to the swing angle while the push timer runs (2.4 start, 0.1 walk)
     f32 swingDecel;     // 0x08: added once the push timer hits 0 (-0.4 start, -0.1 walk)
-    f32 field_0xC;      // 0x0C: cleared at sub-motion 0x32
+    f32 swingDrift;      // 0x0C: cleared at sub-motion 0x32
     f32 swingRotStep;   // 0x10: 0.18, swing tilt step
     s32 wobbleCount;    // 0x14: wobble direction changes, picks SFX 0x189..0x18B
     f32 wobbleDir;      // 0x18: +-0.6, last wobble direction
@@ -538,7 +538,7 @@ void mot_jabara(void) {
         marioPaperLightOff();
         mario->currSubMotionId = 0x32;
         mario->mot.jabara.animFrame = 0;
-        marioGetPtr()->motJabara->field_0xC = 0.0f;
+        marioGetPtr()->motJabara->swingDrift = 0.0f;
     case 0x32: {
         BOOL changed;
         f32 step;

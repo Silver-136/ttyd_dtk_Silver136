@@ -15,8 +15,8 @@ typedef struct EffTeresaWork {
     Vec position;               // 0x4
     u8 field_0x10[0x28 - 0x10]; // 0x10
     f32 alpha;                  // 0x28
-    s32 field_0x2C;             // 0x2C
-    s32 field_0x30;             // 0x30
+    s32 counter;             // 0x2C
+    s32 state;             // 0x30
     f32 scale;                  // 0x34
     f32 rotZ;                   // 0x38
     BOOL vanished;              // 0x3C
@@ -42,8 +42,8 @@ EffectEntry* effTeresaEntry(s32 type, f32 x, f32 y, f32 z) {
     work->position.y = y;
     work->position.z = z;
     work->scale = type == 0 ? 30.0f : 0.0f;
-    work->field_0x30 = 0;
-    work->field_0x2C = 0;
+    work->state = 0;
+    work->counter = 0;
     work->alpha = type == 0 ? 0 : 255;
     work->vanished = FALSE;
     if (type == 0) {

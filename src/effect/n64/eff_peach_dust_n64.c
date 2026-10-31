@@ -25,9 +25,9 @@ typedef struct EffPeachDustParticle {
 typedef struct EffPeachDustWork {
     s32 type;     // 0x0
     Vec position; // 0x4
-    f32 unk10;    // 0x10
-    f32 unk14;    // 0x14
-    f32 unk18;    // 0x18
+    f32 velX;    // 0x10
+    f32 velY;    // 0x14
+    f32 velZ;    // 0x18
     s32 lifetime; // 0x1C
     s32 frame;    // 0x20
     f32 unk24;    // 0x24

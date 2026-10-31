@@ -17,7 +17,7 @@ typedef struct EffLaserWork {
     Vec target;     // 0x10
     f32 scale;      // 0x1C
     s32 poseId;     // 0x20
-    s32 field_0x24; // 0x24
+    s32 counter; // 0x24
     s32 timer;      // 0x28
     s32 state;      // 0x2C
     s32 alpha;      // 0x30
@@ -43,7 +43,7 @@ EffectEntry* effLaserEntry(s32 type, f32 x, f32 y, f32 z) {
     work->position.y = 1000.0f + work->target.y;
     work->position.z = work->target.z;
     work->scale = 1.0f;
-    work->field_0x24 = 0;
+    work->counter = 0;
     work->timer = 0;
     work->poseId = -1;
     work->alpha = 255;

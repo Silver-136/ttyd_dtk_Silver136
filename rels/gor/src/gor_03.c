@@ -114,7 +114,7 @@ typedef struct GMonteSub {
     s32 unk0;
     Vec pos;
     f32 scale;
-    u8 unk14[0x38 - 0x14];
+    u8 iconData[0x38 - 0x14];
 } GMonteSub;
 typedef struct GMonte {
     u8 hidden;

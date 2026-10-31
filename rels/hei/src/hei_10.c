@@ -33,7 +33,7 @@
 typedef struct Chorobon {
     s16 flags;
     s16 state;
-    s16 field_0x4;
+    s16 stateTimer;
     u8 field_0x6[2];
     Vec target;
     f32 vy;
@@ -194,7 +194,7 @@ static void ext_init(void) {
         (*pose->mtx)[2][3] = randf(-100.0f, 100.0f);
         chb->flags = 0;
         chb->state = 0;
-        chb->field_0x4 = 0;
+        chb->stateTimer = 0;
     }
 }
 

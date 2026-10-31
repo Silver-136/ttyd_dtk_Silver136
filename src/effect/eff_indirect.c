@@ -13,15 +13,15 @@
 typedef struct EffIndirectWork {
     s32 type;          // 0x0
     Vec position;      // 0x4
-    f32 field_0x10;    // 0x10
-    f32 field_0x14;    // 0x14
+    f32 rotX;    // 0x10
+    f32 rotY;    // 0x14
     f32 rotZ;          // 0x18
     f32 scale;         // 0x1C
     u8 alpha;          // 0x20
     u8 field_0x21[7];  // 0x21
     s32 timer;         // 0x28, counts down while fading out
-    s32 field_0x2C;    // 0x2C
-    f32 field_0x30;    // 0x30
+    s32 counter;    // 0x2C
+    f32 speed;    // 0x30
     smartEntry* work;  // 0x34
 } EffIndirectWork;
 
@@ -47,12 +47,12 @@ EffectEntry* effIndirectEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     work->scale = 0.0f;
     work->alpha = 255;
     work->work = smartAlloc(GXGetTexBufferSize(64, 64, GX_TF_IA8, GX_FALSE, 0), 0);
-    work->field_0x10 = 0.0f;
-    work->field_0x14 = 0.0f;
+    work->rotX = 0.0f;
+    work->rotY = 0.0f;
     work->rotZ = 0.0f;
     work->timer = duration;
-    work->field_0x2C = 0;
-    work->field_0x30 = -0.05f;
+    work->counter = 0;
+    work->speed = -0.05f;
     return effect;
 }
 

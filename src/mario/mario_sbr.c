@@ -20,14 +20,14 @@
 
 
 typedef struct RubWork {
-    s32 unk0;       // 0x0
+    s32 state;       // 0x0
     s32 count;      // 0x4
     s32 num;        // 0x8
     s32 idx;        // 0xC
     s32 dir;        // 0x10
     s32 start;      // 0x14
-    s32 unk18;      // 0x18
-    s32 unk1C;      // 0x1C
+    s32 lastAngle;      // 0x18
+    s32 stallFrames;      // 0x1C
     s32 revDir;     // 0x20
     s32 idleTimer;  // 0x24
     u8 unk28[0x3C - 0x28]; // 0x28
@@ -679,7 +679,7 @@ s32 marioGetRub(u32 btn, s32* dirOut, s32* countOut, f32* magOut) {
             rw->start = a;
             rubClearHist(a);
         }
-        rw->unk1C = 0;
+        rw->stallFrames = 0;
         rw->num++;
         if (checkOneRevolution(0) == 1) {
             ret = 1;
@@ -706,7 +706,7 @@ s32 marioGetRub(u32 btn, s32* dirOut, s32* countOut, f32* magOut) {
             rw->start = a;
             rubClearHist(a);
         }
-        rw->unk1C = 0;
+        rw->stallFrames = 0;
         rw->num++;
         if (checkOneRevolution(1) == 1) {
             ret = 1;

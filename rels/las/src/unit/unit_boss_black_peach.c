@@ -70,16 +70,16 @@ typedef struct HandWork {
     HandElem* elems;
     s32 num;
     HandAnim anim[32];
-    u8 field_0x488[0x49C - 0x488];
+    u8 groupPos[0x49C - 0x488];
     f32 y;
-    u8 field_0x4a0[4];
+    u8 ySpeed[4];
     s32 animNum;
     s32 timer;
     s32 state;
 } HandWork;
 typedef struct QueenConnect {
     s32 poseId[3];
-    u8 field_0xc[0x40 - 0xC];
+    u8 locatorWork[0x40 - 0xC];
     s32 idx[2];
 } QueenConnect;
 ExtTexInfo hand_data[32];

@@ -23,7 +23,7 @@ typedef struct EffRankupWork {
     f32 scale;      // 0x10
     s32 poseId;     // 0x14
     s32 state;      // 0x18
-    s32 field_0x1C; // 0x1C
+    s32 timer; // 0x1C
     s32 alpha;      // 0x20
 } EffRankupWork;
 
@@ -46,7 +46,7 @@ EffectEntry* effRankupEntry(s32 type, f32 x, f32 y, f32 z) {
     work->scale = 1.0f;
     work->poseId = -1;
     work->state = 0;
-    work->field_0x1C = 0;
+    work->timer = 0;
     work->alpha = 255;
     return effect;
 }

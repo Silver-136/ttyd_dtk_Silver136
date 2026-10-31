@@ -25,7 +25,7 @@ typedef struct MotRollWork {
     f32 spdZ;           // 0x04: roll velocity z
     s32 squashTrigger;  // 0x08: nonzero restarts the squash animation (-> squashState 1)
     s32 squashState;    // 0x0C: y-scale squash state machine (1.4 / back to 1.0)
-    s32 field_0x10;     // 0x10, never accessed
+    s32 squashTimer;     // 0x10, never accessed
 #ifdef VERSION_G8ME01
     s32 sfxId;          // 0x14: US only, rolling sound (PSND_SFX_MARIO_ROLL_MOVE1), -1 when off
 #endif

@@ -13,7 +13,7 @@ typedef struct EffTorchWork {
     f32 scale;         // 0x10
     f32 scaleX;        // 0x14
     f32 scaleY;        // 0x18
-    u8 field_0x1C;     // 0x1C
+    u8 state;     // 0x1C
     u8 field_0x1D[3];  // 0x1D
 } EffTorchWork;
 
@@ -165,7 +165,7 @@ EffectEntry* effTorchEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     effect->userdata = work;
     effect->callback = effTorchMain;
     work->type = type;
-    work->field_0x1C = 0;
+    work->state = 0;
     work->position = (Vec){ x, y, z };
     work->scale = 0.5f * scale;
     work->scaleX = 1.0f;

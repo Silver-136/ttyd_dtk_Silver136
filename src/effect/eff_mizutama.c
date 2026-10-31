@@ -16,8 +16,8 @@ typedef struct EffMizutamaWork {
     f32 velX;       // 0x10
     f32 velY;       // 0x14
     f32 scale;      // 0x18
-    s32 field_0x1C; // 0x1C
-    s32 field_0x20; // 0x20
+    s32 timer; // 0x1C
+    s32 state; // 0x20
     s32 delay;      // 0x24
 } EffMizutamaWork;
 
@@ -61,8 +61,8 @@ EffectEntry* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     work->position.y = y;
     work->position.z = z;
     work->scale = 1.0f;
-    work->field_0x1C = 0;
-    work->field_0x20 = 0;
+    work->timer = 0;
+    work->state = 0;
 
     work++;
     for (i = 1; i < effect->count; i++, work++) {

@@ -13,7 +13,7 @@
 #include "eff/eff_magic1_n64.h"
 
 typedef struct EffBoobooN64Work {
-    s32 unk0;         // 0x0
+    s32 life;         // 0x0
     s32 time;         // 0x4
     u32 flags[11];    // 0x8
     f32 x[11];        // 0x34
@@ -306,7 +306,7 @@ EffectEntry* effBoobooN64Entry(void) {
     effect->userdata = work;
     effect->callback = effBoobooMain;
     work->time = 0;
-    work->unk0 = 1000;
+    work->life = 1000;
     for (i = 0; i < 11; i++) {
         work->x[i] = 0.0f;
         work->y[i] = 0.0f;

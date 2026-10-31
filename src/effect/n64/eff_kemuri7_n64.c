@@ -25,7 +25,7 @@ typedef struct EffKemuri7N64Work {
     f32 side;         // 0x60
     f32 hSpeedScale;  // 0x64
     f32 rising;       // 0x68
-    f32 field_0x6C;   // 0x6C
+    f32 accelStep2;   // 0x6C
     f32 vSpeed;       // 0x70
     f32 vAccel;       // 0x74
     f32 vJerk;        // 0x78
@@ -65,7 +65,7 @@ EffectEntry* effKemuri7N64Entry(f32 x, f32 y, f32 z, f32 angle, f32 side) {
     effect->callback = effKemuri7Main;
     for (i = 0; i < 1; i++, work++) {
         work->active = TRUE;
-        work->field_0x6C = 0.0f;
+        work->accelStep2 = 0.0f;
         work->position.x = x;
         work->position.y = y;
         work->position.z = z;

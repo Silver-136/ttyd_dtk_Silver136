@@ -16,7 +16,7 @@ typedef struct EffQueenWork {
     f32 scale;      // 0x10
     f32 size;       // 0x14
     s32 poseId;     // 0x18
-    s32 field_0x1C; // 0x1C
+    s32 state; // 0x1C
     s32 timer;      // 0x20, counts down while fading out
     s32 alpha;      // 0x24
     s32 maxAlpha;   // 0x28
@@ -48,7 +48,7 @@ EffectEntry* effQueenEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 size
     } else {
         work->timer = duration;
     }
-    work->field_0x1C = 0;
+    work->state = 0;
     work->poseId = -1;
     work->alpha = 0;
     work->maxAlpha = 255;

@@ -26,7 +26,7 @@ typedef struct YuuCounterWork {
     s64 elapsed;
     OSTime lastTime;
     s32 limit;
-    s32 field_0x34;
+    s32 startCount;
 } YuuCounterWork;
 static void* yuunpc_wp;
 static YuuCounterWork* _wp;
@@ -132,7 +132,7 @@ USER_FUNC(evt_yuucounter_alloc) {
             wp->data = wp->limit;
             break;
         case 2:
-            wp->field_0x34 = value;
+            wp->startCount = value;
             break;
     }
     wp->event = evtEntry(main_evt, 0, 0);

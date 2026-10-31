@@ -26,7 +26,7 @@ typedef struct EffKemuri8N64Work {
     f32 vAccelStep2; // 0x2C
     f32 sinAngle;   // 0x30
     f32 cosAngle;   // 0x34
-    s32 field_0x38; // 0x38
+    s32 variant; // 0x38
     s32 timer;      // 0x3C
     s32 texFrame;   // 0x40, current of 16 texture frames; >15 = done
     u8 r;           // 0x44
@@ -91,7 +91,7 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
     work = __memAlloc(HEAP_EFFECT, sizeof(EffKemuri8N64Work) * count);
     effect->userdata = work;
     effect->callback = effKemuri8Main;
-    work->field_0x38 = 0;
+    work->variant = 0;
     work->timer = 0;
     work->type = type;
     work->position.x = x;
