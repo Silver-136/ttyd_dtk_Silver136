@@ -495,6 +495,7 @@ void FontDrawStringMtx(Mtx mtx, const char* msg) {
                     break;
                 case '<':
                     msg = msgGetCommand((char*)(msg + 1), (char*)tag, (char*)value);
+                    // BUG: '/r' is a multi-character constant (0x2F72), so the closing ruby tag test is always false
                     if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;
                     }
@@ -660,6 +661,7 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
                         cx += w * scale + d3;
+                    // BUG: '/r' is a multi-character constant (0x2F72), so the closing ruby tag test is always false
                     } else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;
                     }
@@ -744,6 +746,7 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
                         FontDrawStart_alpha(fontAlpha);
                         FontDrawColor(fontColor);
                         cx += w * scale + d3;
+                    // BUG: '/r' is a multi-character constant (0x2F72), so the closing ruby tag test is always false
                     } else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;
                     }
@@ -830,6 +833,7 @@ u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
                         }
                         iconGetWidthHight(&w, &h, (u16)id);
                         width += w * scale + d3;
+                    // BUG: '/r' is a multi-character constant (0x2F72), so the closing ruby tag test is always false
                     } else if (tag[0] == 'R' || (tag[0] == '/' && tag[0] == (u32)'/r')) {
                         break;
                     }

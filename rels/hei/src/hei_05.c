@@ -228,6 +228,7 @@ static EVT_BEGIN(hashira_evt)
     SET_VALUE(LW(0), LW(0))
     SPAWN_EVENT_GET_ID(PTR(hashira_evt_sub), LW(15))
     IF_INT_EQUAL(LW(2), 0)
+        // BUG: tests hei_03's pillar-enemy flags, not this map's GSWF_HEI_05_PILLAR_ENEMY_1/2_DEFEATED
         IF_INT_EQUAL(GSWF_HEI_03_PILLAR_ENEMY_2_DEFEATED, 0)
             SET_VALUE(LW(0), LW(1))
             SPAWN_EVENT(PTR(hashira_evt_sub))

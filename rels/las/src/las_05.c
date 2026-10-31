@@ -202,6 +202,8 @@ s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz) {
             result = (kurokaron_move_index + 1) % 6;
         }
     }
+    // BUG: with no candidate (cnt == 0) and curDiff >= nextDiff, result is never set and the
+    // function returns whatever its caller left in the register result lives in.
     return result;
 }
 

@@ -387,6 +387,9 @@ static EVT_BEGIN(main_0)
         SET_VALUE(LF(0), 0)
         // Each frame the block moves toward its target height.
         LOOP(0)
+            // BUG: with no partner out the head test uses the bare mobj name, but mobj hit objects are
+            // named "MOBJ_" + name, so it never matches; with a partner it tests LW(7), which nothing sets,
+            // instead of the partner's head object.
             CALL(evt_mario_get_party, LW(5))
             IF_INT_EQUAL(LW(5), 0)
                 CALL(evt_mario_get_name_hitobj_head, LW(6))
@@ -637,6 +640,9 @@ EVT_BEGIN(main_1)
         SET_VALUE(LF(0), 0)
         // Each frame the block moves toward its target height.
         LOOP(0)
+            // BUG: with no partner out the head test uses the bare mobj name, but mobj hit objects are
+            // named "MOBJ_" + name, so it never matches; with a partner it tests LW(7), which nothing sets,
+            // instead of the partner's head object.
             CALL(evt_mario_get_party, LW(5))
             IF_INT_EQUAL(LW(5), 0)
                 CALL(evt_mario_get_name_hitobj_head, LW(6))

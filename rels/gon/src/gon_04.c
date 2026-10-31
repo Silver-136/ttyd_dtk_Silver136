@@ -371,6 +371,9 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
         SET_FLOAT_VALUE(LW(4), LW(2))
         SET_VALUE(LF(0), 0)
         LOOP(0)
+            // BUG: with no partner out the head test uses the bare mobj name, but mobj hit objects are
+            // named "MOBJ_" + name, so it never matches; with a partner it tests LW(7), which nothing sets,
+            // instead of the partner's head object.
             CALL(evt_mario_get_party, LW(5))
             IF_INT_EQUAL(LW(5), 0)
                 CALL(evt_mario_get_name_hitobj_head, LW(6))
@@ -623,6 +626,9 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
         SET_FLOAT_VALUE(LW(4), LW(2))
         SET_VALUE(LF(0), 0)
         LOOP(0)
+            // BUG: with no partner out the head test uses the bare mobj name, but mobj hit objects are
+            // named "MOBJ_" + name, so it never matches; with a partner it tests LW(7), which nothing sets,
+            // instead of the partner's head object.
             CALL(evt_mario_get_party, LW(5))
             IF_INT_EQUAL(LW(5), 0)
                 CALL(evt_mario_get_name_hitobj_head, LW(6))
