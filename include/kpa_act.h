@@ -11,3 +11,8 @@ void kpaAddScorePos(s32 score, Vec* pos);
 
 extern const Vec vec3_802fe200;
 void kpaAddCoinPos(s32 coins, Vec* pos);
+
+#include "evt/evt_cmd.h"
+
+USER_FUNC(kpa_chg_pose);
+USER_FUNC(kpa_score_disp_init);

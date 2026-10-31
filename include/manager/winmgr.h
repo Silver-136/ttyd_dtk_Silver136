@@ -114,3 +114,8 @@ s32 winMgrSelect(WinMgrSelect* select);
 s32 winMgrSelectOther(WinMgrSelect* select, struct EventEntry* evt);
 void winMgrSelectDelete(WinMgrSelect* select);
 s32 winMgrSelectGetCursor(WinMgrSelect* sel);
+
+#include "evt/evt_cmd.h"
+
+USER_FUNC(evt_win_party_lankdown_chk);
+USER_FUNC(evt_win_party_lankup_chk);

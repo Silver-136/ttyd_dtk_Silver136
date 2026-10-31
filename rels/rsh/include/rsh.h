@@ -62,6 +62,8 @@ USER_FUNC(evt_rsh_get_rnd_npc_data);
 USER_FUNC(evt_rsh_get_rnd_npc_talk_evt);
 USER_FUNC(evt_rsh_set_rnd_npc);
 USER_FUNC(evt_rsh_set_rnd_npc_talk_evt);
+USER_FUNC(boss_moamoa_check_zenei_kouei);
+USER_FUNC(mario_normalize_wait);
 
 // Area-local saved values (RSH; swReInit clears them on every area change), named from the area's
 // scripts

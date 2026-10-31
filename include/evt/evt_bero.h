@@ -122,3 +122,4 @@ USER_FUNC(evt_bero_read_mario_pera);
 USER_FUNC(evt_bero_switch_off);
 USER_FUNC(evt_bero_switch_on);
 USER_FUNC(evt_camera_change_event_from_road);
+USER_FUNC(bero_get_position_normal);

@@ -6,6 +6,7 @@
 
 USER_FUNC(_attack_aud);
 USER_FUNC(_get_attack_aud_no);
+USER_FUNC(_check_aud_item_type);
 
 extern EvtWord btlataudevtPresentItem_Damage[];
 extern EvtWord btlataudevtPresentItem_Get[];

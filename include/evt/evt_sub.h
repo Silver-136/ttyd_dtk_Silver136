@@ -82,3 +82,5 @@ USER_FUNC(set_stop);
 USER_FUNC(stageclear_wait);
 USER_FUNC(stone_bg_open);
 USER_FUNC(stone_ry);
+USER_FUNC(evt_key_get_button);
+USER_FUNC(evt_key_get_dir);

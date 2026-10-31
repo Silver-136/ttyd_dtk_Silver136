@@ -39,8 +39,8 @@ extern BattleUnitKind unit_boss_gundan_zako_group2;
 extern BattleUnitKind unit_boss_gundan_zako_group3;
 extern BattleUnitKind unit_gundan_zako_magician;
 extern EvtWord zakogun_entry[];
-extern s32 zakogun_escape3[];
-extern s32 zakogun_ext_init2[];
+USER_FUNC(zakogun_escape3);
+USER_FUNC(zakogun_ext_init2);
 
 BattleUnitKind unit_boss_kanbu3;
 static BattleUnitDefense defence;

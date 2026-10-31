@@ -104,8 +104,8 @@ USER_FUNC(evt_set_fune_anim_rate);
 USER_FUNC(evt_map_anim_rate);
 USER_FUNC(marcoship_stop_wait_func);
 USER_FUNC(marcoship_stop_func);
-extern s32 evt_npc_set_run_anim[];
-extern s32 evt_npc_set_stay_anim[];
+USER_FUNC(evt_npc_set_run_anim);
+USER_FUNC(evt_npc_set_stay_anim);
 
 EvtWord hiru_yoru_event[46];
 EvtWord yoru_hiru_event[46];

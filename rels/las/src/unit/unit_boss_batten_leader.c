@@ -81,9 +81,9 @@ USER_FUNC(evt_eff_firechange00);
 USER_FUNC(evt_eff_barriersizechange);
 USER_FUNC(evt_eff_colorchange00);
 USER_FUNC(evt_eff_pokopi_thunder);
-extern s32 bts_x_flag_add[];
-extern s32 bts_x_flag_set[];
-extern s32 bts_x_flag_wait[];
+USER_FUNC(bts_x_flag_add);
+USER_FUNC(bts_x_flag_set);
+USER_FUNC(bts_x_flag_wait);
 extern BattleUnitKind unit_boss_batten_satellite;
 
 EvtWord batten_leader_zoom[34];

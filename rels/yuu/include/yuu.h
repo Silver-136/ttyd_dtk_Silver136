@@ -102,3 +102,16 @@ void yuuminigame_init_3roll(struct EventEntry* event, BOOL isFirstCall);
 void yuuminigame_main_3roll(struct EventEntry* event, BOOL isFirstCall);
 void yuuminigame_init_4slit(struct EventEntry* event, BOOL isFirstCall);
 void yuuminigame_main_4slit(struct EventEntry* event, BOOL isFirstCall);
+
+
+USER_FUNC(eff_call_minigame);
+USER_FUNC(evt_yuucounter_alloc);
+USER_FUNC(evt_yuucounter_free);
+USER_FUNC(evt_yuuminigame_alloc);
+USER_FUNC(evt_yuutitle_alloc);
+USER_FUNC(evt_yuutitle_free);
+USER_FUNC(yuu_atai_init);
+USER_FUNC(yuu_atai_pop);
+USER_FUNC(yuu_atai_push);
+USER_FUNC(yuuminigame_get_dataadr);
+USER_FUNC(yuuminigame_set_dataadr);

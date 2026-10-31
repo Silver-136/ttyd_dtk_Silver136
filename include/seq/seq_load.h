@@ -9,3 +9,7 @@ void seq_loadMain(SequenceWork* seq);
 
 extern EvtWord evt_continue[];
 extern s32 stone_id[];
+
+#include "evt/evt_cmd.h"
+
+USER_FUNC(evt_seq_load_keep_msg_window);

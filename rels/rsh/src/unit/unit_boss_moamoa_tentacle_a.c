@@ -11,7 +11,7 @@
 #include "battle/battle_damage.h"
 #include "unit_boss_moamoa.h"
 
-extern s32 boss_moamoa_check_zenei_kouei[];
+USER_FUNC(boss_moamoa_check_zenei_kouei);
 extern PoseTableEntry moamoa1_weakness_pose_table[];
 extern s32 moamoa_defence_no_parts[];
 

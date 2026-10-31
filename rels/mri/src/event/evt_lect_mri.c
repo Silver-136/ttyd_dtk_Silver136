@@ -97,7 +97,7 @@ static USER_FUNC(lect_mobj_set_nosysblend);
 static USER_FUNC(lect_push_a_check);
 static USER_FUNC(lect_push_b_check);
 static USER_FUNC(bgm_start_wait);
-extern s32 evt_mario_dispflag_onoff[];
+USER_FUNC(evt_mario_dispflag_onoff);
 
 EvtWord boots_lv2_juyoitem_lecture_init[66];
 EvtWord boots_lv2_juyoitem_lecture[550];

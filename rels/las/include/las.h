@@ -75,6 +75,9 @@ extern s32 move_check_list[];
 USER_FUNC(mobj_color_off);
 USER_FUNC(mobj_set_color);
 USER_FUNC(mobj_set_ry);
+USER_FUNC(bts_x_flag_add);
+USER_FUNC(bts_x_flag_set);
+USER_FUNC(bts_x_flag_wait);
 
 // Area-local saved values (LAS; swReInit clears them on every area change), named from the area's
 // scripts

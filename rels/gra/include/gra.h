@@ -25,6 +25,8 @@ extern BattleUnitKind unit_hyper_togekuri;
 extern BattleUnitKind unit_pansy;
 extern BattleUnitKind unit_twinkling_pansy;
 USER_FUNC(evt_gra_vivian_pose_set);
+USER_FUNC(evt_iwamove_ent);
+USER_FUNC(evt_iwamove_init);
 
 // Area-local saved values (GRA; swReInit clears them on every area change), named from the area's
 // scripts

@@ -21,6 +21,7 @@ extern EvtWord roll_majin_lecture_init[];
 extern EvtWord usu_00_init_evt[];
 extern EvtWord usu_01_init_evt[];
 USER_FUNC(evt_usu_vivian_pose_set);
+USER_FUNC(evt_kagemario_init);
 
 // Area-local saved values (USU; swReInit clears them on every area change), named from the area's
 // scripts

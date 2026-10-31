@@ -142,3 +142,7 @@ void BattleStageLightSetTargetByUnit(s32 idx, s32 unitId, f32 x, f32 y, f32 z, s
 void BattleStageLightSetUpVec(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode);
 void BattleStageLightSetWidth(s32 idx, s32 width, s32 time, u8 mode);
 void BattleStageOffLightInCommand(s32 a, s32 b);
+
+#include "evt/evt_cmd.h"
+
+USER_FUNC(tou_gamen_screen_tev_init);

@@ -80,7 +80,7 @@ USER_FUNC(zakogun_attack3_2);
 USER_FUNC(zakogun_attack3_1);
 USER_FUNC(zakogun_ext_init3);
 USER_FUNC(zakogun_kanbu_on_ball);
-extern s32 zakogun_get_kanbu_id_evtcmd[];
+USER_FUNC(zakogun_get_kanbu_id_evtcmd);
 
 BattleUnitKind unit_boss_gundan_zako_group3;
 static BattleUnitDefense defence;
