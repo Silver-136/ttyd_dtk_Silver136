@@ -109,7 +109,7 @@ typedef struct MoamoaWork {
     s16 hitCount;              // 0x038
     s16 targetHits[3];         // 0x03A, hits near each target (rsh_05); above 50 the escape event for that side runs
     s16 hammerFrames;          // 0x040, frames Mario has been in the hammer motion
-    s16 idleFrames;            // 0x042, frames Mario has stood still (capped at 1000); never read
+    s16 idleFrames;            // 0x042, Mario-still counter, incremented/capped at 1000 in rsh_06; no other consumer found
     EventEntry* escapeEvt;     // 0x044
     s32 animPoseId;            // 0x048, pose of the giant Smorg NPC "base" (rsh_06); never read
     s32 numDefs;               // 0x04C

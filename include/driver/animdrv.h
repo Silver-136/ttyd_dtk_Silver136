@@ -187,8 +187,8 @@ typedef struct AnimationPoseData {
     AnimTableEntry* mpAnims;       // 0x1AC
 } AnimationPoseData;
 
-// AnimationPose.flags, named from the animdrv functions that set them; 0x10 (tested in materialProc, never set in
-// C) is not named.
+// AnimationPose.flags, named from their setters and drawing consumers. The kururing capture in evt_mobj
+// sets/clears ANIM_POSE_FLAG_CHANGE_TEXTURE (0x10), which materialProc reads.
 typedef enum AnimationPoseFlags {
     ANIM_POSE_FLAG_ACTIVE = (1 << 0),               // 0x1, slot in use (animPoseEntry and the paper/effect entries)
     ANIM_POSE_FLAG_PAPER_GROUP = (1 << 1),          // 0x2, animPoseSetPaperAnimGroup

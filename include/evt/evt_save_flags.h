@@ -1703,8 +1703,8 @@
 // evt_tou_match_make_default_sub (tou.c) from evt_tou_get_rule_info, 1 in tou_10 evt_match_make_sub and the
 // stg3_06/stg3_21 story-jump inits (event.c); evt_match (tou_03) passes it to evt_npc_set_battle_rule
 #define GSW_GLITZ_PIT_CONDITION_PARAM GSW(503)
-// second parameter of the match condition (battleRule[2], which the battle code never reads); set and passed like
-// GSW(503)
+// second match-condition parameter (battleRule[2]); copied to FieldBattleInfo.ruleParam2 and used by
+// battle_actrecord threshold checks (some turn checks treat 0xFF specially); set and passed like GSW(503)
 #define GSW_GLITZ_PIT_CONDITION_PARAM2 GSW(504)
 // losses to the Armored Harriers (fighter 10), added by evt_match (tou_03) up to 100; tou_10 init runs the
 // first_tamago partner pep talk once when it is 2 or more

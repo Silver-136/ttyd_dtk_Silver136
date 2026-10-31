@@ -142,7 +142,8 @@ typedef union PartyWork {
 } PartyWork;
 
 // PartyEntry.flags2: the partner's display flags (evt_party_dispflg_onoff; scripts pair it with
-// evt_mario_dispflag_onoff, and the bits mirror MarioDispFlags). 0x40/0x80 (never set) and 0x200 are not named.
+// evt_mario_dispflag_onoff, and the bits mirror MarioDispFlags). The named TURN_LEFT/RIGHT_UNUSED bits
+// (0x40/0x80) have no observed setters; 0x200 remains unnamed.
 typedef enum PartyDispFlags {
     PARTY_DISP_FLAG_HIDE = (1 << 0),             // 0x1, no draw, no shadow
     PARTY_DISP_FLAG_POSE_LOCK = (1 << 1),        // 0x2, pose and paper changes ignored

@@ -291,7 +291,8 @@ typedef struct MarioStayWork {     // US only, MarioWork 0x2AC: mot_stay's count
 /* MarioWork.characterId: who the player controls (marioSetCharMode) */
 // MarioWork.dispFlags, named from the setters (marioPaperOn/Off, the balloon and camera functions, peach/battle pose
 // code, the JP demo's marioDispLeftOnlyOn/RightOnlyOn, marioBlurOn, marioSetDirEvent, evt_mario_shadow_onoff) and
-// the drawing code. 0x20 (write-only) and 0x20000000 (only blocks the rear pose) are not named.
+// the drawing code. MARIO_DISP_FLAG_CAM_STILL_UNUSED (0x20) is named but has no observed reader;
+// 0x20000000 (only blocks the rear pose) remains unnamed.
 typedef enum MarioDispFlags {
     MARIO_DISP_FLAG_HIDE = (1 << 0),              // 0x1, not drawn
     MARIO_DISP_FLAG_POSE_LOCK = (1 << 1),         // 0x2, pose and paper changes ignored
