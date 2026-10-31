@@ -481,7 +481,7 @@ static inline BOOL slitContinueChk(void) {
 // Back from dashing to walking speed.
 static inline void slitSpeedDown(MarioWork* m) {
     m->baseSpeed = m->mBaseWalkSpeed;
-    if (!(m->trigFlags & 0x8000)) {
+    if (!(m->trigFlags & MARIO_TRIG_FLAG_SLIT_KEEP_POSE)) {
         marioChgPose("M_R_1");
     }
     m->mot.slit.flags |= 1;
@@ -558,7 +558,7 @@ void mot_slit(void) {
     f32 d;
     s16 st;
     if (!m->controlStickSensitivity) {
-        m->trigFlags &= ~0x8000;
+        m->trigFlags &= ~MARIO_TRIG_FLAG_SLIT_KEEP_POSE;
     }
     if (m->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
         slitInit();
@@ -638,7 +638,7 @@ void mot_slit(void) {
         }
         m->mot.slit.lastY = m->position.y;
         if (m->forceMoveTimer != 0) {
-            if (!(m->trigFlags & 0x8000)) {
+            if (!(m->trigFlags & MARIO_TRIG_FLAG_SLIT_KEEP_POSE)) {
                 marioChgPose("M_W_1");
             }
             marioChgPaper("PM_S_1D");
@@ -683,7 +683,7 @@ void mot_slit(void) {
         }
         m->baseSpeed = slitWalkSpeed();
         m->directionView = m->controlStickAngle;
-        if (!(m->trigFlags & 0x8000)) {
+        if (!(m->trigFlags & MARIO_TRIG_FLAG_SLIT_KEEP_POSE)) {
             marioChgPose("M_W_1");
         }
         d = revise360(m->controlStickAngle - m->targetYaw);
@@ -728,7 +728,7 @@ void mot_slit(void) {
                 s32 sum;
                 m->mot.slit.count = 0;
                 sum = __abs(m->wStickDir1) + __abs(m->wStickDir2);
-                if (!(m->trigFlags & 0x8000)) {
+                if (!(m->trigFlags & MARIO_TRIG_FLAG_SLIT_KEEP_POSE)) {
                     marioChgPose((sum < 0x44) ? "M_W_1" : "M_R_1");
                 }
             }

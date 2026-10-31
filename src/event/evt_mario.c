@@ -81,7 +81,7 @@ void marioSetForceMove(s32 frames, f32 dir, f32 spd);
         }                                               \
     }                                                   \
     if (mp->dispFlags & MARIO_DISP_FLAG_SLIT) {         \
-        mp->trigFlags |= 0x8000;                        \
+        mp->trigFlags |= MARIO_TRIG_FLAG_SLIT_KEEP_POSE;                        \
     }                                                   \
     return EVT_RETURN_DONE;
 

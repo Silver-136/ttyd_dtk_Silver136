@@ -126,7 +126,19 @@ static inline s32 makeVec(f32 half) {
         b = revise360(180.0f + b);                                                                                                                                                                \
     }                                                                                                                                                                                             \
     {                                                                                                                                                                                             \
-        s32 g_; f32 ty_; f32 dd; s32 sgn; f32 tb_; ty_ = trunc10((m2)->targetYaw); tb_ = trunc10(b); g_ = 0; if (g_ != 0) { ty_ = 0.0f; } dd = revise360(tb_ - ty_); sgn = (dd < 180.0f) ? 0 : 1; \
+        s32 g_; \
+        f32 ty_; \
+        f32 dd; \
+        s32 sgn; \
+        f32 tb_; \
+        ty_ = trunc10((m2)->targetYaw); \
+        tb_ = trunc10(b); \
+        g_ = 0; \
+        if (g_ != 0) { \
+            ty_ = 0.0f; \
+        } \
+        dd = revise360(tb_ - ty_); \
+        sgn = (dd < 180.0f) ? 0 : 1; \
         if (sgn == 0) {                                                                                                                                                                           \
             if (__fabsf(b - a) > 90.0f) {                                                                                                                                                         \
                 if (a > b) {                                                                                                                                                                      \
@@ -161,7 +173,10 @@ static inline s32 makeVec(f32 half) {
             mario->hammerDir = (mario->hammerDir + 1) & 1;                                                                                                                                        \
         }                                                                                                                                                                                         \
     }                                                                                                                                                                                             \
-    { f32 t_ = 270.0f + mario->targetYaw - b; mario->displayDirection = revise360(t_ + (mario->hammerDir ? -180.0f : 0.0f)); }                                                                    \
+    { \
+        f32 t_ = 270.0f + mario->targetYaw - b; \
+        mario->displayDirection = revise360(t_ + (mario->hammerDir ? -180.0f : 0.0f)); \
+    }                                                                    \
     if (mario->displayDirection >= 200.0f) {                                                                                                                                                      \
         mario->displayDirection = revise360(270.0f + mario->targetYaw - b + (mario->hammerDir ? -180.0f : 0.0f));                                                                                 \
     }                                                                                                                                                                                             \

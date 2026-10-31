@@ -839,7 +839,7 @@ void partyChgMoveMode(PartyEntry* party, s32 mode) {
     PartyEntry* p = party;
     switch (p->moveMode) {
         case 6:
-            p->flags &= ~0x8000;
+            p->flags &= ~PARTY_FLAG_CONTINUE_FOLLOW_MARKER;
             break;
         case 4:
         case 5:

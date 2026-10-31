@@ -96,6 +96,7 @@ typedef enum MarioTrigFlags {
     MARIO_TRIG_FLAG_DISP_DIR_RIGHT = (1 << 10),
     MARIO_TRIG_FLAG_CHG_ANIM = (1 << 12),
     MARIO_TRIG_FLAG_CHG_PAPER_ANIM = (1 << 14),
+    MARIO_TRIG_FLAG_SLIT_KEEP_POSE = (1 << 15), // 0x8000, suppress selected slit move poses until neutral stick; not a general pose lock
     MARIO_TRIG_FLAG_SET_JUMP_PARAMS = (1 << 16),
     MARIO_TRIG_FLAG_DISABLE_JUMP_KEMURI = (1 << 17),
     MARIO_TRIG_FLAG_JABARA_CHK = (1 << 20),

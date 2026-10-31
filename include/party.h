@@ -43,6 +43,7 @@ typedef enum PartyFlags {
     PARTY_FLAG_KEEP_POSE_UNUSED = (1 << 9), // 0x200, keep pose and facing (no stand pose on stopping, no display-direction update, fixed rotation offset); nothing sets it
     PARTY_FLAG_PAPER_MODE = (1 << 12),
     PARTY_FLAG_MOT_SLIT_FLOOR = (1 << 13),
+    PARTY_FLAG_CONTINUE_FOLLOW_MARKER = (1 << 15), // 0x8000, set by partyReInit for mode 6; partyChgMoveMode clears it if the old mode is 6; no explicit reader found
     PARTY_FLAG_IS_RIDING_PLANE = (1 << 16),
     PARTY_FLAG_IS_RIDING_SHIP = (1 << 17),
     PARTY_FLAG_IS_BEHIND_MARIO = (1 << 19),

@@ -29,6 +29,10 @@
 #include "driver/dispdrv.h"
 #include "mario/mario_kemuri.h"
 
+// Ride teardown clears these two known flags plus legacy bit 18.
+// Keep 0x40000: no standalone setter/reader was established for that bit.
+enum { PARTY_RIDE_CLEAR_MASK = PARTY_FLAG_IS_RIDING_PLANE | PARTY_FLAG_IS_RIDING_SHIP | 0x40000 };
+
 PartyEntry* partyPtrTbl[2];
 PartyData* party_dp;
 s32 partyCtrlNo;
@@ -700,7 +704,7 @@ void partyReInit(void) {
             partyChgRunMode(party, 2);
             party->moveMode = 6;
             party->motionStep = 0;
-            party->flags |= 0x8000;
+            party->flags |= PARTY_FLAG_CONTINUE_FOLLOW_MARKER;
         }
         if (party->currentMemberId == PARTY_MEMBER_MS_MOWZ) {
             chuchu_reinit(party);
@@ -733,7 +737,7 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
                 party->moveDir = mario->moveDirection;
                 party->targetDir = mario->directionView;
                 party->displayDirectionTarget = mario->displayDirectionTarget;
-                party->flags &= ~0x70000;
+                party->flags &= ~PARTY_RIDE_CLEAR_MASK;
                 partyClearJumpPara(party);
                 partyChgPoseId(party, 1);
                 party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -818,7 +822,7 @@ void partyPrevRunMode(PartyEntry* party) {
         party->moveDir = mario->moveDirection;
         party->targetDir = mario->directionView;
         party->displayDirectionTarget = mario->displayDirectionTarget;
-        party->flags &= ~0x70000;
+        party->flags &= ~PARTY_RIDE_CLEAR_MASK;
         partyClearJumpPara(party);
         partyChgPoseId(party, 1);
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -1808,7 +1812,7 @@ void partyRideMain(PartyEntry* party) {
             break;
 
         case 200:
-            party->flags &= ~0x70000;
+            party->flags &= ~PARTY_RIDE_CLEAR_MASK;
             party->dispOfs.y = 0.0f;
             party->scale.x = 1.0f;
             party->scale.y = party->scale.x;
@@ -1902,7 +1906,7 @@ void partyRideMain(PartyEntry* party) {
                 partyClearJumpPara(party);
                 partyChgPoseId(party, 1);
                 party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-                party->flags &= ~0x70000;
+                party->flags &= ~PARTY_RIDE_CLEAR_MASK;
                 party->dispOfs.y = 0.0f;
                 party->scale.x = 1.0f;
                 party->scale.y = party->scale.x;
