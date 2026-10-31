@@ -1,6 +1,7 @@
 // tou_06 (闘技場, Glitz Pit): the storage room (倉庫): containers, the hidden hole and Ms. Mowz (チュチュリーナ).
 // Connects tou_04, tou_05 and tou_12.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
 #include "evt/evt_cloud.h"
@@ -67,7 +68,7 @@ EvtWord iri_13_pants_00_evt[5];
 EvtWord iri_13_init[124];
 static NpcSetupInfo npcEnt[2];
 static EvtWord mobj_box00[34];
-EvtWord tou_06_init_evt[544];
+EvtWord tou_06_init_evt[];
 
 /**
  * Door animation callback for the storage room door (door_1), opening: LW(0) is the swing angle;
@@ -663,13 +664,34 @@ EVT_BEGIN(tou_06_init_evt)
         BEGIN_INLINE_EVENT
             CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_mario_cont_onoff, 1)
+#if VERSION == VERSION_EU
+            CALL(evt_party_cont_onoff, 0, 1)
+#endif
             CALL(evt_mario_wait_landon)
+#if VERSION == VERSION_EU
+            LOOP(30)
+                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
+                ADD(LW(1), 20)
+                IF_INT_LESS(LW(1), LW(4))
+                    SUBTRACT(LW(4), 10)
+                    CALL(evt_party_set_pos, 0, LW(3), LW(4), LW(5))
+                ELSE
+                    BREAK_LOOP
+                END_IF
+                WAIT_FRAMES(1)
+            END_LOOP
+#endif
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_mario_cam_on)
+#if VERSION == VERSION_EU
+            CALL(evt_cam_letter_box_disable, 0)
+#else
         END_INLINE_EVENT
         BEGIN_INLINE_EVENT
             CALL(evt_seq_wait, SEQ_GAME)
             CALL(evt_party_cont_onoff, 0, 1)
+#endif
         END_INLINE_EVENT
     END_IF
     // The flies over the garbage and, from JP on, Trouble Center job 13.

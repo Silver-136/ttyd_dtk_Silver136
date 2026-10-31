@@ -51,7 +51,7 @@ EvtWord lost_wedding_ring_sub[4];
 EvtWord lost_wedding_ring[395];
 static s32 itemsel_table00[2];
 EvtWord wedding_ring_consign[30];
-EvtWord find_wedding_ring[180];
+EvtWord find_wedding_ring[];
 static EvtWord mony_init[19];
 EvtWord mony_peton_regl[97];
 EvtWord mony_regl[13];
@@ -351,7 +351,11 @@ EVT_BEGIN(find_wedding_ring)
         ADD(LW(2), 110)
         CALL(evt_npc_set_ry, STRING("モニー"), 270)
         CALL(evt_npc_move_position, STRING("モニー"), LW(0), LW(2), 0, FLOAT(120.0f), 0)
+#if VERSION == VERSION_EU
+        ADD(LW(0), -350)
+#else
         ADD(LW(0), -200)
+#endif
         CALL(evt_npc_move_position, STRING("モニー"), LW(0), LW(2), 0, FLOAT(120.0f), 0)
         CALL(evt_npc_set_position, STRING("モニー"), 0, -1000, 0)
         SET_VALUE(GF(0), 0)
@@ -362,7 +366,11 @@ EVT_BEGIN(find_wedding_ring)
         ADD(LW(2), 110)
         CALL(evt_npc_set_ry, STRING("ピートン"), 270)
         CALL(evt_npc_move_position, STRING("ピートン"), LW(0), LW(2), 0, FLOAT(120.0f), 0)
+#if VERSION == VERSION_EU
+        ADD(LW(0), -350)
+#else
         ADD(LW(0), -200)
+#endif
         CALL(evt_npc_move_position, STRING("ピートン"), LW(0), LW(2), 0, FLOAT(120.0f), 0)
         CALL(evt_npc_set_position, STRING("ピートン"), 0, -1000, 0)
         SET_VALUE(GF(1), 0)

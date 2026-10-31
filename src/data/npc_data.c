@@ -159,7 +159,11 @@ NpcTribeInfo npcTribe[] = {
     {/*"ウスグラ店おじさん"*/"\x83\x45\x83\x58\x83\x4F\x83\x89\x93\x58\x82\xA8\x82\xB6\x82\xB3\x82\xF1", "c_f_oji", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_STG4_MOVE1L", "SFX_FLD_NPC_STG4_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {/*"ウスグラ店おばさん"*/"\x83\x45\x83\x58\x83\x4F\x83\x89\x93\x58\x82\xA8\x82\xCE\x82\xB3\x82\xF1", "c_f_oba", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_STG4_MOVE1L", "SFX_FLD_NPC_STG4_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {/*"にせマリオ"*/"\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49", "c_mario", "EM_S_1", "EM_Z_1", "EM_S_1", "EM_T_1", "EM_W_1", "EM_R_1", "EM_D_1", "EM_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_STG4_LANPEL_M_MOVE1L", "SFX_STG4_LANPEL_M_MOVE1R", 10000, "SFX_STG4_LANPEL_M_JUMP1", "STG4_LANPEL_M_LANDING1"},
+#if VERSION == VERSION_EU
+    {"にせマリオ２", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_3", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
+#else
     {/*"にせマリオ２"*/"\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49\x82\x51", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_2", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
+#endif
     {/*"カラス"*/"\x83\x4A\x83\x89\x83\x58", "c_f_karas", "S_1", "Z_1", "S_1", "T_1", "A_1", "A_1", "A_1", "A_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
     {/*"テレサ"*/"\x83\x65\x83\x8C\x83\x54", "c_teresa", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_TELESA_MOVE1", NULL, 0, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {/*"パープルテレサ"*/"\x83\x70\x81\x5B\x83\x76\x83\x8B\x83\x65\x83\x8C\x83\x54", "c_teresa_p", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_TELESA_MOVE1", NULL, 0, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
@@ -345,7 +349,11 @@ NpcTribeInfo npcTribe[] = {
     {/*"カメック白空"*/"\x83\x4A\x83\x81\x83\x62\x83\x4E\x94\x92\x8B\xF3", "c_kamek_w", "KMW_S_2", "KMW_Z_2", "KMW_S_2", "KMW_T_2", "KMW_W_2", "KMW_R_2", "KMW_D_2", "KMW_K_2", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
     {/*"カメック緑空"*/"\x83\x4A\x83\x81\x83\x62\x83\x4E\x97\xCE\x8B\xF3", "c_kamek_g", "KMG_S_2", "KMG_Z_2", "KMG_S_2", "KMG_T_2", "KMG_W_2", "KMG_R_2", "KMG_D_2", "KMG_K_2", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
     {/*"カメック青空"*/"\x83\x4A\x83\x81\x83\x62\x83\x4E\x90\xC2\x8B\xF3", "c_kamek", "KMK_S_2", "KMK_Z_2", "KMK_S_2", "KMK_T_2", "KMK_W_2", "KMK_R_2", "KMK_D_2", "KMK_K_2", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
+#if VERSION == VERSION_EU
+    {"ダイジェストマリオ", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_3", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
+#else
     {/*"ダイジェストマリオ"*/"\x83\x5F\x83\x43\x83\x57\x83\x46\x83\x58\x83\x67\x83\x7D\x83\x8A\x83\x49", "a_mario", "M_S_1", "M_Z_1", "M_S_1", "M_I_2", "M_W_1", "M_R_1", "M_D_1", "M_D_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
+#endif
     {/*"ダイジェストピーチ"*/"\x83\x5F\x83\x43\x83\x57\x83\x46\x83\x58\x83\x67\x83\x73\x81\x5B\x83\x60", "c_peach", "P_S_1", "P_Z_1", "P_S_1", "P_T_1", "P_W_1", "P_R_1", "P_S_1", "P_S_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {/*"ダイジェストピーチ２"*/"\x83\x5F\x83\x43\x83\x57\x83\x46\x83\x58\x83\x67\x83\x73\x81\x5B\x83\x60\x82\x51", "c_peach", "P_S_2", "P_Z_2", "P_S_2", "P_T_2", "P_W_2", "P_R_2", "P_S_2", "P_S_2", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, NULL, NULL, 0, NULL, NULL},
     {/*"ゾンババ"*/"\x83\x5D\x83\x93\x83\x6F\x83\x6F", "c_gonbaba_z", "GNB_S_1", "GNB_Z_1", "GNB_S_1", "GNB_T_1", "GNB_S_1", "GNB_S_1", "GNB_S_1", "GNB_S_1", 450.0f, 20.0f, 0.0f, 0.0f, -50.0f, 50.0f, NULL, NULL, 0, NULL, NULL},

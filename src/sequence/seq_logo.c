@@ -30,6 +30,10 @@ static LogoWork work;
 
 //.sdata
 static LogoWork* wp = &work;
+#if VERSION == VERSION_EU
+// PAL: per-language logo screen textures {logo, story text}
+static s32 logoTexTbl[6][2] = {{24, 25}, {24, 25}, {26, 27}, {28, 29}, {30, 31}, {32, 33}};
+#endif
 
 #define OSIsRestart() ((OSGetResetCode() & 0x80000000) ? TRUE : FALSE)
 
@@ -50,6 +54,11 @@ void seq_logoInit(SequenceWork* work) {
 #endif
     wp->texture = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
+#if VERSION == VERSION_EU
+        // PAL: always ask for 50Hz / 60Hz; preselect 60Hz when EURGB60 is saved
+        wp->progressive = TRUE;
+        wp->toggle = OSGetEuRgb60Mode() != 1;
+#else
         if (VIGetDTVStatus()) {
             if (OSGetProgressiveMode() == 1) {
                 wp->progressive = TRUE;
@@ -66,6 +75,7 @@ void seq_logoInit(SequenceWork* work) {
             }
             wp->progressive = FALSE;
         }
+#endif
     }
 #if VERSION >= VERSION_US
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
@@ -190,8 +200,13 @@ void seq_logoMain(SequenceWork* work) {
 
         case 9:
             if (fadeIsFinish()) {
+#if VERSION == VERSION_EU
+                work->state++;
+                time = gp->renderTime;
+#else
                 time = gp->renderTime;
                 work->state++;
+#endif
             }
             break;
 
@@ -408,7 +423,13 @@ void logoDisp(CameraId camId, void* param) {
         GXGetProjectionv(projection);
         GXGetViewportv(viewport);
         GXGetScissor(&sciLeft, &sciTop, &sciWidth, &sciHeight);
+#if VERSION == VERSION_EU
+        if ((!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) && ((SequenceWork*)param)->state < 3) {
+            rmode = &sRMObjHReso;
+        } else if (OSGetEuRgb60Mode() != 1) {
+#else
         if (OSGetProgressiveMode() != 1) {
+#endif
             rmode = &sRMObjHReso;
         } else {
             rmode = &sRMObjHReso_prog;
@@ -429,7 +450,11 @@ void logoDisp(CameraId camId, void* param) {
 
             case 0:
             case 1:
+#if VERSION == VERSION_EU
+                TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, logoTexTbl[gp->language][0]);
+#else
                 TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 7);
+#endif
                 GXLoadTexObj(&texObj, GX_TEXMAP0);
                 GXSetNumChans(0);
                 GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, 0xFF});
@@ -481,7 +506,11 @@ void logoDisp(CameraId camId, void* param) {
                         alpha = 255;
                     }
                     GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, alpha});
+#if VERSION == VERSION_EU
+                    TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, logoTexTbl[gp->language][1]);
+#else
                     TEXGetGXTexObjFromPalette(*wp->texture->data, &texObj, 8);
+#endif
                     GXLoadTexObj(&texObj, GX_TEXMAP0);
                     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
@@ -665,7 +694,11 @@ void dummy_draw(CameraId camId, void* param) {
     f32 scale;
     u16 height;
 
+#if VERSION == VERSION_EU
+    if (OSGetEuRgb60Mode() != 1) {
+#else
     if (OSGetProgressiveMode() != 1) {
+#endif
         rmode = &GXNtsc480IntDfMarioSt;
     } else {
         rmode = &GXNtsc480ProgMarioSt;
@@ -828,19 +861,34 @@ void progDisp(CameraId camId, void* param) {
                 if (button & (PAD_BUTTON_LEFT | PAD_BUTTON_RIGHT) || keyGetDirTrg(0) & (DEMO_STICK_LEFT | DEMO_STICK_RIGHT)) {
                     wp->toggle = 1 - wp->toggle;
                 } else if (button & PAD_BUTTON_A) {
+#if VERSION == VERSION_EU
+                    time = gp->renderTime;
+#endif
                     wp->progState++;
                 }
 
+#if VERSION == VERSION_EU
+                msg = romFontGetMessage(5);
+#else
                 msg = romFontGetMessage(0);
+#endif
                 width = (f32)romFontGetWidth(msg);
                 romFontPrintGX(
                     -width / 2.0f,
+#if VERSION == VERSION_EU
+                    30.0f,
+#else
                     -80.0f,
+#endif
                     1.0f,
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
                     msg);
 
+#if VERSION == VERSION_EU
+                msg = romFontGetMessage(6);
+#else
                 msg = romFontGetMessage(1);
+#endif
                 width = (f32)romFontGetWidth(msg);
                 romFontPrintGX(
                     -width / 2.0f,
@@ -849,10 +897,18 @@ void progDisp(CameraId camId, void* param) {
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
                     msg);
 
+#if VERSION == VERSION_EU
+                msg = romFontGetMessage(7);
+#else
                 msg = romFontGetMessage(2);
+#endif
                 width = (f32)romFontGetWidth(msg);
                 romFontPrintGX(
+#if VERSION == VERSION_EU
+                    (f32)(108 * ((2 * wp->toggle) - 1)) - width / 2.0f,
+#else
                     (f32)(106 * ((2 * wp->toggle) - 1)) - width / 2.0f,
+#endif
                     -160.0f,
                     1.0f,
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
@@ -860,6 +916,9 @@ void progDisp(CameraId camId, void* param) {
                 break;
 
             case 2:
+#if VERSION == VERSION_EU
+                if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
+#else
                 if (!wp->toggle) {
                     VISetBlack(TRUE);
                     OSSetProgressiveMode(1);
@@ -891,11 +950,20 @@ void progDisp(CameraId camId, void* param) {
             case 4:
                 if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
                     wp->progressive = 0;
+#endif
                     wp->progState++;
                 }
+#if VERSION == VERSION_EU
+                type = 8;
+#else
                 type = 3;
+#endif
                 if (wp->toggle) {
+#if VERSION == VERSION_EU
+                    type = 9;
+#else
                     type = 4;
+#endif
                 }
                 msg = romFontGetMessage(type);
                 width = (f32)romFontGetWidth(msg);
@@ -905,6 +973,36 @@ void progDisp(CameraId camId, void* param) {
                     1.0f,
                     &(GXColor){0xFF, 0xFF, 0xFF, 0xFF},
                     msg);
+#if VERSION == VERSION_EU
+                break;
+
+            case 3:
+                if (!wp->toggle) {
+                    VISetBlack(1);
+                    OSSetEuRgb60Mode(1);
+                    gp->framerate = 60;
+                    VIConfigure(&sRMObjHReso_prog);
+                    VIFlush();
+                    VIWaitForRetrace();
+                    VIWaitForRetrace();
+                    time = gp->renderTime;
+                    wp->progState++;
+                    gp->flags |= GW_FLAG_PROGRESSIVE;
+                } else {
+                    OSSetEuRgb60Mode(0);
+                    gp->framerate = 50;
+                    wp->progressive = 0;
+                    gp->flags &= ~GW_FLAG_PROGRESSIVE;
+                }
+                gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+                break;
+
+            case 4:
+                if (OSTicksToMilliseconds(gp->renderTime - time) > 2000) {
+                    VISetBlack(FALSE);
+                    wp->progressive = 0;
+                }
+#endif
                 break;
         }
     }

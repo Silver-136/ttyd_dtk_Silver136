@@ -79,7 +79,7 @@ static WinMgrDesc window_desc[3];
 ShopPoint shopPointList[11];
 WinMgrDesc list_desc[3];
 static EvtWord buy_evt[VERSION_PICK(326, 366)];
-EvtWord shopper_talk_evt[VERSION_PICK(352, 396)];
+EvtWord shopper_talk_evt[];
 EvtWord first_shopping_evt[86];
 static EvtWord sell_evt[VERSION_PICK(196, 207)];
 EvtWord keep_evt[VERSION_PICK(148, 167)];
@@ -418,10 +418,18 @@ EVT_BEGIN(shopper_talk_evt)
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(LANGUAGE_JP)
+#if VERSION == VERSION_EU
+                CALL(evt_msg_print_add_insert, 0, LW(14), LW(2))
+#else
                 CALL(evt_msg_print_insert, 0, LW(14), 0, 0, LW(2))
+#endif
                 CASE_DEFAULT
                 CALL(evt_msg_fmt_str, 0, LW(14), LW(14), LW(2))
+#if VERSION == VERSION_EU
+                CALL(evt_msg_print_add, 1, LW(14))
+#else
                 CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
+#endif
             END_SWITCH
 #else
             CALL(evt_msg_print_add_insert, 0, LW(14), LW(2))

@@ -965,6 +965,9 @@ typedef struct BattleUnit {
     s32 ceilFallEventId;                                // 0x2C0 (US 0x2C4)
     void* actEndEvent;                           // 0x2C4 (US 0x2C8), run when the unit's action ends (battle_seq)
     s32 actEndEventId;                                   // 0x2C8 (US 0x2CC)
+#if VERSION == VERSION_EU
+    s32 slideReturnEventId; // PAL only (+4 from here): enemy_slide_return_evt of sac_enemy_slide_return, waited on by BattleWaitAllActiveEvtEnd_NoBgSetEndWait
+#endif
     void* hitEventCode;                          // 0x2CC (US 0x2D0), run on the attacker by BattleRunHitEventDirect
     s32 talkPartId;                                  // 0x2D0 (US 0x2D4)
     const char* talkPose;                        // 0x2D4 (US 0x2D8), POSE_TYPE_TALK (btlevtcmd talk anim)

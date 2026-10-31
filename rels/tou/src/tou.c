@@ -212,7 +212,7 @@ EvtWord evt_tamago_byebye[160];
 EvtWord talk_gardman[191];
 static EvtWord evt_gardman[VERSION_PICK(318, 335)];
 EvtWord evt_gardman_spawn[4];
-EvtWord evt_tou_match_make_default_sub[406];
+EvtWord evt_tou_match_make_default_sub[];
 EvtWord evt_tou_match_make_default[303];
 EvtWord evt_talk_doku_cake[14];
 EvtWord evt_eat_doku_cake[270];
@@ -1872,6 +1872,13 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
     IF_STR_EQUAL(LW(0), STRING("tou_07"))
         SET_VALUE(LF(2), 1)
     END_IF
+#if VERSION == VERSION_EU
+    SET_VALUE(LF(3), 0)
+    CALL(evt_sub_get_language, LW(0))
+    IF_INT_EQUAL(LW(0), 3)
+        SET_VALUE(LF(3), 1) // French: the two inserted values are swapped
+    END_IF
+#endif
     CALL(evt_party_stop, 0)
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LF(2), 1)
@@ -1904,15 +1911,49 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
             IF_INT_EQUAL(LW(3), 10)
                 IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 0)
+#if VERSION == VERSION_EU
+                    IF_INT_EQUAL(LF(3), 0)
+#endif
                     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(3), LW(1))
+#if VERSION == VERSION_EU
                     ELSE
-                    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
-                END_IF
+                        CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(1), LW(3))
+                    END_IF
                 ELSE
+                    IF_INT_EQUAL(LF(3), 0)
+                        CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
+#endif
+                    ELSE
+#if VERSION == VERSION_EU
+                        CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(1), LW(3))
+#else
+                    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
+#endif
+                END_IF
+#if VERSION == VERSION_EU
+                END_IF
+#endif
+                ELSE
+#if VERSION == VERSION_EU
+                IF_INT_EQUAL(LF(3), 0)
+#endif
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
+#if VERSION == VERSION_EU
+                ELSE
+                    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(1), LW(3))
+                END_IF
+#endif
             END_IF
             ELSE
+#if VERSION == VERSION_EU
+            IF_INT_EQUAL(LF(3), 0)
+#endif
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
+#if VERSION == VERSION_EU
+            ELSE
+                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(1), LW(3))
+            END_IF
+#endif
         END_IF
     END_IF
     IF_INT_EQUAL(LF(1), 1)
@@ -1926,13 +1967,29 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
             IF_INT_EQUAL(LW(3), 0)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(1))
                 ELSE
+#if VERSION == VERSION_EU
+                IF_INT_EQUAL(LF(3), 0)
+#endif
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
+#if VERSION == VERSION_EU
+                ELSE
+                    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(1), LW(3))
+                END_IF
+#endif
             END_IF
             ELSE
             IF_INT_EQUAL(LW(3), 0)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361_01"), 0, STRING("キノシコワ"), LW(1))
                 ELSE
+#if VERSION == VERSION_EU
+                IF_INT_EQUAL(LF(3), 0)
+#endif
                 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
+#if VERSION == VERSION_EU
+                ELSE
+                    CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(1), LW(3))
+                END_IF
+#endif
             END_IF
         END_IF
         IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
@@ -1949,9 +2006,23 @@ EVT_BEGIN(evt_tou_match_make_default_sub)
         CALL(evt_tou_get_fighter_info, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+#if VERSION == VERSION_EU
+            IF_INT_EQUAL(LF(3), 0)
+#endif
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
             ELSE
+#if VERSION == VERSION_EU
+                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(1), LW(3))
+            END_IF
+        ELSE
+            IF_INT_EQUAL(LF(3), 0)
+#endif
             CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
+#if VERSION == VERSION_EU
+            ELSE
+                CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(1), LW(3))
+            END_IF
+#endif
         END_IF
     END_IF
     CALL(evt_tou_get_rule_info, GSW_GLITZ_PIT_OPPONENT, LW(10), LW(13), LW(14), LW(15))

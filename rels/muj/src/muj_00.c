@@ -85,6 +85,13 @@ static inline f32 orbit_update(f32 x) { return x * 3.141592f / 180.0f; }
 
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
+#if VERSION == VERSION_EU
+/**
+ * Declaration of the PAL-only helper in evt_sub.c that writes gp->framerate (50 or 60) to its script
+ * argument.
+ */
+USER_FUNC(evt_sub_get_framerate); // evt_sub.c (PAL only): writes gp->framerate (50 or 60) to arg 0
+#endif
 USER_FUNC(cam_test_func);
 USER_FUNC(cam_test_init_func);
 USER_FUNC(dai3_butai_main_func);
@@ -176,7 +183,7 @@ EvtWord dai3_move_trace[99];
 static EvtWord _kemuri_sub[56];
 EvtWord tobikakari_kemuri[18];
 EvtWord cam_dai3_vs_kaizoku[58];
-EvtWord kaizoku_vs_dai3[531];
+EvtWord kaizoku_vs_dai3[];
 EvtWord senin_kansei[125];
 f32 dai3_taisan_spline_dt00[9];
 f32 dai3_taisan_spline_dt01[9];
@@ -2931,12 +2938,26 @@ EVT_BEGIN(kaizoku_vs_dai3)
         CALL_CHILD(PTR(iwapera_offscreen_end))
         WAIT_MS(4000)
         SPAWN_EVENT_GET_ID(PTR(cam_dai3_vs_kaizoku), LW(10))
+#if VERSION == VERSION_EU
+        CALL(evt_sub_get_framerate, LW(0))
+        IF_INT_EQUAL(LW(0), 60)
+#endif
         WAIT_MS(9500)
         DELETE_EVENT(LW(10))
         CALL(evt_cam3d_evt_set, -205, 528, 672, -205, 108, -278, 0, EASING_SINE_IN_OUT)
         WAIT_MS(1400)
         CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, EASING_SINE_IN_OUT)
         WAIT_MS(200)
+#if VERSION == VERSION_EU
+        ELSE
+            WAIT_MS(11400)
+            DELETE_EVENT(LW(10))
+            CALL(evt_cam3d_evt_set, -205, 528, 672, -205, 108, -278, 0, 11)
+            WAIT_MS(1680)
+            CALL(evt_cam3d_evt_set, -700, 290, 74, -374, 80, -316, 0, 11)
+            WAIT_MS(240)
+        END_IF
+#endif
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
     WAIT_WHILE(GF(0))

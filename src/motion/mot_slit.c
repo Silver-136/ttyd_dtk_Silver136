@@ -420,7 +420,13 @@ void mot_slit_post(void) {
             marioPaperOff();
             mapResetPaperAmbColor();
             mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+#if VERSION == VERSION_EU
+            if (!(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+                marioAdjustMoveDir();
+            }
+#else
             marioAdjustMoveDir();
+#endif
             allPartyForceSlitOff();
         }
     } else if (mario->currMotionId != MARIO_MOTION_FALL) {
@@ -661,6 +667,11 @@ void mot_slit(void) {
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_SLIT1), &m->position);
         break;
     case 2:
+#if VERSION == VERSION_EU
+        if (m->flags & MARIO_FLAG_FORCED_MOVEMENT) {
+            break;
+        }
+#endif
         if (!m->controlStickSensitivity) {
             m->baseSpeed = 0.0f;
             marioChgPose("M_S_1");
@@ -689,7 +700,11 @@ void mot_slit(void) {
             }
             m->directionView = toMovedirSimple(m->displayDirection);
         }
+#if VERSION == VERSION_EU
+        if (!(m->flags & MARIO_FLAG_FORCED_MOVEMENT) && m->baseSpeed >= m->baseDashSpeed) {
+#else
         if (m->baseSpeed >= m->baseDashSpeed) {
+#endif
             slitSpeedDown(m);
         }
         m->displayDirection = 270.0f;
@@ -1016,6 +1031,11 @@ void mot_slit(void) {
         }
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_CHANGE_SLIT2), &m->position);
     case 0x65:
+#if VERSION == VERSION_EU
+        if (m->flags & MARIO_FLAG_FORCED_MOVEMENT) {
+            break;
+        }
+#endif
         if (!m->controlStickSensitivity) {
             m->baseSpeed = 0.0f;
             marioChgPose("M_S_1");
@@ -1031,12 +1051,22 @@ void mot_slit(void) {
         m->slitState = 0x66;
         break;
     case 0x66:
+#if VERSION == VERSION_EU
+        if (!(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+            if (!m->controlStickSensitivity) {
+                m->baseSpeed = 0.0f;
+                marioChgPose("M_S_1");
+            } else {
+                slitSpeedDown(m);
+            }
+#else
         if (!m->controlStickSensitivity) {
             m->baseSpeed = 0.0f;
             marioChgPose("M_S_1");
 #if VERSION >= VERSION_US
         } else {
             slitSpeedDown(m);
+#endif
 #endif
         }
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
@@ -1045,7 +1075,13 @@ void mot_slit(void) {
         marioPaperOff();
         mapResetPaperAmbColor();
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+#if VERSION == VERSION_EU
+        if (!(m->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
+            marioAdjustMoveDir();
+        }
+#else
         marioAdjustMoveDir();
+#endif
 #if VERSION < VERSION_US
         allPartySlitOff();
 #endif

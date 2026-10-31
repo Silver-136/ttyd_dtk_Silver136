@@ -258,7 +258,11 @@ EvtWord tozokudan3_init[17];
 EvtWord tozokudan3_talk[22];
 EvtWord sanders_open_door[56];
 static EvtWord sanders_init[37];
+#if VERSION == VERSION_EU
+static EvtWord sanders_talk[580];
+#else
 static EvtWord sanders_talk[574];
+#endif
 EvtWord kuribo4_init[13];
 EvtWord kuribo4_regl[19];
 static s32 item_tbl[2];
@@ -299,7 +303,11 @@ EvtWord evt_door_03_01[12];
 static EvtWord evt_wall_03[15];
 static const char* door_data_03_npc[2];
 static const char* door_data_03_mobj[2];
+#if VERSION == VERSION_EU
+static EvtWord evt_door_03_close[178];
+#else
 static EvtWord evt_door_03_close[166];
+#endif
 static EvtWord evt_door_03_open[14];
 static DoorParam door_data_03;
 EvtWord evt_door_sanders_open[27];
@@ -374,11 +382,7 @@ EvtWord Mario_Party_position[33];
 EvtWord book_open[42];
 EvtWord book_close[42];
 EvtWord book_center_init[22];
-#if VERSION >= VERSION_US
-EvtWord epigraphy_map[621];
-#else
-EvtWord epigraphy_map[614];
-#endif
+EvtWord epigraphy_map[];
 #if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage1[258];
 #else
@@ -2217,12 +2221,17 @@ static EVT_BEGIN(sanders_talk)
             CALL(evt_msg_print, 0, STRING("mac_4_051"), 0, STRING("me"))
             CALL(evt_party_set_dir_npc, 0, STRING("me"))
             CALL(evt_msg_print_party, STRING("mac_4_052"))
+#if VERSION != VERSION_EU
             CALL(evt_party_run, 0)
+#endif
             CALL(evt_msg_print, 0, STRING("mac_4_053"), 0, STRING("me"))
             CALL(evt_mario_set_pose, STRING("M_I_2"))
             WAIT_MS(500)
             CALL(evt_msg_print, 0, STRING("mac_4_054"), 0, STRING("me"))
             CALL(evt_msg_print_party, STRING("mac_4_055"))
+#if VERSION == VERSION_EU
+            CALL(evt_party_run, 0)
+#endif
             CALL(evt_msg_print, 0, STRING("mac_4_056"), 0, STRING("me"))
             CALL_CHILD(PTR(sanders_open_door))
             SET_VALUE(GSW_STORY_PROGRESS, STG4_34_BOBBERY_DECLINES)
@@ -2342,7 +2351,13 @@ static EVT_BEGIN(sanders_talk)
         CALL(evt_mario_set_pose, STRING("M_N_2"))
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("mac_4_085"), 0, STRING("me"))
+#if VERSION == VERSION_EU
+        CALL(evt_party_stop, 0)
         CALL(evt_msg_print_party, STRING("mac_4_086"))
+        CALL(evt_party_run, 0)
+#else
+        CALL(evt_msg_print_party, STRING("mac_4_086"))
+#endif
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
         // Bobbery joins the party and the map music resumes.
@@ -3431,13 +3446,25 @@ static EVT_BEGIN(evt_door_03_close)
             CALL(evt_party_move_pos2, 0, LW(0), LW(2), 60)
             CALL(evt_party_set_dir, 0, 270, -1)
             CALL(evt_mario_set_dir, 90, 300, 0)
+#if VERSION == VERSION_EU
+            CALL(evt_party_stop, 0)
             CALL(evt_msg_print_party, STRING("mac_4_058"))
+            CALL(evt_party_run, 0)
+#else
+            CALL(evt_msg_print_party, STRING("mac_4_058"))
+#endif
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_THINK1_2"), LW(0), LW(1), LW(2), 0)
             CALL(evt_mario_set_pose, STRING("M_I_Z"))
             WAIT_MS(1000)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
+#if VERSION == VERSION_EU
+            CALL(evt_party_stop, 0)
             CALL(evt_msg_print_party, STRING("mac_4_059"))
+            CALL(evt_party_run, 0)
+#else
+            CALL(evt_msg_print_party, STRING("mac_4_059"))
+#endif
             SET_VALUE(GSWF_GOR_BOBBERY_DECLINE_REMARK_DONE, 1)
             CALL(evt_mario_key_onoff, 1)
         END_IF
@@ -5653,11 +5680,16 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
+#if VERSION == VERSION_EU
+    SET_VALUE(GSWF_GOR_FRANKLY_FIRST_MAP_READ, 1)
+#endif
 #if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #endif
+#if VERSION != VERSION_EU
     SET_VALUE(GSWF_GOR_FRANKLY_FIRST_MAP_READ, 1)
+#endif
     SET_VALUE(GSW_STORY_PROGRESS, STG0_16_FRANKLYS_HOUSE)
     RETURN
 EVT_END()

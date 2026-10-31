@@ -781,6 +781,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #else
     f32 scale;
 #endif
+#if VERSION == VERSION_EU
+    s32 centerStart; // PAL: first character of the open <center> span
+#endif
     f32 fv;
     s32 posX;
     int posY;
@@ -825,6 +828,9 @@ void msgAnalize(smartEntry* smart, char* msg) {
         scale = one;
     }
     maxW = 70;
+#if VERSION == VERSION_EU
+    centerStart = 0;
+#endif
 #else
     scale = 1.0f;
 #endif
@@ -1162,6 +1168,19 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 data->charCount++;
             } else if (strcmp(tag, "nowinse") == 0) {
                 window->flags |= WINDOW_FLAG_NOWINSE;
+#if VERSION == VERSION_EU
+            } else if (strcmp(tag, "center") == 0) {
+                centerStart = data->charCount;
+            } else if (strcmp(tag, "/center") == 0) {
+                s32 c = centerStart;
+                s32 shift = (420 - x) / 2;
+                MsgChar* ch = &data->entries[c];
+                for (; c < data->charCount; c++, ch++) {
+                    if (ch->glyph < MSG_GLYPH_PAPER_END) {
+                        ch->x += shift;
+                    }
+                }
+#endif
             } else if (strcmp(tag, "icon") == 0) {
                 isHM = FALSE;
                 if ((s8)args[0] >= '0' && (s8)args[0] <= '9') {

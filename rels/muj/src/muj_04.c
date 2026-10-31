@@ -1,6 +1,7 @@
 // muj_04 (無人島, Keelhaul Key): the rope bridge where Admiral Bobbery (sanders) and the Embers
 // (erumosu) attack, and the coconut palm.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -45,7 +46,7 @@ EvtWord erumos00_attack[50];
 EvtWord erumos01_attack[50];
 EvtWord sanders_attack[88];
 EvtWord mario_katsugi[24];
-EvtWord sanders_funto[477];
+EvtWord sanders_funto[];
 EvtWord yashi_yure_init[5];
 EvtWord yashi_yure[255];
 static HitDamageReturn hitDmgRetPoints[4];
@@ -343,8 +344,13 @@ EVT_BEGIN(sanders_funto)
     CALL(evt_npc_set_ry, STRING(/*"オドオド水夫"*/"\x83\x49\x83\x68\x83\x49\x83\x68\x90\x85\x95\x76"), 270)
     CALL(evt_npc_set_position, STRING(/*"めがね水夫"*/"\x82\xDF\x82\xAA\x82\xCB\x90\x85\x95\x76"), 25, 112, -20)
     CALL(evt_npc_set_ry, STRING(/*"めがね水夫"*/"\x82\xDF\x82\xAA\x82\xCB\x90\x85\x95\x76"), 90)
+#if VERSION == VERSION_EU
+    CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_NO_HIT)
+    CALL(evt_npc_flag_onoff, 1, STRING("めがね水夫"), NPC_FLAG_NO_WALL_HIT | NPC_FLAG_NO_HIT)
+#else
     CALL(evt_npc_flag_onoff, 1, STRING(/*"オドオド水夫"*/"\x83\x49\x83\x68\x83\x49\x83\x68\x90\x85\x95\x76"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING(/*"めがね水夫"*/"\x82\xDF\x82\xAA\x82\xCB\x90\x85\x95\x76"), NPC_FLAG_NO_HIT)
+#endif
     CALL(evt_npc_sound_data_set, STRING(/*"めがね水夫"*/"\x82\xDF\x82\xAA\x82\xCB\x90\x85\x95\x76"), STRING("SFX_STG5_KANBU_GLASSES_MOVE1L"), STRING("SFX_STG5_KANBU_GLASSES_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     CALL(evt_npc_set_ry, STRING(/*"エルモスA"*/"\x83\x47\x83\x8B\x83\x82\x83\x58\x41"), 90)
     CALL(evt_npc_set_ry, STRING(/*"エルモスB"*/"\x83\x47\x83\x8B\x83\x82\x83\x58\x42"), 270)

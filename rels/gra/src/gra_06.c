@@ -39,7 +39,7 @@ EvtWord gra_06_ido[12];
 EvtWord gra_06_ido_in_sub[77];
 EvtWord gra_06_ido_in[7];
 static BeroEntry bero_entry_data[4];
-EvtWord gra_06_saku_open[288];
+EvtWord gra_06_saku_open[];
 EvtWord first_gra06jin[138];
 #if VERSION >= VERSION_US
 EvtWord teresa_oidasare_evt[282];
@@ -212,7 +212,14 @@ EVT_BEGIN(gra_06_saku_open)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_mario_key_onoff, 0)
+#if VERSION == VERSION_EU
+            CALL(evt_party_stop, 0)
+            WAIT_MS(200)
             CALL(evt_msg_print_party, STRING("stg4_gra_20"))
+            CALL(evt_party_run, 0)
+#else
+            CALL(evt_msg_print_party, STRING("stg4_gra_20"))
+#endif
             CALL(evt_mario_key_onoff, 1)
         END_IF
         RETURN

@@ -1,5 +1,6 @@
 // kpa_03 (クッパ編, Bowser's interludes): the second side-scrolling stage, by the sea; continues in kpa_04.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "kpa.h"
@@ -17,7 +18,11 @@ static EvtWord kpa_act_stg2_mobj[209];
 EvtWord kpa_act_stg2_item[85];
 static EvtWord kpa_fall[41];
 EvtWord kairyu_evt[38];
+#if VERSION == VERSION_EU
+static EvtWord jumpstand_evt[62];
+#else
 static EvtWord jumpstand_evt[60];
+#endif
 static NpcSetupInfo npcEnt[1];
 EvtWord kpa_03_init_evt[44];
 
@@ -116,6 +121,9 @@ EVT_END()
 
 static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))
+#if VERSION == VERSION_EU
+    CALL(kpa_cancel_attack_mode)
+#endif
     BEGIN_INLINE_EVENT
         WAIT_MS(600)
         CALL(evt_koopa_get_level, GSW_KPA_BOWSER_LEVEL)

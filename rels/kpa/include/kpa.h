@@ -25,6 +25,7 @@ extern EvtWord kpa_time[];
 
 extern EvtWord kpa_status_main_evt[];
 USER_FUNC(kpa_add_coin);
+USER_FUNC(kpa_cancel_attack_mode); // PAL: kpa_01, called by kpa_03's jumpstand_evt
 USER_FUNC(kpa_fire_off);
 USER_FUNC(kpa_get_cam_pt);
 USER_FUNC(kpa_get_msg);

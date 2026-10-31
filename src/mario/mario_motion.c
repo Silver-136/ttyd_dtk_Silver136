@@ -326,6 +326,11 @@ void marioBoots(void) {
         return;
     }
     if (!(flags & MARIO_FLAG_HAS_INPUT_JUMP)) {
+#if VERSION == VERSION_EU
+        return;
+    }
+    if (mario->currMotionId == MARIO_MOTION_PLANE) {
+#endif
         return;
     }
     if (!marioChkHipAttack()) {
@@ -904,7 +909,11 @@ void mot_talk(void) {
         if (fbat != NULL) {
             marioChgPose(((NpcEntry*)fbat)->checkPose);
         }
+#if VERSION == VERSION_EU
+        if (!strcmp(mario->animName, "M_I_3")) {
+#else
         if (!strcmp(mario->animName, "M_I_2")) {
+#endif
             mario->multiTimer = 60;
             mario->currSubMotionId = 10;
         }
@@ -973,6 +982,11 @@ BOOL marioChkJump(void) {
         }
     }
     if (fbatNpcTalkCheck()) {
+#if VERSION == VERSION_EU
+        return FALSE;
+    }
+    if (mario->hitobjStandOn && (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_WATER_HAZARD)) {
+#endif
         return FALSE;
     }
     marioChgMot(MARIO_MOTION_JUMP);

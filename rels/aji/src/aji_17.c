@@ -68,6 +68,9 @@ DanceData dance_dt;
 
 static s32 bgm_start_wait(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(bgm_start_wait);
+#if VERSION == VERSION_EU
+static USER_FUNC(wait_move_end_50hz);
+#endif
 s32 btn_check(EventEntry* event, BOOL isFirstCall);
 s32 compute_horogram_pos(EventEntry* event, BOOL isFirstCall);
 s32 compute_move_pos(EventEntry* event, BOOL isFirstCall);
@@ -134,7 +137,7 @@ EvtWord dance_btn_clear_all[47];
 EvtWord wait_action_time[16];
 EvtWord peach_dance_dark[27];
 EvtWord peach_dance_light[27];
-EvtWord peach_evt_dance[VERSION_PICK(504, 521)];
+EvtWord peach_evt_dance[];
 static EvtWord peach_evt_stg2[900];
 static EvtWord peach_evt_stg3[352];
 static EvtWord peach_evt_stg3_1[650];
@@ -174,6 +177,17 @@ s32 peach_evt_stg4_read_quiz_data(EventEntry* event, BOOL isFirstCall) {
 static s32 bgm_start_wait(EventEntry* event, BOOL isFirstCall) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
+
+#if VERSION == VERSION_EU
+/** PAL: at 50 Hz the next dance move waits for the previous one to end (dance_dt flag 4). */
+static s32 wait_move_end_50hz(EventEntry* event, BOOL isFirstCall) {
+    if (gp->framerate != 50) {
+        return EVT_RETURN_DONE;
+    }
+    return (dance_dt.flags & 4) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+}
+
+#endif
 #pragma defer_codegen on
 
 static EVT_BEGIN(w_door_close)
@@ -1430,6 +1444,9 @@ EVT_BEGIN(peach_evt_dance)
         END_IF
         SET_VALUE(LW(1), 0)
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(12))
+#if VERSION == VERSION_EU
+        CALL(wait_move_end_50hz)
+#endif
         SPAWN_EVENT(PTR(peach_dance_move))
         LOOP(0)
             CALL(evt_sub_get_stopwatch, LW(12), LW(4))
@@ -1449,6 +1466,9 @@ EVT_BEGIN(peach_evt_dance)
         END_SWITCH
         // A button prompt appears on the beat.
         CALL_CHILD(PTR(dance_btn_disp))
+#if VERSION == VERSION_EU
+        CALL(wait_move_end_50hz)
+#endif
         SPAWN_EVENT(PTR(peach_dance_move))
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(14))
         LOOP(0)
@@ -1479,6 +1499,9 @@ EVT_BEGIN(peach_evt_dance)
             WAIT_FRAMES(1)
         END_LOOP
         ADD(LW(11), 2000)
+#if VERSION == VERSION_EU
+        CALL(wait_move_end_50hz)
+#endif
         SPAWN_EVENT(PTR(peach_dance_move))
         IF_INT_NOT_EQUAL(LW(3), 0)
             SWITCH(LW(3))
@@ -1506,6 +1529,9 @@ EVT_BEGIN(peach_evt_dance)
                 SPAWN_EVENT(PTR(peach_dance_action_fail))
             END_SWITCH
         END_IF
+#if VERSION == VERSION_EU
+        CALL_CHILD(PTR(dance_btn_clear_all)) // PAL clears the buttons at once, as JP does
+#else
 #if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
             CALL(dance_flag_check, 4096, LW(5))
@@ -1517,6 +1543,7 @@ EVT_BEGIN(peach_evt_dance)
         END_INLINE_EVENT
 #else
         CALL_CHILD(PTR(dance_btn_clear_all))
+#endif
 #endif
         LOOP(0)
             CALL(evt_sub_get_stopwatch, LW(12), LW(4))

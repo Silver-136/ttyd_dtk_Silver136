@@ -77,7 +77,7 @@ EvtWord init_g_3[30];
 EvtWord talk_g_3[39];
 EvtWord move_g_3[37];
 EvtWord move_g_4_dokimasen[36];
-EvtWord init_g_4[91];
+EvtWord init_g_4[];
 EvtWord talk_g_4[271];
 EvtWord move_g_4[81];
 EvtWord init_g_5[2];
@@ -897,6 +897,15 @@ EVT_BEGIN(init_g_4)
         END_SWITCH
         IF_INT_EQUAL(LF(0), 1)
             SET_VALUE(LF(1), GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE)
+#if VERSION == VERSION_EU
+            IF_INT_EQUAL(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 0)
+                CALL(evt_bero_get_entername, LW(0))
+                IF_STR_EQUAL(LW(0), STRING("s_bero_5"))
+                    SET_VALUE(LF(1), 1)
+                    SET_VALUE(LF(2), 1)
+                END_IF
+            END_IF
+#endif
             ELSE
             IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
                 SET_VALUE(LF(1), GSWF_TOU_04_GUARD_4_LET_IN_REMATCH)
@@ -914,6 +923,9 @@ EVT_BEGIN(init_g_4)
             CALL(evt_npc_set_position, STRING("me"), -350, 0, -530)
             ELSE
             CALL(evt_npc_set_position, STRING("me"), -300, 0, -530)
+#if VERSION == VERSION_EU
+            CALL(evt_npc_set_ry, STRING("me"), 270)
+#endif
             IF_INT_EQUAL(LF(2), 1)
                 SPAWN_EVENT(PTR(move_g_4_dokimasen))
             END_IF

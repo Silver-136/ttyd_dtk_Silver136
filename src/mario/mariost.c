@@ -81,14 +81,30 @@ BOOL DvdCheckTreadOn;
 
 //.data
 GXRenderModeObj sRMObjHReso = {
+#if VERSION == VERSION_EU
+    VI_TVMODE_PAL_INT, //viTVmode
+#else
     VI_TVMODE_NTSC_INT, //viTVmode
+#endif
     0x260, //fbWidth
     0x1C0, //efbHeight
+#if VERSION == VERSION_EU
+    0x212, //xfbHeight
+#else
     0x1C0, //xfbHeight
+#endif
     0x1B, //viXOrigin
+#if VERSION == VERSION_EU
+    0x16, //viYOrigin
+#else
     0x10, //viYOrigin
+#endif
     0x29A, //viWidth
+#if VERSION == VERSION_EU
+    0x212, //viHeight
+#else
     0x1C0, //viHeight
+#endif
     VI_XFBMODE_DF, //xFBmode
     0, //field_rendering
     0, //aa
@@ -101,7 +117,11 @@ GXRenderModeObj sRMObjHReso = {
 
 /** Video mode of the boot logo screens in 60Hz mode (EURGB60), set by seq_logo after a hot reset. */
 GXRenderModeObj sRMObjHReso_prog = {
+#if VERSION == VERSION_EU
+    VI_TVMODE_EURGB60_INT, //viTVmode
+#else
     VI_TVMODE_NTSC_PROG, //viTVmode
+#endif
     0x260, //fbWidth
     0x1C0, //efbHeight
     0x1C0, //xfbHeight
@@ -109,7 +129,11 @@ GXRenderModeObj sRMObjHReso_prog = {
     0x10, //viYOrigin
     0x29A, //viWidth
     0x1C0, //viHeight
+#if VERSION == VERSION_EU
+    VI_XFBMODE_DF, //xFBmode
+#else
     VI_XFBMODE_SF, //xFBmode
+#endif
     0, //field_rendering
     0, //aa
     6, 6, 6, 6, 6, 6, //pix 0
@@ -120,14 +144,30 @@ GXRenderModeObj sRMObjHReso_prog = {
 };
 
 GXRenderModeObj GXNtsc480IntDfMarioSt = {
+#if VERSION == VERSION_EU
+    VI_TVMODE_PAL_INT, //viTVmode
+#else
     VI_TVMODE_NTSC_INT, //viTVmode
+#endif
     0x260, //fbWidth
     0x1E0, //efbHeight
+#if VERSION == VERSION_EU
+    0x238, //xfbHeight
+#else
     0x1E0, //xfbHeight
+#endif
     0x1E, //viXOrigin
+#if VERSION == VERSION_EU
+    0x6, //viYOrigin
+#else
     0x0, //viYOrigin
+#endif
     0x294, //viWidth
+#if VERSION == VERSION_EU
+    0x238, //viHeight
+#else
     0x1E0, //viHeight
+#endif
     VI_XFBMODE_DF, //xFBmode
     0, //field_rendering
     0, //aa
@@ -140,7 +180,11 @@ GXRenderModeObj GXNtsc480IntDfMarioSt = {
 
 /** The game's main video mode in 60Hz (EURGB60), used by marioStInit after a hot reset. */
 GXRenderModeObj GXNtsc480ProgMarioSt = {
+#if VERSION == VERSION_EU
+    VI_TVMODE_EURGB60_INT, //viTVmode
+#else
     VI_TVMODE_NTSC_PROG, //viTVmode
+#endif
     0x260, //fbWidth
     0x1E0, //efbHeight
     0x1E0, //xfbHeight
@@ -148,7 +192,11 @@ GXRenderModeObj GXNtsc480ProgMarioSt = {
     0x0, //viYOrigin
     0x294, //viWidth
     0x1E0, //viHeight
+#if VERSION == VERSION_EU
+    VI_XFBMODE_DF, //xFBmode
+#else
     VI_XFBMODE_SF, //xFBmode
+#endif
     0, //field_rendering
     0, //aa
     6, 6, 6, 6, 6, 6, //pix 0
@@ -211,7 +259,40 @@ void marioStInit(void) {
     gp->areaFadeOutDuration = 300;
     gp->areaFadeInType = FADE_OUT_BLACK;
     gp->areaFadeInDuration = 300;
-#if VERSION >= VERSION_US
+#if VERSION == VERSION_EU
+    if (VIGetTvFormat() == VI_NTSC) {
+        gp->framerate = 60;
+    } else if (VIGetTvFormat() == VI_EURGB60) {
+        gp->framerate = 60;
+    } else {
+        gp->framerate = 50;
+    }
+    if (OSGetFontEncode() == OS_FONT_ENCODE_SJIS && !(gp->flags & GW_FLAG_E3)) {
+        gp->language = LANGUAGE_JP;
+    } else {
+        gp->language = LANGUAGE_US;
+        switch (OSGetLanguage()) {
+            case OS_LANG_ENGLISH:
+                gp->language = LANGUAGE_US;
+                break;
+            case OS_LANG_GERMAN:
+                gp->language = LANGUAGE_GE;
+                break;
+            case OS_LANG_FRENCH:
+                gp->language = LANGUAGE_FR;
+                break;
+            case OS_LANG_SPANISH:
+                gp->language = LANGUAGE_SP;
+                break;
+            case OS_LANG_ITALIAN:
+                gp->language = LANGUAGE_IT;
+                break;
+            case OS_LANG_DUTCH:
+                gp->language = LANGUAGE_US;
+                break;
+        }
+    }
+#elif VERSION >= VERSION_US
     if (VIGetTvFormat() == VI_NTSC) {
         gp->framerate = 60;
     } else {

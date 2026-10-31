@@ -567,7 +567,11 @@ void winMgrHelpMain(WinMgrEntry* entry) {
                     entry->scroll = 0;
                 }
             } else if (keyGetDirTrg(0) & DEMO_SUBSTICK_DOWN) {
+#if VERSION == VERSION_EU
+                if (entry->scroll / 2 < (entry->lines + 1) / 2 - 1) {
+#else
                 if ((entry->lines + 1) / 2 - 1 > (entry->scroll + 1) / 2) {
+#endif
                     entry->scroll += 2;
                 }
             }
@@ -607,7 +611,11 @@ void winMgrHelpDraw(WinMgrEntry* entry) {
                     PSMTXConcat(mtx, scale, mtx);
                     iconDispGx2(mtx, ICON_FLAG_2D, ICON_ARROW_DOWN);
                 }
+#if VERSION == VERSION_EU
+            } else if (entry->scroll / 2 == (entry->lines + 1) / 2 - 1) {
+#else
             } else if (entry->scroll + 2 == entry->lines) {
+#endif
                 if ((gp->retraceCount & 31) < 20) {
                     PSMTXTrans(mtx, entry->x + entry->width - 12, entry->y - entry->height + 44, 0.0f);
                     PSMTXScale(scale, 0.6f, 0.6f, 0.6f);
@@ -946,6 +954,20 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_80237a2c, JP 0x80237A2C. See docs/NAME_PROVENANCE.md.
+#if VERSION == VERSION_EU
+// PAL: equal prices fall back to the type order
+int select_comp_starpiece(void* a, void* b) {
+    if (itemDataTable[((WinMgrSelectItem*)a)->id].star_piece_price > itemDataTable[((WinMgrSelectItem*)b)->id].star_piece_price) {
+        return 1;
+    }
+    if (itemDataTable[((WinMgrSelectItem*)a)->id].star_piece_price < itemDataTable[((WinMgrSelectItem*)b)->id].star_piece_price) {
+        return -1;
+    }
+    if (itemDataTable[((WinMgrSelectItem*)a)->id].type_sort_order > itemDataTable[((WinMgrSelectItem*)b)->id].type_sort_order) {
+        return 1;
+    }
+    return -(itemDataTable[((WinMgrSelectItem*)a)->id].type_sort_order < itemDataTable[((WinMgrSelectItem*)b)->id].type_sort_order);
+#else
 int select_comp_starpiece(void* a, void* b) {
     u16 x = itemDataTable[((WinMgrSelectItem*)a)->id].star_piece_price;
     u16 y = itemDataTable[((WinMgrSelectItem*)b)->id].star_piece_price;
@@ -953,6 +975,7 @@ int select_comp_starpiece(void* a, void* b) {
         return 1;
     }
     return -(x < y);
+#endif
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_802379e4, JP 0x802379E4. See docs/NAME_PROVENANCE.md.
@@ -1231,6 +1254,12 @@ void select_main(WinMgrEntry* entry) {
             if (prev != sel->cursor) {
                 psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_MOVE1 | PSND_SFX_BYPASS_MUTE));
             }
+#if VERSION == VERSION_EU
+            // PAL: moving the cursor resets the help window's text
+            if (prev != sel->cursor && sel->numDescriptors >= 3) {
+                winMgrHelpInit(&wp->entries[sel->descriptorId[2]]);
+            }
+#endif
             if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                 if (sel->items[sel->cursor].flags & SELECT_ITEM_DISABLED) {
                     psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_NOT_CHOICE1 | PSND_SFX_BYPASS_MUTE));

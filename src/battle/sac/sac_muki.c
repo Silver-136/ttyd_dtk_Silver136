@@ -95,7 +95,7 @@ void main_point(s32 idx);
 void main_cursor(void);
 
 
-EvtWord marioAttackEvent_Muki[254];
+EvtWord marioAttackEvent_Muki[];
 
 /**
  * Power Lift's weapon template (3 SP, targets Mario and the partner): set_weapon copies it and adds a sure
@@ -1066,12 +1066,22 @@ EVT_BEGIN(marioAttackEvent_Muki)
         CALL(evt_btl_camera_set_zoomSpeedLv, 0, 2)
         WAIT_MS(1000)
         CALL(sac_wao)
+#if VERSION == VERSION_EU
+        BEGIN_INLINE_EVENT_GET_ID(LW(12))
+#else
         BEGIN_INLINE_EVENT
+#endif
             WAIT_MS(1000)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
             CALL(sac_enemy_slide_return)
             CALL(end_muki)
         END_INLINE_EVENT
+#if VERSION == VERSION_EU
+        SET_VALUE(LW(13), 0)
+        IF_INT_NOT_EQUAL(LW(1), 0)
+            SET_VALUE(LW(13), 1)
+        END_IF
+#endif
         BEGIN_INLINE_EVENT
             WAIT_MS(400)
             IF_INT_NOT_EQUAL(LW(1), 0)
@@ -1083,6 +1093,9 @@ EVT_BEGIN(marioAttackEvent_Muki)
             END_IF
         END_INLINE_EVENT
         IF_INT_NOT_EQUAL(LW(0), 0)
+#if VERSION == VERSION_EU
+            SET_VALUE(LW(13), 1)
+#endif
             CALL(set_weapon, 0, LW(0), LW(9))
             IF_INT_NOT_EQUAL(LW(14), -1)
                 CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(14), LW(15), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -1091,10 +1104,18 @@ EVT_BEGIN(marioAttackEvent_Muki)
             RETURN
         END_IF
     END_IF
+#if VERSION == VERSION_EU
+    IF_INT_EQUAL(LW(13), 0)
+        DELETE_EVENT(LW(12))
+#endif
     CALL(sac_enemy_slide_return)
     WAIT_MS(1000)
     CALL(end_muki)
     WAIT_MS(1000)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
+#if VERSION == VERSION_EU
+    ELSE
+    END_IF
+#endif
     RETURN
 EVT_END()

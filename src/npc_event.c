@@ -264,7 +264,7 @@ EvtWord enemy_common_dead_event[156];
 EvtWord enemy_event_dead_event_sub[36];
 EvtWord enemy_common_blow_event[13];
 EvtWord enemy_2d_common_dead_event[415];
-EvtWord _2d_dead_rotate_event[16];
+EvtWord _2d_dead_rotate_event[];
 EvtWord testenemynpc_move_event[13];
 EvtWord npc_urouro_move_event[21];
 EvtWord npc_urouro_return_event[37];
@@ -369,14 +369,10 @@ EvtWord barriern2_move_event[90];
 EvtWord barriern2_move_event[70];
 #endif
 EvtWord barriern_dead_event[17];
-EvtWord barriern_find_event[189];
-EvtWord barriern_lost_event[17];
-#if VERSION >= VERSION_US
-EvtWord barriern_return_event[43];
-#else
-EvtWord barriern_return_event[42];
-#endif
-EvtWord barriern_blow_event[27];
+EvtWord barriern_find_event[];
+EvtWord barriern_lost_event[];
+EvtWord barriern_return_event[];
+EvtWord barriern_blow_event[];
 EvtWord piders_move_event[111];
 EvtWord piders_find_event[206];
 EvtWord piders_blow_event[13];
@@ -700,6 +696,26 @@ EVT_BEGIN(_2d_dead_rotate_event)
         CALL(evt_npc_add_rotate, STRING("me"), 0, 0, LW(0))
         WAIT_FRAMES(1)
     END_LOOP
+#if VERSION == VERSION_EU
+    RETURN
+EVT_END()
+
+/**
+ * PAL only: kuriboo_move_event with the enemy flags set directly instead of
+ * enemy_common_flag_init_event; nothing in the game references it
+ */
+EVT_BEGIN(testnpc_move_event)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_UPDATE_BY_EVENT | NPC_FLAG_JUMPING | NPC_FLAG_MOVE_ANIM | NPC_FLAG_LAND_ON_FLOOR)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), 2)
+    CALL(evt_sub_random, 360, LW(3))
+    LABEL(0)
+    WAIT_MS(500)
+    CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_loiter_dir, LW(3), FLOAT(120.0f), FLOAT(240.0f))
+    CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(3), FLOAT(100.0f))
+    CALL(evt_npc_move_position, STRING("me"), LW(0), LW(2), 2000, FLOAT(40.0f), 4)
+    GOTO(0)
+#endif
     RETURN
 EVT_END()
 
@@ -2487,6 +2503,9 @@ EVT_BEGIN(barriern_find_event)
     CALL(evt_npc_set_ry, STRING("me"), LW(0))
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_FIND)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
+#if VERSION == VERSION_EU
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_JUMPING)
+#endif
     LABEL(0)
     CALL(evt_npc_set_anim, STRING("me"), STRING("A_2"))
     WAIT_FRAMES(30)
@@ -2610,6 +2629,9 @@ USER_FUNC(kamec_fire_magic_delete) {
 
 /** Lost event of Yux: hovers through its standing poses for 2 s and resumes. */
 EVT_BEGIN(barriern_lost_event)
+#if VERSION == VERSION_EU
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_JUMPING)
+#endif
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_3"))
     WAIT_FRAMES(60)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
@@ -2619,6 +2641,9 @@ EVT_BEGIN(barriern_lost_event)
 EVT_END()
 
 EVT_BEGIN(barriern_return_event)
+#if VERSION == VERSION_EU
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_JUMPING)
+#endif
     CALL(evt_set_dir_to_home, STRING("me"))
     CALL(evt_npc_get_dir, STRING("me"), LW(3))
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -2634,6 +2659,9 @@ EVT_BEGIN(barriern_return_event)
 EVT_END()
 
 EVT_BEGIN(barriern_blow_event)
+#if VERSION == VERSION_EU
+    CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_JUMPING)
+#endif
     CALL(evt_npc_set_attack_mode, STRING("slave_0"), 0)
     CALL(evt_npc_set_position, STRING("slave_0"), 0, -1000, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_HIT)

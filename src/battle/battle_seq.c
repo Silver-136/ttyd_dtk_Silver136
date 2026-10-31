@@ -2640,6 +2640,16 @@ BOOL BattleWaitAllActiveEvtEnd_NoBgSetEndWait(BattleWork* wp) {
                 unit->entryEventId = 0;
                 break;
             }
+#if VERSION == VERSION_EU
+            while (unit->slideReturnEventId) {
+                if (evtCheckID(unit->slideReturnEventId)) {
+                    done = FALSE;
+                    break;
+                }
+                unit->slideReturnEventId = 0;
+                break;
+            }
+#endif
         }
     }
     if (!done) {

@@ -296,6 +296,10 @@ void BattleBreakSlot_Main(void) {
     BreakSlotReel* reel;
     BreakSlotReel* rr;
     s32 count;
+#if VERSION == VERSION_EU
+    s32 item;
+    BOOL isBreakFrame;
+#endif
     s32 k;
     s32 i;
     f32 y;
@@ -303,6 +307,19 @@ void BattleBreakSlot_Main(void) {
     BattleGetMarioPtr(wp);
     BattleGetPartyPtr(wp);
 
+#if VERSION == VERSION_EU
+    // PAL: phase 6 plays a language-dependent number of break hits (count) every i frames
+    switch (gp->language) {
+        case LANGUAGE_SP: // one more break hit
+            count = 7;
+            i = 20;
+            break;
+        default:
+            count = 6;
+            i = 20;
+            break;
+    }
+#endif
     switch (slot->phase) {
         case 0:
             count = 0;
@@ -438,15 +455,31 @@ void BattleBreakSlot_Main(void) {
                     BattleAudienceSoundBooing();
                 }
             }
+#if VERSION == VERSION_EU
+            isBreakFrame = FALSE;
+            for (item = 1; item <= count; item++) {
+                if (slot->phaseTimer == item * i) {
+                    isBreakFrame = TRUE;
+                    break;
+                }
+            }
+            if (isBreakFrame) {
+#else
             if (slot->phaseTimer == 20 || slot->phaseTimer == 40 || slot->phaseTimer == 60 || slot->phaseTimer == 80 ||
                 slot->phaseTimer == 100 || slot->phaseTimer == 120) {
+#endif
                 psndSFXOn("SFX_BTL_SYS_BREAK1");
                 btl_camera_shake_h(0, 5.0f, 0.0f, 10, 0);
             }
-            if (slot->phaseTimer == 120) {
+#if VERSION == VERSION_EU
+            count *= i; // now the frame of the last hit
+#else
+            count = 120; // the frame of the last hit
+#endif
+            if (slot->phaseTimer == count) {
                 BattleAudienceSoundCheer(240, 240);
             }
-            if (slot->phaseTimer == 130) {
+            if (slot->phaseTimer == count + 10) {
                 switch (BattleBreakSlotReelGetPtr(0)->item) {
                     case 0:
                         evtEntry(kinoko_effect, 0, EVENT_START_IMMEDIATE);
@@ -477,7 +510,7 @@ void BattleBreakSlot_Main(void) {
                         break;
                 }
             }
-            if (slot->phaseTimer == 140) {
+            if (slot->phaseTimer == count + 20) {
                 switch (BattleBreakSlotReelGetPtr(0)->item) {
                     case 0:
                     case 1:
@@ -492,7 +525,7 @@ void BattleBreakSlot_Main(void) {
                     btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
                 }
             }
-            if (slot->phaseTimer == 180) {
+            if (slot->phaseTimer == count + 60) {
                 updown = 0.0f;
                 switch (BattleBreakSlotReelGetPtr(0)->item) {
                     case 0:
@@ -511,10 +544,10 @@ void BattleBreakSlot_Main(void) {
                     updown = 0.0f;
                 }
             }
-            if (slot->phaseTimer == 209 && updown != 0.0f) {
+            if (slot->phaseTimer == count + 89 && updown != 0.0f) {
                 BattleAudienceSoundRun(0);
             }
-            if (slot->phaseTimer == 210) {
+            if (slot->phaseTimer == count + 90) {
                 if (!(_battleWorkPointer->cameraWork.flags & BTL_CAM_FLAG_SHAKE_H)) {
                     btl_camera_shake_h(0, 2.0f, 2.0f, 1000, 0);
                 }
@@ -532,11 +565,11 @@ void BattleBreakSlot_Main(void) {
                 }
             }
             // BUG: k is set only by the loop on the frame where phaseTimer is 210; here (220) it is read uninitialized
-            if (slot->phaseTimer == 220 && k == 200) {
+            if (slot->phaseTimer == count + 100 && k == 200) {
                 btl_camera_set_mode(BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT);
                 btl_camera_noshake(0);
             }
-            if (slot->phaseTimer == 270) {
+            if (slot->phaseTimer == count + 150) {
                 BattleAudienceAddTargetNum(0.0f, updown);
                 slot->phase = 8;
                 slot->flags &= ~4;

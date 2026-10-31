@@ -1,6 +1,7 @@
 // tik_07 (埋没した都市, Rogueport Sewers): the room with the door and the pipes to Rogueport (gor_03) and Fahr Outpost
 // (bom_00), and the e-mail scene.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_pouch.h"
 #include "evt/evt_cmd.h"
@@ -30,7 +31,7 @@ EvtWord bero_00_open_door[12];
 EvtWord bero_00_close_door[12];
 static BeroEntry bero_entry_data[8];
 static BeroEntry bero_entry_data2[2];
-EvtWord tik_07_down_evt[82];
+EvtWord tik_07_down_evt[];
 static EvtWord peach_mail[188];
 static EvtWord evt_block[8];
 static EvtWord mobj_box00[34];
@@ -218,10 +219,27 @@ EVT_BEGIN(tik_07_down_evt)
         CALL(evt_party_cont_onoff, 1, 1)
         CALL(evt_mario_wait_landon)
         WAIT_MS(100)
+#if VERSION == VERSION_EU
+        LOOP(30)
+            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+            CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
+            ADD(LW(1), 20)
+            IF_INT_LESS(LW(1), LW(4))
+                SUBTRACT(LW(4), 10)
+                CALL(evt_party_set_pos, 0, LW(3), LW(4), LW(5))
+            ELSE
+                BREAK_LOOP
+            END_IF
+            WAIT_FRAMES(1)
+        END_LOOP
+#endif
         CALL(evt_cam_road_reset)
         CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
         WAIT_MS(400)
         CALL(evt_mario_key_onoff, 1)
+#if VERSION == VERSION_EU
+        CALL(evt_cam_letter_box_disable, 0)
+#endif
     END_INLINE_EVENT
     RETURN
 EVT_END()

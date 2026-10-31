@@ -16,6 +16,7 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_npc.h"
 #include "evt/evt_party.h"
+#include "evt/evt_pouch.h"
 #include "evt/evt_seq.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
@@ -126,7 +127,7 @@ EvtWord end_image_blend_loop[123];
 // US: "THE END" texture per language (indexed by gp->language)
 #endif
 EvtWord end_image_main_evt[187];
-EvtWord end_return_title_evt[49];
+EvtWord end_return_title_evt[];
 EvtWord end_00_init_evt[63];
 EvtWord end_credit_gesso_evt[48];
 EvtWord end_credit_gonbaba_evt[89];
@@ -135,7 +136,7 @@ EvtWord end_credit_atomic_evt[60];
 EvtWord end_credit_korutesu_evt[81];
 EvtWord end_credit_para_evt[50];
 EvtWord end_credit_batten_evt[83];
-EvtWord end_credit_queen_evt[89];
+EvtWord end_credit_queen_evt[];
 EvtWord end_credit_moamoa_evt[108];
 f32 fd_end_00_negone_one_374[2] __attribute__((aligned(8)));
 f32 fd_end_00_neg_one_382;
@@ -255,6 +256,54 @@ USER_FUNC(evt_end_credit_npc_get_wait_type) {
 /** Pointer to the ending's work data (end_work), used by the ending callbacks. */
 EndWork* end_wp = &end_work;
 
+#if VERSION == VERSION_EU
+// PAL credits: the European staff entries
+CreditMsg end_staff_roll_msg_tbl[] = {
+    {0, 0, 0, {NULL, NULL, NULL}, {"a00", NULL, NULL}},
+    {0, 0, 1, {NULL, "a01", NULL}, {"b00", NULL, NULL}},
+    {0, 0, 2, {NULL, "a02", NULL}, {"b01", NULL, NULL}},
+    {0, 0, 3, {NULL, NULL, NULL}, {"b02", "b03", NULL}},
+    {0, 0, 4, {NULL, "a03", NULL}, {"b04", NULL, NULL}},
+    {0, 0, 5, {NULL, "a04", NULL}, {"b05", NULL, NULL}},
+    {0, 0, 6, {NULL, "a05", NULL}, {"b06", NULL, NULL}},
+    {0, 0, 7, {NULL, "a06", NULL}, {"b07", NULL, NULL}},
+    {0, 0, 8, {NULL, "a07", NULL}, {"b08", NULL, NULL}},
+    {0, 0, 9, {NULL, "a08", NULL}, {"b09", "b10", "b11"}},
+    {0, 0, 10, {NULL, "a09", NULL}, {"b12", NULL, NULL}},
+    {0, 0, 11, {NULL, NULL, NULL}, {"b13", NULL, NULL}},
+    {0, 0, 12, {NULL, NULL, NULL}, {"b14", NULL, NULL}},
+    {0, 0, 13, {NULL, NULL, NULL}, {"b15", "b16", NULL}},
+    {0, 1, 14, {NULL, "a10", NULL}, {"b17", NULL, NULL}},
+    {0, 1, 15, {NULL, "a11", NULL}, {"b18", NULL, NULL}},
+    {0, 1, 16, {NULL, "a12", NULL}, {"b19", NULL, NULL}},
+    {0, 1, 17, {NULL, "a13", NULL}, {"b20", "b21", NULL}},
+    {0, 1, 18, {NULL, "a14", NULL}, {"b22", "b23", NULL}},
+    {0, 1, 19, {NULL, NULL, NULL}, {"b24", "b25", NULL}},
+    {0, 1, 20, {NULL, "a15", NULL}, {"b26", "b27", NULL}},
+    {0, 1, 21, {NULL, "a17", NULL}, {"b28", NULL, NULL}},
+    {0, 1, 22, {NULL, NULL, NULL}, {"b29", NULL, NULL}},
+    {0, 1, 23, {NULL, "a18", NULL}, {"b30", NULL, NULL}},
+    {0, 1, 24, {NULL, NULL, NULL}, {"b31", "b32", NULL}},
+    {0, 2, 25, {NULL, "a19", NULL}, {"b33", NULL, NULL}},
+    {0, 2, 26, {NULL, "a20", NULL}, {"b34", "b35", "b36"}},
+    {0, 2, 27, {NULL, "a32", NULL}, {"b65", "b66", NULL}},
+    {0, 2, 28, {NULL, "a33", NULL}, {"b67", "b68", NULL}},
+    {0, 2, 29, {NULL, "a34", NULL}, {"b69", "b70", NULL}},
+    {0, 2, 30, {NULL, "a35", NULL}, {"b71", "b72", NULL}},
+    {0, 3, 31, {NULL, "a31", NULL}, {"b73", "b74", "b75"}},
+    {0, 3, 32, {NULL, NULL, NULL}, {"b76", "b77", "b81"}},
+    {0, 3, 33, {NULL, "a36", NULL}, {"b79", NULL, NULL}},
+    {0, 3, 34, {NULL, "a21", NULL}, {"b37", "b38", "b92"}},
+    {0, 3, 35, {NULL, NULL, NULL}, {"b39", "b40", "b82"}},
+    {0, 3, 36, {NULL, NULL, NULL}, {"b46", "b47", "b83"}},
+    {0, 3, 37, {NULL, "a22", NULL}, {"b48", "b49", NULL}},
+    {0, 3, 38, {NULL, NULL, NULL}, {"b50", "b51", NULL}},
+    {0, 3, 39, {NULL, "a23", NULL}, {"b52", "b53", "b84"}},
+    {0, 3, 40, {NULL, "a24", NULL}, {"b85", NULL, NULL}},
+    {0, 3, 41, {NULL, "a25", NULL}, {"b55", "b86", "b87"}},
+    {0, 0, 42, {NULL, "a38", NULL}, {"b90", "b91", NULL}},
+    {0, 0, 43, {NULL, "a39", NULL}, {"b56", NULL, NULL}},
+#else
 CreditMsg end_staff_roll_msg_tbl[] = {
     {0, 0, 0, {NULL, NULL, NULL}, {"a00", NULL, NULL}},
     {0, 0, 1, {NULL, "a01", NULL}, {"b00", NULL, NULL}},
@@ -314,6 +363,7 @@ CreditMsg end_staff_roll_msg_tbl[] = {
     {0, 0, 41, {NULL, "a24", NULL}, {"b54", NULL, NULL}},
     {0, 0, 42, {NULL, "a25", NULL}, {"b55", NULL, NULL}},
     {0, 0, 43, {NULL, "a26", NULL}, {"b56", NULL, NULL}},
+#endif
 #endif
     {0, 0, 44, {NULL, "a27", NULL}, {"b57", NULL, NULL}},
     {0, 0, 45, {NULL, "a28", NULL}, {"b58", "b59", NULL}},
@@ -989,6 +1039,10 @@ EVT_BEGIN(end_return_title_evt)
     SET_VALUE(GF(10), 1)
     CALL(evt_end_font_restore)
     SET_VALUE(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
+#if VERSION == VERSION_EU
+    CALL(evt_pouch_mario_recovery) // PAL: the party is healed before the save
+    CALL(evt_pouch_all_party_recovery)
+#endif
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 21)
 #if VERSION >= VERSION_US
@@ -1300,12 +1354,15 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
     s32 state = event->userdata[0];
     s32 idx = event->userdata[1];
     s32 i;
+    const char* msg;
+    const char* msg2;
     s32 x;
     s32 y;
     s32 wx;
+    s32 wx2;
     s32 wy;
+    s32 wy2;
     s32 n;
-    const char* msg;
     char buf1[0x400];
     char buf2[0x400];
 
@@ -1355,6 +1412,11 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
                         wx = x - 0.8f * FontGetMessageWidth(msg) / 2.0f;
                     } else if (x > 0) {
                         wx = x - 0.8f * FontGetMessageWidth(msg);
+#if VERSION == VERSION_EU
+                    }
+                    if (strcmp(end_staff_roll_msg_tbl[idx].msg1[i], "c00") == 0) {
+                        wx += 10;
+#endif
                     }
                     sprintf(buf1, "<clear><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0><scale 0.8>%s</scale></speed></col><wait 500></dkey><once_stop>", wx - 62, wy, msg);
                     end_wp->win1[i] = msgWindow_Entry(buf1, 0, 0);
@@ -1362,15 +1424,15 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
             }
             for (i = 0; i < 3; i++) {
                 if (end_staff_roll_msg_tbl[idx].msg2[i] != NULL) {
-                    msg = msgSearch(end_staff_roll_msg_tbl[idx].msg2[i]);
-                    wx = x;
-                    wy = y - i * 24 - 50;
+                    msg2 = msgSearch(end_staff_roll_msg_tbl[idx].msg2[i]);
+                    wx2 = x;
+                    wy2 = y - i * 24 - 50;
                     if (x == 0) {
-                        wx = x - FontGetMessageWidth(msg) / 2.0f;
+                        wx2 = x - FontGetMessageWidth(msg2) / 2.0f;
                     } else if (x > 0) {
-                        wx = x - FontGetMessageWidth(msg);
+                        wx2 = x - FontGetMessageWidth(msg2);
                     }
-                    sprintf(buf2, "<clear><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0>%s</speed></col><wait 5200></dkey><once_stop>", wx - 62, wy, msg);
+                    sprintf(buf2, "<clear><dkey><wpos %d %d 400 200><col f0f0f0ff><speed 0>%s</speed></col><wait 5200></dkey><once_stop>", wx2 - 62, wy2, msg2);
                     end_wp->win2[i] = msgWindow_Entry(buf2, 0, 0);
                 } else {
                     end_wp->win2[i] = -1;

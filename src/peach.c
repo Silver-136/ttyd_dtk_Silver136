@@ -1,6 +1,7 @@
 // Peach as the player in the Peach interludes (X-Naut fortress): her poses, states (normal, transparent, happy,
 // angry...) and motions.
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "mario/mario.h"
 #include "mario/mario_motion.h"
@@ -434,7 +435,27 @@ void peach_talk(void) {
         mario->airTimer = 0;
         mario->currSubMotionId = 0;
         mario->baseSpeed = 0.0f;
+#if VERSION == VERSION_EU
+        if (mario->peachFlags & PEACH_FLAG_GUNDAN) {
+            mario->multiTimer = 60;
+            mario->currSubMotionId = 10;
+        }
+#endif
         marioAdjustMoveDir();
         peachChgPose("P_T_1");
     }
+#if VERSION == VERSION_EU
+    // PAL: while transformed, the talk pose drops back to the stand pose after 60 frames
+    switch (mario->currSubMotionId) {
+        case 10:
+            if (--mario->multiTimer <= 0) {
+                peachChgPose("P_S_1");
+                mario->currSubMotionId = 11;
+            }
+            break;
+        case 0:
+        case 11:
+            break;
+    }
+#endif
 }

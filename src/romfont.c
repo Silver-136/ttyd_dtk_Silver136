@@ -44,18 +44,31 @@ const char* msg_jp[21] = {
 };
 
 const char* msg_us[21] = {
+#if VERSION == VERSION_EU
+    "Would you like to display\nin progressive scan mode?",
+#else
     "Would you like to display\nin Progressive Mode?",
+#endif
     "Yes              N o",
     "[    ]",
+#if VERSION == VERSION_EU
+    "Progressive scan mode\nhas been turned on.",
+    "Progressive scan mode\nhas been turned off.",
+#else
     "Progressive Mode\nhas been turned on.",
     "Progressive Mode\nhas been turned off.",
+#endif
     "This game is compatible with 60Hz mode.\nPlease select mode.\n\nIf your television does not display\ncorrectly in 60Hz mode,\nplease select 50Hz mode.",
     "60Hz mode      50Hz mode",
     "[             ]",
     "Screen display has been set to\n60Hz mode.",
     "Screen display has been set to\n50Hz mode.",
     "The Disc Cover is open.\nIf you want to continue the game,\nplease close the Disc Cover.",
+#if VERSION == VERSION_EU
+    "Please insert\nthe \"Paper Mario\" Game Disc.",
+#else
     "Please insert\nthe \"Paper Mario: The\nThousand-Year Door\"\nGame Disc.",
+#endif
     "The Game Disc could not be read.\nPlease read the Nintendo GameCube\nInstruction Booklet\nfor more information.",
     "An error has occurred.\nTurn the power off and refer to\nthe Nintendo GameCube\nInstruction Booklet\nfor further instructions.",
     "English",
@@ -74,13 +87,21 @@ const char* msg_ge[21] = {
     "",
     "",
     "",
+#if VERSION == VERSION_EU
+    "Dieses Spiel unterst\374tzt den 60Hz-Modus.\nBitte Modus ausw\344hlen.\n\nSollte das TV-Ger\344t im 60Hz-Modus kein\neinwandfreies Bild darstellen,\nbitte den 50Hz-Modus ausw\344hlen.",
+#else
     "Dieses Spiel unterst\374tzt den 60Hz-Modus.\nBitte Modus auswahlen.\n\nSollte das TV-Gerat im 60Hz-Modus kein\neinwandfreies Bild darstellen,\nbitte den 50Hz-Modus auswahlen.",
+#endif
     "60Hz-Modus     50Hz-Modus",
     "[               ]",
     "Die Bildschirmdarstellung erfolgt im\n60Hz-Modus.",
     "Die Bildschirmdarstellung erfolgt im\n50Hz-Modus.",
     "Der Disc-Deckel ist ge\366ffnet.\nBitte den Disc-Deckel schlie\337en,\num mit dem Spiel fortzufahren.",
+#if VERSION == VERSION_EU
+    "Bitte legen Sie die \"Paper Mario\"-Disc ein.",
+#else
     "Bitte legen Sie die \"Paper Mario\" Disc ein.",
+#endif
     "Diese Game Disc kann\nnicht gelesen werden.\nBitte lesen Sie die\nBedienungsanleitung des\nNintendo GameCube, um weitere\nInformationen zu erhalten.",
     "Ein Fehler ist aufgetreten.\nBitte schalten Sie den\nNintendo GameCube aus und lesen\nSie die Bedienungsanleitung,\num weitere Informationen zu erhalten.",
     "English",
@@ -99,14 +120,22 @@ const char* msg_fr[21] = {
     "",
     "",
     "",
+#if VERSION == VERSION_EU
+    "Ce jeu est compatible\navec le mode 60 Hz.\nVeuillez choisir un mode.\n\nSi votre t\351l\351viseur n'affiche pas\ncorrectement le mode 60 Hz,\nchoisissez le mode 50 Hz.",
+#else
     "Ce jeu est compatible\navec le mode 60 Hz.\nVeuillez choisir un mode.\n\nSi votre televiseur n'affiche pas\ncorrectement le mode 60 Hz,\nchoisissez le mode 50 Hz.",
+#endif
     "Mode 60 Hz     Mode 50 Hz",
     "[               ]",
     "L'affichage est en mode 60 Hz.",
     "L'affichage est en mode 50 Hz.",
     "Le couvercle est ouvert.\nPour continuer \340 jouer,\nveuillez fermer le couvercle.",
     "Veuillez ins\351rer le disque \"Paper Mario\".",
+#if VERSION == VERSION_EU
+    "La lecture du disque a \351chou\351.\nVeuillez vous r\351f\351rer\nau manuel d'instructions\nNintendo GameCube pour\nde plus amples informations.",
+#else
     "La lecture du disque a echoue.\nVeuillez vous r\351f\351rer\nau manuel d'instructions\nNintendo GameCube pour\nde plus amples informations.",
+#endif
     "Une erreur est survenue.\nEteignez la console et r\351f\351rez-vous\nau manuel d'instructions\nNintendo GameCube pour\nde plus amples informations.",
     "English",
     "Deutsch",

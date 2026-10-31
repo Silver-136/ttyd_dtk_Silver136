@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
@@ -38,7 +39,11 @@ static EvtWord attack_event[153];
 static EvtWord normal_attack_event[354];
 static EvtWord trans_myself_event[196];
 static EvtWord trans_event[289];
+#if VERSION == VERSION_EU
+static EvtWord move_event[101];
+#else
 static EvtWord move_event[84];
+#endif
 static EvtWord move_event_sub[103];
 static EvtWord wait_event[6];
 
@@ -675,17 +680,30 @@ static EVT_BEGIN(move_event)
     WAIT_FRAMES(30)
     SET_VALUE(LW(12), 80)
     LABEL(0)
+#if VERSION == VERSION_EU
+    SET_VALUE(LW(15), 0)
+#endif
     CALL(teresa_check_teresa, LW(3), LW(5))
     IF_INT_EQUAL(LW(5), 1)
         CALL(btlevtcmd_GetUnitWork, LW(3), UNIT_WORK_LIFTED, LW(6))
         IF_INT_EQUAL(LW(6), 0)
             SPAWN_EVENT(PTR(move_event_sub))
             ADD(LW(12), 20)
+#if VERSION == VERSION_EU
+            ADD(LW(15), 1)
+#endif
         END_IF
     END_IF
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_NOT_EQUAL(LW(3), -1)
         GOTO(0)
+#if VERSION == VERSION_EU
+    END_IF
+    IF_INT_GREATER_OR_EQUAL(LW(15), 2)
+        IF_INT_LESS(LW(12), 145)
+            SET_VALUE(LW(12), 145)
+        END_IF
+#endif
     END_IF
     WAIT_FRAMES(LW(12))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))

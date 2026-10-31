@@ -35,8 +35,19 @@
 #include "assets/_mariost_banner_tex.inc"
 const char cardFileName[] = "mariost_save_file";
 #if VERSION >= VERSION_US
+#if VERSION == VERSION_EU
+const char card_title_jp[0x18] = "ペーパーマリオＲＰＧ";
+const char card_date_jp[0x20] = "%2d月%2d日のセーブデータです";
+const char cardGameTitle[0xC] = "Paper Mario";
+const char cardDateFormat[0x12] = "%2d/%2d save data";
+const char card_date_de[0x18] = "Spielstand vom: %2d/%2d";
+const char card_date_fr[0x16] = "Sauvegarde du %2d/%2d";
+const char card_date_es[0x1B] = "Datos guardados el %2d/%2d";
+const char card_date_it[0x15] = "Salvataggio: %2d/%2d";
+#else
 const char cardGameTitle[] = "Paper Mario";
 const char cardDateFormat[0x12] = "%2d/%2d save data";
+#endif
 #else
 const char cardGameTitle[] = "ペーパーマリオＲＰＧ";
 const char cardDateFormat[0x20] = "%2d月%2d日のセーブデータです";
@@ -330,12 +341,18 @@ void cardCopy2Main(s32 slot) {
     s32 savedLastSlot;
 #endif
 
+#if VERSION == VERSION_EU
+    s32 framerate;
+#endif
     save = &wp->data->saves[slot];
     savedFbatData = gp->fbatData;
     savedMapAlloc = gp->mapAlloc;
     progressive = (u32)(gp->flags & GW_FLAG_PROGRESSIVE);
 #if VERSION >= VERSION_US
     language = gp->language;
+#if VERSION == VERSION_EU
+    framerate = gp->framerate;
+#endif
 #endif
     savedSoundMode = gp->soundMode;
     savedRumble = gp->rumbleEnabled;
@@ -369,6 +386,10 @@ void cardCopy2Main(s32 slot) {
     }
 #if VERSION >= VERSION_US
     gp->language = language;
+#if VERSION == VERSION_EU
+    // PAL: loading a save keeps the current 50/60 Hz frame rate
+    gp->framerate = framerate;
+#endif
 #endif
 }
 
@@ -1128,24 +1149,77 @@ static BOOL dataCheck(void) {
     }
 }
 
+#if VERSION == VERSION_EU
+/** Byte sum of the save file header (PAL: an inline; JP and US spell the loop out in make_header). */
+static inline u32 header_sum(u8* data, s32 size) {
+    s32 i;
+    u32 sum;
+
+    sum = 0;
+    for (i = 0; i < size; i++) {
+        sum += data[i];
+    }
+    return sum;
+}
+
+#endif
 static void make_header(void) {
     CardMetadata* metadata;
+#if VERSION != VERSION_EU
     s32 i;
     u8* temp;
     u32 checksum;
+#endif
     OSCalendarTime td;
 
     metadata = &cardGetFilePtr()->metadata;
     memset(metadata, 0, sizeof(metadata->data));
-    strcpy(metadata->data.fileName, cardGameTitle);
+#if VERSION == VERSION_EU
     OSTicksToCalendarTime(OSGetTime(), &td);
+    switch (gp->language) {
+        case 0:
+            strcpy(metadata->data.fileName, card_title_jp);
+            sprintf(metadata->data.dateString, card_date_jp, td.mon + 1, td.mday);
+            break;
+        case 1:
+        case 6:
+#endif
+    strcpy(metadata->data.fileName, cardGameTitle);
+#if VERSION != VERSION_EU
+    OSTicksToCalendarTime(OSGetTime(), &td);
+#endif
     sprintf(metadata->data.dateString, cardDateFormat, td.mon + 1, td.mday);
+#if VERSION == VERSION_EU
+            break;
+        case 2:
+            strcpy(metadata->data.fileName, cardGameTitle);
+            sprintf(metadata->data.dateString, card_date_de, td.mday, td.mon + 1);
+            break;
+        case 3:
+            strcpy(metadata->data.fileName, cardGameTitle);
+            sprintf(metadata->data.dateString, card_date_fr, td.mday, td.mon + 1);
+            break;
+        case 4:
+            strcpy(metadata->data.fileName, cardGameTitle);
+            sprintf(metadata->data.dateString, card_date_es, td.mday, td.mon + 1);
+            break;
+        case 5:
+            strcpy(metadata->data.fileName, cardGameTitle);
+            sprintf(metadata->data.dateString, card_date_it, td.mday, td.mon + 1);
+            break;
+    }
+#endif
     memcpy(metadata->data.bannerTex, _mariost_banner_tex, sizeof(metadata->data.bannerTex));
     memcpy(metadata->data.iconTex, _mariost_icon_tex, sizeof(metadata->data.iconTex));
     memcpy(metadata->data.iconTlut, _mariost_icon_tlut, sizeof(metadata->data.iconTlut));
     metadata->data.rumbleEnabled = (gp->rumbleEnabled != 0);
     metadata->data.soundMode = (u16)gp->soundMode;
     metadata->data.lastSlot = (u16)gp->lastSlot;
+#if VERSION == VERSION_EU
+    metadata->checksum1 = 0;
+    metadata->checksum2 = ~0u;
+    metadata->checksum1 = header_sum((u8*)&metadata->data, sizeof(metadata->data));
+#else
     metadata->checksum1 = (checksum = 0u);
     metadata->checksum2 = ~0u;
 
@@ -1154,6 +1228,7 @@ static void make_header(void) {
         checksum += temp[i];
     }
     metadata->checksum1 = checksum;
+#endif
     metadata->checksum2 = ~metadata->checksum1;
 }
 

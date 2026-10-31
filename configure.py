@@ -954,6 +954,7 @@ config.libs = [
             Object(MatchingFor("G8MJ01", "G8ME01"), "MSL_C.PPCEABI.bare.H.a/critical_regions.gamecube.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "MSL_C.PPCEABI.bare.H.a/misc_io.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "MSL_C.PPCEABI.bare.H.a/rand.c"),
+            Object(MatchingFor("G8MP01"), "MSL_C.PPCEABI.bare.H.a/extras.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "MSL_C.PPCEABI.bare.H.a/s_copysign.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "MSL_C.PPCEABI.bare.H.a/w_acos.c"),
             Object(MatchingFor("G8MJ01", "G8ME01"), "MSL_C.PPCEABI.bare.H.a/w_asin.c"),

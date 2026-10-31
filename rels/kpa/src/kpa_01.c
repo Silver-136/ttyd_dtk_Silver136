@@ -1,6 +1,9 @@
 // kpa_01 (クッパ編, Bowser's interludes): a Bowser's Castle scene in the hall with Kammy Koopa, the Hammer Bros. and the
 // Spiny guards.
 
+#include "version.h"
+#include "koopa.h"
+#include "kpa.h"
 #include "driver/msgdrv.h"
 #include "kpa_act.h"
 #include "memory.h"
@@ -62,7 +65,7 @@ EvtWord kamek_init_evt[9];
 EvtWord hkoopa_init_evt[9];
 static NpcSetupInfo npcEnt[13];
 static EvtWord shan_init[46];
-EvtWord kpa_01_init_evt[88];
+EvtWord kpa_01_init_evt[];
 
 /**
  * Throne-room door opens: the two Spiny guards walk to their posts and swing the double door open,
@@ -1273,3 +1276,10 @@ USER_FUNC(get_togenoko_pos) {
     return EVT_RETURN_DONE;
 }
 
+#if VERSION == VERSION_EU
+/** PAL only: called at the start of kpa_03's jumpstand_evt. */
+USER_FUNC(kpa_cancel_attack_mode) {
+    kpaCancelAttackMode();
+    return EVT_RETURN_DONE;
+}
+#endif

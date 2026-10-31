@@ -71,6 +71,11 @@ typedef struct MoamoaWork {
     f32 scale;
 } MoamoaWork;
 static MoamoaWork* wp;
+#if VERSION == VERSION_EU
+// PAL: a seeded generator for the swarm's start positions (moamoa_srand / moamoa_randf)
+static u32 moamoa_rand_prev;
+static u32 moamoa_rand_cur;
+#endif
 void moamoa_mainUnitIdClear(void);
 static f32 randf(f32 min, f32 max);
 USER_FUNC(moamoa1_on);
@@ -154,6 +159,30 @@ USER_FUNC(evt_moamoa_mainUnitIdClear) {
 /** Returns a random float between min and max using rand(). */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
+#if VERSION == VERSION_EU
+
+    return r * (max - min) + min;
+}
+
+/**
+ * EU only: seeds the boss swarm's own random generator (two-word state),
+ * so the EU version gets the same swarm placement on every run.
+ */
+void moamoa_srand(u32 seed) {
+    moamoa_rand_prev = seed;
+    moamoa_rand_cur = seed + 0x37E35F7D;
+}
+
+/** EU only: returns a float between min and max parent the boss swarm's own generator seeded by moamoa_srand. */
+f32 moamoa_randf(f32 min, f32 max) {
+    s32 cur = moamoa_rand_cur;
+    s32 next = moamoa_rand_prev + cur + 0x195B31B7;
+    f32 r;
+
+    moamoa_rand_prev = cur;
+    moamoa_rand_cur = next;
+    r = (next & 0x7FFF) / 32767.0f;
+#endif
 
     return r * (max - min) + min;
 }
@@ -1125,12 +1154,15 @@ USER_FUNC(moamoa2_on) {
 
 USER_FUNC(moamoa_on) {
     s32 i;
-    s32 j;
     Moamoa* elem;
     ExtTexInfo* d;
+    s32 j;
     AnimationPose* ap;
     Vec* p;
     s32 start;
+#if VERSION == VERSION_EU
+    u32 seeds[4] = {0x3056, 0xF36, 0xF2A93, 0x17F57};
+#endif
     Vec v;
     char anim[32];
     char pose[32];
@@ -1141,12 +1173,21 @@ USER_FUNC(moamoa_on) {
     wp->elems = BTL_ALLOC(wp->count * sizeof(Moamoa));
     memset(wp->elems, 0, wp->count * sizeof(Moamoa));
     elem = wp->elems;
+#if VERSION == VERSION_EU
+    moamoa_srand(seeds[rand() & 3]);
+#endif
     for (i = 0; i < wp->count; i++, elem++) {
         elem->flags = 0;
         v = (Vec){0.0f, 0.0f, 0.0f};
+#if VERSION == VERSION_EU
+        v.x = moamoa_randf(-10.0f, 10.0f);
+        v.y = moamoa_randf(-10.0f, 10.0f);
+        v.z = moamoa_randf(-10.0f, 10.0f);
+#else
         v.x = randf(-10.0f, 10.0f);
         v.y = randf(-10.0f, 10.0f);
         v.z = randf(-10.0f, 10.0f);
+#endif
         elem->pos = v;
     }
     wp->unitId = BattleTransID(event, UNIT_ID_SELF);

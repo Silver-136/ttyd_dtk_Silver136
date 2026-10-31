@@ -129,6 +129,12 @@ static inline s32 marioBadgeColor(void) {
     return 0;
 }
 
+#if VERSION == VERSION_EU
+#define MARIO_TALK_POSE "M_I_3"
+#else
+#define MARIO_TALK_POSE "M_I_2"
+#endif
+
 /**
  * Switches the player character: 0 Mario (in his badge outfit colour, or 8-bit Mario if that mode is on),
  * 1 Princess Peach (the X-Naut disguise when peachFlags 0x2000 is set), 2 Bowser.
@@ -193,7 +199,7 @@ void marioSetCharMode(s32 mode) {
         animPoseSetMaterialLightFlagOn(wp->paperAnimGroupId[0], lightFlag);
         animPoseSetMaterialLightFlagOn(wp->paperAnimGroupId[1], lightFlag);
         animPoseSetMaterialLightFlagOn(wp->paperAnimGroupId[2], lightFlag);
-        npcSetMarioAutoTalkPose("M_S_1", "M_I_2");
+        npcSetMarioAutoTalkPose("M_S_1", MARIO_TALK_POSE);
         wp->trigFlags |= MARIO_TRIG_FLAG_CHG_ANIM;
     } else {
         marioSetFamicomMode(1);
@@ -248,7 +254,7 @@ void marioSetFamicomMode(s32 mode) {
             wp->paperAnimGroupId[0] = animPoseEntry("d_mario", 2);
             wp->paperAnimGroupId[1] = animPoseEntry(marioAnimeGroupData[mp->colorId][1], 2);
             wp->characterId = CHARACTER_MARIO;
-            npcSetMarioAutoTalkPose("M_S_1", "M_I_2");
+            npcSetMarioAutoTalkPose("M_S_1", MARIO_TALK_POSE);
             wp->animName = NULL;
             marioChgPose("M_S_1");
         } else {
@@ -267,7 +273,7 @@ void marioSetFamicomMode(s32 mode) {
             wp->paperAnimGroupId[0] = animPoseEntry(marioAnimeGroupData[mp->colorId][0], 2);
             wp->paperAnimGroupId[1] = animPoseEntry(marioAnimeGroupData[mp->colorId][1], 2);
             wp->characterId = CHARACTER_MARIO;
-            npcSetMarioAutoTalkPose("M_S_1", "M_I_2");
+            npcSetMarioAutoTalkPose("M_S_1", MARIO_TALK_POSE);
             wp->animName = NULL;
             marioChgPose("M_S_1");
         } else {
@@ -2430,7 +2436,15 @@ const char* toRearPose(const char* name) {
             rear = "M_O_2R";
         } else if (!strcmp(name, "M_I_2")) {
             rear = "M_I_2R";
+#if VERSION == VERSION_EU
+        }
+        else if (!strcmp(name, "M_I_3")) {
+            rear = "M_I_3R";
+        }
+        else if (!strcmp(name, "M_U_2")) {
+#else
         } else if (!strcmp(name, "M_U_2")) {
+#endif
             rear = "M_U_2R";
         } else if (!strcmp(name, "M_C_1")) {
             rear = "M_C_1R";
@@ -2528,7 +2542,15 @@ const char* toFrontPose(const char* name) {
             front = "M_O_1";
         } else if (!strcmp(name, "M_I_2R")) {
             front = "M_I_2";
+#if VERSION == VERSION_EU
+        }
+        else if (!strcmp(name, "M_I_3R")) {
+            front = "M_I_3";
+        }
+        else if (!strcmp(name, "M_U_2R")) {
+#else
         } else if (!strcmp(name, "M_U_2R")) {
+#endif
             front = "M_U_2";
         } else if (!strcmp(name, "M_C_1R")) {
             front = "M_C_1";

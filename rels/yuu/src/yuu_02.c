@@ -374,12 +374,26 @@ static USER_FUNC(fall_rtn) {
                 if (hitCheckVecFilter(qp, NULL) == NULL) {
                     continue;
                 }
+#if VERSION == VERSION_EU
+                hit = query.hitPos;
+                query.targetPos.x -= 9.0f;
+#else
                 query.targetPos.x -= 9.0f;
                 hit = query.hitPos;
+#endif
                 if (hitCheckVecFilter(qp, NULL) != NULL && query.hitPos.y > hit.y + 1.0f) {
                     continue;
                 }
+#if VERSION == VERSION_EU
+                // PAL also probes 2 units back in z and keeps the first floor height
+                query.targetPos.z -= 2.0f;
+                if (hitCheckVecFilter(qp, NULL) != NULL && query.hitPos.y > hit.y + 1.0f) {
+                    continue;
+                }
+                sub->pos.y = hit.y;
+#else
                 sub->pos.y = query.hitPos.y;
+#endif
                 break;
             }
             n++;

@@ -1,6 +1,7 @@
 // aji_06 (敵のアジト, X-Naut Fortress): Peach's potion lab: she mixes the coloured medicines (kusuri) in the
 // machine, shrinks and grows, and turns invisible (peach_evt_kusuri_nomu).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -126,7 +127,7 @@ static EvtWord evt_memo1[14];
 static EvtWord evt_memo2[14];
 EvtWord evt_memo3[14];
 EvtWord evt_memo4[14];
-EvtWord aji_06_init_evt[232];
+EvtWord aji_06_init_evt[];
 
 /**
  * Door open animation step: moves the two door leaves S_door1_2
@@ -1918,6 +1919,20 @@ EVT_BEGIN(aji_06_init_evt)
             CALL(evt_party_cont_onoff, 0, 1)
             CALL(evt_party_cont_onoff, 1, 1)
             CALL(evt_mario_wait_landon)
+#if VERSION == VERSION_EU
+            LOOP(30)
+                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
+                ADD(LW(1), 20)
+                IF_INT_LESS(LW(1), LW(4))
+                    SUBTRACT(LW(4), 10)
+                    CALL(evt_party_set_pos, 0, LW(3), LW(4), LW(5))
+                ELSE
+                    BREAK_LOOP
+                END_IF
+                WAIT_FRAMES(1)
+            END_LOOP
+#endif
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_cam_letter_box_disable, 0)
         END_INLINE_EVENT

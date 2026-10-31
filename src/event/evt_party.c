@@ -142,6 +142,9 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
     Vec out2;
     Vec pos;
     Vec pos2;
+#if VERSION == VERSION_EU
+    Vec marioPos;
+#endif
     f32 sx, sy, sz;
     f32 h;
     f32 ang;
@@ -160,6 +163,13 @@ USER_FUNC(evt_party_force_reset_outofscreen) {
         pos2 = p->position;
         marioGetScreenPos(pos2, &sx, &sy, &sz);
         if (marioChkInScreen((s32)sx, (s32)sy)) {
+#if VERSION == VERSION_EU
+            break;
+        }
+        marioPos = ((MarioWork*)mario)->position;
+        marioGetScreenPos(marioPos, &sx, &sy, &sz);
+        if (!marioChkInScreen((s32)sx, (s32)sy)) {
+#endif
             break;
         }
         ang = angleABf(p->position.x, p->position.z, mario->position.x, mario->position.z);

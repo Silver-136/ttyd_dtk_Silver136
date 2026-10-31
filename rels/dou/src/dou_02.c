@@ -1,6 +1,7 @@
 // dou_02 (洞窟, Pirate's Grotto): water room between dou_01 and dou_12 with a spear trap and bobbing platforms.
 // Gate Handle and Star Piece items.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -23,7 +24,11 @@
 
 
 static BeroEntry bero_entry_data[4];
+#if VERSION == VERSION_EU
+static EvtWord yari_trap_sub[129];
+#else
 static EvtWord yari_trap_sub[119];
+#endif
 static EvtWord yari_trap[11];
 static EvtWord dou_puka_event_init0[8];
 static EvtWord dou_puka_event_0[24];
@@ -125,7 +130,16 @@ static EVT_BEGIN(yari_trap_sub)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("bb"), HIT_ATTR_TOGE)
+#if VERSION == VERSION_EU
+        CALL(evt_sub_get_framerate, LW(0))
+        IF_INT_EQUAL(LW(0), 50)
+            WAIT_MS(2800)
+        ELSE
+#endif
         WAIT_MS(2500)
+#if VERSION == VERSION_EU
+        END_IF
+#endif
         IF_INT_EQUAL(GW(15), 2)
             BREAK_LOOP
         END_IF

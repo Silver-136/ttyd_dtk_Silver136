@@ -62,7 +62,7 @@ EvtWord init_cook[29];
 s32 item_tbl_cook[2];
 EvtWord talk_cook_nabe_return[47];
 s32 iri_22_item_tbl[4];
-EvtWord talk_cook[351];
+EvtWord talk_cook[];
 static EvtWord init_waitless[29];
 s32 item_tbl_waitless[2];
 #if VERSION >= VERSION_US
@@ -496,7 +496,14 @@ EVT_BEGIN(talk_cook)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_212"), 0, 0)
         CASE_LESS(STG6_44_END_OF_DAY_2)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_219"), 0, 0)
+#if VERSION == VERSION_EU
+        CALL(evt_party_stop, 0)
+        WAIT_MS(300)
         CALL(evt_msg_print_party, STRING("stg6_rsh_219_2"))
+        CALL(evt_party_run, 0)
+#else
+        CALL(evt_msg_print_party, STRING("stg6_rsh_219_2"))
+#endif
         CASE_LESS(STG6_57_A_MAIL_FROM_PEACH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_257"), 0, 0)
         CASE_LESS(STG8_END_AFTER_THE_BATTLE)

@@ -562,7 +562,11 @@ s32 npcEntry(const char* description, const char* animName) {
     entry->scale = (Vec){1.0f, 1.0f, 1.0f};
     entry->shadowScale = 1.0f;
     entry->moveAnimState = 0;
+#if VERSION == VERSION_EU
+    entry->checkPose = "M_I_3";
+#else
     entry->checkPose = "M_I_2";
+#endif
     entry->lastUpdateTicks = gp->renderTime;
     entry->moveTicks = 0;
     entry->jumpGravity = 1.0f;

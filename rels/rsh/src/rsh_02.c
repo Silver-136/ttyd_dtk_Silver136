@@ -78,7 +78,11 @@ EvtWord evt_toron_appear[437];
 #else
 EvtWord evt_toron_appear[414];
 #endif
+#if VERSION == VERSION_EU
+static EvtWord evt_daiji_kami[96];
+#else
 static EvtWord evt_daiji_kami[88];
+#endif
 static EvtWord evt_yuka_simi[45];
 static EvtWord evt_access[14];
 static EvtWord evt_access2[44];
@@ -1374,7 +1378,14 @@ static EVT_BEGIN(evt_daiji_kami)
         ELSE
         CALL(evt_mario_set_dir, 270, 300, 0)
     END_IF
+#if VERSION == VERSION_EU
+    CALL(evt_party_stop, 0)
+    WAIT_MS(300)
     CALL(evt_msg_print_party, STRING("stg6_rsh_180"))
+    CALL(evt_party_run, 0)
+#else
+    CALL(evt_msg_print_party, STRING("stg6_rsh_180"))
+#endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_6"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_N_2"))

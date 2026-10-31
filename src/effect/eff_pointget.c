@@ -45,8 +45,13 @@ static PointGetTex tex_lang3[3] = { { 0, 0x7C, 0x7D }, { -1, -1, -1 }, { 1, 0x7E
 static PointGetTex tex_shadow_lang3[3] = { { 0, 0x7C, 0x7D }, { -1, -1, -1 }, { 1, 0x80, 0x81 } };
 static PointGetTex tex_lang4[3] = { { 0, 0x7C, 0x7D }, { -1, -1, -1 }, { 1, 0x7E, 0x7F } };
 static PointGetTex tex_shadow_lang4[3] = { { 0, 0x7C, 0x7D }, { -1, -1, -1 }, { 1, 0x80, 0x81 } };
+#if VERSION == VERSION_EU
+static PointGetTex tex_lang5[6] = {{1, 0x7C, 0x7D}, {0, 0x7E, 0x7F}, {-1, -1, -1}, {1, 0x80, 0x81}, {-1, -1, -1}, {1, 0x84, 0x85}};
+static PointGetTex tex_shadow_lang5[6] = {{1, 0x7C, 0x7D}, {0, 0x7E, 0x7F}, {-1, -1, -1}, {1, 0x82, 0x83}, {-1, -1, -1}, {1, 0x84, 0x85}};
+#else
 static PointGetTex tex_lang5[7] = { { 1, 0x7C, 0x7D }, { -1, -1, -1 }, { 0, 0x7E, 0x7F }, { -1, -1, -1 }, { 1, 0x80, 0x81 }, { -1, -1, -1 }, { 1, 0x84, 0x85 } };
 static PointGetTex tex_shadow_lang5[7] = { { 1, 0x7C, 0x7D }, { -1, -1, -1 }, { 0, 0x7E, 0x7F }, { -1, -1, -1 }, { 1, 0x82, 0x83 }, { -1, -1, -1 }, { 1, 0x84, 0x85 } };
+#endif
 /** Italian one-point and plural Star Point pieces: the number, then the word. */
 static PointGetTex tex_lang6[2] = { { 0, 0x7E, 0x7F }, { 1, 0x7C, 0x7D } };
 static PointGetTex tex_shadow_lang6[2] = { { 0, 0x7E, 0x7F }, { 1, 0x80, 0x81 } };
@@ -57,7 +62,11 @@ static PointGetTexSet texid_tbl[6] = {
     { { tex_us, tex_shadow_us }, 5 },
     { { tex_lang3, tex_shadow_lang3 }, 3 },
     { { tex_lang4, tex_shadow_lang4 }, 3 },
+#if VERSION == VERSION_EU
+    { { tex_lang5, tex_shadow_lang5 }, 6 },
+#else
     { { tex_lang5, tex_shadow_lang5 }, 7 },
+#endif
     { { tex_lang6, tex_shadow_lang6 }, 2 },
 };
 #else

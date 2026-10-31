@@ -2429,9 +2429,13 @@ USER_FUNC(evt_npc_majo_disp_on) {
             break;
 
         case 1:
+#if VERSION == VERSION_EU
+            animPoseSetLocalTime(npc->poseId, 0.0f);
+#else
             animPoseSetEffect(npc->poseId, "p_bibi", TRUE);
             animPoseSetEffectAnim(npc->poseId, "PM_B_2", TRUE);
             animPosePaperPeraOn(npc->poseId);
+#endif
             event->userdata[0]++;
             break;
 

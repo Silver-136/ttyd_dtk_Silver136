@@ -1,6 +1,7 @@
 // Map driver: loads map.dat (joints, materials, animations), builds the display lists, and animates,
 // culls and draws the map objects.
 
+#include "version.h"
 #include "driver/mapdrv.h"
 #include "driver/animdrv.h"
 #include "driver/arcdrv.h"
@@ -53,6 +54,15 @@ void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh);
 
 /** Single-precision sine for this file, routed through the double sin() of math.h. */
 static inline f32 sinf(f32 x) { return sin(x); }
+
+/** Frames per second of the map animation clock. PAL keeps it at 60 even when the display runs at 50 Hz. */
+static inline s32 mapAnimFps(void) {
+#if VERSION == VERSION_EU
+    return 60;
+#else
+    return gp->framerate;
+#endif
+}
 
 /**
  * Records a missing map object or hit object name (type 0 map object, 1 hit object) in the 32-entry error ring
@@ -339,7 +349,11 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
             obj->flags |= MAP_OBJ_FLAG_CHAR_SHADOW;
         }
     } else {
+#if VERSION == VERSION_EU
+        OSPanic("mapdrv.c", 0x2e8, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
+#else
         OSPanic("mapdrv.c", 0x2e5, "\x83\x57\x83\x87\x83\x43\x83\x93\x83\x67\x82\xcc\x83\x66\x81\x5b\x83\x5e\x82\xcc\x8e\x77\x92\xe8\x82\xc9\x82\xa8\x82\xa9\x82\xb5\x82\xc8\x82\xe0\x82\xcc\x82\xaa\x82\xa0\x82\xe9\n");
+#endif
     }
     if (joint->partCount) {
         PSVECAdd(&joint->bboxMin, &joint->bboxMax, &obj->center);
@@ -530,7 +544,7 @@ void mapCheckAnimation(const char* animName, BOOL* valid, f32* remainingMs) {
         if (anim->flags & MAP_ANIM_FLAG_END) {
             *valid = TRUE;
         }
-        *remainingMs = 1000.0f * (anim->anim->length - anim->time) / gp->framerate;
+        *remainingMs = 1000.0f * (anim->anim->length - anim->time) / mapAnimFps();
     } else {
         *valid = TRUE;
     }
@@ -604,7 +618,7 @@ void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
             anim->flags |= MAP_ANIM_FLAG_LOOP;
         }
         if (mode == MAP_ANIM_PLAY_AT_END) {
-            anim->startTime -= (u64)(1000.0f * anim->anim->length / gp->framerate);
+            anim->startTime -= (u64)(1000.0f * anim->anim->length / mapAnimFps());
         }
     }
 }
@@ -1616,17 +1630,21 @@ void mapMain(void) {
             }
             if (!(anim->flags & MAP_ANIM_FLAG_PAUSE)) {
                 ms = OSTicksToMilliseconds(t);
+#if VERSION == VERSION_EU
+                cur = 60.0f * (f32)(u64)(ms - anim->startTime) / 1000.0f;
+#else
                 cur = gp->framerate * (f32)(u64)(ms - anim->startTime) / 1000.0f;
+#endif
                 if (cur < anim->time) {
                     anim->time = anim->time - (anim->time - cur);
                 } else {
                     anim->time = anim->time + anim->rate * (cur - anim->time);
                 }
                 anim->startTime = OSTicksToMilliseconds(t);
-                anim->startTime -= (u64)(1000.0f * anim->time / gp->framerate);
+                anim->startTime -= (u64)(1000.0f * anim->time / mapAnimFps());
             } else if (anim->flags & MAP_ANIM_FLAG_RESTART) {
                 anim->startTime = OSTicksToMilliseconds(t);
-                anim->startTime -= (u64)(1000.0f * anim->time / gp->framerate);
+                anim->startTime -= (u64)(1000.0f * anim->time / mapAnimFps());
                 anim->flags &= ~MAP_ANIM_FLAG_RESTART;
                 anim->flags &= ~MAP_ANIM_FLAG_PAUSE;
             }
@@ -1638,7 +1656,7 @@ void mapMain(void) {
                     }
                     anim->time = t2;
                     anim->startTime = OSTicksToMilliseconds(t);
-                    anim->startTime -= (u64)(1000.0f * anim->time / gp->framerate);
+                    anim->startTime -= (u64)(1000.0f * anim->time / mapAnimFps());
                 } else {
                     anim->time = anim->anim->length;
                     anim->flags |= MAP_ANIM_FLAG_END;

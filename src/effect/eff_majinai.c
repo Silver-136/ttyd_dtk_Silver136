@@ -1,6 +1,7 @@
 // Spell effect (majinai: charm/spell): plays the MOBJ_EFF_majinai animation while the map darkens and Mario glows,
 // with a stardust burst, then restores the map (states 0-3: load, darken, wait, restore). The type is stored, never read.
 
+#include "version.h"
 #include "eff/eff_majinai.h"
 #include "eff/eff_stardust.h"
 #include "battle/battle.h"
@@ -89,8 +90,16 @@ void effMajinaiMain(EffectEntry* effect) {
             map->entries[0].flags |= 8;
             if (!gp->inBattle) {
                 mario = marioGetPtr();
+#if VERSION == VERSION_EU
+                for (i = 0; i < 3; i++) {
+                    if (mario->paperAnimGroupId[i] != -1) {
+#else
                 for (i = 0; i < 5; i++) {
+#endif
                     animPoseSetMaterialFlagOn(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
+#if VERSION == VERSION_EU
+                    }
+#endif
                 }
             } else {
                 unit = BattleGetMarioPtr(_battleWorkPointer);
@@ -118,8 +127,16 @@ void effMajinaiMain(EffectEntry* effect) {
             map->entries[0].flags |= 8;
             if (!gp->inBattle) {
                 mario = marioGetPtr();
+#if VERSION == VERSION_EU
+                for (i = 0; i < 3; i++) {
+                    if (mario->paperAnimGroupId[i] != -1) {
+#else
                 for (i = 0; i < 5; i++) {
+#endif
                     animPoseSetMaterialFlagOff(mario->paperAnimGroupId[i], MAP_OBJ_FLAG_NO_MAP_BLEND);
+#if VERSION == VERSION_EU
+                    }
+#endif
                 }
             } else {
                 unit = BattleGetMarioPtr(_battleWorkPointer);

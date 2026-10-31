@@ -1938,9 +1938,15 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
 
     pouchGetPtr();
     sprintf(buf, msgSearch("btl_msg_multi_item_cancel_check"));
+#if VERSION == VERSION_EU
+    len = (f32)FontGetMessageWidth(buf);
+    // FAKE: called through a cast that puts the float arguments first; the plain call changes the object
+    ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(-30.0f - (w = 0.5f * (f32)len), 30.0f, 65.0f + (f32)len, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+#else
     len = strlen(buf);
     // FAKE: called through a cast that puts the float arguments first; the plain call changes the object
     ((void (*)(f32, f32, f32, f32, f32, u16, GXColor))windowDispGX_Waku_col)(-30.0f - (w = 6.25f * (f32)len), 30.0f, 12.5f * (f32)len + 65.0f, 32.0f, 10.0f, 0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+#endif
     windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, -70.0f, -10.0f, 130.0f, 60.0f, 10.0f);
     FontDrawStart();
     x = 0.0f;

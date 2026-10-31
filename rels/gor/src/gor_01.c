@@ -134,7 +134,7 @@ static EvtWord marco_init[14];
 static EvtWord marco_talk[519];
 EvtWord master_init[12];
 EvtWord iri_20_master_tubuyaki[37];
-EvtWord master_talk[645];
+EvtWord master_talk[];
 EvtWord shoptender_init[27];
 EvtWord shoptender_talk[227];
 EvtWord yadotender_init[2];
@@ -289,7 +289,7 @@ s32 R_mystery_cook_list[20];
 s32 special_cook_list[16];
 EvtWord cooking_evt_sub[284];
 s32 iri_18_item_tbl[2];
-EvtWord cooking_evt[852];
+EvtWord cooking_evt[];
 
 // Descriptive name (not in the symbol maps); placeholder unk_gor_00004db4, JP gor .text+0x4CE8. See docs/NAME_PROVENANCE.md.
 USER_FUNC(badgeshop_special_cnt) {
@@ -1375,7 +1375,13 @@ EVT_BEGIN(master_talk)
         WAIT_MS(1000)
         CALL(evt_npc_reverse_ry, STRING("me"))
         WAIT_MS(1000)
+#if VERSION == VERSION_EU
+        CALL(evt_party_stop, 0)
         CALL(evt_msg_print_party, STRING("mac_4_069"))
+        CALL(evt_party_run, 0)
+#else
+        CALL(evt_msg_print_party, STRING("mac_4_069"))
+#endif
         SET_VALUE(GSWF_GOR_PODLEY_BOBBERY_STORY_TOLD, 1)
         CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
         // Podley asks whether they still want Bobbery at sea.
@@ -1423,7 +1429,13 @@ EVT_BEGIN(master_talk)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         WAIT_MS(800)
         CALL(evt_msg_print, 0, STRING("mac_4_076"), 0, STRING("me"))
+#if VERSION == VERSION_EU
+        CALL(evt_party_stop, 0)
         CALL(evt_msg_print_party, STRING("mac_4_077"))
+        CALL(evt_party_run, 0)
+#else
+        CALL(evt_msg_print_party, STRING("mac_4_077"))
+#endif
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_4"), LW(0), LW(1), LW(2), 0)
         CALL(evt_mario_set_pose, STRING("M_N_2"))
@@ -7165,14 +7177,28 @@ EVT_BEGIN(cooking_evt)
     IF_INT_EQUAL(LW(15), 0)
         CALL(get_item_name, LW(14), LW(0))
         IF_INT_EQUAL(LF(0), 0)
+#if VERSION == VERSION_EU
+            CALL(evt_msg_fmt_str, 0, LW(2), STRING("gor_01_cook_012"), LW(0))
+            CALL(evt_msg_print, 1, LW(2), 0, STRING("ナンシー"))
+        ELSE
+            CALL(evt_msg_fmt_str, 0, LW(2), STRING("gor_01_cook_012"), LW(0))
+            CALL(evt_msg_print_add, 1, LW(2))
+#else
             CALL(evt_msg_print_insert, 0, STRING("gor_01_cook_012"), 0, STRING("ナンシー"), LW(0))
             ELSE
             CALL(evt_msg_print_add_insert, 0, STRING("gor_01_cook_012"), LW(0))
+#endif
         END_IF
         ELSE
         CALL(get_item_name, LW(14), LW(0))
         CALL(get_item_name, LW(15), LW(1))
+#if VERSION == VERSION_EU
+        CALL(evt_msg_fmt_str, 0, LW(2), STRING("gor_01_cook_013"), LW(0))
+        CALL(evt_msg_fmt_str, 1, LW(2), LW(2), LW(1))
+        CALL(evt_msg_print, 1, LW(2), 0, STRING("ナンシー"))
+#else
         CALL(evt_msg_print_insert, 0, STRING("gor_01_cook_013"), 0, STRING("ナンシー"), LW(0), LW(1))
+#endif
     END_IF
     CALL(evt_msg_select, 0, STRING("gor_01_select"))
     IF_INT_EQUAL(LW(0), 1)

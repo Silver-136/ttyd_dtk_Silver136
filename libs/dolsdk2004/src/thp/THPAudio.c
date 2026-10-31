@@ -42,6 +42,9 @@ u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag)
 			yn += header->lCoef[decInfo.predictor][0] * yn1;
 			yn += (sample << decInfo.scale) << 11;
 			yn <<= 5;
+#ifdef VERSION_G8MP01
+			yn += 0x8000;
+#else
 
 			if ((u16)(yn & 0xffff) > 0x8000) {
 				yn += 0x10000;
@@ -49,6 +52,7 @@ u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag)
 				if ((yn & 0x10000))
 					yn += 0x10000;
 			}
+#endif
 
 			if (yn > 2147483647LL) {
 				yn = 2147483647LL;
@@ -77,6 +81,9 @@ u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag)
 			yn += header->lCoef[decInfo.predictor][0] * yn1;
 			yn += (sample << decInfo.scale) << 11;
 			yn <<= 5;
+#ifdef VERSION_G8MP01
+			yn += 0x8000;
+#else
 			if ((u16)(yn & 0xffff) > 0x8000) {
 				yn += 0x10000;
 			} else {
@@ -85,6 +92,7 @@ u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag)
 						yn += 0x10000;
 				}
 			}
+#endif
 
 			if (yn > 2147483647LL) {
 				yn = 2147483647LL;
@@ -111,6 +119,9 @@ u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag)
 			yn += header->rCoef[decInfo.predictor][0] * yn1;
 			yn += (sample << decInfo.scale) << 11;
 			yn <<= 5;
+#ifdef VERSION_G8MP01
+			yn += 0x8000;
+#else
 
 			if ((u16)(yn & 0xffff) > 0x8000) {
 				yn += 0x10000;
@@ -120,6 +131,7 @@ u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag)
 						yn += 0x10000;
 				}
 			}
+#endif
 
 			if (yn > 2147483647LL) {
 				yn = 2147483647LL;

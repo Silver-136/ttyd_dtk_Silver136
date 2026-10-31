@@ -32,10 +32,18 @@
 #include "mario/mario_party.h"
 
 typedef enum winTexMode {
+#if VERSION == VERSION_EU
+    // PAL's texture file has one texture fewer before the tile
+    MODE_5 = 4,
+    MODE_6 = 5,
+    MODE_7 = 6,
+    MODE_8 = 7,
+#else
     MODE_5 = 5,
     MODE_6 = 6,
     MODE_7 = 7,
     MODE_8 = 8,
+#endif
     MODE_11 = 11,
 } winTexMode;
 
@@ -110,7 +118,11 @@ void seq_e3Init(SequenceWork* seq) {
     wp->poseRotY = 270.0f;
     OSCreateAlarm(&wp->alarm);
 #if VERSION >= VERSION_US
+#if VERSION == VERSION_EU
+    OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
+#else
     OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 300, alarm_handler);
+#endif
 #else
     OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
 #endif
@@ -352,6 +364,9 @@ void seq_e3Main(SequenceWork* seq) {
                 pouchGetPtr()->partyData[i].HPLevel = 1;
             }
 
+#if VERSION == VERSION_EU
+            if (wp->scenario != 0) {
+#endif
             for (i = 0; i < 2; i++) {
                 pouchGetItem(ITEM_THUNDER_RAGE);
                 pouchGetItem(ITEM_SHOOTING_STAR);
@@ -359,12 +374,21 @@ void seq_e3Main(SequenceWork* seq) {
                 pouchGetItem(ITEM_POW_BLOCK);
             }
 
+#if VERSION == VERSION_EU
+            }
+#endif
             pouchGetPtr()->availableBP = 20;
             pouchGetPtr()->maximumBP = 20;
+#if VERSION == VERSION_EU
+            if (wp->scenario != 0) {
+#endif
             pouchGetItem(ITEM_POWER_BOUNCE);
             pouchGetItem(ITEM_POWER_SMASH);
             pouchEquipBadgeID(ITEM_POWER_BOUNCE);
             pouchEquipBadgeID(ITEM_POWER_SMASH);
+#if VERSION == VERSION_EU
+            }
+#endif
             pouchReviseMarioParam();
             pouchRevisePartyParam();
             statusWinForceUpdate();
@@ -410,6 +434,11 @@ void e3Disp(CameraId cameraId, void* param) {
     if (active == 0) {
         // 'Press Start' overlay with alpha pulsing
         alpha = (s32)((f32)sin((f64)((f32)gp->retraceCount / 30.0f)) * 459.0f);
+#if VERSION == VERSION_EU
+        {
+            // PAL: per-language title texture
+            s32 tbl[6] = {11, 11, 12, 13, 14, 15};
+#endif
         if (alpha < 0) {
             alpha = 0;
         }
@@ -419,17 +448,24 @@ void e3Disp(CameraId cameraId, void* param) {
 
         winTexInit(*wp->handle->data);
 #if VERSION >= VERSION_US
+#if VERSION == VERSION_EU
+            winTexSet(tbl[gp->language], (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+#else
         winTexSet(12, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+#endif
 #else
         winTexSet(MODE_11, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #endif
         pressStartGX(alpha, 0.0f, -110.0f);
+#if VERSION == VERSION_EU
+        }
+#endif
     } else {
         // Tiled background: 40 columns x 32 rows of 16-unit tiles, from x = -304 and down from y = 240
         winTexInit(*wp->handle->data);
         for (col = 0, x = -304; col < 40; col++, x += 16) {
             for (row = 0, dy = 0; row < 32; row++, dy += 16) {
-                winTexSet(5, (Vec){ (f32)x, (f32)(240 - dy), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f },
+                winTexSet(MODE_5, (Vec){ (f32)x, (f32)(240 - dy), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f },
                           (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             }
         }
@@ -444,13 +480,13 @@ void e3Disp(CameraId cameraId, void* param) {
             if (i == wp->scenario) {
                 // FAKE: the (u32) cast on the 8; plain i + 8 changes the object
                 // Shadow Box
-                winTexSet(i + (u32)8, (Vec){ 10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f },
+                winTexSet(i + (u32)MODE_8, (Vec){ 10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f },
                           (Vec){ 0.35f, 0.35f, 0.35f }, (GXColor){ 0x00, 0x00, 0x00, 0x40 });
                 // Content Box
-                winTexSet(i + 8, (Vec){ e3_tbl[i].x, e3_tbl[i].y, 0.0f }, (Vec){ 0.35f, 0.35f, 0.35f },
+                winTexSet(i + MODE_8, (Vec){ e3_tbl[i].x, e3_tbl[i].y, 0.0f }, (Vec){ 0.35f, 0.35f, 0.35f },
                           (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
             } else {
-                winTexSet(i + 8, (Vec){ 10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f }, (Vec){ 0.35f, 0.35f, 0.35f },
+                winTexSet(i + MODE_8, (Vec){ 10.0f + e3_tbl[i].x, e3_tbl[i].y - 10.0f, 0.0f }, (Vec){ 0.35f, 0.35f, 0.35f },
                           (GXColor){ 0x80, 0x80, 0x80, 0xFF });
             }
 
@@ -539,9 +575,18 @@ void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXTexObj startText, gradient;
     Mtx mtx, scale;
 
+#if VERSION == VERSION_EU
+    s32 tbl[6] = {16, 16, 17, 18, 19, 20};
+    TEXGetGXTexObjFromPalette(*wp->handle->data, &startText, tbl[gp->language]);
+#else
     TEXGetGXTexObjFromPalette(*wp->handle->data, &startText, 3);
+#endif
     GXLoadTexObj(&startText, GX_TEXMAP0);
+#if VERSION == VERSION_EU
+    TEXGetGXTexObjFromPalette(*wp->handle->data, &gradient, 3);
+#else
     TEXGetGXTexObjFromPalette(*wp->handle->data, &gradient, 4);
+#endif
     GXLoadTexObj(&gradient, GX_TEXMAP1);
     GXSetNumTevStages(2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
