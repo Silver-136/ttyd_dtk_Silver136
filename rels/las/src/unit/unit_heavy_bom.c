@@ -4,7 +4,6 @@
 #include "party/party_motion.h"
 #include "battle/battle_status_effect.h"
 
-#include "battle/battle_unit.h"
 #include "driver/animdrv.h"
 #include "string.h"
 #include "battle/battle.h"

@@ -7,7 +7,6 @@
 #include "battle/battle_sub.h"
 
 #include "battle/battle.h"
-#include "battle/battle_unit.h"
 #include "dolphin/mtx.h"
 #include "system.h"
 #include "driver/dispdrv.h"

@@ -4224,7 +4224,6 @@ BattleWeapon ItemWeaponData_PoisonKinoko = {
 
 
 // _nancy_mirage keeps x/y/z as three s32 words from userdata3 on (over wInterpRelatedTime)
-#define EVT_XYZ(evt) ((s32*)&(evt)->userdata3)
 
 typedef struct ThrowWork {
     Vec start;    // 0x0

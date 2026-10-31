@@ -54,13 +54,6 @@
 #include <dolphin/os.h>
 
 
-#define KEYFN(name, fn)                         \
-    USER_FUNC(name) {                           \
-        EvtWord* args = event->args;            \
-        s32 chan = evtGetValue(event, args[0]); \
-        evtSetValue(event, args[1], fn(chan));  \
-        return EVT_RETURN_DONE;                 \
-    }
 
 s32 stop;
 

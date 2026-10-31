@@ -37,7 +37,6 @@
 #include "data/item_data.h"
 #include "dolphin/gx.h"
 #include "string.h"
-#include "evt/evt_cmd.h"
 #include "dolphin/mtx.h"
 #include "driver/animdrv.h"
 #include "driver/mobjdrv.h"

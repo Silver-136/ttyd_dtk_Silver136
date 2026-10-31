@@ -9,7 +9,6 @@
 #include "battle/battle_sub.h"
 
 #include "battle/battle.h"
-#include "battle/battle_unit.h"
 #include "battle/battle_stage_object.h"
 #include "system.h"
 #include "dolphin/mtx.h"

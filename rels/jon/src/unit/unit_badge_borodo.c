@@ -3,7 +3,6 @@
 #include "evt/evt_eff.h"
 
 #include "battle/battle.h"
-#include "battle/battle_unit.h"
 #include "battle/battle_sub.h"
 #include "mario/mario_pouch.h"
 #include "data/item_data.h"

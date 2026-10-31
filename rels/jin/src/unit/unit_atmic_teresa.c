@@ -7,7 +7,6 @@
 
 #include "battle/battle.h"
 #include "driver/camdrv.h"
-#include "battle/battle_unit.h"
 #include "driver/dispdrv.h"
 #include "dolphin/mtx.h"
 #include "battle/battle_event_default.h"

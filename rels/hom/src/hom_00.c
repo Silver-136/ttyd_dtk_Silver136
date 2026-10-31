@@ -24,7 +24,6 @@
 #include "driver/mapdrv.h"
 #include "dolphin/gx.h"
 #include "dolphin/os.h"
-#include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_map.h"

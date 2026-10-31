@@ -106,7 +106,6 @@ BOOL checkHarbor(Vec* out);
 #define SHIP_DIR (marioGetPtr()->motShip->flags & 1)
 
 void shipMove(void);
-#define WAKE_WORK() ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)
 // Descriptive name (not in the symbol maps).
 s32 marioShipGetDir(void) {
     marioGetPtr();

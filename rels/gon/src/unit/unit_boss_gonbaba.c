@@ -4,7 +4,6 @@
 #include "eff/n64/eff_kemuri9_n64.h"
 #include "battle/unit_work.h"
 
-#include "battle/battle_unit.h"
 #include "manager/evtmgr_cmd.h"
 #include "system.h"
 #include "stdlib.h"

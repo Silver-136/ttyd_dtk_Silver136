@@ -15,13 +15,6 @@
 #include "mot/mot_walk.h"
 #include "libc_decls.h"
 
-// A macro, not an inline function: as a function a call to revise360() is not inlined.
-#define REVISE360(a)              \
-    while ((a) < 0.0f) {          \
-        (a) += 360.0f;            \
-    } while ((a) >= 360.0f) { (a) \
-    -= 360.0f;                    \
-}
 
 typedef struct RubWork {
     s32 unk0;       // 0x0

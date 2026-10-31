@@ -21,7 +21,6 @@
 #include "driver/camdrv.h"
 #include "mario/mariost.h"
 #include "driver/dispdrv.h"
-#include "evt/evt_cmd.h"
 #include "dolphin/gx.h"
 #include "memory.h"
 #include "system.h"

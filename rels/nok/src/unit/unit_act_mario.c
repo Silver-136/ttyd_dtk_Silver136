@@ -6,7 +6,6 @@
 #include "system.h"
 
 #include "battle/battle.h"
-#include "battle/battle_unit.h"
 #include "battle/battle_sub.h"
 #include "driver/effdrv.h"
 #include "battle/battle_event_default.h"

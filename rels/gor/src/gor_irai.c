@@ -24,7 +24,6 @@
 #include "system.h"
 #include "string.h"
 #include "mario/mario_pouch.h"
-#include "evt/evt_cmd.h"
 #include "gor.h"
 #include "pmario_sound.h"
 #include <dolphin/pad.h>

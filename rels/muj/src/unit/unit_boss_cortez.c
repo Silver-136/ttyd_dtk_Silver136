@@ -10,7 +10,6 @@
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
 #include "manager/evtmgr_cmd.h"
-#include "battle/battle_unit.h"
 #include "battle/battle_audience.h"
 #include "system.h"
 #include "driver/effdrv.h"

@@ -48,7 +48,6 @@
 #include "dolphin/os.h"
 #include "driver/effdrv.h"
 #include "eff/n64/eff_ripple_n64.h"
-#include "evt/evt_cmd.h"
 #include "stdio.h"
 #include "driver/npcdrv.h"
 #include "driver/animdrv.h"

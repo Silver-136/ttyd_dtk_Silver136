@@ -5,7 +5,6 @@
 #include "evt/evt_map.h"
 #include "driver/mapdrv.h"
 
-#include "battle/battle_unit.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
 #include "memory.h"

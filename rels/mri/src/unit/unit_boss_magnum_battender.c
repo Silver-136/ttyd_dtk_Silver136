@@ -8,7 +8,6 @@
 
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle.h"
-#include "battle/battle_unit.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
 #include "eff/n64/eff_akari_charge_n64.h"

@@ -33,7 +33,6 @@
 #include "manager/evtmgr.h"
 #include "driver/hitdrv.h"
 #include "driver/npcdrv.h"
-#include "driver/hitdrv.h"
 #include "dolphin/gx.h"
 #include "driver/camdrv.h"
 #include "driver/offscreendrv.h"

@@ -21,7 +21,6 @@
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
 #include "manager/fontmgr.h"
-#include "driver/camdrv.h"
 #include "stdio.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_damage.h"

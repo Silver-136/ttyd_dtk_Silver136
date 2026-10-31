@@ -10,7 +10,6 @@
 
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
-#include "battle/battle_unit.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"
 #include "mario/mariost.h"

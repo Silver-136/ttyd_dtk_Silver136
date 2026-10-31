@@ -545,9 +545,6 @@ next:
     if (wp->flags & BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED) wp->flags &= ~BATTLE_FLAG_FORCE_ITEM_ICONS_UNUSED;
 }
 
-#define MTX_TRANS_NEG(m, v) PSMTXTrans(m, -(v).x, -(v).y, -(v).z)
-#define MTX_TRANS(m, v) PSMTXTrans(m, (v).x, (v).y, (v).z)
-#define CAMDIR(c) angleABf((c)->cameraPos.x, (c)->cameraPos.z, (c)->cameraAt.x, (c)->cameraAt.z)
 
 void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
     Mtx uMtx;

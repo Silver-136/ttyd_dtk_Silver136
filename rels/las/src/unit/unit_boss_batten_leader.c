@@ -13,7 +13,6 @@
 #include "dolphin/mtx.h"
 #include "system.h"
 #include "battle/battle.h"
-#include "battle/battle_unit.h"
 #include "battle/battle_sub.h"
 #include "eff/eff_syuryou.h"
 #include "eff/n64/eff_cloud_n64.h"

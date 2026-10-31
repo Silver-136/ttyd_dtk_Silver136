@@ -10,7 +10,6 @@
 #include "battle/unit_work.h"
 
 #include "battle/battle.h"
-#include "battle/battle_unit.h"
 #include "battle/battle_sub.h"
 #include "memory.h"
 #include "driver/effdrv.h"
