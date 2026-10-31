@@ -24,12 +24,6 @@
 // Separate capacities: unit-slot indexes versus the after-reaction queue.
 enum { BATTLE_UNIT_SLOT_COUNT = 64, BATTLE_AFTER_REACTION_COUNT = 64 };
 
-typedef enum EquipFlags {
-    EQUIP_RESET = 1 << 0,   // 0x1, clear/reset equipped badges
-    EQUIP_MARIO = 1 << 1,   // 0x2, equip Mario (non-P) badges
-    EQUIP_PARTNER = 1 << 2, // 0x4, equip Partner (P) badges
-} EquipFlags;
-
 BattleWork* _battleWorkPointer;
 
 /**
@@ -41,7 +35,6 @@ BattleUnitSetup entryunit_system = { &unit_system, 0, {0}, BATTLE_PHASE_PLAYER }
 
 // forward declarations
 BOOL BattleMain(void);
-void BtlUnit_EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type);
 void _EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type);
 void BattlePartyInfoWorkInit(BattleWork* wp);
 void BattleCheckUnitBroken(BattleWork* wp);

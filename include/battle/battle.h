@@ -22,6 +22,14 @@
 // Battle texture id in each version's battle texture file: the US ids of the textures that use it are 0x16 higher
 #define BTL_TEX(id) ((id) + VERSION_PICK(0, 0x16))
 
+typedef enum EquipFlags {
+    EQUIP_RESET = 1 << 0,   // 0x1, clear/reset equipped badges
+    EQUIP_MARIO = 1 << 1,   // 0x2, equip Mario (non-P) badges
+    EQUIP_PARTNER = 1 << 2, // 0x4, equip Partner (P) badges
+} EquipFlags;
+
+void BtlUnit_EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type);
+
 typedef struct BattleAlliance BattleAlliance;
 
 // BattleWork.flags, named from the code that sets and tests them (lecture bits: Frankly's tutorials, which commands

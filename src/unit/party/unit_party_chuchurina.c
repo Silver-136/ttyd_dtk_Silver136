@@ -40,7 +40,6 @@
 #define UNIT_WORK_MAX_SLAPS 5     // NormalAttack: number of slaps (2, 3, 4 by party tech level); the attack ends when the slap count reaches it
 
 void btlUnitPartsDisp(CameraId camId, BattleUnitPart* parts);
-void BtlUnit_EquipItem(BattleUnit* unit, s32 flags, ItemType type);
 
 PoseTableEntry pose_table_chuchurina_stay[24];
 static BattleDataEntry data_table[8];
@@ -2382,11 +2381,11 @@ USER_FUNC(_chuchu_item_steal) {
     }
     if (item >= BADGE_MIN && item < BADGE_MAX) {
         if (unit->currentKind == UNIT_MARIO) {
-            BtlUnit_EquipItem(unit, 3, 0);
+            BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_MARIO, 0);
         } else if (unit->currentKind >= TYPE_PARTNER_MIN && unit->currentKind < TYPE_PARTNER_MAX) {
-            BtlUnit_EquipItem(unit, 5, 0);
+            BtlUnit_EquipItem(unit, EQUIP_RESET | EQUIP_PARTNER, 0);
         } else {
-            BtlUnit_EquipItem(unit, 1, 0);
+            BtlUnit_EquipItem(unit, EQUIP_RESET, 0);
         }
     }
     // FAKE: no-op (u16) cast (item is u16); the plain call changes the object

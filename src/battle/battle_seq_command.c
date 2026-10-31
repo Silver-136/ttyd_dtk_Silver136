@@ -1,6 +1,14 @@
 // Battle command menus: building and handling the action, weapon, item and target selection menus.
 
 #include "battle/battle_seq_command.h"
+
+#define CMD_DISABLE_NONE (0)
+#define CMD_DISABLE_NO_FP (1)
+#define CMD_DISABLE_NO_SP (2)
+#define CMD_DISABLE_NOT_SELECTABLE (3)
+#define CMD_DISABLE_NO_JUMP_TARGET (4)
+#define CMD_DISABLE_NO_HAMMER_TARGET (5)
+#define CMD_DISABLE_NO_ESCAPE (6)
 #include "battle/battle.h"
 #include "battle/battle_monosiri.h"
 #include "battle/battle_unit.h"
@@ -40,6 +48,7 @@
 #include "battle/battle_detect.h"
 
 #define BATTLE_COMMAND_UNIT_CAPACITY ((s32)(sizeof(((BattleWork*)0)->units) / sizeof(((BattleWork*)0)->units[0])))
+#define BATTLE_COMMAND_VISIBLE_WEAPON_ROWS (6)
 
 void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
@@ -126,29 +135,29 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
     if (unit->currentKind == UNIT_MARIO) {
         cmd->act[0].type = 0;
         cmd->act[0].enabled = 1;
-        cmd->act[0].disableReason = 0;
+        cmd->act[0].disableReason = CMD_DISABLE_NONE;
         if (unit->attributeFlags & kVeiled) {
             cmd->act[0].enabled = 0;
-            cmd->act[0].disableReason = 3;
+            cmd->act[0].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         if (pouch->jumpLevel < 1) {
             cmd->act[0].enabled = 0;
         }
         if (unit->badgesEquipped.Hammerman) {
             cmd->act[0].enabled = 0;
-            cmd->act[0].disableReason = 3;
+            cmd->act[0].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         if (wp->commandDisabled[0] > 0) {
             cmd->act[0].enabled = 0;
-            cmd->act[0].disableReason = 3;
+            cmd->act[0].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         if (info->battleFlags & NPC_BATTLE_NO_JUMP) {
             cmd->act[0].enabled = 0;
-            cmd->act[0].disableReason = 3;
+            cmd->act[0].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_SPECIAL)) {
             cmd->act[0].enabled = 0;
-            cmd->act[0].disableReason = 3;
+            cmd->act[0].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         cmd->act[0].name = msgSearch("btl_cmd_act_jump");
         switch (pouch->jumpLevel) {
@@ -168,18 +177,18 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[num].type = 6;
         if (unit->flippedTurns) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         } else {
             cmd->act[num].enabled = 1;
-            cmd->act[num].disableReason = 0;
+            cmd->act[num].disableReason = CMD_DISABLE_NONE;
         }
         if (VERSION_PICK(wp->commandDisabled[3] > 0, unit->usCommandDisabled[0] != 0)) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_SPECIAL)) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         cmd->act[num].name = msgSearch("btl_cmd_act_tech_party");
         cmd->act[num].icon = ICON_BTL_CMD_TECH_PARTY;
@@ -188,29 +197,29 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
     if (unit->currentKind == UNIT_MARIO && pouch->hammerLevel >= 1) {
         cmd->act[num].type = 1;
         cmd->act[num].enabled = 1;
-        cmd->act[num].disableReason = 0;
+        cmd->act[num].disableReason = CMD_DISABLE_NONE;
         if (unit->attributeFlags & kVeiled) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         if (pouch->hammerLevel < 1) {
             cmd->act[num].enabled = 0;
         }
         if (unit->badgesEquipped.Jumpman) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         if (wp->commandDisabled[1] > 0) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         if (info->battleFlags & NPC_BATTLE_NO_HAMMER) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_SPECIAL)) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         cmd->act[num].name = msgSearch("btl_cmd_act_hammer");
         switch (pouch->hammerLevel) {
@@ -230,25 +239,25 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
         cmd->act[num].type = 2;
         if (unit->flippedTurns) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         } else {
             cmd->act[num].enabled = 1;
-            cmd->act[num].disableReason = 0;
+            cmd->act[num].disableReason = CMD_DISABLE_NONE;
         }
         if (unit->currentKind == UNIT_MARIO) {
             if (wp->commandDisabled[2] > 0) {
                 cmd->act[num].enabled = 0;
-                cmd->act[num].disableReason = 3;
+                cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
             }
         } else {
             if (VERSION_PICK(wp->commandDisabled[4] > 0, unit->usCommandDisabled[1] != 0)) {
                 cmd->act[num].enabled = 0;
-                cmd->act[num].disableReason = 3;
+                cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
             }
         }
         if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_SPECIAL | BATTLE_FLAG_LECTURE_FREE | BATTLE_FLAG_LECTURE_ATTACK)) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         cmd->act[num].name = msgSearch("btl_cmd_act_item");
         cmd->act[num].icon = ICON_BTL_CMD_ITEM;
@@ -257,14 +266,14 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
     if (unit->currentKind == UNIT_MARIO && pouch->starPowersObtained != 0) {
         cmd->act[num].type = 4;
         cmd->act[num].enabled = 1;
-        cmd->act[num].disableReason = 0;
+        cmd->act[num].disableReason = CMD_DISABLE_NONE;
         if (unit->attributeFlags & kVeiled) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_FREE | BATTLE_FLAG_LECTURE_ATTACK)) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         cmd->act[num].name = msgSearch("btl_cmd_act_super_action");
         cmd->act[num].icon = ICON_BTL_CMD_SUPER_ACTION;
@@ -273,10 +282,10 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
     if (!(wp->flags & BATTLE_FLAG_LECTURE_FREE)) {
         cmd->act[num].type = 5;
         cmd->act[num].enabled = 1;
-        cmd->act[num].disableReason = 0;
+        cmd->act[num].disableReason = CMD_DISABLE_NONE;
         if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_JUMP | BATTLE_FLAG_LECTURE_HAMMER | BATTLE_FLAG_LECTURE_SPECIAL | BATTLE_FLAG_LECTURE_FREE | BATTLE_FLAG_LECTURE_ATTACK)) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         cmd->act[num].name = msgSearch("btl_cmd_act_operation");
         cmd->act[num].icon = ICON_BTL_CMD_OPERATION;
@@ -285,12 +294,12 @@ void _btlcmd_MakeActClassTable(BattleWork* wp) {
     if (wp->flags & BATTLE_FLAG_LECTURE_FREE) {
         cmd->act[num].type = 0xD;
         cmd->act[num].enabled = 1;
-        cmd->act[num].disableReason = 0;
+        cmd->act[num].disableReason = CMD_DISABLE_NONE;
         cmd->act[num].name = msgSearch("btl_cmd_act_lecture_end");
         cmd->act[num].icon = ICON_BTL_CMD_OPERATION;
         if (wp->flags & (BATTLE_FLAG_LECTURE_NO_COMMAND | BATTLE_FLAG_LECTURE_ATTACK)) {
             cmd->act[num].enabled = 0;
-            cmd->act[num].disableReason = 3;
+            cmd->act[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         num++;
     }
@@ -430,7 +439,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].weapon = &marioDefaultWeapon_Jump;
                 cmd->weapon[num].enabled = 0;
-                cmd->weapon[num].disableReason = 0;
+                cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
                 cmd->weapon[num].icon = _getJumpIconId();
                 if (cmd->weapon[num].weapon->name) {
                     cmd->weapon[num].name = msgSearch(cmd->weapon[num].weapon->name);
@@ -447,7 +456,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].weapon = &marioWeapon_KururinJump;
                 cmd->weapon[num].enabled = 0;
-                cmd->weapon[num].disableReason = 0;
+                cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
                 cmd->weapon[num].icon = _getJumpIconId();
                 if (cmd->weapon[num].weapon->name) {
                     cmd->weapon[num].name = msgSearch(cmd->weapon[num].weapon->name);
@@ -461,7 +470,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].weapon = &marioWeapon_JyabaraJump;
                 cmd->weapon[num].enabled = 0;
-                cmd->weapon[num].disableReason = 0;
+                cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
                 cmd->weapon[num].icon = _getJumpIconId();
                 if (cmd->weapon[num].weapon->name) {
                     cmd->weapon[num].name = msgSearch(cmd->weapon[num].weapon->name);
@@ -477,7 +486,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].weapon = &marioDefaultWeapon_Hammer;
                 cmd->weapon[num].enabled = 0;
-                cmd->weapon[num].disableReason = 0;
+                cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
                 cmd->weapon[num].icon = _getHammerIconId();
                 if (cmd->weapon[num].weapon->name) {
                     cmd->weapon[num].name = msgSearch(cmd->weapon[num].weapon->name);
@@ -494,7 +503,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].weapon = &marioWeapon_KaitenHammer;
                 cmd->weapon[num].enabled = 0;
-                cmd->weapon[num].disableReason = 0;
+                cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
                 cmd->weapon[num].icon = _getHammerIconId();
                 if (cmd->weapon[num].weapon->name) {
                     cmd->weapon[num].name = msgSearch(cmd->weapon[num].weapon->name);
@@ -508,7 +517,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].weapon = &marioWeapon_UltraHammer;
                 cmd->weapon[num].enabled = 0;
-                cmd->weapon[num].disableReason = 0;
+                cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
                 cmd->weapon[num].icon = _getHammerIconId();
                 if (cmd->weapon[num].weapon->name) {
                     cmd->weapon[num].name = msgSearch(cmd->weapon[num].weapon->name);
@@ -528,7 +537,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     cmd->weapon[num].itemId = badge;
                     cmd->weapon[num].weapon = itemDataTable[badge].battle_params;
                     cmd->weapon[num].enabled = 0;
-                    cmd->weapon[num].disableReason = 0;
+                    cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
                     if (cmd->weapon[num].weapon->itemId) {
                         cmd->weapon[num].icon = itemDataTable[badge].icon_id;
                     } else {
@@ -551,7 +560,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     cmd->weapon[num].itemId = badge2;
                     cmd->weapon[num].weapon = itemDataTable[badge2].battle_params;
                     cmd->weapon[num].enabled = 0;
-                    cmd->weapon[num].disableReason = 0;
+                    cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
                     if (cmd->weapon[num].weapon->itemId) {
                         cmd->weapon[num].icon = itemDataTable[badge2].icon_id;
                     } else {
@@ -582,7 +591,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     cmd->weapon[num].itemId = id;
                     cmd->weapon[num].weapon = data->battle_params;
                     cmd->weapon[num].enabled = 0;
-                    cmd->weapon[num].disableReason = 0;
+                    cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
                     if (cmd->weapon[num].weapon == NULL) {
                         cmd->weapon[num].weapon = &ItemWeaponData_CookingItem;
                         cmd->weapon[num].name = msgSearch(data->name);
@@ -606,7 +615,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                 cmd->weapon[num].index = 0;
                 cmd->weapon[num].weapon = &defaultWeapon_Dummy_NoItem;
                 cmd->weapon[num].enabled = 0;
-                cmd->weapon[num].disableReason = 0;
+                cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
                 cmd->weapon[num].icon = ICON_UNAVAILABLE;
                 if (cmd->weapon[num].weapon->name) {
                     cmd->weapon[num].name = msgSearch(cmd->weapon[num].weapon->name);
@@ -626,7 +635,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     cmd->weapon[num].weapon = superActionTable[j];
                     cmd->weapon[num].enabled = 0;
                     cmd->weapon[num].icon = superActionTable[j]->icon;
-                    cmd->weapon[num].disableReason = 0;
+                    cmd->weapon[num].disableReason = CMD_DISABLE_NONE;
                     if (cmd->weapon[num].weapon->name) {
                         cmd->weapon[num].name = msgSearch(cmd->weapon[num].weapon->name);
                     } else {
@@ -647,7 +656,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
     if (cursor->absPos >= cursor->count) {
         cursor->absPos = cursor->count - 1;
     }
-    while (cursor->count < cursor->relPos + 6) {
+    while (cursor->count < cursor->relPos + BATTLE_COMMAND_VISIBLE_WEAPON_ROWS) {
         // FAKE: top is a spare copy of cursor->relPos; testing cursor->relPos directly changes the object
         if ((top = cursor->relPos) <= 0) {
             break;
@@ -689,30 +698,30 @@ void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type) {
     for (i = 0; i < n; i++) {
         weapon = cmd->weapon[i].weapon;
         cmd->weapon[i].enabled = 0;
-        cmd->weapon[i].disableReason = 0;
+        cmd->weapon[i].disableReason = CMD_DISABLE_NONE;
         if (weapon) {
             result = _btlcmd_CheckWeaponTargetNum(wp, unit, weapon);
             if (result <= 0) {
                 if (result == 0) {
                     switch (type) {
                         case 0:
-                            cmd->weapon[i].disableReason = 4;
+                            cmd->weapon[i].disableReason = CMD_DISABLE_NO_JUMP_TARGET;
                             break;
                         case 1:
-                            cmd->weapon[i].disableReason = 5;
+                            cmd->weapon[i].disableReason = CMD_DISABLE_NO_HAMMER_TARGET;
                             break;
                         default:
-                            cmd->weapon[i].disableReason = 3;
+                            cmd->weapon[i].disableReason = CMD_DISABLE_NOT_SELECTABLE;
                             break;
                     }
                 } else if (type != 4) {
-                    cmd->weapon[i].disableReason = 1;
+                    cmd->weapon[i].disableReason = CMD_DISABLE_NO_FP;
                 } else {
-                    cmd->weapon[i].disableReason = 2;
+                    cmd->weapon[i].disableReason = CMD_DISABLE_NO_SP;
                 }
             } else {
                 cmd->weapon[i].enabled = 1;
-                cmd->weapon[i].disableReason = 0;
+                cmd->weapon[i].disableReason = CMD_DISABLE_NONE;
             }
         }
     }
@@ -766,10 +775,10 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[0].type = 0;
         if (unit->flippedTurns) {
             cmd->operation[0].enabled = 0;
-            cmd->operation[0].disableReason = 3;
+            cmd->operation[0].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         } else {
             cmd->operation[0].enabled = 1;
-            cmd->operation[0].disableReason = 0;
+            cmd->operation[0].disableReason = CMD_DISABLE_NONE;
         }
         cmd->operation[0].name = msgSearch("btl_cmd_op_chg_party");
         party = unit;
@@ -781,11 +790,11 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[0].help = "btl_hlp_cmd_operation_changeparty";
         if (unit->attributeFlags & kVeiled) {
             cmd->operation[0].enabled = 0;
-            cmd->operation[0].disableReason = 3;
+            cmd->operation[0].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         if (info->battleFlags & NPC_BATTLE_NO_PARTY_CHANGE) {
             cmd->operation[0].enabled = 0;
-            cmd->operation[0].disableReason = 3;
+            cmd->operation[0].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         cmd->operation[0].cost = 0;
         num = 1;
@@ -795,7 +804,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[num].enabled = 1;
         cmd->operation[num].name = msgSearch("btl_cmd_op_appeal");
         cmd->operation[num].icon = ICON_BTL_CMD_APPEAL;
-        cmd->operation[num].disableReason = 0;
+        cmd->operation[num].disableReason = CMD_DISABLE_NONE;
         cmd->operation[num].cost = 0;
         cmd->operation[num].help = "btl_hlp_cmd_operation_appeal";
         num++;
@@ -810,16 +819,16 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[num].enabled = BtlUnit_CheckWeaponCost(unit, weapon);
         cmd->operation[num].cost = BtlUnit_GetWeaponCost(unit, weapon);
         if (cmd->operation[num].enabled) {
-            cmd->operation[num].disableReason = 0;
+            cmd->operation[num].disableReason = CMD_DISABLE_NONE;
         } else {
-            cmd->operation[num].disableReason = 1;
+            cmd->operation[num].disableReason = CMD_DISABLE_NO_FP;
         }
         cmd->operation[num].name = msgSearch(weapon->name);
         cmd->operation[num].icon = ICON_BTL_CMD_CHARGE;
         cmd->operation[num].help = weapon->description;
         if (unit->attributeFlags & kVeiled) {
             cmd->operation[num].enabled = 0;
-            cmd->operation[num].disableReason = 3;
+            cmd->operation[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         num++;
     }
@@ -833,16 +842,16 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
         cmd->operation[num].enabled = BtlUnit_CheckWeaponCost(unit, weapon);
         cmd->operation[num].cost = BtlUnit_GetWeaponCost(unit, weapon);
         if (cmd->operation[num].enabled) {
-            cmd->operation[num].disableReason = 0;
+            cmd->operation[num].disableReason = CMD_DISABLE_NONE;
         } else {
-            cmd->operation[num].disableReason = 1;
+            cmd->operation[num].disableReason = CMD_DISABLE_NO_FP;
         }
         cmd->operation[num].name = msgSearch(weapon->name);
         cmd->operation[num].icon = ICON_BTL_CMD_SUPER_CHARGE;
         cmd->operation[num].help = weapon->description;
         if (unit->attributeFlags & kVeiled) {
             cmd->operation[num].enabled = 0;
-            cmd->operation[num].disableReason = 3;
+            cmd->operation[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
         }
         num++;
     }
@@ -850,12 +859,12 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     cmd->operation[num].enabled = 1;
     cmd->operation[num].name = msgSearch("btl_cmd_op_defend");
     cmd->operation[num].icon = ICON_BTL_CMD_DEFEND;
-    cmd->operation[num].disableReason = 0;
+    cmd->operation[num].disableReason = CMD_DISABLE_NONE;
     cmd->operation[num].cost = 0;
     cmd->operation[num].help = "btl_hlp_cmd_operation_defend";
     if (unit->attributeFlags & kVeiled) {
         cmd->operation[num].enabled = 0;
-        cmd->operation[num].disableReason = 3;
+        cmd->operation[num].disableReason = CMD_DISABLE_NOT_SELECTABLE;
     }
     idx = num + 1;
     cmd->operation[idx].type = 3;
@@ -864,18 +873,18 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     cmd->operation[idx].icon = ICON_ARROW;
     cmd->operation[idx].cost = 0;
     if (cmd->operation[idx].enabled) {
-        cmd->operation[idx].disableReason = 0;
+        cmd->operation[idx].disableReason = CMD_DISABLE_NONE;
     } else {
-        cmd->operation[idx].disableReason = 1;
+        cmd->operation[idx].disableReason = CMD_DISABLE_NO_FP;
     }
     cmd->operation[idx].help = "btl_hlp_cmd_operation_escape";
     if (unit->attributeFlags & kVeiled) {
         cmd->operation[idx].enabled = 0;
-        cmd->operation[idx].disableReason = 3;
+        cmd->operation[idx].disableReason = CMD_DISABLE_NOT_SELECTABLE;
     }
     if (wp->fbatInfo->setup->battleFlags & NPC_BATTLE_NO_ESCAPE) {
         cmd->operation[idx].enabled = 0;
-        cmd->operation[idx].disableReason = 3;
+        cmd->operation[idx].disableReason = CMD_DISABLE_NOT_SELECTABLE;
     }
     cursor->count = num + 2;
     if (cursor->absPos >= cursor->count) {
@@ -925,9 +934,9 @@ void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
             cmd->multiItem[num].cost = (u8)BtlUnit_GetWeaponCost(unit, &badgeWeapon_2KaiItem);
         }
         if (cmd->multiItem[num].enabled == 0) {
-            cmd->multiItem[num].disableReason = 1;
+            cmd->multiItem[num].disableReason = CMD_DISABLE_NO_FP;
         } else {
-            cmd->multiItem[num].disableReason = 0;
+            cmd->multiItem[num].disableReason = CMD_DISABLE_NONE;
         }
         num++;
     }
@@ -947,9 +956,9 @@ void _btlcmd_MakeMultiItemTable(BattleWork* wp) {
             cmd->multiItem[num].cost = (u8)BtlUnit_GetWeaponCost(unit, &badgeWeapon_3KaiItem);
         }
         if (cmd->multiItem[num].enabled == 0) {
-            cmd->multiItem[num].disableReason = 1;
+            cmd->multiItem[num].disableReason = CMD_DISABLE_NO_FP;
         } else {
-            cmd->multiItem[num].disableReason = 0;
+            cmd->multiItem[num].disableReason = CMD_DISABLE_NONE;
         }
         num++;
     }
@@ -1549,9 +1558,9 @@ s32 BattleCommandDisplay_ActMenuMain(BattleWork* wp) {
                         cmd->act[i].enabled = 0;
                         if (!cmd->act[i].disableReason) {
                             if (type == 0) {
-                                cmd->act[i].disableReason = 4;
+                                cmd->act[i].disableReason = CMD_DISABLE_NO_JUMP_TARGET;
                             } else {
-                                cmd->act[i].disableReason = 5;
+                                cmd->act[i].disableReason = CMD_DISABLE_NO_HAMMER_TARGET;
                             }
                         }
                     }
@@ -3056,21 +3065,21 @@ USER_FUNC(_get_msg) {
     const char* msg;
 
     switch (wp->commandMenu.disableReason) {
-        case 1:
+        case CMD_DISABLE_NO_FP:
             msg = "btl_msg_cmderror_no_fp";
             // FAKE: empty if that only reads event->args (twice); without it case 1 is scheduled differently
             if (!event->args && !event->args) {}
             break;
-        case 2:
+        case CMD_DISABLE_NO_SP:
             msg = "btl_msg_cmderror_no_ap";
             break;
-        case 4:
+        case CMD_DISABLE_NO_JUMP_TARGET:
             msg = "btl_msg_cmderror_no_jump_target";
             break;
-        case 5:
+        case CMD_DISABLE_NO_HAMMER_TARGET:
             msg = "btl_msg_cmderror_no_hammer_target";
             break;
-        case 6:
+        case CMD_DISABLE_NO_ESCAPE:
             msg = "btl_msg_cmderror_no_escape";
             break;
         default:

@@ -31,6 +31,18 @@
 
 // Initial and zero-request frequency for the sound low-pass controls.
 #define PSND_DEFAULT_LPF_FREQUENCY 32000
+typedef enum PsndFadeState {
+    PSND_FADE_STATE_IDLE = 0,
+    PSND_FADE_STATE_IN = 1,
+    PSND_FADE_STATE_OUT = 2,
+    PSND_FADE_STATE_PAUSED = 4,
+} PsndFadeState;
+
+typedef enum PsndDipState {
+    PSND_DIP_STATE_IDLE = 0,
+    PSND_DIP_STATE_DOWN = 8,
+    PSND_DIP_STATE_UP = 0x10,
+} PsndDipState;
 
 typedef struct SoundBGMEntry {
     const char* name;
@@ -5450,12 +5462,12 @@ void psndBGMMain(void) {
         // FAKE: f0 is a second name for fade (&bgm->fade) in its own block; using fade changes the object
         {
             PaperSoundFade* f0 = &bgm->fade;
-            if (f0->state == 0) {
+            if (f0->state == PSND_FADE_STATE_IDLE) {
                 a = bgm->volume;
             } else {
                 a = (u8)((bgm->volume * f0->timeMax) / f0->time);
             }
-            if (f0->dipState == 0) {
+            if (f0->dipState == PSND_DIP_STATE_IDLE) {
                 b = 0x7F;
             } else {
                 b = (u8)((f0->dipTime * 0x7F) / f0->dipTimeMax);
@@ -5474,13 +5486,13 @@ void psndBGMMain(void) {
                 }
             }
         }
-        if (fade->state == 1) {
+        if (fade->state == PSND_FADE_STATE_IN) {
             fade->timeMax++;
             if (fade->timeMax >= fade->time) {
-                fade->state = 0;
+                fade->state = PSND_FADE_STATE_IDLE;
             }
         }
-        if (fade->state == 2) {
+        if (fade->state == PSND_FADE_STATE_OUT) {
             fade->timeMax--;
             if (fade->timeMax <= 0) {
                 if (bgm->listId != -1) {
@@ -5492,14 +5504,14 @@ void psndBGMMain(void) {
                         SoundSongFadeinCh(bgm->streamId);
                     }
                 }
-                fade->state = 0;
+                fade->state = PSND_FADE_STATE_IDLE;
                 bgm->listId = -1;
             }
         }
-        if (fade->state == 4 && fade->timeMax > 0) {
+        if (fade->state == PSND_FADE_STATE_PAUSED && fade->timeMax > 0) {
             fade->timeMax--;
         }
-        if (fade->dipState == 8) {
+        if (fade->dipState == PSND_DIP_STATE_DOWN) {
             c = (fade->dipTimeMax * fade->dipPercent) / 100;
             if (fade->dipTime > c) {
                 if (!(bgm->flags & PSND_QUICK)) {
@@ -5512,7 +5524,7 @@ void psndBGMMain(void) {
                 }
             }
         }
-        if (fade->dipState == 0x10) {
+        if (fade->dipState == PSND_DIP_STATE_UP) {
             if (fade->dipTime < fade->dipTimeMax) {
                 if (!(bgm->flags & PSND_QUICK)) {
                     fade->dipTime++;
@@ -5523,7 +5535,7 @@ void psndBGMMain(void) {
                     }
                 }
             } else {
-                fade->dipState = 0;
+                fade->dipState = PSND_DIP_STATE_IDLE;
             }
         }
     }
@@ -5646,7 +5658,7 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         if (id == PSND_BGM_CHUBOSS_BATTLE1) {
             return 0;
         }
-        if (((idx == 0) && (fl & PSND_CONTINUE)) && (fade->state != 4)) {
+        if (((idx == 0) && (fl & PSND_CONTINUE)) && (fade->state != PSND_FADE_STATE_PAUSED)) {
             return 0;
         }
         b0 = psbgm;
@@ -5700,16 +5712,16 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
                     SoundSongContinueCh(bgm->streamId);
                 }
                 if (fl & PSND_FADEIN) {
-                    fade2->state = 1;
+                    fade2->state = PSND_FADE_STATE_IN;
                     fade2->time = ft / PSND_FRAME_MS;
                     fade2->timeMax = 0;
                 } else {
-                    fade2->state = 0;
+                    fade2->state = PSND_FADE_STATE_IDLE;
                     fade2->time = 1;
                     fade2->timeMax = 1;
                 }
-                if ((fl & PSND_UNSILENT) && (fade2->dipState == 8)) {
-                    fade2->dipState = 0x10;
+                if ((fl & PSND_UNSILENT) && (fade2->dipState == PSND_DIP_STATE_DOWN)) {
+                    fade2->dipState = PSND_DIP_STATE_UP;
                     fade2->dipTimeMax = ft / PSND_FRAME_MS;
                     fade2->dipTime = (fade2->dipTimeMax * fade2->dipPercent) / 100;
                     if (fl & PSND_QUICK) {
@@ -5721,8 +5733,8 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
                 goto done;
             }
             if (old == id) {
-                // FAKE: empty then-branch; if (fade2->state != 2) changes the object
-                if (fade2->state == 2) {
+                // FAKE: empty then-branch; if (fade2->state != PSND_FADE_STATE_OUT) changes the object
+                if (fade2->state == PSND_FADE_STATE_OUT) {
                 } else {
                     goto done;
                 }
@@ -5784,17 +5796,17 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
         SoundSongSetVolCh(bgm->streamId, vol);
     }
     if (fl & PSND_FADEIN) {
-        fade2->state = 1;
+        fade2->state = PSND_FADE_STATE_IN;
         fade2->time = ft / PSND_FRAME_MS;
         fade2->timeMax = 0;
-        fade2->dipState = 0;
+        fade2->dipState = PSND_DIP_STATE_IDLE;
         fade2->dipTimeMax = 1;
         fade2->dipTime = 1;
     } else {
-        fade2->state = 0;
+        fade2->state = PSND_FADE_STATE_IDLE;
         fade2->time = 1;
         fade2->timeMax = 1;
-        fade2->dipState = 0;
+        fade2->dipState = PSND_DIP_STATE_IDLE;
         fade2->dipTimeMax = 1;
         fade2->dipTime = 1;
     }
@@ -5836,23 +5848,23 @@ BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 force) {
     entry = &psbgmlist[bgm->listId];
     fade = &bgm->fade;
     if (flags & PSND_FADEOUT) {
-        if (fade->state == 2) {
-        } else if (fade->state != 4) {
-            fade->state = 2;
+        if (fade->state == PSND_FADE_STATE_OUT) {
+        } else if (fade->state != PSND_FADE_STATE_PAUSED) {
+            fade->state = PSND_FADE_STATE_OUT;
             fade->time = fadetime / PSND_FRAME_MS;
             fade->timeMax = fade->time;
         } else {
-            fade->state = 2;
+            fade->state = PSND_FADE_STATE_OUT;
         }
     } else if (flags & PSND_PAUSE) {
-        if (fade->state != 2 && fade->state != 4) {
-            fade->state = 4;
+        if (fade->state != PSND_FADE_STATE_OUT && fade->state != PSND_FADE_STATE_PAUSED) {
+            fade->state = PSND_FADE_STATE_PAUSED;
             fade->time = fadetime / PSND_FRAME_MS;
             fade->timeMax = fade->time;
         }
     } else if (flags & PSND_SILENT) {
-        if (fade->dipState != 8) {
-            fade->dipState = 8;
+        if (fade->dipState != PSND_DIP_STATE_DOWN) {
+            fade->dipState = PSND_DIP_STATE_DOWN;
             fade->dipPercent = silent;
             fade->dipTimeMax = fadetime / PSND_FRAME_MS;
             fade->dipTime = fade->dipTimeMax;
@@ -6845,24 +6857,24 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
         if (!(flags & PSND_RESTART)) {
             if (flags & PSND_CONTINUE) {
                 if (flags & PSND_FADEIN) {
-                    fade->state = 1;
+                    fade->state = PSND_FADE_STATE_IN;
                     fade->time = fadetime / PSND_FRAME_MS;
                     fade->timeMax = 0;
                 } else {
-                    fade->state = 0;
+                    fade->state = PSND_FADE_STATE_IDLE;
                     fade->time = 1;
                     fade->timeMax = 1;
                 }
                 if (flags & PSND_UNSILENT) {
-                    if (fade->dipState == 8) {
-                        fade->dipState = 0x10;
+                    if (fade->dipState == PSND_DIP_STATE_DOWN) {
+                        fade->dipState = PSND_DIP_STATE_UP;
                         fade->dipTimeMax = fadetime / PSND_FRAME_MS;
                         fade->dipTime = fade->dipTimeMax * fade->dipPercent / 100;
                     }
                 }
                 goto end;
             }
-            if (cur == id && fade->state != 2) {
+            if (cur == id && fade->state != PSND_FADE_STATE_OUT) {
                 goto end;
             }
         }
@@ -6907,25 +6919,25 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
         }
     }
     *env = id;
-    fade->state = 0;
+    fade->state = PSND_FADE_STATE_IDLE;
     *(u16*)((u8*)psnd.envLpf + o) = PSND_DEFAULT_LPF_FREQUENCY;
     *(u16*)((u8*)psnd.envFreq + o) = PSND_DEFAULT_LPF_FREQUENCY;
     if (flags & PSND_FADEIN) {
-        fade->state = 1;
+        fade->state = PSND_FADE_STATE_IN;
         fade->time = fadetime / PSND_FRAME_MS;
         fade->timeMax = 0;
         fade->dipTimeMax = 1;
         fade->dipTime = 1;
-        fade->dipState = 0;
+        fade->dipState = PSND_DIP_STATE_IDLE;
         fade->dipTimeMax = 1;
         fade->dipTime = 1;
     } else {
-        fade->state = 0;
+        fade->state = PSND_FADE_STATE_IDLE;
         fade->time = 1;
         fade->timeMax = 1;
         fade->dipTimeMax = 1;
         fade->dipTime = 1;
-        fade->dipState = 0;
+        fade->dipState = PSND_DIP_STATE_IDLE;
         fade->dipTimeMax = 1;
         fade->dipTime = 1;
     }
@@ -6947,22 +6959,22 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 unused) {
     }
     fade = &psnd.fade[flags & 0xF];
     if (flags & PSND_FADEOUT) {
-        if (fade->state == 2) {
-        } else if (fade->state != 4) {
-            fade->state = 2;
+        if (fade->state == PSND_FADE_STATE_OUT) {
+        } else if (fade->state != PSND_FADE_STATE_PAUSED) {
+            fade->state = PSND_FADE_STATE_OUT;
             fade->time = fadetime / PSND_FRAME_MS;
             fade->timeMax = fade->time;
         } else {
-            fade->state = 2;
+            fade->state = PSND_FADE_STATE_OUT;
         }
     } else if (flags & PSND_PAUSE) {
-        if (fade->state != 2 && fade->state != 4) {
-            fade->state = 4;
+        if (fade->state != PSND_FADE_STATE_OUT && fade->state != PSND_FADE_STATE_PAUSED) {
+            fade->state = PSND_FADE_STATE_PAUSED;
             fade->time = fadetime / PSND_FRAME_MS;
             fade->timeMax = fade->time;
         }
     } else if (flags & PSND_SILENT) {
-        fade->dipState = 8;
+        fade->dipState = PSND_DIP_STATE_DOWN;
         fade->dipTimeMax = fadetime / PSND_FRAME_MS;
         fade->dipTime = fade->dipTimeMax;
         fade->dipPercent = silent;

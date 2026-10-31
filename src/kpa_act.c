@@ -19,6 +19,9 @@ typedef struct KpaScore {
 } KpaScore;
 
 #define KPA_SCORE_SLOT_COUNT 50
+#define KPA_COIN_ROLLOVER_BONUS 1000
+#define KPA_SCORE_PER_COIN 500
+#define KPA_SCORE_PICKUP_CAP 10000
 
 KpaScore* ksdp;
 USER_FUNC(kpa_score_disp_main);
@@ -99,11 +102,11 @@ USER_FUNC(kpa_score_disp_init) {
 void kpaAddCoin(s32 coins) {
     s32 score;
     if (pouchAddKpaCoin(coins)) {
-        pouchAddKpaScore(1000);
+        pouchAddKpaScore(KPA_COIN_ROLLOVER_BONUS);
     }
-    score = coins * 500;
-    if (score > 10000) {
-        score = 10000;
+    score = coins * KPA_SCORE_PER_COIN;
+    if (score > KPA_SCORE_PICKUP_CAP) {
+        score = KPA_SCORE_PICKUP_CAP;
     }
     pouchAddKpaScore(score);
 }
@@ -157,11 +160,11 @@ static inline void kpaSetScoreStr(s32 score, Vec* pos) {
 void kpaAddCoinPos(s32 coins, Vec* pos) {
     s32 score;
     if (pouchAddKpaCoin(coins)) {
-        pouchAddKpaScore(1000);
+        pouchAddKpaScore(KPA_COIN_ROLLOVER_BONUS);
     }
-    score = coins * 500;
-    if (score > 10000) {
-        score = 10000;
+    score = coins * KPA_SCORE_PER_COIN;
+    if (score > KPA_SCORE_PICKUP_CAP) {
+        score = KPA_SCORE_PICKUP_CAP;
     }
     pouchAddKpaScore(score);
     kpaSetScoreStr(score, pos);
@@ -169,8 +172,8 @@ void kpaAddCoinPos(s32 coins, Vec* pos) {
 
 /** Adds score points (capped at 10000 per call) to the Super Bowser total. */
 void kpaAddScore(s32 score) {
-    if (score > 10000) {
-        score = 10000;
+    if (score > KPA_SCORE_PICKUP_CAP) {
+        score = KPA_SCORE_PICKUP_CAP;
     }
     pouchAddKpaScore(score);
 }
@@ -182,8 +185,8 @@ void kpaAddScore(s32 score) {
 void kpaAddScorePos(s32 score, Vec* pos) {
     // FAKE: sc is a spare copy of score; clamping score itself (as kpaAddScore does) changes the object
     s32 sc = score;
-    if (score > 10000) {
-        sc = 10000;
+    if (score > KPA_SCORE_PICKUP_CAP) {
+        sc = KPA_SCORE_PICKUP_CAP;
     }
     pouchAddKpaScore(sc);
     kpaSetScoreStr(sc, pos);

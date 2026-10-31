@@ -15,6 +15,16 @@
 #include "mario/mariost.h"
 #include "libc_decls.h"
 
+#define CARD_OP_IDLE 0
+#define CARD_OP_WRITE 1
+#define CARD_OP_WRITE_HEADER 2
+#define CARD_OP_READ 3
+#define CARD_OP_READ_ALL 4
+#define CARD_OP_CREATE 5
+#define CARD_OP_FORMAT 6
+#define CARD_OP_DELETE 7
+#define CARD_OP_STOPPED 8
+
 //.rodata
 #include "assets/_mariost_icon_tex.inc"
 #include "assets/_mariost_icon_tlut.inc"
@@ -95,7 +105,7 @@ void cardBufReset(void) {
     wp->chan = -1;
     wp->fileNo = -1;
     wp->serialNo = 0;
-    wp->op = 0;
+    wp->op = CARD_OP_IDLE;
     wp->result = CARD_RESULT_NOCARD;
     wp->flags = 0;
 }
@@ -123,7 +133,7 @@ void cardInit(void) {
     wp->chan = -1;
     wp->fileNo = -1;
     wp->serialNo = 0;
-    wp->op = 0;
+    wp->op = CARD_OP_IDLE;
     wp->result = CARD_RESULT_NOCARD;
     wp->flags = 0;
     CARDInit();
@@ -194,29 +204,29 @@ void cardMain(void) {
     }
 
     switch (wp->op) {
-        case 1:
+        case CARD_OP_WRITE:
             write_main();
             break;
 
-        case 2:
+        case CARD_OP_WRITE_HEADER:
             write_header_main();
             break;
 
-        case 3:
+        case CARD_OP_READ:
             read_main();
             break;
 
-        case 4:
+        case CARD_OP_READ_ALL:
             read_all_main();
             break;
 
-        case 5:
+        case CARD_OP_CREATE:
             create_main();
             break;
 
-        case 6:
+        case CARD_OP_FORMAT:
             if (wp->result != CARD_RESULT_READY) {
-                wp->op = 8;
+                wp->op = CARD_OP_STOPPED;
                 wp->flags |= CARD_FLAG_FAILED;
                 wp->flags &= ~CARD_FLAG_EXEC;
             } else if (!(wp->flags & CARD_FLAG_BUSY)) {
@@ -238,7 +248,7 @@ void cardMain(void) {
                         break;
 
                     case 4:
-                        wp->op = 0;
+                        wp->op = CARD_OP_IDLE;
                         wp->flags |= CARD_FLAG_DONE;
                         wp->flags &= ~CARD_FLAG_EXEC;
                         break;
@@ -250,9 +260,9 @@ void cardMain(void) {
             }
             break;
 
-        case 7:
+        case CARD_OP_DELETE:
             if (wp->result != CARD_RESULT_READY) {
-                wp->op = 8;
+                wp->op = CARD_OP_STOPPED;
                 wp->flags |= CARD_FLAG_FAILED;
                 wp->flags &= ~CARD_FLAG_EXEC;
             } else if (!(wp->flags & CARD_FLAG_BUSY)) {
@@ -278,7 +288,7 @@ void cardMain(void) {
                         break;
 
                     case 5:
-                        wp->op = 0;
+                        wp->op = CARD_OP_IDLE;
                         wp->flags |= CARD_FLAG_DONE;
                         wp->flags &= ~CARD_FLAG_EXEC;
                         break;
@@ -290,7 +300,7 @@ void cardMain(void) {
             }
             break;
 
-        case 8:
+        case CARD_OP_STOPPED:
         default:
             break;
     }
@@ -363,7 +373,7 @@ void cardErase(s32 slotNo) {
     CardSaveSlot* save;
 
     if (!(wp->flags & CARD_FLAG_EXEC)) {
-        wp->op = 1;
+        wp->op = CARD_OP_WRITE;
         wp->currSlot = slotNo;
         wp->opStep = 0;
         wp->result = CARD_RESULT_READY;
@@ -380,7 +390,7 @@ void cardErase(s32 slotNo) {
 /** Starts copying save slot from into slot to (file select's Copy), writing both copies of the target on the card. */
 void cardCopy(s32 from, s32 to) {
     if (!(wp->flags & CARD_FLAG_EXEC)) {
-        wp->op = 1;
+        wp->op = CARD_OP_WRITE;
         wp->currSlot = to;
         wp->opStep = 0;
         wp->result = CARD_RESULT_READY;
@@ -403,7 +413,7 @@ void cardWrite(s32 slot) {
     s8 partyId;
 
     if (!(wp->flags & CARD_FLAG_EXEC)) {
-        wp->op = 1;
+        wp->op = CARD_OP_WRITE;
         wp->currSlot = slot;
         wp->opStep = 0;
         wp->result = CARD_RESULT_READY;
@@ -492,7 +502,7 @@ static void memcard_probe(void) {
  */
 void write_main(void) {
     if (wp->result) {
-        wp->op = 8;
+        wp->op = CARD_OP_STOPPED;
         wp->flags |= CARD_FLAG_FAILED;
         wp->flags &= ~CARD_FLAG_EXEC;
     } else if (!(wp->flags & CARD_FLAG_BUSY)) {
@@ -561,7 +571,7 @@ void write_main(void) {
                 memcard_unmount();
                 break;
             case 15:
-                wp->op = 0;
+                wp->op = CARD_OP_IDLE;
                 wp->flags |= CARD_FLAG_DONE;
                 wp->flags |= CARD_FLAG_WRITTEN;
                 wp->flags &= ~CARD_FLAG_EXEC;
@@ -581,7 +591,7 @@ void write_main(void) {
 /** Starts rewriting just the save file header (comment, date and settings like sound mode and rumble). */
 void cardWriteHeader(void) {
     if (!(wp->flags & CARD_FLAG_EXEC)) {
-        wp->op = 2;
+        wp->op = CARD_OP_WRITE_HEADER;
         wp->currSlot = 0;
         wp->opStep = 0;
         wp->result = CARD_RESULT_READY;
@@ -595,7 +605,7 @@ void cardWriteHeader(void) {
 /** Step machine for cardWriteHeader: mount, check, open, write the header block, close, unmount. */
 void write_header_main(void) {
     if (wp->result) {
-        wp->op = 8;
+        wp->op = CARD_OP_STOPPED;
         wp->flags |= CARD_FLAG_FAILED;
         wp->flags &= ~CARD_FLAG_EXEC;
     } else if (!(wp->flags & CARD_FLAG_BUSY)) {
@@ -625,7 +635,7 @@ void write_header_main(void) {
                 memcard_unmount();
                 break;
             case 8:
-                wp->op = 0;
+                wp->op = CARD_OP_IDLE;
                 wp->flags |= CARD_FLAG_DONE;
                 wp->flags |= CARD_FLAG_WRITTEN;
                 wp->flags &= ~CARD_FLAG_EXEC;
@@ -647,7 +657,7 @@ void read_main(void) {
     s32 saveType; //invalid = -1, main = 0, backup = 1
 
     if (wp->result) {
-        wp->op = 8;
+        wp->op = CARD_OP_STOPPED;
         wp->flags |= CARD_FLAG_FAILED;
         wp->flags &= ~CARD_FLAG_EXEC;
     } else if (!(wp->flags & CARD_FLAG_BUSY)) {
@@ -716,7 +726,7 @@ void read_main(void) {
                 memcard_unmount();
                 break;
             case 14:
-                wp->op = 0;
+                wp->op = CARD_OP_IDLE;
                 wp->flags |= CARD_FLAG_DONE;
                 wp->flags |= CARD_FLAG_WRITTEN;
                 wp->flags &= ~CARD_FLAG_EXEC;
@@ -732,7 +742,7 @@ void read_main(void) {
 /** Starts reading the whole save file from slot A: header and all four slots (file select start-up). */
 void cardReadAll(void) {
     if (!(wp->flags & CARD_FLAG_EXEC)) {
-        wp->op = 4;
+        wp->op = CARD_OP_READ_ALL;
         wp->opSlot = 0;
         wp->opStep = 0;
         wp->result = CARD_RESULT_READY;
@@ -746,7 +756,7 @@ void read_all_main(void) {
     s32 saveType; //invalid = -1, main = 0, backup = 1
 
     if (wp->result) {
-        wp->op = 8;
+        wp->op = CARD_OP_STOPPED;
         wp->flags |= CARD_FLAG_FAILED;
         wp->flags &= ~CARD_FLAG_EXEC;
     } else if (!(wp->flags & CARD_FLAG_BUSY)) {
@@ -823,7 +833,7 @@ void read_all_main(void) {
                 memcard_unmount();
                 break;
             case 14:
-                wp->op = 0;
+                wp->op = CARD_OP_IDLE;
                 wp->flags |= CARD_FLAG_DONE;
                 wp->flags |= CARD_FLAG_WRITTEN;
                 wp->flags &= ~CARD_FLAG_EXEC;
@@ -839,7 +849,7 @@ void read_all_main(void) {
 /** Starts creating the save file on the card, replacing any old one (evt_memcard's create, from the file select). */
 void cardCreate(void) {
     if (!(wp->flags & CARD_FLAG_EXEC)) {
-        wp->op = 5;
+        wp->op = CARD_OP_CREATE;
         wp->opStep = 0;
         wp->result = CARD_RESULT_READY;
         wp->flags |= CARD_FLAG_EXEC;
@@ -856,7 +866,7 @@ void cardCreate(void) {
  */
 void create_main(void) {
     if (wp->result) {
-        wp->op = 8;
+        wp->op = CARD_OP_STOPPED;
         wp->flags |= CARD_FLAG_FAILED;
         wp->flags &= ~CARD_FLAG_EXEC;
     } else if (!(wp->flags & CARD_FLAG_BUSY)) {
@@ -910,7 +920,7 @@ void create_main(void) {
                 memcard_unmount();
                 break;
             case 13:
-                wp->op = 0;
+                wp->op = CARD_OP_IDLE;
                 wp->flags |= CARD_FLAG_DONE;
                 wp->flags |= CARD_FLAG_WRITTEN;
                 wp->flags &= ~CARD_FLAG_EXEC;
@@ -926,7 +936,7 @@ void create_main(void) {
 /** Starts formatting the card in slot A (evt_memcard's format, offered by the file select for an unusable card). */
 void cardFormat(void) {
     if (!(wp->flags & CARD_FLAG_EXEC)) {
-        wp->op = 6;
+        wp->op = CARD_OP_FORMAT;
         wp->opStep = 0;
         wp->result = CARD_RESULT_READY;
         wp->flags |= CARD_FLAG_EXEC;
@@ -938,7 +948,7 @@ void cardFormat(void) {
 /** Step machine for formatting: mount, format, unmount. Unused: cardMain carries its own copy for op 6. */
 static void format_main(void) {
     if (wp->result != CARD_RESULT_READY) {
-        wp->op = 8;
+        wp->op = CARD_OP_STOPPED;
         wp->flags |= CARD_FLAG_FAILED;
         wp->flags &= ~CARD_FLAG_EXEC;
     } else if (!(wp->flags & CARD_FLAG_BUSY)) {
@@ -960,7 +970,7 @@ static void format_main(void) {
                 break;
 
             case 4:
-                wp->op = 0;
+                wp->op = CARD_OP_IDLE;
                 wp->flags |= CARD_FLAG_DONE;
                 wp->flags &= ~CARD_FLAG_EXEC;
                 break;
@@ -978,7 +988,7 @@ static void format_main(void) {
  */
 static void delete_main(void) {
     if (wp->result != CARD_RESULT_READY) {
-        wp->op = 8;
+        wp->op = CARD_OP_STOPPED;
         wp->flags |= CARD_FLAG_FAILED;
         wp->flags &= ~CARD_FLAG_EXEC;
     } else if (!(wp->flags & CARD_FLAG_BUSY)) {
@@ -1004,7 +1014,7 @@ static void delete_main(void) {
                 break;
 
             case 5:
-                wp->op = 0;
+                wp->op = CARD_OP_IDLE;
                 wp->flags |= CARD_FLAG_DONE;
                 wp->flags &= ~CARD_FLAG_EXEC;
                 break;

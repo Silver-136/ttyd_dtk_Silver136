@@ -893,7 +893,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             sel->items = __memAlloc(HEAP_DEFAULT, m * sizeof(WinMgrSelectItem));
             memset(sel->items, 0, m * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
-            for (i = 0; i < 338; i++) {
+            for (i = 0; i < BADGE_MAX - KEY_ITEM_MIN; i++) {
                 if ((s16)badgeShop_get(bdsw->bteresa_table, i + 1) > 0) {
                     sel->items[sel->numItems++].id = i + 1;
                 }

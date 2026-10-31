@@ -32,15 +32,15 @@ static inline void peachStepSe(s32 period, s32 halfPeriod) {
     s32 sfx, halfSfx;
     if (!(mario->peachFlags & PEACH_FLAG_GUNDAN)) {
         if ((mario->peachFlags & PEACH_FLAG_INVISIBLE) && mario->scale.y == 0.0f) {
-            sfx = 0x80C;
-            halfSfx = 0x80B;
+            sfx = PSND_SFX_PEACH_BAREFOOT_MOVE1R;
+            halfSfx = PSND_SFX_PEACH_BAREFOOT_MOVE1L;
         } else {
-            sfx = 0x7C4;
-            halfSfx = 0x7C3;
+            sfx = PSND_SFX_PEACH_MOVE1R;
+            halfSfx = PSND_SFX_PEACH_MOVE1L;
         }
     } else {
-        sfx = 0x7E9;
-        halfSfx = 0x7E8;
+        sfx = PSND_SFX_PEACH_3RD_P_MOVE1R;
+        halfSfx = PSND_SFX_PEACH_3RD_P_MOVE1L;
     }
     if (mario->multiTimer % period == 0) {
         psndSFXOn_3D(SFX_NAME_WORD(sfx), &mario->position);
