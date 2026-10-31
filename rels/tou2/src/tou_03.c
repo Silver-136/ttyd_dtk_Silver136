@@ -48,7 +48,6 @@ USER_FUNC(evt_mario_party_use_check);
 #ifdef VERSION_G8ME01
 #endif
 #undef GXSetTexCoordGen
-static void callback(MapTevCallbackInfo* info);
 static f32 cosf(f32 x);
 static f32 sinf(f32 x);
 typedef struct ScreenWork {

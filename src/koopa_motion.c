@@ -759,8 +759,6 @@ void kpaSwimMove(void) {
             if (spd < -lim) {
                 spd = -lim;
             }
-            // FAKE: lim is reassigned the same 40.0f; clamping to the constant directly changes the object
-            lim = 40.0f;
             if (spd > lim) {
                 spd = lim;
             }

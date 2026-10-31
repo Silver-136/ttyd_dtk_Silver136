@@ -55,9 +55,9 @@ void btlMovePos(f32 speed, f32 angle, f32* x, f32* z) {
  * Interpolates from start to end at frame cur of steps.
  * Modes: 0 linear; 1-3 ease-in (square, cube, 4th power); 4-6 ease-out (same powers);
  * 7, 8 and 10 overshoot and wobble around end as they settle; 11 cosine ease-in-out; 12 sine ease-out;
- * 13 cosine ease-in. Other modes return 0. battle_event_cmd.c calls it through a cast with reordered arguments.
+ * 13 cosine ease-in. Other modes return 0. Battle event and stage callers share the declaration in battle_sub.h.
  */
-f32 intpl_sub(s32 mode, s32 cur, s32 steps, f32 start, f32 end) {
+f32 intpl_sub(s32 mode, f32 start, f32 end, s32 cur, s32 steps) {
     f32 diff;
     s32 rest;
     f32 c;

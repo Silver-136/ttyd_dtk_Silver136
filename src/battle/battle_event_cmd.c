@@ -3282,9 +3282,6 @@ USER_FUNC(btlevtcmd_GetMoveFrame) {
     return EVT_RETURN_DONE;
 }
 
-// FAKE: the definition (battle_sub.c) is intpl_sub(mode, cur, steps, start, end); the same registers (ints and floats go in
-// separate ones), but only this order gives the retail call code here
-f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
 
 /**
  * Script: flies the unit args[0] to (args[1..3]) over args[4] frames along a curve bowed by args[5] units (0 =

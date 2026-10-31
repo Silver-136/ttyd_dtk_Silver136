@@ -1,5 +1,6 @@
 // Battle sequence: the phase and turn flow, and the action, move and command-selection steps of a battle.
 
+#include "battle/battle_sub.h"
 #include "battle/battle_seq.h"
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -46,10 +47,6 @@
 
 
 // external prototypes
-f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
-
-
-
 
 // local prototypes
 USER_FUNC(_set_haikei_entry_scale);

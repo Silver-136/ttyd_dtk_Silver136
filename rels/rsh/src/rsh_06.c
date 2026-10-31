@@ -213,27 +213,12 @@ static inline f32 moa_cosx(f32 x) {
     return a;
 }
 
-static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa);
-static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 void moamoa_joint_position(Moamoa* moa, Vec* out);
-static void ext_disp(CameraId camera, void* param);
-static void ext_shadow_disp(CameraId camera, void* param);
 
 s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall);
 s32 npc_anim_wait(EventEntry* event, BOOL isFirstCall);
 static s32 ramp_r(EventEntry* event, BOOL isFirstCall);
 static void resha_tev(MapTevCallbackInfo* info);
-static void ext_moamoa_dispent(void);
-static void ext_moamoa_init(void);
-static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall);
-static s32 evt_moamoa_exit(EventEntry* event, BOOL isFirstCall);
 
 static ExtTexInfo ext_moamoa_data[71];
 static SharinData sharinDt[29];

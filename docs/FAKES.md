@@ -75,8 +75,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | rels/usu/src/usu_01.c | check_tabemono | `*(u16*)&itemDataTable[id].usable_locations`, a no-op u16 view of the u16 field, keeps the target load order | plain `itemDataTable[id].usable_locations & 4` (bytes differ) |
 | Both | rels/win/src/window/win_04.c | ss_ch_check | (decomp-permuter): reorders the args[1] load | see comment |
 | Both | src/battle/battle_event_cmd.c | btlevtcmd_SetPartsWork | byte-stride `*(EvtWord*)((u8*)part->work + index * sizeof(EvtWord)) = value`: the index is scaled and added before the field offset, as in the target (replaces the old raw `p + 0x130` form) | `part->work[index] = value` (91.7%) |
-| Both | src/battle/battle_event_cmd.c | intpl_sub callers | private declaration intpl_sub(type, start, end, cur, max): the definition's order (mode, cur, steps, start, end) passes the same registers but changes the call code; battle_event_cmd.c includes battle_sub.h, so no shared prototype is possible | the definition's prototype with reordered calls (reorder_calls.py) |
-| Both | src/battle/battle_stage_object.c | intpl_sub callers | same private declaration order as battle_event_cmd.c | the definition's prototype with reordered calls |
 | Both | src/battle/ac/ac_button_down.c | battleAcMain_ButtonDown | the button[]/pressed[] indexes are cast (u32) (i, j >= 0 there, same value); the cast stops IR strength reduction so the backend emits the target addi/lwzx and the shared offset IV. allDone is declared first for the register ... | plain `i` index 81.69 (lab), byte-offset off/off2 forms 97.38 |
 | Both | src/battle/ac/ac_gauge_timing2.c | battleAcMain_GaugeTiming2 | register-promoted array of the two SFX names; separate scalars swap regs | two scalars |
 | Both | src/battle/ac/ac_signal_timing.c | actionCommandDisp | work recovered from ac (container-of: `(u8*)ac - offsetof(BattleWork, actionCommands)`) so its web is a codegen temp numbered above the rodata base; then work takes r31 and the base r30, as in the target | work/ac as statements, (0, ptr), *&ptr, (&ptr)[0], +0, u32 cast, inline getter, ac after camGetPtr (work named v39 -> r29), 41 decl orders: 85-136 |
@@ -243,7 +241,6 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | US | src/koopa_hit.c | kpaGetHitobjHead2 | ret is a spare copy of hit; returning hit changes the object | see comment |
 | Both | src/koopa_hit.c | kpaGetHitobjRide | address temporary; the plain return of rideHit[i] changes the object | see comment |
 | Both | src/koopa_hit.c | kpaChkHitobjRide | dead test (both branches return r); dropping it changes the object | see comment |
-| Both | src/koopa_motion.c | kpaSwimMove | lim is reassigned the same 40.0f; clamping to the constant directly changes the object | see comment |
 | Both | src/kpa_act.c | kpa_score_disp_init | (s32) cast on the u32 counter (signed compare); the plain `i < 50` changes the object | see comment |
 | Both | src/kpa_act.c | kpaSetScoreStr | str is a spare second pointer to ksdp[i].str (only writes the terminator); ksdp[i].str[n] changes the object | see comment |
 | Both | src/kpa_act.c | kpaAddScorePos | sc is a spare copy of score; clamping score itself (as kpaAddScore does) changes the object | see comment |
