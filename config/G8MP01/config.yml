@@ -1,0 +1,210 @@
+name: MarioSt
+object: sys/main.dol
+hash: 2957cb9264311e7ea81f655620784e0b1ed7a97c
+object_base: orig/G8MP01
+symbols: config/G8MP01/symbols.txt
+splits: config/G8MP01/splits.txt
+mw_comment_version: 10
+force_active:
+# MSL extras.c strupr: unreferenced in the PAL dol but kept by the original link
+- strupr
+# EXIBios.c EXIGetType: unreferenced in the PAL dol but kept by the original link
+- EXIGetType
+block_relocations:
+# unit_party_chuchurina partyWeapon_ChuchurinaKiss+0x7C holds the flag word 0x80003500, not a pointer
+- source: 0x8038DF4C
+- source: 0x802D5D44
+- source: 0x802D5D4C
+- source: 0x802D5DC4
+- source: 0x802D5DC8
+- source: 0x802D5DCC
+- source: 0x802D5DD0
+- source: 0x802D5DD4
+- source: 0x802D5DE8
+- source: 0x802D5DF8
+- source: 0x802D6038
+- source: 0x802D666C
+- source: 0x802D6674
+- source: 0x802D6730
+- source: 0x802D6AF0
+- source: 0x802D6AF8
+- source: 0x802D6B14
+- source: 0x802D6B6C
+- source: 0x802D6B88
+- source: 0x802D6BD0
+
+extract:
+# manager/cardmgr.c
+- symbol: _mariost_icon_tex
+  header: assets/_mariost_icon_tex.inc
+- symbol: _mariost_icon_tlut
+  header: assets/_mariost_icon_tlut.inc
+- symbol: _mariost_banner_tex
+  header: assets/_mariost_banner_tex.inc
+# musyx/runtime/dsp_import.c
+- symbol: dspSlave
+  header: assets/dspSlave.inc
+  header_type: raw
+
+modules:
+- object: files/rel/aaa.rel
+  hash: 6dc3d5da3530bee660492d179de4cb5bb7cb0e79
+  symbols: config/G8MP01/aaa/symbols.txt
+  splits: config/G8MP01/aaa/splits.txt
+
+- object: files/rel/aji.rel
+  hash: 9fe50cb18b65d8c490f666f07469c968c664ea5b
+  symbols: config/G8MP01/aji/symbols.txt
+  splits: config/G8MP01/aji/splits.txt
+
+- object: files/rel/bom.rel
+  hash: c6f4fd89e49b13c1740ab46690a763e9c568742a
+  symbols: config/G8MP01/bom/symbols.txt
+  splits: config/G8MP01/bom/splits.txt
+
+- object: files/rel/dig.rel
+  hash: 384ec9b643b522f8f3bebc4403c4e3e823b53079
+  symbols: config/G8MP01/dig/symbols.txt
+  splits: config/G8MP01/dig/splits.txt
+
+- object: files/rel/dmo.rel
+  hash: 8c15bab90563a165df142367c3926f86189424d9
+  symbols: config/G8MP01/dmo/symbols.txt
+  splits: config/G8MP01/dmo/splits.txt
+
+- object: files/rel/dou.rel
+  hash: 072bc7f3fae15178ae007ea35ebabeb16d8bddb1
+  symbols: config/G8MP01/dou/symbols.txt
+  splits: config/G8MP01/dou/splits.txt
+
+- object: files/rel/eki.rel
+  hash: 7077964c7b9b12f2b6537c188cb4a4431ed9bfd0
+  symbols: config/G8MP01/eki/symbols.txt
+  splits: config/G8MP01/eki/splits.txt
+
+- object: files/rel/end.rel
+  hash: fa103a909daeb09bbdbb556d9344874917611628
+  symbols: config/G8MP01/end/symbols.txt
+  splits: config/G8MP01/end/splits.txt
+
+- object: files/rel/gon.rel
+  hash: 4cd893946fb5c9849000ca9b69788b1eb06cf969
+  symbols: config/G8MP01/gon/symbols.txt
+  splits: config/G8MP01/gon/splits.txt
+
+- object: files/rel/gor.rel
+  hash: 162e84e4d8072f86fd1fe83c7050d6ea5cee942c
+  symbols: config/G8MP01/gor/symbols.txt
+  splits: config/G8MP01/gor/splits.txt
+
+- object: files/rel/gra.rel
+  hash: 380970b4e093fbe2c1780ce40107691c2f830015
+  symbols: config/G8MP01/gra/symbols.txt
+  splits: config/G8MP01/gra/splits.txt
+
+- object: files/rel/hei.rel
+  hash: 692185356d1288d04c33c39b050d7e1679fd5cf7
+  symbols: config/G8MP01/hei/symbols.txt
+  splits: config/G8MP01/hei/splits.txt
+
+- object: files/rel/hom.rel
+  hash: 836d52c203e58cfae3953e59e341f857fbb6d1ad
+  symbols: config/G8MP01/hom/symbols.txt
+  splits: config/G8MP01/hom/splits.txt
+
+- object: files/rel/jin.rel
+  hash: 5df5cbf2936db21cf419795f3b32df58c742f59e
+  symbols: config/G8MP01/jin/symbols.txt
+  splits: config/G8MP01/jin/splits.txt
+
+- object: files/rel/jon.rel
+  hash: a5ed59eda89f6f9ceb6002cfd3a70e9c5567cab6
+  symbols: config/G8MP01/jon/symbols.txt
+  splits: config/G8MP01/jon/splits.txt
+
+- object: files/rel/kpa.rel
+  hash: c7fd98ec7ee7e56eca1faf0d88265e86f7f24ae9
+  symbols: config/G8MP01/kpa/symbols.txt
+  splits: config/G8MP01/kpa/splits.txt
+
+- object: files/rel/las.rel
+  hash: a4a2295f170f8f7eb9deff84019fa75f255e87d6
+  symbols: config/G8MP01/las/symbols.txt
+  splits: config/G8MP01/las/splits.txt
+
+- object: files/rel/moo.rel
+  hash: 1eb0180e00daf048f1ac7b35ed5525a54ee477d4
+  symbols: config/G8MP01/moo/symbols.txt
+  splits: config/G8MP01/moo/splits.txt
+
+- object: files/rel/mri.rel
+  hash: fad5eea725b060ad61335faa2060d6900cd4d251
+  symbols: config/G8MP01/mri/symbols.txt
+  splits: config/G8MP01/mri/splits.txt
+
+- object: files/rel/muj.rel
+  hash: 21249e8879024ee8fdab1f3ea3babd9cb0857161
+  symbols: config/G8MP01/muj/symbols.txt
+  splits: config/G8MP01/muj/splits.txt
+
+- object: files/rel/nok.rel
+  hash: 46737b64f2fc01703b25ef546ddabb1f22b29614
+  symbols: config/G8MP01/nok/symbols.txt
+  splits: config/G8MP01/nok/splits.txt
+
+- object: files/rel/pik.rel
+  hash: bd90057335cf1b564a365a60203900a4df04d93f
+  symbols: config/G8MP01/pik/symbols.txt
+  splits: config/G8MP01/pik/splits.txt
+
+- object: files/rel/qiz.rel
+  hash: de4ff6bbac8f875880ec0e0d6d59c31ba3b8786a
+  symbols: config/G8MP01/qiz/symbols.txt
+  splits: config/G8MP01/qiz/splits.txt
+
+- object: files/rel/rsh.rel
+  hash: fbc6d0a77708b10a78e6121c9c5f8f3b50fc70c2
+  symbols: config/G8MP01/rsh/symbols.txt
+  splits: config/G8MP01/rsh/splits.txt
+
+- object: files/rel/sys.rel
+  hash: b0307f15622fd97855c936d3f30f8712e6d22841
+  symbols: config/G8MP01/sys/symbols.txt
+  splits: config/G8MP01/sys/splits.txt
+
+- object: files/rel/tik.rel
+  hash: 11772ed7763c0eb0e72fc787c95a2980648fedff
+  symbols: config/G8MP01/tik/symbols.txt
+  splits: config/G8MP01/tik/splits.txt
+
+- object: files/rel/tou.rel
+  hash: 4fdc47ca565311c741cc0aa7af9336fbf9e788eb
+  symbols: config/G8MP01/tou/symbols.txt
+  splits: config/G8MP01/tou/splits.txt
+
+- object: files/rel/tou2.rel
+  hash: 4a499a6590b0c0ee3a16c0c85b210df10c53489b
+  symbols: config/G8MP01/tou2/symbols.txt
+  splits: config/G8MP01/tou2/splits.txt
+
+# tst.rel is PAL only: a test REL (maps tst_00-02, tst_bt00, bti_01-04; the BTLNO_TEST_* battles).
+# Its symbols are dtk's own analysis and it has no splits yet.
+- object: files/rel/tst.rel
+  hash: 5ac90fade3057e1048b0000e89413298eaf1a925
+  symbols: config/G8MP01/tst/symbols.txt
+  splits: config/G8MP01/tst/splits.txt
+
+- object: files/rel/usu.rel
+  hash: 1b13877453719105f6af05e9ab9e811bbca1a671
+  symbols: config/G8MP01/usu/symbols.txt
+  splits: config/G8MP01/usu/splits.txt
+
+- object: files/rel/win.rel
+  hash: 3facae1be223c2fbc8f121dc3bf3f106602e65f8
+  symbols: config/G8MP01/win/symbols.txt
+  splits: config/G8MP01/win/splits.txt
+
+- object: files/rel/yuu.rel
+  hash: 6b233bf545559d49577130eb49519e36976f2a48
+  symbols: config/G8MP01/yuu/symbols.txt
+  splits: config/G8MP01/yuu/splits.txt

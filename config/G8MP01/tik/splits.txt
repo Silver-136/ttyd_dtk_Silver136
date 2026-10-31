@@ -1,0 +1,189 @@
+Sections:
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+	.bss        type:bss align:8
+
+tik.c:
+	.text       start:0x00000000 end:0x000003B8
+	.rodata     start:0x00000000 end:0x000000D0
+	.data       start:0x00000000 end:0x000001F8
+
+tik_00.c:
+	.text       start:0x000003B8 end:0x000014C8
+	.rodata     start:0x000000D0 end:0x00001098
+	.data       start:0x000001F8 end:0x00005C20
+	.bss        start:0x00000000 end:0x00000010
+
+tik_01.c:
+	.rodata     start:0x00001098 end:0x000013E8
+	.data       start:0x00005C20 end:0x000073A8
+
+tik_02.c:
+	.text       start:0x000014C8 end:0x00001F28
+	.rodata     start:0x000013E8 end:0x00001798
+	.data       start:0x000073A8 end:0x00008E40
+
+tik_03.c:
+	.rodata     start:0x00001798 end:0x00001A68
+	.data       start:0x00008E40 end:0x0000A428
+
+tik_04.c:
+	.rodata     start:0x00001A68 end:0x00001CD8
+	.data       start:0x0000A428 end:0x0000B1C8
+
+tik_05.c:
+	.text       start:0x00001F28 end:0x00004988
+	.rodata     start:0x00001CD8 end:0x000026B8
+	.data       start:0x0000B1C8 end:0x000116F8
+	.bss        start:0x00000010 end:0x00000030
+
+tik_06.c:
+	.rodata     start:0x000026B8 end:0x00002810
+	.data       start:0x000116F8 end:0x00012118
+
+tik_07.c:
+	.rodata     start:0x00002810 end:0x00002A70
+	.data       start:0x00012118 end:0x00012EA8
+
+tik_08.c:
+	.rodata     start:0x00002A70 end:0x00002AF8
+	.data       start:0x00012EA8 end:0x00013260
+
+tik_09.c:
+	.rodata     start:0x00002AF8 end:0x00002B50
+	.data       start:0x00013260 end:0x000134C0
+
+tik_10.c:
+	.rodata     start:0x00002B50 end:0x00002BD0
+	.data       start:0x000134C0 end:0x00013738
+
+tik_13.c:
+	.rodata     start:0x00002BD0 end:0x00002C40
+	.data       start:0x00013738 end:0x000138F0
+
+tik_11.c:
+	.text       start:0x00004988 end:0x0000533C
+	.rodata     start:0x00002C40 end:0x00002F48
+	.data       start:0x000138F0 end:0x00015620
+	.bss        start:0x00000030 end:0x00000070
+
+tik_12.c:
+	.text       start:0x0000533C end:0x000054C8
+	.rodata     start:0x00002F48 end:0x00003248
+	.data       start:0x00015620 end:0x000168B0
+
+unit/unit_boss_gesso.c:
+	.text       start:0x000054C8 end:0x000055D8
+	.rodata     start:0x00003248 end:0x000034F0
+	.data       start:0x000168B0 end:0x00018070
+
+data/battle/battle_database_tik.c:
+	.text       start:0x000055D8 end:0x00005770
+	.rodata     start:0x000034F0 end:0x00003948
+	.data       start:0x00018070 end:0x0001B338
+
+tik_14.c:
+	.rodata     start:0x00003948 end:0x000039A0
+	.data       start:0x0001B338 end:0x0001B540
+
+unit/unit_boss_gesso_right_arm.c:
+	.text       start:0x00005770 end:0x00005818
+	.rodata     start:0x000039A0 end:0x00003B50
+	.data       start:0x0001B540 end:0x0001C5A0
+
+unit/unit_boss_gesso_left_arm.c:
+	.rodata     start:0x00003B50 end:0x00003C30
+	.data       start:0x0001C5A0 end:0x0001CDA8
+
+unit/unit_kuriboo.c:
+	.text       start:0x00005818 end:0x00005930
+	.rodata     start:0x00003C30 end:0x00003D88
+	.data       start:0x0001CDA8 end:0x0001D940
+
+tik_21.c:
+	.rodata     start:0x00003D88 end:0x00003E30
+	.data       start:0x0001D940 end:0x0001DCF8
+
+tik_15.c:
+	.rodata     start:0x00003E30 end:0x00003FC8
+	.data       start:0x0001DCF8 end:0x0001E128
+
+tik_16.c:
+	.rodata     start:0x00003FC8 end:0x00004140
+	.data       start:0x0001E128 end:0x0001E860
+
+tik_17.c:
+	.rodata     start:0x00004140 end:0x000042C0
+	.data       start:0x0001E860 end:0x0001F028
+
+tik_18.c:
+	.rodata     start:0x000042C0 end:0x00004418
+	.data       start:0x0001F028 end:0x0001F408
+
+tik_19.c:
+	.text       start:0x00005930 end:0x00005A14
+	.rodata     start:0x00004418 end:0x00004698
+	.data       start:0x0001F408 end:0x000200F8
+
+tik_20.c:
+	.rodata     start:0x00004698 end:0x00004750
+	.data       start:0x000200F8 end:0x000203D0
+
+unit/unit_hannya.c:
+	.rodata     start:0x00004750 end:0x00004870
+	.data       start:0x000203D0 end:0x00020F90
+
+unit/unit_hinnya.c:
+	.rodata     start:0x00004870 end:0x00004990
+	.data       start:0x00020F90 end:0x00021B48
+
+unit/unit_patakuri.c:
+	.text       start:0x00005A14 end:0x00005B2C
+	.rodata     start:0x00004990 end:0x00004BC8
+	.data       start:0x00021B48 end:0x00023200
+
+unit/unit_togekuri.c:
+	.text       start:0x00005B2C end:0x00005E44
+	.rodata     start:0x00004BC8 end:0x00004D88
+	.data       start:0x00023200 end:0x000242A0
+
+unit/unit_hammer_bros.c:
+	.text       start:0x00005E44 end:0x00006058
+	.rodata     start:0x00004D88 end:0x00004EB8
+	.data       start:0x000242A0 end:0x00025D20
+
+unit/unit_kamec.c:
+	.text       start:0x00006058 end:0x0000684C
+	.rodata     start:0x00004EB8 end:0x000051F0
+	.data       start:0x00025D20 end:0x00029648
+
+unit/unit_patapata.c:
+	.rodata     start:0x000051F0 end:0x00005488
+	.data       start:0x00029648 end:0x0002B928
+
+unit/unit_togenoko.c:
+	.text       start:0x0000684C end:0x000068CC
+	.rodata     start:0x00005488 end:0x000056C0
+	.data       start:0x0002B928 end:0x0002DE78
+
+unit/unit_nokonoko.c:
+	.rodata     start:0x000056C0 end:0x00005868
+	.data       start:0x0002DE78 end:0x0002F2C0
+
+event/evt_lect_tik.c:
+	.text       start:0x000068CC end:0x00007D54
+	.rodata     start:0x00005868 end:0x000059C0
+	.data       start:0x0002F2C0 end:0x0002FF60
+	.bss        start:0x00000070 end:0x00000118
+
+unit/unit_lecture_frankli_kuriboo.c:
+	.text       start:0x00007D54 end:0x00007D9C
+	.rodata     start:0x000059C0 end:0x00005AA8
+	.data       start:0x0002FF60 end:0x00030520
+
+unit/unit_hennya.c:
+	.rodata     start:0x00005AA8 end:0x00005BC1
+	.data       start:0x00030520 end:0x000310E0

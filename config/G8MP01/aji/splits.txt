@@ -1,0 +1,181 @@
+Sections:
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+	.bss        type:bss align:8
+
+aji_00.c:
+	.rodata     start:0x00000000 end:0x000001A0
+	.data       start:0x00000000 end:0x00000A60
+
+aji_01.c:
+	.text       start:0x00000000 end:0x000000C8
+	.rodata     start:0x000001A0 end:0x00000BC8
+	.data       start:0x00000A60 end:0x000065F0
+
+aji_02.c:
+	.text       start:0x000000C8 end:0x000007B4
+	.rodata     start:0x00000BC8 end:0x00000CD8
+	.data       start:0x000065F0 end:0x00006DF8
+	.bss        start:0x00000000 end:0x00000078
+
+aji_03.c:
+	.text       start:0x000007B4 end:0x00000CF0
+	.rodata     start:0x00000CD8 end:0x000010A0
+	.data       start:0x00006DF8 end:0x00009BB0
+	.bss        start:0x00000078 end:0x000000B8
+
+aji_04.c:
+	.text       start:0x00000CF0 end:0x00000E84
+	.rodata     start:0x000010A0 end:0x00001530
+	.data       start:0x00009BB0 end:0x0000BA88
+
+aji_05.c:
+	.text       start:0x00000E84 end:0x000013D0
+	.rodata     start:0x00001530 end:0x00001618
+	.data       start:0x0000BA88 end:0x0000BFB0
+	.bss        start:0x000000B8 end:0x00000118
+
+aji_06.c:
+	.text       start:0x000013D0 end:0x00002304
+	.rodata     start:0x00001618 end:0x00001DC0
+	.data       start:0x0000BFB0 end:0x00010B40
+	.bss        start:0x00000118 end:0x00000130
+
+aji_07.c:
+	.text       start:0x00002304 end:0x000023E4
+	.rodata     start:0x00001DC0 end:0x00001F20
+	.data       start:0x00010B40 end:0x00011870
+
+aji_08.c:
+	.text       start:0x000023E4 end:0x000024D4
+	.rodata     start:0x00001F20 end:0x00002038
+	.data       start:0x00011870 end:0x00011EB0
+
+aji_09.c:
+	.text       start:0x000024D4 end:0x00002664
+	.rodata     start:0x00002038 end:0x00002478
+	.data       start:0x00011EB0 end:0x00013F50
+
+aji_10.c:
+	.text       start:0x00002664 end:0x00002E7C
+	.rodata     start:0x00002478 end:0x00002E00
+	.data       start:0x00013F50 end:0x00017F78
+	.bss        start:0x00000130 end:0x00000138
+
+aji_11.c:
+	.text       start:0x00002E7C end:0x00002F24
+	.rodata     start:0x00002E00 end:0x00003030
+	.data       start:0x00017F78 end:0x00018C00
+
+aji_12.c:
+	.text       start:0x00002F24 end:0x00003540
+	.rodata     start:0x00003030 end:0x00003348
+	.data       start:0x00018C00 end:0x00019180
+
+aji_13.c:
+	.text       start:0x00003540 end:0x0000417C
+	.rodata     start:0x00003348 end:0x00003888
+	.data       start:0x00019180 end:0x0001AD78
+
+aji_14.c:
+	.text       start:0x0000417C end:0x000043E4
+	.rodata     start:0x00003888 end:0x00003B20
+	.data       start:0x0001AD78 end:0x0001C068
+
+aji_15.c:
+	.text       start:0x000043E4 end:0x000044FC
+	.rodata     start:0x00003B20 end:0x00003CE0
+	.data       start:0x0001C068 end:0x0001D0E8
+
+aji_16.c:
+	.text       start:0x000044FC end:0x00004540
+	.rodata     start:0x00003CE0 end:0x00003F60
+	.data       start:0x0001D0E8 end:0x0001E428
+
+aji_17.c:
+	.text       start:0x00004540 end:0x00006304
+	.rodata     start:0x00003F60 end:0x000051F0
+	.data       start:0x0001E428 end:0x00027510
+	.bss        start:0x00000138 end:0x00000150
+
+aji.c:
+	.text       start:0x00006304 end:0x0000657C
+	.rodata     start:0x000051F0 end:0x00005298
+	.data       start:0x00027510 end:0x00027560
+
+unit/unit_boss_magnum_battender_mkII.c:
+	.text       start:0x0000657C end:0x000082B0
+	.rodata     start:0x00005298 end:0x00005900
+	.data       start:0x00027560 end:0x0002B6C8
+	.bss        start:0x00000150 end:0x00000190
+
+data/battle/battle_database_aji.c:
+	.text       start:0x000082B0 end:0x0000837C
+	.rodata     start:0x00005900 end:0x00005D30
+	.data       start:0x0002B6C8 end:0x0002DA70
+
+aji_18.c:
+	.text       start:0x0000837C end:0x00008490
+	.rodata     start:0x00005D30 end:0x00005EF0
+	.data       start:0x0002DA70 end:0x0002E7C0
+	.bss        start:0x00000190 end:0x000001A0
+
+aji_19.c:
+	.text       start:0x00008490 end:0x00008CAC
+	.rodata     start:0x00005EF0 end:0x00005FC8
+	.data       start:0x0002E7C0 end:0x0002EB88
+
+unit/unit_gundan_zako.c:
+	.rodata     start:0x00005FC8 end:0x000061E8
+	.data       start:0x0002EB88 end:0x00030178
+
+unit/unit_barriern_z_satellite.c:
+	.text       start:0x00008CAC end:0x00008DFC
+	.rodata     start:0x000061E8 end:0x00006318
+	.data       start:0x00030178 end:0x000306B8
+
+unit/unit_barriern_z.c:
+	.text       start:0x00008DFC end:0x0000B484
+	.rodata     start:0x00006318 end:0x00006668
+	.data       start:0x000306B8 end:0x000337D8
+	.bss        start:0x000001A0 end:0x000001B8
+
+unit/unit_gundan_zako_elite.c:
+	.rodata     start:0x00006668 end:0x00006890
+	.data       start:0x000337D8 end:0x00034DC8
+
+unit/unit_gundan_zako_magician.c:
+	.text       start:0x0000B484 end:0x0000B53C
+	.rodata     start:0x00006890 end:0x00006AC8
+	.data       start:0x00034DC8 end:0x00037178
+
+event/evt_shuryolight.c:
+	.text       start:0x0000B53C end:0x0000BFB0
+	.rodata     start:0x00006AC8 end:0x00006C48
+	.data       start:0x00037178 end:0x000374C0
+	.bss        start:0x000001B8 end:0x000001C0
+
+unit/unit_barriern_custom.c:
+	.text       start:0x0000BFB0 end:0x0000E638
+	.rodata     start:0x00006C48 end:0x00006F98
+	.data       start:0x000374C0 end:0x0003A5E0
+	.bss        start:0x000001C0 end:0x000001D8
+
+unit/unit_barriern_custom_satellite.c:
+	.text       start:0x0000E638 end:0x0000E788
+	.rodata     start:0x00006F98 end:0x000070D0
+	.data       start:0x0003A5E0 end:0x0003AB20
+
+unit/unit_barriern.c:
+	.text       start:0x0000E788 end:0x00010E58
+	.rodata     start:0x000070D0 end:0x00007420
+	.data       start:0x0003AB20 end:0x0003DC40
+	.bss        start:0x000001D8 end:0x000001E4
+
+unit/unit_barriern_satellite.c:
+	.text       start:0x00010E58 end:0x00010FA8
+	.rodata     start:0x00007420 end:0x00007550
+	.data       start:0x0003DC40 end:0x0003E180

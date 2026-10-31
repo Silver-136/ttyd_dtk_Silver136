@@ -1,0 +1,66 @@
+Sections:
+	.text       type:code align:4
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:4
+	.rodata     type:rodata align:8
+	.data       type:data align:8
+	.bss        type:bss align:8
+
+yuu_02.c:
+	.text       start:0x00000000 end:0x000011D4
+	.rodata     start:0x00000000 end:0x00000208
+	.data       start:0x00000000 end:0x00001190
+	.bss        start:0x00000000 end:0x00000010
+
+yuu_03.c:
+	.text       start:0x000011D4 end:0x0000370C
+	.rodata     start:0x00000208 end:0x00000438
+	.data       start:0x00001190 end:0x00001C30
+	.bss        start:0x00000010 end:0x00000020
+
+yuu.c:
+	.text       start:0x0000370C end:0x000037F8
+	.rodata     start:0x00000438 end:0x00000458
+	.data       start:0x00001C30 end:0x00001C80
+
+yuu_00.c:
+	.text       start:0x000037F8 end:0x0000435C
+	.rodata     start:0x00000458 end:0x00000938
+	.data       start:0x00001C80 end:0x00004968
+	.bss        start:0x00000020 end:0x00000028
+
+yuu_01.c:
+	.text       start:0x0000435C end:0x0000538C
+	.rodata     start:0x00000938 end:0x00000D70
+	.data       start:0x00004968 end:0x00006440
+	.bss        start:0x00000028 end:0x00000030
+
+event/evt_yuuranking.c:
+	.text       start:0x0000538C end:0x0000A0CC
+	.rodata     start:0x00000D70 end:0x000011B8
+	.data       start:0x00006440 end:0x000064C8
+	.bss        start:0x00000030 end:0x00000038
+
+event/evt_yuutitle.c:
+	.text       start:0x0000A0CC end:0x0000A428
+	.rodata     start:0x000011B8 end:0x000011F0
+	.data       start:0x000064C8 end:0x00006528
+	.bss        start:0x00000038 end:0x00000040
+
+event/evt_yuucounter.c:
+	.text       start:0x0000A428 end:0x0000AF34
+	.rodata     start:0x000011F0 end:0x00001240
+	.data       start:0x00006528 end:0x000065A8
+	.bss        start:0x00000040 end:0x00000048
+
+event/evt_yuuminigame.c:
+	.text       start:0x0000AF34 end:0x0000B528
+	.rodata     start:0x00001240 end:0x00001248
+	.data       start:0x000065A8 end:0x00006608
+	.bss        start:0x00000048 end:0x000000E0
+
+event/evt_yuunpc.c:
+	.text       start:0x0000B528 end:0x00015210
+	.rodata     start:0x00001248 end:0x000015C1
+	.data       start:0x00006608 end:0x0000809C
+	.bss        start:0x000000E0 end:0x000000E8

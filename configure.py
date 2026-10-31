@@ -31,7 +31,13 @@ DEFAULT_VERSION = 0
 VERSIONS = [
     "G8MJ01",  # 0
     "G8ME01",  # 1
+    "G8MP01",  # 2
+    "G8ME01_DEMO",  # 3
+    "G8MJ01_DEMO",  # 4
 ]
+# Versions being brought up: a unit links from C only when config/<version>/matching_units.txt lists it, every other
+# unit links the original object, so the whole-output hashes stay checkable at every step.
+BRINGUP_VERSIONS = ("G8MP01", "G8ME01_DEMO", "G8MJ01_DEMO")
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -226,6 +232,9 @@ cflags_base = [
     f"-DVERSION_{config.version}",
     "-DSDK_REVISION=1",
 ]
+# libs/ test the VERSION_<id> macros: the European release is built from the US code, so it defines both.
+if config.version == "G8MP01":
+    cflags_base.append("-DVERSION_G8ME01")
 
 # Debug flags
 if args.debug:
@@ -2102,6 +2111,15 @@ for lib in config.libs:
     for obj in lib.get("objects", []):
         if obj.name in MAIN_PCH:
             obj.options["extra_cflags"] = [*obj.options["extra_cflags"], "-prefix msl_main.mch"]
+
+if config.version in BRINGUP_VERSIONS:
+    # one objdiff unit name per line (MarioSt/battle/battle_sub, kpa/kpa_01), written by unit_report.py
+    bringup_list = Path("config") / config.version / "matching_units.txt"
+    bringup = set(bringup_list.read_text(encoding="utf-8").split()) if bringup_list.exists() else set()
+    for lib in config.libs:
+        for obj in lib.get("objects", []):
+            stem = str(Path(obj.name).with_suffix("").as_posix())
+            obj.completed = bool({f"{lib['lib']}/{stem}", f"MarioSt/{stem}", f"MarioSt/{lib['lib']}/{stem}"} & bringup)
 
 # Optional extra categories for progress tracking
 # Adjust as desired for your project
