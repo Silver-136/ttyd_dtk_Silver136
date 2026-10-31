@@ -180,6 +180,12 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init event of the Bill Blaster: installs its wait, attack, damage and confusion events,
+ * shifts it 20 units right, sets the poses of the two upper barrel parts (KTA_Z_3 and KTA_Z_2)
+ * and makes them hidden and shadowless (PART_ATTR_HIDDEN, PART_ATTR_NO_SHADOW); the attack scripts show them
+ * only while it fires.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

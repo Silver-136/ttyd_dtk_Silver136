@@ -128,6 +128,10 @@ static EVT_BEGIN(fabio_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Fabio during trouble 28: the first talk gives the request ("irai_28_001")
+ * and sets GSWF_TROUBLE_WORK_BASE; later talks remind Mario ("irai_28_002").
+ */
 static EVT_BEGIN(fabio_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ROUST_THESE_CADS)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)

@@ -54,6 +54,10 @@ static EvtWord puni_vs_toge[136];
 static KusaAccess ueki_access_data[4];
 EvtWord mri_11_init_evt[192];
 
+/**
+ * Init of Jabbi villager 7: once the chapter 2 finale has been played
+ * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-220, 0, 110).
+ */
 EVT_BEGIN(toge_7_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -82,6 +86,10 @@ EVT_BEGIN(toge_7_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of Jabbi villager 8: once the chapter 2 finale has been played
+ * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-75, 0, -100).
+ */
 EVT_BEGIN(toge_8_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -110,6 +118,10 @@ EVT_BEGIN(toge_8_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of Jabbi villager 9: once the chapter 2 finale has been played
+ * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (70, 0, 80).
+ */
 EVT_BEGIN(toge_9_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -138,6 +150,10 @@ EVT_BEGIN(toge_9_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of Jabbi villager 10: once the chapter 2 finale has been played
+ * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (180, 0, 60).
+ */
 EVT_BEGIN(toge_10_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -177,6 +193,10 @@ EVT_BEGIN(toge_10_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of Jabbi villager 11: once the chapter 2 finale has been played
+ * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-70, 0, -35).
+ */
 EVT_BEGIN(toge_11_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -365,6 +385,12 @@ static EVT_BEGIN(puni_win_offscreen)
     RETURN
 EVT_END()
 
+/**
+ * Victory scene of the second Puni-versus-Jabbi fight; the mirror image of the one in mri_08.
+ * Waits until every Puni has landed, the camera moves to the crowd, Punio speaks (stg2_mri_e17_01_04),
+ * the crowd charges the hive on the left, the beacon breaks,
+ * the music returns and the fight is marked won (GSWF_MRI11_JABBI_FIGHT2_WON). Mario gets control back.
+ */
 static EVT_BEGIN(puni_win)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
@@ -585,6 +611,11 @@ static EVT_BEGIN(puni_vs_toge_init)
     RETURN
 EVT_END()
 
+/**
+ * Start of the second fight with the Jabbi: as puni_vs_toge_init,
+ * but Punio speaks to the Puni (stg2_mri_e17_01_01 and 01_02) while the camera zooms;
+ * sets GSWF_MRI11_JABBI_FIGHT2_STARTED.
+ */
 static EVT_BEGIN(puni_vs_toge)
     CALL(evt_puni_wait_systemmode, 2)
     CALL(evt_mri_toge_enter_init)
@@ -633,6 +664,13 @@ static KusaAccess ueki_access_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Map init script of mri_11, the second Jabbi fortress:
+ * like mri_08 it starts the Punies-versus-Jabbi fight (or its resume scene)
+ * until it has been won (GSWF_MRI11_JABBI_FIGHT2_WON),
+ * keeps the fortress and walls in place until then and hides them afterwards,
+ * and plays the waterfall and water animations.
+ */
 EVT_BEGIN(mri_11_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 11, 0, -310, -1000, -1000, 0, 0)

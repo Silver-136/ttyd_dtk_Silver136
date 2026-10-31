@@ -85,6 +85,10 @@ static EVT_BEGIN(rival_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of villager Puni 6: once the chapter 2 finale has been played
+ * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (390, 0, -35) and sets its facing.
+ */
 EVT_BEGIN(puni_6_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -107,6 +111,10 @@ EVT_BEGIN(puni_6_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of villager Puni 7: once the chapter 2 finale has been played
+ * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-350, -310, 100).
+ */
 EVT_BEGIN(puni_7_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -129,6 +137,10 @@ EVT_BEGIN(puni_7_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of villager Puni 8: once the chapter 2 finale has been played
+ * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-380, 0, 10).
+ */
 EVT_BEGIN(puni_8_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -150,6 +162,10 @@ EVT_BEGIN(puni_8_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of villager Puni 9: once the chapter 2 finale has been played
+ * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (330, -310, 45) and sets its facing.
+ */
 EVT_BEGIN(puni_9_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -172,6 +188,10 @@ EVT_BEGIN(puni_9_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of villager Puni 10: once the chapter 2 finale has been played
+ * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-120, -310, 50).
+ */
 EVT_BEGIN(puni_10_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -204,6 +224,10 @@ EVT_BEGIN(puni_10_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of villager Puni 11: once the chapter 2 finale has been played
+ * and Mario has left the tree (GSWF_MRI_LEFT_TREE_AFTER_STG2), moves it to (-190, -310, 125).
+ */
 EVT_BEGIN(puni_11_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)

@@ -1233,6 +1233,20 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for Mr. Goldbob.
+ * During Trouble Center request 25 he gives Mario a Package for General White,
+ * who he says is back in Fahr Outpost (irai_25_00, 01), then repeats where White is (irai_25_02);
+ * once Mario has picked up White's trail elsewhere (GSWF_TROUBLE_WORK_3,
+ * set in Rogueport and Glitzville) he says White was just here
+ * and left for Fahr Outpost again (irai_25_03, setting GSWF_TROUBLE_WORK_4);
+ * and once the package is delivered he pays 64 coins and finishes the request (irai_25_04).
+ * During request 29 he mentions that Bub and his wife had a row (irai_29_18_1).
+ * Otherwise his line depends on the story: wanting a gold train set (stg6_pik_01)
+ * until the return from the train trip, stg7_pik_19_01_1 until Mayor Bob,
+ * then (chapters 7 and 8) the cannon permit talk (talk_papa_taihou_kyoka) until it is approved
+ * and stg7_pik_19_01 after, and stg7_pik_19_01_2 after the game.
+ */
 static EVT_BEGIN(talk_papa)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
@@ -1292,6 +1306,20 @@ s32 iri_29_item_tbl[] = {
     ITEM_PRESENT, -1,
 };
 
+/**
+ * Talk script for Mrs. Goldbob.
+ * During Trouble Center request 29, until she has had the Present:
+ * if Mario has one she greets him (irai_29_14),
+ * takes it from the item window and reads Bub's apology letter (irai_29_15);
+ * then (Mario and the partner stepping aside if they stand in her way) she walks off bawling (irai_29_16),
+ * comes back, asks Mario to tell Bub she is not angry (irai_29_17),
+ * restarts the music and sets GSWF_TROUBLE_WORK_1.
+ * Without the Present she says she has no son (irai_29_18_2); after the handover she says irai_29_18.
+ * Otherwise her story lines are stg6_pik_02 (looking for a present for Bub)
+ * until the return from the train trip, stg7_pik_21_1 until Mayor Bob,
+ * then in chapters 7 and 8 stg7_pik_21_1 or, after the first cannon permit talk,
+ * stg7_pik_20 until the cannon is approved and stg7_pik_21 after, and stg7_pik_21_2 after the game.
+ */
 static EVT_BEGIN(talk_mama)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)

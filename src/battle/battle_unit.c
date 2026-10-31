@@ -364,6 +364,7 @@ BattleUnitPart* BtlUnit_GetPartsPtr(BattleUnit* unit, s32 partNum) {
     return part;
 }
 
+/** Returns the part number of the unit's main (body) part, the one flagged PART_ATTR_MAIN, or -1. */
 s32 BtlUnit_GetBodyPartsId(BattleUnit* unit) {
     BattleUnitPart* part;
     s32 ret = -1;
@@ -400,6 +401,10 @@ void BtlUnit_AddPos(BattleUnit* unit, f32 x, f32 y, f32 z) {
     unit->mPosition.z += z;
 }
 
+/**
+ * Reads a part's own position field (absolute only for PART_ATTR_WORLD_POSITION parts;
+ * see BtlUnit_GetPartsWorldPos).
+ */
 void BtlUnit_GetPartsPos(BattleUnitPart* part, f32* x, f32* y, f32* z) {
     *x = part->mPosition.x;
     *y = part->mPosition.y;
@@ -420,6 +425,10 @@ void BtlUnit_AddPartsPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     part->mPosition.z += z;
 }
 
+/**
+ * Stage position of a part: its own position for PART_ATTR_WORLD_POSITION parts,
+ * otherwise the unit's position plus the part's offset, with x mirrored by the unit's facing direction.
+ */
 void BtlUnit_GetPartsWorldPos(BattleUnitPart* part, f32* x, f32* y, f32* z) {
     BattleUnit* unit = part->mOwner;
     f32 ux, ox, uy, oy, uz, oz;
@@ -1470,6 +1479,11 @@ void BtlUnit_OffUnitFlag(BattleUnit* unit, s32 flags) {
     unit->flags &= ~flags;
 }
 
+/**
+ * Looks up the animation name for a pose type in the part's pose table,
+ * taking the first entry that matches the type or its group's fallback (BTL_POSE_NORMAL,
+ * BTL_POSE_DAMAGE or BTL_POSE_STAY_DEFAULT). NULL when nothing fits.
+ */
 const char* BtlUnit_GetPoseNameFromType(BattleUnitPart* part, s32 type) {
     PoseTableEntry* pose = part->poseTable;
     s32 alt;

@@ -81,6 +81,12 @@ static ShopperData35 shopper_data = {
     {"stg2_shop_00", "stg2_shop_01", "stg2_shop_02", "stg2_shop_03", "stg2_shop_04", "stg2_shop_05", "stg2_shop_06", "stg2_shop_07", "stg2_shop_08", "stg2_shop_09", "stg2_shop_10", "stg2_shop_11", "stg2_shop_12", "stg2_shop_13", "stg2_shop_14", "stg2_shop_15", "stg2_shop_16", "stg2_shop_17", "stg2_shop_18", "stg2_shop_19", "stg2_shop_20", "stg2_shop_21", "stg2_shop_22", "stg2_shop_23", "stg2_shop_24", "stg2_shop_25", "stg2_shop_26", "stg2_shop_27", "stg2_shop_28", "stg2_shop_29", "stg2_shop_30", "stg2_shop_31", "stg2_shop_32", "stg2_shop_33", "stg2_shop_34"}, // msgs
 };
 
+/**
+ * Talk script of the little Jabbi in the Puni shop room:
+ * Punio, the clerk and the party talk about the little Jabbi joining the Puni group and the player answers yes
+ * or no. If Mario agrees the Jabbi joins the Puni group (GSWF_MRI_JABBI_IN_PUNI_GROUP);
+ * if not, the Jabbi hops away.
+ */
 EVT_BEGIN(chibitoge_nakama)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_TOGETTI_JUMP1"), LW(0), LW(1), LW(2), 0)

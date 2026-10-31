@@ -60,6 +60,12 @@ EvtWord evt_nozoki[769];
 EvtWord evt_sensyu_reentry[293];
 EvtWord tou_05_init_evt[445];
 
+/**
+ * Entrance script for the air duct: puts Mario and the partner at the duct mouth and walks them out of it.
+ * The first time (GSWF_TOU05_DUCT_GRATE_FALLEN clear) the duct grate (haikikau_2) falls off with a clatter,
+ * the partner remarks (stg3_tou_456) and the flag is set; the hit object a_haikikan is switched on.
+ * Control returns to Mario and LW(0) is set to 1.
+ */
 static EVT_BEGIN(evt_dakuto)
     CALL(evt_mario_normalize)
     CALL(evt_mario_set_pos, -160, 85, -65)
@@ -110,6 +116,10 @@ static EVT_BEGIN(n_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Entrance script: cancels a registered but unplayed match (clears GSWF_TOU_MATCH_RESERVED)
+ * when Mario leaves through the door.
+ */
 EVT_BEGIN(n_bero_match_reset)
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
         DEBUG_PUT_MSG(STRING("登録していた試合をリセット"))

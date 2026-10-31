@@ -179,6 +179,10 @@ static KusaAccess kusa_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Case script for the grass patch a_kusa_1: Mario hits it, the grass shakes and a pipe rises out of it;
+ * sets GSWF_HEI01_BUSH_PIPE_REVEALED and enables the "dokan" exit.
+ */
 EVT_BEGIN(kusa_dokan)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("anm_kusa_1"), LW(5), LW(6), LW(7))

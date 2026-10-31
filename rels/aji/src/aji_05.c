@@ -80,6 +80,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Item-box script for the chest at "box": gives Mario the card key (ITEM_CARD_KEY_0x1D),
+ * sets GSWF_AJI05_CARD_KEY_TAKEN, clears the A_no1 hit flag 2048,
+ * switches off the floor lights and makes the floor visibly flash between two states five times
+ * while Mario turns to face east.
+ */
 static EVT_BEGIN(evt_box)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
@@ -148,6 +154,13 @@ static EvtWord hikaru_yuka_init[] = {
     RETURN
 };
 
+/**
+ * Init script of aji_05, a second glowing-floor room like aji_02:
+ * plays BGM_STG7_DUN2, sets up the exits and a Sleepy Sheep badge block,
+ * and keeps the floor panels reacting to Mario (hikaru_yuka_init)
+ * until the chest's card key has been taken (GSWF_AJI05_CARD_KEY_TAKEN);
+ * afterwards the panel lights are all off.
+ */
 EVT_BEGIN(aji_05_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))

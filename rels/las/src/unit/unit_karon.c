@@ -306,6 +306,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of the Dry Bones: it spins for 48 frames with the death sound, a smoke puff appears and the coins,
+ * experience and star points are awarded once (unit work 1 guards it);
+ * then it tips over and the unit is killed: KO'd and deleted
+ * when the hit defeated it for good (damage flag 0x400,
+ * which a reviving unit only gets from fire or explosions), otherwise only marked inactive (KILL_UNIT_INACTIVE).
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(0), 48)

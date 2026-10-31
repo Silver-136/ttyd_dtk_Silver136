@@ -1791,6 +1791,11 @@ USER_FUNC(muj_get_door_check) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: sets the "dark world" view matrix,
+ * a camera looking down from height 100 at the offset z in args[0];
+ * used by the dark ending scene (after STORY_STG8_15_GRODUS) where the camp goes dark.
+ */
 static USER_FUNC(yami_view) {
     f32 z = evtGetFloat(event, event->args[0]);
     Mtx mtx;
@@ -1882,6 +1887,12 @@ static USER_FUNC(starstone_set_ry) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * The world-goes-dark cutaway at STORY_STG8_15_GRODUS (entered from "sekai_yami2"):
+ * control is taken, the camp is drawn dark with the camera shaking and a quake sound,
+ * four sailors run back and forth in panic, someone screams for help (stg8_dark_06), the screen flashes,
+ * and the game returns to pik_01 at "sekai_yami2".
+ */
 static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -2176,6 +2187,11 @@ EVT_BEGIN(yakan_anime)
     RETURN
 EVT_END()
 
+/**
+ * Map init for muj_01 (the camp): picks music (ending-scene variants after STORY_STG8_15_GRODUS),
+ * registers the exits, Flavio's shop and the inn, the save block and Star Pieces,
+ * then spawns the scene for the story stage (nakamaware_event, settoku_event or the ending epilogue).
+ */
 EVT_BEGIN(muj_01_init_evt)
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)

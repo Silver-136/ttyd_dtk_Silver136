@@ -564,6 +564,12 @@ static EVT_BEGIN(epilogue_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * Epilogue scene, second part (entered as "epilogue2"):
+ * Mario and Luigi are in the house, Toadsworth and Peach come in through the front door
+ * and talk (ep_47 to ep_54), then walk away; the ending BGM starts, a spotlight fades out on Mario,
+ * the story progress is set to STORY_STG9_00_EPILOGUE and the map changes to end_00.
+ */
 static EVT_BEGIN(epilogue_evt2)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_END_AAA1"))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))

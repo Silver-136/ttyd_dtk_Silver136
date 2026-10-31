@@ -191,6 +191,11 @@ EVT_BEGIN(iri_12_kino_makkino_talk)
     RETURN
 EVT_END()
 
+/**
+ * Interrupt (talk) script for Kino while Trouble request 12 is active.
+ * Before Makkino has arrived (GSWF_TROUBLE_WORK_2 = 0) it says irai_12_001_1 the first time
+ * and irai_12_001_2 afterwards; once Makkino stands beside her it starts the final conversation with LW(0) = 0.
+ */
 EVT_BEGIN(iri_12_kino_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
@@ -218,6 +223,11 @@ static EVT_BEGIN(iri_12_makkino_talk)
     RETURN
 EVT_END()
 
+/**
+ * Sets up Kino and Makkino while Trouble Center request 12 is active.
+ * Kino stands at (60, 0, -70) facing left (or right once Makkino has come);
+ * Makkino appears at (90, 0, -70) only after GSWF_TROUBLE_WORK_2 is set. Each gets a talk interrupt script.
+ */
 static EVT_BEGIN(iri_12_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
         CALL(evt_npc_entry, STRING("キーノ"), STRING("c_kokinopio"))

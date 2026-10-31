@@ -900,6 +900,12 @@ EVT_BEGIN(talk_tenin)
     RETURN
 EVT_END()
 
+/**
+ * Init of General White (ホワイト): during Trouble Center job 25 (work flag 4 set, 6 not) he is placed at (380, 45,
+ * -150) facing west and either idles as a talking NPC (work flag 5) or lies in pose N_1 with a narrow width
+ * and no talk script; the same bed placement is used when GSWF_STG7_WHITE_TWILIGHT_HINT is set
+ * and GSWF_BOM02_GENERAL_WHITE_WOKEN is not.
+ */
 static EVT_BEGIN(init_white)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(4), 1)
@@ -1012,6 +1018,14 @@ s32 iri_25_item_tbl[] = {
     ITEM_PACKAGE, -1,
 };
 
+/**
+ * Talk script of General White for Trouble Center job 25, once he is awake (GSWF_TROUBLE_WORK_4) and before the
+ * package is delivered (GSWF_TROUBLE_WORK_6): he apologizes for the chase if Mario woke him on the bed
+ * (GSWF_TROUBLE_WORK_5, irai_25_19), then an item menu asks for the package (ITEM_PACKAGE);
+ * when it is handed in he
+ * thanks Mario, sends him to Goldbob for the reward (irai_25_18) and hops away off the map. Otherwise he says
+ * nothing.
+ */
 static EVT_BEGIN(talk_white)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(4), 1)
@@ -1052,6 +1066,12 @@ static EVT_BEGIN(talk_white)
     RETURN
 EVT_END()
 
+/**
+ * Trouble Center job 25 (the package for White):
+ * the player is asked repeatedly whether to keep jumping on White's bed;
+ * after eleven hops General White wakes (irai_25_14 to 17) and
+ * then takes the package via talk_white (GSWF_TROUBLE_WORK_5). Saying no ends it early.
+ */
 EVT_BEGIN(iri_25_white_bed)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

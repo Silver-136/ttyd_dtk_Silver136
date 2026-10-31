@@ -3441,6 +3441,15 @@ static EVT_BEGIN(sekai_yami_shake)
     RETURN
 EVT_END()
 
+/**
+ * Final-chapter scene ("sekai yami", the world goes dark)
+ * when the map is entered through sekai_yami2 at STORY_STG8_15_GRODUS:
+ * with Mario and the partner off stage the town is drawn in darkness (envSetYami),
+ * the light flickers with SFX_STG8_LIGHT1 (once from US on, twice before),
+ * villagers A to E turn about in panic (sekai_yami_npc), crows C, D and E fly off,
+ * a quake rumbles with the camera shaking, a villager screams (stg8_dark_05)
+ * and the game moves on to muj_01 (entrance sekai_yami2).
+ */
 static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -3549,6 +3558,15 @@ static EVT_BEGIN(minnnanokoe_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * Final-battle scene ("minna no koe", everyone's voices)
+ * when the map is entered through minnnanokoe at STORY_STG8_15_GRODUS:
+ * with Mario off stage and the town in darkness,
+ * a Crystal Star effect hovers and spins over the square
+ * while the three children cheer Mario on (stg8_las_148_26 to 31), villager A,
+ * the woman (worried about Vivian) and the mayor speak (32 to 34), the children cheer again (35 to 37),
+ * and the game moves on to muj_01 (entrance minnnanokoe).
+ */
 static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)

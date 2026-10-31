@@ -1079,6 +1079,7 @@ BOOL mobjGetHint(MapObjectEntry* entry) {
     return (entry->flags >> 5) & 1; // MOBJ_FLAG_SHOW_HINT, normalized to BOOL
 }
 
+/** Returns TRUE while any map object is busy (MOBJ_FLAG_BUSY); the pause menu does not open then. */
 BOOL mobjCheckExec(void) {
     MapObjectWork* wp = mobjGetWork();
     int i;

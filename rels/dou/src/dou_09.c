@@ -497,6 +497,12 @@ static EVT_BEGIN(evt_ride_ship)
     RETURN
 EVT_END()
 
+/**
+ * Case script run when Bobbery bombs the cracked wall S_ki:
+ * plays SFX_OFF_WALL_BREAK1, enables the w_bero exit,
+ * sets GSWF_DOU09_BOMB_WALL_BLOWN and shatters the wall as a folding paper image (OFF_d_bom_ver2)
+ * before hiding it and its hit area.
+ */
 static EVT_BEGIN(bombwall_bomb)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -539,6 +545,10 @@ static EVT_BEGIN(bombwall_bomb)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the bomb wall: until GSWF_DOU09_BOMB_WALL_BLOWN is set it closes the w_bero exit
+ * and lets Bobbery's bomb trigger bombwall_bomb on A_ki1; afterwards the wall is already hidden.
+ */
 static EVT_BEGIN(bombwall_init)
     IF_INT_EQUAL(GSWF_DOU_09_BOMB_WALL_BLOWN, 0)
         SET_VALUE(LW(0), STRING("w_bero"))

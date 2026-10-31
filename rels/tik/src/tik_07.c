@@ -279,6 +279,10 @@ static EVT_BEGIN(peach_mail)
     RETURN
 EVT_END()
 
+/**
+ * Break callback of the big Lv 2 block (mobj_blk01, GSWF_TIK07_BIG_BLOCK_BROKEN): shows the s_hikari map-object
+ * group, which the map init hides while the block is unbroken.
+ */
 static EVT_BEGIN(evt_block)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_hikari"), MAP_OBJ_FLAG_HIDDEN)
     RETURN

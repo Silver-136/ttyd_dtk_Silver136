@@ -1263,6 +1263,15 @@ static EVT_BEGIN(evt_kime_pose)
     RETURN
 EVT_END()
 
+/**
+ * Spawns the NPCs for the ring map, depending on story progress.
+ * Before the intro it places Rawk Hawk and the Spiked Goomba-type opponent;
+ * in the regular story it creates two random sparring fighters for watch mode (unless a match is reserved);
+ * and when GSWF_TOU_MATCH_RESERVED is set it creates the opponent team as NPCs "enemy 1..5" hidden under the
+ * floor, with their tribes from evt_tou_get_fighter_tribe,
+ * plus the special extra NPCs used by the random ambush fights ("Ran": Bowser at rank 6,
+ * otherwise a pair of Iron Cleft-type fighters).
+ */
 EVT_BEGIN(npc_entry)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
         CALL(evt_npc_entry, PTR(/*("\203`\203\203\203\223\203s\203\207\203\223")*/("\203`\203\203\203\223\203s\203\207\203\223")), PTR("c_bred_h"))

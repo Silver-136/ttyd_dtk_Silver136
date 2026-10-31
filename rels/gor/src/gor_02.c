@@ -473,6 +473,11 @@ EVT_BEGIN(gor_02_event_00)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of the pipe "dokan" (to tik_01): the first time through,
+ * parks the partner out of sight below the map and sets GSWF_GOR02_FRANKLY_INTRO_SEEN.
+ * Returns 0 in LW(0) so the pipe still works.
+ */
 EVT_BEGIN(gor_02_event_01)
     IF_INT_EQUAL(GSWF_GOR_02_TUTORIAL_PIPE_TAKEN, 1)
         SET_VALUE(LW(0), 0)
@@ -2082,6 +2087,10 @@ EVT_BEGIN(tozokudan3_talk)
     RETURN
 EVT_END()
 
+/**
+ * Makes Sanders walk to Bobbery's door and open it (50, 25) and sets GSWF_GOR02_BOBBERY_DOOR_OPEN,
+ * then says mac_4_056_01. Does nothing if the door is already open.
+ */
 EVT_BEGIN(sanders_open_door)
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 1)
         RETURN
@@ -2100,6 +2109,11 @@ EVT_BEGIN(sanders_open_door)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Sanders (Bobbery) at his house: lets him pass through walls and places him by story stage:
+ * at (0, 0, -50) before Mario meets Bobbery, and until his decision at (0, 0, -50)
+ * or (50, 0, -30) depending on GSWF_GOR02_BOBBERY_DOOR_OPEN (whether the door has been opened).
+ */
 static EVT_BEGIN(sanders_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     SWITCH(GSW_STORY_PROGRESS)
@@ -3357,6 +3371,11 @@ static DoorParam door_data_03 = {
     evt_door_03_close, // evtClose
 };
 
+/**
+ * Door-open handler used with Sanders's door (house 03):
+ * if Sanders has not opened the door yet (GSWF_GOR02_BOBBERY_DOOR_OPEN is 0) shows gor_02_012 and stays shut;
+ * otherwise runs the normal evt_door_open.
+ */
 EVT_BEGIN(evt_door_sanders_open)
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
         CALL(evt_mario_key_onoff, 0)
@@ -3434,6 +3453,16 @@ static EVT_BEGIN(evt_door_03_caseopen)
     RETURN
 EVT_END()
 
+/**
+ * Open callback of house 03's roll-in entrance (door_data_03_roll),
+ * the gap into Bobbery's (Sanders's) house that
+ * Mario enters rolled up as a paper tube (evt_door_03_caseopen plays his roll-down sounds):
+ * three smoke puffs rise at
+ * the "S_i01_dan_mC" box, the camera moves in, the music and ambience dip and low-pass
+ * and Mario rolls to (65, -55).
+ * Until GSWF_GOR02_BOBBERY_DOOR_OPEN is set he unrolls facing left and Sanders turns and asks what they want
+ * (mac_4_049). It then registers evt_door_03_caseopen again as a stand-on case event.
+ */
 EVT_BEGIN(evt_door_03_roll_open)
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
     BEGIN_INLINE_EVENT

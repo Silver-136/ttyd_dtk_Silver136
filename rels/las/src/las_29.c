@@ -3151,6 +3151,10 @@ EVT_BEGIN(last_evt_4)
     RETURN
 EVT_END()
 
+/**
+ * Init of Peach's glow in las_29: at STORY_STG8_15_GRODUS,
+ * sets up the glow effect around Peach and runs it with the blinking power table.
+ */
 static EVT_BEGIN(shuryolight_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_shuryolight_init, STRING("シュリョー"))

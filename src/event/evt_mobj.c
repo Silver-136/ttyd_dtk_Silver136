@@ -2122,6 +2122,14 @@ static inline void recoveryHeal(void) {
     }
 }
 
+/**
+ * Main function of the heart (recovery) blocks:
+ * hitting one from below restores Mario's HP and FP and every active partner's HP.
+ * The coin-taking version first checks the price (typeData[1]), shows "sys_no_coin" when Mario is short,
+ * charges the coins and keeps a price bubble above it.
+ * The first hit outside the kiosk build shows the "kaifuku_first_hit" tutorial instead
+ * and sets GSWF_HEART_BLOCK_TUTORIAL_SEEN.
+ */
 s32 mobj_recovery_blk(MapObjectEntry* mobj) {
     MarioWork* mario;
     PouchPartyData* party;

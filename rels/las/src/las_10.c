@@ -512,6 +512,12 @@ EVT_BEGIN(las_10_temae_kabe)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the first entry to the Riddle Tower hall.
+ * Waits for the elevator, then Mario and the partner walk to the centre,
+ * the partner speaks twice (stg8_las_31, stg8_las_32) while the camera looks up at the tower,
+ * and GSWF_LAS10_RIDDLE_TOWER_ENTERED is set.
+ */
 static EVT_BEGIN(first_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
@@ -779,6 +785,7 @@ EVT_BEGIN(kagi1_evt)
     RETURN
 EVT_END()
 
+/** Event script: the same as kagi1_evt for key stand 2 (S_kagi2, GSWF_LAS10_TOWER_LOCK_2). */
 EVT_BEGIN(kagi2_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
@@ -809,6 +816,7 @@ EVT_BEGIN(kagi2_evt)
     RETURN
 EVT_END()
 
+/** Event script: the same as kagi1_evt for key stand 3 (S_kagi3, GSWF_LAS10_TOWER_LOCK_3). */
 EVT_BEGIN(kagi3_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
@@ -839,6 +847,7 @@ EVT_BEGIN(kagi3_evt)
     RETURN
 EVT_END()
 
+/** Event script: the same as kagi1_evt for key stand 4 (S_kagi4, GSWF_LAS10_TOWER_LOCK_4). */
 EVT_BEGIN(kagi4_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
@@ -869,6 +878,7 @@ EVT_BEGIN(kagi4_evt)
     RETURN
 EVT_END()
 
+/** Event script: the same as kagi1_evt for key stand 5 (S_kagi5, GSWF_LAS10_TOWER_LOCK_5). */
 EVT_BEGIN(kagi5_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
@@ -899,6 +909,7 @@ EVT_BEGIN(kagi5_evt)
     RETURN
 EVT_END()
 
+/** Event script: the same as kagi1_evt for key stand 6 (S_kagi6, GSWF_LAS10_TOWER_LOCK_6). */
 EVT_BEGIN(kagi6_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
@@ -929,6 +940,7 @@ EVT_BEGIN(kagi6_evt)
     RETURN
 EVT_END()
 
+/** Event script: the same as kagi1_evt for key stand 7 (S_kagi7, GSWF_LAS10_TOWER_LOCK_7). */
 EVT_BEGIN(kagi7_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))
@@ -959,6 +971,7 @@ EVT_BEGIN(kagi7_evt)
     RETURN
 EVT_END()
 
+/** Event script: the same as kagi1_evt for key stand 8 (S_kagi8, GSWF_LAS10_TOWER_LOCK_8). */
 EVT_BEGIN(kagi8_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(make_kagi_tbl, LW(0), LW(1))

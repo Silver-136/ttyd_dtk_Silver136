@@ -199,6 +199,13 @@ static USER_FUNC(_battle_set_lecture_unit_id) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper run by Professor Frankly's init_event to set up the Star Power lecture's audience:
+ * sets BREAK_SLOT_FLAG_LECTURE
+ * (the bingo reels always show card 3), freezes the audience,
+ * removes everyone and seats ten Toads in seats
+ * 5 to 14 and a Hammer Bro in seat 48 that never runs away (the one who later threatens to throw his hammer).
+ */
 static USER_FUNC(lecture_init) {
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
     BattleAudience* aud = BattleAudienceBaseGetPtr();

@@ -714,6 +714,11 @@ static EVT_BEGIN(first_time_w_bero)
     RETURN
 EVT_END()
 
+/**
+ * Exit script of the northeast door (to mri_01):
+ * the first time through, Punio is hidden and the party member takes his place,
+ * then he is marked as following Mario (GSWF_MRI00_PUNIO_FOLLOWING). Returns 0 to the door code in LW(0).
+ */
 EVT_BEGIN(out_ne_bero)
     IF_INT_EQUAL(GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO, 0)
         WAIT_MS(50)
@@ -1110,6 +1115,11 @@ f32 guide_move_data[] = {
     -188.3354f, 130.73201f, 155.65002f, -185.70927f, 160.16298f, 165.45027f, -184.42146f,
 };
 
+/**
+ * Cutscene after Flurrie blows the clouds off the tree:
+ * the hidden door part is shown, Punio jumps in, Mario and Flurrie talk, and the secret door (S_doa) opens.
+ * Sets the story to STORY_STG2_10_SECRET_ENTRANCE_REVEALED and enables the northeast door.
+ */
 EVT_BEGIN(open_bigtree)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))

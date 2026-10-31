@@ -674,6 +674,12 @@ EVT_BEGIN(kinoji_talk)
     RETURN
 EVT_END()
 
+/**
+ * Watches for Mario walking up to Zess T. ("Nancy") in the western alley before the contact lens quest:
+ * when he enters the box near x -580 to -400 she stops pacing
+ * and the first scene runs (gor_01_000 to gor_01_007), where she turns away, Mario bumps into her,
+ * her glasses break and she ends up blocking the way. Sets GSWF_GOR01_ZESS_BLOCKS_GATE.
+ */
 EVT_BEGIN(nancy_init_check)
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     LOOP(0)
@@ -972,6 +978,12 @@ s32 item_tbl_nancy[] = {
     ITEM_CONTACT_LENS, -1,
 };
 
+/**
+ * Talk event of Zess T. Before the contact lens is delivered,
+ * Mario can hand over a Contact Lens (the item list item_tbl_nancy);
+ * she then thanks him, walks into her house, the west exit opens and GSWF_GOR01_LENS_DELIVERED is set.
+ * After that talking to her runs cooking_evt.
+ */
 EVT_BEGIN(nancy_talk)
     IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         CALL(evt_pouch_check_item, ITEM_CONTACT_LENS, LW(0))
@@ -2211,6 +2223,13 @@ static EVT_BEGIN(borodo2_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Borodo for job 4 (irai_04_005):
+ * he stops the Goomba (Kuribo 1)'s regular event and sends it off,
+ * moving it to (229, 0, -400) and then to (420, -350);
+ * the Goomba speaks (irai_04_006), the scene adds 20 coins (evt_sub_get_coin) and goes on through irai_04_008
+ * and irai_04_009, ending with GSWF_TROUBLE_WORK_3.
+ */
 static EVT_BEGIN(borodo2_talk)
     CALL(evt_npc_get_reglid, STRING("クリボー１"), LW(0))
     DELETE_EVENT(LW(0))

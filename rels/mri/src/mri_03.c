@@ -516,6 +516,10 @@ static EVT_BEGIN(sister_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of Punio in the cell room: when he is waiting at the cell (GSWF_MRI03_PUNIO_WAITING_AT_CELL) he
+ * stands in front of the blue cell, facing it.
+ */
 static EVT_BEGIN(guide_init)
     IF_INT_EQUAL(GSWF_MRI_PUNIO_WAITING_AT_JAIL, 1)
         CALL(evt_npc_set_position, STRING("me"), -145, 0, -60)
@@ -707,6 +711,10 @@ EVT_BEGIN(jail_init_00)
     RETURN
 EVT_END()
 
+/**
+ * Opens the red cell door: sets GSWF_MRI03_RED_CELL_DOOR_OPEN,
+ * swings the door open with a sound and turns on its collisions. Called when the door unlocks.
+ */
 EVT_BEGIN(red_jail_open)
     SET_VALUE(GSWF_MRI_03_RED_JAIL_OPENED, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -770,6 +778,10 @@ EVT_BEGIN(evt_check00)
     RETURN
 EVT_END()
 
+/**
+ * Opens the blue cell door: sets GSWF_MRI03_BLUE_CELL_DOOR_OPEN, swings the door open with a sound,
+ * enables its collisions and runs the scene with Punio's sister (guide_sister).
+ */
 EVT_BEGIN(blue_jail_open)
     SET_VALUE(GSWF_MRI_03_BLUE_JAIL_OPENED, 1)
 #ifndef VERSION_G8ME01

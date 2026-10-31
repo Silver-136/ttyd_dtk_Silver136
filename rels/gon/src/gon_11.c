@@ -987,6 +987,10 @@ EVT_BEGIN(iri_16_box_evt)
     RETURN
 EVT_END()
 
+/**
+ * End event of the request-16 cloud: places the chest (box), switches off the cloud's hit area,
+ * plays the success jingle and sets GSWF_TROUBLE_WORK_1.
+ */
 EVT_BEGIN(iri_16_cloud_evt)
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(iri_16_box_evt), GSWF_TROUBLE_WORK(2))
     CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
@@ -1004,6 +1008,11 @@ EVT_BEGIN(iri_16_touch_evt)
     RETURN
 EVT_END()
 
+/**
+ * Map-init part of Trouble Center request 16: while the request is active it sets up the cloud (A_kura) with its
+ * case event and the capture map, or, once the cloud is cleared (GSWF_TROUBLE_WORK_1), the reward chest (box);
+ * when the request is not active it disables the hit objects A_taka and A_kura.
+ */
 static EVT_BEGIN(iri_16_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ELUSIVE_BADGE)
         CALL(evt_hitobj_onoff, STRING("A_taka"), 1, 0)

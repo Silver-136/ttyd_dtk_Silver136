@@ -740,6 +740,12 @@ static EVT_BEGIN(garawaru_init)
     RETURN
 EVT_END()
 
+/**
+ * Regular event of the rough sailor.
+ * Before Goombella joins he paces the pier until the X-Naut ambush has been seen
+ * (GSWF_GOR00_GOOMBELLA_ASSAULTED_SEEN) and then stands facing right;
+ * at most other stages he runs garawaru_urouro2, and he stays put during Chapter 4's Flavio scene.
+ */
 EVT_BEGIN(garawaru_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG0_07_GOOMBELLA_JOINS)
@@ -1382,6 +1388,11 @@ static EVT_BEGIN(korutesu_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Cortez at the harbor: asks whether to sail (gor_00_025 yes/no).
+ * Yes sets GSWF_GOR00_SAIL_TO_KEELHAUL and GF(13) and starts the Keelhaul Key ship with gor_muj_ship_start;
+ * no answers gor_00_026.
+ */
 static EVT_BEGIN(korutesu_talk)
     CALL(evt_msg_print, 0, STRING("gor_00_025"), 0, STRING("me"))
     CALL(evt_msg_select, 0, STRING("gor_00_025_yesno"))
@@ -1484,6 +1495,7 @@ static EVT_BEGIN(borodo2_escape)
     RETURN
 EVT_END()
 
+/** Talk event of Borodo for Trouble Center job 4 (irai_04_004): sets GSWF_TROUBLE_WORK_2 and starts borodo2_escape. */
 static EVT_BEGIN(borodo2_talk)
     CALL(evt_msg_print, 0, STRING("irai_04_004"), 0, STRING("me"))
     SET_VALUE(GSWF_TROUBLE_WORK(2), 1)

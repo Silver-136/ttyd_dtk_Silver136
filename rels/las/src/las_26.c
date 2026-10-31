@@ -450,6 +450,13 @@ EVT_BEGIN(bomb_wall)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_26, the Gloomtail room:
+ * music and ambience by story, the doors to las_25 and las_28, Gloomtail, the wall Bobbery can bomb,
+ * the collapsed body hit area, the Star Key chest after the fight,
+ * the cutscene with the dark world (sekai_yami_evt) at STORY_STG8_15_GRODUS,
+ * and blocks with an Ultra Shroom and Jammin' Jelly.
+ */
 EVT_BEGIN(las_26_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)

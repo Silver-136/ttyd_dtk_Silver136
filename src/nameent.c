@@ -222,6 +222,7 @@ void nameEntOff(void) {
     wp->loadState = 3;
 }
 
+/** Lets the screen take input (NAMEENT_FLAG_INPUT_ON) and returns TRUE while the player has not yet confirmed or cancelled. */
 BOOL nameEntWait(void) {
     wp->flags |= NAMEENT_FLAG_INPUT_ON;
     return wp->state != 101;

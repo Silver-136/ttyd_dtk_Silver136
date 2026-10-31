@@ -402,6 +402,11 @@ static EVT_BEGIN(mobj_box00)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of mri_16, the water room: sets up the Puni, the blue water switch, the bar switch and bar,
+ * the water level or drained water depending on GSWF_MRI16_WATER_SWITCH_PRESSED, the Dizzy Dial,
+ * the Shrink Stomp chest (the badge) and a Shine Sprite block.
+ */
 EVT_BEGIN(mri_16_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 16, 80, -319, -1000, -1000, 4, 3)

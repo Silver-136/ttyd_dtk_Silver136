@@ -435,6 +435,14 @@ EVT_BEGIN(evt_memcard_copy)
     RETURN
 EVT_END()
 
+/**
+ * Retail save script, run from Save Blocks, intermissions and the first save after name entry.
+ * LW(0) is the save kind stored in GSW_SAVE_RESUME_KIND:
+ * 0 is a Save Block, 23 the new-file save (saves without asking),
+ * 21 the ending save (which uses the ending yes/no prompt).
+ * Handles format/create prompts, retries a failed write,
+ * and on failure warns that the game was not saved and offers to try again.
+ */
 EVT_BEGIN(evt_memcard_save)
     SET_VALUE(LW(10), LW(0))
     IF_INT_EQUAL(LW(10), 23)

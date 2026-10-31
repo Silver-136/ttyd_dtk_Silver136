@@ -189,6 +189,10 @@ static KusaAccess ueki_access_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Init script of the breaking floor: until the floor has fallen (GSWF_MRI12_FLOOR_BROKEN is 0) the lower floor
+ * piece (A_f2_rak_01) has its collision off.
+ */
 static EVT_BEGIN(breakyuka_init)
     IF_INT_EQUAL(GSWF_MRI_12_BREAKING_FLOOR_BROKEN, 0)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_01"), 1, 0)

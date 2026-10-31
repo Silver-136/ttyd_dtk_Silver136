@@ -1304,6 +1304,12 @@ void npcSetTalkPose(char* name) {
     }
 }
 
+/**
+ * Called by msgdrv when a speaker stops talking:
+ * puts the named speaker back into its idle animation ("party" / "extparty" use pose 1,
+ * "mario" uses MarioStayPose, an NPC with NPC_FLAG_TALK_ANIM its stayAnim).
+ * Empty names and "(^x^)party" are ignored.
+ */
 void npcSetStayPose(char* name) {
     PartyEntry* party;
     NpcEntry* npc;

@@ -998,6 +998,12 @@ u16 _battleGetPartyIcon(s32 kind) {
 }
 #pragma dont_inline reset
 
+/**
+ * Fills the Change Partner list with each partner whose pouch entry carries POUCH_PARTY_FLAG_JOINED,
+ * with name, icon and HP.
+ * The partner already out and KO'd partners are greyed out, and the cursor starts on the current one.
+ * Returns the count, 0 when there is no partner out.
+ */
 s32 _btlcmd_MakePartyTable(BattleWork* wp) {
     BattleUnit* unit;
     BattleUnit* partner;

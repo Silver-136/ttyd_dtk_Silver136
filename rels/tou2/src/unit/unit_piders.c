@@ -711,6 +711,13 @@ static EVT_BEGIN(yure_event)
     RETURN
 EVT_END()
 
+/**
+ * Moves the Pider down to its low perch ("kuutei", height 10) with a sway
+ * and SFX_ENM_PAIDA_MOVE2 (SFX_ENM_PAIDA_MOVE1 the first time, while unit work 3 is set),
+ * sets its home position there, clears PART_ATTR_HAMMERLIKE_CANNOT_TARGET and
+ * PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET (6291456) on its body part so hammers and shell attacks reach it,
+ * and sets unit work 0 to 1.
+ */
 static EVT_BEGIN(move_kuutei_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_DROP, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -739,6 +746,12 @@ static EVT_BEGIN(move_kuutei_event)
     RETURN
 EVT_END()
 
+/**
+ * Moves the Pider up into the air ("kuuchu" = midair, height 70) with SFX_ENM_PAIDA_MOVE2 and a sway,
+ * sets its home position there, sets PART_ATTR_HAMMERLIKE_CANNOT_TARGET
+ * and PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET
+ * (6291456) on its body part so hammers and shell attacks cannot reach it, and sets unit work 0 to 0.
+ */
 static EVT_BEGIN(move_kuuchu_event)
     SPAWN_EVENT(yure_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

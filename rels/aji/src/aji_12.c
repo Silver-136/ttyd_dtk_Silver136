@@ -132,6 +132,10 @@ const char* hit_list[] = {
     "A_hikaru_44",
 };
 
+/**
+ * Item-box script for the chest at "box": gives Mario the card key (ITEM_CARD_KEY_0x1E),
+ * sets GSWF_AJI12_CARD_KEY_TAKEN, turns off the floor lights and makes Mario turn to face east.
+ */
 static EVT_BEGIN(evt_box)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))

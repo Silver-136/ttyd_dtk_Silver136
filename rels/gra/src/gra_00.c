@@ -599,6 +599,7 @@ static TreeAccess tree_tbl[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/** Pickup callback of the Black Key: sets GSWF_GRA00_BLACK_KEY_TAKEN so the key is not spawned again. */
 EVT_BEGIN(evt_majin_key)
     SET_VALUE(GSWF_GRA_00_BLACK_KEY, 1)
     RETURN

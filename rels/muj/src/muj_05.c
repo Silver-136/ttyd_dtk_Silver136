@@ -772,6 +772,11 @@ static s32 itemsel_table[] = {
     ITEM_SKULL_GEM, -1,
 };
 
+/**
+ * Touching the skull rock: if Mario has no Skull Gem he reads the inscription (stg5_muj_93_01);
+ * with the gem he can pick it from the item window and place it in the rock,
+ * which flashes both eyes and sets GSWF_MUJ05_SKULL_GEM_PLACED.
+ */
 EVT_BEGIN(dokuroiwa_touch)
     CALL(evt_pouch_check_item, ITEM_SKULL_GEM, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -943,6 +948,10 @@ static EVT_BEGIN(cam_shake2)
     RETURN
 EVT_END()
 
+/**
+ * Correct skull rock answer: Mario is frozen, the rock flashes five times,
+ * the camera shakes and the rock opens (GSWF_MUJ05_SKULL_ROCK_OPENED).
+ */
 EVT_BEGIN(answer_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 525, 119, 584, 525, 23, 42, 500, EASING_SINE_IN_OUT)

@@ -459,6 +459,10 @@ EVT_BEGIN(bomb_wanwan)
     RETURN
 EVT_END()
 
+/**
+ * Event script: Bobbery explodes the first Chain Chomp statue (map object wan3, hit object A_wan1).
+ * Hides the letterbox, locks Mario's controls, runs bomb_wanwan and sets GSWF_LAS09_CHOMP_STATUE_1_BOMBED.
+ */
 EVT_BEGIN(bomb_wanwan1_evt)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -472,6 +476,10 @@ EVT_BEGIN(bomb_wanwan1_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: Bobbery explodes the second Chain Chomp statue (wan1, hit object A_wan2).
+ * Same as bomb_wanwan1_evt but sets GSWF_LAS09_CHOMP_STATUE_2_BOMBED.
+ */
 EVT_BEGIN(bomb_wanwan2_evt)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)

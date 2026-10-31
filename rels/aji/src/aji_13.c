@@ -960,6 +960,7 @@ EVT_BEGIN(evt_bcv_sw)
     RETURN
 EVT_END()
 
+/** Pick-up event of the Card Key (ITEM_CARD_KEY_0x20): sets GSWF_AJI13_CARD_KEY_TAKEN. */
 EVT_BEGIN(evt_key_get)
     SET_VALUE(GSWF_AJI_13_CARD_KEY, 1)
     RETURN

@@ -224,6 +224,11 @@ void BattleStatusIconDelete(BattleUnit* unit) {
     ; //stubbed in retail
 }
 
+/**
+ * Draws one unit's status icons in 2D, bottom to top:
+ * the backing plate for entries without STATUS_ICON_NO_PLATE, the icon with its own scale,
+ * rotation and colour (skipped while STATUS_ICON_HIDDEN), and the remaining turn count beside it.
+ */
 void BattleStatusIconDisp(CameraId camId, void* param) {
     BattleWorkStatusIcon* icon = &((BattleUnit*)param)->mStatusIconWork;
     GXColor col = {0xFF, 0xFF, 0xFF, 0xFF};

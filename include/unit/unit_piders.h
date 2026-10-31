@@ -1,3 +1,6 @@
+// Piders / Churantalar (the Pider and Arantula spiders): the thread drawn from the ceiling to the spider, shared by every copy
+// of the units (jon, mri, tou2 and tst).
+
 #pragma once
 #include <dolphin/types.h>
 

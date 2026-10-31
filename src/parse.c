@@ -204,6 +204,10 @@ BOOL parseGet1Next(s32 type, void* data) {
     return TRUE;
 }
 
+/**
+ * Reads one value of the given type (see parseGet1Next) from the first element named tag in the current block,
+ * e.g. parseTagGet1("<position>", PARSE_VEC, &pos). Returns FALSE if the tag is missing.
+ */
 BOOL parseTagGet1(const char* tag, s32 type, void* data) {
     BOOL result;
 

@@ -1610,6 +1610,10 @@ static EVT_BEGIN(peach_evt_stg1)
     RETURN
 EVT_END()
 
+/**
+ * Peach's remark (peach_aji_39) on coming back from the shower,
+ * shown once (GSWF_AJI16_PEACH1_AFTER_SHOWER_REMARK); she then goes back to her idle pose.
+ */
 static EVT_BEGIN(peach_evt_stg1_1)
     IF_INT_EQUAL(GSWF_AJI_01_PEACH_NOBODY_AROUND_SEEN, 1)
         RETURN

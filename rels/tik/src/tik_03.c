@@ -461,6 +461,12 @@ EVT_BEGIN(puni_nakama)
     RETURN
 EVT_END()
 
+/**
+ * The floor switch for the secret passage.
+ * Toggles it: pressed while closed, it plays the opening animation (anm_para),
+ * hides the wall and sets GSWF_TIK03_SECRET_DOOR_OPEN;
+ * pressed while open, it plays the closing animation (anm_rapa), clears the flag and restores the hit areas.
+ */
 EVT_BEGIN(tik03_switch_evt)
     IF_INT_EQUAL(GSWF_TIK_03_SECRET_PASSAGE_OPEN, 0)
         CALL(evt_map_playanim, STRING("anm_para"), MAP_ANIM_PLAY_ONCE, 0)

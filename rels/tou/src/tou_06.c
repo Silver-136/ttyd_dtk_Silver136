@@ -428,11 +428,20 @@ static s32 list[] = {
     -116, 0, -111,
 };
 
+/** Trouble Center job 13 pickup handler: sets GSWF_TROUBLE_WORK_3 when the Battle Trunks are collected. */
 EVT_BEGIN(iri_13_pants_00_evt)
     SET_VALUE(GSWF_TROUBLE_WORK(3), 1)
     RETURN
 EVT_END()
 
+/**
+ * Sets up Trouble Center job 13 (Jolene's storeroom garbage) when the room loads,
+ * unless GSWF_TROUBLE_WORK_1 shows Mario already reported all 20:
+ * places Battle Trunks for the ones Mario is still missing out of 20 at spots taken from the shuffled position
+ * list (make_tbl, get_pos), shows the flies (gor_hae) and plays a fly buzz every 3 to 4 seconds
+ * while any trunks lie in the room.
+ * While GSWF_TROUBLE_WORK_3 is unset, spot 0 comes first and its trunks run iri_13_pants_00_evt when picked up.
+ */
 EVT_BEGIN(iri_13_init)
     IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
         RETURN

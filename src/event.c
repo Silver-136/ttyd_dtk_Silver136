@@ -608,6 +608,7 @@ void stg0_00_init(void) {
     statusWinForceUpdate();
 }
 
+/** Story point STG0_05 "1000 X-Nauts (Before)" (gor_00): sets GSWF_GOR00_GOOMBELLA_ASSAULTED_SEEN. */
 void stg0_05_init(void) {
     swSet(GSWF_GOR00_GOOMBELLA_ASSAULTED_SEEN); // GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED
 }
@@ -617,14 +618,17 @@ void stg0_08_init(void) {
     partyJoin(PARTNER_GOOMBELLA);
 }
 
+/** Story point STG0_11 "3 Goomba Goons" (tik_01): sets GSWF_GOR02_FRANKLY_INTRO_SEEN. */
 void stg0_11_init(void) {
     swSet(GSWF_GOR02_FRANKLY_INTRO_SEEN); // GSWF_GOR_02_TUTORIAL_PIPE_TAKEN
 }
 
+/** Story point STG0_12_02 "Paper Mage 1" (tik_19): sets GSWF_TIK04_SWITCH_PRESSED. */
 void stg0_12_02_init(void) {
     swSet(GSWF_TIK04_SWITCH_PRESSED); // GSWF_TIK_04_STAIRS_SWITCH_PRESSED
 }
 
+/** Story point STG0_13 "First Flight" (tik_04): gives the Plane Curse; sets GSWF_TIK04_BLACK_KEY_TAKEN. */
 void stg0_13_init00(void) {
     pouchGetItem(ITEM_PLANE_CURSE);
     swSet(GSWF_TIK04_BLACK_KEY_TAKEN); // GSWF_TIK_04_BLACK_KEY
@@ -635,6 +639,7 @@ void stg0_16_init(void) {
     pouchGetStarStone(0);
 }
 
+/** Story point STG1_01a "Petalburg (1st Time)" (nok_00): sets GSWF_HEI01_BUSH_PIPE_REVEALED. */
 // Stage 1 ----------------------------------------------------------------------------
 void stg1_01a_init(void) {
     swSet(GSWF_HEI01_BUSH_PIPE_REVEALED); // GSWF_HEI_01_BUSH_PIPE_REVEALED
@@ -658,6 +663,10 @@ void stg1_06_01_init(void) {
     swSet(0x6EE); // GSWF_HEI_SUN_STONE_TAKEN
 }
 
+/**
+ * Story point STG1_08 "Opening the Path" (hei_00): Koops joins the party;
+ * sets GSWF_HEI01_KOOPS_ASKED_TO_JOIN and GSWF_HEI01_KOOPIE_KOO_FAREWELL.
+ */
 void stg1_08_init(void) {
     partyJoin(PARTNER_KOOPS);
     swSet(GSWF_HEI01_KOOPS_ASKED_TO_JOIN); // GSWF_HEI_01_KOOPS_JOIN_REQUEST_SEEN
@@ -741,6 +750,7 @@ void stg1_16_init00(void) {
     pouchReviseMarioParam();
 }
 
+/** Story point STG1_16 "Hooktail Defeated" (gon_11): sets GSWF_GON11_HOOKTAIL_INTRO_SKIP. */
 void stg1_16_init01(void) {
     swSet(GSWF_GON11_HOOKTAIL_INTRO_SKIP); // GSWF_GON_11_HOOKTAIL_INTRO_SKIP
 }
@@ -751,6 +761,10 @@ void stg1_17_init(void) {
     pouchGetStarStone(1);
 }
 
+/**
+ * Story point STG1_19 "Peach: TEC" (aji_17): sets GSWF_AJI15_PEACH1_SHOWER_ROOM_ENTERED,
+ * GSWF_AJI16_PEACH1_AFTER_SHOWER_REMARK and GSWF_AJI01_PEACH1_DOOR_OPENED.
+ */
 void stg1_19_init(void) {
     swSet(GSWF_AJI15_PEACH1_SHOWER_ROOM_ENTERED); // GSWF_AJI_15_VISITED
     swSet(GSWF_AJI16_PEACH1_AFTER_SHOWER_REMARK); // GSWF_AJI_01_PEACH_NOBODY_AROUND_SEEN
@@ -768,11 +782,16 @@ void stg1_30_init(void) {
     pouchOpenMail(0);
 }
 
+/**
+ * Story point STG1_30 "Thousand-Year Door" (tik_05):
+ * sets GSWF_GOR01_LENS_DELIVERED and GSWF_GOR01_ZESS_BLOCKS_GATE.
+ */
 void stg1_30_init01(void) {
     swSet(GSWF_GOR01_LENS_DELIVERED); // GSWF_GOR_ZESS_T_GOT_CONTACT_LENS
     swSet(GSWF_GOR01_ZESS_BLOCKS_GATE); // GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE
 }
 
+/** Story point STG1_35 "Puni Joins" (tik_03): sets GSWF_TIK03_SECRET_DOOR_OPEN. */
 void stg1_35_init01(void) {
     swSet(GSWF_TIK03_SECRET_DOOR_OPEN); // GSWF_TIK_03_SECRET_PASSAGE_OPEN
 }
@@ -802,6 +821,10 @@ void stg2_09_init(void) {
     pouchGetItem(ITEM_NECKLACE);
 }
 
+/**
+ * Story point STG2_10 "Secret Entrance Revealed!" (mri_00): Flurrie joins the party; takes the Necklace;
+ * delivers mail 0x1B; sets GSWF_MAIL_RDM_ISSUE1_SENT.
+ */
 void stg2_10_init(void) {
     pouchRemoveItem(ITEM_NECKLACE);
     partyJoin(PARTNER_FLURRIE);
@@ -809,54 +832,81 @@ void stg2_10_init(void) {
     pouchReceiveMail(0x1B);
 }
 
+/** Story point STG2_11 "X-Naut Battle" (mri_01): sets GSWF_MRI00_PUNIO_FOLLOWING. */
 void stg2_11_init(void) {
     swSet(GSWF_MRI00_PUNIO_FOLLOWING); // GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO
 }
 
+/**
+ * Story point STG2_12_01 "A Dark Figure" (mri_04): sets GSW_MRI_PUNI_FOLLOWERS to 0;
+ * sets GSWF_MRI_PUNIO_IN_PUNI_GROUP.
+ */
 void stg2_12_01_init(void) {
     swSet(GSWF_MRI_PUNIO_IN_PUNI_GROUP); // GSWF_MRI_PUNIO_JOINED
     swByteSet(GSW_MRI_PUNI_FOLLOWERS, 0); // GSW_MRI_PUNI_FOLLOWER_COUNT
 }
 
+/** Story point STG2_14 "Puni Elder Freed" (mri_03): gives the Red Key; sets GSWF_MRI04_RED_KEY_TAKEN. */
 void stg2_14_init(void) {
     pouchGetItem(ITEM_RED_KEY);
     swSet(GSWF_MRI04_RED_KEY_TAKEN); // GSWF_MRI_04_RED_KEY
 }
 
+/**
+ * Story point STG2_15 "11 Punies" (mri_01): takes the Red Key;
+ * sets GSWF_MRI03_RED_CELL_UNLOCKED and GSWF_MRI03_RED_CELL_DOOR_OPEN.
+ */
 void stg2_15_init(void) {
     pouchRemoveItem(ITEM_RED_KEY);
     swSet(GSWF_MRI03_RED_CELL_UNLOCKED); // GSWF_MRI_03_RED_JAIL_UNLOCKED
     swSet(GSWF_MRI03_RED_CELL_DOOR_OPEN); // GSWF_MRI_03_RED_JAIL_OPENED
 }
 
+/**
+ * Story point STG2_16 "The Puni Elder's Powers" (mri_01): sets GSW_MRI_PUNI_FOLLOWERS to 9; gives the Puni Orb;
+ * sets GSWF_MRI_RIVAL_IN_PUNI_GROUP.
+ */
 void stg2_16_init00(void) {
     swSet(GSWF_MRI_RIVAL_IN_PUNI_GROUP); // GSWF_MRI_PUNIPER_JOINED
     swByteSet(GSW_MRI_PUNI_FOLLOWERS, 9); // GSW_MRI_PUNI_FOLLOWER_COUNT
     pouchGetItem(ITEM_PUNI_ORB);
 }
 
+/** Story point STG2_16 "Puni Switch" (mri_02): sets GSWF_MRI01_ELDER_POWERS_EXPLAINED. */
 void stg2_16_init01(void) {
     swSet(GSWF_MRI01_ELDER_POWERS_EXPLAINED); // GSWF_MRI_01_ELDER_TIP_SEEN
 }
 
+/** Story point STG2_18 "Punies vs. Jabbies" (mri_08): sets GSWF_MRI_JABBI_IN_PUNI_GROUP. */
 void stg2_18_init01(void) {
     swSet(GSWF_MRI_JABBI_IN_PUNI_GROUP); // GSWF_MRI_JABBLE_JOINED
 }
 
+/**
+ * Story point STG2_18 "Blue Key Obtained" (mri_09):
+ * sets GSWF_MRI08_JABBI_FIGHT_STARTED and GSWF_MRI08_JABBI_FIGHT_WON.
+ */
 void stg2_18_init02(void) {
     swSet(GSWF_MRI08_JABBI_FIGHT_STARTED); // GSWF_MRI_08_JABBI_SQUAD_INTRO_SEEN
     swSet(GSWF_MRI08_JABBI_FIGHT_WON); // GSWF_MRI_08_JABBI_SQUAD_DEFEATED
 }
 
+/** Story point STG2_19 "Inside the Blue Cell" (mri_03): gives the Blue Key; sets GSWF_MRI09_BLUE_KEY_CHEST_OPENED. */
 void stg2_19_init(void) {
     swSet(GSWF_MRI09_BLUE_KEY_CHEST_OPENED); // GSWF_MRI_09_BLUE_KEY_CHEST
     pouchGetItem(ITEM_BLUE_KEY);
 }
 
+/** Story point STG2_20 "Punio & Petuni" (mri_03): sets GSWF_MRI03_PUNIO_WAITING_AT_CELL. */
 void stg2_20_init(void) {
     swSet(GSWF_MRI03_PUNIO_WAITING_AT_CELL); // GSWF_MRI_PUNIO_WAITING_AT_JAIL
 }
 
+/**
+ * Story point STG2_21 "Bubbles 2" (mri_05): sets GSW_MRI_PUNI_FOLLOWERS to 0x62; takes the Blue Key;
+ * sets GSWF_MRI03_BLUE_CELL_UNLOCKED, GSWF_MRI03_BLUE_CELL_DOOR_OPEN and GSWF_MRI_PETUNI_IN_PUNI_GROUP;
+ * clears GSWF_MRI03_PUNIO_WAITING_AT_CELL.
+ */
 void stg2_21_init00(void) {
     pouchRemoveItem(ITEM_BLUE_KEY);
     swSet(GSWF_MRI03_BLUE_CELL_UNLOCKED); // GSWF_MRI_03_BLUE_JAIL_UNLOCKED
@@ -866,11 +916,17 @@ void stg2_21_init00(void) {
     swByteSet(GSW_MRI_PUNI_FOLLOWERS, 0x62); // GSW_MRI_PUNI_FOLLOWER_COUNT
 }
 
+/** Story point STG2_21 "Trapped" (mri_17): sets GSWF_MRI11_JABBI_FIGHT2_STARTED and GSWF_MRI11_JABBI_FIGHT2_WON. */
 void stg2_21_init02(void) {
     swSet(GSWF_MRI11_JABBI_FIGHT2_STARTED); // GSWF_MRI_11_JABBI_SQUAD_INTRO_SEEN
     swSet(GSWF_MRI11_JABBI_FIGHT2_WON); // GSWF_MRI_11_JABBI_SQUAD_DEFEATED
 }
 
+/**
+ * Story point STG2_21_01 "Mystery Pillar" (mri_17):
+ * fills the GSW_MRI_PUNI_TRAPPED_BITS bytes (0xF6, eleven 0xFF, 0x7F):
+ * every Puni is trapped for the Great Tree jail scene.
+ */
 void stg2_21_01_init(void) {
     swByteSet(GSW_MRI_PUNI_TRAPPED_BITS, 0xF6);
     swByteSet(0x28D, 0xFF);
@@ -887,10 +943,12 @@ void stg2_21_01_init(void) {
     swByteSet(0x298, 0x7F);
 }
 
+/** Story point STG2_21_02 "Matching the Patterns" (mri_09): sets GSWF_MRI17_STRANGE_STATUE_SEEN. */
 void stg2_21_02_init(void) {
     swSet(GSWF_MRI17_STRANGE_STATUE_SEEN); // GSWF_MRI_17_PILLAR_SCENE_SEEN
 }
 
+/** Story point STG2_21_03 "Super Boots" (mri_10): sets GSWF_MRI09_WALL_PANELS_ROLLED. */
 void stg2_21_03_init(void) {
     swSet(GSWF_MRI09_WALL_PANELS_ROLLED); // GSWF_MRI_09_WALL_PUZZLE_SOLVED
 }
@@ -900,6 +958,10 @@ void stg2_21_04_init(void) {
     pouchGetItem(ITEM_SUPER_BOOTS);
 }
 
+/**
+ * Story point STG2_21_06 "Water Switch" (mri_16): zeroes all GSW_MRI_PUNI_TRAPPED_BITS bytes again;
+ * the Punies are freed.
+ */
 void stg2_21_06_init00(void) {
     swByteSet(GSW_MRI_PUNI_TRAPPED_BITS, 0);
     swByteSet(0x28D, 0);
@@ -916,25 +978,36 @@ void stg2_21_06_init00(void) {
     swByteSet(0x298, 0);
 }
 
+/** Story point STG2_21_06 "The 101 Puni Switch" (mri_13): sets GSWF_MRI16_WATER_SWITCH_PRESSED. */
 void stg2_21_06_init01(void) {
     swSet(GSWF_MRI16_WATER_SWITCH_PRESSED); // GSWF_MRI_16_WATER_SWITCH_PRESSED
 }
 
+/** Story point STG2_23 "Time Bomb Activated" (mri_14): sets GSWF_MRI14_TIME_BOMB_SCENE_PENDING. */
 void stg2_23_init(void) {
     swSet(GSWF_MRI14_TIME_BOMB_SCENE_PENDING); // GSWF_MRI_14_CRUMP_REENTRY_PENDING
 }
 
+/**
+ * Story point STG2_23_01 "X-Naut Battle" (mri_15): sets GSWF_MRI_BOMB_COUNTDOWN_PENDING;
+ * clears GSWF_MRI14_TIME_BOMB_SCENE_PENDING.
+ */
 void stg2_23_01_init(void) {
     swClear(GSWF_MRI14_TIME_BOMB_SCENE_PENDING); // GSWF_MRI_14_CRUMP_REENTRY_PENDING
     swSet(GSWF_MRI_BOMB_COUNTDOWN_PENDING); // GSWF_MRI_COUNTDOWN_START_PENDING
 }
 
+/**
+ * Story point STG2_25 "After the Boss Battle" (mri_01): unlocks star power 2; gives the Emerald Star;
+ * clears GSWF_MRI_BOMB_COUNTDOWN_PENDING.
+ */
 void stg2_25_init(void) {
     swClear(GSWF_MRI_BOMB_COUNTDOWN_PENDING); // GSWF_MRI_COUNTDOWN_START_PENDING
     pouchGetItem(ITEM_EMERALD_STAR);
     pouchGetStarStone(2);
 }
 
+/** Story point STG2_25_02 "Peach: Shall We Dance?" (aji_17): sets GSWF_AJI16_PEACH2_SCENE_DONE. */
 void stg2_25_02_init(void) {
     swSet(GSWF_AJI16_PEACH2_SCENE_DONE); // GSWF_AJI_16_PEACH_STG2_SCENE_SEEN
 }
@@ -944,12 +1017,17 @@ void stg2_26_init(void) {
     marioSetCharMode(CHARACTER_MARIO);
 }
 
+/**
+ * Story point STG2_40 "Thousand-Year Door" (tik_05): delivers mail 1; marks mail 1 read;
+ * sets GSWF_MRI_LEFT_TREE_AFTER_STG2.
+ */
 void stg2_40_init(void) {
     swSet(GSWF_MRI_LEFT_TREE_AFTER_STG2); // GSWF_MRI_LEFT_AFTER_BOSS_BATTLE
     pouchReceiveMail(1);
     pouchOpenMail(1);
 }
 
+/** Story point STG2_44 "Mafia Boss" (gor_03): sets GSWF_GOR03_SYNDICATE_BACKDOOR_OPEN. */
 void stg2_44_init(void) {
     swSet(GSWF_GOR03_SYNDICATE_BACKDOOR_OPEN); // GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE
 }
@@ -965,6 +1043,10 @@ void stg2_end_init(void) {
     pouchReceiveMail(0x11);
 }
 
+/**
+ * Story point STG3_06 "1st Match" (tou_03): books Mario's first Glitz Pit match:
+ * opponent 0x13 (GSW_TOU_OPPONENT_ID), rule 0x2B with parameters 1 and 1, and GSWF_TOU_MATCH_RESERVED set.
+ */
 void stg3_06_init(void) {
     swSet(GSWF_TOU_MATCH_RESERVED); // GSWF_GLITZ_PIT_MATCH_RESERVED
     swByteSet(GSW_TOU_OPPONENT_ID, 0x13);
@@ -973,6 +1055,12 @@ void stg3_06_init(void) {
     swByteSet(0x1F8, 1); // GSW_GLITZ_PIT_CONDITION_PARAM2
 }
 
+/**
+ * Story point STG3_07 "Minors - 9th Pl." (tou_10):
+ * marks the lowest Glitz Pit fighter as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19),
+ * stores 19 in GSW_TOU_LAST_OPPONENT_ID, and clears GSWF_TOU_MATCH_RESERVED and marks the Goomba Bros.
+ * match scenes and the first-match follow-up as seen.
+ */
 void stg3_07_init__9(void) {
     int i;
 
@@ -988,6 +1076,11 @@ void stg3_07_init__9(void) {
     swSet(GSWF_TOU_LAST_RULE_MET); // GSWF_GLITZ_PIT_CONDITION_KEPT
 }
 
+/**
+ * Story point STG3_07 "Minors - 8th Pl." (tou_10):
+ * marks the 2 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 18),
+ * stores 18 in GSW_TOU_LAST_OPPONENT_ID, and clears GSWF_TOU_MATCH_RESERVED and sets GSWF_TOU_RANK18_SCENE.
+ */
 void stg3_07_init__8(void) {
     int i;
 
@@ -999,6 +1092,11 @@ void stg3_07_init__8(void) {
     swSet(GSWF_TOU_RANK18_SCENE); // GSWF_TOU_RANK_18_KING_K_TALK_DONE
 }
 
+/**
+ * Story point STG3_07 "Minors - 7th Pl." (tou_10):
+ * marks the 3 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 17),
+ * stores 17 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_RANK17_SCENE.
+ */
 void stg3_07_init__7(void) {
     int i;
 
@@ -1009,6 +1107,11 @@ void stg3_07_init__7(void) {
     swSet(GSWF_TOU_RANK17_SCENE); // GSWF_TOU_RANK_17_KING_K_TALK_DONE
 }
 
+/**
+ * Story point STG3_07 "Minors - 6th Pl." (tou_10):
+ * marks the 4 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 16),
+ * stores 16 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_RANK16_SCENE.
+ */
 void stg3_07_init__6(void) {
     int i;
 
@@ -1019,6 +1122,11 @@ void stg3_07_init__6(void) {
     swSet(GSWF_TOU_RANK16_SCENE); // GSWF_TOU_RANK_16_KING_K_TALK_DONE
 }
 
+/**
+ * Story point STG3_10 "Minors - 5th Pl.
+ * (Egg)" (tou_01): marks the 5 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to +
+ * 15), stores 15 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_RANK15_SCENE.
+ */
 void stg3_10_init__5(void) {
     int i;
 
@@ -1029,6 +1137,13 @@ void stg3_10_init__5(void) {
     swSet(GSWF_TOU_RANK15_SCENE); // GSWF_TOU_RANK_15_KING_K_TALK_DONE
 }
 
+/**
+ * Story point STG3_12 "Minors - 4th Pl." (tou_10):
+ * marks the 6 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 14),
+ * stores 14 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_RANK14_SCENE and GSWF_TOU_EGG_STORY_SKIP,
+ * saves the current play time into the 8 GSW_TOU_EGG_TIME bytes (the egg's hatch timer),
+ * and delivers mail 0x1C (GSWF_MAIL_RDM_ISSUE2_SENT).
+ */
 void stg3_12_init__4(void) {
     u8 timeBytes[8];
     int i;
@@ -1047,6 +1162,11 @@ void stg3_12_init__4(void) {
     pouchReceiveMail(0x1C);
 }
 
+/**
+ * Story point STG3_12 "Minors - 3rd Pl." (tou_10):
+ * marks the 7 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 13),
+ * stores 13 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_RANK13_SCENE.
+ */
 void stg3_12_init__3(void) {
     int i;
 
@@ -1057,6 +1177,11 @@ void stg3_12_init__3(void) {
     swSet(GSWF_TOU_RANK13_SCENE); // GSWF_TOU_RANK_13_KING_K_TALK_DONE
 }
 
+/**
+ * Story point STG3_12 "Minors - 2nd Place" (tou_10):
+ * marks the 8 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 12),
+ * stores 12 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_RANK12_KING_K_GONE.
+ */
 void stg3_12_init__2(void) {
     int i;
 
@@ -1067,6 +1192,11 @@ void stg3_12_init__2(void) {
     swSet(GSWF_TOU_RANK12_KING_K_GONE); // GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED
 }
 
+/**
+ * Story point STG3_12 "Minors - 1st Pl.
+ * (Iron)" (tou_10): marks the 9 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to +
+ * 11), stores 11 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_RANK11_SWOOPS_JOINS.
+ */
 void stg3_12_init__1(void) {
     int i;
 
@@ -1077,6 +1207,12 @@ void stg3_12_init__1(void) {
     swSet(GSWF_TOU_RANK11_SWOOPS_JOINS); // GSWF_GLITZ_PIT_SIR_SWOOP_JOINED
 }
 
+/**
+ * Story point STG3_12 "Minors - 1st Pl.
+ * (Iron 2)" (tou_10): hatches Yoshi: picks his colour,
+ * names him with the default name (name_party3) and adds him to the party;
+ * sets GSWF_TOU_IRON_CLEFTS_OPENING_SEEN.
+ */
 void stg3_12_2_init(void) {
     yoshiSetColor();
     pouchSetYoshiName(msgSearch("name_party3"));
@@ -1084,6 +1220,12 @@ void stg3_12_2_init(void) {
     swSet(GSWF_TOU_IRON_CLEFTS_OPENING_SEEN); // GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN
 }
 
+/**
+ * Story point STG3_20 "Majors - 10th Place" (tou_08):
+ * marks the 10 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 10),
+ * stores 10 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_RANK10_SCENE and GSWF_TOU_IRON_CLEFTS_WIN_SEEN,
+ * and delivers and opens mail 6.
+ */
 void stg3_20_init_10(void) {
     int i;
 
@@ -1097,6 +1239,11 @@ void stg3_20_init_10(void) {
     pouchOpenMail(6);
 }
 
+/**
+ * Story point STG3_20 "Majors - 9th Place" (tou_08):
+ * marks the 11 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 9),
+ * stores 9 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_RANK9_SCENE.
+ */
 void stg3_20_init_9(void) {
     int i;
 
@@ -1107,6 +1254,11 @@ void stg3_20_init_9(void) {
     swSet(GSWF_TOU_RANK9_SCENE);
 }
 
+/**
+ * Story point STG3_20_00 "Majors - 8th Place" (tou_08):
+ * marks the 12 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 8),
+ * stores 8 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_MAIL1_RECEIVED.
+ */
 void stg3_20_init_8(void) {
     int i;
 
@@ -1130,6 +1282,12 @@ void stg3_20_02_init(void) {
     pouchOpenMail(8);
 }
 
+/**
+ * Story point STG3_20_04 "Majors - 7th Pl.(Raid/Cake)" (tou_08):
+ * marks the 13 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 7),
+ * stores 7 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_MAIL2_RECEIVED,
+ * GSWF_TOU08_SKIP_TO_143 and GSWF_TOU04_GUARD1_STEPPED_ASIDE, and delivers and opens mail 9.
+ */
 void stg3_20_init_7(void) {
     int i;
 
@@ -1144,6 +1302,11 @@ void stg3_20_init_7(void) {
     pouchOpenMail(9);
 }
 
+/**
+ * Story point STG3_20_04 "Majors - 6th Pl.(Bowser)" (tou_08):
+ * marks the 14 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 6),
+ * stores 6 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_CAKE_EVENT_DONE and clears GSWF_TOU08_SKIP_TO_143.
+ */
 void stg3_20_init_6(void) {
     int i;
 
@@ -1155,6 +1318,11 @@ void stg3_20_init_6(void) {
     swClear(GSWF_TOU08_SKIP_TO_143); // GSWF_TOU_08_JUMP_STORY_CONFISCATED
 }
 
+/**
+ * Story point STG3_20_04 "Majors - 5th Pl." (tou_08):
+ * marks the 15 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 5),
+ * stores 5 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_BOWSER_RAID_DONE.
+ */
 void stg3_20_init_5(void) {
     int i;
 
@@ -1165,6 +1333,11 @@ void stg3_20_init_5(void) {
     swSet(GSWF_TOU_BOWSER_RAID_DONE); // GSWF_TOU_RANK_5_BOWSER_EVENT_DONE
 }
 
+/**
+ * Story point STG3_20_05 "Majors - 4th Pl." (tou_08):
+ * marks the 16 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 4),
+ * stores 4 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_MAIL3_RECEIVED and GSWF_TOU08_SKIP_TO_144.
+ */
 void stg3_20_init_4(void) {
     int i;
 
@@ -1176,6 +1349,10 @@ void stg3_20_init_4(void) {
     swSet(GSWF_TOU08_SKIP_TO_144); // GSWF_TOU_08_JUMP_STORY_MAJORS_4TH
 }
 
+/**
+ * Story point STG3_20_06 "Rawk Hawk's Warning" (tou_04): delivers mail 10; marks mail 10 read;
+ * clears GSWF_TOU08_SKIP_TO_144.
+ */
 void stg3_20_06_init(void) {
     swClear(GSWF_TOU08_SKIP_TO_144); // GSWF_TOU_08_JUMP_STORY_MAJORS_4TH
     pouchReceiveMail(10);
@@ -1215,6 +1392,11 @@ void stg3_20_12_init(void) {
     swSet(GSWF_TOU06_BLOCK_H_BROKEN); // GSWF_TOU_06_BIG_BLOCK_H_BROKEN
 }
 
+/**
+ * Story point STG3_20_12 "Majors - 3rd Pl.(Poison)" (tou_08):
+ * marks the 17 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 3),
+ * stores 3 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_MAIL4_RECEIVED and delivers and opens mail 13.
+ */
 void stg3_20_init_3(void) {
     int i;
 
@@ -1227,6 +1409,12 @@ void stg3_20_init_3(void) {
     pouchOpenMail(13);
 }
 
+/**
+ * Story point STG3_20_12 "Majors - 2nd Pl." (tou_08):
+ * marks the 18 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 2),
+ * stores 2 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_RANK2_SCENE,
+ * GSWF_TOU_POISON_CAKE_EVENT and GSWF_TOU_PARTNER_POISON_CURED.
+ */
 void stg3_20_init_2(void) {
     int i;
 
@@ -1239,6 +1427,12 @@ void stg3_20_init_2(void) {
     swSet(GSWF_TOU_PARTNER_POISON_CURED); // GSWF_TOU_POISON_CAKE_RECOVERED
 }
 
+/**
+ * Story point STG3_20_13 "Majors - 1st Pl." (tou_08):
+ * marks the 19 lowest Glitz Pit fighters as beaten (GSWF_TOU_FIGHTER_BELOW_BASE + 19 down to + 1),
+ * stores 1 in GSW_TOU_LAST_OPPONENT_ID, and sets GSWF_TOU_RANK1_SCENE,
+ * GSWF_TOU08_GUARD_LET_THROUGH and GSWF_TOU08_SKIP_TO_153, and delivers and opens mail 14.
+ */
 void stg3_20_init_1(void) {
     int i;
 
@@ -1253,6 +1447,7 @@ void stg3_20_init_1(void) {
     pouchOpenMail(14);
 }
 
+/** Story point STG3_20_14 "Lobby Poster" (tou_02): clears GSWF_TOU08_SKIP_TO_153. */
 void stg3_20_13_init(void) {
     swClear(GSWF_TOU08_SKIP_TO_153); // GSWF_TOU_08_JUMP_STORY_MAJORS_1ST
 }
@@ -1272,6 +1467,10 @@ void stg3_20_15_init(void) {
     pouchRemoveItem(ITEM_STORAGE_KEY_0x13);
 }
 
+/**
+ * Story point STG3_21 "1st Match with Rawk Hawk" (tou_08): books the title match against Rawk Hawk:
+ * opponent 0, GSWF_TOU_TITLE_MATCH_RESERVED, rule 6 with parameters 1 and 1.
+ */
 void stg3_21_init(void) {
     swSet(GSWF_TOU_MATCH_RESERVED); // GSWF_GLITZ_PIT_MATCH_RESERVED
     swByteSet(GSW_TOU_OPPONENT_ID, 0);
@@ -1281,6 +1480,11 @@ void stg3_21_init(void) {
     swByteSet(0x1F8, 1); // GSW_GLITZ_PIT_CONDITION_PARAM2
 }
 
+/**
+ * Story point STG3_30 "A New Champion" (tou_08):
+ * marks all 20 Glitz Pit fighters beaten and Mario the champion, clears the match bookings,
+ * sets GSWF_TOU_MATCH_RESULT_PENDING and marks the champion and Rawk Hawk battle scenes as seen.
+ */
 void stg3_30_init(void) {
     int i;
 
@@ -1301,6 +1505,10 @@ void stg3_30_init(void) {
     swSet(GSWF_TOU_RAWK_HAWK_PHASE3_SEEN); // GSWF_TOU_RAWK_HAWK_25_HP_TALK
 }
 
+/**
+ * Story point STG3_30 "Champion's Room" (tou_07): gives the Champ's Belt; delivers mail 0x2B;
+ * marks mail 0x2B read; clears GSWF_TOU_MATCH_RESULT_PENDING.
+ */
 void stg3_31_00_init(void) {
     swClear(GSWF_TOU_MATCH_RESULT_PENDING); // GSWF_GLITZ_PIT_MATCH_JUST_ENDED
     pouchGetItem(ITEM_CHAMPS_BELT);
@@ -1308,10 +1516,12 @@ void stg3_31_00_init(void) {
     pouchOpenMail(0x2B);
 }
 
+/** Story point STG3_31 "Grubba's Plans" (tou_05): clears GSWF_TOU_MATCH_RESULT_PENDING. */
 void stg3_31_init(void) {
     swClear(GSWF_TOU_MATCH_RESULT_PENDING); // GSWF_GLITZ_PIT_MATCH_JUST_ENDED
 }
 
+/** Story point STG3_32 "Boss Battle" (tou_03): sets GSWF_TOU05_DUCT_GRATE_FALLEN. */
 void stg3_32_init(void) {
     swSet(GSWF_TOU05_DUCT_GRATE_FALLEN); // GSWF_TOU_05_DUCT_GRATE_FELL
 }
@@ -1322,11 +1532,16 @@ void stg3_33_init(void) {
     pouchGetStarStone(3);
 }
 
+/**
+ * Story point STG3_33_03 "Peach: Grodus" (aji_10):
+ * sets GSWF_AJI09_PEACH3_UNIFORM_TAKEN and GSWF_AJI09_PEACH3_DISGUISED.
+ */
 void stg3_33_03_init(void) {
     swSet(GSWF_AJI09_PEACH3_UNIFORM_TAKEN); // GSWF_AJI_09_UNIFORM_TAKEN
     swSet(GSWF_AJI09_PEACH3_DISGUISED); // GSWF_AJI_PEACH_IN_UNIFORM
 }
 
+/** Story point STG3_33_04 "Peach: Back to TEC" (aji_17): clears GSWF_AJI09_PEACH3_DISGUISED. */
 void stg3_33_04_init(void) {
     swClear(GSWF_AJI09_PEACH3_DISGUISED); // GSWF_AJI_PEACH_IN_UNIFORM
 }
@@ -1355,6 +1570,7 @@ void stg3_34_init(void) {
     swClear(GSWF_TOU02_LOBBY_CROWD_CHAMP_SEEN); // GSWF_TOU_02_FANS_MOB_MARIO_SEEN
 }
 
+/** Story point STG3_35 "A Mail from Peach" (gor_03): sets GSWF_TOU_LEFT_AS_CHAMPION. */
 void stg3_35_init(void) {
     swSet(GSWF_TOU_LEFT_AS_CHAMPION); // GSWF_TOU_LEFT_AFTER_CHAPTER
 }
@@ -1365,6 +1581,10 @@ void stg3_50_init(void) {
     pouchOpenMail(2);
 }
 
+/**
+ * Story point STG3_52 "Darkly" (gor_02): delivers mail 0x12;
+ * sets GSWF_TIK08_TWILIGHT_PIPE_REACHED and GSWF_MAIL_KOOPIE_KOO_SENT.
+ */
 void stg3_52_init(void) {
     swSet(GSWF_TIK08_TWILIGHT_PIPE_REACHED); // GSWF_TIK_08_PIPE_REJECTED
     swSet(9); // GSWF_MAIL_KOOPIE_KOO_SENT
@@ -1386,12 +1606,20 @@ void stage4_04_init(void) {
     pouchGetItem(ITEM_SHOP_KEY);
 }
 
+/**
+ * Story point STG4_04_01 "Paper Mage (Tube Mod)" (usu_01): gives the Black Key (item 0x23); takes the Shop Key;
+ * sets GSWF_GRA00_BLACK_KEY_TAKEN.
+ */
 void stage4_04_01_init(void) {
     pouchRemoveItem(ITEM_SHOP_KEY);
     swSet(GSWF_GRA00_BLACK_KEY_TAKEN); // GSWF_GRA_00_BLACK_KEY
     pouchGetItem(ITEM_BLACK_KEY_0x23);
 }
 
+/**
+ * Story point STG4_05 "Straw Tepee" (gra_02): gives the Tube Curse; takes the Black Key (item 0x23);
+ * delivers mail 0x1D; sets GSWF_MAIL_RDM_ISSUE3_SENT.
+ */
 void stage4_05_init(void) {
     pouchRemoveItem(ITEM_BLACK_KEY_0x23);
     pouchGetItem(ITEM_TUBE_CURSE);
@@ -1428,10 +1656,15 @@ void stg4_13_02_init(void) {
     partyJoin(PARTNER_VIVIAN);
 }
 
+/** Story point STG4_13_03 "Breaking the Floor" (jin_11): sets GSWF_GRA01_VIVIAN_FIRST_TRAIL_TALK. */
 void stg4_13_03_init(void) {
     swSet(GSWF_GRA01_VIVIAN_FIRST_TRAIL_TALK); // GSWF_GRA_01_AFTER_DOOPLISS_SCENE_SEEN
 }
 
+/**
+ * Story point STG4_14 "Name Guessing" (gra_00): gives the Letter P;
+ * sets GSWF_GRA01_VIVIAN_FIRST_TRAIL_TALK, GSWF_JIN08_STEEPLE_KEY_TAKEN and GSWF_JIN08_DOOR_UNLOCKED.
+ */
 void stg4_14_init(void) {
     pouchGetItem(ITEM_THE_LETTER_P);
     swSet(GSWF_GRA01_VIVIAN_FIRST_TRAIL_TALK); // GSWF_GRA_01_AFTER_DOOPLISS_SCENE_SEEN
@@ -1468,6 +1701,10 @@ void stg4_30_init(void) {
     pouchOpenMail(3);
 }
 
+/**
+ * Story point STG4_35 "Advice from Podley" (gor_01):
+ * sets GSWF_GOR02_BOBBERY_DOOR_OPEN and GSWF_GOR02_BOBBERY_DECLINE_SCENE_DONE.
+ */
 void stg4_35_init(void) {
     swSet(GSWF_GOR02_BOBBERY_DOOR_OPEN); // GSWF_GOR_BOBBERY_DOOR_UNLOCKED
     swSet(GSWF_GOR02_BOBBERY_DECLINE_SCENE_DONE); // GSWF_GOR_BOBBERY_DECLINE_REMARK_DONE
@@ -1489,14 +1726,17 @@ void stg4_end_init(void) {
     pouchReceiveMail(0x13);
 }
 
+/** Story point STG5_12 "Flavio's Favor" (muj_01): sets GSWF_MUJ01_SKIP_TO_SHOW_OF_HANDS. */
 void stg5_12_init01(void) {
     swSet(GSWF_MUJ01_SKIP_TO_SHOW_OF_HANDS); // GSWF_MUJ_01_CREW_SPLIT_SKIP
 }
 
+/** Story point STG5_15 "Flavio's Rescue Plan" (muj_01): sets GSWF_MUJ03_RUNAWAY_SAILOR_SEEN. */
 void stg5_15_init01(void) {
     swSet(GSWF_MUJ03_RUNAWAY_SAILOR_SEEN); // GSWF_MUJ_03_FLEEING_SAILORS_SEEN
 }
 
+/** Story point STG5_15 "Saving Bobbery" (muj_05): sets GSWF_MUJ01_TIMID_SAILOR_PERSUADED. */
 void stg5_15_init02(void) {
     swSet(GSWF_MUJ01_TIMID_SAILOR_PERSUADED); // GSWF_MUJ_01_BOBBERY_MISSING_SCENE_SEEN
 }
@@ -1528,6 +1768,10 @@ void stg5_19_init01(void) {
     pouchGetItem(ITEM_SKULL_GEM);
 }
 
+/**
+ * Story point STG5_19 "Skull Rock Blast" (muj_05): takes the Skull Gem;
+ * sets GSWF_MUJ05_SKULL_GEM_PLACED and GSWF_MUJ05_SKULL_ROCK_OPENED.
+ */
 void stg5_19_init02(void) {
     pouchRemoveItem(ITEM_SKULL_GEM);
     swSet(GSWF_MUJ05_SKULL_GEM_PLACED); // GSWF_MUJ_05_SKULL_GEM_PLACED
@@ -1539,15 +1783,18 @@ void stg5_19_01_init(void) {
     //stubbed
 }
 
+/** Story point STG5_21 "Grotto Key" (dou_04): sets GSWF_DOU05_BIG_DOOR_SWITCH_PRESSED. */
 void stg5_21_init00(void) {
     swSet(GSWF_DOU05_BIG_DOOR_SWITCH_PRESSED); // GSWF_DOU_05_BIG_DOOR_SWITCH_PRESSED
 }
 
+/** Story point STG5_21 "Spikes (Wall)" (dou_10): sets GSWF_DOU04_GROTTO_KEY_TAKEN and GSWF_DOU05_DOOR_UNLOCKED. */
 void stg5_21_init01(void) {
     swSet(GSWF_DOU04_GROTTO_KEY_TAKEN); // GSWF_DOU_04_GROTTO_KEY
     swSet(GSWF_DOU05_DOOR_UNLOCKED); // GSWF_DOU_05_DOOR_UNLOCKED
 }
 
+/** Story point STG5_21 "Paper Mage 4" (dou_07): sets GSWF_DOU09_BOMB_WALL_BLOWN. */
 void stg5_21_init03(void) {
     swSet(GSWF_DOU09_BOMB_WALL_BLOWN); // GSWF_DOU_09_BOMB_WALL_BLOWN
 }
@@ -1573,10 +1820,15 @@ void stg5_29_init(void) {
     pouchRemoveItem(ITEM_GATE_HANDLE);
 }
 
+/** Story point STG5_30 "Switch Test" (dou_11): sets GSWF_DOU11_STRANDED_SAILORS_SEEN. */
 void stg5_30_init01(void) {
     swSet(GSWF_DOU11_STRANDED_SAILORS_SEEN); // GSWF_DOU_11_SAILORS_SHOUT_SEEN
 }
 
+/**
+ * Story point STG5_30 "Thankful Sailors" (dou_11):
+ * sets GSWF_DOU11_ISLAND_SWITCH_A_PRESSED, GSWF_DOU11_ISLAND_SWITCH_B_PRESSED and GSWF_DOU11_SAILORS_CROSSED.
+ */
 void stg5_30_init02(void) {
     swSet(GSWF_DOU11_ISLAND_SWITCH_A_PRESSED); // GSWF_DOU_11_SWITCH_1_PRESSED
     swSet(GSWF_DOU11_ISLAND_SWITCH_B_PRESSED); // GSWF_DOU_11_SWITCH_2_PRESSED
@@ -1589,6 +1841,10 @@ void stg5_43_init(void) {
     pouchGetStarStone(5);
 }
 
+/**
+ * Story point STG5_47 "Peach: TEC Talk" (aji_17):
+ * sets GSWF_AJI11_PEACH5_ROOM_REMARK, GSWF_AJI11_PEACH5_DATA_DISK_TAKEN and GSWF_AJI11_PEACH5_DISK_READ.
+ */
 void stg5_47_init(void) {
     swSet(GSWF_AJI11_PEACH5_ROOM_REMARK); // GSWF_AJI_11_PEACH_ENTRY_LINE_SEEN
     swSet(GSWF_AJI11_PEACH5_DATA_DISK_TAKEN); // GSWF_AJI_11_DATA_DISK_TAKEN
@@ -1600,10 +1856,15 @@ void stg5_58_init(void) {
     marioSetCharMode(CHARACTER_MARIO);
 }
 
+/** Story point STG5_59_01 "A Mail from Peach" (gor_00): sets GSWF_GOR00_SHIP_ARRIVAL_AT_DOCK. */
 void stg5_59_01_init(void) {
     swSet(GSWF_GOR00_SHIP_ARRIVAL_AT_DOCK); // GSWF_GOR_00_PLACE_BY_SHIP
 }
 
+/**
+ * Story point STG5_60 "Return to Keelhaul" (gor_00): delivers mail 4 and 0x1E; marks mail 4 read;
+ * sets GSWF_MAIL_RDM_ISSUE4_SENT; clears GSWF_GOR00_SHIP_ARRIVAL_AT_DOCK.
+ */
 void stg5_60_init(void) {
     pouchReceiveMail(4);
     pouchOpenMail(4);
@@ -1612,18 +1873,25 @@ void stg5_60_init(void) {
     swClear(GSWF_GOR00_SHIP_ARRIVAL_AT_DOCK); // GSWF_GOR_00_PLACE_BY_SHIP
 }
 
+/** Story point STG5_62 "An Ill Don Pianta" (gor_03): sets GSWF_GOR03_DON_PIANTA_STG5_SCENE. */
 void stg5_62_init(void) {
     swSet(GSWF_GOR03_DON_PIANTA_STG5_SCENE);
 }
 
+/** Story point STG5_63 "Keelhaul Anytime" (muj_00): sets GSWF_GOR00_SAIL_TO_KEELHAUL. */
 void stg5_63_init(void) {
     swSet(GSWF_GOR00_SAIL_TO_KEELHAUL); // GSWF_GOR_SAILING_TO_KEELHAUL
 }
 
+/** Story point STG5_64 "Lost Wedding Ring" (muj_02): clears GSWF_GOR00_SAIL_TO_KEELHAUL. */
 void stg5_64_init(void) {
     swClear(GSWF_GOR00_SAIL_TO_KEELHAUL); // GSWF_GOR_SAILING_TO_KEELHAUL
 }
 
+/**
+ * Story point STG5_64_01 "Wedding Ring Delivery" (muj_02): gives the Wedding Ring;
+ * sets GSWF_MUJ05_WEDDING_RING_TAKEN.
+ */
 void stg5_64_01_init(void) {
     swSet(GSWF_MUJ05_WEDDING_RING_TAKEN); // GSWF_MUJ_05_WEDDING_RING
     pouchGetItem(ITEM_WEDDING_RING);
@@ -1634,15 +1902,21 @@ void stg5_64_02_init(void) {
     pouchRemoveItem(ITEM_WEDDING_RING);
 }
 
+/** Story point STG5_64_03 "F & F Arrive" (gor_00): sets GSWF_GOR00_SHIP_ARRIVAL_PENDING. */
 void stg5_64_03_init(void) {
     swSet(GSWF_GOR00_SHIP_ARRIVAL_PENDING); // GSWF_MUJ_SAILING_TO_ROGUEPORT
 }
 
+/**
+ * Story point STG5_65 "Train Ticket" (gor_03): sets GSWF_GOR03_DON_PIANTA_STG5_SCENE;
+ * clears GSWF_GOR00_SHIP_ARRIVAL_PENDING.
+ */
 void stg5_65_init(void) {
     swClear(GSWF_GOR00_SHIP_ARRIVAL_PENDING); // GSWF_MUJ_SAILING_TO_ROGUEPORT
     swSet(GSWF_GOR03_DON_PIANTA_STG5_SCENE);
 }
 
+/** Story point STG5_66 "Beldam Finds Out" (gor_03): gives the Train Ticket; sets GSWF_GOR03_DON_PIANTA_STG5_SCENE. */
 void stg5_66_init(void) {
     pouchGetItem(ITEM_TRAIN_TICKET);
     swSet(GSWF_GOR03_DON_PIANTA_STG5_SCENE);
@@ -1685,6 +1959,7 @@ void stg6_20_init(void) {
     pouchRemoveItem(ITEM_BLANKET);
 }
 
+/** Story point STG6_22 "Document" (rsh_04_a): delivers mail 0x1F; sets GSWF_MAIL_RDM_ISSUE5_SENT. */
 void stg6_22_init(void) {
     swSet(GSWF_MAIL_RDM_ISSUE5_SENT); // GSWF_MAIL_RDM_ISSUE_5_SENT
     pouchReceiveMail(0x1F);
@@ -1795,19 +2070,29 @@ void stg6_72_init(void) {
     //stubbed
 }
 
+/**
+ * Story point STG6_END "Stone Block Smash" (tik_07): gives the Ultra Hammer;
+ * sets GSWF_GOR01_ULTRA_HAMMER_CHEST_OPENED.
+ */
 void stg6_end_init01(void) {
     pouchGetItem(ITEM_ULTRA_HAMMER);
     swSet(GSWF_GOR01_ULTRA_HAMMER_CHEST_OPENED); // GSWF_GOR_01_ULTRA_HAMMER_CHEST
 }
 
+/** Story point STG6_END "To Fahr Outpost" (tik_07): sets GSWF_TIK07_BIG_BLOCK_BROKEN. */
 void stg6_end_init02(void) {
     swSet(GSWF_TIK07_BIG_BLOCK_BROKEN); // GSWF_TIK_07_LV2_BIG_BLOCK_BROKEN
 }
 
+/** Story point STG7_01 "Fahr Outpost (1st Visit)" (bom_01): sets GSWF_BOM_FAHR_REACHED. */
 void stg7_01_init(void) {
     swSet(GSWF_BOM_FAHR_REACHED); // GSWF_BOM_FIRST_ARRIVAL_DONE
 }
 
+/**
+ * Story point STG7_03 "Where's White?(Petalburg)" (nok_00): gives the Goldbob Guide; delivers mail 0x20;
+ * sets GSWF_MAIL_RDM_ISSUE6_SENT and GSWF_PIK00_GOLDBOB_CANNON_APPROVAL.
+ */
 void stg7_03_white_0(void) {
     swSet(GSWF_MAIL_RDM_ISSUE6_SENT); // GSWF_MAIL_RDM_ISSUE_6_SENT
     pouchReceiveMail(0x20);
@@ -1815,28 +2100,37 @@ void stg7_03_white_0(void) {
     pouchGetItem(ITEM_GOLDBOB_GUIDE);
 }
 
+/** Story point STG7_03 "Where's White?(Keelhaul)" (muj_01): sets GSWF_STG7_WHITE_PETALBURG_HINT. */
 void stg7_03_white_1(void) {
     swSet(GSWF_STG7_WHITE_PETALBURG_HINT); // GSWF_NOK_GENERAL_WHITE_HINT_HEARD
 }
 
+/** Story point STG7_03 "Where's White?(Glitzville)" (tou_01): sets GSWF_STG7_WHITE_KEELHAUL_HINT. */
 void stg7_03_white_2(void) {
     swSet(GSWF_STG7_WHITE_KEELHAUL_HINT); // GSWF_MUJ_01_WHITE_HINT_HEARD_UNUSED
 }
 
+/** Story point STG7_03 "Where's White?(Great Tree)" (mri_01): sets GSWF_STG7_WHITE_GLITZVILLE_HINT. */
 void stg7_03_white_3(void) {
     swSet(GSWF_STG7_WHITE_GLITZVILLE_HINT); // GSWF_TOU_GENERAL_WHITE_HINT_HEARD
 }
 
+/** Story point STG7_03 "Where's White?(Twilight)" (usu_00): sets GSWF_STG7_WHITE_BOGGLY_HINT. */
 void stg7_03_white_4(void) {
     swSet(GSWF_STG7_WHITE_BOGGLY_HINT); // GSWF_MRI_GENERAL_WHITE_HINT_HEARD
 }
 
+/**
+ * Story point STG7_03 "Gen.
+ * White Awakens" (bom_02): delivers mail 0x18; sets GSWF_STG7_WHITE_TWILIGHT_HINT and GSWF_MAIL_RAWK_HAWK_SENT.
+ */
 void stg7_03_white_5(void) {
     swSet(GSWF_STG7_WHITE_TWILIGHT_HINT); // GSWF_USU_GENERAL_WHITE_HINT_HEARD
     swSet(0xF); // GSWF_MAIL_RAWK_HAWK_SENT
     pouchReceiveMail(0x18);
 }
 
+/** Story point STG7_04 "Back Online" (bom_02): sets GSWF_BOM02_GENERAL_WHITE_WOKEN. */
 void stg7_04_init(void) {
     swSet(GSWF_BOM02_GENERAL_WHITE_WOKEN); // GSWF_BOM_GENERAL_WHITE_AGREED
 }
@@ -1866,22 +2160,33 @@ void stg7_15_room_A_init(void) {
     pouchRemoveItem(ITEM_ELEVATOR_KEY_0x1C);
 }
 
+/** Story point STG7_15 "Room Key B" (aji_12): gives the Card Key (item 0x1D); sets GSWF_AJI05_CARD_KEY_TAKEN. */
 void stg7_15_room_B_init(void) {
     pouchGetItem(ITEM_CARD_KEY_0x1D);
     swSet(GSWF_AJI05_CARD_KEY_TAKEN); // GSWF_AJI_05_LIT_FLOOR_DONE
 }
 
+/** Story point STG7_15 "Room Key C" (aji_10): gives the Card Key (item 0x1E); sets GSWF_AJI12_CARD_KEY_TAKEN. */
 void stg7_15_room_C_init(void) {
     pouchGetItem(ITEM_CARD_KEY_0x1E);
     swSet(GSWF_AJI12_CARD_KEY_TAKEN); // GSWF_AJI_12_LIT_FLOOR_DONE
 }
 
+/**
+ * Story point STG7_16 "Factory Door" (aji_18): gives the Card Key (item 0x1F);
+ * sets GSWF_AJI11_CARD_KEY_TAKEN and GSWF_AJI10_VISITED.
+ */
 void stg7_16_init(void) {
     pouchGetItem(ITEM_CARD_KEY_0x1F);
     swSet(GSWF_AJI11_CARD_KEY_TAKEN); // GSWF_AJI_11_CARD_KEY
     swSet(GSWF_AJI10_VISITED); // GSWF_AJI_10_VISITED
 }
 
+/**
+ * Story point STG7_17 "Conveyor Belt" (aji_13):
+ * takes the Card Key (item 0x1D), Card Key (item 0x1E) and Card Key (item 0x1F);
+ * sets GSWF_AJI18_CARD_KEY_SLOT_1, GSWF_AJI18_CARD_KEY_SLOT_2 and GSWF_AJI18_CARD_KEY_SLOT_3.
+ */
 void stg7_17_init(void) {
     pouchRemoveItem(ITEM_CARD_KEY_0x1D);
     pouchRemoveItem(ITEM_CARD_KEY_0x1E);
@@ -1891,6 +2196,10 @@ void stg7_17_init(void) {
     swSet(GSWF_AJI18_CARD_KEY_SLOT_3); // GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED
 }
 
+/**
+ * Story point STG7_19 "The Door to Lord Crump" (aji_13): gives the Card Key (item 0x20);
+ * sets GSWF_AJI13_CARD_KEY_TAKEN.
+ */
 void stg7_19_init(void) {
     swSet(GSWF_AJI13_CARD_KEY_TAKEN); // GSWF_AJI_13_CARD_KEY
     pouchGetItem(ITEM_CARD_KEY_0x20);
@@ -1907,10 +2216,15 @@ void stg7_25_00_init(void) {
     pouchGetStarStone(7);
 }
 
+/** Story point STG7_50 "A Waiting Prof. Frankly " (tik_00): sets GSWF_TIK00_TELEPORTER_ARRIVAL. */
 void stg7_50_init(void) {
     swSet(GSWF_TIK00_TELEPORTER_ARRIVAL); // GSWF_AJI_TELEPORT_TO_TIK_PENDING
 }
 
+/**
+ * Story point STG7_51 "Thousand-Year Door" (tik_05): delivers mail 0x19 and 0x21;
+ * sets GSWF_MAIL_GHOST_T_SENT and GSWF_TIK00_STG7_DOOR_OPENED; clears GSWF_TIK00_TELEPORTER_ARRIVAL.
+ */
 void stg7_51_init(void) {
     swSet(0x10); // GSWF_MAIL_GHOST_T_SENT
     pouchReceiveMail(0x19);
@@ -1934,6 +2248,11 @@ void stg8_02_init(void) {
     pouchRemoveItem(ITEM_PALACE_KEY_0x2E);
 }
 
+/**
+ * Story point STG8_05 "Star Key Slot" (las_10):
+ * clears Gloomtail's body (GSWF_LAS26_GLOOMTAIL_BODY_CLEARED),
+ * marks the las_09 chomp statues bombed and switches pressed, opens the las_26 chest and gives the Star Key.
+ */
 void stg8_05_init(void) {
     swSet(GSWF_LAS26_GLOOMTAIL_BODY_CLEARED); // GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL
     swSet(GSWF_LAS09_CHOMP_STATUE_1_BOMBED); // GSWF_LAS_09_CHAIN_CHOMP_1_BLOWN_UP
@@ -1986,22 +2305,32 @@ void stg8_10_init(void) {
     pouchGetItem(ITEM_PALACE_KEY_0x2F);
 }
 
+/** Story point STG8_11 "Star Puzzle" (las_20): takes the Palace Key (item 0x2F); sets GSWF_LAS22_DOOR_UNLOCKED. */
 void stg8_11_init(void) {
     pouchRemoveItem(ITEM_PALACE_KEY_0x2F);
     swSet(GSWF_LAS22_DOOR_UNLOCKED); // GSWF_LAS_22_DOOR_UNLOCKED
 }
 
+/**
+ * Story point STG8_13 "Key" (las_24): sets GSWF_LAS24_BLOCK_UNCOVERED,
+ * GSWF_LAS24_BIG_BLOCK_BROKEN and GSWF_LAS24_FLOOR_BROKEN.
+ */
 void stg8_13_init(void) {
     swSet(GSWF_LAS24_BLOCK_UNCOVERED); // GSWF_LAS_24_HAKO_BLOWN_AWAY
     swSet(GSWF_LAS24_BIG_BLOCK_BROKEN); // GSWF_LAS_24_BIG_BLOCK_BROKEN
     swSet(GSWF_LAS24_FLOOR_BROKEN); // GSWF_LAS_24_FLOOR_BROKEN
 }
 
+/** Story point STG8_14 "Lock" (las_25): gives the Palace Key (item 0x30); sets GSWF_LAS24_KEY_CHEST_OPENED. */
 void stg8_14_init(void) {
     pouchGetItem(ITEM_PALACE_KEY_0x30);
     swSet(GSWF_LAS24_KEY_CHEST_OPENED); // GSWF_LAS_24_PALACE_KEY_CHEST
 }
 
+/**
+ * Story point STG8_14_01 "Queen's Chamber" (las_28): takes the Palace Key (item 0x30);
+ * sets GSWF_LAS25_DOOR_UNLOCKED.
+ */
 void stg8_15_init(void) {
     pouchRemoveItem(ITEM_PALACE_KEY_0x30);
     swSet(GSWF_LAS25_DOOR_UNLOCKED); // GSWF_LAS_25_DOOR_UNLOCKED

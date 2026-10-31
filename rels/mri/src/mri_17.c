@@ -62,6 +62,11 @@ EvtWord strange_statue[56];
 EvtWord switch_event[41];
 EvtWord mri_17_init_evt[208];
 
+/**
+ * Enter script of the east pipe: the first time Mario comes in,
+ * it starts the strange statue scene (strange_statue) and records it with GSWF_MRI17_STRANGE_STATUE_SEEN.
+ * Returns 0 in LW(0).
+ */
 EVT_BEGIN(bero_02_into_event)
     IF_INT_EQUAL(GSWF_MRI_17_PILLAR_SCENE_SEEN, 0)
         SPAWN_EVENT(PTR(strange_statue))

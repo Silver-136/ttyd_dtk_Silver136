@@ -158,6 +158,10 @@ void itemInit(void) {
     wp->currId = 0;
 }
 
+/**
+ * Clears the current item table on map change; on the field it first puts dropped badges
+ * (ITEM_FLAG_BADGE_RETURN) on sale at the badge shop (itemCheckBadge).
+ */
 void itemReInit(void) {
     ItemWork* wp = itemGetWork();
     ItemEntry* entry;

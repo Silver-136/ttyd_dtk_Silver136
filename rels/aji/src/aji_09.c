@@ -110,6 +110,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Exit event of the first exit (hit area on the changing-room side) in Peach's section:
+ * without the X-Naut disguise (GSWF_AJI09_PEACH3_DISGUISED = 0) she says she cannot go out like this
+ * (peach_aji_133) and LW(0) = 1 tells the exit to be cancelled; disguised, LW(0) = 0 lets her through.
+ */
 EVT_BEGIN(peach_evt_bero_out1)
     IF_INT_EQUAL(GSWF_AJI_PEACH_IN_UNIFORM, 0)
         CALL(evt_mario_key_onoff, 0)
@@ -232,6 +237,12 @@ EVT_BEGIN(evt_kou1)
     RETURN
 EVT_END()
 
+/**
+ * Case script for the second changing booth's curtain (A_kou2_ka_omo and A_kou2_ka_ura),
+ * which also toggles open and closed through GF(1).
+ * When the map is entered from the ceiling ("tenjo") Mario turns into 8-bit pixel Mario (dot_mario,
+ * GSWF_AJI09_PIXEL_MARIO_ACTIVE) and BGM_EVT_DOT_MARIO1 plays while he stays in that form.
+ */
 EVT_BEGIN(evt_kou2)
     CALL(evt_hit_bind_mapobj, STRING("A_kou2_ka_omo"), STRING("S_kou2_ka"))
     CALL(evt_hit_bind_mapobj, STRING("A_kou2_ka_ura"), STRING("S_kou2_ka"))

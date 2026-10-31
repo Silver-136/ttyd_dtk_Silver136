@@ -409,6 +409,7 @@ BattleUnit* BattleGetUnitPtr(BattleWork* wp, s32 index) {
     return NULL;
 }
 
+/** Stores unit in battle slot index (ignored past BATTLE_UNIT_MAX). */
 void BattleSetUnitPtr(BattleWork* wp, s32 index, BattleUnit* unit) {
     if (index < BATTLE_UNIT_SLOT_COUNT) {
         wp->units[index] = unit;

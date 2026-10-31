@@ -85,6 +85,12 @@ static EVT_BEGIN(box_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: a bomb is thrown at the cracked wall of las_16 (Bobbery's explosion).
+ * The wall breaks with a sound while an offscreen capture of the hole is played as a paper-craft image,
+ * the hole collision is switched on, a success jingle plays,
+ * GSWF_LAS16_WALL_BOMBED is set and the exit case is run.
+ */
 static EVT_BEGIN(bomb_wall_evt)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -153,6 +159,11 @@ static EVT_BEGIN(hint_plate)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_16, a Riddle Tower room (the chest holds Palace Key 0x2B):
+ * music, the door to las_10, a cracked wall Bobbery can bomb open (until GSWF_LAS16_WALL_BOMBED),
+ * the key chest and the hint plate.
+ */
 EVT_BEGIN(las_16_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))

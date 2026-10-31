@@ -702,6 +702,7 @@ EVT_BEGIN(testenemynpc_move_event)
     RETURN
 EVT_END()
 
+/** Move event of the generic wandering event NPC: wanders within 100 units of where it stands with evt_urouro. */
 EVT_BEGIN(npc_urouro_move_event)
     CALL_CHILD(PTR(npc_urouro_init_event))
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))

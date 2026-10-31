@@ -1295,6 +1295,11 @@ void winMailGX(WindowWork* wp, f32 x, f32 y) {
     GXSetScissor(x + 304 + 32, 240 - y + 32 + 1, 344, 200);
 }
 
+/**
+ * Draws a Journal collection grid ("hako" = box) at (x, y): a == 0 the badge log, 1 the recipe log.
+ * Pages of 7x4 cells scroll vertically; found badges (GSWF_BADGE_FOUND_BASE) and cooked recipes show their icon,
+ * the rest a blank mark. Adds page-up/down arrows and the "msg_menu_sort_narabikae" sort hint.
+ */
 void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
     u32 c0;
     u32 c1;

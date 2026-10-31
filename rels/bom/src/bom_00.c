@@ -50,6 +50,11 @@ static EVT_BEGIN(evt_tree)
     RETURN
 EVT_END()
 
+/**
+ * Pipe-exit event used when entering from the Rogueport Sewers pipe:
+ * on the very first arrival (GSWF_BOM_FAHR_REACHED not set) it hides Mario and the partner
+ * until first_evt clears GF(0), then shows them again; leaves LW(0) = 0.
+ */
 static EVT_BEGIN(first_evt_dokan)
     IF_INT_EQUAL(GSWF_BOM_FIRST_ARRIVAL_DONE, 1)
         SET_VALUE(LW(0), 0)

@@ -802,6 +802,11 @@ TattleEntry* battleGetUnitMonosiriPtr(s32 id) {
     return &monosiriMessageTable[id];
 }
 
+/**
+ * TRUE when the unit's HP may be shown: Peekaboo is equipped,
+ * or its kind (or the kind it started as, if it changed kind in battle) has been Tattled,
+ * either in the saved GSWF_TATTLE_BASE flags or earlier in this battle.
+ */
 BOOL battleCheckUnitMonosiriFlag(BattleUnit* unit) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnitType kind = unit->currentKind;
@@ -821,6 +826,11 @@ BOOL battleCheckUnitMonosiriFlag(BattleUnit* unit) {
     return FALSE;
 }
 
+/**
+ * Marks a unit type as Tattled, both in the saved GSWF_TATTLE_BASE flags and in this battle's bitfield.
+ * When the type is in one of the battle_monosiri_same_tbl groups (an enemy and its clones or variants),
+ * every type in it is marked.
+ */
 void battleSetUnitMonosiriFlag(BattleUnitType kind) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnitType* group;

@@ -158,6 +158,10 @@ static USER_FUNC(getYoshiColor) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: picks Yoshi's color from the real time that has passed since the egg was received (stored in
+ * GSW_TOU_EGG_TIME), modulo 20 minutes, and stores it in the pouch.
+ */
 USER_FUNC(setYoshiColor) {
     OSTime start;
     s32 i;

@@ -1088,6 +1088,7 @@ USER_FUNC(point_wait) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets or clears ShopWork flag bits; args: on/off, mask. The talk script sets SHOP_FLAG_TALKING while the counter menu is up. */
 USER_FUNC(shop_flag_onoff) {
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);

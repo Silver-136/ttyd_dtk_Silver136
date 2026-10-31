@@ -500,6 +500,14 @@ s32 iri_29_item_tbl3[] = {
     ITEM_FRIGHT_MASK, -1,
 };
 
+/**
+ * Talk script for Little Narikin (コナリキン).
+ * During Trouble Center request 29 he asks for a gift:
+ * the choice made in the first question (stored in GSW_TROUBLE_WORK_FIRST) decides whether he wants a Shroom
+ * Cake, Keelhaul Mango or Fright Mask; Mario hands the item over, receives a Present for it,
+ * and on the second visit gets 3 coins and the request is solved.
+ * During the Bowser interlude he reacts to Bowser, and depending on the answer runs away.
+ */
 EVT_BEGIN(konarikin_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)

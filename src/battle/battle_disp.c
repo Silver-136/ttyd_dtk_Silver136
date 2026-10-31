@@ -51,6 +51,10 @@ void _pose_two_pattern(BattleUnitPart* part);
 void _btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, Vec pos2, Vec scale2, GXColor color);
 void _btlStockExpDisp(CameraId camId, void* param);
 
+/**
+ * Returns the animation name for a pose type from a unit part's pose table:
+ * the first entry that matches poseId or is the BTL_POSE_NORMAL fallback. NULL for no table.
+ */
 const char* searchPoseTbl(PoseTableEntry* table, s32 type) {
     int i;
 
@@ -276,6 +280,10 @@ void btlDispGetTexSize(u32 id, u16* width, u16* height) {
     *height = GXGetTexObjHeight(&texobj);
 }
 
+/**
+ * Battle display setup at battle start: the battle cameras, the menu display, and BATTLE_DISP_FLAG_STAR_POINTS,
+ * which turns on the Star Point counter.
+ */
 void btlDispInit(void) {
     BattleWork* wp = _battleWorkPointer;
 
@@ -1315,6 +1323,11 @@ void _btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, Vec pos2, Vec scale2, GXC
     btlDispTexPlane2(mtx, id, color, 0);
 }
 
+/**
+ * Counts the displayed Star Points up towards the ones earned
+ * so far this battle (one per frame after a 4-frame delay) and queues the counter draw
+ * while BATTLE_DISP_FLAG_STAR_POINTS is on.
+ */
 void BattleStockExpDisp(void) {
     BattleWork* wp = _battleWorkPointer;
 

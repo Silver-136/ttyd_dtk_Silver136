@@ -6,6 +6,11 @@
 #include "manager/evtmgr_cmd.h"
 #include <string.h>
 
+/**
+ * Registers a case event with casedrv: conditionId is what triggers it (with CASE_COND_FLAG_BALLOON when flag is
+ * set), hitObjName and swFlag pick the hit object, evtCode runs with lwData copied in (or zeroed).
+ * Returns the case id.
+ */
 static inline s32 _caseEntry(s32 conditionId, BOOL flag, const char* hitObjName, u32 swFlag,
                              void* evtCode, EvtWord* lwData, s32 priority) {
     CaseSetup setup;

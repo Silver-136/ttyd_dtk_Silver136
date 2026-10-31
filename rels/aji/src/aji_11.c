@@ -133,6 +133,10 @@ static BeroEntry bero_peach_data[] = {
     {0},
 };
 
+/**
+ * Pick-up event for the Card Key on the storage-room floor:
+ * records it in GSWF_AJI11_CARD_KEY_TAKEN so it is not placed again.
+ */
 static EVT_BEGIN(key_evt)
     SET_VALUE(GSWF_AJI_11_CARD_KEY, 1)
     RETURN
@@ -213,6 +217,12 @@ static s32 item_list[] = {
     ITEM_DATA_DISK, -1,
 };
 
+/**
+ * Case script of the disk console (a_disksys): Peach says she has nothing to put in (peach_aji_244_01)
+ * until she has the Data Disk; otherwise she picks the disk from the item menu,
+ * the monitor lights up and plays the disk (BGM_FF_PEACH_DISCSET1, peach_aji_247 and 248),
+ * which sets GSWF_AJI11_PEACH5_DISK_READ and attaches peach_evt_tana2 to the shelf.
+ */
 EVT_BEGIN(peach_evt_disksys)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_TAKEN, 0)

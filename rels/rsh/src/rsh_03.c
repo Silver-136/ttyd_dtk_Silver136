@@ -132,6 +132,12 @@ EvtWord rsh_03_c_init_evt_nidome[80];
 EvtWord rsh_03_c_init_evt_nidome[50];
 #endif
 
+/**
+ * Script helper for Troubles Center request 22 (the cook's ingredient request):
+ * lists which of the Golden Leaf, Mystic Egg and Keel Mango Mario carries
+ * and has not handed over yet (bits 1, 2 and 4 of GSW_TROUBLE_WORK_FIRST).
+ * Returns the -1 terminated table address in args[0] and the number of entries in args[1].
+ */
 USER_FUNC(iri_22_make_item_tbl) {
     EvtWord* args = event->args;
     u8 bought;

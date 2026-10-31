@@ -4507,6 +4507,14 @@ EVT_BEGIN(uraguchi_tenin)
     RETURN
 EVT_END()
 
+/**
+ * Back door password scene of the Pianta syndicate office, run by uraguchi_check once Mario has bought a Dried
+ * Shroom and then a Dizzy Dial (GW(10) = 152, GW(11) = 141): the clerk (店員) asks his mustache colour, corrects
+ * himself and asks his favourite colour (mac_2_041, 042, choices Red / Green / Yellow / Black). Any answer but
+ * Yellow gets Mario sent off (mac_2_044) and clears GW(10) and GW(11). Yellow passes (mac_2_043) with a success
+ * jingle: the clerk unlocks the door (evt_door_01_entry on door_data_01_1), lets him through (043_01) and
+ * GSWF_GOR03_SYNDICATE_BACKDOOR_OPEN is set.
+ */
 EVT_BEGIN(uraguchi_event)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_envoff, PSND_PAUSE)
@@ -4602,6 +4610,10 @@ EVT_BEGIN(uraguchi_event)
     RETURN
 EVT_END()
 
+/**
+ * Checks the back door: if GSWF_GOR03_SYNDICATE_BACKDOOR_OPEN is already set it does nothing,
+ * otherwise it plays the back door scene.
+ */
 EVT_BEGIN(uraguchi_check)
     IF_INT_EQUAL(GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE, 1)
         RETURN

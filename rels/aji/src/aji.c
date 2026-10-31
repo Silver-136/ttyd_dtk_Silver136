@@ -23,6 +23,11 @@ void _prolog(void);
 void _unresolved(void) {
 }
 
+/**
+ * Module exit point of the X-Naut Fortress: if the pixel-Mario (Famicom mode) section of aji_09 was still active
+ * when the area is left, turns Famicom mode off for Mario and his partner
+ * and clears GSWF_AJI09_PIXEL_MARIO_ACTIVE; then runs the static destructors.
+ */
 // Restore normal Mario and partner rendering before running the module destructors.
 void _epilog(void) {
     voidfunctionptr* dtor;

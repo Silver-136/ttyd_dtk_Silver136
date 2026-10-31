@@ -932,6 +932,7 @@ USER_FUNC(cam_r) {
     return EVT_RETURN_BLOCK;
 }
 
+/** TRUE while the Ragged Diary scene runs or the game is in Game Over; evt_shop and evt_win use it to hold off. */
 BOOL winGhostDiaryChk(void) {
     if (wp->menuState == WIN_MENU_DIARY_WAIT) {
         return TRUE;

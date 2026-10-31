@@ -487,6 +487,13 @@ static EVT_BEGIN(counter_event)
     RETURN
 EVT_END()
 
+/**
+ * Start-of-turn event of the Dark Puff (not while it is charged or unable to act):
+ * 50% of the time it changes height.
+ * From up high it sinks to height 10 with SFX_ENM_KUMO_MOVE5 and clears PART_ATTR_HAMMERLIKE_CANNOT_TARGET and
+ * PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET on its body, so hammers and shell attacks reach it (unit work 0 = 1);
+ * from down low it rises back to height 40 with SFX_ENM_KUMO_MOVE4 and sets them again (work 0 = 0).
+ */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_EQUAL(LW(0), 0)

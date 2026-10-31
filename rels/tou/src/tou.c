@@ -415,6 +415,13 @@ static void insert(s32* list, s32 num, s32 from, s32 to) {
     }
 }
 
+/**
+ * Re-sorts the ranking.
+ * Fighters who are still above Mario ("win" group) are ordered by score
+ * and some are pinned to fixed slots (the champion first, then slots 1, 10, 14, 18,
+ * 19 for the flagged fighters); the last opponent is pushed to the end of its group.
+ * Mario's marker (id 20) sits between the two groups and his rank goes to GSW_TOU_PLAYER_RANK.
+ */
 static void rankingControll(void) {
     s32 win[32];
     s32 lose[32];
@@ -524,6 +531,11 @@ USER_FUNC(evt_tou_get_ranking) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] receives the id of the fighter Mario fights next:
+ * the one ranked just above him, or the one just below
+ * after the last rule was not met (GSWF_TOU_LAST_RULE_MET clear). Mario at rank 0 gets the second fighter.
+ */
 static USER_FUNC(evt_tou_get_next_match) {
     EvtWord* args = event->args;
     s32 flag = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
@@ -716,6 +728,12 @@ USER_FUNC(evt_tou_get_rule_msg2) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = 0 if Mario won the match, else lost; args[1] = opponent id.
+ * Updates the opponent's lost flag and GSWF_TOU_LAST_MATCH_WON,
+ * jitters every fighter's score by a random amount,
+ * records the opponent in GSW_TOU_LAST_OPPONENT_ID and re-sorts the board.
+ */
 static USER_FUNC(evt_tou_set_ranking_win_lose) {
     EvtWord* args = event->args;
     s32 lose = evtGetValue(event, args[0]);
@@ -760,6 +778,10 @@ static USER_FUNC(evt_tou_set_ranking_win_lose) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = rule result bits from the match (bit 2 = rule met);
+ * sets or clears GSWF_TOU_LAST_RULE_MET.
+ */
 static USER_FUNC(evt_tou_set_rule_result) {
     s32 result = evtGetValue(event, event->args[0]);
 
@@ -2693,6 +2715,12 @@ static USER_FUNC(tou_champion_belt_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Rank 11 scene (once: GSWF_TOU_RANK11_SWOOPS_JOINS), after King K has gone: オクトール and ガンガン (Cleftor)
+ * talk about missing him (stg3_tou_93_28 to 30); Jolene brings in the new fighter Sir Swoop (ポグ), shows him
+ * the minor-league room and the match terminal, Grubba (ガンス) books his first match over the monitor
+ * (stg3_tou_93_31 to 37) and Swoop introduces himself (stg3_tou_93_38), then the guard comes in.
+ */
 EVT_BEGIN(evt_michel_8)
     CALL(evt_npc_set_position, STRING("オクトール"), 145, 0, 50)
     CALL(evt_npc_set_position, STRING("ガンガン"), 95, 0, 50)
@@ -3056,6 +3084,10 @@ EVT_BEGIN(evt_cake)
     RETURN
 EVT_END()
 
+/**
+ * Partner remark after Bowser's visit to the Glitz Pit (GSWF_TOU_BOWSER_RAID_DONE):
+ * the party partner says stg3_tou_403_11.
+ */
 static EVT_BEGIN(evt_koopa_after)
     CALL(evt_msg_print_party, STRING("stg3_tou_403_11"))
     RETURN

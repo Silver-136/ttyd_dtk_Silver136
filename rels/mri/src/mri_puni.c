@@ -1138,6 +1138,12 @@ void puniMapFindbuff(Vec pos) {
     }
 }
 
+/**
+ * Picks the nearest gather target (PUNI_TARGET_FLAG_MASS)
+ * and the nearest flee target (PUNI_TARGET_FLAG_AWAY) for a Puni among the ten targets;
+ * only targets within 32 units of its height count.
+ * Results go to massTarget and awayTarget (-1 for none) with the squared distances.
+ */
 void puniTargetSearch(PuniData* p) {
     s32 i;
     PuniTarget* t = Punigp->targets;
@@ -1171,6 +1177,13 @@ void puniTargetSearch(PuniData* p) {
     }
 }
 
+/**
+ * Puni position save slots: PUNI_LSW_SLOT_SIZE (7) LSW bytes per puni,
+ * from the LSW() script word `base` (puniswGetindex/puniswSetindex)
+ * or from LSW 0 (evt_puni_exit, puni_exit_swset):
+ * [0] floor number (0: none saved), [1..2] x low/high, [3..4] y low/high, [5..6] z low/high,
+ * each a signed 16-bit map coordinate.
+ */
 void puniswGetindex(s32 base, s32 idx, s32* val, Vec* pos) {
     u8 b0, b1, b2, b3, b4, b5, b6;
     s32 off;
@@ -1233,6 +1246,10 @@ void puniswSetindex(s32 base, s32 idx, s32* val, Vec* pos) {
 }
 #pragma pop
 
+/**
+ * Reads the trap bit of Puni number idx from the saved-bit area GSW_MRI_PUNI_TRAPPED_BITS into *out (1 if the
+ * Puni is caught in a trap); the blocker slots from 103 up always give 0.
+ */
 void puniswTrapGetindex(s32 idx, s32* out) {
     if (idx >= PUNI_SOLID_FIRST) {
         *out = 0;
@@ -1828,6 +1845,13 @@ void puniMoveCustom(PuniData* p) {
     }
 }
 
+/**
+ * Resolves one fight exchange between Puni a and Puni b:
+ * each side's hit chance (hitRate, or hitRateGuard against an escaping opponent) is rolled with qrnd;
+ * the loser gets damage (the winner's attack minus its defense), loses its velocity,
+ * is flagged for knockback and goes to PUNI_MODE_DAMAGE. A dizzy Jabbi always loses.
+ * Both are marked attacked for this frame.
+ */
 void puniParaAttack(PuniData* a, PuniData* b) {
     s16 x, y, r;
     s32 c;
@@ -2176,6 +2200,11 @@ void puniSearch(PuniData* p) {
     }
 }
 
+/**
+ * Battle start (allMode 3): every idle, joining,
+ * following or scripted Puni or Jabbi that has an opponent in range leaves its chain
+ * and switches to PUNI_MODE_ATTACK against it.
+ */
 void puniModeChangeAttack(void) {
     s32 i;
     PuniData* p = &Punidat[1];
@@ -2248,6 +2277,10 @@ void puniModeChangeAway(void) {
 /** Direction straight down, used when checking whether a Puni has ground under it. */
 static const Vec puni_fallchk_dir = {0.0f, -1.0f, 0.0f};
 
+/**
+ * Puni (slots 1 to 102) that have no floor within 2 units under them leave their chain,
+ * lose their velocity and switch to PUNI_MODE_FALL.
+ */
 void puniModeChangeFallCheck(void) {
     Vec dir;
     Vec pos;
@@ -2675,6 +2708,10 @@ void puniModeSearch(PuniData* p) {
     p->maxSpeed = 3.0f;
 }
 
+/**
+ * Gather mode: the Puni walks to a gather target (targets with PUNI_TARGET_FLAG_MASS, e.g. a Puni Orb pedestal),
+ * nudging away when too close and jittering sideways on floors 13 and 18 when it stands still.
+ */
 void puniModeMass(PuniData* p) {
     Vec v;
     PuniTarget* t = &Punigp->targets[p->massTarget];
@@ -4398,6 +4435,10 @@ void puniModeDokan(PuniData* p) {
     }
 }
 
+/**
+ * Custom mode: calls the Puni's own mode function (modeFunc), if it has one.
+ * Scripts use it with PUNI_MODE_FUNC for scripted behaviors.
+ */
 void puniModeCustom(PuniData* p) {
     if (p->modeFunc) {
         p->modeFunc(p);
@@ -5488,6 +5529,12 @@ s32 evt_puni_init(EventEntry *event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Declares this map's floor data to the Puni system.
+ * args[0] = map number (stored as floor = number + 1 and written to GSW_MRI_PUNI_CUR_MAP),
+ * args[1] to args[4] = the heights of up to four floors, args[5] = height mode for puniSetYPosition (ymode),
+ * args[6] = maze map kind (see evt_puni_set_maze).
+ */
 USER_FUNC(evt_puni_set_yuka) {
     EvtWord* args = event->args;
     Punigp->floor = evtGetValue(event, args[0]) + 1;
@@ -5841,6 +5888,14 @@ s32 evt_puni_debug_info(EventEntry *event, BOOL isFirstCall) {
     return 2;
 }
 
+/**
+ * Sets up the Puni crowd when a map starts (called through mri_puni_init).
+ * args[0] = 2 means the map was entered through a loading zone, whose direction in args[2] sets the entry flags;
+ * Punies that Mario had with him (those the story has recruited: Punio, his sister, the little Jabbi,
+ * the rival and the first GSW_MRI_PUNI_FOLLOWERS+4 others) are placed either beside Mario after a save load,
+ * walking in from the loading zone, or at their saved lost position; trapped ones are skipped.
+ * The blockers 103 to 109 are placed at the down pipes.
+ */
 USER_FUNC(evt_puni_setup) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
@@ -7248,6 +7303,11 @@ EVT_BEGIN(puni_piders_check)
     RETURN
 EVT_END()
 
+/**
+ * Event that keeps the Puni counter updated every frame.
+ * Does not run at all once the Punies have been praised (STORY_STG2_26_PRAISE_FROM_THE_PUNI)
+ * and the counter is no longer needed.
+ */
 EVT_BEGIN(puni_disp_info)
     IF_INT_GREATER_OR_EQUAL(4124967296, 118)
         RETURN
@@ -7408,6 +7468,16 @@ EVT_BEGIN(mri_puni_init_dvd)
     RETURN
 EVT_END()
 
+/**
+ * Map init call that starts the Puni system if it is needed at the current story point.
+ * The stand-ins are always registered; before STORY_STG2_10_SECRET_ENTRANCE_REVEALED and
+ * after the epilogue there are no Punies.
+ * During the Grodus chapter they exist only in mri_00
+ * when entered at the ending scenes (sekai_yami1 or minnnanokoe);
+ * between the praise and the queen's chamber they exist only in mri_00 and only
+ * while the player has not left the tree.
+ * Otherwise it allocates the system, loads the maze and starts the position driver and the update loop.
+ */
 EVT_BEGIN(mri_puni_init)
     CALL_CHILD(mri_puni_init_dvd)
     SWITCH(4124967296)
