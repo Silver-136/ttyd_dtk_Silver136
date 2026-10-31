@@ -2021,9 +2021,7 @@ void SoundSSSetPanCh(s32 chan, u8 pan) {
                 right = left;
                 if (pan < 64) {
                     right = (((f32)pan * stream->curVol) / 63.0f);
-                }
-                // FAKE: sign-bit test for pan >= 64; the plain comparison changes the object
-                if (!((u32)(pan - 64) >> 31)) {
+                } else {
                     left = (((f32)(127 - pan) * stream->curVol) / 63.0f);
                 }
                 sndStreamMixParameter(stream->entries[0].streamId, left, 0, stream->span, 0);

@@ -341,15 +341,13 @@ void mot_slit_post(void) {
     u16 id;
     if (m->slitState >= 10) {
         id = m->currMotionId;
-        // FAKE: (u16)(id - MARIO_MOTION_FALL_2) <= 1 is the range test FALL_2..UPSTAIRS; the plain range test changes the object
-        if (id == MARIO_MOTION_SLIT || (u16)(id - MARIO_MOTION_FALL_2) <= 1 || m->currMotionId <= MARIO_MOTION_JUMP_2 ||
+        if (id == MARIO_MOTION_SLIT || (id == MARIO_MOTION_FALL_2 || id == MARIO_MOTION_UPSTAIRS) || m->currMotionId <= MARIO_MOTION_JUMP_2 ||
             m->currMotionId == MARIO_MOTION_JUMP_3) {
             return;
         }
 #else
     u16 id = m->currMotionId;
-    // FAKE: (u16)(id - MARIO_MOTION_FALL_2) <= 1 is the range test FALL_2..UPSTAIRS; the plain range test changes the object
-    if (id == MARIO_MOTION_SLIT || (u16)(id - MARIO_MOTION_FALL_2) <= 1 || m->currMotionId <= MARIO_MOTION_JUMP_2 ||
+    if (id == MARIO_MOTION_SLIT || (id == MARIO_MOTION_FALL_2 || id == MARIO_MOTION_UPSTAIRS) || m->currMotionId <= MARIO_MOTION_JUMP_2 ||
         m->currMotionId == MARIO_MOTION_JUMP_3) {
         return;
 #endif

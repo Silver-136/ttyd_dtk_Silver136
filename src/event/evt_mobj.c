@@ -3085,7 +3085,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         }
         break;
     case 10: {
-        void* joint;
+        f32* joint;
         animGetPtr()->poses[mobj->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
         mobj->flags |= MOBJ_FLAG_PAPER_TEX;
         dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
@@ -3093,7 +3093,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         joint = &animPoseGetAnimPosePtr(mobj->poseId)->worldPositions[0][1].y;
         item = marioGetPtr();
         if (kururing_in_box(mobj->position.x, mobj->position.z, ((MarioWork*)item)->position.x, ((MarioWork*)item)->position.z, 30.0f)) {
-            ((MarioWork*)item)->position.y = *(f32*)joint;
+            ((MarioWork*)item)->position.y = *joint;
         }
         p = partyGetPtr(marioGetPartyId());
 #ifdef VERSION_G8ME01
@@ -3102,7 +3102,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         if (p) {
 #endif
             if (kururing_in_box(mobj->position.x, mobj->position.z, ((PartyEntry*)p)->position.x, ((PartyEntry*)p)->position.z, 30.0f)) {
-                ((PartyEntry*)p)->position.y = *(f32*)joint;
+                ((PartyEntry*)p)->position.y = *joint;
             }
         }
         p = partyGetPtr(marioGetExtraPartyId());
@@ -3112,7 +3112,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         if (p) {
 #endif
             if (kururing_in_box(mobj->position.x, mobj->position.z, ((PartyEntry*)p)->position.x, ((PartyEntry*)p)->position.z, 30.0f)) {
-                ((PartyEntry*)p)->position.y = *(f32*)joint;
+                ((PartyEntry*)p)->position.y = *joint;
             }
         }
         {
@@ -3122,14 +3122,14 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             for (i = 0; i < wp->total; i++, npc++) {
                 if (npc->flags & NPC_FLAG_IN_USE) {
                     if (kururing_in_box(mobj->position.x, mobj->position.z, npc->position.x, npc->position.z, 42.420002f)) {
-                        npc->position.y = *(f32*)joint;
+                        npc->position.y = *joint;
                     }
                 }
             }
         }
         p = itemNearDistCheck(mobj->position.x, mobj->position.y, mobj->position.z, 42.420002f);
         if (p) {
-            ((ItemEntry*)p)->position.y = *(f32*)joint;
+            ((ItemEntry*)p)->position.y = *joint;
         }
         if (animPoseGetLoopTimes(mobj->poseId) < 2.0f) {
             break;

@@ -257,7 +257,8 @@ void* (_mapAlloc)(MAPBASE_PARAM u32 size) {
 void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
     MapAllocEntry* usedEntry;
     MapAllocEntry* entry;
-    MapAllocEntry* tailEntry; // next of freeEntry before the split, then the returned data
+    MapAllocEntry* tailEntry; // next of freeEntry before the split
+    void* result;
     MapAllocEntry* freeEntry; // last free block that fits; the allocation is cut from its end
     u32 freeSize; // size of freeEntry, 0 while none fits
     u32 fullSize; // usableSize plus the header
@@ -295,17 +296,16 @@ void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
 
         usedEntry = freeEntry->next;
         usedEntry->next = tailEntry;
-        // FAKE: tailEntry is reused for the returned data pointer; a separate void* changes the object
-        tailEntry = (void*)(usedEntry + 1);
+        result = (void*)(usedEntry + 1);
         usedEntry->size = usableSize;
         usedEntry->inuse = 1;
 #ifndef VERSION_G8ME01
         usedEntry->currId = COUNT++;
 #endif
 
-        memset(tailEntry, 0, usableSize);
-        DCFlushRange(tailEntry, usableSize);
-        return tailEntry;
+        memset(result, 0, usableSize);
+        DCFlushRange(result, usableSize);
+        return result;
     } else {
         return NULL;
     }

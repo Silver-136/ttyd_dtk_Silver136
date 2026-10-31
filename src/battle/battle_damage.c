@@ -1655,8 +1655,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         if (status & STATUS_RESULT_GALE_FORCE) {
             result = flags | DAMAGE_CODE_GALE_FORCE;
         }
-        // FAKE: no-op (u32) cast; the plain test changes the object
-        if (((u32)flags & DAMAGE_RESULT_FINAL_HIT) && (status & STATUS_RESULT_INSTANT_KILL)) {
+        if ((flags & DAMAGE_RESULT_FINAL_HIT) && (status & STATUS_RESULT_INSTANT_KILL)) {
             code = DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_NORMAL;
             target->damagePattern = ATTACKPATTERN_NULL;
             _checkDamageCode_EmergencyRevival(target, &code);
@@ -1664,8 +1663,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
             ret = 18;
             break;
         }
-        // FAKE: no-op (u32) cast; the plain test changes the object
-        if (((u32)flags & DAMAGE_RESULT_FINAL_HIT) && (weapon->special & SPECIAL_FREEZE_CRUSH) && BtlUnit_CheckStatus(target, STATUS_FREEZE) && irand(100) < 0) {
+        if ((flags & DAMAGE_RESULT_FINAL_HIT) && (weapon->special & SPECIAL_FREEZE_CRUSH) && BtlUnit_CheckStatus(target, STATUS_FREEZE) && irand(100) < 0) {
             // BUG: irand(100) < 0 never holds, so this freeze-crush hit never happens
             code2 = DAMAGE_RESULT_FREEZE_CRUSH | DAMAGE_RESULT_DEATH | DAMAGE_RESULT_ZERO_HP | DAMAGE_RESULT_FINAL_HIT |
                     DAMAGE_CODE_NORMAL;

@@ -106,8 +106,6 @@ f32 kpaStickSpd(s32 dash) {
     if (stick >= lim) {
         stick = lim;
     }
-    // FAKE: lim is reassigned the same 70.0f; clamping to the constant directly changes the object
-    lim = 70.0f;
     if (stick <= -lim) {
         stick = -lim;
     }

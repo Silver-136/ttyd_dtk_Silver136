@@ -2251,11 +2251,6 @@ EVT_BEGIN(muj_20_init_evt)
 EVT_END()
 
 #ifdef VERSION_G8ME01
-/* FAKE: in the US build the step-count argument (FPS_FRAMES) of logo's second
- * intplGetValue call is evaluated after the float arguments. Calling through a
- * prototype with `steps` last reproduces that evaluation order; the registers
- * (r3 mode, r4 step, r5 steps, f1 start, f2 end) are the same under the EABI,
- * so the call is behaviour-identical. */
 
 
 #endif
@@ -2284,7 +2279,7 @@ USER_FUNC(logo) {
             if (wp->counter < VERSION_PICK(180, FPS_FRAMES(180))) {
                 wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 255.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
 #ifdef VERSION_G8ME01
-                wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, FPS_FRAMES(180)); /* FAKE */
+                wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, FPS_FRAMES(180));
 #else
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, 180);
 #endif
@@ -2303,7 +2298,7 @@ USER_FUNC(logo) {
             if (wp->counter < VERSION_PICK(120, FPS_FRAMES(120))) {
                 wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 255.0f, 0.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
 #ifdef VERSION_G8ME01
-                wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, FPS_FRAMES(120)); /* FAKE */
+                wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, FPS_FRAMES(120));
 #else
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, 120);
 #endif

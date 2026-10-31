@@ -37,8 +37,6 @@ typedef struct StickRotateWork {
     s32 endTimer; // 0x14
 } StickRotateWork;
 
-// FAKE: the no-op (BattleActions*) casts here and on disp below keep the address add early (the plain field reschedules the disp functions)
-#define AC_WORK(bw) ((StickRotateWork*)((BattleActions*)&(bw)->actionCommands)->work)
 
 
 static void actionCommandDisp(f32 x, f32 y);
@@ -418,7 +416,7 @@ u16 _get_icon_id(s8 dir) {
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
-    StickRotateWork* sw = AC_WORK(work);
+    StickRotateWork* sw = (StickRotateWork*)ac->work;
     Vec v0, v1, v2, v3, v4, v5;
 
     switch (work->actionCommands.mAcState) {
@@ -453,7 +451,7 @@ static void actionCommandDisp(f32 x, f32 y) {
 void actionCommandDisp2(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
-    StickRotateWork* sw = AC_WORK(work);
+    StickRotateWork* sw = (StickRotateWork*)ac->work;
     Vec v0, v1, v2;
 
     switch (work->actionCommands.mAcState) {

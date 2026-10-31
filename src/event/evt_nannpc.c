@@ -141,7 +141,7 @@ void nanNPCOption(void) {
         }
     }
     // FAKE: r (loop 3 start) assigned in loop 2's exit test, as the target loads it there (no mr copy); w->npc is not changed by loop 2
-    for (p = ((NanNPCWork*)w)->npc; p < (r = ((NanNPCWork*)w)->npc) + ((NanNPCWork*)w)->num; p++) {
+    for (p = w->npc; p < (r = w->npc) + w->num; p++) {
         if (p->flags & 4) {
             PSVECSubtract(&p->target, &p->pos, &diff);
             mag = PSVECMag(&diff);
@@ -153,7 +153,7 @@ void nanNPCOption(void) {
             }
         }
     }
-    for (; r < ((NanNPCWork*)w)->npc + ((NanNPCWork*)w)->num; r++) {
+    for (; r < w->npc + w->num; r++) {
         if (r->flags & 4) {
             mag = PSVECMag(&r->move);
             if (mag) {

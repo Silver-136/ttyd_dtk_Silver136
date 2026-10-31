@@ -40,11 +40,6 @@ static effN64Vtx kmr_a_1_v[] = {
 };
 
 void effKemuri5Main(EffectEntry* effect);
-static inline GXColor mkc(u8 a) {
-    GXColor c = {0x70, 0x60, 0x18, 0};
-    c.a = a;
-    return c;
-}
 
 void effKemuri5Disp(CameraId cameraId, EffectEntry* effect);
 
@@ -170,8 +165,7 @@ void effKemuri5Disp(CameraId cameraId, EffectEntry* effect) {
         if (work->active == 0) {
             continue;
         }
-        // FAKE: one-use inline mkc builds the colour; the compound literal (GXColor){0x70, 0x60, 0x18, work->alpha} changes the object
-        GXSetTevColor(GX_TEVREG0, mkc(work->alpha));
+        GXSetTevColor(GX_TEVREG0, (GXColor){0x70, 0x60, 0x18, work->alpha});
         PSMTXTrans(mtx, work->position.x, work->position.y, work->position.z);
         PSMTXRotRad(rot, 'y', 0.017453292f * -camGetPtr(CAMERA_3D)->viewYaw);
         PSMTXConcat(mtx, rot, mtx);
