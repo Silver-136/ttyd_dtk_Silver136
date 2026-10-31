@@ -41,6 +41,20 @@ typedef enum PartyMotion {
     PARTY_MOTION_UPSTAIRS = 6,
     PARTY_MOTION_DAMAGE = 7,
 } PartyMotion;
+// PartyEntry.runMode; 4..7 are distinct hello variants and remain unnamed here.
+typedef enum PartyRunMode {
+    PARTY_RUN_MOVE_RESET = 0,
+    PARTY_RUN_WAIT = 1,
+    PARTY_RUN_MOVE = 2,
+    PARTY_RUN_USE = 3,
+    PARTY_RUN_GOODBYE = 8,
+    PARTY_RUN_FORCE_WALK = 9,
+    PARTY_RUN_PIPE = 10,
+    PARTY_RUN_RIDE = 11,
+    PARTY_RUN_RIDE_YOSHI = 12,
+    PARTY_RUN_DAMAGE_RETURN = 13,
+    PARTY_RUN_DELETE = 14,
+} PartyRunMode;
 
 #pragma enumsalwaysint off
 typedef enum PartyFlags {

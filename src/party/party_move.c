@@ -699,7 +699,7 @@ void partyWalkSe(PartyEntry* party, s32 arg) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_800c9044, JP 0x800C9044. See docs/NAME_PROVENANCE.md.
 void partyChgStayPose(PartyEntry* party) {
-    if (party->runMode != 0) {
+    if (party->runMode != PARTY_RUN_MOVE_RESET) {
         if (marioChkDeepSleep() == TRUE || (party->flags & PARTY_FLAG_SLEEP_ON)) {
             partyChgPoseId(party, 6);
         } else if (party->currentMemberId != PARTY_MEMBER_MS_MOWZ) {
@@ -955,7 +955,7 @@ void partySetDir(PartyEntry* party, f32 x, f32 z) {
  * Ignored while Yoshi is in run mode 3 (being used).
  */
 void partyMoveBehindMario(PartyEntry* party, s32 arg) {
-    if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == 3) {
+    if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == PARTY_RUN_USE) {
         return;
     }
     party->moveArg = arg;
@@ -968,7 +968,7 @@ void partyMoveBehindMario(PartyEntry* party, s32 arg) {
  * also keeps a set homeDir (party_set_behind_dir) and uses the smaller push box around Mario.
  */
 void partyMoveBehindMario3(PartyEntry* party, s32 arg, f32 dir) {
-    if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == 3) {
+    if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == PARTY_RUN_USE) {
         return;
     }
     party->trigFlags |= PARTY_TRIG_BEHIND_DIR_SET;
@@ -984,7 +984,7 @@ void partyMoveBehindMario3(PartyEntry* party, s32 arg, f32 dir) {
  * Ignored while Yoshi is in run mode 3.
  */
 void partyMoveBesideMario(PartyEntry* party, s32 arg) {
-    if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == 3) {
+    if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == PARTY_RUN_USE) {
         return;
     }
     party->moveArg = arg;
@@ -1240,7 +1240,7 @@ void partyWalkMain(PartyEntry* party) {
     } else {
         other = anotherPartyGetPtr(party->currentSlotId);
         if (other) {
-            if ((other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == 3) || nokonokoGetStatus(other) == 3 ||
+            if ((other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == PARTY_RUN_USE) || nokonokoGetStatus(other) == 3 ||
                 PSVECDistance(&mario->position, &other->position) >= 150.0f) {
                 flags = partyChkMarioJumpFlag();
                 partyPutFootmark(1, marioGetPtr()->position, flags);

@@ -108,7 +108,7 @@ void bomhei_bye(PartyEntry* party) {
         bomheiCleanSfx(party);
     }
     if (partyGoodbyeMain(party)) {
-        partyChgRunMode(party, 14);
+        partyChgRunMode(party, PARTY_RUN_DELETE);
     }
 }
 
@@ -148,8 +148,8 @@ void bomhei_exit(PartyEntry* party) {
     p = partyGetPtr(marioGetPartyId());
     if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED)) {
         p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
-        if (p->runMode != 9) {
-            partyChgRunMode(p, 2);
+        if (p->runMode != PARTY_RUN_FORCE_WALK) {
+            partyChgRunMode(p, PARTY_RUN_MOVE);
             p->moveMode = PARTY_MOVE_MODE_STAY;
         }
         bomheiCleanFlags(p);
@@ -162,8 +162,8 @@ void bomhei_use_cancel(void) {
     PartyEntry* p = partyGetPtr(marioGetPartyId());
     if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED)) {
         p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
-        if (p->runMode != 9) {
-            partyChgRunMode(p, 2);
+        if (p->runMode != PARTY_RUN_FORCE_WALK) {
+            partyChgRunMode(p, PARTY_RUN_MOVE);
             p->moveMode = PARTY_MOVE_MODE_STAY;
         }
         bomheiCleanFlags(p);
@@ -177,8 +177,8 @@ void bomhei_use_cancel2(void) {
     if (p != NULL && p->currentMemberId == PARTY_MEMBER_BOBBERY && (p->flags & PARTY_FLAG_IS_BEING_USED) && (p->playerPtr->flags & MARIO_FLAG_IS_CARRYING_BOBBERY)) {
         p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
         marioChgPose("M_S_1");
-        if (p->runMode != 9) {
-            partyChgRunMode(p, 2);
+        if (p->runMode != PARTY_RUN_FORCE_WALK) {
+            partyChgRunMode(p, PARTY_RUN_MOVE);
             p->moveMode = PARTY_MOVE_MODE_STAY;
         }
         bomheiCleanFlags(p);
@@ -207,7 +207,7 @@ void bomhei_use_post(PartyEntry* party) {
         marioChgPose(name);
     }
     bomheiCleanFlags(party);
-    if (party->runMode != 9) {
+    if (party->runMode != PARTY_RUN_FORCE_WALK) {
         party->moveMode = PARTY_MOVE_MODE_STAY;
         party->trigFlags |= PARTY_TRIG_CHG_RUN_MODE;
     }
@@ -665,7 +665,7 @@ void bomhei_use_main(PartyEntry* party) {
         partyMove(party);
         break;
     case 100:
-        partyChgRunMode(party, 2);
+        partyChgRunMode(party, PARTY_RUN_MOVE);
         party->moveMode = PARTY_MOVE_MODE_STAY;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->flags &= ~PARTY_FLAG_IS_EVT_USE;

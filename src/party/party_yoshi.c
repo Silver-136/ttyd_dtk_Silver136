@@ -167,7 +167,7 @@ void marioRideYoshi(void) {
     party->trigFlags &= ~PARTY_TRIG_CHG_MOVE_MODE;
     party->trigFlags &= ~PARTY_TRIG_CHG_MOT;
     party->flags |= PARTY_FLAG_IS_BEING_USED;
-    party->runMode = 3;
+    party->runMode = PARTY_RUN_USE;
     party->useMotionId = 11;
     if (party->useStruct == NULL) {
         party->useStruct = __memAlloc(HEAP_DEFAULT, sizeof(YoshiWork));
@@ -268,16 +268,16 @@ void marioYoshiForceCancel(void) {
             party->useStruct = NULL;
         }
         if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
-            partyChgRunMode(party, 0xd);
+            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
             extra = partyGetPtr(marioGetExtraPartyId());
             if (extra) {
-                partyChgRunMode(extra, 0xd);
+                partyChgRunMode(extra, PARTY_RUN_DAMAGE_RETURN);
             }
             return;
         }
     }
-    if (party->runMode != 8 && party->runMode != 0xd) {
-        partyChgRunMode(party, 2);
+    if (party->runMode != PARTY_RUN_GOODBYE && party->runMode != PARTY_RUN_DAMAGE_RETURN) {
+        partyChgRunMode(party, PARTY_RUN_MOVE);
         party->moveMode = PARTY_MOVE_MODE_STAY;
     }
 }
@@ -297,7 +297,7 @@ void yoshi_bye(PartyEntry* party) {
         }
         yoshi_use(party);
     } else if (partyGoodbyeMain(party)) {
-        partyChgRunMode(party, 0xe);
+        partyChgRunMode(party, PARTY_RUN_DELETE);
     }
 }
 
@@ -340,10 +340,10 @@ void yoshi_damageToge(PartyEntry* party) {
     marioChgPose("M_Y_2");
     mario->mot.yoshi.velX = 0.0f;
     mario->mot.yoshi.velZ = 0.0f;
-    partyChgRunMode(party, 0xd);
+    partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
     extra = partyGetPtr(marioGetExtraPartyId());
     if (extra) {
-        partyChgRunMode(extra, 0xd);
+        partyChgRunMode(extra, PARTY_RUN_DAMAGE_RETURN);
     }
 }
 
@@ -458,8 +458,8 @@ void yoshi_use(PartyEntry* party) {
                         party->useStruct = NULL;
                     }
                 }
-                if (party->runMode != 8 && party->runMode != 0xd) {
-                    partyChgRunMode(party, 2);
+                if (party->runMode != PARTY_RUN_GOODBYE && party->runMode != PARTY_RUN_DAMAGE_RETURN) {
+                    partyChgRunMode(party, PARTY_RUN_MOVE);
                     party->moveMode = PARTY_MOVE_MODE_STAY;
                 }
                 return;
@@ -519,7 +519,7 @@ void yoshi_use(PartyEntry* party) {
             party->useMotionId = 10;
             extra = partyGetPtr(marioGetExtraPartyId());
             if (extra) {
-                partyChgRunMode(extra, 0xc);
+                partyChgRunMode(extra, PARTY_RUN_RIDE_YOSHI);
             }
             partyChkGnd(party);
             break;
@@ -575,7 +575,7 @@ void yoshi_use(PartyEntry* party) {
                 }
                 break;
             }
-            if (party->runMode == 8) {
+            if (party->runMode == PARTY_RUN_GOODBYE) {
                 break;
             }
             if (yoshiGetStatus() == YOSHI_STATUS_RIDING) {
@@ -657,8 +657,8 @@ void yoshi_use(PartyEntry* party) {
                 return;
             }
             party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-            if (party->runMode != 8) {
-                partyChgRunMode(party, 2);
+            if (party->runMode != PARTY_RUN_GOODBYE) {
+                partyChgRunMode(party, PARTY_RUN_MOVE);
                 party->moveMode = PARTY_MOVE_MODE_STAY;
             }
             yoshiAddFloorMove(party);
@@ -992,10 +992,10 @@ void yoshi_use(PartyEntry* party) {
         }
         marioSetFallPara();
         marioChgMot(MARIO_MOTION_DAMAGE);
-        partyChgRunMode(party, 0xd);
+        partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
         extra = partyGetPtr(marioGetExtraPartyId());
         if (extra) {
-            partyChgRunMode(extra, 0xd);
+            partyChgRunMode(extra, PARTY_RUN_DAMAGE_RETURN);
         }
         return;
     }
@@ -1005,7 +1005,7 @@ void yoshi_use(PartyEntry* party) {
             __memFree(HEAP_DEFAULT, party->useStruct);
             party->useStruct = NULL;
         }
-        partyChgRunMode(party, 2);
+        partyChgRunMode(party, PARTY_RUN_MOVE);
         party->moveMode = PARTY_MOVE_MODE_STAY;
         resetOfs(party);
         return;
@@ -1182,11 +1182,11 @@ void searchGround(PartyEntry* party) {
         }
         if (attr & 0xC00) {
             yoshi_damageToge(party);
-            partyChgRunMode(party, 0xd);
+            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
             {
                 PartyEntry* extra = partyGetPtr(marioGetExtraPartyId());
                 if (extra) {
-                    partyChgRunMode(extra, 0xd);
+                    partyChgRunMode(extra, PARTY_RUN_DAMAGE_RETURN);
                 }
             }
             return;

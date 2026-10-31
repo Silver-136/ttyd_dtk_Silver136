@@ -48,6 +48,7 @@
 #include "battle/battle_detect.h"
 
 #define BATTLE_COMMAND_UNIT_CAPACITY ((s32)(sizeof(((BattleWork*)0)->units) / sizeof(((BattleWork*)0)->units[0])))
+#define BATTLE_COMMAND_WEAPON_CAPACITY ((s32)(sizeof(((BattleCommand*)0)->weapon) / sizeof(((BattleCommand*)0)->weapon[0])))
 #define BATTLE_COMMAND_VISIBLE_WEAPON_ROWS (6)
 
 void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
@@ -604,7 +605,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                             cmd->weapon[num].name = msgSearch(itemDataTable[cmd->weapon[num].weapon->itemId].name);
                         }
                     }
-                    if (++num >= 21) {
+                    if (++num >= BATTLE_COMMAND_WEAPON_CAPACITY) {
                         break;
                     }
                 }
@@ -641,7 +642,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
                     } else {
                         cmd->weapon[num].name = msgSearch(itemDataTable[cmd->weapon[num].weapon->itemId].name);
                     }
-                    if (++num >= 21) {
+                    if (++num >= BATTLE_COMMAND_WEAPON_CAPACITY) {
                         break;
                     }
                 }

@@ -6223,7 +6223,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOn
     if ((psnd.flags & PSND_FLAG_NO_SFX) && (ignoreSfxOff == 0)) {
         return -1;
     }
-    if ((((sid == 0x5B) || (sid == 0x8CA)) || (((u32) (sid - 0x1BE)) <= 1)) || (sid == 0x205)) {
+    if ((((sid == 0x5B) || (sid == 0x8CA)) || (((u32) (sid - 0x1BE)) <= 1)) || (sid == PSND_SFX_COIN_GET1)) {
         if (psnd.sfxCooldown) {
             return -1;
         }
@@ -6279,7 +6279,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOn
     if (id & PSND_SFX_ENV) {
         sfx->flags |= PSFX_FLAG_ENV;
     }
-    if ((sid == 0x518) || (sid == 0x742)) {
+    if ((sid == PSND_SFX_STG2_BOMB_TIMER1) || (sid == PSND_SFX_STG7_ALART_WARNING1)) {
         sfx->flags |= (PSFX_FLAG_KEEP | PSFX_FLAG_NO_MUTE);
     }
     if (entry->specialFlag == 1) {

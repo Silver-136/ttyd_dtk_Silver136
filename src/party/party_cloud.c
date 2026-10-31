@@ -369,10 +369,10 @@ void cloud_use(PartyEntry* party) {
         party->useStruct = NULL;
     }
     if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
-        partyChgRunMode(party, 13);
+        partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
     } else {
         partyChgPose(party, partyChgPoseId(party, 1));
-        partyChgRunMode(party, 2);
+        partyChgRunMode(party, PARTY_RUN_MOVE);
         partyChgMot(party, PARTY_MOTION_STAY);
     }
 }
@@ -578,7 +578,7 @@ void _cloud_use(PartyEntry* party) {
             marioChgMot(MARIO_MOTION_STAY);
         }
         party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
-        partyChgRunMode(party, 2);
+        partyChgRunMode(party, PARTY_RUN_MOVE);
         party->moveArg = 0;
         partyChgMoveMode(party, PARTY_MOVE_MODE_BEHIND_MARIO);
         partyChgMot(party, PARTY_MOTION_WALK);

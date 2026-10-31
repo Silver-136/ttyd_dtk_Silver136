@@ -410,7 +410,7 @@ void party_motion_stay(PartyEntry* party) {
         partyMoveBehindMario(party, 0);
         return;
     }
-    if (party->runMode != 0) {
+    if (party->runMode != PARTY_RUN_MOVE_RESET) {
         if (!party->currentSlotId || !partyGetPtr(marioGetPartyId())) {
             if (partyChkMarioFollowY(party->playerPtr)) {
                 f32 d;
@@ -440,7 +440,7 @@ void party_motion_stay(PartyEntry* party) {
                         partyClearFootmark2();
                     }
                 // 3 = PARTY_MEMBER_BOBBERY, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
-                } else if (other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == 3) {
+                } else if (other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == PARTY_RUN_USE) {
                     if (mario->currMotionId != MARIO_MOTION_DAMAGE && mario->currMotionId != MARIO_MOTION_HIP && mario->currMotionId != MARIO_MOTION_HIP_2 &&
                         distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) >= lim) {
                         partyChgMot(party, PARTY_MOTION_WALK);
@@ -532,7 +532,7 @@ void party_motion_wait(PartyEntry* party) {
     }
     partyChkGnd(party);
     if (distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) > 31.0f) {
-        partyChgRunMode(party, 2);
+        partyChgRunMode(party, PARTY_RUN_MOVE);
     }
     if (mario->currMotionId == MARIO_MOTION_TALK && !(party->flags & PARTY_FLAG_IS_BEHIND_MARIO)) {
         partyMoveBehindMario(party, 0);
@@ -708,7 +708,7 @@ void partyFlyAdjustY(PartyEntry* party) {
     if (hit) {
         attr = hitGetAttr(hit);
         if (attr & HIT_ATTR_TOGE) {
-            partyChgRunMode(party, 13);
+            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
             return;
         }
         if (attr & HIT_ATTR_SHALLOW_WATER) {
@@ -1224,7 +1224,7 @@ found:
                 party->flags |= PARTY_FLAG_FORCE_FALL;
             }
         } else if (attr & HIT_ATTR_TOGE) {
-            partyChgRunMode(party, 13);
+            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
             return;
         }
     }
@@ -1581,7 +1581,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     if (hit) {
         attr = hitGetAttr(hit);
         if (attr & HIT_ATTR_TOGE) {
-            partyChgRunMode(party, 13);
+            partyChgRunMode(party, PARTY_RUN_DAMAGE_RETURN);
             return;
         }
         if (attr & HIT_ATTR_SHALLOW_WATER) {
@@ -2201,7 +2201,7 @@ void party_motion_jump(PartyEntry* party) {
         x = party->moveTarget.x;
         y = party->moveTarget.y;
         z = party->moveTarget.z;
-        if (party->forceMoveFrames != 0 || party->runMode == 9) {
+        if (party->forceMoveFrames != 0 || party->runMode == PARTY_RUN_FORCE_WALK) {
             x = party->position.x;
             y = party->position.y;
             z = party->position.z;
@@ -2607,7 +2607,7 @@ void party_motion_damage(PartyEntry* party) {
             break;
         case 12:
             if (--party->moveFrames <= 0) {
-                partyChgRunMode(party, 2);
+                partyChgRunMode(party, PARTY_RUN_MOVE);
                 party->moveMode = PARTY_MOVE_MODE_STAY;
                 party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             }

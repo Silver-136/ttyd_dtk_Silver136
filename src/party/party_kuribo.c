@@ -300,7 +300,7 @@ void kuribo_use(PartyEntry* party) {
         if (--party->moveFrames > 0) {
             break;
         }
-        partyChgRunMode(party, 2);
+        partyChgRunMode(party, PARTY_RUN_MOVE);
         partyChgMoveMode(party, PARTY_MOVE_MODE_STAY);
         partyChgMot(party, PARTY_MOTION_STAY);
         partyChgPoseId(party, 1);
@@ -322,7 +322,7 @@ void kuribo_bye(PartyEntry* party) {
         partyGoodbyeInit(party);
     }
     if (partyGoodbyeMain(party)) {
-        partyChgRunMode(party, 14);
+        partyChgRunMode(party, PARTY_RUN_DELETE);
     }
 }
 
