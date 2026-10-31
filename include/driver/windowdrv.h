@@ -38,8 +38,8 @@ struct WindowEntry {
     s32 type; //0x8, WindowType
     f32 x; //0xC, window xpos
     f32 y; //0x10, window ypos
-    f32 height; //0x14
-    f32 width; //0x18
+    f32 width; //0x14, horizontal extent
+    f32 height; //0x18, vertical extent
     u8 pad_1C[0x20 - 0x1C]; // 0x1C, never accessed
     OSTime timestamp;               // 0x20, gp->renderTime at the start of the current fade/scroll step
     smartEntry* userdata; //0x28
@@ -58,9 +58,9 @@ s32 windowEntry(u16 priority);
 BOOL windowDelete(WindowEntry* entry);
 BOOL windowDeleteID(s32 id);
 void windowMain(void);
-void windowDispGX_Kanban(s32 type, u8 alpha, f32 x, f32 y, f32 height, f32 width);
-void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 height, f32 width);
-void windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, f32 x, f32 y, f32 height, f32 width, f32 tailX, f32 tailY);
+void windowDispGX_Kanban(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height);
+void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height);
+void windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tailY);
 void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve);
 void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve);
 s32 windowCheckID(s32 id);

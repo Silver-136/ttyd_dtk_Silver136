@@ -318,12 +318,12 @@ void mot_roll_post(void) {
     MarioWork* mario = marioGetPtr();
     MarioWork* m = marioGetPtr();
 #ifdef VERSION_G8ME01
-    if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId != (u32)-1) {
+    if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
         psndSFXOff(marioGetPtr()->motRoll->sfxId);
         marioGetPtr()->motRoll->sfxId = -1;
     }
 #else
-    if ((u32)m->mot.roll.sfxId != (u32)-1) {
+    if (m->mot.roll.sfxId != -1U) {
         psndSFXOff(m->mot.roll.sfxId);
         m->mot.roll.sfxId = -1;
     }
@@ -368,12 +368,12 @@ void marioRollForceCancel(void) {
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
         MarioWork* m = marioGetPtr();
 #ifdef VERSION_G8ME01
-        if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId != (u32)-1) {
+        if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
             psndSFXOff(marioGetPtr()->motRoll->sfxId);
             marioGetPtr()->motRoll->sfxId = -1;
         }
 #else
-        if ((u32)m->mot.roll.sfxId != (u32)-1) {
+        if (m->mot.roll.sfxId != -1U) {
             psndSFXOff(m->mot.roll.sfxId);
             m->mot.roll.sfxId = -1;
         }
@@ -620,12 +620,12 @@ void mot_roll(void) {
         {
             MarioWork* m = marioGetPtr();
 #ifdef VERSION_G8ME01
-            if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId != (u32)-1) {
+            if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
                 psndSFXOff(marioGetPtr()->motRoll->sfxId);
                 marioGetPtr()->motRoll->sfxId = -1;
             }
 #else
-            if ((u32)m->mot.roll.sfxId != (u32)-1) {
+            if (m->mot.roll.sfxId != -1U) {
                 psndSFXOff(m->mot.roll.sfxId);
                 m->mot.roll.sfxId = -1;
             }
@@ -1064,12 +1064,12 @@ void mot_roll(void) {
     } else {
         MarioWork* m = marioGetPtr();
 #ifdef VERSION_G8ME01
-        if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId != (u32)-1) {
+        if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
             psndSFXOff(marioGetPtr()->motRoll->sfxId);
             marioGetPtr()->motRoll->sfxId = -1;
         }
 #else
-        if ((u32)m->mot.roll.sfxId != (u32)-1) {
+        if (m->mot.roll.sfxId != -1U) {
             psndSFXOff(m->mot.roll.sfxId);
             m->mot.roll.sfxId = -1;
         }

@@ -762,8 +762,8 @@ void msgAnalize(smartEntry* smart, char* msg) {
     s32 paperTime;
     s16 winX;
     s16 winY;
-    s16 winHeight;
     s16 winWidth;
+    s16 winHeight;
     s16 sel0;
     s16 sel1;
     u16 iw;
@@ -1099,12 +1099,12 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else if (strcmp(tag, "clear") == 0) {
                 window->type = WINDOW_TYPE_CLEAR;
             } else if (strcmp(tag, "wpos") == 0) {
-                sscanf(args, "%hd%hd%hd%hd", &winX, &winY, &winHeight, &winWidth);
+                sscanf(args, "%hd%hd%hd%hd", &winX, &winY, &winWidth, &winHeight);
                 window->flags |= WINDOW_FLAG_WPOS;
                 window->x = winX;
                 window->y = winY;
-                window->height = winHeight;
                 window->width = winWidth;
+                window->height = winHeight;
             } else if (strcmp(tag, "select") == 0) {
                 window->type = WINDOW_TYPE_SELECT;
                 data->flags |= MSG_WIN_FLAG_SELECT;
@@ -1540,16 +1540,16 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
         if (!(window->flags & WINDOW_FLAG_WPOS)) {
             window->x = -280.0f;
             window->y = 225.0f;
-            window->height = 560.0f;
-            window->width = 176.0f;
+            window->width = 560.0f;
+            window->height = 176.0f;
         }
         break;
     case WINDOW_TYPE_SELECT:
         window->main = selectWindow_Main;
         window->x = (s16)(-WIN_DATA(window)->selWidth / 2);
         window->y = WIN_DATA(window)->selY;
-        window->height = WIN_DATA(window)->selWidth;
-        window->width = (s16)(WIN_DATA(window)->numSel * 36 + 40);
+        window->width = WIN_DATA(window)->selWidth;
+        window->height = (s16)(WIN_DATA(window)->numSel * 36 + 40);
         WIN_DATA(window)->sel = WIN_DATA(window)->defSel;
         data->cursorY = window->y - (data->sel * 31 + 58);
         break;
@@ -1559,8 +1559,8 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
 #else
         window->priority = 10;
 #endif
-        window->height = VERSION_PICK(0.7f, 0.9f) * GXGetTexObjWidth(getWakuTexObj(3));
-        window->width = VERSION_PICK(0.7f, 0.9f) * GXGetTexObjHeight(getWakuTexObj(3));
+        window->width = VERSION_PICK(0.7f, 0.9f) * GXGetTexObjWidth(getWakuTexObj(3));
+        window->height = VERSION_PICK(0.7f, 0.9f) * GXGetTexObjHeight(getWakuTexObj(3));
         break;
     }
     return id;
@@ -1941,10 +1941,10 @@ void msgWindow_Disp(CameraId camId, void* param) {
             case WINDOW_TYPE_BOSS:
             case WINDOW_TYPE_TEC:
             case WINDOW_TYPE_MAJO:
-                ex = intplGetValue(EASING_LINEAR, pos.x, (window->height / 2.0f) + window->x, window->alpha, 255);
-                ey = intplGetValue(EASING_LINEAR, pos.y, window->y - (window->width / 2.0f), window->alpha, 255);
-                w = intplGetValue(EASING_LINEAR, 10.0f, window->height, window->alpha, 255);
-                h = intplGetValue(EASING_LINEAR, 10.0f, window->width, window->alpha, 255);
+                ex = intplGetValue(EASING_LINEAR, pos.x, (window->width / 2.0f) + window->x, window->alpha, 255);
+                ey = intplGetValue(EASING_LINEAR, pos.y, window->y - (window->height / 2.0f), window->alpha, 255);
+                w = intplGetValue(EASING_LINEAR, 10.0f, window->width, window->alpha, 255);
+                h = intplGetValue(EASING_LINEAR, 10.0f, window->height, window->alpha, 255);
                 windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - (w / 2.0f), ey + (h / 2.0f), w, h, pos.x, pos.y);
                 if (window->alpha == 255) {
                     GXSetScissor(camera->scissor[0], 240.0f - (window->y - 36.0f), camera->scissor[2], 100);
@@ -1952,16 +1952,16 @@ void msgWindow_Disp(CameraId camId, void* param) {
                 }
                 break;
             case WINDOW_TYPE_SMALL:
-                window->x = pos.x - (window->height / 2.0f);
+                window->x = pos.x - (window->width / 2.0f);
                 if (window->tailMode & 8) {
                     window->y = pos.y - 80.0f;
                 } else {
                     window->y = 60.0f + pos.y;
                 }
-                ex = intplGetValue(EASING_LINEAR, pos.x, (window->height / 2.0f) + window->x, window->alpha, 255);
-                ey = intplGetValue(EASING_LINEAR, pos.y, window->y - (window->width / 2.0f), window->alpha, 255);
-                w = intplGetValue(EASING_LINEAR, 10.0f, window->height, window->alpha, 255);
-                h = intplGetValue(EASING_LINEAR, 10.0f, window->width, window->alpha, 255);
+                ex = intplGetValue(EASING_LINEAR, pos.x, (window->width / 2.0f) + window->x, window->alpha, 255);
+                ey = intplGetValue(EASING_LINEAR, pos.y, window->y - (window->height / 2.0f), window->alpha, 255);
+                w = intplGetValue(EASING_LINEAR, 10.0f, window->width, window->alpha, 255);
+                h = intplGetValue(EASING_LINEAR, 10.0f, window->height, window->alpha, 255);
                 windowDispGX_Message(window->type, window->tailMode, window->alpha, ex - (w / 2.0f), ey + (h / 2.0f), w, h, pos.x, pos.y);
                 if (window->alpha == 255) {
                     sy = 240 - ((s32)window->y - 10);
@@ -1977,7 +1977,7 @@ void msgWindow_Disp(CameraId camId, void* param) {
                 break;
             }
         } else {
-            windowDispGX_Message(window->type, 0, window->alpha, window->x, window->y, window->height, window->width, 0.0f, 0.0f);
+            windowDispGX_Message(window->type, 0, window->alpha, window->x, window->y, window->width, window->height, 0.0f, 0.0f);
             GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 8.0f, camera->scissor[2], 0x7E);
             ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         }
@@ -1985,22 +1985,22 @@ void msgWindow_Disp(CameraId camId, void* param) {
     case WINDOW_TYPE_PLATE:
     case WINDOW_TYPE_KANBAN:
     case WINDOW_TYPE_HOUSOU:
-        windowDispGX_Kanban(window->type, window->alpha, window->x, window->y, window->height, window->width);
+        windowDispGX_Kanban(window->type, window->alpha, window->x, window->y, window->width, window->height);
         GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 2.0f, camera->scissor[2], 0x68);
         ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
     case WINDOW_TYPE_DIARY:
-        windowDispGX_Kanban(window->type, window->alpha, window->x, window->y, window->height, window->width);
+        windowDispGX_Kanban(window->type, window->alpha, window->x, window->y, window->width, window->height);
         GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 8.0f, camera->scissor[2], 0x7E);
         ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
     case WINDOW_TYPE_SYSTEM:
-        windowDispGX_System(window->type, window->alpha, window->x, window->y, window->height, window->width);
-        GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 8.0f, camera->scissor[2], window->width - 50.0f);
+        windowDispGX_System(window->type, window->alpha, window->x, window->y, window->width, window->height);
+        GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 8.0f, camera->scissor[2], window->height - 50.0f);
         ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
     case WINDOW_TYPE_CLEAR:
-        GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 8.0f, camera->scissor[2], window->width - 50.0f);
+        GXSetScissor(camera->scissor[0], (240.0f - (window->y - 36.0f)) - 8.0f, camera->scissor[2], window->height - 50.0f);
         ret = msgDisp(window->userdata, window->alpha, 62.0f + window->x, window->y - 36.0f);
         break;
     case WINDOW_TYPE_SELECT:
@@ -2013,7 +2013,7 @@ void msgWindow_Disp(CameraId camId, void* param) {
             active = 1;
         }
         animPoseMain(msgw->poseId);
-        animPoseDraw(msgw->poseId, (window->x + window->height) - 52.0f, 31.0f + (window->y - window->width), 0.0f, 180.0f, 5.0f, 2);
+        animPoseDraw(msgw->poseId, (window->x + window->width) - 52.0f, 31.0f + (window->y - window->height), 0.0f, 180.0f, 5.0f, 2);
     }
 }
 
@@ -2098,7 +2098,7 @@ void selectWindow_Disp(CameraId camId, void* param) {
     Vec pos;
 
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0, 0, 0, 0});
-    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, window->alpha}, window->x, window->y, window->height, window->width, 30.0f);
+    windowDispGX_Waku_col(0, (GXColor){0xFF, 0xFF, 0xFF, window->alpha}, window->x, window->y, window->width, window->height, 30.0f);
     msgDisp(window->userdata, window->alpha, 40.0f + window->x, window->y - 25.0f);
     pos.x = 2.0f + window->x;
     data->cursorY += 0.3f * (window->y - (f32)(data->sel * 31 + 58) - data->cursorY);
