@@ -37,6 +37,8 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_detect.h"
 
+#define BATTLE_COMMAND_UNIT_CAPACITY ((s32)(sizeof(((BattleWork*)0)->units) / sizeof(((BattleWork*)0)->units[0])))
+
 void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp);
 void BattleCommandDisplay_ActMenuEnd(BattleWork* wp);
 void FontDrawString(f32 x, f32 y, const char* msg);
@@ -2538,7 +2540,7 @@ s32 _check_present_item(void) {
         return 0;
     }
     id = BattleAudience_GetPresentTargetUnitId();
-    if (id < -1 || id >= 64) {
+    if (id < -1 || id >= BATTLE_COMMAND_UNIT_CAPACITY) {
         return 0;
     }
     unit = BattleGetUnitPtr(wp, id);
@@ -2589,7 +2591,7 @@ void BattleDrawEnemyHP(CameraId camId, void* param) {
 
     camGetPtr(CAMERA_2D);
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_COMMAND_UNIT_CAPACITY; i++) {
         unit = wp->units[i];
         if (!unit) {
             continue;

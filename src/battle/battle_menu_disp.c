@@ -1,4 +1,8 @@
 #include "battle/battle_disp.h"
+
+#define SUBMENU_ICON_VISIBLE (1)
+#define SUBMENU_ICON_SPEECH_BUBBLE (2)
+#define SUBMENU_ROW_VISIBLE (1)
 #include "battle/battle_menu_disp.h"
 #include "battle/battle_seq_command.h"
 #include "battle/battle_unit.h"
@@ -153,8 +157,8 @@ void DrawMainIcon(BattleSubMenu* menu, BattleCommandAct* acts, Mtx* a, Vec* b, f
     }
     for (i = 0; i < cursor->count; i++) {
         k = order[i];
-        if (menu->iconFlags[k] & 1) {
-            if (menu->iconFlags[k] & 2) {
+        if (menu->iconFlags[k] & SUBMENU_ICON_VISIBLE) {
+            if (menu->iconFlags[k] & SUBMENU_ICON_SPEECH_BUBBLE) {
                 DrawMainIconHukidasi(menu, &acts[k], a[k], c[k]);
             } else {
                 DrawMainIconCircle(menu, &acts[k], a[k], b[k], c[k]);
@@ -354,7 +358,7 @@ void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const ch
     ofs = menu->scrollPos - (f32)(s32)menu->scrollPos;
     ofs = 24.0f * ofs;
     for (i = 0; i < 7; i++) {
-        if ((s32)menu->scrollPos + i < cursor->count && (menu->rowFlags[i] & 1)) {
+        if ((s32)menu->scrollPos + i < cursor->count && (menu->rowFlags[i] & SUBMENU_ROW_VISIBLE)) {
             PSMTXTrans(m, 100.0f, 35.0f - 24.0f * i + ofs, 0.0f);
             PSMTXConcat(m, a[i], out[i]);
             DrawSubIconSub(menu, i, out[i], enabled[i], icons[i], names[i], costs[i], p34[i], party, y);
@@ -1001,7 +1005,7 @@ void InitSubMenuCommonProcess2(BattleSubMenu* menu, BattleCursor* cursor) {
         menu->iconTimer[idx] = 0;
         menu->iconSlot[idx] = i;
         menu->iconFlags[idx] = 0;
-        menu->iconFlags[idx] |= 1;
+        menu->iconFlags[idx] |= SUBMENU_ICON_VISIBLE;
         if (i == cursor->count - 1) {
             menu->iconState[idx] = 0;
         } else {
@@ -1021,7 +1025,7 @@ void InitSubMenuCommonProcess3(BattleSubMenu* menu, BattleCursor* cursor) {
         menu->iconTimer[idx] = 0;
         menu->iconSlot[idx] = i;
         menu->iconFlags[idx] = 0;
-        menu->iconFlags[idx] |= 1;
+        menu->iconFlags[idx] |= SUBMENU_ICON_VISIBLE;
         if (i == cursor->count - 1) {
             menu->iconState[idx] = 1;
         } else {
@@ -1161,8 +1165,8 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
     for (i = 0; i < mainCursor->count; i++) {
         switch (menu->iconState[i]) {
             case 0:
-                menu->iconFlags[i] |= 1;
-                menu->iconFlags[i] |= 2;
+                menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
+                menu->iconFlags[i] |= SUBMENU_ICON_SPEECH_BUBBLE;
                 GetRingCenter(&b[i]);
                 {
                     f32 px = b[i].x;
@@ -1185,15 +1189,15 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
                 }
                 break;
             case 1:
-                menu->iconFlags[i] |= 1;
-                menu->iconFlags[i] |= 2;
+                menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
+                menu->iconFlags[i] |= SUBMENU_ICON_SPEECH_BUBBLE;
                 PSMTXTrans(a[i], -40.0f, 55.0f, 0.0f);
                 c[i] = 360.0f;
                 menu->iconsArrived = 1;
                 break;
             case 10:
-                menu->iconFlags[i] |= 1;
-                menu->iconFlags[i] &= ~2;
+                menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
+                menu->iconFlags[i] &= ~SUBMENU_ICON_SPEECH_BUBBLE;
                 ang = 3.1415927f * kakutable[mainCursor->count - 3][menu->iconSlot[i]] / 180.0f;
                 GetRingCenter(&b[i]);
                 GetRingOffset(ang, &ox, &oy);
@@ -1211,22 +1215,22 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
                 menu->iconTimer[i]++;
                 break;
             case 11:
-                menu->iconFlags[i] &= ~1;
+                menu->iconFlags[i] &= ~SUBMENU_ICON_VISIBLE;
                 break;
         }
     }
     for (i = 0; i < 7; i++) {
         switch (sw = menu->rowState[i]) {
             case 0:
-                menu->rowFlags[i] &= ~1;
+                menu->rowFlags[i] &= ~SUBMENU_ROW_VISIBLE;
                 menu->reserved_114[i] = 0xFF;
                 break;
             case 1:
-                menu->rowFlags[i] &= ~1;
+                menu->rowFlags[i] &= ~SUBMENU_ROW_VISIBLE;
                 menu->reserved_114[i] = 0xFF;
                 if (menu->rowTimer[i] >= 0 && i != 6) {
                     s = intplGetValue(EASING_LINEAR, 90.0f, 0.0f, menu->rowTimer[i], FRAMES(12));
-                    menu->rowFlags[i] |= 1;
+                    menu->rowFlags[i] |= SUBMENU_ROW_VISIBLE;
                     PSMTXRotRad(d[i], 'y', 0.017453292f * s);
                 }
                 menu->rowTimer[i]++;
@@ -1237,10 +1241,10 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
             case 2:
                 menu->reserved_114[i] = 0xFF;
                 if (i != 6) {
-                    menu->rowFlags[i] |= 1;
+                    menu->rowFlags[i] |= SUBMENU_ROW_VISIBLE;
                     PSMTXIdentity(d[i]);
                 } else {
-                    menu->rowFlags[i] &= ~1;
+                    menu->rowFlags[i] &= ~SUBMENU_ROW_VISIBLE;
                 }
                 break;
             case 10:
@@ -1253,7 +1257,7 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
                 if (sw == 30 || sw == 40) {
                     steps = (cursor->count - 6) / 2 + 12;
                 }
-                menu->rowFlags[i] |= 1;
+                menu->rowFlags[i] |= SUBMENU_ROW_VISIBLE;
                 PSMTXIdentity(d[i]);
                 menu->scrollPos = intplGetValue(EASING_QUADRATIC_OUT, menu->scrollFrom, menu->scrollTo, menu->rowTimer[i], steps);
                 menu->rowTimer[i]++;
@@ -1430,7 +1434,7 @@ void DrawMainMenu(BattleWork* wp_) {
             }
             break;
         case 1:
-            menu->iconFlags[i] |= 1;
+            menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
             c = 0.0f;
             a = c + FRAMES_STEP(0.2f, 12.0f, menu->iconTimer[i]);
             b = 3.1415927f * kakutable[cursor->count - 3][menu->iconSlot[i]] / 180.0f;
@@ -1450,7 +1454,7 @@ void DrawMainMenu(BattleWork* wp_) {
                 PSMTXRotRad(rot, 'x', 0.017453292f * c);
                 PSMTXTrans(trans, 20.0f + pos[i].x, pos[i].y, pos[i].z);
                 PSMTXConcat(trans, rot, mtx[i]);
-                menu->iconFlags[i] |= 2;
+                menu->iconFlags[i] |= SUBMENU_ICON_SPEECH_BUBBLE;
             } else {
                 c = 270.0f + 90.0f * menu->iconTimer[i] / (f32)FRAMES(10);
                 if (c >= 360.0f) {
@@ -1476,7 +1480,7 @@ void DrawMainMenu(BattleWork* wp_) {
             pos[i].z = oy;
             if (i == cursor->absPos) {
                 PSMTXTrans(mtx[i], 20.0f + pos[i].x, pos[i].y, pos[i].z);
-                menu->iconFlags[i] |= 2;
+                menu->iconFlags[i] |= SUBMENU_ICON_SPEECH_BUBBLE;
             } else {
                 PSMTXTrans(mtx[i], pos[i].x, pos[i].y, pos[i].z);
             }
@@ -1502,7 +1506,7 @@ void DrawMainMenu(BattleWork* wp_) {
             pos[i].z = oy;
             PSMTXTrans(mtx[i], pos[i].x, pos[i].y, pos[i].z);
             z[i] = 0.0f;
-            menu->iconFlags[i] &= ~2;
+            menu->iconFlags[i] &= ~SUBMENU_ICON_SPEECH_BUBBLE;
             menu->iconTimer[i]++;
             break;
         case 5:
@@ -1524,12 +1528,12 @@ void DrawMainMenu(BattleWork* wp_) {
             pos[i].z = oy;
             PSMTXTrans(mtx[i], pos[i].x, pos[i].y, pos[i].z);
             z[i] = 0.0f;
-            menu->iconFlags[i] &= ~2;
+            menu->iconFlags[i] &= ~SUBMENU_ICON_SPEECH_BUBBLE;
             menu->iconTimer[i]++;
             break;
         case 10:
-            menu->iconFlags[i] |= 1;
-            menu->iconFlags[i] |= 2;
+            menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
+            menu->iconFlags[i] |= SUBMENU_ICON_SPEECH_BUBBLE;
             GetRingCenter(&pos[i]);
             GetRingOffset(0.0f, &ox, &oy);
             pos[i].x += ox;
@@ -1545,8 +1549,8 @@ void DrawMainMenu(BattleWork* wp_) {
             }
             break;
         case 11:
-            menu->iconFlags[i] |= 1;
-            menu->iconFlags[i] &= ~2;
+            menu->iconFlags[i] |= SUBMENU_ICON_VISIBLE;
+            menu->iconFlags[i] &= ~SUBMENU_ICON_SPEECH_BUBBLE;
             a = 3.1415927f * kakutable[cursor->count - 3][menu->iconSlot[i]] / 180.0f;
             GetRingCenter(&pos[i]);
             GetRingOffset(a, &ox, &oy);

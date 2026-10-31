@@ -1,4 +1,5 @@
 #include "win/win_main.h"
+#include "icon_ids.h"
 #include "eff/eff_recovery.h"
 #include "data/item_data.h"
 #include "driver/camdrv.h"
@@ -468,20 +469,20 @@ EVT_BEGIN(kime_pose)
     END_IF
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
-        CASE_EQUAL(0)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PARTNER_NONE)
+        CASE_EQUAL(PARTNER_GOOMBELLA)
         CALL(evt_party_set_pose, 0, STRING("PKR_I_1"))
-        CASE_EQUAL(2)
+        CASE_EQUAL(PARTNER_KOOPS)
         CALL(evt_party_set_pose, 0, STRING("PNK_I_1"))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PARTNER_BOBBERY)
         CALL(evt_party_set_pose, 0, STRING("I_1"))
-        CASE_EQUAL(4)
+        CASE_EQUAL(PARTNER_YOSHI)
         CALL(evt_party_set_pose, 0, STRING("PYS_I_1"))
-        CASE_EQUAL(5)
+        CASE_EQUAL(PARTNER_FLURRIE)
         CALL(evt_party_set_pose, 0, STRING("PWD_I_1"))
-        CASE_EQUAL(6)
+        CASE_EQUAL(PARTNER_VIVIAN)
         CALL(evt_party_set_pose, 0, STRING("PTR_I_1"))
-        CASE_EQUAL(7)
+        CASE_EQUAL(PARTNER_MSMOWZ)
         CALL(evt_party_set_pose, 0, STRING("PCH_I_1"))
     END_SWITCH
     RETURN
@@ -494,20 +495,20 @@ EVT_BEGIN(kime_pose2)
     END_IF
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
-        CASE_EQUAL(0)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PARTNER_NONE)
+        CASE_EQUAL(PARTNER_GOOMBELLA)
         CALL(evt_party_set_pose, 0, STRING("PKR_Y_1"))
-        CASE_EQUAL(2)
+        CASE_EQUAL(PARTNER_KOOPS)
         CALL(evt_party_set_pose, 0, STRING("PNK_Y_1"))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PARTNER_BOBBERY)
         CALL(evt_party_set_pose, 0, STRING("Y_1"))
-        CASE_EQUAL(4)
+        CASE_EQUAL(PARTNER_YOSHI)
         CALL(evt_party_set_pose, 0, STRING("PYS_Y_1"))
-        CASE_EQUAL(5)
+        CASE_EQUAL(PARTNER_FLURRIE)
         CALL(evt_party_set_pose, 0, STRING("PWD_Y_1"))
-        CASE_EQUAL(6)
+        CASE_EQUAL(PARTNER_VIVIAN)
         CALL(evt_party_set_pose, 0, STRING("PTR_Y_1"))
-        CASE_EQUAL(7)
+        CASE_EQUAL(PARTNER_MSMOWZ)
         CALL(evt_party_set_pose, 0, STRING("PCH_Y_1"))
     END_SWITCH
     RETURN
@@ -529,14 +530,14 @@ EVT_BEGIN(kime_pose_famicom)
     END_IF
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
-        CASE_EQUAL(0)
-        CASE_EQUAL(1)
+        CASE_EQUAL(PARTNER_NONE)
+        CASE_EQUAL(PARTNER_GOOMBELLA)
         CALL(evt_party_set_pose, 0, STRING("R_2"))
-        CASE_EQUAL(2)
+        CASE_EQUAL(PARTNER_KOOPS)
         CALL(evt_party_set_pose, 0, STRING("R_3"))
-        CASE_EQUAL(3)
+        CASE_EQUAL(PARTNER_BOBBERY)
         CALL(evt_party_set_pose, 0, STRING("R_13"))
-        CASE_EQUAL(4)
+        CASE_EQUAL(PARTNER_YOSHI)
         CALL(party_color, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
@@ -554,11 +555,11 @@ EVT_BEGIN(kime_pose_famicom)
             CASE_EQUAL(6)
             CALL(evt_party_set_pose, 0, STRING("R_11"))
         END_SWITCH
-        CASE_EQUAL(5)
+        CASE_EQUAL(PARTNER_FLURRIE)
         CALL(evt_party_set_pose, 0, STRING("R_4"))
-        CASE_EQUAL(6)
+        CASE_EQUAL(PARTNER_VIVIAN)
         CALL(evt_party_set_pose, 0, STRING("R_12"))
-        CASE_EQUAL(7)
+        CASE_EQUAL(PARTNER_MSMOWZ)
         CALL(evt_party_set_pose, 0, STRING("R_15"))
     END_SWITCH
     RETURN
@@ -1333,12 +1334,12 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     f32 sy;
 
 #ifdef VERSION_G8ME01
-    if (iconId == 0x11C) {
-        iconId = 0x11B;
+    if (iconId == ICON_115) {
+        iconId = ICON_114;
     }
 #else
-    if (iconId == 0x115) {
-        iconId = 0x114;
+    if (iconId == ICON_115) {
+        iconId = ICON_114;
     }
 #endif
     iconGetTexObj(&obj, iconId);

@@ -1376,7 +1376,7 @@ void winHakoGX(WindowWork* w, s32 a, f32 x, f32 y) {
                     if (!swGet(w->log.recipeIds[n] + 0x41)) {
                         continue;
                     }
-                    icon = itemDataTable[w->log.recipeIds[n] + 0xB3].icon_id;
+                    icon = itemDataTable[w->log.recipeIds[n] + ITEM_SHROOM_FRY].icon_id;
                 }
                 winIconSet(icon, (Vec){4.0f + (24.0f + (x + i * 56)), yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f},
                            (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -1864,8 +1864,8 @@ void sort_5_3_func(WindowWork* wp) {
 s32 compare_func6_1(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
-    s16 ia = *(s16*)a + 0xB3;
-    s16 ib = *(s16*)b + 0xB3;
+    s16 ia = *(s16*)a + ITEM_SHROOM_FRY;
+    s16 ib = *(s16*)b + ITEM_SHROOM_FRY;
 
     pouchHiraToKata(msgSearch(itemDataTable[ia].name), buf1);
     pouchHiraToKata(msgSearch(itemDataTable[ib].name), buf2);
@@ -1875,8 +1875,8 @@ s32 compare_func6_1(const void* a, const void* b) {
 s32 compare_func6_1_r(const void* a, const void* b) {
     char buf1[128];
     char buf2[128];
-    s16 ia = *(s16*)a + 0xB3;
-    s16 ib = *(s16*)b + 0xB3;
+    s16 ia = *(s16*)a + ITEM_SHROOM_FRY;
+    s16 ib = *(s16*)b + ITEM_SHROOM_FRY;
 
     pouchHiraToKata(msgSearch(itemDataTable[ia].name), buf1);
     pouchHiraToKata(msgSearch(itemDataTable[ib].name), buf2);
@@ -1884,8 +1884,8 @@ s32 compare_func6_1_r(const void* a, const void* b) {
 }
 
 s32 compare_func6_2(const void* a, const void* b) {
-    s16 ia = itemDataTable[(s16)(*(s16*)a + 0xB3)].type_sort_order;
-    s16 ib = itemDataTable[(s16)(*(s16*)b + 0xB3)].type_sort_order;
+    s16 ia = itemDataTable[(s16)(*(s16*)a + ITEM_SHROOM_FRY)].type_sort_order;
+    s16 ib = itemDataTable[(s16)(*(s16*)b + ITEM_SHROOM_FRY)].type_sort_order;
 
     if (ia > ib) {
         return 1;
@@ -1896,8 +1896,8 @@ s32 compare_func6_2(const void* a, const void* b) {
 }
 
 s32 compare_func6_2_r(const void* a, const void* b) {
-    s16 ia = itemDataTable[(s16)(*(s16*)a + 0xB3)].type_sort_order;
-    s16 ib = itemDataTable[(s16)(*(s16*)b + 0xB3)].type_sort_order;
+    s16 ia = itemDataTable[(s16)(*(s16*)a + ITEM_SHROOM_FRY)].type_sort_order;
+    s16 ib = itemDataTable[(s16)(*(s16*)b + ITEM_SHROOM_FRY)].type_sort_order;
 
     if (ia < ib) {
         return 1;

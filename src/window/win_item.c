@@ -131,12 +131,12 @@ void winMakeSkipList(WindowWork* w) {
     for (i = 0; i < MAX_KEY_ITEMS; i++) {
         id = pouchKeyItem(i);
         if (id) {
-            for (j = 0; j < 0x12; j++) {
+            for (j = 0; j < sizeof(menu_skip_list) / sizeof(menu_skip_list[0]); j++) {
                 if (id == menu_skip_list[j]) {
                     break;
                 }
             }
-            if (j >= 0x12) {
+            if (j >= sizeof(menu_skip_list) / sizeof(menu_skip_list[0])) {
                 w->item.skip[w->item.skipCount] = id;
                 w->item.skipCount++;
             }
