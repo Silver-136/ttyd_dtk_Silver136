@@ -45,9 +45,9 @@
 
 // external prototypes
 f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
-extern s32 marioDefaultWeapon_Jump[];
-extern s32 marioWeapon_KururinJump[];
-extern s32 marioDefaultWeapon_Hammer[];
+
+
+
 
 // local prototypes
 USER_FUNC(_set_haikei_entry_scale);
@@ -311,13 +311,13 @@ void btlseqInit(BattleWork* wp) {
 BattleWeapon* _GetFirstAttackWeapon(s32 type) {
     switch (type) {
         case FIRST_ATTACK_JUMP:
-            return (BattleWeapon*)marioDefaultWeapon_Jump;
+            return &marioDefaultWeapon_Jump;
         case FIRST_ATTACK_SPIN_JUMP:
-            return (BattleWeapon*)marioWeapon_KururinJump;
+            return &marioWeapon_KururinJump;
         case FIRST_ATTACK_JUMP_UNUSED:
-            return (BattleWeapon*)marioDefaultWeapon_Jump;
+            return &marioDefaultWeapon_Jump;
         case FIRST_ATTACK_HAMMER:
-            return (BattleWeapon*)marioDefaultWeapon_Hammer;
+            return &marioDefaultWeapon_Hammer;
         case FIRST_ATTACK_SPIN_HAMMER:
             return &marioDefaultWeapon_FirstAttackKaitenHammer;
         case FIRST_ATTACK_ULTRA_HAMMER:

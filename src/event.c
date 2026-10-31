@@ -1015,7 +1015,7 @@ void stg3_12_init__1(void) {
 
 void stg3_12_2_init(void) {
     yoshiSetColor();
-    pouchSetYoshiName((char*)msgSearch("name_party3"));
+    pouchSetYoshiName(msgSearch("name_party3"));
     partyJoin(PARTNER_YOSHI);
     swSet(0x95D); // GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN
 }

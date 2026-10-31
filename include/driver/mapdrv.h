@@ -337,6 +337,9 @@ typedef enum MapEntryFlags {
     MAP_ENTRY_VER_1_02 = (1 << 15),     // 0x8000, map file version "ver1.02"
 } MapEntryFlags;
 
+typedef struct MapTevCallbackInfo MapTevCallbackInfo;
+typedef void (*MapTevCallback)(MapTevCallbackInfo* info);
+
 typedef struct MapEntry {
     union {
         s32 count;                 // 0x0, entries[0]: number of active entries
@@ -368,7 +371,7 @@ typedef struct MapEntry {
     MapObject* rootMapObj;         // 0xA8
     struct HitEntry* rootHitObj;     // 0xAC
     Vec bbox[8];                   // 0xB0
-    void* tevCallbacks[16];        // 0x110
+    MapTevCallback tevCallbacks[16];        // 0x110
     s32 numJoints;                 // 0x150
     MapObject* objects;            // 0x154
     s32 hitNumJoints;              // 0x158
@@ -420,7 +423,7 @@ typedef struct MapTevCallbackInfo {
     s32 indStage;      // 0x18, next free indirect TEV stage
 } MapTevCallbackInfo;
 
-typedef void (*MapTevCallback)(MapTevCallbackInfo* info);
+
 void mapSetTevCallback(s32 index, MapTevCallback callback);
 void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx);
 

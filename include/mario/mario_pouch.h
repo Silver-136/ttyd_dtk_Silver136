@@ -505,7 +505,7 @@ void pouchOpenMail(s32 mailId);
 u32 pouchCheckMail(s32 mailId);
 s32 pouchGetPartyColor(PartyId partnerId);
 void pouchSetPartyColor(PartyId partnerId, s32 color);
-void pouchSetYoshiName(char* name);
+void pouchSetYoshiName(const char* name);
 char* pouchGetYoshiName(void);
 
 BOOL pouchRemoveItemIndex(ItemType type, s32 index);

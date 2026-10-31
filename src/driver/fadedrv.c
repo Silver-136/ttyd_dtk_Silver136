@@ -170,7 +170,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
     entry->flags = 0;
     entry->flags |= FADE_FLAG_ACTIVE;
     entry->type = type;
-    *(s64*)&entry->durationHi = duration;
+    entry->duration = duration;
     entry->color = color;
     entry->progress = 0.0f;
     entry->rotation = 0.0f;
@@ -421,7 +421,6 @@ static inline void fadeCapture(const char* name, const char* off, s32 mode) {
     evt_img_alloc_capture(&evt, TRUE);
 }
 
-#define FADE_DURATION(e) (*(s64*)&(e)->durationHi)
 
 void fadeMain(void) {
     FadeEntry* entry;
@@ -436,14 +435,14 @@ void fadeMain(void) {
             case 1: case 3: case 5: case 9: case 11: case 14:
                 switch (entry->state) {
                     case 0:
-                        if (FADE_DURATION(entry) != 0) {
+                        if (entry->duration != 0) {
                             // FAKE: no-op (s32) cast of the u32 delayFrames; removing it changes the object
                             if ((s32)entry->delayFrames != 0) {
                                 entry->delayFrames--;
                             } else {
                                 entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
                             }
-                            entry->progress = entry->elapsed / FADE_DURATION(entry);
+                            entry->progress = entry->elapsed / entry->duration;
                             entry->progress = 1.0f - entry->progress;
                             entry->rotation += 10.0f;
                             if (entry->progress < 0.0f) {
@@ -462,9 +461,9 @@ void fadeMain(void) {
             case 2: case 4: case 6: case 10: case 12: case 13: case 15:
                 switch (entry->state) {
                     case 0:
-                        if (FADE_DURATION(entry) != 0) {
+                        if (entry->duration != 0) {
                             entry->elapsed += VERSION_PICK(16.666666f, 1000.0f / gp->framerate);
-                            entry->progress = entry->elapsed / FADE_DURATION(entry);
+                            entry->progress = entry->elapsed / entry->duration;
                             entry->rotation -= 10.0f;
                             if (entry->progress > 1.0f) {
                                 entry->progress = 1.0f;

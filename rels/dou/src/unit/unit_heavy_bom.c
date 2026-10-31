@@ -25,7 +25,7 @@
 static USER_FUNC(_set_draw_callback);
 USER_FUNC(btlevtcmd_AfterReactionEntry);
 USER_FUNC(btlevtcmd_SetEventPhase);
-static void _fire_point_callback(BattleUnitPart* part, s32 group);
+static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling);
 
 BattleUnitKind unit_heavy_bom;
 static BattleWeapon weapon_heavy_bomb_super_explosion;
@@ -61,7 +61,6 @@ static EvtWord explosion_event[254];
 static EvtWord explosion_event[247];
 #endif
 
-void animPoseSetDispCallBack(s32 poseId, void (*callback)(BattleUnitPart*, s32), void* userdata);
 
 static USER_FUNC(_set_draw_callback) {
     BattleWork* wp = _battleWorkPointer;
@@ -769,7 +768,8 @@ static EVT_BEGIN(explosion_event)
 EVT_END()
 
 
-static void _fire_point_callback(BattleUnitPart* part, s32 group) {
+static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling) {
+    BattleUnitPart* part = userdata;
     BattleUnit* unit = part->mOwner;
     const char* name;
     s32 poseId;

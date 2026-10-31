@@ -40,7 +40,7 @@ BOOL party_slit(PartyEntry* party);
 BOOL party_roll(PartyEntry* party);
 void partyFlyAdjustY(PartyEntry* party);
 void partyWalkChkGnd(PartyEntry* party);
-s32 partyGetFootmarkId();
+
 
 // The evt_snd script functions belong to this file (see evt_snd.c).
 
@@ -2364,7 +2364,7 @@ s32 party_motion_fall(PartyEntry* party) {
     Vec pos;
 
     if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
-        partyNextReadId(partyGetFootmarkId());
+        partyNextReadId(partyGetFootmarkId(party));
     }
     if (party->trigFlags & PARTY_TRIG_CHG_MOT) {
         party->trigFlags &= ~PARTY_TRIG_CHG_MOT;

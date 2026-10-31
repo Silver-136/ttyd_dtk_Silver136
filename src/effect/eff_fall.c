@@ -63,7 +63,7 @@ typedef struct EffFallElem {
     f32 speedY;       // 0x34, added to pos.y each frame, minus gravity; *= -0.3/-0.5 on landing bounces
     s32 state;        // 0x38
     s32 alpha;        // 0x3C
-    EffFallVtx** vtx; // 0x40
+    smartEntry* vtx; // 0x40
     f32 sway;         // 0x44, damped sine after a type 2 piece lands (effFallMain state 1); bends the vertex strip sideways by sway * y^2/600
     f32 rot2;         // 0x48
     f32 rot3;         // 0x4C
@@ -419,9 +419,9 @@ void effFallMain(EffectEntry* effect) {
                         done++;
                         break;
                 }
-                e->vtx = (EffFallVtx**)smartAlloc(32 * sizeof(EffFallVtx), 3);
+                e->vtx = smartAlloc(32 * sizeof(EffFallVtx), 3);
                 {
-                    EffFallVtx* v = *e->vtx;
+                    EffFallVtx* v = e->vtx->address;
                     for (j = 0; j < 32; j++, v++) {
                         v->x = (j & 1) ? 16.0f : -16.0f;
                         v->y = 128.0f - 8.533334f * (j / 2);
@@ -431,13 +431,13 @@ void effFallMain(EffectEntry* effect) {
                     }
                 }
                 {
-                    EffFallVtx* v = *e->vtx;
+                    EffFallVtx* v = e->vtx->address;
                     // BUG: reuses the outer loop counter i; harmless only because a type 2 effect has one element
                     for (i = 0; i < 32; i++, v++) {
                         v->x += e->sway * ((v->y * v->y) / 600.0f);
                     }
                 }
-                DCFlushRange(*e->vtx, 32 * sizeof(EffFallVtx));
+                DCFlushRange(e->vtx->address, 32 * sizeof(EffFallVtx));
                 break;
             case 3:
                 switch (e->state) {
@@ -888,7 +888,7 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect) {
                 PSMTXIdentity(trans);
                 GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
                 for (j = 0; j < 30; j += 2) {
-                    EffFallVtx* v = &(*e->vtx)[j];
+                    EffFallVtx* v = &((EffFallVtx*)e->vtx->address)[j];
                     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                     GXPosition3f32(v[0].x, v[0].y, v[0].z);
                     GXTexCoord2f32(v[0].u, v[0].v);

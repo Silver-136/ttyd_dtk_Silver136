@@ -395,8 +395,8 @@ void animPose_AllocBuffer(AnimationPose* pose) {
     pose->mpBufferGroupVisibility = testAlloc(sizeof(s8) * animPoseGetBaseData(pose)->mBufferVisibilityNum);
     pose->mpGroupVisibility = pose->mpBufferGroupVisibility;
 
-    pose->mpBufferNode = testAlloc(sizeof(AnimPoseNode*)* animPoseGetBaseData(pose)->mBufferNodeNum);
-    pose->mpNodes = testAlloc(sizeof(AnimPoseNode*)* animPoseGetBaseData(pose)->mBufferNodeNum);
+    pose->mpBufferNode = testAlloc(sizeof(*pose->mpNodes) * animPoseGetBaseData(pose)->mBufferNodeNum);
+    pose->mpNodes = testAlloc(sizeof(*pose->mpNodes) * animPoseGetBaseData(pose)->mBufferNodeNum);
 
     pose->mpBufferTexAnimEntries = testAlloc(sizeof(AnimTexMtx) * animPoseGetBaseData(pose)->mBufferTexAnimNum);
     pose->mpTexAnimEntries = pose->mpBufferTexAnimEntries;
@@ -2207,7 +2207,7 @@ void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 ble
     group = &data->groups[groupId];
     if (pose->mpGroupVisibility[group->visibilityId]) {
         pose = wp->mpCurPose;
-        node = (AnimPoseNode*)((u32*)pose->mpNodes + group->nodeId);
+        node = (AnimPoseNode*)(pose->mpNodes + group->nodeId);
         if (group->useSSC) {
             if (parentId == -1) {
                 sx = sy = sz = 1.0f;
@@ -2216,7 +2216,7 @@ void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 ble
                 if (!parent->useSSC) {
                     sx = sy = sz = 1.0f;
                 } else {
-                    AnimPoseNode* pnode = (AnimPoseNode*)((u32*)pose->mpNodes + parent->nodeId);
+                    AnimPoseNode* pnode = (AnimPoseNode*)(pose->mpNodes + parent->nodeId);
                     sx = pnode->mScale.x;
                     sy = pnode->mScale.y;
                     sz = pnode->mScale.z;
@@ -2274,7 +2274,7 @@ void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 ble
             }
         } else {
             if (pose->dispCallback) {
-                ((void (*)(void*, s32, Mtx*))pose->dispCallback)(pose->dispUserDataCallback, groupId, g_modeling_mtx);
+                pose->dispCallback(pose->dispUserDataCallback, groupId, g_modeling_mtx);
             }
             renderProc(group->shapeId, xluStage);
             dispProc(groupId, group->childGroupId, xluStage, nextKeyframe, blend);
@@ -3052,7 +3052,7 @@ void evalProc(s32 parentId, s32 groupId) {
     group = &data->groups[groupId];
     if (pose->mpGroupVisibility[group->visibilityId]) {
         pose = wp->mpCurPose;
-        node = (AnimPoseNode*)((u32*)pose->mpNodes + group->nodeId);
+        node = (AnimPoseNode*)(pose->mpNodes + group->nodeId);
         if (group->useSSC) {
             if (parentId == -1) {
                 sx = sy = sz = 1.0f;
@@ -3061,7 +3061,7 @@ void evalProc(s32 parentId, s32 groupId) {
                 if (!parent->useSSC) {
                     sx = sy = sz = 1.0f;
                 } else {
-                    AnimPoseNode* pnode = (AnimPoseNode*)((u32*)pose->mpNodes + parent->nodeId);
+                    AnimPoseNode* pnode = (AnimPoseNode*)(pose->mpNodes + parent->nodeId);
                     sx = pnode->mScale.x;
                     sy = pnode->mScale.y;
                     sz = pnode->mScale.z;
@@ -3160,7 +3160,7 @@ s32 animPoseGetVivianType(s32 poseId) {
     return pose->vivianType;
 }
 
-void animPoseSetDispCallBack(s32 poseId, void* callback, void* userData) {
+void animPoseSetDispCallBack(s32 poseId, AnimPoseDispCallback callback, void* userData) {
     AnimationPose* pose = &wp->poses[poseId];
     pose->dispCallback = callback;
     pose->dispUserDataCallback = userData;

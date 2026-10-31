@@ -7,7 +7,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "memory.h"
 
-void animPoseSetDispCallBack(s32 poseId, void (*callback)(void* param, s32 group), void* param);
 typedef struct ShuryoLight {
     NpcEntry* npc;
     const char** anims;
@@ -35,7 +34,7 @@ static USER_FUNC(evt_shuryolight_get_anim_time);
 USER_FUNC(evt_shuryolight_init);
 static s32 shuryolightRunEvt(EvtWord* code, s32 id);
 static void shuryolightSetAnim(s32 index, s32 anim);
-static void shuryolight_callback(void* param, s32 group);
+static void shuryolight_callback(void* param, s32 group, Mtx* modeling);
 
 static const char* green_light_anim[5];
 static const char* yellow_light_anim[5];
@@ -160,7 +159,7 @@ EVT_BEGIN(shuryolight_tue_normal)
     RETURN
 EVT_END()
 
-static void shuryolight_callback(void* param, s32 group) {
+static void shuryolight_callback(void* param, s32 group, Mtx* modeling) {
     ShuryoLight* lights = param;
     s32 i;
 

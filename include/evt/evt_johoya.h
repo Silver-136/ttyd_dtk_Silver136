@@ -24,7 +24,7 @@ typedef struct {
     InformantInfo* info; //0x0
     s32 count; //0x4
     const char* prefix; //0x8
-    InformantInfo *infoEnd; //0xC
+    char* infoEnd; //0xC
     s32 curIndex; //0x10, info index picked by the makelabel funcs
     InformantUnknown readFlags; //0x14
     u8 pad_3F[0x40 - 0x3F]; //0x3F, never accessed

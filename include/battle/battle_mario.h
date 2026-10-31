@@ -41,3 +41,7 @@ extern s32 marioWeapon_UltraHammerFinish[];
 extern BattleWeapon marioWeapon_UltraHammerInvolved;
 USER_FUNC(mario_get_renzoku_count_max);
 extern BattleWeapon* superActionTable[];
+
+extern BattleWeapon marioDefaultWeapon_Jump;
+extern BattleWeapon marioWeapon_KururinJump;
+extern BattleWeapon marioDefaultWeapon_Hammer;

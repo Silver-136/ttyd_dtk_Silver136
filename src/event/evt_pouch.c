@@ -120,7 +120,7 @@ SETTER(evt_pouch_majinai_set, pouchMajinaiInit)
 SETTER(evt_pouch_receive_mail, pouchReceiveMail)
 SETTER(evt_pouch_open_mail, pouchOpenMail)
 USER_FUNC(evt_pouch_set_yoshiname) {
-    pouchSetYoshiName((char*)evtGetValue(event, event->args[0]));
+    pouchSetYoshiName((const char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 USER_FUNC(evt_pouch_get_yoshiname) {

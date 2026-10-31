@@ -29,3 +29,5 @@ void marioUpdateKeyData(void);
 void* marioGetTouchNpcPtr(void);
 BOOL marioSetDirEventMain(void);
 BOOL marioChkPlanePlace(struct HitEntry* hit);
+
+f32 marioGetMoveRate(f32 dir);

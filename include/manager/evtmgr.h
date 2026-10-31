@@ -183,7 +183,7 @@ struct EventEntry {
     s8 switchDepth;                    // 0xF, validated
     u8 wNpcEventType;                  // 0x10, NpcEventType
     u8 pad_11[3];                      // 0x11
-    void* nextCommand;                 // 0x14, validated
+    EvtWord* nextCommand;                 // 0x14, validated
     EvtWord* args;                     // 0x18, validated
     s8 labelIdTable[16];               // 0x1C
     EvtWord* labelAddressTable[16];    // 0x2C
@@ -225,7 +225,7 @@ struct EventEntry {
         f32 lwDataF[16];       // 0x9C, the same words used as floats
     };
     s32 lfData[3];             // 0xDC, validated
-    void* loopStartPtrs[8];    // 0xE8
+    EvtWord* loopStartPtrs[8];    // 0xE8
     EvtWord loopCounters[8];   // 0x108
     s8 switchStates[8];        // 0x128, validated
     EvtWord switchValues[8];   // 0x130, validated

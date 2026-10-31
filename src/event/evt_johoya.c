@@ -69,7 +69,7 @@ USER_FUNC(johoya_data_alloc) {
     wp->count = johoya_data_make(wp->prefix, 0);
     wp->info = _mapAlloc(wp->count * sizeof(InformantInfo) + (sizeof(InformantInfo) * 4));
     memset(wp->info, 0, wp->count * sizeof(InformantInfo) + (sizeof(InformantInfo) * 4));
-    wp->infoEnd = &wp->info[wp->count];
+    wp->infoEnd = (char*)&wp->info[wp->count];
     johoya_data_make(wp->prefix, 1);
     return EVT_RETURN_DONE;
 }
@@ -116,7 +116,7 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
     for (i = 0; i < wp->count; i++) {
         if (johoya_get(table, wp->info[i].storyId) == 0) {
             if (target == n) {
-                sprintf((char*)wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
+                sprintf(wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
                 sprintf(tmp, "jketi_title_%04d", wp->info[i].storyId);
                 msg = msgSearch(tmp);
                 evtSetValue(event, args[1], (EvtWord)wp->infoEnd);
@@ -129,7 +129,7 @@ USER_FUNC(johoya_keti_newjoho_makelabel) {
             n++;
         }
     }
-    *(char*)wp->infoEnd = 0;
+    *wp->infoEnd = 0;
     evtSetValue(event, args[1], (EvtWord)wp->infoEnd);
     evtSetValue(event, args[2], (EvtWord)wp->infoEnd);
     evtSetValue(event, args[3], 0);
@@ -171,7 +171,7 @@ USER_FUNC(johoya_keti_oldspeak_makelabel) {
     for (i = 0; i < wp->count; i++) {
         if (johoya_get(table, wp->info[i].storyId) != 0 && (wp->info[i].flags & 1) == 0) {
             if (target == n) {
-                sprintf((char*)wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
+                sprintf(wp->infoEnd, "%s_%04d", wp->prefix, wp->info[i].storyId);
                 evtSetValue(event, args[1], (EvtWord)wp->infoEnd);
                 evtSetValue(event, args[2], (EvtWord)wp->info[i].initEndPos);
                 evtSetValue(event, args[3], wp->info[i].tagEndPos);
@@ -182,7 +182,7 @@ USER_FUNC(johoya_keti_oldspeak_makelabel) {
             n++;
         }
     }
-    *(char*)wp->infoEnd = 0;
+    *wp->infoEnd = 0;
     evtSetValue(event, args[1], (EvtWord)wp->infoEnd);
     evtSetValue(event, args[2], (EvtWord)wp->infoEnd);
     evtSetValue(event, args[3], 0);

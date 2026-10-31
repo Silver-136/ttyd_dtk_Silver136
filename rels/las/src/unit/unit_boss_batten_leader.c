@@ -49,8 +49,7 @@ static s32 xlw[16];
 s32 xlw2[16];
 char xmemo[20];
 EventEntry* xevt;
-void animPoseSetDispCallBack(s32 poseId, void (*callback)(BattleUnitPart*, s32), void* userdata);
-void _light_point_callback(BattleUnitPart* part, s32 group);
+void _light_point_callback(void* userdata, s32 group, Mtx* modeling);
 typedef struct BattenSpline {
     s32 n;
     Vec* table;
@@ -2631,7 +2630,8 @@ static USER_FUNC(_set_draw_callback) {
     p7->attributes |= kHidden;
     return EVT_RETURN_DONE;
 }
-void _light_point_callback(BattleUnitPart* part, s32 group) {
+void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
+    BattleUnitPart* part = userdata;
     BattleUnit* unit;
     s32 poseId;
     s32 idx;

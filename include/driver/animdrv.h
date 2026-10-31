@@ -182,7 +182,7 @@ typedef struct AnimationPoseData {
     AnimTexBind* texBinds;         // 0x198
     AnimPoseShapeDraw* draws;      // 0x19C
     s8* groupVisibility;           // 0x1A0, copied into the pose buffer each keyframe reset
-    AnimPoseNode* nodeData;        // 0x1A4, copied into the pose buffer each keyframe reset
+    f32* nodeData;        // 0x1A4, copied into the pose buffer each keyframe reset
     AnimPoseGroup* groups;         // 0x1A8
     AnimTableEntry* mpAnims;       // 0x1AC
 } AnimationPoseData;
@@ -216,6 +216,8 @@ typedef enum MaterialLightFlags {
     MATERIAL_LIGHT_PAPER_PLAIN = (1 << 4),  // 0x10, the paper light without the paper ambient
 } MaterialLightFlags;
 
+typedef void (*AnimPoseDispCallback)(void* userdata, s32 group, Mtx* modeling);
+
 typedef struct AnimationPose {
     u32 flags;                          // 0x0, AnimationPoseFlags
     s32 typeFlags;                      // 0x4, AnimPoseTypeFlags
@@ -240,8 +242,8 @@ typedef struct AnimationPose {
     Vec* mpVtxArrayNrm;                 // 0x54
     s8* mpBufferGroupVisibility;        // 0x58
     s8* mpGroupVisibility;              // 0x5C
-    AnimPoseNode* mpBufferNode;         // 0x60
-    AnimPoseNode* mpNodes;              // 0x64
+    f32* mpBufferNode;         // 0x60
+    f32* mpNodes;              // 0x64
     AnimTexMtx* mpBufferTexAnimEntries; // 0x68
     AnimTexMtx* mpTexAnimEntries;       // 0x6C
     f32 peraRotY;                       // 0x70, base Y rotation for the paper turn (flags & 8)
@@ -276,7 +278,7 @@ typedef struct AnimationPose {
     s32 vivianType;                     // 0x11C
     s32* vivianGroupNo;                 // 0x120
     Mtx matrix;                         // 0x124
-    void* dispCallback;                 // 0x154
+    AnimPoseDispCallback dispCallback;                 // 0x154
     void* dispUserDataCallback;         // 0x158
     Vec** worldPositions;               // 0x15C, filled while animPoseWorldPositionEvalOn is set
     s32 numWorldPositions;              // 0x160
@@ -417,3 +419,5 @@ void animPoseWorldPositionEvalOff(s32 poseId);
 void animPoseDrawShape(s32 poseId, s32 shapeId);
 BOOL animPoseTestXLU(s32 poseId);
 void animPoseVivianMain(s32 poseId, Vec* pos);
+
+void animPoseSetDispCallBack(s32 poseId, AnimPoseDispCallback callback, void* userData);

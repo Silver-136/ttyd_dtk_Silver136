@@ -45,8 +45,7 @@ typedef struct PosterWork {
     s32 shape;
 } PosterWork;
 PosterWork* poster;
-void draw_poster(void* userdata, s32 group);
-void animPoseSetDispCallBack(s32 poseId, void (*callback)(void*, s32), void* userdata);
+void draw_poster(void* userdata, s32 group, Mtx* modeling);
 
 USER_FUNC(evt_pouch_get_haveitemcnt);
 USER_FUNC(evt_snd_bgm_freq);
@@ -1125,7 +1124,7 @@ USER_FUNC(pposter_init) {
     return EVT_RETURN_DONE;
 }
 
-void draw_poster(void* userdata, s32 group) {
+void draw_poster(void* userdata, s32 group, Mtx* modeling) {
     NpcEntry* npc = npcNameToPtr("poster");
 
     if (group != poster->group || !(poster->flags & 1)) {

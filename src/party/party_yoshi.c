@@ -31,7 +31,7 @@ typedef struct YoshiWork {
     EffectEntry* effect;  // 0x14
 } YoshiWork;
 
-extern f32 marioGetMoveRate(void);
+
 extern HitEntry* dou10_yoko_yari2(void* out);
 double sin(double);
 
@@ -1308,12 +1308,13 @@ void getStick(PartyEntry* party, f32* angle, f32* speed) {
     if (!dist) {
         ang = party->moveDir;
     }
-    *angle = revise360(ang + party->camDir);
+    ang = revise360(ang + party->camDir);
+    *angle = ang;
     if (dist > 0.0f) {
         if (x * x + y * y > 3025) {
-            dist = 1.5f * (mario->mBaseDashSpeed * marioGetMoveRate());
+            dist = 1.5f * (mario->mBaseDashSpeed * marioGetMoveRate(ang));
         } else {
-            dist = 1.5f * (mario->mBaseWalkSpeed * marioGetMoveRate());
+            dist = 1.5f * (mario->mBaseWalkSpeed * marioGetMoveRate(ang));
         }
         if (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_SHALLOW_WATER) {
             mario->flags |= MARIO_FLAG_IN_SHALLOW_WATER;

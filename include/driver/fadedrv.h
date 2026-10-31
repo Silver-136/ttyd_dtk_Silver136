@@ -43,8 +43,7 @@ typedef struct FadeEntry {
     FadeType type; //0x4
     s32 state; //0x8, step within the fade type
     u8 pad_0C[0x10 - 0xC]; //0xC, never accessed
-    s32 durationHi; //0x10, durationHi/Lo hold the s64 fade duration (FADE_DURATION)
-    s32 durationLo; //0x14
+    s64 duration; // 0x10, fade duration
     GXColor color; //0x18
     f32 fadeSpotX; //0x1C
     f32 fadeSpotY; //0x20

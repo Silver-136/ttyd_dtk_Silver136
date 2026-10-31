@@ -1052,7 +1052,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                 evt->lwData[4] = itemDataTable[id].bp_cost;
                 break;
             case 17:
-                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
+                sprintf(jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
                 sprintf(buf, "jperfect_title_%04d", jdt->info[id].storyId);
                 jdt->curIndex = id;
                 name = msgSearch(buf);
@@ -1066,7 +1066,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                 }
                 break;
             case 18:
-                sprintf((char*)jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
+                sprintf(jdt->infoEnd, "%s_%04d", jdt->prefix, jdt->info[id].storyId);
                 jdt->curIndex = id;
                 evt->lwData[1] = (EvtWord)jdt->infoEnd;
                 evt->lwData[2] = (EvtWord)jdt->info[id].initEndPos;

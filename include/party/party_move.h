@@ -67,3 +67,5 @@ BOOL partyGetAppearPos5(PartyEntry* party, struct HitEntry* hit, Vec* out);
 f32 partyGetTargetDist3D(s32 id, Vec* p);
 
 f32 partyUpdMoveSpd(PartyEntry* party);
+
+s32 partyGetFootmarkId(PartyEntry* party);
