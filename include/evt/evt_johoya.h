@@ -49,3 +49,8 @@ USER_FUNC(johoya_keti_oldspeak_setreadflag);
 USER_FUNC(johoya_luigi_newjoho_setreadflag);
 USER_FUNC(johoya_perfect_newjoho_setreadflag);
 const char* search_evt_moji(s32 id);
+
+// Names from LLCOOLT's tree.
+enum {
+    INFORMANT_FLAG_HEARD = 1,
+};

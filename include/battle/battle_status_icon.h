@@ -35,3 +35,9 @@ typedef struct BattleWorkStatusIcon {
 void BattleStatusIconInit(struct BattleUnit* unit);
 void BattleStatusIconMain(struct BattleUnit* unit);
 void BattleStatusIconDelete(struct BattleUnit* unit);
+
+// Names from LLCOOLT's tree.
+enum {
+    STATUS_ICON_NO_PLATE = 1,
+    STATUS_ICON_HIDDEN = 2,
+};

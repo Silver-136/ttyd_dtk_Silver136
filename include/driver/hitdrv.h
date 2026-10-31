@@ -130,3 +130,10 @@ void hitObjAttrOn(const char* name, u32 mask);
 void hitObjFlagOn(const char* name, u16 mask);
 HitEntry* hitEntry(MapFileJoint* root, Mtx rootMtx, s32 mapIndex);
 HitEntry* hitEntryMOBJ(MapFileJoint* joint, Mtx mtx);
+
+// Names from LLCOOLT's tree.
+enum {
+    HIT_ATTR_DAMAGE_LIQUID = 1024,
+    HIT_ATTR_SPIKES = 2048,
+    HIT_ATTR_DEEP_WATER = 512,
+};

@@ -17,3 +17,11 @@ void parsePop(void);
 void parsePopNext(void);
 BOOL parseGet1Next(s32 type, void* data);
 BOOL parseTagGet1(const char* tag, s32 type, void* data);
+
+// Names from LLCOOLT's tree.
+enum {
+    PARSE_STRING = 0,
+    PARSE_INT = 1,
+    PARSE_FLOAT = 2,
+    PARSE_VEC = 3,
+};

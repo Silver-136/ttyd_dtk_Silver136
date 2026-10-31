@@ -23,3 +23,6 @@ typedef struct LectButton {
     s16 iconId;
     s16 alpha;
 } LectButton;
+
+// Names from LLCOOLT's tree.
+#define LECT_BUTTON_FLAG_HIDDEN 0x1

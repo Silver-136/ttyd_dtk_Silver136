@@ -43,3 +43,9 @@ void nameEntOn(s32 type);
 BOOL nameEntPrepare(void);
 BOOL nameEntWait(void);
 void nameMaskGX(f32 t);
+
+// Names from LLCOOLT's tree.
+enum {
+    NAMEENT_FLAG_INPUT_ON = 1,
+    NAMEENT_FLAG_CANCELLED = 2,
+};

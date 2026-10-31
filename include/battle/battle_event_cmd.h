@@ -342,3 +342,9 @@ USER_FUNC(btlevtcmd_GetACPossibility);
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(btlevtcmd_SetEventUnisonPhase);
 USER_FUNC(btlevtcmd_SetTalkBodyId);
+
+// Names from LLCOOLT's tree.
+enum {
+    KILL_UNIT_KEEP = 1,
+    KILL_UNIT_INACTIVE = 2,
+};

@@ -18,3 +18,6 @@ void* arcOpen(const char* filename, void** addr, u32* length);
 void arcEntry(s32 id, void* data, u32 size);
 BOOL arcDataCheck(void* addr);
 void arcDelete(s32 id);
+
+// Names from LLCOOLT's tree.
+#define ARC_FLAG_USED 0x1

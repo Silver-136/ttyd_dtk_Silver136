@@ -121,3 +121,11 @@ USER_FUNC(yuuminigame_end);
 USER_FUNC(yuuminigame_get_window_evt);
 USER_FUNC(yuuminigame_window_end);
 void evtYuuSetWindowEvt(EvtWord* evt);
+
+// Names from LLCOOLT's tree.
+enum {
+    PARLOR_FLAG_COUNTER_SHOWN = 1,
+    PARLOR_FLAG_TOKENS_OUT = 2,
+    PARLOR_FLAG_COUNTER_HIGH = 4,
+    PARLOR_FLAG_WINDOW_DONE = 8,
+};

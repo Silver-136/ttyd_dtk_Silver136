@@ -138,3 +138,8 @@ void BattleAttackDeclareAll(struct BattleWork* wp);
 void BattleDamageDirect(s32 unitId, struct BattleUnit* target, struct BattleWorkUnitPart* part, s32 damage, s32 fpDamage, u32 result, u32 pattern, s32 flag);
 s32 BattlePreCheckDamage(struct BattleUnit* attacker, struct BattleUnit* target, struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, u32 flags);
 s32 BattleSetStatusDamageFromWeapon(struct BattleUnit* attacker, struct BattleUnit* target, struct BattleWorkUnitPart* part, struct BattleWeapon* weapon, u32 flags);
+
+// Names from LLCOOLT's tree.
+enum {
+    DAMAGE_HIT_MASK = 255,
+};

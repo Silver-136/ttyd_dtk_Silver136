@@ -347,3 +347,22 @@ extern ItemDropData battle_item_yami_patakuri[];
 extern ItemDropData battle_item_yami_togekuri[];
 extern ItemDropData battle_item_yamitogedaruma[];
 extern ItemDropData battle_item_zonbaba[];
+
+// Names from LLCOOLT's tree.
+enum {
+    SPECIAL_BADGE_BUFFABLE = 1,
+    TARGET_CLASS_NO_MARIO = 1,
+    TARGET_WEIGHT_PREFER_LOW_HP = 1024,
+    SPECIAL_SHATTERS_FREEZE = 128,
+    SPECIAL_STATUS_BUFFABLE = 2,
+    TARGET_WEIGHT_PREFER_LOW_HP_RATIO = 256,
+    SPECIAL_FORCE_RESULT_10000 = 32768,
+    SPECIAL_CHARGE_BUFFABLE = 4,
+    TARGET_CLASS_UNUSED_4 = 4,
+    TARGET_WEIGHT_PREFER_FRONT = 4,
+    TARGET_WEIGHT_PREFER_IN_PERIL = 4096,
+    SPECIAL_UNUSED_200 = 512,
+    TARGET_CLASS_UNUSED_8 = 8,
+    TARGET_WEIGHT_PREFER_BACK = 8,
+    TARGET_WEIGHT_UNUSED_2000 = 8192,
+};

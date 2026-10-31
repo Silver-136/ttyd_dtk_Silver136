@@ -130,3 +130,22 @@ extern const char R_no_messages_IT[];
 void msgWindow_Continue(s32 id);
 void msgWindow_Repeat(s32 id);
 void msgWindow_ForceClose(const char* name);
+
+// Names from LLCOOLT's tree.
+enum {
+    MSG_GLYPH_PAPER_END = 65522,
+    MSG_GLYPH_PAPER = 65523,
+    MSG_GLYPH_ANIM = 65524,
+    MSG_GLYPH_DKEY = 65525,
+    MSG_GLYPH_NOISE = 65526,
+    MSG_GLYPH_COLOR = 65527,
+    MSG_GLYPH_ICON = 65528,
+    MSG_GLYPH_VOL = 65529,
+    MSG_GLYPH_SE = 65530,
+    MSG_GLYPH_NEWLINE = 65531,
+    MSG_GLYPH_ONCE_STOP = 65532,
+    MSG_GLYPH_SCROLL = 65533,
+    MSG_GLYPH_KEY = 65534,
+    MSG_GLYPH_END = 65535,
+};
+#define MSG_WIN_FLAG_OPEN 0x1

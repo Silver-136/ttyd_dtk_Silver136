@@ -123,3 +123,25 @@ USER_FUNC(evt_bero_switch_off);
 USER_FUNC(evt_bero_switch_on);
 USER_FUNC(evt_camera_change_event_from_road);
 USER_FUNC(bero_get_position_normal);
+
+// Names from LLCOOLT's tree.
+enum {
+    BERO_DIR_N = 0,
+    BERO_TYPE_ROAD = 0,
+    BERO_DIR_NE = 1,
+    BERO_TYPE_DOOR = 1,
+    BERO_DIR_NONE = 10000,
+    BERO_DIR_E = 2,
+    BERO_TYPE_PIPE = 2,
+    BERO_DIR_AUTO = 20000,
+    BERO_DIR_SE = 3,
+    BERO_TYPE_GATE = 3,
+    BERO_TYPE_NONE = 3840,
+    BERO_DIR_S = 4,
+    BERO_DIR_W = 6,
+    BERO_DIR_NW = 7,
+    BERO_DIR_UP = 8,
+    BERO_TYPE_FLAG_NO_FADE = 8192,
+    BERO_DIR_DOWN = 9,
+};
+#define BERO_POS_AUTO 100000

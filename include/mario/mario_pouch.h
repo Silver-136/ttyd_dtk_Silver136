@@ -513,3 +513,9 @@ char* pouchGetYoshiName(void);
 BOOL pouchRemoveItemIndex(ItemType type, s32 index);
 void pouchSortItem(s32 mode);
 void pouchHiraToKata(const char* src, char* dst);
+
+// Names from LLCOOLT's tree.
+enum {
+    POUCH_PARTY_FLAG_JOINED = 1,
+    POUCH_PARTY_FLAG_AWAY = 2,
+};

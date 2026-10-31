@@ -397,3 +397,7 @@ BOOL BattleAudience_GetAnimEnd(s32 index);
 s32 BattleAudienceSoundCheck(s32 index);
 
 BOOL BattleAudience_GetEscapeChangeOK(s32 index);
+
+// Names from LLCOOLT's tree.
+#define AUDIENCE_ITEM_MAX 100
+#define AUDIENCE_MEMBER_MAX 200

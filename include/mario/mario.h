@@ -602,4 +602,12 @@ void marioDisp(CameraId camId, void* param);
 #define MARIO_STAY(mp) ((mp)->stay)
 #else
 #define MARIO_STAY(mp) ((mp)->mot.stay)
+// Names from LLCOOLT's tree.
+enum {
+    MARIO_DISP_FLAG_FIXED_UNMIRRORED = 1024,
+    MARIO_DISP_FLAG_FIXED_MIRRORED = 2048,
+    MARIO_DISP_FLAG_ANIM_SET_2 = 268435456,
+    MARIO_DISP_FLAG_POSE_UNUSED = 536870912,
+};
+
 #endif

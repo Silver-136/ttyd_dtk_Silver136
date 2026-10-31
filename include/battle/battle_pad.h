@@ -51,3 +51,7 @@ u32 BattlePadMultiCheckUp(s32 chan, s32 mask);
 
 s32 BattlePadCheckRepeat(s32 mask);
 u32 BattlePadMultiCheckRepeat(s32 chan, s32 mask);
+
+// Names from LLCOOLT's tree.
+#define BTL_PAD_STICK_LEFT (1 << 18)
+#define BTL_PAD_STICK_RIGHT (1 << 19)

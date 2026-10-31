@@ -6,3 +6,6 @@
 
 USER_FUNC(chorogun_appear);
 USER_FUNC(chorogun_escape_all);
+
+// Names from LLCOOLT's tree.
+#define CHOROGUN_FLAG_ALIVE 0x1

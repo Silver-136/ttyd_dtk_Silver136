@@ -145,3 +145,14 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range);
 ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range);
 void itemStatusOn(ItemEntry* entry, u32 flags);
 void itemCoinDrop(Vec* position);
+
+// Names from LLCOOLT's tree.
+enum {
+    ITEM_FLAG_ELASTIC = 128,
+    ITEM_STATUS_CUSTOM_LAUNCH = 16,
+    ITEM_FLAG_NO_TOUCH = 2,
+    ITEM_STATUS_END_WAIT = 2,
+    ITEM_FLAG_BADGE_RETURN = 256,
+    ITEM_FLAG_NO_JINGLE = 32768,
+    ITEM_STATUS_LAUNCH = 4,
+};

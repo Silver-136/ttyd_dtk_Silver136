@@ -162,3 +162,10 @@ s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon);
 
 u16 BattleACGetButtonIcon(s32 button, s32 pressed);
 void BattleAcDrawGauge(s32 x, s32 y, f32 ratio, s32 width, s32 level, s32 a, s32 b, s32 c, s32 flags);
+
+// Names from LLCOOLT's tree.
+enum {
+    AC_SETUP_FLAG_CONFUSED_AUTO = 1,
+    AC_SETUP_FLAG_RETRIES = 2,
+};
+#define AC_DONE_FLAG_FINISHED 0x1

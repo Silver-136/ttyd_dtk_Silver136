@@ -49,3 +49,8 @@ s32 badgeShop_SpecialCheck(void);
 extern s32 badge_bottakuru100_table[];
 extern s32 badge_bottakuru_table[];
 extern BadgeShopWork* bdsw;
+
+// Names from LLCOOLT's tree.
+enum {
+    BADGESHOP_RESTOCK_PENDING = 1,
+};

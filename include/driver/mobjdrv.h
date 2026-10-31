@@ -115,3 +115,9 @@ s32 mobjCheckItemboxOpen(MapObjectEntry* entry);
 BOOL mobjGetHint(MapObjectEntry* entry);
 MapObjectEntry* mobjNearDistCheck2(f32 x, f32 y, f32 z, f32 minMagnitude, char** names);
 struct EventEntry* mobjRunEvent(MapObjectEntry* entry, EvtWord* eventCode);
+
+// Names from LLCOOLT's tree.
+enum {
+    MOBJ_FLAG_HINT = 32,
+    MOBJ_FLAG_BUSY = 512,
+};

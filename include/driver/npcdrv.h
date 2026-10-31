@@ -492,3 +492,16 @@ void npcSetStayPose(char* name);
 void npcSetTalkPose(char* name);
 NpcEntry* fbatHitCheckAll(void);
 s32 npcKoopaModeMobjBoundDeadCheck(struct HitEntry* hit);
+
+// Names from LLCOOLT's tree.
+enum {
+    NPC_FLAG_MOVE_ANIM = 1024,
+    NPC_FLAG_NO_WALL_HIT = 1073741824,
+    NPC_FLAG_HIDDEN = 128,
+    NPC_FLAG_JUMPING = 131072,
+    NPC_FLAG_LAND_ON_FLOOR = 16,
+    NPC_FLAG_ACTIVE = 2,
+    NPC_FLAG_INTANGIBLE = 32,
+    NPC_FLAG_TALK_ANIM = 512,
+    NPC_FLAG_SKIP_HIT_ATTR4 = 8192,
+};

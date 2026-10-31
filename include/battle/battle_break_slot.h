@@ -64,3 +64,8 @@ u8 BattleBreakSlot_CheckReaction(void);
 void BattleBreakSlot_Disp(void);
 s32 BattleBreakSlot_GetBreakTurn(void);
 void BattleBreakSlot_PointInc(void);
+
+// Names from LLCOOLT's tree.
+enum {
+    BREAK_SLOT_FLAG_LECTURE = 1,
+};

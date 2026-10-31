@@ -133,3 +133,10 @@ USER_FUNC(evt_nannpc_set_subfunc);
 USER_FUNC(evt_nannpc_set_work);
 USER_FUNC(evt_nannpcwork_flag_onoff);
 USER_FUNC(evt_nannpc_entry);
+
+// Names from LLCOOLT's tree.
+enum {
+    NANNPC_FLAG_HIDDEN = 2,
+    NANNPC_FLAG_WALK = 4,
+    NANNPC_FLAG_NO_HIT = 8,
+};
