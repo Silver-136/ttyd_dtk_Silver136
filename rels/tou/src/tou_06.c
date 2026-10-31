@@ -68,24 +68,40 @@ static NpcSetupInfo npcEnt[2];
 static EvtWord mobj_box00[34];
 EvtWord tou_06_init_evt[544];
 
+/**
+ * Door animation callback for the storage room door (door_1), opening: LW(0) is the swing angle;
+ * turns door_1 about the Y axis by 0.44 times the angle.
+ */
 static EVT_BEGIN(n_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the storage room door (door_1), closing:
+ * turns door_1 about the Y axis by -0.44 times the angle.
+ */
 static EVT_BEGIN(n_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the west door (door_2), opening: LW(0) is the swing angle;
+ * turns door_2 about the Y axis by 0.44 times the angle.
+ */
 static EVT_BEGIN(w_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the west door (door_2), closing:
+ * turns door_2 about the Y axis by -0.44 times the angle.
+ */
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2"), 0, LW(0), 0)
@@ -132,6 +148,10 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Mario steps on the hole in the floor: controls lock
+ * and he falls into tou_05 (Grubba's office) through the "fall" entrance.
+ */
 EVT_BEGIN(evt_ana)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_mapchange, STRING("tou_05"), STRING("fall"))
@@ -200,6 +220,10 @@ static s32 key_tbl[] = {
     ITEM_STORAGE_KEY_0x13, -1,
 };
 
+/**
+ * Check run before the locked door is used: if Mario carries ITEM_STORAGE_KEY_0x13 it shows the item menu
+ * (key_tbl); cancelling the menu cancels the door's action (evt_mobj_exec_cancel).
+ */
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STORAGE_KEY_0x13, LW(0))
     IF_INT_GREATER(LW(0), 0)
@@ -460,6 +484,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Opens the storage room's item box (mobj_box00):
+ * takes control from Mario, the box pops an item (ITEM_CHARGE_P, the Charge P badge) and Mario receives it.
+ */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
@@ -627,12 +655,14 @@ USER_FUNC(iri_13_make_name) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: frees the shuffled location table made by make_tbl. */
 USER_FUNC(free_tbl) {
     _mapFree(tbl);
     tbl = NULL;
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: args[0] = index; args[1..3] receive the x, y, z of the index'th shuffled trunks location. */
 static USER_FUNC(get_pos) {
     EvtWord* args = event->args;
     s32 n = evtGetValue(event, args[0]);
@@ -645,6 +675,7 @@ static USER_FUNC(get_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: builds a shuffled table of the 25 candidate locations for the Battle Trunks. */
 // Shuffle indices with 50 random pair swaps; this is not a Fisher-Yates shuffle.
 USER_FUNC(make_tbl) {
     s32 i;

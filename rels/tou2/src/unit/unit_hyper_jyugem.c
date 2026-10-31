@@ -46,6 +46,10 @@ static EvtWord friend_event[263];
 static EvtWord charge_event[102];
 static EvtWord wait_event[6];
 
+/**
+ * Script helper: arg0 = source unit, arg1 = destination unit;
+ * copies the size-change status, used when the Dark Lakitu's Spiny is swapped for the thrown one.
+ */
 static USER_FUNC(togezo_copy_status) {
     EvtWord* args = event->args;
     s32 sourceId = BattleTransID(event, evtGetValue(event, args[0]));
@@ -296,6 +300,11 @@ static BattleUnitSetup entry_togezo = {
     NULL, // itemDropTable
 };
 
+/**
+ * Init event of the Dark Lakitu: registers its wait, unison-phase, attack, damage and confusion events,
+ * clears unit work 0 (holding a Spiny) and 2 (has charged),
+ * sets part 2 (the Spiny it carries) to the "JGM_P_1" pose and starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(unison_phase_event))
@@ -309,6 +318,17 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Dark Lakitu.
+ * When it is not holding a Spiny egg (unit work 0 = 0) it just runs the default damage reaction.
+ * When it is holding one, a hit that did damage or left it with instant KO (status 27), sleep, dizzy, confusion,
+ * electric, freeze or stop knocks the egg out of its hands:
+ * part 2 is thrown 200 units behind it to the floor and hidden, the hold (unit work 0),
+ * its spiky counter attribute, pose table and hit offset are reset, then the default damage reaction runs.
+ * Otherwise, unless the damage code is 22, 30, 31 (an attacker hurt by its spikes), 38 (lucky),
+ * 39 (dodged) or 41 (guarded), a poison, burn, Tiny, defense-down,
+ * slow or allergic status only makes the egg pop up and vanish again; the Dark Lakitu keeps holding it.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -404,6 +424,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Run before the player's phase from the second turn on (the unison phase event) while the Dark Lakitu can act
+ * and is not dizzy, confused or electrified: with a 50% chance it picks up a Spiny,
+ * with a wind-up and hold sound, sets unit work 0 to 1, switches to the holding pose table,
+ * turns on the counter attribute of its part and raises the hit offset.
+ */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
     IF_INT_EQUAL(LW(0), 0)
@@ -449,6 +475,11 @@ static EVT_BEGIN(unison_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event 37, run (damage code 31) when an attacker is hurt by the spiky egg the Dark Lakitu holds overhead:
+ * after 30 frames it shows the toge_flush spark above it, 35 units up,
+ * 45 when Huge (status 10) and 25 when Tiny (status 11).
+ */
 static EVT_BEGIN(avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -469,6 +500,10 @@ static EVT_BEGIN(avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event 48, run (damage code 57) when the battle opens with Mario's
+ * or his partner's First Strike on the Dark Lakitu: it is set to height 10 and waits for the attack to end.
+ */
 static EVT_BEGIN(dmg_first_attack_pos_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
@@ -713,6 +748,12 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Dark Lakitu calls a friend: faces the spot in LW(0..2), picks up a Spiny if it was not holding one,
+ * throws it to the spot and has a new Sky-Blue Spiny (entry_togezo,
+ * with the thrower's status via togezo_copy_status) land there and spin up with its sound,
+ * setting its home position there.
+ */
 static EVT_BEGIN(friend_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -772,6 +813,12 @@ static EVT_BEGIN(friend_event)
     RETURN
 EVT_END()
 
+/**
+ * The Dark Lakitu charges up (weapon_jyugem_charge in LW(9): charge +5 on itself):
+ * it pays the weapon cost, the camera homes in (zoom 300),
+ * and after 40 frames the charge sound plays with a "crystal_n64" effect over it;
+ * a second later it hops once while the weapon is applied to itself.
+ */
 static EVT_BEGIN(charge_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -797,6 +844,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
+/** Wait event: sets the idle animation from the unit's pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

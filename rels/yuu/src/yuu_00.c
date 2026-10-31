@@ -112,6 +112,7 @@ static MonteTable montetable[] = {
     {0},
 };
 
+/** The Plane Mode game's coin event (data->viewEvent): runs fall_rtn, which scatters and collects the coins. */
 static EVT_BEGIN(minigame_view_monte)
     CALL(fall_rtn)
     RETURN
@@ -137,18 +138,24 @@ EVT_BEGIN(minigame01_floor_delete)
 EVT_END()
 #endif
 
+/** Puts Mario on the starting spot of the Plane Mode stage (x -1550, y 400) facing right. */
 EVT_BEGIN(yuu_00_kaijo_init)
     CALL(evt_mario_set_pos, -1550, 400, 0)
     CALL(evt_mario_set_dir, 90, 0, 0)
     RETURN
 EVT_END()
 
+/** Puts Mario back at the stage spot used after the opening camera or between rounds (x -1350, y 400) facing right. */
 EVT_BEGIN(yuu_00_kaijo_init2)
     CALL(evt_mario_set_pos, -1350, 400, 0)
     CALL(evt_mario_set_dir, 90, 0, 0)
     RETURN
 EVT_END()
 
+/**
+ * Spins up the stage spotlights ("light02" and "light_c") in a background inline event;
+ * the rotation speeds up in steps and stops when GF(0) is cleared.
+ */
 EVT_BEGIN(light_sub_event)
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
@@ -310,6 +317,10 @@ EVT_BEGIN(light_sub_event)
     RETURN
 EVT_END()
 
+/**
+ * Set-up for minigame 1 (Plane Mode): freezes Mario's controls, allocates the minigame work area,
+ * dismisses the partners, starts the spotlights and the crowd sound, and sets phase 1.
+ */
 EVT_BEGIN(minigame01_main)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(yuu_00_kaijo_init))
@@ -324,6 +335,10 @@ EVT_BEGIN(minigame01_main)
     RETURN
 EVT_END()
 
+/**
+ * Opening cutscene of Plane Mode: pans the 3D camera across the course,
+ * then shows the "menu_title_minigame1" title card for a few seconds.
+ */
 EVT_BEGIN(minigame01_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-1230.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(-1230.0f), FLOAT(160.0f), FLOAT(-10.0f), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -337,6 +352,10 @@ EVT_BEGIN(minigame01_start_cam)
     RETURN
 EVT_END()
 
+/**
+ * Cleans up when the player skips the opening camera:
+ * frees the title card, turns off the event camera and puts Mario back at the start spot.
+ */
 EVT_BEGIN(minigame01_start_cam_cancel)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_yuutitle_free)
@@ -1086,6 +1105,10 @@ static const char yuu00_gnd_03[] = "A_ground_03";
 static const char yuu00_gnd_06[] = "A_ground_06";
 static const char yuu00_gnd_04[] = "A_ground_04";
 
+/**
+ * Returns TRUE when two points are within 20 units in 3D and within 20 in height,
+ * i.e. Mario is touching a floating coin.
+ */
 static inline BOOL get_monte_check(Vec* a, Vec* b) {
     if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) {
         return TRUE;
@@ -1093,6 +1116,7 @@ static inline BOOL get_monte_check(Vec* a, Vec* b) {
     return FALSE;
 }
 
+/** Draw callback that renders every coin icon of a Monte array that has not been collected yet. */
 static inline void monte_disp(CameraId camera, void* param) {
     Monte* monte = param;
     s32 i;
@@ -1108,6 +1132,12 @@ static inline void monte_disp(CameraId camera, void* param) {
 
 #define randRange(d) (irand(100.0f * (d)) / 100.0f)
 
+/**
+ * Frame-by-frame coin spawner and collector for Plane Mode.
+ * On first call it allocates the Monte array and scatters coins at random spots within the rectangles of
+ * montetable (at least 20 units apart), then each frame it checks Mario against every coin,
+ * counting and hiding collected ones with a 3D sound. Blocks forever as a view event.
+ */
 static USER_FUNC(fall_rtn) {
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
     BOOL exists = FALSE;
@@ -1198,6 +1228,10 @@ static USER_FUNC(fall_rtn) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Resets the coins for the next round: stops the view event,
+ * frees the Monte array and starts a fresh minigame_view_monte event.
+ */
 static USER_FUNC(re_fall_rtn) {
     HikokiWork* data;
 
@@ -1214,11 +1248,16 @@ static USER_FUNC(re_fall_rtn) {
     return EVT_RETURN_DONE;
 }
 
+/** Script call that switches Mario's motion to 0x18, the airplane glide motion used in Plane Mode. */
 USER_FUNC(evt_change_plane) {
     marioChgMot(MARIO_MOTION_PLANE);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = minigame work pointer, args[1] = new phase for the Plane Mode state machine (0 idle, 1 start, 2
+ * playing, 3 finish).
+ */
 USER_FUNC(yuuminigame1_set_phase) {
     EvtWord* args = event->args;
     HikokiWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
@@ -1227,6 +1266,10 @@ USER_FUNC(yuuminigame1_set_phase) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = minigame work pointer, args[1] = on/off.
+ * Sets or clears the "opening cutscene pending" bit (flags bit 0).
+ */
 USER_FUNC(yuuminigame1_opening_on_off) {
     EvtWord* args = event->args;
     HikokiWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
@@ -1239,6 +1282,10 @@ USER_FUNC(yuuminigame1_opening_on_off) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = minigame work pointer, args[1] = output.
+ * Writes 1 if the opening cutscene is still pending (flags bit 0), else 0.
+ */
 USER_FUNC(yuuminigame1_opening_chk) {
     EvtWord* args = event->args;
     MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
@@ -1252,6 +1299,7 @@ USER_FUNC(yuuminigame1_opening_chk) {
 }
 
 #ifdef VERSION_G8ME01
+/** args[0] = minigame work pointer, args[1] = on/off. Sets or clears the "platforms exist" bit (flags bit 1). */
 USER_FUNC(yuuminigame1_floor_on_off) {
     EvtWord* args = event->args;
     u32* flags = &((HikokiWork*)((MiniGameWork*)evtGetValue(event, args[0]))->data)->flags;
@@ -1264,6 +1312,10 @@ USER_FUNC(yuuminigame1_floor_on_off) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = minigame work pointer, args[1] = output.
+ * Writes 1 if the platforms currently exist (flags bit 1), else 0.
+ */
 USER_FUNC(yuuminigame1_floor_chk) {
     EvtWord* args = event->args;
     u32* flags = &((HikokiWork*)((MiniGameWork*)evtGetValue(event, args[0]))->data)->flags;
@@ -1278,6 +1330,7 @@ USER_FUNC(yuuminigame1_floor_chk) {
 
 #endif
 
+/** Init callback for minigame 1: starts the coin view event and marks the opening cutscene as pending. */
 void yuuminigame_init_1hikoki(EventEntry* event, BOOL isFirstCall) {
     HikokiWork* data = ((MiniGameWork*)event->lwData[0])->data;
 
@@ -1286,6 +1339,11 @@ void yuuminigame_init_1hikoki(EventEntry* event, BOOL isFirstCall) {
     data->flags |= 1;
 }
 
+/**
+ * Per-frame state machine for Plane Mode: phase 1 starts minigame01_start,
+ * phase 2 waits for the rules check to finish, phase 3 launches minigame01_end with the coin count,
+ * result and monte count.
+ */
 void yuuminigame_main_1hikoki(EventEntry* event, BOOL isFirstCall) {
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
     HikokiWork* data = wp->data;
@@ -1318,6 +1376,7 @@ void yuuminigame_main_1hikoki(EventEntry* event, BOOL isFirstCall) {
     }
 }
 
+/** Draw callback for minigame 1: draws the collected-coin counter (monteCountDisp). */
 void yuuminigame_disp_1hikoki(CameraId camera, void* param) {
     monteCountDisp();
 }

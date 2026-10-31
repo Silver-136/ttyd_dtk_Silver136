@@ -27,6 +27,12 @@ f32 dou_normal_puka_data[] = {
     -2.7f, -2.7f, -2.5f, -2.2f, -2.0f, -1.5f, -1.0f, -0.5f,
 };
 
+/**
+ * Idle bobbing of a Pirate's Grotto floating platform (puka):
+ * LW(6) holds a reference to the register that stores the platform's height offset.
+ * Every 130 ms it writes the next of 16 offsets from dou_normal_puka_data into it,
+ * a slow sinking and rising cycle, forever. The map script translates the platform by that register.
+ */
 EVT_BEGIN(dou_normal_puka)
     SET_VALUE(LW(0), 1)
     LOOP(0)
@@ -86,6 +92,12 @@ void _prolog(void) {
     relSetBtlAddr("dou", btlsetup_dou_tbl, btl_dou_setup_no_tbl);
 }
 
+/**
+ * Shared reaction of a floating platform when Mario steps on it:
+ * four dips of shrinking depth and length (-10 for 200 ms, -8 for 150, -5 for 100, -2 for 50),
+ * so the platform settles like a boat taking a weight.
+ * LW(6) must hold the reference to the platform's offset register (set by the caller).
+ */
 EVT_BEGIN(dou_puka_event)
     SET_VALUE(LW(7), LW(0))
     SET_VALUE(LW(8), LW(1))
@@ -116,13 +128,26 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+/**
+ * Module unresolved-symbol stub: if a relocation could not be resolved the REL linker points it here;
+ * it does nothing.
+ */
 void _unresolved(void) {
 }
+/**
+ * Script helper: stores the bobbing offset for step LW(0) (taken modulo 16) from dou_normal_puka_data into
+ * args[0] as a float.
+ */
 USER_FUNC(evt_dou_normal_puka) {
     // LW(0) is the sample counter; its low four bits wrap the 16-entry bobbing curve.
     evtSetFloat(event, event->args[0], dou_normal_puka_data[event->lwData[0] & 0xF]);
     return EVT_RETURN_DONE;
 }
+/**
+ * Debug script function named for printing Mario's position with OSReport: in this build it only looks up
+ * Mario and reads the button trigger, prints nothing and blocks forever.
+ * Only the unused dou_mario_pos_osreport calls it.
+ */
 USER_FUNC(dou_mario_pos_osreport_func) {
     // This diagnostic helper polls input but remains blocked; it does not finish the event.
     marioGetPtr();

@@ -60,6 +60,15 @@ static inline void shotRecord(BattleActions* ac, ShotWork* sw) {
     ac->outputParams[3]++;
 }
 
+/**
+ * Per-frame driver of action command 7, used by Bobbery's Bomb Squad.
+ * A reticle sweeps a 60-unit arc around unit params[0] between angles params[4]
+ * and params[5] at params[6]/10 degrees a frame;
+ * pressing A, holding to charge and letting go throws (acFlags bit 0 throws at once at half power).
+ * Each throw sets outputParams[1] (power, params[2]..[3]), [2] (angle), [3] (count) and [0],
+ * which the script clears for the next of params[1] throws.
+ * Without a press for 360 frames it throws by itself, and the command fails if the last throw was such.
+ */
 s32 battleAcMain_Shot(BattleWork* work) {
     const char* sfx;
     BattleActions* ac;
@@ -243,12 +252,17 @@ s32 battleAcMain_Shot(BattleWork* work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_Shot(BattleWork* work) {
     return work->actionCommands.result;
 }
 
 static void actionCommandDisp(f32 x, f32 y);
 
+/**
+ * Display callback: slides the power gauge in from the left over 20 frames,
+ * and once the command is stopped keeps it up for 40 frames before sliding it back out.
+ */
 void battleAcDisp_Shot(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleActions* ac = &work->actionCommands;
@@ -281,10 +295,12 @@ void battleAcDisp_Shot(CameraId cameraId, void* param) {
     }
 }
 
+/** Called by btlevtcmd_StopAC: stops the cursor sound and starts the 60-frame end wait. */
 void battleAcDelete_Shot(BattleWork* work) {
     work->actionCommands.mAcState = 1004;
 }
 
+/** Resets the display state: the gauge off screen to the left with a 20-frame slide, white colour, empty fill. */
 static void _ac_disp_init(BattleWork* work) {
     BattleACDispParams* disp = &work->actionCommands.disp;
     memset(disp, 0, sizeof(BattleACDispParams));
@@ -299,6 +315,7 @@ static void _ac_disp_init(BattleWork* work) {
     disp->gaugeRatio = 0.0f;
 }
 
+/** Draws the power gauge filling as A is held (pulsing red at full); nothing when acFlags bit 0 removes the charge. */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
@@ -343,6 +360,7 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
 }
 
+/** Draws the reticle: two textures spinning in opposite directions by angle, at half size, in the given colour. */
 static void _draw_target_mark(GXColor color, f32 x, f32 y, f32 z, f32 angle) {
     Vec pos = {0.0f, 0.0f, 0.0f};
     pos.x = x;
@@ -352,6 +370,7 @@ static void _draw_target_mark(GXColor color, f32 x, f32 y, f32 z, f32 angle) {
     btlDispTex4(BTL_TEX(0x41), pos, (Vec){0.5f, 0.5f, 1.0f}, (Vec){0.0f, 0.0f, reviseAngle(angle)}, color);
 }
 
+/** Display callback for the live reticle at its current angle around the unit; main registers it while aiming. */
 static void _disp_target_mark(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     ShotWork* sw = (ShotWork*)work->actionCommands.work;
@@ -364,6 +383,10 @@ static void _disp_target_mark(CameraId cameraId, void* param) {
     _draw_target_mark((GXColor){255, 255, 255, 255}, out.x, out.y, out.z, sw->angle);
 }
 
+/**
+ * Display callback for the faded purple marks left where each of the last three throws aimed;
+ * each lasts 70 frames, fading over the last 30.
+ */
 static void _disp_target_mark_afterimage(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     ShotWork* sw = (ShotWork*)work->actionCommands.work;

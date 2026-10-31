@@ -92,6 +92,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Puts the plane-panel platform, pipe and tree wall in their already-extended state (175 units raised,
+ * the pipe and tree scaled to match) and rebinds their hit areas, for when the blue switch was already pressed.
+ */
 EVT_BEGIN(evt_hikou_nobiru_init)
     CALL(evt_hit_bind_mapobj, STRING("a_dai"), STRING("hikou"))
     CALL(evt_hit_bind_mapobj, STRING("a_hi"), STRING("hikou"))
@@ -118,6 +122,11 @@ EVT_BEGIN(evt_hikou_nobiru_init)
     RETURN
 EVT_END()
 
+/**
+ * Blue-switch cutscene: the camera pans while the paper-plane panel,
+ * the pipe and the tree wall stretch upward by 175 units over 3 seconds with a quake sound,
+ * then the hit areas are rebound.
+ */
 EVT_BEGIN(evt_hikou_nobiru)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tree_ha04"), MAP_OBJ_FLAG_HIDDEN)
@@ -184,6 +193,13 @@ static TreeAccess tree_access_data[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/**
+ * Map init script of Boggly Woods' win_02: registers exits, BGM and ambience,
+ * trees and the plane panel ("hikou"),
+ * places the Shine Sprite block, the hidden badge block with P-Down, D-Up P,
+ * the Quake Hammer badge block and a Star Piece,
+ * and sets up the blue switch whose script raises the plane-panel platform (already raised if it was pressed).
+ */
 EVT_BEGIN(win_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

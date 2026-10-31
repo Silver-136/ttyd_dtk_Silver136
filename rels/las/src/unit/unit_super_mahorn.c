@@ -29,6 +29,10 @@
 #define UNIT_WORK_MAGIC_EFFECT 7 // EffectEntry of the magic shot (effMahorn2Entry); eff_magic_get_posX reads its type-3 element's x
 
 double __fabs(double x);
+/**
+ * Absolute value of a double, via the C library's __fabs (kept as an inline wrapper so the compiler does not
+ * turn it into the fabs instruction).
+ */
 static inline double mahorn_fabs(double x) { return __fabs(x); }
 
 static USER_FUNC(hand_ctrl);
@@ -554,6 +558,14 @@ static BattleUnitSetup entry_mahorn = {
     NULL, // itemDropTable
 };
 
+/**
+ * Attack event of the Dark Wizzerd: when confused it punches.
+ * Illusion copies (unit work 4 set) do nothing here.
+ * Otherwise it can use an item; when it is the last Wizzerd alive it creates illusions (bunsin_event);
+ * when illusions exist it picks one of its spells to buff them (Dekadeka or Katikati);
+ * else it draws a weighted number among the punch, the magic ball at one target,
+ * the lightning on all targets and its support spells (Dekadeka, Katikati, Trans, Yokeyoke, Recover).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -655,6 +667,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Attack event of an illusion copy of the Dark Wizzerd: the copies never attack; it only returns to waiting. */
 static EVT_BEGIN(attack_event_bunsin)
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -695,6 +708,10 @@ static BattleDataEntry data_table_bunsin[] = {
     {0},
 };
 
+/**
+ * Init event of the Dark Wizzerd: installs its wait, attack, damage and confusion events,
+ * starts hand_ctrl_event, which floats its hands, and clears unit work 4 (copy flag) and 6 (hide flag).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -1837,6 +1854,11 @@ static USER_FUNC(mahorn_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: shuffles the positions of the Dark Wizzerd
+ * and its copies (kinds 0x80, 0x81, 0xA9 and 0xAA) with ten random swaps of their X and Z,
+ * so the player cannot tell which one is the real one.
+ */
 static USER_FUNC(mahorn_shuffle) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* kamecs[6];
@@ -1873,6 +1895,10 @@ static USER_FUNC(mahorn_shuffle) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: returns the battle unit indices of the Dark Wizzerd's clones (bunsin, kinds 0x81 and 0xAA) in
+ * up to four script variables args[0..3] (-1 for unused), then the number of clones after them.
+ */
 static USER_FUNC(mahorn_get_bunsin) {
     EvtWord* args = event->args;
     s32 copies[4];
@@ -1900,6 +1926,11 @@ static USER_FUNC(mahorn_get_bunsin) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: sets where hand args[1] (part 2..5 of the Dark Wizzerd, one per hand) should float:
+ * stores the offset (-x, y, z) in the hand's destination block,
+ * scaled by 1.25 when the unit is shrunk or 0.75 when it is grown (status 10 and 11).
+ */
 static USER_FUNC(set_hand_dest) {
     s32 hand;
     BattleUnit* unit;
@@ -1938,6 +1969,11 @@ static USER_FUNC(set_hand_dest) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (runs every frame): eases each of the four hand parts of the Dark Wizzerd toward its
+ * destination offset, one tenth of the distance per call.
+ * It does nothing while the unit is asleep, stopped or frozen (statuses 2, 9 and 1).
+ */
 static USER_FUNC(hand_ctrl) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -1986,6 +2022,7 @@ static USER_FUNC(hand_ctrl) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: frees the four hand destination blocks of the Dark Wizzerd allocated by hand_init. */
 static USER_FUNC(hand_end) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -2003,6 +2040,10 @@ static USER_FUNC(hand_end) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: sets up the Dark Wizzerd's four hands:
+ * starts each in the "MAH_Z_2" animation and allocates a three- float destination block in unit->work[0..3].
+ */
 static USER_FUNC(hand_init) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -2027,6 +2068,10 @@ static USER_FUNC(hand_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Counts the enemy-side (alliance 1) units in battle that are not knocked out (no status 0x1B, the KO status)
+ * and returns the count in args[0].
+ */
 static USER_FUNC(mahorn_get_live_num) {
     s32 i;
     EvtWord* args = event->args;

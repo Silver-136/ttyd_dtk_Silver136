@@ -26,6 +26,10 @@ static u8 scale_dt2[] = {
     0x47, 0x3D, 0x33, 0x28, 0x1E, 0x14, 0x0C, 0x06, 0x02, 0x00
 };
 
+/**
+ * Spawns `count` expanding rings at (x, y, z) for `duration` frames;
+ * used by the Wizzerd effect through evt_eff ("mahorn").
+ */
 EffectEntry* effMahornEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffMahornWork* work;
@@ -65,6 +69,10 @@ EffectEntry* effMahornEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32
     return effect;
 }
 
+/**
+ * Per frame: counts down each ring's delay, grows its scale along the scale curve,
+ * fades it out near the end of the duration and deletes the effect when the last ring is gone.
+ */
 void effMahornMain(EffectEntry* effect) {
     EffMahornWork* work = effect->userdata;
     Vec position;
@@ -102,6 +110,7 @@ void effMahornMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMahornDisp, effect);
 }
 
+/** Draws each ring as a camera-facing textured quad (effect texture 0x82) with its own scale and alpha. */
 void effMahornDisp(CameraId cameraId, EffectEntry* effect) {
     BOOL odd;
     EffMahornWork* work = effect->userdata;

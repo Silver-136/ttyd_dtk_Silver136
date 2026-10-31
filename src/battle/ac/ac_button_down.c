@@ -242,10 +242,15 @@ s32 battleAcMain_ButtonDown(BattleWork *work) {
     return 1;
 }
 
+/**
+ * Returns the result word: 1 while running, 2 once every shown button was pressed in time,
+ * 0 on a wrong button or timeout (acFlags bit 1 counts a partial sequence as success).
+ */
 s32 battleAcResult_ButtonDown(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/** Display callback: slides the button row in from the left over 20 frames, then draws it in place. */
 void battleAcDisp_ButtonDown(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleActions* ac = &work->actionCommands;
@@ -268,10 +273,16 @@ void battleAcDisp_ButtonDown(CameraId cameraId, void* param) {
     actionCommandDisp(0, x, y);
 }
 
+/** Called by btlevtcmd_StopAC: starts the 60-frame wait after which the command clears its callbacks. */
 void battleAcDelete_ButtonDown(BattleWork* work) {
     work->actionCommands.mAcState = 1003;
 }
 
+/**
+ * Draws the frame bar behind the row and the button icons (A, B, X, Y, L, R, Z), lit once pressed.
+ * With acFlags bit 0 only the buttons up to the next one to press are shown.
+ * Used by action command 10 (Tornado Jump's second part, Vivian's Veil and Fiery Jinx).
+ */
 static void actionCommandDisp(s32 unused, f32 x, f32 y) {
     BattleWork *work = _battleWorkPointer;
     BDWork *p = (BDWork*)work->actionCommands.work;

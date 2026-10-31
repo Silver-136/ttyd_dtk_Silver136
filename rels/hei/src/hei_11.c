@@ -49,6 +49,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Petal Meadows hei_11 map init: sets the fortress music and reverb
+ * and the animated water effect (tev callback); nothing else.
+ */
 EVT_BEGIN(hei_11_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

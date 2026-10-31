@@ -92,6 +92,10 @@ static EvtWord renzoku_attack_event_sub_no_last[10];
 static EvtWord renzoku_attack_event_sub_last[79];
 static EvtWord wait_event[6];
 
+/**
+ * Script helper: allocates the yarn work block (a PidersYarn) for the calling Pider
+ * and keeps it in the unit's countersetWeapon slot.
+ */
 static USER_FUNC(piders_yarn_init) {
     s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -214,6 +218,10 @@ static BattleUnitKindPart parts[] = {
     {5, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/**
+ * Draw callback for the Pider's thread: one thin white quad from the unit's hanging height up to the ceiling (y
+ * = 400), with the alpha from the yarn work block.
+ */
 static void piders_draw_yarn_sub(CameraId camera, void* param) {
     PidersYarn* yarn = param;
     CameraEntry* cam = camGetPtr(CAMERA_3D);
@@ -241,6 +249,11 @@ static void piders_draw_yarn_sub(CameraId camera, void* param) {
     GXEnd();
 }
 
+/**
+ * Script helper: args[0] = alpha.
+ * Sets the thread's two end points above the Pider's home position (the Pider's hanging height from work[2] up
+ * to y = 400) and queues the draw callback.
+ */
 static USER_FUNC(piders_draw_yarn) {
     u8 alpha = evtGetValue(event, event->args[0]);
     s32 id = BattleTransID(event, UNIT_ID_SELF);
@@ -257,6 +270,10 @@ static USER_FUNC(piders_draw_yarn) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: returns in args[0] how many Piders and Arantulas (kinds 0x1B and 0xA4) are still on the field
+ * and not knocked out.
+ */
 static USER_FUNC(piders_get_num) {
     BattleUnit* unit;
     s32 i;
@@ -274,6 +291,10 @@ static USER_FUNC(piders_get_num) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = unit; returns in args[1] its order (zyun) among the living Piders and Arantulas,
+ * counting from 1.
+ */
 static USER_FUNC(piders_get_zyun) {
     s32 id;
     s32 i;
@@ -300,6 +321,10 @@ static USER_FUNC(piders_get_zyun) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: returns in args[0] the 0/1 position attribute (work[0]) of the first living Pider or Arantula,
+ * flipped when that unit can act, so the group knows which side to take.
+ */
 static USER_FUNC(piders_get_first_pos_attr) {
     s32 i;
     EvtWord* args = event->args;
@@ -326,6 +351,11 @@ static USER_FUNC(piders_get_first_pos_attr) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for the chained attack (renzoku):
+ * collects the current weapon's target list and picks three targets at random,
+ * writing each pick's unit and part indices into args[0..5] in order.
+ */
 static USER_FUNC(piders_renzoku_attack_set_target) {
     EvtWord* args = event->args;
     s32 unitIdx[20];
@@ -352,6 +382,7 @@ static USER_FUNC(piders_renzoku_attack_set_target) {
     return EVT_RETURN_DONE;
 }
 
+/** Reads the current entry of the weapon target list: unit index in *unitIdx and part index in *partIdx. */
 static void piders_get_target(s32* unitIdx, s32* partIdx) {
     BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
     BattleWorkTarget* target = &wt->targets[wt->targetIndices[wt->currentTarget]];
@@ -360,6 +391,10 @@ static void piders_get_target(s32* unitIdx, s32* partIdx) {
     *partIdx = target->partIdx;
 }
 
+/**
+ * Advances to the next entry of the weapon target list and reads it;
+ * returns unit -1 and part 0 at the end of the list.
+ */
 static void piders_get_next_target(s32* unitIdx, s32* partIdx) {
     BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
 
@@ -446,6 +481,12 @@ static BattleWeapon weapon_piders_renzoku_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init script of the Arantula: registers its wait, unison-phase, attack,
+ * damage and confusion handlers and its entry script, sets unit work 0 (hanging position flag) to 0,
+ * unit work 1 (thread alpha) to 255, unit work 2 (thread drop) to 0 and unit work 3 (first-move flag) to 1,
+ * allocates the thread work block (piders_yarn_init) and starts yarn_event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(unison_phase_event))
@@ -463,6 +504,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event 48 of the Arantula, run when the battle opens with Mario's or the partner's First Strike on it:
+ * it is set to y 10 and waits for the attack to end.
+ */
 static EVT_BEGIN(dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
@@ -471,6 +516,11 @@ static EVT_BEGIN(dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * Background loop of the Arantula, run while it exists:
+ * whenever the thread alpha in unit work 1 is below 255 it fades it by 2 per frame (down to 2)
+ * and redraws the thread to the ceiling (piders_draw_yarn).
+ */
 static EVT_BEGIN(yarn_event)
     LABEL(0)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
@@ -491,6 +541,10 @@ static EVT_BEGIN(yarn_event)
     RETURN
 EVT_END()
 
+/**
+ * Entrance of the Arantula: it starts at y 180 with its thread dropped by 400 (unit work 2),
+ * waits a delay based on its x position and then reels itself down over 40 frames as the drop decreases to 0.
+ */
 static EVT_BEGIN(entry_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 180)
@@ -508,6 +562,7 @@ static EVT_BEGIN(entry_event)
     RETURN
 EVT_END()
 
+/** Damage script of the Arantula: runs the default damage handling on itself. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -515,6 +570,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Defeat script of the Arantula: it spins for 48 frames (SFX_BTL_ENEMY_DIE1_1),
+ * then bursts with the "expbom_n64" effect and a star-point effect, the coins and experience are stored,
+ * and it tips over for 30 frames before it is hidden and removed from the battle.
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(0), 48)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -563,6 +623,11 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Defeat script when the Arantula is blown away (SFX_BTL_CLAUD_BREATH3):
+ * it spins and is carried to the edge of the stage, its coins and experience are stored,
+ * and it is then hidden and removed from the battle.
+ */
 static EVT_BEGIN(blow_dead_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
@@ -592,11 +657,16 @@ static EVT_BEGIN(blow_dead_event)
     RETURN
 EVT_END()
 
+/** Battle-end script: sets the thread alpha (unit work 1) to 254, so yarn_event fades the thread out. */
 static EVT_BEGIN(battle_end_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_YARN_ALPHA, 254)
     RETURN
 EVT_END()
 
+/**
+ * Makes the Arantula sway: a damped back and forth rotation about the vertical axis that decays over about 110
+ * frames, run as a separate event so it does not block the caller.
+ */
 static EVT_BEGIN(yure_event)
     BEGIN_INLINE_EVENT
         LOOP(10)
@@ -628,6 +698,11 @@ static EVT_BEGIN(yure_event)
     RETURN
 EVT_END()
 
+/**
+ * Moves the Arantula down to the floor: it plays SFX_ENM_PAIDA_MOVE1 (first time only, using unit work 3)
+ * or MOVE2, sways, drops to y 10, makes that its home position,
+ * clears part 1's attributes 0x600000 and sets unit work 0 to 1.
+ */
 static EVT_BEGIN(move_kuutei_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FIRST_LOWER, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -656,6 +731,10 @@ static EVT_BEGIN(move_kuutei_event)
     RETURN
 EVT_END()
 
+/**
+ * Moves the Arantula up into the air: it sways, rises to y 70 with SFX_ENM_PAIDA_MOVE2,
+ * makes that its home position, sets part 1's attributes 0x600000 and sets unit work 0 to 0.
+ */
 static EVT_BEGIN(move_kuuchu_event)
     SPAWN_EVENT(yure_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -673,6 +752,16 @@ static EVT_BEGIN(move_kuuchu_event)
     RETURN
 EVT_END()
 
+/**
+ * Before the player's phase, if the Arantula can act and is not in status 27 (KO),
+ * it moves up (move_kuuchu_event) or down (move_kuutei_event),
+ * counting the living Piders and Arantulas together.
+ * The first of them (piders_get_zyun gives 1) switches between the floor and the air every turn.
+ * With an odd number
+ * of them the others go where the first one ends up;
+ * with an even number those at odd places in the order follow the
+ * first and those at even places take the other height, so the group alternates.
+ */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
     IF_INT_EQUAL(LW(0), 0)
@@ -731,6 +820,11 @@ static EVT_BEGIN(unison_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the Arantula.
+ * After clearing its chained-attack work and checking for an item use it draws between the normal web throw (50
+ * in 100) and the chained web throw (renzoku, 50 in 100).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET1_HIT, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET2_HIT, 0)
@@ -819,6 +913,11 @@ static EVT_BEGIN(damage_check_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * First half of a web throw: the Arantula raises its second arm part (part 2, pose PAI_A_2a) and swings it up
+ * and down three times with SFX_ENM_PAIDA_ATTACK1, with a pivot offset scaled to its size,
+ * then keeps the final angle in unit work 4.
+ */
 static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
@@ -863,6 +962,11 @@ static EVT_BEGIN(piders_attack_common_event1)
     RETURN
 EVT_END()
 
+/**
+ * Wind-up used for the later throws of the chained attack:
+ * it takes the arm angle saved in unit work 4 up to 100 in five frames with SFX_ENM_PAIDA_ATTACK1,
+ * then saves the angle again.
+ */
 static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
@@ -891,6 +995,7 @@ static EVT_BEGIN(piders_attack_common_event1_2)
     RETURN
 EVT_END()
 
+/** Lowers the Arantula's arm back to rest over 15 frames, returns to PAI_S_1 and hides the arm part. */
 static EVT_BEGIN(piders_attack_common_event2)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(8))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(8))
@@ -906,6 +1011,11 @@ static EVT_BEGIN(piders_attack_common_event2)
     RETURN
 EVT_END()
 
+/**
+ * The web ball leaves: plays SFX_ENM_PAIDA_ATTACK2,
+ * places part LW(7) (the web, doubled in size) above the Arantula
+ * and sends it flying to the target's hit position.
+ */
 static EVT_BEGIN(piders_attack_common_event3)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAIDA_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, LW(7), STRING("PAI_A_3a"))
@@ -933,6 +1043,12 @@ static EVT_BEGIN(piders_attack_common_event3)
     RETURN
 EVT_END()
 
+/**
+ * The Arantula's normal attack: the web throw.
+ * It picks a target (the first-strike target on a first strike), winds up (piders_attack_common_event1),
+ * has the arm drop in the background and throws the web at the target,
+ * then checks the damage and finishes with a short pause.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -968,6 +1084,12 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Arantula's chained attack: three web throws in a row at three targets picked at random by
+ * piders_renzoku_attack_set_target (target unit ids go in unit work 5 to 7 and part ids in 8 to 10).
+ * Each throw spawns renzoku_attack_event_sub to resolve its damage while the arm swings on to the next,
+ * and a throw can pick the same target again.
+ */
 static EVT_BEGIN(renzoku_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1065,6 +1187,12 @@ static EVT_BEGIN(renzoku_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage step of one throw in the chained attack:
+ * takes the throw's target from unit work 5 to 10 and looks at the later throws.
+ * If a later throw picks the same unit and part it runs renzoku_attack_event_sub_no_last,
+ * otherwise renzoku_attack_event_sub_last.
+ */
 static EVT_BEGIN(renzoku_attack_event_sub)
     SET_VALUE(LW(0), LW(5))
     SET_VALUE(LW(1), LW(6))
@@ -1089,6 +1217,11 @@ static EVT_BEGIN(renzoku_attack_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * Damage check of a chained throw that is not the last one at its target:
+ * it runs damage_check_event_sub with LW(8) = 0 and LW(10) = 1,
+ * so the target is flagged as hit and the final-hit argument is 0.
+ */
 static EVT_BEGIN(renzoku_attack_event_sub_no_last)
     SET_VALUE(LW(8), 0)
     SET_VALUE(LW(10), 1)
@@ -1096,6 +1229,12 @@ static EVT_BEGIN(renzoku_attack_event_sub_no_last)
     RETURN
 EVT_END()
 
+/**
+ * Damage check of the last chained throw at a target:
+ * if an earlier throw already flagged this target (unit work 11 to
+ * 13) it sets the web attributes and deals the damage with the defence result and the 256 argument; otherwise it runs
+ * damage_check_event_sub with LW(8) = 1 and LW(10) = 0.
+ */
 static EVT_BEGIN(renzoku_attack_event_sub_last)
     SET_VALUE(LW(0), 5)
     SET_VALUE(LW(1), 8)
@@ -1125,6 +1264,7 @@ static EVT_BEGIN(renzoku_attack_event_sub_last)
     RETURN
 EVT_END()
 
+/** Wait script: plays the Arantula's idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

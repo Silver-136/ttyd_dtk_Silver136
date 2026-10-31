@@ -81,10 +81,16 @@ static inline NpcWork* npcGetWorkPtr2(BOOL inBattle) {
 }
 #define npcGetWorkPtrInline() (gp->inBattle ? &work.battle : &work.field)
 
+/** Returns the NPC list in use: the battle NPC work while gp->inBattle is set, otherwise the field NPC work. */
 NpcWork* npcGetWorkPtr(void) {
     return gp->inBattle ? &work.battle : &work.field;
 }
 
+/**
+ * Runs as a battle starts (seq_battle): for every live field NPC whose pose has no paper effect,
+ * saves its model name, current animation, pose flags and rotations into release_wp
+ * and frees the animation pose. Does nothing unless field work flag 2 is set. npcRecoveryFiledNpc undoes it.
+ */
 void npcReleaseFiledNpc(void) {
     NpcWork* wp;
     NpcFieldEntry* field;
@@ -116,6 +122,10 @@ void npcReleaseFiledNpc(void) {
     }
 }
 
+/**
+ * Runs as a battle ends (seq_battle): re-creates the animation poses freed by npcReleaseFiledNpc from release_wp
+ * (model, animation, flags, rotations, world position/matrix evaluation) and clears field work flag 2.
+ */
 void npcRecoveryFiledNpc(void) {
     NpcWork* wp;
     NpcFieldEntry* field;
@@ -204,6 +214,10 @@ void mtx_setup(NpcEntry* entry, Mtx mtx, s32 history) {
     }
 }
 
+/**
+ * For the Luigi model only: swaps each animation in luigi_pose for its "R" twin
+ * when the camera sees him from behind, and back again when it sees him from the front.
+ */
 static inline void npcLuigiPoseFlip(NpcEntry* entry) {
     if (entry->flags & NPC_FLAG_LUIGI_POSE_FLIP) {
         AnimationPose* animPose;
@@ -261,6 +275,10 @@ static inline void npcDimColor(NpcEntry* entry) {
     }
 }
 
+/**
+ * Draw callback for a translucent NPC (colour alpha below 255):
+ * draws all three material passes in one go, with the dimming and the Luigi pose flip.
+ */
 void npcDisp_xlu(CameraId cameraId, void* param) {
     NpcEntry* entry = param;
     Mtx mtx;
@@ -333,6 +351,10 @@ void npcDisp(CameraId camId, void* param) {
     }
 }
 
+/**
+ * Like npcDisp_xlu, but draws into the NPC's offscreen buffer (offscreenId)
+ * and records the GX bounding box of what it drew there.
+ */
 void npcDisp_offscreen_xlu(CameraId camId, void* param) {
     NpcEntry* entry = param;
     u16 left, top, right, bottom;
@@ -356,6 +378,11 @@ void npcDisp_offscreen_xlu(CameraId camId, void* param) {
     offscreenAddBoundingBox(entry->offscreenId, left, top, right, bottom);
 }
 
+/**
+ * Like npcDisp, but draws into the NPC's offscreen buffer (offscreenId)
+ * and records the GX bounding box of what it drew there.
+ * Same per-version difference in where the dimming happens.
+ */
 void npcDisp_offscreen(CameraId camId, void* param) {
     NpcEntry* entry = param;
     u16 left, top, right, bottom;
@@ -396,6 +423,11 @@ void npcDisp_offscreen(CameraId camId, void* param) {
 #pragma push
 #pragma optimization_level 2
 
+/**
+ * Draws the motion blur trail of an NPC with NPC_FLAG_BLUR:
+ * four copies at positionHistory[4..1], offset 2 units along the camera yaw and more opaque toward the newest,
+ * then restores the material flags.
+ */
 void npcDisp_blur(CameraId camId, void* param) {
     s32 alpha;
     NpcEntry* entry = param;
@@ -429,6 +461,10 @@ void npcDisp_blur(CameraId camId, void* param) {
 }
 #pragma pop
 
+/**
+ * Boot-time setup (from mariost.c): allocates the field and battle NPC tables,
+ * the release_wp save area for battles and the FieldBattleData at gp->fbatData, all zeroed.
+ */
 void npcInit(void) {
     FieldBattleData* data;
     NpcWork* wp;
@@ -452,6 +488,10 @@ void npcInit(void) {
     npcMainCount = 0;
 }
 
+/**
+ * Clears every NPC of the field or battle list (map change, battle end);
+ * on the field it also resets the field battle mode to 0.
+ */
 void npcReset(BOOL inBattle) {
     NpcWork* wp = npcGetWorkPtr2(inBattle);
     memset(wp->entries, 0, sizeof(NpcEntry) * wp->total);
@@ -462,10 +502,20 @@ void npcReset(BOOL inBattle) {
     npcMainCount = 0;
 }
 
+/**
+ * Returns how many NPCs exist in the field (FALSE) or battle (TRUE) list;
+ * read by the evt_npc_get_ReactionOfLivingBody script helper.
+ */
 s32 npcGetReactionOfLivingBody(BOOL inBattle) {
     return npcGetWorkPtr2(inBattle)->count;
 }
 
+/**
+ * Creates an NPC called name with the model animName in the first free slot of the current list
+ * and returns its index.
+ * Sets the defaults (scale 1, white colour, 3D camera, gravity 1) and loads the "hoshi" model
+ * if animName fails to load. The first loop, a name lookup, has no effect.
+ */
 s32 npcEntry(const char* description, const char* animName) {
     NpcWork* wp;
     s32 i;
@@ -527,6 +577,7 @@ s32 npcEntry(const char* description, const char* animName) {
 static const Vec sZeroVec3 = {0.0f, 0.0f, 0.0f};
 #endif
 
+/** Looks up an enemy or NPC type in npcTribe by its Japanese name (nameJp); NULL if none matches. */
 NpcTribeInfo* npcGetTribe(const char* tribeName) {
     NpcTribeInfo* tribe;
 
@@ -538,6 +589,10 @@ NpcTribeInfo* npcGetTribe(const char* tribeName) {
     return NULL;
 }
 
+/**
+ * Removes one NPC: unlinks its slaves and its prev/next group links, frees its animation pose and slot,
+ * and lowers the list count.
+ */
 void npcDelete(NpcEntry* entry) {
     int i;
     NpcEntry* slave;
@@ -571,6 +626,7 @@ void npcDelete(NpcEntry* entry) {
     npcGetWorkPtrInline()->count--;
 }
 
+/** Deletes this NPC, everything linked after it with next, and all their slaves, last link first. */
 void _npcDeleteGroup(NpcEntry* entry) {
     int i;
 
@@ -587,6 +643,10 @@ void _npcDeleteGroup(NpcEntry* entry) {
     npcDelete(entry);
 }
 
+/**
+ * Deletes an NPC's whole group: goes to its master, then back along prev to the first link,
+ * and deletes the chain with all slaves.
+ */
 void npcDeleteGroup(NpcEntry* entry) {
     if (entry->master) {
         entry = entry->master;
@@ -612,6 +672,7 @@ f32 sinfd(f32 degrees);
 void npcKoopaModeMain(void);
 BOOL npcCheckBlow(NpcEntry* npc);
 #ifdef VERSION_G8ME01
+/** US: probe the wall from a copy of the position first, then slide along it */
 // US: probe the wall from a copy of the position first, then slide along it
 static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
     f32 wx = entry->position.x;
@@ -626,6 +687,15 @@ static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
     }
 }
 #endif
+/**
+ * Per-frame NPC update (from mariost.c).
+ * For each live NPC: timers, wall-checked movement, gravity, pushing Mario aside,
+ * walk/run/stay animations from its speed, half speed in the low part of kpa_03;
+ * then the event interrupts: blown by Flurrie (8), left its territory (4),
+ * lost Mario while chasing (2) or spotted him (1), handed to npcCheckInterrupt.
+ * Then on-screen culling, draw, shadow, blur and offscreen registration.
+ * Last it runs the first-strike banner and the field battle mode (encounter, talk or battle).
+ */
 void npcMain(void) {
     const char* kpaSfx;
     NpcWork* npcwork;
@@ -1137,6 +1207,10 @@ void npcMain(void) {
 static const Vec sZeroVec3 = {0.0f, 0.0f, 0.0f};
 #endif
 
+/**
+ * Finds a live NPC by name in the current list.
+ * If none matches it returns the slot past the end of the list, so callers must know the NPC exists.
+ */
 NpcEntry* npcNameToPtr(const char* name) {
     NpcWork* wp;
     s32 i;
@@ -1154,6 +1228,7 @@ NpcEntry* npcNameToPtr(const char* name) {
     return entry;
 }
 
+/** Finds a live NPC by name in the current list; NULL if none matches. */
 NpcEntry* npcNameToPtr_NoAssert(const char* name) {
     NpcWork* wp;
     s32 i;
@@ -1174,6 +1249,10 @@ NpcEntry* npcNameToPtr_NoAssert(const char* name) {
     return entry;
 }
 
+/**
+ * Sets the stay and talk animations npcSetStayPose and npcSetTalkPose use for "mario";
+ * mario.c switches them for Mario's forms and Bowser, and a script helper in evt_npc.c can set them too.
+ */
 void npcSetMarioAutoTalkPose(const char* stayPose, const char* talkPose) {
     strcpy(MarioStayPose, stayPose);
     strcpy(MarioTalkPose, talkPose);
@@ -1181,6 +1260,10 @@ void npcSetMarioAutoTalkPose(const char* stayPose, const char* talkPose) {
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+/**
+ * name is non-const as in the original: through a const char* the scheduler moves the first load up into the
+ * register saves (MWCC treats const loads as not aliasing the stores).
+ */
 // name is non-const as in the original: through a const char* the scheduler moves the first load up into the
 // register saves (MWCC treats const loads as not aliasing the stores).
 void npcSetTalkPose(char* name) {
@@ -1394,10 +1477,15 @@ void npcMoveG(NpcEntry* npc) {
     }
 }
 
+/** Sets the NPC's facing direction to angle, normalised to 0-360 degrees. */
 void npcTuningRy(NpcEntry* npc, f32 angle) {
     npc->direction = reviseAngle(angle);
 }
 
+/**
+ * Reduces the NPC's facing direction to the side it faces on screen:
+ * 90 (right) when below 180 degrees, else 270 (left).
+ */
 f32 npcTransRytoFaceDir(NpcEntry* npc) {
     if (reviseAngle(npc->direction) < 180.0f) {
         return 90.0f;
@@ -1405,6 +1493,10 @@ f32 npcTransRytoFaceDir(NpcEntry* npc) {
     return 270.0f;
 }
 
+/**
+ * Adds half of the move (dx, dz), with the part into the wall normal (nx, nz) removed, to *outX / *outZ,
+ * so the NPC slides along the wall.
+ */
 static inline void npcSideSlide(f32* outX, f32* outZ, f32 dx, f32 dz, f32 nx, f32 nz) {
     f32 d = dx * nx + dz * nz;
     f32 ax = 0.5f * (dx - d * nx);
@@ -1413,6 +1505,11 @@ static inline void npcSideSlide(f32* outX, f32* outZ, f32 dx, f32 dz, f32 nx, f3
     *outZ += az;
 }
 
+/**
+ * Moves an NPC by (dx, dz) from its position into *outX / *outZ with wall collision:
+ * rays at 20%, 40% and 75% of its height (the middle one only for steep walls), slide along a hit wall and,
+ * with NPC_FLAG_WALL_BOUNCE, reflect *angle off it. Returns the wall hit, or NULL after the full move.
+ */
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz) {
     f32 hx, hy, hz, dist, nx, ny, nz;
     f32 height;
@@ -1484,6 +1581,10 @@ HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 d
     return NULL;
 }
 
+/**
+ * Returns an NPC whose X/Z distance from (x, y, z) is under range (the last one in the list if several),
+ * or NULL; y is not compared. Used so blocks and partners do not end up inside an NPC.
+ */
 NpcEntry* npcNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
     NpcWork* wp;
     NpcEntry* entry;
@@ -1513,14 +1614,24 @@ NpcEntry* npcNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
     return found;
 }
 
+/** Returns the field battle state (gp->fbatData). */
 FieldBattleData* fbatGetPointer(void) {
     return gp->fbatData;
 }
 
+/**
+ * Sets the field battle mode (0 off, 1 normal, 2 talking, 3 hit a friendly NPC, 5 battle, 7 pause menu, ...);
+ * called from scripts and the pause menu.
+ */
 void fbatChangeMode(s16 mode) {
     gp->fbatData->mode = mode;
 }
 
+/**
+ * Prepares the first-strike banner for an FbatHitKind (shown once fbatSetAttackAnnounceEnable runs):
+ * "You struck first!" sliding across in red for Mario's and the partner's first strikes,
+ * "Your foe struck first!" in blue held in place for the enemy's, nothing for plain contact.
+ */
 void fbatSetAttackAnnounce(s32 hitKind) {
     FirstStrikeInfo* firstStrike = &gp->fbatData->firstStrike;
 
@@ -1551,10 +1662,15 @@ void fbatSetAttackAnnounce(s32 hitKind) {
     }
 }
 
+/**
+ * Shows the first-strike banner prepared by fbatSetAttackAnnounce; npcMain draws it from then on.
+ * No callers in src (fbatBattleMode sets the flag directly).
+ */
 void fbatSetAttackAnnounceEnable(void) {
     gp->fbatData->firstStrike.enabled = TRUE;
 }
 
+/** Plain multiply, so the banner's coordinates are scaled by 0.1 in the order the original code did it. */
 static inline f32 mulf(f32 a, f32 b) { return a * b; }
 void npcStrippedAnnouncePool(f32* f) {
     f[0] = -600.0f;
@@ -1642,6 +1758,7 @@ void marioChgMotJump2(void);
 f32 marioGetDispDir(void);
 void npcKoopaModeEncountCheck(void);
 
+/** Yaw of the 3D camera in degrees (0-360), from its look direction. */
 static inline f32 fbat_camAngle(void) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
     f32 dx = camera->cameraAt.x - camera->cameraPos.x;
@@ -1653,6 +1770,10 @@ static inline f32 fbat_camAngle(void) {
     return angle;
 }
 
+/**
+ * Starts the battle for an enemy Mario hit or touched:
+ * switches the field battle mode from 1 (normal) to 5 (battle). Returns FALSE when the mode was not 1.
+ */
 static inline BOOL fbat_setHit(NpcEntry* npc) {
     FieldBattleData* d = gp->fbatData;
     if (d->mode != 1) {
@@ -1942,6 +2063,12 @@ void fbatEncountCheck(void) {
     npcKoopaModeEncountCheck();
 }
 
+/**
+ * Field battle modes 2 (talk) and 3 (hit a friendly NPC):
+ * stops the NPC's move event, turns it to Mario,
+ * locks Mario and the partner and runs its talk event (its dead event for mode 3);
+ * when that ends, restarts the NPC and its animation and returns to mode 1.
+ */
 void fbatTalkMode(void) {
     FieldBattleData* data = gp->fbatData;
     NpcEntry* npc = data->npc;
@@ -2031,6 +2158,15 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
     } while (i < 8);
 }
 
+/**
+ * Field battle mode 5, the battle with the enemy hit or touched.
+ * Skips the fight with a win when Bump Attack (or First Attack after Mario struck first) beats a weaker enemy;
+ * otherwise starts the battle sequence and waits for it.
+ * Afterwards: plays Merlee's coin bonus (coins x3) if her curse fired,
+ * works out the coin drop (more with Money Money, +1 for a first-strike bonus), then kills the enemy's group,
+ * or, if it still holds stolen items, keeps it alive and drops the recovered ones.
+ * Fleeing (result 4) gives Mario 3 seconds of invincibility while he drops coins.
+ */
 void fbatBattleMode(void) {
     FieldBattleData* data;
     NpcWork* wp;
@@ -2250,6 +2386,10 @@ void fbatBattleMode(void) {
     }
 }
 
+/**
+ * Marks one NPC dead (NPC_INTERRUPT_DEAD and NPC_STATUS_DEAD), keeps how it died in koopaEncounterType,
+ * and with NPC_FLAG_RECORD_DEFEAT sets its setup index bit in deadInfo so it stays gone.
+ */
 void _npcDead(NpcEntry* npc, u16 reason) {
     npc->interruptFlags |= NPC_INTERRUPT_DEAD;
     npc->statusFlags |= NPC_STATUS_DEAD;
@@ -2259,6 +2399,7 @@ void _npcDead(NpcEntry* npc, u16 reason) {
     }
 }
 
+/** Marks this NPC, everything linked after it with next, and all their slaves dead, last link first. */
 void _npcGroupDead(NpcEntry* entry, u16 reason) {
     int i;
 
@@ -2273,6 +2414,10 @@ void _npcGroupDead(NpcEntry* entry, u16 reason) {
     _npcDead(entry, reason);
 }
 
+/**
+ * Marks an NPC's whole group dead (from its master and the first prev link), so each runs its dead event;
+ * reason says how (Bowser stage hazards, a block, 0 for a won battle).
+ */
 void npcGroupDead(NpcEntry* entry, u16 reason) {
     if (entry->master) {
         entry = entry->master;
@@ -2283,6 +2428,11 @@ void npcGroupDead(NpcEntry* entry, u16 reason) {
     _npcGroupDead(entry, reason);
 }
 
+/**
+ * Returns the NPC Mario could talk to this frame, or NULL;
+ * casedrv uses it so jumping on, standing on or pushing an object does not fire
+ * while an NPC is in talking range.
+ */
 NpcEntry* fbatNpcTalkCheck(void) {
     NpcWork* wp = npcGetWorkPtrInline();
     if (wp->talkTarget && marioChkTalkable()) {
@@ -2291,6 +2441,11 @@ NpcEntry* fbatNpcTalkCheck(void) {
     return NULL;
 }
 
+/**
+ * Returns the NPC Mario is hitting or touching now (fbatHitCheck with fbatEncountCheck's flags 0x13F1),
+ * without the result details.
+ * Its one caller is rsh_02's toron_check, which uses it to catch the Zip Toad (Toron).
+ */
 NpcEntry* fbatHitCheckAll(void) {
     return fbatHitCheck(FBAT_CHECK_ENEMY | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_SPIN_HAMMER | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_TOUCH | FBAT_CHECK_CURRENT, NULL);
 }
@@ -2309,6 +2464,10 @@ s32 nokonokoGetStatus(PartyEntry* party);
 NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r);
 NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
 
+/**
+ * Whether Mario can hit or touch NPCs now: not during map events, outside SEQ_GAME, on the boat,
+ * while Vivian hides him, while he is hurt, or while the given NPC is in its post-battle hit cooldown.
+ */
 static inline BOOL fbat_canHit(NpcEntry* npc) {
     MarioWork* m = marioGetPtr();
     NpcWork* wp = npcGetWorkPtrInline();
@@ -2343,6 +2502,15 @@ typedef struct {
 } SinTbl;
 static const SinTbl sSinTbl = {{0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101}};
 
+/**
+ * Finds the NPC Mario or the partner hits this frame.
+ * flags pick the checks: 0x20 touch/jump, 0x40 hammer, 0x80 spin hammer, 0x100 Koops' shell,
+ * 0x200 Bobbery's bomb; 0x10 also checks enemy contact (and no checks while invincible),
+ * 0x1 tests only the current hammer frame instead of the whole swing,
+ * 0x1000 tests enemies instead of friendly NPCs, 0x2000 only NPCs whose reactionFlags allow that hit,
+ * without setting the banner.
+ * Returns the closest NPC hit and writes the FbatHitResult (kind first) to the second argument if given.
+ */
 void* fbatHitCheck(u32 flags, void* result) {
     u32 f1000a;
     u32 f20;
@@ -2649,6 +2817,10 @@ void npcStrippedHitPool(f32* f) {
     f[0] = 15.0f;
 }
 
+/**
+ * Sphere test of the point (x, y, z) with radius r against an NPC's upright cylinder (half its width);
+ * writes the distance to *dist and returns the NPC on a hit, else NULL.
+ */
 NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r) {
     f32 dx = x - npc->position.x;
     f32 dy = y - npc->position.y;
@@ -2668,6 +2840,10 @@ NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 
     return NULL;
 }
 
+/**
+ * Tests the hammer head at every frame of the swing (0 to 11) against an NPC;
+ * returns the NPC at the first frame that hits, with the distance in *dist.
+ */
 NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle) {
     f32 t;
     f32 d;
@@ -2754,6 +2930,7 @@ BOOL npcCheckInterrupt(NpcEntry* npc) {
     return FALSE;
 }
 
+/** Rolls the 16 random battle values of an NPC (battleInfo.random) inside the setup's per-value [min, max] ranges. */
 static inline void npcRandField(NpcBattleInfo* info, NpcSetupBattleInfo* setup) {
     s32 i;
     for (i = 0; i < 16; i++) {
@@ -2854,6 +3031,10 @@ void npcSetupBattleInfo(NpcEntry* npc, NpcSetupBattleInfo* setup) {
     }
 }
 
+/**
+ * Gives an NPC the battle setup number battleInfoId from the current area's btlSetupTbl (-1 for none)
+ * and copies the result to its slaves.
+ */
 void npcSetBattleInfo(NpcEntry* npc, s32 battleInfoId) {
     NpcSetupBattleInfo* setup;
     char areaName[4];
@@ -2879,6 +3060,10 @@ void npcSetBattleInfo(NpcEntry* npc, s32 battleInfoId) {
     }
 }
 
+/**
+ * Freezes every enemy NPC (those with battle info) for an event: stops its move event and animation.
+ * Used by the pause menu, Mario taking damage, case events and a script helper.
+ */
 void npcStopForEvent(void) {
     NpcWork* wp;
     s32 i;
@@ -2901,6 +3086,7 @@ void npcStopForOneEvent(NpcEntry* npc) {
     }
 }
 
+/** Unfreezes every NPC that npcStopForEvent froze. */
 void npcStartForEvent(void) {
     NpcWork* wp;
     s32 i;
@@ -2915,6 +3101,7 @@ void npcStartForEvent(void) {
     }
 }
 
+/** Unfreezes one NPC frozen by npcStopForOneEvent: restarts its move event and animation. */
 void npcStartForOneEvent(NpcEntry* npc) {
     if (npc && npc->flags & NPC_FLAG_READY && npc->flags & NPC_FLAG_STOP_FOR_EVENT && npc->statusFlags & NPC_STATUS_STOPPED) {
         npc->statusFlags &= ~NPC_STATUS_STOPPED;
@@ -2923,10 +3110,12 @@ void npcStartForOneEvent(NpcEntry* npc) {
     }
 }
 
+/** Sets the named NPC's colour; alpha below 255 makes npcMain draw it translucent. */
 void npcSetColor(const char* name, GXColor color) {
     npcNameToPtr(name)->color = color;
 }
 
+/** Turns on the motion blur trail for the named NPC, with the position history filled with its current position. */
 void npcBlurOn(const char* name) {
     NpcEntry* npc = npcNameToPtr(name);
 
@@ -2938,28 +3127,37 @@ void npcBlurOn(const char* name) {
     npc->positionHistory[4] = npc->position;
 }
 
+/** Turns off the named NPC's motion blur trail. */
 void npcBlurOff(const char* name) {
     npcNameToPtr(name)->flags &= ~NPC_FLAG_BLUR;
 }
 
+/** Reads one of the NPC's battle setup work values (battleInfo.btlSetupWork[index]); used by a script helper. */
 s32 npcGetBtlSetupWork(NpcEntry* npc, s32 index) {
     return npc->battleInfo.btlSetupWork[index];
 }
 
+/** Writes one of the NPC's battle setup work values (battleInfo.btlSetupWork[index]). */
 void npcSetBtlSetupWork(NpcEntry* npc, s32 index, s32 value) {
     npc->battleInfo.btlSetupWork[index] = value;
 }
 
+/** Makes slave the id-th slave (0-3) of npc; slaves are deleted, killed and given battle info with their master. */
 void npcSetSlave(NpcEntry* npc, NpcEntry* slave, s32 id) {
     slave->master = npc;
     npc->slaves[id] = slave;
 }
 
+/** Chains other after npc in a group (next/prev), so the group is deleted or killed together. */
 void npcSetLink(NpcEntry* npc, NpcEntry* other) {
     npc->next = other;
     other->prev = npc;
 }
 
+/**
+ * Looks up a name in a table of name/value pairs ending with a NULL name and returns its value,
+ * or 0 (NPC_TERRITORY_TYPE_NOTHING). database.c uses it for territory types and battle setup numbers.
+ */
 NpcTerritoryType dbGetDefData(NpcTerritoryInfo* info, const char* description) {
     NpcTerritoryType type;
 
@@ -2977,6 +3175,10 @@ NpcTerritoryType dbGetDefData(NpcTerritoryInfo* info, const char* description) {
     return type;
 }
 
+/**
+ * On map load (seq_mapchange): starts the init event of every NPC that has one (replacing an old one);
+ * the NPCs stay inactive until npcWaitAllInitEvtEnd sees it finish.
+ */
 void npcExecAllInitEvt(void) {
     NpcWork* wp;
     s32 i;
@@ -3005,6 +3207,10 @@ void npcExecAllInitEvt(void) {
     }
 }
 
+/**
+ * On map load: activates each NPC whose init event has finished (or that has none).
+ * Returns TRUE once no init event was running at the start of the check.
+ */
 BOOL npcWaitAllInitEvtEnd(void) {
     NpcWork* wp;
     BOOL done;
@@ -3033,6 +3239,7 @@ BOOL npcWaitAllInitEvtEnd(void) {
     return done;
 }
 
+/** On map load, after the init events: starts every NPC's move (regular) event, replacing any running one. */
 void npcExecAllReglEvt(void) {
     NpcWork* wp;
     s32 i;
@@ -3057,6 +3264,10 @@ void npcExecAllReglEvt(void) {
     }
 }
 
+/**
+ * Script helper for _evt_majinai_coin_up_effect:
+ * sets args[0] to 1 when Merlee has no curse uses left (so her "last time" message follows), else 0.
+ */
 USER_FUNC(_check) {
     EvtWord* args = event->args;
     s32 index = *args++;
@@ -3085,6 +3296,10 @@ USER_FUNC(_majinai_effect) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Field timing of Merlee's spell sounds: plays the five incantation sounds at LW(0..2) at frames 29, 229, 319,
+ * 399 and 404.
+ */
 EVT_BEGIN(evt_majinai_effect_se_fld)
     CALL(btlevtcmd_ftomsec, 29, LW(10))
     WAIT_MS(LW(10))
@@ -3157,6 +3372,7 @@ void npcGetBackItemEntry(NpcEntry* npc) {
     }
 }
 
+/** Forgets all recorded enemy defeats (deadInfo), so they come back; called from the game over sequence. */
 void npcClearDeadInfo(void) {
     memset(gp->fbatData->deadInfo, 0, sizeof(gp->fbatData->deadInfo));
 }
@@ -3168,6 +3384,11 @@ void npcStrippedKoopaPool(f32* f, const char** p) {
     p[1] = "SFX_KUPPA_3RD_WATER_FALL1";
 }
 
+/**
+ * Field battle mode 1, the normal field mode despite the name:
+ * runs fbatEncountCheck, then on Bowser stages (characterId 2) pays the bonus for stomping two
+ * or more enemies in one jump and resets the fire combo when he is not breathing fire.
+ */
 void npcKoopaModeMain(void) {
     s32 jump;
     FieldBattleData* data;
@@ -3194,6 +3415,11 @@ void npcKoopaModeMain(void) {
     }
 }
 
+/**
+ * Bowser stage enemies: kills each with the hazard kpaEnemyHitChk reports (reasons 1, 2, 4),
+ * takes Bowser's power down on a hit, or kills it when it stands on lava ("a_magu").
+ * Each reason only once (hazardFlags).
+ */
 void npcKoopaModeEncountCheck(void) {
     NpcWork* wp;
     FieldBattleData* data;
@@ -3241,6 +3467,10 @@ void npcKoopaModeEncountCheck(void) {
     }
 }
 
+/**
+ * Kills (reason 8) every Bowser stage enemy standing on the given hit object,
+ * e.g. a block bumped from below (evt_mobj.c); returns how many.
+ */
 s32 npcKoopaModeMobjBoundDeadCheck(HitEntry* hit) {
     NpcWork* wp;
     s32 i;
@@ -3266,10 +3496,19 @@ s32 npcKoopaModeMobjBoundDeadCheck(HitEntry* hit) {
     return count;
 }
 
+/**
+ * Called by Bobbery's field code when his bomb explodes,
+ * so fbatHitCheck tests the blast this frame (npcMain clears it).
+ */
 void fbatSandersBombTriggerOn(void) {
     gp->fbatData->sandersBombTrigger = TRUE;
 }
 
+/**
+ * Bowser stage score for a defeated enemy: 300 (400 for a bumped block, 0 for lava), +100 while invincible,
+ * multiplied by the fire combo count, capped at 10000; jump kills also add to the multi-stomp bonus.
+ * Shows the score above it and returns it.
+ */
 s32 npcCalcScore(NpcEntry* npc) {
     FieldBattleData* data = gp->fbatData;
     s32 score = 300;
@@ -3329,6 +3568,10 @@ BOOL npcCheckBlow(NpcEntry* npc) {
     return FALSE;
 }
 
+/**
+ * TRUE while a field battle mode other than off, normal or 8 is active (talk, battle, menu, ...),
+ * so item pick-ups and case events wait.
+ */
 // Descriptive name (not in the symbol maps).
 BOOL fbatPreventMarioEventChk(void) {
     s32 mode = gp->fbatData->mode;

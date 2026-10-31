@@ -200,6 +200,14 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
     return effect;
 }
 
+/**
+ * Type 0: each sparkle bursts out along its direction for 7 frames (speed_data, scale_data),
+ * then becomes type 10 and drifts off at a table-random angle, slowing 4% per frame, sinking and shrinking;
+ * types 0/10 end with the effect lifetime.
+ * Other types give each sparkle its own life (shown only in its last 20 frames):
+ * it pops in and falls under its gravity, and the effect ends once every sparkle is done.
+ * Each sparkle cycles through 8 shapes; drawn on the work's camera, layer 2.
+ */
 void effStardustMain(EffectEntry* effect) {
     EffStardustN64Work* work = effect->userdata;
     Vec position;
@@ -291,6 +299,11 @@ void effStardustMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws each visible sparkle as a camera-facing 8x8 quad cut from the 8-frame sparkle strip (texture 0x20),
+ * coloured from color_rotation_data scaled by the work's tint (see effStardustN64SetColor),
+ * each sparkle one step further on.
+ */
 void effStardustDisp(CameraId cameraId, EffectEntry* effect) {
     EffStardustN64Work* work;
     s32 i;
@@ -392,6 +405,7 @@ void effStardustDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Overrides the sparkle tint with the given red, green and blue. */
 void effStardustN64SetColor(EffectEntry* effect, f32 r, f32 g, f32 b) {
     EffStardustN64Work* work = effect->userdata;
     work->cr = r;
@@ -399,11 +413,13 @@ void effStardustN64SetColor(EffectEntry* effect, f32 r, f32 g, f32 b) {
     work->cb = b;
 }
 
+/** Sets the camera the sparkles are drawn on. */
 void effStardustN64SetDrawCam(EffectEntry* effect, s32 camera) {
     EffStardustN64Work* work = effect->userdata;
     work->camera = camera;
 }
 
+/** Sets the overall scale of the sparkles. */
 void effStardustN64SetScale(EffectEntry* effect, f32 scale) {
     EffStardustN64Work* work = effect->userdata;
     work->scale = scale;

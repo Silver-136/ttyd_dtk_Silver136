@@ -85,6 +85,11 @@ void marioSetForceMove(s32 frames, f32 dir, f32 spd);
     }                                                   \
     return EVT_RETURN_DONE;
 
+/**
+ * True when Mario's motion counts as standing on the ground:
+ * stay, walk or dash, slit/roll/ship with no air time, or riding Yoshi.
+ * The landon and rideon waits pair it with a non-null hitobjStandOn.
+ */
 static inline BOOL marioChkLanding(void) {
     MarioWork* mp = marioGetPtr();
     s32 m = mp->currMotionId;
@@ -106,6 +111,11 @@ static inline BOOL marioChkLanding(void) {
     return FALSE;
 }
 
+/**
+ * Snaps Mario onto the ground if the next vy step reaches it (the roll search in Tube Mode):
+ * clears the jump state and air timers, records the jump distance, re-enables camera Y follow.
+ * True when he landed.
+ */
 static inline BOOL marioLandChk(f32 vy) {
     MarioWork* mp = marioGetPtr();
     f32 a;
@@ -134,6 +144,11 @@ static inline BOOL marioLandChk(f32 vy) {
 
 void partyMoveBehindMario3(PartyEntry* party, s32 a, f32 dir);
 
+/**
+ * Prepares a pipe arrival (evt_bero's pipe entry script): disables floors;
+ * arg 4 (sideways pipe) also shrinks Mario and both partners to nothing and hides them,
+ * arg 5 only turns their shadows off.
+ */
 USER_FUNC(evt_mario_dokan_prepare) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -168,6 +183,11 @@ USER_FUNC(evt_mario_dokan_prepare) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Plays Mario's paper pipe animation, then switches to the pipe motion;
+ * arg 0 = pipe type (evt_bero passes 2 up, 3 down, 5 sideways).
+ * Blocks while the spin runs; the partners leave as he goes in.
+ */
 USER_FUNC(evt_mario_paper_pose_dokan) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -350,6 +370,10 @@ const char* a_mario_group[] = {
     "M_A_2C", "M_B_3", "M_B_4", "M_J_5A", "M_J_5B", "M_S_4", "M_W_6", "M_V_2", "M_I_Y", NULL,
 };
 
+/**
+ * Blocks until Mario leaves the pipe motion; on the first call it sets sub-motion 100 to end it.
+ * Called at the end of evt_bero's pipe arrival script.
+ */
 USER_FUNC(evt_mario_dokan_end) {
     MarioWork* mp = marioGetPtr();
     if (isFirstCall && mp->currMotionId == MARIO_MOTION_DOKAN) {
@@ -362,11 +386,13 @@ USER_FUNC(evt_mario_dokan_end) {
     return EVT_RETURN_DONE;
 }
 
+/** Turns off Mario's paper animation (marioPaperOff) and returns to the normal 3D model. */
 USER_FUNC(evt_mario_paper_pose_off) {
     marioPaperOff();
     return EVT_RETURN_DONE;
 }
 
+/** Shows the "!" surprise balloon over Mario's head unless a scripted balloon is already up. */
 USER_FUNC(evt_mario_balloon_bikkuri) {
     MarioWork* mp = marioGetPtr();
     if (!(mp->dispFlags & MARIO_DISP_FLAG_EVT_BALLOON)) {
@@ -376,6 +402,7 @@ USER_FUNC(evt_mario_balloon_bikkuri) {
     return EVT_RETURN_DONE;
 }
 
+/** Shows the "..." balloon over Mario's head unless a scripted balloon is already up. */
 USER_FUNC(evt_mario_balloon_tenten) {
     MarioWork* mp = marioGetPtr();
     if (!(mp->dispFlags & MARIO_DISP_FLAG_EVT_BALLOON)) {
@@ -385,6 +412,7 @@ USER_FUNC(evt_mario_balloon_tenten) {
     return EVT_RETURN_DONE;
 }
 
+/** Removes the scripted balloon shown by the two helpers above, if any. */
 USER_FUNC(evt_mario_balloon_off) {
     MarioWork* mp = marioGetPtr();
     if (mp->dispFlags & MARIO_DISP_FLAG_EVT_BALLOON) {
@@ -409,6 +437,7 @@ USER_FUNC(evt_mario_cont_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Arg 0 = on/off: enables or disables pad input for Mario and the partners together. */
 USER_FUNC(evt_mario_key_onoff) {
     EvtWord* args = event->args;
     marioGetPtr();
@@ -422,62 +451,77 @@ USER_FUNC(evt_mario_key_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets MarioWork.enableKeyMask to arg 0, limiting which buttons Mario reacts to;
+ * used by the tutorial lectures (evt_lect_*) and the Pianta Parlor games.
+ */
 USER_FUNC(evt_mario_set_enable_key) {
     s32 key = evtGetValue(event, event->args[0]);
     marioGetPtr()->enableKeyMask = key;
     return EVT_RETURN_DONE;
 }
 
+/** Puts Mario in background mode (marioBgmodeOn), used when he walks into the scenery depth. */
 USER_FUNC(evt_mario_bgmode_on) {
     marioBgmodeOn();
     return EVT_RETURN_DONE;
 }
 
+/** Takes Mario out of background mode (marioBgmodeOff). */
 USER_FUNC(evt_mario_bgmode_off) {
     marioBgmodeOff();
     return EVT_RETURN_DONE;
 }
 
+/** Lets the camera follow Mario's position again (marioUpdateCamPos). */
 USER_FUNC(evt_mario_cam_on) {
     marioUpdateCamPos();
     return EVT_RETURN_DONE;
 }
 
+/** Stops the camera from following Mario's position (marioNoUpdateCamPos). */
 USER_FUNC(evt_mario_cam_off) {
     marioNoUpdateCamPos();
     return EVT_RETURN_DONE;
 }
 
+/** Keeps the camera height fixed while Mario jumps (turns camera Y follow off). */
 USER_FUNC(evt_mario_cam_keep_on) {
     camFollowYOff();
     return EVT_RETURN_DONE;
 }
 
+/** Releases a camera height kept by evt_mario_cam_keep_on (turns camera Y follow back on). */
 USER_FUNC(evt_mario_cam_keep_off) {
     camFollowYOn();
     return EVT_RETURN_DONE;
 }
 
+/** Makes the camera follow Mario's height again; same effect as evt_mario_cam_keep_off. */
 USER_FUNC(evt_mario_cam_y_on) {
     camFollowYOn();
     return EVT_RETURN_DONE;
 }
 
+/** Stops the camera following Mario's height; same effect as evt_mario_cam_keep_on. */
 USER_FUNC(evt_mario_cam_y_off) {
     camFollowYOff();
     return EVT_RETURN_DONE;
 }
 
+/** Resets the camera Mario is drawn with to the default (marioInitCamId). */
 USER_FUNC(evt_mario_init_camid) {
     marioInitCamId();
     return EVT_RETURN_DONE;
 }
 
+/** Arg 0 = camera id Mario is drawn with (marioSetCamId); the lectures and some maps switch it. */
 USER_FUNC(evt_mario_set_camid) {
     marioSetCamId(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 
+/** Writes Mario's position to args 1-3 as floats; a non-zero arg 0 reports Y one unit lower. */
 USER_FUNC(evt_mario_get_pos) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -493,6 +537,7 @@ USER_FUNC(evt_mario_get_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Teleports Mario to the float position in args 0-2. */
 USER_FUNC(evt_mario_set_pos) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -502,6 +547,10 @@ USER_FUNC(evt_mario_set_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets Mario's per-frame position correction (floorMove) from args 0-2;
+ * moving floors use it to carry him (evt_movefloor and maps such as gor_00, kpa_03, las_21).
+ */
 USER_FUNC(evt_mario_set_hosei_xyz) {
     MarioWork* mp = marioGetPtr();
     EvtWord* args = event->args;
@@ -511,24 +560,31 @@ USER_FUNC(evt_mario_set_hosei_xyz) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets Mario's scripted move speed from arg 0, given in units per second (divided by the framerate). */
 USER_FUNC(evt_mario_set_mov_spd) {
     f32 spd = evtGetFloat(event, event->args[0]) / (f32)gp->framerate;
     marioGetPtr()->baseSpeed = spd;
     return EVT_RETURN_DONE;
 }
 
+/** Writes Mario's move speed to arg 0 in units per second. */
 USER_FUNC(evt_mario_get_mov_spd) {
     s32 id = event->args[0];
     evtSetFloat(event, id, (f32)gp->framerate * marioGetPtr()->baseSpeed);
     return EVT_RETURN_DONE;
 }
 
+/** Writes Mario's view direction (directionView, degrees) to arg 0. */
 USER_FUNC(evt_mario_get_dir) {
     s32 id = event->args[0];
     evtSetFloat(event, id, marioGetPtr()->directionView);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Turns Mario's sprite to face arg 0 (degrees) over arg 1 ms, blocking during the turn;
+ * arg 2 non-zero waits one more call and then zeroes the view and move directions. With 0 ms he turns at once.
+ */
 USER_FUNC(evt_mario_set_dir) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -574,6 +630,7 @@ USER_FUNC(evt_mario_set_dir) {
     return EVT_RETURN_DONE;
 }
 
+/** Realigns Mario's move direction to his display direction, then zeroes directionView and moveDirection. */
 USER_FUNC(evt_mario_set_reardir) {
     MarioWork* mp = marioGetPtr();
     marioAdjustMoveDir();
@@ -582,12 +639,14 @@ USER_FUNC(evt_mario_set_reardir) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes Mario's sprite display direction (displayDirection, degrees) to arg 0. */
 USER_FUNC(evt_mario_get_dispdir) {
     s32 id = event->args[0];
     evtSetFloat(event, id, marioGetPtr()->displayDirection);
     return EVT_RETURN_DONE;
 }
 
+/** Sets Mario's sprite display direction and its target to arg 0 (degrees, normalised). */
 USER_FUNC(evt_mario_set_dispdir) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -596,6 +655,7 @@ USER_FUNC(evt_mario_set_dispdir) {
     return EVT_RETURN_DONE;
 }
 
+/** Turns Mario left or right to face the NPC named in arg 0, relative to the camera yaw. */
 USER_FUNC(evt_mario_set_dir_npc) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -628,11 +688,16 @@ USER_FUNC(evt_mario_set_dir_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Realigns Mario's move direction with the way his sprite faces (marioAdjustMoveDir). */
 USER_FUNC(evt_mario_adjust_dir) {
     marioAdjustMoveDir();
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Restores Mario's idle animation for his motion (walk, dash or stand pose);
+ * does nothing while he is a plane, boat, tube or sideways paper. Uses the 8-bit pose in 8-bit Mario mode.
+ */
 USER_FUNC(evt_mario_set_normal_pose) {
     s32 i;
     BOOL notFound;
@@ -666,6 +731,11 @@ USER_FUNC(evt_mario_set_pose) {
     SETPOSE_BODY
 }
 
+/**
+ * Brings Mario back to his normal standing state before a cutscene:
+ * gets him off Yoshi or out of Vivian's shadow, cancels Tube Mode and paper slit,
+ * waits for a partner ride to end. Blocks until done.
+ */
 USER_FUNC(evt_mario_normalize) {
     s32 ret = 0;
     MarioWork* mp = marioGetPtr();
@@ -807,6 +877,7 @@ USER_FUNC(evt_mario_normalize) {
     return ret;
 }
 
+/** Writes Mario's motion id to arg 0 (the previous one while a motion change is pending). */
 USER_FUNC(evt_mario_get_motion) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -839,6 +910,7 @@ USER_FUNC(evt_mario_chk_hipbump) {
     return EVT_RETURN_DONE;
 }
 
+/** Puts Mario in his talking motion (marioChgTalkMotion). */
 USER_FUNC(evt_mario_set_talk_motion) {
     marioChgTalkMotion();
     return EVT_RETURN_DONE;
@@ -854,12 +926,14 @@ USER_FUNC(evt_mario_cancel_roll_motion) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the name of Mario's current animation to arg 0. */
 USER_FUNC(evt_mario_get_pose) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], (EvtWord)marioGetPtr()->animName);
     return EVT_RETURN_DONE;
 }
 
+/** While Mario is in the air, forces his direction to arg 0; evt_bero uses it for jumps through exits. */
 USER_FUNC(evt_mario_set_force_dir) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -870,6 +944,10 @@ USER_FUNC(evt_mario_set_force_dir) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Walks Mario to (arg 0, arg 1) on the XZ plane in arg 2 ms (0 = at his own move speed);
+ * blocks until the forced move time runs out.
+ */
 USER_FUNC(evt_mario_mov_pos) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -894,6 +972,10 @@ USER_FUNC(evt_mario_mov_pos) {
     }
 }
 
+/**
+ * Walks Mario to (arg 0, arg 1) at arg 2 units per second (slower in background mode),
+ * blocks until the forced move ends, then snaps him onto the target. The most used walk helper in map scripts.
+ */
 USER_FUNC(evt_mario_mov_pos2) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -930,6 +1012,10 @@ USER_FUNC(evt_mario_party_door_halve_hitbox) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Direction a partner takes behind Mario after a door, from the camera yaw:
+ * 180 when the camera looks roughly along the X axis, else 270.
+ */
 static inline f32 doorAngle(f32 cam) {
     if (cam > 60.0f && cam < 120.0f) {
         return 180.0f;
@@ -1206,6 +1292,11 @@ USER_FUNC(evt_mario_party_bero_move) {
     return ret;
 }
 
+/**
+ * Jumps Mario to (args 0-2) in arg 3 ms on a parabola;
+ * arg 4 non-zero keeps his facing, arg 5 is the jump height (-1000 or less = 20).
+ * Lands on the ground found on the way; works in Tube Mode too.
+ */
 USER_FUNC(evt_mario_jump_pos) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -1515,6 +1606,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Blocks until Mario stands on ground (a hit object under him and a grounded motion). */
 USER_FUNC(evt_mario_wait_landon) {
     if (marioGetPtr()->hitobjStandOn && marioChkLanding()) {
         return EVT_RETURN_DONE;
@@ -1522,6 +1614,10 @@ USER_FUNC(evt_mario_wait_landon) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Blocks until Mario stands on something; same test as evt_mario_wait_landon,
+ * used for rides (evt_sub, usu_00, usu_01, yuu_03).
+ */
 USER_FUNC(evt_mario_wait_rideon) {
     if (marioGetPtr()->hitobjStandOn && marioChkLanding()) {
         return EVT_RETURN_DONE;
@@ -1529,6 +1625,7 @@ USER_FUNC(evt_mario_wait_rideon) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Writes 1 to arg 0 if Mario stands on ground (and yields), else 0; used in las_28. */
 USER_FUNC(evt_mario_check_landon) {
     EvtWord* args = event->args;
     if (marioGetPtr()->hitobjStandOn && marioChkLanding()) {
@@ -1539,6 +1636,10 @@ USER_FUNC(evt_mario_check_landon) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Bowser jumps to (args 0-2) with height arg 3 over arg 4 ms and ground-pounds, shaking the screen;
+ * used in the Super Koopa Bros. stage kpa_07.
+ */
 USER_FUNC(evt_koopa_hip_attack) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -1613,6 +1714,10 @@ USER_FUNC(evt_koopa_hip_attack) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Bowser breathes fire for arg 0 ms, holding fireHold until the time runs out;
+ * used in his Rogueport (gor_00) and Twilight Town (usu_00) interludes.
+ */
 USER_FUNC(evt_koopa_fire) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -1634,6 +1739,7 @@ USER_FUNC(evt_koopa_fire) {
     return EVT_RETURN_YIELD;
 }
 
+/** Writes 1 to arg 0 if Bowser died in the Super Koopa Bros. stages (KPA_WORK_FLAG_DEAD), else 0. */
 USER_FUNC(evt_koopa_chk_dead) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -1641,6 +1747,12 @@ USER_FUNC(evt_koopa_chk_dead) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets (arg 0 non-zero, taken literally) or clears KpaWork flag 0x1000000, which makes Bowser's stay and walk
+ * motions (koopa_motion) use KPA_S_2 and KPA_W_2 instead of KPA_S_1 and KPA_W_1;
+ * set for gor_01's chapter 6 interlude in the Rogueport plaza.
+ * Guess: those are tired poses, from the name.
+ */
 USER_FUNC(evt_koopa_weary) {
     EvtWord* args = event->args;
     MarioWork* mp = marioGetPtr();
@@ -1652,14 +1764,20 @@ USER_FUNC(evt_koopa_weary) {
     return EVT_RETURN_DONE;
 }
 
+/** Blocks until Mario's forced move timer runs out. */
 USER_FUNC(evt_mario_wait_move_end) {
     return marioGetPtr()->forceMoveTimer ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
+/** Blocks while Mario's input is off (MARIO_FLAG_KEY_OFF). */
 USER_FUNC(evt_mario_wait_movable) {
     return (marioGetPtr()->flags & MARIO_FLAG_KEY_OFF) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
+/**
+ * Writes Mario's state to arg 0: 2 after passing through a paper slit, 0 standing still, 1 otherwise.
+ * Used in gor_01 and mri_05.
+ */
 USER_FUNC(evt_mario_get_state) {
     EvtWord id;
     EvtWord* args = event->args;
@@ -1678,12 +1796,16 @@ USER_FUNC(evt_mario_get_state) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the playable character to arg 0 (characterId: 0 Mario, 1 Peach, 2 Bowser). */
 USER_FUNC(evt_mario_get_mode) {
     s32 id = event->args[0];
     evtSetValue(event, id, marioGetPtr()->characterId);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Switches the playable character to arg 0 (0 Mario, 1 Peach, 2 Bowser); the Peach and Bowser interludes set it.
+ */
 USER_FUNC(evt_mario_set_mode) {
     marioSetCharMode(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
@@ -1700,16 +1822,25 @@ USER_FUNC(evt_koopa_set_level) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Disguises Peach as an X-Naut soldier (switches to Peach if needed);
+ * used in the X-Naut Fortress interludes (aji_01, aji_09, aji_10).
+ */
 USER_FUNC(evt_peach_transform_gundan_on) {
     peachTransformOn();
     return EVT_RETURN_DONE;
 }
 
+/** Ends Peach's X-Naut disguise. */
 USER_FUNC(evt_peach_transform_gundan_off) {
     peachTransformOff();
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets Peach's mood pose from arg 0: 0 normal, 1 after the shower, 2 invisible, 3 happy, 4 uneasy, 5 angry,
+ * 6 ordinary, 7 carrying. Used in the X-Naut Fortress (aji) interludes.
+ */
 USER_FUNC(evt_peach_set_condition) {
     switch (evtGetValue(event, event->args[0])) {
         case 0:
@@ -1740,6 +1871,7 @@ USER_FUNC(evt_peach_set_condition) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the current partner's member id to arg 0, or 0 when no partner is out. */
 USER_FUNC(evt_mario_get_party) {
     s32 id = event->args[0];
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -1747,6 +1879,7 @@ USER_FUNC(evt_mario_get_party) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the extra follower's member id (second party slot) to arg 0, or 0 when none. */
 USER_FUNC(evt_mario_get_exparty) {
     s32 id = event->args[0];
     PartyEntry* party = partyGetPtr(marioGetExtraPartyId());
@@ -1754,6 +1887,7 @@ USER_FUNC(evt_mario_get_exparty) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes to arg 0 whether the partner member id in arg 1 has joined the party (partyChkJoin). */
 USER_FUNC(evt_mario_chk_join_party) {
     EvtWord* args = event->args;
     s32 id = args[0];
@@ -1761,6 +1895,7 @@ USER_FUNC(evt_mario_chk_join_party) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the partner's member id to arg 0 while Mario is using the partner's field ability, else 0. */
 USER_FUNC(evt_mario_party_use_check) {
     s32 id = event->args[0];
     s32 val = 0;
@@ -1772,6 +1907,11 @@ USER_FUNC(evt_mario_party_use_check) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Brings back the previous partner of party slot arg 0 for a pipe arrival,
+ * hidden at scale 0 with floors off until the pipe script shows it;
+ * evt_bero's pipe entry calls it for both slots.
+ */
 USER_FUNC(evt_mario_set_prev_party_dokan) {
     s32 slot;
     EvtWord* args = event->args;
@@ -1805,6 +1945,10 @@ USER_FUNC(evt_mario_set_prev_party_dokan) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Brings partner member arg 1 into party slot arg 0 with its greeting entrance,
+ * blocking until it is out and in run mode 1. Does nothing if the slot is taken.
+ */
 USER_FUNC(evt_mario_hello_party) {
     s32 slot;
     EvtWord* args = event->args;
@@ -1839,6 +1983,10 @@ USER_FUNC(evt_mario_hello_party) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Brings follower member arg 0 into the second party slot with its entrance and waits for it;
+ * the position args 1-3 are read but unused. Used in muj_01.
+ */
 USER_FUNC(evt_mario_hello_exparty_pos) {
     s32 member;
     EvtWord* args = event->args;
@@ -1870,6 +2018,7 @@ USER_FUNC(evt_mario_hello_exparty_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Puts partner member arg 1 straight into party slot arg 0 (no entrance), unless the slot is taken. */
 USER_FUNC(evt_mario_set_party) {
     s32 slot;
     EvtWord* args = event->args;
@@ -1898,6 +2047,7 @@ USER_FUNC(evt_mario_set_party) {
     return EVT_RETURN_DONE;
 }
 
+/** Puts partner member arg 1 into party slot arg 0 at the position args 2-4, unless the slot is taken. */
 USER_FUNC(evt_mario_set_party_pos) {
     s32 slot;
     s32 member;
@@ -1927,6 +2077,9 @@ USER_FUNC(evt_mario_set_party_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Brings back the partner that was in slot arg 0 before (prevPartyMemberId), if any and the slot is free.
+ */
 USER_FUNC(evt_mario_set_prev_party) {
     s32 slot;
     EvtWord* args = event->args;
@@ -1958,6 +2111,7 @@ USER_FUNC(evt_mario_set_prev_party) {
     return EVT_RETURN_DONE;
 }
 
+/** Brings back slot arg 0's previous partner at the position args 1-3, if any and the slot is free. */
 USER_FUNC(evt_mario_set_prev_party_pos) {
     s32 slot;
     EvtWord* args = event->args;
@@ -1990,6 +2144,7 @@ USER_FUNC(evt_mario_set_prev_party_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Sends the partner in slot arg 0 away with its exit animation and blocks until the slot is empty. */
 USER_FUNC(evt_mario_goodbye_party) {
     MarioWork* mp = marioGetPtr();
     s32 slot = event->args[0];
@@ -2005,6 +2160,7 @@ USER_FUNC(evt_mario_goodbye_party) {
     return EVT_RETURN_DONE;
 }
 
+/** Removes the partner in slot arg 0 at once (partyKill); the most common way map scripts clear partners. */
 USER_FUNC(evt_mario_kill_party) {
     MarioWork* mp = marioGetPtr();
     s32 slot = event->args[0];
@@ -2020,6 +2176,10 @@ USER_FUNC(evt_mario_kill_party) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Removes the partner in slot arg 0 at once; for the second slot it uses partyKill2 instead.
+ * Used by the game over sequence, Rogueport and the Shadow Mario scripts.
+ */
 USER_FUNC(evt_mario_clear_party) {
     MarioWork* mp = marioGetPtr();
     s32 slot = event->args[0];
@@ -2035,16 +2195,19 @@ USER_FUNC(evt_mario_clear_party) {
     return EVT_RETURN_DONE;
 }
 
+/** Puts Mario in his pushing state (MARIO_FLAG_IS_PUSHING); used in jin_10. */
 USER_FUNC(evt_mario_push) {
     marioGetPtr()->flags |= MARIO_FLAG_IS_PUSHING;
     return EVT_RETURN_DONE;
 }
 
+/** Shows Mario asleep (event pose M_N_5A); used in mri_01, mri_03 and nok_01. */
 USER_FUNC(evt_mario_sleep_on) {
     marioChgEvtPose("M_N_5A");
     return EVT_RETURN_DONE;
 }
 
+/** Plays Mario's waking-up pose (M_N_5B) and blocks for 32 frames. */
 USER_FUNC(evt_mario_sleep_off) {
     if (isFirstCall) {
         marioChgEvtPose("M_N_5B");
@@ -2056,6 +2219,7 @@ USER_FUNC(evt_mario_sleep_off) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes 1 to arg 1 if Mario carries item arg 0 (pouchCheckItem), else 0; used in win_04. */
 USER_FUNC(evt_mario_check_key_item) {
     EvtWord* args = event->args;
     s32 item = evtGetValue(event, args[0]);
@@ -2068,6 +2232,7 @@ USER_FUNC(evt_mario_check_key_item) {
     return EVT_RETURN_DONE;
 }
 
+/** Removes one of item arg 0 from Mario's pouch (muj_05, usu_00, win_04). */
 USER_FUNC(evt_mario_dump_item) {
     pouchRemoveItem(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;

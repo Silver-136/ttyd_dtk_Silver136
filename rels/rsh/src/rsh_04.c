@@ -336,6 +336,10 @@ EVT_BEGIN(evt_allow_kamotsu)
     RETURN
 EVT_END()
 
+/**
+ * Helper loop for the lost documents scene: keeps turning Mario to face Detective Pennington every frame
+ * (chuumoku means "pay attention").
+ */
 EVT_BEGIN(evt_mario_chuumoku)
     LOOP(0)
         CALL(evt_mario_set_dir_npc, STRING("ポワン探偵"))
@@ -344,6 +348,7 @@ EVT_BEGIN(evt_mario_chuumoku)
     RETURN
 EVT_END()
 
+/** Helper loop for the lost documents scene: keeps turning the partner to face Detective Pennington every frame. */
 EVT_BEGIN(evt_party_chuumoku)
     LOOP(0)
         CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
@@ -714,6 +719,10 @@ static EVT_BEGIN(talk_syashou)
     RETURN
 EVT_END()
 
+/**
+ * Overheard background line of the salaryman (stg6_rsh_165_01) shown in a repeating balloon
+ * while Mario stands in cabin 3 on day 2 without talking to anybody; started by evt_powan_room.
+ */
 EVT_BEGIN(talk_sarary_repeat)
 #ifdef VERSION_G8ME01
     CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), NPC_FLAG_NO_TALK_BALLOON)
@@ -757,6 +766,7 @@ static EVT_BEGIN(init_sarary)
     RETURN
 EVT_END()
 
+/** Talk script of the salaryman in rsh_04: lines for the story stage (stg6_rsh_18, 79, 125, 166, 215, 229). */
 static EVT_BEGIN(talk_sarary)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_05_GALLEY_KETTLE_DISCOVERED)
@@ -830,6 +840,11 @@ EVT_BEGIN(talk_papa_mama)
     RETURN
 EVT_END()
 
+/**
+ * Overheard background line of Papa Narikin (stg6_rsh_85_01) shown in a repeating balloon
+ * while Mario stands in cabin 5 without talking to anybody; started by evt_narikin_room.
+ * Repeats the parents' conversation (talk_papa_mama) when Mario talks to him at the right stage.
+ */
 EVT_BEGIN(talk_papa_repeat)
 #ifdef VERSION_G8ME01
     CALL(evt_npc_flag_onoff, 1, STRING("ナリキンパパ"), NPC_FLAG_NO_TALK_BALLOON)
@@ -870,6 +885,7 @@ static EVT_BEGIN(init_papa)
     RETURN
 EVT_END()
 
+/** Talk script of Papa Narikin: by story stage; once the family has been introduced he runs talk_papa_mama. */
 static EVT_BEGIN(talk_papa)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
@@ -888,6 +904,11 @@ static EVT_BEGIN(talk_papa)
     RETURN
 EVT_END()
 
+/**
+ * Overheard background line of Mama Narikin (stg6_rsh_85_02),
+ * shown alongside talk_papa_repeat while Mario stands in cabin 5;
+ * repeats the parents' conversation (talk_papa_mama) when Mario talks to her at the right stage.
+ */
 EVT_BEGIN(talk_mama_repeat)
 #ifdef VERSION_G8ME01
     CALL(evt_npc_flag_onoff, 1, STRING("ナリキンママ"), NPC_FLAG_NO_TALK_BALLOON)
@@ -926,6 +947,7 @@ static EVT_BEGIN(init_mama)
     RETURN
 EVT_END()
 
+/** Talk script of Mama Narikin: by story stage; once the family has been introduced she runs talk_papa_mama. */
 static EVT_BEGIN(talk_mama)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
@@ -1051,6 +1073,10 @@ static EVT_BEGIN(talk_konari)
     RETURN
 EVT_END()
 
+/**
+ * Overheard background line of Detective Pennington (stg6_rsh_165_02) shown in a repeating balloon beside the
+ * salaryman's while Mario stands in cabin 3; started by evt_powan_room.
+ */
 EVT_BEGIN(talk_powan_repeat)
 #ifdef VERSION_G8ME01
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_TALK_BALLOON)
@@ -1256,6 +1282,7 @@ static ShelfAccessTbl3 access_tbl = {
     {NULL},
 };
 
+/** Trigger script for the shelves: prints the message in LW(1). */
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(LW(2), 0)
@@ -1271,6 +1298,7 @@ static EVT_BEGIN(evt_access)
     RETURN
 EVT_END()
 
+/** Registers the shelf triggers from access_tbl; each runs evt_access (or evt_tana_5 for tana_5). */
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
@@ -1283,6 +1311,7 @@ static EVT_BEGIN(evt_access_entry)
     RETURN
 EVT_END()
 
+/** Trigger on the west door (w_bero) on day 3: prints the message about the locked door. */
 static EVT_BEGIN(evt_door_msg)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT
@@ -1404,6 +1433,11 @@ EVT_BEGIN(evt_powan_room)
     RETURN
 EVT_END()
 
+/**
+ * Shared map init for the three variants of rsh_04 on the first trip:
+ * scenery, the three cabin doors, the NPCs, the baggage car door (open only while the story needs it),
+ * the shelf signs, the cabin watchers (evt_narikin_room, evt_powan_room), and the music for the story stage.
+ */
 EVT_BEGIN(rsh_04_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
@@ -1514,6 +1548,7 @@ EVT_BEGIN(rsh_04_a_init_evt)
     RETURN
 EVT_END()
 
+/** Init script of rsh_04_b (first visit): doors (a scripted entry skips the normal door run), shared init. */
 EVT_BEGIN(rsh_04_b_init_evt)
     IF_INT_EQUAL(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
         SET_VALUE(LW(0), PTR(bero_data_b))
@@ -1540,6 +1575,10 @@ static const char* window_tbl[] = {
     NULL,
 };
 
+/**
+ * Init script of rsh_04_c (first visit): doors (a scripted entry skips the normal door run),
+ * shared init and window scenery.
+ */
 EVT_BEGIN(rsh_04_c_init_evt)
     IF_INT_EQUAL(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
         SET_VALUE(LW(0), PTR(bero_data_c))
@@ -1688,6 +1727,11 @@ static BeroEntry bero_data_c_return[] = {
     {0},
 };
 
+/**
+ * Shared map init for rsh_04 on the second visit:
+ * scenery for the outbound or return trip, the cabin doors, NPCs, random passengers (evt_rsh_04_rnd_npc_entry),
+ * shelf signs and the music for the station the train has reached.
+ */
 EVT_BEGIN(rsh_04_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)

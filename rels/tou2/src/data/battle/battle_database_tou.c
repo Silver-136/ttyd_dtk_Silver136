@@ -1552,6 +1552,11 @@ NpcTerritoryInfo btl_tou_setup_no_tbl[] = {
     {0},
 };
 
+/**
+ * Battle stage background script for the Glitz Pit arenas:
+ * initialises the big monitor texture, then installs tou_gamen_screen_tev as TEV callback 8 on the "gamen"
+ * (screen) map object so the monitor shows the battle picture.
+ */
 EVT_BEGIN(bgset_tou_screen_evt)
     CALL(tou_gamen_screen_tev_init)
     WAIT_FRAMES(1)

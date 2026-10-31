@@ -733,6 +733,7 @@ BattleUnitType* battle_monosiri_same_tbl[] = {
     NULL
 };
 
+/** Returns the Tattle entry (log text, model and so on) for a battle unit type, indexed by BattleUnitType. */
 TattleEntry* battleGetUnitMonosiriPtr(s32 id) {
     return &monosiriMessageTable[id];
 }

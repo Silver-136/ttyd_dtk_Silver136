@@ -86,6 +86,7 @@ static u8 shibuki_dl_1_1[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x06, 0x
 static u8 shibuki_dl_1_2[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x06, 0x22, 0x00, 0x04, 0x22, 0x21, 0x00, 0x07, 0x23, 0x23, 0x00, 0x04, 0x1D, 0x1E, 0x00, 0x07, 0x18, 0x24, 0x00, 0x06, 0x1F, 0x1B, 0x00, 0x07, 0x1E, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static u8 shibuki_dl_1_3[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x06, 0x25, 0x00, 0x04, 0x20, 0x20, 0x00, 0x04, 0x21, 0x26, 0x00, 0x04, 0x19, 0x1D, 0x00, 0x05, 0x1A, 0x27, 0x00, 0x06, 0x1C, 0x1A, 0x00, 0x06, 0x1B, 0x00, 0x00, 0x00, 0x00, 0x00 };
 
+/** Shakes the camera lightly for 300 frames; effFallMain starts it with a smoke puff when a falling object hits. */
 static EVT_BEGIN(evt_shake)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.009765625f), 300)
     RETURN
@@ -244,6 +245,7 @@ EffectEntry* effFallEntry(s32 type, f32 x, f32 y, f32 z, f32 width, f32 drop, f3
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 
+/** Releases every element's animation poses and stops its sound effect. */
 static inline void effFallRelease(EffectEntry* effect) {
     s32 i;
     EffFallElem* e;
@@ -790,6 +792,7 @@ void effFallMain(EffectEntry* effect) {
 
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
+/** Draws the sprite-based falling objects (bugs, fork, bucket, tub, Koopa, light) as camera-facing quads. */
 void effFallDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx trans;
     Mtx scl;
@@ -981,6 +984,7 @@ void effFallDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Draws the meteor (EFF_inseki) animation poses at the object's position. */
 void effFallDispInseki(CameraId cameraId, EffectEntry* effect) {
     Mtx trans;
     Mtx scl;
@@ -1035,6 +1039,7 @@ void effFallDispInseki(CameraId cameraId, EffectEntry* effect) {
 }
 
 static const GXColor white255 = { 255, 255, 255, 255 };
+/** Draws the falling water (type 3) as translucent quads. */
 void effFallDispWater(CameraId cameraId, EffectEntry* effect) {
     Mtx trans;
     Mtx scl;
@@ -1169,6 +1174,10 @@ void effFallDispWater(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/**
+ * Returns 1 once the object has landed far enough for its hit to apply; the state threshold depends on type.
+ * Polled by the stage object code and by a Glitzville boss unit (tou2).
+ */
 s32 effFallCheckHit(EffectEntry* effect) {
     EffFallWork* w = effect->userdata;
     switch (w->type) {

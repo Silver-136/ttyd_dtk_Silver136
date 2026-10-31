@@ -55,6 +55,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Bobbing loop for floating object 0: binds the hit area in LW(1) (if any) to the map object in LW(0),
+ * waits a random 0.2 to 0.6 seconds, then every 130 ms steps through the 16 heights of the bobbing table
+ * (evt_dou_normal_puka), moves the object to that height and updates the hit area.
+ */
 // Bottle bobbing; the separate barrel event below keeps the same bytecode shape.
 static EVT_BEGIN(dou_puka_event_main0)
     IF_INT_NOT_EQUAL(LW(1), 0)
@@ -81,6 +86,11 @@ static EVT_BEGIN(dou_puka_event_main0)
     RETURN
 EVT_END()
 
+/**
+ * Bobbing loop for floating object 1: binds the hit area in LW(1) (if any) to the map object in LW(0),
+ * waits a random 0.2 to 0.6 seconds, then every 130 ms steps through the 16 heights of the bobbing table
+ * (evt_dou_normal_puka), moves the object to that height and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main1)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -119,6 +129,11 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Init script of dou_08, the room between dou_07 and dou_13:
+ * music and ambience, exits, waves, a floating bottle and barrel on the shared bobbing-platform routine,
+ * two ship-change platforms, gazigazi hazards, and hides the hole and crack objects (S_ana_before, S_ana_hibi).
+ */
 EVT_BEGIN(dou_08_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU8"))

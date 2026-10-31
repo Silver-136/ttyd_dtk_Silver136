@@ -514,6 +514,10 @@ BattleWeapon weapon_gance_body_attack = {
     {0, 25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Battle camera move to frame Macho Grubba: LW(0) = 2 snaps instantly, anything else moves in over 30 frames;
+ * the framing depends on how big he currently is. LW(0) = 1 also waits 600 ms for the camera to settle.
+ */
 EVT_BEGIN(macho_gance_zoom)
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(2))
     MULTIPLY_FLOAT(LW(2), FLOAT(10.0f))
@@ -1560,6 +1564,7 @@ static USER_FUNC(x_flag_wait) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: arg1 receives x_flag_data[arg0]. */
 static USER_FUNC(x_flag_get) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -1568,6 +1573,7 @@ static USER_FUNC(x_flag_get) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: adds arg1 to x_flag_data[arg0]. */
 static USER_FUNC(x_flag_add) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -1576,6 +1582,7 @@ static USER_FUNC(x_flag_add) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets x_flag_data[arg0] to arg1. */
 static USER_FUNC(x_flag_set) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -1584,6 +1591,11 @@ static USER_FUNC(x_flag_set) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Proportion helper (wariai enzan, ratio calculation): a linear blend over steps 1 to args[1] inclusive.
+ * With a = args[0] - 1 and b = args[1] - 1, args[4] receives (a * args[2] + (b - a) * args[3]) / b as a float,
+ * so step 1 gives args[3] and step args[1] gives args[2]. Not called in this unit.
+ */
 static USER_FUNC(wariai_enzan_0f) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
@@ -1595,6 +1607,10 @@ static USER_FUNC(wariai_enzan_0f) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Integer-result version of wariai_enzan_0f: args[4] receives (a * args[2] + (b - a) * args[3]) / b with a =
+ * args[0] - 1 and b = args[1] - 1. Not called in this unit.
+ */
 static USER_FUNC(wariai_enzan_0) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
@@ -1606,6 +1622,14 @@ static USER_FUNC(wariai_enzan_0) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Curve blend of args[2] and args[3] at step args[0] of args[1],
+ * weighted by the product of two interpolation curves:
+ * args[5] and args[6] are intplGetValue modes, where 14 to 27 run mode minus 14 mirrored and 28
+ * or more give args[2] outright. The float result goes to args[4].
+ * The mirrored branch of the second curve takes its mode from args[5] rather than args[6].
+ * Not called in this unit.
+ */
 USER_FUNC(wariai_enzan_1f_intpl_w) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
@@ -1644,6 +1668,12 @@ USER_FUNC(wariai_enzan_1f_intpl_w) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Curve blend of args[2] and args[3] at step args[0] of args[1]:
+ * args[5] is an intplGetValue mode (0 to 13; 14 to 27 run mode minus 14 mirrored;
+ * 28 or more give args[2] outright), and args[4] receives (1 - r) * args[2] + r * args[3] as a float,
+ * r running from 1 at step 1 toward 0. gance_body_attack_attack_event uses it with mode 5 for its roll.
+ */
 static USER_FUNC(wariai_enzan_1f_intpl) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
@@ -1668,6 +1698,12 @@ static USER_FUNC(wariai_enzan_1f_intpl) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Linear blend helper: with a = args[0] - 1 and b = args[1],
+ * args[4] receives (a * args[2] + (b - a) * args[3]) / b as a float,
+ * so step 1 gives args[3] and the value reaches args[2] one step after args[1].
+ * Used for the turns and growth in phase_event and gance_body_attack_attack_event.
+ */
 static USER_FUNC(wariai_enzan_1f) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
@@ -1679,6 +1715,10 @@ static USER_FUNC(wariai_enzan_1f) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Integer-result version of wariai_enzan_1f: args[4] receives (a * args[2] + (b - a) * args[3]) / b with a =
+ * args[0] - 1 and b = args[1]. Not called in this unit.
+ */
 static USER_FUNC(wariai_enzan_1) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;

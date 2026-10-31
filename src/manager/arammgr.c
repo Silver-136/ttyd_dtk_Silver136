@@ -13,6 +13,10 @@ static ARAMWork work;
 //.sdata
 static ARAMWork* wp = &work;
 
+/**
+ * Boot-time setup from mariost.c: starts AR/ARQ, claims a 0x3FC000-byte ARAM region and a table of 64 entries.
+ * mapdrv parks map data, textures and archives there between areas.
+ */
 void aramMgrInit(void) {
     memset(wp, 0, sizeof(ARAMWork));
     if (!ARCheckInit()) {
@@ -29,12 +33,21 @@ void aramMgrInit(void) {
     wp->tail = NULL;
 }
 
+/**
+ * ARQ completion for the compaction copies: clears the busy flag the copy loop spins on
+ * and invalidates the bounce buffer.
+ */
 void aramCallbackGarbage(u32 request) {
     wp->busy = 0;
     DCInvalidateRange(wp->buffer, wp->bufferSize);
     ICInvalidateRange(wp->buffer, wp->bufferSize);
 }
 
+/**
+ * Compacts ARAM when the bump allocator runs off the end:
+ * waits for transfers in flight, unlinks entries already copied back to main RAM (flag 0x20),
+ * then slides the live ones down through a 32 KB main-RAM bounce buffer.
+ */
 void aramMgrGarbage(void) {
     ARAMEntry* head;
     ARAMEntry* entry;
@@ -112,6 +125,11 @@ void arqCallbackToAram(u32 request) {
     entry->flags |= ARAM_FLAG_IN_ARAM;
 }
 
+/**
+ * Starts copying size bytes (rounded up to 32) from main RAM to the next free ARAM space
+ * and returns the entry tracking it; compacts ARAM first if the region is full.
+ * Does not check for a free entry slot.
+ */
 ARAMEntry* aramMgrToAramAsync(void* src, u32 size) {
     ARAMEntry* entry = NULL;
     ARAMEntry* curr;
@@ -153,6 +171,7 @@ ARAMEntry* aramMgrToAramAsync(void* src, u32 size) {
     return entry;
 }
 
+/** Copies a block to ARAM and spins until the transfer is done; mapdrv uses it to stash the previous map's data. */
 ARAMEntry* aramMgrToAram(void* src, u32 size) {
     ARAMEntry* entry = aramMgrToAramAsync(src, size);
     while (!(entry->flags & ARAM_FLAG_IN_ARAM)) {}
@@ -173,6 +192,10 @@ void arqCallbackToMram(u32 request) {
     ICInvalidateRange(entry->dest, entry->size);
 }
 
+/**
+ * Copies an entry back from ARAM to dest, waiting for its upload to finish first and then for the copy itself.
+ * Each entry is read back once; mapdrv restores a stashed map with it.
+ */
 void aramMgrToMram(ARAMEntry* entry, void* dest) {
     while (!(entry->flags & ARAM_FLAG_IN_ARAM)) {}
     ARQPostRequest(&entry->request, ARAM_OWNER, ARQ_TYPE_ARAM_TO_MRAM, ARQ_PRIORITY_LOW,

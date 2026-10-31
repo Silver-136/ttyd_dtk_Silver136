@@ -42,6 +42,11 @@ static EvtWord normal_attack_event[428];
 static EvtWord call_friend_event[311];
 static EvtWord wait_event[6];
 
+/**
+ * Script helper: arg0 = source unit, arg1 = destination unit;
+ * copies the size-change status (Mini/Giant turns and strength),
+ * used when a Dull Bones is rebuilt after collapsing.
+ */
 static USER_FUNC(honenoko_copy_status) {
     EvtWord* args = event->args;
     s32 sourceId = BattleTransID(event, evtGetValue(event, args[0]));
@@ -215,6 +220,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init event of the Dull Bones: registers its wait, attack, damage and confusion events,
+ * clears unit work 1 (the rewards-paid flag), sets the landing sound for jumps and starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -226,6 +235,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event: runs the default battle damage reaction on the unit itself (part 1). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -412,6 +422,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Starts the target's dodge animation (LW(3) is the target) according to the pre-check result in LW(5):
+ * 3 (dodged by luck) plays avoid 38, 6 (Dodgy) avoid 39, 2 (plain miss) avoid 40.
+ */
 static EVT_BEGIN(start_avoid)
     IF_INT_EQUAL(LW(5), 3)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -551,6 +565,12 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Dull Bones calls a friend: it throws six bones (parts 3 and 4 alternately with different poses) one
+ * after another at the free spot, which pile up there;
+ * they then reunite with the unite sounds and a new Dull Bones is spawned from entry_honenoko at that spot,
+ * copying the status of the caller (honenoko_copy_status).
+ */
 static EVT_BEGIN(call_friend_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -635,6 +655,7 @@ static EVT_BEGIN(call_friend_event)
     RETURN
 EVT_END()
 
+/** Wait event: sets the idle animation from the unit's pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

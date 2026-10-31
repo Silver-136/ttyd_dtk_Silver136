@@ -20,6 +20,7 @@ static u8 scale_data2[7] = {94, 92, 100, 105, 107, 105, 100};
 void effStoneSmokeMain(EffectEntry* effect);
 void effStoneSmokeDisp(CameraId cameraId, EffectEntry* effect);
 
+/** Spawns a stone-gray smoke puff at (x, y, z). Spawned by event scripts through evt_eff. */
 EffectEntry* effStoneSmokeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffStoneSmokeN64Work* work;
@@ -52,6 +53,11 @@ EffectEntry* effStoneSmokeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, 
     return effect;
 }
 
+/**
+ * Rises 0.6 units per frame; its size pops in over 7 frames (scale_data) and
+ * then pulses on a 7-frame loop (scale_data2).
+ * Fades over the last 16 frames, which a delete request starts (timer 1000 means endless). CAMERA_3D.
+ */
 void effStoneSmokeMain(EffectEntry* effect) {
     EffStoneSmokeN64Work* work = effect->userdata;
     Vec position;
@@ -87,6 +93,10 @@ void effStoneSmokeMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effStoneSmokeDisp, effect);
 }
 
+/**
+ * Draws the puff as a 16x16 quad of texture 0x5C (not turned to the camera),
+ * scaled by base scale x pulse and shaded between the work's two colours.
+ */
 void effStoneSmokeDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffStoneSmokeN64Work* work;

@@ -51,6 +51,10 @@ effN64Vtx ice_s_vtx[] = {
 static void effIceMain(EffectEntry* effect);
 static void effIceDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns eight ice shards at (x, y, z) that fly up and spin for 30 frames.
+ * battle_damage.c spawns it on ice damage; event scripts also use it through evt_eff.
+ */
 EffectEntry* effIceN64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffIceN64Work* work;
@@ -84,6 +88,7 @@ EffectEntry* effIceN64Entry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/** Fades the shards in, then out over the last 10 frames, and moves each shard with gravity, drag and spin. */
 static void effIceMain(EffectEntry* effect) {
     EffIceN64Work* work = effect->userdata;
     Vec calcPos;
@@ -134,6 +139,10 @@ static void effIceMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&calcPos), 2, (DispCallback)effIceDisp, effect);
 }
 
+/**
+ * Draws the eight shards, alternating between a plain shard (texture 8, odd indices)
+ * and a spinning one (texture 7, even indices).
+ */
 static void effIceDisp(CameraId cameraId, EffectEntry* effect) {
     EffIceN64Work* work;
     CameraEntry* cam;

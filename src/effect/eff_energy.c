@@ -29,6 +29,11 @@ static GXColor color_tbl[] = {
     { 0xF5, 0x5A, 0xC5, 0xFF }, { 0xFD, 0xBC, 0xFB, 0xFF },
 };
 
+/**
+ * Spawns the energy orb at (x, y, z) for `duration` frames with start size `size`,
+ * spin speed `rotSpeed` and growth `scaleSpeed`; type picks the colour pair.
+ * Used by Mario's Jump and Hammer star effects in battle_mario.c.
+ */
 EffectEntry* effEnergyEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 size, f32 rotSpeed,
                             f32 scaleSpeed) {
     EffectEntry* effect;
@@ -60,6 +65,7 @@ EffectEntry* effEnergyEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 siz
     return effect;
 }
 
+/** Spins and grows the orb, pulses its brightness between limits, and fades it over 16 frames on soft delete. */
 void effEnergyMain(EffectEntry* effect) {
     EffEnergyWork* work = effect->userdata;
     Vec position;
@@ -96,6 +102,7 @@ void effEnergyMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effEnergyDisp, effect);
 }
 
+/** Draws the orb as a camera-facing sprite rotated around Z, with colours chosen by type. */
 void effEnergyDisp(CameraId cameraId, EffectEntry* effect) {
     EffEnergyWork* work = effect->userdata;
     CameraEntry* camera;

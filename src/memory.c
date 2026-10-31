@@ -71,6 +71,11 @@ u32 count;
 //local prototypes
 void smartGarbage(void);
 
+/**
+ * Carves the OS arena into the game's heaps from size_table:
+ * fixed-size heaps (size in KiB) first, then the rest shared out by percentage (the last heap takes 100%).
+ * Creates each OS heap and clears it, which also sets up the map heap allocator. Called once at boot.
+ */
 void memInit(void) {
     void* arenaLo;
     void* arenaHi;
@@ -151,6 +156,10 @@ static inline void mapallocInit(void) {
 #endif
 }
 
+/**
+ * Throws away everything in a heap by destroying and recreating it;
+ * for HEAP_MALLOC also resets the map heap allocator.
+ */
 void memClear(HEAP_TYPE heap) {
     OSDestroyHeap(heapHandle[heap]);
     OSCreateHeap(heapStart[heap], heapEnd[heap]);
@@ -159,6 +168,10 @@ void memClear(HEAP_TYPE heap) {
     }
 }
 
+/**
+ * Allocates size bytes from one of the game heaps, zeroed and flushed from the data cache;
+ * NULL when the heap is full.
+ */
 void* __memAlloc(HEAP_TYPE heap, u32 size) {
     void* ptr;
 
@@ -170,6 +183,7 @@ void* __memAlloc(HEAP_TYPE heap, u32 size) {
     return ptr;
 }
 
+/** Returns a block from __memAlloc to its heap. */
 void __memFree(HEAP_TYPE heap, void* ptr) {
     OSFreeToHeap(heapHandle[heap], ptr);
 }
@@ -431,6 +445,12 @@ void smartAutoFree(s32 allocType) {
 }
 
 #pragma dont_inline reset
+/**
+ * Frees a smart heap block, giving its bytes to the block before it (or back to the start of the heap)
+ * and returning the descriptor to the free list.
+ * A group 4 block is only demoted to group 3, so it lives until the next group 3 free.
+ * The memory is compacted later by smartGarbage.
+ */
 void smartFree(smartEntry* entry) {
     u32 total;
 
@@ -476,6 +496,13 @@ void smartFree(smartEntry* entry) {
     wp->waitsync++;
 }
 
+/**
+ * Allocates size bytes (rounded to 32) in the smart heap, tagged with the auto-free group type.
+ * Tries the free space at the start and after each block;
+ * failing that, compacts the heap (smartGarbage),
+ * first plainly and then after the file manager drops unused files, and returns NULL if it still does not fit.
+ * Blocks can move during compaction, so callers keep the entry, not the address.
+ */
 smartEntry* smartAlloc(u32 size, u8 type) {
     smartEntry* prevEntry;
     smartEntry* entry;
@@ -584,6 +611,11 @@ smartEntry* smartAlloc(u32 size, u8 type) {
     }
 }
 
+/**
+ * Compacts the smart heap: slides every block down to close the gaps (moving loaded files through
+ * fileGarbageMoveMem), leaving all free space after the last block.
+ * A file still being read by the DVD thread is not moved. Waits for the GPU first, since textures may be in use.
+ */
 void smartGarbage(void) {
     u8* addr;
     u8* ptr;
@@ -628,6 +660,10 @@ void smartGarbage(void) {
     DCFlushRange(wp->ptr, (u8*)heapEnd[SMART_HEAP] - (u8*)heapStart[SMART_HEAP] - 32);
 }
 
+/**
+ * Points a texture object at its smart heap image again (the data may have moved during compaction)
+ * and returns it; passing NULL leaves the object unchanged.
+ */
 GXTexObj* smartTexObj(GXTexObj* obj, void** image_ptr) {
     if (image_ptr) {
         GXInitTexObjData(obj, *image_ptr);

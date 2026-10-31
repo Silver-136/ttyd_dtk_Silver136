@@ -155,6 +155,12 @@ static BattleWeapon weapon_chorobon_drain_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack event (also its confusion event) of the Green Fuzzy: may use an item;
+ * otherwise half the time it drains a target (drain_attack_event).
+ * The other half it looks for a free spot behind it (out to x = 170) and then in front of it and,
+ * when it finds one, splits into a new Green Fuzzy there (friend_event); with no room it rolls again.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -220,6 +226,12 @@ static BattleUnitSetup entry_chorobon = {
     NULL, // itemDropTable
 };
 
+/**
+ * The Green Fuzzy multiplies (its turn's action, from attack_event):
+ * it spins faster and faster with the split sounds, hops,
+ * and spawns a new Green Fuzzy that takes its current HP and size status (chorobon_copy_status) and jumps,
+ * spinning, to the free spot in LW(0) to LW(2), which becomes its home.
+ */
 static EVT_BEGIN(friend_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -354,6 +366,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Hop movement of the Green Fuzzy: hops toward LW(5) to LW(7) in hops of at most LW(8) units,
+ * squashing before and stretching after each hop, with the landing sound on the last one.
+ */
 static EVT_BEGIN(rabbit_move)
     LOOP(2)
         CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)
@@ -403,6 +419,10 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/**
+ * Init event of the Green Fuzzy: installs its wait, attack, damage and confusion (the attack event) events,
+ * its pose sound table and jump sound.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -707,6 +727,7 @@ static USER_FUNC(chorobon_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/** Wait (idle) event of the Green Fuzzy, installed by its init (btlevtcmd_SetEventWait): sets the idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

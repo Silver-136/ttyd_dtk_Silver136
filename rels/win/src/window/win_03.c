@@ -43,6 +43,10 @@ static TreeAccess tree_access_data[5];
 EvtWord dummy_event[4];
 EvtWord win_03_init_evt[108];
 
+/**
+ * Bero enter script of Flurrie's front door: locks Mario's keys
+ * and changes the map to win_04 at its "w_bero" entry (Flurrie's house interior); returns LW(0) = 1.
+ */
 EVT_BEGIN(clouda_house_in)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_mapchange, STRING("win_04"), STRING("w_bero"))
@@ -50,6 +54,13 @@ EVT_BEGIN(clouda_house_in)
     RETURN
 EVT_END()
 
+/**
+ * Bero script that nothing in the tree references:
+ * turns on Mario's background mode, removes the partner, turns off the camera's y follow,
+ * places Mario at (277, 54, -450), next to Flurrie's door at (306, 23, -448), and runs bero_case_entry;
+ * returns LW(0) = 1.
+ * Guess: an unused variant for coming out of Flurrie's house.
+ */
 EVT_BEGIN(clouda_house_out)
     CALL(evt_mario_bgmode_on)
     CALL(evt_mario_kill_party, 0)
@@ -60,12 +71,14 @@ EVT_BEGIN(clouda_house_out)
     RETURN
 EVT_END()
 
+/** Bero exit script: plays the wooden door-shut sound at Flurrie's door (306, 23, -448); returns LW(0) = 0. */
 EVT_BEGIN(cloud_out)
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_SHUT_WOOD2"), 306, 23, -448, 0)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
 
+/** Bero enter script: plays the wooden door-open sound at Flurrie's door (306, 23, -448); returns LW(0) = 0. */
 EVT_BEGIN(cloud_in)
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_WOOD3"), 306, 23, -448, 0)
     SET_VALUE(LW(0), 0)
@@ -303,6 +316,10 @@ static TreeAccess tree_access_data[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/**
+ * Case script the init script registers for pressing A while standing on "n_bero":
+ * it only ends the case event, so pressing A there does nothing.
+ */
 EVT_BEGIN(dummy_event)
     CALL(evt_exit_case_evt)
     RETURN

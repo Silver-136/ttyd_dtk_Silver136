@@ -61,12 +61,21 @@ EvtWord rsh_01_a_init_evt_nidome[49];
 EvtWord rsh_01_b_init_evt_nidome[31];
 EvtWord rsh_01_c_init_evt_nidome[41];
 
+/**
+ * Enter animation of the south door (s_bero) of rsh_01:
+ * slides the s_tobira door object by the door animation's progress value in LW(0), scaled by -0.333.
+ */
 EVT_BEGIN(s_bero_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.3330078f))
     CALL(evt_mapobj_trans, 0, STRING("s_tobira"), LW(0), 0, 0)
     RETURN
 EVT_END()
 
+/**
+ * Exit animation of the south door (s_bero) of rsh_01:
+ * slides the s_tobira door object by the door animation's progress value in LW(0),
+ * scaled by -0.333 (same motion as s_bero_close).
+ */
 EVT_BEGIN(s_bero_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.3330078f))
     CALL(evt_mapobj_trans, 0, STRING("s_tobira"), LW(0), 0, 0)
@@ -267,6 +276,10 @@ static const char* door_4[] = {
     "4_door_close",
 };
 
+/**
+ * Init event of Zip Toad (Toron) in rsh_01: places him at (-45, 0, -175) before the first stage
+ * and again from the Galley Pot stage to the end of day 1; at other stages he is parked below the floor.
+ */
 static EVT_BEGIN(init_toron)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_01_THE_CONDUCTOR)
@@ -312,6 +325,7 @@ static EVT_BEGIN(talk_toron)
     RETURN
 EVT_END()
 
+/** Init event of Madam: places her at (-275, 0, -225) before day 3; later she is parked below the floor. */
 static EVT_BEGIN(init_madam)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_45_DAY_3_STARTS)
@@ -334,6 +348,11 @@ static s32 item_tbl_madam[] = {
     ITEM_GOLD_RING, -1,
 };
 
+/**
+ * Talk script used when Mario holds a Gold Ring: opens the item menu;
+ * giving the ring pays Mario 30 coins and she thanks him (stg6_rsh_201, 202), cancelling prints stg6_rsh_201_2,
+ * then the music dip is restored.
+ */
 // Item-selection cancellation gives no reward; a non-cancelled selection pays 30 coins, then removes the ring.
 static EVT_BEGIN(talk_madam_ring_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -578,6 +597,11 @@ static const char* access_tbl[] = {
     NULL,
 };
 
+/**
+ * Trigger script for the shelves (tana_4, tana_5):
+ * locks input and prints the shelf's message, a different one (LW(2)) from the Rogueport station stage on in the
+ * releases.
+ */
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
@@ -589,6 +613,10 @@ static EVT_BEGIN(evt_access)
     RETURN
 EVT_END()
 
+/**
+ * Registers the shelf triggers from access_tbl (hit name and message rows);
+ * each runs evt_access when Mario faces it.
+ */
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
@@ -601,6 +629,13 @@ static EVT_BEGIN(evt_access_entry)
     RETURN
 EVT_END()
 
+/**
+ * Shared map init for the three variants of rsh_01 on the first trip:
+ * starts the scenery animations, registers the two cabin doors (heya 3 and 4)
+ * and the shelf signs (tana_4, tana_5), closes the south door with the stg6_rsh_261 message,
+ * and starts the music and ambience for the story stage (Pennington theme, Riverside, Poshley, danger theme,
+ * or the per-variant train theme).
+ */
 EVT_BEGIN(rsh_01_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
@@ -705,6 +740,10 @@ EVT_BEGIN(rsh_01_a_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_01_b (first visit): sets the doors,
+ * sets up the car's NPCs (npc_data_2) and runs the shared init.
+ */
 EVT_BEGIN(rsh_01_b_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_b))
     CALL(evt_bero_get_info)
@@ -720,6 +759,10 @@ static const char* window_tbl[] = {
     NULL,
 };
 
+/**
+ * Init script of rsh_01_c (first visit): sets the doors, sets up the car's NPCs (npc_data_2),
+ * runs the shared init, plays the lamp animation and sets up the window scenery.
+ */
 EVT_BEGIN(rsh_01_c_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_c))
     CALL(evt_bero_get_info)
@@ -732,6 +775,10 @@ EVT_BEGIN(rsh_01_c_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the conductor (syasyou) on the return trip (hooked in rsh_01_init_evt_nidome):
+ * says stg6_rsh_c_14, or in the releases stg6_rsh_c_09_1 once the train has reached Rogueport.
+ */
 EVT_BEGIN(talk_syasyou)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
@@ -1037,6 +1084,10 @@ EVT_BEGIN(rsh_01_a_init_evt_nidome)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_01_b on the second visit: outbound or return-trip doors, shared second-visit init,
+ * and marks variant B active.
+ */
 EVT_BEGIN(rsh_01_b_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(LW(0), PTR(bero_data_b))
@@ -1053,6 +1104,10 @@ EVT_BEGIN(rsh_01_b_init_evt_nidome)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_01_c on the second visit: outbound or return-trip doors, shared second-visit init,
+ * and marks variant C active.
+ */
 EVT_BEGIN(rsh_01_c_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(LW(0), PTR(bero_data_c))

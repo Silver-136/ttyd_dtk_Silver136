@@ -198,6 +198,13 @@ static BattleWeapon weapon_kurokumorn_thunder_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Turn script of the Ruff Puff.
+ * After an item-use check, if it is charged (electric counter attribute 1024 on part 1) it fires the
+ * lightning attack through thunder_event.
+ * Otherwise it rolls 0 to 99: below 60 it makes a normal attack,
+ * otherwise it charges up through charge_event.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -228,6 +235,14 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Ruff Puff's lightning attack, used while it is charged.
+ * It samples a target, declares an attack on every opponent,
+ * plays the charge sound and the A_2B/A_3A/A_3B animations,
+ * drops its charge (clears counter attribute 1024)
+ * and rains pokopi_thunder_n64 lightning bolts on the player's side,
+ * with the damage decided by the pre-damage check and CheckDamage per target.
+ */
 static EVT_BEGIN(thunder_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -387,6 +402,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init script of the Ruff Puff: installs the wait, unison-phase, attack, damage and confusion handlers,
+ * clears its unit work 0 and 1, and starts barrier_event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(unison_phase_event))
@@ -400,6 +419,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Background loop on the Ruff Puff (barrier_event): every 31 frames, while it is charged,
+ * spawns the akari_charge_n64 spark effect above it; ends when the unit is gone.
+ */
 static EVT_BEGIN(barrier_event)
     LABEL(0)
     WAIT_FRAMES(31)
@@ -419,6 +442,10 @@ static EVT_BEGIN(barrier_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table event 48, run when the battle opens with Mario's or his partner's First Strike on the Ruff Puff:
+ * puts it at height 10 and waits for the attack to end.
+ */
 static EVT_BEGIN(dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
@@ -427,6 +454,7 @@ static EVT_BEGIN(dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/** Damage event of the Ruff Puff: runs the default damage reaction (btldefaultevt_Damage) for itself. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -434,6 +462,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Counter handler of the Ruff Puff: empty, it does nothing. */
 static EVT_BEGIN(counter_event)
     RETURN
 EVT_END()
@@ -476,6 +505,11 @@ static EVT_BEGIN(unison_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * The Ruff Puff's body slam with the weapon in LW(9): picks a target (the first-attack target on a pre-emptive
+ * strike), shakes and squashes itself as a wind-up, lunges back and then dives into the target, which dodges,
+ * guards or takes the hit (pre-damage check and action-command defence); then it bounces off and floats home.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -583,6 +617,10 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Charge-up: the camera zooms on the Puff, a charge sound plays
+ * and it becomes charged (electric counter attribute 1024 on part 1) with its A_2A/A_2B charge animations.
+ */
 static EVT_BEGIN(charge_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -601,6 +639,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
+/** Wait script of the Ruff Puff: shows its idle pose from the pose table and resets its scale to 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)

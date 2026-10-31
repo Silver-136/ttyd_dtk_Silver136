@@ -116,6 +116,10 @@ static BattleWeapon weapon = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Shows the action command rating sign for a cleared Showstopper round (LW(0) = round + 1, capped at 6,
+ * so later rounds give the higher signs) at screen position (-120, 120).
+ */
 static EVT_BEGIN(nice_event)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), -120, 120, 0)
     RETURN
@@ -154,6 +158,12 @@ USER_FUNC(main_suki) {
     return 0;
 }
 
+/**
+ * The button panel's state machine: slides it in,
+ * deals each round's buttons (round + 3 buttons in 180 + 10 * round frames, five rounds),
+ * checks the A/B/X/Y presses, cheers the audience by its size after a cleared round,
+ * and ends the game on a wrong press, a timeout or the fifth round.
+ */
 static void main_base(void) {
     SukiWork* w = get_ptr();
     s32 num = BattleAudience_GetAudienceNum();
@@ -282,6 +292,7 @@ static void main_base(void) {
     }
 }
 
+/** Deals button idx of a new round: places it in the row and picks A, B, X or Y at random. */
 void main_button(s32 idx) {
     SukiWork* w = get_ptr();
     SukiBtn* b = &w->btn[idx];
@@ -304,6 +315,11 @@ void main_button(s32 idx) {
     }
 }
 
+/**
+ * Moves the star (star stone effect type 5): rises from Mario and spins up to the top of the screen,
+ * spins with stardust after each cleared round, and flies from a star position towards the camera for each hit;
+ * also feeds its position, rotation and scale to the effect.
+ */
 static void main_star(void) {
     SukiWork* w = get_ptr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -419,6 +435,7 @@ static void main_star(void) {
     }
 }
 
+/** Deletes the star effect and its stardust at the end of the move. */
 USER_FUNC(end_suki) {
     SukiWork* w = get_ptr();
     effDelete(((EffStarStoneWork*)w->star.eff->userdata)->dust);
@@ -456,6 +473,10 @@ static void disp_2D(CameraId cam, void* param) {
     GXSetScissor(0, 0, gp->fbWidth, gp->efbHeight);
 }
 
+/**
+ * Draws button idx of the previous round's row (side 0, 80 pixels higher) or the current row (side 1),
+ * with the pressed icon for buttons already entered.
+ */
 // Descriptive name (not in the symbol maps).
 void _disp_2D(s32 side, s32 idx) {
     SukiWork* w = get_ptr();
@@ -544,19 +565,26 @@ void _disp_2D(s32 side, s32 idx) {
 static void disp_3D(CameraId cam, void* param) {
 }
 
+/** Translucent 3D draw callback; draws nothing. */
 static void disp_3D_alpha(CameraId cam, void* param) {
 }
 
+/** Returns the Showstopper work, which lives in the battle's action command work area. */
 static SukiWork* get_ptr(void) {
     return (SukiWork*)_battleWorkPointer->actionCommands.work;
 }
 
+/** Starts the button game once the star is in place. */
 static USER_FUNC(start_game) {
     SukiWork* w = get_ptr();
     w->state = 1;
     return 2;
 }
 
+/**
+ * Waits until the button game ends, then returns in args[0] how many stars were earned:
+ * cleared rounds plus one (1..6).
+ */
 static USER_FUNC(wait_game_end) {
     SukiWork* w = get_ptr();
     EvtWord* args = event->args;
@@ -567,16 +595,19 @@ static USER_FUNC(wait_game_end) {
     return 0;
 }
 
+/** Starts the star's appearance over Mario. */
 static USER_FUNC(star_stone_appear) {
     SukiWork* w = get_ptr();
     w->star.state = 1;
     return 2;
 }
 
+/** Waits until the star has reached its place at the top of the screen. */
 USER_FUNC(wait_star_stone_up_end) {
     return get_ptr()->star.state == 4 ? 2 : 0;
 }
 
+/** Returns in args[1..3] the battle-space position of star args[0] (0..5), where its shot starts. */
 USER_FUNC(star_stone_get_attack_point) {
     SukiWork* w = get_ptr();
     EvtWord* args = event->args;
@@ -587,6 +618,7 @@ USER_FUNC(star_stone_get_attack_point) {
     return 2;
 }
 
+/** Sends the star from position args[0] flying towards the camera (a 20-frame shot). */
 static USER_FUNC(star_stone_attack) {
     SukiWork* w = get_ptr();
     s32 i = evtGetValue(event, event->args[0]);
@@ -600,6 +632,7 @@ static USER_FUNC(star_stone_attack) {
     return 2;
 }
 
+/** Waits until the current star shot has finished. */
 USER_FUNC(wait_star_stone_attack_end) {
     return get_ptr()->star.state == 8 ? 2 : 0;
 }
@@ -611,6 +644,10 @@ typedef struct OhkoRateTbl {
 // Descriptive name (not in the symbol maps).
 const OhkoRateTbl ohko_rate_tbl = {{50, 60, 70, 80, 90, 100}};
 
+/**
+ * Returns in args[1] a copy of Showstopper's weapon whose instant-KO chance depends on the stars earned in
+ * args[0]: 50, 60, 70, 80, 90 or 100%.
+ */
 static USER_FUNC(set_weapon) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
@@ -622,6 +659,7 @@ static USER_FUNC(set_weapon) {
     return 2;
 }
 
+/** Hides (args[0] 0) or shows the audience. */
 USER_FUNC(aud_set_draw) {
     EvtWord* args = event->args;
     BattleAudience* a = BattleAudienceBaseGetPtr();
@@ -633,12 +671,14 @@ USER_FUNC(aud_set_draw) {
     return 2;
 }
 
+/** Sets the brightness (0..255) the flash TEV callback draws the stage with, from args[0]. */
 USER_FUNC(flash_update) {
     u8 v = evtGetValue(event, event->args[0]);
     get_ptr()->flash = v;
     return 2;
 }
 
+/** Returns in args[1] 1 if the stage has a map object named args[0], else 0. */
 USER_FUNC(exist_map) {
     EvtWord* args = event->args;
     if (mapGetMapObj((char*)evtGetValue(event, args[0]))) {
@@ -649,6 +689,7 @@ USER_FUNC(exist_map) {
     return 2;
 }
 
+/** Projects world position args[0..2] to the battle screen and returns x and y in args[3] and args[4]. */
 USER_FUNC(get_screen_point) {
     EvtWord* args = event->args;
     Vec v;
@@ -661,6 +702,7 @@ USER_FUNC(get_screen_point) {
     return 2;
 }
 
+/** Spawns the crystal shine effect at the star position args[0], args[1] (z 30), drawn on the 3D effect camera. */
 USER_FUNC(eff_crystal) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -670,6 +712,7 @@ USER_FUNC(eff_crystal) {
     return 2;
 }
 
+/** Returns in args[1] the capture image name of star args[0] ("sac_suki_img0".."5"). */
 USER_FUNC(get_img_name) {
     EvtWord* args = event->args;
     s8 idx = evtGetValue(event, args[0]);
@@ -686,6 +729,7 @@ static inline GXColor grayColor(u8 v) {
     return c;
 }
 
+/** Map TEV callback for the flash: draws the stage as a flat grey of the current flash brightness. */
 void set_tev(MapTevCallbackInfo* info) {
     u8 v = get_ptr()->flash;
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
@@ -700,6 +744,12 @@ void set_tev(MapTevCallbackInfo* info) {
 }
 
 
+/**
+ * Showstopper, the Garnet Star's special move (star stone effect type 5):
+ * Mario raises the star, the player presses the shown buttons over up to five rounds,
+ * then each earned star flies out with a paper flourish and a crystal shine,
+ * the stage flashes and every enemy not evasive is checked against the instant-KO chance the stars bought.
+ */
 EVT_BEGIN(marioAttackEvent_Suki)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(14))
     CALL(btlevtcmd_GetBodyId, LW(14), LW(15))
@@ -846,6 +896,10 @@ EVT_BEGIN(marioAttackEvent_Suki)
     RETURN
 EVT_END()
 
+/**
+ * Darkens the battle for the finishing flash: hooks the flash TEV callback onto the stage objects, hides Mario,
+ * the partner and the audience, blacks out the enemies and darkens the stage.
+ */
 EVT_BEGIN(flash_evt)
     CALL(evt_map_set_tevcallback, 1, PTR(set_tev))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bti_S"), MAP_OBJ_TEV_CALLBACK(1))
@@ -895,6 +949,7 @@ EVT_BEGIN(flash_evt)
     RETURN
 EVT_END()
 
+/** One step of the flash: sets the stage brightness to LW(10) and tints every enemy the opposite way (255 - LW(10)). */
 EVT_BEGIN(flash_main_evt)
     SET_VALUE(LW(11), 255)
     SUBTRACT(LW(11), LW(10))
@@ -914,6 +969,10 @@ EVT_BEGIN(flash_main_evt)
     RETURN
 EVT_END()
 
+/**
+ * Undoes flash_evt: restores the stage objects (and the "gamen" screen's TEV callback where the stage has one),
+ * shows Mario, the partner and the audience again, resets the enemies' colour and the stage darkness.
+ */
 EVT_BEGIN(flash_cancel_evt)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bti_S"), MAP_OBJ_TEV_CALLBACK_MASK)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("bti_S"), MAP_OBJ_FLAG_DISPLAY_LIST)

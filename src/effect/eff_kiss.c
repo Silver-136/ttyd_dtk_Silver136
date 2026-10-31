@@ -55,6 +55,10 @@ static u8 color_rotation_data[] = {
     0xB4, 0xFE, 0xB4, 0xD5, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5, 0xAC,
 };
 
+/**
+ * Spawns a kiss at (x, y, z) facing `angle`: a lip mark plus hearts; type 4 lasts 60 frames instead of 40.
+ * Type 5 also spawns a PM64 stamp. Spawned by event scripts in gon, gor and mri.
+ */
 EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     EffectEntry* effect;
     KissWork* work;
@@ -129,6 +133,7 @@ EffectEntry* effKissEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     return effect;
 }
 
+/** Moves the hearts with decay, fades them over the last 15 frames, and for type 4 ends with a stardust puff. */
 void effKissMain(EffectEntry* effect) {
     KissWork* work = effect->userdata;
     Vec pos;
@@ -249,6 +254,7 @@ static inline void effKissGXSetup(void) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
 }
 
+/** Draws the lip mark and the hearts in two passes. */
 void effKissDisp(CameraId cameraId, EffectEntry* effect) {
     KissWork* work = effect->userdata;
     CameraEntry* cam;
@@ -432,6 +438,7 @@ void effKissDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Draws the small pink hearts (texture 20) around the kiss. */
 void effKissDisp2(CameraId cameraId, EffectEntry* effect) {
     KissWork* work = effect->userdata;
     CameraEntry* cam;

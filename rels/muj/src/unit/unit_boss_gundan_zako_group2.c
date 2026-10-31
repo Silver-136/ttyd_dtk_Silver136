@@ -275,6 +275,7 @@ BattleWeapon weapon_gundan_zako_group2_yusuri_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Init event of X-Naut group 2: installs its wait, attack, damage and confusion events and starts the wait event. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -514,6 +515,7 @@ USER_FUNC(down_ceil) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: raises the stage objects if_body and if_wire from 130 back to 250 over 120 frames. */
 USER_FUNC(up_ceil) {
     u8* ceil = &_battleWorkPointer->stageObjectWork.flags;
     BattleStageObject* body = BattleSearchObjectPtr("if_body");
@@ -536,6 +538,10 @@ USER_FUNC(up_ceil) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: makes the lowered stage objects if_body and if_wire shudder between height 130
+ * and 135 over 9 frames.
+ */
 USER_FUNC(shake_ceil) {
     BattleStageObject* body = BattleSearchObjectPtr("if_body");
     BattleStageObject* wire = BattleSearchObjectPtr("if_wire");
@@ -554,6 +560,7 @@ USER_FUNC(shake_ceil) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: starts formation 2: selects it (work->flag = 1) and initialises the first 25 X-Nauts of the pool. */
 USER_FUNC(zakogun_ext_init2) {
     s32 i;
     ExtdrvPose* pose = extGetPosePtr();
@@ -565,6 +572,10 @@ USER_FUNC(zakogun_ext_init2) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Per-frame update of formation 2 (25 X-Nauts):
+ * moves each member through its state machine and updates its pose matrix and sounds.
+ */
 void zakogun_ext_main2(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit = zakogun_get_ptr();
@@ -847,6 +858,7 @@ void zakogun_ext_main2(void) {
     }
 }
 
+/** Script helper for group 2 attack: sets the 25 X-Nauts to attack state 20 and blocks until they finish. */
 USER_FUNC(zakogun_attack2) {
     s32 i;
     s32 n;
@@ -867,6 +879,7 @@ USER_FUNC(zakogun_attack2) {
     return n == 25 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** Script helper for group 2 shaking attack (yusuri): sets the 25 X-Nauts to state 60 and blocks until they finish. */
 USER_FUNC(zakogun_attack2_yusuri) {
     s32 i;
     s32 n;
@@ -886,6 +899,7 @@ USER_FUNC(zakogun_attack2_yusuri) {
     return n == 25 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** Script helper: puts the 25 X-Nauts of group 2 into their death state (80). */
 USER_FUNC(zakogun_dead2) {
     s32 i;
 
@@ -895,6 +909,7 @@ USER_FUNC(zakogun_dead2) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sends the 25 X-Nauts of group 2 running away (state 90) and blocks until they have left. */
 USER_FUNC(zakogun_escape2) {
     s32 i;
     s32 n;
@@ -914,6 +929,10 @@ USER_FUNC(zakogun_escape2) {
     return n == 25 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/**
+ * Hit check of group 2's fall attack: four hits 20 frames apart as the X-Nauts drop,
+ * then a last hit once all 25 have landed (unit work 0), each through hit_check_event_sub.
+ */
 static EVT_BEGIN(hit_check_event)
     WAIT_FRAMES(10)
     LOOP(4)
@@ -933,12 +952,18 @@ static EVT_BEGIN(hit_check_event)
     RETURN
 EVT_END()
 
+/** Hit check event for group 2: runs hit_check_event_sub whenever the group is about to hit someone. */
 EVT_BEGIN(hit_check_event2)
     SET_VALUE(LW(15), 1)
     CALL_CHILD(PTR(hit_check_event_sub))
     RETURN
 EVT_END()
 
+/**
+ * One hit of a group 2 attack: starts the target's avoid pose on a dodge,
+ * otherwise applies the hit with the action-command defence (the last hit when LW(15) is 1).
+ * In the fall attack the first landed hit sets unit work 1, after which the last hit skips the dodge check.
+ */
 EVT_BEGIN(hit_check_event_sub)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_group2_attack))
         IF_INT_EQUAL(LW(15), 1)
@@ -990,6 +1015,7 @@ EVT_BEGIN(hit_check_event_sub)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of X-Naut group 2: sets the idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

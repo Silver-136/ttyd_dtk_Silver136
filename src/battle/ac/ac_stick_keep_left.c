@@ -23,6 +23,13 @@ s32 ac_stickkeepleft_ok_frame[7] = {80, 70, 60, 40, 20, 10, 5};
 
 static void actionCommandDisp(f32 x, f32 y, s32 unused);
 
+/**
+ * Per-frame driver of action command 3, used by Mario's hammer attacks and Frankly's battle lesson.
+ * Tilt the stick left within 120 frames and hold it while params[0] lights come on, one every params[1] frames,
+ * then let go within a difficulty window (80 down to 5 frames) after the last, big one lights.
+ * outputParams[2]: 1 let go early, 2 held too long, 3 success.
+ * acFlags bit 1 ignores early releases and passes a held-too-long. A non-zero params[2] freezes.
+ */
 s32 battleAcMain_StickKeepLeft(BattleWork* work) {
     const char* sfx[2];
     SklWork* cw;
@@ -216,10 +223,16 @@ s32 battleAcMain_StickKeepLeft(BattleWork* work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_StickKeepLeft(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/**
+ * Display callback: slides the prompt in from the left over 20 frames, lights it step by step,
+ * and once the command is stopped keeps it up for 40 frames before sliding it back out;
+ * the slide pauses while params[2] freezes it.
+ */
 void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleActions* ac = &work->actionCommands;
@@ -265,10 +278,16 @@ void battleAcDisp_StickKeepLeft(CameraId camId, void* param) {
     }
 }
 
+/** Called by btlevtcmd_StopAC: starts the slide-out and the 60-frame end wait. */
 void battleAcDelete_StickKeepLeft(BattleWork* work) {
     work->actionCommands.mAcState = 1005;
 }
 
+/**
+ * Draws the stick icon (flashing until it is tilted, released once the last light is on), the bar,
+ * the numbered lights up to the current step and the final star;
+ * acFlags bit 0 packs them closer for long counts.
+ */
 static void actionCommandDisp(f32 x, f32 y, s32 unused) {
     s32 count;
     s32 idx;

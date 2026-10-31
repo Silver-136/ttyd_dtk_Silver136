@@ -234,6 +234,11 @@ static BattleUnitKindPart parts[] = {
     {3, "btl_un_magnum_battender", "c_mb_robo_1b", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/**
+ * Keeps the "waku" part (part 3, the frame or sign attached to Magnus von Grapple) fixed to the body:
+ * every frame moves it to the position of locator17 in the body's animation
+ * and turns it to face the camera (rotating by minus the camera yaw). args[0] is the unit.
+ */
 static USER_FUNC(waku_main) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -263,6 +268,11 @@ static USER_FUNC(waku_main) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Looks for a living rocket arm (X-Fist) on one side:
+ * args[0] = 0 for the left (arm slot 0 or 2), 1 for the right (slot 1 or 3).
+ * Writes the unit index of the first one found to args[1], or -1.
+ */
 static USER_FUNC(arm_check) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -376,6 +386,12 @@ static BattleUnitSetup entry_rocket_punch = {
     NULL, // itemDropTable
 };
 
+/**
+ * Init script of Magnus von Grapple: sets its wait, entry, attack, damage and confusion events,
+ * puts the frame part in its pose, starts the frame-following event, creates the arm trail data,
+ * clears its work values (arms attached, phase counters, the first stamp scene flag),
+ * places it at x=125 turned 55 degrees and sets its walk and run sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -456,11 +472,16 @@ static USER_FUNC(eff_dead) {
     return EVT_RETURN_DONE;
 }
 
+/** Removes the defeat glow created by eff_dead. */
 static USER_FUNC(eff_dead_delete) {
     effDelete(eff_charge);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Creates a white dust puff (a vapor effect fading to black) at x, y,
+ * z (args[0] to args[2]) with the lifetime given in args[3].
+ */
 USER_FUNC(eff_hokori) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -546,6 +567,10 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Entry event: Magnus and Mario's partner exchange the lines of the boss's entrance (stg2_mri_e24_09 and 10),
+ * then the partner returns to its pose.
+ */
 static EVT_BEGIN(entry_event)
     WAIT_FRAMES(120)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
@@ -568,6 +593,15 @@ static EVT_BEGIN(entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Magnus.
+ * If the arms are out (work 0 = 1) and both have returned,
+ * a counter counts down and when it is spent the arms are brought back (arm_return_event).
+ * Then uses an enemy item if it has one.
+ * With the arms on it uses the stamp (a stomp, always the first attack, with a line);
+ * once the stamp scene has been done it rolls to either stamp again or shoot the arms off (arm_bunri_event);
+ * with the arms out it does the shaking ceiling attack (shake_attack_event).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -630,6 +664,11 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The stamp attack: Magnus picks a target, the first time he says his line (stg2_mri_e24_11),
+ * steps back 50 units, lifts a leg with the sounds and poses MGN_A2_1 to A2_4, and stamps the target;
+ * the damage and result checks follow and he steps back to his place.
+ */
 EVT_BEGIN(stamp_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_batten_stamp_attack))
@@ -737,6 +776,12 @@ EVT_BEGIN(stamp_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The shake attack (weapon_batten_shake_attack, which hits every target on the other side):
+ * Magnus pounds the ground (poses MGN_A3_3 and A3_4, quake sound, camera shake) and dust falls from the ceiling.
+ * Mario, if he can act and is not Invisible, is put into his pose M_I_O while it runs;
+ * then the damage check runs on each target in turn.
+ */
 static EVT_BEGIN(shake_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_batten_shake_attack))
@@ -846,6 +891,13 @@ static EVT_BEGIN(shake_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The first time Magnus fires his arms off, he says a line (stg2_mri_e24_12),
+ * then plays the arm launch poses (MGN_A1_1 to A1_3) and sounds.
+ * Two rocket punch units are spawned (arms 0 and 1), linked to him through his unit work,
+ * and he switches to the no-arm pose table.
+ * Work 0 is set to 1 (arms out), work 2 to 1 and the counter in work 1 to 2.
+ */
 static EVT_BEGIN(arm_bunri_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_LAUNCHED, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -896,6 +948,12 @@ static EVT_BEGIN(arm_bunri_event)
     RETURN
 EVT_END()
 
+/**
+ * Brings the arms back: the arms-out flag is cleared,
+ * the arm return pose (MGN_A1_6) plays and two rocket punch units are spawned as the returning arms,
+ * which fly in from the right with the fly sound and ease back onto the body;
+ * the arm trails are removed, the reattach poses (MGN_A1_7 and A1_8) play and the normal pose table returns.
+ */
 static EVT_BEGIN(arm_return_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A1_6"))
@@ -931,6 +989,7 @@ static EVT_BEGIN(arm_return_event)
     RETURN
 EVT_END()
 
+/** Idle script of Magnus: plays its idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -1092,6 +1151,12 @@ static BattleWeapon weapon_batten_rocket_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init script of a rocket arm (X-Fist), run when arm_bunri_event spawns it:
+ * plays its pose, sets its base rotation, creates the trail effect for its side, starts the arm_event loop and,
+ * depending on which arm it is, flies it out from beside Magnus with the fly sound
+ * and settles it at its resting place: the flight of the arm being fired off.
+ */
 static EVT_BEGIN(init_event_r)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A1_4"))
@@ -1316,6 +1381,7 @@ static USER_FUNC(arm_init) {
     return EVT_RETURN_DONE;
 }
 
+/** Creates the arm trail effect (a Batten-style streak) for arm slot args[0], hidden at y -1000 until it moves. */
 static USER_FUNC(arm_init2) {
     s32 idx = evtGetValue(event, event->args[0]);
     ArmWork* arm = work[idx];
@@ -1324,6 +1390,11 @@ static USER_FUNC(arm_init2) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Per-frame update of an arm's trail: reads the arm's position,
+ * turns the arm to the angle of its path (easing a third of the way each frame while its wait event is not
+ * running), builds the arm's rotation matrix and puts the trail effect 18 units behind it, along its rotation.
+ */
 static USER_FUNC(arm_main) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -1389,6 +1460,7 @@ static USER_FUNC(arm_main) {
     return EVT_RETURN_DONE;
 }
 
+/** Removes the trail effect of arm slot args[0]. */
 static USER_FUNC(arm_end) {
     s32 idx = evtGetValue(event, event->args[0]);
     ArmWork* arm = work[idx];

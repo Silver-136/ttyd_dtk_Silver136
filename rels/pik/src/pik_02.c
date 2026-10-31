@@ -83,6 +83,11 @@ EvtWord pik_02_init_evt[172];
 EvtWord pik_02_init_evt[166];
 #endif
 
+/**
+ * Switches the hidden back room on for Mario's trip down the pipe (run by evt_go, the dokan exit event):
+ * turns the hit objects a_E_yuka, h_bero and h_dokan on and removes the painting's case event (GW(10)).
+ * Returns 0 in LW(0) (no override).
+ */
 EVT_BEGIN(haikei_on)
     CALL(evt_hitobj_onoff, STRING("a_E_yuka"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("h_bero"), 1, 1)
@@ -92,6 +97,12 @@ EVT_BEGIN(haikei_on)
     RETURN
 EVT_END()
 
+/**
+ * Reverse of haikei_on: switches the back-room hit objects (a_E_yuka, h_bero, h_dokan) off
+ * and re-registers the case event that shows the painting message (evt_kaiga) when Mario faces a_kaiga.
+ * Run as the enter event of s_bero (both door versions), by evt_return when Mario comes back up the pipe,
+ * and by the map init before the theft scene.
+ */
 EVT_BEGIN(haikei_off)
     CALL(evt_hitobj_onoff, STRING("a_E_yuka"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("h_bero"), 1, 0)
@@ -145,12 +156,20 @@ EVT_BEGIN(evt_return)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of the dokan pipe, whose destination is h_dokan on this same map: switches the back room on
+ * (haikei_on) so the hidden room is solid when Mario arrives.
+ */
 EVT_BEGIN(evt_go)
     CALL_CHILD(PTR(haikei_on))
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door callback of the sanctum door (evtIn): rotates the double door objects door_1_a
+ * and door_1_b in opposite directions by the angle in LW(0) scaled by 0.38867188.
+ */
 static EVT_BEGIN(s_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1_a"), 0, LW(0), 0)
@@ -159,6 +178,7 @@ static EVT_BEGIN(s_door_open)
     RETURN
 EVT_END()
 
+/** Door callback of the sanctum door (evtOut): the reverse of s_door_open. */
 static EVT_BEGIN(s_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1_a"), 0, LW(0), 0)
@@ -281,6 +301,11 @@ static EVT_BEGIN(init_powan)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for Pennington in the sanctum: stg6_pik_19 before the real Garnet Star,
+ * then stg6_pik_22 and stg6_pik_23 alternately (LSWF(0)) until he is back,
+ * stg7_pik_clear_09_1 until the end of chapter 8 and stg7_pik_clear_09_1_1 afterwards.
+ */
 static EVT_BEGIN(talk_powan)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_53_THE_REAL_GARNET_STAR)
@@ -404,6 +429,10 @@ static NpcSetupInfo npc_data[] = {
     {0},
 };
 
+/**
+ * Script helper: puts the NPC named args[0] at the position args[1..3] (floats) immediately,
+ * setting both its position and its previous position so it does not interpolate there.
+ */
 static USER_FUNC(npc_set_pos) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -417,16 +446,22 @@ static USER_FUNC(npc_set_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: creates the Garnet Star effect (star stone type 5) on the altar at (0, 60, -950)
+ * and keeps its pointer in LW(10) of the running script.
+ */
 USER_FUNC(hoshi) {
     event->lwData[10] = (EvtWord)effStarStoneEntry(5, 0.0f, 60.0f, -950.0f, 1.0f);
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: soft-deletes the star effect whose pointer is in LW(10) (made by the hoshi helper). */
 USER_FUNC(hoshi_delete) {
     effSoftDelete((EffectEntry*)event->lwData[10]);
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets the Y rotation of the star effect in LW(10) to args[0] (degrees). */
 USER_FUNC(hoshi_r) {
     EffectEntry* eff = (EffectEntry*)event->lwData[10];
 
@@ -434,6 +469,11 @@ USER_FUNC(hoshi_r) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Blocking script helper: makes the star effect in LW(10) hop from the altar to above Beldam's head (her
+ * position plus 50 in y) in a parabola, moving 0.5 units per frame horizontally with gravity 0.1;
+ * returns when it arrives. t, vy and speed are kept between frames in the event's userdata.
+ */
 USER_FUNC(hoshi_jump) {
     f32* pos = (f32*)((EffectEntry*)event->lwData[10])->userdata + 2;
     NpcEntry* npc = npcNameToPtr("\203}\203W\203\207\203\212\203\223");
@@ -478,6 +518,7 @@ USER_FUNC(hoshi_jump) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: reads the state of the star effect named args[0] into the variable args[1]. */
 USER_FUNC(get_starstone_seq) {
     EvtWord* args = event->args;
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, args[0]));
@@ -486,6 +527,7 @@ USER_FUNC(get_starstone_seq) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets the star effect named args[0] to state 1, which makes it fall. */
 static USER_FUNC(starstone_fall) {
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
@@ -493,6 +535,7 @@ static USER_FUNC(starstone_fall) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: moves the star effect named args[0] to the position args[1..3] (floats). */
 static USER_FUNC(set_starstone_pos) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -507,6 +550,7 @@ static USER_FUNC(set_starstone_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: writes the position of the star effect named args[0] into the variables args[1..3] (floats). */
 static USER_FUNC(get_starstone_pos) {
     EvtWord* args = event->args;
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, args[0]));
@@ -517,6 +561,11 @@ static USER_FUNC(get_starstone_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: creates a star stone effect and gives it a name.
+ * args[0] is the name, args[1] the star type, args[2..4] the position and args[5] the scale;
+ * the jump sound effect is turned off for it.
+ */
 static USER_FUNC(starstone_entry) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -532,6 +581,10 @@ static USER_FUNC(starstone_entry) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for the fake Garnet Star close-up:
+ * moves the effect "sub_bg" and the star "nise" to camera 5 and makes Mario use camera 5 too.
+ */
 static USER_FUNC(stone_bg) {
     EffectEntry* eff;
 
@@ -543,6 +596,7 @@ static USER_FUNC(stone_bg) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: moves the fake star "nise" back to camera 4. */
 USER_FUNC(reset_stone_cam) {
     EffectEntry* eff = effNameToPtr("nise");
 
@@ -720,6 +774,7 @@ static EVT_BEGIN(evt_sw)
     RETURN
 EVT_END()
 
+/** Case event for the painting on the wall (a_kaiga): prints the stg6_pik_24 message. */
 EVT_BEGIN(evt_kaiga)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg6_pik_24"), 0, 0)
@@ -1071,6 +1126,13 @@ EVT_BEGIN(nise_starstone_init)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for pik_02: loads the entrances (depending on whether the Garnet Star theft is still to come),
+ * music and ambience, NPCs, the blue switch that opens the curtain (evt_sw),
+ * the painting and the altar case events (evt_kaiga, evt_daiza),
+ * the Garnet Star theft scene (evt_garnet) on first entry, the return-trip door change, the fake star,
+ * and the Bowser interlude.
+ */
 EVT_BEGIN(pik_02_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_51_3_SURPRISE_GUESTS)
         SET_VALUE(LW(0), PTR(bero_data))

@@ -25,6 +25,7 @@ static EvtWord party_damage_pose[52];
 static EvtWord mario_fly[203];
 EvtWord moo_03_init_evt[35];
 
+/** Event script: puts the active partner (by party id) into its hurt pose during the flight through space. */
 static EVT_BEGIN(party_damage_pose)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
@@ -138,6 +139,10 @@ static USER_FUNC(z) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (runs every frame, blocking): spins Mario
+ * and the partner about their centres (10 degrees per call) while they fly through space.
+ */
 static USER_FUNC(mario_kirimomi) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);

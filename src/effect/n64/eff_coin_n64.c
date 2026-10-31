@@ -41,6 +41,11 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 void effCoinMain(EffectEntry* effect);
 void effCoinDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns four coin sprites around (x, y, z) at the preset offsets and delays in _data, each scaled by scale.
+ * The effect lasts 14 frames.
+ * battle_event_cmd.c spawns it at a position with scale 1; event scripts via evt_eff.
+ */
 EffectEntry* effCoinN64Entry(s32 type, s32 unused, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffCoinN64Work* work;
@@ -72,6 +77,10 @@ EffectEntry* effCoinN64Entry(s32 type, s32 unused, f32 x, f32 y, f32 z, f32 scal
     return effect;
 }
 
+/**
+ * Counts the 14-frame life down, starts each coin after its own delay and steps its 10-frame animation,
+ * then deletes the effect.
+ */
 void effCoinMain(EffectEntry* effect) {
     EffCoinN64Work* work = effect->userdata;
     s32 i;
@@ -104,6 +113,10 @@ void effCoinMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effCoinDisp, effect);
 }
 
+/**
+ * Draws each started coin as a camera-facing sprite from texture 0x84,
+ * shifting the texture window to the animation frame (two animation frames per texture step).
+ */
 void effCoinDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffCoinN64Work* work;

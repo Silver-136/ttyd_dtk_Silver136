@@ -156,6 +156,7 @@ static EVT_BEGIN(evt_switch_00_init)
     RETURN
 EVT_END()
 
+/** Switches the first pipe's exit off if its switch has not been pressed yet. */
 static EVT_BEGIN(evt_switch_00_after)
     IF_INT_EQUAL(GSWF_TIK_17_PIK_PIPE_RAISED, 0)
         SET_VALUE(LW(0), STRING("dokan_1"))
@@ -164,6 +165,10 @@ static EVT_BEGIN(evt_switch_00_after)
     RETURN
 EVT_END()
 
+/**
+ * Tornado switch handler for the first pipe (to Poshley Heights):
+ * the pipe rises 30 units over a second, its cover is hidden and the exit is switched on.
+ */
 static EVT_BEGIN(evt_switch_00)
     CALL(evt_mapobj_get_position, STRING("S_dakan_1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOKAN_APPEAR1"), LW(0), LW(1), LW(2), 0)
@@ -193,6 +198,7 @@ static EVT_BEGIN(evt_switch_01_init)
     RETURN
 EVT_END()
 
+/** Switches the second pipe's exit off if its switch has not been pressed yet. */
 static EVT_BEGIN(evt_switch_01_after)
     IF_INT_EQUAL(GSWF_TIK_17_MUJ_PIPE_RAISED, 0)
         SET_VALUE(LW(0), STRING("dokan_2"))
@@ -201,6 +207,10 @@ static EVT_BEGIN(evt_switch_01_after)
     RETURN
 EVT_END()
 
+/**
+ * Tornado switch handler for the second pipe (to Keelhaul Key):
+ * the pipe rises 30 units over a second, its cover is hidden and the exit is switched on.
+ */
 static EVT_BEGIN(evt_switch_01)
     CALL(evt_mapobj_get_position, STRING("S_dakan_2"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOKAN_APPEAR1"), LW(0), LW(1), LW(2), 0)
@@ -220,6 +230,10 @@ static EVT_BEGIN(evt_switch_01)
     RETURN
 EVT_END()
 
+/**
+ * Item-box callback for the FP Plus chest: takes control, puts the badge at the chest,
+ * waits for the chest animation and hands it to Mario.
+ */
 static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))

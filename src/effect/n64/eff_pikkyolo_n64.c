@@ -48,6 +48,11 @@ static effN64Vtx size16x16_tex16x16_vtx[] = {
 void effPikkyoloMain(EffectEntry* effect);
 void effPikkyoloDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns six randomly colored fragments at (x, y, z) thrown out with random velocities, scaled by scale;
+ * they last life frames (<= 0 means until deleted). Soft-deletable.
+ * Via evt_eff64 "pikkyolo_n64"; no script callers found.
+ */
 EffectEntry* effPikkyoloN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffPikkyoloN64Work* work;
@@ -99,6 +104,10 @@ EffectEntry* effPikkyoloN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 sc
     return effect;
 }
 
+/**
+ * Applies gravity (-0.5 per frame) to each fragment, bounces it off the ground at 70% speed and tumbles it;
+ * fades alpha over the last 8 frames.
+ */
 void effPikkyoloMain(EffectEntry* effect) {
     EffPikkyoloN64Work* work = effect->userdata;
     s32 i;
@@ -138,6 +147,7 @@ void effPikkyoloMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effPikkyoloDisp, effect);
 }
 
+/** Draws each fragment as a camera-facing, spinning quad using one of four animation cells of texture 0x41. */
 void effPikkyoloDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffPikkyoloN64Work* work;

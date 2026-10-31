@@ -14,6 +14,10 @@ double cos(float);
 void effSweatMain(EffectEntry* effect);
 void effSweatDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns sweat drops at (x, y, z) for `life` frames, fanned around `angle`.
+ * Used by the Yoshi partner and event scripts.
+ */
 EffectEntry* effSweatN64Entry(s32 type, f32 x, f32 y, f32 z, f32 base, f32 angle, s32 life) {
     EffectEntry* effect;
     EffSweatN64Work* work;
@@ -83,6 +87,12 @@ EffectEntry* effSweatN64Entry(s32 type, f32 x, f32 y, f32 z, f32 base, f32 angle
     return effect;
 }
 
+/**
+ * After its start delay each drop moves by its velocity:
+ * sideways speed damps 6% per frame and it falls with gravity 0.05 up to 0.1 per frame;
+ * it fades in over 8 frames and out over its last 16. The effect deletes once every drop's life is over.
+ * CAMERA_3D, layer 2.
+ */
 void effSweatMain(EffectEntry* effect) {
     EffSweatN64Work* work = effect->userdata;
     Vec position;
@@ -134,6 +144,10 @@ void effSweatMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws each started drop as a camera-facing 6.4 x 9.6 white quad of the TTYD sweat-drop texture 93,
+ * tilted by its angle and mirrored when the angle is positive.
+ */
 void effSweatDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffSweatN64Work* work;

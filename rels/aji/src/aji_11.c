@@ -131,6 +131,7 @@ static EVT_BEGIN(key_evt)
     RETURN
 EVT_END()
 
+/** Plays the small creature's walking animation GAZ_A_1 over and over for the NPC whose name is in LW(10). */
 EVT_BEGIN(evt_gajigaji_anim)
     LOOP(0)
         CALL(evt_npc_set_anim, LW(10), STRING("GAZ_A_1"))
@@ -139,6 +140,12 @@ EVT_BEGIN(evt_gajigaji_anim)
     RETURN
 EVT_END()
 
+/**
+ * Creates one of the background creatures (NPC LW(10) from c_gazigazi,
+ * placed at a random spot on the floor at depth LW(11),
+ * scaled between 0.5 and 1.5) and makes it glide around the room at random forever.
+ * Half of them also run the animation script evt_gajigaji_anim.
+ */
 EVT_BEGIN(evt_gajigaji_main)
     SET_VALUE(LW(10), LW(0))
     SET_VALUE(LW(11), LW(1))
@@ -168,6 +175,10 @@ EVT_BEGIN(evt_gajigaji_main)
     RETURN
 EVT_END()
 
+/**
+ * Creates the six small background creatures gazi1 to gazi6 that scuttle around the storage room
+ * (evt_gajigaji_main for each, at depths -280 to -255).
+ */
 EVT_BEGIN(evt_gajigaji)
     SET_VALUE(LW(0), STRING("gazi1"))
     SET_VALUE(LW(1), -280)
@@ -351,6 +362,7 @@ USER_FUNC(map_anim_flag_off) {
     anim->flags &= ~mask;
     return EVT_RETURN_DONE;
 }
+/** Script function: sets Mario's scale to 0 on all axes, making the player (Peach) invisible. */
 static USER_FUNC(peach_evt_toumei) {
     MarioWork* mario = marioGetPtr();
 

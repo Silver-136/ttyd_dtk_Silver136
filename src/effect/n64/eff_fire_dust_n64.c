@@ -74,6 +74,10 @@ void effFireDustMain(EffectEntry* effect);
 void effFireDustDisp(CameraId cameraId, EffectEntry* effect);
 static void main_dl(EffectEntry* effect, Mtx mtx);
 
+/**
+ * Spawns count particles of glowing fire dust around (x, y, z) on a ring of radius a with a vertical spread of
+ * b, running for lifetime frames (0 = until soft-deleted). Each starts after a staggered delay.
+ */
 EffectEntry* effFireDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 range, f32 height) {
     EffectEntry* effect;
     EffFireDustWork* work;
@@ -121,6 +125,10 @@ EffectEntry* effFireDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y
     return effect;
 }
 
+/**
+ * Each particle runs a 20-step cycle: it respawns on the ring at a random angle and height, flies outward,
+ * and eases toward half its speed while its scale follows scale_data. A delete request leaves 16 frames of fade.
+ */
 void effFireDustMain(EffectEntry* effect) {
     s32 height;
     EffFireDustWork* p;
@@ -195,6 +203,10 @@ void effFireDustMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws the particle set three times, turned 120 degrees apart around Y, with texture 0x20;
+ * main_dl does the per-particle drawing under each camera matrix.
+ */
 void effFireDustDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffFireDustWork* work;
@@ -237,6 +249,7 @@ void effFireDustDisp(CameraId cameraId, EffectEntry* effect) {
     main_dl(effect, mtx);
 }
 
+/** Draws every live fire-dust particle as a spinning, scaled yellow sprite under the camera matrix cam. */
 static void main_dl(EffectEntry* effect, Mtx cam) {
     EffFireDustWork* p;
     Mtx tr;

@@ -194,6 +194,12 @@ EvtWord batten_leader_yokeyoke_attack_event[176];
 EvtWord batten_leader_stop_attack_event[328];
 static EvtWord wait_event[16];
 
+/**
+ * Event script: moves the battle camera to the close view of Sir Grodus (position 83, 84, 349 looking at 83, 60,
+ * 0).
+ * LW(0) selects the timing: with 2 the move is instant, otherwise it takes 30 frames,
+ * and with 1 the script waits 600 ms after it.
+ */
 EVT_BEGIN(batten_leader_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
@@ -208,6 +214,10 @@ EVT_BEGIN(batten_leader_zoom)
     RETURN
 EVT_END()
 
+/**
+ * Camera helper of the Sir Grodus fight: moves the battle camera to a close view of Mario's side (X -120).
+ * With LW(0) = 2 it cuts immediately, otherwise it takes 30 frames; with LW(0) = 1 it then waits 600 ms.
+ */
 static EVT_BEGIN(mario_party_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
@@ -610,6 +620,7 @@ static BattleUnitKindPart parts[] = {
     {7, /*"杖のランプ１"*/"\x8F\xF1\x82\xCC\x83\x89\x83\x93\x83\x76\x82\x50", "c_shuryo", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kNoShadow, 0, pose_table},
 };
 
+/** Event script: plays the sound of Grodus's barrier breaking (SFX_BOSS_SRYO_BARRIER_BREAK1). */
 EVT_BEGIN(hakai_snd_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_SRYO_BARRIER_BREAK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     RETURN
@@ -629,6 +640,10 @@ USER_FUNC(evt_eff_pokopi_thunder) {
     effPokopiThunderN64Entry(1, 30, x, top, z, x, y, z, 1.0f);
     return EVT_RETURN_DONE;
 }
+/**
+ * Script helper: recolours the cloud effect named args[0] to white fading to yellow and lifts it 65 units up
+ * and 10 units forward; used for Grodus's lightning cloud.
+ */
 USER_FUNC(evt_eff_colorchange00) {
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
@@ -643,6 +658,7 @@ USER_FUNC(evt_eff_colorchange00) {
 
     return EVT_RETURN_DONE;
 }
+/** Script helper: sets the scale of Grodus's barrier effect named args[0] to args[1]. */
 USER_FUNC(evt_eff_barriersizechange) {
     EvtWord* args = event->args;
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, args[0]));
@@ -650,6 +666,13 @@ USER_FUNC(evt_eff_barriersizechange) {
     ((EffSyuryouWork*)eff->userdata)->scale = evtGetFloat(event, args[1]);
     return EVT_RETURN_DONE;
 }
+/**
+ * Script helper (runs every frame until done): steers the fire effect named args[0] toward the target point
+ * (args[2], args[3]) in a wobbling path at 15 units per frame, turning at most 15 degrees per frame.
+ * With mode args[1] set to 0 it finishes on arrival;
+ * otherwise it then flies off to the left edge (X -270) and is deleted.
+ * Used for the fireballs of Grodus's fire spell.
+ */
 USER_FUNC(evt_eff_firechange00) {
     Mtx m;
     Vec target;
@@ -745,6 +768,10 @@ USER_FUNC(evt_eff_firechange00) {
     }
     return 0;
 }
+/**
+ * Script helper: creates the wand-tip barrier glow effect at the end of Grodus's staff,
+ * sized by the unit's size multiplier.
+ */
 static USER_FUNC(eff_staff) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -761,6 +788,12 @@ static USER_FUNC(eff_staff) {
     wk[4] = unit->mSizeMultiplier;
     return EVT_RETURN_DONE;
 }
+/**
+ * Script helper: counts Grodus's living satellites (his unit work 9..12) and updates his invulnerability.
+ * With all four present the barrier effect appears around him and he becomes immune to damage and status;
+ * once a satellite is gone the barrier shatters (with glass effects and a break sound)
+ * and his defence is recalculated from the stored values plus the number of satellites left.
+ */
 USER_FUNC(check_satellite) {
     s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -860,6 +893,11 @@ USER_FUNC(check_satellite) {
     }
     return EVT_RETURN_DONE;
 }
+/**
+ * Script helper: returns the starting offset (x, y, z, mirrored by the unit's facing) of satellite args[2]
+ * when args[1] satellites surround the unit args[0], from a fixed layout for 1 to 4 satellites.
+ * The offsets go to the variables args[3..5].
+ */
 USER_FUNC(battleGetBattenSatelliteInitPos) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -970,6 +1008,11 @@ LightSeq4 btl_shuryolight_rod_normal = {{{"L_3C", 0}, {"L_3B", 1000}, {"L_3D", 0
 
 LightSeq1 btl_shuryolight_rod_off = {{{"L_3A", -1}}, NULL};
 
+/**
+ * Event script: animates Grodus's lamp parts from a sequence table (pointer in LW(6),
+ * a list of animation names with durations; durations are in ms, 0 waits for the animation to end, -1 ends,
+ * -2 blinks randomly, -3 and -4 are random waits). Runs the table forever in a sibling event.
+ */
 EVT_BEGIN(light_anim_rtn)
     BEGIN_SIBLING_EVENT
         SET_INT_READ_ADDR(LW(6))
@@ -1176,6 +1219,7 @@ EVT_BEGIN(light_anim_rtn)
     RETURN
 EVT_END()
 
+/** Event script: animates the staff lamp from the sequence table in LW(9), the same format as light_anim_rtn. */
 EVT_BEGIN(light_rod_anim_rtn)
     SET_INT_READ_ADDR(LW(9))
     LOOP(0)
@@ -1229,6 +1273,11 @@ EVT_BEGIN(light_rod_anim_rtn)
     RETURN
 EVT_END()
 
+/**
+ * Event script: when Grodus's body pose changes, chooses the matching lamp sequences.
+ * For the casting poses A_1B and A_1C the lamps blink quickly and the power lamp is steady;
+ * other poses use the normal sequences; restarts the lamp events accordingly.
+ */
 EVT_BEGIN(light_pose_change)
     CALL(enzan_lw_save2)
     CALL(btlevtcmd_AnimeGetPose, UNIT_ID_SELF, 1, LW(0))
@@ -1351,6 +1400,10 @@ EVT_BEGIN(light_pose_change)
     RETURN
 EVT_END()
 
+/**
+ * Event script: watches Grodus's body animation every frame and runs light_pose_change whenever it changes,
+ * so his lamps follow his pose.
+ */
 EVT_BEGIN(maiframeanimcheck)
     LOOP(0)
         CALL(btlevtcmd_AnimeGetPose, UNIT_ID_SELF, 1, LW(1))
@@ -1363,6 +1416,11 @@ EVT_BEGIN(maiframeanimcheck)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Sir Grodus: installs his wait, phase, attack, damage, confusion and entry events,
+ * offsets his HP gauge and sets up his unit work and the poses of his parts,
+ * including the links to his satellites (the unit ids kept in unit work).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))
@@ -1407,6 +1465,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Entry event of the Sir Grodus fight: the status window is hidden,
+ * the camera moves to Grodus and he speaks (stg8_las_65) before calling his satellites (sub_call_satellite)
+ * and taking his battle stance.
+ */
 static EVT_BEGIN(entry_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     SET_VALUE(LW(0), 2)
@@ -1436,6 +1499,10 @@ static EVT_BEGIN(entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of Sir Grodus: default damage handling, then clears unit work 3,
+ * which his self-cast Shikaeshi (4) and Yokeyoke (5) spells set; for those it first waits and resets the camera.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -1508,6 +1575,10 @@ EVT_BEGIN(damage_sub_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of Sir Grodus: before the player phase it runs player_before_phase_event,
+ * and after the player phase monster_before_phase_event, which handle his satellites and his statuses.
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1523,6 +1594,11 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Event script: Grodus's turn before the enemy phase, driving his three story stages by HP.
+ * At 75 percent HP or less he stops and speaks (stg8_las_66); at 50 percent he says stg8_las_67;
+ * at 25 percent he sets his wobbly pose table (pose_table_furafura) and says stg8_las_68.
+ */
 EVT_BEGIN(monster_before_phase_event)
     CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1588,6 +1664,11 @@ EVT_BEGIN(monster_before_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of Sir Grodus: his satellites are killed, the status window is hidden,
+ * he speaks his last line (stg8_las_69) and the slow death sequence runs;
+ * if the killing blow had damage code 512 the satellites go without the death sequence.
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_WaitAttackEnd)
     SET_VALUE(LW(0), 9)
@@ -1805,6 +1886,10 @@ static Vec splineTableOut4_4[] = {
     {-38.0f, 7.0f, 5.0f},
 };
 
+/**
+ * Event script: puts the blur attribute (0x4000000) on the satellite in the unit work slot LW(2), part LW(4),
+ * so it is drawn blurred while it spins.
+ */
 static EVT_BEGIN(satellite_blur_on)
     SET_VALUE(LW(2), 9)
     LOOP(4)
@@ -2536,6 +2621,10 @@ USER_FUNC(btlevtcmd_AnimeGetPose) {
     evtSetValue(event, args[2], (EvtWord)animPoseGetCurrentAnim(part->poseId));
     return EVT_RETURN_DONE;
 }
+/**
+ * Script helper: saves the 16 local variables LW(0..15) of the running event into the static array xlw
+ * so a sub-script can use the registers and restore them.
+ */
 static USER_FUNC(enzan_lw_save) {
     s32 i;
 
@@ -2544,6 +2633,7 @@ static USER_FUNC(enzan_lw_save) {
     }
     return EVT_RETURN_DONE;
 }
+/** Script helper: restores LW(0..15) from the array saved by enzan_lw_save. */
 static USER_FUNC(enzan_lw_load) {
     s32 i;
 
@@ -2552,6 +2642,7 @@ static USER_FUNC(enzan_lw_load) {
     }
     return EVT_RETURN_DONE;
 }
+/** Script helper: saves LW(0..15) into a second static array xlw2 (a separate slot from enzan_lw_save). */
 USER_FUNC(enzan_lw_save2) {
     s32 i;
 
@@ -2560,6 +2651,7 @@ USER_FUNC(enzan_lw_save2) {
     }
     return EVT_RETURN_DONE;
 }
+/** Script helper: restores LW(0..15) from the second array saved by enzan_lw_save2. */
 USER_FUNC(enzan_lw_load2) {
     s32 i;
 
@@ -2568,6 +2660,7 @@ USER_FUNC(enzan_lw_load2) {
     }
     return EVT_RETURN_DONE;
 }
+/** Script helper: copies the string args[0] (at most 16 characters) into the static buffer xmemo. */
 USER_FUNC(datastrcopy) {
     s8* s = (s8*)evtGetValue(event, event->args[0]);
     s32 i;
@@ -2578,6 +2671,10 @@ USER_FUNC(datastrcopy) {
     xmemo[i] = 0;
     return EVT_RETURN_DONE;
 }
+/**
+ * Script helper: starts maiframeanimcheck as a new event for this unit,
+ * storing it in xevt and giving it the xmemo buffer to compare poses against.
+ */
 USER_FUNC(pose_check_evt_run) {
     xevt = evtEntryType(maiframeanimcheck, event->priority, 0, event->type);
     xevt->unitId = event->unitId;
@@ -2588,10 +2685,12 @@ USER_FUNC(pose_check_evt_run) {
     xevt->ufBase = event->ufBase;
     return EVT_RETURN_DONE;
 }
+/** Script helper: stops the pose-watching event that pose_check_evt_run started. */
 USER_FUNC(pose_check_evt_stop) {
     evtDeleteID(xevt->eventId);
     return EVT_RETURN_DONE;
 }
+/** Script helper: sets hitOffsetX of part args[1] of the unit args[0] to args[2]. */
 USER_FUNC(btl_hitoffsetx) {
     s32 id;
     EvtWord* args = event->args;
@@ -2606,6 +2705,10 @@ USER_FUNC(btl_hitoffsetx) {
     part->hitOffsetX = evtGetValue(event, args[2]);
     return EVT_RETURN_DONE;
 }
+/**
+ * Script helper: hooks the display callback _light_point_callback onto Grodus's body pose
+ * and hides the five lamp parts (3..7), which are drawn through the callback instead.
+ */
 static USER_FUNC(_set_draw_callback) {
     BattleWork* wp = _battleWorkPointer;
     s32 id = BattleTransID(event, UNIT_ID_SELF);
@@ -2630,6 +2733,10 @@ static USER_FUNC(_set_draw_callback) {
     p7->attributes |= kHidden;
     return EVT_RETURN_DONE;
 }
+/**
+ * Display callback for Grodus: when the pose group being drawn is one of his five lamp locators (locator6, 9, 8,
+ * 7, 5), draws the matching lamp part's plane shape at that locator.
+ */
 void _light_point_callback(void* userdata, s32 group, Mtx* modeling) {
     BattleUnitPart* part = userdata;
     BattleUnit* unit;
@@ -2699,6 +2806,11 @@ USER_FUNC(_hp_gauge_flag_on) {
     }
     return EVT_RETURN_DONE;
 }
+/**
+ * Starts moving satellite n of the unit along a spline:
+ * allocates a 5-point spline from table, remembers the table on the satellite's body part,
+ * and returns TRUE (FALSE if that satellite slot is empty).
+ */
 u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     BattenSpline* sp;
 
@@ -2716,6 +2828,11 @@ u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table) {
     BtlUnit_GetPartsPtr(BattleGetUnitPtr(_battleWorkPointer, unit->work[UNIT_WORK_SATELLITE + n]), 1)->work[1] = (EvtWord)table;
     return TRUE;
 }
+/**
+ * Advances satellite n of the unit one frame along its spline,
+ * moving over 60 frames relative to the unit's position and facing, and frees the spline when finished.
+ * Returns TRUE while it is still moving.
+ */
 u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
     BattenSpline* sp;
     BattleUnit* sat;
@@ -2747,6 +2864,10 @@ u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n) {
     sp->count++;
     return TRUE;
 }
+/**
+ * Script helper: pulls the satellites in to Grodus along the "in" splines paired with the "out" splines they
+ * left by; blocks until all have arrived.
+ */
 USER_FUNC(battenSatelliteToInside) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -2803,6 +2924,10 @@ USER_FUNC(battenSatelliteToInside) {
     }
     return moving == FALSE ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
+/**
+ * Script helper: sends args[1] satellites out from Grodus to their outer positions along the "out" splines for
+ * that many satellites; blocks until all have arrived.
+ */
 USER_FUNC(battenSatelliteToOutside) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);

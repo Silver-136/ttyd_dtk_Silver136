@@ -11,6 +11,12 @@
 void effCrystalMain(EffectEntry* effect);
 void effCrystalDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a crystal glint at (x, y, z).
+ * Types 0-6 pick one of seven colour/animation variants;
+ * any other type shrinks from scale toward 0.1 over lifetime.
+ * sac_suki.c spawns type 6 with life 60; event scripts via evt_eff.
+ */
 EffectEntry* effCrystalN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffCrystalN64Work* work;
@@ -66,6 +72,10 @@ EffectEntry* effCrystalN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32
     return effect;
 }
 
+/**
+ * Fades in over 16 frames and out over the last 16 (a delete request cuts the life to 30).
+ * Sets the tint and alpha for the variant: some pulse with a sine, the later ones keep growing by 10% per frame.
+ */
 void effCrystalMain(EffectEntry* effect) {
     EffCrystalN64Work* work = effect->userdata;
     Vec position;
@@ -211,6 +221,7 @@ effN64Vtx size100x100_tex32x32_vtx[] = {
     {-50, 50, -1, 0, 1024, 0, 0, 0, 255},
 };
 
+/** Draws a camera-facing glint of 108x108 or 100x100 units; types below 3 use textures 0x6D and 0x6E. */
 void effCrystalDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffCrystalN64Work* work;

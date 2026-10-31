@@ -160,6 +160,11 @@ void BattleAudienceCtrlProcessKinopio(s32 index) {
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+/**
+ * Status 0, idle: faces the stage (or away, for back-facing seats) and now and
+ * then starts a fidget (turn around, tilt the head, hop) or a cheer,
+ * more often the fuller the crowd is relative to its expected size. A member hit by Mario switches to status 10.
+ */
 void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
     BattleAudience* base;
     BattleAudienceMember* m;
@@ -331,6 +336,7 @@ void BattleAudienceCtrlProcessKinopioWait(s32 index, s32 front) {
 
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
+/** Status 1, "furimuki" (looking back): turns 180 degrees over 15 frames, holds, turns back, then idles again. */
 void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
@@ -351,6 +357,7 @@ void BattleAudienceCtrlProcessKinopioWaitHurimuki(s32 index, s32 front) {
     }
 }
 
+/** Status 2, "kubi katamuke" (head tilt): sways the sprite sideways and back over 60 frames, then idles again. */
 void BattleAudienceCtrlProcessKinopioWaitKubiKatamuke(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
@@ -374,6 +381,7 @@ void BattleAudienceCtrlProcessKinopioWaitKubiKatamuke(s32 index, s32 front) {
     }
 }
 
+/** Status 3, idle hop: one small hop (three higher ones for Punies), then back to idle. */
 void BattleAudienceCtrlProcessKinopioWaitJump(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
@@ -410,6 +418,7 @@ void BattleAudienceCtrlProcessKinopioWaitJump(s32 index, s32 front) {
     }
 }
 
+/** Status 4, cheering with raised arms: bobs up and down for counterF cycles of 30 frames. */
 void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 0) {
@@ -437,6 +446,7 @@ void BattleAudienceCtrlProcessKinopioJoyRaiseArm(s32 index, s32 front) {
     }
 }
 
+/** Status 5, cheering: one excited hop of slightly random height. */
 void BattleAudienceCtrlProcessKinopioJoyJump(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
@@ -464,6 +474,7 @@ void BattleAudienceCtrlProcessKinopioJoyJump(s32 index, s32 front) {
     }
 }
 
+/** Status 6, big cheer: two higher hops while spinning. */
 void BattleAudienceCtrlProcessKinopioJoyJump2(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
@@ -492,6 +503,12 @@ void BattleAudienceCtrlProcessKinopioJoyJump2(s32 index, s32 front) {
     }
 }
 
+/**
+ * Status 7, holding an item to throw: waits during command input until the item's timer runs out,
+ * then throws (status 8).
+ * If Mario or a partner hits the member first, the item is dropped, the member is knocked back (status 10) and,
+ * unless the item was junk, the crowd's target size shrinks a little.
+ */
 void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
     BattleWork* bw = _battleWorkPointer;
     BattleAudience* base = BattleAudienceBaseGetPtr();
@@ -523,6 +540,10 @@ void BattleAudienceCtrlProcessKinopioItemOn(s32 index, s32 front) {
     }
 }
 
+/**
+ * Status 8, throwing: plays the throw animation, then idles.
+ * Being hit during the throw knocks it back as in status 7.
+ */
 void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     BattleAudience_SetAnim(index, 6, FALSE);
@@ -542,6 +563,7 @@ void BattleAudienceCtrlProcessKinopioItemThrow(s32 index, s32 front) {
     }
 }
 
+/** Status 9, booing: bobs with the arms-up animation for counterF cycles of 30 frames, then idles. */
 void BattleAudienceCtrlProcessKinopioBooing(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     BattleAudience_SetAnim(index, 4, FALSE);
@@ -567,6 +589,10 @@ void BattleAudienceCtrlProcessKinopioBooing(s32 index, s32 front) {
     }
 }
 
+/**
+ * Status 10, hit by Mario or a partner: knocked up and squashed,
+ * then flees screaming (status 12) when allowed to leave, otherwise goes back to idle.
+ */
 void BattleAudienceCtrlProcessKinopioDamage(s32 index, s32 front) {
     BattleAudienceMember* m;
     BattleAudienceBaseGetPtr();
@@ -603,6 +629,10 @@ void BattleAudienceCtrlProcessKinopioDamage(s32 index, s32 front) {
     }
 }
 
+/**
+ * Status 11, arriving: walks in to the member's seat (Piranha Plants rise from below after a random delay),
+ * then idles. Also used to send phase-event members back to their seats.
+ */
 void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
     BattleAudienceMember* m;
     f32 dx;
@@ -682,6 +712,7 @@ void BattleAudienceCtrlProcessKinopioEnter(s32 index, s32 front) {
     }
 }
 
+/** Status 12, leaving: walks out of the stands (Piranha Plants sink into the floor) and removes the member. */
 void BattleAudienceCtrlProcessKinopioEscape(s32 index, s32 front) {
     BattleAudienceMember* m;
     BattleAudienceBaseGetPtr();
@@ -733,6 +764,7 @@ void BattleAudienceCtrlProcessKinopioEscape(s32 index, s32 front) {
     }
 }
 
+/** Status 13, asleep after a Crazee Dayzee's song: breathes slowly with a pulsing blue tint until woken. */
 void BattleAudienceCtrlProcessKinopioSleep(s32 index, s32 front) {
     BattleAudience* base;
     BattleAudienceMember* m;
@@ -822,6 +854,11 @@ static BattleWeapon weapon_teresa_trans = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Status 14, Boo phase event: the Boo flies out of the stands to a random unit and,
+ * unless it is already invisible or shadow-guarded, turns it invisible (weapon_teresa_trans),
+ * then returns to its seat.
+ */
 void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front) {
     BattleWork* bw = _battleWorkPointer;
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
@@ -887,6 +924,12 @@ void BattleAudienceCtrlProcessKinopioTransEvt(s32 index, s32 front) {
 s32 intrudeSound;
 
 static const Vec v0 = {0.0f, 0.0f, 0.0f};
+/**
+ * Status 15, Shy Guy phase event: the Shy Guy runs onto the stage
+ * and either makes a stage prop fall (BattleStage_ObjectFallCheck) or wiggles three times
+ * and sets off the stage nozzle (BattleStage_NozzleWorkCheck) while running off the side;
+ * then it returns to its seat. At rank 0 it always makes a prop fall.
+ */
 void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
     BattleWork* bw = _battleWorkPointer;
     BattleAudienceMember* m;
@@ -1093,6 +1136,10 @@ void BattleAudienceCtrlProcessKinopioIntrude(s32 index, s32 front) {
     }
 }
 
+/**
+ * Status 16, Crazee Dayzee phase event: spins, sings (with floating notes) for 120 frames,
+ * and puts the rest of the crowd to sleep.
+ */
 void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
     BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
@@ -1145,6 +1192,10 @@ void BattleAudienceCtrlProcessKinopioSing(s32 index, s32 front) {
     }
 }
 
+/**
+ * Puts one member to sleep (status 13 after 3 frames) for the Dayzee's song,
+ * redirecting a wide member's tail seat to its owner and sparing Koopas hiding in their shells.
+ */
 void BattleAudienceCtrlProcessKinopioSingSub(s32 index) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if (m->flags & AUDIENCE_MEMBER_FLAG_WIDE_SUB) {
@@ -1155,6 +1206,10 @@ void BattleAudienceCtrlProcessKinopioSingSub(s32 index) {
     }
 }
 
+/**
+ * Status 17, Koopa phase event: after a random delay the Koopa hops into its shell (with the shell sound),
+ * stays inside until released, then hops out and idles.
+ */
 void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if (m->step >= 2 && m->step <= 5) {
@@ -1206,6 +1261,7 @@ void BattleAudienceCtrlProcessKinopioShell(s32 index, s32 front) {
     }
 }
 
+/** Status 18, Bulky Bob-omb phase event: lights its fuse (sound for 180 frames) and counts down to the blast. */
 void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front) {
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
     if ((u8)front == 1) {
@@ -1236,6 +1292,10 @@ void BattleAudienceCtrlProcessKinopioIgnite(s32 index, s32 front) {
     }
 }
 
+/**
+ * Status 19, Bulky Bob-omb explosion: swells, explodes with a blast effect (front rows only)
+ * and clears the members in the surrounding seats via BattleAudienceCtrlProcessKinopioFireSub.
+ */
 void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front) {
     BattleAudience* base;
     BattleAudienceMember* m;
@@ -1289,6 +1349,10 @@ void BattleAudienceCtrlProcessKinopioFire(s32 index, s32 front) {
     }
 }
 
+/**
+ * Applies a Bulky Bob-omb blast to one seat: another Bulky Bob-omb catches and explodes too (status 19),
+ * anyone else except a shelled Koopa is removed from the crowd and the target count drops by one.
+ */
 void BattleAudienceCtrlProcessKinopioFireSub(s32 index) {
     BattleAudience* base = BattleAudienceBaseGetPtr();
     BattleAudienceMember* m = BattleAudienceGetPtr(index);
@@ -1308,6 +1372,11 @@ void BattleAudienceCtrlProcessKinopioFireSub(s32 index) {
     }
 }
 
+/**
+ * Status 20, Piranha Plant phase event: picks a nearby member,
+ * turns to it and eats it (removing it from the crowd), then idles.
+ * Goes straight back to idle when no one is in reach.
+ */
 void BattleAudienceCtrlProcessKinopioEat(s32 index, s32 front) {
     BattleAudience* base;
     BattleAudienceMember* m;

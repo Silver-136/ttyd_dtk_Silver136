@@ -564,6 +564,12 @@ EventStage event_dt[] = {
     {"エンディング" NAME_EN("Ending"), stage9_evt, sizeof(stage9_evt) / sizeof(EventData)}
 };
 
+/**
+ * New-game setup, also story point STG0_00 "Prologue" (aaa_00):
+ * resets the inventory (pouchInit), gives the Boots, Hammer and Magical Map and 100 coins,
+ * resets the badge shop, Pianta Parlor and information seller, zeroes the play clock and makes the player Mario.
+ * seq_load calls it when a new file starts; later story points' setups build on it.
+ */
 // Stage 0 / Prologue -----------------------------------------------------------------
 void stg0_00_init(void) {
     pouchGetPtr(); // return value unused
@@ -585,6 +591,7 @@ void stg0_05_init(void) {
     swSet(0x49B); // GSWF_GOR_00_GOOMBELLA_ASSAULT_STARTED
 }
 
+/** Story point STG0_08 "Stolen Coins" (gor_02): Goombella joins the party. */
 void stg0_08_init(void) {
     partyJoin(PARTNER_GOOMBELLA);
 }
@@ -602,6 +609,7 @@ void stg0_13_init00(void) {
     swSet(0x539); // GSWF_TIK_04_BLACK_KEY
 }
 
+/** Story point STG0_16 "Frankly's House" (gor_02): unlocks star power 0. */
 void stg0_16_init(void) {
     pouchGetStarStone(0);
 }
@@ -611,12 +619,17 @@ void stg1_01a_init(void) {
     swSet(0x6F7); // GSWF_HEI_01_BUSH_PIPE_REVEALED
 }
 
+/** Story point STG1_03 "Petalburg Gatekeeper" (nok_01): delivers mail 0x10 and 0x1A; sets GSWF_MAIL_FRANKLY_SENT. */
 void stg1_03_init(void) {
     swSet(7); // GSWF_MAIL_FRANKLY_SENT
     pouchReceiveMail(0x10);
     pouchReceiveMail(0x1A);
 }
 
+/**
+ * Story point STG1_06_01 "Gold Fuzzy" (hei_10): gives the Moon Stone and Sun Stone;
+ * sets GSWF_HEI_MOON_STONE_TAKEN and GSWF_HEI_SUN_STONE_TAKEN.
+ */
 void stg1_06_01_init(void) {
     pouchGetItem(ITEM_MOON_STONE);
     swSet(0x6EF); // GSWF_HEI_MOON_STONE_TAKEN
@@ -630,56 +643,73 @@ void stg1_08_init(void) {
     swSet(0x6F6); // GSWF_HEI_01_KOOPIE_KOO_FAREWELL_SEEN
 }
 
+/** Story point STG1_09 "Hooktail Castle" (gon_01): takes the Moon Stone and Sun Stone. */
 void stg1_09_init(void) {
     pouchRemoveItem(ITEM_MOON_STONE);
     pouchRemoveItem(ITEM_SUN_STONE);
 }
 
+/** Story point STG1_09_02 "Lock" (gon_01): empty; this point needs no setup beyond the earlier ones. */
 void stg1_09_02_init(void) {
     //stubbed
 }
 
+/** Story point STG1_10 "Father's Letter" (gon_03): empty; this point needs no setup beyond the earlier ones. */
 void stg1_10_init(void) {
     //stubbed
 }
 
+/** Story point STG1_12_02 "Lock" (gon_04): gives the Castle Key (item 0x0D). */
 void stg1_12_02_init(void) {
     pouchGetItem(ITEM_CASTLE_KEY_0x0D);
 }
 
+/** Story point STG1_13 "A Suspicious Room" (gon_07): takes the Castle Key (item 0x0D). */
 void stg1_13_init(void) {
     pouchRemoveItem(ITEM_CASTLE_KEY_0x0D);
 }
 
+/** Story point STG1_13_01 "50 Seconds to Escape" (gon_06): gives the Black Key (item 0x22). */
 void stg1_13_01_init(void) {
     pouchGetItem(ITEM_BLACK_KEY_0x22);
 }
 
+/** Story point STG1_13_02 "Key 2" (gon_03): gives the Paper Curse; takes the Black Key (item 0x22). */
 void stg1_13_02_init(void) {
     pouchRemoveItem(ITEM_BLACK_KEY_0x22);
     pouchGetItem(ITEM_PAPER_CURSE);
 }
 
+/** Story point STG1_13_03 "Lock 2" (gon_05): gives the Castle Key (item 0x0C). */
 void stg1_13_03_init(void) {
     pouchGetItem(ITEM_CASTLE_KEY_0x0C);
 }
 
+/** Story point STG1_14 "Paper Bridge (Right)" (gon_04): takes the Castle Key (item 0x0C). */
 void stg1_14_init(void) {
     pouchRemoveItem(ITEM_CASTLE_KEY_0x0C);
 }
 
+/** Story point STG1_15_02 "Lock 3" (gon_08): gives the Castle Key (item 0x0F). */
 void stg1_15_02_init(void) {
     pouchGetItem(ITEM_CASTLE_KEY_0x0F);
 }
 
+/** Story point STG1_15_03 "Key 4" (gon_05): takes the Castle Key (item 0x0F). */
 void stg1_15_03_init(void) {
     pouchRemoveItem(ITEM_CASTLE_KEY_0x0F);
 }
 
+/** Story point STG1_15_04 "Lock 4" (gon_05): gives the Castle Key (item 0x0E). */
 void stg1_15_04_init(void) {
     pouchGetItem(ITEM_CASTLE_KEY_0x0E);
 }
 
+/**
+ * Story point STG1_16 "Hooktail" (gon_11): takes Castle Key 0x0E
+ * and gives the badges found in Hooktail Castle (Attack FX R, Power Bounce, Multibounce, Power Smash),
+ * equipping Attack FX R.
+ */
 void stg1_16_init00(void) {
     pouchRemoveItem(ITEM_CASTLE_KEY_0x0E);
     pouchGetItem(ITEM_ATTACK_FX_R);
@@ -694,6 +724,7 @@ void stg1_16_init01(void) {
     swSet(0x5DA); // GSWF_GON_11_HOOKTAIL_INTRO_SKIP
 }
 
+/** Story point STG1_17 "Father & Son Reunited" (gon_11): unlocks star power 1; gives the Diamond Star. */
 void stg1_17_init(void) {
     pouchGetItem(ITEM_DIAMOND_STAR);
     pouchGetStarStone(1);
@@ -705,10 +736,12 @@ void stg1_19_init(void) {
     swSet(0x1069); // GSWF_AJI_01_PEACH_DOOR_OPENS_SEEN
 }
 
+/** Story point STG1_20 "Koops Leaves" (nok_01): switches the player back to Mario. */
 void stg1_20_init(void) {
     marioSetCharMode(CHARACTER_MARIO);
 }
 
+/** Story point STG1_30 "Zess T." (gor_01): delivers mail 0; marks mail 0 read. */
 void stg1_30_init(void) {
     pouchReceiveMail(0);
     pouchOpenMail(0);
@@ -723,6 +756,10 @@ void stg1_35_init01(void) {
     swSet(0x536); // GSWF_TIK_03_SECRET_PASSAGE_OPEN
 }
 
+/**
+ * Story point STG2_00 "Boggly Woods" (sys_01): puts Mario at the stats expected for chapter 2:
+ * max HP 15, max FP 15, 6 BP and level 3.
+ */
 void stg2_00_init(void) {
     PouchData* pouch;
 
@@ -734,10 +771,12 @@ void stg2_00_init(void) {
     pouch->level = 3;
 }
 
+/** Story point STG2_03_03 "Flurrie Intro" (win_03): empty; this point needs no setup beyond the earlier ones. */
 void stg2_03_03_init(void) {
     //stubbed
 }
 
+/** Story point STG2_09 "Flurrie Joins" (win_04): gives the Necklace. */
 void stg2_09_init(void) {
     pouchGetItem(ITEM_NECKLACE);
 }
@@ -835,6 +874,7 @@ void stg2_21_03_init(void) {
     swSet(0xB22); // GSWF_MRI_09_WALL_PUZZLE_SOLVED
 }
 
+/** Story point STG2_21_04 "Escape" (mri_17): gives the Super Boots. */
 void stg2_21_04_init(void) {
     pouchGetItem(ITEM_SUPER_BOOTS);
 }
@@ -878,6 +918,7 @@ void stg2_25_02_init(void) {
     swSet(0x106A); // GSWF_AJI_16_PEACH_STG2_SCENE_SEEN
 }
 
+/** Story point STG2_26 "Praise from the Puni" (mri_00): switches the player back to Mario. */
 void stg2_26_init(void) {
     marioSetCharMode(CHARACTER_MARIO);
 }
@@ -892,10 +933,12 @@ void stg2_44_init(void) {
     swSet(0x4CE); // GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE
 }
 
+/** Story point STG2_47 "After Getting the Ticket" (gor_03): gives the Blimp Ticket. */
 void stg2_47_init(void) {
     pouchGetItem(ITEM_BLIMP_TICKET);
 }
 
+/** Story point STG2_END "To Glitzville" (gor_04): delivers mail 0x11; sets GSWF_MAIL_KOOPLEY_SENT. */
 void stg2_end_init(void) {
     swSet(8); // GSWF_MAIL_KOOPLEY_SENT
     pouchReceiveMail(0x11);
@@ -1053,11 +1096,13 @@ void stg3_20_init_8(void) {
     swSet(0x970); // GSWF_TOU_RANK_8_MAIL_DONE
 }
 
+/** Story point STG3_20_01 "Super Hammer" (tou_01): delivers mail 7; marks mail 7 read. */
 void stg3_20_01_init(void) {
     pouchReceiveMail(7);
     pouchOpenMail(7);
 }
 
+/** Story point STG3_20_02 "Back to the Minors" (tou_04): gives the Super Hammer; delivers mail 8; marks mail 8 read. */
 void stg3_20_02_init(void) {
     pouchGetItem(ITEM_SUPER_HAMMER);
     pouchReceiveMail(8);
@@ -1116,20 +1161,27 @@ void stg3_20_06_init(void) {
     pouchOpenMail(10);
 }
 
+/** Story point STG3_20_07_00 "Storage Room Unlocked" (tou_04): gives the Storage Key (item 0x12). */
 void stg3_20_07_00_init(void) {
     pouchGetItem(ITEM_STORAGE_KEY_0x12);
 }
 
+/** Story point STG3_20_08 "Ms. Mowz" (tou_06): delivers mail 11; marks mail 11 read. */
 void stg3_20_08_init(void) {
     pouchReceiveMail(11);
     pouchOpenMail(11);
 }
 
+/** Story point STG3_20_09 "Blowing Containers" (tou_06): delivers mail 12; marks mail 12 read. */
 void stg3_20_09_init(void) {
     pouchReceiveMail(12);
     pouchOpenMail(12);
 }
 
+/**
+ * Story point STG3_20_12 "Jolene's Secret" (tou_05):
+ * takes Storage Key 0x12 and marks the eight tou_06 blocks A-H as broken.
+ */
 void stg3_20_12_init(void) {
     pouchRemoveItem(ITEM_STORAGE_KEY_0x12);
     swSet(0x979); // GSWF_TOU_06_BIG_BLOCK_A_BROKEN
@@ -1184,12 +1236,17 @@ void stg3_20_13_init(void) {
     swClear(0x996); // GSWF_TOU_08_JUMP_STORY_MAJORS_1ST
 }
 
+/**
+ * Story point STG3_20_15 "Unlocking the Door" (tou_06): gives the Storage Key (item 0x13); delivers mail 15;
+ * marks mail 15 read.
+ */
 void stg3_20_14_init(void) {
     pouchGetItem(ITEM_STORAGE_KEY_0x13);
     pouchReceiveMail(15);
     pouchOpenMail(15);
 }
 
+/** Story point STG3_20_16 "Flattened" (tou_12): takes the Storage Key (item 0x13). */
 void stg3_20_15_init(void) {
     pouchRemoveItem(ITEM_STORAGE_KEY_0x13);
 }
@@ -1238,6 +1295,7 @@ void stg3_32_init(void) {
     swSet(0x961); // GSWF_TOU_05_DUCT_GRATE_FELL
 }
 
+/** Story point STG3_33 "Peach: The Secret Weapon" (aji_10): unlocks star power 3; gives the Gold Star. */
 void stg3_33_init(void) {
     pouchGetItem(ITEM_GOLD_STAR);
     pouchGetStarStone(3);
@@ -1252,6 +1310,11 @@ void stg3_33_04_init(void) {
     swClear(0x106C); // GSWF_AJI_PEACH_IN_UNIFORM
 }
 
+/**
+ * Story point STG3_34 "Return to Rogueport" (tou_02): ends chapter 3 at the Glitz Pit:
+ * makes the player Mario, takes the Champ's Belt, clears the 20 fighter-beaten flags,
+ * the champion scene flags and the saved ranking, and sets the lobby crowd flag.
+ */
 void stg3_34_init(void) {
     int i;
 
@@ -1275,6 +1338,7 @@ void stg3_35_init(void) {
     swSet(0x9C0); // GSWF_TOU_LEFT_AFTER_CHAPTER
 }
 
+/** Story point STG3_50 "Thousand-Year Door" (tik_05): delivers mail 2; marks mail 2 read. */
 void stg3_50_init(void) {
     pouchReceiveMail(2);
     pouchOpenMail(2);
@@ -1286,14 +1350,17 @@ void stg3_52_init(void) {
     pouchReceiveMail(0x12);
 }
 
+/** Story point STG3_END "To Stage 4" (tik_07): empty; this point needs no setup beyond the earlier ones. */
 void stg3_end_init(void) {
     //stubbed
 }
 
+/** Story point STG4_00 "Welcome to Stage 4" (sys_01): empty; this point needs no setup beyond the earlier ones. */
 void stage4_00_init(void) {
     //stubbed
 }
 
+/** Story point STG4_04 "Storage Room Unlocked" (usu_01): gives the Shop Key. */
 void stage4_04_init(void) {
     pouchGetItem(ITEM_SHOP_KEY);
 }
@@ -1311,14 +1378,17 @@ void stage4_05_init(void) {
     pouchReceiveMail(0x1D);
 }
 
+/** Story point STG4_09_05 "Lock" (jin_00): gives the Steeple Key (item 0x16). */
 void stage4_09_05_init(void) {
     pouchGetItem(ITEM_STEEPLE_KEY_0x16);
 }
 
+/** Story point STG4_10 "Doopliss Battle" (jin_04): takes the Steeple Key (item 0x16). */
 void stage4_10_init(void) {
     pouchRemoveItem(ITEM_STEEPLE_KEY_0x16);
 }
 
+/** Story point STG4_11 "Superbombbomb Lost" (usu_00): Goombella, Koops, Flurrie and Yoshi leave the party. */
 void stg4_11_init(void) {
     partyLeft(PARTNER_GOOMBELLA);
     partyLeft(PARTNER_KOOPS);
@@ -1326,10 +1396,12 @@ void stg4_11_init(void) {
     partyLeft(PARTNER_YOSHI);
 }
 
+/** Story point STG4_13 "Vivian Joins" (usu_00): gives the Superbombomb. */
 void stg4_13_init(void) {
     pouchGetItem(ITEM_SUPERBOMBOMB);
 }
 
+/** Story point STG4_13_02 "Waiting Doopliss 2" (gra_00): Vivian joins the party; takes the Superbombomb. */
 void stg4_13_02_init(void) {
     pouchRemoveItem(ITEM_SUPERBOMBOMB);
     partyJoin(PARTNER_VIVIAN);
@@ -1346,10 +1418,15 @@ void stg4_14_init(void) {
     swSet(0x8B7); // GSWF_JIN_08_DOOR_UNLOCKED
 }
 
+/** Story point STG4_15 "Doopliss Battle 2" (jin_04): takes the Letter P. */
 void stg4_15_init(void) {
     pouchRemoveItem(ITEM_THE_LETTER_P);
 }
 
+/**
+ * Story point STG4_15_03 "The Ruby Star" (jin_04): Goombella, Koops, Flurrie and Yoshi join the party;
+ * unlocks star power 4; gives the Ruby Star.
+ */
 void stg4_15_03_init(void) {
     partyJoin(PARTNER_GOOMBELLA);
     partyJoin(PARTNER_KOOPS);
@@ -1359,10 +1436,12 @@ void stg4_15_03_init(void) {
     pouchGetStarStone(4);
 }
 
+/** Story point STG4_16 "Leaving Twilight Town" (usu_00): switches the player back to Mario. */
 void stg4_16_init(void) {
     marioSetCharMode(CHARACTER_MARIO);
 }
 
+/** Story point STG4_30 "Thousand-Year Door" (tik_05): delivers mail 3; marks mail 3 read. */
 void stg4_30_init(void) {
     pouchReceiveMail(3);
     pouchOpenMail(3);
@@ -1373,14 +1452,17 @@ void stg4_35_init(void) {
     swSet(0x4C1); // GSWF_GOR_BOBBERY_DECLINE_REMARK_DONE
 }
 
+/** Story point STG4_36 "Bobbery's Decision" (gor_02): gives the Old Letter. */
 void stg4_36_init(void) {
     pouchGetItem(ITEM_OLD_LETTER);
 }
 
+/** Story point STG4_37 "To the Port" (gor_02): takes the Old Letter. */
 void stg4_37_init(void) {
     pouchRemoveItem(ITEM_OLD_LETTER);
 }
 
+/** Story point STG4_END "Off to the Keys" (gor_00): delivers mail 0x13; sets GSWF_MAIL_PETUNI_SENT. */
 void stg4_end_init(void) {
     swSet(0xA); // GSWF_MAIL_PETUNI_SENT
     pouchReceiveMail(0x13);
@@ -1398,24 +1480,29 @@ void stg5_15_init02(void) {
     swSet(0xC39); // GSWF_MUJ_01_BOBBERY_MISSING_SCENE_SEEN
 }
 
+/** Story point STG5_17 "Wine Obtained" (muj_01): gives the Coconut. */
 void stg5_17_init(void) {
     pouchGetItem(ITEM_COCONUT);
 }
 
+/** Story point STG5_18 "Bobbery Rescue 2" (muj_05): gives the Chuckola Cola; takes the Coconut. */
 void stg5_18_init(void) {
     pouchGetItem(ITEM_CHUCKOLA_COLA);
     pouchRemoveItem(ITEM_COCONUT);
 }
 
+/** Story point STG5_18_02 "Flavio's Favor 2" (muj_01): Bobbery joins the party; takes the Chuckola Cola. */
 void stg5_18_init_02(void) {
     pouchRemoveItem(ITEM_CHUCKOLA_COLA);
     partyJoin(PARTNER_BOBBERY);
 }
 
+/** Story point STG5_19 "Gems and Jingles" (muj_05): empty; this point needs no setup beyond the earlier ones. */
 void stg5_19_init00(void) {
     //stubbed
 }
 
+/** Story point STG5_19 "The Skull Rock" (muj_05): gives the Skull Gem. */
 void stg5_19_init01(void) {
     pouchGetItem(ITEM_SKULL_GEM);
 }
@@ -1426,6 +1513,7 @@ void stg5_19_init02(void) {
     swSet(0xC4D); // GSWF_MUJ_05_SKULL_ROCK_OPENED
 }
 
+/** Story point STG5_19_01 "Entering the Grotto" (dou_00): empty; this point needs no setup beyond the earlier ones. */
 void stg5_19_01_init(void) {
     //stubbed
 }
@@ -1443,19 +1531,23 @@ void stg5_21_init03(void) {
     swSet(0xBA5); // GSWF_DOU_09_BOMB_WALL_BLOWN
 }
 
+/** Story point STG5_21_01 "Boat Mod Obtained" (dou_07): gives the Black Key (item 0x24). */
 void stg5_21_01_init00(void) {
     pouchGetItem(ITEM_BLACK_KEY_0x24);
 }
 
+/** Story point STG5_22 "Floodgate Handle" (dou_02): gives the Boat Curse; takes the Black Key (item 0x24). */
 void stg5_22_init00(void) {
     pouchRemoveItem(ITEM_BLACK_KEY_0x24);
     pouchGetItem(ITEM_BOAT_CURSE);
 }
 
+/** Story point STG5_22 "Floodgate" (dou_03): gives the Gate Handle. */
 void stg5_22_init01(void) {
     pouchGetItem(ITEM_GATE_HANDLE);
 }
 
+/** Story point STG5_29 "Wave-dodging" (dou_10): takes the Gate Handle. */
 void stg5_29_init(void) {
     pouchRemoveItem(ITEM_GATE_HANDLE);
 }
@@ -1470,6 +1562,7 @@ void stg5_30_init02(void) {
     swSet(0xBB0); // GSWF_DOU_11_SAILORS_CROSSED
 }
 
+/** Story point STG5_43 "X-Nauts Retreat" (muj_00): unlocks star power 5; gives the Sapphire Star. */
 void stg5_43_init(void) {
     pouchGetItem(ITEM_SAPPHIRE_STAR);
     pouchGetStarStone(5);
@@ -1481,6 +1574,7 @@ void stg5_47_init(void) {
     swSet(0x1071); // GSWF_AJI_11_DATA_DISK_PLAYED
 }
 
+/** Story point STG5_58 "Fair Winds!" (muj_00): switches the player back to Mario. */
 void stg5_58_init(void) {
     marioSetCharMode(CHARACTER_MARIO);
 }
@@ -1514,6 +1608,7 @@ void stg5_64_01_init(void) {
     pouchGetItem(ITEM_WEDDING_RING);
 }
 
+/** Story point STG5_64_02 "F & F Sail Off" (muj_00): takes the Wedding Ring. */
 void stg5_64_02_init(void) {
     pouchRemoveItem(ITEM_WEDDING_RING);
 }
@@ -1532,32 +1627,39 @@ void stg5_66_init(void) {
     swSet(0x4CF);
 }
 
+/** Story point STG6_00 "Start" (sys_01): delivers mail 0x14; sets GSWF_MAIL_BOO_SENT. */
 void stg6_00_init(void) {
     swSet(0xB); // GSWF_MAIL_BOO_SENT
     pouchReceiveMail(0x14);
 }
 
+/** Story point STG6_06 "Pennington's Assistant" (rsh_04_a): gives the Galley Pot. */
 void stg6_06_init(void) {
     pouchGetItem(ITEM_GALLEY_POT);
 }
 
+/** Story point STG6_12 "Give Autograph" (rsh_04_b): gives the Autograph. */
 void stg6_12_init(void) {
     pouchGetItem(ITEM_AUTOGRAPH);
 }
 
+/** Story point STG6_13 "Talk to the Conductor" (rsh_04_c): takes the Autograph. */
 void stg6_13_init(void) {
     pouchRemoveItem(ITEM_AUTOGRAPH);
 }
 
+/** Story point STG6_18 "Blanket Exchange" (rsh_02_c): gives the Ragged Diary. */
 void stg6_18_init(void) {
     pouchGetItem(ITEM_RAGGED_DIARY);
 }
 
+/** Story point STG6_19 "Give Blanket" (rsh_04_c): gives the Blanket; takes the Ragged Diary. */
 void stg6_19_init(void) {
     pouchRemoveItem(ITEM_RAGGED_DIARY);
     pouchGetItem(ITEM_BLANKET);
 }
 
+/** Story point STG6_20 "End of Day 1" (rsh_02_c): takes the Blanket. */
 void stg6_20_init(void) {
     pouchRemoveItem(ITEM_BLANKET);
 }
@@ -1567,28 +1669,34 @@ void stg6_22_init(void) {
     pouchReceiveMail(0x1F);
 }
 
+/** Story point STG6_24 "A Vital Clue" (rsh_04_a): gives the Vital Paper. */
 void stg6_24_init(void) {
     pouchGetItem(ITEM_VITAL_PAPER);
 }
 
+/** Story point STG6_27 "Riverside Station" (hom_00): gives the Gold Ring and Shell Earrings; takes the Vital Paper. */
 void stg6_27_init(void) {
     pouchRemoveItem(ITEM_VITAL_PAPER);
     pouchGetItem(ITEM_GOLD_RING);
     pouchGetItem(ITEM_SHELL_EARRINGS);
 }
 
+/** Story point STG6_29 "Station Door Unlocked" (hom_00): gives the Station Key (item 0x18). */
 void stg6_29_init(void) {
     pouchGetItem(ITEM_STATION_KEY_0x18);
 }
 
+/** Story point STG6_30 "Origami Stairs" (eki_01): takes the Station Key (item 0x18). */
 void stg6_30_init(void) {
     pouchRemoveItem(ITEM_STATION_KEY_0x18);
 }
 
+/** Story point STG6_32 "Unlocking the Door" (eki_01): gives the Station Key (item 0x19). */
 void stg6_32_init(void) {
     pouchGetItem(ITEM_STATION_KEY_0x19);
 }
 
+/** Story point STG6_33 "Blow the Poster" (eki_03): takes the Station Key (item 0x19). */
 void stg6_33_init(void) {
     pouchRemoveItem(ITEM_STATION_KEY_0x19);
 }
@@ -1607,18 +1715,22 @@ void stg6_34_init(void) {
     swSet(0xE9F); // GSWF_EKI_03_POSTER_15_BLOWN_AWAY
 }
 
+/** Story point STG6_37 "Elevator Key" (eki_05): gives the Ultra Boots. */
 void stg6_37_init(void) {
     pouchGetItem(ITEM_ULTRA_BOOTS);
 }
 
+/** Story point STG6_38 "Ride the Elevator" (eki_00): gives the Elevator Key (item 0x1A). */
 void stg6_38_init(void) {
     pouchGetItem(ITEM_ELEVATOR_KEY_0x1A);
 }
 
+/** Story point STG6_39 "Smorg (1st Encounter)" (eki_00): takes the Elevator Key (item 0x1A). */
 void stg6_39_init(void) {
     pouchRemoveItem(ITEM_ELEVATOR_KEY_0x1A);
 }
 
+/** Story point STG6_44 "End of Day 2" (rsh_02_c): delivers mail 0x16; sets GSWF_MAIL_KING_K_SENT. */
 void stg6_44_init(void) {
     swSet(0xD); // GSWF_MAIL_KING_K_SENT
     pouchReceiveMail(0x16);
@@ -1629,26 +1741,35 @@ void stg6_47_00_init(void) {
     pouchReceiveMail(0x15);
 }
 
+/** Story point STG6_54 "Welcome Back" (pik_02): unlocks star power 6; gives the Garnet Star. */
 void stg6_54_init(void) {
     pouchGetItem(ITEM_GARNET_STAR);
     pouchGetStarStone(6);
 }
 
+/** Story point STG6_56 "Rogueport Station" (gor_04): switches the player back to Mario. */
 void stg6_56_init(void) {
     marioSetCharMode(CHARACTER_MARIO);
 }
 
+/** Story point STG6_70 "Thousand-Year Door" (tik_05): delivers mail 5; marks mail 5 read. */
 void stg6_70_init(void) {
     pouchReceiveMail(5);
     pouchOpenMail(5);
 }
 
+/**
+ * Story point STG6_72 "3 Minutes Later" (gor_02):
+ * sends Zip Toad's mail (0x17, GSWF_MAIL_ZIP_TOAD_SENT) and moves the play clock forward 180 seconds,
+ * the three minutes in the point's name.
+ */
 void stg6_71_01_init(void) {
     swSet(0xE); // GSWF_MAIL_ZIP_TOAD_SENT
     pouchReceiveMail(0x17);
     gp->retraceLocalTime += (OSTime)OS_TIMER_CLOCK * 180;
 }
 
+/** Story point STG6_72 "A Way to the Moon" (gor_02): empty; this point needs no setup beyond the earlier ones. */
 void stg6_72_init(void) {
     //stubbed
 }
@@ -1699,22 +1820,27 @@ void stg7_04_init(void) {
     swSet(0xF24); // GSWF_BOM_GENERAL_WHITE_AGREED
 }
 
+/** Story point STG7_06 "To the Moon" (moo_00): takes the Goldbob Guide. */
 void stg7_06_init(void) {
     pouchRemoveItem(ITEM_GOLDBOB_GUIDE);
 }
 
+/** Story point STG7_10 "Elevator Activated" (aji_01): gives the Elevator Key (item 0x1B). */
 void stg7_10_init(void) {
     pouchGetItem(ITEM_ELEVATOR_KEY_0x1B);
 }
 
+/** Story point STG7_11 "Password for Today" (aji_09): takes the Elevator Key (item 0x1B). */
 void stg7_11_init(void) {
     pouchRemoveItem(ITEM_ELEVATOR_KEY_0x1B);
 }
 
+/** Story point STG7_15 "Elevator Activated 2" (aji_01): gives the Elevator Key (item 0x1C). */
 void stg7_15_init(void) {
     pouchGetItem(ITEM_ELEVATOR_KEY_0x1C);
 }
 
+/** Story point STG7_15 "Room Key A" (aji_05): takes the Elevator Key (item 0x1C). */
 void stg7_15_room_A_init(void) {
     pouchRemoveItem(ITEM_ELEVATOR_KEY_0x1C);
 }
@@ -1749,10 +1875,12 @@ void stg7_19_init(void) {
     pouchGetItem(ITEM_CARD_KEY_0x20);
 }
 
+/** Story point STG7_20 "Lord Crump Defeated" (aji_14): takes the Card Key (item 0x20). */
 void stg7_20_init(void) {
     pouchRemoveItem(ITEM_CARD_KEY_0x20);
 }
 
+/** Story point STG7_25_00 "Bowser: Poshley Heights" (pik_01): unlocks star power 7; gives the Crystal Star. */
 void stg7_25_00_init(void) {
     pouchGetItem(ITEM_CRYSTAL_STAR);
     pouchGetStarStone(7);
@@ -1770,14 +1898,17 @@ void stg7_51_init(void) {
     swSet(0x52F); // GSWF_TIK_00_STG7_DOOR_OPENED
 }
 
+/** Story point STG7_52 "The Pedestal" (tik_05): empty; this point needs no setup beyond the earlier ones. */
 void stg7_52_init(void) {
     //stubbed
 }
 
+/** Story point STG8_01_02 "Lock" (las_05): gives the Palace Key (item 0x2E). */
 void stg8_01_02_init(void) {
     pouchGetItem(ITEM_PALACE_KEY_0x2E);
 }
 
+/** Story point STG8_02 "Follow the Lit Torches" (las_08): takes the Palace Key (item 0x2E). */
 void stg8_02_init(void) {
     pouchRemoveItem(ITEM_PALACE_KEY_0x2E);
 }
@@ -1829,6 +1960,7 @@ void stg8_06_init(void) {
     swSet(0x1111); // GSWF_LAS_18_PALACE_KEY_CHEST
 }
 
+/** Story point STG8_10 "Lock" (las_22): gives the Palace Key (item 0x2F). */
 void stg8_10_init(void) {
     pouchGetItem(ITEM_PALACE_KEY_0x2F);
 }
@@ -1860,10 +1992,16 @@ void stg9_02_init(void) {
     partyJoin(PARTNER_MSMOWZ);
 }
 
+/**
+ * Returns chapter table stage (0 = prologue, 9 = ending) from event_dt.
+ * The E3 scenario select (seq_e3) walks these tables to find a story point
+ * and runs every setup function up to it.
+ */
 EventStage* eventStgDtPtr(s32 stage) {
     return &event_dt[stage];
 }
 
+/** Number of chapter tables in event_dt (prologue, chapters 1-8 and the ending). */
 s32 eventStgNum(void) {
     return sizeof(event_dt) / sizeof(EventStage);
 }

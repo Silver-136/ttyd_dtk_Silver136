@@ -197,6 +197,10 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/**
+ * Init event of the flying Paragloomba: installs its wait, attack,
+ * damage and confusion events and its pose sound table, then starts the wait event.
+ */
 static EVT_BEGIN(init_event_patakuri)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event_patakuri))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_patakuri))
@@ -207,6 +211,13 @@ static EVT_BEGIN(init_event_patakuri)
     RETURN
 EVT_END()
 
+/**
+ * Run when a hit grounds the flying Paragloomba (data table entry 14, damage flag 0x400000):
+ * it loses its floating
+ * and winged attributes, and after a second its parts, pose table and data table become the Gloomba's
+ * (unit flag 4, kind changed); it falls to the ground with the fall sound, takes that spot as home,
+ * becomes kind 0x99 (Gloomba) and reruns init_event to install the ground attack.
+ */
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -235,6 +246,10 @@ static EVT_BEGIN(dmg_fall_event)
     RETURN
 EVT_END()
 
+/**
+ * Sets the flying Paragloomba's height to 10 and waits for the attack in progress to end;
+ * data table entry 48, run when the battle opens with a First Strike on it (damage code 0x39).
+ */
 static EVT_BEGIN(patakuri_dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
@@ -344,6 +359,7 @@ static EVT_BEGIN(attack_event_patakuri)
     RETURN
 EVT_END()
 
+/** Idle event of the flying Paragloomba: shows the table pose for state 1 and then idles forever in 30 frame steps. */
 static EVT_BEGIN(wait_event_patakuri)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     LABEL(0)
@@ -464,6 +480,10 @@ static BattleWeapon weapon_kuriboo_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init event of the Paragloomba: installs its wait, attack, damage and confusion events and sets its run,
+ * walk and jump sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

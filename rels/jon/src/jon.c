@@ -1284,6 +1284,10 @@ s32 treasure_tbl[] = {
     303, 291,
 };
 
+/**
+ * Opens a rest-room chest: locks controls, takes the reward for this floor from treasure_tbl (entry (floor + 1)
+ * / 10 - 1, so one reward per tenth floor), has the item pop out of the chest and gives it to Mario.
+ */
 EVT_BEGIN(evt_open_box)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
@@ -1301,6 +1305,12 @@ EVT_BEGIN(evt_open_box)
     RETURN
 EVT_END()
 
+/**
+ * Regular (idle) event of the mover and the trader NPCs:
+ * sets them as jumping, floor-landing and animated, then loops forever:
+ * turns around, waits, turns back and wanders 100 units in a random direction between 120
+ * and 240 degrees of the loiter direction at speed 40, so they pace around the room.
+ */
 static EVT_BEGIN(move_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_GRAVITY)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -1438,6 +1448,10 @@ NpcSetupInfo npcEnt_idouya[] = {
     {0},
 };
 
+/**
+ * Gives each floor a 5% chance of a mover Puni (c_pjoho model) standing at x = -100.
+ * Never on floor 100 or from floor 95 on.
+ */
 EVT_BEGIN(idouya_setup)
     IF_INT_EQUAL(GSW_PIT_FLOOR, 99)
         RETURN
@@ -1569,6 +1583,7 @@ NpcSetupInfo npcEnt_gyousyou[] = {
     {0},
 };
 
+/** Gives each rest-room floor (every 10th except 100) a 33% chance of a peddler (c_botta model) standing at x = 100. */
 EVT_BEGIN(gyousyou_setup)
     IF_INT_EQUAL(GSW_PIT_FLOOR, 99)
         RETURN
@@ -1590,6 +1605,15 @@ EVT_BEGIN(gyousyou_setup)
     RETURN
 EVT_END()
 
+/**
+ * Floor "device" (shikake) set-up; nothing in the tree starts it.
+ * 20% of the time, when the floor has an enemy,
+ * it would flash the screen white on arrival and show one of four system messages (msg_jon_trick_1 to 4, "the
+ * device
+ * on this level is now active"), each setting a battle rule on the enemy via shikakeFlag:
+ * no ally change, no hammer,
+ * no jump, or double coins after the battle.
+ */
 EVT_BEGIN(shikake_setup)
     IF_INT_EQUAL(GSW_PIT_FLOOR, 99)
         RETURN
@@ -1635,6 +1659,11 @@ EVT_BEGIN(shikake_setup)
     RETURN
 EVT_END()
 
+/**
+ * Raises the exit pipe (a_dokan_1 / dokan_1_s) 30 units out of the floor over half a second,
+ * with the pipe-appear sound, once the floor's enemy is beaten. Controls are locked meanwhile.
+ * Spawned from enemy_setup.
+ */
 EVT_BEGIN(dokan_open)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(1000)
@@ -1664,6 +1693,10 @@ EVT_BEGIN(dokan_open)
     RETURN
 EVT_END()
 
+/**
+ * Variant used in rest rooms: pressing the blue float switch ("sw") raises the exit pipe a_dokan_3 the same way
+ * after a 0.4 s pause.
+ */
 EVT_BEGIN(dokan_open2)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(400)
@@ -1698,6 +1731,10 @@ static EVT_BEGIN(evt_kanban)
     RETURN
 EVT_END()
 
+/**
+ * Signboard event of the floor's wall board (the "board" signboard set in the map's setup):
+ * stops NPC events, shows msg_jon_kanban_2 and gives control back.
+ */
 static EVT_BEGIN(evt_kanban2)
     CALL(evt_npc_stop_for_event)
     CALL(evt_mario_key_onoff, 0)
@@ -1757,6 +1794,10 @@ BeroEntry bero_boss[] = {
     {0},
 };
 
+/**
+ * Floor 100 pipes: registers the entry pipe (dokan_2)
+ * and the exit pipe to Rogueport (dokan_1 to tik_06, which resets the floor counter).
+ */
 EVT_BEGIN(setup_boss)
     SET_VALUE(LW(0), PTR(bero_boss))
     CALL(evt_bero_get_info)
@@ -1859,6 +1900,11 @@ BeroEntry bero_return3[] = {
     {0},
 };
 
+/**
+ * Rest-room setup (floors 10, 20, ... 100): registers the pipes,
+ * points the downward pipe at the next map (jon_00, or jon_01 after floor 50, jon_02 after floor 70),
+ * and places that floor's treasure chest (own opened flag per floor, running evt_open_box) and the signboard.
+ */
 EVT_BEGIN(setup_return)
     SET_VALUE(LW(0), PTR(bero_return))
     CALL(evt_bero_get_info)
@@ -2007,6 +2053,11 @@ BeroEntry bero_prev_return4[] = {
     {0},
 };
 
+/**
+ * Setup for the floor before a rest room: registers the pipes
+ * and sends exit pipe dokan_1 to the rest-room map for that stretch:
+ * jon_03 up to floor 48, jon_04 for floors 49-69, jon_05 for floors 70-98 and jon_06 (Bonetail) for floor 99.
+ */
 EVT_BEGIN(setup_prev_return)
     SET_VALUE(LW(0), PTR(bero_prev_return))
     CALL(evt_bero_get_info)
@@ -2115,6 +2166,10 @@ BeroEntry bero_normal3[] = {
     {0},
 };
 
+/**
+ * Setup for ordinary floors: registers the pipes and points exit pipe dokan_1 at the next map of the stretch:
+ * jon_00 up to floor 49, jon_01 for floors 50-80 and jon_02 beyond.
+ */
 EVT_BEGIN(setup_normal)
     SET_VALUE(LW(0), PTR(bero_normal))
     CALL(evt_bero_get_info)
@@ -2834,6 +2889,7 @@ void iri_12_msgcb(s32 type, void* param) {
     }
 }
 
+/** Script helper: blocks until the sailor NPC has landed on the floor (returns at once if he cannot land). */
 USER_FUNC(wait_landon) {
     // マッキノ
     NpcEntry* npc = npcNameToPtr("\203}\203b\203L\203m");
@@ -2844,6 +2900,7 @@ USER_FUNC(wait_landon) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: args[0] = y; sets the sailor NPC's height directly. */
 USER_FUNC(iri_12_makkino_set_y) {
     f32 y = evtGetFloat(event, event->args[0]);
 
@@ -2851,6 +2908,7 @@ USER_FUNC(iri_12_makkino_set_y) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: turns off paper-peraform bending and paper lighting on the sailor's model, for the pipe jump. */
 USER_FUNC(iri_12_paper_init) {
     NpcEntry* npc = npcNameToPtr("\203}\203b\203L\203m");
 
@@ -2880,6 +2938,7 @@ USER_FUNC(shikakeFlag) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: args[0..2] = x, y, z; writes them into the Chain Chomp setup's territoryBase before it is spawned. */
 USER_FUNC(wanwan_set_home_pos) {
     EvtWord* args = event->args;
     s32 x = evtGetValue(event, args[0]);
@@ -2892,6 +2951,10 @@ USER_FUNC(wanwan_set_home_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = NPC name; sets its loiter height to 50 and homing height to 180
+ * so flyers can chase over the room.
+ */
 USER_FUNC(setup_npc_ex_para) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     NpcEntry* npc = evtNpcNameToPtr(event, name);
@@ -2901,11 +2964,18 @@ USER_FUNC(setup_npc_ex_para) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets NPC_BATTLE_NO_BUMP_ATTACK on the floor enemy's battle info. */
 USER_FUNC(yattukeFlag) {
     npcNameToPtr("\223G")->battleInfo.battleFlags |= NPC_BATTLE_NO_BUMP_ATTACK;
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = floor index (0-99).
+ * Looks up its battle number in enemy_100 and returns the tribe's model name (args[1]),
+ * Japanese name (args[2]) and battle setup number (args[3]) from btlsetup_jon_tbl;
+ * falls back to Goomba when the name is not a tribe.
+ */
 USER_FUNC(enemy_info) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
@@ -2934,6 +3004,11 @@ USER_FUNC(enemy_info) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: the warp wobble shown during the mover's trip.
+ * Blocks forever, growing the amplitude 0.2 and phase 0.01 per frame,
+ * and queues raster_disp each frame on the 2D camera.
+ */
 USER_FUNC(evt_raster) {
     f32* work = event->lwDataF;
 
@@ -2947,6 +3022,10 @@ USER_FUNC(evt_raster) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Offset of the pixel (x, y) in a 4x4-tiled IA8 texture of 8 tiles per row;
+ * raster_disp writes the same arithmetic out by hand.
+ */
 inline s32 ia8_ofs(s32 x, s32 y) {
     int off = (y / 4) << 5;
     off += (x / 4) << 9;
@@ -2954,6 +3033,11 @@ inline s32 ia8_ofs(s32 x, s32 y) {
     return off;
 }
 
+/**
+ * Draw callback of the mover's warp: copies the screen to a texture
+ * and draws it back through a 64x64 sine-wave indirect texture (amplitude capped at 127),
+ * producing the wavy distortion.
+ */
 void raster_disp(CameraId cameraId, void* param) {
     EventEntry* event = param;
     CameraEntry* cam = camGetPtr(cameraId);
@@ -3044,9 +3128,11 @@ void raster_disp(CameraId cameraId, void* param) {
     GXSetTevDirect(GX_TEVSTAGE0);
 }
 
+/** Unresolved-import stub for the REL (empty). */
 void _unresolved(void) {
 }
 
+/** REL exit point: runs the static destructors. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -3055,6 +3141,10 @@ void _epilog(void) {
     }
 }
 
+/**
+ * REL entry point: runs the static constructors
+ * and registers jon_init_evt as the init script of the seven jon maps (jon_00..jon_06).
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 

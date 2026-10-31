@@ -274,6 +274,10 @@ static EVT_BEGIN(evt_block)
     RETURN
 EVT_END()
 
+/**
+ * Item-box callback for the Flower Saver P chest:
+ * takes control, puts the badge at the chest, waits for the chest animation and hands it to Mario.
+ */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))

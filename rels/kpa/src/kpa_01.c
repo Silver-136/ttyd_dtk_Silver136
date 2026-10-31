@@ -64,6 +64,10 @@ static NpcSetupInfo npcEnt[13];
 static EvtWord shan_init[46];
 EvtWord kpa_01_init_evt[88];
 
+/**
+ * Throne-room door opens: the two Spiny guards walk to their posts and swing the double door open,
+ * the door objects rotating 180 degrees over 2 s with a sound at the door. Used by the arrival cutscene.
+ */
 EVT_BEGIN(kpa_01_door_open)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_set_ry, STRING("トゲノコＡ"), 270)
@@ -144,6 +148,7 @@ EVT_BEGIN(kpa_01_door_open)
     RETURN
 EVT_END()
 
+/** Reverse of kpa_01_door_open: the double door swings shut over 2 s with the Spiny guards stepping aside. */
 EVT_BEGIN(kpa_01_door_close)
     SET_FLOAT_VALUE(GW(0), 0)
     SET_VALUE(GW(1), 1)
@@ -278,6 +283,12 @@ EVT_BEGIN(kpa_01_touzyo_evt)
     RETURN
 EVT_END()
 
+/**
+ * Departure cutscene: the door opens, a startled Bowser meets the out-of-breath Kammy Koopa and the two talk,
+ * with a choice in the middle (kpa_stg1_032).
+ * Kammy then flies off, and play returns to kpa_00 for the flight to Petalburg.
+ * Plays when Bowser reaches x = 625 or re-enters from the other side.
+ */
 EVT_BEGIN(kpa_01_syuppatu_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("door"), LW(0), LW(1), LW(2))
@@ -780,6 +791,10 @@ EVT_BEGIN(kpa_01_syuppatu_evt)
     RETURN
 EVT_END()
 
+/**
+ * Waits until Bowser reaches x = 625 at the far end of the hall,
+ * then starts the departure cutscene kpa_01_syuppatu_evt.
+ */
 EVT_BEGIN(kpa_01_pos_check)
     CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
@@ -793,6 +808,7 @@ EVT_BEGIN(kpa_01_pos_check)
     RETURN
 EVT_END()
 
+/** Examine script for the first statue (a_zou_1): Bowser comments on it. */
 EVT_BEGIN(douzou_1_touch_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
@@ -801,6 +817,7 @@ EVT_BEGIN(douzou_1_touch_evt)
     RETURN
 EVT_END()
 
+/** Examine script for the second statue (a_zou_2): Bowser comments on it. */
 EVT_BEGIN(douzou_2_touch_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
@@ -809,6 +826,10 @@ EVT_BEGIN(douzou_2_touch_evt)
     RETURN
 EVT_END()
 
+/**
+ * Examine script for the third statue (a_zou_3): Bowser comments;
+ * a jingle (BGM_FF_GET_ITEM1) plays when the message reaches its third page.
+ */
 EVT_BEGIN(douzou_3_touch_evt)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LSWF_KPA_01_MSG_CUE, 0)
@@ -829,16 +850,19 @@ EVT_BEGIN(douzou_3_touch_evt)
     RETURN
 EVT_END()
 
+/** Talk script of the first Spiny guard. */
 EVT_BEGIN(togenoko_A_talk_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_002"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/** Talk script of the second Spiny guard. */
 EVT_BEGIN(togenoko_B_talk_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_004"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/** Init for the third Spiny guard: standard NPC init, then it is set to jump and land on the floor. */
 EVT_BEGIN(togenoko_C_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -891,6 +915,7 @@ EVT_BEGIN(hammer_AB_talk_evt)
     RETURN
 EVT_END()
 
+/** Talk script of the third Hammer Bro., with a reply from Bowser. */
 EVT_BEGIN(hammer_C_talk_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_012"), 0, STRING("me"))
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_7"), STRING("KPA_T_7"))
@@ -898,22 +923,26 @@ EVT_BEGIN(hammer_C_talk_evt)
     RETURN
 EVT_END()
 
+/** Talk script of the fourth Hammer Bro. */
 EVT_BEGIN(hammer_D_talk_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_015"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/** Init for the fifth Hammer Bro.: standard NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
 EVT_BEGIN(hammer_E_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
+/** Talk script of the fifth Hammer Bro. */
 EVT_BEGIN(hammer_E_talk_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg1_016"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/** Init for Kammy Koopa: standard NPC init, NPC_STATUS_FACE_MOVE_DIR, and the grounded tribe model. */
 EVT_BEGIN(baba_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -921,12 +950,14 @@ EVT_BEGIN(baba_init_evt)
     RETURN
 EVT_END()
 
+/** Init for the Magikoopa: standard NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
 EVT_BEGIN(kamek_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
+/** Init for the flying Bowser NPC: standard NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
 EVT_BEGIN(hkoopa_init_evt)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -1060,6 +1091,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Prepares the twelve wall fire objects of the throne hall (named by make_name, numbers 1 to 12):
+ * hides each map object and puts a small "fire" effect at its position, 2.5 units lower,
+ * as the burning torches along the walls.
+ */
 static EVT_BEGIN(shan_init)
     SET_VALUE(LW(0), 1)
     LOOP(12)
@@ -1113,6 +1149,10 @@ static USER_FUNC(make_name) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Message callback for kpa_stg1_008: when the text reaches page 1 it sets LSWF(1),
+ * which lets the Hammer Bro turn toward Bowser.
+ */
 void kpa_stg1_008_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 
@@ -1125,6 +1165,7 @@ void kpa_stg1_008_cb(s32 type, smartEntry* smart) {
     }
 }
 
+/** Message callback for kpa_stg1_014_2: sets LSWF(1) on page 2, which plays the item jingle in douzou_3_touch_evt. */
 void kpa_stg1_014_2_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 
@@ -1137,6 +1178,10 @@ void kpa_stg1_014_2_cb(s32 type, smartEntry* smart) {
     }
 }
 
+/**
+ * Message callback for kpa_stg1_036: sets LSWF(1) on page 2,
+ * which a waiting inline event of the departure cutscene reacts to.
+ */
 void kpa_stg1_036_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 
@@ -1149,6 +1194,10 @@ void kpa_stg1_036_cb(s32 type, smartEntry* smart) {
     }
 }
 
+/**
+ * Message callback for kpa_stg1_034: sets LSWF(1) once the text reaches entry 117,
+ * the cue for Kammy's next animation.
+ */
 void kpa_stg1_034_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 
@@ -1161,6 +1210,10 @@ void kpa_stg1_034_cb(s32 type, smartEntry* smart) {
     }
 }
 
+/**
+ * Script helper: rotates the point (args[2], args[3]) about the centre (args[0], args[1]) by args[4] degrees
+ * around Y, returning x in args[5] and z in args[6]. Moves the Spiny guards along an arc around the door.
+ */
 USER_FUNC(get_togenoko_pos) {
     EvtWord* args = event->args;
     f32 cx = evtGetFloat(event, args[0]);

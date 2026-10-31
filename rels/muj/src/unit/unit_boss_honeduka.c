@@ -113,6 +113,12 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_honeduka", "c_honezuka", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kUntattleable | kNoShadow, 0, pose_table},
 };
 
+/**
+ * Init event of the standalone Bone Pile unit: sets unit flag 0x1000000 (no mirror flip),
+ * installs its wait and damage events and gives it no actions per turn.
+ * Nothing in the tree spawns this unit (Cortez's bone pile is his own part 4);
+ * its owner would be in unit work 0.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -122,6 +128,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Bone Pile: runs the default damage reaction,
+ * which calls its data tag 9 (honeduka_damage_sub_event) to pass the hit on to Cortez.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -136,6 +146,7 @@ EVT_BEGIN(honeduka_damage_sub_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of the Bone Pile: sets the idle pose (KRT_Z_1) from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

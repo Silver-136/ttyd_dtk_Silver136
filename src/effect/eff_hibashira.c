@@ -19,6 +19,11 @@ typedef struct EffHibashiraWork {
     s32 delay;    // 0x24
 } EffHibashiraWork;
 
+/**
+ * Spawns the fire pillar(s) for `duration` frames:
+ * types 0-2 one pillar at (x, y, z), types 3-5 `count` pillars spread from (x, y, z) to (endX, endY, endZ).
+ * Used by Mario's _fire_wave helper in battle_mario.c and evt_eff.
+ */
 EffectEntry* effHibashiraEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, f32 z, f32 endX,
                                f32 endY, f32 endZ, f32 scale) {
     EffectEntry* effect;
@@ -84,6 +89,7 @@ EffectEntry* effHibashiraEntry(s32 type, s32 count, s32 duration, f32 x, f32 y, 
     return effect;
 }
 
+/** Fades the pillars in and out, spreading pillars for types 3-5 and loading their flame animations. */
 void effHibashiraMain(EffectEntry* effect) {
     s32 k;
     EffHibashiraWork* work = effect->userdata;
@@ -172,6 +178,7 @@ void effHibashiraMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHibashiraDisp, effect);
 }
 
+/** Draws each pillar's animation pose at its offset, faded by the effect's alpha. */
 void effHibashiraDisp(CameraId cameraId, EffectEntry* effect) {
     EffHibashiraWork* work = effect->userdata;
     s32 i, alpha;

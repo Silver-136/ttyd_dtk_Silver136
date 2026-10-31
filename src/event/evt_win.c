@@ -158,11 +158,13 @@ static void unitwin_fmt(char* buf, const char* name, s32 n) {
     sprintf(buf, "%s_%04d", name, n);
 }
 
+/** Help window update: runs the shared help-window logic. */
 // Descriptive name (not in the symbol maps); placeholder unk_8017597c, JP 0x8017597C. See docs/NAME_PROVENANCE.md.
 void unitwin_help_main(WinMgrEntry* entry) {
     winMgrHelpMain(entry);
 }
 
+/** Help window draw: shows the description of the item at the selected counter slot. */
 // Descriptive name (not in the symbol maps); placeholder unk_801758fc, JP 0x801758FC. See docs/NAME_PROVENANCE.md.
 void unitwin_help_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
@@ -174,6 +176,11 @@ void unitwin_help_disp(WinMgrEntry* entry) {
     }
 }
 
+/**
+ * Draws the shop-point window: the points label and the count,
+ * which steps a tenth of the way to Mario's shop points each frame.
+ * The label icon differs between Japanese (language 0) and other text.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_80175710, JP 0x80175710. See docs/NAME_PROVENANCE.md.
 void unitwin_point_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
@@ -294,6 +301,10 @@ USER_FUNC(evt_unitwin_selltable_setup) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Shows (args[0] nonzero) or hides the coin counter window,
+ * starting it from Mario's current coins so it counts up or down to later changes.
+ */
 USER_FUNC(unitwincoin_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
     UnitWinWork* wp;
@@ -309,6 +320,7 @@ USER_FUNC(unitwincoin_disp_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Blocks until the coin counter window has caught up with Mario's coin total. */
 USER_FUNC(unitwincoin_wait) {
     UnitWinWork* wp = _wp;
     pouchGetPtr();
@@ -318,6 +330,10 @@ USER_FUNC(unitwincoin_wait) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Shows (args[0] nonzero) or hides the lottery ticket number (from evt_lottery) in the unit window;
+ * it is drawn only while the lottery reports a ticket.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_8017524c, JP 0x8017524C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(unitwin_lottery_disp_onoff) {
     s32 on = evtGetValue(event, event->args[0]);
@@ -330,6 +346,10 @@ USER_FUNC(unitwin_lottery_disp_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Tells the counter whether the purchase script finished with a sale:
+ * args[0] is the unit window work, args[1] nonzero marks the slot sold so its item disappears.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_801751f8, JP 0x801751F8. See docs/NAME_PROVENANCE.md.
 USER_FUNC(unitwin_set_bought) {
     EvtWord* args = event->args;
@@ -1413,6 +1433,10 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
     }
 }
 
+/**
+ * Replaces the item at the selected counter slot (args[0] is the unit window work) with item args[1],
+ * swapping its icon, or removes the icon when args[1] is 0.
+ */
 USER_FUNC(set_new_goods_list) {
     EvtWord* args = event->args;
     UnitWinWork* wp = (UnitWinWork*)evtGetValue(event, args[0]);
@@ -1430,11 +1454,16 @@ USER_FUNC(set_new_goods_list) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Returns the unit window work pointer in args[0],
+ * for scripts that pass it to set_new_goods_list or unitwin_set_bought.
+ */
 USER_FUNC(unitwin_get_work_ptr) {
     evtSetValue(event, event->args[0], (EvtWord)_wp);
     return EVT_RETURN_DONE;
 }
 
+/** Returns the rank (0-2) of partner args[0] in args[1]. */
 USER_FUNC(unitwin_getpartylank) {
     EvtWord* args = event->args;
     PouchData* pouch = pouchGetPtr();
@@ -1443,6 +1472,12 @@ USER_FUNC(unitwin_getpartylank) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets partner args[0] to rank args[1] (HP, attack and tech levels together),
+ * recomputes its stats and refills its HP.
+ * Used by Merlon's partner rank-up (gor_02)
+ * and by Chet Rippo's Adjustment House in the Rogueport Sewers (tik_11), which lowers ranks.
+ */
 USER_FUNC(unitwin_setpartylank) {
     PouchPartyData* party;
     u32 ofs;
@@ -1461,6 +1496,11 @@ USER_FUNC(unitwin_setpartylank) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets Mario's base HP, FP and BP to args[0..2], refills HP and FP,
+ * and if the BP no longer covers the equipped badges takes them all off; args[3] returns 1 when that happened.
+ * Used by Chet Rippo's Adjustment House (tik_11), which boosts one of Mario's stats by lowering another.
+ */
 USER_FUNC(unitwin_setmariolevel) {
     EvtWord* args = event->args;
     PouchData* pouch = pouchGetPtr();

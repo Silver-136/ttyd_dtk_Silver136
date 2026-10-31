@@ -18,6 +18,11 @@ void _prolog(void);
 
 EvtWord tik_villager_urouro[101];
 
+/**
+ * REL prolog for the Rogueport Sewers module.
+ * Runs the static constructors, registers the init script of each of the 22 maps (tik_00 to tik_21)
+ * and the battle setup tables for the area.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 
@@ -49,6 +54,7 @@ void _prolog(void) {
     relSetBtlAddr("tik", btlsetup_tik_tbl, btl_tik_setup_no_tbl);
 }
 
+/** REL epilog. Runs the static destructors when the Rogueport Sewers module is unloaded. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -57,9 +63,16 @@ void _epilog(void) {
     }
 }
 
+/** Target of unresolved relocations in the module; does nothing. */
 void _unresolved(void) {
 }
 
+/**
+ * Script helper for the sewer residents' wandering.
+ * args[0] and args[1] are the variables holding the target X and Z;
+ * args[2], args[3] and args[4] are the home X, home Z and the allowed radius.
+ * If the target lies farther than the radius from home, the target is reset to the home point.
+ */
 // An out-of-range destination is reset to the center, not clamped to the edge of the circle.
 USER_FUNC(evt_tik_villager_urouro_check_func) {
     EvtWord* args = event->args;
@@ -83,6 +96,12 @@ USER_FUNC(evt_tik_villager_urouro_check_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Wandering loop for the sewer residents (urouro = loitering about).
+ * The NPC flips to face the opposite way every few seconds, then picks a random heading of 120 to 240 degrees,
+ * walks 50 units that way (clamped to 70 units from where it started) at speed 30,
+ * and rests a second before repeating.
+ */
 EVT_BEGIN(tik_villager_urouro)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_get_position, STRING("me"), LW(6), LW(7), LW(8))

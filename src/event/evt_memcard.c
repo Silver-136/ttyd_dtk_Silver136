@@ -7,6 +7,12 @@
 
 USER_FUNC(evt_seq_load_keep_msg_window);
 
+/**
+ * Functions are emitted in reverse source order (deferred inlining) Waits
+ * until the current memory card operation finishes, then stores cardmgr's result code in args[0]:
+ * 0 on success, negative for errors (-3 no card, -2 a different card, -6/-13 needs formatting, -4 no save file,
+ * -8/-9 no space, -10 save data it cannot use), as the save/load scripts below switch on it.
+ */
 USER_FUNC(memcard_code) {
     EvtWord* args = event->args;
     s32 code = cardGetCode();
@@ -18,18 +24,27 @@ USER_FUNC(memcard_code) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Clears cardmgr's read buffer so the next check rereads the card;
+ * the retail evt_memcard_check calls it before a retry.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_802564b4, JP 0x802564B4. See docs/NAME_PROVENANCE.md.
 USER_FUNC(memcard_buf_reset) {
     cardBufReset();
     return EVT_RETURN_DONE;
 }
 
+/** Starts watching the card slot for the card being pulled or swapped while a format or create prompt is open. */
 // Descriptive name (not in the symbol maps); placeholder unk_80256490, JP 0x80256490. See docs/NAME_PROVENANCE.md.
 USER_FUNC(memcard_watch_start) {
     cardInsertWatchStart();
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets args[0] to 1 if the card in the slot changed since memcard_watch_start, else 0;
+ * the scripts then print msg_out_mcard_warnning and abandon the format or create.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_80256428, JP 0x80256428. See docs/NAME_PROVENANCE.md.
 USER_FUNC(memcard_watch_chk) {
     EvtWord* args = event->args;
@@ -42,12 +57,17 @@ USER_FUNC(memcard_watch_chk) {
     return EVT_RETURN_DONE;
 }
 
+/** Stops the card-slot watch started by memcard_watch_start. */
 // Descriptive name (not in the symbol maps); placeholder unk_80256404, JP 0x80256404. See docs/NAME_PROVENANCE.md.
 USER_FUNC(memcard_watch_end) {
     cardInsertWatchEnd();
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Reads the whole memory card (save file and headers) on the first call,
+ * blocking the script until the read is done.
+ */
 USER_FUNC(memcard_load) {
     if (isFirstCall) {
         cardBufReset();
@@ -59,6 +79,7 @@ USER_FUNC(memcard_load) {
     return EVT_RETURN_DONE;
 }
 
+/** Formats the memory card on the first call, blocking the script until it finishes; check memcard_code afterwards. */
 USER_FUNC(memcard_format) {
     if (isFirstCall) {
         cardFormat();
@@ -69,6 +90,7 @@ USER_FUNC(memcard_format) {
     return EVT_RETURN_DONE;
 }
 
+/** Creates the game's save file on the card on the first call, blocking until done. */
 USER_FUNC(memcard_create) {
     if (isFirstCall) {
         cardCreate();
@@ -79,6 +101,7 @@ USER_FUNC(memcard_create) {
     return EVT_RETURN_DONE;
 }
 
+/** Erases save slot args[0] (1-based, as shown on the file select screen), blocking until the card write finishes. */
 USER_FUNC(memcard_delete) {
     EvtWord* args = event->args;
     s32 slot = evtGetValue(event, args[0]) - 1;
@@ -92,6 +115,7 @@ USER_FUNC(memcard_delete) {
     return EVT_RETURN_DONE;
 }
 
+/** Copies save slot args[0] onto slot args[1] (both 1-based), blocking until the card write finishes. */
 USER_FUNC(memcard_copy) {
     EvtWord* args = event->args;
     s32 from = evtGetValue(event, args[0]) - 1;
@@ -106,6 +130,7 @@ USER_FUNC(memcard_copy) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the save file's header block on the first call, blocking until done. */
 USER_FUNC(memcard_header_write) {
     if (isFirstCall) {
         cardWriteHeader();
@@ -116,11 +141,19 @@ USER_FUNC(memcard_header_write) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Asks for a reset to the GameCube main menu (IPL) so the player can free card space there;
+ * gp->resetType 2 makes the main loop reset, and the script never resumes.
+ */
 USER_FUNC(memcard_ipl) {
     gp->resetType = 2;
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Sets args[1] to 1 if save slot args[0] (1-based) holds a save and 0
+ * if it is empty (save flag bit 0 set reads as empty); evt_memcard_copy uses it to ask before overwriting.
+ */
 USER_FUNC(memcard_file_existance) {
     EvtWord* args = event->args;
     s32 slot = evtGetValue(event, args[0]) - 1;
@@ -133,6 +166,7 @@ USER_FUNC(memcard_file_existance) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the current game to the save slot in gp->saveSlot, blocking until the card write finishes. */
 USER_FUNC(memcard_write) {
     if (isFirstCall) {
         cardWrite(gp->saveSlot);
@@ -150,6 +184,10 @@ EvtWord evt_memcard_delete[80];
 EvtWord evt_memcard_copy[126];
 EvtWord evt_memcard_save[510];
 
+/**
+ * Tells the player they can continue without saving and asks yes or no;
+ * yes sets GF(0) so the caller goes on without a memory card.
+ */
 EVT_BEGIN(evt_memcard_nosave)
     CALL(evt_msg_print_add, 0, STRING("msg_nosave_start"))
     CALL(evt_msg_select, 0, STRING("msg_mcard_yesno2"))
@@ -292,6 +330,10 @@ EVT_BEGIN(evt_memcard_check)
     RETURN
 EVT_END()
 
+/**
+ * File select: asks whether to start the game from save slot LW(0) (0-based; shown 1-based).
+ * Sets GW(0) to 1 for yes and 0 for no.
+ */
 EVT_BEGIN(evt_memcard_start)
     SET_VALUE(LW(10), LW(0))
     ADD(LW(10), 1)
@@ -306,6 +348,11 @@ EVT_BEGIN(evt_memcard_start)
     RETURN
 EVT_END()
 
+/**
+ * File select: asks to delete save slot LW(0) (0-based) and erases it.
+ * If the erase fails, the curtains close and open,
+ * the load screen reloads the card and GF(0) is set so the file list is refreshed.
+ */
 EVT_BEGIN(evt_memcard_delete)
     SET_VALUE(GF(0), 0)
     SET_VALUE(LW(10), LW(0))
@@ -336,6 +383,11 @@ EVT_BEGIN(evt_memcard_delete)
     RETURN
 EVT_END()
 
+/**
+ * File select: copies save slot LW(0) onto slot LW(1) (0-based),
+ * asking first when the target slot already holds a save.
+ * On failure the curtains close and open and the file list is reloaded (GF(0) set), as in evt_memcard_delete.
+ */
 EVT_BEGIN(evt_memcard_copy)
     SET_VALUE(GF(0), 0)
     SET_VALUE(LW(10), LW(0))

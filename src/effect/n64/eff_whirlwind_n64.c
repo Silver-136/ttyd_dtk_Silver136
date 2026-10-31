@@ -45,6 +45,10 @@ effN64Vtx eff_whirlwind_v[] = {
 void effWhirlwindMain(EffectEntry* effect);
 void effWhirlwindDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns four wind bands around a Mario work target for `life` frames; type is nonzero when facing left.
+ * Used by battle_mario, battle_event_subset and event scripts.
+ */
 EffectEntry* effWhirlwindN64Entry(s32 type, MarioWork* target, f32 scale, s32 life) {
     f32 quarter;
     EffectEntry* effect;
@@ -141,6 +145,14 @@ EffectEntry* effWhirlwindN64Entry(s32 type, MarioWork* target, f32 scale, s32 li
     return effect;
 }
 
+/**
+ * Follows the target's position each frame.
+ * Type 8: alpha eases to 255, size shrinks with the remaining life and it fades over the last 10 frames,
+ * while each band tumbles and alternate bands spin opposite ways (40 degrees per frame).
+ * Other types: alpha eases to 100, the bands spin about Y, and over the last 10 frames they fade 20% per frame,
+ * widen toward twice the base size and their spin slows to a stop. Deletes when the life runs out.
+ * CAMERA_3D, layer 2.
+ */
 void effWhirlwindMain(EffectEntry* effect) {
     EffWhirlwindN64Work* work = effect->userdata;
     Vec position;
@@ -211,6 +223,11 @@ void effWhirlwindMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effWhirlwindDisp, effect);
 }
 
+/**
+ * Draws each band from the eff_whirlwind_v mesh with texture 0x58 in the band's colour,
+ * set out from the centre (types below 8 pull in as they widen) and turned by its rotations,
+ * around the camera-facing centre.
+ */
 void effWhirlwindDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffWhirlwindN64Work* work;

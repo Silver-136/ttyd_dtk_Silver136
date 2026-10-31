@@ -12,9 +12,11 @@ void _prolog(void);
 void _epilog(void);
 void _unresolved(void);
 
+/** Target of unresolved relocations; the module has no code to run for them, so it is empty. */
 void _unresolved(void) {
 }
 
+/** REL epilog: runs the static destructors when the Hooktail Castle module is unloaded. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -23,6 +25,11 @@ void _epilog(void) {
     }
 }
 
+/**
+ * REL prolog for the Hooktail Castle module: runs the static constructors
+ * and registers the init event of every room (gon_00 to gon_13 and the battle stage gon_bt00)
+ * and the area's battle setup tables.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 

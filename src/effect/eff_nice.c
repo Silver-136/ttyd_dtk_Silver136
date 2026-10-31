@@ -87,6 +87,10 @@ s32* acrobat_tbl[2] = { acrobat_jp, acrobat_us };
 
 void effNiceMain(EffectEntry* effect);
 
+/**
+ * Starts loading the rating-text animations for the current language into `group`;
+ * returns TRUE when all are loaded. Called before battles (battle_seq.c) and on map change (seq_mapchange.c).
+ */
 BOOL effNiceAsync(s32 group) {
     int i;
     BOOL valid;
@@ -102,6 +106,7 @@ BOOL effNiceAsync(s32 group) {
     return valid;
 }
 
+/** GX state callback for the rating text's pose: sets up alpha blending. */
 static void rendermodeFunc(s32 wXluStage) {
     AnimationWork* wp = animGetPtr();
 
@@ -112,6 +117,10 @@ static void rendermodeFunc(s32 wXluStage) {
     wp->currDispMode = wXluStage;
 }
 
+/**
+ * Spawns a rating text (type 0-7) at (x, y, z);
+ * battle_damage.c and battle_event_cmd.c call it for Action Command ratings.
+ */
 EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
     NiceEffectWork *userdata, *ptr;
     EffectEntry* effect;
@@ -185,6 +194,7 @@ EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
 void effNiceDisp(CameraId cameraId, void* param);
 void acrobatMain(EffectEntry* effect);
 
+/** Per frame: advances the text's squash-and-stretch animation, fades it and deletes the effect when finished. */
 void effNiceMain(EffectEntry* effect) {
     NiceEffectWork* wp = effect->userdata;
     Vec pos;
@@ -310,6 +320,7 @@ void effNiceMain(EffectEntry* effect) {
     }
 }
 
+/** Draw callback: draws the rating text pose, scaled by the work's stretch factors. */
 void effNiceDisp(CameraId cameraId, void* param) {
     EffectEntry* effect = param;
     NiceEffectWork* wp = effect->userdata;
@@ -335,6 +346,12 @@ void effNiceDisp(CameraId cameraId, void* param) {
 
 void effAcrobatDisp(CameraId cameraId, void* param);
 
+/**
+ * Per-frame update for type 7 (called from effNiceMain):
+ * each letter, 4 frames after the one before (the first plays SFX_SYSTEM_ACROBAT1), slides in from x 500,
+ * squashes, waits its turn, springs back to full size while spreading out, holds 16 frames,
+ * then flattens wide and stretches tall and thin until it vanishes. Deletes when every letter is done.
+ */
 void acrobatMain(EffectEntry* effect) {
     NiceEffectWork* wp = effect->userdata;
     int i;

@@ -33,6 +33,11 @@ EvtWord gon_01_GATEEVENT_evt[151];
 static HitDamageReturn hitDmgRetPoints[17];
 EvtWord gon_01_init_evt[102];
 
+/**
+ * Door animation callback, closing for the e_bero exit to gon_02:
+ * rotates map objects "door01" and "door02" about Y by -0.389 and 0.389 times the value in LW(0),
+ * so the two leaves swing opposite ways.
+ */
 static EVT_BEGIN(door01_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door01"), 0, LW(0), 0)
@@ -41,6 +46,11 @@ static EVT_BEGIN(door01_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the e_bero exit to gon_02:
+ * rotates map objects "door01" and "door02" about Y by 0.389 and -0.389 times the value in LW(0),
+ * so the two leaves swing opposite ways.
+ */
 static EVT_BEGIN(door01_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door01"), 0, LW(0), 0)
@@ -119,6 +129,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Cutscene run when Mario re-enters gon_01 after the Dry Bones swarm pushed him out of gon_03:
+ * the door bursts open and Mario and his partner are thrown out, tumble to the floor and get up.
+ * If he was pushed out a second time the partner (Goombella or Koops) comments on it (stg1_gon_13 and
+ * stg1_gon_14). Then the door to gon_02 is usable again.
+ */
 // Animate separate Mario and partner bounce arcs before restoring controls and reopening the door.
 EVT_BEGIN(honenoko_oidasare_evt)
     CALL(evt_mario_key_onoff, 0)
@@ -301,6 +317,13 @@ EVT_BEGIN(honenoko_oidasare_evt)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene played the first time Mario enters the castle courtyard:
+ * castle music and a slow camera pan, the chapter title card,
+ * then Mario and the partner walk up to the gate
+ * and the partner remarks on the castle (stg1_gon_00 and stg1_gon_01).
+ * If Mario had no partner, Goombella joins him.
+ */
 EVT_BEGIN(gon_01_GATEEVENT_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)

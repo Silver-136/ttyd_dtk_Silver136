@@ -220,6 +220,10 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/**
+ * Init event of the Dark Keeper: registers its wait, phase, attack, damage and confusion events,
+ * the run and walk footstep sounds and the pose sound table, then starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))
@@ -233,6 +237,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event 37 (damage code 31, run when an attacker is hurt by its spiked head):
+ * after 30 frames flashes the "toge_flush" spike effect near its head,
+ * placed 60 units up (Huge, status 10), 33 (Tiny, status 11) or 48 otherwise.
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -256,6 +265,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/** Damage event: runs the default battle damage reaction on the unit itself (part 1). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -263,10 +273,16 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Phase event of the Bandit: does nothing. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Dark Keeper: uses an enemy item if one fits,
+ * otherwise a roll of 0-99 under 50 (about half the time) picks the normal attack (weapon_monban_attack,
+ * normal_attack_event) and the rest the throw attack (weapon_monban_throw_attack).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -291,6 +307,12 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Dark Keeper's charge: winds up with stamping footsteps,
+ * then runs along the floor into the target (weapon in LW(9)).
+ * A hit shakes the camera and knocks the target back; a miss runs on past.
+ * Afterwards it walks home and laughs three times before going back to its stance.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -399,6 +421,13 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Dark Craw's spear throw (weapon in LW(9)):
+ * it picks a target (the first-strike target during a first strike), winds up and throws its spear,
+ * part 2 (otherwise hidden), spinning along an arc to the target's hit position.
+ * A dodge plays the avoid reaction and the spear flies on; a hit takes the guard result and deals the damage;
+ * either way the spear is hidden again. Then it laughs three times and returns to its stance.
+ */
 static EVT_BEGIN(throw_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -500,6 +529,7 @@ static EVT_BEGIN(throw_attack_event)
     RETURN
 EVT_END()
 
+/** Wait event: sets the idle animation from the unit's pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

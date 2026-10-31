@@ -60,6 +60,10 @@
 #include <math.h>
 #include "driver/seqdrv.h"
 
+/**
+ * Identity function on a float (returns x).
+ * Used in the camera-angle math so the compiler loads the value the same way as the original.
+ */
 static inline f32 fid(f32 x) { return x; }
 typedef struct KaitenParam {
     Vec pos;
@@ -174,6 +178,10 @@ EvtWord lastdungeon[103];
 EvtWord mahojin_event7[VERSION_PICK(2537, 2541)];
 EvtWord tik_05_init_evt[VERSION_PICK(289, 287)];
 
+/**
+ * Door callback of the Thousand-Year Door (bero n_bero):
+ * turns door_b by the progress times 0.389 degrees and door_a the opposite way.
+ */
 static EVT_BEGIN(n_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("door_b"), 0, LW(0), 0)
@@ -182,6 +190,10 @@ static EVT_BEGIN(n_door_close)
     RETURN
 EVT_END()
 
+/**
+ * The opening counterpart of n_door_close: turns door_b by progress times -0.389 and door_a the opposite way,
+ * used for the exit to the Palace of Shadow (las_00).
+ */
 static EVT_BEGIN(n_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("door_b"), 0, LW(0), 0)
@@ -281,6 +293,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Script helper. Moves the named Crystal Star effect to the world position (args[1], args[2], args[3]). */
 USER_FUNC(starstone_set_position) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -295,6 +308,7 @@ USER_FUNC(starstone_set_position) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Reads the named Crystal Star effect's position into the variables args[1], args[2], args[3]. */
 USER_FUNC(starstone_get_position) {
     EvtWord* args = event->args;
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, args[0]));
@@ -308,6 +322,7 @@ USER_FUNC(starstone_get_position) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Sets the named Crystal Star effect's Y rotation to args[1] degrees, wrapped to 0..360. */
 static USER_FUNC(starstone_set_ry) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -319,6 +334,7 @@ static USER_FUNC(starstone_set_ry) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Sets the named Crystal Star effect's opacity to args[1] (0 to 255). */
 USER_FUNC(starstone_set_alpha) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -328,6 +344,7 @@ USER_FUNC(starstone_set_alpha) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Sets the named Crystal Star effect's scale to the float args[1]. */
 USER_FUNC(starstone_set_scale) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -337,6 +354,12 @@ USER_FUNC(starstone_set_scale) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that places one of the seven Crystal Stars on a circle.
+ * args: [0] effect name, [1] star number 1 to 7, [2] to [4] the circle's centre,
+ * [5] the circle's rotation in degrees, [6] its radius.
+ * The stars sit 360/7 degrees apart; called every frame so the ring turns around the pedestal.
+ */
 USER_FUNC(starstone_circle_link_func) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -362,11 +385,17 @@ USER_FUNC(starstone_circle_link_func) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Clears the sound flag (bit 2) of the named Crystal Star effect so it stays silent. */
 USER_FUNC(eff_starstone_sound_off) {
     ((EffStarStoneWork*)effNameToPtr((const char*)evtGetValue(event, event->args[0]))->userdata)->flags &= ~4;
     return EVT_RETURN_DONE;
 }
 
+/**
+ * TEV callback for the pedestal's star glow (hosi_2).
+ * Draws it with source-alpha blending and a constant alpha taken from the byte at _ap,
+ * so mahojin_alpha can fade it in and out.
+ */
 static void alpha_tev(MapTevCallbackInfo* info) {
     s32 stage = info->tevStage;
     u8* alpha = _ap;
@@ -384,6 +413,12 @@ static void alpha_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
+/**
+ * Runs the fade of the glowing star (hosi_2) on the pedestal.
+ * Every frame it adds the speed in GW(1) to an alpha clamped to 0..255 and stores it;
+ * stops when GF(10) is set, then removes the callback after a second.
+ * mahojin_alpha_up and mahojin_alpha_down set GW(1) when Mario steps on or off the pedestal (a_dai).
+ */
 EVT_BEGIN(mahojin_alpha)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("hosi_2"), MAP_OBJ_TEV_CALLBACK(1))
@@ -624,11 +659,19 @@ static USER_FUNC(alpha_init_func) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Sets the pedestal star's alpha byte to args[0]. */
 static USER_FUNC(alpha_set_func) {
     *_ap = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that prepares the rotating camera of the map scene.
+ * args[0..5] and [6..11] are the position and target of two key camera views;
+ * the helper allocates three work areas and computes each key view's yaw and distance around the target.
+ * It clears the second area twice instead of the working one; harmless, since every field of the working area
+ * is then written (a copy of the first view).
+ */
 static USER_FUNC(cam_kaiten_init) {
     EvtWord* args = event->args;
     Vec target;
@@ -678,6 +721,7 @@ static USER_FUNC(cam_kaiten_init) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Applies the working camera view of the map scene (position, target) directly to the 3D camera. */
 static USER_FUNC(cam_kaiten_set_direct) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
     f32 s = sin(6.2831855f * ckpw->angle / 360.0f);
@@ -696,6 +740,11 @@ static USER_FUNC(cam_kaiten_set_direct) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper.
+ * Reads one of the three stored camera views (args[0]: 0, 1 or the working one) into the variables args[1..8]:
+ * position, target, yaw angle and distance.
+ */
 static USER_FUNC(cam_kaiten_get_para) {
     EvtWord* args = event->args;
     KaitenParam* p;
@@ -723,6 +772,10 @@ static USER_FUNC(cam_kaiten_get_para) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper.
+ * Writes the position, target, angle and distance in args[1..8] into the camera view selected by args[0].
+ */
 static USER_FUNC(cam_kaiten_set_para) {
     EvtWord* args = event->args;
     KaitenParam* p;
@@ -750,6 +803,11 @@ static USER_FUNC(cam_kaiten_set_para) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper.
+ * Places the orb effect args[0] at 30 units in front of (x, y, z) = args[1..3] along the Y rotation args[4],
+ * where the item sits.
+ */
 USER_FUNC(disp_lighteffect_func) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -770,6 +828,11 @@ USER_FUNC(disp_lighteffect_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper.
+ * Places the treasure map effect args[0] at (args[1], args[2], args[3]) with rotation 180 + args[4]
+ * and the alpha args[5].
+ */
 USER_FUNC(disp_treasure_map_func) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -788,6 +851,7 @@ USER_FUNC(disp_treasure_map_func) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Sets the alpha (args[1]) of the named magic-circle effect. */
 USER_FUNC(mahojin_effect_alpha) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -797,6 +861,11 @@ USER_FUNC(mahojin_effect_alpha) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that keeps the map, orb and wave effects in front of the item (item00) as the camera turns,
+ * by offsetting them 5, 10 and 15 units along the camera's view direction.
+ * Returns EVT_RETURN_BLOCK so it runs every frame.
+ */
 USER_FUNC(effect_position) {
     ItemEntry* item = itemNameToPtr("item00");
     f32 angle = -(6.2831855f * camGetPtr(CAMERA_3D)->viewYaw / 360.0f);
@@ -834,6 +903,11 @@ USER_FUNC(effect_position) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper.
+ * Sets the overlay image "img" to white with the opacity args[0]
+ * and places it with a fixed transform (scale 0.9, tilted back 30 degrees).
+ */
 USER_FUNC(img_alpha) {
     Mtx trans;
     Mtx scale;
@@ -851,6 +925,11 @@ USER_FUNC(img_alpha) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for the map-appear scene.
+ * args[0] is a time 0..10000: it sets the star stone effect's opacity
+ * and spin from it (spinning five turns over the range) and puts the dust effects on camera 7.
+ */
 USER_FUNC(tiz_stone) {
     f32 t = evtGetValue(event, event->args[0]);
     EffectEntry* eff;
@@ -873,6 +952,11 @@ USER_FUNC(tiz_stone) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Draw callback of the screen-shatter effect.
+ * On the first call it copies the frame to a texture, then draws it as a 38 by 30 grid of 16 pixel tiles;
+ * each tile whose delay is over is drawn flying off with its own rotation and velocity.
+ */
 void tiz_broken_draw(CameraId cameraId, void* param) {
     GXTexObj tex;
     Mtx mtx;
@@ -966,6 +1050,13 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+/**
+ * Blocking script helper for evt_mapwrite: shatters the screen into the item-get view. On the first call it sets
+ * up a 38 by 30 grid of tiles, each flying outward from the centre after a delay proportional to its distance
+ * (param_tbl); every frame it moves the tiles and queues tiz_broken_draw on camera 8, and it returns once every
+ * tile has left the screen (|x| over 340 or |y| over 260), freeing its buffers.
+ * Parts of it are written with hand-expanded math to keep the original code.
+ */
 USER_FUNC(tiz_broken) {
 #ifdef VERSION_G8ME01
     f32 sq; // FAKE: tb_sqrtf expanded by hand (see below)
@@ -1131,6 +1222,11 @@ static const char* name_tbl[] = {
     "vr",
 };
 
+/**
+ * Script helper.
+ * Fades the screen to white over args[0] ms, holds for args[1] ms, then fades back over args[2] ms.
+ * Used for the flash when the magic circle appears.
+ */
 static USER_FUNC(evtflash) {
     EvtWord* args = event->args;
     s32 in = evtGetValue(event, args[0]);
@@ -1187,6 +1283,7 @@ USER_FUNC(map_disp_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Draws the named crystal effect on camera 5, the camera that is drawn over the black overlay. */
 USER_FUNC(crystal_bgmode) {
     EffectEntry* eff = effNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
@@ -1194,6 +1291,12 @@ USER_FUNC(crystal_bgmode) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper.
+ * Moves the item-get effect (args[0]) and the treasure map effect (args[1]) to camera 5
+ * and enlarges the item-get glow, so the map scene is drawn over the black background.
+ * Also puts Mario on camera 5.
+ */
 USER_FUNC(map_bgmode) {
     EvtWord* args = event->args;
     const char* name1 = (const char*)evtGetValue(event, args[0]);
@@ -1208,6 +1311,7 @@ USER_FUNC(map_bgmode) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Undoes map_bgmode: puts the item-get effect, the treasure map effect and Mario back on camera 4. */
 USER_FUNC(map_bgmode_end) {
     EvtWord* args = event->args;
     const char* name1 = (const char*)evtGetValue(event, args[0]);
@@ -1222,6 +1326,12 @@ USER_FUNC(map_bgmode_end) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that turns the camera around the pedestal.
+ * args: [0] start angle, [1] end angle, [2] duration in ms, [3] receives the current angle,
+ * [4] receives 1 while still turning and 0 when done.
+ * The speed ramps up over the first 20 percent of the time and down over the last 20 percent.
+ */
 USER_FUNC(cam_mahojin_kaiten_main) {
     s32 frames;
     s32 msec;
@@ -1271,6 +1381,12 @@ USER_FUNC(cam_mahojin_kaiten_main) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper.
+ * Marks the named Crystal Star effect (args[0]) as not drawn by itself
+ * and hooks it into slot args[1] + 2 of the magic-circle (mahojin) effect,
+ * so the circle draws that star as part of its own pass.
+ */
 USER_FUNC(starstone_setting) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1284,6 +1400,7 @@ USER_FUNC(starstone_setting) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Moves the named smoke effect to (args[1], args[2], args[3]). */
 USER_FUNC(kemuri_set_position) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1298,6 +1415,11 @@ USER_FUNC(kemuri_set_position) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper.
+ * Sets the colour of the named smoke (kemuri) effect to (args[1], args[2], args[3])
+ * and gives it a random scale of 1.0 to 3.9.
+ */
 USER_FUNC(kemuri_set_color) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1313,6 +1435,7 @@ USER_FUNC(kemuri_set_color) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Moves the named charge-up effect to (args[1], args[2], args[3]). */
 USER_FUNC(pcharge_set_position) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1327,6 +1450,7 @@ USER_FUNC(pcharge_set_position) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Configures two star-dust effects, args[0] and args[1], to draw on camera 5. */
 USER_FUNC(stardust_setting) {
     EvtWord* args = event->args;
     const char* name1 = (const char*)evtGetValue(event, args[0]);
@@ -1340,6 +1464,13 @@ USER_FUNC(stardust_setting) {
 }
 
 #ifndef VERSION_G8ME01
+/**
+ * Script helper (JP and earlier).
+ * Checks whether an EXI device of ID 0x05070000 is attached to channel 0;
+ * if so, releases the big map-scene animations that the map init has just loaded. The same check in end_00
+ * (JP and earlier) swaps the credits NPCs for Mario's model, so both cut memory use when that device is present.
+ * Guess: the device is the "DOL viewer" development tool the name refers to.
+ */
 USER_FUNC(is_dol_viewer) {
     u32 type;
 
@@ -1735,6 +1866,11 @@ EVT_BEGIN(evt_mapwrite)
     RETURN
 EVT_END()
 
+/**
+ * Ending of the pedestal scenes before their map change: starts a two-second camera move (0, 225, 469 looking at
+ * 0, 100, -270), irises out after 1.2 s, then sets the next map change to an instant black fade-out and a 500 ms
+ * iris-in, so the change continues the iris it has already done.
+ */
 EVT_BEGIN(fake_fade)
     CALL(evt_cam3d_evt_set, 0, 225, 469, 0, 100, -270, 2000, EASING_SINE_IN_OUT)
     WAIT_MS(1200)
@@ -1744,6 +1880,11 @@ EVT_BEGIN(fake_fade)
     RETURN
 EVT_END()
 
+/**
+ * A Crystal Star rises from Mario's raised hands.
+ * Plays the item-get light, the star stone effect (LW(0) = star number) and star dust,
+ * then removes the effects and returns Mario to his idle pose.
+ */
 EVT_BEGIN(evt_starstone_up)
     WAIT_MS(500)
     CALL(evt_mario_get_pos, 0, LW(4), LW(5), LW(6))
@@ -1769,6 +1910,10 @@ EVT_BEGIN(evt_starstone_up)
     RETURN
 EVT_END()
 
+/**
+ * Places the seven-star ring one star: spawns the star stone effect, sets its alpha and number,
+ * fades it in and then spins it until GF(11) is set, removing it at the end.
+ */
 EVT_BEGIN(evt_starstone_set)
     WAIT_MS(7000)
     SET_VALUE(LW(0), GW(15))
@@ -2099,6 +2244,11 @@ EVT_BEGIN(mahojin_event6)
     RETURN
 EVT_END()
 
+/**
+ * Loop that keeps the seven Crystal Stars (stone01 to stone07) on a ring around the pedestal,
+ * calling starstone_circle_link_func each frame with the centre and radius held in GW(10) to GW(12)
+ * and the rotation in LW(0).
+ */
 EVT_BEGIN(starstone_circle_link)
     LOOP(0)
         CALL(starstone_circle_link_func, STRING("stone01"), 1, LW(0), GW(10), LW(2), GW(11), GW(12))
@@ -2113,6 +2263,10 @@ EVT_BEGIN(starstone_circle_link)
     RETURN
 EVT_END()
 
+/**
+ * Starts the looping map animations of the final door room:
+ * the cracks (anm_hibi), the seven stars (anm_hosi_1 to 7) and the door (anm_tobira).
+ */
 EVT_BEGIN(lastdungeon_anim_init)
     CALL(evt_map_playanim, STRING("anm_hibi"), MAP_ANIM_PLAY_AT_END, 0)
     CALL(evt_map_playanim, STRING("anm_hosi_1"), MAP_ANIM_PLAY_AT_END, 0)
@@ -2127,6 +2281,10 @@ EVT_BEGIN(lastdungeon_anim_init)
     RETURN
 EVT_END()
 
+/**
+ * Puts the Thousand-Year Door's two leaves (door_a, door_b) at 120 degrees (door_a at -120)
+ * and updates their hit areas; lastdungeon swings them from that pose.
+ */
 EVT_BEGIN(lastdungeon_init)
     CALL(evt_hit_bind_mapobj, STRING("a_door_a"), STRING("door_a"))
     CALL(evt_hit_bind_mapobj, STRING("a_door_b"), STRING("door_b"))
@@ -2708,6 +2866,13 @@ EVT_BEGIN(mahojin_event7)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_05, the Thousand-Year Door room.
+ * Starts the music, sets up Professor Frankly's NPC, the pedestal glow,
+ * the pedestal triggers chosen by story progress (mahojin_event to mahojin_event7),
+ * the doorway to the final dungeon, the Shine Sprite block,
+ * the save block and the animations needed for the map scenes.
+ */
 EVT_BEGIN(tik_05_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

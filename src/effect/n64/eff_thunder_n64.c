@@ -589,6 +589,7 @@ effN64Vtx Ncube_inazuma_v[] = {
     {-13, -115, 0, 9463, 2048, 255, 255, 255, 255},
 };
 
+/** Spawns a lightning strike at (x, y, z); type picks the variant. Spawned by event scripts through evt_eff. */
 EffectEntry* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
     EffectEntry* effect;
     EffThunderN64Work* work;
@@ -644,6 +645,13 @@ EffectEntry* effThunderN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a, f32 b) {
     return effect;
 }
 
+/**
+ * A delete request ends it next frame; the lifetime only counts down from below 100.
+ * At the end it also deletes its charge and flare child effects (the flare goes after 18 frames anyway).
+ * Types 0-2 (other types for their first 6 frames) scroll the two bolt texture layers,
+ * some steps only every interval0/interval1 frames;
+ * types 3+ fade 13 per frame after frame 6, types 0-2 fade 25 per frame over their last 10. CAMERA_3D, layer 2.
+ */
 void effThunderMain(EffectEntry* effect) {
     EffThunderN64Work* work;
     Vec position;
@@ -732,6 +740,11 @@ void effThunderMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effThunderDisp, effect);
 }
 
+/**
+ * Draws the lightning bolt mesh (Ncube_inazuma_v, a different part per type) camera-facing with texture 84 in
+ * two scrolled layers: magenta-pink (FF,2F,C6) for types 0-2, yellow with the fading alpha for types 3+.
+ * Type 1 stays hidden for its first 18 frames.
+ */
 void effThunderDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffThunderN64Work* work;

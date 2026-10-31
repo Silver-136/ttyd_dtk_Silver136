@@ -42,6 +42,11 @@ static u8 scale_dt2[] = {
 static void effBombDisp(CameraId cameraId, EffectEntry* effect);
 static void effBombMain(EffectEntry* effect);
 
+/**
+ * Spawns a bomb blast at (x, y, z): eight rays (four at 90 degree steps, four offset by 45)
+ * and a confetti burst.
+ * Spawned by battle damage code (battle_damage.c), scripts in gor_03 and event scripts via evt_eff.
+ */
 EffectEntry* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffBombWork* work;
@@ -81,6 +86,7 @@ EffectEntry* effBombEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     return effect;
 }
 
+/** Looks up each ray's offset and X/Y stretch from scale_dt / scale_dt2 by age; deleted after 36 frames. */
 static void effBombMain(EffectEntry* effect) {
     EffBombWork* work = effect->userdata;
     Vec position;
@@ -114,6 +120,7 @@ static void effBombMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBombDisp, effect);
 }
 
+/** Draws the eight rays as stretched sprites, rotated by their angle around the blast centre. */
 static void effBombDisp(CameraId cameraId, EffectEntry* effect) {
     EffBombWork* work;
     CameraEntry* camera;

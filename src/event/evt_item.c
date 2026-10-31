@@ -9,6 +9,10 @@
 
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
+/**
+ * Spawns a field item: args are name, item id, x, y, z (integers), ItemEntryType,
+ * the collect flag (GSWF/LSWF passed unevaluated, or -1) and a pickup script. Wraps itemEntry.
+ */
 USER_FUNC(evt_item_entry) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
@@ -23,11 +27,13 @@ USER_FUNC(evt_item_entry) {
     return EVT_RETURN_DONE;
 }
 
+/** Deletes the field item named in args[0]. */
 USER_FUNC(evt_item_delete) {
     itemDelete((char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 
+/** Writes 1 to args[1] when no field item named args[0] exists any more (collected or deleted), else 0. */
 USER_FUNC(evt_item_delete_check) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
@@ -66,6 +72,7 @@ USER_FUNC(evt_item_status_on) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the field item's direction (args[1], degrees) and horizontal speed (args[2], float) for its next launch. */
 USER_FUNC(evt_item_set_move_dir_speed) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
@@ -77,6 +84,7 @@ USER_FUNC(evt_item_set_move_dir_speed) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the field item's vertical velocity (args[1], float), the jump power of its launch. */
 USER_FUNC(evt_item_set_jump_power) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
@@ -86,6 +94,7 @@ USER_FUNC(evt_item_set_jump_power) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the field item's gravity scale (args[1], float). */
 USER_FUNC(evt_item_set_gravity) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
@@ -95,6 +104,7 @@ USER_FUNC(evt_item_set_gravity) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the field item's bounce factor (args[1], float): how much speed it keeps each bounce. */
 USER_FUNC(evt_item_set_bound_rate) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
@@ -104,6 +114,7 @@ USER_FUNC(evt_item_set_bound_rate) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the field item's maximum number of bounces (args[1]). */
 USER_FUNC(evt_item_set_bound_limit) {
     EvtWord* args = event->args;
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, args[0]));
@@ -126,6 +137,7 @@ USER_FUNC(evt_item_get_item) {
     return itemStatus(item, ITEM_FLAG2_RELEASED) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** Blocks until the get sequence of the field item named args[0] is over, without starting it; done if it is gone. */
 USER_FUNC(evt_item_get_item_end_wait) {
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, event->args[0]));
     if (item == NULL) return EVT_RETURN_DONE;
@@ -134,6 +146,7 @@ USER_FUNC(evt_item_get_item_end_wait) {
     return itemStatus(item, ITEM_FLAG2_RELEASED) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** Switches the field item named args[0] to mode args[1] (itemModeChange restarts that mode's state). */
 USER_FUNC(evt_item_change_mode) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
@@ -162,6 +175,7 @@ USER_FUNC(evt_item_set_bound_next_dir) {
     return EVT_RETURN_DONE;
 }
 
+/** Moves the field item named args[0] to the float position args[1..3]. */
 USER_FUNC(evt_item_set_position) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
@@ -176,6 +190,7 @@ USER_FUNC(evt_item_set_position) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the position of the field item named args[0] to the float variables args[1..3]. */
 USER_FUNC(evt_item_get_position) {
     EvtWord* args = event->args;
     ItemEntry* item;
@@ -192,6 +207,7 @@ USER_FUNC(evt_item_get_position) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the draw scale (args[1], float) of the field item named args[0]. */
 USER_FUNC(evt_item_set_scale) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
@@ -202,6 +218,7 @@ USER_FUNC(evt_item_set_scale) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the alpha (args[1], 0-255) of the field item named args[0]. */
 USER_FUNC(evt_item_set_alpha) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
@@ -212,6 +229,10 @@ USER_FUNC(evt_item_set_alpha) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Slides the field item named args[0] to the integer position args[1..3] over args[4] milliseconds with
+ * interpolation mode args[5] (intplGetValue), blocking until it arrives.
+ */
 USER_FUNC(evt_item_move_3d_position) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
@@ -241,6 +262,11 @@ USER_FUNC(evt_item_move_3d_position) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Flies the field item named args[0] to Mario (raised by his collision box height) in an arc:
+ * 0.5 units per frame toward him with 0.1 per-frame gravity, blocking until it reaches him.
+ * Assumes the item exists (no NULL check).
+ */
 USER_FUNC(evt_item_get_important_item) {
     ItemEntry* item = itemNameToPtr((char*)evtGetValue(event, event->args[0]));
     MarioWork* mario = marioGetPtr();

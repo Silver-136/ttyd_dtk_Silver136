@@ -39,24 +39,40 @@ static EvtWord evt_tojikome_msg[30];
 EvtWord evt_postar[23];
 EvtWord tou_11_init_evt[178];
 
+/**
+ * Door animation callback for the north door (door_1), opening: LW(0) is the swing angle;
+ * turns door_1 about the Y axis by 0.44 times the angle.
+ */
 static EVT_BEGIN(n_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the north door (door_1), closing:
+ * turns door_1 about the Y axis by -0.44 times the angle.
+ */
 static EVT_BEGIN(n_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the east door (door_2), opening: LW(0) is the swing angle;
+ * turns door_2 about the Y axis by 0.44 times the angle.
+ */
 static EVT_BEGIN(e_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the east door (door_2), closing:
+ * turns door_2 about the Y axis by -0.44 times the angle.
+ */
 static EVT_BEGIN(e_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2"), 0, LW(0), 0)
@@ -212,6 +228,11 @@ EVT_BEGIN(evt_tojikome)
     RETURN
 EVT_END()
 
+/**
+ * Second visit (entrance "nidome"): the partner complains they are ridiculously late
+ * and goes to check (stg3_tou_409_02), the door will not open (locked-door sound),
+ * the partner panics that they are locked in (stg3_tou_410), and the screen irises out to tou_03.
+ */
 EVT_BEGIN(evt_tojikome_nidome)
     CALL(evt_snd_bgm_scope, 0, 0)
     CALL(evt_mario_key_onoff, 0)
@@ -239,6 +260,7 @@ EVT_BEGIN(evt_tojikome_nidome)
     RETURN
 EVT_END()
 
+/** Third shut-in scene: the partner's remark stg3_tou_421_01 and the normal Glitz Pit music and ambience return. */
 EVT_BEGIN(evt_tojikome_sandome)
     CALL(evt_snd_bgm_scope, 0, 0)
     CALL(evt_mario_key_onoff, 0)
@@ -254,6 +276,7 @@ EVT_BEGIN(evt_tojikome_sandome)
     RETURN
 EVT_END()
 
+/** Message for a door that will not open: plays the door-locked sound and the partner remarks stg3_tou_421_02. */
 static EVT_BEGIN(evt_tojikome_msg)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -277,6 +300,11 @@ EVT_BEGIN(evt_postar)
     RETURN
 EVT_END()
 
+/**
+ * Map init for tou_11, the empty minor-league locker room:
+ * NPCs, the blowable poster (pos_1), the shut-in message at n_bero, music,
+ * and Mario's and the partner's entry positions (and the title match entry if reserved).
+ */
 EVT_BEGIN(tou_11_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)

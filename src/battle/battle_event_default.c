@@ -57,6 +57,13 @@ EvtWord btldefaultevt_LectureEnd[6];
 EvtWord btldefaultevt_Defend[7];
 EvtWord btldefaultevt_DefendParty[7];
 
+/**
+ * Standard damage reaction that unit damage scripts call with LW(10) = unit and LW(11) = part:
+ * plays the reaction for the damage pattern and damage code (hurt pose, Gale Force and Fright blow-away, slaps,
+ * counters, guards, lucky and dodged misses, using the unit's data-table events where it has them), then the KO,
+ * the backfire (damage code bit 0x4000) or the guard return,
+ * and finally walks or floats the unit back to its home position and restarts its wait event.
+ */
 EVT_BEGIN(btldefaultevt_Damage)
     CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FREEZE_CRUSH, LW(1))
@@ -947,15 +954,21 @@ USER_FUNC(_backfire) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script: starts loading the animations of the partner chosen in the command menu. */
 static USER_FUNC(_anime_load) {
     BattlePartyAnimeLoad(_battleWorkPointer->commandMenu.partyKind);
     return EVT_RETURN_DONE;
 }
 
+/** Script: blocks until the chosen partner's animations are loaded. */
 static USER_FUNC(_anime_load_wait) {
     return BattlePartyAnimeLoad(_battleWorkPointer->commandMenu.partyKind) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script: sets args[0] to 1 when the active unit is Mario
+ * and the partner switch costs his turn (no Quick Change, or he is confused).
+ */
 USER_FUNC(_check_pose_stay) {
     BattleWork* wp = _battleWorkPointer;
     s32 out = event->args[0];
@@ -978,16 +991,19 @@ USER_FUNC(_check_pose_stay) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: tells the audience that Mario is running away. */
 USER_FUNC(btlevtcmd_audience_code_escape) {
     BattleAudience_Case_Escape();
     return EVT_RETURN_DONE;
 }
 
+/** Script: audience reaction to a successful escape. */
 USER_FUNC(btlevtcmd_audience_code_escape_success) {
     BattleAudience_Case_Escape_Good();
     return EVT_RETURN_DONE;
 }
 
+/** Script: audience reaction to a failed escape. */
 USER_FUNC(btlevtcmd_audience_code_escape_fail) {
     BattleAudience_Case_Escape_Bad();
     return EVT_RETURN_DONE;
@@ -1006,12 +1022,14 @@ USER_FUNC(_btl_escape_reset_move_color_lv_player_unit_all) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: shows the escape action command's help text. */
 USER_FUNC(_set_escape_ac_hlp_msg) {
     BattleAcHelpSetHelp("msg_ac_escape");
     BattleAcHelpSetDispType(2);
     return EVT_RETURN_DONE;
 }
 
+/** Script: returns in args[0] the enemy group's run rate, which sets the escape gauge. */
 USER_FUNC(_get_escape_rate) {
     BattleWork* wp = _battleWorkPointer;
     evtSetValue(event, event->args[0],
@@ -1019,6 +1037,10 @@ USER_FUNC(_get_escape_rate) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: returns in args[1] the HP the unit args[0] regains from HP Drain:
+ * its equipped power, capped at its damage dealt.
+ */
 USER_FUNC(_get_heart_suitoru_point) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -1040,6 +1062,10 @@ USER_FUNC(_get_heart_suitoru_point) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: returns in args[1] the FP the unit args[0] regains from FP Drain:
+ * its equipped power, capped at its damage dealt.
+ */
 USER_FUNC(_get_flower_suitoru_point) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

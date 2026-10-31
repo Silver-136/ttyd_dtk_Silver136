@@ -105,6 +105,10 @@ static KusaAccess kusa_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Petal Meadows hei_02 map init: registers the exits, field music, the tree and grass rewards, wheat animation,
+ * the POW Block item block and the drifting grass clouds.
+ */
 EVT_BEGIN(hei_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

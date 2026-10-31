@@ -23,6 +23,13 @@ const char* ac_lstrckeep_iconname[] = {"_AcSkl1", "_AcSkl2", "_AcSkl3", "_AcSkl4
 
 static void actionCommandDisp(f32 x, f32 y, s32 n);
 
+/**
+ * Per-frame driver of action command 4, which no battle script in the tree sets up: a two-stick hammer charge.
+ * Tilt the Control Stick left and the C-Stick right within 120 frames,
+ * keep holding while three stars light (step lengths params[0..3]),
+ * then let go of both during the last step (params[4] frames) within a difficulty window of 80 down to 5 frames.
+ * Letting go early, or for over 5 frames, or never, fails.
+ */
 s32 battleAcMain_LstRcKeep(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     LstRcWork* lw = (LstRcWork*)ac->work;
@@ -207,10 +214,15 @@ s32 battleAcMain_LstRcKeep(BattleWork* work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_LstRcKeep(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/**
+ * Display callback: slides the prompt in from the left over 20 frames, lights the stars as the steps pass,
+ * and after the command is stopped keeps it up for 40 frames before sliding it back out.
+ */
 void battleAcDisp_LstRcKeep(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleActions* ac = &work->actionCommands;
@@ -255,11 +267,16 @@ void battleAcDisp_LstRcKeep(CameraId cameraId, void* param) {
     }
 }
 
+/** Called by btlevtcmd_StopAC: starts the 60-frame wait after which the command clears its callbacks. */
 void battleAcDelete_LstRcKeep(BattleWork* work) {
     work->actionCommands.mAcState = 1005;
 }
 
 #pragma optimize_for_size on
+/**
+ * Draws the two stick icons (shown tilted until the last step),
+ * the bar and its three numbered stars lit up to step n, and the final star, lit on the last step.
+ */
 static void actionCommandDisp(f32 x, f32 y, s32 n) {
     s32 off;
     s32 i;

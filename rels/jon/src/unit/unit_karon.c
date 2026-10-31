@@ -246,6 +246,12 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init script of the Dry Bones: registers its wait, attack, damage and confusion handlers,
+ * puts its three bone parts (2 to 4) in the KRN_H_1 pose,
+ * clears unit work 1 (set once its reward has been paid out)
+ * and sets its landing sound (SFX_ENM_HONENOKO_LANDING1).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

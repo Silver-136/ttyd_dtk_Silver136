@@ -151,6 +151,10 @@ static EVT_BEGIN(door_open)
     RETURN
 EVT_END()
 
+/**
+ * Shakes the NPC named in LW(0) from side to side by one unit every two frames, forever;
+ * deleted by hashira_evt when the shaking should stop.
+ */
 // Alternate between the initial X plus one and the initial X; the decremented temporary is not used.
 static EVT_BEGIN(shake_evt)
     CALL(evt_npc_get_position, LW(0), LW(10), LW(11), LW(12))
@@ -167,6 +171,10 @@ static EVT_BEGIN(shake_evt)
     RETURN
 EVT_END()
 
+/**
+ * Makes the guard in LW(0) jump 50 units towards the middle from its pillar with SFX_STG1_TOGEDA_JUMP1
+ * and landing sound and a small camera shake.
+ */
 static EVT_BEGIN(hashira_evt_sub)
     CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_get_position, LW(0), LW(10), LW(11), LW(12))
@@ -182,6 +190,13 @@ static EVT_BEGIN(hashira_evt_sub)
     RETURN
 EVT_END()
 
+/**
+ * Case script run when Mario hits a pillar of the second gate (LW(0) is the guard on it, LW(1) the other):
+ * the pillar shakes with a quake (SFX_STG1_QUAKE6) while the camera looks at it,
+ * the guard jumps down (hashira_evt_sub), the other guard too unless it was already beaten,
+ * then both guards are set up as linked enemies and the battle mode is switched on.
+ * The original tests hei_03's pillar-defeated flags rather than this map's own.
+ */
 // The optional second-enemy wakeup checks HEI_03 flags here, not this room's HEI_05 defeat flags.
 static EVT_BEGIN(hashira_evt)
     CALL(evt_mario_key_onoff, 0)
@@ -232,6 +247,11 @@ static EVT_BEGIN(hashira_evt)
     RETURN
 EVT_END()
 
+/**
+ * Petal Meadows hei_05 map init: puts the two Shinemon enemies on their pillars until the "Bristle" story step
+ * and until each has been defeated, opens the gate when both are beaten (or at once later in the story),
+ * sets the cave music and reverb.
+ */
 EVT_BEGIN(hei_05_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

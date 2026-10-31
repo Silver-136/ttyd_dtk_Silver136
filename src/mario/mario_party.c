@@ -6,6 +6,7 @@
 #include "party/party_yoshi.h"
 
 
+/** Removes the partner in Mario's first party slot (currPartySlotId[0]) and marks the slot empty (-1). */
 static inline void marioPartyKillSlot0(void) {
     MarioWork* wp = marioGetPtr();
     if (wp->currPartySlotId[0] >= 0) {
@@ -14,6 +15,7 @@ static inline void marioPartyKillSlot0(void) {
     }
 }
 
+/** Removes the follower in Mario's second party slot (currPartySlotId[1], the partyEntry2 members) and empties it. */
 static inline void marioPartyKillSlot1(void) {
     MarioWork* wp = marioGetPtr();
     if (wp->currPartySlotId[1] >= 0) {
@@ -22,6 +24,13 @@ static inline void marioPartyKillSlot1(void) {
     }
 }
 
+/**
+ * Partner button check, run every frame from marioMain:
+ * X arms MARIO_TRIG_FLAG_USE_PARTNER with a 5-frame partyUseDelay when Mario stands,
+ * walks or dashes with a usable partner.
+ * Airborne, field-battle locks, slits, an airborne Goombella or a busy Yoshi block or cancel it.
+ * Always returns 0; marioUsePartyMain later fires the ability.
+ */
 s32 marioUseParty(void) {
     MarioWork* wp = marioGetPtr();
     PartyEntry* party;
@@ -85,8 +94,12 @@ s32 marioUseParty(void) {
     return 0;
 }
 
-// Per frame (from partyMain): runs the partner action that marioUseParty requested with X, after its delay;
-// a locked controller cancels the request. Descriptive name (not in the symbol maps; docs/NAME_PROVENANCE.md).
+/**
+ * Runs from partyMain while a partner is out: after the partner button,
+ * counts down partyUseDelay and then calls partyDoWork to use the partner's field ability (returns its result,
+ * else 0). Losing control (marioKeyOffChk) cancels.
+ */
+// Descriptive name (not in the symbol maps; docs/NAME_PROVENANCE.md).
 s32 marioUsePartyMain(void) {
     MarioWork* wp = marioGetPtr();
 
@@ -105,6 +118,12 @@ s32 marioUsePartyMain(void) {
     return 0;
 }
 
+/**
+ * Puts a party member out at once, replacing whoever held the slot:
+ * ids below 8 are partners (must have joined, else -1) and go to slot 0,
+ * higher ids are followers (partyEntry2) in slot 1.
+ * Used on save load, after battles and in the E3 sequence; returns the party slot or -1.
+ */
 s32 marioPartyEntry(PartyId id) {
     MarioWork* wp = marioGetPtr();
     s32 ret;
@@ -134,6 +153,11 @@ s32 marioPartyEntry(PartyId id) {
     return ret;
 }
 
+/**
+ * Calls a partner out with the arrival animation (partyEntryHello) if slot 0 is empty,
+ * or a follower into slot 1.
+ * The partner menu (win_main) uses it after marioPartyGoodbye when switching partners. Returns the slot or -1.
+ */
 s32 marioPartyHello(PartyId id) {
     s32 ret = -1;
     MarioWork* wp = marioGetPtr();
@@ -157,6 +181,10 @@ s32 marioPartyHello(PartyId id) {
     return ret;
 }
 
+/**
+ * Sends the current partner in slot 0 away with the leaving animation (partyGoodbye)
+ * when switching partners in the partner menu. TRUE if there was a partner to send away.
+ */
 BOOL marioPartyGoodbye(void) {
     BOOL ret = FALSE;
     s8 slot = marioGetPtr()->currPartySlotId[0];
@@ -167,11 +195,16 @@ BOOL marioPartyGoodbye(void) {
     return ret;
 }
 
+/** Removes both the partner and the follower at once with no animation (save load, end of battle, E3 sequence). */
 void marioPartyKill(void) {
     marioPartyKillSlot0();
     marioPartyKillSlot1();
 }
 
+/**
+ * The PartyMember kind of the partner out with Mario (PARTY_MEMBER_GOOMBELLA, ...), or 0 when none.
+ * Used by the pause menu, item menu and status window.
+ */
 s32 marioGetParty(void) {
     s32 id;
 
@@ -183,6 +216,10 @@ s32 marioGetParty(void) {
     }
 }
 
+/**
+ * The party slot of Mario's partner: the first of his two slots whose entry is not a follower
+ * (PARTY_FLAG_IS_PARTNER is set by partyEntry2 on followers). -1 when no partner is out. Pass it to partyGetPtr.
+ */
 s32 marioGetPartyId(void) {
     MarioWork* wp = marioGetPtr();
     PartyEntry* party;
@@ -205,6 +242,10 @@ s32 marioGetPartyId(void) {
     return -1;
 }
 
+/**
+ * The party slot of the follower walking with Mario (a member added by partyEntry2,
+ * flagged PARTY_FLAG_IS_PARTNER), or -1. The counterpart of marioGetPartyId.
+ */
 s32 marioGetExtraPartyId(void) {
     MarioWork* wp = marioGetPtr();
     PartyEntry* party;
@@ -228,18 +269,29 @@ s32 marioGetExtraPartyId(void) {
     return -1;
 }
 
+/**
+ * Marks a partner as recruited in the pouch (partyData flag 1), so it can be called out.
+ * event.c's story-stage setup calls it for each partner's join point (Goombella, Koops, Flurrie, Yoshi, Vivian,
+ * Bobbery, Ms. Mowz).
+ */
 void partyJoin(PartyId partnerId) {
     if (partnerId < PARTNER_COUNT) {
         pouchGetPtr()->partyData[partnerId].flags |= 1; // obtained
     }
 }
 
+/**
+ * Clears a partner's recruited flag in the pouch.
+ * event.c's chapter 4 stage setup clears Goombella, Koops, Flurrie and Yoshi while Doopliss has them,
+ * and partyJoin restores them a few stages later.
+ */
 void partyLeft(PartyId partnerId) {
     if (partnerId < PARTNER_COUNT) {
         pouchGetPtr()->partyData[partnerId].flags &= ~1;
     }
 }
 
+/** TRUE when the partner has been recruited (pouch partyData flag 1); FALSE for ids 8 and up (followers). */
 BOOL partyChkJoin(PartyId partnerId) {
     BOOL ret = FALSE;
     if (partnerId < PARTNER_COUNT) {
@@ -258,6 +310,11 @@ s32 partyGetHp(PartyId partnerId) {
     return ret;
 }
 
+/**
+ * The partner's rank (pouch techLevel: 0 unranked, 1 and 2 the rank-ups Merlon sells for Shine Sprites in
+ * gor_02, which unitwin_setpartylank applies to HP, attack and tech levels together).
+ * The partner battle units read it to pick their moves; 0 for invalid ids.
+ */
 s32 partyGetTechLv(PartyId partnerId) {
     s32 ret = 0;
     if (partnerId < PARTNER_COUNT) {

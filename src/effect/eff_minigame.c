@@ -182,6 +182,10 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Per frame: runs the banner's state machine with its sounds (SFX ids 0x8D1/0x8D2),
+ * deletes the effect when finished, and registers the 2D draw callback.
+ */
 void effMiniGameMain(EffectEntry* effect) {
     MiniGameWork* work = effect->userdata;
     Vec pos;
@@ -426,6 +430,7 @@ void effMiniGameMain(EffectEntry* effect) {
     }
 }
 
+/** Draws the banner text pieces as 2D textured quads, choosing the texture set for the current language. */
 void effMiniGameDisp(CameraId cameraId, EffectEntry* effect) {
     MiniGameWork* work = effect->userdata;
     CameraEntry* cam;

@@ -63,6 +63,7 @@ static TreeAccess ki_data[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/** Reward script for bush 8: if not yet taken, a Coin pops out of the bush when Mario hits it. */
 EVT_BEGIN(evt_kusa_8)
     CALL(evt_item_delete_check, STRING("item_kusa_8"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -84,6 +85,10 @@ static KusaAccess kusa_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Petal Meadows hei_06 map init: registers the exits, field music, the tree and bush rewards,
+ * a recovery block (Heart/Flower), the Fire Flower item block and the Inn Coupon lying in the field.
+ */
 EVT_BEGIN(hei_06_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

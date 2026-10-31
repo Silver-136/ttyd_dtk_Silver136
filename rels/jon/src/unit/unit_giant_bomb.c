@@ -62,6 +62,10 @@ static EvtWord explosion_event[247];
 #endif
 
 
+/**
+ * Script helper: hooks _fire_point_callback onto the bomb's body (part 1), and hides part 2, the fuse flame,
+ * so the callback can draw it at the fuse's locator.
+ */
 static USER_FUNC(_set_draw_callback) {
     BattleWork* wp = _battleWorkPointer;
     s32 id = BattleTransID(event, UNIT_ID_SELF);
@@ -524,6 +528,13 @@ static BattleUnitKindPart parts[] = {
     {2, /*"ジャイアントボム"*/"\x83\x57\x83\x83\x83\x43\x83\x41\x83\x93\x83\x67\x83\x7B\x83\x80", "c_giant", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kNoShadow, 0, pose_table_3},
 };
 
+/**
+ * Init script of the Bob-ulk: registers its wait, phase,
+ * attack and damage handlers and the default confusion handler.
+ * Unit work 0 (fuse lit) is cleared, unit work 1 (fuse stages left) is 3,
+ * unit work 2 (fuse sound handle) is -1 and unit work 3 (guard cycle) is 0.
+ * It sets the fuse part's pose (F_1), the pose sound timing table and the draw callback for the fuse flame.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))

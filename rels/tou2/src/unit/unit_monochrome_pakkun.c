@@ -159,6 +159,11 @@ static BattleWeapon weapon_pakkun_flower_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack entry of the Pale Piranha: with a first-strike battle flag, or after any item use check,
+ * it runs normal_attack_event with its single weapon (weapon_pakkun_flower_attack),
+ * then returns to the wait event.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -239,6 +244,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init script of the Pale Piranha: installs the wait, attack, damage and confusion event handlers,
+ * sets the hit cursor offset of part 1 and saves its shadow size with shadow_scale_memory.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -513,6 +522,10 @@ static USER_FUNC(shadow_scale_return) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper that shrinks the Pale Piranha's shadow from the scale saved by shadow_scale_memory to nothing
+ * over 15 frames (counted in unit work 1), as it sinks out of sight.
+ */
 static USER_FUNC(shadow_scale_small) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -529,6 +542,10 @@ static USER_FUNC(shadow_scale_small) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper that saves the Pale Piranha Plant's current shadow scale in unit work 0 for the other shadow
+ * scripts.
+ */
 static USER_FUNC(shadow_scale_memory) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -538,6 +555,7 @@ static USER_FUNC(shadow_scale_memory) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: arg0 receives 1 if the arena's ceiling iron frame still exists, 0 once it has been removed. */
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 

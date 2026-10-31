@@ -82,6 +82,10 @@ USER_FUNC(btlevtcmd_GetACPossibility);
 extern BattleStageNozzleData battle_stage_nozzle_data[];
 extern BattleStageFallObjectData battle_stage_fall_object_data[];
 
+/**
+ * Finds the stage object with the given id (1-based, assigned in BattleStageObjectInit), or NULL.
+ * The tree and switch units use it to reach the set piece they stand for through unit->stageObjectId.
+ */
 BattleStageObject* BattleGetObjectPtr(s32 id) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObject* obj;
@@ -96,6 +100,7 @@ BattleStageObject* BattleGetObjectPtr(s32 id) {
     return NULL;
 }
 
+/** Finds a live stage object by its map object name ("nozzle_l", "if_body", ...), or NULL. */
 BattleStageObject* BattleSearchObjectPtr(const char* name) {
     BattleWork* wp = _battleWorkPointer;
     int i;
@@ -110,6 +115,14 @@ BattleStageObject* BattleSearchObjectPtr(const char* name) {
     return NULL;
 }
 
+/**
+ * Sets up the stage's set pieces at battle start (from battle_stage.c):
+ * resets the stage object table, then registers the battle's stage objects (spawning a tree or switch unit for
+ * those that ask for one), the three nozzles from Mario's rank 1 up, the escape wall and the spotlight.
+ * Picks the nozzle and falling-object tables for the rank, starts the stage init and background layer scripts,
+ * and marks layers that are missing or not destroyable as gone.
+ * A stage with no iron frame hides it and counts it as already fallen.
+ */
 void BattleStageObjectInit(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageData* stage = wp->fbatInfo->setup->stageData;
@@ -352,6 +365,11 @@ void BattleStageObjectInit(void) {
     }
 }
 
+/**
+ * Per-frame stage object update (from battle.c):
+ * pushes changed positions, offsets and rotations into the map objects (layer B tilts as a whole around its own
+ * height, layer C pivots on its y), and shows or hides each one by flag 1.
+ */
 void BattleStageObjectMain(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -446,10 +464,19 @@ void BattleStageObjectMain(void) {
     BattleObjectConfig();
 }
 
+/**
+ * Empty in every version; called at the end of BattleStageObjectMain each frame.
+ * Guess: a stripped debug hook.
+ */
 void BattleObjectConfig(void) {
     // does nothing
 }
 
+/**
+ * Knocks down background layer A1: stops its idle script and any running background destroy event,
+ * then runs the stage's own A1 destroy script or the default _object_turn_event_A1.
+ * Rolled by btlevtcmd_WeaponAftereffect after attacks that shake the stage.
+ */
 void BattleStage_DestroyA1(void) {
     BattleWork* wp = _battleWorkPointer;
     void* evt = wp->fbatInfo->setup->stageData->destroyBgA1Evt;
@@ -469,6 +496,10 @@ void BattleStage_DestroyA1(void) {
     }
 }
 
+/**
+ * Knocks down background layer A2 the same way as BattleStage_DestroyA1, but without tracking the event id,
+ * so nothing waits for it.
+ */
 void BattleStage_DestroyA2(void) {
     BattleWork* wp = _battleWorkPointer;
     void* evt = wp->fbatInfo->setup->stageData->destroyBgA2Evt;
@@ -481,6 +512,10 @@ void BattleStage_DestroyA2(void) {
     evtEntry(evt, 10, 0);
 }
 
+/**
+ * Knocks down the rear background layer B, the same way as BattleStage_DestroyA1.
+ * btlevtcmd_WeaponAftereffect only rolls this once A1 is gone.
+ */
 void BattleStage_DestroyB(void) {
     BattleWork* wp = _battleWorkPointer;
     void* evt = wp->fbatInfo->setup->stageData->destroyBgBEvt;
@@ -2434,6 +2469,11 @@ EVT_BEGIN(_object_turn_event_core)
     RETURN
 EVT_END()
 
+/**
+ * The iron frame over the stage falls: waits for other attacks and nozzle work,
+ * runs every unit's ceiling-fall reaction script, drops the frame, damages everyone the frame weapon reaches,
+ * shakes the camera and fades it out.
+ */
 EVT_BEGIN(_fall_frame_event)
     CALL(_fall_frame_wait)
     CALL(_fall_frame_wait_unit_ready)
@@ -2462,6 +2502,13 @@ EVT_BEGIN(_fall_frame_event)
     RETURN
 EVT_END()
 
+/**
+ * The three nozzles fire (smoke, a silent effect or fire, by nozzleType) or, for type 0 with LW(10) = 1,
+ * fog starts.
+ * When something fired, it builds the Mario-side and enemy-side weapons from the nozzles' aim
+ * and runs each one on its targets, with one action-command guard check on the Mario side and dodges
+ * where the pre-check says so.
+ */
 EVT_BEGIN(_nozzle_work_event_core)
     CALL(_nozzle_work_wait)
     CALL(_nozzle_work_effect, LW(10), LW(0))
@@ -2534,6 +2581,10 @@ EVT_BEGIN(_nozzle_work_event_core)
     RETURN
 EVT_END()
 
+/**
+ * An object falls from the ceiling: waits for other stage events, runs _object_fall_attack,
+ * and if the object landed in the audience waits another second. Started by BattleStage_ObjectFallCheck.
+ */
 EVT_BEGIN(_object_fall_event)
     CALL(_object_fall_wait)
     CALL(_object_fall_attack, LW(0))
@@ -2554,6 +2605,7 @@ BattleUnitSetup _entry_tree_data = {&unit_object_tree, 2, {0}, 0x04000005, {-100
 
 BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, 0x04000005, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
 
+/** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */
 EVT_BEGIN(_object_turn_event_A1)
     SET_VALUE(LW(9), 0)
     CALL_CHILD(PTR(_object_turn_event_core))
@@ -2733,6 +2785,10 @@ USER_FUNC(_mobj_set_alpha) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Hides every piece of background layer args[0], makes any tree or switch unit on it untargetable,
+ * and sets the layer's GONE flag so it cannot fall again.
+ */
 USER_FUNC(_mobj_destroy) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObject* obj;
@@ -2768,6 +2824,11 @@ USER_FUNC(_mobj_destroy) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Returns in args[1] the weapon a falling background layer args[0] hits with:
+ * the stage's bgAWeapon for A1, bgBWeapon for B, or 0 for A2,
+ * other layers and weapons without a damage function.
+ */
 USER_FUNC(_get_bgset_attack_data) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -2794,6 +2855,7 @@ USER_FUNC(_get_bgset_attack_data) {
     return EVT_RETURN_DONE;
 }
 
+/** Puffs dust (kemuri) in front of each piece of the fallen layer args[0] and plays its landing sound. */
 USER_FUNC(_bgset_kemuri_effect) {
     s32 layer;
     const char* sfxA1;
@@ -2842,11 +2904,13 @@ USER_FUNC(_bgset_kemuri_effect) {
     return EVT_RETURN_DONE;
 }
 
+/** Gives the audience its reaction to a falling background set (BattleAudience_Case_HaikeiSet, haikei = background). */
 USER_FUNC(_bgset_audience_bgset_access) {
     BattleAudience_Case_HaikeiSet();
     return EVT_RETURN_DONE;
 }
 
+/** Gives each piece of layer args[0] a random wobble period of 60-69 frames, starting at either end of the swing. */
 USER_FUNC(_set_mobj_shake_init) {
     BattleWork* wp = _battleWorkPointer;
     s32 layer;
@@ -2872,6 +2936,10 @@ USER_FUNC(_set_mobj_shake_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Wobbles the A1/A2 pieces of layer args[0] each frame until all other battle events,
+ * nozzle work and the iron frame fall are finished; layer B just waits.
+ */
 USER_FUNC(_set_mobj_shake) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObject* obj;
@@ -2903,6 +2971,7 @@ USER_FUNC(_set_mobj_shake) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Advances one piece's wobble a frame: rotation.x swings +-5 degrees as a sine over its shake period. */
 void _mobj_shake_main(BattleStageObject* obj) {
     obj->mShakePeriodPosition++;
     if (obj->mShakePeriodPosition >= obj->mShakePeriodLength) {
@@ -2912,6 +2981,10 @@ void _mobj_shake_main(BattleStageObject* obj) {
     obj->mRotation.x = obj->mShakeAngle;
 }
 
+/**
+ * Rolls a new aim for each of the three nozzles from the rank's dirRate weights (no nozzles below rank 1).
+ * Rolled by btlevtcmd_WeaponAftereffect after stage-shaking attacks.
+ */
 void BattleStage_NozzleDirChangeCheck(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -2924,6 +2997,10 @@ void BattleStage_NozzleDirChangeCheck(void) {
     }
 }
 
+/**
+ * Picks direction 0-3 for nozzle index from the four weights in rate (0 upright, 1-3 aimed);
+ * if it differs and the nozzle is not already turning, starts _nozzle_turn_event toward it.
+ */
 void _Nozzle_Change_Check(u8 index, u8* rate) {
     BattleStageObjectWork* sw = &_battleWorkPointer->stageObjectWork;
     u8* cur = &sw->nozzleDir[index];
@@ -2959,6 +3036,11 @@ void _Nozzle_Change_Check(u8 index, u8* rate) {
     }
 }
 
+/**
+ * Animates nozzle event->unitId (0 left, 1 centre, 2 right):
+ * an upright nozzle first tips its head down to -80 degrees,
+ * and the head swings from the old yaw to the new one (45, 0 or -45) over 30 frames. Stores the new direction.
+ */
 USER_FUNC(_nozzle_turn) {
     BattleStageObjectWork* sw = &_battleWorkPointer->stageObjectWork;
     s32 index = event->unitId;
@@ -3045,6 +3127,10 @@ USER_FUNC(_nozzle_turn) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Starts _close_wall_event once per battle; called from the first-act sequence of battles that cannot be fled
+ * (NPC_BATTLE_NO_ESCAPE).
+ */
 void BattleStage_WallCloseCheck(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3083,6 +3169,10 @@ void _disp_escape_wall_message(CameraId camera, void* param) {
 
 #endif
 
+/**
+ * Drops the iron frame over the stage (_fall_frame_event) unless it already fell or the stage has none;
+ * rolled by btlevtcmd_WeaponAftereffect. Once it is gone, falling objects can be rolled.
+ */
 void BattleStage_IronFrameFallCheck(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3093,6 +3183,7 @@ void BattleStage_IronFrameFallCheck(void) {
     }
 }
 
+/** Waits until all battle events (except the background set ones) and any nozzle work are over, then yields a frame. */
 USER_FUNC(_fall_frame_wait) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3142,6 +3233,10 @@ USER_FUNC(_fall_frame_wait_unit_ready) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Drops the iron frame (if_body) from its height to the floor over 60 frames,
+ * then returns in args[0] the rank's falling-object table, whose first member is the frame's weapon.
+ */
 USER_FUNC(_fall_frame) {
     BattleWork* wp;
     s32 arg = event->args[0];
@@ -3164,6 +3259,7 @@ USER_FUNC(_fall_frame) {
     return EVT_RETURN_DONE;
 }
 
+/** Fades the fallen iron frame out over 51 frames and clears fallFrameEvtId. */
 USER_FUNC(_fall_frame_delete) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3180,6 +3276,12 @@ USER_FUNC(_fall_frame_delete) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * From rank 1 up, picks the battle's nozzle type if not yet chosen and starts the nozzle event
+ * unless one is running.
+ * type 0 (first turn, battle_seq.c) only fires when the nozzle type is not 0;
+ * type 1 (weapon aftereffects, the Toad audience member's trick) always runs and can start fog.
+ */
 void BattleStage_NozzleWorkCheck(s32 type) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3203,6 +3305,7 @@ void BattleStage_NozzleWorkCheck(s32 type) {
     }
 }
 
+/** Picks the battle's nozzle type 0-3 once from the rank's typeRate weights; nozzleType stays -1 until then. */
 void _nozzle_type_init(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3226,6 +3329,7 @@ void _nozzle_type_init(void) {
     }
 }
 
+/** Waits until other battle events (except background set ones) are over and no nozzle is still turning. */
 USER_FUNC(_nozzle_work_wait) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3245,6 +3349,7 @@ USER_FUNC(_nozzle_work_wait) {
     return EVT_RETURN_DONE;
 }
 
+/** Spray angle in degrees for a nozzle's direction: -45 for 1, -135 for 3, -90 for 2 or upright. */
 f32 _get_nozzle_dir(s32 index) {
     switch (_battleWorkPointer->stageObjectWork.nozzleDir[index]) {
         case 1:
@@ -3257,6 +3362,12 @@ f32 _get_nozzle_dir(s32 index) {
     }
 }
 
+/**
+ * Fires the nozzles for 90 frames with nozzleType's effect and sound (1 smoke, 2 silent, 3 fire);
+ * upright ones spray straight up, with confetti when args[0] is 0.
+ * Type 0 with args[0] set instead starts a dry-ice fog lasting two turns.
+ * Returns 1 in args[1] once done if something fired, 0 at once if not or if the battle is already decided.
+ */
 USER_FUNC(_nozzle_work_effect) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3408,6 +3519,10 @@ USER_FUNC(_nozzle_work_effect) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Counts the stage fog down at the start of each turn (btlseqTurnFirstProcess) and removes the fog effect
+ * when it runs out. Returns TRUE when no fog is left.
+ */
 BOOL BattleFogEndCheck(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3426,6 +3541,10 @@ BOOL BattleFogEndCheck(void) {
     return TRUE;
 }
 
+/**
+ * Removes the fog effect at once (btlevtcmd_StageDispellFog, a Hold Fast counter blast, the battle end).
+ * Returns TRUE if fog was active; fogTimer is left to run out on its own.
+ */
 BOOL BattleFogForceStop(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3440,6 +3559,11 @@ BOOL BattleFogForceStop(void) {
     return TRUE;
 }
 
+/**
+ * Builds the nozzle weapons for this burst: starts from the Mario-side and enemy-side base weapons
+ * and adds the nozzle type's weapon once for every nozzle aimed at that side.
+ * A side no nozzle hits keeps a NULL weapon.
+ */
 USER_FUNC(_nozzle_work_attack_set) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3464,6 +3588,10 @@ USER_FUNC(_nozzle_work_attack_set) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Which side nozzle index hits with its current direction:
+ * 0 Mario's side, 1 the enemy side, -1 neither (upright or aimed away).
+ */
 s32 _get_nozzle_attack_index(u8 index) {
     BattleStageObjectWork* sw = &_battleWorkPointer->stageObjectWork;
 
@@ -3499,6 +3627,10 @@ s32 _get_nozzle_attack_index(u8 index) {
     return -1;
 }
 
+/**
+ * Merges one status inflict pair into a weapon:
+ * keeps the higher chance and adds the turns, when the source has one.
+ */
 void _rate_mix(s8* dstChance, s8* dstTime, s8* srcChance, s8* srcTime) {
     if (*srcChance <= 0) {
         return;
@@ -3509,6 +3641,10 @@ void _rate_mix(s8* dstChance, s8* dstTime, s8* srcChance, s8* srcTime) {
     *dstTime += *srcTime;
 }
 
+/**
+ * Like _rate_mix for statuses with a strength (size, defence):
+ * also adds the strengths, and drops the status if the strengths cancel to 0.
+ */
 void _rate_mix_3(s8* dstChance, s8* dstTime, s8* dstStrength, s8* srcChance, s8* srcTime, s8* srcStrength) {
     if (*srcChance <= 0) {
         return;
@@ -3524,6 +3660,11 @@ void _rate_mix_3(s8* dstChance, s8* dstTime, s8* dstStrength, s8* srcChance, s8*
     }
 }
 
+/**
+ * copy TRUE copies src into dst; FALSE adds src onto dst:
+ * FP/SP costs and damage parameters summed, element replaced, statuses merged with _rate_mix.
+ * Attack change is not merged, and poison adds src's strength to dst's turns, as in the original.
+ */
 void _combine_nozzle_weapon(BOOL copy, BattleWeapon* dst, BattleWeapon* src) {
     s8* d;
     s8* s;
@@ -3567,6 +3708,7 @@ void _combine_nozzle_weapon(BOOL copy, BattleWeapon* dst, BattleWeapon* src) {
     d[0x2D] += s[0x2D]; // fpRegenStrength
 }
 
+/** Returns in args[1] the nozzle weapon for side args[0] (0 Mario's side, 1 enemies), or 0 if no nozzle hits it. */
 USER_FUNC(_nozzle_work_get_weapon_address) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3577,6 +3719,12 @@ USER_FUNC(_nozzle_work_get_weapon_address) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Starts _object_fall_event unless the battle disables falling objects (BATTLE_FLAG_NO_OBJECT_FALL)
+ * and returns its event id (0 if not started).
+ * Rolled by btlevtcmd_WeaponAftereffect after the iron frame is gone,
+ * and used by the Toad audience member's trick.
+ */
 s32 BattleStage_ObjectFallCheck(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3590,6 +3738,7 @@ s32 BattleStage_ObjectFallCheck(void) {
     return evt->eventId;
 }
 
+/** Waits until other battle events, nozzle work, the iron frame fall and any background set fall are all over. */
 USER_FUNC(_object_fall_wait) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageObjectWork* sw = &wp->stageObjectWork;
@@ -3642,6 +3791,12 @@ typedef struct FallObjectWork {
     FallObjectEntry entries[1]; //0x4
 } FallObjectWork;
 
+/**
+ * Drops one ceiling object: picks its type from the rank's rates (repeating earlier picks once three are
+ * recorded), aims it at a target the type's weapon can reach or, 10% of the time once Mario has a Star Power,
+ * at a random audience member, then waits for the effect to land and deals the damage (guard check, dodges,
+ * Superguard and lucky reactions). Returns 1 in args[0] if it fell on the audience.
+ */
 USER_FUNC(_object_fall_attack) {
     BattleWork* wp = _battleWorkPointer;
     BattleStageFallObjectData* fd = wp->stageObjectWork.fallObjectData;

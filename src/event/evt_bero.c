@@ -56,6 +56,7 @@ BeroEntry bero_null[] = {
     },
 };
 
+/** Enter script for entrances without one: LW(0) = 0 so the normal entrance runs. */
 EVT_BEGIN(default_entevt)
     SET_VALUE(LW(0), 0)
     RETURN
@@ -89,6 +90,7 @@ USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets Mario's bottomless-pit respawn point to where he stands now. No arguments; retail only. */
 // no args (new in retail)
 // Descriptive name (not in the symbol maps).
 USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos) {
@@ -97,10 +99,15 @@ USER_FUNC(evt_bero_set_mario_bottomless_respawn_pos_to_current_mario_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Returns the BeroEXEC state bits; bit 1 is set while an entrance
+ * or exit is playing (camdrv and seq_mapchange check it before showing the letterbox).
+ */
 s32 bero_get_BeroEXEC(void) {
     return BeroEXEC;
 }
 
+/** Returns how many entrances the current map registered with evt_bero_get_info. */
 s32 bero_get_BeroNUM(void) {
     return BeroNUM;
 }
@@ -129,16 +136,22 @@ f32 bero_get_BeroEZ(void) {
     return BeroEZ;
 }
 
+/** Returns the current map's table of 16 entrance pointers (BeroINFOARR, NULL-terminated). */
 BeroEntry** bero_get_ptr(void) {
     return BeroINFOARR;
 }
 
+/** Zeroes the saved Mario display offset (BeroOX/OY/OZ) that pipe travel restores; called from mot_yoshi. */
 void bero_clear_Offset(void) {
     BeroOX = 0.0f;
     BeroOY = 0.0f;
     BeroOZ = 0.0f;
 }
 
+/**
+ * Turns an entrance reference into its table index:
+ * values 0-15 are already indices, anything else is taken as a hit object name and looked up in BeroINFOARR.
+ */
 // FAKE: `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object
 s32 bero_id_filter(EvtWord id) {
     BeroEntry** temp, **table = BeroINFOARR;
@@ -165,6 +178,7 @@ s32 bero_id_filter(EvtWord id) {
     return newId;
 }
 
+/** const char** mapName, const char** beroName */
 //const char** mapName, const char** beroName
 USER_FUNC(evt_bero_mapchange) {
     EvtWord* args = event->args;
@@ -178,12 +192,14 @@ USER_FUNC(evt_bero_mapchange) {
     return EVT_RETURN_BLOCK;
 }
 
+/** s32 retIndex */
 //s32 retIndex
 USER_FUNC(evt_bero_get_entername) {
     evtSetValue(event, *event->args, (EvtWord)&gp->beroEnterName);
     return EVT_RETURN_DONE;
 }
 
+/** BOOL* on/off, s32* mask */
 //BOOL* on/off, s32* mask
 USER_FUNC(evt_bero_exec_onoff) {
     EvtWord* args = event->args;
@@ -200,16 +216,19 @@ USER_FUNC(evt_bero_exec_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** s32 retIndex */
 //s32 retIndex
 USER_FUNC(evt_bero_exec_get) {
     evtSetValue(event, *event->args, BeroEXEC);
     return EVT_RETURN_DONE;
 }
 
+/** Blocks until any of the bits in the argument mask is set in BeroEXEC (see evt_bero_exec_onoff). */
 USER_FUNC(evt_bero_exec_wait) {
     return evtGetValue(event, *event->args) & BeroEXEC ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** f32 retX, f32 retY, f32 retZ */
 //f32 retX, f32 retY, f32 retZ
 USER_FUNC(evt_bero_get_start_position) {
     EvtWord* args = event->args;
@@ -220,6 +239,7 @@ USER_FUNC(evt_bero_get_start_position) {
     return EVT_RETURN_DONE;
 }
 
+/** f32 retX, f32 retY, f32 retZ */
 //f32 retX, f32 retY, f32 retZ
 USER_FUNC(evt_bero_get_end_position) {
     EvtWord* args = event->args;
@@ -230,6 +250,7 @@ USER_FUNC(evt_bero_get_end_position) {
     return EVT_RETURN_DONE;
 }
 
+/** s32* id, s32 retIndex1, s32 retIndex2, s32 retIndex3, s32 retIndex4 */
 //s32* id, s32 retIndex1, s32 retIndex2, s32 retIndex3, s32 retIndex4
 USER_FUNC(evt_bero_get_info_anime) {
     BeroEntry* bero;
@@ -243,6 +264,11 @@ USER_FUNC(evt_bero_get_info_anime) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args: entrance index, out length (float).
+ * Uses the entry's length, or the type default when it is -1:
+ * 30 for roads, gates and "none", 60 for doors and pipes.
+ */
 USER_FUNC(evt_bero_get_info_length) {
     BeroEntry* bero;
     EvtWord* args = event->args;
@@ -275,6 +301,7 @@ USER_FUNC(evt_bero_get_info_length) {
     return EVT_RETURN_DONE;
 }
 
+/** args: entrance index, then outs for its type, door sound kind (sfxId) and direction. */
 USER_FUNC(evt_bero_get_info_kinddir) {
     BeroEntry* bero;
     EvtWord* args = event->args;
@@ -286,6 +313,10 @@ USER_FUNC(evt_bero_get_info_kinddir) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args: entrance index, then outs for the destination map name and destination entrance name.
+ * Also used by evt_movefloor.
+ */
 USER_FUNC(evt_bero_get_info_nextarea) {
     BeroEntry* bero;
     EvtWord* args = event->args;
@@ -296,16 +327,22 @@ USER_FUNC(evt_bero_get_info_nextarea) {
     return EVT_RETURN_DONE;
 }
 
+/** Records the index of the entrance being used now (BeroNOWNUM). */
 USER_FUNC(evt_bero_set_now_number) {
     BeroNOWNUM = evtGetValue(event, *event->args);
     return EVT_RETURN_DONE;
 }
 
+/** Returns the index of the entrance in use (BeroNOWNUM) to args[0]; also used by evt_movefloor. */
 USER_FUNC(evt_bero_get_now_number) {
     evtSetValue(event, *event->args, BeroNOWNUM);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Loads the map's entrance table from LW(0): fills BeroINFOARR, reports entries whose hit object is missing,
+ * marks every exit unregistered (BeroSW -1), sets BeroNUM and clears BeroEXEC.
+ */
 USER_FUNC(evt_bero_get_info) {
     BeroEntry** table;
     int i;
@@ -389,6 +426,10 @@ static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
     return kind;
 }
 
+/**
+ * Finds the entrance Mario arrived by (gp->beroEnterName; bero_null when empty) and fills LW(1) index,
+ * LW(2) count, LW(3) name, LW(4) type, LW(5) direction, LW(6) position, LW(7) enter script.
+ */
 USER_FUNC(evt_bero_get_into_info) {
     s32 i;
     BeroEntry* bero;
@@ -437,6 +478,7 @@ USER_FUNC(evt_bero_get_into_info) {
     }
 }
 
+/** Loads Mario's paper pipe-travel animations (p_dokan_x, p_dokan_y), blocking until both are in. */
 USER_FUNC(evt_bero_read_mario_pera) {
     if (isFirstCall) {
         event->userdata[0] = 0;
@@ -460,12 +502,18 @@ USER_FUNC(evt_bero_read_mario_pera) {
     return event->userdata[0] == 100 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** Replaces the variable in args[0] (an index or a hit name) with its entrance index, see bero_id_filter. */
 USER_FUNC(evt_bero_id_filter) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], bero_id_filter(evtGetValue(event, args[0])));
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Loads entrance args[0] into LW(3)-LW(14) for the bero scripts:
+ * name, type, direction, position, enter script, LW(9) registered state, LW(10) case trigger,
+ * LW(11) exit script, LW(13)/LW(14) destination.
+ */
 USER_FUNC(evt_bero_get_info_num) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -590,6 +638,10 @@ USER_FUNC(bero_get_position_normal) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Start and end points for pipe travel: id 0 goes into the pipe, otherwise out of it;
+ * side pipes move a units along X (floor-snapped), up/down pipes a units along Y, others stay at the hit object.
+ */
 void bero_get_position_pipe_sub(s32 id, s32 a, EvtWord name, s32 kind, Vec* start, Vec* end) {
     f32 hx, hy, hz, dist, nx, ny, nz;
     f32 ofs;
@@ -658,6 +710,10 @@ USER_FUNC(bero_get_position_pipe_pure) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Works out the road camera at the far end of a pipe (args: in/out, length) into BeroPT/BeroAT,
+ * for evt_bero_cam3d_change during same-map pipe travel.
+ */
 USER_FUNC(bero_get_position_pipe2) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -684,6 +740,10 @@ USER_FUNC(bero_get_position_pipe2) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Re-registers the pipe exit at LW(3) once Mario has stepped off it, so he does not re-enter at once;
+ * waits for motion 3 or 10 only when LW(10) is 6, otherwise re-registers right away.
+ */
 EVT_BEGIN(evt_bero_nonride_check)
     IF_INT_NOT_EQUAL(LW(10), 6)
         SET_VALUE(LW(0), LW(3))
@@ -948,6 +1008,10 @@ USER_FUNC(bero_set_disp_position_pipe) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Marks entrance args[0] (index or name) as registered in BeroSW;
+ * LW(0) = 1 if it already was (so the caller skips a double registration), LW(1) = its index.
+ */
 // FAKE: `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object
 USER_FUNC(evt_bero_switch_on) {
     BeroEntry** table = BeroINFOARR;
@@ -983,6 +1047,7 @@ USER_FUNC(evt_bero_switch_on) {
     return EVT_RETURN_DONE;
 }
 
+/** Marks entrance args[0] (index or name) as unregistered; LW(0) = 1 if it already was, LW(1) = its index. */
 // FAKE: `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object
 USER_FUNC(evt_bero_switch_off) {
     BeroEntry** table = BeroINFOARR;
@@ -1018,6 +1083,7 @@ USER_FUNC(evt_bero_switch_off) {
     return EVT_RETURN_DONE;
 }
 
+/** Puts the index of entrance args[0] (index or hit name) into LW(1). */
 // FAKE: `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object
 USER_FUNC(evt_bero_get_number) {
     BeroEntry** table = BeroINFOARR;
@@ -1047,6 +1113,7 @@ USER_FUNC(evt_bero_get_number) {
     return EVT_RETURN_DONE;
 }
 
+/** Stores case ID args[1] for entrance index args[0] (BeroID), for deleting the exit trigger later. */
 USER_FUNC(evt_bero_case_id_save) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -1054,6 +1121,7 @@ USER_FUNC(evt_bero_case_id_save) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the case ID saved for entrance index args[0] into args[1]. */
 USER_FUNC(evt_bero_case_id_load) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -1061,6 +1129,7 @@ USER_FUNC(evt_bero_case_id_load) {
     return EVT_RETURN_DONE;
 }
 
+/** Saves Mario's display offset before pipe travel shifts it (restored by evt_bero_disppos_load). */
 USER_FUNC(evt_bero_disppos_save) {
     BeroOX = marioGetPtr()->dispOfs.x;
     BeroOY = marioGetPtr()->dispOfs.y;
@@ -1068,6 +1137,7 @@ USER_FUNC(evt_bero_disppos_save) {
     return EVT_RETURN_DONE;
 }
 
+/** Restores Mario's display offset saved by evt_bero_disppos_save. */
 USER_FUNC(evt_bero_disppos_load) {
     marioGetPtr()->dispOfs.x = BeroOX;
     marioGetPtr()->dispOfs.y = BeroOY;
@@ -1129,6 +1199,7 @@ USER_FUNC(evt_bero_move_mario_speed) {
     return EVT_RETURN_DONE;
 }
 
+/** Replaces entrance args[0] (index or hit name) in BeroINFOARR with the BeroEntry pointer args[1]. */
 // FAKE: `&newId != NULL` tests (always true); the plain `newId = 0` / `newId++` change the object
 USER_FUNC(evt_bero_overwrite) {
     BeroEntry** temp, **table = BeroINFOARR;
@@ -1157,6 +1228,7 @@ USER_FUNC(evt_bero_overwrite) {
     return EVT_RETURN_DONE;
 }
 
+/** Moves the 3D camera to BeroPT/BeroAT over args[0] ms with interpolation curve args[1]. */
 USER_FUNC(evt_bero_cam3d_change) {
     EvtWord* args = event->args;
     CameraEntry* cam = camGetPtr(CAMERA_3D);
@@ -1173,26 +1245,35 @@ USER_FUNC(evt_bero_cam3d_change) {
     return EVT_RETURN_DONE;
 }
 
+/** Resets the road camera and camera shift after same-map pipe travel. */
 USER_FUNC(evt_bero_cam_shift_init) {
     camRoadReset();
     camShiftReset();
     return EVT_RETURN_DONE;
 }
 
+/** Clears the go signal before a door animation starts (see evt_bero_mario_go_wait). */
 USER_FUNC(evt_bero_mario_go_init) {
     BeroMarioGO = FALSE;
     return EVT_RETURN_DONE;
 }
 
+/** Raised by the door animation scripts once the door is open enough for Mario to walk. */
 USER_FUNC(evt_bero_mario_go) {
     BeroMarioGO = TRUE;
     return EVT_RETURN_DONE;
 }
 
+/** Blocks until evt_bero_mario_go has been called. */
 USER_FUNC(evt_bero_mario_go_wait) {
     return BeroMarioGO == FALSE ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = 1 when the destination map (LW(13)) is sys_01, else 0; the exits then wait a second.
+ * sys_01 is the chapter title card ("Prologue", "Chapter 1" ...),
+ * so this is the pause before a chapter starts.
+ */
 USER_FUNC(evt_bero_1stcheck) {
     EvtWord* args = event->args;
     if (strcmp((const char*)event->lwData[13], "sys_01") == 0) {
@@ -1233,6 +1314,11 @@ USER_FUNC(evt_camera_change_event_from_road) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Shared start of every exit trigger: LW(0) = 1 to abort if another transition runs;
+ * otherwise stops NPCs, computes the walk, runs the exit script LW(11),
+ * and aborts (restarting NPCs) if it returns LW(0) = 1.
+ */
 EVT_BEGIN(bero_case_init_check)
     CALL(evt_bero_exec_onoff, 1, 65536)
     CALL(evt_bero_exec_get, LW(0))
@@ -1361,6 +1447,11 @@ EVT_BEGIN(bero_case_exec_door)
     RETURN
 EVT_END()
 
+/**
+ * Pipe travel within the map (no destination map):
+ * Mario goes down one pipe, the camera pans and he comes out of pipe LW(14),
+ * switching background mode when the two pipes differ; the exit is re-registered.
+ */
 EVT_BEGIN(bero_case_exec_pipe_sub)
     BEGIN_INLINE_EVENT
         CALL(evt_camera_change_event_from_road)
@@ -1496,6 +1587,11 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
     RETURN
 EVT_END()
 
+/**
+ * Exit trigger for pipes (only in normal mode):
+ * Mario slides in, the pipe-direction fade is set unless type bit 0x2000, then the map changes.
+ * Pipes with no destination map run bero_case_exec_pipe_sub.
+ */
 EVT_BEGIN(bero_case_exec_pipe)
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1557,6 +1653,7 @@ EVT_BEGIN(bero_case_exec_pipe)
     RETURN
 EVT_END()
 
+/** Exit trigger for gates: after bero_case_init_check, changes map straight away. */
 EVT_BEGIN(bero_case_exec_gate)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(bero_case_init_check))
@@ -1577,6 +1674,10 @@ EVT_BEGIN(bero_case_exec_gate)
     RETURN
 EVT_END()
 
+/**
+ * Registers the exit trigger (case event) for every entrance not yet registered, by type,
+ * saves the case IDs and marks them registered. Runs once the arrival finishes.
+ */
 EVT_BEGIN(bero_case_entry)
     PEEK_INT(LW(2), PTR(&BeroNUM))
     SET_VALUE(LW(1), 0)
@@ -1611,6 +1712,7 @@ EVT_BEGIN(bero_case_entry)
     RETURN
 EVT_END()
 
+/** Registers the exit trigger for the single entrance loaded in LW(1)-LW(15) and saves its case ID. */
 EVT_BEGIN(bero_case_entry_sub)
     SET_VALUE(LW(0), LW(4))
     AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
@@ -1631,6 +1733,7 @@ EVT_BEGIN(bero_case_entry_sub)
     RETURN
 EVT_END()
 
+/** Retail: same, with the "registered" debug message only on a real registration. */
 EVT_BEGIN(bero_case_switch_on)
     CALL(evt_bero_switch_on, LW(0))
     CALL(evt_bero_get_info_num, LW(1))
@@ -1643,6 +1746,7 @@ EVT_BEGIN(bero_case_switch_on)
     RETURN
 EVT_END()
 
+/** Retail: same, and also clears hit attribute 0x800000 on the entrance's hit object. */
 EVT_BEGIN(bero_case_switch_off)
     CALL(evt_bero_switch_off, LW(0))
     CALL(evt_bero_get_info_num, LW(1))
@@ -1657,6 +1761,10 @@ EVT_BEGIN(bero_case_switch_off)
     RETURN
 EVT_END()
 
+/**
+ * Arrival by road: Mario walks from the map edge to the end point
+ * while partners follow closely (homing distance 20, back to 50 after).
+ */
 EVT_BEGIN(evt_bero_info_run_road)
     PEEK_FLOAT(LW(13), PTR(&BeroEX))
     PEEK_FLOAT(LW(14), PTR(&BeroEY))
@@ -1672,6 +1780,7 @@ EVT_BEGIN(evt_bero_info_run_road)
     RETURN
 EVT_END()
 
+/** Arrival through a door: plays the door animation, then Mario and partners walk in. */
 EVT_BEGIN(evt_bero_info_run_door)
     CALL(evt_bero_mario_go_init)
     SPAWN_EVENT(PTR(bero_play_enter_anime))
@@ -1690,6 +1799,7 @@ EVT_BEGIN(evt_bero_info_run_door)
     RETURN
 EVT_END()
 
+/** Mario rises, drops or slides out of a pipe by direction LW(5), then ends the pipe pose. */
 EVT_BEGIN(evt_bero_info_run_pipe_sub00)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
@@ -1713,6 +1823,10 @@ EVT_BEGIN(evt_bero_info_run_pipe_sub00)
     RETURN
 EVT_END()
 
+/**
+ * Arrival from a pipe: after the fade, Mario comes out
+ * and the pipe's exit is re-registered once he steps off it (evt_bero_nonride_check).
+ */
 EVT_BEGIN(evt_bero_info_run_pipe)
     PEEK_FLOAT(LW(0), PTR(&BeroEX))
     PEEK_FLOAT(LW(1), PTR(&BeroEY))
@@ -1733,6 +1847,11 @@ EVT_BEGIN(evt_bero_info_run_pipe)
     RETURN
 EVT_END()
 
+/**
+ * Map-entry script run after evt_bero_get_info: on a save load just registers exits;
+ * otherwise sets up Mario (background mode, partners, pipe pose), places him,
+ * sets the pipe fade and spawns the walk-in.
+ */
 EVT_BEGIN(evt_bero_info_run)
     CALL(evt_bero_get_into_info)
     CALL(evt_bero_set_now_number, LW(1))
@@ -1825,6 +1944,7 @@ EVT_BEGIN(evt_bero_info_run)
     RETURN
 EVT_END()
 
+/** Places Mario and both partners at the arrival entrance's start point and resets the road camera. */
 EVT_BEGIN(evt_bero_initial_pos)
     CALL(evt_bero_get_into_info)
     SET_VALUE(LW(0), LW(4))
@@ -1872,6 +1992,10 @@ EVT_BEGIN(evt_bero_initial_pos)
     RETURN
 EVT_END()
 
+/**
+ * Runs the entrance's enter script (LW(0) = 1 skips the walk-in), then the arrival for its type,
+ * and finally registers every exit trigger and clears the transition bit.
+ */
 EVT_BEGIN(evt_bero_mario_enter)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_npc_change_fbat_mode, 7)

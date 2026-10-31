@@ -16,6 +16,7 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
+/** Stub the linker needs for unresolved symbols; does nothing. */
 void _unresolved(void) {
 }
 
@@ -33,6 +34,10 @@ void _epilog(void) {
     }
 }
 
+/**
+ * Module entry point: runs the static constructors, registers the init script of each map aji_00 to aji_19,
+ * and registers the area's battle setup tables (btlsetup_aji_tbl, btl_aji_setup_no_tbl) with the battle system.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 

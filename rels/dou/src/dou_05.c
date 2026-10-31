@@ -49,6 +49,10 @@ EvtWord ride_waterfall[5];
 EvtWord nonride_waterfall[19];
 EvtWord dou_05_init_evt[136];
 
+/**
+ * Map TEV callback that fades the waterfall: adds a TEV stage that multiplies the surface alpha by the byte
+ * stored in _ap.
+ */
 static void alpha_tev(MapTevCallbackInfo* info) {
     s32 stage = info->tevStage;
     u8* alpha = _ap;
@@ -62,17 +66,24 @@ static void alpha_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
+/** Script helper: allocates the one-byte waterfall alpha and sets it to 255 (opaque). */
 static USER_FUNC(alpha_init_func) {
     _ap = _mapAlloc(1);
     *_ap = 255;
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets the waterfall alpha byte to args[0] (0 to 255). */
 static USER_FUNC(alpha_set_func) {
     *_ap = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: sets the camera road's position weight (work->tuning[10], default 1.0) to 1.7: cam_road.c
+ * scales the distance the camera position moves by it when timing a blend between camera settings (20 to 90
+ * frames), so blends that move the camera take up to 1.7 times as long in this room.
+ */
 USER_FUNC(cam_displacement) {
     CamRoadWork* work = camRoadGetWorkPtr();
 
@@ -154,6 +165,11 @@ static s32 key_tbl[] = {
     ITEM_GROTTO_KEY, -1,
 };
 
+/**
+ * Check run when Mario tries the Grotto Key door:
+ * if he has a Grotto Key (ITEM_GROTTO_KEY) it opens the item menu (key_tbl) and cancels the door action
+ * if he backs out of it.
+ */
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_GROTTO_KEY, LW(0))
     IF_INT_GREATER(LW(0), 0)
@@ -165,6 +181,7 @@ static EVT_BEGIN(evt_chk)
     RETURN
 EVT_END()
 
+/** Unlocks the e_bero exit after the Grotto Key was used. */
 static EVT_BEGIN(evt_unlock)
     SET_VALUE(LW(0), STRING("e_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -256,6 +273,10 @@ static EVT_BEGIN(mobj_box00)
     RETURN
 EVT_END()
 
+/**
+ * Waterfall fade loop: every frame adds GW(0) to the waterfall alpha (clamped to 0 through 255),
+ * so a negative GW(0) makes it fade out and a positive one fade in.
+ */
 // GW(0) is the per-frame opacity delta: -4 fades out, +4 fades in, 0 holds.
 EVT_BEGIN(waterfall_main)
     SET_VALUE(LW(0), 255)
@@ -273,6 +294,10 @@ EVT_BEGIN(waterfall_main)
     RETURN
 EVT_END()
 
+/**
+ * Initialises the waterfall: allocates the alpha byte, installs the fade callback on S_mizu_ata,
+ * sets GW(0) to 0 and starts waterfall_main.
+ */
 EVT_BEGIN(waterfall_init)
     CALL(alpha_init_func)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
@@ -283,11 +308,13 @@ EVT_BEGIN(waterfall_init)
     RETURN
 EVT_END()
 
+/** Case event for standing on the waterfall (mizu_atari): sets GW(0) to -4 so the waterfall fades out. */
 EVT_BEGIN(ride_waterfall)
     SET_VALUE(GW(0), -4)
     RETURN
 EVT_END()
 
+/** Case event for leaving the waterfall: fades it out (-4) if Mario is at Z <= -700, otherwise back in (+4). */
 EVT_BEGIN(nonride_waterfall)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS_OR_EQUAL(LW(2), -700)

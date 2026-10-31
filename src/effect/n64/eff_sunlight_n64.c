@@ -24,6 +24,10 @@ typedef struct EffSunlightN64Work {
 void effSunlightMain(EffectEntry* effect);
 void effSunlightDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns sunlight beams at (x, y, z) of width `w`; a lifetime of 0 or less lasts until soft-deleted.
+ * Spawned by event scripts through evt_eff.
+ */
 EffectEntry* effSunlightN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 w) {
     EffectEntry* effect;
     EffSunlightN64Work* work;
@@ -129,6 +133,11 @@ void effSunlightMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), VERSION_PICK(2, 10), (DispCallback)effSunlightDisp, effect);
 }
 
+/**
+ * Draws five light shafts (testsrc__s_v) through a fixed orthographic screen view,
+ * mirrored left-right for type 0: shaft shape from texture 0x42, shimmer from texture 0x43 scrolled per shaft,
+ * shaded between the work's two colours at half alpha. Skipped while alpha is 0.
+ */
 void effSunlightDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera = camGetPtr(cameraId);
     EffSunlightN64Work* work = effect->userdata;

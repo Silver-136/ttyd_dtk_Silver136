@@ -199,6 +199,7 @@ static BattleWeapon weapon_togedaruma_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Init script: registers the wait, attack, damage and confusion handlers and starts the idle event. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -208,6 +209,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table event 37, run when an attacker is hurt by the Bristle's top spikes (counter hit event 0x1F):
+ * after 30 frames it plays the toge_flush spark effect 45 units above the unit (58 when Huge, 32 when Tiny)
+ * and holds for 60 frames.
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -229,6 +235,14 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table events 38 and 39, run when an approaching attacker is hurt by the Bristle's front spikes (counter
+ * hit
+ * events 0x20, pre-emptive front spikes, and 0x21, front spikes): it bounces (SFX_ENM_TOGEDA_MOVE1, pose
+ * TGD_J_1/2, or TGD_J_3/4 when flipped, status 17) and
+ * after 30 frames plays the toge_flush spark in front of it,
+ * placed by size (Huge, status 10, or Tiny, 11).
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_front_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGEDA_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
@@ -266,6 +280,10 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_front_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage reaction: runs the default damage handling (btldefaultevt_Damage) with LW(10) = -2 (the unit itself)
+ * and LW(11) = 1.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -273,6 +291,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Flips the Bristle onto its back: it switches to the upside-down pose table,
+ * sets the flipped status flag with a flipped-over counter of 2 turns (SFX_ENM_INSIDE1),
+ * plays TGD_S_1 and then rolls over (rotation steps of -18) into the TGD_S_5 pose.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -310,6 +333,12 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Run instead of an attack while the Bristle is on its back:
+ * it counts the flipped-over counter down and, while it is still nonzero, just goes back to idling.
+ * At zero it rolls back onto its feet (SFX_ENM_TOGEDA_MOVE6, rotation steps of -18),
+ * restoring the normal pose table, and settles into TGD_S_4.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -349,6 +378,12 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * The Bristle's attack: it wakes up first if it is on its back;
+ * otherwise it uses an item or picks a target, bounces up (TGD_J_1) and rams it (TGD_A_1).
+ * A miss makes it slip past and recover, a hit applies the damage,
+ * and it lands back in its stance (TGD_J_2, TGD_S_4).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)

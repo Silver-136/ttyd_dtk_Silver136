@@ -36,36 +36,60 @@ EvtWord evt_kami_5[5];
 EvtWord evt_kami_6[5];
 EvtWord eki_01_init_evt[223];
 
+/**
+ * Door animation callback, closing for the e_bero exit to eki_03:
+ * rotates map object "door_3" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(e_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_3"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the e_bero exit to eki_03:
+ * rotates map object "door_3" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(e_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_3"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, closing for the w_dero exit to eki_00:
+ * rotates map object "door_1" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(w_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the w_dero exit to eki_00:
+ * rotates map object "door_1" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(w_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, closing for the n_bero exit to eki_02:
+ * rotates map object "door_2" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(n_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_2"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the n_bero exit to eki_02:
+ * rotates map object "door_2" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(n_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_2"), 0, LW(0), 0)
@@ -168,6 +192,10 @@ static s32 key_tbl[] = {
     ITEM_STATION_KEY_0x19, -1,
 };
 
+/**
+ * Check for the station door lock ("me"): if Mario carries the station key (ITEM_STATION_KEY_0x19),
+ * opens the item select window with key_tbl; cancelling it cancels the lock execution so the door stays locked.
+ */
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STATION_KEY_0x19, LW(0))
     IF_INT_GREATER(LW(0), 0)
@@ -216,6 +244,12 @@ EVT_BEGIN(evt_kami_6)
     RETURN
 EVT_END()
 
+/**
+ * Map init for eki_01: sets up the doors (to eki_00, eki_02 and eki_03),
+ * the blue switch that unfolds the origami stairs until that story step is passed,
+ * the locked door that needs the Station Key until it has been unlocked,
+ * and the six paper panels that Flurrie can blow away (those already blown are hidden with their hit areas off).
+ */
 EVT_BEGIN(eki_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)

@@ -361,11 +361,21 @@ EvtWord monte_evt_door_close[16];
 EvtWord monte_evt_door_entry[73];
 EvtWord gor_03_init_evt[VERSION_PICK(462, 681)];
 
+/**
+ * Script helper that makes the NPC named args[0] the owner of this script (event->ownerNPC),
+ * so later "me" references and talk effects refer to it.
+ */
 static USER_FUNC(setmertn) {
     event->ownerNPC = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that bobs the NPC args[0] up and down on a 40-step table:
+ * args[1] is the speed, args[2] the duration in milliseconds (0 for forever).
+ * When the time is up it puts the NPC back at its base height and yields.
+ * Used for floating Boo (Bunny Teresa) NPCs.
+ */
 USER_FUNC(gor_npc_fuwafuwa) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -425,6 +435,10 @@ s32 exchange_ret_tbl_no(void) {
     return no;
 }
 
+/**
+ * Script helper for the Pianta Changer: for choice args[0] (0 to 2) returns the price in coins in args[1]
+ * and the number of Monte medals bought in args[2] from the table row for the current story progress.
+ */
 USER_FUNC(exchange_ryokin_medal) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
@@ -435,6 +449,7 @@ USER_FUNC(exchange_ryokin_medal) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that frees the exchange message buffer. */
 USER_FUNC(evt_exchange_msg_free) {
     if (exchange_msgp == NULL) {
         return EVT_RETURN_DONE;
@@ -444,12 +459,18 @@ USER_FUNC(evt_exchange_msg_free) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that allocates and clears the 0x100-byte buffer for the exchange menu text. */
 USER_FUNC(evt_exchange_msg_alloc) {
     exchange_msgp = _mapAlloc(0x100);
     memset(exchange_msgp, 0, 0x100);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that formats the exchange menu text:
+ * message args[1] filled in with args[0] (the player's coins) and the three coin/medal offers (all offers in JP;
+ * only the coin count outside Japanese). The text pointer goes to args[2].
+ */
 USER_FUNC(evt_exchange_msg_set) {
     EvtWord* args = event->args;
     s32 value = evtGetValue(event, args[0]);
@@ -469,6 +490,12 @@ USER_FUNC(evt_exchange_msg_set) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that builds the minigame selection menu from message args[0]:
+ * keeps the header and footer lines and only the lines of the minigames whose unlock flags are set (plane,
+ * paper, tube and boat), and patches the two-digit height field at the end of the menu from the number of
+ * entries. The text pointer goes to args[1].
+ */
 USER_FUNC(minigameselect_msg_set) {
     EvtWord* args = event->args;
     const s8* msg = (const s8*)msgSearch((const char*)evtGetValue(event, args[0]));
@@ -524,6 +551,10 @@ USER_FUNC(minigameselect_msg_set) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that finds the point args[4] units from (args[2], args[3]) towards (args[0], args[1]) on the
+ * floor plane and stores it in args[5] (x) and args[6] (z). Used to place Mario in front of a pipe.
+ */
 USER_FUNC(mario_walkpoint_enzan) {
     EvtWord* args = event->args;
     Vec a;
@@ -547,6 +578,10 @@ USER_FUNC(mario_walkpoint_enzan) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that reads slot-game data pointer number args[0] (0 to 7) into args[1],
+ * or 0 for an index past the table.
+ */
 USER_FUNC(goryuugijo_get_dataadr) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
@@ -559,6 +594,7 @@ USER_FUNC(goryuugijo_get_dataadr) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that stores args[1] in slot-game data pointer number args[0] (0 to 7). */
 USER_FUNC(goryuugijo_set_dataadr) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
@@ -575,13 +611,16 @@ void goryuugijo_init_montemedal(EventEntry* event, BOOL isFirstCall) {
     }
 }
 
+/** Per-frame callback of the Monte medal counter minigame: does nothing; the counter only needs to be drawn. */
 void goryuugijo_main_montemedal(EventEntry* event, BOOL isFirstCall) {
 }
 
+/** Draw callback of the Monte medal counter minigame: draws the medal count (monteCountDisp). */
 void goryuugijo_disp_montemedal(CameraId camera, void* param) {
     monteCountDisp();
 }
 
+/** Script helper: sets the slot machine's case id number args[1] to args[2], for the minigame work block in args[0]. */
 USER_FUNC(evt_goryuugijo_set_caseid) {
     EvtWord* args = event->args;
     SlotWork* data = ((GoryuuWork*)evtGetValue(event, args[0]))->data;
@@ -591,6 +630,10 @@ USER_FUNC(evt_goryuugijo_set_caseid) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: reads the slot machine's case id number args[1] from the minigame work block in args[0] into
+ * args[2].
+ */
 USER_FUNC(evt_goryuugijo_get_caseid) {
     EvtWord* args = event->args;
     SlotWork* data = ((GoryuuWork*)evtGetValue(event, args[0]))->data;
@@ -600,6 +643,10 @@ USER_FUNC(evt_goryuugijo_get_caseid) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: sets the number of the slot machine currently played (nowSlot) in the minigame work block in
+ * args[0] to args[1].
+ */
 USER_FUNC(evt_goryuugijo_set_nowslot) {
     EvtWord* args = event->args;
     SlotWork* data = ((GoryuuWork*)evtGetValue(event, args[0]))->data;
@@ -608,6 +655,10 @@ USER_FUNC(evt_goryuugijo_set_nowslot) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Returns TRUE when a falling Monte medal is close enough to the collecting point:
+ * the distance under 20 units and the heights under 20 apart.
+ */
 static BOOL get_monte_check(Vec* a, Vec* b) {
     if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) {
         return TRUE;
@@ -626,6 +677,10 @@ static void monte_disp(CameraId camera, void* param) {
     }
 }
 
+/**
+ * Enter event of the n_bero door: if system flag 64 is set it clears it, then returns 0 in LW(0).
+ * Leftover of a debug mode switch.
+ */
 EVT_BEGIN(debug_event)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), 64)
@@ -808,6 +863,10 @@ BeroEntry yuu_03_data[] = {
     },
 };
 
+/**
+ * Gives Mario the Blimp Ticket from Don Pianta:
+ * places the ticket item, plays the key item jingle and has Mario pick it up (evt_item_get_item).
+ */
 EVT_BEGIN(maffiaboss_ticket_put)
     CALL(evt_item_entry, STRING("ticket"), ITEM_BLIMP_TICKET, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("ticket"), 32768)
@@ -1285,6 +1344,7 @@ EVT_BEGIN(maffiaboss_teshita_irai)
     RETURN
 EVT_END()
 
+/** Short dialogue of Mony (mac_5_040) and Peeton (mac_5_041) when the train ticket scene starts. */
 EVT_BEGIN(maffiaboss_train_ticket_init)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1532,6 +1592,7 @@ EVT_BEGIN(maffiaboss_talk_common)
     RETURN
 EVT_END()
 
+/** Talk event of Don Pianta: runs maffiaboss_talk_common. */
 EVT_BEGIN(maffiaboss_talk)
     CALL(evt_party_stop, 0)
     CALL_CHILD(PTR(maffiaboss_talk_common))
@@ -1539,6 +1600,7 @@ EVT_BEGIN(maffiaboss_talk)
     RETURN
 EVT_END()
 
+/** Talk event of Don Pianta's desk (speaking to him across the desk): runs maffiaboss_talk_common. */
 EVT_BEGIN(maffiaboss_desk_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1602,12 +1664,14 @@ EVT_BEGIN(maffiaboss_nekomu00)
     RETURN
 EVT_END()
 
+/** Dialogue of the two henchmen while Don Pianta is ill (mac_5_033, mac_5_034). */
 EVT_BEGIN(maffiaboss_nekomu01)
     CALL(evt_msg_print, 0, STRING("mac_5_033"), 0, STRING("マフィア１"))
     CALL(evt_msg_print, 0, STRING("mac_5_034"), 0, STRING("マフィア２"))
     RETURN
 EVT_END()
 
+/** Dialogue of the two henchmen while waiting to go to Keelhaul Key (mac_5_035, mac_5_036). */
 EVT_BEGIN(maffiaboss_nekomu02)
     CALL(evt_msg_print, 0, STRING("mac_5_035"), 0, STRING("マフィア１"))
     CALL(evt_msg_print, 0, STRING("mac_5_036"), 0, STRING("マフィア２"))
@@ -1684,6 +1748,7 @@ EVT_BEGIN(maffia2_init)
     RETURN
 EVT_END()
 
+/** Talk event of the second henchman: the same structure as the first one's, with his own messages. */
 EVT_BEGIN(maffia2_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
@@ -1724,11 +1789,13 @@ EVT_BEGIN(maffia2_talk)
     RETURN
 EVT_END()
 
+/** Init event of the third henchman (maffia3): places him at (-140, 0, 10) downstairs. */
 EVT_BEGIN(maffia3_init)
     CALL(evt_npc_set_position, STRING("me"), -140, 0, 10)
     RETURN
 EVT_END()
 
+/** Talk event of the third henchman: a line for each chapter (gor_03_008 to 015). */
 EVT_BEGIN(maffia3_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
@@ -1769,6 +1836,10 @@ static EVT_BEGIN(mony_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Mony: prints one line by story progress (mac_2_044_05, mac_5_044,
+ * then gor_03_04_01 to 04 for chapters 5 to the epilogue and afterwards).
+ */
 static EVT_BEGIN(mony_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
@@ -1882,11 +1953,13 @@ EVT_BEGIN(peton_talk_common)
     RETURN
 EVT_END()
 
+/** Talk event of Peeton: just runs peton_talk_common. */
 static EVT_BEGIN(peton_talk)
     CALL_CHILD(PTR(peton_talk_common))
     RETURN
 EVT_END()
 
+/** Talk event of Peeton when talking across the desk: also handles request 19 and then runs peton_talk_common. */
 EVT_BEGIN(peton_desk_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IMPORTANT_THING)
         RETURN
@@ -1920,6 +1993,7 @@ static EVT_BEGIN(init_gurume)
     RETURN
 EVT_END()
 
+/** Talk event of Lucky, the lottery Bob-omb: runs kuzi_bomb_talk. */
 static EVT_BEGIN(talk_gurume)
     CALL_CHILD(PTR(kuzi_bomb_talk))
     RETURN
@@ -1934,6 +2008,7 @@ static EVT_BEGIN(luigi_init)
     RETURN
 EVT_END()
 
+/** Talk event of Luigi: runs luigi_gor_first_talk. */
 static EVT_BEGIN(luigi_talk)
     CALL_CHILD(PTR(luigi_gor_first_talk))
     RETURN
@@ -1955,6 +2030,7 @@ EVT_BEGIN(cherry_init)
     RETURN
 EVT_END()
 
+/** Talk event of Cherry: says luigi_npc_02. */
 EVT_BEGIN(cherry_talk)
     CALL(evt_msg_print, 0, STRING("luigi_npc_02"), 0, STRING("me"))
     RETURN
@@ -1992,6 +2068,7 @@ EVT_BEGIN(bteresa_n_fadein)
     RETURN
 EVT_END()
 
+/** Fades the Bunny Teresa NPC out over LW(0) frames with a vanishing sound, by lowering her alpha to 0. */
 EVT_BEGIN(bteresa_n_fadeout)
     CALL(evt_npc_get_position, STRING("バニーテレサ"), LW(1), LW(2), LW(3))
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_GAME_TELESA_MOVE1"), LW(1), LW(2), LW(3), 0)
@@ -2007,6 +2084,12 @@ EVT_BEGIN(bteresa_n_fadeout)
     RETURN
 EVT_END()
 
+/**
+ * Bunny Teresa gives back the Monte medals Mario had left in the parlor (the "keep" count):
+ * she vanishes, reappears at the spot given in LW(0..2),
+ * shows how many medals he gets back (bunny_teresa_90) and returns them to the counter;
+ * then she returns to her place. LW(11) tells the caller which situation it is.
+ */
 EVT_BEGIN(exchange_return_sub)
     IF_INT_NOT_EQUAL(LW(11), 0)
         CALL(evt_cam3d_evt_set, FLOAT(-541.0f), FLOAT(125.0f), FLOAT(-407.0f), FLOAT(-197.0f), FLOAT(64.0f), FLOAT(-407.0f), 600, EASING_SINE_IN_OUT)
@@ -2056,6 +2139,11 @@ EVT_BEGIN(exchange_return_sub)
     RETURN
 EVT_END()
 
+/**
+ * Bunny Teresa takes care of the medals Mario carries when he leaves the parlor machines:
+ * if he has some she moves next to him, says bunny_teresa_91 with the count,
+ * stores them with yuugijou_montemedal_keep, and returns to her place.
+ */
 EVT_BEGIN(exchange_keep_sub)
     CALL(yuugijou_get_takeoutflag, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -2115,6 +2203,7 @@ EVT_BEGIN(gor_03_dokan_init_evt)
     RETURN
 EVT_END()
 
+/** Raises the minigame pipe out of the floor over 60 frames with a sound, showing its shadow shortly after. */
 EVT_BEGIN(gor_03_dokan_up_evt)
     CALL(evt_mapobj_get_position, STRING("S_dokan_1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOKAN_APPEAR1"), LW(0), LW(1), LW(2), LW(3))
@@ -2136,6 +2225,7 @@ EVT_BEGIN(gor_03_dokan_up_evt)
     RETURN
 EVT_END()
 
+/** Lowers the minigame pipe into the floor over 60 frames with a sound, hiding its shadow. */
 EVT_BEGIN(gor_03_dokan_down_evt)
     CALL(evt_mapobj_get_position, STRING("S_dokan_1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOKAN_GOOUT1"), LW(0), LW(1), LW(2), LW(3))
@@ -2170,6 +2260,12 @@ ExchangeRyokin exchange_ryokin_medal_tbl[][3] = {
     {{3, 1}, {15, 5}, {30, 10}},
 };
 
+/**
+ * Bunny Teresa's minigame menu (bunny_teresa_34 on):
+ * Mario picks one of the unlocked minigames (plane, paper, tube or boat), she adds the medals he is carrying,
+ * the pipe rises, and he walks into the pipe that is set to lead to the chosen minigame map (yuu_00, yuu_01,
+ * yuu_02 or yuu_03).
+ */
 EVT_BEGIN(bteresa_talk_sub_minigame)
     SET_VALUE(LW(15), LW(0))
     LOOP(0)
@@ -2355,6 +2451,13 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Bunny Teresa at the parlor tables:
+ * finishes Trouble Center request 11 (gives 10 medals), gives back medals Mario left,
+ * unlocks minigames when he shows the Special (plane), Silver (paper),
+ * Gold (tube) or Platinum Card (boat) and says so (bunny_teresa_43 to 46), greets him (bunny_teresa_00 to 02),
+ * and offers the menu: ask about a minigame, prizes or chatter.
+ */
 EVT_BEGIN(bteresa_table_talk)
     CALL(setmertn, STRING("バニーテレサ"))
     CALL(evt_mario_key_onoff, 0)
@@ -2528,6 +2631,10 @@ EVT_BEGIN(bteresa_table_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Bunny Teresa: makes pressing A at either parlor table (A_hako_tele_01 or A_hako_tele_02) run
+ * bteresa_table_talk.
+ */
 EVT_BEGIN(bteresa_init)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_hako_tele_01"), 0, PTR(bteresa_table_talk), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_hako_tele_02"), 0, PTR(bteresa_table_talk), 0)
@@ -2562,10 +2669,15 @@ EVT_BEGIN(bteresa_talk)
     RETURN
 EVT_END()
 
+/** Init event of the customer NPC kyaku1: nothing to set up. */
 EVT_BEGIN(kyaku1_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of customer 1: kyaku1_00 if Mario owns any of the four parlor cards (Special, Platinum, Gold or
+ * Silver), kyaku1_00_00 if not.
+ */
 EVT_BEGIN(kyaku1_talk)
     SET_VALUE(LF(0), 0)
     CALL(evt_pouch_check_item, ITEM_SPECIAL_CARD, LW(0))
@@ -2592,10 +2704,12 @@ EVT_BEGIN(kyaku1_talk)
     RETURN
 EVT_END()
 
+/** Init event of the customer NPC kyaku4: nothing to set up. */
 EVT_BEGIN(kyaku4_init)
     RETURN
 EVT_END()
 
+/** Talk event of customer 4: kyaku4_00 if Mario owns any of the four parlor cards, kyaku4_00_00 if not. */
 EVT_BEGIN(kyaku4_talk)
     SET_VALUE(LF(0), 0)
     CALL(evt_pouch_check_item, ITEM_SPECIAL_CARD, LW(0))
@@ -2626,6 +2740,7 @@ f32 montemedalzpos[] = {
     -235.0f, -160.0f,
 };
 
+/** Event run when a medal falls out of the slot machine: runs fall_rtn. */
 EVT_BEGIN(slot_fall_monte)
     CALL(fall_rtn)
     RETURN
@@ -2634,6 +2749,13 @@ EVT_END()
 static inline Vec fall_pos0(void) { Vec v = {-113.0f, 70.0f, 0.0f}; return v; } /* @place "slot_mess_01" */
 static inline Vec fall_vel0(void) { Vec v = {0.0f, 10.0f, 0.0f}; return v; } /* @place "slot_mess_01" */
 
+/**
+ * Common talk script of slot machine number LW(8):
+ * positions the camera next to the machine, shows how many medals Mario has,
+ * and asks to play (slot_mess_00, slot_mess_01 if he has none).
+ * Each play costs one medal and starts the machine's phase 1;
+ * it loops until Mario declines, then the camera returns.
+ */
 EVT_BEGIN(slot_set)
     CALL(goryuugijo_get_dataadr, 1, LW(0))
     CALL(evt_goryuugijo_set_nowslot, LW(0), LW(8))
@@ -2704,12 +2826,14 @@ EVT_BEGIN(slot_set)
     RETURN
 EVT_END()
 
+/** Slot machine 1: talk event that plays slot_set for the machine number 0. */
 EVT_BEGIN(slot1_set)
     SET_VALUE(LW(8), 0)
     CALL_CHILD(PTR(slot_set))
     RETURN
 EVT_END()
 
+/** Slot machine 2: talk event that plays slot_set for the machine number 1. */
 EVT_BEGIN(slot2_set)
     SET_VALUE(LW(8), 1)
     CALL_CHILD(PTR(slot_set))
@@ -2788,6 +2912,10 @@ typedef struct I3 {
 } I3;
 static const I3 disp_slot_icons = {{ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT}};
 
+/**
+ * Talk event of the ranking board (ranking_mess_00, menu ranking_mess_01):
+ * shows the ranking board for the minigame Mario picks until he leaves.
+ */
 EVT_BEGIN(ranking_set)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, FLOAT(-541.8994f), FLOAT(115.5f), FLOAT(-115.0f), FLOAT(-197.0f), FLOAT(56.799805f), FLOAT(-115.0f), 600, EASING_SINE_IN_OUT)
@@ -2811,6 +2939,12 @@ EVT_BEGIN(ranking_set)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the Pianta Changer (the exchange counter):
+ * offers to buy Monte medals with coins at the prices of the current chapter (exchange_mess_00 to 05).
+ * The price list is a menu; the coins are taken and the medals are added to the counter;
+ * also first returns any medals Mario carries.
+ */
 EVT_BEGIN(exchange_set)
     CALL(evt_mario_key_onoff, 0)
     CALL(yuugijou_get_takeoutflag, LW(0))
@@ -2896,6 +3030,7 @@ EVT_BEGIN(roten_4_init)
     RETURN
 EVT_END()
 
+/** Regular event of the stall 4 NPC: wanders within a 100-unit range. */
 EVT_BEGIN(roten_4_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
@@ -2903,6 +3038,7 @@ EVT_BEGIN(roten_4_regl)
     RETURN
 EVT_END()
 
+/** Talk event of the stall 4 NPC: a line for each chapter (gor_03_016 to 023). */
 EVT_BEGIN(roten_4_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
@@ -2930,6 +3066,7 @@ EVT_BEGIN(kinopiko_a_init)
     RETURN
 EVT_END()
 
+/** Talk event of the Toad woman A: a line for each chapter (gor_03_048 to 055). */
 EVT_BEGIN(kinopiko_a_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
@@ -2958,6 +3095,7 @@ static EVT_BEGIN(kinopiko_b_init)
     RETURN
 EVT_END()
 
+/** Regular event of the Toad woman B: wanders around within a 100-unit range. */
 EVT_BEGIN(kinopiko_b_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
@@ -3025,6 +3163,7 @@ EVT_BEGIN(kinopio_a_init)
     RETURN
 EVT_END()
 
+/** Talk event of the Toad A: a line for each chapter (gor_03_024 to 031). */
 EVT_BEGIN(kinopio_a_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
@@ -3052,6 +3191,7 @@ EVT_BEGIN(kokinopio_a_init)
     RETURN
 EVT_END()
 
+/** Talk event of the small Toad a: a line for each chapter. */
 EVT_BEGIN(kokinopio_a_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
@@ -3074,12 +3214,14 @@ EVT_BEGIN(kokinopio_a_talk)
     RETURN
 EVT_END()
 
+/** Init event of the small Toad b: places it at (35, -5, 300) and gives it jumping flags. */
 EVT_BEGIN(kokinopio_b_init)
     CALL(evt_npc_set_position, STRING("me"), 35, -5, 300)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
     RETURN
 EVT_END()
 
+/** Regular event of the small Toad b: wanders within a 100-unit range. */
 EVT_BEGIN(kokinopio_b_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
@@ -3087,6 +3229,7 @@ EVT_BEGIN(kokinopio_b_regl)
     RETURN
 EVT_END()
 
+/** Talk event of the small Toad b: a line for each chapter (gor_03_040 and following). */
 EVT_BEGIN(kokinopio_b_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
@@ -3114,6 +3257,7 @@ EVT_BEGIN(nokonoko_a_init)
     RETURN
 EVT_END()
 
+/** Talk event of the Koopa a: a line for each chapter (gor_03_056 to 063). */
 EVT_BEGIN(nokonoko_a_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
@@ -3141,6 +3285,7 @@ EVT_BEGIN(kuribo_1_init)
     RETURN
 EVT_END()
 
+/** Talk event of the Goomba 1: a line for each chapter (gor_03_064 and following). */
 EVT_BEGIN(kuribo_1_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
@@ -3416,6 +3561,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Door-swing callback for house 1 (built from the double door S_i01_doa_m/S_i01_doa_o):
+ * LW(0) is the door's angle, applied at half size around Y. The middle leaf always follows;
+ * the outer leaf turns only when LF(0) is set. With LF(0) clear it first turns off the leaves' blending flags.
+ */
 static EVT_BEGIN(evt_door_01_00)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
@@ -3429,6 +3579,10 @@ static EVT_BEGIN(evt_door_01_00)
     RETURN
 EVT_END()
 
+/**
+ * Wall callback for house 1: turns the upper wall panel S_ie_01uB by minus LW(0)
+ * and the lower panel S_ie_01sB by plus LW(0) around Z, so the front folds open as the door does.
+ */
 static EVT_BEGIN(evt_wall_01)
     SET_FLOAT_VALUE(LW(2), LW(0))
     SET_FLOAT_VALUE(LW(3), LW(0))
@@ -3439,6 +3593,11 @@ static EVT_BEGIN(evt_wall_01)
     RETURN
 EVT_END()
 
+/**
+ * Swing animation of the double door of building 1:
+ * LW(0) is the door angle and the outer door leaf (S_i01_doa_o) turns by -0.5 times that;
+ * with LF(0) set the inner leaf (S_i01_doa_m) follows. Without LF(0) it first switches the leaves' blending off.
+ */
 EVT_BEGIN(evt_door_01_10)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
@@ -3457,6 +3616,11 @@ static const char* door_data_01_npc[] = {
     NULL,
 };
 
+/**
+ * Opens building 1's front door: sets GW(10) and GW(11) to 0,
+ * dips the music and ambience volume to 50 percent with a low-pass on the ambience,
+ * and hides the Shine Sprite block (pblk2) while Mario is inside.
+ */
 EVT_BEGIN(evt_door_01_0_open)
     SET_VALUE(GW(10), 0)
     SET_VALUE(GW(11), 0)
@@ -3527,6 +3691,12 @@ EVT_BEGIN(evt_door_01_1_open)
     RETURN
 EVT_END()
 
+/**
+ * Close callback of building 1's back door: the reverse of evt_door_01_1_open, turning that collision off,
+ * hiding
+ * the outside models and NPCs again, clearing the doors no-blend flags, restoring the sound and showing "pblk2"
+ * again.
+ */
 EVT_BEGIN(evt_door_01_1_close)
     CALL(evt_hitobj_onoff, STRING("A_ie_03A"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_gaitou"), 1, 0)
@@ -3601,6 +3771,11 @@ DoorParam door_data_01_1 = {
     evt_door_01_1_close, // evtClose
 };
 
+/**
+ * Binds evt_door_close and evt_door_open to the A button in front of the door in LW(0);
+ * uraguchi_event runs it on
+ * door_data_01_1 when the clerk unlocks the back door.
+ */
 EVT_BEGIN(evt_door_01_entry)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
@@ -3614,6 +3789,11 @@ EVT_BEGIN(evt_door_01_entry)
     RETURN
 EVT_END()
 
+/**
+ * Door-swing callback for house 2: LW(0) is the door angle;
+ * the two leaves S_ie_02_f1_doa01 and doa02 turn by plus and minus 0.6 times it around Y (they swing apart).
+ * With LF(0) clear it first turns off their blending flags.
+ */
 static EVT_BEGIN(evt_door_02_00)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ie_02_f1_doa01"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
@@ -3628,6 +3808,13 @@ static EVT_BEGIN(evt_door_02_00)
     RETURN
 EVT_END()
 
+/**
+ * Wall callback (evtWall) of the Pianta Parlor's ground-floor doors (door_data_02_0l and its partner, whose
+ * inside
+ * is "S_i02_f1" with Bunny Teresa and the customers):
+ * turns the wall panel "S_ie_02_f1B" about z by half of the angle
+ * in LW(0).
+ */
 EVT_BEGIN(evt_wall_02_0)
     SET_FLOAT_VALUE(LW(2), LW(0))
     MULTIPLY_FLOAT(LW(2), FLOAT(0.5f))
@@ -3644,6 +3831,10 @@ const char* door_data_02_0_npc[] = {
     NULL,
 };
 
+/**
+ * Sets up the slot machines while the Pianta Parlor door is opening:
+ * re-seeds the reels of both slot machines and waits for Mario's keys to be free.
+ */
 EVT_BEGIN(door_data_02_0_open_sub)
     WAIT_FRAMES(1)
     CALL(goryuugijo_get_dataadr, 1, LW(0))
@@ -3664,6 +3855,11 @@ EVT_BEGIN(door_data_02_0_open)
     RETURN
 EVT_END()
 
+/**
+ * Closes the Pianta Parlor's front door: restores the door leaves,
+ * makes Bunny Teresa keep any medals Mario still carries,
+ * sets the slot phase to 11 (shut down) and brings the Rogueport music and ambience back.
+ */
 EVT_BEGIN(door_data_02_0_close)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02_f1_doa01"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02_f1_doa02"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
@@ -3727,6 +3923,10 @@ DoorParam door_data_02_0r = {
     door_data_02_0_close, // evtClose
 };
 
+/**
+ * evtIn callback of the Pianta Parlor's upstairs door (door_data_02_1, inside "S_i02_f2": Don Pianta's office):
+ * turns the leaf S_ie_02_f2_doa around y by 0.6 times LW(0).
+ */
 EVT_BEGIN(evt_door_02_10)
     SET_FLOAT_VALUE(LW(2), LW(0))
     MULTIPLY_FLOAT(LW(2), FLOAT(0.5996094f))
@@ -3734,6 +3934,7 @@ EVT_BEGIN(evt_door_02_10)
     RETURN
 EVT_END()
 
+/** evtOut callback of the same upstairs door (door_data_02_1): turns S_ie_02_f2_doa around the z axis by half of LW(0). */
 EVT_BEGIN(evt_door_02_11)
     SET_FLOAT_VALUE(LW(2), LW(0))
     MULTIPLY_FLOAT(LW(2), FLOAT(0.5f))
@@ -3741,6 +3942,11 @@ EVT_BEGIN(evt_door_02_11)
     RETURN
 EVT_END()
 
+/**
+ * Wall callback (evtWall) of the upstairs door (door_data_02_1):
+ * rotates the upstairs wall panels (S_ie_02_f2sB and
+ * S_ie_02_f2uB) about z in opposite directions by LW(0).
+ */
 EVT_BEGIN(evt_wall_02_1)
     SET_FLOAT_VALUE(LW(2), LW(0))
     SET_FLOAT_VALUE(LW(3), LW(0))
@@ -3907,12 +4113,17 @@ DoorParam door_data_02_1 = {
     evt_door_02_1_close, // evtClose
 };
 
+/** Door-swing callback for house 3: turns the door S_ie_03_doa around Y by 0.6 times the door angle LW(0). */
 static EVT_BEGIN(evt_door_03_00)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5996094f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie_03_doa"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Wall callback for house 3: turns the upper wall panel S_i03_ueB by minus half of LW(0)
+ * and the lower panel S_i03_sitaB by plus half of it around Z.
+ */
 static EVT_BEGIN(evt_wall_03)
     SET_FLOAT_VALUE(LW(2), LW(0))
     SET_FLOAT_VALUE(LW(3), LW(0))
@@ -3964,6 +4175,7 @@ static DoorParam door_data_03 = {
     door_data_03_close, // evtClose
 };
 
+/** Case script of house 3's door: runs evt_door_open_roll, then ends the case event. */
 static EVT_BEGIN(evt_door_03_caseopen)
     CALL_CHILD(PTR(evt_door_open_roll))
     CALL(evt_exit_case_evt)
@@ -4043,6 +4255,11 @@ static DoorParam door_data_03_roll = {
     evt_door_03_close, // evtClose
 };
 
+/**
+ * Registers house 3's door: reads the door parameters,
+ * installs evt_door_03_caseopen as the front-of-door case event
+ * and binds the drawer's collision A_i03_tan_hiki to its map object S_i03_tan_hiki so it moves with it.
+ */
 static EVT_BEGIN(evt_door_03_entry)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
@@ -4051,12 +4268,17 @@ static EVT_BEGIN(evt_door_03_entry)
     RETURN
 EVT_END()
 
+/** Door-swing callback for house 4: turns the door S_ie_04_doa around Y by 0.6 times the door angle LW(0). */
 static EVT_BEGIN(evt_door_04_00)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5996094f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie_04_doa"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Wall callback for house 4: turns the upper wall panel S_i04_ueB by plus half of LW(0)
+ * and the lower panel S_i04_stB by minus half of it around Z.
+ */
 static EVT_BEGIN(evt_wall_04)
     SET_FLOAT_VALUE(LW(2), LW(0))
     SET_FLOAT_VALUE(LW(3), LW(0))
@@ -4153,6 +4375,10 @@ DoorParam door_data_04_roll = {
     evt_door_04_close, // evtClose
 };
 
+/**
+ * Registers house 4's door: reads the door parameters
+ * and installs evt_door_04_caseclose as the front-of-door case event.
+ */
 static EVT_BEGIN(evt_door_04_entry)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     SET_VALUE(LW(15), 0)
@@ -5513,6 +5739,7 @@ static USER_FUNC(fall_rtn) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that sets the phase of a slot machine (the minigame work block in args[0]) to args[1]. */
 USER_FUNC(goryuugijo_set_slot_phase) {
     EvtWord* args = event->args;
     SlotWork* data = ((GoryuuWork*)evtGetValue(event, args[0]))->data;
@@ -5521,6 +5748,7 @@ USER_FUNC(goryuugijo_set_slot_phase) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that reads the phase of a slot machine (the minigame work block in args[0]) into args[1]. */
 USER_FUNC(goryuugijo_get_slot_phase) {
     EvtWord* args = event->args;
     SlotWork* data = ((GoryuuWork*)evtGetValue(event, args[0]))->data;
@@ -5529,18 +5757,27 @@ USER_FUNC(goryuugijo_get_slot_phase) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Turns on the three window map groups of reel number reel of a slot machine.
+ * Same as the disp version; the original had two copies.
+ */
 void goryuugijo_upsidewindow_dispoff_sub(s32 slot, s32 reel) {
     mapGrpFlagOn(drumname[slot].window[reel][0], MAP_OBJ_FLAG_HIDDEN);
     mapGrpFlagOn(drumname[slot].window[reel][1], MAP_OBJ_FLAG_HIDDEN);
     mapGrpFlagOn(drumname[slot].window[reel][2], MAP_OBJ_FLAG_HIDDEN);
 }
 
+/** Turns on the three window map groups of reel number reel of a slot machine. */
 void goryuugijo_upsidewindow_disp_sub(s32 slot, s32 reel) {
     mapGrpFlagOn(drumname[slot].window[reel][0], MAP_OBJ_FLAG_HIDDEN);
     mapGrpFlagOn(drumname[slot].window[reel][1], MAP_OBJ_FLAG_HIDDEN);
     mapGrpFlagOn(drumname[slot].window[reel][2], MAP_OBJ_FLAG_HIDDEN);
 }
 
+/**
+ * Script helper that gives each reel of both slot machines a random starting angle (a multiple of 45 degrees)
+ * and a random face.
+ */
 USER_FUNC(goryuugijo_door_init_slot) {
     GoryuuWork* wp = (GoryuuWork*)evtGetValue(event, event->args[0]);
     SlotWork* data = wp->data;
@@ -5562,6 +5799,10 @@ USER_FUNC(goryuugijo_door_init_slot) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Init callback of the slot machine game: clears the counter, the lever angle and the medal event,
+ * and clears the win flag.
+ */
 void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall) {
     SlotWork* data = ((GoryuuWork*)event->lwData[0])->data;
 
@@ -5571,6 +5812,15 @@ void goryuugijo_init_slot(EventEntry* event, BOOL isFirstCall) {
     data->flags &= ~1;
 }
 
+/**
+ * Per-frame lights of a slot machine spin, run by slot_rotate_sub during the lever pull for the first 79 frames
+ * (neonCount): for 27 frames it shuffles the three faces of the small window above the reels (UPSIDEGARA) every
+ * other frame, then shows faces 0, 1 and 2 there and starts the reels at full speed;
+ * the neon animation plays once at
+ * frame 24.
+ * Flag 2 would pick a slow "lucky" spin with more neon flashes, but it is cleared right after its 1-in-10
+ * roll, and flag 4 (all three window faces equal) cannot be set with faces 0, 1 and 2.
+ */
 void slot_neon_sub(GoryuuWork* wp, SlotWork* data) {
     s32 i;
     s32 r;
@@ -5640,6 +5890,11 @@ void slot_neon_sub(GoryuuWork* wp, SlotWork* data) {
     }
 }
 
+/**
+ * Spins one reel of the current slot machine by its speed:
+ * slows to a stop at the next face and snaps to it, keeping the angle in 0 to 360;
+ * returns 1 when the reel has stopped.
+ */
 s32 slot_rotate_sub(GoryuuWork* wp, SlotWork* data, s32 reel) {
     s32 stopped = 0;
     f32 angle = data->angle[data->nowSlot][reel];
@@ -6100,17 +6355,27 @@ static USER_FUNC(mario_keyoff_wait) {
     }
 }
 
+/**
+ * Script helper that regenerates Bunny Teresa's list of badges for the prize exchange
+ * (badgeShop_bteresaGeneration).
+ */
 USER_FUNC(teresa_badge_item_list_init) {
     badgeShop_bteresaGeneration();
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that allocates the work area for desk_talk_func: one NPC entry and one effect entry. */
 USER_FUNC(desk_talk_init_func) {
     npc = _mapAlloc(sizeof(NpcEntry));
     eff = _mapAlloc(sizeof(EffectEntry));
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for the desk balloon: args[0] is the on flag and args[1] its previous value;
+ * shows the speech balloon effect when it switches on, removes it when it switches off,
+ * and moves the balloon's NPC to (args[2], args[3], args[4]).
+ */
 USER_FUNC(desk_talk_func) {
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);
@@ -6131,6 +6396,7 @@ USER_FUNC(desk_talk_func) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that stores Mario's target display direction in args[0]. */
 USER_FUNC(get_mario_dispReqDir) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
@@ -6139,6 +6405,10 @@ USER_FUNC(get_mario_dispReqDir) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that places a shadow of size args[3] at (args[0], args[1], args[2]) and blocks.
+ * Used for Beldam, who has no shadow of her own.
+ */
 USER_FUNC(dummy_shadow) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -6150,6 +6420,10 @@ USER_FUNC(dummy_shadow) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper that sets the viewport and scissor of the background,
+ * 3D and 2D cameras to the rectangle (args[0], args[1], args[2], args[3]).
+ */
 static USER_FUNC(viewport) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -6180,6 +6454,13 @@ static USER_FUNC(viewport) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Message callback of Lucky's threat line kuji_bomb_055 in kuzi_bomb_talk_husei:
+ * when the text turns to its second
+ * page (msgdrv callback type 3) it sets GF(0), which starts the screen shake there; as each character is printed
+ * (type 5) it switches his animation (T_3, T_4 or B_1) at fixed text positions and turns his talk animation off
+ * near the end.
+ */
 void kuji_bomb_055_callback(s32 type, MsgWinData** work) {
     MsgWinData* wp = *work;
     NpcEntry* npc = npcNameToPtr("\203O\203\213\203\201\203{\203\200\225\272");
@@ -6249,6 +6530,11 @@ USER_FUNC(kuzi_get_keihin) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for the lottery Bob-omb's explosion gag:
+ * when his height passes 25, 50, 75 and 100 it spawns a small bomb effect beside him, alternating sides,
+ * and returns the next stage in args[2]; does nothing for types 2 and 3.
+ */
 USER_FUNC(kuzi_bomb_bomb_eff) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
@@ -6293,6 +6579,7 @@ USER_FUNC(kuzi_bomb_bomb_eff) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that saves all 16 local words (LW) of the script into a global array. */
 static USER_FUNC(enzan_lw_save) {
     s32 i;
 
@@ -6302,6 +6589,7 @@ static USER_FUNC(enzan_lw_save) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that restores the 16 local words saved by enzan_lw_save. */
 static USER_FUNC(enzan_lw_load) {
     s32 i;
 

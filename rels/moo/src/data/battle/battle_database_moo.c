@@ -1362,6 +1362,11 @@ NpcTerritoryInfo btl_moo_setup_no_tbl[] = {
     {0},
 };
 
+/**
+ * Event script: the animated space background of the Moon battles.
+ * It rotates the three star objects of the stage (star_01, star_02, star_03) about Z once every 7500,
+ * 6750 and 6000 frames, forever.
+ */
 EVT_BEGIN(bgset_moo_space_event)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)

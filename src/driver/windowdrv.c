@@ -25,6 +25,7 @@ typedef enum WakuTexId {
 
 static const GXColor fog_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
+/** Turns GX fog off before drawing window frames (they are 2D and must not be fogged). */
 static inline void fogOff(void) {
     GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, fog_color);
 }
@@ -51,6 +52,7 @@ void windowInit(void) {
     tpl_loaded = FALSE;
 }
 
+/** new in retail */
 // Completion callback of the msgWindow.tpl DVD read in windowTexSetup (new in retail)
 // Descriptive name (not in the symbol maps); placeholder unk_8007f204, JP 0x8007F204. See docs/NAME_PROVENANCE.md.
 void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
@@ -93,6 +95,7 @@ void windowTexSetup(void) {
     }
 }
 
+/** Marks all 7 window slots free without calling their delete callbacks; run on every map change. */
 void windowReInit(void) {
     WindowEntry* w = WinObjects;
 
@@ -112,6 +115,7 @@ void windowReInit(void) {
     w[6].userdata = NULL;
 }
 
+/** Claims a free window slot with the given draw priority and returns its id, or -1 if all 7 are in use. */
 s32 windowEntry(u16 priority) {
     WindowEntry* entry;
     int i;
@@ -128,6 +132,7 @@ s32 windowEntry(u16 priority) {
     return -1;
 }
 
+/** Runs the window's delete callback (freeing its contents) and frees the slot; always TRUE. */
 BOOL windowDelete(WindowEntry* entry) {
     if (entry->delete) {
         entry->delete(entry);
@@ -137,6 +142,7 @@ BOOL windowDelete(WindowEntry* entry) {
     return TRUE;
 }
 
+/** Deletes window id like windowDelete; FALSE if the slot was not in use. */
 BOOL windowDeleteID(s32 id) {
     WindowEntry* entry = &WinObjects[id];
     if (!(entry->flags & WINDOW_FLAG_ACTIVE)) {
@@ -150,6 +156,10 @@ BOOL windowDeleteID(s32 id) {
     return TRUE;
 }
 
+/**
+ * Per-frame update: runs the main callback of every window in use (message,
+ * selection and other windows queue their own drawing there).
+ */
 void windowMain(void) {
     WindowEntry* entry;
     int i;
@@ -164,6 +174,11 @@ void windowMain(void) {
     }
 }
 
+/**
+ * Draws the frame of a sign-style window at (x, y) with the given size and alpha:
+ * the wooden plate of sign (kanban) and plate windows, the lined paper of broadcast (housou) windows,
+ * and the letter paper of the diary.
+ */
 void windowDispGX_Kanban(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height) {
     CameraEntry* camera;
     Mtx trans, scale;
@@ -403,6 +418,10 @@ void windowDispGX_Kanban(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height
     }
 }
 
+/**
+ * Draws the frame of a system window (type 3) at (x, y) with the given size and alpha,
+ * with its slowly scrolling background pattern.
+ */
 void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height) {
     CameraEntry* camera;
     f32 x5, scroll;
@@ -625,6 +644,11 @@ void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height
     GXTexCoord2f32(0.0f, 1.0f);
 }
 
+/**
+ * Draws one layer (dark = the shadow pass, else the face) of a speech balloon:
+ * the frame for the window type (normal, boss, TEC-XX, Shadow Sirens)
+ * and the tail from the balloon toward (tailX, tailY) as set by tailMode.
+ */
 void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tailY) {
     CameraEntry* camera;
     Mtx trans, scale;
@@ -1039,6 +1063,10 @@ end:
 BOOL tpl_loaded; // TRUE once msgWindow.tpl is unpacked and wakuTexObj is built (new in retail)
 TEXPalette* winTpl; //new in retail
 
+/**
+ * Draws a speech balloon at (x, y) with its tail pointing at the speaker:
+ * the shadow layer then the face, or only one layer for TEC-XX (type 8) windows.
+ */
 void windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tailY) {
     GXSetCullMode(GX_CULL_NONE);
     GXSetZCompLoc(GX_TRUE);
@@ -1073,6 +1101,11 @@ void windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, f32 x, f32 y, f32 w
     }
 }
 
+/**
+ * Draws a rounded-corner frame (waku) of the given size,
+ * colour and corner radius (curve) at screen position (x, y), from nine pieces of the frame texture;
+ * used by selection lists, menus and item windows.
+ */
 void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve) {
     CameraEntry* camera = camGetCurPtr();
     Mtx mtx;
@@ -1249,6 +1282,10 @@ void windowDispGX_Waku_col(u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 widt
     }
 }
 
+/**
+ * Same rounded-corner frame as windowDispGX_Waku_col,
+ * drawn with an extra caller matrix mtx (for scaled or moved menus).
+ */
 void windowDispGX2_Waku_col(Mtx mtx, u16 gxTexMapID, GXColor color, f32 x, f32 y, f32 width, f32 height, f32 curve) {
     CameraEntry* camera = camGetCurPtr();
     Mtx mtx2;
@@ -1437,10 +1474,12 @@ s32 windowCheckID(s32 id) {
     return windowGetPointer(id)->flags & WINDOW_FLAG_BUSY;
 }
 
+/** Returns window slot id (no range check). */
 WindowEntry* windowGetPointer(s32 id) {
     return &WinObjects[id];
 }
 
+/** Returns frame texture id of msgWindow.tpl, e.g. 3 for the small window. */
 GXTexObj* getWakuTexObj(s32 id) {
     return &wakuTexObj[id];
 }

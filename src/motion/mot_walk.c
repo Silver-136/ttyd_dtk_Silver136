@@ -13,6 +13,11 @@
 #include "sfx_name_word.h"
 
 
+/**
+ * Footstep sounds for walking and running: every interval frames a full step and at half that a lighter one,
+ * chosen by the floor's hit attribute (0x100, 0x200000, 0x100000, 0x1000, 0x400000, or plain ground).
+ * The 0x1000 floor plays the plain 0x100 sound on the Great Tree (mri) maps.
+ */
 void marioWalkDashSe(HitEntry* hitObj, u32 interval) {
     s32 hitAttr;
     MarioWork* mario;
@@ -122,6 +127,12 @@ f32 marioGetDashSpd(void) {
     return dashSpeed;
 }
 
+/**
+ * Walking motion: moves Mario at marioGetWalkSpd with footstep sounds,
+ * switches to the pushing pose (M_O_1) against a pushable case object,
+ * to running when the stick is pushed far (unless the Slow Go badge is on), to Paper Mode when R is pressed,
+ * and back to standing when the stick is released. Bowser and Peach run their own versions.
+ */
 void mot_walk(void) {
     s32 trigFlags;
     s32 flags;
@@ -235,6 +246,11 @@ void mot_walk(void) {
     }
 }
 
+/**
+ * Running motion: like mot_walk at marioGetDashSpd,
+ * dropping back to walking for a small stick tilt or with the Slow Go badge,
+ * with the pushing pose against pushable objects.
+ */
 void mot_dash(void) {
     u32 trigFlags;
     BOOL pushCaseActive;

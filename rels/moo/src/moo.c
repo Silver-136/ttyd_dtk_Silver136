@@ -12,6 +12,10 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
+/**
+ * Module prolog of the moon: runs the static constructors and registers the init scripts of moo_00 to moo_07
+ * and the battle setup table for "moo".
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 
@@ -29,6 +33,7 @@ void _prolog(void) {
     relSetBtlAddr("moo", btlsetup_moo_tbl, btl_moo_setup_no_tbl);
 }
 
+/** Module epilog of the moon: runs the static destructors. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -36,5 +41,6 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+/** Unresolved-symbol stub of the moon module; does nothing. */
 void _unresolved(void) {
 }

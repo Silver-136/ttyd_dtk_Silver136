@@ -39,6 +39,13 @@ f32 muj_ship_puka_data[] = {
     -2.7f, -2.7f, -2.5f, -2.2f, -2.0f, -1.5f, -1.0f, -0.5f,
 };
 
+/**
+ * Ship bobbing loop for the pirate ship's NPC/objects:
+ * every 130 ms steps through muj_ship_puka_data (via muj_ship_puka_func)
+ * and writes the scaled offset into the indexed float LW(0).
+ * The caller sets LW(0) to the target and LW(1) to the amplitude;
+ * runs forever, spawned from the Keelhaul Key ship maps.
+ */
 EVT_BEGIN(muj_ship_puka)
     SET_VALUE(LW(10), 0)
     LOOP(0)
@@ -70,6 +77,7 @@ void _prolog(void) {
     relSetBtlAddr("muj", btlsetup_muj_tbl, btl_muj_setup_no_tbl);
 }
 
+/** REL epilog: runs the static destructors when the muj module is unloaded. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -78,9 +86,14 @@ void _epilog(void) {
     }
 }
 
+/** Unresolved-symbol stub for the REL linker; does nothing. */
 void _unresolved(void) {
 }
 
+/**
+ * Script helper for muj_ship_puka: args[0] = step index (used modulo 16), args[1] = amplitude;
+ * returns the amplitude times the matching entry of muj_ship_puka_data into args[2].
+ */
 USER_FUNC(muj_ship_puka_func) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -91,6 +104,13 @@ USER_FUNC(muj_ship_puka_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that makes an NPC circle around a point (cx, cz) for a set time.
+ * Args: [0] NPC name, [1] centre x, [2] centre z, [3] 0 = turn the NPC to face left or right of its travel,
+ * [4] angular speed per frame, [5] duration in ms.
+ * Keeps the NPC's starting radius and angle, updates its position and plays its footstep sounds;
+ * blocks until the duration has elapsed.
+ */
 USER_FUNC(muj_npc_guruguru) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -146,6 +166,11 @@ USER_FUNC(muj_npc_guruguru) {
     return EVT_RETURN_YIELD;
 }
 
+/**
+ * Script helper that bobs an NPC up and down for a set time.
+ * Args: [0] NPC name, [1] axis (only 0 = vertical is implemented), [2] duration in ms.
+ * Follows a 32-entry sine-like table and snaps the NPC back to its start position at the end.
+ */
 USER_FUNC(muj_npc_fuwafuwa) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -187,6 +212,13 @@ USER_FUNC(muj_npc_fuwafuwa) {
     return EVT_RETURN_YIELD;
 }
 
+/**
+ * Script helper that shakes an NPC (or the active partner when the NPC pointer is -2) back
+ * and forth along one axis.
+ * Args: [0] NPC name, [1] axis (0 x, 1 y, 2 z), [2] amplitude, [3] half period in ms,
+ * [4] duration in ms (0 = shake until the script is killed). Restores the start position when the duration ends.
+ * Used for the shivering sailors.
+ */
 USER_FUNC(muj_npc_buruburu) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -264,6 +296,11 @@ USER_FUNC(muj_npc_buruburu) {
     return EVT_RETURN_YIELD;
 }
 
+/**
+ * Script helper for korutesu_apper/korutesu_vanish:
+ * sets the transparency scale (args[1], 0.0 to 1.0) of the named kameki_tornade_n64 effect (args[0]),
+ * which fades Cortez's tornado in and out.
+ */
 static USER_FUNC(tornade_alpha_func) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -273,6 +310,10 @@ static USER_FUNC(tornade_alpha_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Debug stub for muj_mario_pos_osreport: reads Mario's state and the A-button trigger
+ * but prints nothing in this build; always blocks.
+ */
 USER_FUNC(muj_mario_pos_osreport_func) {
     marioGetPtr();
     keyGetButtonTrg(0);
@@ -353,6 +394,11 @@ EVT_BEGIN(korutesu_apper)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's exit: the same tornado effect fades in around him while he flickers hidden
+ * and visible at growing intervals, then the tornado is deleted and he stays hidden.
+ * Called at the end of his scenes in muj_12.
+ */
 EVT_BEGIN(korutesu_vanish)
     CALL(evt_npc_get_position, STRING("コルテス"), LW(0), LW(1), LW(2))
     CALL(evt_eff64, STRING("tornade"), STRING("kameki_tornade_n64"), 0, LW(0), LW(1), LW(2), FLOAT(2.5f), 0, 0, 0, 0, 0, 0, 0)
@@ -424,6 +470,7 @@ EVT_BEGIN(korutesu_vanish)
     RETURN
 EVT_END()
 
+/** Debug event that calls muj_mario_pos_osreport_func; has no visible effect. */
 EVT_BEGIN(muj_mario_pos_osreport)
     CALL(muj_mario_pos_osreport_func)
     RETURN

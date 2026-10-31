@@ -181,6 +181,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init script of the Spiky Goomba.
+ * Registers its wait, attack and damage scripts and sets its run, walk and jump sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -193,6 +197,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Runs when an attack on the spiky head is stopped by the thorns (the counter damage to the attacker).
+ * In the lecture battle it also marks the lecture's unit work 0, so the lesson knows the thorn was triggered.
+ * Guess.
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -235,6 +244,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/** Damage reaction of the Spiky Goomba: the default damage script. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -257,6 +267,12 @@ static f32 SinTable[] = {
     0.999391f, 0.999848f, 1.0f,
 };
 
+/**
+ * The Spiky Goomba's attack: it runs to the target,
+ * curls up and rolls or jumps onto it (poses TGK_D_1, A_2, K_1);
+ * the pre-damage check decides between a miss and a hit with the action-command result,
+ * and it hops back to its place.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -441,6 +457,10 @@ static USER_FUNC(krb_get_dir) {
 
 double hypot(double x, double y);
 
+/**
+ * Returns the angle in degrees (0..359) of the point (x, z) by a binary search of the sine table;
+ * apparently unused by this unit's scripts.
+ */
 static u16 krb_comp_dir(f32 x, f32 z) {
     f32 dist = hypot(x, z);
     f32 s = __fabs(z) / dist;
@@ -471,6 +491,10 @@ static u16 krb_comp_dir(f32 x, f32 z) {
     return (u16)mid;
 }
 
+/**
+ * Battle script helper: stores who is attacking the Spiky Goomba in args[0]:
+ * 0 for Mario, 1 for Goombella, 2 for anyone else.
+ */
 // Tutorial speaker selector: Mario is 0, Goombella is 1, and other active attackers are 2.
 static USER_FUNC(get_attacker) {
     BattleWork* wp = _battleWorkPointer;
@@ -487,6 +511,7 @@ static USER_FUNC(get_attacker) {
     return EVT_RETURN_DONE;
 }
 
+/** Wait (idle) event of the Spiky Goomba: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

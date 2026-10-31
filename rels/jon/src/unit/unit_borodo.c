@@ -47,6 +47,14 @@ static EvtWord _borodo_steal_attack[610];
 static EvtWord escape_event[115];
 static EvtWord wait_event[26];
 
+/**
+ * Script helper for the Bandit's steal attack: args[0] = thief, args[1] = target,
+ * args[2..4] = variables that receive the stolen item id, its icon and a coin count.
+ * The coin test is irand(100) < 100, which always passes,
+ * so the Bandit takes 5 coins (or whatever the pouch holds) and the item-stealing code below it never runs.
+ * That is by design: Goombella's tattle says Bandits grab coins and only Big Bandits (40 here) steal items too.
+ * Taken coins are remembered in the unit's heldItem and stolenCoins so they can be won back.
+ */
 static USER_FUNC(_steal_item) {
     EvtWord* args = event->args;
     s32 coins;
@@ -330,6 +338,12 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_borodo", "c_borodo", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/**
+ * Init script of the Bandit: registers its wait, attack,
+ * damage and confusion handlers (confusion reuses the attack script), sets its run and walk sounds,
+ * and picks the carrying-loot pose table if unit flag 0x40000000 (it has stolen something) is already set,
+ * otherwise the normal one.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -347,6 +361,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage script of the Bandit: runs the default damage handling on itself. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -354,10 +369,17 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Empty phase script (just returns). Nothing in the unit's tables refers to it. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the Bandit.
+ * If it already carries loot (unit flag 0x40000000) it runs escape_event and leaves the battle.
+ * Otherwise it checks for an item use, always uses the plain attack while confused,
+ * and else draws a random number to choose between the plain attack (about 25 in 224) and the steal attack.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -386,6 +408,13 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Bandit's plain attack: it runs past the chosen target,
+ * turns around and dashes back into it with SFX_ENM_BORODO_ATT1.
+ * A hit deals damage and sends it spinning back in a flip;
+ * if it is dodged or blocked it hops away twice instead. It then walks back home.
+ * When confused with no target it is flustered.
+ */
 static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_borodo_attack))
@@ -519,6 +548,13 @@ static EVT_BEGIN(_borodo_normal_attack)
     RETURN
 EVT_END()
 
+/**
+ * The Bandit's steal attack: the same run-up and dash as the plain attack.
+ * If it lands and the action command result is 3 or less, _steal_item takes something from the target;
+ * on success it shows btl_msg_steal_item_lost, the stolen item's icon flies off,
+ * it flags itself as carrying loot (unit flag 0x40000000), laughs and switches to the loot-holding poses.
+ * If nothing was taken it just bows, then returns home.
+ */
 static EVT_BEGIN(_borodo_steal_attack)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_borodo_attack))
@@ -674,6 +710,11 @@ static EVT_BEGIN(_borodo_steal_attack)
     RETURN
 EVT_END()
 
+/**
+ * The Bandit flees with its loot: it turns, jumps
+ * and dashes off the right side of the stage with a blur trail (SFX_ENM_BORODO_ESCAPE1),
+ * then removes itself from the battle without giving a reward.
+ */
 static EVT_BEGIN(escape_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BORODO_WAIT1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_3"))
@@ -696,6 +737,7 @@ static EVT_BEGIN(escape_event)
     RETURN
 EVT_END()
 
+/** Wait script: plays the Bandit's idle pose, using the loot-holding pose table once it has stolen something. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))
     IF_INT_EQUAL(LW(0), 0)

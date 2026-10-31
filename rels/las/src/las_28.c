@@ -62,6 +62,10 @@ static EvtWord shuryolight_init[18];
 static EvtWord shan_init[46];
 EvtWord las_28_init_evt[238];
 
+/**
+ * Script helper: creates the glowing barrier ("baria", the Shuryo effect at double scale) around Princess
+ * Peach's NPC so she is shown held inside it.
+ */
 USER_FUNC(syuryo_baria) {
     // ピーチ単
     NpcEntry* npc = npcNameToPtr("\x83\x73\x81\x5B\x83\x60\x95\x50");
@@ -72,6 +76,11 @@ USER_FUNC(syuryo_baria) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_door2_1 and S_door2_2 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door2_1"), 0, LW(0), 0)
@@ -80,6 +89,11 @@ static EVT_BEGIN(w_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_door2_1 and S_door2_2 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(w_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door2_1"), 0, LW(0), 0)
@@ -143,6 +157,7 @@ EVT_BEGIN(koopa_init)
     RETURN
 EVT_END()
 
+/** Talk event of Bowser after the fight; prints stg8_las_107. */
 EVT_BEGIN(koopa_talk)
     CALL(evt_msg_print, 0, STRING("stg8_las_107"), 0, STRING("me"))
     RETURN
@@ -276,6 +291,11 @@ USER_FUNC(syuryo_baria_recalc_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Event script: Sir Grodus shocks Mario and the partner with a bolt of lightning:
+ * hit effects on both, a thunder effect between them, camera shake,
+ * then Mario and the partner fall into their hurt poses.
+ */
 EVT_BEGIN(syuryo_thunder)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
@@ -730,6 +750,10 @@ static USER_FUNC(eff_guruguru) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Event script: a chunk of ceiling rubble (map object LW(0)) falls from 350 units up over LW(3) ms;
+ * LW(1) and LW(2) are its landing parameters.
+ */
 EVT_BEGIN(gareki_fall)
     SET_VALUE(LW(7), LW(0))
     SET_VALUE(LW(8), LW(1))

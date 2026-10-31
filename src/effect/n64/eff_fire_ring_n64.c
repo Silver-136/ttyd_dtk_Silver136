@@ -90,6 +90,10 @@ static effN64Vtx stg__s_v[] = {
     {-178, 0, 142, 14461, 4096, 255, 255, 255, 255},
 };
 
+/**
+ * Spawns an expanding ring of fire at (x, y, z) that grows by 0.1 * scale per frame for lifetime frames
+ * and scrolls two flame textures. The only caller is event scripts through evt_eff.
+ */
 EffectEntry* effFireRingN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffFireRingN64Work* work;
@@ -123,6 +127,10 @@ EffectEntry* effFireRingN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f3
     return effect;
 }
 
+/**
+ * Grows the ring, scrolls the two texture layers (wrapped at 128), fades out over the last 10 frames,
+ * and on odd frames spawns a short fire-dust ring at the centre whose radius is 8 * frame.
+ */
 void effFireRingMain(EffectEntry* effect) {
     EffFireRingN64Work* work;
     Vec position;
@@ -187,6 +195,10 @@ void effFireRingMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws the ring mesh with the two flame textures (0x2d and 0x2e),
+ * using the scrolled coordinates and the work colour.
+ */
 void effFireRingDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffFireRingN64Work* work;

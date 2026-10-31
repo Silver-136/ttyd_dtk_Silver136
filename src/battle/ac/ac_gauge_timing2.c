@@ -239,10 +239,15 @@ s32 battleAcMain_GaugeTiming2(BattleWork *work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 when at least one target was hit, 0 otherwise. */
 s32 battleAcResult_GaugeTiming2(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/**
+ * Display callback: slides the bar in from the left over 20 frames,
+ * and once the command ends keeps it up for 40 frames before sliding it back out.
+ */
 void battleAcDisp_GaugeTiming2(CameraId cameraId, void* param) {
     BattleWork* work = param;
     BattleActions* ac = &work->actionCommands;
@@ -273,12 +278,18 @@ void battleAcDisp_GaugeTiming2(CameraId cameraId, void* param) {
     }
 }
 
+/** Called by btlevtcmd_StopAC: unless the command already finished, starts the 60-frame end wait. */
 void battleAcDelete_GaugeTiming2(BattleWork* work) {
     if (!(work->actionCommands.doneFlags & 1)) {
         work->actionCommands.mAcState = 1003;
     }
 }
 
+/**
+ * Draws the bar frame (params[2] x 60 wide), its red fill, the target stars (lit once reached),
+ * an OK or miss mark on each resolved target, the A icon (pressed while a target is in reach)
+ * and the count hits + params[3].
+ */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleActions* ac = &_battleWorkPointer->actionCommands;
     BattleACDispParams* disp = &ac->disp;

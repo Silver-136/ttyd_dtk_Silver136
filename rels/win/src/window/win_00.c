@@ -76,6 +76,7 @@ static EVT_BEGIN(vivian_init)
     RETURN
 EVT_END()
 
+/** Talk script of Vivian: one line, "stg2_win_e01_18". */
 static EVT_BEGIN(vivian_talk)
     CALL(evt_msg_print, 0, STRING("stg2_win_e01_18"), 0, STRING("me"))
     RETURN
@@ -90,6 +91,7 @@ static EVT_BEGIN(maririn_init)
     RETURN
 EVT_END()
 
+/** Talk script of Marilyn, standing in the Boggly Woods clearing: one line, "stg2_win_e01_17". */
 EVT_BEGIN(maririn_talk)
     CALL(evt_msg_print, 0, STRING("stg2_win_e01_17"), 0, STRING("me"))
     RETURN
@@ -104,11 +106,16 @@ EVT_BEGIN(majorin_init)
     RETURN
 EVT_END()
 
+/** Talk script of Beldam: one line, "stg2_win_e01_16". */
 EVT_BEGIN(majorin_talk)
     CALL(evt_msg_print, 0, STRING("stg2_win_e01_16"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/**
+ * Init script of Fabio, the client of trouble 28:
+ * while the request is active he is placed at (-455, 0, -30), facing west.
+ */
 static EVT_BEGIN(fabio_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ROUST_THESE_CADS)
         CALL(evt_npc_set_position, STRING("me"), -455, 0, -30)
@@ -130,6 +137,7 @@ static EVT_BEGIN(fabio_talk)
     RETURN
 EVT_END()
 
+/** Regular behavior of the dandy in Boggly Woods: wanders around his start position (100 units across, 30 deep). */
 static EVT_BEGIN(kizayarou_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
@@ -137,6 +145,7 @@ static EVT_BEGIN(kizayarou_regl)
     RETURN
 EVT_END()
 
+/** Talk script of the dandy in Boggly Woods: one line, "stg2_win_00_01". */
 static EVT_BEGIN(kizayarou_talk)
     CALL(evt_msg_print, 0, STRING("stg2_win_00_01"), 0, STRING("me"))
     RETURN
@@ -453,6 +462,10 @@ EVT_BEGIN(witchtrio_momeru)
     RETURN
 EVT_END()
 
+/**
+ * Background loop that keeps the "picture" item (the Mario poster) glued to Beldam's position,
+ * 20 units above her, while she holds it.
+ */
 EVT_BEGIN(majorin_have_picture)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("マジョリン"), LW(0), LW(1), LW(2))
@@ -763,11 +776,13 @@ EVT_BEGIN(witchtrio_lose_item)
     RETURN
 EVT_END()
 
+/** Message helper: Vivian says "stg2_win_e08_02". */
 EVT_BEGIN(witchtrio_mess_vivi)
     CALL(evt_msg_print, 0, STRING("stg2_win_e08_02"), 0, STRING("ビビアン"))
     RETURN
 EVT_END()
 
+/** Message helper: Marilyn says "stg2_win_e08_01". */
 EVT_BEGIN(witchtrio_mess_mari)
     CALL(evt_msg_print, 0, STRING("stg2_win_e08_01"), 0, STRING("マリリン"))
     RETURN
@@ -1032,6 +1047,10 @@ USER_FUNC(mariowalk_wait) {
     return !(marioGetPtr()->flags & MARIO_FLAG_FORCED_MOVEMENT);
 }
 
+/**
+ * Script helper: slides the named item (args[0]) from its current position to (args[1], args[2], args[3]) over
+ * args[4] ms using interpolation mode args[5], plus a y offset args[6]; blocks until done.
+ */
 USER_FUNC(win_item_move_3d_position) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
@@ -1068,6 +1087,10 @@ USER_FUNC(win_item_move_3d_position) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: blocks while the "necklace" item exists and is still in use,
+ * so scenes wait until it has been picked up or removed.
+ */
 USER_FUNC(item_check_necklace_exist) {
     ItemEntry* item = itemNameToPtr("necklace");
 

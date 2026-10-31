@@ -37,12 +37,20 @@ static EvtWord switch_evt[48];
 static EvtWord hint_plate[14];
 EvtWord las_18_init_evt[71];
 
+/**
+ * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panel S_door1 by it.
+ */
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_door1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panel S_door1 by it.
+ */
 static EVT_BEGIN(w_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_door1"), 0, LW(0), 0)
@@ -71,6 +79,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Event script: the key chest of las_18 opens and Mario receives Palace Key 0x2D. */
 static EVT_BEGIN(box_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
@@ -98,6 +107,10 @@ USER_FUNC(switch_set_alpha) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: restores the map object "switch" to fully opaque with its shadow
+ * and turns the evt colour override off.
+ */
 USER_FUNC(switch_alpha_off) {
     MapObjectEntry* mobj = mobjNameToPtrNoAssert("switch");
 
@@ -163,6 +176,10 @@ USER_FUNC(get_mobj_seq) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Event script: the switch of las_18 was hit.
+ * The switch-alpha effect is turned off, the camera shows the spot and the key chest drops in (box_syutugen).
+ */
 static EVT_BEGIN(switch_evt)
     CALL(switch_alpha_off)
     CALL(evt_mario_key_onoff, 0)
@@ -179,6 +196,7 @@ static EVT_BEGIN(switch_evt)
     RETURN
 EVT_END()
 
+/** Event script: reading the hint plate of las_18 (stg8_las_43). */
 static EVT_BEGIN(hint_plate)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg8_las_43"), 0, 0)
@@ -186,6 +204,11 @@ static EVT_BEGIN(hint_plate)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_18, a Riddle Tower room (the chest holds Palace Key 0x2D):
+ * music, the door to las_10, the nearly invisible blue floating switch that only Vivian can reveal,
+ * the key chest and the hint plate.
+ */
 EVT_BEGIN(las_18_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))

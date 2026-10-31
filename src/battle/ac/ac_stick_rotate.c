@@ -43,6 +43,10 @@ static void actionCommandDisp(f32 x, f32 y);
 void actionCommandDisp2(f32 x, f32 y);
 u16 _get_icon_id(s8 dir);
 
+/**
+ * Reads the Control Stick as one of eight directions, 1 up then clockwise to 8 up-left, or 0 when centred.
+ * Returns -1 when the command needs a button held (params[2]) and it is not.
+ */
 s32 _GetInputDir(void) {
     u32 button = _battleWorkPointer->actionCommands.params[STICK_ROTATE_PARAM_BUTTON]; // pad mask
 
@@ -70,6 +74,10 @@ s32 _GetInputDir(void) {
     return BattlePadCheckNow(BATTLE_PAD_STICK_LEFT) != 0U ? 7 : 0;
 }
 
+/**
+ * Which way the stick turned since last frame: +1 clockwise, -1 anticlockwise, 0 when centred, jumping or new;
+ * an unchanged direction keeps the current roll.
+ */
 s32 _CalcRollDir(void) {
     StickRotateWork* w = (StickRotateWork*)_battleWorkPointer->actionCommands.work;
     s8 cur = w->dir;
@@ -103,6 +111,14 @@ static inline void stickRotateFail(BattleWork* work) {
     work->actionCommands.mAcState = 1002;
 }
 
+/**
+ * Per-frame driver of action command 9, which no battle script in the tree sets up.
+ * Start rotating the stick (holding button params[2], if set) within 120 frames;
+ * every 8 steps is one rotation, counted in outputParams[0] up to params[0].
+ * After params[1] frames, or on letting go of the button, it succeeds with params[3] rotations or more.
+ * acFlags bit 0 demands a steady one-way turn, each step within params[4]..params[5] frames;
+ * bit 1 a fixed direction.
+ */
 s32 battleAcMain_StickRotate(BattleWork* work) {
     StickRotateWork* sw;
     BattleACDispParams* disp;
@@ -331,10 +347,15 @@ s32 battleAcMain_StickRotate(BattleWork* work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_StickRotate(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/**
+ * Display callback: slides the stick icon in over 20 frames and out over 40 after the command is stopped,
+ * drawn by actionCommandDisp with acFlags bit 1 and actionCommandDisp2 otherwise.
+ */
 void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
     BattleACDispParams* disp = &((BattleActions*)&((BattleWork*)param)->actionCommands)->disp;
     void (*fn)(f32, f32);
@@ -382,6 +403,7 @@ void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
 }
 
 #pragma auto_inline off
+/** Icon of the stick tilted in direction 1-8 (see _GetInputDir), or centred for anything else. */
 u16 _get_icon_id(s8 dir) {
     switch (dir) {
         case 1:
@@ -413,6 +435,7 @@ u16 _get_icon_id(s8 dir) {
     (v).y = 70.0f + y;             \
     iconDispGx(&(v), ICON_FLAG_2D, (id), 1.0f)
 
+/** Stick icon for the fixed-direction mode (acFlags bit 1): shows the direction to turn to next. */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
@@ -448,6 +471,10 @@ static void actionCommandDisp(f32 x, f32 y) {
     }
 }
 
+/**
+ * Stick icon for the free mode: spins through the eight directions as a hint,
+ * following the player's turn direction.
+ */
 void actionCommandDisp2(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
@@ -493,6 +520,7 @@ void actionCommandDisp2(f32 x, f32 y) {
 }
 
 #pragma auto_inline reset
+/** Called by btlevtcmd_StopAC: starts the slide-out and the 60-frame end wait. */
 void battleAcDelete_StickRotate(BattleWork* work) {
     work->actionCommands.mAcState = 1004;
 }

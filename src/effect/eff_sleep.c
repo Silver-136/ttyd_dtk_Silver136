@@ -13,6 +13,11 @@
 // local prototypes
 void effSleepDisp(CameraId camId, EffectEntry* effect);
 
+/**
+ * Spawns the sleep marks at (x, y, z).
+ * `lifetime` is in frames (0 or less: until soft deleted), `rotation` is the line direction in degrees.
+ * Used for the sleep status in battle, audience Toads and a sleeping NPC in Glitzville.
+ */
 EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale, f32 rotation) {
     EffectEntry* effect;
     s32 delay;
@@ -53,6 +58,7 @@ EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scal
     return effect;
 }
 
+/** Fades the base alpha in and out, and fades in each of the 3 marks after its staggered delay. */
 void effSleepMain(EffectEntry* effect) {
     effSleepData* data = effect->userdata;
     int i;
@@ -97,6 +103,10 @@ void effSleepMain(EffectEntry* effect) {
 //   computed in the inner loop body, and the y products go through sleepPos so `1.0f * y` is not
 //   folded away by the front end (CExpr_IsOne).
 static inline void sleepPos(f32 x, f32 one, f32 y) { GXPosition3f32(x, one * y, 0.0f); }
+/**
+ * Draws each visible mark as a camera-facing strip of 8 quads whose x offset follows a sine wave,
+ * giving a wavy ribbon texture.
+ */
 void effSleepDisp(CameraId camId, EffectEntry* effect) {
     s32 off;
     f32 tau;

@@ -247,6 +247,10 @@ static BattleWeapon weapon_ura_noko_ura_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init event of the Shady Koopa: installs its wait, attack, damage and confusion events,
+ * clears its over-turn count (it starts upright) and sets its run and walk sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -701,6 +705,7 @@ static USER_FUNC(eff_aura) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Idle event: sets the unit's body part 1 to the pose given by its pose table for its current state. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

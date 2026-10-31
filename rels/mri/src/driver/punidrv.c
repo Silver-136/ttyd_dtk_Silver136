@@ -22,12 +22,20 @@ static u8 shadow_dl[32];
 static f32 shadow_vtx[56];
 static PunidrvWork* work;
 
+/**
+ * Adds a point on an ellipse to (x, z): x += rx * sin(deg) and z += rz * cos(deg),
+ * using the sine table (angles in whole degrees, wrapped at 360). Used to spread the Puni around a centre.
+ */
 void puniSinCosRet(u32 deg, f32* x, f32* z, f32 rx, f32 rz) {
     deg %= 360;
     *x += rx * sintbl[deg];
     *z += rz * sintbl[deg + 90];
 }
 
+/**
+ * Allocates the Puni renderer's work area (an empty pose table, fade on).
+ * Called once from puniInit in the Puni system setup.
+ */
 void puniInit(void) {
     PunidrvWork* wp;
 
@@ -139,6 +147,12 @@ void puniEntry(s32 poseNum, PunidrvTexInfo* texInfo, void (*initFunc)(void), voi
     }
 }
 
+/**
+ * Draw callback run once when the texture set is created (queued by puniEntry on the offscreen camera):
+ * renders every Puni animation frame (group, animation, frame in the texture table) to a texture with
+ * animPoseDisp_MakeExtTexture and builds for each one a textured quad (size scaled by 0.342 per pixel,
+ * centred on the bounding box the animation reports) with a small display list that draws it.
+ */
 void puniMakeTexture(CameraId camId, void* param) {
     PunidrvWork* wp = work;
     PunidrvTexInfo* info = param;
@@ -181,6 +195,10 @@ void puniMakeTexture(CameraId camId, void* param) {
     }
 }
 
+/**
+ * Frees the Puni renderer's tables (poses, textures, matrices, vertices, sort list and display lists)
+ * and clears the work area. Called when the Puni system shuts down at a map change.
+ */
 void puniReset(void) {
     PunidrvWork* wp = work;
 
@@ -208,10 +226,22 @@ void puniReset(void) {
     memset(wp, 0, sizeof(PunidrvWork));
 }
 
+/**
+ * Turns the colour fade of the Puni quads on or off:
+ * with the fade the quads are drawn plainly, without it the map's blend colour is mixed in (see puniLoadTev).
+ */
 void puniFadeOff(BOOL useFade) {
     work->useFade = useFade;
 }
 
+/**
+ * Per-frame update of the Puni renderer.
+ * Runs the owner's two hooks (the first only when no menu window is open),
+ * then for each pose turns its quad to face the camera (sideways poses keep their direction,
+ * poses facing away flip 180 degrees; with flag 2 the turn is eased by 0.1 per frame),
+ * writes the facing into the pose's matrix, and finally sorts the poses by depth (qqsort with compare)
+ * so they draw back to front.
+ */
 void puniMain(void) {
     PunidrvWork* wp = work;
     s32 i;
@@ -282,6 +312,7 @@ void puniMain(void) {
     wp->usedTmem = 0;
 }
 
+/** Sort comparison for two Puni poses: orders them by their depth value z, ascending. */
 static s32 compare(const void* a, const void* b) {
     if (((PunidrvSort*)a)->z > ((PunidrvSort*)b)->z) {
         return 1;
@@ -292,14 +323,21 @@ static s32 compare(const void* a, const void* b) {
     return 0;
 }
 
+/** Returns the table of poses so the Puni system can set each one's position, direction and texture. */
 PunidrvPose* puniGetPosePtr(void) {
     return work->poses;
 }
 
+/** Returns how many poses the Puni renderer has (211 in this map). */
 s32 puniGetPoseNum(void) {
     return work->poseNum;
 }
 
+/**
+ * Draws a single pose (by index) with the camera view matrix;
+ * used by the dark view where each pose is set up with its own lighting.
+ * Loads the pose's texture only when it differs from the one already loaded.
+ */
 void puniPoseDraw(s32 index) {
     PunidrvWork* wp = work;
     PunidrvPose* pose = &wp->poses[index];
@@ -321,6 +359,10 @@ void puniPoseDraw(s32 index) {
     }
 }
 
+/**
+ * Draws every pose in depth order: for each visible pose loads its texture if needed,
+ * builds the matrix from the pose's matrix, offset, roll (rotZ) and scale, and calls the quad's display list.
+ */
 void puniDraw(void) {
     PunidrvWork* wp = work;
     s32 i;
@@ -356,6 +398,10 @@ void puniDraw(void) {
     }
 }
 
+/**
+ * Sets the render mode for the Puni quads: no blending, alpha test at 0x80 (cutout edges),
+ * depth test and depth writes on.
+ */
 void puniLoadRenderMode(void) {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
     GXSetZCompLoc(GX_FALSE);
@@ -363,6 +409,10 @@ void puniLoadRenderMode(void) {
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
 }
 
+/**
+ * Sets the vertex format for the Puni quads: 16-bit indexed positions
+ * and texture coordinates from the renderer's tables, no culling.
+ */
 void puniLoadVertex(void) {
     PunidrvWork* wp = work;
 
@@ -376,6 +426,11 @@ void puniLoadVertex(void) {
     GXSetCullMode(GX_CULL_NONE);
 }
 
+/**
+ * Loads every Puni texture into the GPU's texture cache (TMEM) one after another,
+ * starting at offset 0 and skipping over the 512 KB boundary when a texture would straddle it;
+ * remembers the total used and sets texture coordinate generation.
+ */
 void puniLoadTexture(void) {
     PunidrvWork* wp = work;
     PunidrvTex* tex = wp->texs;
@@ -398,10 +453,12 @@ void puniLoadTexture(void) {
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
 }
 
+/** Returns how much of the texture cache the Puni textures use. */
 u32 puniGetUsedTmemSize(void) {
     return work->usedTmem;
 }
 
+/** Syncs the GPU texture state after the Puni draw is done. */
 void puniLoadTextureExit(void) {
     GXTexModeSync();
 }
@@ -424,6 +481,11 @@ GXColor shadow_col[8] ATTRIBUTE_ALIGN(32) = {
     {0x00, 0x00, 0x00, 0x80},
 };
 
+/**
+ * Sets the colour combiner for the Puni quads.
+ * With the fade off, the texture is mixed with the map's blend colour so they match the map's lighting;
+ * with the fade on, the texture colour and alpha pass through unchanged. No lighting channels and no fog.
+ */
 void puniLoadTev(void) {
     GXColor blend;
     // FAKE: unused color locals retained; removing them changes the object.
@@ -453,6 +515,10 @@ void puniLoadTev(void) {
     GXSetNumTevStages(1);
 }
 
+/**
+ * Returns the camera's rotation about the Y axis in degrees (0 to 360),
+ * from the direction between the 3D camera's position and its target.
+ */
 static f32 camGetRy(void) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     f32 ry = 57.29579f * (f32)atan2(-(cam->cameraAt.x - cam->cameraPos.x), -(cam->cameraAt.z - cam->cameraPos.z));
@@ -466,6 +532,7 @@ static f32 camGetRy(void) {
     return ry;
 }
 
+/** Sets the vertex format for the shadows: 8-bit indexed positions from the shadow disc table, no culling. */
 void puniLoadShadowVertex(void) {
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
@@ -474,6 +541,7 @@ void puniLoadShadowVertex(void) {
     GXSetCullMode(GX_CULL_NONE);
 }
 
+/** Sets the colour combiner for the shadows: a flat colour (black, alpha 0x40), no textures. */
 void puniLoadShadowTev(void) {
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
@@ -490,6 +558,7 @@ void puniLoadShadowTev(void) {
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
 }
 
+/** Sets the render mode for the shadows: alpha blending, depth test on but no depth writes. */
 void puniLoadShadowRenderMode(void) {
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
@@ -497,10 +566,16 @@ void puniLoadShadowRenderMode(void) {
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_FALSE);
 }
 
+/** Stores the shadow's shape matrix (scale of the shadow disc) for puniDrawShadow. */
 void puniLoadShadowMtx(Mtx mtx) {
     PSMTXCopy(mtx, work->shadowMtx);
 }
 
+/**
+ * Draws the shadows: for each pose, back to front, whose flag 4 is not set,
+ * applies the pose's matrix and the shadow shape matrix (moved to the shadow height with flag 0x10)
+ * and calls the shadow disc display list.
+ */
 void puniDrawShadow(void) {
     PunidrvWork* wp = work;
     s32 i;

@@ -159,6 +159,10 @@ BattleUnitKind unitdata_Party_Christine = {
     data_table, // dataTable
 };
 
+/**
+ * Goombella's battle entry: starts 250 units behind her home spot and, after 40 frames,
+ * runs in to it at speed 4 with her footstep sounds, then takes her stay pose.
+ */
 static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 250)
@@ -187,6 +191,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Hit reaction: straightens her rotation (left over from tilted jumps), then runs the default damage script. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     SET_VALUE(LW(10), -2)
@@ -363,6 +368,11 @@ BattleWeapon partyWeapon_ChristineKiss = {
 #endif
 };
 
+/**
+ * Goombella's Headbonk: she runs up and jumps onto the selected enemy,
+ * headbonking again for each successful action command press,
+ * then lands with an optional stylish and returns home.
+ */
 EVT_BEGIN(partyChristineAttack_NormalAttack)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -609,6 +619,10 @@ EVT_BEGIN(christine_dictionary_event)
     RETURN
 EVT_END()
 
+/**
+ * Goombella's Tattle: after the action command she reads the target, opens its tattle card,
+ * says its tattle line, and marks the enemy as tattled so its HP shows from then on.
+ */
 EVT_BEGIN(partyChristineAttack_Monosiri)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -722,6 +736,10 @@ EVT_BEGIN(partyChristineAttack_Monosiri)
     RETURN
 EVT_END()
 
+/**
+ * Goombella's Multibonk: like Headbonk, but she keeps bouncing on the same enemy for as long as the action
+ * command is timed right.
+ */
 EVT_BEGIN(partyChristineAttack_RenzokuAttack)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1019,6 +1037,11 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
     RETURN
 EVT_END()
 
+/**
+ * Goombella's Rally Wink: she blows a kiss at Mario;
+ * with a successful action command he gets another move this turn (_set_hustle and the quick-change
+ * announcement). Ends with an optional stylish.
+ */
 EVT_BEGIN(partyChristineAttack_Kiss)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1169,6 +1192,10 @@ EVT_BEGIN(partyChristineAttack_Kiss)
     RETURN
 EVT_END()
 
+/**
+ * Goombella's Appeal (data tag 5): appeal pose and sound, a kiss effect towards the audience,
+ * then the audience is fired up.
+ */
 EVT_BEGIN(christine_appeal_event)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_APPEAL)
@@ -1187,6 +1214,7 @@ EVT_BEGIN(christine_appeal_event)
     RETURN
 EVT_END()
 
+/** Victory reaction (data tag 64): Goombella's PKR_Y_1 cheer for 64 frames, then her stay pose. */
 static EVT_BEGIN(party_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_Y_1"))
     WAIT_FRAMES(64)
@@ -1194,6 +1222,10 @@ static EVT_BEGIN(party_win_reaction)
     RETURN
 EVT_END()
 
+/**
+ * Audience-attack reaction (data tag 6): Goombella runs offstage, reappears in the audience,
+ * headbonks the chosen audience member while tilting along her jump arc, bounces back down and runs home.
+ */
 static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageSize, LW(3), EVT_NULLPTR, EVT_NULLPTR)
@@ -1320,6 +1352,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/** Empty: partner moves come from the player's menu choices, not a unit attack script. */
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
@@ -1350,6 +1383,11 @@ static USER_FUNC(krb_get_dir) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Builds Goombella's battle move list (data tag 1):
+ * Headbonk and Tattle always, Multibonk from Super rank and Rally Wink from Ultra rank,
+ * appending each to command->weapon and advancing *count.
+ */
 static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     s32 techLv;
 
@@ -1392,6 +1430,10 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     }
 }
 
+/**
+ * Returns in args[2] the battle tattle message tag of the unit kind of unit args[0].
+ * args[1] (the part) is read but not used.
+ */
 USER_FUNC(btlevtcmd_get_monosiri_msg_no) {
     EvtWord* args = event->args;
     BattleUnit* unit;
@@ -1405,6 +1447,10 @@ USER_FUNC(btlevtcmd_get_monosiri_msg_no) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Records that the unit kind of unit args[0] has been tattled,
+ * which unlocks its HP display and its Tattle Log entry.
+ */
 USER_FUNC(_monosiri_flag_on) {
     s32 id = evtGetValue(event, event->args[0]);
 

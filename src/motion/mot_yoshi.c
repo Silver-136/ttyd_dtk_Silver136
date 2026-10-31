@@ -5,6 +5,10 @@
 #include "party.h"
 #include "pmario_sound.h"
 
+/**
+ * Motion while Mario rides Yoshi: on entry clears his jump flags, speed and every collision hit,
+ * and sets the front pose without a shadow; party_yoshi.c then moves and animates both of them.
+ */
 void mot_yoshi(void) {
     MarioWork* mario = marioGetPtr();
 
@@ -27,6 +31,10 @@ void mot_yoshi(void) {
     }
 }
 
+/**
+ * Cleanup when Mario gets off Yoshi: stops Yoshi's running sound,
+ * clears the door (bero) offsets and restores Mario's pose, shadow and draw offsets.
+ */
 void mot_yoshi_post(void) {
     PartyEntry* party;
     MarioWork* mario;

@@ -150,6 +150,10 @@ BattleWeapon weapon_kanbu2_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init event of Lord Crump: installs wait, attack, damage and the default confusion events,
+ * sets the walk and run sounds (SFX_BOSS_KANBU_MOVE1L/R), and starts the idle loop.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -161,6 +165,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of Lord Crump: runs the default damage handling. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -168,6 +173,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Lord Crump's defeat script (data table entry 49):
+ * prints a Japanese debug message ("after this he is due to ride the Magnus von Grapple"),
+ * hops off 300 units to the right and removes himself from the battle.
+ */
 static EVT_BEGIN(dead_event)
     CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("このあと\nまぐなむばってんだーに　のるよてい<key>"), 0, 0)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(5.0f), FLOAT(0.5f))
@@ -176,6 +186,10 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Lord Crump's turn: uses an enemy item if he has one,
+ * otherwise always performs the basic attack (weapon_kanbu2_attack).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -189,6 +203,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of Lord Crump: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -236,6 +251,15 @@ static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_ACTION, "G_2"},
 };
 
+/**
+ * Lord Crump's basic attack (weapon in LW(9), weapon_kanbu2_attack):
+ * picks a target, runs at it and does a belly flop.
+ * He hops (SFX_BOSS_KANBU_JUMP1, poses A_1A and A_1B) over the target;
+ * the pre-damage check decides between a dodge and a hit,
+ * and on a hit he lands on it (A_1C, SFX_BOSS_KANBU_HIP_ATTACK1 and 2),
+ * bounces and gets up (D_1) before returning home.
+ * Falls back to the flustered reaction when confused with nothing to hit.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

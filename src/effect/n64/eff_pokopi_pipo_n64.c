@@ -45,6 +45,10 @@ static u8 h_scale_data[7] = {80, 60, 80, 100, 120, 110, 100};
 void effPokopiPipoMain(EffectEntry* effect);
 void effPokopiPipoDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a lobbed blob that flies from (x, y, z) to (x2, y2, z2) in duration frames on a gravity arc,
+ * spinning with a random angle speed. Via evt_eff64 "pokopi_pipo_n64"; no script callers found.
+ */
 EffectEntry* effPokopiPipoN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 x2, f32 y2, f32 z2, f32 scale) {
     EffectEntry* effect;
     EffPokopiPipoN64Work* work;
@@ -94,6 +98,10 @@ EffectEntry* effPokopiPipoN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, 
     return effect;
 }
 
+/**
+ * Moves the blob under gravity (-0.2 per frame), bounces it off a floor at height 14.3,
+ * and at the end of the flight plays a squash-and-stretch table; deletes 60 frames after the flight.
+ */
 void effPokopiPipoMain(EffectEntry* effect) {
     EffPokopiPipoN64Work* work = effect->userdata;
     Vec position;
@@ -143,6 +151,7 @@ void effPokopiPipoMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effPokopiPipoDisp, effect);
 }
 
+/** Draws the blob as a camera-facing, spinning quad (texture 0x95 for type 0, otherwise 0x96). */
 void effPokopiPipoDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffPokopiPipoN64Work* work;

@@ -101,6 +101,10 @@ static s32 key_tbl[2];
 static EvtWord evt_door_msg[87];
 EvtWord aji_13_init_evt[295];
 
+/**
+ * Recursive helper of hitIsGroup: whether the joint name of target equals that of node,
+ * of any of node's descendants, or (when checkSibling is TRUE) of the siblings that follow.
+ */
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) {
     if (strcmp(target->joint->name, node->joint->name) == 0) {
         return TRUE;
@@ -115,6 +119,7 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) 
     return FALSE;
 }
 
+/** Whether the hit area target is group itself or one of its descendants. */
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
     // Search by joint name, excluding the root sibling chain; child recursion skips the current node's siblings.
     return _hitIsGroupSub(target, group, FALSE);
@@ -160,6 +165,11 @@ EVT_BEGIN(evt_snd_stop)
     RETURN
 EVT_END()
 
+/**
+ * Entry event of the background-camera section:
+ * after the entrance finishes it releases the keep-camera mode and switches on Y-following for Mario's camera,
+ * and returns LW(0) = 1, which makes evt_bero_mario_enter skip the normal walk-in.
+ */
 static EVT_BEGIN(evt_haikei_in)
     BEGIN_INLINE_EVENT
         CALL(evt_bero_exec_wait, 65536)
@@ -518,6 +528,12 @@ static USER_FUNC(mario_chk) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script for one sliding platform of left_right_tbl (row values in LW(0) to LW(4): hit area, map object,
+ * two positions, time in ms): binds the hit area to the map object and slides it back
+ * and forth between the two positions, pausing 300 ms at each end and then waiting while GF(0) is set
+ * (evt_sw raises it during the staircase-reveal cutscene).
+ */
 EVT_BEGIN(move_left_right)
     SET_VALUE(LW(5), LW(0))
     SET_VALUE(LW(6), LW(1))
@@ -675,6 +691,11 @@ EVT_BEGIN(move_up_down)
     RETURN
 EVT_END()
 
+/**
+ * Script for one platform of r_tbl: binds the hit area to the map object
+ * and turns it between two angles over the row's time, again and again; while GF(0) is set
+ * (evt_sw raises it during the staircase-reveal cutscene) it stops mid-swing and waits.
+ */
 EVT_BEGIN(move_r)
     SET_VALUE(LW(5), LW(0))
     SET_VALUE(LW(6), LW(1))
@@ -759,6 +780,10 @@ ShikakeMoveTbl15 r_tbl = {
     {NULL, NULL},
 };
 
+/**
+ * Starts all the moving platforms of the room: reads left_right_tbl,
+ * up_down_tbl and r_tbl and spawns move_left_right, move_up_down and move_r for each row.
+ */
 EVT_BEGIN(shikake_init)
     SET_VALUE(GF(0), 0)
     SET_INT_READ_ADDR(PTR(&left_right_tbl))
@@ -831,6 +856,12 @@ static EVT_BEGIN(evt_sw)
     RETURN
 EVT_END()
 
+/**
+ * Swings the needle map object whose name is in LW(0) (S_hari01 to S_hari04, started by evt_ramp
+ * when the conveyor belt is switched on) around its Z axis forever, to random angles up to 90 degrees
+ * on alternating sides over 1.5 to 3 seconds each, like evt_hari in aji_03 but without a stop.
+ * Guess: the needles are dial pointers on the machinery.
+ */
 static EVT_BEGIN(evt_hari)
     SET_VALUE(LW(8), LW(0))
     SET_VALUE(LW(2), 0)
@@ -859,6 +890,10 @@ static EVT_BEGIN(evt_hari)
     RETURN
 EVT_END()
 
+/**
+ * Starts the conveyor-belt machinery: plays SFX_STG7_CONVEYER_MOVE1 at the belt (S_bel),
+ * shows and spins the warning beacon S_pato1 (10 degrees per frame), and spawns four evt_hari needle swings.
+ */
 static EVT_BEGIN(evt_ramp)
     CALL(evt_mapobj_get_position, STRING("S_bel"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_CONVEYER_MOVE1"), LW(0), LW(1), LW(2), GW(11))

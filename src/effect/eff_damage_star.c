@@ -251,6 +251,10 @@ void effDamageStarDisp(CameraId cameraId, EffectEntry* effect);
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+/**
+ * Spawns the damage star burst at (x, y, z): a central star plus up to 20 spark stars for the damage `number`.
+ * type 0 is HP damage, 1 is FP damage; angle tilts the burst. Spawned by battle damage code.
+ */
 EffectEntry* effDamageStarEntry(s32 type, s32 number, f32 x, f32 y, f32 z, f32 scale, f32 angle) {
     EffectEntry* effect;
     DamageStarWork* work;
@@ -307,6 +311,10 @@ EffectEntry* effDamageStarEntry(s32 type, s32 number, f32 x, f32 y, f32 z, f32 s
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
+/**
+ * Advances the Maya animation and the star physics for each elapsed retrace (decay factor 0.75 per step)
+ * and deletes the effect when life runs out.
+ */
 void effDamageStarMain(EffectEntry* effect) {
     DamageStarWork* work = effect->userdata;
     Vec calcPos;
@@ -381,6 +389,7 @@ static inline void damageStarQuad(f32 h, f32 u) {
     GXTexCoord2f32(0.0f, 1.0f);
 }
 
+/** Draws the star sprites and the damage number as digit quads in front of them. */
 void effDamageStarDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     GXColor color;

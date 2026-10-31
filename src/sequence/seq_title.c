@@ -44,6 +44,7 @@ void disp1(CameraId cameraId, void* param);
 void disp2(CameraId cameraId, void* param);
 static void titleLoadDemo(void);
 
+/** Stub of the debug battle selector's message file hook: always NULL, so a debug battle loads gon_11's messages. */
 const char* DbgBtlSel_GetMsgDataPtr(void) {
     return NULL;
 }
@@ -56,6 +57,7 @@ void seq_titleInit(SequenceWork* work) {
     gp->flags &= ~GW_FLAG_E3;
 }
 
+/** Leaves the title sequence: frees mariost.tpl and fades out all sound unless going on to the file select. */
 void seq_titleExit(SequenceWork* work) {
     fileFree(wp2->texture);
     if (seqGetNextSeq() != SEQ_LOAD) {
@@ -63,6 +65,7 @@ void seq_titleExit(SequenceWork* work) {
     }
 }
 
+/** Per-frame title sequence; all the work is in titleMain. */
 void seq_titleMain(SequenceWork* work) {
     titleMain(work);
 }
@@ -299,6 +302,7 @@ void titleMain(SequenceWork* work) {
     }
 }
 
+/** 3D-camera draw callback: draws the title background image from mariost.tpl through the 2D camera. */
 void disp1(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     CameraEntry saved;

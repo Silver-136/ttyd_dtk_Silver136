@@ -195,6 +195,11 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init script of the Cleft: installs its wait, attack
+ * and damage handlers (attack_event doubles as the confused turn) and its walk, run and jump sounds,
+ * then starts the idle wait.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -207,6 +212,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table hook (entry 37) for when an attacker is hurt by the Cleft's spiky top:
+ * after 30 frames shows the toge_flush spark above its head,
+ * placed higher while it is huge (status 10) and lower while tiny (status 11).
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -230,6 +240,11 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage handler of the Cleft: hurt pose if it lost HP;
+ * while flipped over it takes the upside-down pose and bounces twice in place;
+ * then runs the default damage reaction.
+ */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
     IF_INT_GREATER_OR_EQUAL(LW(15), 1)
@@ -270,6 +285,10 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * A flipped Cleft's turn: counts the flip timer down, and when it reaches 0 restores its normal defense, poses,
+ * height and spiky-top counter and hops back upright.
+ */
 // A flipped attack turn decrements the counter; restore upright data only when it reaches zero.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
@@ -298,6 +317,12 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * Cleft's turn: if flipped it only runs wakeup_event.
+ * Otherwise it targets the first-strike target, or uses an item, or picks the front-most target,
+ * walks to 100 units before it, paws the ground and dashes into it with a head-butt (weapon_sinemon_attack);
+ * on a miss it overshoots, on a hit it bounces back twice, then walks home.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -422,6 +447,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait event of the Cleft: switches to pose table entry 1 (idle; the upside-down pose while flipped). */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

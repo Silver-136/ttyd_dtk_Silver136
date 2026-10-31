@@ -40,6 +40,11 @@ static effN64Vtx size64x64_tex64x64_vtx[] = {
 void effMagicHoraoMain(EffectEntry* effect);
 void effMagicHoraoDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a "Horao" battle magic sprite at (x, y, z):
+ * scale and alpha ease from (a, b) toward (c, d) at rate e, and it is deleted after f frames.
+ * Via evt_eff64 "magic_horao_n64"; no script callers found.
+ */
 EffectEntry* effMagicHoraoN64Entry(s32 type, f32 x, f32 y, f32 z, f32 startSize, s32 startAlpha, f32 endSize, s32 endAlpha,
                                    f32 blendRate, s32 lifetime) {
     EffectEntry* effect;
@@ -71,6 +76,7 @@ EffectEntry* effMagicHoraoN64Entry(s32 type, f32 x, f32 y, f32 z, f32 startSize,
     return effect;
 }
 
+/** Runs a six-state sequence: ease in, hold, wait, fall to the ground (kicking up two dust puffs), wait, fade out. */
 void effMagicHoraoMain(EffectEntry* effect) {
     EffMagicHoraoN64Work* work = effect->userdata;
     Vec position;
@@ -138,6 +144,7 @@ void effMagicHoraoMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMagicHoraoDisp, effect);
 }
 
+/** Draws a wobbling 16-strip ribbon (textures 0x56/0x57) while easing in; in the hold state draws two flat textures. */
 void effMagicHoraoDisp(CameraId cameraId, EffectEntry* effect) {
     effN64Vtx* vtx;
     effN64Vtx* v;

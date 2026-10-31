@@ -19,6 +19,7 @@ typedef struct EffPeachFukidashiWork {
     NpcEntry* npc;  // 0x20, NULL = Mario
 } EffPeachFukidashiWork;
 
+/** place the bubble next to the speaker's head, rotated around the camera's view axis */
 // place the bubble next to the speaker's head, rotated around the camera's view axis
 static inline void _setPosition(EffPeachFukidashiWork* work, f32 offset) {
     CameraEntry* camera;
@@ -45,6 +46,10 @@ static inline void _setPosition(EffPeachFukidashiWork* work, f32 offset) {
     work->rot = work->angle;
 }
 
+/**
+ * Spawns a Peach speech bubble of `type` next to `npc` for `duration` frames, at `size` and `angle`.
+ * Used by the X-Naut Fortress (aji_17) Peach scenes.
+ */
 EffectEntry* effPeachFukidashiEntry(s32 type, NpcEntry* npc, s32 duration, f32 x, f32 y, f32 z,
                                     f32 size, f32 angle) {
     EffectEntry* effect;
@@ -65,6 +70,10 @@ EffectEntry* effPeachFukidashiEntry(s32 type, NpcEntry* npc, s32 duration, f32 x
     return effect;
 }
 
+/**
+ * Per frame: counts the display timer down (1000 or more means no limit),
+ * deletes the effect at 0 and registers the draw callback.
+ */
 void effPeachFukidashiMain(EffectEntry* effect) {
     EffPeachFukidashiWork* work = effect->userdata;
 
@@ -78,6 +87,7 @@ void effPeachFukidashiMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)effPeachFukidashiDisp, effect);
 }
 
+/** Draws the speech bubble next to the speaker's head, rotated around the camera view axis. */
 void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     EffPeachFukidashiWork* work = effect->userdata;
     Mtx mtx;
@@ -147,6 +157,7 @@ void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Sets the name of the cross (batu) mark; rels/aji/src/aji_17.c calls it from an event script. */
 void effSetPeachFukiBatu(const char* name) {
     ((EffPeachFukidashiWork*)effNameToPtr(name)->userdata)->flags |= 0x80;
 }

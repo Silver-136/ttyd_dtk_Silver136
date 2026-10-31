@@ -101,6 +101,7 @@ EffectEntry* effHoraoSpellN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, 
     return effect;
 }
 
+/** Fades the alpha in over 16 frames and out over the last 16 and counts frames; a delete request leaves 16. */
 void effHoraoSpellMain(EffectEntry* effect) {
     EffHoraoSpellN64Work* work = effect->userdata;
     Vec position;
@@ -133,6 +134,10 @@ void effHoraoSpellMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHoraoSpellDisp, effect);
 }
 
+/**
+ * Draws two 16-segment ribbons 36 degrees apart that sway with a sine and scroll texture 0x73.
+ * The vertices are rebuilt every frame in smartAlloc memory.
+ */
 void effHoraoSpellDisp(CameraId cameraId, EffectEntry* effect) {
     GXTexObj texObj;
     Mtx mtx;

@@ -68,6 +68,10 @@ EvtWord muj_10_init_evt[207];
 EvtWord muj_10_init_evt[204];
 #endif
 
+/**
+ * Script helper: sets the transparency scale (args[1], 0.0 to 1.0) of the kameki_tornade_n64 effect named
+ * args[0]; fades Cortez's tornado in and out (same as the helper in muj.c).
+ */
 static USER_FUNC(tornade_alpha_func) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -77,6 +81,10 @@ static USER_FUNC(tornade_alpha_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: moves the whole crowd of 95 sailors (mass NPCs) up or down to their base height plus args[0],
+ * so they bob with the ship (called from senin_event with the ship bobbing value).
+ */
 USER_FUNC(suifu_option_func) {
     f32 y = evtGetFloat(event, event->args[0]);
     NanNPCWork* wp = nanNPCWork;
@@ -89,6 +97,10 @@ USER_FUNC(suifu_option_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: remembers the current positions of the 95 crowd sailors as their base positions for
+ * suifu_option_func.
+ */
 USER_FUNC(suifu_option_init_func) {
     NanNPCWork* wp = nanNPCWork;
     s32 i;
@@ -108,6 +120,7 @@ static EVT_BEGIN(megane_init)
     RETURN
 EVT_END()
 
+/** Talk event of the bespectacled sailor: says stg5_dou_19_00. */
 static EVT_BEGIN(megane_talk)
     CALL(evt_msg_print, 0, STRING("stg5_dou_19_00"), 0, STRING("me"))
     RETURN
@@ -129,18 +142,33 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Enter hook of the door to the corridor (A_b_bero03 to muj_11, enter anime type 5):
+ * turns S_b_doa to LW(0) x -0.444 degrees; the door code feeds 180 down to 0,
+ * so the door stands 80 degrees open and swings shut.
+ */
 static EVT_BEGIN(e_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_b_doa"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Exit hook of the same door: turns S_b_doa to LW(0) x 0.444 degrees;
+ * the door code feeds 0 up to 180, so it swings 80 degrees open the other way as Mario leaves.
+ */
 static EVT_BEGIN(e_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_b_doa"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Copy of the engine's door enter animation type 5 (bero_play_enter_anime) with a longer wait:
+ * if the entry has an enter hook (LW(12)), runs it at angle 180 (door open), lets Mario walk in,
+ * waits 1.5 s instead of 0.5 s so the partners can follow,
+ * plays the door-closing sound and swings the door shut (angle 180 to 0 over 500 ms).
+ */
 static EVT_BEGIN(door_custom)
     CALL(evt_bero_get_info_anime, LW(1), LW(10), LW(11), LW(12), LW(13))
     IF_INT_NOT_EQUAL(LW(12), 0)
@@ -444,6 +472,10 @@ s32 senin_event_erumospos[] = {
     -305, -126, 252, -242,
 };
 
+/**
+ * Sets up the crowd of 95 sailors on the hidden dock (mass NPCs with the sailor animation table) from
+ * senin_event_suifupos and bobs them up and down with the ship via muj_ship_puka.
+ */
 EVT_BEGIN(senin_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_nannpc_init, PTR(test_ext_entry_data), 0, 0, 0, 155)
@@ -597,6 +629,11 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Map init for muj_10 (the hidden dock): picks music for the story stage, registers the exits and NPCs,
+ * hides or places sailors, Mony and Cortez for the current stage and spawns the scene (nazo_event,
+ * oidasare_event, senin_event or korutesu_appear_event).
+ */
 EVT_BEGIN(muj_10_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"))

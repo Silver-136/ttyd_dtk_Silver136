@@ -22,6 +22,12 @@ static effN64Vtx size2x8_tex8x16_vtx[] = {
 void effAkariChargeMain(EffectEntry* effect);
 void effAkariChargeDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns the glow at (x, y, z), `size` times its normal scale,
+ * for `lifetime` frames (0 or less: until soft deleted).
+ * Type 0 draws on the 3D camera, other types on the 2D camera.
+ * Used for spell charge-ups (mahorn and kurokumorn units, aji).
+ */
 EffectEntry* effAkariChargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 size) {
     EffectEntry* effect;
     EffAkariChargeN64Work* work;
@@ -66,6 +72,12 @@ EffectEntry* effAkariChargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
     return effect;
 }
 
+/**
+ * Fades the glow in over 16 frames and out at the end.
+ * Every third spark restarts on a random 20-70 frame cycle,
+ * random-walking from the centre and remembering its last two positions as a trail;
+ * each picks a random texture column.
+ */
 void effAkariChargeMain(EffectEntry* effect) {
     EffAkariChargeN64Elem* p = effect->userdata;
     s32 i;
@@ -145,6 +157,11 @@ void effAkariChargeMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws each spark as a streak stretched along its last step (scale = step length) in the glow colour,
+ * with the texture column and scroll animated; type 1 temporarily switches to the 3D camera's projection with
+ * depth testing off.
+ */
 void effAkariChargeDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffAkariChargeN64Elem* p;

@@ -66,6 +66,10 @@ BattleUnitKind unit_system = {
     data_table, // dataTable
 };
 
+/**
+ * Init for the invisible system unit that Btl_UnitSetup enters before Mario (entryunit_system):
+ * registers the empty wait, attack and damage scripts, never moves, and idles.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -108,14 +112,17 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/** Hit reaction: nothing; the system unit cannot be hurt (its HP is locked). */
 static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** The system unit never acts on its own turn; empty. */
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Idle: nothing. */
 static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()

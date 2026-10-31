@@ -90,6 +90,10 @@ f32 scale_h_dat[] = {0.25f, 0.5f, 0.75f, 1.0f, 1.2f, 0.9f, 1.0f};
 void effRecoverHeartMain(EffectEntry* effect);
 void effRecoverHeartDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a rising heart sprite at (x, y, z) lasting 46 frames; a negative count selects the alternate texture.
+ * Spawned by event scripts through evt_eff.
+ */
 EffectEntry* effRecoverHeartN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffRecoverHeartN64Work* work;
@@ -147,6 +151,13 @@ EffectEntry* effRecoverHeartN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Counts the effect life down and deletes at 0.
+ * Each piece, once its spawn delay is over, pops in with a 7-frame squash-and-stretch (scale_w_dat/scale_h_dat),
+ * drifts by its velocity and sways up to 8 units sideways
+ * while tilting up to 30 degrees (both damped over the last 20 frames);
+ * over the last 10 frames it fades and its rise slows 10%/frame.
+ */
 void effRecoverHeartMain(EffectEntry* effect) {
     s32 lifetime;
     EffRecoverHeartN64Work* work = effect->userdata;
@@ -202,6 +213,12 @@ void effRecoverHeartMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effRecoverHeartDisp, effect);
 }
 
+/**
+ * Draws each piece camera-facing: types 0 and 2 use heart texture 0x50 (0x51 when `flag` is set),
+ * others the flower texture 0x52.
+ * Except for type 2, the first piece is a large 32x32 icon with the amount drawn on it from digit strip 0x53:
+ * one digit under 10, otherwise two (with `flag` set the left glyph is strip slot 10 instead of the tens digit).
+ */
 void effRecoverHeartDisp(CameraId cameraId, EffectEntry* effect) {
     s32 j;
     CameraEntry* camera;

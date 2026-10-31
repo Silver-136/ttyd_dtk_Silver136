@@ -43,6 +43,10 @@ effN64Vtx size4x4_tex32x32_vtx[] = {
     {-2, 2, 0, 0, 1024, 0, 0, 0, 255},
 };
 
+/**
+ * Spawns count small sparks that rise from a strip of width rangeX and height rangeY around (x, y, z);
+ * speedY and speedZ set how fast they drift. eff_fire.c spawns it for fire embers; event scripts via evt_eff.
+ */
 EffectEntry* effFireSparkN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 rangeX, f32 rangeY,
                                   f32 scale, f32 speedY, f32 speedZ) {
     EffectEntry* effect;
@@ -91,6 +95,11 @@ EffectEntry* effFireSparkN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
     return effect;
 }
 
+/**
+ * Fades in over the first 16 frames and out over the last 16.
+ * Each spark runs a 30-step cycle: it respawns at a random spot in the strip,
+ * drifts with a velocity that eases toward a random target, and scales by scale_data.
+ */
 void effFireSparkMain(EffectEntry* effect) {
     Vec position;
     Vec tmp = {0.0f, 0.0f, 0.0f};
@@ -170,6 +179,10 @@ void effFireSparkMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFireSparkDisp, effect);
 }
 
+/**
+ * Draws each live spark as a camera-facing sprite blending texture 0x8b with 0x65,
+ * one texture row per spark (i % 4) and scrolled by its own offset.
+ */
 void effFireSparkDisp(CameraId cameraId, EffectEntry* effect) {
     s32 i;
     EffFireSparkN64Work* work;

@@ -81,6 +81,7 @@ static EvtWord wait_event[6];
 ExtTexInfo chorogun_ext_entry_data[21];
 EvtWord chorogun_entry[19];
 
+/** Finds the Fuzzy Horde unit (initial kind 0x15) among the battle's units and returns it, or NULL. */
 BattleUnit* chorogun_get_ptr(void) {
     s32 i;
     BattleWork* wp = _battleWorkPointer;
@@ -232,6 +233,7 @@ EVT_BEGIN(chorogun_dead_reward)
     RETURN
 EVT_END()
 
+/** Init event of the Fuzzy Horde: installs wait, attack, damage and default confusion events and clears unit work 0. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -270,6 +272,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Fuzzy Horde: uses an enemy item if it has one;
+ * otherwise the swarm flies at one target (weapon_chorobon_gundan_attack).
+ * The pre-damage check decides between a dodge and a hit,
+ * and a hit swoops (alive count + 100) / 200 groups of Fuzzies onto the target in turn,
+ * the last one dealing the damage.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -355,6 +364,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of the Fuzzy Horde: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -384,6 +394,10 @@ ExtTexInfo chorogun_ext_entry_data[] = {
     {0},
 };
 
+/**
+ * Battle-start script: creates the hidden "ext_chorobon" NPC
+ * and registers the 1000-sprite Fuzzy swarm (init, per- frame update and draw callbacks).
+ */
 EVT_BEGIN(chorogun_entry)
     CALL(evt_npc_entry, STRING("ext_chorobon"), STRING("c_chorobon"))
     CALL(evt_npc_set_position, STRING("ext_chorobon"), 0, -1000, 0)
@@ -432,6 +446,12 @@ void chorogun_ext_init(void) {
     }
 }
 
+/**
+ * Per-frame update of the 1000 Fuzzies: each follows its state,
+ * from falling out of the sky into formation (1, 2, 10, 20, 21),
+ * through marching toward the target (30..50) and the dive attack,
+ * to running off the stage (60, 61) and being hidden (99). Also plays the landing and movement sounds.
+ */
 void chorogun_ext_main(void) {
     BattleWork* wp;
     BattleUnit* unit;
@@ -660,6 +680,7 @@ void chorogun_ext_main(void) {
     dispEntry(CAMERA_3D, 0.0f, 1, chorogun_ext_disp, NULL);
 }
 
+/** Draw callback of the Fuzzy swarm: loads the render setup, vertices, textures and TEV setup and draws the sprites. */
 void chorogun_ext_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
@@ -669,6 +690,7 @@ void chorogun_ext_disp(CameraId camera, void* param) {
     extLoadTextureExit();
 }
 
+/** Battle script helper: stores the number of Fuzzies still alive in args[0]. */
 // Count active crowd members; escape clears this flag before the visual exit finishes.
 USER_FUNC(chorogun_get_alive_num) {
     EvtWord* args = event->args;
@@ -684,11 +706,16 @@ USER_FUNC(chorogun_get_alive_num) {
     return 2;
 }
 
+/** Battle script helper: remembers the unit id args[0] as the target of the Fuzzies' dive attack. */
 USER_FUNC(chorogun_set_target_id) {
     chorogun_targetId = evtGetValue(event, event->args[0]);
     return 2;
 }
 
+/**
+ * Battle script helper: marks all Fuzzies alive and makes them drop into formation;
+ * finishes once every one has settled (state 21).
+ */
 USER_FUNC(chorogun_appear) {
     s32 i;
     s32 n;
@@ -713,6 +740,10 @@ USER_FUNC(chorogun_appear) {
     return 0;
 }
 
+/**
+ * Battle script helper: sends every living Fuzzy toward the attack target and waits
+ * until all of them have arrived (state 40).
+ */
 USER_FUNC(chorogun_approach_target) {
     s32 i;
 
@@ -731,6 +762,11 @@ USER_FUNC(chorogun_approach_target) {
     return 2;
 }
 
+/**
+ * Battle script helper: picks a random living Fuzzy,
+ * aims it at the target unit's position so that it lands after args[0] frames,
+ * plays the attack sound and returns the chosen Fuzzy's index in args[1].
+ */
 USER_FUNC(chorogun_dive_target) {
     ExtdrvPose* pose;
     s32 frames;
@@ -777,6 +813,7 @@ USER_FUNC(chorogun_dive_target) {
     return 2;
 }
 
+/** Battle script helper: sets Fuzzy number args[0] to the bounce-off state (46) after it has hit. */
 USER_FUNC(chorogun_bound_target) {
     s32 id = evtGetValue(event, event->args[0]);
 
@@ -784,6 +821,7 @@ USER_FUNC(chorogun_bound_target) {
     return 2;
 }
 
+/** Battle script helper: sets Fuzzy number args[0] to the countered state (48). */
 USER_FUNC(chorogun_counterd) {
     s32 id = evtGetValue(event, event->args[0]);
 
@@ -791,6 +829,7 @@ USER_FUNC(chorogun_counterd) {
     return 2;
 }
 
+/** Battle script helper: on its first call sends all living Fuzzies back toward the formation (state 50). */
 USER_FUNC(chorogun_after_attack) {
     s32 i;
 
@@ -804,6 +843,10 @@ USER_FUNC(chorogun_after_attack) {
     return 2;
 }
 
+/**
+ * Battle script helper: removes the 50 living Fuzzies nearest the unit's home position (or fewer if less than 50
+ * are close) from the horde; they run off the stage as the horde loses members.
+ */
 USER_FUNC(chorogun_escape) {
     f32 dist[1000];
     s32 idx[1000];
@@ -854,6 +897,7 @@ USER_FUNC(chorogun_escape) {
     return 2;
 }
 
+/** Battle script helper: removes all living Fuzzies from the horde and sends them running off the stage. */
 USER_FUNC(chorogun_escape_all) {
     s32 i;
     Chorogun* c;

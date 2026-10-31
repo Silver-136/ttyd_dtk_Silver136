@@ -160,6 +160,11 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init event of the Bombshell Bill Blaster: installs its wait, attack, damage and confusion events,
+ * shifts it 20 units right, sets the poses of the two upper barrel parts (KTA_Z_3 and KTA_Z_2)
+ * and hides them: part attributes 0x1000000 (not drawn) and 0x2000000 (no shadow).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -177,6 +182,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Bombshell Bill Blaster: default damage handling on its body part. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -184,6 +190,14 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Bombshell Bill Blaster: it never attacks directly,
+ * it fires a Bombshell Bill into free space beside it.
+ * It can use an item; otherwise it draws a number and picks one of the weighted launches:
+ * from the front barrel (friend_event), or from the upper barrel (friend_event_sky) after raising it;
+ * LW(12) = 1 selects the charged shot with extra charging flashes.
+ * If no free space is found on either side nothing is launched.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -424,6 +438,15 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Launches a Bombshell Bill (entry_killer) from the front barrel:
+ * the barrel animation and cannon sound play, a smoke puff appears at the muzzle (bigger and higher when the
+ * cannon
+ * is Huge, status 10, smaller when Tiny, status 11), the camera shakes,
+ * the new unit copies the cannon's status (killer_copy_status),
+ * flies to the free spot found by the caller and takes that as its home.
+ * With LW(12) = 1 it charges first and makes the new Bill Charged (status 16).
+ */
 static EVT_BEGIN(friend_event)
     IF_INT_EQUAL(LW(12), 1)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KILLER_CANNON_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -480,6 +503,13 @@ static EVT_BEGIN(friend_event)
     RETURN
 EVT_END()
 
+/**
+ * Launches a Bombshell Bill (entry_killer) from the raised upper barrel (part 2):
+ * the barrel turns to aim at the free spot (killer_get_angle),
+ * then it fires like friend_event with a slightly different smoke and sound,
+ * and the new Bill flies with the barrel's angle at height 40 and gets part attributes 0x400000
+ * and 0x200000 on its body (shell-toss-like and hammer-like moves cannot target it).
+ */
 static EVT_BEGIN(friend_event_sky)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(7), LW(8), LW(9))
     CALL(evt_sub_get_dir, LW(7), LW(8), LW(0), 40, LW(10))
@@ -557,6 +587,10 @@ EVT_END()
 
 double atan(double x);
 
+/**
+ * Script helper: returns in args[4] the angle in degrees of the line from (args[0], args[1]) to (args[2],
+ * args[3]) as atan of its slope, used to aim the Bombshell Bill.
+ */
 static USER_FUNC(killer_get_angle) {
     EvtWord* args = event->args;
     f32 x1 = evtGetFloat(event, args[0]);
@@ -569,6 +603,7 @@ static USER_FUNC(killer_get_angle) {
     return EVT_RETURN_DONE;
 }
 
+/** Wait event of the Bombshell Bill Blaster: plays its idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

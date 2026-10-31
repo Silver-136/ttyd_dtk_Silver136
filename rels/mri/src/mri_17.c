@@ -120,28 +120,34 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Init script of Punio in the trap room: nothing to do, he is placed by the Puni system. */
 static EVT_BEGIN(guide_init)
     RETURN
 EVT_END()
 
+/** Talk script of Punio in the trap room: his line stg2_mri_e18_00_06 (he is trapped with the crowd). */
 static EVT_BEGIN(guide_talk)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00_06"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/** Init script of Punio's sister in the trap room: nothing to do, she is placed by the Puni system. */
 static EVT_BEGIN(sister_init)
     RETURN
 EVT_END()
 
+/** Talk script of Punio's sister in the trap room: her line stg2_mri_e18_00_07. */
 static EVT_BEGIN(sister_talk)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00_07"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/** Init script of the rival Puni in the trap room: nothing to do, he is placed by the Puni system. */
 static EVT_BEGIN(rival_init)
     RETURN
 EVT_END()
 
+/** Talk script of the rival Puni in the trap room: his line stg2_mri_e18_00_08. */
 static EVT_BEGIN(rival_talk)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00_08"), 0, STRING("me"))
     RETURN
@@ -223,6 +229,11 @@ s16 trap_position[] = {
     41, -35, 49, -58,
 };
 
+/**
+ * After the cage trap has sprung (stories STG2_21 to 21_03):
+ * puts every Puni that was caught (trap index 1) back inside the trap at its saved position, and moves Punio,
+ * his sister and the rival Puni NPCs to the cage with the Puni of the same slot.
+ */
 EVT_BEGIN(trap_main)
     CALL(evt_puni_wait_systemmode, 2)
     SET_VALUE(LW(10), 1)

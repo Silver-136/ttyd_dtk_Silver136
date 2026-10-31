@@ -73,6 +73,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Init script of the little Jabbi: once Mario has left the tree
+ * after the Puni praise he waits at the left of the room, until he has given his mushroom.
+ */
 static EVT_BEGIN(chibitoge_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
@@ -149,6 +153,12 @@ static USER_FUNC(evt_chuchu_back_loop) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Cutscene when Mario comes through the loading zone while the elder is imprisoned:
+ * Ms. Mowz (Chuchurina) and a Third Force underling are in the room,
+ * Ms. Mowz greets him and kisses him (the kiss surprises Mario), he and his partner walk in and Punio follows;
+ * the scene plays the conversation (stg2_mri_e13_00 to 05) and hands the story on from there.
+ */
 static EVT_BEGIN(chuchurina_sogu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -414,6 +424,7 @@ EVT_BEGIN(black_shadow)
     RETURN
 EVT_END()
 
+/** Planter hit script 2: the first time it is hit it launches a coin out of the planter (remembered with a flag). */
 static EVT_BEGIN(evt_ueki_02)
     CALL(evt_item_delete_check, STRING("item_ueki_02"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -430,6 +441,10 @@ static KusaAccess ueki_access_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Script run when Mario opens the chest in this room:
+ * shows the Ultra Shroom coming out of mobj_box00 and gives it to Mario.
+ */
 EVT_BEGIN(item_mri_04)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
@@ -441,6 +456,12 @@ EVT_BEGIN(item_mri_04)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of mri_04, the small side room:
+ * sets up the Puni, the planter, the Ultra Shroom chest and the second chest, plays the room's water animations,
+ * and starts the Ms. Mowz scenes (black silhouette at story 12, her meeting with Mario at 12_02)
+ * and drops the Red Key from story 13 on.
+ */
 EVT_BEGIN(mri_04_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 4, 0, -310, -1000, -1000, 0, 0)

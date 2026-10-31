@@ -281,6 +281,11 @@ static EVT_BEGIN(ceil_sky_event)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the Swooper: registers its events (the ceiling-aware damage_event_ceil and the ceiling-fall
+ * event), the pose sound table and the offsets for hanging upside down.
+ * If unit work 0 is 1 it starts already dropped from the ceiling, then starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -302,6 +307,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event 48, which the standard damage reaction runs
+ * when the Swooper is the victim of a first strike (battle_seq gives it damage code 57):
+ * drops it from the ceiling (ceil_sky_event), puts it at Y = 10 and waits for the attack to end.
+ */
 static EVT_BEGIN(dmg_first_attack_pos)
     CALL_CHILD(PTR(ceil_sky_event))
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 10, LW(2))
@@ -309,6 +319,7 @@ static EVT_BEGIN(dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/** Damage event: runs the default battle damage reaction on the unit itself (part 1). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -316,6 +327,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event while hanging: runs the default damage reaction,
+ * then drops the Swooper from the ceiling (ceil_sky_event) and dives it to its new home over 60 frames,
+ * unless the hit knocked it out for good or did no damage.
+ */
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -336,6 +352,10 @@ static EVT_BEGIN(damage_event_ceil)
     RETURN
 EVT_END()
 
+/**
+ * Data events 25 to 36, which the standard damage reaction runs for the counter-damage codes 44 to 55:
+ * drops the Swooper from the ceiling (ceil_sky_event), then runs subsetevt_counter_damage with its damage code.
+ */
 static EVT_BEGIN(counter_damage_event)
     CALL_CHILD(PTR(ceil_sky_event))
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -345,6 +365,11 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Ceiling-fall event (registered with btlevtcmd_SetEventCeilFall,
+ * run for every unit when the stage's overhead iron frame falls, _fall_frame_event):
+ * default damage reaction, then drops it from the ceiling and dives it to its new home over 60 frames.
+ */
 static EVT_BEGIN(ceil_fall_ready_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -354,6 +379,14 @@ static EVT_BEGIN(ceil_fall_ready_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Swooper: uses an enemy item if one fits, otherwise picks a target and swoops at it.
+ * If hanging from the ceiling it first drops 30 units, then dives at the target,
+ * wobbling up and down twice on the approach, and checks damage.
+ * A miss flies past and a hit shakes the camera;
+ * either way it returns home and goes back to hanging (rising 30 units, "BSA_S_2") or hovering ("BSA_S_1").
+ * A confused unit with no target runs subsetevt_confuse_flustered.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -475,6 +508,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait event: sets the idle animation from the unit's pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

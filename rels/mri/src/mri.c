@@ -56,6 +56,10 @@ BOOL toge_searchParent(PuniData* self, s16 group);
 void togeModeParent(PuniData* puni);
 void togeMoveParent(PuniData* puni);
 
+/**
+ * REL prolog: runs the static constructors, registers each Great Boggly Tree map's init script (mri_00 to
+ * mri_20) with the event system and registers the area's battle setup tables.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 
@@ -86,6 +90,7 @@ void _prolog(void) {
     relSetBtlAddr("mri", btlsetup_mri_tbl, btl_mri_setup_no_tbl);
 }
 
+/** REL epilog: runs the static destructors. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -94,6 +99,7 @@ void _epilog(void) {
     }
 }
 
+/** Placeholder for unresolved REL imports; does nothing. */
 void _unresolved(void) {
 }
 
@@ -125,6 +131,10 @@ EvtWord mri_guide_goryu[63];
 EvtWord mri_puni_walk_se[20];
 EvtWord mri_puni_jump_se[15];
 
+/**
+ * Slides a tree door open: it sinks aside along x (LW(9) picks the direction), pauses,
+ * then retracts into the wall along z. LW(10) is the door's map object name.
+ */
 EVT_BEGIN(evt_mri_door_open_pure)
     IF_INT_EQUAL(LW(9), 0)
         SET_VALUE(LW(2), -5)
@@ -304,6 +314,11 @@ USER_FUNC(evt_mri_door_naname_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Shake animation of the planter (ueki) plants:
+ * rustles the map object in LW(2) left and right with a grass sound,
+ * then spawns the follow-up script in LW(10) if there is one.
+ */
 EVT_BEGIN(_ueki_anime)
     CALL(evt_mapobj_get_position, LW(2), LW(4), LW(5), LW(6))
     CALL(evt_snd_sfxon_3d, STRING("SFX_GRASS_SHAKE1"), LW(4), LW(5), LW(6), 0)
@@ -322,6 +337,11 @@ EVT_BEGIN(_ueki_anime)
     RETURN
 EVT_END()
 
+/**
+ * Registers the planter plants of a map.
+ * It reads a table (address in LW(0)) of (map object name, unused, follow-up script) entries
+ * and makes each plant run _ueki_anime when Mario hits it with the hammer or touches it from the front.
+ */
 EVT_BEGIN(mri_ueki_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -335,6 +355,7 @@ EVT_BEGIN(mri_ueki_entry)
     RETURN
 EVT_END()
 
+/** Saves the current state of the Punies so a later map can restore them (see evt_puni_all_save). */
 EVT_BEGIN(mri_puni_save)
     DEBUG_PUT_MSG(STRING("プニの状態をセーブします"))
     CALL(evt_puni_all_save)
@@ -345,6 +366,10 @@ s32 mri_itemsel_table[] = {
     64, -1,
 };
 
+/**
+ * Creates the invisible Puni Orb item at an off-screen position,
+ * so the Puni switch can show it when Mario sets the orb on its pedestal. The item id is returned in LW(10).
+ */
 EVT_BEGIN(mri_punipuni_setup)
     CALL(evt_item_entry, LW(10), ITEM_PUNI_ORB, 0, -20000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH_GET)
@@ -401,6 +426,7 @@ USER_FUNC(hakari_color) {
     return EVT_RETURN_DONE;
 }
 
+/** Reads entry [args[1]] of the 16-bit table at address args[0] and returns it in args[2]. */
 USER_FUNC(evt_mri_get16bitdata) {
     EvtWord* args = event->args;
     s16* table = (s16*)evtGetValue(event, args[0]);
@@ -409,6 +435,12 @@ USER_FUNC(evt_mri_get16bitdata) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Runs for the light on the Puni switch (map object name in LW(0), counter read from the pointer in LW(1),
+ * threshold in LW(2)): every frame it plays the ride sound when the counter crosses the threshold
+ * and colors the light with hakari_color (rainbow while the counter is within the threshold, white otherwise).
+ * Spawned from mri_02 with GW(0), the number of Punies still missing on the switch.
+ */
 EVT_BEGIN(mri_hikari_color)
     CALL(evt_mapobj_flag_onoff, 0, 0, LW(0), MAP_OBJ_FLAG_DISPLAY_LIST)
     GET_INT_INDEXED(LW(1), LW(11))
@@ -491,6 +523,14 @@ USER_FUNC(mri_npc_buruburu) {
     return EVT_RETURN_YIELD;
 }
 
+/**
+ * The bomb countdown of the Great Boggly Tree.
+ * It starts a 5-minute timer when pending, sets the restart times for mri_13 (5:00),
+ * mri_06 (about 4:10) and mri_01 (1:40) and waits for it to run out.
+ * On timeout Mario is frozen, the tree shakes with dust and a quake,
+ * the screen fades to white and the game over sequence plays.
+ * Skipped once the Punies have praised Mario (story progress past STG2_26).
+ */
 EVT_BEGIN(mri_countdown)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_26_PRAISE_FROM_THE_PUNI)
         RETURN
@@ -645,6 +685,7 @@ BOOL toge_searchParent(PuniData* self, s16 group) {
     return TRUE;
 }
 
+/** Movement mode for Jabbi in a line: steps toward the parent Jabbi when farther than a few units away, at speed 3. */
 void togeModeParent(PuniData* puni) {
     Vec dir;
 
@@ -659,10 +700,12 @@ void togeModeParent(PuniData* puni) {
     }
 }
 
+/** Move function for a Jabbi line: plain deceleration movement. */
 void togeMoveParent(PuniData* puni) {
     puniMoveDecel(puni);
 }
 
+/** Puni mode for the victory jump: the Puni does a short hop (200 ms) in place, then goes to the point mode. */
 void puniModeWinjump(PuniData* puni) {
     s32 elapsed;
     f32 t;
@@ -695,6 +738,10 @@ void puniModeWinjump(PuniData* puni) {
     }
 }
 
+/**
+ * Lines up Jabbi (toge) slots start to end behind the leader slot at a position,
+ * linking each to a parent with toge_searchParent so they follow like a caterpillar.
+ */
 void togeMakeRetsu(Vec* pos, s16 leader, s16 start, s16 end) {
     s32 i;
     PuniData* puni = &puniGetPunidat()[leader];
@@ -720,6 +767,7 @@ void togeMakeRetsu(Vec* pos, s16 leader, s16 start, s16 end) {
     }
 }
 
+/** Script wrapper for togeMakeRetsu. Arguments: x, y, z, leader slot, first slot, last slot of the line. */
 USER_FUNC(evt_mri_toge_make_retsu) {
     EvtWord* args = event->args;
     Vec pos;
@@ -737,6 +785,10 @@ USER_FUNC(evt_mri_toge_make_retsu) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Stops a Jabbi line: clears the follow mode, movement and group flag of the leader slot (args[0])
+ * and slots args[1] to args[2], and sets their animation to 0.
+ */
 USER_FUNC(evt_mri_toge_retsu_stop) {
     EvtWord* args = event->args;
     s16 leader = evtGetValue(event, args[0]);
@@ -759,6 +811,10 @@ USER_FUNC(evt_mri_toge_retsu_stop) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Parks all active Jabbi (slots 110 to 209) below the map at (0, -1000, 0), waiting for the enter-routine;
+ * clears their collide flag.
+ */
 USER_FUNC(evt_mri_toge_enter_init) {
     s32 i;
 
@@ -776,6 +832,10 @@ USER_FUNC(evt_mri_toge_enter_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Prepares the Punies (slots 1 to 102) for the victory scene:
+ * restores full HP and clears the spin and the display offsets.
+ */
 USER_FUNC(evt_mri_puni_win_init) {
     s32 i;
 
@@ -792,6 +852,10 @@ USER_FUNC(evt_mri_puni_win_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets up the Punies' victory parade: arguments are the start x/y/z and end x/y/z.
+ * Defeated Punies hop with puniModeWinjump, the others go to the point mode.
+ */
 USER_FUNC(evt_mri_puni_win_attack) {
     EvtWord* args = event->args;
     f32 x0 = evtGetValue(event, args[0]);
@@ -831,6 +895,10 @@ USER_FUNC(evt_mri_puni_win_attack) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Ends the victory scene: puts each active Puni (slots 1 to 102) at a random spot near the first position (x0,
+ * y0, z0) and sets it to enter toward the second position.
+ */
 USER_FUNC(evt_mri_puni_win_end) {
     EvtWord* args = event->args;
     f32 x0 = evtGetValue(event, args[0]);

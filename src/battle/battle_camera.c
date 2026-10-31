@@ -15,6 +15,7 @@ void btl_camera_nomove_y_onoff(s32 pri, s32 on);
 void btl_camera_nomove_z_onoff(s32 pri, s32 on);
 void battleCameraMoveTo(s32 mode, s32 clamp, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ, f32* dX, f32* dY, f32* dZ, f32* dAtX, f32* dAtY, f32* dAtZ);
 
+/** this file uses -O4,s */
 void battleCameraInit(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleCameraWork* camera;
@@ -48,6 +49,14 @@ void battleCameraInit(void) {
     camera->modeFrame = 0;
 }
 
+/**
+ * Per-frame battle camera: works out the target eye
+ * and look-at point for cameraWork.mode (0 default view of the stage, 1 default zoomed, 2 raised for the cursor,
+ * 3 scripted move-to, 4/5 from backstage, 6 on the audience, 7-13 following one or two units,
+ * parts or an audience member, 14-16 the battle opening (normal, First Strike, enemy First Strike), 17 victory,
+ * 18 defeat, 19 running away), applies zoom, axis locks, offsets and the W/H shakes,
+ * and eases the 3D camera there at the move/zoom speed level. Each mode's debug name is kept in a local buffer.
+ */
 void battleCameraMain(void) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     BattleWork* wp = _battleWorkPointer;
@@ -545,6 +554,14 @@ void battleCameraMain(void) {
     }
 }
 
+/**
+ * Moves the battle camera one step toward the eye (x, y, z) and target (atX, atY, atZ),
+ * called each frame from battleCameraMain.
+ * Mode 1 adds the manual offset (cameraWork.position) and the wide-stage shift;
+ * clamp 1 keeps x within +-(100 + (600 - z) / 2).
+ * The step is the remaining distance divided by 1.5, 15, 5, 1,
+ * 200 or 100 for speed level 0-5 (moveSpeedLv for x/y, zoomSpeedLv for z); the steps are returned in dX..dAtZ.
+ */
 void battleCameraMoveTo(s32 applyOffsets, s32 clampX, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ,
                         f32* dX, f32* dY, f32* dZ, f32* dAtX, f32* dAtY, f32* dAtZ) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
@@ -719,6 +736,7 @@ void battleCameraMoveTo(s32 applyOffsets, s32 clampX, f32 x, f32 y, f32 z, f32 a
     }
 }
 
+/** Returns how far the battle camera's eye moved this frame (length of cameraWork.moveSpeed). */
 f32 battleCameraGetPosMoveSpeed(void) {
     BattleWork* wp = _battleWorkPointer;
     f32 x = wp->cameraWork.moveSpeed.x;
@@ -727,15 +745,24 @@ f32 battleCameraGetPosMoveSpeed(void) {
     return sqrt(x * x + y * y + z * z);
 }
 
+/**
+ * Sets the camera priority floor: later camera requests with a lower priority are ignored.
+ * Lets a scripted sequence keep the camera while other scripts ask for it.
+ */
 void btl_camera_set_prilimit(s32 pri) {
     _battleWorkPointer->cameraWork.priLimit = pri;
 }
 
+/** Script helper: args[0] = new camera priority floor (btl_camera_set_prilimit). */
 USER_FUNC(evt_btl_camera_set_prilimit) {
     btl_camera_set_prilimit(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Switches the battle camera to mode (see battleCameraMain) if pri passes the floor, resetting zoom,
+ * speed levels, axis locks and the manual offset.
+ */
 void btl_camera_set_mode(s32 pri, s32 mode) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -751,6 +778,7 @@ void btl_camera_set_mode(s32 pri, s32 mode) {
     }
 }
 
+/** Script helper: args[0] = priority, args[1] = camera mode. */
 USER_FUNC(evt_btl_camera_set_mode) {
     EvtWord* args = event->args;
     s32 pri = evtGetValue(event, args[0]);
@@ -759,6 +787,11 @@ USER_FUNC(evt_btl_camera_set_mode) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: makes the camera follow unit args[1] (its body part),
+ * and when args[2] is not -1 also frame the hit point of unit args[2].
+ * args[0], the priority, is read but not checked.
+ */
 USER_FUNC(evt_btl_camera_set_homing_unit) {
     BattleWork* wp;
     BattleUnit* u;
@@ -791,6 +824,11 @@ USER_FUNC(evt_btl_camera_set_homing_unit) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: like evt_btl_camera_set_homing_unit but for specific parts:
+ * args[0] priority, args[1]/args[2] unit and part to follow,
+ * args[3]/args[4] optional second unit and part (-1 for none).
+ */
 USER_FUNC(evt_btl_camera_set_homing_unitparts) {
     EvtWord* args = event->args;
     BattleWork* wp;
@@ -825,6 +863,10 @@ USER_FUNC(evt_btl_camera_set_homing_unitparts) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: frames unit args[1] part args[2] together with audience member args[3] (priority args[0]);
+ * used when a unit attacks the crowd.
+ */
 USER_FUNC(evt_btl_camera_set_homing_unit_audience) {
     s32 audId;
     BattleWork* wp;
@@ -860,6 +902,7 @@ USER_FUNC(evt_btl_camera_set_homing_unit_audience) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the camera zoom (distance pulled in, world units) if pri passes the floor. */
 void btl_camera_set_zoom(s32 pri, f32 zoom) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -867,6 +910,7 @@ void btl_camera_set_zoom(s32 pri, f32 zoom) {
     }
 }
 
+/** Adds to the camera zoom if pri passes the floor. */
 void btl_camera_add_zoom(s32 pri, f32 zoom) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -874,6 +918,7 @@ void btl_camera_add_zoom(s32 pri, f32 zoom) {
     }
 }
 
+/** Script helper: args[0] priority, args[1] zoom (truncated to a whole number). */
 USER_FUNC(evt_btl_camera_set_zoom) {
     EvtWord* args = event->args;
     s32 pri = evtGetValue(event, args[0]);
@@ -881,6 +926,7 @@ USER_FUNC(evt_btl_camera_set_zoom) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: args[0] priority, args[1] zoom to add (truncated to a whole number). */
 USER_FUNC(evt_btl_camera_add_zoom) {
     EvtWord* args = event->args;
     s32 pri = evtGetValue(event, args[0]);
@@ -888,6 +934,7 @@ USER_FUNC(evt_btl_camera_add_zoom) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the camera's move and zoom easing level (0-5; out-of-range values mean 1) if pri passes the floor. */
 void btl_camera_set_moveSpeedLv(s32 pri, s32 lv) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -900,6 +947,7 @@ void btl_camera_set_moveSpeedLv(s32 pri, s32 lv) {
     }
 }
 
+/** Sets only the zoom easing level (0-5; out-of-range values mean 1) if pri passes the floor. */
 void btl_camera_set_zoomSpeedLv(s32 pri, s32 lv) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -911,6 +959,7 @@ void btl_camera_set_zoomSpeedLv(s32 pri, s32 lv) {
     }
 }
 
+/** Script helper: args[0] priority, args[1] move speed level. */
 USER_FUNC(evt_btl_camera_set_moveSpeedLv) {
     EvtWord* args = event->args;
     s32 pri = evtGetValue(event, args[0]);
@@ -919,6 +968,7 @@ USER_FUNC(evt_btl_camera_set_moveSpeedLv) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: args[0] priority, args[1] zoom speed level. */
 USER_FUNC(evt_btl_camera_set_zoomSpeedLv) {
     EvtWord* args = event->args;
     s32 pri = evtGetValue(event, args[0]);
@@ -927,6 +977,10 @@ USER_FUNC(evt_btl_camera_set_zoomSpeedLv) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Starts a timed camera glide (camera mode 3 in battleCameraMain) from the current eye and target to (x, y, z)
+ * and (atX, atY, atZ) over frames frames with intplGetValue curve type, if pri passes the priority floor.
+ */
 void btl_camera_set_moveto(s32 pri, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ, s32 frames,
                            s32 type) {
     BattleWork* wp = _battleWorkPointer;
@@ -950,6 +1004,10 @@ void btl_camera_set_moveto(s32 pri, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 a
     }
 }
 
+/**
+ * Script helper for mode 3 moves: args[0] priority, args[1..3] eye position, args[4..6] look-at point,
+ * args[7] frames, args[8] interpolation type.
+ */
 USER_FUNC(evt_btl_camera_set_moveto) {
     EvtWord* args = event->args;
     s32 pri = evtGetValue(event, args[0]);
@@ -964,6 +1022,10 @@ USER_FUNC(evt_btl_camera_set_moveto) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Starts a horizontal camera shake whose amplitude goes from a to b over frames with interpolation type,
+ * and rumbles the controller unless rumble is disabled for the camera.
+ */
 void btl_camera_shake_w(s32 pri, f32 a, f32 b, s32 frames, s32 type) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -979,6 +1041,10 @@ void btl_camera_shake_w(s32 pri, f32 a, f32 b, s32 frames, s32 type) {
     }
 }
 
+/**
+ * Script helper: args[0] priority, args[1]/args[2] start and end amplitude, args[3] frames,
+ * args[4] interpolation type.
+ */
 USER_FUNC(evt_btl_camera_shake_w) {
     EvtWord* args = event->args;
     s32 pri = evtGetValue(event, args[0]);
@@ -989,6 +1055,7 @@ USER_FUNC(evt_btl_camera_shake_w) {
     return EVT_RETURN_DONE;
 }
 
+/** Starts a vertical camera shake (see btl_camera_shake_w), with controller rumble. */
 void btl_camera_shake_h(s32 pri, f32 a, f32 b, s32 frames, s32 type) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -1004,6 +1071,7 @@ void btl_camera_shake_h(s32 pri, f32 a, f32 b, s32 frames, s32 type) {
     }
 }
 
+/** Script helper: args as evt_btl_camera_shake_w, for the vertical shake. */
 USER_FUNC(evt_btl_camera_shake_h) {
     EvtWord* args = event->args;
     s32 pri = evtGetValue(event, args[0]);
@@ -1014,6 +1082,7 @@ USER_FUNC(evt_btl_camera_shake_h) {
     return EVT_RETURN_DONE;
 }
 
+/** Stops both camera shakes if pri passes the floor. */
 void btl_camera_noshake(s32 pri) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -1022,11 +1091,13 @@ void btl_camera_noshake(s32 pri) {
     }
 }
 
+/** Script helper: args[0] priority; stops the camera shakes. */
 USER_FUNC(evt_btl_camera_noshake) {
     btl_camera_noshake(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 
+/** Locks (on == 1) or frees the camera's x movement if pri passes the floor. */
 void btl_camera_nomove_x_onoff(s32 pri, s32 on) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -1038,6 +1109,7 @@ void btl_camera_nomove_x_onoff(s32 pri, s32 on) {
     }
 }
 
+/** Script helper: args[0] priority, args[1] 1 to lock x movement, 0 to free it. */
 USER_FUNC(evt_btl_camera_nomove_x_onoff) {
     EvtWord* args = event->args;
     s32 pri = evtGetValue(event, args[0]);
@@ -1046,6 +1118,7 @@ USER_FUNC(evt_btl_camera_nomove_x_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Locks (on == 1) or frees the camera's y movement if pri passes the floor. */
 void btl_camera_nomove_y_onoff(s32 pri, s32 on) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -1057,6 +1130,7 @@ void btl_camera_nomove_y_onoff(s32 pri, s32 on) {
     }
 }
 
+/** Script helper: args[0] priority, args[1] 1 to lock y movement, 0 to free it. */
 USER_FUNC(evt_btl_camera_nomove_y_onoff) {
     EvtWord* args = event->args;
     s32 pri = evtGetValue(event, args[0]);
@@ -1065,6 +1139,7 @@ USER_FUNC(evt_btl_camera_nomove_y_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Locks (on == 1) or frees the camera's z movement if pri passes the floor. */
 void btl_camera_nomove_z_onoff(s32 pri, s32 on) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -1076,6 +1151,7 @@ void btl_camera_nomove_z_onoff(s32 pri, s32 on) {
     }
 }
 
+/** Script helper: args[0] priority, args[1] 1 to lock z movement, 0 to free it. */
 USER_FUNC(evt_btl_camera_nomove_z_onoff) {
     EvtWord* args = event->args;
     s32 pri = evtGetValue(event, args[0]);
@@ -1084,6 +1160,7 @@ USER_FUNC(evt_btl_camera_nomove_z_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Adds a fixed offset (x, y, z) to the camera position until btl_camera_off_posoffset_manual or a mode change. */
 void btl_camera_set_posoffset(s32 pri, f32 x, f32 y, f32 z) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -1094,6 +1171,7 @@ void btl_camera_set_posoffset(s32 pri, f32 x, f32 y, f32 z) {
     }
 }
 
+/** Script helper: args[0] priority, args[1..3] camera position offset. */
 USER_FUNC(evt_btl_camera_set_posoffset) {
     EvtWord* args = event->args;
     s32 pri = evtGetValue(event, args[0]);
@@ -1104,6 +1182,7 @@ USER_FUNC(evt_btl_camera_set_posoffset) {
     return EVT_RETURN_DONE;
 }
 
+/** Removes the manual camera position offset if pri passes the floor. */
 void btl_camera_off_posoffset_manual(s32 pri) {
     BattleWork* wp = _battleWorkPointer;
     if (pri >= wp->cameraWork.priLimit) {
@@ -1114,11 +1193,13 @@ void btl_camera_off_posoffset_manual(s32 pri) {
     }
 }
 
+/** Script helper: args[0] priority; removes the manual camera offset. */
 USER_FUNC(evt_btl_camera_off_posoffset_manual) {
     btl_camera_off_posoffset_manual(evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: blocks until the camera has settled (moving less than 2 units a frame). */
 USER_FUNC(evt_btl_camera_wait_move_end) {
     if (battleCameraGetPosMoveSpeed() >= 2.0f) {
         return EVT_RETURN_BLOCK;

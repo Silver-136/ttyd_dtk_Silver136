@@ -359,11 +359,18 @@ void marioStMain(void) {
     }
 }
 
+/** Draws the frame through the camera list (camDraw) and clears g_bFirstSmartAlloc after the first drawn frame. */
 void marioStDisp(void) {
     camDraw();
     g_bFirstSmartAlloc = FALSE;
 }
 
+/**
+ * Sets how much of the game is paused, 0 (nothing) to 4 (everything):
+ * each level sets the matching low bits of gp->systemLevelFlags, which stop that level's play-time clock,
+ * and stops or restarts events by type mask.
+ * Used by item pickups (itemdrv.c), map objects (evt_mobj.c) and the evt_lecture script command.
+ */
 void marioStSystemLevel(s32 level) {
     switch (level) {
         case 0:
@@ -397,6 +404,10 @@ void marioStSystemLevel(s32 level) {
     }
 }
 
+/**
+ * Returns the paused-level bit mask (gp->systemLevelFlags), not the level number;
+ * 0 means the game is running freely.
+ */
 u32 marioStGetSystemLevel(void) {
     return gp->systemLevelFlags;
 }
@@ -595,6 +606,11 @@ void* gcDvdCheckThread(void* param) {
     }
 }
 
+/**
+ * Rumble safety, run from viPostCallback: forces a pad's motor off for 30 seconds
+ * after 30 seconds of continuous rumble, and hard-stops all rumble during a disc error or
+ * while the game is paused at any system level.
+ */
 void gcRumbleCheck(void) {
     static BOOL off_trg[4] = {FALSE, FALSE, FALSE, FALSE};
     static OSTime off_time[4] = {0, 0, 0, 0};

@@ -195,6 +195,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init event of the Moon Cleft: installs its wait, attack, damage and confusion events and sets its walk,
+ * run and jump sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -207,6 +211,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Waits half a second, then shows the toge_flush spike flash on the Moon Cleft's head;
+ * the flash sits higher and farther out for a big (status 10)
+ * or small (status 11) Moon Cleft than for a normal one.
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -230,6 +239,11 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Moon Cleft: when it takes damage it plays the SIN_D_1 flinch pose,
+ * and if it is currently flipped over (over-turn count of 1 or more) it plays SIN_D_2
+ * and bounces twice on the spot, then runs the default damage handling.
+ */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
     IF_INT_GREATER_OR_EQUAL(LW(15), 1)
@@ -248,6 +262,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Flips the Moon Cleft onto its back (a hit that overturns it):
+ * switches the part to the turned defence table and pose table,
+ * sets the flipped status flag with an over-turn count of 2, plays the SIN_D_2 pose with a hop,
+ * lowers it to height 7 and its hit offset by 10,
+ * and turns off the part's counter attribute (the spikes no longer counter).
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -270,6 +291,12 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Flips the Moon Cleft back onto its feet: counts the over-turn down by one,
+ * restores the normal defence and pose tables, clears the flipped flag,
+ * returns to height 0 and the SIN_S_1 pose with a hop and the INSIDE2 sound,
+ * and turns the counter attribute back on.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -297,6 +324,14 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Moon Cleft: if flipped over it only wakes up (wakeup_event).
+ * Otherwise it uses an enemy item if it has one, else picks a target with weapon_sinemon_attack,
+ * backs away with a short hop, then charges at the target (dash sound, speed 5).
+ * A miss runs it past the target; a hit shakes the camera
+ * and applies the damage with the action command defence check,
+ * after which it jumps back past the target and returns to its place.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -421,6 +456,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait event of the Moon Cleft: hands part 1 back to its pose table (the idle pose for its current state). */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

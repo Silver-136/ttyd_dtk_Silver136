@@ -126,6 +126,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Door animation callback, closing for the w_bero exit to gon_02:
+ * rotates map object "door01" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door01_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door01"), 0, LW(0), 0)
@@ -133,18 +137,30 @@ static EVT_BEGIN(door01_close)
 EVT_END()
 
 
+/**
+ * Door animation callback, opening for the w_bero exit to gon_02:
+ * rotates map object "door01" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door01_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door01"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, closing for the e_bero exit to gon_04:
+ * rotates map object "door02" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door02_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door02"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the e_bero exit to gon_04:
+ * rotates map object "door02" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door02_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door02"), 0, LW(0), 0)
@@ -489,6 +505,12 @@ static EVT_BEGIN(key_get)
     RETURN
 EVT_END()
 
+/**
+ * Map init for gon_03 (Dry Bones hall): sets up the doors, music,
+ * the Dry Bones NPCs (the leader, Richard and the lying bones),
+ * the Koops' father letter scene and the Castle Key until it is picked up, and the spinning floor panel.
+ * Locks the east door until the swarm has been dealt with.
+ */
 EVT_BEGIN(gon_03_init_evt)
     CALL(evt_bg_disp_onoff, 0)
     SET_VALUE(LW(0), PTR(bero_entry_data))
@@ -555,6 +577,10 @@ EVT_BEGIN(gon_03_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for Richard, a Dry Bones in the hall:
+ * places him at the middle of the room, plays his idle animation and stops him from turning toward Mario.
+ */
 EVT_BEGIN(richard_init_event)
     CALL(evt_npc_set_position, STRING("リチャード"), 0, 0, -100)
     CALL(evt_npc_set_width, STRING("リチャード"), FLOAT(30.0f))
@@ -565,10 +591,15 @@ EVT_BEGIN(richard_init_event)
     RETURN
 EVT_END()
 
+/** NPC regular event for Richard; does nothing. */
 EVT_BEGIN(richard_regl_event)
     RETURN
 EVT_END()
 
+/**
+ * Talk event for Richard: when Mario talks to him he asks a yes/no question (stg1_gon_09_01_yn) and,
+ * on the yes answer, replies with stg1_gon_09_02. Does nothing while the swarm scene is running (GW(15) is 1).
+ */
 EVT_BEGIN(richard_talk_event)
     IF_INT_EQUAL(GW(15), 1)
         RETURN
@@ -603,6 +634,10 @@ EVT_BEGIN(leaderkaron_init_event)
     RETURN
 EVT_END()
 
+/**
+ * Talk event for the Dry Bones leader: plays the bone-rattling sound and, the first time, starts senkaron_event,
+ * the swarm of Dry Bones that rain from the ceiling and push Mario back toward the entrance.
+ */
 EVT_BEGIN(leaderkaron_talk_event)
     BEGIN_INLINE_EVENT
         LOOP(10)
@@ -710,12 +745,18 @@ USER_FUNC(leader_touch_check) {
     return EVT_RETURN_DONE;
 }
 
+/** Random float in [min, max] from rand(). */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
 
     return r * (max - min) + min;
 }
 
+/**
+ * Ext-pose init for the Dry Bones swarm: allocates the swarm work array
+ * and puts each of the 1000 Dry Bones at a random spot above the room (y 200) with a random start delay,
+ * ready to fall.
+ */
 static void senkaron_ext_init(void) {
     s32 i;
     ExtdrvPose* pose = extGetPosePtr();
@@ -738,6 +779,13 @@ static void senkaron_ext_init(void) {
     marioHammerFrame = 0;
 }
 
+/**
+ * Per-frame update of the Dry Bones swarm: each bone falls from the ceiling and lands,
+ * then once the attack starts shuffles toward Mario and shoves him west (marioPushedFlag);
+ * hits from Mario's hammer or jumps knock bones into the air,
+ * and when the swarm escapes the bones run off toward the room's edge
+ * and drop away (the knock-back and escape states 0x61 and 0x62 are read from the code only).
+ */
 static void senkaron_ext_main(void) {
     MarioWork* mario;
     const char* sfxLand;
@@ -989,11 +1037,13 @@ static void senkaron_ext_main(void) {
     }
 }
 
+/** Queues the swarm's draw and shadow callbacks into the 3D camera every frame. */
 static void senkaron_ext_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, 1, senkaron_ext_disp, NULL);
     dispEntry(CAMERA_3D, 0.0f, 2, senkaron_ext_shadow_disp, NULL);
 }
 
+/** Draw callback for the swarm: loads the ext-pose render state, vertices, textures and TEV and draws all the bones. */
 static void senkaron_ext_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
@@ -1003,6 +1053,7 @@ static void senkaron_ext_disp(CameraId camera, void* param) {
     extLoadTextureExit();
 }
 
+/** Draw callback for the swarm's shadows: draws every bone flattened with a fixed shadow matrix. */
 static void senkaron_ext_shadow_disp(CameraId camera, void* param) {
     static Mtx mt = {
         {10.0f, 0.0f, 0.0f, 0.0f},
@@ -1017,26 +1068,34 @@ static void senkaron_ext_shadow_disp(CameraId camera, void* param) {
     extDrawShadow();
 }
 
+/** Script helper: sets senkaronEscapeFlag so the swarm runs away. */
 static USER_FUNC(senkaronToEscape) {
     senkaronEscapeFlag = 1;
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: sets senkaronMesPushingFlag; the swarm only pushes Mario while it is clear,
+ * so the partner's comment about the pushing can be shown without being interrupted.
+ */
 static USER_FUNC(senkaronFlagOnMesPushing) {
     senkaronMesPushingFlag = 1;
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: clears senkaronMesPushingFlag (see senkaronFlagOnMesPushing). */
 static USER_FUNC(senkaronFlagOffMesPushing) {
     senkaronMesPushingFlag = 0;
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets senkaronAttackStartFlag so the Dry Bones start moving in on Mario. */
 static USER_FUNC(senkaronAttackStart) {
     senkaronAttackStartFlag = 1;
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: writes marioPushedFlag (1 while the swarm is pressing against Mario this frame) into args[0]. */
 static USER_FUNC(senkaronGetMarioPushedFlag) {
     evtSetValue(event, event->args[0], marioPushedFlag);
     return EVT_RETURN_DONE;

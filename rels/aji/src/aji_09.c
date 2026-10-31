@@ -60,6 +60,11 @@ static EvtWord evt_memo1[21];
 static EvtWord evt_memo2[14];
 EvtWord aji_09_init_evt[226];
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_2
+ * and S_door1_1 in opposite directions along X by the animation value in LW(0) times 0.16601563;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(s_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.16601563f))
     CALL(evt_mapobj_trans, 1, STRING("S_door1_2"), LW(0), 0, 0)
@@ -68,6 +73,11 @@ static EVT_BEGIN(s_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_2
+ * and S_door1_1 in opposite directions along X by the animation value in LW(0) times 0.16601563;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(s_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.16601563f))
     CALL(evt_mapobj_trans, 1, STRING("S_door1_2"), LW(0), 0, 0)
@@ -132,6 +142,11 @@ BeroEntry bero_data_peach1[] = {
     {0},
 };
 
+/**
+ * Exit event of the second exit in Peach's section, the mirror of peach_evt_bero_out1:
+ * while disguised she says peach_aji_155_01 (she should not leave in the disguise)
+ * and LW(0) = 1 cancels the exit; undisguised, LW(0) = 0 lets her through.
+ */
 EVT_BEGIN(peach_evt_bero_out2)
     IF_INT_EQUAL(GSWF_AJI_PEACH_IN_UNIFORM, 0)
         SET_VALUE(LW(0), 0)
@@ -166,6 +181,10 @@ BeroEntry bero_data_peach2[] = {
     {0},
 };
 
+/**
+ * Case script for the first changing booth's curtain (A_kou1_ka_omo and A_kou1_ka_ura):
+ * rolls the curtain S_kou1_ka open or closed depending on GF(0), toggling it each time.
+ */
 EVT_BEGIN(evt_kou1)
     CALL(evt_hit_bind_mapobj, STRING("A_kou1_ka_omo"), STRING("S_kou1_ka"))
     CALL(evt_hit_bind_mapobj, STRING("A_kou1_ka_ura"), STRING("S_kou1_ka"))
@@ -280,6 +299,10 @@ const char* rokka_data[] = {
     NULL,
 };
 
+/**
+ * Opens a locker door: swings the locker (map object LW(0)) open by 120 degrees over 40 frames with
+ * SFX_PEACH_LOCKER_OPEN1, then attaches evt_rokka_close to its push and stand-on areas so that it closes again.
+ */
 EVT_BEGIN(evt_rokka_open)
     CALL(evt_mario_get_pos, 0, LW(13), LW(14), LW(15))
     CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_LOCKER_OPEN1"), LW(13), LW(14), LW(15), 0)
@@ -827,6 +850,7 @@ USER_FUNC(dot_mario) {
     return EVT_RETURN_DONE;
 }
 
+/** Script function: sets Mario's pose to the animation named in args[0]; used while Mario is Peach. */
 static USER_FUNC(peach_set_pose) {
     const char* pose = (const char*)evtGetValue(event, event->args[0]);
     MarioWork* mario = marioGetPtr();

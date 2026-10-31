@@ -269,6 +269,10 @@ static BattleWeapon weapon_marilyn_charge1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Marilyn sinks into her shadow: after 250 ms plays the shadow sound (SFX_BOSS_MARI_SHADOW1)
+ * and hides her model (battle_evt_majo_disp_off).
+ */
 static EVT_BEGIN(marilyn_down)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
@@ -278,6 +282,10 @@ static EVT_BEGIN(marilyn_down)
     RETURN
 EVT_END()
 
+/**
+ * Marilyn rises out of her shadow at the position in LW(0..2):
+ * after 250 ms plays the rising sound (SFX_BOSS_MARI_SHADOW2), shows her model again and sets her position.
+ */
 static EVT_BEGIN(marilyn_up)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
@@ -288,6 +296,11 @@ static EVT_BEGIN(marilyn_up)
     RETURN
 EVT_END()
 
+/**
+ * Init script of Marilyn in the Shadow Sirens fight:
+ * installs her wait, phase, attack, damage and confusion handlers, clears unit work 8 (attack cycle step) and 3,
+ * and starts the shared shadow-tail follower (majo3_shadow_tail_event).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))
@@ -301,6 +314,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage handler for Marilyn: sets GW(12) (her state for the sisters' scripts) to 1
+ * when the hit carries damage code 1024, then runs the default damage script.
+ */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -369,6 +386,12 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Marilyn's unison-phase script, which nothing installs (init_event sets only phase_event):
+ * after the player's phase it
+ * runs the shared majo_unison_phase_event, and if her slot in the HP order (unit work 5) changed,
+ * sinks into her shadow and re-emerges at the new home spot (x 55 / 105 / 155), then re-sorts the turn order.
+ */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -402,10 +425,18 @@ static EVT_BEGIN(unison_phase_event)
     RETURN
 EVT_END()
 
+/** Phase handler for Marilyn: does nothing (Beldam's phase script drives the sisters' lines). */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Marilyn's turn: uses an item if she has one, else follows unit work 8:
+ * first turn the shadow slap, then she charges every turn
+ * until Beldam's phase script sets her unit work 7 (a sister fell below the HP threshold),
+ * which forces a lightning strike and switches her to a random pick (slap 50, lightning 20 once triggered,
+ * charge 30 while she has charged fewer than 2 times in a row; unit work 9 counts the charges).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -471,6 +502,12 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Marilyn's shadow-slip attack (weapon in LW(9)):
+ * she sinks into her shadow, rises 30 units in front of a randomly chosen target,
+ * claps her hands at it (one hit, guardable), then sinks again and returns home.
+ * The US release places her 5 units further forward in depth.
+ */
 static EVT_BEGIN(kagenuke_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -551,6 +588,11 @@ static EVT_BEGIN(kagenuke_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Marilyn's lightning attack (weapon in LW(9)):
+ * she powers up, then drops a thunder_n64 bolt with screen shake
+ * and rumble on each target on the player's side in turn; the weapon pierces defense and cannot be guarded.
+ */
 static EVT_BEGIN(thunder_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -631,6 +673,11 @@ static EVT_BEGIN(thunder_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Marilyn charges up (weapon in LW(9), weapon_marilyn_charge1):
+ * camera on her, power-up pose and sound, then the weapon hits herself to apply a charge of +2 to her next
+ * attack.
+ */
 static EVT_BEGIN(charge_attack_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -650,6 +697,7 @@ static EVT_BEGIN(charge_attack_event)
     RETURN
 EVT_END()
 
+/** Wait event of Marilyn: switches to pose table entry 1 (idle). */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

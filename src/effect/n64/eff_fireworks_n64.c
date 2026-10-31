@@ -77,6 +77,11 @@ struct {
 void effFireworksMain(EffectEntry* effect);
 void effFireworksDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a firework at (x, y, z) travelling with velocity (vx, vy, vz) that bursts into the pattern selected by
+ * type; w is the final burst scale. lifetime is in frames, with 32 extra for the launch.
+ * Event scripts via evt_eff.
+ */
 EffectEntry* effFireworksN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 vx, f32 vy, f32 vz, f32 w) {
     EffectEntry* effect;
     EffFireworksN64Work* work;
@@ -138,6 +143,11 @@ EffectEntry* effFireworksN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f
     return effect;
 }
 
+/**
+ * State 0 is the launch: four trailing sparks rise along the path for 32 frames.
+ * State 1 is the burst: the centre drifts with drag and gravity while the scale eases to scaleTarget;
+ * alpha fades over the last 32 frames.
+ */
 void effFireworksMain(EffectEntry* effect) {
     EffFireworksN64Work* work = effect->userdata;
     Vec position;
@@ -202,6 +212,11 @@ void effFireworksMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFireworksDisp, effect);
 }
 
+/**
+ * During the launch draws the four trail sparks;
+ * after the burst draws one sprite (texture 8) per vertex of vtx_data[type],
+ * randomly skipping some every frame so the burst twinkles.
+ */
 void effFireworksDisp(CameraId cameraId, EffectEntry* effect) {
     static s32 salpha;
     static s32 sflag;

@@ -35,6 +35,7 @@ EvtWord fune_yure[42];
 static EvtWord epilogue_evt[344];
 EvtWord muj_21_init_evt[58];
 
+/** Init event of Princess Peach in the ending scene: places her at (62, 28, 44) on the deck facing right. */
 EVT_BEGIN(peach_init)
     CALL(evt_npc_set_position, STRING("me"), 62, 28, 44)
     CALL(evt_npc_set_ry, STRING("me"), 90)
@@ -55,6 +56,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Rocks the ship S_fune_m (and its hit box A_fune_m) by a sine wave on its roll,
+ * advancing the phase 2 degrees per frame, forever.
+ */
 EVT_BEGIN(fune_yure)
     CALL(evt_hit_bind_mapobj, STRING("A_fune_m"), STRING("S_fune_m"))
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))

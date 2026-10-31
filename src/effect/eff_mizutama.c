@@ -18,6 +18,7 @@ typedef struct EffMizutamaWork {
     s32 delay;      // 0x24
 } EffMizutamaWork;
 
+/** Spawns underwater bubbles at (x, y, z) heading in `angle` degrees; koopa_motion.c uses it while Bowser swims. */
 EffectEntry* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     s32 radius;
     EffectEntry* effect;
@@ -93,6 +94,7 @@ EffectEntry* effMizutamaEntry(s32 type, f32 x, f32 y, f32 z, f32 angle) {
     return effect;
 }
 
+/** Per frame: slows each bubble horizontally, lets it drift upward and deletes the effect when all are gone. */
 void effMizutamaMain(EffectEntry* effect) {
     EffMizutamaWork* work = effect->userdata;
     Vec position;
@@ -123,6 +125,7 @@ void effMizutamaMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMizutamaDisp, effect);
 }
 
+/** Draws each bubble as a camera-facing textured quad (effect texture 0x3F). */
 void effMizutamaDisp(CameraId cameraId, EffectEntry* effect) {
     EffMizutamaWork* work = effect->userdata;
     CameraEntry* camera;

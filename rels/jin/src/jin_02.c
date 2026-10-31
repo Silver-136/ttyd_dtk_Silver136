@@ -25,24 +25,34 @@ static EvtWord cam_shake[62];
 EvtWord evt_kaidan_temae[144];
 EvtWord jin_02_init_evt[33];
 
+/**
+ * Door animation callback: closes door03 as Mario arrives through n_bero_2 (from jin_03);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it, negated.
+ */
 static EVT_BEGIN(n2_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door03"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: opens door03 as Mario leaves through n_bero_2 (to jin_03);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it.
+ */
 static EVT_BEGIN(n2_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door03"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Door animation callback for the door00 door's closing: rotates it by -0.444 times the value in LW(0). */
 EVT_BEGIN(n1_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door00"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Door animation callback for the door00 door's opening: rotates it by 0.444 times the value in LW(0). */
 EVT_BEGIN(n1_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door00"), 0, LW(0), 0)
@@ -89,6 +99,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Rumble of the endless staircase moving one stage:
+ * plays SFX_STG4_KAIDAN_MOVE1 at (300, 100, -200) while the camera shake ramps up to 0.010 over 30 steps
+ * and back down to 0, then stops the sound.
+ */
 static EVT_BEGIN(cam_shake)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_KAIDAN_MOVE1"), 300, 100, -200, LW(9))
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 10, 30)
@@ -111,6 +126,10 @@ static EVT_BEGIN(cam_shake)
     RETURN
 EVT_END()
 
+/**
+ * Red-switch script that moves the endless staircase one stage on in the other direction:
+ * same reaction as in jin_01 but the stage counter LSW(1) is raised by 1.
+ */
 // The front switch increments the staircase position unless its current value is 1.
 EVT_BEGIN(evt_kaidan_temae)
     IF_INT_NOT_EQUAL(LSW_JIN_STAIRCASE_POS, 1)
@@ -163,6 +182,10 @@ EVT_BEGIN(evt_kaidan_temae)
     RETURN
 EVT_END()
 
+/**
+ * Creepy Steeple jin_02 map init: starts the steeple music and reverb, the shadow-Mario tint,
+ * the exits and the red switch for the endless staircase.
+ */
 EVT_BEGIN(jin_02_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN2"))

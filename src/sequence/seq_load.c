@@ -132,10 +132,12 @@ s32 evt_seq_load_keep_msg_window(EventEntry* evt, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/** Enters the file select sequence; clears its work. */
 void seq_loadInit(SequenceWork* seq) {
     memset(wp, 0, sizeof(LoadWork));
 }
 
+/** Leaves the file select sequence; frees the menu texture file (name.tpl). */
 void seq_loadExit(SequenceWork* seq) {
     if (wp->file != NULL) {
         fileFree(wp->file);
@@ -156,6 +158,10 @@ static inline BOOL loadStart(void) {
 }
 
 #endif
+/**
+ * File select sequence: loads name.tpl, runs the memory card check script (back to the title if the card is
+ * unusable), reads the sound and rumble settings and last used slot, opens the curtain, then runs loadMain.
+ */
 void seq_loadMain(SequenceWork* seq) {
     switch (seq->state) {
         case 0:
@@ -745,6 +751,7 @@ void loadMain(SequenceWork* seq) {
     dispEntry(CAMERA_3D, 1000.0f, 0, loadDraw, NULL);
 }
 
+/** Draws the texture id from name.tpl stretched over the rectangle (x0, y0)-(x1, y1). */
 static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
     GXTexObj obj;
     Mtx m;
@@ -771,6 +778,11 @@ static inline void loadDrawBg(u32 id, f32 x0, f32 y0, f32 x1, f32 y1) {
     GXTexCoord2f32(1.0f, 0.0f);
 }
 
+/**
+ * Draws the file menu: the four save slot windows (name, level, play time, crystal star icons;
+ * new or corrupted file messages), the copy/delete/back buttons, the sound and rumble options,
+ * the prompt message and the wobbling cursor (hidden while a card script runs).
+ */
 void loadDraw(CameraId camera, void* param) {
     CameraEntry* cam = camGetPtr(CAMERA_2D);
     GXColor white = {255, 255, 255, 255};

@@ -371,6 +371,10 @@ static void majin_callback(s32 type) {
 }
 
 
+/**
+ * Script helper: blocks until music channel 1 has started playing,
+ * so the genie's music is audible before the scene continues.
+ */
 static USER_FUNC(bgm_start_wait) {
     // Wait for BGM slot 1 before beginning the curse presentation.
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;

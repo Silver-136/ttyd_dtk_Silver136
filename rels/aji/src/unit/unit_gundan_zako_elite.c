@@ -258,6 +258,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event for the Elite X-Naut: runs the default damage handler (btldefaultevt_Damage) with LW(10) = -2
+ * and LW(11) = 1.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -265,6 +269,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the Elite X-Naut: if battle flag 2 is set it always uses the normal attack;
+ * otherwise it lets an enemy item be used if one is ready and rolls 50% normal attack (normal_attack_event),
+ * 30% jump attack and 20% to drink the size-up bottle (dekadeka_event), re-rolling if it is already enlarged.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -309,6 +318,11 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Shared run-up of the Elite X-Naut's physical attacks:
+ * pays for the attack, aims the camera, and runs toward the target with dust puffs
+ * and footstep sounds (pose R_2), then switches to the attack pose A_1 and moves to the target's hit position.
+ */
 static EVT_BEGIN(attack_common_event1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
@@ -356,6 +370,10 @@ static EVT_BEGIN(attack_common_event1)
     RETURN
 EVT_END()
 
+/**
+ * Shared recovery of the Elite X-Naut's physical attacks:
+ * resets the camera and runs back to its home position in pose R_1, then restores its facing.
+ */
 static EVT_BEGIN(attack_common_event2)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
@@ -366,6 +384,12 @@ static EVT_BEGIN(attack_common_event2)
     RETURN
 EVT_END()
 
+/**
+ * The Elite X-Naut's normal attack: picks a target (the first attack target if battle flag 2 is set),
+ * runs up (attack_common_event1) and jumps at the target;
+ * a miss or dodge ends in the D_2/D_3 stumble poses with SFX_ENM_3RD1_MISS1,
+ * a hit applies the damage with the 256 guard flag, then it returns through attack_common_event2.
+ */
 static EVT_BEGIN(normal_attack_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_attack))
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -461,6 +485,11 @@ static EVT_BEGIN(normal_attack_event)
         RETURN
 EVT_END()
 
+/**
+ * The Elite X-Naut's jump attack: picks a target, runs up and leaps with a high arc (pose A_2) onto it;
+ * a miss ends in the D_2/D_3 stumble poses, a hit applies the damage
+ * and bounces on the target in decreasing hops, then it returns through attack_common_event2.
+ */
 static EVT_BEGIN(jump_attack_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_jump_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -543,6 +572,11 @@ static EVT_BEGIN(jump_attack_event)
         RETURN
 EVT_END()
 
+/**
+ * The Elite X-Naut drinks a bottle (dekadeka) on itself:
+ * camera close-up with bottle sounds and poses A_4A/A_4B,
+ * then applies the dekadeka bottle weapon to itself (always hits; size-change status for 3 turns, strength 2).
+ */
 static EVT_BEGIN(dekadeka_event)
     SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
@@ -583,6 +617,7 @@ static EVT_BEGIN(dekadeka_event)
     RETURN
 EVT_END()
 
+/** Idle script of the Elite X-Naut: sets the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

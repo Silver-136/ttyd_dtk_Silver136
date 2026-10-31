@@ -17,6 +17,7 @@ typedef struct EffLasMonWork {
     s32 timer;    // 0x20, counts down while fading out
 } EffLasMonWork;
 
+/** Spawns a MOBJ_EFF_las_mon animation at (x, y, z); spawned by an event script in tik. */
 EffectEntry* effLasMonEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffLasMonWork* work;
@@ -40,6 +41,7 @@ EffectEntry* effLasMonEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/** Loads the animation, plays A_1 once then holds S_1, and fades out over 16 frames on soft delete. */
 void effLasMonMain(EffectEntry* effect) {
     EffLasMonWork* work = effect->userdata;
     Vec position;
@@ -88,6 +90,7 @@ void effLasMonMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effLasMonDisp, effect);
 }
 
+/** Draws the pose at the effect position with the current alpha. */
 void effLasMonDisp(CameraId cameraId, EffectEntry* effect) {
     EffLasMonWork* work = effect->userdata;
     Mtx mtx;

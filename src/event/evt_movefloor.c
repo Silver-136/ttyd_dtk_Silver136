@@ -118,6 +118,13 @@ static inline void movingFloorWobble(MovingFloor* w, EventEntry* event) {
     }
 }
 
+/**
+ * Allocates the moving floor's work block on the map heap and fills it from the moving_floor script's LW values:
+ * LW(6) the mode (0-2 slide along X, Y or Z; 3 and 4 move on X and Z together; 5 one-shot),
+ * LW(2)/LW(3)/LW(4) the start, end and travel time in ms (LW(8)-LW(10) the same for the Z leg),
+ * LW(5) the stop time at each end in ms, LW(11) the turn per frame in degrees
+ * and LW(12) the kind (1 bobs up and down). Returns the block in args[0].
+ */
 USER_FUNC(evt_moving_floor_alloc) {
     EvtWord* args = event->args;
     MovingFloor* w = (MovingFloor*)_mapAlloc(sizeof(MovingFloor));
@@ -200,6 +207,7 @@ USER_FUNC(evt_moving_floor_alloc) {
     return EVT_RETURN_DONE;
 }
 
+/** Frees a moving floor's work block from the map heap and clears args[0]. */
 USER_FUNC(evt_moving_floor_free) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
@@ -211,6 +219,11 @@ USER_FUNC(evt_moving_floor_free) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Starts the floor's next leg: picks the axis, direction and start fraction for the current phase of its mode
+ * and sets the speed so the leg takes its configured time.
+ * Modes 0-2 go back and forth, mode 3 cycles eight half-legs, mode 4 four legs, mode 5 stays put.
+ */
 USER_FUNC(evt_moving_floor_init) {
     MovingFloor* w = MOVING_FLOOR_ARG();
     s32 dir;
@@ -357,6 +370,10 @@ USER_FUNC(evt_moving_floor_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Advances the floor by the time elapsed since the last update (in ms, from the event's lifetime timer)
+ * and returns its new X, Y and Z in args[1]-args[3], with the kind 1 bob added to Y.
+ */
 USER_FUNC(evt_moving_floor_main) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
@@ -376,12 +393,14 @@ USER_FUNC(evt_moving_floor_main) {
     return EVT_RETURN_DONE;
 }
 
+/** Stamps the current event time as the start of the next time step of the moving floor. */
 USER_FUNC(evt_moving_floor_main2) {
     MovingFloor* w = MOVING_FLOOR_ARG();
     w->start = event->lifetime;
     return EVT_RETURN_DONE;
 }
 
+/** Sets args[1] to 1 once the current leg has run its full time (scaled to half for mode 3's half-legs), else 0. */
 USER_FUNC(moving_floor_get_end) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
@@ -406,6 +425,7 @@ USER_FUNC(moving_floor_get_pause) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the floor's kind in args[1]: 0 carries Mario and partners along, 1 bobs in place without carrying. */
 USER_FUNC(moving_floor_get_kind) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
@@ -413,6 +433,7 @@ USER_FUNC(moving_floor_get_kind) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the floor's mode (from LW(6)) in args[1]. */
 USER_FUNC(moving_floor_get_mode) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
@@ -420,6 +441,7 @@ USER_FUNC(moving_floor_get_mode) {
     return EVT_RETURN_DONE;
 }
 
+/** Adds the floor's turn speed to its Y rotation, wrapped to 0-360 degrees, and returns the angle in args[1]. */
 USER_FUNC(moving_floor_update_turn) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
@@ -434,6 +456,7 @@ USER_FUNC(moving_floor_update_turn) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the floor's current X, Y and Z in args[1]-args[3] without moving it, refreshing the kind 1 bob. */
 USER_FUNC(moving_floor_getf_pos) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
@@ -445,6 +468,10 @@ USER_FUNC(moving_floor_getf_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Returns how far the floor moved in the last step (X, Y, Z deltas in args[1]-args[3]);
+ * the script shifts anyone riding it by this amount.
+ */
 USER_FUNC(moving_floor_getf_now_bpoint) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
@@ -465,6 +492,7 @@ USER_FUNC(moving_floor_get_stmsec) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns in args[1] the X/Z scale for the floor's shadow object, shrinking as the floor rises: (500 - y) / 500. */
 USER_FUNC(moving_floor_getf_xz_scale) {
     EvtWord* args = event->args;
     MovingFloor* w = MOVING_FLOOR_ARG();
@@ -473,6 +501,11 @@ USER_FUNC(moving_floor_getf_xz_scale) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Turns the floor back the way it came when its speed is negative,
+ * keeping the time already spent so it retraces the same leg;
+ * the script calls it when Mario's or a partner's head hits a vertical (mode 1) floor from below.
+ */
 USER_FUNC(moving_floor_reverse) {
     MovingFloor* w = MOVING_FLOOR_ARG();
     f32 end;
@@ -512,6 +545,7 @@ USER_FUNC(moving_floor_set_se) {
     return EVT_RETURN_DONE;
 }
 
+/** Stops the floor's movement sound if one is playing and sounds are not halted. */
 USER_FUNC(moving_floor_stop_se) {
     MovingFloor* w = MOVING_FLOOR_ARG();
     if (w->seHalt == 0 && w->seId) {
@@ -521,12 +555,17 @@ USER_FUNC(moving_floor_stop_se) {
     return EVT_RETURN_DONE;
 }
 
+/** Halts the floor's sounds for good; set when Mario leaves the map so no sound outlives it. */
 USER_FUNC(moving_floor_halt_se) {
     MovingFloor* w = MOVING_FLOOR_ARG();
     w->seHalt = 1;
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Stops and deletes a running moving_floor script: args[0] is its event id.
+ * Stops its sound, frees its work block (the script's LW(9)) and kills the event.
+ */
 USER_FUNC(evt_moving_floor_delete) {
     s32 id = evtGetValue(event, event->args[0]);
     EventEntry* e = evtGetPtrID(id);
@@ -546,6 +585,10 @@ USER_FUNC(evt_moving_floor_delete) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Spawned by moving_floor: waits until Mario takes a loading zone to another area,
+ * then stops and halts the floor's sound. Skipped in the yuu (Pianta Parlor) area.
+ */
 EVT_BEGIN(moving_floor_bero_check)
     CALL(evt_sub_get_areaname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("yuu"))
@@ -569,6 +612,12 @@ EVT_BEGIN(moving_floor_bero_check)
     RETURN
 EVT_END()
 
+/**
+ * Generic moving platform script, run as a child with LW(0) the map object, LW(1) the hit object bound to it,
+ * LW(7) an optional shadow object and the rest of the setup in LW values read by evt_moving_floor_alloc.
+ * Moves the floor leg by leg forever, carries Mario and partners standing on it (kind 0),
+ * plays its sound while it moves and waits the stop time at each end.
+ */
 EVT_BEGIN(moving_floor)
     CALL(evt_moving_floor_alloc, LW(9))
     CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -726,6 +775,14 @@ EVT_BEGIN(moving_floor)
     RETURN
 EVT_END()
 
+/**
+ * One of a pair of balance-scale platforms (tik_07's kur_1 and kur_2 in the Rogueport Sewers):
+ * standing on one moves the shared position so it sinks and its partner rises,
+ * and with nobody on either they drift back to the starting position.
+ * LW(0)/LW(1) are the map and hit objects, LW(2)/LW(3) the top and bottom heights, LW(4) the step per frame,
+ * LW(5) which side, LW(6) a shared 0-10000 position value and LW(7) a shared ridden-bits word;
+ * carries riders and plays SFX_STG1_TIK_FLOOR_MOVE1 while moving.
+ */
 EVT_BEGIN(ridedown_floor)
     CALL(evt_hit_bind_mapobj, LW(1), LW(0))
     SET_VALUE(LW(10), LW(2))

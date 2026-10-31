@@ -184,6 +184,10 @@ void replace_disp(CameraId camera, void* param) {
     wp->ready = 1;
 }
 
+/**
+ * Display callback of the trap part (set by replace_evt): once the floor texture is ready it binds it as the
+ * paper texture with an identity matrix for draw type 0 and clears the paper texture for any other type.
+ */
 void replace_callback(BattleUnitPart* part, s32 type) {
     WanaWork* wp = (WanaWork*)part->mOwner->countersetWeapon;
 
@@ -248,6 +252,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage reaction: runs the default damage handling (btldefaultevt_Damage) with LW(10) = -2 (the unit itself)
+ * and LW(11) = 1.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -255,10 +263,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Phase event: empty, it does nothing. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/** Attack event: uses an item if it has one; otherwise it does nothing and goes back to idling. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -270,6 +280,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Idle event: sets the unit's body part 1 to the pose given by its pose table for its current state. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

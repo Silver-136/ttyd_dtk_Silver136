@@ -29,6 +29,13 @@ typedef struct PowerGaugeWork {
 
 static void actionCommandDisp(f32 x, f32 y);
 
+/**
+ * Per-frame driver of action command 15, used by Bobbery's Bomb, Yoshi's Gulp and Ms. Mowz's Kiss Thief.
+ * A gauge fills over params[1] frames (curve params[3]) and stays full for params[2] more.
+ * params[0] 0/1: press L+R or A while it is at params[4] or above;
+ * 2/3: hold A or R (within 120 frames) to fill it and release at params[4] or above.
+ * acFlags bit 0 fills only while held. Running out of time fails.
+ */
 s32 battleAcMain_PowerGauge(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     PowerGaugeWork* pw = (PowerGaugeWork*)ac->work;
@@ -227,11 +234,16 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_PowerGauge(BattleWork* work) {
     return work->actionCommands.result;
 }
 
 
+/**
+ * Display callback: slides the gauge in from the left over 20 frames,
+ * and once the command ends keeps it up for 40 frames before sliding it back out.
+ */
 void battleAcDisp_PowerGauge(CameraId cameraId, void* param) {
     BattleWork* work = param;
     BattleActions* ac = &work->actionCommands;
@@ -263,12 +275,18 @@ void battleAcDisp_PowerGauge(CameraId cameraId, void* param) {
     }
 }
 
+/** Called by btlevtcmd_StopAC: unless the command already finished, stops the gauge sound and starts the end wait. */
 void battleAcDelete_PowerGauge(BattleWork* work) {
     if (!(work->actionCommands.doneFlags & 1)) {
         work->actionCommands.mAcState = 1004;
     }
 }
 
+/**
+ * Draws the gauge with its params[4] threshold (acFlags bit 1 hides it), the threshold marker or,
+ * with acFlags bit 2, a star that lights in the zone (bit 3 shifts it left), and the button icons,
+ * flashed as a cue to press or release.
+ */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;

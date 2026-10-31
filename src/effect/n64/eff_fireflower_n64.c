@@ -57,6 +57,10 @@ static s8 scale_data[] = "27<AFKPUZ_dgigd";
 void effFireFlowerMain(EffectEntry* effect);
 void effFireFlowerDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns the Fire Flower effect at (x, y, z): a flower that unfolds and shoots 30 sparks to the side,
+ * holding for lifetime frames. type 1 mirrors it (flip). Spawned from event scripts through evt_eff.
+ */
 EffectEntry* effFireFlowerN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) {
     EffectEntry* effect;
     EffFireFlowerN64Work* work;
@@ -112,6 +116,11 @@ EffectEntry* effFireFlowerN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) 
     return effect;
 }
 
+/**
+ * Runs a seven-state sequence: spawn the hammer-success spark, grow the flower, open it in two stages,
+ * hold while the sparks fly and the flower blinks in size, close it,
+ * then spin it away and fade before deleting itself.
+ */
 void effFireFlowerMain(EffectEntry* effect) {
     EffFireFlowerN64Work* work = effect->userdata;
     Vec position;
@@ -224,6 +233,10 @@ void effFireFlowerMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFireFlowerDisp, effect);
 }
 
+/**
+ * Draws the flower with texture 0x36 and the spark sprites with 0x37;
+ * work->stage picks the vertex set for the flower's bloom stage.
+ */
 void effFireFlowerDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffFireFlowerN64Work* work;

@@ -209,6 +209,11 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/**
+ * Hop-walk used by the Gold Fuzzy's attack: squashes,
+ * then jumps in steps of LW(8) units toward x=LW(5) (height LW(6), depth LW(7)), squashing between hops,
+ * and finishes with the attack jump onto the target with its attack sound.
+ */
 // Hop toward LW(5..7), limiting intermediate X steps to LW(8); the final hop uses the exact destination.
 EVT_BEGIN(gold_chorobon_rabbit_move)
     LOOP(2)
@@ -263,6 +268,11 @@ BattleUnitSetup entry_chorogun = {
     NULL, // itemDropTable
 };
 
+/**
+ * Battle script run when the Gold Fuzzy calls its friends:
+ * it shows the wave animation, the camera pans in on it and it says stg1_hei_43, Mario is startled,
+ * and chorogun_appear drops the 1000-Fuzzy horde into place.
+ */
 EVT_BEGIN(call_chorogun_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("CBN_S_1"))
     WAIT_MS(1000)
@@ -307,6 +317,11 @@ EVT_BEGIN(escape_chorogun_event)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the Gold Fuzzy: installs wait, attack, damage and default confusion events,
+ * starts the Fuzzy horde setup (chorogun_entry),
+ * clears unit work 0 and 1 and sets the boss hop and landing sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

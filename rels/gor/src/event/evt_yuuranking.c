@@ -63,6 +63,10 @@ static s32 fontlenpitch(const char* str, s32 pitch);
 
 static EvtWord main_evt[4];
 
+/**
+ * Width of a string in a fixed-pitch font: the number of characters (a two-byte character counts once) times
+ * pitch, or the proportional message width when pitch is 0.
+ */
 static s32 fontlenpitch(const char* str, s32 pitch) {
     s32 i;
     s32 n;
@@ -83,6 +87,7 @@ static s32 fontlenpitch(const char* str, s32 pitch) {
 }
 
 #ifdef VERSION_G8ME01
+/** US: centered in [x, x + width], squeezed to fit width. */
 // US: centered in [x, x + width], squeezed to fit width.
 static inline void yuuDrawCenter(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
@@ -105,6 +110,7 @@ static inline void yuuDrawCenter(f32 x, f32 y, f32 scale, const char* msg, s32 w
 #endif
 
 #ifdef VERSION_G8ME01
+/** US: left-aligned at x, squeezed to fit width. */
 // US: left-aligned at x, squeezed to fit width.
 static inline void yuuDrawLeft(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
@@ -145,6 +151,7 @@ static inline void yuuDrawRight(f32 xo, f32 y, f32 scale, const char* msg, s32 w
 }
 #endif
 
+/** Draws message msg at (x, y) with the given scale, squeezing it horizontally when it is wider than width. */
 // Descriptive name (not in the symbol maps); placeholder unk_gor_0000dfc4, JP gor .text+0xDEF8. See docs/NAME_PROVENANCE.md.
 void gor_yuuranking_draw_msg_fit(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
@@ -164,6 +171,7 @@ void gor_yuuranking_draw_msg_fit(f32 x, f32 y, f32 scale, const char* msg, s32 w
 }
 
 #ifdef VERSION_G8ME01
+/** US: centered text, squeezed to fit width. */
 // US: centered text, squeezed to fit width.
 void gor_yuuranking_draw_msg_fit_center(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
@@ -184,6 +192,7 @@ void gor_yuuranking_draw_msg_fit_center(f32 x, f32 y, f32 scale, const char* msg
     FontDrawMessageMtx(mtx, msg);
 }
 
+/** US: right-aligned text, squeezed to fit width. */
 // US: right-aligned text, squeezed to fit width.
 void gor_yuuranking_draw_msg_fit_right(f32 x, f32 y, f32 scale, const char* msg, s32 width) {
     Mtx trans;
@@ -991,6 +1000,10 @@ USER_FUNC(evt_yuuranking_alloc) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that closes the ranking board: sets the quit flag on the first call,
+ * waits until the driver acknowledges it, then frees the work block.
+ */
 USER_FUNC(evt_yuuranking_free) {
     YuuRankingWork* wp = _wp;
 
@@ -1008,6 +1021,10 @@ USER_FUNC(evt_yuuranking_free) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that waits for A or B while the board is shown;
+ * on press it clears the wait flag, plays a sound and finishes.
+ */
 USER_FUNC(yuuranking_wait_button) {
     YuuRankingWork* wp = _wp;
 

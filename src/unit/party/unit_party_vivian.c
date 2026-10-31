@@ -189,6 +189,7 @@ static VivDefAttr defence_attr = {{{0, 0, 0, 0, 0}}, {0, 0, 0}};
 
 static VivRegist regist = {{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100}, {0, 0}};
 
+/** Empty: partner moves come from the player's menu choices, not a unit attack script. */
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
@@ -284,6 +285,10 @@ USER_FUNC(battle_evt_majo_disp_on) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Vivian's battle entry: starts 250 units behind her home spot and, after 40 frames,
+ * floats in to it at speed 4 with her hovering sound, then takes her stay pose.
+ */
 static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 250)
@@ -316,6 +321,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Hit reaction: straightens her rotation (left over from her moves), then runs the default damage script. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -556,6 +562,11 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
 #endif
 };
 
+/**
+ * Vivian's Shade Fist: she sinks into the shadows,
+ * reappears beside the enemy (_get_vivian_attack_position) and punches it with the action command,
+ * the hit able to burn it for 2 turns (_make_kagenuke_weapon), then returns.
+ */
 EVT_BEGIN(partyVivianAttack_NormalAttack)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1320,6 +1331,10 @@ USER_FUNC(battle_evt_majo_disp_off) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Allocates a spare BattleWeapon in the running unit's countersetWeapon slot,
+ * which Shade Fist fills per use (_make_kagenuke_weapon). Run from init_event.
+ */
 USER_FUNC(_vivian_make_extra_work_area) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -1331,6 +1346,11 @@ USER_FUNC(_vivian_make_extra_work_area) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Builds Vivian's battle move list (data tag 1):
+ * Shade Fist and Veil always, Fiery Jinx from Super rank and Infatuate from Ultra rank,
+ * appending each to command->weapon and advancing *count.
+ */
 static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
     s32 techLv;
 
@@ -1375,6 +1395,10 @@ static void __makeTechMenuFunc(BattleCommand* command, s32* count) {
 
 double sqrt(double);
 
+/**
+ * Returns in args[7] how many frames moving from point args[0..2] to args[3..5] takes at speed args[6],
+ * capped at 15.
+ */
 USER_FUNC(_get_move_frame) {
     EvtWord* args = event->args;
     Vec a, b, d;
@@ -1435,6 +1459,11 @@ USER_FUNC(_get_vivian_attack_position) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Copies the weapon pointed to by args[0] into the unit's spare weapon,
+ * sets its burn duration (burnTime) to args[1] turns, and writes the copy's address back into args[0].
+ * Shade Fist always passes 2.
+ */
 USER_FUNC(_make_kagenuke_weapon) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -1456,6 +1485,11 @@ USER_FUNC(_make_kagenuke_weapon) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Shows Infatuate's heart over part args[4] of unit args[3] for args[2] frames,
+ * popping in by frame args[0] and settling by frame args[1] (state kept in event->heart).
+ * Ends early once _disp_heart_entry_stop is called.
+ */
 USER_FUNC(_disp_heart_entry) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -1482,6 +1516,10 @@ USER_FUNC(_disp_heart_entry) {
     return event->heart.cur < event->heart.total ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
+/**
+ * Display callback for _disp_heart_entry: draws the heart icons at the target's hit position,
+ * scaled through the pop-in animation.
+ */
 void _disp_heart(CameraId camera, void* param) {
     EventEntry* w;
     f32 scale;
@@ -1515,12 +1553,14 @@ void _disp_heart(CameraId camera, void* param) {
     }
 }
 
+/** Stops the heart display of the event whose id is args[0] (sets its heart.stop). */
 USER_FUNC(_disp_heart_entry_stop) {
     EventEntry* e = evtGetPtrID(evtGetValue(event, *event->args));
     e->heart.stop = 1;
     return EVT_RETURN_DONE;
 }
 
+/** Returns in args[0] whether the running event's heart display has been stopped. */
 USER_FUNC(_disp_heart_entry_stop_check) {
     evtSetValue(event, *event->args, event->heart.stop);
     return EVT_RETURN_DONE;

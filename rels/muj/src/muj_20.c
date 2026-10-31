@@ -146,6 +146,10 @@ EvtWord fune_move[136];
 static EvtWord epilogue_evt[97];
 EvtWord muj_20_init_evt[362];
 
+/**
+ * Day turns to night: plays the "hiru_yoru" map animation (sky, lights and sea colours) at 4x speed
+ * and slows it down in steps until it finishes. Used on the ship voyages.
+ */
 EVT_BEGIN(hiru_yoru_event)
     CALL(evt_map_playanim, STRING("hiru_yoru"), MAP_ANIM_PLAY_ONCE, 0)
     BEGIN_INLINE_EVENT
@@ -231,6 +235,10 @@ USER_FUNC(urouro_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper like urouro_func but in 3D (start and end x, y, z, args[1] to args[6]) with a floating wobble
+ * taken from a 32-entry sine table; used for the Embers drifting on the deck.
+ */
 USER_FUNC(urouro_fuwafuwa_func) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -283,6 +291,10 @@ USER_FUNC(urouro_fuwafuwa_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Makes the NPC in LW(0) pace back and forth between two deck points (LW(11), LW(13) and LW(1), LW(3)) forever
+ * using urouro_func.
+ */
 EVT_BEGIN(urouro)
     CALL(evt_npc_get_position, LW(0), LW(11), LW(12), LW(13))
     LOOP(0)
@@ -313,6 +325,11 @@ USER_FUNC(marcoship_yure_init_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: advances the ship rocking one frame and returns the roll angle in args[0]
+ * and a "stopped" flag in args[1].
+ * It rolls to the limit, pauses 500 ms and swings back; once told to stop it settles at 0 degrees.
+ */
 USER_FUNC(marcoship_yure_func) {
     MarcoShip* ms = marcoship;
     EvtWord* args = event->args;
@@ -361,15 +378,22 @@ USER_FUNC(marcoship_yure_func) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: asks the ship rocking to stop (settle at level) at the next zero crossing. */
 USER_FUNC(marcoship_stop_func) {
     marcoship->state = 2;
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: blocks until the ship rocking has settled level (marcoship->stopped). */
 USER_FUNC(marcoship_stop_wait_func) {
     return marcoship->stopped ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper that eases the playback speed of the ship's flag
+ * and sea animations ("fune", "fune_01" and "nami", "nami_02") toward their target rates by at most 0.005 per
+ * frame; runs forever (always blocks).
+ */
 USER_FUNC(evt_map_anim_rate) {
     MapAnimRate* rate = &mapAnimRate;
     f32 d;
@@ -401,16 +425,22 @@ USER_FUNC(evt_map_anim_rate) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: sets the target speed of the ship animations (fune and fune_01) for evt_map_anim_rate. */
 USER_FUNC(evt_set_fune_anim_rate) {
     mapAnimRate.funeTarget = evtGetFloat(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets the target speed of the wave animations (nami and nami_02) for evt_map_anim_rate. */
 USER_FUNC(evt_set_nami_anim_rate) {
     mapAnimRate.namiTarget = evtGetFloat(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Makes the NPC in LW(0) float back and forth between two 3D deck points (LW(11) to LW(13) and LW(1) to LW(3))
+ * forever; used for the Embers.
+ */
 EVT_BEGIN(urouro_fuwafuwa)
     CALL(evt_npc_get_position, LW(0), LW(11), LW(12), LW(13))
     LOOP(0)
@@ -569,17 +599,23 @@ static void alpha_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
+/** Script helper: allocates the one-byte alpha value (_ap) used by alpha_tev and sets it to 255. */
 static USER_FUNC(alpha_init_func) {
     _ap = _mapAlloc(1);
     *_ap = 255;
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets the alpha byte used by alpha_tev to args[0] (0 to 255). */
 static USER_FUNC(alpha_set_func) {
     *_ap = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: scatters the mass-NPC Embers (1000 of them, nanNPCWork) over an ellipse in front of the camera,
+ * invisible (alpha 0), at random angles and distances for the ghost fleet.
+ */
 USER_FUNC(elmos1000tai_init) {
     NanNPCWork* wp = nanNPCWork;
     s32 i;
@@ -624,6 +660,7 @@ USER_FUNC(elmos1000tai_init) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: starts the scattered Embers fading in by giving each one the elmos1000tai_seq00 behaviour. */
 USER_FUNC(elmos1000tai_start) {
     s32 i;
     NanNPC* npc;
@@ -639,6 +676,10 @@ USER_FUNC(elmos1000tai_start) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Per-frame behaviour of one Ember in the fleet:
+ * waits a random time (longer for ones far away), fades its alpha from 0 to 255 over 500 ms, then stays visible.
+ */
 void elmos1000tai_seq00(NanNPC* npc) {
     s32 t;
 
@@ -668,6 +709,10 @@ void elmos1000tai_seq00(NanNPC* npc) {
     }
 }
 
+/**
+ * Script helper that places a drifting mist effect near (args[0], args[1], args[2]) with a random offset of up
+ * to 75 units, and keeps fading it in and out with random 3 to 4 second durations.
+ */
 USER_FUNC(mist_func) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -706,6 +751,7 @@ USER_FUNC(mist_func) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: moves the sinking ship (map object S_a1) to height args[0]. */
 USER_FUNC(marcoship_shizumu_func) {
     f32 y = evtGetFloat(event, event->args[0]);
 
@@ -713,6 +759,7 @@ USER_FUNC(marcoship_shizumu_func) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: spawns a splash effect (scale 3) at (args[0], args[1], args[2]). */
 USER_FUNC(splash_eff) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -723,6 +770,10 @@ USER_FUNC(splash_eff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper, one per frame: keeps a wake effect (funemizu) at the bow of the pirate ship S_b,
+ * sized and angled by how fast and which way the ship is moving. Always blocks.
+ */
 USER_FUNC(kaizoku_fune_eff) {
     EffectEntry* eff;
     Vec pos;
@@ -760,6 +811,10 @@ USER_FUNC(kaizoku_fune_eff) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Fades the foam layer of the sea (S_umi_l_siro_b) from opaque to clear over 500 ms through the water alpha
+ * callback.
+ */
 EVT_BEGIN(nami_alpha)
     CALL(alpha_init_func)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
@@ -777,6 +832,10 @@ EVT_BEGIN(nami_alpha)
     RETURN
 EVT_END()
 
+/**
+ * Fades the sky models S_hai02 and S_hai03_moon (the moon) from opaque to clear over 1.5 seconds through
+ * alpha_tev; moya_effect starts it together with the five mist banks.
+ */
 EVT_BEGIN(moonout_effect)
     CALL(alpha_init_func)
     CALL(evt_map_set_tevcallback, 1, PTR(alpha_tev))
@@ -796,6 +855,7 @@ EVT_BEGIN(moonout_effect)
     RETURN
 EVT_END()
 
+/** Starts all five mist banks (moya_effect01 to 05) and the "onryou" (ghost) map animation. */
 EVT_BEGIN(moya_effect)
     SPAWN_EVENT(PTR(moya_effect01))
     SPAWN_EVENT(PTR(moya_effect02))
@@ -807,6 +867,7 @@ EVT_BEGIN(moya_effect)
     RETURN
 EVT_END()
 
+/** Scales the Ember Elmos A from LW(0) to LW(1) percent over LW(2) ms; helper of the grow and shrink scripts. */
 EVT_BEGIN(_kakushuku)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(0), LW(1), LW(2))
     LOOP(0)
@@ -822,6 +883,7 @@ EVT_BEGIN(_kakushuku)
     RETURN
 EVT_END()
 
+/** Makes Elmos A throb: shrinks and grows its size repeatedly until GF(10) is cleared, then clears GF(11). */
 EVT_BEGIN(elmos_a_kakushuku)
     SET_VALUE(LW(0), 100)
     SET_VALUE(LW(1), 0)
@@ -851,6 +913,7 @@ EVT_BEGIN(elmos_a_kakushuku)
     RETURN
 EVT_END()
 
+/** Grows Elmos A from 0 to 100 percent over 150 ms. */
 EVT_BEGIN(elmos_a_kaku)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 100)
@@ -859,6 +922,7 @@ EVT_BEGIN(elmos_a_kaku)
     RETURN
 EVT_END()
 
+/** Shrinks Elmos A from 100 to 0 percent over 150 ms. */
 EVT_BEGIN(elmos_a_shuku)
     SET_VALUE(LW(0), 100)
     SET_VALUE(LW(1), 0)
@@ -897,6 +961,11 @@ static s16 elmos_animtbl[] = {
     16, 17, 18, 19, -1, 0,
 };
 
+/**
+ * Sets up the mass-NPC crowd of 1000 Embers for the Ember attack (onryo_event spawns it):
+ * each uses the c_elmos texture table with the 20-frame elmos_animtbl and the fast update function,
+ * then elmos1000tai_init scatters them around the ship.
+ */
 static EVT_BEGIN(nannpc_mode_setup)
     CALL(evt_nannpc_init, PTR(ext_entry_data), 0, 0, 0, 1000)
     CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
@@ -926,6 +995,10 @@ s32 mist_pos[] = {
     30, -1200, -10000,
 };
 
+/**
+ * Spawns the mist clouds: walks the mist_pos table until the -10000 terminator
+ * and starts mist_func at each position, then repeats.
+ */
 EVT_BEGIN(mist_setup)
     LOOP(0)
         SET_VALUE(LW(10), 0)
@@ -1844,6 +1917,11 @@ static USER_FUNC(fune_eff) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: bends a ship position (GW(0), GW(1), GW(2)) onto a large circle of radius 6000
+ * so the ship follows the curve of the horizon,
+ * writing the result to LW(7) to LW(9) and the added heading to LW(0).
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_muj_00004328, JP muj .text+0x4264. See docs/NAME_PROVENANCE.md.
 USER_FUNC(fune_curve_pos) {
     f32 x = evtGetFloat(event, GW(0));
@@ -1965,6 +2043,10 @@ static void pressStartGX(LogoWork* wp, s32 alpha, f32 x, f32 y) {
     GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
 }
 
+/**
+ * Display callback for the title logo: draws the logo texture for the current language
+ * and the Press Start text with the wp alpha.
+ */
 static void draw(CameraId camera, void* param) {
     LogoWork* wp = param;
     CameraEntry saved;

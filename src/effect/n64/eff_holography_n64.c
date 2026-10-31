@@ -1376,6 +1376,7 @@ EffectEntry* effHolographyN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, 
     return effect;
 }
 
+/** Fades the alpha in over 16 frames and out over the last 16 (a delete request leaves 16 frames). */
 void effHolographyMain(EffectEntry* effect) {
     EffHolographyN64Work* work = effect->userdata;
     Vec position;
@@ -1410,6 +1411,11 @@ void effHolographyMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHolographyDisp, effect);
 }
 
+/**
+ * Draws a ten-segment ribbon from textures 0x93 and 0x94.
+ * The vertex set is ach_01_v[54 - frame], so the ribbon unfurls over 55 frames;
+ * each segment is fainter than the previous one.
+ */
 void effHolographyDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffHolographyN64Work* work;

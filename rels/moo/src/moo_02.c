@@ -43,6 +43,10 @@ static EvtWord rock_evt1[21];
 #endif
 EvtWord moo_02_init_evt[132];
 
+/**
+ * Bero-in script of the north entry (n_bero): hides the partner,
+ * places Mario at the bero position and runs the bero entry; returns 1 in LW(0).
+ */
 EVT_BEGIN(n_bero_in)
     CALL(evt_mario_bgmode_on)
     CALL(evt_mario_kill_party, 0)
@@ -54,6 +58,10 @@ EVT_BEGIN(n_bero_in)
     RETURN
 EVT_END()
 
+/**
+ * Bero-out script of the north exit (n_bero): takes control from Mario
+ * and changes the map to aji_19 (the X-Naut Fortress), entering at w_bero; returns 1 in LW(0).
+ */
 EVT_BEGIN(n_bero_out)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_mapchange, STRING("aji_19"), STRING("w_bero"))
@@ -203,6 +211,10 @@ static EVT_BEGIN(dokan_evt)
 EVT_END()
 
 #ifndef VERSION_G8ME01
+/**
+ * Rock-blasting script (JP only): the rock crumbles into an offscreen animation,
+ * then the model and collision of the rock in LW(10)/LW(11) are removed.
+ */
 static EVT_BEGIN(rock_main)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)

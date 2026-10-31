@@ -28,6 +28,13 @@ typedef struct CraneTimingWork {
 } CraneTimingWork;
 
 
+/**
+ * Per-frame driver of action command 13, which no battle script in the tree sets up.
+ * Sways unit params[1] (part params[2]) left and right at 1.5 units a frame by a random distance (params[4])
+ * around its start, bobbing it up and down; pressing A after the params[3]-frame delay succeeds
+ * when it is within 20 units of the start. Fails after params[6] frames.
+ * Auto Command presses for you near the start. Returns 0 when finished.
+ */
 s32 battleAcMain_CraneTiming(BattleWork* work) {
     CraneTimingWork* cw;
     BattleUnit* unit;
@@ -130,13 +137,16 @@ s32 battleAcMain_CraneTiming(BattleWork* work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_CraneTiming(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/** Display callback: this command draws nothing; the swaying unit is the only cue. */
 void battleAcDisp_CraneTiming(CameraId cameraId, void* param) {
 }
 
+/** Called by btlevtcmd_StopAC: starts the 60-frame wait after which the command clears its callbacks. */
 void battleAcDelete_CraneTiming(BattleWork* work) {
     work->actionCommands.mAcState = 1002;
 }

@@ -66,6 +66,7 @@ EffectEntry* effAkariSflushN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
     return effect;
 }
 
+/** Fades the flash in over 16 frames; in its last 8 frames it expands and fades out quickly. */
 void effAkariSflushMain(EffectEntry* effect) {
     EffAkariSflushN64Work* work = effect->userdata;
     s32 lifetime;
@@ -103,6 +104,10 @@ void effAkariSflushMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effAkariSflushDisp, effect);
 }
 
+/**
+ * Draws a ring of five pointed, four-corner flares that pulse in size with a cosine;
+ * extra rings are added with `count` (always 0 here).
+ */
 void effAkariSflushDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffAkariSflushN64Work* work;

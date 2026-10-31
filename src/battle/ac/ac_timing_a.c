@@ -44,6 +44,10 @@ TimingAEntry* _ac_timing_a_timing_tbl[] = {
     _ac_timing_a_timing_lv_6,
 };
 
+/**
+ * Draws the A icon, shown pressed while the jump script sets timing flag bit 0 (btlevtcmd_ac_timing_flag_onoff)
+ * as the cue.
+ */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;
@@ -63,10 +67,15 @@ static void actionCommandDisp(f32 x, f32 y) {
     (*blinkTimer)++;
 }
 
+/** Called by btlevtcmd_StopAC: starts the 60-frame end wait. */
 void battleAcDelete_TimingA(BattleWork* work) {
     work->actionCommands.mAcState = 1000;
 }
 
+/**
+ * Display callback: slides the A icon in from the left over 20 frames (the releases snap it in place),
+ * and once the command is stopped keeps it up for 40 frames before sliding it back out.
+ */
 void battleAcDisp_TimingA(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleACDispParams* disp = &work->actionCommands.disp;
@@ -99,6 +108,12 @@ void battleAcDisp_TimingA(CameraId cameraId, void* param) {
 }
 
 
+/**
+ * Judges the press when the script asks: succeeds
+ * if A was pressed in the last battleAcTimingA_GetSuccessFrame frames of the pad record
+ * and only once in the last 20. outputParams[0]: 1 pressed too often or early, 2 not pressed, 3 success.
+ * Auto Command and Frankly's jump lesson always succeed; confused units fail.
+ */
 s32 battleAcResult_TimingA(BattleWork* work) {
     s32 successFrame = battleAcTimingA_GetSuccessFrame(work);
     s32 count = 0;
@@ -173,6 +188,11 @@ s32 battleAcTimingA_GetSuccessFrame(BattleWork* work) {
     return ret;
 }
 
+/**
+ * Per-frame driver of action command 1, used by Mario's jumps,
+ * Goombella's Headbonk and Multibonk and Frankly's lesson.
+ * Does no judging itself (see battleAcResult_TimingA); it only sets up the display and runs the end wait.
+ */
 s32 battleAcMain_TimingA(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     TimingAWork* tw = (TimingAWork*)ac->work;

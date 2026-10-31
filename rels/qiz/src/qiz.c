@@ -12,6 +12,10 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
+/**
+ * Module entry point: runs the static constructors,
+ * then registers the init script of qiz_00 with the REL loader (there are no battle tables).
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 
@@ -21,6 +25,7 @@ void _prolog(void) {
     relSetEvtAddr("qiz_00", qiz_00_init_evt);
 }
 
+/** Module exit point: runs the static destructors. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -28,5 +33,6 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+/** Placeholder the linker points unresolved relocations at; it does nothing. */
 void _unresolved(void) {
 }

@@ -20,6 +20,11 @@ USER_FUNC(evt_snd_envoff_f);
 static EvtWord epilogue_evt[49];
 EvtWord gor_12_init_evt[35];
 
+/**
+ * Ending sequence on the final sea view: starts the sea ambience, freezes and hides Mario and the partner,
+ * waits 7 seconds while music and ambience fade out over 8 seconds,
+ * then fades to black and changes the map to aaa_00.
+ */
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_END_MUJ1"))
     CALL(evt_cam_ctrl_onoff, 4, 0)

@@ -27,6 +27,7 @@ static inline s32 _caseEntry(s32 conditionId, BOOL flag, const char* hitObjName,
     return caseEntry(ptr);
 }
 
+/** Same as _caseEntry, but the case script gets a copy of the calling script's LW variables. */
 static inline s32 _evtCaseEntry(EventEntry* event, s32 conditionId, BOOL flag,
                                 const char* hitObjName, u32 swFlag, void* evtCode, s32 priority) {
     CaseSetup setup;
@@ -46,6 +47,9 @@ static inline s32 _evtCaseEntry(EventEntry* event, s32 conditionId, BOOL flag,
     return caseEntry(ptr);
 }
 
+/**
+ * u16 conditionId, BOOL flag, const char* hitObjName, u32 swFlag, void* evtCode, s32 caseIdStoreIndex
+ */
 // u16 conditionId, BOOL flag, const char* hitObjName, u32 swFlag, void* evtCode,
 // s32 caseIdStoreIndex
 USER_FUNC(evt_run_case_evt) {
@@ -69,6 +73,7 @@ USER_FUNC(evt_run_case_evt) {
     return EVT_RETURN_DONE;
 }
 
+/** same as evt_run_case_evt, but with priority 20 */
 // same as evt_run_case_evt, but with priority 20
 USER_FUNC(evt_run_case_evt_bero) {
     EvtWord* args = event->args;
@@ -91,16 +96,22 @@ USER_FUNC(evt_run_case_evt_bero) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * C entry point for registering a case event at priority 0 (_caseEntry);
+ * evt_map.c uses it for the airport ride cases. Returns the case id.
+ */
 s32 evtRunCaseEntry(s32 conditionId, BOOL flag, const char* hitObjName, u32 swFlag, void* evtCode,
                     EvtWord* lwData) {
     return _caseEntry(conditionId, flag, hitObjName, swFlag, evtCode, lwData, 0);
 }
 
+/** Deletes the case that started the running script (event->caseId), so it no longer triggers. */
 USER_FUNC(evt_exit_case_evt) {
     caseDelete(event->caseId);
     return EVT_RETURN_DONE;
 }
 
+/** BOOL keepEvent, s32 caseId */
 // BOOL keepEvent, s32 caseId
 USER_FUNC(evt_del_case_evt) {
     EvtWord* args = event->args;
@@ -120,6 +131,7 @@ USER_FUNC(evt_del_case_evt) {
     return EVT_RETURN_DONE;
 }
 
+/** s32 caseId, s32 index, s32 value */
 // s32 caseId, s32 index, s32 value
 USER_FUNC(evt_set_case_wrk) {
     EvtWord* args = event->args;

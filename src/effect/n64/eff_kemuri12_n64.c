@@ -32,6 +32,11 @@ effN64Vtx size32x32_tex32x32_yougan_vtx[] = {
 void effKemuri12Main(EffectEntry* effect);
 void effKemuri12Disp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns an expanding smoke puff at (x, y, z) for duration frames.
+ * Type 0 is black, 1 red, anything else white-purple.
+ * battle_damage.c uses type 0 for explosion hits, gor_01 uses scale 2; event scripts via evt_eff.
+ */
 EffectEntry* effKemuri12N64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffKemuri12N64Work* work;
@@ -74,6 +79,7 @@ EffectEntry* effKemuri12N64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f3
     return effect;
 }
 
+/** Advances progress from 0 to 8 across the duration (it picks the sprite frame), then deletes the effect. */
 void effKemuri12Main(EffectEntry* effect) {
     EffKemuri12N64Work* work = effect->userdata;
     Vec position;
@@ -93,6 +99,11 @@ void effKemuri12Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri12Disp, effect);
 }
 
+/**
+ * Draws the smoke with texture 0xE, cross-fading two 32-pixel texture windows,
+ * the current animation frame and the next, by the fraction of progress (TEV register 1 alpha);
+ * types above 2 use the lava-coloured (yougan) mesh with extra quads.
+ */
 void effKemuri12Disp(CameraId cameraId, EffectEntry* effect) {
     s32 type;
     CameraEntry* camera;

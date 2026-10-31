@@ -150,6 +150,10 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_frankli", "c_kuri_h", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kUntattleable | kNoHpLoss, 0, pose_table},
 };
 
+/**
+ * Test event: Frankly's lecture intro (mac_0_b_t3_000) and sets the act-end event of Mario to none.
+ * Not used by the rest of the file.
+ */
 EVT_BEGIN(_test_event)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
@@ -171,6 +175,7 @@ USER_FUNC(_set_actend_event) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that sets the battle's lecture unit id to args[0], the unit that the tutorial messages come from. */
 static USER_FUNC(_battle_set_lecture_unit_id) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -204,31 +209,40 @@ static USER_FUNC(lecture_init) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that stores the kind of action Mario chose in the command menu (actType) in args[0]. */
 USER_FUNC(get_actkind) {
     evtSetValue(event, event->args[0], _battleWorkPointer->commandMenu.actType);
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that stores the success of the last action command in args[0]. */
 USER_FUNC(get_ac_result) {
     evtSetValue(event, event->args[0], _battleWorkPointer->lastAcSuccess);
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that makes the audience cheer as in the Star Power lecture. */
 USER_FUNC(aud_joy) {
     BattleAudienceJoySACLecture();
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that adds 5 audience members. */
 USER_FUNC(aud_inc) {
     BattleAudienceAddAudienceNum(5);
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that removes 5 audience members. */
 USER_FUNC(aud_dec) {
     BattleAudienceAddAudienceNum(-5);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that lets audience seat 48 throw a hammer (item 0xEF) onto the stage;
+ * blocks until it has been thrown, then freezes the audience again.
+ */
 USER_FUNC(hammer_on) {
     BattleAudience* aud = BattleAudienceBaseGetPtr();
     BattleAudienceMember* member = BattleAudienceGetPtr(48);
@@ -242,6 +256,10 @@ USER_FUNC(hammer_on) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper that starts the audience attack part of the lecture:
+ * sets the lecture flag and remembers the message window id.
+ */
 USER_FUNC(aud_attack_init) {
     BattleWork* wp = _battleWorkPointer;
 
@@ -250,16 +268,23 @@ USER_FUNC(aud_attack_init) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that ends the audience attack part: sets the lecture flag. */
 USER_FUNC(aud_attack_end) {
     _battleWorkPointer->lectureFlags |= 1;
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that makes the AP (Star Power) gauge in the status window blink for 160 frames. */
 USER_FUNC(blinkAP) {
     statusAPBlink(160);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that dims the screen except for a rectangle:
+ * args[0..3] are the left, top, right and bottom of the lit area,
+ * args[4] the fade time and args[5] the hold time (frames). Used to point at the gauge.
+ */
 USER_FUNC(spot_square) {
     EvtWord* args = event->args;
     s32 fadeFrames;
@@ -286,6 +311,7 @@ USER_FUNC(spot_square) {
     return darkCount >= holdFrames + fadeFrames * 2 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** Draws one axis-aligned black quad in 2D from (x0, y0) to (x1, y1). */
 void Quads2D(f32 x0, f32 y0, f32 x1, f32 y1) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(x0, y0, 0.0f);
@@ -294,6 +320,7 @@ void Quads2D(f32 x0, f32 y0, f32 x1, f32 y1) {
     GXPosition3f32(x0, y1, 0.0f);
 }
 
+/** Draw callback of spot_square: fills the screen with translucent black in four quads around the lit rectangle. */
 void spot_square_disp(CameraId cameraId, void* param) {
     CameraEntry* cam;
     Mtx mtx;
@@ -321,6 +348,10 @@ void spot_square_disp(CameraId cameraId, void* param) {
     Quads2D(-320.0f, point[3], 320.0f, -240.0f);
 }
 
+/**
+ * Stops the idle events of Mario and his partner and puts both into their normal standing pose,
+ * ready for the next lecture step.
+ */
 EVT_BEGIN(stop_wait_event)
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_MARIO, 1)
@@ -330,6 +361,11 @@ EVT_BEGIN(stop_wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Professor Frankly in the special-action-command tutorial:
+ * starts lecture mode, registers himself as the lecture unit, hooks actend_event on Mario and the partner,
+ * clears work 0 to 2 and forbids movement.
+ */
 static EVT_BEGIN(init_event)
     CALL(lecture_init)
     CALL(btlevtcmd_onoff_battleflag, 1, BATTLE_FLAG_NO_OBJECT_FALL)
@@ -349,6 +385,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event that scripts the Star Power lesson: unit work 0 is the lesson step.
+ * On turn 1 he introduces the AP gauge (mac_0_b_t3_000, 001) with a spotlight on it (spot_square),
+ * then later steps explain the special action command, branching on unit work 1 and 2.
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -382,6 +423,16 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Act-end event of Mario and his partner in the Star Power lecture (hooked by init_event): after each action it
+ * moves the lecture along by the lecture unit's work 0.
+ * After the first special move (act type 4) Frankly shows the
+ * emptied gauge and asks to be attacked (mac_0_b_t3_003 to 005);
+ * after each attack he praises or scolds the action
+ * command result (006 to 010, the audience growing or shrinking) and, once the icons match,
+ * explains the bingo and
+ * the hammer-throwing audience member (013 to 014_3); at step 3 he ends the lecture (014_4, 015).
+ */
 EVT_BEGIN(actend_event)
     CALL_CHILD(PTR(stop_wait_event))
     CALL(get_actkind, LW(0))
@@ -536,6 +587,12 @@ EVT_BEGIN(actend_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of Professor Frankly in the Star Power tutorial:
+ * runs the default damage handling, then, once the lesson is at step 2
+ * and the action command result (get_ac_result) is 1,
+ * he comments mac_0_b_t3_011 and 012 with a spotlight on the area.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -563,6 +620,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of Professor Frankly in the Star Power tutorial: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

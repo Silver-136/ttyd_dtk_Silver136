@@ -20,6 +20,7 @@ typedef struct EffRankupWork {
     s32 alpha;      // 0x20
 } EffRankupWork;
 
+/** Spawns the rank-up banner at (x, y, z); reached through evt_eff ("rankup"). */
 EffectEntry* effRankupEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffRankupWork* work;
@@ -43,6 +44,7 @@ EffectEntry* effRankupEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/** Per frame: loads the banner animation, fades it in, and deletes the effect after one loop. */
 void effRankupMain(EffectEntry* effect) {
     EffRankupWork* work = effect->userdata;
     Vec position;
@@ -101,6 +103,7 @@ void effRankupMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effRankupDisp, effect);
 }
 
+/** Draws the banner animation pose in three segments scaled by 6. */
 void effRankupDisp(CameraId cameraId, EffectEntry* effect) {
     EffRankupWork* work = effect->userdata;
     Mtx mtx;

@@ -111,6 +111,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Planter hit script 8: the first time it is hit it launches a Power Punch badge out of the planter;
+ * remembered with a flag.
+ */
 static EVT_BEGIN(evt_ueki_08)
     CALL(evt_item_delete_check, STRING("item_ueki_08"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

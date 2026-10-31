@@ -77,11 +77,19 @@ static NpcSetupInfo npcEnt[2];
 static BeroEntry bero_entry_data[2];
 EvtWord tik_11_init_evt[31];
 
+/**
+ * Script helper.
+ * Sets the running event's owner NPC to the NPC named by args[0], so "me" in the shop scripts refers to it.
+ */
 static USER_FUNC(setmertn) {
     event->ownerNPC = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper.
+ * Spawns a star-dust particle burst: args are the type, X, Y, Z, X and Y velocities, particle count and camera.
+ */
 static USER_FUNC(effect_stardust) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
@@ -97,6 +105,11 @@ static USER_FUNC(effect_stardust) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for ratio ("wariai") math on integers.
+ * With a = args[0] - 1 and b = args[1], stores (a * args[2] + args[3] * (b - a)) / b into args[4]:
+ * a blend from args[3] toward args[2] as args[0] steps up from 1 to b + 1.
+ */
 static USER_FUNC(wariai_enzan_1) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
@@ -108,6 +121,7 @@ static USER_FUNC(wariai_enzan_1) {
     return EVT_RETURN_DONE;
 }
 
+/** The same blend as wariai_enzan_1, but stores the result into args[4] as a float. */
 static USER_FUNC(wariai_enzan_1f) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
@@ -119,6 +133,10 @@ static USER_FUNC(wariai_enzan_1f) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Like wariai_enzan_1, but the divisor is args[1] - 1, so the blend reaches args[2] when args[0] equals args[1].
+ * Result stored as an integer.
+ */
 static USER_FUNC(wariai_enzan_0) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
@@ -130,6 +148,7 @@ static USER_FUNC(wariai_enzan_0) {
     return EVT_RETURN_DONE;
 }
 
+/** The same as wariai_enzan_0, with the result stored as a float. */
 static USER_FUNC(wariai_enzan_0f) {
     EvtWord* args = event->args;
     f32 a = evtGetFloat(event, args[0]) - 1.0f;
@@ -141,6 +160,12 @@ static USER_FUNC(wariai_enzan_0f) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper.
+ * Rotates the point whose X and Z are held in the variables args[1]
+ * and args[2] around the centre (args[3], args[4]) by args[0] degrees (modulo 360),
+ * writing the new X and Z back.
+ */
 static USER_FUNC(enzan_cam_turn_keisan) {
     EvtWord* args = event->args;
     f32 angle = evtGetValue(event, args[0]) % 360;
@@ -165,6 +190,11 @@ static USER_FUNC(enzan_cam_turn_keisan) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that sets the 3D camera for a turn around the shop counter.
+ * args[0] is a percentage 0..100: the camera slides from (-9, 212, 886) toward (-9, 152, 542)
+ * while orbiting the point (-9, 56, 0) by up to two turns (720 degrees), then is snapped to that position.
+ */
 // Move through two full camera revolutions as the interpolation parameter runs from zero to one hundred.
 static USER_FUNC(enzan_cam_turn_keisan_f) {
     f32 t = evtGetFloat(event, event->args[0]) / 100.0f;
@@ -193,6 +223,7 @@ static USER_FUNC(enzan_cam_turn_keisan_f) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Copies the float args[1] into the variable args[0] as an integer. */
 static USER_FUNC(enzan_set_i_f) {
     EvtWord* args = event->args;
     s32 var = args[0];
@@ -201,6 +232,7 @@ static USER_FUNC(enzan_set_i_f) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Copies the integer args[1] into the variable args[0] as a float. */
 static USER_FUNC(enzan_set_f_i) {
     EvtWord* args = event->args;
     s32 var = args[0];
@@ -209,6 +241,7 @@ static USER_FUNC(enzan_set_f_i) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Saves the script's 16 LW registers into the module array xlw. */
 // Save all sixteen local words in the shared backup before the animation reuses them.
 static USER_FUNC(enzan_lw_save) {
     s32 i;
@@ -219,6 +252,7 @@ static USER_FUNC(enzan_lw_save) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. Restores the 16 LW registers from the array saved by enzan_lw_save. */
 static USER_FUNC(enzan_lw_load) {
     s32 i;
 
@@ -228,6 +262,7 @@ static USER_FUNC(enzan_lw_load) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper. With args[0] = 0 turns the background scroll offset off, otherwise on. */
 static USER_FUNC(bgScrollControll) {
     if (evtGetValue(event, event->args[0]) == 0) {
         bgTransOffsetOff();
@@ -238,6 +273,7 @@ static USER_FUNC(bgScrollControll) {
 }
 
 
+/** Script helper. Blocks until the music on channel 1 has started. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
@@ -251,6 +287,14 @@ EVT_BEGIN(powerdownya_face_left)
     RETURN
 EVT_END()
 
+/**
+ * Chet Rippo's stat trade for Mario. Refuses if Mario has fewer than 39 coins (powerdown_04).
+ * Otherwise shows the coin window and two choices (evt_win_other_select 9 and 10: the stat to boost and the stat
+ * to decrease) and asks whether that trade sounds good for 39 coins (powerdown_06, powerdown_09);
+ * on yes it takes the 39 coins, chants (powerdown_11, powerdown_12) over the light and house effects,
+ * sets the new HP, FP and BP (unitwin_setmariolevel), and says it removed all badges because BP ran low
+ * (powerdown_10) when that happened, else that it is finished (powerdown_13).
+ */
 EVT_BEGIN(powerdownya_mario_level_rtn)
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), 39)
@@ -798,6 +842,7 @@ EVT_BEGIN(powerdownya_table_talk)
     RETURN
 EVT_END()
 
+/** Talk script for Chet Rippo when spoken to directly instead of at the counter; he says powerdown_14. */
 EVT_BEGIN(powerdownya_direct_talk)
     CALL(evt_msg_print, 0, STRING("powerdown_14"), 0, STRING("me"))
     RETURN
@@ -844,6 +889,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Map init script of tik_11, Chet Rippo's shop.
+ * Starts the sewer music and ambience, sets up the exit back to tik_01,
+ * clears the greeting flag so he greets Mario on each entry,
+ * places the shopkeeper and starts the smoke animation.
+ */
 EVT_BEGIN(tik_11_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))

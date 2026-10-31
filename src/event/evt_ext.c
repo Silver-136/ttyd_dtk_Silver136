@@ -2,6 +2,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/extdrv.h"
 
+/** pose count, texture list, init function, main function, second main function */
 // pose count, texture list, init function, main function, second main function
 USER_FUNC(evt_ext_entry) {
     EvtWord* args = event->args;
@@ -20,6 +21,7 @@ USER_FUNC(evt_ext_entry) {
     return EVT_RETURN_DONE;
 }
 
+/** Clears everything evt_ext_entry set up in extdrv. No arguments. */
 USER_FUNC(evt_ext_reset) {
     extReset();
     return EVT_RETURN_DONE;

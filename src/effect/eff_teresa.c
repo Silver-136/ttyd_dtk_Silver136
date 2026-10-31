@@ -19,6 +19,11 @@ typedef struct EffTeresaWork {
     BOOL vanished;              // 0x3C
 } EffTeresaWork;
 
+/**
+ * Spawns a Boo sprite at (x, y, z).
+ * Type 0 starts at scale 30 and plays a sound on creation (the Creepy Steeple caller);
+ * type 1 starts small and black (the Shadow Queen shockwave in the effect table).
+ */
 EffectEntry* effTeresaEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffTeresaWork* work;
@@ -49,6 +54,10 @@ EffectEntry* effTeresaEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Type 0 shrinks and spins, then on vanishing starts a smoke puff and a second sound and fades out.
+ * Type 1 expands towards scale 20 while its alpha decays; both delete once the alpha is nearly zero.
+ */
 void effTeresaMain(EffectEntry* effect) {
     EffTeresaWork* work = effect->userdata;
     Vec position;
@@ -98,6 +107,7 @@ void effTeresaMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effTeresaDisp, effect);
 }
 
+/** Draws the Boo texture as a camera-facing quad: white for type 0, black for type 1. */
 void effTeresaDisp(CameraId cameraId, EffectEntry* effect) {
     EffTeresaWork* work = effect->userdata;
     CameraEntry* camera;

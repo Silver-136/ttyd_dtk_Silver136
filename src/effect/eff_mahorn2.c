@@ -95,6 +95,10 @@ EffectEntry *effMahorn2Entry(BOOL unused, f32 posX, f32 posY, f32 posZ, f32 dstX
     return effect;
 }
 
+/**
+ * Per frame: moves the effect elements along the path to the destination,
+ * updates their scale and alpha and deletes the effect once every element has finished.
+ */
 void effMahorn2Main(EffectEntry *effect) {
     effMahorn2Data *data = effect->userdata;
     Vec position;
@@ -166,6 +170,7 @@ void effMahorn2Main(EffectEntry *effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMahorn2Disp, effect);
 }
 
+/** Draws the travelling elements as textured quads (effect textures 0x8F and 0x90). */
 void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
     effMahorn2Data *data = effect->userdata;
     Mtx mtx;

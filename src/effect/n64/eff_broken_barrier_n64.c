@@ -77,6 +77,11 @@ static effN64Vtx size8x8_tex22x22_vtx[] = {
     {-8, 8, 0, 4928, 704, 0, 0, 0, 255},
 };
 
+/**
+ * Spawns 60 barrier shards around (x, y, z) for `life` frames (0 or less: until soft deleted).
+ * Type 0 is the staff barrier breaking, 2 plays in reverse (shards flow inward); 1 is Peach's (Guess).
+ * Used in the Palace of Shadow (las_29).
+ */
 EffectEntry* effBrokenBarrierN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffBrokenBarrierN64Work* work;
@@ -124,6 +129,11 @@ EffectEntry* effBrokenBarrierN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f
     return effect;
 }
 
+/**
+ * Each shard, with a staggered start, spawns on the barrier shell in a 20-frame cycle,
+ * flies out (or in, for types 2-3) spinning, and shrinks along a scale table.
+ * The whole effect fades in its last 8 frames.
+ */
 void effBrokenBarrierMain(EffectEntry* effect) {
     s32 w;
     s32 h;
@@ -250,6 +260,7 @@ void effBrokenBarrierMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBrokenBarrierDisp, effect);
 }
 
+/** Draws the shard cloud three times: as is, and rotated by +/-120 degrees about a tilted axis. */
 void effBrokenBarrierDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx trans;
     Mtx scaleMtx;
@@ -296,6 +307,7 @@ void effBrokenBarrierDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Draws each live shard as a rotated, scaled quad using one of eight textured cells of the shard strip. */
 static void main_dl(EffectEntry* effect, Mtx viewMtx) {
     EffBrokenBarrierN64Work* work = effect->userdata;
     Mtx trans;

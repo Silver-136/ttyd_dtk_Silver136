@@ -35,6 +35,7 @@ EffectEntry* effUranokoEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/** Waits for the MOBJ_EFF_uranoko group, starts the A_1 animation, eases the scale up to 1 and fades out at the end. */
 void effUranokoMain(EffectEntry* effect) {
     EffUranokoWork* work = effect->userdata;
     Vec position;
@@ -74,6 +75,7 @@ void effUranokoMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effUranokoDisp, effect);
 }
 
+/** Draws the aura pose camera-facing, with the fade alpha as an event colour. */
 void effUranokoDisp(CameraId cameraId, EffectEntry* effect) {
     EffUranokoWork* work = effect->userdata;
     Mtx mtx;

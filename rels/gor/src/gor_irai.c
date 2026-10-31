@@ -227,6 +227,10 @@ s32* irai_item_table[] = {
     irai_item_data25, irai_item_null, irai_item_null, irai_item_null, irai_item_data29, irai_item_null,
 };
 
+/**
+ * Start event of a Trouble Center request that needs no setup on taking it (the default entry of
+ * irai_start_event): does nothing.
+ */
 EVT_BEGIN(irai_start_event_null)
     RETURN
 EVT_END()
@@ -253,6 +257,10 @@ EvtWord* irai_start_event[] = {
     irai_start_event_null,
 };
 
+/**
+ * End event of a Trouble Center request that needs no cleanup when it is cancelled
+ * or solved (the default entry of irai_end_event): does nothing.
+ */
 EVT_BEGIN(irai_end_event_null)
     RETURN
 EVT_END()
@@ -290,6 +298,11 @@ EvtWord* irai_end_event[] = {
     irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
 };
 
+/**
+ * Init event of the Trouble Center: makes the notice board (A_i04_keizi) open the request window with
+ * gor_irai_main when Mario presses A in front of it,
+ * and the Trouble Center manager (A_i04_kunter) run gor_irai_tenshu_main.
+ */
 EVT_BEGIN(gor_irai_init)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_i04_keizi"), 0, PTR(gor_irai_main), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_i04_kunter"), 0, PTR(gor_irai_tenshu_main), 0)
@@ -470,6 +483,7 @@ void irai_flag_clear(void) {
     }
 }
 
+/** Empty loops over the request work flags and bytes; the debug print they once contained is gone. */
 void irai_flag_disp(void) {
     s32 i;
 
@@ -479,15 +493,21 @@ void irai_flag_disp(void) {
     }
 }
 
+/** Script helper that starts a request: clears its working flags. */
 USER_FUNC(irai_start_func) {
     irai_flag_clear();
     return EVT_RETURN_DONE;
 }
 
+/** Returns the zero-based request index from the script argument, which holds the request number counted from 1. */
 static inline s32 irai_get_no(EventEntry* event) {
     return evtGetValue(event, event->args[0]) - 1;
 }
 
+/**
+ * Script helper that cancels request args[0]: clears the working flags
+ * and removes every copy of each of its items (irai_item_table) from Mario's pouch.
+ */
 USER_FUNC(irai_cancel_func) {
     s32 no = irai_get_no(event);
     s32* items;
@@ -511,6 +531,12 @@ USER_FUNC(irai_cancel_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that prepares the request window:
+ * allocates the work block, fills the list with the requests that exist at the current story progress (6 at the
+ * start, then 3 more at story progress 56, 112, 164, 215, 261 (2 requests), 281, 339, 373 and 401),
+ * copies each request's client and contents text, and stores the work block in LW(10).
+ */
 USER_FUNC(irai_init_func) {
     IraiWork* wp;
     s32 seq;
@@ -595,6 +621,13 @@ USER_FUNC(irai_init_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that runs the request window each frame (work block in LW(10)):
+ * first creates the pointer hand, scroll arrow and L/R button icons,
+ * then A picks the highlighted request (only when no request is active and it is not solved yet), B cancels,
+ * the stick moves the cursor and L and R page through the list.
+ * Finishes with LW(0) set to the chosen request number, or -1 if cancelled.
+ */
 USER_FUNC(irai_main_func) {
     IraiWork* wp = (IraiWork*)event->lwData[10];
     s32 prev;
@@ -744,6 +777,11 @@ USER_FUNC(irai_main_func) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper that sets up the text for the chosen request:
+ * LW(12) is the confirmation message irai_msg_kakunin for the request in LW(0) and LW(11) the request number,
+ * or 0 and -1 when the window was cancelled.
+ */
 USER_FUNC(irai_check_func) {
     if (event->lwData[0] != -1) {
         event->lwData[12] = (EvtWord)irai_msg_kakunin[event->lwData[0] - 1];
@@ -755,6 +793,7 @@ USER_FUNC(irai_check_func) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that frees the request window's work block (LW(10)). */
 USER_FUNC(irai_end_func) {
     _mapFree((void*)event->lwData[10]);
     return EVT_RETURN_DONE;
@@ -847,6 +886,10 @@ void irai_window_disp(CameraId camera, void* param) {
         iraiDrawFit(wp->client[no], -119.0f, wp->scroll + (140 - i * 30), 180.0f, w);
         iraiDrawFit(wp->contents[no], 51.0f, wp->scroll + (140 - i * 30), 260.0f, w);
 #else
+/**
+ * Adds an integer to a float; kept as a separate function
+ * so the draw code's arithmetic compiles as in the original.
+ */
 // FAKE: the float + int sum goes through an inline (same value); plain `wp->scroll + (140 - i * 30)` changes the JP
 // object
 static inline f32 iraiAddI(f32 a, s32 b) {

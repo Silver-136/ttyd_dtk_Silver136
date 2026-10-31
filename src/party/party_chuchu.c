@@ -55,6 +55,11 @@ USER_FUNC(set_msg);
 USER_FUNC(search_result);
 USER_FUNC(post_msg);
 
+/**
+ * Ms. Mowz's search report, run by chuchu_use after her sniff:
+ * set_msg finds the nearest hidden thing, search_result plays the reaction,
+ * the message from the party group is printed, and post_msg lets chuchu_use end.
+ */
 EVT_BEGIN(msg_evt)
     CALL(set_msg)
     CALL(search_result)
@@ -110,6 +115,11 @@ ChuchuTreasure chuchu_treasure_tbl[] = {
 
 static const Vec vecB = {0.0f, 0.0f, 0.0f};
 
+/**
+ * Script helper: reads set_msg's result (LW0 message, LW1 2 near / 1 far / 0 nothing) and,
+ * if something was found, plays a 42-frame sniff (sound 0x945, pose PCH_Y_1) and
+ * then a 1.5 s speech-bubble effect over her. In the retail versions a far find skips the sniff.
+ */
 USER_FUNC(search_result) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
@@ -253,6 +263,7 @@ USER_FUNC(set_msg) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: clears LW0 and advances Ms. Mowz's use step (22 to 23) so chuchu_use ends the search. */
 USER_FUNC(post_msg) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
@@ -263,6 +274,7 @@ USER_FUNC(post_msg) {
     return EVT_RETURN_DONE;
 }
 
+/** Whether any unfound chuchu_treasure_tbl entry on the current map is within range of Mario. */
 static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
     u32 i;
     int found;
@@ -293,6 +305,11 @@ static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
     return found;
 }
 
+/**
+ * Whether there is something to sniff within 150 units of Mario (an item, an unopened item box,
+ * a Kururin floor item or a block from mobj_list);
+ * party_motion.c and party_move.c play her sniffing pose while it is TRUE.
+ */
 BOOL chuchu_searchObject(void) {
     PartyEntry* cp = partyGetPtr(marioGetPartyId());
     MarioWork* player = cp->playerPtr;
@@ -306,6 +323,7 @@ BOOL chuchu_searchObject(void) {
     return chuchu_findTreasure(cp, 150.0f) != 0;
 }
 
+/** Party table init handler: Ms. Mowz is member kind 7, 20 units tall and 24 wide. */
 void chuchu_init(PartyEntry* party) {
     party->memberKind = PARTY_MEMBER_MS_MOWZ;
     party->moveKind = 0;
@@ -313,12 +331,18 @@ void chuchu_init(PartyEntry* party) {
     party->width = 24.0f;
 }
 
+/** Called from partyReInit when Ms. Mowz is the partner; does nothing. */
 void chuchu_reinit(PartyEntry* party) {
 }
 
+/** Party table exit handler; does nothing. */
 void chuchu_exit(PartyEntry* party) {
 }
 
+/**
+ * Party table move handler: on a run-mode change clears the in-use flag and starts walking;
+ * then follows Mario (the retail versions also update her walk speed first).
+ */
 void chuchu_move(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
@@ -329,6 +353,12 @@ void chuchu_move(PartyEntry* party) {
     partyWalkMain(party);
 }
 
+/**
+ * Party table use handler for her search ability:
+ * freezes the game at system level 1, glides beside Mario over 4 frames, faces his way, waits 25 frames,
+ * sniffs (sound 0x944, pose PCH_A2_1) for 30, runs msg_evt,
+ * and once post_msg advances the step ends the use and unfreezes.
+ */
 void chuchu_use(PartyEntry* party) {
     PartyEntry* cp = party;
     MarioWork* player = cp->playerPtr;

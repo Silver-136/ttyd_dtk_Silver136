@@ -156,6 +156,11 @@ static BattleUnitKindPart parts_yoshi[] = {
     },
 };
 
+/**
+ * Init script of the Doopliss-controlled Yoshi.
+ * Registers his wait, attack, damage and confusion handlers,
+ * applies his original body colour animation and starts him waiting.
+ */
 static EVT_BEGIN(init_event_yoshi)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event_yoshi))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_yoshi))
@@ -166,6 +171,11 @@ static EVT_BEGIN(init_event_yoshi)
     RETURN
 EVT_END()
 
+/**
+ * Damage script of the Doopliss-controlled Yoshi:
+ * if the hit carries damage code 1024 it sets GW(20)
+ * so the fake Mario's phase script knows the partner was struck, then runs the default damage handling.
+ */
 EVT_BEGIN(damage_event_yoshi)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -177,6 +187,14 @@ EVT_BEGIN(damage_event_yoshi)
     RETURN
 EVT_END()
 
+/**
+ * Defeat script of the Doopliss-controlled Yoshi.
+ * He first walks back to his home position if he is away from it, then collapses.
+ * With GW(19) at 0 (the fake Mario is still standing) the camera frames him
+ * and his farewell lines (stg4_jin_26_03_yos and stg4_jin_26_04) play;
+ * with GW(19) at 1 or 2 he only plays the collapse pose, waiting for GW(19) to reach 2 first.
+ * He is then removed from the battle and GW(20) is set to 2 so the fake Mario's phase script knows he is gone.
+ */
 static EVT_BEGIN(dead_event_yoshi)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(3), LW(4), LW(5))
@@ -229,6 +247,12 @@ static EVT_BEGIN(dead_event_yoshi)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the Doopliss-controlled Yoshi: a flutter-jump stomp.
+ * After an item check he picks a target, runs in place, hops and flutter-jumps over it, spins,
+ * and dives onto it. While the hit connects he bounces up and dives again for a random one to four total stomps.
+ * A miss or block makes him tumble back, and he then walks home.
+ */
 static EVT_BEGIN(attack_event_yoshi)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -425,6 +449,7 @@ static EVT_BEGIN(attack_event_yoshi)
     RETURN
 EVT_END()
 
+/** Wait script: plays Yoshi's idle pose from his pose table. */
 static EVT_BEGIN(wait_event_yoshi)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

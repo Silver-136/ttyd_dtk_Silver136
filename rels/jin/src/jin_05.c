@@ -19,6 +19,10 @@ EvtWord item_box_00[34];
 static EvtWord mobj_box01[34];
 EvtWord jin_05_init_evt[63];
 
+/**
+ * Exit event of the roll-through doorway: returns 0 in LW(0), which blocks the exit,
+ * while Mario is in motion 22 (MARIO_MOTION_ROLL, the paper-roll form), and 1 otherwise.
+ */
 static EVT_BEGIN(check_roll)
     CALL(evt_mario_get_motion, LW(0))
     IF_INT_EQUAL(LW(0), 22)
@@ -49,6 +53,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Chest script for mobj_box00: freezes Mario, makes the Cookbook appear from the chest
+ * and gives it to him once the lid has opened.
+ */
 EVT_BEGIN(item_box_00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
@@ -60,6 +68,10 @@ EVT_BEGIN(item_box_00)
     RETURN
 EVT_END()
 
+/**
+ * Chest script for the Ice Smash chest (mobj_box01):
+ * the item appears at the chest while it opens and Mario receives the badge; control is locked meanwhile.
+ */
 static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
@@ -71,6 +83,10 @@ static EVT_BEGIN(mobj_box01)
     RETURN
 EVT_END()
 
+/**
+ * Creepy Steeple jin_05 map init: starts the steeple music and reverb, the shadow-Mario tint and the exit,
+ * and places a power-up block (Shine Sprite), the Cookbook chest, the Ice Smash chest and a Star Piece.
+ */
 EVT_BEGIN(jin_05_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))

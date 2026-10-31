@@ -61,6 +61,10 @@ typedef struct MonteTable {
 static void* yuunpc_wp;
 static Monte* monte_p;
 static void monte_disp(CameraId camera, void* param);
+/**
+ * Returns TRUE when two points are within 20 units in 3D and within 20 in height,
+ * i.e. the boat is touching a floating coin.
+ */
 static inline BOOL monte_check_inl(Vec* a, Vec* b) {
     if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) {
         return TRUE;
@@ -68,6 +72,10 @@ static inline BOOL monte_check_inl(Vec* a, Vec* b) {
     return FALSE;
 }
 
+/**
+ * Returns a random float in [0, d) with two decimal digits of resolution,
+ * used to scatter coins inside a montetable rectangle.
+ */
 static inline f32 randRange(f32 d) { return irand(100.0f * d) / 100.0f; }
 
 USER_FUNC(eff_call_minigame);
@@ -165,6 +173,7 @@ static MonteTable montetable[] = {
     {0},
 };
 
+/** The Boat Mode game's coin event (data->viewEvent): runs fall_rtn, which scatters and collects the coins. */
 static EVT_BEGIN(minigame_view_monte)
     CALL(fall_rtn)
     RETURN
@@ -823,10 +832,15 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
     return FALSE;
 }
 
+/** Draw callback for minigame 2: draws the collected-coin counter (monteCountDisp). */
 void yuuminigame_disp_2fune(CameraId camera, void* param) {
     monteCountDisp();
 }
 
+/**
+ * Per-frame state machine for Boat Mode: phase 1 starts minigame02_start, phases 2 and 3 run the rules check,
+ * phase 4 launches minigame02_end with the coin counter, a result value and the coin count.
+ */
 void yuuminigame_main_2fune(EventEntry* event, BOOL isFirstCall) {
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
     FuneWork* data = wp->data;
@@ -865,6 +879,10 @@ void yuuminigame_main_2fune(EventEntry* event, BOOL isFirstCall) {
     }
 }
 
+/**
+ * Init callback for minigame 2: starts the coin view event,
+ * marks the opening cutscene as pending and switches Mario to the boat motion.
+ */
 void yuuminigame_init_2fune(EventEntry* event, BOOL isFirstCall) {
     FuneWork* data = ((MiniGameWork*)event->lwData[0])->data;
 
@@ -874,6 +892,10 @@ void yuuminigame_init_2fune(EventEntry* event, BOOL isFirstCall) {
     marioChgShipMotion();
 }
 
+/**
+ * args[0] = minigame work pointer, args[1] = output.
+ * Writes 1 if the opening cutscene is still pending (flags bit 0), else 0.
+ */
 USER_FUNC(yuuminigame2_opening_chk) {
     EvtWord* args = event->args;
     MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
@@ -886,6 +908,10 @@ USER_FUNC(yuuminigame2_opening_chk) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = minigame work pointer, args[1] = on/off.
+ * Sets or clears the "opening cutscene pending" bit (flags bit 0).
+ */
 USER_FUNC(yuuminigame2_opening_on_off) {
     EvtWord* args = event->args;
     FuneWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
@@ -898,6 +924,10 @@ USER_FUNC(yuuminigame2_opening_on_off) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = index into the whirlpool/barrel tables;
+ * returns the map object name in args[1], the hit object name in args[2] and the turn angle in args[3].
+ */
 USER_FUNC(yuuminigame2_get_name) {
     EvtWord* args = event->args;
     s32 i = evtGetValue(event, args[0]);
@@ -908,6 +938,7 @@ USER_FUNC(yuuminigame2_get_name) {
     return EVT_RETURN_DONE;
 }
 
+/** args[0] = minigame work pointer, args[1] = new phase for the Boat Mode state machine. */
 USER_FUNC(yuuminigame2_set_phase) {
     EvtWord* args = event->args;
     FuneWork* data = ((MiniGameWork*)evtGetValue(event, args[0]))->data;
@@ -916,6 +947,10 @@ USER_FUNC(yuuminigame2_set_phase) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Resets the coins for the next round: stops the view event,
+ * frees the Monte array and starts a fresh minigame_view_monte event.
+ */
 static USER_FUNC(re_fall_rtn) {
     FuneWork* data;
 
@@ -932,6 +967,12 @@ static USER_FUNC(re_fall_rtn) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Frame-by-frame coin spawner and collector for Boat Mode.
+ * On first call it allocates the Monte array and scatters coins at random spots in the montetable rectangles (at
+ * least 20 units apart), then each frame it checks the boat against every coin,
+ * counting and hiding collected ones with a 3D sound. Blocks forever as a view event.
+ */
 static USER_FUNC(fall_rtn) {
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
     BOOL exists = FALSE;
@@ -1021,6 +1062,7 @@ static USER_FUNC(fall_rtn) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Draw callback that renders every coin icon of a Monte array that has not been collected yet. */
 static void monte_disp(CameraId camera, void* param) {
     Monte* monte = param;
     s32 i;
@@ -1034,6 +1076,10 @@ static void monte_disp(CameraId camera, void* param) {
     }
 }
 
+/**
+ * Returns TRUE when two points are within 20 units in 3D and within 20 in height;
+ * unused here, the inline copy monte_check_inl does the work.
+ */
 static BOOL get_monte_check(Vec* a, Vec* b) {
     if (PSVECDistance(a, b) < 20.0f && __fabs(a->y - b->y) < 20.0) {
         return TRUE;
@@ -1041,6 +1087,7 @@ static BOOL get_monte_check(Vec* a, Vec* b) {
     return FALSE;
 }
 
+/** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
 // Descriptive name (not in the symbol maps); placeholder unk_yuu_00005268, JP yuu .text+0x519C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(yuu_01_cam_shift_reset) {
     camShiftReset();

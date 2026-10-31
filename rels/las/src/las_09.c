@@ -60,6 +60,11 @@ EvtWord majyorin_evt_main[652];
 EvtWord majyorin_evt[55];
 EvtWord las_09_init_evt[257];
 
+/**
+ * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_door1_1 and S_door1_2 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door1_1"), 0, LW(0), 0)
@@ -68,6 +73,11 @@ static EVT_BEGIN(w_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_door1_1 and S_door1_2 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(w_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door1_1"), 0, LW(0), 0)
@@ -76,6 +86,11 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (closing) for the east door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_door2_1 and S_door2_2 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(e_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door2_1"), 0, LW(0), 0)
@@ -84,6 +99,11 @@ static EVT_BEGIN(e_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the east door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_door2_1 and S_door2_2 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(e_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door2_1"), 0, LW(0), 0)
@@ -92,6 +112,12 @@ static EVT_BEGIN(e_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (closing) for the north door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_door3_1 and S_door3_2 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(n_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door3_1"), 0, LW(0), 0)
@@ -100,6 +126,12 @@ static EVT_BEGIN(n_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the north door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_door3_1 and S_door3_2 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(n_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door3_1"), 0, LW(0), 0)
@@ -364,6 +396,13 @@ static EVT_BEGIN(first_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: crumbles a Chain Chomp statue wall after Bobbery blows it up.
+ * LW(0) is the statue's map object, LW(1) its hit object.
+ * It captures the statue into an offscreen image, hides the real object,
+ * plays the paper "OFF_d_bom_ver2" break animation,
+ * removes the statue's hit area and plays a short success jingle.
+ */
 EVT_BEGIN(bomb_wanwan)
     SET_VALUE(LW(14), LW(0))
     SET_VALUE(LW(15), LW(1))
@@ -436,6 +475,12 @@ EVT_BEGIN(bomb_wanwan2_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: runs when the first blue switch is pressed.
+ * After a camera move and an earthquake, three platform segments (S_daizadai1_1..3) flip over into place one
+ * after another, opening the way and the "Ship_Change" harbour exit;
+ * plays a success jingle if the other switch is already pressed.
+ */
 EVT_BEGIN(switch_1_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 400, 1368, 0, -40, 700, 1000, EASING_SINE_IN_OUT)
@@ -532,6 +577,11 @@ EVT_BEGIN(switch_1_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: runs when the second blue switch is pressed.
+ * Same as switch_1_evt for the platforms S_daizadai2_1..3 and the harbour exit Ship_Change1,
+ * which is made walkable.
+ */
 EVT_BEGIN(switch_2_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 450, 45, 0, -75, -558, 1000, EASING_SINE_IN_OUT)
@@ -628,6 +678,10 @@ EVT_BEGIN(switch_2_evt)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the dazed Shadow Sirens after the battle:
+ * Beldam, Marilyn and Doopliss each say a line, then the partner comments.
+ */
 EVT_BEGIN(goikkou_talk)
     CALL(evt_party_stop, 0)
     CALL(evt_msg_print, 0, STRING("stg8_las_27"), 0, STRING("マジョリン"))
@@ -639,18 +693,27 @@ EVT_BEGIN(goikkou_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Beldam (Majolyne): clears her battle-info flag and sets status bit 2,
+ * which makes her turn to face the way she moves (the evt_npc move commands check it).
+ */
 EVT_BEGIN(majyorin_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
+/**
+ * Init of the Marilyn NPC: clears its battle info flag and sets status bit 2 (evt_npc_status_onoff),
+ * which makes it turn to face the way it moves (the evt_npc move commands check it).
+ */
 static EVT_BEGIN(maririn_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
+/** Init event of Doopliss (Rampell): same as Beldam's (no battle info, turns to face the way he moves). */
 EVT_BEGIN(ranpel_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)

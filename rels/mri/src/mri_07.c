@@ -149,27 +149,35 @@ static EVT_BEGIN(chibitoge_init)
     RETURN
 EVT_END()
 
+/** Talk script of the little Jabbi: runs chibitoge_nakama, the scene in which he asks to join the Puni group. */
 static EVT_BEGIN(chibitoge_talk)
     CALL_CHILD(PTR(chibitoge_nakama))
     RETURN
 EVT_END()
 
+/** Init for the Puni clerk of the shop: places the clerk at (207, 0, -6) facing left. */
 EVT_BEGIN(punishop_init)
     CALL(evt_npc_set_position, STRING("me"), 207, 0, -6)
     CALL(evt_npc_set_ry, STRING("me"), 270)
     RETURN
 EVT_END()
 
+/** Talk script of the Puni clerk: does nothing; the shop menu itself is opened by the shop setup (evt_shop_setup). */
 EVT_BEGIN(punishop_talk)
     RETURN
 EVT_END()
 
+/** Init for the Puni information seller: places it at (235, 0, 124) facing left. */
 EVT_BEGIN(puniinfo_init)
     CALL(evt_npc_set_position, STRING("me"), 235, 0, 124)
     CALL(evt_npc_set_ry, STRING("me"), 270)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the Puni information seller: cycles through three lines of tips (counter LSW(714));
+ * the set of lines changes after the boss fight and again at the end of the story.
+ */
 EVT_BEGIN(puniinfo_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
@@ -272,6 +280,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Map init script of mri_07, the Puni shop room:
+ * sets up the Puni, the recovery block, the little Jabbi, the shop clerk and the information seller,
+ * and registers the shop (goods and trade lists).
+ */
 EVT_BEGIN(mri_07_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 7, 0, -310, -1000, -1000, 0, 0)

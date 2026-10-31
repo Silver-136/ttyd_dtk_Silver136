@@ -99,6 +99,10 @@ static EvtWord cloud_toujou[95];
 EvtWord win_04_init_evt[94];
 
 
+/**
+ * Door-open callback for the west bero exit: names the door map objects "S_doa_w_l" and "S_doa_w_r"
+ * and runs the shared evt_win_door_open.
+ */
 EVT_BEGIN(win_04w_door_open)
     SET_VALUE(LW(8), STRING("S_doa_w_l"))
     SET_VALUE(LW(9), STRING("S_doa_w_r"))
@@ -106,6 +110,10 @@ EVT_BEGIN(win_04w_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door-close callback for the west bero exit: names the door map objects "S_doa_w_l" and "S_doa_w_r"
+ * and runs the shared evt_win_door_close.
+ */
 EVT_BEGIN(win_04w_door_close)
     SET_VALUE(LW(8), STRING("S_doa_w_l"))
     SET_VALUE(LW(9), STRING("S_doa_w_r"))
@@ -113,6 +121,10 @@ EVT_BEGIN(win_04w_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door-open callback for the east bero exit: names the door map objects "S_doa_e_l" and "S_doa_e_r"
+ * and runs the shared evt_win_door_open.
+ */
 EVT_BEGIN(win_04e_door_open)
     SET_VALUE(LW(8), STRING("S_doa_e_l"))
     SET_VALUE(LW(9), STRING("S_doa_e_r"))
@@ -120,6 +132,10 @@ EVT_BEGIN(win_04e_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door-close callback for the east bero exit: names the door map objects "S_doa_e_l" and "S_doa_e_r"
+ * and runs the shared evt_win_door_close.
+ */
 EVT_BEGIN(win_04e_door_close)
     SET_VALUE(LW(8), STRING("S_doa_e_l"))
     SET_VALUE(LW(9), STRING("S_doa_e_r"))
@@ -490,6 +506,7 @@ USER_FUNC(ss_ch_check) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets ssf[args[0]] to args[1]; used by clouda_nakama and the helper hop scripts. */
 USER_FUNC(ss_ch_set) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -498,6 +515,10 @@ USER_FUNC(ss_ch_set) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: covers the screen with a 2D black fade of color (args[0], args[1], args[2]) and alpha args[3],
+ * without animating.
+ */
 USER_FUNC(fade_alpha) {
     EvtWord* args = event->args;
     s32 r = evtGetValue(event, args[0]);
@@ -943,6 +964,10 @@ EVT_BEGIN(clouda_nakama)
     RETURN
 EVT_END()
 
+/**
+ * Front-door case script: depending on story progress it runs clouda_inai, clouda_irai, clouda_irai_ato,
+ * or (after the Sirens' defeat) either asks for the necklace or starts the joining scene clouda_nakama.
+ */
 EVT_BEGIN(touch_door)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_05_01_FLURRIE_LIVING_ROOM)
@@ -965,6 +990,10 @@ EVT_BEGIN(touch_door)
     RETURN
 EVT_END()
 
+/**
+ * Sets map TEV callback 1 to mirror_ball, assigns it to the map object "S_mirre"
+ * and turns off its prebuilt display lists so the callback's extra shine stage is used.
+ */
 EVT_BEGIN(mirror_ball_event)
     CALL(evt_map_set_tevcallback, 1, PTR(mirror_ball))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mirre"), MAP_OBJ_TEV_CALLBACK(1))
@@ -1208,6 +1237,10 @@ f32 rose_table[] = {
     -190.0f, 270.0f, -190.0f, -260.0f, 190.0f, 270.0f, 190.0f, -260.0f,
 };
 
+/**
+ * Rose-petal effect: allocates 55 flowers, ticks them until GW(0) is set to 1, then fades them out;
+ * spawned during Flurrie's joining scene.
+ */
 EVT_BEGIN(flower_event)
     SET_VALUE(GW(0), 0)
     CALL(evt_flower_init)
@@ -1243,6 +1276,10 @@ void mirror_ball(void* param) {
     envAddTev(10, param);
 }
 
+/**
+ * 2D draw callback for the falling rose petals:
+ * blends each of the 55 flowers' texture at its position, scale and alpha.
+ */
 void flower_disp(CameraId camera, void* param) {
     // rose_table_direct stores screen x/y and target scale in Vec.z, not depth.
     FlowerWork* wp = param;
@@ -1365,6 +1402,7 @@ static f32 randf(f32 min, f32 max) {
     return (max - min) * r + min;
 }
 
+/** Script helper: allocates the rose-petal work area (55 flowers) and stores it in LW(10). */
 USER_FUNC(evt_flower_init) {
     FlowerWork* wp = _mapAlloc(sizeof(FlowerWork));
 
@@ -1374,6 +1412,11 @@ USER_FUNC(evt_flower_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: ticks every flower: each starts
+ * after a random delay (0 to 99 frames) at its rose_table_direct position,
+ * grows by 0.08 a frame to its target scale while fading in by 20 alpha a frame, and all are drawn in 2D.
+ */
 USER_FUNC(evt_flower) {
     FlowerWork* wp = (FlowerWork*)event->lwData[10];
     Flower* fl = wp->flowers;
@@ -1412,6 +1455,7 @@ USER_FUNC(evt_flower) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: resets all flowers' states so they start fading. */
 USER_FUNC(evt_flower_end) {
     FlowerWork* wp = (FlowerWork*)event->lwData[10];
     Flower* fl = wp->flowers;
@@ -1423,6 +1467,7 @@ USER_FUNC(evt_flower_end) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: fades the flowers' alpha by 10 per frame until they are gone, drawing them each frame. */
 USER_FUNC(evt_flower_end_main) {
     FlowerWork* wp = (FlowerWork*)event->lwData[10];
     Flower* fl = wp->flowers;
@@ -1445,6 +1490,7 @@ USER_FUNC(evt_flower_end_main) {
     return EVT_RETURN_DONE;
 }
 
+/** Loops over the flowers doing nothing; only flower_disp_pos calls it. Guess: its debug output was compiled out. */
 USER_FUNC(flower_pos_report) {
     FlowerWork* wp = (FlowerWork*)event->lwData[10];
     s32 i;

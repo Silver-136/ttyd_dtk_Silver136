@@ -40,6 +40,11 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 void effBlowMain(EffectEntry* effect);
 void effBlowDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns `count` streaks at (x, y, z) travelling along the direction (dx, dy, dz);
+ * returns NULL for a zero count or a zero direction.
+ * Each streak gets a sideways acceleration around the axis (the table calls this effect a fountain).
+ */
 EffectEntry* effBlowN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz) {
     EffectEntry* effect;
     EffBlowN64Work* w;
@@ -137,6 +142,12 @@ EffectEntry* effBlowN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f
     return effect;
 }
 
+/**
+ * Launches streaks in waves (two frames apart per group of five):
+ * each moves along the direction with drag, widens and shortens late in its life, then loses speed and alpha.
+ * Streaks respawn while state is 0; the effect ends once state goes from 1 to 2.
+ * Nothing in the tree sets state 1 (and no script spawns blow_n64), so as built it runs until deleted.
+ */
 void effBlowMain(EffectEntry* effect) {
     EffBlowN64Work* work = effect->userdata;
     Vec position;
@@ -230,6 +241,7 @@ void effBlowMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effBlowDisp, effect);
 }
 
+/** Draws each streak as a rotated, stretched camera-facing quad tinted light cyan. */
 void effBlowDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffBlowN64Work* work;

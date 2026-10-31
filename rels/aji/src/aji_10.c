@@ -183,6 +183,11 @@ static BeroEntry bero_peach_data[] = {
     {0},
 };
 
+/**
+ * Script function: allocates the monitor's work area
+ * and a 608 by 480 intensity texture buffer for the live image on Sir Grodus's monitor,
+ * and clears its ready and officer flags.
+ */
 USER_FUNC(monitor_cap_init) {
     u32 size = GXGetTexBufferSize(0x260, 0x1E0, GX_TF_I4, GX_FALSE, 0);
 
@@ -198,6 +203,12 @@ USER_FUNC(monitor_kanbu_flag_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Draw callback that renders the picture for the monitor:
+ * sets up a perspective camera close to the NPC chosen by monitor_wp->kanbu (the officer or the first grunt),
+ * draws that NPC's poses into the frame buffer and copies the result into the monitor texture (0x130 by 0xF0,
+ * RGB565). Sets monitor_wp->ready when done.
+ */
 void monitor_cap_capture(CameraId cameraId, void* param) {
     CameraEntry saved = *camGetCurPtr();
     Mtx44 projMtx;
@@ -269,11 +280,20 @@ void monitor_cap_capture(CameraId cameraId, void* param) {
     monitor_wp->ready = 1;
 }
 
+/**
+ * Script function that queues monitor_cap_capture every frame so the monitor picture stays live;
+ * never finishes (blocks).
+ */
 USER_FUNC(monitor_cap_evt) {
     dispEntry(CAMERA_3D, 1000.0f, 0, monitor_cap_capture, NULL);
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Texture-environment callback of the monitor screen (map object monitor_1):
+ * once the picture is ready, binds the captured texture with a projective texture matrix aimed at the screen,
+ * so the screen shows the captured NPC.
+ */
 void monitor_cap_tev(MapTevCallbackInfo* info) {
     Mtx proj;
     Mtx view;
@@ -310,6 +330,7 @@ void monitor_cap_tev(MapTevCallbackInfo* info) {
     }
 }
 
+/** Script function: sets Mario's (Peach's) pose to the animation named in args[0]. */
 static USER_FUNC(peach_set_pose) {
     const char* pose = (const char*)evtGetValue(event, event->args[0]);
     MarioWork* mario = marioGetPtr();
@@ -317,6 +338,10 @@ static USER_FUNC(peach_set_pose) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: sets the 3D camera's viewport and scissor and the 2D camera's viewport to x, y,
+ * width and height from args[0] to args[3].
+ */
 static USER_FUNC(viewport) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -342,6 +367,7 @@ static USER_FUNC(viewport) {
     return EVT_RETURN_DONE;
 }
 
+/** Script function: sets Mario's scale to 0 on all axes, making the player (Peach) invisible. */
 static USER_FUNC(peach_evt_toumei) {
     MarioWork* mario = marioGetPtr();
 
@@ -349,6 +375,10 @@ static USER_FUNC(peach_evt_toumei) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Opens Sir Grodus's monitor: unhides it, plays SFX_PEACH_SCREEN_OPEN1 and the opening animation monitore_1,
+ * and waits for it to finish.
+ */
 EVT_BEGIN(monitor_on)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_get_position, STRING("monitor"), LW(0), LW(1), LW(2))
@@ -359,6 +389,10 @@ EVT_BEGIN(monitor_on)
     RETURN
 EVT_END()
 
+/**
+ * Closes the monitor: plays the closing animation monitore_2 with SFX_PEACH_SCREEN_SHUT1
+ * and hides the monitor afterwards.
+ */
 EVT_BEGIN(monitor_off)
     CALL(evt_map_playanim, STRING("monitore_2"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, STRING("monitore_2"), LW(0), LW(1))
@@ -900,6 +934,10 @@ static EVT_BEGIN(peach_evt_stg3)
     RETURN
 EVT_END()
 
+/**
+ * Walks Peach (Mario) from where she stands to the spot in front of Sir Grodus's chair:
+ * around him if she is behind him on his side, then to x = -130 and finally to (-150, 0).
+ */
 EVT_BEGIN(peach_move)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("シュリョー"), LW(3), LW(4), LW(5))
@@ -1152,6 +1190,11 @@ static EVT_BEGIN(peach_evt_stg6)
     RETURN
 EVT_END()
 
+/**
+ * Unused test script (named eff_test, started by nothing in the game) for the N64-style charge effect
+ * (akari_charge_n64) under the TEC fade: fade on, effect at (-300, 95, 200) after a second,
+ * fade off a second later.
+ */
 EVT_BEGIN(eff_test)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_fade_tec_onoff, 1, 0)
@@ -1163,18 +1206,21 @@ EVT_BEGIN(eff_test)
     RETURN
 EVT_END()
 
+/** Init of the first X-Naut underling in Grodus's room: common NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
 static EVT_BEGIN(teshita1_init)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
+/** Init of the second X-Naut underling in Grodus's room: common NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
 static EVT_BEGIN(teshita2_init)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
+/** Init of the third X-Naut underling in Grodus's room: common NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
 static EVT_BEGIN(teshita3_init)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)

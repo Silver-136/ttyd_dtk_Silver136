@@ -418,6 +418,10 @@ u8 wakka_dl_0_size_tbl[] = {
 void effUltraHammerMain(EffectEntry* effect);
 void effUltraHammerDisp(CameraId camId, void* param);
 
+/**
+ * Spawns the effect at (x, y, z) for `counter` frames (0 or less: until removed).
+ * `mode` mirrors the rings for a right-turning swing. Caller: Mario's Ultra Hammer swing (mot_hammer).
+ */
 EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 counter) {
     EffectEntry* effect;
     EffUltraHammerData* data;
@@ -455,6 +459,10 @@ EffectEntry* effUltraHammerEntry(f32 x, f32 y, f32 z, f32 scale, BOOL mode, s32 
     return effect;
 }
 
+/**
+ * Counts down and fades alpha in the last 16 frames;
+ * each of the three rings waits for its start delay, then runs its 25-step scroll/scale table and repeats.
+ */
 void effUltraHammerMain(EffectEntry* effect) {
     EffUltraHammerData* data;
     Vec position;
@@ -490,6 +498,10 @@ void effUltraHammerMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, effUltraHammerDisp, effect);
 }
 
+/**
+ * unknown function, is used for many functions to "initialize"/copy some value into the local stack,
+ * with an extra vec
+ */
 // Returns a copy of *input, built in a zero-initialized temporary
 inline Vec initializeVec(Vec* input) {
     Vec temp = (Vec){ 0.0f, 0.0f, 0.0f };
@@ -499,6 +511,7 @@ inline Vec initializeVec(Vec* input) {
     return temp;
 }
 
+/** Draws the three ring models with the scrolling texture, mirrored in x if `mode` is non-zero. */
 void effUltraHammerDisp(CameraId camId, void* param) {
     u32 fmtLoop[2]; // FAKE: register-promoted array (vtx fmt + loop counter); separate scalars differ
     CameraEntry* cam;

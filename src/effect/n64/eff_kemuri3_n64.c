@@ -36,6 +36,10 @@ void effKemuri3Main(EffectEntry* effect);
 void effKemuri3Disp(CameraId cameraId, EffectEntry* effect);
 
 #pragma opt_propagation off
+/**
+ * Spawns five flower-smoke puffs ("jump" in the effect table) at (x, y, z), 72 degrees apart around the angle;
+ * 60 frames. Called via evt_eff64 "kemuri3_n64".
+ */
 EffectEntry* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
     s32 ofs;
     EffectEntry* effect;
@@ -81,6 +85,7 @@ EffectEntry* effKemuri3N64Entry(f32 x, f32 y, f32 z, f32 angle) {
 }
 
 #pragma opt_propagation reset
+/** Moves each puff outward (slowing 15% per frame) in a rise-then-fall arc and tilts it; deletes when all expire. */
 void effKemuri3Main(EffectEntry* effect) {
     EffKemuri3N64Work* work = effect->userdata;
     s32 i;
@@ -138,6 +143,7 @@ void effKemuri3Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri3Disp, effect);
 }
 
+/** Draws each live puff as a 16x16 quad (effect texture 0xF) tinted brown-yellow with the puff alpha. */
 void effKemuri3Disp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffKemuri3N64Work* work;

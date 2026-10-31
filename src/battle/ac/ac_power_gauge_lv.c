@@ -18,6 +18,12 @@ typedef struct PowerGaugeWork {
 
 
 
+/**
+ * Per-frame driver of action command 16, which no battle script in the tree sets up.
+ * A gauge fills over 100 frames; holding exactly L and R together stops it,
+ * succeeding at params[2] or above with outputParams[0] set to the level reached against thresholds params[3..5]
+ * (params[1] levels). Fails if the gauge fills without the press.
+ */
 s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     PowerGaugeWork* tw = (PowerGaugeWork*)ac->work;
@@ -124,6 +130,7 @@ s32 battleAcMain_PowerGaugeLv(BattleWork* work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_PowerGaugeLv(BattleWork* work) {
     return work->actionCommands.result;
 }
@@ -132,6 +139,10 @@ s32 battleAcResult_PowerGaugeLv(BattleWork* work) {
 static void actionCommandDisp(f32 x, f32 y);
 
 #pragma opt_propagation off
+/**
+ * Display callback: slides the gauge in from the left over 20 frames,
+ * and once the command ends keeps it up for 40 frames before sliding it back out.
+ */
 void battleAcDisp_PowerGaugeLv(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleACDispParams* disp = &work->actionCommands.disp;
@@ -163,6 +174,7 @@ void battleAcDisp_PowerGaugeLv(CameraId cameraId, void* param) {
 }
 
 #pragma opt_propagation reset
+/** Called by btlevtcmd_StopAC: unless the command already finished, starts the 60-frame end wait. */
 void battleAcDelete_PowerGaugeLv(BattleWork* work) {
     if (work->actionCommands.doneFlags & 1) {
         return;
@@ -170,6 +182,10 @@ void battleAcDelete_PowerGaugeLv(BattleWork* work) {
     work->actionCommands.mAcState = 1003;
 }
 
+/**
+ * Draws the A icon frame, the level gauge and the L and R icons,
+ * shown pressed while the gauge is in the success zone.
+ */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;

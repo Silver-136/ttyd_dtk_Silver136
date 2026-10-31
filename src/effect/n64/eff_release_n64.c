@@ -172,6 +172,10 @@ effN64Vtx rectangle_vtx[] = {
     {0, 480, 0, 2048, 0, 0, 0, 0, 255},
 };
 
+/**
+ * Spawns the glowing orb at (x, y, z); the 0xFF00 bits of `type` pick the variant,
+ * and a lifetime of 0 or less lasts until soft-deleted. Spawned by event scripts through evt_eff.
+ */
 EffectEntry* effReleaseN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffReleaseN64Work* work;
@@ -225,6 +229,14 @@ EffectEntry* effReleaseN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32
     return effect;
 }
 
+/**
+ * A delete request fades the orb out over 16 frames (lifetime 1000 means endless).
+ * State 0: the core layer flickers and pulses; for nonzero types the orb wobbles and
+ * after 50 frames starts the release (state 100 for variant 3, else 1).
+ * State 1: a 2-frame flash, then rings 1-2 grow and fade by anime_data over 30 steps;
+ * state 4 shrinks ring 1 by anime_data_2 over 30 steps; state 5 hides everything.
+ * State 100 keeps growing its rings until deleted.
+ */
 void effReleaseMain(EffectEntry* effect) {
     EffReleaseN64Work* work = effect->userdata;
     Vec position;
@@ -393,6 +405,13 @@ void effReleaseMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effReleaseDisp, effect);
 }
 
+/**
+ * Draws the four layers camera-facing, tinted by the work's two colours:
+ * 0 the core (texture 0x44), 1 a four-band ring strip (0x45),
+ * 2 a large glow (0x46, skipped for variant 1; it falls through and also draws layer 3's quads)
+ * and 3 the flash (0x47).
+ * Variants 2 and 3 also flash the whole screen light grey for a few frames at the release and at state 5.
+ */
 void effReleaseDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffReleaseN64Work* work;

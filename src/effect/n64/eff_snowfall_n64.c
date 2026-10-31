@@ -74,6 +74,10 @@ static effN64Vtx eff_snowfall_v[] = {
     {27, -44, -57, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF},
 };
 
+/**
+ * Wraps a particle back into the box of half-width w and half-height h around the camera target;
+ * below the box it either wraps to the top or, when life < 100, stops and hides the particle.
+ */
 void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     f32 cx, cy, cz, py, pz;
@@ -118,6 +122,10 @@ void cam_clip_chk(EffSnowfallParticle* p, s32 w, s32 h, s32 life) {
     }
 }
 
+/**
+ * Spawns `count` falling snow particles around the camera.
+ * Used by the Fahr Outpost battle stage (bom) and event scripts.
+ */
 EffectEntry* effSnowfallN64Entry(s32 arg, s32 count) {
     EffectEntry* effect;
     EffSnowfallWork* work;
@@ -212,6 +220,11 @@ void effSnowfallMain(EffectEntry* effect) {
 #endif
 }
 
+/**
+ * Draws each visible particle as a camera-facing cluster of small flake quads (eff_snowfall_v) with texture 99,
+ * after copying texture 100's 16x16 image into 99's mip chain each frame.
+ * White, or the map's blend colour when the first map entry has blending on.
+ */
 void effSnowfallDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     EffSnowfallParticle* p;

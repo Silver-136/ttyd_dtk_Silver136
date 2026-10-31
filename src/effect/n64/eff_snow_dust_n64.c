@@ -63,6 +63,11 @@ static u8 a_data[] = {
     255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 250, 200
 };
 
+/**
+ * Spawns `count` snow dust particles at (x, y, z) in a w by h area;
+ * a lifetime of 0 or less lasts until soft-deleted.
+ * Used by the Crystal Star effect (eff_starstone) and event scripts.
+ */
 EffectEntry* effSnowDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y, f32 z, f32 w, f32 h, f32 scale) {
     EffectEntry* effect;
     EffSnowDustN64Work* work;
@@ -145,6 +150,14 @@ EffectEntry* effSnowDustN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 y
     return effect;
 }
 
+/**
+ * A delete request fades the effect over 16 frames (lifetime 1000 means endless).
+ * Each particle runs a 30-frame cycle and respawns at a random spot in the w x h area facing the camera:
+ * types 0/1 drift down with a rising-then-falling alpha (a_data),
+ * 2/3 pulse in size by scale_data (type 2 also drifts randomly), 6 circles inward around the centre,
+ * and 4/5 are stationary sparkles in random pale colours.
+ * With under 30 frames left, finished cycles restart at step 20 instead of respawning.
+ */
 void effSnowDustMain(EffectEntry* effect) {
     s32 wi, hi;
     s32 lifetime;
@@ -306,6 +319,12 @@ void effSnowDustMain(EffectEntry* effect) {
     dispEntry(camId, dispCalcZ(&position), 2, (DispCallback)effSnowDustDisp, effect);
 }
 
+/**
+ * Draws each live particle camera-facing, scaled by its size and the effect alpha:
+ * types 0/6 a 4x4 flake from texture 8 masked by scrolling texture 0x65, type 1 an 8x8 flake from 0x66,
+ * types 2/3 a 12x12 frame from the 0x67 strip (type 2 picks the frame per particle),
+ * and types 4/5 a 16x16 sparkle from 0x68 plus a 32x32 glow quad.
+ */
 void effSnowDustDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     EffSnowDustN64Work* work;

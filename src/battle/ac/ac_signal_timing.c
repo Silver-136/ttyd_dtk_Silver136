@@ -59,6 +59,7 @@ s32 ac_signaltiming_ok_frame_range_2[7] = {30, 30, 30, 30, 25, 20, 15};
 
 static void actionCommandDisp(f32 x, f32 y);
 
+/** Frames a signal stays pressable: params[7] plus 20 down to 2 by difficulty, or 30 down to 15 when params[1] is 1. */
 s32 _get_ok_frame_range(s32 difficulty) {
     BattleWork* work = _battleWorkPointer;
     switch (work->actionCommands.params[SIGNAL_PARAM_MODE]) {
@@ -68,6 +69,15 @@ s32 _get_ok_frame_range(s32 difficulty) {
     return work->actionCommands.params[SIGNAL_PARAM_OK_BASE] + ac_signaltiming_ok_frame_range[difficulty];
 }
 
+/**
+ * Per-frame driver of action command 18, used by Vivian's Shade Fist,
+ * Flurrie's Dodgy Fog and Bobbery's Hold Fast.
+ * A signal sounds every params[2] frames: params[6] lead-in beeps, then params[0] signals,
+ * each to be answered with its button (A, or random d-pad-style stick directions or A/B/X/Y per params[4])
+ * within the ok window.
+ * Counts hits in outputParams[0] ([1] is the last answer, 1 or -1) and succeeds with params[3] or more.
+ * The releases also stop taking presses once every signal is answered.
+ */
 s32 battleAcMain_SignalTiming(BattleWork *work) {
     const char *sfxPi;
     const char *sfxPone;
@@ -331,10 +341,15 @@ s32 battleAcMain_SignalTiming(BattleWork *work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_SignalTiming(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/**
+ * Display callback: slides the signal row in from the left over 20 frames, holds it while running,
+ * and once the command is stopped keeps it up for 40 frames before sliding it back out.
+ */
 void battleAcDisp_SignalTiming(CameraId cameraId, void* param) {
     BattleWork* work = param;
     BattleActions* ac = &work->actionCommands;
@@ -370,10 +385,16 @@ void battleAcDisp_SignalTiming(CameraId cameraId, void* param) {
     }
 }
 
+/** Called by btlevtcmd_StopAC: marks the command done and starts the 60-frame end wait. */
 void battleAcDelete_SignalTiming(BattleWork* work) {
     work->actionCommands.mAcState = 1004;
 }
 
+/**
+ * Draws the signal row: the A icon (pressed during the ok window) or the buttons to press per acFlags,
+ * the numbered lead-in lights, a star per signal lit once it has sounded,
+ * OK/miss marks per answer and the hit count (+params[5]).
+ */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleActions* ac = &_battleWorkPointer->actionCommands;
     // FAKE: work recovered from ac (container-of through offsetof) so its web is a codegen temp numbered above the

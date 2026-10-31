@@ -97,6 +97,11 @@ EvtWord nok_00_koopa_npc_entry[35];
 EvtWord nok_00_koopa_evt[1250];
 EvtWord nok_00_init_evt[205];
 
+/**
+ * Message callback for Bowser's line kpa_stg2_013 in the Petalburg cutscene.
+ * Once the text has printed past its 49th character it sets the local flag LSWF(2),
+ * which releases the parallel thread waiting to switch Kammy's animation.
+ */
 void nok_stg2_013_cb(s32 type, void** work) {
     s32* msg = *work;
 
@@ -109,6 +114,10 @@ void nok_stg2_013_cb(s32 type, void** work) {
     }
 }
 
+/**
+ * Makes the poster visible: sets bit 0 of the PosterWork flags,
+ * which draw_poster checks before drawing the Peach poster onto the Koopa's locator.
+ */
 USER_FUNC(pposter_nok_on) {
     poster->flags |= 1;
     return EVT_RETURN_DONE;
@@ -125,6 +134,7 @@ EVT_BEGIN(nokonoko_A_init)
     RETURN
 EVT_END()
 
+/** Regular script for Koopa A; he does nothing on his own. */
 EVT_BEGIN(nokonoko_A_regl)
     RETURN
 EVT_END()
@@ -148,12 +158,20 @@ EVT_BEGIN(nokonoko_A_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init for Koopa B: not an encounter-style talker (talk animation off) but flagged as an enemy NPC
+ * so he can be hit with the hammer (see nokonoko_B_damage).
+ */
 EVT_BEGIN(nokonoko_B_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY)
     RETURN
 EVT_END()
 
+/**
+ * Regular script for Koopa B: he wanders at random within 100 units of where he stands,
+ * at speed 30 (urouro_init_func and urouro_main_func).
+ */
 EVT_BEGIN(nokonoko_B_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
@@ -161,6 +179,10 @@ EVT_BEGIN(nokonoko_B_regl)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for Koopa B: story-progress dependent dialogue,
+ * one line per stretch of the story up to the end of chapter 8, and a final line afterwards.
+ */
 EVT_BEGIN(nokonoko_B_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
@@ -177,6 +199,11 @@ EVT_BEGIN(nokonoko_B_talk)
     RETURN
 EVT_END()
 
+/**
+ * Runs when Mario hits Koopa B with the hammer:
+ * he plays a startled animation and says "Eek, don't touch me!" for 200 ms,
+ * then goes back to his idle animation.
+ */
 EVT_BEGIN(nokonoko_B_damage)
     CALL(evt_npc_set_anim, STRING("me"), STRING("KNP_O_1"))
     CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, STRING("イャーン　さわらないで！！<key>"), 0, 0)
@@ -185,6 +212,7 @@ EVT_BEGIN(nokonoko_B_damage)
     RETURN
 EVT_END()
 
+/** Regular script for Koopa C: wanders at random within 100 units of his spot, like Koopa B. */
 EVT_BEGIN(nokonoko_C_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
@@ -192,6 +220,7 @@ EVT_BEGIN(nokonoko_C_regl)
     RETURN
 EVT_END()
 
+/** Talk script for Koopa C: story-progress dependent dialogue, same schedule as Koopa B. */
 EVT_BEGIN(nokonoko_C_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
@@ -208,6 +237,10 @@ EVT_BEGIN(nokonoko_C_talk)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for Koopa D: story-progress dependent dialogue.
+ * Before Frankly's house is reached he asks a yes/no question and then continues with a follow-up line.
+ */
 EVT_BEGIN(nokonoko_D_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
@@ -373,6 +406,13 @@ static EVT_BEGIN(kizayarou_regl)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the Show-off Koopa, a French-accented flirt.
+ * If Goombella (party id 1) is with Mario, the first talk has him woo her (stg1_nok_10),
+ * she turns him down rudely (stg1_nok_11), he retreats (stg1_nok_12) and she asks Mario to leave (stg1_nok_13),
+ * setting LSWF(1); later talks play stg1_nok_14 and her reply stg1_nok_15.
+ * With any other partner he asks Mario where his Goomba companion is (stg1_nok_16).
+ */
 static EVT_BEGIN(kizayarou_talk)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -740,6 +780,10 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Creates the "poster" NPC (model c_p_peach, the Peach poster) used in the Bowser interlude:
+ * intangible, placed just in front of the S_ie_mad02 wall object, and then hooks it up with pposter_init.
+ */
 EVT_BEGIN(nok_00_koopa_npc_entry)
     CALL(evt_npc_entry, STRING("poster"), STRING("c_p_peach"))
     CALL(evt_npc_pera_onoff, STRING("poster"), 0)
@@ -1124,6 +1168,10 @@ USER_FUNC(pposter_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Display callback of the Koopa A model: when the group drawn is the poster's locator
+ * and the poster has been switched on, draws the poster's plane shape there.
+ */
 void draw_poster(void* userdata, s32 group, Mtx* modeling) {
     NpcEntry* npc = npcNameToPtr("poster");
 

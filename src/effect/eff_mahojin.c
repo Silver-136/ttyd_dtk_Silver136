@@ -29,6 +29,10 @@ Vec pos_tbl[7] = {
     { -11.1931f, 0.0f, -9.0435f },
 };
 
+/**
+ * TEV callback for the magic circle's map-object materials:
+ * appends a stage that blends in a purple (0xE8,0x00,0xE8) tint whose alpha is mahojin_rate.
+ */
 static void callback(MapTevCallbackInfo* info) {
     s32 tevStage = info->tevStage;
     s32 texMap = info->texMap;
@@ -48,6 +52,10 @@ static void callback(MapTevCallbackInfo* info) {
     info->texMap = texMap;
 }
 
+/**
+ * Spawns the magic circle (2 work records: front and back animation) at (x, y, z); type is stored.
+ * Called from evt_eff ("mahojin").
+ */
 EffectEntry* effMahojinEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffMahojinWork* work;
@@ -105,6 +113,10 @@ EffectEntry* effMahojinEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Per frame: sets up the omote/ura animations, advances them, switches to the "S_1" animation after the loop,
+ * and fades out and deletes the effect on a delete request.
+ */
 void effMahojinMain(EffectEntry* effect) {
     EffMahojinWork* p;
     s32 i;
@@ -257,6 +269,10 @@ void effMahojinMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMahojinDisp, effect);
 }
 
+/**
+ * Draws the magic circle's front and back animation poses at the effect position,
+ * applying the purple tint callback.
+ */
 void effMahojinDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx mtx;
     f32 z[16];

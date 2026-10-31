@@ -64,6 +64,10 @@ static void moamoa_pose_main(void);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
 static void ext_moamoa_main(void);
 #pragma inline_max_total_size(100000)
+/**
+ * Polynomial sine used by the Smorg swarm code (fast approximation, input in radians 0 to 2 pi),
+ * inlined where the swarm moves.
+ */
 // Same body as polySinf/polyCosf (poly_trig.h), kept as a second pair: using the shared pair for these calls too
 // changes the code, so this unit inlined two distinct copies.
 static inline f32 moa_sin(f32 x) {
@@ -102,6 +106,7 @@ static inline f32 moa_sin(f32 x) {
     return a;
 }
 
+/** Polynomial cosine for the Smorg swarm code (radians 0 to 2 pi); the companion of moa_sin. */
 static inline f32 moa_cos(f32 x) {
     f32 a = 0.03705f;
     f32 b = 0.4967f;
@@ -230,6 +235,11 @@ static ExtTexInfo ext_moamoa_data[] = {
 
 
 #pragma dont_inline on
+/**
+ * Splits the flat ext_moamoa_data table (one row per animation frame) into wp->defs:
+ * one MoamoaPoseDef per model and animation name, holding its first frame, frame count,
+ * speed and whether it loops (animation names starting with J play once).
+ */
 static void moamoa_pose_init(void) {
     ExtTexInfo* data = ext_moamoa_data;
     s32 i = 0;
@@ -264,6 +274,11 @@ static void moamoa_pose_init(void) {
     wp->numDefs++;
 }
 #pragma dont_inline reset
+/**
+ * Per-frame animation step for every Smorg in the swarm:
+ * turns the elapsed render time into a position in the current pose's frame range
+ * and stores the frame in the pose's texId, restarting the pose when its time has run out.
+ */
 static void moamoa_pose_main(void) {
     f32 t;
     u64 now;
@@ -347,11 +362,13 @@ static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: shuts the swarm down by resetting the ext-pose driver (extReset). */
 static s32 evt_moamoa_exit(EventEntry* event, BOOL isFirstCall) {
     extReset();
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: zeroes the Y rotation and target Y rotation of every swarm pose. */
 static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     ExtdrvPose* pose = extGetPosePtr();
@@ -363,6 +380,10 @@ static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: blocks the calling script until every Moamoa has MOAMOA_FLAG_GONE, that is,
+ * until the whole swarm has finished leaving.
+ */
 static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     Moamoa* moa;
@@ -378,6 +399,11 @@ static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: sends every Moamoa to its merge point (state 14, staggered timers) and blocks
+ * until all have gathered; then it marks them all as merged into the big Smorg
+ * and gives them the c_n_moa_a standing pose.
+ */
 static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     ExtdrvPose* pose;
@@ -446,6 +472,10 @@ static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: ends the merged state for the whole swarm
+ * and sends every Moamoa to state 63 (the blow-apart state). Its argument is read but not used.
+ */
 static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     Moamoa* moa;
@@ -460,6 +490,10 @@ static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: skips the gathering and puts every Moamoa straight into the merged state.
+ * Not called from any script in this module (debug leftover).
+ */
 static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     ExtdrvPose* pose = extGetPosePtr();
@@ -490,6 +524,7 @@ static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/** Random float in [min, max] from rand(). */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / (32767.0f);
 
@@ -499,6 +534,12 @@ static f32 randf(f32 min, f32 max) {
 __declspec(section ".rodata") static Vec ext_moamoa_t0 = {0.0f, 0.0f, 10.0f};
 __declspec(section ".rodata") static Vec ext_moamoa_t1 = {0.0f, 0.0f, 10.0f};
 __declspec(section ".rodata") static Vec ext_moamoa_t2 = {0.0f, 0.0f, 10.0f};
+/**
+ * Ext-pose init callback for the Smorg swarm (registered by evt_moamoa_init):
+ * allocates the work area and one Moamoa per pose, scatters them randomly around the first swarm target,
+ * drops each onto the floor and then runs 600 update steps so the swarm is already spread out
+ * when the map appears.
+ */
 static void ext_moamoa_init(void) {
     s32 i, j;
     ExtdrvPose* pose;
@@ -542,6 +583,10 @@ static void ext_moamoa_init(void) {
     }
 }
 #pragma opt_lifetimes reset
+/**
+ * Draw callback for the swarm: loads the ext-pose render state, vertices, textures and TEV, draws all poses and,
+ * when drawing into the offscreen camera, adds the bounding box to the "offscreen" buffer.
+ */
 static void ext_disp(CameraId camera, void* param) {
     u16 left, top, right, bottom;
 
@@ -563,6 +608,10 @@ static void ext_disp(CameraId camera, void* param) {
     }
 }
 
+/**
+ * Draw callback for the swarm's shadows: draws every pose flattened with a fixed shadow matrix,
+ * and also feeds the offscreen bounding box when drawing into the offscreen camera.
+ */
 static void ext_shadow_disp(CameraId camera, void* param) {
     static Mtx mt = {
         {8.0f, 0.0f, 0.0f, 0.0f},
@@ -586,6 +635,11 @@ static void ext_shadow_disp(CameraId camera, void* param) {
     }
 }
 #pragma dont_inline on
+/**
+ * Starts one Smorg's hop to (x, y, z): optionally snaps the destination to the floor below it,
+ * computes the jump time from the distance and speed and the initial vertical speed from the height difference
+ * and gravity, turns it toward the target and sets state 3 (in the air) with state next to follow.
+ */
 static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     f32 hitX, hitY, hitZ, dist, nx, ny, nz;
     f32 dy;
@@ -620,6 +674,12 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
 }
 #pragma dont_inline reset
 #pragma opt_lifetimes off
+/**
+ * Tests one Smorg against Mario and the partners:
+ * returns 1 when Mario lands on it, 2 when a hammer swing or a Koops shell hits it,
+ * 3 when Flurrie's breath reaches it, 4 when Bobbery's bomb attack hits it, otherwise 0.
+ * When nothing hits it, the Smorg also pushes Mario out of its way through mario->floorMove.
+ */
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     MarioWork* mario = marioGetPtr();
     CameraEntry* cam;
@@ -715,6 +775,13 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
 #pragma opt_lifetimes reset
 #pragma opt_lifetimes off
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
+/**
+ * Per-frame update of the whole Smorg swarm: tracks Mario's idle and hammer time and Flurrie's breath,
+ * applies hit results (stomp, hammer, shell, breath, bomb) to each Smorg
+ * and counts hits (past 250 the swarm runs away through evt_moamoa_escape),
+ * then runs every Smorg's state machine (idle hopping toward Mario or the swarm target, damage, knock-off,
+ * escape, merge) and its animation.
+ */
 static void ext_moamoa_main(void) {
     MarioWork *mario = marioGetPtr();
     PartyEntry *party = partyGetPtr(0);
@@ -1266,18 +1333,24 @@ static void ext_moamoa_dispent(void) {
     }
 }
 
+/** Door animation callback, closing: rotates map object "e_door" about Y by -0.444 times the value in LW(0). */
 static EVT_BEGIN(e_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("e_door"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Door animation callback, opening: rotates map object "e_door" about Y by 0.444 times the value in LW(0). */
 static EVT_BEGIN(e_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("e_door"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, closing: rotates map objects "s_door_a" and "s_door_b" about Y by 0.389
+ * and -0.389 times the value in LW(0), so the two leaves swing opposite ways.
+ */
 static EVT_BEGIN(s_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("s_door_a"), 0, LW(0), 0)
@@ -1286,6 +1359,10 @@ static EVT_BEGIN(s_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening: rotates map objects "s_door_a" and "s_door_b" about Y by -0.389
+ * and 0.389 times the value in LW(0), so the two leaves swing opposite ways.
+ */
 static EVT_BEGIN(s_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("s_door_a"), 0, LW(0), 0)
@@ -1532,6 +1609,11 @@ s32 img_set_color(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Plays the elevator's shaking: a shake sound and camera shake at the start
+ * and again near the end of the ride animation (anm_ere_1 going down, anm_ere_2 going up),
+ * timed from the animation length.
+ */
 EVT_BEGIN(evt_elv_rumble)
     IF_INT_EQUAL(GF(0), 0)
         CALL(evt_map_checkanim, STRING("anm_ere_1"), LW(0), LW(1))
@@ -1549,6 +1631,12 @@ EVT_BEGIN(evt_elv_rumble)
     RETURN
 EVT_END()
 
+/**
+ * Map init part for the elevator ride: enters the OFF_hei_07 paper,
+ * an image object "capture_img" and an offscreen buffer, allocates two 608x480 captures for it,
+ * hides the image and clears GF(0) (the elevator's floor flag, 0 = upper). evt_elv_down and evt_elv_up show this
+ * capture of the old floor and fade it out while the cage moves.
+ */
 static EVT_BEGIN(evt_elv_init)
     CALL(evt_paper_entry, STRING("OFF_hei_07"))
     CALL(evt_img_entry, STRING("capture_img"))
@@ -1714,6 +1802,12 @@ EVT_BEGIN(evt_elv_down)
     RETURN
 EVT_END()
 
+/**
+ * Elevator ride from the lower floor back up; the mirror of evt_elv_down (door sounds, door animations,
+ * the captured pictures of both floors fading out and in; before the Smorgs are swatted the swarm is drawn
+ * into the lower floor's picture and switched off), ending with Mario and the partner walking out of the
+ * cage.
+ */
 EVT_BEGIN(evt_elv_up)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     BEGIN_INLINE_EVENT
@@ -1846,6 +1940,12 @@ static s32 item_tbl[] = {
     ITEM_ELEVATOR_KEY_0x1A, -1,
 };
 
+/**
+ * Case event on the elevator switch (a_suitti).
+ * Before the ride story step it asks Mario to pick the Elevator Key from the item list,
+ * takes it and shows stg6_eki_07 ("You used the Elevator Key!"); then calls evt_elv_down or evt_elv_up
+ * depending on GF(0), the current floor, and flips GF(0).
+ */
 EVT_BEGIN(evt_elv)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_38_RIDE_THE_ELEVATOR)
@@ -1871,6 +1971,10 @@ EVT_BEGIN(evt_elv)
     RETURN
 EVT_END()
 
+/**
+ * Case event on the elevator switch while Mario does not have the key yet:
+ * prints the message stg6_eki_06 (there is a hole for the Elevator Key, but Mario does not have it).
+ */
 EVT_BEGIN(evt_elv_nomsg)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg6_eki_06"), 0, 0)
@@ -1878,6 +1982,11 @@ EVT_BEGIN(evt_elv_nomsg)
     RETURN
 EVT_END()
 
+/**
+ * Head-bump event of the block under "a_dai_sita":
+ * respawns the Close Call P item at (-260, 160, -60),
+ * launched with a bounce (gravity 1, bound rate 0.6, jump power 500), then ends the case event.
+ */
 static EVT_BEGIN(evt_head)
     CALL(evt_item_delete, STRING("item"))
     CALL(evt_item_entry, STRING("item"), ITEM_CLOSE_CALL_P, -260, 160, -60, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_EKI_00_CLOSE_CALL_P, 0)
@@ -1891,6 +2000,7 @@ static EVT_BEGIN(evt_head)
     RETURN
 EVT_END()
 
+/** Reads the signboard in the station: shows stg6_eki_00_01 while Mario's controls are locked. */
 static EVT_BEGIN(evt_kanban)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg6_eki_00_01"), 0, 0)
@@ -1898,6 +2008,14 @@ static EVT_BEGIN(evt_kanban)
     RETURN
 EVT_END()
 
+/**
+ * Map init for eki_00: sets up the doors to eki_01 and the platform (hom_00),
+ * the elevator switch (usable once the Elevator Key story step is reached),
+ * the Smorg swarm until they have been swatted,
+ * the Close Call P item under the platform (a head-bump case on a_dai_sita),
+ * the station sign (a_kan) and the station ambience. If the bridge scene flag is set it starts evt_bridge2.
+ * The lower floor's lever and bridge switch are set up by evt_elv_down.
+ */
 EVT_BEGIN(eki_00_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)

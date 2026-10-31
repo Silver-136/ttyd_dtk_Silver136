@@ -199,6 +199,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Map init for kpa_00 (Bowser's Castle exterior).
+ * Sets up the two NPCs, Kammy and the flying Bowser,
+ * and starts the opening cutscene or the flying cutscene depending on the story progress.
+ */
 EVT_BEGIN(kpa_00_init_evt)
     CALL(evt_mario_set_mode, 2)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_KOOPA_KPA1"))

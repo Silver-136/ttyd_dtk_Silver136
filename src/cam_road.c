@@ -89,6 +89,13 @@ s32 camRoadSetup(const char* name) {
     }
     return 1;
 }
+/**
+ * Turns the current road state into camera parameters:
+ * the file's field of view, aspect and far plane,
+ * an eye placed dist away from the curve point along its direction at the elevation angle,
+ * and a look-at point turned by rot degrees about the sideways axis.
+ * Without a state the camera sits at (0, 100, 100) looking at the origin.
+ */
 void calcCurrentCamState(CameraParams* out) {
     Mtx m;
     Vec v;
@@ -137,6 +144,7 @@ void calcCurrentCamState(CameraParams* out) {
     out->at.y = out->pos.y + res.y;
     out->at.z = out->pos.z + res.z;
 }
+/** Vector a - b by value. */
 static inline Vec crVecSub(Vec a, Vec b) {
     Vec r;
     r.x = a.x - b.x;
@@ -144,6 +152,7 @@ static inline Vec crVecSub(Vec a, Vec b) {
     r.z = a.z - b.z;
     return r;
 }
+/** Vector a + b by value. */
 static inline Vec crVecAdd(Vec a, Vec b) {
     Vec r;
     r.x = a.x + b.x;
@@ -151,6 +160,7 @@ static inline Vec crVecAdd(Vec a, Vec b) {
     r.z = a.z + b.z;
     return r;
 }
+/** Vector a scaled by s, by value. */
 static inline Vec crVecScale(Vec a, f32 s) {
     Vec r;
     r.x = a.x * s;
@@ -158,6 +168,7 @@ static inline Vec crVecScale(Vec a, f32 s) {
     r.z = a.z * s;
     return r;
 }
+/** Cross product a x b by value. */
 static inline Vec crVecCross(Vec a, Vec b) {
     Vec r;
     r.x = a.y * b.z - a.z * b.y;
@@ -165,6 +176,7 @@ static inline Vec crVecCross(Vec a, Vec b) {
     r.z = a.x * b.y - a.y * b.x;
     return r;
 }
+/** Dot product of a and b. */
 static inline f32 crVecDot(Vec a, Vec b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
@@ -174,6 +186,11 @@ static inline BOOL crVecIsZero(Vec a) {
     }
     return FALSE;
 }
+/**
+ * Casts a ray straight down from P onto triangle ABC;
+ * returns 1 and raises *dist to the hit height when it hits higher than *dist.
+ * Used to find which curve's floor area is under the target.
+ */
 s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist) {
     Vec dir = {0.0f, -1.0f, 0.0f};
     Vec nz;
@@ -229,6 +246,7 @@ s32 collisionTri_simple(Vec P, Vec A, Vec B, Vec C, f32* dist) {
     *dist = hit.y;
     return 1;
 }
+/** Unused: horizontal length of (x, z). */
 static inline f32 crLen2(f32 x, f32 z) {
     f32 l = x * x + z * z;
     if (l != 0.0) {
@@ -236,6 +254,11 @@ static inline f32 crLen2(f32 x, f32 z) {
     }
     return l;
 }
+/**
+ * Projects pos onto a camera curve (mode 0) or a curve group strip (mode 1):
+ * finds the curve segment beside pos and fills hit with the interpolated point, direction and height,
+ * clamping the sideways distance to the curve's limits (flag 2 when clamped). Returns 1 on a hit.
+ */
 s32 collisionCurve(s32 mode, void* curve, Vec pos, CamRoadHit* hit) {
     f32 lx0;
     f32 ang0, yA, yB, minDist, cx, side;
@@ -685,6 +708,14 @@ static inline void camRoadSgn2(f32 s, f32 t, f32* p1, f32* p2) {
     *p1 = a;
     *p2 = b;
 }
+/**
+ * Works out the camera road state for this frame:
+ * picks the curve whose floor triangles lie highest under position (d, e, f) (in tenths of world units),
+ * skipping curves switched off, projects (a, b, c) onto it with collisionCurve,
+ * and fills out with the curve point, direction, distance, elevation angle, rotation and shift rate,
+ * limiting how far the point may move from prev along the curve's two axes. g is stored as the sideways shift.
+ * Without a curve it keeps the previous one, or passes the inputs through.
+ */
 void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g) {
     f32 ax, az; // FAKE: named dA.x/dA.z copies declared first (numbered low, below l2) -> see camRoadSgn2
     f32 nx;
@@ -1029,7 +1060,15 @@ void calcCamRoad(CamRoadState* out, CamRoadState* prev, f32 a, f32 b, f32 c, f32
     out->f_58 = g;
     out->shiftXRate = curve->f_7c;
 }
+/** Square of x. */
 static inline f32 crSq(f32 x) { return x * x; }
+/**
+ * Decides whether moving from road state b to a needs a smooth blend:
+ * returns 0 when they are close enough (same curve with nearby segment and small movement),
+ * otherwise flags for what changed (1 curve, 2/4 floor hit lost or found, 8 segment jump, 0x10 just movement,
+ * 0x20 near the curve end) and sets *outSpeed to 1 over the blend length (20 to 90 frames' worth from the angle,
+ * rotation, distance and position changes).
+ */
 u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
     u32 flags = 0;
     s32 d;
@@ -1137,6 +1176,7 @@ u32 compareCamRoad(CamRoadState* a, CamRoadState* b, f32* outSpeed) {
     }
     return flags;
 }
+/** Blend curve for interpolation (hokan): eases t from 0 to 1 along a cosine shape, clamped to 1. */
 static inline f32 hokanRate(f32 t, f32 a, f32 b, f32 k, f32 o) {
     f32 c1, c0, c2, r;
     // FAKE: cos called through a double (*)(f32) cast; (f32)cos(a) changes the object
@@ -1151,6 +1191,7 @@ static inline f32 hokanRate(f32 t, f32 a, f32 b, f32 k, f32 o) {
     }
     return r;
 }
+/** Unused: interpolates between angles a0 and a1 (radians) the short way round. */
 static inline f32 angleLerp(f32 from, f32 to, f32 r) {
     while (from - to > 3.1415927f) {
         from -= 6.2831855f;
@@ -1160,6 +1201,11 @@ static inline f32 angleLerp(f32 from, f32 to, f32 r) {
     }
     return r * (to - from) + from;
 }
+/**
+ * Blends road states from and to by the eased t into out:
+ * position (snapped to to when type is 0), heading the short way round, distance, angle,
+ * rotation and shift rate. The fourth state is unused.
+ */
 void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadState* unused, CamRoadState* out, f32 t) {
     f32 r, a0, a1, a2;
     r = hokanRate(t, 0.0f, 0.0f, 1.0f, 0.0f);
@@ -1209,6 +1255,13 @@ void calcHokanCamRoad(s32 type, CamRoadState* from, CamRoadState* to, CamRoadSta
             wp->hokanType = 0;                                                                    \
         }                                                                                         \
     }
+/**
+ * Per frame camera road update: computes the road state for target (a, b, c)
+ * and floor probe (d, e, f) (world units), starts a timed blend whenever the state jumps (compareCamRoad),
+ * advances the blend at 60 fps speed, and writes the resulting eye and look-at positions to out.
+ * g is the sideways shift from cam_shift.
+ * Called by the camera driver, door transitions (evt_bero) and camera scripts (evt_cam).
+ */
 void camRoadMain(CameraParams* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f32 g) {
     u32 flags;
     wp->in[0] = a;
@@ -1259,15 +1312,24 @@ void camRoadMain(CameraParams* out, f32 a, f32 b, f32 c, f32 d, f32 e, f32 f, f3
     out->pos.y *= 10.0f;
     out->pos.z *= 10.0f;
 }
+/** Returns the camera road work. */
 CamRoadWork* camRoadGetWorkPtr(void) {
     return wp;
 }
+/**
+ * Returns how far the current curve lets the camera shift sideways (the cam_shift target),
+ * or 0 without a road state.
+ */
 f32 camRoadGetCurrentShiftXRate(void) {
     if (wp->next.on) {
         return wp->next.shiftXRate;
     }
     return 0.0f;
 }
+/**
+ * Clears the road state and blend tuning but keeps the loaded map file and its version state,
+ * so the next camRoadMain snaps to the new position. Used by door transitions, camera scripts and game over.
+ */
 void camRoadReset(void) {
     s32 a = wp->f_204;
     CamRoadMap* m = wp->map;
@@ -1294,6 +1356,7 @@ void camRoadReset(void) {
     wp->map = m;
     wp->state = s;
 }
+/** Switches the named camera curve back on (version 1.01 files only). */
 void camRoadCurveOn(const char* name) {
     CamRoadCurve* c = wp->map->curves;
     s32 i;
@@ -1306,6 +1369,7 @@ void camRoadCurveOn(const char* name) {
         }
     }
 }
+/** Switches the named camera curve off so the road ignores it (version 1.01 files only). */
 void camRoadCurveOff(const char* name) {
     CamRoadCurve* c = wp->map->curves;
     s32 i;

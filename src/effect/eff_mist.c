@@ -27,6 +27,11 @@ typedef struct EffMistWork {
 void effMistMain(EffectEntry* effect);
 void effMistDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns the rising mist at (x, y, z) for `life` frames; type 0-6 selects the colour and motion.
+ * Called from evt_eff ("mist") and from the Fahr Outpost (bom) code, which uses type 4 around Mario,
+ * partners and NPCs.
+ */
 EffectEntry* effMistEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw) {
     EffectEntry* effect;
     EffMistWork* work;
@@ -121,6 +126,10 @@ EffectEntry* effMistEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw) {
     return effect;
 }
 
+/**
+ * Per frame: moves each puff by its velocity and acceleration,
+ * fades it with age and deletes the effect at the end of its life.
+ */
 void effMistMain(EffectEntry* effect) {
     EffMistWork* work = effect->userdata;
     Vec position;
@@ -191,6 +200,7 @@ void effMistMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMistDisp, effect);
 }
 
+/** Draws each puff as a camera-facing textured quad (effect texture 0x44) tinted by its r, g, b. */
 void effMistDisp(CameraId cameraId, EffectEntry* effect) {
     EffMistWork* work = effect->userdata;
     Mtx trans;

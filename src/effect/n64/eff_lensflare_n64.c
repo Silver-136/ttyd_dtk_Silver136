@@ -52,6 +52,11 @@ static effN64Vtx size10x10_tex32x32_vtx[] = {
 void effLensflareMain(EffectEntry* effect);
 void effLensflareDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a lens flare at (x, y, z): one main record plus five orbiting streak elements with random angle
+ * and size. lifetime <= 0 keeps it until deleted.
+ * Played from map scripts in gor, tik and las via evt_eff64 "lensflare_n64".
+ */
 EffectEntry* effLensflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffLensflareN64Elem* work;
@@ -86,6 +91,11 @@ EffectEntry* effLensflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Fades the flare in over 20 frames and out before the end;
+ * cycles each streak element outward and respawns it with new random values;
+ * a delete request starts a 30-frame fade.
+ */
 void effLensflareMain(EffectEntry* effect) {
     EffLensflareN64Elem* e = effect->userdata;
     Vec position;
@@ -128,6 +138,10 @@ void effLensflareMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effLensflareDisp, effect);
 }
 
+/**
+ * Draws a spinning 48x48 glow billboard (texture 0x6F),
+ * then for each streak element four small shapes (texture 0x86).
+ */
 void effLensflareDisp(CameraId cameraId, EffectEntry* effect) {
     s32 ang1;
     s32 odd;

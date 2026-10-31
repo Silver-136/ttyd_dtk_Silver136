@@ -332,6 +332,10 @@ static BattleWeapon weapon_togezo_charge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init script of the Sky-Blue Spiny: registers its wait, attack, damage and confusion handlers,
+ * clears unit work 0 (guarding flag) and unit work 3 (charged flag), and sets its run, walk and jump sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -346,6 +350,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Plays the "toge_flush" spark effect over the Sky-Blue Spiny 30 frames after an attacker is hurt by its spikes,
+ * at a height that depends on its size statuses 10 (Huge) and 11 (Tiny).
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -366,6 +374,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_event)
     RETURN
 EVT_END()
 
+/** Damage script of the Sky-Blue Spiny: runs the default damage handling on itself. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -373,6 +382,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Reaction when the Sky-Blue Spiny is flipped onto its back:
+ * swaps in the flipped defence, attribute, status and pose tables and data table,
+ * sets status flag 1 and a flip count of 1 turn, removes the counter attributes (1 and 4) of its spikes,
+ * plays pose type 39 with SFX_CONDITION_INSIDE and bounces twice.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -394,6 +409,11 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Called on the Sky-Blue Spiny's turn while it is flipped over.
+ * It counts the flip counter down; at 0 it restores the normal tables, clears status flag 1,
+ * restores the spike counter attributes and hops upright.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -420,6 +440,14 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the Sky-Blue Spiny.
+ * If it is flipped over it gets up first; then, after an item check,
+ * if it is guarding (unit work 0) it unfolds (guard_cancel_event).
+ * If it has just charged (unit work 3) it makes its normal attack and clears the flag.
+ * Otherwise it draws lots between the normal attack (40),
+ * guarding (40) and charging up (20 on the first turn, 6 afterwards), which sets the charged flag.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -465,6 +493,14 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Sky-Blue Spiny's rolling attack: it curls into a ball (TGZ_P_1),
+ * spins up (SFX_ENM_TOGEZO_ROLL1) and rolls into the target, spinning along the ground (ROLL2 to ROLL5).
+ * The target takes the damage when it is reached.
+ * It then bounces back in two hops, unrolls (TGZ_S_1)
+ * and returns home spinning on the way (SFX_ENM_TOGEZO_ROLL3),
+ * after which it rests in guard (swapping to the guard tables with unit work 0 set) 50 percent of the time.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -741,6 +777,11 @@ static EVT_BEGIN(guard_cancel_event)
     RETURN
 EVT_END()
 
+/**
+ * The Sky-Blue Spiny charges up: it waits 40 frames,
+ * a "crystal_n64" effect appears over it (SFX_ENM_CHARGE1) and it bounces once;
+ * the charge weapon is then applied to itself (a power-up).
+ */
 static EVT_BEGIN(charge_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -766,6 +807,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
+/** Wait script: plays the Sky-Blue Spiny's idle pose from its current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

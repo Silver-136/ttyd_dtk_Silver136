@@ -163,6 +163,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Footstep sound loop for the guide Puni: plays SFX_STG2_PUNI_MOVE2_1 at his position repeatedly while he walks.
+ * Started and stopped by the scenes.
+ */
 static EVT_BEGIN(puni_walk_se)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("ガイド"), LW(0), LW(1), LW(2))
@@ -338,6 +342,11 @@ EVT_BEGIN(puni_soguu_3)
     RETURN
 EVT_END()
 
+/**
+ * Sound effects for the secret passage (para) appearing:
+ * a SFX_STG1_LOAD_APPEAR1 step sound at each of eight positions from X = 55 to 425 and at -454, in sequence,
+ * timed to the opening animation.
+ */
 EVT_BEGIN(anm_para_snd)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_LOAD_APPEAR1"), 55, -50, -90, 0)
     WAIT_MS(100)
@@ -357,6 +366,7 @@ EVT_BEGIN(anm_para_snd)
     RETURN
 EVT_END()
 
+/** The same as anm_para_snd played in reverse order, for the passage closing again. */
 EVT_BEGIN(anm_rapa_snd)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_LOAD_APPEAR1"), -454, -50, -90, 0)
     WAIT_MS(100)

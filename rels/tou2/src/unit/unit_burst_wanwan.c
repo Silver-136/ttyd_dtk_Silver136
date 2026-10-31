@@ -211,6 +211,12 @@ static BattleWeapon weapon_wanwan_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init event of the Red Chomp: registers its wait, attack, damage and confusion events,
+ * sets unit work 0 to 1 and the sound volume in work 1 to 127,
+ * sets up its chain (chain_init) and spawns chain_event to keep it moving,
+ * sets the landing sound for jumps and starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -706,6 +712,11 @@ static USER_FUNC(chain_main) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper run by init_event to set up the Red Chomp's chain;
+ * args[0] = unit: puts the chain links (parts 2 to 7) on the chomp with the WAN_S_1B animation,
+ * and part 8 and the stake (part 9, animation WAN_Z_2) 20 units behind it.
+ */
 static USER_FUNC(chain_init) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

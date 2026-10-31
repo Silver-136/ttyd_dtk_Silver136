@@ -105,11 +105,13 @@ static EVT_BEGIN(evt_box)
     RETURN
 EVT_END()
 
+/** Turns the glowing floor panels on by calling the _hikaru_on script function. */
 static EVT_BEGIN(hikaru_on)
     CALL(_hikaru_on)
     RETURN
 EVT_END()
 
+/** Turns the glowing floor panels off by calling the _hikaru_off script function. */
 static EVT_BEGIN(hikaru_off)
     CALL(_hikaru_off)
     RETURN
@@ -212,6 +214,11 @@ static USER_FUNC(ride_chk) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script function that plays an electric shock when Mario is in the spike-damage motion
+ * (MARIO_MOTION_DAMAGE_TOGE): SFX_STG7_ELECTRIC_SHOCK1 and a blue-green spark effect at his position,
+ * once per hit.
+ */
 static USER_FUNC(thunder_main) {
     MarioWork* mario = marioGetPtr();
 
@@ -252,6 +259,10 @@ USER_FUNC(_hikaru_off) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: shows the dark panel objects nashi_01 to 24
+ * and hides the lit ones hikaru_01 to 24 (every panel in its unlit state).
+ */
 USER_FUNC(_hikaru_on) {
     char name[64];
     s32 i;
@@ -265,6 +276,10 @@ USER_FUNC(_hikaru_on) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function that runs the panel light-up show:
+ * lights the panels one after another, twice, then finishes (timing in event->userdata).
+ */
 static USER_FUNC(loop_onoff) {
     char name[64];
     s32 i;

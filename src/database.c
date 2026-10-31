@@ -51,6 +51,11 @@ typedef struct MapAttrEntry {
 
 extern MapAttrEntry _map_attr_data[];
 
+/**
+ * Starts the async load of every enemy model the setup file names;
+ * returns FALSE until they are all resident, TRUE at once when the map has no setup file.
+ * Polled by the map-change sequence before setupDataBase.
+ */
 BOOL setupDataCheck(void) {
     char tribeName[64];
     BOOL group;
@@ -70,6 +75,7 @@ BOOL setupDataCheck(void) {
     parsePop();
     return TRUE;
 }
+/** Looks up mapName in _map_attr_data; returns the NULL-named terminator entry when the map is not listed. */
 static inline MapAttrEntry* findMapAttr(const char* name) {
     MapAttrEntry* p = _map_attr_data;
     for (;;) {
@@ -81,6 +87,13 @@ static inline MapAttrEntry* findMapAttr(const char* name) {
     return p;
 }
 
+/**
+ * Spawns the field enemies listed in the map's setup file:
+ * moves this map's defeated-enemy record to the front of the 64-entry list,
+ * resets the records when the map's area changes (map attribute flags),
+ * then creates each enemy not yet marked defeated with its tribe model, AI scripts, territory,
+ * search ranges and battle setup.
+ */
 void setupDataBase(const char* areaName, const char* mapName) {
     char npcName[64];
     char tribeName[64];

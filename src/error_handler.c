@@ -18,6 +18,10 @@ extern void* DemoCurrentBuffer, * DemoFrameBuffer1, * DemoFrameBuffer2;
 //local prototypes
 void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar);
 
+/**
+ * Installs systemErrorHandler for the DSI, ISI and program exceptions (bad data access, bad instruction fetch,
+ * illegal instruction). Called once from marioStInit.
+ */
 // Descriptive name (not in the symbol maps).
 void setupErrorHandler(void) {
     OSSetErrorHandler(OS_ERROR_DSI, (OSErrorHandler)systemErrorHandler);

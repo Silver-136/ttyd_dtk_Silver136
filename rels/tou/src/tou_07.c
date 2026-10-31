@@ -68,6 +68,7 @@ EvtWord tou_07_init_evt[286];
 
 #ifdef VERSION_G8ME01
 
+/** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 USER_FUNC(tou_07_mario_keyoff_check) {
     EvtWord* args = event->args;
 
@@ -80,18 +81,21 @@ USER_FUNC(tou_07_mario_keyoff_check) {
 }
 #endif
 
+/** Script helper: re-enables sound effects (clears the SFX mute flag). */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006bd8, JP tou .text+0x6B14. See docs/NAME_PROVENANCE.md.
 USER_FUNC(tou_07_snd_on) {
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: mutes sound effects (sets the SFX mute flag), used while Mario sleeps in the bed. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006c00, JP tou .text+0x6B3C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(tou_07_snd_off) {
     psndSetFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: restores Mario's HP and FP to their maximums (the bed's rest). */
 // Restore HP and FP only; unlike evt_pouch_mario_recovery, this leaves AP unchanged.
 USER_FUNC(mario_recovery) {
     pouchSetHP(pouchGetMaxHP());
@@ -99,17 +103,26 @@ USER_FUNC(mario_recovery) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: ends the paper-slit transformation on Mario (marioPaperOff). */
 static USER_FUNC(paper_off) {
     marioPaperOff();
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Door animation callback for the room door (door_1), opening: LW(0) is the swing angle;
+ * turns door_1 about the Y axis by 0.44 times the angle.
+ */
 static EVT_BEGIN(n_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the room door (door_1), closing:
+ * turns door_1 about the Y axis by -0.44 times the angle.
+ */
 static EVT_BEGIN(n_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
@@ -157,6 +170,7 @@ static EVT_BEGIN(init_gans)
     RETURN
 EVT_END()
 
+/** Talk script of Grubba in this room: does nothing. */
 static EVT_BEGIN(talk_gans)
     RETURN
 EVT_END()
@@ -797,6 +811,7 @@ static USER_FUNC(paper_on) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: hides the belt item's icon. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006cfc, JP tou .text+0x6C38. See docs/NAME_PROVENANCE.md.
 USER_FUNC(tou_07_icon_off) {
     iconFlagOn(itemNameToPtr("belt")->name, ICON_FLAG_HIDDEN);

@@ -173,11 +173,16 @@ static USER_FUNC(mario_chk) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Whether the hit area target is group or one of its descendants. */
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
     // Compare joint names through the child-first search, excluding the root's siblings.
     return _hitIsGroupSub(target, group, FALSE);
 }
 
+/**
+ * Recursive helper of hitIsGroup: whether the joint name of target equals that of node,
+ * of any of node's descendants, or (when checkSibling is TRUE) of the siblings that follow.
+ */
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) {
     if (strcmp(target->joint->name, node->joint->name) == 0) {
         return TRUE;

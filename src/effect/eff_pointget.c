@@ -59,6 +59,10 @@ static PointGetTexSet texid_tbl[6] = {
 static s32 texid_tbl[2][4] = { { 0x98, 0x99, 0x9A, 0x9B }, { 0x98, 0x99, 0x9A, 0x9B } };
 #endif
 
+/**
+ * Spawns the point display at (x, y, z) showing `number` for `duration` frames;
+ * battle_seq_end.c uses it for the Star Points earned after a battle.
+ */
 EffectEntry* effPointGetEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 duration) {
     EffectEntry* effect;
     EffPointGetWork* work;
@@ -86,6 +90,7 @@ EffectEntry* effPointGetEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 dur
     return effect;
 }
 
+/** Per frame: advances the display's state machine and deletes the effect when finished. */
 void effPointGetMain(EffectEntry* effect) {
     EffPointGetWork* work = effect->userdata;
     Vec position;

@@ -97,12 +97,18 @@ static EvtWord attack_event[287];
 static EvtWord hit_check_event[119];
 static EvtWord wait_event[6];
 
+/** Script helper: puts the horde leader on top of the formation centre, 45 units above it. */
 USER_FUNC(zakogun_kanbu_on_ball) {
     BattleUnit* kanbu = BattleGetUnitPtr(_battleWorkPointer, zakogun_get_kanbu_id());
     BtlUnit_SetPos(kanbu, work->pos.x, 45.0f + work->pos.y, work->pos.z);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: starts formation 3 (the 500 X-Nauts in a ring):
+ * selects it (work->flag = 2), places each member on a circle with random offsets around the leader
+ * and initialises its pose.
+ */
 USER_FUNC(zakogun_ext_init3) {
     s32 i;
     ExtdrvPose* pose = extGetPosePtr();
@@ -273,6 +279,7 @@ BattleWeapon weapon_gundan_zako_group3_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Init event of X-Naut group 3: installs its wait, attack, damage and confusion events and starts the wait event. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -664,6 +671,10 @@ void zakogun_ext_main3(void) {
     }
 }
 
+/**
+ * Script helper, first step of group 3 attack: sets the formation centre at (0, 55, 0) with radius 25
+ * and builds up the ring; blocks until it is formed.
+ */
 USER_FUNC(zakogun_attack3_1) {
     s32 i;
     s32 n;
@@ -686,6 +697,10 @@ USER_FUNC(zakogun_attack3_1) {
     return n == 500 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper, second step of group 3 attack (args[0] = sound id):
+ * moves the ring toward the target with a sound until it arrives.
+ */
 USER_FUNC(zakogun_attack3_2) {
     BattleUnit* unit = zakogun_get_ptr();
     s32 sfx = evtGetValue(event, event->args[0]);
@@ -748,6 +763,7 @@ USER_FUNC(zakogun_attack3_2) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper, last step of group 3 attack: sets all 500 X-Nauts to state 50 and blocks until they have finished. */
 USER_FUNC(zakogun_attack3_3) {
     s32 i;
     s32 n;
@@ -765,6 +781,7 @@ USER_FUNC(zakogun_attack3_3) {
     return n == 500 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** Script helper: puts the 500 X-Nauts of group 3 into their death state (80). */
 USER_FUNC(zakogun_dead3) {
     s32 i;
 
@@ -774,6 +791,10 @@ USER_FUNC(zakogun_dead3) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: sends the 500 X-Nauts of group 3 running away (state 90, escape animation) and blocks
+ * until they are gone.
+ */
 USER_FUNC(zakogun_escape3) {
     s32 i;
     s32 n;
@@ -793,6 +814,11 @@ USER_FUNC(zakogun_escape3) {
     return n == 500 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/**
+ * Hit check of X-Naut group 3's attack: for each selected target in turn it waits
+ * until the ball reaches it (unit work 0), then starts its avoid pose on a dodge
+ * or applies the hit with the action-command defence.
+ */
 static EVT_BEGIN(hit_check_event)
     LABEL(10)
     LOOP(0)
@@ -844,6 +870,7 @@ static EVT_BEGIN(hit_check_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of X-Naut group 3: sets the idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

@@ -28,11 +28,13 @@
 #define HIP_SFX_VOICE (mario->mot.hip.sfxId[1])
 #endif
 
+/** Vertical camera shake (0.0195 for 110 ms) when Mario's spin jump lands on the ground. */
 static EVT_BEGIN(quake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 110)
     RETURN
 EVT_END()
 
+/** The half-strength shake (0.0098 for 110 ms) used instead of quake_evt in background mode. */
 static EVT_BEGIN(quake_bgmode_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 110)
     RETURN
@@ -40,6 +42,10 @@ EVT_END()
 
 s32 chkground(void);
 
+/**
+ * TRUE when the spin jump should start: Mario has been airborne at least 10 frames past the jump peak,
+ * A was just pressed and he has the Super Boots or better. Checked from the jump motions in mario_motion.c.
+ */
 BOOL marioChkHipAttack(void) {
     BOOL ret;
     MarioWork* mario;
@@ -52,6 +58,10 @@ BOOL marioChkHipAttack(void) {
     return ret;
 }
 
+/**
+ * TRUE while Mario is in the landing phase of the spin jump (MARIO_MOTION_HIP_2);
+ * mobjdrv uses it to trigger spin-jump switches and blocks he lands on.
+ */
 BOOL marioChkHipBump(void) {
     BOOL ret = FALSE;
 
@@ -100,6 +110,11 @@ static inline void hip_snd_off(MarioWork* mario) {
     }
 }
 
+/**
+ * Spin jump (Super Boots): Mario hops up, spins in place with the looping sounds, then drops straight down;
+ * on landing it switches to MARIO_MOTION_HIP_2, shakes the camera and stands,
+ * or goes to the water or spike damage motion when the floor has those attributes. Bowser runs kpa_hip instead.
+ */
 void mot_hip(void) {
     MarioWork* mario;
     HitEntry* hit;
@@ -346,6 +361,7 @@ s32 chkground(void) {
 
 #pragma dont_inline reset
 
+/** Cleanup when the spin jump motion ends: resets the spin offsets and air timers and stops the looping sounds. */
 void mot_hip_post(void) {
     MarioWork* mario;
 

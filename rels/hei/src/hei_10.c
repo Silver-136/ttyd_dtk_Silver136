@@ -93,6 +93,10 @@ static inline f32 chb_sin(f32 x) {
     return a;
 }
 
+/**
+ * Cosine counterpart of chb_sin, with the same polynomial approximation
+ * and quadrant folding (argument in radians, 0..2pi).
+ */
 static inline f32 chb_cos(f32 x) {
     f32 a = 0.03705f;
     f32 b = 0.4967f;
@@ -152,20 +156,28 @@ EvtWord evt_golden[319];
 EvtWord hei_10_init_evt[80];
 
 
+/** Returns a random float in 0..1 from the game's rand() (divided by 32767). */
 static inline f32 rand01(void) {
     return rand() / 32767.0f;
 }
 
+/** Maps a random value r in 0..1 onto the range min..max. */
 static inline f32 randf_scale(f32 r, f32 min, f32 max) {
     return r * (max - min) + min;
 }
 
+/** Returns a random float between min and max. */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
 
     return r * (max - min) + min;
 }
 
+/**
+ * Setup callback of the Fuzzy swarm (ext pose effect):
+ * allocates one Chorobon state per pose and scatters the Fuzzies at random positions along the floor of the
+ * room.
+ */
 static void ext_init(void) {
     s32 i;
     ExtdrvPose* pose;
@@ -190,6 +202,10 @@ static void ext_init(void) {
     }
 }
 
+/**
+ * Draw callback of the Fuzzy swarm: loads the render mode, vertices,
+ * textures and TEV setup of the ext-pose effect and draws the sprites.
+ */
 static void ext_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
@@ -276,6 +292,7 @@ static ExtTexInfo ext_data[] = {
     {0},
 };
 
+/** Draw callback for the Fuzzy swarm's shadows: loads the shadow matrix and render setup and draws them. */
 static void ext_shadow_disp(CameraId camera, void* param) {
     static Mtx mt = {
         {8.0f, 0.0f, 0.0f, 0.0f},
@@ -290,6 +307,11 @@ static void ext_shadow_disp(CameraId camera, void* param) {
     extDrawShadow();
 }
 
+/**
+ * Starts a hop for one Fuzzy toward (x, y, z): derives the flight time from the distance and speed
+ * and the initial vertical speed from the gravity,
+ * then switches it to the hopping state (100) that returns to state next.
+ */
 void chb_jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     f32 dy;
     f32 dist;
@@ -307,28 +329,40 @@ void chb_jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f3
     chb->next = next;
 }
 
+/** Starts a hop of random speed and gravity from the given ranges for one Fuzzy. */
 static inline void jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 rs, f32 smin, f32 smax, f32 rg, f32 gmin, f32 gmax) {
     chb_jump(pose, chb, next, x, y, z, rs * (smax - smin) + smin, rg * (gmax - gmin) + gmin);
 }
 
+/** Starts a hop for a fleeing Fuzzy: like jump, but at twice the speed. */
 static inline void escape(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 rs, f32 smin, f32 smax, f32 rg, f32 gmin, f32 gmax) {
     chb_jump(pose, chb, next, x, y, z, 2.0f * (rs * (smax - smin) + smin), rg * (gmax - gmin) + gmin);
 }
 
 #pragma push
 #pragma opt_dead_assignments off
+/**
+ * Random hop for a Fuzzy that is idling: speed 0.3..0.5, gravity 0.5..0.8,
+ * returning to its current state afterwards.
+ */
 static inline void jump_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z) {
     f32 rs = rand() / 32767.0f;
     f32 rg = rand01();
     jump(pose, chb, chb->state, x, y, z, rs, 0.3f, 0.5f, rg, 0.5f, 0.8f);
 }
 
+/** Random flee hop: speed 1.0..1.2 doubled, gravity 0.8. */
 static inline void escape_r(ExtdrvPose* pose, Chorobon* chb, f32 x, f32 y, f32 z) {
     f32 rs = rand() / 32767.0f;
     f32 rg = rand01();
     escape(pose, chb, chb->state, x, y, z, rs, 1.0f, 1.2f, rg, 0.8f, 0.8f);
 }
 
+/**
+ * Per-frame update of the Fuzzy swarm: idle Fuzzies hop around randomly inside the room,
+ * fleeing ones hop away from Mario (with an occasional escape sound), hopping ones follow their arc,
+ * and the sprite frame alternates; a Fuzzy that has run 800 units from Mario parks itself (state 99).
+ */
 static void ext_main(void) {
     MarioWork* mario = marioGetPtr();
     const char* sfx;
@@ -432,10 +466,12 @@ static inline void chb_zero(Vec* v) {
     *v = (Vec){0.0f, 0.0f, 0.0f};
 }
 
+/** Registers the swarm's draw callback with the 3D camera. */
 static void ext_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, 1, ext_disp, NULL);
 }
 
+/** Script helper: switches every Fuzzy of the swarm to the fleeing state. */
 s32 evt_chorobon_escape(EventEntry* event, BOOL isFirstCall) {
     ExtdrvPose* pose = extGetPosePtr();
     s32 i;
@@ -448,6 +484,7 @@ s32 evt_chorobon_escape(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: blocks until every Fuzzy has finished fleeing (state 99), then resets the ext-pose effect. */
 // Keep the extended-pose system alive until every Fuzzy reaches the escape-complete state.
 s32 evt_chorobon_wait(EventEntry* event, BOOL isFirstCall) {
     ExtdrvPose* pose = extGetPosePtr();
@@ -463,11 +500,17 @@ s32 evt_chorobon_wait(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the hop duration in milliseconds that the script passed as args[6] to npc_jump. */
 static inline s32 npc_jump_get_time(EventEntry* event, EvtWord* args) {
     return evtGetValue(event, args[6]);
 }
 
 #pragma opt_propagation off
+/**
+ * Script helper: makes an NPC hop to a point.
+ * args: name, x, y, z, speed, gravity, duration in ms (0 to derive it from the distance).
+ * Moves the NPC by its own position each frame until the hop ends.
+ */
 // A zero duration derives flight time from horizontal distance and speed; a nonzero duration sets the speed.
 static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
@@ -527,6 +570,7 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
 }
 #pragma opt_propagation reset
 
+/** Script helper: blocks until the Gold Fuzzy's current animation has reached the frame given by args[0]. */
 s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall) {
     f32 frame = evtGetFloat(event, *event->args);
     NpcEntry* npc = npcNameToPtr("\203S\201[\203\213\203h\203`\203\207\203\215\203\173\203\223");
@@ -537,6 +581,7 @@ s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: blocks until the Gold Fuzzy's animation has completed another loop. */
 s32 wait_anim_end(EventEntry* event, BOOL isFirstCall) {
     NpcEntry* npc = npcNameToPtr("\203S\201[\203\213\203h\203`\203\207\203\215\203\173\203\223");
 
@@ -549,6 +594,10 @@ s32 wait_anim_end(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Looping sound script for the Gold Fuzzy: plays hop and wait sounds at animation frames 35,
+ * 50 and 95 of its idle animation.
+ */
 EVT_BEGIN(golden_se)
     LOOP(0)
         CALL(wait_anim_frame, 35)
@@ -565,6 +614,12 @@ EVT_BEGIN(golden_se)
     RETURN
 EVT_END()
 
+/**
+ * Gold Fuzzy cutscene (after both stones have been taken):
+ * the Gold Fuzzy appears and hops toward Mario, Mario is startled, the Gold Fuzzy battle starts,
+ * and afterwards it splits into a swarm of Fuzzies that scatter and flee off screen.
+ * Sets the story to "Gold Fuzzy".
+ */
 EVT_BEGIN(evt_golden)
     CALL(evt_npc_entry, STRING(("dummy")), STRING(("c_chorobon")))
     CALL(evt_npc_set_position, STRING(("dummy")), 0, -1000, 0)
@@ -639,6 +694,12 @@ EVT_BEGIN(evt_golden)
     RETURN
 EVT_END()
 
+/**
+ * Petal Meadows hei_10 map init: registers the exits to hei_09, hei_11 and the pipe,
+ * sets the fortress music and reverb, places the Multibounce block and the Gold Fuzzy,
+ * runs evt_golden once both stones are taken and the Gold Fuzzy story step is not reached,
+ * and sets the water effect.
+ */
 EVT_BEGIN(hei_10_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

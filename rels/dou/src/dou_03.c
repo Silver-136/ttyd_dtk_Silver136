@@ -41,6 +41,7 @@ static EvtWord dou_puka_event_main2[60];
 static HitDamageReturn hitDmgRetPoints[18];
 EvtWord dou_03_init_evt[130];
 
+/** Enter event of the dou_03 doors: switches the "on_off" hit object on and lets Mario through. */
 EVT_BEGIN(dou_03_custom)
     CALL(evt_hitobj_onoff, STRING("on_off"), 1, 0)
     SET_VALUE(LW(0), 0)
@@ -180,6 +181,7 @@ static s32 itemsel_table[] = {
     ITEM_GATE_HANDLE, -1,
 };
 
+/** Turns the floodgate winch lever (S_reba) forever, 2 degrees per frame. */
 EVT_BEGIN(watergate_lever)
     SET_VALUE(LW(0), 0)
     LOOP(0)
@@ -190,6 +192,7 @@ EVT_BEGIN(watergate_lever)
     RETURN
 EVT_END()
 
+/** Turns the small winch gear (S_zenmai1) forever, 2 degrees per frame. */
 EVT_BEGIN(watergate_geer_small)
     SET_VALUE(LW(0), 0)
     LOOP(0)
@@ -200,6 +203,7 @@ EVT_BEGIN(watergate_geer_small)
     RETURN
 EVT_END()
 
+/** Turns the large winch gear (S_zenmai2) forever, 4 degrees per frame the other way. */
 EVT_BEGIN(watergate_geer_large)
     SET_VALUE(LW(0), 0)
     LOOP(0)
@@ -210,6 +214,10 @@ EVT_BEGIN(watergate_geer_large)
     RETURN
 EVT_END()
 
+/**
+ * After the floodgate opens, the barrel (S_taru) is swept away along Z for 2 seconds and
+ * then hidden along with its hit area.
+ */
 EVT_BEGIN(nagare_taru)
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 100, 2000)
     LOOP(0)
@@ -225,6 +233,7 @@ EVT_BEGIN(nagare_taru)
     RETURN
 EVT_END()
 
+/** Plays the barrel-moving sound at the barrel's position three times, a second apart. */
 EVT_BEGIN(nagare_taru_se)
     CALL(evt_mapobj_get_position, STRING("S_taru"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_BARREL_MOVE1"), LW(0), LW(1), LW(2), LW(9))
@@ -237,6 +246,7 @@ EVT_BEGIN(nagare_taru_se)
     RETURN
 EVT_END()
 
+/** After the floodgate opens, the bottle (S_bin) is swept away along Z for 1.2 seconds and then hidden. */
 EVT_BEGIN(nagare_bin)
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 100, 1200)
     LOOP(0)
@@ -327,6 +337,11 @@ EVT_BEGIN(watergate_handle)
     RETURN
 EVT_END()
 
+/**
+ * Bobbing loop for floating object 0: binds the hit area in LW(1) (if any) to the map object in LW(0),
+ * waits a random 0.2 to 0.6 seconds, then every 130 ms steps through the 16 heights of the bobbing table
+ * (evt_dou_normal_puka), moves the object to that height and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main0)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -352,6 +367,11 @@ static EVT_BEGIN(dou_puka_event_main0)
     RETURN
 EVT_END()
 
+/**
+ * Bobbing loop for floating object 1: binds the hit area in LW(1) (if any) to the map object in LW(0),
+ * waits a random 0.2 to 0.6 seconds, then every 130 ms steps through the 16 heights of the bobbing table
+ * (evt_dou_normal_puka), moves the object to that height and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main1)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -377,6 +397,11 @@ static EVT_BEGIN(dou_puka_event_main1)
     RETURN
 EVT_END()
 
+/**
+ * Bobbing loop for floating object 2: binds the hit area in LW(1) (if any) to the map object in LW(0),
+ * waits a random 0.2 to 0.6 seconds, then every 130 ms steps through the 16 heights of the bobbing table
+ * (evt_dou_normal_puka), moves the object to that height and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main2)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -423,6 +448,12 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Init script of dou_03, the hub room with the floodgate:
+ * music and ambience, exits, waves, a Star Piece panel, the winch event, the gate state by story progress,
+ * drifting barrel and bottle (bobbing platforms until the gate opens),
+ * the ship-change platform and the boat's bobbing.
+ */
 EVT_BEGIN(dou_03_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU4"))

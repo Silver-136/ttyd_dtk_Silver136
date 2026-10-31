@@ -256,6 +256,11 @@ static BattleUnitSetup entry_togezo = {
     NULL, // itemDropTable
 };
 
+/**
+ * Init script of the Dark Lakitu: registers its wait, unison-phase, attack, damage and confusion handlers,
+ * clears unit work 0 (set while it holds a Spiny egg) and unit work 2 (charged flag),
+ * and puts its second part (the egg) in the JGM_P_1 pose.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(unison_phase_event))

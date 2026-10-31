@@ -247,6 +247,10 @@ static BattleWeapon weapon_ura_noko_ura_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init script of the Koopa: registers its wait, attack, damage and confusion handlers,
+ * clears its flipped-over counter and sets the shell-clack run and walk sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

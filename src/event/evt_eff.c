@@ -164,6 +164,10 @@ extern EffectEntry* effRotHammerFailN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effLensflareN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effBoobooN64Entry(s32, s32, f32, f32, f32, f32);
 
+/**
+ * Spawns an effect by effect-set name args[1] ("kemuri", "recovery", ...) and names it args[0]
+ * unless that is ""; args[2..13] are passed to the set's entry function as ints or floats as each one needs.
+ */
 USER_FUNC(evt_eff) {
     EvtWord* args = event->args;
     s32* p;
@@ -880,21 +884,25 @@ USER_FUNC(evt_eff64) {
     return EVT_RETURN_DONE;
 }
 
+/** Ends the effect named args[0], letting it finish its fade-out when it supports soft deletion. */
 USER_FUNC(evt_eff_softdelete) {
     effSoftDelete(effNameToPtr((const char*)evtGetValue(event, *event->args)));
     return EVT_RETURN_DONE;
 }
 
+/** Removes the effect named args[0] at once. */
 USER_FUNC(evt_eff_delete) {
     effDelete(effNameToPtr((const char*)evtGetValue(event, *event->args)));
     return EVT_RETURN_DONE;
 }
 
+/** As evt_eff_softdelete, for an effect pointer held in args[0]. */
 USER_FUNC(evt_eff_softdelete_ptr) {
     effSoftDelete((EffectEntry*)evtGetValue(event, *event->args));
     return EVT_RETURN_DONE;
 }
 
+/** As evt_eff_delete, for an effect pointer held in args[0]. */
 USER_FUNC(evt_eff_delete_ptr) {
     effDelete((EffectEntry*)evtGetValue(event, *event->args));
     return EVT_RETURN_DONE;

@@ -18,6 +18,11 @@ void _prolog(void);
 
 EvtWord nokonoko_urouro_regl[97];
 
+/**
+ * Module entry point: runs the static constructors,
+ * then registers the init scripts of nok_00 and nok_01
+ * and the battle setup tables for Petalburg with the REL loader.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 
@@ -29,6 +34,7 @@ void _prolog(void) {
     relSetBtlAddr("nok", btlsetup_nok_tbl, btl_nok_setup_no_tbl);
 }
 
+/** Module exit point: runs the static destructors. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -37,9 +43,17 @@ void _epilog(void) {
     }
 }
 
+/** Placeholder the linker points unresolved relocations at; it does nothing. */
 void _unresolved(void) {
 }
 
+/**
+ * Script helper for the wandering Koopas in Petalburg.
+ * args[0] and args[1] are the script variables holding a target x and z,
+ * args[2] and args[3] the centre of the wander area and args[4] its radius.
+ * If the target is farther than the radius from the centre, the target is reset to the centre,
+ * so the Koopa walks back instead of leaving the area.
+ */
 USER_FUNC(evt_nokonoko_urouro_check_func) {
     EvtWord* args = event->args;
     s32 xVar = args[0];
@@ -62,6 +76,12 @@ USER_FUNC(evt_nokonoko_urouro_check_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Regular (idle) script for a loitering Koopa in Petalburg:
+ * remembers where it started, then loops forever,
+ * turning around now and then and walking 50 units in a random direction (within a 120 to 240 degree window of
+ * its heading) while staying within 70 units of its starting point.
+ */
 EVT_BEGIN(nokonoko_urouro_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(6), LW(7), LW(8))
     CALL(evt_sub_random, 300, LW(0))

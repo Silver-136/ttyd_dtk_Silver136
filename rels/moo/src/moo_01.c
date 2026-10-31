@@ -131,6 +131,10 @@ static EVT_BEGIN(rock_evt1)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for moo_01: entry bero, Moon music and ambience, star animation,
+ * the two Bobbery rocks (or their removal), and a Volt Shroom at (-80, 0, 140).
+ */
 EVT_BEGIN(moo_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

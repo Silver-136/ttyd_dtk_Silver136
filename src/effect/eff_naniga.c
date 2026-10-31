@@ -46,6 +46,10 @@ void effNanigaDisp(CameraId cameraId, EffectEntry* effect);
 void effNanigaDisp2(CameraId cameraId, EffectEntry* effect);
 void effNanigaDisp3(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Plays SFX_ITEM_WHAT3, 4 and 5 at the effect's position (LW 0-2), 833 ms apart;
+ * started when the EFF_naniga pose appears.
+ */
 static EVT_BEGIN(sound_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_WHAT3"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(833)
@@ -116,6 +120,10 @@ EffectEntry* effNanigaEntry(s32 type, f32 x, f32 y, f32 z, s32* list, s32 item) 
     return effect;
 }
 
+/**
+ * Per frame: runs the state machine ("what" sounds, EFF_naniga animation, smoke burst)
+ * and deletes the effect at the end.
+ */
 void effNanigaMain(EffectEntry* effect) {
     EffNanigaWork* work = effect->userdata;
     BOOL inBattle;
@@ -278,6 +286,11 @@ void effNanigaMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws the item reel in screen space: the candidate items' icons in a vertical strip scrolled by `offset`,
+ * clipped by a scissor to a 40x40 window (scaled 1.5x) around the effect's screen position.
+ * Used while the reel spins and settles (states 2-5 and 10).
+ */
 void effNanigaDisp(CameraId cameraId, EffectEntry* effect) {
     EffNanigaWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
@@ -353,6 +366,10 @@ void effNanigaDisp(CameraId cameraId, EffectEntry* effect) {
     work->scale = oldScale;
 }
 
+/**
+ * Draws the EFF_naniga animation pose (groups 1-3) 20 units below the effect, facing the camera,
+ * tinted white at the work's alpha. Registered every frame while the pose is loaded.
+ */
 void effNanigaDisp2(CameraId cameraId, EffectEntry* effect) {
     EffNanigaWork* work = effect->userdata;
     Mtx mT, mR, mS, mC;

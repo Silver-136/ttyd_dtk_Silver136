@@ -47,6 +47,11 @@ static EvtWord yokeyoke_bottle_event_with_kanbu[15];
 static EvtWord ziwaziwa_bottle_event[15];
 static EvtWord wait_event[6];
 
+/**
+ * Script function: finds the X-Naut officer (the unit with initialKind 99, the "kanbu") among the 64 battle
+ * units and returns its unit ID in args[0] (-1 if absent) and its body part ID in args[1] (0 if absent);
+ * the PhD's bottle events use it to aim at the officer.
+ */
 static USER_FUNC(kanbu_get_id) {
     EvtWord* args = event->args;
     s32 id = -1;
@@ -439,6 +444,10 @@ static BattleWeapon weapon_gundan_zako_magician_ziwaziwa_bottle = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Battle init for the X-Naut PhD: registers its wait, attack,
+ * damage and confusion events and starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -448,6 +457,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event for the X-Naut PhD: runs the default damage handler (btldefaultevt_Damage). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -455,6 +465,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the X-Naut PhD: if battle flag 2 is set it throws the fire bottle;
+ * otherwise it lets an enemy item be used if one is ready and picks a bottle by weight:
+ * fire 20, defense-down 10, dodgy 10 (skipped if already dodgy), shrink 20, heal one ally 10, heal all 5.
+ * When an X-Naut officer (kanbu_get_id) is in the battle a different mix is used that includes giving the
+ * officer the dodgy bottle or the regen bottle.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -553,6 +570,11 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Shared start of the X-Naut PhD's bottle throws:
+ * pays for the attack, aims the camera, faces the target (or the target side),
+ * plays the throw wind-up sounds and poses A_1A to A_4A.
+ */
 static EVT_BEGIN(attack_common_event1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
@@ -601,6 +623,12 @@ static EVT_BEGIN(attack_common_event1)
     RETURN
 EVT_END()
 
+/**
+ * Shared bottle throw at an opposing target: lobs the bottle part (part 2) in a high arc to the target's hit
+ * position, then either it shatters on a dodged or missed target (glass shards, SFX_ENM_3RD2_CRASH1)
+ * or applies the damage and status to the target with the 256 guard flag;
+ * ends by resetting the camera and facing.
+ */
 static EVT_BEGIN(attack_common_event2)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_fire_bottle))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1A"))
@@ -689,6 +717,10 @@ static EVT_BEGIN(attack_common_event2)
         RETURN
 EVT_END()
 
+/**
+ * Shared bottle throw at an ally: the bottle part (part 2) is thrown in a short low arc to the target's hit
+ * position, shatters in glass shards and applies the weapon's effect to the target.
+ */
 static EVT_BEGIN(attack_common_event3)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_yokeyoke_bottle))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1D"))
@@ -763,6 +795,10 @@ static EVT_BEGIN(attack_common_event3)
         RETURN
 EVT_END()
 
+/**
+ * Fire bottle: picks a target (the first attack target if battle flag 2 is set) and throws a bottle that damages
+ * and may burn it (75% for 3 turns).
+ */
 static EVT_BEGIN(fire_bottle_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_fire_bottle))
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -787,6 +823,7 @@ static EVT_BEGIN(fire_bottle_event)
     RETURN
 EVT_END()
 
+/** Hunyahunya bottle: throws a bottle at a chosen opponent that lowers its defense by 3 for 3 turns (75% chance). */
 static EVT_BEGIN(hunyahunya_bottle_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_hunyahunya_bottle))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -806,6 +843,7 @@ static EVT_BEGIN(hunyahunya_bottle_event)
     RETURN
 EVT_END()
 
+/** Yokeyoke bottle: the X-Naut PhD drinks a bottle that makes it dodgy (always hits itself, 3 turns). */
 static EVT_BEGIN(yokeyoke_bottle_event)
     SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
@@ -833,6 +871,10 @@ static EVT_BEGIN(yokeyoke_bottle_event)
     RETURN
 EVT_END()
 
+/**
+ * Minimini bottle: throws a bottle that shrinks every opposing target in turn (size change of -2 for 3 turns,
+ * 75% chance), shattering over each one.
+ */
 static EVT_BEGIN(minimini_bottle_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_minimini_bottle))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -929,6 +971,10 @@ static EVT_BEGIN(minimini_bottle_event)
         RETURN
 EVT_END()
 
+/**
+ * Heals one ally: picks the ally to help, shakes the bottle (SFX_ENM_3RD2_SHAKE1)
+ * and restores 10 HP to it with a recovery effect above its head.
+ */
 static EVT_BEGIN(one_recover_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_one_recover))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -967,6 +1013,10 @@ static EVT_BEGIN(one_recover_event)
     RETURN
 EVT_END()
 
+/**
+ * Heals the whole team: shakes the bottle and restores 5 HP to every ally in turn,
+ * with a recovery effect above each.
+ */
 static EVT_BEGIN(all_recover_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_all_recover))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1016,6 +1066,10 @@ static EVT_BEGIN(all_recover_event)
     RETURN
 EVT_END()
 
+/**
+ * Yokeyoke bottle given to the X-Naut officer (kanbu) instead of itself:
+ * throws the bottle at the officer through attack_common_event3 to make it dodgy.
+ */
 static EVT_BEGIN(yokeyoke_bottle_event_with_kanbu)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_yokeyoke_bottle))
     CALL(kanbu_get_id, LW(3), LW(4))
@@ -1025,6 +1079,11 @@ static EVT_BEGIN(yokeyoke_bottle_event_with_kanbu)
     RETURN
 EVT_END()
 
+/**
+ * Ziwaziwa bottle given to the X-Naut officer (kanbu):
+ * throws the bottle at the officer through attack_common_event3,
+ * giving it HP regeneration (2 HP per turn for 5 turns).
+ */
 static EVT_BEGIN(ziwaziwa_bottle_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_ziwaziwa_bottle))
     CALL(kanbu_get_id, LW(3), LW(4))
@@ -1034,6 +1093,7 @@ static EVT_BEGIN(ziwaziwa_bottle_event)
     RETURN
 EVT_END()
 
+/** Idle script of the X-Naut PhD: sets the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

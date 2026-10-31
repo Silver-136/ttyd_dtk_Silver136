@@ -160,6 +160,11 @@ static HitDamageReturn dmgReturnPt[] = {
     {0},
 };
 
+/**
+ * Sets up the electrified-floor puzzle: places the chest, sets the damage return point,
+ * starts the thunder effect (thunder_main) and the Mario position checker (mario_chk),
+ * and starts the floor animation denyuka.
+ */
 static EVT_BEGIN(hikaru_yuka_init)
     CALL(evt_mobj_itembox, STRING("box"), -350, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF_AJI_12_CARD_KEY_CHEST)
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))

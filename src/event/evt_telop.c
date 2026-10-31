@@ -41,6 +41,11 @@ static TelopWork* wp = &work;
 
 void telop(CameraId cameraId, void* param);
 
+/**
+ * Shows the name banner for area args[0] (an index into msg_tbl: Rogueport, Petal Meadows,
+ * ...) the first time a map script calls it for that area: fades in for 1 s, holds 5 s, fades out for 1 s.
+ * A saved flag per area keeps it from showing twice.
+ */
 USER_FUNC(evt_telop_entry) {
     EvtWord* args = event->args;
     u32 ms;

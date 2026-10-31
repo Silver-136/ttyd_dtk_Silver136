@@ -67,6 +67,10 @@ GXColor HSV2RGB(GXColor hsv);
 void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg);
 #endif
 
+/**
+ * The width entry (kerning and advance width in pixels) of a glyph, from the font's WID1 block that covers it;
+ * NULL if no block does (callers do not check).
+ */
 static inline FontWidthEntry* fontGetWidth(u16 code) {
     FontWidthBlock* block = (FontWidthBlock*)&pfh[1];
     u32 i;
@@ -84,6 +88,11 @@ static inline FontWidthEntry* fontGetWidth(u16 code) {
     return NULL;
 }
 
+/**
+ * Draws one glyph at the current position matrix origin;
+ * with FontDrawEdge on, first draws it four times in the outline colour (fontColTbl[0]) offset 2 px left, right,
+ * down and up, then restores the colour.
+ */
 static inline void fontDrawCodeEdge(u16 code) {
     if (fontEdge) {
         GXColor save = fontColor;
@@ -97,6 +106,10 @@ static inline void fontDrawCodeEdge(u16 code) {
     _JUTFont_DrawPos(code, 0, 0);
 }
 
+/**
+ * Font manager start-up, called once from the boot code in mariost.c.
+ * Empty: the font is loaded later by fontmgrTexSetup.
+ */
 void fontmgrInit(void) {
 }
 
@@ -108,10 +121,16 @@ void fontmgrTexSetup(void) {
 #endif
 }
 
+/** Starts a block of text drawing at full opacity; see FontDrawStart_alpha. */
 void FontDrawStart(void) {
     FontDrawStart_alpha(0xFF);
 }
 
+/**
+ * Starts a block of text drawing: resets the colour to the default dark text colour,
+ * the scale to 1 and the outline off, remembers alpha (0-255) as the multiplier for every later colour,
+ * and sets up GX for glyphs.
+ */
 void FontDrawStart_alpha(u8 alpha) {
     GXColor start;
 
@@ -123,14 +142,21 @@ void FontDrawStart_alpha(u8 alpha) {
     JUTFont_DrawStart(start);
 }
 
+/** Turns on the outline: following glyphs get a 2 px border in fontColTbl[0] drawn under them. */
 void FontDrawEdge(void) {
     fontEdge = TRUE;
 }
 
+/** Turns the glyph outline back off. */
 void FontDrawEdgeOff(void) {
     fontEdge = FALSE;
 }
 
+/**
+ * Adds a second TEV stage that multiplies the text by the vertex colour,
+ * which _JUTFont_DrawPos always sets to a hue cycling with x and time;
+ * msgdrv uses it for rainbow-coloured message glyphs.
+ */
 void FontDrawRainbowColor(void) {
     GXSetNumTevStages(2);
     GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
@@ -140,10 +166,15 @@ void FontDrawRainbowColor(void) {
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_RASA, GX_CA_ZERO);
 }
 
+/** Drops back to the single TEV stage, ending FontDrawRainbowColor. */
 void FontDrawRainbowColorOff(void) {
     GXSetNumTevStages(1);
 }
 
+/**
+ * Adds a second TEV stage that multiplies the glyph alpha by a tiling noise texture (window texture 50);
+ * msgdrv uses it for the <noise> message tag, which makes the text look grainy.
+ */
 void FontDrawNoise(void) {
     Mtx mtx;
 
@@ -161,39 +192,50 @@ void FontDrawNoise(void) {
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
 }
 
+/** Ends FontDrawNoise: back to one texture coordinate and one TEV stage. */
 void FontDrawNoiseOff(void) {
     GXSetNumTexGens(1);
     GXSetNumTevStages(1);
 }
 
+/** Sets the text colour from fontColTbl: 0 dark default (also the outline colour), 1 near white, 2 orange. */
 void FontDrawColorIDX(s32 idx) {
     FontDrawColor(fontColTbl[idx]);
 }
 
+/** Sets the text colour; its alpha is scaled by the alpha given to FontDrawStart_alpha before it is loaded. */
 void FontDrawColor(GXColor color) {
     fontColor = color;
     color.a = (color.a * fontAlpha) / 255;
     GXSetTevColor(GX_TEVREG0, color);
 }
 
+/** Reloads the current text colour into TEV register 0 (msgdrv calls it after other drawing changed the register). */
 void FontDrawColor_(void) {
     FontDrawColor(fontColor);
 }
 
+/** The current text colour as last set, before the alpha scaling. */
 GXColor FontGetDrawColor(void) {
     return fontColor;
 }
 
+/** Sets a uniform text scale for the following FontDrawCode/FontDrawString* calls (reset to 1 by FontDrawStart). */
 void FontDrawScale(f32 scale) {
     fontScale.x = scale;
     fontScale.y = scale;
     fontScale.z = scale;
 }
 
+/** Sets a per-axis text scale; see FontDrawScale. */
 void FontDrawScaleVec(Vec scale) {
     fontScale = scale;
 }
 
+/**
+ * Draws one glyph (an index from JUTFont_CodeToGlyph) at x, y with the current scale and outline;
+ * msgdrv draws message windows glyph by glyph through this.
+ */
 void FontDrawCode(f32 x, f32 y, u16 code) {
     Mtx mtx;
 
@@ -205,6 +247,10 @@ void FontDrawCode(f32 x, f32 y, u16 code) {
     fontDrawCodeEdge(code);
 }
 
+/**
+ * Draws one glyph through the given model matrix (changed in place: the camera view is multiplied in);
+ * msgdrv uses it for rotated or scaled message glyphs.
+ */
 void FontDrawCodeMtx(Mtx mtx, u16 code) {
     PSMTXConcat(camGetCurPtr()->view, mtx, mtx);
     GXLoadPosMtxImm(mtx, GX_PNMTX0);
@@ -283,6 +329,10 @@ static inline void fontDrawStringVecPitch(Vec pos, f32 pitch, const s8* str) {
     }
 }
 
+/**
+ * Draws a single-line string at x, y with every glyph centred in a fixed cell pitch pixels wide (monospaced,
+ * e.g. for numbers); a negative pitch means proportional spacing like FontDrawString.
+ */
 void FontDrawStringPitch(f32 x, f32 y, f32 pitch, const char* msg) {
 #ifdef VERSION_G8ME01
     FontDrawStringVecPitch((Vec){x, y, 0.0f}, pitch, (const s8*)msg);
@@ -362,6 +412,7 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
 #pragma auto_inline reset
 #endif
 
+/** The left/right pair of a glyph's four outline copies, 2 px either side of an integer x, y. */
 static inline void fontDrawPairXI(u16 code, s16 x, s16 y) {
     // FAKE: spare s16 copies of the s16 parameters (and a no-op cast); using x and y directly changes the object
     s16 iy = y;
@@ -370,6 +421,7 @@ static inline void fontDrawPairXI(u16 code, s16 x, s16 y) {
     _JUTFont_DrawPos(code, ix + 2, (s16)iy);
 }
 
+/** The down/up pair of outline copies for an integer position; see fontDrawPairXI. */
 static inline void fontDrawPairYI(u16 code, s16 x, s16 y) {
     // FAKE: spare s16 copies of the s16 parameters; using x and y directly changes the object
     s16 iy = y;
@@ -378,6 +430,7 @@ static inline void fontDrawPairYI(u16 code, s16 x, s16 y) {
     _JUTFont_DrawPos(code, ix, iy + 2);
 }
 
+/** The left/right pair of outline copies for a float position (truncated to pixels). */
 static inline void fontDrawPairX(u16 code, f32 x, f32 y) {
     s16 ix = x;
     s16 iy = y;
@@ -386,6 +439,7 @@ static inline void fontDrawPairX(u16 code, f32 x, f32 y) {
     _JUTFont_DrawPos(code, ix + 2, (s16)iy);
 }
 
+/** The down/up pair of outline copies for a float position (truncated to pixels). */
 static inline void fontDrawPairY(u16 code, f32 x, f32 y) {
     s16 ix = x;
     s16 iy = y;
@@ -394,6 +448,7 @@ static inline void fontDrawPairY(u16 code, f32 x, f32 y) {
     _JUTFont_DrawPos(code, (s16)ix, iy + 2);
 }
 
+/** Draws one glyph at x, y in the already-loaded matrix, with the outline first when FontDrawEdge is on. */
 static inline void fontDrawCodeEdgeXY(u16 code, f32 x, f32 y) {
     if (fontEdge) {
         GXColor save = fontColor;
@@ -405,6 +460,10 @@ static inline void fontDrawCodeEdgeXY(u16 code, f32 x, f32 y) {
     _JUTFont_DrawPos(code, x, y);
 }
 
+/**
+ * Draws a multi-line string through a model matrix, line height 28; <tags> are skipped, not interpreted.
+ * Used for the speech-bubble effects, battle menu text, telops and block messages.
+ */
 void FontDrawStringMtx(Mtx mtx, const char* msg) {
     CameraEntry* camera;
     Mtx m;
@@ -451,6 +510,10 @@ void FontDrawStringMtx(Mtx mtx, const char* msg) {
     }
 }
 
+/**
+ * Draws one line of text centred on the matrix origin (half of FontGetMessageWidthLine to the left);
+ * the battle menu uses it for names.
+ */
 void FontDrawStringCenterMtx(Mtx mtx, const s8* msg) {
     f32 x;
     u16 code;
@@ -473,10 +536,15 @@ void FontDrawStringCenterMtx(Mtx mtx, const s8* msg) {
     }
 }
 
+/** A glyph's advance width in pixels from the WID1 block. */
 inline u8 fontGetGlyphWidth(u16 code) {
     return fontGetWidth(code)->width;
 }
 
+/**
+ * Draws a single-line string with every glyph jittered 0-2 px at random each frame (shaking text);
+ * npcdrv uses it for the first-strike bubble text.
+ */
 void FontDrawStringShake(f32 x, f32 y, const s8* msg) {
     CameraEntry* camera;
     Mtx trans, scale;
@@ -514,6 +582,7 @@ void FontDrawStringShake(f32 x, f32 y, const s8* msg) {
     }
 }
 
+/** Draws one glyph at integer x, y in the loaded matrix, outline first when FontDrawEdge is on. */
 static inline void fontDrawCodeEdgeI(u16 code, s16 x, s16 y) {
     if (fontEdge) {
         GXColor save = fontColor;
@@ -525,6 +594,10 @@ static inline void fontDrawCodeEdgeI(u16 code, s16 x, s16 y) {
     _JUTFont_DrawPos(code, x, y);
 }
 
+/**
+ * Draws a message at screen position x, y (line height 28), handling the <red>, <col xxxxxxxx> and <icon> tags;
+ * other tags are skipped. Used for help windows, battle messages and the list windows.
+ */
 void FontDrawMessage(s32 x, s32 y, const char* msg) {
     s32 cx;
     s32 cy;
@@ -602,6 +675,10 @@ void FontDrawMessage(s32 x, s32 y, const char* msg) {
     }
 }
 
+/**
+ * FontDrawMessage through a model matrix (glyphs and icons transformed by mtx);
+ * handles <red> and <icon> but not <col>. Used by the shop, the select windows and the pause menu.
+ */
 void FontDrawMessageMtx(Mtx mtx, const char* msg) {
     CameraEntry* camera;
     u16 code;
@@ -686,18 +763,26 @@ void FontDrawMessageMtx(Mtx mtx, const char* msg) {
     }
 }
 
+/** The glyph index of a single-byte (hankaku, half-width) character; msgdrv's entry point to the font map. */
 u16 hankakuSearch(s8 c) {
     return JUTFont_CodeToGlyph(FONT_CH(c));
 }
 
+/** The glyph index of a two-byte Shift-JIS (kanji or full-width) character code. */
 u16 kanjiSearch(u32 code) {
     return JUTFont_CodeToGlyph(code);
 }
 
+/** A glyph's advance width in pixels (code is a glyph index, not a character code). */
 u16 kanjiGetWidth(u16 code) {
     return fontGetWidth(code)->width;
 }
 
+/**
+ * The width in pixels of the widest line of a message as FontDrawMessage would lay it out (glyphs,
+ * spacing and <icon> widths; other tags take no room), unscaled.
+ * If lines is given it receives the number of line breaks (lines minus one).
+ */
 u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
     u16 code;
     u16 maxWidth = 0;
@@ -772,10 +857,15 @@ u16 FontGetMessageWidthLine(const char* msg, u16* lines) {
     return maxWidth;
 }
 
+/** The width in pixels of the widest line of a message; see FontGetMessageWidthLine. */
 u16 FontGetMessageWidth(const char* message) {
     return FontGetMessageWidthLine(message, NULL);
 }
 
+/**
+ * Converts a colour packed as HSV (r = hue, 0-255 for a full circle; g = saturation; b = value; a kept) to RGB.
+ * Used for the rainbow glyph vertex colours and by Art Attack (sac_scissor).
+ */
 GXColor HSV2RGB(GXColor hsv) {
     f32 h, s, v, f, p, q, r, g, b;
     s32 i;
@@ -905,6 +995,11 @@ void JUTFont_Free(void) {
 }
 #endif
 
+/**
+ * Maps a character code (one byte, or a Shift-JIS pair read as u16) to a glyph index through the font's MAP1
+ * blocks (linear, Shift-JIS formula, table or binary-searched pairs);
+ * unmapped codes give the font's replacement glyph.
+ */
 u16 JUTFont_CodeToGlyph(u32 code) {
     BinaryFontMap* map;
     u32 blockcount;
@@ -973,6 +1068,11 @@ u16 JUTFont_CodeToGlyph(u32 code) {
     return glyph;
 }
 
+/**
+ * Sets up GX for textured glyph quads: alpha blending, no depth test or fog,
+ * direct s16 positions with colour and two texture coordinates, the glyph sheet texture and its texel scale,
+ * colour in TEV register 0.
+ */
 void JUTFont_DrawStart(GXColor color) {
     CameraEntry* camera;
     Mtx mtx;
@@ -1026,10 +1126,12 @@ static inline void fontHue(GXColor* hsv, s32 hr) {
     hsv->r = hr;
 }
 
+/** Sets the vertex hue from its x and the frame hue (see fontHue). */
 static inline void fontHueX(GXColor* hsv, const s16 x, u8 hue) {
     fontHue(hsv, x + hue);
 }
 
+/** Emits a vertex position and sets the hue for that vertex's colour. */
 static inline void fontPos(const s16 x, s16 y, GXColor* hsv, u8 hue) {
     GXPosition3s16(x, y, 0);
     fontHueX(hsv, x, hue);

@@ -28,6 +28,10 @@ USER_FUNC(evt_goryuugijo_alloc);
 
 static EvtWord main_evt[4];
 
+/**
+ * Script helper that spawns a minigame effect: args[0] is the effect type and args[1..3] the position,
+ * passed to effMiniGameEntry. Used by the Pianta Parlor hall in gor_03.
+ */
 USER_FUNC(eff_call_yuugijo) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
@@ -39,6 +43,11 @@ USER_FUNC(eff_call_yuugijo) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that shuts down the hall minigame whose work block pointer is in args[0]:
+ * on the first call it sets the quit flag, waits until the main function has acknowledged it,
+ * frees the data and the block and clears args[0]. Does nothing when the pointer is 0.
+ */
 USER_FUNC(evt_goryuugijo_free) {
     EvtWord* args = event->args;
     GoryuuWork* wp = (GoryuuWork*)evtGetValue(event, args[0]);
@@ -60,6 +69,11 @@ USER_FUNC(evt_goryuugijo_free) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that starts a hall minigame: allocates its work block (pointer stored in args[0]),
+ * picks the callbacks by type args[1] (0 the Monte medal counter with 4 bytes of data,
+ * 1 the slot machine with 0x78 bytes), starts the driver script main_evt and calls the game's init.
+ */
 USER_FUNC(evt_goryuugijo_alloc) {
     EvtWord* args = event->args;
     GoryuuWork* wp = _mapAlloc(sizeof(GoryuuWork));
@@ -90,6 +104,11 @@ USER_FUNC(evt_goryuugijo_alloc) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Per-frame driver of a hall minigame (work block in LW(0)):
+ * stops when the quit flag is set, otherwise runs the game's main function unless a sub-event is still running,
+ * and queues the 2D draw (priority 1000). Never finishes by itself.
+ */
 USER_FUNC(evt_goryuugijo_main_func) {
     GoryuuWork* wp = (GoryuuWork*)event->lwData[0];
 
@@ -109,10 +128,15 @@ disp:
     return EVT_RETURN_BLOCK;
 }
 
+/** Draw callback of a hall minigame: forwards to the game's own disp function. */
 void evt_goryuugijo_disp_func(CameraId camera, void* param) {
     ((GoryuuWork*)param)->disp(camera, param);
 }
 
+/**
+ * Driver script of a hall minigame, started by the start helper with evtEntry:
+ * runs evt_goryuugijo_main_func, which yields every frame until the quit flag is set.
+ */
 static EVT_BEGIN(main_evt)
     CALL(evt_goryuugijo_main_func)
     RETURN

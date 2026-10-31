@@ -35,6 +35,7 @@ DispEntry* pDispWork;
 //local prototypes
 static s32 _sort(const void** sortA, const void** sortB);
 
+/** Allocates the display list of 1024 draw requests and its sort table at boot. */
 void dispInit(void) {
     pDispWork = __memAlloc(HEAP_DEFAULT, sizeof(DispEntry) * DISP_MAX_ENTRIES);
     pSortWork = __memAlloc(HEAP_DEFAULT, sizeof(DispEntry*) * DISP_MAX_ENTRIES);
@@ -43,6 +44,7 @@ void dispInit(void) {
     entry_n = 0;
 }
 
+/** Empties the display list at the start of each frame. */
 void dispReInit(void) {
     entry_n = 0;
 }
@@ -72,6 +74,7 @@ void dispEntry(CameraId camId, f32 order, s32 renderMode, DispCallback callback,
     entry_n++;
 }
 
+/** qsort comparator for draw requests: ascending by their combined order. */
 static s32 _sort(const void** sortA, const void** sortB) {
     f32 orderB;
     f32 orderA;
@@ -87,10 +90,16 @@ static s32 _sort(const void** sortA, const void** sortB) {
     return 0;
 }
 
+/** Sorts this frame's draw requests by order before the cameras are drawn. */
 void dispSort(void) {
     qqsort(pSortWork, entry_n, sizeof(DispEntry*), _sort);
 }
 
+/**
+ * Calls every queued draw callback for camera camId in sorted order, first setting the GX blend,
+ * alpha compare and depth state its render mode asks for.
+ * Colour updates are always on; alpha updates are off for cameras 4, 5 and 7.
+ */
 void dispDraw(CameraId camId) {
     s32 i;
 
@@ -151,6 +160,10 @@ void dispDraw(CameraId camId) {
     }
 }
 
+/**
+ * Turns a world position into a dispEntry order from its projected depth under the 3D camera,
+ * scaled to 0..10000 (clamped) and negated, so callers can sort objects by distance.
+ */
 f32 dispCalcZ(Vec* input) {
     CameraEntry* camera;
     Vec output;
@@ -169,6 +182,7 @@ f32 dispCalcZ(Vec* input) {
     return calc;
 }
 
+/** Returns the draw request whose callback is running now, so a callback can read its own render mode. */
 DispEntry* dispGetCurWork(void) {
     return currentWorkPtr;
 }

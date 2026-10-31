@@ -409,6 +409,11 @@ BattleWeapon weapon_bunbaba_mega_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Entry event of the Gloomtail fight: the camera moves in on Gloomtail while Mario
+ * and the partner strike a startled pose, Gloomtail rises (GNB_F_3) and roars with a camera shake,
+ * and Mario and the partner ready themselves before the battle starts.
+ */
 static EVT_BEGIN(battle_entry_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
     CALL(evt_map_replayanim, 0, STRING("dontyo"))
@@ -1162,6 +1167,7 @@ static USER_FUNC(_leg_smoke_effect) {
     return EVT_RETURN_DONE;
 }
 
+/** Wait event of Gloomtail: plays its idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

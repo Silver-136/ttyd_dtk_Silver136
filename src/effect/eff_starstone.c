@@ -293,6 +293,11 @@ static inline void starStoneBlendState(void) {
         GXCallDisplayList(*dp, *sp << 5); \
     }
 
+/**
+ * Spawns Crystal Star type % 7 (0 Diamond, 1 Emerald, 2 Gold, 3 Ruby, 4 Sapphire, 5 Garnet,
+ * 6 Crystal) at (x, y, z). Types 7 and up are the same stars without the dust trail or shine sound.
+ * Callers: Star Power moves (battle/sac).
+ */
 EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffStarStoneWork* work;
@@ -353,6 +358,11 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     return effect;
 }
 
+/**
+ * State 0 spins the texture and trails dust, with a looping shine sound when allowed.
+ * States 1-5 are the drop: it falls under gravity, bounces on the ground (jump sound, puffs),
+ * then the halves separate and tilt.
+ */
 void effStarStoneMain(EffectEntry* effect) {
     EffStarStoneWork* w = effect->userdata;
     Vec pos;
@@ -598,6 +608,7 @@ void effStarStoneDisp_1(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Draws the stones that split in two (types 1-5): an untextured shell for each half, then each half textured. */
 void effStarStoneDisp_2(CameraId cameraId, EffectEntry* effect) {
     Mtx m;
     Mtx s;
@@ -776,6 +787,7 @@ void effStarStoneDisp_2(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Draws the star with the right model: the round stone for types 0 and 6, the two-half stone otherwise. */
 void effStarStoneDraw(CameraId cameraId, EffectEntry* effect) {
     EffStarStoneWork* w = effect->userdata;
     switch (w->type) {

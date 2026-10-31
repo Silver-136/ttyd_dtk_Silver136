@@ -217,6 +217,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init script of the Spiky Goomba.
+ * Registers its wait, attack and damage scripts and sets its run, walk and jump sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -229,6 +233,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Runs when an attack on the spiky head is stopped by the thorns (the counter damage to the attacker).
+ * In the lecture battle it also marks the lecture's unit work 0, so the lesson knows the thorn was triggered.
+ * Guess.
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -271,6 +280,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/** Damage reaction of the Spiky Goomba: the default damage script. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -293,6 +303,10 @@ static f32 SinTable[] = {
     0.999391f, 0.999848f, 1.0f,
 };
 
+/**
+ * The Hyper Spiky Goomba's attack: the Spiky Goomba's roll or jump onto the target,
+ * with a charge option (weapon_togekuri_charge) at the start unless it is already charged (status 16).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CHARGE, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -513,6 +527,10 @@ static USER_FUNC(krb_get_dir) {
 
 double hypot(double x, double y);
 
+/**
+ * Finds the direction in degrees (0 to 359) of the vector (x, z) with a binary search over SinTable (seven
+ * halvings between 0 and 90 degrees), then reflects the result into the right quadrant.
+ */
 static u16 krb_comp_dir(f32 x, f32 z) {
     f32 dist = hypot(x, z);
     f32 s = __fabs(z) / dist;
@@ -558,6 +576,7 @@ static USER_FUNC(get_attacker) {
     return EVT_RETURN_DONE;
 }
 
+/** Wait (idle) event of the Hyper Spiky Goomba: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

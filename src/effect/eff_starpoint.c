@@ -24,6 +24,7 @@ typedef struct EffStarPointWork {
     s32 delay;               // 0x30
 } EffStarPointWork;
 
+/** Cosine approximation by a quartic polynomial, valid for x in [0, 2pi]. */
 // Cheap polynomial cosine approximation, valid for x in [0, 2pi]
 static inline f32 _cosf(f32 x) {
     f32 a = 0.03705f;
@@ -64,6 +65,10 @@ static inline f32 _cosf(f32 x) {
     return a;
 }
 
+/**
+ * Spawns `count` star icons at (x, y, z), each launched at a random horizontal angle
+ * and release delay (staggered every 3 frames). Caller: the evt_eff "starpoint" effect.
+ */
 EffectEntry* effStarPointEntry(s32 type, s32 count, f32 x, f32 y, f32 z) {
     s32 delay;
     EffectEntry* effect;
@@ -101,6 +106,10 @@ EffectEntry* effStarPointEntry(s32 type, s32 count, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Runs ballistic motion for each icon once its delay is up, fading it out after it starts falling;
+ * deletes the effect 60 frames after the start.
+ */
 void effStarPointMain(EffectEntry* effect) {
     EffStarPointWork* work = effect->userdata;
     Vec position;

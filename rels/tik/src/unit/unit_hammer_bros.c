@@ -51,6 +51,10 @@ static EvtWord nagemakuri_attack_event_sub_no_last[13];
 static EvtWord nagemakuri_attack_event_sub_last[76];
 static EvtWord wait_event[6];
 
+/**
+ * Advances the weapon's current target index and returns the next target's unit and part indices;
+ * returns unit -1 when there are no more targets.
+ */
 static void hammer_bros_get_next_target(s32* unitIdx, s32* partIdx) {
     BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
 
@@ -65,6 +69,7 @@ static void hammer_bros_get_next_target(s32* unitIdx, s32* partIdx) {
     }
 }
 
+/** Returns the unit and part indices of the weapon's current target. */
 static void hammer_bros_get_target(s32* unitIdx, s32* partIdx) {
     BattleWorkWeaponTargets* wt = &_battleWorkPointer->weaponTargets;
     BattleWorkTarget* target = &wt->targets[wt->targetIndices[wt->currentTarget]];
@@ -73,6 +78,11 @@ static void hammer_bros_get_target(s32* unitIdx, s32* partIdx) {
     *partIdx = target->partIdx;
 }
 
+/**
+ * Script helper for the Hammer Bro's multi-throw attack (nagemakuri).
+ * It lists every target of the weapon and then picks five targets at random (repeats allowed),
+ * writing their unit and part ids into the five pairs of variables passed in args.
+ */
 // Collect the sampled targets, then choose five unit/part pairs independently with replacement.
 static USER_FUNC(hammer_bros_nagemakuri_set_target) {
     EvtWord* args = event->args;
@@ -319,6 +329,10 @@ static BattleWeapon weapon_hammer_bros_nagemakuri_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init script of the Hammer Bro.
+ * Registers its wait, attack and damage scripts and sets its walking and jumping sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -328,6 +342,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage reaction of the Hammer Bro: the default damage script. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -335,6 +350,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the Hammer Bro.
+ * Picks one of three attacks: the single hammer throw (normal_attack_event),
+ * the successive throws (renzoku_attack_event) or the barrage (nagemakuri_attack_event);
+ * with a 50 percent chance for the barrage or the series when several targets exist,
+ * and the normal throw otherwise. Uses the confused-attack and enemy-item checks first.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_THROW_HIT, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_THROW_HIT + 1, 0)
@@ -373,6 +395,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Starts the target's avoid animation for the result of a pre-damage check (3, 6 or 2 select the three avoid
+ * types, 38 to 40).
+ */
 static EVT_BEGIN(start_avoid)
     IF_INT_EQUAL(LW(5), 3)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -386,6 +412,13 @@ static EVT_BEGIN(start_avoid)
     RETURN
 EVT_END()
 
+/**
+ * A hammer throw that misses (damage_check_event_sub's avoid results): with the throw pose (BRO_A_1B) and
+ * sounds, the hammer part LW(15) spins from the Hammer Bro's hand towards the target's hit position;
+ * as it passes
+ * the target the avoid animation starts (start_avoid), and it bounces twice on the ground beyond the target
+ * (100 and 150 units past) before being hidden again.
+ */
 static EVT_BEGIN(hammer_bros_attack_common_event1)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HUMMER_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, LW(15), STRING("BRO_A_1B"))
@@ -450,6 +483,11 @@ static EVT_BEGIN(hammer_bros_attack_common_event1)
     RETURN
 EVT_END()
 
+/**
+ * The flight of a hammer throw that hits: with the throw pose (BRO_A_1B) and sounds,
+ * the hammer part LW(15) spins
+ * from the Hammer Bro's hand to the target's hit position. The damage is applied by the caller.
+ */
 static EVT_BEGIN(hammer_bros_attack_common_event2)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HUMMER_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, LW(15), STRING("BRO_A_1B"))
@@ -480,6 +518,10 @@ static EVT_BEGIN(hammer_bros_attack_common_event2)
     RETURN
 EVT_END()
 
+/**
+ * The hammer bouncing off after a hit: keeps the hammer part LW(15) spinning, shows the throw pose (BRO_A_1B),
+ * bounces it from the target to the ground 50 units back towards the Hammer Bro and hides it again.
+ */
 static EVT_BEGIN(hammer_bros_attack_common_event3)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -555,6 +597,10 @@ static EVT_BEGIN(damage_check_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * The Hammer Bro's single hammer throw: samples a target (or the first-attack target), pays the weapon cost,
+ * winds up (BRO_A_1A), throws once through damage_check_event_sub and goes back to its wait pose.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -594,6 +640,11 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Hammer Bro's series of hammer throws (renzoku = in a row) at one target:
+ * winds up (BRO_A_1A) and spawns four throws 250 ms apart using hammer parts 2 to 5, the last one through
+ * renzoku_attack_event_sub_last, and waits 1.5 s for them to land.
+ */
 static EVT_BEGIN(renzoku_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_hammer_bros_renzoku_attack))
@@ -637,6 +688,11 @@ static EVT_BEGIN(renzoku_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * One of the first three throws of the series: damage_check_event_sub with the series weapon,
+ * as a non-final throw
+ * that records a hit in unit work 10.
+ */
 static EVT_BEGIN(renzoku_attack_event_sub_no_last)
     SET_VALUE(LW(9), PTR(&weapon_hammer_bros_renzoku_attack))
     SET_VALUE(LW(10), 0)
@@ -645,6 +701,11 @@ static EVT_BEGIN(renzoku_attack_event_sub_no_last)
     RETURN
 EVT_END()
 
+/**
+ * The fourth and final throw of the series: if an earlier throw hit (unit work 10 is 1) it always hits, playing
+ * the hit flight, applying the action-command result and the damage and the bounce; otherwise it is an ordinary
+ * final throw through damage_check_event_sub.
+ */
 static EVT_BEGIN(renzoku_attack_event_sub_last)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_THROW_HIT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -661,6 +722,13 @@ static EVT_BEGIN(renzoku_attack_event_sub_last)
     RETURN
 EVT_END()
 
+/**
+ * The Hammer Bro's barrage (nagemakuri = throwing wildly) against the whole party:
+ * picks five random targets with hammer_bros_nagemakuri_set_target (units in unit work 0 to 4, parts in 5 to 9),
+ * then turns to each of the first four in turn,
+ * winds up (BRO_A_1A) and spawns a throw (nagemakuri_attack_event_sub)
+ * 250 ms apart with hammer parts 2 to 5, and waits 1.5 s.
+ */
 static EVT_BEGIN(nagemakuri_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_hammer_bros_nagemakuri_attack))
@@ -717,6 +785,12 @@ static EVT_BEGIN(nagemakuri_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * One throw of the barrage, at the target in slot LW(13):
+ * if a later throw (up to slot 3) goes to the same target
+ * this one is non-final (nagemakuri_attack_event_sub_no_last), otherwise it is the last throw at that target
+ * (nagemakuri_attack_event_sub_last).
+ */
 // Look ahead among the remaining throws to distinguish an intermediate hit from the last hit on this unit/part.
 static EVT_BEGIN(nagemakuri_attack_event_sub)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(13), LW(3))
@@ -740,6 +814,11 @@ static EVT_BEGIN(nagemakuri_attack_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * A non-final throw of the barrage: damage_check_event_sub with the barrage weapon,
+ * recording a hit in unit work 10
+ * plus the target's first slot.
+ */
 static EVT_BEGIN(nagemakuri_attack_event_sub_no_last)
     SET_VALUE(LW(9), PTR(&weapon_hammer_bros_nagemakuri_attack))
     SET_VALUE(LW(10), 0)
@@ -748,6 +827,11 @@ static EVT_BEGIN(nagemakuri_attack_event_sub_no_last)
     RETURN
 EVT_END()
 
+/**
+ * The last throw of the barrage at a target: if an earlier throw at the same target hit (unit work 10 plus its
+ * first slot is 1) it always hits, playing the hit flight, applying the action-command result and the damage and
+ * the bounce; otherwise it is an ordinary final throw through damage_check_event_sub.
+ */
 static EVT_BEGIN(nagemakuri_attack_event_sub_last)
     SET_VALUE(LW(13), 0)
     SET_VALUE(LW(14), 5)
@@ -778,6 +862,7 @@ static EVT_BEGIN(nagemakuri_attack_event_sub_last)
     RETURN
 EVT_END()
 
+/** Wait script of the Hammer Bro: shows its idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

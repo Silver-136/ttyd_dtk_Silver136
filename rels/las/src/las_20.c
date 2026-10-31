@@ -39,6 +39,11 @@ EvtWord hosi_08_sw_evt[15];
 EvtWord hosi_init[175];
 EvtWord las_20_init_evt[103];
 
+/**
+ * Door animation script (closing) for the east door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_01 and S_doa_02 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(e_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_01"), 0, LW(0), 0)
@@ -47,6 +52,11 @@ static EVT_BEGIN(e_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the east door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_01 and S_doa_02 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(e_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_01"), 0, LW(0), 0)
@@ -158,6 +168,11 @@ static const char* haguruma_kage2[] = {
     "S_hgm_17b",
 };
 
+/**
+ * Event script: spins the gear map objects of the room forever:
+ * two groups of gears turn in opposite directions at 1 degree per frame,
+ * and three more gears sway on sine curves.
+ */
 static EVT_BEGIN(haguruma_evt)
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(1), FLOAT(0.0f))
@@ -222,6 +237,7 @@ static EVT_BEGIN(haguruma_evt)
     RETURN
 EVT_END()
 
+/** Event script: the red switch dai_switch raises the moving platform (S_move_dai) for 2.7 seconds via move_dai. */
 static EVT_BEGIN(dai_evt)
     SET_VALUE(LW(0), STRING("S_move_dai"))
     SET_VALUE(LW(1), STRING("A_move_dai"))

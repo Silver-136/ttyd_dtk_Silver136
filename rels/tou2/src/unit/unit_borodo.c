@@ -47,6 +47,12 @@ static EvtWord _borodo_steal_attack[610];
 static EvtWord escape_event[115];
 static EvtWord wait_event[26];
 
+/**
+ * Script helper for the Bandit's steal attack: arg0 = thief unit, arg1 = victim unit;
+ * arg2/arg3/arg4 receive the stolen item id, its icon id and the count.
+ * This version always steals up to 5 coins from Mario's pouch (the item and badge branch below it is never
+ * reached); the loot is kept in the thief's heldItem and stolenCoins.
+ */
 static USER_FUNC(_steal_item) {
     EvtWord* args = event->args;
     s32 coins;
@@ -330,6 +336,13 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_borodo", "c_borodo", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/**
+ * Init event of the Bandit: registers its wait, attack,
+ * damage and confusion events and its run and walk footstep sounds, and picks the pose table:
+ * the one with the loot bag (pose_table_item_have)
+ * when unit flag 0x40000000 (it already holds stolen goods) is set, the plain one otherwise.
+ * Then starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -347,6 +360,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event: runs the default battle damage reaction on the unit itself (part 1). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -354,10 +368,16 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Phase event of the Bandit: does nothing. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Bandit: if it already carries loot (unit flag 0x40000000) it runs away with escape_event.
+ * Otherwise it uses an enemy item if one fits; a confused Bandit always uses the plain attack;
+ * else a roll of 0-223 under 25 picks the plain attack (about 11%) and anything higher the steal attack.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -386,6 +406,13 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Bandit's plain attack: walks around behind the target, then runs at it for a shoulder charge,
+ * stepping with the run sounds.
+ * If the pre-check says a pre-emptive spike stops it (result 5) it still charges in and takes the damage check.
+ * A miss makes it hop past and trot home; a hit knocks the Bandit tumbling head over heels away from the target
+ * before it gets up. The weapon is weapon_borodo_attack.
+ */
 static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_borodo_attack))
@@ -696,6 +723,10 @@ static EVT_BEGIN(escape_event)
     RETURN
 EVT_END()
 
+/**
+ * Wait event of the Bandit: picks the plain or loot-bag pose table by unit flag 0x40000000
+ * and sets the idle pose from it.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))
     IF_INT_EQUAL(LW(0), 0)

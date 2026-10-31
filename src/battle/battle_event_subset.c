@@ -60,6 +60,16 @@ EvtWord subsetevt_nodamage_motion[6];
 EvtWord subsetevt_regeneration[4];
 EvtWord subset_attack_ready_jump_event[2];
 
+/**
+ * KO reaction for a unit (LW(10) = unit, LW(11) = part) whose HP reached 0.
+ * Mario and the partners first walk home.
+ * Mario then runs his data-table event 51 when a Life Shroom revives him (damage code bit 0x800), else event 49.
+ * A partner with a Life Shroom keels over, uses it up and gets back up with 10 HP;
+ * otherwise it is KO'd and, when it stood in front, swaps places with Mario.
+ * Enemies revived by a Life Shroom spin down, show it and recover 10 HP;
+ * other enemies run their data-table KO event or subsetevt_dead_core.
+ * US on, a revived enemy also loses its holding-stolen-item flag.
+ */
 EVT_BEGIN(subsetevt_dead)
     CALL(_disable_restore_command_cursor)
     CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
@@ -1424,6 +1434,7 @@ USER_FUNC(_disable_restore_command_cursor) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: blocks until the unit args[0] has no attack or damage event running. */
 USER_FUNC(_check_at_dm_event_wait) {
     BattleWork* wp = _battleWorkPointer;
     s32 id;
@@ -1443,6 +1454,10 @@ USER_FUNC(_check_at_dm_event_wait) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: adds the unit's starPointDispOffset (from its kind data) to the position in args[1..3],
+ * where the Star Point effect appears when it is defeated.
+ */
 USER_FUNC(_add_star_point_disp_offset) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -1482,6 +1497,11 @@ USER_FUNC(_set_hp_gauge_fade_flag) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: sets args[4] to 1 when x = args[1] lies between args[2] and args[3],
+ * or beyond them in the direction the unit args[0] faces;
+ * the Ultra Hammer knockback uses it to tell when the flying unit has passed a target.
+ */
 USER_FUNC(_check_through_pos) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -1516,6 +1536,10 @@ USER_FUNC(_check_through_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: starts a 90-frame whirlwind effect at the unit args[0], turning the way of args[1]'s sign;
+ * used by the final slaps.
+ */
 USER_FUNC(_binta_effect) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

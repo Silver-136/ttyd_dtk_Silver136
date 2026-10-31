@@ -139,6 +139,10 @@ static EvtWord epilogue_evt[88];
 EvtWord yakan_anime[17];
 EvtWord muj_01_init_evt[225];
 
+/**
+ * Fades the white map blend layer 1 from opaque to clear over 300 ms;
+ * run when the player walks into a building (shop, inn) so the outdoor lighting fades away.
+ */
 EVT_BEGIN(custom_door_dark2)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 300)
     LABEL(0)
@@ -152,6 +156,10 @@ EVT_BEGIN(custom_door_dark2)
     RETURN
 EVT_END()
 
+/**
+ * Fades the white map blend layer 1 back in over 300 ms and then switches it off;
+ * the opposite of custom_door_dark2, run when leaving a building.
+ */
 EVT_BEGIN(custom_door_light2)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 300)
     LABEL(0)
@@ -179,6 +187,7 @@ static EVT_BEGIN(garawaru_init)
     RETURN
 EVT_END()
 
+/** Talk event of the rude sailor: a different line for each story stage (stg5_muj_22_1, stg5_muj_32_02 and others). */
 static EVT_BEGIN(garawaru_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_12_FLAVIO_PA_PATCH)
@@ -619,6 +628,7 @@ static EVT_BEGIN(suifu_a_init)
     RETURN
 EVT_END()
 
+/** Talk event of sailor A: a different line for each story stage (stg5_muj_22_2, stg5_muj_32_03 and others). */
 static EVT_BEGIN(suifu_a_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_12_FLAVIO_PA_PATCH)
@@ -643,6 +653,7 @@ static EVT_BEGIN(suifu_bomb_init)
     RETURN
 EVT_END()
 
+/** Talk event of the bomb sailor: a different line for each story stage (stg5_muj_22_3, stg5_muj_32_04 and others). */
 static EVT_BEGIN(suifu_bomb_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_12_FLAVIO_PA_PATCH)
@@ -677,6 +688,10 @@ EVT_BEGIN(suifu_d_regl)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of sailor D: lines stg5_muj_159 to 163 for the stretches of the story from Fair Winds to the end of
+ * the Hideout arc.
+ */
 static EVT_BEGIN(suifu_d_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_61_FRANKLYS_HOUSE_STG_5)
@@ -703,6 +718,10 @@ EVT_BEGIN(borosuifu_a_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the shabby sailor A: a different line (stg5_muj_154 to 157) for each stretch of the story from
+ * Fair Winds to the end of the Hideout arc.
+ */
 EVT_BEGIN(borosuifu_a_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_61_FRANKLYS_HOUSE_STG_5)
@@ -744,6 +763,10 @@ EVT_BEGIN(borosuifu_b_regl)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the shabby sailor B: a different line (stg5_muj_164 to 167) for each stretch of the story,
+ * as for sailor A.
+ */
 EVT_BEGIN(borosuifu_b_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_58_FAIR_WINDS, STG5_61_FRANKLYS_HOUSE_STG_5)
@@ -770,6 +793,7 @@ static EVT_BEGIN(mony_init)
     RETURN
 EVT_END()
 
+/** Talk event of Mony in the camp: says stg5_muj_147. */
 static EVT_BEGIN(mony_talk)
     CALL(evt_msg_print, 0, STRING("stg5_muj_147"), 0, STRING("me"))
     RETURN
@@ -783,11 +807,13 @@ static EVT_BEGIN(peton_init)
     RETURN
 EVT_END()
 
+/** Talk event of Peton in the camp: says stg5_muj_148. */
 static EVT_BEGIN(peton_talk)
     CALL(evt_msg_print, 0, STRING("stg5_muj_148"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/** Talk event shared by the three dancers (musume): each says her line in turn (stg5_muj_168_01 to 03). */
 static EVT_BEGIN(musume_talk)
     CALL(evt_msg_print, 0, STRING("stg5_muj_168_01"), 0, STRING("３人娘Ａ"))
     CALL(evt_msg_print, 0, STRING("stg5_muj_168_02"), 0, STRING("３人娘Ｂ"))
@@ -1011,6 +1037,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Enter event of both camp exits (w_bero and e_bero1 in bero_entry_data): only clears LW(0). */
 static EVT_BEGIN(bero_in_event)
     SET_VALUE(LW(0), 0)
     RETURN
@@ -1052,6 +1079,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Custom door-open event for the Keelhaul Key houses:
+ * like the standard door-open event but does nothing when evt_mario_party_use_check returns 4 or
+ * when Mario is more than 30 units from the door;
+ * otherwise takes control, shows the interior and runs the door's open event.
+ */
 EVT_BEGIN(muj_00_door_open)
     CALL(evt_mario_party_use_check, LW(4))
     IF_INT_EQUAL(LW(4), 4)
@@ -1128,6 +1161,11 @@ EVT_BEGIN(muj_00_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Custom door-close event: the matching close for muj_00_door_open,
+ * run when Mario leaves through the door (it does nothing when evt_mario_party_use_check returns 4 or when he is
+ * too far from the door).
+ */
 EVT_BEGIN(muj_00_door_close)
     CALL(evt_mario_party_use_check, LW(4))
     IF_INT_EQUAL(LW(4), 4)
@@ -1146,6 +1184,10 @@ static const char* mise_npc[] = {
     NULL,
 };
 
+/**
+ * Open event of the shop building: shows the interior,
+ * fades the outside blend away and lowers the music and ambience to a muffled 50 percent with a low-pass filter.
+ */
 EVT_BEGIN(mise_data_open)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise_kan"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mise_hasi04"), MAP_OBJ_FLAG_NO_MAP_BLEND2)
@@ -1157,6 +1199,10 @@ EVT_BEGIN(mise_data_open)
     RETURN
 EVT_END()
 
+/**
+ * Close event of the shop building: restores the exterior blend flags,
+ * fades the light back in and restores the music and ambience volume and filter.
+ */
 EVT_BEGIN(mise_data_close)
     BEGIN_INLINE_EVENT
         CALL_CHILD(PTR(custom_door_light2))
@@ -1190,6 +1236,7 @@ static const char* yado_npc[] = {
     NULL,
 };
 
+/** Open event of the inn: darkens the outside, shows the interior (S_yado) and muffles the music and ambience. */
 EVT_BEGIN(mise_open_event)
     SPAWN_EVENT(PTR(door_dark))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yado"), MAP_OBJ_FLAG_NO_MAP_BLEND)
@@ -1200,6 +1247,7 @@ EVT_BEGIN(mise_open_event)
     RETURN
 EVT_END()
 
+/** Close event of the inn: lights the outside again, hides the interior and restores music and ambience. */
 EVT_BEGIN(mise_close_event)
     SPAWN_EVENT(PTR(door_light))
     SPAWN_EVENT(PTR(custom_door_light2))
@@ -1226,6 +1274,7 @@ static DoorParam yado_data = {
     mise_close_event, // evtClose
 };
 
+/** Registers muj_00_door_open and muj_00_door_close as the door cases for the first custom door of the map. */
 EVT_BEGIN(evt_door_entry_custom00)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
@@ -1239,6 +1288,7 @@ EVT_BEGIN(evt_door_entry_custom00)
     RETURN
 EVT_END()
 
+/** Registers muj_00_door_open and muj_00_door_close as the door cases for the second custom door of the map. */
 EVT_BEGIN(evt_door_entry_custom01)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(2), 0)
@@ -1663,11 +1713,13 @@ static USER_FUNC(make_itemsel_table) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: frees the item selection table made by make_itemsel_table. */
 static USER_FUNC(delete_itemsel_table) {
     _mapFree(itemsel_table_ram);
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: writes the direction Mario is currently requested to face (displayDirectionTarget) into args[0]. */
 USER_FUNC(evt_mario_get_reqdir) {
     EvtWord* args = event->args;
 
@@ -1675,6 +1727,10 @@ USER_FUNC(evt_mario_get_reqdir) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: writes 1 into args[2] if Mario is within args[1] units (horizontal) of the door's outside hit
+ * box, otherwise 0. args[0] is the door parameter block.
+ */
 USER_FUNC(muj_get_door_check) {
     EvtWord* args = event->args;
     DoorParam* door = (DoorParam*)evtGetValue(event, args[0]);
@@ -1702,6 +1758,10 @@ static USER_FUNC(yami_view) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: turns on a TEV callback slot (args[1], low 4 bits) in the material of the NPC named args[0],
+ * so the NPC is drawn through the map's colour callback. Does nothing if the NPC does not exist.
+ */
 static USER_FUNC(anim_tevcallback) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1715,6 +1775,7 @@ static USER_FUNC(anim_tevcallback) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: the same TEV callback switch for a map object (args[0]) instead of an NPC. */
 static USER_FUNC(anim_tevcallback_mobj) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1728,6 +1789,7 @@ static USER_FUNC(anim_tevcallback_mobj) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper for the dark-world scene: tints the six shop icons shp0 to shp5 dark grey (0x40, 0x40, 0x40). */
 USER_FUNC(sekai_yami_omise) {
     char name[40];
     s32 i;
@@ -1741,6 +1803,7 @@ USER_FUNC(sekai_yami_omise) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: creates a Star Stone effect (type 4) named args[0] at (args[1], args[2], args[3]). */
 static USER_FUNC(starstone_entry) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1752,6 +1815,7 @@ static USER_FUNC(starstone_entry) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: moves the named Star Stone effect to (args[1], args[2], args[3]). */
 static USER_FUNC(starstone_set_pos) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1766,6 +1830,7 @@ static USER_FUNC(starstone_set_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: rotates the named Star Stone effect around Y by args[1] degrees. */
 static USER_FUNC(starstone_set_ry) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -2050,6 +2115,7 @@ static EVT_BEGIN(epilogue_evt)
     RETURN
 EVT_END()
 
+/** Plays the kettle (yakan) animation of the map and keeps replaying it when it finishes. */
 EVT_BEGIN(yakan_anime)
     LOOP(0)
         CALL(evt_map_playanim, STRING("yakan"), MAP_ANIM_PLAY_LOOP, 0)

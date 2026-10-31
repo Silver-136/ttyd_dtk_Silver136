@@ -74,6 +74,10 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_tree", "b_mario", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHidden | kNoShadow, 0, pose_table},
 };
 
+/**
+ * Init for a stage tree the player can hit (spawned by battle_stage_object.c as _entry_tree_data):
+ * registers the wait, attack and damage scripts, never moves, and idles. Its part is hidden and has no shadow.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -84,6 +88,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Hit reaction: wobbles the tree object up and down (_rumble_tree),
+ * then tips it over to 90 degrees and snaps it back upright (_turn_tree).
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -140,6 +148,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** The tree never acts on its own turn; it just returns to its (empty) idle script. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -172,6 +181,10 @@ USER_FUNC(_rumble_tree) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Tilts the tree's stage object (the running unit) about X by 3 degrees a frame up to 90 over 30 frames,
+ * then snaps it back upright. Run from damage_event after _rumble_tree.
+ */
 USER_FUNC(_turn_tree) {
     BattleUnit* unit;
     BattleStageObject* object;

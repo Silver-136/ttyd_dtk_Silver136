@@ -185,14 +185,24 @@ void _epilog(void) {
 #endif
 }
 
+/** Target of unresolved relocations; the module has no code to run for them, so it is empty. */
 void _unresolved(void) {
 }
 
+/**
+ * Map TEV callback that makes a model draw as a flat black silhouette:
+ * it replaces the colour of the stage before the callback's stage with black.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00002508, JP end .text+0x2444. See docs/NAME_PROVENANCE.md.
 void end_silhouette_tev(MapTevCallbackInfo* info) {
     GXSetTevColorIn(info->tevStage - 1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ONE);
 }
 
+/**
+ * Animation GX callback used with the silhouette:
+ * sets opaque drawing with the alpha test at 0x80 and depth writes on, so the silhouettes have clean edges,
+ * and records the display mode for the animation driver.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00002494, JP end .text+0x23D0. See docs/NAME_PROVENANCE.md.
 void end_silhouette_rendermode(s32 wXluStage) {
     animGetPtr()->currDispMode = wXluStage;
@@ -202,6 +212,11 @@ void end_silhouette_rendermode(s32 wXluStage) {
     GXSetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
 }
 
+/**
+ * Draw callback for one parade character (CreditActor):
+ * draws its pose three times as a black silhouette (three animation draw passes)
+ * unless the roll has ended (GF(10) set).
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000023ac, JP end .text+0x22E8. See docs/NAME_PROVENANCE.md.
 void end_credit_npc_disp(CameraId cameraId, void* param) {
     CreditActor* actor = param;
@@ -217,6 +232,12 @@ void end_credit_npc_disp(CameraId cameraId, void* param) {
     }
 }
 
+/**
+ * Script helper: for credit NPC number args[0] writes into args[1] how long the parade script waits
+ * before sending the next one: 0 for a character with its own script,
+ * 1 for a normal silhouette (about 2 seconds), and in the Japanese release
+ * and later 2 for the Gazigazi (a longer 6 second wait). Out-of-range numbers give 0.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000022e8, JP end .text+0x2224. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_credit_npc_get_wait_type) {
     EvtWord* args = event->args;
@@ -461,6 +482,13 @@ CreditNpc R_credits_npc_info[] = {
     {"c_peach", "P_W_1", NULL},
 };
 
+/**
+ * Runs one silhouette of the character parade (credit NPC number args[0] in R_credits_npc_info).
+ * Characters with their own script (evt) just start it.
+ * Others get a CreditActor that is drawn as a silhouette spinning around a screen corner chosen by the current
+ * staff roll position, rotating until it passes its limit angle and is then freed.
+ * The next character's animation group is requested early so it is loaded in time.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00001d90, JP end .text+0x1CCC. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_credit_npc_main) {
     s32 id = evtGetValue(event, event->args[0]);
@@ -591,6 +619,12 @@ USER_FUNC(evt_end_credit_npc_main) {
     return 0;
 }
 
+/**
+ * Runs the parade of characters during the staff roll:
+ * goes through R_credits_npc_info in order, starts evt_end_credit_npc_main for each
+ * and waits between characters as evt_end_credit_npc_get_wait_type says,
+ * until the table ends or the roll finishes.
+ */
 EVT_BEGIN(end_credit_npc_parade)
     SET_VALUE(LW(0), 0)
     LOOP(0)
@@ -620,6 +654,11 @@ EVT_END()
 s32 end_overlay_tex_tbl[6] = {52, 52, 54, 55, 55, 56};
 #endif
 
+/**
+ * Japanese release and later: loops the two ending pictures during the last credit image:
+ * shows one, cross-fades to the next and back, with long holds (about 18 s) and 4 s fades,
+ * by driving evt_end_image_set_mode and the TEV blend value.
+ */
 EVT_BEGIN(end_image_blend_loop)
     LOOP(0)
         CALL(evt_end_image_set_mode, 1)
@@ -675,6 +714,12 @@ EVT_BEGIN(end_image_blend_loop)
     RETURN
 EVT_END()
 
+/**
+ * Guess (details): draw callback of the ending pictures (Japanese release and later):
+ * draws the picture selected by GW(11) from ending.tpl in the position given by GW(12), with the fade alpha,
+ * the overlay picture and the cross-blend of end_image_blend_loop;
+ * for picture 9 it shows the version where Ms. Mowz was met with Koops if that flag is set.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00001324, JP end .text+0x1260. See docs/NAME_PROVENANCE.md.
 void end_image_disp(CameraId cameraId, void* param) {
     s32 i;
@@ -839,6 +884,12 @@ void end_image_disp(CameraId cameraId, void* param) {
     }
 }
 
+/**
+ * Runs the pictures shown beside the credits: waits until the roll asks for a picture (GW(10) = 1),
+ * fades it in over 500 ms, holds it until GW(10) = 2 and fades it out.
+ * For picture 49, the last one, the Japanese release and later also fade in an overlay, change the music,
+ * loop the blended pictures until the player presses a button and then start end_return_title_evt.
+ */
 EVT_BEGIN(end_image_main_evt)
     LOOP(0)
         IF_INT_EQUAL(GF(10), 1)
@@ -1037,6 +1088,7 @@ EVT_BEGIN(end_credit_batten2_evt)
     RETURN
 EVT_END()
 
+/** Parade script (releases) for Atomic Boo (c_atmic_trs): drifts across the screen at 0.8 scale. */
 EVT_BEGIN(end_credit_atomic_evt)
     CALL(evt_npc_entry, STRING("atomic"), STRING("c_atmic_trs"))
     CALL(evt_npc_set_anim, STRING("atomic"), STRING("W_1"))
@@ -1089,6 +1141,10 @@ EVT_BEGIN(end_credit_korutesu_evt)
     RETURN
 EVT_END()
 
+/**
+ * Parade script (releases) for the c_bom_sen model, the Bob-omb crowd sprite of Fahr Outpost's cannon scene
+ * (bom_01's evt_bom1000), in pose S_2: falls down the screen as a silhouette.
+ */
 EVT_BEGIN(end_credit_para_evt)
     WAIT_MS(1000)
     CALL(evt_npc_entry, STRING("para"), STRING("c_bom_sen"))
@@ -1177,36 +1233,60 @@ const char* end_moa_ext_anim = "c_n_moa_a";
 
 const char* end_moa_ext_pose = "S_1";
 
+/** Script helper: queues the ending picture draw callback (end_image_disp) for this frame. */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000012e0, JP end .text+0x121C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_disp_entry) {
     dispEntry(CAMERA_3D, 0.0f, 7, end_image_disp, NULL);
     return 0;
 }
 
+/** Script helper: sets the opacity (0 to 255) of the ending picture to args[0]. */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000012a4, JP end .text+0x11E0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_set_alpha) {
     end_wp->alpha = evtGetValue(event, event->args[0]);
     return 2;
 }
 
+/**
+ * Script helper: sets args[0] as alpha2, the opacity of the overlay picture end_image_disp draws over the
+ * picture while it is above 0 (image 52 in JP, end_overlay_tex_tbl by language later).
+ * The staff roll fades it in
+ * over the last picture (49) before end_image_blend_loop starts.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00001268, JP end .text+0x11A4. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_set_overlay_alpha) {
     end_wp->alpha2 = evtGetValue(event, event->args[0]);
     return 2;
 }
 
+/**
+ * Script helper: selects what end_image_disp draws (args[0]): 0 the current picture, 1 images 49 and 50 blended,
+ * 2 images 50 and 51 blended; end_image_blend_loop switches between 1 and 2.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_0000122c, JP end .text+0x1168. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_set_mode) {
     end_wp->mode = evtGetValue(event, event->args[0]);
     return 2;
 }
 
+/**
+ * Script helper: sets args[0] (0 to 255) as the TEV blend alpha of the ending pictures:
+ * in modes 1 and 2 it is the
+ * cross-fade amount between the two blended images, which end_image_blend_loop ramps over 4 seconds.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000011f0, JP end .text+0x112C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_image_set_blend) {
     end_wp->tevAlpha = evtGetValue(event, event->args[0]);
     return 2;
 }
 
+/**
+ * Script helper that runs the whole staff roll:
+ * steps through end_staff_roll_msg_tbl, and for each entry opens two message windows (job title and names) at
+ * one of five screen positions, waits the entry's time, closes them and starts the next,
+ * while telling end_image_main_evt when to show each picture (GW(10) and GW(11)).
+ * Starts end_image_main_evt on its first call.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000bc8, JP end .text+0xB04. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_staff_roll_msg_main) {
     s32 state = event->userdata[0];
@@ -1356,6 +1436,12 @@ USER_FUNC(evt_end_staff_roll_msg_main) {
     return 0;
 }
 
+/**
+ * Script helper: prepares the staff roll.
+ * On the first call it resets the roll state, mutes the sound effects,
+ * and in the Japanese versions switches the language to English for the credits text;
+ * then it waits until ending.tpl (the picture file) and the first characters' animation groups have loaded.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000a6c, JP end .text+0x9A8. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_staff_roll_init) {
     BOOL inBattle = gp->inBattle ? TRUE : FALSE;
@@ -1403,6 +1489,10 @@ void end_staff_roll_exit(void) {
 }
 #pragma dont_inline reset
 
+/**
+ * Script helper: puts the font and messages back to normal before the game continues:
+ * restores Japanese text where the credits switched it, or turns the sound effects back on.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000009cc, JP end .text+0x908. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_font_restore) {
 #ifndef VERSION_G8ME01
@@ -1420,6 +1510,10 @@ USER_FUNC(end_bgm_wait_stop) {
     return 2;
 }
 
+/**
+ * Script helper: turns the NPC named by args[0] into a black silhouette by hooking the silhouette TEV callback
+ * and GX callback into its animation pose.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000938, JP end .text+0x874. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_npc_silhouette_on) {
     NpcEntry* npc = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
@@ -1430,6 +1524,7 @@ USER_FUNC(evt_end_npc_silhouette_on) {
     return 2;
 }
 
+/** Random float in [min, max] from rand(). */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000008bc, JP end .text+0x7F8. See docs/NAME_PROVENANCE.md.
 f32 end_randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
@@ -1437,6 +1532,11 @@ f32 end_randf(f32 min, f32 max) {
     return r * (max - min) + min;
 }
 
+/**
+ * Ext-pose init for the Smorg silhouette in the credits:
+ * gives each of the 300 small Moamoa a random offset of up to 10 units
+ * and assigns it to a chain (between two points of the big Smorg's skeleton) and a place along that chain.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000006f8, JP end .text+0x634. See docs/NAME_PROVENANCE.md.
 void end_ext_moamoa_init(void) {
     ExtdrvPose* pose = extGetPosePtr();
@@ -1457,6 +1557,12 @@ void end_ext_moamoa_init(void) {
     }
 }
 
+/**
+ * Per-frame update of the Smorg silhouette: places each small Moamoa on its chain between two joints of the big
+ * Smorg model (c_g_moamoa), hides it when a joint is off screen, scales it with the model,
+ * and sets its animation frame from the retrace counter.
+ * Then clears the model's joint positions for the next frame.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000440, JP end .text+0x37C. See docs/NAME_PROVENANCE.md.
 void end_ext_moamoa_main(void) {
     NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
@@ -1511,6 +1617,10 @@ void end_ext_moamoa_main(void) {
     }
 }
 
+/**
+ * Draw callback for the Smorg silhouette: draws all the small Moamoa in plain black using the silhouette render
+ * mode.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_0000039c, JP end .text+0x2D8. See docs/NAME_PROVENANCE.md.
 void end_ext_disp(CameraId cameraId, void* param) {
     extLoadRenderMode();
@@ -1523,11 +1633,17 @@ void end_ext_disp(CameraId cameraId, void* param) {
     extLoadTextureExit();
 }
 
+/** Queues end_ext_disp into the 3D camera every frame. */
 // Descriptive name (not in the symbol maps); placeholder unk_end_0000035c, JP end .text+0x298. See docs/NAME_PROVENANCE.md.
 void end_ext_moamoa_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, 1, end_ext_disp, NULL);
 }
 
+/**
+ * Script helper: allocates the Smorg silhouette's tables (300 Moamoa, 40 animation frames,
+ * the chains between joints of the big Smorg model),
+ * turns on world-position tracking for its pose and writes the animation table to LW(10) for evt_ext_entry.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_end_0000012c, JP end .text+0x68. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_moamoa_init) {
     NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
@@ -1564,6 +1680,7 @@ USER_FUNC(evt_end_moamoa_init) {
     return 2;
 }
 
+/** Script helper: turns off the joint tracking, frees the Smorg silhouette's tables and resets the ext-pose driver. */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000000c4, JP end .text+0x0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_moamoa_exit) {
     NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
@@ -1577,6 +1694,10 @@ USER_FUNC(evt_end_moamoa_exit) {
 }
 
 
+/**
+ * Parade script for the giant Smorg: builds the big Smorg out of 300 small Moamoa as a silhouette,
+ * raises it up the screen over 2 seconds, holds it for 3 seconds, lowers it away, and cleans it up.
+ */
 EVT_BEGIN(end_credit_moamoa_evt)
     CALL(evt_npc_entry, STRING("モアモアダミー"), STRING("c_n_moa_a"))
     CALL(evt_npc_set_position, STRING("モアモアダミー"), 0, -1000, 0)

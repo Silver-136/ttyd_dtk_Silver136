@@ -85,6 +85,12 @@ WindowPartyDt winPartyDt[7] = {
     {7, ICON_PARTY_MS_MOWZ, "name_party6", "msg_menu_party_chu", "EFF_m_chu", "W_1", "d_mario", "R_14", chu_waza},
 };
 
+/**
+ * Sets up the Party window when the pause menu opens:
+ * loads a model for every partner who has joined and is not away (Yoshi in his color;
+ * 8-bit models in Mario's 8-bit form), puts the cursor on the current partner,
+ * counts their moves (rank + 2) and picks Yoshi's icon for his color.
+ */
 void winPartyInit(WindowWork* wp) {
     PouchData* pouch;
     s32 i;
@@ -212,6 +218,10 @@ void winPartyInit(WindowWork* wp) {
     }
 }
 
+/**
+ * Run from win_root.c each time the Party window comes to the front:
+ * snaps the partner carousel to the cursor and shows the partner's help text.
+ */
 void winPartyInit2(WindowWork* wp) {
     wp->party.angle = wp->party.angleTarget = 360.0f / wp->party.count * wp->party.cursor;
     wp->party.mode = 0;
@@ -220,6 +230,7 @@ void winPartyInit2(WindowWork* wp) {
     winMsgEntry(wp, 0, winPartyDt[wp->party.dtIdx].msg, 0);
 }
 
+/** Frees the partner models loaded by winPartyInit. */
 void winPartyExit(WindowWork* wp) {
     s32 i;
 
@@ -230,6 +241,13 @@ void winPartyExit(WindowWork* wp) {
     }
 }
 
+/**
+ * Party window input.
+ * Left/Right turn the partner carousel; A asks to switch to the selected partner
+ * and closes the menu (winMain then swaps partners);
+ * X opens the move list, where Up/Down show each move's description.
+ * Returns -1 on B or with no partners, -2 to close the menu, else 0.
+ */
 s32 winPartyMain(WindowWork* wp) {
     s32 i;
     s32 prev;
@@ -329,12 +347,18 @@ s32 winPartyMain(WindowWork* wp) {
     return 0;
 }
 
+/** Every frame: eases the carousel angle a quarter of the way toward the selected partner. */
 void winPartyMain2(WindowWork* wp) {
     wp->party.angle += (wp->party.angleTarget - wp->party.angle) / 4.0f;
 }
 
 static const GXColor winPartyWhiteC = {0xFF, 0xFF, 0xFF, 0xFF};
 static const GXColor winPartyBlackC = {0x00, 0x00, 0x00, 0xFF};
+/**
+ * Draws the Party window (menu slot idx): the selected partner's HP
+ * and rank (one Shine Sprite icon per rank-up), the partner carousel with shadows (others shrunk and grayed),
+ * the partner's name, the switch and move-list hints, and the move list with FP costs.
+ */
 void winPartyDisp(s32 camId, void* param, s32 idx) {
     WindowWork* wp = param;
     GXColor white2;

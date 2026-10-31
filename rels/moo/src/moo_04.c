@@ -43,6 +43,7 @@ static f32 spline_dt[] = {
     -75.32023f,
 };
 
+/** Event script: puts the active partner (by party id) into its hurt pose during the flight. */
 static EVT_BEGIN(party_damage_pose)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
@@ -197,6 +198,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Event script: the epilogue scene after the ending:
+ * the camera shows the Moon, a text (ep_45) is displayed,
+ * the music and ambience fade out and the map changes to gor_00 (epilogue2).
+ */
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
     CALL(evt_snd_bgm_scope, 0, 1)

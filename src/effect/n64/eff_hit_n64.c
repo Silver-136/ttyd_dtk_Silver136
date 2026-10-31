@@ -56,6 +56,11 @@ void effHitMain(EffectEntry* effect);
 void effHitDisp(CameraId cameraId, EffectEntry* effect);
 static void main_dl(EffectEntry* effect, Mtx mtx);
 
+/**
+ * Spawns a hit flash at (x, y, z). type is the damage flavour: 0 white, 1 fire, 2 electric, 3 ice.
+ * size sets the number of radiating pieces ((size * 5 + 20) / 3).
+ * Called through effHitEntry by battle damage code.
+ */
 EffectEntry* effHitN64Entry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffHitN64Work* work;
@@ -132,6 +137,10 @@ EffectEntry* effHitN64Entry(s32 type, s32 size, f32 x, f32 y, f32 z, f32 scale) 
     return effect;
 }
 
+/**
+ * Plays the flash for cnt_table[type] frames, reading anim_data for the progress
+ * and radius_data for how far the pieces have spread, then deletes it.
+ */
 void effHitMain(EffectEntry* effect) {
     EffHitN64Work* work = effect->userdata;
     Vec position;
@@ -172,6 +181,10 @@ void effHitMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHitDisp, effect);
 }
 
+/**
+ * Picks the colour pair for the type (fire fades with fire_data, electric alternates every frame)
+ * and draws the flash three times around the (1, 1, 1) axis at 120-degree steps with texture 0x4A.
+ */
 void effHitDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffHitN64Work* work;
@@ -279,6 +292,10 @@ void effHitDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws one copy of the flash's radiating pieces under mtx,
+ * setting up the texture matrices from the animation progress.
+ */
 static void main_dl(EffectEntry* effect, Mtx mtx) {
     Mtx texTrans;
     Mtx texMtx;

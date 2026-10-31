@@ -31,6 +31,11 @@ typedef struct EffFlowerN64Work {
 void effFlowerMain(EffectEntry* effect);
 void effFlowerDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a flower that rises from just above (x, y, z) for lifetime frames.
+ * Type 0 spins and tilts; any other type is a randomly swaying one.
+ * Each call alternates the spin direction (kaiten). Event scripts via evt_eff.
+ */
 EffectEntry* effFlowerN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) {
     EffectEntry* effect;
     EffFlowerN64Work* work;
@@ -78,6 +83,10 @@ EffectEntry* effFlowerN64Entry(s32 type, f32 x, f32 y, f32 z, s32 lifetime) {
     return effect;
 }
 
+/**
+ * Accelerates the flower upward and, once lifetime drops below 150, drifts it to one side and spins it;
+ * type 1 swings between 0 and 20. Deletes it at the end of the life.
+ */
 void effFlowerMain(EffectEntry* effect) {
     EffFlowerN64Work* work = effect->userdata;
     Vec position;
@@ -138,6 +147,7 @@ void effFlowerMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFlowerDisp, effect);
 }
 
+/** Draws the flower with texture 0x4C in two passes (the flowers_v meshes), tilted by rotX/rotY. */
 void effFlowerDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffFlowerN64Work* work;

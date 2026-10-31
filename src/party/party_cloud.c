@@ -41,6 +41,11 @@ void getHitBreatheout2(PartyEntry* party, f32 angle);
 #define CLOUD_WORK(p) ((PartyCloud*)(p)->useStruct)
 #define BREATH_PARTICLES(p) ((EffKumokumoN64Particle*)(p)->work.cloud.breathEffect->userdata)
 
+/**
+ * Swings one of the two side rays of Flurrie's gust back and forth:
+ * the ray's angle steps 1 degree per frame between -20 and +20 and turns around at either end.
+ * The sign argument is unused here; the caller applies it.
+ */
 static inline void cloudSweep(PartyEntry* party, f32 sign, s32 i) {
     PartyCloud* cl = CLOUD_WORK(party);
     if (cl->sweep[i].reverse == 0) {
@@ -104,6 +109,11 @@ void cloudResetAt(void) {
     mario->camShiftTargetX = 0.0f;
 }
 
+/**
+ * Gale Force state for evt_party.c's script wait:
+ * 0 when there is no partner or Flurrie is not gusting, 1 while the gust is in its start state (10),
+ * otherwise 2 (also when the partner is not Flurrie).
+ */
 u8 cloudGetStatus(void) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
@@ -119,6 +129,10 @@ u8 cloudGetStatus(void) {
     return status;
 }
 
+/**
+ * Direction of Flurrie's gust in movement degrees:
+ * -1 while she is still moving into position, 0 when there is no gust work. No callers in this tree.
+ */
 f32 cloudGetBreathDir(void) {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
     f32 breathDir;
@@ -139,6 +153,13 @@ f32 cloudGetBreathDir(void) {
     return breathDir;
 }
 
+/**
+ * Gust strength (0-100) at a point: nonzero only while Flurrie is mid-gust,
+ * the point is within 10 units of 18 below her,
+ * within reach (allowing half the target's width)
+ * and within 30 degrees of the gust's direction (cosine falloff).
+ * npcdrv.c uses it to tell whether an NPC is caught by the gust.
+ */
 f32 cloudGetBreathPower(f32 size, Vec* pos) {
     PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
     f32 breathPower;
@@ -201,6 +222,10 @@ struct HitEntry* cloudGetHitBreathout(s32 which) {
     return hitBreathout;
 }
 
+/**
+ * Current reach of Flurrie's gust in units (grows 2 per frame up to 120), or 0 when she is not mid-gust.
+ * No callers in this tree.
+ */
 f32 cloudGetBreathDist(void) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
@@ -223,12 +248,21 @@ f32 cloudGetBreathDist(void) {
 }
 
 #ifdef VERSION_G8ME01
+/**
+ * Lets Flurrie follow and bob again after a cutscene froze her,
+ * and puts her back in her standing pose (PWD_S_1).
+ * Called by the US-only evt_party_cloud_lock_animations_on_off script helper.
+ */
 // Descriptive name (not in the symbol maps).
 void cloudLockAnimationsOff(PartyEntry* party) {
     party->work.cloud.lockAnims = 0;
     partyChgPose(party, "PWD_S_1");
 }
 
+/**
+ * Freezes Flurrie for a cutscene: cloud_move stops following and bobbing, and she takes pose PWD_Z_1.
+ * Called by the US-only evt_party_cloud_lock_animations_on_off script helper.
+ */
 // Descriptive name (not in the symbol maps).
 void cloudLockAnimationsOn(PartyEntry* party) {
     party->work.cloud.lockAnims = 1;
@@ -236,12 +270,14 @@ void cloudLockAnimationsOn(PartyEntry* party) {
 }
 #endif
 
+/** Resets Flurrie's idle bob: phase 0 degrees, advancing 4.25 degrees per frame. */
 // Descriptive name (not in the symbol maps); placeholder unk_801820d0, JP 0x801820D0. See docs/NAME_PROVENANCE.md.
 void cloud_hover_init(PartyEntry* party) {
     party->work.cloud.hoverAngle = 0.0f;
     party->work.cloud.hoverSpeed = 4.25f;
 }
 
+/** Advances Flurrie's idle bob and sets her display offset to a 0-6 unit sine wave above her position. */
 // Descriptive name (not in the symbol maps); placeholder unk_8018206c, JP 0x8018206C. See docs/NAME_PROVENANCE.md.
 void cloud_hover_main(PartyEntry* party) {
     f32 a;
@@ -250,6 +286,10 @@ void cloud_hover_main(PartyEntry* party) {
     party->dispOfs.y = 3.0f + 3.0f * a;
 }
 
+/**
+ * Flurrie's follow handler (party_data.c move slot): flies after Mario with partyFlyMain and bobs in the air.
+ * The first frame after a run-mode change sets up the fly movement and the bob.
+ */
 void cloud_move(PartyEntry* party) {
 #ifdef VERSION_G8ME01
     f32 a;
@@ -297,6 +337,11 @@ void cloud_init(PartyEntry* party) {
     party->work.cloud.breathEffect = NULL;
 }
 
+/**
+ * Gale Force (X): Flurrie moves beside Mario over 4 frames,
+ * then blows a gust while X is held (or for actionTime ms when a script started it),
+ * casting rays that map objects and NPCs read; ends by freeing the work and following.
+ */
 void cloud_use(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
@@ -330,6 +375,11 @@ void cloud_use(PartyEntry* party) {
     }
 }
 
+/**
+ * The gust itself: Flurrie moves beside Mario over 4 frames,
+ * then blows while X is held (or for actionTime ms when a script started it),
+ * casting the rays map objects and NPCs read; 200 ms after release she goes back to following.
+ */
 // Descriptive name (not in the symbol maps).
 void _cloud_use(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
@@ -543,6 +593,11 @@ void _cloud_use(PartyEntry* party) {
     }
 }
 
+/**
+ * Flurrie's exit handler (party_data.c), run when she leaves the field:
+ * stops the gust sound and effect, frees the gust work
+ * and puts Mario back in his standing motion with the camera shift cleared.
+ */
 void cloud_exit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
@@ -566,6 +621,11 @@ void cloud_exit(PartyEntry* party) {
     mario->camShiftTargetX = 0.0f;
 }
 
+/**
+ * Per-frame gust update: casts the straight ray at one of three heights (8, 20, 40 above Mario, cycling each
+ * frame), places and scales the cloud effect in front of Flurrie, then casts the two swinging side rays.
+ * Rays that hit collision with attribute 4 are ignored.
+ */
 void getHitBreatheout2(PartyEntry* party, f32 angle) {
     f32 dirSin, dirCos, ys, yc;
     f32 hx, hy, hz, dist, nx, ny, nz;
@@ -647,6 +707,11 @@ void getHitBreatheout2(PartyEntry* party, f32 angle) {
     CLOUD_WORK(party)->hitSweep[1] = hit;
 }
 
+/**
+ * Called by marioCamZoomUp: while the 3D camera's stateA is 0, remembers the given look-at point in cloud_at;
+ * otherwise replaces it with the remembered point.
+ * Does nothing with no partner or when Flurrie is out but not gusting.
+ */
 void cloudGetAt(Vec* position) {
     MarioWork* mario = marioGetPtr();
     u32 partyId = marioGetPartyId();

@@ -4,6 +4,7 @@
 //.bss
 static ArchiveEntry work[4];
 
+/** Clears all four archive slots at startup. */
 void arcInit(void) {
     int i;
 
@@ -12,6 +13,10 @@ void arcInit(void) {
     }
 }
 
+/**
+ * Tells whether addr falls inside any registered archive's data;
+ * the map driver uses it to avoid freeing map data or textures that live inside the map archive.
+ */
 BOOL arcDataCheck(void* addr) {
     int i;
 
@@ -23,6 +28,10 @@ BOOL arcDataCheck(void* addr) {
     return FALSE;
 }
 
+/**
+ * Registers a loaded archive in slot id (data and size) and opens an ARC handle on it
+ * so arcOpen can find files in it. The map driver uses slots 1 and 2; seq_logo registers the startup archive.
+ */
 void arcEntry(s32 id, void* data, u32 size) {
     ArchiveEntry* entry = &work[id];
 
@@ -32,10 +41,17 @@ void arcEntry(s32 id, void* data, u32 size) {
     entry->flags |= 1;
 }
 
+/** Forgets the archive in slot id (the memory itself is freed by the owner). */
 void arcDelete(s32 id) {
     memset(&work[id], 0, sizeof(ArchiveEntry));
 }
 
+/**
+ * Looks a file up by path in every registered archive.
+ * On a hit it returns the file's address inside the archive and stores it and the length in addr
+ * and length (either may be NULL); on a miss it returns NULL and zeroes both,
+ * and callers fall back to reading the file from the disc.
+ */
 void* arcOpen(const char* filename, void** addr, u32* length) {
     ARCFileInfo info;
     // FAKE: info used through the pointer infop; passing &info directly changes the object

@@ -42,6 +42,10 @@ static u8 cloud_once_flag;
 static CloudWork* cloud_p;
 
 static USER_FUNC(evt_cloud_main);
+/**
+ * Per-object event started by the cloud registration command for each blowable scenery piece;
+ * runs evt_cloud_main (LW(0) = its CloudWork).
+ */
 static EVT_BEGIN(evt_cloud_main_evt)
     CALL(evt_cloud_main)
     RETURN
@@ -247,6 +251,7 @@ static USER_FUNC(evt_cloud_main) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Frees all 16 blow-away slots and names their image and offscreen buffers; run at map setup. */
 USER_FUNC(evt_cloud_init) {
     s32 i;
 
@@ -260,6 +265,10 @@ USER_FUNC(evt_cloud_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Registers a blow-away piece: args[1] map group (or a NULL-ended name list when args[0] is nonzero),
+ * args[2] the hit object Flurrie must blow on, args[3] the event to run when it is blown away.
+ */
 USER_FUNC(evt_cloud_ent) {
     EvtWord* args = event->args;
     s32 multi;
@@ -308,6 +317,10 @@ USER_FUNC(evt_cloud_ent) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets the screen capture size (args[0] width, args[1] height) of the last registered blow-away piece;
+ * 0 x 0 captures through the offscreen target instead of a screen rectangle.
+ */
 USER_FUNC(evt_cloud_set_cap_size) {
     EvtWord* args = event->args;
     u16 w = evtGetValue(event, args[0]);
@@ -318,6 +331,10 @@ USER_FUNC(evt_cloud_set_cap_size) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Returns the state of the last registered blow-away piece in args[0] (20 = being blown away, 99 = finishing),
+ * or -1 if none is registered.
+ */
 USER_FUNC(evt_cloud_get_mode) {
     EvtWord* args = event->args;
 

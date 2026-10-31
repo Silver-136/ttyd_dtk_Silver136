@@ -57,6 +57,11 @@ EvtWord kpa_act_stg2_item[] = {
     KPA_ITEM(1150.0f, 387.5f), KPA_ITEM_END,
 };
 
+/**
+ * Watches Bowser in the stage: each frame it checks whether he is dead (evt_koopa_chk_dead)
+ * or has fallen below y = -20, then runs the death handler (kpa_dead) if he died,
+ * or the pit fall handler (kpa_fall_sub) if he fell.
+ */
 static EVT_BEGIN(kpa_fall)
     SET_VALUE(LF(0), 0)
     LOOP(0)
@@ -79,6 +84,10 @@ static EVT_BEGIN(kpa_fall)
     RETURN
 EVT_END()
 
+/**
+ * Gives Bowser a small constant push (hosei) while he is between x = -175 and -100 below y = 400:
+ * the sea current at this part of stage 2. Runs until the stage ends.
+ */
 EVT_BEGIN(kairyu_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)

@@ -36,6 +36,10 @@ Vec scale_tbl[15] = {
     { 1.0f, 1.0f, 1.0f },    { 0.8f, 0.8f, 0.8f },    { 0.9f, 0.9f, 0.9f },
 };
 
+/**
+ * Spawns `count` small stars around (x, y, z) after `delay` frames;
+ * battle_damage.c uses it when an attack misses (index selects the direction).
+ */
 EffectEntry* effMissStarEntry(s32 count, s32 delay, f32 x, f32 y, f32 z, s32 index) {
     EffectEntry* effect;
     EffMissStarWork* work;
@@ -92,6 +96,10 @@ EffectEntry* effMissStarEntry(s32 count, s32 delay, f32 x, f32 y, f32 z, s32 ind
     return effect;
 }
 
+/**
+ * Per frame: moves, spins and fades each star, turns it to face the camera and deletes the effect
+ * when all are gone.
+ */
 void effMissStarMain(EffectEntry* effect) {
     EffMissStarWork* work = effect->userdata;
     Vec position;
@@ -137,6 +145,7 @@ void effMissStarMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position2), 1, (DispCallback)effMissStarDisp, effect);
 }
 
+/** Draws each star as a camera-facing textured quad (effect texture 24). */
 void effMissStarDisp(CameraId cameraId, EffectEntry* effect) {
     EffMissStarWork* work = effect->userdata;
     GXTexObj texObj;

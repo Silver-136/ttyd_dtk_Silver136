@@ -259,6 +259,11 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init event of the Dry Bones: installs its wait, attack, damage and confusion events,
+ * sets the thrown-bone part poses (KRN_H_1) and the landing sound,
+ * and clears unit work 1 (the flag that the death reward was already given).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -273,6 +278,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Dry Bones: runs the default damage handling on its body part (unit LW(10) = -2, part 1). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -332,6 +338,13 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Event when the Dry Bones runs out of HP but can rebuild itself:
+ * it moves to its home position, awards the reward once,
+ * collapses into a pile of bones (KRN_D_2, crumble sound),
+ * stays there for a second and sets unit work 2 to 2 or 3,
+ * the number of turns until rebirth_event brings it back.
+ */
 static EVT_BEGIN(fake_dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
@@ -370,6 +383,11 @@ static EVT_BEGIN(fake_dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Turn event of the collapsed Dry Bones: counts unit work 2 down and, when it reaches zero,
+ * reassembles it (KRN_D_3 and KRN_D_4 with the reunite sounds),
+ * clears attribute 0x20000 and restores its HP to the maximum.
+ */
 static EVT_BEGIN(rebirth_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBIRTH_TURNS, LW(0))
     SUBTRACT(LW(0), 1)
@@ -390,6 +408,13 @@ static EVT_BEGIN(rebirth_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Dry Bones: when confused it throws a plain bone;
+ * when collapsed it rebuilds itself (rebirth_event);
+ * otherwise it can use an item, or draws a number from 0 to 99:
+ * bone throw (50), three-bone throw (30) or calling a Dry Bones friend (20).
+ * For the call it first checks that there is room beside it by turning to both sides with btlevtcmd_CheckSpace.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -464,6 +489,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Helper child script of the bone throw: given the pre-check result in LW(5) it makes the target start its dodge
+ * reaction (avoid type 38, 39 or 40) as the bone passes it.
+ */
 static EVT_BEGIN(start_avoid)
     IF_INT_EQUAL(LW(5), 3)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -477,6 +506,13 @@ static EVT_BEGIN(start_avoid)
     RETURN
 EVT_END()
 
+/**
+ * Attack of the Dry Bones: it picks a target (weapon_honenoko_attack),
+ * winds up (KRN_A_1, KRN_A_2) and throws a spinning bone (part 2) in an arc;
+ * the target can dodge as the bone passes (start_avoid).
+ * If the bone is not avoided it lands on the target with the action command defence check,
+ * and the bone then bounces off.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -603,6 +639,7 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/** Helper child script of the three-bone throw: like start_avoid but the pre-check result comes from LW(11). */
 static EVT_BEGIN(start_avoid2)
     IF_INT_EQUAL(LW(11), 3)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -616,6 +653,11 @@ static EVT_BEGIN(start_avoid2)
     RETURN
 EVT_END()
 
+/**
+ * Attack of the Dry Bones: three bones thrown at one target in sequence (weapon_honenoko_link_attack).
+ * It spawns link_attack_event_sub for bone parts 2, 3 and 4, 40 and 35 frames apart,
+ * and waits until the last one has finished (unit work 4 = -1).
+ */
 static EVT_BEGIN(link_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LINK_HIT, 0)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -657,6 +699,12 @@ static EVT_BEGIN(link_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * One bone of the three-bone throw of the Dry Bones: LW(12) is the bone part (2, 3 or 4).
+ * Wind-up, a spinning arc to the target and dodge or hit handling as in normal_attack_event;
+ * the third bone does the damage check, and if an earlier bone hit,
+ * unit work 3 makes the following ones hit too.
+ */
 static EVT_BEGIN(link_attack_event_sub)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_1"))
     WAIT_MS(250)
@@ -858,6 +906,7 @@ static EVT_BEGIN(call_friend_event)
     RETURN
 EVT_END()
 
+/** Wait event of the Dry Bones: plays the idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

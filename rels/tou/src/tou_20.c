@@ -23,6 +23,10 @@ static f32 spline_dt[9];
 EvtWord evt_anim2[147];
 EvtWord tou_20_init_evt[223];
 
+/**
+ * Decoration loop for the chapter title scene: every 0.3 to 0.8 seconds a random "balloon_heiho_n64" balloon
+ * effect floats out from a point near the tou_enkei1 arena object.
+ */
 // Random offsets span [-50,50], [-20,20], [-10,30]; delays span 300..800 ms, inclusive.
 static EVT_BEGIN(evt_tou_balloon)
     CALL(evt_mapobj_get_position, STRING("tou_enkei1"), LW(13), LW(14), LW(15))
@@ -50,6 +54,12 @@ static EVT_BEGIN(evt_tou_balloon)
     RETURN
 EVT_END()
 
+/**
+ * Chapter title scene when entered at "start": the distant arena (tou_enkei1) is hidden,
+ * the blimp (Hikousen) bobs up and down while the camera sweeps for 10 seconds,
+ * and after 14 seconds the blimp sounds stop and the map changes to the chapter title screen sys_01 (entrance
+ * stg_3).
+ */
 EVT_BEGIN(evt_anim)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tou_enkei1"), MAP_OBJ_FLAG_HIDDEN)
     BEGIN_INLINE_EVENT
@@ -78,6 +88,11 @@ static f32 spline_dt[] = {
     3982.0f,
 };
 
+/**
+ * Chapter title scene for any other entrance: Mario and the partner are hidden,
+ * the blimp (Hikousen) appears after 2 seconds and flies along the spline path spline_dt for 10 seconds
+ * while bobbing up and down, and 20 seconds in the blimp sounds stop and the map changes to tou_00.
+ */
 EVT_BEGIN(evt_anim2)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
@@ -128,6 +143,10 @@ EVT_BEGIN(evt_anim2)
     RETURN
 EVT_END()
 
+/**
+ * Map init for tou_20, the chapter title scene:
+ * locks controls, plays the light and jet animations, positions the camera and starts the blimp flight.
+ */
 EVT_BEGIN(tou_20_init_evt)
     CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)

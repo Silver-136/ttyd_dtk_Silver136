@@ -18,6 +18,10 @@ static BeroEntry bero_entry_data2[2];
 static EvtWord evt_kanban[16];
 EvtWord tik_08_init_evt[68];
 
+/**
+ * Pushes Mario back from the Twilight Town pipe (oshimodo = push back) before it is open:
+ * he walks out of the pipe (bero exec), the "no entry" message tik_08_01 is shown and controls return.
+ */
 EVT_BEGIN(oshimodo_event_sub)
     CALL(evt_cam_ctrl_onoff, 4, 0)
     CALL(evt_mario_key_onoff, 0)
@@ -118,6 +122,7 @@ static BeroEntry bero_entry_data2[] = {
     {0},
 };
 
+/** Signboard script: says tik_08_02 with Mario's controls disabled. */
 static EVT_BEGIN(evt_kanban)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)

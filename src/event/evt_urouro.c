@@ -43,6 +43,11 @@ typedef enum UrouroFlags {
     UROURO_FLAG_TURN_AROUND_UNUSED = (1 << 16), // 0x10000, turn round 2-4 times while waiting; every script passes 0
 } UrouroFlags;
 
+/**
+ * Sets up NPC args[0] to wander around centre (args[1], args[2]) within radius args[3] at speed args[4];
+ * args[5] is the flag word (0x10000: look around a few times while idle). The state lives in LW(10).
+ * Run from the npc_event.c wander move script and map scripts (gor, dmo, ...).
+ */
 USER_FUNC(urouro_init_func) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -72,6 +77,12 @@ USER_FUNC(urouro_init_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Per-frame wander step for NPC args[0]: walk in a random direction for 3-6 s,
+ * turn back toward the centre when outside the radius,
+ * after hitting a wall or when Mario walks into it from behind, then stand 4.5-9 s.
+ * Retail versions also play the NPC's footstep sounds. Never returns DONE.
+ */
 USER_FUNC(urouro_main_func) {
     const char* name = (const char*)evtGetValue(event, *event->args);
     NpcEntry* npc = evtNpcNameToPtr(event, name);

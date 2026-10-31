@@ -7,6 +7,10 @@
 //.bss
 ParseWork parse;
 
+/**
+ * Starts parsing a text buffer of size bytes: the whole buffer becomes the single open block at depth 0.
+ * Used by database.c to read the <Npc> entries of a map's NPC setup file.
+ */
 void parseInit(void* ptr, u32 size) {
     parse.ptr = ptr;
     parse.depth = 0;
@@ -14,6 +18,10 @@ void parseInit(void* ptr, u32 size) {
     parse.end[0] = size;
 }
 
+/**
+ * the tag copy loop was an inline: its locals take the low volatile registers (r4 j, r5 n) under the
+ * strength-reduced buf pointer (r6)
+ */
 // Copies the tag that starts at p[i] into buf without its whitespace, up to and including the closing '>'
 // (at most 127 characters), and terminates it.
 static inline void parseCopyTag(char* buf, s8* p, s32 i, s32 end) {
@@ -31,6 +39,11 @@ static inline void parseCopyTag(char* buf, s8* p, s32 i, s32 end) {
     buf[n] = 0;
 }
 
+/**
+ * Searches the current block for the next top-level element whose tag (whitespace stripped, e.g. "<Npc>") equals
+ * tag and makes its contents the current block.
+ * Returns FALSE and leaves the depth unchanged when no complete element is found.
+ */
 BOOL parsePush(const char* tag) {
     static char buf[128];
     s32 i;
@@ -86,15 +99,25 @@ BOOL parsePush(const char* tag) {
     return TRUE;
 }
 
+/** Leaves the current block and returns to the enclosing one, whose read position stays where it was. */
 void parsePop(void) {
     parse.depth--;
 }
 
+/**
+ * Leaves the current block and moves the enclosing block's read position past it,
+ * so the next parsePush finds the following element of the same kind.
+ */
 void parsePopNext(void) {
     parse.depth--;
     parse.pos[parse.depth] = parse.end[parse.depth + 1];
 }
 
+/**
+ * Reads the next whitespace-separated value of the current block into data and advances past it.
+ * type 0 is a quoted string, 1 a decimal s32, 2 an f32, 3 three f32s (a Vec).
+ * Returns FALSE when the block has no more values.
+ */
 BOOL parseGet1Next(s32 type, void* data) {
     s32* posp;
     s32 i;

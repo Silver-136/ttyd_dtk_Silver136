@@ -7,6 +7,11 @@
 
 HitDamageReturn* hitDmgretPtr;
 
+/**
+ * Enables (args[2] nonzero) or disables the collision of hit object args[0],
+ * or of its whole group when args[1] is nonzero, by clearing or setting hit flag 0x1.
+ * Doors use it on their inside groups.
+ */
 USER_FUNC(evt_hitobj_onoff) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -29,6 +34,10 @@ USER_FUNC(evt_hitobj_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Copies a NULL-ended table of (hit group, position) pairs into map memory and attaches each to its group:
+ * the spot Mario is put back on after falling into that hazard. y -1000 means the object's own position.
+ */
 USER_FUNC(evt_hit_damage_return_set) {
     s32 n;
     HitDamageReturn* q;
@@ -64,6 +73,7 @@ USER_FUNC(evt_hit_damage_return_set) {
     return EVT_RETURN_DONE;
 }
 
+/** Binds hit object args[0] to map object args[1] so the collision follows that object's movement. */
 USER_FUNC(evt_hit_bind_mapobj) {
     EvtWord* args = event->args;
     const char* hitName = (const char*)evtGetValue(event, args[0]);
@@ -72,11 +82,13 @@ USER_FUNC(evt_hit_bind_mapobj) {
     return EVT_RETURN_DONE;
 }
 
+/** Re-syncs hit object args[0] with the map object it is bound to. */
 USER_FUNC(evt_hit_bind_update) {
     hitBindUpdate((const char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 
+/** Returns the position of hit object args[0] in the float variables args[1..3]. */
 USER_FUNC(evt_hit_get_position) {
     EvtWord* args = event->args;
     Vec pos;
@@ -88,6 +100,10 @@ USER_FUNC(evt_hit_get_position) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets (args[1] nonzero) or clears hit flag mask args[3] (a literal, not a variable) on hit object args[2],
+ * or on its whole group when args[0] is nonzero.
+ */
 USER_FUNC(evt_hitobj_flag_onoff) {
     EvtWord* args = event->args;
     s32 isGroup = evtGetValue(event, args[0]);
@@ -111,6 +127,10 @@ USER_FUNC(evt_hitobj_flag_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets (args[1] nonzero) or clears attribute mask args[3] (a literal) on hit object args[2],
+ * or on its whole group when args[0] is nonzero.
+ */
 USER_FUNC(evt_hitobj_attr_onoff) {
     EvtWord* args = event->args;
     s32 isGroup = evtGetValue(event, args[0]);
@@ -134,6 +154,10 @@ USER_FUNC(evt_hitobj_attr_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Starts script evt once for hit object name and every object below it, passing each name in LW(0);
+ * flag also walks the siblings (it is FALSE only for the starting object).
+ */
 static void name_callback_sub(const char* name, void* evt, BOOL withSiblings) {
     HitEntry* hit = hitNameToPtr(name);
     if (hit != NULL) {
@@ -147,6 +171,7 @@ static void name_callback_sub(const char* name, void* evt, BOOL withSiblings) {
     }
 }
 
+/** Runs script args[1] once for hit object args[0] and each of its descendants, with the name in LW(0). */
 USER_FUNC(evt_hitobj_name_callback) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

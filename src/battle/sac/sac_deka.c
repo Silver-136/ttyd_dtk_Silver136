@@ -132,6 +132,7 @@ static void yuka_main(void);
 static void yuka_init(void);
 
 
+/** Shows the action-command success effect (level in LW(0)) when a round of the timing game is cleared. */
 static EVT_BEGIN(nice_event)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), 0, 100, 0)
     RETURN
@@ -169,6 +170,12 @@ USER_FUNC(main_deka) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Sets up the rippling floor: flags the stage floor object stg_b_yuka 0x400001 (hidden from the normal draw,
+ * drawn by test_kururing_mapdisp for the capture), measures its bounds,
+ * allocates a texture of its size (at most 608x480) and a 2 x 129 vertex strip across its width,
+ * and queues yuka_capture to photograph the floor into that texture.
+ */
 static void yuka_init(void) {
     DekaWork* w = get_ptr();
     MapObject* mo = mapGetMapObj("stg_b_yuka");
@@ -218,6 +225,10 @@ static void yuka_init(void) {
     dispEntry(CAMERA_SHADOW, 0.0f, 0, yuka_capture, NULL);
 }
 
+/**
+ * Steps the floor ripple: each active wave walks along the strip kicking columns upward by its amplitude;
+ * columns then pull toward their neighbours, fall under gravity (2 per frame) back to y 0, and are smoothed.
+ */
 static void yuka_main(void) {
     DekaWork* w = get_ptr();
     YukaMesh* m = w->mesh->address;
@@ -295,6 +306,10 @@ static void yuka_main(void) {
     }
 }
 
+/**
+ * Frees the floor texture and mesh and clears the stg_b_yuka flags again.
+ * The retail releases also null the buffer addresses, which is what lets main_deka finish.
+ */
 USER_FUNC(yuka_end) {
     DekaWork* w = get_ptr();
 
@@ -306,6 +321,14 @@ USER_FUNC(yuka_end) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * The timing game.
+ * Each round a cursor runs along a 180-long gauge (faster after every cleared round)
+ * and A must be pressed as it passes each star marker (within 7).
+ * Reaching the end clears the round: the star grows and the crowd cheers.
+ * A press with no star in reach, or a star let past, ends the game with booing.
+ * Five rounds at most; result counts the rounds cleared.
+ */
 static void main_base(void) {
     DekaWork* w = get_ptr();
     s32 idx[8];
@@ -445,6 +468,7 @@ static void main_base(void) {
     }
 }
 
+/** Gauge display states: 30 frames to appear, then shown; after a miss it blinks for 80 frames and holds 30. */
 void main_gauge(void) {
     DekaWork* w = get_ptr();
 
@@ -494,6 +518,10 @@ void main_gauge(void) {
     }
 }
 
+/**
+ * Per-marker upkeep: clears the type of an unused marker, keeps a waiting one fully opaque,
+ * and moves a hit marker to its settled state.
+ */
 void main_timing(s32 idx) {
     DekaWork* w = get_ptr();
     DekaTiming* t = &w->timing[idx];
@@ -518,6 +546,13 @@ void main_timing(s32 idx) {
     }
 }
 
+/**
+ * Crystal Star state machine: appears over Mario, grows and spins,
+ * then settles at (-100, 30, 50) for Mario and the partner to ride (state 4).
+ * Grows by 1 per cleared round (states 6-7) or shrinks back to 2 on a wrong press (8-9).
+ * For the attack (10-11) it bounces six times; each landing shakes the camera and sends two floor waves outward,
+ * stronger with the bounce count and the result; then it rises 40 and stops (13).
+ */
 static void main_star(void) {
     DekaWork* w = get_ptr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -698,6 +733,7 @@ static void main_star(void) {
     }
 }
 
+/** Moves every enemy-side unit with the floor ripple (main_enemy_sub) and records their ids, -1 for unused slots. */
 void main_enemy(void) {
     BattleWork* bw = _battleWorkPointer;
     DekaWork* w = get_ptr();
@@ -716,6 +752,12 @@ void main_enemy(void) {
     }
 }
 
+/**
+ * Bounces one enemy on the rippling floor: when the rising floor under it (enemy half only) is above it,
+ * the unit is thrown upward, plays its hurt animation and damage sound with a small-star effect,
+ * and spins by 20 degrees a frame. Ceiling units only react where the floor rises past 120.
+ * Gravity 1.25; it lands back at its home height.
+ */
 void main_enemy_sub(BattleUnit* unit, s32* n) {
     DekaWork* w = get_ptr();
     YukaMesh* m = w->mesh->address;
@@ -802,6 +844,7 @@ void main_enemy_sub(BattleUnit* unit, s32* n) {
     (*n)++;
 }
 
+/** Deletes the Crystal Star effect and its dust at the end of the move. */
 USER_FUNC(end_deka) {
     DekaWork* w = get_ptr();
 
@@ -810,6 +853,11 @@ USER_FUNC(end_deka) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Draws the timing gauge: its frame, the red fill up to the cursor,
+ * the star markers (lit once the cursor reaches them), the previous round's markers drifting up and fading,
+ * and the hit or miss mark under each marker.
+ */
 static void disp_2D(CameraId cam, void* param) {
     Mtx m;
     Mtx sc;
@@ -912,12 +960,18 @@ static void disp_2D(CameraId cam, void* param) {
     GXSetScissor(0, 0, gp->fbWidth, gp->efbHeight);
 }
 
+/** Empty 3D display callback, queued every frame by main_deka. */
 static void disp_3D(CameraId cam, void* param) {
 }
 
+/** Empty translucent 3D display callback, queued every frame by main_deka. */
 static void disp_3D_alpha(CameraId cam, void* param) {
 }
 
+/**
+ * Photographs the stage floor once: points the camera straight down at the floor's centre with a 25-degree view
+ * framing its bounds, draws the map and copies the frame into the floor texture, then restores the camera.
+ */
 void yuka_capture(CameraId cam, void* param) {
     CameraEntry save;
     Vec c;
@@ -951,6 +1005,13 @@ void yuka_capture(CameraId cam, void* param) {
     memcpy(camGetPtr(cam), &save, sizeof(CameraEntry));
 }
 
+/**
+ * Earth Tremor's attack script (battle_mario's weapon):
+ * Crystal Star opening, then Mario and the partner jump onto the star and ride it
+ * while the timing game runs with the crowd cheering;
+ * the star pounds the floor, dmg_evt hits the enemies, and everyone jumps home.
+ * While Vivian (kind 228) rides, her unit work 0-3 follows her position.
+ */
 EVT_BEGIN(marioAttackEvent_Deka)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_PARTNER, LW(14))
     CALL(btlevtcmd_GetBodyId, LW(14), LW(15))
@@ -1083,6 +1144,11 @@ EVT_BEGIN(marioAttackEvent_Deka)
     RETURN
 EVT_END()
 
+/**
+ * Damages every targeted enemy (damage = rounds cleared + 1).
+ * With 0-1 rounds cleared it misses ceiling enemies and floating ones whose part cannot be hammered;
+ * with 2-3 only ceiling enemies are missed; 4-5 hit everyone.
+ */
 EVT_BEGIN(dmg_evt)
     CALL(get_result, LW(10))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1136,6 +1202,10 @@ EVT_END()
         (fifo)->f32 = _z;      \
     }
 
+/**
+ * Draws the rippling floor as 128 textured quads along the strip, using the captured floor texture.
+ * The retail releases skip it once the buffers are freed.
+ */
 void yuka_disp(CameraId cam, void* param) {
     DekaWork* w;
     CameraEntry* camera;
@@ -1183,10 +1253,16 @@ void yuka_disp(CameraId cam, void* param) {
     }
 }
 
+/** Earth Tremor's work area (DekaWork), kept in the battle's shared action-command work buffer. */
 static DekaWork* get_ptr(void) {
     return (DekaWork*)_battleWorkPointer->actionCommands.work;
 }
 
+/**
+ * Sets up the star markers for a round: keeps the old ones for the fade-out,
+ * then places round + 3 stars at random spots at least 15.75 apart,
+ * with the last one at the gauge's end and the first no later than 70.
+ */
 void create_timing(void) {
     DekaWork* w = get_ptr();
     DekaTiming* ta;
@@ -1273,30 +1349,39 @@ restart:
     }
 }
 
+/** Earth Tremor's damage function: the rounds cleared in the timing game plus 1 (1 to 6). */
 u32 weaponGetPower_Deka(BattleUnit* attacker, BattleWeapon* weapon, BattleUnit* target, BattleUnitPart* part) {
     return get_ptr()->result + 1;
 }
 
+/** Waits until the Crystal Star has settled where Mario and the partner can jump onto it. */
 USER_FUNC(wait_star_stone_take_on) {
     return get_ptr()->starState == 4 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** Starts the timing game (main_base state 1). */
 static USER_FUNC(start_game) {
     DekaWork* w = get_ptr();
     w->state = 1;
     return EVT_RETURN_DONE;
 }
 
+/** Waits until the timing game has ended (cleared all rounds or missed). */
 static USER_FUNC(wait_game_end) {
     return get_ptr()->state == 5 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** Starts the Crystal Star appearing above Mario (main_star state 1). */
 static USER_FUNC(star_stone_appear) {
     DekaWork* w = get_ptr();
     w->starState = 1;
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Riding spot on top of the Crystal Star, scaled with its size:
+ * args[0] 0 = Mario's (right of centre), 1 = the partner's (left); the x, y and z go to args[1] to args[3].
+ */
 USER_FUNC(get_ride_pos) {
     DekaWork* w = get_ptr();
     EvtWord* args = event->args;
@@ -1311,6 +1396,7 @@ USER_FUNC(get_ride_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Starts the Crystal Star's six floor-pounding bounces and waits until they are over. */
 static USER_FUNC(star_stone_attack) {
     DekaWork* w = get_ptr();
     if (isFirstCall) {
@@ -1323,6 +1409,7 @@ static USER_FUNC(star_stone_attack) {
     }
 }
 
+/** Returns the number of rounds cleared (0 to 5) in args[0]. */
 USER_FUNC(get_result) {
     DekaWork* w = get_ptr();
     evtSetValue(event, event->args[0], w->result);

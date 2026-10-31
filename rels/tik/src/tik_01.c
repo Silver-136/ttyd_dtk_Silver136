@@ -39,6 +39,10 @@ EvtWord wall_bomb01[140];
 static EvtWord mobj_box00[34];
 EvtWord tik_01_init_evt[208];
 
+/**
+ * Short scene after Goombella's badge lecture: Mario's partner walks to (-375, -105),
+ * turns left and says lecture_badge_after_00, a reminder to equip a badge.
+ */
 EVT_BEGIN(lecture_badge_after_00_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, 65536)
@@ -503,6 +507,10 @@ EVT_BEGIN(wall_bomb01)
     RETURN
 EVT_END()
 
+/**
+ * Item-box callback for the Defend Plus P chest:
+ * takes control, puts the badge at the chest, waits for the chest animation and hands it to Mario.
+ */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))

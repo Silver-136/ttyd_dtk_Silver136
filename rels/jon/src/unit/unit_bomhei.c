@@ -272,6 +272,10 @@ static EVT_BEGIN(bomb_event)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the Bob-omb: registers its wait, attack, damage and confusion handlers,
+ * sets unit work 0 (the fuse sound id) to -1 and sets its run and walk sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -284,6 +288,13 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage script of the Bob-omb.
+ * A damaging hit (damage code 256) of kind 24, 25 or 27 (a fire, explosion or electric hit) sets it off at once
+ * (bomb_event).
+ * Otherwise it takes the default damage and, if it is still able to act and not in status 27 (KO),
+ * lights its fuse (change_spark_event).
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -311,6 +322,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Lights the fuse after a damaging hit: if the hit took at least 1 HP it plays SFX_ENM_BOMB_SPARK1,
+ * switches to the spark wait, attack and damage scripts, pose table and data table,
+ * and sets counter attribute 8192 on part 1.
+ */
 static EVT_BEGIN(change_spark_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_FINAL_HIT, LW(0))
@@ -440,11 +456,16 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait script: plays the Bob-omb's idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Damage script of the Bob-omb with its fuse lit:
+ * a damaging hit (damage code 256) detonates it (bomb_event), otherwise the default damage handling runs.
+ */
 static EVT_BEGIN(damage_event_spark)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -458,6 +479,11 @@ static EVT_BEGIN(damage_event_spark)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the lit Bob-omb: it runs at its target like the normal attack,
+ * then explodes (bomb_event) whether the blast hits or misses,
+ * dealing the bomb weapon's damage to the target when it connects.
+ */
 static EVT_BEGIN(attack_event_spark)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -544,6 +570,10 @@ static EVT_BEGIN(attack_event_spark)
     RETURN
 EVT_END()
 
+/**
+ * Wait script of the lit Bob-omb: plays the idle pose and, if no fuse sound is playing yet (unit work 0 is -1),
+ * starts the looping SFX_ENM_BOMB_WAIT1 and remembers its handle in unit work 0.
+ */
 static EVT_BEGIN(wait_event_spark)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPARK_SFX, LW(15))

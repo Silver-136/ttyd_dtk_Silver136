@@ -145,10 +145,15 @@ void camShiftMain(CameraEntry* camera, MarioWork* mario, f32* out) {
     *out = wp->current;
 }
 
+/** Records this frame's clock so the next camShiftMain can scale by the time elapsed. */
 void camShiftPostMain(void) {
     wp->prevTime = gp->renderTime;
 }
 
+/**
+ * Snaps the sideways camera lead back to zero with the default tuning (same as camShiftInit).
+ * Called on map changes, door transitions, game over and by camera scripts.
+ */
 void camShiftReset(void) {
     wp->current = 0.0f;
     wp->target = 0.0f;

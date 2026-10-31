@@ -42,6 +42,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Spike floor trap loop of tik_21: every cycle it makes the floor solid for the spikes (a_yuka),
+ * pops the spikes (s_toge) up 35 units in 150 ms, holds them for 1.5 seconds,
+ * drops them again in 300 ms and waits about two seconds before repeating.
+ * The trap sounds are SFX_MOBJ_FLOOR_TRAP1 and 2.
+ */
 EVT_BEGIN(hari_trap)
     CALL(evt_hit_bind_mapobj, STRING("a_toge"), STRING("s_toge"))
     LOOP(0)
@@ -87,6 +93,10 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Item-box callback for the Spike Shield chest:
+ * takes control, puts the badge at the chest, waits for the chest animation and hands it to Mario.
+ */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
@@ -98,6 +108,10 @@ static EVT_BEGIN(mobj_box00)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_21, the spike trap room.
+ * Sets fall recovery, starts hari_trap and places the Spike Shield chest.
+ */
 EVT_BEGIN(tik_21_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))

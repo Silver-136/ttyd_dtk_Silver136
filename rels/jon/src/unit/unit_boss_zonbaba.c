@@ -474,6 +474,14 @@ BattleWeapon weapon_zonbaba_recover = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Entrance sequence of the Bonetail fight on floor 100:
+ * the camera locks, Mario and his partner are placed off the left edge of the stage
+ * and Bonetail is lifted out of view; Mario and the partner walk in,
+ * then Bonetail drops into place ("dontyo" map animation, SFX_BOSS_GNB_APPEAR1) with a camera shake
+ * and both are startled.
+ * Bonetail speaks tik_boss_12 and the partner answers with tik_boss_13 before the camera returns to normal.
+ */
 static EVT_BEGIN(battle_entry_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
     CALL(evt_map_replayanim, 0, STRING("dontyo"))

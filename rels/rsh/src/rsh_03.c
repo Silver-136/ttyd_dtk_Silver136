@@ -156,6 +156,11 @@ USER_FUNC(iri_22_make_item_tbl) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[1] receives 1 when the NPC named in args[0] is the one Mario has just talked to (the last
+ * talked-to NPC's description is remembered in a static buffer), otherwise 0.
+ * Used by evt_lunch_talk to see who Mario is interrogating.
+ */
 // Remember the latest non-NULL talk target; a later NULL result does not clear the cached name.
 static USER_FUNC(mario_flag) {
     static BOOL flg;
@@ -177,6 +182,10 @@ static USER_FUNC(mario_flag) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: saves the 3D camera's position and look-at point
+ * before the shop transition ("omise" is the shop) so omiseFukki can restore it.
+ */
 USER_FUNC(omiseHozon) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
 
@@ -185,6 +194,7 @@ USER_FUNC(omiseHozon) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sends the 3D camera back to the position saved by omiseHozon, as a 500 ms eased move. */
 USER_FUNC(omiseFukki) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
 
@@ -468,6 +478,10 @@ EVT_BEGIN(talk_cook)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the waitress: parked below the floor from day 3 to the Smorg miasma;
+ * turns jumping off when she stands on the floor.
+ */
 static EVT_BEGIN(init_waitless)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_45_DAY_3_STARTS, STG6_48_SMORG_MIASMA)
@@ -686,6 +700,7 @@ static NpcSetupInfo npc_data[] = {
     {0},
 };
 
+/** Talk script of Zip Toad in the dining car: lines stg6_rsh_20 and 42 depending on the story stage. */
 static EVT_BEGIN(talk_toron)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_02_A_CASE_OF_LOST_STEW)
@@ -696,6 +711,7 @@ static EVT_BEGIN(talk_toron)
     RETURN
 EVT_END()
 
+/** Talk script of the salaryman in the dining car: lines stg6_rsh_21, 43 and 50 depending on the story stage. */
 static EVT_BEGIN(talk_sarary)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_02_A_CASE_OF_LOST_STEW)
@@ -710,6 +726,10 @@ static EVT_BEGIN(talk_sarary)
     RETURN
 EVT_END()
 
+/**
+ * Helper script: turns the waitress, Toron, the salaryman and Detective Pennington
+ * and Mario to face the target NPC whose name is in LW(0). Used during the lunch-missing mystery.
+ */
 EVT_BEGIN(dir_target)
     CALL(evt_set_dir_to_target, STRING("ウェイトレス"), LW(0))
     CALL(evt_set_dir_to_target, STRING("トロン"), LW(0))
@@ -719,6 +739,11 @@ EVT_BEGIN(dir_target)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene of the missing lunch mystery in the dining car:
+ * Pennington questions the cook, the waitress, Toron and the salaryman in turn, each with a reaction jingle,
+ * and the case ends with Pennington's conclusion (stg6_rsh_23 onwards).
+ */
 EVT_BEGIN(evt_lanch_missing)
     SET_VALUE(GF(10), 1)
     CALL(evt_set_dir_to_target, STRING("サラリーマン"), STRING("ポワン探偵"))
@@ -922,6 +947,10 @@ EVT_BEGIN(evt_lanch_missing)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Pennington in the dining car: his lines by story stage (the one-line talk used while the lunch
+ * is missing is in msg_tbl).
+ */
 static EVT_BEGIN(talk_powan)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_02_A_CASE_OF_LOST_STEW)
@@ -1177,6 +1206,7 @@ static ShopperData35 shopper_data = {
     {"stg6_shop_00", "stg6_shop_01", "stg6_shop_02", "stg6_shop_03", "stg6_shop_04", "stg6_shop_05", "stg6_shop_06", "stg6_shop_07", "stg6_shop_08", "stg6_shop_09", "stg6_shop_10", "stg6_shop_11", "stg6_shop_12", "stg6_shop_13", "stg6_shop_14", "stg6_shop_15", "stg6_shop_16", "stg6_shop_17", "stg6_shop_18", "stg6_shop_19", "stg6_shop_20", "stg6_shop_21", "stg6_shop_22", "stg6_shop_23", "stg6_shop_24", "stg6_shop_25", "stg6_shop_26", "stg6_shop_27", "stg6_shop_28", "stg6_shop_29", "stg6_shop_30", "stg6_shop_31", "stg6_shop_32", "stg6_shop_33", "stg6_shop_34"}, // msgs
 };
 
+/** Plays the sliding open animation of the shop door (mise_door_open) with its sound and waits until it ends. */
 EVT_BEGIN(shop_door_open)
     CALL(evt_mapobj_get_position, STRING("S_tobira_omise"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_SLIDE1"), LW(0), LW(1), LW(2), 0)
@@ -1214,6 +1244,11 @@ USER_FUNC(npc_alpha_except_tenin) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Trigger on the shop door (tobira_omise) of the dining car:
+ * locks input, moves Mario and the partners to the door, opens it, walks in,
+ * then plays the page-turn transition into the shop interior while the dining car objects are hidden.
+ */
 EVT_BEGIN(evt_shop_open)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1473,6 +1508,10 @@ static const char* access_tbl[] = {
     NULL,
 };
 
+/**
+ * Trigger script for the shelves: prints the message in LW(1) (LW(2) after the Rogueport station stage in the
+ * releases).
+ */
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
@@ -1484,6 +1523,7 @@ static EVT_BEGIN(evt_access)
     RETURN
 EVT_END()
 
+/** Registers the shelf triggers from access_tbl; each runs evt_access when Mario faces it. */
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
@@ -1496,6 +1536,11 @@ static EVT_BEGIN(evt_access_entry)
     RETURN
 EVT_END()
 
+/**
+ * Shared map init for the three variants of rsh_03 on the first trip:
+ * loads the dining car NPCs for the story stage (lunch mystery set at the start, the normal crew afterwards),
+ * the shop door and the Smorg shop, the shelf signs, and the music for the story stage.
+ */
 EVT_BEGIN(rsh_03_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
@@ -1583,6 +1628,10 @@ EVT_BEGIN(rsh_03_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_03_a (first visit): doors, shared init, the Smorg window effect,
+ * the carpet stain trigger (a_yuka_simi) during day 1, and the mail event.
+ */
 EVT_BEGIN(rsh_03_a_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_a))
     CALL(evt_bero_get_info)
@@ -1628,6 +1677,7 @@ EVT_BEGIN(rsh_03_a_init_evt)
     RETURN
 EVT_END()
 
+/** Init script of rsh_03_b (first visit): doors and shared init. */
 EVT_BEGIN(rsh_03_b_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_b))
     CALL(evt_bero_get_info)
@@ -1666,6 +1716,11 @@ static const char* window_tbl[] = {
     NULL,
 };
 
+/**
+ * Init script of rsh_03_c (first visit): doors, shared init, window scenery,
+ * lights the two candles (rousoku_1, rousoku_2) and, in the US release and later,
+ * shows the shop's open or closed sign in the game's language.
+ */
 EVT_BEGIN(rsh_03_c_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_c))
     CALL(evt_bero_get_info)
@@ -1740,6 +1795,11 @@ EVT_BEGIN(rsh_03_c_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Shared map init for rsh_03 on the second visit:
+ * scenery for the outbound or return trip, the dining car NPCs, the shop door and Smorg shop,
+ * the random passengers (evt_rsh_03_rnd_npc_entry) and the music for the station the train has reached.
+ */
 EVT_BEGIN(rsh_03_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
@@ -1812,6 +1872,7 @@ EVT_BEGIN(rsh_03_init_evt_nidome)
     RETURN
 EVT_END()
 
+/** Init script of rsh_03_a on the second visit: doors plus the shared second-visit init. */
 EVT_BEGIN(rsh_03_a_init_evt_nidome)
     SET_VALUE(LW(0), PTR(bero_data_a))
     CALL(evt_bero_get_info)
@@ -1822,6 +1883,7 @@ EVT_BEGIN(rsh_03_a_init_evt_nidome)
     RETURN
 EVT_END()
 
+/** Init script of rsh_03_b on the second visit: doors plus the shared second-visit init. */
 EVT_BEGIN(rsh_03_b_init_evt_nidome)
     SET_VALUE(LW(0), PTR(bero_data_b))
     CALL(evt_bero_get_info)
@@ -1830,6 +1892,7 @@ EVT_BEGIN(rsh_03_b_init_evt_nidome)
     RETURN
 EVT_END()
 
+/** Init script of rsh_03_c on the second visit: doors plus the shared second-visit init and the window scenery. */
 EVT_BEGIN(rsh_03_c_init_evt_nidome)
     SET_VALUE(LW(0), PTR(bero_data_c))
     CALL(evt_bero_get_info)

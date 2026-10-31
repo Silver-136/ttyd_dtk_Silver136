@@ -139,6 +139,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Plays the falling-wall paper animation for one wall panel:
+ * LW(0) paper name, LW(1) map object, LW(2) image name, LW(3) offscreen name.
+ * It captures the panel, shows the roll animation with a slot sound,
+ * then hides the panel and releases the capture.
+ */
 EVT_BEGIN(wall_roll_sub)
     CALL(evt_img_entry, LW(2))
     CALL(evt_img_set_paper, LW(2), LW(0))
@@ -253,6 +259,10 @@ static EVT_BEGIN(breakyuka_init)
     RETURN
 EVT_END()
 
+/**
+ * Main script when the floor gives way under the Puni weight:
+ * turns on the collision of the lower floor piece and makes every Puni that is standing over the hole fall.
+ */
 static EVT_BEGIN(breakyuka_main)
     CALL(evt_hitobj_onoff, STRING("A_f2_rak_02"), 1, 1)
     CALL(evt_puni_all_fall_check)
@@ -268,6 +278,10 @@ static KusaAccess ueki_access_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Hit script of red switch 0: while the puzzle is not solved,
+ * each hit turns the first panel (GW(0)) by 90 degrees over half a second.
+ */
 EVT_BEGIN(slot00_event)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
         RETURN
@@ -292,6 +306,7 @@ EVT_BEGIN(slot00_event)
     RETURN
 EVT_END()
 
+/** Hit script of red switch 1: turns the second panel (GW(1)) by 90 degrees over half a second. */
 EVT_BEGIN(slot01_event)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
         RETURN
@@ -316,6 +331,7 @@ EVT_BEGIN(slot01_event)
     RETURN
 EVT_END()
 
+/** Hit script of red switch 2: turns the third panel (GW(2)) by 90 degrees over half a second. */
 EVT_BEGIN(slot02_event)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
         RETURN
@@ -340,6 +356,7 @@ EVT_BEGIN(slot02_event)
     RETURN
 EVT_END()
 
+/** Hit script of red switch 3: turns the fourth panel (GW(3)) by 90 degrees over half a second. */
 EVT_BEGIN(slot03_event)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
         RETURN
@@ -364,6 +381,11 @@ EVT_BEGIN(slot03_event)
     RETURN
 EVT_END()
 
+/**
+ * Runs the four-panel pattern puzzle: sets the panels' starting angles (GW(0) to GW(3)),
+ * keeps their rotation up to date and starts wall_roll
+ * when the panels show the correct pattern (270, 180, 0, 90).
+ */
 EVT_BEGIN(slot_event)
     SET_VALUE(GW(0), 0)
 #ifdef VERSION_G8ME01
@@ -437,6 +459,11 @@ EVT_BEGIN(get_blue_jail_key)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of mri_09, the slot-switch room:
+ * sets up the Puni, planters and Piders checker, the four red switches and wall panels for the story state,
+ * the Blue Key chest, the Charge badge, a Shine Sprite block and the breaking floor.
+ */
 EVT_BEGIN(mri_09_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 9, 100, 0, -310, -1000, 2, 2)

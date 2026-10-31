@@ -41,6 +41,10 @@ static u8 ibuki_color0_tbl[] __attribute__((aligned(32))) = { 0xFF, 0xFF, 0xFF, 
 static u8* ibuki_dl_0_tbl[] = { ibuki_dl_0_0, ibuki_dl_0_1, ibuki_dl_0_2, ibuki_dl_0_3 };
 static u8 ibuki_dl_0_size_tbl[4] = { 2, 2, 2, 2 };
 
+/**
+ * Spawns a breath puff stream of 32 puffs from (x, y, z); life <= 0 keeps it endless.
+ * Spawned by boss units (las, win), battle items and event scripts.
+ */
 EffectEntry* effIbukiEntry(s32 type, s32 life, f32 x, f32 y, f32 z) {
     s32 delay;
     EffectEntry* effect;
@@ -101,6 +105,7 @@ EffectEntry* effIbukiEntry(s32 type, s32 life, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/** Releases each puff after its delay and drifts it outward, spawns vapor puffs, fades out on soft delete. */
 void effIbukiMain(EffectEntry* effect) {
     s32 delay;
     EffIbukiWork* work = effect->userdata;
@@ -194,6 +199,7 @@ void effIbukiMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effIbukiDisp, effect);
 }
 
+/** Draws the puffs from display lists, fading by per-puff alpha. */
 void effIbukiDisp(CameraId cameraId, EffectEntry* effect) {
     s32 i;
     u8* sz;

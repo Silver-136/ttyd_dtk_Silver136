@@ -374,6 +374,10 @@ static BattleDataEntry data_table[] = {
     {0},
 };
 
+/**
+ * Init script of the Poison Puff: installs the wait, unison-phase, attack, damage and confusion handlers,
+ * clears its unit work 0 and 1, and starts barrier_event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(unison_phase_event))
@@ -597,6 +601,10 @@ static USER_FUNC(eff_poison_barrier) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: spawns one green vapor puff at a random point near x = -125 (args[0] = 0)
+ * or x = 125 (otherwise) for the Poison Puff's breath attack.
+ */
 static USER_FUNC(eff_poison_breath) {
     f32 x;
     f32 y;
@@ -643,6 +651,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
+/** Wait event of the Poison Puff: switches to its idle pose and resets its scale to 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)

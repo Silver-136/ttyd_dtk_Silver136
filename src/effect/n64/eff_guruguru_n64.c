@@ -19,6 +19,10 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 void effGuruguruMain(EffectEntry* effect);
 void effGuruguruDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns num yellow sprites circling (x, y, z); the radius opens up to the given radius.
+ * Used by the Palace of Shadow rels las_09 and las_28 and by event scripts through evt_eff.
+ */
 EffectEntry* effGuruguruN64Entry(s32 type, s32 num, f32 x, f32 y, f32 z, f32 radius) {
     EffectEntry* effect;
     EffGuruguruN64Work* work;
@@ -52,6 +56,10 @@ EffectEntry* effGuruguruN64Entry(s32 type, s32 num, f32 x, f32 y, f32 z, f32 rad
     return effect;
 }
 
+/**
+ * Opens the radius by 10% of the remaining distance each frame and advances every sprite around the circle,
+ * spinning each in Z by 20 degrees per frame.
+ */
 void effGuruguruMain(EffectEntry* effect) {
     EffGuruguruN64Work* work = effect->userdata;
     Vec position;
@@ -89,6 +97,7 @@ void effGuruguruMain(EffectEntry* effect) {
     }
 }
 
+/** Draws each sprite as a camera-facing yellow quad (texture 0x1D) at its position on the circle. */
 void effGuruguruDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera = camGetPtr(cameraId);
     EffGuruguruN64Work* work = effect->userdata;

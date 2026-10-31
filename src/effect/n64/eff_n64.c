@@ -159,6 +159,7 @@ static eff_n64_work work;
 //.sdata
 static eff_n64_work* wp = &work;
 
+/** DVD read-complete callback: unpacks the effect texture palette, closes the file and marks the textures loaded. */
 static void _callback_tpl(s32 error, DVDFileInfo* info) {
     DVDEntry* entry;
 
@@ -168,11 +169,17 @@ static void _callback_tpl(s32 error, DVDFileInfo* info) {
     wp->effTextureLoaded = TRUE;
 }
 
+/** Clears the effect-texture state so no N64 effect texture is loaded yet. */
 void effInit64(void) {
     memset(wp, 0, sizeof(eff_n64_work));
     wp->effTextureLoaded = FALSE;
 }
 
+/**
+ * Loads effect_n64.tpl from the archive if present,
+ * otherwise reads it from the game disc (path by version and language) in the background;
+ * textures become available once unpacked.
+ */
 void effTexSetupN64(void) {
     const char* lang;
     DVDEntry* entry;
@@ -200,6 +207,7 @@ void effTexSetupN64(void) {
     }
 }
 
+/** Fills obj with effect texture id from the loaded palette, or a 1x1 placeholder until loading has finished. */
 void effGetTexObjN64(u32 id, GXTexObj* obj) {
 #pragma explicit_zero_data on
     static u8 dummy ATTRIBUTE_ALIGN(32) = 0;
@@ -212,6 +220,7 @@ void effGetTexObjN64(u32 id, GXTexObj* obj) {
     }
 }
 
+/** Looks up an N64 effect by its script name in the eff_set_n64 table; returns NULL if there is no such name. */
 eff_set* effGetSetN64(const char* name) {
     int i;
 
@@ -223,6 +232,7 @@ eff_set* effGetSetN64(const char* name) {
     return NULL;
 }
 
+/** Returns a repeatable pseudo-random value in 0..rand taken from a fixed 128-entry table at index (mod 128). */
 u32 effTblRandN64(u32 rand, s32 index) {
     s32 val = _rand_table[index % 128];
     if (val < 0) {
@@ -231,6 +241,10 @@ u32 effTblRandN64(u32 rand, s32 index) {
     return val % (s32)(rand + 1);
 }
 
+/**
+ * Points GX at an effN64Vtx array and selects 16-bit-indexed position,
+ * color and texcoord attributes for the following draws.
+ */
 void effSetVtxDescN64(effN64Vtx* vtx) {
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX16);
@@ -244,6 +258,7 @@ void effSetVtxDescN64(effN64Vtx* vtx) {
     GXSetArray(GX_VA_TEX0, &vtx->s, sizeof(effN64Vtx));
 }
 
+/** Writes one triangle (three indices, each repeated for the position, color and texcoord arrays) to the GX FIFO. */
 void tri1(u16 x, u16 y, u16 z, u16 flag) {
     GXWGFifo.u16 = x;
     GXWGFifo.u16 = x;
@@ -256,6 +271,7 @@ void tri1(u16 x, u16 y, u16 z, u16 flag) {
     GXWGFifo.u16 = z;
 }
 
+/** Writes two triangles (six indices, each repeated for the position, color and texcoord arrays) to the GX FIFO. */
 void tri2(s32 x1, s32 y1, s32 z1, s32 flag1, s32 x2, s32 y2, s32 z2, s32 flag2) {
     GXWGFifo.u16 = x1;
     GXWGFifo.u16 = x1;

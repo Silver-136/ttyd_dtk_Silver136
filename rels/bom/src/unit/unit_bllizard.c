@@ -222,6 +222,11 @@ static BattleWeapon weapon_bllizard_bllizard_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack script of the Ice Puff: lets an enemy item be used if ready;
+ * if its ice barrier is up (part 1 counter attribute 64) it uses the barrier blast (bllizard_event);
+ * otherwise it picks 70% normal attack (normal_attack_event) or 30% to charge up a new barrier (charge_event).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -252,6 +257,11 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Ice Puff's barrier blast: it drops the barrier, backs away,
+ * then bursts a cloud of freezing air over all opposing targets (SFX_ENM_BLIZ_KUMO_CHARGE_ATTACK1, kumokumo
+ * effect) and checks the damage for each in turn (usually with its freeze effect), then moves back home.
+ */
 static EVT_BEGIN(bllizard_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -381,6 +391,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Battle init for the Ice Puff: registers its wait, unison-phase, attack, damage and confusion events,
+ * clears unit work 0 and 1 (work 0 is its high/low float state) and starts the barrier effect loop.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(unison_phase_event))
@@ -602,6 +616,10 @@ static USER_FUNC(eff_ice_barrier) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Charges up an ice barrier: zooms the camera, plays SFX_ENM_BLIZ_KUMO_CHARGE1,
+ * sets the barrier counter attribute (64) on part 1 and plays the A_2A and A_2B poses.
+ */
 static EVT_BEGIN(charge_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -620,6 +638,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
+/** Wait script of the Ice Puff: shows its idle pose from the pose table and resets its scale to 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)

@@ -31,6 +31,7 @@ EvtWord unpush_evt[252];
 EvtWord vivi_chk[42];
 EvtWord jin_10_init_evt[59];
 
+/** Script helper: returns Mario's current position in args[0..2]. */
 static USER_FUNC(get_pos) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
@@ -41,12 +42,20 @@ static USER_FUNC(get_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Door animation callback: closes door11 as Mario arrives through n_bero (from jin_11);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it, negated.
+ */
 static EVT_BEGIN(door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door11"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: opens door11 as Mario leaves through n_bero (to jin_11);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it.
+ */
 static EVT_BEGIN(door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door11"), 0, LW(0), 0)
@@ -91,6 +100,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Script helper: moves Mario directly to the position (args[0], args[1], args[2]). */
 USER_FUNC(set_pos) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -102,6 +112,12 @@ USER_FUNC(set_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Case script run every frame while Mario pushes the sliding gate (saku):
+ * the gate and Mario move together (grid-move sound loop SFX_STG4_GRID_MOVE1) up to 265 units,
+ * advancing 0.5 per frame when Mario is on the left and moving back at 1 unit per frame otherwise;
+ * GW(10) holds the offset and the gate's hit area follows it.
+ */
 // The grille rises by one quarter of its X offset; Mario receives the same horizontal step.
 static EVT_BEGIN(push_evt)
     IF_INT_EQUAL(GF(0), 0)

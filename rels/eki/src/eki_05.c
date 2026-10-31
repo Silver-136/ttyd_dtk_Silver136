@@ -33,24 +33,40 @@ EvtWord eki_05_init_evt[112];
 EvtWord eki_05_init_evt[106];
 #endif
 
+/**
+ * Door animation callback, closing for the n_bero exit to eki_04:
+ * rotates map object "door_1" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(n_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the n_bero exit to eki_04:
+ * rotates map object "door_1" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(n_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, closing for the w_bero_2 exit to eki_06:
+ * rotates map object "door_2" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(w_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_2"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the w_bero_2 exit to eki_06:
+ * rotates map object "door_2" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(w_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_2"), 0, LW(0), 0)
@@ -113,6 +129,10 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Case event on the first glass panel (a_garasu_1):
+ * if the glass case is open (GF(0) is 1), plays the closing animation anm_nata and clears GF(0).
+ */
 EVT_BEGIN(grass_open_1)
     IF_INT_EQUAL(GF(0), 1)
         CALL(evt_map_playanim, STRING("anm_nata"), MAP_ANIM_PLAY_ONCE, 0)
@@ -121,6 +141,10 @@ EVT_BEGIN(grass_open_1)
     RETURN
 EVT_END()
 
+/**
+ * Case event on the second glass panel (a_garasu_2):
+ * toggles the glass case, playing anm_tana to open it (GF(0) = 1) or anm_nata to close it (GF(0) = 0).
+ */
 EVT_BEGIN(grass_open_2)
     IF_INT_EQUAL(GF(0), 0)
         CALL(evt_map_playanim, STRING("anm_tana"), MAP_ANIM_PLAY_ONCE, 0)
@@ -151,6 +175,11 @@ EVT_BEGIN(evt_elvkey)
     RETURN
 EVT_END()
 
+/**
+ * Head-bump event of the block "a_t_2": respawns the Elevator Key (ITEM_ELEVATOR_KEY_0x1A) at (-135, 166, -70),
+ * launched with a bounce (gravity 1, bound rate 0.6, jump power 500) and picked up through evt_elvkey,
+ * then ends the case event.
+ */
 static EVT_BEGIN(evt_head)
     CALL(evt_item_delete, STRING("elvkey"))
     CALL(evt_item_entry, STRING("elvkey"), ITEM_ELEVATOR_KEY_0x1A, -135, 166, -70, ITEM_TYPE_SCATTER_NO_PICKUP, -1, PTR(evt_elvkey))
@@ -163,6 +192,11 @@ static EVT_BEGIN(evt_head)
     RETURN
 EVT_END()
 
+/**
+ * Map init for eki_05: sets up the doors to eki_06, the two glass panels,
+ * the Ultra Boots chest and the Elevator Key (which jumps out when Mario bumps the block a_t_2 from below)
+ * until each story step is passed, and loops the dripping water animation with its sound.
+ */
 EVT_BEGIN(eki_05_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)

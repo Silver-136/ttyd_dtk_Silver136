@@ -26,6 +26,12 @@ typedef struct EffSheepWork {
 void effSheepDisp(CameraId cameraId, EffectEntry* effect);
 void effSheepMain(EffectEntry* effect);
 
+/**
+ * Spawns the flock: 50 sheep records after the header, placed off to the left at random depth, scale,
+ * speed and delay; about one in five hops.
+ * Used by evt_eff "sheep", whose only caller is the Sleepy Sheep item script (ItemEvent_Nemure_Yoikoyo);
+ * `type` is unused later.
+ */
 EffectEntry* effSheepEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffSheepWork* work;
@@ -74,6 +80,11 @@ EffectEntry* effSheepEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Each sheep loads its EFF_hituji pose, waits out its delay,
+ * then runs left to right to x = 500 (hopping on a parabola if it is a hopper) leaving smoke puffs.
+ * The first and last sheep carry the looping 3D sleep sounds.
+ */
 void effSheepMain(EffectEntry* effect) {
     EffSheepWork* work = effect->userdata;
     const char* sfx1;
@@ -193,6 +204,7 @@ void effSheepMain(EffectEntry* effect) {
     }
 }
 
+/** Draws every active sheep pose at its offset and scale relative to the effect position. */
 void effSheepDisp(CameraId cameraId, EffectEntry* effect) {
     EffSheepWork* work = effect->userdata;
     Mtx trans;

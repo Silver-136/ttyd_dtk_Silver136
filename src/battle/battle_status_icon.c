@@ -153,6 +153,7 @@ IconDispTableEntry _disp_table_3[0x17] = {
 //local prototypes
 void BattleStatusIconDisp(CameraId camId, void* param);
 
+/** Clears the unit's status icon work; called from BtlUnit_Entry. */
 void BattleStatusIconInit(BattleUnit* unit) {
     memset(&unit->mStatusIconWork, 0, sizeof(BattleWorkStatusIcon));
 }
@@ -216,6 +217,7 @@ void BattleStatusIconMain(BattleUnit* unit) {
     }
 }
 
+/** Status-icon cleanup when a unit is deleted; empty in every version. */
 void BattleStatusIconDelete(BattleUnit* unit) {
     ; //stubbed in retail
 }
@@ -277,6 +279,11 @@ void BattleStatusIconDisp(CameraId camId, void* param) {
     }
 }
 
+/**
+ * Icon builder for the plain turn-count statuses (Sleep, Poison, Stop, Burn, Freeze, Fast, Slow,
+ * attack and defense changes, Dodgy, Huge, Tiny, Confused, Invisible, Payback):
+ * fills the entry with the status's icon and turn count and returns TRUE if the unit has the status.
+ */
 BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     s32 type = disp->id;
     s8 turns, strength;
@@ -303,6 +310,11 @@ BOOL _bsi_default_turn(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkSta
     return TRUE;
 }
 
+/**
+ * Guruguru = Dizzy.
+ * Builds the Dizzy icon, spinning it 4 degrees per frame about its centre and raised 4 units;
+ * resets the spin and returns FALSE when the unit is not Dizzy.
+ */
 BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     int type = disp->id;
     s8 turns, strength;
@@ -327,6 +339,10 @@ BOOL _bsi_guruguru(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusI
     return TRUE;
 }
 
+/**
+ * Builds the Allergic icon, which blinks: it is hidden for 16 frames out of every 32.
+ * Returns FALSE (and resets the blink timer) when the unit is not Allergic.
+ */
 BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     int type = disp->id;
     s8 turns, strength;
@@ -351,6 +367,11 @@ BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIc
     return TRUE;
 }
 
+/**
+ * Biribiri = Electrified.
+ * Builds the Electrified icon, which flickers: full size for 4-9 frames, then shrunk to 0.8 for 30-129 frames,
+ * at random lengths. Returns FALSE and resets the flicker when the unit is not Electrified.
+ */
 BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     s32 type = disp->id;
     s8 turns, strength;
@@ -393,6 +414,11 @@ BOOL _bsi_biribiri(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusI
     return TRUE;
 }
 
+/**
+ * Builds the HP Regen or FP Regen icon (status 23 or 24),
+ * tinting it back and forth over 60 frames between pink-red and yellow (HP) or green and cyan (FP).
+ * Returns FALSE when the unit lacks the status or for any other status.
+ */
 BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry) {
     s32 type = disp->id;
     s16* ctr;

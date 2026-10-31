@@ -130,6 +130,13 @@ u8 rz_tbl[] = {0x00, 0x09, 0x12, 0x1C, 0x25, 0x2F, 0x39, 0x43, 0x4D, 0x57, 0x61,
 void effKumokumoMain(EffectEntry* effect);
 void effKumokumoDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a cloud effect at (x, y, z) scaled by scale, lasting time frames (time <= 0 means until deleted).
+ * Record 0 is the main cloud model (colors, alpha, texture scroll); records 1+ are textured puff sprites.
+ * Types 0-4 pick colors and motion: 0 and 4 puffs drift outward, 1 is the model alone,
+ * 2 uses an X-shaped model with converging puffs, 3 is a blue swirl of five clouds.
+ * Used for Flurrie's breath (party_cloud.c, unit_party_clauda.c).
+ */
 EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 rot, f32 unused, f32 scale) {
     EffectEntry* effect;
     EffKumokumoN64Particle* work;
@@ -267,6 +274,10 @@ EffectEntry* effKumokumoN64Entry(s32 type, s32 time, f32 x, f32 y, f32 z, f32 ro
     return effect;
 }
 
+/**
+ * Fades the main cloud in and out, scrolls its textures and runs each puff's delay, motion and respawn by type;
+ * deletes when the delay runs out (a delete request shortens it to a 16-frame fade).
+ */
 void effKumokumoMain(EffectEntry* effect) {
     EffKumokumoN64Particle* work = effect->userdata;
     Vec position;
@@ -401,6 +412,10 @@ void effKumokumoMain(EffectEntry* effect) {
     dispEntry(camera, dispCalcZ(&position), 2, (DispCallback)effKumokumoDisp, effect);
 }
 
+/**
+ * Points GX at the given vertex, normal, color and texcoord arrays
+ * and calls the four display lists of one cloud model.
+ */
 static inline void kkDraw(void* vtx, void* tex0, void* tex1, void* norm, void* clr, void** dl, u8* sz) {
     u32 i;
     GXClearVtxDesc();
@@ -424,6 +439,10 @@ static inline void kkDraw(void* vtx, void* tex0, void* tex1, void* norm, void* c
     }
 }
 
+/**
+ * Draws the main cloud model billboarded with two scrolling textures (type 2 uses the X-shaped model,
+ * type 3 five rotated copies), then each active puff as a textured quad sized to its texture.
+ */
 void effKumokumoDisp(CameraId cameraId, EffectEntry* effect) {
     EffKumokumoN64Particle* work;
     s32 alpha;

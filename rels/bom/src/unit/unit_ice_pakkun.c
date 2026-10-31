@@ -162,6 +162,10 @@ static BattleWeapon weapon_ice_pakkun_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack script of the Frost Piranha: if battle flag 2 is set it uses the normal attack;
+ * otherwise lets an enemy item be used if ready, else uses the normal attack with weapon_ice_pakkun_attack.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -242,6 +246,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Battle init for the Frost Piranha: registers its wait, attack, damage and confusion events,
+ * sets the hit cursor offset and stores the shadow scale (shadow_scale_memory) before starting the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -516,6 +524,11 @@ static USER_FUNC(shadow_scale_return) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper (args[0] is a battle unit): shrinks part 1's shadow from the saved scale to zero over 15 frames;
+ * blocks until done. return_event, ceil_fall_ready_event and normal_attack_event run it as the Frost Piranha
+ * ducks out of sight (poses PKF_E_2 or PKF_E_4) before it moves between the ground and the ceiling.
+ */
 static USER_FUNC(shadow_scale_small) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -541,6 +554,10 @@ static USER_FUNC(shadow_scale_memory) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: returns in args[0] 0 if the stage's iron frame (the ceiling the piranha hangs from) has been
+ * destroyed, otherwise 1.
+ */
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 

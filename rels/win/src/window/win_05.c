@@ -29,6 +29,10 @@ static EvtWord item_get00[34];
 static EvtWord cloud_toujou[126];
 EvtWord win_05_init_evt[42];
 
+/**
+ * Door-open callback for the bero exit "w_bero":
+ * names the two door map objects "S_doa_e_l" and "S_doa_e_r" and runs the shared evt_win_door_open.
+ */
 EVT_BEGIN(win_05_door_open)
     SET_VALUE(LW(8), STRING("S_doa_e_l"))
     SET_VALUE(LW(9), STRING("S_doa_e_r"))
@@ -36,6 +40,10 @@ EVT_BEGIN(win_05_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door-close callback for the bero exit "w_bero":
+ * names the door map objects "S_doa_e_l" and "S_doa_e_r" and runs the shared evt_win_door_close.
+ */
 EVT_BEGIN(win_05_door_close)
     SET_VALUE(LW(8), STRING("S_doa_e_l"))
     SET_VALUE(LW(9), STRING("S_doa_e_r"))

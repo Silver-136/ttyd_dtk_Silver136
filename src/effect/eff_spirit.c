@@ -29,6 +29,10 @@ typedef struct EffSpiritWork {
     f32 scale;      // 0x64
 } EffSpiritWork;
 
+/**
+ * Spawns the orb at (x1, y1, z1) which will travel to (x2, y2, z2) in `time` frames; `scale` is its size.
+ * The only caller is Cortez's boss fight (muj).
+ */
 EffectEntry* effSpiritEntry(s32 type, s32 time, f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2, f32 scale) {
     EffectEntry* effect;
     EffSpiritWork* work;
@@ -69,6 +73,11 @@ EffectEntry* effSpiritEntry(s32 type, s32 time, f32 x1, f32 y1, f32 z1, f32 x2, 
     return effect;
 }
 
+/**
+ * State 0 rises with a small sideways wobble until slowed;
+ * state 1 interpolates to the target along an arc (50 units high at mid-flight) while shrinking, then deletes.
+ * The colour cycles every 32 frames.
+ */
 void effSpiritMain(EffectEntry* effect) {
     EffSpiritWork* work = effect->userdata;
     Vec position;
@@ -156,6 +165,7 @@ void effSpiritMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSpiritDisp, effect);
 }
 
+/** Draws the orb as one additive, camera-facing quad tinted with the current colour. */
 void effSpiritDisp(CameraId cameraId, EffectEntry* effect) {
     EffSpiritWork* work = effect->userdata;
     CameraEntry* camera;

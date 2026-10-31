@@ -78,30 +78,52 @@ static ExtTexInfo senteresa_ext_entry_data[5];
 EvtWord evt_teresa_box_open[576];
 EvtWord jin_07_init_evt[151];
 
+/**
+ * Door animation callback: closes door08 as Mario arrives through w_bero_1 (from jin_08);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it, negated.
+ */
 static EVT_BEGIN(w_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door08"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: opens door08 as Mario leaves through w_bero_1 (to jin_08);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it.
+ */
 static EVT_BEGIN(w_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door08"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: closes door06 as Mario arrives through e_bero (from jin_06);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it.
+ */
 static EVT_BEGIN(e_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door06"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: opens door06 as Mario leaves through e_bero (to jin_06);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it, negated.
+ */
 static EVT_BEGIN(e_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door06"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Script run on entering jin_07 after the parrot room:
+ * the partner comments (stg4_jin_46 and 47; Vivian's lines say they overheard Doopliss's name)
+ * and the camera goes
+ * back to normal. It runs once after the parrot's first special talk in jin_08 (oumu_juyo_talk sets LSWF(1)).
+ */
 EVT_BEGIN(jin_07_juyo_oumu_vivian)
     IF_INT_NOT_EQUAL(LSWF_JIN_PARROT_SCENE_PENDING, 0)
         SET_VALUE(LSWF_JIN_PARROT_SCENE_PENDING, 0)
@@ -123,6 +145,10 @@ EVT_BEGIN(jin_07_juyo_oumu_vivian)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of the roll-through doorway: returns 0 in LW(0), which blocks the exit,
+ * while Mario is in motion 22 (MARIO_MOTION_ROLL, the paper-roll form), and 1 otherwise.
+ */
 static EVT_BEGIN(check_roll)
     CALL(evt_mario_get_motion, LW(0))
     IF_INT_EQUAL(LW(0), MARIO_MOTION_ROLL)
@@ -189,6 +215,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Case script for the locked west door: Mario is told the door is locked (stg4_jin_48). */
 EVT_BEGIN(evt_locked)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg4_jin_48"), 0, 0)
@@ -196,6 +223,7 @@ EVT_BEGIN(evt_locked)
     RETURN
 EVT_END()
 
+/** Runs when the lock is opened: switches the w_bero_1 door entry on. */
 static EVT_BEGIN(evt_unlock)
     SET_VALUE(LW(0), STRING("w_bero_1"))
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -223,12 +251,18 @@ static ExtTexInfo senteresa_ext_entry_data[] = {
     {0},
 };
 
+/** Returns a random float between min and max. */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
 
     return r * (max - min) + min;
 }
 
+/**
+ * Setup callback of the Boo swarm that pours out of the Boo box:
+ * gives the 200 Boos start positions at the box (0, 6, 80),
+ * random target heights and sideways tangents and staggered release delays.
+ */
 static void senteresa_ext_init(void) {
     ExtdrvPose* pose = extGetPosePtr();
     s32 n = extGetPoseNum();
@@ -263,15 +297,21 @@ static void senteresa_ext_init(void) {
     g_nNumEndProc[0] = 0;
 }
 
+/** Linear interpolation between a and b by t (0..1). */
 static f32 computePos(f32 a, f32 b, f32 t) {
     return (1.0f - t) * a + t * b;
 }
 
+/** Returns the product of the three arguments (an inline kept for the Hermite curve code). */
 // FAKE: one-use inline helper; writing the call out changes the object in both versions
 inline f32 jin07HermiteMul3(f32 a, f32 b, f32 c) {
     return (a * b) * c;
 }
 
+/**
+ * Moves a Boo along a cubic Hermite curve from the box to its target using the Boo's tangent values
+ * and its progress t, writing the position into the pose matrix.
+ */
 void computePosHermite(ExtdrvPose* pose, Teresa* ter) {
     Vec m0 = {0.0f, 0.0f, 0.0f};
     Vec m1 = {1.0f, 0.0f, 0.0f};
@@ -292,6 +332,11 @@ void computePosHermite(ExtdrvPose* pose, Teresa* ter) {
     (*pose->mtx)[2][3] = ter->pos.z * h00 + m0.z * h10 + m1.z * h11 + ter->dst.z * h01;
 }
 
+/**
+ * Per-frame update of the Boo swarm: each Boo waits for its release time,
+ * then flies along its Hermite curve (t grows 0.015 per frame) and stops at the end;
+ * when all 200 have finished the swarm effect is reset.
+ */
 // Release each Boo after its delay, count completed paths, and reset the renderer when all 200 finish.
 static void senteresa_ext_main(void) {
     ExtdrvPose* pose = extGetPosePtr();
@@ -336,10 +381,12 @@ static void senteresa_ext_main(void) {
     }
 }
 
+/** Registers the swarm's draw callback with the 3D camera. */
 static void senteresa_ext_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, 1, senteresa_ext_disp, NULL);
 }
 
+/** Draw callback of the Boo swarm: loads the ext-pose render setup, vertices, textures and TEV setup and draws them. */
 static void senteresa_ext_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
@@ -349,6 +396,7 @@ static void senteresa_ext_disp(CameraId camera, void* param) {
     extLoadTextureExit();
 }
 
+/** Draw callback for the swarm's shadows. */
 static void senteresa_ext_shadow_disp(void) {
     static Mtx mt = {
         {10.0f, 0.0f, 0.0f, 0.0f},
@@ -362,6 +410,7 @@ static void senteresa_ext_shadow_disp(void) {
     extDrawShadow();
 }
 
+/** Script helper: returns the position of Boo number args[0] in the swarm in args[1..3]. */
 USER_FUNC(senteresa_get_position) {
     EvtWord* args = event->args;
     ExtdrvPose* pose = extGetPosePtr();
@@ -373,6 +422,10 @@ USER_FUNC(senteresa_get_position) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: stores the start (args[0..2]) and target (args[3..5]) positions for the late Boo's flight into
+ * LW(10..15).
+ */
 USER_FUNC(senteresa_okure_move_init) {
     EvtWord* args = event->args;
 
@@ -385,6 +438,10 @@ USER_FUNC(senteresa_okure_move_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: moves the late Boo NPC along a Hermite curve between the stored start
+ * and target for the progress value args[0] (0..1).
+ */
 USER_FUNC(senteresa_okure_move) {
     EvtWord* args = event->args;
     NpcEntry* npc = npcNameToPtr("\203e\203\214\203T");
@@ -406,6 +463,12 @@ USER_FUNC(senteresa_okure_move) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Boo box scene (case script for the box a_hako):
+ * the box shakes, its lid opens, 200 small Boos pour out and jeer with speech bubbles;
+ * a late Boo then flies out, asks Mario a question (stg4_jin_69) and gives him an item before disappearing.
+ * Sets the story to "Boo box".
+ */
 EVT_BEGIN(evt_teresa_box_open)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envoff, PSND_PAUSE)
@@ -586,6 +649,12 @@ EVT_BEGIN(evt_teresa_box_open)
     RETURN
 EVT_END()
 
+/**
+ * Creepy Steeple jin_07 map init: sets the music for the room, the shadow-Mario tint and the exits,
+ * places the Star Piece, handles Mario falling in from the hole,
+ * unlocks or locks the west door by the jin_08 lock flag,
+ * closes the Boo box before the "Boo box" story step and hides the flame objects.
+ */
 EVT_BEGIN(jin_07_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN3"))

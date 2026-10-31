@@ -136,6 +136,7 @@ static const char* access_tbl[] = {
     NULL,
 };
 
+/** Trigger script for the signboards: locks input, prints the message in LW(1) and unlocks. */
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, LW(1), 0, 0)
@@ -143,6 +144,7 @@ static EVT_BEGIN(evt_access)
     RETURN
 EVT_END()
 
+/** Registers the signboard triggers from access_tbl (hit name, message rows). */
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
@@ -197,6 +199,10 @@ EVT_BEGIN(rsh_07_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_07_a: sets up the door to rsh_04_a and runs the shared init.
+ * Used on both the first trip and the second visit.
+ */
 EVT_BEGIN(rsh_07_a_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_a))
     CALL(evt_bero_get_info)
@@ -205,6 +211,10 @@ EVT_BEGIN(rsh_07_a_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_07_b: sets up the door to rsh_04_b and runs the shared init.
+ * Used on both the first trip and the second visit.
+ */
 EVT_BEGIN(rsh_07_b_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_b))
     CALL(evt_bero_get_info)
@@ -221,6 +231,11 @@ static const char* window_tbl[] = {
     NULL,
 };
 
+/**
+ * Init script of rsh_07_c: sets up the door to rsh_04_c,
+ * runs the shared init and the window scenery (mado_uturi_1 to 4).
+ * Used on both the first trip and the second visit.
+ */
 EVT_BEGIN(rsh_07_c_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_c))
     CALL(evt_bero_get_info)

@@ -67,6 +67,10 @@ effN64Vtx shooting_dust_vtx[10] = {
 void effSstarMain(EffectEntry* effect);
 void effSstarDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a star at (x, y, z) flying toward (tx, ty, tz) at `speed` per frame.
+ * Spawned by event scripts through evt_eff.
+ */
 EffectEntry* effSstarN64Entry(s32 type, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz, f32 speed) {
     EffectEntry* effect;
     EffSstarN64Work* w;
@@ -198,6 +202,11 @@ void effSstarMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws the star camera-facing: a 64x64 star from texture 9 in its colour plus a 128x128 glow, then,
+ * until its second bounce, a five-segment dust trail built from the last eight frames' matrices with texture 0xA
+ * (0xB for subtype 3).
+ */
 void effSstarDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffSstarN64Work* w;

@@ -13,6 +13,11 @@
 
 #define GAZIGAZI "\x83\x4B\x83\x57\x83\x4B\x83\x57" // "ガジガジ"
 
+/**
+ * Creates the Gazigazi biter NPC (model c_gazigazi) out of sight at y -1000, not billboarded.
+ * The init scripts of the maps with hazard water run it (CALL_CHILD in dou, tik, las, muj, pik and others),
+ * next to their evt_hit_damage_return_set, so evt_gazigazi_appear has its NPC.
+ */
 EVT_BEGIN(evt_gazigazi_entry)
     CALL(evt_npc_entry, STRING(GAZIGAZI), STRING("c_gazigazi"))
     CALL(evt_npc_set_position, STRING(GAZIGAZI), 0, -1000, 0)
@@ -84,6 +89,7 @@ USER_FUNC(camdir) {
     return EVT_RETURN_DONE;
 }
 
+/** const char* name, s32 x0, s32 y0, s32 z0, s32 x1, s32 y1, s32 z1, s32 msec, s32 mode */
 // const char* name, s32 x0, s32 y0, s32 z0, s32 x1, s32 y1, s32 z1, s32 msec, s32 mode
 USER_FUNC(evt_gazigazi_move_position) {
     EvtWord* args = event->args;

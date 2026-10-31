@@ -36,12 +36,20 @@ static EvtWord talk_kinoshikowa[2];
 static NpcSetupInfo npcEnt[6];
 EvtWord tou_12_init_evt[133];
 
+/**
+ * Door animation callback for the west door (door_1), opening: LW(0) is the swing angle;
+ * turns door_1 about the Y axis by -0.44 times the angle.
+ */
 static EVT_BEGIN(w_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the west door (door_1), closing:
+ * turns door_1 about the Y axis by 0.44 times the angle.
+ */
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
@@ -140,6 +148,7 @@ EVT_BEGIN(init_michel_dummy)
     RETURN
 EVT_END()
 
+/** Talk script of Michel: says stg3_tou_307_14_01. */
 static EVT_BEGIN(talk_michel)
     CALL(evt_msg_print, 0, STRING("stg3_tou_307_14_01"), 0, STRING("マイケル"))
     RETURN
@@ -196,6 +205,7 @@ static EVT_BEGIN(init_kinoshikowa)
     RETURN
 EVT_END()
 
+/** Talk script of Jolene in this room: does nothing. */
 static EVT_BEGIN(talk_kinoshikowa)
     RETURN
 EVT_END()
@@ -261,6 +271,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Map init for tou_12, the back room beside the storage room:
+ * music by story stage, NPCs, a Star Piece, and the big block that Mario breaks open until the boss battle.
+ */
 EVT_BEGIN(tou_12_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)

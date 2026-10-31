@@ -115,16 +115,24 @@ RootRoute root_data[] = {
     {root_2, 15},
 };
 
+/** Turns the glowing floor panels on by calling the hikaru_on_func script function. */
 static EVT_BEGIN(hikaru_on)
     CALL(hikaru_on_func)
     RETURN
 EVT_END()
 
+/** Turns the glowing floor panels off by calling the hikaru_off_func script function. */
 static EVT_BEGIN(hikaru_off)
     CALL(hikaru_off_func)
     RETURN
 EVT_END()
 
+/**
+ * Shows the player the safe route across the electrified floor when the room is entered:
+ * lights the panels of the route chosen in GW(10) (hikaru_on, which also makes every other panel shock),
+ * pans the camera over the room for about three seconds and switches the lights off again (hikaru_off),
+ * leaving the shocking panels in place.
+ */
 EVT_BEGIN(hikaru_yuka)
     CALL_CHILD(PTR(hikaru_on))
     WAIT_MS(1000)
@@ -202,6 +210,11 @@ static EvtWord hikaru_yuka_init[] = {
     RETURN
 };
 
+/**
+ * Peach's stage-1 variant of this room: hides Mario's model, places him at (-140, 10, 0),
+ * hides the "no1" object and the floor lights, fades out after 1.5 seconds
+ * and changes map to aji_16 at the peach_evt_stg1 entrance.
+ */
 static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
@@ -310,6 +323,11 @@ static USER_FUNC(ride_chk) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script function that plays an electric shock when Mario is in the spike-damage motion
+ * (MARIO_MOTION_DAMAGE_TOGE): the sound SFX_STG7_ELECTRIC_SHOCK1 and a blue-green spark effect at his position,
+ * once per hit.
+ */
 static USER_FUNC(thunder_main) {
     MarioWork* mario = marioGetPtr();
 
@@ -336,6 +354,10 @@ static USER_FUNC(thunder_main) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script function that runs the panel light-up show:
+ * lights the panels one after another, twice (see the comment in the body), with timing kept in event->userdata.
+ */
 static USER_FUNC(loop_onoff) {
     char name[64];
     s32 i;

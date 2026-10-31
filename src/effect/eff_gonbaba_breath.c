@@ -47,6 +47,7 @@ void effGonbabaBreathMain(EffectEntry* effect);
 void effGonbabaBreathDisp(CameraId cameraId, EffectEntry* effect);
 
 #pragma opt_propagation off
+/** Initialises one breath particle for the given type: delay by index, start offset, velocity and lifetime. */
 void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
     f32 ang;
     f32 spd;
@@ -137,6 +138,11 @@ void init_breath(EffGonbabaBreathWork* work, s32 idx, s32 type) {
 
 #pragma opt_propagation reset
 
+/**
+ * Spawns a breath of the given type (0-7, plus companion layers 10-17) at (x, y, z) pointing along yaw;
+ * life <= 0 keeps it endless.
+ * Spawned by the Hooktail Castle, Pit of 100 Trials and Palace of Shadow bosses and event scripts.
+ */
 EffectEntry* effGonbabaBreathEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 yaw) {
     EffectEntry* effect;
     EffGonbabaBreathWork* work;
@@ -202,6 +208,7 @@ EffectEntry* effGonbabaBreathEntry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 
     return effect;
 }
 
+/** Moves and ages each particle, and on soft delete fades the breath over 32 frames (also soft-deleting the child). */
 void effGonbabaBreathMain(EffectEntry* effect) {
     EffGonbabaBreathWork* work = effect->userdata;
     Vec position;
@@ -336,6 +343,7 @@ void effGonbabaBreathMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effGonbabaBreathDisp, effect);
 }
 
+/** Draws the particles as camera-facing quads, coloured by type; companion layers sit slightly off the camera plane. */
 void effGonbabaBreathDisp(CameraId cameraId, EffectEntry* effect) {
     EffGonbabaBreathWork* work = effect->userdata;
     Mtx trans;

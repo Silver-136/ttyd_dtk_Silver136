@@ -212,6 +212,11 @@ static BattleUnitKindPart parts_nokotarou[] = {
     },
 };
 
+/**
+ * Flip-over reaction of the Doopliss-controlled Koops (his data event 13):
+ * swaps in the upside-down defence and pose tables, sets status flag 1 and an over-turn count of 2 turns,
+ * plays the PNK_D_1 pose with SFX_ENM_INSIDE1 and bounces twice on the spot.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -228,6 +233,11 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Called on Koops's turn while he is flipped over.
+ * It counts the over-turn counter down; while it is still above 0 he stays on his back and goes back to waiting.
+ * At 0 he restores the normal defence and pose tables, clears status flag 1, and hops upright.
+ */
 // Spend each overturned action decrementing the counter; restore defense and poses only at zero.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
@@ -250,6 +260,12 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the Doopliss-controlled Koops.
+ * Registers his wait, attack, damage and confusion handlers,
+ * clears unit work 8 to 11 (the shell-spin state used by the attack scripts), sets his walk,
+ * run and jump sounds and starts him waiting.
+ */
 static EVT_BEGIN(init_event_nokotarou)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event_nokotarou))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_nokotarou))
@@ -266,6 +282,12 @@ static EVT_BEGIN(init_event_nokotarou)
     RETURN
 EVT_END()
 
+/**
+ * Damage script of the Doopliss-controlled Koops:
+ * if the hit carries damage code 1024 it sets GW(20)
+ * so the fake Mario's phase script knows the partner was struck, stops any shell spin,
+ * then runs the default damage handling.
+ */
 static EVT_BEGIN(damage_event_nokotarou)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -278,6 +300,14 @@ static EVT_BEGIN(damage_event_nokotarou)
     RETURN
 EVT_END()
 
+/**
+ * Defeat script of the Doopliss-controlled Koops.
+ * He first walks back to his home position if he is away from it, then collapses.
+ * With GW(19) at 0 (the fake Mario is still standing) the camera frames him
+ * and his farewell lines (stg4_jin_26_03_nok and stg4_jin_26_04) play;
+ * with GW(19) at 1 or 2 he only plays the collapse pose, waiting for GW(19) to reach 2 first.
+ * He is then removed from the battle and GW(20) is set to 2 so the fake Mario's phase script knows he is gone.
+ */
 static EVT_BEGIN(dead_event_nokotarou)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(3), LW(4), LW(5))
@@ -330,6 +360,10 @@ static EVT_BEGIN(dead_event_nokotarou)
     RETURN
 EVT_END()
 
+/**
+ * Koops pulls into his shell: plays PNK_K_2 and then PNK_K_1
+ * while turning on the spot through 18 + 6 frames of 15 degrees each.
+ */
 static EVT_BEGIN(_change_koura_pose)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_K_2"))
     LOOP(18)
@@ -344,6 +378,11 @@ static EVT_BEGIN(_change_koura_pose)
     RETURN
 EVT_END()
 
+/**
+ * Faster version of the pull-into-the-shell turn:
+ * 10 frames of 27 degrees in the PNK_K_2 pose, then 3 frames of 30 degrees in PNK_K_1.
+ * Not called by any script in this file.
+ */
 static EVT_BEGIN(_change_koura_pose_fast)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PNK_K_2"))
     LOOP(10)
@@ -358,6 +397,11 @@ static EVT_BEGIN(_change_koura_pose_fast)
     RETURN
 EVT_END()
 
+/**
+ * Koops comes back out of his shell after a shell attack:
+ * clears the spin flag (unit work 8) and rotation,
+ * then unfolds through PNK_K_1 (6 frames of 45 degrees) and PNK_K_2 (6 frames of 15 degrees).
+ */
 static EVT_BEGIN(_restore_koura_pose)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_ON, 0)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
@@ -375,6 +419,12 @@ static EVT_BEGIN(_restore_koura_pose)
     RETURN
 EVT_END()
 
+/**
+ * Starts the shell spin: sets the spin flag (unit work 8)
+ * and launches a background loop that adds a Y rotation every frame until the flag is cleared.
+ * The speed ramps by 1 degree per frame towards the target in unit work 9 and is negated
+ * when unit work 10 is set.
+ */
 static EVT_BEGIN(_koura_rotate_start)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_ON, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_REVERSE, 0)
@@ -412,12 +462,22 @@ static EVT_BEGIN(_koura_rotate_start)
     RETURN
 EVT_END()
 
+/**
+ * Ends the shell spin: clears the spin flag (unit work 8), which stops the rotation loop,
+ * and resets his rotation to 0.
+ */
 static EVT_BEGIN(_koura_rotate_stop)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_ON, 0)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the Doopliss-controlled Koops.
+ * If he is still flipped over he just gets up (wakeup_event);
+ * otherwise he draws lots between the single-target shell attack (80 percent)
+ * and the all-target spin attack (20 percent), then returns to waiting.
+ */
 static EVT_BEGIN(attack_event_nokotarou)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -435,6 +495,13 @@ static EVT_BEGIN(attack_event_nokotarou)
     RETURN
 EVT_END()
 
+/**
+ * Koops's shell attack: after an item check he picks a target, pulls into his shell,
+ * spins up (SFX_BTL_NOKO_ATTACK1/2) with the camera zooming in, then slides into the target.
+ * If the attack misses or is blocked he overshoots and walks home;
+ * a hit deals the damage, and he then tumbles back in three decreasing hops,
+ * comes out of the shell and walks home.
+ */
 static EVT_BEGIN(attack_event_nokotarou_koura)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -533,6 +600,12 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
     RETURN
 EVT_END()
 
+/**
+ * Koops's second attack (shubibin): a spinning shell slide that hits every enemy.
+ * He pulls into his shell, spins up (SFX_BTL_NOKO_SHUBIBIN1/2), then slides through the targets in turn,
+ * damaging each, and off the edge of the stage;
+ * he reappears on the opposite side, returns home and comes out of the shell.
+ */
 static EVT_BEGIN(attack_event_nokotarou_shubibin)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -627,6 +700,7 @@ static EVT_BEGIN(attack_event_nokotarou_shubibin)
     RETURN
 EVT_END()
 
+/** Wait script: plays Koops's idle pose from his pose table. */
 static EVT_BEGIN(wait_event_nokotarou)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

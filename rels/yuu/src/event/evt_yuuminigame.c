@@ -31,6 +31,10 @@ USER_FUNC(yuu_atai_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = output.
+ * Pops the top value of the 4-entry value stack into it; leaves it untouched if the stack is empty.
+ */
 USER_FUNC(yuu_atai_pop) {
     EvtWord* args = event->args;
 
@@ -41,6 +45,7 @@ USER_FUNC(yuu_atai_pop) {
     return EVT_RETURN_DONE;
 }
 
+/** args[0] = value. Pushes it on the 4-entry value stack; ignored when the stack is full. */
 USER_FUNC(yuu_atai_push) {
     EvtWord* args = event->args;
 
@@ -51,6 +56,10 @@ USER_FUNC(yuu_atai_push) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = effect type (0 start countdown, 1 success, 2 failure), args[1] to args[3] = x, y, z.
+ * Spawns the minigame banner effect.
+ */
 USER_FUNC(eff_call_minigame) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
@@ -62,6 +71,10 @@ USER_FUNC(eff_call_minigame) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = slot (0 to 31), args[1] = value.
+ * Stores a pointer or event id in the shared slot table scripts use to find the minigame work and moving floors.
+ */
 USER_FUNC(yuuminigame_set_dataadr) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -72,6 +85,10 @@ USER_FUNC(yuuminigame_set_dataadr) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = slot, args[1] = output.
+ * Reads back the value stored with yuuminigame_set_dataadr (0 if the slot is out of range).
+ */
 USER_FUNC(yuuminigame_get_dataadr) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -84,6 +101,10 @@ USER_FUNC(yuuminigame_get_dataadr) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = minigame work pointer (cleared to 0 afterwards).
+ * Asks the minigame event to quit, blocks until it has stopped, then frees the minigame data and work area.
+ */
 USER_FUNC(evt_yuuminigame_free) {
     EvtWord* args = event->args;
     MiniGameWork* wp = (MiniGameWork*)evtGetValue(event, args[0]);
@@ -110,6 +131,11 @@ USER_FUNC(evt_yuuminigame_free) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * args[0] = output work pointer, args[1] = minigame type (0 Plane Mode, 1 Boat Mode, 2 Tube Mode, 3 Paper Mode).
+ * Allocates the work area and per-game data, hooks up that game's init, main and draw callbacks,
+ * starts the main event and calls the init callback.
+ */
 USER_FUNC(evt_yuuminigame_alloc) {
     EvtWord* args = event->args;
     MiniGameWork* wp = _mapAlloc(sizeof(MiniGameWork));
@@ -155,6 +181,11 @@ USER_FUNC(evt_yuuminigame_alloc) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Body of the minigame event: each frame it runs the game's main callback
+ * unless a sub event (start or end script) is still running, queues the draw callback,
+ * and stops once the quit flag is set.
+ */
 USER_FUNC(evt_yuuminigame_main_func) {
     MiniGameWork* wp = (MiniGameWork*)event->lwData[0];
 
@@ -174,10 +205,12 @@ disp:
     return EVT_RETURN_BLOCK;
 }
 
+/** 2D draw callback that forwards to the current minigame's own disp callback. */
 void evt_yuuminigame_disp_func(CameraId camera, void* param) {
     ((MiniGameWork*)param)->disp(camera, param);
 }
 
+/** The minigame's per-frame event, started by evt_yuuminigame_alloc; runs evt_yuuminigame_main_func. */
 static EVT_BEGIN(main_evt)
     CALL(evt_yuuminigame_main_func)
     RETURN

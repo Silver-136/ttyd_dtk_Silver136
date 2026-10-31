@@ -75,8 +75,14 @@ void mapDispMapObj(CameraId cam, MapObject* obj);
 void mapDispMapObj_bbox(CameraId cam, MapObject* obj);
 void mapDispMapObj_off(CameraId cam, MapObject* obj);
 
+/** Single-precision sine for this file, routed through the double sin() of math.h. */
 static inline f32 sinf(f32 x) { return sin(x); }
 
+/**
+ * Records a missing map object or hit object name (type 0 map object, 1 hit object) in the 32-entry error ring
+ * buffer error_data and sets error_flag; called by hitdrv, evt_door,
+ * evt_bero and evt_movefloor when a name lookup fails.
+ */
 void mapErrorEntry(s32 type, const char* name) {
     MapError* error = error_data;
 
@@ -88,6 +94,7 @@ void mapErrorEntry(s32 type, const char* name) {
     error_count %= 32;
 }
 
+/** Root directory of the map data on the disc, always "." (cam_road.c builds its file path from it). */
 const char* getMapDataDvdRoot(void) {
     return ".";
 }
@@ -97,19 +104,23 @@ void mapDispOff(void) {
     disableMapDraw = TRUE;
 }
 
+/** Lets mapDisp draw the map again after mapDispOff. */
 // Descriptive name (not in the symbol maps).
 void mapDispOn(void) {
     disableMapDraw = FALSE;
 }
 
+/** The MapWork of the active group: index 0 is the field map, 1 the battle stage. */
 MapWork* mapGetWork(void) {
     return &mapWork[activeGroup];
 }
 
+/** Which MapWork is active (0 field, 1 battle); lightdrv picks its light set from it. */
 s32 mapGetActiveGroup(void) {
     return activeGroup;
 }
 
+/** Recursive helper of mapGetJoints: counts this joint, its children and its later siblings into *numJoints. */
 void mapGetJointsSub(MapFileJoint* joint, s32* numJoints) {
     (*numJoints)++;
     if (joint->child) {
@@ -133,6 +144,11 @@ s32 mapGetJoints(MapFileJoint* joint) {
     return numJoints;
 }
 
+/**
+ * World-space bounding box of the first map entry of the active group,
+ * from the bbox corners of every joint that has geometry;
+ * the box always includes the origin since min and max start at 0.
+ */
 void mapGetBoundingBox(Vec* min, Vec* max) {
     MapWork* wp = &mapWork[activeGroup];
     MapObject* obj;
@@ -162,6 +178,7 @@ void mapGetBoundingBox(Vec* min, Vec* max) {
     }
 }
 
+/** Allocates and clears the two MapWork slots (field and battle) at boot; called once from mariost.c. */
 void mapInit(void) {
     mapWork = __memAlloc(HEAP_DEFAULT, sizeof(MapWork) * 2);
     memset(mapWork, 0, sizeof(MapWork) * 2);
@@ -169,6 +186,7 @@ void mapInit(void) {
     mapClipOffFlag = FALSE;
 }
 
+/** Index of the texture called name in the map's texture_table chunk, or -1. */
 static inline s32 mapSearchTexName(MapTexTable* table, char* name) {
     s32 i;
 
@@ -180,6 +198,10 @@ static inline s32 mapSearchTexName(MapTexTable* table, char* name) {
     return -1;
 }
 
+/**
+ * Points every material sampler of obj and its subtree at its image in the map's texture.tpl (matched by name,
+ * falling back to image 0) and converts the TPL format code into the map's own texture format numbering.
+ */
 void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
     int i;
     int j;
@@ -228,6 +250,12 @@ void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table) {
     }
 }
 
+/**
+ * Takes the next free MapObject of map entry index and fills it from joint:
+ * local and world matrices (rotation in degrees), blend mode from the draw mode and the materials,
+ * group and shadow flags, centre, and the bounding-box cull flag
+ * when its centre-to-corner distance is under about 141 units. Panics on a joint without a draw mode.
+ */
 MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
     MapWork* wp = &mapWork[activeGroup];
     MapObject* obj;
@@ -353,6 +381,10 @@ MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index) {
     return obj;
 }
 
+/**
+ * Creates the MapObject for joint and, recursively, its children and (unless it is the root) its later siblings,
+ * linking them into the child/next tree.
+ */
 MapObject* mapEntrySub(MapFileJoint* joint, MapObject* parent, Mtx mtx, BOOL isRoot, s32 index) {
     MapObject* obj = _mapEnt(joint, parent, mtx, index);
     if (joint->child) {
@@ -366,6 +398,10 @@ MapObject* mapEntrySub(MapFileJoint* joint, MapObject* parent, Mtx mtx, BOOL isR
     return obj;
 }
 
+/**
+ * Allocates the MapObject array for map entry index, one per joint,
+ * and builds the object tree from the root joint with world matrix mtx; returns the root object.
+ */
 MapObject* mapEntry(MapFileJoint* joint, Mtx mtx, s32 index) {
     // FAKE: comma expression `(0, X)`: X becomes a separate compiler temp; the plain X changes the object
     MapWork* wp = (0, &mapWork[activeGroup]);
@@ -384,6 +420,12 @@ f32 (*shadowGetDepthShadowProjTexMtx(void))[4];
 f32 (*shadowGetProjShadowProjTexMtx(void))[4];
 static void mapResetPaperCraftAmbColor(void);
 
+/**
+ * Records the material setup and cull mode of each eligible part of map entry group into GX display lists,
+ * in two passes (size, then copy into one buffer at the heap tail).
+ * Only for ver1.02 map files, and skips light-masked parts and Mario's shadow receivers
+ * while a character shadow projection is on.
+ */
 void makeDisplayList(BOOL group) {
     static const GXCullMode culling[4] = {GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL, GX_CULL_NONE};
     MapEntry* e;
@@ -460,6 +502,10 @@ void makeDisplayList(BOOL group) {
     __mapdrv_make_dl = FALSE;
 }
 
+/**
+ * The playing map animation called animName in the active group's entries,
+ * or NULL (inline twin of mapSearchAnmObj).
+ */
 static inline MapAnim* mapSearchAnmObj_inl(const char* animName) {
     MapEntry* entry;
     MapWork* wp = &mapWork[activeGroup];
@@ -479,6 +525,7 @@ static inline MapAnim* mapSearchAnmObj_inl(const char* animName) {
     return NULL;
 }
 
+/** The playing map animation called animName in the active group's entries, or NULL; no callers outside this file. */
 MapEntryAnimData* mapSearchAnmObj(const char* animName) {
     MapWork* wp = &mapWork[activeGroup];
     MapEntry* entry;
@@ -513,6 +560,12 @@ void mapCheckAnimation(const char* animName, BOOL* valid, f32* remainingMs) {
     }
 }
 
+/**
+ * Starts the map animation name from map.dat.
+ * mode 0 plays once, 1 loops, 2 jumps to the end;
+ * level 1-4 times it on the system level clock gp->systemLv0Time..Lv3Time,
+ * 0 on the field or battle render clock. Called from evt_map and battle stage objects.
+ */
 void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
     MapAnim* anim = NULL;
     MapWork* wp;
@@ -580,6 +633,7 @@ void mapPlayAnimationLv(const char* name, s32 mode, s32 level) {
     }
 }
 
+/** Pauses the playing map animation name; mapMain stops advancing it. */
 void mapPauseAnimation(const char* name) {
     MapAnim* anim = mapSearchAnmObj_inl(name);
     if (anim) {
@@ -587,6 +641,7 @@ void mapPauseAnimation(const char* name) {
     }
 }
 
+/** Resumes the map animation name paused by mapPauseAnimation, from the frame it stopped on. */
 void mapReStartAnimation(const char* name) {
     MapAnim* anim = mapSearchAnmObj_inl(name);
     if (anim) {
@@ -594,6 +649,7 @@ void mapReStartAnimation(const char* name) {
     }
 }
 
+/** Pauses every map animation of the active group; the name argument is ignored. */
 void mapPauseAnimationAll(const char* name) {
     MapWork* wp = &mapWork[activeGroup];
     MapEntry* entry = wp->entries;
@@ -609,6 +665,7 @@ void mapPauseAnimationAll(const char* name) {
     }
 }
 
+/** Resumes every paused map animation of the active group; the name argument is ignored. */
 void mapReStartAnimationAll(const char* name) {
     MapWork* wp = &mapWork[activeGroup];
     MapEntry* entry = wp->entries;
@@ -624,6 +681,7 @@ void mapReStartAnimationAll(const char* name) {
     }
 }
 
+/** Sets the speed multiplier of the playing map animation name (1.0 is normal speed). */
 void mapSetPlayRate(const char* name, f32 rate) {
     MapAnim* anim = mapSearchAnmObj_inl(name);
     if (anim) {
@@ -631,6 +689,10 @@ void mapSetPlayRate(const char* name, f32 rate) {
     }
 }
 
+/**
+ * Pointer to the map.dat chunk with the given name (information, texture_table, light_table, ...) via the file's
+ * chunk table, or NULL.
+ */
 static inline void* mapSearchChunk(MapHeader* header, const char* name) {
     u32 k;
 
@@ -642,6 +704,10 @@ static inline void* mapSearchChunk(MapHeader* header, const char* name) {
     return NULL;
 }
 
+/**
+ * Turns the file-relative pointers listed in the map.dat relocation table into real addresses by adding the data
+ * base.
+ */
 static inline void mapLoadReloc_(MapEntry* entry) {
     u32 k;
     for (k = 0; k < (u32)entry->header.file.relCount; k++) {
@@ -652,12 +718,21 @@ static inline void mapLoadReloc_(MapEntry* entry) {
     }
 }
 
+/**
+ * MWCC swaps == operands when the left side is a computed address (wp->entries[group]...);
+ * through a pointer parameter the load stays on the left, as in the original (cmplw r0,r17).
+ */
 // FAKE: the file-size check goes through this helper so the header's size stays the left operand of the compare;
 // the same `==` written in place on wp->entries[group].header swaps the operands and changes the object
 static inline BOOL mapHdrSizeOk_(MapHeader* h, u32 size) {
     return h->file.fileSize == size;
 }
 
+/**
+ * Parses the map.dat header of entry group: locates the data, relocation, chunk,
+ * extern and string sections after it and relocates the pointers.
+ * Does nothing if the stored file size does not match the loaded size.
+ */
 static inline void mapLoadHeader_(MapWork* wp, BOOL group) {
     u32 datSize = wp->entries[group].datSize;
     u8* data = (u8*)wp->entries[group].dat;
@@ -732,6 +807,11 @@ found:
     }
 }
 
+/**
+ * Loads map into entry group of wp: map.dat and texture.tpl from the archive or the disc,
+ * the joint tree as map and hit objects (scaled x10), the map's lights and fog, the camera road (field only),
+ * textures, bounding box corners, animation table and display lists.
+ */
 void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     MapFileInfo* info;
     int i;
@@ -897,6 +977,11 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
     disableMapDraw = FALSE;
 }
 
+/**
+ * Frees the field map and everything built from it:
+ * map objects, animations, display lists, hit objects, lights, environment, the camera road and the map files.
+ * Called by seq_mapchange when leaving a map.
+ */
 void mapUnLoad(void) {
     MapEntry* entry2;
     MapEntry* entry;
@@ -976,6 +1061,10 @@ void mapLoad(const char* map) {
 // split temp; split temps are created in order of the variables' first reference (i before wp before entry), which gives
 // the target's i r31 / wp r30 / entry r29. Code is otherwise identical.
 #pragma opt_common_subs off
+/**
+ * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
+ * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
+ */
 void bmapUnLoad(void) {
     MapEntry* entry2;
     MapEntry* entry;
@@ -1124,6 +1213,10 @@ typedef struct MapAnimJoint {
     MapAnimKey keys[];          // 0x5C
 } MapAnimJoint;
 
+/**
+ * Cubic Hermite interpolation at time cur between key (t0, p0, tangent m0) and key (t1, p1, tangent m1),
+ * as used by the map animation keys.
+ */
 static inline f32 mapHermite(f32 cur, f32 t0, f32 t1, f32 p0, f32 m0, f32 p1, f32 m1) {
     f32 s = cur - t0;
     f32 dt = t1 - t0;
@@ -1137,6 +1230,7 @@ static inline f32 mapHermite(f32 cur, f32 t0, f32 t1, f32 p0, f32 m0, f32 p1, f3
         + m1 * (dt * (t3 - t2));
 }
 
+/** mapHermite between two animation key channels: a's value and out tangent to b's value and in tangent. */
 static inline f32 mapHermiteCh(f32 cur, f32 t0, f32 t1, MapAnimKeyCh* a, MapAnimKeyCh* b) {
     f32 s = cur - t0;
     f32 dt = t1 - t0;
@@ -1154,6 +1248,11 @@ static inline f32 mapHermiteCh(f32 cur, f32 t0, f32 t1, MapAnimKeyCh* a, MapAnim
         + m1 * (dt * (t3 - t2));
 }
 
+/**
+ * Builds out = in times the animated offset of a joint at anim's current time:
+ * translation, rotation (degrees) and scale channels are interpolated between keys
+ * and taken relative to the joint's base pose. Also used by hitdrv for animated collision.
+ */
 void mapCalcAnimMatrix(Mtx out, Mtx in, MapAnim* anim, MapAnimJoint* joint) {
     f32 v[21];
     Mtx mT;
@@ -1229,6 +1328,11 @@ void mapCalcAnimMatrix(Mtx out, Mtx in, MapAnim* anim, MapAnimJoint* joint) {
     }
 }
 
+/**
+ * Recomputes the world matrix of obj (dirty flag 0x200 or force) from the parent matrix mtx and its local
+ * or animated matrix plus the script transform,
+ * and walks the children (forced when the parent changed) and siblings.
+ */
 void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force) {
     BOOL dirty = FALSE;
 
@@ -1306,6 +1410,10 @@ typedef struct MapAnimLightData2 {
     MapAnimKey5 keys[1];
 } MapAnimLightData2;
 
+/**
+ * Applies a material animation (texture scroll, scale, rotation) at the animation's current time to texture
+ * transform d->idx of the material, with the transform centre from the data.
+ */
 static inline void mapMainMatKeys_(MapAnim* a_, MapAnimMatData* d, MapMaterial* obj) {
     int n, c;
     f32 cur;
@@ -1332,6 +1440,10 @@ static inline void mapMainMatKeys_(MapAnim* a_, MapAnimMatData* d, MapMaterial* 
         break;
     }
 }
+/**
+ * Applies an alpha animation at the animation's current time to the material,
+ * stored as 255 minus the animated value in blendColor.r.
+ */
 static inline void mapMainAlphaKeys_(MapAnim* a_, MapAnimAlphaData* d, MapMaterial* obj) {
     int n;
     f32 cur;
@@ -1358,6 +1470,10 @@ static inline void mapMainAlphaKeys_(MapAnim* a_, MapAnimAlphaData* d, MapMateri
         break;
     }
 }
+/**
+ * Applies a light animation at the animation's current time to the light's position (x10 to world scale)
+ * and rotation.
+ */
 static inline void mapMainLight_ll(MapAnim* anim, LightEntry* lp, MapAnimLightData* d, f32* v) {
     int n, c;
     f32 cur;
@@ -1389,6 +1505,10 @@ static inline void mapMainLight_ll(MapAnim* anim, LightEntry* lp, MapAnimLightDa
     }
 }
 
+/**
+ * Applies a light colour animation at the animation's current time to the light's colour,
+ * spot angle and attenuation angle.
+ */
 static inline void mapMainLight_lc(MapAnim* anim, LightEntry* lp, MapAnimLightData2* d, f32* cv) {
     int n, c;
     f32 cur;
@@ -1470,6 +1590,11 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
     }                                          \
 }
 
+/**
+ * Per-frame map update from mariost: advances each playing map animation by its clock
+ * and rate (looping or stopping at the end, handling pause and resume) and applies its joint, material, alpha,
+ * light and light colour tracks, then recalculates the changed object matrices.
+ */
 void mapMain(void) {
     MapObject* o;
     f32 cur;
@@ -1596,6 +1721,12 @@ void mapSetTextureMatrix(MapMaterial* mat);
 
 static inline void mapSetObjFog(MapObject* obj);
 
+/**
+ * TRUE when the object must go in the translucent pass:
+ * its own colour (flag 0x40) or its material is not fully opaque,
+ * or the map-wide blend colour (entry flag 2, unless object flag 0x800)
+ * or second blend colour (entry flag 4, unless object flag 0x1000) is.
+ */
 static inline BOOL mapObjIsTranslucent(u32 flags, GXColor objColor, GXColor matColor) {
     if ((flags & MAP_OBJ_FLAG_COLOR) && objColor.a != 0xFF) {
         return TRUE;
@@ -1612,6 +1743,7 @@ static inline BOOL mapObjIsTranslucent(u32 flags, GXColor objColor, GXColor matC
     return FALSE;
 }
 
+/** Draws every packed display list of the mesh straight from the map file. */
 static inline void callPackedLists(MapFileMesh* mesh) {
     int j;
     for (j = 0; j < mesh->displayListCount; j++) {
@@ -1619,6 +1751,12 @@ static inline void callPackedLists(MapFileMesh* mesh) {
     }
 }
 
+/**
+ * Draws one map object on camera cam: for objects drawn inside a group, sets the GX blend,
+ * alpha test and z mode for its blend mode and (flag 0x8000) biases the depth projection by its index among its
+ * siblings; then loads its matrices, cull mode and fog and draws each part from the prebuilt display lists
+ * or by setting up the material and mesh. Skips hidden or fully transparent group members.
+ */
 void _mapDispMapObj(CameraId cam, MapObject* obj) {
     CameraEntry* camera;
     MapFileJoint* joint;
@@ -1764,6 +1902,7 @@ void _mapDispMapObj(CameraId cam, MapObject* obj) {
     }
 }
 
+/** Draws a group: the object, its children, and for group members (flag 0x20) the later siblings. */
 void _mapDispMapGrp(CameraId cam, MapObject* obj) {
     _mapDispMapObj(cam, obj);
     if (obj->child) {
@@ -1774,14 +1913,20 @@ void _mapDispMapGrp(CameraId cam, MapObject* obj) {
     }
 }
 
+/** dispdrv callback that draws a single map object (queued by mapDisp). */
 void mapDispMapObj(CameraId cam, MapObject* obj) {
     _mapDispMapObj(cam, obj);
 }
 
+/** dispdrv callback that draws a group map object and its members (queued by mapDisp). */
 void mapDispMapGrp(CameraId cam, MapObject* obj) {
     _mapDispMapGrp(cam, obj);
 }
 
+/**
+ * dispdrv callback for an object drawn into its offscreen buffer:
+ * draws it and adds the screen rectangle it covered to that offscreen entry.
+ */
 void mapDispMapObj_off(CameraId cam, MapObject* obj) {
     u16 left, top, right, bottom;
 
@@ -1793,6 +1938,7 @@ void mapDispMapObj_off(CameraId cam, MapObject* obj) {
     offscreenAddBoundingBox(obj->offscreenId, left, top, right, bottom);
 }
 
+/** As mapDispMapObj_off for a whole group. */
 void mapDispMapGrp_off(CameraId cam, MapObject* obj) {
     u16 left, top, right, bottom;
 
@@ -1804,6 +1950,12 @@ void mapDispMapGrp_off(CameraId cam, MapObject* obj) {
     offscreenAddBoundingBox(obj->offscreenId, left, top, right, bottom);
 }
 
+/**
+ * Draws every map object with flag 0x400000 straight away, without bounding-box culling.
+ * Named after the flipping floor panels (evt_mobj_kururing_floor flags the map group under a panel),
+ * whose kururing_capture renders that floor from above into the panel's texture;
+ * the sac_deka action command uses it the same way to photograph the stage floor.
+ */
 void test_kururing_mapdisp(CameraId cam) {
     MapWork* wp = &mapWork[activeGroup];
     MapEntry* entry = wp->entries;
@@ -1825,6 +1977,10 @@ void test_kururing_mapdisp(CameraId cam) {
     }
 }
 
+/**
+ * Draws the object's meshes in flat black with no material, lighting or texture,
+ * for measuring its screen rectangle.
+ */
 void _mapDispMapObj_NoMaterial(CameraId cam, MapObject* obj) {
     Mtx mtx;
     Mtx nrm;
@@ -1848,6 +2004,7 @@ void _mapDispMapObj_NoMaterial(CameraId cam, MapObject* obj) {
     }
 }
 
+/** _mapDispMapObj_NoMaterial over a group: the object, its children and, for group members, the later siblings. */
 void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj) {
     _mapDispMapObj_NoMaterial(cam, obj);
     if (obj->child) {
@@ -1858,6 +2015,10 @@ void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj) {
     }
 }
 
+/**
+ * dispdrv callback for objects with flag 0x20000000:
+ * draws the object untextured and stores the screen rectangle the GPU reports in obj->screenRect.
+ */
 void mapDispMapObj_bbox(CameraId cam, MapObject* obj) {
     sysWaitDrawSync();
     GXClearBoundingBox();
@@ -1866,6 +2027,7 @@ void mapDispMapObj_bbox(CameraId cam, MapObject* obj) {
     GXReadBoundingBox(&obj->screenRect[0], &obj->screenRect[1], &obj->screenRect[2], &obj->screenRect[3]);
 }
 
+/** As mapDispMapObj_bbox for a whole group. */
 void mapDispMapGrp_bbox(CameraId cam, MapObject* obj) {
     sysWaitDrawSync();
     GXClearBoundingBox();
@@ -1880,6 +2042,7 @@ const s32 texfmt_tbl[11] = {4, 5, 6, 14, 0, 1, 2, 3, 8, 9, 10};
 const s32 texwrap_tbl[3] = {GX_CLAMP, GX_REPEAT, GX_MIRROR};
 const s32 palfmt_tbl[2] = {1, 2};
 const GXLightID lightid_tbl[8] = {GX_LIGHT0, GX_LIGHT1, GX_LIGHT2, GX_LIGHT3, GX_LIGHT4, GX_LIGHT5, GX_LIGHT6, GX_LIGHT7};
+/** TRUE when the projected point v lies inside the view volume; unused, mapDisp uses the MAP_CLIP_IN macro. */
 static inline BOOL mapClipTest(Vec* v) {
     if (v->z > -1.0f && v->z < 0.0f && v->x >= -1.0f && v->x <= 1.0f && v->y >= -1.0f && v->y <= 1.0f) {
         return TRUE;
@@ -1890,6 +2053,12 @@ static inline BOOL mapClipTest(Vec* v) {
 void dispEntry(CameraId camera, f32 order, s32 renderMode, void* callback, void* param);
 #define MAP_CLIP_IN(v) ((v).z > -1.0f && (v).z < 0.0f && (v).x >= -1.0f && (v).x <= 1.0f && (v).y >= -1.0f && (v).y <= 1.0f)
 
+/**
+ * Per-frame map draw from mariost: recalculates the object matrices, skips hidden, empty,
+ * group-member and fully transparent objects and those whose bounding box is out of view,
+ * and queues each remaining object with dispdrv on its camera, sorted by projected depth,
+ * plus its offscreen and screen-rectangle passes. Does nothing after mapDispOff.
+ */
 void mapDisp(void) {
     MapWork* wp = &mapWork[activeGroup];
     CameraEntry* camera = camGetPtr(CAMERA_3D);
@@ -2016,6 +2185,11 @@ void mapDisp(void) {
     }
 }
 
+/**
+ * Fills lights (up to 8) with the lights for obj:
+ * the map lights picked by its draw mode's light mask,
+ * then (draw mode flag 8) the nearest other lights to its centre; returns how many.
+ */
 s32 mapSetLight(MapObject* obj, LightEntry** lights) {
     Vec pos;
     s32 count;
@@ -2086,6 +2260,13 @@ static u32 texture_0[64] ATTRIBUTE_ALIGN(32) = {
 
 #pragma push
 #pragma opt_lifetimes off
+/**
+ * Sets up the GX TEV stages for a map or model material:
+ * the texture combine for tevMode drawMode, then the colour stage (kcolor 0 from mapSetMaterialLastStageBlend)
+ * and optional extra stages selected by flags: Mario's projected shadow, the projected texture,
+ * depth and projected shadows, the flash colour, a pulsing glow, a shimmer texture and a per-map TEV callback.
+ * Also used by animdrv for models.
+ */
 void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
     static f32 scrl_uv[4] = {0.0f, 0.0f, 0.0f, 0.0f};
     GXTexMapID map;
@@ -2774,6 +2955,12 @@ void mapSetMaterialTev(s32 texCount, s32 drawMode, s32 flags, Mtx mtx) {
 }
 #pragma pop
 
+/**
+ * Sets TEV kcolor 0, the colour the last stage multiplies by:
+ * white scaled by the object colour (flag 0x40),
+ * the material alpha (color2.r) and the map-wide blend colours and colour unless the object opts out.
+ * Shared with animdrv.
+ */
 void mapSetMaterialLastStageBlend(s32 flags, GXColor color1, GXColor color2) {
     MapWork* wp = mapGetWork();
     GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
@@ -2811,6 +2998,10 @@ void mapSetMaterialLastStageBlend(s32 flags, GXColor color1, GXColor color2) {
 // .sdata: defined after mapSetMaterialTev so it follows that function's static scrl_uv in .sdata
 s32 fog_type[5] = {2, 4, 5, 6, 7};
 
+/**
+ * Sets the GX fog to the map's fog (fog_table or mapSetFog) when map fog is on, else turns fog off;
+ * animdrv uses it for models.
+ */
 void mapSetMaterialFog(void) {
     CameraEntry* camera = camGetCurPtr();
     MapWork* wp = mapGetWork();
@@ -2823,6 +3014,7 @@ void mapSetMaterialFog(void) {
     }
 }
 
+/** As mapSetMaterialFog for a map object, which can opt out of the fog with flag 0x80000. */
 static inline void mapSetObjFog(MapObject* obj) {
     CameraEntry* camera = camGetCurPtr();
     MapWork* wp = mapGetWork();
@@ -2835,6 +3027,11 @@ static inline void mapSetObjFog(MapObject* obj) {
     }
 }
 
+/**
+ * Loads the texture coordinate generation for each sampler of mat,
+ * with a texture matrix for the animated scroll,
+ * scale and rotation (about the transform centre) when it is not the identity.
+ */
 void mapSetTextureMatrix(MapMaterial* mat) {
     s32 j;
     s32 k;
@@ -2895,6 +3092,11 @@ void mapSetTextureMatrix(MapMaterial* mat) {
     }
 }
 
+/**
+ * Sets up GX for drawing one part of a map object with material:
+ * up to 8 lights (point, spot, directional) with the ambient light, the material colour and lighting mode,
+ * the textures from the map's texture.tpl, then the TEV stages.
+ */
 void mapSetMaterial(MapObject* obj, void* material) {
     MapMaterial* mat = material;
     GXColor ambient;
@@ -3005,18 +3207,29 @@ void mapSetMaterial(MapObject* obj, void* material) {
     mapSetMaterialTev(mat->samplerCount, mat->tevMode ? *mat->tevMode : 0, obj->flags, obj->modelWorldMtx);
 }
 
+/**
+ * Sets the ambient colour used with the paper light for models (mapSetMaterialLight flag 1);
+ * mot_slit sets it for Mario's Paper Mode.
+ */
 void mapSetPaperAmbColor(GXColor* color) {
     paper_ambient = *color;
 }
 
+/** Resets the paper ambient colour to grey 0x70; done on every map load and by mot_slit. */
 void mapResetPaperAmbColor(void) {
     paper_ambient = (GXColor){0x70, 0x70, 0x70, 0xFF};
 }
 
+/** Resets the paper-craft light's ambient colour to grey 0x70; done on every map load. */
 static void mapResetPaperCraftAmbColor(void) {
     paperCraft_ambient = (GXColor){0x70, 0x70, 0x70, 0xFF};
 }
 
+/**
+ * Sets up the GX lighting channel for an animdrv model at position:
+ * flags 1 and 0x10 add the paper light, 8 the paper-craft light, 2 the nearest character lights;
+ * flag 4 lights a white material colour instead of the vertex colours. Fog is turned off.
+ */
 void mapSetMaterialLight(s32 flags, Vec position) {
     GXColor matColor = {0xFF, 0xFF, 0xFF, 0xFF};
     GXColor ambColor = {0x00, 0x00, 0x00, 0xFF};
@@ -3230,6 +3443,7 @@ void mapSetPolygon(MapObject* obj, MapFileMesh* mesh) {
     }
 }
 
+/** Sets the GX vertex descriptors, formats and arrays for a ver1.02 packed mesh, ahead of calling its display lists. */
 void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh) {
     MapWork* wp;
     u32 mask;
@@ -3269,6 +3483,7 @@ void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh) {
     }
 }
 
+/** Depth-first search of the joint tree (children, then later siblings) for the joint called name. */
 MapFileJoint* mapSearchDmdJointSub(MapFileJoint* joint, const char* name) {
     MapFileJoint* found;
 
@@ -3290,6 +3505,10 @@ MapFileJoint* mapSearchDmdJointSub(MapFileJoint* joint, const char* name) {
     return NULL;
 }
 
+/**
+ * Depth-first search by full path: matches name against the joint's "|"-separated path from the root (prefix
+ * plus its name).
+ */
 MapFileJoint* mapSearchDmdJointSub2(MapFileJoint* joint, const char* name, const char* prefix) {
     MapFileJoint* found;
     char path[256];
@@ -3315,6 +3534,11 @@ MapFileJoint* mapSearchDmdJointSub2(MapFileJoint* joint, const char* name, const
     return NULL;
 }
 
+/**
+ * The joint called name in the tree under joint;
+ * a name starting with "|" is a full path ("|a|b"), anything else a plain joint name.
+ * Used to find the map and hit roots named in the information chunk.
+ */
 MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name) {
     // FAKE: no-op (s32) cast; name[0] != '|' changes the object
     if ((s32)name[0] != '|') {
@@ -3323,6 +3547,10 @@ MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name) {
     return mapSearchDmdJointSub2(joint, name, "|");
 }
 
+/**
+ * The map object of the active group whose joint is called name, or NULL;
+ * the lookup behind the map object script helpers.
+ */
 MapObject* mapGetMapObj(const char* name) {
     MapWork* wp;
     MapEntry* entry;
@@ -3376,6 +3604,10 @@ void mapObjFlagOff(const char* name, u32 flags) {
     obj->flags &= ~flags;
 }
 
+/**
+ * Sets flags on obj and its whole subtree, and its later siblings when doNext;
+ * retail versions skip the display-list flag on objects without a display list.
+ */
 void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
     if (!(flags & MAP_OBJ_FLAG_DISPLAY_LIST) || obj->displayListSize[0]) {
         obj->flags |= flags;
@@ -3388,6 +3620,7 @@ void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext) {
     }
 }
 
+/** Clears flags on obj and its whole subtree, and its later siblings when doNext. */
 void mapFlgOff(MapObject* obj, u32 flags, BOOL doNext) {
     obj->flags &= ~flags;
     if (obj->child) {
@@ -3398,6 +3631,7 @@ void mapFlgOff(MapObject* obj, u32 flags, BOOL doNext) {
     }
 }
 
+/** Sets flags on the map object name and everything under it, logging a map error if it does not exist. */
 void mapGrpFlagOn(const char* name, u32 flags) {
     MapObject* obj = mapGetMapObj(name);
 
@@ -3412,6 +3646,7 @@ void mapGrpFlagOn(const char* name, u32 flags) {
     mapFlgOn(obj, flags, FALSE);
 }
 
+/** Clears flags on the map object name and everything under it, logging a map error if it does not exist. */
 void mapGrpFlagOff(const char* name, u32 flags) {
     MapObject* obj = mapGetMapObj(name);
 
@@ -3426,6 +3661,10 @@ void mapGrpFlagOff(const char* name, u32 flags) {
     mapFlgOff(obj, flags, FALSE);
 }
 
+/**
+ * Assigns offscreen buffer id to obj and its subtree (and later siblings when doNext),
+ * setting the offscreen flag 0x80, or clearing it for id -1.
+ */
 void _setOffScrnId(MapObject* obj, s32 id, BOOL doNext) {
     // Requires a non-NULL object; group offscreen operations pass their lookup result without a check.
     obj->offscreenId = id;
@@ -3442,6 +3681,7 @@ void _setOffScrnId(MapObject* obj, s32 id, BOOL doNext) {
     }
 }
 
+/** Makes the map object name also draw into the offscreen buffer called offscreen (evt_map). */
 void mapObjSetOffScreen(const char* name, const char* offscreen) {
     MapObject* obj;
     MapObject* object;
@@ -3472,6 +3712,10 @@ done:
     obj->flags |= MAP_OBJ_FLAG_OFFSCREEN;
 }
 
+/**
+ * Makes the map object name and everything under it also draw into the offscreen buffer called offscreen
+ * (evt_map, evt_cloud).
+ */
 void mapGrpSetOffScreen(const char* name, const char* offscreen) {
     MapObject* obj = mapGetMapObj(name);
     s32 id = offscreenNameToId(offscreen);
@@ -3479,6 +3723,7 @@ void mapGrpSetOffScreen(const char* name, const char* offscreen) {
     _setOffScrnId(obj, id, FALSE);
 }
 
+/** Stops the map object name drawing into an offscreen buffer; crashes on an unknown name. */
 void mapObjClearOffScreen(const char* name) {
     MapObject* obj = mapGetMapObj(name);
 
@@ -3487,12 +3732,18 @@ void mapObjClearOffScreen(const char* name) {
     obj->flags &= ~MAP_OBJ_FLAG_OFFSCREEN;
 }
 
+/** Stops the map object name and everything under it drawing into an offscreen buffer. */
 void mapGrpClearOffScreen(const char* name) {
     MapObject* obj = mapGetMapObj(name);
 
     _setOffScrnId(obj, -1, FALSE);
 }
 
+/**
+ * Adds a rotation (degrees, applied z, y, x) to the script transform of the map object name,
+ * which then follows its world matrix; the transform restarts from identity
+ * unless a change is still pending this frame. Used by evt_map and battle stage objects.
+ */
 void mapObjRotate(const char* name, f32 x, f32 y, f32 z) {
     MapObject* obj = mapGetMapObj(name);
     Mtx rotX, rotY, rotZ;
@@ -3512,6 +3763,10 @@ void mapObjRotate(const char* name, f32 x, f32 y, f32 z) {
     }
 }
 
+/**
+ * Adds a translation in world units to the script transform of the map object name (divided by the map's x10
+ * scale); the transform restarts from identity unless a change is still pending this frame.
+ */
 void mapObjTranslate(const char* name, f32 x, f32 y, f32 z) {
     MapObject* obj = mapGetMapObj(name);
     Mtx trans;
@@ -3527,6 +3782,10 @@ void mapObjTranslate(const char* name, f32 x, f32 y, f32 z) {
     }
 }
 
+/**
+ * Adds a scale to the script transform of the map object name;
+ * the transform restarts from identity unless a change is still pending this frame.
+ */
 void mapObjScale(const char* name, f32 x, f32 y, f32 z) {
     MapObject* obj = mapGetMapObj(name);
     Mtx scale;
@@ -3542,6 +3801,10 @@ void mapObjScale(const char* name, f32 x, f32 y, f32 z) {
     }
 }
 
+/**
+ * Adds the world-space centre of each leaf object under obj (and its later siblings when doNext) to *sum,
+ * counting them in *count.
+ */
 void mapObjGetPosSub(MapObject* obj, Vec* sum, s32* count, BOOL doNext) {
     Vec pos;
 
@@ -3557,6 +3820,10 @@ void mapObjGetPosSub(MapObject* obj, Vec* sum, s32* count, BOOL doNext) {
     }
 }
 
+/**
+ * World position of the map object name: the average centre of the leaf objects under it,
+ * or the origin if it does not exist. Used by evt_map, evt_shop, evt_movefloor and others.
+ */
 void mapObjGetPos(const char* name, Vec* pos) {
     s32 count = 0;
     Vec sum = {0.0f, 0.0f, 0.0f};
@@ -3570,6 +3837,7 @@ void mapObjGetPos(const char* name, Vec* pos) {
     VECScale(&sum, pos, 1.0f / count);
 }
 
+/** Sets the active map's fog type (index into fog_type), start, end and colour; mapFogOn turns it on. */
 void mapSetFog(s32 type, f32 start, f32 end, GXColor color) {
     MapWork* wp = &mapWork[activeGroup];
 
@@ -3579,6 +3847,7 @@ void mapSetFog(s32 type, f32 start, f32 end, GXColor color) {
     wp->entries[0].fogColor = color;
 }
 
+/** Reads back the active map's fog type, start, end and colour. */
 void mapGetFog(s32* type, f32* start, f32* end, GXColor* color) {
     MapWork* wp = &mapWork[activeGroup];
 
@@ -3588,14 +3857,20 @@ void mapGetFog(s32* type, f32* start, f32* end, GXColor* color) {
     *color = wp->entries[0].fogColor;
 }
 
+/** Turns the active map's fog on. */
 void mapFogOn(void) {
     mapGetWork()->entries[0].flags |= MAP_ENTRY_FOG;
 }
 
+/** Turns the active map's fog off. */
 void mapFogOff(void) {
     mapGetWork()->entries[0].flags &= ~MAP_ENTRY_FOG;
 }
 
+/**
+ * Sets and enables the map-wide blend colour, which tints
+ * and fades every map object that does not opt out (flag 0x800); evt_map.
+ */
 void mapSetBlend(GXColor* color) {
     MapWork* wp = &mapWork[activeGroup];
 
@@ -3603,6 +3878,10 @@ void mapSetBlend(GXColor* color) {
     wp->entries[0].flags |= MAP_ENTRY_BLEND;
 }
 
+/**
+ * Sets and enables the second map-wide blend colour, applied like mapSetBlend to objects without flag 0x1000;
+ * evt_map.
+ */
 void mapSetBlend2(GXColor* color) {
     MapWork* wp = &mapWork[activeGroup];
 
@@ -3610,6 +3889,7 @@ void mapSetBlend2(GXColor* color) {
     wp->entries[0].flags |= MAP_ENTRY_BLEND2;
 }
 
+/** The map-wide blend colour, or white when it is off. */
 void mapGetBlend(GXColor* color) {
     MapWork* wp = &mapWork[activeGroup];
 
@@ -3620,6 +3900,7 @@ void mapGetBlend(GXColor* color) {
     }
 }
 
+/** The second map-wide blend colour, or white when it is off. */
 void mapGetBlend2(GXColor* color) {
     MapWork* wp = &mapWork[activeGroup];
 
@@ -3630,14 +3911,20 @@ void mapGetBlend2(GXColor* color) {
     }
 }
 
+/** Turns the map-wide blend colour off. */
 void mapBlendOff(void) {
     mapGetWork()->entries[0].flags &= ~MAP_ENTRY_BLEND;
 }
 
+/** Turns the second map-wide blend colour off. */
 void mapBlendOff2(void) {
     mapGetWork()->entries[0].flags &= ~MAP_ENTRY_BLEND2;
 }
 
+/**
+ * Tints the map object name by color, alpha included (flag 0x40);
+ * objects with alpha below 255 draw translucent and at 0 not at all.
+ */
 void mapObjSetColor(const char* name, GXColor* color) {
     MapObject* obj = mapGetMapObj(name);
 
@@ -3647,6 +3934,7 @@ void mapObjSetColor(const char* name, GXColor* color) {
     }
 }
 
+/** Sets the tint colour and flag 0x40 on obj, its subtree and, when doNext, its later siblings. */
 void setColor(MapObject* obj, GXColor color, BOOL doNext) {
     if (obj) {
         obj->color = color;
@@ -3660,19 +3948,27 @@ void setColor(MapObject* obj, GXColor color, BOOL doNext) {
     }
 }
 
+/** Tints the map object name and everything under it by color (see mapObjSetColor). */
 void mapGrpSetColor(const char* name, GXColor color) {
     setColor(mapGetMapObj(name), color, FALSE);
 }
 
+/** Stores the texture for the projected texture stage of objects with flag 0x400; no callers in the tree. */
 void mapSetProjTexObj(GXTexObj* obj, void* imgRef) {
     projTexObj = *obj;
     projTexImgRef = imgRef;
 }
 
+/** Stores the projection matrix for the projected texture stage of objects with flag 0x400; no callers in the tree. */
 void mapSetProjMtx(Mtx mtx) {
     MTXCopy(mtx, projMtx);
 }
 
+/**
+ * Prepares a cubic spline through the n points pts for spline_getvalue:
+ * t gets each point's parameter (cumulative distance normalised to 0..1) and out the second-derivative table.
+ * Used by evt_sub.
+ */
 void spline_maketable(s32 n, Vec* pts, f32* t, Vec* out) {
     f32* h;
     Vec* w;
@@ -3736,6 +4032,10 @@ void spline_maketable(s32 n, Vec* pts, f32* t, Vec* out) {
     _mapFree(h);
 }
 
+/**
+ * Point at parameter t (0..1) on the spline through the n points pts,
+ * from the ts and tbl tables of spline_maketable; straight line for two points.
+ */
 void spline_getvalue(Vec* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl) {
     s32 lo;
     s32 hi;
@@ -3771,6 +4071,10 @@ void spline_getvalue(Vec* out, f32 t, s32 n, Vec* pts, f32* ts, Vec* tbl) {
     out->z = pts[lo].z + u * ((pts[lo + 1].z - pts[lo].z) / h - h * (2.0f * tbl[lo].z + tbl[lo + 1].z) + u * (3.0f * tbl[lo].z + u * (tbl[lo + 1].z - tbl[lo].z) / h));
 }
 
+/**
+ * Same translucency test as mapObjIsTranslucent, for animdrv models:
+ * TRUE when the model colour (flag 0x40), material colour or a map-wide blend colour is not fully opaque.
+ */
 BOOL mapTestXLU(u32 flags, GXColor* color, GXColor* matColor) {
     if ((flags & MAP_OBJ_FLAG_COLOR) && color->a != 0xFF) {
         return TRUE;
@@ -3787,26 +4091,39 @@ BOOL mapTestXLU(u32 flags, GXColor* color, GXColor* matColor) {
     return FALSE;
 }
 
+/**
+ * Installs callback in slot index of the active map's TEV callbacks;
+ * objects or models whose flags carry that index in bits 24-27 get extra TEV stages from it (eff_mahojin uses
+ * 10, unit_mario 11).
+ */
 void mapSetTevCallback(s32 index, MapTevCallback callback) {
     mapGetWork()->entries[0].tevCallbacks[index] = callback;
 }
 
+/** Turns on the flash colour of the map object name: its tint colour is added on top of its texture (flag 0x100000). */
 void mapObjFlushOn(const char* name) {
     mapObjFlagOn(name, MAP_OBJ_FLAG_FLUSH);
 }
 
+/** Turns off the flash colour of the map object name. */
 void mapObjFlushOff(const char* name) {
     mapObjFlagOff(name, MAP_OBJ_FLAG_FLUSH);
 }
 
+/** Turns on the flash colour of the map object name and everything under it. */
 void mapGrpFlushOn(const char* name) {
     mapGrpFlagOn(name, MAP_OBJ_FLAG_FLUSH);
 }
 
+/** Turns off the flash colour of the map object name and everything under it. */
 void mapGrpFlushOff(const char* name) {
     mapGrpFlagOff(name, MAP_OBJ_FLAG_FLUSH);
 }
 
+/**
+ * Sets the flash colour of the map object name (stored as its tint colour,
+ * with the tint flag cleared so it does not also tint).
+ */
 void mapObjSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a) {
     GXColor color = {0};
 
@@ -3819,11 +4136,13 @@ void mapObjSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a) {
     mapObjFlagOff(name, MAP_OBJ_FLAG_COLOR);
 }
 
+/** Sets the flash colour of the map object name and everything under it, without enabling the tint. */
 void mapGrpSetFlushColor(const char* name, u8 r, u8 g, u8 b, u8 a) {
     mapGrpSetColor(name, (GXColor){r, g, b, a});
     mapGrpFlagOff(name, MAP_OBJ_FLAG_COLOR);
 }
 
+/** Reads the flash (tint) colour of the map object name, logging a map error if it does not exist. */
 void mapObjGetFlushColor(const char* name, u8* r, u8* g, u8* b, u8* a) {
     MapObject* obj = mapGetMapObj(name);
 

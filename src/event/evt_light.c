@@ -8,6 +8,7 @@
 #include "mario/mario_party.h"
 #include "party.h"
 
+/** BOOL on */
 // BOOL on
 USER_FUNC(evt_light_charalight_all_onoff) {
     s32 i;
@@ -24,6 +25,7 @@ USER_FUNC(evt_light_charalight_all_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** BOOL on */
 // BOOL on
 USER_FUNC(evt_light_mario_lighting_onoff) {
     BOOL on;
@@ -43,6 +45,7 @@ USER_FUNC(evt_light_mario_lighting_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** BOOL on */
 // BOOL on
 USER_FUNC(evt_light_party_lighting_onoff) {
     BOOL on;
@@ -58,6 +61,7 @@ USER_FUNC(evt_light_party_lighting_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** BOOL on, const char* npcName */
 // BOOL on, const char* npcName
 USER_FUNC(evt_light_npc_lighting_onoff) {
     EvtWord* args = event->args;
@@ -74,6 +78,7 @@ USER_FUNC(evt_light_npc_lighting_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** const char* lightName, const char* mapobjName, s32 mode */
 // const char* lightName, const char* mapobjName, s32 mode
 USER_FUNC(evt_light_bind_mapobj) {
     EvtWord* args = event->args;

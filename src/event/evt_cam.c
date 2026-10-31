@@ -14,6 +14,7 @@
 #include <math.h>
 #include "cam_shift.h"
 
+/** CameraId id, BOOL on */
 // CameraId id, BOOL on
 USER_FUNC(evt_cam_ctrl_onoff) {
     EvtWord* args = event->args;
@@ -27,6 +28,7 @@ USER_FUNC(evt_cam_ctrl_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the eye position of camera args[0] in the float variables args[1..3]. */
 USER_FUNC(evt_cam_get_pos) {
     EvtWord* args = event->args;
     CameraEntry* camera = camGetPtr(evtGetValue(event, args[0]));
@@ -37,6 +39,7 @@ USER_FUNC(evt_cam_get_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the look-at point of camera args[0] in the float variables args[1..3]. */
 USER_FUNC(evt_cam_get_at) {
     EvtWord* args = event->args;
     CameraEntry* camera = camGetPtr(evtGetValue(event, args[0]));
@@ -47,6 +50,7 @@ USER_FUNC(evt_cam_get_at) {
     return EVT_RETURN_DONE;
 }
 
+/** CameraId id, f32 x, f32 y, s32 msec */
 // CameraId id, f32 x, f32 y, s32 msec
 USER_FUNC(evt_cam_shake) {
     EvtWord* args = event->args;
@@ -121,6 +125,7 @@ USER_FUNC(evt_cam_shake) {
     return EVT_RETURN_BLOCK;
 }
 
+/** s32 percent, s32 msec, s32 dist, s32 curve */
 // s32 percent, s32 msec, s32 dist, s32 curve
 USER_FUNC(evt_cam3d_evt_zoom_in) {
     EvtWord* args = event->args;
@@ -151,6 +156,7 @@ USER_FUNC(evt_cam3d_evt_zoom_in) {
     return EVT_RETURN_DONE;
 }
 
+/** s32 x, s32 y, s32 z, s32 percent, s32 msec, s32 curve */
 // s32 x, s32 y, s32 z, s32 percent, s32 msec, s32 curve
 USER_FUNC(evt_cam3d_evt_set_at) {
     EvtWord* args = event->args;
@@ -183,6 +189,7 @@ USER_FUNC(evt_cam3d_evt_set_at) {
     return EVT_RETURN_DONE;
 }
 
+/** s32 posX, posY, posZ, atX, atY, atZ, msec, curve */
 // s32 posX, posY, posZ, atX, atY, atZ, msec, curve
 USER_FUNC(evt_cam3d_evt_set) {
     EvtWord* args = event->args;
@@ -213,6 +220,7 @@ USER_FUNC(evt_cam3d_evt_set) {
     return EVT_RETURN_DONE;
 }
 
+/** s32 posX, posY, posZ (relative to at), atX, atY, atZ (relative to mario), msec, curve */
 // s32 posX, posY, posZ (relative to at), atX, atY, atZ (relative to mario), msec, curve
 USER_FUNC(evt_cam3d_evt_set_rel) {
     EvtWord* args = event->args;
@@ -259,6 +267,7 @@ USER_FUNC(evt_cam3d_evt_set_rel) {
     return EVT_RETURN_DONE;
 }
 
+/** const char* npc, s32 posX, posY, posZ, atX, atY, atZ, msec, curve */
 // const char* npc, s32 posX, posY, posZ, atX, atY, atZ, msec, curve
 USER_FUNC(evt_cam3d_evt_set_npc_rel) {
     EvtWord* args = event->args;
@@ -296,6 +305,7 @@ USER_FUNC(evt_cam3d_evt_set_npc_rel) {
     return EVT_RETURN_DONE;
 }
 
+/** s32 posX, posY, posZ, atX, atY, atZ (rotated by camera yaw), msec, curve */
 // s32 posX, posY, posZ, atX, atY, atZ (rotated by camera yaw), msec, curve
 USER_FUNC(evt_cam3d_evt_set_rel_dir) {
     EvtWord* args = event->args;
@@ -342,6 +352,7 @@ static void evt_cam_debug_print(f32 a) {
     OSReport("%f%f%f%f%f%f%d%s", a / 100.0f);
 }
 
+/** s32 msec, s32 curve */
 // s32 msec, s32 curve
 USER_FUNC(evt_cam3d_evt_off) {
     EvtWord* args = event->args;
@@ -360,6 +371,7 @@ USER_FUNC(evt_cam3d_evt_off) {
     return EVT_RETURN_DONE;
 }
 
+/** BOOL on */
 // BOOL on
 USER_FUNC(evt_cam3d_road_shift_onoff) {
     s32 on = evtGetValue(event, *event->args);
@@ -373,6 +385,7 @@ USER_FUNC(evt_cam3d_road_shift_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** s32 x, s32 y, s32 z, s32 dolly, s32 msec, s32 curve */
 // s32 x, s32 y, s32 z, s32 dolly, s32 msec, s32 curve
 USER_FUNC(evt_cam3d_evt_set_xyz) {
     EvtWord* args = event->args;
@@ -397,6 +410,7 @@ USER_FUNC(evt_cam3d_evt_set_xyz) {
     return EVT_RETURN_DONE;
 }
 
+/** s32 msec, s32 curve */
 // s32 msec, s32 curve
 USER_FUNC(evt_cam3d_evt_xyz_off) {
     EvtWord* args = event->args;
@@ -415,6 +429,7 @@ USER_FUNC(evt_cam3d_evt_xyz_off) {
     return EVT_RETURN_DONE;
 }
 
+/** f32 x, f32 y, f32 z, out f32 shift */
 // f32 x, f32 y, f32 z, out f32 shift
 USER_FUNC(evt_cam3d_get_shift) {
     EvtWord* args = event->args;
@@ -443,6 +458,10 @@ USER_FUNC(evt_cam3d_get_shift) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Pins the 3D event camera where it is now: stored and preset eye/target become the current ones
+ * and a zero-length move (state 3) starts, so later event moves begin from here.
+ */
 USER_FUNC(evt_cam3d_evt_set_now) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
 
@@ -457,6 +476,7 @@ USER_FUNC(evt_cam3d_evt_set_now) {
     return EVT_RETURN_DONE;
 }
 
+/** f32 x, f32 y, f32 z, f32 w, out f32 posX, posY, posZ, atX, atY, atZ */
 // f32 x, f32 y, f32 z, f32 w, out f32 posX, posY, posZ, atX, atY, atZ
 USER_FUNC(evt_cam3d_event_from_road) {
     EvtWord* args = event->args;
@@ -477,6 +497,10 @@ USER_FUNC(evt_cam3d_event_from_road) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Re-centres the 3D field camera on Mario's current position and resets the camera road and camera shift,
+ * so it snaps to him instead of easing over from its old spot.
+ */
 USER_FUNC(evt_cam_road_reset) {
     MarioWork* mario = marioGetPtr();
     CameraEntry* camera = camGetPtr(CAMERA_3D);
@@ -494,6 +518,7 @@ USER_FUNC(evt_cam_road_reset) {
     return EVT_RETURN_DONE;
 }
 
+/** f32 x, f32 y, f32 z */
 // f32 x, f32 y, f32 z
 USER_FUNC(evt_cam_road_reset2) {
     EvtWord* args = event->args;
@@ -520,6 +545,7 @@ USER_FUNC(evt_cam_road_reset2) {
     return EVT_RETURN_DONE;
 }
 
+/** Clears the camera shift offset of the 3D field camera (camShiftReset). */
 USER_FUNC(evt_cam_shift_reset) {
     marioGetPtr();
     camGetPtr(CAMERA_3D);
@@ -527,6 +553,7 @@ USER_FUNC(evt_cam_shift_reset) {
     return EVT_RETURN_DONE;
 }
 
+/** BOOL ortho, CameraId id */
 // BOOL ortho, CameraId id
 USER_FUNC(evt_cam_type_change) {
     EvtWord* args = event->args;
@@ -541,6 +568,7 @@ USER_FUNC(evt_cam_type_change) {
     return EVT_RETURN_DONE;
 }
 
+/** BOOL on, BOOL flag */
 // BOOL on, BOOL flag
 USER_FUNC(evt_cam_letter_box_onoff) {
     EvtWord* args = event->args;
@@ -565,6 +593,7 @@ USER_FUNC(evt_cam_letter_box_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** BOOL disable */
 // BOOL disable
 USER_FUNC(evt_cam_letter_box_disable) {
     s32 disable = evtGetValue(event, *event->args);
@@ -580,6 +609,7 @@ USER_FUNC(evt_cam_letter_box_disable) {
     return EVT_RETURN_DONE;
 }
 
+/** Blocks the script until the 2D camera's letterbox bars are on and fully in (top 49, bottom 44). */
 USER_FUNC(evt_cam_letter_box_wait) {
     CameraEntry* camera = camGetPtr(CAMERA_2D);
 
@@ -589,6 +619,7 @@ USER_FUNC(evt_cam_letter_box_wait) {
     return EVT_RETURN_BLOCK;
 }
 
+/** CameraId id */
 // CameraId id
 USER_FUNC(evt_cam_letter_box_camid) {
     CameraId id = evtGetValue(event, *event->args);

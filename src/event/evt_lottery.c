@@ -209,11 +209,16 @@ USER_FUNC(evt_lottery_flag) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes today's drawn number to args[0] (-1 after a clock error). */
 USER_FUNC(evt_lottery_todaynum) {
     evtSetValue(event, event->args[0], gp->mLotteryInfo.todayNum);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Writes TRUE to args[0] when the console clock looks set backwards (flag 4, or now before any stored time),
+ * unless a ticket was bought under that error on an earlier day.
+ */
 USER_FUNC(evt_lottery_error_check) {
     OSCalendarTime a, b;
     // FAKE: g is a spare copy of gp; &gp->mLotteryInfo changes the object

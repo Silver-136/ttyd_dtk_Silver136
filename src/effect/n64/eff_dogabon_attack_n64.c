@@ -296,6 +296,7 @@ void effDogabonAttackMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 1, (DispCallback)effDogabonAttackDisp, effect);
 }
 
+/** Draws the 25 pieces with texture 140, scaled by each piece's scaleX/scaleY. */
 void effDogabonAttackDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffDogabonAttackN64Work* work;

@@ -58,24 +58,40 @@ EvtWord eki_03_init_evt[470];
 EvtWord eki_03_init_evt[471];
 #endif
 
+/**
+ * Door animation callback, closing for the w_bero_1 exit to eki_01:
+ * rotates map object "door_1" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(w1_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the w_bero_1 exit to eki_01:
+ * rotates map object "door_1" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(w1_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, closing for the w_bero_2 exit to eki_04:
+ * rotates map object "door_2" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(w2_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_2"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the w_bero_2 exit to eki_04:
+ * rotates map object "door_2" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(w2_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door_2"), 0, LW(0), 0)
@@ -451,6 +467,12 @@ static void sun_tev(MapTevCallbackInfo* info) {
     info->texMap = texMap + 1;
 }
 
+/**
+ * Per-frame script helper (started inline from the map init, never finishes):
+ * keeps the screen glare filter on the sun.
+ * Switches the glare off when the sun's screen rectangle is off screen or empty,
+ * otherwise sets the glare box around it (50 pixels margin) and its depth limit.
+ */
 static USER_FUNC(test_glare) {
     MapObject* sun = mapGetMapObj("sun");
     u16* rect;

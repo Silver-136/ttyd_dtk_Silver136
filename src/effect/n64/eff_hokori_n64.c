@@ -86,6 +86,10 @@ EffectEntry* effHokoriN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Counts the life down (fading over the last 24 frames) and grows each puff;
+ * types 0 and 1 also speed the growth up.
+ */
 void effHokoriMain(EffectEntry* effect) {
     EffHokoriN64Work* work = effect->userdata;
     Vec position;
@@ -127,6 +131,10 @@ void effHokoriMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effHokoriDisp, effect);
 }
 
+/**
+ * Draws each puff as a camera-facing sprite (texture 21 for type 0, 22 otherwise):
+ * tall and square ones alternate for types 0-1, small ones for other types.
+ */
 void effHokoriDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffHokoriN64Work* work;

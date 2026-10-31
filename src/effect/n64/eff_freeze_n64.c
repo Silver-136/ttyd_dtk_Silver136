@@ -45,6 +45,11 @@ static effN64Vtx size32x64_tex32x64_vtx[] = {
 void effFreezeMain(EffectEntry* effect);
 void effFreezeDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns an ice block around (x, y, z) for lifetime frames (0 = until soft-deleted),
+ * with a snow-dust effect attached.
+ * battle_seq.c spawns it with life 1 above units recovering from freeze; event scripts via evt_eff.
+ */
 EffectEntry* effFreezeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffFreezeN64Work* work;
@@ -81,6 +86,11 @@ EffectEntry* effFreezeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 
     return effect;
 }
 
+/**
+ * Blinks the glint frame at random times, puffs a vapour effect every 16 frames
+ * and keeps the snow dust on the block.
+ * When the life ends it shatters into ten glass shards and deletes the dust and the block.
+ */
 void effFreezeMain(EffectEntry* effect) {
     s32 lifetime;
     EffFreezeN64Work* work = effect->userdata;
@@ -142,6 +152,7 @@ void effFreezeMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effFreezeDisp, effect);
 }
 
+/** Draws the ice block as a camera-facing 32x64 sprite from texture 138, using texIdx to choose the glint frame. */
 void effFreezeDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffFreezeN64Work* work;

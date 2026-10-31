@@ -204,6 +204,11 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_frankli", "c_kuri_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kUntattleable, 0, pose_table},
 };
 
+/**
+ * Init event of Professor Frankly in the action-command tutorial:
+ * installs phase, attack, damage and confusion events,
+ * forbids movement and starts the lesson state (unit work 1) at 0.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))
@@ -217,6 +222,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of Professor Frankly in the tutorial: runs the default damage handling. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -224,6 +230,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event that scripts the action-command lesson: unit work 1 is the step (0 to 9).
+ * Each step waits for the right phase and then has Frankly talk (mac_0_b_t2_000 to 023) with the camera framed
+ * on Mario or Goombella, then moves to the next step;
+ * the last steps repeat prompts depending on how many tries the player has made.
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
@@ -426,16 +438,27 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/** Attack event of Professor Frankly: does nothing (he never attacks). */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of Professor Frankly: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Mario's Jump in the Action Command tutorial, the attack script of _lec_weapon_jump (data table tag 67):
+ * approaches
+ * the target with Professor Frankly's explanation (mac_0_b_t2_001),
+ * freezes just before landing for his prompt to
+ * press A (mac_0_b_t2_002), stores the timing result in the lecture's unit work 2 and, on a success,
+ * stomps a second
+ * time; at the end it moves the lecture progress on to 2.
+ */
 EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -635,6 +658,13 @@ EVT_BEGIN(lecAttackEvent_Jump)
     RETURN
 EVT_END()
 
+/**
+ * Mario's Hammer in the Action Command tutorial, the attack script of _lec_weapon_hammer (data table tag 68):
+ * Professor Frankly prompts the player to tilt and hold the stick left (mac_0_b_t2_008, 009) and to release it
+ * when
+ * the light comes on (mac_0_b_t2_010); the result goes to the lecture's unit work 2
+ * and the progress moves on to 6.
+ */
 EVT_BEGIN(lecAttackEvent_Hammer)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -830,6 +860,11 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     RETURN
 EVT_END()
 
+/**
+ * End of the action command tutorial battle: Mario returns to his idle pose, the camera zooms on Frankly,
+ * the status window is hidden and Frankly says his closing line (mac_0_b_t2_024),
+ * then a battle flag (32) is set to end the fight.
+ */
 EVT_BEGIN(lecture_end_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)

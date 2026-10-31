@@ -779,6 +779,15 @@ static BattleUnitKindPart parts[] = {
     {19, "btl_un_honeduka", "c_hone", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence_mode1, &defence_attr_mode1, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_fly_bone},
 };
 
+/**
+ * Init event of Cortez: allocates the audience-drain work area and installs his wait, phase,
+ * attack (attack_event_mode1), damage and confusion events.
+ * It clears unit work 5 (his form: 0 the first form, 1 to 3 the second form's upper, middle and lower stance,
+ * 4 the third form), 6 (the mode 1 attack counter), 9 (audience drains done),
+ * 10 (bone rain charged) and 11 (turns the ribs stay open), and sets 7 (hit since the last turn) to 1.
+ * Then it spawns his four weapons, the claw, rapier, sword and saber (kept in unit work 3, 4, 1 and 2),
+ * each at its own offset around him with his unit id in its unit work 0.
+ */
 static EVT_BEGIN(init_event)
     CALL(_make_cortez_work_area, UNIT_ID_SELF)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
@@ -838,6 +847,14 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of Cortez.
+ * In the first form (unit work 5 = 0) it plays the default damage reaction,
+ * with the bone-pile pose table when the bone pile (part 4) was hit.
+ * In the later forms a hit on the head (part 1) gets the default reaction,
+ * a hit on the rib cage (part 2) first sets unit work 7 (hit since the last turn)
+ * and 11 = 2 (ribs open for two turns), and a hit on the bone pile runs mode2_honeduka_damage_event.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -867,6 +884,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's damage event for the counterattack (action command) phase:
+ * when he is hit while swinging, he recovers into his idle pose and dives back to his home position,
+ * with a different path depending on the damage code, then continues in the normal damage flow.
+ */
 EVT_BEGIN(cortez_ac_counter_damage_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
     IF_INT_LESS(LW(0), 4)
@@ -893,6 +915,12 @@ EVT_BEGIN(cortez_ac_counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event (tags 37 and 39) run when an attacker is hurt by Cortez's top or front spikes:
+ * on the bone pile (part 4) it shows the toge_flush spike flash at its hit position.
+ * On any other part it plays the rib counter sound and the rib-snap pose for his stance (KRT_1C_3 to KRT_3C_3),
+ * clears the rib-open count (unit work 11) and resets his pose table.
+ */
 static EVT_BEGIN(avoid_thorn_event)
     CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), 4)
@@ -918,6 +946,14 @@ static EVT_BEGIN(avoid_thorn_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of Cortez: after the enemy phase it rolls a new weapon formation (unit work 8, 0 to 2,
+ * read by cortez_weapon_get_home_height).
+ * Before the player's turn, in the second form's middle or lower stance (unit work 5 = 2 or 3)
+ * and not hit since the last turn (unit work 7, cleared here),
+ * he closes his ribs if open and rises back to the upper stance (5 = 1).
+ * Otherwise it counts down the turns the ribs stay open (unit work 11) and closes them when it reaches 0.
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108869)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -991,6 +1027,11 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's attack chooser for mode 1 (first phase):
+ * picks between the normal sword stab (at1_normal_attack)
+ * and the flurry slash (at1_midaregiri_attack) from a counter in unit work 6 so the order cycles.
+ */
 EVT_BEGIN(attack_event_mode1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_ATTACK_CYCLE, LW(0))
     IF_INT_LESS(LW(0), 3)
@@ -1013,6 +1054,13 @@ EVT_BEGIN(attack_event_mode1)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's attack chooser for the second form: if the bone rain is charged (unit work 10),
+ * throws it (at2_hone_rain_attack_event);
+ * in the middle or lower stance (unit work 5 = 2 or 3) he always charges it (at2_hone_charge_event),
+ * otherwise he chooses between the charge (25) and the head-bat attack (at2_head_bat_event, 75) by weighted
+ * lots.
+ */
 EVT_BEGIN(attack_event_mode2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1148,6 +1196,11 @@ EVT_BEGIN(at2_hone_charge_event)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's bone rain (mode 2): declares an attack on all enemies,
+ * throws his bones into the air and has them fall on the player's side in a shower (spawned through
+ * _bone_rain_event), then clears the pending flag.
+ */
 EVT_BEGIN(at2_hone_rain_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_CHARGED, 0)
     SET_VALUE(LW(12), PTR(&weapon_cortez_mode2_bone_attack))
@@ -1337,6 +1390,10 @@ EVT_BEGIN(at2_hone_rain_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * One falling bone of the bone rain: starts after a random delay, picks a random start above Cortez,
+ * flies to a random spot around the target and spins as it falls, then lands and damages.
+ */
 EVT_BEGIN(_bone_rain_event)
     CALL(evt_sub_random, 20, LW(10))
     ADD(LW(10), 20)
@@ -1371,6 +1428,11 @@ EVT_BEGIN(_bone_rain_event)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's attack chooser for mode 3 (final phase):
+ * he may first drain the audience (attack_audience_event) when his HP is low,
+ * and otherwise bites the target (at3_kamitsuki_attack).
+ */
 EVT_BEGIN(attack_event_mode3)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_AUDIENCE_ATTACK_COUNT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1456,6 +1518,10 @@ static EVT_BEGIN(attack_audience_event)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's biting attack (mode 3, kamitsuki): lunges at a target with a spinning dive and bite sounds,
+ * and chomps for the weapon's damage.
+ */
 EVT_BEGIN(at3_kamitsuki_attack)
     SET_VALUE(LW(12), PTR(&weapon_cortez_mode3_kamitsuki_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1530,6 +1596,10 @@ EVT_BEGIN(at3_kamitsuki_attack)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's normal sword stab (mode 1): raises the sword, then thrusts it twice with sword-stick sounds,
+ * with a different pose for targets at the front guard than at the back (_check_zenei_kouei).
+ */
 EVT_BEGIN(at1_normal_attack)
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(12), PTR(&weapon_cortez_normal_front_attack))
@@ -1600,6 +1670,11 @@ EVT_BEGIN(at1_normal_attack)
     RETURN
 EVT_END()
 
+/**
+ * Cortez's flurry slash (mode 1, midaregiri): shakes his sword with three swishes
+ * then cuts through the target with a multi-hit slash,
+ * with a different pose for the front and back guard targets.
+ */
 EVT_BEGIN(at1_midaregiri_attack)
     SET_VALUE(LW(12), PTR(&weapon_cortez_midaregiri_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1691,6 +1766,7 @@ EVT_BEGIN(at1_midaregiri_attack)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of Cortez: sets the idle pose from his current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -1740,6 +1816,12 @@ BattleUnitSetup entry_saber = {
     NULL, // itemDropTable
 };
 
+/**
+ * Re-applies Cortez's pose table, defence tables,
+ * hit offsets and kiss hit offset for his current form and stance (unit work 5),
+ * whether the ribs are open (unit work 11) and whether the bone rain is charged (unit work 10), after a form,
+ * stance or rib change.
+ */
 EVT_BEGIN(cortez_reset_pose_table)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
     SWITCH(LW(0))
@@ -2288,6 +2370,11 @@ static USER_FUNC(_check_zenei_kouei) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for the audience drain (runs until finished):
+ * resets the 100 audience seat markers, waits for all of them to settle,
+ * then deletes each seat's audience member and subtracts it from the audience target count.
+ */
 USER_FUNC(_cortez_recovery_audience) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -2346,6 +2433,10 @@ USER_FUNC(_cortez_recovery_audience) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: removes every spirit effect Cortez's audience drain created
+ * and writes the number of audience members he collected (work->count) to args[1].
+ */
 USER_FUNC(_cortez_drain_energy) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -2366,6 +2457,12 @@ USER_FUNC(_cortez_drain_energy) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for the audience drain (runs until finished):
+ * flags each audience member of the 100 seats as removed, plays their scared animation,
+ * sends a spirit effect from each seat to Cortez and a cloud at his position,
+ * then tips each member back by 90 degrees over 30 frames.
+ */
 USER_FUNC(_cortez_collect_energy) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -2457,6 +2554,10 @@ USER_FUNC(_cortez_collect_energy) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: scans the 100 audience seats (10 rows of 10) and records
+ * which are occupied in Cortez's work area; writes the number of occupied seats to args[1].
+ */
 USER_FUNC(_cortez_check_drain_audience) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -2484,6 +2585,7 @@ USER_FUNC(_cortez_check_drain_audience) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: writes the current volume of sound effect args[0] to args[1]. */
 // Descriptive name (not in the symbol maps); placeholder unk_muj_0000652c, JP muj .text+0x6468. See docs/NAME_PROVENANCE.md.
 USER_FUNC(_cortez_get_sfx_vol) {
     EvtWord* args = event->args;
@@ -2494,6 +2596,10 @@ USER_FUNC(_cortez_get_sfx_vol) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: allocates Cortez's work area (CortezWork, used to track the audience drain)
+ * and stores it in the unit's countersetWeapon pointer.
+ */
 USER_FUNC(_make_cortez_work_area) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

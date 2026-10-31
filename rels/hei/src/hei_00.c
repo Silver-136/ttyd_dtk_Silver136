@@ -96,6 +96,10 @@ static EvtWord epilogue_npc_entry[30];
 static EvtWord epilogue_evt[90];
 EvtWord hei_00_init_evt[297];
 
+/**
+ * Script helper: switches on the projected-texture material flag for Mario's three paper poses
+ * and his partner's pose, so the Hooktail shadow texture falls on them.
+ */
 static USER_FUNC(proj_on) {
     animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[0], MAP_OBJ_FLAG_PROJ_TEX);
     animPoseSetMaterialFlagOn(marioGetPtr()->paperAnimGroupId[1], MAP_OBJ_FLAG_PROJ_TEX);
@@ -104,6 +108,10 @@ static USER_FUNC(proj_on) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: switches the projected-texture material flag off again for Mario's three paper poses
+ * and his partner's pose.
+ */
 static USER_FUNC(proj_off) {
     animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[0], MAP_OBJ_FLAG_PROJ_TEX);
     animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[1], MAP_OBJ_FLAG_PROJ_TEX);
@@ -112,6 +120,10 @@ static USER_FUNC(proj_off) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Display callback for the Hooktail shadow: renders the hidden shadow NPC (Hooktail, seen from straight above)
+ * into a 608x480 texture that the map then projects onto the ground.
+ */
 // Render the shadow actor into the projection texture, then restore the caller's view and GX state.
 void make_gonbaba_projection(CameraId camera, void* param) {
     GonbabaProj* wp = param;
@@ -154,6 +166,11 @@ void make_gonbaba_projection(CameraId camera, void* param) {
     GXSetScissor(left, top, width, height);
 }
 
+/**
+ * Script helper: allocates the shadow texture (stored in the event's userdata)
+ * and registers make_gonbaba_projection as a shadow-camera draw callback;
+ * blocks for the rest of the event's life.
+ */
 // Keep registering the shadow capture while this blocking event remains alive.
 USER_FUNC(make_gonbaba_projection_evt) {
     GonbabaProj* wp;
@@ -170,6 +187,10 @@ USER_FUNC(make_gonbaba_projection_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: builds the projection matrix for the flying Hooktail shadow from args[0..2] (light position)
+ * and args[3..5] (target point) and hands it to the map as the projected-texture matrix.
+ */
 static USER_FUNC(proj_mtx) {
     EvtWord* args = event->args;
     f32 px = evtGetFloat(event, args[0]);
@@ -197,6 +218,10 @@ static USER_FUNC(proj_mtx) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: shakes the 3D camera each frame by toggling its view offset in z every three frames;
+ * runs while Hooktail flies over.
+ */
 USER_FUNC(shake) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
 
@@ -217,6 +242,7 @@ USER_FUNC(shake) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: puts the camera's z view offset back to 0 after the flyover shake. */
 USER_FUNC(shake_reset) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
 
@@ -224,6 +250,10 @@ USER_FUNC(shake_reset) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Starts the Hooktail shadow capture; run as a separate event by evt_gonbaba_shadow so the texture exists
+ * while the shadow moves.
+ */
 EVT_BEGIN(make_proj_evt)
     CALL(make_gonbaba_projection_evt)
     RETURN
@@ -310,6 +340,10 @@ USER_FUNC(cam_test) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: same as cam_test but with the camera 270 units back and a higher road camera;
+ * used at the end of the flyover.
+ */
 USER_FUNC(cam_test2) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -387,6 +421,13 @@ static EVT_BEGIN(first_evt)
     RETURN
 EVT_END()
 
+/**
+ * Hooktail's flyover cutscene.
+ * Waits until Mario walks east of x=-100, then freezes him:
+ * Hooktail roars off-screen, Mario and his partner react, the shadow passes over,
+ * Hooktail's sprite flies in from the back and out again, and the partner comments.
+ * Sets the story progress to "The Shadow of Hooktail".
+ */
 EVT_BEGIN(gonbaba_evt)
     LABEL(1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -634,6 +675,10 @@ static BeroEntry e3_bero[] = {
     {0},
 };
 
+/**
+ * Ramps the camera shake up from 0 to 0.010 over 30 steps (the rumble when the hidden pipe starts to rise),
+ * then ends with a minimal shake.
+ */
 static EVT_BEGIN(cam_shake)
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 10, 30)
     LABEL(0)
@@ -956,6 +1001,10 @@ USER_FUNC(hei_00_mario_keyoff_check) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Map-init script: if the Sun Stone has already been placed, hides its empty socket and shows the stone model,
+ * shifting the second stone into position when the Moon Stone is placed as well.
+ */
 EVT_BEGIN(setting_sun_stone)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("taiyou_ana"), MAP_OBJ_FLAG_HIDDEN)
@@ -974,6 +1023,11 @@ static s32 itemsel_table00[] = {
     ITEM_SUN_STONE, -1,
 };
 
+/**
+ * Case script for the Sun Stone socket: lets Mario pick the Sun Stone from his key items,
+ * removes it from the pouch, shows it in the socket with a sound and message,
+ * then runs switch_evt to check whether both stones are in.
+ */
 EVT_BEGIN(sun_stone_set_event)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
         CALL(evt_mario_key_onoff, 0)
@@ -996,6 +1050,10 @@ EVT_BEGIN(sun_stone_set_event)
     RETURN
 EVT_END()
 
+/**
+ * Map-init script: if the Moon Stone has already been placed, hides its empty socket and shows the stone model,
+ * shifting the second stone into position when the Sun Stone is placed as well.
+ */
 EVT_BEGIN(setting_moon_stone)
     IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 1)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tuki_ana"), MAP_OBJ_FLAG_HIDDEN)
@@ -1014,6 +1072,11 @@ static s32 itemsel_table01[] = {
     ITEM_MOON_STONE, -1,
 };
 
+/**
+ * Case script for the Moon Stone socket: lets Mario pick the Moon Stone from his key items,
+ * removes it from the pouch, shows it in the socket with a sound and message,
+ * then runs switch_evt to check whether both stones are in.
+ */
 EVT_BEGIN(moon_stone_set_event)
     IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
         CALL(evt_mario_key_onoff, 0)
@@ -1044,6 +1107,10 @@ static EVT_BEGIN(ki_data_evt_01)
     RETURN
 EVT_END()
 
+/**
+ * Reward script for the second tree (ki_02): if the item has not been taken yet,
+ * drops a Mushroom from it when Mario hits the tree.
+ */
 EVT_BEGIN(ki_data_evt_02)
     CALL(evt_item_delete_check, STRING("item_ki02"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1161,6 +1228,11 @@ static EVT_BEGIN(epilogue_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * Epilogue scene at Petal Meadows: the Chapter 1 music and ambience start,
+ * Goombella walks to the centre and says ep_37, then walks off to the right;
+ * music and ambience fade out and the map changes to nok_01.
+ */
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_bgm_scope, 0, 1)
@@ -1187,6 +1259,12 @@ static EVT_BEGIN(epilogue_evt)
     RETURN
 EVT_END()
 
+/**
+ * Petal Meadows (hei_00) map init: registers the exits (hei_13, Hooktail Castle gon_00, the pipe),
+ * starts the opening, the Hooktail flyover, the Bowser interlude or the epilogue by story progress,
+ * restores the Sun and Moon Stone sockets and the pipe, and sets up the tree rewards, Mushroom block,
+ * save block, music and kiosk pipe.
+ */
 EVT_BEGIN(hei_00_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_02_PEACH_SHALL_WE_DANCE)
         CALL(evt_mario_set_mode, 2)

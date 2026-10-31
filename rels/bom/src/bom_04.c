@@ -27,6 +27,7 @@ static TreeAccess tree_tbl[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/** Registers the map's tree access table (tree_tbl) with evt_sub_tree_access_entry so the trees can be shaken. */
 static EVT_BEGIN(evt_tree)
     SET_VALUE(LW(0), PTR(tree_tbl))
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
@@ -69,6 +70,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Init script of bom_04, the snowfield just before the village (exits to bom_03 and bom_01):
+ * sets the exits, snow, trees, music, a Star Piece,
+ * an HP Plus P badge block and clears the culling box of a wall object.
+ */
 EVT_BEGIN(bom_04_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

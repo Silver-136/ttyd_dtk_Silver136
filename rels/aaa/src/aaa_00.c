@@ -99,6 +99,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Door-swing callback for the house door: scales the animation value in LW(0) by -0.5546875 then -1.0
+ * and applies it as the S_ie_door map object's X rotation.
+ */
 static EVT_BEGIN(evt_door)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.5546875f))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -106,12 +110,18 @@ static EVT_BEGIN(evt_door)
     RETURN
 EVT_END()
 
+/** Alternate door-swing callback: scales LW(0) by -0.5 and applies it as the S_ie_door map object's Z rotation. */
 static EVT_BEGIN(evt_door2)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie_door"), 0, 0, LW(0))
     RETURN
 EVT_END()
 
+/**
+ * Wall-swing callback for the house door: rotates the S_ie_kaiten2
+ * and S_ie_kaiten1 map objects about X in opposite directions (0.75 and -0.75 times LW(0)),
+ * so the wall parts turn aside as the door opens.
+ */
 static EVT_BEGIN(evt_wall)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.75f))
     CALL(evt_mapobj_rotate, 1, STRING("S_ie_kaiten2"), LW(0), 0, 0)
@@ -125,6 +135,10 @@ static const char* ie_npc[] = {
     NULL,
 };
 
+/**
+ * Door 1 open callback: dips the BGM and ambience to 50
+ * and low-pass filters the ambience (the muffled indoor/outdoor change).
+ */
 static EVT_BEGIN(door_1_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -132,6 +146,7 @@ static EVT_BEGIN(door_1_open)
     RETURN
 EVT_END()
 
+/** Door 1 close callback: resumes the BGM and ambience from the dip and removes the ambience low-pass filter. */
 static EVT_BEGIN(door_1_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -428,6 +443,11 @@ EVT_BEGIN(evt_prologue2)
     RETURN
 EVT_END()
 
+/**
+ * Epilogue scene, first part: Mario stands in the house with Luigi, opens the door,
+ * reads a mail from Peach (the mail-received jingle and vibration), the dialogue ep_31 to ep_35 plays,
+ * Mario jumps and Luigi follows, then the map changes to gor_02.
+ */
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_END_AAA1"))
@@ -695,6 +715,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Init script for Mario's house: sets up the exits, NPCs and door,
+ * then starts the prologue (entered as "prologue" or "prologue2") or, after the final battle,
+ * the epilogue with Luigi (epilogue_evt, or epilogue_evt2 when entered as "epilogue2").
+ * Also registers the tree and grass access data.
+ */
 EVT_BEGIN(aaa_00_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
@@ -748,6 +774,7 @@ USER_FUNC(mapdraw) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Frees the mariost.tpl texture loaded by mapdraw, if any (called from _epilog). */
 void mapdelete(void) {
     if (wp != NULL && wp->tpl != NULL) {
         fileFree(wp->tpl);

@@ -72,6 +72,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Fades the room's lighting up from black over 2 seconds (map blend colour 0 to 255),
+ * then lets Mario's model ignore the blend and switches the map blend off. Spawned by the arrival cutscene.
+ */
 static EVT_BEGIN(back_light)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 2000)
     LOOP(0)

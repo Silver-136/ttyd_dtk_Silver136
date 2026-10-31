@@ -22,6 +22,7 @@
 #define MSG_BUF_SIZE 0x500
 #endif
 
+/** Message-script setup hook called at startup; empty in every release. */
 void evt_msg_init(void) {
     // empty in the retail game
 }
@@ -35,6 +36,14 @@ s32 msgWindow_Entry(const char* msg, s32 callback, s32 priority);
 // A message window's MsgWinData lives in its userdata block. Kept as a macro: an inline function changes the object.
 #define MSG_WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
 
+/**
+ * Shared body of the evt_msg_print commands.
+ * On the first call opens a message window for msg (a message id looked up with msgSearch,
+ * or literal text when flags bit 0 is set) and points its speech-bubble tail at the speaker:
+ * the NPC named by name (or the event's owner NPC), the partner ("party"), the second partner ("extparty"),
+ * Mario ("mario"), or with flags bit 1 a battle unit. evt_msg_toge/togelr settings then override the tail.
+ * Blocks until the window closes.
+ */
 s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* msg, s32 callback, EvtWord name) {
     NpcEntry* npc = NULL;
     WindowEntry* win;
@@ -153,6 +162,11 @@ s32 _evt_msg_print(EventEntry* event, BOOL isFirstCall, s32 flags, const char* m
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Opens a message window and waits until it closes.
+ * Args: flags (bit 0 literal text, bit 1 battle speaker), the message id,
+ * a window callback and the speaker (an NPC name, "party", "extparty", "mario" or 0).
+ */
 USER_FUNC(evt_msg_print) {
     EvtWord* args = event->args;
     s32 flags = evtGetValue(event, args[0]);
@@ -186,6 +200,12 @@ char* strstr(const char* s, const char* sub);
 // clang-format on
 #endif
 
+/**
+ * Prints message args[0] spoken by the current partner,
+ * with the partner's suffix appended to the id (_kur for Goombella, _nok Koops, _bom Bobbery, _yos Yoshi,
+ * _win Flurrie, _viv Vivian, _chu Ms. Mowz), so each partner gets a line of their own;
+ * no suffix with no partner out.
+ */
 USER_FUNC(evt_msg_print_party) {
     static char partyLabel[0x40];
     s32 id;
@@ -201,6 +221,10 @@ USER_FUNC(evt_msg_print_party) {
     return _evt_msg_print(event, isFirstCall, 0, partyLabel, 0, (EvtWord)"party");
 }
 
+/**
+ * Adds the current partner's version of message args[0] (id plus partner suffix, as evt_msg_print_party) to the
+ * open message window and waits until the window closes or continues.
+ */
 USER_FUNC(evt_msg_print_party_add) {
     static char partyLabel[0x40];
     s32 id;
@@ -222,6 +246,10 @@ USER_FUNC(evt_msg_print_party_add) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * In battle: prints message args[0] spoken by the active partner unit,
+ * with that partner's suffix appended to the id; does nothing if there is no partner unit.
+ */
 USER_FUNC(evt_msg_print_battle_party) {
     static char partyLabel[0x40];
     const char* msg = (const char*)evtGetValue(event, *event->args);
@@ -277,6 +305,10 @@ USER_FUNC(evt_msg_print_insert) {
     return _evt_msg_print(event, isFirstCall, flags | MSG_PRINT_DIRECT_TEXT, buf, callback, name);
 }
 
+/**
+ * Appends message args[1] (literal text when args[0] bit 0 is set) to the script's open message window,
+ * so a conversation continues in the same window, and waits until it closes or pauses.
+ */
 USER_FUNC(evt_msg_print_add) {
     EvtWord* args = event->args;
     s32 flags = evtGetValue(event, args[0]);
@@ -294,6 +326,7 @@ USER_FUNC(evt_msg_print_add) {
     return EVT_RETURN_DONE;
 }
 
+/** evt_msg_print_add with up to four printf values filled into the message first. */
 USER_FUNC(evt_msg_print_add_insert) {
     char buf[MSG_BUF_SIZE];
     s32 vals[4];
@@ -338,6 +371,7 @@ USER_FUNC(evt_msg_print_add_insert) {
 }
 
 
+/** Lets the script's paused message window carry on (after a choice, for example) and waits until it closes. */
 USER_FUNC(evt_msg_continue) {
     if (isFirstCall) {
         msgWindow_Continue(event->printWindowId);
@@ -348,6 +382,10 @@ USER_FUNC(evt_msg_continue) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Restarts the script's message window from its first page (scroll and print state reset) and waits
+ * until it closes.
+ */
 USER_FUNC(evt_msg_repeat) {
     if (isFirstCall) {
         msgWindow_Repeat(event->printWindowId);
@@ -358,11 +396,16 @@ USER_FUNC(evt_msg_repeat) {
     return EVT_RETURN_DONE;
 }
 
+/** Force-closes the message window whose tag is the message id args[0]. */
 USER_FUNC(evt_msg_close) {
     msgWindow_ForceClose((const char*)evtGetValue(event, *event->args));
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Shows a choice window (message args[1], e.g. msg_mcard_yesno; literal text when args[0] bit 0 is set),
+ * waits for the player to pick, then returns the chosen option in LW(0) (0 = first) and deletes the window.
+ */
 USER_FUNC(evt_msg_select) {
     EvtWord* args = event->args;
     s32 flags = evtGetValue(event, args[0]);
@@ -386,6 +429,11 @@ USER_FUNC(evt_msg_select) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets where the next message window's tail points:
+ * args[0] is the tail kind (1 no tail; 2 and 3 point at the X, Y, Z position in args[1]-args[3],
+ * as tail modes 7 and 2) for the window that evt_msg_print opens next.
+ */
 USER_FUNC(evt_msg_toge) {
     EvtWord* args = event->args;
     s32 mode = evtGetValue(event, args[0]);
@@ -397,6 +445,7 @@ USER_FUNC(evt_msg_toge) {
     return EVT_RETURN_DONE;
 }
 
+/** Forces tail mode 3 on the next message window; args[0] adds tail bit 4 (1), bit 8 (2) or both (3). */
 USER_FUNC(evt_msg_togelr) {
     s32 side = evtGetValue(event, *event->args);
     event->printWindowFlags |= MSG_PRINT_WIN_TOGELR;
@@ -416,11 +465,13 @@ USER_FUNC(evt_msg_togelr) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the priority of the next message window the script opens (reset to 0 after one use). */
 USER_FUNC(evt_msg_pri) {
     event->msgPriority = evtGetValue(event, *event->args);
     return EVT_RETURN_DONE;
 }
 
+/** Changes the speaker name stored in the script's open message window to args[0]. */
 USER_FUNC(evt_msg_npc) {
     const char* name = (const char*)evtGetValue(event, *event->args);
     strcpy(MSG_WIN_DATA(windowGetPointer(event->printWindowId))->speakerName, name);

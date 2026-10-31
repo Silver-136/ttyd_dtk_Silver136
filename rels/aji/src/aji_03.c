@@ -106,6 +106,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Spins the map object named in LW(10) around its Y axis, 5 degrees per frame, until GF(15) is set;
+ * used for the rotating warning beacon S_pato4 once the crane has been powered.
+ * The object is unhidden while it spins and hidden again at the end.
+ */
 EVT_BEGIN(evt_kaitentou)
     CALL(evt_mapobj_flag_onoff, 1, 0, LW(10), MAP_OBJ_FLAG_HIDDEN)
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
@@ -124,6 +129,11 @@ EVT_BEGIN(evt_kaitentou)
     RETURN
 EVT_END()
 
+/**
+ * Spins the map object named in LW(10) around its Z axis, 5 degrees per frame,
+ * until GF(15) is set (evt_sw_reinit sets it to stop all spinners);
+ * the lamp spinners (S_pato1 to 3) of the crane power switches use it.
+ */
 EVT_BEGIN(evt_kaitentou2)
     CALL(evt_mapobj_flag_onoff, 1, 0, LW(10), MAP_OBJ_FLAG_HIDDEN)
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
@@ -142,6 +152,12 @@ EVT_BEGIN(evt_kaitentou2)
     RETURN
 EVT_END()
 
+/**
+ * Swings the needle (hari) map object named in LW(10) (S_hari01 to S_hari06, started when the crane game is
+ * switched on) around its Z axis: picks random target angles up to 90 degrees (alternating sides)
+ * over 1.5 to 3 seconds each, until GF(15) is raised by a switch reset, then eases it back to 0 over one second.
+ * Guess: the needles are dial pointers on the machinery.
+ */
 static EVT_BEGIN(evt_hari)
     SET_VALUE(LW(6), LW(8))
     SET_VALUE(LW(7), LW(9))
@@ -194,6 +210,11 @@ static EVT_BEGIN(evt_hari)
     RETURN
 EVT_END()
 
+/**
+ * Opens and closes the crane's claw forever: the four claw arms (S_te_1_a/b, S_te_2_a/b) swing by 30 degrees
+ * over one second and back.
+ * GF(9) is 1 while the claw is open, so ufo_main can wait for it to be shut before lowering.
+ */
 EVT_BEGIN(ufo_hand)
     LOOP(0)
         SET_VALUE(GF(9), 1)
@@ -233,26 +254,37 @@ EVT_BEGIN(ufo_hand)
     RETURN
 EVT_END()
 
+/**
+ * Sets GF(10) to 1, the flag evt_ufo_sousaban raises while the crane is driven along X.
+ * Nothing runs this script; evt_ufo_sousaban sets GF(10) itself.
+ */
 EVT_BEGIN(move_left)
     SET_VALUE(GF(10), 1)
     RETURN
 EVT_END()
 
+/** Sets GF(10) back to 0; unused, see move_left. */
 EVT_BEGIN(move_left2)
     SET_VALUE(GF(10), 0)
     RETURN
 EVT_END()
 
+/**
+ * Sets GF(11) to 1, the flag evt_ufo_sousaban raises while the crane is driven along Z.
+ * Nothing runs this script; evt_ufo_sousaban sets GF(11) itself.
+ */
 EVT_BEGIN(move_up)
     SET_VALUE(GF(11), 1)
     RETURN
 EVT_END()
 
+/** Sets GF(11) back to 0; unused, see move_up. */
 EVT_BEGIN(move_up2)
     SET_VALUE(GF(11), 0)
     RETURN
 EVT_END()
 
+/** Closes the crane's claw (all three arm pairs rotate 30 degrees over one second) to grab a prize. */
 EVT_BEGIN(hand_success)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 3000, 1000)
     LABEL(0)
@@ -271,6 +303,10 @@ EVT_BEGIN(hand_success)
     RETURN
 EVT_END()
 
+/**
+ * Closes the claw to 50 degrees over one second and opens it again: the missed-grab motion its name describes,
+ * but nothing runs it (ufo_main calls hand_success whether item_chk finds a prize or not).
+ */
 EVT_BEGIN(hand_fail)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 5000, 1000)
     LABEL(0)
@@ -303,6 +339,7 @@ EVT_BEGIN(hand_fail)
     RETURN
 EVT_END()
 
+/** Opens the claw back up over one second after the crane has carried a prize to the chute or come up empty. */
 EVT_BEGIN(hand_release)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 3000, 0, 1000)
     LABEL(0)
@@ -488,6 +525,11 @@ EVT_BEGIN(ufo_main)
     RETURN
 EVT_END()
 
+/**
+ * Powers up the crane: the machine's light S_hikari flickers on
+ * and the prize-light balls S_tama_a/S_tama_b blink alternately and S_hikari rotates
+ * until GF(14) (crane shut down), then ufo_main starts.
+ */
 EVT_BEGIN(evt_ufo_init)
     LOOP(3)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hikari"), MAP_OBJ_FLAG_HIDDEN)
@@ -567,6 +609,10 @@ EVT_BEGIN(evt_zenmai)
     RETURN
 EVT_END()
 
+/**
+ * Makes the switch lamps pair LW(0) and LW(1) blink forever (the three crane power switches use it while they
+ * are not yet pressed).
+ */
 EVT_BEGIN(blink_sw)
     LOOP(0)
         CALL(evt_mapobj_flag_onoff, 1, 0, LW(0), MAP_OBJ_FLAG_HIDDEN)
@@ -1098,6 +1144,7 @@ void icon_disp(CameraId camera, void* param) {
     }
 }
 
+/** Script function: looks up the item named in args[0] and returns its item ID in args[1] and the name in args[2]. */
 USER_FUNC(evt_itemNameToItemID) {
     static char tmp[64];
     EvtWord* args = event->args;
@@ -1110,6 +1157,11 @@ USER_FUNC(evt_itemNameToItemID) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: finds the crane prize closest (within 20 units) to the claw position (GW(10), GW(11)) among
+ * the items named keihin00 to keihin31.
+ * Returns TRUE and the prize's name in args[0] and args[1], or FALSE and 0 when nothing is within reach.
+ */
 USER_FUNC(item_chk) {
     char name[256];
     EvtWord* args = event->args;

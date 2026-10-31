@@ -104,6 +104,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Turns the quiz statue's head (map object LW(2)) around its Y axis from LW(0) degrees to -50 over LW(1) ms with
+ * the rotation sound SFX_STG7_DSN_ROUND1, then back to 0 over half a second with a quake sound.
+ */
 EVT_BEGIN(sekizou_kaiten)
     CALL(evt_mapobj_get_position, LW(2), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DSN_ROUND1"), LW(10), LW(11), LW(12), LW(9))
@@ -129,6 +133,10 @@ EVT_BEGIN(sekizou_kaiten)
     RETURN
 EVT_END()
 
+/**
+ * Turns the statue's head back from LW(0) degrees to 0 over 500 ms with the quake sound SFX_STG7_QUAKE2;
+ * used between questions and at the end.
+ */
 EVT_BEGIN(sekizou_kaiten2)
     CALL(evt_mapobj_get_position, LW(2), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_DSN_ROUND1"), LW(10), LW(11), LW(12), LW(9))
@@ -146,6 +154,10 @@ EVT_BEGIN(sekizou_kaiten2)
     RETURN
 EVT_END()
 
+/**
+ * Makes the statue's lower jaw (kuti, kuti2) flap for three open-and-close cycles
+ * while its text is shown (it is spawned next to every statue message).
+ */
 EVT_BEGIN(sekizou_talk)
     RETURN
 EVT_END()
@@ -155,6 +167,10 @@ EVT_BEGIN(evt_item)
     RETURN
 EVT_END()
 
+/**
+ * Sound track for the transition into the quiz view (spawned by offscreen_to_kuizu):
+ * a hand-timed series of SFX_OFF1_PUZZLE1 ticks with waits of 83 to 666 ms.
+ */
 static EVT_BEGIN(evt_down_snd)
     WAIT_MS(100)
     CALL(evt_snd_sfxon, STRING("SFX_OFF1_PUZZLE1"), 0)
@@ -201,6 +217,10 @@ static EVT_BEGIN(evt_down_snd)
     RETURN
 EVT_END()
 
+/**
+ * Plays SFX_OFF1_PUZZLE_MOVE1, then SFX_OFF1_PUZZLE2 366 ms later:
+ * one click of the room unfolding back up (spawned repeatedly by evt_up_snd__).
+ */
 static EVT_BEGIN(evt_up_snd_)
     CALL(evt_snd_sfxon, STRING("SFX_OFF1_PUZZLE_MOVE1"), 0)
     WAIT_MS(366)
@@ -208,6 +228,11 @@ static EVT_BEGIN(evt_up_snd_)
     RETURN
 EVT_END()
 
+/**
+ * Timing script for the room unfolding back to normal:
+ * a long run of short waits (16 to 83 ms) that spawns evt_up_snd_ several times, one per click of the animation.
+ * Spawned by offscreen_to_normal.
+ */
 static EVT_BEGIN(evt_up_snd__)
     WAIT_MS(16)
     WAIT_MS(16)
@@ -249,6 +274,11 @@ static EVT_BEGIN(evt_up_snd__)
     RETURN
 EVT_END()
 
+/**
+ * Switches the screen to the quiz stage: captures the room into an offscreen paper, hides the room (S_aji_04),
+ * shows the quiz set (S_kuizu) with the answer lamps,
+ * moves Mario and the partner onto it and plays the transition animation.
+ */
 EVT_BEGIN(offscreen_to_kuizu)
     CALL(evt_paper_entry, STRING("OFF_d_pazu"))
     CALL(evt_img_entry, STRING("capture_img"))
@@ -279,6 +309,13 @@ EVT_BEGIN(offscreen_to_kuizu)
     RETURN
 EVT_END()
 
+/**
+ * Transition from the quiz screen back to the normal room:
+ * captures the offscreen-rendered S_aji_04 into the capture_img image,
+ * plays its paper animation A_2 (the room folds up out of the quiz view) with the sound track evt_up_snd__,
+ * then deletes the offscreen buffer, hides the quiz objects (S_kuizu, me_mae), shows the normal ones,
+ * puts Mario at (-90, 0, -10) and the partner at (-105, 0, -20) and sets the fixed camera.
+ */
 static EVT_BEGIN(offscreen_to_normal)
     CALL(evt_img_onoff, STRING("capture_img"), 1)
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
@@ -330,6 +367,10 @@ EVT_BEGIN(UNK_0x00022a90)
     RETURN
 EVT_END()
 
+/**
+ * Marks a right answer on the quiz set: shows the lamp object dennshoku,
+ * hides dennshoku_2 and plays the map animation anm_seikai (seikai = correct answer).
+ */
 EVT_BEGIN(quiz_ok)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -337,6 +378,11 @@ EVT_BEGIN(quiz_ok)
     RETURN
 EVT_END()
 
+/**
+ * Marks a wrong answer: hides the lamp object dennshoku,
+ * shows dennshoku_2 and plays the map animation anm_fuseikai (fuseikai = wrong answer);
+ * from the JP release on it also waits 1.5 seconds.
+ */
 EVT_BEGIN(quiz_ng)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)

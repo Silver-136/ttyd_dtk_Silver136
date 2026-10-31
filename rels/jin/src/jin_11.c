@@ -24,12 +24,20 @@ EVT_BEGIN(jin_11_ana)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: closes door10 as Mario arrives through s_bero (from jin_10);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it.
+ */
 static EVT_BEGIN(s_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door10"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: opens door10 as Mario leaves through s_bero (to jin_10);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it, negated.
+ */
 static EVT_BEGIN(s_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door10"), 0, LW(0), 0)
@@ -74,11 +82,16 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Script run when Mario breaks the weak floor: sets the story to "Breaking the floor". */
 EVT_BEGIN(evt_yuka)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_13_03_BREAKING_THE_FLOOR)
     RETURN
 EVT_END()
 
+/**
+ * Creepy Steeple jin_11 map init: sets music, the shadow-Mario tint and the exits, adds the save block,
+ * the Shine Sprite power-up block and, before the "Breaking the floor" step, the breaking floor.
+ */
 EVT_BEGIN(jin_11_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))

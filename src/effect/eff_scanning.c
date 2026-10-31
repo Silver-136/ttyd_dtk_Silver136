@@ -10,6 +10,10 @@
 void effScanningMain(EffectEntry* effect);
 void effScanningDisp(CameraId camId, void* param);
 
+/**
+ * Spawns the scan animation at (x, y, z); `int2` is stored as the type but not otherwise used.
+ * Callers: Rampell's scan attack (jin, las) and evt_eff "scanning".
+ */
 EffectEntry* effScanningEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* entry;
     effScanningData* data;
@@ -35,6 +39,7 @@ EffectEntry* effScanningEntry(s32 type, f32 x, f32 y, f32 z) {
     return entry;
 }
 
+/** Loads the EFF_Scan animation group, starts animation Z_1 and deletes the effect after one loop. */
 void effScanningMain(EffectEntry* effect) {
     effScanningData* data = effect->userdata;
     Vec position;
@@ -73,6 +78,7 @@ void effScanningMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, effScanningDisp, effect);
 }
 
+/** Draws the EFF_Scan pose billboarded to the camera yaw. */
 void effScanningDisp(CameraId camId, void* param) {
     effScanningData* data = ((EffectEntry*)param)->userdata;
     Mtx mtx;

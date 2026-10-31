@@ -23,9 +23,14 @@ void _prolog(void);
 
 EvtWord evt_bress[4];
 
+/**
+ * Module unresolved-symbol stub: if a relocation could not be resolved the REL linker points it here;
+ * it does nothing.
+ */
 void _unresolved(void) {
 }
 
+/** REL module epilog: runs the static destructors (_dtors) when bom.rel is unloaded. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -34,6 +39,11 @@ void _epilog(void) {
     }
 }
 
+/**
+ * REL module prolog, run when bom.rel is loaded:
+ * runs the static constructors, registers the five map init scripts (bom_00 to bom_04)
+ * and the Fahr Outpost battle setup tables, and starts the breath-cloud script evt_bress.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 
@@ -49,6 +59,13 @@ void _prolog(void) {
     evtEntryType(evt_bress, 0, 0, 0);
 }
 
+/**
+ * Breath-puff script helper, run every frame by evt_bress:
+ * spawns a small mist effect in front of Mario and the first partner every 1 to 2 seconds (randomised, 60 to 119
+ * frames), and in front of every active NPC, each with its own timer.
+ * No puffs while Mario is in certain states (marioChkSts 4, 8, 0x10), and from the JP release on,
+ * none while vivianGetStatus() returns 2 (Vivian's shadow state). Simulates visible breath in the cold.
+ */
 USER_FUNC(bress) {
     static f32 offset[8] = {0.0f, 10.0f, 24.0f, 10.0f, 15.0f, 20.0f, 20.0f, 10.0f};
     MarioWork* mario = marioGetPtr();
@@ -106,6 +123,10 @@ USER_FUNC(bress) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Event script started at module load (not tied to one map):
+ * runs the bress breath-puff helper for the lifetime of the module.
+ */
 EVT_BEGIN(evt_bress)
     CALL(bress)
     RETURN

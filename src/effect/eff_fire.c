@@ -53,6 +53,7 @@ static u8 scale_dt[] = {
 };
 
 void effFireMain(EffectEntry* effect);
+/** Emits one flame quad iw wide and ih tall: white at the top, black at the base. */
 static inline void effFireQuad(s32 iw, s32 ih) {
     f32 w, h;
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
@@ -87,6 +88,10 @@ void effFireSmokeMain(EffectEntry* effect);
 
 static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale);
 
+/**
+ * Spawns a flame of the given type at (x, y, z); duration <= 0 keeps it burning until soft-deleted.
+ * Used for the burn status, fire attacks and event scripts.
+ */
 EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffFireWork* work;
@@ -163,6 +168,10 @@ EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale
     return effect;
 }
 
+/**
+ * Per frame: steps the scale animation from the type's key table, fades out over 16 frames on soft delete,
+ * and spawns smoke puffs.
+ */
 void effFireMain(EffectEntry* effect) {
     EffFireWork* work = effect->userdata;
     s32 type = work->type;
@@ -283,6 +292,7 @@ void effFireMain(EffectEntry* effect) {
     }
 }
 
+/** Draws the main flame billboard with an animated texture, using alpha blending. */
 void effFireDisp(CameraId cameraId, EffectEntry* effect) {
     s32 w;
     s32 h;
@@ -396,6 +406,7 @@ void effFireDisp(CameraId cameraId, EffectEntry* effect) {
     effFireQuad(w, h);
 }
 
+/** Draws the second flame layer (texture 0x48) using two texture coordinate sets. */
 void effFireDisp2(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffFireWork* work;
@@ -558,6 +569,7 @@ void effFireDisp2(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Draws the spark particles (types 5-7) around the flame. */
 void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     GXColor* col;
@@ -767,6 +779,7 @@ void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
     work->bboxValid = 1;
 }
 
+/** Spawns a single smoke puff at (x, y, z) that lives 60 frames, with the given scale. */
 static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* smoke = effEntry();
     EffFireSmokeWork* sw;
@@ -791,6 +804,7 @@ static void effFireSmokeEntry(f32 x, f32 y, f32 z, f32 scale) {
     sw->color[2] = 0x38;
 }
 
+/** Moves the puff by its velocity, ages it, and fades it out over its last 16 frames. */
 void effFireSmokeMain(EffectEntry* effect) {
     EffFireSmokeWork* work = effect->userdata;
 
@@ -822,6 +836,7 @@ void effFireSmokeMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&work->position), 2, (DispCallback)effFireSmokeDisp, effect);
 }
 
+/** Draws the smoke puff as a billboard scaled by scale_dt for its age. */
 void effFireSmokeDisp(CameraId cameraId, EffectEntry* effect) {
     EffFireSmokeWork* work = effect->userdata;
     CameraEntry* camera;

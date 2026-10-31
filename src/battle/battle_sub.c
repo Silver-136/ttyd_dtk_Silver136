@@ -4,14 +4,21 @@
 #include "libc_decls.h"
 #include "eff/eff_magic1_n64.h"
 
+/** Sine of an angle in degrees, used throughout battle code for motion and bobbing. */
 f32 sinfd(f32 deg) {
     return sin((6.2831855f * deg) / 360.0f);
 }
 
+/** Cosine of an angle in degrees; the cosine counterpart of sinfd. */
 f32 cosfd(f32 deg) {
     return cos((6.2831855f * deg) / 360.0f);
 }
 
+/**
+ * atan2 (radians) that first nudges a near-zero x or y (|v| < 0.0001) to 0.0001
+ * so the result never comes from an exact 0/0.
+ * The battle move commands use it to turn a unit's or part's start-to-target vector into a facing angle.
+ */
 f32 atan2f_safety(f32 y, f32 x) {
     f32 a;
 
@@ -42,6 +49,12 @@ void btlMovePos(f32 speed, f32 angle, f32* x, f32* z) {
     *z += dz;
 }
 
+/**
+ * Interpolates from start to end at frame cur of steps.
+ * Modes: 0 linear; 1-3 ease-in (square, cube, 4th power); 4-6 ease-out (same powers);
+ * 7, 8 and 10 overshoot and wobble around end as they settle; 11 cosine ease-in-out; 12 sine ease-out;
+ * 13 cosine ease-in. Other modes return 0. battle_event_cmd.c calls it through a cast with reordered arguments.
+ */
 f32 intpl_sub(s32 mode, s32 cur, s32 steps, f32 start, f32 end) {
     f32 diff;
     s32 rest;
@@ -97,6 +110,10 @@ f32 intpl_sub(s32 mode, s32 cur, s32 steps, f32 start, f32 end) {
     return 0.0f;
 }
 
+/**
+ * Ranks a unit's x position into a forward level 0..48 (40-unit bands from x = -800) for target sampling in
+ * battle_detect.c; a negative dir (side facing the other way) reverses the scale so 48 is always the frontmost.
+ */
 s32 BtlCompForwardLv(s32 dir, f32 x) {
     s32 lv = 0;
 

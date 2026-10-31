@@ -32,6 +32,11 @@ EvtWord peach_evt_syawa_main[798];
 EvtWord peach_evt_syawa_init[63];
 EvtWord aji_15_init_evt[58];
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times -0.22167969;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(e_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
@@ -40,6 +45,11 @@ static EVT_BEGIN(e_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times -0.22167969;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(e_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
@@ -70,6 +80,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Puffs steam (the kemuri_test effect) at random spots above the bath every 0.7 seconds, forever,
+ * while Peach is bathing.
+ */
 EVT_BEGIN(peach_evt_yuge)
     LOOP(0)
         CALL(evt_sub_random, 38, LW(0))

@@ -27,12 +27,20 @@ static EvtWord block_break[22];
 static EvtWord hint_plate[14];
 EvtWord las_15_init_evt[96];
 
+/**
+ * Door animation script (closing) for the east door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panel S_door1 by it.
+ */
 static EVT_BEGIN(e_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_door1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the east door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panel S_door1 by it.
+ */
 static EVT_BEGIN(e_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_door1"), 0, LW(0), 0)
@@ -61,6 +69,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Event script: the key chest of las_15 opens and Mario receives Palace Key 0x2A. */
 static EVT_BEGIN(box_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
@@ -71,6 +80,10 @@ static EVT_BEGIN(box_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the switch of las_15 was hit.
+ * The camera shows the spot, the key chest drops in (box_syutugen) and a success jingle plays.
+ */
 static EVT_BEGIN(switch_evt)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(1250)
@@ -91,6 +104,10 @@ static EVT_BEGIN(switch_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the sound of a big block in las_15:
+ * plays its thud 1400 units below the block position after a 1.4 second delay.
+ */
 static EVT_BEGIN(block_break)
     CALL(evt_mobj_get_position, STRING("me"), LW(0), LW(1), LW(2))
     WAIT_MS(900)
@@ -100,6 +117,7 @@ static EVT_BEGIN(block_break)
     RETURN
 EVT_END()
 
+/** Event script: reading the hint plate of las_15 (stg8_las_40). */
 static EVT_BEGIN(hint_plate)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg8_las_40"), 0, 0)
@@ -107,6 +125,11 @@ static EVT_BEGIN(hint_plate)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_15, a Riddle Tower room (the chest holds Palace Key 0x2A):
+ * music, the door to las_10, four big blocks (two stone, two metal),
+ * a floating blue switch that reveals the key chest, and the hint plate.
+ */
 EVT_BEGIN(las_15_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))

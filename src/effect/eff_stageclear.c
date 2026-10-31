@@ -38,6 +38,7 @@ static s32 tex_us[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA0, 0x9E, 0xA
 s32 tex_shadow_us[] = {0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAA, 0xA8, 0xAD, 0xAA, 0xAE, 0xAF};
 #endif
 #ifndef VERSION_G8ME01
+/** Shakes the camera when a banner letter lands: 50 frames lightly, or 100 frames harder for the last letter (LW 1). */
 static EVT_BEGIN(evt_shake)
     IF_INT_EQUAL(LW(1), 0)
         CALL(evt_cam_shake, CAMERA_3D_EFFECTA, FLOAT(0.009765625f), FLOAT(0.009765625f), 50)
@@ -68,6 +69,7 @@ typedef struct TexSet {
 } TexSet;
 static TexSet texid_tbl[6] = { { tex_jp, tex_shadow_jp, 8 }, { tex_us, tex_shadow_us, 14 }, { tex_lang3, tex_shadow_lang3, 12 }, { tex_lang4, tex_shadow_lang4, 16 }, { tex_lang5, tex_shadow_lang5, 12 }, { tex_lang6, tex_shadow_lang6, 8 } };
 u32 niji_tbl[] = {144, 154, 150, 156, 158, 144};
+/** Shakes the camera when a banner letter lands: 50 frames lightly, or 100 frames harder for the last letter (LW 1). */
 static EVT_BEGIN(evt_shake)
     IF_INT_EQUAL(LW(1), 0)
         CALL(evt_cam_shake, CAMERA_3D_EFFECTA, FLOAT(0.009765625f), FLOAT(0.009765625f), 50)
@@ -86,6 +88,11 @@ s32 shake_dt[] = {2, 6, 2, 0, -1};
 s32 shake_dt2[] = {12, 36, 12, 0, -1};
 static u8 scale_dt[] = {0x00, 0x00, 0x16, 0x2E, 0x47, 0x5D, 0x6E, 0x78, 0x77, 0x6E, 0x66};
 
+/**
+ * Spawns the banner at (x, y, z): one record per letter texture,
+ * laid out left to right and popped in with a staggered delay.
+ * Type 1 with a non-zero language returns the minigame effect instead; types 10 and up use the effect camera.
+ */
 EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     StageClearWork* work;
@@ -179,6 +186,11 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Pops each letter in (plays a sound, then follows scale_dt),
+ * starts a camera-shake event as each letter lands and sets `done` once all have.
+ * Never deletes itself; the owner removes it after effStageClearEndChk. Type 1 also drops confetti.
+ */
 void effStageClearMain(EffectEntry* effect) {
     StageClearWork* work = effect->userdata;
     Vec pos;
@@ -244,6 +256,11 @@ void effStageClearMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws the letters in screen space with the 2D camera:
+ * a dark offset shadow pass first, then the letters,
+ * with a scrolling rainbow texture blended over the type 0 text.
+ */
 void effStageClearDisp(CameraId cameraId, EffectEntry* effect) {
     StageClearWork* work = effect->userdata;
     CameraEntry* cam;
@@ -401,6 +418,7 @@ void effStageClearDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
 }
 
+/** Returns non-zero once every letter has landed (the `done` flag set by Main). */
 s32 effStageClearEndChk(EffectEntry* effect) {
     return ((StageClearWork*)effect->userdata)->done != 0;
 }

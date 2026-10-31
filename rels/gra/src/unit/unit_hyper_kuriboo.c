@@ -214,6 +214,10 @@ static BattleWeapon weapon_kuriboo_charge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init event of the Hyper Goomba: installs wait, attack, damage and confusion events, sets the Goomba run,
+ * walk and jump sounds and clears unit work 0 (the "charged" flag).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

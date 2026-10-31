@@ -126,6 +126,11 @@ EvtWord evt_memo3[14];
 EvtWord evt_memo4[14];
 EvtWord aji_06_init_evt[232];
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_2
+ * and S_door1_1 in opposite directions along X by the animation value in LW(0) times 0.16601563;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(s_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.16601563f))
     CALL(evt_mapobj_trans, 1, STRING("S_door1_2"), LW(0), 0, 0)
@@ -134,6 +139,11 @@ static EVT_BEGIN(s_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_2
+ * and S_door1_1 in opposite directions along X by the animation value in LW(0) times 0.16601563;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(s_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.16601563f))
     CALL(evt_mapobj_trans, 1, STRING("S_door1_2"), LW(0), 0, 0)
@@ -215,6 +225,10 @@ s32 g_Kusuri3_No = 2;
 
 s32 g_Kusuri4_No = 3;
 
+/**
+ * Opens one mixing-slot hatch (the map object named in LW(0), S_kaihei1 to 4):
+ * slides it down 25 units over 0.8 seconds with SFX_PEACH_MACHINE_OPEN1, unless it is already open.
+ */
 EVT_BEGIN(peach_evt_kaihei_open)
     SET_VALUE(LW(5), LW(0))
     CALL(evt_mapobj_get_position, LW(5), LW(0), LW(1), LW(2))
@@ -234,6 +248,7 @@ EVT_BEGIN(peach_evt_kaihei_open)
     RETURN
 EVT_END()
 
+/** Opens all four hatches of the potion machine at once (S_kaihei1 to S_kaihei4). */
 EVT_BEGIN(peach_evt_kaihei_open_all)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), STRING("S_kaihei1"))
@@ -252,6 +267,7 @@ EVT_BEGIN(peach_evt_kaihei_open_all)
     RETURN
 EVT_END()
 
+/** Closes one mixing-slot hatch (LW(0)): slides it back up 25 units with SFX_PEACH_MACHINE_OPEN1. */
 EVT_BEGIN(peach_evt_kaihei_close)
     SET_VALUE(LW(5), LW(0))
     CALL(evt_mapobj_get_position, LW(5), LW(0), LW(1), LW(2))
@@ -268,6 +284,7 @@ EVT_BEGIN(peach_evt_kaihei_close)
     RETURN
 EVT_END()
 
+/** Closes all four hatches of the potion machine at once. */
 EVT_BEGIN(peach_evt_kaihei_close_all)
     BEGIN_INLINE_EVENT
         SET_VALUE(LW(0), STRING("S_kaihei1"))
@@ -298,6 +315,11 @@ s32 kusuri_id[] = {
     102, 101, 103, 104,
 };
 
+/**
+ * Peach's potion pick: builds the list of potions she still holds (red, blue, orange, green,
+ * from the local flags LSWF(1) to 4) and shows the item menu.
+ * Returns in LW(0) the potion number (1 to 4) she chose, or 0 if the menu was cancelled or she has no potion.
+ */
 EVT_BEGIN(peach_evt_kusuri_select)
     CALL(kusuri_list_init)
     SET_VALUE(LF(0), 0)
@@ -330,6 +352,11 @@ EVT_BEGIN(peach_evt_kusuri_select)
     RETURN
 EVT_END()
 
+/**
+ * Takes the potion LW(0) out of a slot: sets the matching "have it" flag (LSWF(1) to 4),
+ * removes the potion item object (kusuri_aka, kusuri_ao, kusuri_ki or kusuri_mid) and,
+ * if the machine had been started (LSWF(5)), cancels the start and silences the siren.
+ */
 EVT_BEGIN(peach_evt_pick_kusuri)
     SWITCH(LW(0))
         CASE_EQUAL(1)
@@ -355,6 +382,12 @@ EVT_BEGIN(peach_evt_pick_kusuri)
     RETURN
 EVT_END()
 
+/**
+ * Checks whether all four slots are filled (their potion numbers sum to 10, which is 1+2+3+4).
+ * If so, asks whether to start mixing (peach_aji_227);
+ * on yes the mixing case script (peach_evt_tyogo) is attached to the start switch A_sui1
+ * and the siren S_pato1 starts to turn.
+ */
 EVT_BEGIN(peach_evt_check_all_kusuri_set)
     SET_VALUE(LW(0), LSW_AJI_06_SLOT_1_POTION)
     ADD(LW(0), LSW_AJI_06_SLOT_2_POTION)
@@ -383,6 +416,12 @@ EVT_BEGIN(peach_evt_check_all_kusuri_set)
     RETURN
 EVT_END()
 
+/**
+ * Pours potion number LW(1) through the stream object LW(0) (S_mizu1 to 4): plays the map animation "mizu"
+ * with SFX_PEACH_MACHINE_MEDICINE1 and scales the stream up, holds it and scales it down over that time.
+ * If a press was accepted in the timing window (LSWF(7)), the beaker contents S_naka also rise by an eighth
+ * (GW(10)) and the potion's colour is blended in (kusuri_color_set); LSWF(7) is cleared at the end.
+ */
 EVT_BEGIN(peach_evt_kusuri_dasu)
     SET_VALUE(LW(5), LW(0))
     SET_VALUE(LW(6), LW(1))
@@ -433,6 +472,10 @@ EVT_BEGIN(peach_evt_kusuri_dasu)
     RETURN
 EVT_END()
 
+/**
+ * Flashes the pair of map objects LW(0) and LW(1) (shown and hidden alternately) three times at 100 ms each;
+ * the slot scripts run it on their lamp pair (hika1 and kesu1, ...) after a correct pour.
+ */
 EVT_BEGIN(peach_evt_seikai_evt)
     LOOP(3)
         CALL(evt_mapobj_flag_onoff, 1, 0, LW(0), MAP_OBJ_FLAG_HIDDEN)
@@ -445,6 +488,17 @@ EVT_BEGIN(peach_evt_seikai_evt)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the first mixing slot (A_sui2).
+ * While the machine is idle (LSWF(6) = 0): shows the potion menu
+ * and puts the chosen potion in the slot (at x = -110)
+ * or takes the current one out again (peach_evt_pick_kusuri), then checks whether all slots are full.
+ * While the machine is running (LSWF(6) = 1): pours the slot's potion (peach_evt_kusuri_dasu).
+ * The pour counts only when the beaker is at this slot (GW(12) = 0) and the press window is open (LSWF(8),
+ * from 400 ms before the beaker stops until 3 seconds after); it is then checked against step GW(11)
+ * of kusuri_tyogo_list (peach_evt_seikai_check): right adds 1 to the score GW(13) and flashes the slot's lamps,
+ * wrong subtracts 1.
+ */
 EVT_BEGIN(peach_evt_kaihei1)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -516,6 +570,10 @@ EVT_BEGIN(peach_evt_kaihei1)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the second mixing slot (A_sui3):
+ * the same as peach_evt_kaihei1 for slot 2 (potion placed at x = -65).
+ */
 EVT_BEGIN(peach_evt_kaihei2)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -585,6 +643,10 @@ EVT_BEGIN(peach_evt_kaihei2)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the third mixing slot (A_sui4):
+ * the same as peach_evt_kaihei1 for slot 3 (potion placed at x = -10).
+ */
 EVT_BEGIN(peach_evt_kaihei3)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -654,6 +716,10 @@ EVT_BEGIN(peach_evt_kaihei3)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the fourth mixing slot (A_sui5):
+ * the same as peach_evt_kaihei1 for slot 4 (potion placed at x = 35).
+ */
 EVT_BEGIN(peach_evt_kaihei4)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -723,6 +789,11 @@ EVT_BEGIN(peach_evt_kaihei4)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the machine's stop switch (A_sui6):
+ * in the last step (GW(11) = 8) while the machine is heating (LSWF(8)) it sets LSWF(7),
+ * which stops the heating timer.
+ */
 EVT_BEGIN(peach_evt_stop_renji)
     IF_INT_EQUAL(GW(11), 8)
         IF_INT_EQUAL(LSWF_AJI_06_DISPENSE_WINDOW_OPEN, 1)
@@ -733,6 +804,10 @@ EVT_BEGIN(peach_evt_stop_renji)
     RETURN
 EVT_END()
 
+/**
+ * Starts a warning siren: turns the map object named in LW(0) (S_pato1, 2 or 3) around its Y axis at 12 degrees
+ * per 30 ms and plays SFX_PEACH_MACHINE_SIREN1. Runs until deleted.
+ */
 EVT_BEGIN(peach_evt_pato_on)
     SET_VALUE(LW(15), LW(0))
     CALL(evt_mapobj_get_position, LW(15), LW(0), LW(1), LW(2))
@@ -749,6 +824,7 @@ EVT_BEGIN(peach_evt_pato_on)
     RETURN
 EVT_END()
 
+/** Stops the siren named in LW(0): hides it, resets its rotation and stops the siren sound. */
 EVT_BEGIN(peach_evt_pato_off)
     CALL(evt_mapobj_flag_onoff, 0, 1, LW(0), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_rotate, 0, LW(0), 0, 0, 0)
@@ -756,6 +832,10 @@ EVT_BEGIN(peach_evt_pato_off)
     RETURN
 EVT_END()
 
+/**
+ * Swings the machine's needle (hari) 130 units out over 0.5 seconds and keeps it moving back and forth
+ * while the machine runs.
+ */
 EVT_BEGIN(peach_evt_hari_on)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -130, 500)
     LABEL(0)
@@ -792,6 +872,7 @@ EVT_BEGIN(peach_evt_hari_on)
     RETURN
 EVT_END()
 
+/** Returns the machine's needle (hari) to its rest position. */
 EVT_BEGIN(peach_evt_hari_off)
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, -130, 0, 500)
     LABEL(0)
@@ -804,6 +885,10 @@ EVT_BEGIN(peach_evt_hari_off)
     RETURN
 EVT_END()
 
+/**
+ * After Peach has grown or shrunk from a wrong potion,
+ * scales her back to normal size over time (peach_set_scale), starting from big or small depending on LSW(5).
+ */
 EVT_BEGIN(peach_evt_sugata_modoru)
     WAIT_MS(15000)
     SWITCH(LSW_AJI_06_WRONG_POTION_EFFECT)
@@ -940,6 +1025,10 @@ EVT_BEGIN(peach_evt_kusuri_nomu)
     RETURN
 EVT_END()
 
+/**
+ * Colour animation of the finished potion for a successful mix:
+ * fades the fluid colour back and forth between green and blue-green forever.
+ */
 EVT_BEGIN(kusuri_color_seiko)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 255)
@@ -963,6 +1052,11 @@ EVT_BEGIN(kusuri_color_seiko)
     RETURN
 EVT_END()
 
+/**
+ * Colour animation of the finished potion for a failed mix:
+ * fades the fluid colour back and forth between a dimmed version (70 percent) of its current colour
+ * and a 30 percent version, forever.
+ */
 EVT_BEGIN(kusuri_color_sippai)
     CALL(kusuri_color_get, LW(0), LW(1), LW(2))
     SET_VALUE(LW(3), LW(0))
@@ -1007,6 +1101,17 @@ s32 peach_evt_bika_move_data[] = {
     0,
 };
 
+/**
+ * Part of the machine's run (peach_evt_tyogo_sub), after the potions are in:
+ * TEC asks Peach to press the button where the beaker stops (peach_aji_230), then the beaker (S_bika) makes
+ * eight stops from peach_evt_bika_move_data (target x, time, slot GW(12), direction), with the floor animation
+ * "yuka" run forward or backward to match; each stop waits up to 3 seconds for a pour, scored by the slot
+ * scripts in GW(13).
+ * Then TEC asks for the heating to be stopped after 30 seconds (peach_aji_230_01): stopping it with A_sui6
+ * between 25 and 35 seconds adds 1 more.
+ * A score of 9 (all eight pours right and good heating) plays kusuri_color_seiko; anything less
+ * kusuri_color_sippai.
+ */
 EVT_BEGIN(peach_evt_tyogo_sub)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_map_pauseanim, 0, STRING("yuka"))
@@ -1767,16 +1872,24 @@ USER_FUNC(yuka_anim_reverse_end) {
     return EVT_RETURN_DONE;
 }
 
+/** Script function: pauses the reverse playback of the "yuka" animation. */
 USER_FUNC(yuka_anim_reverse_pause) {
     yuka_anim.flags |= 1;
     return EVT_RETURN_DONE;
 }
 
+/** Script function: resumes the reverse playback of the "yuka" animation after a pause. */
 USER_FUNC(yuka_anim_reverse_replay) {
     yuka_anim.flags &= ~1;
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: plays the map animation "yuka" backwards (peach_evt_tyogo_sub runs it while the beaker moves
+ * back toward a lower slot).
+ * Each frame it subtracts the elapsed time times the animation speed from the animation frame
+ * and wraps around at the start. Blocks until yuka_anim_reverse_end.
+ */
 USER_FUNC(yuka_anim_reverse_play) {
     f32 frame;
 
@@ -1807,11 +1920,13 @@ USER_FUNC(yuka_anim_reverse_play) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script function: sets Mario's (Peach's) pose to the animation named in args[0]. */
 USER_FUNC(peach_chg_pose) {
     marioChgPose((const char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
 
+/** Script function: args[0] = 1 makes Peach invisible by setting Mario's scale to 0 on all axes; 0 restores scale 1. */
 USER_FUNC(peach_evt_toumei_onoff) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
@@ -1828,6 +1943,10 @@ USER_FUNC(peach_evt_toumei_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: sets Peach's size to the float in args[0] (Mario's scale on x, y and z),
+ * scaling her collision box (20 by 47 units at scale 1) with it.
+ */
 USER_FUNC(peach_set_scale) {
     f32 scale = evtGetFloat(event, event->args[0]);
     MarioWork* mario = marioGetPtr();
@@ -1840,6 +1959,10 @@ USER_FUNC(peach_set_scale) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: checks whether the potion number in args[1] equals step args[0] of kusuri_tyogo_list (1, 2,
+ * 3, 2, 3, 1, 3, 4); returns 1 or 0 in args[2].
+ */
 USER_FUNC(peach_evt_seikai_check) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
@@ -1853,6 +1976,10 @@ USER_FUNC(peach_evt_seikai_check) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: converts an item ID in args[0] (red 102, blue 101, orange 103, green 104,
+ * the table kusuri_id) into its potion number 1 to 4 and returns it in args[1].
+ */
 USER_FUNC(kusuri_list_get_no) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -1864,6 +1991,7 @@ USER_FUNC(kusuri_list_get_no) {
     return EVT_RETURN_DONE;
 }
 
+/** Script function: appends the item ID of potion number args[0] (1 to 4) to the potion menu list kusuri_list. */
 USER_FUNC(kusuri_list_add) {
     s32 no = evtGetValue(event, event->args[0]);
     s32 i;
@@ -1874,6 +2002,7 @@ USER_FUNC(kusuri_list_add) {
     return EVT_RETURN_DONE;
 }
 
+/** Script function: clears the potion menu list (kusuri_list) to empty (-1 entries). */
 USER_FUNC(kusuri_list_init) {
     s32 i;
 
@@ -1895,6 +2024,7 @@ void kusuri_4_color_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
+/** Texture-environment callback for the third potion tube: the same as kusuri_4_color_tev with its own colour. */
 void kusuri_3_color_tev(MapTevCallbackInfo* info) {
     GXTevStageID stage = info->tevStage;
 
@@ -1907,6 +2037,7 @@ void kusuri_3_color_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
+/** Texture-environment callback for the second potion tube: the same as kusuri_4_color_tev with its own colour. */
 void kusuri_2_color_tev(MapTevCallbackInfo* info) {
     GXTevStageID stage = info->tevStage;
 
@@ -1919,6 +2050,7 @@ void kusuri_2_color_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
+/** Texture-environment callback for the first potion tube: the same as kusuri_4_color_tev with its own colour. */
 void kusuri_1_color_tev(MapTevCallbackInfo* info) {
     GXTevStageID stage = info->tevStage;
 
@@ -1964,6 +2096,11 @@ USER_FUNC(kusuri_color_set_rgb) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: blends potion colour number args[0] into the tank colour over args[1] ms:
+ * adds the potion's source colour to what was already mixed,
+ * scales the result so the largest channel is 255 and stores the sum when finished. Blocks until the time is up.
+ */
 USER_FUNC(kusuri_color_set) {
     EvtWord* args = event->args;
     s32 no = evtGetValue(event, args[0]);
@@ -2021,6 +2158,7 @@ USER_FUNC(kusuri_color_set) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script function: resets the tank colour and the accumulated mix to black (0, 0, 0). */
 USER_FUNC(kusuri_color_init) {
     g_Kusuri_Col.r = 0;
     g_Kusuri_Col.g = 0;

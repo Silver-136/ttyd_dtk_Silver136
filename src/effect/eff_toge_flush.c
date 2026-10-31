@@ -26,6 +26,10 @@ static u8 color_rotation_data[24] = {
     0xFF, 0xFF, 0xD6, 0xFF, 0xFF, 0xD6, 0xB5, 0x94, 0x00, 0xB5, 0x94, 0x00,
 };
 
+/**
+ * Spawns the flash at (x, y, z), living `life` frames.
+ * Types: 0 cycles colours, 1 and 3 red, 2 blue, 4 white; types 0 and 3 also spin.
+ */
 EffectEntry* effTogeFlushEntry(s32 type, f32 x, f32 y, f32 z, s32 life) {
     EffectEntry* effect;
     EffTogeFlushWork* work;
@@ -56,6 +60,7 @@ EffectEntry* effTogeFlushEntry(s32 type, f32 x, f32 y, f32 z, s32 life) {
     return effect;
 }
 
+/** Grows the flash and fades it out after 6 frames, spins it with decay, and pulses the glow behind it by sine. */
 void effTogeFlushMain(EffectEntry* effect) {
     s32 life;
     EffTogeFlushWork* work = effect->userdata;
@@ -93,6 +98,10 @@ void effTogeFlushMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws a pulsing coloured glow quad, then the (non-pulsing) flash quad on top,
+ * using one of three flash textures depending on the remaining life.
+ */
 void effTogeFlushDisp(CameraId cameraId, EffectEntry* effect) {
     EffTogeFlushWork* work = effect->userdata;
     s32 type = work->type;

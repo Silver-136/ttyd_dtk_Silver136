@@ -49,6 +49,11 @@ static u8 geso_shibuki_dl_0_4[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x0
 static u8* geso_shibuki_dl_0_tbl[] = { geso_shibuki_dl_0_0, geso_shibuki_dl_0_1, geso_shibuki_dl_0_2, geso_shibuki_dl_0_3, geso_shibuki_dl_0_4 };
 static u8 geso_shibuki_dl_0_size_tbl[] = { 1, 1, 1, 1, 1};
 
+/**
+ * Spawns the splash at (x, y, z) with `size`.
+ * Types: 0 falls in water, 1 jumps out of water, 2 falls into lava/fire (also starts a smoke effect),
+ * 3 Blooper (gesso) entrance, 4 its background variant. Allocates 1+n1+n2 records.
+ */
 EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
     EffectEntry* effect;
     EffSplashWork* work;
@@ -195,6 +200,11 @@ EffectEntry* effSplashEntry(s32 type, f32 x, f32 y, f32 z, f32 size) {
     return effect;
 }
 
+/**
+ * The first frame only queues effSplashGetCol to sample the water colour;
+ * afterwards integrates each column and droplet (velocity, gravity, delay) and deletes after 30,
+ * 60 or 71 frames depending on type.
+ */
 void effSplashMain(EffectEntry* effect) {
     EffSplashWork* work = effect->userdata;
     Vec position;
@@ -292,6 +302,10 @@ void effSplashMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 1, (DispCallback)effSplashDisp, effect);
 }
 
+/**
+ * Projects the splash position to the screen and reads the frame buffer pixel there for the water tint (the
+ * retail build then overrides it with the map colour from eff_funemizu).
+ */
 void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
     EffSplashWork* work = effect->userdata;
     CameraEntry* cam;
@@ -321,6 +335,11 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
     work->color.b = c.b;
 }
 
+/**
+ * Draws the splash columns (scrolling textured cones,
+ * or the Blooper's display lists for type 3) followed by the camera-facing droplet quads tinted from the sampled
+ * colour.
+ */
 void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
     EffSplashWork* work = effect->userdata;
     Mtx trans;

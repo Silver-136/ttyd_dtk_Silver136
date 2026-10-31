@@ -209,6 +209,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of Cortez's saber: runs the default damage handling with LW(10) = -2 and LW(11) = 1. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -216,6 +217,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event (tags 37 to 39) run when an attacker is hurt by the saber's spikes:
+ * shows the toge_flush spike flash at its hit position on part 1, 40 forward and 5 back in z.
+ */
 static EVT_BEGIN(avoid_thorn_event)
     CALL(btlevtcmd_GetHitPos, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
@@ -224,6 +229,15 @@ static EVT_BEGIN(avoid_thorn_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Cortez's saber; while knocked down (unit work 1, its revive countdown, is not 0) it only
+ * restarts the wait event.
+ * Otherwise it picks a target with weapon_cortez_saber_float_attack,
+ * winds up with a tilt of 60 degrees and a swing of 135,
+ * dives onto the target and slashes down with the sword-dance sound.
+ * It plays the avoid pose on a dodge, or applies the damage with the action command defence check,
+ * A superguarded saber recoils home at once; otherwise it returns home and straightens.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_DOWN_TURNS, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -358,12 +372,20 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Idle event of Cortez's saber: waits for the loop timing of its animation
+ * and plays the pose table pose for state 1.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeWaitPlayLoopTiming, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Data event (entry 9) of Cortez's saber: when the weapon takes damage it plays the KRT_Z_1 pose on the unit in
+ * LW(10) and waits 30 frames.
+ */
 static EVT_BEGIN(cortez_damage_sub_event)
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))
     IF_INT_EQUAL(LW(0), 0)

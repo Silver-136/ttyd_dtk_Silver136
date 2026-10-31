@@ -44,6 +44,10 @@ typedef enum MotJabaraFlags {
 } MotJabaraFlags;
 
 
+/**
+ * Sets the camera z shift target, shift rate and zoom for a Spring Jump charge level,
+ * with a 40-unit upward zoom offset.
+ */
 static inline void jabaraSetSpd(f32 shiftZ, f32 shiftRate, f32 zoom) {
     MarioWork* mp = marioGetPtr();
     mp->camShiftTargetZ = shiftZ;
@@ -52,6 +56,11 @@ static inline void jabaraSetSpd(f32 shiftZ, f32 shiftRate, f32 zoom) {
     mp->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
 }
 
+/**
+ * Puts Mario back to normal after the Spring Jump:
+ * restores the facing saved at take-off, clears the offsets and rotation,
+ * resets the 20x37 collision box and releases the front-pose and facing locks.
+ */
 static inline void jabaraResetPose(void) {
     MarioWork* m2 = marioGetPtr();
     m2->displayDirection = m2->mot.jabara.dir;
@@ -66,6 +75,10 @@ static inline void jabaraResetPose(void) {
     m2->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 }
 
+/**
+ * Casts a short ray (half Mario's width) from just above his head along angle ang (degrees);
+ * returns the hit, used while walking hanging under a ceiling to stop at walls.
+ */
 static inline void* jabaraHitFront(f32 ang) {
     f32 sn, cs, hx, hy, hz, dist, nx, ny, nz;
     MarioWork* mp = marioGetPtr();
@@ -78,6 +91,7 @@ static inline void* jabaraHitFront(f32 ang) {
 }
 
 
+/** Vertical camera shake (about 0.015 for 240 ms) when Mario bumps a ceiling during the Spring Jump. */
 static EVT_BEGIN(quake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0146484375f), 240)
     RETURN
@@ -107,6 +121,11 @@ s32 marioGetJabaraState(void) {
     return state;
 }
 
+/**
+ * TRUE when Mario may start a Spring Jump: he owns the Ultra Boots
+ * and no blocking flag (0x80000000, or 0x100000 / 0x2100000 by version) is set;
+ * otherwise also clears the hold timer.
+ */
 BOOL marioPriCheckJabara(void) {
     MarioWork* mario = marioGetPtr();
     u32 flags = mario->flags;
@@ -117,6 +136,7 @@ BOOL marioPriCheckJabara(void) {
     return pouchCheckItem(ITEM_ULTRA_BOOTS) != 0;
 }
 
+/** Inline copy of marioPriCheckJabara for marioChkJabara. */
 static inline BOOL priChk(void) {
     MarioWork* mario = marioGetPtr();
     u32 flags = mario->flags;
@@ -177,6 +197,7 @@ BOOL marioChkJabara(void) {
     }
 }
 
+/** z position of the ceiling hit object Mario grabbed, so he can be snapped to its plane. */
 static inline f32 jabaraHitPosZ(HitEntry* hit) {
     Vec v;
     marioGetPtr();
@@ -219,6 +240,13 @@ void swingMain(void);
 void jabaraSwingStart(s32 s);
 void jabaraSwingWalk(void);
 
+/**
+ * Spring Jump (Ultra Boots): Mario squashes into a spring, charges while the stick is rotated,
+ * and launches straight up.
+ * Hitting a ceiling bounces him off it with a camera shake;
+ * at full charge a grabbable ceiling (attribute 0x40000) lets him hang under it, move along it,
+ * drop with A or let go with B. Ends in the stay or fall motion.
+ */
 void mot_jabara(void) {
     MarioWork* mario = marioGetPtr();
     Vec v74;
@@ -722,6 +750,10 @@ void mot_jabara(void) {
     }
 }
 
+/**
+ * TRUE while Mario is bumping a ceiling during the Spring Jump (sub-motions 0x28-0x31);
+ * mario_hit.c skips some hit checks then.
+ */
 BOOL jabaraNoHitChk(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId != MARIO_MOTION_JABARA) {
@@ -733,6 +765,11 @@ BOOL jabaraNoHitChk(void) {
     return FALSE;
 }
 
+/**
+ * Cleanup when the Spring Jump ends: turns walls and the camera shift back on, frees the motion's work,
+ * resets the pose, puts the partners down, and clears the jump parameters unless the next motion is a jump
+ * or fall motion (3-8, 10, 11).
+ */
 void mot_jabara_post(void) {
     MarioWork* mario = marioGetPtr();
     MarioWork* m2;
@@ -766,6 +803,10 @@ void mot_jabara_post(void) {
     }
 }
 
+/**
+ * Starts the swing after grabbing a ceiling with a fast initial spin;
+ * s < 0 (no overhead hit) uses the reverse swing state 0xB.
+ */
 void jabaraSwingStart(s32 side) {
     MarioWork* mp = marioGetPtr();
     mp->mot.jabara.rotTimer = 4;
@@ -781,6 +822,7 @@ void jabaraSwingStart(s32 side) {
 }
 
 
+/** Starts a gentle swing while Mario moves hanging under a ceiling, if he is not already swinging. */
 void jabaraSwingWalk(void) {
     MarioWork* mp = marioGetPtr();
     if (mp->mot.jabara.state != 0) {
@@ -794,6 +836,11 @@ void jabaraSwingWalk(void) {
     marioGetPtr()->motJabara->swingRotStep = 0.18f;
 }
 
+/**
+ * Swing state machine run each frame while Mario hangs under a ceiling:
+ * spins mario->rot.x up and down per mario->mot.jabara.state, plays the wobble sounds,
+ * and lets A or B cut the push short.
+ */
 void swingMain(void) {
     MarioWork* m = marioGetPtr();
     if (marioGetPtr()->motStruct) {
@@ -968,6 +1015,10 @@ void swingMain(void) {
     }
 }
 
+/**
+ * Unused stub: motion 0x1E (MARIO_MOTION_GRASP) only clears the jump and fall flags on entry and does nothing
+ * else; nothing in the tree switches to it. Guess: a grabbing motion that was never written, from the name.
+ */
 void mot_grasp(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {

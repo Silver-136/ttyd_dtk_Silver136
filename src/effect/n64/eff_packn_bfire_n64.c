@@ -42,6 +42,11 @@ static effN64Vtx size64x64_tex32x32_vtx[] = {
     {-32, 32, 0, 0, 1024, 0, 0, 0, 255},
 };
 
+/**
+ * Spawns piranha-plant fire breath from (x, y, z) toward (tx, ty, tz).
+ * Type 0 is the emitter: it lasts life frames and launches a type 1 fire puff every 4 frames that flies to the
+ * target in frames; type 2 is a burst of 8 sparks. Via evt_eff64 "packn_bfire_n64"; no script callers found.
+ */
 EffectEntry* effPacknBfireN64Entry(s32 type, s32 frames, s32 life, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz,
                                    f32 scale) {
     s32 count;
@@ -131,6 +136,11 @@ EffectEntry* effPacknBfireN64Entry(s32 type, s32 frames, s32 life, f32 x, f32 y,
     return effect;
 }
 
+/**
+ * Type 0 emits puffs; type 1 drifts and settles its size and spins,
+ * and spawns the type 2 burst just before it ends;
+ * type 2 sparks fall with gravity, bounce on the ground (y = 0) and shrink.
+ */
 void effPacknBfireMain(EffectEntry* effect) {
     EffPacknBfireWork* work;
     Vec position;
@@ -201,6 +211,10 @@ void effPacknBfireMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws each type 1/2 fire puff as a camera-facing 64x64 quad with two scrolling flame textures (0x71, 0x72);
+ * type 0 draws nothing.
+ */
 void effPacknBfireDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffPacknBfireWork* work;

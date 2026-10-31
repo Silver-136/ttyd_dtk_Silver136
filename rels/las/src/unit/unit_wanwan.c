@@ -211,6 +211,11 @@ static BattleWeapon weapon_wanwan_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init event of the Chain-Chomp: installs its wait, attack, damage and confusion events,
+ * sets up its chain (chain_init) and starts chain_event, sets the landing sound,
+ * and sets unit work 1 (the volume of its barking, 127 at the start) and unit work 0 = 1.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -706,6 +711,11 @@ static USER_FUNC(chain_main) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: sets up the Chain-Chomp's chain at the start of battle:
+ * puts links 2..7 on the chomp, link 8 and the stake (part 9) 20 units behind it,
+ * and sets their chain animations.
+ */
 static USER_FUNC(chain_init) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

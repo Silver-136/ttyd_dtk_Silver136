@@ -401,6 +401,7 @@ static BattleWeapon weapon_togenoko_charge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Init script of the Koopatrol. Registers its scripts and sets its run and walk sounds. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -412,6 +413,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage reaction of the Koopatrol: the default damage script. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -419,6 +421,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event 37, run by the default damage event for damage code 0x1F (the name: an attack avoided by the
+ * thorn-head counter, i.e. bounced off its spiked helmet): waits 30 frames
+ * and flashes the "toge_flush" spike effect for 60 frames above the unit,
+ * 70 units up when it is Huge (status 10),
+ * 40 when Tiny (status 11) and 55 otherwise.
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -508,6 +517,11 @@ static BattleUnitSetup entry_togenoko = {
     NULL, // itemDropTable
 };
 
+/**
+ * Attack script of the Koopatrol.
+ * Chooses between the normal attack, the shell attack, the charge, guarding and calling a friend,
+ * based on its state, the number of Koopatrols alive (togenoko_getnum) and random chances.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

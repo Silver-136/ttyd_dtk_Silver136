@@ -113,6 +113,7 @@ EvtWord first_tamago[52];
 static EvtWord evt_block[5];
 EvtWord tou_10_init_evt[254];
 
+/** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006e5c, JP tou .text+0x6D98. See docs/NAME_PROVENANCE.md.
 USER_FUNC(tou_10_mario_keyoff_check) {
     EvtWord* args = event->args;
@@ -126,10 +127,15 @@ USER_FUNC(tou_10_mario_keyoff_check) {
 }
 
 #ifdef VERSION_G8ME01
+/** Script helper: returns DONE once Mario has left his talking motion, otherwise blocks. */
 s32 tou_10_mario_talk_end_wait(void) {
     return marioGetPtr()->currMotionId != MARIO_MOTION_TALK ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 #endif
+/**
+ * Script helper: waits until Mario has been free (idle, walking or dashing, with no lockout) for a total of 240
+ * frames.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006ec8, JP tou .text+0x6E04. See docs/NAME_PROVENANCE.md.
 // Accumulate 241 eligible checks; blocked controls or other motions pause rather than reset the count.
 USER_FUNC(tou_10_mario_free_wait) {
@@ -149,6 +155,7 @@ USER_FUNC(tou_10_mario_free_wait) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: args[0] receives Yoshi's color (0-6) from the pouch. */
 static USER_FUNC(getYoshiColor) {
     EvtWord* args = event->args;
     evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
@@ -191,12 +198,20 @@ EVT_BEGIN(room_out)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the locker room door (door_1), opening: LW(0) is the swing angle;
+ * turns door_1 about the Y axis by 0.44 times the angle.
+ */
 static EVT_BEGIN(n_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the locker room door (door_1), closing:
+ * turns door_1 about the Y axis by -0.44 times the angle.
+ */
 static EVT_BEGIN(n_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
@@ -233,6 +248,11 @@ EVT_BEGIN(init_kino)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Jolene before the first match:
+ * she tells Mario to log on to the terminal instead (stg3_tou_66),
+ * or once GF(0) is set says she doesn't date fighters (stg3_tou_73).
+ */
 EVT_BEGIN(talk_kino)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_05_MATCH)
@@ -245,6 +265,7 @@ EVT_BEGIN(talk_kino)
     RETURN
 EVT_END()
 
+/** NPC init for the room guard (empty). */
 EVT_BEGIN(init_gard)
     RETURN
 EVT_END()
@@ -418,6 +439,7 @@ EVT_BEGIN(init_gangan)
     RETURN
 EVT_END()
 
+/** Talk script of Gangan: story-dependent lines like talk_octo. */
 EVT_BEGIN(talk_gangan)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
@@ -503,6 +525,7 @@ EVT_BEGIN(talk_poku)
     RETURN
 EVT_END()
 
+/** NPC init for the first Iron Cleft: placed at (75, 0, -100) facing 270, scaled 1.5x. */
 EVT_BEGIN(init_iron)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
@@ -520,6 +543,7 @@ EVT_BEGIN(init_iron)
     RETURN
 EVT_END()
 
+/** Talk script of the first Iron Cleft (stg3_npc_10_06_07, rematch lines stg3_npc_re_080/081). */
 EVT_BEGIN(talk_iron)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_msg_print, 0, STRING("stg3_npc_10_06_07"), 0, 0)
@@ -533,6 +557,7 @@ EVT_BEGIN(talk_iron)
     RETURN
 EVT_END()
 
+/** NPC init for the second Iron Cleft: placed at (100, 0, -80) facing 270, scaled 1.5x. */
 EVT_BEGIN(init_iron2)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
@@ -550,6 +575,7 @@ EVT_BEGIN(init_iron2)
     RETURN
 EVT_END()
 
+/** Talk script of the second Iron Cleft (stg3_npc_10_06_08, rematch lines). */
 EVT_BEGIN(talk_iron2)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_msg_print, 0, STRING("stg3_npc_10_06_08"), 0, 0)

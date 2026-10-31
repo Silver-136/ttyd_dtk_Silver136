@@ -511,6 +511,11 @@ static BattleUnitKindPart parts[] = {
     {5, "btl_un_sambo_mummy", "c_sanbo_m", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_parts},
 };
 
+/**
+ * Init event of the Poison Pokey: installs its wait, attack, damage and confusion events,
+ * sets unit work 0 (its body length, in segments) to 4, applies the matching height (_body_param_set),
+ * clears unit work 1 (how many Poison Pokeys it has called) and sets its run and walk sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -526,6 +531,13 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Reaction of a Poison Pokey whose spines counter an attack:
+ * data table tags 37 and 39, which btldefaultevt_Damage
+ * runs for the top-spike and front-spike counter hit events (damage codes 0x1F and 0x21):
+ * it shows pose type 47 on the unit in LW(10), part LW(11),
+ * and flashes a toge_flush spike effect above it for 60 frames.
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_AVOID_SPIKY_SIDE)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -540,6 +552,10 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_side_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Poison Pokey: runs the default damage handling for the segment that is currently on top,
+ * picked from the body length in unit work 0 (1 to 4 gives part 4 to 1).
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
@@ -557,6 +573,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Poison Pokey that loses its top segment when a hit does damage:
+ * plays the damage pose, takes one off the body length (unit work 0), re-applies the height and the status icon,
+ * cut and kiss offsets for the shorter stack, and drops the old top as a loose head (part 5) that falls to the
+ * floor and bounces.
+ */
 static EVT_BEGIN(damage_event_bodylost)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -631,6 +653,11 @@ static EVT_BEGIN(damage_event_bodylost)
     RETURN
 EVT_END()
 
+/**
+ * Part of the Poison Pokey losing a segment, run by its segment-losing damage events:
+ * plays pose type LW(14), lifts the
+ * stack by 18 and lets it drop back over 11 frames with a small bounce, ending where it started.
+ */
 static EVT_BEGIN(subset_dmg_sambo_fall)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -674,6 +701,16 @@ static EVT_BEGIN(subset_dmg_sambo_fall)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Poison Pokey for a hammer blow-away hit (data table tag 18,
+ * damage patterns 14 and 16: Super and Ultra Hammer).
+ * With
+ * only its head left (unit work 0 = 1) it takes the shot-away damage.
+ * Otherwise it loses a segment: the loose segment
+ * (part 5) is knocked through each ally after it in turn, hitting them with marioWeapon_KaitenHammerInvolved
+ * (pattern 15) or marioWeapon_UltraHammerInvolved, then flies off the stage edge; with pattern 16 the
+ * marioWeapon_UltraHammerFinish hit then lands on the Poison Pokey itself.
+ */
 static EVT_BEGIN(damage_event_bodylost_blow)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -771,6 +808,13 @@ static EVT_BEGIN(damage_event_bodylost_blow)
     RETURN
 EVT_END()
 
+/**
+ * Data table tag 54, run by btldefaultevt_Damage on a hit with damage pattern 7 (Yoshi's Gulp).
+ * With only its head left it plays
+ * the hurt pose (39). Otherwise one segment is taken off the body length, the offsets are updated, the part is
+ * hidden while the rest of the stack drops by one segment, and the loose segment (part 5) slides out along the
+ * floor; when one segment remains it also sets swallow parameter 50 and swallow attribute 2.
+ */
 static EVT_BEGIN(damage_swallow_body)
     SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
     SET_VALUE(LW(15), -1)
@@ -842,6 +886,13 @@ static EVT_BEGIN(damage_swallow_body)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Poison Pokey: uses an enemy item if it has one.
+ * A full-length Poison Pokey (4 segments) that has called at most one friend has a 20 percent chance to call
+ * another (call_friend_event) when there is a free spot to its side.
+ * Otherwise, with two or more segments it does the head attack of its length (attack_head_2_event, about 30 in
+ * 70) or else the spike attack, and a lone head does attack_head_1_event.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -911,6 +962,12 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Poison Pokey's head attack for a stack of two to four segments:
+ * it winds up by tilting back, leans over at the target
+ * and brings the whole stack down on it (rotating z with the attack sounds), then straightens up and walks back.
+ * The weapon used is weapon_sambo_mummy_head_attack_2 to 4 according to the body length (unit work 0).
+ */
 static EVT_BEGIN(attack_head_2_event)
     SET_VALUE(LW(6), LW(11))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(5))
@@ -1097,6 +1154,12 @@ static EVT_BEGIN(attack_head_2_event)
     RETURN
 EVT_END()
 
+/**
+ * The attack of a Poison Pokey that is down to its head:
+ * it hops (sambo_rabbit_move, 35 units a hop) beside the target,
+ * spins forward on a jump over it with the attack sound, then lands with a few shrinking bounces and hops home.
+ * The weapon is weapon_sambo_mummy_head_attack_1.
+ */
 static EVT_BEGIN(attack_head_1_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_sambo_mummy_head_attack_1))
@@ -1259,6 +1322,14 @@ static EVT_BEGIN(attack_head_1_event)
     RETURN
 EVT_END()
 
+/**
+ * The Poison Pokey's spike throw (it lobs a part of its body):
+ * it chooses a target with weapon_sambo_mummy_spike_attack_2 to 4
+ * according to its body length, shrinks by one segment
+ * and throws that top segment (part 5, pose SNB_B_1) in a rising arc at the target,
+ * the hit or the miss deciding where it lands.
+ * The segment then drops to the floor, bounces three times and is lost.
+ */
 static EVT_BEGIN(attack_spike_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(10))
     SWITCH(LW(10))
@@ -1565,6 +1636,10 @@ static BattleUnitSetup entry_sambo = {
     NULL, // itemDropTable
 };
 
+/**
+ * Idle event: shows the pose table entry for the segment currently on top (unit work 0 of 1 to 4 gives part 4 to
+ * 1).
+ */
 static EVT_BEGIN(wait_event)
     SET_VALUE(LW(10), -2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
@@ -1582,6 +1657,11 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Helper of attack_head_1_event: hops the unit along x toward LW(5) in steps of at most LW(8) units
+ * (JumpPosition with a jump height of 0, y = LW(6)) until it is within one step, then lands at LW(5), LW(6),
+ * LW(7).
+ */
 static EVT_BEGIN(sambo_rabbit_move)
     LABEL(0)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1607,6 +1687,10 @@ static EVT_BEGIN(sambo_rabbit_move)
     RETURN
 EVT_END()
 
+/**
+ * Sets the unit's height and cut height from its body length in unit work 0:
+ * 20 per segment (1 to 4 segments gives 20, 40, 60 and 80).
+ */
 static EVT_BEGIN(_body_param_set)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
     SWITCH(LW(0))

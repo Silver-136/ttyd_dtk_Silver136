@@ -8,11 +8,13 @@
 #include "sdk/DEMOInit.h"
 #include "driver/mapdrv.h"
 
+/** Creates an image entry named args[0] in the field or battle image list. */
 USER_FUNC(evt_img_entry) {
     imgEntry((const char*)evtGetValue(event, event->args[0]), gp->inBattle != 0);
     return EVT_RETURN_DONE;
 }
 
+/** Sets the screen offset of image args[0] to the floats args[1], args[2]. */
 USER_FUNC(evt_img_set_position) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -24,6 +26,7 @@ USER_FUNC(evt_img_set_position) {
     return EVT_RETURN_DONE;
 }
 
+/** Gives image args[0] the paper pose of animation file args[1] and restarts its clock. */
 USER_FUNC(evt_img_set_paper) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -36,6 +39,7 @@ USER_FUNC(evt_img_set_paper) {
     return EVT_RETURN_DONE;
 }
 
+/** Plays animation args[1] on image args[0]'s paper pose, from the start. */
 USER_FUNC(evt_img_set_paper_anim) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -47,6 +51,12 @@ USER_FUNC(evt_img_set_paper_anim) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets up screen capture slot args[1] (0-2) of image args[0]:
+ * from offscreen args[2] when the rectangle args[4..7] is all zero,
+ * else that screen rectangle (rounded to even). args[3] picks the allocation mode.
+ * Silently does nothing if the slot is in use or the size clashes with another slot.
+ */
 USER_FUNC(evt_img_alloc_capture) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -118,6 +128,7 @@ USER_FUNC(evt_img_alloc_capture) {
     return EVT_RETURN_DONE;
 }
 
+/** Frees capture slot args[1] of image args[0]. */
 USER_FUNC(evt_img_free_capture) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -139,6 +150,7 @@ USER_FUNC(evt_img_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/** Anchors image args[0] to the world point args[1..3]. */
 USER_FUNC(evt_img_set_virtual_point) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -157,17 +169,20 @@ USER_FUNC(evt_img_set_virtual_point) {
     return EVT_RETURN_DONE;
 }
 
+/** Removes the world anchor from image args[0]. */
 USER_FUNC(evt_img_clear_virtual_point) {
     imgClearVirtualPoint(imgNameToPtr((const char*)evtGetValue(event, event->args[0]), gp->inBattle != 0));
     return EVT_RETURN_DONE;
 }
 
+/** Frees image args[0] and its resources. */
 USER_FUNC(evt_img_release) {
     ImageEntry* img = imgNameToPtr((const char*)evtGetValue(event, event->args[0]), gp->inBattle != 0);
     imgRelease(img, gp->inBattle != 0);
     return EVT_RETURN_DONE;
 }
 
+/** Blocks until image args[0]'s animation has played through at least once. */
 USER_FUNC(evt_img_wait_animend) {
     ImageEntry* img = imgNameToPtr((const char*)evtGetValue(event, event->args[0]), gp->inBattle != 0);
     if (isFirstCall) {
@@ -179,6 +194,7 @@ USER_FUNC(evt_img_wait_animend) {
     return EVT_RETURN_DONE;
 }
 
+/** Selects which capture slot (args[1]) image args[0] draws as its shadow. */
 USER_FUNC(evt_img_set_shadow) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -187,6 +203,7 @@ USER_FUNC(evt_img_set_shadow) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the playback speed of image args[0]'s paper animation to the float args[1]. */
 USER_FUNC(evt_img_set_paper_timerate) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -196,6 +213,7 @@ USER_FUNC(evt_img_set_paper_timerate) {
     return EVT_RETURN_DONE;
 }
 
+/** Tints image args[0]'s pose with the colour args[1..4] (r, g, b, a). */
 USER_FUNC(evt_img_set_color) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -209,6 +227,7 @@ USER_FUNC(evt_img_set_color) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the draw order value of image args[0] to the float args[1]. */
 // Descriptive name (not in the symbol maps).
 USER_FUNC(evt_img_set_z) {
     EvtWord* args = event->args;

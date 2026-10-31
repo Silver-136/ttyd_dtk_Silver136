@@ -29,6 +29,14 @@ s32 _power_table2[] = {100, 100, 100, 100, 110, 120, 130};
 
 static void actionCommandDisp(f32 x, f32 y);
 
+/**
+ * Per-frame driver of action command 17, used by Flurrie's Lip Lock.
+ * For 7 seconds holding A fills the gauge (rate params[1], faster at easy difficulty) except during three random
+ * 0.75-second windows near 1, 3 and 5 seconds, where holding drains it;
+ * it also leaks params[2]/100 a frame and locks once full.
+ * outputParams[0] is the level (gauge x params[3] / 100,
+ * one more when full in the releases unless acFlags bit 0); success needs params[4] or more.
+ */
 s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     PGLv2Work* g = (PGLv2Work*)ac->work;
@@ -180,10 +188,15 @@ s32 battleAcMain_PowerGaugeLv2(BattleWork* work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_PowerGaugeLv2(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/**
+ * Display callback: slides the gauge in from the left over 20 frames,
+ * and once the command ends keeps it up for 40 frames before sliding it back out.
+ */
 void battleAcDisp_PowerGaugeLv2(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleActions* ac = &work->actionCommands;
@@ -214,6 +227,7 @@ void battleAcDisp_PowerGaugeLv2(CameraId cameraId, void* param) {
     }
 }
 
+/** Called by btlevtcmd_StopAC: unless the command already finished, stops the gauge sound and starts the end wait. */
 void battleAcDelete_PowerGaugeLv2(BattleWork* work) {
     if (!(work->actionCommands.doneFlags & 1)) {
         work->actionCommands.mAcState = 1003;
@@ -223,6 +237,10 @@ void battleAcDelete_PowerGaugeLv2(BattleWork* work) {
 // iconDispGx called through a cast: its callers pass different argument types and no single prototype fits
 // them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
 
+/**
+ * Draws the gauge with level marks from gaugeParams (pulsing red once full), the A icon and a star,
+ * both lit while holding A is safe.
+ */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;

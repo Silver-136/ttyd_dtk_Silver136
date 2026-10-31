@@ -46,6 +46,7 @@ inline Vec unknownVec0(void) {
     return (Vec){ 0.0f, 0.0f, 0.0f };
 }
 
+/** Builds a Vec from x, y, z (a twin of makeVecByValue that compiles the same). */
 inline Vec makeVecByValue2(f32 x, f32 y, f32 z) {
     Vec v = (Vec){ 0.0f, 0.0f, 0.0f };
     v.x = x;
@@ -54,6 +55,7 @@ inline Vec makeVecByValue2(f32 x, f32 y, f32 z) {
     return v;
 }
 
+/** Builds a Vec from x, y, z. */
 inline Vec makeVecByValue(f32 x, f32 y, f32 z) {
     Vec v = (Vec){ 0.0f, 0.0f, 0.0f };
     v.x = x;
@@ -98,6 +100,10 @@ inline void itemCheckBadge(ItemEntry* entry) {
 }
 
 void itemseq_Bound(ItemEntry* entry);
+/**
+ * Puts the item into the pouch; FALSE if the pouch is full.
+ * On success sets its collect flag (GSWF or LSWF) and starts its pickup script.
+ */
 static inline BOOL itemGetPouch(ItemEntry* entry) {
     EventEntry* evt;
 
@@ -133,6 +139,7 @@ static inline void itemGetEnd(ItemEntry* entry) {
 
 void itemGetSound(ItemEntry* entry);
 
+/** Allocates the 32-entry field and battle item tables; called once at boot. */
 void itemInit(void) {
     ItemWork* wp;
 
@@ -170,6 +177,10 @@ void itemReInit(void) {
     }
 }
 
+/**
+ * Takes one coin from Mario and drops it as a coin item that scatters and vanishes after 8 seconds;
+ * mario.c calls it when Mario loses coins.
+ */
 void itemCoinDrop(Vec* position) {
     ItemEntry* entry;
 
@@ -232,6 +243,7 @@ BOOL itemGetCheck(ItemEntry* entry) {
     return FALSE;
 }
 
+/** Like itemGetCheck for an item fetched by Koops's shell: whether the item may be collected for Mario now. */
 BOOL itemGetNokoCheck(ItemEntry* entry) {
     MarioWork* mario = marioGetPtr();
 
@@ -259,6 +271,7 @@ BOOL itemGetNokoCheck(ItemEntry* entry) {
     return !fbatPreventMarioEventChk();
 }
 
+/** Returns TRUE while any item is in its get sequence (mode 2); NPC updates, shops and menus wait on it. */
 // Descriptive name (not in the symbol maps).
 BOOL itemPickUpFromFieldCheck(void) {
     ItemWork* wp = itemGetWork();
@@ -273,6 +286,11 @@ BOOL itemPickUpFromFieldCheck(void) {
     return FALSE;
 }
 
+/**
+ * Per-frame update of the field items: despawn timers and blinking before an item vanishes, then per mode:
+ * resting on the floor (1), falling (3, 4), bouncing (5, 6, 10),
+ * being collected (2) or carried by a partner (8); checks Mario touching items, queues drawing and shadows.
+ */
 void itemMain(void) {
     ItemWork* wp = itemGetWork();
     MarioWork* mario;
@@ -435,12 +453,17 @@ void itemMain(void) {
     }
 }
 
+/** Puts an item into mode (resting, collecting, falling, bouncing, carried, ...) and restarts that mode's sub-state. */
 void itemModeChange(ItemEntry* entry, u16 mode) {
     entry->mode = mode;
     entry->subState = 0;
 }
 
 #ifdef VERSION_G8ME01
+/**
+ * Returns the first replaceable dropped item (coin, heart, flower) with this item id,
+ * so itemEntry can reuse its slot when the table is full; NULL if none.
+ */
 static inline ItemEntry* itemFindDeletable(ItemWork* wp, s32 itemId) {
     ItemEntry* entry;
     ItemEntry* found;
@@ -699,6 +722,7 @@ void itemDelete(const char* name) {
     }
 }
 
+/** Returns the field item with this name, or NULL. */
 ItemEntry* itemNameToPtr(char* name) {
     ItemWork* wp = itemGetWork();
     ItemEntry* entry;
@@ -712,6 +736,11 @@ ItemEntry* itemNameToPtr(char* name) {
     return NULL;
 }
 
+/**
+ * Returns an item that is within range of (x, y, z)
+ * and not cut off from it by a wall (checked with a collision ray), or NULL;
+ * evt_mobj uses it to see whether an item sits on a block.
+ */
 ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
     ItemWork* wp = itemGetWork();
     ItemEntry* entry;
@@ -759,6 +788,10 @@ ItemEntry* itemHitCheck(f32 x, f32 y, f32 z, f32 range) {
     return found;
 }
 
+/**
+ * Returns the nearest collectable item within range of (x, y, z), skipping items Koops's shell must ignore;
+ * Ms. Mowz and evt_mobj use it.
+ */
 ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
     MarioWork* mario = marioGetPtr();
     ItemWork* wp = itemGetWork();
@@ -795,6 +828,10 @@ ItemEntry* itemNearDistCheck(f32 x, f32 y, f32 z, f32 range) {
     return found;
 }
 
+/**
+ * Draws the "You got X!" box during an item get, with "badge" wording for badges;
+ * this version formats the message per language and sizes the box by its line count.
+ */
 void winNameDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     const char* name;
@@ -844,6 +881,7 @@ void winNameDisp(WinMgrEntry* win) {
 }
 
 
+/** Draws the box that names an item Mario let go of (msg_window_item_release) when his pouch was full. */
 void winNameDisp2(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     const char* name;
@@ -881,10 +919,12 @@ void winNameDisp2(WinMgrEntry* win) {
 }
 
 
+/** Per-frame update of the item description box shown under the get box. */
 void winHelpMain(WinMgrEntry* win) {
     winMgrHelpMain(win);
 }
 
+/** Draws the got item's description in the help box, once the name box has finished opening. */
 void winHelpDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
 
@@ -1270,6 +1310,11 @@ void itemseq_GetItem(ItemEntry* entry) {
 
 // FAKE: unused file-scope static; removing it changes the object
 static s32 _move_dir_1090;
+/**
+ * Moves a bouncing or falling item: gravity, bouncing off floors (with fewer, lower bounces each time),
+ * walls and ceilings, landing on map objects, water and lava, and despawning where needed;
+ * becomes resting when it stops.
+ */
 void itemseq_Bound(ItemEntry* entry) {
     static s32 _move_dir;
     MarioWork* mario;
@@ -1579,12 +1624,17 @@ void itemseq_Bound(ItemEntry* entry) {
     entry->flags2 &= ~ITEM_FLAG2_SKIP_BOUND_INIT;
 }
 
+/** Moves an item to (x, y, z). */
 void itemSetPosition(ItemEntry* entry, f32 x, f32 y, f32 z) {
     entry->position.x = x;
     entry->position.y = y;
     entry->position.z = z;
 }
 
+/**
+ * Plays an item's pickup sound and sparkle: coins, hearts and flowers have their own sounds;
+ * others use the default get sound.
+ */
 void itemGetSound(ItemEntry* entry) {
     Vec pos;
 
@@ -1609,6 +1659,10 @@ void itemGetSound(ItemEntry* entry) {
     }
 }
 
+/**
+ * Wall check for a moving item: casts a ray along its motion (dx, dz) and, on a wall,
+ * returns the hit and the corrected position and reflected direction (degrees) in outX, outZ and angle.
+ */
 HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 dz, s32* angle) {
     HitEntry* hit;
     f32 a, b;
@@ -1699,6 +1753,10 @@ HitEntry* itemHitCheckUp(ItemEntry* entry, f32 vy) {
     return NULL;
 }
 
+/**
+ * Starts the get sequence for an item at once (collected by a script or partner),
+ * without waiting for Mario's get motion.
+ */
 void itemForceGet(ItemEntry* entry) {
     entry->timer = 0;
     itemModeChange(entry, ITEM_MODE_GET);
@@ -1706,6 +1764,10 @@ void itemForceGet(ItemEntry* entry) {
     entry->flags2 &= ~ITEM_FLAG2_RELEASED;
 }
 
+/**
+ * Koops's shell has fetched the item: starts the get sequence if Mario may collect now,
+ * else drops the item back to rest where it is.
+ */
 void itemNokoForceGet(ItemEntry* entry) {
     if (itemGetNokoCheck(entry)) {
         entry->timer = 0;
@@ -1742,6 +1804,7 @@ u32 itemStatus(ItemEntry* entry, u32 flags) {
     return entry->flags2 & flags;
 }
 
+/** A partner picks up the item and carries it (mode 8, following above the partner); it stops blinking. */
 void itemPickUp(ItemEntry* entry) {
     entry->flags2 |= ITEM_FLAG2_CARRIED;
     itemModeChange(entry, ITEM_MODE_CARRIED);

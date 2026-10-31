@@ -145,6 +145,11 @@ static BattleUnitKindPart parts[] = {
     {2, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow, 0, pose_table},
 };
 
+/**
+ * Init for Koops's Shell Shield shell: draws it at 1.5x scale, registers the wait, phase,
+ * attack and damage scripts, and clears the open flag, open-for-turn flag and crack stage (unit work 1-3).
+ * Unit work 0 holds the shielded unit.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, FLOAT(1.5f), FLOAT(1.5f), FLOAT(1.5f))
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -159,6 +164,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Opens the shell off Mario before the player phase and closes it again after.
+ * Since the US release it skips both when the shell has no HP left.
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -177,6 +186,11 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Shell Shield: tilts the shell up off Mario over 30 frames before his turn (data tag 59).
+ * Shows Mario, makes him targetable again and the shell untargetable, and sets unit work 1 (open) and 2.
+ * Does nothing if already open.
+ */
 EVT_BEGIN(koura_open)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_OPEN, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -199,6 +213,11 @@ EVT_BEGIN(koura_open)
     RETURN
 EVT_END()
 
+/**
+ * Shell Shield: lowers the shell back over Mario after his turn (data tag 60),
+ * hiding him and making the shell the target again. Also run before a Mario/partner position swap.
+ * Does nothing if already closed.
+ */
 EVT_BEGIN(koura_close)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_OPEN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -223,6 +242,11 @@ EVT_BEGIN(koura_close)
     RETURN
 EVT_END()
 
+/**
+ * Shell Shield damage reaction (data tag 9): picks the intact,
+ * cracked or badly cracked pose table from the shell's HP (above 6, 4-6, 3 or less),
+ * plays the crack sound when the stage changes, and records the stage in unit work 3.
+ */
 EVT_BEGIN(damage_core)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_CRACK, LW(1))
     CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
@@ -252,6 +276,10 @@ EVT_BEGIN(damage_core)
     RETURN
 EVT_END()
 
+/**
+ * Data tag 61: reapplies the crack-stage pose table for the shell's current HP (as damage_core does, but without
+ * the hurt pose); plays the crack sound unless the shell is intact.
+ */
 EVT_BEGIN(pose_tbl_reset)
     CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
     SWITCH(LW(0))
@@ -270,6 +298,11 @@ EVT_BEGIN(pose_tbl_reset)
     RETURN
 EVT_END()
 
+/**
+ * Death data event (tag 49): the shell breaks.
+ * Gives the shielded unit back its normal targeting and visibility, plays the break sound,
+ * then the two halves (parts 1 and 2) spring apart, tip over and blink out before the unit is removed.
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_TARGET, LW(3))
     CALL(btlevtcmd_OffAttribute, LW(3), (kShellShielded | kUnitNeverTargetable))
@@ -340,6 +373,10 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Data tag 62: removes the shell instantly in a puff of smoke,
+ * giving Mario back his normal targeting and visibility, without the split-in-two break animation of dead_event.
+ */
 EVT_BEGIN(destroy_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, SHELL_SHIELD_WORK_TARGET, LW(3))
     CALL(btlevtcmd_OffAttribute, LW(3), (kShellShielded | kUnitNeverTargetable))
@@ -351,6 +388,7 @@ EVT_BEGIN(destroy_event)
     RETURN
 EVT_END()
 
+/** Hit reaction: the default damage script with no special pose (LW10 = -2); the crack poses come from damage_core. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -358,11 +396,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Idle: just plays the stay pose from the current (crack-stage) pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/** The shell never acts on its own turn; empty. */
 static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()

@@ -47,6 +47,11 @@ static EvtWord peach_evt_stg6[138];
 static EvtWord peach_evt_door_stop[18];
 EvtWord aji_16_init_evt[167];
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.22167969;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
@@ -55,6 +60,11 @@ static EVT_BEGIN(w_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_1
+ * and S_door1_2 in opposite directions along Z by the animation value in LW(0) times 0.22167969;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(w_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
     CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
@@ -63,6 +73,11 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door2_1
+ * and S_door2_2 in opposite directions along Z by the animation value in LW(0) times -0.22167969;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(e_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
     CALL(evt_mapobj_trans, 0, STRING("S_door2_1"), 0, 0, LW(0))
@@ -71,6 +86,11 @@ static EVT_BEGIN(e_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door open animation step: moves the two door leaves S_door2_1
+ * and S_door2_2 in opposite directions along Z by the animation value in LW(0) times -0.22167969;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(e_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
     CALL(evt_mapobj_trans, 0, STRING("S_door2_1"), 0, 0, LW(0))
@@ -79,6 +99,10 @@ static EVT_BEGIN(e_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Enter event of the west door w_bero: if the player is Peach,
+ * resets her to the normal condition (evt_peach_set_condition 0), and sets LW(0) = 0 so the entry proceeds.
+ */
 EVT_BEGIN(w_bero_in_evt)
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_EQUAL(LW(0), 1)

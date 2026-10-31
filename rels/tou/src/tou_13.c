@@ -135,6 +135,11 @@ static EVT_BEGIN(evt_first)
     RETURN
 EVT_END()
 
+/**
+ * Map init for tou_13, the passage between Grubba's office and the champion's room:
+ * music by story stage, the air-duct exit (deguti, broken with the hammer)
+ * and the entry scenes by story progress.
+ */
 EVT_BEGIN(tou_13_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)

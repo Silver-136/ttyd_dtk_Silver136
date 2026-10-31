@@ -58,6 +58,11 @@ static f32 randf(f32 min, f32 max);
 static void moamoa_pose_init(void);
 static void moamoa_pose_main(void);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
+/**
+ * Polynomial approximation of sin(x) for an angle in radians in [0, 2*pi);
+ * the Smorg (moamoa) swarm code uses its own sine to keep results identical on every frame without calling the
+ * libm. Inlined into the swarm code.
+ */
 // Same body as polySinf/polyCosf (poly_trig.h), kept as a second pair: using the shared pair for these calls too
 // changes the code, so this unit inlined two distinct copies.
 static inline f32 moa_sin(f32 x) {
@@ -96,6 +101,10 @@ static inline f32 moa_sin(f32 x) {
     return a;
 }
 
+/**
+ * Polynomial approximation of cos(x) for an angle in radians in [0, 2*pi), companion of moa_sin.
+ * Inlined into the swarm code.
+ */
 static inline f32 moa_cos(f32 x) {
     f32 a = 0.03705f;
     f32 b = 0.4967f;
@@ -234,6 +243,12 @@ static ExtTexInfo ext_moamoa_data[] = {
 };
 
 #pragma dont_inline on
+/**
+ * Builds the swarm's animation table (wp->defs) from ext_moamoa_data:
+ * consecutive rows with the same model and animation name become one MoamoaPoseDef (first texture frame,
+ * frame count, speed, and looping unless the animation name starts with J).
+ * Kept out of line to match the original.
+ */
 // Group contiguous model/animation samples; the last sampled frame becomes the playback duration.
 static void moamoa_pose_init(void) {
     ExtTexInfo* data = ext_moamoa_data;
@@ -269,6 +284,10 @@ static void moamoa_pose_init(void) {
     wp->numDefs++;
 }
 
+/**
+ * Per-frame update of every Moamoa sprite's animation:
+ * turns the time since its pose started into a texture frame index in the sprite's ExtdrvPose.
+ */
 static void moamoa_pose_main(void) {
     f32 t;
     u64 now;
@@ -389,11 +408,13 @@ static s32 evt_moamoa_flag_onoff(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: removes the swarm effect (extReset). */
 static s32 evt_moamoa_exit(EventEntry* event, BOOL isFirstCall) {
     extReset();
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: resets the facing (ry and target ry) of every Moamoa sprite to 0. */
 static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     ExtdrvPose* pose = extGetPosePtr();
@@ -405,6 +426,7 @@ static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: blocks the calling script until every Moamoa has finished leaving (MOAMOA_FLAG_GONE). */
 // Block until every member has entered GONE; the escape scene resets the ext controller afterward.
 static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
     s32 i;
@@ -488,6 +510,10 @@ static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: breaks the merged Smorg apart;
+ * every Moamoa leaves the merged state and goes to the blown-away state (63).
+ */
 static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     Moamoa* moa;
@@ -502,6 +528,10 @@ static s32 evt_moamoa_blow(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Debug leftover: instantly puts every Moamoa into the fully merged state with kind models,
+ * skipping the gathering. Used by moamoa_debug.
+ */
 static s32 evt_moamoa_fusion_debug(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     ExtdrvPose* pose = extGetPosePtr();
@@ -532,12 +562,19 @@ static s32 evt_moamoa_target_off(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns a random float between min and max using rand(). */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
 
     return r * (max - min) + min;
 }
 
+/**
+ * Init callback of the Smorg swarm effect (evt_ext_entry):
+ * allocates the work area, sets the swarm targets,
+ * scatters the sprites at random spots on the car floor (snapped to the ground with a hit check),
+ * looks up the train map object and runs 600 frames of the swarm logic so the swarm starts already spread out.
+ */
 static void ext_moamoa_init(void) {
     s32 i;
     ExtdrvPose* pose;
@@ -579,6 +616,10 @@ static void ext_moamoa_init(void) {
     }
 }
 
+/**
+ * Draw callback of the swarm sprites: loads the ext driver state and draws all sprites.
+ * When drawn into the offscreen camera it also records the bounding box of what was drawn.
+ */
 static void ext_disp(CameraId camera, void* param) {
     u16 left, top, right, bottom;
 
@@ -600,6 +641,10 @@ static void ext_disp(CameraId camera, void* param) {
     }
 }
 
+/**
+ * Draw callback of the swarm's shadows: loads the shadow matrix and TEV state
+ * and draws the flat shadow of every sprite (also records the bounding box for the offscreen camera).
+ */
 static void ext_shadow_disp(CameraId camera, void* param) {
     static Mtx mt = {
         {8.0f, 0.0f, 0.0f, 0.0f},
@@ -623,6 +668,12 @@ static void ext_shadow_disp(CameraId camera, void* param) {
     }
 }
 
+/**
+ * Starts a hop for one Moamoa toward (x, y, z) with the given horizontal speed and gravity:
+ * optionally snaps y to the ground below the target, computes the flight time and initial vertical speed,
+ * turns the sprite toward the target, and sets its state to the jump state (3) with `next` as the state to
+ * return to.
+ */
 static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround, f32 x, f32 y, f32 z, f32 speed, f32 gravity) {
     f32 hitX, hitY, hitZ, dist, nx, ny, nz;
     f32 dy;
@@ -658,6 +709,12 @@ static void moamoa_jump(ExtdrvPose* pose, Moamoa* moa, s32 next, s32 checkGround
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+/**
+ * Checks whether something hits one Moamoa.
+ * Returns 0 for nothing, 1 for Mario jumping on it (Mario bounces), 2 for a hammer swing or Koops's shell,
+ * 3 for Flurrie's breath and 4 for Bobbery's bomb.
+ * As a side effect it also pushes Mario out when he walks into a Moamoa on the ground.
+ */
 static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
     MarioWork* mario = marioGetPtr();
     f32 range;
@@ -749,6 +806,13 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 __declspec(section ".rodata") static Vec moamoa_zero_vec = {0.0f, 0.0f, 0.0f};
+/**
+ * Per-frame callback of the Smorg swarm.
+ * Tracks hammer and idle time, Flurrie's breath and partner use, counts hits on the swarm's targets,
+ * and runs each Moamoa's state machine (idle hopping toward its target or Mario, jumps, damage and knock-off,
+ * escape, gathering and merging, being blown away).
+ * When both targets have been freed it starts the swarm's escape.
+ */
 static void ext_moamoa_main(void) {
     MarioWork* mario;
     PartyEntry* party;
@@ -1352,6 +1416,10 @@ static void ext_moamoa_main(void) {
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
+/**
+ * Registers the swarm's draw callbacks each frame (sprites and shadows on the 3D camera and, if enabled,
+ * on the offscreen camera).
+ */
 static void ext_moamoa_dispent(void) {
     if (wp->flags & MOAMOA_WORK_FLAG_ACTIVE) {
         dispEntry(CAMERA_3D, 0.0f, 1, ext_disp, NULL);
@@ -1365,6 +1433,10 @@ static void ext_moamoa_dispent(void) {
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+/**
+ * Script helper: moves the named NPC in a hop to (x, y, z).
+ * Args: name, x, y, z, horizontal speed, gravity, duration in milliseconds. Blocks until the NPC lands.
+ */
 static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -1497,6 +1569,12 @@ static EVT_BEGIN(evt_meet_moamoa)
     RETURN
 EVT_END()
 
+/**
+ * Script run for a freed NPC (name in LW(0): the waitress or the conductor):
+ * the NPC thanks Mario (stg6_rsh_249_00 / 249_01),
+ * then hops away from the swarm in three shrinking jumps (400, 200 and 100 ms) in a random direction,
+ * and ends in a relieved pose.
+ */
 EVT_BEGIN(evt_moamoa_help)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_TALK_POSE)
@@ -1545,6 +1623,10 @@ EVT_BEGIN(evt_moamoa_help)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the swarm gives up its first target:
+ * frees the waitress (evt_moamoa_help) and gives her talk_waitless as her talk event.
+ */
 EVT_BEGIN(evt_moamoa_escape0)
     SET_VALUE(LW(0), STRING(("\x83" "E\x83" "F\x83" "C\x83g\x83\x8c\x83X")))
     SPAWN_EVENT(PTR(evt_moamoa_help))
@@ -1641,6 +1723,10 @@ static EVT_BEGIN(init_syashou)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the conductor in the baggage car:
+ * before the escape he says he is stuck (stg6_rsh_249_01_01), afterwards he thanks Mario (stg6_rsh_242).
+ */
 static EVT_BEGIN(talk_syashou)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_249_01_01"), 0, 0)
@@ -1662,6 +1748,10 @@ static EVT_BEGIN(init_waitless)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the waitress in the baggage car:
+ * before the escape she says she is stuck (stg6_rsh_249_01_02), afterwards she thanks Mario (stg6_rsh_243).
+ */
 static EVT_BEGIN(talk_waitless)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_47_ESCAPING_THE_SMORGS)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_249_01_02"), 0, 0)
@@ -1814,6 +1904,10 @@ EVT_BEGIN(evt_ghost_diary)
     RETURN
 EVT_END()
 
+/**
+ * Reading the Ragged Diary: asks whether to read it (stg6_rsh_130_yn),
+ * then shows its pages (stg6_rsh_131 to 133) and the ghost's remark (stg6_rsh_134).
+ */
 EVT_BEGIN(evt_ghost_diary_read)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_130"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg6_rsh_130_yn"))
@@ -1847,6 +1941,7 @@ static ShelfMsgTbl6 access_tbl = {
     {NULL},
 };
 
+/** Trigger script for the shelves: locks input, prints the message in LW(1) and unlocks. */
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, LW(1), 0, 0)
@@ -1854,6 +1949,10 @@ static EVT_BEGIN(evt_access)
     RETURN
 EVT_END()
 
+/**
+ * Trigger for the bottle shelf (bin_2): the first time (LSWF 12) Mario finds a Power Punch badge (stg6_rsh_277,
+ * item-get); afterwards it only prints stg6_rsh_279.
+ */
 static EVT_BEGIN(evt_access2)
     IF_INT_EQUAL(LSWF_RSH_05_BIN_POWER_PUNCH, 0)
         SET_VALUE(LSWF_RSH_05_BIN_POWER_PUNCH, 1)
@@ -1870,6 +1969,7 @@ static EVT_BEGIN(evt_access2)
     RETURN
 EVT_END()
 
+/** Registers the shelf triggers from access_tbl and the Power Punch bottle (bin_2). */
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
@@ -1883,6 +1983,10 @@ static EVT_BEGIN(evt_access_entry)
     RETURN
 EVT_END()
 
+/**
+ * Shared map init for rsh_05 on the first trip:
+ * scenery, shelf signs and the Power Punch bottle (bin_2) trigger, and the music for the story stage.
+ */
 EVT_BEGIN(rsh_05_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
@@ -1962,6 +2066,10 @@ EVT_BEGIN(rsh_05_a_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Shared map init for rsh_05 on the second visit:
+ * scenery, NPCs and the music for the station the train has reached.
+ */
 EVT_BEGIN(rsh_05_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)

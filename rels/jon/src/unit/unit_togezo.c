@@ -294,6 +294,10 @@ static BattleWeapon weapon_togezo_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init event of the Spiny: installs its wait, attack, damage and confusion events,
+ * clears unit work 0 (guarding) and 3, and sets its run, walk and jump sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -308,6 +312,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Waits half a second, then shows the toge_flush spike flash above the Spiny;
+ * it is higher for a big (status 10) than a normal Spiny and lower for a small (status 11) one.
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -328,6 +336,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Spiny: runs the default damage handling with LW(10) = -2 and LW(11) = 1. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -335,6 +344,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Flips the Spiny onto its back: swaps in the turned defence, defence-attribute, status-vulnerability,
+ * pose and data tables, sets the flipped status flag,
+ * turns off the part's counter attributes (the spikes no longer counter),
+ * sets the over-turn count to 1 and hops twice with the inside sound.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -356,6 +371,10 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Flips the Spiny back onto its feet: counts the over-turn down by one,
+ * restores the normal tables and counter attributes (the reverse of dmg_turn_event) and hops back up.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -382,6 +401,12 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Spiny: if flipped over it only wakes up.
+ * Otherwise it uses an enemy item if it has one;
+ * a guarding Spiny (unit work 0 = 1) leaves its guard, and an unguarded one rolls 0 to 99:
+ * below 50 the roll attack (normal_attack_event), else it curls up to guard (guard_event).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -415,6 +440,12 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Spiny's roll attack (weapon_togezo_attack): it curls up (TGZ_P_1, TURN1 sound),
+ * rolls at the target spinning in z (ROLL sounds),
+ * and either misses and rolls past or hits with the defence check and rebounds with two hops (JUMP1),
+ * then uncurls (TURN2, TGZ_S_1) and returns home.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -638,6 +669,11 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Spiny curls into a spiky guard: it spins 360 degrees (TURN1 sound) as it switches to the TGZ_P_1 pose,
+ * then swaps in the guard defence, defence-attribute, status, pose and data tables,
+ * turns off the part's attribute 0x1000 and sets unit work 0 to 1.
+ */
 static EVT_BEGIN(guard_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -665,6 +701,10 @@ static EVT_BEGIN(guard_event)
     RETURN
 EVT_END()
 
+/**
+ * Undoes guard_event: the Spiny spins back the other way (TURN2 sound) into TGZ_S_1, restores the normal tables,
+ * turns the part's attribute 0x1000 back on and clears unit work 0.
+ */
 static EVT_BEGIN(guard_cancel_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -691,6 +731,7 @@ static EVT_BEGIN(guard_cancel_event)
     RETURN
 EVT_END()
 
+/** Idle event: sets the unit's body part 1 to the pose given by its pose table for its current state. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

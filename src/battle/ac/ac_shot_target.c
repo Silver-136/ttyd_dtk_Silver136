@@ -41,6 +41,13 @@ static void _ac_disp_init(BattleWork* work);
 static void actionCommandDisp(f32 x, f32 y);
 void _ac_rumble_param_set(u32 difficulty, s16* period, s16* count, f32* amp);
 
+/**
+ * Per-frame driver of action command 8, used by Flurrie's Body Slam.
+ * A cursor drifts on its own (see _ac_rumble_param_set, strength params[3]) and the Control Stick steers it;
+ * when params[2] frames have passed it succeeds
+ * if the cursor is within 28 units of the hit point of unit params[0], part params[1].
+ * Auto Command steers it onto the target at 3 units a frame.
+ */
 s32 battleAcMain_ShotTarget(BattleWork* work) {
     const char* sfxName;
     BattleActions* ac;
@@ -187,6 +194,10 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
     return 1;
 }
 
+/**
+ * Picks the next random drift for one axis of the cursor:
+ * a 120-239 frame half-sine push of 15 units either way, scaled by difficulty from x0.25 to x3.
+ */
 void _ac_rumble_param_set(u32 difficulty, s16* period, s16* count, f32* amp) {
     *period = irand(120) + 120;
     *count = *period - 1;
@@ -220,10 +231,12 @@ void _ac_rumble_param_set(u32 difficulty, s16* period, s16* count, f32* amp) {
     }
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_ShotTarget(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/** Display callback: runs the slide-in/slide-out timing like the other commands and draws the cursor and target. */
 void battleAcDisp_ShotTarget(CameraId cameraId, void* param) {
     BattleWork* work = param;
     BattleActions* ac = &work->actionCommands;
@@ -256,10 +269,12 @@ void battleAcDisp_ShotTarget(CameraId cameraId, void* param) {
     }
 }
 
+/** Called by btlevtcmd_StopAC: stops the cursor sound and starts the 60-frame end wait. */
 void battleAcDelete_ShotTarget(BattleWork* work) {
     work->actionCommands.mAcState = 1003;
 }
 
+/** Resets the display state: off screen to the left with a 20-frame slide, white colour, empty fill. */
 static void _ac_disp_init(BattleWork* work) {
     BattleACDispParams* d = &work->actionCommands.disp;
     memset(d, 0, sizeof(BattleACDispParams));
@@ -274,6 +289,10 @@ static void _ac_disp_init(BattleWork* work) {
     d->gaugeRatio = 0.0f;
 }
 
+/**
+ * While aiming, draws the cursor and the spinning target reticle on the target's hit point,
+ * each with a grey shadow.
+ */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;

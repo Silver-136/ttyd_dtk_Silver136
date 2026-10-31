@@ -9,6 +9,10 @@
 
 #include "system.h"
 
+/**
+ * Finds the in-use battle icon (of the 16 slots in BattleWork) whose slot index matches; NULL if none.
+ * Scripts refer to icons by this index.
+ */
 BattleIcon* BtlIconGetPtr(s32 index) {
     BattleIcon* icon;
     int i;
@@ -22,10 +26,15 @@ BattleIcon* BtlIconGetPtr(s32 index) {
     return NULL;
 }
 
+/** Clears all 16 battle icon slots; called from battle start. */
 void BattleIconInit(void) {
     memset(_battleWorkPointer->icons, 0, sizeof(_battleWorkPointer->icons));
 }
 
+/**
+ * Per-frame update from the battle main loop: copies each live icon's position
+ * and scale (scale * scaleMul) to its icondrv icon, and mirrors flag 2 onto the icon's flag 2.
+ */
 void BattleIconMain(void) {
     BattleWork* wp;
     BattleIcon* icon;
@@ -48,6 +57,7 @@ void BattleIconMain(void) {
     }
 }
 
+/** Deletes every battle icon when the battle ends. */
 void BattleIconEnd(void) {
     BattleWork* wp = _battleWorkPointer;
     int i;
@@ -87,6 +97,7 @@ BattleIcon* BtlIcon_Entry(u16 iconId, f32 x, f32 y, f32 z) {
     return icon;
 }
 
+/** Removes a live battle icon's icondrv icon and frees its slot; safe on an unused slot. */
 void BtlIcon_Delete(BattleIcon* icon) {
     if (icon->flags & 1) {
         iconDelete(icon->base->name);
@@ -112,6 +123,10 @@ USER_FUNC(btlevtcmd_BtlIconEntry) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * s32 itemId (index for itemDataTable) , f32 x, f32 y, f32 z, s32 evtIndex Script:
+ * like btlevtcmd_BtlIconEntry but takes an item id and shows that item's icon from itemDataTable.
+ */
 // args: item id (its itemDataTable icon is shown), x, y, z (read as integers), variable that receives the battle
 // icon index
 USER_FUNC(btlevtcmd_BtlIconEntryItemId) {
@@ -131,6 +146,9 @@ USER_FUNC(btlevtcmd_BtlIconEntryItemId) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * s32 index for BtlIconGetPtr Script: deletes the battle icon with the given index.
+ */
 // args: battle icon index (BtlIconGetPtr)
 USER_FUNC(btlevtcmd_BtlIconDelete) {
     BattleIcon* icon;
@@ -142,6 +160,10 @@ USER_FUNC(btlevtcmd_BtlIconDelete) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * s32 index for BtlIconGetPtr, f32 x, f32 y, f32 z Script:
+ * moves the battle icon with the given index to (x, y, z).
+ */
 // args: battle icon index, x, y, z (floats)
 USER_FUNC(btlevtcmd_BtlIconSetPosition) {
     EvtWord* args = event->args;
@@ -160,6 +182,10 @@ USER_FUNC(btlevtcmd_BtlIconSetPosition) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * s32 index for BtlIconGetPtr, f32 fallAccel Script:
+ * sets the gravity per frame used by btlevtcmd_BtlIconJumpPosition for that icon.
+ */
 // args: battle icon index, fall acceleration (float)
 USER_FUNC(btlevtcmd_BtlIconSetFallAccel) {
     EvtWord* args = event->args;
@@ -169,6 +195,11 @@ USER_FUNC(btlevtcmd_BtlIconSetFallAccel) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: arcs a battle icon from its position to (x, y, z) over args[4] frames (0 keeps the icon's own frame
+ * count or derives it from jumpSpeed), falling by fallAccel per frame.
+ * Blocks the script until it lands; used for items tossed in battle.
+ */
 USER_FUNC(btlevtcmd_BtlIconJumpPosition) {
     EvtWord* args = event->args;
     BattleIcon* icon;

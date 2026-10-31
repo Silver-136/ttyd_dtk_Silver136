@@ -410,6 +410,11 @@ static BattleUnitSetup entry_rocket_punch = {
     NULL, // itemDropTable
 };
 
+/**
+ * Event run on a thrown audience member that hit its target in the Magnus von Grapple 2.0 audience attack:
+ * moves it to the hit position over LW(5) frames, makes it jump away along an arc,
+ * deletes it and lowers the audience size by one.
+ */
 EVT_BEGIN(aud_hit_event)
     CALL(evt_audience_move_position_frame, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
     CALL(evt_audience_jump_position_gravity, LW(0), LW(6), LW(7), LW(8), LW(9), LW(10))
@@ -454,6 +459,11 @@ static USER_FUNC(waku_main) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: looks for one of the boss's two punching arms (UNIT_X_FIST or UNIT_X_PUNCH) by side,
+ * args[0] = 0 for the arms with work[0] of 0 or 2 and 1 for those with 1 or 3.
+ * Returns the unit ID in args[1], or -1 if there is none.
+ */
 static USER_FUNC(arm_check) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -479,6 +489,11 @@ static USER_FUNC(arm_check) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function that plays the tornado effect under the boss during the drill attack for 70 frames,
+ * following the unit's X and Z and staying 240 units below it (only while it is below 300 high),
+ * then deletes it.
+ */
 USER_FUNC(drill_tor) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -503,6 +518,10 @@ USER_FUNC(drill_tor) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script function that plays the drill attack's jet flames at two points next to the unit args[0] for 90 frames,
+ * then deletes them.
+ */
 USER_FUNC(drill_jet) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -536,6 +555,10 @@ USER_FUNC(drill_jet) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script function that shows the two jet flames of the audience-attack pod at fixed offsets from the unit
+ * args[0], tilted 20 degrees, until aud_jet_end sets jetCount to 1.
+ */
 USER_FUNC(aud_jet) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -573,11 +596,13 @@ USER_FUNC(aud_jet) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script function: tells aud_jet to end by setting jetCount to 1. */
 USER_FUNC(aud_jet_end) {
     jetCount = 1;
     return EVT_RETURN_DONE;
 }
 
+/** Script function: returns the current number of audience members in args[0]. */
 USER_FUNC(get_aud_num) {
     EvtWord* args = event->args;
 
@@ -585,6 +610,13 @@ USER_FUNC(get_aud_num) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function for the audience attack's suction:
+ * picks 20 random audience members, makes them spin
+ * and fly toward the boss's pod (a dust-cloud effect and SFX_AUDIENCE_PANIC_SCREAM1 start),
+ * and removes each when it arrives. The list of 20 is kept for the shots that follow.
+ * Blocks until all 20 arrived.
+ */
 USER_FUNC(aud_suikomi) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     s32 done = 0;
@@ -674,16 +706,23 @@ USER_FUNC(aud_scream_fadeout) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Returns the position of the boss's pod, 10 units right of and 78 above the unit, for the audience cannon. */
 void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z) {
     BtlUnit_GetPos(unit, x, y, z);
     *x += 10.0f;
     *y += 78.0f;
 }
 
+/** Starts the smoke puff (kemuri_test effect) at the pod's muzzle for each audience shot. */
 void aud_fire_eff(f32 x, f32 y, f32 z) {
     effKemuTestSetRxRz(effKemuTestEntry(11, x - 50.0f, 20.0f + y, 50.0f + z, 0.75f), 40.0f, 110.0f);
 }
 
+/**
+ * Script function: fires two audience members from the pod at the target args[1] (the unit args[0] is the boss,
+ * args[2] the first of the sucked-in members, list[start]):
+ * each flies a throwing arc to the target's hit position with aud_hit_event; used when the shot hits.
+ */
 USER_FUNC(aud_fire_hit) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));
@@ -733,6 +772,10 @@ USER_FUNC(aud_fire_hit) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: like aud_fire_hit but for a shot that misses:
+ * the audience members fly past the target to x = -275 (aud_hit_event).
+ */
 USER_FUNC(aud_fire_no_hit) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));
@@ -778,6 +821,11 @@ USER_FUNC(aud_fire_no_hit) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function that draws the targeting marker for the audience attack at the position given by args[0] to
+ * args[2]: the reticle swoops in over 60, 40 and 20 frames with SFX_BOSS_MBTN_SEARCH1 and
+ * then locks on with SFX_BOSS_MBTN_LOCKON1.
+ */
 USER_FUNC(aud_target_mark) {
     EvtWord* args = event->args;
     f32 x = evtGetValue(event, args[0]);
@@ -840,6 +888,7 @@ USER_FUNC(aud_target_mark) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script function: starts the dying boss's charge-up effect (akari_charge_n64) at args[0] to args[2]. */
 static USER_FUNC(eff_dead) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -850,11 +899,18 @@ static USER_FUNC(eff_dead) {
     return EVT_RETURN_DONE;
 }
 
+/** Script function: removes the charge-up effect started by eff_dead. */
 static USER_FUNC(eff_dead_delete) {
     effDelete(eff_charge);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Battle init for Magnus von Grapple 2.0: registers its wait, entry, attack, damage and confusion events,
+ * sets the part 3 pose MGN_L_1, starts the frame event (waku_event) and the arm physics (arm_init)
+ * and clears its unit work flags: 0 = arms detached, 1 = turns until the fists return,
+ * 2 = arms have separated once, 5 and 6 are phase flags (6 is set when the boss is defeated).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -878,6 +934,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Per-frame loop that calls waku_main for the boss (keeping the frame part, part 3, on the body's locator17 bone
+ * and facing the camera) until the unit no longer exists.
+ */
 static EVT_BEGIN(waku_event)
     LABEL(0)
     WAIT_FRAMES(1)
@@ -891,6 +951,12 @@ static EVT_BEGIN(waku_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of Magnus von Grapple 2.0: marks part 3 with part attribute 0x1000000
+ * while damage pattern 10 is processed, runs the default damage handler,
+ * and the first time its HP drops to 14 or lower (and it is not already beaten) it waits for attacks to end,
+ * zooms the camera on it and speaks stg7_aji_41_06.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -925,6 +991,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Defeat sequence of Magnus von Grapple 2.0: sets the defeated flag (unit work 6),
+ * plays the explosion effect over the body, zooms the camera,
+ * speaks stg7_aji_41_07 and runs the common defeat handling (subsetevt_dead_core).
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LOW_HP_TALK_DONE, 1)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -994,6 +1065,11 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Entrance of Magnus von Grapple 2.0 at the start of the fight:
+ * waits 2 seconds, then a camera close-up on the boss with the opening lines stg7_aji_41_00
+ * and stg7_aji_41_01 (the partner answers), after which the camera returns to normal.
+ */
 static EVT_BEGIN(entry_event)
     WAIT_FRAMES(120)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
@@ -1016,6 +1092,18 @@ static EVT_BEGIN(entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack choice of Magnus von Grapple 2.0.
+ * When both detached fists are gone it counts unit work 1 down and, at 0, calls them back (arm_return_event).
+ * With the arms on it uses the drill while its HP is above 63 or on its first attack,
+ * splits its arms off (arm_bunri_event) the first time after that,
+ * then picks drill 40 / arm separation 40 (above 35 HP)
+ * or drill 40 / separation 40 / audience attack 25 (35 HP or less).
+ * With the fists out it throws the boomerang above 35 HP,
+ * and at 35 HP or less boomerang 75 / audience attack 20.
+ * The audience attack (aud_attack_event) needs at least 20 audience members and is used first
+ * when still unused (unit work 7).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1148,6 +1236,14 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Magnus Drill Attack of Magnus von Grapple 2.0 (weapon_batten_drill_attack, one target): the first time
+ * (unit work 5) Crump announces it (stg7_aji_41_02). The boss winds up (MGN_A3_1 to 3 with
+ * SFX_BOSS_MBTN_DRILL_ATTACK1 to 3), jets up off screen,
+ * comes down upside down over the party in a tornado effect
+ * through the floor with a camera shake, deals the damage with the usual dodge and guard checks,
+ * then reappears at the right edge and walks home.
+ */
 EVT_BEGIN(drill_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_batten_drill_attack))
@@ -1368,6 +1464,12 @@ EVT_BEGIN(boomerang_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Audience attack of Magnus von Grapple 2.0 (weapon_batten_aud_attack, one target): the first time
+ * (unit work 7) Crump talks in close-up before it (stg7_aji_41_04) and again before firing (stg7_aji_41_05).
+ * The boss sucks 20 audience members into its pod (aud_suikomi), takes aim (aud_target_mark)
+ * and fires them at the target in ten rounds of two (aud_attack_event_sub).
+ */
 EVT_BEGIN(aud_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_batten_aud_attack))
@@ -1643,6 +1745,13 @@ EVT_BEGIN(aud_attack_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * Separates the boss's arms (bunri = separation):
+ * sets unit work 0 (arms detached), 2 (separated once) and 1 = 2,
+ * shows a close-up with stg7_aji_41_03 the first time, plays poses MGN_A1_1 to 3,
+ * spawns two rocket punch units (unit_boss_rocket_punch_mkII, left and right fists) whose ids go in unit work 3
+ * and 4, and switches to the pose table without arms.
+ */
 static EVT_BEGIN(arm_bunri_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_LAUNCHED, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1693,6 +1802,11 @@ static EVT_BEGIN(arm_bunri_event)
     RETURN
 EVT_END()
 
+/**
+ * Calls the fists back: clears unit work 0, plays pose MGN_A1_6 for 0.6 seconds,
+ * spawns two fresh rocket punch units (work 0 = 2 and 3, left and right) whose ids go in unit work 3 and 4
+ * and switches back to the pose table with arms.
+ */
 static EVT_BEGIN(arm_return_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A1_6"))
@@ -1728,6 +1842,7 @@ static EVT_BEGIN(arm_return_event)
     RETURN
 EVT_END()
 
+/** Idle script of Magnus von Grapple 2.0: sets the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -1889,6 +2004,12 @@ static BattleWeapon weapon_batten_rocket_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Battle init for a rocket punch fist of Magnus von Grapple 2.0 (unit work 0: 0 and 2 are the left fist,
+ * 1 and 3 the right): registers its wait, attack, damage and confusion events, turns it sideways,
+ * sets up the arm physics (arm_init2), starts arm_event and, for the freshly separated fists (work 0 or 1),
+ * makes it fly out in an arc with SFX_BOSS_MBTN_PUNCH_FLY1 and settle at its hovering home position.
+ */
 static EVT_BEGIN(init_event_r)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A1_4"))
@@ -2113,6 +2234,7 @@ static USER_FUNC(arm_init) {
     return EVT_RETURN_DONE;
 }
 
+/** Script function: creates the arm effect (effBattenEntry type 3) for the arm args[0]. */
 static USER_FUNC(arm_init2) {
     s32 idx = evtGetValue(event, event->args[0]);
     ArmWork* arm = work[idx];
@@ -2121,6 +2243,11 @@ static USER_FUNC(arm_init2) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: each frame, places the arm effect for the arm args[1] on the unit args[0],
+ * tilts it by the direction of travel (smoothed over three frames) and rotates it with the unit's rotation,
+ * with a small offset (0, -18, 0) along its own axis.
+ */
 static USER_FUNC(arm_main) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -2186,6 +2313,7 @@ static USER_FUNC(arm_main) {
     return EVT_RETURN_DONE;
 }
 
+/** Script function: removes the arm effect of arm args[0]. */
 static USER_FUNC(arm_end) {
     s32 idx = evtGetValue(event, event->args[0]);
     ArmWork* arm = work[idx];

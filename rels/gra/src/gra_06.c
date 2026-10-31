@@ -45,6 +45,10 @@ EvtWord teresa_oidasare_evt[274];
 #endif
 EvtWord gra_06_init_evt[148];
 
+/**
+ * Closes the double door (door_L and door_R) of the Creepy Steeple entrance:
+ * LW(0) is the door angle, and the two leaves rotate opposite ways.
+ */
 EVT_BEGIN(ne_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("door_L"), 0, LW(0), 0)
@@ -53,6 +57,7 @@ EVT_BEGIN(ne_close)
     RETURN
 EVT_END()
 
+/** Opens the double door of the Creepy Steeple entrance, the reverse of ne_close. */
 EVT_BEGIN(ne_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("door_L"), 0, LW(0), 0)
@@ -68,6 +73,10 @@ EVT_BEGIN(gra_06_ido)
     RETURN
 EVT_END()
 
+/**
+ * Moves Mario and his partners above the hole's landing spot and makes them jump down to it,
+ * then waits 1.5 seconds.
+ */
 EVT_BEGIN(gra_06_ido_in_sub)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_mario_set_pos, 210, -100, 318)
@@ -92,6 +101,7 @@ EVT_BEGIN(gra_06_ido_in_sub)
     RETURN
 EVT_END()
 
+/** Enter event of the hole: spawns gra_06_ido_in_sub and returns 0. */
 EVT_BEGIN(gra_06_ido_in)
     SPAWN_EVENT(PTR(gra_06_ido_in_sub))
     SET_VALUE(LW(0), 0)
@@ -278,6 +288,11 @@ EVT_BEGIN(first_gra06jin)
     RETURN
 EVT_END()
 
+/**
+ * Scene when Mario comes out of the Steeple carried by the Boos:
+ * Mario and the partner drop from above onto the trail and land,
+ * control returns and the Steeple door's n_bero case is switched on again.
+ */
 EVT_BEGIN(teresa_oidasare_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

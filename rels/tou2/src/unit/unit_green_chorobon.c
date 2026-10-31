@@ -220,6 +220,13 @@ static BattleUnitSetup entry_chorobon = {
     NULL, // itemDropTable
 };
 
+/**
+ * The Green Fuzzy calls a friend (it splits): it spins
+ * and shakes on the spot with the split sound for about two seconds,
+ * then hops to LW(7..9) while a new Fuzzy is spawned there from entry_chorobon,
+ * given the same status as its parent (chorobon_copy_status),
+ * spun into place and hopped on to the free spot in LW(0..2), which becomes its home.
+ */
 static EVT_BEGIN(friend_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -354,6 +361,11 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Hop movement used by the Fuzzy: from the position in LW(0..2) it hops toward LW(5..7),
+ * covering at most LW(8) units per hop and squashing and stretching on each landing with the hop sound,
+ * then ends with a final squash and stretch. LW(6) is the target height.
+ */
 static EVT_BEGIN(rabbit_move)
     LOOP(2)
         CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)
@@ -403,6 +415,10 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/**
+ * Init event of the Green Fuzzy: registers its wait, attack, damage and confusion events,
+ * its pose sound table and hop sound and starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -706,6 +722,7 @@ static USER_FUNC(chorobon_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/** Wait event: sets the idle animation from the unit's pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

@@ -28,60 +28,94 @@ EvtWord jin_03_kaidan_naka_kesu[13];
 EvtWord jin_03_kaidan_oku_kesu[13];
 EvtWord jin_03_init_evt[55];
 
+/**
+ * Door animation callback: closes door01 as Mario arrives through n_bero (from jin_01);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it, negated.
+ */
 static EVT_BEGIN(n_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door01"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: opens door01 as Mario leaves through n_bero (to jin_01);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it.
+ */
 static EVT_BEGIN(n_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door01"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: closes door02 as Mario arrives through s_bero (from jin_02);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it.
+ */
 static EVT_BEGIN(s_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door02"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: opens door02 as Mario leaves through s_bero (to jin_02);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it, negated.
+ */
 static EVT_BEGIN(s_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door02"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: closes door00A as Mario arrives through w_bero3 (from jin_00);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it.
+ */
 static EVT_BEGIN(w1_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door00A"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: opens door00A as Mario leaves through w_bero3 (to jin_00);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it, negated.
+ */
 static EVT_BEGIN(w1_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door00A"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: closes door00B as Mario arrives through w_bero2 (from jin_00);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it.
+ */
 static EVT_BEGIN(w2_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door00B"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: opens door00B as Mario leaves through w_bero2 (to jin_00);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it, negated.
+ */
 static EVT_BEGIN(w2_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door00B"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Door animation callback for the door00C door's closing: rotates it by 0.444 times the value in LW(0). */
 EVT_BEGIN(w3_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door00C"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Door animation callback for the door00C door's opening: rotates it by -0.444 times the value in LW(0). */
 EVT_BEGIN(w3_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door00C"), 0, LW(0), 0)
@@ -182,24 +216,32 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Hides the first staircase section (kaidan01) and its collision. */
 EVT_BEGIN(jin_03_kaidan_temae_kesu)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan01"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_kaidan01"), 1, 0)
     RETURN
 EVT_END()
 
+/** Hides the middle staircase section (kaidan02) and its collision. */
 EVT_BEGIN(jin_03_kaidan_naka_kesu)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan02"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_kaidan02"), 1, 0)
     RETURN
 EVT_END()
 
+/** Hides the last staircase section (kaidan03) and its collision. */
 EVT_BEGIN(jin_03_kaidan_oku_kesu)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kaidan03"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_kaidan03"), 1, 0)
     RETURN
 EVT_END()
 
+/**
+ * Creepy Steeple jin_03 map init: starts the steeple music and reverb, the shadow-Mario tint and the exits,
+ * hides two of the three staircase sections according to the stair stage LSW(1) (set by the switches in jin_01
+ * and jin_02) and adds the spinning floor tile that hides a Star Piece.
+ */
 // Position 0 keeps the middle stairs, 1 keeps the front stairs, and other values keep the rear stairs.
 EVT_BEGIN(jin_03_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))

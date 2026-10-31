@@ -28,6 +28,11 @@ EvtWord _tree_anime[106];
 EvtWord win_tree_entry[25];
 EvtWord win_puni_walk_se[20];
 
+/**
+ * Boggly Woods double-door swing without the walk-through:
+ * LW(0) = 0 opens (plays the wooden door-open sound) and nonzero closes, LW(1) is the duration in ms,
+ * LW(8) and LW(9) the two door map objects, which rotate in opposite directions by up to 70 degrees.
+ */
 EVT_BEGIN(evt_win_door_open_pure)
     BEGIN_INLINE_EVENT
         IF_INT_EQUAL(LW(0), 0)
@@ -170,6 +175,7 @@ void _prolog(void) {
     relSetBtlAddr("win", btlsetup_win_tbl, btl_win_setup_no_tbl);
 }
 
+/** REL exit point for win.rel: runs the static destructors. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -177,5 +183,6 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+/** Handler called when an unresolved import in win.rel is hit; does nothing. */
 void _unresolved(void) {
 }

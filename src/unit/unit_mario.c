@@ -192,6 +192,11 @@ BattleUnitKind unitdata_Mario = {
     data_table_mario, // dataTable
 };
 
+/**
+ * Mario's normal battle entry: starts 250 units behind his home spot, replays the stage's "dontyo" animation,
+ * then after 40 frames runs to his home position
+ * and switches to the stand pose on a run-loop boundary (frame 0 or 10).
+ */
 static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 250)
@@ -282,6 +287,10 @@ USER_FUNC(_get_local_frame) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Pose sound callback for the low-HP pant pose M_S_3:
+ * plays Mario's relief voice, alternating between the two clips by counting in unit work 8.
+ */
 s32 mario_pinch_pose_sound_callback(BattleUnit* unit) {
     s32 ret;
 
@@ -294,6 +303,11 @@ s32 mario_pinch_pose_sound_callback(BattleUnit* unit) {
     return ret;
 }
 
+/**
+ * TEV callback 11: adds an extra TEV stage that replaces the colour with constant dark purple (0x4D0952)
+ * and keeps the alpha, turning Mario into the shadow silhouette he becomes
+ * while Doopliss has his name in Twilight Town.
+ */
 static void callback(MapTevCallbackInfo* info) {
     GXColor color = {0x4D, 0x09, 0x52, 0xFF};
     s32 tevStage = info->tevStage;
@@ -314,10 +328,19 @@ static void callback(MapTevCallbackInfo* info) {
     info->texMap = texMap;
 }
 
+/**
+ * Installs the shadow-silhouette TEV callback 11 for Doopliss's Mario disguise;
+ * the Doopliss unit (unit_boss_rampell) then flags its own model to use it. The unit argument is unused.
+ */
 void faker_mario_makkuro_set(BattleUnit* unit) {
     mapSetTevCallback(11, callback);
 }
 
+/**
+ * Turns battle Mario into the dark purple silhouette (TEV callback 11 on all three model parts).
+ * init_event calls it between Trading Places and Back to Normal in chapter 4,
+ * while Doopliss has stolen Mario's name and body.
+ */
 static USER_FUNC(_mario_makkuro_set) {
     BattleUnit* unit = BattleGetMarioPtr(_battleWorkPointer);
 
@@ -330,6 +353,11 @@ static USER_FUNC(_mario_makkuro_set) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Swaps all three Mario model parts (args[0] unit) to the recoloured b_mario_l,
+ * b_mario_w or b_mario_wl model when the L Emblem, W Emblem or both are equipped.
+ * Blocks until the model has loaded; does nothing with neither badge.
+ */
 USER_FUNC(_mario_super_emblem_anim_set) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -396,6 +424,10 @@ USER_FUNC(_mario_super_emblem_anim_set) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Returns Mario's hammer upgrade level (pouch hammerLevel) in args[0];
+ * the audience hammer reaction picks its swing poses and sounds from it.
+ */
 static USER_FUNC(_get_mario_hammer_lv) {
     s32 index = event->args[0];
 
@@ -426,6 +458,11 @@ EVT_BEGIN(mario_dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Mario's Life Shroom revival (data tag 51): he collapses, then the reserved Life Shroom is used,
+ * its icon shows above him, his statuses clear and he recovers 10 HP with the recovery effect
+ * before jumping back up.
+ */
 EVT_BEGIN(mario_emergency_revival_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_VOICE_MARIO_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, LW(10), LW(11), STRING("M_I_S"))
@@ -457,6 +494,10 @@ EVT_BEGIN(mario_emergency_revival_event)
     RETURN
 EVT_END()
 
+/**
+ * Mario's Appeal (data tag 5): he strikes the appeal pose with its sound, the audience is fired up,
+ * then he returns to waiting.
+ */
 EVT_BEGIN(mario_appeal_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_APPEAL)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -468,6 +509,10 @@ EVT_BEGIN(mario_appeal_event)
     RETURN
 EVT_END()
 
+/**
+ * Audience-attack reaction (data tag 6): picks at random between jumping on (btlataudevtMarioJump)
+ * or hammering (btlataudevtMarioHammer) an audience member.
+ */
 static EVT_BEGIN(attack_audience_event)
     CALL(evt_sub_random, 1, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -478,6 +523,11 @@ static EVT_BEGIN(attack_audience_event)
     RETURN
 EVT_END()
 
+/**
+ * Audience-attack reaction: Mario jumps out into the audience,
+ * stomps the audience member picked by _get_attack_aud_no (the camera follows),
+ * then leaves offstage and walks back home. Picked at random against btlataudevtMarioHammer.
+ */
 EVT_BEGIN(btlataudevtMarioJump)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1B"))
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
@@ -655,6 +705,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Mario's victory pose M_V_2 held for one second (data tag 64),
+ * run for Mario and the partner when the battle is won and experience is handed out.
+ */
 EVT_BEGIN(mario_win_reaction)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_V_2"))
     WAIT_MS(1000)

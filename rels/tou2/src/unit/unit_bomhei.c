@@ -272,6 +272,11 @@ static EVT_BEGIN(bomb_event)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the Bob-omb: registers its wait, attack, damage and confusion events,
+ * clears the fuse-sound handle in unit work 0 and sets its walk and run footstep sounds,
+ * then starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -284,6 +289,13 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Bob-omb: a last hit that is fire,
+ * explosion or electric (damage codes 24, 25 and 27) sets it off with bomb_event.
+ * Anything else is a normal damage reaction, after
+ * which a unit that can still act (and is not marked with the instant-kill status,
+ * 27) lights its fuse with change_spark_event.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -311,6 +323,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Lights the Bob-omb's fuse: if the last hit did at least 1 HP of damage it plays the spark sound
+ * and switches the unit to the "spark" event set (wait, attack, damage, confusion), pose table and data table,
+ * and sets counter attribute 0x2000 on its part.
+ */
 static EVT_BEGIN(change_spark_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_FINAL_HIT, LW(0))
@@ -333,6 +350,13 @@ static EVT_BEGIN(change_spark_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Bob-omb before its fuse is lit:
+ * uses an enemy item if one fits, otherwise picks a target, hops twice and runs along the floor at it.
+ * A hit does damage with weapon_bomhei_attack and it bounces off in two hops;
+ * a miss it runs past, then walks back in three slowing steps. Either way it returns home.
+ * A confused unit with no target runs subsetevt_confuse_flustered.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -440,11 +464,16 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait event: sets the idle animation from the unit's pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the lit Bob-omb: a last hit sets it off immediately with bomb_event,
+ * any other damage runs the default reaction.
+ */
 static EVT_BEGIN(damage_event_spark)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -458,6 +487,11 @@ static EVT_BEGIN(damage_event_spark)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the lit Bob-omb: picks a target, hops twice and runs at it.
+ * On a hit it does the weapon_bomhei_bomb damage; on a miss it runs 500 units past the target.
+ * In both cases it explodes afterwards with bomb_event, removing itself.
+ */
 static EVT_BEGIN(attack_event_spark)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -544,6 +578,11 @@ static EVT_BEGIN(attack_event_spark)
     RETURN
 EVT_END()
 
+/**
+ * Wait event of the lit Bob-omb: sets the idle pose from the pose table
+ * and starts the looping fuse sound ("SFX_ENM_BOMB_WAIT1") once,
+ * keeping its handle in unit work 0 so bomb_event can stop it.
+ */
 static EVT_BEGIN(wait_event_spark)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPARK_SFX, LW(15))

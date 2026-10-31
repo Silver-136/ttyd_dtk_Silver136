@@ -14,6 +14,7 @@
 void effMist2Main(EffectEntry* effect);
 void effMist2Disp(CameraId cameraId, EffectEntry* effect);
 
+/** Spawns the second mist effect at (x, y, z) for `life` frames; called through evt_eff ("mist2", the black mist). */
 EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b) {
     EffectEntry* effect;
     EffMist2Work* work;
@@ -74,6 +75,7 @@ EffectEntry* effMist2Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 a, f32 b
     return effect;
 }
 
+/** Per frame: grows, spins and fades each puff and deletes the effect when its life is over. */
 void effMist2Main(EffectEntry* effect) {
     EffMist2Work* work = effect->userdata;
     Vec position;
@@ -144,6 +146,7 @@ void effMist2Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMist2Disp, effect);
 }
 
+/** Draws each puff as a rotated textured quad (effect texture 0x5E). */
 void effMist2Disp(CameraId cameraId, EffectEntry* effect) {
     EffMist2Work* work = effect->userdata;
     Mtx trans;

@@ -246,6 +246,10 @@ static BattleWeapon weapon_gundan_zako_dekadeka_bottle = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init event of the X-Naut: installs wait, attack, damage and confusion events and sets the run,
+ * walk and landing sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -258,6 +262,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the X-Naut: runs the default damage handling. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -265,6 +270,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the X-Naut: uses an enemy item if it has one;
+ * otherwise picks its attack at random: 50% charging attack (normal_attack_event), 30% jump attack,
+ * 20% dekadeka_event, which it skips while it is already Huge (status 10).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -309,6 +319,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Shared wind-up of the X-Naut's attacks: pays the weapon cost, zooms the camera onto the target,
+ * faces it and runs towards it kicking up dust with the run sounds, then switches to the attack pose.
+ */
 static EVT_BEGIN(attack_common_event1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
@@ -355,6 +369,7 @@ static EVT_BEGIN(attack_common_event1)
     RETURN
 EVT_END()
 
+/** Shared recovery of the X-Naut's attacks: resets the camera and runs back to the home position. */
 static EVT_BEGIN(attack_common_event2)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
@@ -365,6 +380,13 @@ static EVT_BEGIN(attack_common_event2)
     RETURN
 EVT_END()
 
+/**
+ * The X-Naut's basic attack (weapon_gundan_zako_attack):
+ * picks a target, runs at it, hops and strikes (SFX_ENM_3RD1_ATTACK1);
+ * the pre-damage check decides between a dodge animation and a hit with the action-command result,
+ * then it returns home through attack_common_event2.
+ * Falls back to the flustered reaction when confused with nothing to hit.
+ */
 static EVT_BEGIN(normal_attack_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_attack))
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -460,6 +482,11 @@ static EVT_BEGIN(normal_attack_event)
         RETURN
 EVT_END()
 
+/**
+ * The X-Naut's jump attack (weapon_gundan_zako_jump_attack):
+ * runs at the target, jumps onto it in a low arc (SFX_ENM_3RD1_ATTACK2)
+ * and the pre-damage check decides between a dodge and a hit; then it returns home.
+ */
 static EVT_BEGIN(jump_attack_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_jump_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -542,6 +569,10 @@ static EVT_BEGIN(jump_attack_event)
         RETURN
 EVT_END()
 
+/**
+ * The X-Naut uses a bottle on itself (poses A_4A and A_4B, SFX_ENM_3RD1_BOTTLE1 to 5),
+ * applying weapon_gundan_zako_dekadeka_bottle: Huge (size +2) for 3 turns.
+ */
 static EVT_BEGIN(dekadeka_event)
     SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
@@ -582,6 +613,7 @@ static EVT_BEGIN(dekadeka_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of the X-Naut: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

@@ -17,6 +17,11 @@ static EvtWord door02_open[12];
 static BeroEntry bero_entry_data[4];
 EvtWord gon_02_init_evt[248];
 
+/**
+ * Door animation callback, closing for the w_bero exit to gon_01:
+ * rotates map objects "door01" and "door02" about Y by 0.389 and -0.389 times the value in LW(0),
+ * so the two leaves swing opposite ways.
+ */
 static EVT_BEGIN(door01_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door01"), 0, LW(0), 0)
@@ -25,6 +30,11 @@ static EVT_BEGIN(door01_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the w_bero exit to gon_01:
+ * rotates map objects "door01" and "door02" about Y by -0.389 and 0.389 times the value in LW(0),
+ * so the two leaves swing opposite ways.
+ */
 static EVT_BEGIN(door01_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door01"), 0, LW(0), 0)
@@ -33,12 +43,20 @@ static EVT_BEGIN(door01_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, closing for the e_bero exit to gon_03:
+ * rotates map object "door03" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door02_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door03"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the e_bero exit to gon_03:
+ * rotates map object "door03" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door02_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door03"), 0, LW(0), 0)
@@ -101,6 +119,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Map init for gon_02 (first hall): sets up the doors, castle music and reverb,
+ * five dormant Dry Bones (karon) NPCs lying on the floor that are not yet active,
+ * and the Power Bounce badge block.
+ */
 EVT_BEGIN(gon_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

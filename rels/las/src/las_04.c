@@ -93,6 +93,11 @@ EvtWord firebar_evt[102];
 static HitDamageReturn dmgRetPoint[4];
 EvtWord las_04_init_evt[55];
 
+/**
+ * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_l_01 and S_doa_l_02 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_l_01"), 0, LW(0), 0)
@@ -101,6 +106,11 @@ static EVT_BEGIN(w_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_l_01 and S_doa_l_02 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(w_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_l_01"), 0, LW(0), 0)
@@ -109,6 +119,11 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (closing) for the east door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r_01 and S_doa_r_02 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(e_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_r_01"), 0, LW(0), 0)
@@ -117,6 +132,11 @@ static EVT_BEGIN(e_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the east door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r_01 and S_doa_r_02 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(e_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_r_01"), 0, LW(0), 0)
@@ -165,6 +185,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Event script: pops 5 coins out of a destroyed fire bar, one every 200 ms.
+ * LW(0..2) is the fire bar's position; the sign of LW(2) picks the launch direction range (0: all round,
+ * negative: 90..270, positive: 270..450 degrees).
+ */
 EVT_BEGIN(firebar_coin)
     SWITCH(LW(2))
         CASE_EQUAL(0)
@@ -277,6 +302,12 @@ FirebarSetup firebardesc[] = {
     },
 };
 
+/**
+ * Event script: starts the fire bars of the hall.
+ * Each bar gets one event running firebar_entry and one drawing its shadows and balls;
+ * the first five bars are the spinning ones, then two sliding bars (types 1) are launched,
+ * one after another 2 seconds apart, and the first is launched again.
+ */
 EVT_BEGIN(firebar_evt)
     BEGIN_INLINE_EVENT_GET_ID(LW(0))
         CALL(firebar_entry, PTR(firebardesc))
@@ -366,6 +397,10 @@ s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball) {
     return 0;
 }
 
+/**
+ * Checks the whole fire bar (a capsule along the line from the first to the last ball) against Mario;
+ * returns 1 on a hit. Same invulnerability and Vivian exceptions as _firebar_hitCheck.
+ */
 s32 _firebar_hitCheck2(FirebarWork* wp) {
     FirebarBall* balls = wp->balls;
     MarioWork* mario = marioGetPtr();
@@ -413,6 +448,13 @@ s32 _firebar_hitCheck2(FirebarWork* wp) {
     return 0;
 }
 
+/**
+ * Per-frame update of a rotating fire bar (type 0):
+ * advances the animation poses, places each ball on the circle around the pivot at the current angle,
+ * steps the angle by speed (faster after each jump over the bar),
+ * and tests for a hit (callback type 2) or for Mario passing over the tip (callback type 1, counted in
+ * hitCount).
+ */
 void _firebar_rot(FirebarWork* wp) {
     FirebarBall* ball = wp->balls;
     MarioWork* mario = marioGetPtr();
@@ -476,6 +518,11 @@ void _firebar_rot(FirebarWork* wp) {
     wp->prevAngle = diff;
 }
 
+/**
+ * Per-frame update of a sliding fire bar (type 1):
+ * it grows in, slides along X until the end X, shrinks away and restarts;
+ * places the balls in a row along Z and runs the same hit and jump-over tests as the rotating bar.
+ */
 void _firebar_trans(FirebarWork* wp) {
     FirebarBall* ball = wp->balls;
     MarioWork* mario = marioGetPtr();
@@ -548,6 +595,14 @@ void _firebar_trans(FirebarWork* wp) {
     }
 }
 
+/**
+ * Script helper: creates and runs one fire bar from the FirebarSetup in args[0].
+ * The first call allocates the work area and the fire ball poses; every call updates the bar and blocks.
+ * When flags has bit 8 (set after the bar has been jumped over ten times) it puffs smoke,
+ * frees everything and finishes.
+ * Mario's invulnerability motions or invincibility timer set the "no damage" bit;
+ * the fire-bar sound plays while Mario is within 120 units in X.
+ */
 USER_FUNC(firebar_entry) {
     FirebarSetup* setup = (FirebarSetup*)evtGetValue(event, event->args[0]);
     FirebarWork* wp;
@@ -659,6 +714,11 @@ USER_FUNC(firebar_entry) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: while the fire bar event in LW(0) exists,
+ * queues shadows under each ball (pulsing with shadowAngle) and the draw callback for the bar each frame;
+ * finishes once the bar event is gone.
+ */
 USER_FUNC(firebar_disp_evt) {
     FirebarWork* wp;
     FirebarBall* ball;
@@ -680,6 +740,10 @@ USER_FUNC(firebar_disp_evt) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Draw callback of a fire bar: draws every ball pose three times (the three layers of the flame) at the ball's
+ * position.
+ */
 void firebar_disp(CameraId camera, void* param) {
     FirebarWork* wp = param;
     FirebarBall* ball = wp->balls;
@@ -694,6 +758,10 @@ void firebar_disp(CameraId camera, void* param) {
     }
 }
 
+/**
+ * Script helper: spawns a bouncing coin at (args[0], args[1], args[2]) launched in direction args[3] with a
+ * custom launch (speed 70, upward 550, five bounces).
+ */
 USER_FUNC(coin_entry) {
     EvtWord* args = event->args;
     s32 x = evtGetValue(event, args[0]);
@@ -712,6 +780,12 @@ USER_FUNC(coin_entry) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Fire bar callback.
+ * Type 1 (Mario jumped over the bar): after the tenth jump over a rotating bar it flags the bar for removal
+ * and starts firebar_coin at its position.
+ * Type 2 (hit): records Mario's height for the fall return and gives him spike-style damage.
+ */
 void firebar_cb(FirebarWork* wp, s32 type) {
     MarioWork* mario = marioGetPtr();
     EventEntry* evt;
@@ -740,6 +814,11 @@ static HitDamageReturn dmgRetPoint[] = {
     {0},
 };
 
+/**
+ * Map init script for las_04: music and ambience, the doors to las_03 and las_05,
+ * the bottomless pits' return points, the fire bar event, the water animations, a brick with Boo's Sheet,
+ * and a save block.
+ */
 EVT_BEGIN(las_04_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS2"))

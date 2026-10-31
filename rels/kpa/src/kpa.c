@@ -201,6 +201,7 @@ void _prolog(void) {
     relSetEvtAddr("kpa_07", kpa_07_init_evt);
 }
 
+/** REL exit point: runs the static destructors. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -209,19 +210,32 @@ void _epilog(void) {
     }
 }
 
+/** Unresolved-import stub for the REL (empty). */
 void _unresolved(void) {
 }
 
+/**
+ * Script helper: returns the current Bowser stage number (1..3, from kwp->stage as set by kpa_status_init) in
+ * args[0].
+ */
 USER_FUNC(kpa_status_get_stage) {
     evtSetValue(event, event->args[0], kwp->stage);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: calls mobjKoopaOn() to allocate the 128-entry map-object table used by the side-scrolling
+ * stages. Runs once from kpa_init.
+ */
 USER_FUNC(kpa_mobj_on) {
     mobjKoopaOn();
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: writes a fresh unique map-object name ("mobj0", "mobj1", ... in hex) to args[0],
+ * so kpa_read_mobj can give every block its own name.
+ */
 USER_FUNC(kpa_make_mobj_name) {
     static char name[16];
     static s32 no;
@@ -233,6 +247,7 @@ USER_FUNC(kpa_make_mobj_name) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: writes a fresh unique item name ("item 0", "item 1", ... in hex) to args[0] for kpa_read_item. */
 USER_FUNC(kpa_make_item_name) {
     static char name[16];
     static s32 no;
@@ -244,6 +259,12 @@ USER_FUNC(kpa_make_item_name) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for kpa_coin_evt: args[0..2] = coin x, y, z.
+ * Adds one coin to Bowser's stage coin tally and its score popup at that position (kpaAddCoinPos),
+ * then takes back the coin that the pickup itself put in Mario's pouch (pouchGetItem runs before the pickup
+ * script), so only the stage tally counts.
+ */
 USER_FUNC(kpa_add_coin) {
     EvtWord* args = event->args;
 
@@ -252,6 +273,13 @@ USER_FUNC(kpa_add_coin) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Bowser's death sequence, shared by all stages:
+ * runs once (LSWF(3)), locks controls, plays the defeated pose,
+ * and has Bowser pop up and fall off the bottom of the screen.
+ * It then bumps the try counter (max 99) and returns to the current stage with "kpa_replay" (stage 1: kpa_02, 2:
+ * kpa_03, 3: kpa_05). Called on a timeout, a pit fall or lethal damage.
+ */
 EVT_BEGIN(kpa_dead)
     IF_INT_EQUAL(LSWF_KPA_STAGE_ENDED, 1)
         RETURN
@@ -353,6 +381,10 @@ USER_FUNC(kpa_fire_off) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = scale. Resizes Bowser uniformly and scales his collision box to match.
+ * kpa_stage_start uses it to shrink him to about 0.4 for the intro and restore 1.0.
+ */
 USER_FUNC(kpa_set_scale) {
     f32 scale = evtGetFloat(event, event->args[0]);
     MarioWork* mario = marioGetPtr();
@@ -363,6 +395,14 @@ USER_FUNC(kpa_set_scale) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Background music controller for the side-scrolling stages, spawned by the stage start.
+ * Every frame it picks a track from the stage (LSW(1) = 0..2) and the time left:
+ * the normal theme, a faster "UP1" variant when 30 s or less remain (and "UP2" for the first stage).
+ * It switches to the invincibility music (BGM_STGK_FIELD2) while Bowser is invincible,
+ * the defeat jingle when LSWF(4) is set and the goal jingle when LSWF(5) is set, then stops.
+ * Changes wait 300 ms.
+ */
 EVT_BEGIN(kpa_bgm_change)
     IF_INT_GREATER(GSW_KPA_TIME_LEFT, 30)
         SET_VALUE(LW(2), 0)
@@ -437,6 +477,13 @@ EVT_BEGIN(kpa_bgm_change)
     RETURN
 EVT_END()
 
+/**
+ * Stage intro, spawned by each side-scrolling map:
+ * fades out the sound, shrinks Bowser, frames him with the camera,
+ * shows the cross and infinity 2D icons ("batu", "mugen") and prints the try message from kpa_get_msg.
+ * Then it fades in, restores Bowser's size and control,
+ * starts the music controller and sets LSWF(2) (intro done), which also starts kpa_time.
+ */
 EVT_BEGIN(kpa_stage_start)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_cam_letter_box_onoff, 0, 0)
@@ -506,6 +553,10 @@ u16 kpa_status_icon_tbl[6][3] = {
 };
 #endif
 
+/**
+ * Event that calls kpa_status_main every frame so the HUD (score, coins, stage, tries, time) keeps being drawn.
+ * Started by kpa_status_init.
+ */
 EVT_BEGIN(kpa_status_main_evt)
     LOOP(0)
         CALL(kpa_status_main)
@@ -570,12 +621,19 @@ USER_FUNC(kpa_get_msg) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: returns in LW(0) whether Bowser is currently invincible (kpaMutekiCheck). */
 USER_FUNC(kpa_muteki_check) {
     event->lwData[0] = kpaMutekiCheck();
     return EVT_RETURN_DONE;
 }
 
 
+/**
+ * Draw callback of the Bowser HUD, queued each frame by kpa_status_main:
+ * the stage/score/tries/time labels (language- specific icons), the six-digit score, the coin count,
+ * the stage number, the try counter (leading zero dropped) and the three-digit time.
+ * The US release moved the number icons up by 8.
+ */
 void kpa_status_disp(CameraId camera, void* param) {
     Vec pos;
     s32 digit[6];
@@ -661,11 +719,17 @@ void kpa_status_disp(CameraId camera, void* param) {
     }
 }
 
+/** Script helper: queues kpa_status_disp for this frame on the 2D camera. */
 USER_FUNC(kpa_status_main) {
     dispEntry(CAMERA_2D, 1000.0f, 0, kpa_status_disp, NULL);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = stage, args[1] = tries, args[2] = time left.
+ * Allocates the stage work block (kwp) with those values
+ * and starts kpa_status_main_evt in a copy of the calling event's state.
+ */
 USER_FUNC(kpa_status_init) {
     EvtWord* args = event->args;
     s32 stage = evtGetValue(event, args[0]);
@@ -691,6 +755,11 @@ USER_FUNC(kpa_status_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = elapsed milliseconds in the current 10 s step, args[1] = completed 10 s steps,
+ * args[2] = result.
+ * Computes the time left (180 minus elapsed seconds), stores it in the HUD and returns it in args[2].
+ */
 USER_FUNC(kpa_set_time) {
     EvtWord* args = event->args;
     s32 sec = evtGetValue(event, args[0]) / 1000;
@@ -704,6 +773,7 @@ USER_FUNC(kpa_set_time) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: makes the goal pole ("pole") untouchable so a timed-out run cannot still finish. */
 USER_FUNC(kpa_pole_hitoff) {
     MapObjectEntry* mobj = mobjNameToPtrNoAssert("pole");
 
@@ -713,6 +783,10 @@ USER_FUNC(kpa_pole_hitoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Draw callback that prints the large stage-clear text in the middle of the screen (the Japanese "goal in"
+ * caption).
+ */
 void kpa_stageclear_disp(CameraId camera, void* param) {
     FontDrawStart();
     FontDrawScale(2.0f);
@@ -722,6 +796,11 @@ void kpa_stageclear_disp(CameraId camera, void* param) {
     FontDrawEdgeOff();
 }
 
+/**
+ * Goal pole script: locks controls, plays the counter sound
+ * while kpa_time_countdown turns each remaining second into 100 points,
+ * then shows the "stageclear" effect and waits 3.5 s before returning control.
+ */
 EVT_BEGIN(kpa_stage_clear)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_sfxon, STRING("SFX_KUPPA_COUNTER1"), LW(0))
@@ -738,6 +817,10 @@ USER_FUNC(kpa_stageclear_disp_entry) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for the goal tally: each call removes one second from the time left and adds 100 points;
+ * it blocks the script (EVT_RETURN_BLOCK) until the time reaches zero.
+ */
 USER_FUNC(kpa_time_countdown) {
     KpaWork* wp = kwp;
 
@@ -749,6 +832,7 @@ USER_FUNC(kpa_time_countdown) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: returns the 3D camera position (x, y, z) in args[0..2]. */
 USER_FUNC(kpa_get_cam_pt) {
     EvtWord* args = event->args;
     CameraEntry* cam = camGetPtr(CAMERA_3D);

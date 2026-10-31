@@ -204,6 +204,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Bald Cleft: runs damage_event_sub (hurt and flipped poses), then the default damage handling. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
     IF_INT_GREATER_OR_EQUAL(LW(15), 1)
@@ -222,6 +223,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Pose part of the Bald Cleft's damage reaction: shows the hurt pose (SIS_D_1) when damage was dealt,
+ * and while he lies flipped over shows SIS_D_2 and hops twice.
+ */
 static EVT_BEGIN(damage_event_sub)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(15))
     IF_INT_GREATER_OR_EQUAL(LW(15), 1)
@@ -238,6 +243,10 @@ static EVT_BEGIN(damage_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * Reaction when the Bald Cleft is flipped over: switches to the flipped defence and pose tables,
+ * sets the over-turn count to 2 (SFX_ENM_INSIDE1), hops and rests on his back at y = 5.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -259,6 +268,12 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Recovery of the Bald Cleft at the start of its turn:
+ * counts the over-turn count down and, when it reaches 0,
+ * restores the normal defence and pose tables and ground position with SFX_ENM_INSIDE2 and a hop;
+ * while still flipped he just goes back to waiting.
+ */
 // Flipped attack turns count down from two; the recovery turn restores the upright state instead of attacking.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
@@ -286,6 +301,10 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Bald Cleft: like the Moon Cleft's dash attack (gets up first if flipped,
+ * otherwise uses an item or dashes at one target with weapon_sinnosuke_attack) but with faster movement speeds.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -410,6 +429,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of the Bald Cleft: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

@@ -28,10 +28,15 @@ s16 _party_max_hp_table[8][4] = {
     {15, 20, 25, 200}
 };
 
+/** The pouch (Mario's save data: items, badges, stats, partners, mail), allocated by pouchInit. */
 PouchData* pouchGetPtr(void) {
     return mpp;
 }
 
+/**
+ * Allocates and clears the pouch for a new game:
+ * empty lists, 10 HP, 5 FP, 3 BP, level 1, partners at 10 HP, and Yoshi's default name.
+ */
 void pouchInit(void) {
     int i;
 
@@ -89,18 +94,22 @@ void pouchInit(void) {
 #endif
 }
 
+/** Key item in key item list slot id (0 if empty). */
 ItemType pouchKeyItem(s32 id) {
     return mpp->keyItems[id];
 }
 
+/** Item in Mario's item list slot id (0 if empty). */
 ItemType pouchHaveItem(s32 id) {
     return mpp->heldItems[id];
 }
 
+/** Item in storage slot id (0 if empty). */
 ItemType pouchKeepItem(s32 id) {
     return mpp->storedItems[id];
 }
 
+/** Badge in badge list slot id (0 if empty). */
 ItemType pouchHaveBadge(s32 id) {
     return mpp->badges[id];
 }
@@ -111,6 +120,7 @@ ItemType pouchEquipBadge(s32 id) {
 
 #endif
 
+/** Number of items Mario carries (out of 20 slots). */
 s32 pouchGetHaveItemCnt(void) {
     s32 i, count;
 
@@ -122,6 +132,7 @@ s32 pouchGetHaveItemCnt(void) {
     return count;
 }
 
+/** Number of items in storage. */
 s32 pouchGetKeepItemCnt(void) {
     s32 i, count;
 
@@ -133,6 +144,7 @@ s32 pouchGetKeepItemCnt(void) {
     return count;
 }
 
+/** Number of badges Mario owns. */
 s32 pouchGetHaveBadgeCnt(void) {
     s32 i, count;
 
@@ -144,6 +156,7 @@ s32 pouchGetHaveBadgeCnt(void) {
     return count;
 }
 
+/** Number of badges Mario is wearing. */
 s32 pouchGetEquipBadgeCnt(void) {
     s32 i, count;
 
@@ -155,6 +168,7 @@ s32 pouchGetEquipBadgeCnt(void) {
     return count;
 }
 
+/** Free slots in Mario's item list: 20 with the Strange Sack, else 10. */
 s32 pouchGetEmptyHaveItemCnt(void) {
     s32 i, count, max;
 
@@ -167,6 +181,7 @@ s32 pouchGetEmptyHaveItemCnt(void) {
     return count;
 }
 
+/** Number of free item storage slots. */
 s32 pouchGetEmptyKeepItemCnt(void) {
     s32 i, count;
 
@@ -178,6 +193,7 @@ s32 pouchGetEmptyKeepItemCnt(void) {
     return count;
 }
 
+/** we have obtained an item, update the appropriate data */
 // Puts type at the front of list t1 if it has an empty slot: the entries above the last empty slot move down
 // one place (t2, if given, moves in step and gets 0 at the front). Returns 1, or 0 when the list is full.
 static inline BOOL pouchAdd(s16 *t1, s16 *t2, s32 size, ItemType type) {
@@ -300,6 +316,7 @@ BOOL pouchGetItem(ItemType type) {
 }
 
 
+/** How many copies of an item, key item or badge Mario carries (stored items do not count); 0 for other ids. */
 s32 pouchCheckItem(u32 itemId) {
     s32 id = itemId;
     s32 i;
@@ -335,6 +352,7 @@ s32 pouchCheckItem(u32 itemId) {
     return 0;
 }
 
+/** Clears slot i of a list (and of its parallel worn-badge list, if any) and moves the later slots up one. */
 static inline void pouchShift(s16 *table1, s16 *table2, int i, s32 maximum) {
     table1[i] = ITEM_NULL;
     if (table2 != NULL) {
@@ -350,6 +368,7 @@ static inline void pouchShift(s16 *table1, s16 *table2, int i, s32 maximum) {
     }
 }
 
+/** Removes the first copy of an item, key item or badge from its list and closes the gap; FALSE if Mario lacks it. */
 BOOL pouchRemoveItem(ItemType type) {
     s16 *table1;
     s16 *table2;
@@ -390,6 +409,11 @@ BOOL pouchRemoveItem(ItemType type) {
     return 0;
 }
 
+/**
+ * Removes the item id from list slot index (the item used or thrown away, from the item menu,
+ * battle and evt_pouch) and closes the gap; FALSE if the slot holds another item.
+ * Badges drop their worn state too.
+ */
 BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     s16* table1, * table2, * p;
     BOOL valid;
@@ -535,6 +559,7 @@ s32 comp_aiueo(const void* a, const void* b) {
     return strcmp(bufA, bufB);
 }
 
+/** qqsort comparator: items by type_sort_order from the item table, ascending (pouchSortItem modes 1 and 3). */
 s32 comp_kind(s16* a, s16* b) {
     s16 x = itemDataTable[*a].type_sort_order;
     s16 y = itemDataTable[*b].type_sort_order;
@@ -544,6 +569,7 @@ s32 comp_kind(s16* a, s16* b) {
     return -(x < y);
 }
 
+/** qqsort comparator: items by name, descending (pouchSortItem modes 7 and 9). */
 s32 comp_aiueo_r(const void* a, const void* b) {
     char bufA[0x80];
     char bufB[0x80];
@@ -555,6 +581,7 @@ s32 comp_aiueo_r(const void* a, const void* b) {
     return strcmp(bufB, bufA);
 }
 
+/** qqsort comparator: items by type_sort_order, descending (pouchSortItem modes 8 and 10). */
 s32 comp_kind_r(s16* a, s16* b) {
     s16 x = itemDataTable[*a].type_sort_order;
     s16 y = itemDataTable[*b].type_sort_order;
@@ -564,6 +591,12 @@ s32 comp_kind_r(s16* a, s16* b) {
     return -(x > y);
 }
 
+/**
+ * Sorts a pouch list for the item and badge menus (win_root.c).
+ * Mode: 0/7 items by name ascending/descending, 1/8 items by kind, 2/9 and 3/10 key items by name and kind,
+ * 4/11 badges by name, 5/12 badges by kind, 6/13 badges by BP cost then kind. Badges keep their worn state.
+ * JP compares internal ids for badge names.
+ */
 void pouchSortItem(s32 mode) {
     s32 k;
     s16 items[MAX_HELD_ITEMS];
@@ -722,10 +755,12 @@ void pouchSortItem(s32 mode) {
     }
 }
 
+/** Mario's coins. */
 s32 pouchGetCoin(void) {
     return mpp->coins;
 }
 
+/** Adds coins (negative to pay), clamped to 0..999; returns the new count. */
 s32 pouchAddCoin(s32 coins) {
     mpp->coins += coins;
     if (mpp->coins < 0) {
@@ -737,6 +772,7 @@ s32 pouchAddCoin(s32 coins) {
     return mpp->coins;
 }
 
+/** Sets Mario's coins, clamped to 0..999; returns the new count. */
 s32 pouchSetCoin(s32 coins) {
     mpp->coins = coins;
     if (mpp->coins < 0) {
@@ -748,24 +784,29 @@ s32 pouchSetCoin(s32 coins) {
     return mpp->coins;
 }
 
+/** Number of Shine Sprites Mario carries (super coin: the Japanese name). */
 s32 pouchGetSuperCoin(void) {
     return mpp->mShineSpriteCount;
 }
 
+/** Sets the Shine Sprite count (super coin: the Japanese name) and returns it. */
 s32 pouchSetSuperCoin(s32 count) {
     mpp->mShineSpriteCount = count;
     return mpp->mShineSpriteCount;
 }
 
+/** Number of Star Pieces Mario carries. */
 s32 pouchGetStarPiece(void) {
     return mpp->mStarPieceCount;
 }
 
+/** Adds Star Pieces (negative to spend) without a clamp; returns the new count. */
 s32 pouchAddStarPiece(s32 count) {
     mpp->mStarPieceCount += count;
     return mpp->mStarPieceCount;
 }
 
+/** Adds HP to Mario (negative for damage), clamped to 0..maximumHP; returns the new HP. */
 s16 pouchAddHP(s16 points) {
     mpp->currentHP += (s16)points;
     if (mpp->currentHP < 0) {
@@ -777,14 +818,17 @@ s16 pouchAddHP(s16 points) {
     return mpp->currentHP;
 }
 
+/** Mario's current HP. */
 s32 pouchGetHP(void) {
     return mpp->currentHP;
 }
 
+/** Max HP including HP Plus badges. */
 s32 pouchGetMaxHP(void) {
     return mpp->maximumHP;
 }
 
+/** Sets current HP, clamped to the maximum (not to 0). */
 void pouchSetHP(s32 points) {
     mpp->currentHP = points;
     if (mpp->currentHP > mpp->maximumHP) {
@@ -792,15 +836,18 @@ void pouchSetHP(s32 points) {
     }
 }
 
+/** Sets max HP and the badge-free base max HP. */
 void pouchSetMaxHP(s16 points) {
     mpp->maximumHP = points;
     mpp->baseMaxHP = mpp->maximumHP;
 }
 
+/** A partner's current HP (partyData is indexed by PartyId). */
 s32 pouchGetPartyHP(PartyId partnerId) {
     return mpp->partyData[partnerId].currentHP;
 }
 
+/** Sets a partner's current HP, clamped to its maximum (not to 0). */
 void pouchSetPartyHP(s32 partnerId, s32 points) {
     PouchPartyData* party;
 
@@ -811,14 +858,17 @@ void pouchSetPartyHP(s32 partnerId, s32 points) {
     }
 }
 
+/** Mario's current FP. */
 s32 pouchGetFP(void) {
     return mpp->currentFP;
 }
 
+/** Max FP including FP Plus badges. */
 s32 pouchGetMaxFP(void) {
     return mpp->maximumFP;
 }
 
+/** Sets current FP, clamped to the maximum (not to 0). */
 void pouchSetFP(s32 points) {
     mpp->currentFP = points;
     if (mpp->currentFP > mpp->maximumFP) {
@@ -826,15 +876,18 @@ void pouchSetFP(s32 points) {
     }
 }
 
+/** Sets max FP and the badge-free base max FP. */
 void pouchSetMaxFP(s16 points) {
     mpp->maximumFP = points;
     mpp->baseMaxFP = mpp->maximumFP;
 }
 
+/** Current Star Power in hundredths of a gauge unit (AP: appeal points, from the audience). */
 s32 pouchGetAP(void) {
     return mpp->currentSP;
 }
 
+/** Adds Star Power (negative to spend: a special move costs baseSpCost * 100), clamped to 0..maximumSP. */
 void pouchAddAP(s32 points) {
     mpp->currentSP += points;
     if (mpp->currentSP < 0) {
@@ -845,6 +898,7 @@ void pouchAddAP(s32 points) {
     }
 }
 
+/** Sets Star Power, clamped to 0..maximumSP. */
 void pouchSetAP(s32 points) {
     mpp->currentSP = points;
     if (mpp->currentSP < 0) {
@@ -855,18 +909,25 @@ void pouchSetAP(s32 points) {
     }
 }
 
+/** Star Power maximum in hundredths of a gauge unit (100 per Crystal Star). */
 s32 pouchGetMaxAP(void) {
     return mpp->maximumSP;
 }
 
+/** Audience size carried between battles; the next battle's starting crowd is drawn around it. */
 f32 pouchGetAudienceNum(void) {
     return mpp->audienceCount;
 }
 
+/** Saves the battle audience size (battle_audience.c) so the next battle starts with about as many. */
 void pouchSetAudienceNum(f32 num) {
     mpp->audienceCount = num;
 }
 
+/**
+ * Jump level from the boots key items (0 none, 1 Boots, 2 Super Boots, 3 Ultra Boots);
+ * also caches it in jumpLevel. Field objects check it (evt_mobj.c).
+ */
 s32 pouchGetJumpLv(void) {
     s32 level = 0;
 
@@ -881,6 +942,10 @@ s32 pouchGetJumpLv(void) {
     return mpp->jumpLevel;
 }
 
+/**
+ * Hammer level from the hammer key items (0 none, 1 Hammer, 2 Super Hammer, 3 Ultra Hammer);
+ * also caches it in hammerLevel.
+ */
 s32 pouchGetHammerLv(void) {
     s32 level = 0;
 
@@ -895,6 +960,10 @@ s32 pouchGetHammerLv(void) {
     return mpp->hammerLevel;
 }
 
+/**
+ * Partner's attack level (number of rank-ups); the party menu shows attackLevel + 2 moves
+ * and battle uses it to pick move power.
+ */
 s32 pouchGetPartyAttackLv(PartyId partyId) {
     // FAKE: &mpp->partyData[partyId] is formed by hand (same address) so the scaled index gets the field offset before the base is added (addi + lhax), as in the target
     return ((PouchPartyData*)((u8*)mpp + partyId * sizeof(PouchPartyData)))->attackLevel;
@@ -915,6 +984,7 @@ BOOL pouchAddKeepItem(s32 id) {
     return FALSE;
 }
 
+/** Takes the first copy of id out of storage, leaving an empty slot; FALSE if it is not stored. */
 BOOL pouchRemoveKeepItem(s32 id, s32 index) {
     s32 i, j;
 
@@ -934,6 +1004,11 @@ BOOL pouchRemoveKeepItem(s32 id, s32 index) {
     return FALSE;
 }
 
+/**
+ * Recomputes Mario's stats from his badges: max HP and FP are the base values plus 5 per HP Plus / FP Plus worn,
+ * current HP and FP are clamped, and available BP is max BP minus the cost of every worn badge.
+ * Runs after battle and after badge or item changes (badge menu, evt_pouch).
+ */
 void pouchReviseMarioParam(void) {
     int i;
 
@@ -966,6 +1041,10 @@ void pouchReviseMarioParam(void) {
     }
 }
 
+/**
+ * Recomputes every partner's max HP: the _party_max_hp_table entry for its HP level plus 5 per HP Plus P worn,
+ * clamping current HP down to it.
+ */
 void pouchRevisePartyParam(void) {
     PouchPartyData* party;
     int count, i;
@@ -984,10 +1063,12 @@ void pouchRevisePartyParam(void) {
     }
 }
 
+/** Mario's Star Points toward the next level, for the status window. */
 s16 pouchGetStarPoint(void) {
     return mpp->mStarPoints;
 }
 
+/** Wears the badge in list slot index by copying it into the same slot of equippedBadges; FALSE for an empty slot. */
 BOOL pouchEquipBadgeIndex(s32 index) {
     if (mpp->badges[index] == 0) {
         return FALSE;
@@ -996,6 +1077,10 @@ BOOL pouchEquipBadgeIndex(s32 index) {
     return TRUE;
 }
 
+/**
+ * Takes off the badge in list slot index (badge menu); FALSE if that slot was not worn.
+ * BP is recomputed later by pouchReviseMarioParam.
+ */
 BOOL pouchUnEquipBadgeIndex(s32 index) {
     if (mpp->equippedBadges[index] == 0) {
         return FALSE;
@@ -1004,6 +1089,7 @@ BOOL pouchUnEquipBadgeIndex(s32 index) {
     return TRUE;
 }
 
+/** How many copies of a badge Mario is wearing (for stacking badges such as HP Plus P). */
 s32 pouchEquipCheckBadge(s32 badgeId) {
     int i, count;
 
@@ -1016,6 +1102,7 @@ s32 pouchEquipCheckBadge(s32 badgeId) {
     return count;
 }
 
+/** TRUE if the badge in list slot index is worn (equippedBadges mirrors the badges list slot for slot). */
 BOOL pouchEquipCheckBadgeIndex(s32 index) {
     return mpp->equippedBadges[index] != 0;
 }
@@ -1053,6 +1140,10 @@ s32 pouchArriveBadge(s32 id) {
     return badgeShop_add(bdsw->special_table, (s16)id, 1);
 }
 
+/**
+ * Script command evt_pouch_majinai_set: gives Merlee curseCount charm uses unless more are already left,
+ * and restarts her countdown (majinai: charm).
+ */
 void pouchMajinaiInit(s32 curseCount) {
     if (mpp->mMerleeCurseUsesRemaining < curseCount) {
         mpp->mMerleeCurseUsesRemaining = (u8)curseCount;
@@ -1061,10 +1152,15 @@ void pouchMajinaiInit(s32 curseCount) {
     }
 }
 
+/** Coin counter of Bowser's side-scrolling stages (0-99). */
 s32 pouchGetKpaCoin(void) {
     return mpp->mSuperBowserCoins;
 }
 
+/**
+ * Adds coins collected in Bowser's side-scrolling stages (kpa_act.c).
+ * Every 100 coins wraps the counter and returns TRUE; the caller then adds a 1000-point bonus.
+ */
 BOOL pouchAddKpaCoin(s32 coins) {
     BOOL ret = FALSE;
     mpp->mSuperBowserCoins += coins;
@@ -1075,10 +1171,12 @@ BOOL pouchAddKpaCoin(s32 coins) {
     return ret;
 }
 
+/** Score of Bowser's side-scrolling stages, shown by the kpa rel. */
 u32 pouchGetKpaScore(void) {
     return mpp->mSuperBowserScore;
 }
 
+/** Adds to the score of Bowser's side-scrolling stages (kpa_act.c), capped at 999999. */
 void pouchAddKpaScore(u32 score) {
     mpp->mSuperBowserScore += score;
     if (mpp->mSuperBowserScore > 999999) {
@@ -1126,6 +1224,7 @@ void pouchOpenMail(s32 mailId) {
     mpp->mEmailReadFlags[mailId / 32] |= (1 << (mailId % 32));
 }
 
+/** Mail state for the mail menu: 2 when read, 1 when received but unread, 0 when not received. */
 u32 pouchCheckMail(s32 mailId) {
     s32 mask = (1 << (mailId % 32));
     if (mpp->mEmailReadFlags[mailId / 32] & mask) {
@@ -1135,18 +1234,31 @@ u32 pouchCheckMail(s32 mailId) {
     }
 }
 
+/**
+ * Partner colour from the top three bits of its flags;
+ * Yoshi's colour picks his sprite pose table and his window and battle colours.
+ */
 s32 pouchGetPartyColor(PartyId partnerId) {
     return mpp->partyData[partnerId].flags >> 13;
 }
 
+/**
+ * Stores a partner's colour in the top three bits of its flags;
+ * only Yoshi uses it (set when the egg hatches, tou_10 in Glitzville, and by party.c).
+ */
 void pouchSetPartyColor(PartyId partnerId, s32 color) {
     mpp->partyData[partnerId].flags = (mpp->partyData[partnerId].flags & 0x1FFF) | (u16)(color << 13);
 }
 
+/**
+ * Stores the name the player gave Yoshi when the egg hatched (evt_pouch script command);
+ * the story-progress setup in event.c resets it to the default name.
+ */
 void pouchSetYoshiName(const char* name) {
     strcpy(mpp->yoshiName, name);
 }
 
+/** Yoshi's name for messages: the stored name, or the default from message name_party3 when it is empty. */
 char* pouchGetYoshiName(void) {
     if (strlen(mpp->yoshiName) < 1) {
         return (char*)msgSearch("name_party3");

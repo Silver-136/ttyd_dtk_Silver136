@@ -167,6 +167,11 @@ static EvtWord evt_after_peach[188];
 EvtWord tou_02_init_evt[VERSION_PICK(576, 919)];
 
 int __cvt_ull_flt();
+/**
+ * Builds the fan crowd's animation table (FanAnim) from ext_fan_data:
+ * groups the per-frame texture entries by model name and animation,
+ * recording each animation's first texture and frame count.
+ */
 // Consecutive texture entries with the same group and pose form one animation range.
 static void pose_init(void) {
     char name[32];
@@ -200,6 +205,10 @@ static void pose_init(void) {
     fan_wp->animNum++;
 }
 
+/**
+ * Per-frame update of the crowd's sprites: picks each fan's current texture frame from its animation
+ * and the render time.
+ */
 // Restart at frame zero after the pose duration; excess elapsed time is not carried into the next cycle.
 static void pose_main(void) {
     s32 i;
@@ -222,6 +231,7 @@ static void pose_main(void) {
     }
 }
 
+/** Switches a fan to the animation named `anim` of model `name` (if it exists and differs) and restarts its timer. */
 static void pose_change(Fan* fan, const char* name, const char* anim) {
     FanAnim* a;
     s32 i;
@@ -237,6 +247,7 @@ static void pose_change(Fan* fan, const char* name, const char* anim) {
     }
 }
 
+/** Returns a random float between min and max. */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
 
@@ -285,6 +296,7 @@ static EVT_BEGIN(s_door_close)
     RETURN
 EVT_END()
 
+/** Swings open the double doors door_2_a / door_2_b (the first lobby door pair). */
 EVT_BEGIN(n_1_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING(("door_2_b")), 0, LW(0), 0)
@@ -293,6 +305,7 @@ EVT_BEGIN(n_1_door_open)
     RETURN
 EVT_END()
 
+/** Swings the double doors door_2_a / door_2_b closed again. */
 EVT_BEGIN(n_1_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING(("door_2_b")), 0, LW(0), 0)
@@ -301,6 +314,10 @@ EVT_BEGIN(n_1_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the lobby's second double door (door_3_a and door_3_b): LW(0) is the swing angle;
+ * the two leaves turn about the Y axis in opposite directions by 0.39 times the angle.
+ */
 static EVT_BEGIN(n_2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING(("door_3_b")), 0, LW(0), 0)
@@ -309,6 +326,10 @@ static EVT_BEGIN(n_2_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the second double door going shut:
+ * like n_2_door_open with the angle direction reversed.
+ */
 static EVT_BEGIN(n_2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING(("door_3_b")), 0, LW(0), 0)
@@ -317,24 +338,28 @@ static EVT_BEGIN(n_2_door_close)
     RETURN
 EVT_END()
 
+/** Swings open the lobby door door_4. */
 EVT_BEGIN(n_3_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING(("door_4")), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings the lobby door door_4 closed again. */
 EVT_BEGIN(n_3_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING(("door_4")), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings open the lobby door door_5. */
 EVT_BEGIN(n_4_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING(("door_5")), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings the lobby door door_5 closed again. */
 EVT_BEGIN(n_4_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING(("door_5")), 0, LW(0), 0)
@@ -457,6 +482,10 @@ EVT_BEGIN(evt_move_g)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the left guard: stands at x = -470 until the guards step aside, then at -530;
+ * absent when the story has moved on.
+ */
 EVT_BEGIN(init_gard1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_02_THE_GUARD_BACKS_OFF)
@@ -473,6 +502,10 @@ EVT_BEGIN(init_gard1)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the left guard: lines depend on story progress (before the arena intro, after he steps aside,
+ * after Mario's gone champion).
+ */
 EVT_BEGIN(talk_gard1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_01_ARENA_INTRO_1F)
@@ -499,6 +532,7 @@ EVT_BEGIN(talk_gard1)
     RETURN
 EVT_END()
 
+/** NPC init for the right guard: stands at x = 470 until the guards step aside, then at 530. */
 EVT_BEGIN(init_gard2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_02_THE_GUARD_BACKS_OFF)
@@ -515,6 +549,7 @@ EVT_BEGIN(init_gard2)
     RETURN
 EVT_END()
 
+/** Talk script of the right guard: same lines as talk_gard1. */
 EVT_BEGIN(talk_gard2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_01_ARENA_INTRO_1F)
@@ -581,11 +616,16 @@ static EVT_BEGIN(talk_madam)
     RETURN
 EVT_END()
 
+/** NPC init for the reporter: stands at (-100, 0, -25). */
 EVT_BEGIN(init_repo)
     CALL(evt_npc_set_position, STRING(("me")), -100, 0, -25)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the reporter: story-dependent lines (before Gonzales, until the boss battle,
+ * then after the league reopens).
+ */
 EVT_BEGIN(talk_repo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -626,11 +666,13 @@ EVT_BEGIN(talk_repo)
     RETURN
 EVT_END()
 
+/** NPC init for the first camera operator: stands at (-150, 0, 0). */
 EVT_BEGIN(init_cam1)
     CALL(evt_npc_set_position, STRING(("me")), -150, 0, 0)
     RETURN
 EVT_END()
 
+/** Talk script of the first camera operator: story-dependent lines. */
 EVT_BEGIN(talk_cam1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -671,6 +713,7 @@ EVT_BEGIN(talk_cam1)
     RETURN
 EVT_END()
 
+/** NPC init for the second camera operator: stands at (80, 200, -125), or (30, 200, -60) before the arena intro. */
 EVT_BEGIN(init_cam2)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
         CALL(evt_npc_set_position, STRING(("me")), 80, 200, -125)
@@ -680,6 +723,7 @@ EVT_BEGIN(init_cam2)
     RETURN
 EVT_END()
 
+/** Talk script of the second camera operator: story-dependent lines. */
 EVT_BEGIN(talk_cam2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -720,12 +764,14 @@ EVT_BEGIN(talk_cam2)
     RETURN
 EVT_END()
 
+/** NPC init for the fourth Toad: placed at (-350, 0, 75). */
 EVT_BEGIN(init_kino4)
     CALL(evt_npc_set_position, STRING(("me")), -350, 0, 75)
     CALL(evt_npc_status_onoff, 1, STRING(("me")), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
+/** Regular (idle) script of the fourth Toad: paces between x = -350 and 350. */
 EVT_BEGIN(reg_kino4)
     LOOP(0)
         CALL(evt_npc_move_position, STRING(("me")), -350, 75, 0, FLOAT(48.0f), 0)
@@ -738,6 +784,7 @@ EVT_BEGIN(reg_kino4)
     RETURN
 EVT_END()
 
+/** Talk script of the fourth Toad: story-dependent lines. */
 EVT_BEGIN(talk_kino4)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -778,6 +825,7 @@ EVT_BEGIN(talk_kino4)
     RETURN
 EVT_END()
 
+/** NPC init for the fifth Toad: placed at (-520, 0, 25). */
 EVT_BEGIN(init_kino5)
     CALL(evt_npc_set_position, STRING(("me")), -520, 0, 25)
     RETURN
@@ -864,11 +912,13 @@ EVT_BEGIN(talk_kino5)
     RETURN
 EVT_END()
 
+/** NPC init for Toadette (kinopiko): placed at (-490, 0, 25). */
 EVT_BEGIN(init_kinopiko)
     CALL(evt_npc_set_position, STRING(("me")), -490, 0, 25)
     RETURN
 EVT_END()
 
+/** Talk script of Toadette: story-dependent lines. */
 EVT_BEGIN(talk_kinopiko)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -909,11 +959,13 @@ EVT_BEGIN(talk_kinopiko)
     RETURN
 EVT_END()
 
+/** NPC init for the female Toad: placed at (100, 0, 0). */
 EVT_BEGIN(init_kinopio_f)
     CALL(evt_npc_set_position, STRING(("\203L\203m\203s\203I\217\227")), 100, 0, 0)
     RETURN
 EVT_END()
 
+/** Talk script of the female Toad: story-dependent lines. */
 EVT_BEGIN(talk_kinopio_f)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -954,6 +1006,10 @@ EVT_BEGIN(talk_kinopio_f)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the mouse (chu): placed at (245, 0, 125) from Ms. Mowz's introduction,
+ * otherwise hidden at y = -1000.
+ */
 EVT_BEGIN(init_chu)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_20_05_MAJORS_4TH_PL)
@@ -964,6 +1020,7 @@ EVT_BEGIN(init_chu)
     RETURN
 EVT_END()
 
+/** Talk script of the mouse (chu): story-dependent lines. */
 EVT_BEGIN(talk_chu)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1063,6 +1120,7 @@ EVT_BEGIN(move_champ)
     RETURN
 EVT_END()
 
+/** Talk script of the champion in the lobby (stg3_tou_190), with the post-Chapter 3 line stg3_tou_479_02. */
 EVT_BEGIN(talk_champ)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_33_06_BOWSER_TREASURE)
@@ -1172,6 +1230,7 @@ EVT_BEGIN(talk_ironB)
     RETURN
 EVT_END()
 
+/** NPC init for the Bandit (borodo): placed at (-100, 0, 100) in the late Chapter 3 scene. */
 EVT_BEGIN(init_borodo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1187,6 +1246,7 @@ EVT_BEGIN(init_borodo)
     RETURN
 EVT_END()
 
+/** Talk script of the Bandit in the late Chapter 3 scene (stg3_tou_479_06). */
 EVT_BEGIN(talk_borodo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1523,6 +1583,11 @@ ExtTexInfo ext_fan_data[] = {
     {0},
 };
 
+/**
+ * Init callback of the lobby fan crowd (extdrv sprites): allocates FanWork and one Fan per pose, gives each fan
+ * a random facing, a random Toad, Toadette or Lakitu walk animation and a random spot within 100 of the centre,
+ * and starts the crowd noise SFX_STG3_AUDIENCE_FAN1, keeping its full volume.
+ */
 void ext_fan_init(void) {
     s32 i;
     ExtdrvPose* pose;
@@ -1569,6 +1634,7 @@ void ext_fan_init(void) {
     fan_wp->vol = psndSFX_get_vol(fan_wp->sfxId);
 }
 
+/** Display callback of the fan crowd: loads render mode, vertices, textures and TEV, and draws all fan sprites. */
 void fan_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
@@ -2009,6 +2075,7 @@ s32 check_hammer(Fan* fan) {
 }
 #pragma opt_propagation reset
 
+/** Script helper: args[0] receives the number of fans still in the lobby crowd. */
 s32 evt_end_count(EventEntry* event, BOOL isFirstCall) {
     evtSetValue(event, event->args[0], fan_wp->count);
     return EVT_RETURN_DONE;
@@ -2128,6 +2195,11 @@ static EVT_BEGIN(evt_after_peach)
     RETURN
 EVT_END()
 
+/**
+ * Map init for tou_02, the lobby: music and ambience by story stage,
+ * NPCs (guards, reporters, spectators, the champion),
+ * and the first-visit scenes (evt_tougi2, evt_momikucha, doors to tou_01, tou_03 and tou_04).
+ */
 EVT_BEGIN(tou_02_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)

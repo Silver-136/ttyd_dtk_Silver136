@@ -64,6 +64,10 @@ EVT_BEGIN(toge_1_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Jabbi villager 1: a message in the Jabbi message style (evt_msg_toge) followed by the Jabbi's
+ * own line, with a second pair after the chapter 8 finale.
+ */
 EVT_BEGIN(toge_1_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
@@ -88,6 +92,10 @@ EVT_BEGIN(toge_2_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Jabbi villager 2: a message in the Jabbi message style (evt_msg_toge) followed by the Jabbi's
+ * own line, with a second pair after the chapter 8 finale.
+ */
 EVT_BEGIN(toge_2_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
@@ -112,6 +120,10 @@ EVT_BEGIN(toge_3_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Jabbi villager 3: a message in the Jabbi message style (evt_msg_toge) followed by the Jabbi's
+ * own line, with a second pair after the chapter 8 finale.
+ */
 EVT_BEGIN(toge_3_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
@@ -136,6 +148,10 @@ EVT_BEGIN(toge_4_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Jabbi villager 4: a message in the Jabbi message style (evt_msg_toge) followed by the Jabbi's
+ * own line, with a second pair after the chapter 8 finale.
+ */
 EVT_BEGIN(toge_4_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
@@ -160,6 +176,10 @@ EVT_BEGIN(toge_5_init)
     RETURN
 EVT_END()
 
+/**
+ * Regular script of Jabbi villager 5: has it wander back
+ * and forth around its spot (about 100 by 30 units, urouro walk).
+ */
 EVT_BEGIN(toge_5_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)
@@ -167,6 +187,10 @@ EVT_BEGIN(toge_5_regl)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Jabbi villager 5: a message in the Jabbi message style (evt_msg_toge) followed by the Jabbi's
+ * own line, with a second pair after the chapter 8 finale.
+ */
 EVT_BEGIN(toge_5_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
@@ -191,6 +215,10 @@ EVT_BEGIN(toge_6_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Jabbi villager 6: a message in the Jabbi message style (evt_msg_toge) followed by the Jabbi's
+ * own line, with a second pair after the chapter 8 finale.
+ */
 EVT_BEGIN(toge_6_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
@@ -281,6 +309,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Door script for the Jabbi hive alarm: if the alarm siren sound (GW(1) is 1) is playing it stops it
+ * and clears the flag. Returns 0 in LW(0).
+ */
 static EVT_BEGIN(patolight_sound_off)
     IF_INT_EQUAL(GW(1), 1)
         SET_VALUE(GW(1), 0)
@@ -326,6 +358,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Script helper that lines up three Jabbi chains (slots 110 to 112, 113 to 115, 116 to 119) at (450, 0, 0) with
+ * togeMakeRetsu, for the Jabbi fortress scene.
+ */
 USER_FUNC(toge_enter_func00) {
     Vec pos = {450.0f, 0.0f, 0.0f};
 
@@ -335,6 +371,12 @@ USER_FUNC(toge_enter_func00) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Plays the hive beacon (S_hati and S_patolight) breaking after the Jabbi fight:
+ * both models are drawn into an offscreen buffer, a paper capture image is made from it, the break sound plays,
+ * the real models are hidden and their collision is turned off
+ * and the capture image plays its breaking animation (A_1) before everything is released.
+ */
 static EVT_BEGIN(puni_win_offscreen)
     CALL(evt_paper_entry, STRING("OFF_d_bom"))
     CALL(evt_img_entry, STRING("capture_img"))
@@ -448,6 +490,10 @@ static EVT_BEGIN(puni_lose)
     RETURN
 EVT_END()
 
+/**
+ * Watches the fight every frame until either all Punies (loss) or all Jabbi (win) are down,
+ * then starts puni_lose or puni_win (a win also turns on the collision of the gate A_gra_r).
+ */
 static EVT_BEGIN(puni_winlose_check)
     LOOP(0)
         CALL(evt_puni_zenmetsu_check, 0, LW(10))
@@ -473,6 +519,11 @@ static EVT_BEGIN(puni_winlose_check)
     RETURN
 EVT_END()
 
+/**
+ * Brings the Jabbi into the arena: three chains of Jabbi (slots 110 to 112, 113 to 115, 116 to 119) are placed
+ * at x=450 and walk in toward the Punies at 100 units per second,
+ * two columns stopping at z=-40 and z=40 and the third at the middle, with delays between them.
+ */
 static EVT_BEGIN(toge_enter)
     BEGIN_INLINE_EVENT
         CALL(evt_mri_toge_make_retsu, 450, 0, 0, 110, 111, 112)
@@ -500,6 +551,10 @@ static EVT_BEGIN(toge_enter)
     RETURN
 EVT_END()
 
+/**
+ * Waits for Mario to walk to x=175, then lets the Punies attack (evt_puni_attack_on),
+ * shows the Jabbi message (stg2_mri_e17_00_02) and starts the win-or-lose check.
+ */
 static EVT_BEGIN(puni_vs_toge_battlewait)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -517,6 +572,12 @@ static EVT_BEGIN(puni_vs_toge_battlewait)
     RETURN
 EVT_END()
 
+/**
+ * Start of the fight on a retry (after a loss):
+ * waits for the Puni system, then when Mario reaches x=0 freezes him and the crowd,
+ * sounds the alarm siren and light, moves the camera, brings the Jabbi in, puts Punio into the join mode,
+ * restarts the fight music and starts the battle wait. No dialogue.
+ */
 static EVT_BEGIN(puni_vs_toge_init)
     CALL(evt_puni_wait_systemmode, 2)
     CALL(evt_mri_toge_enter_init)
@@ -597,6 +658,11 @@ static KusaAccess ueki_access_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Map init script of mri_08, the first Jabbi fortress: sets up the Puni, NPCs, planters and waterfall;
+ * if the Puni-versus-Jabbi fight has not been won yet it starts the fight scene (or its resume scene)
+ * and keeps the fortress walls solid, otherwise hides the fortress.
+ */
 EVT_BEGIN(mri_08_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 8, 0, -310, -1000, -1000, 0, 0)

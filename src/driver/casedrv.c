@@ -28,12 +28,14 @@ static CaseWork work;
 static CaseWork* wp = &work;
 
 
+/** Allocates and clears the table of 64 case entries at boot. */
 void caseInit(void) {
     wp->count = 64;
     wp->entries = __memAlloc(HEAP_DEFAULT, wp->count * sizeof(CaseEntry));
     memset(wp->entries, 0, wp->count * sizeof(CaseEntry));
 }
 
+/** Releases every case entry, e.g. on a map change; the table stays allocated. */
 void caseReInit(void) {
     CaseEntry* entry = wp->entries;
     int i;
@@ -43,6 +45,11 @@ void caseReInit(void) {
     }
 }
 
+/**
+ * Registers a case from a CaseSetup: the event script to start, its priority,
+ * the hit object name and condition (or a save flag or a check function) that fires it.
+ * Returns the case id the scripts use to delete it. Called by the evt_case helpers.
+ */
 s32 caseEntry(CaseSetup* setup) {
     CaseEntry* entry;
     int i = 0;
@@ -70,6 +77,7 @@ s32 caseEntry(CaseSetup* setup) {
     return i & 0xFFFFFFFFFFFFFFFFu;
 }
 
+/** Releases case entry caseId so it no longer fires. */
 void caseDelete(s32 caseId) {
     wp->entries[caseId].flags &= ~CASE_FLAG_ACTIVE;
 }
@@ -249,6 +257,10 @@ void caseMain(void) {
     }
 }
 
+/**
+ * Returns the active case watching hit object obj (any hit-object condition, not flag or function cases),
+ * or NULL; also NULL in battle. Mario's motions use it to tell whether a surface or wall has an event attached.
+ */
 CaseEntry* caseCheckHitObj(void* obj) {
     CaseEntry* entry;
     int i;
@@ -264,6 +276,10 @@ CaseEntry* caseCheckHitObj(void* obj) {
     return NULL;
 }
 
+/**
+ * Like caseCheckHitObj, but only for cases fired by Bobbery's blast on obj;
+ * Bobbery's field code uses it to see whether a wall reacts to a bomb.
+ */
 CaseEntry* caseCheckHitObj2(void* obj) {
     CaseEntry* entry;
     int i;
@@ -279,6 +295,7 @@ CaseEntry* caseCheckHitObj2(void* obj) {
     return NULL;
 }
 
+/** Returns case caseId's entry, or NULL if that slot is no longer in use. */
 CaseEntry* caseIdToPtr(s32 caseId) {
     CaseEntry* entry = &wp->entries[caseId];
     if (!(entry->flags & CASE_FLAG_ACTIVE)) return NULL;

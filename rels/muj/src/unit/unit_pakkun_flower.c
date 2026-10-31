@@ -171,6 +171,10 @@ static BattleWeapon weapon_pakkun_flower_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack event (also its confusion event) of the Piranha Plant: on a first strike it bites at once;
+ * otherwise it may use an item, and else it bites (normal_attack_event), its only attack.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -251,6 +255,10 @@ static BattleDataEntry data_table[] = {
     {0},
 };
 
+/**
+ * Init event of the Piranha Plant: installs its wait, attack, damage and confusion (the attack event) events,
+ * raises its hit cursor by 50 and records its shadow size (shadow_scale_memory).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -525,6 +533,7 @@ static USER_FUNC(shadow_scale_return) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: shrinks the plant's shadow from its stored size to 0 over 15 frames as it burrows. */
 static USER_FUNC(shadow_scale_small) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -541,6 +550,10 @@ static USER_FUNC(shadow_scale_small) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: remembers the current shadow size of the plant's body part in unit work 0 for the shrink
+ * and grow helpers.
+ */
 static USER_FUNC(shadow_scale_memory) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

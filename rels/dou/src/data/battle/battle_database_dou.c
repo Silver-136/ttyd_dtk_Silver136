@@ -1499,6 +1499,13 @@ NpcTerritoryInfo btl_dou_setup_no_tbl[] = {
     {0},
 };
 
+/**
+ * Script helper that sways one battle-stage wave object (name in args[0]):
+ * adds a horizontal offset ampX * sin(step * 360 / periodX) (args[1] is the script variable holding the step,
+ * args[2] the period in frames, args[3] the amplitude)
+ * and a vertical offset ampY * sin(step * 360 / periodY + 270) + ampY (args[4] to args[6] likewise),
+ * then advances both steps, wrapping at the period.
+ */
 // Integer-degree phases drive horizontal sine motion and a nonnegative vertical wave offset.
 static USER_FUNC(_wave_offset) {
     EvtWord* args = event->args;
@@ -1528,6 +1535,11 @@ static USER_FUNC(_wave_offset) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Background event of the Pirate's Grotto battle stages:
+ * every frame sways the five water-wave objects nami_00 to nami_04 with _wave_offset,
+ * each with its own period and amplitude, forever.
+ */
 EVT_BEGIN(bgset_dou_wave_event)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 200)

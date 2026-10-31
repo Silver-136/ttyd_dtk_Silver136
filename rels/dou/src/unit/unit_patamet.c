@@ -215,6 +215,11 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/**
+ * Init script of the winged form (the Parabuzzy).
+ * Registers its wait, attack, damage and confusion scripts and the pose-sound timing table,
+ * then starts the wait script.
+ */
 static EVT_BEGIN(init_event_pata)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event_pata))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_pata))
@@ -225,6 +230,7 @@ static EVT_BEGIN(init_event_pata)
     RETURN
 EVT_END()
 
+/** Damage reaction of the winged form: the default damage script. */
 static EVT_BEGIN(damage_event_pata)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -232,6 +238,12 @@ static EVT_BEGIN(damage_event_pata)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the winged unit is knocked out of the air.
+ * It drops the flying state, swaps in the grounded pose table, data table and part,
+ * falls to the floor and turns into unit kind 72 (UNIT_BUZZY_BEETLE).
+ * If it took more than 1 HP damage it also flips over through dmg_turn_event.
+ */
 // Replace winged parts/data with the ground form before the optional turnover path.
 static EVT_BEGIN(dmg_fall_event_pata)
     SET_VALUE(LW(10), -2)
@@ -264,6 +276,10 @@ static EVT_BEGIN(dmg_fall_event_pata)
     RETURN
 EVT_END()
 
+/**
+ * Data-table event 48, run when the battle opens with Mario's or his partner's First Strike on it:
+ * puts the unit at height 10 and waits for the attack to end.
+ */
 static EVT_BEGIN(dmg_first_attack_pos_event_pata)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
@@ -272,6 +288,12 @@ static EVT_BEGIN(dmg_first_attack_pos_event_pata)
     RETURN
 EVT_END()
 
+/**
+ * The Parabuzzy's dive attack.
+ * It picks a target (the first-attack target on a pre-emptive strike), rises 40 units,
+ * dives at the target in its rolled pose and, depending on the pre-damage check,
+ * passes it (avoid) or hits it with SFX_ENM_PATAMET_ATTACK1 damage, then flies back home.
+ */
 static EVT_BEGIN(attack_event_pata)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -367,6 +389,7 @@ static EVT_BEGIN(attack_event_pata)
     RETURN
 EVT_END()
 
+/** Wait script of the winged form: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event_pata)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -581,6 +604,10 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/**
+ * Init script of the Buzzy Beetle.
+ * Calls init_event2 to set the unit up for its current state (unit work 0) and starts the wait script.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, LW(15))
     CALL_CHILD(PTR(init_event2))
@@ -588,6 +615,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Configures the Buzzy Beetle for the floor (unit work 0 is 0: normal scripts, hit cursor at the body)
+ * or for the ceiling (nonzero: raised to height 130, ceiling pose/data tables and scripts, hit offsets lowered,
+ * ceiling-fall event set). Also sets its run and walk sounds and clears the overturned counter.
+ */
 static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ON_CEILING, LW(15))
     IF_INT_EQUAL(LW(15), 0)
@@ -623,6 +655,10 @@ static EVT_BEGIN(init_event2)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the grounded Buzzy Beetle form (init_event2 sets it on the floor): runs the default damage
+ * reaction (btldefaultevt_Damage) for itself.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -630,6 +666,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Flips the Buzzy Beetle onto its back after a stomp-type hit:
+ * switches to the overturned defence tables and pose table, sets status flag 1,
+ * sets the overturned counter to 1 and hops to the floor.
+ */
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -648,6 +689,11 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Counts the overturned counter down by one.
+ * Once it reaches 0 the beetle restores its normal defence and pose tables,
+ * clears status flag 1 and jumps back onto its feet; while it is still above 0 it just goes back to waiting.
+ */
 // A flipped attack turn runs this countdown/recovery path instead of attacking.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
@@ -673,6 +719,12 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * The Buzzy Beetle's shell roll. If it is overturned it only wakes up.
+ * Otherwise it tucks into its shell and spins while a smoke trail follows it, and rolls into the target;
+ * a miss makes it bounce past, a hit applies damage after the action command.
+ * It then walks back to its home position.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -819,6 +871,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of the grounded Buzzy Beetle form: sets the idle pose from the current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -846,6 +899,11 @@ static EVT_BEGIN(damage_event_ceil)
     RETURN
 EVT_END()
 
+/**
+ * Counter-damage reaction of the ceiling Buzzy Beetle:
+ * leaves the ceiling state, restores the floor pose and data tables and hit offsets,
+ * drops its home position to the floor and applies the counter damage.
+ */
 static EVT_BEGIN(counter_damage_event_ceil)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kCeiling)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kShellTosslikeCannotTarget)
@@ -866,6 +924,10 @@ static EVT_BEGIN(counter_damage_event_ceil)
     RETURN
 EVT_END()
 
+/**
+ * The ceiling Buzzy Beetle falls (SFX_ENM_FALL1),
+ * lands with SFX_ENM_MET_LANDING1 and ends up overturned on the floor with its home position set there.
+ */
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_FALL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, 0)
@@ -900,6 +962,12 @@ static EVT_BEGIN(ceil_fall_ready_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack of the ceiling Buzzy Beetle.
+ * It slides over the target and drops on it (SFX_ENM_MET_FALL1),
+ * with a miss or hit decided by the pre-damage check, then swings back and forth,
+ * leaves the ceiling state and hops back to its home position on the floor.
+ */
 // A completed drop attack restores the upright ground form, not the flipped damage-fall state.
 static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -1024,6 +1092,7 @@ static EVT_BEGIN(attack_event_ceil)
     RETURN
 EVT_END()
 
+/** Wait script of the ceiling Buzzy Beetle: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event_ceil)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

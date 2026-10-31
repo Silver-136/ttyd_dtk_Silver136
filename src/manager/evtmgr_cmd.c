@@ -22,6 +22,10 @@ EvtWord* evtSearchCase(EventEntry* entry);
 EvtWord* evtSearchWhile(EventEntry* entry);
 EvtWord* evtSearchJustBeforeWhile(EventEntry* entry);
 
+/**
+ * Decodes a script number to a float: values in the FLOAT() range are stored as (x * 1024) - 230000000,
+ * anything else is a plain integer converted as is.
+ */
 f32 check_float(s32 val) {
     f32 ret;
     if (val <= EVTDAT_FLOAT_MAX) {
@@ -35,6 +39,7 @@ f32 check_float(s32 val) {
     return ret;
 }
 
+/** Encodes a float in the FLOAT() script format, (x * 1024) - 230000000; the inverse of check_float. */
 s32 change_float(f32 val) {
     s32 ret;
     val *= 1024.0f;
@@ -44,16 +49,19 @@ s32 change_float(f32 val) {
     return ret;
 }
 
+/** RETURN: deletes the running event (and its children) and tells evtmgrCmd to stop running it. */
 s32 evt_end_evt(EventEntry* entry) { // 2
     evtDelete(entry);
 
     return EVT_RETURN_FINISH;
 }
 
+/** LABEL(id): no-op at run time; label positions are recorded in labelIdTable when the event starts. */
 s32 evt_lbl(EventEntry* entry) { // 3
     return EVT_RETURN_DONE;
 }
 
+/** GOTO(id): continues the script at the label found by evtSearchLabel. */
 s32 evt_goto(EventEntry* entry) { // 4
     EvtWord lbl;
 
@@ -63,6 +71,10 @@ s32 evt_goto(EventEntry* entry) { // 4
     return EVT_RETURN_DONE;
 }
 
+/**
+ * LOOP(count): opens a loop level and remembers the first command of the body and the count (0 loops forever;
+ * a variable reference is counted down in place by END_LOOP).
+ */
 s32 evt_do(EventEntry* entry) { // 5
     EvtWord* args = entry->args;
     s32 count;
@@ -81,6 +93,11 @@ s32 evt_do(EventEntry* entry) { // 5
 
 #define EVT_LOOP_LITERAL_CUTOFF (-10000000)
 
+/**
+ * END_LOOP: jumps back to the loop body while the count has not run out, else pops the loop level.
+ * A count of 0 never ends; counts at or below -10000000 are variable references (LW, GW, ...) decremented in the
+ * variable.
+ */
 s32 evt_while(EventEntry* entry) { // 6
     s32 depth = entry->loopDepth;
     s32 counter = entry->loopCounters[depth];
@@ -104,6 +121,7 @@ s32 evt_while(EventEntry* entry) { // 6
     return EVT_RETURN_DONE;
 }
 
+/** BREAK_LOOP: continues after the matching END_LOOP and pops the loop level. */
 s32 evt_do_break(EventEntry* entry) { // 7
     entry->nextCommand = evtSearchWhile(entry);
     entry->loopDepth--;
@@ -111,12 +129,17 @@ s32 evt_do_break(EventEntry* entry) { // 7
     return EVT_RETURN_DONE;
 }
 
+/** CONTINUE_LOOP: jumps to the matching END_LOOP itself, so the count is still decremented and checked. */
 s32 evt_do_continue(EventEntry* entry) { // 8
     entry->nextCommand = evtSearchJustBeforeWhile(entry);
 
     return EVT_RETURN_DONE;
 }
 
+/**
+ * WAIT_FRAMES(n): blocks for n frames, latching n into userdata[0] on the first call.
+ * 0 continues at once; the last frame returns YIELD so the next command runs on the following frame.
+ */
 s32 evt_wait_frm(EventEntry* entry) { // 9
     EvtWord* args = entry->args;
 
@@ -138,6 +161,11 @@ s32 evt_wait_frm(EventEntry* entry) { // 9
     }
 }
 
+/**
+ * WAIT_MS(ms): blocks until ms milliseconds of the event's lifetime (OS ticks,
+ * advanced by real frame time in evtmgrMain) have passed since the first call.
+ * Only the low 32 bits of the start time are compared.
+ */
 s32 evt_wait_msec(EventEntry* entry) { // 10
     EvtWord* args = entry->args;
     u64 time = (u64)entry->lifetime;
@@ -164,10 +192,15 @@ s32 evt_wait_msec(EventEntry* entry) { // 10
     return msecDiff >= waitMsec ? EVT_RETURN_YIELD : EVT_RETURN_BLOCK;
 }
 
+/** WAIT_WHILE(expr): blocks the event every frame while expr evaluates to non-zero. */
 s32 evt_halt(EventEntry* entry) { // 11
     return evtGetValue(entry, *entry->args) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
+/**
+ * IF_STR_EQUAL(a, b): runs the block when the two strings are equal (strcmp; NULL counts as "").
+ * evtSearchElse jumps past the matching ELSE (or END_IF) when the test fails.
+ */
 s32 evt_if_str_equal(EventEntry* entry) { // 12
     EvtWord* args = entry->args;
     const char* str1;
@@ -188,6 +221,7 @@ s32 evt_if_str_equal(EventEntry* entry) { // 12
     return EVT_RETURN_DONE;
 }
 
+/** IF_STR_NOT_EQUAL(a, b): runs the block when the strings differ (NULL counts as ""). */
 s32 evt_if_str_not_equal(EventEntry* entry) { // 13
     EvtWord* args = entry->args;
     const char* str1;
@@ -208,6 +242,7 @@ s32 evt_if_str_not_equal(EventEntry* entry) { // 13
     return EVT_RETURN_DONE;
 }
 
+/** IF_STR_LESS(a, b): runs the block when a sorts before b by strcmp (NULL counts as ""). */
 s32 evt_if_str_small(EventEntry* entry) { // 14
     EvtWord* args = entry->args;
     const char* str1;
@@ -228,6 +263,7 @@ s32 evt_if_str_small(EventEntry* entry) { // 14
     return EVT_RETURN_DONE;
 }
 
+/** IF_STR_GREATER(a, b): runs the block when a sorts after b by strcmp (NULL counts as ""). */
 s32 evt_if_str_large(EventEntry* entry) { // 15
     EvtWord* args = entry->args;
     const char* str1;
@@ -248,6 +284,7 @@ s32 evt_if_str_large(EventEntry* entry) { // 15
     return EVT_RETURN_DONE;
 }
 
+/** IF_STR_LESS_OR_EQUAL(a, b): runs the block when a sorts before or equal to b (NULL counts as ""). */
 s32 evt_if_str_small_equal(EventEntry* entry) { // 16
     EvtWord* args = entry->args;
     const char* str1;
@@ -268,6 +305,7 @@ s32 evt_if_str_small_equal(EventEntry* entry) { // 16
     return EVT_RETURN_DONE;
 }
 
+/** IF_STR_GREATER_OR_EQUAL(a, b): runs the block when a sorts after or equal to b (NULL counts as ""). */
 s32 evt_if_str_large_equal(EventEntry* entry) { // 17
     EvtWord* args = entry->args;
     const char* str1;
@@ -288,6 +326,7 @@ s32 evt_if_str_large_equal(EventEntry* entry) { // 17
     return EVT_RETURN_DONE;
 }
 
+/** IF_FLOAT_EQUAL(a, b): runs the block when the two values, read as floats, are equal. */
 s32 evt_iff_equal(EventEntry* entry) { // 18
     EvtWord* args = entry->args;
     f32 float1;
@@ -302,6 +341,7 @@ s32 evt_iff_equal(EventEntry* entry) { // 18
     return EVT_RETURN_DONE;
 }
 
+/** IF_FLOAT_NOT_EQUAL(a, b): runs the block when the two float values differ. */
 s32 evt_iff_not_equal(EventEntry* entry) { // 19
     EvtWord* args = entry->args;
     f32 float1;
@@ -316,6 +356,7 @@ s32 evt_iff_not_equal(EventEntry* entry) { // 19
     return EVT_RETURN_DONE;
 }
 
+/** IF_FLOAT_LESS(a, b): runs the block when float a < b. */
 s32 evt_iff_small(EventEntry* entry) { // 20
     EvtWord* args = entry->args;
     f32 float1;
@@ -330,6 +371,7 @@ s32 evt_iff_small(EventEntry* entry) { // 20
     return EVT_RETURN_DONE;
 }
 
+/** IF_FLOAT_GREATER(a, b): runs the block when float a > b. */
 s32 evt_iff_large(EventEntry* entry) { // 21
     EvtWord* args = entry->args;
     f32 float1;
@@ -344,6 +386,7 @@ s32 evt_iff_large(EventEntry* entry) { // 21
     return EVT_RETURN_DONE;
 }
 
+/** IF_FLOAT_LESS_OR_EQUAL(a, b): runs the block when float a <= b. */
 s32 evt_iff_small_equal(EventEntry* entry) { // 22
     EvtWord* args = entry->args;
     f32 float1;
@@ -358,6 +401,7 @@ s32 evt_iff_small_equal(EventEntry* entry) { // 22
     return EVT_RETURN_DONE;
 }
 
+/** IF_FLOAT_GREATER_OR_EQUAL(a, b): runs the block when float a >= b. */
 s32 evt_iff_large_equal(EventEntry* entry) { // 23
     EvtWord* args = entry->args;
     f32 float1;
@@ -372,6 +416,10 @@ s32 evt_iff_large_equal(EventEntry* entry) { // 23
     return EVT_RETURN_DONE;
 }
 
+/**
+ * IF_INT_EQUAL(a, b): runs the block when the two integer values are equal;
+ * otherwise evtSearchElse jumps past the matching ELSE (or END_IF). The other IF commands branch the same way.
+ */
 s32 evt_if_equal(EventEntry* entry) { // 24
     EvtWord* args = entry->args;
     s32 value1;
@@ -386,6 +434,7 @@ s32 evt_if_equal(EventEntry* entry) { // 24
     return EVT_RETURN_DONE;
 }
 
+/** IF_INT_NOT_EQUAL(a, b): runs the block when a != b. */
 s32 evt_if_not_equal(EventEntry* entry) { // 25
     EvtWord* args = entry->args;
     s32 value1;
@@ -400,6 +449,7 @@ s32 evt_if_not_equal(EventEntry* entry) { // 25
     return EVT_RETURN_DONE;
 }
 
+/** IF_INT_LESS(a, b): runs the block when a < b. */
 s32 evt_if_small(EventEntry* entry) { // 26
     EvtWord* args = entry->args;
     s32 value1;
@@ -414,6 +464,7 @@ s32 evt_if_small(EventEntry* entry) { // 26
     return EVT_RETURN_DONE;
 }
 
+/** IF_INT_GREATER(a, b): runs the block when a > b. */
 s32 evt_if_large(EventEntry* entry) { // 27
     EvtWord* args = entry->args;
     s32 value1;
@@ -428,6 +479,7 @@ s32 evt_if_large(EventEntry* entry) { // 27
     return EVT_RETURN_DONE;
 }
 
+/** IF_INT_LESS_OR_EQUAL(a, b): runs the block when a <= b. */
 s32 evt_if_small_equal(EventEntry* entry) { // 28
     EvtWord* args = entry->args;
     s32 value1;
@@ -442,6 +494,7 @@ s32 evt_if_small_equal(EventEntry* entry) { // 28
     return EVT_RETURN_DONE;
 }
 
+/** IF_INT_GREATER_OR_EQUAL(a, b): runs the block when a >= b. */
 s32 evt_if_large_equal(EventEntry* entry) { // 29
     EvtWord* args = entry->args;
     s32 value1;
@@ -456,6 +509,7 @@ s32 evt_if_large_equal(EventEntry* entry) { // 29
     return EVT_RETURN_DONE;
 }
 
+/** IF_BITS_SET(value, mask): runs the block when any bit of the raw mask word is set in value. */
 s32 evt_if_flag(EventEntry* entry) { // 30
     EvtWord* args = entry->args;
     s32 value;
@@ -470,6 +524,7 @@ s32 evt_if_flag(EventEntry* entry) { // 30
     return EVT_RETURN_DONE;
 }
 
+/** IF_BITS_CLEAR(value, mask): runs the block when none of the raw mask bits are set in value. */
 s32 evt_if_not_flag(EventEntry* entry) { // 31
     EvtWord* args = entry->args;
     s32 value;
@@ -484,16 +539,23 @@ s32 evt_if_not_flag(EventEntry* entry) { // 31
     return EVT_RETURN_DONE;
 }
 
+/** ELSE: reached at the end of a taken IF block, so skips the else block to just past END_IF. */
 s32 evt_else(EventEntry* entry) { // 32
     entry->nextCommand = evtSearchEndIf(entry);
 
     return EVT_RETURN_DONE;
 }
 
+/** END_IF: no-op; only a marker for the IF/ELSE searches. */
 s32 evt_end_if(EventEntry* entry) { // 33
     return EVT_RETURN_DONE;
 }
 
+/**
+ * SWITCH(expr): opens a switch level holding the evaluated value, with state 1 (no case matched yet).
+ * States: 1 searching, 0 a case matched (the next case label ends the switch), -1 an OR/AND group matched,
+ * -2 an AND group failed.
+ */
 s32 evt_switch(EventEntry* entry) { // 34
     s32 value;
     s32 depth;
@@ -509,6 +571,7 @@ s32 evt_switch(EventEntry* entry) { // 34
     return EVT_RETURN_DONE;
 }
 
+/** SWITCH_RAW(value): like SWITCH but takes the argument word as is, without evaluating it. */
 s32 evt_switchi(EventEntry* entry) { // 35
     s32 depth;
     s32 value;
@@ -523,6 +586,11 @@ s32 evt_switchi(EventEntry* entry) { // 35
     return EVT_RETURN_DONE;
 }
 
+/**
+ * CASE_EQUAL(x): enters the case when the switch value equals x, else jumps to the next case label.
+ * Reached after a matched case ran (state 0), it acts as the break and jumps to END_SWITCH;
+ * the other cases do the same.
+ */
 s32 evt_case_equal(EventEntry* entry) { // 36
     EvtWord* args = entry->args;
     s32 depth;
@@ -550,6 +618,7 @@ s32 evt_case_equal(EventEntry* entry) { // 36
     }
 }
 
+/** CASE_NOT_EQUAL(x): enters the case when the switch value differs from x. */
 s32 evt_case_not_equal(EventEntry* entry) { // 37
     EvtWord* args = entry->args;
     s32 depth;
@@ -576,6 +645,7 @@ s32 evt_case_not_equal(EventEntry* entry) { // 37
     }
 }
 
+/** CASE_LESS(x): enters the case when the switch value is less than x. */
 s32 evt_case_small(EventEntry* entry) { // 38
     EvtWord* args = entry->args;
     s32 depth;
@@ -602,6 +672,7 @@ s32 evt_case_small(EventEntry* entry) { // 38
     }
 }
 
+/** CASE_LESS_OR_EQUAL(x): enters the case when the switch value is at most x. */
 s32 evt_case_small_equal(EventEntry* entry) { // 40
     EvtWord* args = entry->args;
     s32 depth;
@@ -628,6 +699,7 @@ s32 evt_case_small_equal(EventEntry* entry) { // 40
     }
 }
 
+/** CASE_GREATER(x): enters the case when the switch value is greater than x. */
 s32 evt_case_large(EventEntry* entry) { // 39
     EvtWord* args = entry->args;
     s32 depth;
@@ -654,6 +726,7 @@ s32 evt_case_large(EventEntry* entry) { // 39
     }
 }
 
+/** CASE_GREATER_OR_EQUAL(x): enters the case when the switch value is at least x. */
 s32 evt_case_large_equal(EventEntry* entry) { // 41
     EvtWord* args = entry->args;
     s32 depth;
@@ -680,6 +753,7 @@ s32 evt_case_large_equal(EventEntry* entry) { // 41
     }
 }
 
+/** CASE_BETWEEN(lo, hi): enters the case when lo <= switch value <= hi (both inclusive). */
 s32 evt_case_between(EventEntry* entry) { // 47
     EvtWord* args = entry->args;
     s32 depth = entry->switchDepth;
@@ -706,6 +780,7 @@ s32 evt_case_between(EventEntry* entry) { // 47
     }
 }
 
+/** CASE_DEFAULT: enters the case whenever no earlier case matched. */
 s32 evt_case_etc(EventEntry* entry) { // 42
     s32 depth = entry->switchDepth;
     s32 state;
@@ -723,6 +798,7 @@ s32 evt_case_etc(EventEntry* entry) { // 42
     }
 }
 
+/** CASE_FLAG(mask): enters the case when any bit of the raw (unevaluated) mask is set in the switch value. */
 s32 evt_case_flag(EventEntry* entry) { // 45
     EvtWord* args = entry->args;
     s32 depth = entry->switchDepth;
@@ -747,6 +823,11 @@ s32 evt_case_flag(EventEntry* entry) { // 45
     }
 }
 
+/**
+ * CASE_OR_EQUAL(x): one line of an OR group closed by CASE_END.
+ * A match sets state -1 and later lines of the group fall through to the shared body;
+ * while nothing has matched, a miss jumps to the next case line.
+ */
 s32 evt_case_or(EventEntry* entry) { // 43
     EvtWord* args = entry->args;
     s32 depth = entry->switchDepth;
@@ -771,6 +852,10 @@ s32 evt_case_or(EventEntry* entry) { // 43
     }
 }
 
+/**
+ * CASE_AND_EQUAL(x): one line of an AND group closed by CASE_END; every line must equal the switch value.
+ * The first miss sets state -2 and the remaining lines skip straight on to CASE_END.
+ */
 s32 evt_case_and(EventEntry* entry) { // 44
     EvtWord* args = entry->args;
     s32 depth = entry->switchDepth;
@@ -798,6 +883,11 @@ s32 evt_case_and(EventEntry* entry) { // 44
     }
 }
 
+/**
+ * CASE_END: closes an OR/AND group.
+ * After a matched group (-1) it ends the switch;
+ * after a failed one it resets the state to 1 and moves on to the next case label.
+ */
 s32 evt_case_end(EventEntry* entry) { // 46
     s32 depth = entry->switchDepth;
     s8 state;
@@ -818,12 +908,14 @@ s32 evt_case_end(EventEntry* entry) { // 46
     }
 }
 
+/** BREAK_SWITCH: jumps to the END_SWITCH of the current switch. */
 s32 evt_switch_break(EventEntry* entry) { // 48
     entry->nextCommand = evtSearchEndSwitch(entry);
 
     return EVT_RETURN_DONE;
 }
 
+/** END_SWITCH: clears the state and pops the switch level. */
 s32 evt_end_switch(EventEntry* entry) { // 49
     s32 depth = entry->switchDepth;
 
@@ -833,6 +925,7 @@ s32 evt_end_switch(EventEntry* entry) { // 49
     return EVT_RETURN_DONE;
 }
 
+/** SET_VALUE(var, expr): stores the evaluated expr in the variable var (LW, GW, LSW, GSWF, ...). */
 s32 evt_set(EventEntry* entry) { // 50
     EvtWord* args = entry->args;
     s32 index;
@@ -845,6 +938,7 @@ s32 evt_set(EventEntry* entry) { // 50
     return EVT_RETURN_DONE;
 }
 
+/** SET_RAW_VALUE(var, literal): stores the argument word itself in var, without evaluating it. */
 s32 evt_seti(EventEntry* entry) { // 51
     EvtWord* args = entry->args;
     s32 index;
@@ -857,6 +951,7 @@ s32 evt_seti(EventEntry* entry) { // 51
     return EVT_RETURN_DONE;
 }
 
+/** SET_FLOAT_VALUE(var, expr): stores expr, read as a float, in var in the FLOAT() encoding. */
 s32 evt_setf(EventEntry* entry) { // 52
     EvtWord* args = entry->args;
     s32 index;
@@ -869,6 +964,7 @@ s32 evt_setf(EventEntry* entry) { // 52
     return EVT_RETURN_DONE;
 }
 
+/** ADD(var, expr): var += expr, integer. */
 s32 evt_add(EventEntry* entry) { // 53
     EvtWord* args = entry->args;
     s32 index;
@@ -883,6 +979,7 @@ s32 evt_add(EventEntry* entry) { // 53
     return EVT_RETURN_DONE;
 }
 
+/** SUBTRACT(var, expr): var -= expr, integer. */
 s32 evt_sub(EventEntry* entry) { // 54
     EvtWord* args = entry->args;
     s32 index;
@@ -897,6 +994,7 @@ s32 evt_sub(EventEntry* entry) { // 54
     return EVT_RETURN_DONE;
 }
 
+/** MULTIPLY(var, expr): var *= expr, integer. */
 s32 evt_mul(EventEntry* entry) { // 55
     EvtWord* args = entry->args;
     s32 index;
@@ -911,6 +1009,7 @@ s32 evt_mul(EventEntry* entry) { // 55
     return EVT_RETURN_DONE;
 }
 
+/** DIVIDE(var, expr): var /= expr, integer division (no check for zero). */
 s32 evt_div(EventEntry* entry) { // 56
     EvtWord* args = entry->args;
     s32 index;
@@ -925,6 +1024,11 @@ s32 evt_div(EventEntry* entry) { // 56
     return EVT_RETURN_DONE;
 }
 
+/**
+ * MODULO(var, expr): var %= expr.
+ * Both values pass through a float with +0.5 first,
+ * so negative values come out one higher than plain integer modulo would use.
+ */
 s32 evt_mod(EventEntry* entry) { // 57
     EvtWord* args = entry->args;
     s32 index;
@@ -941,6 +1045,7 @@ s32 evt_mod(EventEntry* entry) { // 57
     return EVT_RETURN_DONE;
 }
 
+/** ADD_FLOAT(var, expr): var += expr in floats, stored back in the FLOAT() encoding. */
 s32 evt_addf(EventEntry* entry) { // 58
     EvtWord* args = entry->args;
     s32 index;
@@ -955,6 +1060,7 @@ s32 evt_addf(EventEntry* entry) { // 58
     return EVT_RETURN_DONE;
 }
 
+/** SUBTRACT_FLOAT(var, expr): var -= expr in floats. */
 s32 evt_subf(EventEntry* entry) { // 59
     EvtWord* args = entry->args;
     s32 index;
@@ -968,6 +1074,7 @@ s32 evt_subf(EventEntry* entry) { // 59
 
     return EVT_RETURN_DONE;
 }
+/** MULTIPLY_FLOAT(var, expr): var *= expr in floats. */
 s32 evt_mulf(EventEntry* entry) { // 60
     EvtWord* args = entry->args;
     s32 index;
@@ -982,6 +1089,7 @@ s32 evt_mulf(EventEntry* entry) { // 60
     return EVT_RETURN_DONE;
 }
 
+/** DIVIDE_FLOAT(var, expr): var /= expr in floats. */
 s32 evt_divf(EventEntry* entry) { // 61
     EvtWord* args = entry->args;
     s32 index;
@@ -996,18 +1104,21 @@ s32 evt_divf(EventEntry* entry) { // 61
     return EVT_RETURN_DONE;
 }
 
+/** SET_INT_READ_ADDR(ptr): points the event's integer table cursor (readAddr) at a word table. */
 s32 evt_set_read(EventEntry* entry) { // 62
     entry->readAddr = (EvtWord*)evtGetValue(entry, *entry->args);
 
     return EVT_RETURN_DONE;
 }
 
+/** SET_FLOAT_READ_ADDR(ptr): points the event's float table cursor (readfAddr) at an f32 table. */
 s32 evt_set_readf(EventEntry* entry) { // 68
     entry->readfAddr = (f32*)evtGetValue(entry, *entry->args);
 
     return EVT_RETURN_DONE;
 }
 
+/** READ_INT(dest): copies the next word of the readAddr table into dest and advances the cursor. */
 s32 evt_read(EventEntry* entry) { // 63
     EvtWord* args = entry->args;
     evtSetValue(entry, args[0], *entry->readAddr++);
@@ -1015,6 +1126,7 @@ s32 evt_read(EventEntry* entry) { // 63
     return EVT_RETURN_DONE;
 }
 
+/** READ_INT2(a, b): copies the next two table words into a and b, advancing the cursor. */
 s32 evt_read2(EventEntry* entry) { // 64
     EvtWord* args = entry->args;
     evtSetValue(entry, args[0], *entry->readAddr++);
@@ -1023,6 +1135,7 @@ s32 evt_read2(EventEntry* entry) { // 64
     return EVT_RETURN_DONE;
 }
 
+/** READ_INT3(a, b, c): copies the next three table words, advancing the cursor. */
 s32 evt_read3(EventEntry* entry) { // 65
     EvtWord* args = entry->args;
     evtSetValue(entry, args[0], *entry->readAddr++);
@@ -1032,6 +1145,7 @@ s32 evt_read3(EventEntry* entry) { // 65
     return EVT_RETURN_DONE;
 }
 
+/** READ_INT4(a, b, c, d): copies the next four table words, advancing the cursor. */
 s32 evt_read4(EventEntry* entry) { // 66
     EvtWord* args = entry->args;
     evtSetValue(entry, args[0], *entry->readAddr++);
@@ -1042,6 +1156,7 @@ s32 evt_read4(EventEntry* entry) { // 66
     return EVT_RETURN_DONE;
 }
 
+/** READ_INT_INDEXED(dest, i): copies word i of the readAddr table into dest; the cursor stays put. */
 s32 evt_read_n(EventEntry* entry) { // 67
     EvtWord* args = entry->args;
     s32 index;
@@ -1054,6 +1169,7 @@ s32 evt_read_n(EventEntry* entry) { // 67
     return EVT_RETURN_DONE;
 }
 
+/** READ_FLOAT(dest): copies the next f32 of the readfAddr table into dest and advances the cursor. */
 s32 evt_readf(EventEntry* entry) { // 69
     EvtWord* args = entry->args;
     evtSetFloat(entry, args[0], *entry->readfAddr++);
@@ -1061,6 +1177,7 @@ s32 evt_readf(EventEntry* entry) { // 69
     return EVT_RETURN_DONE;
 }
 
+/** READ_FLOAT2(a, b): copies the next two f32 table entries, advancing the cursor. */
 s32 evt_readf2(EventEntry* entry) { // 70
     EvtWord* args = entry->args;
     evtSetFloat(entry, args[0], *entry->readfAddr++);
@@ -1069,6 +1186,7 @@ s32 evt_readf2(EventEntry* entry) { // 70
     return EVT_RETURN_DONE;
 }
 
+/** READ_FLOAT3(a, b, c): copies the next three f32 table entries, advancing the cursor. */
 s32 evt_readf3(EventEntry* entry) { // 71
     EvtWord* args = entry->args;
     evtSetFloat(entry, args[0], *entry->readfAddr++);
@@ -1078,6 +1196,7 @@ s32 evt_readf3(EventEntry* entry) { // 71
     return EVT_RETURN_DONE;
 }
 
+/** READ_FLOAT4(a, b, c, d): copies the next four f32 table entries, advancing the cursor. */
 s32 evt_readf4(EventEntry* entry) { // 72
     EvtWord* args = entry->args;
     evtSetFloat(entry, args[0], *entry->readfAddr++);
@@ -1088,6 +1207,7 @@ s32 evt_readf4(EventEntry* entry) { // 72
     return EVT_RETURN_DONE;
 }
 
+/** READ_FLOAT_INDEXED(dest, i): stores entry i of the read table in dest as a float (see the bug note). */
 s32 evt_readf_n(EventEntry* entry) { // 73
     EvtWord* args = entry->args;
     s32 index;
@@ -1100,18 +1220,24 @@ s32 evt_readf_n(EventEntry* entry) { // 73
     return EVT_RETURN_DONE;
 }
 
+/** SET_UW_BASE(ptr): sets the array the event's UW(n) variables index into. */
 s32 evt_set_user_wrk(EventEntry* entry) { // 74
     entry->uwBase = (EvtWord*)evtGetValue(entry, *entry->args);
 
     return EVT_RETURN_DONE;
 }
 
+/** SET_UF_BASE(ptr): sets the bit array the event's UF(n) flags index into. */
 s32 evt_set_user_flg(EventEntry* entry) { // 75
     entry->ufBase = (s32*)evtGetValue(entry, *entry->args);
 
     return EVT_RETURN_DONE;
 }
 
+/**
+ * ALLOCATE_UW(count, dest): allocates count words from the map heap (_mapAlloc) as the event's UW array
+ * and stores the pointer in dest. The memory lives until the map heap is reset.
+ */
 s32 evt_alloc_user_wrk(EventEntry* entry) { // 76
     EvtWord* args = entry->args;
     s32 index;
@@ -1125,6 +1251,7 @@ s32 evt_alloc_user_wrk(EventEntry* entry) { // 76
     return EVT_RETURN_DONE;
 }
 
+/** AND(var, expr): var &= expr. */
 s32 evt_and(EventEntry* entry) { // 77
     EvtWord* args = entry->args;
     s32 index;
@@ -1138,6 +1265,7 @@ s32 evt_and(EventEntry* entry) { // 77
     return EVT_RETURN_DONE;
 }
 
+/** AND_RAW(var, mask): var &= the raw argument word (not evaluated). */
 s32 evt_andi(EventEntry* entry) { // 78
     EvtWord* args = entry->args;
     s32 index;
@@ -1151,6 +1279,7 @@ s32 evt_andi(EventEntry* entry) { // 78
     return EVT_RETURN_DONE;
 }
 
+/** OR(var, expr): var |= expr. */
 s32 evt_or(EventEntry* entry) { // 79
     EvtWord* args = entry->args;
     s32 index;
@@ -1164,6 +1293,7 @@ s32 evt_or(EventEntry* entry) { // 79
     return EVT_RETURN_DONE;
 }
 
+/** OR_RAW(var, mask): var |= the raw argument word (not evaluated). */
 s32 evt_ori(EventEntry* entry) { // 80
     EvtWord* args = entry->args;
     s32 index;
@@ -1177,6 +1307,7 @@ s32 evt_ori(EventEntry* entry) { // 80
     return EVT_RETURN_DONE;
 }
 
+/** CONVERT_MS_TO_FRAME(dest, ms): dest = ms * 60 / 1000, frames at 60 fps. */
 s32 evt_set_frame_from_msec(EventEntry* entry) { // 81
     EvtWord* args = entry->args;
     s32 index;
@@ -1191,6 +1322,7 @@ s32 evt_set_frame_from_msec(EventEntry* entry) { // 81
     return EVT_RETURN_DONE;
 }
 
+/** CONVERT_FRAME_TO_MS(dest, frames): dest = frames * 1000 / 60, at 60 fps. */
 s32 evt_set_msec_from_frame(EventEntry* entry) { // 82
     EvtWord* args = entry->args;
     s32 index;
@@ -1205,6 +1337,7 @@ s32 evt_set_msec_from_frame(EventEntry* entry) { // 82
     return EVT_RETURN_DONE;
 }
 
+/** POKE_INT(value, addr): writes the evaluated value to the s32 at the raw address addr. */
 s32 evt_set_ram(EventEntry* entry) { // 83
     EvtWord* args = entry->args;
     s32 value;
@@ -1217,6 +1350,7 @@ s32 evt_set_ram(EventEntry* entry) { // 83
     return EVT_RETURN_DONE;
 }
 
+/** POKE_FLOAT(value, addr): writes the value as an f32 to the raw address addr. */
 s32 evt_set_ramf(EventEntry* entry) { // 84
     EvtWord* args = entry->args;
     f32 value;
@@ -1229,6 +1363,7 @@ s32 evt_set_ramf(EventEntry* entry) { // 84
     return EVT_RETURN_DONE;
 }
 
+/** PEEK_INT(dest, addr): reads the s32 at the raw address addr into dest. */
 s32 evt_get_ram(EventEntry* entry) { // 85
     EvtWord* args = entry->args;
     s32* addr;
@@ -1241,6 +1376,7 @@ s32 evt_get_ram(EventEntry* entry) { // 85
     return EVT_RETURN_DONE;
 }
 
+/** PEEK_FLOAT(dest, addr): reads the f32 at the raw address addr into dest. */
 s32 evt_get_ramf(EventEntry* entry) { // 86
     EvtWord* args = entry->args;
     f32* addr;
@@ -1253,6 +1389,10 @@ s32 evt_get_ramf(EventEntry* entry) { // 86
     return EVT_RETURN_DONE;
 }
 
+/**
+ * SET_INT_INDEXED(ref, expr): ref evaluates to a variable reference (such as an LW holding GW(3));
+ * stores expr in that variable. Lets scripts pick the target variable at run time.
+ */
 s32 evt_setr(EventEntry* entry) { // 87
     EvtWord* args = entry->args;
     s32 index;
@@ -1265,6 +1405,7 @@ s32 evt_setr(EventEntry* entry) { // 87
     return EVT_RETURN_DONE;
 }
 
+/** SET_FLOAT_INDEXED(ref, expr): float form of SET_INT_INDEXED, writing to the variable ref names. */
 s32 evt_setrf(EventEntry* entry) { // 88
     EvtWord* args = entry->args;
     s32 index;
@@ -1277,6 +1418,7 @@ s32 evt_setrf(EventEntry* entry) { // 88
     return EVT_RETURN_DONE;
 }
 
+/** GET_INT_INDEXED(ref, dest): reads the variable that ref evaluates to and stores its value in dest. */
 s32 evt_getr(EventEntry* entry) { // 89
     EvtWord* args = entry->args;
     s32 index;
@@ -1289,6 +1431,7 @@ s32 evt_getr(EventEntry* entry) { // 89
     return EVT_RETURN_DONE;
 }
 
+/** GET_FLOAT_INDEXED(ref, dest): float form of GET_INT_INDEXED. */
 s32 evt_getrf(EventEntry* entry) { // 90
     EvtWord* args = entry->args;
     s32 index;
@@ -1301,6 +1444,11 @@ s32 evt_getrf(EventEntry* entry) { // 90
     return EVT_RETURN_DONE;
 }
 
+/**
+ * CALL(func, args...): runs a C USER_FUNC.
+ * The first call passes isFirstCall TRUE with args moved past the function pointer;
+ * while it returns BLOCK it is called again each frame with FALSE. Its return code is passed on.
+ */
 s32 evt_user_func(EventEntry* entry) { // 91
     EvtWord* args = entry->args;
     s32 result;
@@ -1322,6 +1470,10 @@ s32 evt_user_func(EventEntry* entry) { // 91
     return result;
 }
 
+/**
+ * SPAWN_EVENT(script): starts script as a separate event with this event's priority and type, copying LW, LF,
+ * the UW/UF bases, unitId and ownerNPC; the caller continues at once.
+ */
 s32 evt_run_evt(EventEntry* entry) { // 92
     EventEntry* copy;
     void* script;
@@ -1342,6 +1494,7 @@ s32 evt_run_evt(EventEntry* entry) { // 92
     return EVT_RETURN_DONE;
 }
 
+/** SPAWN_EVENT_GET_ID(script, dest): SPAWN_EVENT that also stores the new event's id in dest. */
 s32 evt_run_evt_id(EventEntry* entry) { // 93
     EvtWord* args = entry->args;
     EventEntry* copy;
@@ -1366,6 +1519,10 @@ s32 evt_run_evt_id(EventEntry* entry) { // 93
     return EVT_RETURN_DONE;
 }
 
+/**
+ * CALL_CHILD(script): starts script as a child event and suspends this one until the child ends;
+ * evtDelete then copies the child's LW/LF back. Returns FINISH so the manager stops running this event for now.
+ */
 s32 evt_run_child_evt(EventEntry* entry) { // 94
     EvtWord* script;
 
@@ -1377,6 +1534,7 @@ s32 evt_run_child_evt(EventEntry* entry) { // 94
     return EVT_RETURN_FINISH;
 }
 
+/** RESTART_EVENT(script): sets a new restart point and restarts the event there (evtRestart). */
 s32 evt_restart_evt(EventEntry* entry) { // 96
     entry->restartFrom = (void*)evtGetValue(entry, *entry->args);
     evtRestart(entry);
@@ -1384,6 +1542,7 @@ s32 evt_restart_evt(EventEntry* entry) { // 96
     return EVT_RETURN_DONE;
 }
 
+/** DELETE_EVENT(id): deletes the event with that id, with its children and brother events. */
 s32 evt_delete_evt(EventEntry* entry) { // 95
     s32 id;
 
@@ -1393,6 +1552,7 @@ s32 evt_delete_evt(EventEntry* entry) { // 95
     return EVT_RETURN_DONE;
 }
 
+/** SET_PRIORITY(pri): changes this event's run-order priority (evtSetPri). */
 s32 evt_set_pri(EventEntry* entry) { // 97
     u32 priority;
 
@@ -1402,6 +1562,7 @@ s32 evt_set_pri(EventEntry* entry) { // 97
     return EVT_RETURN_DONE;
 }
 
+/** SET_SPEED(scale): sets the event's timescale (evtSetSpeed); evtmgrMain runs it that many times per frame. */
 s32 evt_set_spd(EventEntry* entry) { // 98
     f32 speed;
 
@@ -1411,6 +1572,7 @@ s32 evt_set_spd(EventEntry* entry) { // 98
     return EVT_RETURN_DONE;
 }
 
+/** SET_TYPE(mask): sets the event's type mask, used by the stop/start-by-type commands. */
 s32 evt_set_type(EventEntry* entry) { // 99
     u32 type;
 
@@ -1420,6 +1582,7 @@ s32 evt_set_type(EventEntry* entry) { // 99
     return EVT_RETURN_DONE;
 }
 
+/** SUSPEND_TYPES(mask): suspends every event whose type mask overlaps mask (evtStopAll). */
 s32 evt_stop_all(EventEntry* entry) { // 100
     u32 mask;
 
@@ -1429,6 +1592,7 @@ s32 evt_stop_all(EventEntry* entry) { // 100
     return EVT_RETURN_DONE;
 }
 
+/** RESUME_TYPES(mask): resumes every event whose type mask overlaps mask (evtStartAll). */
 s32 evt_start_all(EventEntry* entry) { // 101
     u32 mask;
 
@@ -1438,6 +1602,7 @@ s32 evt_start_all(EventEntry* entry) { // 101
     return EVT_RETURN_DONE;
 }
 
+/** SUSPEND_TYPES_OTHER(mask): like SUSPEND_TYPES but leaves the calling event running. */
 s32 evt_stop_other(EventEntry* entry) { // 102
     u32 mask;
 
@@ -1447,6 +1612,7 @@ s32 evt_stop_other(EventEntry* entry) { // 102
     return EVT_RETURN_DONE;
 }
 
+/** RESUME_TYPES_OTHER(mask): like RESUME_TYPES but skips the calling event. */
 s32 evt_start_other(EventEntry* entry) { // 103
     u32 mask;
 
@@ -1456,6 +1622,7 @@ s32 evt_start_other(EventEntry* entry) { // 103
     return EVT_RETURN_DONE;
 }
 
+/** SUSPEND_EVENT(id): suspends the event with that id. */
 s32 evt_stop_id(EventEntry* entry) { // 104
     s32 id;
 
@@ -1465,6 +1632,7 @@ s32 evt_stop_id(EventEntry* entry) { // 104
     return EVT_RETURN_DONE;
 }
 
+/** RESUME_EVENT(id): resumes the event with that id. */
 s32 evt_start_id(EventEntry* entry) { // 105
     s32 id;
 
@@ -1474,6 +1642,7 @@ s32 evt_start_id(EventEntry* entry) { // 105
     return EVT_RETURN_DONE;
 }
 
+/** IS_EVENT_RUNNING(id, dest): stores in dest whether an event with that id is still alive. */
 s32 evt_chk_evt(EventEntry* entry) { // 106
     EvtWord* args = entry->args;
     s32 index;
@@ -1486,6 +1655,10 @@ s32 evt_chk_evt(EventEntry* entry) { // 106
     return EVT_RETURN_DONE;
 }
 
+/**
+ * BEGIN_INLINE_EVENT: starts the commands up to END_INLINE_EVENT as a separate event (copying LW/LF,
+ * the UW/UF bases, owner and message window state) and continues this event after END_INLINE_EVENT.
+ */
 s32 evt_inline_evt(EventEntry* entry) { // 107
     EvtWord* script = entry->nextCommand;
     EvtWord* inlineEnd = script;
@@ -1519,6 +1692,7 @@ s32 evt_inline_evt(EventEntry* entry) { // 107
     return EVT_RETURN_DONE;
 }
 
+/** BEGIN_INLINE_EVENT_GET_ID(dest): BEGIN_INLINE_EVENT that also stores the new event's id. */
 s32 evt_inline_evt_id(EventEntry* entry) { // 108
     EvtWord* args = entry->args;
     EvtWord* script = entry->nextCommand;
@@ -1558,12 +1732,18 @@ s32 evt_inline_evt_id(EventEntry* entry) { // 108
     return EVT_RETURN_DONE;
 }
 
+/** END_INLINE_EVENT: ends the inline event that reaches it (deletes it, like RETURN). */
 s32 evt_end_inline(EventEntry* entry) { // 109
     evtDelete(entry);
 
     return EVT_RETURN_FINISH;
 }
 
+/**
+ * BEGIN_SIBLING_EVENT: starts the commands up to END_SIBLING_EVENT as a brother event,
+ * which is deleted when this event is; copies the UW/UF bases, owner and read cursor but not LW/LF.
+ * This event continues after the block.
+ */
 s32 evt_brother_evt(EventEntry* entry) { // 110
     EvtWord* script = entry->nextCommand;
     EvtWord* brotherEnd;
@@ -1587,6 +1767,10 @@ s32 evt_brother_evt(EventEntry* entry) { // 110
     return EVT_RETURN_DONE;
 }
 
+/**
+ * BEGIN_SIBLING_EVENT_GET_ID(dest): BEGIN_SIBLING_EVENT that also stores the new event's id (it does not copy
+ * the read cursor).
+ */
 s32 evt_brother_evt_id(EventEntry* entry) { // 111
     EvtWord* args = entry->args;
     EvtWord* script = entry->nextCommand;
@@ -1613,16 +1797,22 @@ s32 evt_brother_evt_id(EventEntry* entry) { // 111
     return EVT_RETURN_DONE;
 }
 
+/**
+ * END_SIBLING_EVENT: deletes the brother event that reaches it.
+ * Returns BLOCK where END_INLINE_EVENT returns FINISH.
+ */
 s32 evt_end_brother(EventEntry* entry) { // 112
     evtDelete(entry);
 
     return EVT_RETURN_BLOCK;
 }
 
+/** DEBUG_PUT_MSG(msg): debug print, compiled out in the release game. */
 s32 evt_debug_put_msg(EventEntry* entry) { // 113
     return EVT_RETURN_DONE;
 }
 
+/** DEBUG_MSG_CLEAR: clears the debug print, compiled out in the release game. */
 s32 evt_debug_msg_clear(EventEntry* entry) { // 114
     return EVT_RETURN_DONE;
 }
@@ -1722,16 +1912,19 @@ s32 evt_debug_put_reg(EventEntry* entry) { // 115
     return EVT_RETURN_DONE;
 }
 
+/** DEBUG_NAME(str): stores the raw string pointer as the event's name, for debugging. */
 s32 evt_debug_name(EventEntry* entry) { // 116
     entry->name = (const char*)*entry->args;
 
     return EVT_RETURN_DONE;
 }
 
+/** DEBUG_REM(text): script comment; does nothing. */
 s32 evt_debug_rem(EventEntry* entry) { // 117
     return EVT_RETURN_DONE;
 }
 
+/** DEBUG_BP: breakpoint left over from development; finds the event's slot (unused) and just yields one frame. */
 s32 evt_debug_bp(EventEntry* entry) { // 118
     s32 i;
 
@@ -1744,6 +1937,12 @@ s32 evt_debug_bp(EventEntry* entry) { // 118
     return EVT_RETURN_YIELD;
 }
 
+/**
+ * Runs one event's commands until one blocks or yields; evtmgrMain calls it once per unit of the event's speed.
+ * Returns -1 when the event finished or handed over to a child,
+ * 1 when a command returned a negative code (evtmgrMain then stops running events this frame), else 0.
+ * BLOCK reruns the same command next time, YIELD moves on to the next one.
+ */
 s32 evtmgrCmd(EventEntry* entry) {
     EvtWord* args;
     s32 argCount;
@@ -2140,6 +2339,11 @@ s32 evtmgrCmd(EventEntry* entry) {
     return 0;
 }
 
+/**
+ * Evaluates a script argument as an integer: plain numbers and addresses come back as is,
+ * FLOAT() values are truncated, and variable references (LW, GW, LF, GF, LSW, GSW, LSWF, GSWF, UW, UF) return
+ * their current value.
+ */
 EvtWord evtGetValue(EventEntry* entry, EvtWord index) {
     EventWork* wp = evtGetWork();
     s32 mask;
@@ -2222,6 +2426,10 @@ EvtWord evtGetValue(EventEntry* entry, EvtWord index) {
     return index;
 }
 
+/**
+ * Turns a variable reference into its plain index (LW(3) -> 3, GSWF(100) -> 100);
+ * numbers, addresses and FLOAT() values come back unchanged.
+ */
 EvtWord evtGetNumber(EventEntry* entry, EvtWord index) {
     if (index <= EVTDAT_ADDR_MAX) {
         return index;
@@ -2265,6 +2473,11 @@ EvtWord evtGetNumber(EventEntry* entry, EvtWord index) {
     return index;
 }
 
+/**
+ * Writes value to the variable reference index.
+ * Returns the old value for word variables and switches, and value itself for flags;
+ * a plain number or FLOAT() as target is not written.
+ */
 EvtWord evtSetValue(EventEntry* entry, EvtWord index, EvtWord value) {
     EventWork* wp = evtGetWork();
     s32 result;
@@ -2359,6 +2572,11 @@ EvtWord evtSetValue(EventEntry* entry, EvtWord index, EvtWord value) {
     return value;
 }
 
+/**
+ * Evaluates a script argument as a float, decoding FLOAT() values.
+ * UF, LSWF and GSWF references have no branch of their own and fall into the UW
+ * and GF branches with out-of-range indexes.
+ */
 f32 evtGetFloat(EventEntry* entry, EvtWord index) {
     EventWork* wp = evtGetWork();
 
@@ -2413,6 +2631,11 @@ f32 evtGetFloat(EventEntry* entry, EvtWord index) {
     return check_float(index);
 }
 
+/**
+ * Writes value in the FLOAT() encoding to LW, GW or UW (returning the old value as a float),
+ * or as a flag to LF or GF.
+ * Other kinds have no branch: UF lands in UW and the save-data switches in GF, with bad indexes.
+ */
 f32 evtSetFloat(EventEntry* entry, EvtWord index, f32 value) {
     EventWork* wp = evtGetWork();
     s32 result;
@@ -2465,6 +2688,11 @@ f32 evtSetFloat(EventEntry* entry, EvtWord index, f32 value) {
     return value;
 }
 
+/**
+ * Resolves a GOTO target: an address below EVTDAT_ADDR_MAX is used as is,
+ * else the id is looked up in the event's 16-entry label table.
+ * An unknown id returns entry->args, the GOTO's own argument word.
+ */
 EvtWord* evtSearchLabel(EventEntry* entry, EvtWord lbl) {
     EvtWord* args = entry->args;
     s32 n;
@@ -2483,6 +2711,10 @@ EvtWord* evtSearchLabel(EventEntry* entry, EvtWord lbl) {
     return args;
 }
 
+/**
+ * Scans forward past nested IFs for the matching ELSE or END_IF (or the end of the script)
+ * and returns the command after it; where a failed IF continues.
+ */
 EvtWord* evtSearchElse(EventEntry* entry) {
     s32 depth;
     EvtWord* cmd;
@@ -2535,6 +2767,7 @@ EvtWord* evtSearchElse(EventEntry* entry) {
     }
 }
 
+/** Returns the command just after the END_IF matching the current IF level, skipping nested IFs. */
 EvtWord* evtSearchEndIf(EventEntry* entry) {
     s32 depth;
     EvtWord* cmd;
@@ -2660,6 +2893,7 @@ EvtWord* evtSearchCase(EventEntry* entry) {
     }
 }
 
+/** Returns the command after the END_LOOP matching the current loop, skipping nested loops. */
 EvtWord* evtSearchWhile(EventEntry* entry) {
     s32 depth;
     EvtWord* cmd;
@@ -2688,6 +2922,7 @@ EvtWord* evtSearchWhile(EventEntry* entry) {
     }
 }
 
+/** Returns the matching END_LOOP command itself, so CONTINUE_LOOP runs it next. */
 EvtWord* evtSearchJustBeforeWhile(EventEntry* entry) {
     s32 depth;
     EvtWord* cmd;

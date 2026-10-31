@@ -41,6 +41,7 @@ char _next_area[0x20];
 char _next_map[0x20];
 char _next_bero[0x20];
 
+/** Started after loading a save: waits two sequence frames and for the fade to end, then gives Mario back key input. */
 EVT_BEGIN(key_off)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_fade_end_wait)
@@ -60,6 +61,10 @@ static const char mc_rel_fmt[14];
 static const char mc_tst[4];
 static const char mc_jon[4];
 
+/**
+ * Name of the REL to load for the next area: normally its three-letter prefix,
+ * but Glitzville (tou) uses the tou2 REL when entered from the title sequence or into tou_03.
+ */
 static inline const char* getAreaName(void) {
     const char* area_name = _next_area;
     if (!strcmp(_next_area, mc_tou)) {
@@ -72,6 +77,11 @@ static inline const char* getAreaName(void) {
     return area_name;
 }
 
+/**
+ * Enters the map change sequence: stores the target area, map and entrance (bero) names, fades out the ambience,
+ * and rerolls the Rogueport badge shop's bargain and Charlieton stock on entering gor_01
+ * after any map except gor_01.
+ */
 void seq_mapChangeInit(SequenceWork* work) {
     strcpy(_next_area, "");
     strcpy(_next_map, "");
@@ -99,6 +109,7 @@ void seq_mapChangeInit(SequenceWork* work) {
     }
 }
 
+/** Leaves the map change sequence: resets the GX overflow counter and turns off the lottery debug display. */
 void seq_mapChangeExit(SequenceWork* work) {
     GXResetOverflowCount();
     dbg_lotteryinfo = FALSE;
@@ -336,6 +347,13 @@ void seq_mapChangeMain(SequenceWork* work) {
     }
 }
 
+/**
+ * Tears down the current map: resets Mario, the map, NPCs, map objects, effects, windows,
+ * events and other field drivers, stops rumble, frees map-lifetime memory,
+ * and clears the area-local LSW/LSWF flags on an area change.
+ * Also resets the fade (closing the curtain) unless coming from the load or title sequence
+ * or from sys_00/sys_01/dig_00.
+ */
 void _unload(const char* prevMap, const char* nextMap, const char* bero) {
     BOOL swReinit = FALSE;
     int i;
@@ -379,6 +397,12 @@ void _unload(const char* prevMap, const char* nextMap, const char* bero) {
     nanNPCWork = NULL;
 }
 
+/**
+ * Loads the next map and its messages, setup data and background (dmo_00 uses the gor_01 map),
+ * then places Mario: at the saved position after loading a save,
+ * else on the ground just inside the entrance (bero) whose name starts with a compass direction,
+ * else at the origin. Syncs the camera to him afterwards.
+ */
 void _load(const char* prevMapName, const char* newMapName, const char* beroName) {
     MapData* map;
     char mapFile[64];
@@ -489,6 +513,7 @@ static const char mc_tou2[] = "tou2";
 static const char mc_tst[] = "tst";
 static const char mc_jon[] = "jon";
 
+/** Unlinks the current area REL after running its epilog, freeing its buffer when it was not the shared map buffer. */
 void _relUnLoad(void) {
     if (gp->relocationBase) {
         ((void (*)(void))((OSModuleHeader*)gp->relocationBase)->epilog)();

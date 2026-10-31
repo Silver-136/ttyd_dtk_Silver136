@@ -95,6 +95,10 @@ static effN64Vtx stg__s_v[] = {
 
 static f32 vx_data[] = {-1.0f, -0.5f, 0.5f, 1.0f, -1.0f, -0.5f, 0.5f, 1.0f};
 
+/**
+ * Spawns a falling rubble chunk (gareki = rubble) at (x, y, z) that drops until it reaches groundY,
+ * then breaks into eight pieces. type is not read. Spawned only from event scripts through evt_eff.
+ */
 EffectEntry* effGarekiN64Entry(f32 x, f32 y, f32 z, f32 groundY) {
     f32* tp;
     s32 i;
@@ -139,6 +143,10 @@ EffectEntry* effGarekiN64Entry(f32 x, f32 y, f32 z, f32 groundY) {
     return effect;
 }
 
+/**
+ * State 0: the whole chunk accelerates downward and tumbles until it reaches groundY.
+ * State 1: the eight pieces fly apart with gravity for 20 frames, fading out over the last 10.
+ */
 void effGarekiMain(EffectEntry* effect) {
     EffGarekiN64Work* work = effect->userdata;
     Vec position;
@@ -180,6 +188,10 @@ void effGarekiMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effGarekiDisp, effect);
 }
 
+/**
+ * Draws the whole chunk with texture 23 while it falls,
+ * then each of the eight pieces at its own offset and rotation.
+ */
 void effGarekiDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffGarekiN64Work* work;
@@ -254,6 +266,7 @@ void effGarekiDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Draws piece number type of the rubble from the stg__s_v vertices (0 is the whole chunk, 1-8 are the pieces). */
 void gareki_dl(s32 type) {
     GXSetCullMode(GX_CULL_NONE);
     effSetVtxDescN64(stg__s_v);

@@ -28,6 +28,7 @@ static EvtWord first_evt[108];
 EvtWord first_evt2[101];
 EvtWord bom_00_init_evt[66];
 
+/** Starts the snowfall effect (snowfall_n64) shared by the Fahr Outpost field maps. */
 EVT_BEGIN(evt_bom_snowfall)
     CALL(evt_eff64, 0, STRING("snowfall_n64"), 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     RETURN
@@ -40,6 +41,7 @@ static TreeAccess tree_tbl[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/** Registers the map's tree access table (tree_tbl) with evt_sub_tree_access_entry so the trees can be shaken. */
 static EVT_BEGIN(evt_tree)
     SET_VALUE(LW(0), PTR(tree_tbl))
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
@@ -154,6 +156,12 @@ EVT_BEGIN(first_evt2)
     RETURN
 EVT_END()
 
+/**
+ * Init script of bom_00, the snowy entrance field of Fahr Outpost:
+ * sets the exits (the pipe back to Rogueport Sewers tik_07 and the path east to bom_03), the music and ambience,
+ * snowfall and trees, a Double Dip P brick and a Star Piece panel,
+ * and starts the arrival cutscene on the first visit.
+ */
 EVT_BEGIN(bom_00_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

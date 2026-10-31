@@ -124,6 +124,10 @@ HitDamageReturn hitDmgRetPoints_1st[17];
 static HitDamageReturn hitDmgRetPoints[17];
 EvtWord dou_11_init_evt[307];
 
+/**
+ * Recursive helper for hitIsGroup: returns TRUE if the hit entry target has the same joint name as node,
+ * or as one of node's descendants (and, below the first level, its siblings).
+ */
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) {
     if (strcmp(target->joint->name, node->joint->name) == 0) {
         return TRUE;
@@ -137,6 +141,10 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) 
     return FALSE;
 }
 
+/**
+ * Returns whether the hit entry target is the hit group (or one of the hit entries below it), by joint name;
+ * used so the swaying ship's rotation moves Mario while he stands on any of its hit parts.
+ */
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
     // Match joint names along the recursive child-first search; a child result returns without resuming this node's siblings.
     return _hitIsGroupSub(target, group, FALSE);
@@ -658,6 +666,11 @@ s32 suifudata_after[] = {
     0, -1000, 0, 0, 0, -1000, 0, 0,
 };
 
+/**
+ * Creates the crowd of 95 sailors (nannpc extension sprites c_boro_k) at their resting places on the right-hand
+ * platform (suifudata_after) when they have already crossed or the story is past that point,
+ * faces them and gives them a hit size; also adds one invisible blocker (id 100) that follows Mario.
+ */
 EVT_BEGIN(watarikiri_suifu_init)
     CALL(evt_nannpc_init, PTR(ext_entry_data), 0, 0, 0, 101)
     CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
@@ -1799,6 +1812,10 @@ USER_FUNC(dou_mario_kaiten_hosei) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Rocks the background ship (S_h_fune) between -10 and +10 degrees every 3 seconds forever with a shaking sound,
+ * keeping its hit area bound and carrying Mario.
+ */
 EVT_BEGIN(haikei_funeyure)
     BEGIN_INLINE_EVENT
         CALL(dou_mario_kaiten_hosei, STRING("A_h_fune"))
@@ -1833,12 +1850,21 @@ EVT_BEGIN(haikei_funeyure)
     RETURN
 EVT_END()
 
+/**
+ * Extra callback when Mario steps onto a floating barrel platform:
+ * plays SFX_STG5_BARREL_ON1 at the map object named in LW(0).
+ */
 static EVT_BEGIN(evt_ride_taru)
     CALL(evt_mapobj_get_position, LW(0), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_BARREL_ON1"), LW(10), LW(11), LW(12), 0)
     RETURN
 EVT_END()
 
+/**
+ * Bobbing loop for floating object 0: binds the hit area in LW(1) (if any) to the map object in LW(0),
+ * waits a random 0.2 to 0.6 seconds, then every 130 ms steps through the 16 heights of the bobbing table
+ * (evt_dou_normal_puka), moves the object to that height and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main0)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -1864,6 +1890,10 @@ static EVT_BEGIN(dou_puka_event_main0)
     RETURN
 EVT_END()
 
+/**
+ * Bobbing barrel 1 (object name in LW(0), hit area in LW(1), 0 for none):
+ * after a random delay it bobs up and down forever using the shared dou_normal_puka table.
+ */
 EVT_BEGIN(dou_puka_event_main10)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -1889,6 +1919,7 @@ EVT_BEGIN(dou_puka_event_main10)
     RETURN
 EVT_END()
 
+/** Bobbing barrel 2: same as dou_puka_event_main10 for its own object. */
 EVT_BEGIN(dou_puka_event_main11)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -1914,6 +1945,7 @@ EVT_BEGIN(dou_puka_event_main11)
     RETURN
 EVT_END()
 
+/** Bobbing barrel 3: same as dou_puka_event_main10 for its own object. */
 EVT_BEGIN(dou_puka_event_main12)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -1939,6 +1971,7 @@ EVT_BEGIN(dou_puka_event_main12)
     RETURN
 EVT_END()
 
+/** Bobbing barrel 4: same as dou_puka_event_main10 for its own object. */
 EVT_BEGIN(dou_puka_event_main13)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -1964,6 +1997,7 @@ EVT_BEGIN(dou_puka_event_main13)
     RETURN
 EVT_END()
 
+/** Bobbing bottle 1: same as dou_puka_event_main10 for its own object. */
 EVT_BEGIN(dou_puka_event_main14)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -1989,6 +2023,7 @@ EVT_BEGIN(dou_puka_event_main14)
     RETURN
 EVT_END()
 
+/** Bobbing bottle 2: same as dou_puka_event_main10 for its own object. */
 EVT_BEGIN(dou_puka_event_main15)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -2014,6 +2049,7 @@ EVT_BEGIN(dou_puka_event_main15)
     RETURN
 EVT_END()
 
+/** Bobbing bottle 3: same as dou_puka_event_main10 for its own object. */
 EVT_BEGIN(dou_puka_event_main16)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -2039,6 +2075,7 @@ EVT_BEGIN(dou_puka_event_main16)
     RETURN
 EVT_END()
 
+/** Bobbing bottle 4: same as dou_puka_event_main10 for its own object. */
 EVT_BEGIN(dou_puka_event_main17)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -2064,12 +2101,22 @@ EVT_BEGIN(dou_puka_event_main17)
     RETURN
 EVT_END()
 
+/**
+ * Clears the state and offset registers of floating platform 1 (state 0 = idle, 1 = being ridden,
+ * 2 = stepped off; offset = its current height).
+ */
 static EVT_BEGIN(dou_puka_event_init1)
     SET_VALUE(GW(1), 0)
     SET_VALUE(GW(2), 0)
     RETURN
 EVT_END()
 
+/**
+ * Stand-on case script for floating platform 1:
+ * if idle it marks the platform as ridden, runs the extra callback in LW(3)
+ * when there is one (e.g. the boat or barrel creak sound), then the shared dip animation dou_puka_event,
+ * and marks it as stepped off.
+ */
 static EVT_BEGIN(dou_puka_event_1)
     IF_INT_NOT_EQUAL(GW(1), 0)
         RETURN
@@ -2084,6 +2131,10 @@ static EVT_BEGIN(dou_puka_event_1)
     RETURN
 EVT_END()
 
+/**
+ * Step-off case script for floating platform 1:
+ * once the dip has finished (state 2) it sets the platform back to idle so it can bob again.
+ */
 static EVT_BEGIN(dou_puka_event_rev_1)
     IF_INT_NOT_EQUAL(GW(1), 2)
         RETURN
@@ -2092,6 +2143,11 @@ static EVT_BEGIN(dou_puka_event_rev_1)
     RETURN
 EVT_END()
 
+/**
+ * Frame loop for floating platform 1: binds the hit area in LW(1) to the map object in LW(0),
+ * then every frame moves the object to the height held in the platform's offset register
+ * and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main1)
     CALL(evt_hit_bind_mapobj, LW(1), LW(0))
     LOOP(0)
@@ -2102,6 +2158,10 @@ static EVT_BEGIN(dou_puka_event_main1)
     RETURN
 EVT_END()
 
+/**
+ * Idle bobbing of floating platform 1: after a random 0.2 to 0.6 second delay it runs the shared bobbing loop
+ * dou_normal_puka, pauses it while the platform is being ridden and restarts it once Mario steps off.
+ */
 static EVT_BEGIN(dou_puka_event_sub1)
     CALL(evt_sub_random, 400, LW(0))
     ADD(LW(0), 200)
@@ -2127,12 +2187,22 @@ static EVT_BEGIN(dou_puka_event_sub1)
     RETURN
 EVT_END()
 
+/**
+ * Clears the state and offset registers of floating platform 2 (state 0 = idle, 1 = being ridden,
+ * 2 = stepped off; offset = its current height).
+ */
 static EVT_BEGIN(dou_puka_event_init2)
     SET_VALUE(GW(3), 0)
     SET_VALUE(GW(4), 0)
     RETURN
 EVT_END()
 
+/**
+ * Stand-on case script for floating platform 2:
+ * if idle it marks the platform as ridden, runs the extra callback in LW(3)
+ * when there is one (e.g. the boat or barrel creak sound), then the shared dip animation dou_puka_event,
+ * and marks it as stepped off.
+ */
 static EVT_BEGIN(dou_puka_event_2)
     IF_INT_NOT_EQUAL(GW(3), 0)
         RETURN
@@ -2147,6 +2217,10 @@ static EVT_BEGIN(dou_puka_event_2)
     RETURN
 EVT_END()
 
+/**
+ * Step-off case script for floating platform 2:
+ * once the dip has finished (state 2) it sets the platform back to idle so it can bob again.
+ */
 static EVT_BEGIN(dou_puka_event_rev_2)
     IF_INT_NOT_EQUAL(GW(3), 2)
         RETURN
@@ -2155,6 +2229,11 @@ static EVT_BEGIN(dou_puka_event_rev_2)
     RETURN
 EVT_END()
 
+/**
+ * Frame loop for floating platform 2: binds the hit area in LW(1) to the map object in LW(0),
+ * then every frame moves the object to the height held in the platform's offset register
+ * and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main2)
     CALL(evt_hit_bind_mapobj, LW(1), LW(0))
     LOOP(0)
@@ -2165,6 +2244,10 @@ static EVT_BEGIN(dou_puka_event_main2)
     RETURN
 EVT_END()
 
+/**
+ * Idle bobbing of floating platform 2: after a random 0.2 to 0.6 second delay it runs the shared bobbing loop
+ * dou_normal_puka, pauses it while the platform is being ridden and restarts it once Mario steps off.
+ */
 static EVT_BEGIN(dou_puka_event_sub2)
     CALL(evt_sub_random, 400, LW(0))
     ADD(LW(0), 200)
@@ -2190,12 +2273,22 @@ static EVT_BEGIN(dou_puka_event_sub2)
     RETURN
 EVT_END()
 
+/**
+ * Clears the state and offset registers of floating platform 3 (state 0 = idle, 1 = being ridden,
+ * 2 = stepped off; offset = its current height).
+ */
 static EVT_BEGIN(dou_puka_event_init3)
     SET_VALUE(GW(5), 0)
     SET_VALUE(GW(6), 0)
     RETURN
 EVT_END()
 
+/**
+ * Stand-on case script for floating platform 3:
+ * if idle it marks the platform as ridden, runs the extra callback in LW(3)
+ * when there is one (e.g. the boat or barrel creak sound), then the shared dip animation dou_puka_event,
+ * and marks it as stepped off.
+ */
 static EVT_BEGIN(dou_puka_event_3)
     IF_INT_NOT_EQUAL(GW(5), 0)
         RETURN
@@ -2210,6 +2303,10 @@ static EVT_BEGIN(dou_puka_event_3)
     RETURN
 EVT_END()
 
+/**
+ * Step-off case script for floating platform 3:
+ * once the dip has finished (state 2) it sets the platform back to idle so it can bob again.
+ */
 static EVT_BEGIN(dou_puka_event_rev_3)
     IF_INT_NOT_EQUAL(GW(5), 2)
         RETURN
@@ -2218,6 +2315,11 @@ static EVT_BEGIN(dou_puka_event_rev_3)
     RETURN
 EVT_END()
 
+/**
+ * Frame loop for floating platform 3: binds the hit area in LW(1) to the map object in LW(0),
+ * then every frame moves the object to the height held in the platform's offset register
+ * and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main3)
     CALL(evt_hit_bind_mapobj, LW(1), LW(0))
     LOOP(0)
@@ -2228,6 +2330,10 @@ static EVT_BEGIN(dou_puka_event_main3)
     RETURN
 EVT_END()
 
+/**
+ * Idle bobbing of floating platform 3: after a random 0.2 to 0.6 second delay it runs the shared bobbing loop
+ * dou_normal_puka, pauses it while the platform is being ridden and restarts it once Mario steps off.
+ */
 static EVT_BEGIN(dou_puka_event_sub3)
     CALL(evt_sub_random, 400, LW(0))
     ADD(LW(0), 200)
@@ -2253,12 +2359,18 @@ static EVT_BEGIN(dou_puka_event_sub3)
     RETURN
 EVT_END()
 
+/** Resets the state registers (GW(7), GW(8)) of the fifth dipping platform to 0. */
 EVT_BEGIN(dou_puka_event_init4)
     SET_VALUE(GW(7), 0)
     SET_VALUE(GW(8), 0)
     RETURN
 EVT_END()
 
+/**
+ * Case event for standing on the fifth dipping platform:
+ * runs the shared dip once (guarded by GW(7)) with the offset register GW(8),
+ * and plays the sound given in LW(3) first.
+ */
 EVT_BEGIN(dou_puka_event_4)
     IF_INT_NOT_EQUAL(GW(7), 0)
         RETURN
@@ -2273,6 +2385,7 @@ EVT_BEGIN(dou_puka_event_4)
     RETURN
 EVT_END()
 
+/** Case event for leaving the fifth platform: resets GW(7) to 0 once the dip has finished (GW(7) = 2). */
 EVT_BEGIN(dou_puka_event_rev_4)
     IF_INT_NOT_EQUAL(GW(7), 2)
         RETURN
@@ -2281,6 +2394,10 @@ EVT_BEGIN(dou_puka_event_rev_4)
     RETURN
 EVT_END()
 
+/**
+ * Applies the fifth platform's offset GW(8) to its map object every frame,
+ * binding the hit area LW(1) to the object LW(0).
+ */
 EVT_BEGIN(dou_puka_event_main4)
     CALL(evt_hit_bind_mapobj, LW(1), LW(0))
     LOOP(0)
@@ -2291,6 +2408,10 @@ EVT_BEGIN(dou_puka_event_main4)
     RETURN
 EVT_END()
 
+/**
+ * Idle bobbing of the fifth platform: after a random delay runs dou_normal_puka on GW(8),
+ * and pauses it while Mario stands on it (GW(7) = 1) until he leaves.
+ */
 EVT_BEGIN(dou_puka_event_sub4)
     CALL(evt_sub_random, 400, LW(0))
     ADD(LW(0), 200)
@@ -2316,6 +2437,10 @@ EVT_BEGIN(dou_puka_event_sub4)
     RETURN
 EVT_END()
 
+/**
+ * Makes the first two barrels (S_taru_n01 and n02) dip when stood on, using the shared dip scripts,
+ * after the first island switch has been pressed.
+ */
 EVT_BEGIN(pukapuka_watari_init01)
     SET_VALUE(LW(0), STRING("S_taru_n01"))
     SET_VALUE(LW(1), STRING("A_taru_n01"))
@@ -2338,6 +2463,10 @@ EVT_BEGIN(pukapuka_watari_init01)
     RETURN
 EVT_END()
 
+/**
+ * Makes the second two barrels (S_taru_n03 and n04) dip when stood on,
+ * after the second island switch has been pressed.
+ */
 EVT_BEGIN(pukapuka_watari_init02)
     SET_VALUE(LW(0), STRING("S_taru_n03"))
     SET_VALUE(LW(1), STRING("A_taru_n03"))

@@ -34,12 +34,20 @@ EvtWord enemy4_dead_evt[102];
 static EvtWord hint_plate[24];
 EvtWord las_17_init_evt[123];
 
+/**
+ * Door animation script (closing) for the east door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panel S_door1 by it.
+ */
 static EVT_BEGIN(e_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_door1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the east door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panel S_door1 by it.
+ */
 static EVT_BEGIN(e_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_door1"), 0, LW(0), 0)
@@ -68,6 +76,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Event script: the key chest of las_17 opens and Mario receives Palace Key 0x2C. */
 static EVT_BEGIN(box_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
@@ -78,6 +87,7 @@ static EVT_BEGIN(box_evt)
     RETURN
 EVT_END()
 
+/** Event script: the switch of las_17 was hit. The camera shows the spot and the key chest drops in (box_syutugen). */
 static EVT_BEGIN(switch_evt)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(1250)
@@ -117,6 +127,11 @@ EVT_BEGIN(enemy3_dead_evt)
     RETURN
 EVT_END()
 
+/**
+ * Death event of the fourth enemy (Shinnosuke):
+ * if the first three were beaten in order it sets the order to 4,
+ * plays a success jingle and makes the blue floating switch appear in a puff of smoke.
+ */
 EVT_BEGIN(enemy4_dead_evt)
     CALL_CHILD(PTR(enemy_common_dead_event))
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 3)
@@ -147,6 +162,10 @@ EVT_BEGIN(enemy4_dead_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: reading the hint plate of las_17 (stg8_las_42).
+ * Switches the field enemies to a waiting mode while the message is shown.
+ */
 static EVT_BEGIN(hint_plate)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_change_fbat_mode, 7)
@@ -158,6 +177,11 @@ static EVT_BEGIN(hint_plate)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_17, a Riddle Tower room (the chest holds Palace Key 0x2C):
+ * music, the door to las_10, the order puzzle of four enemies (the order resets until it is solved),
+ * the switch and key chest, and the hint plate.
+ */
 EVT_BEGIN(las_17_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))

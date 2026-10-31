@@ -43,6 +43,11 @@ s16 size300x40_tex32x32[] = {
     300, -20, 0, 1024, 1024, -5121, -2816,
 };
 
+/**
+ * Spawns the radiation rays at (x, y, z): types 0-1 use 8 rising rays, other types 16 spinning rays;
+ * type + 10 draws on another display layer.
+ * Used by the Palace of Shadow (las_29) and by event scripts through evt_eff.
+ */
 EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffRadiationN64Work* work;
@@ -134,6 +139,14 @@ EffectEntry* effRadiationN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     return effect;
 }
 
+/**
+ * Types 0-1: each ray climbs by its yVel, fades in over 10 frames and out over its last 5,
+ * then respawns at a random tilt (0-179 degrees per axis).
+ * Other types scroll four texture offsets, fade each ray in and out over 5 frames,
+ * spin it about Z at a speed from r_data and respawn it on its fixed r_data pose.
+ * The effect itself only counts down once a delete request sets its life to 10, then fades and deletes.
+ * Drawn on layer 2, or 8 when `flag` is set.
+ */
 void effRadiationMain(EffectEntry* effect) {
     s32 base1;
     s32 base2;
@@ -282,6 +295,12 @@ void effRadiationMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Types 0-1 draw each ray as a 150x20 quad of texture 0x2C tinted pale yellow;
+ * other types draw an untextured 300x40 triangle in near-white whose length follows its alpha,
+ * with every fourth ray a different length (type 3 turned 45 degrees about Z).
+ * Both faces drawn; with `flag` set it uses plain alpha blending without depth test or writes.
+ */
 void effRadiationDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffRadiationN64Work* p;

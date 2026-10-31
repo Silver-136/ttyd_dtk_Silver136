@@ -9,6 +9,10 @@
 #include "party/party_cloud.h"
 #include "system.h"
 
+/**
+ * Clears the camera shift targets and zoom offsets so the camera recentres on Mario;
+ * run when Mario is (re)initialised in mario.c.
+ */
 void marioResetCamShift(void) {
     MarioWork* mario = marioGetPtr();
 
@@ -20,6 +24,10 @@ void marioResetCamShift(void) {
     mario->camZoomOfs = (Vec){ 0.0f, 0.0f, 0.0f };
 }
 
+/**
+ * Restores the default per-frame approach rates of the camera shift (x 0.03, y and z 0.06)
+ * and clears the zoom offsets; run from mario.c at init and from Bowser's motions in koopa_motion.c.
+ */
 void marioResetCamShiftRate(void) {
     MarioWork* mario = marioGetPtr();
 
@@ -31,26 +39,35 @@ void marioResetCamShiftRate(void) {
     mario->camZoomOfs = (Vec){ 0.0f, 0.0f, 0.0f };
 }
 
+/** Sets Mario back to drawing on the normal 3D camera (CAMERA_3D); run on map change and by evt_mario scripts. */
 void marioInitCamId(void) {
     marioGetPtr()->camId = CAMERA_3D;
 }
 
+/** Camera Mario and the partners draw on (mario.c dispEntry, party.c copies it to each partner). */
 s32 marioGetCamId(void) {
     return marioGetPtr()->camId;
 }
 
+/**
+ * Moves Mario's drawing onto another camera, e.g. the effect cameras while an item is used (itemdrv.c)
+ * or in tutorial and story scripts.
+ */
 void marioSetCamId(CameraId camId) {
     marioGetPtr()->camId = camId;
 }
 
+/** Sets the vertical camera follow rate back to the default 0.2; used when Mario lands, stands or walks. */
 void marioResetCamFollowRate(void) {
     marioGetPtr()->camFollowRate = 0.2;
 }
 
+/** Sets how fast the 3D camera catches up to Mario vertically (fraction per frame); set during jumps in mot_jump.c. */
 void marioSetCamFollowRate(f32 followRate) {
     marioGetPtr()->camFollowRate = followRate;
 }
 
+/** Vertical camera follow rate, read by camdrv.c when it moves the camera towards Mario's target height. */
 f32 marioGetCamFollowRate(void) {
     return marioGetPtr()->camFollowRate;
 }
@@ -65,6 +82,11 @@ void marioPreCamera(void) {
     marioGetPtr()->targetYaw = revise360((s32)((1000.0f * camGetPtr(CAMERA_3D)->viewYaw) + roundingFactor) / 1000.0f);
 }
 
+/**
+ * Per-frame camera update from Mario's main loop (also Bowser's and Peach's):
+ * moves the follow target (except in a pipe), runs the level zoom and the zoom-off request,
+ * then clears the camera collision flag for the next frame.
+ */
 void marioCamMain(void) {
     MarioWork* mario = marioGetPtr();
     CameraEntry* camera;
@@ -89,6 +111,10 @@ void marioCamMain(void) {
     mario->dispFlags &= ~MARIO_DISP_FLAG_CAM_COLLISION;
 }
 
+/**
+ * Sets the point the camera should look at this frame instead of Mario (camdrv.c uses it while
+ * MARIO_DISP_FLAG_CAM_COLLISION is set); used by the plane, tube, Spring Jump and Yoshi motions and mario_hit.c.
+ */
 void marioUpdateCamCollision(Vec collision) {
     MarioWork* mario = marioGetPtr();
     mario->camCollision = collision;
@@ -117,6 +143,10 @@ void marioUpdateCamCollision(Vec collision) {
         }                                   \
     }
 
+/**
+ * Eases the camera shift towards its targets and sets the camera target to Mario's position plus the shift along
+ * the screen's x axis; with follow-y off only x/z move. The boat raises the target by 10 units.
+ */
 void marioUpdateCam(void) {
     MarioWork* mario = marioGetPtr();
     f32 sinYaw;
@@ -145,24 +175,32 @@ void marioUpdateCam(void) {
     }
 }
 
+/** Lets marioUpdateCam move the camera target with Mario again. */
 void marioUpdateCamPos(void) {
     marioGetPtr()->dispFlags &= ~MARIO_DISP_FLAG_NO_UPDATE_CAM_POS;
 }
 
+/** Freezes the camera target where it is (marioUpdateCam skips it); used by scripts and the damage motion. */
 void marioNoUpdateCamPos(void) {
     marioGetPtr()->dispFlags |= MARIO_DISP_FLAG_NO_UPDATE_CAM_POS;
 }
 
+/** Lets the 3D camera follow Mario's height again (clears the follow-y-off flags on the camera and Mario). */
 void camFollowYOn(void) {
     camGetPtr(CAMERA_3D)->flags &= ~CAMERA_FLAG_NO_Y_FOLLOW;
     marioGetPtr()->dispFlags &= ~MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF;
 }
 
+/** Stops the 3D camera following Mario's height, e.g. during a jump or pipe, so it does not bob up and down. */
 void camFollowYOff(void) {
     camGetPtr(CAMERA_3D)->flags |= CAMERA_FLAG_NO_Y_FOLLOW;
     marioGetPtr()->dispFlags |= MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF;
 }
 
+/**
+ * Asks for the zoomed-in camera to pull back to normal after 32 frames, over 2.2 seconds;
+ * ignored if no zoom is active or a request is already pending. Used by Bowser's motions.
+ */
 void marioCamZoomOffReq(void) {
     MarioWork* mario = marioGetPtr();
 
@@ -173,6 +211,10 @@ void marioCamZoomOffReq(void) {
     }
 }
 
+/**
+ * Like marioCamZoomOffReq, but the pull-back time is given in ms (resolution 10 ms)
+ * and a pending request is overridden; used when the boat (900) and Flurrie (600) end.
+ */
 void marioCamZoomOffReq2(s32 value) {
     MarioWork* mario = marioGetPtr();
 
@@ -183,6 +225,11 @@ void marioCamZoomOffReq2(s32 value) {
     }
 }
 
+/**
+ * Per-frame: once a zoom-off request's 32-frame delay has run out,
+ * starts the camera move back to the normal view (evt_cam3d_evt_off) and clears the zoom.
+ * Returns TRUE on the frame the move starts.
+ */
 BOOL marioCamZoomOff(void) {
     MarioWork* mario = marioGetPtr();
     EventEntry event;
@@ -214,6 +261,11 @@ BOOL marioCamZoomOff(void) {
     return TRUE;
 }
 
+/**
+ * Zooms the 3D camera in towards Mario (450 units, 750 for Bowser,
+ * 550 off to his side while Flurrie carries him) over 1.5 s; run when Mario becomes the boat.
+ * Returns FALSE when it cannot zoom (background mode, camera busy).
+ */
 BOOL marioCamZoomUp(void) {
     MarioWork* mario;
     PartyEntry* party;

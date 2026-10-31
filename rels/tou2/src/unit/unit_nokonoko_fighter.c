@@ -200,6 +200,10 @@ static BattleWeapon weapon_nokonoko_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init script of the Koopa: registers its wait, attack, damage and confusion handlers,
+ * clears its flipped-over counter and sets the shell-clack run and walk sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -212,6 +216,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage reaction: runs the default damage handling (btldefaultevt_Damage) with LW(10) = -2 (the unit itself)
+ * and LW(11) = 1.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -219,6 +227,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Flips the Koopa onto its back when it is hit while helpless:
+ * it switches to the upside-down defence and pose tables (NKT_D_1, then NKT_S_2),
+ * sets the flipped status flag and a flipped-over counter of 2 turns, lowers its hit offset,
+ * and bounces with SFX_ENM_INSIDE1.
+ */
 static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -15, 0)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -238,6 +252,11 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Run instead of an attack while the Koopa is on its back: counts the flipped-over counter down;
+ * while it is still nonzero it only wriggles (NKT_S_3) and ends the turn,
+ * at zero it flips back up (normal defence and pose tables, SFX_ENM_INSIDE2, a small hop).
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -263,6 +282,11 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * The Koopa's shell spin when it makes a first strike on Mario's side (the pre-battle attack):
+ * it pulls into its shell with SFX_ENM_NOKO_SHELL1 and spins into the target,
+ * which takes the hit via the damage check; afterwards it settles back into its rest pose.
+ */
 static EVT_BEGIN(first_attack_event)
     CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -331,6 +355,12 @@ static EVT_BEGIN(first_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Koopa's attack: while it is flipped over it just wakes up (wakeup_event);
+ * otherwise it uses an item or picks a target, pulls into its shell (SFX_ENM_NOKO_SHELL1) and spins into it,
+ * kicking up kemuri_test dust; a miss lets it slide past, a hit applies the damage,
+ * and it returns to its stance.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -477,6 +507,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Idle event: sets the unit's body part 1 to the pose given by its pose table for its current state. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

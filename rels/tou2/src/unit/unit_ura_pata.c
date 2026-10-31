@@ -211,6 +211,10 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/**
+ * Init script of the winged Koopa Paratroopa: registers its wait,
+ * damage and flying attack handlers (attack_event_patapata) and the pose sound table for its wing flaps.
+ */
 static EVT_BEGIN(init_event_patapata)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_patapata))
@@ -221,6 +225,12 @@ static EVT_BEGIN(init_event_patapata)
     RETURN
 EVT_END()
 
+/**
+ * Fall reaction when the Shady Paratroopa loses its wings:
+ * it drops with SFX_ENM_FALL1 and becomes a Shady Koopa, taking the walking data tables,
+ * attack and walk/run sounds; after a hit of at most 1 HP of damage it lands on its feet,
+ * otherwise it is also flipped (dmg_turn_event).
+ */
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -267,6 +277,7 @@ static EVT_BEGIN(dmg_fall_event)
     RETURN
 EVT_END()
 
+/** Position event for a first strike on the Paratroopa: sets its height to 10 and waits for the attack to finish. */
 static EVT_BEGIN(patapata_dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
@@ -275,6 +286,11 @@ static EVT_BEGIN(patapata_dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * The Paratroopa's flying attack: it uses an item or picks a target,
+ * flaps up (PTP_A_1, PTP_A_4) and dives at it with SFX_ENM_PATA_ATTACK1;
+ * a miss makes it fly past, a hit applies the damage, and it returns to its stance.
+ */
 static EVT_BEGIN(attack_event_patapata)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -588,6 +604,10 @@ static BattleWeapon weapon_ura_noko_ura_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init script of the Koopa: registers its wait, attack, damage and confusion handlers,
+ * clears its flipped-over counter and sets the shell-clack run and walk sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

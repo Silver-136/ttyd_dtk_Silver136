@@ -58,6 +58,7 @@ void DEMOPadCopy(PADStatus* pad, DEMOPadStatus* dmpad) {
     }
 }
 
+/** Reads all four controllers, counts the connected ones, updates DemoPad and resets any unplugged channel. */
 void DEMOPadRead(void) {
     s32 i;
     u32 ResetReq = 0;
@@ -80,6 +81,7 @@ void DEMOPadRead(void) {
     }
 }
 
+/** Initialises the PAD library and zeroes all four DemoPad entries. */
 void DEMOPadInit(void) {
     s32 i;
 

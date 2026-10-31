@@ -25,6 +25,11 @@ BOOL ARCGetCurrentDir(ARCHandle* handle, char* path, u32 maxlen);
 
 // The functions are emitted in reverse source order: ARCClose comes first in the object.
 
+/**
+ * Opens an archive in memory: checks the 0x55AA382D magic
+ * and fills the handle with absolute pointers to the file table, names and file data.
+ * Called by arcdrv when an archive is loaded.
+ */
 BOOL ARCInitHandle(void* arcStart, ARCHandle* handle) {
     FSTEntry* entry;
     ARCHeader* header;
@@ -44,6 +49,10 @@ BOOL ARCInitHandle(void* arcStart, ARCHandle* handle) {
     return TRUE;
 }
 
+/**
+ * Looks up a file by path in the archive and fills info with its offset and length.
+ * Returns FALSE if the path is missing or names a directory.
+ */
 BOOL ARCOpen(ARCHandle* handle, const char* filename, ARCFileInfo* info) {
     s32 entry;
     char currentDir[128];
@@ -63,6 +72,7 @@ BOOL ARCOpen(ARCHandle* handle, const char* filename, ARCFileInfo* info) {
     return TRUE;
 }
 
+/** Case-insensitive compare of one path component against an entry name. */
 static BOOL isSame(const char* path, const char* string) {
     while (*string != '\0') {
         if (tolower(*path++) != tolower(*string++)) {
@@ -75,6 +85,10 @@ static BOOL isSame(const char* path, const char* string) {
     return FALSE;
 }
 
+/**
+ * Resolves a path (absolute or relative to the current directory, with . and ..) to a file-table entry index;
+ * -1 if not found.
+ */
 s32 ARCConvertPathToEntrynum(ARCHandle* handle, const char* pathPtr) {
     const char* ptr;
     char* stringPtr;
@@ -139,6 +153,7 @@ s32 ARCConvertPathToEntrynum(ARCHandle* handle, const char* pathPtr) {
     }
 }
 
+/** Copies up to maxlen characters without a terminator; returns the count copied. */
 u32 myStrncpy(char* dest, char* src, u32 maxlen) {
     u32 i = maxlen;
     while ((i > 0) && (*src != 0)) {
@@ -149,6 +164,7 @@ u32 myStrncpy(char* dest, char* src, u32 maxlen) {
 }
 
 #pragma inline_depth(3)
+/** Builds the path of an entry into path by walking up its parent directories; returns its length. */
 static u32 entryToPath(ARCHandle* handle, u32 entry, char* path, u32 maxlen) {
     char* name;
     u32 loc;
@@ -167,6 +183,7 @@ static u32 entryToPath(ARCHandle* handle, u32 entry, char* path, u32 maxlen) {
     return loc;
 }
 
+/** Writes the full path of an entry (with a trailing / for directories); FALSE if it did not fit. */
 BOOL ARCConvertEntrynumToPath(ARCHandle* handle, s32 entrynum, char* path, u32 maxlen) {
     u32 loc;
     FSTEntry* FstStart = (FSTEntry*)handle->FSTStart;
@@ -187,19 +204,23 @@ BOOL ARCConvertEntrynumToPath(ARCHandle* handle, s32 entrynum, char* path, u32 m
     return TRUE;
 }
 
+/** Writes the path of the archive's current directory into path. */
 BOOL ARCGetCurrentDir(ARCHandle* handle, char* path, u32 maxlen) {
     return ARCConvertEntrynumToPath(handle, (s32)handle->currDir, path, maxlen);
 }
 
+/** Returns the address in memory of an opened file's data. */
 void* ARCGetStartAddrInMem(ARCFileInfo* info) {
     ARCHandle* handle = info->handle;
     return (void*)((u32)handle->archiveStartAddr + info->startOffset);
 }
 
+/** Returns an opened file's length in bytes. */
 u32 ARCGetLength(ARCFileInfo* info) {
     return info->length;
 }
 
+/** Closes an opened file; nothing to release, always TRUE. */
 BOOL ARCClose(ARCFileInfo* info) {
     return TRUE;
 }

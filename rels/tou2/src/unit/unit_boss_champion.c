@@ -69,6 +69,10 @@ EvtWord healing_event[209];
 EvtWord roof_shake_attack_event[386];
 static EvtWord wait_event[6];
 
+/**
+ * Script helper: arg0 receives 1 if the iron frame hanging from the arena ceiling (the stage object Rawk Hawk
+ * grabs) is still there, 0 once it has been removed.
+ */
 USER_FUNC(ceil_exist) {
     EvtWord* args = event->args;
 
@@ -230,6 +234,10 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_champion", "c_bred_h", 0.0f, 0.0f, 0.0f, 0.0f, 50.0f, 0.0f, 0.0f, 55.0f, 0.0f, 35, 70, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/**
+ * Script helper that removes the iron frame from the ceiling at the start of the fight:
+ * moves its body and wire up to y=250 and marks the frame as gone.
+ */
 USER_FUNC(init_ceil) {
     u8* ceil = &_battleWorkPointer->stageObjectWork.flags;
     BattleStageObject* body = BattleSearchObjectPtr("if_body");
@@ -501,6 +509,11 @@ BattleWeapon weapon_champion_roof_shake_last_attack = {
     {0, 25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Rawk Hawk jumps up and hangs from the iron frame in the ceiling:
+ * switches to the roof pose table, becomes untargetable by ground attacks and shifts the hit
+ * and cursor offsets for the hanging body.
+ */
 EVT_BEGIN(to_ceiling)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("J_1A"))
     WAIT_MS(250)
@@ -1393,6 +1406,7 @@ static USER_FUNC(down_ceil) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: LW(1) receives non-zero when the iron frame is gone from the ceiling. */
 USER_FUNC(check_ceil) {
     event->lwData[1] = _battleWorkPointer->stageObjectWork.flags & 0x20;
     return EVT_RETURN_DONE;
@@ -1533,6 +1547,7 @@ EVT_BEGIN(roof_shake_attack_event)
     RETURN
 EVT_END()
 
+/** Wait event: sets the idle animation from the unit's pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

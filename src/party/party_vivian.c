@@ -47,6 +47,11 @@ void marioForceVivianAnime(void) {
     animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], mario->poseTime);
 }
 
+/**
+ * Mario motion MARIO_MOTION_VIVIAN (entered while Veil hides him in the floor):
+ * on entry it stops any jump or fall, zeroes his speed and timers and, in retail,
+ * clears his wall and push collision; nothing runs on later frames.
+ */
 void mot_vivian(void) {
     MarioWork* mario = marioGetPtr();
 
@@ -65,6 +70,11 @@ void mot_vivian(void) {
 }
 
 
+/**
+ * Post-step for Mario's Vivian motion: if Mario takes damage while hidden,
+ * pops both of them back out at once (paper off, offsets and walls restored, Vivian back to follow mode);
+ * otherwise, while Veil is in use, it sets vivian_cancel_req so vivian_use starts rising out.
+ */
 void mot_vivian_post(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     MarioWork* mario = marioGetPtr();
@@ -113,6 +123,12 @@ void vivian_init_801809C0(PartyEntry* party) {
     vivian_cancel_req = 0;
 }
 
+/**
+ * Where Vivian is in her Veil: 0 not in use (or not Vivian), 1 sinking into the floor with Mario, 2 hidden,
+ * 3 rising back out, 4 anything else.
+ * Mario's collision, item pickup, NPC contact and the event commands read it (1 to 3 skip several of Mario's hit
+ * checks).
+ */
 s32 vivianGetStatus(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     u8 st;
@@ -136,6 +152,10 @@ s32 vivianGetStatus(void) {
     return 4;
 }
 
+/**
+ * Ends a hidden Veil from code or a script (evt_party, evt_mario):
+ * if Vivian is in the hidden state it starts the rise-out sequence.
+ */
 void vivianUnhold(PartyEntry* party) {
     if (party == NULL || party->currentMemberId != PARTY_MEMBER_VIVIAN || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return;
@@ -157,6 +177,11 @@ void partyVivianTailStart(PartyEntry* party) {
     }
 }
 
+/**
+ * Whether party.c draws Vivian's shadow tail this frame:
+ * only for Vivian, with the tail not hidden, on screen,
+ * and not while Fahr Outpost's bom_01 has parked her at y = -1000.
+ */
 // Descriptive name (not in the symbol maps).
 BOOL vivianDisplayTailCheck(PartyEntry* party) {
     if (party->currentMemberId != PARTY_MEMBER_VIVIAN) {
@@ -192,6 +217,7 @@ void vivianShadow(PartyEntry* party) {
     }
 }
 
+/** Vivian's follow routine: the shared flying-partner movement plus her shadow-tail update. */
 void vivian_move(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;

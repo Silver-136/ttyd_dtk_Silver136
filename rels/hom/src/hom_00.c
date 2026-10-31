@@ -76,6 +76,10 @@ EvtWord hom_00_init_evt[259];
 EvtWord hom_00_init_evt[247];
 #endif
 
+/**
+ * Door-swing callback when opening the station door (n_bero_2): LW(0) is the door angle;
+ * the two leaves tobira_1 and tobira_2 turn around Y by 0.39 times it in opposite directions.
+ */
 static EVT_BEGIN(n_2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("tobira_1"), 0, LW(0), 0)
@@ -84,6 +88,10 @@ static EVT_BEGIN(n_2_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door-swing callback when closing the station door (n_bero_2):
+ * same as n_2_door_open with the angle direction reversed.
+ */
 static EVT_BEGIN(n_2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("tobira_1"), 0, LW(0), 0)
@@ -154,6 +162,12 @@ BeroEntry bero_data_nidome[] = {
     {0},
 };
 
+/**
+ * Talk script of station attendant 1 (ekiin1) about the raised drawbridge:
+ * explains the bridge (stg6_hom_04/05, or stg6_hom_10 on a repeat),
+ * then asks whether Mario wants the Station Key (yes/no);
+ * on yes he is given the key (ITEM_STATION_KEY_0x18) and the story becomes "Station Key obtained".
+ */
 EVT_BEGIN(evt_carry_up_bridge)
     IF_INT_EQUAL(GSWF_HOM_DRAWBRIDGE_PROBLEM_EXPLAINED, 0)
         CALL(evt_msg_print, 0, STRING("stg6_hom_04"), 0, STRING("me"))
@@ -182,6 +196,11 @@ EVT_BEGIN(evt_carry_up_bridge)
     RETURN
 EVT_END()
 
+/**
+ * Init script shared by the platform NPCs Pennington, the fake Zip Toad, Heff T., Goldbob and Bub:
+ * removes the NPC from the map once the drawbridge is down (story 42),
+ * and the fake Zip Toad once the station has been reached (story 27).
+ */
 EVT_BEGIN(init_powan_toron_konari_papa_gurume)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG6_42_DRAWBRIDGE_DOWN)
@@ -218,10 +237,15 @@ static EVT_BEGIN(talk_konari)
     RETURN
 EVT_END()
 
+/** Init script of station attendant 1; does nothing. */
 EVT_BEGIN(init_ekiin1)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of station attendant 1: before the key is obtained, runs evt_carry_up_bridge;
+ * then gives the drawbridge, waiting-for-the-train and after-departure lines by story progress.
+ */
 EVT_BEGIN(talk_ekiin1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_28_STATION_KEY_OBTAINED)
@@ -236,6 +260,10 @@ EVT_BEGIN(talk_ekiin1)
     RETURN
 EVT_END()
 
+/**
+ * Init script of station attendant 2: once the drawbridge is down (story 42),
+ * moves him to the gate at (-865, 80, 100).
+ */
 EVT_BEGIN(init_ekiin2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG6_42_DRAWBRIDGE_DOWN)
@@ -244,6 +272,10 @@ EVT_BEGIN(init_ekiin2)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of station attendant 2 (at the ticket gate):
+ * different lines before the drawbridge is down, while waiting for the conductor, and afterwards.
+ */
 EVT_BEGIN(talk_ekiin2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_42_DRAWBRIDGE_DOWN)
@@ -395,6 +427,10 @@ static s32 key_tbl[] = {
     ITEM_STATION_KEY_0x18, -1,
 };
 
+/**
+ * Check script of the locked station door: if Mario carries a Station Key it opens the key picker (key_tbl)
+ * and cancels the unlock (evt_mobj_exec_cancel) if he backs out of it.
+ */
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STATION_KEY_0x18, LW(0))
     IF_INT_GREATER(LW(0), 0)
@@ -849,6 +885,10 @@ static void sun_tev(MapTevCallbackInfo* info) {
     info->texMap = texMap + 1;
 }
 
+/**
+ * Script helper, runs forever: draws a glare filter over the sun's screen rectangle (grown by 50 pixels),
+ * switching it off when the sun is off screen or the train has left (GF(15)).
+ */
 static USER_FUNC(test_glare) {
     MapObject* sun = mapGetMapObj("sun");
     u16* rect;
@@ -870,6 +910,10 @@ static USER_FUNC(test_glare) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: sets the hour and minute hand rotation of the station clock (LW(0) and LW(1)) from the
+ * console's real-time clock.
+ */
 USER_FUNC(tokei) {
     s32 min;
     OSCalendarTime time;

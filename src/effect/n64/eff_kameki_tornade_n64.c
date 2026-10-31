@@ -71,6 +71,11 @@ EffectEntry* effKamekiTornadeN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f
     return effect;
 }
 
+/**
+ * Fades in over 16 frames and out over the last 16.
+ * Each layer follows the one below it, so the column leans as the base moves (rot is clamped to 90 degrees);
+ * also advances the twist and the texture scroll.
+ */
 void effKamekiTornadeMain(EffectEntry* effect) {
     EffKamekiTornadeN64Work* work = effect->userdata;
     Vec position;
@@ -134,6 +139,10 @@ void effKamekiTornadeMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKamekiTornadeDisp, effect);
 }
 
+/**
+ * Builds a 16-segment ring of vertices and draws seven stacked, twisted layers, each tilted and scaled,
+ * using texture 0x6C on both texture maps.
+ */
 void effKamekiTornadeDisp(CameraId cameraId, EffectEntry* effect) {
     f32 scale;
     s32 i;

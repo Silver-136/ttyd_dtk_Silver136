@@ -120,6 +120,11 @@ static ExtTexInfo ext_moamoa_data[89];
 static EvtWord evt_moamoa[151];
 EvtWord MOAMOA_SET_BODYSCALE[4];
 
+/**
+ * Script helper for the Smorg boss's tentacle and mouth units:
+ * args[0] is a battle unit id, and args[1] receives 0 if the unit's x position is -120 or more and 1
+ * if it is further left, i.e. whether it stands in the front (zenei) or rear (kouei) part of the stage.
+ */
 USER_FUNC(boss_moamoa_check_zenei_kouei) {
     BattleWork* btlwp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -137,17 +142,26 @@ USER_FUNC(boss_moamoa_check_zenei_kouei) {
     return 2;
 }
 
+/**
+ * Script helper: forgets the Smorg main body's unit id in the swarm work area (wp->unitId = -1),
+ * so the swarm draws itself falling away once the boss is dead.
+ */
 USER_FUNC(evt_moamoa_mainUnitIdClear) {
     moamoa_mainUnitIdClear();
     return 2;
 }
 
+/** Returns a random float between min and max using rand(). */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
 
     return r * (max - min) + min;
 }
 
+/**
+ * Clears the Smorg main body's unit id in the swarm work area (wp->unitId = -1).
+ * Called from evt_moamoa_mainUnitIdClear.
+ */
 void moamoa_mainUnitIdClear(void) {
     wp->unitId = -1;
 }
@@ -349,6 +363,12 @@ BattleWeapon weapon_moamoa_tsunami_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Battle camera script: switches to camera mode 3
+ * and moves the camera to a fixed close view of the Smorg (about (83, 144, 512) looking at (83, 109, 0)).
+ * LW(0) selects the speed: 1 waits 600 ms after starting the move, 2 jumps there in a single frame,
+ * anything else takes 30 frames.
+ */
 EVT_BEGIN(moamoa_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
@@ -363,6 +383,11 @@ EVT_BEGIN(moamoa_zoom)
     RETURN
 EVT_END()
 
+/**
+ * Battle camera script: zooms in on Mario and the partner (camera mode 3,
+ * to (-120, 58, 257) looking at (-120, 40, 0)).
+ * LW(0) works as in moamoa_zoom: 1 waits 600 ms, 2 jumps in one frame, otherwise 30 frames.
+ */
 static EVT_BEGIN(mario_party_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
@@ -377,6 +402,11 @@ static EVT_BEGIN(mario_party_zoom)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the Smorg main body: registers its wait, phase, attack, damage and confusion events,
+ * spawns the three tentacle units (c, b and a, stored in unit work 3 to 5) with the mouth slot (6) empty,
+ * starts the swarm (evt_moamoa) and the body-scale event, and starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))
@@ -415,6 +445,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Smorg main body: runs the default damage handling (btldefaultevt_Damage) with the body as
+ * target.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -539,6 +573,13 @@ const char* moamoa2_change_tbl[] = {
     NULL,
 };
 
+/**
+ * Phase event of the Smorg boss (called from its phase_event): grows the three tentacles.
+ * Plays the arm restore sound and the V_2 pose,
+ * spawns the tentacle units (entry_boss_moamoa_tentacle_a, b and c),
+ * links them to the main body through unit work 3 to 5, attaches the swarm Moamoa chains to them (moamoa1_on),
+ * switches the defence table to moamoa_defence and plays each tentacle's B_1 idle pose.
+ */
 EVT_BEGIN(moamoa_tentacl_on)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_ARM_RESTORE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("V_2"))
@@ -587,6 +628,12 @@ EVT_BEGIN(moamoa_tentacl_on)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of the Smorg boss (called from its phase_event): grows the mouth.
+ * Plays the restore sound, the V_2 pose, spawns the mouth unit (entry_boss_moamoa_mouth) linked through unit
+ * work 6, attaches the swarm Moamoa chains to it (moamoa2_on),
+ * and switches to moamoa2_defence and the mouth's pose-change table.
+ */
 EVT_BEGIN(moamoa_mouth_on)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_ARM_RESTORE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(40)
@@ -630,6 +677,11 @@ EVT_BEGIN(moamoa_mouth_on)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of the Smorg main body: once the mouth
+ * and all tentacles are gone it checks the HP threshold in unit work 2 and, when it fires,
+ * regrows the tentacles (moamoa_tentacl_on) and the mouth (moamoa_mouth_on).
+ */
 // Count regrowth turns only while all limbs are absent; at regrowth, half HP selects mouth form.
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
@@ -686,6 +738,7 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/** Attack event of the Smorg main body: runs the attack script chosen in LW(0). */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -697,6 +750,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Idle event of the Smorg main body: shows the unit's table pose for state 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -794,6 +848,10 @@ static ExtTexInfo ext_moamoa_data[] = {
     {0},
 };
 
+/**
+ * Script helper used at the Smorg's death: collects the Moamoa that are above ground, finds their center,
+ * and gives each a starting angle (22.4 degrees apart) so they can swirl (guruguru) around it.
+ */
 USER_FUNC(moamoa_guruguru) {
     s32 i;
     Moamoa* elem;
@@ -843,6 +901,12 @@ USER_FUNC(moamoa_guruguru) {
     return 2;
 }
 
+/**
+ * Script helper used at the Smorg's death: every other frame it launches up to ten more Moamoa outward
+ * and upward from their body positions, makes them fall under gravity,
+ * and finishes (returns done) once at most nine Moamoa remain above -200,
+ * so the swarm scatters like an explosion.
+ */
 USER_FUNC(moamoa_bomb) {
     ExtdrvPose* p2;
     Moamoa* e2;
@@ -914,6 +978,12 @@ USER_FUNC(moamoa_bomb) {
     return 0;
 }
 
+/**
+ * Script helper: attaches the swarm Moamoa to the Smorg's three tentacle parts.
+ * Looks up the tentacle poses (unit work 3 to 5), hides their joints,
+ * and assigns each Moamoa's chain to the tentacle it belongs to (chains 0 to 4, 5 to 9 and 10 to 14)
+ * or to the main body, recording which unit's work slot owns it.
+ */
 USER_FUNC(moamoa1_on) {
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, wp->unitId);
     s32 i;
@@ -965,6 +1035,11 @@ USER_FUNC(moamoa1_on) {
     return 2;
 }
 
+/**
+ * Script helper: attaches the swarm Moamoa to the Smorg's mouth.
+ * Looks up the mouth pose (unit work 6), hides its joints,
+ * and assigns the Moamoa of chains 15 to 29 to the mouth and all others to the main body.
+ */
 USER_FUNC(moamoa2_on) {
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, wp->unitId);
     Moamoa* elem;
@@ -1115,6 +1190,10 @@ USER_FUNC(moamoa_on) {
     return 2;
 }
 
+/**
+ * Sets up the boss's swarm: hides the passenger model NPCs, runs moamoa_on,
+ * and adds the 750-sprite swarm effect with ext_moamoa_data, ext_moamoa_init and ext_moamoa_main.
+ */
 static EVT_BEGIN(evt_moamoa)
     CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a"))
     CALL(evt_npc_entry, STRING("moa_b"), STRING("c_n_moa_b"))
@@ -1182,6 +1261,10 @@ void moamoa_pose(Moamoa* elem) {
     }
 }
 
+/**
+ * Init callback of the boss swarm effect: sets scale to 1 and gives every sprite an identity matrix
+ * and its starting pose.
+ */
 static void ext_moamoa_init(void) {
     s32 i;
     ExtdrvPose* pose;
@@ -1198,6 +1281,10 @@ static void ext_moamoa_init(void) {
     }
 }
 
+/**
+ * Event run beside the main body's script: calls moamoa_set_bodyScale to resize the body Moamoa as tentacles
+ * and mouth are lost.
+ */
 EVT_BEGIN(MOAMOA_SET_BODYSCALE)
     CALL(moamoa_set_bodyScale)
     RETURN
@@ -1324,6 +1411,7 @@ static void ext_moamoa_main(void) {
     dispEntry(CAMERA_3D, 0.0f, 1, moamoa_draw, NULL);
 }
 
+/** Draw callback of the boss swarm: loads the ext driver state and draws all sprites. */
 void moamoa_draw(CameraId cameraId, void* param) {
     extLoadRenderMode();
     extLoadVertex();
@@ -1333,6 +1421,12 @@ void moamoa_draw(CameraId cameraId, void* param) {
     extLoadTextureExit();
 }
 
+/**
+ * Script helper: sets the target scale of the body's own Moamoa sprites (chains 46 and up),
+ * which ext_moamoa_main eases toward.
+ * The scale is 0.333 * (n - 3) + 1, where n counts missing parts (each missing tentacle counts 1,
+ * a missing mouth counts 3). Removes the effect if the main body no longer exists.
+ */
 // Missing mouth contributes three, each missing tentacle one; the target scale follows their sum.
 USER_FUNC(moamoa_set_bodyScale) {
     BattleUnit* unit;

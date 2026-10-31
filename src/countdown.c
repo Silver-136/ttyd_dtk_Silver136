@@ -23,6 +23,7 @@ static CountdownWork* wp;
 
 static void countDownDisp(CameraId cameraId, void* param);
 
+/** Points the countdown at gp->countdown and clears it. Called during game initialisation. */
 void countDownInit(void) {
     wp = &gp->countdown;
     memset(&gp->countdown, 0, sizeof(gp->countdown));
@@ -56,6 +57,11 @@ void countDownSaveReStart(void) {
     }
 }
 
+/**
+ * Starts a countdown of limit milliseconds (restart is the minimum time a resumed save gets back),
+ * slides the display in from the right at (180, -180)
+ * and starts the ticking sound (bomb timer before chapter 7, alarm after).
+ */
 void countDownStart(u32 limit, u32 restart) {
     wp->limit = limit;
     wp->restart = restart;
@@ -76,6 +82,7 @@ void countDownStart(u32 limit, u32 restart) {
     }
 }
 
+/** Changes the minimum time (ms) a countdown gets back when a save is loaded mid-countdown. */
 void countDownSetRestartTime(u32 restart) {
     wp->restart = restart;
 }
@@ -172,26 +179,31 @@ static void countDownDisp(CameraId cameraId, void* param) {
     }
 }
 
+/** Returns -1 when no countdown is running, 1 when its time is up and 0 while it is still counting. */
 s32 countDownGetStatus(void) {
     CountdownWork* work = wp;
     return !(work->flags & COUNTDOWN_FLAG_RUNNING) ? -1 : (work->flags & COUNTDOWN_FLAG_TIME_UP) != 0;
 }
 
+/** Slides a running countdown off screen and stops its sound (state 2 of countDownMain). */
 void countDownEnd(void) {
     if ((wp->flags & COUNTDOWN_FLAG_RUNNING) != 0) {
         wp->state = 2;
     }
 }
 
+/** Freezes the countdown (flag 8) and stops its sound; the display stays up. */
 void countDownStop(void) {
     wp->flags |= COUNTDOWN_FLAG_STOPPED;
     psndSFXOff(wp->sfxId);
 }
 
+/** Sets countdown flags (1 running, 2 time up, 4 hidden, 8 frozen). */
 void countDownFlagOn(u16 flag) {
     wp->flags |= flag;
 }
 
+/** Clears countdown flags (1 running, 2 time up, 4 hidden, 8 frozen). */
 void countDownFlagOff(u16 flag) {
     wp->flags &= ~flag;
 }

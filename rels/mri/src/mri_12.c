@@ -115,6 +115,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Init script of the orb pedestal in this room: runs the shared Puni-switch setup;
+ * if the orb is already on the pedestal it is shown there and its target is on,
+ * otherwise the beam of light is hidden. The target is placed at the pedestal.
+ */
 static EVT_BEGIN(punipuni_ball00_init)
     CALL_CHILD(PTR(mri_punipuni_setup))
     IF_INT_EQUAL(GSWF_MRI_12_PUNI_ORB_PLACED, 1)
@@ -127,6 +132,11 @@ static EVT_BEGIN(punipuni_ball00_init)
     RETURN
 EVT_END()
 
+/**
+ * Hit/talk script of the orb pedestal: if empty, Mario picks an item to put on it (cancel ends the script),
+ * the orb appears and the light beam is shown; if full, Mario takes the orb back and the beam is hidden.
+ * Mario is frozen during this.
+ */
 static EVT_BEGIN(punipuni_ball00)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(GSWF_MRI_12_PUNI_ORB_PLACED, 0)
@@ -148,6 +158,7 @@ static EVT_BEGIN(punipuni_ball00)
     RETURN
 EVT_END()
 
+/** Planter hit script 1: the first time it is hit it launches a coin out of the planter (remembered with a flag). */
 static EVT_BEGIN(evt_f1_ueki_01)
     CALL(evt_item_delete_check, STRING("item_ueki_01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -174,12 +185,21 @@ static EVT_BEGIN(breakyuka_init)
     RETURN
 EVT_END()
 
+/**
+ * Main script when the floor gives way under the Puni weight:
+ * turns on the collision of the lower floor piece and makes every Puni that is standing over the hole fall.
+ */
 static EVT_BEGIN(breakyuka_main)
     CALL(evt_hitobj_onoff, STRING("A_f2_rak_01"), 1, 1)
     CALL(evt_puni_all_fall_check)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of mri_12, a junction room joining mri_11, mri_17 and mri_18:
+ * sets up the Puni, planters, the breaking floor and the Puni Orb pedestal (punipuni), places a Star Piece,
+ * and plays the room music and water animations.
+ */
 EVT_BEGIN(mri_12_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 12, 0, -250, -310, -1000, 3, 0)

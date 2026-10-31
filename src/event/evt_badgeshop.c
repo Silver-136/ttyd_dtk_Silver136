@@ -94,14 +94,20 @@ BadgeShopWork badgeshopwork;
 //.sbss
 BadgeShopWork* bdsw;
 
+/** Number of items in Charlieton's Pit of 100 Trials list (without the ITEM_NULL end); winmgr sizes that menu by it. */
 s32 getBadgeBottakuru100TableMaxCount(void) {
     return (sizeof(badge_bottakuru100_table) / sizeof(s32)) - 1;
 }
 
+/** Number of badges in Dazzle's list (without the ITEM_NULL end); winmgr sizes the Star Piece exchange menu by it. */
 s32 getBadgeStarmaniacTableMaxCount(void) {
     return (sizeof(badge_starmaniac_table) / sizeof(s32)) - 1;
 }
 
+/**
+ * Number of Pianta Parlor prizes across the base list and all four card lists (Special, Silver, Gold, Platinum);
+ * winmgr sizes the prize menu by it.
+ */
 s32 getBadgeBteresaTableMaxCount(void) {
     return ((sizeof(badge_bteresa_table) / sizeof(s32)) - 1) +
         ((sizeof(badge_bteresa_table_card_special) / sizeof(s32)) - 1) +
@@ -110,6 +116,11 @@ s32 getBadgeBteresaTableMaxCount(void) {
         ((sizeof(badge_bteresa_table_card_platinum) / sizeof(s32)) - 1);
 }
 
+/**
+ * Resets all shop stock: one of each Lovely Howz special badge, Dazzle badge and Charlieton item,
+ * the base Pianta Parlor prizes, and Charlieton's first offer. Sets restockFlags bit 0.
+ * On boot (mariost.c) and new game (stg0_00).
+ */
 void badgeShop_init(void) {
     s32* ptr;
 
@@ -138,6 +149,7 @@ void badgeShop_init(void) {
     }
 }
 
+/** qqsort comparator for badgeShop_bottakuruGeneration: orders (item, key) pairs by the key in word 1, ascending. */
 s32 bottakuruComp(const s32* sortA, const s32* sortB) {
     s32 a, b;
 
@@ -371,6 +383,11 @@ void badgeShop_bargainGeneration(void) {
 }
 
 #pragma dont_inline on
+/**
+ * Writes a 2-bit stock count (clamped to 0-3) for item id into a shop table and returns the stored count.
+ * Tables hold four items per byte from BADGE_MIN, or from KEY_ITEM_MIN for Charlieton's and the Parlor's;
+ * other ids give 0.
+ */
 s16 badgeShop_set(u8* table, s16 id, s16 val) {
     s32 bound;
     s16 index;
@@ -416,6 +433,10 @@ s16 badgeShop_set(u8* table, s16 id, s16 val) {
 }
 
 #pragma dont_inline reset
+/**
+ * Reads the 2-bit stock count (0-3) of item id from a shop table;
+ * same layout as badgeShop_set, 0 when out of range.
+ */
 s32 badgeShop_get(u8* table, s16 id) {
     s32 bound;
     s16 index;
@@ -452,6 +473,10 @@ s32 badgeShop_get(u8* table, s16 id) {
     return (s16)((mask & table[index / 4]) >> shift);
 }
 
+/**
+ * Adds value (may be negative) to the 2-bit stock count of item id, clamped to 0-3, and returns the new count;
+ * same table layout as badgeShop_set.
+ */
 s32 badgeShop_add(u8* table, s16 id, s32 value) {
     s32 temp;
     s32 mask;
@@ -502,11 +527,16 @@ s32 badgeShop_add(u8* table, s16 id, s32 value) {
     return data;
 }
 
+/** Stores a pointer to the five bargain badge ids (bdsw->bargainBadges) in args[0] for the shop script. */
 USER_FUNC(badgeShop_getBargainTable) {
     evtSetValue(event, *event->args, (EvtWord)&bdsw->bargainBadges);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Adds one of the badge in args[0] to the Lovely Howz stock (both the special and bargain tables).
+ * gor_01's sell_evt calls it after Mario sells the badge, so the shop puts it back on sale.
+ */
 USER_FUNC(evt_badgeShop_throw_inc) {
     s32 value;
 
@@ -516,6 +546,7 @@ USER_FUNC(evt_badgeShop_throw_inc) {
     return EVT_RETURN_DONE;
 }
 
+/** Removes one of the badge in args[0] from the Lovely Howz stock (both the special and bargain tables). */
 USER_FUNC(evt_badgeShop_throw_dec) {
     s32 value;
 
@@ -525,6 +556,7 @@ USER_FUNC(evt_badgeShop_throw_dec) {
     return EVT_RETURN_DONE;
 }
 
+/** Removes one of the badge in args[0] from the Lovely Howz special stock only. */
 USER_FUNC(evt_badgeShop_special_dec) {
     s32 value;
 
@@ -533,6 +565,7 @@ USER_FUNC(evt_badgeShop_special_dec) {
     return EVT_RETURN_DONE;
 }
 
+/** Removes one of the badge in args[0] from Dazzle's stock (bought with Star Pieces). */
 USER_FUNC(evt_badgeShop_starmaniac_dec) {
     s32 value;
 
@@ -573,6 +606,7 @@ USER_FUNC(evt_badgeShop_throw_get_kind_cnt) {
     return EVT_RETURN_DONE;
 }
 
+/** Counts how many different badges Dazzle still has in stock and writes it to args[0]. */
 USER_FUNC(evt_badgeShop_starmaniac_get_kind_cnt) {
     EvtWord* args = event->args;
     s16 badge;
@@ -589,6 +623,7 @@ USER_FUNC(evt_badgeShop_starmaniac_get_kind_cnt) {
     return EVT_RETURN_DONE;
 }
 
+/** Counts how many of Charlieton's four offer slots hold an item (not the empty entry) and writes it to args[0]. */
 USER_FUNC(evt_badgeShop_bottakuru_get_kind_cnt) {
     EvtWord* args = event->args;
     s32 count;
@@ -619,6 +654,7 @@ USER_FUNC(U_evt_badgeShop_get_special_zaiko) {
     return EVT_RETURN_DONE;
 }
 
+/** Counts how many different prizes the Pianta Parlor has in stock and writes it to args[0]. */
 USER_FUNC(evt_badgeShop_bteresa_get_kind_cnt) {
     EvtWord* args = event->args;
     s16 badge;

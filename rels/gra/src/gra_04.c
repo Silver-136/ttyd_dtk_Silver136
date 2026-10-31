@@ -29,6 +29,7 @@ EvtWord gra_04_tree_open_evt[41];
 static const char* fukitobashi_tbl[6];
 EvtWord gra_04_init_evt[64];
 
+/** Enter event of the w_bero_1 and w_bero_2 doors: just returns 1 in LW(0) so the door transition goes ahead. */
 static EVT_BEGIN(in_evt)
     SET_VALUE(LW(0), 1)
     RETURN
@@ -89,6 +90,11 @@ static EVT_BEGIN(out_evt)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of the return door from the back lane (w_bero_2): the reverse of out_evt.
+ * Mario leaves background mode, appears at (-380, 0, -10) with both partners next to him,
+ * they run out and walk to (-280, -10) while the camera and shift are released. Returns 1 in LW(0).
+ */
 static EVT_BEGIN(out_evt2)
     CALL(evt_mario_key_onoff, 0)
     CALL(roll_release_check, LW(0))

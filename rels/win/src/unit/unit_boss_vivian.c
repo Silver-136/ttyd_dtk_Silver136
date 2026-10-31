@@ -264,6 +264,10 @@ static BattleUnitSetup entry_majolyne = {
     NULL, // itemDropTable
 };
 
+/**
+ * Vivian sinks into her shadow: after 250 ms plays the shadow sound (SFX_BOSS_VIVI_SHADOW1)
+ * and hides her model (battle_evt_majo_disp_off).
+ */
 static EVT_BEGIN(vivian_down)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
@@ -273,6 +277,10 @@ static EVT_BEGIN(vivian_down)
     RETURN
 EVT_END()
 
+/**
+ * Vivian rises out of her shadow at the position in LW(0..2):
+ * after 250 ms plays the rising sound (SFX_BOSS_VIVI_SHADOW2), shows her model and sets her position.
+ */
 static EVT_BEGIN(vivian_up)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
@@ -283,6 +291,15 @@ static EVT_BEGIN(vivian_up)
     RETURN
 EVT_END()
 
+/**
+ * Init script of Vivian, the unit that sets up the Shadow Sirens fight:
+ * installs her wait, phase, attack, damage and entry scripts and the default confusion script.
+ * It stores her unit id in GW(10), spawns Marilyn (GW(9)) and Beldam (GW(8)) behind her at x offsets 50
+ * and 100 (z +10, +20), gives the three HP-order slots 0,
+ * 1 and 2 (unit work 4 and 5) and clears unit work 6 and 7,
+ * zeroes the sisters' states GW(11) to GW(13), sets GW(14) to 2,
+ * clears her unit work 8 and 3 and starts majo3_shadow_tail_event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))
@@ -326,6 +343,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Battle intro (entry script): after 120 frames the camera moves onto each sister in turn:
+ * Beldam says they will show what they can do (btl_majo3_00),
+ * Marilyn grunts (btl_majo3_01) and Vivian answers "Yes, Sis!" (btl_majo3_02).
+ */
 static EVT_BEGIN(entry_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     WAIT_FRAMES(60)
@@ -355,6 +377,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Vivian's defeat: she walks back to her home spot if displaced.
+ * If a sister is in the middle of her own defeat (state 1) she waits for it and says nothing;
+ * if both sisters are dead she screams (btl_majo3_13);
+ * otherwise she apologizes (btl_majo3_10). Then GW(13) = 2 and the shared no-spin dead sequence runs.
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(3), LW(4), LW(5))
@@ -435,6 +463,12 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Vivian's unison-phase script, which nothing installs (init_event sets only phase_event):
+ * after the player's phase it re-sorts the sisters by HP (majo_unison_phase_event);
+ * if her slot (unit work 5) differs from her current one (unit work 4) she sinks into her shadow
+ * and comes up at the new home spot (x 55, 105 or 155), and the turn order is re-sorted.
+ */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -467,10 +501,17 @@ static EVT_BEGIN(unison_phase_event)
     RETURN
 EVT_END()
 
+/** Vivian's phase script: empty, it does nothing. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Vivian's attack choice: uses an item if the AI picks one.
+ * Otherwise she always uses the shadow slip (unit work 8 = 0)
+ * until Beldam's phase script sets her unit work 7 (below 50% HP);
+ * then her next attack is the flame and from then on she picks shadow slip 70% or flame 30%.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -510,6 +551,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Vivian's shadow-slip attack (weapon_vivian_kagenuke_attack1, 1 damage to one enemy):
+ * she sinks into her shadow, rises in front of the target and strikes, then sinks again to return home.
+ */
 static EVT_BEGIN(kagenuke_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -582,6 +627,12 @@ static EVT_BEGIN(kagenuke_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Vivian's flame attack (weapon_vivian_flame_attack1, 1 damage to every enemy,
+ * piercing defense and unguardable):
+ * she raises her hands with the magic sound, then smoke appears on each target in turn as it is hit or dodges;
+ * with no valid targets it ends (or flusters her when confused).
+ */
 EVT_BEGIN(flame_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -647,6 +698,7 @@ EVT_BEGIN(flame_attack_event)
     RETURN
 EVT_END()
 
+/** Wait event of Vivian: switches to pose table entry 1 (idle). */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

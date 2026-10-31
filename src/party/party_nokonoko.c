@@ -36,6 +36,13 @@ void lookupSafetyPos3(Vec pos, f32 height, Vec* out);
 void lookupSafetyPos2(Vec pos, f32 height, Vec* out);
 u32 lookupSafetyPos(Vec pos, f32 height, Vec* out);
 
+/**
+ * Where Koops is in his Shell Toss, from his use-motion state:
+ * 0 not in use (or not Koops), 1 pulling into his shell beside Mario, 2 shell flying out,
+ * 3 shell held spinning in place (the X button, or an event hold), 4 shell coming back,
+ * 5 coming back after a held shot, 6 dropping back in from above after falling out of bounds, 7 anything else.
+ * Read by evt_party, npcdrv and party_motion.
+ */
 s32 nokonokoGetStatus(PartyEntry* party) {
     u32 m;
     s32 status;
@@ -68,6 +75,10 @@ s32 nokonokoGetStatus(PartyEntry* party) {
     return status;
 }
 
+/**
+ * TRUE while Koops is mid Shell Toss carrying an item his shell picked up;
+ * marioChkKey and itemdrv check it so Mario cannot act or collect items until the shell is back.
+ */
 BOOL nokonoko_holdItem(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party == NULL) {
@@ -79,6 +90,10 @@ BOOL nokonoko_holdItem(void) {
     return party->work.nokonoko.heldItem != NULL;
 }
 
+/**
+ * Koops's goodbye routine, the same as kuribo_bye:
+ * plays the leave-the-party motion and switches to run mode 14 once it ends.
+ */
 void nokonoko_bye(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
@@ -89,6 +104,10 @@ void nokonoko_bye(PartyEntry* party) {
     }
 }
 
+/**
+ * Party table init for Koops: sets his 24 wide by 37 tall collision size
+ * and clears the stored shell-spin sound handle.
+ */
 void nokonoko_init(PartyEntry* party) {
     party->memberKind = 2;
     party->moveKind = 0;
@@ -97,6 +116,10 @@ void nokonoko_init(PartyEntry* party) {
     nokoSe = -1;
 }
 
+/**
+ * Koops's follow routine: records Mario's footsteps and runs the shared stay, walk,
+ * behind-Mario or beside-Mario movement for his current move mode.
+ */
 void nokonoko_move(PartyEntry* party) {
     marioGetPtr();
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
@@ -123,6 +146,11 @@ void nokonoko_move(PartyEntry* party) {
     }
 }
 
+/**
+ * Aborts Koops's Shell Toss when Mario gets hurt (called from the damage motion):
+ * stops the shell-spin sound, restores his flags and standing height and puts him back into follow mode
+ * unless he is in run mode 8 or 13.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_800cd9a0, JP 0x800CD9A0. See docs/NAME_PROVENANCE.md.
 void nokonoko_use_cancel(void) {
     PartyEntry* party;
@@ -153,6 +181,11 @@ void nokonoko_use_cancel(void) {
     }
 }
 
+/**
+ * Party table post_func for Koops, run when Shell Toss ends:
+ * hands any carried item to Mario (itemNokoForceGet), stops the shell-spin sound and restores his flags,
+ * 37 unit height and shell work fields.
+ */
 void nokonoko_use_post(PartyEntry* party) {
     if (party->work.nokonoko.heldItem != NULL) {
         itemNokoForceGet(party->work.nokonoko.heldItem);
@@ -175,6 +208,7 @@ void nokonoko_use_post(PartyEntry* party) {
     party->work.nokonoko.word180 = 0;
 }
 
+/** Stops the looping shell-spin sound (nokoSe) if one is playing. */
 static inline void noko_se_off(void) {
     marioGetPtr();
     if ((u32)nokoSe != 0xFFFFFFFFU) {
@@ -183,6 +217,10 @@ static inline void noko_se_off(void) {
     }
 }
 
+/**
+ * Spins the shell's sprite 50 degrees a frame, clockwise or counter-clockwise depending on
+ * which way it travels on screen.
+ */
 static inline void noko_spin(PartyEntry* party) {
     f32 dir;
     if (revise360(party->targetDir - party->camDir) > 180.0f) {
@@ -193,6 +231,11 @@ static inline void noko_spin(PartyEntry* party) {
     party->displayDirection = revise360(50.0f * dir + party->displayDirection);
 }
 
+/**
+ * Spawns n small N64-style star sparks at the top of the shell,
+ * aimed along its direction of travel (the bump effect when the shell hits a wall or grabs an item;
+ * 3 when it launches).
+ */
 static inline void noko_star(PartyEntry* party, s32 n) {
     f32 c = (f32)cos(6.2831855f * party->targetDir / 360.0f);
     f32 s = (f32)sin(6.2831855f * party->targetDir / 360.0f);
@@ -208,6 +251,14 @@ static inline void noko_star(PartyEntry* party, s32 n) {
             body                                                                                                   \
         }                                                                                                          \
     }
+/**
+ * Shell Toss, run every frame while Koops is in use.
+ * He tucks into his shell beside Mario, shoots forward 120 units (picking up the first item it touches),
+ * stops spinning in place while X is held (or while an event holds it),
+ * then slides back to a safe spot next to Mario; hitting a wall ends the throw early.
+ * Off screen, he is placed near Mario and the toss ends at once.
+ * nokonokoGetStatus reports the state; the US release reworked the wall push-out.
+ */
 void nokonoko_use(PartyEntry* party) {
     Vec out;
     Vec out2;
@@ -854,6 +905,10 @@ void nokonoko_use(PartyEntry* party) {
     }
 }
 
+/**
+ * Ends Shell Toss if Koops is in use: runs nokonoko_use_post, then returns him to follow mode,
+ * or to run mode 0 when the toss was started by an event.
+ */
 void nokonoko_finish(PartyEntry* party) {
     if (party != NULL && party->currentMemberId == PARTY_MEMBER_KOOPS && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         nokonoko_use_post(party);
@@ -869,10 +924,20 @@ void nokonoko_finish(PartyEntry* party) {
     }
 }
 
+/**
+ * Releases an event-held shell (evt_party_nokotaro_hold_cancel) by moving it from the held state into the
+ * spinning state that sends it back.
+ */
 void nokotaro_hold_cancel(PartyEntry* party) {
     party->useMotionId = 20;
 }
 
+/**
+ * Shell collision for Shell Toss: snaps the shell onto floors within 11 units,
+ * then probes ahead along its direction (centre, then each side) for a wall and pushes it out along the wall.
+ * Returns the wall hit, or NULL.
+ * Mode 0 is the outbound throw; mode 1 the return, where hitobjAction is only set after a held shot.
+ */
 HitEntry* ccwall(PartyEntry* party, s32 mode) {
     f32 s;
     f32 c;
@@ -1029,6 +1094,13 @@ void nokoStrippedPool(f32* p) {
     p[4] = 6.0f;
 }
 
+/**
+ * Picks where the returning shell can stop near pos:
+ * probes for floor at Mario's collision width behind, left,
+ * right and in front of him (relative to his facing)
+ * and returns the bit mask of probes that found floor (1 behind, 2 and 4 the sides, 8 front),
+ * with *out set to the best spot or pos itself.
+ */
 u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
     Vec p[4];
     f32 dist;
@@ -1165,6 +1237,11 @@ u32 lookupSafetyPos(Vec pos, f32 height, Vec* out) {
 // target colouring in lookupSafetyPos2; same value as (f32)sin(rad)
 static inline f32 nokoSin(f32 rad) { return (f32)sin(rad); }
 
+/**
+ * Fallback landing spot for the returning shell:
+ * the first of Mario's collision width toward +x, toward -x, pos itself, then toward -z that has floor under it,
+ * else pos.
+ */
 void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     f32 rad;
     f32 dx;
@@ -1241,6 +1318,10 @@ void lookupSafetyPos2(Vec pos, f32 height, Vec* out) {
     *out = pos;
 }
 
+/**
+ * Landing spot used when only the front probe of lookupSafetyPos found floor:
+ * tries Mario's collision width toward +x, then toward -x of pos, else pos.
+ */
 void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
     f32 y;
     f32 rad;
@@ -1292,6 +1373,10 @@ void lookupSafetyPos3(Vec pos, f32 height, Vec* out) {
     *out = pos;
 }
 
+/**
+ * Returns the point Mario's collision width away from pos in the given direction (degrees)
+ * if there is floor under it, else pos; nokonoko_use picks the direction from the lookupSafetyPos probe mask.
+ */
 void lookupSafetyPosSub(Vec pos, f32 height, f32 angle, Vec* out) {
     f32 rad;
     f32 x;

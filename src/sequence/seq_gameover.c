@@ -47,6 +47,10 @@ s32 fall_data2[] = {
     200, 170, 140, 110, 80, 50, 20, 0, 12, 15, 16, 15, 11, 6, 0, 4, 3, 1, 0,
 };
 
+/**
+ * Drops the GAME OVER letter map object named in LW(0) from 200 units up,
+ * bouncing it to rest over 26 frames using the heights in fall_data.
+ */
 EVT_BEGIN(_fall_char)
     SET_INT_READ_ADDR(PTR(fall_data))
     LOOP(26)

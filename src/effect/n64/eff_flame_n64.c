@@ -41,6 +41,10 @@ typedef struct EffFlameN64Work {
 void effFlameMain(EffectEntry* effect);
 void effFlameDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Copies one s16 vertex from src to dst and transforms its position by matrix m,
+ * going through float with the fast-cast routines.
+ */
 static inline void xf(Mtx m, effN64Vtx* dst, effN64Vtx* src) {
     Vec v;
     memcpy(dst, src, sizeof(effN64Vtx));
@@ -88,6 +92,11 @@ static effN64Vtx stg_flame_3_v[] = {
     {-50, 50, -2, 0, 1024, 255, 255, 255, 255},
 };
 
+/**
+ * Spawns a flame at (x, y, z) scaled by scale.
+ * Type 0 is grey, type 2 blue-green and the default yellowish;
+ * the colours and texture scroll targets are set per type. Spawned from event scripts through evt_eff.
+ */
 EffectEntry* effFlameN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffFlameN64Work* work;
@@ -199,6 +208,10 @@ EffectEntry* effFlameN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     return effect;
 }
 
+/**
+ * Fades in, eases the two flame textures' scroll speeds toward their targets, and for type 0 eases the scale.
+ * It lives until a delete request, then fades out over 16 frames.
+ */
 void effFlameMain(EffectEntry* effect) {
     EffFlameN64Work* work;
     Vec position;

@@ -23,6 +23,7 @@ typedef struct EffIrekaeruWork {
     s32 alpha;      // 0x20
 } EffIrekaeruWork;
 
+/** Spawns the swap (irekaeru) animation at (x, y, z); spawned by event scripts. */
 EffectEntry* effIrekaeruEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffIrekaeruWork* work;
@@ -46,6 +47,7 @@ EffectEntry* effIrekaeruEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/** Loads the pose, fades it in, plays it, then fades out and deletes it; a soft delete deletes it immediately. */
 void effIrekaeruMain(EffectEntry* effect) {
     EffIrekaeruWork* work = effect->userdata;
     Vec position;
@@ -109,6 +111,7 @@ void effIrekaeruMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effIrekaeruDisp, effect);
 }
 
+/** Draws the EFF_Irekae pose billboarded to the camera with the current alpha. */
 void effIrekaeruDisp(CameraId cameraId, EffectEntry* effect) {
     EffIrekaeruWork* work = effect->userdata;
     Mtx mtx;

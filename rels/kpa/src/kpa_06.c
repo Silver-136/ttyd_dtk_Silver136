@@ -28,6 +28,11 @@ static EvtWord kpa_act_stg3_mobj[] = {
     KPA_OBJ_POLE(262.5f, 0.0f, kpa_goal), KPA_OBJ_END,
 };
 
+/**
+ * Watches Bowser in the stage: each frame it checks whether he is dead (evt_koopa_chk_dead)
+ * or has fallen below y = -20, then runs the death handler (kpa_dead) if he died,
+ * or the pit fall handler (kpa_fall_sub) if he fell.
+ */
 static EVT_BEGIN(kpa_fall)
     SET_VALUE(LF(0), 0)
     LOOP(0)
@@ -66,6 +71,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Map init for kpa_06, the second half of stage 3:
+ * Bowser arrives at the top left, the blocks come from kpa_act_stg3_mobj, and the clock and music run.
+ * The goal leads to kpa_07.
+ */
 EVT_BEGIN(kpa_06_init_evt)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_npc_setup, PTR(npcEnt))

@@ -37,12 +37,20 @@ EvtWord item_get01[34];
 EvtWord item_get02[34];
 EvtWord gon_12_init_evt[93];
 
+/**
+ * Door animation callback, closing for the e_bero exit to gon_08:
+ * rotates map object "door03" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door03"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the e_bero exit to gon_08:
+ * rotates map object "door03" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door03"), 0, LW(0), 0)
@@ -235,6 +243,7 @@ static EVT_BEGIN(chuchurina_sogu)
     RETURN
 EVT_END()
 
+/** Talk event for Ms. Mowz in gon_12; empty (her first meeting with Mario is the scripted scene chuchurina_sogu). */
 EVT_BEGIN(chuchurina_talk)
     RETURN
 EVT_END()
@@ -266,6 +275,7 @@ static EVT_BEGIN(item_get00)
     RETURN
 EVT_END()
 
+/** Runs when Mario opens the chest mobj_box01: shows the Mushroom coming out and gives it to him. */
 EVT_BEGIN(item_get01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
@@ -277,6 +287,7 @@ EVT_BEGIN(item_get01)
     RETURN
 EVT_END()
 
+/** Runs when Mario opens the chest mobj_box02: shows the Honey Syrup coming out and gives it to him. */
 EVT_BEGIN(item_get02)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box02"), LW(0), LW(1), LW(2))

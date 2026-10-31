@@ -179,6 +179,11 @@ BattleUnitSetup entry_npc_christine = {
     NULL, // itemDropTable
 };
 
+/**
+ * Init event of Lord Crump: installs his wait, attack, damage, confusion and phase events,
+ * spawns the Goombella unit (entry_npc_christine) at (-140, 0, 5) as his unit work 0,
+ * clears work 1 to 3 (message flags) and sets the heavy walk and run sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -199,6 +204,13 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of Lord Crump: on turn 1 before the player's phase the camera swings to Mario,
+ * who turns round while Goombella speaks (mac_0_b_t1_000) and raises his hand.
+ * After the player's phase it plays one-time comments:
+ * when Crump is at half HP or less (mac_0_b_t1_003),
+ * after Mario's first successful action command (001) and after his first failed one (002).
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -286,6 +298,7 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/** Damage event of Lord Crump: runs the default damage handling. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -293,6 +306,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Lord Crump: uses an enemy item if he has one,
+ * otherwise always runs normal_attack_event with weapon_kanbu1_attack.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -306,11 +323,18 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of Lord Crump: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Death event of Lord Crump: spins him over 48 frames with the defeat sound, puffs smoke, pays out the coins,
+ * experience and Star Points, tips him over, then runs a short Goombella dialogue with Mario turning to face her
+ * (mac_0_b_t1_004 and 005) before the unit is removed.
+ * It is the scripted end of the fight with Goombella's commentary.
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_PRE_DEAD_EVENT)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -430,6 +454,15 @@ static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_ACTION, "G_2"},
 };
 
+/**
+ * Lord Crump's basic attack (weapon in LW(9), weapon_kanbu1_attack):
+ * picks a target, runs at it and does a belly flop.
+ * He hops (SFX_BOSS_KANBU_JUMP1, poses A_1A and A_1B) over the target;
+ * the pre-damage check decides between a dodge and a hit,
+ * and on a hit he lands on it (A_1C, SFX_BOSS_KANBU_HIP_ATTACK1 and 2),
+ * bounces and gets up (D_1) before returning home.
+ * Falls back to the flustered reaction when confused with nothing to hit.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -531,6 +564,7 @@ USER_FUNC(_mario_ac_success_check) {
     evtSetValue(event, event->args[0], _battleWorkPointer->marioAcSuccess);
     return EVT_RETURN_DONE;
 }
+/** Script helper: stores in args[0] whether Mario's last action command failed (the battle work's marioAcFailed). */
 USER_FUNC(_mario_ac_failed_check) {
     evtSetValue(event, event->args[0], _battleWorkPointer->marioAcFailed);
     return EVT_RETURN_DONE;

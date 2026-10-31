@@ -247,6 +247,11 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init event of the Dark Bones: installs its wait, attack, damage and confusion events,
+ * sets the thrown-bone part poses (KRN_H_1) and the landing sound,
+ * and clears unit work 1 (the flag that the death reward was already given).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))

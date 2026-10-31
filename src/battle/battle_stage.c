@@ -57,6 +57,10 @@ static u8 inta_tex[32] ATTRIBUTE_ALIGN(32) = {
 
 USER_FUNC(screen_evt_func);
 
+/**
+ * Started by tou_gamen_screen_tev_init: calls screen_evt_func from an inline event,
+ * which queues one capture of the frame for the Glitzville arena's big screen.
+ */
 EVT_BEGIN(screen_evt)
     BEGIN_INLINE_EVENT
         CALL(screen_evt_func, LW(0))
@@ -75,10 +79,20 @@ f32 getSpline(f32* a, f32* b, f32* c, f32* d, s32* t, s32 n, s32 x);
 void batSpotMain(void);
 void drawCone(CameraId camId, BattleSpotEntry* e);
 
+/**
+ * Returns the stage lighting state inside the battle work (_battleWorkPointer->stage):
+ * the 12 light beams, the stage and audience darkness and the stage and audience area sizes.
+ */
 BattleStage* BattleStageGetPtr(void) {
     return &_battleWorkPointer->stage;
 }
 
+/**
+ * Resets the stage at battle start (from BattleInit):
+ * no lights, stage darkness 0, audience darkness 0x8C,
+ * stage size 290 x 200 x 90 and audience area 290 x -50 x 200,
+ * then sets up the stage objects and the spotlight cones.
+ */
 void BattleStageInit(void) {
     BattleStage* s = STG;
     s32 i;
@@ -120,6 +134,12 @@ typedef struct LightSpline {
     f32 z[4][8];    // 0x124
 } LightSpline;
 
+/**
+ * Per-frame update from BattleMain: steps each active light's colour, width, position,
+ * target and up-vector fades with intplGetValue,
+ * clears a light once its release fade (BattleStageLightRelease) reaches black,
+ * follows spline targets (flag 4, looping with flag 8) and steps the stage and audience darkness fades.
+ */
 void BattleStageMain(void) {
     StageLight* l;
     s32 i;
@@ -222,6 +242,10 @@ void BattleStageEnd(void) {
     }
 }
 
+/**
+ * Queues the stage darkness (z 5000) and the light beams (z 6000) on the 3D camera each frame;
+ * called from battle_disp.c. The BattleGetUnitPtr result is unused.
+ */
 void BattleStageDisp(void) {
     BattleGetUnitPtr(_battleWorkPointer, _battleWorkPointer->activeUnitId);
     dispEntry(CAMERA_3D, 5000.0f, 2, BattleStageDispDark, NULL);
@@ -229,6 +253,7 @@ void BattleStageDisp(void) {
 }
 
 #pragma dont_inline on
+/** Emits one vertex of a darkening quad: the position, coloured black at the given alpha. */
 void DarkByPoint(u8 alpha, f32 x, f32 y, f32 z) {
     GXPosition3f32(x, y, z);
     GXColor4u8(0, 0, 0, alpha);
@@ -236,6 +261,7 @@ void DarkByPoint(u8 alpha, f32 x, f32 y, f32 z) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+/** Draws one black quad of the given alpha at depth z with corners (x0, y0) and (x1, y1). */
 void DarkBySquare(f32 x0, f32 y0, f32 x1, f32 y1, f32 z, u8 alpha) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     DarkByPoint(alpha, x0, y0, z);
@@ -245,6 +271,11 @@ void DarkBySquare(f32 x0, f32 y0, f32 x1, f32 y1, f32 z, u8 alpha) {
 }
 #pragma dont_inline reset
 
+/**
+ * Display callback from BattleStageDisp: darkens the scene with 1280-unit black quads at z 105,
+ * two at the audience darkness (audDark.cur) with opposite depth tests and windings,
+ * then one at the stage darkness (stgDark.cur).
+ */
 void BattleStageDispDark(CameraId camId, void* param) {
     BattleStage* s = STG;
     CameraEntry* cam = camGetPtr(CAMERA_3D);
@@ -283,6 +314,11 @@ void BattleStageDispDark(CameraId camId, void* param) {
 // rather than through STG because with propagation off the inline's return temp would take its place.
 #pragma push
 #pragma opt_propagation off
+/**
+ * Display callback from BattleStageDisp: draws each active light as an additive beam,
+ * a fan of 18 triangles from the light's position out to twice the distance of its target with radius width,
+ * turning the up vector 20 degrees around the beam axis per triangle.
+ */
 void BattleStageDispLight(CameraId camId, void* param) {
     s32 i, j;
     f32 width;
@@ -355,24 +391,37 @@ void BattleStageDispLight(CameraId camId, void* param) {
 }
 #pragma pop
 
+/**
+ * Empty in every version. battle_seq_command.c calls it when Mario or the partner starts choosing a command.
+ * Guess: it once lit the acting unit while the menu is open.
+ */
 void BattleStageOnLightInCommand(void) {
 }
 
+/** Empty in every version; battle_seq_command.c calls it when command selection ends (both arguments unused). */
 void BattleStageOffLightInCommand(s32 a, s32 b) {
 }
 
+/** Empty in every version; called from battle_seq_command.c while choosing a target. Guess: it once lit the allies. */
 void BattleStageOnLightFriendInCommand(void) {
 }
 
+/** Empty in every version; called from battle_seq_command.c when the command menu opens or targeting ends. */
 void BattleStageOffLightFriendInCommand(void) {
 }
 
+/** Empty in every version; called from battle_seq_command.c while choosing a target. Guess: it once lit the enemies. */
 void BattleStageOnLightEnemyInCommand(void) {
 }
 
+/** Empty in every version; called from battle_seq_command.c when the command menu opens or targeting ends. */
 void BattleStageOffLightEnemyInCommand(void) {
 }
 
+/**
+ * Returns the slot of the active light with this name, or -1.
+ * evt_batstage.c finds its sys_activeUnit_1..3 beams this way.
+ */
 s32 BattleStageGetLightNumberByName(const char* name) {
     BattleStage* s = STG;
     s32 i;
@@ -386,6 +435,11 @@ s32 BattleStageGetLightNumberByName(const char* name) {
     return -1;
 }
 
+/**
+ * Claims the first free light among slots 0-6 under the given name
+ * and returns its slot (7 when all are taken, which callers do not check).
+ * The first loop searches for the name but does nothing with a match.
+ */
 s32 BattleStageSysLightEntry(const char* name) {
     BattleStage* s = STG;
     s32 i;
@@ -407,6 +461,11 @@ s32 BattleStageSysLightEntry(const char* name) {
     return i;
 }
 
+/**
+ * Switches light idx off: at once when time is 0,
+ * otherwise fades its colour to black over time frames (curve mode) and BattleStageMain clears it
+ * when it reaches black.
+ */
 void BattleStageLightRelease(s32 idx, s32 time, u8 mode) {
     // FAKE: l first holds the stage pointer (two definitions), which keeps the stage base and idx * 232 + 4 as
     // separate adds; `StageLight* l = &STG->lights[idx];` changes the object
@@ -429,6 +488,10 @@ void BattleStageLightRelease(s32 idx, s32 time, u8 mode) {
 }
 
 #pragma opt_propagation off
+/**
+ * Starts a fade of light idx's colour to (r, g, b) over time frames with interpolation curve mode;
+ * time 0 sets it at once.
+ */
 void BattleStageLightSetLightColor(s32 idx, u8 r, u8 g, u8 b, s32 time, u8 mode) {
     StageLight* l = &STG->lights[idx];
 
@@ -444,6 +507,10 @@ void BattleStageLightSetLightColor(s32 idx, u8 r, u8 g, u8 b, s32 time, u8 mode)
 #pragma opt_propagation reset
 
 #pragma opt_propagation off
+/**
+ * Starts a fade of light idx's beam radius to width over time frames with interpolation curve mode;
+ * time 0 sets it at once.
+ */
 void BattleStageLightSetWidth(s32 idx, s32 width, s32 time, u8 mode) {
     StageLight* l = &STG->lights[idx];
 
@@ -459,6 +526,10 @@ void BattleStageLightSetWidth(s32 idx, s32 width, s32 time, u8 mode) {
 #pragma opt_propagation reset
 
 #pragma opt_propagation off
+/**
+ * Starts a move of light idx's source position to (x, y, z) over time frames with interpolation curve mode;
+ * time 0 moves it at once.
+ */
 void BattleStageLightSetPosition(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode) {
     StageLight* l = &STG->lights[idx];
 
@@ -479,6 +550,10 @@ void BattleStageLightSetPosition(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode
 
 #pragma dont_inline on
 #pragma opt_propagation off
+/**
+ * Starts a move of the point light idx shines at to (x, y, z) over time frames with interpolation curve mode,
+ * dropping any spline target (flag 4); time 0 moves it at once.
+ */
 void BattleStageLightSetTarget(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode) {
     StageLight* l = &STG->lights[idx];
 
@@ -499,6 +574,10 @@ void BattleStageLightSetTarget(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode) 
 #pragma opt_propagation reset
 #pragma dont_inline reset
 
+/**
+ * Aims light idx at battle unit unitId's position plus the offset (x, y, z), moving there over time frames.
+ * evt_batstage.c uses it to point the beams at the acting unit.
+ */
 void BattleStageLightSetTargetByUnit(s32 idx, s32 unitId, f32 x, f32 y, f32 z, s32 time, u8 mode) {
     f32 px, py, pz;
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, unitId);
@@ -511,6 +590,10 @@ void BattleStageLightSetTargetByUnit(s32 idx, s32 unitId, f32 x, f32 y, f32 z, s
 }
 
 #pragma opt_propagation off
+/**
+ * Starts a turn of light idx's up vector (where its beam fan starts) to (x, y, z) over time frames with
+ * interpolation curve mode; time 0 sets it at once.
+ */
 void BattleStageLightSetUpVec(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode) {
     StageLight* l = &STG->lights[idx];
 
@@ -530,6 +613,10 @@ void BattleStageLightSetUpVec(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode) {
 #pragma opt_propagation reset
 
 #pragma dont_inline on
+/**
+ * Starts a fade of a darkness layer's current alpha to v over time frames with interpolation curve mode;
+ * time 0 sets it at once.
+ */
 void BattleStageSetDark(StageDark* d, u8 v, s32 time, u8 mode) {
     d->start = d->cur;
     d->target = v;
@@ -543,6 +630,10 @@ void BattleStageSetDark(StageDark* d, u8 v, s32 time, u8 mode) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+/**
+ * Starts a fade of a darkness layer's base alpha (the level the Return functions go back to) to v over time
+ * frames; time 0 sets it at once.
+ */
 void BattleStageSetDarkBase(StageDark* d, u8 v, s32 time, u8 mode) {
     d->baseStart = d->base;
     d->baseTarget = v;
@@ -555,33 +646,49 @@ void BattleStageSetDarkBase(StageDark* d, u8 v, s32 time, u8 mode) {
 }
 #pragma dont_inline reset
 
+/**
+ * Fades the darkness over the stage to alpha v over time frames (evt_batstage_set_stg_dark and the stage light
+ * helpers).
+ */
 void BattleStageSetStgDark(u8 v, s32 time, u8 mode) {
     BattleStageSetDark(&STG->stgDark, v, time, mode);
 }
 
+/** Fades the stage darkness's base alpha to v over time frames (evt_batstage_set_stg_dark_base). */
 void BattleStageSetStgDarkBase(u8 v, s32 time, u8 mode) {
     BattleStageSetDarkBase(&STG->stgDark, v, time, mode);
 }
 
+/** Fades the stage darkness back to its base alpha over time frames. */
 void BattleStageReturnStgDarkBase(s32 time, u8 mode) {
     StageDark* d = &STG->stgDark;
     BattleStageSetDark(d, d->base, time, mode);
 }
 
+/**
+ * Fades the darkness over the audience to alpha v over time frames (evt_batstage_set_aud_dark and the stage
+ * light helpers).
+ */
 void BattleStageSetAudDark(u8 v, s32 time, u8 mode) {
     BattleStageSetDark(&STG->audDark, v, time, mode);
 }
 
+/** Fades the audience darkness's base alpha to v over time frames. */
 void BattleStageSetAudDarkBase(u8 v, s32 time, u8 mode) {
     BattleStageSetDarkBase(&STG->audDark, v, time, mode);
 }
 
+/** Fades the audience darkness back to its base alpha over time frames. */
 void BattleStageReturnAudDarkBase(s32 time, u8 mode) {
     StageDark* d = &STG->audDark;
     BattleStageSetDark(d, d->base, time, mode);
 }
 
 #pragma dont_inline on
+/**
+ * Evaluates a piecewise cubic at frame x: picks the last segment i whose start frame t[i] is at or before x
+ * and returns a + b*f + c*f^2 + d*f^3 with f = x - t[i]. BattleStageMain uses it for spline light targets.
+ */
 // Assumes n > 0 and x >= t[0]: otherwise the search ends at index -1. Only the unused spline light path calls it.
 f32 getSpline(f32* a, f32* b, f32* c, f32* d, s32* t, s32 n, s32 x) {
     s32 i;
@@ -597,11 +704,17 @@ f32 getSpline(f32* a, f32* b, f32* c, f32* d, s32* t, s32 n, s32 x) {
 }
 #pragma dont_inline reset
 
+/** Returns the spotlight cone work; the level-up script helpers in battle_seq_end.c move and fade its cones. */
 BattleSpotWork* BatSpotGetPtr(void) {
     return wp;
 }
 
 #pragma dont_inline on
+/**
+ * Allocates the five spotlight cones from the battle heap at battle start
+ * and places them in a row (x -100 to 100, z -50), white, 20 x 20 x 150.
+ * They stay hidden until _lvup_spot_on sets flag 2.
+ */
 void batSpotInit(void) {
     int i;
     BattleSpotEntry* entry;
@@ -621,6 +734,10 @@ void batSpotInit(void) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+/**
+ * Per-frame from BattleStageMain: queues batSpotDisp on the 3D image camera
+ * while skipRender is nonzero (despite the name, nonzero means draw). The loop over the cones is empty.
+ */
 void batSpotMain(void) {
     s32 count = wp->count;
 
@@ -634,12 +751,18 @@ void batSpotMain(void) {
 #ifdef VERSION_G8ME01
 // US: frees the spot entries at battle end
 #pragma dont_inline on
+/** Frees the spotlight cone array at battle end (BattleStageEnd). */
 void batSpotEnd(void) {
     BattleFree(wp->entries);
 }
 #pragma dont_inline reset
 #endif
 
+/**
+ * Display callback from batSpotMain: draws each shown cone (flags 1 and 2) in three passes,
+ * back faces into the frame alpha, front faces clearing it, then the cone colour blended by destination alpha,
+ * so the colour only lands inside the cone's volume.
+ */
 void batSpotDisp(CameraId camId, void* param) {
     int i;
     BattleSpotEntry* e;
@@ -689,6 +812,11 @@ void batSpotDisp(CameraId camId, void* param) {
 }
 
 #pragma dont_inline on
+/**
+ * Draws one spotlight cone: apex at the origin with alpha color.a,
+ * a 30-segment rim at z -1 with a third of that alpha, placed by the entry's position,
+ * rotation (degrees) and scale.
+ */
 void drawCone(CameraId camId, BattleSpotEntry* e) {
     Mtx trans, scale, m, rx, ry, rz;
     CameraEntry* cam;
@@ -726,6 +854,11 @@ void drawCone(CameraId camId, BattleSpotEntry* e) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+/**
+ * Claims the first unused cone (flag 1), resets it to the origin, unit scale and clear colour, and returns it.
+ * With all cones taken it would write one entry past the end of the array, but its only caller, batSpotInit,
+ * claims exactly the five cones it allocates.
+ */
 BattleSpotEntry* batSpotEntry(void) {
     int i;
     BattleSpotEntry* entry = wp->entries;
@@ -747,6 +880,7 @@ BattleSpotEntry* batSpotEntry(void) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+/** Returns a random float between min and max, from rand() / 32767. */
 static f32 randf(f32 min, f32 max) {
     f32 r = (f32)rand() / 32767.0f;
     f32 d = max - min;
@@ -754,6 +888,10 @@ static f32 randf(f32 min, f32 max) {
 }
 #pragma dont_inline reset
 
+/**
+ * One-shot 2D display callback: copies the 608 x 480 frame at half size into screen_wp->tex as RGB565
+ * and marks it captured for tou_gamen_screen_tev.
+ */
 static void screen_capture(CameraId camId, void* param) {
     GXSetTexCopySrc(0, 0, 608, 480);
     GXSetTexCopyDst(304, 240, GX_TF_RGB565, GX_TRUE);
@@ -762,6 +900,7 @@ static void screen_capture(CameraId camId, void* param) {
     screen_wp->captured = 1;
 }
 
+/** Script helper with no arguments: queues screen_capture for this frame. */
 USER_FUNC(screen_evt_func) {
     dispEntry(CAMERA_2D, 1000.0f, 0, screen_capture, NULL);
     return 0;
@@ -785,6 +924,12 @@ USER_FUNC(tou_gamen_screen_tev_init) {
     return 2;
 }
 
+/**
+ * Map TEV callback for the Glitzville arena's big screen (map group gamen):
+ * shows the captured battle slowly panning and zooming to a new random framing every 200 frames,
+ * or freshly drawn random static, under a scanline overlay (inta_tex) whose density follows the 3D camera.
+ * Uses two TEV stages. Also hooked up by the Showstopper special move.
+ */
 void tou_gamen_screen_tev(MapTevCallbackInfo* p) {
     GXTexObj obj;
     Mtx m;

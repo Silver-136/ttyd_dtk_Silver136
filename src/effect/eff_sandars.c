@@ -18,6 +18,12 @@ void effSandarsDisp2(CameraId cameraId, EffectEntry* effect);
 
 static u8 scale_data[] = { 0, 0, 0, 13, 0x1C, 0x2C, 0x3C, 0x4B, 0x59, 0x65, 0x6F, 0x75, 0x78, 0x4B, 0};
 
+/**
+ * Spawns the effect at (x, y, z).
+ * Types 0-2 are field bursts (small, then larger) and 3/4 the battle bomb-game success/failure;
+ * type 5 allocates 6 records for the steam sprites, with `radius` as their direction in degrees.
+ * Callers include Bobbery's party attack, the Toad audience and the bomb minigame.
+ */
 EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 radius) {
     EffSandarsWork* work;
     EffectEntry* effect;
@@ -91,6 +97,7 @@ EffectEntry* effSandarsEntry(s32 type, f32 x, f32 y, f32 z, f32 radius) {
     return effect;
 }
 
+/** Builds a Vec from three floats (inline helper so Main's position copy compiles the same way). */
 static inline Vec effSandarsMakeVec(f32 x, f32 y, f32 z) {
     Vec pos = { 0.0f, 0.0f, 0.0f };
     pos.x = x;
@@ -99,6 +106,10 @@ static inline Vec effSandarsMakeVec(f32 x, f32 y, f32 z) {
     return pos;
 }
 
+/**
+ * Types 0-4 spawn a bomb effect, then (types 3/4) play the EFF_bakuhatu animation and fade it out;
+ * type 5 runs the scale/spin timers of the steam sprites for 100 frames.
+ */
 void effSandarsMain(EffectEntry* effect) {
     EffSandarsWork* work = effect->userdata;
     Vec pos2;
@@ -176,6 +187,7 @@ void effSandarsMain(EffectEntry* effect) {
     dispEntry(camId, dispCalcZ(&pos2), 2, (DispCallback)effSandarsDisp, effect);
 }
 
+/** Draws the EFF_bakuhatu explosion pose, camera-facing, with fading alpha. */
 void effSandarsDisp(CameraId cameraId, EffectEntry* effect) {
     EffSandarsWork* work;
     Mtx mtx;
@@ -203,6 +215,7 @@ void effSandarsDisp(CameraId cameraId, EffectEntry* effect) {
     animPoseDrawMtx(work->poseId, view, 3, 0.0f, 4.0f);
 }
 
+/** Draws the type 5 steam sprites as camera-facing textured quads, each spinning around its own centre. */
 void effSandarsDisp2(CameraId cameraId, EffectEntry* effect) {
     EffSandarsWork* work;
     CameraEntry* camera;

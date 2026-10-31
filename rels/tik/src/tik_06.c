@@ -26,6 +26,10 @@ static EvtWord evt_kanban[16];
 static EvtWord evt_kanban2[45];
 EvtWord tik_06_init_evt[47];
 
+/**
+ * Pushes Mario back when he tries to use the blocked pipe (oshimodo = push back):
+ * takes control, makes him leave the pipe, shows tik_06_01 and gives control back. Returns 0 in LW(0).
+ */
 static EVT_BEGIN(oshimodo_event)
     BEGIN_INLINE_EVENT
         CALL(evt_cam_ctrl_onoff, 4, 0)
@@ -195,6 +199,10 @@ EVT_BEGIN(iri_12_kino_talk)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Makkino for Trouble Center request 12:
+ * runs the final conversation with LW(0) = 1, so Makkino steps toward Mario first.
+ */
 static EVT_BEGIN(iri_12_makkino_talk)
     SET_VALUE(LW(0), 1)
     CALL_CHILD(PTR(iri_12_kino_makkino_talk))
@@ -227,6 +235,7 @@ static EVT_BEGIN(iri_12_init)
     RETURN
 EVT_END()
 
+/** Signboard script: says tik_06_02 with Mario's controls disabled. */
 static EVT_BEGIN(evt_kanban)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -235,6 +244,11 @@ static EVT_BEGIN(evt_kanban)
     RETURN
 EVT_END()
 
+/**
+ * Signboard script for the Pit of 100 Trials board:
+ * shows the player's records (deepest floor, Power Bounce record and the Star Pieces found there) in
+ * msg_jon_kanban_3.
+ */
 static EVT_BEGIN(evt_kanban2)
     CALL(evt_npc_stop_for_event)
     CALL(evt_mario_key_onoff, 0)

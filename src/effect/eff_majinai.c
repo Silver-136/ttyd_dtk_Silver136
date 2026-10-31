@@ -11,6 +11,10 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 
+/**
+ * Spawns the charm/spell effect at (x, y, z); called when Mario casts a spell in battle (battle_mario.c),
+ * by npcdrv.c for a field spell, and by evt_eff ("majinai").
+ */
 EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffMajinaiWork* work;
@@ -35,6 +39,10 @@ EffectEntry* effMajinaiEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Per frame: runs the 4-state sequence (load the MOBJ_EFF_majinai animation, darken the map and make Mario glow,
+ * wait, restore) and deletes the effect when the animation has looped.
+ */
 void effMajinaiMain(EffectEntry* effect) {
     EffMajinaiWork* work = effect->userdata;
     Vec position;
@@ -128,6 +136,7 @@ void effMajinaiMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMajinaiDisp, effect);
 }
 
+/** Draws the MOBJ_EFF_majinai animation pose at the effect position. */
 void effMajinaiDisp(CameraId cameraId, EffectEntry* effect) {
     EffMajinaiWork* work = effect->userdata;
     Mtx mtx;

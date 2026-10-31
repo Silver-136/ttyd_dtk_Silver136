@@ -115,6 +115,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Clears the state and offset registers of floating platform 0 (state 0 = idle, 1 = being ridden,
+ * 2 = stepped off; offset = its current height).
+ */
 // Four floating objects use state/height pairs GW(0/1), GW(2/3), GW(4/5), GW(6/7).
 static EVT_BEGIN(dou_puka_event_init0)
     SET_VALUE(GW(0), 0)
@@ -122,6 +126,12 @@ static EVT_BEGIN(dou_puka_event_init0)
     RETURN
 EVT_END()
 
+/**
+ * Stand-on case script for floating platform 0:
+ * if idle it marks the platform as ridden, runs the extra callback in LW(3)
+ * when there is one (e.g. the boat or barrel creak sound), then the shared dip animation dou_puka_event,
+ * and marks it as stepped off.
+ */
 static EVT_BEGIN(dou_puka_event_0)
     IF_INT_NOT_EQUAL(GW(0), 0)
         RETURN
@@ -136,6 +146,10 @@ static EVT_BEGIN(dou_puka_event_0)
     RETURN
 EVT_END()
 
+/**
+ * Step-off case script for floating platform 0:
+ * once the dip has finished (state 2) it sets the platform back to idle so it can bob again.
+ */
 static EVT_BEGIN(dou_puka_event_rev_0)
     IF_INT_NOT_EQUAL(GW(0), 2)
         RETURN
@@ -144,6 +158,11 @@ static EVT_BEGIN(dou_puka_event_rev_0)
     RETURN
 EVT_END()
 
+/**
+ * Frame loop for floating platform 0: binds the hit area in LW(1) to the map object in LW(0),
+ * then every frame moves the object to the height held in the platform's offset register
+ * and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main0)
     CALL(evt_hit_bind_mapobj, LW(1), LW(0))
     LOOP(0)
@@ -154,6 +173,10 @@ static EVT_BEGIN(dou_puka_event_main0)
     RETURN
 EVT_END()
 
+/**
+ * Idle bobbing of floating platform 0: after a random 0.2 to 0.6 second delay it runs the shared bobbing loop
+ * dou_normal_puka, pauses it while the platform is being ridden and restarts it once Mario steps off.
+ */
 static EVT_BEGIN(dou_puka_event_sub0)
     CALL(evt_sub_random, 400, LW(0))
     ADD(LW(0), 200)
@@ -179,12 +202,22 @@ static EVT_BEGIN(dou_puka_event_sub0)
     RETURN
 EVT_END()
 
+/**
+ * Clears the state and offset registers of floating platform 1 (state 0 = idle, 1 = being ridden,
+ * 2 = stepped off; offset = its current height).
+ */
 static EVT_BEGIN(dou_puka_event_init1)
     SET_VALUE(GW(2), 0)
     SET_VALUE(GW(3), 0)
     RETURN
 EVT_END()
 
+/**
+ * Stand-on case script for floating platform 1:
+ * if idle it marks the platform as ridden, runs the extra callback in LW(3)
+ * when there is one (e.g. the boat or barrel creak sound), then the shared dip animation dou_puka_event,
+ * and marks it as stepped off.
+ */
 static EVT_BEGIN(dou_puka_event_1)
     IF_INT_NOT_EQUAL(GW(2), 0)
         RETURN
@@ -199,6 +232,10 @@ static EVT_BEGIN(dou_puka_event_1)
     RETURN
 EVT_END()
 
+/**
+ * Step-off case script for floating platform 1:
+ * once the dip has finished (state 2) it sets the platform back to idle so it can bob again.
+ */
 static EVT_BEGIN(dou_puka_event_rev_1)
     IF_INT_NOT_EQUAL(GW(2), 2)
         RETURN
@@ -207,6 +244,11 @@ static EVT_BEGIN(dou_puka_event_rev_1)
     RETURN
 EVT_END()
 
+/**
+ * Frame loop for floating platform 1: binds the hit area in LW(1) to the map object in LW(0),
+ * then every frame moves the object to the height held in the platform's offset register
+ * and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main1)
     CALL(evt_hit_bind_mapobj, LW(1), LW(0))
     LOOP(0)
@@ -217,6 +259,10 @@ static EVT_BEGIN(dou_puka_event_main1)
     RETURN
 EVT_END()
 
+/**
+ * Idle bobbing of floating platform 1: after a random 0.2 to 0.6 second delay it runs the shared bobbing loop
+ * dou_normal_puka, pauses it while the platform is being ridden and restarts it once Mario steps off.
+ */
 static EVT_BEGIN(dou_puka_event_sub1)
     CALL(evt_sub_random, 400, LW(0))
     ADD(LW(0), 200)
@@ -242,12 +288,22 @@ static EVT_BEGIN(dou_puka_event_sub1)
     RETURN
 EVT_END()
 
+/**
+ * Clears the state and offset registers of floating platform 2 (state 0 = idle, 1 = being ridden,
+ * 2 = stepped off; offset = its current height).
+ */
 static EVT_BEGIN(dou_puka_event_init2)
     SET_VALUE(GW(4), 0)
     SET_VALUE(GW(5), 0)
     RETURN
 EVT_END()
 
+/**
+ * Stand-on case script for floating platform 2:
+ * if idle it marks the platform as ridden, runs the extra callback in LW(3)
+ * when there is one (e.g. the boat or barrel creak sound), then the shared dip animation dou_puka_event,
+ * and marks it as stepped off.
+ */
 static EVT_BEGIN(dou_puka_event_2)
     IF_INT_NOT_EQUAL(GW(4), 0)
         RETURN
@@ -262,6 +318,10 @@ static EVT_BEGIN(dou_puka_event_2)
     RETURN
 EVT_END()
 
+/**
+ * Step-off case script for floating platform 2:
+ * once the dip has finished (state 2) it sets the platform back to idle so it can bob again.
+ */
 static EVT_BEGIN(dou_puka_event_rev_2)
     IF_INT_NOT_EQUAL(GW(4), 2)
         RETURN
@@ -270,6 +330,11 @@ static EVT_BEGIN(dou_puka_event_rev_2)
     RETURN
 EVT_END()
 
+/**
+ * Frame loop for floating platform 2: binds the hit area in LW(1) to the map object in LW(0),
+ * then every frame moves the object to the height held in the platform's offset register
+ * and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main2)
     CALL(evt_hit_bind_mapobj, LW(1), LW(0))
     LOOP(0)
@@ -280,6 +345,10 @@ static EVT_BEGIN(dou_puka_event_main2)
     RETURN
 EVT_END()
 
+/**
+ * Idle bobbing of floating platform 2: after a random 0.2 to 0.6 second delay it runs the shared bobbing loop
+ * dou_normal_puka, pauses it while the platform is being ridden and restarts it once Mario steps off.
+ */
 static EVT_BEGIN(dou_puka_event_sub2)
     CALL(evt_sub_random, 400, LW(0))
     ADD(LW(0), 200)
@@ -305,12 +374,22 @@ static EVT_BEGIN(dou_puka_event_sub2)
     RETURN
 EVT_END()
 
+/**
+ * Clears the state and offset registers of floating platform 3 (state 0 = idle, 1 = being ridden,
+ * 2 = stepped off; offset = its current height).
+ */
 static EVT_BEGIN(dou_puka_event_init3)
     SET_VALUE(GW(6), 0)
     SET_VALUE(GW(7), 0)
     RETURN
 EVT_END()
 
+/**
+ * Stand-on case script for floating platform 3:
+ * if idle it marks the platform as ridden, runs the extra callback in LW(3)
+ * when there is one (e.g. the boat or barrel creak sound), then the shared dip animation dou_puka_event,
+ * and marks it as stepped off.
+ */
 static EVT_BEGIN(dou_puka_event_3)
     IF_INT_NOT_EQUAL(GW(6), 0)
         RETURN
@@ -325,6 +404,10 @@ static EVT_BEGIN(dou_puka_event_3)
     RETURN
 EVT_END()
 
+/**
+ * Step-off case script for floating platform 3:
+ * once the dip has finished (state 2) it sets the platform back to idle so it can bob again.
+ */
 static EVT_BEGIN(dou_puka_event_rev_3)
     IF_INT_NOT_EQUAL(GW(6), 2)
         RETURN
@@ -333,6 +416,11 @@ static EVT_BEGIN(dou_puka_event_rev_3)
     RETURN
 EVT_END()
 
+/**
+ * Frame loop for floating platform 3: binds the hit area in LW(1) to the map object in LW(0),
+ * then every frame moves the object to the height held in the platform's offset register
+ * and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main3)
     CALL(evt_hit_bind_mapobj, LW(1), LW(0))
     LOOP(0)
@@ -343,6 +431,10 @@ static EVT_BEGIN(dou_puka_event_main3)
     RETURN
 EVT_END()
 
+/**
+ * Idle bobbing of floating platform 3: after a random 0.2 to 0.6 second delay it runs the shared bobbing loop
+ * dou_normal_puka, pauses it while the platform is being ridden and restarts it once Mario steps off.
+ */
 static EVT_BEGIN(dou_puka_event_sub3)
     CALL(evt_sub_random, 400, LW(0))
     ADD(LW(0), 200)
@@ -376,12 +468,20 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Extra callback when Mario steps onto a floating barrel platform:
+ * plays SFX_STG5_BARREL_ON1 at the map object named in LW(0).
+ */
 static EVT_BEGIN(evt_ride_taru)
     CALL(evt_mapobj_get_position, LW(0), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_BARREL_ON1"), LW(10), LW(11), LW(12), 0)
     RETURN
 EVT_END()
 
+/**
+ * Extra callback when Mario steps onto a floating boat platform:
+ * plays SFX_STG5_SHIP_ON1 at the map object named in LW(0).
+ */
 static EVT_BEGIN(evt_ride_ship)
     CALL(evt_mapobj_get_position, LW(0), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_SHIP_ON1"), LW(10), LW(11), LW(12), 0)

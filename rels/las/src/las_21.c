@@ -40,6 +40,11 @@ EvtWord floatblk21_1_evt[62];
 EvtWord floatblk21_2_evt[62];
 EvtWord las_21_init_evt[211];
 
+/**
+ * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_l_01 and S_doa_l_02 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_l_01"), 0, LW(0), 0)
@@ -48,6 +53,11 @@ static EVT_BEGIN(w_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_l_01 and S_doa_l_02 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(w_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_l_01"), 0, LW(0), 0)
@@ -56,6 +66,12 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (closing) for the east (door 1) door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r_01 and S_doa_r_02 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(e1_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_r_01"), 0, LW(0), 0)
@@ -64,6 +80,12 @@ static EVT_BEGIN(e1_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the east (door 1) door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r_01 and S_doa_r_02 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(e1_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_r_01"), 0, LW(0), 0)
@@ -72,6 +94,12 @@ static EVT_BEGIN(e1_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (closing) for the east (door 2) door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r2_01
+ * and S_doa_r2_02 by it, the second one the opposite way.
+ */
 static EVT_BEGIN(e2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_r2_01"), 0, LW(0), 0)
@@ -80,6 +108,12 @@ static EVT_BEGIN(e2_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the east (door 2) door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r2_01
+ * and S_doa_r2_02 by it, the second one the opposite way.
+ */
 static EVT_BEGIN(e2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_r2_01"), 0, LW(0), 0)
@@ -183,6 +217,10 @@ static BeroEntry w_bero_mapchg[] = {
     },
 };
 
+/**
+ * Event script: plays the stop sound of a floating block (LW(15)) when it reaches its end height;
+ * the big green, purple and orange blocks use their own sound.
+ */
 EVT_BEGIN(floatblk_stop_se)
     CALL(evt_mobj_get_position, LW(15), LW(0), LW(1), LW(2))
     CALL(evt_mobj_get_kindname, LW(15), LW(3))
@@ -462,6 +500,7 @@ static USER_FUNC(set_party_y_pos) {
     party->position.y = evtGetFloat(event, args[0]);
     return EVT_RETURN_DONE;
 }
+/** Script helper: sets the Y of the map object named args[0] to args[1] and recomputes its matrix. */
 USER_FUNC(set_mobj_y_position) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

@@ -22,6 +22,10 @@ USER_FUNC(evt_iwamove_init);
 
 EvtWord evt_iwamove_main_evt[4];
 
+/**
+ * Starts the boulder push watcher: stores the script in args[0] (run when the push is done)
+ * and spawns evt_iwamove_main_evt, passing the shared work block in its LW(0).
+ */
 USER_FUNC(evt_iwamove_ent) {
     IwaMoveWork* wk = &iwamove;
 
@@ -32,11 +36,17 @@ USER_FUNC(evt_iwamove_ent) {
     return EVT_RETURN_DONE;
 }
 
+/** Resets the shared boulder work block's init flag. */
 USER_FUNC(evt_iwamove_init) {
     iwamove.init = 0;
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Per-frame watcher for the push: when Mario pushes the A_h_iwa collision it locks his pose,
+ * shows the status window and counts 80 frames of holding right on the stick; releasing early restores control;
+ * after 80 frames it starts the given script. Never finishes by itself.
+ */
 USER_FUNC(evt_iwamove_main) {
     IwaMoveWork* wk = (IwaMoveWork*)event->lwData[0];
     MarioWork* mario = marioGetPtr();
@@ -83,6 +93,7 @@ USER_FUNC(evt_iwamove_main) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Wrapper that runs evt_iwamove_main. */
 EVT_BEGIN(evt_iwamove_main_evt)
     CALL(evt_iwamove_main)
     RETURN

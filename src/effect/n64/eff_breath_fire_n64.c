@@ -23,6 +23,11 @@ static effN64Vtx stg_fire_breath_v[] = {
     {-100, -100, 5, 0, 0, 0, 0, 0, 255},
 };
 
+/**
+ * Spawns `count` flames (random `seed`) living `lifetime` frames,
+ * streaming from (x, y, z) toward (endX, endY, endZ); the table names it Bowser breathing fire.
+ * Spawned only by event scripts through evt_eff.
+ */
 EffectEntry* effBreathFireN64Entry(s32 type, s32 count, s32 seed, s32 lifetime, f32 x, f32 y, f32 z, f32 endX,
                                    f32 endY, f32 endZ) {
     EffectEntry* effect;
@@ -78,6 +83,10 @@ EffectEntry* effBreathFireN64Entry(s32 type, s32 count, s32 seed, s32 lifetime, 
     return effect;
 }
 
+/**
+ * Moves the flame blob along the line to the end point with random drift, scaling and fading by type.
+ * At frame `seed` + 1 it spawns the next flame with count - 1, so one entry makes a chain of `count` flames.
+ */
 void effBreathFireMain(EffectEntry* effect) {
     s32 remaining;
     EffBreathFireN64Work* work;
@@ -139,6 +148,7 @@ void effBreathFireMain(EffectEntry* effect) {
     }
 }
 
+/** Draws the flame as two stacked textured quads whose texture strip frame advances with age. */
 void effBreathFireDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffBreathFireN64Work* work;

@@ -50,6 +50,11 @@ EvtWord kpa_act_stg3_item[] = {
     KPA_ITEM(1425.0f, 12.5f), KPA_ITEM(1425.0f, 50.0f), KPA_ITEM_END,
 };
 
+/**
+ * Watches Bowser in the lava stage: it waits until he is dead or standing on the "a_magu" (magma) object.
+ * In the lava case it adds a "splash" effect at his position sized by his power level (0.8, 1.7, 3.0 or 4.5)
+ * and runs the pit fall handler (kpa_fall_sub); if he died it runs kpa_dead.
+ */
 static EVT_BEGIN(kpa_fall)
     SET_VALUE(LF(0), 0)
     LOOP(0)

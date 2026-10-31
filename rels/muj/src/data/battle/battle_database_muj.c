@@ -1420,6 +1420,10 @@ NpcTerritoryInfo btl_muj_setup_no_tbl[] = {
     {0},
 };
 
+/**
+ * Battle background event for the beach stage: endlessly bobs the three wave layers (nami_1, nami_2, nami_3)
+ * with different periods and amplitudes through _wave_offset, so the sea moves behind the fight.
+ */
 EVT_BEGIN(bgset_muj_wave_event)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)

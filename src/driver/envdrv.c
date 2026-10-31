@@ -79,6 +79,10 @@ void envDisp_Blur(void);
 void envDisp_FF(void);
 
 
+/**
+ * DVD read callback for the asynchronous env.tpl load:
+ * unpacks the palette, closes the file and marks env_tpl ready.
+ */
 static void _callback(s32 result, DVDFileInfo* fileInfo) {
     DVDEntry* handle = fileInfo->cb.userData;
 
@@ -87,6 +91,7 @@ static void _callback(s32 result, DVDFileInfo* fileInfo) {
     tpl_ok = TRUE;
 }
 
+/** Clears both the field and battle environment state and forgets env.tpl at boot. */
 void envInit(void) {
     memset(&work[0], 0, sizeof(EnvironmentWork));
     memset(&work[1], 0, sizeof(EnvironmentWork));
@@ -94,11 +99,20 @@ void envInit(void) {
     tpl_ok = FALSE;
 }
 
+/**
+ * Clears the current mode's environment state (field or battle), turning its screen effects off,
+ * when a map or battle is set up again.
+ */
 void envReInit(void) {
     EnvironmentWork* wp = envGetWork();
     memset(wp, 0, sizeof(EnvironmentWork));
 }
 
+/**
+ * Loads env.tpl, the environment textures (reflection maps, water ripples, the darkness pattern):
+ * from the startup archive if it holds it, else asynchronously from the disc.
+ * Called from the logo sequence at boot.
+ */
 void envTexSetup(void) {
     DVDEntry* entry;
     TEXPalette* tpl;
@@ -121,6 +135,11 @@ void envTexSetup(void) {
     }
 }
 
+/**
+ * 3D-camera draw callback before the screen effects:
+ * when enabled, copies the frame (flag 1) and the depth buffer (flag
+ * 2) to half-size textures for the depth of field and radial effects.
+ */
 void envCapture(CameraId camId, void* param) {
     EnvironmentWork* wp = envGetWork();
     u16 width, height, halfWidth, halfHeight;
@@ -152,6 +171,10 @@ void envCapture(CameraId camId, void* param) {
     }
 }
 
+/**
+ * 3D-camera draw callback after the scene: copies the finished frame to the half-size blur texture
+ * while the motion blur (flag 4) is on, and decides when the blur stops capturing new frames.
+ */
 void envCapture2(CameraId camId, void* param) {
     EnvironmentWork* wp = envGetWork();
     u16 halfWidth, halfHeight;
@@ -174,6 +197,11 @@ void envCapture2(CameraId camId, void* param) {
     }
 }
 
+/**
+ * 3D-camera draw callback for the full-screen effects in order:
+ * depth of field, motion blur and the radial lines of envDisp_FF,
+ * restoring the viewport and projection afterwards.
+ */
 void envDisp(CameraId camId, void *param) {
     f32 vp[GX_VIEWPORT_SZ];
     f32 pm[GX_PROJECTION_SZ];
@@ -187,6 +215,10 @@ void envDisp(CameraId camId, void *param) {
     GXSetProjectionv(pm);
 }
 
+/**
+ * Last 3D-camera draw callback: draws the glare (bloom) filter the current type picks (envGlare0..3) over its
+ * screen rectangle, restoring the viewport and projection afterwards.
+ */
 void envDisp2(CameraId camId, void *param) {
     f32 vp[GX_VIEWPORT_SZ];
     f32 pm[GX_PROJECTION_SZ];
@@ -219,6 +251,7 @@ void envDisp2(CameraId camId, void *param) {
     GXSetProjectionv(pm);
 }
 
+/** Once per frame: queues the environment capture and draw callbacks on the 3D camera around the scene. */
 void envMain(void) {
     dispEntry(CAMERA_3D, 20.0f, 7, envCapture, NULL);
     dispEntry(CAMERA_3D, 10.0f, 7, envDisp, NULL);
@@ -486,6 +519,10 @@ void envDisp_DepthOfField(void) {
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
+/**
+ * Draws the motion blur: the captured earlier frame over the screen at a constant alpha, or,
+ * when envBlurOn gave a duration, fading out over it (type 1 from fully opaque, otherwise from 248 to 128).
+ */
 void envDisp_Blur(void) {
     EnvironmentWork* wp = envGetWork();
     EnvBlurWork* blur = &wp->blur;
@@ -542,6 +579,11 @@ void envDisp_Blur(void) {
     }
 }
 
+/**
+ * Starts the motion blur (from the evt_env helpers):
+ * type 1 fades from fully opaque, msec gives the fade time in milliseconds (0 for a constant blur).
+ * Allocates the half-size capture texture in map memory.
+ */
 void envBlurOn(s32 type, s32 msec) {
     EnvironmentWork* wp = envGetWork();
     EnvBlurWork* blur = &wp->blur;
@@ -558,6 +600,7 @@ void envBlurOn(s32 type, s32 msec) {
     wp->envBlur = _mapAlloc(GXGetTexBufferSize(gp->fbWidth / 2, gp->efbHeight / 2, GX_TF_RGB565, GX_FALSE, 0));
 }
 
+/** Stops the motion blur and frees its capture texture. */
 void envBlurOff(void) {
     EnvironmentWork* wp = envGetWork();
 
@@ -566,6 +609,7 @@ void envBlurOff(void) {
     _mapFree(wp->envBlur);
 }
 
+/** almost 1:1, needs some regalloc work and type changes */
 void envGlare(EnvironmentGlare* glare) {
     static f32 frame_cnt = 0.0f;
     EnvironmentWork* envWork = envGetWork();
@@ -706,6 +750,11 @@ void envGlare(EnvironmentGlare* glare) {
     }
 }
 
+/**
+ * Sets the glare filter: type 1..4 picks the glare pattern
+ * and x0/y0..x1/y1 the screen rectangle it covers (rounded out to even pixels and clamped to the frame);
+ * type 0 turns it off. No caller in this tree.
+ */
 void envGlareFilter(s32 type, s32 y0, s32 x0, s32 y1, s32 x1) {
     EnvironmentWork* wp = envGetWork();
     EnvironmentGlareFilter* f = &wp->filter;
@@ -746,6 +795,7 @@ void envGlareFilter(s32 type, s32 y0, s32 x0, s32 y1, s32 x1) {
     wp->flags |= ENV_FLAG_GLARE_FILTER;
 }
 
+/** Sets the depth scale of the glare filter and makes it depth-dependent. No caller in this tree. */
 void envGlareFilterZ(f32 zscale) {
     EnvironmentWork* wp = envGetWork();
     EnvironmentGlareFilter* f = &wp->filter;
@@ -756,6 +806,10 @@ void envGlareFilterZ(f32 zscale) {
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
+/**
+ * Draws a ring of 1000 jittered lines from the screen centre outwards, textured with the captured frame,
+ * which gives a radial streak over the picture; enabled by flag 0x10000000.
+ */
 void envDisp_FF(void) {
     EnvironmentWork* wp = envGetWork();
     f32 r;
@@ -807,6 +861,10 @@ void envDisp_FF(void) {
 
 double acos(double);
 
+/**
+ * Builds and loads the texture matrix for environment TEV type type (reflection maps from the surface normals as
+ * seen by the camera, scrolled or spun by the env work's angles).
+ */
 void envTevLoadTexMtxImm(s32 type, GXTexMtx id, GXTexMtx id2, GXTexMtxType mtxType) {
     static f32 a = 0.0f;
     EnvironmentWork* wp = envGetWork();
@@ -988,6 +1046,13 @@ static inline void envLoadTex(u32 id, s32 map) {
     }
 }
 
+/**
+ * Map TEV callback: adds the TEV stages and texture generation for environment effect type (reflection and shine
+ * textures from env.tpl, 1..10) to a map object's material, advancing the stage,
+ * texture coordinate and map counters in info.
+ * Map RELs call it from their own TEV callbacks installed with evt_map_set_tevcallback
+ * (the trains in gor_04 and pik_00 with type 7, pik_01 with 4 and 7, hom_10 with 7).
+ */
 void envAddTev(s32 type, MapTevCallbackInfo* info) {
     s32 stage;
     int map;
@@ -1148,12 +1213,20 @@ void envAddTev(s32 type, MapTevCallbackInfo* info) {
     info->texMap = map;
 }
 
+/** The map object being drawn, from a TEV callback's info. */
 // FAKE: one-use inline helper; writing the call out changes the object in both versions
 static inline MapObject* envWaterObj(MapTevCallbackInfo* info) {
     return info->mapObj;
 }
+/** A map object's parent object. */
 // FAKE: one-use inline helper for obj->parent; writing it out changes the object
 static inline MapObject* envWaterParent(MapObject* o) { return o->parent; }
+/**
+ * Map TEV callback for refracting water: copies the screen area behind the water object (from the previous
+ * frame's screen rectangle, at half size), builds a wavy indirect texture whose strength grows as the camera
+ * gets closer, and warps the copy through it onto the surface. Skips the first frame an object is seen.
+ * Called from map TEV callbacks installed with evt_map_set_tevcallback (dou_00, hei_09).
+ */
 void envSetWater(MapTevCallbackInfo* info) {
     MapObject* obj;
     GXTevStageID stage;
@@ -1305,6 +1378,7 @@ void envSetWater(MapTevCallbackInfo* info) {
     info->texMap = map;
 }
 
+/** Stores the view matrix the darkness (yami) pattern of envSetYami is projected with. */
 void envSetYamiView(Mtx view) {
     EnvironmentWork* wp = envGetWork();
 

@@ -58,6 +58,10 @@ void effWaterDamageMain(EffectEntry* effect);
 void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect);
 void effWaterDamageDisp2(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns water droplets and mist at (x, y, z); type picks the splash shape.
+ * Used by Mario's water code (mario_kemuri), eff_splash, eff_fall and event scripts.
+ */
 EffectEntry* effWaterDamageN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     s32 variant;
     s32 j;
@@ -181,6 +185,12 @@ EffectEntry* effWaterDamageN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z,
     return effect;
 }
 
+/**
+ * Moves each droplet by its velocity (damped 2% per frame, gravity 0.1, type 2 another 0.8)
+ * and fades it 2% per frame; type 3 droplets grow 20% per frame, others shrink 10%.
+ * The whole effect fades over its last 4 frames (a delete request sets 16 left; lifetime 1000 means endless).
+ * Drawn on layer 8 by effWaterDamageDisp, or Disp2 for nonzero variants.
+ */
 void effWaterDamageMain(EffectEntry* effect) {
     EffWaterDamageN64Work* work = effect->userdata;
     Vec calcPos;
@@ -320,6 +330,10 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/**
+ * Plain variant of effWaterDamageDisp: the same camera-facing 8x8 droplet quads of texture 0x89 in pale cyan,
+ * with no refraction layer.
+ */
 void effWaterDamageDisp2(CameraId cameraId, EffectEntry* effect) {
     EffWaterDamageN64Work* work;
     CameraEntry* cam;

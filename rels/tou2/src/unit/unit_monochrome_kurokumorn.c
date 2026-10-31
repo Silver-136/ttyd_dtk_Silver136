@@ -198,6 +198,12 @@ static BattleWeapon weapon_kurokumorn_thunder_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack script of the monochrome Dark Puff: item use first;
+ * if it is charged (part counter attribute 1024) it fires the thunder attack (thunder_event);
+ * otherwise 50% of the time it uses its normal attack (normal_attack_event) and
+ * otherwise it charges up (charge_event).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -228,6 +234,13 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Dark Puff's charged thunder attack with the weapon in LW(9):
+ * it clears the charged flag, plays poses A_2B to A_3B, calls down eight pokopi_thunder_n64 bolts over the
+ * targets' side of the stage, then resolves the first target and each one after it in turn
+ * (pre-damage and damage checks)
+ * before dropping back to its resting pose.
+ */
 static EVT_BEGIN(thunder_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -387,6 +400,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init script of a Puff: registers its wait, unison-phase, attack, damage and confusion handlers,
+ * clears unit work 0 and 1, spawns barrier_event to show its charged state and starts the idle event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(unison_phase_event))
@@ -400,6 +417,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Loops while the Dark Puff exists: every 31 frames, if it is charged (part counter attribute 1024),
+ * plays the akari_charge_n64 glow effect above it, scaled to its size.
+ */
 static EVT_BEGIN(barrier_event)
     LABEL(0)
     WAIT_FRAMES(31)
@@ -419,6 +440,7 @@ static EVT_BEGIN(barrier_event)
     RETURN
 EVT_END()
 
+/** Position event for a first strike on this unit: sets its height to 10 and waits for the attack to finish. */
 static EVT_BEGIN(dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
@@ -427,6 +449,10 @@ static EVT_BEGIN(dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * Damage reaction: runs the default damage handling (btldefaultevt_Damage) with LW(10) = -2 (the unit itself)
+ * and LW(11) = 1.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -434,6 +460,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Counter event of the Puff: empty, it does nothing. */
 static EVT_BEGIN(counter_event)
     RETURN
 EVT_END()
@@ -476,6 +503,11 @@ static EVT_BEGIN(unison_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * The Puff's plain attack with the weapon in LW(9):
+ * picks a target and plays the A_2A and A_1A attack poses with SFX_ENM_KUMO_MOVE1 to 3 without leaving its spot;
+ * the damage check decides between a miss and a hit, then it returns to S_1.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -583,6 +615,11 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Charges the Dark Puff: zooms the camera onto it,
+ * sets the charged flag (part counter attribute 1024) with SFX_ENM_KUMO_CHARGE1 and the A_2A/A_2B poses,
+ * so its next attack is the thunder.
+ */
 static EVT_BEGIN(charge_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -601,6 +638,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
+/** Idle event of the Puff: sets the pose from the pose table and resets its scale to 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)

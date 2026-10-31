@@ -100,6 +100,10 @@ static f32 spline_dt[] = {
     -170.0f,
 };
 
+/**
+ * Event script: puts the active partner (by party id: Goombella, Koops, Flurrie, Yoshi, Vivian, Bobbery,
+ * Ms. Mowz) into its first "hurt" pose, used while they lie on the ground after the crash landing.
+ */
 static EVT_BEGIN(party_damage_pose)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
@@ -424,6 +428,10 @@ USER_FUNC(party_reset) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: resets Mario's scale, rotation offset and Z rotation to their normal values
+ * after the tumbling in the crash scene.
+ */
 USER_FUNC(mario_reset) {
     MarioWork* mario = marioGetPtr();
 
@@ -433,6 +441,10 @@ USER_FUNC(mario_reset) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: makes the partner tumble head over heels.
+ * args[0] is the angle in degrees; the partner is rotated about its centre to that angle.
+ */
 USER_FUNC(party_kirimomi) {
     f32 angle = evtGetFloat(event, event->args[0]);
     PartyEntry* party = partyGetPtr(0);
@@ -444,6 +456,10 @@ USER_FUNC(party_kirimomi) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: makes Mario tumble head over heels.
+ * args[0] is the angle in degrees; Mario is rotated about his centre to that angle.
+ */
 static USER_FUNC(mario_kirimomi) {
     f32 angle = evtGetFloat(event, event->args[0]);
     MarioWork* mario = marioGetPtr();

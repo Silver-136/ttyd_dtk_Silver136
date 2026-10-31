@@ -26,6 +26,10 @@ static u8 offset_tbl[] = {
     0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28
 };
 
+/**
+ * Spawns the coin price bubble at (x, y, z) showing `number`; duration <= 0 keeps it until soft-deleted.
+ * Spawned by coin blocks (evt_mobj.c).
+ */
 EffectEntry* effCoinFukidashiEntry(s32 type, s32 number, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffCoinFukidashiWork* work;
@@ -54,6 +58,10 @@ EffectEntry* effCoinFukidashiEntry(s32 type, s32 number, s32 duration, f32 x, f3
     return effect;
 }
 
+/**
+ * Per frame: fades in (+16 alpha), bobs along offset_tbl (61-frame loop),
+ * and fades out over 16 frames once the duration runs out or a soft delete was requested.
+ */
 void effCoinFukidashiMain(EffectEntry* effect) {
     EffCoinFukidashiWork* work = effect->userdata;
     Vec position;
@@ -88,6 +96,7 @@ void effCoinFukidashiMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effCoinFukidashiDisp, effect);
 }
 
+/** Draws the camera-facing bubble sprite (texture 0x25) and then the number printed inside it. */
 void effCoinFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffCoinFukidashiWork* work;

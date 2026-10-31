@@ -588,6 +588,7 @@ NpcTerritoryInfo btl_bom_setup_no_tbl[] = {
     {0},
 };
 
+/** Background event of the Fahr Outpost battle stage: starts the snowfall effect for the whole battle. */
 EVT_BEGIN(bgset_bom_snow_event)
     CALL(_snow_control)
     RETURN

@@ -19,6 +19,10 @@ typedef struct EffQueenWork {
     s32 maxAlpha;   // 0x28
 } EffQueenWork;
 
+/**
+ * Spawns the Shadow Queen tornado at (x, y, z) scaled by `size` for `duration` frames;
+ * reached through evt_eff ("queen").
+ */
 EffectEntry* effQueenEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 size) {
     EffectEntry* effect;
     EffQueenWork* work;
@@ -49,6 +53,7 @@ EffectEntry* effQueenEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 size
     return effect;
 }
 
+/** Per frame: loads the MOBJ_EFF_queen_tornade animation, fades it in and out and deletes the effect at the end. */
 void effQueenMain(EffectEntry* effect) {
     EffQueenWork* work = effect->userdata;
     Vec position;
@@ -93,6 +98,7 @@ void effQueenMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effQueenDisp, effect);
 }
 
+/** Draws the tornado pose in three segments scaled by 10. */
 void effQueenDisp(CameraId cameraId, EffectEntry* effect) {
     EffQueenWork* work = effect->userdata;
     Mtx mtx;

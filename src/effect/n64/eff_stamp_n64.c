@@ -18,6 +18,7 @@ static effN64Vtx size16x16_tex64x32_vtx[] = {
 void effStampMain(EffectEntry* effect);
 void effStampDisp(CameraId cameraId, EffectEntry* effect);
 
+/** Spawns the stamp burst at (x, y, z); type 0-2 picks the tint. Used by the battle damage code (battle_damage.c). */
 EffectEntry* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffStampN64Work* work;
@@ -83,6 +84,12 @@ EffectEntry* effStampN64Entry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * For the first 10 frames each piece stretches tall (scaleY toward 7) and moves out toward radius 10;
+ * after that it flattens (scaleY toward 1, scaleX toward 2.4) and flies out toward radius 100
+ * while the alpha drops 10% per frame. Pieces sit on a ring by their angle. Deletes when the lifetime runs out.
+ * CAMERA_3D, layer 2.
+ */
 void effStampMain(EffectEntry* effect) {
     EffStampN64Work* work = effect->userdata;
     Vec position;
@@ -122,6 +129,10 @@ void effStampMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effStampDisp, effect);
 }
 
+/**
+ * Draws each piece as a 16x16 quad of texture 0x2B facing the camera and turned to its angle,
+ * shaded between the work's two colours by the vertex alpha.
+ */
 void effStampDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffStampN64Work* work;

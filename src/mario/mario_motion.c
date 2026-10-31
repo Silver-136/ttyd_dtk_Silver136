@@ -151,6 +151,10 @@ void marioChgMoveMotion(void) {
     }
 }
 
+/**
+ * Stops Mario in the standing motion unless he is riding the boat or Yoshi,
+ * or is in the paper slit or tube motion. Called by events, item pickups, hit checks and the lecture maps.
+ */
 void marioChgStayMotion(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId != MARIO_MOTION_SHIP && mario->currMotionId != MARIO_MOTION_YOSHI &&
@@ -159,10 +163,16 @@ void marioChgStayMotion(void) {
     }
 }
 
+/** Starts the talk motion (mot_talk), from npcdrv when Mario speaks to an NPC and from evt_mario. */
 void marioChgTalkMotion(void) {
     marioChgMot(MARIO_MOTION_TALK);
 }
 
+/**
+ * Starts the item-pickup pose (mot_getItem) from itemdrv and evt_sub.
+ * In tube mode it only resets the roll speed, in the slit or the boat it stops Mario,
+ * and on Yoshi nothing changes.
+ */
 void marioChgGetItemMotion(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
@@ -176,16 +186,30 @@ void marioChgGetItemMotion(void) {
     }
 }
 
+/**
+ * Re-initialises the boat motion (marioReInit_ship);
+ * the Pianta Parlor boat game (yuu_01) and the E3 sequence use it.
+ */
 void marioChgShipMotion(void) {
     marioReInit_ship();
 }
 
+/**
+ * Puts Mario straight into the tube (roll) motion at its sub-state 50,
+ * without running the old motion's post function or the first-frame setup.
+ * The Pianta Parlor tube game (yuu_02) uses it; landing in tube mode too.
+ */
 void marioChgRollMotion(void) {
     MarioWork* mario = marioGetPtr();
     mario->currSubMotionId = 50;
     mario->currMotionId = MARIO_MOTION_ROLL;
 }
 
+/**
+ * Launches Mario off a spring (jump stand) with v as the jump height:
+ * from evt_mobj and on landing on MOBJ_BlueJumpStand (100).
+ * In tube mode only the height is stored (retail also puffs smoke and jumps); on Yoshi, yoshi_jumpStand jumps.
+ */
 void marioChgJumpStandMotion(f32 v) {
     MarioWork* mario = marioGetPtr();
     camFollowYOn();
@@ -202,6 +226,10 @@ void marioChgJumpStandMotion(f32 v) {
     }
 }
 
+/**
+ * A small fixed hop (start speed 6, no air steering), used by the Koops,
+ * Vivian and Yoshi partner code and mot_jabara.
+ */
 void marioChgSmallJumpMotion(void) {
     MarioWork* mario = marioGetPtr();
     mario->trigFlags |= MARIO_TRIG_FLAG_SET_JUMP_PARAMS;
@@ -215,6 +243,11 @@ void marioChgSmallJumpMotion(void) {
     mario->jumpSnapY = 0.0f;
 }
 
+/**
+ * TRUE when Mario can take an item pickup now: standing, walking, dashing, on Yoshi,
+ * in the tube or the slit and not starting a new motion, or on the boat once its transformation has finished.
+ * itemdrv checks it before pickups.
+ */
 BOOL marioChkItemGetMotion(void) {
     BOOL ret = FALSE;
     MarioWork* mario = marioGetPtr();
@@ -232,6 +265,10 @@ BOOL marioChkItemGetMotion(void) {
     return ret;
 }
 
+/**
+ * TRUE when Mario may start talking to an NPC: standing, walking or dashing, not in background mode or the slit,
+ * and not while Yoshi is being ridden or Vivian is hiding him. npcdrv checks it before choosing a talk target.
+ */
 BOOL marioChkTalkable(void) {
     MarioWork* mario = marioGetPtr();
     BOOL ret = FALSE;
@@ -285,6 +322,10 @@ void marioBoots(void) {
     marioChgMot(MARIO_MOTION_HIP);
 }
 
+/**
+ * Runs the current motion's main function from marioMain each frame, again while a motion change is pending,
+ * so a new motion's first frame runs in the same frame. Clears the hammer's hit object first.
+ */
 void marioMotion(void) {
     MarioWork* mario = marioGetPtr();
     mario->hitobjHammer = NULL;
@@ -293,6 +334,11 @@ void marioMotion(void) {
     } while (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION);
 }
 
+/**
+ * The usual motion change: runs the old motion's post function
+ * and flags the new one to do its first-frame setup.
+ * Ignored while MARIO_FLAG_CHG_MOT_DISABLED; after a Spin Jump it clears the blur and front pose.
+ */
 void marioChgMot(MarioMotion id) {
     MarioWork* mario = marioGetPtr();
     if (mario->flags & MARIO_FLAG_CHG_MOT_DISABLED) {
@@ -314,6 +360,10 @@ void marioChgMot(MarioMotion id) {
     mario->trigFlags |= MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
 }
 
+/**
+ * marioChgMot with a choice: callPost FALSE skips the old motion's post function (retail still runs it when
+ * leaving the jabara motion). Used by motion code that has already cleaned up itself.
+ */
 void marioChgMotSub(MarioMotion id, s32 callPost) {
     MarioWork* mario = marioGetPtr();
     if (mario->flags & MARIO_FLAG_CHG_MOT_DISABLED) {
@@ -341,6 +391,11 @@ void marioChgMotSub(MarioMotion id, s32 callPost) {
     mario->trigFlags |= MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
 }
 
+/**
+ * Changes motion without the new motion's first-frame setup (the start flag is cleared, not set),
+ * then runs the old motion's post function.
+ * Used by mot_jump, mot_stay, mot_slit and Bowser's motions to switch mid-move.
+ */
 void marioChgMot2(MarioMotion id) {
     MarioWork* mario = marioGetPtr();
     if (mario->flags & MARIO_FLAG_CHG_MOT_DISABLED) {
@@ -354,6 +409,7 @@ void marioChgMot2(MarioMotion id) {
     }
 }
 
+/** Zeroes Mario's vertical motion (jump velocity, acceleration, jerk and snap), e.g. on landing. */
 void marioClearJumpPara(void) {
     MarioWork* mario = marioGetPtr();
     mario->jumpVelocityY = 0.0f;
@@ -362,6 +418,12 @@ void marioClearJumpPara(void) {
     mario->jumpSnapY = 0.0f;
 }
 
+/**
+ * Loads the starting vertical speed curve for the current jump motion from marioJumpData (or marioJumpSwData for
+ * the red switch).
+ * The pre-battle slow motion halves it, the Moon's low gravity swaps in a floatier set,
+ * and Bowser uses kpaSetJumpPara. Called by mot_jump at the start of a jump.
+ */
 void marioSetJumpPara(void) {
     MarioWork* mario = marioGetPtr();
     f32* jd;
@@ -430,6 +492,11 @@ void marioSetJumpPara(void) {
     }
 }
 
+/**
+ * Loads the falling speed curve from marioJumpData.fall (the red switch jump has its own),
+ * or a slow one under the Moon's low gravity.
+ * marioJump calls it at a jump's peak; mario.c and several motions (damage, plane, boat) too.
+ */
 void marioSetFallPara(void) {
     MarioWork* mario = marioGetPtr();
     f32* fall = marioJumpData.fall;
@@ -448,6 +515,10 @@ void marioSetFallPara(void) {
     }
 }
 
+/**
+ * Steps the fall curve one frame and returns the new vertical speed (units per frame),
+ * capped at marioJumpData.minFall (-18); the jerk is not allowed to turn positive.
+ */
 f32 marioGetFallSpd(void) {
     MarioWork* mario = marioGetPtr();
     MarioJumpData* jd;
@@ -468,6 +539,10 @@ f32 marioGetFallSpd(void) {
     return mario->jumpVelocityY;
 }
 
+/**
+ * Steps the jump curve one frame (snap into jerk into acceleration into velocity)
+ * and returns the new vertical speed. Everything is divided by 1.7 during the pre-battle slow motion.
+ */
 f32 marioMakeJumpPara(void) {
     MarioWork* mario = marioGetPtr();
     f32 div = (mario->flags & MARIO_FLAG_PRE_BATTLE_PHYSICS) ? 1.7f : 1.0f;
@@ -521,6 +596,12 @@ void marioJump(void) {
     mario->position.y += mario->jumpVelocityY;
 }
 
+/**
+ * Per-frame fall (marioMain and Peach): slows air drift, stops it off screen,
+ * steps the fall speed and lands Mario on the floor below (marioLandOn);
+ * a passing jabara check (marioPriCheckJabara, stick rub) turns the landing into the jabara motion.
+ * On kpa_03 Bowser just falls and lands; the tube uses mot_fall_roll.
+ */
 void marioFall(void) {
     MarioWork* mario = marioGetPtr();
     s32 rub;
@@ -615,6 +696,12 @@ void marioFall(void) {
     }
 }
 
+/**
+ * Mario touches down: plays the landing sound for the floor type, clears the jump state,
+ * and picks the next motion: damage on hazard or spike floors, the red switch or blue spring objects,
+ * walk or stand from the stick, Bowser's quake, re-entering the slit in paper mode.
+ * Bowser and the tube also call it.
+ */
 void marioLandOn(void) {
     MarioWork* mario = marioGetPtr();
     MapObjectEntry* mobj;
@@ -823,6 +910,7 @@ void mot_talk(void) {
     }
 }
 
+/** Item pickup motion: stops Mario and shows the item-up pose M_I_U until the item code changes the motion. */
 void mot_getItem(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
@@ -879,6 +967,11 @@ BOOL marioChkJump(void) {
     return TRUE;
 }
 
+/**
+ * On Y, turns Mario into the boat or the plane when he stands on a matching panel and has the Boat
+ * or Plane Curse (retail: not while a partner use is pending).
+ * Returns TRUE only when Y was pressed and no panel took it; callers (mot_stay, mot_walk) ignore it.
+ */
 BOOL marioChkTransform(void) {
     MarioWork* mario = marioGetPtr();
     if (!(mario->buttonTrg & PAD_BUTTON_Y)) {
@@ -901,6 +994,11 @@ BOOL marioChkTransform(void) {
     return TRUE;
 }
 
+/**
+ * Starts a hammer swing from stand or walk: the charged spin swing when marioChkHammer2 says so,
+ * otherwise a swing on B (not in paper or tube mode). Needs a hammer and normal (not 8-bit) Mario.
+ * TRUE if a swing started.
+ */
 BOOL marioChkItemMotion(void) {
     MarioWork* mario = marioGetPtr();
     u32 trig;
@@ -929,10 +1027,16 @@ BOOL marioChkItemMotion(void) {
     return TRUE;
 }
 
+/** Always 0: a left-over stick-rub check; marioMain's air movement would skip the stick while it returned nonzero. */
 s32 L_marioChkRub(void) {
     return 0;
 }
 
+/**
+ * From the slit motion: rolls Mario into a tube when R is held, the stick-rub gesture counts 3,
+ * he has the Tube Curse and no wall or crevice is around him. Not in 8-bit mode.
+ * Returns MARIO_MOTION_ROLL when it switched, else 0.
+ */
 s32 marioRollChgChk(void) {
     MarioWork* mario = marioGetPtr();
     s32 b;
@@ -963,6 +1067,10 @@ s32 marioRollChgChk(void) {
     return 0;
 }
 
+/**
+ * Bounces Mario off an enemy he jumped on in the field (npcdrv first-strike hits) with the NPC jump motion;
+ * not for Bowser in body status 2 or (retail) in the tube.
+ */
 void marioChgMotJump2(void) {
     MarioWork* mario = marioGetPtr();
     if (kpaGetBodyStatus() != KPA_BODY_SUBMERGED && mario->currMotionId != MARIO_MOTION_ROLL) {
@@ -970,6 +1078,7 @@ void marioChgMotJump2(void) {
     }
 }
 
+/** TRUE for display angles strictly between 90 and 270 degrees, so mot_kaze ends facing 180 rather than 0. */
 static inline BOOL marioChkBackAngle(f32 a) {
     BOOL ret = FALSE;
     if (a > 90.0f && a < 270.0f) {
@@ -978,6 +1087,12 @@ static inline BOOL marioChkBackAngle(f32 a) {
     return ret;
 }
 
+/**
+ * Unused spin: turns Mario in pose M_P_2 up to 60 degrees a frame while Z is held,
+ * then slows him to a stop and stands.
+ * No code in the tree enters MARIO_MOTION_KAZE; marioChkSts 0x20 only tests for it.
+ * Guess: a whirlwind, from the name ("kaze", wind).
+ */
 void mot_kaze(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
@@ -1017,6 +1132,10 @@ void mot_kaze(void) {
     }
 }
 
+/**
+ * Unused: lays Mario flat (rot.x 90, pose M_S_1, slit display flag cleared) until B stands him back up.
+ * No code in the tree enters MARIO_MOTION_SHADOW. Guess: lying flat as a shadow, from the name.
+ */
 void mot_shadow(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
@@ -1042,14 +1161,21 @@ void mot_shadow(void) {
     }
 }
 
+/** Empty motion slot MARIO_MOTION_PARTY_USE; nothing in the tree enters it. */
 void mot_partyUse(void) {
     marioGetPtr();
 }
 
+/** Empty last motion slot (MARIO_MOTION_DUMMY). */
 void mot_dummy(void) {
     marioGetPtr();
 }
 
+/**
+ * Falling into a pit in background mode (marioBottomless):
+ * Mario drops from above the screen, glides back to where he entered (returnPos; fixed spots on win_01,
+ * win_03 and tik_01 when unset), lands with a thud, loses 1 HP and stands.
+ */
 void mot_bottomless(void) {
     MarioWork* mario = marioGetPtr();
     Vec pos;
@@ -1158,6 +1284,11 @@ void mot_bottomless(void) {
     }
 }
 
+/**
+ * After marioBottomless moves Mario out of a pit: cancels the slit and stands him.
+ * Its second step (marioReset, partner and follower moved to Mario) only runs
+ * if MARIO_FLAG_CHG_MOT_DISABLED blocked that stand change.
+ */
 void mot_forceReset(void) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party;

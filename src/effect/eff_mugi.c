@@ -43,6 +43,7 @@ inline f32 mugiKemuriAngle(effMugiKemuriData *data) {
     return 6.2831855f * reviseAngle(data->rot.y);
 }
 
+/** Spawns the wheat/flower smoke puffs behind Mario at (x, y, z) heading `angle`; called from mario_kemuri.c. */
 EffectEntry* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle) {
     EffectEntry* effect;
     effMugiKemuriData* data;
@@ -89,6 +90,7 @@ EffectEntry* effMugiKemuriEntry(f32 x, f32 y, f32 z, f32 angle) {
 void effMugiKemuri2Main(EffectEntry* effect);
 void effMugiKemuri2Disp(CameraId camId, void* param);
 
+/** Spawns the second smoke form at (x, y, z) with `angle` and a left/right `dir`; called from mario_kemuri.c. */
 EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 dir) {
     EffectEntry* effect;
     effMugiKemuriData* data;
@@ -140,6 +142,10 @@ EffectEntry* effMugiKemuri2Entry(s32 type, f32 x, f32 y, f32 z, f32 angle, f32 d
     return effect;
 }
 
+/**
+ * Per frame: loads the EFF_Mugi (EFF_Hana on win) pose for each puff, moves and fades them,
+ * deletes the effect at the end.
+ */
 void effMugiKemuriMain(EffectEntry* effect) {
     s32 i;
     effMugiKemuriData* data;
@@ -217,6 +223,7 @@ void effMugiKemuriMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&pos2), 2, effMugiKemuriDisp, effect);
 }
 
+/** Per frame: same as effMugiKemuriMain for the second form, with sideways drift scaled by the vertical speed. */
 void effMugiKemuri2Main(EffectEntry* effect) {
     s32 i;
     effMugiKemuriData* data;
@@ -309,6 +316,7 @@ void effMugiKemuri2Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&pos2), 2, effMugiKemuri2Disp, effect);
 }
 
+/** Draws each puff's animation pose at its position, rotation and scale. */
 void effMugiKemuriDisp(CameraId camId, void* param) {
     EffectEntry* effect = param;
     effMugiKemuriData* data;
@@ -339,6 +347,7 @@ void effMugiKemuriDisp(CameraId camId, void* param) {
     }
 }
 
+/** Draws each puff of the second form from its animation pose with its drift rotation. */
 void effMugiKemuri2Disp(CameraId camId, void* param) {
     EffectEntry* effect = param;
     effMugiKemuriData* data;

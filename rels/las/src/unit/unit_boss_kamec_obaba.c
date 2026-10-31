@@ -423,6 +423,10 @@ static BattleUnitKindPart parts[] = {
     {2, "btl_un_kamec_obaba", "c_kamek_bb", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/**
+ * Camera helper of the Bowser fight: moves the battle camera to a close view of Kammy Koopa (the unit in GW(9));
+ * the view is higher when her unit work 0 is 1 (she is flying on her broom).
+ */
 static EVT_BEGIN(kamec_obaba_zoom)
     CALL(btlevtcmd_GetUnitWork, GW(9), KAMEC_OBABA_WORK_SKY, LW(1))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -1161,6 +1165,11 @@ static USER_FUNC(eff_magic) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (runs every frame while blocked):
+ * keeps a Thunder Flare charging effect on the tip of Kammy's staff, following her position and size,
+ * until the effect ends.
+ */
 static USER_FUNC(eff_staff) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -1184,6 +1193,7 @@ static USER_FUNC(eff_staff) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Wait event of Kammy Koopa: plays her idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

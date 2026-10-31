@@ -37,6 +37,11 @@ EvtWord tensou_init[69];
 static EvtWord evt_haguruma[5];
 EvtWord aji_07_init_evt[118];
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_2
+ * and S_door1_1 in opposite directions along X by the animation value in LW(0) times 0.16601563;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(s_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.16601563f))
     CALL(evt_mapobj_trans, 1, STRING("S_door1_2"), LW(0), 0, 0)
@@ -45,6 +50,11 @@ static EVT_BEGIN(s_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_2
+ * and S_door1_1 in opposite directions along X by the animation value in LW(0) times 0.16601563;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(s_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.16601563f))
     CALL(evt_mapobj_trans, 1, STRING("S_door1_2"), LW(0), 0, 0)
@@ -75,6 +85,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Script function: sets the scale of Mario and of the first partner to the float in args[0] on all axes;
+ * the teleporter uses it to shrink them as they dissolve into the beam.
+ */
 static USER_FUNC(scale_func) {
     f32 s = evtGetFloat(event, event->args[0]);
     MarioWork* mario = marioGetPtr();
@@ -176,6 +190,11 @@ EVT_BEGIN(tensou_ride)
     RETURN
 EVT_END()
 
+/**
+ * Case script for the teleporter's switch (A__sui):
+ * presses the switch (SFX_STG7_SWITCH_WARP1), plays the teleporter's start-up animation anm_saisho and the beam,
+ * and attaches tensou_ride to the pad A_tensou.
+ */
 EVT_BEGIN(tensou_switch)
     CALL(evt_mapobj_flag_onoff, 0, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)

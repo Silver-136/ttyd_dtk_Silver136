@@ -197,6 +197,11 @@ typedef enum RomFontLanguage {
 
 void romFontMake(void);
 
+/**
+ * Returns system message msg (progressive-scan prompt, disc errors, language names) in the console's language.
+ * Non-JP releases fall back to the English table when the IPL font is ASCII but gp->language is Japanese;
+ * JP always returns the Japanese text. Used by seq_logo and the disc-error screen in mariost.
+ */
 const char* romFontGetMessage(s32 msg) {
 #ifdef VERSION_G8ME01
     if (wp->language != ROM_FONT_LANGUAGE_SJIS && (u32)gp->language == LANGUAGE_JP) {
@@ -208,6 +213,7 @@ const char* romFontGetMessage(s32 msg) {
 #endif
 }
 
+/** Called once at boot from mariost: picks Japanese (SJIS IPL font) or Western text and bakes the glyph cache. */
 void romFontInit(void) {
     wp->glyphs = 0;
     wp->uniqueChars = 0;
@@ -219,6 +225,11 @@ void romFontInit(void) {
     romFontMake();
 }
 
+/**
+ * Builds the glyph cache: collects every character used by the message tables, sorts and dedups them,
+ * loads the IPL font from ROM and stores one texel glyph and width per character in wp->glyphs.
+ * The temporary buffers are freed.
+ */
 void romFontMake(void) {
     char c[16];
     s32 width;
@@ -346,6 +357,7 @@ void romFontMake(void) {
 
 double tan(double);
 
+/** Looks a character code up in the glyph cache; falls back to the first glyph when the code was not baked. */
 static inline RomFontChar* romFontFindChar(u16 code) {
     RomFontWork* w = wp;
     RomFontChar* table = w->glyphs;

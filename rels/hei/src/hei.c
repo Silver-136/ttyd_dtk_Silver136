@@ -12,6 +12,11 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
+/**
+ * Module entry point of hei.rel: runs the static constructors,
+ * registers the init script of every Petal Meadows map (hei_00..hei_13, hei_bt00)
+ * and the area's battle setup tables.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 
@@ -36,6 +41,7 @@ void _prolog(void) {
     relSetBtlAddr("hei", btlsetup_hei_tbl, btl_hei_setup_no_tbl);
 }
 
+/** Module exit point of hei.rel: runs the static destructors. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -43,5 +49,6 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+/** Linker stub for unresolved symbols; does nothing. */
 void _unresolved(void) {
 }

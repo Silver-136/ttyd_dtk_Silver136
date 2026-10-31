@@ -90,6 +90,11 @@ static u8 vx_data[13] = {20, 5, 20, 20, 10, 20, 20, 8, 8, 8, 1, 1, 1};
 void effPokopiPchargeMain(EffectEntry* effect);
 void effPokopiPchargeDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns an energy-charge effect at (x, y, z): 10-20 streaks (count by type) spaced evenly around a ring,
+ * flowing inward (negative speed: types 0-2, 6, 7, 9) or outward. lifetime <= 0 means until deleted.
+ * Soft-deletable. Used by map scripts in gor, tik and tou2 via evt_eff64 "pokopi_pcharge_n64"; type 9 is orange.
+ */
 EffectEntry* effPokopiPchargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffPokopiPchargeN64Elem* work;
     s32 count;
@@ -210,6 +215,10 @@ EffectEntry* effPokopiPchargeN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     return effect;
 }
 
+/**
+ * Fades the effect in and out; each streak slides along its ray, restarts at a random angle when its cycle ends,
+ * and pulses its alpha with a sine over the cycle.
+ */
 void effPokopiPchargeMain(EffectEntry* effect) {
     EffPokopiPchargeN64Elem* p = effect->userdata;
     s32 i;
@@ -268,6 +277,7 @@ void effPokopiPchargeMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effPokopiPchargeDisp, effect);
 }
 
+/** Draws each streak as a camera-facing sprite (texture 0x86) pushed out along its ray, in a shape chosen by type. */
 void effPokopiPchargeDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffPokopiPchargeN64Elem* p;

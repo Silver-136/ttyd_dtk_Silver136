@@ -161,6 +161,10 @@ static BattleUnitKindPart parts_christine[] = {
     },
 };
 
+/**
+ * Camera shot on the fake Mario (x = 90) from the Goombella double's side:
+ * sets the battle camera to a fixed position and waits 37 frames for it to arrive.
+ */
 static EVT_BEGIN(fmario_zoom_christine)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, 90, 58, 228, 90, 38, -20, 30, 11)
@@ -168,6 +172,10 @@ static EVT_BEGIN(fmario_zoom_christine)
     RETURN
 EVT_END()
 
+/**
+ * Camera shot on the Goombella double (x = 130):
+ * sets the battle camera to a fixed position and waits 37 frames for it to arrive.
+ */
 static EVT_BEGIN(gparty_zoom_christine)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, 130, 58, 228, 130, 38, -20, 30, 11)
@@ -175,6 +183,10 @@ static EVT_BEGIN(gparty_zoom_christine)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the Goombella double: installs wait, attack,
+ * damage and default confusion events and the partner walk, run and jump sounds.
+ */
 static EVT_BEGIN(init_event_christine)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event_christine))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_christine))
@@ -187,6 +199,11 @@ static EVT_BEGIN(init_event_christine)
     RETURN
 EVT_END()
 
+/**
+ * Damage script of the Doopliss-controlled Goombella:
+ * if the hit carries damage code 1024 it sets GW(20)
+ * so the fake Mario's phase script knows the partner was struck, then runs the default damage handling.
+ */
 EVT_BEGIN(damage_event_christine)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -246,6 +263,11 @@ static EVT_BEGIN(dead_event_christine)
     RETURN
 EVT_END()
 
+/**
+ * The Goombella double's attack: uses an enemy item if she has one,
+ * otherwise a Mario-style headbonk on a target (enemyWeapon_ChristineNormalAttack,
+ * with a random 0 to 4 bonus hops, 20% chance) and the pre-damage check decides between a dodge and a hit.
+ */
 static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -454,6 +476,7 @@ static USER_FUNC(_krb_get_dir) {
     return EVT_RETURN_DONE;
 }
 
+/** Wait (idle) event of the Goombella: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event_christine)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

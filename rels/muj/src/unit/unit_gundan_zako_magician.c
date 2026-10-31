@@ -415,6 +415,7 @@ static BattleWeapon weapon_gundan_zako_magician_ziwaziwa_bottle = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Init event of the X-Naut PhD: installs its wait, attack, damage and confusion (the attack event) events. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -424,6 +425,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the X-Naut PhD: runs the default damage reaction. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -431,6 +433,15 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event (also its confusion event) of the X-Naut PhD: on a first strike it throws the fire bottle;
+ * otherwise it may use an item.
+ * Without Lord Crump on the field it picks by weights:
+ * fire bottle 20, defense-down bottle 10, dodgy potion on itself 10 (only if not already Dodgy),
+ * shrinking bottle 20, healing one ally 10, healing all allies 5.
+ * With Crump present: fire bottle 60, a dodgy potion for Crump 20 and an HP-regen potion for Crump 20,
+ * each only if he lacks that status. A pick that is not allowed rolls again.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -529,6 +540,12 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Common start of an X-Naut PhD bottle move: declares the attack,
+ * faces the target (for the shrinking bottle, the middle of the target's side),
+ * plays the attack sounds and the wind-up pose for the bottle (A_1A fire, A_2A defense down, A_3A shrink,
+ * A_5A dodgy, A_4A the healing ones) and waits 80 frames.
+ */
 static EVT_BEGIN(attack_common_event1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
@@ -577,6 +594,12 @@ static EVT_BEGIN(attack_common_event1)
     RETURN
 EVT_END()
 
+/**
+ * Throw of an X-Naut PhD bottle at an enemy (fire and defense-down bottles):
+ * the bottle (part 2) arcs onto the target and shatters;
+ * on a dodge it flies on, on a hit (with fire smoke for the fire bottle) the hit is applied with the
+ * action-command defence.
+ */
 static EVT_BEGIN(attack_common_event2)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_fire_bottle))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1A"))

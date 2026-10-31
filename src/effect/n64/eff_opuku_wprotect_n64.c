@@ -43,6 +43,11 @@ typedef struct EffOpukuWprotectN64Work {
 void effOpukuWprotectMain(EffectEntry* effect);
 void effOpukuWprotectDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a water shield box around (x, y, z) scaled by scale,
+ * lasting lifetime frames (<= 0 means until deleted), with four staggered bubble sprites.
+ * Via evt_eff64 "opuku_wprotect_n64". Soft-deletable; type 1 ends with splashes.
+ */
 EffectEntry* effOpukuWprotectN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffOpukuWprotectN64Work* work;
@@ -78,6 +83,10 @@ EffectEntry* effOpukuWprotectN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 
     return effect;
 }
 
+/**
+ * Fades the shield in and out, pulses its color, scrolls the texture and moves the bubbles upward;
+ * at the end of a type 1 shield it spawns two water-damage splashes above the shield.
+ */
 void effOpukuWprotectMain(EffectEntry* effect) {
     EffOpukuWprotectN64Work* work = effect->userdata;
     Vec position;
@@ -219,6 +228,10 @@ static effN64Vtx size8x8_tex32x32_vtx[4] = {
     {-4, 4, 0, 0, 1024, 0, 0, 0, 255},
 };
 
+/**
+ * Draws the shield as a 40-point box whose upper vertices jitter each frame (texture 0x90),
+ * plus the rising bubble sprites (texture 0x91).
+ */
 void effOpukuWprotectDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffOpukuWprotectN64Work* work;

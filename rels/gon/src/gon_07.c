@@ -34,12 +34,20 @@ static EvtWord item_evt[268];
 static EvtWord bomb_wall_evt[179];
 EvtWord gon_07_init_evt[86];
 
+/**
+ * Door animation callback, closing for the w_bero exit to gon_06:
+ * rotates map object "door01" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door01_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door01"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the w_bero exit to gon_06:
+ * rotates map object "door01" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door01_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door01"), 0, LW(0), 0)
@@ -93,6 +101,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Rumble sequence after the Black Key is taken:
+ * a chain of camera shakes (strength 0.0049, 1000 ms each) whose gaps shrink from 2000 ms to 600 ms.
+ */
 static EVT_BEGIN(shake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 1000)
     WAIT_MS(2000)
@@ -223,6 +235,11 @@ static EVT_BEGIN(item_evt)
     RETURN
 EVT_END()
 
+/**
+ * Bobbery's bomb wall break (S_ana): plays SFX_OFF_WALL_BREAK1,
+ * captures the wall hole into a paper image (OFF_d_bom_ver2) and plays its crumbling animation A_1
+ * so the wall breaks apart, and swaps the S_ana hide flags to show the opened hole (S_ana_after).
+ */
 static EVT_BEGIN(bomb_wall_evt)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT

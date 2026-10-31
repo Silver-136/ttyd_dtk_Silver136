@@ -60,11 +60,17 @@ u8 color_table[] = {
 
 u8 anm_seq[] = {0, 1, 2, 3, 2, 1};
 
+/** Chooses which camera the confetti is drawn on (default 4); effConfettiMain only uses it for types below 10. */
 void effConfettiN64SetCamId(EffectEntry* effect, s32 camId) {
     EffConfettiN64Work* w = effect->userdata;
     w->camId = camId;
 }
 
+/**
+ * Spawns a confetti burst of 12, 18, 24 or 48 pieces.
+ * type % 10 picks the piece count and motion (3 = a falling shower, 4-6 = bursts that slow down and sag);
+ * life is in frames. battle_stage_object.c spawns type 4 with life 90.
+ */
 EffectEntry* effConfettiN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 scale) {
     s32 mod;
     EffectEntry* effect;
@@ -172,6 +178,11 @@ EffectEntry* effConfettiN64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 sc
     return effect;
 }
 
+/**
+ * Counts the life down (alpha fades over the last 10 frames) and moves every piece by its velocity;
+ * type 3 pieces respawn at the top after their 120-frame life,
+ * types 4-6 damp their speed and then fall with accelY.
+ */
 void effConfettiMain(EffectEntry* effect) {
     s32 mod;
     EffConfettiN64Work* w;
@@ -259,6 +270,10 @@ void effConfettiMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws each active piece as a camera-facing sprite from texture 0x4B,
+ * stepping through the six-entry anm_seq flutter cycle. Type 3 draws four small quads per piece.
+ */
 void effConfettiDisp(CameraId cameraId, EffectEntry* effect) {
     s32 anm;
     s32 type;

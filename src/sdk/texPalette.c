@@ -5,6 +5,11 @@
 
 #define PALETTE_VERSION 0x0020AF30
 
+/**
+ * Turns a TPL loaded in memory into usable form:
+ * checks the version and converts the descriptor, texture and CLUT offsets to pointers (only once).
+ * Used by the effect and background drivers after loading a .tpl.
+ */
 void UnpackTexPalette(TEXPalettePtr pal) {
     u16 i;
 
@@ -36,11 +41,16 @@ void UnpackTexPalette(TEXPalettePtr pal) {
     }
 }
 
+/** Returns the descriptor for texture id (the range check is a debug-only assert). */
 TEXDescriptorPtr TEXGet(TEXPalettePtr pal, u32 id) {
     ASSERTMSGLINE(0x90, id < pal->numDescriptors, "GetTexture():  Texture Not Found ");
     return &pal->descriptorArray[id];
 }
 
+/**
+ * Fills a GXTexObj from texture id of a TPL: size, format, wrap,
+ * filters and LOD range (mipmapped when the LODs differ).
+ */
 void TEXGetGXTexObjFromPalette(TEXPalettePtr pal, GXTexObj* to, u32 id) {
     TEXDescriptorPtr tdp;
     GXBool mipMap;

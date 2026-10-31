@@ -257,6 +257,12 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/**
+ * Brings a Swoopula down from the ceiling when it is first hit or attacks:
+ * if its ceiling attribute is still set (attribute 2) it clears it, sets the flying attribute (4),
+ * switches to the flying pose table and moves it 30 units down with new hit, cursor,
+ * kiss and status icon offsets. Leaves its home position in LW(0) to LW(2).
+ */
 static EVT_BEGIN(ceil_sky_event)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -282,6 +288,12 @@ static EVT_BEGIN(ceil_sky_event)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the Swoopula: installs wait, attack, ceiling damage (damage_event_ceil),
+ * confusion and ceiling-fall (ceil_fall_ready_event, run when the stage's overhead iron frame falls) events
+ * and the hang-from-ceiling hit offsets;
+ * if unit work 0 is 1 it starts already in flight (ceil_sky_event).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -303,6 +315,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Data table entry 48, run when the battle opens with a First Strike on the Swoopula (damage code 0x39):
+ * drops from the ceiling (ceil_sky_event), sets its height to 10 and waits for the attack to end.
+ */
 static EVT_BEGIN(dmg_first_attack_pos)
     CALL_CHILD(PTR(ceil_sky_event))
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 10, LW(2))
@@ -310,6 +326,7 @@ static EVT_BEGIN(dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/** Damage event of the Swoopula: runs the default damage handling. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -317,6 +334,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Swoopula while it hangs from the ceiling:
+ * runs the default damage handling and then, unless the hit was a counter-type hit (512 without 2048)
+ * or did no damage, makes it drop to its flying position (ceil_sky_event) and dive down.
+ */
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -337,6 +359,11 @@ static EVT_BEGIN(damage_event_ceil)
     RETURN
 EVT_END()
 
+/**
+ * Damage event used for the Swoopula's counter-damage case:
+ * drops it from the ceiling (ceil_sky_event) and runs the shared counter damage handling
+ * (subsetevt_counter_damage).
+ */
 static EVT_BEGIN(counter_damage_event)
     CALL_CHILD(PTR(ceil_sky_event))
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -346,6 +373,10 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Ceiling-fall event of the Swoopula, run when the stage's overhead iron frame falls:
+ * runs the default damage handling, then drops it to its flying position (ceil_sky_event) and dives down.
+ */
 static EVT_BEGIN(ceil_fall_ready_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -355,6 +386,13 @@ static EVT_BEGIN(ceil_fall_ready_event)
     RETURN
 EVT_END()
 
+/**
+ * The Swoopula's draining bite: like the Swoopula's swoop,
+ * but when the hit lands it tilts into the target (SFX_ENM_BASA_SUCK1, pose CYU_A_2)
+ * and heals itself with the recovery effect for the damage it dealt.
+ * When the counter check (btlevtcmd_PreCheckCounter) finds the target electrified (14) or under Hold Fast (17),
+ * it skips the drain and applies weapon_basabasa_drain_attack_biribiri_counterd instead.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -547,6 +585,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of the Swoopula: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

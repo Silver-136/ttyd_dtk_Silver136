@@ -17,6 +17,11 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
+/**
+ * Script helper for Vivian's pose table in Twilight Trail:
+ * sets entry args[0] of partyPoseTbl[6] (Vivian's party poses, slot 6) to the animation name string args[1],
+ * e.g. "PTR_S_4" for her idle pose. The gra cutscenes use it to change how she stands, walks and runs.
+ */
 USER_FUNC(evt_gra_vivian_pose_set) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -42,6 +47,10 @@ void _prolog(void) {
     memcpy(pose_buf, partyPoseTbl[PARTY_MEMBER_VIVIAN], sizeof(partyPoseTbl[PARTY_MEMBER_VIVIAN]));
 }
 
+/**
+ * REL exit point of gra.rel: runs the static destructors,
+ * puts Vivian's pose table back from the copy taken in _prolog and frees that copy.
+ */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -52,6 +61,7 @@ void _epilog(void) {
     _mapFree(pose_buf);
 }
 
+/** Empty stub the linker binds to calls that were left unresolved. */
 void _unresolved(void) {
 }
 

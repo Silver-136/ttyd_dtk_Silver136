@@ -39,6 +39,12 @@ s32 mugen_kairou_list[7];
 EvtWord mugen_kairou_init[96];
 EvtWord las_08_init_evt[22];
 
+/**
+ * Door animation script (closing) for the west (door 1) door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_l1_01
+ * and S_doa_l1_02 by it, the second one the opposite way.
+ */
 static EVT_BEGIN(w1_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_l1_01"), 0, LW(0), 0)
@@ -47,6 +53,12 @@ static EVT_BEGIN(w1_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the west (door 1) door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_l1_01
+ * and S_doa_l1_02 by it, the second one the opposite way.
+ */
 static EVT_BEGIN(w1_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_l1_01"), 0, LW(0), 0)
@@ -55,6 +67,12 @@ static EVT_BEGIN(w1_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (closing) for the west (door 2) door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_l2_01
+ * and S_doa_l2_02 by it, the second one the opposite way.
+ */
 static EVT_BEGIN(w2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_l2_01"), 0, LW(0), 0)
@@ -63,6 +81,12 @@ static EVT_BEGIN(w2_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the west (door 2) door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_l2_01
+ * and S_doa_l2_02 by it, the second one the opposite way.
+ */
 static EVT_BEGIN(w2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_l2_01"), 0, LW(0), 0)
@@ -71,6 +95,12 @@ static EVT_BEGIN(w2_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (closing) for the east (door 1) door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r1_01
+ * and S_doa_r1_02 by it, the second one the opposite way.
+ */
 static EVT_BEGIN(e1_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_r1_01"), 0, LW(0), 0)
@@ -79,6 +109,12 @@ static EVT_BEGIN(e1_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the east (door 1) door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r1_01
+ * and S_doa_r1_02 by it, the second one the opposite way.
+ */
 static EVT_BEGIN(e1_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_r1_01"), 0, LW(0), 0)
@@ -87,6 +123,12 @@ static EVT_BEGIN(e1_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (closing) for the east (door 2) door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r2_01
+ * and S_doa_r2_02 by it, the second one the opposite way.
+ */
 static EVT_BEGIN(e2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_r2_01"), 0, LW(0), 0)
@@ -95,6 +137,12 @@ static EVT_BEGIN(e2_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the east (door 2) door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_doa_r2_01
+ * and S_doa_r2_02 by it, the second one the opposite way.
+ */
 static EVT_BEGIN(e2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa_r2_01"), 0, LW(0), 0)
@@ -281,6 +329,10 @@ const char* taimatu_data[] = {
     "A_hi_08",
 };
 
+/**
+ * Event script: pulses the eight torch flames of the corridor,
+ * scaling their light map objects with a sine wave (0.6 to 1.0) forever.
+ */
 EVT_BEGIN(hikari_anim)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
@@ -303,6 +355,10 @@ EVT_BEGIN(hikari_anim)
     RETURN
 EVT_END()
 
+/**
+ * Event script: hides the eight torch map objects of the corridor,
+ * then starts hikari_anim to make the lit torches flicker.
+ */
 EVT_BEGIN(taimatu_evt)
     SET_INT_READ_ADDR(PTR(&taimatu_data))
     LOOP(8)
@@ -317,6 +373,14 @@ s32 mugen_kairou_list[] = {
     7, 7, 3, 3, 7, 3, 7,
 };
 
+/**
+ * Event script: sets up the endless corridor (mugen kairou),
+ * a room that repeats until Mario takes the right door seven times.
+ * Before the Palace lock is opened it just lights the four torches 4..7;
+ * afterwards it lights the torch given by mugen_kairou_list for the current streak
+ * and rewires the east doors e_bero_1 and e_bero_2
+ * so that the right one leads on (the list entry, 7 or 3, decides which).
+ */
 EVT_BEGIN(mugen_kairou_init)
     CALL_CHILD(PTR(taimatu_evt))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_01_02_LOCK)
@@ -385,6 +449,10 @@ USER_FUNC(hi_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: reads entry args[0] of mugen_kairou_list into args[1] (7 or 3: which door the current round
+ * expects).
+ */
 USER_FUNC(mugen_kairou_get_list) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);

@@ -91,6 +91,11 @@ static SharinData sharinDt[] = {
     {0},
 };
 
+/**
+ * Spins one wheel map object (LW(0)) of the train:
+ * LW(1) picks the wheel's radius and LW(2) picks which wheel speed, GW(0) or GW(1), drives it;
+ * every frame the angle grows by speed over radius and the object is rotated.
+ */
 static EVT_BEGIN(evt_sharin_main)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
     SWITCH(LW(1))
@@ -131,6 +136,7 @@ static EVT_BEGIN(evt_sharin_main)
     RETURN
 EVT_END()
 
+/** Starts evt_sharin_main for every wheel listed in sharinDt (sha_1_1 and so on). */
 static EVT_BEGIN(evt_sharin)
     SET_INT_READ_ADDR(PTR(sharinDt))
     LOOP(0)
@@ -200,6 +206,7 @@ static EVT_BEGIN(evt_clank_main)
     RETURN
 EVT_END()
 
+/** Starts evt_clank_main for every rod listed in clankDt. */
 static EVT_BEGIN(evt_clank)
     SET_INT_READ_ADDR(PTR(clankDt))
     LOOP(0)
@@ -213,6 +220,10 @@ static EVT_BEGIN(evt_clank)
     RETURN
 EVT_END()
 
+/**
+ * Scrolls the background layers (ground, mountains) sideways every frame by speeds derived from the train speed
+ * GW(0), so the scenery flows past the train.
+ */
 static EVT_BEGIN(evt_bg)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(11), FLOAT(0.0f))
@@ -276,6 +287,13 @@ static EVT_BEGIN(evt_hoshi)
     RETURN
 EVT_END()
 
+/**
+ * Train departure at a station (shared by hom_00, gor_04 and pik_00):
+ * sets the train-moving flag, clears the "train at station" flags, rings the bell twice,
+ * starts the engine sound for the station and accelerates the train over 20 seconds to a speed of -15 (GW(0) is
+ * the train's speed, which also scrolls the scenery; GW(1) drives the big drive wheels sha_1_4/sha_1_5 and rods
+ * bou_2/bou_4: it follows GW(0), and after 1.5 seconds runs up to 10 faster for 2 seconds; Guess: wheel spin).
+ */
 EVT_BEGIN(hom_10_evt_resha_start)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -374,6 +392,7 @@ EVT_BEGIN(hom_10_evt_resha_start)
     RETURN
 EVT_END()
 
+/** Same as hom_10_evt_resha_start but for the return trip: the train accelerates in the opposite direction to +15. */
 EVT_BEGIN(hom_10_evt_resha_start2)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -478,6 +497,10 @@ EVT_BEGIN(hom_10_evt_resha_start2)
     RETURN
 EVT_END()
 
+/**
+ * Sets the train to travel at its cruising speed of -15 immediately (the outbound direction),
+ * without the departure acceleration; used by the running-train scenes.
+ */
 EVT_BEGIN(hom_10_evt_resha_start3)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(-15.0f))
@@ -485,6 +508,10 @@ EVT_BEGIN(hom_10_evt_resha_start3)
     RETURN
 EVT_END()
 
+/**
+ * Sets the train to travel at its cruising speed of +15 immediately (the return direction),
+ * without the departure acceleration.
+ */
 EVT_BEGIN(hom_10_evt_resha_start4)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(15.0f))
@@ -526,6 +553,7 @@ static EVT_BEGIN(stop_1)
     RETURN
 EVT_END()
 
+/** Arrival braking of the return-trip train: like stop_1 with the return-trip sound variants. */
 static EVT_BEGIN(stop_2)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
@@ -560,6 +588,11 @@ static EVT_BEGIN(stop_2)
     RETURN
 EVT_END()
 
+/**
+ * Train arrival at a station: picks the slowing-down script (stop_1 or stop_2) by the current map (pik_00,
+ * gor_04 and hom_00 and the trip direction), which brings the train speed to zero
+ * and clears the train-moving flag.
+ */
 EVT_BEGIN(hom_10_evt_resha_stop)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
@@ -580,6 +613,7 @@ EVT_BEGIN(hom_10_evt_resha_stop)
     RETURN
 EVT_END()
 
+/** Keeps the lamp objects (ranpu, ranpu_c) swinging every frame by the amount from ramp_r while the train is moving. */
 static EVT_BEGIN(evt_ramp)
     LOOP(0)
         CALL(ramp_r)
@@ -627,6 +661,11 @@ static const char* pika_tbl_rsh_06[] = {
     NULL,
 };
 
+/**
+ * Common start of the train-exterior scenes: marks the train as not moving,
+ * zeroes the wheel speeds and spawns the wheel, rod,
+ * background and star scripts (plus lamp and sparks on the maps that have them).
+ */
 static EVT_BEGIN(hom_10_evt_resha_sub)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 0)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
@@ -739,6 +778,10 @@ static USER_FUNC(ramp_r) {
 }
 
 
+/**
+ * Texture-environment callback for the train's lights (the pika objects):
+ * hands the TEV info to envAddTev with stage 7.
+ */
 static void resha_tev(MapTevCallbackInfo* info) {
     envAddTev(7, info);
 }

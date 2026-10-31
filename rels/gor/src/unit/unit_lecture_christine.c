@@ -44,6 +44,10 @@ BattleWeapon lec_weapon_zutsuki_1;
 BattleWeapon lec_weapon_zutsuki_2;
 EvtWord lecture_zutsuki_attack_event[570];
 
+/**
+ * Script helper that converts the defence action command result of the battle into the tutorial's own code:
+ * 2 for result 1, 3 for 2, 1 for 4, 0 for 5, otherwise 0, stored in args[0].
+ */
 USER_FUNC(_get_defence_ac_result) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -68,6 +72,11 @@ USER_FUNC(_get_defence_ac_result) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that fakes a recorded button press for the tutorial:
+ * marks the defence result as 4, resets the action command pad
+ * and stores args[0] as the first entry of the pad's pressed-button history.
+ */
 USER_FUNC(_config_key_record) {
     s32 record = event->args[0];
     BattleWork* wp = _battleWorkPointer;
@@ -176,6 +185,12 @@ BattleUnitSetup entry_lecture_frankli = {
     NULL, // itemDropTable
 };
 
+/**
+ * Init event of Goombella in the tutorial battle:
+ * installs phase, attack, damage and confusion events and her partner walk, run and jump sounds,
+ * switches the battle to lecture mode, spawns Professor Frankly (entry_lecture_frankli,
+ * stored as work 0 and registered as the lecture unit) facing left and gives him her unit id.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))
@@ -197,6 +212,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of Goombella in the tutorial battle: runs the default damage handling. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -204,6 +220,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Counter-damage event (data table tag 36) of Goombella in the tutorial's Superguard lesson, run when Mario's
+ * Superguard turns her Headbonk back on her: she is knocked into the air, lands, hops twice,
+ * says mac_0_b_t2_015 and advances the lecture's unit work (to 8 if it was 7,
+ * otherwise sets 7 on the other slot).
+ */
 EVT_BEGIN(lecture_christine_ac_counter_damage_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(1.0f))
@@ -232,15 +254,25 @@ EVT_BEGIN(lecture_christine_ac_counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of Goombella in the tutorial battle:
+ * does nothing (Professor Frankly's phase event drives the lesson).
+ */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of Goombella in the tutorial battle: shows the idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Goombella in the tutorial battle:
+ * runs the scripted headbonk lesson (lecture_zutsuki_attack_event),
+ * then advances the lecture's work 1 from 3 to 4.
+ */
 static EVT_BEGIN(attack_event)
     CALL_CHILD(PTR(lecture_zutsuki_attack_event))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
@@ -503,6 +535,7 @@ static USER_FUNC(_krb_get_dir) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that sets the battle's lecture unit id to args[0], the unit that the tutorial messages come from. */
 static USER_FUNC(_battle_set_lecture_unit_id) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -513,6 +546,10 @@ static USER_FUNC(_battle_set_lecture_unit_id) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that turns on the lecture mode of the battle:
+ * locks Goombella's (the active unit's) HP and sets lectureMode.
+ */
 USER_FUNC(_set_lecture_mode) {
     BattleWork* wp = _battleWorkPointer;
     s32 id = BattleTransID(event, UNIT_ID_MARIO);

@@ -31,6 +31,11 @@ static s8* anim_data_table[] = {anim_data_0, anim_data_1};
 static void effKemuri2Main(EffectEntry* effect);
 static void effKemuri2Disp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a single smoke puff at (x, y, z) that drifts along (dirX, dirZ) and rises.
+ * Type 2 uses the longer animation; types 0-2 pick the texture and size.
+ * Spawned only from event scripts through evt_eff.
+ */
 EffectEntry* effKemuri2N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dirX, f32 dirZ) {
     EffectEntry* effect;
     EffKemuri2N64Work* work;
@@ -56,6 +61,10 @@ EffectEntry* effKemuri2N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dirX, f32 dir
     return effect;
 }
 
+/**
+ * Steps through the animation frame table (anim_data_0 or _1) and moves the puff,
+ * and deletes it at the -1 end marker.
+ */
 static void effKemuri2Main(EffectEntry* effect) {
     EffKemuri2N64Work* work = effect->userdata;
     Vec position;
@@ -79,6 +88,7 @@ static void effKemuri2Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri2Disp, effect);
 }
 
+/** Binds the texture for the puff type (0xC, 0xD or 0xE) and draws one centred quad (16x16 for type 0, else 24x24). */
 static void main_dl(s32 type) {
     GXTexObj texObj;
     s16 w;
@@ -147,6 +157,10 @@ static void main_dl(s32 type) {
     GXTexCoord2f32(0.0f, 1.0f);
 }
 
+/**
+ * Draws each puff as a camera-facing sprite via main_dl,
+ * picking the cell (wf * cell units) from the type's sprite sheet (176, 224 or 256 texels wide).
+ */
 static void effKemuri2Disp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera = camGetPtr(cameraId);
     EffKemuri2N64Work* work = effect->userdata;

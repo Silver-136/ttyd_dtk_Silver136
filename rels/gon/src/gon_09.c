@@ -33,24 +33,40 @@ static EvtWord main_0[491];
 #endif
 EvtWord gon_09_init_evt[239];
 
+/**
+ * Door animation callback, closing for the w_bero exit to gon_08:
+ * rotates map object "door_01" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door01_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_01"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the w_bero exit to gon_08:
+ * rotates map object "door_01" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door01_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_01"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, closing for the e_bero exit to gon_05:
+ * rotates map object "door_02" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door02_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_02"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the e_bero exit to gon_05:
+ * rotates map object "door_02" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door02_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_02"), 0, LW(0), 0)
@@ -97,6 +113,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Map-init helper for the floating block blk_0 and its switch (sw_0):
+ * if the local flag LSWF(1) says the switch has been used,
+ * it lifts the block 200 units above its resting height.
+ */
 // With this configuration, a clear moved flag places the block 200 units above its base position.
 static EVT_BEGIN(init_0)
     IF_INT_EQUAL(1, 0)
@@ -115,6 +136,13 @@ static EVT_BEGIN(init_0)
     RETURN
 EVT_END()
 
+/**
+ * Handler of the sw_0 switch for the floating block blk_0:
+ * the camera shakes with rumble while the block rises
+ * or falls 200 units (the direction follows LSWF(1), which is toggled), with block-float sounds;
+ * if Mario or his partner bumps the block with the head during the move,
+ * it reverses and the switch is cancelled.
+ */
 static EVT_BEGIN(main_0)
     SET_TYPE(239)
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
@@ -328,6 +356,10 @@ static EVT_BEGIN(main_0)
     RETURN
 EVT_END()
 
+/**
+ * Map init for gon_09: sets up the doors, four dormant Dry Bones,
+ * the Star Piece and the floating block (blk_0) with its switch (sw_0).
+ */
 EVT_BEGIN(gon_09_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

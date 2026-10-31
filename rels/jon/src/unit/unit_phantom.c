@@ -46,6 +46,13 @@ static EvtWord all_fire_attackEvent_sub[10];
 static EvtWord all_fire_attack_event[321];
 static EvtWord wait_event[6];
 
+/**
+ * Script helper: args[0] = source unit, args[1] = destination unit.
+ * Copies the current HP (clamped to the destination's maximum)
+ * and the size-change status from one Phantom Ember to another, and resets the destination's HP gauge to match.
+ * The Phantom Ember's friend_event calls it right after spawning a second Phantom Ember (the split),
+ * so the new one starts with the same HP.
+ */
 static USER_FUNC(bubble_copy_status) {
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
@@ -264,6 +271,11 @@ static BattleUnitSetup entry_bubble = {
     NULL, // itemDropTable
 };
 
+/**
+ * Init event of the Phantom Ember: installs its wait, attack,
+ * damage and confusion events and lifts it to height 10 (both position and home position)
+ * so it floats above the stage.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -527,6 +539,11 @@ static USER_FUNC(eff_fire) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * The Phantom Ember's fire attack: it spits a fireball (part 2, drawn by eff_fire) that flies to the target in
+ * three dives with the attack sounds.
+ * On a hit it makes a smoke puff and applies the damage with the action command defence check.
+ */
 static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -651,6 +668,7 @@ static USER_FUNC(eff_all_fire) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Helper of all_fire_attack_event: starts one eff_all_fire effect for index LW(0) and waits 120 frames. */
 static EVT_BEGIN(all_fire_attackEvent_sub)
     BEGIN_SIBLING_EVENT
         CALL(eff_all_fire, UNIT_ID_SELF, LW(0))
@@ -765,6 +783,7 @@ static EVT_BEGIN(all_fire_attack_event)
     RETURN
 EVT_END()
 
+/** Idle event: shows the unit's table pose for state 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

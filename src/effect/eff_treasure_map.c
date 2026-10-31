@@ -7,6 +7,10 @@
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
 
+/**
+ * Spawns the treasure map at (x, y, z); the map model is shown until the effect is removed.
+ * Caller: evt_eff "treasure_map".
+ */
 EffectEntry* effTreasureMapEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffTreasureMapWork* work;
@@ -31,6 +35,7 @@ EffectEntry* effTreasureMapEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/** Waits for the EFF_treasure_map group, starts its animation, and on soft delete fades alpha out over 16 frames. */
 void effTreasureMapMain(EffectEntry* effect) {
     EffTreasureMapWork* work = effect->userdata;
     Vec position;
@@ -70,6 +75,7 @@ void effTreasureMapMain(EffectEntry* effect) {
     dispEntry(work->cameraId, dispCalcZ(&position), 2, (DispCallback)effTreasureMapDisp, effect);
 }
 
+/** Draws the map twice: first a larger brown copy as an outline, then the normal one on top. */
 void effTreasureMapDisp(CameraId cameraId, EffectEntry* effect) {
     EffTreasureMapWork* work = effect->userdata;
     Mtx trans;

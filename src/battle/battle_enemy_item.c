@@ -16,6 +16,15 @@ void* _check_attack_item(BattleUnit* self);
 void* _check_fp_recover_item(BattleUnit* self);
 void* _check_hp_recover_item(BattleUnit* self);
 
+/**
+ * Decides whether an enemy should use its held item this turn;
+ * returns the item's attack script to run, or NULL to act normally.
+ * Called from the btlevtcmd command that enemy AI scripts use.
+ * Confused enemies only use items marked usable while confused.
+ * Damage items (Thunder Bolt, Fire Flower, POW Block, HP Drain ...) go to _check_attack_item,
+ * status items to the status checks, Slow Shroom and Gradual Syrup to the HP and FP checks,
+ * and any other item that restores HP or FP is used when a target is missing some.
+ */
 void* BattleEnemyUseItemCheck(BattleUnit* self) {
     s32 itemId = self->heldItem;
     BattleWeapon* weapon;
@@ -76,6 +85,10 @@ void* BattleEnemyUseItemCheck(BattleUnit* self) {
     }
 }
 
+/**
+ * Returns the item's script when any unit the item can target has less than full HP.
+ * Like all checks here, the inactive test reads the user's own attribute flags, not the target's.
+ */
 void* _check_hp_recover_item(BattleUnit* self) {
     BattleWork* wp;
     s32 itemId;
@@ -102,6 +115,7 @@ void* _check_hp_recover_item(BattleUnit* self) {
     return NULL;
 }
 
+/** Returns the item's script when any unit the item can target has less than full FP. */
 void* _check_fp_recover_item(BattleUnit* self) {
     BattleWork* wp;
     s32 itemId;
@@ -130,6 +144,10 @@ void* _check_fp_recover_item(BattleUnit* self) {
     return NULL;
 }
 
+/**
+ * Damage items: Earthquake and POW Block are used at once if Koops is among the targets and cannot act;
+ * otherwise the chance to use the item is 20% per elapsed turn (turnCount * 20 out of 100).
+ */
 void* _check_attack_item(BattleUnit* self) {
     BattleWork* wp;
     s32 itemId;
@@ -162,6 +180,11 @@ void* _check_attack_item(BattleUnit* self) {
     return itemDataTable[itemId].battle_params->mAttackEvtScript;
 }
 
+/**
+ * Status attack items: Sleepy Sheep and Stopwatch are used when some target can still act;
+ * Mini Mr. Mini, Mr. Softener, Ruin Powder and Dizzy Dial when some target can act
+ * and does not already have that status.
+ */
 void* _check_status_attack_item(BattleUnit* self) {
     BattleWork* wp;
     s32 itemId;
@@ -216,6 +239,11 @@ void* _check_status_attack_item(BattleUnit* self) {
     return NULL;
 }
 
+/**
+ * Support items: Power Punch, Courage Shell, Boo's Sheet,
+ * Volt Shroom and Repel Cape are used when some ally lacks the status they give (Power Punch also needs the ally
+ * able to act).
+ */
 void* _check_status_support_item(BattleUnit* self) {
     BattleWork* wp;
     s32 itemId;
@@ -269,6 +297,10 @@ void* _check_status_support_item(BattleUnit* self) {
     return NULL;
 }
 
+/**
+ * Tasty Tonic: used when some ally has a status it cures (sleep, stop, dizzy, poison, confusion, electric, burn,
+ * freeze, tiny, defense down or slow).
+ */
 void* _check_status_recover_item(BattleUnit* self) {
     BattleWork* wp;
     s32 itemId;

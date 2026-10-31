@@ -148,6 +148,10 @@ u8 torch_obj22t_texture[] ATTRIBUTE_ALIGN(32) = {
     0x88, 0x77, 0x9C, 0xCC, 0x68, 0x88, 0x9A, 0xCC, 0x56, 0x79, 0x99, 0xBC, 0x55, 0x67, 0xA9, 0x9B,
 };
 
+/**
+ * Spawns a torch flame at (x, y, z); `scale` is applied at half size.
+ * Used for map torches (evt_map) and the Palace of Shadow torches (las_08).
+ */
 EffectEntry* effTorchEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffTorchWork* work;
@@ -167,12 +171,17 @@ EffectEntry* effTorchEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     return effect;
 }
 
+/** Does nothing per frame except queue the draw callback; the flame is animated purely by the texture scroll. */
 void effTorchMain(EffectEntry* effect) {
     EffTorchWork* work = effect->userdata;
 
     dispEntry(CAMERA_3D, dispCalcZ(&work->position), 2, (DispCallback)effTorchDisp, effect);
 }
 
+/**
+ * Draws six overlapping quads with the flame texture pair, each scrolled upward at a slightly different phase,
+ * additively blended and camera-facing.
+ */
 void effTorchDisp(CameraId cameraId, EffectEntry* effect) {
     EffTorchWork* work = effect->userdata;
     CameraEntry* camera;

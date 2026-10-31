@@ -110,6 +110,10 @@ EffectEntry* effPturnN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Steps the displayed count toward its target (one per 8 frames), bobs the badge,
+ * and on delete tumbles it away with gravity while fading.
+ */
 void effPturnMain(EffectEntry* effect) {
     PturnElem* work = effect->userdata;
     Vec position;
@@ -212,6 +216,7 @@ void effPturnMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effPturnDisp, effect);
 }
 
+/** Draws the badge, and the digits for every type except 1, while the effect is active. */
 void effPturnDisp(CameraId cameraId, EffectEntry* effect) {
     PturnElem* work = effect->userdata;
     if (work->active != 0) {
@@ -222,6 +227,7 @@ void effPturnDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Draws the badge sprite (texture 0x92) as a camera-facing quad with the bob offset, scale and alpha. */
 void pturn_main_dispp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     PturnElem* p;
@@ -289,6 +295,7 @@ void pturn_main_dispp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Draws the one- or two-digit count (texture 0x53, digits 32 rows apart) over the badge when it is above zero. */
 void pturn_num_dispp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     GXTexObj texObj;

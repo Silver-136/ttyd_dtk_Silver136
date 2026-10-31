@@ -35,6 +35,7 @@ EvtWord ueki_evt_01[20];
 static KusaAccess ueki_access_data[7];
 EvtWord mri_15_init_evt[156];
 
+/** Closes the south door (S_doa); used as the door-close script of the south loading zone. */
 static EVT_BEGIN(bero_s_doa_close)
     SET_VALUE(LW(9), 0)
     SET_VALUE(LW(10), STRING("S_doa"))
@@ -42,6 +43,7 @@ static EVT_BEGIN(bero_s_doa_close)
     RETURN
 EVT_END()
 
+/** Opens the south door (S_doa); used as the door-open script of the south loading zone. */
 static EVT_BEGIN(bero_s_doa_open)
     SET_VALUE(LW(9), 0)
     SET_VALUE(LW(10), STRING("S_doa"))
@@ -126,6 +128,10 @@ static EVT_BEGIN(door_switch)
     RETURN
 EVT_END()
 
+/**
+ * Lord Crump flees the room: the west door closes behind him and he runs out of the left side,
+ * then is parked out of sight.
+ */
 EVT_BEGIN(dai3_escape)
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
@@ -140,6 +146,7 @@ EVT_BEGIN(dai3_escape)
     RETURN
 EVT_END()
 
+/** Positions the two X-Naut grunts and, if he has not left yet, Lord Crump for the fight in the Puni room. */
 EVT_BEGIN(dai3_battle_init)
     CALL(evt_npc_set_position, STRING("第三勢力部下Ａ"), -119, 0, 29)
     CALL(evt_npc_set_ry, STRING("第三勢力部下Ａ"), 90)
@@ -228,6 +235,11 @@ static KusaAccess ueki_access_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Map init script of mri_15, the room behind the Crystal Star room:
+ * sets up the Puni, planters, waterfalls, the light-locked door and, right after the time bomb is set,
+ * the X-Naut fight.
+ */
 EVT_BEGIN(mri_15_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 15, 0, -310, -1000, -1000, 0, 0)

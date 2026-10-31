@@ -54,42 +54,70 @@ static EvtWord evt_unlock01[10];
 static EvtWord key_get[5];
 EvtWord gon_05_init_evt[338];
 
+/**
+ * Door animation callback, closing for the w_bero_1 exit to gon_04:
+ * rotates map object "door_01" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door01_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_01"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the w_bero_1 exit to gon_04:
+ * rotates map object "door_01" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door01_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_01"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, closing for the w_bero_3 exit to gon_04:
+ * rotates map object "door_02" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door02_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_02"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the w_bero_3 exit to gon_04:
+ * rotates map object "door_02" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door02_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_02"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, closing for the w_bero_4 exit to gon_09:
+ * rotates map object "door_03" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door03_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_03"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the w_bero_4 exit to gon_09:
+ * rotates map object "door_03" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door03_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_03"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation for the double door (door04_1 and door04_2) in gon_05: LW(0) is the interpolated angle;
+ * the two leaves rotate opposite ways to close.
+ */
 EVT_BEGIN(door04_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door04_1"), 0, LW(0), 0)
@@ -98,6 +126,7 @@ EVT_BEGIN(door04_close)
     RETURN
 EVT_END()
 
+/** Door animation that opens the double door door04_1 and door04_2 in gon_05 (the reverse of door04_close). */
 EVT_BEGIN(door04_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("door04_1"), 0, LW(0), 0)
@@ -106,12 +135,14 @@ EVT_BEGIN(door04_open)
     RETURN
 EVT_END()
 
+/** Door animation that closes the single door door_05 in gon_05. */
 EVT_BEGIN(door05_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_05"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Door animation that opens the single door door_05 in gon_05. */
 EVT_BEGIN(door05_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_05"), 0, LW(0), 0)
@@ -228,6 +259,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Map-init helper for the floating block blk_0 and its switch (sw_0):
+ * if the local flag LSWF(4) says the switch has been used,
+ * it lifts the block 525 units above its resting height.
+ */
 // Block 0 starts 525 units above its placed position when its area flag is clear.
 static EVT_BEGIN(init_0)
     IF_INT_EQUAL(1, 0)
@@ -246,6 +282,13 @@ static EVT_BEGIN(init_0)
     RETURN
 EVT_END()
 
+/**
+ * Handler of the sw_0 switch for the floating block blk_0:
+ * the camera shakes with rumble while the block rises
+ * or falls 525 units (the direction follows LSWF(4), which is toggled), with block-float sounds;
+ * if Mario or his partner bumps the block with the head during the move,
+ * it reverses and the switch is cancelled. Ends with a landing sound and the final shake.
+ */
 static EVT_BEGIN(main_0)
     SET_TYPE(239)
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
@@ -457,6 +500,10 @@ static EVT_BEGIN(main_0)
     RETURN
 EVT_END()
 
+/**
+ * Map-init helper for the floating block blk_1:
+ * moves it 489 units up if its saved state LSWF(5) says it was raised.
+ */
 // Block 1 starts 489 units above its placed position when its area flag is set.
 EVT_BEGIN(init_1)
     IF_INT_EQUAL(0, 0)
@@ -475,6 +522,11 @@ EVT_BEGIN(init_1)
     RETURN
 EVT_END()
 
+/**
+ * Runs when Mario hits the floating-block switch sw_1:
+ * lifts or lowers blk_1 by 489 units with its sound and a camera shake, and flips the saved state LSWF(5).
+ * If the block cannot move the switch press is cancelled.
+ */
 EVT_BEGIN(main_1)
     SET_TYPE(239)
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
@@ -690,6 +742,10 @@ s32 key_tbl00[] = {
     ITEM_CASTLE_KEY_0x0C, -1,
 };
 
+/**
+ * Check run when Mario tries the first lock (Castle Key 0x0C):
+ * if he has the key it asks him to pick it from the item list and cancels the unlock when he picks nothing.
+ */
 EVT_BEGIN(evt_chk00)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0C, LW(0))
     IF_INT_GREATER(LW(0), 0)
@@ -712,6 +768,7 @@ s32 key_tbl01[] = {
     ITEM_CASTLE_KEY_0x0E, -1,
 };
 
+/** Check run when Mario tries the second lock (Castle Key 0x0E): same as evt_chk00 for that key. */
 EVT_BEGIN(evt_chk01)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0E, LW(0))
     IF_INT_GREATER(LW(0), 0)

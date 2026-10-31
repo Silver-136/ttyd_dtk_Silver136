@@ -177,6 +177,10 @@ static BattleWeapon weapon_moamoa_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init event of Smorg's tentacle A: installs its wait, attack,
+ * damage and default confusion events and moves its HP gauge to offset (50, 62).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -187,6 +191,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of Smorg's tentacle A: runs the default damage handling with LW(10) = -2 and LW(11) = 1. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -194,6 +199,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Death of Smorg's tentacle A: it plays the arm-down sound and the R_1A pose,
+ * clears the main body's slot for it (unit work 5 = -1), then, like the other parts,
+ * gives the main body the no-parts defence table and weakness pose table,
+ * plays the BIG sounds and V_1 pose on it, and kills the tentacle unit.
+ */
 // Clear this tentacle's body slot; expose the body only after all three tentacle slots are empty.
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_ARM_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -225,10 +236,12 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/** Phase event of Smorg's tentacle A: does nothing. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/** Attack event of Smorg's tentacle A: uses an enemy item if it has one, otherwise runs evt_attack. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -241,6 +254,13 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Moves another tentacle along with this one's attack: plays the first section of the pose list at LW(1)
+ * (sections end at a NULL entry) on part LW(5) of unit LW(0) with the arm-move sound running,
+ * waits until the main
+ * body (LW(6)) has unit work 0 set back to non-zero (done by evt_attack after its damage check), then plays the
+ * next section. Spawned by evt_attack for each of the other two tentacles that is still alive.
+ */
 // Consume one animation segment, wait for the body's hit signal, then consume the next segment.
 static EVT_BEGIN(evt_attack_other_arm)
     SET_INT_READ_ADDR(LW(1))
@@ -461,6 +481,10 @@ static EVT_BEGIN(evt_attack)
     RETURN
 EVT_END()
 
+/**
+ * Idle event of Smorg's tentacle A: shows its table pose for state 1,
+ * and does the same for the other two tentacles (main body unit work 4 and 3) while they still exist.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_GetUnitWork, LW(6), MOAMOA_UNIT_WORK_TENTACLE_B, LW(10))

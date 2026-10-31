@@ -37,6 +37,7 @@ typedef struct {
 void BattleBreakSlotDispReel(CameraId camId, void* param);
 void item_appear_force(BreakSlotReel* reel, s32 item);
 
+/** BINGO! with three Mushrooms: fully restores Mario's HP and, unless the partner is knocked out, the partner's. */
 EVT_BEGIN(kinoko_effect)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
@@ -62,6 +63,7 @@ EVT_BEGIN(kinoko_effect)
     RETURN
 EVT_END()
 
+/** BINGO! with three Fire Flowers: fully restores Mario's FP. */
 EVT_BEGIN(flower_effect)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
@@ -73,6 +75,7 @@ EVT_BEGIN(flower_effect)
     RETURN
 EVT_END()
 
+/** BINGO! with three Shine Sprites: fully restores Mario's and the partner's HP, then a second later Mario's FP. */
 EVT_BEGIN(shine_effect)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
@@ -164,6 +167,11 @@ BattleWeapon weapon_doku_kinoko_fp = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * BINGO!
+ * with three Poison Mushrooms: hits Mario and the partner with the HP-halving weapon,
+ * then a second later halves Mario's FP.
+ */
 EVT_BEGIN(doku_kinoko_effect)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_MARIO, LW(3))
     CALL(btlevtcmd_GetBodyId, LW(3), LW(4))
@@ -187,6 +195,7 @@ EVT_END()
 u16 tex_id_list_small[5] = {BTL_TEX(0x2B), BTL_TEX(0x2D), BTL_TEX(0x2F), BTL_TEX(0x2E), BTL_TEX(0x2C)};
 u16 tex_id_list_big[5] = {BTL_TEX(0x30), BTL_TEX(0x32), BTL_TEX(0x34), BTL_TEX(0x33), BTL_TEX(0x31)};
 
+/** BINGO! with three Stars: no script work; the Star Power refill and sound are done by BattleBreakSlot_Main. */
 EVT_BEGIN(star_effect)
     RETURN
 EVT_END()
@@ -220,6 +229,7 @@ BreakSlotWork* BattleBreakSlotGetPtr(void) {
     return &_battleWorkPointer->breakSlot;
 }
 
+/** Returns Bingo reel no (0-2). */
 BreakSlotReel* BattleBreakSlotReelGetPtr(s32 no) {
     return &BattleBreakSlotGetPtr()->reels[no];
 }
@@ -228,6 +238,10 @@ const SlotCards8 R_slot_1_cards = {{0, 1, 2, 1, 2, 0, 3, 4}};
 const SlotCards8 R_slot_2_cards = {{3, 1, 0, 1, 4, 2, 0, 2}};
 const SlotCards5 R_slot_3_cards = {{0, 1, 2, 3, 4}};
 
+/**
+ * Resets the Bingo slots at battle start and gives each of the three reels its cards (0 Mushroom, 1 Fire Flower,
+ * 2 Star, 3 Shine Sprite, 4 Poison Mushroom): two eight-card reels and a five-card one.
+ */
 void BattleBreakSlot_Init(void) {
     BreakSlotWork* wp = BattleBreakSlotGetPtr();
     SlotCards8 c1 = R_slot_1_cards;
@@ -759,10 +773,15 @@ void BattleBreakSlot_Main(void) {
     }
 }
 
+/** Queues the Bingo reel drawing on the 2D camera. */
 void BattleBreakSlot_Disp(void) {
     dispEntry(CAMERA_2D, 490.0f, 0, BattleBreakSlotDispReel, NULL);
 }
 
+/**
+ * Draws the Bingo reels: the small card row while cards are being filled,
+ * the big spinning reels during the BINGO! sequence.
+ */
 void BattleBreakSlotDispReel(CameraId camId, void* param) {
     Mtx trans;
     Mtx scale;
@@ -915,6 +934,7 @@ void BattleBreakSlot_PointInc(void) {
     }
 }
 
+/** Starts the BINGO! spin once all three cards are filled. */
 void BattleBreakSlot_Start(void) {
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
     BreakSlotReel* reel;
@@ -931,6 +951,10 @@ void BattleBreakSlot_Start(void) {
     }
 }
 
+/**
+ * Called between battle phases: starts a pending Bingo and returns TRUE while its sequence
+ * or announcement is still playing; afterwards resets the camera, settles the crowd size and returns FALSE.
+ */
 u8 BattleBreakSlot_CheckReaction(void) {
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
 
@@ -948,10 +972,15 @@ u8 BattleBreakSlot_CheckReaction(void) {
     return FALSE;
 }
 
+/**
+ * Returns how many turns of the post-BINGO!
+ * boost remain (Star Power gains are multiplied and the crowd stays excited).
+ */
 s32 BattleBreakSlot_GetBreakTurn(void) {
     return BattleBreakSlotGetPtr()->breakTurn;
 }
 
+/** Counts one turn off the post-BINGO! boost, once per turn from the audience phase. */
 void BattleBreakSlot_DecBreakTurn(void) {
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
 
@@ -961,6 +990,7 @@ void BattleBreakSlot_DecBreakTurn(void) {
     }
 }
 
+/** Hides the Bingo cards and clears the fill count when the battle ends. */
 void BattleBreakSlot_HideReel(void) {
     BreakSlotWork* slot = BattleBreakSlotGetPtr();
     BreakSlotReel* reel = BattleBreakSlotReelGetPtr(0);
@@ -972,6 +1002,7 @@ void BattleBreakSlot_HideReel(void) {
     slot->reelNo = 0;
 }
 
+/** Makes the reel land on card item next by moving its index to just before that card (debug forcing). */
 void item_appear_force(BreakSlotReel* reel, s32 item) {
     s32 i;
 

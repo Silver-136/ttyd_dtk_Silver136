@@ -23,6 +23,10 @@ static GXColor color_tbl[10] = {
 };
 u8 size_tbl[10] = { 0x32, 0x32, 0x32, 0x28, 0x0C, 0x0C, 0x0C, 0x0A, 0x0A, 0x0F};
 
+/**
+ * Spawns item sparkles at (x, y, z): types 0, 3 and 9 use seven, type 10 (battle item use) five.
+ * Spawned when Mario obtains or uses an item (itemdrv.c, battle_event_cmd.c).
+ */
 EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     ItemGetWork* work;
@@ -79,6 +83,7 @@ EffectEntry* effItemGetEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/** Pops the sparkle scale in over 12 frames, moves the sparkles, fades out over 16 frames and deletes when done. */
 void effItemGetMain(EffectEntry* effect) {
     ItemGetWork* work = effect->userdata;
     Vec tmp;
@@ -169,6 +174,7 @@ void effItemGetMain(EffectEntry* effect) {
     }
 }
 
+/** Draws the sparkle sprites for the item get types in two passes (shadow, then main). */
 void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
     ItemGetWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
@@ -319,6 +325,7 @@ void effItemGetDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Draws the sparkles for type 10 (item use) as camera-facing quads. */
 void effItemUseDisp(CameraId cameraId, EffectEntry* effect) {
     ItemGetWork* work = effect->userdata;
     CameraEntry* camera;

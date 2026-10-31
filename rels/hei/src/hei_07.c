@@ -90,6 +90,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Drops the NPC named in LW(10) from its current height to the ground over 30 frames,
+ * then plays two landing sounds and a short camera shake.
+ */
 static EVT_BEGIN(npc_jump)
     CALL(evt_npc_get_position, LW(10), LW(5), LW(6), LW(7))
     CALL(evt_sub_intpl_init, EASING_QUADRATIC_IN, LW(6), 0, 30)
@@ -105,11 +109,16 @@ static EVT_BEGIN(npc_jump)
     RETURN
 EVT_END()
 
+/**
+ * Sets off a continuous camera shake (amplitude 0.002, no end);
+ * run as an event and deleted when the statue has finished moving.
+ */
 EVT_BEGIN(dokan_shake)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.001953125f), FLOAT(0.0f), 0)
     RETURN
 EVT_END()
 
+/** Fades the camera shake out at the end of the statue's movement: three 500 ms shakes at 0.001, 0.001, then 0. */
 EVT_BEGIN(dokan_shake2)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), 500)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0009765625f), FLOAT(0.0f), 500)
@@ -117,6 +126,10 @@ EVT_BEGIN(dokan_shake2)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene after the quiz is won: the stone statue's base (DAIZA1) slides away with quake and rumble sounds
+ * and camera shake, a pipe rises out of the floor, and the "dokan" exit is enabled.
+ */
 EVT_BEGIN(sekizou_move)
     SPAWN_EVENT_GET_ID(PTR(dokan_shake), LW(10))
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
@@ -160,6 +173,10 @@ EVT_BEGIN(sekizou_move)
     RETURN
 EVT_END()
 
+/**
+ * Plays the map animation named in LW(0) and, for the two statue-rotation animations, plays the quake sound;
+ * used while the statue rotates and nods.
+ */
 // Wait for the full animation; a parallel event schedules the rotation sound near its end.
 EVT_BEGIN(animation_wait)
     CALL(evt_map_playanim, LW(0), MAP_ANIM_PLAY_ONCE, 0)
@@ -179,6 +196,10 @@ EVT_BEGIN(animation_wait)
     RETURN
 EVT_END()
 
+/**
+ * Camera shake for the quiz room's moving statue:
+ * ramps the amplitude from 0 to 0.010 over 30 steps, then eases it down to 0.005 over 15 steps.
+ */
 static EVT_BEGIN(shake_evt)
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 10, 30)
     LABEL(0)
@@ -199,6 +220,10 @@ static EVT_BEGIN(shake_evt)
     RETURN
 EVT_END()
 
+/**
+ * Right-answer reaction: confetti above Mario, the right-answer lights come on,
+ * the wrong-answer lights go off and the "anm_seikai" animation starts.
+ */
 EVT_BEGIN(seikai_anime)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 150)
@@ -210,6 +235,7 @@ EVT_BEGIN(seikai_anime)
     RETURN
 EVT_END()
 
+/** Stops the right-answer animation and turns the lights back to their idle state. */
 EVT_BEGIN(seikai_anime_stop)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -217,6 +243,7 @@ EVT_BEGIN(seikai_anime_stop)
     RETURN
 EVT_END()
 
+/** Wrong-answer reaction: the wrong-answer lights come on and the "anm_fuseikai" animation starts. */
 EVT_BEGIN(fuseikai_anime)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -225,6 +252,7 @@ EVT_BEGIN(fuseikai_anime)
     RETURN
 EVT_END()
 
+/** Stops the wrong-answer animation and turns the lights back to their idle state. */
 EVT_BEGIN(fuseikai_anime_stop)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -232,6 +260,10 @@ EVT_BEGIN(fuseikai_anime_stop)
     RETURN
 EVT_END()
 
+/**
+ * Sound-only script for the statue sinking: plays SFX_OFF1_PUZZLE1 at a long list of irregular delays to make a
+ * grinding sound.
+ */
 static EVT_BEGIN(evt_down_snd)
     WAIT_MS(100)
     CALL(evt_snd_sfxon, STRING("SFX_OFF1_PUZZLE1"), 0)
@@ -278,6 +310,7 @@ static EVT_BEGIN(evt_down_snd)
     RETURN
 EVT_END()
 
+/** Sound for one step of the statue rising: SFX_OFF1_PUZZLE_MOVE1, then SFX_OFF1_PUZZLE2 366 ms later. */
 static EVT_BEGIN(evt_up_snd_)
     CALL(evt_snd_sfxon, STRING("SFX_OFF1_PUZZLE_MOVE1"), 0)
     WAIT_MS(366)
@@ -285,6 +318,10 @@ static EVT_BEGIN(evt_up_snd_)
     RETURN
 EVT_END()
 
+/**
+ * Sound-only script for the statue rising: waits through a list of irregular delays
+ * and spawns evt_up_snd_ at the matching beats.
+ */
 static EVT_BEGIN(evt_up_snd__)
     WAIT_MS(16)
     WAIT_MS(16)
@@ -326,6 +363,10 @@ static EVT_BEGIN(evt_up_snd__)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the quiz screen: registers the OFF_d_pazu paper object,
+ * captures the offscreen picture of the quiz board and shows it as a paper-animated image.
+ */
 EVT_BEGIN(offscreen_to_quiz)
     CALL(evt_paper_entry, STRING("OFF_d_pazu"))
     CALL(evt_img_entry, STRING("capture_img"))
@@ -354,6 +395,13 @@ EVT_BEGIN(offscreen_to_quiz)
     RETURN
 EVT_END()
 
+/**
+ * Finishes the paper transition of the quiz room:
+ * after one second the mouth animation anm_kuti_1 plays,
+ * the map hei_07 is captured to a paper image that unfolds (animation A_2) with the rising sounds,
+ * then the room is swapped to its second state (hei_07_2),
+ * Mario is put back on the ground and control returns to him and his partner.
+ */
 static EVT_BEGIN(offscreen_to_normal)
     WAIT_MS(1000)
     CALL(evt_map_playanim, STRING("anm_kuti_1"), MAP_ANIM_PLAY_AT_END, 0)
@@ -394,6 +442,12 @@ QuizEntry quiz_data[] = {
     {"anm_8mon", "stg1_hei_30", "stg1_hei_q_08", 0},
 };
 
+/**
+ * Case script for the stone statue (a_sekizou_1):
+ * the statue wakes up with a quake and speaks to Mario (stg1_hei_20), offers the quiz as a yes/no choice,
+ * and on yes runs the quiz questions with the right/wrong animations until the quiz is won;
+ * on no it goes back to sleep. Winning sets the story to "Quiz" and opens the statue's base.
+ */
 EVT_BEGIN(a_sekizou_1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -803,6 +857,10 @@ static void callback(s32 type, void** work) {
     }
 }
 
+/**
+ * Script helper: turns Mario over args[1] frames toward the direction args[0] (degrees) by the shortest way
+ * round, using his move direction.
+ */
 USER_FUNC(mario_set_dir) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();

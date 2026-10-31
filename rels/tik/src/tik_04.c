@@ -107,6 +107,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Footstep sound loop for the guide Puni: plays SFX_STG2_PUNI_MOVE2_1 at his position repeatedly while he walks.
+ * Started and stopped by the scenes.
+ */
 static EVT_BEGIN(puni_walk_se)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("ガイド"), LW(0), LW(1), LW(2))
@@ -241,6 +245,10 @@ EVT_BEGIN(tik04_wall_blow_evt)
     RETURN
 EVT_END()
 
+/**
+ * The paper stairs unfold: the page-turn animation (OFF_d_meku) is captured and played over the fake stairs
+ * and the real stairs (dai_6) are shown, with a step-appear sound.
+ */
 // Animate the captured scenery, then detach all three objects before releasing the capture.
 EVT_BEGIN(kaidan_pera)
     CALL(evt_paper_entry, STRING("OFF_d_meku"))
@@ -289,6 +297,10 @@ EVT_BEGIN(tik_04_switch_evt)
     RETURN
 EVT_END()
 
+/**
+ * Item-box callback for the Happy Heart P chest:
+ * takes control, puts the badge at the chest, waits for the chest animation and hands it to Mario.
+ */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
@@ -300,6 +312,12 @@ static EVT_BEGIN(mobj_box00)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_04.
+ * Starts the sewer music, sets up exits, runs the two Puni glimpses at their story steps,
+ * the airplane tutorial watcher, the cloud, the blue switch for the paper stairs, the black key, the big block,
+ * the Happy Heart P chest, two Pretty Lucky blocks and a Star Piece.
+ */
 EVT_BEGIN(tik_04_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))

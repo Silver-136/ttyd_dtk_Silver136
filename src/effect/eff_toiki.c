@@ -132,6 +132,10 @@ static u8 queen_toiki_dl_0_13[] __attribute__((aligned(32))) = {
 static u8* queen_toiki_dl_0_tbl[] = { queen_toiki_dl_0_0, queen_toiki_dl_0_1, queen_toiki_dl_0_2, queen_toiki_dl_0_3, queen_toiki_dl_0_4, queen_toiki_dl_0_5, queen_toiki_dl_0_6, queen_toiki_dl_0_7, queen_toiki_dl_0_8, queen_toiki_dl_0_9, queen_toiki_dl_0_10, queen_toiki_dl_0_11, queen_toiki_dl_0_12, queen_toiki_dl_0_13 };
 static u8 queen_toiki_dl_0_size_tbl[] = { 3, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
+/**
+ * Spawns the breath cloud at (x, y, z) lasting `duration` frames (1000 or more: until removed).
+ * Type 0 dark breath, 1 confusion, 2 poison; it drifts up and left at an initial speed of 2.5.
+ */
 EffectEntry* effToikiEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffToikiWork* work;
@@ -159,6 +163,11 @@ EffectEntry* effToikiEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Moves the cloud with 5% damping per frame, scrolls its texture,
+ * and every 20 frames drops a mist puff (effMistEntry of type + 1) near its leading edge
+ * while the scroll is between 1 and 4.
+ */
 void effToikiMain(EffectEntry* effect) {
     EffToikiWork* work = effect->userdata;
     Vec position;
@@ -212,6 +221,10 @@ void effToikiMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effToikiDisp, effect);
 }
 
+/**
+ * Draws the breath model (an indexed display-list cloud) tinted by a per-type colour,
+ * with the texture scrolled across it.
+ */
 void effToikiDisp(CameraId cameraId, EffectEntry* effect) {
     EffToikiWork* work = effect->userdata;
     static u8 color_tbl[3][4] = { { 0x03, 0x02, 0x21, 0xFF }, { 0xD8, 0x0F, 0x51, 0xFF }, { 0x0B, 0x1B, 0x00, 0xFF } };

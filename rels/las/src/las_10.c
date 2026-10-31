@@ -81,6 +81,11 @@ s32 daiza_key_tbl[2];
 EvtWord daiza_evt[57];
 EvtWord las_10_init_evt[294];
 
+/**
+ * Script helper: collects the Riddle Tower keys (items 0x26..0x2D, the eight Palace keys) Mario carries into
+ * kagi_tbl, terminated by -1, and returns the table in args[0] and the count in args[1].
+ * Used to build the item picker at a key stand.
+ */
 USER_FUNC(make_kagi_tbl) {
     EvtWord* args = event->args;
     s32 n = 0;
@@ -97,6 +102,12 @@ USER_FUNC(make_kagi_tbl) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Door animation script (closing) for the south door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_door1_1 and S_door1_2 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(s_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door1_1"), 0, LW(0), 0)
@@ -105,6 +116,12 @@ static EVT_BEGIN(s_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the south door,
+ * used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panels S_door1_1 and S_door1_2 by it,
+ * the second one the opposite way.
+ */
 static EVT_BEGIN(s_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door1_1"), 0, LW(0), 0)
@@ -113,96 +130,160 @@ static EVT_BEGIN(s_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: closes the NW door of the tower (the one leading to las_11);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(nw_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door2"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: opens the NW door of the tower (the one leading to las_11);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(nw_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door2"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: closes the NE door of the tower (the one leading to las_12);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(ne_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door3"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: opens the NE door of the tower (the one leading to las_12);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(ne_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door3"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: closes the SW door of the tower (the one leading to las_13);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(sw_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_door4"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: opens the SW door of the tower (the one leading to las_13);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(sw_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_door4"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: closes the SE door of the tower (the one leading to las_14);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(se_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door5"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: opens the SE door of the tower (the one leading to las_14);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(se_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door5"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: closes the NW2 door of the tower (the one leading to las_15);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(nw2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door6"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: opens the NW2 door of the tower (the one leading to las_15);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(nw2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door6"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: closes the NE2 door of the tower (the one leading to las_16);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(ne2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door7"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: opens the NE2 door of the tower (the one leading to las_16);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(ne2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door7"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: closes the SW2 door of the tower (the one leading to las_17);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(sw2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door8"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: opens the SW2 door of the tower (the one leading to las_17);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(sw2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door8"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: closes the SE2 door of the tower (the one leading to las_18);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(se2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door9"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script: opens the SE2 door of the tower (the one leading to las_18);
+ * LW(0) is the swing angle driven by the door code.
+ */
 EVT_BEGIN(se2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("S_door9"), 0, LW(0), 0)
@@ -408,6 +489,7 @@ const char* kabe_list_3[] = {
     "S113_kabe3",
 };
 
+/** Event script: runs forever each frame, calling temae_kesu to hide the near walls that block the camera. */
 EVT_BEGIN(las_10_temae_kabe)
     CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
@@ -483,6 +565,12 @@ static EVT_BEGIN(first_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the cutscene when the last of the eight keys is placed.
+ * The Palace shakes, the celestial globe (S_hoshihoshi) fades in and starts turning,
+ * Mario and his partner are placed on the platform, the partner comments,
+ * and the map changes to las_19 (chgmap_evt) for the planets sequence.
+ */
 EVT_BEGIN(tenkyugi_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
@@ -610,6 +698,11 @@ EVT_BEGIN(tenkyugi_evt2)
     RETURN
 EVT_END()
 
+/**
+ * Event script: after a key is placed on a stand,
+ * shakes the camera and turns the stand (map object LW(0), hit object LW(1)) half a turn over one second with
+ * the stand sound.
+ */
 EVT_BEGIN(kagi_rotate)
     SET_VALUE(LW(10), LW(0))
     SET_VALUE(LW(9), LW(1))
@@ -879,6 +972,11 @@ EVT_BEGIN(kagi8_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: raises one key stand out of the floor in a cloud of mist.
+ * LW(0) is the stand's map object, LW(1) its tinted copy, LW(2) the mist effect name;
+ * the stand rises over 3 seconds while spinning, then fades in from black.
+ */
 EVT_BEGIN(daiza_up)
     SET_VALUE(LW(8), LW(0))
     SET_VALUE(LW(9), LW(1))
@@ -931,6 +1029,7 @@ EVT_BEGIN(daiza_up)
     RETURN
 EVT_END()
 
+/** Event script: before the Star Key is used, hides the eight key stands and turns off their hit objects. */
 EVT_BEGIN(kagi_8_off)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A113_daiza1"), 1, 0)
@@ -1080,6 +1179,7 @@ EVT_BEGIN(kagi_8_on)
     RETURN
 EVT_END()
 
+/** Event script: at map load, hides the key stands before the Star Key is placed, otherwise shows them. */
 EVT_BEGIN(kagi_8_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
         CALL_CHILD(PTR(kagi_8_off))
@@ -1089,6 +1189,10 @@ EVT_BEGIN(kagi_8_init)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the Star Key is placed in the central pedestal;
+ * plays a sound and then raises the key stands via kagi_8_on.
+ */
 EVT_BEGIN(kagi_8_syutugen)
     CALL(evt_mapobj_get_position, STRING("S_daizadai"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_STAR_SET1"), LW(0), LW(1), LW(2), 0)
@@ -1219,6 +1323,10 @@ USER_FUNC(check_party_pos) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: each frame hides the near walls of the tower and shows only the ones in the camera's octant
+ * and its two neighbours, so walls do not block the view of Mario.
+ */
 USER_FUNC(temae_kesu) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     s32 idx;

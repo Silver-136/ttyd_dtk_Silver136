@@ -35,10 +35,17 @@ static void actionCommandDisp(f32 x, f32 y);
 
 s32 _frame_table[] = {240, 180, 120, 90, 70, 40, 20};
 
+/** Frames the Tattle cursor takes to cross the target, by action command difficulty: 240 at the easiest down to 20. */
 s32 _getmaxcount(void) {
     return _frame_table[BattleActionCommandGetDifficulty(_battleWorkPointer)];
 }
 
+/**
+ * Per-frame driver of action command 21, used by Goombella's Tattle.
+ * A cursor sweeps 160 units left to right across the hit point of unit params[0] (part params[1]) over
+ * _getmaxcount frames; pressing A while it is within 28 units of the hit point succeeds,
+ * any other press or letting it pass fails. Plays the cursor sound meanwhile.
+ */
 s32 battleAcMain_MonosiriTarget(BattleWork* work) {
     BattleActions* ac;
     MonosiriTargetWork* cw;
@@ -131,10 +138,12 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_MonosiriTarget(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/** Display callback: draws the cursor and target only while the cursor is moving. */
 void battleAcDisp_MonosiriTarget(CameraId cameraId, void* param) {
     BattleWork* work = _battleWorkPointer;
     switch (work->actionCommands.mAcState) {
@@ -144,10 +153,16 @@ void battleAcDisp_MonosiriTarget(CameraId cameraId, void* param) {
     }
 }
 
+/** Called by btlevtcmd_StopAC: stops the cursor sound and starts the 60-frame end wait. */
 void battleAcDelete_MonosiriTarget(BattleWork* work) {
     work->actionCommands.mAcState = 1002;
 }
 
+/**
+ * Draws the moving cursor and the spinning target reticle (each with a grey shadow),
+ * pulses the reticle while the cursor is in range,
+ * and shows the A icon pressed when the cursor is within 15 units as a cue.
+ */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;

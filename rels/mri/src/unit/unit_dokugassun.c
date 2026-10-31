@@ -139,6 +139,11 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/**
+ * Creates one puff of poison gas (a green-blue vapor effect) at a random spot on the target side of the stage:
+ * x near -125 (args[0] = 0) or 125 (otherwise) plus or minus 75,
+ * random height up to 70 and depth plus or minus 40, with a random size.
+ */
 static USER_FUNC(eff_poison_breath) {
     f32 x;
     f32 y;
@@ -276,6 +281,13 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Poison gas attack: the Poison Puff, already charged, breathes poison gas on all targets.
+ * From JP it first slides back 40 units.
+ * It faces the opponents, plays the wind-up poses with the charge sounds, turns off the charge,
+ * then puffs 20 clouds of gas (one every 3 frames) over the target side while the damage
+ * and poison checks run for each target.
+ */
 static EVT_BEGIN(poisongas_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -395,6 +407,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Creates three small puffs of poison gas around the Poison Puff (random offsets of 10 left or right and up to
+ * 30 up), scaled to its size, to show it is charged.
+ */
 static USER_FUNC(eff_poison_barrier) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -431,6 +447,11 @@ static BattleDataEntry data_table[] = {
     {0},
 };
 
+/**
+ * Init script of the Poison Puff: sets its wait, unison phase, attack, damage and confusion events,
+ * clears its two unit work values (work 0 says which way its next hop goes),
+ * starts the barrier_event loop and starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(unison_phase_event))
@@ -460,6 +481,10 @@ static EVT_BEGIN(barrier_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table event 48, run when the battle opens with Mario's or his partner's First Strike on the Poison Puff:
+ * sets its y position to 10 and waits for the attack to end.
+ */
 static EVT_BEGIN(dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
@@ -468,6 +493,7 @@ static EVT_BEGIN(dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/** Damage event of the Poison Puff: runs the default damage reaction. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -475,6 +501,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Counter event of the Poison Puff: does nothing. */
 static EVT_BEGIN(counter_event)
     RETURN
 EVT_END()
@@ -517,6 +544,11 @@ static EVT_BEGIN(unison_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Body slam of the Poison Puff: it picks a target (or uses the first-strike target),
+ * shakes and shrinks for 40 frames, then dives to a spot behind itself and flies at the target to strike it;
+ * the damage and result checks follow, and the Puff returns to its home position afterwards.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -642,6 +674,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
+/** Idle script of the Poison Puff: plays its idle pose and resets its scale to normal. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)

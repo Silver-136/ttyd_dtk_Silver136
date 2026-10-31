@@ -15,6 +15,10 @@
 
 EvtWord hom_11_init_evt[140];
 
+/**
+ * Excess Express exterior scene (hom_11): hides Mario and his partners, sets the train to cruising speed,
+ * pans a letterboxed camera along the coupled cars and then changes to rsh_02_b (nidome).
+ */
 EVT_BEGIN(hom_11_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH2"))

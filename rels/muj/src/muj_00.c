@@ -71,8 +71,14 @@ OrbitData* _op;
 NanNPC* random_choice_target(s32 type);
 TobiWork* Tobidat;
 void tobikakari_seq00(NanNPC* npc);
+/**
+ * Sine of an angle in radians, forced through a float local so the compiler keeps the single-precision result;
+ * used for the ship orbit and camera maths.
+ */
 static inline f32 sinf_l(f32 x) { f32 v = sin(x); return v; }
+/** Cosine of an angle in radians (double cos narrowed to f32); partner of sinf_l. */
 static inline f32 cosf_l(f32 x) { return cos(x); }
+/** Converts degrees to radians with the 3.141592 approximation this map uses everywhere. */
 static inline f32 orbit_update(f32 x) { return x * 3.141592f / 180.0f; }
 
 static USER_FUNC(alpha_init_func);
@@ -207,6 +213,10 @@ EvtWord muj_00_init_evt[550];
 EvtWord muj_00_init_evt[548];
 #endif
 
+/**
+ * Map TEV callback for the ship water: adds a TEV stage that multiplies the surface alpha by the byte at _ap,
+ * so alpha_set_func can fade the water under the departing ghost ship in and out.
+ */
 static void alpha_tev(MapTevCallbackInfo* info) {
     s32 stage = info->tevStage;
     u8* alpha = _ap;
@@ -220,17 +230,26 @@ static void alpha_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
+/**
+ * Script helper: allocates the one-byte water alpha value (_ap) from map memory and starts it fully opaque
+ * (255).
+ */
 static USER_FUNC(alpha_init_func) {
     _ap = _mapAlloc(1);
     *_ap = 255;
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets the water alpha byte used by alpha_tev to args[0] (0 to 255). */
 static USER_FUNC(alpha_set_func) {
     *_ap = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: writes how the Whacka was hit (fbat->hitKind of the last field battle: which jump,
+ * hammer or other attack hit it) to args[0]; koburon_dead uses it to pick its death line.
+ */
 USER_FUNC(koburon_get_encount_info) {
     s32 arg = event->args[0];
     FieldBattleData* fbat = fbatGetPointer();
@@ -239,6 +258,11 @@ USER_FUNC(koburon_get_encount_info) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Per-frame behaviour of a milling sailor (mass NPC):
+ * walks left or right for a random 100 to 1100 ms, then flips direction and pauses before repeating,
+ * so the crowd on the beach looks restless.
+ */
 void suifu_kyorokyoro(NanNPC* npc) {
     switch (npc->state) {
         case 0:
@@ -286,11 +310,17 @@ void suifu_kyorokyoro(NanNPC* npc) {
     }
 }
 
+/** Initialises a mass-NPC sailor: state 0 and suifu_kyorokyoro as its per-frame function. */
 void suifu_kyorokyoro_init(NanNPC* npc) {
     npc->state = 0;
     npc->func = suifu_kyorokyoro;
 }
 
+/**
+ * Script helper that keeps the X-Naut ship's crowd (mass NPCs 205 to 304) riding along with the ship:
+ * adds the turn from angle args[0] to args[1] to each NPC's orbit angle
+ * and places it on its circle around the ship centre (args[2], args[3]).
+ */
 USER_FUNC(dai3_butai_main_func) {
     s32 d;
     EvtWord* args = event->args;
@@ -322,6 +352,10 @@ USER_FUNC(dai3_butai_main_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that does the same for the pirate ship's crowd (mass NPCs 105 to 204):
+ * rotates each NPC's orbit by args[1] minus args[0] around the centre (args[2], args[3]).
+ */
 USER_FUNC(kaizoku_main_func) {
     EvtWord* args = event->args;
     f32 a = evtGetValue(event, args[0]);
@@ -362,11 +396,20 @@ USER_FUNC(kaizoku_main_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: allocates the 0x40-byte buffer that mario_main_setup_func fills with the orbit data of Mario,
+ * his partner and six named NPCs.
+ */
 USER_FUNC(mario_main_init_func) {
     _op = _mapAlloc(8 * sizeof(OrbitData));
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: records the distance and angle from the ship centre (args[0], args[1]) of Mario,
+ * his partner and the six NPCs on the ship (Flavio, Cortez, Mony, Garawaru, Peton, Odoodo),
+ * so mario_main_func can swing them around as the pirate ship turns.
+ */
 USER_FUNC(mario_main_setup_func) {
     EvtWord* args = event->args;
     f32 cx = evtGetValue(event, args[0]);
@@ -400,6 +443,11 @@ USER_FUNC(mario_main_setup_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper called every frame while the pirate ship turns (args[0] to args[1] is the turn in degrees,
+ * args[2], args[3] the pivot): moves Mario, his partner and the six NPCs along their recorded orbits
+ * so they stay on the deck.
+ */
 USER_FUNC(mario_main_func) {
     EvtWord* args;
     OrbitData* op;
@@ -453,6 +501,10 @@ USER_FUNC(mario_main_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Picks a random mass NPC for a jumping sailor to land on:
+ * indices 205 to 304 for types 0 and 1, otherwise 10 to 104 or 105 to 204 at random.
+ */
 NanNPC* random_choice_target(s32 type) {
     NanNPCWork* wp = nanNPCWork;
     s32 idx;
@@ -474,6 +526,11 @@ NanNPC* random_choice_target(s32 type) {
     return &wp->npc[idx];
 }
 
+/**
+ * Per-frame behaviour of the sailors that jump during the fight (tobikakaru):
+ * wait a random time, hop in a parabola onto a random target sailor, wait, then hop back to their home spot;
+ * states 20 to 22 are the hop and the waits.
+ */
 void tobikakari_seq00(NanNPC* npc) {
     TobiWork* work = npc->tobi;
     NanNPC* target;
@@ -550,6 +607,10 @@ void tobikakari_seq00(NanNPC* npc) {
     }
 }
 
+/**
+ * Script helper: allocates the jump work area (0x1310 bytes)
+ * and gives mass NPCs 10 to 104 the tobikakari_seq00 behaviour and the running animation table.
+ */
 USER_FUNC(tobikakaru_init) {
     NanNPCWork* wp = nanNPCWork;
     TobiWork* p;
@@ -591,6 +652,10 @@ USER_FUNC(tobikakaru_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: ends the jumping crowd, removing the per-frame functions of mass NPCs 10 to 104 and 105 to 204
+ * and restoring the normal animation table.
+ */
 USER_FUNC(tobikakaru_end) {
     NanNPCWork* wp = nanNPCWork;
     NanNPC* npc;
@@ -613,6 +678,10 @@ USER_FUNC(tobikakaru_end) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: turns two map points (x1, z1) and (x2, z2) into the heading (angle minus 90 degrees) a ship
+ * should face when moving between them; written to args[4].
+ */
 USER_FUNC(ship_rotate) {
     EvtWord* args = event->args;
     f32 x1 = evtGetFloat(event, args[0]);
@@ -626,6 +695,7 @@ USER_FUNC(ship_rotate) {
     return EVT_RETURN_DONE;
 }
 
+/** Like ship_rotate but the result is turned a further 180 degrees, for a ship that sails stern first. */
 USER_FUNC(ship_rotate_rev) {
     EvtWord* args = event->args;
     f32 x1 = evtGetFloat(event, args[0]);
@@ -640,6 +710,10 @@ USER_FUNC(ship_rotate_rev) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for the battle camera: given a ship position (args[0], args[1]) computes the angle (args[2])
+ * and distance (args[3]) from it to the camera centre at (70, 110, 0).
+ */
 USER_FUNC(cam_test_init_func) {
     EvtWord* args = event->args;
     Vec b;
@@ -658,6 +732,11 @@ USER_FUNC(cam_test_init_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper for the battle camera: from an angle
+ * and distance (args[2], args[3]) around the centre (70, 110, 0) writes the camera x and z to args[0]
+ * and args[1].
+ */
 USER_FUNC(cam_test_func) {
     EvtWord* args = event->args;
     s32* p0 = args++;
@@ -775,6 +854,11 @@ s16 dai3_animtbl_run[] = {
     56, 56, 57, 57, -1, 0,
 };
 
+/**
+ * Sets up the crowd of 305 mass-NPC sailors used in the beach scenes:
+ * initialises the mass-NPC system with the ext texture table,
+ * gives them the sailor animation table and the fast update function.
+ */
 static EVT_BEGIN(nannpc_mode_setup)
     CALL(evt_nannpc_init, PTR(ext_entry_data), 0, 0, 0, 305)
     CALL(evt_nannpc_set_subfunc, 1, PTR(nannpc_ext_main_sub_fast))
@@ -810,6 +894,10 @@ static EVT_BEGIN(nannpc_mode_setup)
     RETURN
 EVT_END()
 
+/**
+ * Fades the whole map's brightness down from full to dark over LW(10) ms (map blend layer 0),
+ * used for the dusk during the ship scenes.
+ */
 static EVT_BEGIN(back_dark)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, LW(10))
     LOOP(0)
@@ -823,6 +911,7 @@ static EVT_BEGIN(back_dark)
     RETURN
 EVT_END()
 
+/** Fades the map's brightness back up from dark to full over LW(10) ms; the opposite of back_dark. */
 static EVT_BEGIN(back_light)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, LW(10))
     LOOP(0)
@@ -836,6 +925,10 @@ static EVT_BEGIN(back_light)
     RETURN
 EVT_END()
 
+/**
+ * Fades the sailor crowd (mass NPCs 10 to 104) to black over LW(10) ms by setting their colour;
+ * the opposite of nannpc_light.
+ */
 EVT_BEGIN(suifu_dark)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, LW(10))
     LOOP(0)
@@ -853,6 +946,9 @@ EVT_BEGIN(suifu_dark)
     RETURN
 EVT_END()
 
+/**
+ * Fades the sailor crowd (mass NPCs 10 to 104) back from black to normal colour, the opposite of suifu_dark.
+ */
 EVT_BEGIN(nannpc_light)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, LW(10))
     LOOP(0)
@@ -878,15 +974,18 @@ static EVT_BEGIN(garawaru_init)
     RETURN
 EVT_END()
 
+/** Talk event of the rude sailor: says stg5_muj_117_01 (his line while the crew waits on the beach). */
 static EVT_BEGIN(garawaru_talk)
     CALL(evt_msg_print, 0, STRING("stg5_muj_117_01"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/** Init event of Flavio (nothing to set up on this map). */
 static EVT_BEGIN(marco_init)
     RETURN
 EVT_END()
 
+/** Talk event of Flavio (empty on this map). */
 static EVT_BEGIN(marco_talk)
     RETURN
 EVT_END()
@@ -899,23 +998,28 @@ static EVT_BEGIN(odoodo_init)
     RETURN
 EVT_END()
 
+/** Talk event of the timid sailor: says stg5_muj_117_00. */
 static EVT_BEGIN(odoodo_talk)
     CALL(evt_msg_print, 0, STRING("stg5_muj_117_00"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/** Init event of sailor A (nothing to set up on this map). */
 static EVT_BEGIN(suifu_a_init)
     RETURN
 EVT_END()
 
+/** Talk event of sailor A (empty on this map). */
 static EVT_BEGIN(suifu_a_talk)
     RETURN
 EVT_END()
 
+/** Init event of the bomb sailor (nothing to set up on this map). */
 static EVT_BEGIN(suifu_bomb_init)
     RETURN
 EVT_END()
 
+/** Talk event of the bomb sailor (empty on this map). */
 static EVT_BEGIN(suifu_bomb_talk)
     RETURN
 EVT_END()
@@ -998,6 +1102,7 @@ static EVT_BEGIN(korutesu_talk)
     RETURN
 EVT_END()
 
+/** Init event of Mony (nothing to set up on this map). */
 static EVT_BEGIN(mony_init)
     RETURN
 EVT_END()
@@ -1014,6 +1119,7 @@ static EVT_BEGIN(mony_talk)
     RETURN
 EVT_END()
 
+/** Init event of Peton (nothing to set up on this map). */
 static EVT_BEGIN(peton_init)
     RETURN
 EVT_END()
@@ -1030,6 +1136,10 @@ static EVT_BEGIN(peton_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the Whacka (Koburon): clears its reaction flags and interrupt so it does not react
+ * until koburon_regp enables it.
+ */
 EVT_BEGIN(koburon_init)
     CALL(evt_npc_reaction_flag_onoff, 0, STRING("me"), 15)
     CALL(evt_npc_set_anim, STRING("me"), STRING("A_2"))
@@ -1040,6 +1150,10 @@ EVT_BEGIN(koburon_init)
     RETURN
 EVT_END()
 
+/**
+ * Regular event of the Whacka: watches the distance to Mario and, when he is near and the local flag allows it,
+ * turns on its reaction flags and talk interrupt (koburon_talk); turns them off again when he walks away.
+ */
 EVT_BEGIN(koburon_regp)
     CALL(evt_mario_keyon_wait)
     LABEL(0)
@@ -1152,6 +1266,10 @@ EVT_BEGIN(koburon_dead)
     RETURN
 EVT_END()
 
+/**
+ * Map-init helper: once eight Whacka Bumps have been given the Whacka NPC is deleted;
+ * otherwise its hit box is set to 15 wide and 22 high.
+ */
 EVT_BEGIN(koburon_evt)
     IF_INT_EQUAL(GSW_MUJ_WHACKA_HIT_COUNT, 8)
         CALL(evt_npc_delete, STRING("コブロン"))
@@ -1527,6 +1645,11 @@ s32 suifu_random_setup[] = {
     1356, 35, -338, 270,
 };
 
+/**
+ * Sets up the crowd of sailors (mass NPCs) standing on the beach:
+ * reads x, y, z and facing for each from suifu_random_setup, gives them their size and shadow,
+ * and starts their suifu_kyorokyoro wandering.
+ */
 EVT_BEGIN(suifu_random_sub)
     CALL(evt_nannpc_set_subfunc, 2, PTR(nanNPCOption))
     SET_VALUE(LW(0), 10)
@@ -1562,6 +1685,10 @@ EVT_BEGIN(suifu_random_sub)
     RETURN
 EVT_END()
 
+/**
+ * Fires a cannonball splash at the ship's position: a smoke puff and a splash effect at the waterline;
+ * used while the ships trade shots in the pirates versus X-Nauts scene.
+ */
 EVT_BEGIN(tama_shoot)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_CANNON_FIRING1"), 0)
     BEGIN_INLINE_EVENT
@@ -1581,6 +1708,10 @@ EVT_BEGIN(tama_shoot)
     RETURN
 EVT_END()
 
+/**
+ * Makes the NPC named in LW(0) look around: waits random times
+ * and flips its facing (evt_npc_reverse_ry) repeatedly, as nervous sailors do.
+ */
 EVT_BEGIN(npc_kyorokyoro)
     CALL(evt_sub_random, 1000, LW(10))
     ADD(LW(10), 100)
@@ -1902,6 +2033,10 @@ EVT_BEGIN(dai3_shurai)
     RETURN
 EVT_END()
 
+/**
+ * Loop spawned (event id in GW(8)) once the X-Naut officer has made his entrance line (stg5_muj_112):
+ * every 0.5 to 3 seconds it runs tama_shoot with one of three random parameter sets in LW(0) to LW(3).
+ */
 static EVT_BEGIN(dai3_shurai_after)
     LOOP(0)
         CALL(evt_sub_random, 2500, LW(10))
@@ -2036,6 +2171,10 @@ s32 kaizoku_vs_dai3_elmospos[] = {
     29, 186, 68, 270, 0, 179, -38, 270,
 };
 
+/**
+ * Starts the rock-wall transition: captures the "S_iwa_before" rock into an off-screen image
+ * and plays the paper-fold animation A_1 so it can be swapped for the broken rock.
+ */
 EVT_BEGIN(iwapera_offscreen)
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_yabu"))
@@ -2050,6 +2189,10 @@ EVT_BEGIN(iwapera_offscreen)
     RETURN
 EVT_END()
 
+/**
+ * Ends the rock-wall transition: waits for the paper animation,
+ * frees the captured image and off-screen buffer and shows the "S_iwa_after" (broken) rock.
+ */
 EVT_BEGIN(iwapera_offscreen_end)
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
@@ -2061,6 +2204,10 @@ EVT_BEGIN(iwapera_offscreen_end)
     RETURN
 EVT_END()
 
+/**
+ * Rams the X-Naut ship into the shore: plays the impact sound,
+ * shakes the camera and swings the ship's heading (GW(1)) by 15 degrees over one second.
+ */
 EVT_BEGIN(dai3_kurukuru)
     CALL(evt_snd_sfxon, STRING("SFX_STG5_SHIP_IMPACT1"), 0)
     BEGIN_INLINE_EVENT
@@ -2139,6 +2286,11 @@ s32 kaizoku_vs_dai3_dai3pos[] = {
     2, -18, 217, -94,
 };
 
+/**
+ * Places the X-Naut ship's crowd (mass NPCs 205 to 304) from kaizoku_vs_dai3_dai3pos
+ * and records each one's angle and distance from the ship centre GW(2), GW(3),
+ * so dai3_butai_main_func can rotate them with the ship.
+ */
 EVT_BEGIN(dai3_butai_setup)
     SET_VALUE(LW(0), 205)
     SET_INT_READ_ADDR(PTR(kaizoku_vs_dai3_dai3pos))
@@ -2161,6 +2313,10 @@ EVT_BEGIN(dai3_butai_setup)
     RETURN
 EVT_END()
 
+/**
+ * Loop that keeps the X-Naut ship's crowd attached to the ship each frame (dai3_butai_main_func with the ship
+ * heading in GW(1) and centre GW(2), GW(3)).
+ */
 EVT_BEGIN(dai3_butai_main)
     SET_VALUE(LW(10), GW(1))
     LOOP(0)
@@ -2171,10 +2327,15 @@ EVT_BEGIN(dai3_butai_main)
     RETURN
 EVT_END()
 
+/** Setup of Lord Crump on the X-Naut ship (empty; he is positioned by dai3_kanbu_main). */
 EVT_BEGIN(dai3_kanbu_setup)
     RETURN
 EVT_END()
 
+/**
+ * Loop that places Lord Crump (dai3_kanbu) relative to the X-Naut ship each frame,
+ * from its distance and angle to the ship centre (GW(2), GW(3)).
+ */
 EVT_BEGIN(dai3_kanbu_main)
     CALL(evt_npc_get_position, STRING("第三勢力幹部"), LW(1), LW(2), LW(3))
     CALL(evt_sub_get_dir, GW(2), GW(3), LW(1), LW(3), GW(10))
@@ -2200,6 +2361,10 @@ EVT_BEGIN(dai3_kanbu_main)
     RETURN
 EVT_END()
 
+/**
+ * Places the pirate ship's crowd (mass NPCs 105 to 204) from kaizoku_vs_dai3_suifupos, faces the partners left,
+ * and records each member's angle and distance from the pirate ship's centre (GW(5), GW(6)).
+ */
 EVT_BEGIN(kaizoku_setup)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_party_set_dir, 0, 270, -1)
@@ -2246,6 +2411,10 @@ EVT_BEGIN(kaizoku_setup)
     RETURN
 EVT_END()
 
+/**
+ * Loop that keeps the pirate ship's crowd attached to the pirate ship each frame (kaizoku_main_func with heading
+ * GW(4) and centre GW(5), GW(6)).
+ */
 EVT_BEGIN(kaizoku_main)
     SET_VALUE(LW(10), GW(4))
     LOOP(0)
@@ -2256,11 +2425,16 @@ EVT_BEGIN(kaizoku_main)
     RETURN
 EVT_END()
 
+/** Allocates the orbit buffer for Mario and the deck NPCs (mario_main_init_func). */
 EVT_BEGIN(mario_main_init)
     CALL(mario_main_init_func)
     RETURN
 EVT_END()
 
+/**
+ * Loop that carries Mario, his partner and the deck NPCs around with the pirate ship as it turns,
+ * using mario_main_setup_func once and then mario_main_func each frame.
+ */
 EVT_BEGIN(mario_main)
     CALL(evt_mario_set_pos, 20, 40, 10)
     CALL(evt_party_set_pos, 0, 10, 40, -65)
@@ -2283,6 +2457,10 @@ EVT_BEGIN(mario_main)
     RETURN
 EVT_END()
 
+/**
+ * Variant of mario_main used in the later scene (dai3_beat_back) where the pirate ship pivots about GW(5),
+ * GW(6).
+ */
 EVT_BEGIN(mario_main2)
     CALL(evt_mario_set_pos, 20, 40, 10)
     CALL(evt_party_set_pos, 0, 10, 40, -25)
@@ -2305,6 +2483,10 @@ EVT_BEGIN(mario_main2)
     RETURN
 EVT_END()
 
+/**
+ * Per-frame loop that moves the pirate ship map object S_b to (GW(5), GW(6)),
+ * rotates it to heading GW(4) and updates its hit box A_b.
+ */
 EVT_BEGIN(kaizoku_move_every)
     LOOP(0)
         CALL(evt_mapobj_trans, 1, STRING("S_b"), GW(5), 0, GW(6))
@@ -2315,6 +2497,10 @@ EVT_BEGIN(kaizoku_move_every)
     RETURN
 EVT_END()
 
+/**
+ * Per-frame loop that moves the X-Naut ship map object S_c to (GW(2), GW(3)),
+ * rotates it to heading GW(1) and updates its hit box A_c.
+ */
 EVT_BEGIN(dai3_move_every)
     LOOP(0)
         CALL(evt_mapobj_trans, 1, STRING("S_c"), GW(2), 0, GW(3))
@@ -2342,6 +2528,10 @@ f32 kaizoku_spline_dt[] = {
     199.88821f, 0.0f, -403.68475f, -80.28505f, 0.0f, -265.78485f,
 };
 
+/**
+ * Plays the pirate ship's moving sound, positioned on S_b and sized by distance,
+ * until the sailing script deletes this event.
+ */
 EVT_BEGIN(kaizoku_move_trace_se)
     CALL(evt_mapobj_get_position, STRING("S_b"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_KOR_SHIP_MOVE1"), LW(10), LW(11), LW(12), LW(13))
@@ -2359,6 +2549,11 @@ EVT_BEGIN(kaizoku_move_trace_se)
     RETURN
 EVT_END()
 
+/**
+ * Sails the pirate ship along the kaizoku_spline_dt spline toward the shore:
+ * samples the spline, stores the position in GW(5), GW(6),
+ * turns the ship to face its heading and ends when the spline is finished.
+ */
 EVT_BEGIN(kaizoku_move_trace)
     SET_FLOAT_VALUE(LW(5), GW(5))
     SET_FLOAT_VALUE(LW(6), GW(6))
@@ -2410,6 +2605,10 @@ EVT_BEGIN(kaizoku_move_trace)
     RETURN
 EVT_END()
 
+/**
+ * Plays the X-Naut ship's moving sound, positioned on the ship and sized by distance,
+ * until the sailing script deletes this event.
+ */
 EVT_BEGIN(dai3_move_trace_se)
     CALL(evt_mapobj_get_position, STRING("S_c"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_3RD_SHIP_MOVE1"), LW(10), LW(11), LW(12), LW(13))
@@ -2427,6 +2626,10 @@ EVT_BEGIN(dai3_move_trace_se)
     RETURN
 EVT_END()
 
+/**
+ * Sails the X-Naut ship along the dai3_spline_dt spline:
+ * samples the spline into GW(2), GW(3), turns the ship to face its heading and frees the spline when it ends.
+ */
 EVT_BEGIN(dai3_move_trace)
     SET_FLOAT_VALUE(LW(5), GW(2))
     SET_FLOAT_VALUE(LW(6), GW(3))
@@ -2465,6 +2668,11 @@ EVT_BEGIN(dai3_move_trace)
     RETURN
 EVT_END()
 
+/**
+ * One puff of smoke with the SFX_STG0_3RD_ATTACK3 sound at a random spot (x -400 to -100, y 150 to 300,
+ * z -300 to -250, scale 0.5 to 1.5); tobikakari_kemuri spawns two at a time during the brawl
+ * after Cortez's line.
+ */
 static EVT_BEGIN(_kemuri_sub)
     CALL(evt_sub_random, 300, LW(0))
     ADD(LW(0), -400)
@@ -2480,6 +2688,10 @@ static EVT_BEGIN(_kemuri_sub)
     RETURN
 EVT_END()
 
+/**
+ * Spawns the smoke puffs kicked up where the jumping sailors land (two _kemuri_sub events with random
+ * delays).
+ */
 EVT_BEGIN(tobikakari_kemuri)
     LOOP(0)
         SPAWN_EVENT(PTR(_kemuri_sub))
@@ -2491,6 +2703,10 @@ EVT_BEGIN(tobikakari_kemuri)
     RETURN
 EVT_END()
 
+/**
+ * Orbits the camera slowly (0.27 degrees per frame) around the two ships during the pirates versus X-Nauts
+ * fight, using cam_test_init_func and cam_test_func.
+ */
 EVT_BEGIN(cam_dai3_vs_kaizoku)
     SET_VALUE(LW(0), 70)
     SET_VALUE(LW(1), 1400)
@@ -2714,6 +2930,10 @@ f32 dai3_taisan_spline_dt01[] = {
     -346.33777f,
 };
 
+/**
+ * Slowly turns the X-Naut ship's heading (GW(1)) toward the target heading GW(7) one degree per frame,
+ * so it swings round smoothly as it retreats.
+ */
 EVT_BEGIN(nameraka_rotate)
     LOOP(0)
         IF_FLOAT_NOT_EQUAL(GW(1), GW(7))
@@ -2738,6 +2958,10 @@ EVT_BEGIN(nameraka_rotate)
     RETURN
 EVT_END()
 
+/**
+ * Unreferenced (nothing spawns it): would back the X-Naut ship stern first (ship_rotate_rev) about 70 units
+ * along the short spline dai3_taisan_spline_dt00, updating its centre GW(2), GW(3).
+ */
 EVT_BEGIN(dai3_taisan_move_trace00)
     SET_FLOAT_VALUE(LW(5), GW(2))
     SET_FLOAT_VALUE(LW(6), GW(3))
@@ -2765,6 +2989,10 @@ EVT_BEGIN(dai3_taisan_move_trace00)
     RETURN
 EVT_END()
 
+/**
+ * Sails the X-Naut ship away (taisan, retreat) about 600 units along dai3_taisan_spline_dt01,
+ * spawned right after the officer's sore-loser line (stg5_muj_125).
+ */
 EVT_BEGIN(dai3_taisan_move_trace01)
     SET_FLOAT_VALUE(LW(5), GW(2))
     SET_FLOAT_VALUE(LW(6), GW(3))
@@ -2911,6 +3139,10 @@ s32 leave_island_suifupos[] = {
     896, 115, -592, 270,
 };
 
+/**
+ * Plays the pirate ship's move sound (SFX_STG5_SHIP_KOL_MOVE1) at ship S_b every 2 s, 5 times, as it leaves
+ * (leave_island).
+ */
 EVT_BEGIN(move_ship_se00)
     LOOP(5)
         WAIT_MS(2000)
@@ -3311,6 +3543,11 @@ static USER_FUNC(scale_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Cortez's ship leaves for Rogueport (talk with Cortez, hune_02):
+ * plays the ghost ship music, scales Mario, partners and the pirate NPCs,
+ * makes the ship fly off the water while the water alpha fades, then changes to muj_20 (the ship's deck).
+ */
 EVT_BEGIN(muj_gor_ship_start)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST_SHIP1"))
     BEGIN_INLINE_EVENT
@@ -3447,6 +3684,7 @@ EVT_BEGIN(into_muj_ship)
     RETURN
 EVT_END()
 
+/** Moves the NPCs on the ship by the ship's displacement (GW(0), GW(1)) while Mony and Peton board. */
 EVT_BEGIN(mony_peton_boarding_sub)
     SET_FLOAT_VALUE(LW(10), GW(0))
     SET_FLOAT_VALUE(LW(11), GW(1))
@@ -3523,6 +3761,11 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Map init for muj_00 (the beach): binds the ship's lights, picks music by story stage,
+ * shows or hides the ships and rocks for the current story stage,
+ * spawns the scene for it (mujinto_hyochaku, dai3_shurai, kaizoku_vs_dai3 and others) and sets up the exits.
+ */
 EVT_BEGIN(muj_00_init_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_light_bind_mapobj, STRING("pointLight1"), STRING("S_b"), 0)

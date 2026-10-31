@@ -33,6 +33,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Map init script of tik_13, a small dripping-water room off tik_02.
+ * Starts the sewer music, sets up the exit, loops the dripping animation (anm_mizu) in the background
+ * and places a Star Piece.
+ */
 EVT_BEGIN(tik_13_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK6"))

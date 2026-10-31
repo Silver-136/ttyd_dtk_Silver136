@@ -332,6 +332,10 @@ static BattleWeapon weapon_majolyne_powder_attack2 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Beldam sinks into her shadow: after 250 ms plays the shadow sound (SFX_BOSS_MAJO_SHADOW1)
+ * and hides her model (battle_evt_majo_disp_off).
+ */
 static EVT_BEGIN(majolyne_down)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)

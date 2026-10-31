@@ -291,6 +291,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init event of the Dark Boo: installs its wait, attack, damage and confusion events,
+ * clears unit work 0 (its "has moved" flag, used by move_event) and sets its height to 15.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -707,6 +711,11 @@ static USER_FUNC(teresa_check_trans) {
     }
     return EVT_RETURN_DONE;
 }
+/**
+ * Script helper: returns in args[0] 1 if any Boo or Dark Boo on the field has work[0] equal to 0, otherwise 0.
+ * work[0] is the "has moved" flag that move_event_sub sets when it floats a Boo up to height 40, so this tells
+ * whether move_event still has a Boo to raise.
+ */
 static USER_FUNC(teresa_check_move) {
     EvtWord* args = event->args;
     s32 num = 0;
@@ -730,6 +739,7 @@ static USER_FUNC(teresa_check_move) {
     }
     return EVT_RETURN_DONE;
 }
+/** Script helper: args[0] = unit, returns in args[1] 1 if it is a Boo or Dark Boo (kinds 0x4B and 0x6A), else 0. */
 static USER_FUNC(teresa_check_teresa) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);

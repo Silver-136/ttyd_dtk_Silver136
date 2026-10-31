@@ -32,6 +32,11 @@ static BeroEntry bero_entry_data[5];
 EvtWord heya_tenura_onoff[68];
 EvtWord aji_08_init_evt[148];
 
+/**
+ * Door open animation step: moves the two door leaves S_door1_2
+ * and S_door1_1 in opposite directions along X by the animation value in LW(0) times 0.16601563;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(s_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.16601563f))
     CALL(evt_mapobj_trans, 1, STRING("S_door1_2"), LW(0), 0, 0)
@@ -40,6 +45,11 @@ static EVT_BEGIN(s_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door close animation step: moves the two door leaves S_door1_2
+ * and S_door1_1 in opposite directions along X by the animation value in LW(0) times 0.16601563;
+ * the open and close scripts apply the same transform.
+ */
 static EVT_BEGIN(s_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.16601563f))
     CALL(evt_mapobj_trans, 1, STRING("S_door1_2"), LW(0), 0, 0)
@@ -48,6 +58,10 @@ static EVT_BEGIN(s_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of the ceiling slit s_bero_2: locks the controls
+ * and changes the map to aji_06 (the potion laboratory), entering as "tenjo" (from the ceiling).
+ */
 EVT_BEGIN(evt_slit0)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_letter_box_disable, 1)
@@ -56,6 +70,10 @@ EVT_BEGIN(evt_slit0)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of the ceiling slit with exitEvent evt_slit1:
+ * the map changes to aji_07 (the teleporter room), entering as "tenjo".
+ */
 EVT_BEGIN(evt_slit1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_letter_box_disable, 1)
@@ -64,6 +82,7 @@ EVT_BEGIN(evt_slit1)
     RETURN
 EVT_END()
 
+/** Exit event of the ceiling slit with exitEvent evt_slit2: the map changes to aji_09, entering as "tenjo". */
 EVT_BEGIN(evt_slit2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_letter_box_disable, 1)
@@ -142,6 +161,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Swaps the room model with the roof model by the camera height:
+ * while the camera looks from y = 180 or higher the roof S_tenura is shown and the room S_heya hidden,
+ * otherwise the other way round. Runs forever.
+ */
 EVT_BEGIN(heya_tenura_onoff)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_heya"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tenura"), MAP_OBJ_FLAG_HIDDEN)
@@ -221,6 +245,11 @@ USER_FUNC(camAtY) {
     evtSetValue(event, args[0], camGetPtr(CAMERA_3D)->cameraAt.y);
     return EVT_RETURN_DONE;
 }
+/**
+ * Script function: waits until paper-mode Mario is at a slit position (x below -200 or above 300, height 160 to
+ * 169), then switches off the 3D camera control and stops the event whose ID is in LW(0),
+ * the roof-swap script heya_tenura_onoff. Blocks until then.
+ */
 USER_FUNC(slit_chk) {
     MarioWork* mario = marioGetPtr();
 

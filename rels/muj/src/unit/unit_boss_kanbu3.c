@@ -283,6 +283,12 @@ BattleUnitSetup entry_group3 = {
     NULL, // itemDropTable
 };
 
+/**
+ * Init event of Lord Crump: installs his wait, entry, phase, attack,
+ * damage and confusion events and his walk and run sounds,
+ * clears unit work 0 (which X-Naut group is in play: 0 to 2) and 1 (guarding),
+ * registers the X-Naut crowd (zakogun_entry) and sets up the first formation (zakogun_ext_init1).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(entry_event))
@@ -300,6 +306,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Entry event of Lord Crump: after 120 frames the camera closes in on him and, with the status window hidden,
+ * he threatens to turn the party into seaweed (stg5_muj_125_00).
+ */
 static EVT_BEGIN(entry_event)
     WAIT_FRAMES(120)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
@@ -315,6 +325,17 @@ static EVT_BEGIN(entry_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of Lord Crump.
+ * With group 3 in play (unit work 0 = 2), a knockout hit that no Life Shroom saves shows his hurt pose and
+ * after 120 frames group 3 flees (zakogun_escape3).
+ * Then the default damage reaction runs.
+ * With group 1 in play, the first hit that leaves him at 15 HP
+ * or less calls group 1 off (zakogun_escape1, unless it is already dying),
+ * and he complains the party won't get off that easily (stg5_muj_125_01),
+ * shouts for the X-Nauts (stg5_muj_125_02) and group 2 comes down with the ceiling (down_ceil);
+ * unit work 0 becomes 1.
+ */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
     IF_INT_EQUAL(LW(0), 2)
@@ -427,6 +448,15 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Runs at Lord Crump's first defeat: he drops his guard,
+ * the group in play flees (group 1, or group 2 as the ceiling rises; after a wait if it is dying),
+ * and he runs off to the right, where he recovers to full HP (five recovery effects)
+ * and loses the KO status (27).
+ * Group 3, the crowd of 500 X-Nauts, arrives as he runs back;
+ * unit work 0 becomes 2, his data table loses this event (data_table2),
+ * and he says he is down but not out (stg5_muj_125_03).
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GUARD, LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -529,6 +559,10 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of Lord Crump: before the player's turn (from turn 2), if he is not KO'd (status 27) and can act,
+ * with group 3 in play (unit work 0 = 2) he calls it back when it is gone (call_event).
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
     IF_INT_EQUAL(LW(0), 0)
@@ -554,6 +588,10 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Lord Crump calls his horde (call_event): if no horde unit is on the stage yet,
+ * he plays the call-back sound and pose C_1 and brings in horde group 1, 2 or 3 according to unit work 0.
+ */
 EVT_BEGIN(call_event)
     CALL(check_exist_group, LW(15))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
@@ -647,6 +685,14 @@ EVT_BEGIN(call_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Lord Crump: uses an item when the item check says so.
+ * With group 1 or 2 in play (unit work 0 at most 1) and not guarding, he picks by weights 75 normal attack,
+ * 0 guard (so guard_event is never chosen) and 30 calling the group (call_event);
+ * if the group is already present he rolls again.
+ * While guarding he lowers his guard or waits (no_event), 50/50.
+ * With group 3 in play he uses his normal attack or charges (charge_event), 50/50.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -708,6 +754,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Lord Crump raises his guard (guard poses G_1 and G_2),
+ * switches to the guard defence and pose tables and sets unit work 1 (guarding); attack_event gives it weight 0.
+ */
 static EVT_BEGIN(guard_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -726,6 +776,10 @@ static EVT_BEGIN(guard_event)
     RETURN
 EVT_END()
 
+/**
+ * Lord Crump lowers his guard: hops back into his standing pose,
+ * restores his normal defence and pose tables and clears unit work 1.
+ */
 static EVT_BEGIN(guard_cancel_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -745,6 +799,10 @@ static EVT_BEGIN(guard_cancel_event)
     RETURN
 EVT_END()
 
+/**
+ * Lord Crump's idle event for turns without an action:
+ * aims the battle camera at him and zooms in to 200, then returns the camera to its default mode.
+ */
 EVT_BEGIN(no_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -756,6 +814,7 @@ EVT_BEGIN(no_event)
     RETURN
 EVT_END()
 
+/** Lord Crump charges up: takes the guard poses G_1 and G_2 and applies weapon_kanbu3_charge (charge strength 3) to himself. */
 static EVT_BEGIN(charge_event)
     SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
@@ -779,6 +838,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of Lord Crump: sets the idle pose from his current pose table (normal or guard). */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -826,6 +886,11 @@ static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_ACTION, "G_2"},
 };
 
+/**
+ * Lord Crump's normal attack: he runs up to one target (the first-strike target if he struck first)
+ * and jumps onto it in a butt stomp with the hip-attack sounds and a camera shake, bounces off,
+ * flops down and runs home.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -942,6 +1007,10 @@ USER_FUNC(check_exist_group) {
     evtSetValue(event, args[0], id);
     return EVT_RETURN_DONE;
 }
+/**
+ * Script helper: writes the battle unit id of the unit of kind 0x77 to args[0],
+ * or -1 if none exists (the name suggests a researcher unit).
+ */
 USER_FUNC(check_exist_kenkyu) {
     s32 i;
     EvtWord* args = event->args;

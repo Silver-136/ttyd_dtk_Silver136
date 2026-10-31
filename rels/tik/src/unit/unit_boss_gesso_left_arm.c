@@ -140,6 +140,7 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_gesso_left_arm", "c_gesso3", 0.0f, 0.0f, 0.0f, 270.0f, 20.0f, 0.0f, 270.0f, 20.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, VERSION_PICK(0x80009, 0x2080009), 0, pose_table},
 };
 
+/** Init script of the Blooper's left tentacle. Registers its damage, phase and attack scripts and starts it waiting. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -150,6 +151,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage reaction of the left tentacle: runs the default damage, then,
+ * if the body (unit work 0) is idle (work 4 not above 0), tells the body to go back to its wait script.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -201,6 +206,7 @@ EVT_BEGIN(gesso_left_arm_damage_event)
     RETURN
 EVT_END()
 
+/** Phase script of the left tentacle; does nothing. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
@@ -241,6 +247,11 @@ BattleWeapon weapon_gesso_left_arm_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack script of the left tentacle: uses an enemy item if it has one; otherwise samples a target for
+ * weapon_gesso_left_arm_attack, swings (GSO_A1_1) with the arm-move and attack sounds,
+ * damage-checks the target (and each further one if the weapon hits several) and waits for the pose to finish.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -303,6 +314,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait script of the left tentacle: shows its idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

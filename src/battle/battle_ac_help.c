@@ -6,10 +6,15 @@
 #include "driver/windowdrv.h"
 #include "manager/fontmgr.h"
 
+/** Sets the message id of the action-command hint box shown above the stage (the weapon's acHelpMsg). */
 void BattleAcHelpSetHelp(const char* msg) {
     _battleWorkPointer->acHelpMsg = msg;
 }
 
+/**
+ * Sets how the action-command hint is drawn: 0 hides it, 1 draws it half transparent, 2 fully opaque.
+ * The audience window is only allowed while the hint is hidden.
+ */
 void BattleAcHelpSetDispType(s32 type) {
     _battleWorkPointer->acHelpDispType = type;
     switch (type) {
@@ -22,11 +27,13 @@ void BattleAcHelpSetDispType(s32 type) {
     }
 }
 
+/** Empty in the retail games; called once from battle setup. */
 void BattleAcHelpInit(void) {
 }
 
 void _ac_help_disp(CameraId cameraId, void* param);
 
+/** Per-frame battle hook: queues the hint box draw when a hint is set and shown, except during a First Strike. */
 void BattleAcHelpMain(void) {
     BattleWork* wp = _battleWorkPointer;
     // FAKE: spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object
@@ -36,6 +43,10 @@ void BattleAcHelpMain(void) {
     }
 }
 
+/**
+ * Draws the action-command hint: a white framed window near the top of the screen sized to the message,
+ * with the text centred inside. Falls back to a "message not found" string when the id is missing.
+ */
 void _ac_help_disp(CameraId cameraId, void* param) {
     u16 lines;
     const char* msgs[2]; // FAKE: register-promoted array; one msg pointer differs

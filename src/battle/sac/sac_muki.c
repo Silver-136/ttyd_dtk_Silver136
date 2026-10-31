@@ -166,6 +166,11 @@ USER_FUNC(main_muki) {
     return 0;
 }
 
+/**
+ * Game state machine: grows the 3x3 grid in, slides the gauges in, runs the 900-frame timer,
+ * then shrinks the grid and pops the rating (from the attack + defense levels earned) when time is up.
+ * Also eases the shown gauge values toward the earned ones.
+ */
 static void main_base(void) {
     MukiWork* w = get_ptr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -482,6 +487,11 @@ void main_cursor(void) {
     }
 }
 
+/**
+ * One grid square: grows in after a random delay,
+ * then while the game runs now and then spawns an arrow or mushroom (main_icon) in it when empty,
+ * and shrinks away at the end.
+ */
 void main_point(s32 idx) {
     MukiWork* w = get_ptr();
     Muki3D* o = &w->o3d[idx];
@@ -554,6 +564,10 @@ void main_point(s32 idx) {
     }
 }
 
+/**
+ * One arrow or poison mushroom in a square: spins in as a random type (0 attack, 1 defense, 2 mushroom),
+ * stays 90 frames, then spins out; a hit removes it at once and the end of the game fades it.
+ */
 void main_icon(s32 idx) {
     MukiWork* w = get_ptr();
     MukiObj* o = &w->obj[idx];
@@ -627,6 +641,7 @@ void main_icon(s32 idx) {
     }
 }
 
+/** The star that rises out of Mario at the start, grows and spins, then flies off the top of the screen. */
 static void main_star(void) {
     MukiWork* w = get_ptr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -690,6 +705,7 @@ static void main_star(void) {
     }
 }
 
+/** Cleanup when the move ends: deletes the star and the grid icon effects. */
 USER_FUNC(end_muki) {
     MukiWork* w = get_ptr();
     s32 i;
@@ -702,10 +718,17 @@ USER_FUNC(end_muki) {
     return 2;
 }
 
+/** Float add, kept as a function so disp_2D matches the original's operation order. */
 // FAKE: addf() for x + 32.0f in disp_2D; the plain sum changes the object
 static inline f32 addf(f32 a, f32 b) { return a + b; }
+/** Float multiply, kept as a function so disp_3D_alpha matches the original's operation order. */
 // FAKE: mulf() for c * 3.141592f in disp_3D_alpha; the plain product changes the object
 static inline f32 mulf(f32 x, f32 y) { return x * y; }
+/**
+ * Draws the two gauges on the left: attack (red) and defense (blue),
+ * each a bar filled by the fractional part of the level with the level number beside it,
+ * blinking when a new level is reached.
+ */
 static void disp_2D(CameraId cam, void* param) {
     MukiWork* w = get_ptr();
     Mtx m;
@@ -829,6 +852,7 @@ static void disp_2D(CameraId cam, void* param) {
     }
 }
 
+/** Draws the frame of each grid square and the cursor (white, blue while moving, red on the frame A is pressed). */
 static void disp_3D(CameraId cam, void* param) {
     MukiWork* w = get_ptr();
     s32 a[8] = {-8, 8, 8, 8, 8, -8, -8, -8};
@@ -858,6 +882,7 @@ static void disp_3D(CameraId cam, void* param) {
     }
 }
 
+/** Draws the arrows and mushrooms in the grid: red attack arrows, blue defense arrows and the poison mushroom. */
 static void disp_3D_alpha(CameraId cam, void* param) {
     MukiWork* w = get_ptr();
     s32 i;
@@ -918,11 +943,16 @@ static void disp_3D_alpha(CameraId cam, void* param) {
     }
 }
 
+/** The minigame's work area, kept in the battle's shared action-command work buffer. */
 static MukiWork* get_ptr(void) {
     return (MukiWork*)_battleWorkPointer->actionCommands.work;
 }
 
 
+/**
+ * Builds the boost weapon: copies the template and gives it a sure 3-turn attack up (args[0] 0)
+ * or defense up (1) of args[1] points, and returns its address in args[2].
+ */
 static USER_FUNC(set_weapon) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
@@ -945,12 +975,14 @@ static USER_FUNC(set_weapon) {
     return 2;
 }
 
+/** Starts the grid game (main_base state 1). */
 static USER_FUNC(start_game) {
     MukiWork* w = get_ptr();
     w->state = 1;
     return 2;
 }
 
+/** Waits for the game to finish and returns the earned attack level in args[0] and defense level in args[1]. */
 static USER_FUNC(wait_game_end) {
     MukiWork* w = get_ptr();
     EvtWord* args = event->args;
@@ -962,6 +994,7 @@ static USER_FUNC(wait_game_end) {
     return 0;
 }
 
+/** Starts the star rising out of Mario (main_star). */
 static USER_FUNC(star_stone_appear) {
     MukiWork* w = get_ptr();
     w->star.state = 1;

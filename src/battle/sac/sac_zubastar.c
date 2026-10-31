@@ -136,12 +136,14 @@ BattleWeapon weapon_zubastar = {
 };
 s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy);
 
+/** Starts the star's appearance over Mario. */
 static USER_FUNC(star_stone_appear) {
     ZubaStarWork* w = GetZubaStarPtr();
     w->stone_state = 1;
     return 2;
 }
 
+/** Waits until the star has reached its place at the top of the screen. */
 USER_FUNC(wait_star_stone_up) {
     return GetZubaStarPtr()->stone_state == 4 ? 2 : 0;
 }
@@ -149,6 +151,12 @@ USER_FUNC(wait_star_stone_up) {
 void zubaStarDispStar(CameraId cam, void* param);
 
 
+/**
+ * Script helper run as a sibling script for the whole move:
+ * moves the star (star stone effect type 6) up from Mario, spinning and growing,
+ * then up to the top of the screen, and feeds its position, rotation and scale to the effect.
+ * Never finishes on its own.
+ */
 static USER_FUNC(main_star) {
     ZubaStarWork* w = GetZubaStarPtr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
@@ -213,18 +221,25 @@ static USER_FUNC(main_star) {
     return 0;
 }
 
+/** Translucent 3D draw callback for the star; draws nothing (the effect draws it). */
 void zubaStarDispStar(CameraId cam, void* param) {
 }
 
+/** Returns the Supernova work, which lives in the battle's action command work area. */
 ZubaStarWork* GetZubaStarPtr(void) {
     return (ZubaStarWork*)_battleWorkPointer->actionCommands.work;
 }
 
+/**
+ * Supernova's damage function: the damage for the number of cuts made in the minigame (weapon->hpDamageWork: 0,
+ * 3, 6, 9, 12 or 15).
+ */
 u32 weaponGetPower_ZubaStar(BattleUnit* a, BattleWeapon* weapon, BattleUnit* target, BattleUnitPart* part) {
     return weapon->hpDamageWork[GetZubaStarPtr()->level];
 }
 
 
+/** Adds a polygon of n points to the list of screen pieces the cut picture is made of. */
 void zubastar_create_takaku(s32 n, Vec* pts) {
     ZubaStarWork* w = GetZubaStarPtr();
     ZSObj* t;
@@ -243,6 +258,10 @@ void zubastar_create_takaku(s32 n, Vec* pts) {
     w->count++;
 }
 
+/**
+ * Cuts every screen piece the line from p0 to p1 crosses into two, replacing it with both halves,
+ * each given a random delay and drift for the shatter.
+ */
 void zubastar_bunkatu(Vec* p0, Vec* p1) {
     ZubaStarWork* w = GetZubaStarPtr();
     ZSObj* t;
@@ -333,6 +352,10 @@ void zubastar_bunkatu(Vec* p0, Vec* p1) {
     }
 }
 
+/**
+ * Intersects the line through (x1, y1)-(x2, y2) with the segment (x3, y3)-(x4, y4):
+ * stores the crossing in ox, oy and returns 1 if it lies on the segment, else 0 (also 0 for parallel lines).
+ */
 s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy) {
     f32 dx1 = x2 - x1;
     f32 d, a, t, e1, e2, dx2, b;
@@ -369,6 +392,10 @@ s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, 
     return 0;
 }
 
+/**
+ * Shows the action command rating sign for a full Supernova gauge (LW(0) = cut count + 1, capped at 6) at (-120,
+ * 140).
+ */
 static EVT_BEGIN(nice_event)
     CALL(btlevtcmd_ACSuccessEffect, LW(0), -120, 140, 0)
     RETURN
@@ -376,6 +403,12 @@ EVT_END()
 void zubastar_disp2D(CameraId cam, void* param);
 void psndSFX_pit(s32 id, s32 pitch);
 
+/**
+ * Runs the Supernova minigame until it ends: each round the player mashes A to fill the gauge to 100 within 300
+ * frames; a full gauge counts a cut (up to five),
+ * cheers the audience by its size and slashes a line across the screen, which splits the screen pieces.
+ * A failed round or the fifth cut ends the game.
+ */
 USER_FUNC(zubastar_main) {
     ZubaStarWork* w = GetZubaStarPtr();
     Vec pts[4] = {{0.0f, 240.0f, 0.0f}, {304.0f, 240.0f, 0.0f}, {304.0f, -240.0f, 0.0f}, {0.0f, -240.0f, 0.0f}};
@@ -786,6 +819,11 @@ USER_FUNC(zubastar_main) {
 void zubastar_disp_bomb(CameraId cam, void* param);
 void zubastar_capture(CameraId cam, void* param);
 
+/**
+ * Shatters the screen after the damage: captures the frame on the first call,
+ * then throws every screen piece off the bottom with its own spin and arc (with a sound) and draws them;
+ * finishes once all pieces have fallen.
+ */
 USER_FUNC(zubastar_bomb) {
     ZubaStarWork* w = GetZubaStarPtr();
     const char* sfx;
@@ -860,11 +898,13 @@ USER_FUNC(zubastar_bomb) {
     return 0;
 }
 
+/** Clears the Supernova work at the start of the move. */
 USER_FUNC(zubastar_init) {
     memset(GetZubaStarPtr(), 0, sizeof(ZubaStarWork));
     return 2;
 }
 
+/** Frees the star effect and its stardust, every screen piece and the screen capture at the end of the move. */
 USER_FUNC(zubastar_end) {
     ZubaStarWork* w = GetZubaStarPtr();
     s32 i;
@@ -884,6 +924,7 @@ USER_FUNC(zubastar_end) {
     return 2;
 }
 
+/** 2D draw callback: copies the frame into the screen capture the shattering pieces are textured with. */
 void zubastar_capture(CameraId cam, void* param) {
     ZubaStarWork* w = GetZubaStarPtr();
     GXSetTexCopySrc(0xd0, 0, 400, 480);
@@ -892,6 +933,7 @@ void zubastar_capture(CameraId cam, void* param) {
     GXPixModeSync();
 }
 
+/** Draws every screen piece as a triangle fan textured with the captured frame, at its falling position and spin. */
 void zubastar_disp_bomb(CameraId cam, void* param) {
     ZubaStarWork* w = GetZubaStarPtr();
     CameraEntry* camera = camGetPtr(CAMERA_2D);
@@ -959,6 +1001,10 @@ static inline void dispA(Mtx m, s32 i) {
     iconDispGxCol(m, ICON_FLAG_2D, ICON_SAC_GENKI1, ca);
 }
 
+/**
+ * Draws the minigame's 2D layer: the A button and the gauge, the slash lines fading in and out,
+ * and the cursor with its trail while it slashes.
+ */
 void zubastar_disp2D(CameraId cam, void* param) {
     ZubaStarWork* w = GetZubaStarPtr();
     ZSCursor* cur = &w->cursor;
@@ -1013,6 +1059,12 @@ void zubastar_disp2D(CameraId cam, void* param) {
     }
 }
 
+/**
+ * Supernova, the Crystal Star's special move (star stone effect type 6):
+ * Mario raises the star, the player fills the gauge with A over up to five rounds to slash the screen,
+ * then a white flash and quaking camera hit every enemy not evasive for 0 to 15 damage by the number of slashes,
+ * and the screen shatters into the cut pieces.
+ */
 EVT_BEGIN(marioAttackEvent_ZubaStar)
     CALL(zubastar_init)
     BEGIN_SIBLING_EVENT

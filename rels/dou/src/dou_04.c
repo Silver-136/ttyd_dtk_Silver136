@@ -55,6 +55,10 @@ EvtWord kuribo_talk[740];
 static NpcSetupInfo npcEnt[2];
 EvtWord dou_04_init_evt[96];
 
+/**
+ * Script helper: stores in args[0] whether Mario's menu is currently disabled (marioCheckMenuDisable),
+ * so the lift scripts can stop moving while a menu or message is open.
+ */
 USER_FUNC(evt_mario_check_menu) {
     // Return the menu-disabled state, not whether a menu is currently open.
     EvtWord* args = event->args;
@@ -83,6 +87,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Moves the large box platform (s04_m_hako_a) and the water bridge (mizuhashi) by the offsets in GW(0) to GW(2)
+ * every frame, rebinds its hit area, and shifts Mario and the partners by the box's movement while they ride it.
+ */
 // Carry riders by the change in X translation, not by the full accumulated offset.
 EVT_BEGIN(box_trans)
     SET_FLOAT_VALUE(LW(3), 0)
@@ -110,11 +118,16 @@ EVT_BEGIN(box_trans)
     RETURN
 EVT_END()
 
+/** Runs evt_box_pukapuka, which writes the idle bobbing offset of the box into GW(1). */
 EVT_BEGIN(box_pukapuka)
     CALL(evt_box_pukapuka, GW(1))
     RETURN
 EVT_END()
 
+/**
+ * Movement of the box platform in dou_04: forever slides the offset GW(0) from 0 out to 50 and back (slowly,
+ * with float sounds and small bobs at each end) while box_pukapuka bobs it up and down.
+ */
 EVT_BEGIN(box_event)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
     SET_FLOAT_VALUE(GW(1), FLOAT(0.0f))
@@ -197,6 +210,12 @@ EVT_BEGIN(box_event)
     RETURN
 EVT_END()
 
+/**
+ * One step of the first lift platform (s04_m_hako_b, hit area a04_m_hako_02):
+ * LW(0) = 0 lowers it from the offset in LW(3) down to -180 at 0.75 per frame,
+ * anything else raises it back to 0.
+ * It carries Mario and the partners, stops while a menu is open, and leaves the final offset in LW(4).
+ */
 EVT_BEGIN(lift_event_00)
     IF_INT_EQUAL(LW(0), 0)
         SET_FLOAT_VALUE(LW(0), LW(3))
@@ -274,6 +293,11 @@ EVT_BEGIN(lift_event_00)
     RETURN
 EVT_END()
 
+/**
+ * One step of the second lift platform (s04_m_ita_b, hit area a04_m_hako_01):
+ * LW(0) = 0 raises it from the offset in LW(3) up to 128 with a rising sound,
+ * otherwise it falls back to 0 with a falling sound; same carrying behaviour as lift_event_00.
+ */
 EVT_BEGIN(lift_event_01)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mapobj_get_position, STRING("s04_m_ita_b"), LW(0), LW(1), LW(2))
@@ -354,6 +378,11 @@ EVT_BEGIN(lift_event_01)
     RETURN
 EVT_END()
 
+/**
+ * Control loop of the first lift: waits until the red switch has set GF(10) to 0,
+ * lowers the platform (resuming from where it stopped if interrupted), waits 4 seconds,
+ * raises it again and sets GF(10) back to 1.
+ */
 EVT_BEGIN(lift_main_00)
     SET_VALUE(LF(10), 0)
     LOOP(0)
@@ -380,6 +409,10 @@ EVT_BEGIN(lift_main_00)
     RETURN
 EVT_END()
 
+/**
+ * Control loop of the second lift: the same sequence as lift_main_00 for the platform that rises to 128
+ * and returns.
+ */
 EVT_BEGIN(lift_main_01)
     SET_VALUE(LF(10), 0)
     LOOP(0)
@@ -406,6 +439,10 @@ EVT_BEGIN(lift_main_01)
     RETURN
 EVT_END()
 
+/**
+ * Binds the two lift hit areas to their platforms,
+ * sets GF(10) to 1 (lifts idle) and starts both lift control loops.
+ */
 EVT_BEGIN(lift_event_init)
     CALL(evt_hit_bind_mapobj, STRING("a04_m_hako_01"), STRING("s04_m_ita_b"))
     CALL(evt_hit_bind_mapobj, STRING("a04_m_hako_02"), STRING("s04_m_hako_b"))
@@ -415,6 +452,7 @@ EVT_BEGIN(lift_event_init)
     RETURN
 EVT_END()
 
+/** Event of the red switch (mobj00): sets GF(10) to 0 to start the lifts. */
 EVT_BEGIN(lift_event)
     SET_VALUE(GF(10), 0)
     RETURN
@@ -427,6 +465,10 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Init of the Goomba Kurichero: during Trouble Center job 21 (the Couples Cake request) he is placed at (-183,
+ * 10, 135) facing east.
+ */
 static EVT_BEGIN(kuribo_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_LOOKING_FOR_A_GAL)
         CALL(evt_npc_set_position, STRING("me"), -183, 10, 135)
@@ -665,6 +707,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Init script of dou_04, the lift room off dou_03:
+ * music and ambience, exit, Kurichero, the moving box platform, the red switch and two lifts, waves,
+ * the Grotto Key and Star Piece, a Shine Sprite block, and the Couples Cake once job 21 is solved.
+ */
 EVT_BEGIN(dou_04_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU6"))
@@ -706,6 +753,11 @@ USER_FUNC(evt_box_pukapuka) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: moves the map group args[0] to (args[1], args[2], args[3]) and,
+ * if Mario stands on the hit area named by args[4],
+ * pushes him along by the movement since the last call (stored in the script's lwDataF[6..8]).
+ */
 USER_FUNC(evt_mapgrp_translate2) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();

@@ -230,6 +230,12 @@ static BattleWeapon weapon_chorobon_magic_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack script of the Flower Fuzzy.
+ * After an item check: with less than 2 FP it always drains (drain_attack_event);
+ * with full FP it always casts its magic (magic_attack_event);
+ * in between it drains 50 times in 60 and casts 10 times in 60.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -261,6 +267,12 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Flower Fuzzy's magic attack: it spends 2 FP,
+ * hops in place and sets off three "shock_n64" bursts with SFX_ENM_CHORO2_MAGIC1,
+ * then checks every target in turn and damages them with the magic weapon (the defence action command result is
+ * taken once, for the first target). When confused with no target it is flustered.
+ */
 static EVT_BEGIN(magic_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_chorobon_magic_attack))
@@ -409,6 +421,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Hops the Flower Fuzzy in steps towards (LW(5), LW(6), LW(7)), each step at most LW(8) units long,
+ * squashing before and after every jump (SFX_ENM_CHORO2_LANDING1 on the last landing), until it arrives.
+ */
 static EVT_BEGIN(rabbit_move)
     LOOP(2)
         CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)
@@ -458,6 +474,11 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/**
+ * Init script of the Flower Fuzzy: registers its wait, attack, damage and confusion handlers,
+ * sets the pose sound timing table and its jump sound (SFX_ENM_CHORO2_MOVE1),
+ * and sets its maximum FP to 3 and current FP to 0.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -471,6 +492,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage script of the Flower Fuzzy: runs the default damage handling on itself. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -478,6 +500,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Counter-damage script of the Flower Fuzzy: resets its scale, runs the shared counter-damage handling and,
+ * unless the damage code is 512 without 2048, hops back home (return_event).
+ */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -495,6 +521,7 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/** Hops the Flower Fuzzy back to its home position in steps of up to 40 units (rabbit_move). */
 static EVT_BEGIN(return_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(4.0f), FLOAT(0.5996094f))
@@ -504,6 +531,17 @@ static EVT_BEGIN(return_event)
     RETURN
 EVT_END()
 
+/**
+ * The Flower Fuzzy's drain attack: it hops up to the target, climbs onto it and latches on (CBN_A_2),
+ * shaking for 90 frames, then drops off.
+ * If the target has any FP it uses the FP drain weapon and otherwise the HP drain weapon,
+ * and it recovers FP or HP equal to the amount drained, with the "recovery" effect.
+ * When the target's counter check gives 14 (electrified) or 17 (Hold Fast) it does not latch on:
+ * it makes the damage
+ * check with the no-damage weapon_chorobon_drain_attack_biribiri_counterd, so only the counter lands,
+ * and the script
+ * ends there. Otherwise it then hops home.
+ */
 static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_chorobon_drain_attack))
@@ -750,6 +788,7 @@ static EVT_BEGIN(drain_attack_event)
     RETURN
 EVT_END()
 
+/** Wait script: plays the Flower Fuzzy's idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

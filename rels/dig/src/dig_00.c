@@ -68,6 +68,10 @@ void dig_thpInit(void) {
     }
 }
 
+/**
+ * Shuts the movie down in the opposite order: stops the audio and the loader,
+ * closes the file and quits the THP player. Skipped on an IS-Viewer unit.
+ */
 void dig_thpStop(void) {
     u32 type;
 
@@ -102,6 +106,12 @@ void movie_draw(CameraId camera, void* param) {
     }
 }
 
+/**
+ * Script helper, started once by the map init: resets the frame counter and GF(0),
+ * then queues movie_draw every frame.
+ * Sets GF(0) to TRUE when the movie is within two frames of its end (or after 300 frames on an IS-Viewer unit).
+ * Never finishes by itself.
+ */
 USER_FUNC(movie) {
     u32 type;
 
@@ -121,11 +131,16 @@ USER_FUNC(movie) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: fades the movie sound to zero over two seconds. */
 USER_FUNC(sound_fade) {
     THPSimpleSetVolume(0, 2000);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] is an NPC name; sets its jump gravity to 0.1
+ * so it floats down slowly (the "fall" parade action).
+ */
 USER_FUNC(gravity_scale) {
     NpcEntry* npc = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
@@ -181,6 +196,10 @@ USER_FUNC(evt_action_sub) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * LW(0) = the camera distance at which a 25-degree field of view shows 480 units of height (half height 240 over
+ * tan(12.5 degrees)), as an event float; dig_00_init_evt places the camera there.
+ */
 static USER_FUNC(z) {
     f32 t = tan(0.21816612780094147);
 
@@ -243,6 +262,11 @@ static DigAnim anim_tbl[] = {
     {/*"チョロボン"*/"\x83\x60\x83\x87\x83\x8D\x83\x7B\x83\x93", 3, 0},
 };
 
+/**
+ * Shared body of the two pop-up actions (NPC name in LW(10), LF(0) set means wait instead of look around):
+ * the character appears at a random X below the bottom of the screen facing a random side, rises for 0.7 s,
+ * then either turns left and right (LF(0) = 0) or just waits for a second, sinks away in 0.4 s and is deleted.
+ */
 EVT_BEGIN(evt_action_1_2)
     CALL(evt_sub_random, 400, LW(0))
     SUBTRACT(LW(0), 200)
@@ -404,6 +428,13 @@ EVT_BEGIN(evt_action)
     RETURN
 EVT_END()
 
+/**
+ * Init script of dig_00, the digest movie map: hides Mario and the partner,
+ * places the camera so 480 units fill the screen height, starts the character parade and the movie,
+ * and fades in from white.
+ * A button press (A or Start) or the end of the movie fades the sound and screen out
+ * and returns to the title screen.
+ */
 EVT_BEGIN(dig_00_init_evt)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)

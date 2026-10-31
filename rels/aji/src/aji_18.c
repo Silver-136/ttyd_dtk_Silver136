@@ -43,6 +43,10 @@ EvtWord aji_18_init_evt[301];
 EvtWord aji_18_init_evt[299];
 #endif
 
+/**
+ * Script function: fills key_list with the Card Keys (item IDs 0x1D, 0x1E, 0x1F) that Mario carries,
+ * ending the list with -1, for the key slot menu.
+ */
 static USER_FUNC(make_list) {
     s32 n = 0;
 

@@ -20,19 +20,27 @@ static BackgroundWork work[2];
 //local prototypes
 void bgDisp(CameraId camId, void* param);
 
+/** the field or the battle background work (inlined everywhere; no symbol of its own) */
 static inline BackgroundWork* bgGetWork(void) {
     return gp->inBattle ? &work[1] : &work[0];
 }
 
+/** Clears both the field and the battle background state at boot. */
 void bgInit(void) {
     memset(&work[0], 0, sizeof(BackgroundWork));
     memset(&work[1], 0, sizeof(BackgroundWork));
 }
 
+/** Clears the current mode's background state (field or battle) when a map or battle is set up again. */
 void bgReInit(void) {
     memset(bgGetWork(), 0, sizeof(BackgroundWork));
 }
 
+/**
+ * Loads background texture file filename: from a registered archive if it holds it,
+ * else from the disc into map memory.
+ * A missing file falls back to a plain green fill; NULL turns the background off.
+ */
 static inline void bgLoad(BackgroundWork* bgwork, const char* filename) {
     TEXPalette* tpl;
     DVDEntry* dvd;
@@ -71,49 +79,72 @@ static inline void bgLoad(BackgroundWork* bgwork, const char* filename) {
     }
 }
 
+/**
+ * Loads and shows filename as the background for the current mode (field or battle);
+ * called from the map change sequence with the map's background name.
+ */
 void bgEntry(const char* filename) {
     bgLoad(bgGetWork(), filename);
 }
 
+/** Frees the current background texture and loads filename in its place. */
 void bgReEntry(const char* filename) {
     _mapFree(bgGetWork()->data);
     bgLoad(bgGetWork(), filename);
 }
 
+/**
+ * Sets the colour the background texture is multiplied by (on top of the map's blend colour);
+ * used by the evt_bg script helpers to tint or fade the backdrop.
+ */
 void bgSetColor(GXColor color) {
     bgGetWork()->color = color;
 }
 
+/** Turns background drawing back on for the current mode. */
 void bgDispOn(void) {
     bgGetWork()->flags |= BG_RENDERING;
 }
 
+/** Hides the background for the current mode. */
 void bgDispOff(void) {
     bgGetWork()->flags &= ~BG_RENDERING;
 }
 
+/** Sets the extra texture scroll offset of the backdrop, in texture coordinates (1.0 is one texture width). */
 void bgSetScrlOffset(f32 x, f32 y) {
     BackgroundWork* bgwork = bgGetWork();
     bgwork->scrl_x = x;
     bgwork->scrl_y = y;
 }
 
+/** Stops the backdrop following the camera: only the scroll offset set by bgSetScrlOffset moves it. */
 void bgAutoScrollOff(void) {
     bgGetWork()->flags |= BG_NO_AUTOSCROLL;
 }
 
+/** Makes the backdrop follow the camera's yaw and position again (the default). */
 void bgAutoScrollOn(void) {
     bgGetWork()->flags &= ~BG_NO_AUTOSCROLL;
 }
 
+/**
+ * Stops the camera's position from shifting the backdrop; only the camera yaw still turns it.
+ * No caller in this tree.
+ */
 void bgTransOffsetOff(void) {
     bgGetWork()->flags |= BG_NO_TRANSLATION;
 }
 
+/** Lets the camera's position shift the backdrop again (the default). */
 void bgTransOffsetOn(void) {
     bgGetWork()->flags &= ~BG_NO_TRANSLATION;
 }
 
+/**
+ * Once per frame: works out how far the backdrop has scrolled from the 3D camera's yaw (four screen widths per
+ * full turn) and position, then queues bgDisp on the background camera.
+ */
 void bgMain(void) {
     f32 sinangle, cosangle, angle, transX, yawScroll;
     BackgroundWork* bgwork;
@@ -144,6 +175,11 @@ void bgMain(void) {
     }
 }
 
+/**
+ * Draws the backdrop as one full-screen 608x480 quad on the background camera,
+ * textured and tinted by the map blend and background colour,
+ * or as a flat colour when the texture failed to load.
+ */
 void bgDisp(CameraId camId, void* param) {
     BackgroundWork* bgwork = bgGetWork();
     CameraEntry* camera = camGetPtr(camId);

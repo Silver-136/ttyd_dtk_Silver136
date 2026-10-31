@@ -31,6 +31,10 @@ static u8 scale_data[30] = {
     0x52, 0x6F, 0x50, 0x78, 0x50, 0x7B, 0x54, 0x78, 0x59, 0x71, 0x5F, 0x69, 0x64, 0x64,
 };
 
+/**
+ * Spawns the pop-up at (x, y, z) for `timer` frames showing `number`: negative numbers show the arrow flipped.
+ * Types 0/2 are the attack style (red) and 1/3 the defense style (blue); only 0 and 1 bounce in.
+ */
 EffectEntry* effUpdownEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 timer) {
     EffectEntry* effect;
     EffUpdownWork* work;
@@ -55,6 +59,11 @@ EffectEntry* effUpdownEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 timer
     return effect;
 }
 
+/**
+ * Per frame: counts the timer down (1000 means no limit; a soft delete fades it out over 16 frames),
+ * plays the 15-frame squash-and-stretch pop-in, then bobs scaleY gently,
+ * and draws through effUpdownDisp on CAMERA_3D.
+ */
 void effUpdownMain(EffectEntry* effect) {
     EffUpdownWork* work = effect->userdata;
     s32 type = work->type;
@@ -104,6 +113,7 @@ void effUpdownMain(EffectEntry* effect) {
     }
 }
 
+/** Emits one gradient-coloured textured quad. `type` selects the colours: 0 white, 1 red-yellow, 2 blue. */
 static void polygon(s32 type, s32 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
     u8 r0, g0, b0, a, r1, g1, b1;
 
@@ -151,6 +161,7 @@ static void polygon(s32 type, s32 alpha, f32 x, f32 y, f32 w, f32 h, f32 s, f32 
     GXTexCoord2f32(0.0f, t);
 }
 
+/** Draws a coloured square background, the last digit of |number| (an icon texture) and the up or down arrow icon. */
 void effUpdownDisp(CameraId cameraId, EffectEntry* effect) {
     EffUpdownWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);

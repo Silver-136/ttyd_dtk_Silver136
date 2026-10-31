@@ -89,6 +89,11 @@ EffectEntry* effAkariPoseN64Entry(s32 type, s32 count, s32 lifetime, f32 x, f32 
     return effect;
 }
 
+/**
+ * Steps each flare through its sequence with staggered starts:
+ * it begins 16 units out at an evenly spaced angle, moves outward with decaying velocity,
+ * and takes scale and alpha from the sequence tables.
+ */
 void effAkariPoseMain(EffectEntry* effect) {
     EffAkariPoseN64Work* work = effect->userdata;
     Vec position;
@@ -174,6 +179,7 @@ void effAkariPoseMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effAkariPoseDisp, effect);
 }
 
+/** Draws each started flare as a rotated, camera-facing 16x16 textured quad. */
 void effAkariPoseDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     EffAkariPoseN64Work* work;

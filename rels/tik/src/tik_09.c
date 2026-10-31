@@ -52,6 +52,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Raises the pipe (dokan_1_s) in the room out of the floor:
+ * after 1.5 seconds it slides up 30 units over 100 frames, moving its hit area with it.
+ */
 // Start the pipe at zero offset, then raise it while updating its bound collision each step.
 EVT_BEGIN(evt_tik09_dokan)
     CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
@@ -70,6 +74,11 @@ EVT_BEGIN(evt_tik09_dokan)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_09.
+ * Starts with the pipe sunk 30 units (hit area bound to it), starts the music and ambience,
+ * sets up the exits and runs evt_tik09_dokan.
+ */
 EVT_BEGIN(tik_09_init_evt)
     CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
     CALL(evt_mapobj_trans, 1, STRING("dokan_1_s"), 0, 30, 0)

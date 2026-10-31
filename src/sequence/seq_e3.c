@@ -121,6 +121,12 @@ void seq_e3Exit(SequenceWork* seq) {
     psndStopAllFadeOut();
 }
 
+/**
+ * Kiosk menu state machine: press A/Start page-flips from the title to the scenario boxes;
+ * the stick picks a scenario (B or 2 min idle flips back);
+ * A sets story progress to just before the scenario's e3_tbl entry, runs the story init events up to it,
+ * sets partners, a 20 HP/FP/BP loadout and items, and starts its map.
+ */
 void seq_e3Main(SequenceWork* seq) {
     CameraEntry* camera;
     s32 prevId;
@@ -498,6 +504,10 @@ f32 forceSdata(void) {
     return 30.0f;
 }
 
+/**
+ * Page-flip offscreen callback: switches to the next page, draws it,
+ * and registers its drawn bounding box with the fOff_peron offscreen.
+ */
 void e3DispOffscreen(CameraId cameraId, void* param) {
     u16 left, top, right, bottom;
 

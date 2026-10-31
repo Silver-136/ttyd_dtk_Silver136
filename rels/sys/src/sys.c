@@ -175,6 +175,12 @@ EvtWord evt_start[191];
 EvtWord evt_start[189];
 #endif
 
+/**
+ * REL entry point of sys.rel: runs the global constructors,
+ * registers the empty init event for sys_00 and sys_01_init_evt for the chapter title map sys_01,
+ * stops all music with a fade unless the story is at one of the stages
+ * where the previous scene's music should carry over, and turns the 2D camera's letterbox off and snaps it.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 
@@ -192,6 +198,7 @@ void _prolog(void) {
     camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_INSTANT;
 }
 
+/** Init event of sys_00, an empty map: does nothing. */
 EVT_BEGIN(dummy_evt)
     RETURN
 EVT_END()
@@ -221,9 +228,14 @@ static void _epilog(void) {
     }
 }
 
+/** Linker stub for unresolved references in the relocatable module; does nothing. */
 static void _unresolved(void) {
 }
 
+/**
+ * Frees the title texture file (effect_sys.tpl) that display loaded and clears the work area pointer.
+ * Called from _epilog when the module is unloaded from sys_01.
+ */
 void sys_01_release(void) {
     if (g_wp->file != NULL) {
         fileFree(g_wp->file);
@@ -231,6 +243,10 @@ void sys_01_release(void) {
     g_wp = NULL;
 }
 
+/**
+ * Returns a gray level (255 down to 75) for the rainbow light, as a triangle wave of the angle in degrees:
+ * 255 at 0 and 180, lowest at 90 and 270. Used for the shimmer on the title letters.
+ */
 s32 getLightColor(f32 angle) {
     f32 a = fmod(angle, 360.0);
     s32 c;
@@ -247,12 +263,17 @@ s32 getLightColor(f32 angle) {
     return 255 - c * 2;
 }
 
+/** Loads the color into TEV register 0 (inlined helper of display_func). */
 static inline void setTevColor(GXColor init) {
     GXColor color = init;
 
     GXSetTevColor(GX_TEVREG0, color);
 }
 
+/**
+ * Sets the material color of channel COLOR0A0 to a gray with level c (alpha from the argument);
+ * inlined helper of display_func.
+ */
 static inline void setChanMatColor(GXColor init, s32 c) {
     GXColor color = init;
 
@@ -264,6 +285,7 @@ static inline void setChanMatColor(GXColor init, s32 c) {
 
 #ifdef VERSION_G8ME01
 
+/** US: draws the chapter subtitle once, flat, and copies it into a texture that display_func bends */
 // US: draws the chapter subtitle once, flat, and copies it into a texture that display_func bends
 void sys_01_msg_tex_capture_func(CameraId cameraId, void* param) {
     SysWork* wp = param;
@@ -991,6 +1013,11 @@ const char* lang_prefix[] = {
 };
 
 
+/**
+ * Init event of sys_01, the chapter title card map:
+ * draws the background (bg), starts the title (display) for the chapter named by the map entry (prologue, stg_1
+ * to stg_8), waits 3 seconds, sets the white fade for the map change and runs evt_start.
+ */
 EVT_BEGIN(sys_01_init_evt)
     CALL(init)
     CALL(evt_mario_cont_onoff, 0)
@@ -1257,6 +1284,10 @@ USER_FUNC(start) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: creates the item-get effect used as the title card background
+ * and points it at the 3D effect A camera.
+ */
 USER_FUNC(bg) {
     EffectEntry* eff = effItemGetEntry(0, 0.0f, 0.0f, 0.0f);
 
@@ -1265,11 +1296,13 @@ USER_FUNC(bg) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: placeholder that does nothing. */
 USER_FUNC(init) {
     return EVT_RETURN_DONE;
 }
 
 #ifdef VERSION_G8ME01
+/** US: waits until every title letter has finished spinning in */
 // US: waits until every title letter has finished spinning in
 USER_FUNC(sys_01_start_end_wait) {
     SysWork* wp = g_wp;

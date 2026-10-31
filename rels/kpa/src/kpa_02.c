@@ -45,6 +45,11 @@ EvtWord kpa_act_stg1_item[] = {
     KPA_ITEM(187.5f, 125.0f), KPA_ITEM(325.0f, 162.5f), KPA_ITEM(362.5f, 162.5f), KPA_ITEM_END,
 };
 
+/**
+ * Watches Bowser in the stage: each frame it checks whether he is dead (evt_koopa_chk_dead)
+ * or has fallen below y = -20, then runs the death handler (kpa_dead) if he died,
+ * or the pit fall handler (kpa_fall_sub) if he fell.
+ */
 static EVT_BEGIN(kpa_fall)
     SET_VALUE(LF(0), 0)
     LOOP(0)
@@ -89,6 +94,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Map init for kpa_02, side-scrolling stage 1: starts Bowser at x = -1450,
+ * builds the stage's blocks and coins from kpa_act_stg1_mobj/item, and starts the pit watcher, the HUD,
+ * the intro and the clock. Reaching the goal goes to Petalburg (nok_00).
+ */
 EVT_BEGIN(kpa_02_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(PTR(kpa_init))

@@ -36,6 +36,13 @@ typedef struct RepeatedlyLvWork {
 // them all (docs/CLEANUP_BACKLOG.md, function-pointer casts).
 
 
+/**
+ * Reads the script parameters: params[0] picks the input (A by default; 2 B, 3 X, 4 Y, 5 R, 6 stick left,
+ * 7 letting go of the stick held left, 8 the same while holding A, 11 A/B, 12 X/Y, 13 stick up/down,
+ * 14 stick left/right and 15 L/R alternately).
+ * [1] is the time limit, [2] the gauge width, [3] the gain per press (x 0.4), [4] the drain x 100,
+ * [5] the gauge per level.
+ */
 static void _init_param(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     RepeatedlyLvWork* p = (RepeatedlyLvWork*)ac->work;
@@ -108,6 +115,14 @@ static void _init_param(BattleWork* work) {
 
 void battleAcDelete_RepeatedlyLv(BattleWork* work);
 
+/**
+ * Per-frame driver of action command 6, used by Koops's Shell Slam, Yoshi's Ground Pound and Stampede,
+ * Bobbery's Bob- ombast and Ms. Mowz's Love Slap, Tease and Smooch.
+ * Presses fill a draining gauge (see the acFlags enum);
+ * at the time limit it succeeds if the gauge is at params[6] or more.
+ * outputParams[1] is the gauge, [2] the level reached (one more when full).
+ * Input 8 waits up to 150 frames for A to be held, then ends with level 0.
+ */
 s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     RepeatedlyLvWork* p = (RepeatedlyLvWork*)ac->work;
@@ -295,12 +310,17 @@ s32 battleAcMain_RepeatedlyLv(BattleWork* work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_RepeatedlyLv(BattleWork* work) {
     return work->actionCommands.result;
 }
 
 static void actionCommandDisp(f32 x, f32 y);
 
+/**
+ * Display callback: slides the gauge in from the left over 20 frames,
+ * and once the command ends keeps it up for 40 frames before sliding it back out.
+ */
 void battleAcDisp_RepeatedlyLv(CameraId cameraId, void* param) {
     BattleWork* work = param;
     BattleActions* ac = &work->actionCommands;
@@ -331,11 +351,20 @@ void battleAcDisp_RepeatedlyLv(CameraId cameraId, void* param) {
     }
 }
 
+/**
+ * Ends the command (also called from main at the time limit):
+ * stops the gauge sound and starts the 60-frame end wait.
+ */
 void battleAcDelete_RepeatedlyLv(BattleWork* work) {
     work->actionCommands.mAcState = 1002;
     BattleAcGaugeSeDelete();
 }
 
+/**
+ * Draws the flashing input icons (two for the alternating inputs),
+ * the gauge eased toward its value with level marks from gaugeParams (pulsing red once full),
+ * and per acFlags the params[6] target marker and the level number.
+ */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;

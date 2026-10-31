@@ -183,6 +183,11 @@ ExtTexInfo moamoa_data[] = {
 };
 
 #pragma dont_inline on
+/**
+ * Builds the work area's animation table (wp->defs) from moamoa_data:
+ * consecutive rows with the same model and animation name become one MoamoaPoseDef (first texture frame,
+ * frame count, speed, looping unless the animation name starts with J). Kept out of line to match the original.
+ */
 // Build one definition for each contiguous model/animation group in the texture table.
 static void moamoa_pose_init(void) {
     ExtTexInfo* data = moamoa_data;
@@ -219,6 +224,11 @@ static void moamoa_pose_init(void) {
 }
 
 #pragma dont_inline reset
+/**
+ * Per-frame update of every Smorg (moamoa) sprite:
+ * converts the time since the pose started into a texture frame index (looping or clamped at the end)
+ * and stores it in the sprite's ExtdrvPose.
+ */
 static void moamoa_pose_main(void) {
     f32 t;
     u64 now;
@@ -246,6 +256,10 @@ static void moamoa_pose_main(void) {
     }
 }
 
+/**
+ * Switches one Smorg sprite to the named model/animation pair from the table (the b model is forced when flag 2
+ * is set) and restarts its animation clock; does nothing if it is already playing it.
+ */
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim) {
     MoamoaPoseDef* def = wp->defs;
     s32 i;
@@ -264,12 +278,19 @@ static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim)
     }
 }
 
+/** Returns a random float between min and max using rand(). */
 static f32 randf(f32 min, f32 max) {
     f32 r = rand() / 32767.0f;
 
     return r * (max - min) + min;
 }
 
+/**
+ * Init callback of the Smorg window effect (evt_ext_entry):
+ * allocates the work area, then places every sprite at a random spot just outside the cab window
+ * or the carriage (rsh_00 versus rsh_03 versus other cars), hidden below the floor at y = -1000,
+ * with a yaw for the sprites that will climb in from the side.
+ */
 void moamoa_init(void) {
     s32 i;
     ExtdrvPose* pose;
@@ -363,6 +384,10 @@ void moamoa_init(void) {
     }
 }
 
+/**
+ * Draw callback of the Smorg sprite effect: loads the ext driver's render mode, vertices,
+ * textures and TEV setup and draws all sprites.
+ */
 static void ext_disp(CameraId camera, void* param) {
     extLoadRenderMode();
     extLoadVertex();
@@ -372,6 +397,12 @@ static void ext_disp(CameraId camera, void* param) {
     extLoadTextureExit();
 }
 
+/**
+ * Per-frame callback of the Smorg effect.
+ * Steps each sprite through its state (0 idle, 1 pick a random delay, 2 wait it out,
+ * 3 pop up from below the window along a random angle over 20 frames, 4 stay at its spot), clamps z to 45,
+ * then advances the animations.
+ */
 // States: 0 hidden, 1 start delay, 2 wait, 3 emerge, 4 hold the final position.
 void moamoa_main(void) {
     s32 i;
@@ -426,10 +457,15 @@ void moamoa_main(void) {
     moamoa_pose_main();
 }
 
+/** Registers ext_disp with the display list on the 3D camera each frame. */
 void moamoa_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, 1, ext_disp, NULL);
 }
 
+/**
+ * Script helper: places Smorg sprite number args[0] at (args[1], args[2], args[3])
+ * and puts it straight into the pop-up state (3); the first time it also turns the sprite to face sideways.
+ */
 // Set one emergence target without resetting its timer or animation pose.
 USER_FUNC(evt_moamoa_set_one) {
     EvtWord* args = event->args;
@@ -451,6 +487,10 @@ USER_FUNC(evt_moamoa_set_one) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: forces every Smorg sprite into the state args[0] (1 starts the random appear sequence,
+ * 4 shows them all at their spots).
+ */
 USER_FUNC(evt_moamoa_set_seq_all) {
     s32 seq = evtGetValue(event, event->args[0]);
     s32 i;
@@ -627,6 +667,11 @@ static BeroEntry bero_data_c[] = {
     {0},
 };
 
+/**
+ * Animates the cab's handles while the story is between the engineer stage and Poshley Heights:
+ * spins handoru_1 and handoru_2 in opposite directions and slides handoru_3 back and forth,
+ * driving the shaking controls during the Smorg attack.
+ */
 EVT_BEGIN(evt_handle)
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_46_ENGINEER)
@@ -671,6 +716,11 @@ EVT_BEGIN(evt_handle)
     RETURN
 EVT_END()
 
+/**
+ * Regular (idle) event of the driver NPC: every one to two seconds it picks one of three handles at random
+ * and eases it to a new random angle or position, so the driver seems to steer.
+ * It does nothing during the stages where the train is stopped or the driver is busy.
+ */
 // Randomly animate one control per iteration; the three empty day-3 tests do not gate those actions.
 EVT_BEGIN(regu_unten)
     SET_VALUE(LW(2), 0)
@@ -861,6 +911,7 @@ static const char* access_tbl[] = {
     NULL,
 };
 
+/** Trigger script for the signboards (nittei, soujyuu): locks input, prints the message in LW(1) and unlocks. */
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, LW(1), 0, 0)
@@ -868,6 +919,10 @@ static EVT_BEGIN(evt_access)
     RETURN
 EVT_END()
 
+/**
+ * Registers the cab's signboard triggers from access_tbl (hit name, message):
+ * each row runs evt_access when Mario faces it.
+ */
 static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
@@ -880,6 +935,12 @@ static EVT_BEGIN(evt_access_entry)
     RETURN
 EVT_END()
 
+/**
+ * Shared map init for the three variants of the driver's cab:
+ * starts the window and scenery animations unless the train is stopped at a station, registers the driver,
+ * the signboards, the handle animation, the save block and the Star Piece spinning-floor panel,
+ * and starts the music and ambience for the current story stage.
+ */
 EVT_BEGIN(rsh_00_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
@@ -941,6 +1002,10 @@ EVT_BEGIN(rsh_00_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_00_a (first visit): sets up the door to rsh_01_a, runs the shared init,
+ * and from day 3 on sets up the Smorg effect (shown at once from the engineer stage on).
+ */
 EVT_BEGIN(rsh_00_a_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_a))
     CALL(evt_bero_get_info)
@@ -960,6 +1025,7 @@ EVT_BEGIN(rsh_00_a_init_evt)
     RETURN
 EVT_END()
 
+/** Init script of rsh_00_b (first visit): sets up the door to rsh_01_b and runs the shared init. */
 EVT_BEGIN(rsh_00_b_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_b))
     CALL(evt_bero_get_info)
@@ -976,6 +1042,10 @@ static const char* window_tbl[] = {
     NULL,
 };
 
+/**
+ * Init script of rsh_00_c (first visit): sets up the door to rsh_01_c,
+ * runs the shared init and the window scenery for mado_uturi_1..4.
+ */
 EVT_BEGIN(rsh_00_c_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_c))
     CALL(evt_bero_get_info)
@@ -1041,6 +1111,7 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
     RETURN
 EVT_END()
 
+/** Init script of rsh_00_a on the second visit: door to rsh_01_a plus rsh_00_init_evt_nidome. */
 EVT_BEGIN(rsh_00_a_init_evt_nidome)
     SET_VALUE(LW(0), PTR(bero_data_a))
     CALL(evt_bero_get_info)
@@ -1049,6 +1120,7 @@ EVT_BEGIN(rsh_00_a_init_evt_nidome)
     RETURN
 EVT_END()
 
+/** Init script of rsh_00_b on the second visit: door to rsh_01_b plus rsh_00_init_evt_nidome. */
 EVT_BEGIN(rsh_00_b_init_evt_nidome)
     SET_VALUE(LW(0), PTR(bero_data_b))
     CALL(evt_bero_get_info)
@@ -1057,6 +1129,7 @@ EVT_BEGIN(rsh_00_b_init_evt_nidome)
     RETURN
 EVT_END()
 
+/** Init script of rsh_00_c on the second visit: door to rsh_01_c, rsh_00_init_evt_nidome and the window scenery. */
 EVT_BEGIN(rsh_00_c_init_evt_nidome)
     SET_VALUE(LW(0), PTR(bero_data_c))
     CALL(evt_bero_get_info)

@@ -19,6 +19,10 @@ s32 handBeatEnable;
 s32 cheerEnable;
 u8 volPer;
 
+/**
+ * Opening camera of every special move: homes the battle camera on Mario and sets zoom 300,
+ * or 100 while he is huge (STATUS_HUGE).
+ */
 EVT_BEGIN(sac_start_camera_evt)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -107,6 +111,11 @@ USER_FUNC(sac_wao) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Runs until sac_handbeat_end: the crowd claps along in time,
+ * starting every 60 frames and speeding up to every 20 while the clap volume rises to 100%.
+ * Stops audience sounds 4 and 5 first; fades out over 180 frames.
+ */
 USER_FUNC(sac_handbeat) {
     BattleAudienceSound* sound;
 
@@ -147,11 +156,17 @@ USER_FUNC(sac_handbeat) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Tells a running sac_handbeat to fade the clapping out and finish. */
 USER_FUNC(sac_handbeat_end) {
     handBeatEnable = 0;
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Runs until sac_cheer_end: a crowd cheer whose volume rises 5% per beat.
+ * args[0] nonzero leaves the volume alone.
+ * Same timer as sac_handbeat but without the claps; fades out over 180 frames when ended.
+ */
 USER_FUNC(sac_cheer) {
     BattleAudienceSound* sound;
     s32 flag = evtGetValue(event, event->args[0]);
@@ -194,11 +209,13 @@ USER_FUNC(sac_cheer) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Tells a running sac_cheer to fade the cheer out and finish. */
 USER_FUNC(sac_cheer_end) {
     cheerEnable = 0;
     return EVT_RETURN_DONE;
 }
 
+/** Starts enemy_slide_go_evt on every enemy-side unit, sliding the whole enemy party off stage. */
 USER_FUNC(sac_enemy_slide_go) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
@@ -231,11 +248,13 @@ USER_FUNC(sac_enemy_slide_return) {
     return EVT_RETURN_DONE;
 }
 
+/** Switches the action-command help display to the special-move style (type 2), which hides the audience window. */
 USER_FUNC(sac_ac_help_on) {
     BattleAcHelpSetDispType(2);
     return EVT_RETURN_DONE;
 }
 
+/** Restores the normal action-command help display (type 0) and shows the audience window again. */
 USER_FUNC(sac_ac_help_off) {
     BattleAcHelpSetDispType(0);
     return EVT_RETURN_DONE;

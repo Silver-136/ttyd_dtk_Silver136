@@ -88,6 +88,11 @@ EvtWord evt_door_close_roll[247];
 EvtWord evt_door_open_quick[220];
 EvtWord evt_door_entry[77];
 
+/**
+ * Plays the door-open sound for a DoorParam (LW(0)) at its map object's position;
+ * the sound comes from DoorParam.se (1 plain, 2-4 wood, 5-6 iron, 7 grille, 8 sliding, 9 turning, 10 electric,
+ * 11 stone, 12-13 castle, 14 metal); 0 stays silent.
+ */
 EVT_BEGIN(door_open_se)
     CALL(evt_door_param, LW(0), 8, LW(1))
     CALL(evt_door_param, LW(0), 1, LW(2), LW(3), LW(4))
@@ -197,6 +202,11 @@ USER_FUNC(snd_door_out) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets up a house for evt_door_setup: allocates a HouseWork on the map heap for the HouseData in args[0],
+ * works out where Mario stands outside (from hit[1]) and inside (from hit[3]),
+ * and returns the HouseWork in args[1].
+ */
 USER_FUNC(door_entry) {
     EvtWord* args = event->args;
     HouseData* d = (HouseData*)evtGetValue(event, args[0]);
@@ -1321,6 +1331,7 @@ USER_FUNC(inout_hit) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the X and Z of the spot outside the house that door_entry worked out. */
 USER_FUNC(out_pos) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
@@ -1329,6 +1340,7 @@ USER_FUNC(out_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the X and Z of the spot inside the house that door_entry worked out. */
 USER_FUNC(in_pos) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
@@ -1337,6 +1349,7 @@ USER_FUNC(in_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the house's outside map group name (HouseData.outside). */
 USER_FUNC(outside_group) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
@@ -1344,6 +1357,7 @@ USER_FUNC(outside_group) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the house's door map group name (HouseData.door); also used as the sound position. */
 USER_FUNC(door_group) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
@@ -1351,6 +1365,7 @@ USER_FUNC(door_group) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns HouseData.inside: the interior map group and its hit object, shown while Mario is inside. */
 USER_FUNC(inside_group) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
@@ -1359,6 +1374,7 @@ USER_FUNC(inside_group) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns HouseData.initInside: the map group and hit object evt_door_setup hides at map start. */
 USER_FUNC(init_inside_group) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
@@ -1367,6 +1383,7 @@ USER_FUNC(init_inside_group) {
     return EVT_RETURN_DONE;
 }
 
+/** Returns the house's four map animation names (HouseData.anim): [0] opening, [2] closing; 0 for none. */
 USER_FUNC(animation) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
@@ -1423,14 +1440,23 @@ USER_FUNC(animation) {
     }                                                                                                   \
     return EVT_RETURN_DONE;
 
+/**
+ * Keeps Mario, both partners and the house's listed NPCs,
+ * map objects and items lit (exempt from the map blend) while house_in darkens the town.
+ */
 USER_FUNC(npc_dark) {
     NPC_LIGHT_BODY(animPoseSetMaterialFlagOn, iconFlagOn)
 }
 
+/** Undoes npc_dark when Mario leaves the house, letting the map blend reach them again. */
 USER_FUNC(npc_light) {
     NPC_LIGHT_BODY(animPoseSetMaterialFlagOff, iconFlagOff)
 }
 
+/**
+ * Returns entry args[1] of HouseData.noclip (map groups whose view culling is turned off while Mario is inside),
+ * or -1 past the end of the list.
+ */
 USER_FUNC(get_noclip_map) {
     EvtWord* args = event->args;
     HouseWork* w = (HouseWork*)evtGetValue(event, args[0]);
@@ -1453,6 +1479,11 @@ USER_FUNC(get_noclip_map) {
     }                                  \
     hitObjGetNormal(HIT, &nrm);
 
+/**
+ * Works out where Mario stands outside (out) and inside (in) a door from the hit objects' positions and normals;
+ * the outside spot is offset sideways by half the door map object's width according to the hinge side (type).
+ * With mario set, Mario's own position replaces the hit positions. Only X and Z are written.
+ */
 void door_position_sub(s32 type, const char* map, const char* hitIn, const char* hitOut, Vec* in, Vec* out, BOOL mario) {
     Mtx inv;
     Mtx m;
@@ -1609,6 +1640,10 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
         }                                                                                       \
     }
 
+/**
+ * Sets (on) or clears the no-blend material flags on Mario, both partners and the listed NPCs,
+ * map objects and items, so they stay lit while the room around them is darkened.
+ */
 void door_dark_flag_sub(BOOL on, const char** npcs, const char** mobjs, const char** items) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);
@@ -1622,6 +1657,10 @@ void door_dark_flag_sub(BOOL on, const char** npcs, const char** mobjs, const ch
     }
 }
 
+/**
+ * Script wrapper for door_dark_flag_sub: args[0] is the DoorParam (its npcs, mobjs and items lists),
+ * args[1] turns the exemption on or off.
+ */
 USER_FUNC(door_dark_flag) {
     EvtWord* args = event->args;
     DoorParam* d = (DoorParam*)evtGetValue(event, args[0]);
@@ -1636,6 +1675,12 @@ USER_FUNC(door_dark_flag) {
     evtSetValue(event, args[3], V.y);                                         \
     evtSetValue(event, args[4], V.z);
 
+/**
+ * Reads a field of the DoorParam in args[0] into args[2..];
+ * args[1] picks it: 0 type, 1 map object and hits, 2 outside, 3 inside, 4/5 inside/outside standing spot,
+ * 6 in/out/wall events, 7 open/close events, 8 sound set, 9 flags,
+ * 10/11 the standing spots measured from Mario's position.
+ */
 USER_FUNC(evt_door_param) {
     EvtWord* args = event->args;
     DoorParam* d = (DoorParam*)evtGetValue(event, args[0]);
@@ -1703,6 +1748,10 @@ USER_FUNC(evt_door_param) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Saves the flags of the map object named in args[0] into door_mapflag before a door changes them;
+ * only one door's flags can be saved at a time.
+ */
 USER_FUNC(evt_door_save_mapflag) {
     const char* name = (const char*)evtGetValue(event, *event->args);
     MapObject* obj = mapGetMapObj(name);
@@ -1714,6 +1763,7 @@ USER_FUNC(evt_door_save_mapflag) {
     return EVT_RETURN_DONE;
 }
 
+/** Restores the flags saved by evt_door_save_mapflag onto the map object named in args[0]. */
 USER_FUNC(evt_door_load_mapflag) {
     const char* name = (const char*)evtGetValue(event, *event->args);
     MapObject* obj = mapGetMapObj(name);
@@ -1725,6 +1775,10 @@ USER_FUNC(evt_door_load_mapflag) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Hides (args[1] on) or shows every NPC in the DoorParam's npcs list,
+ * so NPCs on the other side of the door are only drawn while Mario is in their room.
+ */
 USER_FUNC(npc_hide_onoff) {
     EvtWord* args = event->args;
     DoorParam* d = (DoorParam*)evtGetValue(event, args[0]);
@@ -1745,6 +1799,10 @@ USER_FUNC(npc_hide_onoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Copies the DoorParam in args[0] onto the map heap and returns the copy in args[1],
+ * so a map can change it with evt_door_set_param (Rogueport, gor_01/gor_02).
+ */
 USER_FUNC(evt_door_data_copy) {
     EvtWord* args = event->args;
     DoorParam* src = (DoorParam*)evtGetValue(event, args[0]);
@@ -1754,6 +1812,10 @@ USER_FUNC(evt_door_data_copy) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Changes a field of a DoorParam: args[1] 0 replaces its npcs list with args[2]; other kinds do nothing.
+ * Rogueport uses it to swap who is shown behind a door.
+ */
 USER_FUNC(evt_door_set_param) {
     EvtWord* args = event->args;
     DoorParam* d = (DoorParam*)evtGetValue(event, args[0]);
@@ -1767,6 +1829,7 @@ USER_FUNC(evt_door_set_param) {
     return EVT_RETURN_DONE;
 }
 
+/** Blocks the calling script until no door open or close sequence is running (DoorFLAG is 0). */
 USER_FUNC(evt_door_end_wait) {
     return DoorFLAG ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }

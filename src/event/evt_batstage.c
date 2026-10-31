@@ -10,6 +10,10 @@ void BattleStageReturnStgDarkBase(s32 time, s32 mode);
 void BattleStageSetStgDarkBase(u8 dark, s32 time, s32 mode);
 void BattleStageSetStgDark(u8 dark, s32 time, s32 mode);
 
+/**
+ * Fades the battle stage's darkness: args are the darkness level (0-255), the fade time in frames and a mode.
+ * Used by the battle-end and Showstopper (sac_suki) scripts.
+ */
 USER_FUNC(evt_batstage_set_stg_dark) {
     EvtWord* args = event->args;
     u8 dark = evtGetValue(event, args[0]);
@@ -19,6 +23,7 @@ USER_FUNC(evt_batstage_set_stg_dark) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the stage's base darkness (the level evt_batstage_return_stg_dark_base fades back to): level, frames, mode. */
 USER_FUNC(evt_batstage_set_stg_dark_base) {
     EvtWord* args = event->args;
     u8 dark = evtGetValue(event, args[0]);
@@ -28,6 +33,7 @@ USER_FUNC(evt_batstage_set_stg_dark_base) {
     return EVT_RETURN_DONE;
 }
 
+/** Fades the stage darkness back to its base level; args are the fade time in frames and a mode. */
 USER_FUNC(evt_batstage_return_stg_dark_base) {
     EvtWord* args = event->args;
     s32 time = evtGetValue(event, args[0]);
@@ -36,6 +42,7 @@ USER_FUNC(evt_batstage_return_stg_dark_base) {
     return EVT_RETURN_DONE;
 }
 
+/** Fades the audience's darkness: args are the darkness level (0-255), the fade time in frames and a mode. */
 USER_FUNC(evt_batstage_set_aud_dark) {
     EvtWord* args = event->args;
     u8 dark = evtGetValue(event, args[0]);
@@ -45,6 +52,7 @@ USER_FUNC(evt_batstage_set_aud_dark) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets the audience's base darkness level (restored by evt_batstage_return_aud_dark_base): level, frames, mode. */
 USER_FUNC(evt_batstage_set_aud_dark_base) {
     EvtWord* args = event->args;
     u8 dark = evtGetValue(event, args[0]);
@@ -54,6 +62,7 @@ USER_FUNC(evt_batstage_set_aud_dark_base) {
     return EVT_RETURN_DONE;
 }
 
+/** Fades the audience darkness back to its base level; args are the fade time in frames and a mode. */
 USER_FUNC(evt_batstage_return_aud_dark_base) {
     EvtWord* args = event->args;
     s32 time = evtGetValue(event, args[0]);

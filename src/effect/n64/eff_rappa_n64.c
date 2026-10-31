@@ -38,6 +38,10 @@ static u8 color_rotation_data[] = {
 void effRappaMain(EffectEntry* effect);
 void effRappaDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns `num` sparks at (x, y, z) fired along pitch/yaw (degrees), living 30 frames;
+ * returns NULL when num is 0. Spawned by event scripts through evt_eff.
+ */
 EffectEntry* effRappaN64Entry(s32 type, s32 num, f32 x, f32 y, f32 z, f32 pitch, f32 yaw) {
     EffectEntry* effect;
     EffRappaN64Work* work;
@@ -87,6 +91,11 @@ EffectEntry* effRappaN64Entry(s32 type, s32 num, f32 x, f32 y, f32 z, f32 pitch,
     return effect;
 }
 
+/**
+ * Moves each spark along its direction at its speed, which drops 10% per frame;
+ * over the last 10 frames the alpha drops 20% per frame and each spark grows by speed/10.
+ * Deletes when the lifetime runs out. CAMERA_3D, layer 2.
+ */
 void effRappaMain(EffectEntry* effect) {
     EffRappaN64Work* work = effect->userdata;
     Vec position;
@@ -121,6 +130,7 @@ void effRappaMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effRappaDisp, effect);
 }
 
+/** Builds a GXColor from four byte components. */
 static inline GXColor mkcol(u8 r, u8 g, u8 b, u8 a) {
     GXColor c = {0};
     c.r = r;
@@ -130,6 +140,11 @@ static inline GXColor mkcol(u8 r, u8 g, u8 b, u8 a) {
     return c;
 }
 
+/**
+ * Draws each spark as a camera-facing 16x16 quad of texture 0x1D in a flat colour from color_rotation_data;
+ * each spark is one step further along the table and the whole set advances 3 steps per frame,
+ * so the colours cycle.
+ */
 void effRappaDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     s32 j0, j1, j2;

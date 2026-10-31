@@ -292,6 +292,11 @@ static inline MapObjectWork* mobjGetWorkFlag(BOOL inBattle) {
     return inBattle ? &work[1] : &work[0];
 }
 
+/**
+ * Switches to a separate 128-entry map object table (in map memory) for Bowser's side-scrolling stages
+ * and marks them running; nothing in the main program calls it, so it comes from the map code.
+ * mobjReset turns it off again.
+ */
 void mobjKoopaOn(void) {
     if (!koopaRunFlag) {
         MapObjectWork* wp = &work[2];
@@ -303,6 +308,7 @@ void mobjKoopaOn(void) {
     }
 }
 
+/** Returns the map object table in use: Bowser's stage table while it runs, else the field or battle one. */
 static MapObjectWork* mobjGetWork(void) {
     if (koopaRunFlag) {
         return &work[2];
@@ -311,6 +317,10 @@ static MapObjectWork* mobjGetWork(void) {
     }
 }
 
+/**
+ * Draw callback for a translucent map object: draws its pose's opaque and translucent parts in one go,
+ * with its paper texture if it has one.
+ */
 void mobjDispXLU(CameraId camId, void* param) {
     MapObjectEntry* entry = param;
 
@@ -330,6 +340,10 @@ void mobjDispXLU(CameraId camId, void* param) {
     }
 }
 
+/**
+ * Draw callback for a map object, called once per render pass (opaque, alpha-tested, translucent);
+ * draws its pose with its paper texture if it has one.
+ */
 void mobjDisp(CameraId camId, void* param) {
     MapObjectEntry* entry = param;
     DispEntry* disp;
@@ -360,6 +374,10 @@ void mobjDisp(CameraId camId, void* param) {
     }
 }
 
+/**
+ * Draw callback on the offscreen camera for a map object with an offscreen region:
+ * draws its pose and grows the region by the screen box it covered.
+ */
 void mobjDisp_OffscreenXLU(CameraId camId, void* param) {
     MapObjectEntry* entry = param;
     u16 left, top, right, bottom;
@@ -385,6 +403,7 @@ void mobjDisp_OffscreenXLU(CameraId camId, void* param) {
     offscreenAddBoundingBox(entry->offscreenId, left, top, right, bottom);
 }
 
+/** Allocates the field (16) and battle (8) map object tables; called once at boot. */
 void mobjInit(void) {
     MapObjectWork* wp = &work[0];
 
@@ -400,12 +419,18 @@ void mobjInit(void) {
     koopaRunFlag = FALSE;
 }
 
+/** Clears the field or battle map object table and leaves Bowser's stage mode; run when a map or battle starts. */
 void mobjReset(BOOL inBattle) {
     MapObjectWork* wp = mobjGetWorkFlag(inBattle);
     memset(wp->entries, 0, sizeof(MapObjectEntry) * wp->count);
     koopaRunFlag = FALSE;
 }
 
+/**
+ * Creates the collision for a map object from its pose's bounding box, replacing any it had:
+ * type 0 a solid cube (MOBJ_<name>), 1 a cube shaped for head hits,
+ * 2 a front cube plus a second part (MOBJ~<name>) for objects with two hit parts.
+ */
 void mobjHitEntry(MapObjectEntry* entry, s32 type) {
     AnimationPoseData* pose;
     Mtx mtx;
@@ -507,6 +532,10 @@ void mobjHitEntry(MapObjectEntry* entry, s32 type) {
     }
 }
 
+/**
+ * Creates a named map object (blocks, switches, boxes, save blocks, ...) drawing animation pose animPoseName,
+ * reusing the slot if the name exists; returns its index. Called by the evt_mobj entry commands.
+ */
 s32 mobjEntry(const char* name, const char* animPoseName) {
     MapObjectWork* wp = mobjGetWork();
     s32 entryCount;
@@ -548,6 +577,7 @@ s32 mobjEntry(const char* name, const char* animPoseName) {
     return idx;
 }
 
+/** Removes the named map object and its collision and frees its pose. */
 void mobjDelete(const char* name) {
     MapObjectWork* wp = mobjGetWork();
     s32 entryCount;
@@ -572,6 +602,7 @@ void mobjDelete(const char* name) {
     }
 }
 
+/** Moves the named map object to (x, y, z) and updates its collision. */
 void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
     MapObjectWork* wp = mobjGetWork();
     MapObjectEntry* entry;
@@ -592,6 +623,12 @@ void mobjSetPosition(const char* name, f32 x, f32 y, f32 z) {
 }
 
 
+/**
+ * Per-frame update of all map objects: works out which one Mario hammered, hit from below, stood on,
+ * spun on or touched with an action, which one a partner, a Bobbery bomb or Bowser hit,
+ * and reports it to the object; runs each object's main function, drops falling ones,
+ * keeps their shadows and colours, and queues their drawing (offscreen if they have a region).
+ */
 void mobjMain(void) {
     MapObjectWork* wp;
     MapObjectEntry* entry;
@@ -880,6 +917,7 @@ void mobjMain(void) {
 }
 
 
+/** Returns the map object with this name; one past the table when there is none (the name is expected to exist). */
 MapObjectEntry* mobjNameToPtr(const char* name) {
     int i;
     s32 entryCount;
@@ -897,6 +935,7 @@ MapObjectEntry* mobjNameToPtr(const char* name) {
     return entry;
 }
 
+/** Returns the map object with this name, or NULL if there is none. */
 MapObjectEntry* mobjNameToPtrNoAssert(const char* name) {
     int i;
     s32 entryCount;
@@ -926,6 +965,10 @@ MapObjectEntry* mobjHitObjPtrToPtr(HitEntry* hitObj) {
     return NULL;
 }
 
+/**
+ * Starts script eventCode for a map object (its this-object is set),
+ * unless the object's previous script is still running; returns the event or NULL.
+ */
 EventEntry* mobjRunEvent(MapObjectEntry* entry, EvtWord* eventCode) {
     EventEntry* event;
 
@@ -944,6 +987,7 @@ EventEntry* mobjRunEvent(MapObjectEntry* entry, EvtWord* eventCode) {
     return event;
 }
 
+/** Builds a scale, x/y/z rotation (degrees) and translation matrix. */
 static void calcMtx(Mtx mtx, Vec* pos, Vec* sc, Vec* rot) {
     Mtx trans;
     Mtx scale;
@@ -961,6 +1005,10 @@ static void calcMtx(Mtx mtx, Vec* pos, Vec* sc, Vec* rot) {
     MTXConcat(trans, scale, mtx);
 }
 
+/**
+ * Recomputes a map object's collision matrices from its position, scale and rotation,
+ * sizing the hit cube from its pose's bounding box (HOBJ_ poses get a thin fixed depth).
+ */
 void mobjCalcMtx(MapObjectEntry* entry) {
     AnimationPoseData* pose;
     Mtx mtx;
@@ -988,6 +1036,10 @@ void mobjCalcMtx(MapObjectEntry* entry) {
     }
 }
 
+/**
+ * Recomputes a map object's collision matrices from its position, rotation and the already-computed hit size;
+ * evt_mobj calls it as objects move.
+ */
 void mobjCalcMtx2(MapObjectEntry* entry) {
     Mtx mtx;
     Vec position;
@@ -1039,6 +1091,10 @@ static int mobjCheckKururingFloorItem(MapObjectEntry* entry) { // was always inl
     }
 }
 
+/**
+ * For treasure chests (normal, big, gray, black) returns 2 once opened (state 99) and 1 while closed;
+ * 0 for any other object.
+ */
 s32 mobjCheckItemboxOpen(MapObjectEntry* entry) {
     if (strcmp(entry->animName, "MOBJ_TreasureBox") == 0 || strcmp(entry->animName, "MOBJ_BigTreasureBox") == 0 ||
         strcmp(entry->animName, "MOBJ_GrayTreasureBox") == 0 || strcmp(entry->animName, "MOBJ_BlackTreasureBox") == 0) {

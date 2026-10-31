@@ -36,6 +36,7 @@
 
 s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 9, 8, 6, 4, 3, 2, 1, 0, 0, 0, 0, 0};
 
+/** Camera shake of 600 ms (camera 4), run when Bobbery's blast hits a bomb rock (isBombRock). */
 EVT_BEGIN(longQuake_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(15.0f / 1024.0f), FLOAT(15.0f / 1024.0f), 600)
     RETURN
@@ -91,6 +92,11 @@ static inline void bomheiFree(PartyEntry* p) {
     }
 }
 
+/**
+ * Party table bye handler: plays the goodbye sequence when Bobbery leaves the party,
+ * dropping Mario's carry flag and stopping the bomb sounds on the first frame,
+ * then switches to run mode 14 when the sequence ends.
+ */
 void bomhei_bye(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
@@ -114,6 +120,11 @@ void bomhei_init_800BFBB0(PartyEntry* party) {
     party->work.bomhei.sfxId2 = -1;
 }
 
+/**
+ * Bobbery's state for scripts (evt_party.c): 0 when there is no partner or Bobbery is out
+ * but not using his ability, 1 on the frame his bomb explodes (use motion 60),
+ * 2 otherwise (bomb in progress, or another partner is out).
+ */
 u8 bomheiGetStatus(void) {
     u32 partyId = marioGetPartyId();
     PartyEntry* party = partyGetPtr(partyId);
@@ -291,6 +302,10 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
     return FALSE;
 }
 
+/**
+ * Holds Bobbery above Mario's head: 36 units up (plus a bob from m_w_7_sync while Mario plays the carry walk
+ * M_W_7), 6 behind along his facing, facing the same way as Mario.
+ */
 static inline void bomheiSetHoldPos(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 height = 36.0f;
@@ -307,6 +322,14 @@ static inline void bomheiSetHoldPos(PartyEntry* party) {
     party->displayDirection = mario->displayDirection;
 }
 
+/**
+ * The bomb ability's motion steps (party->useMotionId).
+ * 0-2: Bobbery hops onto Mario's head; 10: held there with a 3 s fuse while X is held;
+ * 20-22: thrown 38 units ahead on release; 30-32: walks forward slowly (X again cuts the fuse to 0.5 s);
+ * 40-42: lands in water with a splash; 50-51: A_3 last-moment pose for 40 frames,
+ * then check_front picks the hit; 60: the blast (Sanders effect at the partner attack level, camera shake,
+ * field enemy hit); 70-71: flies off the top of the screen; 80-82: 0.8 s later drops back near Mario; 100: done.
+ */
 void bomhei_use_main(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 x, z;
@@ -650,6 +673,10 @@ void bomhei_use_main(PartyEntry* party) {
     }
 }
 
+/**
+ * Returns 0 while Bobbery's bomb is at a stage where marioCheckMenuDisable must keep the menu shut (being
+ * lifted, carried, thrown, the blast, flying off); 1 otherwise or when Bobbery is not in use.
+ */
 s32 mario_bomhei_keychk(void) {
     PartyEntry* p;
     u8 m;
@@ -676,6 +703,10 @@ s32 mario_bomhei_keychk(void) {
     return 1;
 }
 
+/**
+ * Returns 0 while Bobbery is being lifted or thrown, so marioChkKey ignores Mario's buttons;
+ * 1 otherwise or when Bobbery is not in use.
+ */
 s32 mario_bomhei_keychk2(void) {
     PartyEntry* p;
     u8 m;
@@ -698,6 +729,12 @@ s32 mario_bomhei_keychk2(void) {
     return 1;
 }
 
+/**
+ * Drives Mario's side of the bomb (party->work.bomhei.state):
+ * 10 lift pose, 20-21 carrying (syncs the M_W_7 walk frame with the bob table),
+ * 40-41 a 40-frame stand when the fuse runs out in his hands,
+ * 30-36 the throw pose M_C_1 and its 50+10 frame recovery; 100 is idle.
+ */
 void mario_controll(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
     s32 cnt;
@@ -865,6 +902,11 @@ void partyGetReturnPos(Vec* out) {
     out->z = z;
 }
 
+/**
+ * Picks the hit object Bobbery's blast acts on (party->hitobjAction, read by the case triggers):
+ * a bomb rock within 30 units (50 when the direction is sideways to the camera) in eight directions around his
+ * facing, else the floor below if it is a bomb rock or any floor, else his floor hit.
+ */
 HitEntry* check_front(PartyEntry* party) {
     const s32 angles[8] = {0, 45, -45, 90, -90, 135, -135, 180};
     static const Vec down = {0.0f, -1.0f, 0.0f};

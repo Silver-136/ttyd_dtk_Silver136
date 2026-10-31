@@ -352,6 +352,10 @@ static void* nozle_4_dl_0_tbl[] = {nozle_4_dl_0_0, nozle_4_dl_0_1, nozle_4_dl_0_
 static u8 nozle_4_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
 static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}, {0, 0}};
 
+/**
+ * Spawns a nozzle model (type picks the model) at (x, y, z) rotated by rx and ry for `life` frames;
+ * battle_stage_object.c uses it for the stage nozzle objects.
+ */
 EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 life) {
     EffectEntry* effect;
     EffNozleWork* work;
@@ -410,6 +414,7 @@ EffectEntry* effNozleEntry(s32 type, f32 x, f32 y, f32 z, f32 rx, f32 ry, s32 li
     return effect;
 }
 
+/** Per frame: counts the life down and deletes the effect at the end; chooses the draw layer (8 or 2) by type. */
 void effNozleMain(EffectEntry* effect) {
     EffNozleWork* work = effect->userdata;
     EffNozleWork* p;
@@ -497,6 +502,7 @@ static inline void nozleVtxSetup(GXAttrType type, u8 posFrac, u8 texFrac, void* 
     GXSetArray(GX_VA_TEX1, tex1, 4);
 }
 
+/** Draws the nozzle from its display lists with indexed vertex arrays (effect textures 60-62). */
 void effNozleDisp(CameraId cameraId, EffectEntry* effect) {
     void** dl5;
     u8* sz5;

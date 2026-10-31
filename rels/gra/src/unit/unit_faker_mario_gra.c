@@ -290,6 +290,10 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Camera shot on Mario's side of the stage (x = -110):
+ * sets the battle camera to a fixed position and waits 37 frames for it to arrive.
+ */
 static EVT_BEGIN(mario_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 0, -110, 65, 332, -110, 30, -340, 30, 11)
@@ -767,6 +771,7 @@ static USER_FUNC(vivian_comeback) {
 
 #ifdef VERSION_G8ME01
 
+/** US only: restore the moves of the unit for this turn. */
 // US only: restore the moves of the unit for this turn.
 USER_FUNC(faker_mario_gra_sync_max_moves) {
     BattleUnit* unit;

@@ -46,6 +46,10 @@ f32 bom_ry[10] = {
 void effExpBomMain(EffectEntry* effect);
 void effExpBomDisp(CameraId camId, void* param);
 
+/**
+ * Spawns an explosion made of ten fragments thrown out in the directions of bom_dir at the speeds of bom_spd;
+ * each lives 16-21 frames (random). Event scripts spawn it through evt_eff.
+ */
 EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     f32 sv, cv;
@@ -85,6 +89,10 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Moves each fragment after its start delay, slows it by 1.25x once its slow delay ends,
+ * and deletes the effect when no fragment is left alive.
+ */
 void effExpBomMain(EffectEntry* effect) {
     effExpBomData* data;
     int i;
@@ -125,6 +133,10 @@ void effExpBomMain(EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws each live fragment as a camera-facing sprite stepping through the explosion textures 0-6 (blending each
+ * with its successor); the sprite scale and Z rotation come from bom_scale and bom_ry.
+ */
 void effExpBomDisp(CameraId camId, void* param) {
     f32* scl;
     f32* ry;

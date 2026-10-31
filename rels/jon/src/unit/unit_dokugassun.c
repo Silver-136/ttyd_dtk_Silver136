@@ -236,6 +236,12 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Poison gas attack (weapon_dokugassun_poisongas_attack, multiple targets): the Puff floats over and exhales,
+ * dropping its poison counter attribute (0x200);
+ * twenty green vapour clouds spawn on the targets' side of the stage
+ * and each target in turn is hit or avoids it by the usual checks; then it floats home.
+ */
 static EVT_BEGIN(poisongas_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -361,6 +367,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init script of the Poison Puff: installs the wait, unison-phase, attack, damage and confusion handlers,
+ * clears its unit work 0 and 1, and starts barrier_event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventUnisonPhase, UNIT_ID_SELF, PTR(unison_phase_event))
@@ -584,6 +594,11 @@ static USER_FUNC(eff_poison_barrier) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = 0 for the left side of the stage, otherwise the right.
+ * Spawns one large green vapour cloud at a random spot on that side, the attack's poison breath.
+ * Called once per cloud.
+ */
 static USER_FUNC(eff_poison_breath) {
     f32 x;
     f32 y;
@@ -630,6 +645,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
+/** Wait event of the Poison Puff: switches to its idle pose and resets its scale to 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, 1, 1, 1)

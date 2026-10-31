@@ -14,6 +14,7 @@
 double sin(double);
 double cos(double);
 
+/** Returns the sine of an angle given in degrees. */
 static inline f32 dsin(f32 a) { return sin(6.2831855f * a / 360.0f); }
 
 typedef struct EffOpukuWgunN64Work {
@@ -47,6 +48,10 @@ typedef struct EffOpukuWgunN64Work {
 void effOpukuWgunMain(EffectEntry* effect);
 void effOpukuWgunDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a water-gun shot from (x1, y1, z1) to (x2, y2, z2) living `lifetime` frames at `scale`.
+ * Spawned only by event scripts through evt_eff.
+ */
 EffectEntry* effOpukuWgunN64Entry(s32 type, s32 lifetime, f32 x1, f32 y1, f32 z1, f32 x2, f32 y2, f32 z2,
                                   f32 scale) {
     EffectEntry* effect;
@@ -110,6 +115,11 @@ EffectEntry* effOpukuWgunN64Entry(s32 type, s32 lifetime, f32 x1, f32 y1, f32 z1
     return effect;
 }
 
+/**
+ * Releases the twelve ribbon points one after another
+ * and moves each from the start to the end point over the shot time (type 1 along a 120-unit arc, fading with
+ * progress).
+ */
 void effOpukuWgunMain(EffectEntry* effect) {
     EffOpukuWgunN64Work* work = effect->userdata;
     Vec position;
@@ -171,6 +181,10 @@ void effOpukuWgunMain(EffectEntry* effect) {
 
 static u8 a_data[12] = {255, 255, 255, 255, 255, 255, 255, 255, 255, 200, 128, 32};
 
+/**
+ * Builds a camera-view ribbon through the twelve points (width grows with each point age, texture 0x8D or 0x8E)
+ * and draws it as quads.
+ */
 void effOpukuWgunDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffOpukuWgunN64Work* work;

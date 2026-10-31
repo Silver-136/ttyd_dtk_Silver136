@@ -37,6 +37,11 @@ static u8 color_rotation_data[] = {
 void effOnpuMain(EffectEntry* effect);
 void effOnpuDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns one music note at (x, y, z) living 64 frames.
+ * Type 0 rises straight up; type 1 drifts left and type 2 right while slowing to a stop.
+ * Pansy units spawn types 1 and 2 via evt_eff64 "onpu_n64".
+ */
 EffectEntry* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffOnpuN64Work* work;
@@ -79,6 +84,7 @@ EffectEntry* effOnpuN64Entry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/** Grows and fades the note in, moves it by its easing velocity, and fades it out over the last 10 frames. */
 void effOnpuMain(EffectEntry* effect) {
     EffOnpuN64Work* work = effect->userdata;
     s32 lifetime;
@@ -110,6 +116,10 @@ void effOnpuMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effOnpuDisp, effect);
 }
 
+/**
+ * Draws the note as a camera-facing 16x32 quad using two scrolling note textures (0x28, 0x29) with the color
+ * cycling.
+ */
 void effOnpuDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffOnpuN64Work* work;

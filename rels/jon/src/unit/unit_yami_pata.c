@@ -201,6 +201,10 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/**
+ * Init event of the flying Dark Paratroopa: installs its wait, attack,
+ * damage and confusion events and its pose sound table, then starts the wait event.
+ */
 static EVT_BEGIN(init_event_patapata)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_patapata))
@@ -211,6 +215,14 @@ static EVT_BEGIN(init_event_patapata)
     RETURN
 EVT_END()
 
+/**
+ * Run when a hit grounds the flying Dark Paratroopa (data table entry 14, damage flag 0x400000):
+ * it loses its floating and winged attributes and falls to the ground,
+ * turning into a Dark Koopa (parts, pose table and data table replaced, kind changed to 156 = 0x9C,
+ * unit flag 4 set, its wait, attack, damage and confusion events and walk sounds replaced).
+ * If this was the first hit of the attack (hpDamageCount at most 1) it lands on its feet;
+ * on a later hit of the same attack it falls onto its back and runs dmg_turn_event.
+ */
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -257,6 +269,10 @@ static EVT_BEGIN(dmg_fall_event)
     RETURN
 EVT_END()
 
+/**
+ * Sets the flying Dark Paratroopa's height to 10 and waits for the attack in progress to end;
+ * data table entry 48, run when the battle opens with a First Strike on it (damage code 0x39).
+ */
 static EVT_BEGIN(patapata_dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
@@ -541,6 +557,10 @@ static BattleWeapon weapon_nokonoko_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init event of the Dark Paratroopa: installs its wait, attack, damage and confusion events,
+ * clears its over-turn count (it starts upright) and sets its run and walk sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -553,6 +573,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Dark Paratroopa: runs the default damage handling with LW(10) = -2 and LW(11) = 1. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -560,6 +581,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Flips the Dark Paratroopa onto its back: lowers the part's hit offset by 15,
+ * swaps in the turned defence and pose tables, sets the flipped status flag with an over-turn count of 2,
+ * plays NKT_D_1, hops twice with the inside sound and settles into the NKT_S_2 pose.
+ */
 static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -15, 0)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -579,6 +605,12 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Called when the flipped Dark Paratroopa takes its turn: counts the over-turn down by one.
+ * While it is still above zero it only wiggles on its back (NKT_S_3, 400 ms) and waits;
+ * once it reaches zero it flips back up (normal tables, NKT_S_1, INSIDE2 sound, a hop)
+ * and restores its hit offset.
+ */
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -604,6 +636,11 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * Unreferenced first-strike attack (no table or script in this file points to it):
+ * it targets the first attack target and slides into it in its shell (NKT_A_1, SHELL1 and MOVE sounds),
+ * always hitting with weapon_nokonoko_attack (no pre-check), then bounces off twice and walks back to its place.
+ */
 static EVT_BEGIN(first_attack_event)
     CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -672,6 +709,13 @@ static EVT_BEGIN(first_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Dark Paratroopa: wakes up first if it is flipped.
+ * In the forced-attack case it uses the first attack target after a half-second pause,
+ * otherwise it uses an enemy item if it has one or samples a target.
+ * It then spins into its shell and rams the target (NKT_A_1, with a smoke puff),
+ * the hit being checked with weapon_nokonoko_attack, and returns home.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -818,6 +862,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Idle event: sets the unit's body part 1 to the pose given by its pose table for its current state. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

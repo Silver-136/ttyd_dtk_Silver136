@@ -24,6 +24,10 @@
 //.sbss
 u32 msg_ep; // cleared by kuribo_init; nothing reads it
 
+/**
+ * TRUE while Goombella is the active partner and her Tattle ability is in use;
+ * marioChkKey checks it to keep Mario's controls locked while she talks.
+ */
 BOOL christineGetStatus(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (!party || party->currentMemberId != PARTY_MEMBER_GOOMBELLA || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
@@ -171,6 +175,10 @@ USER_FUNC(pre_kurio_use) {
 }
 
 
+/**
+ * Last step of the field Tattle script: advances kuribo_use to its wind-down state,
+ * lets Mario move again and unmutes sound effects (retail also restores her floor collision).
+ */
 USER_FUNC(post_kurio_use) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
@@ -193,6 +201,10 @@ void kuribo_init_800C23B4(PartyEntry* party) {
     msg_ep = 0;
 }
 
+/**
+ * Field Tattle event: runs pre_kurio_use, prints the chosen message in Goombella's party speech balloon,
+ * then post_kurio_use. Started by kuribo_use with LW(0) set to the NPC Mario faces, if any.
+ */
 EVT_BEGIN(kurio_msg_evt)
     CALL(pre_kurio_use)
     IF_INT_EQUAL(LW(0), 0)
@@ -298,6 +310,10 @@ void kuribo_use(PartyEntry* party) {
     partyChkGnd(party);
 }
 
+/**
+ * Goodbye routine shared by Goombella, Flurrie, Vivian, Ms. Mowz and the walking NPC followers:
+ * plays the standard leave-the-party motion and switches to run mode 14 once it ends.
+ */
 void kuribo_bye(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;

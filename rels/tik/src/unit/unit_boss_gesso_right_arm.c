@@ -152,6 +152,10 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_gesso_right_arm", "c_gesso2", 0.0f, 0.0f, 0.0f, 85.0f, -110.0f, 0.0f, 85.0f, -110.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, VERSION_PICK(0x680009, 0x2680009), 0, pose_table},
 };
 
+/**
+ * Init script of the Blooper's right tentacle.
+ * Registers its damage, phase and attack scripts and starts it waiting.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -162,6 +166,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage reaction of the right tentacle: runs the default damage,
+ * then tells the body (unit work 0) to go back to its wait script if it is idle.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -213,6 +221,7 @@ EVT_BEGIN(gesso_right_arm_damage_event)
     RETURN
 EVT_END()
 
+/** Phase script of the right tentacle; does nothing. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
@@ -289,6 +298,14 @@ BattleWeapon weapon_gesso_right_arm_rear_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack script of the right tentacle: uses an enemy item if it has one;
+ * otherwise picks the front or rear weapon
+ * at random (they prefer front or back targets) and samples a target. The first time it targets Mario (unit kind
+ * 0xDE, tracked in the Blooper's unit work 5) the Blooper asks whether Mario thinks it would taste good, with a
+ * yes/no answer (tik_02_gs_04). It then swings with GSO_A1_1 or GSO_A1_3 depending on the target's side of the
+ * stage (_check_zenei_kouei) and damage-checks the targets.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

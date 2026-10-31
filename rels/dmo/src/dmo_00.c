@@ -131,6 +131,11 @@ void demo_exit(void) {
     statusWinDispOn();
 }
 
+/**
+ * Unused: nothing calls it and capBuf is never allocated. On the fifth picture (page 4) it copies the rendered
+ * screen into capBuf once, then again every call while the zoom (fade) is running.
+ * Guess: meant to let the last picture be drawn over the zoom.
+ */
 void demo_cap(void) {
     if (wp->page == 4) {
         if (wp->captured == 0) {
@@ -398,6 +403,10 @@ void demo_book(CameraId cameraId, void* param) {
     GXEnd();
 }
 
+/**
+ * Draw callback for the narration window: fades the text window's background in
+ * or out (10 alpha per frame, depending on winOn) and draws it on the 2D camera.
+ */
 void demo_window(CameraId cameraId, void* param) {
     CameraEntry* cam = camGetPtr(cameraId);
     GXTexObj obj;
@@ -470,6 +479,7 @@ USER_FUNC(demo_draw) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: args[0] switches the narration window on (1) or off (0) so that it fades in or out. */
 USER_FUNC(demo_winonoff) {
     EvtWord* args = event->args;
 
@@ -477,6 +487,10 @@ USER_FUNC(demo_winonoff) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: slowly zooms the desk (scale 0.6 to 1.5 over 12 seconds) while the first pages are narrated;
+ * finishes at 1.5.
+ */
 USER_FUNC(demo_scale) {
     OSTime now = event->lifetime;
     f32 t;
@@ -494,6 +508,7 @@ USER_FUNC(demo_scale) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: args[0] is a float; sets the angle of the book cover. */
 USER_FUNC(book_r) {
     EvtWord* args = event->args;
 
@@ -501,11 +516,16 @@ USER_FUNC(book_r) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: advances to the next picture of the storybook (increments the page counter). */
 static USER_FUNC(next) {
     wp->page++;
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] is a float from 0 to 1;
+ * sets the zoom amount into the last picture (img4) and moves its scale and position accordingly.
+ */
 USER_FUNC(adjust) {
     EvtWord* args = event->args;
     Mtx trans;
@@ -526,12 +546,14 @@ USER_FUNC(adjust) {
     return EVT_RETURN_DONE;
 }
 
+/** Moves the two crystal effects to the CAMERA_3D_EFFECTA camera. */
 USER_FUNC(eff_cam) {
     ((s32*)effNameToPtr("eff0")->userdata)[0x38 / 4] = 5;
     ((s32*)effNameToPtr("eff1")->userdata)[0x38 / 4] = 5;
     return EVT_RETURN_DONE;
 }
 
+/** The same for the radiation effect. */
 USER_FUNC(eff_cam1) {
     ((s32*)effNameToPtr("eff2")->userdata)[0x98 / 4] = 5;
     return EVT_RETURN_DONE;

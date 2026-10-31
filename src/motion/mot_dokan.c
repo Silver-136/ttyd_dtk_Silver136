@@ -11,6 +11,12 @@
 
 
 
+/**
+ * Brings the partners back out with Mario when he comes out of a pipe:
+ * re-enters any partner that was sent away (partyEntryPos / partyEntry2Pos) at his position,
+ * puts both in run mode 10 facing away from him, and zero-scales them so they grow in when flag is 0.
+ * Skipped in background mode. From JP on, two partners fan out at +/-120 degrees instead of both turning 180.
+ */
 static void _partyEntry(s32 flag) {
     MarioWork* mario;
     s32 i;

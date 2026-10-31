@@ -138,11 +138,13 @@ USER_FUNC(keijiban_joho_makelabel) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that returns the number of notice board entries in args[0]. */
 USER_FUNC(keijiban_joho_check) {
     evtSetValue(event, event->args[0], _kjdt->count);
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that frees the notice board entry table and resets the board data. */
 USER_FUNC(keijiban_data_free) {
     KeijibanData* kj = _kjdt;
 
@@ -158,6 +160,10 @@ USER_FUNC(keijiban_data_free) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that loads a notice board: args[0] is the message prefix;
+ * counts the entries at the current story progress, allocates the table and fills it.
+ */
 USER_FUNC(keijiban_data_alloc) {
     _kjdt->prefix = (const char*)evtGetValue(event, event->args[0]);
     _kjdt->count = keijiban_data_make(_kjdt->prefix, FALSE);

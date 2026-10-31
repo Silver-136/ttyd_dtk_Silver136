@@ -36,12 +36,20 @@ EvtWord evt_box_open[115];
 EvtWord evt_sw_complete[272];
 EvtWord eki_06_init_evt[132];
 
+/**
+ * Door animation callback, closing for the e_bero_1 exit to eki_05:
+ * rotates map object "door" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(e_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the e_bero_1 exit to eki_05:
+ * rotates map object "door" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(e_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door"), 0, LW(0), 0)
@@ -209,6 +217,7 @@ void sw_cntup(MapObjectEntry* mobj) {
     }
 }
 
+/** Returns the hit counter (GW(0) to GW(2)) of the counting switch named by mobj, or 0 for any other object. */
 s32 sw_cnt(MapObjectEntry* mobj) {
     if (strcmp(mobj->name, "MOBJ_eki_06_su1") == 0) {
         return evtGetValue(NULL, GW(0));
@@ -222,6 +231,11 @@ s32 sw_cnt(MapObjectEntry* mobj) {
     return 0;
 }
 
+/**
+ * Called when a switch has been hit too many times:
+ * sets the switches back to their idle poses and clears the counters of the ones that were at their trigger
+ * count (1, 10 and 3 hits).
+ */
 void sw_reset(void) {
     MapObjectEntry* mobj;
 
@@ -253,6 +267,13 @@ void sw_reset(void) {
     }
 }
 
+/**
+ * Per-frame function of each counting switch.
+ * When hit (stomp, hammer or partner action) it counts the hit and plays its press animation,
+ * locking the other switches meanwhile; the puzzle is solved when the three switches have been hit exactly 1,
+ * 10 and 3 times (evt_sw_complete is then started), otherwise the switch pops back up,
+ * and an overcount resets all counters.
+ */
 s32 sw_main(MapObjectEntry* mobj) {
     switch (mobj->state) {
         case 2:
@@ -338,6 +359,11 @@ s32 sw_main(MapObjectEntry* mobj) {
     return 0;
 }
 
+/**
+ * Script helper: loads the switch model named by args[0]
+ * and spawns it as a map object at (args[1], args[2], args[3]) with sw_main as its per-frame function.
+ * Blocks until the model has finished loading.
+ */
 USER_FUNC(sw_entry) {
     EvtWord* args = event->args;
     const char* name;

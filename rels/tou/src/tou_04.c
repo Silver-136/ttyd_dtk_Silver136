@@ -123,6 +123,10 @@ EvtWord tou_04_init_evt[652];
 EvtWord tou_04_init_evt[668];
 #endif
 
+/**
+ * Script helper: remembers the calling NPC's current facing direction in npc->savedDirection,
+ * so it can turn back after talking.
+ */
 USER_FUNC(memoryRY) {
     NpcEntry* npc = evtNpcNameToPtr(event, "me");
 
@@ -130,114 +134,148 @@ USER_FUNC(memoryRY) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Door animation callback for the west door door_w (bero open animation): LW(0) is the swing angle;
+ * turns door_w about the Y axis by -0.44 times the angle.
+ */
 static EVT_BEGIN(w_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_w"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the west door door_w (bero close animation): LW(0) is the swing angle;
+ * turns door_w about the Y axis by 0.44 times the angle.
+ */
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_w"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_1 open (case-event handler for the corridor's first door). */
 EVT_BEGIN(_1_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_1 closed. */
 EVT_BEGIN(_1_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_2 open. */
 EVT_BEGIN(_2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_2 closed. */
 EVT_BEGIN(_2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_3 open. */
 EVT_BEGIN(_3_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_3"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_3 closed. */
 EVT_BEGIN(_3_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_3"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_4 open. */
 EVT_BEGIN(_4_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_4"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_4 closed. */
 EVT_BEGIN(_4_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_4"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_5 open. */
 EVT_BEGIN(_5_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_5"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_5 closed. */
 EVT_BEGIN(_5_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_5"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_6 open. */
 EVT_BEGIN(_6_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_6"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_6 closed. */
 EVT_BEGIN(_6_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_6"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_7 open. */
 EVT_BEGIN(_7_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_7"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** Swings door_7 closed. */
 EVT_BEGIN(_7_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_7"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the east door door_e (bero open animation): LW(0) is the swing angle;
+ * turns door_e about the Y axis by -0.44 times the angle.
+ */
 static EVT_BEGIN(e_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_e"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the east door door_e (bero close animation): LW(0) is the swing angle;
+ * turns door_e about the Y axis by 0.44 times the angle.
+ */
 static EVT_BEGIN(e_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door_e"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the blue double door (ao_a and ao_b), opening: LW(0) is the swing angle;
+ * the two leaves turn about Y in opposite directions by 0.39 times the angle.
+ */
 static EVT_BEGIN(n1_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("ao_a"), 0, LW(0), 0)
@@ -246,6 +284,10 @@ static EVT_BEGIN(n1_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the blue double door (ao_a and ao_b), closing:
+ * the leaves turn the opposite way to n1_door_open.
+ */
 static EVT_BEGIN(n1_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("ao_a"), 0, LW(0), 0)
@@ -254,6 +296,10 @@ static EVT_BEGIN(n1_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the red double door (aka_a and aka_b), opening: LW(0) is the swing angle;
+ * the two leaves turn about Y in opposite directions by 0.39 times the angle.
+ */
 static EVT_BEGIN(n2_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("aka_a"), 0, LW(0), 0)
@@ -262,6 +308,10 @@ static EVT_BEGIN(n2_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback for the red double door (aka_a and aka_b), closing:
+ * the leaves turn the opposite way to n2_door_open.
+ */
 static EVT_BEGIN(n2_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.38867188f))
     CALL(evt_mapobj_rotate, 1, STRING("aka_a"), 0, LW(0), 0)
@@ -541,6 +591,7 @@ EVT_BEGIN(move_g)
     RETURN
 EVT_END()
 
+/** Guard 1 refuses to move: he is placed at (-580, 0, 350), then walks to (-580, 300) when Mario enters. */
 EVT_BEGIN(move_g_1_dokimasen)
     CALL(evt_npc_set_position, STRING("me"), -580, 0, 350)
     CALL(evt_bero_exec_wait, 65536)
@@ -652,6 +703,7 @@ EVT_BEGIN(move_g_1)
     RETURN
 EVT_END()
 
+/** NPC init for guard 2: placed at (-520, 0, 70) or (-520, 0, 0), depending on how Mario entered. */
 EVT_BEGIN(init_g_2)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         CALL(evt_bero_get_entername, LW(0))
@@ -664,6 +716,10 @@ EVT_BEGIN(init_g_2)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of guard 2: lines before the first match, during Grubba's plans,
+ * and the champion opening scene (Mario pose change, stg3_tou_423_01/02).
+ */
 EVT_BEGIN(talk_g_2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
@@ -716,6 +772,10 @@ EVT_BEGIN(move_g_2)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for guard 3: placed at (-620, 0, -300) while the majors or title-room escort flag is set,
+ * otherwise at his post at (-580, 0, -300).
+ */
 EVT_BEGIN(init_g_3)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 1)
         CALL(evt_npc_set_position, STRING("me"), -620, 0, -300)
@@ -729,6 +789,7 @@ EVT_BEGIN(init_g_3)
     RETURN
 EVT_END()
 
+/** Talk script of guard 3 (stg3_tou_99, 98, 99_01, 40). */
 EVT_BEGIN(talk_g_3)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
@@ -744,6 +805,12 @@ EVT_BEGIN(talk_g_3)
     RETURN
 EVT_END()
 
+/**
+ * Movement script of guard 3, at the major-league locker room door:
+ * does nothing while the majors or title-room escort flag is set.
+ * Otherwise he steps out of Mario's way (move_g) when Mario is in the majors (rank 1 to 10),
+ * or is the champion (rank 0) while Jolene's escort to the champion's room is pending.
+ */
 EVT_BEGIN(move_g_3)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 1)
         RETURN
@@ -766,6 +833,10 @@ EVT_BEGIN(move_g_3)
     RETURN
 EVT_END()
 
+/**
+ * Guard 4 (the main hall guard) refuses to move:
+ * placed at (-300, 0, -530) and walks to (-350, -530) when Mario enters.
+ */
 EVT_BEGIN(move_g_4_dokimasen)
     CALL(evt_npc_set_position, STRING("me"), -300, 0, -530)
     CALL(evt_bero_exec_wait, 65536)
@@ -778,6 +849,10 @@ EVT_BEGIN(move_g_4_dokimasen)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for guard 4: stands at (-350, 0, -530) before returning to Rogueport,
+ * with variants for the Trouble Center jobs and Jolene's rematch calls.
+ */
 EVT_BEGIN(init_g_4)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_npc_set_position, STRING("me"), -350, 0, -530)
@@ -818,6 +893,10 @@ EVT_BEGIN(init_g_4)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of guard 4, the main-hall guard: he lets Mario in on the first visit (stg3_tou_42)
+ * and gives story- dependent lines about the league, Grubba and the rematch.
+ */
 EVT_BEGIN(talk_g_4)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_03_GRUBBA)
@@ -933,18 +1012,25 @@ EVT_BEGIN(move_g_4)
     RETURN
 EVT_END()
 
+/** NPC init for guard 5 (unused; empty). */
 EVT_BEGIN(init_g_5)
     RETURN
 EVT_END()
 
+/** Talk script of guard 5 (unused; empty). */
 EVT_BEGIN(talk_g_5)
     RETURN
 EVT_END()
 
+/** Movement script of guard 5 (unused; empty). */
 EVT_BEGIN(move_g_5)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for guard 6: placed at (350, 0, -560) while the champion's room escort flag is set,
+ * otherwise at his post at (350, 0, -530).
+ */
 EVT_BEGIN(init_g_6)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 1)
         CALL(evt_npc_set_position, STRING("me"), 350, 0, -560)
@@ -967,6 +1053,12 @@ EVT_BEGIN(talk_g_6)
     RETURN
 EVT_END()
 
+/**
+ * Movement script of guard 6, at the champion's room door:
+ * does nothing while the champion's room escort flag is set;
+ * otherwise he steps out of Mario's way (move_g) when Mario is the champion (rank 0) or
+ * while Grubba's escort is pending.
+ */
 EVT_BEGIN(move_g_6)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 1)
         RETURN
@@ -985,11 +1077,13 @@ EVT_BEGIN(move_g_6)
     RETURN
 EVT_END()
 
+/** NPC init for guard 7: placed at (580, 0, -300). */
 EVT_BEGIN(init_g_7)
     CALL(evt_npc_set_position, STRING("me"), 580, 0, -300)
     RETURN
 EVT_END()
 
+/** Talk script of guard 7: lines before the first match and during Grubba's plans (stg3_tou_40, 100_01, 100). */
 EVT_BEGIN(talk_g_7)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
@@ -1002,15 +1096,18 @@ EVT_BEGIN(talk_g_7)
     RETURN
 EVT_END()
 
+/** Movement script of guard 7 (empty). */
 EVT_BEGIN(move_g_7)
     RETURN
 EVT_END()
 
+/** NPC init for guard 8: placed at (520, 0, 0). */
 EVT_BEGIN(init_g_8)
     CALL(evt_npc_set_position, STRING("me"), 520, 0, 0)
     RETURN
 EVT_END()
 
+/** Talk script of guard 8: lines before the first match and the champion opening scene (stg3_tou_423_03, 94). */
 EVT_BEGIN(talk_g_8)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
@@ -1027,15 +1124,21 @@ EVT_BEGIN(talk_g_8)
     RETURN
 EVT_END()
 
+/** Movement script of guard 8 (empty). */
 EVT_BEGIN(move_g_8)
     RETURN
 EVT_END()
 
+/** NPC init for guard 9: placed at (580, 0, 300). */
 EVT_BEGIN(init_g_9)
     CALL(evt_npc_set_position, STRING("me"), 580, 0, 300)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of guard 9: lines before the first match, during Grubba's plans,
+ * and after Mario re-enters the league.
+ */
 EVT_BEGIN(talk_g_9)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
@@ -1111,6 +1214,7 @@ EVT_BEGIN(talk_g_11)
     RETURN
 EVT_END()
 
+/** NPC init for the champion in the corridor: does nothing. */
 static EVT_BEGIN(init_champ)
     RETURN
 EVT_END()
@@ -1403,6 +1507,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Plays the dripping-water animation (anm_mizu) with a water-drop sound in the corridor. */
 EVT_BEGIN(evt_drop)
     LOOP(0)
         CALL(evt_sub_random, 5000, LW(0))
@@ -2021,6 +2126,11 @@ static s32 key_tbl[] = {
     ITEM_STORAGE_KEY_0x12, -1,
 };
 
+/**
+ * Check run before the storage room door is used:
+ * if Mario carries ITEM_STORAGE_KEY_0x12 it shows the item menu (key_tbl);
+ * cancelling the menu cancels the door's action (evt_mobj_exec_cancel).
+ */
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STORAGE_KEY_0x12, LW(0))
     IF_INT_GREATER(LW(0), 0)
@@ -2147,6 +2257,7 @@ EVT_BEGIN(evt_bred_nigeru)
     RETURN
 EVT_END()
 
+/** Prints Mario's one-line remark stg3_tou_462_01 with controls locked. */
 EVT_BEGIN(boss_msg)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg3_tou_462_01"), 0, 0)
@@ -2162,6 +2273,11 @@ EVT_BEGIN(out_from_tou_10_re)
     RETURN
 EVT_END()
 
+/**
+ * Map init for tou_04, the corridor: sets up the guards and doors, the Last Stand badge item, save blocks,
+ * and chooses the entry scene (Grubba escort, Jolene escort, champion escape, storage room talk) from flags
+ * and story progress.
+ */
 EVT_BEGIN(tou_04_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)

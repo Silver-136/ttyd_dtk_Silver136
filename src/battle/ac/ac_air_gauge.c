@@ -47,6 +47,13 @@ typedef struct AirPw {
 static void actionCommandDisp(f32 x, f32 y);
 f32 _GetGaugeDecValue(void);
 
+/**
+ * Per-frame driver of action command 14, used by Flurrie's Gale Force.
+ * While params[1] frames run, each A press lifts the gauge for a moment (see _GetGaugeDecValue) and it
+ * otherwise drains.
+ * Sets outputParams[0] to the level reached against thresholds params[3..6] (params[2] levels), [1] to A held,
+ * [2] to the final gauge (0..100). Returns 0 when finished; confused partners get a random outcome instead.
+ */
 s32 battleAcMain_AirGauge(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     AirGaugeWork* pw = (AirGaugeWork*)ac->work;
@@ -230,10 +237,15 @@ f32 _GetGaugeDecValue(void) {
     return base;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_AirGauge(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/**
+ * Display callback: slides the gauge and A icon in from the left over 20 frames,
+ * and once the command ends keeps them up for 40 frames before sliding them back out.
+ */
 void battleAcDisp_AirGauge(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleACDispParams* disp = &work->actionCommands.disp;
@@ -264,10 +276,15 @@ void battleAcDisp_AirGauge(CameraId cameraId, void* param) {
     }
 }
 
+/** Called by btlevtcmd_StopAC: jumps to the end state, which stops the gauge sound and slides the display out. */
 void battleAcDelete_AirGauge(BattleWork* work) {
     work->actionCommands.mAcState = 1002;
 }
 
+/**
+ * Draws the level gauge (its fill eased toward the real value by 0.01 a frame) and the A button icon,
+ * pressed while the press lift is active.
+ */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;

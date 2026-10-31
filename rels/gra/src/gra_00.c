@@ -54,6 +54,10 @@ static TreeAccess tree_tbl[2];
 EvtWord evt_majin_key[5];
 EvtWord gra_00_init_evt[74];
 
+/**
+ * Doopliss's torn-paper entrance: loads the torn-paper cutout (OFF_d_yabu_small) as an image,
+ * plays the Doopliss (Lanpel) appear sound, shakes the camera for 20 frames and starts the tear animation.
+ */
 EVT_BEGIN(evt_yabure_on)
     CALL(evt_paper_entry, STRING("OFF_d_yabu_small"))
     CALL(evt_snd_sfxon_3d, STRING("SFX_OFF4_LANPEL_APPEAR1"), -145, 270, -25, 0)
@@ -71,11 +75,17 @@ EVT_BEGIN(evt_yabure_on)
     RETURN
 EVT_END()
 
+/** Releases the image entry created by evt_yabure_on once the torn-paper effect is finished. */
 EVT_BEGIN(evt_yabure_off)
     CALL(evt_img_release, STRING("img"))
     RETURN
 EVT_END()
 
+/**
+ * Name-entry screen for the "guess my name" test:
+ * shows the OFF_d_roll scroll cutout, opens the name-entry window, waits for the player to type a name,
+ * plays the entry sounds, then closes everything. The name entered is read back with evt_win_nameent_name.
+ */
 EVT_BEGIN(evt_nameent)
     CALL(evt_paper_entry, STRING("OFF_d_roll"))
     CALL(evt_img_entry, STRING("img"))
@@ -111,6 +121,10 @@ EVT_BEGIN(evt_nameent)
     RETURN
 EVT_END()
 
+/**
+ * Doopliss's (the fake Mario) reaction when the player guessed his name right:
+ * he gasps, switches to his surprised pose and talk poses, and the camera is released.
+ */
 EVT_BEGIN(name_seikai)
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_NM_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
@@ -626,6 +640,13 @@ static USER_FUNC(cam_r) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Message window callback that nothing in this file installs.
+ * By msgdrv's callback types: when the window opens (0)
+ * it clears GW(0), GW(1) and its counter; for each printed character (5) it counts
+ * and turns Mario's controls off at
+ * the fourth; at the end of the text (1) it sets GW(1); on a page turn (3) it sets GW(0).
+ */
 void msg_callback(s32 type, void* param) {
     EventEntry* ev = (*(MsgWinData**)param)->event;
 
@@ -650,6 +671,11 @@ void msg_callback(s32 type, void* param) {
     }
 }
 
+/**
+ * Script helper that works out a camera framing close to the current camera:
+ * writes the point 60 percent of the way from the camera target back to the camera into args[0..2]
+ * and the current camera target into args[3..5], ready for evt_cam3d_evt_set.
+ */
 static USER_FUNC(zoom) {
     EvtWord* args = event->args;
     CameraEntry* cam = camGetPtr(CAMERA_3D);
@@ -667,6 +693,11 @@ static USER_FUNC(zoom) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that shakes the camera for args[0] frames:
+ * a three-cycle sine that fades out over the duration,
+ * applied as a view offset to both the 3D camera and the 3D image camera. Blocks until the frames are used up.
+ */
 USER_FUNC(camera_yure) {
     s32 frames = evtGetValue(event, event->args[0]);
     CameraEntry* cam = camGetPtr(CAMERA_3D);

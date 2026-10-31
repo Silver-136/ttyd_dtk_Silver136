@@ -96,10 +96,12 @@ static const char* msg_tbl[] = {
     "msg_nameent_4"
 };
 
+/** Clears the name entry state. Called once at boot (marioStInit). */
 void nameEntInit(void) {
     memset(wp, 0, sizeof(NameEntryWork));
 }
 
+/** Makes the next nameEntMain free the name entry textures and stop drawing. Used when the game over screen resets. */
 void nameEntReInit(void) {
     wp->loadState = 3;
 }
@@ -207,6 +209,7 @@ void nameEntOn(s32 type) {
 #endif
 }
 
+/** Closes the name entry screen: the next nameEntMain frees its textures. */
 void nameEntOff(void) {
     wp->loadState = 3;
 }
@@ -216,10 +219,16 @@ BOOL nameEntWait(void) {
     return wp->state != 101;
 }
 
+/** TRUE when the player backed out with B on an empty file name (type 0 only). */
 BOOL nameEntIsCancel(void) {
     return (wp->flags >> 1) & 1;
 }
 
+/**
+ * Returns the confirmed name with trailing blanks (full-width spaces,
+ * or plain spaces in the latin table) cut off, keeping at least one character;
+ * NULL until the player has confirmed.
+ */
 const char* nameEntGetName(void) {
     s32 j;
 
@@ -255,6 +264,7 @@ const char* nameEntGetName(void) {
     return wp->name;
 }
 
+/** Loads the language's name.tpl into tplFile once the async read has finished; FALSE while it is still loading. */
 static inline BOOL nameEntLoad(void) {
 #ifdef VERSION_G8ME01
     const char* lang[6] = {"jp", "us", "ge", "fr", "sp", "it"};
@@ -274,6 +284,10 @@ static inline BOOL nameEntLoad(void) {
     return FALSE;
 }
 
+/**
+ * Per frame: loads the textures, runs nameMain while the screen is open, or frees them after nameEntOff,
+ * and queues nameEntDisp in the 3D camera layer while anything is shown.
+ */
 void nameEntMain(void) {
     switch (wp->loadState) {
         case 0:
@@ -650,6 +664,11 @@ s32 nameMain(void) {
     return 0;
 }
 
+/**
+ * Draws the name entry screen in 2D: background, the name boxes with the 8 typed characters, the character grid,
+ * the side buttons, the caret, the prompt window for this type and, while confirming,
+ * the yes/no window over a darkening mask. Restores the camera, projection and viewport afterwards.
+ */
 void nameEntDisp(CameraId cameraId, void* param) {
     GXColor white2;
     GXColor white;
@@ -761,6 +780,10 @@ void nameEntDisp(CameraId cameraId, void* param) {
     GXSetViewport(vp[0], vp[1], vp[2], vp[3], vp[4], vp[5]);
 }
 
+/**
+ * Draws the screen background from name.tpl: a 32-pixel strip on each side (textures 0x22 and 0x23)
+ * and the 544-pixel middle (0x21), all 480 high.
+ */
 void nameBG(void) {
     Mtx m1, m2, m3;
     GXTexObj obj1, obj2, obj3;
@@ -848,6 +871,7 @@ void nameBG(void) {
 }
 
 #pragma inline_max_total_size(100000)
+/** Draws one textured quad from name.tpl texture id at (x, y), w x h, with the texture scaled to fit. */
 static inline void nameTexQuad(s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;
     Mtx i;
@@ -874,6 +898,10 @@ static inline void nameTexQuad(s32 id, f32 x, f32 y, f32 w, f32 h) {
     GXTexCoord2f32(1.0f, 0.0f);
 }
 
+/**
+ * Draws the panel the character grid sits on (kirinuki, a cut-out) from nine name.tpl pieces:
+ * 8-pixel corners and edges around the middle.
+ */
 void nameKirinukiGX(f32 x, f32 y, f32 w, f32 h) {
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ZERO, GX_LO_CLEAR);
     GXSetZCompLoc(GX_FALSE);
@@ -951,6 +979,7 @@ void nameMaskGX(f32 t) {
     GXTexCoord2f32(0.0f, 1.0f);
 }
 
+/** Draws one window piece: texture a scaled to w x h modulated by textures b and c. */
 static inline void nameWinQuad(TEXPalette* tpl, s32 a, s32 b, s32 c, f32 x, f32 y, f32 w, f32 h) {
     GXTexObj obj;
     Mtx i;
@@ -991,6 +1020,10 @@ static inline void nameWinQuad(TEXPalette* tpl, s32 a, s32 b, s32 c, f32 x, f32 
     GXTexCoord2f32(1.0f, 0.0f);
 }
 
+/**
+ * Draws a window frame at (x, y), w x h, from four pieces of the given texture palette starting at texture type
+ * (the body and the right, bottom and corner edges, 16 pixels wide). Used for the confirm window.
+ */
 void nameWinGX(f32 x, f32 y, f32 w, f32 h, TEXPalette* tpl, s32 type) {
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);

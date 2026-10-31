@@ -96,6 +96,11 @@ static TreeAccess tree_tbl[6];
 static KusaAccess kusa_tbl[8];
 EvtWord muj_05_init_evt[146];
 
+/**
+ * Script helper for the skull rock puzzle: compares the seven eye strikes Mario has made (command_work) with the
+ * correct sequence (command_seikai).
+ * Writes 0 to args[0] if fewer than seven have been entered, 1 if one of them is wrong and 2 if all seven match.
+ */
 USER_FUNC(evt_dokuroiwa_command_check) {
     s32 result;
     s32 i;
@@ -121,6 +126,10 @@ USER_FUNC(evt_dokuroiwa_command_check) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: records one eye strike of the skull rock puzzle:
+ * args[0] is the slot (0 to 6), args[1] the eye hit (1 = blue, 2 = red).
+ */
 USER_FUNC(evt_dokuroiwa_command_set) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -132,17 +141,20 @@ USER_FUNC(evt_dokuroiwa_command_set) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: clears the seven recorded eye strikes so the puzzle starts over. */
 USER_FUNC(evt_dokuroiwa_command_clear) {
     memset(command_work, 0, 7 * sizeof(s32));
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: allocates the seven-word eye strike buffer from map memory and clears it. */
 USER_FUNC(evt_dokuroiwa_command_init) {
     command_work = _mapAlloc(7 * sizeof(s32));
     memset(command_work, 0, 7 * sizeof(s32));
     return EVT_RETURN_DONE;
 }
 
+/** Turns the NPC in LW(10) from LW(1) to LW(2) degrees over LW(3) ms; Bobbery uses it to look around while he talks. */
 EVT_BEGIN(sanders_rotate)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(1), LW(2), LW(3))
     LOOP(0)
@@ -156,6 +168,10 @@ EVT_BEGIN(sanders_rotate)
     RETURN
 EVT_END()
 
+/**
+ * Runs the partner lecture for Admiral Bobbery (all_party_lecture) when he joins,
+ * then sends the partner back out running.
+ */
 EVT_BEGIN(sanders_nakama_sub)
     SET_VALUE(LW(8), STRING("me"))
     SET_VALUE(LW(9), 3)
@@ -387,6 +403,7 @@ EVT_BEGIN(erumosu_a_dead)
     RETURN
 EVT_END()
 
+/** Death event of the second Ember (Elmos B): stops its circling events. */
 EVT_BEGIN(erumosu_b_dead)
     DELETE_EVENT(GW(1))
     DELETE_EVENT(GW(3))
@@ -520,6 +537,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Hammering the tree A_ki_02_01: sways the palm (S_treeA_05) and plays its map animation. */
 EVT_BEGIN(hammer_sub)
     CALL(evt_mapobj_get_position, STRING("S_treeA_05"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_OBJ_TREE_SHAKE1"), LW(0), LW(1), LW(2), 0)
@@ -528,6 +546,7 @@ EVT_BEGIN(hammer_sub)
     RETURN
 EVT_END()
 
+/** Registers hammer_sub as the hammer case event of the tree A_ki_02_01. */
 EVT_BEGIN(hammer_event)
     CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_ki_02_01"), 0, PTR(hammer_sub), 0)
     RETURN
@@ -612,6 +631,7 @@ EVT_BEGIN(sanders_kyushutsu_sub)
     RETURN
 EVT_END()
 
+/** Makes an Ember circle around the point (-115, -15) at 5 degrees per frame for three seconds (muj_npc_guruguru). */
 EVT_BEGIN(erumosu_guruguru)
     LOOP(0)
         CALL(muj_npc_guruguru, LW(0), -115, -15, 1, FLOAT(-5.0f), 3000)
@@ -619,6 +639,7 @@ EVT_BEGIN(erumosu_guruguru)
     RETURN
 EVT_END()
 
+/** Keeps the Ember in LW(0) facing Bobbery (Sanders) while it circles. */
 EVT_BEGIN(erumosu_guruguru_dir)
     LOOP(0)
         CALL(evt_set_dir_to_target, LW(0), STRING("サンダース"))
@@ -627,6 +648,10 @@ EVT_BEGIN(erumosu_guruguru_dir)
     RETURN
 EVT_END()
 
+/**
+ * Starts the Ember fight near Bobbery: unless the Embers are already defeated,
+ * links Embers 1 and 2 as a battle pair (battle info 8) and starts them circling.
+ */
 EVT_BEGIN(sanders_kyushutsu)
     CALL(evt_npc_set_position, STRING("サンダース"), -88, 200, -34)
     IF_INT_EQUAL(GSWF_MUJ_05_EMBERS_DEFEATED, 0)
@@ -647,6 +672,10 @@ EVT_BEGIN(sanders_kyushutsu)
     RETURN
 EVT_END()
 
+/**
+ * Flavio's humming event (hanauta), tracked in GW(2) and deleted when he is talked to;
+ * its body is only RETURN, so it does nothing.
+ */
 EVT_BEGIN(marco_hanauta)
     RETURN
 EVT_END()
@@ -678,6 +707,7 @@ EVT_BEGIN(marco_and_jewel)
     RETURN
 EVT_END()
 
+/** Flashes the blue eye of the skull rock (S_hige_iwa03_me) twice with a sparkle effect. */
 EVT_BEGIN(blueeye_flush)
     CALL(evt_mapobj_get_position, STRING("S_hige_iwa03_me"), LW(0), LW(1), LW(2))
     ADD(LW(0), -12)
@@ -694,6 +724,7 @@ EVT_BEGIN(blueeye_flush)
     RETURN
 EVT_END()
 
+/** Flashes the red eye of the skull rock (S_hige_iwa02_me) twice with a sparkle effect. */
 EVT_BEGIN(redeye_flush)
     CALL(evt_mapobj_get_position, STRING("S_hige_iwa02_me"), LW(0), LW(1), LW(2))
     ADD(LW(0), -12)
@@ -710,6 +741,10 @@ EVT_BEGIN(redeye_flush)
     RETURN
 EVT_END()
 
+/**
+ * Flashes the skull rock's face (S_dkr_iwa02) with random jitter and a hagetaka flush effect;
+ * answer_event spawns it five times.
+ */
 EVT_BEGIN(dokuroiwa_flush)
     CALL(evt_mapobj_get_position, STRING("S_dkr_iwa02"), LW(0), LW(1), LW(2))
     ADD(LW(0), 0)
@@ -776,6 +811,10 @@ EVT_BEGIN(dokuroiwa_touch)
     RETURN
 EVT_END()
 
+/**
+ * Registers the hammer, jump-from-A and stand-on case events on the two eye rocks (A_iwa01 and A_iwa_atari),
+ * saving their ids in GW(5) to GW(9).
+ */
 EVT_BEGIN(case_event_entry)
     SET_VALUE(GF(10), 0)
     CALL(evt_run_case_evt, CASE_HAMMER, 1, STRING("A_iwa01"), 0, PTR(iwa01_hammer), GW(5))
@@ -786,6 +825,7 @@ EVT_BEGIN(case_event_entry)
     RETURN
 EVT_END()
 
+/** Removes the case events registered by case_event_entry whose ids are still in GW(5) to GW(9). */
 EVT_BEGIN(case_event_delete)
     IF_INT_NOT_EQUAL(GW(5), -1)
         CALL(evt_del_case_evt, 0, GW(5))
@@ -805,6 +845,13 @@ EVT_BEGIN(case_event_delete)
     RETURN
 EVT_END()
 
+/**
+ * The penalty for a wrong eye sequence: Flavio's humming stops,
+ * the three Embers (A, B, C) glide down beside Mario,
+ * he turns to them with a "!" bubble and fights them (battle info 7).
+ * Afterwards they are hidden, the sequence is reset, GW(12) is set so Flavio comments on the failure,
+ * the humming restarts and the case events are registered again.
+ */
 EVT_BEGIN(penalty_event)
     CALL(evt_mario_key_onoff, 0)
     DELETE_EVENT(GW(2))
@@ -857,6 +904,10 @@ EVT_BEGIN(penalty_event)
     RETURN
 EVT_END()
 
+/**
+ * Builds up the skull rock's opening shake: shakes the 3D camera sideways with a strength rising from 0 to 0.01
+ * over 30 steps; answer_event runs it during the opening and deletes it.
+ */
 static EVT_BEGIN(cam_shake)
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 10, 30)
     LABEL(0)
@@ -870,6 +921,10 @@ static EVT_BEGIN(cam_shake)
     RETURN
 EVT_END()
 
+/**
+ * Winds down the skull rock's opening shake: the sideways strength falls from 0.01 to 0 over 30 steps;
+ * answer_event runs it after cam_shake.
+ */
 static EVT_BEGIN(cam_shake2)
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 0, 30)
     LABEL(0)
@@ -921,6 +976,12 @@ EVT_BEGIN(answer_event)
     RETURN
 EVT_END()
 
+/**
+ * Hammering the big rock with the blue eye (A_iwa01):
+ * plays the rock hit sound and, while the Skull Gem is in place,
+ * flashes the blue eye and records a blue strike (1), then checks the sequence:
+ * a wrong one starts penalty_event, a complete one starts answer_event.
+ */
 EVT_BEGIN(iwa01_hammer)
     IF_INT_EQUAL(GF(10), 1)
         RETURN
@@ -951,6 +1012,7 @@ EVT_BEGIN(iwa01_hammer)
     RETURN
 EVT_END()
 
+/** Jumping onto the big blue-eye rock with A: plays the rock jump sound while the Skull Gem is not yet placed. */
 EVT_BEGIN(iwa01_ride_a)
     IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         RETURN
@@ -960,6 +1022,11 @@ EVT_BEGIN(iwa01_ride_a)
     RETURN
 EVT_END()
 
+/**
+ * Landing with a ground pound (hip bump) on the red-eye rock (A_iwa_atari):
+ * once per landing (GW(13)), flashes the red eye and records a red strike (2),
+ * then checks the sequence like iwa01_hammer.
+ */
 EVT_BEGIN(iwa02_ride)
     CALL(evt_mario_chk_hipbump, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -991,6 +1058,7 @@ EVT_BEGIN(iwa02_ride)
     RETURN
 EVT_END()
 
+/** Hammering the small red-eye rock: plays the small rock hit sound while the Skull Gem is not yet placed. */
 EVT_BEGIN(iwa02_hammer)
     IF_INT_EQUAL(GSWF_MUJ_05_SKULL_GEM_PLACED, 0)
         RETURN
@@ -1000,6 +1068,10 @@ EVT_BEGIN(iwa02_hammer)
     RETURN
 EVT_END()
 
+/**
+ * Jumping onto the red-eye rock with A after a hip bump:
+ * plays the small rock jump sound while the Skull Gem is not yet placed.
+ */
 EVT_BEGIN(iwa02_ride_a)
     CALL(evt_mario_chk_hipbump, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1013,11 +1085,18 @@ EVT_BEGIN(iwa02_ride_a)
     RETURN
 EVT_END()
 
+/** Clears GW(13) when Mario leaves the red-eye rock, so the next ground pound counts as a new strike. */
 EVT_BEGIN(iwa02_nonride_a)
     SET_VALUE(GW(13), 0)
     RETURN
 EVT_END()
 
+/**
+ * Breaks the skull rock (S_dokuro_iwa) with the bomb-wall paper effect:
+ * plays the wall-break sound, captures the rock into an off-screen image
+ * and plays the OFF_d_bom_ver2 animation A_1 on it, hides the rock and turns off its hit (A_dokuro_iwa),
+ * then waits until no partner action is running before giving control back.
+ */
 static EVT_BEGIN(bombwall_bomb)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT
@@ -1190,6 +1269,7 @@ EVT_BEGIN(muj_05_first)
     RETURN
 EVT_END()
 
+/** Sways the leaves of the palm tree (S_treeA_05) back and forth, spawned by yure_yashi. */
 EVT_BEGIN(yure_yashi_ha1)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 2, 500)
     LOOP(0)
@@ -1275,6 +1355,10 @@ EVT_BEGIN(yure_yashi)
     RETURN
 EVT_END()
 
+/**
+ * Case event for grass patch 1: when the grass is hit,
+ * launches a Spite Pouch out of it unless it has been taken (item_kusa_1).
+ */
 static EVT_BEGIN(evt_kusa_1)
     CALL(evt_item_delete_check, STRING("item_kusa_1"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -1303,6 +1387,11 @@ static KusaAccess kusa_tbl[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Map init for muj_05 (the skull rock): picks music
+ * and ambience by story stage (danger music while Bobbery is stuck), sets up the Embers, Bobbery,
+ * the skull rock puzzle and the exits.
+ */
 EVT_BEGIN(muj_05_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_13_BOBBERY_THE_BRIDGE)

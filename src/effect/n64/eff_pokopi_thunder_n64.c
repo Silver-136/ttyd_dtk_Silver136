@@ -44,6 +44,13 @@ static u8 (*yuragi_data_table[2])[24] = {yuragi_data, yuragi_data2};
 void effPokopiThunderMain(EffectEntry* effect);
 void effPokopiThunderDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a lightning bolt from (x, y, z) to (x2, y2, z2) scaled by scale,
+ * lasting duration frames (<= 0 means until deleted).
+ * Type 10 and above (type mod 10 picks the shape) draws with camera 8 instead of 4.
+ * Returns NULL if the two points coincide.
+ * Used by Dark Puff-type units, the X-Naut leader fight and aji_10 via evt_eff64.
+ */
 EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 x2, f32 y2, f32 z2, f32 scale) {
     EffectEntry* effect;
     EffPokopiThunderN64Work* work;
@@ -107,8 +114,10 @@ EffectEntry* effPokopiThunderN64Entry(s32 type, s32 duration, f32 x, f32 y, f32 
     return effect;
 }
 
+/** Returns i * step. */
 inline float inline_fn(s32 i, float step) { return ((f32)i) * step; }
 
+/** Counts down the lifetime and halves the alpha every frame after the first 11 frames (40 for type 2). */
 void effPokopiThunderMain(EffectEntry* effect) {
     EffPokopiThunderN64Work* work = effect->userdata;
     Vec position;
@@ -145,8 +154,13 @@ void effPokopiThunderMain(EffectEntry* effect) {
     dispEntry(work->cameraId, dispCalcZ(&position), 2, (DispCallback)effPokopiThunderDisp, effect);
 }
 
+/** Returns a->end.y - b->start.y, the vertical span of the bolt. */
 inline float pt_dy(EffPokopiThunderN64Work* a, EffPokopiThunderN64Work* b) { return a->end.y - b->start.y; }
 
+/**
+ * Rebuilds a 12-point jagged ribbon along the bolt each frame, wobbling the points from the frame table,
+ * and draws it as quads with texture 0x54.
+ */
 void effPokopiThunderDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     s32 alpha;

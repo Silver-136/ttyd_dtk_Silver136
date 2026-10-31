@@ -15,6 +15,10 @@ void effPuniBalloonDisp(CameraId cameraId, EffectEntry* effect);
 static void balloon_1(CameraId cameraId, EffectEntry* effect);
 static void balloon_0(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a Puni balloon (type 0) or its pop burst (type 1) at (x, y, z) scaled by `scale`;
+ * used by the Great Tree (mri) Puni scenes and evt_eff ("puniballoon").
+ */
 EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     PuniBalloonWork* work;
@@ -59,6 +63,7 @@ EffectEntry* effPuniBalloonEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     return effect;
 }
 
+/** Per frame: advances the frame counter, ends the effect after the pop and registers the draw callback. */
 void effPuniBalloonMain(EffectEntry* effect) {
     PuniBalloonWork* work = effect->userdata;
     Vec pos;
@@ -103,6 +108,7 @@ void effPuniBalloonMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, (DispCallback)effPuniBalloonDisp, effect);
 }
 
+/** Draw callback: dispatches to balloon_0 (the balloon) or balloon_1 (the burst) by type. */
 void effPuniBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     PuniBalloonWork* work = effect->userdata;
     if (work->type == 0) {
@@ -112,6 +118,7 @@ void effPuniBalloonDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Draws the wobbling balloon (scale pulses with a sine) as a camera-facing textured quad (effect texture 0x26). */
 static void balloon_0(CameraId cameraId, EffectEntry* effect) {
     PuniBalloonWork* work = effect->userdata;
     CameraEntry* cam = camGetPtr(cameraId);
@@ -165,6 +172,7 @@ static void balloon_0(CameraId cameraId, EffectEntry* effect) {
     GXSetTevDirect(GX_TEVSTAGE0);
 }
 
+/** Draws the burst of small pieces after the balloon pops, using the same texture. */
 static void balloon_1(CameraId cameraId, EffectEntry* effect) {
     PuniBalloonWork* work = effect->userdata;
     CameraEntry* cam = camGetPtr(cameraId);

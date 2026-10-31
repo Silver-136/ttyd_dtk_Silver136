@@ -40,6 +40,13 @@ typedef struct GaugeWork {
 } GaugeWork;
 
 
+/**
+ * Per-frame driver of action command 19, used by Koops's Shell Toss and Power Shell.
+ * params[0] picks the input (0 press R, 1 press A, 2 hold the stick left and release it), [1] the frame limit.
+ * Mode 0 ([2]): a marker starts mid-gauge and moves [4]/100 a frame (acFlags bit 0 wraps it round,
+ * bit 1 also blanks it 15 frames per lap); stop it within 12 of the middle.
+ * Mode 1: the gauge swings 0..100..0 twice every [4] frames; stop it at [3] or above.
+ */
 s32 battleAcMain_GaugeTiming(BattleWork* work) {
     GaugeWork* cw;
     BOOL autoCommand;
@@ -297,10 +304,15 @@ s32 battleAcMain_GaugeTiming(BattleWork* work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 when stopped in the zone, 0 otherwise. */
 s32 battleAcResult_GaugeTiming(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/**
+ * Display callback: slides the gauge in from the left over 20 frames,
+ * and once the command ends keeps it up for 40 frames before sliding it back out.
+ */
 void battleAcDisp_GaugeTiming(CameraId cameraId, void* param) {
     BattleActions* ac = &((BattleWork*)param)->actionCommands;
     BattleACDispParams* disp = &ac->disp;
@@ -332,12 +344,18 @@ void battleAcDisp_GaugeTiming(CameraId cameraId, void* param) {
     }
 }
 
+/** Called by btlevtcmd_StopAC: unless the command already finished, starts the end wait and stops its sound. */
 void battleAcDelete_GaugeTiming(BattleWork* work) {
     if (!(work->actionCommands.doneFlags & 1)) {
         work->actionCommands.mAcState = 1004;
     }
 }
 
+/**
+ * Draws the gauge: in mode 1 the fill and a star that lights at the target,
+ * otherwise the green moving marker and the target stars.
+ * Then the input icon (R, A or the stick held left), shown pressed or released as a cue.
+ */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;

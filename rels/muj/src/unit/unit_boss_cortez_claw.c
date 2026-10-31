@@ -184,6 +184,12 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_cortez_claw", "c_buki4", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, 0, pose_table},
 };
 
+/**
+ * Init event of Cortez's claw weapon: sets the unit flag 0x1000000, installs its wait, phase, unison phase,
+ * attack, damage and (default) confusion events,
+ * stores weapon number 2 in unit work 2 and clears unit work 1 (the flag that makes it sit out its attack),
+ * and allows no movement.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -199,6 +205,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of Cortez's claw: runs the default damage handling with LW(10) = -2 and LW(11) = 1. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -206,6 +213,15 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Cortez's claw; while knocked down (unit work 1, its revive countdown, is not 0) it only
+ * restarts the wait event.
+ * Otherwise it picks a target with weapon_cortez_claw_float_attack,
+ * winds back to -135 degrees in z as it dives in front of the target,
+ * then swings forward to 45 degrees with the sword-dance sound for one hit.
+ * It plays the avoid pose on a dodge, or applies the damage with the action command defence check;
+ * a superguarded claw recoils home at once, otherwise it straightens and returns home.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_DOWN_TURNS, LW(0))
     // Any nonzero down-turn count suppresses this attack.
@@ -319,12 +335,20 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Idle event of Cortez's claw: waits for the loop timing of its animation
+ * and plays the pose table pose for state 1.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeWaitPlayLoopTiming, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Data event (entry 9) of Cortez's claw: when the weapon takes damage it plays the KRT_Z_1 pose on the unit in
+ * LW(10) and waits 30 frames.
+ */
 static EVT_BEGIN(cortez_damage_sub_event)
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))
     IF_INT_EQUAL(LW(0), 0)

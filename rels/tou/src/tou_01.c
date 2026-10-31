@@ -202,6 +202,7 @@ EvtWord tou_01_init_evt[1641];
 EvtWord tou_01_init_evt[627];
 #endif
 
+/** Script helper: turns off projected-texture shading (the blimp shadow) on Mario's and the partners' models. */
 static USER_FUNC(proj_off) {
     animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[0], MAP_OBJ_FLAG_PROJ_TEX);
     animPoseSetMaterialFlagOff(marioGetPtr()->paperAnimGroupId[1], MAP_OBJ_FLAG_PROJ_TEX);
@@ -279,6 +280,10 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Door animation for the shop door door_1, going in (evtIn): LW(0) is the swing angle;
+ * it turns the map object door_2 about its vertical axis by 0.55 times the angle.
+ */
 static EVT_BEGIN(evt_door)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.5546875f))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -286,12 +291,21 @@ static EVT_BEGIN(evt_door)
     RETURN
 EVT_END()
 
+/**
+ * Door animation for the shop door door_1, coming out (evtOut): LW(0) is the swing angle;
+ * it turns door_2 by half the angle about the Z axis.
+ */
 static EVT_BEGIN(evt_door2)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2"), 0, 0, LW(0))
     RETURN
 EVT_END()
 
+/**
+ * Wall callback (evtWall) of door_1, the shop door: LW(0) is the swing angle;
+ * it turns the shop wall objects mise_N and mise_H in opposite directions by three quarters of the angle,
+ * folding the front wall away as Mario goes in.
+ */
 static EVT_BEGIN(evt_wall)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.75f))
     CALL(evt_mapobj_rotate, 1, STRING("mise_N"), 0, LW(0), 0)
@@ -300,6 +314,10 @@ static EVT_BEGIN(evt_wall)
     RETURN
 EVT_END()
 
+/**
+ * Open callback (evtOpen) of door_1, the shop door: dips the music and ambience to 50 and low-pass filters the
+ * ambience (800).
+ */
 EVT_BEGIN(evt_door_1_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -307,6 +325,7 @@ EVT_BEGIN(evt_door_1_open)
     RETURN
 EVT_END()
 
+/** Close callback (evtClose) of door_1: resumes the music and ambience from the dip and removes the filter. */
 EVT_BEGIN(evt_door_1_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -339,18 +358,27 @@ static DoorParam door_1 = {
     evt_door_1_close, // evtClose
 };
 
+/**
+ * Door animation for the second door, going in (evtIn): LW(0) is the swing angle;
+ * it turns the map object door_3 about its vertical axis by half the angle.
+ */
 static EVT_BEGIN(evt_door_2)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("door_3"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation for the second door, coming out (evtOut): LW(0) is the swing angle;
+ * it turns door_3 by half the angle about the Z axis.
+ */
 static EVT_BEGIN(evt_door2_2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("door_3"), 0, 0, LW(0))
     RETURN
 EVT_END()
 
+/** Folds down the first outer wall panel (sak_soto_1) of the tavern with a collapsing sound. */
 EVT_BEGIN(evt_sakaba_1)
     IF_INT_EQUAL(LW(6), 0)
         CALL(evt_mapobj_get_position, STRING("sak_soto_1"), LW(10), LW(11), LW(12))
@@ -360,6 +388,7 @@ EVT_BEGIN(evt_sakaba_1)
     RETURN
 EVT_END()
 
+/** Folds down the second outer wall panel (sak_soto_2) of the tavern. */
 EVT_BEGIN(evt_sakaba_2)
     IF_INT_EQUAL(LW(6), 0)
         CALL(evt_mapobj_get_position, STRING("sak_soto_2"), LW(10), LW(11), LW(12))
@@ -369,6 +398,7 @@ EVT_BEGIN(evt_sakaba_2)
     RETURN
 EVT_END()
 
+/** Folds down the third outer wall panel (sak_soto_3) of the tavern. */
 EVT_BEGIN(evt_sakaba_3)
     IF_INT_EQUAL(LW(6), 0)
         CALL(evt_mapobj_get_position, STRING("sak_soto_3"), LW(10), LW(11), LW(12))
@@ -378,6 +408,7 @@ EVT_BEGIN(evt_sakaba_3)
     RETURN
 EVT_END()
 
+/** Folds down the fourth outer wall panel (sak_soto_4) of the tavern. */
 EVT_BEGIN(evt_sakaba_4)
     IF_INT_EQUAL(LW(6), 0)
         CALL(evt_mapobj_get_position, STRING("sak_soto_4"), LW(10), LW(11), LW(12))
@@ -441,6 +472,10 @@ const char* sakaba_item[] = {
     NULL,
 };
 
+/**
+ * Open callback (evtOpen) of door_2, the tavern (sakaba) door: dips the music and ambience to 50 and low-pass
+ * filters the ambience (800).
+ */
 EVT_BEGIN(evt_door_2_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -448,6 +483,7 @@ EVT_BEGIN(evt_door_2_open)
     RETURN
 EVT_END()
 
+/** Close callback (evtClose) of door_2: resumes the music and ambience from the dip and removes the filter. */
 EVT_BEGIN(evt_door_2_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -476,6 +512,10 @@ static DoorParam door_2 = {
     evt_door_2_close, // evtClose
 };
 
+/**
+ * Looping decoration: the sign kanban_e rocks about the X axis between +20 and -20 degrees,
+ * taking 60 frames each way, forever.
+ */
 static EVT_BEGIN(evt_kanban)
     LOOP(0)
         CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 2000, -2000, 60)
@@ -496,6 +536,11 @@ static EVT_BEGIN(evt_kanban)
     RETURN
 EVT_END()
 
+/**
+ * Looping decoration: the leaning sign object taore rocks about the Z axis (0 to 10, to -10,
+ * to 10 and back to 0 degrees, over 1, 2, 2 and 1 seconds) and then rests for 3 seconds,
+ * until global flag GF(10) is set, when it snaps upright.
+ */
 static EVT_BEGIN(evt_kanban2)
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_OUT, 0, 1000, 1000)
@@ -660,6 +705,10 @@ static USER_FUNC(proj_on) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Display callback: renders the blimp's silhouette from above into a 128x128 texture,
+ * the source for the blimp shadow projected on the plaza.
+ */
 // Render the sphere into the projected shadow texture, restoring viewport, projection and scissor afterward.
 void make_shadow_disp(CameraId camera, void* param) {
     ShadowWork* wp = param;
@@ -714,6 +763,7 @@ void make_shadow_disp(CameraId camera, void* param) {
     GXSetScissor(left, top, width, height);
 }
 
+/** Script helper: allocates the shadow texture and queues make_shadow_disp every frame; blocks forever as the owner. */
 USER_FUNC(make_shadow) {
     ShadowWork* wp;
 
@@ -730,6 +780,10 @@ USER_FUNC(make_shadow) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: args[0..2] = camera position, args[3..5] = look-at point;
+ * builds the view/projection matrices for the shadow projection.
+ */
 static USER_FUNC(proj_mtx) {
     EvtWord* args = event->args;
     f32 px = evtGetFloat(event, args[0]);
@@ -754,6 +808,7 @@ static USER_FUNC(proj_mtx) {
     return EVT_RETURN_DONE;
 }
 
+/** Sets up the blimp shadow: marks the ground, gondola and "den" map objects as projected-texture receivers. */
 EVT_BEGIN(evt_ship_shadow)
     CALL(proj_on)
     BEGIN_INLINE_EVENT
@@ -783,12 +838,17 @@ EVT_BEGIN(evt_ship_shadow)
     RETURN
 EVT_END()
 
+/** NPC init for the blimp ticket clerk: puts him at (100, 0, 430) facing 270. */
 EVT_BEGIN(init_hikuu)
     CALL(evt_npc_set_position, STRING("me"), 100, 0, 430)
     CALL(evt_npc_set_ry, STRING("me"), 270)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the blimp operator: offers a ride back to Rogueport (stg3_tou_00 with yes/no);
+ * on yes Mario shows the Blimp Ticket and the scene continues, on no he stays (stg3_tou_01).
+ */
 EVT_BEGIN(talk_hikuu)
     CALL(evt_msg_print, 0, STRING("stg3_tou_00"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg3_tou_00_yn"))
@@ -817,11 +877,17 @@ EVT_BEGIN(talk_hikuu)
     RETURN
 EVT_END()
 
+/** NPC init for the tavern keeper: places him at (650, 10, 12). */
 EVT_BEGIN(init_sakaba)
     CALL(evt_npc_set_position, STRING("me"), 650, 10, 12)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the tavern keeper.
+ * Handles Trouble Center job 25 first; otherwise his lines depend on story progress,
+ * including the Chapter 3 scene where Mario hears about the 8th-place rank.
+ */
 EVT_BEGIN(talk_sakaba)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 1)
@@ -938,6 +1004,7 @@ EVT_BEGIN(talk_sakaba)
     RETURN
 EVT_END()
 
+/** NPC init for the shop NPC: places it at (-600, 10, 140), facing 200. */
 EVT_BEGIN(init_mise)
     CALL(evt_npc_set_position, STRING("me"), -600, 10, 140)
     CALL(evt_npc_set_ry, STRING("me"), 200)
@@ -948,12 +1015,17 @@ EVT_BEGIN(talk_mise)
     RETURN
 EVT_END()
 
+/** NPC init for the hot dog vendor: shadowless at (-400, 20, -125). */
 EVT_BEGIN(init_hot)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_set_position, STRING("me"), -400, 20, -125)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the hot dog vendor (outside the main stall):
+ * different lines before and after the runaway egg (story stages 11 and 12).
+ */
 EVT_BEGIN(talk_hot)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_11_RUNAWAY_EGG)
@@ -1112,6 +1184,7 @@ static EVT_BEGIN(talk_musume)
     RETURN
 EVT_END()
 
+/** NPC init for the first girl: stands at (300, 10, -150) between Glitzville's arrival and the boss battle. */
 EVT_BEGIN(init_musume_1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_32_BOSS_BATTLE)
@@ -1120,11 +1193,13 @@ EVT_BEGIN(init_musume_1)
     RETURN
 EVT_END()
 
+/** Talk script of the first girl. */
 EVT_BEGIN(talk_musume_1)
     CALL_CHILD(PTR(talk_musume))
     RETURN
 EVT_END()
 
+/** NPC init for the second girl: stands at (330, 10, -180) between arrival and the boss battle. */
 EVT_BEGIN(init_musume_2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_32_BOSS_BATTLE)
@@ -1133,11 +1208,13 @@ EVT_BEGIN(init_musume_2)
     RETURN
 EVT_END()
 
+/** Talk script of the second girl. */
 EVT_BEGIN(talk_musume_2)
     CALL_CHILD(PTR(talk_musume))
     RETURN
 EVT_END()
 
+/** NPC init for the third girl: stands at (370, 10, -140) between arrival and the boss battle. */
 EVT_BEGIN(init_musume_3)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_32_BOSS_BATTLE)
@@ -1146,17 +1223,20 @@ EVT_BEGIN(init_musume_3)
     RETURN
 EVT_END()
 
+/** Talk script of the third girl. */
 EVT_BEGIN(talk_musume_3)
     CALL_CHILD(PTR(talk_musume))
     RETURN
 EVT_END()
 
+/** NPC init for the first Toad: placed at (-350, 0, 75); NPC_STATUS_FACE_MOVE_DIR set. */
 EVT_BEGIN(init_kino_1)
     CALL(evt_npc_set_position, STRING("me"), -350, 0, 75)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
+/** Regular (idle) script of the first Toad: paces back and forth along x between -350 and 350. */
 EVT_BEGIN(reg_kino_1)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("me"), -350, 75, 0, FLOAT(48.0f), 0)
@@ -1209,11 +1289,13 @@ EVT_BEGIN(talk_kino_1)
     RETURN
 EVT_END()
 
+/** NPC init for the second Toad: placed at (-450, 0, 625). */
 EVT_BEGIN(init_kino_2)
     CALL(evt_npc_set_position, STRING("me"), -450, 0, 625)
     RETURN
 EVT_END()
 
+/** Talk script of the second Toad: story-dependent spectator lines, like talk_kino_1. */
 EVT_BEGIN(talk_kino_2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1259,6 +1341,7 @@ EVT_BEGIN(init_roten_1)
     RETURN
 EVT_END()
 
+/** Talk script of the first stall vendor: story-dependent lines, like talk_kino_1. */
 EVT_BEGIN(talk_roten_1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1299,11 +1382,13 @@ EVT_BEGIN(talk_roten_1)
     RETURN
 EVT_END()
 
+/** NPC init for the second stall vendor: placed at (725, 10, 40). */
 EVT_BEGIN(init_roten_2)
     CALL(evt_npc_set_position, STRING("me"), 725, 10, 40)
     RETURN
 EVT_END()
 
+/** Talk script of the second stall vendor: story-dependent lines, like talk_kino_1. */
 EVT_BEGIN(talk_roten_2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1344,11 +1429,13 @@ EVT_BEGIN(talk_roten_2)
     RETURN
 EVT_END()
 
+/** NPC init for the first Lakitu (jugem): placed at (-400, 0, 625). */
 EVT_BEGIN(init_jugem_1)
     CALL(evt_npc_set_position, STRING("me"), -400, 0, 625)
     RETURN
 EVT_END()
 
+/** Talk script of the first Lakitu: story-dependent spectator lines, like talk_kino_1. */
 EVT_BEGIN(talk_jugem_1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1389,12 +1476,14 @@ EVT_BEGIN(talk_jugem_1)
     RETURN
 EVT_END()
 
+/** NPC init for the second Lakitu: placed at (700, 10, 105), facing 340. */
 EVT_BEGIN(init_jugem_2)
     CALL(evt_npc_set_position, STRING("me"), 700, 10, 105)
     CALL(evt_npc_set_ry, STRING("me"), 340)
     RETURN
 EVT_END()
 
+/** Talk script of the second Lakitu: story-dependent spectator lines, like talk_kino_1. */
 EVT_BEGIN(talk_jugem_2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1435,6 +1524,10 @@ EVT_BEGIN(talk_jugem_2)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the beauty (bijyo): her position depends on story progress (placed at (610, 10, -120) during the
+ * early Chapter 3 stage, elsewhere or absent otherwise, including after Mario leaves as champion).
+ */
 EVT_BEGIN(init_bijyo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_20_00_MAJORS_8TH_PLACE, STG3_20_03_THE_YELLOW_BLOCK)
@@ -1452,6 +1545,7 @@ EVT_BEGIN(init_bijyo)
     RETURN
 EVT_END()
 
+/** Talk script of the beauty: story-dependent spectator lines, like talk_kino_1. */
 EVT_BEGIN(talk_bijyo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1531,6 +1625,10 @@ static EVT_BEGIN(init_sarary)
     RETURN
 EVT_END()
 
+/**
+ * Menu helper: asks "pick a number" (irai_24_010/011) on two pages to return 1 to 10 in LW(0) (Trouble Center
+ * job 24).
+ */
 // The sixth option switches pages; the other five options select digits 0..4 or 5..9.
 EVT_BEGIN(select_number)
     SET_VALUE(LW(15), 0)
@@ -2016,6 +2114,7 @@ USER_FUNC(eff_sleep_on) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: removes the sleeping "Z" effect. */
 USER_FUNC(eff_sleep_off) {
     EffectEntry* eff = effNameToPtr("eff_sleep");
 
@@ -2025,6 +2124,7 @@ USER_FUNC(eff_sleep_off) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: args[0] receives 1 if Mario's key input and control are both enabled, else 0. */
 static USER_FUNC(mario_chk) {
     EvtWord* args = event->args;
     BOOL ok = FALSE;
@@ -2060,10 +2160,12 @@ EVT_BEGIN(evt_tamago_sleep)
     RETURN
 EVT_END()
 
+/** Empty script (just RETURN). */
 EVT_BEGIN(dummy)
     RETURN
 EVT_END()
 
+/** The hot dog vendor's interrupt script: chases the egg to its position and hops after it. */
 EVT_BEGIN(hot_move_evt)
     CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_NO_WALL_COLLISION)
@@ -2084,6 +2186,7 @@ EVT_BEGIN(hot_move_evt)
     RETURN
 EVT_END()
 
+/** The hot dog vendor's regular script variant: moves to (-288, -110) and faces the egg. */
 EVT_BEGIN(hot_move_evt2)
     CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -2092,6 +2195,10 @@ EVT_BEGIN(hot_move_evt2)
     RETURN
 EVT_END()
 
+/**
+ * Hot dog vendor ("oyaji", old man) walks across the plaza to the egg, speaking stg3_tou_242,
+ * and then restarts his regular script.
+ */
 EVT_BEGIN(evt_oyaji_move)
     WAIT_MS(1000)
     CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_NO_WALL_COLLISION)
@@ -2189,6 +2296,10 @@ s32 yoshi_data[] = {
     -360, 0, 150, -290, 0, 40,
 };
 
+/**
+ * Runaway egg scene: the egg NPC hops along the points in yoshi_data (ten jumps with random height and
+ * squashing) away from the plaza, stopping if Mario takes control.
+ */
 // Two close approaches at jump endpoints end the chase; intervening misses do not reset the count.
 EVT_BEGIN(evt_tamago_move)
     CALL(evt_npc_flag_onoff, 1, STRING("たまご"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -2400,6 +2511,10 @@ EVT_BEGIN(talk_tamago)
     RETURN
 EVT_END()
 
+/**
+ * Moves the blimp gondola ("gondora" map object) up or down with its sound and keeps Mario
+ * and the partner standing on it.
+ */
 // LW(0)/LW(1) are lift heights; LW(2) selects whether Mario and the main partner move with the platform.
 EVT_BEGIN(evt_gondora_updown)
     SET_VALUE(LW(3), LW(0))
@@ -3090,6 +3205,10 @@ static USER_FUNC(anim_tevcallback) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = map object name, args[1] = index;
+ * enables TEV callback `index` (0-15) on that object's model.
+ */
 static USER_FUNC(anim_tevcallback_mobj) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -3103,6 +3222,7 @@ static USER_FUNC(anim_tevcallback_mobj) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: args[0] = NPC name; stops and clears that NPC's regular (idle) event. */
 static USER_FUNC(delete_npc_regl_evt) {
     NpcEntry* npc = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
 
@@ -3114,6 +3234,10 @@ static USER_FUNC(delete_npc_regl_evt) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = limit, args[1], args[2] = x, z;
+ * sets args[3] to TRUE when the point is behind the darkness cutoff for the current camera yaw.
+ */
 // Block until this point lies behind the camera-oriented darkness boundary.
 USER_FUNC(yami_oowareru_check) {
     EvtWord* args = event->args;
@@ -3136,6 +3260,7 @@ USER_FUNC(yami_oowareru_check) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: args[0] = effect name, args[1..3] = x, y, z; creates a star-stone effect (type 2) with that name. */
 static USER_FUNC(starstone_entry) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -3147,6 +3272,7 @@ static USER_FUNC(starstone_entry) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: args[0] = effect name, args[1..3] = x, y, z; moves the named star-stone effect. */
 static USER_FUNC(starstone_set_pos) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -3161,6 +3287,7 @@ static USER_FUNC(starstone_set_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: args[0] = effect name, args[1] = degrees; sets the named star-stone effect's rotation about y. */
 static USER_FUNC(starstone_set_ry) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -3573,6 +3700,10 @@ static inline void kanbanCopyFlags(MapObject* kanban, const char* name) {
     }
 }
 
+/**
+ * Script helper: copies the display flags of the "kanban" sign's parts to its language-specific letter objects,
+ * so only the right-language lettering shows. Blocks forever.
+ */
 USER_FUNC(tou_01_kanban_moji_flag_sync) {
     MapObject* kanban = mapGetMapObj("kanban");
     if (kanban != NULL) {

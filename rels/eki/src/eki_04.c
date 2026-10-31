@@ -21,24 +21,40 @@ static BeroEntry bero_data[3];
 EvtWord evt_jump[21];
 EvtWord eki_04_init_evt[66];
 
+/**
+ * Door animation callback, closing for the e_bero exit to eki_03:
+ * rotates map object "e_door" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(e_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("e_door"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the e_bero exit to eki_03:
+ * rotates map object "e_door" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(e_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("e_door"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, closing for the s_bero exit to eki_05:
+ * rotates map object "s_door" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(s_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("s_door"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the s_bero exit to eki_05:
+ * rotates map object "s_door" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(s_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("s_door"), 0, LW(0), 0)
@@ -85,6 +101,11 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Runs when Mario uses the red jump stand: freezes him,
+ * launches him with a high jump (evt_mario_jump_jumpstand) from the stand at (360, -900) up to the ledge near
+ * (310, -900), and then gives control back.
+ */
 EVT_BEGIN(evt_jump)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_jump_jumpstand, 360, -900, 70, 300, 700, 75, 310, -900, 65, 6000, 1)

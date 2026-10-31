@@ -32,6 +32,10 @@ f32 planeData[41] = {
     28.0f,
 };
 
+/**
+ * Plays the paper airplane fold sound (SFX_MARIO_AIRPLANE1) four times, 12 frames apart,
+ * at the position in LW(0..2) while Mario folds into the plane on take-off.
+ */
 EVT_BEGIN(sound_evt)
 CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_AIRPLANE1"), LW(0), LW(1), LW(2), 0)
 WAIT_FRAMES(12)
@@ -53,6 +57,7 @@ static inline void planeSetSpd(f32 targetZ, f32 rate, f32 zoom) {
 
 const char* paper_plane[4] = {"p_hikohki", "p_hikohki_g", "p_hikohki_y", "p_hikohki_v"};
 
+/** Stops the plane's looping flight sound if it is playing. */
 static inline void planeSfxOff(void) {
     MarioWork* m = marioGetPtr();
     if (m->motStruct != NULL && (u32)m->motPlane->sfxId != 0xFFFFFFFF) {
@@ -61,6 +66,10 @@ static inline void planeSfxOff(void) {
     }
 }
 
+/**
+ * Turns Mario back from the plane: normal 20x37 collision box, rotation and offsets cleared,
+ * paper animation off, mirror and facing locks released.
+ */
 static inline void planeReset(void) {
     MarioWork* m = marioGetPtr();
     m->wPlayerCollisionBox.x = 20.0f;
@@ -89,6 +98,10 @@ static inline BOOL planeCancel(void) {
     return FALSE;
 }
 
+/**
+ * Plane heading for the partner follow code: 0 when not flying,
+ * 1 or -1 for the two directions (motPlane flag 1 set means 1).
+ */
 s32 marioPlaneGetFlyingDir(void) {
     MarioWork* mp = marioGetPtr();
     s32 ret;
@@ -102,6 +115,10 @@ s32 marioPlaneGetFlyingDir(void) {
     return ret;
 }
 
+/**
+ * 0 when Mario is not in the plane motion, 2 while gliding (sub-motions 12-19), 1 during take-off or landing.
+ * Used by evt_mario and the camera and shadow code in mario.c.
+ */
 s32 marioGetPlaneStatus(void) {
     MarioWork* mp = marioGetPtr();
     if (mp->currMotionId != MARIO_MOTION_PLANE) {
@@ -113,6 +130,10 @@ s32 marioGetPlaneStatus(void) {
     return 1;
 }
 
+/**
+ * Ends a glide early: switches to the landing phase (sub-motion 50) from the current height.
+ * Called from evt_mario's plane command and when the field motion is changed while flying.
+ */
 BOOL mario_plane_cancel(void) {
     MarioWork* mp = marioGetPtr();
     if (mp->currMotionId != MARIO_MOTION_PLANE) {
@@ -126,6 +147,10 @@ BOOL mario_plane_cancel(void) {
     return FALSE;
 }
 
+/**
+ * Re-applies the paper airplane animation in Mario's current colour (paper_plane[marioGetColor()])
+ * when mario.c rebuilds his look while flying.
+ */
 void marioForcePlaneAnime(void) {
     MarioWork* mp = marioGetPtr();
     marioPaperOff();
@@ -143,6 +168,7 @@ static inline void planeRoll1(MarioWork* mp, f32 rate, f32 max) {
     *p += rate * (target - *p);
 }
 
+/** Eases the plane's turn speed toward max (degrees per frame) in the flying direction by rate. */
 // Same easing as planeRoll1.
 static inline void planeRoll2(MarioWork* mp, f32 rate, f32 max) {
     f32* p = &mp->mot.plane.turnSpeed;
@@ -164,6 +190,12 @@ static inline f32 planeCamFloor(void) {
 }
 #endif
 
+/**
+ * Plane Mode motion (from a plane panel): Mario jumps, spins and folds into a paper airplane,
+ * then glides with the stick pitching it up and down (flyMain); A or B or a key-off lands him.
+ * Handles landing on the ground, hitting walls (falling back to the jump motion),
+ * dropping into water (splash, then the water damage motion) and the camera following the flight.
+ */
 void mot_plane(void) {
     MarioWork* mp;
     BOOL done;
@@ -485,6 +517,7 @@ double sin(double);
 
 #define PI 3.1415927f
 
+/** TRUE when the floor under the plane has one of the attributes 0x38 that stop the glide. */
 static inline BOOL planeChkUnder(void) {
     BOOL ret = FALSE;
     MarioWork* m = marioGetPtr();
@@ -494,6 +527,12 @@ static inline BOOL planeChkUnder(void) {
     return ret;
 }
 
+/**
+ * Per-frame flight: the climb into the glide, then pitch from the stick,
+ * speed gain when diving and loss when climbing (planeData constants),
+ * the yaw clamped to stay in the flying direction, and the collision checks that end the flight on the ground,
+ * a wall or water.
+ */
 static void flyMain(void) {
     f32 s2, c2, s, c;
     MarioWork* mp;
@@ -772,6 +811,10 @@ static void flyMain(void) {
     }
 }
 
+/**
+ * Cleanup when the plane motion ends: camera follow and shift reset, flight sound off, Mario reset to normal,
+ * the motion's work freed and the partners dismounted.
+ */
 void mot_plane_post(void) {
     MarioWork* mp = marioGetPtr();
     camFollowYOn();
@@ -791,6 +834,12 @@ static f32 planeDead270(void) {
     return 270.0f;
 }
 
+/**
+ * Checks the plane against the world: rays ahead of its front point for walls (mario->hitobjFront),
+ * downward rays under its front and nose points for a floor (mario->hitobjStandOn,
+ * plus from JP on a ray between the two), and with no floor a short upward ray for a ceiling
+ * (mario->hitobjHead). Returns TRUE on any hit, with the hit height in *outY.
+ */
 BOOL chkCollision(f32* outY) {
     Vec dir, hpos, v, v2;
     f32 s1, c1, s0, c0, s2, c2;

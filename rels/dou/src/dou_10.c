@@ -155,6 +155,13 @@ const char* namiyoke_mapobj[] = {
     "S_nami15",
 };
 
+/**
+ * One travelling wave of the wave-dodging section:
+ * takes a free slot in the wave table (LW(9) = table, LW(10) = wave id),
+ * moves the wave object namiyoke_mapobj[id] along the lane from the start values in LW(11) to LW(13)
+ * until it reaches the end, and sets GW(0) to 1 if it touches Mario on the way.
+ * Frees the slot and parks the wave object under the map at the end.
+ */
 EVT_BEGIN(nami_running)
     CALL(evt_sub_entrymgr_entry, LW(9), LW(10), LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -180,6 +187,7 @@ EVT_BEGIN(nami_running)
     RETURN
 EVT_END()
 
+/** Failure animation, part 1: spins Mario's facing three full turns (1080 degrees) over one second. */
 EVT_BEGIN(namiyoke_fail_kaiten)
     CALL(evt_mario_get_dispdir, LW(0))
     SET_VALUE(LW(1), LW(0))
@@ -196,6 +204,10 @@ EVT_BEGIN(namiyoke_fail_kaiten)
     RETURN
 EVT_END()
 
+/**
+ * Failure animation, part 2: takes control away from Mario
+ * and sinks him 100 units below the water over four seconds.
+ */
 EVT_BEGIN(namiyoke_fail_shizumu)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -213,6 +225,10 @@ EVT_BEGIN(namiyoke_fail_shizumu)
     RETURN
 EVT_END()
 
+/**
+ * Failure animation, part 3: Mario bobs back up at (-660, 0, 100), the start of the wave room, from 100 below,
+ * with three smaller bounces (-10, -5, -1) as he settles.
+ */
 EVT_BEGIN(namiyoke_fail_recover)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_MINIGAME_SHIP_FLOAT1"), LW(0), LW(1), LW(2), 0)
@@ -282,6 +298,11 @@ EVT_BEGIN(namiyoke_fail_recover)
     RETURN
 EVT_END()
 
+/**
+ * Mario was hit by a wave: stops the boat, aims the camera, spins and sinks Mario,
+ * puts him back at the start (-660,
+ * 100) with a ripple effect and the camera pulled to the start, and gives control back.
+ */
 EVT_BEGIN(namiyoke_fail)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -316,6 +337,7 @@ EVT_BEGIN(namiyoke_fail)
     RETURN
 EVT_END()
 
+/** Watches GW(0) forever; whenever a wave sets it to 1 (touching Mario), runs the failure sequence and clears it. */
 EVT_BEGIN(namiyoke_atari_check)
     SET_VALUE(GW(0), 0)
     LOOP(0)
@@ -329,6 +351,11 @@ EVT_BEGIN(namiyoke_atari_check)
     RETURN
 EVT_END()
 
+/**
+ * Wave spawner of the wave-dodging section: first a run of 9 waves staggered along the room (the near lanes are
+ * only used for later ones), then forever one new wave every 1.5 to 2 seconds at the far end (X = 1040) in one
+ * of four lanes (Z = -125, -50, 25, 100), up to 15 at once.
+ */
 EVT_BEGIN(namiyoke_main)
     SET_VALUE(LW(10), 0)
     LOOP(0)
@@ -389,6 +416,10 @@ EVT_BEGIN(namiyoke_main)
     RETURN
 EVT_END()
 
+/**
+ * Parks all 15 wave objects below the map (y = -1000) and switches off their hit areas
+ * so the waves start out of sight.
+ */
 EVT_BEGIN(namiyoke_init)
     SET_VALUE(LW(0), 0)
     LOOP(0)
@@ -416,6 +447,11 @@ EVT_BEGIN(namiyoke_init)
     RETURN
 EVT_END()
 
+/**
+ * Sound loop for the waves (namiyoke_check spawns it): every frame it finds the active wave nearest Mario among
+ * the 15 wave slots (namiyoke_se_check) and starts SFX_STG5_MINIGAME_WAVE1 there or moves it there;
+ * it stops the sound when no wave is active. The first start passes the wave's x as its z position too.
+ */
 EVT_BEGIN(namiyoke_se)
     SET_VALUE(LW(12), 0)
     LOOP(0)
@@ -473,6 +509,11 @@ EVT_BEGIN(namiyoke_check)
     RETURN
 EVT_END()
 
+/**
+ * Spear trap loop (only one at a time, guarded by GW(15)):
+ * the spear S_yari shoots up and retracts on a timer,
+ * repeating until GW(15) is set to 2 (same pattern as yari_trap_sub in dou_02).
+ */
 static EVT_BEGIN(yari_trap_sub)
     IF_INT_NOT_EQUAL(GW(15), 0)
         RETURN
@@ -513,6 +554,10 @@ static EVT_BEGIN(yari_trap_sub)
     RETURN
 EVT_END()
 
+/**
+ * Starts the spear trap: binds the spear's hit area A_yari to its map object S_yari,
+ * clears GW(15) and spawns yari_trap_sub.
+ */
 static EVT_BEGIN(yari_trap)
     CALL(evt_hit_bind_mapobj, STRING("A_yari"), STRING("S_yari"))
     SET_VALUE(GW(15), 0)
@@ -520,6 +565,11 @@ static EVT_BEGIN(yari_trap)
     RETURN
 EVT_END()
 
+/**
+ * Bobbing loop for floating object 0: binds the hit area in LW(1) (if any) to the map object in LW(0),
+ * waits a random 0.2 to 0.6 seconds, then every 130 ms steps through the 16 heights of the bobbing table
+ * (evt_dou_normal_puka), moves the object to that height and updates the hit area.
+ */
 static EVT_BEGIN(dou_puka_event_main0)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
@@ -552,6 +602,11 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Init script of dou_10, the wave-dodging room:
+ * music and ambience, exits, waves and boat animation, the spear trap, gazigazi hazards,
+ * the wave-dodging scripts, a bobbing boat and a Shine Sprite block.
+ */
 EVT_BEGIN(dou_10_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU10"))
@@ -594,11 +649,17 @@ USER_FUNC(namiyoke_se_check) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: stops Mario's boat immediately (marioShipForceStop). */
 USER_FUNC(namiyoke_fail_stop) {
     marioShipForceStop();
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0..2] is a wave's position; sets args[3] to 1 if Mario is touching it.
+ * The hit box is 30 wide and deep plus margins of 20 in X and 10 in Z,
+ * shrinking while the wave sinks (y between -5 and -45); a wave lower than -45 never hits.
+ */
 USER_FUNC(dou_namiatari_check) {
     // Waves at Y <= -45 are inactive; between -45 and -5 their X/Z extents grow linearly.
     EvtWord* args = event->args;
@@ -634,6 +695,12 @@ USER_FUNC(dou_namiatari_check) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: moves one wave forward by 1.35 per frame (X) and bobs it with a sine;
+ * the wave rises out of the water at the start and sinks again after 200 (or -340 in the far lanes).
+ * Writes the position to args[0..2] and sets LW(15) to 1 once the wave has finished its run (X < 0, or < -540 in
+ * the far lanes).
+ */
 USER_FUNC(nami_running_func) {
     f32* lwf = event->lwDataF;
     EvtWord* args = event->args;
@@ -682,6 +749,7 @@ USER_FUNC(nami_running_func) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: copies the start position of a wave (LW(11) to LW(13)) into its working floats. */
 USER_FUNC(nami_running_init_func) {
     f32* lwf = event->lwDataF;
 
@@ -702,6 +770,7 @@ USER_FUNC(namiyoke_set_mapobj) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper (wave table): args[0] is the table; copies the three floats stored with id args[1] into args[2..4]. */
 USER_FUNC(evt_sub_entrymgr_getreg) {
     EvtWord* args = event->args;
     EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
@@ -720,6 +789,7 @@ USER_FUNC(evt_sub_entrymgr_getreg) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper (wave table): args[0] is the table; stores the floats args[2..4] with id args[1]. */
 USER_FUNC(evt_sub_entrymgr_setreg) {
     EvtWord* args = event->args;
     EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
@@ -738,6 +808,7 @@ USER_FUNC(evt_sub_entrymgr_setreg) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper (wave table): sets args[2] to 1 if id args[1] is in use in the table args[0], else 0. */
 USER_FUNC(evt_sub_entrymgr_check) {
     // BUG: an unused entry does not advance e, so later entries are not checked.
     EvtWord* args = event->args;
@@ -760,6 +831,7 @@ USER_FUNC(evt_sub_entrymgr_check) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper (wave table): frees the slot with id args[1] in the table args[0]; args[2] is 1 if it was found. */
 USER_FUNC(evt_sub_entrymgr_delete) {
     EvtWord* args = event->args;
     EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
@@ -780,6 +852,10 @@ USER_FUNC(evt_sub_entrymgr_delete) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (wave table): claims the first free slot in the table args[0] for id args[1];
+ * args[2] is 1 on success and 0 if the table is full.
+ */
 USER_FUNC(evt_sub_entrymgr_entry) {
     EvtWord* args = event->args;
     EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
@@ -800,6 +876,10 @@ USER_FUNC(evt_sub_entrymgr_entry) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (wave table): allocates a table of args[1] slots from the map heap, zeroed,
+ * and returns its address in args[0].
+ */
 USER_FUNC(evt_sub_entrymgr_init) {
     EvtWord* args = event->args;
     EntryMgr* mgr = _mapAlloc(sizeof(EntryMgr));

@@ -112,6 +112,12 @@ NpcTerritoryInfo btl_rsh_setup_no_tbl[] = {
     {0},
 };
 
+/**
+ * Background script of the Smorg boss battle stage:
+ * sets the stage objects to be destroyed when the battle ends
+ * and scrolls the two rock mountains (iwayama_1, iwayama_2) sideways forever, with a different phase for each,
+ * to fake the train moving past them.
+ */
 EVT_BEGIN(bgset_rsh_bg_event)
     CALL(_set_destroy_flag)
     SET_VALUE(LW(0), 0)
@@ -143,6 +149,10 @@ USER_FUNC(_set_offset) {
     evtSetValue(event, outVar, step);
     return EVT_RETURN_DONE;
 }
+/**
+ * Script helper: sets flag 8 in the battle stage object work so the stage objects are destroyed
+ * when the battle ends.
+ */
 USER_FUNC(_set_destroy_flag) {
     _battleWorkPointer->stageObjectWork.flags |= STAGE_FLAG_NO_BG_B_DESTROY;
     return EVT_RETURN_DONE;

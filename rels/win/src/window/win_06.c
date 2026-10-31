@@ -95,6 +95,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Starts the Chapter 2 arrival scene with the letterbox bars on. */
 EVT_BEGIN(welcome_wonderforest_init)
     CALL(evt_cam_letter_box_onoff, 1, 0)
     RETURN
@@ -233,6 +234,10 @@ static USER_FUNC(cam_kaiten_set_para) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: reads the camera-orbit parameter set in slot args[0] back into args[1..8] (position, target,
+ * angle, distance).
+ */
 static USER_FUNC(cam_kaiten_get_para) {
     EvtWord* args = event->args;
     KaitenParam* p;
@@ -260,6 +265,10 @@ static USER_FUNC(cam_kaiten_get_para) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: places the 3D camera at the working orbit's angle
+ * and distance around its target in one step (0 frames), so a loop can move the camera around it every frame.
+ */
 static USER_FUNC(cam_kaiten_set_direct) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
     f32 s = sin(6.2831855f * ckpw->angle / 360.0f);
@@ -278,11 +287,20 @@ static USER_FUNC(cam_kaiten_set_direct) {
     return EVT_RETURN_DONE;
 }
 
+/** Identity function (returns x unchanged); inline helper kept from the original source. */
 // FAKE: one-use inline helper; writing the call out changes the object in both versions
 static inline f32 fid(f32 x) {
     return x;
 }
 
+/**
+ * Script helper: allocates the three orbit parameter sets,
+ * fills sets 0 and 1 from the two position/target vectors in args[0..11],
+ * computes each one's angle (degrees, around the target in the xz plane) and xz distance,
+ * and copies set 0 into the working set.
+ * The source clears set 1 twice instead of the working set;
+ * harmless, since every field of the working set is then written.
+ */
 static USER_FUNC(cam_kaiten_init) {
     EvtWord* args = event->args;
     Vec target;
@@ -332,6 +350,7 @@ static USER_FUNC(cam_kaiten_init) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets the 3D camera's vertical field of view to 25 degrees. */
 USER_FUNC(camps25) {
     f32 fovY = 25.0f;
 
@@ -339,6 +358,7 @@ USER_FUNC(camps25) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: sets the 3D camera's vertical field of view to 30 degrees. */
 USER_FUNC(camps30) {
     f32 fovY = 30.0f;
 

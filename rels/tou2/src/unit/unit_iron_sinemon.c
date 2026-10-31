@@ -192,6 +192,11 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init event of the first Iron Cleft: unit work 0 = 0
+ * and unit work 1 is the other Iron Cleft's unit id (the second id from get_id),
+ * then the shared setup init_event_sub.
+ */
 static EVT_BEGIN(init_event1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SILENT, 0)
     CALL(get_id, LW(0), LW(1))
@@ -471,6 +476,7 @@ static USER_FUNC(get_id) {
     evtSetValue(event, args[1], id2);
     return EVT_RETURN_DONE;
 }
+/** Script helper: arg0 receives 1 if Yoshi is in Mario's party data, else 0. */
 static USER_FUNC(yoshi_exist) {
     EvtWord* args = event->args;
     PouchData* pouch = pouchGetPtr();

@@ -154,6 +154,10 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_act_mario", "c_mario", 0.0f, 0.0f, 0.0f, -5.0f, 30.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/**
+ * Init event of the Mario stage actor: installs the wait event and battle_entry_event as the entry event,
+ * hides the status window and starts the wait event. This unit runs the whole stage play.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventEntry, UNIT_ID_SELF, PTR(battle_entry_event))
@@ -162,6 +166,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Mario stage actor: runs the default damage handling with LW(10) = -2 and LW(11) = 1. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -169,15 +174,18 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Phase event of the Mario stage actor: does nothing. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/** Attack event of the Mario stage actor: just restarts the wait event; the play is driven by _battle_event. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
+/** Idle event of the Mario stage actor: shows the unit's table pose for state 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
@@ -266,6 +274,15 @@ BattleUnitSetup entry_unit_data[] = {
     },
 };
 
+/**
+ * Entry of Flurrie's stage play "Paper Mario" (her epilogue):
+ * hides the status window, places Mario's actor at Mario's spot
+ * and moves the real Mario off the left edge of the stage, and keeps its own unit id in unit work 0.
+ * It spawns the eight other actors of entry_unit_data (Flurrie as Clauda, two Boos, the Atomic Boo, two Toads,
+ * Toadette and Goombella), keeping their unit ids in unit work 1 to 8, and starts _battle_event.
+ * After two seconds the narration (ep_39) tells of Flurrie's hit play about the adventure,
+ * with Doopliss in the troupe; then battle flag 32 is set.
+ */
 static EVT_BEGIN(battle_entry_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_MARIO, LW(0), LW(1), LW(2))
@@ -708,6 +725,7 @@ static USER_FUNC(_clauda_breath_effect_fire) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: spawns the smaller smoke puff effect in front of Clauda while she winds up her breath attack. */
 static USER_FUNC(_clauda_breath_effect_ready) {
     BattleWork* wp = _battleWorkPointer;
     s32 id;
@@ -730,6 +748,10 @@ static USER_FUNC(_clauda_breath_effect_ready) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: turns the battle status window off (statusWindowOff = 1)
+ * so it does not show during the stage play.
+ */
 USER_FUNC(_status_window_off) {
     _battleWorkPointer->statusWindowOff = 1;
     return EVT_RETURN_DONE;

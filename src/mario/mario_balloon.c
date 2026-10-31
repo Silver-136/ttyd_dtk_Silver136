@@ -10,10 +10,16 @@
 
 extern NpcEntry* fbatNpcTalkCheck(void);
 
+/** Clears the balloon effect pointer; run from marioInit and marioReInit (the "Baloon" spelling is the original's). */
 void marioBaloonInit(void) {
     marioGetPtr()->balloonEffect = NULL;
 }
 
+/**
+ * Spawns the balloon effect of the given type over Mario's head unless one is already showing.
+ * Called each frame by marioBalloonMain and by the evt_mario balloon script commands (type 0 "!", type 1 the
+ * "..." balloon).
+ */
 void marioBalloonOn(s32 type) {
     MarioWork* mario = marioGetPtr();
 
@@ -23,6 +29,10 @@ void marioBalloonOn(s32 type) {
     }
 }
 
+/**
+ * Like marioBalloonOn, but anchors the balloon effect to the NPC Mario can talk to and remembers it in
+ * mario->balloonNpc.
+ */
 static inline void marioBalloonOnNpc(s32 type, NpcEntry* npc) {
     MarioWork* mario = marioGetPtr();
 
@@ -33,6 +43,7 @@ static inline void marioBalloonOnNpc(s32 type, NpcEntry* npc) {
     }
 }
 
+/** Removes the balloon over Mario's head, if any, and forgets the NPC it pointed at. */
 void marioBalloonOff(void) {
     MarioWork* mario = marioGetPtr();
 
@@ -44,6 +55,11 @@ void marioBalloonOff(void) {
     }
 }
 
+/**
+ * TRUE when the surface in front of Mario (hitobjFrontA) is something A can act on:
+ * a map object whose hint is 1 or a case-event hit flagged for the balloon with the "front + A" condition.
+ * Hits with attribute 0x800000 never count.
+ */
 static inline BOOL chkBalloonStand(HitEntry* hit) {
     BOOL ret = FALSE;
     CaseEntry* entry;
@@ -67,6 +83,10 @@ static inline BOOL chkBalloonStand(HitEntry* hit) {
     return ret;
 }
 
+/**
+ * TRUE when the hit directly in front of Mario is a hinted map object or a balloon case event triggered by A
+ * while facing or pushing it. Hits Mario passes through (marioChkBero) never count.
+ */
 static inline BOOL chkBalloonJump(HitEntry* hit) {
     BOOL ret = FALSE;
     CaseEntry* entry;
@@ -95,6 +115,10 @@ static inline BOOL chkBalloonJump(HitEntry* hit) {
     return ret;
 }
 
+/**
+ * TRUE when the floor Mario stands on is a hinted map object or a balloon case event triggered by A
+ * while pushing or standing on it. Attribute 0x800000 hits and pass-through hits (marioChkBero) never count.
+ */
 static inline BOOL chkBalloonPush(HitEntry* hit) {
     BOOL ret = FALSE;
     CaseEntry* entry;
@@ -129,6 +153,11 @@ static inline BOOL chkBalloonPush(HitEntry* hit) {
     return ret;
 }
 
+/**
+ * Checks whether the hit is a treasure chest (MOBJ_TreasureBox or MOBJ_BigTreasureBox):
+ * -1 if it is not one, 1 if it is still closed, 0 once opened.
+ * marioBalloonMain uses it so the "!" shows only over unopened chests.
+ */
 static inline s32 chkItemBox(HitEntry* hit) {
     MapObjectEntry* mobj;
     s32 ret = -1;
@@ -218,6 +247,11 @@ void marioBalloonMain(void) {
     }
 }
 
+/**
+ * TRUE when the hit is something the A button acts on:
+ * a map object with hint 1 or a balloon-flagged case event with any of the A conditions (front, jump from, push,
+ * stand on). Pass-through hits never count. Used by Bowser's collision code (koopa_hit.c).
+ */
 BOOL chkBalloon(HitEntry* hit) {
     BOOL ret = FALSE;
     CaseEntry* entry;

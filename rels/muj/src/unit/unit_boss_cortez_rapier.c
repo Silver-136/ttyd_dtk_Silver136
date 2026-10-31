@@ -188,6 +188,12 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_cortez_rapier", "c_buki3", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };
 
+/**
+ * Init event of Cortez's rapier weapon: sets the unit flag 0x1000000, installs its wait, phase, unison phase,
+ * attack, damage and (default) confusion events,
+ * stores weapon number 3 in unit work 2 and clears unit work 1 (the flag that makes it sit out its attack),
+ * and allows no movement.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -203,6 +209,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of Cortez's rapier: runs the default damage handling with LW(10) = -2 and LW(11) = 1. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -210,6 +217,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event (tags 37 to 39) run when an attacker is hurt by the rapier's spikes:
+ * shows the toge_flush spike flash at its hit position on part 1, 40 forward and 5 back in z.
+ */
 static EVT_BEGIN(avoid_thorn_event)
     CALL(btlevtcmd_GetHitPos, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
@@ -218,10 +229,20 @@ static EVT_BEGIN(avoid_thorn_event)
     RETURN
 EVT_END()
 
+/** Phase event of the rapier: does nothing. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Cortez's rapier; while knocked down (unit work 1, its revive countdown, is not 0) it only
+ * restarts the wait event.
+ * Otherwise it takes the selected targets of
+ * weapon_cortez_rapier_float_attack, spins in the KRT_Z_1 pose (six turns in 60 frames) with the sword-dance
+ * sound while it flies across the stage through them,
+ * damage-checking each target as it passes (avoid poses on a dodge, defence check on the first),
+ * then returns home.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_DOWN_TURNS, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -387,12 +408,20 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Idle event of Cortez's rapier: waits for the loop timing of its animation
+ * and plays the pose table pose for state 1.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeWaitPlayLoopTiming, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Data event (entry 9) of Cortez's rapier: when the weapon takes damage it plays the KRT_Z_1 pose on the unit in
+ * LW(10) and waits 30 frames.
+ */
 static EVT_BEGIN(cortez_damage_sub_event)
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))
     IF_INT_EQUAL(LW(0), 0)

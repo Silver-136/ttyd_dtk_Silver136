@@ -77,18 +77,33 @@ void checkWall(PartyEntry* party, f32 spd, f32 dir);
 void getStick(PartyEntry* party, f32* angle, f32* speed);
 void yoshiFlyMove(PartyEntry* party);
 
+/**
+ * Scripted flutter for evt_party_yoshi_fly: stores the length (ms to frames) in evt_yoshi_frm.
+ * Only its sign is read: 0 or more makes yoshi_use start a flutter in event mode, and landing resets it to -1.
+ * The script command already converts its argument to frames, so the value is converted twice.
+ */
 void evt_set_yoshi_frm(s32 msec) {
     evt_yoshi_frm = sysMsec2Frame(msec);
 }
 
+/** Sets the speed Yoshi moves at while a script drives him (evt_party_yoshi_fly argument 1). */
 void evt_set_yoshi_spd(f32 spd) {
     evt_yoshi_spd = spd;
 }
 
+/**
+ * Returns evt_yoshi_frm; evt_party_yoshi_fly keeps waiting while it is 0
+ * or more (the scripted flutter has not landed yet).
+ */
 s32 evt_get_yoshi_frm(void) {
     return evt_yoshi_frm;
 }
 
+/**
+ * Records the hit object Yoshi stands on (NULL when airborne) and,
+ * while Mario rides on the ground and is not jumping or falling,
+ * makes it Mario's stand-on object too so moving floors carry both.
+ */
 void L_sweatEntry(PartyEntry* party, void* hit) {
     party->hitobjStandOn = hit;
     if (yoshiGetStatus() == YOSHI_STATUS_RIDING && !(party->playerPtr->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP))) {
@@ -96,6 +111,10 @@ void L_sweatEntry(PartyEntry* party, void* hit) {
     }
 }
 
+/**
+ * Keeps the sweat-drop effect spawned during the flutter jump above Yoshi (18 up) and deletes it
+ * when its 20-frame timer runs out. Runs every frame from yoshi_use.
+ */
 void sweatMain(PartyEntry* party) {
     if (party->useStruct && YOSHI_WORK(party)->effect) {
         f32 x = party->position.x;
@@ -134,6 +153,10 @@ s32 yoshiGetStatus(void) {
     return status;
 }
 
+/**
+ * Puts Mario back on Yoshi without the mount animation (motion 11) when Mario's motion is re-initialised
+ * while riding (mario.c). Allocates Yoshi's work area if needed and makes the extra partner follow the ride.
+ */
 void marioRideYoshi(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     PartyEntry* extra;
@@ -155,6 +178,11 @@ void marioRideYoshi(void) {
     }
 }
 
+/**
+ * Starts the dismount (motion 100) when Mario is riding on the ground.
+ * Returns TRUE if it started; used by the cancel in evt_mario.c,
+ * the ride script command in evt_party.c and party.c.
+ */
 s32 marioGetoffYoshi(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
@@ -168,6 +196,7 @@ s32 marioGetoffYoshi(void) {
     return 0;
 }
 
+/** Clears Mario's and the extra partner's display offsets (the bob added while riding). */
 // Descriptive name (inline helper; not in the symbol maps).
 static inline void resetOfs(PartyEntry* party) {
     PartyEntry* extra;
@@ -182,6 +211,7 @@ static inline void resetOfs(PartyEntry* party) {
     }
 }
 
+/** Switches Yoshi's use motion unless he is still moving under Mario to mount (motion 5); FALSE if refused. */
 // Descriptive name (inline helper; not in the symbol maps).
 static inline u32 chgMotion(PartyEntry* party, u8 motion) {
     if (party->useMotionId == 5) {
@@ -191,6 +221,10 @@ static inline u32 chgMotion(PartyEntry* party, u8 motion) {
     return TRUE;
 }
 
+/**
+ * Applies one frame of ride gravity: starts the fall curve the first time,
+ * then integrates the jerk and acceleration into party->gravity, capped at -15 per frame.
+ */
 // Descriptive name (inline helper; not in the symbol maps).
 static inline void fall(PartyEntry* party) {
     if (!(party->flags & PARTY_FLAG_IS_FALLING)) {
@@ -208,6 +242,13 @@ static inline void fall(PartyEntry* party) {
     }
 }
 
+/**
+ * Ends the ride at once (no dismount animation):
+ * resets the offsets and Mario's pose, frees Yoshi's work area and returns him to follow mode.
+ * Called on damage, map re-init and yoshi_exit.
+ * In the retail versions a spike hit (MARIO_MOTION_DAMAGE_TOGE) instead puts Yoshi
+ * and the extra partner in run mode 0xd.
+ */
 void marioYoshiForceCancel(void) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(marioGetPartyId());
@@ -239,6 +280,10 @@ void marioYoshiForceCancel(void) {
     }
 }
 
+/**
+ * Yoshi's goodbye handler (party_data): if Mario is riding, dismounts first and keeps running the ride code;
+ * otherwise plays the partner goodbye and moves to run mode 0xe when it ends.
+ */
 void yoshi_bye(PartyEntry* party) {
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
@@ -254,12 +299,17 @@ void yoshi_bye(PartyEntry* party) {
     }
 }
 
+/** Yoshi's exit handler (retail party_data only): cancels the ride and puts Mario back to standing. */
 void yoshi_exit(PartyEntry* party) {
     party->playerPtr->flags &= ~MARIO_FLAG_CHG_MOT_DISABLED;
     marioYoshiForceCancel();
     marioChgMot(MARIO_MOTION_STAY);
 }
 
+/**
+ * Bounce off a jump stand while riding: marioChgJumpStandMotion calls this instead of Mario's own jump-stand
+ * motion; starts Yoshi's jump-stand sequence (motions 60-66) unless one is already running.
+ */
 void yoshi_jumpStand(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 
@@ -271,6 +321,11 @@ void yoshi_jumpStand(void) {
     }
 }
 
+/**
+ * Spike hit while riding: stops Mario's ride velocity,
+ * plays the hurt motion (MARIO_MOTION_DAMAGE_TOGE) with the hurt poses and puts Yoshi
+ * and the extra partner in run mode 0xd.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_800b474c, JP 0x800B474C. See docs/NAME_PROVENANCE.md.
 void yoshi_damageToge(PartyEntry* party) {
     MarioWork* mario = marioGetPtr();
@@ -324,6 +379,10 @@ void yoshi_init(PartyEntry* party) {
 
 // Descriptive name (inline helper; not in the symbol maps).
 static void searchHead(PartyEntry* party);
+/**
+ * How far Mario sits above Yoshi this frame: twice the bob table entry for Yoshi's pose (PYS_S_2, PYS_R_2 or
+ * PYS_F_1) at the shared pose time.
+ */
 // Descriptive name (inline helper; not in the symbol maps).
 static inline f32 getOfs(PartyEntry* party) {
     MarioWork* p = party->playerPtr;
@@ -986,6 +1045,12 @@ void yoshiFlyMove(PartyEntry* party) {
     mario->moveDist = spd;
 }
 
+/**
+ * Ride velocity from the stick X axis: accelerates velX,
+ * stops on a reversal against the flutter direction and clamps to 16.
+ * With the stick released it brakes (harder against a wall);
+ * from the US release on it brakes only during the flutter and stops at once otherwise.
+ */
 void inertia(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 sx = party->stickX;
@@ -1203,6 +1268,7 @@ void searchGround2(PartyEntry* party) {
     mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
 }
 
+/** Looks for a ceiling above Yoshi (10 units over his height) and stores it in Mario's hitobjHead. */
 static void searchHead(PartyEntry* party) {
     MarioWork* p = party->playerPtr;
     Vec pos = party->position;
@@ -1211,6 +1277,10 @@ static void searchHead(PartyEntry* party) {
     p->hitobjHead = marioSearchHead(&pos, &height, 10.0f);
 }
 
+/**
+ * Wall check while riding: moves Yoshi by spd in direction dir up to a wall, records the front,
+ * push and A-button hit objects for Mario, takes spike damage from walls, then pushes Yoshi out of nearby walls.
+ */
 void checkWall(PartyEntry* party, f32 spd, f32 dir) {
     MarioWork* mario = marioGetPtr();
     HitEntry* hit;
@@ -1286,6 +1356,11 @@ void checkWall(PartyEntry* party, f32 spd, f32 dir) {
     party->position.z = pos.z;
 }
 
+/**
+ * Converts the stick into a camera-relative ride direction and speed:
+ * dash or walk speed by stick strength, times 1.5, cut to 3/4 in shallow water.
+ * Zero speed while Mario's keys are off.
+ */
 void getStick(PartyEntry* party, f32* angle, f32* speed) {
     s32 x;
     s32 y;

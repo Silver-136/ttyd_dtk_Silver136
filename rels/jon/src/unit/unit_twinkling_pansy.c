@@ -152,6 +152,11 @@ static BattleWeapon weapon_twinkling_pansy_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack event of the Amazy Dayzee: uses an enemy item if it has one,
+ * otherwise rolls 0 to 99 and sings its attack song (song_event, weapon_twinkling_pansy_attack) below 20,
+ * else runs away (escape_event).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -200,6 +205,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init event of the Amazy Dayzee: installs its wait, attack, damage and confusion events,
+ * starts twink_event for its sparkle and starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -210,6 +219,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Runs for as long as the Amazy Dayzee exists: every 40 frames it shows a stardust_n64 sparkle effect at its
+ * position (scaled for its size status).
+ */
 static EVT_BEGIN(twink_event)
     LABEL(0)
     WAIT_FRAMES(40)
@@ -229,6 +242,7 @@ LABEL(99)
 RETURN
 EVT_END()
 
+/** Damage event of the Amazy Dayzee: runs the default damage reaction (btldefaultevt_Damage) for its part 1. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -236,6 +250,14 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * The Amazy Dayzee's song attack (weapon_twinkling_pansy_attack: hits every target,
+ * 75% chance of Sleep for 5 turns):
+ * it picks targets with the weapon in LW(9), turns to face them and sings (ATTACK1 sound, music-note effects
+ * drifting the way it faces) while map blend 0 tints the stage (red channel down to 192),
+ * then the damage check runs on every target in turn (PreCheckDamage,
+ * avoid poses, CheckDamage with the defence result on the first) and the lighting fades back to normal.
+ */
 static EVT_BEGIN(song_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -359,6 +381,7 @@ static EVT_BEGIN(escape_event)
     RETURN
 EVT_END()
 
+/** Wait event of the Amazy Dayzee: hands part 1 back to its pose table (the idle pose for its current state). */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

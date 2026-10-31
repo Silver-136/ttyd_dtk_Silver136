@@ -28,6 +28,10 @@ static f32 kaiten;
 void effSmallStarMain(EffectEntry* effect);
 void effSmallStarDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns `count` small stars at (x, y, z); type picks the spread pattern and (dx, dy, dz) the base velocity.
+ * Used by the Koopa partner (party_nokonoko), eff_small_star.c and event scripts.
+ */
 EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz) {
     EffectEntry* effect;
     EffSmallStarN64Work* w;
@@ -173,11 +177,19 @@ EffectEntry* effSmallStarN64Entry(s32 type, s32 count, f32 x, f32 y, f32 z, f32 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
 
+/** Multiplies an integer alpha value by a float factor. */
 // FAKE: alpha scaling through an inline helper; (s32)(w->alpha * 0.6f) written out changes the object
 inline f32 alphaf(f32 m, s32 x) {
     return x * m;
 }
 
+/**
+ * Type 2 stars bob (vy = 4*cos of 6 degrees per frame) while drifting outward,
+ * and fade 40% per frame and slow their spin once falling.
+ * Other types damp their velocity 20% per frame;
+ * type 0 also spins faster between 20 and 5 frames left, and all fade 40% per frame and slow over the last 5.
+ * Deletes at end of life; drawn on the work's camera.
+ */
 void effSmallStarMain(EffectEntry* effect) {
     EffSmallStarN64Work* w = effect->userdata;
     Vec position;
@@ -251,6 +263,11 @@ static u8 color_rotation_data[] = {
     0xB4, 0xFE, 0xB4, 0xD5, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5, 0xAC,
 };
 
+/**
+ * Draws each star as a 16x16 quad of texture 0x1D facing the camera and turned by its spin,
+ * with no depth test so it shows on top; the colour cycles through color_rotation_data,
+ * each star one step further along.
+ */
 void effSmallStarDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     s32 a, b, c;
@@ -304,6 +321,7 @@ void effSmallStarDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Sets the camera every star of the effect is drawn on. */
 void effSmallStarN64CamChg(EffectEntry* effect, u8 camera) {
     EffSmallStarN64Work* w = effect->userdata;
     s32 i;

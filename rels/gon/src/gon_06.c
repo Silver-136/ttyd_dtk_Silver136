@@ -46,24 +46,40 @@ static EvtWord evt_majin[409];
 static EvtWord evt_majin2[241];
 EvtWord gon_06_init_evt[340];
 
+/**
+ * Door animation callback, closing for the w_bero exit to gon_05:
+ * rotates map object "door01" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door01_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door01"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the w_bero exit to gon_05:
+ * rotates map object "door01" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door01_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door01"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, closing for the e_bero exit to gon_07:
+ * rotates map object "door02" about Y by -0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door02_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door02"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback, opening for the e_bero exit to gon_07:
+ * rotates map object "door02" about Y by 0.444 times the value in LW(0).
+ */
 static EVT_BEGIN(door02_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("door02"), 0, LW(0), 0)
@@ -110,6 +126,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Runs when Mario steps on the red switch: slides the bar grid ori02 up with its sound, waits,
+ * slides it back down and shakes the camera when it lands, while its hit areas follow it.
+ */
 // Raise the bound gate 150 units at 2 units per frame, wait, then lower it at 10 per frame.
 EVT_BEGIN(evt_ori_open)
     SET_VALUE(LW(0), 0)
@@ -218,6 +238,7 @@ static void majin_callback(s32 type) {
 }
 
 
+/** Script helper: blocks until the lecture/cutscene music (BGM channel 1) has actually started. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }

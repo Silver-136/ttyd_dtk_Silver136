@@ -50,6 +50,10 @@ static const GXColor kColor2;
 void effVaporMain(EffectEntry* effect);
 void effVaporDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a steam puff at (x, y, z) of the given scale; a lifetime of 0 or less lasts until soft-deleted.
+ * Used by battle damage, the Poison Pokey units (jon, mri), eff_ibuki and event scripts.
+ */
 EffectEntry* effVaporN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffVaporN64Work* work;
@@ -85,6 +89,11 @@ EffectEntry* effVaporN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 s
     return effect;
 }
 
+/**
+ * Moves the puff up by its rise speed (types 0/1 speed up by 0.02 per frame; clamped to -1.5..0.5)
+ * and fades it over the last 16 frames, which a delete request starts (lifetime 1000 means endless).
+ * CAMERA_3D, layer 2.
+ */
 void effVaporMain(EffectEntry* effect) {
     EffVaporN64Work* work = effect->userdata;
     Vec position;
@@ -128,6 +137,12 @@ void effVaporMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effVaporDisp, effect);
 }
 
+/**
+ * Draws the puff as a camera-facing 64x64 quad whose size,
+ * Z twist and sideways offset follow the type's 30-frame tables (holding the last entry after that),
+ * cross-fading between frames of the smoke strip (texture 0x69 for types 0/2, 0x6A otherwise)
+ * and shaded between the work's two colours.
+ */
 void effVaporDisp(CameraId cameraId, EffectEntry* effect) {
     EffVaporN64Work* work;
     s32 frame;

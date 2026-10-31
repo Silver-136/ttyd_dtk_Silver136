@@ -104,6 +104,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Holds Mario for up to 4 seconds (GF(11)) while the Puni switch is being set, ending early when GF(10) is cleared. */
 static EVT_BEGIN(punipuni_mario_halt)
     SET_VALUE(GF(11), 1)
     CALL(evt_mario_key_onoff, 0)
@@ -245,6 +246,10 @@ USER_FUNC(yuka_fall_check) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Resets the display of the Puni whose slot index is args[0]:
+ * clears its offsets, spin and velocity so it stands still.
+ */
 USER_FUNC(evt_puni_force_pose) {
     s32 offset = evtGetValue(event, event->args[0]) * sizeof(PuniData);
     PuniData* puni = (PuniData*)((u8*)puniGetPunidat() + offset);
@@ -261,6 +266,10 @@ EVT_BEGIN(yuka_shake)
     RETURN
 EVT_END()
 
+/**
+ * Fading camera shake for the last part of the elevator descent:
+ * a series of shakes that die down over about 10 seconds, ending in a final stronger one.
+ */
 EVT_BEGIN(yuka_shake2)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 500)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.0087890625f), 1000)
@@ -276,6 +285,11 @@ EVT_BEGIN(yuka_shake2)
     RETURN
 EVT_END()
 
+/**
+ * Counts every frame the Punies standing on the platform (alive, not lost, not in mode 13,
+ * within the platform area and height band; the band moves down by 309 after the water has been drained)
+ * and drives the platform with that weight.
+ */
 static EVT_BEGIN(yuka_check)
     LOOP(0)
         SET_VALUE(LW(10), 1)
@@ -453,6 +467,10 @@ EVT_BEGIN(yuka_event)
     RETURN
 EVT_END()
 
+/**
+ * Planter hit script 1: the first time it is hit it launches a Mushroom out of the planter (remembered with a
+ * flag).
+ */
 static EVT_BEGIN(evt_f1_ueki_01)
     CALL(evt_item_delete_check, STRING("item_ueki_01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)

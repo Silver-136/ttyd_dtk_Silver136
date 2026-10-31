@@ -186,6 +186,11 @@ static SharinData sharinDt[] = {
     {0},
 };
 
+/**
+ * Spins one wheel map object (LW(0)) of the train:
+ * LW(1) picks the wheel's radius and LW(2) picks which wheel speed, GW(0) or GW(1), drives it;
+ * every frame the angle grows by speed over radius and the object is rotated.
+ */
 static EVT_BEGIN(evt_sharin_main)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
     SWITCH(LW(1))
@@ -226,6 +231,7 @@ static EVT_BEGIN(evt_sharin_main)
     RETURN
 EVT_END()
 
+/** Starts evt_sharin_main for every wheel listed in sharinDt (sha_1_1 and so on). */
 static EVT_BEGIN(evt_sharin)
     SET_INT_READ_ADDR(PTR(sharinDt))
     LOOP(0)
@@ -295,6 +301,7 @@ static EVT_BEGIN(evt_clank_main)
     RETURN
 EVT_END()
 
+/** Starts evt_clank_main for every rod listed in clankDt. */
 static EVT_BEGIN(evt_clank)
     SET_INT_READ_ADDR(PTR(clankDt))
     LOOP(0)
@@ -308,6 +315,10 @@ static EVT_BEGIN(evt_clank)
     RETURN
 EVT_END()
 
+/**
+ * Scrolls the background layers (ground, mountains) sideways every frame by speeds derived from the train speed
+ * GW(0), so the scenery flows past the train.
+ */
 static EVT_BEGIN(evt_bg)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(11), FLOAT(0.0f))
@@ -371,6 +382,13 @@ static EVT_BEGIN(evt_hoshi)
     RETURN
 EVT_END()
 
+/**
+ * Train departure at a station (shared by hom_00, gor_04 and pik_00):
+ * sets the train-moving flag, clears the "train at station" flags, rings the bell twice,
+ * starts the engine sound for the station and accelerates the train over 20 seconds to a speed of -15 (GW(0) is
+ * the train's speed, which also scrolls the scenery; GW(1) drives the big drive wheels sha_1_4/sha_1_5 and rods
+ * bou_2/bou_4: it follows GW(0), and after 1.5 seconds runs up to 10 faster for 2 seconds; Guess: wheel spin).
+ */
 static EVT_BEGIN(hom_10_evt_resha_start)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -469,6 +487,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
     RETURN
 EVT_END()
 
+/** Same as hom_10_evt_resha_start but for the return trip: the train accelerates in the opposite direction to +15. */
 static EVT_BEGIN(hom_10_evt_resha_start2)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
@@ -573,6 +592,10 @@ static EVT_BEGIN(hom_10_evt_resha_start2)
     RETURN
 EVT_END()
 
+/**
+ * Sets the train to travel at its cruising speed of -15 immediately (the outbound direction),
+ * without the departure acceleration; used by the running-train scenes.
+ */
 static EVT_BEGIN(hom_10_evt_resha_start3)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(-15.0f))
@@ -580,6 +603,10 @@ static EVT_BEGIN(hom_10_evt_resha_start3)
     RETURN
 EVT_END()
 
+/**
+ * Sets the train to travel at its cruising speed of +15 immediately (the return direction),
+ * without the departure acceleration.
+ */
 static EVT_BEGIN(hom_10_evt_resha_start4)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(15.0f))
@@ -621,6 +648,7 @@ static EVT_BEGIN(stop_1)
     RETURN
 EVT_END()
 
+/** Arrival braking of the return-trip train: like stop_1 with the return-trip sound variants. */
 static EVT_BEGIN(stop_2)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
@@ -655,6 +683,11 @@ static EVT_BEGIN(stop_2)
     RETURN
 EVT_END()
 
+/**
+ * Train arrival at a station: picks the slowing-down script (stop_1 or stop_2) by the current map (pik_00,
+ * gor_04 and hom_00 and the trip direction), which brings the train speed to zero
+ * and clears the train-moving flag.
+ */
 static EVT_BEGIN(hom_10_evt_resha_stop)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
@@ -675,6 +708,7 @@ static EVT_BEGIN(hom_10_evt_resha_stop)
     RETURN
 EVT_END()
 
+/** Keeps the lamp objects (ranpu, ranpu_c) swinging every frame by the amount from ramp_r while the train is moving. */
 static EVT_BEGIN(evt_ramp)
     LOOP(0)
         CALL(ramp_r)
@@ -722,6 +756,11 @@ static const char* pika_tbl_rsh_06[] = {
     NULL,
 };
 
+/**
+ * Common start of the train-exterior scenes: marks the train as not moving,
+ * zeroes the wheel speeds and spawns the wheel, rod,
+ * background and star scripts (plus lamp and sparks on the maps that have them).
+ */
 static EVT_BEGIN(hom_10_evt_resha_sub)
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 0)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
@@ -765,6 +804,10 @@ static EVT_BEGIN(hom_10_evt_resha_sub)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the train scene with the outbound (right-moving) train:
+ * runs the shared set-up and hides the rear cars unless the map is rsh_06_a.
+ */
 static EVT_BEGIN(hom_10_evt_resha_right)
     CALL_CHILD(PTR(hom_10_evt_resha_sub))
     CALL(evt_sub_get_mapname, LW(0))
@@ -777,6 +820,10 @@ static EVT_BEGIN(hom_10_evt_resha_right)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the train scene with the return (left-moving) train:
+ * runs the shared set-up and hides the cars that are not part of the return view.
+ */
 static EVT_BEGIN(hom_10_evt_resha_left)
     CALL_CHILD(PTR(hom_10_evt_resha_sub))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -824,6 +871,10 @@ static EVT_BEGIN(hom_10_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of the n_bero door towards the Excess Express (rsh_01_a):
+ * sets GF(11) and clears LW(0) so the train-door script does not reset anything on the way out.
+ */
 EVT_BEGIN(resha_noru)
     SET_VALUE(GF(11), 1)
     SET_VALUE(LW(0), 0)
@@ -877,6 +928,11 @@ static const char* name_tbl[] = {
     "yajirusi_6",
 };
 
+/**
+ * Idle animation of one of the six arrow signs (yajirusi_1 to _6) around the station;
+ * the map object named in LW(9) swings between -20 and 20 degrees,
+ * and now and then (10 percent of the time) spins a full turn instead, forever.
+ */
 EVT_BEGIN(evt_pik_yajirushi)
     LABEL(0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 20, -20, 1000)
@@ -1356,6 +1412,12 @@ static EVT_BEGIN(init_konari)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for Bub: stg6_pik_03 (he is getting a gold train set) until the return from the train trip,
+ * stg7_pik_23_1 until Mayor Bob, then in chapters 7 and 8 stg7_pik_23_1 (before the first cannon permit talk)
+ * or stg7_pik_22 (after it) until the cannon is approved and stg7_pik_23 afterwards,
+ * and stg7_pik_23_2 after the game.
+ */
 static EVT_BEGIN(talk_konari)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_54_WELCOME_BACK)
@@ -1477,6 +1539,7 @@ static EVT_BEGIN(init_sarary)
     RETURN
 EVT_END()
 
+/** Talk script for the salaryman: always stg6_pik_05. */
 static EVT_BEGIN(talk_sarary)
     CALL(evt_msg_print, 0, STRING("stg6_pik_05"), 0, 0)
     RETURN
@@ -1558,6 +1621,12 @@ static NpcSetupInfo npc_data[] = {
     {0},
 };
 
+/**
+ * evtIn callback of door_1, the left villa's front door:
+ * the door scripts run it with LW(0) going from 0 to 180 over 500 ms as the door opens
+ * and back to 0 as it shuts, so door_1 swings around y by up to about 100 degrees (0.5546875 times, negated)
+ * and back.
+ */
 static EVT_BEGIN(evt_door)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5546875f))
     MULTIPLY_FLOAT(LW(0), FLOAT(-1.0f))
@@ -1565,12 +1634,17 @@ static EVT_BEGIN(evt_door)
     RETURN
 EVT_END()
 
+/** evtOut callback of door_1: run with LW(0) from 0 to 180 (with the door_down_se sound) and back, it tips door_1 down around x by up to 90 degrees. */
 static EVT_BEGIN(evt_door2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), LW(0), 0, 0)
     RETURN
 EVT_END()
 
+/**
+ * evtWall callback of door_1: run with LW(0) from 0 to 180 as the villa opens up and back as it closes,
+ * it swings the front walls ie_1_N and ie_1_H open around y by up to 135 degrees, in opposite directions.
+ */
 static EVT_BEGIN(evt_wall)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.75f))
     CALL(evt_mapobj_rotate, 1, STRING("ie_1_N"), 0, LW(0), 0)
@@ -1584,6 +1658,10 @@ const char* ie1_mobj[] = {
     NULL,
 };
 
+/**
+ * Door 1 open callback: dips the BGM and ambience to 50
+ * and low-pass filters the ambience (the muffled indoor/outdoor change).
+ */
 static EVT_BEGIN(door_1_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -1591,6 +1669,7 @@ static EVT_BEGIN(door_1_open)
     RETURN
 EVT_END()
 
+/** Door 1 close callback: resumes the BGM and ambience from the dip and removes the ambience low-pass filter. */
 static EVT_BEGIN(door_1_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -1619,18 +1698,29 @@ static DoorParam door_1 = {
     door_1_close, // evtClose
 };
 
+/**
+ * evtIn callback of door_2, the front door of Toodles's villa on the right:
+ * the door scripts run it with LW(0) from 0 to 180 and back,
+ * so door_2 swings around y by up to 90 degrees (negated) and back.
+ */
 static EVT_BEGIN(evt_door_2)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/** evtOut callback of door_2: run with LW(0) from 0 to 180 and back, it tips door_2 down around x by up to 90 degrees. */
 static EVT_BEGIN(evt_door2_2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("door_2"), LW(0), 0, 0)
     RETURN
 EVT_END()
 
+/**
+ * evtWall callback of door_2: run with LW(0) from 0 to 180 as the villa opens up and back as it closes,
+ * it swings the walls ie_2_N and ie_2_H open around y by up to 135 degrees in opposite directions
+ * and tips ie_2_U around x.
+ */
 static EVT_BEGIN(evt_wall_2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.75f))
     CALL(evt_mapobj_rotate, 1, STRING("ie_2_N"), 0, LW(0), 0)
@@ -1645,6 +1735,7 @@ const char* door_2_npc[] = {
     NULL,
 };
 
+/** Door 2 open callback: dips the BGM and ambience to 50 and low-pass filters the ambience, like door_1_open. */
 static EVT_BEGIN(door_2_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -1652,6 +1743,10 @@ static EVT_BEGIN(door_2_open)
     RETURN
 EVT_END()
 
+/**
+ * Door 2 close callback: resumes the BGM and ambience from the dip and removes the ambience low-pass filter,
+ * like door_1_close.
+ */
 static EVT_BEGIN(door_2_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -1679,6 +1774,11 @@ static DoorParam door_2 = {
     door_2_close, // evtClose
 };
 
+/**
+ * Runs the spinning door of the house (map object door_3, hit area a_door_3):
+ * its spin speed (GW(10)) decays by about 4 percent per frame, the angle accumulates in GW(11),
+ * and a turning sound plays while the speed stays above 0.3.
+ */
 EVT_BEGIN(evt_rot_door_sub)
     SET_FLOAT_VALUE(GW(10), FLOAT(0.0f))
     SET_FLOAT_VALUE(GW(11), FLOAT(0.0f))
@@ -1944,6 +2044,10 @@ USER_FUNC(under) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Message callback for Trouble Center request 29 (irai_29_15):
+ * when the second page of the text appears it starts the BGM_EVT_NOKO_SAIKAI1 (reunion) music.
+ */
 void irai_29_15_cb(s32 type, smartEntry* smart) {
     MsgWinData* info = smart->address;
 
@@ -1954,12 +2058,20 @@ void irai_29_15_cb(s32 type, smartEntry* smart) {
 
 #ifdef VERSION_G8ME01
 
+/** Script helper: force-closes the status window (statusWinForceOff). */
 USER_FUNC(pik_00_statuswin_force_off) {
     statusWinForceOff();
     return EVT_RETURN_DONE;
 }
 #endif
 
+/**
+ * Script helper for the Goldbob scene's camera:
+ * computes a camera position 70 percent of the way from the current camera target to the camera,
+ * shifted in x to the middle between Mario and Goldbob, so the shot frames both.
+ * Writes the 3D camera position to args[0] to args[2] and the target to args[3] to args[5];
+ * used with evt_cam3d_evt_set.
+ */
 static USER_FUNC(zoom) {
     EvtWord* args = event->args;
     // ナリキンパパ
@@ -2002,11 +2114,16 @@ static USER_FUNC(zoom) {
 }
 
 
+/** Map TEV callback for the train model: forwards the map object's TEV info to envAddTev with index 7. */
 static void resha_tev(MapTevCallbackInfo* info) {
     envAddTev(7, info);
 }
 
 
+/**
+ * Script helper: writes into LW(10) a sine wobble (1.8 times |GW(0)| times sin(frame count / 15));
+ * evt_ramp rotates the station's ramp (ranpu) by it, so the boarding ramp sways while the train stands there.
+ */
 static USER_FUNC(ramp_r) {
     f32 amp = __fabsf(evtGetFloat(event, GW(0)));
     f32 wave = sin(gp->retraceCount / 15.0f);

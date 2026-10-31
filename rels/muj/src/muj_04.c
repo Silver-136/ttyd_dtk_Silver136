@@ -102,6 +102,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Enter event of the pipe A_dokan: in the background it waits
+ * until the entrance has finished (BeroEXEC bit 0x10000) and 10 more frames,
+ * then makes the camera follow Mario's height again; returns LW(0) = 0.
+ */
 static EVT_BEGIN(evt_haikei_in)
     BEGIN_INLINE_EVENT
         CALL(evt_bero_exec_wait, 65536)
@@ -221,6 +226,10 @@ const char* mapanim[] = {
     "S_hasi17",
 };
 
+/**
+ * Loop that makes the rope bridge sway: whenever Mario steps on a different plank (mario_moveride_check) it
+ * plays a creak sound at his feet and the plank's map animation.
+ */
 EVT_BEGIN(mario_hashi_anime)
     SET_VALUE(LW(1), 0)
     LOOP(0)
@@ -235,6 +244,10 @@ EVT_BEGIN(mario_hashi_anime)
     RETURN
 EVT_END()
 
+/**
+ * First Ember (Elmos A) swoops in over the bridge toward Mario, gliding to x = -25 then -35 at height 125,
+ * with its footstep sounds muted.
+ */
 EVT_BEGIN(erumos00_attack)
     CALL(evt_npc_sound_data_set, STRING(/*"エルモスA"*/"\x83\x47\x83\x8B\x83\x82\x83\x58\x41"), 0, 0, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     WAIT_MS(500)
@@ -247,6 +260,7 @@ EVT_BEGIN(erumos00_attack)
     RETURN
 EVT_END()
 
+/** Second Ember (Elmos B) swoops in from the other side, gliding to x = 25 then 35 at height 125. */
 EVT_BEGIN(erumos01_attack)
     CALL(evt_npc_sound_data_set, STRING(/*"エルモスB"*/"\x83\x47\x83\x8B\x83\x82\x83\x58\x42"), 0, 0, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
     WAIT_MS(500)
@@ -259,6 +273,10 @@ EVT_BEGIN(erumos01_attack)
     RETURN
 EVT_END()
 
+/**
+ * Admiral Bobbery (Sanders) lashes out at the Embers:
+ * repeatedly spawns hit effects at random offsets around him and spins him round while the Embers are attacked.
+ */
 EVT_BEGIN(sanders_attack)
     WAIT_MS(600)
     BEGIN_INLINE_EVENT
@@ -290,6 +308,11 @@ EVT_BEGIN(sanders_attack)
     RETURN
 EVT_END()
 
+/**
+ * Keeps Mario riding on the bespectacled sailor's shoulders:
+ * every frame sets Mario's position to the sailor's position plus 40 up,
+ * so he appears carried (used while Bobbery rescues them).
+ */
 EVT_BEGIN(mario_katsugi)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("めがね水夫"), LW(0), LW(1), LW(2))
@@ -425,11 +448,16 @@ EVT_BEGIN(sanders_funto)
     RETURN
 EVT_END()
 
+/** Init event of the coconut palm: sets its state GW(10) to 0 (nothing dropped yet). */
 EVT_BEGIN(yashi_yure_init)
     SET_VALUE(GW(10), 0)
     RETURN
 EVT_END()
 
+/**
+ * The coconut palm (S_yasi_ki): hitting it shakes the tree and drops coconuts (ITEM_COCONUT) one after another,
+ * state GW(10) counting how many have fallen; each coconut can be picked up where it lands.
+ */
 // Only the first two shakes schedule coconut pickups; later shakes still increment the counter.
 EVT_BEGIN(yashi_yure)
     ADD(GW(10), 1)
@@ -525,6 +553,11 @@ static KusaAccess kusa_tbl[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Map init for muj_04 (the rope bridge): starts the jungle music and ambience,
+ * places the Ice Power and Inn Coupon items, a Shine Sprite block and the NPCs,
+ * starts the water animations and sets the story-dependent bridge and Ember scene.
+ */
 EVT_BEGIN(muj_04_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ6"))

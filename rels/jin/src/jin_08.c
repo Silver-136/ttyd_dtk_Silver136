@@ -44,18 +44,30 @@ static EvtWord mobj_box01[34];
 static EvtWord mobj_box02[34];
 EvtWord jin_08_init_evt[138];
 
+/**
+ * Door animation callback: closes door07 as Mario arrives through e_bero_1 (from jin_07);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it.
+ */
 static EVT_BEGIN(e_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door07"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: opens door07 as Mario leaves through e_bero_1 (to jin_07);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it, negated.
+ */
 static EVT_BEGIN(e_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door07"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Exit event for the west exit (e_bero_2) along a ramp: Mario walks back three short steps of decreasing speed;
+ * returns 1 in LW(0).
+ */
 EVT_BEGIN(evt_roll_in)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -155,6 +167,10 @@ EVT_BEGIN(evt_open_kagi)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the Steeple Key is used on the lock:
+ * switches the e_bero_1 door entry on and takes the Steeple Key (ITEM_STEEPLE_KEY_0x17) out of Mario's pouch.
+ */
 static EVT_BEGIN(evt_unlock)
     SET_VALUE(LW(0), STRING("e_bero_1"))
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -162,10 +178,15 @@ static EVT_BEGIN(evt_unlock)
     RETURN
 EVT_END()
 
+/** Init script of the parrot (oumu) NPC; empty. */
 EVT_BEGIN(oumu_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the parrot: repeats stg4_jin_40..42 one after the other (using LSW(2))
+ * before the Ruby Star is recovered, then different lines for after the Ruby Star and after the final battle.
+ */
 EVT_BEGIN(oumu_talk)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     SWITCH(GSW_STORY_PROGRESS)
@@ -188,6 +209,11 @@ EVT_BEGIN(oumu_talk)
     RETURN
 EVT_END()
 
+/**
+ * Special talk with the parrot, triggered by walking up to it with Vivian once she has joined (before the Peach
+ * report step): it speaks (stg4_jin_43 the first time, stg4_jin_44 afterwards)
+ * and LSWF(1) is set for the jin_07 follow-up.
+ */
 EVT_BEGIN(oumu_juyo_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -202,6 +228,11 @@ EVT_BEGIN(oumu_juyo_talk)
     RETURN
 EVT_END()
 
+/**
+ * Per-frame watcher near the parrot: shows an "..." balloon when Mario stands within 50 units of it
+ * and lets him talk with A (oumu_talk); when Vivian is out with him it starts the special Vivian talk
+ * and waits for her to return.
+ */
 // Nearby Mario can talk normally unless Vivian is hiding him; hiding enables the story-gated secret dialogue.
 EVT_BEGIN(oumu_check)
     LOOP(0)
@@ -295,6 +326,10 @@ static s32 lock_tbl[] = {
     ITEM_STEEPLE_KEY_0x17, -1,
 };
 
+/**
+ * Check script of the locked door: if Mario has a Steeple Key (ITEM_STEEPLE_KEY_0x17) it opens the key picker
+ * and cancels the unlock (evt_mobj_exec_cancel) if he backs out of it.
+ */
 static EVT_BEGIN(lock_item_check)
     CALL(evt_pouch_check_item, ITEM_STEEPLE_KEY_0x17, LW(0))
     IF_INT_GREATER(LW(0), 0)
@@ -306,6 +341,10 @@ static EVT_BEGIN(lock_item_check)
     RETURN
 EVT_END()
 
+/**
+ * Chest script for the Power Plus chest (mobj_box01):
+ * the item appears at the chest while it opens and Mario receives the badge; control is locked meanwhile.
+ */
 static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
@@ -317,6 +356,10 @@ static EVT_BEGIN(mobj_box01)
     RETURN
 EVT_END()
 
+/**
+ * Chest script for the Mr. Softener chest (mobj_box02):
+ * the item appears at the chest while it opens and Mario receives it; control is locked meanwhile.
+ */
 static EVT_BEGIN(mobj_box02)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box02"), LW(0), LW(1), LW(2))
@@ -328,6 +371,11 @@ static EVT_BEGIN(mobj_box02)
     RETURN
 EVT_END()
 
+/**
+ * Creepy Steeple jin_08 map init: sets music and reverb, the shadow-Mario tint, the exits and the parrot,
+ * the Letter P chest and the Steeple Key chest, the locked door to jin_07 (opened with the Steeple Key),
+ * the spinning floor tile with a Star Piece and the Power Plus and Mr. Softener chests.
+ */
 EVT_BEGIN(jin_08_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))

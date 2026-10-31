@@ -47,6 +47,11 @@ static EvtWord all_fire_attackEvent_sub[10];
 static EvtWord all_fire_attack_event[321];
 static EvtWord wait_event[6];
 
+/**
+ * Script helper: copies the current HP (capped to the max HP),
+ * size change turns and strength of unit args[0] to unit args[1] and resets the second unit's HP gauge;
+ * used to carry damage over when one Ember form replaces another.
+ */
 static USER_FUNC(bubble_copy_status) {
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
@@ -309,6 +314,10 @@ static BattleUnitSetup entry_bubble = {
     NULL, // itemDropTable
 };
 
+/**
+ * Init event of the Ember: installs its wait, attack,
+ * damage and confusion (the attack event) events and puts it, and its home, 10 units above the ground.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -580,6 +589,10 @@ static USER_FUNC(eff_fire) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Fireball attack of the Ember: it sends its second part, wrapped in a growing flame (eff_fire),
+ * at one target for 2 fire damage with a 75% chance of Burn for 3 turns (weapon_bubble_fire_attack).
+ */
 static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -704,6 +717,7 @@ static USER_FUNC(eff_all_fire) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Sub-event of the wall-of-fire attack: keeps flame LW(0) of the row (eff_all_fire) going for 120 frames. */
 static EVT_BEGIN(all_fire_attackEvent_sub)
     BEGIN_SIBLING_EVENT
         CALL(eff_all_fire, UNIT_ID_SELF, LW(0))
@@ -712,6 +726,11 @@ static EVT_BEGIN(all_fire_attackEvent_sub)
     RETURN
 EVT_END()
 
+/**
+ * Wall-of-fire attack of the Ember: it moves to the front (x = -40), quivers,
+ * and lights a row of ten flames in front of itself that hit every selected target for 2 fire damage with a 75%
+ * chance of Burn for 3 turns (weapon_bubble_all_fire_attack), then returns home.
+ */
 static EVT_BEGIN(all_fire_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -819,6 +838,7 @@ static EVT_BEGIN(all_fire_attack_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of the Ember: sets the idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

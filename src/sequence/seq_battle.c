@@ -36,6 +36,7 @@ s32 debug_battle_flag;
 s32 seq_battle_unk_8041874c;
 
 
+/** Requests an async load of a TPL under the disc root; true once the file is resident (seq_battleMain polls it). */
 static inline BOOL loadTpl(const char* path) {
     // FAKE: the (u32) cast; comparing the s32 result directly changes the object
     return (u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/%s", getMarioStDvdRoot(), path) != 0;
@@ -70,6 +71,7 @@ void seq_battleInit(SequenceWork* work) {
     }
 }
 
+/** Leaves the battle sequence; battle_exit tears the battle down and restores the field. */
 void seq_battleExit(SequenceWork* work) {
     battle_exit();
 }
@@ -80,6 +82,12 @@ static const char bti02[7];
 static const char bti03[7];
 static const char bti04[7];
 
+/**
+ * Per-frame battle sequence: curtain fade, audience texture loads,
+ * waits out a pending first strike (up to 200 frames), loads the bti_01..04 audience stage for Mario's rank,
+ * starts the battle via battle_init, then once the battle ends returns to the field (or game over on a kiosk
+ * timeout; states 10/11 end a debug battle).
+ */
 void seq_battleMain(SequenceWork* work) {
     FieldBattleData* fbat;
     BattleStageData* stage;

@@ -49,6 +49,11 @@ f32 kakutable[3][5] = {{240.0f, 120.0f, 0.0f, 0.0f, 0.0f}, {270.0f, 180.0f, 90.0
 //.sdata
 GXColor seleItemCoordCol = {0xFF, 0xC0, 0xC0, 0xCF};
 
+/**
+ * Cycles seleItemCoordCol, the highlight colour of the selected list row, one step per frame through pale red,
+ * yellow, green, cyan, blue and magenta (each channel between 0xC0 and 0xFF).
+ * Called every frame from BattleCommandDisplay.
+ */
 void SelectedItemCoordinateColorUpDate(void) {
     static s8 seq;
     switch (seq) {
@@ -85,6 +90,11 @@ void SelectedItemCoordinateColorUpDate(void) {
     }
 }
 
+/**
+ * TRUE when the command menu may take input: the current sub-menu has finished opening (shown),
+ * or an audience attack check has fired (commandMenu.attackAudience).
+ * Polled by the battle_seq_command.c menu loops.
+ */
 BOOL BattleMenuKeyOKInACT(BattleWork* wp) {
     if (!wp->commandMenu.attackAudience && !wp->commandMenu.subMenu->shown) {
         return FALSE;
@@ -92,6 +102,10 @@ BOOL BattleMenuKeyOKInACT(BattleWork* wp) {
     return TRUE;
 }
 
+/**
+ * Loads battle/common/battle_common.tpl, the textures for the command ring, list rows and DANGER/PERIL marks,
+ * into wp->menuTex; called from btlDispInit.
+ */
 void battleMenuDispInit(void) {
     BattleWork* wp = _battleWorkPointer;
     char path[256];
@@ -100,10 +114,15 @@ void battleMenuDispInit(void) {
     wp->menuTex = fileAlloc(path, FILE_TYPE_TPL);
 }
 
+/** Frees the battle menu textures loaded by battleMenuDispInit; called at battle end. */
 void battleMenuDispEnd(void) {
     fileFree(_battleWorkPointer->menuTex);
 }
 
+/**
+ * Screen-space centre of the command ring: the acting unit's screen position moved 22.5 right and 105 up,
+ * with x kept at -180 or more so the ring stays on screen.
+ */
 void GetRingCenter(Vec* out) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit = BattleGetUnitPtr(wp, wp->activeUnitId);
@@ -117,12 +136,21 @@ void GetRingCenter(Vec* out) {
     }
 }
 
+/**
+ * Offset of a ring icon at angle (radians, 0 = front/bottom of the ring) on the 80 x 35 ellipse of the command
+ * ring.
+ */
 void GetRingOffset(f32 angle, f32* x, f32* y) {
     f32 t = 4.712389f - angle;
     *x = 80.0f * (f32)cos(t);
     *y = 35.0f * (f32)sin(t);
 }
 
+/**
+ * Draws the command-ring icons back to front (sorted by y, so the far side of the ring goes first):
+ * the selected one as a speech-bubble label (iconFlags bit 1), the rest as round icons.
+ * Only icons with iconFlags bit 0 are drawn.
+ */
 void DrawMainIcon(BattleSubMenu* menu, BattleCommandAct* acts, Mtx* a, Vec* b, f32* c) {
     s32 order[5];
     f32 z[6];
@@ -167,6 +195,12 @@ void DrawMainIcon(BattleSubMenu* menu, BattleCommandAct* acts, Mtx* a, Vec* b, f
     }
 }
 
+/**
+ * Hukidasi = speech bubble.
+ * Draws the selected command as a bubble with its icon and name,
+ * with a drop shadow that shifts as the bubble turns about y by s degrees; disabled commands are greyed.
+ * The US release squeezes names wider than 90 units.
+ */
 void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32 s) {
     GXColor tev;
     GXColor col;
@@ -256,6 +290,11 @@ void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32
     FontDrawStringCenterMtx(out, name);
 }
 
+/**
+ * Draws one round command icon on the ring, turned about y by s degrees,
+ * scaled and darkened by its depth v.z so the far side of the ring looks smaller and dimmer;
+ * disabled commands are greyed.
+ */
 void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v, f32 s) {
     GXColor tev;
     Mtx rot;
@@ -345,6 +384,7 @@ void DrawMainIconCircle(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, Vec v
     }
 }
 
+/** Retail signature: y is the name-width setting described above. */
 void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const char** names, s32* costs, s32* p34, void* party, s32 y) {
     Mtx out[7];
     Mtx m;
@@ -366,6 +406,7 @@ void DrawSubIcon(BattleSubMenu* menu, Mtx* a, s32* enabled, u16* icons, const ch
     }
 }
 
+/** Retail signature: y selects the name squeezing described above. */
 void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, const char* name, s32 cost, s32 p34, void* party, s32 y) {
     BattleWork* wp = _battleWorkPointer;
     CameraEntry* cam;
@@ -612,6 +653,14 @@ void DrawSubIconSub(BattleSubMenu* menu, s32 i, Mtx m, s32 enabled, s32 icon, co
     }
 }
 
+/**
+ * Draws the switch-places button between Mario and his partner
+ * when BattleCommandCheckChangePositionEnable allows it.
+ * While an audience item throw is pending (BattleAudience_GetItemOn), flips in texture 5 instead,
+ * the throw warning:
+ * between the two with the SFX_BTL_SYS_CAUTION_THROW1 sound as it starts,
+ * or above Mario without a sound if he has no partner.
+ */
 void DrawMenuPartyChangeButton(void) {
     Vec p;
     Vec q;
@@ -669,6 +718,7 @@ void DrawMenuPartyChangeButton(void) {
     }
 }
 
+/** Draws battle texture plane id at screen x, y, turned about y by angle degrees (used to flip the button in). */
 void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle) {
     Mtx mtx;
 
@@ -683,6 +733,11 @@ void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle) {
 u16 danger_icon_tbl[6] = {6, 7, 8, 7, 9, 10};
 u16 peril_icon_tbl[6] = {11, 12, 13, 14, 15, 16};
 
+/**
+ * Draws Mario's DANGER mark when his HP is 5 or less (and below max),
+ * or the PERIL mark flashing yellow/red every 25 frames at 1 HP, using the texture for the current language,
+ * 1.5x larger outside Japanese.
+ */
 // Descriptive name (not in the symbol maps).
 void DrawMenuMarioPinchMark(void) {
     Mtx m;
@@ -691,6 +746,10 @@ void DrawMenuMarioPinchMark(void) {
     GXTexObj texobj;
     Vec p;
 #else
+/**
+ * Draws the DANGER/PERIL marks for Mario and his partner,
+ * drawing first whichever stands behind (from Mario's x position) so the front one stays on top.
+ */
 void DrawMenuPinchMark(void) {
     Mtx m;
     Mtx out;
@@ -790,6 +849,10 @@ void DrawMenuPinchMark(void) {
     }
 }
 
+/**
+ * Draws the partner's DANGER or PERIL mark, the same as DrawMenuMarioPinchMark,
+ * slightly further back than Mario's.
+ */
 // Descriptive name (not in the symbol maps).
 void DrawMenuPartyPinchMark(void) {
     Mtx m;
@@ -847,6 +910,10 @@ void DrawMenuPartyPinchMark(void) {
     }
 }
 
+/**
+ * Draws the DANGER/PERIL marks for Mario and his partner,
+ * drawing first whichever stands behind (from Mario's x position) so the front one stays on top.
+ */
 void DrawMenuPinchMark(void) {
     BattleUnit* unit = BattleGetMarioPtr(_battleWorkPointer);
     btlDispGXInit2D();
@@ -866,6 +933,11 @@ void DrawMenuPinchMark(void) {
     }
 }
 
+/**
+ * Draws a sub-menu help window at x, y: looks up the message,
+ * strips its <tags> and draws its first three lines at 0.8 scale.
+ * With no message it shows a Japanese placeholder (there is no description!!).
+ */
 void DrawMenuHelpWin(const char* msg, f32 x, f32 y) {
     f32 tx;
     s8 lines[4][0x30];
@@ -924,6 +996,10 @@ void DrawMenuHelpWin(const char* msg, f32 x, f32 y) {
     }
 }
 
+/**
+ * Draws the sub-menu cursor icon on the selected visible row and the bobbing up/down arrows
+ * when the list can scroll further.
+ */
 void DrawMenuCursorAndScrollArrow(const Vec* v) {
     Vec pos;
     BattleWork* wp = _battleWorkPointer;
@@ -966,6 +1042,11 @@ void DrawMenuCursorAndScrollArrow(const Vec* v) {
     iconDispGx(&pos, ICON_FLAG_2D | ICON_FLAG_FLIP_X, ICON_YUBI_CURSOR, 1.0f);
 }
 
+/**
+ * Allocates a fresh BattleSubMenu (freeing the old one) for the list cursor,
+ * sets every row to flip in one frame after the row above,
+ * and returns the acting unit's command-ring cursor (Mario's or the partner's) through mainCursor.
+ */
 void InitSubMenuCommonProcess(BattleSubMenu** out, BattleCursor** mainCursor, BattleCursor* cursor) {
     BattleWork* wp = _battleWorkPointer;
     s32 i;
@@ -994,6 +1075,10 @@ void InitSubMenuCommonProcess(BattleSubMenu** out, BattleCursor** mainCursor, Ba
     }
 }
 
+/**
+ * Sets up the command-ring icons for a sub-menu that opens from the ring:
+ * the selected command flies to the bubble at the upper left (iconState 0), the others shrink away (10).
+ */
 void InitSubMenuCommonProcess2(BattleSubMenu* menu, BattleCursor* cursor) {
     s32 i;
     s32 idx = cursor->absPos;
@@ -1014,6 +1099,10 @@ void InitSubMenuCommonProcess2(BattleSubMenu* menu, BattleCursor* cursor) {
     }
 }
 
+/**
+ * Sets up the command-ring icons for a sub-menu shown without the ring animation:
+ * the selected command already sits in the bubble (iconState 1) and the others are hidden (11).
+ */
 void InitSubMenuCommonProcess3(BattleSubMenu* menu, BattleCursor* cursor) {
     s32 i;
     s32 idx = cursor->absPos;
@@ -1034,6 +1123,11 @@ void InitSubMenuCommonProcess3(BattleSubMenu* menu, BattleCursor* cursor) {
     }
 }
 
+/**
+ * Starts a list scroll animation when the first visible row (relPos) has moved:
+ * one row down (10) or up (20), or the wrap-around jumps from bottom to top (30) and top to bottom (40).
+ * key is the number of visible rows.
+ */
 void DrawSubMenuCommonProcessSub1(BattleSubMenu* menu, BattleCursor* cursor, s32 prev, s32 key) {
     s32 i;
 
@@ -1076,6 +1170,12 @@ void DrawSubMenuCommonProcessSub1(BattleSubMenu* menu, BattleCursor* cursor, s32
     }
 }
 
+/**
+ * Per-frame animation shared by the list sub-menus:
+ * keeps the cursor row on screen, steps the scroll,
+ * the ring icons leaving for the bubble (filling a, b and c with their matrices, positions and angles)
+ * and the rows flipping in (d). Returns the help window position in x, y.
+ */
 void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
     Mtx tm;
     Mtx sm;
@@ -1270,6 +1370,11 @@ void DrawSubMenuCommonProcess(f32* x, f32* y, Mtx* a, Vec* b, f32* c, Mtx* d) {
     }
 }
 
+/**
+ * Sets up the main command ring.
+ * With flag bit 0, the selected command flies back from the bubble and the others grow in;
+ * otherwise all icons spread out around the ring one after another (the menu opening fresh).
+ */
 void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandAct* acts, BOOL flag) {
     s32 i;
     s32 idx;
@@ -1327,13 +1432,16 @@ void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleC
     }
 }
 
+/** Per-frame update of the command ring; empty, as the animation runs in DrawMainMenu. */
 void BattleMenuDisp_ActSelect_Main(BattleWork* wp) {
 }
 
+/** Draw callback of the command ring. */
 void BattleMenuDisp_ActSelect_Disp(BattleWork* wp) {
     DrawMainMenu(wp);
 }
 
+/** Closes the command ring and frees its BattleSubMenu. */
 void BattleMenuDisp_ActSelect_End(BattleWork* wp) {
     if (wp->commandMenu.subMenu) {
         BattleFree(wp->commandMenu.subMenu);
@@ -1341,6 +1449,12 @@ void BattleMenuDisp_ActSelect_End(BattleWork* wp) {
     }
 }
 
+/**
+ * Animates and draws the main command ring: icons spread out around the ring,
+ * rotate one slot left or right when the cursor moves, and the selected one becomes a bubble;
+ * then draws the switch-places button and the DANGER/PERIL marks.
+ * kakutable holds the slot angles for 3, 4 and 5 commands.
+ */
 void DrawMainMenu(BattleWork* wp_) {
     Mtx mtx[5];
     Vec pos[5];
@@ -1574,6 +1688,10 @@ void DrawMainMenu(BattleWork* wp_) {
     DrawMenuPinchMark();
 }
 
+/**
+ * Sets up the move list (jumps, hammers, items, special moves or partner moves) for the given weapon table;
+ * flag bit 0 plays the ring icons' leaving animation.
+ */
 void BattleMenuDisp_WeaponSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleCommandWeapon* weapons, BOOL flag) {
     BattleSubMenu* menu = NULL;
     BattleCursor* mainCursor = NULL;
@@ -1587,13 +1705,16 @@ void BattleMenuDisp_WeaponSelect_Init(BattleWork* wp, BattleCursor* cursor, Batt
     }
 }
 
+/** Per-frame update of the move list; empty. */
 void BattleMenuDisp_WeaponSelect_Main(BattleWork* wp) {
 }
 
+/** Draw callback of the move list. */
 void BattleMenuDisp_WeaponSelect_Disp(BattleWork* wp) {
     DrawWeaponWin();
 }
 
+/** Closes the move list and frees its BattleSubMenu. */
 void BattleMenuDisp_WeaponSelect_End(BattleWork* wp) {
     if (wp->commandMenu.subMenu) {
         BattleFree(wp->commandMenu.subMenu);
@@ -1601,6 +1722,11 @@ void BattleMenuDisp_WeaponSelect_End(BattleWork* wp) {
     }
 }
 
+/**
+ * Draws the move list: the ring icons, rows with each move's FP and Star Power costs,
+ * the cursor and the help window (the item description for items and cooked dishes,
+ * otherwise the move's description).
+ */
 void DrawWeaponWin(void) {
     Mtx rowMtx[7];
     Mtx iconMtx[5];
@@ -1668,6 +1794,7 @@ void DrawWeaponWin(void) {
     }
 }
 
+/** Sets up the Tactics list on Mario's or the partner's cursor; flag bit 0 plays the ring icons' leaving animation. */
 void BattleMenuDisp_Operation_Init(BattleWork* wp, BOOL flag) {
     BattleSubMenu* menu;
     BattleCursor* mainCursor;
@@ -1686,13 +1813,16 @@ void BattleMenuDisp_Operation_Init(BattleWork* wp, BOOL flag) {
     }
 }
 
+/** Per-frame update of the Tactics list; empty. */
 void BattleMenuDisp_Operation_Main(BattleWork* wp) {
 }
 
+/** Draw callback of the Tactics list. */
 void BattleMenuDisp_Operation_Disp(BattleWork* wp) {
     DrawOperationWin();
 }
 
+/** Closes the Tactics list and frees its BattleSubMenu. */
 void BattleMenuDisp_Operation_End(BattleWork* wp) {
     if (wp->commandMenu.subMenu) {
         BattleFree(wp->commandMenu.subMenu);
@@ -1748,6 +1878,10 @@ void DrawOperationWin(void) {
     }
 }
 
+/**
+ * Sets up the Change Partner list; here flag bit 0 skips the ring icons' leaving animation (the reverse of the
+ * other lists).
+ */
 void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp, BOOL flag) {
     BattleSubMenu* menu;
     BattleCursor* mainCursor;
@@ -1760,13 +1894,16 @@ void BattleMenuDisp_ChangePartySelect_Init(BattleWork* wp, BOOL flag) {
     }
 }
 
+/** Per-frame update of the Change Partner list; empty. */
 void BattleMenuDisp_ChangePartySelect_Main(BattleWork* wp) {
 }
 
+/** Draw callback of the Change Partner list. */
 void BattleMenuDisp_ChangePartySelect_Disp(BattleWork* wp) {
     DrawChangePartyWin();
 }
 
+/** Closes the Change Partner list and frees its BattleSubMenu. */
 void BattleMenuDisp_ChangePartySelect_End(BattleWork* wp) {
     if (wp->commandMenu.subMenu) {
         BattleFree(wp->commandMenu.subMenu);
@@ -1774,6 +1911,7 @@ void BattleMenuDisp_ChangePartySelect_End(BattleWork* wp) {
     }
 }
 
+/** Draws the Change Partner list with each partner's HP, the cursor and the help window. */
 void DrawChangePartyWin(void) {
     Mtx rowMtx[7];
     Mtx iconMtx[5];
@@ -1820,6 +1958,7 @@ void DrawChangePartyWin(void) {
     }
 }
 
+/** Sets up the Double/Triple Dip choice list; flag bit 0 plays the ring icons' leaving animation. */
 void BattleMenuDisp_MultiItem_Init(BattleWork* wp, BOOL flag) {
     BattleSubMenu* menu;
     BattleCursor* mainCursor;
@@ -1832,13 +1971,16 @@ void BattleMenuDisp_MultiItem_Init(BattleWork* wp, BOOL flag) {
     }
 }
 
+/** Per-frame update of the Double/Triple Dip list; empty. */
 void BattleMenuDisp_MultiItem_Main(BattleWork* wp) {
 }
 
+/** Draw callback of the Double/Triple Dip list. */
 void BattleMenuDisp_MultiItem_Disp(BattleWork* wp) {
     DrawMultiItemWin();
 }
 
+/** Closes the Double/Triple Dip list and frees its BattleSubMenu. */
 void BattleMenuDisp_MultiItem_End(BattleWork* wp) {
     if (wp->commandMenu.subMenu) {
         BattleFree(wp->commandMenu.subMenu);
@@ -1846,6 +1988,10 @@ void BattleMenuDisp_MultiItem_End(BattleWork* wp) {
     }
 }
 
+/**
+ * Draws the Double/Triple Dip list (one, two or three items this turn) with each option's FP cost,
+ * the cursor and the help window.
+ */
 void DrawMultiItemWin(void) {
     Mtx rowMtx[7];
     Mtx iconMtx[5];

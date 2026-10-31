@@ -47,6 +47,11 @@ MailData mail_data[44] = {
     {MAIL_FLAG_TROUBLE, 0, 42, "irai_af_mail_05", "irai_mail_05", 0},
 };
 
+/**
+ * Returns the mail_data entry whose id matches (the letters Mario reads in the mail menu).
+ * An unknown id runs off the end of the 44-entry table and returns the pointer just past it,
+ * so callers must pass a valid id.
+ */
 MailData* mailGetPtr(s32 id) {
     MailData* mail = mail_data;
     s32 i;

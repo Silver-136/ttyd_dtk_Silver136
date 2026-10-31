@@ -29,6 +29,11 @@ static EvtWord kpa_act_stg2_mobj[] = {
     KPA_OBJ_BRICK_2(75.0f, 200.0f), KPA_OBJ_POLE(262.5f, 0.0f, kpa_goal), KPA_OBJ_END,
 };
 
+/**
+ * Watches Bowser in the stage: each frame it checks whether he is dead (evt_koopa_chk_dead)
+ * or has fallen below y = -20, then runs the death handler (kpa_dead) if he died,
+ * or the pit fall handler (kpa_fall_sub) if he fell.
+ */
 static EVT_BEGIN(kpa_fall)
     SET_VALUE(LF(0), 0)
     LOOP(0)

@@ -91,6 +91,10 @@ static inline void fukidashiSetPos(EffFukidashiWork* work, Mtx rot, Vec* origin)
     work->position.z = rot[2][1] * (16.0f + work->size) + (origin->z + work->base.z);
 }
 
+/**
+ * Places the bubble above its speaker (Mario, a partner, or an NPC; otherwise relative to the base point),
+ * tilted by the bubble angle plus 20 degrees per slot.
+ */
 void calc_pos(EffFukidashiWork* work, s32 flag) {
     CameraEntry* camera;
     Vec axis;
@@ -124,6 +128,11 @@ void calc_pos(EffFukidashiWork* work, s32 flag) {
     work->scale = 0.5f * (work->size / 12.0f) + 0.5f;
 }
 
+/**
+ * Spawns an emote bubble of `type` (with `number` for the numbered forms) at (x, y, z) relative to `npc`,
+ * which may also name Mario or a partner; size, angle and duration (frames, negative = 10000) shape it.
+ * Used by battle_damage.c, Flurrie's party code, the mri Puni scenes and event scripts through evt_eff.
+ */
 EffectEntry* effFukidashiEntry(s32 type, s32 number, NpcEntry* npc, f32 x, f32 y, f32 z, f32 size,
                                f32 angle, s32 duration) {
     EffectEntry* effect;
@@ -223,6 +232,7 @@ EffectEntry* effFukidashiEntry(s32 type, s32 number, NpcEntry* npc, f32 x, f32 y
     return effect;
 }
 
+/** Returns the current animation frame number from the type's table; negative values loop (-10 - n) or end (-1). */
 static inline s32 getAnim(EffFukidashiWork* w, s32 type) {
     if (w->duration == 0) {
         return anim_data_table[type][w->frame / 2];
@@ -230,6 +240,7 @@ static inline s32 getAnim(EffFukidashiWork* w, s32 type) {
     return anim_data_table_2[type][w->frame / 2];
 }
 
+/** Advances the pop-up animation and, for type 6, its spin-in stages; deletes the effect when the table ends. */
 void effFukidashiMain(EffectEntry* effect) {
     EffFukidashiWork* work = effect->userdata;
     Vec position;
@@ -290,6 +301,7 @@ void effFukidashiMain(EffectEntry* effect) {
     }
 }
 
+/** Draws the bubble from the moja model display lists with its mark or icon, lit by a GX light. */
 void effFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     s32 alphaA;

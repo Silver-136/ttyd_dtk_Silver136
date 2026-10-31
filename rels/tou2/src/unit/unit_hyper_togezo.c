@@ -332,6 +332,11 @@ static BattleWeapon weapon_togezo_charge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init event of the Sky-Blue Spiny: registers its wait, attack, damage and confusion events,
+ * clears unit work 0 (guarding) and 3 (charged), and sets its run, walk and jump sounds,
+ * then starts the wait event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -346,6 +351,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event 39 (damage code 33, run when an attacker is hurt by its spikes):
+ * after 30 frames flashes the "toge_flush" spike effect above the unit,
+ * 45 units up when Huge (status 10), 25 when Tiny (status 11) and 35 otherwise.
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -366,6 +376,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_event)
     RETURN
 EVT_END()
 
+/** Damage event: runs the default battle damage reaction on the unit itself (part 1). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -420,6 +431,15 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Sky-Blue Spiny: a flipped unit runs wakeup_event;
+ * otherwise it uses an enemy item if one fits.
+ * While curled up guarding (unit work 0 = 1) it runs guard_cancel_event;
+ * after a charge (unit work 3 = 1) it does the rolling attack.
+ * Otherwise it draws among the rolling attack (normal_attack_event),
+ * curling up to guard (guard_event) and charging up (charge_event), with weights 40, 40, 20 on turn 1 and 40,
+ * 40, 6 later.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -465,6 +485,15 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Sky-Blue Spiny's rolling attack (weapon_togezo_attack):
+ * it curls up with the turn sounds, spins faster and faster and rolls along the floor into the target.
+ * A miss rolls past and winds down; a hit shakes the camera,
+ * knocks the target and the Spiny rebounds in two hops.
+ * After a hit there is a 50% chance that it keeps rolling home
+ * and ends curled up in its guard state (guard tables and unit work 0 = 1);
+ * otherwise it unrolls, returns home and stands up.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -688,6 +717,10 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Sky-Blue Spiny curls up to guard: spins into its ball pose "TGZ_P_1", switches to the guard defence,
+ * attribute, status-resist, pose and data tables and sets unit work 0 to 1.
+ */
 static EVT_BEGIN(guard_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -715,6 +748,10 @@ static EVT_BEGIN(guard_event)
     RETURN
 EVT_END()
 
+/**
+ * The Sky-Blue Spiny uncurls: spins back to "TGZ_S_1", restores the normal defence, attribute, status-resist,
+ * pose and data tables and sets unit work 0 to 0.
+ */
 static EVT_BEGIN(guard_cancel_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -741,6 +778,12 @@ static EVT_BEGIN(guard_cancel_event)
     RETURN
 EVT_END()
 
+/**
+ * The Sky-Blue Spiny charges up (weapon_togezo_charge in LW(9): charge +6 on itself):
+ * it pays the weapon cost, the camera homes in (zoom 300),
+ * and after 40 frames the charge sound plays with a "crystal_n64" effect over it;
+ * a second later it hops once while the weapon is applied to itself.
+ */
 static EVT_BEGIN(charge_event)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -766,6 +809,7 @@ static EVT_BEGIN(charge_event)
     RETURN
 EVT_END()
 
+/** Wait event: sets the idle animation from the unit's pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

@@ -59,6 +59,11 @@ static KinopioWork* work;
 //.sdata
 static KinopioWork** wp = &work;
 
+/**
+ * Registers a map's inn: args[0] is its KinopioWork (innkeeper name, price, bed and camera spots, messages).
+ * Waits for the "p_slit" paper animation to load,
+ * then gives the innkeeper kinopio_house_talk_evt as his talk script.
+ */
 USER_FUNC(evt_kinopio_setup) {
     KinopioWork* w = (KinopioWork*)evtGetValue(event, event->args[0]);
     NpcEntry* npc = npcNameToPtr(w->npcName);
@@ -70,6 +75,7 @@ USER_FUNC(evt_kinopio_setup) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the inn's message for slot args[0] (KinopioWork.msg: 0 greeting, 3 good night, 5 morning, ...) to args[1]. */
 USER_FUNC(msg_no) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);
@@ -77,6 +83,10 @@ USER_FUNC(msg_no) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Writes 1 to args[0] when Mario's HP, FP and star power and every partner's HP are already full, else 0;
+ * the innkeeper then asks whether to stay anyway.
+ */
 USER_FUNC(power_chk) {
     EvtWord* args = event->args;
     s32 ok;
@@ -97,6 +107,7 @@ USER_FUNC(power_chk) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes 1 to args[0] when Mario has fewer coins than the inn's price, else 0. */
 USER_FUNC(coin_chk) {
     EvtWord* args = event->args;
     if (pouchGetCoin() < (*wp)->ryoukin) {
@@ -107,16 +118,19 @@ USER_FUNC(coin_chk) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the inn's price in coins to args[0]. */
 USER_FUNC(get_ryoukin) {
     evtSetValue(event, event->args[0], (*wp)->ryoukin);
     return EVT_RETURN_DONE;
 }
 
+/** Writes the innkeeper's NPC name to args[0]. */
 USER_FUNC(get_npcname) {
     evtSetValue(event, event->args[0], (EvtWord)(*wp)->npcName);
     return EVT_RETURN_DONE;
 }
 
+/** Writes the bed position (where Mario lies) to the float variables args[0..2]. */
 USER_FUNC(get_bed) {
     EvtWord* args = event->args;
     evtSetFloat(event, args[0], (*wp)->bed.x);
@@ -125,6 +139,7 @@ USER_FUNC(get_bed) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the spot beside the bed, where Mario walks to and wakes up, to args[0..2]. */
 USER_FUNC(get_bedside) {
     EvtWord* args = event->args;
     evtSetFloat(event, args[0], (*wp)->bedside.x);
@@ -133,11 +148,13 @@ USER_FUNC(get_bedside) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the angle (degrees) Mario lies at in bed to args[0]. */
 USER_FUNC(get_beddeg) {
     evtSetFloat(event, event->args[0], (*wp)->bedDeg);
     return EVT_RETURN_DONE;
 }
 
+/** Writes the spot Mario walks back to in front of the innkeeper after waking to args[0..2]. */
 USER_FUNC(get_npctalk) {
     EvtWord* args = event->args;
     evtSetFloat(event, args[0], (*wp)->npcTalk.x);
@@ -146,6 +163,7 @@ USER_FUNC(get_npctalk) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the six camera values for the bed shot (passed to evt_cam3d_evt_set) to args[0..5]. */
 USER_FUNC(get_cam) {
     EvtWord* args = event->args;
     evtSetFloat(event, args[0], (*wp)->cam[0]);
@@ -157,16 +175,23 @@ USER_FUNC(get_cam) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the inn's optional walk-to-bed script (0 for none; then Mario just walks beside the bed) to args[0]. */
 USER_FUNC(get_to_bed_evt) {
     evtSetValue(event, event->args[0], (EvtWord)(*wp)->toBedEvt);
     return EVT_RETURN_DONE;
 }
 
+/** Writes the inn's optional script run after waking (0 for none) to args[0]. */
 USER_FUNC(get_from_bed_evt) {
     evtSetValue(event, event->args[0], (EvtWord)(*wp)->fromBedEvt);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Lays Mario flat in bed: switches him to the "p_slit" paper pose and holds his facing at args[0] degrees,
+ * never finishing (the talk script deletes it).
+ * Retail also slides him 0.2 units a frame for 30 frames (backwards in pik_04).
+ */
 static USER_FUNC(paper_on) {
     EvtWord* args = event->args;
     f32 dir = evtGetFloat(event, *args++);
@@ -195,11 +220,16 @@ static USER_FUNC(paper_on) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Ends the bed paper pose set by paper_on. */
 static USER_FUNC(paper_off) {
     marioPaperOff();
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Turns distance args[0] into an x/z offset across the camera's view (yaw + 90 degrees),
+ * written to args[1] and args[2]; places the second partner beside the bed.
+ */
 USER_FUNC(offset) {
     EvtWord* args = event->args;
     f32 dist = evtGetFloat(event, args[0]);
@@ -209,6 +239,10 @@ USER_FUNC(offset) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Puts the inn's breakfast item (KinopioWork.breakfastItem) at its spot as the fixed item "breakfast",
+ * unless one is already there or the inn has none.
+ */
 USER_FUNC(breakfast) {
     ItemEntry* item = itemNameToPtr("breakfast");
     if (item == NULL || !(item->flags & ITEM_FLAG_ACTIVE)) {
@@ -221,11 +255,13 @@ USER_FUNC(breakfast) {
     return EVT_RETURN_DONE;
 }
 
+/** Mutes sound effects while Mario sleeps. */
 USER_FUNC(snd_off) {
     psndSetFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
 }
 
+/** Unmutes sound effects after the stay. */
 USER_FUNC(snd_on) {
     psndClearFlag(PSND_FLAG_MUTE_SFX);
     return EVT_RETURN_DONE;
@@ -238,6 +274,11 @@ USER_FUNC(cameraman_on) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * .data The innkeeper's talk script: asks to stay, takes an Inn Coupon or the price,
+ * puts Mario to bed with a spotlight fade and sleep music, restores HP/FP and partners,
+ * places breakfast and counts GSW_INN_STAY_COUNT (max 100).
+ */
 //.data
 EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_mario_key_onoff, 0)

@@ -21,6 +21,7 @@ typedef struct EffQueen2Work {
     EffectEntry* charge; // 0x28
 } EffQueen2Work;
 
+/** Spawns the Shadow Queen charge-up at (x, y, z), including its charge light; reached through evt_eff ("queen2"). */
 EffectEntry* effQueen2Entry(s32 type, f32 x, f32 y, f32 z) {
     EffQueen2Work* work;
     EffectEntry* effect;
@@ -52,6 +53,7 @@ EffectEntry* effQueen2Entry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/** Per frame: fades in and grows the sphere, soft-deletes the charge light, then ends the effect after the flashes. */
 void effQueen2Main(EffectEntry* effect) {
     EffQueen2Work* work = effect->userdata;
     Vec position;
@@ -120,6 +122,7 @@ void effQueen2Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effQueen2Disp, effect);
 }
 
+/** Draws the dark sphere scaled by the camera distance so it keeps its apparent size. */
 void effQueen2Disp(CameraId cameraId, EffectEntry* effect) {
     EffQueen2Work* work = effect->userdata;
     CameraEntry* camera;

@@ -31,6 +31,10 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 void effRotHammerSuccessMain(EffectEntry* effect);
 void effRotHammerSuccessDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns `count` star sprites flying out from (x, y, z) for `lifetime` frames.
+ * Spawned by event scripts through evt_eff.
+ */
 EffectEntry* effRotHammerSuccessN64Entry(s32 type, f32 x, f32 y, f32 z, s32 count, s32 lifetime) {
     EffectEntry* effect;
     EffRotHammerSuccessWork* work;
@@ -66,6 +70,11 @@ EffectEntry* effRotHammerSuccessN64Entry(s32 type, f32 x, f32 y, f32 z, s32 coun
     return effect;
 }
 
+/**
+ * Moves each star by its velocity, which damps 20% per frame (30% plus slowing spin over the last 5 frames),
+ * turns it by its spin speed and shrinks it 20% per frame once half the lifetime has passed.
+ * Deletes when the lifetime runs out.
+ */
 void effRotHammerSuccessMain(EffectEntry* effect) {
     EffRotHammerSuccessWork* work = effect->userdata;
     Vec position;
@@ -110,6 +119,10 @@ void effRotHammerSuccessMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effRotHammerSuccessDisp, effect);
 }
 
+/**
+ * Draws each star as a camera-facing 16x16 quad of texture 0x1D, turned by its spin and scaled,
+ * in flat yellow (DC,DC,28).
+ */
 void effRotHammerSuccessDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffRotHammerSuccessWork* work;

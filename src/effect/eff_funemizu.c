@@ -86,6 +86,10 @@ static u8 gor_fune_dl_0_size_tbl[] = { 0x02, 0x02};
 static u8* gor_fune_dl_1_tbl[] = { gor_fune_dl_1_0, gor_fune_dl_1_1 };
 static u8 gor_fune_dl_1_size_tbl[] = { 0x02, 0x02};
 
+/**
+ * Returns the water colour for the current map:
+ * exact name match in the table first, then a 3-letter area prefix, then the default.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_80224298, JP 0x80224298. See docs/NAME_PROVENANCE.md.
 GXColor effFunemizuGetMapColor(void) {
     ColorEntry* e;
@@ -108,6 +112,11 @@ GXColor effFunemizuGetMapColor(void) {
     return funemizu_default_color;
 }
 
+/**
+ * Spawns boat water: types 0 and 2 are the ripple wake,
+ * type 1 a spray burst (size picks how many pieces, max 10).
+ * Spawned by the ship motion (mot_ship.c) and by scripts in gor and muj.
+ */
 EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) {
     EffectEntry* effect;
     EffFunemizuWork* work;
@@ -156,6 +165,7 @@ EffectEntry* effFunemizuEntry(s32 type, f32 x, f32 y, f32 z, f32 size, f32 yaw) 
     return effect;
 }
 
+/** Advances the wake and spray timers, spawns a spray piece from the wake, and deletes spent ones. */
 void effFunemizuMain(EffectEntry* effect) {
     EffFunemizuWork* work = effect->userdata;
     Vec position;
@@ -242,6 +252,7 @@ void effFunemizuMain(EffectEntry* effect) {
     }
 }
 
+/** Calls the three display lists of the wake mesh. */
 static inline void funemizuCallDL(u32 *p_u) {
     u32 u = *p_u;
     for (u = 0; u < 3; u++) {
@@ -249,6 +260,7 @@ static inline void funemizuCallDL(u32 *p_u) {
     }
     *p_u = u;
 }
+/** Draws the wake ripple mesh tinted with the map's water colour. */
 void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
     EffFunemizuWork* work = effect->userdata;
     Mtx trans;
@@ -393,6 +405,7 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Draws the spray (shibuki) pieces as camera-facing quads. */
 void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
     EffFunemizuWork* work = effect->userdata;
     Mtx trans;

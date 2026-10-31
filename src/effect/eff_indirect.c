@@ -23,6 +23,10 @@ typedef struct EffIndirectWork {
     smartEntry* work;  // 0x34
 } EffIndirectWork;
 
+/**
+ * Spawns a screen distortion centred at (x, y, z), allocating a 64x64 IA8 capture buffer; type 0-1.
+ * duration is the lifetime in frames (1000 or more is endless). Spawned by scripts (tik, battle items).
+ */
 EffectEntry* effIndirectEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffIndirectWork* work;
@@ -50,6 +54,7 @@ EffectEntry* effIndirectEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/** Fades the distortion near the end of its life (or on soft delete) and frees the capture buffer when finished. */
 void effIndirectMain(EffectEntry* effect) {
     EffIndirectWork* work = effect->userdata;
     Vec position;
@@ -86,6 +91,7 @@ void effIndirectMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D_EFFECTB, dispCalcZ(&position), 2, (DispCallback)effIndirectDisp, effect);
 }
 
+/** Copies the frame buffer into a texture and redraws it over the point, offset through an indirect texture. */
 void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
     EffIndirectWork* work = effect->userdata;
     CameraEntry* camera;

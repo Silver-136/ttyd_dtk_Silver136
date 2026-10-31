@@ -61,6 +61,10 @@ EvtWord muj_12_init_evt[60];
 static const GXColor evtflash_col1 = {0xFF, 0xFF, 0xFF, 0xFF};
 static const GXColor evtflash_col2 = {0xFF, 0xFF, 0xFF, 0xFF};
 
+/**
+ * Darkens the room: fades map blend colour 0 from white to black over LW(10) ms;
+ * korutesu_event uses it (600 ms) before the closing message.
+ */
 static EVT_BEGIN(back_dark)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, LW(10))
     LOOP(0)
@@ -74,6 +78,12 @@ static EVT_BEGIN(back_dark)
     RETURN
 EVT_END()
 
+/**
+ * Copy of the engine's door enter animation type 5 (bero_play_enter_anime) with a longer wait:
+ * if the entry has an enter hook (LW(12)), runs it at angle 180 (door open), lets Mario walk in,
+ * waits 1.5 s instead of 0.5 s so the partners can follow,
+ * plays the door-closing sound and swings the door shut (angle 180 to 0 over 500 ms).
+ */
 static EVT_BEGIN(door_custom)
     CALL(evt_bero_get_info_anime, LW(1), LW(10), LW(11), LW(12), LW(13))
     IF_INT_NOT_EQUAL(LW(12), 0)
@@ -146,12 +156,20 @@ static EVT_BEGIN(bero_custom)
     RETURN
 EVT_END()
 
+/**
+ * Enter hook of the lair door (w_bero, enter anime type 5): turns S_doa to LW(0) x 0.610 degrees;
+ * the door code feeds 180 down to 0, so the door stands 110 degrees open and swings shut.
+ */
 static EVT_BEGIN(w_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.61035156f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Exit hook of the lair door: turns S_doa to LW(0) x -0.610 degrees;
+ * fed 0 up to 180, it swings 110 degrees open the other way as Mario leaves.
+ */
 static EVT_BEGIN(w_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.61035156f))
     CALL(evt_mapobj_rotate, 0, STRING("S_doa"), 0, LW(0), 0)
@@ -180,6 +198,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Shakes the camera and plays a ship-shaking sound at Cortez until GF(0) is cleared, to show him thrashing. */
 EVT_BEGIN(korutesu_yure)
     CALL(evt_npc_get_position, STRING("コルテス"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_SHIP_SHAKE2"), LW(0), LW(1), LW(2), LW(10))
@@ -784,6 +803,10 @@ static f32 accdec_type(s32 step, s32 total, f32 start, f32 end) {
     return start + cur * (end - start) / sum;
 }
 
+/**
+ * Script helper: moves the named item to the position (args[1], args[2], args[3]) over args[4] ms using
+ * interpolation mode args[5], adding args[6] to its height; blocks until it arrives.
+ */
 USER_FUNC(muj_item_move_3d_position) {
     EvtWord* args = event->args;
     char* name = (char*)evtGetValue(event, args[0]);
@@ -821,6 +844,10 @@ USER_FUNC(muj_item_move_3d_position) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that flashes the screen white: fades out in 20 frames with colour evtflash_col1 (white),
+ * holds 50 ms, then fades back in over 80 frames with evtflash_col2. Blocks until finished.
+ */
 static USER_FUNC(evtflash) {
     if (isFirstCall) {
         event->userdata[2] = 0;

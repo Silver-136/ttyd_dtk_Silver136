@@ -97,10 +97,19 @@ void BSE_FreezeDelete(BattleUnit* unit);
 void BSE_Kagegakure(BattleUnit* unit);
 void BSE_KagegakureDelete(BattleUnit* unit);
 
+/**
+ * Status-effect setup for a new unit, called from BtlUnit_Entry;
+ * empty in every version (the effect pointers start NULL).
+ */
 void BattleStatusEffectInit(BattleUnit* unit) {
     ; //stubbed in retail
 }
 
+/**
+ * Runs every frame for each unit from battle_disp.c:
+ * creates, moves or removes the sleep Zs, Electrified sparks, Burn flames,
+ * Freeze ice block and the Veil icon to match the unit's current statuses.
+ */
 void BattleStatusEffectMain(BattleUnit* unit) {
     BSE_Sleep(unit);
     BSE_Biribiri(unit);
@@ -109,6 +118,7 @@ void BattleStatusEffectMain(BattleUnit* unit) {
     BSE_Kagegakure(unit);
 }
 
+/** Removes all of the unit's status effects; called when the unit is deleted from battle. */
 void BattleStatusEffectDelete(BattleUnit* unit) {
     BSE_SleepDelete(unit);
     BSE_BiribiriDelete(unit);
@@ -120,6 +130,11 @@ void BattleStatusEffectDelete(BattleUnit* unit) {
 EffectEntry* effSparkEntry(s32, s32, f32, f32, f32, f32);
 EffectEntry* effSleepEntry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale, f32 rotation);
 
+/**
+ * While the unit is asleep, keeps a sleep effect (the floating Zs) at the top-right of its body part:
+ * half the width across and 0.95 of the height up, scaled by the unit's size (at body height for ceiling units).
+ * Deletes it once the unit wakes.
+ */
 void BSE_Sleep(BattleUnit* unit) {
     f32 x, y, z;
     f32* wk;
@@ -150,6 +165,7 @@ void BSE_Sleep(BattleUnit* unit) {
     }
 }
 
+/** Deletes the unit's sleep effect if it has one. */
 void BSE_SleepDelete(BattleUnit* unit) {
     if (unit->sleepEff != NULL) {
         effDelete(unit->sleepEff);
@@ -157,6 +173,11 @@ void BSE_SleepDelete(BattleUnit* unit) {
     }
 }
 
+/**
+ * Biribiri = Electrified.
+ * While the unit is Electrified, keeps a spark effect around the middle of its body part (half its width as
+ * radius, half its height up, 10 units in front); deletes it when the status ends.
+ */
 void BSE_Biribiri(BattleUnit* unit) {
     f32 x, y, z;
     f32* wk;
@@ -185,6 +206,7 @@ void BSE_Biribiri(BattleUnit* unit) {
     }
 }
 
+/** Deletes the unit's Electrified spark effect if it has one. */
 void BSE_BiribiriDelete(BattleUnit* unit) {
     if (unit->sparkEff != NULL) {
         effDelete(unit->sparkEff);
@@ -195,6 +217,10 @@ void BSE_BiribiriDelete(BattleUnit* unit) {
 EffectEntry* effFireEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale);
 EffectEntry* effIceEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale);
 
+/**
+ * While the unit is Burned, keeps a flame effect on it at the unit kind's burnFlameOffset (mirrored by facing
+ * direction and scaled by size); deletes it when the burn ends.
+ */
 void BSE_Fire(BattleUnit* unit) {
     f32 x, y, z;
     f32* wk;
@@ -220,6 +246,7 @@ void BSE_Fire(BattleUnit* unit) {
     }
 }
 
+/** Deletes the unit's Burn flame effect if it has one. */
 void BSE_FireDelete(BattleUnit* unit) {
     if (unit->fireEff != NULL) {
         effDelete(unit->fireEff);
@@ -227,6 +254,11 @@ void BSE_FireDelete(BattleUnit* unit) {
     }
 }
 
+/**
+ * While the unit is Frozen, keeps an ice-block effect around it,
+ * scaled to the smaller of width/20 and height/36 (times the size multiplier)
+ * and raised by 20 units per scale step.
+ */
 void BSE_Freeze(BattleUnit* unit) {
     f32 x, y, z;
     f32* wk;
@@ -258,6 +290,10 @@ void BSE_Freeze(BattleUnit* unit) {
     }
 }
 
+/**
+ * Removes the unit's ice-block effect with effSoftDelete, so instead of vanishing it plays out the rest of its
+ * animation and then sags, fades and drips smoke puffs (effIceMain).
+ */
 void BSE_FreezeDelete(BattleUnit* unit) {
     if (unit->iceEff != NULL) {
         effSoftDelete(unit->iceEff);
@@ -291,6 +327,7 @@ void BSE_Kagegakure(BattleUnit* unit) {
     }
 }
 
+/** Deletes the unit's Veil icon if it has one. */
 void BSE_KagegakureDelete(BattleUnit* unit) {
     if (unit->kageIcon != NULL) {
         iconDelete(unit->kageIcon->name);
@@ -298,6 +335,10 @@ void BSE_KagegakureDelete(BattleUnit* unit) {
     }
 }
 
+/**
+ * Starts the start-of-turn Burn damage animation for a unit;
+ * battle_seq.c calls it with active 1 for every living unit whose Burn strength is above 0.
+ */
 void BSE_TurnFirstProcessEffectEntry(BattleUnit* unit, s16 active) {
     unit->mBurnDamageFlameState = 1;
     unit->mbBurnDamageFlameActive = active;
@@ -305,6 +346,12 @@ void BSE_TurnFirstProcessEffectEntry(BattleUnit* unit, s16 active) {
 
 f32 sinfd(f32 degrees);
 
+/**
+ * Steps the start-of-turn Burn animation each frame:
+ * spawns a flame at the unit, pulses its scale between 0.4 and 2.0 for 60 frames,
+ * then deletes it and deals 1 damage unless the unit is hidden by BtlUnit_CheckShadowGuard.
+ * Returns TRUE while still animating.
+ */
 BOOL BSE_TurnFirstProcessEffectMain(BattleUnit* unit) {
     BattleUnitPart* part;
     f32 x, y, z;
@@ -374,6 +421,11 @@ void BattleStatusChangeInfoWorkInit(BattleUnit* unit) {
     }
 }
 
+/**
+ * Priority of a status for the change messages:
+ * 24 for the first entry of _st_pri_data (Charge) down to 1 for the last, -1 if the status is not listed.
+ * type is a StatusEffectType stored as s8 in _st_pri_data
+ */
 s32 _get_pri(s8 type) {
     s8* val;
     s32 priority = 24;
@@ -389,6 +441,13 @@ s32 _get_pri(s8 type) {
     return -1;
 }
 
+/**
+ * Queues a status change on the unit (battle_damage.c calls it when a status is inflicted or changed):
+ * inserts it into the six-entry statusChangeInfo list by _get_pri priority,
+ * replacing an entry of the same status, then gives each entry a 10-step stagger and a stacking offset.
+ * BattleStatusChangeMsgAdjust still reads the queued types; nothing reads the stagger or offsets.
+ * Guess: they laid out per-unit popups that BattleStatusChangeAnnouceMain_Unit no longer draws.
+ */
 void BattleStatusChangeInfoSetAnnouce(BattleUnit* unit, s32 type, s32 strength, s32 changed) {
     StChgInfo* e = &unit->statusChangeInfo[0];
     StChgInfo tmp, swap;
@@ -444,6 +503,11 @@ Ld:;
     }
 }
 
+/**
+ * Runs the per-unit status announcements for every unit and returns TRUE while any is still showing;
+ * since BattleStatusChangeAnnouceMain_Unit is empty it always returns FALSE.
+ * Called from the battle sequence alongside BattleStatusChangeMsgMain.
+ */
 BOOL BattleStatusChangeAnnouceMain(BattleWork* wp) {
     s32 i;
     BOOL ret;
@@ -459,10 +523,12 @@ BOOL BattleStatusChangeAnnouceMain(BattleWork* wp) {
     return ret;
 }
 
+/** Per-unit status announcement step; empty in every version, so it never holds up the battle sequence. */
 BOOL BattleStatusChangeAnnouceMain_Unit(BattleUnit* unit) {
     return FALSE;
 }
 
+/** Clears the 28 status-change message slots in BattleWork (one per status type) at battle start. */
 void BattleStatusChangeMsgWorkInit(void) {
     StChgMsg* msg = &_battleWorkPointer->announce.stChg.msg[0];
     s32 i;
@@ -491,6 +557,11 @@ void BattleStatusChangeMsgSetAnnouce(BattleUnit* unit, s32 index, s32 changed) {
     }
 }
 
+/**
+ * Rebuilds the pending status messages before they are shown:
+ * for each status, re-marks it from every living unit whose statusChangeInfo queue holds it,
+ * and drops it if no unit does or if its bit is set in the StChgWork mask.
+ */
 void BattleStatusChangeMsgAdjust(BattleWork* wp) {
     s32 t;
     StChgWork* base;
@@ -585,6 +656,10 @@ BOOL BattleStatusChangeMsgMain(BattleWork* wp) {
 
 typedef void (*WakuColByRefFunc)(u16, GXColor*, f32, f32, f32, f32, f32);
 
+/**
+ * Draws the current status-change text centred near the top of the screen (y -120) in a white-bordered window
+ * sized to the text, 29 units per line.
+ */
 void _st_chg_msg_disp(void) {
     StChgWork* st = &_battleWorkPointer->announce.stChg;
     f32 y;

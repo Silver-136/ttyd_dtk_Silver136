@@ -53,6 +53,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Item-box callback: puts a Mushroom at the box, waits for the chest animation and gives it to Mario. */
 static EVT_BEGIN(item_get00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))

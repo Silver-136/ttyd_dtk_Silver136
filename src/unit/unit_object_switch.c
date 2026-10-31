@@ -101,6 +101,10 @@ static EvtWord attack_event[5];
 static EvtWord wait_event[2];
 static EvtWord damage_event[22];
 
+/**
+ * Init for a stage switch the player can hit (spawned by battle_stage_object.c as _entry_switch_data):
+ * registers the wait, attack and damage scripts, never moves, and idles.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -122,11 +126,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** The switch never acts on its own turn; it just returns to its (empty) idle script. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
+/** Idle: nothing; the switch has no idle animation. */
 static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
@@ -136,6 +142,11 @@ static s32 _data[] = {
     8, 0, -7, 0, 6, 0, -6, 0, 5, 0, -4, 0, 2, 0, -2, 0, 0,
 };
 
+/**
+ * Shakes the switch's stage object (args[0] unit) when it is hit:
+ * adds one entry of the _data offset table to its height each frame for 34 frames,
+ * a decaying up-and-down wobble. Run from damage_event.
+ */
 USER_FUNC(_rumble_switch) {
     BattleUnit* unit;
     BattleStageObject* object;

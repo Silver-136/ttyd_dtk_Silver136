@@ -189,11 +189,19 @@ EvtWord usu_01_tree_init[7];
 static EvtWord mobj_box00[34];
 EvtWord usu_01_init_evt[350];
 
+/** Init script of villager F: enables move/talk animation. */
 EVT_BEGIN(villagerF_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｆ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of villager F, the novelist: text by story progress.
+ * Before the Doopliss fight he wonders whether pigs can read;
+ * until Mario leaves Twilight Town he asks what books Mario likes (a four-way choice, one shared reply);
+ * later lines are about his writing, his finished love story (until the end of the game)
+ * and its film adaptation (after).
+ */
 EVT_BEGIN(villagerF_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -212,11 +220,16 @@ EVT_BEGIN(villagerF_talk)
     RETURN
 EVT_END()
 
+/** Init script of villager G: enables move/talk animation. */
 EVT_BEGIN(villagerG_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｇ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of villager G: text by Chapter 4 progress (before the Doopliss fight, until leaving Twilight Town,
+ * later).
+ */
 EVT_BEGIN(villagerG_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -235,11 +248,16 @@ EVT_BEGIN(villagerG_talk)
     RETURN
 EVT_END()
 
+/** Init script of villager H: enables move/talk animation. */
 EVT_BEGIN(villagerH_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｈ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of villager H: text by Chapter 4 progress (before the Doopliss fight, until leaving Twilight Town,
+ * later).
+ */
 EVT_BEGIN(villagerH_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -276,6 +294,7 @@ EVT_BEGIN(villagerI_pig_init)
     RETURN
 EVT_END()
 
+/** Talk script of villager I: an oink plus pig text before the Doopliss fight, then human text by story progress. */
 EVT_BEGIN(villagerI_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -314,6 +333,7 @@ EVT_BEGIN(villagerJ_pig_init)
     RETURN
 EVT_END()
 
+/** Talk script of villager J: an oink plus pig text before the Doopliss fight, then human text by story progress. */
 EVT_BEGIN(villagerJ_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -332,6 +352,12 @@ EVT_BEGIN(villagerJ_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the shopkeeper (the shop woman's husband): enables move/talk animation.
+ * From the Doopliss fight until Mario leaves Twilight Town he stands in the shop at (-125, 0, -475),
+ * turned to 90 degrees towards the dandy he quarrels with (see mise_kiza_msg);
+ * later he stands at (-130, 0, -480). Before the fight his placement is left as set up.
+ */
 EVT_BEGIN(shop_man_init)
     CALL(evt_npc_flag_onoff, 1, STRING("店の主人"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -346,6 +372,10 @@ EVT_BEGIN(shop_man_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the shopkeeper: one line until Mario leaves Twilight Town (stg4_usu_61_5),
+ * another after the story's end (stg4_usu_61_6).
+ */
 EVT_BEGIN(shop_man_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_16_LEAVING_TWILIGHT_TOWN)
@@ -358,6 +388,7 @@ EVT_BEGIN(shop_man_talk)
     RETURN
 EVT_END()
 
+/** Init script of the shopkeeper's wife: enables move/talk animation. */
 EVT_BEGIN(shop_woman_init)
     CALL(evt_npc_flag_onoff, 1, STRING("お店の奥さん"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
@@ -421,6 +452,11 @@ EVT_BEGIN(shop_woman_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the dandy ("kizayarou", human form): enables move/talk animation.
+ * He is kept below the map before the Doopliss fight (his pig form stands in instead)
+ * and once Mario leaves Twilight Town; in between he stands in the shop at (-100, 0, -450).
+ */
 static EVT_BEGIN(kizayarou_init)
     CALL(evt_npc_flag_onoff, 1, STRING("キザ野郎"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -444,6 +480,12 @@ EVT_BEGIN(kizayarou_pig_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the dandy, shared by his pig form:
+ * before the Doopliss fight an oink sound and a small "L'oink" line (stg4_usu_61_00);
+ * afterwards he says, in his French accent, that he came by the pipe
+ * and does not know why he is in the shop (stg4_usu_61).
+ */
 static EVT_BEGIN(kizayarou_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -456,6 +498,10 @@ static EVT_BEGIN(kizayarou_talk)
     RETURN
 EVT_END()
 
+/**
+ * Group chat of the three children (A, B and C) with staggered messages stg4_usu_63 and up;
+ * used while the children still have their mother.
+ */
 EVT_BEGIN(childABC_talk_01)
     BEGIN_INLINE_EVENT
         CALL(evt_msg_print, 0, STRING("stg4_usu_63"), 0, STRING("子供Ａ"))
@@ -495,6 +541,10 @@ EVT_BEGIN(childABC_talk_03)
     RETURN
 EVT_END()
 
+/**
+ * Group chat of the three children with the same greeting, welcome-back and gift lines as childABC_talk_03
+ * (stg4_usu_81_4_2 to stg4_usu_81_4_4); used after the end of the game.
+ */
 EVT_BEGIN(childABC_talk_04)
     BEGIN_INLINE_EVENT
         CALL(evt_msg_print, 0, STRING("stg4_usu_81_4_2"), 0, STRING("子供Ａ"))
@@ -532,6 +582,12 @@ EVT_BEGIN(aunt_pig_init)
     RETURN
 EVT_END()
 
+/**
+ * Trouble 20 helper (door in LW(0)): with Mario's controls off, pans the camera,
+ * opens the house door and walks the aunt out to (-368, 0) facing Mario,
+ * while Mario and the partner follow her out to -420 and -450;
+ * then closes the door, returns the camera and restores the house's map objects.
+ */
 EVT_BEGIN(iri_20_out_house)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT
@@ -670,6 +726,10 @@ EVT_BEGIN(iri_20_out_house)
     RETURN
 EVT_END()
 
+/**
+ * Trouble 20 helper: the aunt walks back to house 1's door, which opens; she walks inside to (-390, -185)
+ * and the door closes behind her.
+ */
 EVT_BEGIN(iri_20_aunt_to_house)
     CALL(evt_npc_move_position, STRING("おばさん"), -390, -40, 0, 60, 0)
     SET_VALUE(LW(0), PTR(&door_1))
@@ -932,11 +992,13 @@ EVT_BEGIN(aunt_talk)
     RETURN
 EVT_END()
 
+/** Init script of child A: enables move/talk animation. */
 EVT_BEGIN(childA_init)
     CALL(evt_npc_flag_onoff, 1, STRING("子供Ａ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
 
+/** Talk script of child A: a line about the mother turning into a pig, the three-children chat, or later story text. */
 EVT_BEGIN(childA_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -955,11 +1017,13 @@ EVT_BEGIN(childA_talk)
     RETURN
 EVT_END()
 
+/** Init script of child B: enables move/talk animation. */
 EVT_BEGIN(childB_init)
     CALL(evt_npc_flag_onoff, 1, STRING("子供Ｂ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
 
+/** Talk script of child B: a line about the mother turning into a pig, the three-children chat, or later story text. */
 EVT_BEGIN(childB_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -978,11 +1042,13 @@ EVT_BEGIN(childB_talk)
     RETURN
 EVT_END()
 
+/** Init script of child C: enables move/talk animation. */
 EVT_BEGIN(childC_init)
     CALL(evt_npc_flag_onoff, 1, STRING("子供Ｃ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
 EVT_END()
 
+/** Talk script of child C: a line about the mother turning into a pig, the three-children chat, or later story text. */
 EVT_BEGIN(childC_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -1070,26 +1136,31 @@ EVT_BEGIN(gatekeeper_talk)
     RETURN
 EVT_END()
 
+/** Init script of crow F: puts it on its perch at (275, 83, 355). */
 EVT_BEGIN(crow_f_init)
     CALL(evt_npc_set_position, STRING("me"), 275, 83, 355)
     RETURN
 EVT_END()
 
+/** Init script of crow G: puts it on its perch at (250, 112, 355). */
 EVT_BEGIN(crow_g_init)
     CALL(evt_npc_set_position, STRING("me"), 250, 112, 355)
     RETURN
 EVT_END()
 
+/** Init script of crow H: puts it on its perch at (-147, 110, 346). */
 EVT_BEGIN(crow_h_init)
     CALL(evt_npc_set_position, STRING("me"), -147, 110, 346)
     RETURN
 EVT_END()
 
+/** Init script of crow I: puts it on its perch at (-175, 110, 348). */
 EVT_BEGIN(crow_i_init)
     CALL(evt_npc_set_position, STRING("me"), -175, 110, 348)
     RETURN
 EVT_END()
 
+/** Init script of crow J: puts it on its perch at (-195, 100, -157). */
 EVT_BEGIN(crow_j_init)
     CALL(evt_npc_set_position, STRING("me"), -195, 100, -157)
     RETURN
@@ -1115,6 +1186,11 @@ static EVT_BEGIN(musume_talk)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the first of the three young women (the "musume" trio; NPC name in LW(0), dancer or pig form):
+ * places her at (-440, 0, 180) facing 90 degrees, enables move/talk animation,
+ * makes musume_talk her talk event and briefly turns on instant turning while the map starts.
+ */
 EVT_BEGIN(musume_a_init)
     CALL(evt_npc_set_position, LW(0), -440, 0, 180)
     CALL(evt_npc_set_ry, LW(0), 90)
@@ -1129,6 +1205,7 @@ EVT_BEGIN(musume_a_init)
     RETURN
 EVT_END()
 
+/** Spawns the first young woman in her dancer form (model "c_dance_r") and runs musume_a_init on her. */
 static EVT_BEGIN(musume_a_entry)
     CALL(evt_npc_entry, STRING("３人娘Ａ"), STRING("c_dance_r"))
     CALL(evt_npc_set_tribe, STRING("３人娘Ａ"), STRING("踊り子"))
@@ -1137,6 +1214,7 @@ static EVT_BEGIN(musume_a_entry)
     RETURN
 EVT_END()
 
+/** Spawns the pig form of the first young woman ("c_bubusan" model) and runs musume_a_init on her. */
 EVT_BEGIN(musume_a_pig_entry)
     CALL(evt_npc_entry, STRING("ブタ３人娘Ａ"), STRING("c_bubusan"))
     CALL(evt_npc_set_tribe, STRING("ブタ３人娘Ａ"), STRING("ブタ"))
@@ -1145,6 +1223,9 @@ EVT_BEGIN(musume_a_pig_entry)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the second of the three young women (NPC name in LW(0)): as musume_a_init, at (-410, 0, 150).
+ */
 EVT_BEGIN(musume_b_init)
     CALL(evt_npc_set_position, LW(0), -410, 0, 150)
     CALL(evt_npc_set_ry, LW(0), 90)
@@ -1159,6 +1240,7 @@ EVT_BEGIN(musume_b_init)
     RETURN
 EVT_END()
 
+/** Spawns the second young woman in her pink dancer form (model "c_dance_p") and runs musume_b_init on her. */
 static EVT_BEGIN(musume_b_entry)
     CALL(evt_npc_entry, STRING("３人娘Ｂ"), STRING("c_dance_p"))
     CALL(evt_npc_set_tribe, STRING("３人娘Ｂ"), STRING("踊り子ピンク"))
@@ -1167,6 +1249,7 @@ static EVT_BEGIN(musume_b_entry)
     RETURN
 EVT_END()
 
+/** Spawns the pig form of the second young woman and runs musume_b_init on her. */
 EVT_BEGIN(musume_b_pig_entry)
     CALL(evt_npc_entry, STRING("ブタ３人娘Ｂ"), STRING("c_bubusan"))
     CALL(evt_npc_set_tribe, STRING("ブタ３人娘Ｂ"), STRING("ブタ"))
@@ -1175,6 +1258,9 @@ EVT_BEGIN(musume_b_pig_entry)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the third of the three young women (NPC name in LW(0)): as musume_a_init, at (-380, 0, 180).
+ */
 EVT_BEGIN(musume_c_init)
     CALL(evt_npc_set_position, LW(0), -380, 0, 180)
     CALL(evt_npc_set_ry, LW(0), 90)
@@ -1189,6 +1275,7 @@ EVT_BEGIN(musume_c_init)
     RETURN
 EVT_END()
 
+/** Spawns the third young woman in her green dancer form (model "c_dance_k") and runs musume_c_init on her. */
 static EVT_BEGIN(musume_c_entry)
     CALL(evt_npc_entry, STRING("３人娘Ｃ"), STRING("c_dance_k"))
     CALL(evt_npc_set_tribe, STRING("３人娘Ｃ"), STRING("踊り子黄緑"))
@@ -1197,6 +1284,7 @@ static EVT_BEGIN(musume_c_entry)
     RETURN
 EVT_END()
 
+/** Spawns the pig form of the third young woman and runs musume_c_init on her. */
 EVT_BEGIN(musume_c_pig_entry)
     CALL(evt_npc_entry, STRING("ブタ３人娘Ｃ"), STRING("c_bubusan"))
     CALL(evt_npc_set_tribe, STRING("ブタ３人娘Ｃ"), STRING("ブタ"))
@@ -1205,6 +1293,10 @@ EVT_BEGIN(musume_c_pig_entry)
     RETURN
 EVT_END()
 
+/**
+ * Regular script of the wandering NPCs (villagers G and J and the pig forms): wanders around its start position
+ * within a 50-unit radius at speed 30 using the urouro helpers.
+ */
 static EVT_BEGIN(urouro_move)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -1213,6 +1305,11 @@ static EVT_BEGIN(urouro_move)
     RETURN
 EVT_END()
 
+/**
+ * Narrow-range ("semai") variant of urouro_move:
+ * wanders around the start position within a 15-unit radius at speed 30.
+ * Nothing in the tree uses it.
+ */
 EVT_BEGIN(urouro_move_semai)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -1491,6 +1588,12 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Spawned by the first gatekeeper talk: waits until Mario walks to x <= -300, then the temple bell rings;
+ * Mario is startled (the partner is called out if absent), turns to the partner,
+ * and the partner says the bell means someone is being turned into a pig
+ * and is glad it was not them (stg4_usu_50).
+ */
 EVT_BEGIN(village_chief_change_pig_event)
     LABEL(0)
     WAIT_FRAMES(1)
@@ -1574,6 +1677,10 @@ EVT_BEGIN(evt_mon_open)
     RETURN
 EVT_END()
 
+/**
+ * Raises the 3D camera and its target by 85 units over 500 ms, then waits 600 ms;
+ * the crow watchers use it before a crow speaks from its perch.
+ */
 static EVT_BEGIN(cam_up)
     BEGIN_INLINE_EVENT
         CALL(evt_cam_get_pos, CAMERA_3D, LW(0), LW(1), LW(2))
@@ -1586,12 +1693,17 @@ static EVT_BEGIN(cam_up)
     RETURN
 EVT_END()
 
+/** Returns the 3D camera to its normal position over 500 ms (after cam_up) and waits for it. */
 static EVT_BEGIN(cam_down)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     RETURN
 EVT_END()
 
+/**
+ * Background loop: while Vivian is the active partner and Mario is not hidden in her shadow,
+ * it clears the crow-talk gates GW(0), GW(1) and GW(2) so the crows talk again next time.
+ */
 EVT_BEGIN(usu01_check_vivian)
     LABEL(0)
     CALL(evt_mario_get_party, LW(0))
@@ -1992,18 +2104,32 @@ const char* shop_item[] = {
     NULL,
 };
 
+/**
+ * Door script for house 1's door "S_usu01_ie1_door" (evtIn of door_1):
+ * turns it about y by LW(0) scaled to door units.
+ */
 static EVT_BEGIN(evt_door_1_1)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5546875f))
     CALL(evt_mapobj_rotate, 1, STRING("S_usu01_ie1_door"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door script for house 1's door (evtOut of door_1,
+ * which the door code runs with the door-fall sound while the house front opens or closes):
+ * tilts "S_usu01_ie1_door" about x by half of LW(0) (0 to 180, so up to 90 degrees).
+ */
 static EVT_BEGIN(evt_door_1_2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S_usu01_ie1_door"), LW(0), 0, 0)
     RETURN
 EVT_END()
 
+/**
+ * Wall script of house 1 (evtWall of door_1, run by the door code as the house front swings open or shut,
+ * LW(0) 0 to 180):
+ * tilts the front panels "S_usu01_ie1_kai1" and "S_usu01_ie1_kai2" about x by -LW(0)/2 and +LW(0)/2.
+ */
 static EVT_BEGIN(evt_wall_1)
     SET_FLOAT_VALUE(LW(1), LW(0))
     MULTIPLY_FLOAT(LW(1), FLOAT(-0.5f))
@@ -2014,6 +2140,7 @@ static EVT_BEGIN(evt_wall_1)
     RETURN
 EVT_END()
 
+/** House 1 open callback: dips BGM and ambience to 50 and low-pass filters the environment sound. */
 static EVT_BEGIN(door_1_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -2021,6 +2148,7 @@ static EVT_BEGIN(door_1_open)
     RETURN
 EVT_END()
 
+/** House 1 close callback: restores BGM and ambience and removes the low-pass filter. */
 static EVT_BEGIN(door_1_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -2049,6 +2177,7 @@ static DoorParam door_1 = {
     door_1_close, // evtClose
 };
 
+/** Door script for house 2's front door: rotates "S_usu01_ie2_door1" by LW(0) scaled to door units. */
 EVT_BEGIN(evt_door_2_1_1)
     SET_VALUE(LW(2), LW(0))
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5546875f))
@@ -2056,10 +2185,15 @@ EVT_BEGIN(evt_door_2_1_1)
     RETURN
 EVT_END()
 
+/** Empty door script for house 2 (just returns). */
 EVT_BEGIN(evt_door_2_1_2)
     RETURN
 EVT_END()
 
+/**
+ * Wall script of house 2, the shop (evtWall of door_2_1, LW(0) 0 to 180 as the front swings open or shut):
+ * turns the front panels "S_usu01_ie2_kai1" and "S_usu01_ie2_kai2" about z by +LW(0)/2 and -LW(0)/2.
+ */
 EVT_BEGIN(evt_wall_2_1)
     SET_FLOAT_VALUE(LW(1), LW(0))
     MULTIPLY_FLOAT(LW(1), FLOAT(0.5f))
@@ -2113,6 +2247,11 @@ EVT_BEGIN(loop_msg)
     RETURN
 EVT_END()
 
+/**
+ * Shop quarrel chatter, started when Mario enters the shop or comes back from the storeroom:
+ * through loop_msg the dandy (stg4_usu_61_3, swearing he just woke up in the shop)
+ * and the shopkeeper (stg4_usu_61_4, demanding why he was there with his wife) repeat their lines.
+ */
 EVT_BEGIN(mise_kiza_msg)
     BEGIN_SIBLING_EVENT
         SET_VALUE(LW(0), STRING("キザ野郎"))
@@ -2147,6 +2286,10 @@ EVT_BEGIN(mawari_house_delay)
     RETURN
 EVT_END()
 
+/**
+ * Shop open callback (evtOpen of door_2_1): dips the BGM and ambience and low-pass filters the ambience,
+ * stops the sounds heard from outside (usu01_gusun) and starts the quarrel chatter (mise_kiza_msg).
+ */
 EVT_BEGIN(door_2_1_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -2179,6 +2322,10 @@ DoorParam door_2_1 = {
     mawari_house_delay, // evtClose
 };
 
+/**
+ * Script helper that blocks forever: each time Mario's sleep animation (M_N_5A) loops it plays
+ * "SFX_VOICE_MARIO_SLEEP1" at his position and stores the sound id in GW(10).
+ */
 USER_FUNC(sleep_voice) {
     MarioWork* mario = marioGetPtr();
     s32 loops;
@@ -2196,6 +2343,10 @@ USER_FUNC(sleep_voice) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: builds a -1 terminated list of the items in Mario's pouch (first 20 slots) in newly allocated
+ * memory, returns the pointer in args[0].
+ */
 USER_FUNC(get_item_list) {
     EvtWord* args = event->args;
 #ifdef VERSION_G8ME01
@@ -2218,6 +2369,7 @@ USER_FUNC(get_item_list) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: frees the list that get_item_list allocated (pointer in args[0]). */
 USER_FUNC(delete_item_list) {
 #ifdef VERSION_G8ME01
     void* p = (void*)evtGetValue(event, event->args[0]);
@@ -2228,6 +2380,10 @@ USER_FUNC(delete_item_list) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: returns in args[1] whether item args[0] counts as food for the aunt's request:
+ * its usable_locations has the menu-use bit (4); aunt_talk turns anything else down as not edible.
+ */
 USER_FUNC(check_tabemono) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -2241,6 +2397,10 @@ USER_FUNC(check_tabemono) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: returns in args[1] TRUE if the NPC that the A button would talk to this frame (talkTarget)
+ * is the one named args[0].
+ */
 USER_FUNC(chk_fuki) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -2254,6 +2414,7 @@ USER_FUNC(chk_fuki) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: hides the six shop display objects in obj_list. */
 USER_FUNC(shop_item_disp_off) {
     s32 i;
 
@@ -2263,6 +2424,7 @@ USER_FUNC(shop_item_disp_off) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: shows the six shop display objects in obj_list. */
 USER_FUNC(shop_item_disp_on) {
     s32 i;
 
@@ -2287,6 +2449,10 @@ USER_FUNC(ie2_npc_disp_off) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper run when Mario comes back from the storeroom: the reverse of ie2_npc_disp_off
+ * (the shop's people ignore the map's blend colour again and the chest demon takes it).
+ */
 USER_FUNC(ie2_npc_disp_on) {
     const char* hide[] = {"\202\250\223X\202\314\211\234\202\263\202\361", "\203L\203U\226\354\230Y",
                           "\203u\203^\203L\203U\226\354\230Y", "\223X\202\314\216\345\220l", NULL};
@@ -2302,6 +2468,10 @@ USER_FUNC(ie2_npc_disp_on) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: sets the talk hook script (fook_evt) of the ShopperData at args[0] to args[1];
+ * the init script picks shopper_talk1 or shopper_talk2 by story progress.
+ */
 static USER_FUNC(set_fook_evt) {
     EvtWord* args = event->args;
     s32* work = (s32*)evtGetValue(event, args[0]);
@@ -2310,6 +2480,10 @@ static USER_FUNC(set_fook_evt) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: gives each pig NPC in booboo_name[] that is present in the room (up to eight) the "paper,
+ * no ambient light" material flag.
+ */
 static USER_FUNC(booboo_main) {
     u32 i;
 
@@ -2321,6 +2495,7 @@ static USER_FUNC(booboo_main) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper that runs until blocked: each frame it hides any NPC parked at y <= -1000 and shows the rest. */
 static USER_FUNC(npc_process) {
     NpcWork* wp = npcGetWorkPtr();
     NpcEntry* npc = wp->entries;
@@ -2483,18 +2658,32 @@ EVT_BEGIN(evt_ie2_door2_2)
     RETURN
 EVT_END()
 
+/**
+ * Door script for house 3's door "S_usu01_ie3_door" (evtIn of door_3):
+ * turns it about y by LW(0) scaled to door units.
+ */
 static EVT_BEGIN(evt_door_3_1)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5546875f))
     CALL(evt_mapobj_rotate, 1, STRING("S_usu01_ie3_door"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door script for house 3's door (evtOut of door_3,
+ * run with the door-fall sound as the house front opens or closes):
+ * tilts "S_usu01_ie3_door" about x by half of LW(0) (0 to 180).
+ */
 static EVT_BEGIN(evt_door_3_2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S_usu01_ie3_door"), LW(0), 0, 0)
     RETURN
 EVT_END()
 
+/**
+ * Wall script of house 3 (evtWall of door_3, LW(0) 0 to 180):
+ * tilts the front panel "S_usu01_ie3_kai1" about x by -LW(0)/2,
+ * then 10 frames later "S_usu01_ie3_kai2" by +LW(0)/2, so the second panel trails the first.
+ */
 static EVT_BEGIN(evt_wall_3)
     SET_FLOAT_VALUE(LW(1), LW(0))
     MULTIPLY_FLOAT(LW(1), FLOAT(-0.5f))
@@ -2511,6 +2700,7 @@ const char* door_3_item[] = {
     NULL,
 };
 
+/** House 3 open callback: dips BGM and ambience to 50 and low-pass filters the environment sound. */
 static EVT_BEGIN(door_3_open)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -2518,6 +2708,7 @@ static EVT_BEGIN(door_3_open)
     RETURN
 EVT_END()
 
+/** House 3 close callback: restores BGM and ambience and removes the low-pass filter. */
 static EVT_BEGIN(door_3_close)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -2610,6 +2801,10 @@ EVT_BEGIN(usu01_gusun)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene body: replaces the gatekeeper with the gatekeeper pig at (400, 0, -55),
+ * rings the temple bell and returns control.
+ */
 EVT_BEGIN(evt_monban_buta_main)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("ブタ門番"), 400, 0, -55)
@@ -2634,6 +2829,10 @@ EVT_BEGIN(evt_monban_buta)
     RETURN
 EVT_END()
 
+/**
+ * Variant of evt_monban_buta spawned by the shop's close callback (mawari_house_delay):
+ * waits one second instead of for the entry move.
+ */
 EVT_BEGIN(evt_monban_buta2)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_02_DINGE)
         RETURN
@@ -2686,6 +2885,12 @@ static s32 lock_tbl[] = {
     ITEM_SHOP_KEY, -1,
 };
 
+/**
+ * Check script of the storeroom lock ("usu_00_lock"):
+ * with the Shop Key in the pouch Mario picks it from the item menu (backing out cancels the unlock);
+ * without it, once the shopkeeper's wife has made her plea she turns to Mario,
+ * says her husband must have lost the key in the woods (stg4_usu_57) and the unlock is cancelled.
+ */
 static EVT_BEGIN(lock_item_check)
     CALL(evt_pouch_check_item, ITEM_SHOP_KEY, LW(0))
     IF_INT_GREATER(LW(0), 0)
@@ -2748,6 +2953,11 @@ static ShopperData35 shopper_data = {
     {"usugurashop_00", "usugurashop_01", "usugurashop_02", "usugurashop_03", "usugurashop_04", "usugurashop_05", "usugurashop_06", "usugurashop_07", "usugurashop_08", "usugurashop_09", "usugurashop_10", "usugurashop_11", "usugurashop_12", "usugurashop_13", "usugurashop_14", "usugurashop_15", "usugurashop_16", "usugurashop_17", "usugurashop_18", "usugurashop_19", "usugurashop_20", "usugurashop_21", "usugurashop_22", "usugurashop_23", "usugurashop_24", "usugurashop_25", "usugurashop_26", "usugurashop_27", "usugurashop_28", "usugurashop_29", "usugurashop_30", "usugurashop_31", "usugurashop_32", "usugurashop_33", "usugurashop_34"}, // msgs
 };
 
+/**
+ * Talk hook (fook_evt) of the shop woman from the storeroom unlock to the Doopliss fight:
+ * she begs Mario to restore her husband (stg4_usu_59);
+ * LW(0) = -100 makes the shop talk continue in the same message box.
+ */
 EVT_BEGIN(shopper_talk1)
     CALL(evt_msg_print, 0, STRING("stg4_usu_59"), 0, STRING("me"))
     SET_VALUE(LW(0), -100)
@@ -2771,6 +2981,7 @@ static BoobooName booboo_name[] = {
     {/*"ブタ３人娘Ｃ"*/"\x83\x75\x83\x5E\x82\x52\x90\x6C\x96\xBA\x82\x62", 4, 1},
 };
 
+/** Empty script (just returns) that nothing in the tree uses. Guess: by its name, meant for getting the tube ("roll") curse. */
 EVT_BEGIN(evt_roll_get)
     RETURN
 EVT_END()
@@ -2952,6 +3163,7 @@ static void majin_callback(s32 type) {
     }
 }
 
+/** Script helper: turns the "pera_box" chest to face 135 degrees. */
 USER_FUNC(box_r) {
     MapObjectEntry* mobj = mobjNameToPtr("pera_box");
 
@@ -2961,10 +3173,12 @@ USER_FUNC(box_r) {
 }
 
 
+/** Script helper: blocks until the channel 1 BGM has started. */
 static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** Script helper: turns the "mobj_box00" chest to face 135 degrees. */
 USER_FUNC(mobj_ry) {
     MapObjectEntry* mobj = mobjNameToPtr("mobj_box00");
 
@@ -2973,6 +3187,10 @@ USER_FUNC(mobj_ry) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script: shows or hides a tree map object depending on Mario's distance (LW(10) object, LW(11) radius),
+ * toggling LF(0).
+ */
 EVT_BEGIN(tree_onoff)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -2994,6 +3212,7 @@ EVT_BEGIN(tree_onoff)
     RETURN
 EVT_END()
 
+/** Hammer hook of tree "S_usu01_ki01" (tree_tbl): crow J plays A_1 for 1.5 seconds, then S_1. Guess: A_1 is the crow flapping. */
 static EVT_BEGIN(evt_ki_1)
     CALL(evt_npc_set_anim, STRING("カラスＪ"), STRING("A_1"))
     WAIT_MS(1500)
@@ -3001,6 +3220,10 @@ static EVT_BEGIN(evt_ki_1)
     RETURN
 EVT_END()
 
+/**
+ * Hammer hook of tree "S_usu01_ki02" (tree_tbl): crows H and I play A_1 for 1.5 seconds, then S_1.
+ * Guess: A_1 is the crows flapping.
+ */
 static EVT_BEGIN(evt_ki_2)
     CALL(evt_npc_set_anim, STRING("カラスＨ"), STRING("A_1"))
     CALL(evt_npc_set_anim, STRING("カラスＩ"), STRING("A_1"))
@@ -3010,6 +3233,10 @@ static EVT_BEGIN(evt_ki_2)
     RETURN
 EVT_END()
 
+/**
+ * Hammer hook of tree "S_usu01_ki03" (tree_tbl): crows F and G play A_1 for 1.5 seconds, then S_1.
+ * Guess: A_1 is the crows flapping.
+ */
 static EVT_BEGIN(evt_ki_3)
     CALL(evt_npc_set_anim, STRING("カラスＦ"), STRING("A_1"))
     CALL(evt_npc_set_anim, STRING("カラスＧ"), STRING("A_1"))
@@ -3027,6 +3254,7 @@ static TreeAccess tree_tbl[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/** Registers tree_tbl with the shared tree-shaking script. */
 EVT_BEGIN(usu_01_tree_init)
     SET_VALUE(LW(0), PTR(tree_tbl))
     CALL_CHILD(PTR(evt_sub_tree_access_entry))

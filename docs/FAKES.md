@@ -599,3 +599,12 @@ Why a no-op cast or a spare temp can change the output: MWCC builds an expressio
 | Both | src/window/win_root.c | winMsgDisp | the != 0 test is redundant; wp->msgItem > 0 alone changes the object | see comment |
 | Both | src/window/win_root.c | sort_4_3_func | re-indexes itemDataTable instead of using db (same pointer); db->... changes the object | see comment |
 | Both | src/window/win_root.c | winMailDisp | the texture id goes through void* casts; pouchCheckMail(id) == 2 ? 0x5E : 0x5D changes the object | see comment |
+| Both | rels/dmo/src/dmo_00.c | demo_window | alpha multiplied by 255 and divided back; using winAlpha directly changes the object. | see comment |
+| Both | rels/eki/src/eki_00.c | evt_moamoa_end_wait | discarded pure getter call retained; removing it changes the retail object. | see comment |
+| Both | rels/eki/src/eki_03.c | USER_FUNC | discarded getter call; removing it changes the object. | see comment |
+| Both | rels/end/src/end_00.c | evt_end_staff_roll_init | empty five-iteration loop retained; removing it changes the object. | see comment |
+| Both | rels/mri/src/driver/punidrv.c | puniLoadTev | unused color locals retained; removing them changes the object. | see comment |
+| Both | rels/muj/src/muj_05.c | evt_dokuroiwa_command_check | empty seven-iteration loop; removing it changes the object. | see comment |
+| Both | rels/muj/src/muj_10.c | suifu_option_func | double-negation addition; either plain addition order changes the object. | see comment |
+| Both | rels/muj/src/muj_12.c | muj_item_move_3d_position | reuse the expired first-call parameter; direct elapsed arguments change the object. | see comment |
+| Both | rels/win/src/window/win_00.c | win_item_move_3d_position | elapsed is copied into isFirstCall; using elapsed directly changes the object. | see comment |

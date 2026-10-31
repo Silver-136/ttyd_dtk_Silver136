@@ -46,6 +46,13 @@ static EvtWord all_fire_attackEvent_sub[10];
 static EvtWord all_fire_attack_event[321];
 static EvtWord wait_event[6];
 
+/**
+ * Script helper: args[0] = source unit, args[1] = destination unit.
+ * Copies the current HP (clamped to the destination's maximum)
+ * and the size-change status from one Lava Bubble to another, and resets the destination's HP gauge to match.
+ * The Lava Bubble's friend_event calls it right after spawning a second Lava Bubble (the split),
+ * so the new one starts with the same HP.
+ */
 static USER_FUNC(bubble_copy_status) {
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
@@ -264,6 +271,10 @@ static BattleUnitSetup entry_bubble = {
     NULL, // itemDropTable
 };
 
+/**
+ * Init script of the Lava Bubble: registers its wait, attack, damage and confusion handlers and puts it at y 10,
+ * which is also its home position.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -527,6 +538,12 @@ static USER_FUNC(eff_fire) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * The Lava Bubble's fireball: it pauses to talk to itself (pose T_1),
+ * then detaches its fire part (part 2) and throws it at the target on a curved path in three stages,
+ * with SFX_ENM_BUBBLE_ATTACK2 and ATTACK3.
+ * The ball bursts into smoke on the target and deals the burning damage.
+ */
 static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -651,6 +668,10 @@ static USER_FUNC(eff_all_fire) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Helper of all_fire_attack_event: starts the all-targets flame effect for one of its flames
+ * and waits 120 frames. Not called by any unit table in this file.
+ */
 static EVT_BEGIN(all_fire_attackEvent_sub)
     BEGIN_SIBLING_EVENT
         CALL(eff_all_fire, UNIT_ID_SELF, LW(0))
@@ -659,6 +680,13 @@ static EVT_BEGIN(all_fire_attackEvent_sub)
     RETURN
 EVT_END()
 
+/**
+ * An attack that sets all of the party on fire:
+ * it moves to x -40, shakes in place for 20 rounds while spawning ten flames (all_fire_attackEvent_sub),
+ * then checks every target in turn and damages them (the defence action command result is taken once,
+ * for the first target). It then returns home.
+ * Nothing in the unit's tables or attack_event calls it, so it is unused.
+ */
 static EVT_BEGIN(all_fire_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -765,6 +793,7 @@ static EVT_BEGIN(all_fire_attack_event)
     RETURN
 EVT_END()
 
+/** Wait script: plays the Lava Bubble's idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

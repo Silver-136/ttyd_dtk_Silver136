@@ -21,6 +21,10 @@ USER_FUNC(evt_kagemario_init);
 static EvtWord evt_check[4];
 EvtWord evt_usu_kagemario_party_kill[42];
 
+/**
+ * Map TEV callback 10 that draws Shadow Mario: appends a TEV stage that outputs a flat color,
+ * black when Mario is in the background (flipped) mode and dark purple (77, 9, 82) otherwise.
+ */
 static void callback(MapTevCallbackInfo* info) {
     s32 stage = info->tevStage;
     s32 texMap = info->texMap;
@@ -46,6 +50,11 @@ static void callback(MapTevCallbackInfo* info) {
     info->texMap = texMap;
 }
 
+/**
+ * Turns the Shadow Mario look on (nonzero) or off:
+ * sets up TEV callback 10 for Mario's three paper-anim groups and toggles MARIO_FLAG_IS_SHADOW_MARIO.
+ * Always returns 0.
+ */
 static s32 color_change_evt(s32 on) {
     s32 i;
 
@@ -64,6 +73,10 @@ static s32 color_change_evt(s32 on) {
     return 0;
 }
 
+/**
+ * Script helper that blocks forever after clearing the Shadow Mario tint from the active partner's pose,
+ * so the partner is not drawn dark.
+ */
 static USER_FUNC(check) {
     if (partyGetPtr(PARTY_SLOT_PARTY) != NULL) {
         animPoseSetMaterialFlagOff(partyGetPtr(PARTY_SLOT_PARTY)->paperAnimGroup, MAP_OBJ_TEV_CALLBACK(10));
@@ -71,6 +84,10 @@ static USER_FUNC(check) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Called by the map init scripts: if the story progress byte is in the range 201 to 211 (Doopliss has Mario's
+ * name) it turns Shadow Mario on and starts the partner-tint cleaner, otherwise it turns it off.
+ */
 USER_FUNC(evt_kagemario_init) {
     s32 sequence = swByteGet(0); // GSW_STORY_PROGRESS
 
@@ -83,17 +100,26 @@ USER_FUNC(evt_kagemario_init) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: turns the Shadow Mario look on or off from args[0]. */
 static USER_FUNC(evt_kagemario_change) {
     color_change_evt(event->args[0]);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: clears the two remembered previous-partner ids in Mario's work area,
+ * so no partner is called back afterwards.
+ */
 static USER_FUNC(test) {
     marioGetPtr()->prevPartyMemberId[PARTY_SLOT_PARTY] = PARTY_MEMBER_NONE;
     marioGetPtr()->prevPartyMemberId[PARTY_SLOT_FOLLOWER] = PARTY_MEMBER_NONE;
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script run once by evt_kagemario_init: calls the check helper,
+ * which keeps the partner free of the Shadow Mario tint.
+ */
 static EVT_BEGIN(evt_check)
     CALL(check)
     RETURN

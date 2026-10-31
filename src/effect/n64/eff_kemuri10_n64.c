@@ -52,6 +52,11 @@ static effN64Vtx stg_houki_kemuri_v[] = {
 void effKemuri10Main(EffectEntry* effect);
 void effKemuri10Disp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns smoke effect 10 at (x, y, z) heading along (dx, dy, dz);
+ * a zero direction makes no effect (NULL is returned).
+ * Spawned by evt_npc.c beside a moving NPC and by event scripts through evt_eff.
+ */
 EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, f32 dz, f32 scale) {
     EffectEntry* effect;
     EffKemuri10N64Work* work;
@@ -141,6 +146,11 @@ EffectEntry* effKemuri10N64Entry(s32 type, f32 x, f32 y, f32 z, f32 dx, f32 dy, 
     return effect;
 }
 
+/**
+ * Lives 16 frames.
+ * The alpha rises and the velocity decays for the first 11 frames, then both drop off quickly;
+ * the scale grows by 5% per frame and the texture offset scrolls.
+ */
 void effKemuri10Main(EffectEntry* effect) {
     EffKemuri10N64Work* work;
     Vec position;
@@ -187,6 +197,7 @@ void effKemuri10Main(EffectEntry* effect) {
     dispEntry((CameraId)camera, dispCalcZ(&position), 2, (DispCallback)effKemuri10Disp, effect);
 }
 
+/** Draws the smoke cloud mesh (stg_houki_kemuri_v, 192 vertices) with texture 0x1F, oriented by the direction frame. */
 void effKemuri10Disp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera = camGetPtr(cameraId);
     EffKemuri10N64Work* work = effect->userdata;

@@ -257,6 +257,13 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/**
+ * Takes the Swoopula off the ceiling.
+ * If it still hangs from it (attribute 2) the script clears that, sets the flying attribute 4,
+ * restores the flying pose table, offsets and normal damage script,
+ * and lowers it and its home position by 70 units; the home position ends up in LW(0..2) either way.
+ * Called when it is hit, countered, or when the ceiling falls, and at init if it starts already in the air.
+ */
 static EVT_BEGIN(ceil_sky_event)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -282,6 +289,11 @@ static EVT_BEGIN(ceil_sky_event)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the Swoopula: installs its wait, attack, damage (the ceiling version),
+ * confusion and ceiling-fall handlers, the wing-flap pose sound table and the offsets for hanging upside down.
+ * If unit work 0 is 1 it starts already off the ceiling and moves to its home position.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -303,6 +315,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event 48 (the battle opens with Mario's or the partner's First Strike on it) of the Swoopula:
+ * it leaves the ceiling,
+ * is set to y 10 and waits for the attack to end.
+ */
 static EVT_BEGIN(dmg_first_attack_pos)
     CALL_CHILD(PTR(ceil_sky_event))
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 10, LW(2))
@@ -310,6 +327,7 @@ static EVT_BEGIN(dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/** Damage script of the Swoopula once it is in the air: runs the default damage handling on itself. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -317,6 +335,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage script of the Swoopula while it hangs from the ceiling:
+ * runs the default damage handling, then, unless the hit has damage code 512 without 2048 or did no damage,
+ * it leaves the ceiling (ceil_sky_event) and flies down to its home position over 60 frames.
+ */
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -337,6 +360,10 @@ static EVT_BEGIN(damage_event_ceil)
     RETURN
 EVT_END()
 
+/**
+ * Counter-damage script of the Swoopula: leaves the ceiling (ceil_sky_event) and
+ * then runs the shared counter-damage handling.
+ */
 static EVT_BEGIN(counter_damage_event)
     CALL_CHILD(PTR(ceil_sky_event))
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -346,6 +373,10 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Ceiling-fall script of the Swoopula: runs the default damage handling,
+ * then leaves the ceiling (ceil_sky_event) and flies down to its home position over 60 frames.
+ */
 static EVT_BEGIN(ceil_fall_ready_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -547,6 +578,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait script: plays the Swoopula's idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

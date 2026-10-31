@@ -20,6 +20,14 @@ typedef struct TimingWideWork {
 
 static void actionCommandDisp(f32 x, f32 y);
 
+/**
+ * Per-frame driver of action command 11, used by Mario's Fire Drive and Vivian's Infatuate.
+ * Within params[1] frames the input must come between frames params[2] and params[3]:
+ * params[0] 5 presses A, 0/1 lets go of the stick held left/right, 2/3 the same on the release edge,
+ * 4 first waits for a tilt left.
+ * outputParams[0] is 1 on success or -1 on a mistimed input, [2] whether the window is open now.
+ * Timing out fails.
+ */
 s32 battleAcMain_TimingWide(BattleWork* work) {
     BattleActions* ac = &work->actionCommands;
     TimingWideWork* tw = (TimingWideWork*)ac->work;
@@ -204,10 +212,16 @@ s32 battleAcMain_TimingWide(BattleWork* work) {
     return 1;
 }
 
+/** Returns the result word: 1 while running, 2 on success, 0 on failure. */
 s32 battleAcResult_TimingWide(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/**
+ * Display callback: slides the icon in from the left over 20 frames (acFlags bit 0 starts it in place),
+ * and once the command ends keeps it up for 40 frames before sliding it out
+ * unless acFlags bits 1/2 keep it there.
+ */
 void battleAcDisp_TimingWide(CameraId cameraId, void* param) {
     BattleWork* work = (BattleWork*)param;
     BattleActions* ac = &work->actionCommands;
@@ -256,6 +270,7 @@ void battleAcDisp_TimingWide(CameraId cameraId, void* param) {
     }
 }
 
+/** Called by btlevtcmd_StopAC: starts the 60-frame end wait. */
 void battleAcDelete_TimingWide(BattleWork* work) {
     work->actionCommands.mAcState = 0x3EC;
 }
@@ -269,6 +284,10 @@ void battleAcDelete_TimingWide(BattleWork* work) {
         pos.y = 50.0f + y;                          \
         iconDispGx(&pos, ICON_FLAG_2D, (id), 1.0f); \
     }
+/**
+ * Draws the button or stick icon, flipping between its two poses as the cue
+ * while the window is open (acFlags bit 4 swaps them after the input).
+ */
 static void actionCommandDisp(f32 x, f32 y) {
     BattleWork* work = _battleWorkPointer;
     BattleActions* ac = &work->actionCommands;

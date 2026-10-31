@@ -207,6 +207,11 @@ BattleWeapon weapon_poison_pakkun_breath_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack event (also its confusion event) of the Putrid Piranha: on a first strike it bites at once;
+ * otherwise it may use an item, and else it bites (normal_attack_event, weight 60)
+ * or breathes poison (breath_event, weight 40).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -242,6 +247,12 @@ static EVT_BEGIN(attack_event)
         RETURN
 EVT_END()
 
+/**
+ * Poison breath of the Putrid Piranha: it burrows,
+ * re-emerges at the front (x = -40) and breathes a stream of poison gas (eff_poison_breath) at the selected
+ * target (weapon_poison_pakkun_breath_attack is single-target):
+ * 2 damage and a 50% chance of Poison (1 a turn for 10 turns); then it returns (return_event).
+ */
 static EVT_BEGIN(breath_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -429,6 +440,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init event of the Putrid Piranha: installs its wait, attack, damage and confusion (the attack event) events,
+ * raises its hit cursor by 50 and records its shadow size (shadow_scale_memory).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -703,6 +718,7 @@ static USER_FUNC(shadow_scale_return) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: shrinks the plant's shadow from its stored size to 0 over 15 frames as it burrows. */
 static USER_FUNC(shadow_scale_small) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -719,6 +735,10 @@ static USER_FUNC(shadow_scale_small) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper: remembers the current shadow size of the plant's body part in unit work 0 for the shrink
+ * and grow helpers.
+ */
 static USER_FUNC(shadow_scale_memory) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
@@ -739,6 +759,10 @@ static USER_FUNC(pakkun_ceil_exist) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: spawns one green poison-breath puff (vapor effect, colour 32, 115, 100) at a random spot on the
+ * target side of the stage: x near -125 when args[0] is 0, otherwise near 125.
+ */
 static USER_FUNC(eff_poison_breath) {
     f32 x;
     f32 y;

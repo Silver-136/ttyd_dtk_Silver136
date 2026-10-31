@@ -2587,6 +2587,13 @@ NpcTerritoryInfo btl_tik_setup_no_tbl[] = {
     {0},
 };
 
+/**
+ * Script helper that moves one wave object of the sewer battle stage up and down and sideways.
+ * args: [0] stage object name, [1] and [4] the variables holding the X and Y phase counters,
+ * [2] and [5] the X and Y periods in frames, [3] and [6] the X and Y amplitudes.
+ * It sets the object's position offset to a sine in X and a raised sine in Y, then advances both counters,
+ * wrapping at their periods.
+ */
 static USER_FUNC(_wave_offset) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -2616,6 +2623,12 @@ static USER_FUNC(_wave_offset) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Background animation of the sewer battle stage:
+ * forever (one frame at a time) runs _wave_offset on the three wave objects nami_1, nami_2 and nami_3,
+ * with periods of 600, 1100 and 1250 frames and amplitudes of 20 to 50 units in X and 6 to 8 in Y,
+ * so the water in the background rolls.
+ */
 // Advance independent horizontal and vertical phases for each of the three animated wave objects.
 EVT_BEGIN(bgset_tik_wave_event)
     SET_VALUE(LW(0), 0)

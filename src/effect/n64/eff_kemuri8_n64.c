@@ -41,13 +41,20 @@ typedef struct EffKemuri8N64Work {
 void effKemuri8Main(EffectEntry* effect);
 void effKemuri8Disp(CameraId cameraId, EffectEntry* effect);
 
+/** Sets the camera the smoke is drawn with (the entry defaults to camera 4). */
 void effKemuri8N64SetCamId(EffectEntry* effect, s32 camId) {
     ((EffKemuri8N64Work*)effect->userdata)->camId = camId;
 }
 
+/** Returns a * -b (used for the x position of each puff in the ring). */
 inline float inline_fn(f32 a, f32 b) { return a * (-b); }
 
 #pragma opt_propagation off
+/**
+ * Spawns a ring of smoke puffs (7/9/11 for type 0/1/other, radius 14/28/42) around (x, y, z) that fly outward in
+ * the screen plane. Types 3 and up use the same sizes with a hot variant.
+ * Used by the bomb effect and evt_eff64 "kemuri8_n64".
+ */
 EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffKemuri8N64Work* work;
@@ -127,6 +134,7 @@ EffectEntry* effKemuri8N64Entry(s32 type, f32 x, f32 y, f32 z) {
 }
 
 #pragma opt_propagation reset
+/** Steps the shared 16-frame texture animation over 17 frames and flies each puff outward; deletes at the end. */
 void effKemuri8Main(EffectEntry* effect) {
     EffKemuri8N64Work* work = effect->userdata;
     s32 i;
@@ -167,6 +175,10 @@ void effKemuri8Main(EffectEntry* effect) {
     dispEntry(camId, dispCalcZ(&position), 2, (DispCallback)effKemuri8Disp, effect);
 }
 
+/**
+ * Draws each puff twice as a billboarded quad (texture 0x28): a dark offset shadow, then the puff.
+ * Hot puffs shift from white through yellow to red as their counter grows.
+ */
 void effKemuri8Disp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffKemuri8N64Work* work;

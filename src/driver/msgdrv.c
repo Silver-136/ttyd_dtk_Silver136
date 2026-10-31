@@ -110,6 +110,10 @@ const char* language_dir[2] = {"msg", "emsg"};
 int msg_compare(const void* a, const void* b);
 void msgDispKeyWait_render(s32 wXluStage);
 
+/**
+ * Sets up the message system at boot: the blinking star (hoshi_2) pose drawn at key waits
+ * and the always-loaded global message file (slot 1).
+ */
 void msgInit(void) {
     msgw->poseId = animPoseEntry("hoshi_2", 2);
     animPoseSetAnim(msgw->poseId, "HOS_C_1", TRUE);
@@ -243,6 +247,7 @@ void msgLoad(const char* filename, s32 index) {
     }
 }
 
+/** Records y as the top of a new page for paging back with Z, up to 110 pages, unless the window keeps no page list. */
 static inline void msgAddPage(smartEntry* smart, s32 y) {
     MsgWinData* d = smart->address;
     if (!(d->flags & MSG_WIN_FLAG_NO_PAGE_LOG) && d->pageCount < 110) {
@@ -252,6 +257,7 @@ static inline void msgAddPage(smartEntry* smart, s32 y) {
     }
 }
 
+/** Lets A or B (and X after <keyxon>) speed up the printing, unless <dkey> turned that off. */
 static inline void msgCheckSkip(smartEntry* smart, MsgWinData* data) {
     s32 btn, trgv;
     if (!(data->flags & MSG_WIN_FLAG_NO_SKIP)) {
@@ -266,6 +272,7 @@ static inline void msgCheckSkip(smartEntry* smart, MsgWinData* data) {
     }
 }
 
+/** Plays the talking blip once per frame at the window's talk volume, except in small (type 1) windows. */
 static inline void msgVoiceSE(smartEntry* smart) {
     MsgWinData* d = smart->address;
     if (d->window->type != WINDOW_TYPE_SMALL && !msgSEflag) {
@@ -274,6 +281,12 @@ static inline void msgVoiceSE(smartEntry* smart) {
     }
 }
 
+/**
+ * Per-frame text update for a message: runs the window callback on the first frame,
+ * reveals characters at the print speed (faster when skipping), plays talk blips,
+ * drives the speaker's talk animation and stops at key waits, selections and the end;
+ * returns the print state to the window.
+ */
 s32 msgMain(smartEntry* smart) {
     MsgWinData* data = smart->address;
     MsgChar* entry;
@@ -434,6 +447,12 @@ s32 msgMain(smartEntry* smart) {
     }
 #endif
 
+/**
+ * Draws the parsed message text of a window at (x, y):
+ * the characters revealed so far on the current page, with colour, shaking, waves, ruby text,
+ * inline icons and the key-wait star, faded by alpha.
+ * Returns TRUE when something was drawn below the visible area.
+ */
 BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
     s32 al;
     s32 hide;
@@ -676,6 +695,10 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
     return ret;
 }
 
+/**
+ * GX set-up hook for the key-wait star pose: draws it on top of everything (Z always passes, no blending, alpha
+ * test).
+ */
 void msgDispKeyWait_render(s32 wXluStage) {
     AnimationWork* wp = animGetPtr();
 
@@ -696,6 +719,11 @@ u16 hankakuSearch(char c);
    as in the target. The webs the target does split are split by hand: glyphD, wwD, wwR and kR (declared first so they take
    the numbers of the split temps). See FAKES.md */
 #pragma opt_lifetimes off
+/**
+ * Parses a message's markup into the window's character list:
+ * text and Japanese ruby, <col>, <shake>, <wave>, <icon>, <k> key waits, <p> pages, <select>, speeds and waits,
+ * word wrap and scrolling. Called when a window opens and for each added message.
+ */
 void msgAnalize(smartEntry* smart, char* msg) {
     u16 glyphD;
     s32 wwD;
@@ -1369,10 +1397,12 @@ void msgAnalize(smartEntry* smart, char* msg) {
 }
 #pragma opt_lifetimes reset
 
+/** Returns the message driver's work (loaded files and the key-wait star pose). */
 MessageWork* msgGetWork(void) {
     return &msgWork;
 }
 
+/** qsort comparator for the message lookup table: orders entries by tag string, so msgSearch can binary-search. */
 int msg_compare(const void* a, const void* b) {
     s32 result = strcmp((char*)msgSortDvdData + *(u32*)a, (char*)msgSortDvdData + *(u32*)b);
     if (result > 0) {
@@ -1384,6 +1414,10 @@ int msg_compare(const void* a, const void* b) {
     return 0;
 }
 
+/**
+ * Returns the text of the message with this tag, looking in the area file then the global file;
+ * if neither has it, a per-language error string.
+ */
 const char* msgSearch(const char* tag) {
     MessageEntry* entry;
     MsgLookupEntry* lookup;
@@ -1432,6 +1466,10 @@ BOOL _ismbblead(u32 c) {
     return FALSE;
 }
 
+/**
+ * Splits a markup tag at msg (after the '<') into its command name and argument string (up to '>'),
+ * and returns the text after the tag.
+ */
 char* msgGetCommand(char* msg, char* cmd, char* arg) {
     s32 i;
     BOOL inArg = FALSE;
@@ -1468,6 +1506,7 @@ char* msgGetCommand(char* msg, char* cmd, char* arg) {
     return NULL;
 }
 
+/** Maps an <icon> name in message text to its icon id, or -1. */
 s32 msgIconStr2ID(const char* str) {
     u32 i;
 
@@ -1479,6 +1518,11 @@ s32 msgIconStr2ID(const char* str) {
     return -1;
 }
 
+/**
+ * Opens a speech window for message text msg at the given priority (type and options come from the markup),
+ * parses the text and sizes the window for its type; returns the window id.
+ * callback is a function (s32 event, smartEntry*) the window notifies, 0 for none.
+ */
 s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     WindowEntry* window;
     char* copy;
@@ -1567,6 +1611,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
 }
 
 #pragma optimize_for_size on
+/** Window delete callback: frees the message window's parsed text. */
 void msgWindow_Delete(WindowEntry* window) {
     MsgWinData* data;
     s32 i;
@@ -1582,6 +1627,10 @@ void msgWindow_Delete(WindowEntry* window) {
 
 #pragma optimize_for_size reset
 
+/**
+ * Appends message msg to an open message window and resumes printing;
+ * the script commands use it to continue a conversation in the same window.
+ */
 void msgWindow_Add(char* msg, s32 id) {
     WindowEntry* window = windowGetPointer(id);
     smartEntry* smart = window->userdata;
@@ -1592,6 +1641,7 @@ void msgWindow_Add(char* msg, s32 id) {
     window->flags |= WINDOW_FLAG_BUSY;
 }
 
+/** Resumes printing in a message window that is waiting. */
 void msgWindow_Continue(s32 id) {
     WindowEntry* window = windowGetPointer(id);
     MsgWinData* data;
@@ -1602,6 +1652,7 @@ void msgWindow_Continue(s32 id) {
     data->lastUpdateTime = gp->renderTime;
 }
 
+/** Restarts a message window's text from the beginning. */
 void msgWindow_Repeat(s32 id) {
     WindowEntry* window = windowGetPointer(id);
     MsgWinData* data;
@@ -1617,6 +1668,7 @@ void msgWindow_Repeat(s32 id) {
     data->nextEntry = 0;
 }
 
+/** Closes every open message window whose speaker tag is name, putting its speaker back in the standing pose. */
 void msgWindow_ForceClose(const char* name) {
     WindowEntry* window;
     MsgWinData* data;
@@ -1638,6 +1690,7 @@ void msgWindow_ForceClose(const char* name) {
     }
 }
 
+/** Steps a message window back one page (Z at a key wait); FALSE if already on the first page. */
 static inline BOOL msgWinPrevPage(WindowEntry* window) {
     MsgWinData* d = WIN_DATA(window);
     d->page--;
@@ -1648,6 +1701,7 @@ static inline BOOL msgWinPrevPage(WindowEntry* window) {
     return TRUE;
 }
 
+/** Steps a message window forward one page, stopping at the last. */
 static inline void msgWinNextPage(WindowEntry* window) {
     MsgWinData* d = WIN_DATA(window);
     s32 max;
@@ -1659,6 +1713,11 @@ static inline void msgWinNextPage(WindowEntry* window) {
 }
 
 #pragma opt_common_subs off
+/**
+ * Per-frame window update for speech windows: times the speaker's talk animation,
+ * then runs the window states (fade in, printing, key wait with A to continue and Z/B to page back and forward,
+ * fade out and close), playing the page sounds, and queues msgWindow_Disp.
+ */
 void msgWindow_Main(WindowEntry* window) {
     smartEntry* smart = window->userdata;
     MsgWinData* data = smart->address;
@@ -1849,6 +1908,10 @@ void msgWindow_Main(WindowEntry* window) {
 }
 
 #pragma opt_common_subs reset
+/**
+ * Per-frame update for clear (type 11) windows, text with no frame:
+ * prints, waits for A (or X) to page on and B to jump to the last page, then fades out; queues msgWindow_Disp.
+ */
 void msgWindow_Clear_Main(WindowEntry* window) {
     MsgWinData* data = WIN_DATA(window);
 
@@ -1910,6 +1973,10 @@ void msgWindow_Clear_Main(WindowEntry* window) {
     dispEntry(CAMERA_2D, 400.0f - window->priority, 0, msgWindow_Disp, window);
 }
 
+/**
+ * Draw callback for a message window: draws the frame for its type (speech balloon with tail toward the speaker,
+ * sign plate, system box, ...) and the text with msgDisp.
+ */
 void msgWindow_Disp(CameraId camId, void* param) {
     CameraEntry* camera = camGetCurPtr();
     BOOL ret = FALSE;
@@ -2017,6 +2084,11 @@ void msgWindow_Disp(CameraId camId, void* param) {
     }
 }
 
+/**
+ * Per-frame update for selection lists (type 5):
+ * fades in, moves the choice with the stick or D-pad (wrapping), confirms with A,
+ * and on B cancels to the option given by the markup (or -1) unless cancelling is off; then fades out.
+ */
 void selectWindow_Main(WindowEntry* window) {
     MsgWinData* data = window->userdata->address;
     s8 prev;
@@ -2092,6 +2164,10 @@ void selectWindow_Main(WindowEntry* window) {
     dispEntry(CAMERA_2D, 400.0f - window->priority, 0, selectWindow_Disp, window);
 }
 
+/**
+ * Draw callback for a selection list: the white frame, the options,
+ * and the pointing-hand cursor gliding to the selected line.
+ */
 void selectWindow_Disp(CameraId camId, void* param) {
     WindowEntry* window = param;
     MsgWinData* data = window->userdata->address;

@@ -166,6 +166,11 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_bomzou", "c_bakudan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kUntattleable, 0, pose_table_3},
 };
 
+/**
+ * Init for a bomb that Bobbery's Bomb Squad leaves on the field:
+ * registers the wait, phase, attack and damage scripts,
+ * sets the fuse to 2 turns (unit work 0) and clears the stored sizzle sound id (unit work 1).
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))
@@ -188,6 +193,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * At the start of each player phase, burns one turn off the fuse and swaps the pose table to the shorter fuse;
+ * when the fuse reaches 0 it takes the phase, plays the "B_2" pose for 36 frames and explodes.
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -214,6 +223,10 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Idle loop: plays the fuse pose, and once only one turn is left on the fuse puffs a sweat effect above the bomb
+ * every 45-89 frames as a warning.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     LABEL(0)
@@ -232,6 +245,11 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Battle-end data event (tag 63, run by the battle end sequence):
+ * stops the fuse sizzle loop whose sound id Bobbery's Bomb Squad throw stored in unit work 1,
+ * so the sound does not outlive the battle.
+ */
 EVT_BEGIN(end_battle_evt)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_FUSE_SFX, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -241,6 +259,11 @@ EVT_BEGIN(end_battle_evt)
     RETURN
 EVT_END()
 
+/**
+ * The blast: stops the fuse sizzle, plays the fire pillar effect, sound and screen shake, clears stage fog,
+ * hides the bomb, damages every enemy within 50 units horizontally with weapon_bomzou_explosion (3 damage),
+ * then removes the bomb.
+ */
 static EVT_BEGIN(explosion_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, BOMZOU_WORK_FUSE_SFX, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -297,6 +320,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Hit reaction: the default damage script with no special pose (LW10 = -2). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -304,11 +328,16 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** The bomb never acts on its own turn; it just returns to its idle loop. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
+/**
+ * Death data event (tag 49): queues explosion_event (tag 53) as an after-reaction,
+ * so a bomb that is knocked out still blows up.
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_AfterReactionEntry, UNIT_ID_SELF, UNIT_DATA_EXPLOSION_EVENT_BOMZOU)
     RETURN

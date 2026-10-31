@@ -44,6 +44,10 @@ static u8 colb[17] = {130, 196, 255, 255, 255, 255, 255, 255, 202, 144, 130, 130
 void effTimestampMain(EffectEntry* effect);
 void effTimestampDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns ten digit sprites around (x, y, z) that fade in with staggered delays;
+ * a lifetime of 0 or less lasts until soft-deleted. Spawned by event scripts through evt_eff.
+ */
 EffectEntry* effTimestampN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime) {
     EffectEntry* effect;
     EffTimestampN64Work* work;
@@ -87,6 +91,12 @@ EffectEntry* effTimestampN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 
     return effect;
 }
 
+/**
+ * Fades the overall brightness in over 16 frames and out over the last 16 (a delete request sets 64 frames left;
+ * lifetime 1000 means endless); over the last 64 frames the ripple dies down
+ * and over the last 32 the pieces wash to white.
+ * Each of the ten pieces starts fading in (8 per frame) once its pos_data delay runs out. CAMERA_3D, layer 2.
+ */
 void effTimestampMain(EffectEntry* effect) {
     EffTimestampN64Work* work = effect->userdata;
     Vec position;
@@ -144,6 +154,11 @@ void effTimestampMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effTimestampDisp, effect);
 }
 
+/**
+ * Builds a 16-row strip mesh each frame whose rows sway on two sine waves (scaled by the ripple amount)
+ * and draws the ten pieces on it at their pos_data offsets with textures 0x5A/0x5B,
+ * each in its own colour and size, turned to face the camera.
+ */
 void effTimestampDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffTimestampN64Work* work;

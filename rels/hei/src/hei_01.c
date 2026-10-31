@@ -68,6 +68,7 @@ static EvtWord peach_mail[287];
 EvtWord christine_hei_01[46];
 EvtWord hei_01_init_evt[148];
 
+/** Exit event for the map's exits: just returns 0 in LW(0) so the exit proceeds. */
 EVT_BEGIN(bero_out_event)
     SET_VALUE(LW(0), 0)
     RETURN
@@ -223,6 +224,11 @@ static const char* name_tbl[] = {
     "hasi_25",
 };
 
+/**
+ * Plays the flipping bridge: the camera pans to the gap,
+ * a captured image of the bridge pieces is flipped plate by plate through the offscreen texture
+ * until the bridge is across the gap.
+ */
 // GW0 advances through the 25 bridge pieces; each flip captures the previous and next scene.
 EVT_BEGIN(bridge_evt_02)
     CALL(evt_mario_key_onoff, 0)
@@ -282,6 +288,10 @@ EVT_BEGIN(bridge_evt_02)
     RETURN
 EVT_END()
 
+/**
+ * Blue switch (bg_switch) script: after the switch is pressed, flips the bridge across (bridge_evt_02),
+ * enables its collision and sets the story to "The Flip Bridge".
+ */
 EVT_BEGIN(bridge_evt)
     CALL(evt_npc_change_fbat_mode, 7)
     CALL(evt_npc_stop_for_event)
@@ -297,6 +307,10 @@ EVT_BEGIN(bridge_evt)
     RETURN
 EVT_END()
 
+/**
+ * Koops joins: Koops speaks his line, the camera frames him,
+ * Mario and Koops are introduced through the partner lecture and the story progress becomes "Koops Joins".
+ */
 EVT_BEGIN(nokotaro_get)
     CALL(evt_npc_flag_onoff, 0, STRING("ノコタロウ"), NPC_FLAG_TALK_POSE)
     CALL(evt_npc_set_anim, STRING("ノコタロウ"), STRING("PNK_Y_2"))
@@ -324,6 +338,10 @@ EVT_BEGIN(nokotaro_get)
     RETURN
 EVT_END()
 
+/**
+ * Koops asks Mario to join: a yes/no question; yes calls nokotaro_get,
+ * no leads to a second yes/no prompt and then to the same join.
+ */
 EVT_BEGIN(nokotaro_kanyu)
     CALL(evt_msg_select, 0, STRING("stg1_hei_12_yesno1"))
     CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
@@ -342,6 +360,11 @@ EVT_BEGIN(nokotaro_kanyu)
     RETURN
 EVT_END()
 
+/**
+ * Map-init script for Koops (Nokotaro): once both the Sun and Moon Stones have been taken,
+ * the Fuzzy-gold story step is on, and Koops has not asked yet, he waits at the right edge,
+ * walks up to Mario when he comes close and asks to join.
+ */
 EVT_BEGIN(nokotaro_nakama)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 0)
         RETURN
@@ -428,10 +451,15 @@ static EVT_BEGIN(nokotarou_init)
     RETURN
 EVT_END()
 
+/** Empty regular-event script for Koops; the NPC does nothing between conversations. */
 EVT_BEGIN(nokotarou_reg)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for Koops while he waits here: runs the join prompts (nokotaro_kanyu) with Mario frozen,
+ * then lets him go if he already joined.
+ */
 EVT_BEGIN(nokotarou_talk_2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -448,11 +476,16 @@ EVT_BEGIN(nokotarou_talk_2)
     RETURN
 EVT_END()
 
+/** Talk event of Koops: runs nokotarou_talk_2 as a separate event and returns. */
 static EVT_BEGIN(nokotarou_talk)
     SPAWN_EVENT(PTR(nokotarou_talk_2))
     RETURN
 EVT_END()
 
+/**
+ * Spin script for Nokorin (the rolling shell enemy NPC):
+ * plays its rolling sound, stops the walk animation and rotates it 30 degrees per frame.
+ */
 EVT_BEGIN(nokorin_pose)
     CALL(evt_npc_get_position, STRING("ノコリン"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_NOKORIN_MOVE1"), LW(0), LW(1), LW(2), LW(3))

@@ -61,6 +61,10 @@ const char* searchPoseTbl(PoseTableEntry* table, s32 type) {
     return NULL;
 }
 
+/**
+ * Shared 2D render state for the battle overlays:
+ * no culling, alpha blending, Z test always passing without writes, one vertex-colour channel.
+ */
 void btlDispGXInit2DSub(void) {
     GXSetCullMode(GX_CULL_NONE);
     GXSetZCompLoc(GX_TRUE);
@@ -72,6 +76,10 @@ void btlDispGXInit2DSub(void) {
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_VTX, GX_SRC_VTX, 0, GX_DF_CLAMP, GX_AF_NONE);
 }
 
+/**
+ * Sets up GX for flat-coloured 2D quads (position and colour, no texture);
+ * action command gauges use it before btlDispGXQuads2DRasta.
+ */
 void btlDispGXInit2DRasta(void) {
     btlDispGXInit2DSub();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -87,6 +95,7 @@ void btlDispGXInit2DRasta(void) {
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
 }
 
+/** Sets up GX for textured 2D quads (texture times vertex colour); the battle menu uses it before btlDispGXQuads2D. */
 void btlDispGXInit2D(void) {
     btlDispGXInit2DSub();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -113,11 +122,13 @@ f32 getFloatDispOffset(BattleUnitPart* part);
 f32 getGravityDispOffset(BattleUnitPart* part);
 void gravityOffsetControl(BattleUnitPart* part);
 void statusPoseControl(BattleUnitPart* part);
+/** Emits one vertex of a flat-coloured quad at (x, y) on the 2D plane. */
 void btlDispGXPoint2DRasta(f32 x, f32 y, u8 r, u8 g, u8 b, u8 a) {
     GXPosition3f32(x, y, 0.0f);
     GXColor4u8(r, g, b, a);
 }
 
+/** Draws a flat-coloured rectangle from (x0, y0) to (x1, y1); used for action command gauges and bars. */
 void btlDispGXQuads2DRasta(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     btlDispGXPoint2DRasta(x0, y0, r, g, b, a);
@@ -126,12 +137,14 @@ void btlDispGXQuads2DRasta(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 
     btlDispGXPoint2DRasta(x0, y1, r, g, b, a);
 }
 
+/** Emits one textured vertex at (x, y) with texture coordinate (s, t). */
 void btlDispGXPoint2D(f32 x, f32 y, u8 r, u8 g, u8 b, u8 a, f32 s, f32 t) {
     GXPosition3f32(x, y, 0.0f);
     GXColor4u8(r, g, b, a);
     GXTexCoord2f32(s, t);
 }
 
+/** Draws a textured rectangle from (x0, y0) to (x1, y1) with the full texture mapped on it. */
 void btlDispGXQuads2D(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     btlDispGXPoint2D(x0, y0, r, g, b, a, 0.0f, 0.0f);
@@ -139,6 +152,10 @@ void btlDispGXQuads2D(f32 x0, f32 y0, f32 x1, f32 y1, u8 r, u8 g, u8 b, u8 a) {
     btlDispGXPoint2D(x1, y1, r, g, b, a, 1.0f, 1.0f);
     btlDispGXPoint2D(x0, y1, r, g, b, a, 0.0f, 1.0f);
 }
+/**
+ * GX state for the battle texture planes: textured, vertex colour from the vertices,
+ * alpha from the material register.
+ */
 void btlDispTexPlaneInit(void) {
     GXSetCullMode(GX_CULL_NONE);
     GXClearVtxDesc();
@@ -154,6 +171,11 @@ void btlDispTexPlaneInit(void) {
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
 }
 
+/**
+ * Draws texture id of the battle menu texture palette as a quad centred on the loaded matrix,
+ * sized to the texture, with one colour per corner.
+ * Intensity (I4) textures are drawn as a colour mask, others are modulated.
+ */
 void btlDispTexPlainGX(u32 id, GXColor color0, GXColor color1, GXColor color2, GXColor color3) {
     GXTexObj texobj;
     f32 x, y;
@@ -199,6 +221,10 @@ void btlDispTexPlainGX(u32 id, GXColor color0, GXColor color1, GXColor color2, G
     GXTexCoord2f32(0.0f, 1.0f);
 }
 
+/**
+ * Draws a battle menu texture as a flat plane in the 3D scene at (tX, tY, tZ), scaled by (sX, sY);
+ * used for action command signs, status icons, the Yoshi gauge and similar in-world markers.
+ */
 void btlDispTexPlane(f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY, u32 id, GXColor color, s32 unused) {
     CameraEntry* camera;
     Mtx scale, trans, mtx;
@@ -213,6 +239,7 @@ void btlDispTexPlane(f32 tX, f32 tY, f32 tZ, f32 sX, f32 sY, u32 id, GXColor col
     btlDispTexPlainGX(id, color, color, color, color);
 }
 
+/** Draws a battle menu texture with a caller-built model matrix, in camera space. */
 void btlDispTexPlane2(Mtx mtx, u32 id, GXColor color, s32 unused) {
     CameraEntry* camera;
     Mtx mtx2;
@@ -225,6 +252,7 @@ void btlDispTexPlane2(Mtx mtx, u32 id, GXColor color, s32 unused) {
     btlDispTexPlainGX(id, color, color, color, color);
 }
 
+/** Like btlDispTexPlane2 with a separate colour for each corner (used by a Star Power special move's display). */
 void btlDispTexPlane3(Mtx mtx, u32 id, GXColor color0, GXColor color1, GXColor color2, GXColor color3, s32 unused) {
     CameraEntry* camera;
     Mtx mtx2;
@@ -237,6 +265,7 @@ void btlDispTexPlane3(Mtx mtx, u32 id, GXColor color0, GXColor color1, GXColor c
     btlDispTexPlainGX(id, color0, color1, color2, color3);
 }
 
+/** Returns the width and height in texels of a texture in the battle menu texture palette. */
 void btlDispGetTexSize(u32 id, u16* width, u16* height) {
     GXTexObj texobj;
 
@@ -862,6 +891,7 @@ disp:
     }
 }
 
+/** Draws an item stolen from Mario (by a Bandit or similar) floating above the thief's head. */
 void btlUnitStolenItemDisp(CameraId camId, void* param) {
     BattleUnit* unit = param;
     Vec pos;
@@ -881,6 +911,10 @@ void btlUnitPartsBlurControl(BattleUnitPart* part, s32 unused, Mtx orientation, 
     }
 }
 
+/**
+ * Shifts the part's 10-entry blur history down one and stores this frame's matrix,
+ * colour and blur colours in entry 0.
+ */
 void _partsBlurControl(BattleUnitPart* part, s32 flags, Mtx orientation, GXColor color, f32 rotation) {
     BattleWorkUnitPartBlur* blur;
     int i;
@@ -900,6 +934,10 @@ void _partsBlurControl(BattleUnitPart* part, s32 flags, Mtx orientation, GXColor
     }
 }
 
+/**
+ * Draws the part's afterimage trail: each history entry is redrawn with the base colour faded between the two
+ * blur colours along the trail.
+ */
 void btlUnitPartsBlurDisp(CameraId camId, BattleUnitPart* part) {
     BattleWorkUnitPartBlur* blur;
     BattleWorkUnitPartBlurEntry* entry;
@@ -928,6 +966,10 @@ void btlUnitPartsBlurDisp(CameraId camId, BattleUnitPart* part) {
     }
 }
 
+/**
+ * Creates the animation pose for every part of a unit from its model name, starting in its normal pose;
+ * parts without a pose table or model get poseId -1.
+ */
 void btlDispEntAnime(BattleUnit* unit) {
     BattleUnitPart* part;
     const char* name;
@@ -947,6 +989,10 @@ void btlDispEntAnime(BattleUnit* unit) {
     }
 }
 
+/**
+ * Plays a named animation on a part, taking manual control of its pose (status poses no longer override it).
+ * flag marks it as a hurt pose, which keeps the status draw types.
+ */
 void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL damagePose) {
     strcpy(part->poseName, name);
     part->animFlags |= PART_ANIM_EVENT_POSE;
@@ -961,12 +1007,17 @@ void btlDispChangeAnime(BattleUnitPart* part, const char* name, BOOL damagePose)
     }
 }
 
+/** Plays a paper effect animation (pera) on a part, for flattened and similar effects, with the plain draw type. */
 void btlDispChangePeraAnime(BattleUnitPart* part, const char* name) {
     part->animFlags |= PART_ANIM_PERA;
     part->poseType = 0;
     animPoseSetEffectAnim(part->poseId, name, 1);
 }
 
+/**
+ * Hands a part's pose back to automatic status-based selection, clearing manual, blackened,
+ * command-wait and pera states.
+ */
 void btlDispPoseAnime(BattleUnitPart* part) {
     part->animFlags &= ~(PART_ANIM_EVENT_POSE | PART_ANIM_BURNT);
     part->animFlags |= PART_ANIM_CHANGED;
@@ -974,6 +1025,11 @@ void btlDispPoseAnime(BattleUnitPart* part) {
     part->animFlags &= ~PART_ANIM_PERA;
 }
 
+/**
+ * Advances the zero-gravity bob timer of a part
+ * while the battle is in zero gravity (and the unit does not float on its own),
+ * and eases it back to rest when it ends; the cycle is 120 frames.
+ */
 void gravityOffsetControl(BattleUnitPart* part) {
     BOOL active = TRUE;
     BattleWork* wp = _battleWorkPointer;
@@ -996,6 +1052,7 @@ void gravityOffsetControl(BattleUnitPart* part) {
     }
 }
 
+/** Vertical display offset from zero gravity: 0 to 8 units, following the bob timer. */
 f32 getGravityDispOffset(BattleUnitPart* part) {
     return 4.0f * sinfd((part->gravityTimer * 3 + 270) % 360) + 4.0f;
 }
@@ -1023,10 +1080,15 @@ void floatOffsetControl(BattleUnitPart* part) {
     }
 }
 
+/** Vertical display offset from floating: 0 to 4 units, following the float timer. */
 f32 getFloatDispOffset(BattleUnitPart* part) {
     return 2.0f * sinfd((part->floatTimer * 4 + 270) % 360) + 2.0f;
 }
 
+/**
+ * Runs the per-frame effect animation for the part's draw type:
+ * one-shot effects for types 2, 3 and 7, cycling effects for 4 to 6, default (no effect) otherwise.
+ */
 void statusPoseControl(BattleUnitPart* part) {
     switch (part->poseType) {
         case 0:
@@ -1047,6 +1109,7 @@ void statusPoseControl(BattleUnitPart* part) {
     }
 }
 
+/** Clears the part's effect animation once; paper-craft units (no backface flip) also get the paper-craft light. */
 void _pose_def(BattleUnitPart* part) {
     switch (part->poseState) {
         case 0:
@@ -1059,6 +1122,12 @@ void _pose_def(BattleUnitPart* part) {
     }
 }
 
+/**
+ * Starts a one-shot "p_b_st" effect animation for the draw type: PM_Y_1A for translucent (type 7).
+ * Types 2 and 3 (PM_C_1A, PM_F_1A) are never set:
+ * the draw code and btlevtcmd only give a part types 0, 1, 4 and 7.
+ * Guess: C and F are a stone-like and a frozen look, from the effect names.
+ */
 void _pose_one_pattern(BattleUnitPart* part) {
     switch (part->poseState) {
     case 0:
@@ -1081,6 +1150,11 @@ void _pose_one_pattern(BattleUnitPart* part) {
     }
 }
 
+/**
+ * Cycles a "p_b_st" effect animation: type 4 (Dodgy) replays PM_Y_1B every 2.2 seconds;
+ * types 5 and 6 hold PM_C_1A or PM_F_2 for a random while,
+ * then play PM_C_1B or PM_F_1B for 22 frames and start over.
+ */
 void _pose_two_pattern(BattleUnitPart* part) {
     switch (part->poseState) {
         case 0:
@@ -1161,6 +1235,7 @@ void _pose_two_pattern(BattleUnitPart* part) {
 // FAKE: unused constant local kept by a per-function opt_dead_assignments off; without them the object changes
 #pragma push
 #pragma opt_dead_assignments off
+/** Sets a part's status animation speed (2 for Fast, 0.5 for Slow) and applies it times its scripted speed. */
 void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed) {
     f32 unusedOne = 1.0f;
     part->animSpeed = speed;
@@ -1168,6 +1243,7 @@ void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed) {
 }
 #pragma pop
 
+/** Projects a 3D battle position to 2D screen coordinates (the 608x480 2D camera space centred on the screen). */
 void btlGetScreenPoint(Vec* in, Vec* out) {
     CameraEntry* camera = camGetPtr(CAMERA_3D);
     Vec v;
@@ -1183,6 +1259,11 @@ void btlGetScreenPoint(Vec* in, Vec* out) {
     out->z = 0.0f;
 }
 
+/**
+ * Draws a battle menu texture four times, mirrored into the four quadrants around pos,
+ * so one corner texture makes a full symmetrical sight;
+ * used by aiming action commands (Tattle and shot targets).
+ */
 void btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, GXColor color) {
     u16 width, height;
     f32 hw, hh;
@@ -1207,6 +1288,10 @@ void btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, GXColor color) {
     _btlDispTex4(id, pos, scale, rot, off, (Vec){1.0f, -1.0f, 1.0f}, color);
 }
 
+/**
+ * Draws one quadrant of btlDispTex4: offset by pos2, mirrored by scale2, then scaled,
+ * rotated (Z, X, Y) and placed at pos.
+ */
 void _btlDispTex4(u32 id, Vec pos, Vec scale, Vec rot, Vec pos2, Vec scale2, GXColor color) {
     Mtx mtx, trans, scl, rotX, rotY, rotZ, trans2, scl2;
 
@@ -1242,6 +1327,10 @@ void BattleStockExpDisp(void) {
     }
 }
 
+/**
+ * Draws the earned Star Points in the lower right as star icons:
+ * a large one per ten and a small one per unit, up to 100.
+ */
 void _btlStockExpDisp(CameraId camId, void* param) {
     static f32 y;
     static f32 x;

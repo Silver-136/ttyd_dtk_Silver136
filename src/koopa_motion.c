@@ -24,6 +24,7 @@ s32 _rateTbl[4] = {0, 0, 0, 0};
 s32 _rateTbl2[4] = {0, 0, 0, 0};
 f32 scaleDt[9] = {1.0f, 0.0f, 2.0f, 1.0f, 3.0f, 2.0f, 4.0f, 3.0f, 5.0f};
 
+/** Small 30-frame camera shake when big or giant Bowser lands (quake_kpaLandOn). */
 EVT_BEGIN(quake_kpaLandOn_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 30)
     RETURN
@@ -42,6 +43,10 @@ static inline void kpa_hip_launch(MarioWork* m) {
     m->jumpVelocityY = m->jumpAccelerationY;
 }
 
+/**
+ * In the side-scrolling stages, A jumps (or swims when fully underwater); returns 1 if it changed motion.
+ * Always 0 in 3D maps.
+ */
 static inline s32 kpa_stay_chk(void) {
     MarioWork* m2 = marioGetPtr();
     if (kpaGetStageViewType() == 1) {
@@ -58,6 +63,11 @@ static inline s32 kpa_stay_chk(void) {
     return 1;
 }
 
+/**
+ * Spawns the water droplet effect around swimming Bowser:
+ * on every frame of the stroke (sub-states 0x1E/0x1F),
+ * otherwise every 10 frames while rising and every 30 while sinking.
+ */
 static inline void kpa_swim_splash(void) {
     MarioWork* m = marioGetPtr();
     s32 st;
@@ -88,6 +98,10 @@ static inline void kpa_swim_splash(void) {
     }
 }
 
+/**
+ * TRUE when Bowser may ground pound: not already doing one
+ * and KpaWork flag 0x10 (set when he starts swimming) is clear.
+ */
 BOOL kpaHipAttackOk(void) {
     MarioWork* m = marioGetPtr();
     if (m->currMotionId == MARIO_MOTION_HIP) {
@@ -96,6 +110,12 @@ BOOL kpaHipAttackOk(void) {
     return ((m->kpaWork->flags >> 4) & 1) ^ 1;
 }
 
+/**
+ * Side-scrolling horizontal speed from the stick:
+ * accelerates toward a walk (1.3) or dash (2.3) top speed, much lower when fully underwater,
+ * and slows down when the stick is released (faster against a wall).
+ * Sets kpaSpeed, baseSpeed and facing; returns the speed.
+ */
 f32 kpaStickSpd(s32 dash) {
     MarioWork* m = marioGetPtr();
     f32 stick = m->wStickDir1;
@@ -154,6 +174,10 @@ f32 kpaStickSpd(s32 dash) {
     return m->baseSpeed;
 }
 
+/**
+ * Standing motion for Bowser: idle pose, then A jumps (side-scrolling), B breathes fire,
+ * and stick input starts walking.
+ */
 void kpa_stay(void) {
     MarioWork* m = marioGetPtr();
     f32 spd;
@@ -197,6 +221,11 @@ void kpa_stay(void) {
     }
 }
 
+/**
+ * Walking motion for Bowser: plays footstep sounds on land and a slowed swim-walk animation under water,
+ * B breathes fire, A jumps; uses stick speed in the side-scrolling stages
+ * and the per-level walk speed in 3D maps; a full stick tilt switches to dashing and releasing it stops.
+ */
 void kpa_walk(void) {
     MarioWork* m = marioGetPtr();
     if (m->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
@@ -278,6 +307,10 @@ void kpa_walk(void) {
     }
 }
 
+/**
+ * Running motion for Bowser: as kpa_walk but with dash speeds and faster footsteps;
+ * easing off the stick goes back to walking.
+ */
 void kpa_dash(void) {
     MarioWork* m = marioGetPtr();
     if (m->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
@@ -345,6 +378,10 @@ void kpa_dash(void) {
     }
 }
 
+/**
+ * Jumping motion for Bowser: jump pose and sound, rises with the level's jump physics,
+ * cut short if A is released after 3 frames, then switches to falling at the peak.
+ */
 void kpa_jump(void) {
     MarioWork* m = marioGetPtr();
     f32 prevVy;
@@ -384,6 +421,11 @@ void kpa_jump(void) {
     }
 }
 
+/**
+ * Falling motion for Bowser (a non-Bowser player just gets Mario's fall pose):
+ * turns camera follow back on near the ground, marks entering the water in kpa_03
+ * and switches to swimming once fully underwater. Retail keeps the fire pose while breathing fire.
+ */
 void kpa_fall(void) {
     MarioWork* m = marioGetPtr();
     if (m->trigFlags & MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION) {
@@ -441,6 +483,11 @@ void kpa_fall(void) {
     }
 }
 
+/**
+ * Ground pound: hangs for 6 frames, drops at up to 100 units per frame,
+ * and on landing plays the impact sound and the big camera shake;
+ * 20 frames later he stands up, or drops again if A is held and he is not standing on an object.
+ */
 void kpa_hip(void) {
     MarioWork* m = marioGetPtr();
     f32 fall;
@@ -510,6 +557,11 @@ void kpa_hip(void) {
     }
 }
 
+/**
+ * Power-up pickup (the kpa_powerup script helper):
+ * grows Bowser one level with the power-up motion and returns TRUE;
+ * at the giant level gives star invincibility instead and returns FALSE.
+ */
 BOOL kpaPowUp(void) {
     MarioWork* m = marioGetPtr();
     if (kpaGetLevel() < 3) {
@@ -523,6 +575,13 @@ BOOL kpaPowUp(void) {
     return FALSE;
 }
 
+/**
+ * Damage: shrinks Bowser one level with the power-down motion and 3 seconds without hits, returning TRUE;
+ * at the smallest level sets KpaWork flag 0x10000000 instead and returns FALSE.
+ * Called from the NPC contact code.
+ * That flag is Bowser's death: the Super Koopa Bros. stage scripts poll it with evt_koopa_chk_dead
+ * and run kpa_dead, which plays his defeat and restarts the stage.
+ */
 BOOL kpaPowDown(void) {
     MarioWork* m = marioGetPtr();
     kpaCancelAttackMode();
@@ -536,6 +595,7 @@ BOOL kpaPowDown(void) {
     return FALSE;
 }
 
+/** Sets Bowser's collision box for his level: width from kpaGetWidth, height 24, 74, 103.6 or 222. */
 void kpaSetSpec(void) {
     MarioWork* m = marioGetPtr();
     s32 lv;
@@ -552,6 +612,11 @@ void kpaSetSpec(void) {
     }
 }
 
+/**
+ * Power-up motion: flickers Bowser's scale between the old and new level size in five 5-frame steps (scaleDt),
+ * then applies the new collision, shifts the camera for his size and returns to standing;
+ * reaching giant also starts star invincibility.
+ */
 void kpa_powup(void) {
     MarioWork* m = marioGetPtr();
     MarioWork* m2;
@@ -611,6 +676,7 @@ void kpa_powup(void) {
     }
 }
 
+/** Power-down motion: the shrinking version of kpa_powup, ending invincibility at the end. */
 void kpa_powdown(void) {
     MarioWork* m = marioGetPtr();
     MarioWork* m2;
@@ -712,6 +778,11 @@ void kpaSwimMove(void) {
 
 #pragma dont_inline reset
 
+/**
+ * Swimming motion in kpa_03: A starts a swim stroke upward (limited near the surface),
+ * he sinks slowly between strokes, B breathes fire (which freezes the stick),
+ * and stepping onto a platform stops him. Also spawns the droplet effects.
+ */
 void kpa_swim(void) {
     MarioWork* m = marioGetPtr();
     f32 v;
@@ -920,6 +991,7 @@ void kpa_swim(void) {
     }
 }
 
+/** Landing feedback outside kpa_03: the landing thud, and for big or giant Bowser a small camera shake. */
 void quake_kpaLandOn(void) {
     MarioWork* m = marioGetPtr();
     if (kpaGetStageType() != 1) {
@@ -930,6 +1002,7 @@ void quake_kpaLandOn(void) {
     }
 }
 
+/** Starts the ground pound camera shake. */
 void quake_kpaHipAttack(void) {
     evtEntry(quake_kpaHipAttack_evt, 0, 0);
 }

@@ -76,6 +76,11 @@ EvtWord touch_evt[2];
 static EvtWord hint_plate[14];
 EvtWord las_14_init_evt[81];
 
+/**
+ * Calls the evt_img_alloc_capture script command from C:
+ * builds a fake event with the eight arguments (image name, shadow id, offscreen name, alloc mode, and the x, y,
+ * width, height of the capture rectangle).
+ */
 static void _img_alloc_capture(EvtWord name, EvtWord shadowId, EvtWord offName, EvtWord allocMode, EvtWord x, EvtWord y, EvtWord w, EvtWord h) {
     EventEntry event;
     EvtWord args[10];
@@ -92,6 +97,11 @@ static void _img_alloc_capture(EvtWord name, EvtWord shadowId, EvtWord offName, 
     evt_img_alloc_capture(&event, TRUE);
 }
 
+/**
+ * Projects the eight corners of a 100 by 100 by 100 box around the hit object named name to the screen
+ * and returns in x, y, w, h the rectangle that bounds them, clamped to the 608 by 480 capture buffer.
+ * Always returns TRUE.
+ */
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h) {
     Vec pos;
     Vec screen;
@@ -157,6 +167,10 @@ static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h) {
     return TRUE;
 }
 
+/**
+ * Attaches the cloud offscreen buffer of wp to every map group listed in wp->groupNames (up to 8),
+ * so those groups are drawn into the capture.
+ */
 static void _mapsetofs_all(CloudWork* wp) {
     s32 i;
 
@@ -168,6 +182,7 @@ static void _mapsetofs_all(CloudWork* wp) {
     }
 }
 
+/** Detaches the cloud offscreen buffer from every map group listed in wp->groupNames. */
 static void _mapclsofs_all(CloudWork* wp) {
     s32 i;
 
@@ -179,12 +194,20 @@ static void _mapclsofs_all(CloudWork* wp) {
     }
 }
 
+/**
+ * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panel S_door1 by it.
+ */
 static EVT_BEGIN(w_door_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_door1"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation script (opening) for the west door, used as the enter/exit animation of this room's bero entry.
+ * LW(0) holds the angle step of the swing, and the script turns the door panel S_door1 by it.
+ */
 static EVT_BEGIN(w_door_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 1, STRING("S_door1"), 0, LW(0), 0)
@@ -213,6 +236,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Event script: the key chest of las_14 opens and Mario receives Palace Key 0x29. */
 static EVT_BEGIN(box_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
@@ -240,6 +264,10 @@ static Vec v_list[] = {
     {-50.0f, 0.0f, -50.0f},
 };
 
+/**
+ * Event script: runs the cloud-blowing mechanism (evt_cloud_main) of las_14,
+ * the room where Flurrie's gust uncovers the way.
+ */
 static EVT_BEGIN(evt_cloud_main_evt)
     CALL(evt_cloud_main)
     RETURN
@@ -455,6 +483,11 @@ USER_FUNC(evt_las_cloud_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: registers a cloud puzzle.
+ * args[0] is the list of map groups to capture, args[1] the cloud's hit object name,
+ * args[2] the event to run when the cloud has been blown away; starts evt_cloud_main_evt for it.
+ */
 USER_FUNC(evt_las_cloud_ent) {
     EvtWord* args = event->args;
     char** groups;

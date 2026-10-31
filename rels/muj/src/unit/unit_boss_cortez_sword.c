@@ -207,6 +207,11 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_cortez_sword", "c_buki2", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, kCounterTopSpiky | kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };
 
+/**
+ * Init event of Cortez's sword: installs its wait, phase, unison-phase, attack, damage and confusion events,
+ * sets its formation slot (unit work 2) to 0 and its revive countdown (unit work 1) to 0,
+ * and gives it no actions per turn until Cortez's third form.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SOLID_MODEL)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
@@ -222,6 +227,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of Cortez's sword: runs the default damage reaction. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -229,6 +235,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event (tags 37 to 39) run when an attacker is hurt by the sword's spikes:
+ * shows the toge_flush spike flash at its hit position, 40 forward and 5 back in z.
+ */
 static EVT_BEGIN(avoid_thorn_event)
     CALL(btlevtcmd_GetHitPos, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
@@ -237,6 +247,10 @@ static EVT_BEGIN(avoid_thorn_event)
     RETURN
 EVT_END()
 
+/**
+ * Works out the height one of Cortez's weapons (unit LW(9)) should hover at (LW(5), 20 or 60) from the formation
+ * Cortez rolled after the enemy phase (unit work 8 of the owner, 0 to 2) and the weapon's slot (unit work 2).
+ */
 EVT_BEGIN(cortez_weapon_get_home_height)
     SET_VALUE(LW(5), 0)
     CALL(btlevtcmd_GetPos, LW(9), LW(0), LW(1), LW(2))
@@ -306,6 +320,11 @@ EVT_BEGIN(cortez_weapon_set_formation_attribute)
     RETURN
 EVT_END()
 
+/**
+ * Unison phase event of a weapon, before the player's turn:
+ * in Cortez's third form (his unit work 5 is 4) and while the weapon is not knocked down (unit work 1 is 0),
+ * it dives to its height in the new formation and updates its home position.
+ */
 EVT_BEGIN(cortez_weapon_unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -336,6 +355,12 @@ EVT_BEGIN(cortez_weapon_unison_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of a weapon, before the player's turn:
+ * while it is knocked down it counts its revive countdown (unit work 1) down,
+ * and when that reaches 0 the weapon swings upright, flies back to its formation height, recovers full HP,
+ * loses its statuses and becomes targetable again.
+ */
 EVT_BEGIN(cortez_weapon_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108865)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -375,6 +400,15 @@ EVT_BEGIN(cortez_weapon_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Cortez's sword; while knocked down (unit work 1, its revive countdown, is not 0) it only
+ * restarts the wait event.
+ * Otherwise it targets with weapon_cortez_sword_float_attack and dives at the target spinning,
+ * slashing twice with the sword-dance sounds (the second hit is the last),
+ * avoid poses on a dodge and an action-command defence check otherwise.
+ * If a hit is superguarded it recoils home at once;
+ * else it flies off the side of the stage and returns home from the other side.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_DOWN_TURNS, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -637,12 +671,17 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of Cortez's sword: waits for its animation's loop point and plays its pose-table idle pose. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeWaitPlayLoopTiming, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Data event (tag 9) of a weapon's damage reaction:
+ * when the hit did damage it plays the KRT_Z_1 pose on the unit in LW(10) and waits 30 frames.
+ */
 static EVT_BEGIN(cortez_damage_sub_event)
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -655,6 +694,11 @@ static EVT_BEGIN(cortez_damage_sub_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of a sword hit during Cortez's counter phase:
+ * flags the unit hit and, depending on the damage code, plays the knocked-back pose,
+ * runs the sword's data event and lets it fall under gravity.
+ */
 EVT_BEGIN(cortez_weapon_counter_damage_event)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
     SWITCH(LW(0))
@@ -690,10 +734,15 @@ EVT_BEGIN(cortez_weapon_counter_damage_event)
     RETURN
 EVT_END()
 
+/** Empty script that nothing references; the sword's defeat is handled by cortez_weapon_dead_event (data tag 49). */
 static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Death event of a sword: it falls to the stage floor with a clatter, bounces once, sets its home there,
+ * marks itself dead (unit work 1 = 2) and makes the body part untargetable.
+ */
 EVT_BEGIN(cortez_weapon_dead_event)
     CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -721,6 +770,10 @@ EVT_BEGIN(cortez_weapon_dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Break event of a sword: tells its owner Cortez that this slot is gone (writes -1 into the owner's unit work
+ * for the sword's slot), so he no longer counts it.
+ */
 EVT_BEGIN(cortez_weapon_break_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_OWNER, LW(0))
     IF_INT_NOT_EQUAL(LW(0), -1)
@@ -745,6 +798,10 @@ EVT_BEGIN(cortez_weapon_break_event)
     RETURN
 EVT_END()
 
+/**
+ * Death event used when a sword is blown away: it spins at 20 degrees per frame
+ * and flies off the side of the stage; its coins and experience are stored for the player before it leaves.
+ */
 EVT_BEGIN(cortez_weapon_blow_dead_event)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))

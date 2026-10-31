@@ -253,11 +253,22 @@ static void rankingControll(void);
 static void insert(s32* arr, s32 n, s32 from, s32 to);
 static void rankingExit(void);
 static void rankingInit(void);
+/**
+ * Script helper: arg0 = 1 hides the Champ's Belt that tou_champion_belt draws on Rawk Hawk,
+ * 0 shows it again (used when the belt is handed over after the title match).
+ */
 USER_FUNC(tou_champion_belt_onoff) {
     champion_belt_onoff = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that keeps the Champ's Belt sparkle effect (a star-stone effect) attached to the champion NPC
+ * named by arg0.
+ * Each frame it moves the effect to the NPC's "locator8" bone and turns it to face the camera;
+ * it parks the effect at y=-1000 when the NPC has been moved below y=-1000 or the belt is switched off.
+ * Blocks forever, so the caller runs it in its own thread.
+ */
 USER_FUNC(tou_champion_belt) {
     NpcEntry* npc;
     EffectEntry* eff;
@@ -302,6 +313,7 @@ USER_FUNC(tou_champion_belt) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Returns the 3D camera's yaw in degrees (0 to 360), computed from the camera position and look-at point. */
 static f32 camGetRy(void) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     f32 ry = reviseAngle(57.29579f * atan2f(-(cam->cameraAt.x - cam->cameraPos.x), -(cam->cameraAt.z - cam->cameraPos.z)));
@@ -312,10 +324,16 @@ static f32 camGetRy(void) {
     return ry;
 }
 
+/** Single-precision wrapper around atan2 (radians). */
 f32 atan2f(f32 y, f32 x) {
     return atan2(y, x);
 }
 
+/**
+ * Script helper that opens the Glitz Pit ranking board.
+ * The first call picks the page that holds the player's rank (11 fighters per page) and
+ * then every frame handles L/R to flip pages and B to close; returns YIELD (finished) when B is pressed.
+ */
 static USER_FUNC(evt_tou_print_ranking) {
     s32 i;
     s32 rank;
@@ -354,6 +372,11 @@ static USER_FUNC(evt_tou_print_ranking) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * 2D draw callback for the ranking board: a window with the "Ranking" title,
+ * the visible fighters' ranks and names (the player's row in red), the scrolling page animation,
+ * and the up/down arrows with the L/R button icons.
+ */
 static void disp_proc(CameraId cameraId, void* param) {
     FighterData* fighters;
     f32 winW;
@@ -503,6 +526,10 @@ static void disp_proc(CameraId cameraId, void* param) {
     }
 }
 
+/**
+ * Left over from a debug build: walks the ranking but prints nothing.
+ * Kept as a call target (not inlined) to match the original.
+ */
 static void printRanking(void) {
     s32 i;
 
@@ -573,6 +600,11 @@ USER_FUNC(evt_tou_set_ranking_win_lose) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: arg0 = rule id, arg1 receives the message text describing that special rule.
+ * The rule table depends on story progress and on whether the player is ranked lower than 11th;
+ * an unknown id falls back to the last entry.
+ */
 static USER_FUNC(evt_tou_get_rule_msg2) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -614,6 +646,12 @@ static USER_FUNC(evt_tou_get_rule_msg2) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that picks the special rule for the next match.
+ * arg0 = 0 forces the rule with id 6, 10 picks a random rule other than 48, 32 and 64,
+ * anything else picks any rule at random.
+ * Outputs: arg1 = rule name, arg2 = rule id, arg3/arg4 = the rule's two parameters.
+ */
 static USER_FUNC(evt_tou_get_rule_info) {
     EvtWord* args = event->args;
     s32 type = evtGetValue(event, args[0]);
@@ -666,6 +704,12 @@ static USER_FUNC(evt_tou_get_rule_info) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: arg0 = fighter id, arg1 = index of the enemy inside that fighter's battle group.
+ * Finds the NPC tribe (model) of that enemy through its Tattle entry,
+ * with hand-written overrides for a few special enemies, and returns arg2 = model name,
+ * arg3 = Japanese tribe name, which the arena script uses to spawn the opponent's NPC.
+ */
 USER_FUNC(evt_tou_get_fighter_tribe) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -713,6 +757,7 @@ USER_FUNC(evt_tou_get_fighter_tribe) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: arg0 = fighter id; arg1 receives how many enemies that fighter's battle setup contains. */
 USER_FUNC(evt_tou_get_fighter_num) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -721,6 +766,10 @@ USER_FUNC(evt_tou_get_fighter_num) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: arg0 = fighter id; arg1 receives the taunt message key
+ * and arg2 the victory message key shown around that fighter's match.
+ */
 USER_FUNC(evt_tou_get_fighter_battle_msg) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -731,6 +780,10 @@ USER_FUNC(evt_tou_get_fighter_battle_msg) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: arg0 = fighter id; arg1 receives the fighter's current position in the visible ranking (0 is
+ * the champion).
+ */
 static USER_FUNC(evt_tou_get_fighter_rank) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -750,6 +803,10 @@ static USER_FUNC(evt_tou_get_fighter_rank) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: arg0 = fighter id; arg1 receives the message text of the fighter's team title (for example "The
+ * Koopinator").
+ */
 USER_FUNC(evt_tou_get_fighter_name2) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -759,6 +816,10 @@ USER_FUNC(evt_tou_get_fighter_name2) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: arg0 = fighter id; arg1 receives the fighter's name text
+ * and arg2 the battle setup id (index into btlsetup_tou_tbl).
+ */
 USER_FUNC(evt_tou_get_fighter_info) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -769,6 +830,12 @@ USER_FUNC(evt_tou_get_fighter_info) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: arg0 receives the id of the next opponent.
+ * If the last special rule was met it is the fighter ranked directly above the player,
+ * otherwise the one directly below (or above if there is none);
+ * the champion's slot picks the second fighter in the list.
+ */
 static USER_FUNC(evt_tou_get_next_match) {
     EvtWord* args = event->args;
     BOOL reverse = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
@@ -807,6 +874,7 @@ static USER_FUNC(evt_tou_get_next_match) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: arg0 receives the player's current rank (0 is the champion). */
 USER_FUNC(evt_tou_get_ranking) {
     EvtWord* args = event->args;
     s32 i;
@@ -1047,6 +1115,7 @@ static void rankingControll(void) {
     swByteSet(580, rank);
 }
 
+/** Moves arr[from] to index to, shifting the elements in between by one place. */
 static void insert(s32* arr, s32 n, s32 from, s32 to) {
     s32 i;
 
@@ -1065,6 +1134,11 @@ static void insert(s32* arr, s32 n, s32 from, s32 to) {
     }
 }
 
+/**
+ * Script helper that resets the arena ranking when the player starts the tournament again:
+ * saves and frees the old table, takes the Champ's Belt from the inventory,
+ * clears the per-fighter and story flags of the Glitz Pit run, and builds a fresh ranking.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_tou2_00004b50, JP tou2 .text+0x4A8C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(tou2_rankingReset) {
     s32 i;
@@ -1085,12 +1159,17 @@ USER_FUNC(tou2_rankingReset) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper that saves the ranking to the game state
+ * and rebuilds it (used when story progress changes which fighters are listed).
+ */
 static USER_FUNC(evt_rankingReInit) {
     rankingExit();
     rankingInit();
     return EVT_RETURN_DONE;
 }
 
+/** Saves each fighter's below-player flag and points into the saved game state (GSW) and frees the ranking table. */
 static void rankingExit(void) {
     s32 i;
     s32 j;
@@ -1109,6 +1188,12 @@ static void rankingExit(void) {
     _mapFree(rank_wp->entries);
 }
 
+/**
+ * Allocates the ranking table, restores each fighter's below-player flag
+ * and points from the saved game state (or the starting points on the first run),
+ * hides fighters who have not joined yet or have left according to story progress (Sir Swoop, Bandy Andy, The
+ * Destructors), and sorts it.
+ */
 static void rankingInit(void) {
     s32 temp;
     s32 count;
@@ -1181,9 +1266,14 @@ static void rankingInit(void) {
     rankingControll();
 }
 
+/** REL linker stub for unresolved imports; does nothing. */
 void _unresolved(void) {
 }
 
+/**
+ * REL unload entry: saves the ranking, clears the tou_03 event and tou battle tables
+ * and runs the static destructors.
+ */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -1195,6 +1285,10 @@ void _epilog(void) {
     }
 }
 
+/**
+ * REL load entry: runs the static constructors,
+ * registers the tou_03 map init script and the tou battle setup tables, and builds the ranking.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 

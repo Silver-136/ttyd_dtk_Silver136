@@ -32,6 +32,11 @@ typedef struct EffKemuri9N64Work {
 void effKemuri9Main(EffectEntry* effect);
 void effKemuri9Disp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a ring of count smoke puffs around (x, y, z), starting at the angle,
+ * that expand out to radiusEnd while rising, over life frames.
+ * Used for Hooktail/Gloomtail/Bonetail leg smoke (type 1) and via evt_eff64 "kemuri9_n64".
+ */
 EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32 z, f32 radiusEnd, f32 angle) {
     EffectEntry* effect;
     EffKemuri9N64Work* work;
@@ -78,6 +83,7 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
     return effect;
 }
 
+/** Eases the ring radius toward radiusEnd, lifts each puff, advances the texture animation; deletes at end of life. */
 void effKemuri9Main(EffectEntry* effect) {
     EffKemuri9N64Work* work = effect->userdata;
     s32 i;

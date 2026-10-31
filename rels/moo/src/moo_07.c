@@ -68,6 +68,10 @@ static BeroEntry bero_entry_data[] = {
 };
 
 #ifndef VERSION_G8ME01
+/**
+ * Rock-blasting script (JP only): the rock crumbles into an offscreen animation,
+ * then the model and collision of the rock in LW(10)/LW(11) are removed.
+ */
 static EVT_BEGIN(rock_main)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -109,6 +113,10 @@ static EVT_BEGIN(rock_evt0)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for moo_07: entry bero, Moon music and ambience, star animations,
+ * the Bobbery rock (or its removal) and a Courage Shell at (5, 0, 400).
+ */
 EVT_BEGIN(moo_07_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

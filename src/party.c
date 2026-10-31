@@ -39,6 +39,7 @@ s32 partyCtrlNo;
 
 s32 partyEntryMain(s32 memberId);
 
+/** Returns the partner entry in slot index (0 is the main partner, 1 the follower), or NULL for a negative index. */
 PartyEntry* partyGetPtr(s32 index) {
     if (index >= 0) {
         return partyPtrTbl[index];
@@ -46,6 +47,10 @@ PartyEntry* partyGetPtr(s32 index) {
     return NULL;
 }
 
+/**
+ * Returns the entry in the other slot than index (the follower for the main partner and the other way round),
+ * or NULL for a negative index.
+ */
 PartyEntry* anotherPartyGetPtr(s32 index) {
     if (index < 0) {
         return NULL;
@@ -53,6 +58,11 @@ PartyEntry* anotherPartyGetPtr(s32 index) {
     return partyPtrTbl[(index + 1) & 1];
 }
 
+/**
+ * Starts a paper animation group (p_roll, p_plane, p_slit, ...) on the partner, replacing any running one.
+ * The model is hidden during it except for the roll, plane and pipe papers,
+ * and for the paper slit only when the partner is Flurrie.
+ */
 BOOL partyPaperOn(PartyEntry* party, const char* animGroup) {
     BOOL flag;
 
@@ -71,6 +81,7 @@ BOOL partyPaperOn(PartyEntry* party, const char* animGroup) {
     return TRUE;
 }
 
+/** Ends the partner's paper animation and releases its paper pose, if one is active. */
 void partyPaperOff(PartyEntry* party) {
     s32 paperPoseId;
 
@@ -86,6 +97,10 @@ void partyPaperOff(PartyEntry* party) {
     }
 }
 
+/**
+ * Turns off paper-mode lighting on the partner's model (used by the partner motion code when leaving a paper
+ * shape).
+ */
 void partyPaperLightOff(PartyEntry* party) {
     animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
 }
@@ -145,6 +160,12 @@ static inline const char* partyChgPoseIdNoPinch_inl(PartyEntry* party, s32 index
     return pose;
 }
 
+/**
+ * Starts the partner's pose number index from partyPoseTbl (or the 8-bit table in the Famicom pipe,
+ * or Yoshi's colour table) and returns the pose name.
+ * Indexes 1-3 (stand, walk, run) switch to the pinch poses 12-14 when her HP is low.
+ * Does nothing while the pose is locked.
+ */
 const char* partyChgPoseId(PartyEntry* party, s32 index) {
     const char* pose;
     const char* curPose;
@@ -179,6 +200,7 @@ const char* partyChgPoseId(PartyEntry* party, s32 index) {
     return pose;
 }
 
+/** Starts the named pose on the partner unless the pose is locked, already playing, or she is in 8-bit form. */
 void partyChgPose(PartyEntry* party, const char* pose) {
     if (!(party->flags2 & PARTY_DISP_FLAG_POSE_LOCK)) {
         if (party->animName == NULL || strcmp(party->animName, pose)) {
@@ -191,6 +213,10 @@ void partyChgPose(PartyEntry* party, const char* pose) {
     }
 }
 
+/**
+ * Starts the named paper animation on the partner (applied by partyPreDisp) unless the pose is locked
+ * or it is already playing.
+ */
 void partyChgPaper(PartyEntry* party, char* paper) {
     if (!(party->flags2 & PARTY_DISP_FLAG_POSE_LOCK)) {
         if (party->paperAnimName == NULL || strcmp(party->paperAnimName, paper)) {
@@ -201,6 +227,10 @@ void partyChgPaper(PartyEntry* party, char* paper) {
     }
 }
 
+/**
+ * Freezes both partner slots (PARTY_FLAG_CTRL_OFF): driveParty only draws them.
+ * Used by events, battles and windows while the partner must stand still.
+ */
 void partyCtrlOff(void) {
     PartyEntry* party = partyPtrTbl[0];
     if (party) {
@@ -212,6 +242,7 @@ void partyCtrlOff(void) {
     }
 }
 
+/** Lets both partner slots move again after partyCtrlOff. */
 void partyCtrlOn(void) {
     PartyEntry* party = partyPtrTbl[0];
     if (party) {
@@ -223,16 +254,22 @@ void partyCtrlOn(void) {
     }
 }
 
+/** Switches a standing partner (run mode 0) to waiting/following mode 1 (evt_party_run). */
 void partyRun(PartyEntry* party) {
     if (party->runMode == 0) {
         partyChgRunMode(party, 1);
     }
 }
 
+/** Puts the partner in run mode 0: she stops in place with speed 0 instead of following Mario (evt_party_stop). */
 void partyStop(PartyEntry* party) {
     partyChgRunMode(party, 0);
 }
 
+/**
+ * Makes the partner walk for frames frames in direction dir (degrees) at speed (run mode 9, partyForceWalk);
+ * used by evt_party_move.
+ */
 void partySetForceMove(PartyEntry* party, s32 frames, f32 dir, f32 speed) {
     party->targetDir = dir;
     party->forceMoveFrames = frames;
@@ -241,12 +278,17 @@ void partySetForceMove(PartyEntry* party, s32 frames, f32 dir, f32 speed) {
     partyChgMot(party, PARTY_MOTION_WALK);
 }
 
+/** Creates the partner memberId in a free slot and has her pop out of Mario (run mode 4). Returns the slot or -1. */
 s32 partyEntryHello(s32 memberId) {
     s32 id = partyEntryMain(memberId);
     partyChgRunMode(partyGetPtr(id), 4);
     return id;
 }
 
+/**
+ * Creates the partner memberId in a free slot, already standing at her appear position next to Mario,
+ * waiting to follow him (run mode 1). Returns the slot or -1.
+ */
 s32 partyEntry(s32 memberId) {
     PartyEntry* party;
     s32 id;
@@ -266,6 +308,10 @@ s32 partyEntry(s32 memberId) {
     return id;
 }
 
+/**
+ * Creates the partner memberId standing still at x, y, z facing Mario's way (run mode 0),
+ * as after a pipe or when an event places her. Returns the slot or -1.
+ */
 s32 partyEntryPos(s32 memberId, f32 x, f32 y, f32 z) {
     PartyEntry* party;
     s32 index;
@@ -308,6 +354,7 @@ s32 partyEntryPos(s32 memberId, f32 x, f32 y, f32 z) {
     return id;
 }
 
+/** Sends the partner in slot id away with her goodbye animation (run mode 8). Returns FALSE for a negative id. */
 BOOL partyGoodbye(s32 id) {
     BOOL ret = FALSE;
 
@@ -318,6 +365,10 @@ BOOL partyGoodbye(s32 id) {
     return ret;
 }
 
+/**
+ * Removes the partner in slot id at once: runs her member's exit function (not while riding, in the full game),
+ * remembers her as the previous member of that slot, clears the slot and frees the entry and model.
+ */
 s32 partyKill(s32 id) {
     PartyEntry* party;
     MarioWork* player;
@@ -343,6 +394,10 @@ s32 partyKill(s32 id) {
     return 0;
 }
 
+/**
+ * Like partyKill, but forgets the slot's previous member instead of remembering it;
+ * evt_mario uses it for the follower slot.
+ */
 s32 partyKill2(s32 id) {
     PartyEntry* party;
     MarioWork* player;
@@ -364,6 +419,10 @@ s32 partyKill2(s32 id) {
     return 0;
 }
 
+/**
+ * Picks Yoshi's colour at random when he hatches in Glitzville (stg3_12_2_init):
+ * the first six colours 15% each, the seventh 10%. Stores it in the pouch and returns it.
+ */
 s32 yoshiSetColor(void) {
     s32 color;
     s32 r = irand(1000);
@@ -387,6 +446,7 @@ s32 yoshiSetColor(void) {
     return color;
 }
 
+/** The partner's height for collision and riding; Yoshi counts 18.5 more while Mario rides him. */
 f32 partyGetHeight(PartyEntry* party) {
     if (party->currentMemberId == PARTY_MEMBER_YOSHI && (party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return 18.5f + party->height;
@@ -394,6 +454,10 @@ f32 partyGetHeight(PartyEntry* party) {
     return party->height;
 }
 
+/**
+ * Finds the first empty partner slot from start, allocates and zeroes a new entry there and returns its index,
+ * or -1 if both are taken.
+ */
 static inline s32 partyGetFreeSlot(s32 start) {
     s32 i;
 
@@ -406,6 +470,10 @@ static inline s32 partyGetFreeSlot(s32 start) {
     return -1;
 }
 
+/**
+ * Loads the partner's model: her member's animation group, Yoshi's group for his colour,
+ * or the 8-bit d_mario group in the Famicom pipe.
+ */
 static void partyPoseEntry(PartyEntry* party) {
     char* animName;
 
@@ -427,6 +495,7 @@ static void partyPoseEntry(PartyEntry* party) {
     party->paperAnimGroup = animPoseEntry(animName, 2);
 }
 
+/** Copies Mario's current material and light flags to the partner's model, so she is lit and tinted like him. */
 static void setAnimPoseMaterialFlag(PartyEntry* party) {
     MarioWork* player = party->playerPtr;
 
@@ -435,6 +504,7 @@ static void setAnimPoseMaterialFlag(PartyEntry* party) {
                                    animPoseGetMaterialLightFlag(player->paperAnimGroupId[marioAnimeId()]));
 }
 
+/** Allocates and zeroes the follower slot (1) if it is empty; returns 1, or -1 if taken. */
 static inline s32 partyGetFreeSlot2(void) {
     if (partyPtrTbl[1] == NULL) {
         memset(partyPtrTbl[1] = __memAlloc(HEAP_DEFAULT, sizeof(PartyEntry)), 0, sizeof(PartyEntry));
@@ -453,6 +523,11 @@ char* yoshigroup[7] = {
     "c_babyyoshi7"
 };
 
+/**
+ * Shared setup of partyEntry*: allocates a free slot,
+ * fills in the entry for memberId (camera, Mario, follower flag for slot 1, 8-bit form),
+ * loads the model and standing pose and calls the member's init function. Returns the slot or -1.
+ */
 s32 partyEntryMain(s32 memberId) {
     MarioWork* player;
     s32 slot;
@@ -492,6 +567,10 @@ s32 partyEntryMain(s32 memberId) {
     return slot;
 }
 
+/**
+ * Creates follower memberId (Flavio, Frankly, a partner tagging along, ...) in slot 1 at Mario's position,
+ * standing still (run mode 0). Returns the slot or -1 if the slot is taken.
+ */
 s32 partyEntry2(s32 memberId) {
     MarioWork* player;
     s32 slot;
@@ -529,6 +608,7 @@ s32 partyEntry2(s32 memberId) {
     return slot;
 }
 
+/** Creates follower memberId in slot 1 popping out of Mario (run mode 4). Returns the slot or -1. */
 s32 partyEntry2Hello(s32 memberId) {
     MarioWork* player;
     s32 slot;
@@ -563,6 +643,7 @@ s32 partyEntry2Hello(s32 memberId) {
     return slot;
 }
 
+/** Creates follower memberId in slot 1 at x, y, z, following Mario (run mode 2). Returns the slot or -1. */
 s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
     MarioWork* player;
     s32 slot;
@@ -604,16 +685,24 @@ s32 partyEntry2Pos(s32 memberId, f32 x, f32 y, f32 z) {
 
 void driveParty(PartyEntry* party);
 s32 partyHelloMain(PartyEntry* party);
+/** Lets partyPreDisp draw the partner's shadow again. */
 static void partyShadowOn(PartyEntry* party) {
     if (party) {
         party->flags2 &= ~PARTY_DISP_FLAG_SHADOW_OFF;
     }
 }
 
+/** Clears both partner slots at game start. */
 void partyInit(void) {
     memset(partyPtrTbl, 0, sizeof(partyPtrTbl));
 }
 
+/**
+ * Resets both partners when Mario is reinitialised on a map change (marioReInit):
+ * clears their flags, paper animations, hit objects and scale and puts them back in following mode,
+ * or in the walk-disabled wait when Mario's partner walking is off.
+ * Yoshi being ridden is left alone; Ms. Mowz gets chuchu_reinit.
+ */
 void partyReInit(void) {
     s32 poseId;
     s32 dotted;
@@ -711,6 +800,10 @@ void partyReInit(void) {
         partyResetTouchWallCt();
     }
 }
+/**
+ * Runs the partner's member post function if she is in the middle of her field ability (run mode 3),
+ * to end it cleanly (from Mario's battle and map-exit code).
+ */
 void partyUsePost(PartyEntry* party) {
     PartyFunc func;
     if (party && party->runMode == 3) {
@@ -723,6 +816,12 @@ void partyUsePost(PartyEntry* party) {
 
 static inline void partyChgRunM(PartyEntry* party);
 static inline void partyChgRunMo(PartyEntry* party);
+/**
+ * Cleanup when the partner leaves run mode prev for mode:
+ * gets off a ride (11) unless she is leaving, ends the hello pop-out (4) back into following,
+ * shows the shadow again after riding Yoshi (12), ends her ability (3),
+ * and drops the paper slit from waiting/following.
+ */
 // Descriptive name (not in the symbol maps).
 void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
     MarioWork* mario;
@@ -785,6 +884,10 @@ void partyChgRunMode(PartyEntry* party, s32 mode) {
 #pragma dont_inline reset
 
 #pragma dont_inline on
+/**
+ * Like partyChgRunMode but enters mode already at motion step sub,
+ * without the mode's start-up (the change trigger is cleared). Unused in C.
+ */
 // Descriptive name (not in the symbol maps).
 void partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub) {
     if (party->runMode != 9 && party->runMode != 3) {
@@ -797,6 +900,10 @@ void partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub) {
 }
 #pragma dont_inline reset
 
+/**
+ * Returns the partner to the run mode she had before the current one,
+ * ending her ability first (evt_party and party_move).
+ */
 void partyPrevRunMode(PartyEntry* party) {
     if (party->runMode == party->prevRunMode) {
         return;
@@ -840,6 +947,7 @@ void partyPrevRunMode(PartyEntry* party) {
     }
 }
 
+/** Counts the active partner slots. */
 static inline s32 partyCountActive(void) {
     s32 count = 0;
     s32 i;
@@ -850,6 +958,11 @@ static inline s32 partyCountActive(void) {
     }
     return count;
 }
+/**
+ * Per-frame partner update from Mario's main loop:
+ * when any partner is active (the full game also runs marioUsePartyMain first),
+ * drives each active slot unless Mario is in background mode.
+ */
 void partyMain(void) {
     s32 i;
     PartyEntry* party;
@@ -873,6 +986,11 @@ void party_damage_return(PartyEntry* party);
 s32 partyDokanInit(PartyEntry* party);
 s32 partyDokanMain(PartyEntry* party);
 
+/**
+ * Runs one partner's frame by run mode (see partyChgRunMode):
+ * her move, ability, appear, goodbye, pipe, ride and damage handlers, or frees her in mode 14.
+ * A frozen partner only gets drawn. Afterwards updates dust, the off-screen flag and her display.
+ */
 void driveParty(PartyEntry* party) {
     MarioWork* mario;
     f32 x, y, z;
@@ -1024,6 +1142,11 @@ void driveParty(PartyEntry* party) {
     party->floorMove = (Vec){0.0f, 0.0f, 0.0f};
     partyPreDisp(party);
 }
+/**
+ * Starts and runs the partner's appear (run modes 4-7):
+ * modes 4 and 5 pop her out of Mario from scale 0, mode 7 starts later in the sequence, and if Mario is rolling,
+ * flying or sailing she joins at the end.
+ */
 static inline void partyHello_inl(PartyEntry* party) {
     MarioWork* mario;
 
@@ -1058,6 +1181,10 @@ static inline void partyHello_inl(PartyEntry* party) {
     partyHelloMain(party);
 }
 
+/**
+ * Starts the main partner's field ability (run mode 3) when Mario presses the partner button:
+ * only from standing, waiting or following. Stops Mario and returns TRUE if it started.
+ */
 BOOL partyDoWork(void) {
     PartyEntry* party = partyGetPtr(marioGetPtr()->currPartySlotId[0]);
     if (!party) {
@@ -1071,11 +1198,18 @@ BOOL partyDoWork(void) {
     return TRUE;
 }
 
+/** Runs the partner appear handler (partyHello_inl) for mario_party. */
 void partyHello(PartyEntry* party) {
     partyHello_inl(party);
 }
 
 
+/**
+ * Runs the partner's appear: step 0 places her at Mario's middle
+ * and launches a 16-frame hop to her appear position while she grows from nothing (with the appear sound),
+ * step 2 settles her facing left or right and switches to waiting.
+ * Step 10 places her at once, 20 just stands her still, 30 puts her on Mario's ride. Returns 1 when done.
+ */
 s32 partyHelloMain(PartyEntry* party) {
     s32 ret = 0;
     u8* mario = (u8*)party->playerPtr;
@@ -1182,6 +1316,11 @@ s32 partyHelloMain(PartyEntry* party) {
     return ret;
 }
 
+/**
+ * Starts the partner's goodbye (run mode 8): runs the member's init function,
+ * has Vivian let go of Mario or Mario get off Yoshi first if her ability is active,
+ * and skips the animation when Mario is rolling, flying or sailing.
+ */
 s32 partyGoodbyeInit(PartyEntry* party) {
     MarioWork* mario;
     party->motionStep = 10;
@@ -1206,6 +1345,11 @@ s32 partyGoodbyeInit(PartyEntry* party) {
     return 0;
 }
 
+/**
+ * Runs the partner's goodbye: finishes Vivian's or Yoshi's ability first,
+ * then she hops back into Mario over 15 frames, spinning and shrinking, and is freed (run mode 14).
+ * Returns 1 when done.
+ */
 s32 partyGoodbyeMain(PartyEntry* party) {
     MarioWork* mario = marioGetPtr();
     f32 tx, ty, tz, px, py, pz;
@@ -1280,9 +1424,16 @@ s32 partyGoodbyeMain(PartyEntry* party) {
 }
 
 
+/** Resets the partner's scale to 1 (leaving the appear mode). */
 static inline void partyChgRunM(PartyEntry* party) {
     party->scale = (Vec){1.0f, 1.0f, 1.0f};
 }
+/**
+ * Puts the partner in the pipe with Mario (run mode 10):
+ * she takes Mario's position facing backwards and turns into the spinning pipe paper,
+ * p_dokan_y for the vertical pipe kinds (Mario's dokanType 0-3) and p_dokan_x for the sideways ones (4, 5).
+ * Ends Vivian's tail effect.
+ */
 s32 partyDokanInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
@@ -1403,6 +1554,12 @@ s32 partyDokanInit(PartyEntry* party) {
     return 0;
 }
 
+/**
+ * The partner's frames in the pipe (run mode 10):
+ * she spins at Mario's position, growing back to full size on the vertical kinds;
+ * once partyDokanEnd sets step 100 she plays the PM_D_1B exit paper for 18 frames,
+ * then returns to normal and waits beside Mario, offset so two partners do not overlap.
+ */
 s32 partyDokanMain(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     s32 n;
@@ -1527,6 +1684,10 @@ s32 partyDokanMain(PartyEntry* party) {
     return 0;
 }
 
+/**
+ * Called by mot_dokan as Mario leaves the pipe:
+ * makes a partner in pipe mode play her exit (step 100) for pipe kind dir and shows her shadow again.
+ */
 void partyDokanEnd(s32 id, s32 dir) {
     PartyEntry* party = partyGetPtr(id);
     if (party && party->runMode == 10) {
@@ -1543,6 +1704,7 @@ void partyDokanEnd(s32 id, s32 dir) {
     }
 }
 
+/** Puts both partners on Mario's plane-mode flight (run mode 11), cancelling Bobbery's ability first (mot_plane). */
 void allPartyRidePlane(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
@@ -1557,6 +1719,7 @@ void allPartyRidePlane(void) {
     }
 }
 
+/** Puts both partners on Mario's boat-mode ride (run mode 11), cancelling Bobbery's ability first (mot_ship). */
 void allPartyRideShip(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
@@ -1619,6 +1782,10 @@ void getRidePos(PartyEntry* party, Vec* pos) {
 }
 
 #pragma dont_inline on
+/**
+ * Puts both partners straight into the riding-along state (run mode 11, step 11) hidden and without shadow,
+ * e.g. when Mario is already rolling, flying or sailing as they appear.
+ */
 void allPartyForceRideOn(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
@@ -1635,6 +1802,10 @@ void allPartyForceRideOn(void) {
 }
 #pragma dont_inline reset
 
+/**
+ * Puts both partners in the ride mode (11) to hop onto Mario (mot_roll for the rolling paper mode,
+ * and the retail bellows motion).
+ */
 void L_allPartyRideOn(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party) {
@@ -1673,6 +1844,10 @@ void allPartyRideOff(void) {
     }
 }
 
+/**
+ * Like allPartyRideOff but the partners land at the partyGetAppearPos2 spot (step 101);
+ * used when Mario lands from plane mode.
+ */
 void allPartyRideOff2(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party && party->runMode == 11) {
@@ -1700,6 +1875,10 @@ void allPartyRideOff2(void) {
     }
 }
 
+/**
+ * Ride state of a partner: 0 not riding, 1 hopping on, 2 riding along.
+ * evt_mario waits on it before and after Mario's paper modes.
+ */
 s32 partyRideChk(PartyEntry* party) {
     s32 ret = 0;
     if (party == NULL) {
@@ -1714,6 +1893,12 @@ s32 partyRideChk(PartyEntry* party) {
     return ret;
 }
 
+/**
+ * The partner's ride mode (11): hops onto Mario over 30 frames, spinning and shrinking (steps 0-2),
+ * then rides along hidden at his position (10, 11).
+ * Steps 20-22 (not entered from C) throw her up and let her fall, 200 (also not entered) drops her at once;
+ * 100/101 hop her back out next to Mario and return her to waiting.
+ */
 void partyRideMain(PartyEntry* party) {
     Vec pos;
     f32 shrink; // FAKE: one function-scope temp for (f32)(16 - timer), shared by cases 110 and 111 (see docs/FAKES.md)
@@ -1919,11 +2104,16 @@ void partyRideMain(PartyEntry* party) {
 
     party->trailPos = party->position;
 }
+/** Resets the partner's scale and display offset when she leaves the ride mode. */
 static inline void partyChgRunMo(PartyEntry* party) {
     party->scale = (Vec){1.0f, 1.0f, 1.0f};
     party->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
 }
 
+/**
+ * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow;
+ * used by party_yoshi when Mario mounts Yoshi.
+ */
 void party_force_ride_yoshi(PartyEntry* party) {
     Vec pos;
 
@@ -1938,6 +2128,7 @@ void party_force_ride_yoshi(PartyEntry* party) {
     party->moveDir = toMovedir(party->displayDirectionTarget);
 }
 
+/** Snaps the follower to her seat behind Mario on Yoshi (party_yoshi, while Yoshi carries Mario). */
 void party_ride_yoshi_force_move(void) {
     Vec pos;
     PartyEntry* party = partyGetPtr(marioGetExtraPartyId());
@@ -1949,6 +2140,10 @@ void party_ride_yoshi_force_move(void) {
     }
 }
 
+/**
+ * The follower's ride-Yoshi mode (12): hops onto Yoshi behind Mario over 15 frames,
+ * then rides there without shadow until Mario gets off, when she drops to her appear position and follows again.
+ */
 s32 partyRideYoshiMain(PartyEntry* party) {
     Vec pos;
     Vec pos2;
@@ -2005,6 +2200,11 @@ s32 partyRideYoshiMain(PartyEntry* party) {
     return 0;
 }
 
+/**
+ * Brings the partner back after Mario takes damage from a pit or spikes (run mode 13):
+ * after a splash it waits 100 frames, plays her hurt pose, flies her up off screen,
+ * waits for Mario's return fall, then drops her in from above next to him and resumes following.
+ */
 void party_damage_return(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     f32 x, y, z;
@@ -2120,10 +2320,12 @@ void party_damage_return(PartyEntry* party) {
     }
 }
 
+/** Puts the partner back on Mario's camera (evt_party). */
 void partyInitCamId(PartyEntry* party) {
     party->camId = marioGetCamId();
 }
 
+/** Draws the partner with camera cameraId instead of Mario's (evt_party). */
 void partySetCamId(PartyEntry* party, s32 cameraId) {
     party->camId = cameraId;
 }
@@ -2131,6 +2333,11 @@ void partySetCamId(PartyEntry* party, s32 cameraId) {
 BOOL vivianDisplayTailCheck(PartyEntry* party);
 void partyDisp(CameraId cam, void* param);
 
+/**
+ * Turns the partner to face left (180) or right (0) of the screen as she moves,
+ * with Paper Mario's overshooting flip: eases past the target by about 40 degrees and back.
+ * Leaves her alone in the paper slit or when her direction is locked.
+ */
 void partyMakeDispDir(PartyEntry* party) {
     f32 diff;
     f32 tgt;
@@ -2217,6 +2424,11 @@ void partyMakeDispDir(PartyEntry* party) {
     }
 }
 
+/**
+ * Applies the partner's pose and paper animation changes,
+ * advances her model and queues her draw at her screen depth (flickering while invincible after damage),
+ * then draws her shadow, following Vivian's shadow tail when she is out or used.
+ */
 void partyPreDisp(PartyEntry* party) {
     Vec screen;
     f32 z;
@@ -2377,12 +2589,15 @@ void partyDisp(CameraId cam, void* param) {
     animPoseSetLocalTimeRate(party->paperAnimGroup, (party->flags & PARTY_FLAG_IN_SHALLOW_WATER) ? 0.75f : 1.0f);
 }
 
+/** Empty in the shipped game; npcdrv, evt_mario and evt_mobj call it where Mario's controls are switched back on. */
 void partyKeyOn(void) {
 }
 
+/** Empty in the shipped game; npcdrv, evt_mario and evt_mobj call it where Mario's controls are switched off. */
 void partyKeyOff(void) {
 }
 
+/** Clears the partner's copy of the controller state. */
 void partyClearCont(PartyEntry* party) {
     party->stickX = 0;
     party->stickY = 0;
@@ -2398,6 +2613,11 @@ void partyClearCont(PartyEntry* party) {
     party->buttonUp = 0;
 }
 
+/**
+ * Copies the controller state of the partner's pad port into the entry,
+ * or clears it while the partner is frozen; read by the abilities that steer the partner (Flurrie, Vivian,
+ * Yoshi).
+ */
 void partyUpdateKeyData(PartyEntry* party) {
     s32 port = party->port;
     if (party->flags & (PARTY_FLAG_CTRL_OFF | PARTY_FLAG_CTRL_OFF_2)) {
@@ -2418,12 +2638,14 @@ void partyUpdateKeyData(PartyEntry* party) {
     party->buttonUp = gp->buttonUp[port];
 }
 
+/** Hides the partner's shadow (pipes, riding, events); NULL is ignored. */
 void partyShadowOff(PartyEntry* party) {
     if (party) {
         party->flags2 |= PARTY_DISP_FLAG_SHADOW_OFF;
     }
 }
 
+/** Reloads the partner's model for her normal or 8-bit form (see partyPoseEntry). */
 static inline void partyPoseEntryF(PartyEntry* party) {
     char* animName;
 
@@ -2445,6 +2667,10 @@ static inline void partyPoseEntryF(PartyEntry* party) {
     party->paperAnimGroup = animPoseEntry(animName, 2);
 }
 
+/**
+ * Switches the partner into (mode 1) or out of the 8-bit Famicom form, reloading her model and standing pose.
+ * Unused in C.
+ */
 void partySetFamicomMode(PartyEntry* party, s32 mode) {
     if (mode == 1) {
         if (party->flags2 & PARTY_DISP_FLAG_FAMICOM) {

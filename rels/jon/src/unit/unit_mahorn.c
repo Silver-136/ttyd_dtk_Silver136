@@ -25,6 +25,7 @@
 #define UNIT_WORK_MAGIC_EFFECT 7 // EffectEntry* of the magic shot (effMahorn2Entry, eff_magic); eff_magic_get_posX reads the x of its type-3 element
 
 double __fabs(double x);
+/** Absolute value of a double, wrapped so the compiler emits the same code as the original. */
 static inline double mahorn_fabs(double x) { return __fabs(x); }
 
 static USER_FUNC(hand_ctrl);
@@ -387,6 +388,14 @@ static BattleWeapon weapon_mahorn_recover_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack script of the Wizzerd. On a first strike it casts its single-target magic.
+ * Otherwise, after an item check, it draws a spell:
+ * single-target magic (50 in 120), magic on all enemies (30),
+ * and 10 each for the size-up spell on an ally (dekadeka), the defence-up spell (katikati),
+ * the confusion spell and the heal (recover).
+ * The invisibility (trans) and dodgy (yokeyoke) spells are never picked here.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -484,6 +493,11 @@ static BattleDataEntry data_table_bunsin[] = {
     {0},
 };
 
+/**
+ * Init script of the Wizzerd: registers its wait, attack, damage and confusion handlers,
+ * lifts its home position to y 20, sets up its four floating hands (hand_init) with their resting offsets,
+ * starts hand_ctrl_event to animate them, and clears unit work 4 (set on its copies) and unit work 6.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -1414,6 +1428,11 @@ static USER_FUNC(eff_magic_get_posX) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = unit, args[1..3] = target x, y, z, args[4] = travel time in frames.
+ * Starts the Wizzerd's magic effect from its wand towards the target and stores it in work[7];
+ * the speed is derived from the distance and time.
+ */
 static USER_FUNC(eff_magic) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));
@@ -1434,6 +1453,10 @@ static USER_FUNC(eff_magic) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: finds the Wizzerd's copies on the field (kinds 0x81 and 0xAA)
+ * and returns up to four of their unit indices in args[0..3] (-1 for none) and the count in args[4].
+ */
 static USER_FUNC(mahorn_get_bunsin) {
     EvtWord* args = event->args;
     s32 copies[4];
@@ -1461,6 +1484,11 @@ static USER_FUNC(mahorn_get_bunsin) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = unit, args[1] = hand (2-5), args[2..4] = x, y, z.
+ * Sets the target offset of one floating hand, mirrored in x and scaled by 1.25 or 0.75 when the Wizzerd is big
+ * or small.
+ */
 static USER_FUNC(set_hand_dest) {
     s32 hand;
     BattleUnit* unit;
@@ -1499,6 +1527,11 @@ static USER_FUNC(set_hand_dest) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Per-frame script helper: args[0] = unit.
+ * Eases each of the four floating hand parts (2-5) a tenth of the way towards the destination set by
+ * set_hand_dest; does nothing while the Wizzerd is under certain statuses (ids 1, 2 and 9).
+ */
 static USER_FUNC(hand_ctrl) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;
@@ -1547,6 +1580,7 @@ static USER_FUNC(hand_ctrl) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: args[0] = unit. Frees the four hand destination blocks held in work[0..3]. */
 static USER_FUNC(hand_end) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -1564,6 +1598,11 @@ static USER_FUNC(hand_end) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = unit.
+ * Gives each of the four hand parts (2-5) the idle animation MAH_Z_2
+ * and a zeroed destination block (work[0..3]).
+ */
 static USER_FUNC(hand_init) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;

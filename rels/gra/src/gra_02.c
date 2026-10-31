@@ -44,6 +44,10 @@ EVT_BEGIN(shopmaster_pig_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the pig shopkeeper (the shop owner Doopliss turned into a pig):
+ * before the Doopliss battle he oinks and says stg4_gra_17, afterwards stg4_gra_18.
+ */
 EVT_BEGIN(shopmaster_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -80,6 +84,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Enter event of the w_bero_2 door: just returns 0 in LW(0), so the door acts as a plain transition. */
 EVT_BEGIN(w_bero_2_in)
     SET_VALUE(LW(0), 0)
     RETURN

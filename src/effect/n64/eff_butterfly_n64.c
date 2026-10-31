@@ -215,6 +215,11 @@ effN64Vtx but_02_v[] = {
     {-318, 27, -254, 1024, 0, 255, 255, 255, 255},
 };
 
+/**
+ * Spawns a butterfly that wanders within 50 units horizontally and 30 vertically of (x, y, z);
+ * type picks the texture (type + 0x78). It lives until soft-deleted.
+ * Spawned only from event scripts through evt_eff.
+ */
 EffectEntry* effButterflyN64Entry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffButterflyN64Work* work;
@@ -243,6 +248,11 @@ EffectEntry* effButterflyN64Entry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Every 10-109 frames picks a new random point around the home position
+ * and flies toward it at one unit per frame.
+ * After a delete request it flutters on for 900 more frames, fading out over the last 16.
+ */
 void effButterflyMain(EffectEntry* effect) {
     EffButterflyN64Work* work = effect->userdata;
     Vec position;
@@ -313,6 +323,11 @@ void effButterflyMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 1, (DispCallback)effButterflyDisp, effect);
 }
 
+/**
+ * Draws the butterfly facing its heading, bobbing with y_data.
+ * bobIdx also selects the six-vertex set in but_02_v;
+ * the wing tips rise from set to set (y 31, 42, 58, 79 ...), so the wings flap.
+ */
 void effButterflyDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffButterflyN64Work* work;

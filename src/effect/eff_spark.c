@@ -52,6 +52,11 @@ static f32 scale_data[24] = {
 static f32 scale_data2[12] = { 0.9f, 1.0f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f };
 static u8 a_data2[12] = { 0xFA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
+/**
+ * Spawns the spark ring at (x, y, z).
+ * `type` 0 or 1 picks the sequence length (24 or 12 frames);
+ * the five sparks start with staggered sequence counters. The battle status code shows it for electrified units.
+ */
 EffectEntry* effSparkEntry(s32 type, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffSparkWork* work;
@@ -83,6 +88,10 @@ EffectEntry* effSparkEntry(s32 type, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Advances each spark's sequence: at frame 0 it starts 16 units from the centre on its own angle,
+ * moves outward with decaying velocity and follows the scale/alpha tables. Soft delete fades the whole effect.
+ */
 void effSparkMain(EffectEntry* effect) {
     EffSparkParticle* p = effect->userdata;
     s32 i;
@@ -170,6 +179,7 @@ void effSparkMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), prio, (DispCallback)effSparkDisp, effect);
 }
 
+/** Draws each active spark as a camera-facing textured quad rotated to its angle. */
 void effSparkDisp(CameraId cameraId, EffectEntry* effect) {
     EffSparkParticle* p = effect->userdata;
     CameraEntry* camera;

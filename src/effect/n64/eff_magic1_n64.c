@@ -15,6 +15,11 @@ static u8 anime_data[12] = {0x00, 0xFF, 0xD0, 0x1A, 0x78, 0x4D, 0xD0, 0xFE, 0xF0
 void effMagic1Main(EffectEntry* effect);
 void effMagic1Disp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns a Magikoopa-style magic bolt (type 0) at (x, y, z) that travels to (tx, ty, tz) in life frames,
+ * or a burst of sparks (type 1, 24 frames) that the bolt spawns when it arrives.
+ * Called by the kamec units (Magikoopas, Kammy).
+ */
 EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, f32 ty, f32 tz) {
     EffectEntry* effect;
     EffMagic1N64Work* w;
@@ -59,6 +64,10 @@ EffectEntry* effMagic1N64Entry(s32 type, s32 life, f32 x, f32 y, f32 z, f32 tx, 
     return effect;
 }
 
+/**
+ * Moves the bolt along its velocity (the burst slows and fades); a bolt reaching the end spawns the burst there.
+ * From JP on, it only draws while the system level is nonzero.
+ */
 void effMagic1Main(EffectEntry* effect) {
     EffMagic1N64Work* work = effect->userdata;
     Vec position;
@@ -99,6 +108,7 @@ void effMagic1Main(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effMagic1Disp, effect);
 }
 
+/** Draws three trailing rings of three spinning glow sprites (texture 0x10) with colors that pulse over time. */
 static void main_dl(EffectEntry* effect, Mtx base) {
     u8* a;
     EffMagic1N64Work* w = effect->userdata;
@@ -217,6 +227,7 @@ static void main_dl(EffectEntry* effect, Mtx base) {
     }
 }
 
+/** Draws the bolt once, or the burst as twelve copies rotated 30 degrees apart around the Z axis. */
 void effMagic1Disp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* camera;
     EffMagic1N64Work* w;

@@ -7,6 +7,11 @@
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
 
+/**
+ * Spawns Grodus's effect at (x, y, z): type 0 his staff animation, type 1 his barrier.
+ * `duration` is in frames (0 or less: until soft deleted);
+ * the aji (X-Naut Fortress) fights spawn the barrier with a 1000-frame duration.
+ */
 EffectEntry* effSyuryouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     EffSyuryouWork* work;
@@ -34,6 +39,11 @@ EffectEntry* effSyuryouEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/**
+ * Waits for the animation group to load, starts the pose, then runs the timer:
+ * soft delete or timeout fades the alpha over 32 frames;
+ * the staff deletes itself after one loop and the barrier switches to its S_1 animation.
+ */
 void effSyuryouMain(EffectEntry* effect) {
     EffSyuryouWork* work = effect->userdata;
     Vec position;
@@ -94,6 +104,7 @@ void effSyuryouMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effSyuryouDisp, effect);
 }
 
+/** Draws the animation pose camera-facing, with the fade alpha applied as an event colour. */
 void effSyuryouDisp(CameraId cameraId, EffectEntry* effect) {
     EffSyuryouWork* work = effect->userdata;
     Mtx mtx;

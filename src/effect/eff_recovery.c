@@ -169,6 +169,11 @@ void effRecoveryDisp2(CameraId cameraId, EffectEntry* effect);
 void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect);
 void effRecoveryDisp4(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns the HP/FP recovery icons at (x, y, z);
+ * type selects HP, FP, large forms or sparkle-only and `amount` the icon count.
+ * Called from battle_damage.c and battle_seq.c.
+ */
 EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     RecoveryWork* work;
@@ -303,6 +308,7 @@ EffectEntry* effRecoveryEntry(s32 type, s32 amount, f32 x, f32 y, f32 z) {
     return effect;
 }
 
+/** Per frame: releases the icons one at a time with their shine sounds and sparkles, then deletes the effect. */
 void effRecoveryMain(EffectEntry* effect) {
     RecoveryWork* work = effect->userdata;
     RecoveryWork* p;
@@ -477,6 +483,7 @@ void effRecoveryMain(EffectEntry* effect) {
     }
 }
 
+/** Per frame: Main for the sparkle-only form (type 6). */
 void effRecoveryMain2(EffectEntry* effect) {
     RecoveryWork* work = effect->userdata;
     Vec calc;
@@ -530,6 +537,7 @@ void effRecoveryMain2(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&calc), 2, (DispCallback)effRecoveryDisp4, effect);
 }
 
+/** Draws the rising icons as textured quads. */
 void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
     RecoveryWork* work = effect->userdata;
     RecoveryWork* p;
@@ -631,6 +639,10 @@ void effRecoveryDisp(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws the recovered amount above the icons for the HP/FP forms (types 0-3, 7, 8) with effNumberGX,
+ * centred and facing the camera: number style 0 for HP (types 0, 2, 7), 1 for FP (types 1, 3, 8).
+ */
 void effRecoveryDisp2(CameraId cameraId, EffectEntry* effect) {
     RecoveryWork* work = effect->userdata;
     s32 type;
@@ -768,6 +780,12 @@ void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/**
+ * Draws the sparkle-only form (type 6) camera-facing:
+ * the first piece is a white glow (texture 18) that fades in to half alpha;
+ * the others are sparkles (texture 20) pointed along their flight angle,
+ * their colour cycling through color_rotation_data.
+ */
 void effRecoveryDisp4(CameraId cameraId, EffectEntry* effect) {
     RecoveryWork* work = effect->userdata;
     CameraEntry* cam;

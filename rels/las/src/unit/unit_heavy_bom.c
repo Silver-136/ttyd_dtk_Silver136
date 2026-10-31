@@ -539,6 +539,12 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/**
+ * Init event of the Bulky Bob-omb: installs its wait, phase, attack,
+ * damage and confusion events and sets its unit work:
+ * 0 = fuse lit, 1 = fuse length left (starts at 3), 2 = the fuse sound handle (-1 for none),
+ * 3 = which guard weapon is next. Part 2 gets the fuse flame pose F_1 and the draw callback is set up.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))

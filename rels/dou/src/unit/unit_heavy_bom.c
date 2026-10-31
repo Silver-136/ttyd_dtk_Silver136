@@ -62,6 +62,10 @@ static EvtWord explosion_event[247];
 #endif
 
 
+/**
+ * Script helper: gives the Bulky Bob-omb's body (part 1) the draw callback _fire_point_callback
+ * and hides part 2, the separate flame shape that callback draws.
+ */
 static USER_FUNC(_set_draw_callback) {
     BattleWork* wp = _battleWorkPointer;
     s32 id = BattleTransID(event, UNIT_ID_SELF);
@@ -524,6 +528,12 @@ static BattleUnitKindPart parts[] = {
     {2, /*"ヘビーボム"*/"\x83\x77\x83\x72\x81\x5B\x83\x7B\x83\x80", "c_heavy", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kNoShadow, 0, pose_table_3},
 };
 
+/**
+ * Init event of the Bulky Bob-omb: installs its wait, phase, attack,
+ * damage and confusion events and sets its unit work:
+ * 0 = fuse lit, 1 = fuse length left (starts at 3), 2 = the fuse sound handle (-1 for none),
+ * 3 = which guard weapon is next. Part 2 gets the fuse flame pose F_1 and the draw callback is set up.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))

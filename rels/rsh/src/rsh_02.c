@@ -224,6 +224,11 @@ static BeroEntry bero_data_c[] = {
     {0},
 };
 
+/**
+ * Reaction during Pennington's speech in evt_nabe:
+ * Detective Pennington plays A_1, Mario gives a question-mark balloon, and the gourmet Toad turns to Mario.
+ * Started from powan_callback.
+ */
 EVT_BEGIN(evt_powan_msg)
     CALL(evt_npc_set_anim, STRING("ポワン探偵"), STRING("A_1"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -297,6 +302,10 @@ EVT_BEGIN(evt_nabe)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the gourmet Toad: parked below the floor during the Riverside stages
+ * and from the end of day 2 to the Smorg miasma; turns jumping off when he is on the floor.
+ */
 static EVT_BEGIN(init_gurume)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
@@ -372,6 +381,7 @@ static EVT_BEGIN(talk_gurume)
     RETURN
 EVT_END()
 
+/** Talk script of Pennington in rsh_02: does nothing. */
 static EVT_BEGIN(talk_powan)
     RETURN
 EVT_END()
@@ -462,6 +472,11 @@ EVT_BEGIN(init_yuurei)
     RETURN
 EVT_END()
 
+/**
+ * Camera shake during the ghost's first speech:
+ * plays the surprise jingle, then repeatedly zooms the 3D camera in and out.
+ * Started by yuurei_callback and stopped with evt_shake2.
+ */
 static EVT_BEGIN(evt_shake)
     WAIT_MS(300)
     BEGIN_INLINE_EVENT
@@ -480,6 +495,10 @@ static EVT_BEGIN(evt_shake)
     RETURN
 EVT_END()
 
+/**
+ * Stops the camera shake: resets the 3D camera event (evt_cam3d_evt_off).
+ * Second half of the shake in the ghost's first speech.
+ */
 EVT_BEGIN(evt_shake2)
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
     RETURN
@@ -669,11 +688,13 @@ static EVT_BEGIN(init_toron)
     RETURN
 EVT_END()
 
+/** Talk script of Zip Toad in rsh_02: prints stg6_rsh_186. */
 static EVT_BEGIN(talk_toron)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_186"), 0, 0)
     RETURN
 EVT_END()
 
+/** Talk script of the salaryman in rsh_02: prints stg6_rsh_192. */
 static EVT_BEGIN(talk_sarary)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_192"), 0, 0)
     RETURN
@@ -809,6 +830,10 @@ void yuurei_callback(s32 type, void* param) {
     }
 }
 
+/**
+ * Message-window callback for Pennington's speech in evt_nabe:
+ * on the second page turn it starts evt_powan_msg (counts pages in LW(10)).
+ */
 // Start the reaction on the second type-3 notification (the counter starts at zero).
 void powan_callback(s32 type, void* param) {
     MsgWinData* work = *(MsgWinData**)param;
@@ -856,6 +881,11 @@ EVT_BEGIN(evt_2day_end)
     RETURN
 EVT_END()
 
+/**
+ * Bed outside the story nights: asks "rest?" (stg6_yado_00), plays the sleep jingle, fades out with a spotlight,
+ * fully restores HP/FP of Mario and the party, repositions the partners at the foot of the bed,
+ * fades back in and prints the wake-up message (stg6_yado_01).
+ */
 EVT_BEGIN(evt_normal_yado)
     CALL(evt_msg_print, 0, STRING("stg6_yado_00"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg6_yado_00_yn"))
@@ -997,6 +1027,11 @@ static s32 item_tbl[] = {
     ITEM_BRIEFCASE, -1,
 };
 
+/**
+ * Cutscene in rsh_02_b right after the catch: Mario, Pennington,
+ * the salaryman and Toron are placed around the caught thief and they talk (stg6_rsh_183 to 191),
+ * the train chimes and arrives, and the map changes to hom_00 (Riverside Station) with an iris fade.
+ */
 EVT_BEGIN(evt_toron_catch2)
     CALL(evt_mario_normalize)
     CALL(evt_party_yoshi_ride, 0, 0)
@@ -1282,6 +1317,7 @@ static EVT_BEGIN(evt_yuka_simi)
     RETURN
 EVT_END()
 
+/** Trigger script for the shelves: prints the message in LW(1). */
 static EVT_BEGIN(evt_access)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, LW(1), 0, 0)
@@ -1304,6 +1340,10 @@ static EVT_BEGIN(evt_access2)
     RETURN
 EVT_END()
 
+/**
+ * Registers the shelf triggers (tana_3, tana_4, tana_5) with evt_access or evt_access2,
+ * depending on the version and the story stage.
+ */
 static EVT_BEGIN(evt_access_entry)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SET_VALUE(LW(1), STRING("stg6_rsh_267"))
@@ -1588,6 +1628,10 @@ EVT_BEGIN(rsh_02_a_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_02_b (first visit): runs the shared init;
+ * after the Zip Toad is caught it spawns evt_toron_catch2 for the post-catch scene.
+ */
 EVT_BEGIN(rsh_02_b_init_evt)
     CALL_CHILD(PTR(rsh_02_init_evt))
     IF_INT_EQUAL(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
@@ -1639,6 +1683,7 @@ static const char* window_tbl[] = {
     NULL,
 };
 
+/** Init script of rsh_02_c (first visit): sets the doors, runs the shared init and the window scenery. */
 EVT_BEGIN(rsh_02_c_init_evt)
     SET_VALUE(LW(0), PTR(bero_data_c))
     CALL(evt_bero_get_info)
@@ -1677,6 +1722,11 @@ EVT_BEGIN(rsh_02_c_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Shared map init for rsh_02 on the second visit:
+ * plays the outbound or return-trip scenery, registers the doors, bed (evt_nidome_bed), NPCs,
+ * shelf signs and the music for the station the train has reached.
+ */
 EVT_BEGIN(rsh_02_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
@@ -1746,6 +1796,13 @@ EVT_BEGIN(rsh_02_init_evt_nidome)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_02_a on the second visit: runs rsh_02_init_evt_nidome, shows the clean floors and,
+ * when the map was entered by waking up in the cabin (nidome, nidome_start) or at a station arrival,
+ * places Mario and the partners inside cabin 5 with only that cabin shown.
+ * Waking up on the way sends the train on to Poshley Heights (pik_00)
+ * or Rogueport (gor_04) depending on the direction of the trip; otherwise it uses the normal doors.
+ */
 EVT_BEGIN(rsh_02_a_init_evt_nidome)
     CALL_CHILD(PTR(rsh_02_init_evt_nidome))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
@@ -1847,6 +1904,11 @@ EVT_BEGIN(rsh_02_a_init_evt_nidome)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_02_b on the second visit: runs rsh_02_init_evt_nidome and,
+ * when entered by waking up (nidome) or arriving from Riverside (hom_touchaku),
+ * places Mario and the partners inside cabin 5 with only that cabin shown; otherwise uses the normal doors.
+ */
 EVT_BEGIN(rsh_02_b_init_evt_nidome)
     CALL_CHILD(PTR(rsh_02_init_evt_nidome))
     SET_VALUE(LF(0), 0)
@@ -1911,6 +1973,7 @@ EVT_BEGIN(rsh_02_b_init_evt_nidome)
     RETURN
 EVT_END()
 
+/** Init script of rsh_02_c on the second visit: doors, the shared second-visit init and the window scenery. */
 EVT_BEGIN(rsh_02_c_init_evt_nidome)
     CALL_CHILD(PTR(rsh_02_init_evt_nidome))
     CALL(evt_map_playanim, STRING("ranpu"), MAP_ANIM_PLAY_LOOP, 0)

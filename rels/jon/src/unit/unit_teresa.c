@@ -42,6 +42,7 @@ static EvtWord move_event[84];
 static EvtWord move_event_sub[103];
 static EvtWord wait_event[6];
 
+/** Script helper: args[0] = unit, returns in args[1] 1 if it is a Boo or Dark Boo (kinds 0x4B and 0x6A), else 0. */
 static USER_FUNC(teresa_check_teresa) {
     EvtWord* args = event->args;
     s32 id = evtGetValue(event, args[0]);
@@ -62,6 +63,10 @@ static USER_FUNC(teresa_check_teresa) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: returns in args[0] 1 if any Boo or Dark Boo on the field has work[0] equal to 0, otherwise 0.
+ * work[0] is set by move_event_sub once that Boo has taken part in the group move.
+ */
 static USER_FUNC(teresa_check_move) {
     EvtWord* args = event->args;
     s32 num = 0;
@@ -86,6 +91,10 @@ static USER_FUNC(teresa_check_move) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: args[0] = unit; returns in args[1] 1 if some other Boo
+ * or Dark Boo is not Invisible (status 0x12), otherwise 0.
+ */
 static USER_FUNC(teresa_check_trans) {
     EvtWord* args = event->args;
     s32 num = 0;
@@ -363,6 +372,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Init event of the Boo: installs its wait, attack, damage and confusion events,
+ * clears unit work 0 (its "has moved" flag, used by move_event) and sets its height to 15.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -377,6 +390,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Boo: runs the default damage handling with LW(10) = -2 and LW(11) = 1. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -384,6 +398,14 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Boo.
+ * Uses an enemy item if it has one, otherwise rolls among four options:
+ * the Invisible move on itself (25, only if it is not already Invisible, status 18),
+ * the same move on another Boo (25, if teresa_check_trans finds one; not allowed while it is Confused,
+ * status 5),
+ * the Boo move (15, if teresa_check_move allows it) and the plain attack (the rest, 50).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -449,6 +471,11 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Boo's plain attack: it fades out, reappears next to the target, then slaps it.
+ * A dodge plays the X_1 pose; a hit shakes the camera
+ * and applies the damage with the action command defence check. It then turns around and floats back home.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -555,6 +582,12 @@ static EVT_BEGIN(normal_attack_event)
         RETURN
 EVT_END()
 
+/**
+ * The Boo's move that turns itself Invisible.
+ * It dips and shows pose A_1, fades its alpha down (unless it was already Invisible, status 18),
+ * turns around in two 90 degree steps (15 degrees x 6 frames each) with pose S_1,
+ * and applies weapon_teresa_trans_myself to itself with the defence check (Invisible for 2 turns).
+ */
 static EVT_BEGIN(trans_myself_event)
     SET_VALUE(LW(3), -2)
     SET_VALUE(LW(4), 1)
@@ -607,6 +640,13 @@ static EVT_BEGIN(trans_myself_event)
     RETURN
 EVT_END()
 
+/**
+ * The Boo's move that turns another Boo Invisible.
+ * It picks another Boo (teresa_check_teresa) that is not yet Invisible (status 18),
+ * fades out and reappears beside it,
+ * applies weapon_teresa_trans_myself with the defence check (Invisible for 2 turns on that Boo)
+ * and returns home.
+ */
 static EVT_BEGIN(trans_event)
     LABEL(0)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -713,6 +753,12 @@ static EVT_BEGIN(move_event)
     RETURN
 EVT_END()
 
+/**
+ * Per-Boo part of move_event, for the unit in LW(3):
+ * after a random 60 to 79 frame delay it sets that unit's work 0 to 1,
+ * spins it at 12 degrees per frame for 60 frames and dives it to height 40, which becomes its home position.
+ * The casting Boo itself has no delay and does not spin, and plays T_1 half a second in.
+ */
 static EVT_BEGIN(move_event_sub)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(1))
     IF_INT_EQUAL(LW(3), LW(1))
@@ -747,6 +793,7 @@ static EVT_BEGIN(move_event_sub)
     RETURN
 EVT_END()
 
+/** Idle event: shows the unit's table pose for state 1. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

@@ -216,6 +216,11 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/**
+ * Init script of the Paratroopa.
+ * Registers its wait, attack, damage and confusion scripts and the pose-sound timing table,
+ * then starts the wait script.
+ */
 static EVT_BEGIN(init_event_patapata)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_patapata))
@@ -226,6 +231,13 @@ static EVT_BEGIN(init_event_patapata)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the Paratroopa is knocked out of the air.
+ * It drops the flying state, swaps in the grounded Koopa pose table, data table and part,
+ * falls to the floor and turns into unit kind 14 (Koopa Troopa).
+ * If it took more than 1 HP damage it ends up flipped over;
+ * otherwise it re-registers its ground wait and attack scripts and run and walk sounds.
+ */
 // Grounding installs the Koopa form; a damage count above one also runs its flip event.
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
@@ -273,6 +285,7 @@ static EVT_BEGIN(dmg_fall_event)
     RETURN
 EVT_END()
 
+/** Used when Mario hits it with a first strike: puts the unit back at height 10 and waits for the attack to end. */
 static EVT_BEGIN(patapata_dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
@@ -281,6 +294,11 @@ static EVT_BEGIN(patapata_dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * The Paratroopa's aerial kick.
+ * It picks a target (the first-attack target on a pre-emptive strike), flies to it and swoops down;
+ * the pre-damage check decides between an avoid animation on the target and a hit, then it flies back home.
+ */
 static EVT_BEGIN(attack_event_patapata)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -557,6 +575,11 @@ static BattleWeapon weapon_nokonoko_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Init script of the Koopa Troopa this Paratroopa becomes.
+ * Registers its wait, attack, damage and confusion scripts,
+ * clears the overturned counter and sets its run and walk sounds.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -569,6 +592,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Paratroopa: runs the default damage reaction (btldefaultevt_Damage) on its body part. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -576,6 +600,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Flips the Koopa onto its back after a stomp-type hit:
+ * switches to the overturned defence and pose tables, sets status flag 1 and the overturned counter to 2,
+ * and hops once.
+ */
 static EVT_BEGIN(dmg_turn_event)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, -15, 0)
     SET_VALUE(LW(10), -2)
@@ -595,6 +624,11 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+/**
+ * Counts the overturned counter down by one.
+ * While it is still above 0 the Koopa struggles in place and goes back to waiting;
+ * at 0 it restores its normal defence and pose tables, clears status flag 1 and jumps back onto its feet.
+ */
 // Each flipped turn counts down; even the turn that restores the shell consumes the attack.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
@@ -621,6 +655,10 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * Pre-emptive strike by the Koopa: retreats into its shell, spins into the first-attack target and hits it,
+ * with the miss/hit result from the pre-damage and damage checks.
+ */
 static EVT_BEGIN(first_attack_event)
     CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -689,6 +727,11 @@ static EVT_BEGIN(first_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Koopa's shell attack. If it is overturned it only wakes up.
+ * Otherwise it jumps into its shell and spins at the target while a smoke trail follows it,
+ * a miss makes it bounce past and a hit damages the target, after which it returns to its home position.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetOverTurnCount, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -835,6 +878,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of the Paratroopa (and of its grounded Koopa form): sets the idle pose from its current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

@@ -996,6 +996,7 @@ f32 hair_offset[] = {
     0.0f, 13.0f, 0.0f, -21.0f,
 };
 
+/** inline helper for pose_init: defined here so its Vec template lands at this .rodata position */
 // inline helper for pose_init: defined here so its Vec template lands at this .rodata position
 inline void hand_light_init(void) {
     Mtx mtx;
@@ -1006,6 +1007,12 @@ inline void hand_light_init(void) {
     PSMTXMultVec(mtx, (Vec*)(light + 0x24), (Vec*)(light + 0x24));
 }
 
+/**
+ * Event script: sets up the swarm of "small hand" ext poses (model c_s_hand, animation KRT_S_1) that the Shadow
+ * Queen uses for her many-hands attacks and her draining.
+ * It creates a hidden helper NPC "dummy" to read the animation,
+ * builds the pattern table with make_pattern and registers the ext drawing callbacks (hand_init, hand_main).
+ */
 EVT_BEGIN(shadow_queen_1000)
     CALL(evt_npc_entry, STRING("dummy"), STRING("c_s_hand"))
     CALL(evt_npc_set_anim, STRING("dummy"), STRING("KRT_S_1"))
@@ -1404,6 +1411,11 @@ BattleUnitSetup entry_shadow_hand_small = {
     NULL, // itemDropTable
 };
 
+/**
+ * Event script: init of the Shadow Queen (possessing Peach), the first phase of the final fight:
+ * spawns the Shadow Queen unit that hides behind her, connects the queen's head and hand parts to her pose,
+ * starts the hand swarm, and plays the idle animation.
+ */
 EVT_BEGIN(peach_init_event)
     SET_VALUE(GW(8), -1)
     SET_VALUE(GW(9), -1)
@@ -4003,6 +4015,10 @@ USER_FUNC(queen_hand_small_1000hand_set_offset_evt) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (runs until done): raises the swarm of small hands from below the floor (y from -80 to 0) in
+ * randomised positions, ready for the thousand-hands attack.
+ */
 USER_FUNC(queen_hand_small_1000hand_2_evt) {
     s32 i;
     ExtdrvPose* pose;
@@ -4052,6 +4068,11 @@ USER_FUNC(queen_hand_small_1000hand_2_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper (runs until done): the thousand-hands sweep:
+ * for 200 frames the hands move left along X in a wave, bobbing on a cosine,
+ * with columns starting one after another.
+ */
 USER_FUNC(queen_hand_small_1000hand_1_evt) {
     s32 i;
     HandElem* elem;
@@ -4098,6 +4119,7 @@ USER_FUNC(queen_hand_small_1000hand_1_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper (runs until done): drags the hand swarm across the party for the drag attack (first stage). */
 USER_FUNC(queen_hand_small_drag_1_evt) {
     s32 i;
     ExtdrvPose* pose;
@@ -4174,6 +4196,10 @@ USER_FUNC(queen_hand_small_drag_1_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper (runs until done): the second stage of the drag:
+ * sinks the swarm back below the floor (y from 0 to -80) and hides it.
+ */
 USER_FUNC(queen_hand_small_drag_2_evt) {
     s32 i;
     ExtdrvPose* pose;
@@ -4209,6 +4235,7 @@ USER_FUNC(queen_hand_small_drag_2_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper (runs until done): the third stage: raises a fresh randomised swarm out of the floor. */
 USER_FUNC(queen_hand_small_drag_3_evt) {
     s32 i;
     ExtdrvPose* pose;
@@ -4258,6 +4285,7 @@ USER_FUNC(queen_hand_small_drag_3_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper (runs until done): the fourth stage: sinks the swarm back below the floor and hides it. */
 USER_FUNC(queen_hand_small_drag_4_evt) {
     s32 i;
     ExtdrvPose* pose;
@@ -4293,6 +4321,10 @@ USER_FUNC(queen_hand_small_drag_4_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper (runs until done): sinks the swarm of small hands under the floor (y 0 to -80) and hides it;
+ * used when the small hand unit dies.
+ */
 USER_FUNC(queen_hand_small_dead_evt) {
     s32 i;
     ExtdrvPose* pose;
@@ -4328,6 +4360,10 @@ USER_FUNC(queen_hand_small_dead_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper (runs until done): raises the swarm of small hands out of the floor (y -80 to 0) at randomised
+ * positions; used when the small hand unit enters.
+ */
 USER_FUNC(queen_hand_small_entry_evt) {
     s32 i;
     ExtdrvPose* pose;
@@ -4382,6 +4418,7 @@ USER_FUNC(slot_init) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: creates a dark shock effect at (args[0], args[1], args[2]) with random pale colours. */
 USER_FUNC(peach_shock_evt) {
     EvtWord* args = event->args;
     s32 x = evtGetValue(event, args[0]);
@@ -4399,6 +4436,10 @@ USER_FUNC(peach_shock_evt) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (runs until done): the last stage of the HP drain:
+ * raises the hand swarm in front of the stage as the queen takes her heal.
+ */
 USER_FUNC(queen_hp_drain_5_evt) {
     s32 i;
     ExtdrvPose* pose;
@@ -4448,6 +4489,10 @@ USER_FUNC(queen_hp_drain_5_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper (runs until done): the audience part of the HP drain:
+ * sets the audience members' animation, sinks them 80 units while they are pulled down, then deletes them.
+ */
 USER_FUNC(queen_hp_drain_4_evt) {
     s32 i;
     f32 x, y, z;
@@ -4490,6 +4535,7 @@ USER_FUNC(queen_hp_drain_4_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper (runs until done): lowers the hand swarm from y -30 to -110 under the floor during the HP drain. */
 USER_FUNC(queen_hp_drain_3_evt) {
     s32 i;
     ExtdrvPose* pose;
@@ -4525,6 +4571,10 @@ USER_FUNC(queen_hp_drain_3_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper (runs until done): raises a hand swarm from y -110 to -30 closer to the audience (Z 270) during
+ * the HP drain.
+ */
 USER_FUNC(queen_hp_drain_2_evt) {
     s32 i;
     ExtdrvPose* pose;
@@ -4575,6 +4625,10 @@ USER_FUNC(queen_hp_drain_2_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Script helper (runs until done): sinks the hand swarm from y 0 to -80 under the floor at the start of the HP
+ * drain.
+ */
 USER_FUNC(queen_hp_drain_1_evt) {
     s32 i;
     ExtdrvPose* pose;
@@ -4610,6 +4664,7 @@ USER_FUNC(queen_hp_drain_1_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: returns in args[0] how many audience members are in the stands. */
 USER_FUNC(queen_get_aud_num) {
     EvtWord* args = event->args;
 
@@ -4618,6 +4673,7 @@ USER_FUNC(queen_get_aud_num) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: deletes every audience member and reduces the audience's target count by one for each. */
 USER_FUNC(queen_kankyaku_delete_evt) {
     s32 i;
 
@@ -4630,6 +4686,10 @@ USER_FUNC(queen_kankyaku_delete_evt) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper (runs until done): raises the hand swarm for the possessed Peach's dark drag attack, shifted
+ * 200 units left.
+ */
 USER_FUNC(peach_hand1000_dark_drag_1_evt) {
     s32 i;
     ExtdrvPose* pose;
@@ -4699,6 +4759,7 @@ USER_FUNC(peach_hand1000_dark_drag_1_evt) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Script helper: sets the alpha of the queen effect "m_q2" to args[0]. */
 USER_FUNC(eff_queen_set_alpha_evt) {
     s32 alpha = evtGetValue(event, *event->args);
 
@@ -4712,6 +4773,10 @@ USER_FUNC(queen_break_slot_flag2_on) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: plays the drain sound at (args[0], args[1], args[2]) with a stardust effect,
+ * used when the queen drains the party.
+ */
 USER_FUNC(queen_drain) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -4727,6 +4792,10 @@ USER_FUNC(queen_drain) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: calls a lightning strike down at (args[0], args[1], args[2]):
+ * a sound, a pink pokopi thunder bolt with a ground shock, and a camera shake.
+ */
 USER_FUNC(queen_thunder) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -4757,6 +4826,7 @@ USER_FUNC(queen_thunder) {
     return EVT_RETURN_DONE;
 }
 
+/** Script helper: switches the animation index of every hand in the swarm to args[0]. */
 USER_FUNC(change_pose) {
     s32 anim = evtGetValue(event, *event->args);
     s32 i;
@@ -4770,6 +4840,7 @@ USER_FUNC(change_pose) {
     return EVT_RETURN_DONE;
 }
 
+/** same body as pose_main; hand_main inlines it (register/stack order only match this way) */
 // same body as pose_main; hand_main inlines it (register/stack order only match this way)
 inline void hand_pose_inl(void) {
     ExtdrvPose* pose;
@@ -4806,11 +4877,16 @@ inline void hand_pose_inl(void) {
         }
     }
 }
+/**
+ * Ext update callback of the hand swarm: advances every hand's animation and position (inlined hand_pose_inl),
+ * then queues the draw callback.
+ */
 void hand_main(void) {
     hand_pose_inl();
     dispEntry(CAMERA_3D, 0.0f, 1, hand_draw, NULL);
 }
 
+/** Draw callback of the hand swarm: loads the ext render mode, vertex, texture and TEV set-up and draws all hands. */
 void hand_draw(CameraId cameraId, void* param) {
     extLoadRenderMode();
     extLoadVertex();
@@ -4820,6 +4896,10 @@ void hand_draw(CameraId cameraId, void* param) {
     extLoadTextureExit();
 }
 
+/**
+ * Ext init callback of the hand swarm: allocates the work area and the hand list,
+ * builds the animation table via pose_init and gives every hand a random animation start and flip.
+ */
 static void hand_init(void) {
     s32 i;
     ExtdrvPose* pose;
@@ -4842,6 +4922,10 @@ static void hand_init(void) {
     }
 }
 
+/**
+ * Advances every hand pose: computes the animation frame from the elapsed render time
+ * and places the hand at its position, offset by the position of the unit in GW(10) if there is one.
+ */
 static void pose_main(void) {
     ExtdrvPose* pose;
     HandElem* elem;
@@ -4878,6 +4962,11 @@ static void pose_main(void) {
     }
 }
 
+/**
+ * Builds the animation table of the hand swarm from hand_data:
+ * groups consecutive entries of the same model and animation into HandAnim ranges,
+ * and sets the paper-craft light position for the hands.
+ */
 static void pose_init(void) {
     char name[32];
     char anim[32];
@@ -4912,6 +5001,10 @@ static void pose_init(void) {
     hand_wp->animNum++;
 }
 
+/**
+ * Script helper: fills hand_data with one entry per third frame of the queen's KRT_S_1 animation,
+ * giving every hand its own animation start offset.
+ */
 USER_FUNC(make_pattern) {
     ExtTexInfo* d = hand_data;
     NpcEntry* npc = npcNameToPtr("dummy");
@@ -4968,6 +5061,11 @@ USER_FUNC(peach_talk_synchro_shadow_head_evt) {
     return 0;
 }
 
+/**
+ * Script helper: positions the queen's head, hand
+ * and cape parts (parts 3, 4 and 5) on the world positions of the locators of her body poses;
+ * sets their display Z offsets.
+ */
 USER_FUNC(shadow_queen_connect) {
     QueenConnect* wk;
     Vec* wpos;

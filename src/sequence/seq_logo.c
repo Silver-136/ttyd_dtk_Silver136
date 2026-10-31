@@ -98,6 +98,10 @@ void seq_logoInit(SequenceWork* work) {
 }
 
 
+/**
+ * Leaves the logo sequence: sets up the font, window, fade, icon,
+ * environment and effect textures and Mario's poses for the rest of the game, and frees mariost.tpl.
+ */
 void seq_logoExit(SequenceWork* work) {
     fontmgrTexSetup();
     windowTexSetup();
@@ -384,6 +388,7 @@ void seq_logoMain(SequenceWork* work) {
 }
 
 
+/** param is unused */
 //param is unused
 void logoDisp(CameraId camId, void* param) {
     GXRenderModeObj* rmode;

@@ -47,6 +47,12 @@ static EvtWord all_fire_attackEvent_sub[10];
 static EvtWord all_fire_attack_event[321];
 static EvtWord wait_event[6];
 
+/**
+ * Script helper used when an Ember splits (friend_event):
+ * copies the current HP (capped at the new unit's maximum)
+ * and the size-change state from unit args[0] to the freshly spawned unit args[1]
+ * and resets the new unit's HP gauge to match.
+ */
 static USER_FUNC(bubble_copy_status) {
     // Copy capped current HP and size-change state, then synchronize the new HP gauge.
     EvtWord* args = event->args;
@@ -309,6 +315,10 @@ static BattleUnitSetup entry_bubble = {
     NULL, // itemDropTable
 };
 
+/**
+ * Init event of the Ember: registers its wait, attack (also used when confused) and damage events
+ * and moves its position and home position to height 10.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -581,6 +591,12 @@ static USER_FUNC(eff_fire) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Fireball of the Ember (weapon_bubble_fire_attack, fire element, one target): it lobs its fireball part
+ * (part 2, with the growing eff_fire flame) at the target in arcs and hits it with the usual dodge
+ * and guard checks
+ * (75% chance of a 3-turn burn), with a smoke puff at the target.
+ */
 static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -705,6 +721,7 @@ static USER_FUNC(eff_all_fire) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Sub-event of all_fire_attack_event: lights flame LW(0) of the row (eff_all_fire). */
 static EVT_BEGIN(all_fire_attackEvent_sub)
     BEGIN_SIBLING_EVENT
         CALL(eff_all_fire, UNIT_ID_SELF, LW(0))
@@ -713,6 +730,11 @@ static EVT_BEGIN(all_fire_attackEvent_sub)
     RETURN
 EVT_END()
 
+/**
+ * Fire wall of the Ember (weapon_bubble_all_fire_attack, fire element, every target, pierces defense,
+ * 75% chance of a 3-turn burn): it hops to x = -40, shakes, lights a row of ten flames in front of itself
+ * (all_fire_attackEvent_sub) and hits each target with the usual dodge and guard checks, then hops home.
+ */
 // Only the hit branch advances to the next target; avoidance exits the entire sweep.
 static EVT_BEGIN(all_fire_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -820,6 +842,7 @@ static EVT_BEGIN(all_fire_attack_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of the Ember: sets its idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

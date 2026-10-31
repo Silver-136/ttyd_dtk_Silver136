@@ -401,6 +401,7 @@ static BattleWeapon weapon_togenoko_charge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Init script of the Dark Koopatrol. Registers its scripts and sets its run and walk sounds. */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event))
@@ -412,6 +413,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage reaction of the Dark Koopatrol: the default damage script. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -419,6 +421,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table event 37, run when an attacker is hurt by the Dark Koopatrol's spiked helmet (top spikes, counter
+ * hit
+ * event 0x1F): after 30 frames it plays the toge_flush spark effect 55 units above it (70 when Huge, 40 when
+ * Tiny).
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -507,6 +515,14 @@ static BattleUnitSetup entry_togenoko = {
     NULL, // itemDropTable
 };
 
+/**
+ * The Dark Koopatrol's action: it wakes up first if it is on its back;
+ * while guarding (unit work 0 = 1) it mostly (80%) stands up again (guard_cancel_event);
+ * when confused it makes a normal or shell attack;
+ * otherwise it uses an item, or, when a free spot exists beside it and fewer Dark Koopatrols are on the field,
+ * may call a friend (friend_event), and otherwise picks between the normal attack, the shell attack,
+ * the charge (charge_event) and curling into guard (guard_event) by weighted chance.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

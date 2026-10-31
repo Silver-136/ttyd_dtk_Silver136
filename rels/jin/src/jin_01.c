@@ -31,24 +31,40 @@ static EvtWord ki_data_evt_01[20];
 static TreeAccess ki_data[2];
 EvtWord jin_01_init_evt[41];
 
+/**
+ * Door animation callback: closes door00 as Mario arrives through s_bero_1 (from jin_00);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it.
+ */
 static EVT_BEGIN(s1_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door00"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: opens door00 as Mario leaves through s_bero_1 (to jin_00);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it, negated.
+ */
 static EVT_BEGIN(s1_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door00"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: closes door03 as Mario arrives through s_bero_2 (from jin_03);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it.
+ */
 static EVT_BEGIN(s2_close)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door03"), 0, LW(0), 0)
     RETURN
 EVT_END()
 
+/**
+ * Door animation callback: opens door03 as Mario leaves through s_bero_2 (to jin_03);
+ * LW(0) is the door angle and the door turns around Y by 0.44 times it, negated.
+ */
 static EVT_BEGIN(s2_open)
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.44433594f))
     CALL(evt_mapobj_rotate, 0, STRING("door03"), 0, LW(0), 0)
@@ -95,6 +111,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Rumble of the endless staircase moving one stage:
+ * plays SFX_STG4_KAIDAN_MOVE1 at (300, 100, 200) while the camera shake ramps up to 0.010 over 30 steps
+ * and back down to 0, then stops the sound.
+ */
 static EVT_BEGIN(cam_shake)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_KAIDAN_MOVE1"), 300, 100, 200, LW(9))
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 10, 30)
@@ -117,6 +138,11 @@ static EVT_BEGIN(cam_shake)
     RETURN
 EVT_END()
 
+/**
+ * Red-switch script that moves the endless staircase one stage on:
+ * Mario and his partner react in confusion (exclamation mark and random turning the first time),
+ * the camera shakes and the stage counter LSW(1) is lowered by 1.
+ */
 // The rear switch decrements the staircase position when the current value is at most 1.
 EVT_BEGIN(evt_kaidan_oku)
     IF_INT_LESS_OR_EQUAL(LSW_JIN_STAIRCASE_POS, 1)
@@ -169,6 +195,10 @@ EVT_BEGIN(evt_kaidan_oku)
     RETURN
 EVT_END()
 
+/**
+ * Reward script for the golden tree: if the item has not been taken yet,
+ * drops a Golden Leaf from it (flag LSWF(2)) when Mario hits the tree.
+ */
 static EVT_BEGIN(ki_data_evt_01)
     CALL(evt_item_delete_check, STRING("item_ki01"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
@@ -182,6 +212,10 @@ static TreeAccess ki_data[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/**
+ * Creepy Steeple jin_01 map init: starts the steeple music and reverb, the shadow-Mario tint, the exits,
+ * the red switch for the endless staircase and the golden tree that drops a Golden Leaf.
+ */
 EVT_BEGIN(jin_01_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN2"))

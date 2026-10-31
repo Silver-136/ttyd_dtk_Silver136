@@ -12,6 +12,11 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
+/**
+ * REL prolog for the Riverside Station module: runs the static constructors,
+ * then registers the init event of each of the seven rooms (eki_00 to eki_06)
+ * and the area's battle setup tables.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 
@@ -28,6 +33,7 @@ void _prolog(void) {
     relSetBtlAddr("eki", btlsetup_eki_tbl, btl_eki_setup_no_tbl);
 }
 
+/** REL epilog: runs the static destructors when the Riverside Station module is unloaded. */
 void _epilog(void) {
     voidfunctionptr* dtor;
 
@@ -35,5 +41,6 @@ void _epilog(void) {
         (*dtor)();
     }
 }
+/** Target of unresolved relocations; the module has no code to run for them, so it is empty. */
 void _unresolved(void) {
 }
