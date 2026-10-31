@@ -34,7 +34,7 @@
 u8* lightGetPaperCraft(void);
 
 USER_FUNC(btlevtcmd_SetTalkBodyId);
-s32 weaponGetPower_Gonbaba(BattleUnit* unit, s32* weapon);
+u32 weaponGetPower_Gonbaba(BattleUnit* unit, BattleWeapon* weapon, BattleUnit* target, BattleUnitPart* part);
 static USER_FUNC(_leg_smoke_effect);
 USER_FUNC(_btlgon_get_escape_param);
 USER_FUNC(_set_gonbaba_light);
@@ -64,8 +64,8 @@ static EvtWord fumituke_attack_event[386];
 EvtWord firebreath_attack_event[261];
 static EvtWord wait_event[6];
 
-s32 weaponGetPower_Gonbaba(BattleUnit* unit, s32* weapon) {
-    s32 power = weapon[8];
+u32 weaponGetPower_Gonbaba(BattleUnit* unit, BattleWeapon* weapon, BattleUnit* target, BattleUnitPart* part) {
+    s32 power = weapon->hpDamageWork[0];
 
     power -= unit->work[UNIT_WORK_POWER_DOWN];
     if (power <= 0) {

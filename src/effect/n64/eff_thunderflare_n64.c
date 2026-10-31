@@ -1,3 +1,4 @@
+#include "eff/n64/eff_thunderflare_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -36,7 +37,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
 void effThunderflareMain(EffectEntry* effect);
 void effThunderflareDisp(CameraId cameraId, EffectEntry* effect);
 
-EffectEntry* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
+EffectEntry* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffThunderflareN64Elem* work;
     EffThunderflareN64Elem* e;

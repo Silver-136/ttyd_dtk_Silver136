@@ -35,7 +35,6 @@ const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
 
 
 // MsgWinData.callback holds a function pointer in an s32 (msgWindow_Entry takes the callback as s32)
-#define MSG_CB(d) (*(void (**)(s32, smartEntry*))&(d)->callback)
 // A message window's MsgWinData lives in its userdata block. A macro, not an inline function: as a function the object changes.
 #define WIN_DATA(w) ((MsgWinData*)(w)->userdata->address)
 void msgWindow_Disp(CameraId camId, void* param);
@@ -284,8 +283,8 @@ s32 msgMain(smartEntry* smart) {
 
     msgSEflag = 0;
     if (data->flags & MSG_WIN_FLAG_START) {
-        if (MSG_CB(data)) {
-            MSG_CB(data)(0, smart);
+        if (data->callback) {
+            data->callback(0, smart);
         }
         data->flags &= ~MSG_WIN_FLAG_START;
         msgAddPage(smart, 0);
@@ -311,8 +310,8 @@ s32 msgMain(smartEntry* smart) {
         data->pageState = 0;
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_WAIT1 | PSND_SFX_BYPASS_MUTE));
         data->playTime += 100;
-        if (MSG_CB(data)) {
-            MSG_CB(data)(3, smart);
+        if (data->callback) {
+            data->callback(3, smart);
         }
         break;
     default:
@@ -332,8 +331,8 @@ s32 msgMain(smartEntry* smart) {
         }
         switch (entry->glyph) {
         case 0xFFFF:
-            if (MSG_CB(data)) {
-                MSG_CB(data)(1, smart);
+            if (data->callback) {
+                data->callback(1, smart);
             }
             data->nextEntry = i;
             return 0;
@@ -342,8 +341,8 @@ s32 msgMain(smartEntry* smart) {
                 data->pageState = 1;
                 data->playTime = entry->time;
                 data->flags &= ~MSG_WIN_FLAG_FAST;
-                if (MSG_CB(data)) {
-                    MSG_CB(data)(2, smart);
+                if (data->callback) {
+                    data->callback(2, smart);
                 }
             }
             break;
@@ -358,8 +357,8 @@ s32 msgMain(smartEntry* smart) {
             data->flags &= ~MSG_WIN_FLAG_FAST;
             return 1;
         case 0xFFFB:
-            if (MSG_CB(data)) {
-                MSG_CB(data)(4, smart);
+            if (data->callback) {
+                data->callback(4, smart);
             }
             break;
         case 0xFFFA:
@@ -401,8 +400,8 @@ s32 msgMain(smartEntry* smart) {
         case 0xFFF8:
             break;
         default:
-            if (MSG_CB(data)) {
-                MSG_CB(data)(5, smart);
+            if (data->callback) {
+                data->callback(5, smart);
             }
             if (entry->value & MSG_CHAR_VOICE) {
                 msgVoiceSE(smart);
@@ -1504,7 +1503,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
     memset(data, 0, sizeof(MsgWinData));
     data->window = window;
     data->flags = 0x1 | MSG_WIN_FLAG_START;
-    data->callback = callback;
+    data->callback = (MsgWindowCallback)callback;
     data->lastUpdateTime = gp->renderTime;
     data->openTime = gp->renderTime;
     data->talkSfxGroup = 0;

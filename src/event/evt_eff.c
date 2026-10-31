@@ -1,3 +1,4 @@
+#include "eff/n64/eff_thunderflare_n64.h"
 #include "mario/mario.h"
 #include "evt/evt_eff.h"
 #include "driver/effdrv.h"
@@ -160,7 +161,6 @@
 
 extern EffectEntry* effGarekiN64Entry(s32, f32, f32, f32, f32);
 extern EffectEntry* effRotHammerFailN64Entry(s32, s32, f32, f32, f32, f32);
-extern EffectEntry* effThunderflareN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effLensflareN64Entry(s32, s32, f32, f32, f32, f32);
 extern EffectEntry* effBoobooN64Entry(s32, s32, f32, f32, f32, f32);
 

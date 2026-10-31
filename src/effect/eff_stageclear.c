@@ -1,3 +1,4 @@
+#include "eff/eff_minigame.h"
 #include "eff/eff_stageclear.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -15,7 +16,6 @@
 #include "sfx_name_word.h"
 #include "libc_decls.h"
 
-EffectEntry* effMiniGameEntry(s32);
 
 typedef struct StageClearWork {
     s32 type;     // 0x0
@@ -102,7 +102,7 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
 #endif
 
     if (type == 1 && (u32)gp->language != LANGUAGE_JP) {
-        return effMiniGameEntry(1);
+        return effMiniGameEntry(1, x, y, z);
     }
     effect = effEntry();
 #ifdef VERSION_G8ME01

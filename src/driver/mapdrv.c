@@ -1268,16 +1268,6 @@ void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force) {
     }
 }
 
-typedef struct MapAnimNm {
-    const char* name;  // 0x0
-    u8* data;          // 0x4
-} MapAnimNm;
-
-typedef struct MapAnimList {
-    s32 count;
-    MapAnimNm* items[1];
-} MapAnimList;
-
 typedef struct MapAnimKey4 {
     f32 time;
     MapAnimKeyCh ch[4];
@@ -1467,7 +1457,7 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
     }                                        \
     obj = mapMainFindTbl_(b_);               \
     if (obj) {                               \
-        mapMainMatKeys_(a_, (void*)i_, obj); \
+        mapMainMatKeys_(a_, i_, obj); \
     }                                        \
 }
 
@@ -1480,7 +1470,7 @@ static inline MapMaterial* mapMainFindTbl_(const char* name) {
     }                                          \
     obj = mapMainFindTbl_(b_);                 \
     if (obj) {                                 \
-        mapMainAlphaKeys_(a_, (void*)i_, obj); \
+        mapMainAlphaKeys_(a_, i_, obj); \
     }                                          \
 }
 
@@ -1505,11 +1495,11 @@ void mapMain(void) {
         changed = FALSE;
         anim = (MapAnim*)entry->animData;
         for (j = 0; j < entry->numAnims; j++, anim++) {
-            MapAnimList* jl = anim->anim->jointAnims;
-            MapAnimList* ml = anim->anim->materialAnims;
-            MapAnimList* al = anim->anim->alphaAnims;
-            MapAnimList* ll = anim->anim->lightAnims;
-            MapAnimList* lc = anim->anim->lightColorAnims;
+            MapAnimJointList* jl = anim->anim->jointAnims;
+            MapAnimMatDataList* ml = anim->anim->materialAnims;
+            MapAnimAlphaDataList* al = anim->anim->alphaAnims;
+            MapAnimLightDataList* ll = anim->anim->lightAnims;
+            MapAnimLightData2List* lc = anim->anim->lightColorAnims;
 
             if (!(anim->flags & MAP_ANIM_FLAG_ACTIVE) || (anim->flags & MAP_ANIM_FLAG_END)) {
                 continue;
@@ -1561,7 +1551,7 @@ void mapMain(void) {
                 for (k = 0; k < jl->count; k++) {
                     o = mapGetMapObj((const char*)jl->items[k]->name);
                     if (o) {
-                        mapCalcAnimMatrix(o->animMtx, o->localMtx, anim, (MapAnimJoint*)jl->items[k]);
+                        mapCalcAnimMatrix(o->animMtx, o->localMtx, anim, jl->items[k]);
                         changed = TRUE;
                         o->flags |= MAP_OBJ_FLAG_ANIM_MTX;
                         o->flags |= MAP_OBJ_FLAG_MTX_DIRTY;
@@ -1586,7 +1576,7 @@ void mapMain(void) {
                 for (k = 0; k < ll->count; k++) {
                     LightEntry* lp = lightNameToPtr((const char*)ll->items[k]->name);
                     if (lp) {
-                        mapMainLight_ll(anim, lp, (MapAnimLightData*)ll->items[k], v);
+                        mapMainLight_ll(anim, lp, ll->items[k], v);
                     }
                 }
             }
@@ -1594,7 +1584,7 @@ void mapMain(void) {
                 for (k = 0; k < lc->count; k++) {
                     LightEntry* lp = lightNameToPtr((const char*)lc->items[k]->name);
                     if (lp) {
-                        mapMainLight_lc(anim, lp, (MapAnimLightData2*)lc->items[k], cv);
+                        mapMainLight_lc(anim, lp, lc->items[k], cv);
                     }
                 }
             }

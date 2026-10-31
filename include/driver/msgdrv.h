@@ -4,6 +4,8 @@
 #include "driver/windowdrv.h"
 #include "memory.h"
 
+typedef void (*MsgWindowCallback)(s32 event, smartEntry* storage);
+
 // MsgChar.value of a text character (msgAnalize, read by msgDisp)
 typedef enum MsgCharFlags {
     MSG_CHAR_DYNAMIC = (1 << 0),        // 0x1, <dynamic>: drawn rotated by rot
@@ -68,7 +70,7 @@ typedef struct MsgWinData {
     s32 page; //0x783C
     s32 pageCount; //0x7840, number of pageY entries
     s32 pageY[(0x79FC - 0x7844) / 4]; //0x7844
-    s32 callback; //0x79FC, void (*)(s32 event, smartEntry*), see MSG_CB
+    MsgWindowCallback callback; // 0x79FC, message event callback
     struct EventEntry* event; //0x7A00 (US 0xF200), event that opened the window; read by map msg callbacks
     char speakerName[0x20]; //0x7A04, speaker NPC name, passed to npcNameToPtr (SPM npcName)
     s32 unitId; //0x7A24

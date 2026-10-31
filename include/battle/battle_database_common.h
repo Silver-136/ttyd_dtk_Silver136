@@ -136,6 +136,13 @@ typedef enum BattleWeaponElement {
     ELEMENT_ELECTRIC,
 } BattleWeaponElement;
 
+struct BattleUnit;
+struct BattleWeapon;
+struct BattleWorkUnitPart;
+
+typedef u32 (*BattleWeaponDamageFn)(struct BattleUnit* attacker,
+    struct BattleWeapon* weapon, struct BattleUnit* target, struct BattleWorkUnitPart* part);
+
 typedef struct BattleWeapon {
     const char* name;                 // 0x0, msg tag
     u16 icon;                         // 0x4
@@ -151,9 +158,9 @@ typedef struct BattleWeapon {
     s8 reserved_19;                   // 0x19, 1 (5 on player moves); copied to StarPowerInfo.weaponParam, never read
     s8 mBingoSlotChance;              // 0x1A
     s8 reserved_1B;                   // 0x1B, 1 (50 on player moves), never read
-    void* hpDamageFn;                 // 0x1C
+    BattleWeaponDamageFn hpDamageFn;                 // 0x1C
     u32 hpDamageWork[8];              // 0x20
-    void* fpDamageFn;                 // 0x40
+    BattleWeaponDamageFn fpDamageFn;                 // 0x40
     u32 fpDamageWork[8];              // 0x44
     u32 targetClassFlags;             // 0x64
     u32 targetPropertyFlags;          // 0x68

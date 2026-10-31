@@ -1273,7 +1273,7 @@ restart:
     }
 }
 
-s32 weaponGetPower_Deka(void) {
+u32 weaponGetPower_Deka(BattleUnit* attacker, BattleWeapon* weapon, BattleUnit* target, BattleUnitPart* part) {
     return get_ptr()->result + 1;
 }
 

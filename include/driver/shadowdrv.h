@@ -18,7 +18,7 @@ typedef enum ShadowEntryFlags {
     SHADOW_ENTRY_NO_DECAY = (1 << 2),  // 0x4, drawn without the decay colours
 } ShadowEntryFlags;
 
-typedef struct DepthShadowWork {
+typedef struct ShadowWork {
     s32 flags; //0x0, ShadowWorkFlags
     s32 drawCount; //0x4
     s32 configIdx; //0x8, index into shadowConfig
@@ -29,20 +29,10 @@ typedef struct DepthShadowWork {
     GXTexObj texObj; //0xDC
     smartEntry* texBuffer; //0xFC, shadow texture memory
     GXColor color; //0x100
-} DepthShadowWork;
+} ShadowWork;
+typedef ShadowWork DepthShadowWork;
 
-typedef struct ProjShadowWork {
-    s32 flags; //0x0, ShadowWorkFlags
-    s32 drawCount; //0x4
-    s32 configIdx; //0x8, index into shadowConfig
-    Mtx view; //0xC
-    Mtx44 proj; //0x3C
-    Mtx texMtx; //0x7C
-    Mtx depthMtx; //0xAC
-    GXTexObj texObj; //0xDC
-    smartEntry* texBuffer; //0xFC, shadow texture memory
-    GXColor color; //0x100
-} ProjShadowWork;
+typedef ShadowWork ProjShadowWork;
 
 typedef struct ShadowEntry {
     u16 flags; //0x0, ShadowEntryFlags
@@ -62,16 +52,7 @@ typedef struct ShadowEntry {
 } ShadowEntry;
 
 typedef struct CharShadowWork {
-    s32 flags; //0x0, ShadowWorkFlags
-    s32 drawCount; //0x4
-    s32 configIdx; //0x8, index into shadowConfig
-    Mtx view; //0xC
-    Mtx44 proj; //0x3C
-    Mtx texMtx; //0x7C
-    Mtx depthMtx; //0xAC
-    GXTexObj texObj; //0xDC
-    smartEntry* texBuffer; //0xFC, shadow texture memory
-    GXColor color; //0x100
+    ShadowWork base;
     s32 numEntries; //0x104, ShadowEntry count this frame
     ShadowEntry* entries; //0x108
     s32 projection; //0x10C, shadowGetCharShadowProjection

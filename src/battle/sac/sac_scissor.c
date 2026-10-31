@@ -584,7 +584,7 @@ void tess(Pt* pts, s32 n) {
     }
 }
 
-s32 weaponGetPower_Scissor(void* a, void* b, BattleUnit* unit) {
+u32 weaponGetPower_Scissor(BattleUnit* a, BattleWeapon* b, BattleUnit* unit, BattleUnitPart* part) {
     ScissorWork* w = GetScissorPtr();
     s32 i;
     if (unit == NULL) {

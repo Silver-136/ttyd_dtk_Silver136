@@ -243,15 +243,40 @@ typedef struct MapError {
 } MapError;
 
 // "animation_table" entry in map.dat (SPM MapFileAnimData)
+typedef struct MapAnimJointList {
+    s32 count;
+    struct MapAnimJoint* items[1];
+} MapAnimJointList;
+
+typedef struct MapAnimMatDataList {
+    s32 count;
+    struct MapAnimMatData* items[1];
+} MapAnimMatDataList;
+
+typedef struct MapAnimAlphaDataList {
+    s32 count;
+    struct MapAnimAlphaData* items[1];
+} MapAnimAlphaDataList;
+
+typedef struct MapAnimLightDataList {
+    s32 count;
+    struct MapAnimLightData* items[1];
+} MapAnimLightDataList;
+
+typedef struct MapAnimLightData2List {
+    s32 count;
+    struct MapAnimLightData2* items[1];
+} MapAnimLightData2List;
+
 typedef struct MapAnimHeader {
     const char* name;                    // 0x0
     u8 pad_04[0x8 - 0x4];                // 0x4
     f32 length;                          // 0x8
-    struct MapAnimList* jointAnims;      // 0xC, also read by hitMain as the joint list (count + joints)
-    struct MapAnimList* materialAnims;   // 0x10
-    struct MapAnimList* alphaAnims;      // 0x14
-    struct MapAnimList* lightAnims;      // 0x18
-    struct MapAnimList* lightColorAnims; // 0x1C
+    MapAnimJointList* jointAnims;      // 0xC, also read by hitMain as the joint list (count + joints)
+    MapAnimMatDataList* materialAnims;   // 0x10
+    MapAnimAlphaDataList* alphaAnims;      // 0x14
+    MapAnimLightDataList* lightAnims;      // 0x18
+    MapAnimLightData2List* lightColorAnims; // 0x1C
 } MapAnimHeader;
 
 // MapEntryAnimData.flags (map animations)

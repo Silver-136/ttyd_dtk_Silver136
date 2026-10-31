@@ -184,10 +184,10 @@ void shadowInit(void) {
     void* ramp;
     u32 i;
 
-    cswp->flags = 0;
-    cswp->drawCount = 0;
-    cswp->configIdx = 1;
-    cswp->color = (GXColor){0, 0, 0, 0x6E};
+    cswp->base.flags = 0;
+    cswp->base.drawCount = 0;
+    cswp->base.configIdx = 1;
+    cswp->base.color = (GXColor){0, 0, 0, 0x6E};
     cswp->projection = 1;
     cswp->defaultMode = 2;
     cswp->defaultSizeY = 20.0f;
@@ -197,7 +197,7 @@ void shadowInit(void) {
     memset(cswp->entries, 0, sizeof(ShadowEntry) * 64);
     wp = cswp;
     bufferSize = GXGetTexBufferSize(ShadowSizeTbl[0], ShadowSizeTbl[0], GX_TF_IA4, GX_FALSE, 0);
-    wp->texBuffer = smartAlloc(bufferSize, 0);
+    wp->base.texBuffer = smartAlloc(bufferSize, 0);
     depthShadowInit();
 
     {
@@ -238,8 +238,8 @@ void shadowMain(void) {
     dispEntry(CAMERA_SHADOW, 0.0f, 2, shadowDisp, NULL);
     dispEntry(CAMERA_SHADOW, 0.0f, 7, shadowDisp, NULL);
     cswp->numEntries = 0;
-    cswp->flags &= ~SHADOW_WORK_READY;
-    cswp->drawCount = 0;
+    cswp->base.flags &= ~SHADOW_WORK_READY;
+    cswp->base.drawCount = 0;
     pswp->flags &= ~SHADOW_WORK_READY;
     pswp->drawCount = 0;
     dswp->flags &= ~SHADOW_WORK_READY;
@@ -249,7 +249,7 @@ void shadowMain(void) {
 static inline void shadowSetupPolygon(void) {
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_CLAMP, GX_AF_NONE);
-    GXSetChanMatColor(GX_COLOR0A0, cswp->color);
+    GXSetChanMatColor(GX_COLOR0A0, cswp->base.color);
     GXSetNumTexGens(0);
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
@@ -327,7 +327,7 @@ void shadowDisp(CameraId cameraId, void* param) {
             case 5: {
                 ShadowConfig* cfg;
                 shadowCharShadowDisp_Collision(cameraId, param);
-                if ((cfg = &shadowConfig[cswp->configIdx])->follow == 1) {
+                if ((cfg = &shadowConfig[cswp->base.configIdx])->follow == 1) {
                     cam->cameraAt.z = cam->cameraAt.z; // FAKE: self-assignment; removing it changes codegen
                     cam = camGetPtr(CAMERA_3D);
                     cfg->pos.x = cam->cameraAt.x;
@@ -340,9 +340,9 @@ void shadowDisp(CameraId cameraId, void* param) {
                     cfg->target.y = cam->cameraAt.y;
                     cfg->target.z = cam->cameraAt.z;
                 }
-                shadowBegin((ProjShadowWork*)cswp, FALSE);
+                shadowBegin(&cswp->base, FALSE);
                 shadowCharShadowDisp_Projection(cameraId, param);
-                projShadowEnd(cameraId, cswp);
+                projShadowEnd(cameraId, &cswp->base);
                 break;
             }
             case 0:
@@ -350,7 +350,7 @@ void shadowDisp(CameraId cameraId, void* param) {
                 break;
             case 2:
                 projShadowEnd(cameraId, pswp);
-                shadowBegin((ProjShadowWork*)dswp, TRUE);
+                shadowBegin(dswp, TRUE);
                 break;
             case 7:
                 depthShadowEnd(cameraId, dswp);
@@ -437,10 +437,10 @@ void shadowCharShadowDisp_Projection(CameraId cameraId, void* param) {
     f32 cx, cz;
 
     // FAKE: assignment inside the index; `wp = cswp;` as its own statement changes the object
-    cfg = &shadowConfig[(wp = cswp)->configIdx];
+    cfg = &shadowConfig[(wp = cswp)->base.configIdx];
     entry = wp->entries;
     view = camGetCurPtr()->view;
-    alpha = cswp->color.a;
+    alpha = cswp->base.color.a;
     shadowSetupPolygon();
     GXSetArray(GX_VA_POS, testKagePosArray, 12);
     GXClearVtxDesc();
@@ -472,9 +472,9 @@ void shadowCharShadowDisp_Projection(CameraId cameraId, void* param) {
         GXPosition1x8(3);
         GXPosition1x8(4);
         GXPosition1x8(5);
-        wp->drawCount++;
+        wp->base.drawCount++;
     }
-    if (wp->drawCount) {
+    if (wp->base.drawCount) {
         Mtx44 proj;
         Mtx look;
         C_MTXOrtho(proj, cfg->top, -cfg->top, cfg->left, -cfg->left, cfg->near, cfg->far);
@@ -583,7 +583,7 @@ void shadowCharShadowDisp_Polygon(CameraId cameraId, void* param) {
 }
 
 static inline void shadowSetMat(void) {
-    GXSetChanMatColor(GX_COLOR0A0, cswp->color);
+    GXSetChanMatColor(GX_COLOR0A0, cswp->base.color);
 }
 
 void shadowCharShadowDisp_Texture(CameraId cameraId, void* param) {
@@ -672,7 +672,7 @@ void cylinder(ShadowEntry* entry) {
         return;
     }
     inner = 1.0f - entry->decay2;
-    volumeAlpha = (cswp->color.a * entry->volume) / 255.0f;
+    volumeAlpha = (cswp->base.color.a * entry->volume) / 255.0f;
     decayAlpha = volumeAlpha * entry->decay;
     if (inner < 0.0f) {
         inner = 0.0f;
@@ -879,18 +879,18 @@ void shadowFlagOn(s32 id, u16 flags) {
 }
 
 GXTexObj* shadowGetCharShadowTexObj(void) {
-    if (cswp->flags & SHADOW_WORK_READY) {
-        return smartTexObj(&cswp->texObj, (void**)cswp->texBuffer);
+    if (cswp->base.flags & SHADOW_WORK_READY) {
+        return smartTexObj(&cswp->base.texObj, (void**)cswp->base.texBuffer);
     }
     return NULL;
 }
 
 f32 (*shadowGetCharShadowProjTexMtx(void))[4] {
-    return cswp->texMtx;
+    return cswp->base.texMtx;
 }
 
 GXColor shadowGetCharShadowColor(void) {
-    return cswp->color;
+    return cswp->base.color;
 }
 
 s32 shadowGetCharShadowProjection(void) {

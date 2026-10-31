@@ -1,3 +1,4 @@
+#include "eff/n64/eff_thunderflare_n64.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_magic1_n64.h"
 #include "evt/evt_cmd.h"
@@ -29,7 +30,6 @@
 #define UNIT_WORK_STAFF_EFFECT 4 // EffectEntry* of the wand charge effect (eff_staff1 thunderflare, eff_staff2 pokopi charge) that the user function keeps at the wand tip
 #define UNIT_WORK_MAGIC_EFFECT 5 // EffectEntry* of the magic shot (eff_magic); eff_magic_get_posX reads its x
 
-EffectEntry* effThunderflareN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 
 static USER_FUNC(eff_magic);
 static USER_FUNC(kamec_copy_status);
@@ -1709,7 +1709,7 @@ static USER_FUNC(eff_staff1) {
     f32* wk;
 
     if (isFirstCall) {
-        unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effThunderflareN64Entry(0, 0.0f, -1000.0f, 0.0f, 1.0f, 60);
+        unit->work[UNIT_WORK_STAFF_EFFECT] = (EvtWord)effThunderflareN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
     }
     if (!(((EffectEntry*)unit->work[UNIT_WORK_STAFF_EFFECT])->flags & 1)) {
         return EVT_RETURN_DONE;

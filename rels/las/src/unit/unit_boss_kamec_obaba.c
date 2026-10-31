@@ -1,3 +1,4 @@
+#include "eff/n64/eff_thunderflare_n64.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_magic1_n64.h"
 #include "evt/evt_cmd.h"
@@ -21,7 +22,6 @@
 #include "battle/battle_database_common.h"
 #include "battle/battle_damage.h"
 
-EffectEntry* effThunderflareN64Entry(s32 type, f32 x, f32 y, f32 z, f32 scale, s32 lifetime);
 
 USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(eff_magic_support);
@@ -1170,7 +1170,7 @@ static USER_FUNC(eff_staff) {
     f32* wk;
 
     if (isFirstCall) {
-        unit->work[KAMEC_OBABA_WORK_STAFF_EFFECT] = (EvtWord)effThunderflareN64Entry(0, 0.0f, -1000.0f, 0.0f, 1.0f, 60);
+        unit->work[KAMEC_OBABA_WORK_STAFF_EFFECT] = (EvtWord)effThunderflareN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
     }
     if (!(((EffectEntry*)unit->work[KAMEC_OBABA_WORK_STAFF_EFFECT])->flags & 1)) {
         return EVT_RETURN_DONE;

@@ -220,8 +220,8 @@ ZubaStarWork* GetZubaStarPtr(void) {
     return (ZubaStarWork*)_battleWorkPointer->actionCommands.work;
 }
 
-s32 weaponGetPower_ZubaStar(void* a, s32* tbl) {
-    return tbl[GetZubaStarPtr()->level + 8];
+u32 weaponGetPower_ZubaStar(BattleUnit* a, BattleWeapon* weapon, BattleUnit* target, BattleUnitPart* part) {
+    return weapon->hpDamageWork[GetZubaStarPtr()->level];
 }
 
 

@@ -1,3 +1,4 @@
+#include "eff/eff_minigame.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "rels/yuu/include/yuu.h"
@@ -12,7 +13,6 @@
 static s32 dataadr[32];
 s32 stackt[4];
 s32 stackp;
-void* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z);
 void evt_yuuminigame_disp_func(CameraId camera, void* param);
 
 USER_FUNC(evt_yuuminigame_main_func);

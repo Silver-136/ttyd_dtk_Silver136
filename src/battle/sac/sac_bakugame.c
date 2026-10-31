@@ -104,13 +104,6 @@ typedef struct BakuWork {
     u8 pad2b4[4];
 } BakuWork;
 
-typedef struct GaugeCol {
-    u8 r, g, b, a;
-    u8 pad;
-    s8 dg, db;
-} GaugeCol;
-
-
 void bakuGameDecideButton(s32 first);
 BOOL bakuGamePartyExist(BattleUnit* unit);
 BOOL bakuGameAudienceCanThrowPos(s32 idx);
@@ -1274,7 +1267,7 @@ void bakuGameAudienceSurprise(void) {
 
 void bakuGameDisp2D(CameraId cam, void* param) {
     BakuWork* w = GetBakuGamePtr();
-    GaugeCol* col = (GaugeCol*)&_battleWorkPointer->actionCommands.disp.color;
+    BattleACDispParams* disp = &_battleWorkPointer->actionCommands.disp;
     BakuBtn* b;
     s32 i;
     u16 icon;
@@ -1304,16 +1297,16 @@ void bakuGameDisp2D(CameraId cam, void* param) {
     }
     full = 0;
     if (w->gauge >= 100.0f) {
-        col->r = 0;
+        disp->color.r = 0;
         full = 1;
-        col->a = 0xFF;
-        col->g += col->dg;
-        col->b += col->db;
-        if (col->g <= 0x80 && col->dg <= 0) {
-            col->dg = col->db = 0x10;
+        disp->color.a = 0xFF;
+        disp->color.g += disp->colorStep[1];
+        disp->color.b += disp->colorStep[2];
+        if (disp->color.g <= 0x80 && disp->colorStep[1] <= 0) {
+            disp->colorStep[1] = disp->colorStep[2] = 0x10;
         }
-        if (col->g >= 0xF5 && col->dg >= 0) {
-            col->dg = col->db = -0x10;
+        if (disp->color.g >= 0xF5 && disp->colorStep[1] >= 0) {
+            disp->colorStep[1] = disp->colorStep[2] = -0x10;
         }
     }
     BattleAcDrawGauge(w->gaugeX, w->gaugeY, w->rate, 0xB1, 3, 33, 66, 100, full);

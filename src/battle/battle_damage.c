@@ -387,7 +387,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
     u32 badgePower;
     s8 turns;
     s8 strength;
-    s32 (*fn)(BattleUnit*, BattleWeapon*, BattleUnit*, BattleUnitPart*);
+    BattleWeaponDamageFn fn;
 
     if (target->mTokenFlags & kBodyguarding) {
         flags |= DAMAGE_RESULT_GUARD_RETURN;
@@ -398,7 +398,7 @@ s32 BattleCalculateDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPa
     }
     defaultResult = flags | DAMAGE_CODE_NO_DAMAGE;
     *result = defaultResult;
-    fn = (s32 (*)(BattleUnit*, BattleWeapon*, BattleUnit*, BattleUnitPart*))weapon->hpDamageFn;
+    fn = weapon->hpDamageFn;
     if (fn == NULL) {
         return 0;
     }
@@ -604,12 +604,12 @@ s32 BattleCalculateFpDamage(BattleUnit* attacker, BattleUnit* target, BattleUnit
     BattleWork* wp = _battleWorkPointer;
     s32 damage = 0;
     s32 reduce = 0;
-    s32 (*fn)(BattleUnit*, BattleWeapon*, BattleUnit*, BattleUnitPart*);
+    BattleWeaponDamageFn fn;
 
     if (*resultFlags & DAMAGE_RESULT_ABSORBED) {
         return 0;
     }
-    fn = (s32 (*)(BattleUnit*, BattleWeapon*, BattleUnit*, BattleUnitPart*))weapon->fpDamageFn;
+    fn = weapon->fpDamageFn;
     if (fn == NULL) {
         return 0;
     }

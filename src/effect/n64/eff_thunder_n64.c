@@ -1,3 +1,4 @@
+#include "eff/n64/eff_thunderflare_n64.h"
 #include "eff/eff_n64.h"
 #include "eff/n64/eff_akari_charge_n64.h"
 #include "driver/camdrv.h"
@@ -29,7 +30,6 @@ typedef struct EffThunderN64Work {
     EffectEntry* charge; // 0x48
 } EffThunderN64Work;
 
-EffectEntry* effThunderflareN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 w);
 
 void effThunderMain(EffectEntry* effect);
 void effThunderDisp(CameraId cameraId, EffectEntry* effect);

@@ -1,3 +1,4 @@
+#include "eff/eff_minigame.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "rels/gor/include/gor.h"
@@ -8,7 +9,6 @@
 #include "string.h"
 #include "driver/dispdrv.h"
 
-void* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z);
 typedef struct GoryuuWork {
     EventEntry* event;
     EventEntry* subEvent;
