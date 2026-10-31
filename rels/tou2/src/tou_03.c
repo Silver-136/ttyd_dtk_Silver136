@@ -1,3 +1,5 @@
+// tou_03 (闘技場, Glitz Pit): the arena: ring, audience, matches and the Grubba and Rawk Hawk fights.
+
 #include "version.h"
 #include "mario/mario_pouch.h"
 #include "driver/casedrv.h"
@@ -4100,6 +4102,10 @@ const char* block_data[] = {
     "block_9",
 };
 
+/**
+ * Endless loop that makes Grubba (ガンス) tremble: moves him 2 units right and 2 left every 2 frames.
+ * Spawned during the transformation and deleted afterwards.
+ */
 static EVT_BEGIN(evt_shake)
     LOOP(0)
         CALL(evt_npc_get_position, STRING(("\203K\203\223\203X")), LW(0), LW(1), LW(2))

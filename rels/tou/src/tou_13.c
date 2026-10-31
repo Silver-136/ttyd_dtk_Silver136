@@ -1,3 +1,5 @@
+// tou_13 (闘技場, Glitz Pit): the small passage between tou_05 and tou_07.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

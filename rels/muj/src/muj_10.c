@@ -1,3 +1,6 @@
+// muj_10 (無人島, Keelhaul Key): the end of Pirate's Grotto (from dou_11): the hidden dock and
+// ship where the crew is driven out and Cortez appears (korutesu_appear_event).
+
 #include "eff/n64/eff_kameki_tornade_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

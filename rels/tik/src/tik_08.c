@@ -1,3 +1,5 @@
+// tik_08 (埋没した都市, Rogueport Sewers): the room with the pipe to Twilight Town (usu_00) and the door back to tik_07.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

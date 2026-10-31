@@ -1,3 +1,5 @@
+// eff_charge.c: battle charge (バトル・チャージ): 30 sparkles spiralling in to the unit; effChargeEntry.
+
 #pragma once
 
 #include "driver/effdrv.h"

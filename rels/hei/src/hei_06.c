@@ -1,3 +1,6 @@
+// hei_06 (平原, Petal Meadows): grassy field between hei_05 and hei_07.
+// Field enemies, a recovery block, a Fire Flower block, an Inn Coupon and coins.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

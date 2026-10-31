@@ -1,3 +1,5 @@
+// moo_07 (月, the Moon): a crater field between moo_06 and moo_00.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

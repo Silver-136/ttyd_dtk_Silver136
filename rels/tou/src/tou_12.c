@@ -1,3 +1,5 @@
+// tou_12 (闘技場, Glitz Pit): the back room reached from the storage room tou_06.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -79,6 +81,11 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Scene when Mario steps into the back room: Jolene (キノシコワ) stands by the half-open door,
+ * notices him and runs out (a "!" balloon, then she leaves toward x=-250 and the door slams shut with a wood
+ * sound); the partner remarks stg3_tou_307_13_00 and control returns.
+ */
 static EVT_BEGIN(evt_kinoshikowa)
     CALL(evt_npc_set_position, STRING("キノシコワ"), -200, 0, 10)
     CALL(evt_mapobj_rotate, 1, STRING("door_1"), 0, 30, 0)
@@ -202,6 +209,7 @@ static EVT_BEGIN(talk_brots)
     RETURN
 EVT_END()
 
+/** NPC init for Jolene (キノシコワ) in this room: does nothing. */
 static EVT_BEGIN(init_kinoshikowa)
     RETURN
 EVT_END()

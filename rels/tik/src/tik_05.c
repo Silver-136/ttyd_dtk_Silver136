@@ -1,3 +1,6 @@
+// tik_05 (埋没した都市, Rogueport Sewers): the Thousand-Year Door room: the pedestal for the Crystal Stars (starstone, the
+// mahojin circle), the door opening scenes, and the shattering (tiz_broken) and crystal effects.
+
 #include "eff/eff_starstone.h"
 #include "eff/n64/eff_crystal_n64.h"
 #include "eff/n64/eff_pokopi_pcharge_n64.h"

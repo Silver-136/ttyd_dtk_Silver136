@@ -1,3 +1,6 @@
+// hei_13 (平原, Petal Meadows): field linking hei_00 and hei_01 with pipes.
+// Horsetail item, a Close Call block, bricks and a Happy Heart.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

@@ -1,3 +1,5 @@
+// tou_10 (闘技場, Glitz Pit): the minor-league locker room; exits to tou_03, tou_04, tou_05; Yoshi egg and fighter scenes.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -241,6 +243,7 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/** NPC init for Jolene (キノシコワ): placed at (0, 0, -160) until the first match. */
 EVT_BEGIN(init_kino)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_05_MATCH)
@@ -271,6 +274,10 @@ EVT_BEGIN(init_gard)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the guard (ガードマン) who comes to fetch Mario for a match:
+ * he walks out through the door, Mario follows him, and the map changes to tou_03, the arena.
+ */
 EVT_BEGIN(talk_gard)
     CALL(evt_npc_flag_onoff, 1, STRING("ガードマン"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("ガードマン"), 0, -130, 0, FLOAT(80.0f), 1)
@@ -344,6 +351,7 @@ static EVT_BEGIN(talk_michel)
     RETURN
 EVT_END()
 
+/** NPC init for Octor (オクトール): placed at (80, 0, 85) facing 270. */
 EVT_BEGIN(init_octo)
     CALL(evt_npc_set_position, STRING("オクトール"), 80, 0, 85)
     CALL(evt_npc_status_onoff, 1, STRING("オクトール"), NPC_STATUS_FACE_MOVE_DIR)
@@ -433,6 +441,7 @@ static EVT_BEGIN(talk_brots)
     RETURN
 EVT_END()
 
+/** NPC init for Gangan (ガンガン): placed at (-75, 0, 90) facing 90. */
 EVT_BEGIN(init_gangan)
     CALL(evt_npc_set_position, STRING("me"), -75, 0, 90)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)

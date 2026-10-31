@@ -1,3 +1,6 @@
+// mri_00 (巨木の中, The Great Tree): outside the tree: the sealed trunk opened with Flurrie's gust
+// (open_bigtree), the pipe from the sewers (tik_16), and the Punies' scene as the world goes dark.
+
 #include "battle/battle_unit.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
@@ -600,6 +603,10 @@ static EVT_BEGIN(odoriko_3_init)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the tree base: the guide Puni (ガイド), the rival Puni (ライバル), Jabble (ちびトゲ), the guide's sister
+ * (ガイド妹), the Puni Elder (プニ族長老) and Fabio (ファビオ).
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガイド"*/"\x83\x4B\x83\x43\x83\x68", // name

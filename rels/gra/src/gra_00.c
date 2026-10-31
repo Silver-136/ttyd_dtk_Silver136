@@ -1,3 +1,6 @@
+// gra_00 (ウスグラの道, Twilight Trail): the start of the trail beside Twilight Town (usu_01); also Doopliss's (ランペル)
+// scenes with the fake Mario.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

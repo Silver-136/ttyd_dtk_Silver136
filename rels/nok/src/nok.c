@@ -1,3 +1,5 @@
+// nok (ノコ村, Petalburg): registers nok_00 and nok_01 and the battle database.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_npc.h"

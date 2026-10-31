@@ -1,3 +1,6 @@
+// muj_21 (無人島, Keelhaul Key): an ending scene on the ship at dawn with Peach and Mario
+// (BGM_ENDING5, ep_27 to ep_30), sailing back to Rogueport (gor_12).
+
 #include "battle/battle_unit.h"
 #include "eff/eff_funemizu.h"
 #include "evt/evt_cmd.h"

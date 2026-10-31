@@ -1,3 +1,6 @@
+// kpa_00 (クッパ編, Bowser's interludes): a Bowser's Castle scene with Kammy Koopa; continues in kpa_01 and ends in
+// Petalburg (nok_01).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_memcard.h"
@@ -175,6 +178,10 @@ EVT_BEGIN(kpa_00_fly_evt)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the airship scene: Kammy Koopa (ババ) and Bowser's flying airship (飛クッパ), both created by
+ * npc_init_evt without battle or talk.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ババ"*/"\x83\x6F\x83\x6F", // name

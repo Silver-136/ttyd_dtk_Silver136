@@ -1,3 +1,6 @@
+// tou_04 (闘技場, Glitz Pit): the main corridor (廊下): doors to the offices, locker rooms and arena; guards.
+// Connects tou_02, tou_03 and tou_05..tou_11.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -2066,6 +2069,11 @@ EVT_BEGIN(evt_gardman4)
     RETURN
 EVT_END()
 
+/**
+ * Toilet pipe cutscene to tou_08: the camera starts at the toilet at x=450 and pans over to x=-450 in 5 seconds
+ * while the draining sound plays, with two guards (ガードマン６ then ４) shown in speech bubbles,
+ * then the map changes to tou_08 (bero dokan).
+ */
 static EVT_BEGIN(evt_toile)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 450, 133, -1033, 450, 37, -492, 0, EASING_SINE_IN_OUT)
@@ -2097,6 +2105,11 @@ static EVT_BEGIN(evt_toile)
     RETURN
 EVT_END()
 
+/**
+ * Toilet pipe cutscene to tou_09: the mirror image of evt_toile;
+ * the camera pans from x=-450 to 450 with the draining sound, the bubbles show ガードマン４ then ６,
+ * and the map changes to tou_09 (bero dokan).
+ */
 static EVT_BEGIN(evt_toile2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, -450, 133, -1033, -450, 37, -492, 0, EASING_SINE_IN_OUT)

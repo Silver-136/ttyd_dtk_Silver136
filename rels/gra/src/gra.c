@@ -1,3 +1,5 @@
+// gra.rel (ウスグラの道, Twilight Trail): registers gra_00..gra_06 and the battle database.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"

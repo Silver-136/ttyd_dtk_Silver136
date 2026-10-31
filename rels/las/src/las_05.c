@@ -1,3 +1,6 @@
+// las_05 (ラストダンジョン, Palace of Shadow): Dark Bones (黒カロン) and the swarm of Dull Bones (senkaron) that pushes
+// Mario around.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
@@ -1637,6 +1640,7 @@ EVT_BEGIN(kurokaron_talk)
     RETURN
 EVT_END()
 
+/** The single NPC of the room, Dark Bones (黒カロン); it does not turn to face Mario. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"黒カロン"*/"\x8D\x95\x83\x4A\x83\x8D\x83\x93", // name

@@ -1,3 +1,5 @@
+// mri_11 (巨木の中, The Great Tree): the second Jabbi hive (hachi): Jabbies 7-11 and the hive breaking open.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -214,6 +216,7 @@ EVT_BEGIN(toge_11_talk)
     RETURN
 EVT_END()
 
+/** The five Jabbies (トゲ族７ to 11) of the second hive. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"トゲ族７"*/"\x83\x67\x83\x51\x91\xB0\x82\x56", // name

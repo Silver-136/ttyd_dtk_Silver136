@@ -1,3 +1,6 @@
+// rsh_06 (列車, Excess Express): the car of the Smorg (moamoa) boss fight, with the train wheel/coupling animation and
+// departure/stop scenes; door to rsh_05.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

@@ -1,3 +1,5 @@
+// gor_12 (ゴロツキタウン, Rogueport): final epilogue sea scene (ending, story flag 402); on finish goes to aaa_00 (title).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_map.h"

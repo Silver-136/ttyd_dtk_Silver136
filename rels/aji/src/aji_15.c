@@ -1,3 +1,5 @@
+// aji_15 (敵のアジト, X-Naut Fortress): the shower room where Peach takes a shower (peach_evt_syawa_main).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"

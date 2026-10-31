@@ -1,3 +1,5 @@
+// bom_02 (ボム村, Fahr Outpost): the east side of the village with the inn, the shop and General White's bed.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bg.h"
@@ -1358,6 +1360,10 @@ static EVT_BEGIN(kiza_talk)
     RETURN
 EVT_END()
 
+/**
+ * Spawns the dandy (キザ野郎, model c_kiza) at (-190, 5, -130) facing east with movement and talk animations
+ * and the talk script kiza_talk.
+ */
 static EVT_BEGIN(kiza_entry)
     CALL(evt_npc_entry, STRING("キザ野郎"), STRING("c_kiza"))
     CALL(evt_npc_set_tribe, STRING("キザ野郎"), STRING("キザ野郎"))
@@ -1530,6 +1536,11 @@ static USER_FUNC(yami_view) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Chapter 8 "world of darkness" scene: Mario and the partner are parked off-stage,
+ * the mayor and three villagers (ボムヘイE, F, G) are placed in the darkened village (envSetYami tint),
+ * the mayor speaks stg8_dark_08 and the map changes to las_26 at the sekai_yami2 entrance.
+ */
 static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -1671,6 +1682,11 @@ static EVT_BEGIN(sekai_yami_evt)
     RETURN
 EVT_END()
 
+/**
+ * Chapter 8 finale scene "everyone's voices" in the darkened village:
+ * ボムヘイE speaks stg8_las_148_63 and the mayor stg8_las_148_64,
+ * then the map changes to bom_01 at the minnnanokoe entrance.
+ */
 static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)

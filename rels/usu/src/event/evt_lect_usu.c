@@ -743,6 +743,16 @@ EVT_BEGIN(vivian_party_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * Vivian's tutorial after she joins (system messages lecture_friends_12_0_1, 12_1, 13 and 14):
+ * the primer says X makes her pull Mario into the shadows to hide;
+ * the camera moves in and Vivian holds Mario in the shadow (evt_party_vivian_hold)
+ * while a Boo (テレサ) floats in from the right with a speech bubble, looks around twice and floats away,
+ * unable to find them.
+ * Then the message says X brings them back out, Vivian lets go, moves beside Mario,
+ * and the last message explains Shade Fist (sets enemies on fire) and Veil (hide to avoid damage)
+ * before she strikes a pose (PTR_O_1).
+ */
 EVT_BEGIN(vivian_party_lecture)
     CALL(evt_msg_print, 0, STRING("lecture_friends_12_0_1"), 0, 0)
     CALL(evt_msg_print, 0, STRING("lecture_friends_12_1"), 0, 0)
@@ -1002,6 +1012,17 @@ EVT_BEGIN(roll_majin_lecture_sub02)
     RETURN
 EVT_END()
 
+/**
+ * The Tube Curse lecture after Mario opens Twilight Town's black chest:
+ * the chest spirit (ペラ魔人) appears by the camera
+ * and curses him (stg4_usu_majin3_12 to 14, flashing light on Mario),
+ * telling him to hold R and rotate the stick.
+ * Mario then practices with the status bar and main menu off, only R and the stick enabled,
+ * and R and stick prompts (roll_majin_lecture_sub01 and sub02) until he rolls into a tube (motion 22).
+ * The spirit gloats (stg4_usu_majin3_18) and asks whether he got it (stg4_usu_majin3_19);
+ * "I don't get it" repeats the practice, and once he understands the spirit signs off (20_1 and 21)
+ * and disappears.
+ */
 EVT_BEGIN(roll_majin_lecture)
     BEGIN_SIBLING_EVENT
         CALL(lecture_button_rtn)

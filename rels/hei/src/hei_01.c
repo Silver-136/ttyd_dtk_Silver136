@@ -1,3 +1,6 @@
+// hei_01 (平原, Petal Meadows): field linking hei_13 and Petalburg (nok_00).
+// Koops (nokotarou) is met here and joins as a partner; a blue switch lowers the bridge; Fire Flower block, Star Piece.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -452,6 +455,7 @@ EVT_BEGIN(nokotaro_nakama)
     RETURN
 EVT_END()
 
+/** Init event of Koops (ノコタロウ): turns on his move and talk animations. */
 static EVT_BEGIN(nokotarou_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN

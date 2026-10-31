@@ -1,3 +1,6 @@
+// hei_11 (平原, Petal Meadows): Shhwonk Fortress passage between hei_10 and hei_12.
+// Only the map doors, water and field enemies.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

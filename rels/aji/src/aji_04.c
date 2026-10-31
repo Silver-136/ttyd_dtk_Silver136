@@ -1,3 +1,6 @@
+// aji_04 (敵のアジト, X-Naut Fortress): the quiz room: the stone statue (sekizou) asks its quiz questions
+// (kuizu_sekizou); with two Yux.
+
 #include "data_tables.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

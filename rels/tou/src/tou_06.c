@@ -1,3 +1,6 @@
+// tou_06 (闘技場, Glitz Pit): the storage room (倉庫): containers, the hidden hole and Ms. Mowz (チュチュリーナ).
+// Connects tou_04, tou_05 and tou_12.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"

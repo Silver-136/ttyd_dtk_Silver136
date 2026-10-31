@@ -1,3 +1,6 @@
+// gor_00 (ゴロツキタウン, Rogueport): harbor. Docks and ships, sailors, Lord Crump and X-Naut scenes.
+// Exits to gor_01 (central plaza); also the departure for Keelhaul Key (chapter 5).
+
 #include "version.h"
 #include "eff/eff_funemizu.h"
 #include "battle/battle_unit.h"

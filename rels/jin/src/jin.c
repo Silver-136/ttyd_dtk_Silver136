@@ -1,3 +1,6 @@
+// jin (ダイム寺院, Creepy Steeple): shared code for the whole area: REL prolog/epilog (registers jin_00 to jin_11 and
+// battle tables, swaps the Vivian pose table) and evt_jin_vivian_pose_set.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"

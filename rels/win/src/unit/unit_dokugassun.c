@@ -1,3 +1,5 @@
+// Battle unit Poison Puff (ドクガッスン): win.rel's copy.
+
 #include "eff/n64/eff_vapor_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

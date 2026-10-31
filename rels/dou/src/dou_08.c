@@ -1,3 +1,6 @@
+// dou_08 (洞窟, Pirate's Grotto): room between dou_07 and dou_13 with two ship-change platforms for the boat move.
+// Floating barrel and bottle.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

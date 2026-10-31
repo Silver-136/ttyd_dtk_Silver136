@@ -1,3 +1,5 @@
+// nok_00 (ノコ村, Petalburg): the west half of the village, with the gate to Petal Meadows (hei_01).
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -406,6 +408,10 @@ static EVT_BEGIN(talk_white)
     RETURN
 EVT_END()
 
+/**
+ * Regular script of the Show-off Koopa (キザ野郎):
+ * he wanders at random within 100 units of where he stands, at speed 30 (urouro_init_func and urouro_main_func).
+ */
 static EVT_BEGIN(kizayarou_regl)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(urouro_init_func, STRING("me"), LW(0), LW(2), FLOAT(100.0f), FLOAT(30.0f), 0)

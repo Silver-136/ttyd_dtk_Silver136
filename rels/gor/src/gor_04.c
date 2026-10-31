@@ -1,3 +1,6 @@
+// gor_04 (ゴロツキタウン, Rogueport): station behind the west side: blimp to the Glitz Pit (tou_00) and the train
+// connections to hom_00 and pik_00.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
@@ -1345,6 +1348,7 @@ EVT_BEGIN(jugemu_a_talk)
     RETURN
 EVT_END()
 
+/** Init event of the Toad woman B (キノピオ女Ｂ): places her at (-575, 80, 120). */
 static EVT_BEGIN(kinopiko_b_init)
     CALL(evt_npc_set_position, STRING("me"), -575, 80, 120)
     RETURN
@@ -1373,11 +1377,13 @@ static EVT_BEGIN(kinopiko_b_talk)
     RETURN
 EVT_END()
 
+/** Init event of Kammy Koopa (ババ): sets NPC_STATUS_FACE_MOVE_DIR (2): she turns the way she moves. */
 static EVT_BEGIN(baba_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
+/** Init event of the flying Bowser (飛クッパ): sets NPC_STATUS_FACE_MOVE_DIR (2): he turns the way he moves. */
 static EVT_BEGIN(hkoopa_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
@@ -1428,12 +1434,14 @@ static EVT_BEGIN(luigi_npcEnt)
     RETURN
 EVT_END()
 
+/** Init event of Luigi's companion (ス・クリーミ) NPC: puts him at (105, 0, 120) facing the player. */
 EVT_BEGIN(scream_init)
     CALL(evt_npc_set_position, STRING("me"), 105, 0, 120)
     CALL(evt_npc_set_ry_lr, STRING("me"), 0)
     RETURN
 EVT_END()
 
+/** Talk event of Luigi's companion (ス・クリーミ): says luigi_npc_05. */
 EVT_BEGIN(scream_talk)
     CALL(evt_msg_print, 0, STRING("luigi_npc_05"), 0, STRING("me"))
     RETURN
@@ -2224,6 +2232,10 @@ static void resha_tev(MapTevCallbackInfo* info) {
     envAddTev(7, info);
 }
 
+/**
+ * Script helper that lifts Bowser's airship NPC (飛クッパ) by setting its vertical move offset to args[0],
+ * used to bob it in gor_04_koopa_evt.
+ */
 static USER_FUNC(kpa_hikousen_yure) {
     f32 y = evtGetFloat(event, event->args[0]);
 

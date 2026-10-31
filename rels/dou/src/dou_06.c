@@ -1,3 +1,5 @@
+// dou_06 (洞窟, Pirate's Grotto): short room between dou_05 and dou_10 with a spinning floor.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

@@ -1,3 +1,6 @@
+// tou_05 (闘技場, Glitz Pit): Grubba's (ガンス) office: match registration and reset, first-league scenes.
+// Connects tou_04, tou_06 (storage) and tou_13.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/msgdrv.h"

@@ -1,3 +1,5 @@
+// win_06 (ウィンディん家周辺, Boggly Woods): the edge of the woods with the pipe to Rogueport Sewers (tik_03); path to win_00.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"

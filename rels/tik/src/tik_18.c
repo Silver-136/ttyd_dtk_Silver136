@@ -1,3 +1,6 @@
+// tik_18 (埋没した都市, Rogueport Sewers): the passage between tik_06, tik_07 and tik_17, with a cloud event
+// (tik_18_cloud_evt); a Magikoopa, a Koopatrol and Spanias.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

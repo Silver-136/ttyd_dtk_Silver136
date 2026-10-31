@@ -979,6 +979,10 @@ EVT_BEGIN(demo_evt)
     RETURN
 EVT_END()
 
+/**
+ * Swings the gallows rope (koushukei-dai, 絞首刑台 = gallows; map object S_rop) back and forth about its X axis
+ * between +10 and -10 degrees, one second each way, forever. The map's init spawns it.
+ */
 static EVT_BEGIN(koushukei_dai)
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 10, -10, 1000)

@@ -1,3 +1,6 @@
+// pik_02 (ピカリーヒルズ, Poshley Sanctum): the sanctum hall, whose Garnet Star on the altar is a fake taken by the Shadow
+// Sirens and Doopliss.
+
 #include "battle/battle_unit.h"
 #include "eff/eff_itemget.h"
 #include "eff/eff_starstone.h"
@@ -337,6 +340,7 @@ EVT_BEGIN(init_majo)
     RETURN
 EVT_END()
 
+/** Init for Marilyn (マリリン): until the surprise-guests scene she stands by the altar at (30, 10, -950) facing west. */
 EVT_BEGIN(init_mari)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_51_3_SURPRISE_GUESTS)
@@ -346,6 +350,7 @@ EVT_BEGIN(init_mari)
     RETURN
 EVT_END()
 
+/** Init for Doopliss (ランペル): until the surprise-guests scene he stands at (20, 10, -910) facing west. */
 EVT_BEGIN(init_ramp)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_51_3_SURPRISE_GUESTS)
@@ -355,11 +360,16 @@ EVT_BEGIN(init_ramp)
     RETURN
 EVT_END()
 
+/**
+ * Init for the Paragoomba NPC (パタクリ, Patakuri): turns on bit 2 of the status flags (flies / hovers);
+ * he is only placed on screen by the Bowser interlude.
+ */
 EVT_BEGIN(patakuri_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
+/** Init event of Kammy Koopa (ババ): sets NPC_STATUS_FACE_MOVE_DIR (2): she turns the way she moves. */
 static EVT_BEGIN(baba_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN

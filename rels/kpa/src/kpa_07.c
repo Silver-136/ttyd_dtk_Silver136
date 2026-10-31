@@ -1,3 +1,6 @@
+// kpa_07 (クッパ編, Bowser's interludes): the scene after the third side-scrolling stage, where Bowser meets Rawk Hawk
+// and finds a fake (nise) Crystal Star; it returns to Rogueport (gor_04).
+
 #include "version.h"
 #include "eff/eff_starstone.h"
 #include "battle/battle_unit.h"
@@ -43,6 +46,7 @@ EvtWord kpa_07_hipattack_eff[149];
 EvtWord kpa_07_evt[1224];
 EvtWord kpa_07_init_evt[52];
 
+/** NPCs of the Rawk Hawk scene: Kammy Koopa (ババ) and Rawk Hawk (ブレッドハート). */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ババ"*/"\x83\x6F\x83\x6F", // name

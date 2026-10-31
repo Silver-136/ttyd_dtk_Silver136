@@ -1,3 +1,6 @@
+// jin_03 (ダイム寺院, Creepy Steeple): staircase room joining jin_00, jin_01 and jin_02,
+// with a spinning (kururin) floor tile.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

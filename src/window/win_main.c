@@ -1001,6 +1001,7 @@ void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* f
 #endif
 }
 
+/** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #ifdef VERSION_G8ME01
     char buf[0x1000];

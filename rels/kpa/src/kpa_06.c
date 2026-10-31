@@ -1,3 +1,5 @@
+// kpa_06 (クッパ編, Bowser's interludes): the end of the third side-scrolling stage; continues in kpa_07.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "kpa.h"

@@ -1,3 +1,6 @@
+// gon_10 (ゴンババ, Hooktail Castle): room between gon_05 and Hooktail's lair (gon_11).
+// Has a save block and a recovery block.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

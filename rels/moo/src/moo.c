@@ -1,3 +1,5 @@
+// moo (月, the Moon): registers moo_00..moo_07 and the battle database.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

@@ -1,3 +1,5 @@
+// moo_03 (月, the Moon): the scene after the cannon shot, where Mario and his partners arrive on the Moon.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"

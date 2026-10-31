@@ -1,3 +1,5 @@
+// win_02 (ウィンディん家周辺, Boggly Woods): the path between win_01 and win_03.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

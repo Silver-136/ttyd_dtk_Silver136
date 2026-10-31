@@ -1,3 +1,5 @@
+// las_04 (ラストダンジョン, Palace of Shadow): the hall with the fire bars (firebar) and the coin they drop.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario_pouch.h"

@@ -1,3 +1,6 @@
+// aji_06 (敵のアジト, X-Naut Fortress): Peach's potion lab: she mixes the coloured medicines (kusuri) in the
+// machine, shrinks and grows, and turns invisible (peach_evt_kusuri_nomu).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"

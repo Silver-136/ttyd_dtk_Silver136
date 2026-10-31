@@ -1,3 +1,5 @@
+// Battle unit Z-Yux (バリアーンＺ): moo.rel's copy.
+
 #include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

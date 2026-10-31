@@ -1,3 +1,6 @@
+// mri_19 (巨木の中, The Great Tree): a pipe room with planters, a wind event (cloud_wind_event) and a plane
+// panel (hikou).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

@@ -1,3 +1,6 @@
+// mri_14 (巨木の中, The Great Tree): the deepest room: the Crystal Star appears and Lord Crump takes it
+// (dai3_kanbu), then leaves a time bomb (time_bomb); moving floor and planters.
+
 #include "battle/battle_unit.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"

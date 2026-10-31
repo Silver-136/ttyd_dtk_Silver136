@@ -1,3 +1,6 @@
+// dou_09 (洞窟, Pirate's Grotto): hub room linking dou_03, dou_10 and dou_13 with bobbing platforms.
+// A wall that can be bombed open and a hidden brick.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

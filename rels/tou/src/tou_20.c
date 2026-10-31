@@ -1,3 +1,5 @@
+// tou_20 (闘技場, Glitz Pit): the chapter title scene (balloon and spline camera), then sys_01 or tou_00.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

@@ -1,3 +1,6 @@
+// muj_12 (無人島, Keelhaul Key): Cortez's lair: Cortez appears, the scenes after his battle and
+// the bargain with him (korutesu_event_after, kosho_event), and the Crystal Star.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"

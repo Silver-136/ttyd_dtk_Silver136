@@ -1,3 +1,6 @@
+// gon_09 (ゴンババ, Hooktail Castle): room between gon_08 and gon_05.
+// Floating block and switch puzzle with a Star Piece and Dry Bones-type enemies.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

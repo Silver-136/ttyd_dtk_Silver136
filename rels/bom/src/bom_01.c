@@ -1,3 +1,6 @@
+// bom_01 (ボム村, Fahr Outpost): the village square with the mayor and the Bob-omb soldiers, and the cannon launch to
+// the Moon with the crowd of Bob-ombs.
+
 #include "version.h"
 #include "eff/eff_starstone.h"
 #include "battle/battle_unit.h"
@@ -2252,6 +2255,10 @@ static EVT_BEGIN(musume_talk)
     RETURN
 EVT_END()
 
+/**
+ * Spawns dancing girl A (踊り子, model c_dance_r) at (370, 5, -120) with movement and talk animations
+ * and her talk script musume_talk.
+ */
 static EVT_BEGIN(musume_a_entry)
     CALL(evt_npc_entry, STRING(("\202R\220l\226\272\202`")), STRING(("c_dance_r")))
     CALL(evt_npc_set_tribe, STRING(("\202R\220l\226\272\202`")), STRING(("\227x\202\350\216q")))
@@ -2261,6 +2268,10 @@ static EVT_BEGIN(musume_a_entry)
     RETURN
 EVT_END()
 
+/**
+ * Spawns dancing girl B (踊り子ピンク, model c_dance_p) at (400, 5, -150) with movement and talk animations
+ * and her talk script musume_talk.
+ */
 static EVT_BEGIN(musume_b_entry)
     CALL(evt_npc_entry, STRING(("\202R\220l\226\272\202a")), STRING(("c_dance_p")))
     CALL(evt_npc_set_tribe, STRING(("\202R\220l\226\272\202a")), STRING(("\227x\202\350\216q\203s\203\223\203N")))
@@ -2270,6 +2281,10 @@ static EVT_BEGIN(musume_b_entry)
     RETURN
 EVT_END()
 
+/**
+ * Spawns dancing girl C (踊り子黄緑, model c_dance_k) at (430, 5, -100) with movement and talk animations
+ * and her talk script musume_talk.
+ */
 static EVT_BEGIN(musume_c_entry)
     CALL(evt_npc_entry, STRING(("\202R\220l\226\272\202b")), STRING(("c_dance_k")))
     CALL(evt_npc_set_tribe, STRING(("\202R\220l\226\272\202b")), STRING(("\227x\202\350\216q\211\251\227\316")))

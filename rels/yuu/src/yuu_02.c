@@ -1,3 +1,5 @@
+// yuu_02 (遊技場, Pianta Parlor): minigame 3, Tube Mode (roll, rolling course); entered from gor_03.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "party.h"

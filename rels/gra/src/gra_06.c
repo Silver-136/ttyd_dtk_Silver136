@@ -1,3 +1,6 @@
+// gra_06 (ウスグラの道, Twilight Trail): the end of the trail before Creepy Steeple (jin_00), with the save and heart
+// blocks.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

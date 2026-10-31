@@ -1,3 +1,6 @@
+// muj_20 (無人島, Keelhaul Key): the voyage from Rogueport (gor_muj_ship): the ship at sea by day
+// and night, the Embers in the mist (onryo_event) and the sinking ship (marcoship_shizumu); also a Bowser interlude.
+
 #include "version.h"
 #include "eff/eff_funemizu.h"
 #include "battle/battle_unit.h"

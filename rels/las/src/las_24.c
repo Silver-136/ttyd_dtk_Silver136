@@ -1,3 +1,5 @@
+// las_24 (ラストダンジョン, Palace of Shadow): the room with the cloud blocks and the breaking floor.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

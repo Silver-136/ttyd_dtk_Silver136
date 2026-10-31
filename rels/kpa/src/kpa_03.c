@@ -1,3 +1,5 @@
+// kpa_03 (クッパ編, Bowser's interludes): the second side-scrolling stage, by the sea; continues in kpa_04.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "kpa.h"

@@ -1,3 +1,5 @@
+// tik_09 (埋没した都市, Rogueport Sewers): a small pipe room between tik_06 and tik_10.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

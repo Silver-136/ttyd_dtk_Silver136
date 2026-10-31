@@ -1,3 +1,6 @@
+// mri_08 (巨木の中, The Great Tree): the first Jabbi hive (hachi): Jabbies 1-6 and the Punies' fight against
+// the Jabbies (puni_vs_toge).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -233,6 +236,7 @@ EVT_BEGIN(toge_6_talk)
     RETURN
 EVT_END()
 
+/** The six Jabbies (トゲ族１ to 6) of the first hive. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"トゲ族１"*/"\x83\x67\x83\x51\x91\xB0\x82\x50", // name

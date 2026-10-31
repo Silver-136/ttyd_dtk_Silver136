@@ -1,3 +1,6 @@
+// aji_01 (敵のアジト, X-Naut Fortress): the central hall: its many doors, the card-key elevators (ele_1,
+// ele_2, key_lock), the password (evt_aikotoba), the X-Naut underlings, and Peach's visits.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -1724,6 +1727,10 @@ static EVT_BEGIN(peach_evt_stg5)
     RETURN
 EVT_END()
 
+/**
+ * Peach scene for chapter 5, on entering through n_bero_1:
+ * the guard (見張り) turns toward her, gets an exclamation balloon and speaks peach_aji_243.
+ */
 static EVT_BEGIN(peach_evt_stg5_1)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
@@ -2167,6 +2174,7 @@ static EVT_BEGIN(teshita2_init)
     RETURN
 EVT_END()
 
+/** Talk script of the X-Naut guard 手下２ in Peach's section; one line, peach_aji_139. */
 EVT_BEGIN(teshita2_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_139"), 0, STRING("手下２"))
@@ -2210,6 +2218,7 @@ static EVT_BEGIN(teshita3_init)
     RETURN
 EVT_END()
 
+/** Talk script of the X-Naut guard 手下３ in Peach's section; one line, peach_aji_140. */
 EVT_BEGIN(teshita3_talk)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_140"), 0, STRING("手下３"))

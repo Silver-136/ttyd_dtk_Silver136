@@ -1,3 +1,6 @@
+// hei_00 (平原, Petal Meadows): room with the Sun Stone and Moon Stone statues and the way to Hooktail Castle (gon_00).
+// Has Hooktail's flyover, a Bowser cutscene leading to kpa_02, a pipe to tik_02 and the epilogue scene that goes to nok_01.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -1230,6 +1233,10 @@ EVT_BEGIN(hei_00_koopa_evt)
     RETURN
 EVT_END()
 
+/**
+ * Epilogue setup: creates Goombella (クリスチーヌ, model c_pkr) at (-200, 25, 35) facing right as an intangible,
+ * wall-ignoring NPC.
+ */
 static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))

@@ -1,3 +1,5 @@
+// pik_03 (ピカリーヒルズ, Poshley Sanctum): the hidden inner room of the sanctum.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

@@ -1,3 +1,5 @@
+// mri_10 (巨木の中, The Great Tree): a small room off mri_09 with an item box.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

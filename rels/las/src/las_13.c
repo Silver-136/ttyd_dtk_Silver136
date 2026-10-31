@@ -1,3 +1,5 @@
+// las_13 (ラストダンジョン, Palace of Shadow): a riddle room off las_10: the switch and the small star.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"

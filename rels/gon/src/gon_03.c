@@ -1,3 +1,6 @@
+// gon_03 (ゴンババ, Hooktail Castle): hall between gon_02 and gon_04 with a bone-enemy leader fight and the Richard NPC (story 38, 39, 46).
+// Castle Key (0x0C) item and a spinning floor.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
@@ -622,6 +625,10 @@ EVT_BEGIN(richard_talk_event)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the Dry Bones leader (リーダー): places him at the east end of the room
+ * until the swarm scene has been done, afterwards he is moved off the map.
+ */
 EVT_BEGIN(leaderkaron_init_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_11_1000_DRY_BONES)
@@ -691,6 +698,7 @@ static ExtTexInfo senkaron_ext_entry_data[] = {
     {0},
 };
 
+/** NPC init for the placeholder Dry Bones (カロン1): moves it far below the map. */
 EVT_BEGIN(senkarondummy_init_event)
     CALL(evt_npc_set_position, STRING("カロン1"), 0, -1000, 0)
     RETURN

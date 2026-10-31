@@ -1,3 +1,6 @@
+// Battle unit for a Boo (テレサ) acting in Flurrie's stage play in the epilogue (nok.rel); it only plays its
+// scripted part.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_cmd.h"

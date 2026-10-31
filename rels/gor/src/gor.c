@@ -1,3 +1,6 @@
+// gor.rel (ゴロツキタウン, Rogueport): shared code and the REL prolog/epilog.
+// Registers the init events of gor_00..gor_04 and gor_10..gor_12.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_mario.h"

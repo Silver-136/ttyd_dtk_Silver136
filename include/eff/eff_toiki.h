@@ -1,3 +1,5 @@
+// eff_toiki.c: the Shadow Queen's breath (影の女王・吐息): a drifting cloud with a scrolling texture and mist puffs (unit_boss_black_peach.c). effToikiEntry with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

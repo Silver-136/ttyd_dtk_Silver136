@@ -1,3 +1,6 @@
+// muj_03 (無人島, Keelhaul Key): the jungle path where the nervous sailor runs off
+// (nigeru_suifu01), with the bespectacled sailor and hidden blocks.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

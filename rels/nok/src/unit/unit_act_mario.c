@@ -1,3 +1,6 @@
+// Battle unit for Mario (マリオ) acting in Flurrie's stage play in the epilogue (nok.rel); it only plays its
+// scripted part.
+
 #include "battle/battle_unit.h"
 #include "eff/n64/eff_kumokumo_n64.h"
 #include "evt/evt_cmd.h"

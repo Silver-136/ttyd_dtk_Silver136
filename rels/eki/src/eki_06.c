@@ -1,3 +1,5 @@
+// eki_06 (駅, Riverside Station): far room with three floor switches, a paper-fold origami, a box and a power-up block; door to eki_05.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario.h"

@@ -1,3 +1,6 @@
+// mri_06 (巨木の中, The Great Tree): the hall where Piders ambush the Punies (paiders_a, paiders_b) and the
+// Jabbies appear; Punies 6-11, the rival Puni, a save block, a badge and a fake wall (nisekabe).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

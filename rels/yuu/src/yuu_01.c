@@ -1,3 +1,5 @@
+// yuu_01 (遊技場, Pianta Parlor): minigame 2, Boat Mode (fune); entered from gor_03.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

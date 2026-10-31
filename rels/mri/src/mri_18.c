@@ -1,3 +1,5 @@
+// mri_18 (巨木の中, The Great Tree): a pipe room with planters, guarded by an X-Naut and a Yux.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

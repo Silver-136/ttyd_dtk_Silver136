@@ -1,3 +1,5 @@
+// hom.rel (途中駅ホーム, Excess Express platform): registers hom_00 and the train scenes hom_10..hom_12.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

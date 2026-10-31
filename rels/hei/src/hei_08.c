@@ -1,3 +1,6 @@
+// hei_08 (平原, Petal Meadows): Shhwonk Fortress room off hei_09 where a Fuzzy (chorobon) jumps in and fights Mario.
+// Holds the Moon Stone item.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_map.h"
@@ -53,6 +56,13 @@ static USER_FUNC(npc_set_me) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * The Fuzzy ambush at the Moon Stone: sets GSWF_HEI_MOON_STONE_TAKEN,
+ * then a Fuzzy (チョロボン) drops in on Mario with SFX_STG1_CHORO_FALL1 and Mario is startled.
+ * Battle starts (interrupt chorobon_move_event);
+ * if Mario flees, the Fuzzy is removed with the common dead event,
+ * otherwise the enemy flags are restored and field battle mode is switched on.
+ */
 static EVT_BEGIN(evt_chorobon)
     SET_VALUE(GSWF_HEI_MOON_STONE_TAKEN, 1)
     CALL(evt_mario_wait_movable)

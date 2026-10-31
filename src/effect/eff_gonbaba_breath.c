@@ -1,3 +1,7 @@
+// Fire breath (gonbaba_breath, ファイアブレス): type % 10 picks the colour set in col_tbl (0 normal, 1 poison, 2 mega,
+// 3 cold, 4 confusion, 5 sleep, 6 mini, 7 Bowser); each type 0-7 also spawns its companion layer as type + 10.
+// Particles drift out along a yaw. Used by Hooktail, Bonetail and Bowser.
+
 #include "eff/eff_gonbaba_breath.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"

@@ -1,3 +1,6 @@
+// gor_01 (ゴロツキタウン, Rogueport): central plaza. Badge shop, Zess T. ("nancy" in the code) and her cooking,
+// star-stone scenes. Hub between the harbor and the east and west sides.
+
 #include "eff/eff_starstone.h"
 #include "eff/eff_mahojin.h"
 #include "version.h"
@@ -3644,6 +3647,10 @@ static DoorParam door_data_04 = {
     evt_door_04_close, // evtClose
 };
 
+/**
+ * Loops forever, swinging the map object S_rop (the rope of the plaza's gallows: koushukei-dai, 絞首刑台) back and
+ * forth between +10 and -10 degrees about X, one second each way.
+ */
 static EVT_BEGIN(koushukei_dai)
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 10, -10, 1000)

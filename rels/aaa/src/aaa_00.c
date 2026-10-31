@@ -1,3 +1,6 @@
+// aaa_00 (マリオの家, Mario Bros.' house): the prologue, where Parakarry (パレッタ) delivers Peach's letter with the
+// treasure map before the title logo fades in, and the house scenes of the epilogue.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bg.h"
@@ -538,6 +541,11 @@ static EVT_BEGIN(epilogue_evt)
     RETURN
 EVT_END()
 
+/**
+ * Spawns the epilogue's Peach and Toadsworth (キノじい) NPCs,
+ * parked below the floor at (0, -1000, 0) facing 270 degrees, with wall hits off and blending flags set,
+ * ready for epilogue_evt2 to move them in.
+ */
 static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_entry, STRING("ピーチ姫"), STRING("c_peach"))
     CALL(evt_npc_set_tribe, STRING("ピーチ姫"), STRING("ピーチ姫（普通）"))

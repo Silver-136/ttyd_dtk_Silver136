@@ -71,6 +71,14 @@ void effPturnDisp(CameraId cameraId, EffectEntry* effect);
 void pturn_main_dispp(CameraId cameraId, EffectEntry* effect);
 void pturn_num_dispp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * A bobbing badge (N64 texture 0x92) with a one- or two-digit count (texture 0x53) above (x, y, z);
+ * the effect table labels it 行動不能 ("unable to act").
+ * Type 0 steps its displayed count toward lifetime, type 1 shows the badge without digits,
+ * and type 10 is the short-lived badge that type 0 throws off when the count falls.
+ * Reached only through evt_eff64 "pturn_n64"; no script in the tree spawns it.
+ * Guess: the immobilised-status icon with its turns left.
+ */
 EffectEntry* effPturnN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z) {
     EffectEntry* effect;
     PturnElem* work;

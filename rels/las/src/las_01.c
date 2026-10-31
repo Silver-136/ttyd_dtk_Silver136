@@ -1,3 +1,5 @@
+// las_01 (ラストダンジョン, Palace of Shadow): the first hall inside the palace.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

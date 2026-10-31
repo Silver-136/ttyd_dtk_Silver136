@@ -1,3 +1,6 @@
+// tik_02 (埋没した都市, Rogueport Sewers): the Blooper (gesso) boss room with the moving floating island (ukishima_move); the
+// way to Petal Meadows (hei_00).
+
 #include "eff/n64/eff_ripple_n64.h"
 #include "eff/n64/eff_hokori_n64.h"
 #include "battle/battle_unit.h"
@@ -359,6 +362,7 @@ static BeroEntry bero_entry_data2[] = {
     {0},
 };
 
+/** Init script for the Blooper (geso, ゲッソー) NPC; does nothing. */
 EVT_BEGIN(geso_init)
     RETURN
 EVT_END()

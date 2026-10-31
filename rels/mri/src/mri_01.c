@@ -1,3 +1,6 @@
+// mri_01 (巨木の中, The Great Tree): the Puni Elder's room: the Elder and the Punies, troubles (irai), the
+// first X-Naut battle, the Magnus von Grapple fight with Lord Crump, the Crystal Star, and Bowser's interludes.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "countdown.h"
@@ -2035,6 +2038,13 @@ void bossrobot_batu(CameraId camera, void* param) {
     }
 }
 
+/**
+ * Script helper that never returns (EVT_RETURN_BLOCK, run from an inline event with GW(10) as args[0]):
+ * every frame it puts the boss robot's circle NPC (ボスロボットマル) at the robot's locator17 bone
+ * and queues three bossrobot_batu draws of the cross mark with the alpha in args[0].
+ * On its first call it allocates the alpha byte, turns on world-matrix evaluation for the robot's pose
+ * and fills its world matrices with a translation 1000 units down until the pose computes them.
+ */
 USER_FUNC(bossrobot) {
     u8 alpha = evtGetValue(event, event->args[0]);
     NpcEntry* robot = npcNameToPtr("\203{\203X\203\215\203{\203b\203g");
@@ -3072,6 +3082,10 @@ static EVT_BEGIN(door_switch_init)
     RETURN
 EVT_END()
 
+/**
+ * The Puni NPC "プニ族" appears at a planter (x in LW(0), z in LW(1), message key in LW(2)), says its line,
+ * hops and runs off.
+ */
 EVT_BEGIN(ueki_puni_nigeru)
     CALL(evt_npc_flag_onoff, 1, STRING("プニ族"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING("プニ族"), NPC_FLAG_NO_DRAW)

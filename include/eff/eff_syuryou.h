@@ -1,3 +1,5 @@
+// eff_syuryou.c: Grodus effects (syuryou, 首領 "leader"): type 0 his staff animation (EFF_batug_tue), type 1 the barrier (MOBJ_EFF_baria, also used by the Yux); effSyuryouEntry and EffSyuryouWork.
+
 #pragma once
 
 #include "driver/camdrv.h"

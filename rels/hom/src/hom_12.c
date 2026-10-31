@@ -1,3 +1,5 @@
+// hom_12 (途中駅ホーム, Excess Express platform): the coupled cars seen from outside, leading into rsh_02_a.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "hom.h"

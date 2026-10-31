@@ -1,3 +1,6 @@
+// rsh_01 (列車, Excess Express): car joining the driver's cab (rsh_00) and rsh_02: Toron, Madam, conductor, cook and
+// waitress NPCs; doors to Rogueport (gor_04), Riverside (hom_00) and Poshley Heights (pik_00) stations.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

@@ -1,3 +1,5 @@
+// gon.rel (ゴンババ, Hooktail Castle): _prolog registers each map's init script (gon_00 to gon_13, gon_bt00) and the area's battle tables.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

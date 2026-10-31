@@ -1,3 +1,6 @@
+// hei_04 (平原, Petal Meadows): grassy field between hei_03 and hei_05.
+// Field enemies, coins and a POW Block.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

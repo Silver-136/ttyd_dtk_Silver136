@@ -1,3 +1,6 @@
+// gon_11 (ゴンババ, Hooktail Castle): Hooktail's (Gonbaba's) lair: cutscenes, the Hooktail boss fight (story 55, 56) and the Diamond Star.
+// Also a chest that gives an Attack FX item.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -149,6 +152,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Script helper: blocks until Hooktail (ゴンババ) has touched the ground. */
 static USER_FUNC(gonbaba_wait_landon) {
     // ゴンババ
     return npcNameToPtr("\203S\203\223\203o\203o")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;

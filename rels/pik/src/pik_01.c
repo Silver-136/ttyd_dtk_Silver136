@@ -1,3 +1,6 @@
+// pik_01 (ピカリーヒルズ, Poshley Heights): the town square with Pennington's office and the souvenir shop; paths to pik_04
+// and the sanctum (pik_02), pipe to Rogueport Sewers (tik_17).
+
 #include "battle/battle_unit.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
@@ -704,17 +707,23 @@ EVT_BEGIN(madam_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for Kammy Koopa (ババ) during the Bowser interlude: kpa_stg7_003_1, where she admires the town and
+ * tells Bowser the sanctum and its Crystal Star lie ahead.
+ */
 static EVT_BEGIN(baba_talk)
     CALL(evt_msg_print, 0, STRING("kpa_stg7_003_1"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/** Init for Kammy Koopa (ババ): standard NPC init, then NPC_STATUS_FACE_MOVE_DIR (she turns the way she moves). */
 static EVT_BEGIN(baba_init)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
+/** Init for Tar-kun 4 (ターくん４): turns on the walk and talk animations. */
 EVT_BEGIN(takun4_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ターくん４"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     RETURN
@@ -1193,6 +1202,12 @@ void test_tev2(MapTevCallbackInfo* info) {
     envAddTev(7, info);
 }
 
+/**
+ * Stops the regular scripts of the three NPCs ターくん４, ５ and ６ before the chapter 8 cutscenes:
+ * for each one it fetches the running regular script,
+ * clears its move event (evt_npc_change_interrupt type 1) and
+ * deletes the script.
+ */
 static EVT_BEGIN(delete_npc_regl_evt)
     CALL(evt_npc_get_reglid, STRING("ターくん４"), LW(0))
     CALL(evt_npc_change_interrupt, STRING("ターくん４"), 1, 0)
@@ -1377,6 +1392,10 @@ static EVT_BEGIN(evt_switch_init)
     RETURN
 EVT_END()
 
+/**
+ * Creates the Luigi NPC (ルイージ, model c_luigi) for Trouble Center request 27
+ * and parks him off screen at (0, -1000, 0) until the shop scene calls for him.
+ */
 EVT_BEGIN(iri_27_npc_entry)
     CALL(evt_npc_entry, STRING("ルイージ"), STRING("c_luigi"))
     CALL(evt_npc_set_tribe, STRING("ルイージ"), STRING("ルイージ"))

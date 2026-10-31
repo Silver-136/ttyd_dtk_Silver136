@@ -1,3 +1,5 @@
+// bom.rel (ボム村, Fahr Outpost): registers bom_00..bom_04 and the battle database; puffs of breath in the cold.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_mist.h"

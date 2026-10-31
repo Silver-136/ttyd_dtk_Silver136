@@ -1,3 +1,6 @@
+// mri_13 (巨木の中, The Great Tree): the room with the moving floor set off by the counter switches
+// (yuka_event), a Puni-ball pad, a save block and a recovery block.
+
 #include "mri_puni.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

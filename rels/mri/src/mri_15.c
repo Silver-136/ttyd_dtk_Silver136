@@ -1,3 +1,6 @@
+// mri_15 (巨木の中, The Great Tree): the room with the light-locked door where Lord Crump and two X-Nauts flee
+// or fight Mario (dai3_escape, dai3_battle).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

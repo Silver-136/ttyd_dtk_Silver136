@@ -1,3 +1,5 @@
+// tik_10 (埋没した都市, Rogueport Sewers): a small pipe room with an item box, joining tik_06, tik_09 and tik_14.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

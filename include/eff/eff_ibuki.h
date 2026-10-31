@@ -1,3 +1,5 @@
+// eff_ibuki.c: ice breath (こおりのいぶき) of Beldam (Shadow Siren); effIbukiEntry.
+
 #pragma once
 
 #include "driver/effdrv.h"

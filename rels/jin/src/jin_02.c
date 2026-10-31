@@ -1,3 +1,5 @@
+// jin_02 (ダイム寺院, Creepy Steeple): side room with a red switch and a camera shake event; doors to jin_00 and jin_03.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

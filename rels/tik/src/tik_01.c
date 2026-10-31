@@ -1,3 +1,6 @@
+// tik_01 (埋没した都市, Rogueport Sewers): the first room below Rogueport (gor_02): the three Goomba bullies
+// (gorotuki_sanninngumi), bombable walls, a save block, and the scene after the badge lecture.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

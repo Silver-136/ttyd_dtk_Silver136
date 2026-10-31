@@ -1,3 +1,6 @@
+// sys.rel (システム, System): sys_00, an empty map, and sys_01, the chapter title card ("Prologue", "Chapter 1" ...)
+// that plays between chapters: the title's letters fly in over a rainbow light, followed by the chapter subtitle.
+
 #include "battle/battle_unit.h"
 #include "eff/eff_itemget.h"
 #include "evt/evt_cmd.h"

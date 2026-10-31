@@ -1,3 +1,6 @@
+// las_09 (ラストダンジョン, Palace of Shadow): the Shadow Sirens (Beldam, Marilyn) and Doopliss (Rampell) cutscene and
+// battle, and the two Chain Chomp statues (bomb_wanwan) that are bombed open.
+
 #include "eff/n64/eff_guruguru_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -729,6 +732,7 @@ EVT_BEGIN(ranpel_init)
     RETURN
 EVT_END()
 
+/** NPCs of the Shadow Sirens scene: Beldam (マジョリン), Marilyn (マリリン) and Doopliss (ランペル). */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"マジョリン"*/"\x83\x7D\x83\x57\x83\x87\x83\x8A\x83\x93", // name
@@ -763,6 +767,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Event script: creates the NPC "にせ" with the Professor Frankly (Kurihakase) model, hidden below the floor.
+ * In the cutscene it plays the fake professor who turns out to be Doopliss.
+ */
 EVT_BEGIN(majyorin_evt_npc_entry)
     CALL(evt_npc_entry, STRING("にせ"), STRING("c_kuri_h"))
     CALL(evt_npc_set_tribe, STRING("にせ"), STRING("クリハカセ"))

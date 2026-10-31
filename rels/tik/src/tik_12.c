@@ -1,3 +1,6 @@
+// tik_12 (埋没した都市, Rogueport Sewers): the charm-caster's (majinaishi) house: her charm cube (majinai_BOX) and trouble 14
+// (irai_14).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -87,6 +90,15 @@ EVT_BEGIN(suisyou_kirakira)
     RETURN
 EVT_END()
 
+/**
+ * Talk script at Merlee's table (まじない師, majinaisi, the fortune-teller under Rogueport).
+ * She greets Mario and asks whether he wants her service (majinaisi_01, yes/no majinaisi_02; no ends with
+ * majinaisi_03), then offers three paths (majinaisi_05): Special 50 coins, Normal 20 coins or Cheap 5 coins,
+ * whose fee and charm count (20, 10 or 5) come from majinaisi_ryokin_kaisu.
+ * If Mario cannot pay she refuses (majinaisi_06);
+ * otherwise she takes the coins, sets the charm (evt_pouch_majinai_set), Mario and the partners move into place,
+ * the box and crystal effects play around Mario, and she promises he will win battles in style (majinaisi_08).
+ */
 EVT_BEGIN(majinaisi_table_talk)
     CALL(setmertn, STRING("まじない師"))
     CALL(evt_mario_key_onoff, 0)
@@ -387,6 +399,7 @@ EVT_BEGIN(majinaisi_direct_talk)
     RETURN
 EVT_END()
 
+/** Init script for Merlee (まじない師). Registers the table talk on the a_majinai hit area. */
 EVT_BEGIN(majinaisi_init)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_majinai"), 0, PTR(majinaisi_table_talk), 0)
     RETURN

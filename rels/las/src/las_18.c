@@ -1,3 +1,5 @@
+// las_18 (ラストダンジョン, Palace of Shadow): a riddle room off las_10: the switch only Vivian reaches.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"

@@ -1,3 +1,5 @@
+// Battle unit Dark Puff (クロクモーン): win.rel's copy.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"

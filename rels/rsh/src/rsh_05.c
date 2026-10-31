@@ -1,3 +1,6 @@
+// rsh_05 (列車, Excess Express): car where Smorg (moamoa) is first met and flees; conductor, waitress and ghost NPCs, a
+// ghost diary and the Power Punch badge; doors to rsh_04 and rsh_06.
+
 #include "version.h"
 #include "sfx_name_word.h"
 #include "libc_decls.h"

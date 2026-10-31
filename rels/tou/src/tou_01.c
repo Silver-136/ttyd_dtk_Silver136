@@ -1,3 +1,5 @@
+// tou_01 (闘技場, Glitzville): the front plaza: stands, neon signs and townsfolk; leads to tou_00 and tou_02.
+
 #include "driver/mapdrv.h"
 #include "eff/eff_starstone.h"
 #include "battle/battle_unit.h"
@@ -670,6 +672,10 @@ static ShopperData35 shopper_data = {
     {"stg3_shop_00", "stg3_shop_01", "stg3_shop_02", "stg3_shop_03", "stg3_shop_04", "stg3_shop_05", "stg3_shop_06", "stg3_shop_07", "stg3_shop_08", "stg3_shop_09", "stg3_shop_10", "stg3_shop_11", "stg3_shop_12", "stg3_shop_13", "stg3_shop_14", "stg3_shop_15", "stg3_shop_16", "stg3_shop_17", "stg3_shop_18", "stg3_shop_19", "stg3_shop_20", "stg3_shop_21", "stg3_shop_22", "stg3_shop_23", "stg3_shop_24", "stg3_shop_25", "stg3_shop_26", "stg3_shop_27", "stg3_shop_28", "stg3_shop_29", "stg3_shop_30", "stg3_shop_31", "stg3_shop_32", "stg3_shop_33", "stg3_shop_34"}, // msgs
 };
 
+/**
+ * Talk script of the hot dog vendor (ホットドッグ): he offers a Hot Dog on the house (stg3_tou_13 and a yes/no choice)
+ * and adds it to the pouch, or tells Mario to sell it if the inventory is full.
+ */
 // Charge only after the item was successfully added to the pouch.
 EVT_BEGIN(evt_hotdog)
     CALL(evt_mario_key_onoff, 0)
@@ -1024,6 +1030,7 @@ EVT_BEGIN(init_mise)
     RETURN
 EVT_END()
 
+/** Talk script of the shop clerk (店員): empty. */
 EVT_BEGIN(talk_mise)
     RETURN
 EVT_END()
@@ -1349,6 +1356,7 @@ EVT_BEGIN(talk_kino_2)
     RETURN
 EVT_END()
 
+/** NPC init for the first stall vendor (ロテン1): placed at (350, 0, 700). */
 EVT_BEGIN(init_roten_1)
     CALL(evt_npc_set_position, STRING("ロテン1"), 350, 0, 700)
     RETURN
@@ -2233,6 +2241,11 @@ EVT_BEGIN(evt_oyaji_move)
     RETURN
 EVT_END()
 
+/**
+ * Squash-and-stretch of the egg NPC ("たまご") over a hop of LW(3) milliseconds:
+ * the width scale eases from 1.2 down to 0.9 and the height scale from 0.9 up to 1.1 (two inline events),
+ * while the loop applies both scales to the egg every frame.
+ */
 static EVT_BEGIN(evt_tamago_scale)
     SET_FLOAT_VALUE(GW(10), FLOAT(1.1992188f))
     SET_FLOAT_VALUE(GW(11), FLOAT(0.89941406f))
@@ -2271,6 +2284,11 @@ static EVT_BEGIN(evt_tamago_scale)
     RETURN
 EVT_END()
 
+/**
+ * Second squash-and-stretch step for the egg NPC ("たまご"), over LW(3) milliseconds:
+ * the width eases from 0.9 back to 1.0 and the height from 1.1 back to 1.0,
+ * and the loop applies the scales every frame (the settle after the hops of evt_tamago_scale).
+ */
 static EVT_BEGIN(evt_tamago_scale2)
     BEGIN_INLINE_EVENT
         DIVIDE(LW(3), 2)
@@ -2843,6 +2861,12 @@ static USER_FUNC(yami_view) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Chapter 8 darkness scene setup: spawns the Toad guide (キノシコワ) at (4, 0, 420), parks the blimp,
+ * a Lakitu and the stall vendor around the plaza,
+ * hides the family and the two spectator Toads below the map and deletes the regular scripts of the Toad
+ * and vendor.
+ */
 static EVT_BEGIN(sekai_yami_npc_init)
     CALL(evt_npc_entry, STRING("キノシコワ"), STRING("c_ksikowa"))
     CALL(evt_npc_set_tribe, STRING("キノシコワ"), STRING("キノシコワ"))

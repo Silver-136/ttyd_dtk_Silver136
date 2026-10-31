@@ -1,3 +1,6 @@
+// mri_09 (巨木の中, The Great Tree): the room with the four rolling wall panels (wall_roll), the slot
+// switches, the breaking floor, and the blue jail key (get_blue_jail_key).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

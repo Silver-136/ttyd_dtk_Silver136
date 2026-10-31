@@ -1,3 +1,5 @@
+// aji_18 (敵のアジト, X-Naut Fortress): the door with three key locks (key_lock_koujyou) and the machine.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"

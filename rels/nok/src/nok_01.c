@@ -1,3 +1,6 @@
+// nok_01 (ノコ村, Petalburg): the east half of the village with the mayor's and Koops's houses; the gate to Petal
+// Meadows (hei_02) and the pipe to Rogueport Sewers (tik_16).
+
 #include "battle/battle_unit.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
@@ -676,6 +679,11 @@ END_SWITCH
 RETURN
 EVT_END()
 
+/**
+ * Talk script of the first dancer (踊り子１, the red one):
+ * before the Gold Fuzzy the three dancers talk in turn (stg1_nok_34, 35, 36),
+ * afterwards they use the second set (stg1_nok_36_01 to 03).
+ */
 static EVT_BEGIN(odoriko_1_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
@@ -690,6 +698,10 @@ static EVT_BEGIN(odoriko_1_talk)
     RETURN
 EVT_END()
 
+/**
+ * Entry of the first dancer (踊り子１, model c_dance_r) at (27, 0, 370) facing 270,
+ * with her talk script and the move/talk animations.
+ */
 static EVT_BEGIN(odoriko_1_init)
     SET_VALUE(LW(0), STRING("踊り子１"))
     CALL(evt_npc_entry, LW(0), STRING("c_dance_r"))
@@ -701,6 +713,7 @@ static EVT_BEGIN(odoriko_1_init)
     RETURN
 EVT_END()
 
+/** Talk script of the second dancer (踊り子２, pink): the same three-dancer conversation as odoriko_1_talk. */
 static EVT_BEGIN(odoriko_2_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
@@ -715,6 +728,10 @@ static EVT_BEGIN(odoriko_2_talk)
     RETURN
 EVT_END()
 
+/**
+ * Entry of the second dancer (踊り子２, model c_dance_p) at (67, 0, 340) facing 270,
+ * with her talk script and the move/talk animations.
+ */
 static EVT_BEGIN(odoriko_2_init)
     SET_VALUE(LW(0), STRING("踊り子２"))
     CALL(evt_npc_entry, LW(0), STRING("c_dance_p"))
@@ -726,6 +743,7 @@ static EVT_BEGIN(odoriko_2_init)
     RETURN
 EVT_END()
 
+/** Talk script of the third dancer (踊り子３, yellow-green): the same three-dancer conversation as odoriko_1_talk. */
 static EVT_BEGIN(odoriko_3_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
@@ -740,6 +758,10 @@ static EVT_BEGIN(odoriko_3_talk)
     RETURN
 EVT_END()
 
+/**
+ * Entry of the third dancer (踊り子３, model c_dance_k) at (85, 0, 390) facing 270,
+ * with her talk script and the move/talk animations.
+ */
 static EVT_BEGIN(odoriko_3_init)
     SET_VALUE(LW(0), STRING("踊り子３"))
     CALL(evt_npc_entry, LW(0), STRING("c_dance_k"))
@@ -1428,6 +1450,10 @@ static USER_FUNC(starstone_set_ry) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Creates Goombella (クリスチーヌ, model c_pkr) for the epilogue at (-200, 0, -65) facing 90, intangible,
+ * and moves Koopa H off the map.
+ */
 static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))

@@ -1,3 +1,5 @@
+// gra_01 (ウスグラの道, Twilight Trail): a stretch of the trail between gra_00 and gra_02.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

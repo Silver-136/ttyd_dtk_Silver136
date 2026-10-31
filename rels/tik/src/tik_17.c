@@ -1,3 +1,5 @@
+// tik_17 (埋没した都市, Rogueport Sewers): the room with the pipes to Poshley Heights (pik_01) and Keelhaul Key (muj_02).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

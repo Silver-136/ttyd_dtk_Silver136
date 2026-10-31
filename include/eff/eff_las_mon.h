@@ -1,3 +1,5 @@
+// eff_las_mon.c: the Thousand-Year Door glow (伝説の扉, tik_05); effLasMonEntry with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

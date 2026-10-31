@@ -1,3 +1,6 @@
+// hei_03 (平原, Petal Meadows): first gate room (hei_02 to hei_04).
+// Two Shinnosuke enemies guard a gate (mon) that opens (story 29).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

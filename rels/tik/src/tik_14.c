@@ -1,3 +1,5 @@
+// tik_14 (埋没した都市, Rogueport Sewers): a small pipe room with an item box.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

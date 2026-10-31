@@ -1,3 +1,5 @@
+// eki_01 (駅, Riverside Station): central hub: paper-fold (origami) switch, stairs, a key lock and six paper panels; doors to eki_00, eki_02 and eki_03.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

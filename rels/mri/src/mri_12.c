@@ -1,3 +1,6 @@
+// mri_12 (巨木の中, The Great Tree): a junction room with planters and a Puni-ball pad, joining mri_11, mri_17
+// and mri_18.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

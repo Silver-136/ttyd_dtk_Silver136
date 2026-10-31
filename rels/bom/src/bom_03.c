@@ -1,3 +1,5 @@
+// bom_03 (ボム村, Fahr Outpost): the snowfield between bom_00 and bom_04.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

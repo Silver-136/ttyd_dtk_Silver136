@@ -1,3 +1,5 @@
+// tik_21 (埋没した都市, Rogueport Sewers): the room with the spike floor trap (hari_trap) and an item box.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

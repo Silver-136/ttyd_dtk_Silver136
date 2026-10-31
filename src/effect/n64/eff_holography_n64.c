@@ -1355,6 +1355,12 @@ u8 xlu_data[16] = {255, 255, 220, 190, 160, 120, 80, 40, 0, 0, 40, 80, 120, 160,
 void effHolographyMain(EffectEntry* effect);
 void effHolographyDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns the holography effect at (x, y, z), scaled by 0.1 * scale,
+ * for lifetime frames (0 = until soft-deleted).
+ * The Fright Mask item script (ItemEvent_Attiike_Shisshi) spawns it twice through evt_eff64 as its scary
+ * hologram; the effect table labels it ホログラフ (holograph).
+ */
 EffectEntry* effHolographyN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffHolographyN64Work* work;

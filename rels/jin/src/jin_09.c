@@ -1,3 +1,5 @@
+// jin_09 (ダイム寺院, Creepy Steeple): dripping room with a jump stand and a power-up block; door to jin_10.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

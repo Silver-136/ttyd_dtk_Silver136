@@ -1,3 +1,5 @@
+// Rogueport (gor, ゴロツキタウン): declarations shared by the area's maps (gor_00 to gor_04, gor_10 to gor_12).
+
 #pragma once
 
 #include "dolphin/types.h"

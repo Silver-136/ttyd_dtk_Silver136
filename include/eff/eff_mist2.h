@@ -1,3 +1,5 @@
+// eff_mist2.c: black mist (黒い霧) in las and around the Shadow Queen; effMist2Entry and EffMist2Work.
+
 #pragma once
 
 #include "driver/effdrv.h"

@@ -1,3 +1,6 @@
+// win_01 (ウィンディん家周辺, Boggly Woods): the path to the Great Tree (mri_00), where a Puni guide leads Mario in; also back
+// to win_00 and on to win_02.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

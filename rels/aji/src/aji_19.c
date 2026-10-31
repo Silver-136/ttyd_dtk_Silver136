@@ -1,3 +1,6 @@
+// aji_19 (敵のアジト, X-Naut Fortress): the room reached from the Moon (moo_02), with the first-visit scene
+// (evt_hajimete).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_map.h"

@@ -260,6 +260,7 @@ EVT_BEGIN(irai_start_event01)
     RETURN
 EVT_END()
 
+/** Start event of Trouble 4: moves the ボロドー２ NPC (the second copy of Borodo) to (-475, 0, -180). */
 EVT_BEGIN(irai_start_event04)
     CALL(evt_npc_set_position, STRING("ボロドー２"), -475, 0, -180)
     RETURN
@@ -285,12 +286,17 @@ EVT_BEGIN(irai_end_event_null)
     RETURN
 EVT_END()
 
+/**
+ * End event of Trouble 1: puts the 盗賊団２ NPC back at (10, 0, -460)
+ * and restores the door parameter in GW(11) to the normal door data.
+ */
 EVT_BEGIN(irai_end_event01)
     CALL(evt_npc_set_position, STRING("盗賊団２"), 10, 0, -460)
     CALL(evt_door_set_param, GW(11), 0, PTR(&door_data_05_npc))
     RETURN
 EVT_END()
 
+/** End event of Trouble 4: puts the ボロドー２ NPC at (-475, 0, -180). */
 EVT_BEGIN(irai_end_event04)
     CALL(evt_npc_set_position, STRING("ボロドー２"), -475, 0, -180)
     RETURN

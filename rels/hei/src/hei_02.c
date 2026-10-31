@@ -1,3 +1,6 @@
+// hei_02 (平原, Petal Meadows): grassy field between Petalburg (nok_01) and hei_03.
+// Field enemies, coins, a Star Piece and a POW Block.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

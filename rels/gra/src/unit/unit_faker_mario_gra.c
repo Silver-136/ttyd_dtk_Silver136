@@ -1,3 +1,5 @@
+// Battle unit the fake Mario (Doopliss with Mario's name) (にせマリオ): gra.rel's copy.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle.h"

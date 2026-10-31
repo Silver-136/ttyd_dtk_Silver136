@@ -1,3 +1,6 @@
+// aji_17 (敵のアジト, X-Naut Fortress): TEC's room: Peach's talks with TEC, the e-mails to Mario, the dance
+// (peach_evt_dance), and TEC's shutdown (evt_emergency, evt_last).
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -1175,6 +1178,11 @@ EVT_BEGIN(peach_dance_action_fail)
     RETURN
 EVT_END()
 
+/**
+ * Spawns the speech-bubble effect for a dance prompt on the dummy NPC ダミー:
+ * LW(1) (0 to 2) picks the effect name btn_01 to btn_03 and LW(2) (0 to 2) the bubble type,
+ * which also sets the bubble's tilt (0, +45 or -45 degrees).
+ */
 EVT_BEGIN(dance_btn_disp_sub)
     SWITCH(LW(1))
         CASE_EQUAL(0)
@@ -2982,6 +2990,7 @@ static EVT_BEGIN(teshita2_init)
     RETURN
 EVT_END()
 
+/** Init of Grodus (シュリョー) in TEC's room: common NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
 static EVT_BEGIN(syuryo_init)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING(("me")), NPC_STATUS_FACE_MOVE_DIR)
@@ -3284,6 +3293,12 @@ s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Draw callback that renders the picture of the hologram:
+ * picks the normal or the mirrored hologram NPC (ホログラム or ホログラム2) by its facing direction,
+ * sets up a 608 by 480 viewport and a close camera,
+ * draws the NPC's pose into the frame buffer and copies the colour and depth into horogram_wp->buf0 and buf1.
+ */
 void peach_capture(CameraId cameraId, void* param) {
     CameraEntry saved = *camGetCurPtr();
     Mtx44 projMtx;

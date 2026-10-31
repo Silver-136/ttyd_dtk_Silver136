@@ -1,3 +1,5 @@
+// las_28 (ラストダンジョン, Palace of Shadow): Sir Grodus (シュリョー) and then Bowser and Kammy Koopa.
+
 #include "battle/battle_unit.h"
 #include "eff/n64/eff_guruguru_n64.h"
 #include "evt/evt_cmd.h"
@@ -153,6 +155,7 @@ static EVT_BEGIN(syuryo_init)
     RETURN
 EVT_END()
 
+/** Init event of Bowser (クッパ): sets status bit 2, so he turns to face the way he moves. */
 EVT_BEGIN(koopa_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
@@ -164,16 +167,19 @@ EVT_BEGIN(koopa_talk)
     RETURN
 EVT_END()
 
+/** Init of Kammy Koopa's NPC (ババ): sets status bit 2, so she turns to face the way she moves. */
 static EVT_BEGIN(baba_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
+/** Talk event of Kammy Koopa (ババ); prints stg8_las_107_01. */
 static EVT_BEGIN(baba_talk)
     CALL(evt_msg_print, 0, STRING("stg8_las_107_01"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/** NPCs of the throne room scene: Sir Grodus (シュリョー), Bowser (クッパ) and Kammy Koopa (ババ). */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"シュリョー"*/"\x83\x56\x83\x85\x83\x8A\x83\x87\x81\x5B", // name

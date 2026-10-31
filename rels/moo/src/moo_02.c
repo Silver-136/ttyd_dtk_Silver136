@@ -1,3 +1,5 @@
+// moo_02 (月, the Moon): the field with the way into the X-Naut Fortress (aji_00); paths to moo_05 and moo_06.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

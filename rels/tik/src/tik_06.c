@@ -1,3 +1,6 @@
+// tik_06 (埋没した都市, Rogueport Sewers): the entrance to the Pit of 100 Trials (jon_00), with residents and trouble 12
+// (irai_12).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

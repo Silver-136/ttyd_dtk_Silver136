@@ -1,3 +1,5 @@
+// las_22 (ラストダンジョン, Palace of Shadow): the room with the turntable (kaitendai).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

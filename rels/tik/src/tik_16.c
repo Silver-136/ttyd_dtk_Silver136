@@ -1,3 +1,5 @@
+// tik_16 (埋没した都市, Rogueport Sewers): the room with the pipes to The Great Tree (mri_00) and Petalburg (nok_01).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

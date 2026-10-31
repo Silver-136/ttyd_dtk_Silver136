@@ -1,3 +1,6 @@
+// usu_01 (ウスグラタウン, Twilight Town): the east side of town with the shop, the villagers' houses and the crows; the gate
+// leads to Twilight Trail (gra_00).
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -2469,6 +2472,12 @@ USER_FUNC(shop_item_disp_on) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper run when Mario goes into the storeroom:
+ * lets the shop's people (the wife, the dandy in both forms and the shopkeeper) take the map's blend colour
+ * again,
+ * so they darken with the shop, and makes the black chest's demon ("ペラ魔人") ignore it.
+ */
 USER_FUNC(ie2_npc_disp_off) {
     const char* show[] = {"\202\250\223X\202\314\211\234\202\263\202\361", "\203L\203U\226\354\230Y",
                           "\203u\203^\203L\203U\226\354\230Y", "\223X\202\314\216\345\220l", NULL};

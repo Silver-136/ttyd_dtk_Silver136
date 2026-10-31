@@ -1,3 +1,6 @@
+// rsh_03 (列車, Excess Express): dining car: cook, waitress and shop clerk, the Smorg (moamoa) shop with its trade list,
+// and the lunch-missing mystery; doors to rsh_02 and rsh_04.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"

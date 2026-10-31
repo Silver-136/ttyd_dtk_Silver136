@@ -1,3 +1,6 @@
+// tik_03 (埋没した都市, Rogueport Sewers): where Mario meets the guide Puni (puni_soguu_3), who joins him (puni_nakama), and
+// the switch that opens the way to Boggly Woods (win_06).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

@@ -1,3 +1,6 @@
+// gon_12 (ゴンババ, Hooktail Castle): side room off gon_08 where Ms. Mowz (chuchurina) is met (story 50, 51).
+// Chests with Castle Key (0x0F), Mushroom and Honey Syrup; a power-up block.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -80,6 +83,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Script helper: spins Ms. Mowz (チュチュリーナ) once around her Z axis (a backward flip) over args[0] milliseconds,
+ * easing the rotation, then restores it to 0.
+ */
 static USER_FUNC(evt_chuchu_back_loop) {
     NpcEntry* npc;
     EvtWord* args = event->args;

@@ -1,3 +1,5 @@
+// eki_05 (駅, Riverside Station): room with a treasure chest holding Ultra Boots and an elevator key item; doors to eki_04 and eki_06.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

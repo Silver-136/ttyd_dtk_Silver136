@@ -1,3 +1,5 @@
+// usu.rel (ウスグラ村, Twilight Town): registers usu_00 and usu_01.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"

@@ -1,3 +1,6 @@
+// muj_00 (無人島, Keelhaul Key): the beach: the shipwreck landing (mujinto_hyochaku) and the crew,
+// and later the battle between Lord Crump's X-Nauts and Cortez's pirates (kaizoku_vs_dai3).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"

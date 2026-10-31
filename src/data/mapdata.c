@@ -364,6 +364,7 @@ MapData dig_00 = { "dig_00", NULL };
 /** Maps of the ending (end); relSetEvtAddr fills in each init script when the REL loads. */
 MapData end_00 = { "end_00", NULL };
 
+/** Area "tst" (テスト用): developer test maps; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_kwb = { "tst",
                       "テスト用",
                       NULL,
@@ -371,25 +372,31 @@ AreaData area_kwb = { "tst",
                       { &tst_bt00, &tst_00, &tst_01, &tst_02, &tst_moj_00, &tst_moj_01, &tst_moj_02, &tst_moj_03,
                         &tst_off_01, &tst_npc, &tst_nakayama, &tst_item_00, NULL } };
 
+/** Guess: area "bti" (舞台セット), battle stage test maps; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_bti = { "bti", "舞台セット", NULL, NULL, { &bti_01, &bti_02, &bti_03, &bti_04, NULL } };
 
+/** Guess: area "stg" (背景セット), battle background test maps; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_stg = {
     "stg", "背景セット", NULL, NULL, { &stg_01_0, &stg_01_1, &stg_01_2, &stg_01_3, &stg_01_4, NULL }
 };
 
+/** Area "aaa" (マリオの家): Mario's house; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_aaa = { "aaa", "マリオの家", NULL, NULL, { &aaa_00, NULL } };
 
+/** Area "gor" (ゴロツキタウン): Rogueport; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_gor = { "gor",
                       "ゴロツキタウン",
                       NULL,
                       NULL,
                       { &gor_00, &gor_01, &gor_02, &gor_03, &gor_04, &gor_10, &gor_11, &gor_12, NULL } };
 
+/** Area "tik" (埋没した都市): the Rogueport Sewers; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_tik = { "tik", "埋没した都市", NULL, NULL, { &tik_00, &tik_01, &tik_02, &tik_03, &tik_04,
                                                            &tik_05, &tik_06, &tik_07, &tik_08, &tik_11,
                                                            &tik_12, &tik_13, &tik_15, &tik_16, &tik_17,
                                                            &tik_18, &tik_19, &tik_20, &tik_21, NULL } };
 
+/** Area "gon" (ゴンババ): Hooktail Castle; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_gon = { "gon",
                       "ゴンババ",
                       NULL,
@@ -397,6 +404,7 @@ AreaData area_gon = { "gon",
                       { &gon_00, &gon_01, &gon_02, &gon_03, &gon_04, &gon_05, &gon_06, &gon_07, &gon_08, &gon_09,
                         &gon_10, &gon_11, &gon_12, &gon_13, &gon_bt00, NULL } };
 
+/** Area "hei" (平原): Petal Meadows; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_hei = { "hei",
                       "平原",
                       NULL,
@@ -404,8 +412,10 @@ AreaData area_hei = { "hei",
                       { &hei_00, &hei_01, &hei_02, &hei_03, &hei_04, &hei_05, &hei_06, &hei_07, &hei_08, &hei_09,
                         &hei_10, &hei_11, &hei_12, &hei_13, &hei_bt00, NULL } };
 
+/** Area "nok" (ノコ村): Petalburg; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_nok = { "nok", "ノコ村", NULL, NULL, { &nok_00, &nok_01, NULL } };
 
+/** Area "muj" (無人島): Keelhaul Key; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_muj = { "muj",
                       "無人島",
                       NULL,
@@ -413,6 +423,7 @@ AreaData area_muj = { "muj",
                       { &muj_00, &muj_01, &muj_02, &muj_03, &muj_04, &muj_05, &muj_10, &muj_11, &muj_12, &muj_20,
                         &muj_21, NULL } };
 
+/** Area "dou" (洞窟): Pirate's Grotto; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_dou = { "dou",
                       "洞窟",
                       NULL,
@@ -420,34 +431,43 @@ AreaData area_dou = { "dou",
                       { &dou_00, &dou_01, &dou_02, &dou_03, &dou_04, &dou_05, &dou_06, &dou_07, &dou_08, &dou_09,
                         &dou_10, &dou_11, &dou_12, &dou_13, NULL } };
 
+/** Area "rsh" (列車): the Excess Express; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_rsh = { "rsh", "列車", NULL, NULL, { &rsh_00_a, &rsh_00_b, &rsh_00_c, &rsh_01_a, &rsh_01_b, &rsh_01_c,
                                                    &rsh_02_a, &rsh_02_b, &rsh_02_c, &rsh_03_a, &rsh_03_b, &rsh_03_c,
                                                    &rsh_04_a, &rsh_04_b, &rsh_04_c, &rsh_05_a, &rsh_06_a, &rsh_07_a,
                                                    &rsh_07_b, &rsh_07_c, &rsh_08_a, NULL } };
 
+/** Area "pik" (ピカリーヒルズ): Poshley Heights; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_pik = { "pik", "ピカリーヒルズ", NULL, NULL, { &pik_00, &pik_01, &pik_02, &pik_03, &pik_04, NULL } };
 
+/** Area "hom" (途中駅ホーム): the Riverside Station platforms; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_hom = { "hom", "途中駅ホーム", NULL, NULL, { &hom_00, &hom_10, &hom_11, &hom_12, NULL } };
 
+/** Area "eki" (駅): Riverside Station; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_eki = {
     "eki", "駅", NULL, NULL, { &eki_00, &eki_01, &eki_02, &eki_03, &eki_04, &eki_05, &eki_06, NULL }
 };
 
+/** Area "win" (ウィンディん家周辺): Boggly Woods; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_win = {
     "win", "ウィンディん家周辺", NULL, NULL, { &win_00, &win_01, &win_02, &win_03, &win_04, &win_05, &win_06, NULL }
 };
 
+/** Area "mri" (巨木の中): the Great Tree; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_mri = { "mri", "巨木の中", NULL, NULL, { &mri_00, &mri_01, &mri_02, &mri_03, &mri_04, &mri_05,
                                                        &mri_06, &mri_07, &mri_08, &mri_09, &mri_10, &mri_11,
                                                        &mri_12, &mri_13, &mri_14, &mri_15, &mri_16, &mri_17,
                                                        &mri_18, &mri_19, &mri_20, NULL } };
 
+/** Area "usu" (ウスグラタウン): Twilight Town; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_usu = { "usu", "ウスグラタウン", NULL, NULL, { &usu_00, &usu_01, NULL } };
 
+/** Area "gra" (ウスグラの道): Twilight Trail; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_gra = {
     "gra", "ウスグラの道", NULL, NULL, { &gra_00, &gra_01, &gra_02, &gra_03, &gra_04, &gra_05, &gra_06, NULL }
 };
 
+/** Area "jin" (ダイム寺院): Creepy Steeple; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_jin = { "jin",
                       "ダイム寺院",
                       NULL,
@@ -455,6 +475,7 @@ AreaData area_jin = { "jin",
                       { &jin_00, &jin_01, &jin_02, &jin_03, &jin_04, &jin_05, &jin_06, &jin_07, &jin_08, &jin_09,
                         &jin_10, &jin_11, NULL } };
 
+/** Area "tou" (闘技場): the Glitz Pit; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_tou = { "tou",
                       "闘技場",
                       NULL,
@@ -462,16 +483,20 @@ AreaData area_tou = { "tou",
                       { &tou_00, &tou_01, &tou_02, &tou_03, &tou_04, &tou_05, &tou_06, &tou_07, &tou_08, &tou_09,
                         &tou_10, &tou_11, &tou_12, &tou_13, &tou_20, NULL } };
 
+/** Area "bom" (ボム村): Fahr Outpost; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_bom = { "bom", "ボム村", NULL, NULL, { &bom_00, &bom_01, &bom_02, &bom_03, &bom_04, NULL } };
 
+/** Area "moo" (月): the Moon; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_moo = {
     "moo", "月", NULL, NULL, { &moo_00, &moo_01, &moo_02, &moo_03, &moo_04, &moo_05, &moo_06, &moo_07, NULL }
 };
 
+/** Area "aji" (敵のアジト): the X-Naut Fortress; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_aji = { "aji", "敵のアジト", NULL, NULL, { &aji_00, &aji_01, &aji_02, &aji_03, &aji_04, &aji_05, &aji_06,
                                                          &aji_07, &aji_08, &aji_09, &aji_10, &aji_11, &aji_12, &aji_13,
                                                          &aji_14, &aji_15, &aji_16, &aji_17, &aji_18, &aji_19, NULL } };
 
+/** Area "las" (ラストダンジョン): the Palace of Shadow; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_las = {
     "las", "ラストダンジョン", NULL, NULL, { &las_00, &las_01, &las_02, &las_03, &las_04, &las_05, &las_06, &las_07,
                                              &las_08, &las_09, &las_10, &las_11, &las_12, &las_13, &las_14, &las_15,
@@ -479,24 +504,31 @@ AreaData area_las = {
                                              &las_24, &las_25, &las_26, &las_27, &las_28, &las_29, &las_30, NULL }
 };
 
+/** Area "kpa" (クッパ編): Bowser's side-scrolling chapters; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_kpa = {
     "kpa", "クッパ編", NULL, NULL, { &kpa_00, &kpa_01, &kpa_02, &kpa_03, &kpa_04, &kpa_05, &kpa_06, &kpa_07, NULL }
 };
 
+/** Area "jon" (１００階ダンジョン): the Pit of 100 Trials; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_jon = {
     "jon", "１００階ダンジョン", NULL, NULL, { &jon_00, &jon_01, &jon_02, &jon_03, &jon_04, &jon_05, &jon_06, NULL }
 };
 
+/** Area "yuu" (遊技場): the Pianta Parlor minigames; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_yuu = { "yuu", "遊技場", NULL, NULL, { &yuu_00, &yuu_01, &yuu_02, &yuu_03, NULL } };
 
+/** Area "qiz" (はてなむしクイズ): the quiz minigame; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_qiz = { "qiz", "はてなむしクイズ", NULL, NULL, { &qiz_00, NULL } };
 
+/** Area "sys" (システム): the system maps; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_sys = { "sys", "システム", NULL, NULL, { &sys_00, &sys_01, NULL } };
 
 AreaData area_dmo = { "dmo", "オープニングデモ", NULL, NULL, { &dmo_00, NULL } };
 
+/** Area "dig" (ダイジェスト): the story digest; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_dig = { "dig", "ダイジェスト", NULL, NULL, { &dig_00, NULL } };
 
+/** Area "end" (エンディング): the ending; relSetBtlAddr fills in its battle setup tables. */
 AreaData area_end = { "end", "エンディング", NULL, NULL, { &end_00, NULL } };
 
 /** The whole game world: every area in order, scanned by mapDataPtr and areaDataPtr to look up maps and areas. */

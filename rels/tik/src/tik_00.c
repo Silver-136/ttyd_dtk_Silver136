@@ -1,3 +1,6 @@
+// tik_00 (埋没した都市, Rogueport Sewers): the underground town: the shop, the fortune teller (uranaishi) and her card
+// reading, the Star Piece collector (starmaniac) and other residents, and the teleporter (tensou).
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -2887,6 +2890,10 @@ EVT_BEGIN(hashira_bomb)
     RETURN
 EVT_END()
 
+/**
+ * Creates Goombella (クリスチーヌ, Christine, her Japanese name) as an NPC for the epilogue,
+ * at (-540, 20, -25) facing right, ignoring walls and unable to be touched.
+ */
 static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))

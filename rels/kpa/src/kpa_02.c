@@ -1,3 +1,5 @@
+// kpa_02 (クッパ編, Bowser's interludes): the first side-scrolling stage; it ends in Petalburg (nok_00).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "kpa.h"

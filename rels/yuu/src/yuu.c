@@ -1,3 +1,5 @@
+// yuu: Pianta Parlor (遊技場, yugijo) minigame REL: prolog/epilog and the yuu_00..yuu_03 init table.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

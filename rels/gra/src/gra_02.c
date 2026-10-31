@@ -1,3 +1,6 @@
+// gra_02 (ウスグラの道, Twilight Trail): the shed on the trail with the shopkeeper turned into a pig; between gra_01 and
+// gra_03.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_hit.h"
@@ -60,6 +63,10 @@ EVT_BEGIN(shopmaster_talk)
     RETURN
 EVT_END()
 
+/**
+ * Regular event of the pig shopkeeper (ブタお店の主人):
+ * clears his no-wall-hit flag and makes him wander within a 50-unit radius of his starting spot.
+ */
 static EVT_BEGIN(urouro_move)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))

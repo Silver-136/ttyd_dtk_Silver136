@@ -1,3 +1,6 @@
+// mri_17 (巨木の中, The Great Tree): the cage trap (trap_event) that Lord Crump and his X-Nauts spring on the
+// Punies, the guide Puni, his sister and the rival; also a strange statue and a switch.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"

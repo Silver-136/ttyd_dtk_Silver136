@@ -1,3 +1,6 @@
+// las (ラストダンジョン, Palace of Shadow; las is the "last" dungeon): shared code and data of the area: the map-object
+// helpers, item boxes, torches and the battle setup tables.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"

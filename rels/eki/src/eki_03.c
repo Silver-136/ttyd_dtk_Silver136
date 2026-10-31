@@ -1,3 +1,6 @@
+// eki_03 (駅, Riverside Station): paper-panel poster puzzle room with a power-up block and bricks
+// Thunder Rage and HP Plus items; doors to eki_01 and eki_04.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"

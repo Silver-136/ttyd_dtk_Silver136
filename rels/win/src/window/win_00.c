@@ -1,3 +1,6 @@
+// win_00 (ウィンディん家周辺, Boggly Woods): the clearing in the middle of the woods, where the Shadow Sirens (Beldam, Marilyn,
+// Vivian) stop Mario; paths to win_01 and win_06.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -151,6 +154,10 @@ static EVT_BEGIN(kizayarou_talk)
     RETURN
 EVT_END()
 
+/**
+ * Spawns the dandy NPC ("キザ野郎", model c_kiza) at (-450, 0, -25) facing west and installs his talk
+ * and wander scripts.
+ */
 static EVT_BEGIN(kizayarou_init)
     SET_VALUE(LW(0), STRING("キザ野郎"))
     CALL(evt_npc_entry, LW(0), STRING("c_kiza"))
@@ -772,6 +779,10 @@ EVT_BEGIN(get_necklace)
     RETURN
 EVT_END()
 
+/**
+ * Background loop that keeps the "necklace" item at the position of the dummy Beldam NPC ("ダミー")
+ * while she carries it.
+ */
 EVT_BEGIN(witchtrio_lose_item)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("ダミー"), LW(0), LW(1), LW(2))

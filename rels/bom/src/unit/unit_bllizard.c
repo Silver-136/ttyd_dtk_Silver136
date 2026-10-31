@@ -1,3 +1,5 @@
+// Battle unit Ice Puff (ブリザード): bom.rel's copy.
+
 #include "battle/battle_unit.h"
 #include "eff/n64/eff_kumokumo_n64.h"
 #include "evt/evt_cmd.h"

@@ -1,3 +1,5 @@
+// Battle unit for Flurrie (クラウダ) in her own stage play in the epilogue (nok.rel); it only plays its scripted part.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "unit/party/unit_party_clauda.h"

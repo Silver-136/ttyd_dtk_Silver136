@@ -1,3 +1,5 @@
+// moo_04 (月, the Moon): a scene map: a flight scene with an X-Naut (stg7_aji messages) and an epilogue scene (ep_45).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
@@ -186,6 +188,7 @@ EVT_BEGIN(kanbu_fly)
     RETURN
 EVT_END()
 
+/** The single NPC of the scene, an X-Naut officer (幹部) who can move and talk. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"幹部"*/"\x8A\xB2\x95\x94", // name

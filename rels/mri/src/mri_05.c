@@ -1,3 +1,6 @@
+// mri_05 (巨木の中, The Great Tree): the soap-bubble room: Mario rides bubbles (evt_shabon_s) over the water;
+// Punies 4 and 5, a Puni-ball switch, and the door with the light lock.
+
 #include "battle/battle_unit.h"
 #include "eff/n64/eff_pokopi_pcharge_n64.h"
 #include "eff/eff_puniballoon.h"

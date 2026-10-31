@@ -1,3 +1,6 @@
+// mri_04 (巨木の中, The Great Tree): the room where Ms. Mowz (chuchurina) appears and fights an X-Naut, with
+// the little Jabbi (chibitoge), planters and item boxes.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -119,6 +122,7 @@ static EVT_BEGIN(chibitoge_talk)
     RETURN
 EVT_END()
 
+/** The single NPC of the room, Jabble (ちびトゲ), the little Jabbi. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ちびトゲ"*/"\x82\xBF\x82\xD1\x83\x67\x83\x51", // name
@@ -135,6 +139,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Spins the NPC Ms. Mowz (チュチュリーナ) around the z axis for args[0] milliseconds (one full turn, smoothed),
+ * as a somersault; blocks until it ends.
+ */
 static USER_FUNC(evt_chuchu_back_loop) {
     EvtWord* args = event->args;
     // チュチュリーナ

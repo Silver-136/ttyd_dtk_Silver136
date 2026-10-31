@@ -1,3 +1,5 @@
+// las_26 (ラストダンジョン, Palace of Shadow): Gloomtail (ボンババ) and the bomb wall.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -350,6 +352,7 @@ USER_FUNC(bonbaba_wait_landon) {
     return npcNameToPtr("\x83\x7B\x83\x93\x83\x6F\x83\x6F")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** The single NPC of the room, Gloomtail (ボンババ), who always stays visible and never turns to face Mario. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ボンババ"*/"\x83\x7B\x83\x93\x83\x6F\x83\x6F", // name
@@ -364,6 +367,12 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Event script: the "dark world" scene.
+ * Mario and the partner are taken out of control, Professor Frankly (the Goomba professor, クリハカセ) appears,
+ * the ceiling falls with a dust effect and he speaks (stg8_dark_09).
+ * The screen fades black, then the map changes to las_29 (sekai_yami2) and fades in from white.
+ */
 static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)

@@ -1,3 +1,7 @@
+// mri (巨木の中, The Great Tree; mri is mori, "forest"): the REL prolog/epilog and area-wide code: the Puni and Jabbi
+// (toge) follower movement helpers, the tree's door events, the planter (ueki) animation, and the Puni save and
+// Puni-item events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"

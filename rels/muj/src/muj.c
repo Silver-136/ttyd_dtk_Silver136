@@ -1,3 +1,7 @@
+// muj (無人島, Keelhaul Key; muj is mujinto, "desert island"): the REL prolog/epilog, the map list, and area-wide
+// events: Cortez appearing and vanishing in his tornado (korutesu_apper, korutesu_vanish) and the ship bobbing
+// (muj_ship_puka).
+
 #include "eff/n64/eff_kameki_tornade_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -324,6 +328,11 @@ USER_FUNC(muj_mario_pos_osreport_func) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Cortez's entrance: a tornado effect spawns at his position and fades in over one second with wind sounds,
+ * while Cortez (NPC "コルテス") flickers hidden and visible at shrinking intervals until he stands there.
+ * Called with CALL_CHILD from the Keelhaul Key shore maps (muj_10, muj_12) before he speaks.
+ */
 EVT_BEGIN(korutesu_apper)
     CALL(evt_npc_get_position, STRING("コルテス"), LW(0), LW(1), LW(2))
     BEGIN_INLINE_EVENT

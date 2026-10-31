@@ -1,3 +1,6 @@
+// gor_02 (ゴロツキタウン, Rogueport): east side. Professor Frankly's house, Trouble Center, power-up shop, info shop;
+// exits to gor_01 and down to the underground (tik).
+
 #include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -1603,6 +1606,7 @@ static EVT_BEGIN(kurihakase_talk)
     RETURN
 EVT_END()
 
+/** Init event of the bandit gang's boss ("盗賊団親分"): lets him walk through walls. */
 EVT_BEGIN(oyabun_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     RETURN

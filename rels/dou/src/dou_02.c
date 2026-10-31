@@ -1,3 +1,6 @@
+// dou_02 (洞窟, Pirate's Grotto): water room between dou_01 and dou_12 with a spear trap and bobbing platforms.
+// Gate Handle and Star Piece items.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

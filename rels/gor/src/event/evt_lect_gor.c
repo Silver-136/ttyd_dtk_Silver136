@@ -484,6 +484,10 @@ static USER_FUNC(effitemget_busaiku) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets up Goombella's (クリスチーヌ) partner lecture:
+ * Mario faces left, the camera moves in front of him and his partner glides next to him.
+ */
 EVT_BEGIN(christine_party_lecture_init)
     CALL(evt_mapdisp_onoff, 0)
     CALL(evt_mario_set_dir, 270, 0, 0)

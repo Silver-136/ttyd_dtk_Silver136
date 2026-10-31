@@ -1,3 +1,6 @@
+// mri_03 (巨木の中, The Great Tree): the jail: the red and blue cells (red_jail_open, blue_jail_open) holding
+// the Puni Elder and the Punies, the Elder's rescue and the Punies joining Mario.
+
 #include "mri_puni.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

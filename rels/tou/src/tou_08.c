@@ -1,3 +1,5 @@
+// tou_08 (闘技場, Glitz Pit): the major-league locker room; exits to tou_04 and tou_05; champion belt, the poisoned cake scene.
+
 #include "battle/battle_unit.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
@@ -336,6 +338,7 @@ EVT_BEGIN(talk_hammerbros)
     RETURN
 EVT_END()
 
+/** NPC init for the Shady Koopa (ウラノコ): placed at (-160, 0, -50) facing 90. */
 static EVT_BEGIN(init_uranoko)
     CALL(evt_npc_set_position, STRING("me"), -160, 0, -50)
     CALL(evt_npc_set_ry, STRING("me"), 90)
@@ -978,6 +981,12 @@ EVT_BEGIN(evt_tou_08_cake)
     RETURN
 EVT_END()
 
+/**
+ * Epilogue setup: spawns Goombella (クリスチーヌ) at (30, 0, -50) facing 270
+ * and Mario's Yoshi (チビヨッシー) at (-30, 0, -50) facing 90,
+ * using the baby Yoshi model that matches the Yoshi's colour (get_yoshi_color),
+ * with no wall collision or hitbox for the Yoshi.
+ */
 static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
@@ -1008,6 +1017,13 @@ static EVT_BEGIN(epilogue_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * Background action of the epilogue scene: Goombella (クリスチーヌ)
+ * and Yoshi (チビヨッシー) take turns in their talking animation;
+ * after 3 seconds the door opens and a guard (ガードマン) walks in and faces Yoshi.
+ * Once Yoshi has talked once more he walks over to the guard and both leave through the door, which closes,
+ * and Goombella then keeps turning back and forth.
+ */
 static EVT_BEGIN(epilogue_evt_sub)
     WAIT_MS(500)
     CALL(evt_npc_set_anim, STRING("クリスチーヌ"), STRING("PKR_T_1"))

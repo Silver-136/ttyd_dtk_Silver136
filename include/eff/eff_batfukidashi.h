@@ -1,3 +1,5 @@
+// eff_batfukidashi.c: the recovery block's coin price bubble (コイン吹き出し): effCoinFukidashiEntry, effCoinFukidashiMain and effCoinFukidashiDisp.
+
 #pragma once
 
 #include "driver/camdrv.h"

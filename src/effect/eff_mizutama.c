@@ -1,3 +1,6 @@
+// Underwater bubbles (mizutama, 水中の泡) released at an angle that slow down and drift upward; types 0-3 while
+// swimming and 4-7 after diving in, the size grows with the type (radius type + 1). Used by Bowser swimming.
+
 #include "eff/eff_mizutama.h"
 #include "driver/dispdrv.h"
 #include "memory.h"

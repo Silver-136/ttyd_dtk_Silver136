@@ -1,3 +1,6 @@
+// usu_00 (ウスグラタウン, Twilight Town): the west side of town with the pipe to Rogueport Sewers (tik_08), the mayor and the
+// villagers turned into pigs; also the town's chapter 7 and 8 scenes.
+
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "eff/eff_starstone.h"
@@ -3534,6 +3537,10 @@ static EVT_BEGIN(sekai_yami_evt)
     RETURN
 EVT_END()
 
+/**
+ * Spawns a woman (おばさん, tribe ウスグラおばさん) and three children (子供１ to ３, tribes ウスグラ子供A to C) of Twilight Town for
+ * minnnanokoe_evt ("minna no koe", everyone's voices).
+ */
 static EVT_BEGIN(minnnanokoe_npc_entry)
     CALL(evt_npc_entry, STRING("おばさん"), STRING("c_f_mama"))
     CALL(evt_npc_set_tribe, STRING("おばさん"), STRING("ウスグラおばさん"))
@@ -3726,6 +3733,10 @@ static USER_FUNC(npc_process) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Spawns Goombella (クリスチーヌ) beside Vivian, and Beldam and Marilyn off stage,
+ * for the ending epilogue in Twilight Town.
+ */
 static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))

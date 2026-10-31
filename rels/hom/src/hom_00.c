@@ -1,3 +1,6 @@
+// hom_00 (途中駅ホーム, Excess Express platform): the platform where the Excess Express stops; the locked door into the station
+// (eki_00) needs the Station Key.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
@@ -217,26 +220,31 @@ EVT_BEGIN(init_powan_toron_konari_papa_gurume)
     RETURN
 EVT_END()
 
+/** Talk event of Pennington the detective (ポワン探偵): says stg6_hom_00. */
 static EVT_BEGIN(talk_powan)
     CALL(evt_msg_print, 0, STRING("stg6_hom_00"), 0, 0)
     RETURN
 EVT_END()
 
+/** Talk event of the fake Zip Toad (トロン, Doopliss in disguise): says stg6_hom_01 (left untranslated in US). */
 static EVT_BEGIN(talk_toron)
     CALL(evt_msg_print, 0, STRING("stg6_hom_01"), 0, 0)
     RETURN
 EVT_END()
 
+/** Talk event of Heff T., the gourmet Toad (グルメキノピオ): says stg6_rsh_211. */
 static EVT_BEGIN(talk_gurume)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_211"), 0, 0)
     RETURN
 EVT_END()
 
+/** Talk event of Goldbob (ナリキンパパ): says stg6_hom_02. */
 static EVT_BEGIN(talk_papa)
     CALL(evt_msg_print, 0, STRING("stg6_hom_02"), 0, 0)
     RETURN
 EVT_END()
 
+/** Talk event of Bub, Goldbob's son (コナリキン): says stg6_hom_03. */
 static EVT_BEGIN(talk_konari)
     CALL(evt_msg_print, 0, STRING("stg6_hom_03"), 0, 0)
     RETURN
@@ -293,6 +301,10 @@ EVT_BEGIN(talk_ekiin2)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the platform: Pennington the detective, the fake Zip Toad, Heff T. (the gourmet Toad), Goldbob, Bub,
+ * the two station attendants and Doopliss (ランペル).
+ */
 static NpcSetupInfo npc_data[] = {
     {
         /*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3", // name

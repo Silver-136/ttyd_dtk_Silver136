@@ -1,3 +1,5 @@
+// las_29 (ラストダンジョン, Palace of Shadow): the Shadow Queen's chamber: the final battle and the ending scenes.
+
 #include "eff/eff_starstone.h"
 #include "eff/n64/eff_pokopi_pcharge_n64.h"
 #include "eff/n64/eff_radiation_n64.h"
@@ -206,12 +208,14 @@ static EVT_BEGIN(syuryo_init)
     RETURN
 EVT_END()
 
+/** Init event of the Shadow Queen's NPC (影の女王): turns off the paper billboard and faces her to Y rotation 90. */
 EVT_BEGIN(q_kage_init)
     CALL(evt_npc_pera_onoff, STRING("me"), 0)
     CALL(evt_npc_set_ry, STRING("me"), 90)
     RETURN
 EVT_END()
 
+/** NPCs of the Shadow Queen's chamber: Sir Grodus (シュリョー) and the others who appear in the ending. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"シュリョー"*/"\x83\x56\x83\x85\x83\x8A\x83\x87\x81\x5B", // name

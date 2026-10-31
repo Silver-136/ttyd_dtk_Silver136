@@ -1,3 +1,6 @@
+// aji_14 (敵のアジト, X-Naut Fortress): the Magnus von Grapple 2.0 boss room (evt_boss2), leading on to the
+// Moon (moo_04).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -74,6 +77,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Script function that attaches the two frame NPCs (枠 and 枠２) of the Magnus von Grapple 2.0 robots to the
+ * robots' locator17 bone each frame, or hides them below the floor while the robot is below ground level,
+ * and then moves all the robot's bone world positions out of sight (y = -1000). Blocks forever.
+ */
 USER_FUNC(waku) {
     NpcEntry* npc;
     AnimationPose* pose;
@@ -130,6 +138,11 @@ USER_FUNC(waku) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Creates the two frame NPCs 枠 and 枠２ (model c_mb_robo_2a, no shadow, animation L_1)
+ * and starts waku, which keeps them on the locator17 bone of the robots ロボット and ロボット２.
+ * Guess: c_mb_robo_2a is a part of the Magnus von Grapple 2.0 model that is drawn as its own NPC.
+ */
 EVT_BEGIN(evt_robot_waku)
     CALL(evt_npc_entry, STRING("枠"), STRING("c_mb_robo_2a"))
     CALL(evt_npc_flag_onoff, 1, STRING("枠"), NPC_FLAG_NO_SHADOW | NPC_FLAG_SHADOW_NO_FLOOR)

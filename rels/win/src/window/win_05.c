@@ -1,3 +1,5 @@
+// win_05 (ウィンディん家周辺, Flurrie's house in Boggly Woods): Flurrie's bedroom, with its canopy bed.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

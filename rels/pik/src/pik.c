@@ -1,3 +1,5 @@
+// pik.rel (ピカリーヒルズ, Poshley Heights): registers pik_00..pik_04 and the battle database.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

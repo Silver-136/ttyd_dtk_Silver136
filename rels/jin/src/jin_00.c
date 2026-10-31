@@ -1,3 +1,6 @@
+// jin_00 (ダイム寺院, Creepy Steeple): main hall: six Boo (teresa) NPCs, the Atomic Boo boss fight (drops Lucky Start),
+// a key and lock, save block; doors to jin_01-06, Twilight Trail (gra_06) and Twilight Town (usu_00).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"

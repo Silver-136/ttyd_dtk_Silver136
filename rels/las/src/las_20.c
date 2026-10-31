@@ -1,3 +1,5 @@
+// las_20 (ラストダンジョン, Palace of Shadow): the room of star switches (hosi).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

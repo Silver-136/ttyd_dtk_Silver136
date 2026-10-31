@@ -1,3 +1,6 @@
+// dou_04 (洞窟, Pirate's Grotto): room off dou_03 with a lift raised by a red switch.
+// Grotto Key and Star Piece items, and a Goomba NPC (Kurichero) who gives a Couples Cake request.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "system.h"

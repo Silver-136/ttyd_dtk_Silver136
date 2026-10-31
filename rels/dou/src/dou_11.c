@@ -1,3 +1,6 @@
+// dou_11 (洞窟, Pirate's Grotto): large room with sailors (suifu) including Monie and Peeton, floating islands, bobbing platforms and a bomb wall (story 249 to 256).
+// Doors to dou_10 and to Keelhaul Key (muj_10, muj_00).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"

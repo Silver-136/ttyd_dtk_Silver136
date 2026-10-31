@@ -1,3 +1,6 @@
+// rsh_00 (列車, Excess Express): the driver's cab: driver NPC, controls and schedule board, a Smorg (moamoa) window
+// scene; door to rsh_01.
+
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

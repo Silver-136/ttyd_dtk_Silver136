@@ -1,3 +1,5 @@
+// eki_02 (駅, Riverside Station): room with a contraption (sikake), a key item and a Star Piece; door to eki_01.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"

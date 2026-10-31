@@ -1,3 +1,6 @@
+// mri_07 (巨木の中, The Great Tree): the Puni shop and the Puni information seller, with the little Jabbi
+// (chibitoge) and a recovery block.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -71,6 +74,7 @@ static ShopDb trade_list[] = {
     {0},
 };
 
+/** The Puni clerk (プニ店員) and his 35 shop messages (stg2_shop_00 and up). */
 static ShopperData35 shopper_data = {
     /*"プニ店員"*/"\x83\x76\x83\x6A\x93\x58\x88\xF5", // name
     NULL, NULL, // fook_evt..buy_evt
@@ -225,6 +229,7 @@ EVT_BEGIN(puniinfo_talk)
     RETURN
 EVT_END()
 
+/** NPCs of the Puni shop: Jabble (ちびトゲ), the Puni clerk (プニ店員) and the information seller (プニ情報屋). */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ちびトゲ"*/"\x82\xBF\x82\xD1\x83\x67\x83\x51", // name

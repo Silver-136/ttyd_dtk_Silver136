@@ -1,3 +1,6 @@
+// muj_02 (無人島, Keelhaul Key): the jungle with the pipe to the sewers (tik_17) and the couple's
+// lost wedding ring (lost_wedding_ring); Fuzzies.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"

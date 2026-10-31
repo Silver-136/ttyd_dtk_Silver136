@@ -1,3 +1,5 @@
+// moo_00 (月, the Moon): the landing site with the save block; paths to moo_01 and moo_07.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"

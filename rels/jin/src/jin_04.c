@@ -1,3 +1,6 @@
+// jin_04 (ダイム寺院, Creepy Steeple): Doopliss (Rampell) boss room: Doopliss and fake-Mario scenes and battles,
+// Goombella, Koops, Flurrie and Yoshi cutscenes, Ruby Star; door to jin_00.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -810,6 +813,10 @@ EVT_BEGIN(nisemario_init)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the boss room: Doopliss (Rampell), the fake Mario, Goombella (クリスチーヌ), Koops (ノコタロウ),
+ * Flurrie (クラウダ) and Yoshi.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B", // name

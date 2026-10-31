@@ -1,3 +1,5 @@
+// eff_kiss.c: Ms. Mowz's kiss (チュチュリーナキス); effKissEntry.
+
 #pragma once
 
 #include "driver/effdrv.h"

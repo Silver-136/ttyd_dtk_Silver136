@@ -1,3 +1,5 @@
+// aji_02 (敵のアジト, X-Naut Fortress): an electrified floor-panel room (hikaru_yuka).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"

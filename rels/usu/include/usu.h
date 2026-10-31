@@ -1,3 +1,5 @@
+// Declarations shared by the usu.rel units (ウスグラ村, Twilight Town).
+
 #pragma once
 
 #include "dolphin/types.h"

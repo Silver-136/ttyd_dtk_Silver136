@@ -1,3 +1,6 @@
+// dou_10 (洞窟, Pirate's Grotto): room linking dou_09, dou_06 and dou_11 with a wave-dodging section and a spear trap (story 248 to 249).
+// Bobbing platforms.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"

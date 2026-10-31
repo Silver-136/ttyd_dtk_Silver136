@@ -1,3 +1,6 @@
+// gon_08 (ゴンババ, Hooktail Castle): room linking gon_04, gon_09 and gon_12.
+// Nokkos (nokkosu) gives a side request with a Special Card reward; Life Shroom, floating block, Castle Key (0x0F) lock (story 52).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -440,6 +443,11 @@ static EVT_BEGIN(evt_unlock)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for Nokkos (ノッコス), the Koopa who asks for Mario's help in the Trouble Center request 7:
+ * when that request is active he is placed on the high ledge (y 500) and faces right;
+ * otherwise he stays where the map put him.
+ */
 EVT_BEGIN(nokkosu_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_TRY_TO_FIND_ME)
 #ifdef VERSION_G8ME01

@@ -1,3 +1,5 @@
+// yuu_03 (遊技場, Pianta Parlor): minigame 4, Paper Mode (slit, squeezing through slots); entered from gor_03 or mon_10.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

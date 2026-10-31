@@ -75,6 +75,12 @@ static u8 colb[17] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 void effHoraoSpellMain(EffectEntry* effect);
 void effHoraoSpellDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Spawns the horao spell effect at (x, y, z) for lifetime frames (0 = until soft-deleted).
+ * Reached only through evt_eff64; no script in the tree spawns it.
+ * The effect table labels it バトル・ホラオウ (battle horaou), next to magic_horao_n64 (ホラオウバトル).
+ * Unknown: what horaou refers to.
+ */
 EffectEntry* effHoraoSpellN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffHoraoSpellN64Work* work;

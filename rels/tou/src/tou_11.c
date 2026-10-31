@@ -1,3 +1,6 @@
+// tou_11 (闘技場, Glitz Pit): an empty minor-league locker room, hidden behind the tou_09 lockers, where Mario is
+// shut in before the title match; exits to tou_04 and tou_09 (the shut-in scenes iris out to tou_03).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

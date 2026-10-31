@@ -1,3 +1,6 @@
+// dou.rel (洞窟, Pirate's Grotto): _prolog registers each map's init script (dou_00 to dou_13) and the area's battle tables.
+// Also the shared bobbing-platform (puka) events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"

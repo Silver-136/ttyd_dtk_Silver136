@@ -1,3 +1,5 @@
+// win_03 (ウィンディん家周辺, Boggly Woods): the path between win_02 and Flurrie's house (win_04), with two Piranha Plants.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"

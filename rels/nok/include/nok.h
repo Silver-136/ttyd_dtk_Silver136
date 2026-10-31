@@ -1,3 +1,5 @@
+// Declarations shared by the nok.rel units (ハナハナ村, Petalburg).
+
 #pragma once
 
 #include "dolphin/types.h"

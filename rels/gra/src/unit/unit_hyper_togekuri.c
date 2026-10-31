@@ -1,3 +1,5 @@
+// Battle unit Hyper Spiky Goomba (ハイパートゲクリボー): gra.rel's copy.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"

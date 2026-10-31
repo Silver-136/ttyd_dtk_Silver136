@@ -1,3 +1,5 @@
+// kpa_05 (クッパ編, Bowser's interludes): the third side-scrolling stage, over lava; continues in kpa_06.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"

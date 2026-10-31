@@ -1,3 +1,6 @@
+// kpa (クッパ編, Bowser's interludes): registers kpa_00..kpa_07 and runs the side-scrolling stages: the object and item
+// streams, coins, score, lives, the timer and the status display.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

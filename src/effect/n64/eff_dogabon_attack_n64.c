@@ -74,6 +74,13 @@ u8 move_data_hazure[20] = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 109, 117,
 /** Height offset of each of the 25 pieces, rising from -5 to 5 along the spiral. */
 static s8 y_data[] = {-5, -5, -5, -4, -4, -4, -3, -3, -2, -2, -1, -1, 0, 0, 1, 2, 2, 3, 3, 4, 4, 4, 5, 5, 5};
 
+/**
+ * Spawns the dogabon attack at (x, y, z): 25 pieces laid out on a spiral of radius 120,
+ * each starting after a staggered delay.
+ * The effect table labels it ドガボン (dogabon) and kemuri11_n64 ドガボンけむり (dogabon smoke).
+ * Reached only through evt_eff64; no script in the tree spawns it.
+ * Guess: dogabon is a crash-and-boom sound word.
+ */
 EffectEntry* effDogabonAttackN64Entry(s32 type, s32 lifetime, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffDogabonAttackN64Work* work;

@@ -1,3 +1,6 @@
+// eki_00 (駅, Riverside Station): entrance room with a lift, bridge, paper-fold event and a Smorg (moamoa) cutscene
+// Close Call P item; doors to eki_01 and the platform (hom_00).
+
 #include "driver/imgdrv.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

@@ -1,3 +1,6 @@
+// aji_03 (敵のアジト, X-Naut Fortress): the crane game room: the UFO-catcher crane (ufo_main) and its prizes
+// (keihin) and badges, the clockwork (zenmai) switches.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

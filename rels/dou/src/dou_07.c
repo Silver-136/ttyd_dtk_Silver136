@@ -1,3 +1,6 @@
+// dou_07 (洞窟, Pirate's Grotto): room where the Black Key (0x24) opens a chest and the paper genie (peramajin) gives the Boat Curse (story 246, 247).
+// Elmos (erumosu) appears here; P-Down D-Up badge; the door leads to dou_08.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "pmario_sound.h"
@@ -47,6 +50,7 @@ EvtWord peramajin_before[396];
 EvtWord peramajin_after[297];
 EvtWord dou_07_init_evt[89];
 
+/** Registration script of the Ember (エルモス, erumosu) enemy: does nothing. */
 static EVT_BEGIN(erumosu_regl)
     RETURN
 EVT_END()

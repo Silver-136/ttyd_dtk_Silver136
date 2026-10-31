@@ -1,3 +1,5 @@
+// tou_00 (闘技場, Glitzville): the blimp landing outside the arena; exits to tou_01 and back to gor_04.
+
 #include "eff/n64/eff_kemuri12_n64.h"
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -346,6 +348,7 @@ const char* kemuri_name[] = {
     "kosyo05",
 };
 
+/** Script helper: args[0] = height; sets the y offset of Bowser's flying fortress NPC (the 飛クッパ NPC) to make it bob. */
 static USER_FUNC(kpa_hikousen_yure) {
     f32 y = evtGetFloat(event, event->args[0]);
 

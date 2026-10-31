@@ -1,3 +1,6 @@
+// aji_00 (敵のアジト, X-Naut Fortress): the corridor between aji_19 and the elevator hall, where two X-Naut
+// underlings (teshita) are met.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

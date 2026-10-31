@@ -1,3 +1,6 @@
+// mri_02 (巨木の中, The Great Tree): the room where a Puni switch (punipuni_switch) makes a pipe rise out of
+// the floor (dokan_event); planters and pipes to mri_01, mri_05 and mri_20.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/hitdrv.h"

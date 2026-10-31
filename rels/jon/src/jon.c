@@ -1,3 +1,7 @@
+// jon (１００階ダンジョン, Pit of 100 Trials; jon is the "dungeon"): shared code and data for every floor: enemy setup
+// per floor, the item boxes, the mover (移動屋) and the trader (行商人), the troubles (irai) solved here and the battle
+// setup tables.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
@@ -3025,6 +3029,11 @@ static USER_FUNC(gonbaba_wait_landon) {
     return npcNameToPtr("\223G")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/**
+ * Message window callback (msgdrv calls it with the window's smart-heap block):
+ * starts iri_12_makkino_okiru (マッキノ wakes up) when the message turns to its second page (type 3 = page
+ * advanced).
+ */
 void iri_12_msgcb(s32 type, void* param) {
     u8* msg = *(u8**)param;
 

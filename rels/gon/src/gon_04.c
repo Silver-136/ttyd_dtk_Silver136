@@ -1,3 +1,6 @@
+// gon_04 (ゴンババ, Hooktail Castle): room linking gon_03, gon_05 and gon_08.
+// Floating blocks and switches, a bridge raised by a blue switch (story 40, 48, 49).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

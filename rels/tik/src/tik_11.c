@@ -1,3 +1,5 @@
+// tik_11 (埋没した都市, Rogueport Sewers): the power-down shop (powerdownya), which lowers Mario's level or a partner's rank.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/bgdrv.h"
@@ -848,6 +850,7 @@ EVT_BEGIN(powerdownya_direct_talk)
     RETURN
 EVT_END()
 
+/** Init script for Chet Rippo (パワーダウン屋). Registers the counter talk on the A_power_down hit area. */
 EVT_BEGIN(powerdownya_init)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_power_down"), 0, PTR(powerdownya_table_talk), 0)
     RETURN

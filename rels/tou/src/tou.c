@@ -1340,6 +1340,11 @@ USER_FUNC(tou_mario_keyoff_check) {
 }
 #endif
 
+/**
+ * Display callback for the in-world monitor: renders Grubba (ガンス),
+ * or Jolene (キノシコワ) after Chapter 3's story point, into a 128x128 texture with its own camera,
+ * so the screen mesh can show him.
+ */
 void gans_tex(CameraId cameraId, void* param) {
     GansWork* wp = param;
     CameraEntry saved;

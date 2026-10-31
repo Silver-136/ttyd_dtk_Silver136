@@ -1,3 +1,6 @@
+// gon_07 (ゴンババ, Hooktail Castle): room beyond gon_06 with a treasure chest holding the Black Key (0x22) (story 43).
+// Has a danger-music sequence and a door to gon_13.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

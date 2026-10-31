@@ -1,3 +1,5 @@
+// tik_20 (埋没した都市, Rogueport Sewers): a side room off tik_15 with blocks and an item.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

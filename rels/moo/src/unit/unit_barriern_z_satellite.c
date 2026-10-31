@@ -1,3 +1,5 @@
+// Battle unit the Mini-Z-Yux that orbit a Z-Yux (バリアーンＺ): moo.rel's copy.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_cmd.h"

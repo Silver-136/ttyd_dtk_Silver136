@@ -1,3 +1,6 @@
+// kpa_01 (クッパ編, Bowser's interludes): a Bowser's Castle scene in the hall with Kammy Koopa, the Hammer Bros. and the
+// Spiny guards.
+
 #include "driver/msgdrv.h"
 #include "memory.h"
 #include "battle/battle_unit.h"
@@ -964,6 +967,10 @@ EVT_BEGIN(hkoopa_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of Bowser's hall: the four Spiny guards (A and B can be talked to), the five Hammer Bros., Kammy
+ * Koopa (ババ), a Magikoopa (カメック) and Bowser's airship.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"トゲノコＡ"*/"\x83\x67\x83\x51\x83\x6D\x83\x52\x82\x60", // name

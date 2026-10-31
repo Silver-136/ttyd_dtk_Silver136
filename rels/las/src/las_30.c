@@ -1,3 +1,5 @@
+// las_30 (ラストダンジョン, Palace of Shadow): the stairs between las_28 and las_29.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"

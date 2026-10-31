@@ -1,3 +1,6 @@
+// rsh_02 (列車, Excess Express): passenger car with compartments 3-5: gourmet Toad, ghost (yuurei), salaryman and Toron
+// NPCs, overnight beds and the day-1/day-2 end scenes; doors to rsh_01 and rsh_03.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/msgdrv.h"

@@ -1011,6 +1011,11 @@ EVT_BEGIN(nokonoko_return_event)
     RETURN
 EVT_END()
 
+/**
+ * Ends a togenoko-tribe enemy's shell attack, as nokonoko_shell_return_event does for Koopa Troopas.
+ * togenoko is the Koopatrol (btl_un_togenoko); トゲノコエース (c_togenoko_b) is the Dark Koopatrol
+ * (btl_un_togenoko_ace).
+ */
 EVT_BEGIN(togenoko_shell_return_event)
     CALL(evt_npc_get_unitwork, STRING("me"), 1, LW(15))
     IF_INT_EQUAL(LW(15), 1)

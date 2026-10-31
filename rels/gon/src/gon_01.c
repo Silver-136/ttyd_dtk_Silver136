@@ -1,3 +1,6 @@
+// gon_01 (ゴンババ, Hooktail Castle): castle gate courtyard between gon_00 and gon_02.
+// Plays the gate cutscene (story 35 and 37) and has an HP Plus item.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

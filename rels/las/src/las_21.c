@@ -1,3 +1,5 @@
+// las_21 (ラストダンジョン, Palace of Shadow): the room of floating blocks (floatblk).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"

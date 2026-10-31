@@ -1,3 +1,6 @@
+// mri_16 (巨木の中, The Great Tree): the water room: the mechanism that drains the water (water_shikake) and
+// the rising bars (bar_shikake), with an item box.
+
 #include "mri_puni.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

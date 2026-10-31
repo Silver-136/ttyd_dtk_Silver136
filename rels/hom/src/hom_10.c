@@ -1,3 +1,6 @@
+// hom_10 (途中駅ホーム, Excess Express platform): the train running between stations; the scene between the days of the
+// journey.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"

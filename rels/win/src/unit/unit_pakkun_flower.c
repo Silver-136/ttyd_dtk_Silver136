@@ -1,3 +1,5 @@
+// Battle unit Piranha Plant (キラーパックン): win.rel's copy.
+
 #include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

@@ -1,3 +1,6 @@
+// gon_13 (ゴンババ, Hooktail Castle): small side room off gon_07.
+// A floating switch makes a chest with an Up Arrow appear.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

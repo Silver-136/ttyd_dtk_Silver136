@@ -1,3 +1,6 @@
+// hei_05 (平原, Petal Meadows): second gate room (hei_04 to hei_06).
+// Two Shinemon enemies guard a gate (mon) that opens (story 30).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

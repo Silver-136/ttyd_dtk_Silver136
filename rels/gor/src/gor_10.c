@@ -1,3 +1,5 @@
+// gor_10 (ゴロツキタウン, Rogueport): prologue scenes (the letter and Mario waking up), leading to pro_04 and then gor_00.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"

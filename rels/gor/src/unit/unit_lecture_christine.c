@@ -370,6 +370,13 @@ BattleWeapon lec_weapon_zutsuki_2 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Goombella's Headbonk (ずつき) in the guard lessons: picks lec_weapon_zutsuki_1 at lecture progress 3, else
+ * lec_weapon_zutsuki_2, and jumps at Mario.
+ * Mid-jump, Professor Frankly freezes the action: at progress 3 for the
+ * A guard (mac_0_b_t2_006), at progress 7 for the B Superguard (mac_0_b_t2_014), and waits for the button. After
+ * the hit it stores the guard result in the lecture's unit work 3 (4, 5 or 6) and returns home.
+ */
 EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 3)

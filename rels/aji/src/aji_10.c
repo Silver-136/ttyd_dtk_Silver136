@@ -1,3 +1,6 @@
+// aji_10 (敵のアジト, X-Naut Fortress): Sir Grodus's (shuryo) room with the monitor: Peach's scenes with
+// Grodus, Lord Crump and the Shadow Sirens.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -150,6 +153,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Exit event of Peach's door in Grodus's room: the guard (みはり) turns toward her
+ * and gets an exclamation balloon for about 1.5 seconds; leaves LW(0) = 0 for the door code.
+ */
 static EVT_BEGIN(bero_peach_evt)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -203,6 +210,10 @@ USER_FUNC(monitor_cap_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script function: sets monitor_wp->kanbu from args[0]:
+ * nonzero makes the monitor show the officer (カンブー) instead of the grunt (手下１).
+ */
 USER_FUNC(monitor_kanbu_flag_onoff) {
     monitor_wp->kanbu = evtGetValue(event, event->args[0]);
     return EVT_RETURN_DONE;
@@ -768,6 +779,11 @@ static EVT_BEGIN(peach_evt_stg1)
     RETURN
 EVT_END()
 
+/**
+ * Peach's second scene: Mario's slot is parked at y=-1000,
+ * Grodus and a researcher (研究員) are placed in front of the camera,
+ * the 14 messages peach_aji_72_01 to 72_14 play, and the map changes to aji_16 with an iris fade.
+ */
 static EVT_BEGIN(peach_evt_stg2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -879,6 +895,10 @@ static EVT_BEGIN(peach_evt_stg2)
     RETURN
 EVT_END()
 
+/**
+ * Peach's chapter 3 scene: Grodus talks with the Shadow Sirens (Beldam, Marilyn and Vivian, マジョリン, マリリン, ビビアン);
+ * messages peach_aji_103 to 111 play and the map changes to aji_16 at the peach_evt_stg3 entrance.
+ */
 static EVT_BEGIN(peach_evt_stg3)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -420, 0, 0)
@@ -1002,6 +1022,10 @@ EVT_BEGIN(peach_evt_stg3_syuryo_talk)
     RETURN
 EVT_END()
 
+/**
+ * Peach's fourth scene: Grodus and a researcher (研究員) speak peach_aji_166_00_01 to 07
+ * and the map changes to aji_17 with an iris fade.
+ */
 static EVT_BEGIN(peach_evt_stg4)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -1053,6 +1077,10 @@ static EVT_BEGIN(peach_evt_stg4)
     RETURN
 EVT_END()
 
+/**
+ * Peach's fifth scene: Grodus and an X-Naut (手下１) in front of the monitor (monitore_1 animation);
+ * messages peach_aji_196 to 205 play and the map changes to aji_17 with an iris fade.
+ */
 static EVT_BEGIN(peach_evt_stg5)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -420, 0, 0)
@@ -1118,6 +1146,10 @@ static EVT_BEGIN(peach_evt_stg5)
     RETURN
 EVT_END()
 
+/**
+ * Peach's sixth scene: Grodus and an X-Naut (手下１) speak peach_aji_269 to 279
+ * and the map changes to aji_16 at the peach_evt_stg6 entrance.
+ */
 static EVT_BEGIN(peach_evt_stg6)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -420, 0, 0)
@@ -1232,6 +1264,10 @@ static EVT_BEGIN(teshita3_init)
     RETURN
 EVT_END()
 
+/**
+ * Initialisation of the officer NPC (カンブー): runs the common NPC set-up (npc_init_evt)
+ * and sets NPC_STATUS_FACE_MOVE_DIR (2) on it, so it turns to face the way it moves.
+ */
 EVT_BEGIN(kanbu_init)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)

@@ -1,3 +1,6 @@
+// aji_11 (敵のアジト, X-Naut Fortress): the storage room where Peach finds the disk on a shelf and plays it
+// (peach_evt_disksys), and the gnawing creature (gajigaji).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"

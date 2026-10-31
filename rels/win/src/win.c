@@ -1,3 +1,6 @@
+// win.rel (ふしぎの森, Boggly Woods): registers win_00..win_06 and the battle database, and holds the door and tree
+// scripts the maps share.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_map.h"

@@ -1,3 +1,5 @@
+// gra_05 (ウスグラの道, Twilight Trail): the woods with the breaking floor, between gra_04 and gra_06.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

@@ -1,3 +1,5 @@
+// las_19 (ラストダンジョン, Palace of Shadow): the passage between the riddle tower and the inner palace.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

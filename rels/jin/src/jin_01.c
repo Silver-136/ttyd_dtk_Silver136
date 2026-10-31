@@ -1,3 +1,5 @@
+// jin_01 (ダイム寺院, Creepy Steeple): side room with a red switch and a Golden Leaf item; doors to jin_00 and jin_03.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

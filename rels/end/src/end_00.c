@@ -1,3 +1,6 @@
+// end_00 (エンディング, ending): the staff roll with the parade of characters, the Smorg (moamoa) silhouettes and the
+// closing pictures before the return to the title.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

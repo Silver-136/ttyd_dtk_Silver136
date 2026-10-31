@@ -1,3 +1,5 @@
+// tou_07 (闘技場, Glitz Pit): the champion's room; exits to tou_04, tou_08, tou_10, tou_13.
+
 #include "battle/battle_unit.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
@@ -167,6 +169,7 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/** NPC init for Grubba (ガンス) in this room: does nothing. */
 static EVT_BEGIN(init_gans)
     RETURN
 EVT_END()
@@ -820,6 +823,11 @@ USER_FUNC(tou_07_icon_off) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: moves the belt's star stone effect ("belt")
+ * and the belt NPC (ベルト) to camera 7 (CAMERA_3D_EFFECTB),
+ * the camera itemdrv also puts Mario on while an important item is being received, so they are drawn with him.
+ */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006d34, JP tou .text+0x6C70. See docs/NAME_PROVENANCE.md.
 USER_FUNC(tou_07_belt_camid) {
     EffectEntry* eff = effNameToPtr("belt");

@@ -1,3 +1,6 @@
+// Grodus effects (syuryou, 首領: the leader): type 0 plays his staff animation EFF_batug_tue once, type 1 his barrier
+// MOBJ_EFF_baria; both fade out when removed.
+
 #include "eff/eff_syuryou.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"

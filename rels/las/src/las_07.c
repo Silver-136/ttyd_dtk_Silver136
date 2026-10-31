@@ -1,3 +1,5 @@
+// las_07 (ラストダンジョン, Palace of Shadow): a connecting hall.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

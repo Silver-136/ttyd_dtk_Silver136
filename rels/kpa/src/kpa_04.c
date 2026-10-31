@@ -1,3 +1,5 @@
+// kpa_04 (クッパ編, Bowser's interludes): the end of the second side-scrolling stage; it ends in Rogueport (gor_00).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "kpa.h"

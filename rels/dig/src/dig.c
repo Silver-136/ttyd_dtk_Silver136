@@ -1,3 +1,5 @@
+// dig.rel (ダイジェスト, digest movie): registers dig_00 and starts the THP movie player on load, stops it on unload.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "rels/dig/include/dig.h"

@@ -1,3 +1,5 @@
+// eki_04 (駅, Riverside Station): room with a red jump stand and two doors; Dried Shroom and P-Up, D-Down items; doors to eki_03 and eki_05.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

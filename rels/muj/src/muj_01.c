@@ -1,3 +1,6 @@
+// muj_01 (無人島, Keelhaul Key): the castaways' camp: the shop and the inn, the sailors and the
+// dancers, and the crew's homesickness, split and persuasion (kyoshu_event, nakamaware_event, settoku_event).
+
 #include "battle/battle_unit.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
@@ -291,6 +294,10 @@ static EVT_BEGIN(marco_init)
     RETURN
 EVT_END()
 
+/**
+ * Turns Flavio (マルコ) from LW(0) to LW(1) degrees about y over 150 ms; marco_talk calls it in pairs
+ * (0 to 180 and back) so he glances around while talking.
+ */
 EVT_BEGIN(marco_kyorokyoro)
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, LW(0), LW(1), 150)
     LOOP(0)
@@ -821,6 +828,10 @@ static EVT_BEGIN(musume_talk)
     RETURN
 EVT_END()
 
+/**
+ * Adds the first dancer (3人娘Ａ, model c_dance_r, the red one) with walk and talk animations and musume_talk;
+ * called from the ending map init.
+ */
 static EVT_BEGIN(musume_a_entry)
     CALL(evt_npc_entry, STRING("３人娘Ａ"), STRING("c_dance_r"))
     CALL(evt_npc_set_tribe, STRING("３人娘Ａ"), STRING("踊り子"))
@@ -831,6 +842,7 @@ static EVT_BEGIN(musume_a_entry)
     RETURN
 EVT_END()
 
+/** Adds the second dancer (3人娘Ｂ, model c_dance_p, the pink one) with walk and talk animations and musume_talk. */
 static EVT_BEGIN(musume_b_entry)
     CALL(evt_npc_entry, STRING("３人娘Ｂ"), STRING("c_dance_p"))
     CALL(evt_npc_set_tribe, STRING("３人娘Ｂ"), STRING("踊り子ピンク"))
@@ -841,6 +853,10 @@ static EVT_BEGIN(musume_b_entry)
     RETURN
 EVT_END()
 
+/**
+ * Adds the third dancer (3人娘Ｃ, model c_dance_k, the yellow-green one) with walk and talk animations
+ * and musume_talk.
+ */
 static EVT_BEGIN(musume_c_entry)
     CALL(evt_npc_entry, STRING("３人娘Ｃ"), STRING("c_dance_k"))
     CALL(evt_npc_set_tribe, STRING("３人娘Ｃ"), STRING("踊り子黄緑"))
@@ -2065,6 +2081,10 @@ static EVT_BEGIN(minnnanokoe_evt)
     RETURN
 EVT_END()
 
+/**
+ * Adds the epilogue NPCs Goombella (クリスチーヌ) and Bobbery (サンダース, placed off screen),
+ * and stops sailor D's regular event and moves him beside them.
+ */
 static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
     CALL(evt_npc_set_tribe, STRING("クリスチーヌ"), STRING("クリスチーヌ"))
@@ -2082,6 +2102,11 @@ static EVT_BEGIN(epilogue_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * Animation loop of the epilogue: Goombella and the rough sailor (ガラの悪い水夫) take turns talking,
+ * a speech bubble pops over Goombella, the sailor turns around, Bobbery walks in from the left,
+ * and then all three keep taking turns talking.
+ */
 static EVT_BEGIN(epilogue_evt_sub)
     WAIT_MS(500)
     CALL(evt_npc_set_anim, STRING("クリスチーヌ"), STRING("PKR_T_1"))

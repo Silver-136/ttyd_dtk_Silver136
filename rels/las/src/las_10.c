@@ -1,3 +1,6 @@
+// las_10 (ラストダンジョン, Palace of Shadow): the riddle tower hub: the doors and keys (kagi) to the eight rooms las_11
+// to las_18.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"

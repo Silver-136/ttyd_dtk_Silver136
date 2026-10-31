@@ -1,3 +1,6 @@
+// muj_04 (無人島, Keelhaul Key): the rope bridge where Admiral Bobbery (sanders) and the Embers
+// (erumosu) attack, and the coconut palm.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_hit.h"

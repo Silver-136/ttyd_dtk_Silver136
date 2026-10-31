@@ -1,3 +1,6 @@
+// aji_09 (敵のアジト, X-Naut Fortress): the locker room: the changing booths (kou) and lockers (rokka) where
+// Peach puts on an X-Naut uniform (peach_evt_fuku_g).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"

@@ -1,3 +1,6 @@
+// aji_07 (敵のアジト, X-Naut Fortress): the teleporter room (tensou) linking the fortress with the Moon
+// (moo_04) and the sewers (tik_00).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_case.h"

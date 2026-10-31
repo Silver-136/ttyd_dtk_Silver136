@@ -1,3 +1,6 @@
+// Shadow Queen's breath (toiki, 影の女王・吐息): a cloud that drifts and slows while its texture scrolls, releasing
+// mist puffs along the way; type 0 dark breath, 1 confusion breath, 2 poison breath.
+
 #include "eff/eff_toiki.h"
 #include "driver/dispdrv.h"
 #include "memory.h"

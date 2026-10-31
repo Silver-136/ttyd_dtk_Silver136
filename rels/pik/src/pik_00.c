@@ -1,3 +1,6 @@
+// pik_00 (ピカリーヒルズ, Poshley Heights): the station where the Excess Express ends, with the rich families' villas; chapter
+// 7's cannon permit is given here.
+
 #include "driver/msgdrv.h"
 #include "memory.h"
 #include "version.h"
@@ -1044,6 +1047,7 @@ static EVT_BEGIN(evt_train)
     RETURN
 EVT_END()
 
+/** Init for the station attendant (駅員): puts him at (-250, 60, -350) next to the train door. */
 EVT_BEGIN(init_ekiin)
     CALL(evt_npc_set_position, STRING("me"), -250, 60, -350)
     RETURN
@@ -1096,6 +1100,7 @@ EVT_BEGIN(talk_ekiin)
     RETURN
 EVT_END()
 
+/** Init for Goldbob's husband (ナリキンパパ, Mr. Goldbob): puts him at (-195, 0, 350). */
 static EVT_BEGIN(init_papa)
     CALL(evt_npc_set_position, STRING("me"), -195, 0, 350)
     RETURN
@@ -1291,6 +1296,7 @@ static EVT_BEGIN(talk_papa)
     RETURN
 EVT_END()
 
+/** Init for Goldbob's wife (ナリキンママ): puts her at (-133, 0, 330). */
 static EVT_BEGIN(init_mama)
     CALL(evt_npc_set_position, STRING("me"), -133, 0, 330)
     RETURN
@@ -1407,6 +1413,10 @@ static EVT_BEGIN(talk_mama)
     RETURN
 EVT_END()
 
+/**
+ * Init for Bub (コナリ), the Goldbobs' son: puts him at (-150, 0, 400), unless Trouble Center request 29 is active,
+ * when he keeps his position from npc_data.
+ */
 static EVT_BEGIN(init_konari)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
         RETURN
@@ -1443,6 +1453,7 @@ static EVT_BEGIN(talk_konari)
     RETURN
 EVT_END()
 
+/** Init for Toodles (マダム): puts her at (352, 12, -86). */
 static EVT_BEGIN(init_madam)
     CALL(evt_npc_set_position, STRING("me"), 352, 12, -86)
     RETURN

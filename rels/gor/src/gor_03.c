@@ -1,3 +1,6 @@
+// gor_03 (ゴロツキタウン, Rogueport): west side. Pianta Parlor hall (slots, token exchange, lottery, Don Pianta),
+// doors to the minigame rooms yuu_00..yuu_03; exits to gor_01 and gor_04 (station).
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -1667,6 +1670,10 @@ EVT_BEGIN(maffiaboss_casino_talk)
     RETURN
 EVT_END()
 
+/**
+ * Dialogue of the two henchmen (マフィア１ and マフィア２) when Mario talks to them
+ * while Don Pianta is away (mac_5_009, mac_5_010).
+ */
 EVT_BEGIN(maffiaboss_nekomu00)
     CALL(evt_msg_print, 0, STRING("mac_5_009"), 0, STRING("マフィア１"))
     CALL(evt_msg_print, 0, STRING("mac_5_010"), 0, STRING("マフィア２"))
@@ -1687,6 +1694,7 @@ EVT_BEGIN(maffiaboss_nekomu02)
     RETURN
 EVT_END()
 
+/** Init event of the first henchman (マフィア１): places him at (-135, 155, -260). */
 EVT_BEGIN(maffia1_init)
     CALL(evt_npc_set_position, STRING("me"), -135, 155, -260)
     BEGIN_INLINE_EVENT
@@ -1744,6 +1752,7 @@ EVT_BEGIN(maffia1_talk)
     RETURN
 EVT_END()
 
+/** Init event of the second henchman (マフィア２): places him at (-135, 155, -210). */
 EVT_BEGIN(maffia2_init)
     CALL(evt_npc_set_position, STRING("me"), -135, 155, -210)
     BEGIN_INLINE_EVENT
@@ -1827,6 +1836,11 @@ EVT_BEGIN(maffia3_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Mony (モニー): places her by story progress:
+ * (-265, 155, -225) up to the Thousand-Year Door chapter, (-145, 155, -95) on the Fahr Outpost/F&F arrival step,
+ * (-240, 155, -95) from the train ticket until the train leaves, and (-130, 155, -115) after that.
+ */
 static EVT_BEGIN(mony_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
@@ -1867,6 +1881,11 @@ static EVT_BEGIN(mony_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Peeton (ピートン): while Trouble Center request 19 is active she stands at (275, 0, 413);
+ * otherwise she is placed by story progress at one of four spots in the hall (e.g. (-280, 155, -185) in the
+ * early chapters, (-198, 155, -80) after the train leaves).
+ */
 static EVT_BEGIN(peton_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IMPORTANT_THING)
         CALL(evt_npc_set_position, STRING("me"), 275, 0, 413)
@@ -1994,6 +2013,11 @@ EVT_BEGIN(peton_desk_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Lucky, the lottery Bob-omb (グルメボム兵, "gourmet Bob-omb"): places him at (-160, 0, 480)
+ * and shows the "husei_huki" (invalid) bubble when evt_lottery_error_check reports a problem with the lottery
+ * data.
+ */
 static EVT_BEGIN(init_gurume)
     CALL(evt_npc_set_position, STRING("me"), -160, 0, 480)
     CALL(evt_lottery_error_check, LW(0))
@@ -2024,6 +2048,10 @@ static EVT_BEGIN(luigi_talk)
     RETURN
 EVT_END()
 
+/**
+ * Registers the extra NPC Cherry (チェリー) from cherryEnt in the same story range as luigi_init;
+ * called when the map sets up its NPCs.
+ */
 static EVT_BEGIN(luigi_npcEnt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_32_BOSS_BATTLE, STG4_15_04_SHADOW_SIRENS_DOOPLISS)
@@ -2063,6 +2091,7 @@ NpcSetupInfo cherryEnt[] = {
     {0},
 };
 
+/** Fades the Bunny Teresa (バニーテレサ) NPC in over LW(0) frames with a materialising sound, by raising her alpha to 255. */
 EVT_BEGIN(bteresa_n_fadein)
     CALL(evt_npc_get_position, STRING("バニーテレサ"), LW(1), LW(2), LW(3))
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_GAME_TELESA_MOVE2"), LW(1), LW(2), LW(3), 0)
@@ -3083,6 +3112,7 @@ EVT_BEGIN(roten_4_talk)
     RETURN
 EVT_END()
 
+/** Init event of the Toad woman A (キノピオ女Ａ): places her at (-145, 0, -110). */
 EVT_BEGIN(kinopiko_a_init)
     CALL(evt_npc_set_position, STRING("me"), -145, 0, -110)
     RETURN
@@ -3111,6 +3141,7 @@ EVT_BEGIN(kinopiko_a_talk)
     RETURN
 EVT_END()
 
+/** Init event of the Toad woman B (キノピオ女Ｂ): places her at (155, 0, -50) and lets her jump and land on the floor. */
 static EVT_BEGIN(kinopiko_b_init)
     CALL(evt_npc_set_position, STRING("me"), 155, 0, -50)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -3180,6 +3211,7 @@ static EVT_BEGIN(kinopiko_b_talk)
     RETURN
 EVT_END()
 
+/** Init event of the Toad A (キノピオＡ): places him at (330, 128, -170). */
 EVT_BEGIN(kinopio_a_init)
     CALL(evt_npc_set_position, STRING("me"), 330, 128, -170)
     RETURN
@@ -3208,6 +3240,7 @@ EVT_BEGIN(kinopio_a_talk)
     RETURN
 EVT_END()
 
+/** Init event of the small Toad (コキノピオ) a: places it at (460, 37, -152). */
 EVT_BEGIN(kokinopio_a_init)
     CALL(evt_npc_set_position, STRING("me"), 460, 37, -152)
     RETURN
@@ -3274,6 +3307,7 @@ EVT_BEGIN(kokinopio_b_talk)
     RETURN
 EVT_END()
 
+/** Init event of the Koopa (ノコノコ) a: places it at (110, 146, -310). */
 EVT_BEGIN(nokonoko_a_init)
     CALL(evt_npc_set_position, STRING("me"), 110, 146, -310)
     RETURN
@@ -3302,6 +3336,7 @@ EVT_BEGIN(nokonoko_a_talk)
     RETURN
 EVT_END()
 
+/** Init event of the Goomba (クリボー) 1: places it at (470, 10, 295). */
 EVT_BEGIN(kuribo_1_init)
     CALL(evt_npc_set_position, STRING("me"), 470, 10, 295)
     RETURN
@@ -4486,6 +4521,10 @@ static EVT_BEGIN(wall_bomb)
     RETURN
 EVT_END()
 
+/**
+ * Interrupt event of the clerk (店員) at the back door (裏口), installed once the door is open: walks him back to
+ * his spot and has him stand facing forward (S_1).
+ */
 EVT_BEGIN(uraguchi_tenin)
     CALL(evt_npc_move_position, STRING("店員"), -490, 24, 0, FLOAT(60.0f), 0)
     CALL(evt_npc_flag_onoff, 0, STRING("店員"), NPC_FLAG_AUTO_MOVE_ANIM)

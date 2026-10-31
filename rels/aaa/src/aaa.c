@@ -1,3 +1,5 @@
+// aaa.rel (マリオの家, Mario Bros.' house): registers aaa_00 and frees the map's texture on unload.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

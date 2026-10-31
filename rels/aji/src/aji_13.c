@@ -1,3 +1,6 @@
+// aji_13 (敵のアジト, X-Naut Fortress): the conveyor-belt room (move_left_right, move_up_down) with clockwork
+// switches and the card key (evt_key_get).
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

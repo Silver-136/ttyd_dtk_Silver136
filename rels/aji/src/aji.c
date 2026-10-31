@@ -1,3 +1,5 @@
+// aji.rel (敵のアジト, X-Naut Fortress): the REL prolog/epilog and the area's map list (aji_00 to aji_19).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 

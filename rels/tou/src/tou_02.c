@@ -1,3 +1,5 @@
+// tou_02 (闘技場, Glitz Pit): the entrance lobby with the fans and the reception; leads to tou_01, tou_03, tou_04.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -835,6 +837,14 @@ EVT_BEGIN(init_kino5)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the fifth Toad (キノピオ５), a parent who brought their son to the Glitz Pit: before Gonzales
+ * debuts the son is a fan of Prince Mush (stg3_npc_02_06_01);
+ * until the title match the line follows Mario's rank
+ * (02 to 05), then congratulations (06) and, after the chapter, a farewell (07) or, when Mario re-entered the
+ * league, the stg3_npc_re_031/032 lines. With Yoshi as the partner the _yos variants address him by the Yoshi's
+ * name (LW(10)).
+ */
 EVT_BEGIN(talk_kino5)
     CALL(evt_pouch_get_yoshiname, LW(10))
     SWITCH(GSW_STORY_PROGRESS)
@@ -1072,6 +1082,11 @@ s32 move_pos[] = {
     110, -40,
 };
 
+/**
+ * Move event the lobby crowd scene gives the champion (チャンピョン) while the fans mob him (GF(10) clear): every
+ * 2 to 7 s a fan's cry (stg3_tou_182 to 189 and 186_01, in turn) pops up with its tail at a random spot near
+ * him; it ends once fewer than 10 fans are left. It steps through move_pos but discards the values it reads.
+ */
 EVT_BEGIN(move_champ)
     SET_VALUE(LW(10), 0)
     LOOP(0)
@@ -2163,6 +2178,12 @@ static EVT_BEGIN(evt_poster_9)
     RETURN
 EVT_END()
 
+/**
+ * Lobby scene spawned right after the Champ's Belt is taken away and the party healed (the Peach interlude):
+ * Mario and the partner appear in the lobby with the doors hidden,
+ * Jolene (キノシコワ) speaks (stg3_tou_479_00_01 to 05) with the champion and the Shady Koopa answering,
+ * Mario nods and cheers, then they walk out and the map changes to tou_01 (bero a_door_mon).
+ */
 static EVT_BEGIN(evt_after_peach)
     CALL(evt_cam3d_evt_set, 0, 120, 494, 0, 40, 0, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 0)

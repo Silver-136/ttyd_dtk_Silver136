@@ -1,3 +1,5 @@
+// Declarations shared by the end.rel units (エンディング, the ending).
+
 #pragma once
 
 #include "dolphin/types.h"

@@ -1,3 +1,6 @@
+// jin_11 (ダイム寺院, Creepy Steeple): room with a save block, a power-up block and a breaking floor;
+// doors to jin_07 and jin_10.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

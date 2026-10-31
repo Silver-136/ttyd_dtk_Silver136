@@ -1,3 +1,6 @@
+// pik_04 (ピカリーヒルズ, Poshley Heights): the street between the station (pik_00) and the town square (pik_01); also the
+// X-Naut scene with Grodus (シュリョー) and Lord Crump (カンブー).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -181,6 +184,7 @@ static EVT_BEGIN(evt_wall)
     RETURN
 EVT_END()
 
+/** NPCs inside the house at ie_3: two of the Ta-kun (ターくん), Herringway's relatives from Shiver City. */
 const char* ie_3_npc[] = {
     /*"ターくん１"*/"\x83\x5E\x81\x5B\x82\xAD\x82\xF1\x82\x50",
     /*"ターくん２"*/"\x83\x5E\x81\x5B\x82\xAD\x82\xF1\x82\x51",
@@ -261,6 +265,7 @@ EVT_BEGIN(evt_wall_h)
     RETURN
 EVT_END()
 
+/** NPCs inside the hotel: the receptionist and the French-accented dandy (キザ野郎) who is smitten with her. */
 const char* hotel_npc[] = {
     /*"店員女"*/"\x93\x58\x88\xF5\x8F\x97",
     /*"キザ野郎"*/"\x83\x4C\x83\x55\x96\xEC\x98\x59",
@@ -626,6 +631,7 @@ EVT_BEGIN(talk_miyage)
     RETURN
 EVT_END()
 
+/** Talk script for the Traveling Sisters 3 (３人娘１ to ３): they speak stg7_pik_clear_10, 11 and 12 in turn. */
 static EVT_BEGIN(talk_musume)
     CALL(evt_msg_print, 0, STRING("stg7_pik_clear_10"), 0, STRING("３人娘１"))
     CALL(evt_msg_print, 0, STRING("stg7_pik_clear_11"), 0, STRING("３人娘２"))
@@ -633,6 +639,10 @@ static EVT_BEGIN(talk_musume)
     RETURN
 EVT_END()
 
+/**
+ * Init for the first of the three girls (３人娘１):
+ * after the Thousand-Year Door has been opened she is moved off screen.
+ */
 EVT_BEGIN(init_musume1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER(STG6_70_THOUSAND_YEAR_DOOR)
@@ -647,6 +657,7 @@ EVT_BEGIN(talk_musume1)
     RETURN
 EVT_END()
 
+/** Init for the second of the three girls (３人娘２): moved off screen after the Thousand-Year Door has been opened. */
 EVT_BEGIN(init_musume2)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER(STG6_70_THOUSAND_YEAR_DOOR)
@@ -661,6 +672,7 @@ EVT_BEGIN(talk_musume2)
     RETURN
 EVT_END()
 
+/** Init for the third of the three girls (３人娘３): moved off screen after the Thousand-Year Door has been opened. */
 EVT_BEGIN(init_musume3)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER(STG6_70_THOUSAND_YEAR_DOOR)
@@ -747,6 +759,10 @@ static EVT_BEGIN(talk_kiza)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the street: the souvenir shop owner, the Traveling Sisters 3, two of the Ta-kun (Herringway's
+ * relatives), the hotel receptionist and the French-accented dandy (キザ野郎).
+ */
 static NpcSetupInfo npc_data[] = {
     {
         /*"土産屋"*/"\x93\x79\x8E\x59\x89\xAE", // name
@@ -938,6 +954,11 @@ static KinopioData kino_dt = {
     evt_kinopio_from_bed, // fromBedEvt
 };
 
+/**
+ * Creates the epilogue cast: Grodus (シュリョー, c_shuryo, tribe 第三勢力総統), Lord Crump (カンブー, c_kanbu_ibt), the
+ * X-Nauts 軍団Ａ to Ｅ (A and D plain X-Nauts, B a researcher, C and E elites) and Pennington (ポワン, c_powan),
+ * with their positions and facings.
+ */
 static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_entry, STRING("シュリョー"), STRING("c_shuryo"))
     CALL(evt_npc_set_tribe, STRING("シュリョー"), STRING("第三勢力総統"))

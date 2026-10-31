@@ -1,3 +1,6 @@
+// tik_07 (埋没した都市, Rogueport Sewers): the room with the door and the pipes to Rogueport (gor_03) and Fahr Outpost
+// (bom_00), and the e-mail scene.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"

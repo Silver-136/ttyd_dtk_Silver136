@@ -1,3 +1,6 @@
+// jin_08 (ダイム寺院, Creepy Steeple): parrot (oumu) room: chests with Mr. Softener and Power Plus, The Letter P, a key
+// and lock; door to jin_07.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
