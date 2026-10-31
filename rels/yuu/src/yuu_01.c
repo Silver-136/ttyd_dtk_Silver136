@@ -80,14 +80,8 @@ static inline BOOL monte_check_inl(Vec* a, Vec* b) {
  */
 static inline f32 randRange(f32 d) { return irand(100.0f * d) / 100.0f; }
 
-USER_FUNC(eff_call_minigame);
-USER_FUNC(evt_yuucounter_alloc);
-USER_FUNC(evt_yuucounter_free);
-USER_FUNC(evt_yuuminigame_alloc);
 USER_FUNC(evt_yuuranking_alloc);
 USER_FUNC(evt_yuuranking_free);
-USER_FUNC(evt_yuutitle_alloc);
-USER_FUNC(evt_yuutitle_free);
 static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
 USER_FUNC(yuu_01_cam_shift_reset);
@@ -95,8 +89,6 @@ USER_FUNC(yuuminigame2_get_name);
 USER_FUNC(yuuminigame2_opening_chk);
 USER_FUNC(yuuminigame2_opening_on_off);
 USER_FUNC(yuuminigame2_set_phase);
-USER_FUNC(yuuminigame_get_dataadr);
-USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);
 BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, FuneWork* data);

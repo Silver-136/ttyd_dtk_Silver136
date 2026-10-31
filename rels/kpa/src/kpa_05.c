@@ -14,7 +14,6 @@
 #include "evt/evt_mario.h"
 #include "evt/evt_mobj.h"
 
-USER_FUNC(evt_mario_get_name_hitobj_ride);
 static USER_FUNC(kpa_get_level);
 
 static EvtWord kpa_act_stg3_mobj[118];

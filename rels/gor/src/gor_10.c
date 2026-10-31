@@ -1,6 +1,7 @@
 // gor_10 (ゴロツキタウン, Rogueport): prologue scenes (the letter and Mario waking up), leading to pro_04 and then gor_00.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_snd.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
 #include "evt/evt_bero.h"
@@ -47,8 +48,6 @@ static void draw(CameraId camera, void* param);
 
 USER_FUNC(cam_yure);
 static USER_FUNC(depth);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_snd_env_lpf);
 USER_FUNC(mabuta);
 USER_FUNC(tegami);
 

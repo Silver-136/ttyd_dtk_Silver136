@@ -1,6 +1,11 @@
 // Battle unit data and scripts for Yoshi as a partner.
 
 #include "data_tables.h"
+#include "battle/battle_attack_audience.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_snd.h"
+#include "party/party_motion.h"
+#include "unit/party/unit_party_yoshi.h"
 #include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
@@ -68,11 +73,6 @@ typedef struct YoshiGundanWork {
 #define PARTS_WORK_LAST_AT_TARGET 6 // -1 while sorting; 1 the last egg aimed at its target (CheckDamage with the final-hit flag), 0 an earlier egg at the same target (no final-hit flag), 2 the last egg after an earlier one already hit (pre-checked without evasion)
 #define PARTS_WORK_EVENT 7          // id of the egg's _egg_attack_event sibling event (0 none); the end of the attack waits for it and clears it
 
-USER_FUNC(_attack_aud);
-USER_FUNC(_get_attack_aud_no);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_snd_sfxon);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(yoshi_original_color_anim_set);
 USER_FUNC(_gundan_yoshi_run_effect);
 USER_FUNC(_wait_yoshig_complete);
@@ -80,8 +80,6 @@ USER_FUNC(_wait_yoshig_run);
 USER_FUNC(_check_swallow_attribute);
 USER_FUNC(_get_swallow_param);
 USER_FUNC(_get_nomikomi_hit_position);
-USER_FUNC(btl_yoshi_yoroyoro_jump_move);
-USER_FUNC(btl_yoshi_yoroyoro_jump_calc_param);
 
 PoseTableEntry pose_table_yoshi_stay[25];
 static BattleDataEntry data_table[8];

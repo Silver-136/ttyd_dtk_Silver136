@@ -39,11 +39,8 @@ typedef struct MonitorWork {
 static MonitorWork* monitor_wp;
 void monitor_cap_capture(CameraId cameraId, void* param);
 
-USER_FUNC(evt_npc_set_stay_anim);
 USER_FUNC(evt_shuryolight_init);
 USER_FUNC(evt_shuryolight_run_evt);
-USER_FUNC(evt_snd_sfx_dist);
-USER_FUNC(evt_snd_sfxon_3d_ex);
 USER_FUNC(monitor_cap_evt);
 USER_FUNC(monitor_cap_init);
 USER_FUNC(monitor_kanbu_flag_onoff);

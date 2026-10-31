@@ -23,7 +23,6 @@
 #include "battle/battle_damage.h"
 
 
-USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(eff_magic_support);
 static USER_FUNC(eff_magic_get_posX);
 static USER_FUNC(eff_magic);

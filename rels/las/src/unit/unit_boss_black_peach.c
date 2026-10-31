@@ -86,7 +86,6 @@ ExtTexInfo hand_data[32];
 HandWork* hand_wp;
 u8* lightGetPaperCraft(void);
 
-USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(eff_queen_set_alpha_evt);
 USER_FUNC(make_pattern);
 USER_FUNC(peach_hand1000_dark_drag_1_evt);

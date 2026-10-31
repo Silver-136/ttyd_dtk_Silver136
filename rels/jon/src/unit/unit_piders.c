@@ -44,7 +44,6 @@ typedef struct PidersYarn {
 } PidersYarn;
 static void piders_draw_yarn_sub(CameraId camera, void* param);
 
-USER_FUNC(btlevtcmd_SetEventUnisonPhase);
 static USER_FUNC(piders_draw_yarn);
 static USER_FUNC(piders_get_first_pos_attr);
 static USER_FUNC(piders_get_num);

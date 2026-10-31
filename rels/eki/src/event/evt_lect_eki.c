@@ -62,7 +62,6 @@ static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
     camera->curveA = 11;
 }
 
-USER_FUNC(evt_mario_trigflag_onoff);
 static USER_FUNC(lect_map_cam_chg);
 static USER_FUNC(lect_mario_ido_sum);
 static USER_FUNC(lect_push_a_check);
@@ -97,7 +96,6 @@ static USER_FUNC(lecture_button_get_icon_id);
 static USER_FUNC(x_flag_wait);
 static USER_FUNC(x_flag_add);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
-USER_FUNC(evt_mario_dispflag_onoff);
 
 EvtWord boots_lv3_juyoitem_lecture_init[104];
 EvtWord boots_lv3_juyoitem_lecture_sub01[29];

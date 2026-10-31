@@ -21,7 +21,6 @@
 #define UNIT_WORK_ATTACK_PLAN 8  // next attack: 0 kagenuke (then 1), 1 charge (stays 1), 2 thunder (then 4), 4 random draw (kagenuke 50, thunder 20 when slot 7 is set, charge 30 while slot 9 < 2)
 #define UNIT_WORK_CHARGE_COUNT 9 // charges in a row (the charge cases set 1 or add 1; kagenuke and thunder clear it); the random draw offers charge only while it is below 2
 
-USER_FUNC(btlevtcmd_SetEventPhase);
 extern EvtWord btl_marilyn_zoom[];
 extern EvtWord majo3_shadow_tail_event[];
 extern EvtWord majo_unison_phase_event[];

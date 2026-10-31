@@ -2,6 +2,7 @@
 // Goombella, Koops, Flurrie and Yoshi cutscenes, Ruby Star; door to jin_00.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_pouch.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_eff.h"
@@ -35,10 +36,6 @@
 
 USER_FUNC(evt_kagemario_change);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_npc_set_stay_anim);
-USER_FUNC(evt_pouch_party_join);
-USER_FUNC(evt_pouch_party_left);
 static USER_FUNC(getYoshiColor);
 USER_FUNC(vivian_away);
 

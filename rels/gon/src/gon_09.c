@@ -21,7 +21,6 @@
 #include "driver/itemdrv.h"
 #include "gon.h"
 
-USER_FUNC(evt_mario_get_name_hitobj_head);
 
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];

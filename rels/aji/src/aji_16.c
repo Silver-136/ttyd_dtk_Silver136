@@ -25,7 +25,6 @@
 #include "aji.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
 static USER_FUNC(peach_set_pose);
 
 static EvtWord w_door_close[22];

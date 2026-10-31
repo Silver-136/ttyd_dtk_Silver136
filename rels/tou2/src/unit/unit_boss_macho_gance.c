@@ -30,7 +30,6 @@
 static s32 x_flag_data[2];
 
 
-USER_FUNC(btlevtcmd_SetEventPhase);
 static USER_FUNC(x_flag_wait);
 static USER_FUNC(x_flag_get);
 static USER_FUNC(x_flag_add);

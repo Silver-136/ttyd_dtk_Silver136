@@ -29,7 +29,6 @@
 #include "battle/battle_damage.h"
 #include "icon_ids.h"
 
-USER_FUNC(_check_aud_item_type);
 USER_FUNC(_clauda_make_extra_work_area);
 USER_FUNC(_make_kumoguard_weapon);
 USER_FUNC(_get_clauda_kiss_hit_position);

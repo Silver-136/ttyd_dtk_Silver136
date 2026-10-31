@@ -39,10 +39,8 @@
 
 
 USER_FUNC(bgm_wait_stop);
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(toron_check);
-USER_FUNC(mario_normalize_wait);
 void yuurei_callback(s32 type, void* param);
 void powan_callback(s32 type, void* param);
 

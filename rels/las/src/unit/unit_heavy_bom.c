@@ -23,8 +23,6 @@
 #define UNIT_WORK_GUARD_STEP 3 // which guard weapon the next already-lit turn uses: 0 weapon_heavy_bomb_guard, 1 _guard_2, 2 _guard_3 (cycles)
 
 static USER_FUNC(_set_draw_callback);
-USER_FUNC(btlevtcmd_AfterReactionEntry);
-USER_FUNC(btlevtcmd_SetEventPhase);
 static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling);
 
 static BattleUnitKind unit_heavy_bom;

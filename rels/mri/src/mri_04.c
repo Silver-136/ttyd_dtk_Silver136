@@ -32,7 +32,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(bero_get_position_normal);
 static USER_FUNC(evt_chuchu_back_loop);
 
 static EvtWord bero_custom[13];

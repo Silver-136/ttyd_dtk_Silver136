@@ -38,12 +38,6 @@
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_get_coin);
-USER_FUNC(evt_pouch_get_haveitemcnt);
-USER_FUNC(evt_snd_env_lpf);
-USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_unitwin_alloc);
 USER_FUNC(evt_unitwin_free);
 USER_FUNC(unitwincoin_disp_onoff);

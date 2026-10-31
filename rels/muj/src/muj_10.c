@@ -35,9 +35,6 @@
 #include "data_tables.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_nannpc_entry);
 USER_FUNC(suifu_option_func);
 USER_FUNC(suifu_option_init_func);
 static USER_FUNC(tornade_alpha_func);

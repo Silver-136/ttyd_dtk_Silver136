@@ -33,7 +33,6 @@
 #include "evt/evt_bero.h"
 
 
-USER_FUNC(evt_mario_dispflag_onoff);
 static USER_FUNC(mario_kirimomi);
 USER_FUNC(mario_reset);
 USER_FUNC(party_kirimomi);

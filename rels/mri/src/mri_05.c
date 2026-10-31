@@ -37,8 +37,6 @@
 
 EffectEntry* marioeff;
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_name_hitobj_ride);
 USER_FUNC(evt_pcharge_pos);
 USER_FUNC(mario_shabon_eff);
 USER_FUNC(mario_shabon_effdel);

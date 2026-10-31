@@ -67,7 +67,6 @@ USER_FUNC(add_vy);
 USER_FUNC(all_hikari_change_kuro);
 USER_FUNC(all_hikari_onoff);
 USER_FUNC(b_peach_thunder);
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_shuryolight_delete);
 USER_FUNC(evt_shuryolight_init);
 USER_FUNC(evt_shuryolight_run_evt);

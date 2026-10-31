@@ -22,7 +22,6 @@
 #include "evt/evt_bero.h"
 #include "aji.h"
 
-USER_FUNC(evt_snd_sfx_dist);
 USER_FUNC(peach_chk_aftershower);
 USER_FUNC(peach_set_pos);
 

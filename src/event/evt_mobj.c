@@ -2,6 +2,7 @@
 // item boxes, jump stands, locks and Bowser's side-scrolling stage objects.
 
 #include "evt/evt_cmd.h"
+#include "evt/evt_sub.h"
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
 #include "manager/evtmgr.h"
@@ -108,9 +109,6 @@ EVT_BEGIN(evt_fire)
 EVT_END()
 
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_sub_get_mapname);
-USER_FUNC(kpa_chg_pose);
 
 // ---- entry, delete and property functions ----
 

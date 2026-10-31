@@ -70,15 +70,11 @@ extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
 double sqrt(double x);
 
-USER_FUNC(zakogun_damage_pose);
-USER_FUNC(zakogun_damage_pose_cancel);
-USER_FUNC(zakogun_set_target_id);
 USER_FUNC(zakogun_escape3);
 USER_FUNC(zakogun_dead3);
 USER_FUNC(zakogun_attack3_3);
 USER_FUNC(zakogun_attack3_2);
 USER_FUNC(zakogun_attack3_1);
-USER_FUNC(zakogun_ext_init3);
 USER_FUNC(zakogun_kanbu_on_ball);
 USER_FUNC(zakogun_get_kanbu_id_evtcmd);
 

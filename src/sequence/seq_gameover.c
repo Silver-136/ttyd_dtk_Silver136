@@ -33,7 +33,6 @@ typedef struct GameOverWork {
     EventEntry* evt; // 0x0
 } GameOverWork;
 
-USER_FUNC(evt_mario_dispflag_onoff);
 
 static GameOverWork work;
 /** Points at the Game Over sequence's work. */

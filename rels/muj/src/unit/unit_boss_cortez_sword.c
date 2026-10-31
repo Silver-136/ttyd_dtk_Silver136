@@ -13,9 +13,6 @@
 #include "system.h"
 #include "unit_boss_cortez.h"
 
-USER_FUNC(btlevtcmd_AnimeWaitPlayLoopTiming);
-USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventUnisonPhase);
 
 BattleUnitKind unit_boss_cortez_sword;
 static BattleUnitDefense defence;

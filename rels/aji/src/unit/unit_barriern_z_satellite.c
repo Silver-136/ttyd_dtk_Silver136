@@ -10,7 +10,6 @@
 #include "battle/battle_event_default.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(btlevtcmd_SetEventUnisonPhase);
 static USER_FUNC(battleGetBarriernSatelliteInitPos);
 
 BattleUnitKind unit_barriern_z_satellite;

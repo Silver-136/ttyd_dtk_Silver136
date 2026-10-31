@@ -23,7 +23,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-USER_FUNC(evt_mario_get_name_hitobj_ride);
 
 static EvtWord bero_s_doa_close[10];
 static EvtWord bero_s_doa_open[10];

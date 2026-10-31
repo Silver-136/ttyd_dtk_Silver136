@@ -2,6 +2,7 @@
 // Sirens and Doopliss.
 
 #include "battle/battle_unit.h"
+#include "kpa_act.h"
 #include "eff/eff_itemget.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
@@ -39,16 +40,12 @@
 
 
 
-USER_FUNC(evt_npc_set_stay_anim);
-USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_sfx_all_stop);
 static USER_FUNC(get_starstone_pos);
 USER_FUNC(get_starstone_seq);
 USER_FUNC(hoshi);
 USER_FUNC(hoshi_delete);
 USER_FUNC(hoshi_jump);
 USER_FUNC(hoshi_r);
-USER_FUNC(kpa_chg_pose);
 USER_FUNC(reset_stone_cam);
 static USER_FUNC(set_starstone_pos);
 static USER_FUNC(starstone_entry);

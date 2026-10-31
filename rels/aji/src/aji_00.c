@@ -24,7 +24,6 @@
 #include "pmario_sound.h"
 #include "mario/mario.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

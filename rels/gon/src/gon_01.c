@@ -26,7 +26,6 @@
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
 
 static EvtWord door01_close[22];
 static EvtWord door01_open[22];

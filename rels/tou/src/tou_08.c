@@ -35,11 +35,6 @@
 #include "manager/evtmgr_cmd.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_open_mail);
-USER_FUNC(evt_pouch_receive_mail);
-USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_envon_f);
 USER_FUNC(evt_tou_get_ranking);
 static USER_FUNC(get_yoshi_color);
 USER_FUNC(icon_off);

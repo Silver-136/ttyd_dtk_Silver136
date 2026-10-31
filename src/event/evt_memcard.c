@@ -1,13 +1,13 @@
 // Scripts and commands for saving and loading on the memory card (cardmgr).
 
 #include "evt/evt_cmd.h"
+#include "seq/seq_load.h"
 #include "evt/evt_fade.h"
 #include "manager/cardmgr.h"
 #include "manager/evtmgr_cmd.h"
 #include "mario/mariost.h"
 #include "evt/evt_msg.h"
 
-USER_FUNC(evt_seq_load_keep_msg_window);
 
 /**
  * Functions are emitted in reverse source order (deferred inlining) Waits

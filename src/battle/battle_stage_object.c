@@ -79,7 +79,6 @@ USER_FUNC(_mobj_destroy);
 USER_FUNC(_mobj_set_alpha);
 USER_FUNC(_set_mobj_rotate_x);
 
-USER_FUNC(btlevtcmd_GetACPossibility);
 
 extern BattleStageNozzleData battle_stage_nozzle_data[];
 extern BattleStageFallObjectData battle_stage_fall_object_data[];

@@ -20,7 +20,6 @@
 #include "pmario_sound.h"
 #include "mario/mario.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
 
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];

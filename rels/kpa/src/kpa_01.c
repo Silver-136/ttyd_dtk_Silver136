@@ -2,6 +2,7 @@
 // Spiny guards.
 
 #include "driver/msgdrv.h"
+#include "kpa_act.h"
 #include "memory.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -32,11 +33,7 @@
 #include "driver/seqdrv.h"
 #include "kpa.h"
 
-USER_FUNC(evt_npc_set_stay_anim);
-USER_FUNC(evt_npc_set_stop_anim);
-USER_FUNC(evt_npc_set_walk_anim);
 USER_FUNC(get_togenoko_pos);
-USER_FUNC(kpa_chg_pose);
 static USER_FUNC(make_name);
 void kpa_stg1_008_cb(s32 type, smartEntry* smart);
 void kpa_stg1_014_2_cb(s32 type, smartEntry* smart);

@@ -43,7 +43,6 @@ BattleUnitSetup entry_honeduka;
 
 USER_FUNC(_cortez_check_drain_audience);
 USER_FUNC(_make_cortez_work_area);
-USER_FUNC(btlevtcmd_SetEventPhase);
 static USER_FUNC(_check_zenei_kouei);
 USER_FUNC(_cortez_recovery_audience);
 USER_FUNC(_cortez_drain_energy);

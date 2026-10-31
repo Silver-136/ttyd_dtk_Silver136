@@ -33,7 +33,6 @@
 #include "driver/seqdrv.h"
 
 static USER_FUNC(bgm_start_wait);
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_win_item_select);
 static void majin_callback(s32 type);
 

@@ -53,7 +53,6 @@ typedef struct {
 } BeltWork;
 
 USER_FUNC(bg_cam_chk);
-USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(mario_chk);
 USER_FUNC(hit_group_chk);

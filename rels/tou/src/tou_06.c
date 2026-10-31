@@ -41,8 +41,6 @@ s32* tbl;
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_pouch_open_mail);
-USER_FUNC(evt_pouch_receive_mail);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(free_tbl);
 static USER_FUNC(get_pos);

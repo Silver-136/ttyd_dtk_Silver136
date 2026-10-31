@@ -30,7 +30,6 @@
 #define UNIT_WORK_HALF_HP 1    // half its max HP; below it the phase event runs to_faker_mario
 
 static USER_FUNC(_mario_makkuro_set);
-USER_FUNC(btlevtcmd_SetEventPhase);
 static USER_FUNC(vivian_comeback);
 static USER_FUNC(eff_scanning);
 

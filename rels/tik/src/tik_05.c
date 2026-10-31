@@ -2,6 +2,7 @@
 // mahojin circle), the door opening scenes, and the shattering (tiz_broken) and crystal effects.
 
 #include "eff/eff_starstone.h"
+#include "evt/evt_pouch.h"
 #include "eff/n64/eff_crystal_n64.h"
 #include "eff/n64/eff_pokopi_pcharge_n64.h"
 #include "eff/eff_mist2.h"
@@ -112,10 +113,6 @@ USER_FUNC(disp_lighteffect_func);
 USER_FUNC(disp_treasure_map_func);
 USER_FUNC(eff_starstone_sound_off);
 USER_FUNC(effect_position);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_get_starstone);
-USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_sfxon__);
 static USER_FUNC(evtflash);
 USER_FUNC(img_alpha);
 USER_FUNC(is_dol_viewer);

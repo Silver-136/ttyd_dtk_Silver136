@@ -76,14 +76,9 @@ void zakogun_ext_main1(void);
 void zakogun_ext_disp(CameraId camera, void* param);
 
 USER_FUNC(zakogun_attack1);
-USER_FUNC(zakogun_damage_pose);
-USER_FUNC(zakogun_damage_pose_cancel);
 USER_FUNC(zakogun_end_sukima);
-USER_FUNC(zakogun_set_target_id);
 USER_FUNC(zakogun_start_sukima);
-USER_FUNC(zakogun_escape1);
 USER_FUNC(zakogun_dead1);
-USER_FUNC(zakogun_ext_init1);
 USER_FUNC(zakogun_get_kanbu_id_evtcmd);
 void zakogun_ext_main(void);
 void zakogun_ext_init(void);

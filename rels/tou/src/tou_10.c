@@ -39,9 +39,6 @@
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_party_join);
 USER_FUNC(evt_tou_get_fighter_info);
 USER_FUNC(evt_tou_get_ranking);
 USER_FUNC(evt_tou_get_rule_msg2);

@@ -2,6 +2,7 @@
 // a map TEV callback (gra.rel and jin.rel have the same code).
 
 #include "battle/battle_unit.h"
+#include "usu.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_mario.h"
 #include "evt/evt_party.h"
@@ -19,7 +20,6 @@ static s32 color_change_evt(s32 on);
 static USER_FUNC(check);
 static USER_FUNC(test);
 static USER_FUNC(evt_kagemario_change);
-USER_FUNC(evt_kagemario_init);
 
 static EvtWord evt_check[4];
 EvtWord evt_usu_kagemario_party_kill[42];

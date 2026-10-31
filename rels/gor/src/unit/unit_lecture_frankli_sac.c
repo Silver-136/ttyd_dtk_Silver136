@@ -36,7 +36,6 @@ USER_FUNC(aud_dec);
 USER_FUNC(aud_inc);
 USER_FUNC(aud_joy);
 USER_FUNC(blinkAP);
-USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(get_ac_result);
 USER_FUNC(get_actkind);
 USER_FUNC(hammer_on);

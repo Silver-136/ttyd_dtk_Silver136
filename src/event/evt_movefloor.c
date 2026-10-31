@@ -46,8 +46,6 @@ typedef struct MovingFloor {
     f32 angle;       // 0x84
 } MovingFloor;
 
-USER_FUNC(evt_mario_get_name_hitobj_head);
-USER_FUNC(evt_mario_get_name_hitobj_ride);
 
 /**
  * Sine of each whole degree from 0 to 449 (the extra quarter turn lets it double as a cosine table).

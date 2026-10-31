@@ -46,7 +46,6 @@ USER_FUNC(evt_mario_get_name_hitobj_front);
 USER_FUNC(evt_mario_party_use_check);
 #endif
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_msg_togelr);
 #endif
 #undef GXSetTexCoordGen
 static void callback(MapTevCallbackInfo* info);

@@ -2,6 +2,7 @@
 // exits to gor_01 and down to the underground (tik).
 
 #include "system.h"
+#include "manager/winmgr.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -93,17 +94,7 @@ USER_FUNC(evt_cloud_get_mode);
 USER_FUNC(evt_cloud_init);
 USER_FUNC(evt_gor_door_in_info);
 USER_FUNC(evt_gor_door_out_info);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_get_coin);
-USER_FUNC(evt_pouch_get_max_ap);
-USER_FUNC(evt_pouch_get_supercoin);
-USER_FUNC(evt_pouch_set_ap);
-USER_FUNC(evt_pouch_set_coin);
-USER_FUNC(evt_pouch_set_supercoin);
 USER_FUNC(evt_set_bgtpl);
-USER_FUNC(evt_snd_env_lpf);
-USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_win_coin_off);
 USER_FUNC(evt_win_coin_on);
 USER_FUNC(evt_win_coin_wait);
@@ -124,7 +115,6 @@ USER_FUNC(status_gauge_force_off);
 USER_FUNC(stonechangertn);
 USER_FUNC(unitwin_getpartylank);
 USER_FUNC(unitwin_setpartylank);
-USER_FUNC(evt_win_party_lankup_chk);
 USER_FUNC(get_mario_dir_target);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);

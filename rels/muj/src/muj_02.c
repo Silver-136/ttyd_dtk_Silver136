@@ -43,7 +43,6 @@ void FontDrawString(f32 x, f32 y, const char* str);
 void printCount(CameraId camera, void* param);
 
 USER_FUNC(countDisp);
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_win_item_select);
 
 static BeroEntry bero_entry_data[4];

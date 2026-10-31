@@ -26,7 +26,6 @@
 #else
 USER_FUNC(_test_rtn);
 #endif
-USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(_ikasumi_effect);
 extern BattleUnitKind unit_boss_gesso_left_arm;
 extern BattleUnitKind unit_boss_gesso_right_arm;

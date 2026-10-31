@@ -2,6 +2,7 @@
 // doors to the minigame rooms yuu_00..yuu_03; exits to gor_01 and gor_04 (station).
 
 #include "version.h"
+#include "evt/evt_pouch.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
@@ -149,23 +150,8 @@ static USER_FUNC(enzan_lw_save);
 USER_FUNC(evt_exchange_msg_alloc);
 USER_FUNC(evt_exchange_msg_free);
 USER_FUNC(evt_exchange_msg_set);
-USER_FUNC(evt_goryuugijo_alloc);
 USER_FUNC(evt_goryuugijo_set_caseid);
 USER_FUNC(evt_goryuugijo_set_nowslot);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_name_hitobj_front);
-USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_add_item);
-USER_FUNC(evt_pouch_check_item);
-USER_FUNC(evt_pouch_get_coin);
-USER_FUNC(evt_pouch_open_mail);
-USER_FUNC(evt_pouch_receive_mail);
-USER_FUNC(evt_pouch_remove_item);
-USER_FUNC(evt_snd_env_lpf);
-USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_envon_f);
-USER_FUNC(evt_snd_sfxon_3d_ex);
 USER_FUNC(evt_unitwin_alloc);
 USER_FUNC(evt_unitwin_free);
 USER_FUNC(evt_win_item_select);

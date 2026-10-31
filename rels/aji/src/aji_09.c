@@ -31,8 +31,6 @@
 
 USER_FUNC(check_kou_evt);
 USER_FUNC(dot_mario);
-USER_FUNC(evt_mario_flag_onoff);
-USER_FUNC(evt_snd_sfx_dist);
 static USER_FUNC(peach_set_pose);
 
 static EvtWord s_door_open[22];

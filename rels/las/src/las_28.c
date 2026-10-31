@@ -37,11 +37,9 @@
 static char name[8];
 
 static USER_FUNC(eff_guruguru);
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_shuryolight_init);
 USER_FUNC(evt_shuryolight_run_evt);
 USER_FUNC(evt_shuryolight_run_head_evt);
-USER_FUNC(evt_snd_envoff_f);
 static USER_FUNC(make_name);
 USER_FUNC(syuryo_baria);
 USER_FUNC(syuryo_baria_recalc_pos);

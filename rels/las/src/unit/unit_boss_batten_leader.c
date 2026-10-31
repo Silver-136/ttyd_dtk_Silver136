@@ -1,4 +1,5 @@
 #include "version.h"
+#include "las.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/n64/eff_pokopi_thunder_n64.h"
@@ -63,7 +64,6 @@ u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n);
 static USER_FUNC(_set_draw_callback);
 USER_FUNC(btl_hitoffsetx);
 USER_FUNC(btlevtcmd_AnimeGetPose);
-USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(datastrcopy);
 static USER_FUNC(enzan_lw_load);
 USER_FUNC(enzan_lw_load2);
@@ -81,9 +81,6 @@ USER_FUNC(evt_eff_firechange00);
 USER_FUNC(evt_eff_barriersizechange);
 USER_FUNC(evt_eff_colorchange00);
 USER_FUNC(evt_eff_pokopi_thunder);
-USER_FUNC(bts_x_flag_add);
-USER_FUNC(bts_x_flag_set);
-USER_FUNC(bts_x_flag_wait);
 extern BattleUnitKind unit_boss_batten_satellite;
 
 EvtWord batten_leader_zoom[34];

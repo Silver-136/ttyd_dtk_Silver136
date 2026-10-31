@@ -33,7 +33,6 @@ typedef struct KemuriPos {
     s32 z;
 } KemuriPos;
 
-USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_win_item_select);
 
 static EvtWord w1_door_close[12];

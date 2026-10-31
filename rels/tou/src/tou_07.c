@@ -36,9 +36,6 @@
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_mario_flag_onoff);
-USER_FUNC(evt_pouch_open_mail);
-USER_FUNC(evt_pouch_receive_mail);
 USER_FUNC(evt_tou_get_ranking);
 USER_FUNC(mario_recovery);
 static USER_FUNC(paper_off);

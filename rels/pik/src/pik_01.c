@@ -2,6 +2,7 @@
 // and the sanctum (pik_02), pipe to Rogueport Sewers (tik_17).
 
 #include "battle/battle_unit.h"
+#include "kpa_act.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bg.h"
@@ -45,10 +46,7 @@
 
 static USER_FUNC(anim_tevcallback);
 USER_FUNC(chk_luigi_color);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_get_haveitemcnt);
 USER_FUNC(evt_win_item_select);
-USER_FUNC(kpa_chg_pose);
 USER_FUNC(kpa_lock_hit_scale);
 USER_FUNC(set_r);
 static USER_FUNC(starstone_entry);

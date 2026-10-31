@@ -46,7 +46,6 @@ s32 g_Kusuri_B;
 s32 g_Kusuri_G;
 s32 g_Kusuri_R;
 
-USER_FUNC(evt_snd_sfx_dist);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(kusuri_color_get);
 USER_FUNC(kusuri_color_init);

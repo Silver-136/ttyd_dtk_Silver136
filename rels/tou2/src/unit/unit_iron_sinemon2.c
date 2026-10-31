@@ -22,7 +22,6 @@
 #define UNIT_WORK_GREEN 0    // 1 on the green Iron Cleft (init_event2), 0 on the red one (init_event1); only the red one runs the phase and damage messages
 #define UNIT_WORK_OTHER_ID 1 // unit id of the other Iron Cleft (get_id); it speaks the second line of the phase and damage messages
 
-USER_FUNC(btlevtcmd_SetEventPhase);
 static USER_FUNC(get_id);
 static USER_FUNC(yoshi_exist);
 

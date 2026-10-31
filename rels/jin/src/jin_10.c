@@ -21,7 +21,6 @@
 #include "jin.h"
 
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mario_get_name_hitobj_push);
 static USER_FUNC(get_pos);
 USER_FUNC(get_width);
 USER_FUNC(set_pos);

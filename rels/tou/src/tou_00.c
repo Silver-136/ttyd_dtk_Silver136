@@ -29,11 +29,9 @@
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_snd_bgm_freq);
 USER_FUNC(kemuri_move);
 static USER_FUNC(kpa_hikousen_yure);
 USER_FUNC(time_shift);
-USER_FUNC(evt_snd_bgmon_f_d);
 static USER_FUNC(npc_set_pos);
 
 static EvtWord evt_tou_balloon[85];

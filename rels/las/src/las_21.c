@@ -22,8 +22,6 @@
 #include "evt/evt_bero.h"
 #include "las.h"
 
-USER_FUNC(evt_mario_get_name_hitobj_head);
-USER_FUNC(evt_mario_get_name_hitobj_ride);
 USER_FUNC(set_mobj_y_position);
 static USER_FUNC(set_party_y_pos);
 

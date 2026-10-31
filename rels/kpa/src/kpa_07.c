@@ -2,6 +2,7 @@
 // and finds a fake (nise) Crystal Star; it returns to Rogueport (gor_04).
 
 #include "version.h"
+#include "kpa_act.h"
 #include "eff/eff_starstone.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -30,10 +31,7 @@
 #include "driver/seqdrv.h"
 
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_npc_set_stay_anim);
 static USER_FUNC(get_starstone_pos);
-USER_FUNC(kpa_chg_pose);
 static USER_FUNC(set_starstone_pos);
 USER_FUNC(set_starstone_ry);
 static USER_FUNC(starstone_entry);

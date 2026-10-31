@@ -56,7 +56,6 @@ typedef struct HouseWork {
 s32 DoorFLAG;
 s32 door_mapflag;
 
-USER_FUNC(evt_snd_env_lpf);
 
 EvtWord door_open_se[151];
 EvtWord door_close_se[151];

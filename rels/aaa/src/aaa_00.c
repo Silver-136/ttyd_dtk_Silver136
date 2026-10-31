@@ -46,8 +46,6 @@ typedef struct AaaWork {
 } AaaWork;
 static AaaWork* wp;
 
-USER_FUNC(evt_snd_env_lpf);
-USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(mapdraw);
 
 static NpcSetupInfo npcEnt[3];

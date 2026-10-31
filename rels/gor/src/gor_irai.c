@@ -2,6 +2,7 @@
 // Start/cancel/init/main/check/end helpers for the requests taken in Rogueport.
 
 #include "version.h"
+#include "evt/evt_pouch.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
@@ -52,8 +53,6 @@ void irai_window_disp(CameraId camera, void* param);
 void irai_flag_disp(void);
 void irai_flag_clear(void);
 
-USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_get_coin);
 USER_FUNC(irai_cancel_func);
 USER_FUNC(irai_check_func);
 USER_FUNC(irai_end_func);

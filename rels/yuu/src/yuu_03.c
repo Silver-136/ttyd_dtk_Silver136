@@ -66,25 +66,16 @@ USER_FUNC(evt_ryushi_init);
 BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, SlitWork* data);
 #define REVISE360(a) ((3600.0f + (a)) - (s32)((3600.0f + (a)) / 360.0f) * 360)
 
-USER_FUNC(eff_call_minigame);
-USER_FUNC(evt_mario_get_name_hitobj_ride);
 USER_FUNC(evt_ryushi);
 USER_FUNC(evt_ryushi_clr);
-USER_FUNC(evt_yuucounter_alloc);
-USER_FUNC(evt_yuucounter_free);
-USER_FUNC(evt_yuuminigame_alloc);
 USER_FUNC(evt_yuuranking_alloc);
 USER_FUNC(evt_yuuranking_free);
-USER_FUNC(evt_yuutitle_alloc);
-USER_FUNC(evt_yuutitle_free);
 USER_FUNC(re_init_yuunpc);
 USER_FUNC(yuu_03_icon_monte_entry);
 USER_FUNC(yuu_03_cam_shift_reset);
 USER_FUNC(yuuminigame4_opening_chk);
 USER_FUNC(yuuminigame4_opening_on_off);
 USER_FUNC(yuuminigame4_set_phase);
-USER_FUNC(yuuminigame_get_dataadr);
-USER_FUNC(yuuminigame_set_dataadr);
 USER_FUNC(yuunpc_go);
 USER_FUNC(yuuranking_get_monte);
 USER_FUNC(yuuranking_wait_button);

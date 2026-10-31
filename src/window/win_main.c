@@ -47,7 +47,6 @@ char* strstr(const char* str, const char* sub);
 
 #define HALF_F float_0p5_8041dc98
 USER_FUNC(cam_r);
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(lecture_key_mask_off);
 USER_FUNC(lecture_step_wait);
 USER_FUNC(all_party_slit_off);

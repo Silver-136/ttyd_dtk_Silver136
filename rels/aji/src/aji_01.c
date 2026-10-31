@@ -34,7 +34,6 @@
 #include "mario/mario_pouch.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_npc_set_stay_anim);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(evt_win_nameent_name);
 USER_FUNC(evt_win_nameent_off);

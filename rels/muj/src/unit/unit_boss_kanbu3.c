@@ -26,13 +26,7 @@
 #define UNIT_WORK_GROUP 0 // which group it calls: 0 entry_group1, 1 entry_group2 from the ceiling (after the HP <= 15 scene), 2 entry_group3 (after its revival in dead_event)
 #define UNIT_WORK_GUARD 1 // 1 while in the guard stance (guard_event sets; guard_cancel_event and dead_event clear); attack_event then cancels the guard or does nothing
 
-USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(check_exist_group);
-USER_FUNC(up_ceil);
-USER_FUNC(zakogun_escape1);
-USER_FUNC(zakogun_escape2);
-USER_FUNC(zakogun_ext_init1);
-USER_FUNC(zakogun_ext_init3);
 USER_FUNC(check_exist_kenkyu);
 extern s32 down_ceil[];
 extern BattleUnitKind unit_boss_gundan_zako_group2;

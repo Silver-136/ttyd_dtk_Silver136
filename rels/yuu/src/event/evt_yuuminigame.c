@@ -17,14 +17,7 @@ s32 stackp;
 void evt_yuuminigame_disp_func(CameraId camera, void* param);
 
 USER_FUNC(evt_yuuminigame_main_func);
-USER_FUNC(yuu_atai_init);
-USER_FUNC(yuu_atai_pop);
-USER_FUNC(yuu_atai_push);
-USER_FUNC(eff_call_minigame);
-USER_FUNC(yuuminigame_set_dataadr);
-USER_FUNC(yuuminigame_get_dataadr);
 USER_FUNC(evt_yuuminigame_free);
-USER_FUNC(evt_yuuminigame_alloc);
 
 static EvtWord main_evt[4];
 

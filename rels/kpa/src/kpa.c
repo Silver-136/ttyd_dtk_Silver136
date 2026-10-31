@@ -2,6 +2,7 @@
 // streams, coins, score, lives, the timer and the status display.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_twoddisp.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_cam.h"
@@ -53,14 +54,6 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_twoddisp_entry);
-USER_FUNC(evt_twoddisp_flag_onoff);
-USER_FUNC(evt_twoddisp_init);
-USER_FUNC(evt_twoddisp_set_base_position);
-USER_FUNC(evt_twoddisp_set_position);
-USER_FUNC(kpa_chg_pose);
-USER_FUNC(kpa_score_disp_init);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

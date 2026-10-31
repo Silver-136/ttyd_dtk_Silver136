@@ -73,7 +73,6 @@ USER_FUNC(demo_scale);
 USER_FUNC(demo_winonoff);
 USER_FUNC(eff_cam);
 USER_FUNC(eff_cam1);
-USER_FUNC(evt_snd_sfxon_);
 USER_FUNC(make_msg);
 static USER_FUNC(next);
 USER_FUNC(urouro_init_func);

@@ -43,8 +43,6 @@ USER_FUNC(evt_dokuroiwa_command_check);
 USER_FUNC(evt_dokuroiwa_command_clear);
 USER_FUNC(evt_dokuroiwa_command_init);
 USER_FUNC(evt_dokuroiwa_command_set);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_snd_bgm_freq);
 USER_FUNC(evt_win_item_select);
 
 EvtWord sanders_rotate[28];

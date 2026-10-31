@@ -57,7 +57,6 @@ static USER_FUNC(_check_satellite);
 static USER_FUNC(barriern_satellite_zanzou);
 static USER_FUNC(barriern_satellite_zanzou2);
 static USER_FUNC(battleGetBarriernSatelliteInitPos);
-USER_FUNC(btlevtcmd_SetEventUnisonPhase);
 static USER_FUNC(outSplineTableSet);
 static void barriern_wawawa_get_next_target(s32* unitIdx, s32* partIdx);
 static void barriern_wawawa_get_target(s32* unitIdx, s32* partIdx);

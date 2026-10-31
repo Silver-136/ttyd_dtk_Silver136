@@ -26,7 +26,6 @@ typedef struct MajoSortEntry {
     s32 value;
 } MajoSortEntry;
 
-USER_FUNC(btlevtcmd_SetEventPhase);
 static USER_FUNC(majo3_sort);
 
 BattleUnitKind unit_boss_majolyne_las;

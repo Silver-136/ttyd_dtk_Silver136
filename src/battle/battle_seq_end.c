@@ -108,9 +108,6 @@ USER_FUNC(_lvup_spot_off);
 USER_FUNC(_lvup_spot_on);
 USER_FUNC(_nozzle_set_offset);
 USER_FUNC(_set_confetti_control_evtid);
-USER_FUNC(btlevtcmd_BtlStageObjFlagOnOff);
-USER_FUNC(btlevtcmd_BtlStageObjGetRotate);
-USER_FUNC(btlevtcmd_BtlStageObjSetRotate);
 
 /**
  * Mario's rank titles: Rising Star from level 1, B-list Star at 10, A-list Star at 20 and Superstar at 30,

@@ -80,7 +80,6 @@ void senteresa_loadRenderMode(void);
 static inline f32 cosf(f32 x) { return cos(x); }
 
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(get_npc_color);
 USER_FUNC(teresa_eff);

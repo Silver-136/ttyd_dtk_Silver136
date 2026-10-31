@@ -19,7 +19,6 @@
 #include "party.h"
 
 
-USER_FUNC(evt_mario_dispflag_onoff);
 static USER_FUNC(mario_kirimomi);
 static USER_FUNC(z);
 

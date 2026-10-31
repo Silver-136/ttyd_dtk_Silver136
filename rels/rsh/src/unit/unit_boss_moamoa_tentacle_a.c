@@ -1,4 +1,5 @@
 #include "battle/battle_unit.h"
+#include "rsh.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
 #include "battle/battle_event_cmd.h"
@@ -11,7 +12,6 @@
 #include "battle/battle_damage.h"
 #include "unit_boss_moamoa.h"
 
-USER_FUNC(boss_moamoa_check_zenei_kouei);
 extern PoseTableEntry moamoa1_weakness_pose_table[];
 extern s32 moamoa_defence_no_parts[];
 

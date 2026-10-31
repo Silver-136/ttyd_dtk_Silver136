@@ -26,7 +26,6 @@
 #include "mario/mario_pouch.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_snd_sfxon_3d_ex);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(map_anim_flag_off);
 static USER_FUNC(peach_evt_toumei);

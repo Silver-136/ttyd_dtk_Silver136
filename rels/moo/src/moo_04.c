@@ -28,8 +28,6 @@
 #include "driver/seqdrv.h"
 
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_snd_envoff_f);
 static USER_FUNC(mario_kirimomi);
 
 static f32 spline_dt[9];

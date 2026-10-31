@@ -81,10 +81,6 @@ static const char coin_fmt[] = "%f%f%f";
 static const GXColor coin_black = {0x00, 0x00, 0x00, 0xFF};
 
 USER_FUNC(bgm_start_wait);
-USER_FUNC(evt_pouch_get_starstone);
-USER_FUNC(evt_pouch_receive_mail);
-USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_sfx_all_stop);
 USER_FUNC(evt_win_one_message);
 USER_FUNC(stone_bg);
 void coingetDisp(WinMgrEntry* entry);

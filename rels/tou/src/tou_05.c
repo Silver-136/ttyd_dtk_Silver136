@@ -35,9 +35,7 @@
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
 void gans_msg_callback(s32 type, void** work);
-USER_FUNC(evt_pouch_add_coin);
 
 static EvtWord evt_dakuto[90];
 static EvtWord n_door_open[12];

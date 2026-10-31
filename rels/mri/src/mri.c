@@ -51,7 +51,6 @@ GXColor HSV2RGB(HSV hsv);
 PuniWork* puniGetPunigp(void);
 void puniModeWinjump(PuniData* puni);
 
-USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_win_item_select);
 void _prolog(void);
 void _epilog(void);

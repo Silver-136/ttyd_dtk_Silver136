@@ -2,6 +2,7 @@
 // encounter, talk and first-strike checks.
 
 #include "driver/npcdrv.h"
+#include "evt/evt_mario.h"
 #include "data/npc_data.h"
 #include "libc_decls.h"
 #include "pmario_sound.h"
@@ -60,7 +61,6 @@ f32 cloudGetBreathPower(Vec pos, f32 width);
 void FontDrawStringShake(f32 x, f32 y, const char* message);
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 
-USER_FUNC(evt_mario_get_pos);
 
 
 //.data

@@ -29,7 +29,6 @@
 #include "evt/evt_npc.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_mario_flag_onoff);
 static USER_FUNC(fune_eff);
 
 EvtWord peach_init[12];

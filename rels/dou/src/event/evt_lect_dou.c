@@ -62,7 +62,6 @@ static Vec daiv;
 
 static USER_FUNC(dai_moveti_get);
 static USER_FUNC(dai_moveti_set);
-USER_FUNC(evt_mario_trigflag_onoff);
 static USER_FUNC(evtflash);
 static USER_FUNC(lect_map_cam_chg);
 static USER_FUNC(lect_status_off);

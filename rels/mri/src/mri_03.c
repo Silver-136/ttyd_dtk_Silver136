@@ -43,7 +43,6 @@ static u8* _ap;
 void puniMoveAtari(PuniData* puni, Vec pos, Vec dir, s32 flag, f32 speed);
 void puniModeEventparent(PuniData* puni);
 
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_win_item_desttable);
 USER_FUNC(evt_win_item_maketable);
 USER_FUNC(evt_win_item_select);

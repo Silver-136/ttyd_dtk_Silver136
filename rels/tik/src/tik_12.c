@@ -27,10 +27,6 @@
 #include "mario/mario_pouch.h"
 
 static USER_FUNC(effect_stardust);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_get_coin);
-USER_FUNC(evt_pouch_majinai_set);
 USER_FUNC(evt_unitwin_alloc);
 USER_FUNC(evt_unitwin_free);
 USER_FUNC(evt_win_item_select);

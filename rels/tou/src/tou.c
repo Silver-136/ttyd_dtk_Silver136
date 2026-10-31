@@ -172,12 +172,6 @@ GansWork* gans_wp;
 void gans_tex(CameraId cameraId, void* param);
 static s32 champion_belt_onoff;
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_open_mail);
-USER_FUNC(evt_pouch_party_join);
-USER_FUNC(evt_pouch_party_left);
-USER_FUNC(evt_pouch_receive_mail);
 static USER_FUNC(evt_rankingReInit);
 USER_FUNC(evt_tou_get_fighter_info);
 static USER_FUNC(evt_tou_get_fighter_rank);

@@ -13,8 +13,6 @@
 #include "battle/battle_sub.h"
 #include "battle/unit_work.h"
 
-USER_FUNC(btlevtcmd_AfterReactionEntry);
-USER_FUNC(btlevtcmd_SetEventPhase);
 
 static BattleUnitDefense defence;
 static BattleUnitDefenseAttr defence_attr;

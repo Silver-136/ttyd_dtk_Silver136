@@ -34,11 +34,7 @@
 #include "evt/evt_bero.h"
 #include "aji.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_envon_f);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_npc_set_stay_anim);
 #endif
 static void callback(s32 type, void** work);
 void kuti_callback(s32 type, void** work);

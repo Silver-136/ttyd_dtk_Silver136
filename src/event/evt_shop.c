@@ -54,8 +54,6 @@ void help_main(WinMgrEntry* entry);
 void name_disp(WinMgrEntry* entry);
 
 USER_FUNC(disp_off);
-USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_get_coin);
 USER_FUNC(evt_win_coin_off);
 USER_FUNC(evt_win_coin_on);
 USER_FUNC(evt_win_coin_wait);

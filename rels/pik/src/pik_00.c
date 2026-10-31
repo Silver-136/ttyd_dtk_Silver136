@@ -69,11 +69,6 @@ typedef struct ClankData {
 } ClankData;
 
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_name_hitobj_under);
-USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_get_coin);
-USER_FUNC(evt_snd_env_lpf);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(img_flag);
 static USER_FUNC(ramp_r);

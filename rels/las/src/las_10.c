@@ -31,9 +31,6 @@
 
 
 USER_FUNC(check_party_pos);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_snd_sfx_dist);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(make_kagi_tbl);
 USER_FUNC(temae_kesu);

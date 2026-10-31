@@ -31,7 +31,6 @@
 
 
 USER_FUNC(all_flag_off);
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(hikaru_off_func);
 USER_FUNC(hikaru_on_func);
 static USER_FUNC(ride_chk);

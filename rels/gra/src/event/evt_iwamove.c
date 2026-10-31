@@ -1,6 +1,7 @@
 // The moving boulder (iwa) of Twilight Trail: one shared work block and the script that drives it.
 
 #include "battle/battle_unit.h"
+#include "gra.h"
 #include "evt/evt_cmd.h"
 #include "party.h"
 #include "statuswindow.h"
@@ -19,8 +20,6 @@ typedef struct IwaMoveWork {
 IwaMoveWork iwamove;
 
 USER_FUNC(evt_iwamove_main);
-USER_FUNC(evt_iwamove_ent);
-USER_FUNC(evt_iwamove_init);
 
 EvtWord evt_iwamove_main_evt[4];
 

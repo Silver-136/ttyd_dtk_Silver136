@@ -2,6 +2,7 @@
 // (gorotuki_sanninngumi), bombable walls, a save block, and the scene after the badge lecture.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_pouch.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_movefloor.h"
@@ -28,9 +29,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-USER_FUNC(evt_npc_set_damage_anim);
-USER_FUNC(evt_npc_set_run_anim);
-USER_FUNC(evt_pouch_get_equipbadgecnt);
 
 EvtWord lecture_badge_after_00_evt[34];
 EvtWord dokan_2_in_evt[22];

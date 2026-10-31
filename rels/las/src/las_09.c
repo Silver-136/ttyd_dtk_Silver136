@@ -36,8 +36,6 @@
 #include "driver/seqdrv.h"
 
 static USER_FUNC(eff_guruguru);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_name_hitobj_ride);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

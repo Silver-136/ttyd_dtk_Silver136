@@ -1,6 +1,8 @@
 // tik_11 (埋没した都市, Rogueport Sewers): the power-down shop (powerdownya), which lowers Mario's level or a partner's rank.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_pouch.h"
+#include "manager/winmgr.h"
 #include "evt/evt_cmd.h"
 #include "driver/bgdrv.h"
 #include "pmario_sound.h"
@@ -37,9 +39,6 @@ static USER_FUNC(effect_stardust);
 static USER_FUNC(enzan_cam_turn_keisan_f);
 static USER_FUNC(enzan_lw_load);
 static USER_FUNC(enzan_lw_save);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_get_coin);
-USER_FUNC(evt_pouch_set_coin);
 USER_FUNC(evt_win_coin_off);
 USER_FUNC(evt_win_coin_on);
 USER_FUNC(evt_win_coin_wait);
@@ -48,7 +47,6 @@ static USER_FUNC(setmertn);
 USER_FUNC(unitwin_getpartylank);
 USER_FUNC(unitwin_setmariolevel);
 USER_FUNC(unitwin_setpartylank);
-USER_FUNC(evt_win_party_lankdown_chk);
 static USER_FUNC(wariai_enzan_1f);
 static USER_FUNC(enzan_set_f_i);
 static USER_FUNC(enzan_set_i_f);

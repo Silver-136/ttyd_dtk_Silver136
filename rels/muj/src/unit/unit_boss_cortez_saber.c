@@ -11,9 +11,6 @@
 #include "system.h"
 #include "unit_boss_cortez.h"
 
-USER_FUNC(btlevtcmd_AnimeWaitPlayLoopTiming);
-USER_FUNC(btlevtcmd_SetEventPhase);
-USER_FUNC(btlevtcmd_SetEventUnisonPhase);
 extern EvtWord cortez_weapon_blow_dead_event[];
 extern EvtWord cortez_weapon_break_event[];
 extern EvtWord cortez_weapon_counter_damage_event[];

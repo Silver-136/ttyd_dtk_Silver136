@@ -24,7 +24,6 @@
 
 void BtlUnit_EquipItem(BattleUnit* unit, s32 flags, ItemType type);
 
-USER_FUNC(btlevtcmd_CheckUnitFlag);
 static USER_FUNC(_steal_item);
 
 BattleUnitKind unit_borodo_king;

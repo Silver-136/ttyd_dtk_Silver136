@@ -241,12 +241,6 @@ USER_FUNC(piders_get_height) {
     return EVT_RETURN_DONE;
 }
 
-USER_FUNC(evt_npc_set_confuse_anim);
-USER_FUNC(evt_npc_set_damage_anim);
-USER_FUNC(evt_npc_set_run_anim);
-USER_FUNC(evt_npc_set_stay_anim);
-USER_FUNC(evt_npc_set_talk_anim);
-USER_FUNC(evt_npc_set_walk_anim);
 USER_FUNC(piders_draw_yawn);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);

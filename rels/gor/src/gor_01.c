@@ -2,6 +2,7 @@
 // star-stone scenes. Hub between the harbor and the east and west sides.
 
 #include "eff/eff_starstone.h"
+#include "kpa_act.h"
 #include "eff/eff_mahojin.h"
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -91,16 +92,7 @@ static USER_FUNC(delete_npc_regl_evt);
 static USER_FUNC(disp_off);
 static USER_FUNC(evt_StatusClose);
 static USER_FUNC(evt_StatusOpen);
-USER_FUNC(evt_mario_dispflag_onoff);
 static USER_FUNC(evt_osreport);
-USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_get_coin);
-USER_FUNC(evt_pouch_get_havebadgecnt);
-USER_FUNC(evt_pouch_get_haveitemcnt);
-USER_FUNC(evt_pouch_party_join);
-USER_FUNC(evt_pouch_set_coin);
-USER_FUNC(evt_snd_env_lpf);
-USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_unitwin_alloc);
 USER_FUNC(evt_unitwin_free);
 USER_FUNC(evt_unitwin_selltable_setup);
@@ -116,11 +108,6 @@ USER_FUNC(house03_f2_fade_func);
 USER_FUNC(iri_09_item_tbl_alloc);
 USER_FUNC(iri_09_item_tbl_free);
 USER_FUNC(iri_09_item_tbl_make);
-USER_FUNC(keijiban_data_alloc);
-USER_FUNC(keijiban_data_free);
-USER_FUNC(keijiban_joho_check);
-USER_FUNC(keijiban_joho_makelabel);
-USER_FUNC(kpa_chg_pose);
 USER_FUNC(maffia_kemuri);
 USER_FUNC(make_item_tbl);
 static USER_FUNC(mario_keyoff_wait);

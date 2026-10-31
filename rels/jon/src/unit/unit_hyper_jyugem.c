@@ -20,7 +20,6 @@
 #define UNIT_WORK_REBOUND_SPAWN 1 // 1: when the throw is guarded, the part rebounds to free space and becomes an entry_togezo unit (SFX_ENM_JUGEM_REBOUND1); 0: no rebound
 #define UNIT_WORK_CHARGED 2       // 1 once it has used charge_event (weapon_jyugem_charge); from then on attack_event throws without the rebound spawn (never cleared)
 
-USER_FUNC(btlevtcmd_SetEventUnisonPhase);
 static USER_FUNC(togezo_copy_status);
 extern BattleUnitKind unit_hyper_togezo;
 

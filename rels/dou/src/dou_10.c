@@ -41,7 +41,6 @@ typedef struct EntryMgr {
 } EntryMgr;
 
 USER_FUNC(dou_namiatari_check);
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_sub_entrymgr_check);
 USER_FUNC(evt_sub_entrymgr_delete);
 USER_FUNC(evt_sub_entrymgr_entry);

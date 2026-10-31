@@ -28,7 +28,6 @@
 
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_mario_get_name_hitobj_ride);
 
 static BeroEntry bero_entry_data[5];
 static EvtWord puni_walk_se[20];

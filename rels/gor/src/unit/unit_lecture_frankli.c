@@ -16,7 +16,6 @@
 #include "icon_ids.h"
 #include "battle/unit_work.h"
 
-USER_FUNC(btlevtcmd_SetEventPhase);
 
 BattleUnitKind unit_lecture_frankli;
 static BattleUnitDefense defence;

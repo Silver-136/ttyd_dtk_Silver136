@@ -57,7 +57,6 @@ double sqrt(double x);
 static void senkaron_ext_disp(CameraId camera, void* param);
 static void senkaron_ext_shadow_disp(CameraId camera, void* param);
 
-USER_FUNC(evt_mario_dispflag_onoff);
 static USER_FUNC(senkaronAttackStart);
 static USER_FUNC(senkaronFlagOffMesPushing);
 static USER_FUNC(senkaronFlagOnMesPushing);

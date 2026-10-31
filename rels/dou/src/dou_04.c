@@ -36,10 +36,6 @@
 
 USER_FUNC(evt_box_pukapuka);
 USER_FUNC(evt_mario_check_menu);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_get_name_hitobj_head);
-USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_pouch_get_haveitemcnt);
 USER_FUNC(evt_mapgrp_translate2);
 
 static BeroEntry bero_entry_data[2];

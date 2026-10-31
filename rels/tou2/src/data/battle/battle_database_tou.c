@@ -9,7 +9,6 @@
 #include "evt/evt_map.h"
 #include "driver/mapdrv.h"
 
-USER_FUNC(tou_gamen_screen_tev_init);
 extern s32 tou_gamen_screen_tev[];
 extern BattleUnitKind unit_jyugem;
 

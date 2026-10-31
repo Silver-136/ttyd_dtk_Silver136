@@ -2,6 +2,7 @@
 // Exits to gor_01 (central plaza); also the departure for Keelhaul Key (chapter 5).
 
 #include "version.h"
+#include "kpa_act.h"
 #include "eff/eff_funemizu.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -81,8 +82,6 @@ static inline f32 fid(f32 x) { return x; }
 void gundan1000tai_seq01(NanNPC* npc);
 void gundan1000tai_seq00(NanNPC* npc);
 
-USER_FUNC(evt_pouch_get_hp);
-USER_FUNC(evt_pouch_set_hp);
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 static USER_FUNC(cam_kaiten_get_para);
@@ -90,14 +89,6 @@ static USER_FUNC(cam_kaiten_init);
 static USER_FUNC(cam_kaiten_set_direct);
 static USER_FUNC(cam_kaiten_set_para);
 static USER_FUNC(delete_itemsel_table);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_flag_onoff);
-USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_nannpc_entry);
-USER_FUNC(evt_pouch_add_coin);
-USER_FUNC(evt_pouch_get_coin);
-USER_FUNC(evt_pouch_open_mail);
-USER_FUNC(evt_pouch_receive_mail);
 USER_FUNC(evt_unitwin_alloc);
 USER_FUNC(evt_unitwin_free);
 USER_FUNC(evt_win_item_select);
@@ -117,7 +108,6 @@ USER_FUNC(gundan1000tai_totsuend);
 USER_FUNC(gundan1000tai_totsugeki);
 USER_FUNC(hosei_mario_pos);
 USER_FUNC(hosei_party_pos);
-USER_FUNC(kpa_chg_pose);
 static USER_FUNC(make_itemsel_table);
 static USER_FUNC(scale_func);
 USER_FUNC(suifu100taikikan_away);

@@ -33,8 +33,6 @@
 #include "muj.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_snd_bgm_freq);
 static USER_FUNC(evtflash);
 USER_FUNC(muj_item_move_3d_position);
 static f32 accdec_type(s32 step, s32 total, f32 start, f32 end);

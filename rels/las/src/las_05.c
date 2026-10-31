@@ -80,10 +80,6 @@ static void senkaron_ext_disp(CameraId camera, void* param);
 static void senkaron_ext_shadow_disp(CameraId camera, void* param);
 
 USER_FUNC(chk_mario_ctrloff);
-USER_FUNC(evt_key_get_button);
-USER_FUNC(evt_key_get_dir);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_npc_set_stay_anim);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(get_mario_y_pos);
 USER_FUNC(get_party_y_pos);

@@ -38,7 +38,6 @@
 static USER_FUNC(cam_r);
 USER_FUNC(camera_yure);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(evt_win_nameent_name);
 USER_FUNC(evt_win_nameent_off);
 USER_FUNC(evt_win_nameent_on);

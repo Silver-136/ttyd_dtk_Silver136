@@ -72,13 +72,8 @@ extern ZakoGunWork* work;
 USER_FUNC(shake_ceil);
 USER_FUNC(zakogun_attack2);
 USER_FUNC(zakogun_attack2_yusuri);
-USER_FUNC(zakogun_damage_pose);
-USER_FUNC(zakogun_damage_pose_cancel);
-USER_FUNC(zakogun_set_target_id);
-USER_FUNC(zakogun_escape2);
 USER_FUNC(zakogun_dead2);
 USER_FUNC(zakogun_ext_init2);
-USER_FUNC(up_ceil);
 USER_FUNC(down_ceil);
 
 BattleUnitKind unit_boss_gundan_zako_group2;

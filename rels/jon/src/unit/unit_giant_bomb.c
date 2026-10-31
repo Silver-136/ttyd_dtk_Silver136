@@ -23,8 +23,6 @@
 #define UNIT_WORK_GUARD_WEAPON 3 // which self-targeted weapon the next lit-fuse turn uses: 0 weapon_heavy_bomb_guard, 1 _guard_2, 2 _guard_3, then back to 0
 
 static USER_FUNC(_set_draw_callback);
-USER_FUNC(btlevtcmd_AfterReactionEntry);
-USER_FUNC(btlevtcmd_SetEventPhase);
 static void _fire_point_callback(void* userdata, s32 group, Mtx* modeling);
 
 BattleUnitKind unit_giant_bomb;

@@ -17,7 +17,6 @@
 #include "mario/mario.h"
 #include "party.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
 
 static EvtWord evt_tou_balloon[85];
 EvtWord evt_anim[66];

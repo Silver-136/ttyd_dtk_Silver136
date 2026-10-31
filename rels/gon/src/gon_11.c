@@ -75,8 +75,6 @@ static void _img_alloc_capture(const char* name, s32 shadowId, const char* offNa
 static USER_FUNC(evt_cloud_main);
 USER_FUNC(evt_iri_16_cloud_ent);
 USER_FUNC(evt_iri_16_cloud_init);
-USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_sfxon_3d_ex);
 static USER_FUNC(gonbaba_wait_landon);
 
 EvtWord evt_sound[8];

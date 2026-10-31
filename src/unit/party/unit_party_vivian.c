@@ -1,6 +1,9 @@
 // Battle unit data and scripts for Vivian as a partner.
 
 #include "unit/party/unit_party_vivian.h"
+#include "evt/evt_audience.h"
+#include "evt/evt_eff.h"
+#include "evt/evt_snd.h"
 #include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
@@ -31,10 +34,6 @@
 #include "battle/battle_damage.h"
 
 USER_FUNC(_vivian_make_extra_work_area);
-USER_FUNC(evt_audience_acrobat_notry);
-USER_FUNC(evt_audience_ap_recovery);
-USER_FUNC(evt_eff);
-USER_FUNC(evt_snd_sfxon_3d);
 USER_FUNC(_disp_heart_entry_stop_check);
 USER_FUNC(_disp_heart_entry_stop);
 void _disp_heart(CameraId camera, void* param);

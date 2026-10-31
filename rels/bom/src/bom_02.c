@@ -42,8 +42,6 @@
 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
-USER_FUNC(evt_pouch_get_haveitemcnt);
-USER_FUNC(evt_snd_env_lpf);
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(yami_view);
 extern s32 envSetYami[];

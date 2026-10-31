@@ -1,4 +1,5 @@
 #include "system.h"
+#include "las.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -16,10 +17,7 @@
 s32 bts_x_flag_data;
 
 
-USER_FUNC(bts_x_flag_wait);
 USER_FUNC(bts_x_flag_get);
-USER_FUNC(bts_x_flag_add);
-USER_FUNC(bts_x_flag_set);
 static USER_FUNC(bts_wariai_enzan_0f);
 static USER_FUNC(bts_wariai_enzan_0);
 USER_FUNC(bts_wariai_enzan_1f_intpl_w);

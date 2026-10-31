@@ -2,6 +2,7 @@
 // to win_00 and on to win_02.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_pouch.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
@@ -23,8 +24,6 @@
 #include "driver/itemdrv.h"
 #include "party.h"
 
-USER_FUNC(evt_pouch_open_mail);
-USER_FUNC(evt_pouch_receive_mail);
 
 EvtWord evt_dokan1_message[52];
 EvtWord evt_dokan1[11];

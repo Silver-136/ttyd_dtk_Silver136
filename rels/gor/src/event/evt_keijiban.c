@@ -1,4 +1,5 @@
 #include "battle/battle_unit.h"
+#include "gor.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 
@@ -23,10 +24,6 @@ typedef struct KeijibanData {
 } KeijibanData;
 
 s32 keijiban_data_make(const char* prefix, BOOL fill);
-USER_FUNC(keijiban_joho_makelabel);
-USER_FUNC(keijiban_joho_check);
-USER_FUNC(keijiban_data_free);
-USER_FUNC(keijiban_data_alloc);
 
 KeijibanData _kjdt[1];
 

@@ -20,7 +20,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-USER_FUNC(evt_mario_get_name_hitobj_ride);
 USER_FUNC(evt_win_item_select);
 
 static EvtWord w_door_close[22];

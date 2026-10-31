@@ -18,7 +18,6 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_snd_envoff_f);
 
 EvtWord kpa_00_first_evt[61];
 EvtWord kpa_00_fly_evt[380];

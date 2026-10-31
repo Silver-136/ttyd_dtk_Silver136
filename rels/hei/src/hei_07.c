@@ -32,7 +32,6 @@
 #include "system.h"
 #include "evt/evt_bero.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(mario_set_dir);
 static void callback(s32 type, void** work);
 

@@ -63,8 +63,6 @@ static EffectEntry* eff;
 static USER_FUNC(effitemget_busaiku);
 static USER_FUNC(effitemget_open);
 static USER_FUNC(effitemgetchange_cam);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_party_join);
 static USER_FUNC(lect_itemget_kesan);
 static USER_FUNC(lect_party_ido_sum);
 static USER_FUNC(set_dir);

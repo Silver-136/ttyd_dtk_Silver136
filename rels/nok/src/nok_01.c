@@ -43,9 +43,6 @@
 #include "nok.h"
 
 static USER_FUNC(anim_tevcallback);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_get_haveitemcnt);
-USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);

@@ -16,7 +16,6 @@
 #include "battle/battle_sub.h"
 #include "battle/battle_damage.h"
 
-USER_FUNC(btlevtcmd_SetEventPhase);
 
 BattleUnitKind unit_monban;
 static BattleUnitDefense defence;

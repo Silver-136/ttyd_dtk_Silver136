@@ -44,8 +44,6 @@ USER_FUNC(yuucounter_disp_flag_onoff);
 u32 yuucounter_flag(u32 mask);
 void yuucounter_flag_off(u32 mask);
 void yuucounter_set_data(s32 data);
-USER_FUNC(evt_yuucounter_free);
-USER_FUNC(evt_yuucounter_alloc);
 
 static EvtWord main_evt[4];
 EvtWord yuucounter_window_disp_evt[6];

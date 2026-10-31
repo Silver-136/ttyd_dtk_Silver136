@@ -17,7 +17,6 @@
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_LOW 0 // 1 while low (y 10, hammer and shell toss can reach it), 0 while high (y 40); unison_phase_event switches it
 
-USER_FUNC(btlevtcmd_SetEventUnisonPhase);
 
 BattleUnitKind unit_kurokumorn;
 static BattleUnitDefense defence;

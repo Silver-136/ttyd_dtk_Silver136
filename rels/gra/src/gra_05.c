@@ -25,10 +25,7 @@ USER_FUNC(camera_curve_on);
 USER_FUNC(evt_cloud_ent);
 USER_FUNC(evt_cloud_init);
 USER_FUNC(evt_cloud_set_cap_size);
-USER_FUNC(evt_iwamove_ent);
-USER_FUNC(evt_iwamove_init);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mario_dispflag_onoff);
 
 EvtWord gra_05_in_01[5];
 EvtWord gra_05_out_01[149];

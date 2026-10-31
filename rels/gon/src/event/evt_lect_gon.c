@@ -57,7 +57,6 @@ static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
 
 static Vec daiv;
 
-USER_FUNC(evt_mario_trigflag_onoff);
 static USER_FUNC(evtflash);
 static USER_FUNC(lect_slit_check);
 static USER_FUNC(lect_status_off);

@@ -3,6 +3,7 @@
 
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
+#include "kpa_act.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bg.h"
@@ -80,18 +81,10 @@ static USER_FUNC(anim_tevcallback);
 USER_FUNC(bakuhatu_kemuri);
 static USER_FUNC(booboo_main);
 static USER_FUNC(delete_npc_regl_evt);
-USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_mario_flag_onoff);
-USER_FUNC(evt_npc_set_stay_anim);
-USER_FUNC(evt_snd_env_lpf);
-USER_FUNC(evt_snd_envoff_f);
-USER_FUNC(evt_snd_sfx_all_stop);
 USER_FUNC(evt_win_item_select);
 static USER_FUNC(getYoshiColor);
 USER_FUNC(kpaSen_toge_syugo);
 USER_FUNC(kpaSen_zako_syugo);
-USER_FUNC(kpa_chg_pose);
 USER_FUNC(mainwindow_opendisable);
 USER_FUNC(mainwindow_openenable);
 static USER_FUNC(npc_process);

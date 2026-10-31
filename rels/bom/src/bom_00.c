@@ -19,7 +19,6 @@
 #include "mario/mario.h"
 #include "party.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
 
 EvtWord evt_bom_snowfall[18];
 static TreeAccess tree_tbl[4];

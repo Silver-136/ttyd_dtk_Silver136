@@ -34,7 +34,6 @@
 #include "driver/seqdrv.h"
 
 USER_FUNC(bonbaba_wait_landon);
-USER_FUNC(evt_snd_sfxon_3d_ex);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

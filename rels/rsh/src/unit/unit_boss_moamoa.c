@@ -1,6 +1,7 @@
 // Smorg (moamoa): boss battle unit, the main body, used on the Excess Express.
 
 #include "version.h"
+#include "rsh.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
@@ -76,7 +77,6 @@ USER_FUNC(moamoa1_on);
 void moamoa_pose(Moamoa* elem);
 void moamoa_draw(CameraId cameraId, void* param);
 
-USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(moamoa_on);
 USER_FUNC(moamoa_set_bodyScale);
 static void ext_moamoa_main(void);
@@ -85,7 +85,6 @@ USER_FUNC(moamoa2_on);
 USER_FUNC(moamoa_bomb);
 USER_FUNC(moamoa_guruguru);
 USER_FUNC(evt_moamoa_mainUnitIdClear);
-USER_FUNC(boss_moamoa_check_zenei_kouei);
 extern BattleUnitKind unit_boss_moamoa_mouth;
 extern BattleUnitKind unit_boss_moamoa_tentacle_a;
 extern BattleUnitKind unit_boss_moamoa_tentacle_b;

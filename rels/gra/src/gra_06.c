@@ -30,7 +30,6 @@
 
 USER_FUNC(evt_kagemario_init);
 #ifdef VERSION_G8ME01
-USER_FUNC(evt_mario_dispflag_onoff);
 #endif
 
 EvtWord ne_close[22];

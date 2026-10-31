@@ -55,8 +55,6 @@ void make_gonbaba_projection(CameraId camera, void* param);
 
 USER_FUNC(cam_test);
 USER_FUNC(dist_check);
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_snd_envoff_f);
 USER_FUNC(evt_win_item_select);
 USER_FUNC(make_gonbaba_projection_evt);
 static USER_FUNC(proj_mtx);

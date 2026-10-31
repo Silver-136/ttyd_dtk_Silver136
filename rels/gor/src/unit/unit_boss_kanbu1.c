@@ -24,7 +24,6 @@
 #define UNIT_WORK_AC_FAIL_TALKED 2    // 1 once phase_event has shown mac_0_b_t1_002 after a failed action command (_mario_ac_failed_check)
 #define UNIT_WORK_HALF_HP_TALKED 3    // 1 once phase_event has shown mac_0_b_t1_003 at HP <= half of max
 
-USER_FUNC(btlevtcmd_SetEventPhase);
 USER_FUNC(_mario_ac_failed_check);
 USER_FUNC(_mario_ac_success_check);
 extern BattleUnitKind unit_npc_christine;

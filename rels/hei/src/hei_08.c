@@ -19,7 +19,6 @@
 #include "evt/evt_bero.h"
 #include "npc_event.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
 static USER_FUNC(npc_dead);
 static USER_FUNC(npc_set_me);
 extern s32 hei_test_water_tev[];

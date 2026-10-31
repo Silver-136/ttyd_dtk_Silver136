@@ -44,8 +44,6 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
 USER_FUNC(dou_mario_kaiten_hosei);
-USER_FUNC(evt_mario_get_name_hitobj_ride);
-USER_FUNC(evt_nannpc_entry);
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
 static ExtTexInfo ext_entry_data[31];

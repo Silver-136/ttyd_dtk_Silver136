@@ -2,6 +2,7 @@
 // Koops (nokotarou) is met here and joins as a partner; a blue switch lowers the bridge; Fire Flower block, Star Piece.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_pouch.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_eff.h"
@@ -37,9 +38,6 @@
 #include "data_tables.h"
 #include "manager/evtmgr_cmd.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_open_mail);
-USER_FUNC(evt_pouch_receive_mail);
 static USER_FUNC(set_dir);
 
 EvtWord bero_out_event[5];

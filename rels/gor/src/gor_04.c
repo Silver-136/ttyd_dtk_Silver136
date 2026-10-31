@@ -54,9 +54,6 @@ typedef struct ClankData {
     EvtFloat direction; // +1 / -1, multiplies the angle
 } ClankData;
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_pouch_open_mail);
-USER_FUNC(evt_pouch_receive_mail);
 static USER_FUNC(ramp_r);
 static USER_FUNC(kpa_hikousen_yure);
 static void resha_tev(MapTevCallbackInfo* info);

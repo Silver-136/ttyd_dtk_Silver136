@@ -30,7 +30,6 @@
 #include "driver/seqdrv.h"
 
 
-USER_FUNC(evt_mario_dispflag_onoff);
 USER_FUNC(item_check_necklace_exist);
 USER_FUNC(urouro_init_func);
 USER_FUNC(urouro_main_func);

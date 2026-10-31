@@ -1,6 +1,7 @@
 // gor_11 (ゴロツキタウン, Rogueport): epilogue sea scene (ending, story flag 402); on finish returns to gor_00.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_snd.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_fade.h"
@@ -16,8 +17,6 @@
 #include "mario/mario.h"
 #include "party.h"
 
-USER_FUNC(evt_mario_dispflag_onoff);
-USER_FUNC(evt_snd_envoff_f);
 
 static EvtWord epilogue_evt[62];
 EvtWord gor_11_init_evt[29];

@@ -8,7 +8,6 @@
 #include "battle/battle_sub.h"
 #include "battle/unit_work.h"
 
-USER_FUNC(btlevtcmd_SetEventPhase);
 
 BattleUnitKind unit_koura;
 static BattleDataEntry data_table[7];
