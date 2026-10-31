@@ -301,7 +301,7 @@ void kuribo_use(PartyEntry* party) {
             break;
         }
         partyChgRunMode(party, 2);
-        partyChgMoveMode(party, 0);
+        partyChgMoveMode(party, PARTY_MOVE_MODE_STAY);
         partyChgMot(party, PARTY_MOTION_STAY);
         partyChgPoseId(party, 1);
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;

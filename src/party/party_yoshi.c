@@ -278,7 +278,7 @@ void marioYoshiForceCancel(void) {
     }
     if (party->runMode != 8 && party->runMode != 0xd) {
         partyChgRunMode(party, 2);
-        party->moveMode = 0;
+        party->moveMode = PARTY_MOVE_MODE_STAY;
     }
 }
 
@@ -460,7 +460,7 @@ void yoshi_use(PartyEntry* party) {
                 }
                 if (party->runMode != 8 && party->runMode != 0xd) {
                     partyChgRunMode(party, 2);
-                    party->moveMode = 0;
+                    party->moveMode = PARTY_MOVE_MODE_STAY;
                 }
                 return;
             }
@@ -659,7 +659,7 @@ void yoshi_use(PartyEntry* party) {
             party->flags &= ~PARTY_FLAG_IS_BEING_USED;
             if (party->runMode != 8) {
                 partyChgRunMode(party, 2);
-                party->moveMode = 0;
+                party->moveMode = PARTY_MOVE_MODE_STAY;
             }
             yoshiAddFloorMove(party);
             partyChkGnd(party);
@@ -1006,7 +1006,7 @@ void yoshi_use(PartyEntry* party) {
             party->useStruct = NULL;
         }
         partyChgRunMode(party, 2);
-        party->moveMode = 0;
+        party->moveMode = PARTY_MOVE_MODE_STAY;
         resetOfs(party);
         return;
     }

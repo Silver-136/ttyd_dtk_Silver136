@@ -309,7 +309,7 @@ void cloud_move(PartyEntry* party) {
         party->work.cloud.hoverAngle = revise360(party->work.cloud.hoverAngle - party->work.cloud.hoverSpeed);
         a = sin((3.1415927f * party->work.cloud.hoverAngle) / 180.0f);
         party->dispOfs.y = 3.0f + 3.0f * a;
-        if (party->moveMode != 2) {
+        if (party->moveMode != PARTY_MOVE_MODE_BEHIND_MARIO) {
             party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
         }
 #else
@@ -317,7 +317,7 @@ void cloud_move(PartyEntry* party) {
     }
     partyFlyMain(party);
     cloud_hover_main(party);
-    if (party->moveMode != 2) {
+    if (party->moveMode != PARTY_MOVE_MODE_BEHIND_MARIO) {
         party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
 #endif
     }
@@ -580,7 +580,7 @@ void _cloud_use(PartyEntry* party) {
         party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         partyChgRunMode(party, 2);
         party->moveArg = 0;
-        partyChgMoveMode(party, 2);
+        partyChgMoveMode(party, PARTY_MOVE_MODE_BEHIND_MARIO);
         partyChgMot(party, PARTY_MOTION_WALK);
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             mario->camShiftRate.x = 0.01f;

@@ -80,6 +80,16 @@ typedef enum PartySlotId {
 } PartySlotId;
 #pragma enumsalwaysint on
 
+// PartyEntry.moveMode: names follow the exact walkMain/flyMain dispatch targets.
+// This is separate from runMode, motionId and the shared motionStep substate.
+typedef enum PartyMoveMode {
+    PARTY_MOVE_MODE_STAY = 0,
+    PARTY_MOVE_MODE_WALK = 1,
+    PARTY_MOVE_MODE_BEHIND_MARIO = 2,
+    PARTY_MOVE_MODE_BESIDE_MARIO = 3,
+    PARTY_MOVE_MODE_CONTINUE_BEHIND_MARIO = 6,
+} PartyMoveMode;
+
 struct HitEntry;
 struct EffectEntry;
 

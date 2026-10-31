@@ -100,7 +100,7 @@ void mot_vivian_post(void) {
                 party->dispOfs = zero2;
             }
             partyChgRunMode(party, 2);
-            party->moveMode = 0;
+            party->moveMode = PARTY_MOVE_MODE_STAY;
             partyChgPoseId(party, 1);
             partyVivianTailStart(party);
         }
@@ -521,7 +521,7 @@ void vivian_use(PartyEntry* party) {
             party->work.vivian.shadowSize = 10.0f;
             party->dispOfs.y = 0.0f;
             partyChgRunMode(party, 2);
-            party->moveMode = 0;
+            party->moveMode = PARTY_MOVE_MODE_STAY;
             partyChgPoseId(party, 1);
             party->flags &= ~PARTY_FLAG_IS_EVT_USE;
         }

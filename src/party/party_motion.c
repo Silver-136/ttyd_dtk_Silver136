@@ -1760,7 +1760,7 @@ void party_motion_behind_mario(PartyEntry* party) {
         if (party->trigFlags & PARTY_TRIG_DOOR_MOVE) {
             party->trigFlags &= ~PARTY_TRIG_FOLLOW_CLOSE;
         }
-        partyChgMoveMode(party, 1);
+        partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
         partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, mario->position.x, mario->position.z);
         party->homingDist = 50.0f;
@@ -1774,7 +1774,7 @@ void party_motion_behind_mario(PartyEntry* party) {
     }
     if (party->hitobjPush) {
         party->flags |= PARTY_FLAG_IS_BEHIND_MARIO;
-        partyChgMoveMode(party, 1);
+        partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
         partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, x, z);
         party->homingDist = 50.0f;
@@ -1886,7 +1886,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
         party->moveFrames = 0;
         if (mario->baseSpeed == 0.0f) {
             party->flags |= PARTY_FLAG_IS_BEHIND_MARIO;
-            partyChgMoveMode(party, 1);
+            partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
             partyChgMot(party, PARTY_MOTION_STAY);
             partySetDir(party, mario->position.x, mario->position.z);
             party->homingDist = 50.0f;
@@ -1894,7 +1894,7 @@ void party_motion_behind_mario_continue(PartyEntry* party) {
         }
     }
     if (party->hitobjPush) {
-        partyChgMoveMode(party, 1);
+        partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
         partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, x, z);
         party->homingDist = 50.0f;
@@ -1982,7 +1982,7 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
             party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         }
     }
-    partyChgMoveMode(party, 1);
+    partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
     partyChgMot(party, PARTY_MOTION_STAY);
     partySetDir(party, mario->position.x, mario->position.z);
     party->homingDist = 50.0f;
@@ -1997,7 +1997,7 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
     partySetDispDirToMario(party);
     if (party->hitobjPush) {
         party->flags |= PARTY_FLAG_IS_BEHIND_MARIO;
-        partyChgMoveMode(party, 1);
+        partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
         partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, mario->position.x, mario->position.z);
         party->homingDist = 50.0f;
@@ -2089,7 +2089,7 @@ void party_motion_beside_mario(PartyEntry* party) {
         party->position.y = party->groundY;
     } else {
         party->moveFrames = 0;
-        partyChgMoveMode(party, 1);
+        partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
         partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, mario->position.x, mario->position.z);
         party->homingDist = 50.0f;
@@ -2097,7 +2097,7 @@ void party_motion_beside_mario(PartyEntry* party) {
         party->flags |= PARTY_FLAG_IS_BEHIND_MARIO;
     }
     if (party->hitobjPush) {
-        partyChgMoveMode(party, 1);
+        partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
         partyChgMot(party, PARTY_MOTION_STAY);
         partySetDir(party, mario->position.x, mario->position.z);
         party->homingDist = 50.0f;
@@ -2608,7 +2608,7 @@ void party_motion_damage(PartyEntry* party) {
         case 12:
             if (--party->moveFrames <= 0) {
                 partyChgRunMode(party, 2);
-                party->moveMode = 0;
+                party->moveMode = PARTY_MOVE_MODE_STAY;
                 party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             }
             break;

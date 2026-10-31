@@ -150,7 +150,7 @@ void bomhei_exit(PartyEntry* party) {
         p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
         if (p->runMode != 9) {
             partyChgRunMode(p, 2);
-            p->moveMode = 0;
+            p->moveMode = PARTY_MOVE_MODE_STAY;
         }
         bomheiCleanFlags(p);
         bomheiCleanSfx(p);
@@ -164,7 +164,7 @@ void bomhei_use_cancel(void) {
         p->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
         if (p->runMode != 9) {
             partyChgRunMode(p, 2);
-            p->moveMode = 0;
+            p->moveMode = PARTY_MOVE_MODE_STAY;
         }
         bomheiCleanFlags(p);
         bomheiCleanSfx(p);
@@ -179,7 +179,7 @@ void bomhei_use_cancel2(void) {
         marioChgPose("M_S_1");
         if (p->runMode != 9) {
             partyChgRunMode(p, 2);
-            p->moveMode = 0;
+            p->moveMode = PARTY_MOVE_MODE_STAY;
         }
         bomheiCleanFlags(p);
         bomheiCleanSfx(p);
@@ -208,7 +208,7 @@ void bomhei_use_post(PartyEntry* party) {
     }
     bomheiCleanFlags(party);
     if (party->runMode != 9) {
-        party->moveMode = 0;
+        party->moveMode = PARTY_MOVE_MODE_STAY;
         party->trigFlags |= PARTY_TRIG_CHG_RUN_MODE;
     }
     party->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;
@@ -666,7 +666,7 @@ void bomhei_use_main(PartyEntry* party) {
         break;
     case 100:
         partyChgRunMode(party, 2);
-        party->moveMode = 0;
+        party->moveMode = PARTY_MOVE_MODE_STAY;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->flags &= ~PARTY_FLAG_IS_EVT_USE;
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;

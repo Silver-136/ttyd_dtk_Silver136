@@ -922,7 +922,7 @@ void partyChgMoveMode(PartyEntry* party, s32 mode) {
     // FAKE: the copy p and its self-assignment in case 4/5 keep the empty case 4/5 arm; the plain switch changes the object
     PartyEntry* p = party;
     switch (p->moveMode) {
-        case 6:
+        case PARTY_MOVE_MODE_CONTINUE_BEHIND_MARIO:
             p->flags &= ~PARTY_FLAG_CONTINUE_FOLLOW_MARKER;
             break;
         case 4:
@@ -959,7 +959,7 @@ void partyMoveBehindMario(PartyEntry* party, s32 arg) {
         return;
     }
     party->moveArg = arg;
-    partyChgMoveMode(party, 2);
+    partyChgMoveMode(party, PARTY_MOVE_MODE_BEHIND_MARIO);
     partyChgMot(party, PARTY_MOTION_WALK);
 }
 
@@ -975,7 +975,7 @@ void partyMoveBehindMario3(PartyEntry* party, s32 arg, f32 dir) {
     party->trigFlags |= PARTY_TRIG_HALF_PUSH;
     party_set_behind_dir(party, dir);
     party->moveArg = arg;
-    partyChgMoveMode(party, 2);
+    partyChgMoveMode(party, PARTY_MOVE_MODE_BEHIND_MARIO);
     partyChgMot(party, PARTY_MOTION_WALK);
 }
 
@@ -988,7 +988,7 @@ void partyMoveBesideMario(PartyEntry* party, s32 arg) {
         return;
     }
     party->moveArg = arg;
-    partyChgMoveMode(party, 3);
+    partyChgMoveMode(party, PARTY_MOVE_MODE_BESIDE_MARIO);
     partyChgMot(party, PARTY_MOTION_WALK);
 }
 
@@ -1042,7 +1042,7 @@ void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
     f32 mul;
 
     hosei = partyMarioHosei(party);
-    if (hosei && party->moveMode != 2) {
+    if (hosei && party->moveMode != PARTY_MOVE_MODE_BEHIND_MARIO) {
         if (!(party->flags & PARTY_FLAG_IS_PARTNER)) {
             partyClearFootmark();
         } else {
@@ -1205,7 +1205,7 @@ void partyWalkInit(PartyEntry* party) {
     party->velY = 0.0f;
     if (!(mario->flags & MARIO_FLAG_PARTY_WALK_DISABLED)) {
         partyChgPoseId(party, 1);
-        partyChgMoveMode(party, 1);
+        partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
         partyChgMot(party, PARTY_MOTION_STAY);
     }
 }
@@ -1472,16 +1472,16 @@ void partyMoveFlyInit(PartyEntry* party, s32 arg) {
     } else {
         partyClearFootmark2();
     }
-    if (party->moveMode == 2) {
+    if (party->moveMode == PARTY_MOVE_MODE_BEHIND_MARIO) {
         party->homingDist = 50.0f;
         return;
     }
     party->moveArg = arg == 0 ? 0 : 2;
-    partyChgMoveMode(party, 0);
+    partyChgMoveMode(party, PARTY_MOVE_MODE_STAY);
     if (party->flyRequest == 1 || party->flyRequest == 3) {
         party->flyRequest = 0;
         party->moveArg = 0;
-        partyChgMoveMode(party, 1);
+        partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
     } else if (party->flyRequest == 2) {
         party->moveArg = 0;
         partyChgMoveMode(party, 0x3C);
@@ -1490,7 +1490,7 @@ void partyMoveFlyInit(PartyEntry* party, s32 arg) {
     party->homingDist = 50.0f;
     party->reserved_3E = 0;
     partyChgPoseId(party, 1);
-    partyChgMoveMode(party, 1);
+    partyChgMoveMode(party, PARTY_MOVE_MODE_WALK);
     partyChgMot(party, PARTY_MOTION_STAY);
 }
 
@@ -1558,19 +1558,19 @@ static inline void party_move_mode_behind_mario_continue(PartyEntry* party) {
 /** Runs the current move mode for a walking partner. */
 void walkMain(PartyEntry* party) {
     switch (party->moveMode) {
-        case 0:
+        case PARTY_MOVE_MODE_STAY:
             party_move_mode_stay(party);
             break;
-        case 1:
+        case PARTY_MOVE_MODE_WALK:
             party_move_mode_walk(party);
             break;
-        case 2:
+        case PARTY_MOVE_MODE_BEHIND_MARIO:
             party_move_mode_behind_mario(party);
             break;
-        case 3:
+        case PARTY_MOVE_MODE_BESIDE_MARIO:
             party_move_mode_beside_mario(party);
             break;
-        case 6:
+        case PARTY_MOVE_MODE_CONTINUE_BEHIND_MARIO:
             party_move_mode_behind_mario_continue(party);
             break;
     }
@@ -1579,19 +1579,19 @@ void walkMain(PartyEntry* party) {
 /** Runs the current move mode for a flying partner (the same modes as walkMain). */
 static void flyMain(PartyEntry* party) {
     switch (party->moveMode) {
-        case 0:
+        case PARTY_MOVE_MODE_STAY:
             party_move_mode_stay(party);
             break;
-        case 1:
+        case PARTY_MOVE_MODE_WALK:
             party_move_mode_walk(party);
             break;
-        case 2:
+        case PARTY_MOVE_MODE_BEHIND_MARIO:
             party_move_mode_behind_mario(party);
             break;
-        case 3:
+        case PARTY_MOVE_MODE_BESIDE_MARIO:
             party_move_mode_beside_mario(party);
             break;
-        case 6:
+        case PARTY_MOVE_MODE_CONTINUE_BEHIND_MARIO:
             party_move_mode_behind_mario_continue(party);
             break;
     }

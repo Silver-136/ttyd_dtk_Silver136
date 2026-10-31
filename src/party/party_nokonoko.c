@@ -178,7 +178,7 @@ void nokonoko_use_cancel(void) {
         }
         if (party->runMode != 8 && party->runMode != 13) {
             partyChgRunMode(party, 2);
-            party->moveMode = 0;
+            party->moveMode = PARTY_MOVE_MODE_STAY;
         }
     }
 }
@@ -917,7 +917,7 @@ void nokonoko_finish(PartyEntry* party) {
         if (party->runMode != 9) {
             if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
                 partyChgRunMode(party, 2);
-                party->moveMode = 0;
+                party->moveMode = PARTY_MOVE_MODE_STAY;
             } else {
                 party->flags &= ~PARTY_FLAG_IS_EVT_USE;
                 partyChgRunMode(party, 0);

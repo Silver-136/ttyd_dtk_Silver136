@@ -15,6 +15,10 @@
 #include "mario/mariost.h"
 #include "libc_decls.h"
 
+#define CARD_FILE_BYTES ((s32)(sizeof(CardData) + sizeof(CardSaveSlot) * 4))
+
+#define CARD_REQUIRED_SECTOR_BYTES 0x2000
+
 #define CARD_OP_IDLE 0
 #define CARD_OP_WRITE 1
 #define CARD_OP_WRITE_HEADER 2
@@ -478,7 +482,7 @@ static void memcard_probe(void) {
         timeout = (u32)timeout;
     }
 
-    if (result == CARD_RESULT_READY && sectorSize != 0x2000) {
+    if (result == CARD_RESULT_READY && sectorSize != CARD_REQUIRED_SECTOR_BYTES) {
         result = CARD_RESULT_WRONGDEVICE;
     }
     if (result == CARD_RESULT_READY) {
@@ -1267,7 +1271,7 @@ void createCallback(s32 chan, s32 result) {
 /** Creates mariost_save_file with room for the header and the eight slot copies (0x22000 bytes). */
 static void memcard_create(void) {
     wp->flags |= CARD_FLAG_BUSY;
-    CARDCreateAsync(wp->chan, cardFileName, sizeof(CardData) + (sizeof(CardSaveSlot) * 4), &wp->info, createCallback);
+    CARDCreateAsync(wp->chan, cardFileName, CARD_FILE_BYTES, &wp->info, createCallback);
 }
 
 /** CARDWriteAsync completion: stores the result and clears the in-flight flag. */
@@ -1390,7 +1394,7 @@ void memcard_open(void) {
         if ((result != CARD_RESULT_NOFILE) && (result != CARD_RESULT_NOPERM)) {
             if (result == CARD_RESULT_READY) {
                 if (!strcmp(stat.fileName, cardFileName)) {
-                    if ((stat.commentAddr == 0) && (stat.iconAddr == offsetof(CardMetadata, data.bannerTex)) && (stat.length == 0x22000)) {
+                    if ((stat.commentAddr == 0) && (stat.iconAddr == offsetof(CardMetadata, data.bannerTex)) && (stat.length == CARD_FILE_BYTES)) {
                         wp->fileNo = fileNo;
                         break;
                     } else {
@@ -1422,7 +1426,7 @@ void memcard_open(void) {
             wp->flags &= ~CARD_FLAG_BUSY;
             return;
         }
-        if (byteNotUsed < 0x22000) {
+        if (byteNotUsed < CARD_FILE_BYTES) {
             wp->result = CARD_RESULT_INSSPACE;
             wp->flags &= ~CARD_FLAG_BUSY;
             return;

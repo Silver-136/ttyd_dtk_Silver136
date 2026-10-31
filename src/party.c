@@ -797,7 +797,7 @@ void partyReInit(void) {
             pose = partyChgPoseId(party, 1);
             partyChgPose(party, pose);
             partyChgRunMode(party, 2);
-            party->moveMode = 6;
+            party->moveMode = PARTY_MOVE_MODE_CONTINUE_BEHIND_MARIO;
             party->motionStep = 0;
             party->flags |= PARTY_FLAG_CONTINUE_FOLLOW_MARKER;
         }
@@ -2318,7 +2318,7 @@ void party_damage_return(PartyEntry* party) {
                 break;
             }
             partyChgRunMode(party, 2);
-            party->moveMode = 0;
+            party->moveMode = PARTY_MOVE_MODE_STAY;
             party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             break;
     }

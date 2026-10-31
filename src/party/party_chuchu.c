@@ -439,7 +439,7 @@ void chuchu_use(PartyEntry* party) {
     case 80:
         cp->flags &= ~PARTY_FLAG_IS_BEING_USED;
         partyChgRunMode(party, 2);
-        cp->moveMode = 0;
+        cp->moveMode = PARTY_MOVE_MODE_STAY;
         marioChgMot(MARIO_MOTION_STAY);
         marioStSystemLevel(0);
         break;
