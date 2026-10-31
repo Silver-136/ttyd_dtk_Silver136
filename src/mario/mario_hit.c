@@ -1580,45 +1580,46 @@ HitEntry* marioSearchHead_roll(Vec* pos, f32* h, f32 d) {
     Vec* pdir;
     s32 i;
     HitEntry* hit;
-    MarioWork* mario = marioGetPtr();
+    MarioWork* w = marioGetPtr();
     *h = -1.0f;
-    base = mario->wPlayerCollisionBox.y;
+    base = w->wPlayerCollisionBox.y;
     i = 0;
     top = base + d;
     for (; i < 5; i++) {
         switch (i) {
-            case 0:
-                z = x = 0.0f;
-                break;
-            case 1:
-                a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                z = 9.0f * -marioSearchHead_roll_cos(a);
-                movePos(&x, &z, 3.0f, mario->directionView);
-                break;
-            case 2:
-                a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                z = 9.0f * -marioSearchHead_roll_cos(a);
-                movePos(&x, &z, 3.0f, mario->directionView);
-                break;
-            case 3:
-                a = (3.1415927f * (90.0f + mario->directionView)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                z = 9.0f * -marioSearchHead_roll_cos(a);
-                movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
-                break;
-            case 4:
-                a = (3.1415927f * (mario->directionView - 90.0f)) / 180.0f;
-                x = 9.0f * (f32)sin(a);
-                z = 9.0f * -marioSearchHead_roll_cos(a);
-                movePos(&x, &z, 3.0f, 180.0f + mario->directionView);
-                break;
+        case 0:
+            z = x = 0.0f;
+            break;
+        case 1:
+            a = (3.1415927f * (90.0f + w->directionView)) / 180.0f;
+            x = 9.0f * (f32)sin(a);
+            z = 9.0f * -marioSearchHead_roll_cos(a);
+            movePos(&x, &z, 3.0f, w->directionView);
+            break;
+        case 2:
+            a = (3.1415927f * (w->directionView - 90.0f)) / 180.0f;
+            x = 9.0f * (f32)sin(a);
+            z = 9.0f * -marioSearchHead_roll_cos(a);
+            movePos(&x, &z, 3.0f, w->directionView);
+            break;
+        case 3:
+            a = (3.1415927f * (90.0f + w->directionView)) / 180.0f;
+            x = 9.0f * (f32)sin(a);
+            z = 9.0f * -marioSearchHead_roll_cos(a);
+            movePos(&x, &z, 3.0f, 180.0f + w->directionView);
+            break;
+        case 4:
+            a = (3.1415927f * (w->directionView - 90.0f)) / 180.0f;
+            x = 9.0f * (f32)sin(a);
+            z = 9.0f * -marioSearchHead_roll_cos(a);
+            movePos(&x, &z, 3.0f, 180.0f + w->directionView);
+            break;
         }
         {
             Vec v = {0.0f, 0.0f, 0.0f};
             Vec dir = {0.0f, 1.0f, 0.0f};
             v.x = pos->x + x;
+            // FAKE: spare pointer to dir; passing &dir directly changes the object
             pdir = &dir;
             v.y = 1.0f + pos->y;
             v.z = pos->z + z;
@@ -2578,8 +2579,8 @@ BOOL marioSlitChkWallAround(void) {
     f32 a;
     f32 s, c;
     HitEntry* hit;
-    MarioWork* mario = marioGetPtr();
-    pos = mario->position;
+    MarioWork* w = marioGetPtr();
+    pos = w->position;
     pos.y += 11.0f;
     for (i = 0, a = 0.0f; i < 8; i++, a += 45.0f) {
         Vec dir;
@@ -2593,9 +2594,10 @@ BOOL marioSlitChkWallAround(void) {
             flags[i] = 1;
         }
     }
+    // FAKE: spare temporary k; the plain `pos.y = w->position.y + 5.0f;` changes the object
     {
         f32 k = 5.0f;
-        pos.y = mario->position.y + k;
+        pos.y = w->position.y + k;
     }
     for (i = 0, a = 0.0f; i < 8; i++, a += 45.0f) {
         if (flags[i] != 1) {
@@ -2610,7 +2612,7 @@ BOOL marioSlitChkWallAround(void) {
             }
         }
     }
-    pos.y = mario->position.y + (mario->wPlayerCollisionBox.y - 1.0f);
+    pos.y = w->position.y + (w->wPlayerCollisionBox.y - 1.0f);
     for (i = 0, a = 0.0f; i < 8; i++, a += 45.0f) {
         if (flags[i] != 1) {
             Vec dir;

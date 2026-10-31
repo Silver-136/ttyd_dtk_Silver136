@@ -103,26 +103,26 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
 
     effect = effEntry();
     switch (type) {
-        case 0:
-            radius = a;
-            count = 36;
-            break;
-        case 1:
-            radius = a;
-            count = 4;
-            break;
-        case 2:
-            radius = a;
-            count = 8;
-            break;
-        case 3:
-            radius = 8.0f;
-            count = 4;
-            break;
-        default:
-            count = 8;
-            radius = 8.0f;
-            break;
+    case 0:
+        radius = a;
+        count = 36;
+        break;
+    case 1:
+        radius = a;
+        count = 4;
+        break;
+    case 2:
+        radius = a;
+        count = 8;
+        break;
+    case 3:
+        radius = 8.0f;
+        count = 4;
+        break;
+    default:
+        count = 8;
+        radius = 8.0f;
+        break;
     }
     effect->type = "StardustN64";
     effect->count = count + 1;
@@ -138,8 +138,9 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
     work->cr = 1.0f;
     work->cg = 1.0f;
     work->cb = 1.0f;
-    work->camera = 4;
+    work->camera = CAMERA_3D;
     work->scale = 1.0f;
+    // FAKE: i set before the loop setup; for (i = 1; ...) changes the object
     i = 1;
     randA = (s32)(a * 1000.0f);
     randB = (s32)(radius * 1000.0f);
@@ -150,55 +151,58 @@ EffectEntry* effStardustN64Entry(s32 type, f32 x, f32 y, f32 z, f32 a) {
         fa = (f32)(rand() % randA) / 1000.0f;
         fb = (f32)(rand() % randB) / 1000.0f;
         switch (type) {
-            case 0: {
-                p->ay = 0.0f;
-                a1 = 6.2831855f * (1800.0f / (f32)count * (f32)i - 90.0f) / 360.0f;
-                sn = (f32)sin(a1);
-                a2 = 6.2831855f * (360.0f / (f32)count * (f32)i) / 360.0f;
-                angle = (f32)sin(a2);
-                p->vx = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
-                sn = (f32)sin(a1);
-                angle = (f32)cos(a2);
-                p->vy = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
-                p->position.z = 0.0f;
-                p->sub = 0;
-                break;
+        case 0: {
+            p->ay = 0.0f;
+            a1 = 6.2831855f * (1800.0f / (f32)count * (f32)i - 90.0f) / 360.0f;
+            sn = (f32)sin(a1);
+            a2 = 6.2831855f * (360.0f / (f32)count * (f32)i) / 360.0f;
+            angle = (f32)sin(a2);
+            p->vx = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
+            sn = (f32)sin(a1);
+            angle = (f32)cos(a2);
+            p->vy = (angle * (85.0f - 15.0f * sn - (f32)((i & 1) * 5)) / 100.0f) * a;
+            p->position.z = 0.0f;
+            p->sub = 0;
+            break;
+        }
+        case 1:
+        case 2:
+            angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);
+            if (i & 1) {
+                // BUG: rand() % 50 / 1000 is an integer division and always 0, so ay is always -0.05
+                ay = -(0.05f + (f32)(rand() % 50 / 1000));
+            } else {
+                ay = 0.0f;
             }
-            case 1:
-            case 2:
-                angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);
-                if (i & 1) {
-                    ay = -(0.05f + (f32)(rand() % 50 / 1000));
-                } else {
-                    ay = 0.0f;
-                }
-                p->ay = ay;
-                p->vx = 0.0f;
-                p->vy = 0.0f;
-                angle = 6.2831855f * angle / 360.0f;
-                p->position.x = (f32)sin(angle) * fa;
-                p->position.y = (f32)cos(angle) * fb;
-                p->position.z = 0.0f;
-                p->sub = i % 3;
-                p->scale = 1.0f;
-                p->lifetime = lifeA;
-                p->frame = 0;
-                break;
-            case 3:
-            case 4:
-            default:
-                angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);
-                p->ay = -(0.05f + (f32)(rand() % 50 / 1000)), angle = 6.2831855f * angle / 360.0f;
-                p->vx = 0.0f;
-                p->vy = 0.0f;
-                p->position.x = (f32)sin(angle) * fa;
-                p->position.y = (f32)cos(angle) * fb;
-                p->position.z = 0.0f;
-                p->sub = i % 3;
-                p->scale = 1.0f;
-                p->lifetime = lifeB;
-                p->frame = 0;
-                break;
+            p->ay = ay;
+            p->vx = 0.0f;
+            p->vy = 0.0f;
+            angle = 6.2831855f * angle / 360.0f;
+            p->position.x = (f32)sin(angle) * fa;
+            p->position.y = (f32)cos(angle) * fb;
+            p->position.z = 0.0f;
+            p->sub = i % 3;
+            p->scale = 1.0f;
+            p->lifetime = lifeA;
+            p->frame = 0;
+            break;
+        case 3:
+        case 4:
+        default:
+            angle = 360.0f / (f32)count * (f32)i + (f32)(rand() % 360);
+            // BUG: rand() % 50 / 1000 is an integer division and always 0, so ay is always -0.05
+            p->ay = -(0.05f + (f32)(rand() % 50 / 1000));
+            angle = 6.2831855f * angle / 360.0f;
+            p->vx = 0.0f;
+            p->vy = 0.0f;
+            p->position.x = (f32)sin(angle) * fa;
+            p->position.y = (f32)cos(angle) * fb;
+            p->position.z = 0.0f;
+            p->sub = i % 3;
+            p->scale = 1.0f;
+            p->lifetime = lifeB;
+            p->frame = 0;
+            break;
         }
     }
     return effect;

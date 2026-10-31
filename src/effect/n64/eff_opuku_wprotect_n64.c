@@ -270,6 +270,7 @@ void effOpukuWprotectDisp(CameraId cameraId, EffectEntry* effect) {
             fx = (f32)sin((f32)(s32)(r + effTblRandN64(1000, (s32)(10.0f * y + x + 100.0f * z))));
             fy = (f32)sin((f32)(s32)(r + effTblRandN64(1000, (s32)(10.0f * x + 100.0f * y + z))));
             fz = (f32)sin((f32)(s32)(r + effTblRandN64(1000, (s32)(100.0f * x + y + 10.0f * z))));
+            // FAKE: (f32) casts on f32 products; without them the object changes
             x = x + (f32)(20.0f * fx);
             y = y + (f32)(20.0f * fy);
             z = z + (f32)(20.0f * fz);
@@ -338,7 +339,7 @@ void effOpukuWprotectDisp(CameraId cameraId, EffectEntry* effect) {
     GXLoadTexMtxImm(scale, GX_TEXMTX0, GX_MTX2x4);
     GXSetTevColor(GX_TEVREG0, (GXColor){work->colorR, work->colorG, work->colorB, (s32)(0.3f * (f32)alpha)});
     GXSetCullMode(GX_CULL_FRONT);
-    DCFlushRange(vtx, 0x460);
+    DCFlushRange(vtx, sizeof(effN64Vtx) * 80);
     GXInvalidateVtxCache();
     PSMTXScale(scale, 0.1f, 0.1f, 0.1f);
     PSMTXConcat(mtx, scale, scale);

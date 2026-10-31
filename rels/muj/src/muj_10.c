@@ -92,7 +92,7 @@ USER_FUNC(suifu_option_func) {
     s32 i;
 
     for (i = 0; i < 95; i++) {
-        // "- -y" reproduces the operand order of the original fadds
+        // FAKE: double-negation addition; either plain addition order changes the object.
         wp->npc[i].pos.y = wp->npc[i].basePos.y - -y;
     }
     return EVT_RETURN_DONE;

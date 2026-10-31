@@ -375,11 +375,14 @@ static inline void effMayaKeyInterp(MayaHermitKey* prev, MayaHermitKey* curr, f3
         } else {
             u = t - prev->time;
             dt = curr->time - prev->time;
-            div = (!dt) ? (0.00000001f) : (dt);
+            div = !dt ? 0.00000001f : dt;
             s = u / div;
             s2 = s * s;
             s3 = s2 * s;
-            *out = (((qv0 * (1.0f + ((2.0f * s3) - (3.0f * s2)))) + (qm0 * (dt * (s + (s3 - (2.0f * s2)))))) + (qv1 * (((-2.0f) * s3) + (3.0f * s2)))) + (qm1 * (dt * (s3 - s2)));
+            *out = qv0 * (1.0f + ((2.0f * s3) - (3.0f * s2))) +
+                   qm0 * (dt * (s + (s3 - (2.0f * s2)))) +
+                   qv1 * ((-2.0f * s3) + (3.0f * s2)) +
+                   qm1 * (dt * (s3 - s2));
         }
         pa += 8;
         pb += 8;

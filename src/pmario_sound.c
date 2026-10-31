@@ -6435,11 +6435,13 @@ s32 psndSFXChk(s32 id) {
     PaperSoundEffect* sfx;
     u32 uid = id;
     u32 key;
-    if ((u32)id == 0xFFFFFFFF) {
+
+    if (id == 0xFFFFFFFF) {
         return -1;
     }
     key = (uid >> 8) & 0xFFFF;
     sfx = &pssfx[uid & 0xFF];
+    // FAKE: no-op mask of the u16 serial; key != sfx->serial changes the object
     if (key != (sfx->serial & 0xFFFFu)) {
         return -1;
     }

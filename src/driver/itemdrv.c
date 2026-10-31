@@ -1675,7 +1675,7 @@ HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 d
     f32 hitX, hitY, hitZ, hitDist, hitNX, hitNY, hitNZ;
     f32 sin, cos;
     f32 dot, ox, oz;
-    f32 h = 15.0f;
+    f32 h; // FAKE: 15.0f in a local set before each hitDist store, so the y argument stays pos.y + h (a literal would be put on the left)
 
     *outX = entry->position.x;
     *outZ = entry->position.z;
@@ -1683,9 +1683,10 @@ HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 d
         return NULL;
     }
     sincosf(&sin, &cos, angleABf(0.0f, 0.0f, dx, dz));
+    h = 15.0f;
     hitDist = 10.0f + sqrtf(dx * dx + dz * dz);
     hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ,
-                         entry->position.x, entry->position.y + h, entry->position.z, sin, 0.0f, cos);
+        entry->position.x, entry->position.y + h, entry->position.z, sin, 0.0f, cos);
     if (hit) {
         dot = dx * hitNX + dz * hitNZ;
         ox = 0.5f * (dx - dot * hitNX);
@@ -1697,9 +1698,10 @@ HitEntry* itemHitCheckSide(ItemEntry* entry, f32* outX, f32 dx, f32* outZ, f32 d
         *angle = reviseAngle(b + reviseAngle(b - a));
         return hit;
     }
+    h = 15.0f;
     hitDist = 10.0f + sqrtf(dx * dx + dz * dz);
     hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ,
-                         entry->position.x, entry->position.y + h, entry->position.z, sin, 0.0f, cos);
+        entry->position.x, entry->position.y + h, entry->position.z, sin, 0.0f, cos);
     if (hit) {
         dot = dx * hitNX + dz * hitNZ;
         ox = 0.5f * (dx - dot * hitNX);

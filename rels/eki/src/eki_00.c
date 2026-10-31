@@ -394,6 +394,7 @@ static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     Moamoa* moa;
 
+    // FAKE: discarded pure getter call retained; removing it changes the retail object.
     extGetPosePtr();
     moa = wp->moa;
     for (i = 0; i < wp->count; i++, moa++) {

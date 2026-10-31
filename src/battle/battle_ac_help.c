@@ -38,11 +38,10 @@ void _ac_help_disp(CameraId cameraId, void* param);
 /** Per-frame battle hook: queues the hint box draw when a hint is set and shown, except during a First Strike. */
 void BattleAcHelpMain(void) {
     BattleWork* wp = _battleWorkPointer;
+    // FAKE: spare pointer to acHelpDispType; testing wp->acHelpDispType directly changes the object
     s32* type = &wp->acHelpDispType;
     if (wp->acHelpMsg && *type && !(wp->flags & BATTLE_FLAG_FIRST_ATTACK)) {
         dispEntry(CAMERA_2D, 498.0f, 1, _ac_help_disp, NULL);
-    }
-    if (_ac_help_disp) {
     }
 }
 

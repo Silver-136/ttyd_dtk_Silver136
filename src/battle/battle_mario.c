@@ -6664,8 +6664,7 @@ USER_FUNC(_kaiten_hammer_acrobat_rotate) {
         BtlUnit_GetRotate(unit, &rx, &ry, &rz);
         event->userdata[0] = n;
         if (unit->faceDirection >= 0) {
-            f32 a = reviseAngle(ry);
-            event->userdata[1] = 360.0f + (360.0f - a);
+            event->userdata[1] = 360.0f + (360.0f - reviseAngle(ry));
         } else {
             event->userdata[1] = 360.0f + reviseAngle(ry);
         }
@@ -6674,6 +6673,7 @@ USER_FUNC(_kaiten_hammer_acrobat_rotate) {
     }
     BtlUnit_AddRotate(unit, 0, event->userdata[2], 0);
     event->userdata[0]--;
+    // FAKE: (s32) cast on the u32 userdata3; the plain compare with 0 changes the object
     if ((s32)event->userdata3 == 0) {
         event->userdata[1] -= event->userdata[2];
         if (event->userdata[1] <= 270) {

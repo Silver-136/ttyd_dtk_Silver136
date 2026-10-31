@@ -972,8 +972,8 @@ s32 pouchGetHammerLv(void) {
  * and battle uses it to pick move power.
  */
 s32 pouchGetPartyAttackLv(PartyId partyId) {
-    PouchPartyData* party = &mpp->partyData[partyId];
-    return party->attackLevel;
+    // FAKE: &mpp->partyData[partyId] is formed by hand (same address) so the scaled index gets the field offset before the base is added (addi + lhax), as in the target
+    return ((PouchPartyData*)((u8*)mpp + partyId * sizeof(PouchPartyData)))->attackLevel;
 }
 
 BOOL pouchAddKeepItem(s32 id) {

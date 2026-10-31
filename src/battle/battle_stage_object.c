@@ -3171,6 +3171,7 @@ void _disp_escape_wall_message(CameraId camera, void* param) {
     const char* msg = msgSearch("btl_msg_escape_wall_close2");
     s32 width = FontGetMessageWidth(msg);
     f32 x;
+    // FAKE: spare temporary for 0.0f; writing 0.0f in place changes the object
     f32 zero = 0.0f;
 
     x = zero - width / 2;

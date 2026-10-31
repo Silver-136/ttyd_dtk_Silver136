@@ -1095,7 +1095,7 @@ USER_FUNC(win_item_move_3d_position) {
     }
     elapsed = OSTicksToMilliseconds((u32)gp->renderTime - event->userdata[0]);
     if (elapsed < frames) {
-        // the elapsed time is kept in the (dead) isFirstCall parameter
+        // FAKE: elapsed is copied into isFirstCall; using elapsed directly changes the object.
         isFirstCall = elapsed;
         item->position.x = intplGetValue(mode, event->userdataf[1], x, isFirstCall, frames);
         item->position.y = yOffset + intplGetValue(mode, event->userdataf[2], y, isFirstCall, frames);

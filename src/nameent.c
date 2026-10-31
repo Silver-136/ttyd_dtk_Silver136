@@ -1013,12 +1013,11 @@ static inline void nameWinQuad(TEXPalette* tpl, s32 a, s32 b, s32 c, f32 x, f32 
     GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     GXLoadTexObj(&obj, GX_TEXMAP2);
     GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX1, GX_FALSE, GX_PTIDENTITY);
-    {
-        ah2 = __fabs(h);
-        aw2 = __fabs(w);
-        PSMTXScale(i, (f32)aw2 / GXGetTexObjWidth(&obj), (f32)ah2 / GXGetTexObjHeight(&obj), 1.0f);
-        GXLoadTexMtxImm(i, GX_TEXMTX1, GX_MTX2x4);
-    }
+    // FAKE: second pair of |w|/|h| locals for the TEXMTX1 scale; reusing aw/ah changes the object
+    ah2 = __fabs(h);
+    aw2 = __fabs(w);
+    PSMTXScale(i, (f32)aw2 / GXGetTexObjWidth(&obj), (f32)ah2 / GXGetTexObjHeight(&obj), 1.0f);
+    GXLoadTexMtxImm(i, GX_TEXMTX1, GX_MTX2x4);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(x, y, 0.0f);
     GXTexCoord2f32(0.0f, 0.0f);

@@ -1518,6 +1518,7 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
         } else {
             w = d.z / 2.0f;
         }
+        // FAKE: self-assignment through t; removing it changes the object
         t = w;
         w = t;
     }
@@ -1525,14 +1526,24 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
         case 0:
         case 1:
             if (hitOut) {
-                DOOR_POS_GET(hitOut)
+                if (!mario) {
+                    hitObjGetPos(hitOut, &pos);
+                } else {
+                    pos = marioGetPtr()->position;
+                }
+                hitObjGetNormal(hitOut, &nrm);
                 out->x = pos.x + nrm.x * a - nrm.z * w;
                 out->z = pos.z + nrm.z * a + nrm.x * w;
             } else {
                 *out = marioGetPtr()->position;
             }
             if (hitIn) {
-                DOOR_POS_GET(hitIn)
+                if (!mario) {
+                    hitObjGetPos(hitIn, &pos);
+                } else {
+                    pos = marioGetPtr()->position;
+                }
+                hitObjGetNormal(hitIn, &nrm);
                 in->x = pos.x + nrm.x * b;
                 in->z = pos.z + nrm.z * b;
             } else {
@@ -1541,14 +1552,24 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
             break;
         case 2:
             if (hitOut) {
-                DOOR_POS_GET(hitOut)
+                if (!mario) {
+                    hitObjGetPos(hitOut, &pos);
+                } else {
+                    pos = marioGetPtr()->position;
+                }
+                hitObjGetNormal(hitOut, &nrm);
                 out->x = pos.x + nrm.x * a + nrm.z * w;
                 out->z = pos.z + nrm.z * a - nrm.x * w;
             } else {
                 *out = marioGetPtr()->position;
             }
             if (hitIn) {
-                DOOR_POS_GET(hitIn)
+                if (!mario) {
+                    hitObjGetPos(hitIn, &pos);
+                } else {
+                    pos = marioGetPtr()->position;
+                }
+                hitObjGetNormal(hitIn, &nrm);
                 in->x = pos.x + nrm.x * b;
                 in->z = pos.z + nrm.z * b;
             } else {
@@ -1557,14 +1578,24 @@ void door_position_sub(s32 type, const char* map, const char* hitIn, const char*
             break;
         case 3:
             if (hitOut) {
-                DOOR_POS_GET(hitOut)
+                if (!mario) {
+                    hitObjGetPos(hitOut, &pos);
+                } else {
+                    pos = marioGetPtr()->position;
+                }
+                hitObjGetNormal(hitOut, &nrm);
                 out->x = pos.x + nrm.x * a;
                 out->z = pos.z + nrm.z * a;
             } else {
                 *out = marioGetPtr()->position;
             }
             if (hitIn) {
-                DOOR_POS_GET(hitIn)
+                if (!mario) {
+                    hitObjGetPos(hitIn, &pos);
+                } else {
+                    pos = marioGetPtr()->position;
+                }
+                hitObjGetNormal(hitIn, &nrm);
                 in->x = pos.x + nrm.x * a;
                 in->z = pos.z + nrm.z * a;
             } else {

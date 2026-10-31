@@ -562,7 +562,6 @@ s32 chkRevolveDir(s32* cw, s32* ccw) {
  */
 s32 checkOneRevolution(s32 dir) {
     RubWork* rw;
-    s32 idx;
     s32 j;
     s32 cur;
     s32 v;
@@ -577,6 +576,7 @@ s32 checkOneRevolution(s32 dir) {
     start = rw->start;
     cur = rw->hist[rw->idx];
     for (i = 1; i <= 20; i++) {
+        // FAKE: rubwork read directly instead of through rw; the plain form changes the object
         j = rubwork.idx - i;
         while (j < 0) {
             j += 20;

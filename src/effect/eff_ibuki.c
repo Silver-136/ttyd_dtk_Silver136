@@ -250,7 +250,7 @@ void effIbukiDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetTevAlphaOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_ZERO, GX_CC_CPREV, GX_CC_C0, GX_CC_ZERO);
     GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_APREV, GX_CA_A0, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, (GXColor){255, 255, 255, alpha * alpha2 / 255});
+    GXSetTevColor(GX_TEVREG0, (GXColor){ 255, 255, 255, alpha * alpha2 / 255 });
     PSMTXTrans(trans, work->tex[0], work->tex[1], 0.0f);
     GXLoadTexMtxImm(trans, GX_TEXMTX0, GX_MTX2x4);
     PSMTXTrans(trans, work->tex[2], 0.02f, 0.0f);
@@ -288,6 +288,7 @@ void effIbukiDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxDesc(GX_VA_TEX1, GX_INDEX8);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX1, GX_TEX_ST, GX_S16, 14);
     GXSetArray(GX_VA_TEX1, ibuki_texcoord1_tbl, 4);
+    // FAKE: (u32) cast for an unsigned compare; `i < 4` changes the object
     for (i = 0, sz = ibuki_dl_0_size_tbl, dl = ibuki_dl_0_tbl; (u32)i < 4; i++, sz++, dl++) {
         GXCallDisplayList(*dl, *sz * 32);
     }
@@ -323,7 +324,7 @@ void effIbukiDisp(CameraId cameraId, EffectEntry* effect) {
             PSMTXConcat(final, trans, trans);
             GXLoadPosMtxImm(trans, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
-            GXSetChanMatColor(GX_COLOR0A0, (GXColor){255, 255, 255, a});
+            GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 255, 255, 255, a });
             GXBegin(GX_QUADS, GX_VTXFMT0, 4);
             GXPosition3f32(-w / 2.0f, h, 0.0f);
             GXTexCoord2f32(0.0f, 0.0f);

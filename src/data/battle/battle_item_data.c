@@ -4417,8 +4417,9 @@ USER_FUNC(_sampling_random_target) {
     outUnit = args[1];
     outPart = args[2];
     belong = evtGetValue(event, args[3]);
+    // FAKE: pointer alias of the local targets; using targets directly changes the object
     t = &targets;
-    BattleSamplingEnemy(t, weapon, BattleTransID(event, -2), belong, weapon->targetClassFlags,
+    BattleSamplingEnemy(t, weapon, BattleTransID(event, UNIT_ID_SELF), belong, weapon->targetClassFlags,
                         weapon->targetPropertyFlags, -wp->alliances[belong].attackDirection);
     if (t->numTargets <= 0) {
         evtSetValue(event, outUnit, -1);

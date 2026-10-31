@@ -54,6 +54,7 @@ const char* getMarioStDvdRoot(void) {
 f32 reviseAngle(f32 angle) {
     f32 result, temp;
 
+    // FAKE: spare temporary temp; result = (f32)fmod(angle, 360.0) changes the object
     temp = (f32)fmod(angle, 360.0);
     result = temp;
 
@@ -470,17 +471,17 @@ void fsort(void** base, u32 n) {
  * then moves the elements into place by following the permutation cycles.
  */
 void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*)) {
-    u8* dst;      /* r27 */
-    void** idx;   /* r26 */
-    u32 i;        /* r25 */
-    void** table; /* r24 */
-    u8* buf;      /* r23 */
-    void** slot;  /* r22 */
-    u8* cur;      /* r21 */
-    void* p;      /* r0  */
+    u8* dst;
+    void** idx;
+    u32 i;
+    void** table;
+    u8* buf;
+    void** slot;
+    u8* cur;
+    void* p;
     u32 j;
-    void** pp; /* r4  */
-    u8* src;   /* r5  */
+    void** pp;
+    u8* src;
 
     table = tmp0;
     buf = tmp1;
@@ -507,6 +508,7 @@ void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*)) {
         if (p != NULL) {
             slot = idx;
             if (p != dst) {
+                // FAKE: assignment inside the argument; cur = dst; memcpy(buf, cur, size) changes the object
                 memcpy(buf, cur = dst, size);
                 do {
                     memcpy(cur, *slot, size);

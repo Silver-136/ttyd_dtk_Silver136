@@ -176,9 +176,10 @@ void unitwin_help_main(WinMgrEntry* entry) {
 // Descriptive name (not in the symbol maps); placeholder unk_801758fc, JP 0x801758FC. See docs/NAME_PROVENANCE.md.
 void unitwin_help_disp(WinMgrEntry* entry) {
     UnitWinWork* wp = _wp;
-    s32* goods = &wp->goods[wp->goodsIdx];
+    s32 idx = wp->goodsIdx * sizeof(s32); // FAKE: byte offset of the goods slot computed before winMgrAction (slwi ahead of the call, lwzx after), as in the target; goods[wp->goodsIdx] and an index local both scale after the call
+    s32* goods = wp->goods;
     if (!winMgrAction(wp->winId[1])) {
-        entry->msg = msgSearch(itemDataTable[*goods].description);
+        entry->msg = msgSearch(itemDataTable[*(s32*)((u8*)goods + idx)].description);
         winMgrHelpDraw(entry);
     }
 }
@@ -1486,13 +1487,20 @@ USER_FUNC(unitwin_getpartylank) {
  * and by Chet Rippo's Adjustment House in the Rogueport Sewers (tik_11), which lowers ranks.
  */
 USER_FUNC(unitwin_setpartylank) {
+    PouchPartyData* party;
+    u32 ofs;
+    s16 v;
+    s32 ofs2;
     EvtWord* args = event->args;
     PouchData* pouch = pouchGetPtr();
-    s32 idx = evtGetValue(event, args[0]);
-    pouch->partyData[idx].HPLevel = pouch->partyData[idx].attackLevel = pouch->partyData[idx].techLevel =
-        evtGetValue(event, args[1]);
+    ofs = evtGetValue(event, args[0]) * sizeof(PouchPartyData); // byte offset of the partner's partyData entry
+    v = evtGetValue(event, args[1]);
+    ofs2 = ofs; // FAKE: signed copy for the first stores, so pouch + ofs is added again after pouchRevisePartyParam as in the target
+    party = (PouchPartyData*)((u8*)pouch->partyData + ofs2);
+    party->HPLevel = party->attackLevel = party->techLevel = v;
     pouchRevisePartyParam();
-    pouch->partyData[idx].currentHP = pouch->partyData[idx].maximumHP;
+    party = (PouchPartyData*)((u8*)pouch->partyData + ofs);
+    party->currentHP = party->maximumHP;
     return EVT_RETURN_DONE;
 }
 

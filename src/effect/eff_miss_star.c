@@ -68,6 +68,7 @@ EffectEntry* effMissStarEntry(s32 count, s32 delay, f32 x, f32 y, f32 z, s32 ind
         index = -index;
         sign = -1;
     }
+    // FAKE: endless loop with a break; `while (index > 5) { index -= 5; }` changes the object
     while (TRUE) {
         if (index <= 5) {
             break;
