@@ -59,9 +59,7 @@ USER_FUNC(bossrobot);
 USER_FUNC(elder_talk_sub_fadeoff);
 USER_FUNC(elder_talk_sub_punicheck);
 static USER_FUNC(evtflash);
-void bossrobot_batu(CameraId camera, void* param);
 USER_FUNC(evt_countdown_stop);
-void mri_stg3_012_cb(s32 type, void* param);
 
 static EvtWord guide_init[29];
 static EvtWord guide_talk[20];

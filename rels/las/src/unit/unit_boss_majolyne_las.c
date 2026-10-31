@@ -21,10 +21,7 @@
 #define UNIT_WORK_ATTACK_STEP 8
 #define UNIT_WORK_BLIZZARD_WAIT 9 // turns before the blizzard can be rolled again: set to 2 with each blizzard_attack_event, phase_event counts it down
 
-typedef struct MajoSortEntry {
-    s32 id;
-    s32 value;
-} MajoSortEntry;
+#include "unit/unit_boss_majolyne.h"
 
 static USER_FUNC(majo3_sort);
 

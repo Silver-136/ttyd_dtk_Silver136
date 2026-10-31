@@ -34,11 +34,6 @@
 #include "driver/animdrv.h"
 #include "eff/eff_n64.h"
 #include "driver/seqdrv.h"
-void puniHagurePos(PuniData* p);
-void puniMapdata_MRI_06_getidx(f32 x, f32 z, s32* bx, s32* bz);
-void puniMapdata_MRI_09_getidx(f32 x, f32 z, s32* bx, s32* bz);
-void puniMapdata_MRI_16_getidx(f32 x, f32 z, s32* bx, s32* bz);
-void puniMapdata_MRI_09_getpos(s32 bx, s32 bz, f32* x, f32* z);
 extern int abs(int);
 void envSetYami(MapTevCallbackInfo* info);
 
@@ -3293,7 +3288,6 @@ void puniModeWind_kaiten(PuniData* p) {
     }
 }
 
-void puniModeWind(PuniData *p);
 static const Vec puni_fall_dir;
 /**
  * Wind mode: Flurrie's breath blows the Puni away from Mario in a sliding, spinning arc:
@@ -4564,7 +4558,6 @@ void puni_puni_init(void) {
     memset(Punimap, 0, sizeof(PuniMap));
 }
 
-void puniModeMain(PuniData* p);
 static const Vec puni_fall_dir;
 /**
  * Checks that a stray Puni has not been pushed out of the map and puts it back at the recovery position
@@ -4737,7 +4730,6 @@ void puniModeMain(PuniData* p) {
     }
 }
 
-void puniMoveMain(PuniData* p);
 static const Vec puni_fall_dir;
 /**
  * Inline copy of the wall-collision move that reflects the velocity (puniMoveHit),

@@ -1,6 +1,7 @@
 // Partner movement: the footmark trail behind Mario, target speed and direction, walking and the move modes.
 
 #include "party.h"
+#include "mot/mot_plane.h"
 #include "driver/camdrv.h"
 #include "driver/hitdrv.h"
 #include "mario/mario.h"
@@ -30,7 +31,6 @@
 #include "party/party_vivian.h"
 
 s32 partyMoveMain(PartyEntry* party, s32 hosei);
-f32 partyUpdMoveSpd(PartyEntry* party);
 extern void party_set_behind_dir(PartyEntry* party);
 static void flyMain(PartyEntry* party);
 
@@ -1595,7 +1595,6 @@ static void flyMain(PartyEntry* party) {
 }
 
 extern f32 partyNrmToAngle(Vec* n);
-extern s32 marioPlaneGetFlyingDir(void);
 
 /**
  * TRUE when hit is floor a partner may appear on:

@@ -48,13 +48,7 @@
 // attack_event_r subtracts 1 and waits while the result is 1 or more; set to 1 at launch and after each attack
 #define ROCKET_PUNCH_WORK_WAIT 1
 
-typedef struct ArmWork {
-    Vec prevPos;
-    Vec pos;
-    f32 rot;
-    f32 targetRot;
-    EffectEntry* eff;
-} ArmWork;
+#include "unit/unit_boss_magnum_battender.h"
 double atan(double x);
 typedef struct BattenEffWork {
     s32 type;
@@ -68,8 +62,6 @@ typedef struct TargetWork {
     EffectEntry* eff;
 } TargetWork;
 extern EvtWord aud_hit_event[];
-void aud_get_pod_pos(BattleUnit* unit, f32* x, f32* y, f32* z);
-void aud_fire_eff(f32 x, f32 y, f32 z);
 void psndSFX_vol(s32 id, u8 vol);
 EffectEntry* eff_tor;
 s32 torCount;

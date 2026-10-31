@@ -77,10 +77,7 @@ typedef struct ShopSel {
 } ShopSel;
 NpcEntry* fbatNpcTalkCheck(MarioWork* mario);
 s32* iri_09_item_tbl;
-s32 naniga_okorukana_cook(void);
-s32 itemNameToID(const char* name);
 static s32 item_tbl[21];
-s32 chk_cook_eff_type(s32 item);
 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
@@ -116,7 +113,6 @@ static USER_FUNC(starstone_set_ry);
 USER_FUNC(badgeshop_special_cnt);
 USER_FUNC(wait_mahojin);
 static USER_FUNC(yami_view);
-BOOL chkCookItem(s32 item);
 static s32 npc_process(void);
 extern s32 envSetYami[];
 

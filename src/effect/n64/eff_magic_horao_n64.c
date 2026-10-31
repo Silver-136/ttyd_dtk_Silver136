@@ -1,6 +1,7 @@
 // Paper Mario 64 magic effect (horao); types 0-5, some types spawn dust (hokori) puffs.
 
 #include "driver/camdrv.h"
+#include "eff/eff_magic1_n64.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
 #include "memory.h"
@@ -11,7 +12,6 @@
 #include "eff/n64/eff_hokori_n64.h"
 #include "eff/n64/eff_magic_horao_n64.h"
 
-double sin(double);
 
 typedef struct EffMagicHoraoN64Work {
     s32 type;       // 0x0

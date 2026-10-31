@@ -26,8 +26,6 @@
 #define PARTS_WORK_DONE 15       // 0 while this fireball flies; 1 once it hit or left the stage (x beyond +-250), which stops its bounce loop
 
 USER_FUNC(fire_bros_nagemakuri_set_target);
-void fire_bros_get_next_target(s32* unitIdx, s32* partIdx);
-void fire_bros_get_target(s32* unitIdx, s32* partIdx);
 
 BattleUnitKind unit_fire_bros;
 static BattleUnitDefense defence;

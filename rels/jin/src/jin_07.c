@@ -52,7 +52,6 @@ typedef struct Teresa {
 static Teresa* pTeresa;
 static s32 g_nNumEndProc[1];
 s32 g_nNumOutBox[1];
-void computePosHermite(ExtdrvPose* pose, Teresa* ter);
 f32 randf(f32 min, f32 max);
 static inline f32 cosf(f32 x) { return cos(x); }
 

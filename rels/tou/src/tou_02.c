@@ -89,7 +89,6 @@ static f32 randf(f32 min, f32 max);
 s32 check_hammer(Fan* fan);
 void psndSFX_vol(s32 id, u8 vol);
 static void pose_main(void);
-void fan_disp(CameraId camera, void* param);
 
 s32 evt_cloud_ent(EventEntry* event, BOOL isFirstCall);
 s32 evt_cloud_init(EventEntry* event, BOOL isFirstCall);
@@ -98,8 +97,6 @@ s32 evt_pouch_open_mail(EventEntry* event, BOOL isFirstCall);
 s32 evt_pouch_receive_mail(EventEntry* event, BOOL isFirstCall);
 s32 evt_tou_get_ranking(EventEntry* event, BOOL isFirstCall);
 void ext_fan_dispent(void);
-void ext_fan_main(void);
-void ext_fan_init(void);
 
 static EvtWord s_door_open[58];
 static EvtWord s_door_close[58];

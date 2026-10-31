@@ -2,6 +2,7 @@
 // shine sounds and sparkles; type 6 is the sparkle-only form.
 
 #include "driver/camdrv.h"
+#include "eff/eff_magic1_n64.h"
 #include "eff/eff_recovery.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -17,7 +18,6 @@
 #include "eff/eff_number.h"
 #include "eff/eff_stardust.h"
 
-double sin(double);
 u32 strlen(const char* s);
 
 // One textured rectangle (left, right, top, bottom) with horizontal texture repeat u.

@@ -40,13 +40,7 @@
 
 
 static EffectEntry* eff_charge;
-typedef struct ArmWork {
-    Vec prevPos;
-    Vec pos;
-    f32 rot;
-    f32 targetRot;
-    EffectEntry* eff;
-} ArmWork;
+#include "unit/unit_boss_magnum_battender.h"
 static ArmWork* work[2];
 double atan(double x);
 typedef struct BattenEffWork {

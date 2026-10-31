@@ -33,17 +33,7 @@
 #define UNIT_WORK_TARGET_PART 8  // first of three slots (8-10): target part of each shot of renzoku_attack_event (slots 8-10)
 #define UNIT_WORK_TARGET_HIT 11  // first of three slots (11-13): 1 once a shot hit that target; the last shot at a target that was hit only plays the hit (renzoku_attack_event_sub_last) (slots 11-13)
 
-typedef struct PidersYarn {
-    f32 x0;
-    f32 y0;
-    f32 z0;
-    f32 x1;
-    f32 y1;
-    f32 z1;
-    u8 alpha;
-} PidersYarn;
-void GXEnd_(void);
-void GXPosition3f32_(f32 x, f32 y, f32 z);
+#include "unit/unit_piders.h"
 static void piders_draw_yarn_sub(CameraId camera, void* param);
 
 static USER_FUNC(piders_draw_yarn);

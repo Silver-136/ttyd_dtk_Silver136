@@ -41,7 +41,6 @@ typedef struct KemuTestWork {
 } KemuTestWork;
 
 static void effKemuTestMain(EffectEntry* effect);
-void effKemuTestDisp(CameraId cameraId, void* param);
 
 #pragma defer_codegen off
 

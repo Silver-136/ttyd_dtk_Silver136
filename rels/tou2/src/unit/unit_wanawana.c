@@ -28,8 +28,6 @@ typedef struct WanaWork {
     smartEntry* tex;
 } WanaWork;
 static f32 tanf(f32 x);
-void replace_callback(BattleUnitPart* part, s32 type);
-void replace_disp(CameraId camera, void* param);
 
 USER_FUNC(replace_evt);
 

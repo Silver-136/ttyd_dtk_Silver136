@@ -1,6 +1,7 @@
 // Yoshi: partner init, follow, the ride (Mario on Yoshi's back) and the flutter jump.
 
 #include "dolphin/types.h"
+#include "eff/eff_magic1_n64.h"
 #include "driver/animdrv.h"
 #include "driver/effdrv.h"
 #include "eff/n64/eff_sweat_n64.h"
@@ -35,7 +36,6 @@ typedef struct YoshiWork {
 
 
 extern HitEntry* dou10_yoko_yari2(void* out);
-double sin(double);
 
 f32 ofs_PYS_S_2[52] = {
     0.0f, -0.011f, -0.042f, -0.087f, -0.142f, -0.202f, -0.262f, -0.317f, -0.362f, -0.393f, -0.404f, -0.404f, -0.404f,

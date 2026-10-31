@@ -64,7 +64,6 @@ static Monte* icon_monte_p;
 extern MonteTable montetable[];
 static void monte_disp(CameraId camera, void* param);
 static BOOL get_monte_check(Vec* a, Vec* b);
-void yuu_02_icon_monte_disp(CameraId camera, void* param);
 
 static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
@@ -79,8 +78,6 @@ USER_FUNC(yuuminigame3_set_phase);
 USER_FUNC(yuuranking_get_monte);
 BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, RollWork* data);
 USER_FUNC(yuu_02_icon_monte_onoff);
-void yuu_02_icon_monte_off(s32 idx);
-void yuu_02_icon_monte_on(s32 idx);
 
 Vec fukkipoint[15];
 EvtWord yuu_02_icon_monte_entry_evt[4];

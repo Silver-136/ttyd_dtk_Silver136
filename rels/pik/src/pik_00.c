@@ -56,19 +56,8 @@
 #include "cam_road.h"
 #include "cam_shift.h"
 #include "driver/seqdrv.h"
-typedef struct SharinData {
-    const char* name;
-    s32 radiusType;
-    s32 driveSource;
-    EvtFloat speed;
-} SharinData;
-typedef struct ClankData {
-    const char* name;
-    s32 radiusType;
-    s32 driveSource;
-    EvtFloat radius;    // circle radius (scales the sin/cos offset)
-    EvtFloat direction; // +1 / -1, multiplies the angle
-} ClankData;
+#include "map/sharin.h"
+#include "map/sharin.h"
 
 
 USER_FUNC(img_flag);

@@ -79,7 +79,6 @@ typedef struct ExchangeRyokin {
     s32 ryokin;
     s32 medal;
 } ExchangeRyokin;
-s32 exchange_ret_tbl_no(void);
 s32 yuugijou_montemedal_keep(EventEntry* event, BOOL isFirstCall);
 typedef struct GoryuuWork {
     EventEntry* event;
@@ -142,10 +141,6 @@ typedef struct SlotDrum {
     const char* window[3][3];
     const char* neon[3];
 } SlotDrum;
-void goryuugijo_upsidewindow_disp_sub(s32 slot, s32 reel);
-void goryuugijo_upsidewindow_dispoff_sub(s32 slot, s32 reel);
-s32 slot_rotate_sub(GoryuuWork* wp, SlotWork* data, s32 reel);
-void slot_neon_sub(GoryuuWork* wp, SlotWork* data);
 
 USER_FUNC(desk_talk_func);
 USER_FUNC(desk_talk_init_func);

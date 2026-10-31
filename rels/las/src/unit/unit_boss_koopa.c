@@ -32,16 +32,7 @@
 #define UNIT_WORK_ATTACK_STEP 4    // fixed opening order: 0 fire attack, 1 bite, 2 hip attack, then 3 = DrawLots each turn
 #define UNIT_WORK_TARGET_KIND 5    // unit kind of the current attack's target (UNIT_MARIO 222 or the partners 224-230)
 
-typedef struct IconJumpWork {
-    Vec start;
-    Vec pos;
-    Vec end;
-    s32 frames;
-    f32 speed;
-    f32 gravity;
-    f32 vy;
-    u8 pad[0x7C - 0x34];
-} IconJumpWork;
+#include "unit/unit_boss_koopa.h"
 static void _disp_icon(CameraId camera, void* param);
 
 static USER_FUNC(_icon_jump_icon);

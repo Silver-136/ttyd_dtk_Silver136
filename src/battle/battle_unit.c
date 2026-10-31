@@ -35,7 +35,6 @@ s32 _enemy_can_use_item_table[] = {
 };
 
 //local prototypes
-void _CheckMoveCount(BattleUnit* unit);
 
 /** Clears all 64 unit slots in the battle work at battle start. Always returns TRUE. */
 BOOL BtlUnit_Init(void) {

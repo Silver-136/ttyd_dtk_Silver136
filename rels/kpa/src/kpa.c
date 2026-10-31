@@ -43,13 +43,9 @@ typedef struct KpaWork {
     u8 time;
 } KpaWork;
 KpaWork* kwp;
-void kpa_stageclear_disp(CameraId camera, void* param);
 void FontDrawString(f32 x, f32 y, const char* message);
-void kpa_status_disp(CameraId camera, void* param);
 void iconDispGx(f32 scale, Vec* position, s16 flags, u16 iconId);
-s32 kpaMutekiCheck(void);
 f32 kpaGetWidth(s32 type);
-void kpaFireDelete(void);
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];

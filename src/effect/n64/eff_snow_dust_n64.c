@@ -1,6 +1,7 @@
 // Paper Mario 64 effect: puffs of snowy dust; used by the freeze and Crystal Star effects.
 
 #include "eff/n64/eff_snow_dust_n64.h"
+#include "eff/eff_magic1_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -11,7 +12,6 @@
 #include <dolphin/mtx.h>
 #include "libc_decls.h"
 
-double sin(double);
 
 void effSnowDustMain(EffectEntry* effect);
 void effSnowDustDisp(CameraId cameraId, EffectEntry* effect);

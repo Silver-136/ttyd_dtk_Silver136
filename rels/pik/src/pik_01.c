@@ -54,8 +54,6 @@ static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
 static USER_FUNC(yami_view);
-void test_tev2(MapTevCallbackInfo* info);
-void test_tev(MapTevCallbackInfo* info);
 extern s32 envSetYami[];
 
 static HitDamageReturn dmgReturnPt[9];

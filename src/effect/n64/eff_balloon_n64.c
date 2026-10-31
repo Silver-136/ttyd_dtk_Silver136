@@ -35,9 +35,6 @@ typedef struct effN64Vtx {
     u8 r, g, b, a; // 0xA
 } effN64Vtx;
 
-void effGetTexObjN64(u32 id, GXTexObj* obj);
-void effSetVtxDescN64(effN64Vtx* vtx);
-void tri1();
 
 /** Template vertices of the balloon, copied each frame before the 20 outline points are wobbled around it. */
 static effN64Vtx balloon_vtx[] = {

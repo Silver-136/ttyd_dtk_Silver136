@@ -61,7 +61,6 @@ typedef struct ShadowWork {
     GXTexObj obj;
     smartEntry* tex;
 } ShadowWork;
-void make_shadow_disp(CameraId camera, void* param);
 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);

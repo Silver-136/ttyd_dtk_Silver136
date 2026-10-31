@@ -470,8 +470,6 @@ HitEntry* searchUnder2(f32* out, f32 x, f32 y, f32 z) {
     return hit;
 }
 
-extern void marioSetFallPara(void);
-extern void marioChgMotSub(MarioMotion id, s32 callPost);
 
 /** FALSE when floors are disabled for Mario or he is at y >= 5000 (out of the map), so marioChkGnd skips the floor. */
 static inline BOOL marioChkGndOk(void) {
@@ -1279,8 +1277,6 @@ HitEntry* marioChkLandon2(f32* y, f32 spd, f32 ofs) {
     return NULL;
 }
 
-extern void marioClearJumpPara(void);
-extern void marioChgStayMotion(void);
 
 /**
  * TRUE if the ceiling hit is a Super Block (MOBJ_PowerUpBlock), Save Block or Heart Block (free or paid):

@@ -50,7 +50,6 @@
 #include "mario/mario_party.h"
 #include "driver/seqdrv.h"
 
-void _hikariEntry(const char* name, s32 type, f32 scale);
 typedef struct HikariData {
     s32 key;
     s32 id;
@@ -90,8 +89,6 @@ USER_FUNC(make_mist_name);
 USER_FUNC(eff_b_peach_mist);
 USER_FUNC(eff_b_peach_ripple);
 USER_FUNC(radiation_set_pos);
-void b_peach_msgcb(s32 type, void* param);
-void map_color_tev(MapTevCallbackInfo* info);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

@@ -76,9 +76,6 @@ typedef struct KpaSen {
     u8 pose1Hi;
 } KpaSen;
 KpaSen* kpaSen;
-s32 calcPose(s32 i, s32 lo, s32 hi, s32 flag);
-void kpaSen_ext_disp(CameraId camera, void* param);
-void kpaSen_ext_shadow_disp(CameraId camera, void* param);
 
 static USER_FUNC(anim_tevcallback);
 USER_FUNC(bakuhatu_kemuri);
@@ -96,10 +93,6 @@ static USER_FUNC(starstone_set_ry);
 USER_FUNC(white_off);
 USER_FUNC(white_on);
 static USER_FUNC(yami_view);
-void kpaSen_ext_dispent(void);
-void kpaSen_ext_main(void);
-void kpaSen_ext_init(void);
-void kpa_stg5_009_7_cb(s32 type, smartEntry* smart);
 USER_FUNC(party_tev);
 #ifdef VERSION_G8ME01
 #endif

@@ -29,16 +29,7 @@
 #define UNIT_WORK_HALF_HP_DONE 3 // 1 once harf_hp_event has played the stg3_tou_403_06_02 line
 #define UNIT_WORK_ATTACK_STEP 4  // fixed opening order: 0 fire, 1 bite, 2 hip attack; from 3 on attack_event draws lots
 
-typedef struct IconJumpWork {
-    Vec start;
-    Vec pos;
-    Vec end;
-    s32 frames;
-    f32 speed;
-    f32 gravity;
-    f32 vy;
-    u8 pad[0x7C - 0x34];
-} IconJumpWork;
+#include "unit/unit_boss_koopa.h"
 static void _disp_icon(CameraId camera, void* param);
 
 static USER_FUNC(_icon_jump_icon);

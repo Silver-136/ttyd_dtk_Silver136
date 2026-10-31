@@ -46,37 +46,10 @@ MapWork* mapWork; //allocates two entries
 
 
 // Implementation forward declarations; definitions retain target order.
-void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table);
-void _mapDispMapGrp(CameraId cam, MapObject* obj);
-void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj);
-void _mapDispMapObj(CameraId cam, MapObject* obj);
-void _mapDispMapObj_NoMaterial(CameraId cam, MapObject* obj);
-MapObject* _mapEnt(MapFileJoint* joint, MapObject* parent, Mtx mtx, s32 index);
-void _mapLoad(MapWork* wp, BOOL group, const char* map);
-void _setOffScrnId(MapObject* obj, s32 id, BOOL doNext);
-void makeDisplayList(BOOL group);
-MapObject* mapEntry(MapFileJoint* joint, Mtx mtx, s32 index);
-MapObject* mapEntrySub(MapFileJoint* joint, MapObject* parent, Mtx mtx, BOOL isRoot, s32 index);
-void mapFlgOff(MapObject* obj, u32 flags, BOOL doNext);
-void mapFlgOn(MapObject* obj, u32 flags, BOOL doNext);
-void mapGetBoundingBox(Vec* min, Vec* max);
-void mapGetJointsSub(MapFileJoint* joint, s32* numJoints);
-void mapObjGetPosSub(MapObject* obj, Vec* sum, s32* count, BOOL doNext);
-void mapReCalcMatrix(MapObject* obj, Mtx mtx, BOOL force);
 MapFileJoint* mapSearchDmdJoint(MapFileJoint* joint, const char* name);
-MapFileJoint* mapSearchDmdJointSub(MapFileJoint* joint, const char* name);
-MapFileJoint* mapSearchDmdJointSub2(MapFileJoint* joint, const char* name, const char* prefix);
-s32 mapSetLight(MapObject* obj, LightEntry** lights);
 void mapSetMaterial(MapObject* obj, void* material);
 void mapSetPolygon(MapObject* obj, MapFileMesh* mesh);
 void mapSetPolygonVtxDesc(MapObject* obj, MapFileMesh* mesh);
-void setColor(MapObject* obj, GXColor color, BOOL doNext);
-void mapDispMapGrp(CameraId cam, MapObject* obj);
-void mapDispMapGrp_bbox(CameraId cam, MapObject* obj);
-void mapDispMapGrp_off(CameraId cam, MapObject* obj);
-void mapDispMapObj(CameraId cam, MapObject* obj);
-void mapDispMapObj_bbox(CameraId cam, MapObject* obj);
-void mapDispMapObj_off(CameraId cam, MapObject* obj);
 
 /** Single-precision sine for this file, routed through the double sin() of math.h. */
 static inline f32 sinf(f32 x) { return sin(x); }

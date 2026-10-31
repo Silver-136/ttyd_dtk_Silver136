@@ -18,8 +18,6 @@ effN64Vtx size16x16_tex32x32_0_vtx[] = {
     {-8, 0, 8, 0, 1024, 0, 0, 0, 255},
 };
 
-void effRippleMain(EffectEntry* effect);
-void effRippleDisp(CameraId cameraId, EffectEntry* effect);
 
 __declspec(section ".rodata") static Vec vec3_802fb520 = {0.0f, 0.0f, 0.0f};
 /** Sets the x/z rotation of the ripple plane (degrees), so it can lie on a slanted surface. Used by bom_01. */

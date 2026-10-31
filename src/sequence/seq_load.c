@@ -1,6 +1,7 @@
 // File select sequence: the save file menu (new game, copy, delete, sound and rumble settings).
 
 #include "evt/evt_memcard.h"
+#include "eff/eff_magic1_n64.h"
 #include "evt/evt_story.h"
 #include "evt/evt_sub.h"
 #include "seq/seq_load.h"
@@ -85,7 +86,6 @@ typedef struct WinDt {
     u8 next[4]; // 0x18
 } WinDt;
 
-double sin(double);
 void FontDrawString(f32 x, f32 y, const char* str);
 void loadMain(SequenceWork* seq);
 void loadDraw(CameraId camera, void* param);

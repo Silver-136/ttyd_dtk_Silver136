@@ -2,6 +2,7 @@
 // and cycle through a 17-step green colour table; fades in over 16 frames and out over the last 16.
 
 #include "driver/camdrv.h"
+#include "eff/eff_magic1_n64.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
 #include "memory.h"
@@ -11,7 +12,6 @@
 #include <string.h>
 #include "eff/eff_n64.h"
 
-double sin(double);
 
 typedef struct EffHoraoSpellN64Work {
     s32 type;     // 0x0

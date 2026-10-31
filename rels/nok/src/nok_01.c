@@ -50,7 +50,6 @@ static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
 static USER_FUNC(yami_view);
-void iri_08_msg(s32 type, void** work);
 extern s32 envSetYami[];
 
 EvtWord nokonoko_G_regl[19];

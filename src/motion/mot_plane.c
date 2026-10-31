@@ -1,6 +1,7 @@
 // Mario's paper airplane motion (plane panel): take-off, gliding, landing and the camera while flying.
 
 #include "dolphin/types.h"
+#include "eff/eff_magic1_n64.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_snd.h"
 #include "driver/hitdrv.h"
@@ -520,7 +521,6 @@ void mot_plane(void) {
 }
 
 
-double sin(double);
 
 #define PI 3.1415927f
 

@@ -23,7 +23,6 @@
 #define GETPARTY(args) partyGetPtr((args)[0] == 0 ? partyCtrlNo : 1)
 
 extern s32 bomheiGetStatus(void);
-extern s32 cloudGetStatus(void);
 
 /**
  * Sets or clears PartyFlags bits on a partner slot.
@@ -1048,8 +1047,6 @@ USER_FUNC(evt_party_cloud_breathout) {
 }
 
 #ifdef VERSION_G8ME01
-extern void cloudLockAnimationsOn(PartyEntry* party);
-extern void cloudLockAnimationsOff(PartyEntry* party);
 
 /** US only. */
 // US only.

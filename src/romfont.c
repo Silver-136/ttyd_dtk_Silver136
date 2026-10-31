@@ -1,6 +1,7 @@
 // ROM font: draws text with the console's built-in (IPL) font, for messages shown before the game font is loaded.
 
 #include "romfont.h"
+#include "libc_decls.h"
 #include "dolphin/mtx.h"
 #include "dolphin/types.h"
 #include "memory.h"
@@ -369,7 +370,6 @@ void romFontMake(void) {
     __memFree(HEAP_DEFAULT, chars);
 }
 
-double tan(double);
 
 /** Looks a character code up in the glyph cache; falls back to the first glyph when the code was not baked. */
 static inline RomFontChar* romFontFindChar(u16 code) {

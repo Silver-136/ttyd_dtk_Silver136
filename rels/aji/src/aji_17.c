@@ -65,9 +65,6 @@ typedef struct HorogramWork {
 } HorogramWork;
 HorogramWork* horogram_wp;
 DanceData dance_dt;
-void peach_capture(CameraId cameraId, void* param);
-void disp_horogram(CameraId cameraId, void* param);
-void noiseDisp(CameraId cameraId, void* param);
 
 static s32 bgm_start_wait(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(bgm_start_wait);
@@ -98,16 +95,12 @@ s32 horogram_set_pose(EventEntry* event, BOOL isFirstCall);
 s32 move_center(EventEntry* event, BOOL isFirstCall);
 s32 noise(EventEntry* event, BOOL isFirstCall);
 s32 peach_dance_after_fail(EventEntry* event, BOOL isFirstCall);
-s32 peach_evt_stg4_read_quiz_data(EventEntry* event, BOOL isFirstCall);
 static s32 peach_set_pose(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(peach_set_pose);
 s32 set_local_rotate(EventEntry* event, BOOL isFirstCall);
 s32 set_npc_pos(EventEntry* event, BOOL isFirstCall);
 static s32 viewport(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(viewport);
-s32 wait_move_end(EventEntry* event, BOOL isFirstCall);
-s32 wait_action_begin(EventEntry* event, BOOL isFirstCall);
-s32 wait_action_end(EventEntry* event, BOOL isFirstCall);
 static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t);
 #ifdef VERSION_G8ME01
 // US: map save blocks call the US save wrapper script

@@ -40,7 +40,6 @@
 #include "yuu.h"
 #include "driver/seqdrv.h"
 
-void yuu_03_icon_monte_disp(CameraId camera, void* param);
 typedef struct RyushiWork {
     s32 flag;
     s32 mode;
@@ -62,7 +61,6 @@ RyushiWork* xwp;
 Monte* yuu_03_monte_p;
 static void polygon(f32 x, f32 y, f32 w, f32 h, f32 u, f32 v);
 static f32 randf(f32 min, f32 max);
-void ryushi_disp(CameraId camera, void* param);
 USER_FUNC(evt_ryushi_init);
 BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, SlitWork* data);
 #define REVISE360(a) ((3600.0f + (a)) - (s32)((3600.0f + (a)) / 360.0f) * 360)

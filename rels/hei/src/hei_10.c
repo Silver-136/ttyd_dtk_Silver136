@@ -135,15 +135,10 @@ static inline f32 chb_cos(f32 x) {
     return a;
 }
 
-void chb_jump(ExtdrvPose* pose, Chorobon* chb, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 static void ext_disp(CameraId camera, void* param);
 
-s32 evt_chorobon_escape(EventEntry* event, BOOL isFirstCall);
-s32 evt_chorobon_wait(EventEntry* event, BOOL isFirstCall);
 s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
 static s32 npc_jump(EventEntry* event, BOOL isFirstCall);
-s32 wait_anim_end(EventEntry* event, BOOL isFirstCall);
-s32 wait_anim_frame(EventEntry* event, BOOL isFirstCall);
 static void ext_dispent(void);
 static void ext_main(void);
 static void ext_shadow_disp(CameraId camera, void* param);

@@ -39,7 +39,6 @@ typedef struct MonitorWork {
     s32 kanbu;
 } MonitorWork;
 static MonitorWork* monitor_wp;
-void monitor_cap_capture(CameraId cameraId, void* param);
 
 USER_FUNC(monitor_cap_evt);
 USER_FUNC(monitor_cap_init);
@@ -48,7 +47,6 @@ static USER_FUNC(peach_evt_toumei);
 static USER_FUNC(peach_set_pose);
 static USER_FUNC(viewport);
 
-void monitor_cap_tev(MapTevCallbackInfo* info);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

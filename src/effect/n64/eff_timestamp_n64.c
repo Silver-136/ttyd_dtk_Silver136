@@ -1,6 +1,7 @@
 // Paper Mario 64 effect: timestamp: ten digit sprites that fade in with staggered delays around a point.
 
 #include "driver/camdrv.h"
+#include "eff/eff_magic1_n64.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
 #include "memory.h"
@@ -9,7 +10,6 @@
 #include "eff/eff_n64.h"
 #include "eff/n64/eff_timestamp_n64.h"
 
-double sin(double);
 
 typedef struct EffTimestampN64Work {
     s32 type;           // 0x0

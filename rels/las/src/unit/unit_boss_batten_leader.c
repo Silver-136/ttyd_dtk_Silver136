@@ -58,8 +58,6 @@ typedef struct BattenSpline {
     Vec tbl[5];
     s32 count;
 } BattenSpline;
-u8 battenSatelliteTo_Init(BattleUnit* unit, s32 n, Vec* table);
-u8 battenSatelliteTo_Main(BattleUnit* unit, s32 n);
 
 static USER_FUNC(_set_draw_callback);
 USER_FUNC(btl_hitoffsetx);

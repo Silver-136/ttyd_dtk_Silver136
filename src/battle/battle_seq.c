@@ -53,7 +53,6 @@ f32 intpl_sub(s32 type, f32 start, f32 end, s32 cur, s32 max);
 
 // local prototypes
 USER_FUNC(_set_haikei_entry_scale);
-void _mapobj_data_touch_scale(s32 layer);
 void battleMakePhaseEvtTable(BattleWork* wp);
 void btlseqPhaseFirstProcess(BattleWork* wp);
 void btlseqTurnFirstProcess(BattleWork* wp);
@@ -85,7 +84,6 @@ EVT_BEGIN(_default_haikei_set_entry_event)
     RETURN
 EVT_END()
 
-BattleWeapon* _GetFirstAttackWeapon(s32 type);
 void BattleCheckAllPinchStatus(BattleWork* wp, BOOL noAudience);
 void btlseqInit(BattleWork* wp);
 void btlseqFirstAct(BattleWork* wp);

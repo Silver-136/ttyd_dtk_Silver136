@@ -97,14 +97,12 @@ typedef struct ScissorWork {
 } ScissorWork;
 
 
-ScissorWork* GetScissorPtr(void);
 void scissor_disp_region(CameraId camera, void* param);
 void scissor_capture(CameraId camera, void* param);
 void tess(Pt* buf, s32 count);
 void star_disp2D_sub(s32 idx, s32 alpha);
 s32 scissor_damage_sub2(Vec pt);
 void scissor_damage_sub(BattleUnit* unit, s32* out);
-s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy);
 
 /**
  * Art Attack's per-loop hit: scissor_damage hits each enemy inside a closed loop with it, for the power

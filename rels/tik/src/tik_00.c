@@ -71,7 +71,6 @@ typedef struct UranaiWork {
     s32 w;
     s32 h;
 } UranaiWork;
-void uranai_cap(CameraId cameraId, void* param);
 static inline f32 tanf(f32 x) { return tan(x); }
 static s32 ssf;
 UranaiWork* uranai_wp;
@@ -94,7 +93,6 @@ USER_FUNC(uranai_exit_func);
 USER_FUNC(uranai_init_func);
 USER_FUNC(mario_key_onoff_wait);
 USER_FUNC(card_xlu);
-void card_tev(MapTevCallbackInfo* info);
 static USER_FUNC(ss_check);
 
 static BeroEntry bero_entry_data[4];

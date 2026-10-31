@@ -57,10 +57,7 @@ static USER_FUNC(evt_yuuranking_main_func);
 USER_FUNC(yuuranking_get_monte);
 static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max);
 static void evt_yuuranking_disp_func(CameraId camera, void* param);
-void yuuranking_draw_msg_fit(f32 x, f32 y, f32 scale, const char* msg, s32 width);
 #ifdef VERSION_G8ME01
-void yuuranking_draw_msg_fit_right(f32 x, f32 y, f32 scale, const char* msg, s32 width);
-void yuuranking_draw_msg_fit_center(f32 x, f32 y, f32 scale, const char* msg, s32 width);
 #endif
 static s32 fontlenpitch(const char* str, s32 pitch);
 

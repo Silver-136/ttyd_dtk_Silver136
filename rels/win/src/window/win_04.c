@@ -56,7 +56,6 @@ typedef struct FlowerWork {
     s32 count;
     Flower* flowers;
 } FlowerWork;
-void flower_disp(CameraId camera, void* param);
 static s32 ssf[3];
 
 USER_FUNC(evt_flower);

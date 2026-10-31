@@ -44,7 +44,6 @@
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 #ifndef VERSION_G8ME01
-void* _mapAlloc(u32 size);
 #else
 #include "memory.h"
 #endif

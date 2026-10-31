@@ -26,7 +26,6 @@
 #include "driver/seqdrv.h"
 
 void FontDrawString(f32 x, f32 y, const char* str);
-void movie_draw(CameraId camera, void* param);
 typedef struct DigAnim {
     const char* name;
     u32 mask;

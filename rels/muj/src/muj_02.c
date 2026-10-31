@@ -41,7 +41,6 @@
 void FontDrawString(f32 x, f32 y, const char* str);
 #endif
 
-void printCount(CameraId camera, void* param);
 
 USER_FUNC(countDisp);
 

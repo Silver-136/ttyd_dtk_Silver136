@@ -18,7 +18,6 @@ static inline OffscreenWork* offscreenGetWorkGp(void) {
 }
 
 //local prototypes
-void offscreenDisp(CameraId camId, void* param);
 
 /** Allocates the 10-entry offscreen tables for the field and for battle; called once at boot. */
 void offscreenInit(void) {

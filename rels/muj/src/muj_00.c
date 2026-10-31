@@ -56,7 +56,6 @@ typedef struct TobiWork {
     Vec pos;
     s32 type;
 } TobiWork;
-void suifu_kyorokyoro(NanNPC* npc);
 typedef struct OrbitData {
     f32 angle;
     f32 dist;
@@ -72,9 +71,7 @@ OrbitData* _op;
     t = r * cosf_l(rad) + cz; \
     p.x = x;                  \
     p.z = t
-NanNPC* random_choice_target(s32 type);
 TobiWork* Tobidat;
-void tobikakari_seq00(NanNPC* npc);
 /**
  * Sine of an angle in radians, forced through a float local so the compiler keeps the single-precision result;
  * used for the ship orbit and camera maths.
@@ -100,7 +97,6 @@ USER_FUNC(ship_rotate);
 USER_FUNC(ship_rotate_rev);
 USER_FUNC(tobikakaru_end);
 USER_FUNC(tobikakaru_init);
-void suifu_kyorokyoro_init(NanNPC* npc);
 static void alpha_tev(MapTevCallbackInfo* info);
 
 static ExtTexInfo ext_entry_data[59];

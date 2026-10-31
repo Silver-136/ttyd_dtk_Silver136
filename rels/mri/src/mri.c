@@ -50,14 +50,10 @@ typedef struct HSV {
 } HSV;
 GXColor HSV2RGB(HSV hsv);
 PuniWork* puniGetPunigp(void);
-void puniModeWinjump(PuniData* puni);
 
 void _prolog(void);
 void _epilog(void);
 void _unresolved(void);
-BOOL toge_searchParent(PuniData* self, s16 group);
-void togeModeParent(PuniData* puni);
-void togeMoveParent(PuniData* puni);
 
 /**
  * REL prolog: runs the static constructors, registers each Great Boggly Tree map's init script (mri_00 to

@@ -49,9 +49,6 @@
 #include <math.h>
 #include "driver/seqdrv.h"
 
-s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz);
-s32 kurokaron_move2(NpcEntry* npc, MarioWork* mario);
-void _kurokaron_next_move_index(void);
 typedef struct Senkaron {
     s8 state;
     u16 area;
@@ -72,11 +69,7 @@ typedef struct SenkaronWork {
 } SenkaronWork;
 SenkaronWork* skwp;
 static f32 randf(f32 min, f32 max);
-s32 nokonokoGetStatus(void);
 double sqrt(double x);
-s32 party_hit_check(f32 x, f32 z, f32* dir);
-void calc_area(s32 i, f32 x, f32 z);
-void move_check(ExtdrvPose* pose, s32 idx);
 static void senkaron_ext_disp(CameraId camera, void* param);
 static void senkaron_ext_shadow_disp(CameraId camera, void* param);
 

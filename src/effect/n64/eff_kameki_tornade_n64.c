@@ -1,6 +1,8 @@
 // Paper Mario 64 effect: Magikoopa (kameki) tornado of eight spinning, scrolling layers around a point.
 
 #include "eff/n64/eff_kameki_tornade_n64.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -13,8 +15,6 @@
 #include "eff/eff_n64.h"
 #include "dolphin/os.h"
 
-double sin(double);
-double cos(double);
 
 static inline void Vec2Vtx(Vec* v, s16* o) {
     OSf32tos16(&v->x, &o[0]);

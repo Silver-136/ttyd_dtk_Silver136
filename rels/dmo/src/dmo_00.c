@@ -63,10 +63,6 @@ typedef struct DemoWork {
 static DemoWork work;
 char buf[0x200];
 static DemoWork* wp;
-void demo_img(CameraId cameraId, void* param);
-void demo_book(CameraId cameraId, void* param);
-void demo_desk(CameraId cameraId, void* param);
-void demo_window(CameraId cameraId, void* param);
 
 USER_FUNC(adjust);
 USER_FUNC(book_r);
@@ -77,7 +73,6 @@ USER_FUNC(eff_cam1);
 USER_FUNC(make_msg);
 static USER_FUNC(next);
 USER_FUNC(demo_draw);
-void demo_cap(void);
 USER_FUNC(demo_init);
 
 EvtWord buttonCheck[32];

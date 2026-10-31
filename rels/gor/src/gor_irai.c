@@ -51,8 +51,6 @@ typedef struct IraiWork {
 } IraiWork;
 void FontDrawString(const char* message, f32 x, f32 y);
 void irai_window_disp(CameraId camera, void* param);
-void irai_flag_disp(void);
-void irai_flag_clear(void);
 
 USER_FUNC(irai_cancel_func);
 USER_FUNC(irai_check_func);

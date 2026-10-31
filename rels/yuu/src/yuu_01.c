@@ -89,7 +89,6 @@ USER_FUNC(yuuminigame2_opening_chk);
 USER_FUNC(yuuminigame2_opening_on_off);
 USER_FUNC(yuuminigame2_set_phase);
 USER_FUNC(yuuranking_get_monte);
-BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, FuneWork* data);
 static BOOL get_monte_check(Vec* a, Vec* b);
 
 const char* s_nametbl[21];

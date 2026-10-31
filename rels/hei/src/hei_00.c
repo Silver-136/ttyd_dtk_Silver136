@@ -52,7 +52,6 @@ typedef struct GonbabaProj {
     GXTexObj obj;
     smartEntry* tex;
 } GonbabaProj;
-void make_gonbaba_projection(CameraId camera, void* param);
 
 USER_FUNC(cam_test);
 USER_FUNC(dist_check);

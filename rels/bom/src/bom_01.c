@@ -76,9 +76,6 @@ typedef struct SightWork {
 SightWork* sight_wp;
 // make_name's sprintf buffer; file scope so .bss keeps the target order lp, name, sight_wp (a function static is emitted first)
 static char name[64];
-void drawBG(s32 id, f32 x, f32 y, f32 sx, f32 sy, f32 rot);
-void drawNum(s32 num, s32 digits, f32 x, f32 y, f32 scale);
-void disp_sight(CameraId camera, void* param);
 typedef struct BomAnim {
     char name[8];
     f32 time;
@@ -201,30 +198,19 @@ static inline f32 chb_cos(f32 x) {
 }
 
 static void pose_init(void);
-void jump(s32 i, s32 next, f32 x, f32 y, f32 z, f32 speed, f32 gravity);
 static void pose_main(void);
 static void ext_disp(CameraId camera, void* param);
 static void depthDisp(CameraId camera, void* param);
 void envSetYami(MapTevCallbackInfo* info);
-void ext_disp_minnnanokoe(CameraId camera, void* param);
-void jump_minnnanokoe(s32 i, f32 h);
 
 static s32 anim_tevcallback(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(anim_tevcallback);
-s32 bom1000_jump(EventEntry* event, BOOL isFirstCall);
-s32 bom1000_msg(EventEntry* event, BOOL isFirstCall);
-s32 bom_fall(EventEntry* event, BOOL isFirstCall);
-s32 bom_flag(EventEntry* event, BOOL isFirstCall);
 static s32 depth(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(depth);
 s32 evt_mario_dispflag_onoff(EventEntry* event, BOOL isFirstCall);
 s32 evt_snd_env_lpf(EventEntry* event, BOOL isFirstCall);
-s32 make_ext_table(EventEntry* event, BOOL isFirstCall);
-s32 make_ext_table_minnnanokoe(EventEntry* event, BOOL isFirstCall);
 static s32 make_name(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(make_name);
-s32 sight(EventEntry* event, BOOL isFirstCall);
-s32 sight_dir(EventEntry* event, BOOL isFirstCall);
 static s32 starstone_entry(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(starstone_entry);
 static s32 starstone_set_pos(EventEntry* event, BOOL isFirstCall);
@@ -234,8 +220,6 @@ static USER_FUNC(starstone_set_ry);
 s32 taihou_r(EventEntry* event, BOOL isFirstCall);
 static s32 yami_view(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(yami_view);
-void ext_dispent_minnnanokoe(void);
-void ext_init_minnnanokoe(void);
 static void ext_dispent(void);
 static void ext_main(void);
 static void ext_init(void);
@@ -2678,7 +2662,6 @@ static s32 anim_tevcallback(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale);
 
 /** Script helper: creates a Star Stone effect named args[0] at (args[1], args[2], args[3]), size 1. */
 static s32 starstone_entry(EventEntry* event, BOOL isFirstCall) {

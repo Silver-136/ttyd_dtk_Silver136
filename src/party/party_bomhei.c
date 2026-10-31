@@ -271,7 +271,6 @@ typedef struct BomheiWork {
     s32 timer;  // 0x4
 } BomheiWork;
 
-extern void marioSetSplash(s32 kind, Vec pos);
 
 // Bobbery's work (PartyEntry.useStruct). A macro, not an inline function: as a function the object changes.
 #define BOMHEI_WORK(p) ((BomheiWork*)(p)->useStruct)

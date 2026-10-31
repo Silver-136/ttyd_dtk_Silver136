@@ -1,6 +1,8 @@
 // Paper Mario 64 effect: water gun (wgun) shot from one point toward another.
 
 #include "system.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -13,8 +15,6 @@
 #include "eff/n64/eff_opuku_wgun_n64.h"
 #include "dolphin/os.h"
 
-double sin(double);
-double cos(double);
 
 /** Returns the sine of an angle given in degrees. */
 static inline f32 dsin(f32 a) { return sin(6.2831855f * a / 360.0f); }

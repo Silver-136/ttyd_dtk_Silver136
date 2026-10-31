@@ -125,8 +125,6 @@ static USER_FUNC(wariai_enzan_1);
 static USER_FUNC(alpha_set_func);
 static USER_FUNC(alpha_init_func);
 static void alpha_tev(MapTevCallbackInfo* info);
-void _door_color2_tev(MapTevCallbackInfo* info);
-void _door_color_tev(MapTevCallbackInfo* info);
 
 /**
  * Map TEV callback that adds the door colour (the first colour set by _door_color_main_func) as a flat tint

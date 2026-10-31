@@ -21,10 +21,7 @@
 #define UNIT_WORK_ATTACK_STEP 8   // scripted attack order: 0 kagenuke -> 1 powder_attack2 -> 2 powder_attack1 -> 4 random pick; 3 = blizzard next (set by the 66% line), then 4
 #define UNIT_WORK_BLIZZARD_WAIT 9 // turns before the blizzard can be drawn again (2 after each blizzard; phase_event counts down)
 
-typedef struct MajoSortEntry {
-    s32 id;
-    s32 value;
-} MajoSortEntry;
+#include "unit/unit_boss_majolyne.h"
 
 static USER_FUNC(majo3_sort);
 

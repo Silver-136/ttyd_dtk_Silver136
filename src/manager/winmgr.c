@@ -51,7 +51,6 @@ void select_main3(WinMgrEntry* entry);
 void select_disp3(WinMgrEntry* entry);
 void select_disp3_party(WinMgrEntry* entry);
 void select_disp3_mario(WinMgrEntry* entry);
-void winMgrDisp(CameraId camId, void* param);
 void winMgrSeq(WinMgrEntry* entry);
 int select_comp_type(void* a, void* b);
 int select_comp_starpiece(void* a, void* b);

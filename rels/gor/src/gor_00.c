@@ -68,12 +68,7 @@
 
 void suifu100taikikan_seq01(NanNPC* npc);
 void suifu100taikikan_seq00(NanNPC* npc);
-typedef struct KaitenParam {
-    Vec pos;
-    Vec target;
-    f32 angle;
-    f32 dist;
-} KaitenParam;
+#include "cam_kaiten.h"
 static u8* _ap;
 static s32* itemsel_table_ram;
 static KaitenParam* ckp0;
@@ -116,7 +111,6 @@ USER_FUNC(suifu100taikikan_away);
 USER_FUNC(suifu100taikikan_init);
 USER_FUNC(npc_all_delete);
 void gor_stg4_018_cb(s32 type, smartEntry* smart);
-void geundan1000tai_circle_pos(Vec* pos);
 static f32 accdec_type(s32 step, s32 total, f32 start, f32 end);
 f32 lineardec_type(s32 step, s32 total, f32 start, f32 end);
 static void alpha_tev(MapTevCallbackInfo* info);

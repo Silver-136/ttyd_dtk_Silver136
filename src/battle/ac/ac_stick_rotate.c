@@ -43,7 +43,6 @@ typedef struct StickRotateWork {
 
 static void actionCommandDisp(f32 x, f32 y);
 void actionCommandDisp2(f32 x, f32 y);
-u16 _get_icon_id(s8 dir);
 
 /**
  * Reads the Control Stick as one of eight directions, 1 up then clockwise to 8 up-left, or 0 when centred.

@@ -69,12 +69,7 @@
  * Used in the camera-angle math so the compiler loads the value the same way as the original.
  */
 static inline f32 fid(f32 x) { return x; }
-typedef struct KaitenParam {
-    Vec pos;
-    Vec target;
-    f32 angle;
-    f32 dist;
-} KaitenParam;
+#include "cam_kaiten.h"
 typedef struct BrokenPiece {
     s32 state;
     s32 delay;
@@ -99,7 +94,6 @@ BrokenWork broken_work;
 s32 select;
 
 
-void tiz_broken_draw(CameraId cameraId, void* param);
 
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);

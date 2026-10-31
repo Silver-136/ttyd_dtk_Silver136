@@ -61,9 +61,6 @@
 #include <string.h>
 #include <demo/DEMOPad.h>
 
-extern void SoundSetOutputMode(s32 mode);
-extern void SoundOpenCover(void);
-extern void SoundCloseCover(void);
 #define OSIsRestart() ((OSGetResetCode() & 0x80000000) ? TRUE : FALSE)
 
 //.bss

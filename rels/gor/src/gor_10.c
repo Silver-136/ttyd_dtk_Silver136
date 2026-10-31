@@ -36,7 +36,6 @@
 #include "driver/seqdrv.h"
 
 
-void mabutaDisp(CameraId camera, void* param);
 static void depthDisp(CameraId camera, void* param);
 typedef struct TegamiWork {
     s32 alpha;

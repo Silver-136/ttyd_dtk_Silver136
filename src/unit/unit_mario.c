@@ -26,7 +26,6 @@
 USER_FUNC(_get_local_frame);
 static USER_FUNC(_mario_makkuro_set);
 USER_FUNC(_mario_super_emblem_anim_set);
-s32 mario_pinch_pose_sound_callback(BattleUnit* unit);
 
 PoseTableEntry pose_table_mario_stay[34];
 BattleDataEntry data_table_mario[10];

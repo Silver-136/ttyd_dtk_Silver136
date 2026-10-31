@@ -2,6 +2,13 @@
 // encounter, talk and first-strike checks.
 
 #include "driver/npcdrv.h"
+#include "battle/battle.h"
+#include "battle/battle_sub.h"
+#include "driver/shadowdrv.h"
+#include "mario/mario_motion.h"
+#include "mot/mot_jabara.h"
+#include "party/party_nokonoko.h"
+#include "party/party_vivian.h"
 #include "evt/evt_mario.h"
 #include "data/npc_data.h"
 #include "libc_decls.h"
@@ -669,12 +676,7 @@ s32 kpaJumpChk(void);
 void npcMoveG(NpcEntry* npc);
 BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
-s32 vivianGetStatus(void);
-void shadowSetCollision(s32 shadow, s32 val);
-s32 shadowEntry(f32 x, f32 y, f32 z, f32 size);
-f32 sinfd(f32 degrees);
 void npcKoopaModeMain(void);
-BOOL npcCheckBlow(NpcEntry* npc);
 #ifdef VERSION_G8ME01
 /** US: probe the wall from a copy of the position first, then slide along it */
 // US: probe the wall from a copy of the position first, then slide along it
@@ -1754,8 +1756,6 @@ void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
 #endif
 }
 
-void marioChgTalkMotion(void);
-void marioChgStayMotion(void);
 BOOL marioChkTalkable(void);
 void* fbatHitCheck(u32 flags, void* result);
 
@@ -2128,7 +2128,6 @@ void fbatTalkMode(void) {
 
 #define NPC_ENEMY_LEVEL(npc) ((npc)->battleInfo.groupSetup->enemyData->mUnitKindParams->mLevel)
 
-void BattleMajinaiDone(void);
 void marioChgMoveMotion(void);
 
 // FAKE: the recovered-item loop as a static inline helper (counter = inline-local @ temp, ptr r30), with
@@ -2464,8 +2463,6 @@ typedef struct FbatHitResult {
     u32 bits; // 0xC
 } FbatHitResult;
 
-s32 marioGetJabaraState(void);
-s32 nokonokoGetStatus(PartyEntry* party);
 NpcEntry* _npcHitCheckSphere(NpcEntry* npc, f32* dist, f32 x, f32 y, f32 z, f32 r);
 NpcEntry* _npcHitCheckHammerAllMotion(NpcEntry* npc, f32* dist, f32 r, f32 angle);
 

@@ -1,4 +1,6 @@
 #include "system.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_ext.h"
@@ -40,8 +42,6 @@ typedef struct AtmTeresa {
 AtmTeresa* teresa;
 s32 teresa_count;
 
-double cos(double x);
-double sin(double x);
 void teresa_ext_disp(CameraId camera, void* param);
 
 USER_FUNC(atmic_teresa_id_set);

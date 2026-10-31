@@ -91,38 +91,11 @@ typedef struct YuuNpcWork {
     YuuNpcPose pose[32];
 } YuuNpcWork;
 static YuuNpcWork* yuunpc_wp;
-s32 yuunpc_pose_check(const char* name, const char* anim);
-void yuunpc_pose_change(YuuNpc* npc, s16 id, f32 speed, f32 frame);
 f32 yuusintbl[450];
 s32 chusan_mov_tbl[28];
 s32 chusan_act_tbl[8];
-f32 yuunpc_pose_sub(ExtdrvPose* ext, YuuNpc* npc);
 MiniGameWork* yuunpc_yuuminigame4_ptr;
-void yuunpc_disp(CameraId camera, void* param);
-void yuunpc_pose_minigame1_main(void);
-void yuunpc_pose_minigame2_main(void);
-void yuunpc_pose_minigame3_main(void);
-void yuunpc_pose_minigame4_main(void);
 
-void ext_yuunpc_minigame4_main(void);
-void ext_yuunpc_minigame3_main(void);
-void ext_yuunpc_minigame2_main(void);
-void ext_yuunpc_minigame1_main(void);
-void ext_yuunpc_dispent(void);
-void ext_yuunpc_minigame4_init(void);
-u16 yuunpc_wp_flag_check(u16 flag);
-void yuunpc_wp_flag_on(u16 flag);
-void errper_set_rtn(YuuNpc* npc);
-s32 goalincheck(YuuNpc* npc);
-s32 fallcheck(YuuNpc* npc);
-s32 hitcheck(YuuNpc* npc);
-void ext_yuunpc_minigame3_init(void);
-void ext_yuunpc_minigame2_init(void);
-void ext_yuunpc_minigame1_init(void);
-void yuunpc_set_jump_pose(const char* name, const char* anim, f32 jump);
-void yuunpc_pose_change2(YuuNpc* npc, const char* name, const char* anim, f32 speed);
-void yuunpc_pose_init(ExtTexInfo* data);
-void yuunpc_maphit_init(void);
 
 ExtTexInfo ext_yuunpc_minigame1_data[6];
 ExtTexInfo ext_yuunpc_minigame2_data[6];

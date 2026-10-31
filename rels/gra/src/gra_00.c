@@ -40,7 +40,6 @@ static USER_FUNC(cam_r);
 USER_FUNC(camera_yure);
 USER_FUNC(evt_kagemario_init);
 static USER_FUNC(zoom);
-void msg_callback(s32 type, void* param);
 
 EvtWord evt_yabure_on[56];
 EvtWord evt_yabure_off[5];

@@ -170,7 +170,6 @@ typedef struct GansWork {
     s32 ready;
 } GansWork;
 GansWork* gans_wp;
-void gans_tex(CameraId cameraId, void* param);
 static s32 champion_belt_onoff;
 
 static USER_FUNC(evt_rankingReInit);

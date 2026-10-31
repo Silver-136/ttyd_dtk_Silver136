@@ -74,15 +74,11 @@ typedef struct FirebarWork {
 ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
 void shadowSetVolumeDecay(f32 a, f32 b, f32 c);
 void firebar_disp(CameraId camera, void* param);
-void _firebar_rot(FirebarWork* wp);
-void _firebar_trans(FirebarWork* wp);
-s32 _firebar_hitCheck2(FirebarWork* wp);
 
 USER_FUNC(coin_entry);
 USER_FUNC(firebar_disp_evt);
 USER_FUNC(firebar_entry);
 void firebar_cb(FirebarWork* wp, s32 type);
-s32 _firebar_hitCheck(FirebarWork* wp, FirebarBall* ball);
 
 static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];

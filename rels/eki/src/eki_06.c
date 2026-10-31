@@ -26,10 +26,6 @@
 static s32 lock;
 
 USER_FUNC(sw_entry);
-s32 sw_main(MapObjectEntry* mobj);
-void sw_reset(void);
-s32 sw_cnt(MapObjectEntry* mobj);
-void sw_cntup(MapObjectEntry* mobj);
 
 static EvtWord e_close[12];
 static EvtWord e_open[12];

@@ -37,7 +37,6 @@
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
-void display_func(CameraId cameraId, void* param);
 typedef struct SysChar {
     f32 x;
     f32 y;
@@ -80,9 +79,7 @@ USER_FUNC(sys_01_start_end_wait);
 #endif
 USER_FUNC(start);
 #ifdef VERSION_G8ME01
-void sys_01_msg_tex_capture_func(CameraId cameraId, void* param);
 #endif
-s32 getLightColor(f32 angle);
 void sys_01_release(void);
 static void _unresolved(void);
 static void _epilog(void);

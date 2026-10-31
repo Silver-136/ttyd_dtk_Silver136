@@ -74,7 +74,6 @@ static MoamoaWork* wp;
 void moamoa_mainUnitIdClear(void);
 static f32 randf(f32 min, f32 max);
 USER_FUNC(moamoa1_on);
-void moamoa_pose(Moamoa* elem);
 void moamoa_draw(CameraId cameraId, void* param);
 
 USER_FUNC(moamoa_on);

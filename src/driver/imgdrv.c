@@ -22,10 +22,6 @@ static ImageWork work;
 static ImageWork* wp = &work;
 
 //local prototypes
-void imgDisp(CameraId camId, void* param);
-void imgDisp_ProjPlane(CameraId camId, void* param);
-void imgCapture_Prim(ImageEntry* entry, s32 id);
-void imgCapture(CameraId camId, void* param);
 
 
 void imgShadowDisp(CameraId camId, void* param);

@@ -41,9 +41,6 @@ void iconDispGxCol(Mtx pos, s16 flags, u16 iconId, GXColor color);
 
 USER_FUNC(evt_yuucounter_main_func);
 USER_FUNC(yuucounter_disp_flag_onoff);
-u32 yuucounter_flag(u32 mask);
-void yuucounter_flag_off(u32 mask);
-void yuucounter_set_data(s32 data);
 
 static EvtWord main_evt[4];
 EvtWord yuucounter_window_disp_evt[6];

@@ -56,7 +56,6 @@ void draw_poster(void* userdata, s32 group, Mtx* modeling);
 
 USER_FUNC(pposter_init);
 USER_FUNC(pposter_nok_on);
-void nok_stg2_013_cb(s32 type, void** work);
 
 EvtWord nokonoko_A_init[27];
 EvtWord nokonoko_A_regl[2];

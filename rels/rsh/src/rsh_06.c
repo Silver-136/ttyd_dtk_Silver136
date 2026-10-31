@@ -48,26 +48,14 @@
 #include "driver/extdrv.h"
 #include "driver/seqdrv.h"
 #include "moamoa.h"
-typedef struct SharinData {
-    const char* name;
-    s32 radiusType;
-    s32 driveSource;
-    EvtFloat speed;
-} SharinData;
-typedef struct ClankData {
-    const char* name;
-    s32 radiusType;
-    s32 driveSource;
-    EvtFloat radius;    // circle radius (scales the sin/cos offset)
-    EvtFloat direction; // +1 / -1, multiplies the angle
-} ClankData;
+#include "map/sharin.h"
+#include "map/sharin.h"
 
 static MoamoaWork* wp;
 static f32 randf(f32 min, f32 max);
 static void moamoa_pose_init(void);
 static void moamoa_pose_main(void);
 static void moamoa_pose_change(Moamoa* moa, const char* model, const char* anim);
-void evalOn(void);
 static void ext_moamoa_main(void);
 #pragma inline_max_total_size(100000)
 /**

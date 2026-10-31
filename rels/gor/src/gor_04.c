@@ -40,19 +40,8 @@
 #include "gor.h"
 #include "data_tables.h"
 #include "driver/seqdrv.h"
-typedef struct SharinData {
-    const char* name;
-    s32 radiusType;
-    s32 driveSource;
-    EvtFloat speed;
-} SharinData;
-typedef struct ClankData {
-    const char* name;
-    s32 radiusType;
-    s32 driveSource;
-    EvtFloat radius;    // circle radius (scales the sin/cos offset)
-    EvtFloat direction; // +1 / -1, multiplies the angle
-} ClankData;
+#include "map/sharin.h"
+#include "map/sharin.h"
 
 static USER_FUNC(ramp_r);
 static USER_FUNC(kpa_hikousen_yure);

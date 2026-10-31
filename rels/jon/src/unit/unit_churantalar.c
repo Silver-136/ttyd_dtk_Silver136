@@ -39,15 +39,7 @@
 #define UNIT_WORK_TARGET2_HIT 12   // 1 once the second target has been hit
 #define UNIT_WORK_TARGET3_HIT 13   // 1 once the third target has been hit
 
-typedef struct PidersYarn {
-    f32 x0;
-    f32 y0;
-    f32 z0;
-    f32 x1;
-    f32 y1;
-    f32 z1;
-    u8 alpha;
-} PidersYarn;
+#include "unit/unit_piders.h"
 static void piders_draw_yarn_sub(CameraId camera, void* param);
 
 static USER_FUNC(piders_draw_yarn);

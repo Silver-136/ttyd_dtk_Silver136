@@ -73,9 +73,6 @@ static void ext_disp(CameraId camera, void* param);
 
 USER_FUNC(evt_moamoa_set_one);
 USER_FUNC(evt_moamoa_set_seq_all);
-void moamoa_dispent(void);
-void moamoa_main(void);
-void moamoa_init(void);
 
 ExtTexInfo moamoa_data[81];
 static EvtWord evt_moamoa[324];

@@ -72,12 +72,7 @@ f32 g_fSpeed;
 static f32 randf(f32 min, f32 max);
 static inline f32 sinf(f32 x) { return sin(x); }
 static void computePos(Teresa* ter, Vec* out);
-s32 computeAlpha(Teresa* ter, MarioWork* mp, f32 angle);
-void computeMtx(ExtdrvPose* pose, f32 angle);
-f32 computeAngle(ExtdrvPose* pose, MarioWork* mp);
 static void senteresa_ext_disp(CameraId camera, void* param);
-void senteresa_loadTev(void);
-void senteresa_loadRenderMode(void);
 static inline f32 cosf(f32 x) { return cos(x); }
 
 USER_FUNC(evt_kagemario_init);
@@ -98,7 +93,6 @@ static void senteresa_ext_shadow_disp(void);
 static void senteresa_ext_dispent(void);
 static void senteresa_ext_main(void);
 static void senteresa_ext_init(void);
-s32 randn(s32 min, s32 max);
 
 static EvtWord w_open[22];
 static EvtWord w_close[22];

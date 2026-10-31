@@ -49,7 +49,6 @@ USER_FUNC(chorogun_set_target_id);
 void chorogun_ext_disp(CameraId camera, void* param);
 void chorogun_ext_main(void);
 void chorogun_ext_init(void);
-BattleUnit* chorogun_get_ptr(void);
 extern EvtWord escape_chorogun_event[];
 
 BattleUnitKind unit_chorobon_gundan;

@@ -1053,7 +1053,6 @@ void winNameGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
     }
 }
 
-MessageWork* msgGetWork(void);
 
 /** Draws win.tpl texture id stretched over a width x height quad at (x, y), for the book and journal grid frames. */
 static inline void winBookTex(WindowWork* w, s32 id, f32 x, f32 y, f32 width, f32 height) {

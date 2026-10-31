@@ -33,7 +33,6 @@
 
 u8* lightGetPaperCraft(void);
 
-u32 weaponGetPower_Gonbaba(BattleUnit* unit, BattleWeapon* weapon, BattleUnit* target, BattleUnitPart* part);
 static USER_FUNC(_leg_smoke_effect);
 USER_FUNC(_btlgon_get_escape_param);
 USER_FUNC(_set_gonbaba_light);

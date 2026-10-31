@@ -161,7 +161,6 @@ static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall);
 static s32 evt_moamoa_exit(EventEntry* event, BOOL isFirstCall);
 
 s32 evt_win_item_select(EventEntry* event, BOOL isFirstCall);
-s32 img_set_color(EventEntry* event, BOOL isFirstCall);
 
 static ExtTexInfo ext_moamoa_data[47];
 static EvtWord e_door_close[12];

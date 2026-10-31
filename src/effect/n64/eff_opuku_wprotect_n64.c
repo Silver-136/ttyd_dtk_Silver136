@@ -1,6 +1,8 @@
 // Paper Mario 64 effect: water shield (wprotect) around a point that spawns water-damage splashes.
 
 #include "driver/camdrv.h"
+#include "eff/eff_magic1_n64.h"
+#include "libc_decls.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
 #include "mario/mariost.h"
@@ -18,8 +20,6 @@ typedef struct PointData {
     u8 r, g, b;
 } PointData;
 
-double sin(double);
-double cos(double);
 
 typedef struct EffOpukuWprotectN64Work {
     s32 type;     // 0x0
