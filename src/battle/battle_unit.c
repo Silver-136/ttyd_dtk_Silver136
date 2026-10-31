@@ -807,6 +807,7 @@ void BtlUnit_AddPartsOffsetPos(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     part->positionOffset.z += z;
 }
 
+/** Sets the unit's draw offset (displayOffset); -250000000.0 keeps an axis. */
 void BtlUnit_SetDispOffset(BattleUnit* unit, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
@@ -820,6 +821,7 @@ void BtlUnit_SetDispOffset(BattleUnit* unit, f32 x, f32 y, f32 z) {
     }
 }
 
+/** Sets a part's draw offset (displayOffset); an axis passed as -250000000.0 is left unchanged. */
 void BtlUnit_SetPartsDispOffset(BattleUnitPart* part, f32 x, f32 y, f32 z) {
     f32 noValue = -250000000.0f;
     if (noValue != x) {
@@ -1302,6 +1304,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
     return TRUE;
 }
 
+/** clears the 0x1E bytes of status turns and strengths from sleepTurns on */
 // the 0x1E bytes from sleepTurns are every status's turns and strength
 void BtlUnit_ClearStatus(BattleUnit* unit) {
     memset(&unit->sleepTurns, 0, sizeof(BtlStatusCopy));
@@ -1750,6 +1753,11 @@ void BtlUnit_SetParamToPouch(BattleUnit* unit) {
     }
 }
 
+/**
+ * Updates the peril and danger status flags from the unit's HP against its kind's perilHP
+ * and dangerHP thresholds (only below max HP).
+ * When Mario first drops into peril or danger the audience reacts, unless noAudience is set.
+ */
 void BtlUnit_CheckPinchStatus(BattleUnit* unit, BOOL noAudience) {
     if (unit->currentHp <= unit->kindParams->perilHP && unit->currentHp < unit->maxHp) {
         if (!(unit->statusFlags & UNIT_STATUS_FLAG_PERIL)) {

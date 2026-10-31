@@ -1523,6 +1523,11 @@ static EVT_BEGIN(evt_moamoa_init)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene when Mario first enters the baggage car with the Smorgs (STG6_46_ENGINEER):
+ * the waitress and conductor are being held in the swarm, Mario is startled,
+ * and messages play with the partner's reaction (stg6_rsh_237, 238_x).
+ */
 static EVT_BEGIN(evt_meet_moamoa)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -1651,6 +1656,11 @@ EVT_BEGIN(evt_moamoa_escape1)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene after both captives are freed: the swarm flees, the camera pulls back,
+ * the conductor and waitress thank Mario (stg6_rsh_240_00, 241, 240_01),
+ * the story advances to STG6_47_ESCAPING_THE_SMORGS and the west door opens.
+ */
 static EVT_BEGIN(evt_moamoa_escape)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -1744,6 +1754,11 @@ static EVT_BEGIN(talk_syashou)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the waitress (ウェイトレス) in the baggage car: from STG6_46_ENGINEER to
+ * STG6_48_SMORG_MIASMA she is at (50, 0, 0), caught by the Smorgs, with the P_1 / T_5 poses and the
+ * distressed tribe ウェイトレス悲; at other times she is off the map.
+ */
 static EVT_BEGIN(init_waitless)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_46_ENGINEER, STG6_48_SMORG_MIASMA)
@@ -1911,6 +1926,7 @@ static NpcSetupInfo npc_data[] = {
     {0},
 };
 
+/** Pickup event of the Ragged Diary lying in the car: advances the story to STG6_17_GHOST_DIARY. */
 EVT_BEGIN(evt_ghost_diary)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_17_GHOST_DIARY)
     RETURN
@@ -2035,6 +2051,13 @@ EVT_BEGIN(rsh_05_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_05 on the first trip (it is the only variant; the door back to rsh_04 goes to variant a,
+ * b or c depending on the story stage).
+ * Sets up the NPCs, the swarm at STG6_46_ENGINEER (with the meeting cutscene)
+ * and STG6_47_00_BAGGAGE_CAR_SMORGS, locks the doors while the swarm is active,
+ * and places the Ragged Diary until it is picked up.
+ */
 EVT_BEGIN(rsh_05_a_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)

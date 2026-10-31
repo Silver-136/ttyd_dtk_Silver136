@@ -226,6 +226,12 @@ EVT_BEGIN(tik_07_down_evt)
     RETURN
 EVT_END()
 
+/**
+ * Scene at STG4_16_LEAVING_TWILIGHT_TOWN:
+ * Mario's mail alert (a vibrating exclamation), the partner comments (tik_07_mail4_00);
+ * after he presses A the mail jingle plays, Peach's mail is read (tik_07_mail4_01, 02),
+ * story progress becomes STG4_17_A_MAIL_FROM_PEACH and the mail is opened (mail slot 3).
+ */
 static EVT_BEGIN(peach_mail)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -303,6 +309,14 @@ static EVT_BEGIN(mobj_box00)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_07.
+ * Runs the drop-in scene, sets up the exits, the save block, the big block, the Flower Saver P chest,
+ * the Shine Sprite block, two Star Pieces and the moving and descending floors.
+ * Removes the enemy NPCs that do not belong to the story step,
+ * swaps the pipe to Fahr Outpost (dokan__1) for one to the chapter 7 title screen between chapters 6 and 7,
+ * and runs peach_mail at STG4_16_LEAVING_TWILIGHT_TOWN.
+ */
 EVT_BEGIN(tik_07_init_evt)
     // The drop-in scene, the exits, the music, and the room's blocks, chest, Shine Sprite and Star Pieces.
     CALL_CHILD(PTR(tik_07_down_evt))

@@ -333,6 +333,13 @@ EVT_BEGIN(name_seikai)
     RETURN
 EVT_END()
 
+/**
+ * Ambush on the first trail screen, spawned from the init script
+ * while the story is between STG4_11_SUPERBOMBBOMB_LOST and STG4_13_04_THE_LETTER_P.
+ * Waits until Mario walks into the strip x in [-126, 30], fades the music out,
+ * then the fake Mario appears at (-125, 240, -25) and talks (stg4_gra_00 to stg4_gra_16).
+ * The later rounds use the name-entry screen and move the story to STG4_14_NAME_GUESSING.
+ */
 EVT_BEGIN(evt_machibuse)
     // Waits until Mario steps into the strip of road where Doopliss ambushes him.
     SET_VALUE(LF(0), 0)

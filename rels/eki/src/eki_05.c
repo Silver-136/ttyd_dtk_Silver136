@@ -159,6 +159,11 @@ EVT_BEGIN(grass_open_2)
     RETURN
 EVT_END()
 
+/**
+ * Runs when Mario opens the treasure chest: shows the Ultra Boots coming out of the chest,
+ * gives them to Mario with the important-item message and lecture,
+ * and sets the story to STG6_36_SPRING_JUMP.
+ */
 EVT_BEGIN(evt_boots)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("tbox"), LW(0), LW(1), LW(2))
@@ -173,6 +178,7 @@ EVT_BEGIN(evt_boots)
     RETURN
 EVT_END()
 
+/** Runs when Mario picks up the Elevator Key: sets the story to STG6_37_ELEVATOR_KEY. */
 EVT_BEGIN(evt_elvkey)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_37_ELEVATOR_KEY)
     RETURN

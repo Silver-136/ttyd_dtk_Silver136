@@ -44,6 +44,11 @@ EvtWord welcome_wonderforest_init[6];
 EvtWord welcome_wonderforest[260];
 EvtWord win_06_init_evt[82];
 
+/**
+ * Enter script of the "dokan1" pipe (from tik_03): only at STG1_END_TO_STAGE_2 does it set GF(0) and wait,
+ * so Mario stays in the pipe until welcome_wonderforest clears GF(0) after its camera orbit;
+ * otherwise it returns at once. Always returns LW(0) = 0.
+ */
 static EVT_BEGIN(first_evt_dokan)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG1_END_TO_STAGE_2)
         SET_VALUE(LW(0), 0)

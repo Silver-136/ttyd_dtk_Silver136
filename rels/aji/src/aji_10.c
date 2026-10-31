@@ -414,6 +414,11 @@ EVT_BEGIN(monitor_off)
     RETURN
 EVT_END()
 
+/**
+ * Prepares the monitor: hides it, allocates the capture buffers,
+ * chooses the officer or the grunt as the picture by story point (the officer at STG5_43_X_NAUTS_RETREAT),
+ * starts the capture and installs the texture callback on monitor_1.
+ */
 EVT_BEGIN(monitor_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor"), MAP_OBJ_FLAG_HIDDEN)
     CALL(monitor_cap_init)
@@ -1002,6 +1007,11 @@ EVT_BEGIN(peach_move)
     RETURN
 EVT_END()
 
+/**
+ * Peach's talk with Sir Grodus (シュリョー) in her disguise during STG3_33_02_PEACH_INCOGNITO (peach_aji_141 to
+ * 151); afterwards the story becomes STG3_33_03_PEACH_GRODUS
+ * and she is sent to the changing room aji_09 through s_bero.
+ */
 EVT_BEGIN(peach_evt_stg3_syuryo_talk)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
@@ -1288,6 +1298,10 @@ EVT_BEGIN(kanbu_init)
     RETURN
 EVT_END()
 
+/**
+ * Init of Grodus (シュリョー): common NPC init; during STG3_33_02_PEACH_INCOGNITO he stands at (-100, 0, 0),
+ * is solid and talks through peach_evt_stg3_syuryo_talk when Peach interacts with him.
+ */
 static EVT_BEGIN(syuryo_init)
     CALL_CHILD(PTR(npc_init_evt))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_02_PEACH_INCOGNITO)
@@ -1379,6 +1393,15 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Init script of aji_10, Sir Grodus's room: plays BGM_STG7_DUN1 before STG7_00_START and BGM_STG7_DUN2
+ * after, lights up the control wall and the monitor animations,
+ * and then starts the scene for Peach's current story point:
+ * peach_evt_stg1 (the first Peach scene at STG1_17), peach_evt_stg2, stg3,
+ * stg4 (Shadow Sirens and Doopliss), peach_evt_stg5 (at STG5_43 with the monitor),
+ * the invisible watch at STG5_45 and 46, and peach_evt_stg6 at STG6_54_WELCOME_BACK.
+ * The Barriern Custom guard is removed once Lord Crump is beaten.
+ */
 EVT_BEGIN(aji_10_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))

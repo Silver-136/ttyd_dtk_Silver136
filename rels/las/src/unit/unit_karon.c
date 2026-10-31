@@ -50,6 +50,10 @@ static EvtWord link_attack_event_sub[402];
 static EvtWord call_friend_event[311];
 static EvtWord wait_event[6];
 
+/**
+ * Script helper: copies the shrink/grow status (sizeChangeTurns and sizeChangeStrength) from the unit in args[0]
+ * to the unit in args[1], so a revived or called-in Dry Bones keeps the caller's size effect.
+ */
 static USER_FUNC(honenoko_copy_status) {
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));

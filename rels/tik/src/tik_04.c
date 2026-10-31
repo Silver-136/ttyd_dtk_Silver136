@@ -121,6 +121,11 @@ static EVT_BEGIN(puni_walk_se)
     RETURN
 EVT_END()
 
+/**
+ * First glimpse of the guide Puni (ガイド), while story progress is at or below STG0_11_3_GOOMBA_GOONS.
+ * When Mario walks past X = -275 a speech-bubble appears over the Puni,
+ * he runs away off screen and story progress is set to STG0_12_PUNI_ENCOUNTER.
+ */
 EVT_BEGIN(puni_soguu_1)
     CALL(evt_npc_set_position, STRING("ガイド"), -155, 25, -80)
     CALL(evt_npc_set_ry, STRING("ガイド"), 90)
@@ -154,6 +159,11 @@ EVT_BEGIN(puni_soguu_1)
     RETURN
 EVT_END()
 
+/**
+ * Second glimpse of the Puni, at STG1_31_FRANKLYS_HOUSE_STG_1.
+ * The same chase-off as puni_soguu_1; afterwards the partner remarks (mac_1_011)
+ * and story progress is set to STG1_32_PUNI_ENCOUNTER_2.
+ */
 EVT_BEGIN(puni_soguu_2)
     CALL(evt_npc_set_position, STRING("ガイド"), -155, 25, -80)
     CALL(evt_npc_set_ry, STRING("ガイド"), 90)
@@ -284,6 +294,11 @@ EVT_BEGIN(kaidan_pera)
     RETURN
 EVT_END()
 
+/**
+ * Blue switch handler.
+ * Takes control, pans the camera to the stairs (450, 255, 628), runs kaidan_pera,
+ * enables the stairs' hit area and sets story progress STG0_12_01_PAPER_STAIR_SWITCH.
+ */
 EVT_BEGIN(tik_04_switch_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 450, 255, 628, 450, 150, 37, 500, EASING_SINE_IN_OUT)

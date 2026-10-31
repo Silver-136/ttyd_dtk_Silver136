@@ -497,6 +497,12 @@ EVT_BEGIN(namiyoke_se)
     RETURN
 EVT_END()
 
+/**
+ * Starts the wave-dodging section when dou_10 is entered:
+ * moves the story from STG5_22_FLOODGATE_HANDLE to STG5_29_WAVE_DODGING, creates the wave table,
+ * and starts the wave setup, the wave spawner and the wave sound.
+ * The collision watcher is started only when entering from w_bero_1 or e_bero.
+ */
 EVT_BEGIN(namiyoke_check)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
         SET_VALUE(GSW_STORY_PROGRESS, STG5_29_WAVE_DODGING)

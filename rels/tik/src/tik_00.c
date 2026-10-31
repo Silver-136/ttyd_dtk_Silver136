@@ -2780,6 +2780,11 @@ EVT_BEGIN(tensou_sw_event)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene where Professor Frankly (kurihakase) shows up in the sewer town after the hideout explosion.
+ * Mario and his partner talk with him (mac_7_000 to mac_7_007), he walks away off screen,
+ * and the story progress is set to STG7_50_A_WAITING_PROF_FRANKLY.
+ */
 EVT_BEGIN(kurihakase_event)
     CALL(evt_party_stop, 0)
     CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK2"), 2000)
@@ -2907,6 +2912,11 @@ static EVT_BEGIN(epilogue_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * The epilogue scene in the sewer town, when the story is at STG8_END_AFTER_THE_BATTLE.
+ * Mario is hidden and the camera watches Goombella walk to the teleporter house, open its door,
+ * go in and close it again; then the screen fades and the map changes to moo_04 (the Moon).
+ */
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
     CALL(evt_snd_bgm_scope, 0, 1)

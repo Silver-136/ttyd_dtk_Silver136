@@ -1350,6 +1350,16 @@ const char* oh_data[] = {
     /*"\203{\203\200\203w\203CD"*/"\203{\203\200\203w\203CD", "stg7_bom_65_d",
 };
 
+/**
+ * The cannon scene (taihou = cannon) started by talking to the mayor before STG7_05_THE_CANNON:
+ * the mayor places Mario and asks General White whether the big bomb cannon is ready (stg7_bom_63 to 64_01),
+ * and White's crew (ニトロ, ペントリット, スラリー and ボムヘイD, oh_data) load and aim it on his orders
+ * (stg7_bom_65 to 86: guidance system online, hatches and shutters open, sighting the moon with the disp_sight
+ * display) while the camera switches between the room and the outside and the screen shakes;
+ * the mayor orders everyone in and fires it (stg7_bom_81, 87),
+ * the partner reacts in its damage pose, Mario is fired from the cannon,
+ * the Goldbob guide (ITEM_GOLDBOB_GUIDE) is taken from the pouch and the map changes to moo_03.
+ */
 static EVT_BEGIN(evt_taihou)
     CALL(evt_mario_key_onoff, 0)
     // The scene starts in the cannon room; the music stops.
@@ -2007,6 +2017,7 @@ static EVT_BEGIN(evt_taihou)
     RETURN
 EVT_END()
 
+/** Init of the mayor (村長): from STG7_04_BACK_ONLINE on he stands at (-15, 0, -35). */
 static EVT_BEGIN(init_soncho)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG7_04_BACK_ONLINE)
@@ -2015,6 +2026,10 @@ static EVT_BEGIN(init_soncho)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the mayor: before STG7_05_THE_CANNON it runs the cannon scene (evt_taihou);
+ * until the end of chapter 8's battle he says stg7_bom_59_04_1, and afterwards stg7_bom_59_04_2.
+ */
 static EVT_BEGIN(talk_soncho)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_05_THE_CANNON)
@@ -2128,6 +2143,10 @@ static EVT_BEGIN(init_murabito_e)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of villager E: stg7_bom_10_00 before STG6_71_01, stg7_bom_10 until the cannon,
+ * then stg7_bom_11.
+ */
 static EVT_BEGIN(talk_murabito_e)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
@@ -2146,6 +2165,10 @@ static EVT_BEGIN(init_murabito_f)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of villager F: stg7_bom_12_00 before STG6_71_01, stg7_bom_12 until the cannon,
+ * then stg7_bom_13.
+ */
 static EVT_BEGIN(talk_murabito_f)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
@@ -2164,6 +2187,10 @@ static EVT_BEGIN(init_murabito_g)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of villager G: stg7_bom_14_00 before STG6_71_01, stg7_bom_14 until the cannon,
+ * then stg7_bom_15.
+ */
 static EVT_BEGIN(talk_murabito_g)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
@@ -2182,6 +2209,10 @@ static EVT_BEGIN(init_murabito_h)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of villager H: stg7_bom_16_00 before STG6_71_01, stg7_bom_16 until the cannon,
+ * then stg7_bom_17.
+ */
 static EVT_BEGIN(talk_murabito_h)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
@@ -2200,6 +2231,10 @@ static EVT_BEGIN(init_murabito_i)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of villager I: stg7_bom_18_00 before STG6_71_01, stg7_bom_18 until the cannon,
+ * then stg7_bom_19.
+ */
 static EVT_BEGIN(talk_murabito_i)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
@@ -2251,6 +2286,10 @@ static EVT_BEGIN(talk_white)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the three dancing girls (３人娘Ａ, Ｂ, Ｃ):
+ * three lines each that change at STG7_02_MAYOR_BOB and STG7_04_BACK_ONLINE.
+ */
 static EVT_BEGIN(musume_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_02_MAYOR_BOB)

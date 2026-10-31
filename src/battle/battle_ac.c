@@ -131,6 +131,15 @@ void BattleActionCommandStop(BattleWork* work) {
     }
 }
 
+/**
+ * Judges Mario's or a partner's guard against weapon from the recent pad history and returns defenseResult:
+ * 5 = Superguard (B within the window, allowed by the weapon and while above 0 HP),
+ * 4 = Guard (A within the window), 2 = no press,
+ * 1 = failed because buttons were mashed (two or more presses in the last 15 frames).
+ * The windows shrink or widen with Simplifier and Unsimplifier (A: 10..5 frames, B: 5..1);
+ * Auto Command badges always Superguard.
+ * While actionCommands.countdown is above 0, each check uses one count and passes automatically.
+ */
 s32 BattleActionCommandCheckDefence(BattleUnit* unit, BattleWeapon* weapon) {
     BattleWork* wp;
     BattleWorkPad* pad;

@@ -119,6 +119,10 @@ EVT_BEGIN(evt_nusumi)
     RETURN
 EVT_END()
 
+/**
+ * First visit to the passage: waits until Mario has walked past x=-120, then stops him,
+ * the partner remarks stg3_tou_455 and the story advances to STG3_30_02_AIR_DUCT_1ST_TIME.
+ */
 static EVT_BEGIN(evt_first)
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

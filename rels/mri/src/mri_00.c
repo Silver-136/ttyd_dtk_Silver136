@@ -270,6 +270,12 @@ static f32 spline_dt[] = {
     74.6f, -167.18973f, -49.43834f, 143.94997f, -205.0f, 10.0f, 155.0f, -220.0f,
 };
 
+/**
+ * Cutscene when Mario first reaches the sealed Great Boggly Tree:
+ * Punio, the Puni who guides him, tells the party the entrance is locked,
+ * runs off along a spline path and ends in front of the tree.
+ * Sets the story to STG2_03_01_SEALED_ENTRANCE.
+ */
 EVT_BEGIN(seal_bigtree)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_move_beside_mario, 0)
@@ -326,6 +332,11 @@ EVT_BEGIN(seal_bigtree)
     RETURN
 EVT_END()
 
+/**
+ * Second cutscene at the sealed tree entrance: Punio talks to Mario, hops away and vanishes,
+ * Mario's partner steps up, and the west exit gets the lost-item exit.
+ * Sets the story to STG2_03_02_SEALED_ENTRANCE_2.
+ */
 EVT_BEGIN(seal_bigtree2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -703,6 +714,11 @@ static EVT_BEGIN(bero_01_doa_open)
     RETURN
 EVT_END()
 
+/**
+ * Entry script of the west loading zone: at the start of chapter 2 (STG2_02_TO_THE_GREAT_TREE) it waits
+ * until the opening scene has cleared GF(0), and returns 1 in LW(0) so the normal walk-in is skipped.
+ * Otherwise it returns 0.
+ */
 static EVT_BEGIN(first_time_w_bero)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_02_TO_THE_GREAT_TREE)
         SET_VALUE(GF(0), 1)
@@ -845,6 +861,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Opening cutscene of chapter 2 when Mario arrives at the Great Boggly Tree:
+ * the camera pans over the tree, the area name title appears and Mario walks in.
+ * Sets the story to STG2_03_THE_GREAT_TREE.
+ */
 EVT_BEGIN(first_bigtree)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

@@ -372,6 +372,14 @@ static EVT_BEGIN(evt_majin)
     RETURN
 EVT_END()
 
+/**
+ * Event after the black chest is opened: Mario receives the Paper Curse item (ITEM_PAPER_CURSE),
+ * the Paper Mage's music starts and the Paper Mage appears from the paper image OFF_d_kusya
+ * and gives his lecture (slit_majin_lecture), then leaves.
+ * The story advances to STG1_13_01_01_PAPER_MAGE_2 (or STG1_13_A_SUSPICIOUS_ROOM if it is already
+ * past that), the bero case and ceiling events are started,
+ * five Dry Bones NPCs (KRN_Z_2) are entered in the cell and the red cell switch (mobj_switch1) is placed.
+ */
 static EVT_BEGIN(evt_majin2)
     CALL(evt_npc_change_fbat_mode, 7)
     CALL(evt_npc_stop_for_event)
@@ -446,6 +454,11 @@ static EVT_BEGIN(evt_majin2)
     RETURN
 EVT_END()
 
+/**
+ * Map init for gon_06: sets up the doors, six dormant Dry Bones, the red switch for the bar grid,
+ * the Attack FX R badge, and the black chest (box) that speaks to Mario and holds the Paper Curse;
+ * once the story is past STG1_13_01_01_PAPER_MAGE_2 the chest counts as already opened.
+ */
 EVT_BEGIN(gon_06_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

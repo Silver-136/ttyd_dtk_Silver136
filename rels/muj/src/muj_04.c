@@ -331,6 +331,11 @@ EVT_BEGIN(mario_katsugi)
     RETURN
 EVT_END()
 
+/**
+ * Bobbery's scene on the rope bridge (STG5_13_BOBBERY_THE_BRIDGE):
+ * Mario meets Admiral Bobbery and the two scared sailors, Bobbery tells his story (stg5_muj_23 to 28),
+ * the Embers attack and are driven off, Mario is carried off by the sailors and the party moves to muj_03.
+ */
 EVT_BEGIN(sanders_funto)
     CALL(evt_npc_set_position, STRING(/*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58"), 0, 112, 0)
     CALL(evt_npc_set_ry, STRING(/*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58"), 90)

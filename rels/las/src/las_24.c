@@ -257,6 +257,7 @@ EVT_BEGIN(cloud_blk_evt)
     RETURN
 EVT_END()
 
+/** Event script: runs when the breaking floor gives way; sets the story to STG8_12_LARGE_STONE_BLOCK. */
 EVT_BEGIN(break_floor_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_12_LARGE_STONE_BLOCK)
     RETURN

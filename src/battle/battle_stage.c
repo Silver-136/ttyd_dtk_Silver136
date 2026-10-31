@@ -914,6 +914,11 @@ USER_FUNC(screen_evt_func) {
     return 0;
 }
 
+/**
+ * Script helper for the Glitzville arena battle stages (bgset_tou_screen_evt):
+ * allocates the big-screen work and texture on the map heap and starts screen_evt to capture the battle.
+ * When the story is at STG3_31_GRUBBAS_PLANS the screen shows static instead.
+ */
 USER_FUNC(tou_gamen_screen_tev_init) {
     u32 size = GXGetTexBufferSize(608, 480, GX_TF_I4, GX_FALSE, 0);
 

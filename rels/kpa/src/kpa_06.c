@@ -58,6 +58,11 @@ static EVT_BEGIN(kpa_fall)
     RETURN
 EVT_END()
 
+/**
+ * Goal of the third Bowser stage: locks the controls,
+ * sets the story progress to STG6_55_03_BOWSER_ACTION_STAGE and changes the map to kpa_07
+ * after a 300 ms pause that also removes the letterbox.
+ */
 static EVT_BEGIN(kpa_goal)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_55_03_BOWSER_ACTION_STAGE)

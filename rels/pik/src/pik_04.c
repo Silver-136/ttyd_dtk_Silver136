@@ -746,6 +746,10 @@ EVT_BEGIN(talk_takun3)
     RETURN
 EVT_END()
 
+/**
+ * Init for the dandy hotel guest (キザ野郎, who in stg7_pik_clear_19 says he is courting the receptionist):
+ * from STG6_70_THOUSAND_YEAR_DOOR on, moves him off the map to (0, -1000, 0).
+ */
 static EVT_BEGIN(init_kiza)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG6_70_THOUSAND_YEAR_DOOR)

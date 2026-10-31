@@ -272,6 +272,11 @@ static USER_FUNC(booboo_main) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Init script of villager A (the human form): enables move/talk animation,
+ * hides her below the map until the Doopliss fight (STG4_10)
+ * and parks her at (-180, 0, 0) during the Bowser interlude.
+ */
 EVT_BEGIN(villagerA_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ａ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -284,6 +289,7 @@ EVT_BEGIN(villagerA_init)
     RETURN
 EVT_END()
 
+/** Init script of the pig form of villager A: shown until STG4_10, then moved below the map for good. */
 EVT_BEGIN(villagerA_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ａ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -376,6 +382,10 @@ EVT_BEGIN(villagerC_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of villager D (human form): enables move/talk animation and keeps him below the map
+ * until the Doopliss fight (STG4_10).
+ */
 EVT_BEGIN(villagerD_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｄ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -386,6 +396,7 @@ EVT_BEGIN(villagerD_init)
     RETURN
 EVT_END()
 
+/** Init script of the pig form of villager D: shown until STG4_10, then moved below the map. */
 EVT_BEGIN(villagerD_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｄ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -427,6 +438,10 @@ EVT_BEGIN(villagerD_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of villager E (human form): enables move/talk animation and keeps him below the map
+ * until the Doopliss fight (STG4_10).
+ */
 EVT_BEGIN(villagerE_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｅ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -437,6 +452,7 @@ EVT_BEGIN(villagerE_init)
     RETURN
 EVT_END()
 
+/** Init script of the pig form of villager E: shown until STG4_10, then moved below the map. */
 EVT_BEGIN(villagerE_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｅ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -471,6 +487,10 @@ EVT_BEGIN(villagerE_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of villager K (human form): enables move/talk animation and keeps him below the map
+ * until the Doopliss fight (STG4_10).
+ */
 EVT_BEGIN(villagerK_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｋ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -481,6 +501,7 @@ EVT_BEGIN(villagerK_init)
     RETURN
 EVT_END()
 
+/** Init script of the pig form of villager K: shown until STG4_10, then moved below the map. */
 EVT_BEGIN(villagerK_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｋ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -515,6 +536,11 @@ EVT_BEGIN(villagerK_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the village chief (the Mayor, human form):
+ * hidden below the map from the first gatekeeper conversation (STG4_01_00)
+ * until the Super Bombomb is lost (STG4_11).
+ */
 EVT_BEGIN(village_chief_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村長"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -525,6 +551,10 @@ EVT_BEGIN(village_chief_init)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the pig Mayor: visible only between the gatekeeper conversation (STG4_01_00)
+ * and the loss of the Super Bombomb (STG4_11), otherwise parked below the map.
+ */
 EVT_BEGIN(village_chief_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ村長"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -681,6 +711,13 @@ EVT_BEGIN(chief_mario_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of Vivian in Twilight Town: enables her move and talk animations;
+ * from STG4_11_02_WAITING_DOOPLISS to STG4_12_01_SUPERBOMBBOMB_FOUND she uses the tearful tribe
+ * "ビビアンべそ" with its stand and talk poses (PTR_S_3, PTR_T_3), stands at (-71, 0, 329) facing right,
+ * and from STG4_12_VIVIAN on also wanders (urouro_move)
+ * while she searches for the lost Super Bombomb (her line stg4_usu_109).
+ */
 static EVT_BEGIN(vivian_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ビビアン"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1261,6 +1298,14 @@ EVT_BEGIN(usu00_3witch_init)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene in Twilight Town (Mario and the partner moved off screen):
+ * Beldam gloats that the Super Bombomb will win them Mario's map and asks Vivian for it (stg4_usu_97 to 99);
+ * Vivian never had it (100, 102; she switches to the troubled tribe "ビビアン困る"),
+ * Beldam calls her a liar and sends her to find it or be punished (101, 103 to 106),
+ * with Marilyn grunting along (98, 107).
+ * Beldam and Marilyn vanish, the story becomes STG4_11_SUPERBOMBBOMB_LOST and the map changes to gra_06.
+ */
 EVT_BEGIN(usu00_3witch_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1320,6 +1365,10 @@ EVT_BEGIN(usu00_3witch_event)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene: Beldam and Marilyn find Doopliss (Ranpel),
+ * set STG4_15_04_SHADOW_SIRENS_DOOPLISS and change the map to aji_10 with a story fade.
+ */
 EVT_BEGIN(gra00_2witch_find_ranpel_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1365,6 +1414,7 @@ EVT_BEGIN(gra00_2witch_find_ranpel_event)
     RETURN
 EVT_END()
 
+/** Cutscene: Vivian, left alone, cries and says "stg4_usu_108"; sets the story to STG4_12_VIVIAN. */
 EVT_BEGIN(usu00_vivian_cry_event)
     WAIT_FRAMES(1)
     CALL(evt_npc_set_autotalkpose, STRING("ビビアン"), STRING("PTR_S_3"), STRING("PTR_T_3"))
@@ -1847,6 +1897,10 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
     RETURN
 EVT_END()
 
+/**
+ * Trigger: when Mario walks within 100 units of the pig Mayor,
+ * the party says "stg4_usu_21" and the story moves to STG4_01_THE_MAYORS_A_PIG.
+ */
 EVT_BEGIN(chief_pig_event)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -2053,6 +2107,10 @@ static EVT_BEGIN(evt_wall_2)
     RETURN
 EVT_END()
 
+/**
+ * Enter-house-2 script: hides the "S_gochisou" feast
+ * and its hit area outside the story range (STG4_11 to STG4_15), and dips BGM and ambience.
+ */
 EVT_BEGIN(evt_door2_chk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_11_SUPERBOMBBOMB_LOST, STG4_15_DOOPLISS_BATTLE_2)
@@ -2222,6 +2280,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Exit script of bero_oshimodo, which replaces the dokan_1 pipe to tik_08 from STG4_10_DOOPLISS_BATTLE
+ * until STG4_15_02_BACK_TO_NORMAL (while Doopliss has Mario's name):
+ * the pipe sends Mario back out of itself ("oshimodo", pushed back),
+ * then the system message stg4_jin_151 says he cannot enter the pipe and control returns. Returns LW(0) = 0.
+ */
 static EVT_BEGIN(oshimodo_event)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_key_onoff, 0)
@@ -2463,6 +2527,7 @@ EVT_BEGIN(usu_00_kusa_init)
     RETURN
 EVT_END()
 
+/** Pickup callback for the rolling Super Bombomb: sets the story to STG4_12_01_SUPERBOMBBOMB_FOUND. */
 EVT_BEGIN(evt_ichikorori_ball_get)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_12_01_SUPERBOMBBOMB_FOUND)
     RETURN
@@ -3710,6 +3775,14 @@ USER_FUNC(party_scale) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Cutscene in Twilight Town after the Peach and Bowser interludes (spawned at
+ * STG4_15_08_BOWSER_ROGUEPORT_DOCK): the mayor apologizes for being fooled by the fake Mario
+ * and asks whether they hurt his feelings (stg4_usu_153 with a choice);
+ * "Nah, not really" draws praise (154), "Maybe a little" an awkward reply (155).
+ * The partner suggests heading back to Rogueport (stg4_usu_156), the mayor invites him back anytime (157),
+ * and the story becomes STG4_16_LEAVING_TWILIGHT_TOWN.
+ */
 static EVT_BEGIN(evt_after_peach)
     CALL(evt_mario_key_onoff, 0)
     CALL(party_scale)
@@ -3854,6 +3927,13 @@ static EVT_BEGIN(epilogue_evt_sub)
     RETURN
 EVT_END()
 
+/**
+ * Ending epilogue in Twilight Town (STG8_END_AFTER_THE_BATTLE):
+ * with the town theme playing and Mario hidden,
+ * Vivian and Goombella stand together while epilogue_evt_sub plays,
+ * the epilogue text ep_41 says Vivian has gone back to her sisters
+ * and Beldam promised never to be mean to her again, and the game fades to muj_20.
+ */
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))
     CALL(evt_snd_bgm_scope, 0, 1)

@@ -683,6 +683,10 @@ EVT_BEGIN(mail_evt)
     RETURN
 EVT_END()
 
+/**
+ * Petalburg (nok_01): once Kroop's talk is done (STG1_02),
+ * sends Frankly's mail (16, plus 26) when Mario walks past x = 190.
+ */
 EVT_BEGIN(mail_evt_nok_01)
     IF_INT_EQUAL(GSWF_MAIL_FRANKLY_SENT, 1)
         RETURN
@@ -708,6 +712,11 @@ EVT_BEGIN(mail_evt_nok_01)
     RETURN
 EVT_END()
 
+/**
+ * Rogueport (gor_03): after the Glitzville ticket (STG2_47) sends Koopley's mail (17)
+ * when Mario crosses x = -100; also delivers any Trouble Center follow-up mail that is due (irai_mail_check).
+ * Loops for as long as the map runs.
+ */
 EVT_BEGIN(mail_evt_gor_03)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     LOOP(0)
@@ -740,6 +749,11 @@ EVT_BEGIN(mail_evt_gor_03)
     RETURN
 EVT_END()
 
+/**
+ * Rogueport (gor_02): at STG3_51 sends Koopie Koo's mail (18)
+ * when Mario enters the strip near x -280..-230; also delivers due Trouble Center follow-up mail.
+ * Loops for as long as the map runs.
+ */
 EVT_BEGIN(mail_evt_gor_02)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     LOOP(0)
@@ -772,6 +786,7 @@ EVT_BEGIN(mail_evt_gor_02)
     RETURN
 EVT_END()
 
+/** Rogueport (gor_01): at STG4_37 sends Petuni's mail (19) when Mario crosses x = 350. */
 EVT_BEGIN(mail_evt_gor_01)
     IF_INT_EQUAL(GSWF_MAIL_PETUNI_SENT, 1)
         RETURN
@@ -796,6 +811,11 @@ EVT_BEGIN(mail_evt_gor_01)
     RETURN
 EVT_END()
 
+/**
+ * Rogueport (gor_04): at STG5_66 sends the Boo mail (20) when Mario crosses x = 30,
+ * but only while Mario has control (mail_evt_gor_04_keyoff_check);
+ * also delivers due Trouble Center follow-up mail. Loops for as long as the map runs.
+ */
 EVT_BEGIN(mail_evt_gor_04)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     LOOP(0)
@@ -860,6 +880,10 @@ EVT_BEGIN(mail_evt_rsh_03_a)
     RETURN
 EVT_END()
 
+/**
+ * Riverside Station (hom_00): once the drawbridge is down (STG6_42) sends King K's mail (22)
+ * when Mario crosses x = -600.
+ */
 EVT_BEGIN(mail_evt_hom_00)
     IF_INT_EQUAL(GSWF_MAIL_KING_K_SENT, 1)
         RETURN
@@ -908,6 +932,10 @@ EVT_BEGIN(mail_evt_gor_02_2)
     RETURN
 EVT_END()
 
+/**
+ * Fahr Outpost (bom_01): at STG7_02 after the cannon is approved sends Rawk Hawk's mail (24)
+ * when Mario crosses x = -230.
+ */
 EVT_BEGIN(mail_evt_bom_01)
     IF_INT_EQUAL(GSWF_MAIL_RAWK_HAWK_SENT, 1)
         RETURN
@@ -963,6 +991,10 @@ EVT_BEGIN(mail_evt_tik_00)
     RETURN
 EVT_END()
 
+/**
+ * Boggly Woods (win_01): after Flurrie joins (STG2_09) sends mail 27,
+ * issue 1 of the RDM series (GSWF_MAIL_RDM_ISSUE1_SENT), when Mario crosses x = 390.
+ */
 EVT_BEGIN(mail_evt_win_01)
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_1_SENT, 1)
         RETURN
@@ -1071,6 +1103,7 @@ EVT_BEGIN(mail_evt_gor_01_2)
     RETURN
 EVT_END()
 
+/** Excess Express (rsh_03_a): on day 2 (STG6_21) sends mail 31 (RDM issue 5) when Mario crosses x = 400. */
 EVT_BEGIN(mail_evt_rsh_03_a_2)
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_5_SENT, 1)
         RETURN
@@ -1095,6 +1128,10 @@ EVT_BEGIN(mail_evt_rsh_03_a_2)
     RETURN
 EVT_END()
 
+/**
+ * Poshley Heights (pik_00): at STG7_02 after the cannon is approved sends mail 32 (RDM issue 6)
+ * when Mario crosses x = -60 and starts the rsh_03 double-points sale.
+ */
 EVT_BEGIN(mail_evt_pik_00)
     IF_INT_EQUAL(GSWF_MAIL_RDM_ISSUE_6_SENT, 1)
         RETURN
@@ -1937,6 +1974,10 @@ USER_FUNC(stone_ry) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Puts the star stone, its glow and Mario (or the Doopliss Mario NPC before STG4_15) on camera 5,
+ * so they draw in front of the stage-clear background in evt_sub_starstone.
+ */
 USER_FUNC(stone_bg) {
     char* name;
     CameraEntry* cam;

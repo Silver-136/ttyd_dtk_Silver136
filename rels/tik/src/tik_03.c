@@ -128,6 +128,11 @@ static BeroEntry bero_entry_data2[] = {
     {0},
 };
 
+/**
+ * Init script of the guide Puni (ガイド) for tik_03.
+ * Places him by story step: (-80, -149, 50) at STG1_32, (100, -150, 50) at STG1_33,
+ * (230, -50, 80) at STG1_34, and out of sight otherwise.
+ */
 static EVT_BEGIN(guide_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG1_32_PUNI_ENCOUNTER_2)
@@ -145,6 +150,10 @@ static EVT_BEGIN(guide_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the guide Puni.
+ * At STG1_33_A_PUNI_PLEA_FOR_HELP, after a second, he starts puni_switch; at other steps it does nothing.
+ */
 static EVT_BEGIN(guide_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG1_33_A_PUNI_PLEA_FOR_HELP)
@@ -184,6 +193,12 @@ static EVT_BEGIN(puni_walk_se)
     RETURN
 EVT_END()
 
+/**
+ * Third meeting with the guide Puni (ガイド), at STG1_32_PUNI_ENCOUNTER_2.
+ * He appears in the cave, runs off, and Mario follows him to the dead end
+ * where he asks for help (mac_1_012 to mac_1_029_00, with a yes/no prompt at mac_1_014).
+ * Ends with the music back to the sewer theme and story progress STG1_33_A_PUNI_PLEA_FOR_HELP.
+ */
 EVT_BEGIN(puni_soguu_3)
     // Mario arrives; Punio spots him and scurries off to the west end of the room.
     CALL(evt_mario_key_onoff, 0)
@@ -402,6 +417,12 @@ EVT_BEGIN(anm_rapa_snd)
     RETURN
 EVT_END()
 
+/**
+ * Scene where the guide Puni shows Mario the secret passage (STG1_33).
+ * He walks to a switch at X = 220 and steps on it (mac_1_029_01, mac_1_030);
+ * the camera shakes, success jingle plays, the wall (kabe_1) is replaced and the passage (para) opens.
+ * Sets GSWF_TIK03_SECRET_DOOR_OPEN and story progress STG1_34_PUNIS_SECRET_PASSAGE.
+ */
 EVT_BEGIN(puni_switch)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -437,6 +458,11 @@ EVT_BEGIN(puni_switch)
     RETURN
 EVT_END()
 
+/**
+ * Waits until Mario reaches the end of the passage (X >= 300, Z >= -90) at STG1_34,
+ * then the guide Puni joins as the second partner (mac_1_031): his NPC is removed and he follows Mario.
+ * Sets story progress STG1_35_PUNI_JOINS.
+ */
 // Replace the guide NPC with the extra partner only after Mario reaches the open passage.
 EVT_BEGIN(puni_nakama)
     LOOP(0)
@@ -497,6 +523,15 @@ EVT_BEGIN(tik03_switch_evt)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_03.
+ * Starts the sewer music and ambience, sets up the exits and the guide Puni,
+ * runs puni_soguu_3 and puni_nakama at their story steps,
+ * restores the passage state from GSWF_TIK03_SECRET_DOOR_OPEN,
+ * and places the Damage Dodge badge and the Star Piece panel.
+ * Before Boggly Woods (STG2_00_BOGGLY_WOODS) the pipe exit (dokan) is switched off
+ * and its destination replaced.
+ */
 EVT_BEGIN(tik_03_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))

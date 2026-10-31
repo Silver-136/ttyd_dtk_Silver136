@@ -160,6 +160,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Event script: Bobbery blows up the rock S_iwa_04 that hides the pipe back to the X-Naut Fortress.
+ * The rock crumbles, the pipe appears, and the story progress is set to STG7_07_A_PIPE_APPEARS.
+ */
 static EVT_BEGIN(dokan_evt)
 #ifdef VERSION_G8ME01
     SET_VALUE(GSW_STORY_PROGRESS, STG7_07_A_PIPE_APPEARS)
@@ -279,6 +283,11 @@ static EVT_BEGIN(rock_evt1)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for moo_02: entry bero, Moon music and ambience, star animations,
+ * a Star Piece at (-55, 0, -135), the pipe rock (S_iwa_04, blown up before STG7_07_A_PIPE_APPEARS),
+ * the two Bobbery rocks and a Power Punch at (330, 0, 403).
+ */
 EVT_BEGIN(moo_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

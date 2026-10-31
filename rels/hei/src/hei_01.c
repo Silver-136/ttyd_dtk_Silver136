@@ -520,6 +520,12 @@ EVT_BEGIN(nokorin_pose)
     RETURN
 EVT_END()
 
+/**
+ * Koopie Koo (ノコリン) scene once Koops has joined (STG1_07_KOOPS_JOINS): she comes over and tries to talk
+ * Koops out of fighting Hooktail (stg1_hei_12_01 to 06); when he insists she rams Mario and Koops twice in her
+ * shell, knocking them down ("FINE! IGNORE ME!", stg1_hei_12_07 and 08), and Koops promises to come back
+ * stronger (stg1_hei_12_09). Skipped once GSWF_HEI01_KOOPIE_KOO_FAREWELL is set.
+ */
 EVT_BEGIN(evt_nokorin)
     // Skipped once Koopie Koo has said her farewell.
     IF_INT_EQUAL(GSWF_HEI_01_KOOPIE_KOO_FAREWELL_SEEN, 1)
@@ -821,6 +827,12 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Cutscene spawned by the map init at STG1_20_KOOPS_LEAVES:
+ * once Mario walks west of x = 200 the mail jingle plays and the screen vibrates,
+ * the partner comes to him and comments (stg1_gon_44);
+ * after he presses A the mail is read (stg1_gon_44_01 to 47) and control returns.
+ */
 static EVT_BEGIN(peach_mail)
     LABEL(0)
     // Waits until Mario walks west of x=200.

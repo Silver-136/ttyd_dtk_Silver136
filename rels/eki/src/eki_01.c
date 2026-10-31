@@ -156,6 +156,12 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Cutscene when Mario unfolds the paper staircase (Riverside Station):
+ * the camera moves to the stairs, the "dann" and "n_origami" map objects are hidden
+ * and the anm_kaidan animation plays while step sounds (SFX_STG6_PERA_KAI_DOWN1/2) play,
+ * and the story moves to STG6_30_ORIGAMI_STAIRS.
+ */
 static EVT_BEGIN(evt_origami)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 516, 126, 408, 171, 90, -55, 1000, EASING_SINE_IN_OUT)
@@ -210,6 +216,10 @@ static EVT_BEGIN(evt_chk)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the station door lock is opened with the key:
+ * switches on the bero case (the door can be used) and sets the story to STG6_32_UNLOCKING_THE_DOOR.
+ */
 static EVT_BEGIN(evt_lock)
     SET_VALUE(LW(0), 0)
     CALL_CHILD(PTR(bero_case_switch_on))

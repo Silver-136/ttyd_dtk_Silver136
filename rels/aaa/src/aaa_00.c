@@ -183,6 +183,13 @@ static DoorParam door_1 = {
     door_1_close, // evtClose
 };
 
+/**
+ * Opening of the prologue in Mario's house: starts the house BGM and ambience, letterboxes the screen,
+ * hides Luigi and Parakarry for now, places Mario and the camera and runs a 4-second camera interpolation,
+ * then waits for GF(0), which the title-picture draw callback raises once the picture is fully faded in.
+ * Afterwards it fades out the music, sets the story progress to STG0_02_MARIOS_HOUSE
+ * and changes map to muj_20 with the "prologue" entrance.
+ */
 static EVT_BEGIN(evt_prologue)
     // The house music fades in and the screen is letterboxed; Luigi and Parakarry are hidden for now.
     BEGIN_INLINE_EVENT
@@ -409,6 +416,11 @@ static void draw(CameraId camera, void* param) {
     GXSetProjectionv(projection);
 }
 
+/**
+ * Prologue part 2 (entered from the map with the bero name "prologue2"):
+ * Luigi shows Mario the Magical Map, the mariost.tpl picture (Guess: the story book illustration) fades in over
+ * the scene, and the game moves on to muj_20 with the story at STG0_02_MARIOS_HOUSE.
+ */
 EVT_BEGIN(evt_prologue2)
     // Back in the house after the letter has been read: Mario and Luigi are placed on a black background.
     CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))

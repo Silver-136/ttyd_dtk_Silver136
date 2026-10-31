@@ -87,6 +87,12 @@ static EVT_BEGIN(item_get00)
     RETURN
 EVT_END()
 
+/**
+ * Middle part of Flurrie's intro, spawned at STG2_03_02:
+ * with Mario off the map, the screen fades in on Flurrie ("クラウダ"),
+ * who resolves to make her stage comeback after some makeup, then stops short (stg2_win_e04_00_04);
+ * the story becomes STG2_03_03_FLURRIE_INTRO and the map changes to win_03.
+ */
 static EVT_BEGIN(cloud_toujou)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -121,6 +127,12 @@ static EVT_BEGIN(cloud_toujou)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of win_05: registers its exit,
+ * places the Super Appeal P chest and the spinning floor panel that hides a Star Piece,
+ * plays the Boggly Woods BGM with the ENV_STG2_WIN2 ambience,
+ * and spawns cloud_toujou at STG2_03_02_SEALED_ENTRANCE_2.
+ */
 EVT_BEGIN(win_05_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

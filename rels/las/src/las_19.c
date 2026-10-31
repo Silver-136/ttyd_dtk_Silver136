@@ -343,11 +343,19 @@ static EVT_BEGIN(switch2_evt)
     RETURN
 EVT_END()
 
+/** Event script: the cloud of las_19 was reached; sets the story progress to STG8_08_THE_NEW_PATH. */
 static EVT_BEGIN(cloud_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_08_THE_NEW_PATH)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_19, the stairs of the Palace of Shadow:
+ * music (first or third Palace theme depending on the story),
+ * the cloud-covered lid (S_futa) that Flurrie must blow off until STG8_08_THE_NEW_PATH,
+ * the rising- staircase cutscene when entered from las_10, the Wizzerd NPCs,
+ * two float switches and a Thunder Rage block.
+ */
 EVT_BEGIN(las_19_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("chgmap_evt"))

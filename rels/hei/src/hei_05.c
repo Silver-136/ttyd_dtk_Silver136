@@ -126,6 +126,12 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Opens the second gate once both guards are beaten:
+ * the ground quakes (SFX_STG1_QUAKE3) and the camera looks at the gate, the grid rises (anm_mon),
+ * its collision turns off and, if the story was before STG1_05_BRISTLE,
+ * story progress becomes STG1_05_BRISTLE.
+ */
 static EVT_BEGIN(door_open)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_05_BRISTLE)
         CALL(evt_mario_key_onoff, 0)

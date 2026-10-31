@@ -2036,6 +2036,11 @@ static USER_FUNC(eff_magic) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Script helper: copies HP, status counters (0x1E bytes starting at sleepTurns)
+ * and the HP gauge display from the unit in args[0] to the unit in args[1],
+ * so a clone of the Dark Wizzerd matches the original.
+ */
 static USER_FUNC(mahorn_copy_status) {
     EvtWord* args = event->args;
     s32 id1 = evtGetValue(event, args[0]);

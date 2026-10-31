@@ -270,6 +270,12 @@ f32 spline_dt1[] = {
     -57.388996f, -4.335236f, 0.0f, -40.86129f, -145.0f, 0.0f, -60.0f,
 };
 
+/**
+ * Cutscene when Mario opens the red cell: the Puni elder, swollen and grumbling, is freed;
+ * Punio and the sister Puni run up; the screen fades while the party rests
+ * and the elder walks off along a spline with Punio.
+ * The Puni elder joins the Puni group and the story is set to STG2_14_PUNI_ELDER_FREED.
+ */
 EVT_BEGIN(elder_rescue)
     // Mario opens the red cell; Punio and his sister run up to the swollen Elder inside.
     CALL(evt_mario_key_onoff, 0)
@@ -484,6 +490,10 @@ EVT_BEGIN(elder_rescue)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the Puni elder in the cell room:
+ * until he is freed (STG2_14_PUNI_ELDER_FREED) he is held in the cell (the red one).
+ */
 static EVT_BEGIN(elder_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_14_PUNI_ELDER_FREED)
@@ -504,6 +514,10 @@ static EVT_BEGIN(elder_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of Punio's sister in the cell room:
+ * until the story reaches STG2_20_PUNIO_PETUNI she is held in the blue cell.
+ */
 static EVT_BEGIN(sister_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_20_PUNIO_PETUNI)
@@ -512,6 +526,11 @@ static EVT_BEGIN(sister_init)
     RETURN
 EVT_END()
 
+/**
+ * Regular (per-frame) script of the sister Puni:
+ * returns at once during the dark-figure part (STG2_12_01_A_DARK_FIGURE)
+ * and the Jabble part (STG2_18_JABBLE), otherwise just yields forever.
+ */
 EVT_BEGIN(sister_regl)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_01_A_DARK_FIGURE)
         RETURN
@@ -625,6 +644,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Custom door script for the door to mri_04: while the story is at the dark figure
+ * (STG2_12_01_A_DARK_FIGURE) the door triggers are switched off for 3 seconds,
+ * so Mario cannot leave during the entry scene. GF(0) is set while it runs. Returns 0 in LW(0).
+ */
 EVT_BEGIN(bero_custom_00)
     SET_VALUE(GF(0), 1)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_01_A_DARK_FIGURE)
@@ -920,6 +944,11 @@ EVT_BEGIN(bluejail_alpha)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene inside the blue cell (story STG2_18_JABBLE):
+ * after the fade clears, a Puni in the cell gives Mario a Dried Shroom and talks with Punio's sister.
+ * Sets the story to STG2_19_INSIDE_THE_BLUE_CELL and changes map with an iris wipe.
+ */
 EVT_BEGIN(bluejail_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_puni_puninum_onoff, 0)
@@ -1191,6 +1220,12 @@ EVT_BEGIN(kinoko_small)
     RETURN
 EVT_END()
 
+/**
+ * Scene when the blue cell is opened (story 19 to 20):
+ * the Punies step away from the cell, Punio and his sister Petuni talk with the party,
+ * a Dried Shroom is found and shown shrinking, and Petuni joins the Puni group (GSWF_MRI_PETUNI_IN_PUNI_GROUP).
+ * Sets the story to STG2_20_PUNIO_PETUNI.
+ */
 EVT_BEGIN(guide_sister)
 #ifndef VERSION_G8ME01
     // The Punies step back from the opened blue cell and Mario and his partner relax.
@@ -1412,6 +1447,11 @@ EVT_BEGIN(elder_shaberi)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene on entering the prison during story 12_01:
+ * the Punies find the elder captured, Punio and the party talk about it.
+ * Sets the story to STG2_12_02_PUNI_ELDER_IMPRISONED.
+ */
 EVT_BEGIN(toraware_elder)
     // Mario enters the prison; Punio and the Punies find the Elder locked in her cell.
     CALL(evt_mario_key_onoff, 0)
@@ -1536,6 +1576,10 @@ EVT_BEGIN(toraware_elder)
     RETURN
 EVT_END()
 
+/**
+ * Short scene before the blue cell opens (story 19): Punio waits by the cell and talks;
+ * sets GSWF_MRI03_PUNIO_WAITING_AT_CELL and the story to STG2_19_01_PUNIO_PETUNI_BEFORE.
+ */
 EVT_BEGIN(guide_sister_before)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_puni_wait_systemmode, 2)

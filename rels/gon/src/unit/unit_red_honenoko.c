@@ -398,6 +398,11 @@ static EVT_BEGIN(fake_dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Turn event of the collapsed Red Bones: counts unit work 2 down and, when it reaches zero,
+ * reassembles it (KRN_D_3 and KRN_D_4 with the reunite sounds),
+ * clears attribute 0x20000 and restores its HP to the maximum.
+ */
 // Reassembly consumes this attack turn, even when the countdown reaches zero.
 static EVT_BEGIN(rebirth_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REVIVE_TURNS, LW(0))

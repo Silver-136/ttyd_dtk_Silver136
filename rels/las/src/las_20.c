@@ -273,6 +273,12 @@ const char* hosi_name[] = {
     "S_hosi_08b",
 };
 
+/**
+ * Event script: after each star switch press, checks whether the seven stars match the solution (switches 1, 3,
+ * 4 and 6 on, the rest off, as kept in LSWF(1..7)).
+ * When solved it flashes the stars in a running light, shakes the camera,
+ * removes the switches and sets the story to STG8_11_STAR_PUZZLE.
+ */
 EVT_BEGIN(hosi_sw_check)
     SET_VALUE(LW(0), 0)
     // Compare the seven star switches against the solution (1, 3, 4 and 6 on, the others off).

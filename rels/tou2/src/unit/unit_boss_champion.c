@@ -748,6 +748,12 @@ static EVT_BEGIN(ceil_fall_ready_event)
     RETURN
 EVT_END()
 
+/**
+ * Rawk Hawk's death: if he is hanging he drops to the floor first, then plays his "D_3" defeat pose and cry.
+ * In the first fight (before STG3_30_A_NEW_CHAMPION) he waits for the attack to end
+ * and delivers a last line (stg3_tou_436_06) under a close camera,
+ * before the common no-spin death (subsetevt_dead_core_nospin_norotate).
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

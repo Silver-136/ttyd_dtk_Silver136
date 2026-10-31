@@ -844,6 +844,17 @@ EVT_BEGIN(first_jin00)
     RETURN
 EVT_END()
 
+/**
+ * Case script run every frame while Mario pushes the statue base (A_dai):
+ * he keeps the pushing pose and the base (oki01) slides sideways a little each frame,
+ * with dust now and then once pushed 40 frames.
+ * After 80 frames of pushing it finishes by itself:
+ * the music switches to the success jingle, the camera shakes,
+ * dust puffs and the pedestal sounds play while the base slides 50 units and carries Mario along
+ * until it reaches x = 396, where he looks surprised.
+ * Afterwards the statue-top collision (a_futa) turns off,
+ * story progress becomes STG4_09_01_PUSH_THE_STATUE and the case event ends.
+ */
 static EVT_BEGIN(push_evt)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_get_pose, LW(0))
@@ -933,6 +944,10 @@ EVT_BEGIN(nopush_evt)
     RETURN
 EVT_END()
 
+/**
+ * Pickup event of the Steeple Key lying in the main hall (item key00, ITEM_STEEPLE_KEY_0x16):
+ * sets story progress to STG4_09_04_KEY when Mario takes it.
+ */
 static EVT_BEGIN(evt_key)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_09_04_KEY)
     RETURN
@@ -958,6 +973,10 @@ static EVT_BEGIN(lock_item_check)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the Steeple Key is used on the lock:
+ * sets story progress to STG4_09_05_LOCK and switches the n_bero_2 door entry on.
+ */
 static EVT_BEGIN(evt_unlock)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_09_05_LOCK)
     SET_VALUE(LW(0), STRING("n_bero_2"))

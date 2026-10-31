@@ -139,6 +139,13 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Case script of the three key slots of the factory door (A_kagi1 to 3):
+ * Mario puts a Card Key (ITEM_CARD_KEY_0x1D, 0x1E or 0x1F) from the item menu into the slot it belongs to.
+ * A right key lights the slot (GSWF_AJI18_CARD_KEY_SLOT_1 to 3) and is used up; a wrong one gets stg7_aji_67_01.
+ * When all three slots are filled the story becomes STG7_16_FACTORY_DOOR
+ * and the door's lamp turns from red to green.
+ */
 EVT_BEGIN(evt_machine)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_67"), 0, 0)
@@ -274,6 +281,15 @@ static USER_FUNC(sysflag) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Init script of aji_18, the room with the factory door:
+ * plays BGM_STG7_DUN2, sets up the exits, lights the three key slots by their flags (all filled from
+ * STG7_16_FACTORY_DOOR on), attaches evt_machine to each empty slot
+ * and locks the exit e_bero (key_lock_koujyou) before that point and between Lord Crump's defeat
+ * and STG7_25_00_1_BOWSER_POSHLEY_SANCTUM.
+ * In that last stretch, entering from e_bero puts a partner back with Mario if he has none,
+ * heals Mario and the partners, and starts evt_koopa_after.
+ */
 EVT_BEGIN(aji_18_init_evt)
     CALL(sysflag)
     // The fortress music and ambience start and the exits are set up.

@@ -101,6 +101,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Cortez's warning (STG5_31_FOUR_EYES): when Mario enters the corridor a spoken narration (stg5_dou_20)
+ * warns of the danger ahead and the story becomes STG5_32_CORTEZS_WARNING.
+ */
 EVT_BEGIN(warning_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, 65536)
@@ -116,6 +120,10 @@ EVT_BEGIN(warning_event)
     RETURN
 EVT_END()
 
+/**
+ * Map init for muj_11 (the corridor between the dock and Cortez's lair):
+ * picks music by story stage, registers the exits and spawns warning_event at STG5_31_FOUR_EYES.
+ */
 EVT_BEGIN(muj_11_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG5_GHOST1"))

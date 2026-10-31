@@ -42,6 +42,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Script after the Super Boots chest is opened:
+ * the music is stopped, the Puni counter is hidden,
+ * Super Boots appear above the chest and Mario collects them as an important item with the fanfare,
+ * then the music returns, the story is set to STG2_21_03_SUPER_BOOTS and Mario can move again.
+ */
 static EVT_BEGIN(item_evt)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_envoff, PSND_PAUSE)

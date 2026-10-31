@@ -463,6 +463,12 @@ EVT_BEGIN(floatblk21_2_evt)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_21: music (first or third Palace theme by story), the doors to las_19,
+ * las_23 and las_20, and before STG8_06_MOVING_PLANETS hides the lower floor.
+ * Afterwards the floating blocks of las_19 and las_21 are placed from the las_19 switch states,
+ * with their float switches and a blue jump stand.
+ */
 EVT_BEGIN(las_21_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))

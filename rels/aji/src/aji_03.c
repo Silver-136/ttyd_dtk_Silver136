@@ -582,6 +582,11 @@ EVT_BEGIN(evt_ufo_init)
     RETURN
 EVT_END()
 
+/**
+ * Spins the clock gears (zenmai, clockwork) of the room forever;
+ * one revolution takes 2 seconds, 1 second once STG7_19_THE_DOOR_TO_LORD_CRUMP is reached.
+ * Plays SFX_STG7_AMB_GEAR1.
+ */
 EVT_BEGIN(evt_zenmai)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_AMB_GEAR1"), 0)
     LOOP(0)

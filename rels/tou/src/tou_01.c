@@ -1055,6 +1055,10 @@ EVT_BEGIN(talk_hot)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the dad (パパ, one of the plaza's family):
+ * placed at (-175, 0, -25) before STG5_65_TRAIN_TICKET and hidden below the map afterwards.
+ */
 static EVT_BEGIN(init_papa)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG5_65_TRAIN_TICKET)
@@ -1065,6 +1069,12 @@ static EVT_BEGIN(init_papa)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the dad: story-dependent lines.
+ * Before STG3_04_GONZALES_IS_BORN one line;
+ * until STG3_32_BOSS_BATTLE the line depends on Mario's Glitz Pit ranking (evt_tou_get_ranking: above 15,
+ * above 10, above 5, above 0, or 0); after that one of two lines depending on GSWF_TOU_LEFT_AS_CHAMPION.
+ */
 static EVT_BEGIN(talk_papa)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1093,6 +1103,10 @@ static EVT_BEGIN(talk_papa)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the mom (ママ, one of the plaza's family):
+ * placed at (-130, 0, 0) before STG5_65_TRAIN_TICKET and hidden below the map afterwards.
+ */
 static EVT_BEGIN(init_mama)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG5_65_TRAIN_TICKET)
@@ -1103,6 +1117,10 @@ static EVT_BEGIN(init_mama)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the mom: same structure as talk_papa (a line before STG3_04_GONZALES_IS_BORN,
+ * lines by Glitz Pit ranking until STG3_32_BOSS_BATTLE, then a line chosen by GSWF_TOU_LEFT_AS_CHAMPION).
+ */
 static EVT_BEGIN(talk_mama)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1131,6 +1149,10 @@ static EVT_BEGIN(talk_mama)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the Goldbob family's son (コナリキン, konari):
+ * placed at (-200, 0, 10) before STG5_65_TRAIN_TICKET and hidden below the map afterwards.
+ */
 static EVT_BEGIN(init_konari)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG5_65_TRAIN_TICKET)
@@ -1141,6 +1163,10 @@ static EVT_BEGIN(init_konari)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of konari: same structure as talk_papa (a line before STG3_04_GONZALES_IS_BORN,
+ * lines by Glitz Pit ranking until STG3_32_BOSS_BATTLE, then a line chosen by GSWF_TOU_LEFT_AS_CHAMPION).
+ */
 static EVT_BEGIN(talk_konari)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1169,6 +1195,11 @@ static EVT_BEGIN(talk_konari)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the three girls (３人娘１ to ３): they speak in turn.
+ * Before STG3_04_GONZALES_IS_BORN one exchange;
+ * until STG3_32_BOSS_BATTLE the exchange depends on Mario's Glitz Pit ranking (above 15, 10, 5, 0, or 0).
+ */
 static EVT_BEGIN(talk_musume)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1606,6 +1637,10 @@ EVT_BEGIN(talk_bijyo)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the smug fan (キザ野郎): placed at (555, 10, -30) from STG3_00_WELCOME_TO_GLITZVILLE
+ * until STG3_32_BOSS_BATTLE and hidden below the map otherwise.
+ */
 static EVT_BEGIN(init_kiza)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_32_BOSS_BATTLE)
@@ -1616,6 +1651,10 @@ static EVT_BEGIN(init_kiza)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the smug fan: a line before STG3_04_GONZALES_IS_BORN,
+ * and until STG3_32_BOSS_BATTLE lines chosen by Mario's Glitz Pit ranking (above 15, 10, 5, 0, or 0).
+ */
 static EVT_BEGIN(talk_kiza)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1638,6 +1677,7 @@ static EVT_BEGIN(talk_kiza)
     RETURN
 EVT_END()
 
+/** NPC init for the salaryman (サラリーマン): from STG6_56_ROGUEPORT_STATION on he stands at (-240, 10, -90). */
 static EVT_BEGIN(init_sarary)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         CALL(evt_npc_set_position, STRING("me"), -240, 10, -90)
@@ -2072,6 +2112,13 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Arrival cutscene, run by the gondola script on Mario's first arrival (story before
+ * STG3_00_WELCOME_TO_GLITZVILLE): the location telop shows, Mario and the partner walk in, the partner
+ * marvels that this is Glitzville (stg3_tou_03), the camera sweeps over the plaza while they look around, the
+ * partner urges finding the Crystal Star (stg3_tou_04), and the story advances to
+ * STG3_00_WELCOME_TO_GLITZVILLE.
+ */
 EVT_BEGIN(evt_uron)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -2168,6 +2215,10 @@ static USER_FUNC(mario_chk) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Idle loop of the egg NPC: while the story is at STG3_11_RUNAWAY_EGG it pulses its scale between 100%
+ * and 120% to look like it breathes in its sleep.
+ */
 EVT_BEGIN(evt_tamago_sleep)
     LOOP(0)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG3_11_RUNAWAY_EGG)
@@ -2439,6 +2490,11 @@ EVT_BEGIN(evt_tamago_move)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene when Mario first sees the runaway egg:
+ * he turns toward it, reacts with an exclamation bubble (stg3_tou_241), the camera frames it,
+ * and the story advances to STG3_10_MINORS_5TH_PL_EGG.
+ */
 EVT_BEGIN(evt_tamago)
     CALL(evt_mario_set_dir, 90, 0, 0)
     CALL(evt_mario_key_onoff, 0)
@@ -2470,6 +2526,11 @@ EVT_BEGIN(evt_tamago)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the egg NPC (たまご): Mario picks it up,
+ * the partner and the hot dog vendor talk about it (stg3_tou_247 to 250, with a yes/no prompt),
+ * and the story advances to STG3_12_THE_MINI_YOSHI_EGG.
+ */
 EVT_BEGIN(talk_tamago)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -3351,6 +3412,10 @@ static USER_FUNC(starstone_set_ry) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Pickup callback of the Storage Key lying at (-745, 20, 435) (placed during "Rawk Hawk's Warning"):
+ * sets the story stage to STG3_20_07_STORAGE_KEY and spawns evt_mail.
+ */
 static EVT_BEGIN(evt_key)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_20_07_STORAGE_KEY)
     SPAWN_EVENT(PTR(evt_mail))

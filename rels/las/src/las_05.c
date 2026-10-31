@@ -1668,6 +1668,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Event script: run when the key is used in the lock of the east door;
+ * sets the story progress to STG8_01_01_KEY.
+ */
 static EVT_BEGIN(key_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_01_01_KEY)
     RETURN

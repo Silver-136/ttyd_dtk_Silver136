@@ -143,6 +143,11 @@ EVT_BEGIN(win_04e_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Exit script of the west door in bero_witchtrio,
+ * the exit the init script swaps in at STG2_05_02 (it leads to win_00, where witchtrio_picture plays):
+ * sets the next map change to an iris wipe (500 ms out, 500 ms in); returns LW(0) = 0.
+ */
 static EVT_BEGIN(out_w_bero)
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
     SET_VALUE(LW(0), 0)
@@ -215,6 +220,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Spawned by the init script at STG2_04 when Mario first enters Flurrie's house:
+ * once he is in, Punio (the second partner, "extparty") calls out "Excuse me!",
+ * the camera looks over the room and Punio guesses she went for a walk (stg2_win_e05_00_00, 01).
+ * The story becomes STG2_05_A_SHY_FLURRIE and meet_clouda2 starts.
+ */
 EVT_BEGIN(meet_clouda)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -290,6 +301,11 @@ EVT_BEGIN(meet_clouda2)
     RETURN
 EVT_END()
 
+/**
+ * Inner-door script (touch_door) before STG2_05_01:
+ * a system message says the door won't budge (stg2_win_e04_03)
+ * and the partner thinks the place is deserted (stg2_win_e04_04).
+ */
 EVT_BEGIN(clouda_inai)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg2_win_e04_03"), 0, 0)
@@ -1397,6 +1413,12 @@ void flower_disp(CameraId camera, void* param) {
     }
 }
 
+/**
+ * Second part of Flurrie's intro (after win_03's cloud_toujou), at STG2_03_02:
+ * with Mario off the map, the camera looks over the room while a voice without a speaker tail
+ * enjoys the peace of the woods (stg2_win_e04_00_02), then, pointed at (300, 80, 40),
+ * admits she will soon crave drama (stg2_win_e04_00_03); the map changes to win_05 with an iris wipe.
+ */
 static EVT_BEGIN(cloud_toujou)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)

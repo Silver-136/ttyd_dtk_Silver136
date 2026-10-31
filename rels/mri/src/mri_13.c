@@ -130,6 +130,12 @@ static EVT_BEGIN(punipuni_mario_halt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the orb pedestal in the water room: runs the shared Puni-switch setup;
+ * if the orb is on the pedestal it is placed at the pedestal height,
+ * which drops by 309 units once the water has been drained (STG2_21_06_WATER_SWITCH).
+ * Otherwise the beam of light is hidden. The target point also follows the water level.
+ */
 static EVT_BEGIN(punipuni_ball00_init)
     CALL_CHILD(PTR(mri_punipuni_setup))
     IF_INT_EQUAL(GSWF_MRI_13_PUNI_ORB_PLACED, 1)
@@ -365,6 +371,14 @@ static EVT_BEGIN(yuka_check)
     RETURN
 EVT_END()
 
+/**
+ * Elevator event: waits until the Puni Orb is on the pedestal,
+ * the counter GW(0) has reached 0 (every Puni is standing on the platform) and Mario
+ * and the partner are on it too.
+ * Then Mario stops, the Punies freeze, the floor starts moving with a quake and the camera pans down,
+ * and the platform, Puni Orb and light move 309 units down over 10 seconds.
+ * Afterwards the Punies are released and the story is set to STG2_21_06_WATER_SWITCH.
+ */
 EVT_BEGIN(yuka_event)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -524,6 +538,13 @@ static KusaAccess ueki_access_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Map init script of mri_13, the Puni elevator room:
+ * sets up the Puni, planters, save block and recovery block, the counter GW(0) at 101,
+ * the Puni Orb pedestal and the moving floor depending on the story state (before or after
+ * STG2_21_06_WATER_SWITCH), and the east exit that leads to Lord Crump's room
+ * before STG2_22_LORD_CRUMP_APPEARS.
+ */
 EVT_BEGIN(mri_13_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 13, 0, -310, -1000, -1000, 0, 0)

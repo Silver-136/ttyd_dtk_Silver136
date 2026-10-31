@@ -119,11 +119,17 @@ USER_FUNC(hit_move) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Runs when Mario picks up the station key (ITEM_STATION_KEY_0x19): sets the story to STG6_31_KEY. */
 static EVT_BEGIN(evt_key)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_31_KEY)
     RETURN
 EVT_END()
 
+/**
+ * Map init for eki_02: sets up the door back to eki_01, starts the contraption (sikake) animations,
+ * places the Station Key until it has been picked up (picking it up sets STG6_31_KEY),
+ * places the Star Piece, and starts hit_move so Mario rides the moving platforms.
+ */
 EVT_BEGIN(eki_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)

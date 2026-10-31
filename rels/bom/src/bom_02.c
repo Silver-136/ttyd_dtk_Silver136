@@ -381,6 +381,12 @@ static EVT_BEGIN(evt_kime_pose)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene at the inn when the cannon is back online:
+ * the camera pans in, the mayor speaks stg7_bom_60 to 62,
+ * Mario and the partner gesture (hand-up voice, partner kime pose and stg7_bom_60_2),
+ * the mayor hops away and the story progress is set to STG7_04_BACK_ONLINE.
+ */
 static EVT_BEGIN(evt_taihou)
     CALL(evt_cam3d_evt_set, 140, 100, 593, 140, 40, 248, 500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -494,6 +500,7 @@ EVT_BEGIN(urotuku_white)
     RETURN
 EVT_END()
 
+/** Init of the mayor (村長): before STG7_04_BACK_ONLINE he stands at (120, 0, 265). */
 static EVT_BEGIN(init_soncho)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_04_BACK_ONLINE)
@@ -502,6 +509,14 @@ static EVT_BEGIN(init_soncho)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the mayor in the east village: before STG6_71_01 stg7_bom_20_00;
+ * before STG7_02_MAYOR_BOB the first conversation (stg7_bom_20 to 33,
+ * which ends by setting STG7_02_MAYOR_BOB, with the partner answering);
+ * then he talks about General White and the cannon (stg7_bom_34 onward,
+ * depending on GSWF_PIK00_GOLDBOB_CANNON_APPROVAL and GSWF_BOM02_GENERAL_WHITE_WOKEN)
+ * until the cannon story point.
+ */
 static EVT_BEGIN(talk_soncho)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
     SWITCH(GSW_STORY_PROGRESS)
@@ -759,6 +774,11 @@ static EVT_BEGIN(init_murabito_f)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of villager F: stg7_bom_12_00 before STG6_71_01,
+ * stg7_bom_12 and 12_1 until the cannon is back online and ready,
+ * stg7_bom_13 until the end of the chapter 8 battle and stg7_bom_13_1 afterwards.
+ */
 static EVT_BEGIN(talk_murabito_f)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
@@ -884,6 +904,10 @@ static EVT_BEGIN(init_murabito_i)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of villager I: stg7_bom_18_00 before STG6_71_01, stg7_bom_18 and 18_1 until the cannon,
+ * stg7_bom_19 until the end of the chapter 8 battle and stg7_bom_19_1 afterwards.
+ */
 static EVT_BEGIN(talk_murabito_i)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
@@ -1390,6 +1414,10 @@ EVT_BEGIN(evt_white_bed)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the dandy (キザ野郎): stg7_bom_19_01 before STG7_02_MAYOR_BOB,
+ * stg7_bom_19_02 before STG7_04_BACK_ONLINE, stg7_bom_19_03 afterwards.
+ */
 static EVT_BEGIN(kiza_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_02_MAYOR_BOB)

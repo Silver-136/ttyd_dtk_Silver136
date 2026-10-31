@@ -127,6 +127,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Chest script for the first chest (hako): the lid swings open (hako_futa) with SFX_STG4_TBOX_OPEN1
+ * and Mario receives The Letter P; sets story progress to STG4_13_04_THE_LETTER_P and ends the case event.
+ */
 static EVT_BEGIN(evt_open)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("hako"), LW(10), LW(11), LW(12))

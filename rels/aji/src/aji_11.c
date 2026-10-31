@@ -85,6 +85,13 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Exit event of the west door w_bero during Peach's disk search:
+ * while the story is before STG5_46_PEACH_DISK_SEARCH
+ * and she has taken the Data Disk (GSWF_AJI11_PEACH5_DATA_DISK_TAKEN),
+ * she refuses to leave (peach_aji_249_01 if the disk has not been read, peach_aji_250 if it has)
+ * and LW(0) = 1 cancels the exit; otherwise LW(0) = 0 lets her through.
+ */
 EVT_BEGIN(peach_evt_bero)
     IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_TAKEN, 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG5_46_PEACH_DISK_SEARCH)

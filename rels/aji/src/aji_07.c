@@ -106,6 +106,13 @@ static USER_FUNC(scale_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Case script for stepping on the teleporter pad (A_tensou):
+ * Mario and the partner walk into the beam, spin faster and faster for three seconds,
+ * shrink (scale_func) and rise out of sight, and the map changes:
+ * to the sewers tik_00 (setting GSWF_TIK00_TELEPORTER_ARRIVAL) normally,
+ * to moo_04 during STG7_25_THE_LAST_MAIL.
+ */
 EVT_BEGIN(tensou_ride)
     // Mario and his partner walk onto the teleporter pad.
     CALL(evt_mario_key_onoff, 0)

@@ -57,6 +57,11 @@ static EVT_BEGIN(door01_open)
     RETURN
 EVT_END()
 
+/**
+ * Run when Mario leaves the room during the escape countdown:
+ * ends the countdown timer (evt_sub_countdown_end) and, at STG1_13_A_SUSPICIOUS_ROOM,
+ * stops the ceiling's rumble sound GW(10).
+ */
 EVT_BEGIN(out_func)
     CALL(evt_sub_countdown_end)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_13_A_SUSPICIOUS_ROOM)
@@ -309,6 +314,12 @@ static EVT_BEGIN(bomb_wall_evt)
     RETURN
 EVT_END()
 
+/**
+ * Map init for gon_07: sets up the door, the treasure chest holding the Black Key (already open once the story
+ * reaches STG1_13_A_SUSPICIOUS_ROOM; opening it drops the spiked ceiling and starts the escape countdown,
+ * and the story changes to that step), and the cracked wall that Bobbery's bomb can blow up (bomb_wall_evt),
+ * which stays open afterwards.
+ */
 EVT_BEGIN(gon_07_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

@@ -171,6 +171,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Sets up the floodgate at map load: before STG5_22_FLOODGATE_HANDLE the winch lever is hidden
+ * and the exit behind the gate (s_bero) is switched off; afterwards the gate is already up.
+ */
 EVT_BEGIN(watergate_handle_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_reba"), MAP_OBJ_FLAG_HIDDEN)
@@ -269,6 +273,13 @@ EVT_BEGIN(nagare_bin)
     RETURN
 EVT_END()
 
+/**
+ * Talk-to-winch event (A_makimaki): before the floodgate is raised,
+ * asks for the Gate Handle (a message if Mario does not have one, otherwise the item menu), then fits it,
+ * cranks the winch with shaking and gear sounds, raises the gate, sweeps away the barrel and bottle,
+ * and the partner comments (stg5_dou_02 and 03).
+ * Sets STG5_22_FLOODGATE_HANDLE and re-enables the exit; afterwards it only gives a short message.
+ */
 // Stop the stored barrel/bottle bobbing events before their downstream translation.
 EVT_BEGIN(watergate_handle)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)

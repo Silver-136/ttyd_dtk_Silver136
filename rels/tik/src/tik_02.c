@@ -584,6 +584,15 @@ static EVT_BEGIN(ukishima_apper)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene and battle with the Blooper (geso, the prologue boss),
+ * started from the map init at STG0_17_BADGE_TUTORIAL.
+ * Mario is held back at X = -410 until the scene triggers;
+ * the Blooper's tentacle (ゲッソーのゲソ) and then the Blooper rise out of the water (mac_0_125, mac_0_126),
+ * the battle starts (battle info 3), and afterwards he leaves in a crash.
+ * The road of islands then appears (ukishima_apper),
+ * story progress is set to STG0_19_BLOOPER_BATTLE and the sewer music returns.
+ */
 EVT_BEGIN(geso_battle)
     // The Blooper waits under the walkway and its tentacle lies across it; the scene waits until Mario hits it.
     CALL(evt_npc_set_position, STRING("ゲッソー"), -385, -60, 0)
@@ -821,6 +830,13 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Map init script of tik_02, the Blooper room.
+ * Starts the music and the water animations, sets up the exits, the cracked wall to bomb with Bobbery,
+ * the Shine Sprite power block and the floating islands (sunk out of sight before the battle,
+ * sliding on their own after STG0_19_BLOOPER_BATTLE). Starts geso_battle at STG0_17_BADGE_TUTORIAL.
+ * Until Petal Meadows opens the pipe exit (dokan) is switched off and its destination replaced.
+ */
 EVT_BEGIN(tik_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

@@ -32,6 +32,10 @@ static EvtWord back_light[35];
 EvtWord totsunyu_event[46];
 EvtWord dou_00_init_evt[61];
 
+/**
+ * Entry event of the grotto's entrance door: on the first arrival (STG5_19_GEMS_AND_JINGLES) it starts the
+ * arrival cutscene totsunyu_event; leaves LW(0) = 0.
+ */
 static EVT_BEGIN(bero_in_event)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_19_GEMS_AND_JINGLES)
         CALL_CHILD(PTR(totsunyu_event))

@@ -612,6 +612,10 @@ static EVT_BEGIN(puni_lose)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene when Mario enters mri_06 during story STG2_16: a Jabbi runs across the room and away;
+ * Punio ("ガイドsp") then runs up and rejoins the party. Sets the story to STG2_17_BUBBLES.
+ */
 EVT_BEGIN(apper_toge)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LW(10), STRING("トゲ族"))

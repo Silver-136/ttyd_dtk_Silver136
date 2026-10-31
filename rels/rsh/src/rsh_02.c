@@ -243,6 +243,13 @@ EVT_BEGIN(evt_powan_msg)
     RETURN
 EVT_END()
 
+/**
+ * Trigger on the pot shelf (tana_3).
+ * Before the story reaches STG6_04_GRILLING_HEFF_T (or after the pot was found) it just prints
+ * stg6_rsh_264; during that stage Mario finds the Galley Pot, gets the item,
+ * the gourmet Toad confesses and Pennington appears and walks off,
+ * and the story moves to STG6_05_GALLEY_KETTLE_DISCOVERED.
+ */
 EVT_BEGIN(evt_nabe)
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_04_GRILLING_HEFF_T)
@@ -325,6 +332,11 @@ static EVT_BEGIN(init_gurume)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the gourmet Toad (gurume), by story stage:
+ * before the stew case, the stew case (sets STG6_04_GRILLING_HEFF_T), hints about the ghost's cabin,
+ * and day 1, day 2 and later lines.
+ */
 static EVT_BEGIN(talk_gurume)
     SWITCH(GSW_STORY_PROGRESS)
 #ifdef VERSION_G8ME01
@@ -516,6 +528,14 @@ static s32 item_tbl2[] = {
     ITEM_RAGGED_DIARY, -1,
 };
 
+/**
+ * Talk script of the ghost.
+ * Plays the ghost music and, by story stage, runs the ghost's quest:
+ * introduces herself and asks for a favour (STG6_14_GHOST_T,
+ * then STG6_15_GHOST_REQUEST after Mario agrees), asks for her Ragged Diary, takes it from the item menu,
+ * gives Mario the Blanket in return (STG6_18_BLANKET_EXCHANGE),
+ * and afterwards repeats a hint or a closing line per stage.
+ */
 EVT_BEGIN(talk_yuurei)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     // The ghost's music plays and her quest begins.
@@ -685,6 +705,10 @@ USER_FUNC(toron_check) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Init event of Zip Toad (Toron) in rsh_02: at STG6_25_ZIP_TOAD_APPEARS puts him at (-240, 0, -180)
+ * and starts the chase (evt_toron_catch); once caught he sits in the D_1 pose.
+ */
 static EVT_BEGIN(init_toron)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG6_25_ZIP_TOAD_APPEARS)
@@ -816,6 +840,11 @@ static const char* door_5[] = {
     "5_door_close",
 };
 
+/**
+ * Bed scene at the end of day 1 (story STG6_19_GIVE_BLANKET):
+ * asks to sleep, then fades out with a spotlight on Mario, sets STG6_20_END_OF_DAY_1,
+ * restores HP/FP of Mario and the party and warps to rsh_02_a for the next morning.
+ */
 EVT_BEGIN(evt_1day_end)
     CALL(evt_msg_print, 0, STRING("stg6_yado_02"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg6_yado_02_yn"))
@@ -882,6 +911,10 @@ USER_FUNC(bgm_wait_stop) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Bed scene at the end of day 2 (story STG6_43_CONDUCTOR_APPEARS):
+ * same as evt_1day_end but sets STG6_44_END_OF_DAY_2 before warping to rsh_02_a.
+ */
 EVT_BEGIN(evt_2day_end)
     CALL(evt_msg_print, 0, STRING("stg6_yado_02"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg6_yado_02_yn"))
@@ -946,6 +979,10 @@ EVT_BEGIN(evt_normal_yado)
     RETURN
 EVT_END()
 
+/**
+ * Trigger on the bed in cabin 3-5: locks input and runs evt_1day_end at STG6_19_GIVE_BLANKET,
+ * evt_2day_end at STG6_43_CONDUCTOR_APPEARS, and evt_normal_yado otherwise.
+ */
 EVT_BEGIN(evt_bed)
     CALL(evt_mario_key_onoff, 0)
     SWITCH(GSW_STORY_PROGRESS)
@@ -960,6 +997,12 @@ EVT_BEGIN(evt_bed)
     RETURN
 EVT_END()
 
+/**
+ * Chase of the Zip Toad (Toron) at STG6_25_ZIP_TOAD_APPEARS:
+ * Toron blurs and jumps between three perches in the car while the script waits for Mario to touch him;
+ * when he does, the catch plays (stars, damage cry, Toron stumbles to a stop and says stg6_rsh_182),
+ * then the story advances to STG6_26_ZIP_TOAD_CAUGHT and the map changes to rsh_02_b.
+ */
 EVT_BEGIN(evt_toron_catch)
     // GF(0) requests the jumping loop to stop; GF(1) acknowledges its cleanup.
     SET_VALUE(LW(10), 0)
@@ -1311,6 +1354,11 @@ EVT_BEGIN(evt_toron_appear)
     RETURN
 EVT_END()
 
+/**
+ * Trigger on the paper spot (a_kami) between STG6_24_A_VITAL_CLUE and the next clue:
+ * Mario finds the paper (stg6_rsh_179), the partner comments (stg6_rsh_180)
+ * and the story advances to STG6_24_02_ANOTHER_CLUE.
+ */
 static EVT_BEGIN(evt_daiji_kami)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_move_behind_mario, 0)
@@ -1337,6 +1385,11 @@ static EVT_BEGIN(evt_daiji_kami)
     RETURN
 EVT_END()
 
+/**
+ * Trigger on the stained carpet spot (a_yuka_simi) on day 1:
+ * Mario comments (stg6_rsh_51), the partner too the first time (stg6_rsh_52),
+ * and the story advances to STG6_03_STAINED_CARPET.
+ */
 static EVT_BEGIN(evt_yuka_simi)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_DOUBTFUL_POINT1"), LW(0), LW(1), LW(2), 0)
@@ -1397,6 +1450,11 @@ static EVT_BEGIN(evt_access_entry)
     RETURN
 EVT_END()
 
+/**
+ * Shared map init for the three variants of rsh_02 on the first trip:
+ * registers the three cabin doors (3 to 5), the NPCs, the pot shelf trigger (tana_3),
+ * the bed (from STG6_01_THE_CONDUCTOR on), the shelf signs, and the music for the story stage.
+ */
 EVT_BEGIN(rsh_02_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
@@ -1473,6 +1531,13 @@ EVT_BEGIN(rsh_02_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_02_a (first visit): runs the shared init and then, depending on the story,
+ * plays the arrival scenes after sleeping (day 2, day 3 and the Poshley Heights morning messages,
+ * with a partner line on day 3), the first-time intro dialogue at STG6_00_START,
+ * the stained-floor trigger for the carpet clue, the Vital Paper clue, Toron's appearance,
+ * and the Smorg window effect.
+ */
 EVT_BEGIN(rsh_02_a_init_evt)
     // Decide whether a scripted entry is pending, then run the shared car init.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_20_END_OF_DAY_1)

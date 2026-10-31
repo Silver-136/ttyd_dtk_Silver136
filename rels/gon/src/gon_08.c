@@ -447,6 +447,10 @@ static EVT_BEGIN(evt_chk)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the door lock is opened with the Castle Key:
+ * switches on the e_bero_2 bero case and sets the story to STG1_15_02_LOCK_3.
+ */
 static EVT_BEGIN(evt_unlock)
     SET_VALUE(LW(0), STRING("e_bero_2"))
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -583,6 +587,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Map init for gon_08: sets up the doors, Nokkos, the dormant Dry Bones, the Life Shroom,
+ * the floating block and switch (blk_0 and sw_0),
+ * and the lock that Castle Key 0x0F opens (STG1_15_02_LOCK_3).
+ */
 EVT_BEGIN(gon_08_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

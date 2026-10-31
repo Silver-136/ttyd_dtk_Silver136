@@ -351,6 +351,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Callback run when Flurrie's wind has blown the lid (A_futa) off the hole:
+ * plays a jingle, switches the lid's collision off and advances the story to STG4_06_01_BLOW_THE_FLOOR.
+ */
 EVT_BEGIN(gra_05_futa_open_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -364,6 +368,11 @@ EVT_BEGIN(gra_05_futa_open_evt)
     RETURN
 EVT_END()
 
+/**
+ * Initial state of the pushable boulder (A_iwa / S_iwa):
+ * binds its collision to the model and, if the story is already at STG4_07_TRICK_ROCK,
+ * puts it in its pushed position (120 units over) and hides the lid.
+ */
 EVT_BEGIN(evt_gra_05iwa_move_init)
     CALL(evt_hit_bind_mapobj, STRING("A_iwa"), STRING("S_iwa"))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_07_TRICK_ROCK)
@@ -375,6 +384,11 @@ EVT_BEGIN(evt_gra_05iwa_move_init)
     RETURN
 EVT_END()
 
+/**
+ * Event run when Mario has pushed the boulder long enough:
+ * the boulder slides 120 units sideways over 3 seconds with dust puffs and camera shake, carrying Mario along,
+ * then the story is set to STG4_07_TRICK_ROCK.
+ */
 EVT_BEGIN(evt_gra_05iwa_move_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_get_position, STRING("S_iwa"), LW(0), LW(1), LW(2))
@@ -427,6 +441,10 @@ EVT_BEGIN(evt_gra_05iwa_move_evt)
     RETURN
 EVT_END()
 
+/**
+ * Callback of the breaking floor: advances the story to STG4_06_02_THROUGH_THE_HOLE
+ * and turns the camera curve on.
+ */
 EVT_BEGIN(evt_break_floor)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_06_02_THROUGH_THE_HOLE)
     CALL(camera_curve_on)

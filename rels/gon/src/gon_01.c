@@ -409,6 +409,13 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Map init for gon_01 (castle gate courtyard): after being pushed out of gon_03 it plays honenoko_oidasare_evt;
+ * otherwise it sets up the doors normally and, the first time,
+ * advances the story to STG1_09_HOOKTAIL_CASTLE and plays the gate cutscene.
+ * Also places the HP Plus item, the fall-return points for the pits, the moat water and the airplane panels,
+ * and raises the story to STG1_09_02_LOCK.
+ */
 EVT_BEGIN(gon_01_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_GON2"))

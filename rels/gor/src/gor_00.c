@@ -335,6 +335,12 @@ s16 dai3_run_animtbl[] = {
 #endif
 };
 
+/**
+ * Exit event of the "n_bero" door to gor_01.
+ * At STG0_05_1000_X_NAUTS_BEFORE it freezes Mario,
+ * walks him 80 units back and hides him and his partner before the map change, and returns 1 in LW(0);
+ * at any other time it returns 0 and the exit works normally.
+ */
 EVT_BEGIN(no00_custom)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_05_1000_X_NAUTS_BEFORE)
         CALL(evt_mario_wait_landon)
@@ -391,6 +397,10 @@ static void alpha_tev(MapTevCallbackInfo* info) {
     info->tevStage++;
 }
 
+/**
+ * Init event of Francesca (Mony): while Mario is looking for Don Pianta (STG2_44 to STG2_45) she
+ * stands at (130, 15, 250) facing 90 degrees.
+ */
 static EVT_BEGIN(mony_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_45_DAUGHTER_LOCATED)
@@ -495,6 +505,10 @@ static EVT_BEGIN(mony_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Frankie (Peton): while Mario is looking for Don Pianta (STG2_44 to STG2_45) he
+ * stands at (185, 15, 250) facing 270 degrees, next to Francesca.
+ */
 static EVT_BEGIN(peton_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_45_DAUGHTER_LOCATED)
@@ -515,6 +529,12 @@ EVT_BEGIN(gor_00_peton_regl)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Frankie (Peton).
+ * At STG2_44_FINDING_DON_PIANTA it runs the shared talk scene mony_peton_talk;
+ * at STG2_45_DAUGHTER_LOCATED he says mac_2_087_01,
+ * or mac_2_085_01 once Mario has helped him and Francesca.
+ */
 static EVT_BEGIN(peton_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
@@ -529,6 +549,11 @@ static EVT_BEGIN(peton_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Flavio (Marco) for Chapter 4 (STG4_32 to STG4_END_OFF_TO_THE_KEYS):
+ * places him at (77, 51, 110) facing 90 degrees
+ * and enters a spare third-force grunt NPC ("c_zako_n", an X-Naut grunt) hidden below the map.
+ */
 static EVT_BEGIN(marco_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
@@ -727,6 +752,12 @@ EVT_BEGIN(garawaru_urouro2)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the rough sailor (Garawaru): makes him take part in the regular event
+ * and places him by story stage: at (-200, 15, -175) facing 90 before Goombella is assaulted,
+ * hidden below the map at the Bowser interlude (STG4_15_07),
+ * and at another spot during Chapter 4's Flavio scene.
+ */
 static EVT_BEGIN(garawaru_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
@@ -812,6 +843,10 @@ static EVT_BEGIN(garawaru_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the bespectacled sailor: during Chapter 4's Flavio scene (STG4_32 to
+ * STG4_END_OFF_TO_THE_KEYS) he stands at (220, 71, 80) facing 270 degrees.
+ */
 static EVT_BEGIN(megane_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
@@ -972,6 +1007,10 @@ EVT_BEGIN(odoodo_ani_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of sailor A: hidden below the map at the Bowser interlude (STG4_15_07),
+ * otherwise placed at (-215, 15, 0) facing 90 degrees.
+ */
 static EVT_BEGIN(suifu_a_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG4_15_07_BOWSER_ACTION_STAGE)
@@ -1366,6 +1405,11 @@ EVT_BEGIN(suifubomb_c_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Sanders (Bobbery's name in the Japanese game, model "c_bomt_n") for Chapter 4's Flavio scene:
+ * enters him with sanders_talk as his talk event;
+ * at STG4_37_TO_THE_PORT he stands at (100, 50, 80), otherwise he waits hidden below the map.
+ */
 static EVT_BEGIN(sanders_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG4_END_OFF_TO_THE_KEYS)
@@ -1388,6 +1432,10 @@ static EVT_BEGIN(sanders_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Cortez (korutesu): from STG5_58_FAIR_WINDS onward (except at the end credits) he stands at
+ * (210, 40, 92) facing 270 degrees.
+ */
 static EVT_BEGIN(korutesu_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG9_01_END_CREDITS)
@@ -1723,6 +1771,10 @@ static EVT_BEGIN(baba_init)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Luigi (the Luigi diary NPC): between STG5_43_X_NAUTS_RETREAT
+ * and STG6_53_THE_REAL_GARNET_STAR he stands at (420, 15, -210) facing left.
+ */
 static EVT_BEGIN(luigi_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_43_X_NAUTS_RETREAT, STG6_53_THE_REAL_GARNET_STAR)
@@ -1755,6 +1807,10 @@ static NpcSetupInfo luigiEnt[] = {
     {0},
 };
 
+/**
+ * Enters Luigi ("c_luigi") and his companion Rakugan ("c_lp_pansy") with their NPC setup tables,
+ * between STG5_43_X_NAUTS_RETREAT and STG6_53_THE_REAL_GARNET_STAR.
+ */
 static EVT_BEGIN(luigi_npcEnt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_43_X_NAUTS_RETREAT, STG6_53_THE_REAL_GARNET_STAR)
@@ -2263,6 +2319,12 @@ EVT_BEGIN(christine_osoware_setup)
     RETURN
 EVT_END()
 
+/**
+ * Opening cutscene of Mario's arrival in Rogueport:
+ * the ship sails in with wake and engine sounds, Mario lands on the dock (mac_0_014, mac_0_015),
+ * the ship flips like paper and sails away, the area title card shows
+ * and the story goes to STG0_03_TO_ROGUEPORT. Ends by spawning christine_osoware.
+ */
 EVT_BEGIN(enter_gorotsuki_town)
     // Set up the opening: controls are off and the ship animation state starts at its offscreen position.
     CALL(evt_snd_bgm_scope, 0, 1)
@@ -2482,6 +2544,13 @@ EVT_BEGIN(enter_gorotsuki_town)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene that starts when Mario first walks toward the back of the harbor (z <= -100):
+ * Goombella (Christine) is cornered by Lord Crump and two grunts.
+ * Sets GSWF_GOR00_GOOMBELLA_ASSAULTED_SEEN and STG0_04_GOOMBELLA_ASSAULTED,
+ * creates the crowd of X-Naut extras (1000 in the JP release, 400 later) and spawns gundan1000tai_beforebattle.
+ * If LW(0) is 1 on entry it first repositions Mario (the entry used when the event is started directly).
+ */
 EVT_BEGIN(christine_osoware)
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_key_onoff, 0)
@@ -2819,6 +2888,17 @@ EVT_BEGIN(gundan1000tai_yure)
     RETURN
 EVT_END()
 
+/**
+ * Continues the prologue after the Lord Crump fight:
+ * the X-Nauts' extras (1000 in the JP release, 400 later) pour in,
+ * the X-Naut leader gloats (mac_0_025 to mac_0_027), the army charges (gundan1000tai_totsugeki) with smoke,
+ * shaking and stomping sounds, Goombella (Christine) runs off
+ * and comes back to follow Mario (she officially joins in gor_01),
+ * and Mario is pushed along the pier by the crowd until it calms down.
+ * Lord Crump then dismisses his men, a ring of question marks pops up over the crowd,
+ * and the story becomes STG0_06_1000_X_NAUTS_AFTER before the map changes to gor_01.
+ * If LW(0) is 1 on entry it repositions everyone first (used when started directly).
+ */
 EVT_BEGIN(gundan1000tai_afterbattle)
     // If started directly, place Mario and the X-Nauts after the fight.
     IF_INT_EQUAL(LW(0), 1)
@@ -3252,6 +3332,12 @@ EVT_BEGIN(shukko_event_move_ship)
     RETURN
 EVT_END()
 
+/**
+ * The Chapter 4 departure scene: after Marco (Flavio) is told that Mario is ready, the whole crew boards,
+ * the ship leaves Rogueport (with the camera swinging around it), an X-Naut grunt reports (mac_4_095),
+ * the story becomes STG4_END_OFF_TO_THE_KEYS
+ * and the game goes on to the Chapter 5 sail ("sys_01"/"stg_5").
+ */
 EVT_BEGIN(shukko_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_WALLS_DISABLED)
@@ -4338,6 +4424,15 @@ EVT_BEGIN(marco_run_away)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene at STG5_58_FAIR_WINDS, when Mario comes back to the Rogueport harbor
+ * from Keelhaul Key (Flavio hails the return to his hometown, mac_5_000_00, and Cortez offers to sail Mario back
+ * to
+ * the island whenever he likes, mac_5_000_08).
+ * Marco (Flavio), Cortez and a crowd of 100 sailor extras are waiting;
+ * Marco makes a speech, the sailors scatter, Marco runs off,
+ * and the story becomes STG5_59_ROGUEPORT_DOCK before the peach_mail event starts.
+ */
 EVT_BEGIN(gorotsuki_kikan)
     // Mario, his partner, Flavio, Cortez and the sailors are placed on the pier; the crowd of 100 sailors is
     // set up.
@@ -4485,6 +4580,14 @@ EVT_BEGIN(gorotsuki_kikan)
     RETURN
 EVT_END()
 
+/**
+ * Plays when Mario sails into Rogueport on the ship (GSWF_GOR00_SHIP_ARRIVAL_PENDING):
+ * Mario, the partners, Cortez and, in the Frankie and Francesca step (STG5_64_02_F_F_SAIL_OFF),
+ * the couple are placed on the ship, which slides in 600 units from the right with the ghost ship music
+ * and arrival sound.
+ * At the dock the couple get off (mony_peton_depart),
+ * the music changes back to Rogueport's and Mario gets control.
+ */
 EVT_BEGIN(into_gor_ship)
     // Hide Mario, the partners and the others, then place them on the ship off screen to the right.
     CALL(evt_mario_key_onoff, 0)
@@ -4628,6 +4731,12 @@ EVT_BEGIN(mony_peton_depart)
     RETURN
 EVT_END()
 
+/**
+ * Chapter 4 interlude with Bowser on the Rogueport harbor (STG4_15_07_BOWSER_ACTION_STAGE):
+ * he leaps out of the water onto the dock, the sailors panic and run, Kammy Koopa flies in looking for him,
+ * he scorches her and her broom, and he orders her to find out about Princess Peach and the Crystal Stars.
+ * Ends by setting STG4_15_08_BOWSER_ROGUEPORT_DOCK, saving, and changing to usu_00.
+ */
 EVT_BEGIN(gor_00_koopa_evt)
     // Bowser (controlled through the Mario slot) is set up under the dock, out of sight.
     CALL(evt_mario_key_onoff, 0)
@@ -4951,6 +5060,11 @@ EVT_BEGIN(gor_00_koopa_evt)
     RETURN
 EVT_END()
 
+/**
+ * When Mario walks to the Chapter 5 dock spot (z <= 250 and x <= -120) a mail from Peach arrives:
+ * Mario's controls are locked, the mail jingle (BGM_FF_MAIL_RECEPTION1) plays with the lines gor_00_mail5_00 to
+ * _02, the story moves to STG5_59_01_A_MAIL_FROM_PEACH and the second ship (S_fune_b, A_fune_b) is shown.
+ */
 static EVT_BEGIN(peach_mail)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -5406,6 +5520,17 @@ EVT_BEGIN(gor_muj_ship_start)
     RETURN
 EVT_END()
 
+/**
+ * Background task of the harbor, named after its cargo (tsumini, 積荷): hides the cargo pile that doesn't fit the
+ * story stage ("S_ni_03" up to the X-Naut Ph.D. report, "S_ni_01" after).
+ * Then every frame, while Mario is outside
+ * the dock area (it counts as inside at x >= -100 with z >= -70, or x < -100 with z >= -280; in ship form only
+ * once
+ * a ship change has set GF(12)), it hides the ships "S_fune_b" and "S_fune_c" and the crew NPCs (Flavio's crew
+ * from STG4_32 to the end of chapter 4, otherwise Cortez), and restores them when he is inside.
+ * It ends once
+ * GF(13) is set (korutesu_talk, sailing to Keelhaul Key).
+ */
 EVT_BEGIN(tsumini)
     IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ni_03"), MAP_OBJ_FLAG_HIDDEN)
@@ -6096,6 +6221,12 @@ EVT_BEGIN(return_gorotsuki_town_init)
     RETURN
 EVT_END()
 
+/**
+ * Scene after the end credits (STG9_01_END_CREDITS):
+ * a ship sails into Rogueport like in the opening, Goombella (Christine) comes out to greet Mario,
+ * the ship flips like paper and sails off, and the partner says a last line (mac_8_02).
+ * Sets STG9_02_RETURN_TO_ROGUEPORT and returns control.
+ */
 EVT_BEGIN(return_gorotsuki_town)
     // Set up the post-credits return: only Mario and Goombella (as partner) are present, and the ship animation
     // starts.
@@ -6319,6 +6450,15 @@ EVT_BEGIN(return_gorotsuki_town)
     RETURN
 EVT_END()
 
+/**
+ * Map init for gor_00 (the Rogueport harbor).
+ * Picks the music by story stage, sets up the exit "n_bero" to gor_01, creates the NPCs (including Luigi),
+ * the hidden-ship objects, the save block, the star piece and the spin panel,
+ * and starts whichever story scene belongs to the current stage:
+ * arrival in Rogueport (STG0_02), Goombella's ambush, the X-Naut army, Bowser's visit,
+ * the Flavio departure, the return home, the Peach mail, the epilogue and the post- credits return.
+ * Also handles a pending ship arrival.
+ */
 EVT_BEGIN(gor_00_init_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_light_bind_mapobj, STRING("pointLight1"), STRING("S_fune_b"), 0)

@@ -462,6 +462,11 @@ EVT_BEGIN(gor_02_hitobj_on)
     RETURN
 EVT_END()
 
+/**
+ * Enter event of the west exit "w_bero" (from the plaza):
+ * while the story is at STG0_07_GOOMBELLA_JOINS it locks Mario's controls,
+ * starts steel_coin and returns 1 in LW(0); otherwise returns 0.
+ */
 EVT_BEGIN(gor_02_event_00)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
         SET_VALUE(LW(0), 0)
@@ -1460,6 +1465,13 @@ EVT_BEGIN(johoyaperfect_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Professor Frankly (Kuri-hakase): lets him pass through walls and places him by story stage:
+ * in the street at (-135, 0, -240) at STG0_08_STOLEN_COINS and at (-220, 0, 305)
+ * while he waits to start his tutorial (unless GSWF_GOR02_FRANKLY_INTRO_SEEN is set),
+ * hidden below the map during the early scenes and the late story,
+ * and at (-140, 0, -225) in his house from the Pedestal step on and at each Thousand-Year Door step.
+ */
 static EVT_BEGIN(kurihakase_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     SWITCH(GSW_STORY_PROGRESS)
@@ -2177,6 +2189,14 @@ static EVT_BEGIN(sanders_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Sanders (Bobbery) at his house, by Chapter 4 story step:
+ * before STG4_33_MEET_BOBBERY he speaks mac_4_049_01 and opens the door (sanders_open_door);
+ * at STG4_33_MEET_BOBBERY the first visit is mac_4_050 plus opening the door,
+ * and later visits run the Bobbery talk (mac_4_051 to mac_4_056) with the partner,
+ * leading to STG4_34_BOBBERY_DECLINES; at the later steps he hands Mario a letter (item00, "tegami")
+ * and the letter is read (mac_4_077 to mac_4_083).
+ */
 static EVT_BEGIN(sanders_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_33_MEET_BOBBERY)
@@ -2679,6 +2699,15 @@ EVT_BEGIN(kuragarisan_init)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene at STG3_51_FRANKLYS_HOUSE_STG_3 (run by kuragarisan_talk once the Twilight Town pipe has been
+ * reached)
+ * in which Kuragarisan (Darkly) tells Mario he needs something with his name on it to pass the pipe to Twilight
+ * Town and writes "MARIO" on the seat of his overalls,
+ * then the partner's name on the partner (animations A_1A to
+ * A_1C, mac_3_011 to 019; with Yoshi his chosen name goes into his line). The partner's walk to him times out
+ * after 10 seconds. The story then becomes STG3_52_DARKLY.
+ */
 EVT_BEGIN(kuragarisan_write_name)
     // The partner is moved to the left and walks over to Mario while Darkly looks on.
     CALL(evt_npc_get_position, STRING("me"), LW(13), LW(14), LW(15))
@@ -2813,6 +2842,11 @@ EVT_BEGIN(kuragarisan_write_name)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Kuragarisan.
+ * At STG3_51_FRANKLYS_HOUSE_STG_3, once Mario has reached the Twilight Town pipe,
+ * he runs kuragarisan_write_name; otherwise a line per story stage (gor_02_034_00 to _10).
+ */
 EVT_BEGIN(kuragarisan_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_51_FRANKLYS_HOUSE_STG_3)
@@ -2847,6 +2881,10 @@ EVT_BEGIN(kuragarisan_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Luigi on the east side: from STG1_17_FATHER_SON_REUNITED to STG2_24_BOSS_BATTLE
+ * he stands at (-400, 0, 0) facing right.
+ */
 static EVT_BEGIN(luigi_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG1_17_FATHER_SON_REUNITED, STG2_24_BOSS_BATTLE)
@@ -3195,6 +3233,15 @@ static const char* door_data_02_npc[] = {
     NULL,
 };
 
+/**
+ * Open callback of Professor Frankly's house (door_data_02, whose NPC is クリハカセ): turns the east side's
+ * collision off, dips and low-passes the ambience; at the epigraphy stages the music keeps playing, at
+ * STG6_71_FRANKLYS_HOUSE_STG_6 it switches to BGM_EVT_FRANKURI1, otherwise it dips too (except after the final
+ * battle).
+ * It starts kurihakase_first_talk at STG0_08_STOLEN_COINS, places the open book by story stage, hides
+ * the map "S_tizu_on" except at STG0_15_THE_PEDESTAL and hides the memo "S_i02_memo"
+ * when monosiri_check gives 0.
+ */
 EVT_BEGIN(evt_door_02_open)
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
     SWITCH(GSW_STORY_PROGRESS)
@@ -3241,6 +3288,12 @@ EVT_BEGIN(evt_door_02_open)
     RETURN
 EVT_END()
 
+/**
+ * Close callback for Professor Frankly's house:
+ * brings the Rogueport music and ambience back, clears the Chapter 6 research flag,
+ * and starts kurihakase_wall_remove (STG0_09) or kurihakase_lecture_badge (STG0_16)
+ * when those steps are pending.
+ */
 EVT_BEGIN(evt_door_02_close)
     SPAWN_EVENT(PTR(gor_02_hitobj_on))
     SWITCH(GSW_STORY_PROGRESS)
@@ -4874,6 +4927,12 @@ EVT_BEGIN(steel_coin)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene when Mario and Goombella first enter Professor Frankly's house (STG0_08):
+ * Frankly appears, introduces himself, takes the Magical Map,
+ * and sends them off to find the Thousand-Year Door pedestal. Ends by setting STG0_09_PROF_FRANKLY.
+ * Frankly's talk uses the mac_0_066 to mac_0_082 lines.
+ */
 EVT_BEGIN(kurihakase_first_talk)
     // Setup: Frankly is placed in his house and the door finishes closing behind Mario and the partner.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_naka"), MAP_OBJ_FLAG_CLIP)
@@ -5073,6 +5132,12 @@ EVT_BEGIN(kurihakase_first_talk)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene when Mario comes out of Frankly's house at STG0_09_PROF_FRANKLY (spawned by evt_door_02_close):
+ * Frankly shows that the fence "S_saku04" comes off (mac_0_083) and it peels away as a paper animation
+ * (OFF_d_saku, fence sounds), opening the pipe down under the city (mac_0_084). Then it sets
+ * STG0_10_REMOVING_THE_FENCE and spawns kurihakase_lecture.
+ */
 EVT_BEGIN(kurihakase_wall_remove)
     CALL(evt_door_end_wait)
     CALL(evt_mario_key_onoff, 0)
@@ -5138,6 +5203,11 @@ EVT_BEGIN(kurihakase_wall_remove)
     RETURN
 EVT_END()
 
+/**
+ * Frankly's tutorial lecture after the fence is gone:
+ * asks whether Mario wants the lesson (mac_0_084_02), lets Goombella chip in,
+ * and sets STG0_10_01_FRANKLYS_TUTORIAL. If he declines twice he cuts the lecture short.
+ */
 EVT_BEGIN(kurihakase_lecture)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SET_FLOAT_VALUE(LW(3), LW(0))
@@ -5247,6 +5317,11 @@ EVT_BEGIN(kurihakase_door)
     RETURN
 EVT_END()
 
+/**
+ * Badge tutorial at STG0_16_FRANKLYS_HOUSE:
+ * Frankly gives Mario a Power Smash badge, asks whether he wants a lesson on badges (mac_0_121_02 to 05)
+ * and runs the lecture window (lecture) if he does, then sets STG0_17_BADGE_TUTORIAL.
+ */
 EVT_BEGIN(kurihakase_lecture_badge)
     // Mario and the partner wait inside the house after entering; Mario looks around.
     CALL(evt_door_end_wait)
@@ -5400,6 +5475,15 @@ EVT_BEGIN(book_center_init)
     RETURN
 EVT_END()
 
+/**
+ * Frankly's first epigraphy scene, after the Thousand-Year Door (STG0_15_THE_PEDESTAL):
+ * the pouch's Star Power
+ * is filled, Frankly explains the light that shone on Mario (a special move) and offers to show it outside
+ * (mac_0_103_01 to 06), then reads the Magical Map: the next Crystal Star is in Petal Meadows, reached by a pipe
+ * under the city; he learns that Princess Peach sent the map and had visited him, and stays in town while Mario
+ * and the partner head out (mac_0_104 to 120).
+ * It ends with the Rogueport theme and STG0_16_FRANKLYS_HOUSE.
+ */
 EVT_BEGIN(epigraphy_map)
     // Mario's Star Power gauge is filled and control is taken away while Mario
     // and the partner are moved into place.
@@ -5577,6 +5661,11 @@ EVT_BEGIN(epigraphy_map)
     RETURN
 EVT_END()
 
+/**
+ * Frankly's cutscene after Chapter 1 (STG1_30_ZESS_T):
+ * he deciphers the Magical Map for the next Crystal Star (mac_1_004 to 010_03)
+ * and sets STG1_31_FRANKLYS_HOUSE_STG_1.
+ */
 EVT_BEGIN(epigraphy_map_after_stage1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -5642,6 +5731,10 @@ EVT_BEGIN(epigraphy_map_after_stage1)
     RETURN
 EVT_END()
 
+/**
+ * Frankly's cutscene after Chapter 2 (STG2_40_THOUSAND_YEAR_DOOR):
+ * he deciphers the map for the next star (mac_2_002_01 to 06) and sets STG2_41_FRANKLYS_HOUSE_STG_2.
+ */
 EVT_BEGIN(epigraphy_map_after_stage2)
     // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
     CALL(evt_mario_key_onoff, 0)
@@ -5745,6 +5838,11 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     RETURN
 EVT_END()
 
+/**
+ * Frankly's cutscene after Chapter 3 (STG3_50_THOUSAND_YEAR_DOOR):
+ * he deciphers the map for the next star (mac_3_001_01 on);
+ * if the Twilight Town pipe has not been reached he adds a hint. Sets STG3_51_FRANKLYS_HOUSE_STG_3.
+ */
 EVT_BEGIN(epigraphy_map_after_stage3)
     // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
     CALL(evt_mario_key_onoff, 0)
@@ -5843,6 +5941,15 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     RETURN
 EVT_END()
 
+/**
+ * Frankly's epigraphy scene after Chapter 4 (STG4_30_THOUSAND_YEAR_DOOR):
+ * hearing of Princess Peach's e-mail
+ * he explains that the treasure is the spirit of an ancient demon beaten by four heroes
+ * and that the Thousand-Year
+ * Door may be weakening, so the stars must still be gathered (mac_4_001_01 to 12);
+ * the map points to Keelhaul Key
+ * (mac_4_002, 003). It sets STG4_31_FRANKLYS_HOUSE_STG_4.
+ */
 EVT_BEGIN(epigraphy_map_after_stage4)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -5912,6 +6019,13 @@ EVT_BEGIN(epigraphy_map_after_stage4)
     RETURN
 EVT_END()
 
+/**
+ * Frankly's epigraphy scene after Chapter 5 (STG5_60_RETURN_TO_KEELHAUL):
+ * the next Crystal Star is in Poshley
+ * Heights, reached on the Excess Express, and he suggests asking Don Pianta for tickets (mac_5_002 to 009).
+ * It sets
+ * STG5_61_FRANKLYS_HOUSE_STG_5.
+ */
 EVT_BEGIN(epigraphy_map_after_stage5)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -6036,6 +6150,12 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene when Frankly finishes the Chapter 6 research after three minutes of play time:
+ * Frankly and the partner discuss it (mac_6_007 to 015),
+ * with a different line depending on whether Mario has the Ultra Hammer,
+ * then sets STG6_72_3_MINUTES_LATER and restores the controls and music.
+ */
 EVT_BEGIN(kurihakase_after3minutes)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("mac_6_007"), 0, STRING("クリハカセ"))

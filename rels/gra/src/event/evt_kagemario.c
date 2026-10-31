@@ -126,6 +126,11 @@ static EVT_BEGIN(evt_check)
     RETURN
 EVT_END()
 
+/**
+ * While Mario and Doopliss have swapped places (STG4_10_02_TRADING_PLACES to
+ * STG4_12_01_SUPERBOMBBOMB_FOUND), moves both partners out of sight,
+ * disables their control and clears them from the party.
+ */
 EVT_BEGIN(evt_usu_kagemario_party_kill)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_10_02_TRADING_PLACES, STG4_12_01_SUPERBOMBBOMB_FOUND)

@@ -185,6 +185,11 @@ EVT_BEGIN(lost_wedding_ring_sub)
     RETURN
 EVT_END()
 
+/**
+ * The lost wedding ring request (STG5_64_LOST_WEDDING_RING):
+ * Peton and Mony ask Mario to find the ring they lost in the jungle (stg5_muj_171 onwards),
+ * then they head off the left edge of the screen so Mario can search. Control returns when both have left.
+ */
 EVT_BEGIN(lost_wedding_ring)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ピートン"), NPC_FLAG_NO_HIT)
@@ -368,6 +373,10 @@ EVT_BEGIN(find_wedding_ring)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Mony in the jungle: sets status bit 2 (she turns to face the way she moves)
+ * and between STG5_63_KEELHAUL_ANYTIME and STG5_64_LOST_WEDDING_RING she is placed at (500, 0, -40).
+ */
 static EVT_BEGIN(mony_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
@@ -422,6 +431,10 @@ EVT_BEGIN(mony_regl)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Mony: says stg5_muj_169 at STG5_63_KEELHAUL_ANYTIME and
+ * then starts the lost wedding ring request (lost_wedding_ring).
+ */
 static EVT_BEGIN(mony_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_63_KEELHAUL_ANYTIME)
@@ -443,6 +456,10 @@ static EVT_BEGIN(mony_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Peton in the jungle: NPC_STATUS_FACE_MOVE_DIR set (he turns to face the way he moves),
+ * and between STG5_63_KEELHAUL_ANYTIME and STG5_64_LOST_WEDDING_RING he is placed beside Mony.
+ */
 static EVT_BEGIN(peton_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
@@ -461,6 +478,10 @@ EVT_BEGIN(peton_regl)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Peton: says stg5_muj_170 at STG5_63_KEELHAUL_ANYTIME and
+ * then starts the lost wedding ring request (lost_wedding_ring).
+ */
 static EVT_BEGIN(peton_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_63_KEELHAUL_ANYTIME)
@@ -595,6 +616,11 @@ static KusaAccess kusa_tbl[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Map init for muj_02 (the jungle): starts the jungle music and ambience, registers the exits, NPCs,
+ * hidden badge blocks (Head Rattle, Courage Shell), the Keel Mango tree and grass patches,
+ * and removes the Chorobon enemy NPCs once the story is past STG5_59_ROGUEPORT_DOCK.
+ */
 EVT_BEGIN(muj_02_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ4"))

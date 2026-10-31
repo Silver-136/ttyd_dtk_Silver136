@@ -302,6 +302,11 @@ EVT_BEGIN(talk_gard)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for Michel (マイケル), a Koopa fighter: before STG3_34_RETURN_TO_ROGUEPORT he stands at (120, 0,
+ * -30) facing 270, unless the rank 12 fighter has already left (GSWF_TOU_RANK12_KING_K_GONE);
+ * from that story stage on he is always there.
+ */
 static EVT_BEGIN(init_michel)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
@@ -403,6 +408,10 @@ EVT_BEGIN(talk_octo)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for Brots (ブロッツ): he stands at (-160, 0, -50) facing 90 once Mario's ranking is 19
+ * or worse (unless GSWF_TOU_RANK18_SCENE has played), and always from STG3_34_RETURN_TO_ROGUEPORT on.
+ */
 static EVT_BEGIN(init_brots)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_tou_get_ranking, LW(0))
@@ -494,6 +503,11 @@ EVT_BEGIN(talk_gangan)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for Poku (ポグ): before STG3_34_RETURN_TO_ROGUEPORT he is placed at (120, 0, -30) once the Iron
+ * Clefts match opening has played, and at STG3_34_RETURN_TO_ROGUEPORT itself
+ * unless Mario left Glitzville as champion; otherwise his position is left alone. He faces 270.
+ */
 EVT_BEGIN(init_poku)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
@@ -511,6 +525,13 @@ EVT_BEGIN(init_poku)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Poku: at rank 12 he calls himself a rookie (stg3_npc_10_05_12),
+ * at rank 11 he recommends the Hot Dogs outside (05_13);
+ * otherwise he says he takes notes on Mario's fights (05_14), or,
+ * from STG3_20_02_BACK_TO_THE_MINORS to STG3_20_04_CONFISCATED until guard 1 has stepped aside,
+ * asks if Mario is back in the minors (05_15).
+ */
 EVT_BEGIN(talk_poku)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
@@ -719,6 +740,15 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Scene after Mario's first match, against the Goomba Bros (opponent 19),
+ * before STG3_34_RETURN_TO_ROGUEPORT: Grubba (ガンス) tells him to play to the crowd
+ * if he won (rank now better than 20, stg3_tou_89) or scolds him for losing (93_1), and leaves.
+ * Jolene (キノシコワ) pays the fight money, 3 coins after a win (stg3_tou_90 to 93) or 1 after a loss (93_2 to 93_4),
+ * explains reserving the next match, and leaves.
+ * The minor-league fighters (マイケル, オクトール, ブロッツ, ガンガン) then introduce themselves (stg3_tou_93_5 to 93_16)
+ * and the story advances to STG3_07_MINORS_9TH_PL.
+ */
 EVT_BEGIN(evt_saisyo_after)
     // Mario, the partner, Grubba and Jolene are placed in the room after the first match.
     CALL(evt_mario_key_onoff, 0)
@@ -1370,6 +1400,13 @@ static EVT_BEGIN(evt_door)
     RETURN
 EVT_END()
 
+/**
+ * Scene on Mario's first arrival, before STG3_05_MATCH:
+ * Jolene (キノシコワ) opens the door and brings Mario and the partner in,
+ * tells him this is his locker room and that he starts in the minor league (stg3_tou_63, 64),
+ * and shows him the match terminal, where Grubba picks his opponents (65).
+ * The door is registered to evt_door so Mario cannot leave yet.
+ */
 EVT_BEGIN(evt_rec)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, 0, 0, -180)

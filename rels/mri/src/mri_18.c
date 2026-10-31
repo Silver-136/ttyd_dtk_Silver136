@@ -118,6 +118,11 @@ static KusaAccess ueki_access_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Map init script of mri_18, a pipe room with planters that an X-Naut grunt and a Yux guard:
+ * sets up the Puni, the planters and the water animations,
+ * and removes the guards once the story is past STG2_25_01_PEACH_CRUMP_X_NAUTS.
+ */
 EVT_BEGIN(mri_18_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 18, -89, -319, -1000, -1000, 0, 0)

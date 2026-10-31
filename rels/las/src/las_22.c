@@ -396,6 +396,7 @@ static s32 key_tbl[] = {
     ITEM_PALACE_KEY_0x2F, -1,
 };
 
+/** Event script: run when the key is used in the lock of the door; sets the story progress to STG8_09_KEY. */
 static EVT_BEGIN(key_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_09_KEY)
     RETURN
@@ -417,6 +418,10 @@ static EVT_BEGIN(key_check_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the door is unlocked.
+ * Sets the story progress to STG8_10_LOCK and switches the w_bero door on.
+ */
 static EVT_BEGIN(unlock_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_10_LOCK)
     SET_VALUE(LW(0), STRING("w_bero"))

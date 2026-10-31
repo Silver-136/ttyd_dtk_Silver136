@@ -68,6 +68,11 @@ static EVT_BEGIN(party_damage_pose)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the flight to the Moon (story progress below STG7_06_TO_THE_MOON).
+ * Mario and the partner tumble along a spline for 5 seconds, shrinking as they go away from the camera,
+ * with a flying sound, then the map changes to moo_00.
+ */
 static EVT_BEGIN(mario_fly)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -126,6 +131,13 @@ static EVT_BEGIN(mario_fly)
     RETURN
 EVT_END()
 
+/**
+ * Event script: Lord Crump (the NPC 幹部) blasted into space after the Magnus von Grapple 2.0 fight,
+ * while the story is still before STG7_20_LORD_CRUMP_DEFEATED:
+ * he spins as he flies off at shrinking scale with the SFX_STG7_3RD_FLY1 sound,
+ * a flash (wangflush) lights up and the map changes back to aji_14 at "tuzuki",
+ * where the aftermath sets that flag.
+ */
 EVT_BEGIN(kanbu_fly)
     WAIT_MS(2000)
     CALL(evt_npc_set_position, STRING("幹部"), 25, 75, -70)
@@ -225,6 +237,14 @@ static EVT_BEGIN(epilogue_evt)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for moo_04, the space backdrop.
+ * By story progress: before the Moon it runs the flight (mario_fly);
+ * until Lord Crump is defeated it runs the officer flight (kanbu_fly);
+ * after the final battle it runs the epilogue; otherwise it shows the message stg7_aji_63 and a crystal flash,
+ * sets the story progress to STG7_26_THE_HIDEOUT_EXPLODES with a white fade
+ * and changes to tik_00 with the teleporter arrival flag.
+ */
 EVT_BEGIN(moo_04_init_evt)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_MON1"))

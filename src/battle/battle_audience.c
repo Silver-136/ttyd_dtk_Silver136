@@ -3229,6 +3229,15 @@ BOOL BattleAudience_GetPPAudienceNum_Sub(s32 id) {
     return member->status != AUDIENCE_STATUS_ESCAPE;
 }
 
+/**
+ * Turns the Star Power bonuses of the move just made into Star Power gain (btlevtcmd_InviteApInfoReport):
+ * keeps a copy of them for BattleAudience_PerAct, then adds the square root of the crowd's weight
+ * (each kind's spWeight times its members taking part) times the sum of the action-command
+ * and Stylish multipliers, times how many of those two are nonzero,
+ * times 3 when Mario is in Peril (2 in Danger) and times 2 when the partner is in Peril (1.5 in Danger);
+ * during the post-BINGO! boost also times its multiplier.
+ * May also add a point to the bingo slots (bingoSlotChance percent).
+ */
 void BattleAudience_ApRecoveryBuild(StarPowerInfo* info) {
     BattleWork* bw = _battleWorkPointer;
     BattleAudience* audience = BattleAudienceBaseGetPtr();
@@ -3375,6 +3384,12 @@ void BattleAudienceAddTargetNum(f32 value, f32 value2) {
     }
 }
 
+/**
+ * Adds value to the target audience size one fan at a time with diminishing returns:
+ * while the target is at least 25% above the level's audience factor (audienceDeltaMultiplier),
+ * each fan gained counts 1 / (n + 1) for n whole 25% steps above it, and while it is 25% or more below,
+ * each fan lost counts the same way, so the crowd drifts back toward the level's usual size.
+ */
 void BattleAudienceAddTargetNumSub(f32 value) {
     f32 subtract;
     s32 skew;
@@ -4351,6 +4366,13 @@ void BattleAudienceSoundGetInfo2(s32 index, Vec* pos) {
     pos->z = member->position.z;
 }
 
+/**
+ * Per-frame update of the 24 crowd sound channels (from BattleAudience_Main):
+ * runs the noise loop (BattleAudienceNoiseMain), drops channels whose sound has ended,
+ * stops a sound whose duration has run out, applies a volume fade from BattleAudienceSoundSetVol
+ * and fades a timed sound out over its last fadeoutTime frames.
+ * A duration of -1 plays until the sound ends or is stopped.
+ */
 void BattleAudienceSoundMain(void) {
     BattleAudienceSound* sound;
     s32 i;

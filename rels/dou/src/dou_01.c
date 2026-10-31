@@ -56,6 +56,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * First-entry cutscene in which Mario is startled (voice and exclamation balloon) and Cortez (コルテス) is heard:
+ * shows stg5_dou_01 and sets the story progress to STG5_19_02_THE_CALL_OF_CORTEZ.
+ */
 static EVT_BEGIN(korutesu_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -73,6 +77,12 @@ static EVT_BEGIN(korutesu_event)
     RETURN
 EVT_END()
 
+/**
+ * Init script of dou_01, the passage between dou_00 and dou_02:
+ * music and ambience, exits, two blue jump pads,
+ * and the short Cortez cutscene on the first visit (Mario is startled, Cortez's voice is heard,
+ * stg5_dou_01) (story step STG5_19_01_ENTERING_THE_GROTTO).
+ */
 EVT_BEGIN(dou_01_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU2"))

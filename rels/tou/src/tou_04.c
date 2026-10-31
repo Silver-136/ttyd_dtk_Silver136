@@ -633,6 +633,10 @@ EVT_BEGIN(init_g_1)
     RETURN
 EVT_END()
 
+/**
+ * Guard 1 steps aside ("I'll move"): he walks out of the doorway and Mario can pass;
+ * story set to STG3_20_02_BACK_TO_THE_MINORS.
+ */
 EVT_BEGIN(move_g_1_dokimasu)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("me"), LW(10), LW(11), LW(12))
@@ -650,6 +654,16 @@ EVT_BEGIN(move_g_1_dokimasu)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of guard 1, at the minor-league locker room door:
+ * before the first match he turns Mario away (stg3_tou_39).
+ * From STG3_20_01_SUPER_HAMMER to STG3_20_03_THE_YELLOW_BLOCK he has heard Mario wants to go back to
+ * the minors and lets him in (stg3_tou_297_13), stepping aside (move_g_1_dokimasu) the first time.
+ * During Grubba's plans he says Grubba headed for the ring furious (stg3_tou_96_01).
+ * Otherwise, until STG3_34_RETURN_TO_ROGUEPORT (and afterwards once Mario has re-entered the league;
+ * else stg3_tou_39 again), he waves a minor leaguer (rank above 10) in (stg3_tou_95)
+ * and turns a major leaguer away (stg3_tou_96).
+ */
 EVT_BEGIN(talk_g_1)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_06_1ST_MATCH)
@@ -749,6 +763,12 @@ EVT_BEGIN(talk_g_2)
     RETURN
 EVT_END()
 
+/**
+ * Movement script of guard 2: he steps out of Mario's way (move_g with LW(0) = 1) while any of the minors,
+ * majors or champion's room guard escorts is on,
+ * during STG3_21_1ST_MATCH_WITH_RAWK_HAWK before the champion's opening scene,
+ * and during STG3_31_GRUBBAS_PLANS; otherwise he does nothing.
+ */
 EVT_BEGIN(move_g_2)
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 1)
         SET_VALUE(LW(0), 1)
@@ -995,6 +1015,14 @@ EVT_BEGIN(talk_g_4)
     RETURN
 EVT_END()
 
+/**
+ * Movement script of guard 4, at the door to Grubba's office (s_bero_5):
+ * he steps out of Mario's way (move_g) while Grubba's escort or Jolene's first or majors escort is pending,
+ * from STG3_03_GRUBBA to before the first match,
+ * and from STG3_31_GRUBBAS_PLANS to STG3_33_06_BOWSER_TREASURE.
+ * At STG3_30_04_AIR_DUCT_EXIT, when Mario comes out of the office,
+ * he starts at (-400, 0, -530) and walks back in front of the door once Mario is through.
+ */
 EVT_BEGIN(move_g_4)
     IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
         SET_VALUE(LW(0), 3)
@@ -1182,6 +1210,11 @@ EVT_BEGIN(move_g_9)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for guard 10: placed at (-550, 0, 530) during STG3_21_1ST_MATCH_WITH_RAWK_HAWK
+ * before the champion's opening scene and during STG3_31_GRUBBAS_PLANS;
+ * otherwise his position is left alone.
+ */
 EVT_BEGIN(init_g_10)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
@@ -1206,6 +1239,11 @@ EVT_BEGIN(talk_g_10)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for guard 11: placed at (550, 0, 530) during STG3_21_1ST_MATCH_WITH_RAWK_HAWK
+ * before the champion's opening scene and during STG3_31_GRUBBAS_PLANS (otherwise his position is left
+ * alone), then turned to face 0 degrees.
+ */
 EVT_BEGIN(init_g_11)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
@@ -2179,6 +2217,10 @@ static EVT_BEGIN(evt_chk)
     RETURN
 EVT_END()
 
+/**
+ * Unlocks the storage room: sets the story stage to STG3_20_07_00_STORAGE_ROOM_UNLOCKED,
+ * switches on the s_bero_4 entrance and removes ITEM_STORAGE_KEY_0x12 from the pouch.
+ */
 static EVT_BEGIN(evt_lock)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
     SET_VALUE(LW(0), STRING("s_bero_4"))
@@ -2263,6 +2305,13 @@ EVT_BEGIN(evt_souko_talk)
     RETURN
 EVT_END()
 
+/**
+ * Rawk Hawk's warning, run at STG3_20_05_MAJORS_4TH_PL:
+ * the champion (チャンピョン) waits at (-550, 0, -400),
+ * and when Mario enters he warns him to stop stealing the spotlight (stg3_tou_297_27_00)
+ * and dashes off down the corridor; the partner wonders if he sent the threatening letters (stg3_tou_297_27_01)
+ * and the story advances to STG3_20_06_RAWK_HAWKS_WARNING.
+ */
 EVT_BEGIN(evt_bred_nigeru)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_status_onoff, 1, STRING(/*"チャンピョン"*/"\x83\x60\x83\x83\x83\x93\x83\x73\x83\x87\x83\x93"), NPC_STATUS_FACE_MOVE_DIR)
@@ -2302,6 +2351,11 @@ EVT_BEGIN(boss_msg)
     RETURN
 EVT_END()
 
+/**
+ * Run after STG3_34_RETURN_TO_ROGUEPORT when Mario comes out of the minor-league locker room (s_bero_7) at
+ * rank 10, just promoted: guard 1 starts at (-590, 0, 350)
+ * and walks back to (-590, 300) in front of the door once Mario is through.
+ */
 EVT_BEGIN(out_from_tou_10_re)
     CALL(evt_npc_set_position, STRING("ガードマン１"), -590, 0, 350)
     CALL(evt_seq_wait, SEQ_GAME)

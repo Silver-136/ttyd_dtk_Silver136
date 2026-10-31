@@ -109,6 +109,12 @@ static USER_FUNC(evtflash) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Entry script of the west loading zone: at STG2_22_LORD_CRUMP_APPEARS,
+ * if the time bomb scene is still pending, Mario and his partner are placed inside the room,
+ * the loading zone flickers off and on, and they walk in; returns 1 in LW(0) to skip the normal entry.
+ * Otherwise returns 0.
+ */
 static EVT_BEGIN(first_time_w_bero)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_22_LORD_CRUMP_APPEARS)
         IF_INT_EQUAL(GSWF_MRI_14_CRUMP_REENTRY_PENDING, 1)
@@ -461,6 +467,12 @@ static EVT_BEGIN(punipuni_mario_halt)
     RETURN
 EVT_END()
 
+/**
+ * The time bomb scene (story 22 to 23): with the Puni still, the room shakes with growing quakes and flashes,
+ * the Crystal Star appears in a ripple of light, Lord Crump grabs it,
+ * sets a time bomb that switches on the countdown and flees through a pipe, and the party reacts.
+ * Sets the story to STG2_23_TIME_BOMB_ACTIVATED.
+ */
 EVT_BEGIN(time_bomb)
     // Controls off, the music fades out and the room begins to shake.
     CALL(evt_mario_key_onoff, 0)

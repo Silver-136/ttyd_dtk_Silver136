@@ -175,6 +175,11 @@ static BeroEntry bero_peach_data[] = {
     {0},
 };
 
+/**
+ * Sets up the Last Mail scene (aji_16 entered as "peach", STG7_25_THE_LAST_MAIL):
+ * Mario and the partner are placed on the left,
+ * a paper-flat Peach (P_Z_7) is put in the middle under soft focus and evt_last_mail starts.
+ */
 EVT_BEGIN(evt_last_mail_init)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

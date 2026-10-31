@@ -176,6 +176,11 @@ s32 battleAcResult_TimingA(BattleWork* work) {
     return work->actionCommands.result;
 }
 
+/**
+ * Width in frames of the A window by difficulty (10 at the easiest down to 5);
+ * with timing flag bit 1 it narrows as resultCount grows, as in Power Bounce and Multibonk,
+ * until 100000 bounces make it 0.
+ */
 s32 battleAcTimingA_GetSuccessFrame(BattleWork* work) {
     s32 diff = BattleActionCommandGetDifficulty(work);
     TimingAEntry* e = _ac_timing_a_timing_tbl[diff];

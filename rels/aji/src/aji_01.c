@@ -671,6 +671,12 @@ s32 elv_key1[] = {
     ITEM_ELEVATOR_KEY_0x1B, -1,
 };
 
+/**
+ * Case script on the first elevator's key slot (A_ekagi1 to 3):
+ * Mario picks the elevator key ITEM_ELEVATOR_KEY_0x1B from the item menu, the red lamps switch to the lit ones,
+ * the key is used up, the buttons are attached to ele_1 and the story moves to STG7_10_ELEVATOR_ACTIVATED.
+ * Without the key (or if the menu is cancelled) nothing changes after the "needs a key" text stg7_aji_65.
+ */
 EVT_BEGIN(elv_unlock1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_65"), 0, 0)
@@ -710,6 +716,11 @@ s32 elv_key2[] = {
     ITEM_ELEVATOR_KEY_0x1C, -1,
 };
 
+/**
+ * Case script on the second elevator's key slot (A_ekagi4 to 6):
+ * the same as elv_unlock1 with ITEM_ELEVATOR_KEY_0x1C;
+ * it lights the lamps, uses up the key, attaches ele_2 to the buttons and sets STG7_15_ELEVATOR_ACTIVATED_2.
+ */
 EVT_BEGIN(elv_unlock2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_65"), 0, 0)
@@ -1173,6 +1184,10 @@ EVT_BEGIN(ele2_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Elevator 2 button script: the same ride as ele_1 for the second elevator (cabin ere2_m, floors 2 to 4,
+ * current floor in GW(1)). Before STG7_14_ELEVATOR_KEY_B it only shows the "needs a key" text stg7_aji_65.
+ */
 EVT_BEGIN(ele_2)
     SET_VALUE(LW(5), LW(0))
     // Without the second Elevator Key the elevator only asks for it.
@@ -1498,6 +1513,13 @@ EVT_BEGIN(last_elv_lock)
     RETURN
 EVT_END()
 
+/**
+ * Sets up which hall exits are locked by story progress:
+ * e_bero_5 is locked (key_lock) until STG7_20_LORD_CRUMP_DEFEATED,
+ * e_bero_5 again during STG7_25_THE_LAST_MAIL,
+ * and in the stretch after Crump's defeat the north and the side doors get last_key_lock;
+ * each locked exit has its bero case switched off.
+ */
 EVT_BEGIN(evt_key_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero_5"), 0, PTR(key_lock), 0)
@@ -1555,6 +1577,12 @@ EVT_BEGIN(evt_key_init)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the password door (A_kagi1): shows the paper-roll name-entry screen,
+ * lets the player type a password and compares it with the text stg7_aji_password.
+ * A match opens the door (STG7_12_PASSWORD_ENTRY, bero case switched on, text stg7_aji_70);
+ * otherwise stg7_aji_69 is shown.
+ */
 EVT_BEGIN(evt_aikotoba)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_68"), 0, 0)
@@ -1645,6 +1673,12 @@ static EVT_BEGIN(peach_evt_stg1_1)
     RETURN
 EVT_END()
 
+/**
+ * Peach's first interlude (STG1_18_01_PEACH_AN_OPEN_DOOR):
+ * once Peach (the "mario" actor) walks past x = 900 she is startled, the east door e5 opens,
+ * the e_bero_5 exit is overwritten with e_bero_5_peach and she says peach_aji_41.
+ * GSWF_AJI01_PEACH1_DOOR_OPENED makes it run only once.
+ */
 EVT_BEGIN(peach_evt_stg1_2)
     IF_INT_EQUAL(GSWF_AJI_01_PEACH_DOOR_OPENS_SEEN, 1)
         RETURN
@@ -1682,6 +1716,11 @@ EVT_BEGIN(peach_evt_stg1_2)
     RETURN
 EVT_END()
 
+/**
+ * Peach scene for STG3_33_01_PEACH_TECS_REQUEST:
+ * waits until Peach walks between x=490 and 610, then opens elevator door 4 (ele2_door_open),
+ * switches Peach's pose and shows peach_aji_127.
+ */
 static EVT_BEGIN(peach_evt_stg3_1)
     CALL(evt_seq_wait, SEQ_GAME)
     LOOP(0)
@@ -1708,6 +1747,11 @@ static EVT_BEGIN(peach_evt_stg3_1)
     RETURN
 EVT_END()
 
+/**
+ * Peach scene on arriving in the hall in chapter 3:
+ * shows peach_aji_126, sets the story progress to STG3_33_01_PEACH_TECS_REQUEST
+ * and starts peach_evt_stg3_1 to watch for the elevator.
+ */
 static EVT_BEGIN(peach_evt_stg3)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -1772,6 +1816,17 @@ static EVT_BEGIN(peach_evt_door_stop)
     RETURN
 EVT_END()
 
+/**
+ * Peach's ride in elevator 2 (LW(0) = her floor, LW(1) = 1 to walk her in from the key panel).
+ * It only runs at STG3_33_01_PEACH_TECS_REQUEST and STG5_44_PEACH_TECS_REQUEST_2;
+ * otherwise she says it doesn't work (peach_aji_40).
+ * The cabin ere2_m first comes to her floor if it is elsewhere (floors 2, 3, 4 at heights 2000, 1000, 0),
+ * then carries her to floor 2 with the doors opening and closing. In the chapter 3 errand TEC asks her to wait
+ * because soldiers are near (peach_aji_128), Peach reacts (129) while an X-Naut walks past outside,
+ * then TEC points her to the room with the green lamp (131);
+ * in chapter 5 TEC sends her away from Grodus's room to the green-lamp room (218).
+ * GW(1) records the cabin's floor.
+ */
 EVT_BEGIN(peach_evt_ele_2)
     SET_VALUE(LW(5), LW(0))
     SET_VALUE(LW(9), LW(1))
@@ -1932,6 +1987,11 @@ EVT_BEGIN(peach_evt_ele_2)
     RETURN
 EVT_END()
 
+/**
+ * Peach-section setup for elevator 2: shows the key lamps that fit the story point
+ * (STG5_44_PEACH_TECS_REQUEST_2 or not), puts the cabin on floor 4 (GW(1)) and attaches peach_evt_ele_2
+ * or peach_evt_door_stop to the key and door areas.
+ */
 EVT_BEGIN(peach_evt_ele_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
@@ -2310,6 +2370,13 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Init script of aji_01, the fortress's central hall:
+ * first runs Peach's setup (peach_evt_init, which returns early for her scenes), builds the exits,
+ * locks the password door (A_kagi1, evt_aikotoba) until STG7_12_PASSWORD_ENTRY,
+ * removes the Elite X-Naut group NPCs once Lord Crump is beaten or when entered in the end-of-game mode,
+ * and otherwise starts BGM_STG7_DUN2 and the elevator and door lock setup.
+ */
 EVT_BEGIN(aji_01_init_evt)
     CALL_CHILD(PTR(peach_evt_init))
     CALL(evt_snd_set_rev_mode, 1)

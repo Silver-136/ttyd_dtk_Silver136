@@ -103,6 +103,16 @@ EVT_BEGIN(kpa_07_hipattack_eff)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene after stage 3 (STG6_55_03_BOWSER_ACTION_STAGE):
+ * out-of-breath Kammy catches up with Bowser and points out a Crystal Star on the wall (the star stone "nise").
+ * Rawk Hawk (ブレッドハート) arrives, introduces himself and leaps at Bowser,
+ * who flattens him with a hip attack that also knocks Kammy down.
+ * The star falls and breaks in two, Kammy sees it is a fake made of glass, and the flattened Rawk Hawk says
+ * Gonzales has the real one (kpa_stg6_009 to 023).
+ * The story advances to STG6_55_04_BOWSER_RAWK_HAWK, the game is saved,
+ * and play goes to Rogueport (gor_04).
+ */
 EVT_BEGIN(kpa_07_evt)
     // The scene opens on the empty room; Kammy is hidden until she catches up with Bowser.
     CALL(evt_mario_key_onoff, 0)

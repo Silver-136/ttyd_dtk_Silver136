@@ -59,6 +59,11 @@ static EVT_BEGIN(kpa_fall)
     RETURN
 EVT_END()
 
+/**
+ * Goal of the second Bowser stage: locks the controls,
+ * sets the story progress to STG4_15_07_BOWSER_ACTION_STAGE and changes the map to Rogueport (gor_00)
+ * after a 300 ms pause that also removes the letterbox.
+ */
 static EVT_BEGIN(kpa_goal)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_15_07_BOWSER_ACTION_STAGE)

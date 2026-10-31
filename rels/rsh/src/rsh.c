@@ -1845,6 +1845,12 @@ void _epilog(void) {
     }
 }
 
+/**
+ * REL entry point: runs the global constructors,
+ * then registers each map's init script with relSetEvtAddr (the first-visit scripts until the story reaches
+ * STG6_54_WELCOME_BACK, the "nidome" second-visit scripts afterwards)
+ * and installs the battle setup table for the rsh module.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 

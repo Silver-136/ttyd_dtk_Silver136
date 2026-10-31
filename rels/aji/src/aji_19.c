@@ -109,6 +109,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * First-visit scene of the fortress (aji_19, before STG7_07_01_INSIDE_THE_BUILDING):
+ * the partner comments (stg7_aji_00_00_01), the story becomes STG7_07_01_INSIDE_THE_BUILDING
+ * and the area name telop is shown.
+ */
 EVT_BEGIN(evt_hajimete)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)

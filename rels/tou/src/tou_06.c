@@ -160,6 +160,10 @@ EVT_BEGIN(evt_ana)
     RETURN
 EVT_END()
 
+/**
+ * Mario blows the storage containers (kontena) away:
+ * a success jingle plays and the story advances to STG3_20_09_BLOWING_CONTAINERS.
+ */
 EVT_BEGIN(evt_kontena)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
@@ -170,6 +174,10 @@ EVT_BEGIN(evt_kontena)
     RETURN
 EVT_END()
 
+/**
+ * The hidden staircase appears: the camera frames it, a paper-unfold animation plays with the stairs sound,
+ * the stairs and their hit volume are enabled and the story advances to STG3_20_10_HIDDEN_STAIRWAY.
+ */
 EVT_BEGIN(evt_kaidan)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, -90, 208, 680, -90, 80, -8, 1000, EASING_SINE_IN_OUT)
@@ -214,6 +222,7 @@ EVT_BEGIN(evt_kontena2)
     RETURN
 EVT_END()
 
+/** Run when the floor block is broken: sets the story stage to STG3_20_11_HOLE_IN_THE_FLOOR. */
 static EVT_BEGIN(evt_block_broken)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_20_11_HOLE_IN_THE_FLOOR)
     RETURN
@@ -239,6 +248,10 @@ static EVT_BEGIN(evt_chk)
     RETURN
 EVT_END()
 
+/**
+ * Unlocks the door: sets the story stage to STG3_20_15_UNLOCKING_THE_DOOR,
+ * switches on its entrance and removes ITEM_STORAGE_KEY_0x13 from the pouch.
+ */
 static EVT_BEGIN(evt_lock)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_20_15_UNLOCKING_THE_DOOR)
     SET_VALUE(LW(0), 1)
@@ -247,6 +260,18 @@ static EVT_BEGIN(evt_lock)
     RETURN
 EVT_END()
 
+/**
+ * Scene on entering the storage room before STG3_20_08_MS_MOWZ:
+ * Ms. Mowz (チュチュリーナ) is there with her theme playing and greets Mario again (stg3_tou_308).
+ * The partner asks if security heard her (309);
+ * she denies it and says someone else was in here (310) and that she has taken what she came for (312),
+ * then hops down, blows Mario a kiss (313), warns him not to end up like the "poor souls upstairs" (315)
+ * and leaves through the door.
+ * The partner wonders what she meant (316), Mario's mail arrives with the mail jingle and a "!" balloon
+ * until A is pressed, and he reads it: find the staircase switch to reach the attic,
+ * from X (stg3_tou_316_01, 316_02).
+ * Mail 12 is received and opened and the story advances to STG3_20_08_MS_MOWZ.
+ */
 EVT_BEGIN(evt_chuchu)
     // Ms. Mowz waits on the crates with her theme playing; Mario and the partner spot her.
     CALL(evt_mario_key_onoff, 0)

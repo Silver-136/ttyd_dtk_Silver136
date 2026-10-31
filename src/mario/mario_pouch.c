@@ -1191,6 +1191,11 @@ void pouchAddKpaScore(u32 score) {
     }
 }
 
+/**
+ * Gives Mario Crystal Star id (0-based; called by the story-progress setup in event.c):
+ * sets its bit in starPowersObtained and raises the Star Power maximum to 100 per star (capped at 800).
+ * The first star also sets the saved audience size to 2.
+ */
 void pouchGetStarStone(u32 id) {
     if (!mpp->starPowersObtained) {
         mpp->audienceCount = 2.0f;
@@ -1205,6 +1210,7 @@ void pouchGetStarStone(u32 id) {
     }
 }
 
+/** Number of mails received so far (bits set among the first 99 of emailReceivedFlags). */
 s32 pouchReceiveMailCount(void) {
     s32 i, count;
 
@@ -1216,6 +1222,7 @@ s32 pouchReceiveMailCount(void) {
     return count;
 }
 
+/** Delivers a mail: sets its received bit and appends its id to emailIds in arrival order (the mail menu's list). */
 void pouchReceiveMail(s32 mailId) {
     s32 count;
     s32 index, shift;
@@ -1227,6 +1234,7 @@ void pouchReceiveMail(s32 mailId) {
     mpp->emailIds[count] = (u8)mailId;
 }
 
+/** Marks a mail as read in emailReadFlags; the story-progress setup in event.c opens mails it pre-delivers. */
 void pouchOpenMail(s32 mailId) {
     mpp->emailReadFlags[mailId / 32] |= (1 << (mailId % 32));
 }

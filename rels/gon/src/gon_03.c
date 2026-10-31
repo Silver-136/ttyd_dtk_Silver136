@@ -218,6 +218,13 @@ const char* nokotaro_pose[] = {
     "PNK_L_2",
 };
 
+/**
+ * Cutscene run when Mario walks into the hall for the first time (before STG1_10_FATHERS_LETTER):
+ * the partner is switched to Koops, who takes a skeleton for his father and finds a letter in its hand,
+ * reads it out (stg1_gon_02 to stg1_gon_08: Hooktail cannot stand crickets, an item tied to that weakness is
+ * hidden in the castle, and it will try tricks when beaten), then realizes it is not his father after all
+ * (stg1_gon_09), and the story advances to STG1_10_FATHERS_LETTER.
+ */
 EVT_BEGIN(tegami_event)
     // Wait until Mario walks far enough into the hall.
     LOOP(0)
@@ -528,6 +535,7 @@ static EVT_BEGIN(senkaron_event)
     RETURN
 EVT_END()
 
+/** Runs when Mario picks up the second Hooktail Castle key in this hall: sets the story to STG1_13_02_KEY_2. */
 static EVT_BEGIN(key_get)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_13_02_KEY_2)
     RETURN

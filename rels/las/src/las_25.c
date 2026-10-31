@@ -236,6 +236,10 @@ static EVT_BEGIN(key_check_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the door is unlocked.
+ * Sets the story progress to STG8_14_LOCK and switches the e_bero_2 door on.
+ */
 static EVT_BEGIN(unlock_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG8_14_LOCK)
     SET_VALUE(LW(0), STRING("e_bero_2"))
@@ -243,6 +247,12 @@ static EVT_BEGIN(unlock_evt)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_25, a junction room: music (by story), the doors to las_26 and las_27,
+ * the Phantoms (before and after the planets scene), the lock of door e_bero_2 that needs Palace Key 0x30,
+ * a blue jump stand, a Life Shroom, a Shooting Star and a save block.
+ * After STG8_06_MOVING_PLANETS it uses the moved layout with an airport harbour exit.
+ */
 EVT_BEGIN(las_25_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))

@@ -32,6 +32,11 @@ static TreeAccess tree_tbl[5];
 static KusaAccess kusa_tbl[9];
 EvtWord muj_03_init_evt[112];
 
+/**
+ * Trigger event (case event) of the jungle path:
+ * the first time Mario passes after STG5_13_BOBBERY_THE_BRIDGE it starts nigeru_suifu01
+ * and sets GSWF_MUJ03_RUNAWAY_SAILOR_SEEN.
+ */
 EVT_BEGIN(muj_03_event_01)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_13_BOBBERY_THE_BRIDGE)
         IF_INT_EQUAL(GSWF_MUJ_03_FLEEING_SAILORS_SEEN, 0)

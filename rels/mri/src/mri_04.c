@@ -46,6 +46,10 @@ static KusaAccess ueki_access_data[5];
 EvtWord item_mri_04[34];
 EvtWord mri_04_init_evt[178];
 
+/**
+ * Door script for the loading zone: returns 1 in LW(0) (use the custom entry)
+ * while the elder is imprisoned (STG2_12_02_PUNI_ELDER_IMPRISONED), otherwise 0.
+ */
 static EVT_BEGIN(bero_custom)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_02_PUNI_ELDER_IMPRISONED)
         SET_VALUE(LW(0), 1)
@@ -360,6 +364,11 @@ static EVT_BEGIN(chuchurina_sogu)
     RETURN
 EVT_END()
 
+/**
+ * Chapter 2 cutscene on first entering mri_04 (story STG2_12):
+ * Ms. Mowz, shown as a dark silhouette, leaps in and knocks out an X-Naut grunt with a strike
+ * and a camera shake. Sets the story to STG2_12_01_A_DARK_FIGURE and returns to mri_03.
+ */
 EVT_BEGIN(black_shadow)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)

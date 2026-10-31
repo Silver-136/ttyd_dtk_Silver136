@@ -106,6 +106,11 @@ static TreeAccess tree_tbl[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/**
+ * Init script of gra_01: trail music, the shake-tree spots and the exits, a coin block,
+ * a hidden Super Shroom block and a ten-coin brick,
+ * and Vivian's first-talk cutscene once the story reaches STG4_13_VIVIAN_JOINS.
+ */
 EVT_BEGIN(gra_01_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_GRA1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))

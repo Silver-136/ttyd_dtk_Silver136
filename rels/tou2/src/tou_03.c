@@ -3794,6 +3794,10 @@ static void screen_capture(CameraId cameraId, void* param) {
     screen_wp->ready = 1;
 }
 
+/**
+ * Script helper that allocates the big arena monitor's work area, texture buffers and noise texture;
+ * the monitor starts in static mode during STG3_31_GRUBBAS_PLANS.
+ */
 s32 screen_init(EventEntry* event, BOOL isFirstCall) {
     u32 size = GXGetTexBufferSize(0x260, 0x1E0, GX_TF_I4, GX_FALSE, 0);
 

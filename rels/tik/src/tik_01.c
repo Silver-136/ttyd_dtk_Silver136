@@ -56,6 +56,11 @@ EVT_BEGIN(lecture_badge_after_00_evt)
     RETURN
 EVT_END()
 
+/**
+ * Runs when Mario enters the second pipe.
+ * During the badge tutorial (STG0_17_BADGE_TUTORIAL up to the Blooper battle),
+ * if he has no badge equipped yet, it plays lecture_badge_after_00_evt. Returns 0 in LW(0).
+ */
 // Remind Mario to equip a badge only between the badge tutorial and the Blooper battle.
 EVT_BEGIN(dokan_2_in_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_17_BADGE_TUTORIAL)
@@ -267,6 +272,14 @@ EVT_BEGIN(ashioto)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene with the three Goomba bullies (gorotuki sanninngumi, the "three thugs") that triggers
+ * when Mario walks past X = -100 before the tutorial is over.
+ * They taunt Mario and his partner (mac_0_086 to mac_0_092),
+ * jump at him and start a battle (battle info 4) against Goomba 1.
+ * After the fight they run away off the left edge, the partner comments (mac_0_094),
+ * story progress is set to STG0_11_3_GOOMBA_GOONS, the save-block hit area opens and the music returns.
+ */
 EVT_BEGIN(gorotuki_sanninngumi)
     // The three Goombas wait on the ledge until Mario walks past X = -100.
     CALL(evt_npc_set_position, STRING("クリボー１"), 110, 75, 65)

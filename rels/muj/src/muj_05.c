@@ -181,6 +181,10 @@ EVT_BEGIN(sanders_nakama_sub)
     RETURN
 EVT_END()
 
+/**
+ * Admiral Bobbery joins the party (STG5_18_01_BOBBERY_JOINS):
+ * after talk with Mario and his partner (stg5_muj_55 to 69) he becomes a partner and the story advances.
+ */
 EVT_BEGIN(sanders_nakama)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_move_behind_mario, 0)
@@ -234,6 +238,12 @@ EVT_BEGIN(sanders_nakama)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Bobbery (サンダース): before STG5_18_BOBBERY_RESCUE_2 he uses the worn-out tribe (サンダースへろへろ,
+ * pose D_2), from STG5_15_RUNAWAY_SAILORS placed at (-114, 22, 22);
+ * at STG5_18_BOBBERY_RESCUE_2 he is placed there asleep (サンダースねむる) with sanders_nakama as his interrupt
+ * event.
+ */
 static EVT_BEGIN(sanders_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG5_15_RUNAWAY_SAILORS)
@@ -256,6 +266,10 @@ static s32 itemsel_table01[] = {
     ITEM_CHUCKOLA_COLA, -1,
 };
 
+/**
+ * Bobbery's first talk after being found in the cave (STG5_15_RUNAWAY_SAILORS):
+ * he falls asleep to the music-box tune (stg5_muj_45, 46) and the story moves to STG5_18_BOBBERY_RESCUE_2.
+ */
 EVT_BEGIN(sanders_talk_sub)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_mario_key_onoff, 0)
@@ -339,6 +353,15 @@ static EVT_BEGIN(marco_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Flavio at the skull rock at STG5_18_03_MARCOS_JEWEL: stops his humming for good.
+ * Before the Skull Gem is placed: if Mario lacks it, Flavio sings his skull-captain song (stg5_muj_93_02) and,
+ * once the rock has been examined, asks what Mario wants (stg5_muj_93_03);
+ * asking for the Skull Gem makes him lend it. If Mario has it he sings again (stg5_muj_93_05).
+ * After the gem is placed he cheers Mario on (stg5_muj_93_06),
+ * or says stg5_muj_93_07 once after a failed attempt (GW(12) set by penalty_event).
+ * At STG5_19_GEMS_AND_JINGLES he says stg5_muj_93_09.
+ */
 static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_18_03_MARCOS_JEWEL)
@@ -558,6 +581,10 @@ EVT_BEGIN(hammer_event)
     RETURN
 EVT_END()
 
+/**
+ * Rescue of Bobbery from the tree (STG5_15_RUNAWAY_SAILORS):
+ * Bobbery thanks Mario (stg5_muj_33_01), the party walks to his side and the story advances.
+ */
 EVT_BEGIN(sanders_kyushutsu_sub)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -686,6 +713,13 @@ EVT_BEGIN(marco_hanauta)
     RETURN
 EVT_END()
 
+/**
+ * Flavio reaches the skull rock (STG5_18_02_FLAVIOS_FAVOR_2):
+ * once Mario passes x = 500, Flavio (following as the extra party member) steps forward
+ * and says this must be the skull rock Bobbery spoke of (stg5_muj_93_00),
+ * walks back to (279, -67) and stays there as an NPC;
+ * he leaves the party and the story moves to STG5_18_03_MARCOS_JEWEL.
+ */
 EVT_BEGIN(marco_and_jewel)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1160,6 +1194,15 @@ static EVT_BEGIN(bombwall_bomb)
     RETURN
 EVT_END()
 
+/**
+ * Bobbery's bomb at the opened skull rock (case event on A_dkr_iwa_02_oku_01):
+ * opens the cave entrance e_bero, plays the success jingle,
+ * shakes the camera and breaks the rock with bombwall_bomb.
+ * Flavio stops humming, jumps for joy at the cave entrance (stg5_muj_93_08),
+ * then the Skull Gem falls out and bounces; he picks it up (stg5_muj_93_08_01),
+ * says he must head back to camp (stg5_muj_93_08_02) and leaves,
+ * and the story moves to STG5_19_GEMS_AND_JINGLES.
+ */
 EVT_BEGIN(dokuroiwa_bomb)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_hitobj_onoff, STRING("e_bero"), 1, 1)
@@ -1240,6 +1283,10 @@ EVT_BEGIN(dokuroiwa_bomb)
     RETURN
 EVT_END()
 
+/**
+ * Initialises the skull rock: hides the jewel, closes the lid hit box, clears the puzzle buffer and,
+ * once STG5_19_GEMS_AND_JINGLES is reached, hides the rock and opens the exit hit box.
+ */
 EVT_BEGIN(dokuroiwa_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_jel"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_dkr_iwa_futa02"), 1, 0)
@@ -1337,6 +1384,10 @@ EVT_BEGIN(yure_yashi_ha1)
     RETURN
 EVT_END()
 
+/**
+ * Sways the palm tree (S_treeA_05) and its leaves when it is hit;
+ * after STG5_15_RUNAWAY_SAILORS it keeps swaying until the tree is stopped.
+ */
 EVT_BEGIN(yure_yashi)
     LOOP(0)
         CALL(evt_mapobj_get_position, STRING("S_treeA_05"), LW(0), LW(1), LW(2))

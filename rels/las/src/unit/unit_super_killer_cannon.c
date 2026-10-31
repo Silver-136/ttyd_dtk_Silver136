@@ -30,6 +30,10 @@ static EvtWord friend_event[244];
 static EvtWord friend_event_sky[318];
 static EvtWord wait_event[6];
 
+/**
+ * Script helper: copies the shrink/grow status (sizeChangeTurns and sizeChangeStrength) from the unit in args[0]
+ * to the unit in args[1], so a launched Bombshell Bill keeps the cannon's size effect.
+ */
 static USER_FUNC(killer_copy_status) {
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));

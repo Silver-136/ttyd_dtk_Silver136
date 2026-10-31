@@ -173,6 +173,11 @@ EVT_BEGIN(custom_door_light2)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the rough sailor (NPC ガラの悪い水夫) in the camp: placed at (-155, 0, 170) from
+ * STG5_11_DESERTED_ISLAND to STG5_34_KICKED_OFF and from STG5_59_ROGUEPORT_DOCK on,
+ * except at STG5_18_01_BOBBERY_JOINS, when he stands at (-110, 0, 225).
+ */
 static EVT_BEGIN(garawaru_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_11_DESERTED_ISLAND, STG5_18_BOBBERY_RESCUE_2)
@@ -285,6 +290,10 @@ static EVT_BEGIN(garawaru_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Flavio (NPC マルコ) in the camp: placed at (-64, 0, 170) facing right for STG5_11 to 18_01
+ * and STG5_19_01 to 34.
+ */
 static EVT_BEGIN(marco_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_11_DESERTED_ISLAND, STG5_18_01_BOBBERY_JOINS)
@@ -314,6 +323,10 @@ EVT_BEGIN(marco_kyorokyoro)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Flavio: during STG5_13 to 17 he starts settoku_event_main
+ * if the timid sailor has not yet been persuaded, otherwise he talks according to the story stage.
+ */
 static EVT_BEGIN(marco_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_17_WINE_OBTAINED)
@@ -587,6 +600,10 @@ static EVT_BEGIN(marco_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the bespectacled sailor: placed in the camp between STG5_13_BOBBERY_THE_BRIDGE
+ * and STG5_30_SHIPWRECKED_SAILORS.
+ */
 static EVT_BEGIN(megane_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_30_SHIPWRECKED_SAILORS)
@@ -595,6 +612,12 @@ static EVT_BEGIN(megane_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the bespectacled sailor (めがね水夫): stg5_muj_32_01 (wondering what happened to Admiral Bobbery)
+ * until Bobbery is rescued; at STG5_18_01_BOBBERY_JOINS a line that depends on whether Bobbery (party 3)
+ * is
+ * the partner out; later stage lines.
+ */
 static EVT_BEGIN(megane_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_18_BOBBERY_RESCUE_2)
@@ -614,6 +637,10 @@ static EVT_BEGIN(megane_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the timid sailor (Odoodo): placed in the camp between STG5_13_BOBBERY_THE_BRIDGE
+ * and STG5_34_KICKED_OFF.
+ */
 static EVT_BEGIN(odoodo_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_34_KICKED_OFF)
@@ -622,6 +649,11 @@ static EVT_BEGIN(odoodo_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the timid sailor (オドオド水夫): stg5_muj_32_00 until Bobbery is rescued;
+ * at STG5_18_01_BOBBERY_JOINS a joyful line when Bobbery (party 3) is the partner out, else a worried one;
+ * later stage lines.
+ */
 static EVT_BEGIN(odoodo_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_18_BOBBERY_RESCUE_2)
@@ -641,6 +673,10 @@ static EVT_BEGIN(odoodo_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of sailor A: placed in the camp between STG5_11_DESERTED_ISLAND
+ * and STG5_43_X_NAUTS_RETREAT.
+ */
 static EVT_BEGIN(suifu_a_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_11_DESERTED_ISLAND, STG5_43_X_NAUTS_RETREAT)
@@ -666,6 +702,10 @@ static EVT_BEGIN(suifu_a_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the bomb sailor: placed in the camp between STG5_11_DESERTED_ISLAND
+ * and STG5_43_X_NAUTS_RETREAT.
+ */
 static EVT_BEGIN(suifu_bomb_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_11_DESERTED_ISLAND, STG5_43_X_NAUTS_RETREAT)
@@ -691,6 +731,7 @@ static EVT_BEGIN(suifu_bomb_talk)
     RETURN
 EVT_END()
 
+/** Init event of sailor D: from STG5_59_ROGUEPORT_DOCK on he is set up to wander (suifu_d_regl). */
 static EVT_BEGIN(suifu_d_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_59_ROGUEPORT_DOCK)
@@ -699,6 +740,10 @@ static EVT_BEGIN(suifu_d_init)
     RETURN
 EVT_END()
 
+/**
+ * Regular event of sailor D: once the story reaches STG5_59_ROGUEPORT_DOCK he wanders around his spawn
+ * point (urouro) within a radius of 100 by 30 units.
+ */
 EVT_BEGIN(suifu_d_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_59_ROGUEPORT_DOCK)
@@ -731,6 +776,7 @@ static EVT_BEGIN(suifu_d_talk)
     RETURN
 EVT_END()
 
+/** Init event of the shabby sailor A: after STG5_59_ROGUEPORT_DOCK he is set up to wander. */
 EVT_BEGIN(borosuifu_a_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_59_ROGUEPORT_DOCK)
@@ -761,6 +807,10 @@ EVT_BEGIN(borosuifu_a_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the shabby sailor B: turns on NPC_STATUS_FACE_MOVE_DIR and,
+ * after STG5_59_ROGUEPORT_DOCK, sets him up to wander.
+ */
 EVT_BEGIN(borosuifu_b_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     SWITCH(GSW_STORY_PROGRESS)
@@ -771,6 +821,10 @@ EVT_BEGIN(borosuifu_b_init)
     RETURN
 EVT_END()
 
+/**
+ * Regular event of the shabby sailor B: wanders around his spawn point once the story is past
+ * STG5_59_ROGUEPORT_DOCK.
+ */
 EVT_BEGIN(borosuifu_b_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_59_ROGUEPORT_DOCK)
@@ -806,6 +860,7 @@ EVT_BEGIN(borosuifu_b_talk)
     RETURN
 EVT_END()
 
+/** Init event of Mony in the camp: placed between STG5_59_ROGUEPORT_DOCK and STG5_61_FRANKLYS_HOUSE_STG_5. */
 static EVT_BEGIN(mony_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_59_ROGUEPORT_DOCK, STG5_61_FRANKLYS_HOUSE_STG_5)
@@ -820,6 +875,7 @@ static EVT_BEGIN(mony_talk)
     RETURN
 EVT_END()
 
+/** Init event of Peton in the camp: placed between STG5_59_ROGUEPORT_DOCK and STG5_61_FRANKLYS_HOUSE_STG_5. */
 static EVT_BEGIN(peton_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_59_ROGUEPORT_DOCK, STG5_61_FRANKLYS_HOUSE_STG_5)
@@ -1414,6 +1470,11 @@ static KinopioData kino_dt = {
     NULL, NULL, // toBedEvt..fromBedEvt
 };
 
+/**
+ * The sailors' homesickness (kyoshu): Mario and his partner overhear the crew (stg5_muj_15 to 22);
+ * Flavio asks whether Mario will help, then the story advances to STG5_12_FLAVIO_PA_PATCH
+ * and control returns.
+ */
 EVT_BEGIN(kyoshu_event)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_set_position, STRING("水夫A"), -193, 0, 77)
@@ -1508,6 +1569,12 @@ EVT_BEGIN(suifu_bom_buruburu)
     RETURN
 EVT_END()
 
+/**
+ * The crew splits (nakamaware): Mario walks into the camp at STG5_11_DESERTED_ISLAND,
+ * the sailors argue about heading home (stg5_muj_05 to 14), and three Embers (ghost flames) appear and attack;
+ * the fight is battle info 6. Afterwards kyoshu_event plays.
+ * The GSWF_MUJ01_SKIP_TO_SHOW_OF_HANDS flag jumps straight to kyoshu_event.
+ */
 EVT_BEGIN(nakamaware_event)
     // If the quarrel was already seen, go straight to the show of hands.
     IF_INT_EQUAL(GSWF_MUJ_01_CREW_SPLIT_SKIP, 1)
@@ -2200,6 +2267,11 @@ static EVT_BEGIN(epilogue_evt_sub)
     RETURN
 EVT_END()
 
+/**
+ * The camp's epilogue scene (STG8_END_AFTER_THE_BATTLE):
+ * with the Keelhaul Key music, the epilogue narration says that Bobbery now goes out to sea with Cortez every
+ * day (ep_42); then the ending moves to Ms. Mowz's scene in gor_01 if she joined the party, else to pik_04.
+ */
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_MUJ1"))
     CALL(evt_snd_bgm_scope, 0, 1)

@@ -160,6 +160,11 @@ s32 BattleTransID(EventEntry* evt, s32 type) {
     return type;
 }
 
+/**
+ * Sets every unit's moveColorLv target to 0xFF;
+ * battle_disp.c then ramps each unit's displayed colour level back to it.
+ * Called when a turn's actions are reset (battle_event_cmd.c) and at the end of battle (battle_seq_end.c).
+ */
 void btlsubResetMoveColorLvAll(BattleWork* work) {
     // FAKE: spare copies w and w2 of work and c of 0xFF; the plain loop changes the object
     BattleWork* w = work;

@@ -315,6 +315,15 @@ void btlUnitItemDisp2(CameraId camId, BattleUnit* unit);
 void btlUnitStolenItemDisp(CameraId camId, void* param);
 void btlUnitPartsDisp(CameraId camId, BattleUnitPart* part);
 
+/**
+ * Battle per-frame display update for every unit:
+ * moves Koops' shell shield after its owner, eases the moveColorLv shading,
+ * applies Tiny (down to half size) and Huge (up to double) to the size, runs status effects and icons,
+ * chooses each part's pose (status, peril, danger, defend), sets the animation speed for Fast and Slow,
+ * picks normal, translucent (invisible) or dodgy draw types, queues the part,
+ * blur and shadow draws and held-item icons, then the Star Point counter, stage, command menu,
+ * audience and break slot. Retail drops the shell to the floor height.
+ */
 void btlDispMain(void) {
     BattleUnit* unit;
     BattleUnitPart* part;
@@ -585,6 +594,13 @@ next:
 }
 
 
+/**
+ * Draw callback for one unit part: builds the model matrix from the unit's and part's position,
+ * rotation (in the part's rotation order), scale and size multiplier,
+ * mirrors it when the part faces away from the camera,
+ * then draws the pose tinted by its colour (black when blackened, green-tinted for poison,
+ * dimmed by moveColorLv) with the Charge shine. Also records the matrix for the blur trail.
+ */
 void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
     Mtx uMtx;
     Mtx drawMtx;

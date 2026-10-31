@@ -1045,6 +1045,14 @@ EVT_BEGIN(init_ekiin)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for the station attendant.
+ * Before the return to Rogueport (STG6_54_WELCOME_BACK) he gives a plain greeting;
+ * later he tells Mario the train is not ready until the return trip has started,
+ * and otherwise offers a ride back on the Excess Express.
+ * If Mario has the Train Ticket he shows it, the attendant steps aside and evt_train boards the train;
+ * without it he says Mario needs one.
+ */
 EVT_BEGIN(talk_ekiin)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
         CALL(evt_msg_print, 0, STRING("stg6_pik_00"), 0, 0)
@@ -1104,6 +1112,14 @@ static const Vec zoom_zero_a = {0.0f, 0.0f, 0.0f};
 static const Vec zoom_zero_b = {0.0f, 0.0f, 0.0f};
 
 #endif
+/**
+ * Talk script for Goldbob (ナリキンパパ) in chapter 7:
+ * the first time he explains the Fahr Outpost cannon situation, and then he asks Mario a question.
+ * The right answers take Mario's coins (a bribe) in a counter animation,
+ * give the Goldbob Guide and then return the coins, set GSWF_PIK00_GOLDBOB_CANNON_APPROVAL and,
+ * if General White has also been woken (GSWF_BOM02_GENERAL_WHITE_WOKEN),
+ * advance the story to STG7_03_GOLDBOB. The camera zooms in on the pair for the conversation.
+ */
 EVT_BEGIN(talk_papa_taihou_kyoka)
     IF_INT_EQUAL(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 0)
         SET_VALUE(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 1)
@@ -1580,6 +1596,10 @@ static EVT_BEGIN(talk_madam)
     RETURN
 EVT_END()
 
+/**
+ * Init for the salaryman (サラリーマン), sightseeing while he waits for business partners (stg6_pik_05):
+ * before STG6_56_ROGUEPORT_STATION it puts him at (85, -5, 35).
+ */
 static EVT_BEGIN(init_sarary)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         CALL(evt_npc_set_position, STRING("me"), 85, -5, 35)

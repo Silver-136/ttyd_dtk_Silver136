@@ -1060,6 +1060,11 @@ EVT_BEGIN(nancy_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Flavio (Marco) in the central plaza:
+ * from STG4_32_CHATTING_WITH_FLAVIO to STG5_59_ROGUEPORT_DOCK he is not here (he is at the harbor)
+ * and is moved below the map.
+ */
 static EVT_BEGIN(marco_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_32_CHATTING_WITH_FLAVIO, STG5_59_ROGUEPORT_DOCK)
@@ -1068,6 +1073,15 @@ static EVT_BEGIN(marco_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Flavio (Marco) in the plaza.
+ * Before Frankly's house in Chapter 4 he says mac_4_005
+ * and goes back to muttering to himself (marco_hitorigoto).
+ * At STG4_31_FRANKLYS_HOUSE_STG_4 Mario and Flavio have the long talk (mac_4_007 to mac_4_023):
+ * the camera frames them, Mario answers a question,
+ * Flavio hands over the Magical Map (ITEM_MAGICAL_MAP_LARGE) and talks about the Skull Gem,
+ * and the story advances to STG4_32_CHATTING_WITH_FLAVIO. Later stages only give short lines.
+ */
 static EVT_BEGIN(marco_talk)
     DELETE_EVENT(GW(0))
     CALL(evt_msg_close, STRING("mac_4_004"))
@@ -1221,6 +1235,10 @@ static EVT_BEGIN(marco_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the bar owner (Podley, "master"):
+ * during Professor Frankly's house step (STG4_31) he stands at (259, 0, -275).
+ */
 EVT_BEGIN(master_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_31_FRANKLYS_HOUSE_STG_4)
         CALL(evt_npc_set_position, STRING("me"), 259, 0, -275)
@@ -1246,6 +1264,12 @@ EVT_BEGIN(iri_20_master_tubuyaki)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the bar owner (Podley).
+ * Handles Trouble Center jobs 20 and 25, then by story: before Chapter 4 a line per stage;
+ * after Admiral Bobbery's refusal (STG4_34) he tells Mario the story of Bobbery and, if Mario wants,
+ * gives him the Old Letter and advances to STG4_35_ADVICE_FROM_PODLEY; afterwards a line per stage.
+ */
 EVT_BEGIN(master_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_TELL_THAT_PERSON)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
@@ -2115,6 +2139,11 @@ EVT_BEGIN(bottakuru_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Luigi in the plaza: places him by story stage:
+ * (380, 0, 300) from STG2_25 to STG3_31, (110, 0, -240) from STG4_15_05 to STG5_42,
+ * and (230, 154, -300) from STG7_20_LORD_CRUMP_DEFEATED on.
+ */
 static EVT_BEGIN(luigi_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_25_AFTER_THE_BOSS_BATTLE, STG3_31_GRUBBAS_PLANS)
@@ -2136,6 +2165,12 @@ static EVT_BEGIN(luigi_talk)
     RETURN
 EVT_END()
 
+/**
+ * Enters the NPC that walks with Luigi by story stage:
+ * Kick ("c_lp_gesso") from STG2_25 to STG3_31,
+ * Torque ("c_lp_met") from STG4_15_05 to STG5_42,
+ * and a second Kick from STG7_20_LORD_CRUMP_DEFEATED, each with its NPC setup table.
+ */
 static EVT_BEGIN(luigi_npcEnt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_25_AFTER_THE_BOSS_BATTLE, STG3_31_GRUBBAS_PLANS)
@@ -2346,6 +2381,7 @@ static EVT_BEGIN(borodo2_talk)
     RETURN
 EVT_END()
 
+/** Init event of the thief who stole Mario's coins: from STG0_08_STOLEN_COINS on he stands at (500, 0, -175). */
 EVT_BEGIN(thief_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG0_08_STOLEN_COINS)
@@ -2666,6 +2702,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Enter event of the south exit "s_bero" (from the harbor):
+ * when the story is at STG0_06_1000_X_NAUTS_AFTER it locks Mario's controls,
+ * starts christine_nakama and returns 1 in LW(0); otherwise returns 0 and nothing happens.
+ */
 EVT_BEGIN(christine_nakama_before)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG0_06_1000_X_NAUTS_AFTER)
         SET_VALUE(LW(0), 0)
@@ -3333,6 +3374,10 @@ EVT_BEGIN(house03_suiteki)
     RETURN
 EVT_END()
 
+/**
+ * Marco's (Flavio's) muttering while Mario is in the bar before Chapter 4's Flavio talk:
+ * shows mac_4_004 over and over, cancelling it when Mario talks to him. Does nothing from STG4_32 on.
+ */
 EVT_BEGIN(marco_hitorigoto)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
         RETURN

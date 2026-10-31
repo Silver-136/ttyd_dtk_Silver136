@@ -788,6 +788,10 @@ EVT_BEGIN(evt_chk00)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the first locked door is opened with the key:
+ * switches on the w_bero_3 bero case and sets the story to STG1_13_03_LOCK_2.
+ */
 static EVT_BEGIN(evt_unlock00)
     SET_VALUE(LW(0), STRING("w_bero_3"))
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -812,6 +816,10 @@ EVT_BEGIN(evt_chk01)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the second locked door is opened with the key:
+ * switches on the w_bero_5 bero case and sets the story to STG1_15_04_LOCK_4.
+ */
 static EVT_BEGIN(evt_unlock01)
     SET_VALUE(LW(0), STRING("w_bero_5"))
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -819,11 +827,18 @@ static EVT_BEGIN(evt_unlock01)
     RETURN
 EVT_END()
 
+/** Runs when Mario picks up the fourth Hooktail Castle key in this room: sets the story to STG1_15_03_KEY_4. */
 static EVT_BEGIN(key_get)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_15_03_KEY_4)
     RETURN
 EVT_END()
 
+/**
+ * Map init for gon_05 (hub room): sets up the doors, dormant Dry Bones,
+ * the two floating blocks (blk_0 and blk_1) with their switches, the Castle Key 0x0E,
+ * the Star Piece and Last Stand P badge, the two keyed locks (Castle Key 0x0C to STG1_13_03_LOCK_2 and
+ * 0x0E to STG1_15_04_LOCK_4, each with its door), the save block and the Shine Sprite power-up block.
+ */
 EVT_BEGIN(gon_05_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

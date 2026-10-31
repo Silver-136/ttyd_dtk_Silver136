@@ -1423,6 +1423,13 @@ EVT_BEGIN(nise_mario_init)
 EVT_END()
 #endif
 
+/**
+ * Event script: the scene of the Shadow Queen (possessing Peach).
+ * Grodus is dismissed, the Shadow Queen (possessing Peach; Japanese ブラックピーチ) taunts Mario in front of Beldam,
+ * Marilyn and Doopliss, offers him a yes/no choice, and fights Mario in battle 16.
+ * If the battle result is 5 the story continues with last_evt_3_1,
+ * otherwise the story is set to STG8_16_THE_RETURN_OF_THE_QUEEN and the ending starts with last_evt_4.
+ */
 EVT_BEGIN(last_evt_3)
     // Light floods the hall; the Shadow Queen is reborn in Peach's body.
     CALL(evt_mario_key_onoff, 0)
@@ -2051,6 +2058,13 @@ EVT_BEGIN(majo_kyorokyoro)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the scene where everyone's voices call to Mario and heal him.
+ * The partner and the three Sirens speak, Peach answers,
+ * Mario's party is fully healed with evt_pouch_all_party_recovery, the Shadow Queen (possessing Peach) is
+ * angered, and the second fight with her (battle 17) follows;
+ * afterwards the story becomes STG8_16_THE_RETURN_OF_THE_QUEEN and last_evt_4 starts.
+ */
 EVT_BEGIN(last_evt_3_2)
     // Voices of everyone Mario met call out to him in the darkness.
     CALL(evt_mario_key_onoff, 0)
@@ -2474,6 +2488,12 @@ EVT_BEGIN(last_evt_3_2)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the ending of the main game in the throne hall.
+ * The Shadow Queen is defeated, the Sirens and the partners speak, the ending music starts,
+ * Peach and Professor Frankly (クリハカセ) talk to Mario and a chest appears;
+ * then the story is set to STG8_END_AFTER_THE_BATTLE and the map changes to gor_11.
+ */
 EVT_BEGIN(last_evt_4)
     // The Shadow Queen is gone: the music stops and the Sirens and Mario's partners speak.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -3222,6 +3242,12 @@ EVT_BEGIN(shuryolight_delete)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_29, the Shadow Queen's throne hall:
+ * sets up the doors and the NPCs and then runs the scene that matches the story step
+ * and the way Mario came in (west door: last_evt_1; sekai_yami1: last_evt_2; sekai_yami2: last_evt_3;
+ * starstone: last_evt_3_1; minnnanokoe: last_evt_3_2; STG8_16_THE_RETURN_OF_THE_QUEEN: last_evt_4).
+ */
 EVT_BEGIN(las_29_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

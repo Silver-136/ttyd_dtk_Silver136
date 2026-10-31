@@ -28,6 +28,13 @@ s32 BattleAcrobatStart(BattleWork* work, s32 unitId, s32 windowStartFrame,
     return 0;
 }
 
+/**
+ * Runs one frame of a Stylish move check for work->stylishUnitId.
+ * Sets work->stylishResult: 2 = A pressed inside the window,
+ * -1 = pressed too early (or before the move started), -2 = too late, 1 = window passed or the unit is confused.
+ * Timing Tutor draws the "!" icon during the window and Simplifier-style AutoCommand presses for the player.
+ * Returns EVT_RETURN_BLOCK while still waiting, EVT_RETURN_YIELD once decided.
+ */
 s32 BattleAcrobatMain(BattleWork* work) {
     BattleUnit* unit;
     BOOL doSimplified;

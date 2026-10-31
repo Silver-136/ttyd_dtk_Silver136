@@ -904,6 +904,14 @@ static EVT_BEGIN(evt_train)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene of the train arriving at Rogueport Station on the return trip:
+ * Mario and the partners are hidden while the station attendant stands in front, the train doors open (tobira),
+ * Mario and the partners step out onto the platform,
+ * the story is moved to STG6_56_ROGUEPORT_STATION if it was earlier,
+ * and the camera is released once Mario moves.
+ * Sets the train arrival flags and starts Peach's mail scene (peach_mail) until STG6_57_A_MAIL_FROM_PEACH.
+ */
 EVT_BEGIN(evt_train2)
     // Control is taken away and Mario and the partners are hidden while the train pulls in.
     CALL(evt_mario_key_onoff, 0)
@@ -1004,6 +1012,12 @@ EVT_BEGIN(evt_train2)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene when Mario walks to x >= -275 at the station:
+ * the mail alert (vibrating exclamation), the partner comments (gor_04_mail6_00);
+ * after he presses A the mail is read (gor_04_mail6_01, 02),
+ * story progress becomes STG6_57_A_MAIL_FROM_PEACH and mail 5 is received and opened.
+ */
 static EVT_BEGIN(peach_mail)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1398,6 +1412,10 @@ static EVT_BEGIN(hkoopa_init)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Luigi (ルイージ): between STG6_54_WELCOME_BACK
+ * and STG7_19_THE_DOOR_TO_LORD_CRUMP places him at (65, 0, 120) facing left or right.
+ */
 static EVT_BEGIN(luigi_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_54_WELCOME_BACK, STG7_19_THE_DOOR_TO_LORD_CRUMP)
@@ -1430,6 +1448,11 @@ static NpcSetupInfo luigiEnt[] = {
     {0},
 };
 
+/**
+ * Registers Luigi (model c_luigi) and his companion Su Creamy (ス・クリーミ, model c_lp_moa) from luigiEnt
+ * and screamEnt in the story range STG6_54_WELCOME_BACK to STG7_19_THE_DOOR_TO_LORD_CRUMP;
+ * called while the map sets up its NPCs.
+ */
 static EVT_BEGIN(luigi_npcEnt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_54_WELCOME_BACK, STG7_19_THE_DOOR_TO_LORD_CRUMP)
@@ -1549,6 +1572,12 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Boarding the blimp to Glitzville when Mario stands on the A_noriba gondola:
+ * the blimp music starts, the mooring poles are lowered one after another, the gondola rises over 2 seconds,
+ * then the screen changes to tou_20 (first trip, before STG3_00_WELCOME_TO_GLITZVILLE) or tou_00
+ * after a 10 second ride.
+ */
 EVT_BEGIN(evt_hikousen)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_AIRSHIP1"))
     CALL(evt_mario_key_onoff, 0)
@@ -1814,6 +1843,13 @@ EVT_BEGIN(evt_hikousen_return)
     RETURN
 EVT_END()
 
+/**
+ * Bowser interlude at STG4_15_05_PEACH_X_NAUT_PHD_REPORT (the map init switches the player to Bowser,
+ * mode 2):
+ * Kammy Koopa (ババ, with her broom "houki") wants to ride the Cheep Blimp to Glitzville, where she has heard of a
+ * great secret, and asks the blimp attendant for tickets; he flees, Bowser flies off on his own (飛クッパ, "I'll be
+ * riding THIS") and Kammy is left behind (kpa_stg4_000 to 006). The map then changes to tou_00 (Glitzville).
+ */
 EVT_BEGIN(gor_04_koopa_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 425, 250, 340, 425, 214, 112, 0, EASING_SINE_IN_OUT)
@@ -2131,6 +2167,15 @@ EVT_BEGIN(gor_04_koopa_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of gor_04, the station: music (Bowser's tune at STG4_15_05_PEACH_X_NAUT_PHD_REPORT,
+ * otherwise the Rogueport tune except on arriving by blimp), exits, Luigi and his companion, the NPCs,
+ * a save block, the spinning panel with a Star Piece, a second Star Piece, and the blimp ride trigger.
+ * Depending on how Mario entered (blimp return, train return trip, n_bero door) it sets the train flags
+ * and starts the matching scene.
+ * Also starts Peach's mail scene, the Bowser interlude and, after STG6_55_04_BOWSER_RAWK_HAWK,
+ * heals Mario and his partners.
+ */
 EVT_BEGIN(gor_04_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))

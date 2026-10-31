@@ -563,6 +563,12 @@ static EVT_BEGIN(bombwall_init)
     RETURN
 EVT_END()
 
+/**
+ * Init script of dou_09, the hub linking dou_03, dou_10 and dou_13:
+ * music and ambience, exits, which gate model is shown (closed before STG5_22_FLOODGATE_HANDLE, open after),
+ * three bobbing barrels and a boat that dip when stood on, a Shine Sprite block, a hidden brick,
+ * and the wall that Bobbery can blow open.
+ */
 EVT_BEGIN(dou_09_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU11"))

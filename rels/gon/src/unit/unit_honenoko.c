@@ -401,6 +401,11 @@ static EVT_BEGIN(fake_dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Turn event of the collapsed Dull Bones: counts unit work 2 down and, when it reaches zero,
+ * reassembles it (KRN_D_3 and KRN_D_4 with the reunite sounds),
+ * clears attribute 0x20000 and restores its HP to the maximum.
+ */
 // The attack dispatcher spends this turn counting down/reassembling, then starts the wait event.
 static EVT_BEGIN(rebirth_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBIRTH_TURNS, LW(0))

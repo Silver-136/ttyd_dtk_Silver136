@@ -128,6 +128,11 @@ static EVT_BEGIN(evt_check)
     RETURN
 EVT_END()
 
+/**
+ * Between STG4_10_02_TRADING_PLACES and STG4_12_01_SUPERBOMBBOMB_FOUND (Mario has swapped places
+ * with Doopliss) it removes both partner slots:
+ * stops them, moves them out of the map, disables control and clears them from the party.
+ */
 EVT_BEGIN(evt_usu_kagemario_party_kill)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_10_02_TRADING_PLACES, STG4_12_01_SUPERBOMBBOMB_FOUND)

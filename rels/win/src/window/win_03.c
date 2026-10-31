@@ -161,6 +161,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Trigger: when Mario walks past x = 200 the extra partner comments on Flurrie's house ("stg2_win_e04_02")
+ * and the story becomes STG2_04_EXTENDING_PLANE_PANEL.
+ */
 EVT_BEGIN(lookat_house)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -230,6 +234,12 @@ USER_FUNC(camera_action) {
     return event->lwData[10] == 0 ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
+/**
+ * First part of Flurrie's intro, spawned by the init script at STG2_03_02:
+ * Mario and the partners are moved off the map, the camera pans to her house (camera_action)
+ * and a voice without a speaker tail praises the woods and the house she built there (stg2_win_e04_00_01);
+ * then the map changes to win_04 with an iris wipe.
+ */
 static EVT_BEGIN(cloud_toujou)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -250,6 +260,12 @@ static EVT_BEGIN(cloud_toujou)
     RETURN
 EVT_END()
 
+/**
+ * Last part of Flurrie's intro, spawned by the init script at STG2_03_03 (after win_05):
+ * with Mario off the map, the camera shakes toward the house with a blur and the surprised jingle,
+ * a voice wails that something is gone (stg2_win_e04_00_05),
+ * the story becomes STG2_03_04_SHES_LOST_HER_PRECIOUS and the map changes to win_01 ("n_bero").
+ */
 EVT_BEGIN(cloud_lostitem)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -333,6 +349,14 @@ EVT_BEGIN(dummy_event)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of win_03, outside Flurrie's house:
+ * registers exits, the "n_bero" A case, BGM and ambience, trees, a recovery block,
+ * the Volt Shroom and a Star Piece,
+ * hides the "S_ana" and "S_siro_asu" objects (and the "A_siro_asu" hit),
+ * and spawns lookat_house at STG2_03_05,
+ * cloud_toujou at STG2_03_02 and cloud_lostitem at STG2_03_03.
+ */
 EVT_BEGIN(win_03_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

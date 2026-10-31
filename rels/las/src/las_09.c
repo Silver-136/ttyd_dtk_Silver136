@@ -333,6 +333,12 @@ static HitDamageReturn dmgRetPoint[] = {
     {0},
 };
 
+/**
+ * Event script: the cutscene on the first entry to the Palace garden.
+ * Mario and the partner enter from the west, the camera pans to the door,
+ * the door swings open and shut behind them, the partner comments (stg8_las_11),
+ * the story progress is set to STG8_03_THE_PALACE_GARDEN and the room is entered normally.
+ */
 static EVT_BEGIN(first_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_get_party, LW(0))

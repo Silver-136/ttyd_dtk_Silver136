@@ -259,6 +259,12 @@ EVT_BEGIN(gra_06_saku_open)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene on the first arrival at the Steeple gate:
+ * the camera pans over the Creepy Steeple, a place-name telop is shown,
+ * Mario and the partner walk to the gate and the partner comments (stg4_gra_19).
+ * Sets the story to STG4_08_STEEPLE_DEMO_EXT.
+ */
 EVT_BEGIN(first_gra06jin)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
     CALL(evt_mario_key_onoff, 0)
@@ -407,6 +413,12 @@ EVT_BEGIN(teresa_oidasare_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of gra_06, the end of the trail: a Star Piece,
+ * the entry cases (the Boo drop-out scene or the normal exits), save and recovery blocks, a hidden coin brick,
+ * the Steeple gate in its open or closed state,
+ * and the first- arrival cutscene before STG4_08_STEEPLE_DEMO_EXT.
+ */
 EVT_BEGIN(gra_06_init_evt)
     CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -130, 0, 150, ITEM_TYPE_STILL, GSWF_STARPIECE_66, 0)
     CALL(evt_kagemario_init)

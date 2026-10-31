@@ -116,6 +116,10 @@ EVT_BEGIN(evt_jump)
     RETURN
 EVT_END()
 
+/**
+ * Map init for eki_04: sets up the doors to eki_03 and eki_05, the red jump stand, the Dried Shroom and P-Up,
+ * D-Down items and makes sure the story is at least STG6_33_BLOW_THE_POSTER.
+ */
 EVT_BEGIN(eki_04_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)

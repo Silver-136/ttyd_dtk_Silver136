@@ -93,6 +93,12 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Spawned by the map init: waits until the partner has stopped reacting,
+ * then plays the box (anm_hako) opening with a camera shot
+ * and creates the three counting switches (MOBJ_eki_06_su1 to su3) it reveals,
+ * and advances the story to STG6_34_3_BLUE_BLOCKS. Does nothing when that step has already been reached.
+ */
 EVT_BEGIN(evt_box_open)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_34_3_BLUE_BLOCKS)
         RETURN
@@ -394,6 +400,12 @@ USER_FUNC(sw_entry) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Map init for eki_06: sets up the door to eki_05,
+ * the box and the three counting switches according to the story step (before STG6_34_3_BLUE_BLOCKS the
+ * stairs are hidden; at that step the switches exist;
+ * later the stairs are already unfolded), and the Shine Sprite power-up block.
+ */
 EVT_BEGIN(eki_06_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)

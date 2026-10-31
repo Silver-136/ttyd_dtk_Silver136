@@ -182,6 +182,11 @@ EVT_BEGIN(wall_roll_sub)
     RETURN
 EVT_END()
 
+/**
+ * Reward scene for the slot puzzle: with a quake and fanfare the four wall panels roll away one by one,
+ * the floor and wall collisions change, small stars burst from the four switches, which are removed.
+ * Sets the story to STG2_21_02_MATCHING_THE_PATTERNS.
+ */
 EVT_BEGIN(wall_roll)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -428,6 +433,10 @@ EVT_BEGIN(slot_event)
     RETURN
 EVT_END()
 
+/**
+ * Chest script for the Blue Key: Mario opens the chest and receives the Blue Key, Punio comments,
+ * and the west exit is changed to lead to the blue cell. Sets the story to STG2_18_JABBLE.
+ */
 EVT_BEGIN(get_blue_jail_key)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))

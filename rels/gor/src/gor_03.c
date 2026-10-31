@@ -389,6 +389,11 @@ USER_FUNC(gor_npc_fuwafuwa) {
     return EVT_RETURN_YIELD;
 }
 
+/**
+ * Picks the row of exchange_ryokin_medal_tbl from the story progress:
+ * 0 at the start, then 1 to 8 from progress 61, 117, 171, 218, 267, 344, 375 and 402 (the Bowser interludes
+ * that end chapters 1 to 7, then STG8_END_AFTER_THE_BATTLE).
+ */
 s32 exchange_ret_tbl_no(void) {
     s32 n = evtGetValue(NULL, GSW_STORY_PROGRESS);
     s32 no = 0;
@@ -865,6 +870,14 @@ EVT_BEGIN(maffiaboss_ticket_put)
     RETURN
 EVT_END()
 
+/**
+ * Don Pianta hands Mario the Blimp Ticket.
+ * The script waits until Mario stands in the trigger area by the desk,
+ * then Don Pianta (マフィアボス) grumbles that his daughter is happy now (mac_2_116 to 119), walks to Mario if
+ * needed, gives the ticket (maffiaboss_ticket_put, ITEM_BLIMP_TICKET) and tells him never to come back;
+ * the story
+ * moves to STG2_46_BLIMP_TICKET.
+ */
 EVT_BEGIN(maffiaboss_ticket_check)
     // Wait until Mario steps onto the desk area, or is spoken to (flag), so the scene can begin.
     LOOP(0)
@@ -959,6 +972,11 @@ EVT_BEGIN(maffiaboss_ticket_check)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Don Pianta (マフィアボス): places him by the story progress (at his desk,
+ * on the platform with his back turned during STG5_58_FAIR_WINDS to STG5_64_03_F_F_ARRIVE,
+ * or out of sight afterwards) and, when the ticket has been given, runs the ticket check.
+ */
 EVT_BEGIN(maffiaboss_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG2_45_DAUGHTER_LOCATED)
@@ -982,6 +1000,11 @@ EVT_BEGIN(maffiaboss_init)
     RETURN
 EVT_END()
 
+/**
+ * Scene when Mario first reaches Don Pianta's desk:
+ * Don Pianta and his two henchmen (マフィア１ and マフィア２) talk to Mario and the partner (mac_2_045 to 068)
+ * and the story is set to STG2_44_FINDING_DON_PIANTA.
+ */
 EVT_BEGIN(maffiaboss_maffiaboss)
     // Wait until Mario walks up to Don Pianta's desk.
     LOOP(0)
@@ -1296,6 +1319,10 @@ EVT_BEGIN(maffiaboss_airship_ticket)
     RETURN
 EVT_END()
 
+/**
+ * Scene at STG5_61_FRANKLYS_HOUSE_STG_5: the henchmen talk with Don Pianta and Mario (mac_5_012 to 032),
+ * with two yes/no questions; ends by setting the story to STG5_62_AN_ILL_DON_PIANTA.
+ */
 EVT_BEGIN(maffiaboss_teshita_irai)
     CALL(evt_msg_print, 0, STRING("mac_5_012"), 0, STRING("マフィアボス"))
     BEGIN_INLINE_EVENT
@@ -1380,6 +1407,11 @@ EVT_BEGIN(maffiaboss_train_ticket_init)
     RETURN
 EVT_END()
 
+/**
+ * Scene in which Don Pianta gives Mario the Train Ticket (mac_5_046 to 084):
+ * the key item jingle, Don Pianta moves to the casino spot as the casino version of himself,
+ * Mony and Peeton talk, and the story is set to STG5_65_TRAIN_TICKET.
+ */
 EVT_BEGIN(maffiaboss_train_ticket)
     // Don Pianta lies ill in bed; Francesca and Frankie turn to him and cry out.
     CALL(evt_set_dir_to_target, STRING("モニー"), STRING("マフィアボス"))
@@ -1590,6 +1622,11 @@ EVT_BEGIN(maffiaboss_train_ticket)
     RETURN
 EVT_END()
 
+/**
+ * Shared talk script of Don Pianta (マフィアボス): picks the line by the story progress,
+ * runs the Blimp Ticket and Train Ticket scenes, the henchmen's request scene at STG5_61_FRANKLYS_HOUSE_STG_5,
+ * and the generic lines (gor_03_01_01 to 01_03) otherwise.
+ */
 EVT_BEGIN(maffiaboss_talk_common)
     SET_VALUE(LSWF_GOR_03_TALK_SCENE_ACTIVE, 1)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1666,6 +1703,10 @@ EVT_BEGIN(maffiaboss_desk_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the casino version of Don Pianta (マフィアボスカジノ):
+ * after STG5_64_03_F_F_ARRIVE he stands at (-270, 0, -450).
+ */
 EVT_BEGIN(maffiaboss_casino_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER(STG5_64_03_F_F_ARRIVE)
@@ -2054,6 +2095,10 @@ static EVT_BEGIN(talk_gurume)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Luigi (ルイージ): during STG3_32_BOSS_BATTLE up to STG4_15_04_SHADOW_SIRENS_DOOPLISS
+ * places him at (440, 0, -20) facing left or right; outside that range he keeps his default position.
+ */
 static EVT_BEGIN(luigi_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_32_BOSS_BATTLE, STG4_15_04_SHADOW_SIRENS_DOOPLISS)
@@ -2083,6 +2128,11 @@ static EVT_BEGIN(luigi_npcEnt)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Cherry (チェリー, model c_lp_bom; Jerry in English, a Bob-omb from Luigi's Plumpbelly Village story,
+ * luigi_npc_02) in the story range STG3_32_BOSS_BATTLE to
+ * STG4_15_04_SHADOW_SIRENS_DOOPLISS: places her at (480, 0, -20).
+ */
 EVT_BEGIN(cherry_init)
     CALL(evt_npc_set_position, STRING("me"), 480, 0, -20)
     CALL(evt_npc_set_ry_lr, STRING("me"), 0)
@@ -3750,6 +3800,13 @@ EVT_BEGIN(evt_door_01_0_open)
     RETURN
 EVT_END()
 
+/**
+ * Closes building 1's front door: restores the door leaves,
+ * shows the Shine Sprite block again and brings the music and ambience back.
+ * At STG2_46_BLIMP_TICKET the partner says mac_2_123
+ * and the story moves to STG2_47_AFTER_GETTING_THE_TICKET;
+ * at STG5_65_TRAIN_TICKET it starts Beldam's eavesdropping scene (majorin_nusumigiki).
+ */
 EVT_BEGIN(evt_door_01_0_close)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
@@ -4199,6 +4256,10 @@ EVT_BEGIN(evt_door_02_1_open)
     RETURN
 EVT_END()
 
+/**
+ * Closes the door of Don Pianta's office: brings the Rogueport music
+ * and ambience back (unless it is STG5_64_03_F_F_ARRIVE).
+ */
 EVT_BEGIN(evt_door_02_1_close)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
         IF_INT_EQUAL(GF(5), 0)
@@ -4773,6 +4834,11 @@ static ShopperData35 shopper_data = {
     {"gor_shop2_00", "gor_shop2_01", "gor_shop2_02", "gor_shop2_03", "gor_shop2_04", "gor_shop2_05", "gor_shop2_06", "gor_shop2_07", "gor_shop2_08", "gor_shop2_09", "gor_shop2_10", "gor_shop2_11", "gor_shop2_12", "gor_shop2_13", "gor_shop2_14", "gor_shop2_15", "gor_shop2_16", "gor_shop2_17", "gor_shop2_18", "gor_shop2_19", "gor_shop2_20", "gor_shop2_21", "gor_shop2_22", "gor_shop2_23", "gor_shop2_24", "gor_shop2_25", "gor_shop2_26", "gor_shop2_27", "gor_shop2_28", "gor_shop2_29", "gor_shop2_30", "gor_shop2_31", "gor_shop2_32", "gor_shop2_33", "gor_shop2_34"}, // msgs
 };
 
+/**
+ * Beldam's (マジョリン) eavesdropping scene after the Train Ticket is given (STG5_65_TRAIN_TICKET):
+ * the camera shows Mario's party, Beldam appears with the witch music and speaks (mac_5_900 to 905),
+ * then leaves, and the story moves to STG5_66_BELDAM_FINDS_OUT.
+ */
 EVT_BEGIN(majorin_nusumigiki)
     // Beldam hides out of sight; only a shadow shows on the floor.
     CALL(evt_npc_set_ry_lr, STRING("マジョリン"), 0)

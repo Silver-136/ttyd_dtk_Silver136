@@ -370,6 +370,13 @@ USER_FUNC(cam_test2) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Opening cutscene of Chapter 1 at Petal Meadows (map init, before STG1_00_PETAL_MEADOWS):
+ * starts the field music and ambience, shows the chapter title (telop) while the camera pans across the meadow,
+ * then Mario's entry runs (evt_bero_exec_wait) and he walks to x = -325.
+ * The partner looks left and right and says stg1_hei_00;
+ * story progress becomes STG1_00_PETAL_MEADOWS and control returns.
+ */
 static EVT_BEGIN(first_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI1"))
@@ -569,6 +576,11 @@ EVT_BEGIN(gonbaba_evt)
     RETURN
 EVT_END()
 
+/**
+ * Enter event of the dokan_2 pipe: before the opening cutscene has finished (story below
+ * STG1_00_PETAL_MEADOWS) it sets GF(0) and waits until first_evt clears it,
+ * so the pipe exit does not end before the cutscene; returns 0 in LW(0).
+ */
 static EVT_BEGIN(first_evt_dokan)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_00_PETAL_MEADOWS)
         SET_VALUE(LW(0), 0)
@@ -1161,6 +1173,12 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Bowser interlude at STG2_25_02_PEACH_SHALL_WE_DANCE (after Peach's scene in aji_17): the "mario" actor
+ * is Bowser here (mode 2). He leaps into the meadow, Kammy Koopa flies in with word that Peach was seen in the
+ * town ahead (kpa_stg2_000..003), the story moves to STG2_25_03_BOWSER_MEADOWS, Bowser laughs and walks
+ * off with Kammy, and the map changes to kpa_02.
+ */
 EVT_BEGIN(hei_00_koopa_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -312, 75, -50)

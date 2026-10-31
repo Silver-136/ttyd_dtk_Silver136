@@ -442,6 +442,11 @@ static EVT_BEGIN(friend_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Ember: can use an item; otherwise draws 0 to 99 and uses the body charge
+ * (weapon_bubble_attack) below 50, the fireball (weapon_bubble_fire_attack) below 80
+ * and the fire wall on everyone (weapon_bubble_all_fire_attack) otherwise.
+ */
 // After item use, choose normal, single-fire or all-fire with weights 50, 30 and 20.
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))

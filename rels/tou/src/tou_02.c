@@ -579,6 +579,11 @@ EVT_BEGIN(talk_gard2)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the madam: stands at (525, 0, 0)
+ * until STG3_34_RETURN_TO_ROGUEPORT (and at that stage when Mario has not left as champion),
+ * and is hidden below the map afterwards.
+ */
 static EVT_BEGIN(init_madam)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
@@ -595,6 +600,11 @@ static EVT_BEGIN(init_madam)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the madam: a line before STG3_04_GONZALES_IS_BORN,
+ * lines chosen by Mario's Glitz Pit ranking until STG3_32_BOSS_BATTLE (above 15, 10, 5, 0, or 0),
+ * and one line afterwards.
+ */
 static EVT_BEGIN(talk_madam)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1059,6 +1069,11 @@ EVT_BEGIN(talk_chu)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the champion (Rawk Hawk) in the lobby:
+ * only at story stage STG3_33_06_BOWSER_TREASURE, when Mario did not leave as champion,
+ * he stands at (-15, 0, 25) and faces Mario instantly until the first sequence frame has passed.
+ */
 static EVT_BEGIN(init_champ)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1156,6 +1171,10 @@ EVT_BEGIN(talk_champ)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for Jolene (キノシコワ): at STG3_33_06_BOWSER_TREASURE (after the Bowser interlude, before
+ * Mario leaves Glitzville) she is placed at (-25, 0, 75) unless Mario left as champion.
+ */
 EVT_BEGIN(init_shikowa)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1171,6 +1190,7 @@ EVT_BEGIN(init_shikowa)
     RETURN
 EVT_END()
 
+/** Talk script of Jolene: at STG3_33_06_BOWSER_TREASURE she says stg3_tou_479_01; otherwise nothing. */
 EVT_BEGIN(talk_shikowa)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1179,6 +1199,11 @@ EVT_BEGIN(talk_shikowa)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the Shady Koopa (ウラノコ) in the lobby:
+ * only at story stage STG3_33_06_BOWSER_TREASURE, when Mario did not leave as champion,
+ * he stands at (-75, 0, 50) and faces Mario instantly until the first sequence frame has passed.
+ */
 static EVT_BEGIN(init_uranoko)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1194,6 +1219,10 @@ static EVT_BEGIN(init_uranoko)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the Shady Koopa: at story stage STG3_33_06_BOWSER_TREASURE he says stg3_tou_479_03;
+ * otherwise nothing.
+ */
 static EVT_BEGIN(talk_uranoko)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1202,6 +1231,10 @@ static EVT_BEGIN(talk_uranoko)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the first Iron Cleft (アイアンＡ): scaled 1.5 in x and y, and at
+ * STG3_33_06_BOWSER_TREASURE placed at (-30, 0, -50) unless Mario left as champion.
+ */
 EVT_BEGIN(init_ironA)
     CALL(evt_npc_set_scale, STRING(("me")), FLOAT(1.5f), FLOAT(1.5f), FLOAT((1.0f)))
     SWITCH(GSW_STORY_PROGRESS)
@@ -1218,6 +1251,7 @@ EVT_BEGIN(init_ironA)
     RETURN
 EVT_END()
 
+/** Talk script of the first Iron Cleft: stg3_tou_479_04 at STG3_33_06_BOWSER_TREASURE, otherwise nothing. */
 EVT_BEGIN(talk_ironA)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1226,6 +1260,10 @@ EVT_BEGIN(talk_ironA)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the second Iron Cleft (アイアンＢ): scaled 1.5 in x and y, and at
+ * STG3_33_06_BOWSER_TREASURE placed at (-60, 0, -25) unless Mario left as champion.
+ */
 EVT_BEGIN(init_ironB)
     CALL(evt_npc_set_scale, STRING(("me")), FLOAT(1.5f), FLOAT(1.5f), FLOAT((1.0f)))
     SWITCH(GSW_STORY_PROGRESS)
@@ -1242,6 +1280,7 @@ EVT_BEGIN(init_ironB)
     RETURN
 EVT_END()
 
+/** Talk script of the second Iron Cleft: stg3_tou_479_05 at STG3_33_06_BOWSER_TREASURE, otherwise nothing. */
 EVT_BEGIN(talk_ironB)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)

@@ -1960,6 +1960,11 @@ USER_FUNC(_check_mario_move_count) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Reads or writes unit args[0]'s moveColorLv: with args[1] zero it is returned in args[2],
+ * otherwise set to args[2].
+ * Shell Shield saves Mario's value, sets it to 255 during the move and restores it after.
+ */
 USER_FUNC(_color_lv_set) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;

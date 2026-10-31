@@ -162,6 +162,10 @@ EVT_BEGIN(sekizou_talk)
     RETURN
 EVT_END()
 
+/**
+ * Pick-up event of the elevator key dropped after the quiz (ITEM_ELEVATOR_KEY_0x1C):
+ * sets the story to STG7_14_ELEVATOR_KEY_B.
+ */
 EVT_BEGIN(evt_item)
     SET_VALUE(GSW_STORY_PROGRESS, STG7_14_ELEVATOR_KEY_B)
     RETURN
@@ -429,6 +433,16 @@ EVT_BEGIN(UNK_0x00022c3c)
     RETURN
 EVT_END()
 
+/**
+ * The statue's quiz, the case script of a_sekizou_1_a.
+ * The statue wakes up and asks whether to take its quiz (stg7_aji_02);
+ * on yes it moves Mario onto the quiz set (BGM_EVT_QUIZ1/2)
+ * and asks questions read from kuizu_data (map animation, question text, choice text, correct choice),
+ * turning its head and flapping its mouth with every text.
+ * Wrong answers earn a scolding and an offer to stop;
+ * right answers are counted in LW(14) and after the fifth the statue turns around,
+ * the quiz ends and STG7_13_QUIZ_CLEARED is set.
+ */
 EVT_BEGIN(kuizu_sekizou)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
@@ -808,6 +822,12 @@ void kuti_callback(s32 type, void** work) {
     }
 }
 
+/**
+ * Init script of aji_04, the quiz room: plays BGM_STG7_DUN2, sets up the exits,
+ * and attaches the quiz statue until STG7_13_QUIZ_CLEARED;
+ * right after clearing the quiz it places the elevator key ITEM_ELEVATOR_KEY_0x1C (an item "dummy") for Mario to
+ * pick up.
+ */
 EVT_BEGIN(aji_04_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))

@@ -508,6 +508,13 @@ USER_FUNC(evt_moamoa_set_seq_all) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Cutscene in the driver's cab on day 3 (the story is before STG6_46_ENGINEER):
+ * the music fades, Mario and the partner walk up to the driver, who speaks (stg6_rsh_231, 232);
+ * Smorgs (moamoa) pop up at the window with the danger music, the story advances to STG6_46_ENGINEER,
+ * the camera shakes, Mario is startled, the driver panics (stg6_rsh_233),
+ * the partner reacts (stg6_rsh_234_x) and the driver ends with stg6_rsh_235_00.
+ */
 static EVT_BEGIN(evt_moamoa)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 120)
     CALL(evt_cam3d_evt_set, -70, 113, 373, 126, 38, -13, 500, EASING_SINE_IN_OUT)
@@ -590,6 +597,11 @@ static EVT_BEGIN(evt_moamoa)
     RETURN
 EVT_END()
 
+/**
+ * Called when the cab map loads while the engineer scene is under way (STG6_46_ENGINEER to
+ * STG6_47_ESCAPING_THE_SMORGS): plays the Smorg voice,
+ * registers the two Smorg NPC models and the sprite effect, and shows all Smorgs at their window spots.
+ */
 EVT_BEGIN(evt_rsh_moamoa_on_window)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_46_ENGINEER, STG6_47_ESCAPING_THE_SMORGS)
@@ -816,6 +828,10 @@ EVT_BEGIN(regu_unten)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the driver: during the Smorg stages (STG6_46_ENGINEER to
+ * STG6_47_ESCAPING_THE_SMORGS) turns on his move and talk animations and puts him in the B_2 panic pose.
+ */
 static EVT_BEGIN(init_unten)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_46_ENGINEER, STG6_47_ESCAPING_THE_SMORGS)
@@ -825,6 +841,13 @@ static EVT_BEGIN(init_unten)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the driver (unten).
+ * Picks his line by story stage: the greeting that alternates,
+ * the autograph request (at STG6_10 to 11 he signs and gives Mario the Autograph with the item-get
+ * fanfare, STG6_11_OBTAIN_AUTOGRAPH), hints for each later stage,
+ * the Smorg scene (evt_moamoa) before STG6_46_ENGINEER, and after the story a line for where the train is.
+ */
 static EVT_BEGIN(talk_unten)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)

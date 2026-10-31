@@ -120,6 +120,13 @@ static EVT_BEGIN(box_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the Gloomtail fight scene (battle info 14),
+ * played when Mario first enters the Palace garden (STG8_03_THE_PALACE_GARDEN).
+ * Mario and the partner enter, the door closes behind them, Gloomtail roars and steps forward,
+ * delivers his threats, the battle runs, and afterwards he collapses in the middle of the room,
+ * throws up the Star Key chest, and the story moves to STG8_04_GLOOMTAIL.
+ */
 EVT_BEGIN(bonbaba_evt)
     // Mario and his partner walk into the garden and the door shuts behind them.
     CALL(evt_mario_key_onoff, 0)

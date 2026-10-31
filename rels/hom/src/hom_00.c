@@ -460,6 +460,11 @@ static EVT_BEGIN(evt_chk)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the Station Key is used on the lock:
+ * switches the station door's entry on (bero_case_switch_on with LW(0) = 1)
+ * and sets story progress to STG6_29_STATION_DOOR_UNLOCKED.
+ */
 static EVT_BEGIN(evt_lock)
     SET_VALUE(LW(0), 1)
     CALL_CHILD(PTR(bero_case_switch_on))

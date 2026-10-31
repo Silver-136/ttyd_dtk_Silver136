@@ -339,6 +339,14 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the Boo. With a first-strike flag it only does the normal attack.
+ * Otherwise it checks for an item use, then rolls a random number:
+ * roughly 25 in 114 to turn itself invisible (trans_myself_event, only if it is not already invisible),
+ * 25 in 114 to make another Boo invisible (trans_event, only if one exists that is not),
+ * 15 in 114 for the group move (move_event, only if some Boo has not moved yet),
+ * and otherwise the normal attack. The two special options are skipped while it has status 5.
+ */
 // Unavailable special actions fall through to later choices using the same random roll.
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)

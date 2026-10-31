@@ -122,6 +122,11 @@ USER_FUNC(pposter_nok_on) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Init for the first Petalburg Koopa (ノコノコA, the one who greets Mario):
+ * turns on the move and talk animations and puts him at his post by the gate once the first visit is over;
+ * during the Bowser cutscene (STG2_25_04) he stands near the shop doors.
+ */
 EVT_BEGIN(nokonoko_A_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG1_01A_PETALBURG_1ST_TIME)
@@ -462,6 +467,11 @@ static EVT_BEGIN(kizayarou_talk)
     RETURN
 EVT_END()
 
+/**
+ * Entry of the Show-off Koopa (キザ野郎, model c_kiza):
+ * creates the NPC at (350, 0, 175) facing 270 with the talk and wander scripts and the move/talk animations.
+ * Called from the map init between STG1_00_PETAL_MEADOWS and STG1_17_FATHER_SON_REUNITED.
+ */
 static EVT_BEGIN(kizayarou_init)
     SET_VALUE(LW(0), STRING("キザ野郎"))
     CALL(evt_npc_entry, LW(0), STRING("c_kiza"))
@@ -842,6 +852,13 @@ EVT_BEGIN(nok_00_koopa_npc_entry)
     RETURN
 EVT_END()
 
+/**
+ * Bowser interlude in Petalburg (STG2_25_04_BOWSER_ACTION_STAGE):
+ * Kammy flies in over the village, Koopa A flees into the shops, and Bowser is led to the Peach poster.
+ * Koopa A jumps up and hangs the poster (via pposter_nok_on), the music slows down and fades,
+ * and the story advances to STG2_25_05_BOWSER_PETALBURG.
+ * The game is saved and the scene continues into the next Bowser action stage (mri_00).
+ */
 EVT_BEGIN(nok_00_koopa_evt)
     // The Bowser interlude begins in the quiet village.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_NOK1"))

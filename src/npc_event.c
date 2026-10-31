@@ -1468,6 +1468,7 @@ EVT_BEGIN(met_return_event)
     RETURN
 EVT_END()
 
+/** Move event of Parabuzzies: same bobbing flight as the Paragoomba's. */
 EVT_BEGIN(patamet_move_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_sub_random, 360, LW(3))

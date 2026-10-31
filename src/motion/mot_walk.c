@@ -83,6 +83,10 @@ void marioWalkDashSe(HitEntry* hitObj, u32 interval) {
     }
 }
 
+/**
+ * Mario's walking speed: baseWalkSpeed, halved in Paper Mode when the stick is only tilted a little
+ * and always in background mode, times playerGravity. Also used by Peach's walk and mario_sbr.c.
+ */
 f32 marioGetWalkSpd(void) {
     f32 walkSpeed;
     s8 stickDir2;
@@ -105,6 +109,10 @@ f32 marioGetWalkSpd(void) {
     return walkSpeed;
 }
 
+/**
+ * Mario's running speed: baseDashSpeed (just the walk speed in Paper Mode, halved for a small tilt;
+ * halved in background mode), times playerGravity.
+ */
 f32 marioGetDashSpd(void) {
     MarioWork* mario;
     f32 dashSpeed;

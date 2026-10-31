@@ -11,6 +11,7 @@
 BOOL dbg_lotteryinfo;
 static s32 lotteryUnused;
 
+/** Returns the lottery state kept in the save data (gp->lotteryInfo); the shop menus read the ticket number from it. */
 lottery_info* lotteryGetPtr(void) {
     return &gp->lotteryInfo;
 }
@@ -206,6 +207,7 @@ USER_FUNC(evt_lottery_buy) {
     return EVT_RETURN_DONE;
 }
 
+/** Writes the lottery flags (gp->lotteryInfo.flags) to args[0]. */
 USER_FUNC(evt_lottery_flag) {
     evtSetValue(event, event->args[0], gp->lotteryInfo.flags);
     return EVT_RETURN_DONE;

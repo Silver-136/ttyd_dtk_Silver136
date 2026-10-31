@@ -66,6 +66,12 @@ EvtWord iri_28_enemy_dead[13];
 EvtWord iri_28_init[60];
 EvtWord win_00_init_evt[85];
 
+/**
+ * Init script of Vivian in Boggly Woods: clears her battle-info flag.
+ * From STG2_01 (after Beldam takes her necklace in witchtrio_momeru) to STG2_05_02 she stands at
+ * (-535, 0, -30) in the pose PTR_S_3 (talk pose PTR_T_3), the pose she is left in at the end of that scene;
+ * from STG2_06 to STG2_07 she is only placed there.
+ */
 static EVT_BEGIN(vivian_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     SWITCH(GSW_STORY_PROGRESS)
@@ -85,6 +91,10 @@ static EVT_BEGIN(vivian_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of Marilyn in Boggly Woods: clears her battle-info flag and,
+ * between STG2_01 and STG2_07, places her at (-495, 0, -60).
+ */
 static EVT_BEGIN(maririn_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     SWITCH(GSW_STORY_PROGRESS)
@@ -100,6 +110,11 @@ EVT_BEGIN(maririn_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of Beldam (Majolyne) in Boggly Woods:
+ * clears her battle-info flag and, during the Shadow Sirens' first appearance (STG2_01 to STG2_07),
+ * moves her to (-455, 0, -30).
+ */
 EVT_BEGIN(majorin_init)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_STOP_FOR_EVENT)
     SWITCH(GSW_STORY_PROGRESS)
@@ -267,6 +282,15 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * The Shadow Sirens' first scene, spawned by the init script up to STG2_00:
+ * once Mario has entered, he and both partners walk in
+ * and spot the Sirens (Vivian, Marilyn and Beldam at x -535 to -455) as their theme plays.
+ * Beldam names their goals (find Mario, steal the map), Vivian shows a necklace she found by a tree,
+ * they bicker over who lost the sketch, Marilyn points out a mustached man,
+ * and Beldam snatches the necklace as punishment, leaving Vivian in tears (stg2_win_e01_00 to 14).
+ * The story becomes STG2_01_A_SIREN_ARGUMENT.
+ */
 EVT_BEGIN(witchtrio_momeru)
     // The three Sirens stand in the clearing, turned toward each other.
     CALL(evt_npc_set_position, STRING("ビビアン"), -535, 0, -30)
@@ -505,6 +529,13 @@ EVT_BEGIN(majorin_have_picture)
     RETURN
 EVT_END()
 
+/**
+ * Sirens-only scene at STG2_05_02 (Mario and the partners are moved off the map):
+ * Vivian complains that Beldam had the sketch all along,
+ * Beldam holds up the Mario poster (majorin_have_picture keeps it in her hands) and they study it,
+ * then Beldam blames Vivian, refuses to give back the necklace and orders her to find Mario
+ * (stg2_win_e06_00 to 12). The story becomes STG2_06_THE_SKETCH.
+ */
 EVT_BEGIN(witchtrio_picture)
     // Mario and his party are moved off the map: the scene shows the three Sirens alone.
     CALL(evt_mario_key_onoff, 0)
@@ -619,6 +650,13 @@ EVT_BEGIN(witchtrio_picture)
     RETURN
 EVT_END()
 
+/**
+ * Trigger spawned at STG2_06: when Mario reaches x <= -325 the Shadow Sirens confront him;
+ * the partner reacts, Vivian botches their name ("Shadow Beauties") and Beldam scolds her
+ * (stg2_win_e07_00 to 08).
+ * Then the fight starts (Beldam's battle info 4);
+ * afterwards the story becomes STG2_07_MARIO_VS_SHADOW_SIRENS and witchtrio_lose starts.
+ */
 EVT_BEGIN(mario_vs_witchtrio)
     // The Sirens wait here until Mario walks west past x -325.
     CALL(evt_npc_set_ry, STRING("マジョリン"), 270)

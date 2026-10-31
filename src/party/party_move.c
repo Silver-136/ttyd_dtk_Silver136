@@ -269,6 +269,10 @@ f32 partyGetTargetDistY(s32 id, f32 y) {
     return __fabsf(mario->position.y - y);
 }
 
+/**
+ * The speed trail id should move at: Mario's walk speed (baseSpeed, else baseDashSpeed) for trail 0 or
+ * when the other party member is away, else that member's moveSpeed.
+ */
 f32 partyGetTargetMovespd(s32 id) {
     MarioWork* mario = marioGetPtr();
     BOOL far;

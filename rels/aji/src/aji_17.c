@@ -341,6 +341,14 @@ EVT_BEGIN(evt_emergency)
     RETURN
 EVT_END()
 
+/**
+ * First scene when the party returns to TEC's room at STG7_25_00_1_BOWSER_POSHLEY_SANCTUM:
+ * TEC's lights flicker, the party reacts (stg7_aji_46),
+ * and TEC speaks over its screen with noise and fades (stg7_aji_47 to 57)
+ * before the map changes to aji_16 entered as "peach" for the Last Mail scene.
+ * It is TEC's farewell: it introduces itself, asks Mario to save Peach from Grodus in the Palace of Shadow,
+ * tells him to use the teleporter while backup power lasts, and says it will cease to exist.
+ */
 EVT_BEGIN(evt_last)
     // The party enters TEC's room; the music stops and the lights flicker.
     CALL(evt_mario_key_onoff, 0)
@@ -568,6 +576,12 @@ EVT_BEGIN(evt_last)
     RETURN
 EVT_END()
 
+/**
+ * Second scene in TEC's room, after the Last Mail was shown in aji_16:
+ * the party reacts to the machine (stg7_aji_59 to 62), the screen mosaic plays,
+ * the emergency lights start (evt_emergency) and the story becomes STG7_25_THE_LAST_MAIL
+ * before control returns. The partner follows once Mario moves.
+ */
 EVT_BEGIN(evt_last2)
     // The party is back in TEC's room after the Last Mail; the music stops.
     CALL(evt_mario_key_onoff, 0)
@@ -722,6 +736,11 @@ EVT_BEGIN(mail_sousin_se)
     RETURN
 EVT_END()
 
+/**
+ * Peach's first meeting with TEC (chapter 1): doors open and close with sound,
+ * dialogue peach_aji_42 to 48 plays, the story progress becomes STG1_19_PEACH_TEC
+ * and the map changes to kpa_00 with the story-change fade.
+ */
 static EVT_BEGIN(peach_evt_stg1)
     CALL(evt_mario_set_mode, 1)
     // Peach is brought to TEC's room through the west door.
@@ -1605,6 +1624,11 @@ EVT_BEGIN(peach_evt_dance)
     RETURN
 EVT_END()
 
+/**
+ * Peach and TEC in chapter 2: places dummy and hologram NPCs of Peach (ダミー, ホログラム, ホログラム2),
+ * plays peach_aji_76 to 77, sets the story progress to STG2_25_02_PEACH_SHALL_WE_DANCE
+ * and changes map to hei_00.
+ */
 static EVT_BEGIN(peach_evt_stg2)
     CALL(evt_mario_set_mode, 1)
     // The dummy Peach and two hologram Peaches are created for the dance.
@@ -1939,6 +1963,10 @@ static EVT_BEGIN(peach_evt_stg3)
     RETURN
 EVT_END()
 
+/**
+ * Peach's second chapter 3 scene with TEC: doors open and close with sound, peach_aji_156 to 157_03 play,
+ * the story progress becomes STG3_33_04_PEACH_BACK_TO_TEC and the map changes to mri_01.
+ */
 static EVT_BEGIN(peach_evt_stg3_1)
     CALL(evt_mario_key_onoff, 0)
     // Peach returns to TEC's room after her errand.
@@ -2413,6 +2441,12 @@ static EVT_BEGIN(peach_evt_stg4)
     RETURN
 EVT_END()
 
+/**
+ * Peach's chapter 5 scene with TEC (peach_aji_206 to 217): TEC asks her to sneak into Grodus's room
+ * for a data disk it cannot reach over the network (peach_aji_213 to 215 run under the TEC fade),
+ * and sends her back to the elevator. The map animation moza runs only while TEC speaks (its screen).
+ * The story progress then becomes STG5_44_PEACH_TECS_REQUEST_2 and control returns to the player.
+ */
 static EVT_BEGIN(peach_evt_stg5)
     CALL(evt_mario_key_onoff, 0)
     // Peach is called to TEC's room again.
@@ -2518,6 +2552,10 @@ static EVT_BEGIN(peach_evt_stg5)
     RETURN
 EVT_END()
 
+/**
+ * Peach's second chapter 5 scene with TEC: peach_aji_260 to 264 play,
+ * the story progress becomes STG5_47_PEACH_TEC_TALK and the map changes to usu_00.
+ */
 static EVT_BEGIN(peach_evt_stg5_1)
     CALL(evt_mario_key_onoff, 0)
     // Peach returns to TEC's room after her search.
@@ -2677,6 +2715,11 @@ static EVT_BEGIN(peach_evt_stg5_1)
     RETURN
 EVT_END()
 
+/**
+ * Peach's chapter 6 scene with TEC (the shutdown):
+ * peach_aji_282 to 284 and more play, the story progress becomes STG6_55_01_PEACH_TEC_DELETED
+ * and the map changes to gor_01.
+ */
 static EVT_BEGIN(peach_evt_stg6)
     CALL(evt_mario_key_onoff, 0)
     // Peach visits TEC once more.

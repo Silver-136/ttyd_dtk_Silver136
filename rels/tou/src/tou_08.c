@@ -74,6 +74,11 @@ static EvtWord epilogue_evt_sub[322];
 static EvtWord epilogue_evt[83];
 EvtWord tou_08_init_evt[289];
 
+/**
+ * Run when Mario arrives from the toilet pipe before STG3_21_1ST_MATCH_WITH_RAWK_HAWK:
+ * he walks to (-265, 125), the partner remarks (stg3_tou_422),
+ * GSWF_TOU_TITLE_MATCH_RESERVED is cleared and the story advances to STG3_21_1ST_MATCH_WITH_RAWK_HAWK.
+ */
 static EVT_BEGIN(evt_toile)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
         CALL(evt_mario_key_onoff, 0)
@@ -454,6 +459,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Second stop of Grubba's tour, run from the map init before STG3_03_GRUBBA:
+ * Grubba (ガンス) stands next to Mario and introduces the major-league locker room (stg3_tou_50),
+ * then the map changes to tou_05 with a page-flip transition.
+ */
 static EVT_BEGIN(evt_sensyu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, 0, 0, -75)
@@ -520,6 +530,15 @@ EVT_BEGIN(evt_1st_sub)
     RETURN
 EVT_END()
 
+/**
+ * Scene on Mario's first league promotion (the majors, 10th place):
+ * Jolene (キノシコワ) opens the door and introduces him (stg3_tou_294),
+ * then the champion (チャンピョン, wearing the belt via tou_champion_belt) comes in,
+ * greets Mario and the partner (stg3_tou_294_02 to 08),
+ * after which Mario's mail arrives with the vibration jingle.
+ * Mario reads it (stg3_tou_294_12), mail 6 is received and opened,
+ * the Glitz Pit music resumes and the story advances to STG3_20_MAJORS_10TH_PLACE.
+ */
 static EVT_BEGIN(evt_1st_leagu)
     // Jolene opens the door and leads Mario and the partner into the major-league locker room.
     CALL(evt_mario_key_onoff, 0)

@@ -2289,6 +2289,13 @@ static EVT_BEGIN(evt_moamoa_init)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene and boss fight with the giant Smorg (moamoa) on the roof of the train:
+ * the swarm gathers and merges (evt_moamoa_fusion) into a giant body with the passengers' faces (kinds),
+ * the camera sweeps over it, Mario and the partner react (stg6_rsh_244 to 246),
+ * the battle starts with the "base" NPC and, after the fight, the Smorg falls apart (evt_moamoa_blow),
+ * the story advances to STG6_48_SMORG_MIASMA and the map changes to rsh_01_a.
+ */
 EVT_BEGIN(evt_great_moamoa)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)

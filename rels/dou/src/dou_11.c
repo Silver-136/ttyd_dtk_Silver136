@@ -209,6 +209,10 @@ static s16 suifu_run_animtbl[] = {
     28, 28, 29, 29, -1, 0,
 };
 
+/**
+ * Init of sailor C (水夫C): from STG5_30_SHIPWRECKED_SAILORS to STG5_35_ESCAPE_ROUTE he stands at
+ * (825, 100, -125), facing east at STG5_34_KICKED_OFF.
+ */
 static EVT_BEGIN(suifu_c_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_35_ESCAPE_ROUTE)
@@ -220,6 +224,10 @@ static EVT_BEGIN(suifu_c_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of sailor C: stg5_dou_16_09 while the sailors are shipwrecked (STG5_30 to 34),
+ * stg5_dou_17_09 at STG5_35_ESCAPE_ROUTE.
+ */
 static EVT_BEGIN(suifu_c_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_34_KICKED_OFF)
@@ -230,6 +238,10 @@ static EVT_BEGIN(suifu_c_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of sailor D (水夫D): from STG5_30_SHIPWRECKED_SAILORS to STG5_35_ESCAPE_ROUTE he stands at
+ * (775, 50, 50), facing east at STG5_34_KICKED_OFF.
+ */
 static EVT_BEGIN(suifu_d_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_35_ESCAPE_ROUTE)
@@ -241,6 +253,10 @@ static EVT_BEGIN(suifu_d_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of sailor D: stg5_dou_16_07 while the sailors are shipwrecked (STG5_30 to 34),
+ * stg5_dou_17_07 at STG5_35_ESCAPE_ROUTE.
+ */
 static EVT_BEGIN(suifu_d_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_34_KICKED_OFF)
@@ -266,6 +282,10 @@ static EVT_BEGIN(suifu_e_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of sailor E: stg5_dou_16_08 while the sailors are shipwrecked (STG5_30 to 34),
+ * stg5_dou_17_08 at STG5_35_ESCAPE_ROUTE.
+ */
 static EVT_BEGIN(suifu_e_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_34_KICKED_OFF)
@@ -276,6 +296,10 @@ static EVT_BEGIN(suifu_e_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of Monie (モニー): from STG5_30_SHIPWRECKED_SAILORS to STG5_35_ESCAPE_ROUTE she stands at (700,
+ * 50, 0).
+ */
 static EVT_BEGIN(mony_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_35_ESCAPE_ROUTE)
@@ -284,6 +308,11 @@ static EVT_BEGIN(mony_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Monie: she and Peeton (ピートン) speak in turn,
+ * stg5_dou_16_10 and 16_11 while the sailors are shipwrecked and stg5_dou_17_10
+ * and 17_11 at STG5_35_ESCAPE_ROUTE.
+ */
 static EVT_BEGIN(mony_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_34_KICKED_OFF)
@@ -298,6 +327,10 @@ static EVT_BEGIN(mony_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of Peeton (ピートン): from STG5_30_SHIPWRECKED_SAILORS to STG5_35_ESCAPE_ROUTE he stands at (750,
+ * 50, 0).
+ */
 static EVT_BEGIN(peton_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_35_ESCAPE_ROUTE)
@@ -306,6 +339,11 @@ static EVT_BEGIN(peton_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Peeton: turns Monie to face Mario and the two speak in turn,
+ * stg5_dou_16_10 and 16_11 while the sailors are shipwrecked and stg5_dou_17_10
+ * and 17_11 at STG5_35_ESCAPE_ROUTE.
+ */
 static EVT_BEGIN(peton_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_34_KICKED_OFF)
@@ -1294,6 +1332,13 @@ EVT_BEGIN(torinoko_suifu_sakebu)
     RETURN
 EVT_END()
 
+/**
+ * Set-up of the stranded sailors for STG5_29_WAVE_DODGING:
+ * makes Sailors C, D, E and Monie and Peeton intangible,
+ * spawns the crowd of 100 sailors from suifudata on the left platform with their animations,
+ * adds a hidden crowd entry (100) that follows Mario as a blocker, and hides crowd members 95 and 96,
+ * keeping Monie and Peeton at their places every frame so the two stand in the crowd.
+ */
 EVT_BEGIN(torinoko_suifu_init)
     CALL(evt_npc_flag_onoff, 1, STRING("水夫C"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -1405,6 +1450,11 @@ EVT_BEGIN(torinoko_suifu)
     RETURN
 EVT_END()
 
+/**
+ * After the sailors have crossed: Mario walks to the right platform, the sailors thank him (stg5_dou_16),
+ * Monie runs in and begs for help, Peeton follows, Mario reacts, and then both stand ready for conversation.
+ * Sets STG5_30_SHIPWRECKED_SAILORS.
+ */
 EVT_BEGIN(suifu_orei)
     // Sailors C, D and E are placed on the right-hand platform facing the wall of barrels.
     CALL(evt_npc_set_position, STRING("水夫C"), 825, 100, -125)
@@ -1511,6 +1561,11 @@ EVT_BEGIN(suifu_orei)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene on entering at STG5_34_KICKED_OFF:
+ * Sailors D, E and C discuss the situation with Mario (stg5_dou_17_01 to 06),
+ * then the story moves to STG5_35_ESCAPE_ROUTE.
+ */
 EVT_BEGIN(escapeway_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, 65536)
@@ -1560,6 +1615,11 @@ EVT_BEGIN(bombwall_escape_move)
     RETURN
 EVT_END()
 
+/**
+ * Case script run when Bobbery bombs the cracked wall at n_bero in the grotto's big room:
+ * breaks the wall, starts the sailors' escape (bombwall_escape_move and bombwall_after),
+ * enables the n_bero exit and sets the story progress to STG5_36_HOLE_IN_THE_WALL.
+ */
 static EVT_BEGIN(bombwall_bomb)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT
@@ -1621,6 +1681,11 @@ static EVT_BEGIN(bombwall_bomb)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the bomb wall by story progress: up to STG5_33_CORTEZ_AND_THE_TREASURE the n_bero exit is
+ * closed, from STG5_34_KICKED_OFF to STG5_35_ESCAPE_ROUTE it is closed
+ * and Bobbery's bomb triggers bombwall_bomb, and from STG5_36_HOLE_IN_THE_WALL on it is open.
+ */
 static EVT_BEGIN(bombwall_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
@@ -1653,6 +1718,10 @@ static EVT_BEGIN(bombwall_init)
     RETURN
 EVT_END()
 
+/**
+ * Sound loop for the sailors streaming out through the hole:
+ * plays the crowd-moving sound while any sailor is still moving (work flag 0 set) and stops it when none is.
+ */
 // Both sound-state flags reset to 1 each pass, so neither sound-start nor sound-stop branch is reached here.
 EVT_BEGIN(bombwall_suifuout_secheck)
     LOOP(0)
@@ -2648,6 +2717,13 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/**
+ * Init script of dou_11, the big room with the stranded sailors:
+ * music and ambience, exits, NPCs (Sailors C, D, E, Monie and Peeton wearing their ring models),
+ * the bombable wall by story step, the stranded-sailors cutscenes (STG5_29_WAVE_DODGING and
+ * STG5_34_KICKED_OFF), the two blue island switches, the swaying background ship,
+ * bobbing barrels and bottles, and the dust shaking after Cortez's attack (STG5_40_TRUE_IDENTITY).
+ */
 EVT_BEGIN(dou_11_init_evt)
     // Music, ambience and exits for the room; the NPCs are set up and Monie and Peeton get their ring models.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))

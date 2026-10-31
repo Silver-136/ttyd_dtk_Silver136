@@ -111,6 +111,12 @@ static EVT_BEGIN(door_custom)
     RETURN
 EVT_END()
 
+/**
+ * Enter event of the lair door: at STG5_32_CORTEZS_WARNING (Mario and partner)
+ * and STG5_40_TRUE_IDENTITY (Mario and both partners) it runs door_custom, walks them in from the door,
+ * waits 2 s and returns LW(0) = 1 so the normal walk-in is skipped (evt_bero_mario_enter);
+ * otherwise it returns LW(0) = 0.
+ */
 static EVT_BEGIN(bero_custom)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_32_CORTEZS_WARNING)

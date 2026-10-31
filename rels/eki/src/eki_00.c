@@ -1669,6 +1669,15 @@ static EVT_BEGIN(evt_elv_init)
     RETURN
 EVT_END()
 
+/**
+ * Elevator ride from the upper floor to the lower one:
+ * opens the doors, walks Mario and the partner in, closes the doors,
+ * fades the capture image of the old floor out while the cage moves, then fades a capture of the new floor in
+ * as the doors open there. Before the Smorgs are swatted (story below STG6_40_SWATTING_SMORGS) the
+ * swarm, which lives on the lower floor, is drawn into that picture and then made active. On arrival it sets
+ * up the lower floor for the story step: the lever, the bridge switch and the origami stairs; the uncollected
+ * Close Call P of the upper floor is moved 2000 units down while Mario is below.
+ */
 EVT_BEGIN(evt_elv_down)
     // The elevator doors open and Mario walks to the doorway.
     BEGIN_INLINE_EVENT

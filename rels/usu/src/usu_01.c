@@ -271,6 +271,10 @@ EVT_BEGIN(villagerH_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of villager I (human form): enables move/talk animation and keeps him below the map
+ * until the Doopliss fight (STG4_10).
+ */
 EVT_BEGIN(villagerI_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｉ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -281,6 +285,7 @@ EVT_BEGIN(villagerI_init)
     RETURN
 EVT_END()
 
+/** Init script of the pig form of villager I: shown until STG4_10, then moved below the map. */
 EVT_BEGIN(villagerI_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｉ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -310,6 +315,10 @@ EVT_BEGIN(villagerI_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of villager J (human form): enables move/talk animation and keeps him below the map
+ * until the Doopliss fight (STG4_10).
+ */
 EVT_BEGIN(villagerJ_init)
     CALL(evt_npc_flag_onoff, 1, STRING("村人Ｊ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -320,6 +329,7 @@ EVT_BEGIN(villagerJ_init)
     RETURN
 EVT_END()
 
+/** Init script of the pig form of villager J: shown until STG4_10, then moved below the map. */
 EVT_BEGIN(villagerJ_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ村人Ｊ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -468,6 +478,10 @@ static EVT_BEGIN(kizayarou_init)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the pig form of the dandy ("kizayarou") in the shop:
+ * shown until STG4_10, then moved below the map.
+ */
 EVT_BEGIN(kizayarou_pig_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -512,6 +526,11 @@ EVT_BEGIN(childABC_talk_01)
     RETURN
 EVT_END()
 
+/**
+ * Group chat of the three children, staggered by 400 ms and 600 ms:
+ * small lines saying they miss their mommy, are hungry and want pork chops
+ * (stg4_usu_79 to stg4_usu_81); used from the Doopliss fight until STG4_31_FRANKLYS_HOUSE_STG_4.
+ */
 EVT_BEGIN(childABC_talk_02)
     BEGIN_INLINE_EVENT
         CALL(evt_msg_print, 0, STRING("stg4_usu_79"), 0, STRING("子供Ａ"))
@@ -525,6 +544,10 @@ EVT_BEGIN(childABC_talk_02)
     RETURN
 EVT_END()
 
+/**
+ * Group chat of the three children, staggered the same way: they greet Mario, say he is back and ask for a gift
+ * (stg4_usu_81_2 to stg4_usu_81_4); used from STG4_31_FRANKLYS_HOUSE_STG_4 until the end of the game.
+ */
 EVT_BEGIN(childABC_talk_03)
     BEGIN_INLINE_EVENT
         CALL(evt_msg_print, 0, STRING("stg4_usu_81_2"), 0, STRING("子供Ａ"))
@@ -1100,6 +1123,10 @@ EVT_BEGIN(childC_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the gatekeeper: enables move/talk animation;
+ * before STG4_02_DINGE it blocks the e_bero exit and moves him to his post.
+ */
 EVT_BEGIN(gatekeeper_init)
     CALL(evt_npc_flag_onoff, 1, STRING("門番"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1115,6 +1142,10 @@ EVT_BEGIN(gatekeeper_init)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the pig gatekeeper: parked below the map before STG4_02_DINGE,
+ * shown at the gate until the Doopliss fight.
+ */
 EVT_BEGIN(gatekeeper_pig_init)
     CALL(evt_npc_flag_onoff, 1, STRING("ブタ門番"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1128,6 +1159,15 @@ EVT_BEGIN(gatekeeper_pig_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the gatekeeper, shared by his pig form.
+ * The first talk walks Mario up to him: he warns of a monster in the woods
+ * and says passing needs the mayor's permission, the partner answers (stg4_usu_45),
+ * the pig-mayor scene (village_chief_change_pig_event) starts
+ * and the story advances to STG4_01_00_GATEKEEPER_CONVERSATION.
+ * Later he repeats the warning, refuses passage once the mayor is a pig,
+ * oinks as a pig (until the Doopliss fight) and then gives story text.
+ */
 EVT_BEGIN(gatekeeper_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_01_00_GATEKEEPER_CONVERSATION)
@@ -1199,6 +1239,11 @@ EVT_BEGIN(crow_j_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk interrupt of the three young women: the pig versions speak "stg4_usu_148_1_01" to "03"
+ * before the Doopliss fight; as dancers afterwards they speak "stg4_usu_148_1_04" to "06"
+ * until the Peach report (STG4_15_05).
+ */
 static EVT_BEGIN(musume_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
@@ -1680,6 +1725,10 @@ EVT_BEGIN(village_chief_change_pig_event)
     RETURN
 EVT_END()
 
+/**
+ * Gate script: before the gatekeeper has become a pig the gatekeeper refuses ("stg4_usu_45_02");
+ * afterwards the gate halves rotate open and the story moves to STG4_02_03_OPENING_THE_GATE.
+ */
 EVT_BEGIN(evt_mon_open)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_02_02_THE_GATEKEEPERS_A_PIG)
         CALL(evt_mario_key_onoff, 0)
@@ -2302,6 +2351,14 @@ EVT_BEGIN(evt_wall_2_1)
     RETURN
 EVT_END()
 
+/**
+ * Background chatter for the shop quarrel (LW(0) speaker, LW(1) message id,
+ * LW(2) a flag used as the "may speak" switch, LW(3) start delay in ms);
+ * runs only from the Doopliss fight to STG4_15_05.
+ * Once Mario can move it prints the message over and over;
+ * a sibling loop closes the speaker's bubble and pauses it
+ * while that speaker is the NPC Mario would talk to (chk_fuki), so he can be spoken to.
+ */
 EVT_BEGIN(loop_msg)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_10_DOOPLISS_BATTLE)
         RETURN
@@ -2622,6 +2679,13 @@ static USER_FUNC(npc_process) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Going from the shop into the storeroom (A at "A_usu01_ie2_door3", once it is unlocked):
+ * the storeroom stays lit, the Inn Coupon ("item_05") is moved out of sight,
+ * Mario and the partner walk through the door "S_usu01_ie2_door3", which swings open and shut;
+ * the quarrel chatter stops, the shop's goods (once STG4_04) and people are dimmed,
+ * the wall "S_usu01_ie2_mkabe" slides away and the door folds down.
+ */
 EVT_BEGIN(evt_ie2_door2_1)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -2696,6 +2760,12 @@ EVT_BEGIN(evt_ie2_door2_1)
     RETURN
 EVT_END()
 
+/**
+ * Going back from the storeroom into the shop (A at "A_usu01_ie2_door3_u"): the reverse of evt_ie2_door2_1.
+ * The door stands up, the wall "S_usu01_ie2_mkabe" slides back,
+ * the shop's goods (once STG4_04) and people are lit again and the quarrel chatter restarts;
+ * Mario and the partner walk back through the door, and the Inn Coupon ("item_05") is put back.
+ */
 EVT_BEGIN(evt_ie2_door2_2)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -2936,6 +3006,11 @@ EVT_BEGIN(evt_monban_buta_main)
     RETURN
 EVT_END()
 
+/**
+ * Map-entry trigger, spawned by the init script at STG4_01 once the shop woman has made her plea:
+ * waits for Mario's entry move to finish (evt_bero_exec_wait),
+ * then runs the gatekeeper-turns-pig scene (evt_monban_buta_main) unless STG4_02_DINGE is reached.
+ */
 EVT_BEGIN(evt_monban_buta)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_02_DINGE)
         RETURN
@@ -2962,6 +3037,10 @@ EVT_BEGIN(evt_monban_buta2)
     RETURN
 EVT_END()
 
+/**
+ * Watcher loop: when Mario nears the gatekeeper pig after STG4_02_DINGE,
+ * the party comments ("stg4_usu_47") and the story moves to STG4_02_02_THE_GATEKEEPERS_A_PIG.
+ */
 EVT_BEGIN(evt_monban_look)
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG4_02_02_THE_GATEKEEPERS_A_PIG)
@@ -3027,6 +3106,10 @@ static EVT_BEGIN(lock_item_check)
     RETURN
 EVT_END()
 
+/**
+ * Unlocks the shop storage door: runs the door script when Mario faces door A_usu01_ie2_door3
+ * and sets STG4_04_STORAGE_ROOM_UNLOCKED.
+ */
 EVT_BEGIN(unlock)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_usu01_ie2_door3"), 0, PTR(evt_ie2_door2_1), 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG4_04_STORAGE_ROOM_UNLOCKED)
@@ -3089,6 +3172,11 @@ EVT_BEGIN(shopper_talk1)
     RETURN
 EVT_END()
 
+/**
+ * Talk hook of the shop woman from the Doopliss fight to STG4_15_03:
+ * the pig was not her husband, and she fancies the younger man (stg4_usu_60);
+ * LW(0) = -100 as in shopper_talk1.
+ */
 EVT_BEGIN(shopper_talk2)
     CALL(evt_msg_print, 0, STRING("stg4_usu_60"), 0, STRING("me"))
     SET_VALUE(LW(0), -100)
@@ -3422,6 +3510,14 @@ static EVT_BEGIN(mobj_box00)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of usu_01, the part of Twilight Town whose east exit leads to gra_00:
+ * starts BGM and ambience, registers the exits and NPCs,
+ * spawns the three young women (pigs before the Doopliss fight, dancers until STG4_15_05),
+ * locks the storeroom with the Shop Key until it is unlocked, registers the three house doors,
+ * and starts the gatekeeper-pig trigger, the shop sounds, the shop (from STG4_04) and the crow watchers.
+ * It also sets up the town gate, trees, items, the Defend Plus chest and the black chest by story progress.
+ */
 EVT_BEGIN(usu_01_init_evt)
     // Start the town music and ambience, set up the map exits and spawn the NPCs.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_USU1"))

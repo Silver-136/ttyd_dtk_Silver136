@@ -108,6 +108,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * First arrival at Fahr Outpost: letterboxed camera pan down over the snowfield,
+ * Mario and the partner walk into the scene, the partner speaks stg7_bom_01,
+ * and the story progress is set to STG7_00_START with GSWF_BOM_FAHR_REACHED raised.
+ * It clears GF(0) once the pan is done.
+ */
 static EVT_BEGIN(first_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -137,6 +143,12 @@ static EVT_BEGIN(first_evt)
     RETURN
 EVT_END()
 
+/**
+ * Arrival cutscene for the first visit when Fahr Outpost is reached
+ * before Chapter 7 proper (story step before STG6_71_01):
+ * the camera pulls down from above, Mario and the partner walk in from the pipe
+ * and the partner comments (stg7_bom_01_00). It does not advance the story.
+ */
 EVT_BEGIN(first_evt2)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_key_onoff, 0)

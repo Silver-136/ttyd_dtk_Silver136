@@ -244,6 +244,14 @@ static EVT_BEGIN(gonbaba_down_shake)
     RETURN
 EVT_END()
 
+/**
+ * The Hooktail boss scene, run when Mario enters the lair:
+ * Mario walks in, Hooktail wakes and speaks (stg1_gon_19 to 20_2) while the fog thickens and the floor shakes,
+ * then the boss battle starts.
+ * After the battle (or at once when the intro is skipped) Hooktail collapses,
+ * Koops' father (ノコタロウ父) appears and talks with the partner and Mario (stg1_gon_33_01 to 33_17),
+ * and the story moves to STG1_16_HOOKTAIL and then STG1_17_FATHER_SON_REUNITED.
+ */
 EVT_BEGIN(gonbaba_event)
     // Hooktail Castle's last room: fog fills it and Mario loses control.
     CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
@@ -1058,6 +1066,13 @@ static EVT_BEGIN(iri_16_init)
     RETURN
 EVT_END()
 
+/**
+ * Map init for gon_11 (Hooktail's lair): sets up the door back to gon_10, the music and ambience,
+ * and the Hooktail and Koops' father NPCs.
+ * Before Hooktail is beaten (STG1_16_HOOKTAIL) it enlarges Hooktail and starts gonbaba_event;
+ * afterwards both NPCs are moved off the map.
+ * Also sets up the Trouble Center request 16 cloud and chest (iri_16_init).
+ */
 EVT_BEGIN(gon_11_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

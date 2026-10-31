@@ -683,6 +683,11 @@ EVT_BEGIN(tenkyugi_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the return from las_19: the celestial globe keeps turning,
+ * the camera shakes with decreasing strength, the partner comments,
+ * and the story moves to STG8_06_MOVING_PLANETS while the Palace music resumes.
+ */
 EVT_BEGIN(tenkyugi_evt2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_CELESTIAL_MOVE2"), 0, 400, -150, LW(15))
@@ -1111,6 +1116,12 @@ const char* daiza_name[] = {
     NULL,
 };
 
+/**
+ * Event script: shows the eight key stands.
+ * If the story is before STG8_05_STAR_KEY_SLOT it plays the stands rising out of the floor one second
+ * apart; then it turns their hit objects on, binds them to the stands
+ * and registers the key use events for stands that are still empty (turned stands are shown already turned).
+ */
 EVT_BEGIN(kagi_8_on)
     // Before the keys were placed the eight key stands rise out of the floor one after another, shaking the
     // screen.
@@ -1251,6 +1262,11 @@ s32 daiza_key_tbl[] = {
     37, -1,
 };
 
+/**
+ * Event script: Mario uses the central pedestal (A_daiza1).
+ * If he has the Star Key he picks it, it is removed,
+ * the lit star replaces the dark one and the key stands appear; sets the story to STG8_05_STAR_KEY_SLOT.
+ */
 EVT_BEGIN(daiza_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_pouch_check_item, ITEM_STAR_KEY, LW(0))

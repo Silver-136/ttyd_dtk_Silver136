@@ -225,6 +225,11 @@ EVT_BEGIN(punipuni_switch)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene when enough Punies press the floor with the Puni Orb on its pedestal:
+ * the pipe (dokan2) rises out of the floor with a quake, the party comments on it, and the Puni pipe is enabled.
+ * Sets the story to STG2_16_THE_PUNI_ELDERS_POWERS.
+ */
 EVT_BEGIN(dokan_event)
     WAIT_WHILE(GF(15))
     CALL(evt_mario_key_onoff, 0)

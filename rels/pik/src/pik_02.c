@@ -113,6 +113,11 @@ EVT_BEGIN(haikei_off)
     RETURN
 EVT_END()
 
+/**
+ * Scene when Mario comes back into the sanctum with the real Garnet Star (STG6_53_THE_REAL_GARNET_STAR):
+ * Mario and the partner walk up to Pennington, who speaks (stg6_pik_21),
+ * the story becomes STG6_54_WELCOME_BACK, and the s_bero exit is redirected to aji_10 (s_bero_peach).
+ */
 EVT_BEGIN(evt_return_sub)
     CALL(evt_mario_wait_movable)
     CALL(evt_mario_key_onoff, 0)
@@ -148,6 +153,10 @@ EVT_BEGIN(evt_return_sub)
     RETURN
 EVT_END()
 
+/**
+ * Enter event of the dokan pipe (Mario coming back up from h_dokan): at STG6_53_THE_REAL_GARNET_STAR it
+ * spawns evt_return_sub, and then always switches the back room off (haikei_off).
+ */
 EVT_BEGIN(evt_return)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_53_THE_REAL_GARNET_STAR)
         SPAWN_EVENT(PTR(evt_return_sub))
@@ -263,6 +272,10 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Exit event for the redirected s_bero door (s_bero_peach, STG6_54 and later):
+ * fades the music and ambience out over 2 seconds and stops all sound effects.
+ */
 EVT_BEGIN(out_room)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
@@ -292,6 +305,11 @@ BeroEntry s_bero_peach[] = {
     },
 };
 
+/**
+ * Init for Pennington in the sanctum: between STG6_51 and STG6_52 and
+ * after STG6_53 he stands at (-120, 0, 490);
+ * at STG6_53 (the real Garnet Star) he stands at (-100, 10, -930) in the hidden room.
+ */
 static EVT_BEGIN(init_powan)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_51_3_SURPRISE_GUESTS, STG6_52_THE_HIDDEN_PIPE)
@@ -329,6 +347,10 @@ static EVT_BEGIN(talk_powan)
     RETURN
 EVT_END()
 
+/**
+ * Init for Beldam (マジョリン): until the surprise-guests scene (STG6_51) she stands by the altar at (-35, 10,
+ * -950) facing east.
+ */
 EVT_BEGIN(init_majo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_51_3_SURPRISE_GUESTS)
@@ -761,6 +783,12 @@ EVT_BEGIN(evt_garnet)
     RETURN
 EVT_END()
 
+/**
+ * Hit event of the blue switch sw: the camera moves to the curtain,
+ * the curtain object ka_ten rises 150 units over 1.5 s with the curtain sound while its hit area follows,
+ * story progress becomes STG6_52_THE_HIDDEN_PIPE, the pipe entrance (bero 1, dokan) is registered again
+ * (bero_case_switch_on), the success jingle plays and the camera returns to Mario.
+ */
 static EVT_BEGIN(evt_sw)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, -65, 450, -480, -165, 115, -930, 1000, EASING_SINE_IN_OUT)
@@ -798,6 +826,11 @@ EVT_BEGIN(evt_kaiga)
     RETURN
 EVT_END()
 
+/**
+ * Examine script of the altar (case event on dai_a): locks the controls and, from STG6_70 to
+ * STG7_25_00 (while the fake Crystal Star sits there), says it shines with a suspicious light
+ * (stg7_pik_clear_09_2); otherwise says the Crystal Star is no longer on the pedestal (stg6_pik_25).
+ */
 static EVT_BEGIN(evt_daiza)
     CALL(evt_mario_key_onoff, 0)
     SWITCH(GSW_STORY_PROGRESS)
@@ -810,6 +843,17 @@ static EVT_BEGIN(evt_daiza)
     RETURN
 EVT_END()
 
+/**
+ * Bowser interlude in the sanctum (STG7_25_00_BOWSER_POSHLEY_HEIGHTS), with the player as Bowser:
+ * Bowser and Kammy (ババ) walk in, Bowser takes the fake Garnet Star from the altar (the star effect "nise"
+ * follows
+ * his hand), Pennington accuses them of theft and Bowser names himself in one of three ways picked from a menu
+ * (kpa_stg7_018); Pennington reveals the star is a fake, it falls and breaks,
+ * and he says he gave the real one to
+ * "Luigi"; a Paragoomba (パタクリ) crashes in to report that Mario has the seven Crystal Stars and is heading for
+ * the Thousand-Year Door. The story becomes STG7_25_00_1_BOWSER_POSHLEY_SANCTUM, the game is saved and the
+ * map changes to aji_18.
+ */
 EVT_BEGIN(pik_02_koopa_evt)
     CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_snd_set_rev_mode, 2)
@@ -1140,6 +1184,10 @@ EVT_BEGIN(pik_02_koopa_evt)
     RETURN
 EVT_END()
 
+/**
+ * Puts the fake Garnet Star ("nisemono") back on the altar when the Thousand-Year Door has been opened
+ * but Bowser has not yet taken the star (STG6_70 up to STG7_25_00).
+ */
 EVT_BEGIN(nise_starstone_init)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_70_THOUSAND_YEAR_DOOR)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG7_25_00_BOWSER_POSHLEY_HEIGHTS)

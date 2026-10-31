@@ -25,6 +25,11 @@ EvtWord kpa_00_fly_evt[380];
 static NpcSetupInfo npcEnt[3];
 EvtWord kpa_00_init_evt[24];
 
+/**
+ * Opening cutscene of the Bowser interludes: the camera pans across Bowser's Castle to a BGM_STGK_CASTLE1 start,
+ * then the game moves on to kpa_01.
+ * Runs at the start of the first interlude (story progress below STG1_19_01_BOWSER_BOWSER_CASTLE).
+ */
 EVT_BEGIN(kpa_00_first_evt)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_key_onoff, 0)
@@ -45,6 +50,13 @@ EVT_BEGIN(kpa_00_first_evt)
     RETURN
 EVT_END()
 
+/**
+ * Closing cutscene of the first interlude: the flying Bowser NPC (飛クッパ) bobs up and away and grows from 0.1 to
+ * 0.6 scale, with the airship engine sound (SFX_KUPPA_AIRSHIP_MOVE1) following its position,
+ * while Kammy Koopa flies alongside with her broom sound and a smoke trail.
+ * The story advances to STG1_19_02_BOWSER_CASTLE_INT, the game is saved,
+ * and play returns to Petalburg (nok_01).
+ */
 EVT_BEGIN(kpa_00_fly_evt)
     // Cutscene start: controls are off and Mario is moved out of sight; Bowser's airship and Kammy are placed
     // small and far away.

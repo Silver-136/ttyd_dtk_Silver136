@@ -158,6 +158,10 @@ static EVT_BEGIN(e_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Script that silences the conveyor sound handle in GW(11) once the story has reached
+ * STG7_17_CONVEYOR_BELT; returns LW(0) = 0.
+ */
 EVT_BEGIN(evt_snd_stop)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_17_CONVEYOR_BELT)
         CALL(evt_snd_sfxoff, GW(11))
@@ -839,6 +843,11 @@ EVT_BEGIN(shikake_init)
     RETURN
 EVT_END()
 
+/**
+ * Clockwork switch script that reveals the off-screen staircase:
+ * pans the camera to the stairs, builds a paper-and-offscreen image of S_kaidan (OFF_hei_07) that unfolds,
+ * and sets the story progress to STG7_18_OFF_SCREEN_STAIRS.
+ */
 static EVT_BEGIN(evt_sw)
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(GF(0), 1)

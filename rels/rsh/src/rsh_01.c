@@ -560,6 +560,10 @@ NpcSetupInfo npc_data_2[] = {
     {0},
 };
 
+/**
+ * Trigger when Mario steps on the paper spot (a_kami) at STG6_22_DOCUMENT:
+ * sets STG6_23_VITAL_PAPER and gives him the Vital Paper item with the item-get fanfare.
+ */
 static EVT_BEGIN(evt_daiji_kami)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
@@ -573,6 +577,12 @@ static EVT_BEGIN(evt_daiji_kami)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene when the train pulls into Poshley Heights:
+ * the conductor, waitress, cook and Detective Pennington are lined up around Mario,
+ * each says a line (stg6_rsh_248 to 252), then the story advances to STG6_49_00_TRAIN_ARRIVAL
+ * and the map changes to pik_00 with an iris fade.
+ */
 // Finish the arrival scene, advance the story, then transfer to Poshley Heights with an area fade.
 EVT_BEGIN(evt_pikary_arrival)
     CALL(evt_npc_set_position, STRING("ポワン探偵"), -100, 0, 0)
@@ -726,6 +736,12 @@ EVT_BEGIN(rsh_01_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Init script of rsh_01_a (first visit): sets the doors (during the Smorg miasma stage the west door is only a
+ * case trigger), runs the shared init, swaps the paper and plain floors, starts the Smorg window effect,
+ * gives the Vital Paper from the a_kami spot at STG6_22_DOCUMENT and,
+ * if the story is before STG6_00_START, places Mario and the partner in the car and starts it.
+ */
 EVT_BEGIN(rsh_01_a_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG6_48_SMORG_MIASMA)

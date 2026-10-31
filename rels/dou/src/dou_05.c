@@ -196,6 +196,10 @@ static EVT_BEGIN(evt_unlock)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the big door at map load: before STG5_20_THE_BLUE_BLOCK the way west (w_bero_3) is closed
+ * and the door slab (tetu) is down; afterwards the door is already open.
+ */
 EVT_BEGIN(bigdoor_event_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_20_THE_BLUE_BLOCK)
         DEBUG_PUT_MSG(STRING("dou_05：扉が開く前の処理"))
@@ -210,6 +214,11 @@ EVT_BEGIN(bigdoor_event_init)
     RETURN
 EVT_END()
 
+/**
+ * Event of the blue switch: the camera looks at the big door, the screen shakes,
+ * the door slab rises (2 s) and drops back with a thud, Cortez speaks (stg5_dou_10),
+ * the exit w_bero_3 is enabled and STG5_20_THE_BLUE_BLOCK is set.
+ */
 EVT_BEGIN(bigdoor_event)
     CALL(evt_mario_key_onoff, 0)
     BEGIN_INLINE_EVENT

@@ -206,6 +206,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Callback run when Flurrie's wind has blown the tree away from the trail:
+ * plays a short jingle, waits until Mario's partner is no longer in use,
+ * opens the w_bero_1 exit and advances the story to STG4_06_TREE_TRUNK.
+ */
 EVT_BEGIN(gra_04_tree_open_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -235,6 +240,11 @@ static const char* fukitobashi_tbl[] = {
     NULL,
 };
 
+/**
+ * Init script of gra_04: trail music, the exits and the shadow Mario party removal;
+ * while the story is before STG4_06_TREE_TRUNK the w_bero_1 exit stays closed;
+ * places the Hammer Throw badge block.
+ */
 EVT_BEGIN(gra_04_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_GRA1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))

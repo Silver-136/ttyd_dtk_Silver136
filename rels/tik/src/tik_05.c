@@ -255,6 +255,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Init script of Professor Frankly (クリハカセ) in the Thousand-Year Door room.
+ * Places him at (-30, 23, -190) facing the pedestal from STG7_50_A_WAITING_PROF_FRANKLY to
+ * STG7_51_THOUSAND_YEAR_DOOR, and at (-30, 23, -170) from STG7_52_THE_PEDESTAL to
+ * STG8_03_THE_PALACE_GARDEN.
+ */
 static EVT_BEGIN(kurihakase_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_50_A_WAITING_PROF_FRANKLY, STG7_51_THOUSAND_YEAR_DOOR)
@@ -266,6 +272,10 @@ static EVT_BEGIN(kurihakase_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Professor Frankly: says mac_7_008 while the Door waits (chapter 7 steps 50 to 51)
+ * and mac_7_014 from STG7_52_THE_PEDESTAL on.
+ */
 static EVT_BEGIN(kurihakase_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG7_50_A_WAITING_PROF_FRANKLY, STG7_51_THOUSAND_YEAR_DOOR)
@@ -462,6 +472,10 @@ EVT_BEGIN(mahojin_alpha_down)
     RETURN
 EVT_END()
 
+/**
+ * Map-init part for the prologue (STG0_12_02_PAPER_MAGE_1):
+ * takes control from Mario and holds the camera on the huge Thousand-Year Door high above.
+ */
 EVT_BEGIN(large_door_stg0_init)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -469,6 +483,11 @@ EVT_BEGIN(large_door_stg0_init)
     RETURN
 EVT_END()
 
+/**
+ * Prologue scene where Mario and his partners first see the Thousand-Year Door (look_large_door starts it).
+ * The camera pans down from the door over six seconds, the partners comment (mac_0_095_kur, mac_0_096_kur),
+ * and story progress becomes STG0_13_FIRST_FLIGHT.
+ */
 EVT_BEGIN(large_door_stg0)
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_party_stop, 0)
@@ -504,6 +523,12 @@ EVT_BEGIN(large_door_stg0)
     RETURN
 EVT_END()
 
+/**
+ * Case trigger for looking at the big door.
+ * At STG0_12_02_PAPER_MAGE_1 it starts large_door_stg0 and returns 1 in LW(0);
+ * at STG7_50_A_WAITING_PROF_FRANKLY it advances to STG7_51_THOUSAND_YEAR_DOOR and returns 0;
+ * otherwise returns 0.
+ */
 EVT_BEGIN(look_large_door)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG0_12_02_PAPER_MAGE_1)
@@ -519,6 +544,10 @@ EVT_BEGIN(look_large_door)
     RETURN
 EVT_END()
 
+/**
+ * Waits until Mario walks up the stairs in front of the pedestal (|X| < 130, Z < 0),
+ * then stops him and the partner says mac_0_097. Sets story progress STG0_14_FRONT_OF_THE_PEDESTAL.
+ */
 EVT_BEGIN(kaidan_event)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1999,6 +2028,12 @@ EVT_BEGIN(evt_starstone_set)
     RETURN
 EVT_END()
 
+/**
+ * First pedestal scene (STG0_14_FRONT_OF_THE_PEDESTAL):
+ * Mario steps on the pedestal, the magic circle appears with a flash,
+ * the map is written (evt_mapwrite) and the partner and Professor Frankly react (mac_0_100, mac_0_101).
+ * Sets story progress STG0_15_THE_PEDESTAL.
+ */
 EVT_BEGIN(mahojin_event)
     // Mario walks onto the pedestal, the music stops and he is startled as the magic circle flashes into being.
     SET_VALUE(GW(15), 0)
@@ -2108,6 +2143,11 @@ EVT_BEGIN(mahojin_event)
     RETURN
 EVT_END()
 
+/**
+ * Pedestal scene after the first Crystal Star (STG1_21_A_MAIL_FROM_PEACH).
+ * The star rises, the circle and map appear (evt_mapwrite),
+ * the partner reacts (mac_1_001 to mac_1_003) and story progress becomes STG1_30_ZESS_T.
+ */
 EVT_BEGIN(mahojin_event1)
     SET_VALUE(GW(15), 1)
     CALL(evt_mario_key_onoff, 0)
@@ -2142,6 +2182,11 @@ EVT_BEGIN(mahojin_event1)
     RETURN
 EVT_END()
 
+/**
+ * Pedestal scene after the second Crystal Star (STG2_27_A_MAIL_FROM_PEACH).
+ * The same sequence as mahojin_event1 with the second star (mac_2_001, mac_2_002);
+ * sets STG2_40_THOUSAND_YEAR_DOOR.
+ */
 EVT_BEGIN(mahojin_event2)
     SET_VALUE(GW(15), 2)
     CALL(evt_mario_key_onoff, 0)
@@ -2174,6 +2219,10 @@ EVT_BEGIN(mahojin_event2)
     RETURN
 EVT_END()
 
+/**
+ * Pedestal scene after the third Crystal Star (STG3_35_A_MAIL_FROM_PEACH); the same sequence (mac_3_001);
+ * sets STG3_50_THOUSAND_YEAR_DOOR.
+ */
 EVT_BEGIN(mahojin_event3)
     SET_VALUE(GW(15), 3)
     CALL(evt_mario_key_onoff, 0)
@@ -2205,6 +2254,10 @@ EVT_BEGIN(mahojin_event3)
     RETURN
 EVT_END()
 
+/**
+ * Pedestal scene after the fourth Crystal Star (STG4_17_A_MAIL_FROM_PEACH); the same sequence (mac_4_001);
+ * sets STG4_30_THOUSAND_YEAR_DOOR.
+ */
 EVT_BEGIN(mahojin_event4)
     SET_VALUE(GW(15), 4)
     CALL(evt_mario_key_onoff, 0)
@@ -2236,6 +2289,10 @@ EVT_BEGIN(mahojin_event4)
     RETURN
 EVT_END()
 
+/**
+ * Pedestal scene after the fifth Crystal Star (STG5_59_01_A_MAIL_FROM_PEACH);
+ * the same sequence (mac_5_001); sets STG5_60_RETURN_TO_KEELHAUL.
+ */
 EVT_BEGIN(mahojin_event5)
     SET_VALUE(GW(15), 5)
     CALL(evt_mario_key_onoff, 0)
@@ -2267,6 +2324,11 @@ EVT_BEGIN(mahojin_event5)
     RETURN
 EVT_END()
 
+/**
+ * Pedestal scene after the sixth Crystal Star (STG6_57_A_MAIL_FROM_PEACH).
+ * The same sequence (mac_6_001) with a longer wait;
+ * sets STG6_70_THOUSAND_YEAR_DOOR and sends Mario back to Rogueport (gor_02).
+ */
 EVT_BEGIN(mahojin_event6)
     SET_VALUE(GW(15), 6)
     CALL(evt_mario_key_onoff, 0)
@@ -2350,6 +2412,13 @@ EVT_BEGIN(lastdungeon_init)
     RETURN
 EVT_END()
 
+/**
+ * Entry into the final dungeon through the Thousand-Year Door: the push case event of n_bero that the map init
+ * registers at STG7_52_THE_PEDESTAL.
+ * Mario walks in and is hidden, the camera shakes,
+ * the door leaves swing from 120 degrees to 0 over five seconds,
+ * and the game moves on to the chapter 8 title (sys_01, stg_8).
+ */
 EVT_BEGIN(lastdungeon)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)

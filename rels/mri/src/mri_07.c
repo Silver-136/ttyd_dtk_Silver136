@@ -149,6 +149,11 @@ EVT_BEGIN(chibitoge_nakama)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the little Jabbi in the room: unless the story is in the second Puni-versus-Jabbi fight window
+ * (STG2_21 to 21_03) or past the praise, and he is neither waiting at the cell nor already in the Puni
+ * group, he stands at the left of the room facing east.
+ */
 static EVT_BEGIN(chibitoge_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_21_BUBBLES_2, STG2_21_03_SUPER_BOOTS)

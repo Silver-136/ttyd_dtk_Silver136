@@ -6527,6 +6527,11 @@ EVT_END()
 
 static const Vec majinai_effect_pos = {0.0f, 10.0f, 0.0f};
 
+/**
+ * Run at the start of Mario's attacks: if Merlee's next charm is the attack boost (merleeNextCurseType 1),
+ * uses it up with the Merlee sparkle, a hop and the "power up" banner.
+ * JP and earlier show the banner for 60 frames instead of the US style 180-frame banner that A or B closes.
+ */
 EVT_BEGIN(marioAttackEvent_MajinaiPowerUpCheck)
     CALL(_majinai_powerup_check, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -6774,6 +6779,10 @@ USER_FUNC(_tatsumaki_effect) {
     return EVT_RETURN_BLOCK;
 }
 
+/**
+ * Records a Power Bounce combo of args[0]: keeps this battle's best (capped at 100) and, on a new pouch record,
+ * sets powerBounceRecord and makes the audience react.
+ */
 USER_FUNC(_record_renzoku_count) {
     s32 n = evtGetValue(event, *event->args);
     BattleActRecord* rec = &_battleWorkPointer->actRecord;
@@ -6951,6 +6960,10 @@ USER_FUNC(_fire_wave) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets args[0] to 1 and uses up the charm if Merlee's next charm is the attack boost (merleeNextCurseType 1),
+ * else 0.
+ */
 USER_FUNC(_majinai_powerup_check) {
     BattleWork* wp = _battleWorkPointer;
     s32 ret = *event->args;

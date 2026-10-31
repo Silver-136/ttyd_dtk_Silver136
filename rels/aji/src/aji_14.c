@@ -158,6 +158,15 @@ EVT_BEGIN(evt_robot_waku)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene before the Magnus von Grapple 2.0 fight:
+ * Lord Crump (幹部, "executive", with his "Buh huh huh" laugh;
+ * the story after this fight is STG7_20_LORD_CRUMP_DEFEATED)
+ * and the robot (ロボット) are placed, BGM_EVT_MAGNUM_APP1 plays,
+ * dialogue stg7_aji_36 to 41 plays with the partner, then the robot's battle (battle info 5) starts.
+ * After the fight the partner talks (stg7_aji_42)
+ * and the map changes to moo_04 at the evt_aji_14 entrance with a white fade.
+ */
 static EVT_BEGIN(evt_boss)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("幹部"), 150, 60, 0)
@@ -355,6 +364,13 @@ static EVT_BEGIN(evt_boss)
     RETURN
 EVT_END()
 
+/**
+ * Aftermath of the Magnus von Grapple 2.0 fight (aji_14 entered as "tuzuki" = continued):
+ * the Crystal Star appears above, floats down and bobs (an item named "dummy"),
+ * Mario and his partner react (stg7_aji_42_01),
+ * the story becomes STG7_20_LORD_CRUMP_DEFEATED
+ * and evt_sub_starstone gives Mario the Crystal Star (chapter 7).
+ */
 EVT_BEGIN(evt_boss2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)

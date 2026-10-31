@@ -112,6 +112,10 @@ USER_FUNC(suifu_option_init_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Init event of the bespectacled sailor on the dock:
+ * placed between STG5_31_FOUR_EYES and STG5_32_CORTEZS_WARNING.
+ */
 static EVT_BEGIN(megane_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_31_FOUR_EYES, STG5_32_CORTEZS_WARNING)
@@ -195,6 +199,11 @@ static EVT_BEGIN(door_custom)
     RETURN
 EVT_END()
 
+/**
+ * Enter event of both exits: at STG5_41_RETURN_TO_THE_GROTTO it runs door_custom and walks Mario
+ * and both partners in from the corridor door (-46, 45, -287) one after another,
+ * returning LW(0) = 1 so the normal walk-in is skipped (evt_bero_mario_enter); otherwise it returns LW(0) = 0.
+ */
 static EVT_BEGIN(bero_in_event)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
         SPAWN_EVENT(PTR(door_custom))
@@ -263,6 +272,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * The mystery of the ship (STG5_30 to 31):
+ * waits until Mario stands on the plank A_hasi_ita past x = -250,
+ * then the bespectacled sailor speaks (stg5_dou_19_00_00, stg5_dou_19), walks off,
+ * and the story becomes STG5_31_FOUR_EYES.
+ */
 EVT_BEGIN(nazo_event)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -310,6 +325,11 @@ EVT_BEGIN(nazo_event)
     RETURN
 EVT_END()
 
+/**
+ * Mario is thrown out of the ship (oidasare, driven away):
+ * his partner jumps clear, Mario tumbles to the dock and lies dazed (pose M_D_8) with a landing sound,
+ * and the story becomes STG5_34_KICKED_OFF.
+ */
 EVT_BEGIN(oidasare_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -595,6 +615,13 @@ EVT_BEGIN(senin_event)
 EVT_END()
 
 #ifdef VERSION_G8ME01
+/**
+ * Cortez appears on the dock (STG5_41_RETURN_TO_THE_GROTTO):
+ * the sailors and Mony talk (stg5_dou_19_01 to 03),
+ * Cortez arrives in his tornado (korutesu_apper) and speaks (stg5_dou_19_04),
+ * the Embers fade in around the crowd, the story becomes STG5_41_01_ALL_ABOARD
+ * and the map changes to muj_00.
+ */
 EVT_BEGIN(korutesu_appear_event)
     CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)
     CALL(evt_bero_exec_wait, 65536)
@@ -621,6 +648,10 @@ EVT_BEGIN(korutesu_appear_event)
 EVT_END()
 #endif
 
+/**
+ * Run by the map init from STG5_40_TRUE_IDENTITY until STG5_41_RETURN_TO_THE_GROTTO:
+ * every 1.5 to 4 seconds the camera shakes slightly and dust (hokori_n64) falls from 250 units above Mario.
+ */
 static EVT_BEGIN(dai3_shurai_after)
     LOOP(0)
         CALL(evt_sub_random, 2500, LW(10))

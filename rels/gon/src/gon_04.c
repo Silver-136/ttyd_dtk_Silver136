@@ -987,6 +987,10 @@ EVT_BEGIN(evt_hashi_pera)
     RETURN
 EVT_END()
 
+/**
+ * Runs when Mario presses the right-hand blue bridge switch (mobj_hashi0):
+ * unfolds the right paper bridge and sets the story to STG1_14_PAPER_BRIDGE_RIGHT.
+ */
 EVT_BEGIN(evt_hashi_pera0)
     SET_VALUE(GF(10), 1)
     SET_VALUE(LW(0), 0)
@@ -996,6 +1000,10 @@ EVT_BEGIN(evt_hashi_pera0)
     RETURN
 EVT_END()
 
+/**
+ * Runs when Mario presses the left-hand blue bridge switch (mobj_hashi1):
+ * unfolds the left paper bridge and sets the story to STG1_14_01_PAPER_BRIDGE_LEFT.
+ */
 EVT_BEGIN(evt_hashi_pera1)
     SET_VALUE(GF(10), 1)
     SET_VALUE(LW(0), 1)
@@ -1005,6 +1013,11 @@ EVT_BEGIN(evt_hashi_pera1)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the two paper bridges: while a bridge has not been unfolded (story below
+ * STG1_14_PAPER_BRIDGE_RIGHT or STG1_14_01_PAPER_BRIDGE_LEFT) it hides it,
+ * turns its hit area off and places the blue switch that unfolds it.
+ */
 EVT_BEGIN(evt_hashi)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_14_PAPER_BRIDGE_RIGHT)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tuuro_02"), MAP_OBJ_FLAG_HIDDEN)
@@ -1039,6 +1052,10 @@ static EVT_BEGIN(evt_chk)
     RETURN
 EVT_END()
 
+/**
+ * Runs when the door lock is opened with the Castle Key:
+ * switches on the e_bero_1 bero case (the exit can be used) and sets the story to STG1_12_02_LOCK.
+ */
 static EVT_BEGIN(evt_unlock)
     SET_VALUE(LW(0), STRING("e_bero_1"))
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -1046,11 +1063,18 @@ static EVT_BEGIN(evt_unlock)
     RETURN
 EVT_END()
 
+/** Runs when Mario picks up the Castle Key in this room: sets the story to STG1_12_01_KEY. */
 static EVT_BEGIN(key_get)
     SET_VALUE(GSW_STORY_PROGRESS, STG1_12_01_KEY)
     RETURN
 EVT_END()
 
+/**
+ * Map init for gon_04: sets up the doors, the dormant Dry Bones NPCs, the red switch for the paper stairs,
+ * the two floating blocks and their switches, the paper bridges (evt_hashi),
+ * the Castle Key 0x0D until picked up (STG1_12_01_KEY),
+ * the locked door that key opens (STG1_12_02_LOCK) and the two Star Pieces.
+ */
 EVT_BEGIN(gon_04_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

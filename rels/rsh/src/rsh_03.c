@@ -341,6 +341,11 @@ static BeroEntry bero_data_c[] = {
     {0},
 };
 
+/**
+ * Init event of the cook: moves him out of the way (below the floor) on day 3
+ * until the Smorg miasma stage (STG6_45_DAY_3_STARTS to STG6_48_SMORG_MIASMA) and turns jumping off
+ * when he is already on the ground.
+ */
 EVT_BEGIN(init_cook)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_45_DAY_3_STARTS, STG6_48_SMORG_MIASMA)
@@ -669,6 +674,10 @@ static EVT_BEGIN(talk_waitless)
     RETURN
 EVT_END()
 
+/**
+ * Regular event of the waitress between STG6_01_THE_CONDUCTOR and STG6_05_GALLEY_KETTLE_DISCOVERED:
+ * she paces back and forth between two points of the dining car at 24 units per second.
+ */
 EVT_BEGIN(move_waitless)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_01_THE_CONDUCTOR)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_05_GALLEY_KETTLE_DISCOVERED)
@@ -1118,6 +1127,11 @@ static const char* msg_tbl[] = {
     "stg6_rsh_18_05",
 };
 
+/**
+ * Loop that runs while the lunch is missing (STG6_01_THE_CONDUCTOR to STG6_04_GRILLING_HEFF_T):
+ * each time Mario talks to the cook, Toron, the salaryman,
+ * the waitress or Pennington it prints that person's stg6_rsh_18_xx line from msg_tbl.
+ */
 EVT_BEGIN(evt_lunch_talk)
     SET_VALUE(GF(10), 0)
     LOOP(0)
@@ -1507,6 +1521,11 @@ USER_FUNC(fire) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Sets up the shop door triggers (tobira_omise to open, tobira_omise_heya to close) and shows
+ * or hides the shop floors for the story stage;
+ * at STG6_19_GIVE_BLANKET and STG6_43_CONDUCTOR_APPEARS (the nights) it keeps the shop closed.
+ */
 EVT_BEGIN(evt_shop_door_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("omise_masuku"), MAP_OBJ_FLAG_HIDDEN)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1521,6 +1540,11 @@ EVT_BEGIN(evt_shop_door_init)
     RETURN
 EVT_END()
 
+/**
+ * Trigger on the stained carpet spot (a_yuka_simi) on day 1:
+ * Mario comments (stg6_rsh_51), the partner too the first time (stg6_rsh_52),
+ * and the story advances to STG6_03_STAINED_CARPET.
+ */
 static EVT_BEGIN(evt_yuka_simi)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_DOUBTFUL_POINT1"), LW(0), LW(1), LW(2), 0)

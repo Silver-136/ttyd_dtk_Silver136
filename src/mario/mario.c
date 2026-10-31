@@ -44,10 +44,7 @@
 
 
 
-// defined without a header prototype: marioGetMoveRate in mario_sbr.c (party_yoshi declares it with no parameter,
-// and the shared prototype changes its code); dou10_yoko_yari3 in mario_hit.c takes no parameter but is called
-// here with one
-
+// defined in mario_hit.c with no parameter, but called here with one
 void dou10_yoko_yari3(void* p);
 
 //.data

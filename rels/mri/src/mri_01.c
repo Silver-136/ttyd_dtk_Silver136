@@ -219,6 +219,11 @@ static EVT_BEGIN(guide_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the rival Puni in the village:
+ * placed near the middle while the rival is arriving (STG2_12 to 13),
+ * moved once the elder has been freed (STG2_14), and unable to talk during Bowser's visit.
+ */
 static EVT_BEGIN(rival_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG2_12_RIVAL_ARRIVAL, STG2_13_MS_MOWZ)
@@ -921,6 +926,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * First visit to the village (story STG2_10): Punio leads Mario in and the door opens,
+ * but two X-Naut grunts rush in. Mario fights them (battle info 4).
+ * Sets the story to STG2_11_X_NAUT_BATTLE and starts meet_rival.
+ */
 EVT_BEGIN(bigtree_firstbattle)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1108,6 +1118,11 @@ EVT_BEGIN(bigtree_firstbattle)
     RETURN
 EVT_END()
 
+/**
+ * After the X-Naut battle: the Punies hurry back, the rival Puni turns up,
+ * argues with Punio and the villagers react; at the end Punio joins Mario's Puni group
+ * (GSWF_MRI_PUNIO_IN_PUNI_GROUP). Sets the story to STG2_12_RIVAL_ARRIVAL.
+ */
 EVT_BEGIN(meet_rival)
     // The beaten grunts decide to run back and report to Lord Crump.
     CALL(evt_mario_key_onoff, 0)
@@ -1686,6 +1701,11 @@ EVT_BEGIN(meet_rival)
     RETURN
 EVT_END()
 
+/**
+ * The rival Puni joins Mario (story STG2_14, elder freed):
+ * the Puni elder gives Mario the Puni Orb, the rival and Punio join the group and nine Punies follow Mario.
+ * Sets the story to STG2_15_11_PUNIES and starts elder_kaisetsu.
+ */
 EVT_BEGIN(rival_nakama)
     CALL(evt_puni_init_puni, 5, 14, -89, 0, 0, 0)
     CALL(evt_puni_flag_onoff, 5, 0, PUNI_FLAG_NOT_IN_PARTY)
@@ -2302,6 +2322,11 @@ EVT_BEGIN(boss_robot_pera_after)
     RETURN
 EVT_END()
 
+/**
+ * The boss intro in the village (story 23_01): Crump confronts the Puni elder, the Punies are hidden,
+ * the time bomb is set and Crump gloats, then the Magnus von Grapple lands.
+ * Mario then fights it (battle info 20). Sets the story to STG2_24_BOSS_BATTLE, then runs boss_battle_win.
+ */
 EVT_BEGIN(boss_battle)
     CALL(evt_npc_set_position, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), -320, 0, 30)
     CALL(evt_npc_set_ry, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"), 90)
@@ -2698,6 +2723,11 @@ EVT_BEGIN(boss_battle_win_init)
     RETURN
 EVT_END()
 
+/**
+ * After beating the Magnus von Grapple: the robot breaks down, Crump is sucked away,
+ * the Emerald Star appears and Mario receives it, and the Punies and the elder thank the party.
+ * Sets the story to STG2_25_AFTER_THE_BOSS_BATTLE and runs the Star Stone sequence.
+ */
 EVT_BEGIN(boss_battle_win)
     CALL(evt_cam3d_evt_set, 70, 156, 549, 70, 60, 7, 0, EASING_SINE_IN_OUT)
     // The robot sparks and breaks down; the Punies come out of hiding.
@@ -3167,6 +3197,10 @@ EVT_BEGIN(evt_ueki_01)
     RETURN
 EVT_END()
 
+/**
+ * Planter hit script 2: during Bowser's visit (STG3_33_05) Punio's sister and Punio speak their lines
+ * when Mario hits it.
+ */
 static EVT_BEGIN(evt_ueki_02)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_05_BOWSER_THE_GREAT_TREE)
         CALL(evt_mario_key_onoff, 0)
@@ -3197,6 +3231,10 @@ EVT_BEGIN(evt_ueki_03)
     RETURN
 EVT_END()
 
+/**
+ * Planter hit script 8: during Bowser's visit (STG3_33_05) it starts the second Koopa scene
+ * (mri_01_koopa_second_evt).
+ */
 static EVT_BEGIN(evt_ueki_08)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_05_BOWSER_THE_GREAT_TREE)
         SPAWN_EVENT(PTR(mri_01_koopa_second_evt))

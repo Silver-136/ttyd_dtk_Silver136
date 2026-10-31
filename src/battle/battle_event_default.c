@@ -1092,6 +1092,7 @@ USER_FUNC(btlevtcmd_audience_code_escape_fail) {
     return EVT_RETURN_DONE;
 }
 
+/** Script: resets the moveColorLv shading of Mario and the partner to full brightness before the escape. */
 USER_FUNC(_btl_escape_reset_move_color_lv_player_unit_all) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;

@@ -141,6 +141,10 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Case event for the first poster wall: advances the story to STG6_33_BLOW_THE_POSTER
+ * and opens the door switch (bero_case_switch_on).
+ */
 EVT_BEGIN(evt_poster)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_33_BLOW_THE_POSTER)
     SET_VALUE(LW(0), 1)
@@ -148,6 +152,11 @@ EVT_BEGIN(evt_poster)
     RETURN
 EVT_END()
 
+/**
+ * Checks the poster flags after one is blown away: if any of posters 5 to 15 has not been blown yet it returns;
+ * otherwise it switches on the bero case, opens the a_kabe wall hit object
+ * and advances the story to STG6_33_BLOW_THE_POSTER if it is not already past it.
+ */
 static EVT_BEGIN(evt_chk)
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_5_BLOWN_AWAY, 0)
         RETURN

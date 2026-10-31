@@ -125,6 +125,12 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Event script: the opening cutscene of the Palace of Shadow,
+ * run on the first entry (story progress is set to STG8_00_START).
+ * Mario and the partner are placed inside the west door, the camera pans over the hall while they walk in,
+ * the partner comments (stg8_las_01), Mario nods, and control returns with the area banner (telop 17).
+ */
 static EVT_BEGIN(first_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgm_scope, 0, 1)

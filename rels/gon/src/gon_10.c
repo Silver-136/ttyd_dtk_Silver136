@@ -112,6 +112,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Map init for gon_10 (corridor before Hooktail's lair):
+ * sets up the doors, the save block and recovery block,
+ * and hides the map object "en" once Hooktail has been beaten (STG1_16_HOOKTAIL).
+ */
 EVT_BEGIN(gon_10_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)

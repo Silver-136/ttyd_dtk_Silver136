@@ -146,6 +146,13 @@ static EVT_BEGIN(evt_kanban)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_08, the room with the pipe to Twilight Town (usu_00).
+ * Starts the sewer music and sets up the exits.
+ * Until STG3_51_FRANKLYS_HOUSE_STG_3 the pipe (dokan) is replaced with the push-back version,
+ * and during chapter 3's end (STG3_52_DARKLY to chapter 4) with a second replacement;
+ * adds a signboard (tik_08_02).
+ */
 EVT_BEGIN(tik_08_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))

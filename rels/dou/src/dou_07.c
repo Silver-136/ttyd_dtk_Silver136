@@ -136,6 +136,13 @@ EVT_BEGIN(apper_elmos)
     RETURN
 EVT_END()
 
+/**
+ * Interact event of the black chest (mobj_box00), run before it opens.
+ * The first time the chest speaks to Mario and the partner (messages stg1_gon_majin4_01 to 07,
+ * with its lid wobbling), the Ember appears and the story moves to STG5_21_GROTTO_KEY.
+ * After that it asks for the Black Key (0x24) from the item menu: no key or a cancel closes the chest again;
+ * choosing the key removes it from the pouch so the chest can open.
+ */
 EVT_BEGIN(peramajin_before)
     // The Ember has already appeared (Black Key stage): the chest now wants the key.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)

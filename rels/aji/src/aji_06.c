@@ -177,6 +177,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Exit event of the room's door: freezes Mario and, at STG5_44_PEACH_TECS_REQUEST_2,
+ * prints peach_aji_226 (TEC has locked the door until the potion is done; LSWF(11) is raised while the text
+ * is open) and returns LW(0) = 1, which makes bero_case_init_check cancel the exit; otherwise LW(0) = 0.
+ */
 static EVT_BEGIN(bero_peach_evt)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_44_PEACH_TECS_REQUEST_2)
@@ -934,6 +939,13 @@ EVT_BEGIN(peach_evt_sugata_modoru)
     RETURN
 EVT_END()
 
+/**
+ * Peach drinks the mixed potion (case script on the machine's cup A_bika1): she gulps it with a puff of smoke.
+ * If the mix was wrong (LSWF(9) = 0) she randomly grows huge or shrinks tiny, comments (peach_aji_234 to 236),
+ * returns to her size and the machine resets so she can try again.
+ * If it was right she turns invisible (SFX_PEACH_TOUMEI1, peach_evt_toumei_onoff, evt_peach_set_condition 2),
+ * the scene plays (peach_aji_237 to 242) and the story becomes STG5_45_PEACH_POTION_PUZZLE.
+ */
 EVT_BEGIN(peach_evt_kusuri_nomu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_adjust_dir)
@@ -1869,6 +1881,13 @@ EVT_BEGIN(evt_memo4)
     RETURN
 EVT_END()
 
+/**
+ * Init script of aji_06, the potion laboratory:
+ * music BGM_EVT_PEACH1 before STG7_00_START (Peach's visits) and BGM_STG7_DUN2 after, the exit to aji_01,
+ * Mario dropping in from the ceiling when entered as "tenjo", the machine set- up (kikai_init),
+ * Peach's scenes of STG5_44, 45 and 46 (peach_evt_stg5, the invisible state and peach_evt_stg5_1)
+ * and the wall notes. The magician grunt 軍団ザコ魔法使い is removed once Lord Crump is beaten.
+ */
 EVT_BEGIN(aji_06_init_evt)
     // Peach's visits get her own music; later visits use the fortress music and ambience.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)

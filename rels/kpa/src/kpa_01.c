@@ -238,6 +238,12 @@ EVT_BEGIN(kpa_01_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Arrival cutscene for Bowser (story progress STG1_19_PEACH_TEC):
+ * the camera follows the long corridor, Bowser stomps in, the Spiny guards open the door and he laughs.
+ * After Bowser's line and a guard's reply, the story advances to STG1_19_01_BOWSER_BOWSER_CASTLE
+ * and the player gets control.
+ */
 EVT_BEGIN(kpa_01_touzyo_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STGK_CASTLE1"))
     CALL(evt_snd_envoff, PSND_FADEOUT)

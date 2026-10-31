@@ -120,6 +120,12 @@ static EVT_BEGIN(evt_kinoshikowa)
     RETURN
 EVT_END()
 
+/**
+ * Run when the block is broken and the flattened fighters are revealed:
+ * the partner walks to (95, 10) with the surprised jingle and remarks stg3_tou_307_10,
+ * Brots' dummy (ブロッツダミー) says stg3_tou_307_11, evt_kinoshikowa runs
+ * and the story advances to STG3_20_16_FLATTENED.
+ */
 static EVT_BEGIN(evt_block_broken)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -140,6 +146,10 @@ static EVT_BEGIN(evt_block_broken)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for Michel (マイケル, a Koopa fighter): before STG3_32_BOSS_BATTLE he lies flattened at (175, 0,
+ * -20) in the "NKT_Z_1" pose, rotated 80 degrees.
+ */
 static EVT_BEGIN(init_michel)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
         CALL(evt_npc_set_anim, STRING("マイケル"), STRING("NKT_Z_1"))
@@ -149,6 +159,11 @@ static EVT_BEGIN(init_michel)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the Michel stand-in (マイケルダミー), a hidden NPC that carries Michel's talk script:
+ * before STG3_32_BOSS_BATTLE it is placed at (175, 0, -20), where the flattened Michel lies,
+ * so talking there reaches him.
+ */
 EVT_BEGIN(init_michel_dummy)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
         CALL(evt_npc_set_position, STRING("マイケルダミー"), 175, 0, -20)
@@ -175,6 +190,11 @@ static EVT_BEGIN(init_brots)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for the Brots stand-in (ブロッツダミー), a hidden NPC that carries Brots's talk script:
+ * before STG3_32_BOSS_BATTLE it is placed at (125, 4, -60), next to where the flattened Brots lies,
+ * so talking there reaches him.
+ */
 EVT_BEGIN(init_brots_dummy)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_32_BOSS_BATTLE)
         CALL(evt_npc_set_position, STRING("ブロッツダミー"), 125, 4, -60)

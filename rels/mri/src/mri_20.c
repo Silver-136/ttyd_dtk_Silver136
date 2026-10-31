@@ -144,6 +144,12 @@ static KusaAccess ueki_access_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/**
+ * Map init script of mri_20, a pipe room with planters that an X-Naut grunt and a Yux guard:
+ * sets up the Puni, the planters and the water animations,
+ * removes the guards once the story is past STG2_25_01_PEACH_CRUMP_X_NAUTS,
+ * and redirects the pipe for the Ms. Mowz black-shadow scene at STG2_12_RIVAL_ARRIVAL.
+ */
 EVT_BEGIN(mri_20_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 20, -89, -319, -1000, -1000, 0, 0)

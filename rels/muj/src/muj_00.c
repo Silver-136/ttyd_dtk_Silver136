@@ -968,6 +968,11 @@ EVT_BEGIN(nannpc_light)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the rough sailor (NPC ガラの悪い水夫, "bad-mannered sailor"):
+ * between STG5_40_TRUE_IDENTITY and STG5_41_RETURN_TO_THE_GROTTO he is placed on the beach at
+ * (1386, 35, 0); otherwise he is left where his setup puts him.
+ */
 static EVT_BEGIN(garawaru_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_40_TRUE_IDENTITY, STG5_41_RETURN_TO_THE_GROTTO)
@@ -992,6 +997,11 @@ static EVT_BEGIN(marco_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of the timid sailor (NPC オドオド水夫, "nervous sailor"):
+ * placed on the beach at (1400, 35, -100) between STG5_40_TRUE_IDENTITY
+ * and STG5_41_RETURN_TO_THE_GROTTO.
+ */
 static EVT_BEGIN(odoodo_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_40_TRUE_IDENTITY, STG5_41_RETURN_TO_THE_GROTTO)
@@ -1026,6 +1036,10 @@ static EVT_BEGIN(suifu_bomb_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of sailor C: placed on the beach between STG5_40_TRUE_IDENTITY
+ * and STG5_41_RETURN_TO_THE_GROTTO.
+ */
 static EVT_BEGIN(suifu_c_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_40_TRUE_IDENTITY, STG5_41_RETURN_TO_THE_GROTTO)
@@ -1034,6 +1048,10 @@ static EVT_BEGIN(suifu_c_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of sailor C: stg5_muj_94_01 while the X-Naut ship is coming (STG5_36_HOLE_IN_THE_WALL),
+ * stg5_muj_117_04 in the later beach stage.
+ */
 static EVT_BEGIN(suifu_c_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_36_HOLE_IN_THE_WALL)
@@ -1044,6 +1062,10 @@ static EVT_BEGIN(suifu_c_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of sailor D: placed on the beach between STG5_40_TRUE_IDENTITY
+ * and STG5_41_RETURN_TO_THE_GROTTO.
+ */
 static EVT_BEGIN(suifu_d_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_40_TRUE_IDENTITY, STG5_41_RETURN_TO_THE_GROTTO)
@@ -1052,6 +1074,10 @@ static EVT_BEGIN(suifu_d_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of sailor D: stg5_muj_94_02 at STG5_36_HOLE_IN_THE_WALL,
+ * stg5_muj_117_05 in the later beach stage.
+ */
 static EVT_BEGIN(suifu_d_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_36_HOLE_IN_THE_WALL)
@@ -1062,6 +1088,10 @@ static EVT_BEGIN(suifu_d_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of sailor E: placed on the beach between STG5_40_TRUE_IDENTITY
+ * and STG5_41_RETURN_TO_THE_GROTTO.
+ */
 static EVT_BEGIN(suifu_e_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_40_TRUE_IDENTITY, STG5_41_RETURN_TO_THE_GROTTO)
@@ -1070,6 +1100,10 @@ static EVT_BEGIN(suifu_e_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of sailor E: stg5_muj_94_03 at STG5_36_HOLE_IN_THE_WALL,
+ * stg5_muj_117_06 in the later beach stage.
+ */
 static EVT_BEGIN(suifu_e_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_36_HOLE_IN_THE_WALL)
@@ -1080,6 +1114,10 @@ static EVT_BEGIN(suifu_e_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init event of Cortez on the beach: from STG5_49_BOWSER_TWILIGHT_TOWN_2 on he only turns to face right
+ * (ry 90).
+ */
 static EVT_BEGIN(korutesu_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_49_BOWSER_TWILIGHT_TOWN_2)
@@ -1088,6 +1126,12 @@ static EVT_BEGIN(korutesu_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Cortez as the ferryman (STG5_58_FAIR_WINDS on):
+ * asks whether to sail to Rogueport (hune_00).
+ * On yes he answers (hune_02), GSWF_GOR00_SHIP_ARRIVAL_PENDING is set and muj_gor_ship_start sails the ship;
+ * on no he says hune_01.
+ */
 static EVT_BEGIN(korutesu_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_GREATER_OR_EQUAL(STG5_58_FAIR_WINDS)
@@ -1109,6 +1153,10 @@ static EVT_BEGIN(mony_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Mony: stg5_muj_94_04 at STG5_36_HOLE_IN_THE_WALL,
+ * stg5_muj_117_07 in the later beach stage, stg5_muj_146_02 at STG5_64_02_F_F_SAIL_OFF.
+ */
 static EVT_BEGIN(mony_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_36_HOLE_IN_THE_WALL)
@@ -1126,6 +1174,10 @@ static EVT_BEGIN(peton_init)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of Peton: stg5_muj_94_05 at STG5_36_HOLE_IN_THE_WALL,
+ * stg5_muj_117_08 in the later beach stage, stg5_muj_146_01 at STG5_64_02_F_F_SAIL_OFF.
+ */
 static EVT_BEGIN(peton_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_36_HOLE_IN_THE_WALL)
@@ -1283,11 +1335,19 @@ EVT_BEGIN(koburon_evt)
     RETURN
 EVT_END()
 
+/**
+ * Talk event of the flashy man (Kiza) who appears on the beach in the ending (STG8_00_START on):
+ * says stg5_muj_146_02_01.
+ */
 static EVT_BEGIN(kiza_talk)
     CALL(evt_msg_print, 0, STRING("stg5_muj_146_02_01"), 0, STRING("me"))
     RETURN
 EVT_END()
 
+/**
+ * Adds the flashy man (Kiza) NPC from the c_kiza model with walk and talk animations and his talk event;
+ * called at map init from STG8_00_START on.
+ */
 static EVT_BEGIN(kiza_entry)
     CALL(evt_npc_entry, STRING("キザ野郎"), STRING("c_kiza"))
     CALL(evt_npc_set_tribe, STRING("キザ野郎"), STRING("キザ野郎"))
@@ -1524,6 +1584,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Opening scene on the beach, run at map init when the story is STG5_10_HAUNTED:
+ * Mario and his partner wake up washed ashore (narration stg5_muj_00 to 03), meet a rude sailor,
+ * the Keelhaul Key telop appears and the story advances to STG5_11_DESERTED_ISLAND.
+ */
 EVT_BEGIN(mujinto_hyochaku)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -1736,6 +1801,12 @@ EVT_BEGIN(npc_kyorokyoro)
     RETURN
 EVT_END()
 
+/**
+ * The X-Naut ship's arrival (STG5_36_HOLE_IN_THE_WALL):
+ * when Mario steps onto the pier the X-Naut ship rushes in,
+ * Flavio and the sailors panic (stg5_muj_95, 96 and on),
+ * Mario and his partner are positioned for the scene and kaizoku_vs_dai3 begins.
+ */
 EVT_BEGIN(dai3_shurai_sub)
     // Mario loses control and waits for his partner; the sailors are moved onto the pier.
     CALL(evt_mario_key_onoff, 0)
@@ -2032,6 +2103,11 @@ EVT_BEGIN(dai3_shurai_sub)
     RETURN
 EVT_END()
 
+/**
+ * Waits on the beach until Mario stands on A_yuka01 and has walked past z = -125,
+ * then starts dai3_shurai_sub (the X-Naut ship's approach).
+ * Spawned from map init at STG5_36_HOLE_IN_THE_WALL.
+ */
 EVT_BEGIN(dai3_shurai)
     CALL(evt_mapobj_trans, 1, STRING("S_c"), 0, -1000, 0)
     CALL(evt_mapobj_rotate, 1, STRING("S_c"), 0, 0, 0)
@@ -2761,6 +2837,12 @@ EVT_BEGIN(cam_dai3_vs_kaizoku)
     RETURN
 EVT_END()
 
+/**
+ * The big scene of Keelhaul Key: the pirate and X-Naut ships come together,
+ * Cortez and Lord Crump (the X-Naut "third force", dai3) trade insults (stg5_muj_118 to 123),
+ * crowds of sailors leap between the ships, and Mario fights Lord Crump in a battle.
+ * Afterwards the story becomes STG5_42_PIRATES_VS_X_NAUTS and dai3_beat_back runs.
+ */
 EVT_BEGIN(kaizoku_vs_dai3)
     // The fight begins: Mario loses control and the crowds on both ships are set up.
     CALL(evt_mario_key_onoff, 0)
@@ -2920,6 +3002,12 @@ EVT_BEGIN(kaizoku_vs_dai3)
     RETURN
 EVT_END()
 
+/**
+ * The crew's cheers after the X-Nauts are driven off ("YAHOOOOOOO!", "WE DID IT!" and so on,
+ * stg5_muj_127 to 132):
+ * small speakerless balloons pop up in turn around the pirate ship's position (GW(5), GW(6)), repeating until
+ * the event is deleted. Spawned just before the story becomes STG5_43_X_NAUTS_RETREAT.
+ */
 EVT_BEGIN(senin_kansei)
     LOOP(0)
         WAIT_MS(400)
@@ -3066,6 +3154,12 @@ EVT_BEGIN(dai3_taisan_move_trace01)
     RETURN
 EVT_END()
 
+/**
+ * After Lord Crump is beaten the X-Naut ship retreats:
+ * resets the ships' positions, Crump curses (stg5_muj_125), the ship sails away,
+ * Mario's party comments (stg5_muj_126), the story becomes STG5_43_X_NAUTS_RETREAT,
+ * the game autosaves and the map changes to aji_10 (Pirate's Grotto).
+ */
 EVT_BEGIN(dai3_beat_back)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -3341,6 +3435,11 @@ EVT_BEGIN(option_ship_main)
     RETURN
 EVT_END()
 
+/**
+ * The pirate ship leaves Keelhaul Key with Mario aboard (STG5_64_02_F_F_SAIL_OFF):
+ * Cortez, Flavio, Mony, Peton and the sailors talk (stg5_muj_133 to 143),
+ * Mario and his partner jump aboard and the ship sails away.
+ */
 EVT_BEGIN(leave_island)
     // The crew gathers aboard the ship on the beach; the music stops.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -3714,6 +3813,12 @@ EVT_BEGIN(muj_gor_ship_start)
     RETURN
 EVT_END()
 
+/**
+ * Boarding the pirate ship at the pier: freezes the party,
+ * slides the ship by 600 units while the camera follows, and gives control back;
+ * after STG5_62_AN_ILL_DON_PIANTA it advances the story to STG5_63_KEELHAUL_ANYTIME
+ * and restores the Keelhaul music.
+ */
 EVT_BEGIN(into_muj_ship)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
@@ -3794,6 +3899,11 @@ EVT_BEGIN(mony_peton_boarding_sub)
     RETURN
 EVT_END()
 
+/**
+ * Mony and Peton boarding the ship (STG5_64_01_WEDDING_RING_DELIVERY):
+ * when Mario brings them to the ship they say their thanks (stg5_muj_145, 146)
+ * and the story becomes STG5_64_02_F_F_SAIL_OFF.
+ */
 EVT_BEGIN(mony_peton_boarding)
     SET_VALUE(LW(0), 0)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_64_01_WEDDING_RING_DELIVERY)

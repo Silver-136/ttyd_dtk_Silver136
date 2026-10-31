@@ -380,6 +380,11 @@ EVT_BEGIN(wana_offscreen)
     RETURN
 EVT_END()
 
+/**
+ * The cage trap (story up to STG2_20): when Mario and his partner walk in with the Puni Orb in place,
+ * the cage falls on the Punies, Lord Crump and two X-Nauts drop in front of it and taunt the party,
+ * and the guide Puni answers. Sets the story to STG2_21_BUBBLES_2.
+ */
 EVT_BEGIN(trap_event)
     WAIT_WHILE(GF(15))
     CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_WALL_COLLISION)

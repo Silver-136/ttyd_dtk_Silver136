@@ -166,6 +166,15 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/**
+ * Scene run when Mario opens Grubba's desk drawer (hikidasi_H) before STG3_31_GRUBBAS_PLANS:
+ * the partner spots a paper (stg3_tou_456_01), Mario reads it and is shocked,
+ * and the partner explains the blueprints of a machine under the ring powered by a Crystal Star (stg3_tou_458).
+ * Grubba (ガンス) comes in, catches Mario with his secret paper (stg3_tou_459),
+ * the partner accuses him over King K and Bandy Andy (460),
+ * Grubba flees through the door (461) and the partner urges Mario after him (462);
+ * the story advances to STG3_31_GRUBBAS_PLANS and the office door's entrance is switched on.
+ */
 EVT_BEGIN(evt_takurami)
     CALL(evt_mario_key_onoff, 0)
     // The partner spots a paper in the drawer and Mario takes it out.
@@ -382,6 +391,10 @@ EVT_BEGIN(evt_hiki_open)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for Grubba (ガンス) in his office: before STG3_04_GONZALES_IS_BORN he stands at (120, 0, 0) facing
+ * 270.
+ */
 static EVT_BEGIN(init_gans)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_03_GRUBBA)
@@ -394,6 +407,13 @@ static EVT_BEGIN(init_gans)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of Grubba in the office when Mario signs up for the Glitz Pit:
+ * Grubba asks (stg3_tou_54) and Mario answers the yes/no menu (stg3_tou_52_yn).
+ * One answer gets a short reply (stg3_tou_53).
+ * The other fades out, resets everyone in front of Grubba, and they talk (stg3_tou_55, 55_01, 56);
+ * the story advances to STG3_03_GRUBBA and evt_kinoshikowa runs.
+ */
 static EVT_BEGIN(talk_gans)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
@@ -447,6 +467,10 @@ static EVT_BEGIN(talk_gans)
     RETURN
 EVT_END()
 
+/**
+ * NPC init for Jolene (キノシコワ, the Toad receptionist):
+ * from STG3_32_BOSS_BATTLE on she stands at (127, 0, 7) facing 270.
+ */
 static EVT_BEGIN(init_kinoshikowa)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_32_BOSS_BATTLE)
@@ -798,6 +822,10 @@ static EVT_BEGIN(evt_sensyu)
     RETURN
 EVT_END()
 
+/**
+ * Chapter 3 intro scene: Grubba welcomes Mario and offers to enter him in the Glitz Pit (stg3_tou_51 to 55),
+ * asks yes/no, and advances the story to STG3_03_GRUBBA.
+ */
 EVT_BEGIN(evt_sensyu2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, 20, 0, 0)
@@ -1005,6 +1033,18 @@ EVT_BEGIN(evt_nozoki_msg)
     RETURN
 EVT_END()
 
+/**
+ * Mario peeks down into Grubba's office through the gap in the air duct (a_nozoki):
+ * the camera moves in and a paper animation opens the dark panel (kuro_P).
+ * Before STG3_20_12_JOLENES_SECRET Grubba (ガンス) and Jolene (キノシコワ) talk below:
+ * the storage room intruder, King K's disappearance and keeping it quiet,
+ * and Grubba asking where Jolene keeps vanishing to, which she refuses to answer (stg3_tou_316_05 to 316_17);
+ * she leaves and Grubba grumbles that good fighters are a dying breed (320).
+ * The partner whispers to Mario (321), Grubba hears the ceiling and asks who is there (322),
+ * Mario picks a noise (Squeak, Meow or Belch) and Grubba reacts (325 to 325_02) and goes back to the ring;
+ * the panel closes, the partner sums up (326) and the story advances to STG3_20_12_JOLENES_SECRET.
+ * On later visits Mario just looks until A is pressed.
+ */
 // The first peek runs the story scene; later peeks keep the capture open until A is pressed.
 EVT_BEGIN(evt_nozoki)
     // Mario freezes in place; the first time, Grubba and Jolene are placed in the office below.

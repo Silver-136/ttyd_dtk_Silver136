@@ -215,6 +215,12 @@ EVT_BEGIN(nokonoko_I_talk)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene when Mario first talks to the gatekeeper (monban) after meeting Kroop:
+ * the gatekeeper opens the village gate and Koops, standing outside,
+ * runs in and has a short exchange with Mario and the partner before walking off.
+ * Sets the story to STG1_03_PETALBURG_GATEKEEPER.
+ */
 EVT_BEGIN(open_gate)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
     CALL(evt_msg_print, 0, STRING("stg1_nok_28"), 0, STRING("me"))
@@ -273,6 +279,10 @@ EVT_BEGIN(open_gate)
     RETURN
 EVT_END()
 
+/**
+ * Init for the gatekeeper Koopa (門番ノコノコ): once the gate has been opened (STG1_03 and later) he stands
+ * beside the gate at (370, 0, -76) instead of in front of it.
+ */
 EVT_BEGIN(monban_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_03_PETALBURG_GATEKEEPER)
@@ -306,6 +316,11 @@ EVT_BEGIN(monban_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init of Nokotarou (Koops) in the village:
+ * runs the standard NPC init, then, before the Gold Fuzzy (STG1_06_01),
+ * stands him at (-35, 65, -425) facing 90; after that it sends him off the map to (0, -1000, 0).
+ */
 static EVT_BEGIN(nokotarou_init)
     CALL_CHILD(PTR(npc_init_evt))
     SWITCH(GSW_STORY_PROGRESS)
@@ -578,6 +593,11 @@ EVT_BEGIN(boss_noko_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init for Koopie Koo (ノコリン): places her at (-85, 50, -300);
+ * while Koops has joined but she has not yet spoken to him (STG1_07 up to 17) she stands at (30, 50, -315)
+ * instead.
+ */
 EVT_BEGIN(nokorin_init)
     CALL(evt_npc_set_position, STRING("me"), -85, 50, -300)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
@@ -1540,6 +1560,14 @@ static EVT_BEGIN(epilogue_evt_sub)
     RETURN
 EVT_END()
 
+/**
+ * Koops's epilogue scene in Petalburg (STG8_END_AFTER_THE_BATTLE):
+ * plays the village music, hides Mario, places Koops, Koopie Koo,
+ * Koops's father and the mayor and runs epilogue_evt_sub.
+ * The narration (ep_38) tells Mario that Koops lives peacefully with his dad and Koopie Koo
+ * and wants to become mayor; then Flurrie's stage-play epilogue (btlgrp_nok_hei_ep, the only battle of nok.rel;
+ * unit_act_mario) starts as a battle through Koopa H's NPC, and after it the scene fades out to tou_08.
+ */
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_NOK1"))
     CALL(evt_snd_bgm_scope, 0, 1)

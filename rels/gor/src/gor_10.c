@@ -173,6 +173,11 @@ EvtWord evt_mezame[226];
 EvtWord mezame_init_evt[61];
 EvtWord gor_10_init_evt[29];
 
+/**
+ * Prologue of the game (before STG0_02_MARIOS_HOUSE):
+ * ambience fades down, Mario and the partner are hidden, the letter fades in,
+ * the diary text "pro_04" is shown over it, then a white fade changes the map to aaa_00 ("prologue2").
+ */
 EVT_BEGIN(tegami_init_evt)
     CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(evt_snd_envon, PSND_FADEIN | PSND_SLOT(1), STRING("ENV_STG0_GOR6"))

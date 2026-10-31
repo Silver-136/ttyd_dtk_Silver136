@@ -140,6 +140,11 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Init of Sir Grodus's NPC (シュリョー) in las_28: sets status bit 2, so he turns to face the way he moves.
+ * Between STG8_14_LOCK and STG8_14_01_QUEENS_CHAMBER he is placed at (410, 25, 0), facing left,
+ * and jumping is allowed.
+ */
 static EVT_BEGIN(syuryo_init)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_14_LOCK)

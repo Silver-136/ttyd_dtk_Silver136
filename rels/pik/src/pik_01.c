@@ -210,6 +210,12 @@ static const char* name_tbl[] = {
     "yajirusi_2",
 };
 
+/**
+ * Cutscene at the notice board in the square (case event when Mario faces a_harigami before the sanctum is
+ * opened): Detective Pennington (ポワン探偵) hops in, the partner comments,
+ * and Pennington leads Mario to the padlocked sanctum gate and unlocks it.
+ * Sets the story to STG6_50_THE_SANCTUM_MANAGER and switches the gate's bero on.
+ */
 EVT_BEGIN(evt_powan)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -316,6 +322,10 @@ EVT_BEGIN(evt_powan)
     RETURN
 EVT_END()
 
+/**
+ * Init for Detective Pennington (ポワン探偵, powan): during the sanctum manager story point (STG6_50) he stands
+ * at (165, 20, -190) with the jumping and land-on-floor flags on; at other times he stays where the map put him.
+ */
 static EVT_BEGIN(init_powan)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG6_50_THE_SANCTUM_MANAGER)
@@ -331,6 +341,15 @@ static EVT_BEGIN(talk_powan)
     RETURN
 EVT_END()
 
+/**
+ * Talk script for the souvenir shop owner (土産屋).
+ * During Trouble Center request 27 the owner first asks for help;
+ * once Mario looks like Luigi (chk_luigi_color) a longer scene plays in which the real Luigi (ルイージ) shows up,
+ * the owner gives Mario a Choco Cake (handed over, or put on the shop counter if the inventory is full)
+ * and the request is marked solved.
+ * Otherwise story-progress dependent chatter, with a special line during the Bowser interlude (STG7_20 to
+ * 25).
+ */
 EVT_BEGIN(miyageya_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_WANNA_MEET_LUIGI)
         // Once Mario looks like Luigi, a longer scene plays.
@@ -488,6 +507,11 @@ EVT_BEGIN(miyageya_talk)
     RETURN
 EVT_END()
 
+/**
+ * Init for the souvenir shop owner: puts him at (-270, -5, 260),
+ * switches his walk animation off during the Bowser interlude (STG7_20 to 25)
+ * and hooks up miyageya_talk as his talk event.
+ */
 EVT_BEGIN(miyageya_init)
     CALL(evt_npc_set_position, STRING("me"), -270, -5, 260)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1272,6 +1296,14 @@ static EVT_BEGIN(sekai_yami_shake)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene of the world going dark during the Grodus story point (STG8_15), played when the map is entered
+ * from sekai_yami2: the controls are locked, Mario and the partner are moved off screen,
+ * the square, Pennington and ターくん５ are given the dark look (envSetYami) with yami_view -800
+ * while the camera shakes (sekai_yami_shake) to the quake sound,
+ * Pennington turns about and wonders whether this is the end of the world (stg8_dark_07),
+ * then the map changes to bom_02 (entrance sekai_yami2).
+ */
 static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)

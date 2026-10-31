@@ -155,6 +155,13 @@ EVT_BEGIN(party_damage_pose2)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the crash landing on the Moon, run on the first visit (story progress below
+ * STG7_06_TO_THE_MOON).
+ * Mario and the partner tumble down along a spline and hit the ground with a thud, dust and a camera shake.
+ * After lying there they get up, the partner speaks (stg7_moo_03, stg7_moo_04), Mario nods, control returns,
+ * the story progress is set to STG7_06_TO_THE_MOON and the area banner for the Moon is shown (telop 14).
+ */
 static EVT_BEGIN(evt_first)
     // Controls off; the partner is put into its hurt pose.
     CALL(evt_mario_key_onoff, 0)
