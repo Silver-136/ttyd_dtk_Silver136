@@ -165,7 +165,7 @@ void winMarioExit(WindowWork* w) {
     while (1) {                                                    \
         if (w->marioSel == 11 || w->marioSel == 12) {              \
             if (w->mario.specialCount != 0) break;                 \
-        } else if (p->item == 0 || pouchCheckItem(p->item) != 0) { \
+        } else if (p->item == ITEM_NULL || pouchCheckItem(p->item) != 0) { \
             break;                                                 \
         }                                                          \
         w->marioSel = p->links[n];                                 \

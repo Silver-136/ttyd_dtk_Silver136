@@ -515,7 +515,7 @@ static USER_FUNC(_battle_set_lecture_unit_id) {
 
 USER_FUNC(_set_lecture_mode) {
     BattleWork* wp = _battleWorkPointer;
-    s32 id = BattleTransID(event, -3);
+    s32 id = BattleTransID(event, UNIT_ID_MARIO);
     BattleUnit* unit = BattleGetUnitPtr(wp, id);
 
     unit->mAttributeFlags |= kUnitHpFixed;

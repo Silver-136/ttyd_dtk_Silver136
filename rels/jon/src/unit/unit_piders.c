@@ -87,7 +87,7 @@ static EvtWord renzoku_attack_event_sub_last[79];
 static EvtWord wait_event[7];
 
 static USER_FUNC(piders_yarn_init) {
-    s32 id = BattleTransID(event, -2);
+    s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
 
     unit->countersetWeapon = (BattleWeapon*)BTL_ALLOC(sizeof(PidersYarn)); // piders keep their yarn work in the counter-set weapon slot
@@ -237,7 +237,7 @@ static void piders_draw_yarn_sub(CameraId camera, void* param) {
 
 static USER_FUNC(piders_draw_yarn) {
     u8 alpha = evtGetValue(event, event->args[0]);
-    s32 id = BattleTransID(event, -2);
+    s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
     PidersYarn* yarn = (PidersYarn*)unit->countersetWeapon;
 

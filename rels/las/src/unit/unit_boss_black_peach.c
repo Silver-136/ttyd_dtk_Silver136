@@ -4933,33 +4933,33 @@ USER_FUNC(make_pattern) {
 USER_FUNC(peach_talk_synchro_shadow_head_evt) {
     BattleUnitPart* part;
 
-    part = BattleGetUnitPartsPtr(BattleTransID(event, -2), 1);
+    part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 1);
     if (strcmp(part->poseName, "KRT_T_1") == 0 || strcmp(part->poseName, "KRT_T_2") == 0 ||
         strcmp(part->poseName, "KRT_T_3") == 0) {
-        part = BattleGetUnitPartsPtr(BattleTransID(event, -2), 3);
+        part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 3);
         if (strcmp(part->poseName, "KRT_T_1") != 0) {
             BtlUnit_SetAnim(part, "KRT_T_1");
             return 0;
         }
     }
-    part = BattleGetUnitPartsPtr(BattleTransID(event, -2), 1);
+    part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 1);
     if (strcmp(part->poseName, "KRT_T_1") != 0 && strcmp(part->poseName, "KRT_T_2") != 0 &&
         strcmp(part->poseName, "KRT_T_3") != 0) {
-        part = BattleGetUnitPartsPtr(BattleTransID(event, -2), 3);
+        part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 3);
         if (strcmp(part->poseName, "KRT_T_1") == 0) {
             BtlUnit_SetAnim(part, "KRT_S_1");
             return 0;
         }
     }
-    if (strcmp(BattleGetUnitPartsPtr(BattleTransID(event, -2), 1)->poseName, "KRT_D_1") == 0) {
-        part = BattleGetUnitPartsPtr(BattleTransID(event, -2), 3);
+    if (strcmp(BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 1)->poseName, "KRT_D_1") == 0) {
+        part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 3);
         if (strcmp(part->poseName, "KRT_D_1") != 0) {
             BtlUnit_SetAnim(part, "KRT_D_1");
             return 0;
         }
     }
-    if (strcmp(BattleGetUnitPartsPtr(BattleTransID(event, -2), 1)->poseName, "KRT_D_1") != 0) {
-        part = BattleGetUnitPartsPtr(BattleTransID(event, -2), 3);
+    if (strcmp(BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 1)->poseName, "KRT_D_1") != 0) {
+        part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 3);
         if (strcmp(part->poseName, "KRT_D_1") == 0) {
             BtlUnit_SetAnim(part, "KRT_S_1");
             return 0;
@@ -4975,26 +4975,26 @@ USER_FUNC(shadow_queen_connect) {
 
     if (isFirstCall) {
         event->userdatap[0] = wk = BTL_ALLOC(sizeof(QueenConnect));
-        wk->poseId[0] = BattleGetUnitPartsPtr(BattleTransID(event, -2), 2)->poseId;
+        wk->poseId[0] = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 2)->poseId;
         animPoseWorldPositionEvalOn(wk->poseId[0]);
         wk->idx[0] = animPoseGetGroupIdx(wk->poseId[0], "locator12");
-        wk->poseId[1] = BattleGetUnitPartsPtr(BattleTransID(event, -2), 3)->poseId;
+        wk->poseId[1] = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 3)->poseId;
         animPoseWorldPositionEvalOn(wk->poseId[1]);
         wk->idx[1] = animPoseGetGroupIdx(wk->poseId[1], "locator12");
         animPosePeraOff(wk->poseId[0]);
         animPosePeraOff(wk->poseId[1]);
-        wk->poseId[2] = BattleGetUnitPartsPtr(BattleTransID(event, -2), 4)->poseId;
+        wk->poseId[2] = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 4)->poseId;
         animPosePeraOff(wk->poseId[2]);
     }
     wk = event->userdatap[0];
     wpos = *animPoseGetAnimPosePtr(wk->poseId[0])->worldPositions;
-    part = BattleGetUnitPartsPtr(BattleTransID(event, -2), 3);
+    part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 3);
     BtlUnit_SetPartsPos(part, wpos[wk->idx[0]].x, wpos[wk->idx[0]].y, wpos[wk->idx[0]].z);
-    part = BattleGetUnitPartsPtr(BattleTransID(event, -2), 5);
+    part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 5);
     part->dispZOffset = 7.0f;
     BtlUnit_SetPartsPos(part, wpos[wk->idx[0]].x, wpos[wk->idx[0]].y, wpos[wk->idx[0]].z);
     wpos = *animPoseGetAnimPosePtr(wk->poseId[1])->worldPositions;
-    part = BattleGetUnitPartsPtr(BattleTransID(event, -2), 4);
+    part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 4);
     part->dispZOffset = 1.0f;
     BtlUnit_SetPartsPos(part, wpos[wk->idx[1]].x, wpos[wk->idx[1]].y, wpos[wk->idx[1]].z);
     return 0;

@@ -818,7 +818,7 @@ USER_FUNC(effect_position) {
         ((EffTreasureMapWork*)eff->userdata)->position.y = item->position.y;
         ((EffTreasureMapWork*)eff->userdata)->position.z = item->position.z + z;
         ((EffTreasureMapWork*)eff->userdata)->rotY = 180.0f - camGetPtr(CAMERA_3D)->viewYaw;
-        ((EffTreasureMapWork*)eff->userdata)->alpha = evtGetValue(event, (s32)0xFD050F8B);
+        ((EffTreasureMapWork*)eff->userdata)->alpha = evtGetValue(event, GW(11));
         ((EffTreasureMapWork*)eff->userdata)->scale = 0.9f;
     }
     x = 15.0f * (f32)sin(angle);

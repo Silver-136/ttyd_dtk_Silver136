@@ -300,8 +300,8 @@ USER_FUNC(bakuGameMain) {
     BakuWork* w = GetBakuGamePtr();
     EvtWord* args;
     BattleWork* bw = _battleWorkPointer;
-    BattleUnit* mario = BattleGetUnitPtr(bw, BattleTransID(event, -3));
-    BattleUnit* party = BattleGetUnitPtr(bw, BattleTransID(event, -4));
+    BattleUnit* mario = BattleGetUnitPtr(bw, BattleTransID(event, UNIT_ID_MARIO));
+    BattleUnit* party = BattleGetUnitPtr(bw, BattleTransID(event, UNIT_ID_PARTNER));
     f32 x = 0.0f, y = 0.0f, z = 0.0f;
     f32 hx = 0.0f, hy = 0.0f, hz = 0.0f;
     s32 btns[3] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X};

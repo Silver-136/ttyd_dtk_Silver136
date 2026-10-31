@@ -59,7 +59,10 @@ static s16* mario_status_point_table[3];
 
 //.sdata
 static WinMgrWork* wp = &work;
-static u16 party_id_table[] = {1, 2, 5, 4, 6, 3, 7, 0};
+static u16 party_id_table[] = {
+    PARTNER_GOOMBELLA, PARTNER_KOOPS, PARTNER_FLURRIE, PARTNER_YOSHI,
+    PARTNER_VIVIAN, PARTNER_BOBBERY, PARTNER_MSMOWZ, PARTNER_NONE
+};
 static u16 party_icon_table[] = {ICON_PARTY_GOOMBELLA, ICON_PARTY_KOOPS, ICON_PARTY_FLURRIE, ICON_PARTY_YOSHI, ICON_PARTY_VIVIAN, ICON_PARTY_BOBBERY, ICON_PARTY_MS_MOWZ};
 static const char* party_labelname_table[] = {"_kur", "_nok", "_win", "_yos", "_viv", "_bom", "_chu"};
 static s32 mario_status_icon_table[] = {ICON_HP, ICON_FP, ICON_BP};

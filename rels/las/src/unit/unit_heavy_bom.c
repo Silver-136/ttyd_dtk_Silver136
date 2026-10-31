@@ -818,7 +818,7 @@ void animPoseSetDispCallBack(s32 poseId, void (*callback)(BattleUnitPart*, s32),
 
 static USER_FUNC(_set_draw_callback) {
     BattleWork* wp = _battleWorkPointer;
-    s32 id = BattleTransID(event, -2);
+    s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit = BattleGetUnitPtr(wp, id);
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
 

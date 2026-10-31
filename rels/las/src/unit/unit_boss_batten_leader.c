@@ -763,7 +763,7 @@ static USER_FUNC(eff_staff) {
     return EVT_RETURN_DONE;
 }
 USER_FUNC(check_satellite) {
-    s32 id = BattleTransID(event, -2);
+    s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
     BattleUnitPart* part;
     BattleUnitPart* part2;
@@ -2609,7 +2609,7 @@ USER_FUNC(btl_hitoffsetx) {
 }
 static USER_FUNC(_set_draw_callback) {
     BattleWork* wp = _battleWorkPointer;
-    s32 id = BattleTransID(event, -2);
+    s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit = BattleGetUnitPtr(wp, id);
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
     BattleUnitPart* p3;

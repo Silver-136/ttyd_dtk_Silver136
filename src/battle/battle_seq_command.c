@@ -391,7 +391,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
         case 0:
             if (pouch->jumpLevel >= 1) {
                 cmd->weapon[num].index = -1;
-                cmd->weapon[num].itemId = 0;
+                cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].weapon = &marioDefaultWeapon_Jump;
                 cmd->weapon[num].enabled = 0;
                 cmd->weapon[num].disableReason = 0;
@@ -408,7 +408,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
             }
             if (pouch->jumpLevel >= 2) {
                 cmd->weapon[num].index = -1;
-                cmd->weapon[num].itemId = 0;
+                cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].weapon = &marioWeapon_KururinJump;
                 cmd->weapon[num].enabled = 0;
                 cmd->weapon[num].disableReason = 0;
@@ -422,7 +422,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
             }
             if (pouch->jumpLevel >= 3) {
                 cmd->weapon[num].index = -1;
-                cmd->weapon[num].itemId = 0;
+                cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].weapon = &marioWeapon_JyabaraJump;
                 cmd->weapon[num].enabled = 0;
                 cmd->weapon[num].disableReason = 0;
@@ -438,7 +438,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
         case 1:
             if (pouch->hammerLevel >= 1) {
                 cmd->weapon[num].index = -1;
-                cmd->weapon[num].itemId = 0;
+                cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].weapon = &marioDefaultWeapon_Hammer;
                 cmd->weapon[num].enabled = 0;
                 cmd->weapon[num].disableReason = 0;
@@ -455,7 +455,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
             }
             if (pouch->hammerLevel >= 2) {
                 cmd->weapon[num].index = -1;
-                cmd->weapon[num].itemId = 0;
+                cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].weapon = &marioWeapon_KaitenHammer;
                 cmd->weapon[num].enabled = 0;
                 cmd->weapon[num].disableReason = 0;
@@ -469,7 +469,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
             }
             if (pouch->hammerLevel >= 3) {
                 cmd->weapon[num].index = -1;
-                cmd->weapon[num].itemId = 0;
+                cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].weapon = &marioWeapon_UltraHammer;
                 cmd->weapon[num].enabled = 0;
                 cmd->weapon[num].disableReason = 0;
@@ -566,7 +566,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
             }
             if (num == 0) {
                 cmd->weapon[num].index = -1;
-                cmd->weapon[num].itemId = 0;
+                cmd->weapon[num].itemId = ITEM_NULL;
                 cmd->weapon[num].index = 0;
                 cmd->weapon[num].weapon = &defaultWeapon_Dummy_NoItem;
                 cmd->weapon[num].enabled = 0;
@@ -586,7 +586,7 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
             for (j = 0; j < 16; j++) {
                 if ((starPowers & (1 << j)) && superActionTable[j]) {
                     cmd->weapon[num].index = -1;
-                    cmd->weapon[num].itemId = 0;
+                    cmd->weapon[num].itemId = ITEM_NULL;
                     cmd->weapon[num].weapon = superActionTable[j];
                     cmd->weapon[num].enabled = 0;
                     cmd->weapon[num].icon = superActionTable[j]->icon;

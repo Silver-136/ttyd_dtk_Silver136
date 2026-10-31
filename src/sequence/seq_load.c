@@ -1172,11 +1172,10 @@ void loadDraw(CameraId camera, void* param) {
     *camGetCurPtr() = saved;
 }
 
-#ifdef VERSION_G8ME01
-s32 stone_id[7] = {0x197 + 8, 0x198 + 8, 0x19A + 8, 0x19C + 8, 0x19D + 8, 0x199 + 8, 0x19B + 8};
-#else
-s32 stone_id[7] = {0x197, 0x198, 0x19A, 0x19C, 0x19D, 0x199, 0x19B};
-#endif
+s32 stone_id[7] = {
+    ICON_SAC_DEKA, ICON_SAC_BAKUGAME, ICON_SAC_MUKI, ICON_SAC_SCISSOR,
+    ICON_SAC_GENKI1, ICON_SAC_SUKI, ICON_SAC_ZUBASTAR
+};
 
 static EVT_BEGIN(evt_shake)
     CALL(evt_sub_rumble_onoff, 0, 0)

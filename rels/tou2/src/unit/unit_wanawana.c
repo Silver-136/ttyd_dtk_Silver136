@@ -202,8 +202,8 @@ void replace_callback(BattleUnitPart* part, s32 type) {
 }
 
 USER_FUNC(replace_evt) {
-    BattleUnitPart* part = BattleGetUnitPartsPtr(BattleTransID(event, -2), 1);
-    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, -2));
+    BattleUnitPart* part = BattleGetUnitPartsPtr(BattleTransID(event, UNIT_ID_SELF), 1);
+    BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, UNIT_ID_SELF));
     AnimationPoseData* data = animPoseGetAnimBaseDataPtr(part->poseId);
     WanaWork* wp;
     s32 w;

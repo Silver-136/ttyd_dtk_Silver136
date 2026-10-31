@@ -690,7 +690,7 @@ static USER_FUNC(_clauda_breath_effect_fire) {
     Vec pos;
     EffectEntry* eff;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     var = args[0];
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
@@ -715,7 +715,7 @@ static USER_FUNC(_clauda_breath_effect_ready) {
     Vec pos;
     EffectEntry* eff;
 
-    id = BattleTransID(event, -2);
+    id = BattleTransID(event, UNIT_ID_SELF);
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
     pos.x += unit->mSizeMultiplier * (unit->faceDirection * 20);

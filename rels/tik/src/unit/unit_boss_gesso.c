@@ -643,7 +643,7 @@ USER_FUNC(_ikasumi_effect) {
 #ifndef VERSION_G8ME01
 USER_FUNC(_test_rtn) {
     BattleWork* wp = _battleWorkPointer;
-    s32 id = BattleTransID(event, -2);
+    s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit;
     BattleUnit* target;
     s32 targetId;
@@ -673,7 +673,7 @@ USER_FUNC(_test_rtn) {
     }
     switch (event->userdata[0]) {
         case 0:
-            targetId = BattleTransID(event, -2);
+            targetId = BattleTransID(event, UNIT_ID_SELF);
             break;
         case 1:
             targetId = unit->work[GESSO_UNIT_WORK_LEFT_ARM];

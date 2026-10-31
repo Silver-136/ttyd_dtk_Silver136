@@ -1772,7 +1772,7 @@ static void barriern_wawawa_get_next_target(s32* unitIdx, s32* partIdx) {
 }
 
 static USER_FUNC(_check_satellite) {
-    s32 id = BattleTransID(event, -2);
+    s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
     EvtWord* args = event->args;
     BattleUnitPart* part;

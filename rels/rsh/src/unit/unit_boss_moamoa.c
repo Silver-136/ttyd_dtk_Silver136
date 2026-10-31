@@ -1019,7 +1019,7 @@ USER_FUNC(moamoa_on) {
         v.z = randf(-10.0f, 10.0f);
         elem->pos = v;
     }
-    wp->unitId = BattleTransID(event, -2);
+    wp->unitId = BattleTransID(event, UNIT_ID_SELF);
     BattleGetUnitPtr(_battleWorkPointer, wp->unitId);
     wp->poseId[0] = BattleGetUnitPartsPtr(wp->unitId, 1)->poseId;
     animPoseWorldPositionEvalOn(wp->poseId[0]);
@@ -1328,7 +1328,7 @@ USER_FUNC(moamoa_set_bodyScale) {
     BattleUnit* unit;
     s32 n;
 
-    unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, -2));
+    unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, UNIT_ID_SELF));
     n = 0;
     if (unit == NULL) {
         extReset();

@@ -77,7 +77,7 @@ static EvtWord wait_event_fmario[6];
 
 static USER_FUNC(_mario_makkuro_set) {
     BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, -2));
+    BattleUnit* unit = BattleGetUnitPtr(wp, BattleTransID(event, UNIT_ID_SELF));
 
     if (unit != NULL) {
         faker_mario_makkuro_set(unit);

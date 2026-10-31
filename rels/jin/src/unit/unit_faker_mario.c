@@ -1304,7 +1304,7 @@ EVT_END()
 
 USER_FUNC(_gullible_party_info_init) {
     PouchData* pouch = pouchGetPtr();
-    s32 id = BattleTransID(event, -2);
+    s32 id = BattleTransID(event, UNIT_ID_SELF);
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
     FakerParam* params = BattleAlloc(sizeof(FakerParam) * 4);
     s32 i;
