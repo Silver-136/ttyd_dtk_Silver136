@@ -1,6 +1,7 @@
 // pik_04 (ピカリーヒルズ, Poshley Heights): the street between the station (pik_00) and the town square (pik_01); also the
 // X-Naut scene with Grodus (シュリョー) and Lord Crump (カンブー).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_win.h"
 #include "evt/evt_cmd.h"
@@ -619,7 +620,7 @@ EVT_BEGIN(evt_down)
 EVT_END()
 
 EVT_BEGIN(init_miyage)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_position, STRING("me"), -363, 10, 142)
 #else
     CALL(evt_npc_set_position, STRING("me"), -363, 15, 142)

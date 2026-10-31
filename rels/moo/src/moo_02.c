@@ -1,5 +1,6 @@
 // moo_02 (月, the Moon): the field with the way into the X-Naut Fortress (aji_00); paths to moo_05 and moo_06.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -24,21 +25,21 @@
 EvtWord n_bero_in[25];
 EvtWord n_bero_out[12];
 static BeroEntry bero_entry_data[6];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord dokan_evt[122];
 #else
 static EvtWord dokan_evt[102];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #else
 static EvtWord rock_main[79];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord rock_evt0[15];
 #else
 static EvtWord rock_evt0[21];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord rock_evt1[15];
 #else
 static EvtWord rock_evt1[21];
@@ -165,7 +166,7 @@ static BeroEntry bero_entry_data[] = {
  * The rock crumbles, the pipe appears, and the story progress is set to STG7_07_A_PIPE_APPEARS.
  */
 static EVT_BEGIN(dokan_evt)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(GSW_STORY_PROGRESS, STG7_07_A_PIPE_APPEARS)
 #else
     CALL(evt_mario_key_onoff, 0)
@@ -177,14 +178,14 @@ static EVT_BEGIN(dokan_evt)
     END_INLINE_EVENT
     CALL(evt_offscreen_entry, STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 0, STRING("S_iwa_04"), STRING("offscreen"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_offscreen_get_boundingbox2, STRING("offscreen"), LW(0), LW(1), LW(2), LW(3))
     IF_INT_GREATER(LW(2), 0)
         IF_INT_GREATER(LW(3), 0)
 #endif
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_bom_ver2"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 1, 0, 0, 0, 0)
 #else
     CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
@@ -193,7 +194,7 @@ static EVT_BEGIN(dokan_evt)
     CALL(evt_img_set_shadow, STRING("img"), 2)
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_iwa_04"), MAP_OBJ_FLAG_HIDDEN)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_hitobj_onoff, STRING("A_iwa_04"), 1, 0)
 #endif
     CALL(evt_img_wait_animend, STRING("img"))
@@ -201,26 +202,26 @@ static EVT_BEGIN(dokan_evt)
     CALL(evt_img_set_shadow, STRING("img"), 0)
     CALL(evt_img_onoff, STRING("img"), 0)
     CALL(evt_img_release, STRING("img"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_IF
     END_IF
 #endif
     CALL(evt_offscreen_delete, STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 0, STRING("S_iwa_04"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_iwa_04"), MAP_OBJ_FLAG_HIDDEN)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG7_07_A_PIPE_APPEARS)
 #endif
     CALL(evt_hitobj_onoff, STRING("A_iwa_04"), 1, 0)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(evt_mario_key_onoff, 1)
 #endif
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 /**
  * Rock-blasting script (JP only): the rock crumbles into an offscreen animation,
  * then the model and collision of the rock in LW(10)/LW(11) are removed.
@@ -250,7 +251,7 @@ EVT_END()
 #endif
 
 static EVT_BEGIN(rock_evt0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(GSWF_MOO_02_ROCK_01_BLOWN, 1)
 #else
     CALL(evt_mario_key_onoff, 0)
@@ -258,7 +259,7 @@ static EVT_BEGIN(rock_evt0)
     SET_VALUE(LW(10), STRING("S_iwa_01"))
     SET_VALUE(LW(11), STRING("A_iwa_01"))
     CALL_CHILD(PTR(rock_main))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     SET_VALUE(GSWF_MOO_02_ROCK_01_BLOWN, 1)
     CALL(evt_mario_key_onoff, 1)
 #endif
@@ -267,7 +268,7 @@ static EVT_BEGIN(rock_evt0)
 EVT_END()
 
 static EVT_BEGIN(rock_evt1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(GSWF_MOO_02_ROCK_07_BLOWN, 1)
 #else
     CALL(evt_mario_key_onoff, 0)
@@ -275,7 +276,7 @@ static EVT_BEGIN(rock_evt1)
     SET_VALUE(LW(10), STRING("S_iwa_07"))
     SET_VALUE(LW(11), STRING("A_iwa_07"))
     CALL_CHILD(PTR(rock_main))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     SET_VALUE(GSWF_MOO_02_ROCK_07_BLOWN, 1)
     CALL(evt_mario_key_onoff, 1)
 #endif

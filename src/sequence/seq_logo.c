@@ -1,5 +1,6 @@
 // Logo sequence: the boot logos and the progressive-scan prompt before the title.
 
+#include "version.h"
 #include "seq/seq_logo.h"
 #include "libc_decls.h"
 #include "driver/arcdrv.h"
@@ -21,7 +22,7 @@
 #include <dolphin/vi.h>
 #include <string.h>
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static inline s32* logoStoryTime(void);
 #endif
 //.sbss
@@ -38,13 +39,13 @@ void dummy_draw(CameraId camId, void* param);
 void progDisp(CameraId camId, void* param);
 
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 static s32 logoAsyncFirst(void);
 #endif
 
 void seq_logoInit(SequenceWork* work) {
     memset(wp, 0, sizeof(LogoWork));
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     wp->page = -1;
 #endif
     wp->texture = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());
@@ -66,7 +67,7 @@ void seq_logoInit(SequenceWork* work) {
             wp->progressive = FALSE;
         }
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (!OSIsRestart() || OSGetResetCode() & OS_RESET_SHUTDOWN) {
         VIConfigure(&sRMObjHReso);
 #else
@@ -116,7 +117,7 @@ void seq_logoExit(SequenceWork* work) {
 }
 
 void seq_logoMain(SequenceWork* work) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     static OSTime time;
 #else
     static OSTime time;
@@ -135,7 +136,7 @@ void seq_logoMain(SequenceWork* work) {
             break;
 
         case 1:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             work->state++;
             break;
 
@@ -211,7 +212,7 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         case 11:
 #else
         case 3:
@@ -219,7 +220,7 @@ void seq_logoMain(SequenceWork* work) {
             if (fadeIsFinish()) {
                 fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
                 work->state++;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 wp->page = 3;
 #else
                 wp->logoId = 1;
@@ -227,7 +228,7 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         case 12:
 #else
         case 4:
@@ -238,7 +239,7 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         case 13:
 #else
         case 5:
@@ -249,7 +250,7 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         case 14:
 #else
         case 6:
@@ -257,7 +258,7 @@ void seq_logoMain(SequenceWork* work) {
             if (fadeIsFinish()) {
                 fadeEntry(FADE_IN_BLACK, 500, (GXColor){0, 0, 0, 0xFF});
                 work->state++;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 wp->page = 4;
 #else
                 wp->logoId = 2;
@@ -265,7 +266,7 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         case 15:
 #else
         case 7:
@@ -276,7 +277,7 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         case 16:
 #else
         case 8:
@@ -288,7 +289,7 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         case 17:
 #else
         case 9:
@@ -313,7 +314,7 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         case 18:
             VISetBlack(FALSE);
             VIWaitForRetrace();
@@ -349,7 +350,7 @@ void seq_logoMain(SequenceWork* work) {
                     seqSetSeq(SEQ_MAP_CHANGE, "dmo_00", NULL);
                     return;
                 }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 else {
 #else
                 else { //continue to title screen
@@ -364,7 +365,7 @@ void seq_logoMain(SequenceWork* work) {
             }
             break;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         case 19:
 #else
         case 11:
@@ -375,7 +376,7 @@ void seq_logoMain(SequenceWork* work) {
             break;
     }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (work->state >= 2 && work->state < 4) {
         dispEntry(CAMERA_2D, 0.0f, 0, progDisp, NULL);
     }
@@ -421,7 +422,7 @@ void logoDisp(CameraId camId, void* param) {
         GXSetScissor(0, 0, 608, 448);
         GXSetViewport(0.0f, 0.0f, 608.0f, 448.0f, -1.0f, 1.0f);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         switch (wp->page) {
             case -1:
                 break;
@@ -551,7 +552,7 @@ void logoDisp(CameraId camId, void* param) {
                 GXTexCoord2f32(0.0f, 1.0f);
                 break;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             case 3:
 #else
             case 1:
@@ -599,7 +600,7 @@ void logoDisp(CameraId camId, void* param) {
                 GXTexCoord2f32(0.0f, 1.0f);
                 break;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             case 4:
 #else
             case 2:
@@ -654,7 +655,7 @@ void logoDisp(CameraId camId, void* param) {
 }
 
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 static s32 logoAsyncFirst(void) {
     return fileAsyncf(FILE_TYPE_RAW, 0, "%s/b/first", getMarioStDvdRoot());
 }
@@ -678,7 +679,7 @@ void dummy_draw(CameraId camId, void* param) {
     GXSetViewport(0.0f, 0.0f, 608.0f, 480.0f, 0.0f, 1.0f);
 }
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 //param is unused
 void progDisp(CameraId camId, void* param) {
     static OSTime time;

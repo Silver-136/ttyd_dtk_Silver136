@@ -390,7 +390,7 @@ BattleWeapon partyWeapon_NokotarouKouraAttack = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyNokotarouAttack_NormalAttack, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 4, 2, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 2, 2, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -411,7 +411,7 @@ BattleWeapon partyWeapon_NokotarouSyubibinKoura = {
     3, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -441,7 +441,7 @@ BattleWeapon partyWeapon_NokotarouSyubibinKoura = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyNokotarouAttack_SyubibinKoura, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -504,7 +504,7 @@ BattleWeapon partyWeapon_NokotarouTsuranukiKoura = {
     6, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     3, // stylishCommandMultiplier
@@ -533,7 +533,7 @@ BattleWeapon partyWeapon_NokotarouTsuranukiKoura = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyNokotarouAttack_TsuranukiKoura, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -891,7 +891,7 @@ EVT_BEGIN(partyNokotarouAttack_NormalAttack)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 18, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
     IF_INT_EQUAL(LW(6), 2)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(0), 1, 0, 0, 0)
 #endif
@@ -1142,7 +1142,7 @@ EVT_BEGIN(partyNokotarouAttack_SyubibinKoura)
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 9, 9, 0)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
     IF_INT_EQUAL(LW(6), 2)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(0), 1, 0, 0, 0)
 #endif
@@ -1689,7 +1689,7 @@ EVT_BEGIN(partyNokotarouAttack_TsuranukiKoura)
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 9, 9, 0)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
     IF_INT_EQUAL(LW(6), 2)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(0), 1, 0, 0, 0)
 #endif

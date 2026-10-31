@@ -1,6 +1,7 @@
 // mri_09 (巨木の中, The Great Tree): the room with the four rolling wall panels (wall_roll), the slot
 // switches, the breaking floor, and the blue jail key (get_blue_jail_key).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -36,7 +37,7 @@
 BeroEntry bero_bluejail[1];
 static BeroEntry bero_entry_data[5];
 EvtWord wall_roll_sub[96];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord wall_roll[272];
 #else
 EvtWord wall_roll[264];
@@ -50,7 +51,7 @@ EvtWord slot02_event[52];
 EvtWord slot03_event[52];
 EvtWord slot_event[66];
 EvtWord get_blue_jail_key[143];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord mri_09_init_evt[230];
 #else
 EvtWord mri_09_init_evt[228];
@@ -190,7 +191,7 @@ EVT_END()
 EVT_BEGIN(wall_roll)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_party_cloud_lock_animations_on_off, 0, 1)
 #endif
     WAIT_MS(500)
@@ -257,7 +258,7 @@ EVT_BEGIN(wall_roll)
     CALL(evt_mobj_delete, STRING("slot03"))
     WAIT_MS(500)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_02_MATCHING_THE_PATTERNS)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_party_cloud_lock_animations_on_off, 0, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -403,7 +404,7 @@ EVT_END()
  */
 EVT_BEGIN(slot_event)
     SET_VALUE(GW(0), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(GW(1), 90)
     SET_VALUE(GW(2), 180)
     SET_VALUE(GW(3), 270)
@@ -515,7 +516,7 @@ EVT_BEGIN(mri_09_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_21_01_MYSTERY_PILLAR)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SPAWN_EVENT(slot_event)
 #endif
         CASE_EQUAL(STG2_21_01_MYSTERY_PILLAR)

@@ -931,7 +931,7 @@ static const char* suuji[] = {
  * Runs as a display entry queued by evt_tou_print_ranking.
  */
 static void disp_proc(CameraId cameraId, void* param) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     const char* title;
 #endif
     FighterData* dt;
@@ -942,7 +942,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     u16 sw;
     s32 i;
     s32 rank;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     const char* name;
 #endif
     s32 yoff;
@@ -962,7 +962,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     x = 0.5f;
     x = -winW * x;
     windowDispGX_System(0, 0xFF, x - 30.0f, 165.0f, 310.0f, 330.0f);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((u32)gp->language == LANGUAGE_JP) {
         title = "\203\211\203\223\203L\203\223\203O";
     } else {
@@ -981,7 +981,7 @@ static void disp_proc(CameraId cameraId, void* param) {
         FontDrawColor(color);
     }
     top = 135.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     FontDrawMessage(-w / 2, top, title);
 #else
     FontDrawMessage(-w / 2, top, "\203\211\203\223\203L\203\223\203O");
@@ -1001,7 +1001,7 @@ static void disp_proc(CameraId cameraId, void* param) {
         if (!(rank_wp->entries[i].flags & RANK_FLAG_HIDDEN)) {
             PSMTXScale(scale, 0.8f, 0.8f, 0.8f);
             if (rank != 0) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 if ((u32)gp->language == LANGUAGE_JP) {
                     sprintf(buf, "%s%s", rank / 10 ? suuji[rank / 10] : "", suuji[rank % 10]);
                 } else {
@@ -1027,7 +1027,7 @@ static void disp_proc(CameraId cameraId, void* param) {
                 GXColor color = {0xDC, 0xC8, 0xDC, 0xFF};
                 FontDrawColor(color);
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             {
                 f32 nw;
                 name = msgSearch(dt[rank_wp->entries[i].id].name);
@@ -1210,7 +1210,7 @@ static EVT_BEGIN(evt_open)
         CALL(evt_sub_get_mapname, LW(5))
         IF_STR_EQUAL(LW(5), STRING("tou_10"))
             IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 CALL(tou_mario_keyoff_check, LW(0))
                 IF_INT_EQUAL(LW(0), 1)
                     RETURN
@@ -1346,7 +1346,7 @@ static USER_FUNC(evt_tou_print_ranking) {
     return EVT_RETURN_BLOCK;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_000005d0, JP tou .text+0x50C. See docs/NAME_PROVENANCE.md.
 USER_FUNC(tou_mario_keyoff_check) {
@@ -1753,7 +1753,7 @@ static EVT_BEGIN(evt_gardman)
     CALL(tou_mario_free_wait)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_wait_landon)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_FRAMES(10)
     CALL(tou_mario_talk_end_wait)
     WAIT_FRAMES(10)
@@ -1774,7 +1774,7 @@ static EVT_BEGIN(evt_gardman)
         END_IF
         CALL(evt_mario_normalize)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
 #endif
@@ -2585,7 +2585,7 @@ USER_FUNC(tou_mario_free_wait) {
     return EVT_RETURN_BLOCK;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** Script helper: blocks until Mario leaves his talking motion. */
 USER_FUNC(tou_mario_talk_end_wait) {
     return marioGetPtr()->currMotionId != MARIO_MOTION_TALK ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
@@ -2804,7 +2804,7 @@ EVT_BEGIN(evt_michel_8)
     CALL(evt_msg_print, 0, STRING("stg3_tou_93_36"), 0, STRING("キノシコワ"))
     CALL(evt_npc_get_position, STRING("ポグ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("ポグ"), LW(0), LW(1), LW(2), 500, 30)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_msg_print_add, 0, STRING("stg3_tou_93_37"))
 #else
     CALL(evt_msg_continue)
@@ -3441,7 +3441,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
                 CASE_EQUAL(0)
@@ -3475,7 +3475,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
                 CASE_EQUAL(0)
@@ -3513,7 +3513,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
                 CASE_EQUAL(0)
@@ -3548,7 +3548,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
                 CASE_EQUAL(0)
@@ -3582,7 +3582,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
                 CASE_EQUAL(0)
@@ -3619,7 +3619,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
                 CASE_EQUAL(0)
@@ -3653,7 +3653,7 @@ EVT_BEGIN(evt_tou_match_after_default)
             WAIT_MS(1000)
             CALL(evt_item_delete, STRING("fmoney"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(15))
             SWITCH(LW(15))
                 CASE_EQUAL(0)

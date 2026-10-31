@@ -1,5 +1,6 @@
 // Inn scripts and helpers: the innkeeper talk, payment, sleeping in the bed and breakfast.
 
+#include "version.h"
 #include "evt/evt_save_flags.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -404,7 +405,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(snd_off)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GO_SLEEPING1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_fade_entry, FADE_OUT_SPOT, 6000, 0, 0, 0)
 #else
     CALL(evt_fade_entry, 4, 3000, 0, 0, 0)

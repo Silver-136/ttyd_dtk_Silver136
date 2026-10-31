@@ -674,7 +674,7 @@ EVT_BEGIN(evt_ufo_sousaban)
             CALL(evt_sousa_icon, 0, 200, 130)
         END_LOOP
     END_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_FRAMES(1)
 #endif
     LOOP(0)
@@ -684,7 +684,7 @@ EVT_BEGIN(evt_ufo_sousaban)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_FRAMES(1)
 #endif
     SET_VALUE(GF(10), 1)
@@ -696,7 +696,7 @@ EVT_BEGIN(evt_ufo_sousaban)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_FRAMES(1)
 #endif
     SET_VALUE(GF(10), 0)
@@ -707,7 +707,7 @@ EVT_BEGIN(evt_ufo_sousaban)
             CALL(evt_sousa_icon, 1, 200, 70)
         END_LOOP
     END_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_FRAMES(1)
 #endif
     LOOP(0)
@@ -717,7 +717,7 @@ EVT_BEGIN(evt_ufo_sousaban)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_FRAMES(1)
 #endif
     SET_VALUE(GF(11), 1)
@@ -729,7 +729,7 @@ EVT_BEGIN(evt_ufo_sousaban)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_FRAMES(1)
 #endif
     SET_VALUE(GF(11), 0)

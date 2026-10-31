@@ -1,5 +1,6 @@
 // Item driver: items on the field (drops, coins, pickups): spawning, bouncing, pickup and display.
 
+#include "version.h"
 #include "evt/evt_msg.h"
 #include "driver/itemdrv.h"
 #include "eff/eff_itemget.h"
@@ -466,7 +467,7 @@ void itemModeChange(ItemEntry* entry, u16 mode) {
     entry->subState = 0;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * Returns the first replaceable dropped item (coin, heart, flower) with this item id,
  * so itemEntry can reuse its slot when the table is full; NULL if none.
@@ -491,7 +492,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     ItemWork* wp = itemGetWork();
     int i;
     ItemEntry* entry;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // FAKE: e/base and the explicit coin/flower search loops (the heart search uses the helper) steer register
     // numbering: the search pointer must be a named local and the entries base a named web.
     ItemEntry* e;
@@ -533,7 +534,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
         }
     }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     base = wp->entries;
     for (entry = base, i = 0; i < wp->count; i++, entry++) {
 #else
@@ -545,7 +546,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
     }
 
     if (i >= wp->count) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         entry = NULL;
         for (e = base, i = 0; i < wp->count; i++, e++) {
             if (e->flags & ITEM_FLAG_ACTIVE && e->itemId == ITEM_COIN && e->flags & ITEM_FLAG_REPLACEABLE) {
@@ -560,7 +561,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
 #endif
             itemDelete(entry->name);
         } else {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             entry = NULL;
             for (e = base, i = 0; i < wp->count; i++, e++) {
                 if (e->flags & ITEM_FLAG_ACTIVE && e->itemId == ITEM_FLOWER && e->flags & ITEM_FLAG_REPLACEABLE) {
@@ -575,7 +576,7 @@ ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, Ev
 #endif
                 itemDelete(entry->name);
             } else {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 // the heart found here is discarded: US never replaces a heart
                 entry = itemFindDeletable(wp, ITEM_HEART);
                 entry = NULL;
@@ -843,13 +844,13 @@ void winNameDisp(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     const char* name;
     u16 width;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     u16 lines;
 #endif
     char buffer[1024];
 
     name = msgSearch(itemDataTable[entry->itemId].name);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((u32)gp->language == LANGUAGE_JP) {
         if (entry->itemId >= BADGE_MIN && entry->itemId < BADGE_MAX) {
             sprintf(buffer, msgSearch("msg_window_badge_get"), name);
@@ -877,7 +878,7 @@ void winNameDisp(WinMgrEntry* win) {
         win->width = width + 20;
         win->x = -win->width / 2;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     win->height = win->description->height + lines * 24;
 #endif
     if (!winMgrAction(entry->winId[0])) {
@@ -893,13 +894,13 @@ void winNameDisp2(WinMgrEntry* win) {
     ItemEntry* entry = win->param;
     const char* name;
     u16 width;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     u16 lines;
 #endif
     char buffer[1024];
 
     name = msgSearch(itemDataTable[entry->itemId].name);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((u32)gp->language == LANGUAGE_JP) {
         sprintf(buffer, msgSearch("msg_window_item_release"), name);
     } else {
@@ -915,7 +916,7 @@ void winNameDisp2(WinMgrEntry* win) {
         win->width = width + 20;
         win->x = -win->width / 2;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     win->height = win->description->height + lines * 24;
 #endif
     if (!winMgrAction(entry->winId[0])) {
@@ -1114,7 +1115,7 @@ void itemseq_GetItem(ItemEntry* entry) {
                 winMgrSetParam(entry->winId[2], entry);
             }
             if (entry->itemId == ITEM_WEDDING_RING) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 iconChange(entry->name, 0x11B);
 #else
                 iconChange(entry->name, 0x114);
@@ -1170,7 +1171,7 @@ void itemseq_GetItem(ItemEntry* entry) {
             marioSetCamId(CAMERA_3D);
             iconFlagOff(entry->name, ICON_FLAG_CAM_EFFECT_A);
             if (entry->itemId == ITEM_WEDDING_RING) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 iconChange(entry->name, 0x11C);
 #else
                 iconChange(entry->name, 0x115);
@@ -1380,7 +1381,7 @@ void itemseq_Bound(ItemEntry* entry) {
                                 }
                                 break;
                         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                         if (!strcmp(gp->currentMapName, "aji_03")) {
                             entry->direction = irand(90);
                         }

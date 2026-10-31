@@ -627,7 +627,7 @@ void winPartyDisp(s32 camId, void* param, s32 idx) {
     winFontSetEdge((Vec){bx - 20.0f, fy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, VERSION_PICK("\x82\x65\x82\x6F", msgSearch("btl_cost_disp_FP")));
     for (i = 0; i < wp->party.wazaCount; i++) {
         char buf[0x40];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         winFontSetWidth((Vec){10.0f + x, fy = (wy - (f32)(i * 26)) - 30.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black2, 175.0f, msgSearch(winPartyDt[wp->party.dtIdx].waza[i]->name));
 #else
         winFontSetLabel((Vec){10.0f + x, fy = (wy - (f32)(i * 26)) - 30.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black2, winPartyDt[wp->party.dtIdx].waza[i]->name);

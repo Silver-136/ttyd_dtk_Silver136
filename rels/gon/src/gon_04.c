@@ -1,6 +1,7 @@
 // gon_04 (ゴンババ, Hooktail Castle): room linking gon_03, gon_05 and gon_08.
 // Floating blocks and switches, a bridge raised by a blue switch (story 40, 48, 49).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -45,13 +46,13 @@ static EvtWord e3_door_close[12];
 static EvtWord e3_door_open[12];
 static BeroEntry bero_entry_data[6];
 EvtWord evt_gon_04flowblock_updown1_init[37];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_gon_04flowblock_updown1[465];
 #else
 EvtWord evt_gon_04flowblock_updown1[491];
 #endif
 EvtWord evt_gon_04flowblock_updown2_init[37];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_gon_04flowblock_updown2[465];
 #else
 EvtWord evt_gon_04flowblock_updown2[491];
@@ -311,7 +312,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
             SET_FLOAT_VALUE(LW(8), FLOAT(-0.19921875f))
             SET_FLOAT_VALUE(LW(9), 0)
         END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
 #else
         BEGIN_SIBLING_EVENT
@@ -331,7 +332,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_INLINE_EVENT
 #else
         END_SIBLING_EVENT
@@ -453,7 +454,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
             END_IF
         END_INLINE_EVENT
         IF_INT_EQUAL(LW(10), 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             BEGIN_INLINE_EVENT
 #else
             BEGIN_SIBLING_EVENT
@@ -471,7 +472,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
                 IF_INT_EQUAL(LW(1), 1)
                     GOTO(2)
                 END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             END_INLINE_EVENT
 #else
             END_SIBLING_EVENT
@@ -566,7 +567,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
             SET_FLOAT_VALUE(LW(8), FLOAT(-0.19921875f))
             SET_FLOAT_VALUE(LW(9), 0)
         END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
 #else
         BEGIN_SIBLING_EVENT
@@ -586,7 +587,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_INLINE_EVENT
 #else
         END_SIBLING_EVENT
@@ -708,7 +709,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
             END_IF
         END_INLINE_EVENT
         IF_INT_EQUAL(LW(10), 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             BEGIN_INLINE_EVENT
 #else
             BEGIN_SIBLING_EVENT
@@ -726,7 +727,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
                 IF_INT_EQUAL(LW(1), 1)
                     GOTO(2)
                 END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             END_INLINE_EVENT
 #else
             END_SIBLING_EVENT
@@ -1142,7 +1143,7 @@ EVT_BEGIN(gon_04_init_evt)
         CALL(evt_item_entry, STRING("key00"), ITEM_CASTLE_KEY_0x0D, -150, 150, -125, ITEM_TYPE_STILL, -1, PTR(key_get))
     END_IF
     CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, 150, 400, -125, ITEM_TYPE_STILL, GSWF_STARPIECE_37, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 420, 910, -175, ITEM_TYPE_STILL, GSWF_STARPIECE_38, 0)
 #else
     CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 400, 900, -175, ITEM_TYPE_STILL, GSWF_STARPIECE_38, 0)

@@ -1,5 +1,6 @@
 // Mario's pipe (dokan) motion: going down or up a pipe with the partners.
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "mario/mario.h"
 #include "mario/mario_cam.h"
@@ -196,7 +197,7 @@ void mot_dokan(void) {
             marioPaperLightOff();
             marioChgPaper("PM_D_1A");
             marioChgPose("M_Z_1");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (mario->displayDirectionTarget >= 90.0f && mario->displayDirectionTarget <= 270.0f) {
                 mario->mot.dokan.rotSpeed = 30.0f;
             } else {
@@ -331,7 +332,7 @@ void mot_dokan(void) {
             mario->multiTimer = 20;
             mario->currSubMotionId = 102;
             mario->rot.x = 0.0f;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
             mario->displayDirectionTarget = revise360(180.0f + mario->displayDirectionTarget);
             mario->displayDirection = mario->displayDirectionTarget;
             mario->directionView = toMovedirSimple(mario->displayDirection);

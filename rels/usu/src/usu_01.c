@@ -1821,7 +1821,7 @@ EVT_BEGIN(usu01_crowFG_talk_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カラスＦ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_area_check, 1, LW(3), LW(5), 20, LW(0), LW(2), LW(6))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
         CALL(evt_mario_party_use_check, LW(1))
@@ -1972,7 +1972,7 @@ EVT_BEGIN(usu01_crowHI_talk_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カラスＨ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_area_check, 1, LW(3), LW(5), 80, LW(0), LW(2), LW(6))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
         CALL(evt_mario_party_use_check, LW(1))
@@ -2090,7 +2090,7 @@ EVT_BEGIN(usu01_crowJ_talk_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カラスＪ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_area_check, 1, LW(3), LW(5), 20, LW(0), LW(2), LW(6))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
         CALL(evt_mario_party_use_check, LW(1))
@@ -2509,7 +2509,7 @@ USER_FUNC(sleep_voice) {
  */
 USER_FUNC(get_item_list) {
     EvtWord* args = event->args;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 cnt = pouchGetHaveItemCnt();
     s32* list = _mapAlloc((cnt + 1) * sizeof(s32));
 #else
@@ -2531,7 +2531,7 @@ USER_FUNC(get_item_list) {
 
 /** Script helper: frees the list that get_item_list allocated (pointer in args[0]). */
 USER_FUNC(delete_item_list) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     void* p = (void*)evtGetValue(event, event->args[0]);
     _mapFree(p);
 #else

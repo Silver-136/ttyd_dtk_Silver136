@@ -1,4 +1,5 @@
 /* Original TU name unknown; separate object after eff_ultra_hammer in the retail DOL. */
+#include "version.h"
 #include "hwaccess.h"
 #include "memory.h"
 #include "system.h"
@@ -35,7 +36,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     signed char* textBase;
     int i;
     OSFontHeader* fontHeader;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 scroll;
 #endif
     int px, py;
@@ -57,7 +58,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
 
     if (getDebugMode() >= 0) {
         psndExit();
-#if defined(VERSION_G8ME01) && defined(__MWERKS__)
+#if VERSION >= VERSION_US && defined(__MWERKS__)
         // US: same MSR enable sequence as below (original inline asm), then halt
         HW_ENABLE_MSR_FP_RI();
         PPCHalt();
@@ -92,7 +93,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     sprintf(print_buffer2, "DSISR= 0x%08x DAR  = 0x%08x\n", dsisr, dar);
     strcat(print_buffer, print_buffer2);
     strcat(print_buffer, "\n");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     sprintf(print_buffer2, "Address:     Back Chain   LR Save\n");
 #else
     sprintf(print_buffer2, "Address:      Back Chain    LR Save\n");
@@ -101,7 +102,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     stack = context->gpr[1]; //get r1 (stack)
     i = 0;
     while ((stack != 0) && (stack != 0xFFFFFFFF) && (i++ < 16)) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         sprintf(print_buffer2, "0x%08x:  0x%08x   0x%08x\n", stack, *(AddrWord*)stack, *(AddrWord*)(stack + 4));
 #else
         sprintf(print_buffer2, "0x%08x:   0x%08x    0x%08x\n", stack, *(AddrWord*)stack, *(AddrWord*)(stack + 4));
@@ -113,7 +114,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     sprintf(print_buffer2, "Instruction at 0x%x\n(read from SRR0) attempted to access\ninvalid address 0x%x (read from DAR)\n", context->srr0, dar);
     strcat(print_buffer, print_buffer2);
     psndExit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     scroll = 0;
 #endif
     OSFillFPUContext(context);
@@ -131,7 +132,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     GXSetScissor(0, 0, 608, 480);
     MTXOrtho(projection, 0.0f, 608.0f, 0.0f, 480.0f, 0.0f, 1.0f);
     GXSetProjection(projection, GX_ORTHOGRAPHIC);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     MTXScale(matrix, 0.8f, 1.0f, 1.0f);
 #else
     MTXScale(matrix, 0.5f, 0.5f, 1.0f);
@@ -154,7 +155,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
     textBase = (signed char*)print_buffer;
     while (1) {
         count = VIGetRetraceCount();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         px = 40;
         py = 50 + scroll;
         if (--scroll < -960) {
@@ -168,7 +169,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
         while (textBase[i] != 0) {
             // FAKE: no-op (s32) cast on the char; removing it changes the object
             if ((s32)print_buffer[i] == '\n') {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 px = 40;
 #else
                 px = 50;
@@ -228,7 +229,7 @@ void systemErrorHandler(OSError error, OSContext* context, u32 dsisr, u32 dar) {
             DemoCurrentBuffer = DemoFrameBuffer1;
         }
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     PPCHalt();
     while (1) {}
 #endif

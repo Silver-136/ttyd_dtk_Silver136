@@ -1,6 +1,7 @@
 // rsh_02 (列車, Excess Express): passenger car with compartments 3-5: gourmet Toad, ghost (yuurei), salaryman and Toron
 // NPCs, overnight beds and the day-1/day-2 end scenes; doors to rsh_01 and rsh_03.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_window.h"
@@ -72,7 +73,7 @@ EvtWord evt_bed[22];
 EvtWord evt_toron_catch[281];
 static s32 item_tbl[2];
 EvtWord evt_toron_catch2[359];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_toron_appear[437];
 #else
 EvtWord evt_toron_appear[414];
@@ -83,7 +84,7 @@ static EvtWord evt_access[14];
 static EvtWord evt_access2[44];
 static EvtWord evt_access_entry[62];
 EvtWord rsh_02_init_evt[247];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord rsh_02_a_init_evt[687];
 #else
 EvtWord rsh_02_a_init_evt[685];
@@ -339,7 +340,7 @@ EVT_END()
  */
 static EVT_BEGIN(talk_gurume)
     SWITCH(GSW_STORY_PROGRESS)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CASE_LESS(STG6_02_A_CASE_OF_LOST_STEW)
 #else
         CASE_LESS(STG6_01_THE_CONDUCTOR)
@@ -1273,11 +1274,11 @@ EVT_BEGIN(evt_toron_appear)
         CALL(evt_npc_pera_onoff, STRING("トロン"), 0)
         CALL(evt_npc_set_rotate, STRING("トロン"), 180, 180, 90)
         CALL(evt_npc_set_position, STRING("トロン"), -300, 2, -220)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_set_ry, STRING("トロン"), 90)
 #endif
         CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         ADD(LW(1), 2)
 #endif
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRON_APPEAR1"), LW(0), LW(1), LW(2), 0)
@@ -1317,7 +1318,7 @@ EVT_BEGIN(evt_toron_appear)
     CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
     CALL(evt_npc_set_rotate, STRING("トロン"), 0, 0, 0)
     CALL(evt_npc_get_position, STRING("トロン"), LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     IF_INT_GREATER(LW(10), -200)
         SET_VALUE(LW(0), -260)
@@ -1727,7 +1728,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SPAWN_EVENT(evt_sub_mail_event)
 #endif
     CALL_CHILD(PTR(evt_rsh_moamoa_on_window))

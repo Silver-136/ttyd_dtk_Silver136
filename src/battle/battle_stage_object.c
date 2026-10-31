@@ -1,5 +1,6 @@
 // Battle stage objects: breakable and falling set pieces, their motion, shaking and destruction.
 
+#include "version.h"
 #include "battle/battle_stage_object.h"
 #include "battle/battle.h"
 #include "battle/battle_audience.h"
@@ -61,7 +62,7 @@ USER_FUNC(_fall_frame_delete);
 USER_FUNC(_fall_frame);
 USER_FUNC(_fall_frame_wait_unit_ready);
 USER_FUNC(_fall_frame_wait);
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 USER_FUNC(_announce_wall_message);
 #endif
 USER_FUNC(_nozzle_turn);
@@ -602,7 +603,7 @@ BattleWeaponData _nozzle_at_base_monster = {{
 
 BattleStageNozzleData battle_stage_nozzle_data[] = {
     {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         {{0, 0, 40, 60}, {0, 30, 0, 70}, {0, 40, 60, 0}}, {100, 0, 0, 0},
 #else
         {{0, 0, 50, 50}, {0, 50, 0, 50}, {0, 50, 50, 0}}, {100, 0, 0, 0},
@@ -735,7 +736,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
         },
     },
     {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         {{0, 0, 30, 70}, {0, 30, 0, 70}, {0, 40, 60, 0}}, {65, 35, 0, 0},
 #else
         {{0, 0, 50, 50}, {0, 50, 0, 50}, {0, 50, 50, 0}}, {60, 40, 0, 0},
@@ -868,7 +869,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
         },
     },
     {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         {{0, 0, 40, 60}, {0, 30, 0, 70}, {0, 40, 60, 0}}, {35, 25, 40, 0},
 #else
         {{0, 0, 50, 50}, {0, 50, 0, 50}, {0, 50, 50, 0}}, {40, 30, 30, 0},
@@ -1001,7 +1002,7 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
         },
     },
     {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         {{0, 0, 40, 60}, {0, 30, 0, 70}, {0, 40, 60, 0}}, {20, 20, 25, 35},
 #else
         {{0, 0, 50, 50}, {0, 50, 0, 50}, {0, 50, 50, 0}}, {20, 30, 30, 20},
@@ -2642,7 +2643,7 @@ EVT_BEGIN(_nozzle_turn_event)
     RETURN
 EVT_END()
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 EVT_BEGIN(_close_wall_event)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(_announce_wall_message)
@@ -2650,7 +2651,7 @@ EVT_BEGIN(_close_wall_event)
 EVT_END()
 #endif
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 EVT_BEGIN(_nozzle_work_event_0)
     SET_VALUE(LW(10), 0)
     CALL_CHILD(PTR(_nozzle_work_event_core))
@@ -2752,7 +2753,7 @@ USER_FUNC(_set_mobj_rotate_x) {
     return busy ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 /* US: these three scripts sit after _set_mobj_rotate_x so the message string pools after its Vec literal */
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EVT_BEGIN(_close_wall_event)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_AnnounceMessage, 2, 0, -225, STRING("btl_msg_escape_wall_close2"), 180)
@@ -3158,7 +3159,7 @@ void BattleStage_WallCloseCheck(void) {
     }
 }
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 USER_FUNC(_announce_wall_message) {
     if (isFirstCall) {
         event->userdata[0] = 60;

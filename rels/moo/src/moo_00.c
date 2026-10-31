@@ -1,5 +1,6 @@
 // moo_00 (月, the Moon): the landing site with the save block; paths to moo_01 and moo_07.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
@@ -43,17 +44,17 @@ static f32 spline_dt[9];
 static EvtWord party_damage_pose[52];
 EvtWord party_damage_pose2[52];
 static EvtWord evt_first[525];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord rock_main[105];
 #else
 static EvtWord rock_main[79];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord rock_evt0[15];
 #else
 static EvtWord rock_evt0[21];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord rock_evt1[15];
 #else
 static EvtWord rock_evt1[21];
@@ -315,7 +316,7 @@ static EVT_BEGIN(evt_first)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EVT_BEGIN(rock_main)
 #else
 /**
@@ -332,7 +333,7 @@ static EVT_BEGIN(rock_main)
     END_INLINE_EVENT
     CALL(evt_offscreen_entry, STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 0, LW(10), STRING("offscreen"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_offscreen_get_boundingbox2, STRING("offscreen"), LW(0), LW(1), LW(2), LW(3))
     IF_INT_GREATER(LW(2), 0)
         IF_INT_GREATER(LW(3), 0)
@@ -341,7 +342,7 @@ static EVT_BEGIN(rock_main)
 #endif
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_bom_ver2"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 1, 0, 0, 0, 0)
 #else
     CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
@@ -349,13 +350,13 @@ static EVT_BEGIN(rock_main)
     CALL(evt_img_clear_virtual_point, STRING("img"))
     CALL(evt_img_set_shadow, STRING("img"), 2)
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, LW(11), 1, 0)
 #endif
     CALL(evt_img_wait_animend, STRING("img"))
     CALL(evt_img_release, STRING("img"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, LW(10), MAP_OBJ_FLAG_HIDDEN)
@@ -363,14 +364,14 @@ static EVT_BEGIN(rock_main)
 #endif
     CALL(evt_offscreen_delete, STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 0, LW(10))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(evt_hitobj_onoff, LW(11), 1, 0)
 #endif
     RETURN
 EVT_END()
 
 static EVT_BEGIN(rock_evt0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(GSWF_MOO_00_ROCK_01_BLOWN, 1)
 #else
     CALL(evt_mario_key_onoff, 0)
@@ -378,7 +379,7 @@ static EVT_BEGIN(rock_evt0)
     SET_VALUE(LW(10), STRING("S_iwa_01"))
     SET_VALUE(LW(11), STRING("A_iwa_01"))
     CALL_CHILD(PTR(rock_main))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     SET_VALUE(GSWF_MOO_00_ROCK_01_BLOWN, 1)
     CALL(evt_mario_key_onoff, 1)
 #endif
@@ -387,7 +388,7 @@ static EVT_BEGIN(rock_evt0)
 EVT_END()
 
 static EVT_BEGIN(rock_evt1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(GSWF_MOO_00_ROCK_08_BLOWN, 1)
 #else
     CALL(evt_mario_key_onoff, 0)
@@ -395,7 +396,7 @@ static EVT_BEGIN(rock_evt1)
     SET_VALUE(LW(10), STRING("S_iwa_08"))
     SET_VALUE(LW(11), STRING("A_iwa_08"))
     CALL_CHILD(PTR(rock_main))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     SET_VALUE(GSWF_MOO_00_ROCK_08_BLOWN, 1)
     CALL(evt_mario_key_onoff, 1)
 #endif

@@ -1,5 +1,6 @@
 // Spiky Parabuzzy (patatogemet): enemy battle unit; Riverside Station's copy of the unit data and scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -124,7 +125,7 @@ BattleUnitKind unit_patatogemet = {
     "SFX_BTL_DAMAGE_ICE1",
     "SFX_BTL_DAMAGE_BIRIBIRI1",
     UNIT_ATTR_FLOATING,
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     &regist_pata,
 #else
     &regist,

@@ -1,6 +1,7 @@
 // dou_11 (洞窟, Pirate's Grotto): large room with sailors (suifu) including Monie and Peeton, floating islands, bobbing platforms and a bomb wall (story 249 to 256).
 // Doors to dou_10 and to Keelhaul Key (muj_10, muj_00).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -270,7 +271,7 @@ EVT_END()
 static EVT_BEGIN(suifu_e_init)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG5_30_SHIPWRECKED_SAILORS, STG5_35_ESCAPE_ROUTE)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_set_position, STRING("me"), 736, 50, 113)
 #else
         CALL(evt_npc_set_position, STRING("me"), 750, 50, -25)
@@ -885,7 +886,7 @@ EVT_BEGIN(ukishima_watari_run)
         CASE_EQUAL(99)
         CALL(evt_nannpc_set_position, 99, 0, -1000, 0)
         CALL(evt_nannpc_ppflag_onoff, 99, 0, 4)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_set_position, STRING("水夫E"), 736, 50, 113)
 #else
         CALL(evt_npc_set_position, STRING("水夫E"), 750, 50, -25)
@@ -1461,7 +1462,7 @@ EVT_BEGIN(suifu_orei)
     CALL(evt_npc_set_ry, STRING("水夫C"), 270)
     CALL(evt_npc_set_position, STRING("水夫D"), 775, 50, 50)
     CALL(evt_npc_set_ry, STRING("水夫D"), 270)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_position, STRING("水夫E"), 736, 50, 113)
 #else
     CALL(evt_npc_set_position, STRING("水夫E"), 750, 50, -25)

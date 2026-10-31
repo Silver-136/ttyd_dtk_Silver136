@@ -1,5 +1,6 @@
 // Battle stage: spotlights, lighting, audience darkening and screen capture.
 
+#include "version.h"
 #include "battle/battle_stage.h"
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -40,7 +41,7 @@ static ScreenWork* screen_wp;
 static BattleSpotWork* wp = &work;
 
 // US: battle stage memory goes through BattleAlloc/BattleFree
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define STG_ALLOC(size) BattleAlloc(size)
 #define STG_FREE(ptr) BattleFree(ptr)
 void batSpotEnd(void);
@@ -232,7 +233,7 @@ void BattleStageEnd(void) {
     s32 i;
     BattleStage* s = STG;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     batSpotEnd();
 #endif
     for (i = 0; i < 12; i++) {
@@ -756,7 +757,7 @@ void batSpotMain(void) {
 }
 #pragma dont_inline reset
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: frees the spot entries at battle end
 #pragma dont_inline on
 /** Frees the spotlight cone array at battle end (BattleStageEnd). */

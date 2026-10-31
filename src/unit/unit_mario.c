@@ -1,5 +1,6 @@
 // Battle unit data for Mario: defense, vulnerabilities, poses and data table.
 
+#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
 #include "driver/animdrv.h"
@@ -38,7 +39,7 @@ BattleUnitKind unitdata_Mario;
 static EvtWord battle_entry_event[73];
 EvtWord mario_ride_btl_entry_event[120];
 static EvtWord init_event[75];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord mario_dead_event[67];
 #else
 EvtWord mario_dead_event[57];
@@ -462,13 +463,13 @@ static USER_FUNC(_get_mario_hammer_lv) {
 
 EVT_BEGIN(mario_dead_event)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_btl_camera_nomove_y_onoff, 1, 0)
 #endif
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 1, LW(10), -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 1, 2)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_btl_camera_set_posoffset, 1, 0, 0, 0)
 #endif
     CALL(evt_btl_camera_set_zoom, 1, 500)

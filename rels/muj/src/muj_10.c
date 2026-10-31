@@ -1,6 +1,7 @@
 // muj_10 (無人島, Keelhaul Key): the end of Pirate's Grotto (from dou_11): the hidden dock and
 // ship where the crew is driven out and Cortez appears (korutesu_appear_event).
 
+#include "version.h"
 #include "eff/n64/eff_kameki_tornade_n64.h"
 #include "driver/fadedrv.h"
 #include "battle/battle_unit.h"
@@ -56,14 +57,14 @@ static s16 suifu_animtbl[42];
 static s16 elmos_animtbl[22];
 s32 senin_event_suifupos[380];
 s32 senin_event_erumospos[180];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord senin_event[282];
 #else
 EvtWord senin_event[374];
 #endif
 static EvtWord dai3_shurai_after[46];
 static HitDamageReturn hitDmgRetPoints[7];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord muj_10_init_evt[207];
 #else
 EvtWord muj_10_init_evt[204];
@@ -584,7 +585,7 @@ EVT_BEGIN(senin_event)
     CALL(evt_npc_set_position, STRING("オドオド水夫"), -18, 120, -179)
     CALL(evt_npc_flag_onoff, 1, STRING("オドオド水夫"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_TALK_POSE | NPC_FLAG_INSTANT_TURN | NPC_FLAG_GRAVITY | NPC_FLAG_SHADOW_NO_FLOOR)
     CALL(evt_npc_flag_onoff, 0, STRING("オドオド水夫"), NPC_FLAG_AUTO_MOVE_ANIM)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(evt_cam3d_evt_set, -71, 178, 259, -71, 83, -282, 0, EASING_SINE_IN_OUT)
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(1000)
@@ -614,7 +615,7 @@ EVT_BEGIN(senin_event)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * Cortez appears on the dock (STG5_41_RETURN_TO_THE_GROTTO):
  * the sailors and Mony talk (stg5_dou_19_01 to 03),
@@ -694,7 +695,7 @@ EVT_BEGIN(muj_10_init_evt)
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_cam_road_reset)
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -752,7 +753,7 @@ EVT_BEGIN(muj_10_init_evt)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_40_TRUE_IDENTITY)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             SPAWN_EVENT(PTR(dai3_shurai_after))
 #else
             SPAWN_EVENT(dai3_shurai_after)
@@ -760,7 +761,7 @@ EVT_BEGIN(muj_10_init_evt)
         END_IF
     END_IF
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_gazigazi_entry))
 #else
     CALL_CHILD(evt_gazigazi_entry)

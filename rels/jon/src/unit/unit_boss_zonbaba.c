@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -66,7 +67,7 @@ BattleUnitKind unit_boss_zonbaba = {
     100,
     0,
     50,
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     5,
 #else
     7,
@@ -86,7 +87,7 @@ BattleUnitKind unit_boss_zonbaba = {
     115.0f,
     0.0f,
     -10.0f,
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     115.0f,
 #else
     0.0f,
@@ -211,7 +212,7 @@ BattleWeapon weapon_zonbaba_fumituke_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -253,7 +254,7 @@ BattleWeapon weapon_zonbaba_kamituki_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -293,7 +294,7 @@ BattleWeapon weapon_zonbaba_cold_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -336,7 +337,7 @@ BattleWeapon weapon_zonbaba_confuze_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -379,7 +380,7 @@ BattleWeapon weapon_zonbaba_sleep_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -422,7 +423,7 @@ BattleWeapon weapon_zonbaba_minimini_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed

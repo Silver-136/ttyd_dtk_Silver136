@@ -1,5 +1,6 @@
 // Keelhaul Key (muj) battle unit: Cortez (cortez): its parts, defence/status tables, and attack events.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -343,7 +344,7 @@ BattleWeapon weapon_cortez_normal_front_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -384,7 +385,7 @@ BattleWeapon weapon_cortez_normal_rear_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -425,7 +426,7 @@ BattleWeapon weapon_cortez_midaregiri_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -542,7 +543,7 @@ BattleWeapon weapon_cortez_mode2_bone_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed

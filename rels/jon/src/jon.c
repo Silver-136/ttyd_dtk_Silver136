@@ -2,6 +2,7 @@
 // per floor, the item boxes, the mover (移動屋) and the trader (行商人), the troubles (irai) solved here and the battle
 // setup tables.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_story.h"
@@ -64,7 +65,7 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord jon_init_evt[400];
 #else
 EvtWord jon_init_evt[391];
@@ -104,7 +105,7 @@ EvtWord get_map_name[111];
 EvtWord talk_idouya[141];
 NpcSetupInfo npcEnt_idouya[2];
 EvtWord idouya_setup[38];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord talk_gyousyou[219];
 #else
 EvtWord talk_gyousyou[207];
@@ -251,7 +252,7 @@ EVT_BEGIN(jon_init_evt)
     IF_STR_EQUAL(LW(0), STRING("jon_04"))
         IF_INT_EQUAL(GSW_PIT_FLOOR, 49)
             IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
@@ -266,20 +267,20 @@ EVT_BEGIN(jon_init_evt)
                 IF_INT_EQUAL(LF(0), 0)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
                     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
 #endif
                             CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
                             CALL(evt_set_case_wrk, LW(1), 15, LW(0))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
                         END_IF
                     END_IF
 #endif
                     ELSE
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     END_IF
 #endif
                 END_IF
@@ -1643,7 +1644,7 @@ EVT_BEGIN(talk_gyousyou)
     // name and price for some languages).
     IF_INT_GREATER_OR_EQUAL(LW(1), 240)
         CALL(evt_sub_get_language, LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SWITCH(LW(0))
             CASE_EQUAL(0)
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3), LW(4))
@@ -1652,7 +1653,7 @@ EVT_BEGIN(talk_gyousyou)
         IF_INT_NOT_EQUAL(LW(0), 0)
 #endif
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(3), LW(2), LW(4))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_SWITCH
 #else
             ELSE
@@ -1661,7 +1662,7 @@ EVT_BEGIN(talk_gyousyou)
 #endif
         ELSE
         CALL(evt_sub_get_language, LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SWITCH(LW(0))
             CASE_EQUAL(0)
 #else
@@ -1670,7 +1671,7 @@ EVT_BEGIN(talk_gyousyou)
             ELSE
 #endif
             CALL(evt_msg_print_insert, 0, STRING("100kai_item_04"), 0, STRING("me"), LW(2), LW(3))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("100kai_item_04"), LW(3))
             CALL(evt_msg_fmt_str, 1, LW(14), LW(14), LW(2))
@@ -1822,7 +1823,7 @@ EVT_END()
 EVT_BEGIN(dokan_open)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(1000)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(1000)
 #else
     CALL(evt_cam_letter_box_wait)

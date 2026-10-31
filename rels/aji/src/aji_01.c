@@ -1,6 +1,7 @@
 // aji_01 (敵のアジト, X-Naut Fortress): the central hall: its many doors, the card-key elevators (ele_1,
 // ele_2, key_lock), the password (evt_aikotoba), the X-Naut underlings, and Peach's visits.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_window.h"
@@ -76,14 +77,14 @@ s32 elv_key2[2];
 EvtWord elv_unlock2[131];
 EvtWord ele1_door_open[139];
 EvtWord ele1_door_close[139];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord ele_1[607];
 #else
 EvtWord ele_1[595];
 #endif
 EvtWord ele2_door_open[139];
 EvtWord ele2_door_close[139];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord ele_2[634];
 #else
 EvtWord ele_2[622];
@@ -1049,7 +1050,7 @@ EVT_BEGIN(ele_1)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_trans, 1, STRING("ere1_m"), 0, LW(0), 0)
     CALL(evt_hit_bind_update, STRING("A_ere1_m"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_get_position, STRING("ere1_m"), LW(2), LW(3), LW(4))
     CALL(evt_snd_sfx_pos, LW(9), LW(2), LW(3), LW(4))
 #endif
@@ -1380,7 +1381,7 @@ EVT_BEGIN(ele_2)
     CALL(evt_sub_intpl_msec_get_value)
     CALL(evt_mapobj_trans, 1, STRING("ere2_m"), 0, LW(0), 0)
     CALL(evt_hit_bind_update, STRING("A_ere2_m"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_get_position, STRING("ere2_m"), LW(2), LW(3), LW(4))
     CALL(evt_snd_sfx_pos, LW(9), LW(2), LW(3), LW(4))
 #endif

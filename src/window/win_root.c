@@ -1,5 +1,6 @@
 // Pause menu root: the tabs, help text, sort menu and shared window frames, and the sort functions for every list.
 
+#include "version.h"
 #include "driver/windowdrv.h"
 #include "evt/evt_story.h"
 #include "win/win_main.h"
@@ -104,7 +105,7 @@ void winBgMain(WindowWork* wp);
 void winMsgMain(WindowWork* wp);
 void winSortMain(WindowWork* wp);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define WR_FRAMES(n) (gp->framerate * (n) / 60)
 #define WR_FSTEP(n) ((n) * gp->framerate / 60.0f)
 #else
@@ -268,7 +269,7 @@ s32 winRootMain(WindowWork* w) {
                 winLogInit2(w);
                 break;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         } else if (w->dirRep & DEMO_STICK_LEFT && w->menu[0].state == 100) {
 #else
         } else if (w->dirRep & DEMO_STICK_LEFT) {
@@ -287,7 +288,7 @@ s32 winRootMain(WindowWork* w) {
             w->menu[0].id = w->tab[w->tabSel].id;
             w->helpTgtX = w->tabSel * 105 - 270;
             winMsgEntry(w, 0, w->tab[w->tabSel].msg, NULL);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         } else if (w->dirRep & DEMO_STICK_RIGHT && w->menu[0].state == 100) {
 #else
         } else if (w->dirRep & DEMO_STICK_RIGHT) {
@@ -309,7 +310,7 @@ s32 winRootMain(WindowWork* w) {
         }
         break;
     case 100:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (w->menu[0].state == 100) {
 #else
         if (w->menu[w->tabSel].state == 100) {
@@ -708,7 +709,7 @@ void winMsgMain(WindowWork* wp) {
             }
             break;
         case 2:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (wp->item.state == 202) {
                 break;
             }
@@ -789,7 +790,7 @@ void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
         m = msgSearch(wp->msgName);
         fw = FontGetMessageWidth(m);
         winNameGX(wp, 1, (x - 120.0f) + ofs, ny = 8.0f + (16.0f + by), 240.0f, 32.0f);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         // US: long names are squeezed to 210 wide
         if (fw > 210.0f) {
             fw = 210.0f;
@@ -814,7 +815,7 @@ void winMsgDisp(WindowWork* wp, f32 x, f32 y) {
         }
         GXSetScissor(0, 0, 0x260, 0x1E0);
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (wp->item.state != 202 && wp->msgLines > 2) {
 #else
     if (wp->msgLines > 2) {
@@ -904,7 +905,7 @@ static inline void winRootTexQuad(WindowWork* wp, s32 id, f32 x, f32 y, f32 w, f
  * the US release sizes that tab to the "msg_menu_badge_nokori" text instead of a fixed 90.
  */
 void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     f32 w74 = 74.0f;
     f32 w66 = 66.0f;
 #endif
@@ -936,7 +937,7 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
         winRootTexQuad(wp, 0x8, x + 8, y - (h - 8), w - 8 - 8, 8);
         winRootTexQuad(wp, 0xE, x + w - 8, y - (h - 8), 8, 8);
     } else {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         // US: the tab under the frame is sized to the "remaining" label
         f32 nk = 0.5f * FontGetMessageWidth(msgSearch("msg_menu_badge_nokori")) + 60.0f;
 #endif
@@ -947,7 +948,7 @@ void winKirinukiGX(WindowWork* wp, s32 type, f32 x, f32 y, f32 w, f32 h) {
         winRootTexQuad(wp, 0x8, x + 8, y - 8, w - 8, h - 8 - 8);
         winRootTexQuad(wp, 0xC, x, y - (h - 8), 8, 8);
         winRootTexQuad(wp, 0x8, x + 8, y - (h - 8), w - 8, 8);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         winRootTexQuad(wp, 0xF, x + (w - nk), y - h, 16, 8);
         winRootTexQuad(wp, 0x8, x + (w - nk) + 16, y - h, nk - 16, 8);
         winRootTexQuad(wp, 0xA, x + (w - nk) + 8, y - h - 8, 8, 8);
@@ -2283,7 +2284,7 @@ void winSortMain(WindowWork* wp) {
         trg = 0;
         rep = 0;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // US: Start is checked before B, the stick and A, so it closes the sort menu even when one of them is pressed too
     if (trg & PAD_BUTTON_START) {
         wp->sortActive = 0;
@@ -2310,7 +2311,7 @@ void winSortMain(WindowWork* wp) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_OK1 | PSND_SFX_BYPASS_MUTE));
         sort_data[wp->sortType][wp->sortSel].func(wp);
     }
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     else if (trg & PAD_BUTTON_START) {
         wp->sortActive = 0;
         wp->sortTgtX = -600.0f;
@@ -2598,7 +2599,7 @@ void winMailDisp(WindowWork* wp) {
                 winTexSet(0x65 + (kind + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
                 winTexSet(0x65 + (kind + 1) % 10, (Vec){ 2.0f + (104.0f + wp->item.mailX), wp->item.mailScroll + (((wp->item.mailY - 56.0f) - (f32)(i * 40)) - 3.0f), 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
                 winFontInit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 winFontSetWidth((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, 230.0f, msgSearch(mail->name));
 #else
                 winFontSetLabel((Vec){ 120.0f + wp->item.mailX, wp->item.mailScroll + (8.0f + ((wp->item.mailY - 56.0f) - (f32)(i * 40))), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, mail->name);
@@ -2628,7 +2629,7 @@ void winMailDisp(WindowWork* wp) {
             winTexSet(0x65 + (kind2 + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
             winTexSet(0x65 + (kind2 + 1) % 10, (Vec){ 2.0f + (104.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
             winFontInit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             winFontSetWidth((Vec){ 120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, 230.0f, msgSearch(mail->name));
 #else
             winFontSetLabel((Vec){ 120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, mail->name);
@@ -2637,7 +2638,7 @@ void winMailDisp(WindowWork* wp) {
             winTexInit((TEXPalette*)*wp->res->data);
             winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 80.0f, 0.0f }, (Vec){ 1.0f, 7.5f, 1.0f }, col);
             winFontInit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             winFontSetWidth((Vec){ 80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, (GXColor){ 0x00, 0x00, 0x00, 0xFF }, 280.0f, msgSearch(mail->body));
 #else
             winFontSetLabel((Vec){ 80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, (GXColor){ 0x00, 0x00, 0x00, 0xFF }, mail->body);

@@ -1,6 +1,7 @@
 // muj_03 (無人島, Keelhaul Key): the jungle path where the nervous sailor runs off
 // (nigeru_suifu01), with the bespectacled sailor and hidden blocks.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -224,7 +225,7 @@ EVT_BEGIN(muj_03_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_badgeblk, STRING("mobj01"), -50, 9, 0, ITEM_COIN, 0, GSWF_MUJ_03_COIN_BLOCK, 0)
     CALL(evt_mobj_brick, STRING("mobj02"), -50, 94, 0, ITEM_NULL, MOBJ_BRICK_HIDDEN_TEN_COIN, 0, GSWF_MUJ_03_HIDDEN_TEN_COIN_BLOCK)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mobj_brick, STRING("bblk00"), -470, 155, -50, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF_MUJ_03_BRICK_BBLK00)
 #else
     CALL(evt_mobj_brick, STRING("bblk00"), -470, 155, -50, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, GSWF_MUJ_03_BRICK)

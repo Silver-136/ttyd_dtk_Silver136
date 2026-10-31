@@ -1,11 +1,12 @@
 #pragma once
 
+#include "version.h"
 #include "driver/seqdrv.h"
 #include "manager/filemgr.h"
 #include <dolphin/os.h>
 
 typedef struct LogoWork {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     FileEntry* texture; //0x0
     s32 page; //0x4
     OSTime lastInput; //0x8

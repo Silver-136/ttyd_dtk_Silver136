@@ -1,6 +1,7 @@
 /* "evt_badgeshop" - Badge Shop Script Functions
  * Part of the backend for the shops (badge shop functions for event scripts).
  */
+#include "version.h"
 #include "evt/evt_badgeshop.h"
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"
@@ -83,7 +84,7 @@ s32 badge_bteresa_table_card_special[] = { //Pianta Parlor Special Card
 // US moves Multibounce from the Gold Card list to the Silver Card list.
 s32 badge_bteresa_table_card_silver[] = { // Pianta Parlor Silver Card
     ITEM_GOLD_BAR_X3, ITEM_POWER_SMASH, ITEM_HP_PLUS_P,
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     ITEM_MULTIBOUNCE,
 #endif
     ITEM_NULL
@@ -92,7 +93,7 @@ s32 badge_bteresa_table_card_silver[] = { // Pianta Parlor Silver Card
 /** Extra Pianta Parlor prizes unlocked by the Gold Card. */
 s32 badge_bteresa_table_card_gold[] = { // Pianta Parlor Gold Card
     ITEM_HAMMER_THROW, ITEM_POWER_RUSH, ITEM_TORNADO_JUMP,
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     ITEM_MULTIBOUNCE,
 #endif
     ITEM_POWER_RUSH_P, ITEM_NULL

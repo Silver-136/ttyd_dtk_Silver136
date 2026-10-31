@@ -1,6 +1,7 @@
 // Script commands for system windows: item and party selection lists, name entry and
 // single-message windows.
 
+#include "version.h"
 #include "evt/evt_cmd.h"
 #include "driver/icondrv.h"
 #include "driver/msgdrv.h"
@@ -166,7 +167,7 @@ USER_FUNC(evt_win_item_maketable) {
 /** Frees an item list made by evt_win_item_maketable (args[0]). */
 USER_FUNC(evt_win_item_desttable) {
     EvtWord* args = event->args;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     void* p = (void*)evtGetValue(event, args[0]);
     _mapFree(p);
 #else

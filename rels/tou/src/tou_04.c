@@ -1,6 +1,7 @@
 // tou_04 (闘技場, Glitz Pit): the main corridor (廊下): doors to the offices, locker rooms and arena; guards.
 // Connects tou_02, tou_03 and tou_05..tou_11.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -120,7 +121,7 @@ EvtWord evt_souko_talk[272];
 EvtWord evt_bred_nigeru[116];
 EvtWord boss_msg[14];
 EvtWord out_from_tou_10_re[22];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord tou_04_init_evt[652];
 #else
 EvtWord tou_04_init_evt[668];
@@ -1316,7 +1317,7 @@ static USER_FUNC(make_list) {
     if (tmp == NULL) {
         tmp = _mapAlloc(0x1000);
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {
         s32 maxw = 0;
         for (i = 0; i < 7; i++) {
@@ -2552,7 +2553,7 @@ EVT_BEGIN(tou_04_init_evt)
         CALL_CHILD(PTR(bero_case_switch_off))
         SET_VALUE(LW(0), 8)
         CALL_CHILD(PTR(bero_case_switch_off))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
 #endif

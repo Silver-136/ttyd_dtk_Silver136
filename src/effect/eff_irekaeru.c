@@ -1,6 +1,7 @@
 // Swap effect (irekaeru: swap places): plays the language-specific EFF_Irekae animation at a point, fading in and out.
 
-#ifdef VERSION_G8ME01
+#include "version.h"
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 #include "eff/eff_irekaeru.h"
@@ -11,7 +12,7 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * Animation group of the partner-swap effect by language
  * (Japanese, English, German, French, Spanish, Italian).
@@ -60,7 +61,7 @@ void effIrekaeruMain(EffectEntry* effect) {
     BOOL inBattle;
 
     position = (Vec){ work->position.x, work->position.y, work->position.z };
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     inBattle = !!gp->inBattle;
 #else
     inBattle = gp->inBattle != 0;
@@ -77,14 +78,14 @@ void effIrekaeruMain(EffectEntry* effect) {
     }
     switch (work->state) {
         case 0:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (!animGroupBaseAsync(eff_irekae_str_tbl[gp->language], inBattle, NULL)) {
 #else
             if (!animGroupBaseAsync("EFF_Irekae", inBattle, NULL)) {
 #endif
                 return;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             // FAKE: no-op (u32) cast (animPoseEntry takes s32); the plain argument changes the object
             work->poseId = animPoseEntry(eff_irekae_str_tbl[gp->language], (u32)inBattle);
 #else

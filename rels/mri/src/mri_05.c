@@ -1,6 +1,7 @@
 // mri_05 (巨木の中, The Great Tree): the soap-bubble room: Mario rides bubbles (evt_shabon_s) over the water;
 // Punies 4 and 5, a Puni-ball switch, and the door with the light lock.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "eff/n64/eff_pokopi_pcharge_n64.h"
 #include "eff/eff_puniballoon.h"
@@ -582,7 +583,7 @@ EVT_BEGIN(evt_shabon_s)
             END_LOOP
             CALL(evt_eff_delete, STRING("shabon1eff"))
             IF_INT_LESS(LW(4), 40)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 CALL(evt_eff, STRING("_shabon1eff"), STRING("puni_balloon"), 1, LW(3), LW(0), LW(2), FLOAT(0.32910156f), 0, 0, 0, 0, 0, 0, 0)
 #else
                 CALL(evt_eff, STRING("shabon1eff"), STRING("puni_balloon"), 1, LW(3), LW(0), LW(2), FLOAT(0.32910156f), 0, 0, 0, 0, 0, 0, 0)
@@ -616,7 +617,7 @@ EVT_BEGIN(evt_shabon_s)
             END_LOOP
             CALL(evt_eff_delete, STRING("shabon2eff"))
             IF_INT_LESS(LW(4), 40)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 CALL(evt_eff, STRING("_shabon2eff"), STRING("puni_balloon"), 1, LW(3), LW(0), LW(2), FLOAT(0.32910156f), 0, 0, 0, 0, 0, 0, 0)
 #else
                 CALL(evt_eff, STRING("shabon2eff"), STRING("puni_balloon"), 1, LW(3), LW(0), LW(2), FLOAT(0.32910156f), 0, 0, 0, 0, 0, 0, 0)
@@ -649,7 +650,7 @@ EVT_BEGIN(evt_shabon_s)
         END_LOOP
         CALL(evt_eff_delete, STRING("shabon3eff"))
         IF_INT_LESS(LW(4), 40)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_eff, STRING("_shabon3eff"), STRING("puni_balloon"), 1, LW(3), LW(0), LW(2), FLOAT(0.32910156f), 0, 0, 0, 0, 0, 0, 0)
 #else
             CALL(evt_eff, STRING("shabon3eff"), STRING("puni_balloon"), 1, LW(3), LW(0), LW(2), FLOAT(0.32910156f), 0, 0, 0, 0, 0, 0, 0)

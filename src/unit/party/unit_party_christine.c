@@ -1,5 +1,6 @@
 // Battle unit data and scripts for Goombella (Christine) as a partner.
 
+#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_monosiri.h"
@@ -55,7 +56,7 @@ BattleWeapon partyWeapon_ChristineKiss;
 EvtWord partyChristineAttack_NormalAttack[824];
 EvtWord christine_dictionary_event[26];
 EvtWord partyChristineAttack_Monosiri[397];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord partyChristineAttack_RenzokuAttack[1078];
 #else
 EvtWord partyChristineAttack_RenzokuAttack[1071];
@@ -252,7 +253,7 @@ BattleWeapon partyWeapon_ChristineNormalAttack = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyChristineAttack_NormalAttack, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 4, 2, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 2, 2, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -314,7 +315,7 @@ BattleWeapon partyWeapon_ChristineRenzokuAttack = {
     3, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -343,7 +344,7 @@ BattleWeapon partyWeapon_ChristineRenzokuAttack = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyChristineAttack_RenzokuAttack, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 5, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 0, 0, 5, 0, 0}, // stageEffectRates
@@ -391,7 +392,7 @@ BattleWeapon partyWeapon_ChristineKiss = {
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
     partyChristineAttack_Kiss, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -457,7 +458,7 @@ EVT_BEGIN(partyChristineAttack_NormalAttack)
     IF_INT_LESS_OR_EQUAL(LW(10), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_A_2B"))
         BEGIN_SIBLING_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             WAIT_FRAMES(2)
             CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 7, 7, 0)
 #else
@@ -867,7 +868,7 @@ EVT_BEGIN(partyChristineAttack_RenzokuAttack)
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 14, 0)
         BEGIN_SIBLING_EVENT
             IF_INT_GREATER_OR_EQUAL(LW(6), 2)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, 0, 0, 0)
 #endif
                 WAIT_FRAMES(20)

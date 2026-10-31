@@ -154,7 +154,7 @@ static EVT_BEGIN(buy_evt)
     CALL(get_value, LW(10), LW(11), LW(12), LW(13))
     CALL(get_msg, LW(10), 0, LW(14))
     CALL(evt_sub_get_language, LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SWITCH(LW(0))
         CASE_EQUAL(LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
@@ -209,7 +209,7 @@ static EVT_BEGIN(buy_evt)
     WAIT_MS(200)
     CALL(evt_win_coin_off, LW(8))
     CALL(point_disp_onoff, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(get_msg, LW(10), 11, LW(14))
     CALL(evt_msg_print_add, 0, LW(14))
 #else
@@ -235,7 +235,7 @@ static EVT_BEGIN(buy_evt)
         CALL(get_shop_point, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 300)
             CALL(get_msg, LW(10), 26, LW(14))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(LANGUAGE_JP)
@@ -399,7 +399,7 @@ EVT_BEGIN(shopper_talk_evt)
         // "Here's your prize": the prize is marked as given.
         CALL(get_msg, LW(10), 28, LW(14))
         IF_INT_EQUAL(LF(10), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(LANGUAGE_JP)
@@ -414,7 +414,7 @@ EVT_BEGIN(shopper_talk_evt)
             ELSE
             SET_VALUE(LF(10), 0)
             CALL(evt_msg_print_add, MSG_PRINT_DIRECT_TEXT, STRING("<scrl_auto><once_stop>"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(LANGUAGE_JP)
@@ -512,7 +512,7 @@ static EVT_BEGIN(sell_evt)
     CALL(item_data_db_restore)
     CALL(get_msg, LW(10), 8, LW(14))
     CALL(evt_sub_get_language, LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SWITCH(LW(0))
         CASE_EQUAL(LANGUAGE_JP)
         CALL(evt_msg_print_insert, 0, LW(14), 0, STRING("me"), LW(2), LW(3))
@@ -574,7 +574,7 @@ EVT_BEGIN(keep_evt)
         RETURN
     END_IF
     CALL(get_msg, LW(10), 14, LW(14))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(LANGUAGE_JP)
@@ -676,7 +676,7 @@ EVT_BEGIN(unkeep_evt)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** Counter menu option that tells Mario how many shop points he has. */
 EVT_BEGIN(point_evt)
     CALL(get_shop_point, LW(1))
@@ -703,7 +703,7 @@ EVT_BEGIN(point_evt)
 EVT_END()
 #endif
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: point window icon per language (first object of evt_shop .sdata)
 u16 point_disp_icons[] = {0x226, 0x227, 0x228, 0x227, 0x229, 0x22A};
 #endif
@@ -785,7 +785,7 @@ void point_disp(WinMgrEntry* entry) {
         return;
     }
     PSMTXTrans(m, 10.0f + (30.0f + entry->x), entry->y - 36.0f, 0.0f);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     PSMTXScale(s, (u32)gp->language != LANGUAGE_JP ? 0.8f : 1.1f, 1.1f, 1.1f);
     PSMTXConcat(m, s, m);
     ((void (*)(Mtx, s16, u16))iconDispGx2)(m, ICON_FLAG_2D, point_disp_icons[gp->language]);
@@ -815,7 +815,7 @@ void point_disp(WinMgrEntry* entry) {
 /** Draws the title of the shop point prize list window (msg_shop_point_list4), centred; retail squeezes it to fit. */
 void title_disp(WinMgrEntry* entry) {
     const char* msg;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 w;
     Mtx m;
     Mtx s;
@@ -825,13 +825,13 @@ void title_disp(WinMgrEntry* entry) {
         return;
     }
     msg = msgSearch("msg_shop_point_list4");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     w = FontGetMessageWidth(msg);
 #endif
     FontDrawStart();
     FontDrawEdge();
     FontDrawColor(shop_title_color);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (w > entry->width - 20) {
         PSMTXTrans(m, entry->x + 10, entry->y - 12, 0.0f);
         PSMTXScale(s, (entry->width - 20) / w, 1.0f, 1.0f);
@@ -855,7 +855,7 @@ void title_disp(WinMgrEntry* entry) {
 void list_disp(WinMgrEntry* entry) {
     PouchData* pouch;
     const char* msg;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 i;
     ItemData* item;
     f32 w;
@@ -874,13 +874,13 @@ void list_disp(WinMgrEntry* entry) {
     pouch = pouchGetPtr();
     i = 0;
     msg = msgSearch("msg_shop_point_list5");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     w = FontGetMessageWidth(msg);
 #endif
     FontDrawStart();
     FontDrawEdge();
     FontDrawColor(shop_list_head5_color);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (w > 80.0f) {
         PSMTXTrans(m, 10.0f + (entry->x + 10), entry->y + 13, 0.0f);
         PSMTXScale(s, 80.0f / w, 1.0f, 1.0f);
@@ -901,7 +901,7 @@ void list_disp(WinMgrEntry* entry) {
     FontDrawStart();
     FontDrawEdge();
     FontDrawColor(shop_list_head6_color);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (w > 80.0f) {
         PSMTXTrans(m, 10.0f + (entry->x + entry->width / 2 - 10), entry->y + 13, 0.0f);
         PSMTXScale(s, 80.0f / w, 1.0f, 1.0f);
@@ -919,7 +919,7 @@ void list_disp(WinMgrEntry* entry) {
     for (; shopPointList[i].pts != -1; i++) {
         item = &itemDataTable[shopPointList[i].item];
         FontDrawStart();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (pouch->shopPointRewardFlags & (1 << i)) {
 #else
         if (pouch->shopPointRewardFlags & (mask = 1 << i)) {
@@ -930,7 +930,7 @@ void list_disp(WinMgrEntry* entry) {
         }
         sprintf(buf, "%s", winZenkakuStr(shopPointList[i].pts));
         FontDrawMessage(entry->x + (entry->width / 2 - (s32)FontGetMessageWidth(buf)) - 90, entry->y - 20 - i * 26, buf);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         msg = msgSearch("msg_shop_point_list5");
         w = 0.64f * FontGetMessageWidth(msg);
         FontDrawStart();
@@ -943,7 +943,7 @@ void list_disp(WinMgrEntry* entry) {
         } else {
             FontDrawColor(shop_list_unit_color);
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (w > 60.0f) {
             PSMTXTrans(m, entry->x + entry->width / 2 - 88, entry->y - 28 - i * 26, 0.0f);
             PSMTXScale(s, 0.64f * 60.0f / w, 0.64f, 0.64f);
@@ -970,7 +970,7 @@ void list_disp(WinMgrEntry* entry) {
         } else {
             FontDrawColor(shop_list_item_color);
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         PSMTXTrans(m, entry->x + entry->width / 2 - 10, entry->y - 20 - i * 26, 0.0f);
         if (FontGetMessageWidth(msg) > entry->width / 2 - 10) {
             PSMTXScale(s, (f32)(entry->width / 2 - 10) / FontGetMessageWidth(msg), 1.0f, 1.0f);

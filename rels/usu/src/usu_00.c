@@ -1,6 +1,7 @@
 // usu_00 (ウスグラタウン, Twilight Town): the west side of town with the pipe to Rogueport Sewers (tik_08), the mayor and the
 // villagers turned into pigs; also the town's chapter 7 and 8 scenes.
 
+#include "version.h"
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
@@ -94,7 +95,7 @@ USER_FUNC(white_off);
 USER_FUNC(white_on);
 static USER_FUNC(yami_view);
 USER_FUNC(party_tev);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #endif
 extern s32 envSetYami[];
 
@@ -144,12 +145,12 @@ EvtWord usu00_vivian_joinup_event[608];
 static EvtWord cam_up[34];
 static EvtWord cam_down[8];
 EvtWord usu00_check_vivian[33];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord usu00_crowAB_talk_event[338];
 #else
 EvtWord usu00_crowAB_talk_event[299];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord usu00_crowCDE_talk_event[346];
 #else
 EvtWord usu00_crowCDE_talk_event[307];
@@ -218,7 +219,7 @@ static EvtWord evt_after_peach[151];
 static EvtWord epilogue_npc_entry[48];
 static EvtWord epilogue_evt_sub[167];
 static EvtWord epilogue_evt[73];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord usu_00_init_evt[660];
 #else
 EvtWord usu_00_init_evt[658];
@@ -1664,7 +1665,7 @@ EVT_BEGIN(usu00_crowAB_talk_event)
         SET_VALUE(LW(8), 20)
     END_IF
     CALL(evt_sub_area_check, 1, LW(3), LW(5), LW(8), LW(0), LW(2), LW(6))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
         CALL(evt_mario_party_use_check, LW(1))
@@ -1784,7 +1785,7 @@ EVT_BEGIN(usu00_crowCDE_talk_event)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カラスＤ"), LW(3), LW(4), LW(5))
     CALL(evt_sub_area_check, 1, LW(3), LW(5), 60, LW(0), LW(2), LW(6))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 6)
         CALL(evt_mario_party_use_check, LW(1))
@@ -3402,7 +3403,7 @@ EVT_BEGIN(usu_00_koopa_second_evt)
     CALL(evt_cam_letter_box_disable, 0)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 15)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(evt_memcard_save_wrapper)
 #else
     CALL_CHILD(PTR(evt_memcard_save))
@@ -3567,7 +3568,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_cam3d_evt_set, 0, 80, 687, 0, 70, -13, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     LOOP(1)
 #else
     LOOP(2)
@@ -3576,7 +3577,7 @@ static EVT_BEGIN(sekai_yami_evt)
         CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
         WAIT_MS(100)
         CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         WAIT_MS(500)
 #else
         WAIT_MS(100)
@@ -4159,12 +4160,12 @@ EVT_BEGIN(usu_00_init_evt)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_IF
 #endif
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_status_gauge_force_update)
 #else
         END_IF

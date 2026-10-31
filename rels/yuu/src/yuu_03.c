@@ -797,7 +797,7 @@ EVT_BEGIN(yuu_03_init_evt)
     CALL(evt_map_playanim, STRING("gurade"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kyaku"), MAP_ANIM_PLAY_LOOP, 0)
     SPAWN_EVENT(PTR(minigame04_main))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(evt_yuunpc_minigame4)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_mon"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_mon"), MAP_OBJ_FLAG_DISABLED)

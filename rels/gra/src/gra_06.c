@@ -1,6 +1,7 @@
 // gra_06 (ウスグラの道, Twilight Trail): the end of the trail before Creepy Steeple (jin_00), with the save and heart
 // blocks.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -29,7 +30,7 @@
 #include "mario/mario.h"
 
 USER_FUNC(evt_kagemario_init);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #endif
 
 EvtWord ne_close[22];
@@ -40,7 +41,7 @@ EvtWord gra_06_ido_in[7];
 static BeroEntry bero_entry_data[4];
 EvtWord gra_06_saku_open[288];
 EvtWord first_gra06jin[138];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord teresa_oidasare_evt[282];
 #else
 EvtWord teresa_oidasare_evt[274];
@@ -323,7 +324,7 @@ EVT_BEGIN(teresa_oidasare_evt)
     CALL(evt_cam3d_event_from_road, 65, 60, -115, 0, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
     CALL(evt_cam3d_evt_set, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
@@ -398,11 +399,11 @@ EVT_BEGIN(teresa_oidasare_evt)
     END_SWITCH
     // Control returns and the Steeple door is switched on again.
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(evt_mario_cont_onoff, 1)
 #endif
     CALL(evt_party_cont_onoff, 0, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
     CALL(evt_mario_key_onoff, 1)

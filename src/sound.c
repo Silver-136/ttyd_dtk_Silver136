@@ -1,6 +1,7 @@
 // sound.c: the sound driver over MusyX (Sound*): sound effects with 3D emitters, songs, ADPCM streams read from the
 // DVD, reverb, output mode, and loading the sound project data into ARAM.
 
+#include "version.h"
 #define _MATH_H_ // skip math.h (its sqrtf statics are not in this TU)
 #include "sound.h"
 #include <dolphin/os.h>
@@ -11,7 +12,7 @@
 #include "libc_decls.h"
 #include <string.h>
 #include "eff/eff_magic1_n64.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 
@@ -116,7 +117,7 @@ void SoundInit(void) {
         sndOutputMode(SND_OUTPUTMODE_STEREO);
     }
     sound.callback = AIRegisterDMACallback(SoundAIDMACallback);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     sound.dmaAddress = (u8*)(AIGetDMAStartAddr() | 0x80000000);
     sound.dmaLength = AIGetDMALength();
     if (sound.dmaLength > 0x280) {
@@ -1689,7 +1690,7 @@ u8* ssDecodeDPCM(SoundStream* stream, SoundStreamEntry* entry, s16* out, u32 cou
     }
     return src;
 }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 u32 _sscallback(void* p_b1, u32 p_l1, void* p_b2, u32 p_l2, u32 user) {
     u32 len1;
 #else
@@ -1711,7 +1712,7 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
     // FAKE: len2/buffer1/buffer2 are copied from the params into locals of a different type (unsigned int, s16*) so
     // IRO cannot propagate the copies; the params then coalesce into r3/r5/r6 and these statement copies give the
     // target order len1 (param web, after the stream add) < len2 < buffer1 < buffer2 (buffer1 lands in r6).
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // FAKE (US): len1 is also a local copy of its param, copied first, so it leaves r4 before the sound base is formed.
     len1 = p_l1;
     len2 = p_l2;
@@ -1770,7 +1771,7 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
             *(((u8*)dst)++) = *(src8++);
             n--;
             entry->srcPos++;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             entry->pos++;
 #endif
             if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
@@ -1785,7 +1786,7 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
                 entry->curBuf = 1 - entry->curBuf;
                 src8 = entry->loadBuffer[entry->curBuf];
             }
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
             entry->pos++;
 #endif
             if (entry->pos >= stream->loopEnd) {
@@ -1805,7 +1806,7 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
             *(((u8*)dst)++) = *(src8b++);
             n--;
             entry->srcPos++;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             entry->pos++;
 #endif
             if (entry->srcPos >= entry->loadedLen[entry->curBuf]) {
@@ -1820,7 +1821,7 @@ u32 _sscallback(void* p_b1, u32 len1, void* p_b2, u32 p_l2, u32 user) {
                 entry->curBuf = 1 - entry->curBuf;
                 src8b = entry->loadBuffer[entry->curBuf];
             }
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
             entry->pos++;
 #endif
             if (entry->pos >= stream->loopEnd) {
@@ -2115,7 +2116,7 @@ void SoundSSFadeoutCh(s32 chan) {
     f32 frames;
 
     if (stream->flags) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         frames = sound.fadeOut / (1000.0f / gp->framerate);
 #else
         frames = sound.fadeOut / 16.666666f;
@@ -2305,7 +2306,7 @@ void SoundSSMainInt(void) {
 
     for (i = 0; i < 3; i++) {
         stream = &sound.streams[i];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if ((stream->flags & SOUND_STREAM_FLAG_STARTED) && !(stream->flags & SOUND_STREAM_FLAG_MUTE)) {
             if (stream->flags & SOUND_STREAM_FLAG_PLAY) {
                 if (stream->entries[0].srcPos != 0 && stream->entries[0].loaded == 0 && !(stream->flags & SOUND_STREAM_FLAG_READ_L)) {
@@ -2368,7 +2369,7 @@ void SoundAIDMACallback(void) {
     s32 length;
     u8* address;
     u16* dst;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 n;
     s16* out;
     s16* src;
@@ -2378,7 +2379,7 @@ void SoundAIDMACallback(void) {
     s16* out;
 #endif
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (sound.callback != NULL) {
         sound.callback();
     }

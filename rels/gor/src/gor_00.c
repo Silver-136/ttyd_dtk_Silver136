@@ -114,7 +114,7 @@ void gor_stg4_018_cb(s32 type, smartEntry* smart);
 static f32 accdec_type(s32 step, s32 total, f32 start, f32 end);
 f32 lineardec_type(s32 step, s32 total, f32 start, f32 end);
 static void alpha_tev(MapTevCallbackInfo* info);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: map save blocks call the US save wrapper script
 #define SAVE_EVT evt_memcard_save_wrapper
 #else
@@ -295,7 +295,7 @@ ExtTexInfo nannpc_entry_data[] = {
     {0},
 };
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: every frame entry doubled
 static s16 dai3_animtbl[] = {
     0, 0, 0, 0, 1, 1, 1, 1,
@@ -321,7 +321,7 @@ static s16 dai3_animtbl[] = {
 
 /** Animation frame table for the harbor crowd while it runs. Version for the earlier releases. */
 s16 dai3_run_animtbl[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     20, 20, 21, 21, 22, 22, 23, 23,
     24, 24, 25, 25, 26, 26, 27, 27,
     28, 28, 29, 29, 30, 30, 31, 31,
@@ -413,7 +413,7 @@ EVT_END()
 EVT_BEGIN(gor_00_mony_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_64_03_F_F_ARRIVE)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         WAIT_WHILE(GF(15))
 #endif
         CALL_CHILD(PTR(mony_run_away))
@@ -521,7 +521,7 @@ EVT_END()
 EVT_BEGIN(gor_00_peton_regl)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_64_03_F_F_ARRIVE)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         WAIT_WHILE(GF(15))
 #endif
         CALL_CHILD(PTR(peton_run_away))
@@ -1265,14 +1265,14 @@ EVT_BEGIN(suifubomb_a_talk)
         CASE_LESS(STG4_31_FRANKLYS_HOUSE_STG_4)
         CALL(evt_msg_print, 0, STRING("gor_00_01_06"), 0, STRING("me"))
         CASE_LESS(STG4_32_CHATTING_WITH_FLAVIO)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
         CALL(evt_msg_print, 0, STRING("gor_00_01_07"), 0, STRING("me"))
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(1000)
         CALL(evt_msg_print, 0, STRING("gor_00_01_07_01"), 0, STRING("me"))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
         CASE_LESS(STG4_33_MEET_BOBBERY)
@@ -1694,7 +1694,7 @@ EVT_BEGIN(mokorim_talk)
                     SET_VALUE(LW(0), 300)
                     CASE_EQUAL(2)
                     // The two-investment payout is 600 coins in US and 500 in JP.
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     SET_VALUE(LW(0), 600)
 #else
                     SET_VALUE(LW(0), 500)
@@ -2645,7 +2645,7 @@ EVT_BEGIN(christine_osoware)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     SET_VALUE(GSW_STORY_PROGRESS, STG0_04_GOOMBELLA_ASSAULTED)
     CALL(evt_mario_key_onoff, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 400)
 #else
     CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 1000)
@@ -2825,7 +2825,7 @@ EVT_END()
 EVT_BEGIN(gundan1000tai_kemuri)
     LOOP(0)
         SPAWN_EVENT(PTR(_kemuri_sub))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         SPAWN_EVENT(PTR(_kemuri_sub))
         SPAWN_EVENT(PTR(_kemuri_sub))
 #endif
@@ -2930,7 +2930,7 @@ EVT_BEGIN(gundan1000tai_afterbattle)
         CALL(evt_nannpc_flag_onoff, LW(0), 0, 12)
         CALL(evt_nannpc_set_size, LW(0), 30, 5)
         ADD(LW(0), 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         IF_INT_EQUAL(LW(0), 400)
 #else
         IF_INT_EQUAL(LW(0), 1000)
@@ -2988,7 +2988,7 @@ EVT_BEGIN(gundan1000tai_afterbattle)
                 SET_VALUE(LW(1), 0)
                 BREAK_LOOP
             END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             IF_INT_EQUAL(LW(0), 400)
 #else
             IF_INT_EQUAL(LW(0), 1000)
@@ -3089,7 +3089,7 @@ EVT_BEGIN(gundan1000tai_afterbattle)
                 SET_VALUE(LW(1), 0)
                 BREAK_LOOP
             END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             IF_INT_EQUAL(LW(0), 400)
 #else
             IF_INT_EQUAL(LW(0), 1000)
@@ -3298,7 +3298,7 @@ EVT_BEGIN(shukko_event_move_ship)
         END_IF
     END_LOOP
     SET_FLOAT_VALUE(LW(3), FLOAT(100.0f))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 100, 700, 8400)
 #else
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 100, 600, 7000)
@@ -4713,7 +4713,7 @@ EVT_END()
 
 EVT_BEGIN(mony_peton_depart)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_64_03_F_F_ARRIVE)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(GF(15), 0)
 #endif
     CALL(evt_msg_print, 0, STRING("mac_5_038"), 0, STRING("モニー"))
@@ -5603,7 +5603,7 @@ EVT_BEGIN(tsumini)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: two more damage-return points
 #endif
 /**
@@ -5613,7 +5613,7 @@ static HitDamageReturn dmgRetPoint[] = {
     {"A_yuka", {0.0f, -1000.0f, 0.0f}},
     {"Ship_Change01", {-550.0f, 15.0f, 0.0f}},
     {"Ship_Change02", {0.0f, -1000.0f, 0.0f}},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // two more damage-return points
     {"A_yuka_03", {84.0f, 15.0f, 220.0f}},
     {"A_yuka_04", {475.0f, 15.0f, -180.0f}},
@@ -6512,7 +6512,7 @@ EVT_BEGIN(gor_00_init_evt)
     // Set up the doors, NPCs, ships and the save block.
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(evt_bero_info_run)
     SET_VALUE(GF(15), 1)
 #else
@@ -6539,7 +6539,7 @@ EVT_BEGIN(gor_00_init_evt)
     CALL(evt_map_playanim, STRING("hiki_nami"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_paper_entry, STRING("OFF_d_kaiten"))
     CALL(evt_hit_damage_return_set, PTR(dmgRetPoint))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(evt_gazigazi_entry)
 #else
     CALL_CHILD(PTR(evt_gazigazi_entry))
@@ -6582,7 +6582,7 @@ EVT_BEGIN(gor_00_init_evt)
         CASE_EQUAL(STG0_04_GOOMBELLA_ASSAULTED)
         CALL_CHILD(PTR(enter_gorotsuki_town_init))
         CALL_CHILD(PTR(christine_osoware_setup))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 400)
 #else
         CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 1000)
@@ -6592,7 +6592,7 @@ EVT_BEGIN(gor_00_init_evt)
         SPAWN_EVENT(PTR(gundan1000tai_beforebattle))
         CASE_EQUAL(STG0_05_1000_X_NAUTS_BEFORE)
         CALL_CHILD(PTR(enter_gorotsuki_town_init))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 400)
 #else
         CALL(evt_nannpc_init, PTR(nannpc_entry_data), 0, 0, 0, 1000)

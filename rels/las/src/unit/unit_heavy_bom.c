@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_camera.h"
@@ -53,7 +54,7 @@ static EvtWord phase_event[126];
 static EvtWord attack_event[175];
 static EvtWord wait_event[6];
 static EvtWord dead_event[52];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord explosion_event[254];
 #else
 static EvtWord explosion_event[247];
@@ -118,7 +119,7 @@ static BattleWeapon weapon_heavy_bomb_super_explosion = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -769,7 +770,7 @@ static EVT_BEGIN(explosion_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
     CALL(evt_snd_sfxoff, LW(0))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, -1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_btl_camera_shake_h, 0, 10, 0, 60, 4)
 #endif
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HEAVYB_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)

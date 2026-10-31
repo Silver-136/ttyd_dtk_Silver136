@@ -1,5 +1,6 @@
 // tik_11 (埋没した都市, Rogueport Sewers): the power-down shop (powerdownya), which lowers Mario's level or a partner's rank.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_win.h"
 #include "evt/evt_window.h"
@@ -51,17 +52,17 @@ static USER_FUNC(wariai_enzan_0);
 static USER_FUNC(wariai_enzan_1);
 
 EvtWord powerdownya_face_left[16];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord powerdownya_mario_level_rtn[639];
 #else
 EvtWord powerdownya_mario_level_rtn[616];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord powerdownya_party_lank_rtn[963];
 #else
 EvtWord powerdownya_party_lank_rtn[937];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord powerdownya_table_talk[105];
 #else
 EvtWord powerdownya_table_talk[84];
@@ -314,13 +315,13 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
             WAIT_MS(240)
             CONTINUE_LOOP
         END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
 #endif
         CALL(evt_msg_print_insert, 0, STRING("powerdown_06"), 0, STRING("me"), LW(2), LW(3), 39)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("powerdown_06"), 39)
             CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(2), LW(3))
@@ -525,13 +526,13 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
             WAIT_MS(240)
             CONTINUE_LOOP
         END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
 #endif
         CALL(evt_msg_print_insert, 0, STRING("powerdown_08"), 0, STRING("me"), LW(3), LW(4), 39)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("powerdown_08"), 39)
             CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(3), LW(4))
@@ -560,7 +561,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     CALL(bgScrollControll, 0)
     CALL(evt_mario_goodbye_party, 0)
     CALL(evt_mario_hello_party, 0, LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_party_stop, 0)
 #endif
     // The house walls fold open and the camera pulls back over the light (power-down music from JP on).
@@ -812,13 +813,13 @@ EVT_BEGIN(powerdownya_table_talk)
     CALL(evt_party_stop, 0)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     IF_INT_EQUAL(GSWF_TIK_11_CHET_RIPPO_FIRST_TALK_DONE, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
 #endif
         CALL(evt_msg_print_insert, 0, STRING("powerdown_00"), 0, STRING("me"), 39)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("powerdown_00"), 39)
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"))

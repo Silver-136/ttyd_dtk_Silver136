@@ -1,5 +1,6 @@
 // Point-gain display (PointGet): shows a number in 2D at a point for a set duration; types 0-2.
 
+#include "version.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -25,7 +26,7 @@ typedef struct EffPointGetWork {
 void effPointGetMain(EffectEntry* effect);
 void effPointGetDisp(CameraId cameraId, EffectEntry* effect);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 typedef struct PointGetTex {
     s32 kind;
     s32 id;
@@ -81,7 +82,7 @@ EffectEntry* effPointGetEntry(s32 type, f32 x, f32 y, f32 z, s32 number, s32 dur
     effect->flags |= EFFECT_FLAG_SOFT_DELETABLE;
     work->type = type;
     work->position.x = x - 2000.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     work->position.y = y - 30.0f;
 #else
     work->position.y = y;
@@ -138,14 +139,14 @@ void effPointGetMain(EffectEntry* effect) {
 }
 
 void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 w;
     f32 w1;
 #endif
     EffPointGetWork* work = effect->userdata;
     CameraEntry* camera = camGetPtr(cameraId);
     f32 scale = work->scale;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 pos;
     f32 total;
     f32 ox;
@@ -168,7 +169,7 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     char buf[32];
     s32 i;
     s32 pass;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 j;
     // FAKE: the digit table is read with one flat index over the rows' three words
     // (language * 3 + slot) through row 0's tbl[], as the target computes it; the natural
@@ -225,7 +226,7 @@ void effPointGetDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     for (pass = 1; pass >= 0; pass--) {
         ox = (f32)(pass * 4);
         oy = (f32)(-pass * 4);

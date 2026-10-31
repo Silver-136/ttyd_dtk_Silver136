@@ -366,7 +366,7 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyYoshiAttack_NormalAttack, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 10, 10, 100, 10, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
     {0, 10, 10, 100, 10, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
@@ -413,7 +413,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyYoshiAttack_Nomikomi, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -460,7 +460,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyYoshiAttack_Nomikomi, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 5, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 5, 0, 0, 0, 0}, // stageEffectRates
@@ -597,7 +597,7 @@ BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     3, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -629,7 +629,7 @@ BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
     partyYoshiAttack_EggAttack, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 6, 3, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 3, 3, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -675,7 +675,7 @@ BattleWeapon partyWeapon_YoshiCallGuard = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyYoshiAttack_CallGuard, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 20, 20, 100, 20, 40, 5, 5, 20, 5, 0, 0}, // stageEffectRates
 #else
     {0, 20, 20, 100, 20, 20, 5, 5, 20, 5, 0, 0}, // stageEffectRates

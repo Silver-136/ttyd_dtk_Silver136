@@ -1,5 +1,6 @@
 // Bowser's motions in the side-scrolling interludes: walk, jump, fall, power-ups and damage.
 
+#include "version.h"
 #include "mario/mario.h"
 #include "koopa.h"
 #include "mario/mario_motion.h"
@@ -854,7 +855,7 @@ void kpa_swim(void) {
             if (v < 0.0f) {
                 mario->currSubMotionId = 0x28;
             }
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
             mario->jumpVelocityY += 0.02f * (-2.0f - mario->jumpVelocityY);
             mario->jumpAccelerationY = 0.0f;
             mario->jumpJerkY = 0.0f;

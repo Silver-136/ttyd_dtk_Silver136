@@ -2791,7 +2791,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_yuka1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
@@ -2855,7 +2855,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     SET_VALUE(GW(0), 50)
     BEGIN_INLINE_EVENT
         LOOP(0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(starstone_set_pos, STRING("starstone"), 0, GW(0), 10)
 #else
             CALL(starstone_set_pos, STRING(("starstone")), 0, GW(0), 10)
@@ -2866,7 +2866,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     BEGIN_INLINE_EVENT
         SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
         LOOP(0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(starstone_set_ry, STRING("starstone"), LW(0))
 #else
             CALL(starstone_set_ry, STRING(("starstone")), LW(0))
@@ -2905,7 +2905,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_MS(500)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_move_position, STRING("ボムヘイD"), 450, 25, 0, 90, 0)
     END_INLINE_EVENT
     CALL(evt_npc_move_position, STRING("村長"), 400, 0, 0, 90, 0)
@@ -2934,7 +2934,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             WAIT_MS(100)
         END_LOOP
     END_SIBLING_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(GW(6), 0)
 #endif
     BEGIN_SIBLING_EVENT
@@ -2955,7 +2955,7 @@ static EVT_BEGIN(minnnanokoe_evt)
             CALL(evt_sub_random, 2, LW(3))
             SWITCH(LW(3))
                 CASE_EQUAL(0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 SET_VALUE(LW(3), STRING("stg8_las_148_68"))
                 CASE_EQUAL(1)
                 SET_VALUE(LW(3), STRING("stg8_las_148_69"))
@@ -2985,7 +2985,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     WAIT_MS(3000)
     CALL(evt_cam3d_evt_set, 400, 106, 331, 400, 45, -13, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_ry, STRING("村長"), 90)
     WAIT_MS(300)
     CALL(evt_npc_set_ry, STRING("ボムヘイD"), 90)

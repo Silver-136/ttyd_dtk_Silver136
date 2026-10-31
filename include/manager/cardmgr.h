@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include "evt/evt_badgeshop.h"
 #include "evt/evt_johoya.h"
 #include "evt/evt_yuugijou.h"
@@ -39,7 +40,7 @@ typedef struct {
         NpcDeadInfo deadInfo[64]; //0x19B4
         BadgeShopWork badgeShop; //0x1EB4
         PiantaParlorWork parlor; //0x1FD8
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         InformantUnknown informant; //0x2230 (US parlor work is 0x120 bigger)
         u8 pad_225B[0x2260 - 0x225B]; //0x225B
     } data;

@@ -1,5 +1,6 @@
 // Bowser's collision in the side-scrolling interludes: ground, head, walls, and enemy and flame hits.
 
+#include "version.h"
 #include "eff/eff_gonbaba_breath.h"
 #include "driver/camdrv.h"
 #include "driver/hitdrv.h"
@@ -381,7 +382,7 @@ HitEntry* kpaGetHitobjHead(s32 i) {
 }
 
 HitEntry* kpaGetHitobjHead2(void) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 i;
     HitEntry* hit;
     // FAKE: ret is a spare copy of hit; returning hit changes the object

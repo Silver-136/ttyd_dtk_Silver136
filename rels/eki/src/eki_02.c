@@ -1,5 +1,6 @@
 // eki_02 (駅, Riverside Station): room with a contraption (sikake), a key item and a Star Piece; door to eki_01.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
@@ -136,7 +137,7 @@ EVT_BEGIN(eki_02_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI3"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_map_playanim, STRING("anm_sikake_1"), MAP_ANIM_PLAY_LOOP, 1)
     CALL(evt_map_playanim, STRING("anm_sikake_2"), MAP_ANIM_PLAY_LOOP, 1)
 #else

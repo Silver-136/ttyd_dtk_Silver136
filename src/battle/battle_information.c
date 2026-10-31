@@ -1,5 +1,6 @@
 // Battle information: the data passed in and out of a battle (mode, party, first strike, result, item drops).
 
+#include "version.h"
 #include "battle/battle_information.h"
 #include "battle/battle.h"
 #include "evt/evt_cmd.h"
@@ -63,7 +64,7 @@ s32 BattleInformationGetResult(FieldBattleInfo* info) {
 }
 
 typedef struct ItemHogTable {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     ItemType items[25];
 #else
     ItemType items[20];
@@ -195,7 +196,7 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
                     setup->itemDropped = ITEM_NULL;
                 }
             }
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
             else if (pouchEquipCheckBadge(ITEM_ITEM_HOG) >= 1) {
                 hog = item_hog_table;
                 setup->itemDropped = hog.items[irand(20)];
@@ -203,7 +204,7 @@ void BattleInformationSetDropMaterial(FieldBattleInfo* info) {
 #endif
             break;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (setup->itemDropped == ITEM_NULL && pouchEquipCheckBadge(ITEM_ITEM_HOG) >= 1) {
         hog = item_hog_table;
         setup->itemDropped = hog.items[irand(25)];

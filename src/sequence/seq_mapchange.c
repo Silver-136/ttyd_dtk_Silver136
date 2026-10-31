@@ -1,5 +1,6 @@
 // Map change sequence: unloads the old map, loads the next area REL and map, and starts its scripts.
 
+#include "version.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_story.h"
 #include "evt/evt_cmd.h"
@@ -124,7 +125,7 @@ typedef struct {
 /** Folder name of each language, used to load that language's window textures (win.tpl) on a map change. */
 static const LangTbl lang_tbl = {{
     "jp", "us",
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     "ge", "fr", "sp", "it", "du"
 #endif
 }};
@@ -283,13 +284,13 @@ void seq_mapChangeMain(SequenceWork* work) {
             strncmp(_next_map, "sys", 3) && strncmp(_next_map, "gor_10", 6)) {
             {
                 LangTbl lang = lang_tbl;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
 #else
                 fileAsyncf(FILE_TYPE_TPL, 0, "%s/window/%s/win.tpl", getMarioStDvdRoot(), lang.s[gp->language]);
 #endif
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             animGroupBaseAsync("p_roll", 0, 0);
             animGroupBaseAsync("p_slit", 0, 0);
 #endif

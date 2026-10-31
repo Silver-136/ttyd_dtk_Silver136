@@ -274,7 +274,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyChuchurinaAttack_NormalAttack, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 4, 3, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 2, 3, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -317,7 +317,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyChuchurinaAttack_NormalAttack, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 4, 3, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 2, 3, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -360,7 +360,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyChuchurinaAttack_NormalAttack, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 4, 2, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 2, 2, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -403,7 +403,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partyChuchurinaAttack_NormalAttack, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 4, 2, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 2, 2, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -425,7 +425,7 @@ BattleWeapon partyWeapon_ChuchurinaMadowaseAttack = {
     3, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     3, // stylishCommandMultiplier
@@ -1481,7 +1481,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     END_SIBLING_EVENT
     BEGIN_SIBLING_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 40, 59, 59, 0)
 #else
         CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 45, 59, 59, 0)
@@ -1555,7 +1555,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(15))
         CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 20)
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(btlevtcmd_GetMoveFrame, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, LW(8))
         BEGIN_SIBLING_EVENT_GET_ID(LW(9))
             CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8), MOVE_SOUND_FROM_TABLE, 0)
@@ -1598,7 +1598,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), LW(15))
     ADD(LW(2), 8)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(btlevtcmd_GetMoveFrame, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, LW(8))
     BEGIN_SIBLING_EVENT_GET_ID(LW(9))
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8), MOVE_SOUND_FROM_TABLE, 0)
@@ -1734,7 +1734,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
         GOTO(99)
     END_IF
 // Stolen: the rating effect and a heart sound, the colour returns and she flips back down off the enemy.
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(btlevtcmd_GetResultPrizeLv, 0, 0, LW(6))
 #else
     CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
@@ -2082,7 +2082,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EVT_END_PAD()
 #else
 EVT_END()

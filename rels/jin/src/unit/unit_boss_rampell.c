@@ -1,5 +1,6 @@
 // Doopliss (rampell): boss battle unit used in Creepy Steeple.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_scanning.h"
 #include "evt/evt_cmd.h"
@@ -91,7 +92,7 @@ static USER_FUNC(_mario_makkuro_set) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** US only: restore the moves of the unit for this turn. */
 // US only: set this turn's maximum move count to the remaining-move count.
 USER_FUNC(boss_rampell_sync_max_moves) {

@@ -1,6 +1,7 @@
 // muj_00 (無人島, Keelhaul Key): the beach: the shipwreck landing (mujinto_hyochaku) and the crew,
 // and later the battle between Lord Crump's X-Nauts and Cortez's pirates (kaizoku_vs_dai3).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -200,7 +201,7 @@ EvtWord into_muj_ship[173];
 EvtWord mony_peton_boarding_sub[67];
 EvtWord mony_peton_boarding[115];
 static HitDamageReturn hitDmgRetPoints[8];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord muj_00_init_evt[550];
 #else
 EvtWord muj_00_init_evt[548];
@@ -3215,7 +3216,7 @@ EVT_BEGIN(dai3_beat_back)
     WAIT_MS(1500)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 24)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_memcard_save_wrapper))
 #else
     CALL_CHILD(PTR(evt_memcard_save))
@@ -4002,7 +4003,7 @@ EVT_BEGIN(muj_00_init_evt)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_MUJ2"))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_set_tribe, STRING("モニー"), STRING("モニー（指輪）"))
@@ -4070,7 +4071,7 @@ EVT_BEGIN(muj_00_init_evt)
     END_IF
     // Register the hazard-water return points and the biting Gazigazi.
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_gazigazi_entry))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_10_HAUNTED)
@@ -4090,7 +4091,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SPAWN_EVENT(PTR(dai3_shurai))
         SPAWN_EVENT(PTR(suifu_random_sub))
         CASE_EQUAL(STG5_40_TRUE_IDENTITY)
@@ -4116,7 +4117,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SPAWN_EVENT(PTR(kaizoku_vs_dai3))
         CASE_EQUAL(STG5_42_PIRATES_VS_X_NAUTS)
         CALL_CHILD(PTR(nannpc_mode_setup))
@@ -4135,7 +4136,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
         SET_VALUE(LW(0), 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SPAWN_EVENT(PTR(dai3_beat_back))
 #else
         SPAWN_EVENT(dai3_beat_back)
@@ -4145,7 +4146,7 @@ EVT_BEGIN(muj_00_init_evt)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_IF
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
@@ -4165,7 +4166,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_00"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hasi1"), 1, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SPAWN_EVENT(PTR(leave_island))
 #else
         SPAWN_EVENT(leave_island)
@@ -4179,7 +4180,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_00"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hasi1"), 1, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(muj_gor_ship))
 #else
         CALL_CHILD(muj_gor_ship)
@@ -4187,7 +4188,7 @@ EVT_BEGIN(muj_00_init_evt)
         IF_INT_EQUAL(GSWF_GOR_SAILING_TO_KEELHAUL, 1)
             SET_VALUE(GSWF_GOR_SAILING_TO_KEELHAUL, 0)
             SET_VALUE(GSWF_MUJ_ARRIVED_BY_SHIP_UNUSED, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             SPAWN_EVENT(PTR(into_muj_ship))
         END_IF
         SPAWN_EVENT(PTR(mony_peton_boarding))

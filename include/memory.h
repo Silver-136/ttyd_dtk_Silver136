@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/gx.h>
 #include "manager/filemgr.h"
 
@@ -41,7 +42,7 @@ void memInit(void);
 void memClear(HEAP_TYPE heap);
 void* __memAlloc(HEAP_TYPE heap, u32 size);
 void __memFree(HEAP_TYPE heap, void* ptr);
-#ifdef VERSION_G8ME01 // US: the map heap functions take the heap base; these macros pass mapalloc_base_ptr
+#if VERSION >= VERSION_US // US: the map heap functions take the heap base; these macros pass mapalloc_base_ptr
 extern void* mapalloc_base_ptr;
 void* _mapAlloc(void* base, u32 size);
 void* _mapAllocTail(void* base, u32 size);
@@ -63,7 +64,7 @@ GXTexObj* smartTexObj(GXTexObj* obj, void** image_ptr);
 
 extern BOOL g_bFirstSmartAlloc;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 extern void* R_battlemapalloc_base_ptr;
 #endif
 void battleMapAlloc(void);

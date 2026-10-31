@@ -1,5 +1,6 @@
 // las_23 (ラストダンジョン, Palace of Shadow): a junction room.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -23,7 +24,7 @@ static EvtWord e2_door_open[22];
 static BeroEntry bero_entry_data[6];
 static BeroEntry w_bero_mapchg[1];
 static HitDamageReturn dmgRetPoint[6];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord las_23_init_evt[98];
 #else
 EvtWord las_23_init_evt[93];
@@ -261,7 +262,7 @@ EVT_BEGIN(las_23_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_paipu"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("jav_01"), 1, 0)
         CALL(evt_hitobj_onoff, STRING("jav_02"), 1, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_hitobj_onoff, STRING("jav_03"), 1, 0)
 #endif
     ELSE

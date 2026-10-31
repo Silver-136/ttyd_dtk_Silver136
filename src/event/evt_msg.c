@@ -1,5 +1,6 @@
 // Script commands for message windows: printing, choices, inserted strings and closing.
 
+#include "version.h"
 #include "evt/evt_msg.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr.h"
@@ -18,7 +19,7 @@
 #include "battle/battle_sub.h"
 
 // US message buffer is twice as large
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define MSG_BUF_SIZE 0xA00
 #else
 #define MSG_BUF_SIZE 0x500
@@ -188,12 +189,12 @@ const char* partyMsgStr[] = {"", "_kur", "_nok", "_bom", "_yos", "_win", "_viv",
  * (Goombella, Koops, Yoshi, Flurrie, Vivian, Bobbery, Ms. Mowz).
  */
 const char* battlePartyMsgStr[] = {"_kur", "_nok", "_yos", "_win", "_viv", "_bom", "_chu"};
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 /** Unused padding table in the Japanese release. */
 static const char* battlePartyMsgPad[6] = {0};
 #endif
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 // US-only localized article/plural helpers (evt_msg_fmt_int / evtMsgFmtInt, evt_msg_fmt_str / evtMsgFmtStr, below).
 // clang-format off
@@ -489,7 +490,7 @@ USER_FUNC(evt_msg_npc) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US-only localized article/plural helpers. The US build emits functions in reverse source
 // order, so these sit at the end of the file to come first in .text.
 void evtMsgFmtStr(char* buf, const char* name) {
@@ -934,7 +935,7 @@ USER_FUNC(evt_msg_fmt_int) {
 }
 #endif
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: the scratch buffers are defined after the functions (their .bss follows the partyLabel statics, reversed).
 char msg_article_buf[0xA00];
 char msg_num_buf[0xA00];

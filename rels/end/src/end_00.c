@@ -122,7 +122,7 @@ void _prolog(void);
 
 EvtWord end_credit_npc_parade[44];
 EvtWord end_image_blend_loop[123];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: "THE END" texture per language (indexed by gp->language)
 #endif
 EvtWord end_image_main_evt[187];
@@ -161,7 +161,7 @@ void _prolog(void) {
         (*ctor)();
     }
     relSetEvtAddr("end_00", end_00_init_evt);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_OFF;
     camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX;
     camGetPtr(CAMERA_2D)->flags |= CAMERA_FLAG_LETTER_BOX_INSTANT;
@@ -175,7 +175,7 @@ void _epilog(void) {
         (*dtor)();
     }
     end_staff_roll_exit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     camGetPtr(CAMERA_2D)->flags &= ~CAMERA_FLAG_LETTER_BOX_OFF;
 #endif
 }
@@ -288,7 +288,7 @@ CreditMsg end_staff_roll_msg_tbl[] = {
     {0, 2, 29, {NULL, NULL, NULL}, {"b31", "b32", NULL}},
     {0, 3, 30, {NULL, "a19", NULL}, {"b33", NULL, NULL}},
     {0, 3, 31, {NULL, "a20", NULL}, {"b34", "b35", "b36"}},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 3, 32, {NULL, "a31", NULL}, {"b73", "b74", "b75"}},
     {0, 3, 33, {NULL, NULL, NULL}, {"b76", "b77", "b92"}},
     {0, 3, 34, {NULL, "a36", NULL}, {"b78", "b79", NULL}},
@@ -565,7 +565,7 @@ USER_FUNC(evt_end_credit_npc_main) {
     }
     switch (actor->state) {
         case 0:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             actor->poseId = animPoseEntry(R_credits_npc_info[id].agb, inBattle);
             animPoseSetAnim(actor->poseId, R_credits_npc_info[id].anim, 1);
 #else
@@ -581,7 +581,7 @@ USER_FUNC(evt_end_credit_npc_main) {
             actor->state++;
             break;
         case 1:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             actor->angle += 9.0f / gp->framerate;
 #else
             actor->angle += 0.15f;
@@ -646,7 +646,7 @@ EVT_BEGIN(end_credit_npc_parade)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** Texture numbers of the overlay pictures shown during the ending, in the order they appear. */
 s32 end_overlay_tex_tbl[6] = {52, 52, 54, 55, 55, 56};
 #endif
@@ -851,7 +851,7 @@ void end_image_disp(CameraId cameraId, void* param) {
         GXSetNumTevStages(1);
         GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
         GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         TEXGetGXTexObjFromPalette(*end_wp->tpl->data, &obj, end_overlay_tex_tbl[gp->language]);
 #else
         TEXGetGXTexObjFromPalette(*end_wp->tpl->data, &obj, 52);
@@ -991,7 +991,7 @@ EVT_BEGIN(end_return_title_evt)
     SET_VALUE(GSW_STORY_PROGRESS, STG9_01_END_CREDITS)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 21)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_memcard_save_wrapper))
 #else
     CALL_CHILD(PTR(evt_memcard_save))
@@ -1461,7 +1461,7 @@ USER_FUNC(evt_end_staff_roll_init) {
         end_wp->mode = 0;
         end_wp->pos = 0;
         psndSetFlag(PSND_FLAG_NO_SFX);
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         gp->language = 1;
         JUTFont_Free();
         JUTFontSetup(1);
@@ -1489,7 +1489,7 @@ USER_FUNC(evt_end_staff_roll_init) {
 void end_staff_roll_exit(void) {
     fileFree(end_wp->tpl);
     psndClearFlag(PSND_FLAG_NO_SFX);
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     gp->language = 0;
     JUTFont_Free();
     JUTFontSetup(0);
@@ -1503,7 +1503,7 @@ void end_staff_roll_exit(void) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_end_000009cc, JP end .text+0x908. See docs/NAME_PROVENANCE.md.
 USER_FUNC(evt_end_font_restore) {
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     gp->language = 0;
     JUTFont_Free();
     JUTFontSetup(0);

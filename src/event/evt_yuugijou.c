@@ -1,5 +1,6 @@
 // Script commands for the Pianta Parlor (yuugijou): minigame windows, Piantas and records.
 
+#include "version.h"
 #include "icon_ids.h"
 #include "evt/evt_yuugijou.h"
 #include "evt/evt_cmd.h"
@@ -129,7 +130,7 @@ void yuugijou_init(void) {
     yuwp->recordParam[2][2] = MAX0(((s32)yuwp->recordScore[2][2] - 109000) / 2000) + 4;
     t = (s32)yuwp->recordScore[2][3] - 109000;
     yuwp->recordParam[2][3] = MAX0(t / 2000) + 4;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     yuwp->recordParam[2][4] = ((t = ((s32)yuwp->recordScore[2][4] - 109000) / 2000) >= 0 ? t : 0) + 1;
 #else
     yuwp->recordParam[2][4] = MAX0(((s32)yuwp->recordScore[2][4] - 109000) / 2000) + 1;
@@ -147,7 +148,7 @@ void yuugijou_init(void) {
     yuwp->recordScore[3][3] = 0x1627E;
     yuwp->recordScore[3][4] = 0x15950;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     yuwp->recordParam[3][0] = ((t = ((s32)yuwp->recordScore[3][0] - 74000) / 2000) >= 0 ? t : 0) + 7;
     yuwp->recordParam[3][1] = ((t = ((s32)yuwp->recordScore[3][1] - 74000) / 2000) >= 0 ? t : 0) + 6;
     yuwp->recordParam[3][2] = ((t = ((s32)yuwp->recordScore[3][2] - 74000) / 2000) >= 0 ? t : 0) + 4;

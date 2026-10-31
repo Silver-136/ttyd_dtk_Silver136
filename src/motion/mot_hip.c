@@ -1,5 +1,6 @@
 // Mario's spin jump / hip drop (mot_hip): the spin, the drop and the ground pound.
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "pmario_sound.h"
@@ -22,7 +23,7 @@
 
 // Ids of the two hip-drop sounds (the drop sound and Mario's voice): US keeps them in MarioWork.soundId[3..4],
 // JP in the hip motion work.
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define HIP_SFX_DROP (mario->soundId[3])
 #define HIP_SFX_VOICE (mario->soundId[4])
 #else
@@ -76,7 +77,7 @@ BOOL marioChkHipBump(void) {
 // The hip-drop sounds. The US code looks MarioWork up again inside these helpers (its build has the extra
 // marioGetPtr calls) and starts each sound only when it is not already playing.
 static inline void hip_snd_reset(MarioWork* mario) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     mario = marioGetPtr();
 #endif
     HIP_SFX_DROP = -1;
@@ -84,7 +85,7 @@ static inline void hip_snd_reset(MarioWork* mario) {
 }
 
 static inline void hip_snd_on(MarioWork* mario) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     mario = marioGetPtr();
     if ((u32)HIP_SFX_DROP == 0xFFFFFFFFU) {
         HIP_SFX_DROP = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIP_DROP1), &mario->position);
@@ -99,7 +100,7 @@ static inline void hip_snd_on(MarioWork* mario) {
 }
 
 static inline void hip_snd_off(MarioWork* mario) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     mario = marioGetPtr();
 #endif
     if ((u32)HIP_SFX_DROP != 0xFFFFFFFFU) {

@@ -1,5 +1,6 @@
 // The chapter title card ("telop") shown when a chapter starts.
 
+#include "version.h"
 #include "driver/camdrv.h"
 #include "evt/evt_story.h"
 #include "driver/dispdrv.h"
@@ -24,7 +25,7 @@ typedef struct TelopWork {
     OSTime time;
 } TelopWork;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define TELOP_TEX_A 0x65
 #define TELOP_TEX_B 0x64
 #else
@@ -196,7 +197,7 @@ void telop(CameraId cameraId, void* param) {
         k -= 5;
     } while (--i >= 0);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {
         const char* def = (u32)gp->language != LANGUAGE_JP ? "???" : "\x81H\x81H\x81H";
         msg = (msg_tbl[wp->id] != NULL) ? msgSearch(msg_tbl[wp->id]) : def;

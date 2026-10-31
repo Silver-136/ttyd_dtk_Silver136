@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -52,7 +53,7 @@ EvtWord majo_unison_phase_event[238];
 static EvtWord unison_phase_event[83];
 static EvtWord phase_event[332];
 static EvtWord attack_event[389];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord kagenuke_attack_event[225];
 #else
 static EvtWord kagenuke_attack_event[222];
@@ -233,7 +234,7 @@ static BattleWeapon weapon_majolyne_blizzard_attack1 = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -317,7 +318,7 @@ static BattleWeapon weapon_majolyne_powder_attack2 = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -361,7 +362,7 @@ BattleWeapon weapon_majolyne_powder_attack3 = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -405,7 +406,7 @@ BattleWeapon weapon_majolyne_powder_attack4 = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -1062,7 +1063,7 @@ static EVT_BEGIN(kagenuke_attack_event)
     CALL_CHILD(majolyne_down)
     WAIT_MS(300)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     ADD(LW(2), 5)
 #endif
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 30)

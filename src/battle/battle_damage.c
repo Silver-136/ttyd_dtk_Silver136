@@ -1132,7 +1132,7 @@ s32 BattleSetStatusDamage(u32* result, BattleUnit* unit, BattleUnitPart* part, u
                 x -= 300.0f;
                 z += 30.0f;
                 break;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             case UNIT_SHADOW_QUEEN_INVINCIBLE:
             case UNIT_SHADOW_QUEEN_DEMON:
                 z += 40.0f;

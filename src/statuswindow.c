@@ -1,5 +1,6 @@
 // Status window: the field HUD (HP, FP, star power gauge, coins, star points) and its show/hide logic.
 
+#include "version.h"
 #include "icon_ids.h"
 #include "statuswindow.h"
 #include "battle/battle.h"
@@ -58,7 +59,7 @@ u16 party_icon[8] = { ICON_STATUS_GOOMBELLA, ICON_STATUS_GOOMBELLA, ICON_STATUS_
 u16 gauge_back[8] = { ICON_SP_ORB_1, ICON_SP_ORB_2, ICON_SP_ORB_3, ICON_SP_ORB_4, ICON_SP_ORB_5, ICON_SP_ORB_6, ICON_SP_ORB_7, ICON_SP_ORB_8 };
 u16 gauge_wakka[16] = { ICON_SP_ORB_PART_0, ICON_SP_ORB_PART_1, ICON_SP_ORB_PART_2, ICON_SP_ORB_PART_3, ICON_SP_ORB_PART_4, ICON_SP_ORB_PART_5, ICON_SP_ORB_PART_6, ICON_SP_ORB_PART_7,
                         ICON_SP_ORB_PART_8, ICON_SP_ORB_PART_9, ICON_SP_ORB_PART_10, ICON_SP_ORB_PART_11, ICON_SP_ORB_PART_12, ICON_SP_ORB_PART_13, ICON_SP_ORB_PART_14, ICON_SP_ORB_PART_15 };
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: pause-menu icons per language
 s16 party_icon_tbl[6] = { 0x215, 0x22B, 0x22C, 0x22D, 0x22E, 0x22F };
 s16 gear_icon_tbl[6] = { 0x216, 0x230, 0x231, 0x232, 0x233, 0x234 };
@@ -221,7 +222,7 @@ void statusWinMain(void) {
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_OPEN_REQ;
         wp->flags &= ~STATUS_WINDOW_FLAG_FORCE_CLOSE_REQ;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     wp->timer += 60.0f / gp->framerate;
 #else
     wp->timer += one;
@@ -420,7 +421,7 @@ void statusWinDisp(CameraId camId, void* param) {
             MTXTrans(m2, -250.0f, 16.0f + y2, 0.0f);
             MTXScale(s2, 0.75f, 0.75f, 0.75f);
             MTXConcat(m2, s2, m2);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             iconDispGxCol(m2, ICON_FLAG_2D, (u16)party_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
             iconDispGxCol(m2, ICON_FLAG_2D, ICON_MENU_PARTY, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
@@ -429,7 +430,7 @@ void statusWinDisp(CameraId camId, void* param) {
         MTXTrans(m2, -190.0f, 50.0f + y2, 0.0f);
         MTXScale(s2, 0.75f, 0.75f, 0.75f);
         MTXConcat(m2, s2, m2);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         iconDispGxCol(m2, ICON_FLAG_2D, (u16)gear_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         if (swByteGet(0) >= STG0_17_BADGE_TUTORIAL || pouchGetHaveBadgeCnt()) { // GSW_STORY_PROGRESS
             f32 xoff[6] = { 0.0f, 10.0f, 3.0f, 8.0f, 8.0f, 0.0f };
@@ -449,7 +450,7 @@ void statusWinDisp(CameraId camId, void* param) {
         MTXTrans(m2, -190.0f, y2 - 25.0f, 0.0f);
         MTXScale(s2, 0.75f, 0.75f, 0.75f);
         MTXConcat(m2, s2, m2);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         iconDispGxCol(m2, ICON_FLAG_2D, (u16)journal_icon_tbl[gp->language], (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
         iconDispGxCol(m2, ICON_FLAG_2D, ICON_MENU_JOURNAL, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
@@ -756,7 +757,7 @@ void statusPartyHPBlink(s32 frames) {
 // object changes without it.
 void statusWinEase(f32* f) {
     f[0] = 0.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // US pool order: 0, 60 (framerate step), pi, 1, 0.5
     f[4] = 60.0f;
     f[2] = 3.1415927f;

@@ -478,7 +478,7 @@ EVT_BEGIN(evt_machibuse)
         SET_VALUE(LW(0), 3)
         CALL_CHILD(PTR(evt_nameent))
         WAIT_MS(300)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(1))
         SWITCH(LW(1))
             CASE_EQUAL(LANGUAGE_JP)

@@ -1,6 +1,7 @@
 // gon_05 (ゴンババ, Hooktail Castle): hub room with doors to gon_04, gon_06, gon_09 and gon_10.
 // Floating-block switch puzzles and locks opened with Castle Keys 0x0C and 0x0E (story 47).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -36,13 +37,13 @@ EvtWord door05_close[12];
 EvtWord door05_open[12];
 static BeroEntry bero_entry_data[7];
 static EvtWord init_0[37];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord main_0[465];
 #else
 static EvtWord main_0[491];
 #endif
 EvtWord init_1[37];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord main_1[465];
 #else
 EvtWord main_1[491];
@@ -329,7 +330,7 @@ static EVT_BEGIN(main_0)
             SET_FLOAT_VALUE(LW(8), FLOAT(-0.19921875f))
             SET_FLOAT_VALUE(LW(9), 0)
         END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
 #else
         BEGIN_SIBLING_EVENT
@@ -349,7 +350,7 @@ static EVT_BEGIN(main_0)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_INLINE_EVENT
 #else
         END_SIBLING_EVENT
@@ -472,7 +473,7 @@ static EVT_BEGIN(main_0)
         END_INLINE_EVENT
         // A block that came down shakes the camera again and the scene waits a moment.
         IF_INT_EQUAL(LW(10), 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             BEGIN_INLINE_EVENT
 #else
             BEGIN_SIBLING_EVENT
@@ -490,7 +491,7 @@ static EVT_BEGIN(main_0)
                 IF_INT_EQUAL(LW(1), 1)
                     GOTO(2)
                 END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             END_INLINE_EVENT
 #else
             END_SIBLING_EVENT
@@ -582,7 +583,7 @@ EVT_BEGIN(main_1)
             SET_FLOAT_VALUE(LW(8), FLOAT(-0.19921875f))
             SET_FLOAT_VALUE(LW(9), 0)
         END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
 #else
         BEGIN_SIBLING_EVENT
@@ -602,7 +603,7 @@ EVT_BEGIN(main_1)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_INLINE_EVENT
 #else
         END_SIBLING_EVENT
@@ -725,7 +726,7 @@ EVT_BEGIN(main_1)
         END_INLINE_EVENT
         // A block that came down shakes the camera again and the scene waits a moment.
         IF_INT_EQUAL(LW(10), 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             BEGIN_INLINE_EVENT
 #else
             BEGIN_SIBLING_EVENT
@@ -743,7 +744,7 @@ EVT_BEGIN(main_1)
                 IF_INT_EQUAL(LW(1), 1)
                     GOTO(2)
                 END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             END_INLINE_EVENT
 #else
             END_SIBLING_EVENT

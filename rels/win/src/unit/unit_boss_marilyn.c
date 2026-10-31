@@ -1,5 +1,6 @@
 // Battle unit Marilyn, in the Shadow Sirens fight (マリリン): win.rel's copy.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -43,7 +44,7 @@ static EvtWord dead_event[152];
 static EvtWord unison_phase_event[83];
 static EvtWord phase_event[2];
 static EvtWord attack_event[193];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord kagenuke_attack_event[241];
 #else
 static EvtWord kagenuke_attack_event[238];
@@ -211,7 +212,7 @@ static BattleWeapon weapon_marilyn_thunder_attack1 = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -546,7 +547,7 @@ static EVT_BEGIN(kagenuke_attack_event)
     CALL_CHILD(marilyn_down)
     WAIT_MS(300)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     ADD(LW(2), 5)
 #endif
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 30)

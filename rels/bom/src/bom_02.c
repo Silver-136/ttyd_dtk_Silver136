@@ -1,5 +1,6 @@
 // bom_02 (ボム村, Fahr Outpost): the east side of the village with the inn, the shop and General White's bed.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
 #include "evt/evt_window.h"
@@ -74,7 +75,7 @@ EvtWord urotuku_white[190];
 static EvtWord init_soncho[13];
 static EvtWord talk_soncho[421];
 static EvtWord init_murabito_e[2];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord talk_murabito_e[281];
 #else
 static EvtWord talk_murabito_e[253];
@@ -91,12 +92,12 @@ static EvtWord talk_murabito_i[44];
 EvtWord init_tenin[8];
 EvtWord talk_tenin[2];
 static EvtWord init_white[83];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord mario_jump[203];
 #else
 EvtWord mario_jump[197];
 #endif
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 EvtWord mario_jump_tail[6];
 #endif
 s32 iri_25_item_tbl[2];
@@ -663,7 +664,7 @@ static EVT_BEGIN(talk_murabito_e)
     // Trouble Center job 30: the villager asks Mario to erase the graffiti on the 50th floor of the Pit of 100
     // Trials.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
 #endif
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
@@ -671,15 +672,15 @@ static EVT_BEGIN(talk_murabito_e)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             ELSE
             CALL(evt_msg_print, 0, STRING("irai_30_002"), 0, 0)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
 #endif
                 CALL(evt_msg_print_add, 0, STRING("irai_30_003"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             END_IF
 #endif
                 ELSE
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             SET_VALUE(LF(0), 0)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
                 SET_VALUE(LF(0), 1)
@@ -687,7 +688,7 @@ static EVT_BEGIN(talk_murabito_e)
                 CALL(evt_msg_print, 0, STRING("irai_30_002"), 0, 0)
 #endif
                 CALL(evt_msg_continue)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             END_IF
 #endif
                 CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
@@ -708,12 +709,12 @@ static EVT_BEGIN(talk_murabito_e)
                 CALL(evt_mario_set_pose, STRING("M_I_2"))
                 WAIT_MS(1000)
                 CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             IF_INT_EQUAL(LF(0), 0)
 #endif
                 // Mario has erased it: the villager thanks him.
                 CALL(evt_msg_print, 0, STRING("irai_30_004"), 0, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 ELSE
                 CALL(evt_msg_print, 0, STRING("irai_30_003_1"), 0, 0)
             END_IF
@@ -748,7 +749,7 @@ static EVT_BEGIN(talk_murabito_e)
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
             END_IF
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         END_IF
 #endif
         RETURN
@@ -973,7 +974,7 @@ static EVT_BEGIN(init_white)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * One hop of Mario onto General White's bed: Mario jumps to White's position with a "nice" rating effect
  * and stars, shakes the camera, then jumps down beside the bed at (335, 30, -130).
@@ -996,7 +997,7 @@ EvtWord mario_jump[] = {
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP1"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 500, 2, -1000)
     BEGIN_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SUBTRACT(LW(0), 40)
         SUBTRACT(LW(2), 40)
 #else
@@ -1015,7 +1016,7 @@ EvtWord mario_jump[] = {
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP4"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 500, 2, -1000)
     BEGIN_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SUBTRACT(LW(0), 40)
         SUBTRACT(LW(2), 40)
 #else
@@ -1032,7 +1033,7 @@ EvtWord mario_jump[] = {
     END_INLINE_EVENT
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP2"), LW(10), LW(11), LW(12), 0)
     CALL(evt_mario_jump_pos, 335, 30, -130, 500, 2, -1000)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 0, STRING("ホワイト"), NPC_FLAG_NO_HIT)
     CALL(evt_mario_cam_keep_off)
     RETURN
@@ -1042,7 +1043,7 @@ EVT_END()
 };
 #endif
 
-#ifndef VERSION_G8ME01  // US: this tail is part of mario_jump (US script above)
+#if VERSION < VERSION_US  // US: this tail is part of mario_jump (US script above)
 EvtWord mario_jump_tail[] = {
     STRING(/*"ホワイト"*/"\x83\x7A\x83\x8F\x83\x43\x83\x67"), 32, /* rest of mario_jump's evt_npc_flag_onoff call */
     CALL(evt_mario_cam_keep_off)

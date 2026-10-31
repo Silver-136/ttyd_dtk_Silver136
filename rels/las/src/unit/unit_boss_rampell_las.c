@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_scanning.h"
 #include "evt/evt_cmd.h"
@@ -4548,7 +4549,7 @@ static USER_FUNC(vivian_comeback) {
     return 1;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** US only: restore the moves of the unit for this turn. */
 // US only: restore the moves of the unit for this turn.
 USER_FUNC(boss_rampell_las_sync_max_moves) {

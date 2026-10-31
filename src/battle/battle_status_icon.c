@@ -7,7 +7,7 @@
 #include <string.h>
 #include "driver/icondrv.h"
 #include "system.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 
@@ -26,7 +26,7 @@ BOOL _bsi_allergy(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIc
 BOOL _bsi_regeneration(BattleUnit* unit, IconDispTableEntry* disp, BattleWorkStatusIconEntry* entry);
 
 IconDispTableEntry _disp_table[0x17] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {1, _bsi_default_turn, 22, 1},
     {4, _bsi_default_turn, 20, 1},
     {21, _bsi_default_turn, 21, 1},
@@ -190,7 +190,7 @@ void BattleStatusIconMain(BattleUnit* unit) {
         }
 
         for (i = 0; i < 0x17; i++) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             IconDispTableEntry* d;
             BattleWorkStatusIconEntry* e;
             switch (gp->language) {
@@ -211,7 +211,7 @@ void BattleStatusIconMain(BattleUnit* unit) {
 #else
             IconDispTableEntry* d = &_disp_table[i];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             e = &icon->icons[icon->numStatusIcons];
 #else
             BattleWorkStatusIconEntry* e = &icon->icons[icon->numStatusIcons];

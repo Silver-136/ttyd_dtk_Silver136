@@ -1,5 +1,6 @@
 // aji_12 (敵のアジト, X-Naut Fortress): an electrified floor-panel room (hikaru_yuka) with 44 panels.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
@@ -321,7 +322,7 @@ static USER_FUNC(mario_chk) {
     mapGrpFlagOn(name, MAP_OBJ_FLAG_HIDDEN);
     sprintf(name, "A_hikaru_%02d", n);
     hitGrpAttrOff(name, 0x800);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // This version exposes a third route entry; the other version exposes two.
     j++;
     if (j >= 50) {

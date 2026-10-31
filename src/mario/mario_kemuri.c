@@ -1,5 +1,6 @@
 // Dust and splash effects under Mario's feet (walking, landing, running on water).
 
+#include "version.h"
 #include "mario/mario.h"
 #include "mario/mariost.h"
 #include "driver/effdrv.h"
@@ -287,7 +288,7 @@ void kemuri(void) {
 
 void party_kemuri(PartyEntry* party) {
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (marioStGetSystemLevel() == 0) {
         if (party->runMode != 10) {
             if (party->moveKind != 1) {

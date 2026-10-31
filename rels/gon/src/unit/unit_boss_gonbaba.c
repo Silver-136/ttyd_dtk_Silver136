@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
@@ -98,7 +99,7 @@ BattleWeapon weapon_gonbaba_fumituke_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -143,7 +144,7 @@ BattleWeapon weapon_gonbaba_firebreath_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -242,7 +243,7 @@ BattleUnitKind unit_boss_gonbaba = {
     115.0f,
     0.0f,
     -10.0f,
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     115.0f,
 #else
     0.0f,
@@ -359,7 +360,7 @@ static BattleDataEntry data_table[] = {
  * audience.
  */
 static BattleUnitKindPart parts[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {
         1, // partNum
         "btl_un_gonbaba", // partName

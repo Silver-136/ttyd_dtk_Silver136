@@ -1,5 +1,6 @@
 // Mario's paper airplane motion (plane panel): take-off, gliding, landing and the camera while flying.
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "eff/eff_magic1_n64.h"
 #include "evt/evt_cmd.h"
@@ -183,7 +184,7 @@ static inline void planeRoll2(MarioWork* mario, f32 rate, f32 max) {
     *p += rate * (max * ((mario->motPlane->flags & MOT_PLANE_FLAG_RIGHT) ? 1.0f : -1.0f) - *p);
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static inline f32 planeCamFloor(void) {
     if (strcmp(gp->currentMapName, "tik_01") == 0) {
         return 30.0f;
@@ -327,7 +328,7 @@ void mot_plane(void) {
         mp->camShiftTargetY = -70.0f;
         break;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // US: per-map floor below which the camera stops following the plane
     if (mp->position.y < planeCamFloor()) {
         mp->camShiftTargetY = __fabsf(planeData[38]);
@@ -480,7 +481,7 @@ void mot_plane(void) {
             mp->camShiftTargetY = 0.0f;
             marioChgMot(MARIO_MOTION_STAY);
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         marioChkWallAround(&mp->position, 0, 0.0f, 0.0f, mp->wPlayerCollisionBox.z, mp->wPlayerCollisionBox.y);
 #endif
         break;

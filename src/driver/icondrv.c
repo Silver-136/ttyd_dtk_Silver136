@@ -1,6 +1,7 @@
 // Icon driver: loads icon.tpl/icon.bin and draws icons (animated or still, 2D or 3D) and icon
 // digit numbers, one set of entries for the field and one for battle.
 
+#include "version.h"
 #include "driver/icondrv.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
@@ -62,13 +63,13 @@ typedef struct IconBinData {
         }                                        \
     }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: language-specific variants of icons 0x49 and 0x67 (indexed by gp->language)
 u16 icon_049_lang_tbl[6] = {0x49, 0x4A, 0x4B, 0x4C, 0x49, 0x4D};
 u16 icon_067_lang_tbl[6] = {0x67, 0x68, 0x69, 0x6A, 0x67, 0x6B};
 #endif
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static inline IconBinData* iconGetBinData(s32 iconId) {
 #else
 static inline IconBinData* iconGetBinData(u16 iconId) {
@@ -77,7 +78,7 @@ static inline IconBinData* iconGetBinData(u16 iconId) {
     if (!icon_tpl_ok || !icon_bin_ok) {
         return NULL;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     switch ((u16)iconId) {
         case 0x49:
             iconId = icon_049_lang_tbl[gp->language];
@@ -213,7 +214,7 @@ void iconMain(void) {
         if (entry->uflags & ICON_FLAG_ACTIVE) {
             if (entry->uflags & ICON_FLAG_DATA_PENDING) {
                 entry->uflags &= ~ICON_FLAG_DATA_PENDING;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 data = iconGetBinData(entry->iconId);
 #endif
                 // BUG: JP reads data here without loading it for this entry (uninitialized, or left over from an
@@ -477,7 +478,7 @@ void iconDispGx2(Mtx mtx, s16 flags, s16 iconId) {
     // FAKE: empty if on icon_bin_ok (tested twice); removing it changes the object in both versions
     if (icon_bin_ok && icon_bin_ok) {
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     /* FAKE: (u16)(s16) round-trip is a no-op on the u16 field (the s32 id goes through s16 first); it steers MWCC's register choice */
     ep->iconId = (u16)(s16)iconId;
     data = iconGetBinData((u16)iconId);
@@ -520,7 +521,7 @@ void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
     CameraEntry* camera;
     IconBinData* data;
     IconEntry* ep;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     u16 id;
 #endif
 
@@ -534,7 +535,7 @@ void iconDispGxCol(Mtx pos, u16 flags, s32 iconId, GXColor color) {
     // FAKE: empty if on icon_bin_ok (tested twice); removing it changes the object in both versions
     if (icon_bin_ok && icon_bin_ok) {
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     /* FAKE: (u16)(s16) round-trip is a no-op on the u16 field (the s32 id goes through s16 first); it steers MWCC's register choice */
     ep->iconId = (u16)(s16)iconId;
     data = iconGetBinData((u16)iconId);
@@ -560,7 +561,7 @@ void iconGetTexObj(GXTexObj* texObj, s32 iconId) {
         GXInitTexObj(texObj, dummy, 1, 1, GX_TF_I4, GX_CLAMP, GX_CLAMP, GX_FALSE);
         return;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     data = iconGetBinData(iconId);
 #else
     data = iconGetBinData((u16)iconId);

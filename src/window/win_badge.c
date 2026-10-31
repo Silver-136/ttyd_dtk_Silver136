@@ -321,7 +321,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
     f32 d;
     f32 x = w->menu[n].x;
     f32 y = w->menu[n].y;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 tw;
 #endif
 
@@ -344,7 +344,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
     }
     winKirinukiGX(w, 1, x - 260.0f, yy = 20.0f + (40.0f + y), 150.0f, 158 - (10 - (pouch->maximumBP + 9) / 10) * 13);
     winFontInit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {
         // US: BP label per language (indexed by gp->language)
         const char* bpLabel[7] = {"\202a\202o", "BP", "OP", "PB", "PM", "PT", "BP"};
@@ -354,7 +354,7 @@ void winBadgeDisp(s32 camId, void* param, s32 n) {
     winFontSet((Vec){x - 220.0f, yy = yy - 4.0f, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "\202a\202o");
 #endif
     winFontSetR((Vec){(x - 175.0f) - 18.0f, yy, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, black, "%s", winZenkakuStr(pouch->maximumBP));
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     tw = FontGetMessageWidth(msgSearch("msg_menu_badge_nokori")) * 0.5f + 60.0f;
     winFontSet((Vec){4.0f + (16.0f + ((x - 260.0f) + (150.0f - tw))), ((20.0f + (y - 108.0f)) - 18.0f) + (10 - (pouch->maximumBP + 9) / 10) * 13, 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, black, msgSearch("msg_menu_badge_nokori"));
 #else
@@ -436,7 +436,7 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         winIconSet(itemDataTable[badge].icon_id, (Vec){xo - 75.0f, (scroll + ((yo + 110.0f) - (f32)rowOff)), 0.0f}, (Vec){0.54f, 0.54f, 0.54f}, colA);
         item = &itemDataTable[badge];
         winFontInit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         winFontSetWidth((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)rowOff)), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, 170.0f, msgSearch(item->name));
 #else
         winFontSet((Vec){xo - 55.0f, scroll + (12.0f + ((yo + 110.0f) - (f32)rowOff)), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, colB, item->id);

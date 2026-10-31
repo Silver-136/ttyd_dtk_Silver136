@@ -325,7 +325,7 @@ static BattleWeapon weapon_koopa_fire_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -648,7 +648,7 @@ static EVT_BEGIN(hip_attack_event)
             CASE_EQUAL(UNIT_MARIO)
             CALL(mario_cannot_use_command, LW(15))
             CASE_BETWEEN(224, 230)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(party_cannot_use_command, LW(15), LW(3))
 #else
             CALL(party_cannot_use_command, LW(15))
@@ -1047,7 +1047,7 @@ static USER_FUNC(party_cannot_use_command) {
     BattleWork* wp = _battleWorkPointer;
     s32 r = irand(1);
     s32 var = event->args[0];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 id = evtGetValue(event, event->args[1]);
     s32 icon = 0;
     BattleUnit* unit;
@@ -1057,7 +1057,7 @@ static USER_FUNC(party_cannot_use_command) {
 #else
     s32 icon = 0;
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 
     switch (r) {
         case 0:
@@ -1104,7 +1104,7 @@ static USER_FUNC(mario_cannot_use_command) {
     switch (r) {
         case 0:
             wp->commandDisabled[0] = 3;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             icon = 334;
 #else
             icon = 326;
@@ -1112,7 +1112,7 @@ static USER_FUNC(mario_cannot_use_command) {
             break;
         case 1:
             wp->commandDisabled[1] = 3;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             icon = 337;
 #else
             icon = 329;
@@ -1120,7 +1120,7 @@ static USER_FUNC(mario_cannot_use_command) {
             break;
         case 2:
             wp->commandDisabled[2] = 3;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             icon = 340;
 #else
             icon = 332;

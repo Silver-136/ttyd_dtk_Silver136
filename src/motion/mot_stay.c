@@ -1,5 +1,6 @@
 // Mario's standing and idle motions: idle poses, low-HP and sleep poses, and the automatic motion changes.
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "mario/mario.h"
 #include "mario/mario_cam.h"
@@ -16,7 +17,7 @@
 #include "mot/mot_jabara.h"
 #include "mot/mot_hammer.h"
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 #include "mario/mario_sbr.h"
@@ -86,7 +87,7 @@ void mot_stay(void) {
         peach_stay();
         return;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (!(mario->buttonHold & PAD_BUTTON_A)) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_MOVE_CHK;
         mario->trigFlags &= ~MARIO_TRIG_FLAG_START_JABARA_SPIN;
@@ -100,7 +101,7 @@ void mot_stay(void) {
         mario->airTimer = 0;
         mario->multiTimer = 0;
         mario->currSubMotionId = 0;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (marioPriCheckJabara()) {
             mario->wMotionTimer = (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK) ? 10 : 0;
         } else {
@@ -183,7 +184,7 @@ void mot_stay(void) {
     if (strcmp(mario->animName, "M_S_3") == 0 && marioChkKey()) {
         m = marioGetPtr();
         m->idleTimer = m->idleTimer + 1;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (m->idleTimer >= gp->framerate * 4) {
             m->idleTimer = 0;
             m->poseTime = 0;
@@ -213,7 +214,7 @@ void mot_stay(void) {
     if (!newMot && marioChkItemMotion()) {
         return;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (marioGetHammerLevel() < 2) {
         if (mario->buttonTrg & PAD_BUTTON_B) {
             return;
@@ -237,7 +238,7 @@ void mot_stay(void) {
     }
     marioChkJump();
     marioChkTransform();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     held = mario->controlStickSensitivity && !(mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN);
     if (held) {
 #else
@@ -300,7 +301,7 @@ void mot_stay(void) {
         case 3:
             if ((s32)--mario->multiTimer < 0) {
                 marioChgEvtPose("M_N_5A");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 mario->poseTime = 0;
 #endif
                 mario->multiTimer = 0;
@@ -314,7 +315,7 @@ void mot_stay(void) {
             if (++MARIO_STAY(mario).deepSleepTimer >= sysMsec2Frame(10000)) {
                 MARIO_STAY(mario).deepSleepTimer = sysMsec2Frame(10000);
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if ((s32)++mario->multiTimer >= gp->framerate * 2) {
 #else
             if ((s32)++mario->multiTimer >= 140) {

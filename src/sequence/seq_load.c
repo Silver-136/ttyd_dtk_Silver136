@@ -1,5 +1,6 @@
 // File select sequence: the save file menu (new game, copy, delete, sound and rumble settings).
 
+#include "version.h"
 #include "evt/evt_memcard.h"
 #include "eff/eff_magic1_n64.h"
 #include "evt/evt_story.h"
@@ -42,7 +43,7 @@
 #include "win/win_main.h"
 #include "sdk/texPalette.h"
 #include "icon_ids.h"
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 #include "evt/evt_cmd.h"
 #endif
 // LoadWork.flags (file select)
@@ -129,7 +130,7 @@ WinDt win_dt3[4] = {
 static LoadWork work;
 /** Points at the file-select (load) sequence's work. */
 static LoadWork* wp = &work;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 __declspec(section ".sdata2") const u32 seq_logo_zero_color[2];
 #endif
 
@@ -155,7 +156,7 @@ void seq_loadExit(SequenceWork* seq) {
     wp->file = NULL;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static inline BOOL loadStart(void);
 
 #else
@@ -231,7 +232,7 @@ void seq_loadMain(SequenceWork* seq) {
     }
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static inline BOOL loadStart(void) {
     const char* lang[] = {"jp", "us", "ge", "fr", "sp", "it"};
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
@@ -472,7 +473,7 @@ void loadMain(SequenceWork* seq) {
                     swByteSet(0, STG0_00_PROLOGUE);
                     if (code == 0) {
                         gp->saveSlot = wp->slot;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                         wp->evt = evtEntryType(evt_memcard_save_wrapper, 0, 0, 0);
 #else
                         wp->evt = evtEntryType(evt_memcard_save, 0, 0, 0);
@@ -707,7 +708,7 @@ void loadMain(SequenceWork* seq) {
                 }
                 psndENVOn(PSND_RESTART | PSND_FADEIN, (const char*)PSND_ENV_SYS_FL1);
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             wp->tx = -74.0f;
             wp->ty = 4.0f + (50.0f - 50.0f * wp->soundModeSel);
 #else
@@ -744,7 +745,7 @@ void loadMain(SequenceWork* seq) {
             if (wp->rumbleOffSel < 0) {
                 wp->rumbleOffSel = 1;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             wp->tx = -74.0f;
 #else
             wp->tx = -74.0f;
@@ -808,7 +809,7 @@ void loadDraw(CameraId camera, void* param) {
     f32 x;
     f32 w;
     u64 sec;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WinDt* win1[1]; // FAKE: one-element array, so IRO turns win1 into an @ temp: the address of win_dt is computed into
                     // win1 itself and loop 1 walks a copy of it (the addi r30 / mr r24,r30 direction of the target)
     s32 i;
@@ -843,7 +844,7 @@ void loadDraw(CameraId camera, void* param) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     GXLoadPosMtxImm(cam->view, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
     loadDrawBg(0x35, -304.0f, 240.0f, -272.0f, -240.0f);
@@ -877,7 +878,7 @@ void loadDraw(CameraId camera, void* param) {
         if (i == 5 && (wp->flags & LOAD_FLAG_NO_COPY)) {
             col = dark;
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         switch (win1[0][i].tex) {
 #else
         switch (win1[i].tex) {
@@ -888,7 +889,7 @@ void loadDraw(CameraId camera, void* param) {
             case 13: {
                 col.a = 0xfe;
                 winTexInit(*wp->file->data);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 winTexSet(0xe, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
                 winTexInit(*wp->file->data);
                 winTexSet(win1[0][i].tex, (Vec){win1[0][i].x, 60.0f + win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
@@ -901,7 +902,7 @@ void loadDraw(CameraId camera, void* param) {
             }
             default: {
                 winTexInit_x2(*wp->file->data);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 winTexSet_x2(win1[0][i].tex, win1[0][i].tex2, (Vec){win1[0][i].x, win1[0][i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
 #else
                 winTexSet_x2(win1[i].tex, win1[i].tex2, (Vec){win1[i].x, win1[i].y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
@@ -911,7 +912,7 @@ void loadDraw(CameraId camera, void* param) {
         }
     }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, -250.0f, 200.0f, 500.0f, 40.0f, 20.0f);
 #else
     windowDispGX_Waku_col(0, (GXColor){255, 255, 255, 255}, -250.0f, 200.0f, 500.0f, 40.0f, 20.0f);
@@ -922,7 +923,7 @@ void loadDraw(CameraId camera, void* param) {
         FontDrawMessage(-FontGetMessageWidth(msg) / 2, 192, msg);
     }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     for (i = 0; i < 4; i++, win1[0]++) {
         CardSaveSlot* save = &cardGetFilePtr()->saves[i];
         u16 flags;
@@ -944,7 +945,7 @@ void loadDraw(CameraId camera, void* param) {
         const char* str;
         s32 hours;
         s32 mins;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         flags = save->data.flags;
         level = save->data.pouch.level;
         time = save->data.global.retraceLocalTime;
@@ -960,7 +961,7 @@ void loadDraw(CameraId camera, void* param) {
         }
         FontDrawScale(0.6f);
         FontDrawEdge();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if ((u32)gp->language == LANGUAGE_JP) {
             str = "\x83\x66\x81\x5B\x83\x5E";
         } else {
@@ -979,7 +980,7 @@ void loadDraw(CameraId camera, void* param) {
             FontDrawColor((GXColor){0, 0, 0, 255});
         }
         if (flags & CARD_SAVE_FLAG_NO_VALID_COPY) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if ((u32)gp->language == LANGUAGE_JP) {
                 str = "\x82\xB1\x82\xED\x82\xEA\x82\xC4\x82\xA2\x82\xDC\x82\xB7";
             } else {
@@ -1033,7 +1034,7 @@ void loadDraw(CameraId camera, void* param) {
                 mins = ((u64)sec % 3600) / 60;
             }
             if (strlen(name) != 0) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 FontDrawString(win1[0]->x - FontGetMessageWidth(name) / 2, 70.0f + win1[0]->y, name);
             }
             sprintf(buf2, (u32)gp->language != LANGUAGE_JP ? "%s %s" : "%s\x81\x40%s", msgSearch("msg_menu_mario_level"), winZenkakuStr(level));
@@ -1050,7 +1051,7 @@ void loadDraw(CameraId camera, void* param) {
             strcat(buf2, " ");
             strcat(buf2, winZenkakuStrPad(mins, 2));
             w = FontGetMessageWidth(buf2);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (w > 200.0f) {
                 FontDrawScaleVec((Vec){200.0f / w, 1.0f, 1.0f});
                 w = 200.0f;
@@ -1079,7 +1080,7 @@ void loadDraw(CameraId camera, void* param) {
             PSMTXScale(s, 1.5f, 1.5f, 1.5f);
             PSMTXConcat(m, s, m);
             iconDispGxCol(m, 0, ICON_COUNTER_COLON, (GXColor){0, 0, 0, 255});
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             for (k = 0; k < 7; k++) {
                 if (stars & (1 << (k + 1))) {
                     PSMTXTrans(m, (win1[0]->x - 106.0f) + k * 32, *(f32*)((u8*)win1[0] + offsetof(WinDt, y)) /* FAKE: win1->y read through a byte offset (same load) keeps &win1->y a late loop temp, as in the target's numbering */ - 52.0f, 0.0f);
@@ -1134,7 +1135,7 @@ void loadDraw(CameraId camera, void* param) {
         for (i = 0; i < 2; i++) {
             if (i == wp->rumbleOffSel) {
                 winTexInit(*wp->file->data);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 winTexSet(0x20, (Vec){0.0f, 30 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0, 0, 0, 64});
                 winTexInit_x2(*wp->file->data);
                 winTexSet_x2(i + 0x18, 0x20, (Vec){-4.0f, 34 - i * 50, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){255, 255, 255, 255});
@@ -1214,7 +1215,7 @@ EVT_BEGIN(evt_continue)
     CALL(evt_sub_animgroup_async, STRING("OFF_f_in_out_peach"))
     RETURN
 EVT_END()
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 #pragma defer_codegen off
 #endif
 void continueGame(void) {
@@ -1371,6 +1372,6 @@ void continueGame(void) {
             break;
     }
 }
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 #pragma defer_codegen reset
 #endif

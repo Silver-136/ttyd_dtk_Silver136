@@ -1,5 +1,6 @@
 // Rating text (nice, good, great, wonderful, excellent, lucky) in per-language models, squashing and stretching, with a sound.
 
+#include "version.h"
 #include "eff/eff_nice.h"
 #include "driver/animdrv.h"
 #include "mario/mariost.h"
@@ -31,7 +32,7 @@ const char* anim_us[] = {
     NULL,
     "EFF_lucky_us"
 };
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 const char* anim_lang3[] = {
     "EFF_nice_D",
     "EFF_good_D",
@@ -146,7 +147,7 @@ EffectEntry* effNiceEntry(s32 type, f32 x, f32 y, f32 z) {
     }
     switch (type) {
         case 7:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             count = acrobat_tbl[gp->language].count + 1;
 #else
             if ((u32)gp->language == LANGUAGE_JP) {
@@ -214,7 +215,7 @@ void effNiceMain(EffectEntry* effect) {
     s32 type;
     AnimationPose* pose;
     AnimData* data;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 len, start, t;
 #else
     f32 start, len, t;
@@ -239,7 +240,7 @@ void effNiceMain(EffectEntry* effect) {
         animPoseMain(wp->poseId);
         switch (type) {
         case 0:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         case 1:
         case 2:
         case 3:
@@ -271,7 +272,7 @@ void effNiceMain(EffectEntry* effect) {
                 animPoseSetMaterialFlagOn(wp->poseId, MAP_OBJ_FLAG_COLOR);
                 animPoseSetMaterialEvtColor(wp->poseId, (GXColor){0xFF, 0xFF, 0xFF, 255.0f * t});
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             }
 #else
             break;
@@ -345,7 +346,7 @@ void effNiceDisp(CameraId cameraId, void* param) {
     PSMTXConcat(mtx, scale, mtx);
     PSMTXScale(scale, 8.0f, 8.0f, 8.0f);
     PSMTXConcat(mtx, scale, mtx);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (((u32)gp->language == LANGUAGE_US && wp->type == 3) || ((u32)gp->language == LANGUAGE_US && wp->type == 4) || ((u32)gp->language == LANGUAGE_IT && wp->type == 6)) {
         PSMTXScale(scale, 0.7f, 0.7f, 0.7f);
         PSMTXConcat(mtx, scale, mtx);
@@ -473,7 +474,7 @@ void effAcrobatDisp(CameraId cameraId, void* param) {
     GXTexObj tex;
     f32 size, half, ofsX, ofsY, ten;
     int i;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 id;
 #endif
 
@@ -504,7 +505,7 @@ void effAcrobatDisp(CameraId cameraId, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     size = 20.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     size = -size;
 #else
     ten = 10.0f;
@@ -532,7 +533,7 @@ void effAcrobatDisp(CameraId cameraId, void* param) {
         PSMTXConcat(camera->view, scale, scale);
         GXLoadPosMtxImm(scale, GX_PNMTX0);
         GXSetCurrentMtx(GX_PNMTX0);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         id = acrobat_tbl[gp->language].tex[i - 1];
         if (id != -1) {
             effGetTexObj(id, &tex);

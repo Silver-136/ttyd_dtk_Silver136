@@ -1,5 +1,6 @@
 // E3 sequence: the trade-show chapter-select menu, still present in the retail builds.
 
+#include "version.h"
 #include "seq/seq_e3.h"
 #include "demo/DEMOPad.h"
 #include "dolphin/gx/GXEnum.h"
@@ -49,7 +50,7 @@ static seq_e3_work work;
 
 //.sdata
 static seq_e3_work* wp = &work;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * The four scenarios of the trade-show menu: the story progress each one starts at and where its box sits
  * on screen, one box in each corner.
@@ -71,12 +72,12 @@ seq_e3_entry e3_tbl[3] = {
     { 96, 0.0f, -100.0f },
 };
 #endif
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 char* anim_tbl[] = { "b_mario", "PKR_W_1", "PKR_S_1", "PKR_A_2A", "PNK_W_1", "PNK_S_1",
                      "PNK_O_1", "c_windy", "PWD_W_1", "PWD_S_1",  "PWD_A_7" };
 #endif
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: anim_tbl is gone (dead-stripped) but its strings stayed at the start of .rodata
 const char e3_anim_str0[] = "b_mario";
 const char e3_anim_str1[] = "PKR_W_1";
@@ -94,7 +95,7 @@ const char e3_anim_str10[] = "PWD_A_7";
 // Forward Declarations
 void e3Disp(CameraId cameraId, void* param);
 void e3DispOffscreen(CameraId cameraId, void* param);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static
 #endif
 void alarm_handler(OSAlarm* alarm, OSContext* context) {
@@ -108,7 +109,7 @@ void seq_e3Init(SequenceWork* seq) {
     wp->scenario = 0;
     wp->poseRotY = 270.0f;
     OSCreateAlarm(&wp->alarm);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 300, alarm_handler);
 #else
     OSSetAlarm(&wp->alarm, (OSTime)OS_TIMER_CLOCK * 600, alarm_handler);
@@ -186,7 +187,7 @@ void seq_e3Main(SequenceWork* seq) {
             break;
 
         case 4: {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             prev = wp->scenario;
             keyGetStickX(0);
             keyGetStickY(0);
@@ -328,7 +329,7 @@ void seq_e3Main(SequenceWork* seq) {
             }
 
             if (wp->scenario == 0) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 seqSetSeq(SEQ_MAP_CHANGE, "gor_00", NULL);
             } else if (wp->scenario == 1) {
 #endif
@@ -417,7 +418,7 @@ void e3Disp(CameraId cameraId, void* param) {
         }
 
         winTexInit(*wp->handle->data);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         winTexSet(12, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 #else
         winTexSet(MODE_11, (Vec){ 0.0f, 0.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
@@ -433,7 +434,7 @@ void e3Disp(CameraId cameraId, void* param) {
             }
         }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         for (i = 0; i < 4; i++) {
 #else
         for (i = 0; i < 3; i++) {
@@ -455,7 +456,7 @@ void e3Disp(CameraId cameraId, void* param) {
 
             {
                 char* keys[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     "menu_monosiri_gor",
 #endif
                     "menu_monosiri_hei", "menu_monosiri_gon", "menu_monosiri_win"
@@ -530,7 +531,7 @@ void e3DispOffscreen(CameraId cameraId, void* param) {
     offscreenAddBoundingBox(offscreenNameToId("fOff_peron"), left, top, right, bottom);
 }
 
-#ifdef VERSION_G8ME01 // US: local here, seq_title has the global copy
+#if VERSION >= VERSION_US // US: local here, seq_title has the global copy
 static
 #endif
 void pressStartGX(s32 alpha, f32 x, f32 y) {

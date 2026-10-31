@@ -1,5 +1,6 @@
 // Vivian: partner init, follow and the shadow (hide in the floor) ability.
 
+#include "version.h"
 #include "party/party_vivian.h"
 #include "driver/animdrv.h"
 #include "mario/mario.h"
@@ -19,12 +20,12 @@
 #include "pmario_sound.h"
 #include "sfx_name_word.h"
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US has no local duplicate: this is the global vivian_init
 #define vivian_init_801809C0 vivian_init
 #endif
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define VIVIAN_FOLLOW_DIST 30.0f
 #else
 #define VIVIAN_FOLLOW_DIST 22.0f
@@ -278,7 +279,7 @@ static inline void vivianFollow(PartyEntry* party) {
         movePos(&party->moveTarget.x, &party->moveTarget.z, ofs, toMovedir(270.0f + mario->displayDirection));
     }
     if (strcmp(gp->currentMapName, "eki_02") == 0) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         partyChkWallAround(party, &mario->position, 0.0f, mario->directionView, mario->wPlayerCollisionBox.z, 0.5f);
 #else
         marioChkWallAround(&mario->position, 1, 0.0f, mario->directionView, mario->wPlayerCollisionBox.z, 0.5f);

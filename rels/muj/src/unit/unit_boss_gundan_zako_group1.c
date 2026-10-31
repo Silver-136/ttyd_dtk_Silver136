@@ -51,7 +51,7 @@ typedef struct ZakoGun {
 typedef struct ZakoGunWork {
     s32 flag;
     s32 targetId;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     u8 us_pad08[0xC];
     // US: 12 more bytes here
 #endif
@@ -308,7 +308,7 @@ BattleWeapon weapon_gundan_zako_group1_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed

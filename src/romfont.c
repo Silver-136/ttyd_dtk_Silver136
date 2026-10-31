@@ -1,11 +1,12 @@
 // ROM font: draws text with the console's built-in (IPL) font, for messages shown before the game font is loaded.
 
+#include "version.h"
 #include "romfont.h"
 #include "libc_decls.h"
 #include "dolphin/mtx.h"
 #include "dolphin/types.h"
 #include "memory.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 #include <dolphin/os.h>
@@ -17,7 +18,7 @@ static RomFontWork work;
 static RomFontWork* wp = &work;
 
 //.rodata string, .sdata table
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 const char* msg_jp[21] = {
     "\203v\203\215\203O\203\214\203b\203V\203u\203\202\201[\203h\202\305\225\\\216\246\202\265\202\334\202\267\202\251\201H",
     "\202\315\201@\202\242\201@\201@\201@\201@\201@\201@\202\242\202\242\202\246",
@@ -218,7 +219,7 @@ void romFontMake(void);
  * JP always returns the Japanese text. Used by seq_logo and the disc-error screen in mariost.
  */
 const char* romFontGetMessage(s32 msg) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (wp->language != ROM_FONT_LANGUAGE_SJIS && (u32)gp->language == LANGUAGE_JP) {
         return msg_tbl[1][msg];
     }
@@ -259,7 +260,7 @@ void romFontMake(void) {
     u16 prev;
     s32 t;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     chars = __memAlloc(HEAP_DEFAULT, 0x2000);
 #else
     chars = __memAlloc(HEAP_DEFAULT, 0x800);
@@ -267,7 +268,7 @@ void romFontMake(void) {
     numChars = 0;
 
     /* 1. Collect every printable code from the system message strings. */
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     for (t = 0; t < 6; t++) {
 #else
     for (t = 0; t < 2; t++) {
@@ -279,7 +280,7 @@ void romFontMake(void) {
                 for (;;) {
                     u32 b = str[k];
                     u16 w = *(u16*)(str + k);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     if (wp->language != ROM_FONT_LANGUAGE_SJIS) {
                         if (b == 0) {
                             break;
@@ -321,7 +322,7 @@ void romFontMake(void) {
 
     /* 3. Deduplicate the sorted list; wp->uniqueChars = unique count. */
     wp->uniqueChars = 0;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     uniqueChars = __memAlloc(HEAP_DEFAULT, 0x2000);
 #else
     uniqueChars = __memAlloc(HEAP_DEFAULT, 0x800);
@@ -444,7 +445,7 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ..
         u32 c = buf[i];
         u16 c16 = *(u16*)&buf[i]; // big-endian lead<<8 | trail, for double-byte
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (wp->language != ROM_FONT_LANGUAGE_SJIS) {
             if (c == 0x0A) {
                 curX = 0;
@@ -501,7 +502,7 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ..
 }
 
 s32 romFontGetWidth(const char* message) {
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     u16 c16;
     RomFontChar* glyph;
     u32 c;
@@ -509,7 +510,7 @@ s32 romFontGetWidth(const char* message) {
     s32 width = 0;
     s32 i = 0;
     s32 max = 0;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     u16 c16;
     RomFontChar* glyph;
     u32 c;
@@ -518,7 +519,7 @@ s32 romFontGetWidth(const char* message) {
     for (;;) {
         c = message[i];
         c16 = *(u16*)&message[i];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (wp->language != ROM_FONT_LANGUAGE_SJIS) {
             if (c == 0x00) {
                 if (max < width) {

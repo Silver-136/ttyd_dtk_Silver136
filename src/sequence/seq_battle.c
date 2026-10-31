@@ -1,5 +1,6 @@
 // Battle sequence: loads the battle REL and map, runs the battle and returns to the field.
 
+#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_information.h"
 #include "driver/animdrv.h"
@@ -250,7 +251,7 @@ BOOL battle_init(void) {
             msgLoad(gon11, 0);
         }
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     battleMapAlloc();
 #else
     memClear(HEAP_BATTLE);
@@ -322,7 +323,7 @@ void battle_exit(void) {
     Mtx mtx;
 
     BattleEnd();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     battleMapFree();
     smartAutoFree(2);
 #endif
@@ -344,7 +345,7 @@ void battle_exit(void) {
     evtmgrReInit();
     npcRecoveryFiledNpc();
     gp->inBattle = 0;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     memClear(HEAP_BATTLE);
 #endif
     evtStartAll(4);

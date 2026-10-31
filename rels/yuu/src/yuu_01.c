@@ -681,7 +681,7 @@ EVT_BEGIN(yuu_01_init_evt)
     CALL(yuuminigame_set_dataadr, 20, LW(15))
     // The game is set up and the audience appears.
     SPAWN_EVENT(PTR(minigame02_main))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(evt_yuunpc_minigame2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_mon"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_mon"), MAP_OBJ_FLAG_DISABLED)

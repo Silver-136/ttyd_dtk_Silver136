@@ -468,7 +468,7 @@ void party_motion_stay(PartyEntry* party) {
     party->position.x = v.x;
     party->position.z = v.z;
     partyGetMoveDirSpd(party, &dir, &spd);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     partyChkWallAround(party, &v, spd, dir, party->width, party->height);
 #else
     marioChkWallAround(&v, 1, spd, dir, party->width, party->height);
@@ -637,7 +637,7 @@ static inline BOOL partyChkMarioFollowY(MarioWork* mario) {
     return TRUE;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * US: eases a flying partner's height toward target + 5 (+1 in 8-bit mode) by rate per frame,
  * unless it is already up to 5 above it.
@@ -693,7 +693,7 @@ void partyFlyAdjustY(PartyEntry* party) {
     s32 attr;
     f32 target;
     f32 rate;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     f32 diff;
     f32 add;
 #endif
@@ -701,7 +701,7 @@ void partyFlyAdjustY(PartyEntry* party) {
     if (party->flags & PARTY_FLAG_DISABLE_FLOORS) {
         return;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     partyFlyHeadCheck(party);
 #endif
     hit = partySearchGround(party, 10.0f, 0.0f);
@@ -718,7 +718,7 @@ void partyFlyAdjustY(PartyEntry* party) {
         }
     }
     if (partyChkMarioFollowY(party->playerPtr)) {
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         rate = 0.05f;
 #endif
         if (hit) {
@@ -730,7 +730,7 @@ void partyFlyAdjustY(PartyEntry* party) {
                 rate = 0.1f;
             }
             if (party->position.y < party->groundY) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 target = party->groundY;
                 rate = 0.2f;
             }
@@ -970,7 +970,7 @@ found:
                     }
                     partyForceSetSpd(party, mario->baseSpeed + a);
                 }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 else {
                     // US: catch up with the speed of Mario when far behind
                     a = 0.1f * (d3 - lim);
@@ -1269,7 +1269,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     Vec s2;
     Vec ap;
     Vec ff;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     Vec hp;
 #endif
     Vec p2;
@@ -1277,7 +1277,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     f32 dir, sp;
     f32 tx, ty, tz;
     f32 x, z;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 hh;
     f32 hd;
     void* head;
@@ -1373,7 +1373,7 @@ void party_motion_homing_fly(PartyEntry* party) {
                     }
                     partyForceSetSpd(party, mario->baseSpeed + a);
                 }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 else {
                     // US: catch up with the speed of Mario when far behind
                     a = 0.1f * (d3 - lim);
@@ -1457,7 +1457,7 @@ void party_motion_homing_fly(PartyEntry* party) {
         }
         party->hitobjStandOn = hit;
         if (!hit) {
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
             partyChgMot(party, PARTY_MOTION_FALL);
             party->gravity = -1.0f;
 #endif
@@ -1560,7 +1560,7 @@ void party_motion_homing_fly(PartyEntry* party) {
     }
     party->position.x = v.x;
     party->position.z = v.z;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // US: on las_10 the partner is pushed down out of low ceilings
     if (!strcmp(gp->currentMapName, "las_10")) {
         hp = party->position;
@@ -1768,7 +1768,7 @@ void party_motion_behind_mario(PartyEntry* party) {
         party->flags |= PARTY_FLAG_IS_BEHIND_MARIO;
         party->trigFlags &= ~PARTY_TRIG_BEHIND_DIR_SET;
         party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         party->trigFlags &= ~PARTY_TRIG_DOOR_MOVE;
 #endif
     }
@@ -1780,7 +1780,7 @@ void party_motion_behind_mario(PartyEntry* party) {
         party->homingDist = 50.0f;
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         party->trigFlags &= ~PARTY_TRIG_DOOR_MOVE;
 #endif
     }
@@ -1991,7 +1991,7 @@ void party_motion_behind_mario_fly(PartyEntry* party) {
     party->flags |= PARTY_FLAG_IS_BEHIND_MARIO;
     party->trigFlags &= ~PARTY_TRIG_BEHIND_DIR_SET;
     party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     party->trigFlags &= ~PARTY_TRIG_DOOR_MOVE;
 #endif
     partySetDispDirToMario(party);
@@ -2184,7 +2184,7 @@ void party_motion_jump(PartyEntry* party) {
     f32 dir;
     f32 dist;
     f32 lim;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 dist2;
 #endif
     Vec fl;
@@ -2223,7 +2223,7 @@ void party_motion_jump(PartyEntry* party) {
                 partyGetReadId(id, &x, &y, &z);
                 lim = 50.0f;
                 dist = distABf(party->position.x, party->position.z, x, z);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 dist2 = __fabsf(y - party->position.y);
                 if (50.0f > 1.4f * dist2) {
                     lim = 1.4f * dist2;
@@ -2305,7 +2305,7 @@ void party_motion_jump(PartyEntry* party) {
             party->position.y = party->groundY;
             if (hit) {
                 party->flags |= PARTY_FLAG_IS_GROUNDED;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 party->trigFlags &= ~PARTY_TRIG_JUMP_TARGET_SET;
 #endif
                 party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
@@ -2393,7 +2393,7 @@ void party_motion_jump2(PartyEntry* party) {
                     partyPlaySfxPartyLanding1(party);
                     party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
                     party->flags |= PARTY_FLAG_IS_GROUNDED;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     party->trigFlags &= ~PARTY_TRIG_JUMP_TARGET_SET;
 #endif
                     party->velY = 0.0f;
@@ -2449,7 +2449,7 @@ s32 party_motion_fall(PartyEntry* party) {
             party->velY = -16.0f;
         }
         party->position.y += party->velY;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         // US: with the stick released the drift of the partner slows down while falling
         if (!marioKeyOffChk()) {
             party->moveSpeed += -0.2f;
@@ -2484,7 +2484,7 @@ s32 party_motion_fall(PartyEntry* party) {
     if (party->flags & PARTY_FLAG_IS_FALLING) {
         party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
         party->flags |= PARTY_FLAG_IS_GROUNDED;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         party->trigFlags &= ~PARTY_TRIG_JUMP_TARGET_SET;
 #endif
         party->velY = 0.0f;
@@ -2500,7 +2500,7 @@ s32 party_motion_fall(PartyEntry* party) {
     party->flags &= ~PARTY_FLAG_MOT_SLIT_FLOOR;
     party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
     party->flags |= PARTY_FLAG_IS_GROUNDED;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     party->trigFlags &= ~PARTY_TRIG_JUMP_TARGET_SET;
 #endif
     party->velY = 0.0f;
@@ -2662,7 +2662,7 @@ void allPartyForceSlitOff(void) {
     }
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * US: ends Paper Mode on both partners without changing their facing;
  * mot_slit.c uses it instead of allPartyForceSlitOff when Mario leaves Paper Mode while in his roll motion.
@@ -2712,7 +2712,7 @@ void partyChgMotSlitFloor(PartyEntry* party) {
     party->flags |= PARTY_FLAG_MOT_SLIT_FLOOR;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** US: evt_mario_normalize takes the partner out of Paper Mode and clears slitOn. */
 void partySlitReset(PartyEntry* party) {
     if (party) {
@@ -2730,7 +2730,7 @@ BOOL party_slit(PartyEntry* party) {
     f32 a;
 
     mario = party->playerPtr;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // US: a partner not yet in slit mode joins in while Mario is on a slit floor
     if (party->slitOn != 1) {
         if (mario->flags & MARIO_FLAG_PAPER_MODE) {
@@ -2810,7 +2810,7 @@ BOOL party_slit(PartyEntry* party) {
                     partyChgPaper(party, "PM_S_1D");
                 }
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (!partyChkBetweenWalls(party, party->position) && !(mario->flags & MARIO_FLAG_PAPER_MODE) &&
                 !(hitGetAttr(party->hitobjFront) & HIT_ATTR_SLIT) && !(hitGetAttr(party->hitobjPush) & HIT_ATTR_SLIT))
 #else

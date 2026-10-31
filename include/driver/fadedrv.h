@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include "driver/imgdrv.h"
 #include "sdk/texPalette.h"
 #include <dolphin/gx.h>
@@ -113,7 +114,7 @@ void fadeReset(s32 id);
 TEXPalette* fadeGetTpl(void);
 void fadeSetNarrowFast(void);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 extern const f32 float_1_8041f770;
 // Names from LLCOOLT's tree.
 enum {

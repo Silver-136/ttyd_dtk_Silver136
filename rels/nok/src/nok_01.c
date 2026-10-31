@@ -1,6 +1,7 @@
 // nok_01 (ノコ村, Petalburg): the east half of the village with the mayor's and Koops's houses; the gate to Petal
 // Meadows (hei_02) and the pipe to Rogueport Sewers (tik_16).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
 #include "evt/evt_urouro.h"
@@ -66,7 +67,7 @@ static EvtWord nokotarou_talk[36];
 EvtWord nokopapa_init[19];
 EvtWord nokopapa_talk[72];
 EvtWord nokonoko_K_talk[69];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord boss_noko_open_gate[184];
 #else
 EvtWord boss_noko_open_gate[181];
@@ -74,7 +75,7 @@ EvtWord boss_noko_open_gate[181];
 static s32 iri_17_item_tbl[2];
 EvtWord boss_noko_talk[352];
 EvtWord nokorin_init[30];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord nokorin_talk[281];
 #else
 EvtWord nokorin_talk[267];
@@ -435,7 +436,7 @@ EVT_BEGIN(boss_noko_open_gate)
         CALL(evt_mario_set_dir, 270, 0, 0)
     END_INLINE_EVENT
     WAIT_MS(1000)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_party_move_behind_mario, 0)
 #endif
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
@@ -692,7 +693,7 @@ EVT_BEGIN(nokorin_talk)
         CALL(evt_msg_print, 0, STRING("stg1_nok_78"), 0, 0)
     END_IF
     CASE_DEFAULT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
         CALL(evt_msg_print, 0, STRING("stg1_nok_77"), 0, 0)

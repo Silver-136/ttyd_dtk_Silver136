@@ -1,6 +1,7 @@
 // kpa_00 (クッパ編, Bowser's interludes): a Bowser's Castle scene with Kammy Koopa; continues in kpa_01 and ends in
 // Petalburg (nok_01).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "evt/evt_cmd.h"
@@ -187,7 +188,7 @@ EVT_BEGIN(kpa_00_fly_evt)
     WAIT_MS(2000)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 3)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_memcard_save_wrapper))
 #else
     CALL_CHILD(PTR(evt_memcard_save))

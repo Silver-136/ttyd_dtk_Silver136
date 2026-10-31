@@ -1,5 +1,6 @@
 // unit_iron_sinemon2: Iron Cleft, the green one of the Glitz Pit pair (unit_iron_sinemon is the red one), battle unit.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -158,7 +159,7 @@ static BattleWeapon weapon_iron_sinemon_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed

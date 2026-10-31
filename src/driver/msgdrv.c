@@ -1,6 +1,7 @@
 // Message driver: loads the message files, looks messages up by tag, parses their markup into
 // characters, icons and animations, and runs the speech windows and selection lists.
 
+#include "version.h"
 #include "driver/msgdrv.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
@@ -26,7 +27,7 @@
 #include "driver/mapdrv.h"
 /** Red "No messages" text shown in place of a message key that is not found, Japanese version (ErrMessage). */
 const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** The same red "No messages" text for each other language, tagged with its name; ErrMessage picks one. */
 const char R_no_messages_US[] = "<col ff0000ff>No messages.[English]<col>\012<key>";
 const char R_no_messages_DE[] = "<col ff0000ff>No messages.[German]<col>\012<key>";
@@ -99,7 +100,7 @@ void* msgSortDvdData;
 MessageWork* msgw = &msgWork;
 const char* ErrMessage[VERSION_PICK(2, 7)] = {
     R_no_messages_JP, R_no_messages_US,
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     R_no_messages_DE, R_no_messages_FR, R_no_messages_ES, R_no_messages_IT, R_no_messages_DU
 #endif
 };
@@ -107,7 +108,7 @@ const char* paperPoseTbl[6] = {
     "PM_Y_1B", "PM_Y_2B", "PM_F_1B",
     "PM_F_3B", "PM_C_1B", "PM_C_2B"
 };
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 const char* language_dir[7] = {"msg/JP", "msg/US", "msg/DE", "msg/FR", "msg/SP", "msg/IT", "msg/US"};
 #else
 const char* language_dir[2] = {"msg", "emsg"};
@@ -140,7 +141,7 @@ void msgLoad(const char* filename, s32 index) {
     MsgLookupEntry* lookup;
     const char* msgptr;
     int i;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 msgcount;
     DVDEntry* dvd;
     s32 max;
@@ -154,7 +155,7 @@ void msgLoad(const char* filename, s32 index) {
     char dvdpath[128];
 
     entry = &msgw->entries[index];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // US: the global message buffer is allocated once, sized for the largest message file of all languages
     if (!entry->address && index == 1) {
         max = 0;
@@ -441,7 +442,7 @@ s32 msgMain(smartEntry* smart) {
     return 3;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 
 // US: <scaleX> letters (MSG_CHAR_SCALE_X) are stretched on x only
 // A macro, not an inline function: as a function the US constant order changes.
@@ -573,7 +574,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                 }
                 if (c->glyph == MSG_GLYPH_ICON) {
                     col4 = FontGetDrawColor();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     if ((((data->scrollPos + c->y) - 40) + c->iconY) > 0) {
                         break;
                     }
@@ -602,7 +603,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     }
                     gray.a = a;
                     GXSetTevColor(GX_TEVREG0, gray);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     MSG_DRAW_SCALE(c);
 #else
                     FontDrawScale(c->scale);
@@ -611,7 +612,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     FontDrawColor_();
                 } else if (c->value & MSG_CHAR_DYNAMIC) {
                     w = (u16)(kanjiGetWidth(c->glyph) / 2);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     if (c->value & MSG_CHAR_SHAKE) {
                         sx += irand(10000) % 3;
                         sy += irand(10000) % 3;
@@ -634,7 +635,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     FontDrawCodeMtx(m2, c->glyph);
                     c->rot = 1.0f + 0.5f * (c->rot - 1.0f);
                 } else if (c->value & MSG_CHAR_SHAKE) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     sx += irand(10000) % 3;
                     sy += irand(10000) % 3;
                     MSG_DRAW_SCALE(c);
@@ -647,7 +648,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     FontDrawCode(hy, hx, c->glyph);
 #endif
                 } else if (c->value & MSG_CHAR_WAVE) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     t = 0.01f * OSTicksToMilliseconds(gp->renderTime - data->openTime) - 0.02f * sx;
                     sx += 3.2f * (f32)cos(t);
                     sy -= 3.2f * (f32)sin(t);
@@ -663,7 +664,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                 } else if (c->value & MSG_CHAR_SEL_ROW(data->sel)) {
                     f32 hx2;
                     t = 0.01f * OSTicksToMilliseconds(gp->renderTime - data->openTime) - 0.02f * sx;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     hx2 = sx + 3.2f * (f32)cos(t);
                     sy -= 3.2f * (f32)sin(t);
                     hy = sy;
@@ -689,7 +690,7 @@ BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
                     FontDrawRainbowColorOff();
                     FontDrawColorIDX(0);
                 } else {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     MSG_DRAW_SCALE(c);
 #else
                     FontDrawScale(c->scale);
@@ -716,7 +717,7 @@ void msgDispKeyWait_render(s32 wXluStage) {
     wp->currDispMode = wXluStage;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 u16 hankakuSearch(s32 c);
 #else
 u16 hankakuSearch(char c);
@@ -774,7 +775,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     char paper[0x20];
     char paper2[0x20];
     s32 step;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     Vec scale; // US: x and y scale apart (<scaleX>)
     u32 maxW; // US: widest line so far, becomes the window width
 #else
@@ -818,7 +819,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
     entry = &data->entries[data->charCount];
     flags = 0;
     maxScale = 0.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {
         Vec one = {1.0f, 1.0f, 1.0f};
         scale = one;
@@ -863,13 +864,13 @@ void msgAnalize(smartEntry* smart, char* msg) {
 
     while (TRUE) {
         check = *(u8*)msg;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (_ismbblead((s8)check)) {
 #else
         if (_ismbblead((u8)check)) {
 #endif
             glyph = kanjiSearch(*(u16*)msg);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
             ww = scale.x * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4);
             entry->glyph = glyph;
@@ -894,7 +895,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             if (flags & MSG_CHAR_DYNAMIC) {
                 entry->rot = fv;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (maxScale < scale.y) {
                 maxScale = scale.y;
             }
@@ -915,7 +916,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
         case 0:
             entry->glyph = MSG_GLYPH_END;
             entry->time = time;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (data->selWidth == 0) {
                 if (maxW < x) {
                     maxW = x;
@@ -932,13 +933,13 @@ void msgAnalize(smartEntry* smart, char* msg) {
         case '\n':
             entry->glyph = MSG_GLYPH_NEWLINE;
             entry->time = time;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
             x = 0;
 #endif
             if (0.0f == maxScale) {
                 maxScale = 1.0f;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (data->flags & MSG_WIN_FLAG_SMALL) {
                 // US: tighter line spacing
                 y -= 0.7f * (32.0f * maxScale);
@@ -960,7 +961,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 flags &= ~MSG_CHAR_SEL_ROW_MASK;
                 flags |= MSG_CHAR_SEL_ROW(data->numSel);
                 data->numSel++;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 if (data->selWidth == 0) {
                     if (maxW < x) {
                         maxW = x;
@@ -968,7 +969,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 }
 #endif
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             x = 0;
 #endif
             continue;
@@ -1016,14 +1017,14 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 x = posX;
                 if (posY != 999) {
                     y = topY - posY;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     savedScroll = -posY;
                 }
 #else
                 }
                 savedScroll = -posY;
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             } else if (strcmp(tag, "scale") == 0) {
                 sscanf(args, "%f", &scale.x);
                 flags &= ~MSG_CHAR_SCALE_X;
@@ -1180,7 +1181,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     iconGetWidthHight(&iw, &ih, (u16)iconId);
                     entry->glyph = MSG_GLYPH_ICON;
                     entry->x = (x + 0.5f * iw * iconScale) + iconOffX;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
                     x += 0x28;
 #endif
                     entry->y = y - ih * iconScale;
@@ -1188,13 +1189,13 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     entry->scale = iconScale;
                     entry->time = time;
                     entry++;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     x += iconAdvance + 0x28;
 #endif
                     time += step;
                     data->charCount++;
                 } else {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     if ((u32)gp->language == LANGUAGE_JP) {
                         glyph = kanjiSearch(0x94B5);
                     } else {
@@ -1220,7 +1221,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     if (flags & MSG_CHAR_DYNAMIC) {
                         entry->rot = fv;
                     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     if (maxScale < scale.y) {
                         maxScale = scale.y;
                     }
@@ -1287,7 +1288,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                 // does it instead and its pointer-IV init in the preheader keeps the dead j/i steps alive, as in the target (FAKES.md)
                 for (k = 0; k < half; k++) {
                     glyph = kanjiSearch(*(u16*)&tag[(u32)j]);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
                     total += (s32)(0.55f * (scale.y * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4)));
 #else
@@ -1296,7 +1297,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
 #endif
                     j += 2;
                 }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 total = (u16)total - 0.55f * (4.0f * scale.x);
                 rubyX = ((rubyX + x) - 4.0f * scale.x - (u16)total) / 2;
 #else
@@ -1321,7 +1322,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                         }
                     }
                     glyph = kanjiSearch(*(u16*)&tag[(u32)nn[0]]);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     // FAKE: (u16)(glyph + 0) re-truncates the argument; kanjiGetWidth(glyph) changes the object
                     wwR = 0.55f * (scale.x * (f32)(kanjiGetWidth((u16)(glyph + 0)) + 4));
 #else
@@ -1331,7 +1332,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
                     entry->glyph = glyph;
                     entry->x = rubyX;
                     entry->y = ys[0];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     entry->scale = 0.55f * scale.x;
 #else
                     entry->scale = 0.55f * scale;
@@ -1361,7 +1362,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             } else {
                 glyphD = hankakuSearch(check);
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             // FAKE: (u16)(glyphD + 0) re-truncates the argument; kanjiGetWidth(glyphD) changes the object
             wwD = scale.x * (f32)(kanjiGetWidth((u16)(glyphD + 0)) + 2);
             entry->glyph = glyphD;
@@ -1383,7 +1384,7 @@ void msgAnalize(smartEntry* smart, char* msg) {
             if (flags & MSG_CHAR_DYNAMIC) {
                 entry->rot = fv;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (maxScale < scale.y) {
                 maxScale = scale.y;
             }
@@ -1461,7 +1462,7 @@ const char* msgSearch(const char* tag) {
 }
 
 BOOL _ismbblead(u32 c) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((u32)gp->language != LANGUAGE_JP) {
         return FALSE;
     }
@@ -1605,7 +1606,7 @@ s32 msgWindow_Entry(const char* msg, s32 callback, u16 priority) {
         data->cursorY = window->y - (data->sel * 31 + 58);
         break;
     case WINDOW_TYPE_SMALL:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         window->priority = priority + 10;
 #else
         window->priority = 10;
@@ -1836,7 +1837,7 @@ void msgWindow_Main(WindowEntry* window) {
                 }
             }
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         else // US: one key per frame
 #endif
         if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {
@@ -1889,7 +1890,7 @@ void msgWindow_Main(WindowEntry* window) {
             msgWinNextPage(window);
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         else // US: one key per frame
 #endif
         if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
@@ -1898,7 +1899,7 @@ void msgWindow_Main(WindowEntry* window) {
             data->page = data->pageCount - 1;
             psndSFXOn(SFX_NAME_WORD(PSND_SFX_MESSAGE_Z1 | PSND_SFX_BYPASS_MUTE));
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         else // US: one key per frame
 #endif
         if (keyGetButtonTrg(0) & PAD_TRIGGER_Z) {

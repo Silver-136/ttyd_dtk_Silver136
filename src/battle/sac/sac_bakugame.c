@@ -1,5 +1,6 @@
 // Star-power special move Clock Out (sac_bakugame): the button game that stops the enemies' turns.
 
+#include "version.h"
 #include "eff/eff_starstone.h"
 #include "icon_ids.h"
 #include <dolphin/pad.h>
@@ -693,7 +694,7 @@ state_end:
                 w->phase = 20;
                 w->frame = 0;
                 w->throwTarget = b->target;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 if (w->holder == w->throwTarget) {
                     w->phase = 30;
                 }
@@ -739,7 +740,7 @@ state_end:
         }
         break;
     case 20:
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         if (w->holder == w->throwTarget) {
             w->phase = 30;
             break;

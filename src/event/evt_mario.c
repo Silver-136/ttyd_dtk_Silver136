@@ -1,6 +1,7 @@
 // Script commands that control Mario: position, movement, direction, flags, motions and the
 // collision objects he touches.
 
+#include "version.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_npc.h"
 #include "driver/camdrv.h"
@@ -197,7 +198,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
     s32 type = evtGetValue(event, args[0]);
     PartyEntry* party;
     s32 ret;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 s, c;
 #endif
     {
@@ -212,7 +213,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             mp->rot = (Vec){0.0f, 0.0f, 0.0f};
             mp->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
             mp->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             mp->dispOfs2 = (Vec){0.0f, 0.0f, 0.0f};
 #endif
         } else {
@@ -226,7 +227,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
                     if (!(mp->flags & MARIO_FLAG_BG_MODE)) {
                         marioUpdateCamPos();
                         camFollowYOn();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                         sincosf(&s, &c, mp->targetYaw);
                         mp->dispOfs2.x = -0.4f * s;
                         mp->dispOfs2.z = -0.4f * c;
@@ -332,7 +333,7 @@ USER_FUNC(evt_mario_paper_pose_dokan) {
             ret = 2;
             break;
         case 10:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             mp->mot.dokan.rotSpeed = 30.0f;
 #else
             mp->mot.dokan.rotSpeed += 1.0f;
@@ -749,7 +750,7 @@ USER_FUNC(evt_mario_normalize) {
     if (isFirstCall) {
         party = partyGetPtr(marioGetPartyId());
         if (party) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             partySlitReset(party);
 #else
             party->slitOn = 0;
@@ -757,7 +758,7 @@ USER_FUNC(evt_mario_normalize) {
         }
         party = partyGetPtr(marioGetExtraPartyId());
         if (party) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             partySlitReset(party);
 #else
             party->slitOn = 0;
@@ -1153,7 +1154,7 @@ USER_FUNC(evt_mario_party_door_move) {
                 party->flags &= ~PARTY_FLAG_DISABLE_FRONT_WALL_CHK;
                 party->trigFlags &= ~PARTY_TRIG_HALF_PUSH;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             event->userdata[0] = 8;
             event->userdata[1] = 1;
             break;

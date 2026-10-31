@@ -1,5 +1,6 @@
 // Battle end sequence: victory results, level-up (rank-up) selection and returning to the field.
 
+#include "version.h"
 #include "battle/battle_seq_end.h"
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -42,7 +43,7 @@
 #include "evt/evt_sub.h"
 #include "evt/evt_audience.h"
 #include "eff/eff_pointget.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 #include <stdio.h>
@@ -53,7 +54,7 @@
 #include "battle/battle_camera.h"
 #include "battle/battle_seq.h"
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define EXP_ICON 0x194
 #else
 #define EXP_ICON 0x18C
@@ -134,7 +135,7 @@ EVT_BEGIN(_event_MajinaiEnd)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * Label textures of the HP, FP and BP level-up blocks, one per text language (gp->language),
  * drawn by _lvup_select_object_disp.
@@ -569,7 +570,7 @@ void btlseqEnd(BattleWork* wp) {
                 e = evtEntry(_move_to_badge_point_event, 10, 0);
                 break;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             work->flags &= ~SEQEND_DISP_LVUP_HELP;
 #endif
             if (e) {
@@ -1083,7 +1084,7 @@ void _GetExpIcon_End(BattleSeqEndWork* work) {
 }
 
 // Two copies: the US release adds the upgrade-select prompt and cursor loop and reorders the closing events.
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 USER_FUNC(_display_select_one_to_upgrade_text);
 USER_FUNC(_set_initial_upgrade_cursor_position);
 
@@ -1220,7 +1221,7 @@ EVT_BEGIN(_curtain_close_event)
     BEGIN_SIBLING_EVENT
         CALL(_lvup_spot_off, 30)
     END_SIBLING_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // The stage lights come back and the curtains open.
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_batstage_set_stg_dark, 0, 30, 0)
@@ -1239,7 +1240,7 @@ EVT_BEGIN(_curtain_close_event)
         CALL(evt_fade_set_anim_ofs_pos, 0, 130)
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
         CALL(evt_fade_end_wait)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     END_INLINE_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(10))
     // The "select one to upgrade" prompt stays on screen until the stick is pushed.
@@ -1416,7 +1417,7 @@ EVT_BEGIN(_koura_delete_event)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // Descriptive name (not in the symbol maps).
 USER_FUNC(_set_initial_upgrade_cursor_position) {
     _battleWorkPointer->seqEndWork->selected = evtGetValue(event, event->args[0]);
@@ -1911,7 +1912,7 @@ s32 _keta_get(s32 n) {
     return k;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define LVOBJ_TEX2 0x31
 #define LVOBJ_ICON 0x16B
 #define LVOBJ_TEX(n, tbl) (tbl[gp->language])

@@ -1,5 +1,6 @@
 // Battle audience: the crowd in the stands, their types, movement, mood and the items they throw.
 
+#include "version.h"
 #include "battle/battle_audience.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
@@ -257,7 +258,7 @@ s32 haiti_data[][10] = {
     { 20, 20, 20, 20, 18, 18, 18, 16, 0, 0 },
     { 20, 20, 20, 20, 20, 20, 20, 20, 20, 20 },
 };
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: the first three rows narrowed to 12/14/14 seats; BattleAudience_NoUsedFCHaitiRandCenter seats new
 // members there while fewer than 20 are present
 s32 haiti_data_front_narrow[][10] = {
@@ -1092,7 +1093,7 @@ void BattleAudience_End(void) {
         }
         pouchSetAudienceNum(audience->targetAudienceCount);
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // US frees the star-power bonus info allocated in BattleAudience_ApRecoveryBuild
     if (audience->impendingBonuses) {
         BattleFree(audience->impendingBonuses);
@@ -3026,7 +3027,7 @@ s32 BattleAudience_NoUsedHaitiRand(void) {
     return -1;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * Picks a random free seat in the rank's full seating layout (haiti_data),
  * weighting front rows and centre columns heavily; returns the member index or -1 when the stands are full.
@@ -3076,7 +3077,7 @@ s32 BattleAudience_NoUsedFCHaitiRand(void) {
         }
     }
     return -1;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 }
 
 /**

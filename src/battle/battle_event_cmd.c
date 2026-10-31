@@ -1,3 +1,4 @@
+#include "version.h"
 #include "driver/itemdrv.h"
 #include "battle/ac/ac_timing_a.h"
 #include "battle/battle_event_cmd.h"
@@ -26,7 +27,7 @@
 #include "battle/battle_detect.h"
 #include "battle/battle_seq_command.h"
 #include "battle/battle_enemy_item.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 #include "battle/battle_ac_help.h"
@@ -5357,7 +5358,7 @@ USER_FUNC(btlevtcmd_AudienceDeclareAcrobatResult) {
 
 extern void psndSFX_pit(s32 id, s32 pitch);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: per-language width table [language][0] * [language][type + 1]
 static f32 ac_success_width_tbl[7][8] = {
     {30.0f, 3.0f, 3.0f, 3.0f, 3.0f, 4.0f, 5.0f, 6.0f},
@@ -5384,14 +5385,14 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     f32 h;
     const char* name;
     s32 eff;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 lang;
 #endif
     EffectEntry* entry;
 
     type = evtGetValue(event, args[0]);
     scale = 0.75f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     switch (gp->language) {
         case 1:
             lang = 1;
@@ -5421,7 +5422,7 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     pos.y = (f32)evtGetValue(event, args[2]);
     pos.z = (f32)evtGetValue(event, args[3]);
     switch (type) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         case 0:
             scale *= 0.3f;
             name = "SFX_SYSTEM_NICE_25PERCENT1";
@@ -5510,7 +5511,7 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     h = w / 2.0f;
     if (pos.x + h > 160.0f) {
         pos.x = 160.0f - h;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     }
     if (pos.x - h < -180.0f) {
         pos.x = -180.0f + h;
@@ -7168,7 +7169,7 @@ USER_FUNC(btlevtcmd_ftof) {
     s32 index, value, frames;
     value = evtGetValue(event, args[0]);
     index = args[1];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (gp->framerate == 60) {
         evtSetValue(event, index, value);
         return EVT_RETURN_DONE;

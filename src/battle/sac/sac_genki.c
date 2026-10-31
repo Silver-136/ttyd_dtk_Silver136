@@ -1276,7 +1276,7 @@ EVT_BEGIN(genki_evt_common)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
 #else
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
@@ -1497,7 +1497,7 @@ USER_FUNC(recover_cmd_disable) {
     w->commandDisabled[0] = 0;
     w->commandDisabled[1] = 0;
     w->commandDisabled[2] = 0;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {
         BattleUnit* party = BattleGetPartyPtr(w);
         if (party != NULL) {

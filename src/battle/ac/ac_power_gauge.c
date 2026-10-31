@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/ac/ac_table.h"
 #include "icon_ids.h"
 #include "battle/battle.h"
@@ -169,7 +170,7 @@ s32 battleAcMain_PowerGauge(BattleWork* work) {
             }
             if (pw->frame <= ac->params[1]) {
                 pw->gauge = intplGetValue(ac->params[3], 0.0f, 100.0f, pw->frame2, ac->params[1]);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 if (pw->gauge > 100.0f) {
                     pw->gauge = 100.0f;
                 }

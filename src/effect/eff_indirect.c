@@ -1,6 +1,7 @@
 // Screen distortion (Indirect): copies the frame buffer and redraws it over a point through a texture; types 0-1.
 
-#ifdef VERSION_G8ME01
+#include "version.h"
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 #include "eff/eff_indirect.h"
@@ -81,7 +82,7 @@ void effIndirectMain(EffectEntry* effect) {
             if (work->timer < 32) {
                 work->alpha = work->timer * 8;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             work->rotZ += -300.0f / (f32)gp->framerate;
             work->scale += 60.0f / (f32)gp->framerate;
 #else
@@ -116,7 +117,7 @@ void effIndirectDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetZMode(GX_FALSE, GX_LEQUAL, GX_FALSE);
     switch (type) {
         case 0:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             effGetTexObj(0x6A, &texObj);
 #else
             effGetTexObj(0x86, &texObj);

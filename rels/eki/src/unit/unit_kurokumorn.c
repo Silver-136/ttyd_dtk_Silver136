@@ -1,5 +1,6 @@
 // Ruff Puff (kurokumorn): enemy battle unit (thunder attack); Riverside Station's copy of the unit data and scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -168,7 +169,7 @@ static BattleWeapon weapon_kurokumorn_thunder_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed

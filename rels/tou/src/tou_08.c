@@ -1,5 +1,6 @@
 // tou_08 (闘技場, Glitz Pit): the major-league locker room; exits to tou_04 and tou_05; champion belt, the poisoned cake scene.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "eff/eff_starstone.h"
@@ -62,7 +63,7 @@ EvtWord evt_1st_sub[107];
 static EvtWord evt_1st_leagu[747];
 EvtWord evt_toile_door[236];
 EvtWord evt_toile_door2[136];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_champion_win[290];
 #else
 EvtWord evt_champion_win[271];
@@ -889,7 +890,7 @@ EVT_END()
 
 EVT_BEGIN(evt_champion_win)
     CALL(evt_mario_key_onoff, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_check, STRING("ハンマーブロス"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         BEGIN_INLINE_EVENT
@@ -1189,7 +1190,7 @@ static EVT_BEGIN(epilogue_evt)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // Pause/restart these regular events only when Hammer Bros. exists; the post-match child always starts.
 EVT_BEGIN(evt_match_after_stop_npcs)
     SPAWN_EVENT_GET_ID(PTR(evt_tou_match_after_default), LW(10))
@@ -1281,7 +1282,7 @@ EVT_BEGIN(tou_08_init_evt)
             SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
             SPAWN_EVENT(PTR(evt_champion_win))
             ELSE
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             SPAWN_EVENT(PTR(evt_match_after_stop_npcs))
 #else
             SPAWN_EVENT(PTR(evt_tou_match_after_default))

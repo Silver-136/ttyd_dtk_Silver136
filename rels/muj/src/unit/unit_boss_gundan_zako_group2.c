@@ -1,3 +1,4 @@
+#include "version.h"
 #include "system.h"
 #include "zakogun.h"
 #include "battle/battle_unit.h"
@@ -46,7 +47,7 @@ typedef struct ZakoGun {
     u8 field_0x58[0x64 - 0x58];
     Vec rot;
 } ZakoGun;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define ZAKOGUNWORK_PAD 0x54
 #else
 #define ZAKOGUNWORK_PAD 0x48
@@ -54,7 +55,7 @@ typedef struct ZakoGun {
 typedef struct ZakoGunWork {
     s32 flag;
     s32 targetId;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     Vec targetPos;
     u8 field_0x14[ZAKOGUNWORK_PAD - 0x14];
 #else
@@ -214,7 +215,7 @@ BattleWeapon weapon_gundan_zako_group2_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -257,7 +258,7 @@ BattleWeapon weapon_gundan_zako_group2_yusuri_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -758,7 +759,7 @@ void zakogun_ext_main2(void) {
                 }
                 break;
             case 50:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             {
                 BattleUnit* tgt = BattleGetUnitPtr(wp, work->targetId);
                 if (tgt != NULL) {

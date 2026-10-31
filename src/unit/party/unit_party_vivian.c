@@ -449,7 +449,7 @@ BattleWeapon partyWeapon_VivianNormalAttack = {
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
     partyVivianAttack_NormalAttack, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 4, 2, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 2, 2, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -470,7 +470,7 @@ BattleWeapon partyWeapon_VivianShadowGuard = {
     1, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -544,7 +544,7 @@ BattleWeapon partyWeapon_VivianMagicalPowder = {
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
     partyVivianAttack_MagicalPowder, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -561,7 +561,7 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -593,7 +593,7 @@ BattleWeapon partyWeapon_VivianCharmKissAttack = {
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
     partyVivianAttack_CharmKissAttack, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -741,7 +741,7 @@ EVT_BEGIN(partyVivianAttack_NormalAttack)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, EASING_CUBIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     BEGIN_SIBLING_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 14, 29, 29, 0)
 #else
         CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 20, 29, 29, 0)
@@ -944,7 +944,7 @@ EVT_BEGIN(partyVivianAttack_MagicalPowder)
     END_SWITCH
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_btl_camera_set_posoffset, 0, 0, 0, 0)
 #endif
     WAIT_FRAMES(40)

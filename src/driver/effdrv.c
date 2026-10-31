@@ -1,5 +1,6 @@
 // Effect driver: the effect entry pool, the effect textures and the Maya-exported effect animations.
 
+#include "version.h"
 #include "driver/effdrv.h"
 #include "hwaccess.h"
 #include <dolphin/os/OSFastCast.h>
@@ -105,7 +106,7 @@ static EffectWork work;
 static EffectWork* wp = &work;
 const char* prefix_tbl[] = {
     "jp", "us",
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     "ge", "fr", "sp", "it", "du"
 #endif
 };
@@ -122,7 +123,7 @@ static void _callback_tpl(s32 error, DVDFileInfo* info) {
 }
 
 void effInit(void) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     wp->count = 0x200;
 #else
     wp->count = 0x100;
@@ -136,7 +137,7 @@ void effInit(void) {
     effInit64();
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define EFF_NTEX 118
 #else
 #define EFF_NTEX 146
@@ -151,7 +152,7 @@ void effTexSetup(void) {
     wp->texLoaded = FALSE;
     wp->texture = arcOpen("effect.tpl", 0, 0);
     if (!wp->texture) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         sprintf(path, "%s/e/%s/effect.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
         sprintf(path, "%s/e/jp/effect.tpl", getMarioStDvdRoot());

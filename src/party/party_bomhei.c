@@ -1,5 +1,6 @@
 // Bobbery (bomhei): partner init, follow and the bomb ability.
 
+#include "version.h"
 #include "driver/casedrv.h"
 #include "dolphin/types.h"
 #include "mario/mario.h"
@@ -26,7 +27,7 @@
 #include "sfx_name_word.h"
 #include "evt/evt_cam.h"
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US has no local duplicate: this is the global bomhei_init
 #define bomhei_init_800BFBB0 bomhei_init
 #endif

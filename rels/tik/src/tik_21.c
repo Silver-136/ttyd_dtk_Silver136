@@ -1,5 +1,6 @@
 // tik_21 (埋没した都市, Rogueport Sewers): the room with the spike floor trap (hari_trap) and an item box.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -81,7 +82,7 @@ EVT_BEGIN(hari_trap)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("a_yuka"), 2048)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         WAIT_MS(2000)
 #else
         WAIT_MS(2200)

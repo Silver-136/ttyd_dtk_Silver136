@@ -1,6 +1,7 @@
 // Stage clear banner: letter sprites pop in one by one with confetti and camera shake; type 0 is the stage-clear
 // text (per language), type 1 a shorter variant. effStageClearEndChk reports when it has finished.
 
+#include "version.h"
 #include "eff/eff_minigame.h"
 #include "eff/eff_stageclear.h"
 #include "driver/camdrv.h"
@@ -36,11 +37,11 @@ typedef struct StageClearWork {
 void effStageClearMain(EffectEntry* effect);
 void effStageClearDisp(CameraId cameraId, EffectEntry* effect);
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 static s32 tex_us[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA0, 0x9E, 0xA3, 0xA0, 0xA4, 0xA5};
 s32 tex_shadow_us[] = {0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB, 0xAC, 0xAA, 0xA8, 0xAD, 0xAA, 0xAE, 0xAF};
 #endif
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 /** Shakes the camera when a banner letter lands: 50 frames lightly, or 100 frames harder for the last letter (LW 1). */
 static EVT_BEGIN(evt_shake)
     IF_INT_EQUAL(LW(1), 0)
@@ -52,7 +53,7 @@ static EVT_BEGIN(evt_shake)
 EVT_END()
 #endif
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** Letter textures of the stage-clear banner, Japanese then English, each with a matching shadow list. */
 static s16 tex_jp[] = {128, 129, 130, 131, 132, 133, 134, 135};
 s16 tex_shadow_jp[] = {136, 137, 138, 139, 140, 141, 142, 143};
@@ -110,7 +111,7 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
     StageClearWork* work;
     StageClearWork* p;
     s32 i;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 n;
     GXTexObj texObj;
     f32 a;
@@ -124,7 +125,7 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
         return effMiniGameEntry(1, x, y, z);
     }
     effect = effEntry();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     switch (type % 10) {
         case 0:
             n = texid_tbl[gp->language].count + 1;
@@ -156,7 +157,7 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
     work->confetti = irand(5) + 1;
     work->done = 0;
     for (i = 1, p = work + 1; i < effect->count; i++, p++) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         a = 0.0f;
         b = a;
         for (j = 0; j < i - 1; j++) {
@@ -189,7 +190,7 @@ EffectEntry* effStageClearEntry(s32 type, f32 x, f32 y, f32 z) {
         p->position.z = 0.0f;
         p->scale = 0.0f;
         p->delay = (s32)((f32)i * (0.2f * (f32)gp->framerate));
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         p->delay = (s32)((f32)gp->framerate * (96.0f * (f32)i / (f32)texid_tbl[gp->language].count) / 60.0f);
 #endif
         p->frame = 0;
@@ -333,7 +334,7 @@ void effStageClearDisp(CameraId cameraId, EffectEntry* effect) {
             dy = (f32)(-s * 4);
             if (s != 0) {
                 if (type % 10 == 0) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     if (texid_tbl[gp->language].shadow[i - 1] == -1) {
                         continue;
                     }
@@ -354,7 +355,7 @@ void effStageClearDisp(CameraId cameraId, EffectEntry* effect) {
                 GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_TEXA, GX_CA_A0, GX_CA_ZERO);
                 GXSetTevColor(GX_TEVREG0, (GXColor){0, 0, 0, 0x80});
             } else if (type % 10 == 0) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 if (texid_tbl[gp->language].tex[i - 1] == -1) {
                     continue;
                 }
@@ -363,7 +364,7 @@ void effStageClearDisp(CameraId cameraId, EffectEntry* effect) {
                 effGetTexObj(texid_tbl[gp->language * 2][i - 1], &tex);
 #endif
                 GXLoadTexObj(&tex, GX_TEXMAP0);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 effGetTexObj(niji_tbl[gp->language], &tex);
 #else
                 effGetTexObj(niji_tbl[gp->language != LANGUAGE_JP], &tex);

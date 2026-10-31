@@ -1,5 +1,6 @@
 // Battle unit data and scripts for Flurrie (Clauda) as a partner.
 
+#include "version.h"
 #include "unit/party/unit_party_clauda.h"
 #include "battle/battle.h"
 #include "eff/n64/eff_kumokumo_n64.h"
@@ -150,7 +151,7 @@ BattleWeapon partyWeapon_ClaudaBreathAttack = {
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
     partyClaudaAttack_BreathAttack, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -172,7 +173,7 @@ BattleWeapon partyWeapon_ClaudaPredationAttack = {
     3, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier

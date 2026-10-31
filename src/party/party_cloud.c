@@ -1,5 +1,6 @@
 // Flurrie (cloud): partner init, follow, hover and the gust (breath) ability.
 
+#include "version.h"
 #define _MATH_H_
 #include "party/party_cloud.h"
 #include "dolphin/types.h"
@@ -249,7 +250,7 @@ f32 cloudGetBreathDist(void) {
     return breathDist;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * Lets Flurrie follow and bob again after a cutscene froze her,
  * and puts her back in her standing pose (PWD_S_1).
@@ -293,14 +294,14 @@ void cloud_hover_main(PartyEntry* party) {
  * The first frame after a run-mode change sets up the fly movement and the bob.
  */
 void cloud_move(PartyEntry* party) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 a;
 
 #endif
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
         party->trigFlags &= ~PARTY_TRIG_CHG_RUN_MODE;
         partyMoveFlyInit(party, 1);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         party->work.cloud.hoverAngle = 0.0f;
         party->work.cloud.hoverSpeed = 4.25f;
     }
@@ -332,7 +333,7 @@ void cloud_init(PartyEntry* party) {
     party->work.cloud.breathEffect = NULL;
     party->work.cloud.hoverAngleBits = 0;
     party->work.cloud.hoverSpeedBits = 0;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     party->work.cloud.lockAnims = 0;
 #endif
     party->useStruct = NULL;
@@ -469,7 +470,7 @@ void _cloud_use(PartyEntry* party) {
             break;
         }
         partyChgPose(party, "PWD_A_6");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (mario->currMotionId == MARIO_MOTION_CLOUD)
 #endif
         marioChgPose("M_A_2B");

@@ -1,5 +1,6 @@
 // Lava Bubble (bubble): battle unit used in Pirate's Grotto.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_fire.h"
 #include "evt/evt_cmd.h"
@@ -779,7 +780,7 @@ static EVT_BEGIN(all_fire_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BUBBLE_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, -40, LW(1), -15, 30, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
 #else
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, -40, LW(1), LW(2), 30, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)

@@ -1,5 +1,6 @@
 // Field enemy and NPC behaviour scripts: the init, move, find, lose, blow and dead events of each enemy kind.
 
+#include "version.h"
 #include "eff/eff_magic1_n64.h"
 #include "evt/evt_urouro.h"
 #include "eff/eff_fire.h"
@@ -306,7 +307,7 @@ EvtWord patamet_move_event[151];
 EvtWord patamet_find_event[108];
 EvtWord patamet_lost_event[34];
 EvtWord patamet_return_event[143];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord chorobon_move_event[71];
 #else
 EvtWord chorobon_move_event[69];
@@ -357,12 +358,12 @@ EvtWord togedaruma_find_event[61];
 EvtWord togedaruma_lost_event[38];
 EvtWord togedaruma_return_event[44];
 EvtWord barriern_init_event[37];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord barriern_move_event[90];
 #else
 EvtWord barriern_move_event[89];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord barriern2_move_event[90];
 #else
 EvtWord barriern2_move_event[70];
@@ -370,7 +371,7 @@ EvtWord barriern2_move_event[70];
 EvtWord barriern_dead_event[17];
 EvtWord barriern_find_event[189];
 EvtWord barriern_lost_event[17];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord barriern_return_event[43];
 #else
 EvtWord barriern_return_event[42];
@@ -390,7 +391,7 @@ EvtWord dokugassun_find_event[69];
 EvtWord dokugassun_lost_event[27];
 EvtWord dokugassun_return_event[158];
 EvtWord basabasa_init_event[17];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord basabasa_move_event[72];
 #else
 EvtWord basabasa_move_event[67];
@@ -1574,13 +1575,13 @@ EVT_BEGIN(chorobon_move_event)
     CALL(evt_sub_random, 3, LW(4))
     ADD(LW(4), 2)
     LOOP(LW(4))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         WAIT_FRAMES(1)
 #endif
         CALL(evt_sub_random, 360, LW(3))
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(3), 50)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_jump_position, STRING("me"), LW(0), LW(1), LW(2), 300, 0, FLOAT(30.0f), 0)
 #else
         CALL(evt_npc_jump_position, STRING("me"), LW(0), -10000, LW(2), 300, 0, FLOAT(30.0f), 0)
@@ -1603,7 +1604,7 @@ EVT_BEGIN(chorobon_find_event)
         CALL(evt_npc_set_ry, STRING("me"), LW(3))
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(3), 50)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_jump_position, STRING("me"), LW(0), LW(1), LW(2), 300, 0, FLOAT(30.0f), 0)
 #else
         CALL(evt_npc_jump_position, STRING("me"), LW(0), -10000, LW(2), 300, 0, FLOAT(30.0f), 0)
@@ -1632,7 +1633,7 @@ EVT_BEGIN(chorobon_return_event)
     CALL(evt_npc_get_dir, STRING("me"), LW(3))
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(3), 50)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_jump_position, STRING("me"), LW(0), LW(1), LW(2), 300, 0, FLOAT(30.0f), 0)
 #else
     CALL(evt_npc_jump_position, STRING("me"), LW(0), -10000, LW(2), 300, 0, FLOAT(30.0f), 0)
@@ -2428,7 +2429,7 @@ EVT_BEGIN(barriern_move_event)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_loiter_dir, LW(3), FLOAT(120.0f), FLOAT(240.0f))
     CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(3), FLOAT(100.0f))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_fbat_trans_floor_position_wide, LW(0), LW(1), LW(2), 30, 50, 60)
 #else
     CALL(evt_fbat_trans_floor_position, LW(0), LW(1), LW(2), 30, 50)
@@ -2441,7 +2442,7 @@ EVT_END()
 EVT_BEGIN(barriern2_move_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
@@ -2457,7 +2458,7 @@ EVT_BEGIN(barriern2_move_event)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_loiter_dir, LW(3), FLOAT(120.0f), FLOAT(240.0f))
     CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(3), FLOAT(100.0f))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_fbat_trans_floor_position_wide, LW(0), LW(1), LW(2), 30, 50, 60)
 #else
     CALL(evt_fbat_trans_floor_position, LW(0), LW(1), LW(2), 30, 50)
@@ -2622,7 +2623,7 @@ EVT_BEGIN(barriern_return_event)
     CALL(evt_npc_get_dir, STRING("me"), LW(3))
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_npc_add_dirdist, LW(0), LW(2), LW(3), FLOAT(100.0f))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_fbat_trans_floor_position_wide, LW(0), LW(1), LW(2), 30, 50, 60)
 #else
     CALL(evt_fbat_trans_floor_position, LW(0), LW(1), LW(2), 30, 50)
@@ -2954,7 +2955,7 @@ EVT_BEGIN(basabasa_move_event)
         CALL(evt_npc_get_home_position, STRING("me"), LW(4), LW(1), LW(5))
         CALL(evt_npc_glide_position, STRING("me"), LW(0), LW(1), LW(2), 500, 0, FLOAT(-50.0f), 0, 2)
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_FIND)
 #endif
     LABEL(0)

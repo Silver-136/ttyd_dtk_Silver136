@@ -1,6 +1,7 @@
 // gor_04 (ゴロツキタウン, Rogueport): station behind the west side: blimp to the Glitz Pit (tou_00) and the train
 // connections to hom_00 and pik_00.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
@@ -96,7 +97,7 @@ EvtWord evt_hikousen[224];
 static EvtWord evt_wing[97];
 EvtWord evt_hikousen_return[490];
 EvtWord gor_04_koopa_evt[1123];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord gor_04_init_evt[255];
 #else
 EvtWord gor_04_init_evt[253];
@@ -1722,7 +1723,7 @@ EVT_BEGIN(evt_hikousen_return)
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("hikousen"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_AIR_SHIP_DRIVE1"), LW(0), LW(1), LW(2), LW(10))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         WAIT_MS(7500)
 #else
         WAIT_MS(15000)
@@ -1730,7 +1731,7 @@ EVT_BEGIN(evt_hikousen_return)
         CALL(evt_snd_sfxoff, LW(10))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 4000, 0, 7500)
 #else
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 4000, 0, 15000)
@@ -1746,7 +1747,7 @@ EVT_BEGIN(evt_hikousen_return)
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1000, 0, 7500)
 #else
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 1000, 0, 15000)
@@ -2255,12 +2256,12 @@ EVT_BEGIN(gor_04_init_evt)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_IF
 #endif
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_status_gauge_force_update)
 #else
         END_IF

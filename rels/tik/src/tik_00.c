@@ -291,7 +291,7 @@ static ShopperData35 shopper_data = {
     {"tik_shop_00", "tik_shop_01", "tik_shop_02", "tik_shop_03", "tik_shop_04", "tik_shop_05", "tik_shop_06", "tik_shop_07", "tik_shop_08", "tik_shop_09", "tik_shop_10", "tik_shop_11", "tik_shop_12", "tik_shop_13", "tik_shop_14", "tik_shop_15", "tik_shop_16", "tik_shop_17", "tik_shop_18", "tik_shop_19", "tik_shop_20", "tik_shop_21", "tik_shop_22", "tik_shop_23", "tik_shop_24", "tik_shop_25", "tik_shop_26", "tik_shop_27", "tik_shop_28", "tik_shop_29", "shop_30", "shop_31", "shop_32", "shop_33", "shop_34"}, // msgs
 };
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // FAKE: "pos" lives here in .rodata (before the uranaisi scripts' strings); copied as a 4-byte struct
 typedef struct UranaiTag {
     char s[4];
@@ -486,7 +486,7 @@ USER_FUNC(evt_uranaisi_msg_alloc) {
 USER_FUNC(evt_uranaisi_msg_set) {
     EvtWord* args = event->args;
     const char* msg = msgSearch((const char*)evtGetValue(event, args[0]));
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     UranaiTag tag = uranaisi_pos_tag;
     char* t = tag.s; // FAKE: reading the tag through a pointer keeps tag[0] from being hoisted out of the loop
     char num[20];
@@ -1266,7 +1266,7 @@ EVT_BEGIN(starmaniac_talk)
         RETURN
     END_IF
     CALL(evt_sub_get_language, LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(evt_msg_print_insert, 0, STRING("starmaniac_09"), 0, STRING("me"), LW(2), LW(3), LW(4))
@@ -1354,7 +1354,7 @@ EVT_BEGIN(johoyaketi_talk)
         SUBTRACT(LW(1), 1)
         CALL(evt_sub_random, LW(1), LW(0))
         CALL(johoya_keti_newjoho_makelabel, LW(0), LW(2), LW(3), LW(4), LW(5))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)

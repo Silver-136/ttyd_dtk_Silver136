@@ -102,7 +102,7 @@ s32 set_npc_pos(EventEntry* event, BOOL isFirstCall);
 static s32 viewport(EventEntry* event, BOOL isFirstCall);
 static USER_FUNC(viewport);
 static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: map save blocks call the US save wrapper script
 #define SAVE_EVT evt_memcard_save_wrapper
 #else
@@ -1368,7 +1368,7 @@ EVT_END()
  * Afterwards the hologram fades out and the score is evaluated.
  */
 EVT_BEGIN(peach_evt_dance)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_pera_onoff, STRING("ホログラム"), 0)
     CALL(evt_npc_set_ry, STRING("ホログラム"), 180)
     CALL(evt_npc_pera_onoff, STRING("ホログラム2"), 0)
@@ -1387,7 +1387,7 @@ EVT_BEGIN(peach_evt_dance)
     SET_VALUE(LW(11), 0)
     CALL(dance_data_init)
     CALL(get_center, LW(2), LW(3))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_position, STRING("ダミー"), LW(2), FLOAT(5.0f), LW(3))
     CALL(peach_set_pose, STRING("P_O_Z_1"))
     CALL(evt_npc_set_anim, STRING("ホログラム"), STRING("P_O_Z_1"))
@@ -1495,7 +1495,7 @@ EVT_BEGIN(peach_evt_dance)
                     SPAWN_EVENT(PTR(peach_dance_action_reverse))
                 END_SWITCH
                 CASE_EQUAL(2)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 CALL(evt_npc_get_position, STRING("ホログラム"), LW(5), LW(6), LW(7))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_DANCE_NG1"), LW(5), 0, LW(7), 0)
 #else
@@ -1506,7 +1506,7 @@ EVT_BEGIN(peach_evt_dance)
                 SPAWN_EVENT(PTR(peach_dance_action_fail))
             END_SWITCH
         END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
             CALL(dance_flag_check, 4096, LW(5))
             IF_INT_NOT_EQUAL(LW(5), 0)
@@ -1531,7 +1531,7 @@ EVT_BEGIN(peach_evt_dance)
     // The dance ends and the normal music returns.
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_snd_envon_f, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"), 2000)
     WAIT_MS(400)
     CALL(horogram_flag_onoff, 1, 4)
@@ -1555,7 +1555,7 @@ EVT_BEGIN(peach_evt_dance)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 192, 0, 500)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_color, STRING("ホログラム"), 255, 255, 255, LW(0))
 #else
     CALL(evt_npc_set_color, STRING(("\203z\203\215\203O\203\211\203\200")), 255, 255, 255, LW(0))
@@ -1564,7 +1564,7 @@ EVT_BEGIN(peach_evt_dance)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ホログラム"), NPC_FLAG_NO_DRAW)
 #else
     CALL(evt_npc_flag_onoff, 1, STRING(("\203z\203\215\203O\203\211\203\200")), 128)
@@ -1578,7 +1578,7 @@ EVT_BEGIN(peach_evt_dance)
     CALL(evt_mario_set_dir, 90, 200, 0)
     WAIT_MS(500)
     IF_INT_LESS(LW(15), 10)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_map_replayanim, 0, STRING("moza"))
         CALL(evt_msg_print, 0, STRING("peach_aji_94"), 0, 0)
         CALL(evt_map_pauseanim, 0, STRING("moza"))
@@ -1608,7 +1608,7 @@ EVT_BEGIN(peach_evt_dance)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 192, 500)
         LABEL(1)
         CALL(evt_sub_intpl_msec_get_value)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_set_color, STRING("ホログラム"), 255, 255, 255, LW(0))
 #else
         CALL(evt_npc_set_color, STRING(("\203z\203\215\203O\203\211\203\200")), 255, 255, 255, LW(0))
@@ -3152,7 +3152,7 @@ EVT_BEGIN(tec_talk)
 EVT_END()
 
 EVT_BEGIN(aji_17_init_evt)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(LW(0), STRING("S_camera_1"))
 #else
     SET_VALUE(LW(0), STRING(("S_camera_1")))
@@ -3161,7 +3161,7 @@ EVT_BEGIN(aji_17_init_evt)
     SET_VALUE(LW(2), 60)
     // The camera sweep over TEC's room starts.
     SPAWN_EVENT(PTR(evt_camera))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(LW(0), STRING("S_camera_2"))
 #else
     SET_VALUE(LW(0), STRING(("S_camera_2")))
@@ -3169,7 +3169,7 @@ EVT_BEGIN(aji_17_init_evt)
     SET_VALUE(LW(1), -60)
     SET_VALUE(LW(2), 30)
     SPAWN_EVENT(PTR(evt_camera))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_meil"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kikai_0"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("polySurface1161_q00063"), MAP_OBJ_FLAG_CLIP)
@@ -3206,7 +3206,7 @@ EVT_BEGIN(aji_17_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_PEACH_GRODUS_X_NAUT)
         CALL(evt_npc_setup, PTR(npcEnt))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_shuryolight_init, STRING("シュリョー"))
 #else
         CALL(evt_shuryolight_init, STRING(("\203V\203\205\203\212\203\207\201[")))
@@ -3220,7 +3220,7 @@ EVT_BEGIN(aji_17_init_evt)
             IF_INT_EQUAL(LW(15), 0)
                 CALL(evt_mario_set_party, 0, 1)
                 CALL(evt_party_run, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             END_IF
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
@@ -3236,7 +3236,7 @@ EVT_BEGIN(aji_17_init_evt)
             SPAWN_EVENT(PTR(evt_last2))
             SET_VALUE(LW(0), PTR(bero_entry_data))
             CALL(evt_bero_get_info)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL_CHILD(bero_case_entry)
 #else
             CALL_CHILD(PTR(bero_case_entry))
@@ -3253,7 +3253,7 @@ EVT_BEGIN(aji_17_init_evt)
         CASE_EQUAL(STG3_33_03_PEACH_GRODUS)
         CASE_EQUAL(STG4_15_04_SHADOW_SIRENS_DOOPLISS)
         CASE_DEFAULT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(evt_bero_info_run)
 #else
         CALL_CHILD(PTR(evt_bero_info_run))
@@ -3263,7 +3263,7 @@ EVT_BEGIN(aji_17_init_evt)
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_kill_party, 0)
         ELSE
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI4"))
     END_IF
@@ -3496,7 +3496,7 @@ s32 horogram_init(EventEntry* event, BOOL isFirstCall) {
 
     horogram_wp = _mapAlloc(sizeof(HorogramWork));
     horogram_wp->buf0 = _mapAlloc(size);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     size = GXGetTexBufferSize(0x260, 0x1E0, GX_TF_Z8, GX_FALSE, 0);
     horogram_wp->buf1 = _mapAlloc(size);
 #else

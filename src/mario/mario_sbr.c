@@ -1,6 +1,7 @@
 // Mario subroutines: stick and rub input, falling out of the map (bottomless respawn), move rate, gravity,
 // touched NPC, and the paper/plane/boat checks.
 
+#include "version.h"
 #include "mario/mario_sbr.h"
 #include "mario/mario.h"
 #include "mario/mariost.h"
@@ -180,7 +181,7 @@ void marioAdjustMoveDir(void) {
     MarioWork* mario = marioGetPtr();
 
     if (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         mario->moveDirection = toMovedir(180.0f);
 #else
         mario->moveDirection = toMovedir(90.0f);
@@ -189,7 +190,7 @@ void marioAdjustMoveDir(void) {
         mario->displayDirection = 180.0f;
         mario->displayDirectionTarget = 180.0f;
     } else {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         mario->moveDirection = toMovedir(0.0f);
 #else
         mario->moveDirection = toMovedir(90.0f);
@@ -234,7 +235,7 @@ f32 toMovedir(f32 angle) {
             angle = 180.0f;
         }
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     angle = (s32)(1000.0f * (270.0f - angle + mario->targetYaw) + ((270.0f - angle + mario->targetYaw) >= 0.0f ? 0.5f : -0.5f)) / 1000.0f;
 #else
     angle = (s32)(100.0f * (0.05f + (270.0f - angle + mario->targetYaw))) / 100.0f;
@@ -263,7 +264,7 @@ f32 partyToMovedir(PartyEntry* party, f32 angle) {
             angle = 180.0f;
         }
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     angle = (s32)(1000.0f * (270.0f - angle + player->targetYaw) + ((270.0f - angle + player->targetYaw) >= 0.0f ? 0.5f : -0.5f)) / 1000.0f;
 #else
     angle = (s32)(100.0f * (0.05f + (270.0f - angle + player->targetYaw))) / 100.0f;
@@ -280,7 +281,7 @@ f32 partyToMovedir(PartyEntry* party, f32 angle) {
 /** toMovedir without the paper-mode facing override: only converts the screen angle by the camera yaw. */
 f32 toMovedirSimple(f32 angle) {
     MarioWork* mario = marioGetPtr();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     angle = (s32)(1000.0f * (270.0f - angle + mario->targetYaw) + ((270.0f - angle + mario->targetYaw) >= 0.0f ? 0.5f : -0.5f)) / 1000.0f;
 #else
     angle = (s32)(100.0f * (0.05f + (270.0f - angle + mario->targetYaw))) / 100.0f;
@@ -312,7 +313,7 @@ f32 toMovedir2(f32 angle, f32 ofs) {
             angle = 180.0f;
         }
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     angle = (s32)(1000.0f * (270.0f - angle + mario->targetYaw) + ((270.0f - angle + mario->targetYaw) >= 0.0f ? 0.5f : -0.5f)) / 1000.0f;
 #else
     angle = (s32)(100.0f * (0.05f + (270.0f - angle + mario->targetYaw))) / 100.0f;
@@ -364,7 +365,7 @@ void marioSetForceMove(f32 dir, s32 time, f32 speed) {
     if (mario->currMotionId == MARIO_MOTION_SHIP || (mario->currMotionId == MARIO_MOTION_SLIT || mario->currMotionId == MARIO_MOTION_ROLL) || mario->currMotionId == MARIO_MOTION_YOSHI) {
         return;
     } else {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         marioChgMot(speed >= mario->baseDashSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);
 #else
         marioChgMot(speed > mario->baseWalkSpeed ? MARIO_MOTION_DASH : MARIO_MOTION_WALK);

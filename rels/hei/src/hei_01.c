@@ -1,6 +1,7 @@
 // hei_01 (平原, Petal Meadows): field linking hei_13 and Petalburg (nok_00).
 // Koops (nokotarou) is met here and joins as a partner; a blue switch lowers the bridge; Fire Flower block, Star Piece.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_pouch.h"
 #include "evt/evt_cmd.h"
@@ -50,7 +51,7 @@ EvtWord kusa_dokan[59];
 static const char* name_tbl[25];
 EvtWord bridge_evt_02[192];
 EvtWord bridge_evt[30];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord nokotaro_get[73];
 #else
 EvtWord nokotaro_get[55];
@@ -329,7 +330,7 @@ EVT_BEGIN(nokotaro_get)
     CALL(evt_npc_set_anim, STRING("ノコタロウ"), STRING("PNK_S_1"))
     CALL(evt_npc_flag_onoff, 1, STRING("ノコタロウ"), NPC_FLAG_TALK_POSE)
     WAIT_MS(500)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, 450, 0, FLOAT(80.0f))
         CALL(evt_mario_set_dir_npc, STRING("ノコタロウ"))
@@ -341,7 +342,7 @@ EVT_BEGIN(nokotaro_get)
     SET_VALUE(LW(8), STRING("ノコタロウ"))
     SET_VALUE(LW(9), PARTNER_KOOPS)
     CALL_CHILD(PTR(all_party_lecture))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_party_set_dir, 0, 90, 200)
 #endif
     CALL(evt_msg_print, 0, STRING("stg1_hei_09"), 0, STRING("party"))

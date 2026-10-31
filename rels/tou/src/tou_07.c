@@ -1,5 +1,6 @@
 // tou_07 (闘技場, Glitz Pit): the champion's room; exits to tou_04, tou_08, tou_10, tou_13.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "eff/eff_starstone.h"
@@ -57,7 +58,7 @@ static EvtWord evt_champion[578];
 EvtWord evt_champion_re[308];
 static EvtWord evt_dakuto[39];
 EvtWord evt_dakuto2[44];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_tou_bed[440];
 #else
 EvtWord evt_tou_bed[432];
@@ -66,7 +67,7 @@ static EvtWord bed_entry[10];
 static EvtWord mobj_box00[34];
 EvtWord tou_07_init_evt[286];
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 
 /** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 USER_FUNC(tou_07_mario_keyoff_check) {
@@ -572,7 +573,7 @@ EVT_END()
  * and the partners return.
  */
 EVT_BEGIN(evt_tou_bed)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(tou_07_mario_keyoff_check, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN

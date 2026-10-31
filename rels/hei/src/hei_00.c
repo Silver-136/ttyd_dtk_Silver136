@@ -1,6 +1,7 @@
 // hei_00 (平原, Petal Meadows): room with the Sun Stone and Moon Stone statues and the way to Hooktail Castle (gon_00).
 // Has Hooktail's flyover, a Bowser cutscene leading to kpa_02, a pipe to tik_02 and the epilogue scene that goes to nok_01.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -87,7 +88,7 @@ static EvtWord ki_data_evt_01[20];
 EvtWord ki_data_evt_02[20];
 static TreeAccess ki_data[4];
 static NpcSetupInfo npcEnt[2];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord hei_00_koopa_evt[272];
 #else
 EvtWord hei_00_koopa_evt[269];
@@ -1188,7 +1189,7 @@ EVT_BEGIN(hei_00_koopa_evt)
     CALL(evt_cam3d_evt_set, -148, 195, 539, -148, 95, -22, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 65536)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_kill_party, 0)
 #endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))

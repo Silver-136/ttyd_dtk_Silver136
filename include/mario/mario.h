@@ -1,5 +1,6 @@
 #pragma once
 
+#include "version.h"
 #include <dolphin/mtx.h>
 #include "driver/dispdrv.h"
 
@@ -137,7 +138,7 @@ typedef struct MarioMotSlit {      // mot_slit.c (paper slit / side-step)
     s16 side;                      // 0x1A, 1 = 260 deg, 2 = 280 deg
 } MarioMotSlit;
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 typedef struct MarioMotStay {      // mot_stay.c, JP only (US keeps these in MarioWork.stay)
     u8 pad00[0x10];                // 0x00
     s32 jabaraWait;                // 0x10, frames before the spring-jump check, capped at 10
@@ -194,7 +195,7 @@ typedef struct MarioMotRoll {      // mot_roll.c
 
 typedef struct MarioMotHip {       // mot_hip.c
     f32 angle;                     // 0x00
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     s32 sfxId[2];                  // 0x04, JP only (US uses soundId[3], soundId[4])
 #endif
 } MarioMotHip;
@@ -262,7 +263,7 @@ typedef union MarioMotWork {       // 0x2A0 JP, 0x2B8 US, 0x1C bytes
     s32 word[7];                   // whole-block clears (mot_jabara, mot_roll)
     MarioMotJabara jabara;
     MarioMotSlit slit;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     MarioMotStay stay;
 #endif
     MarioMotPeach peach;
@@ -281,7 +282,7 @@ typedef union MarioMotWork {       // 0x2A0 JP, 0x2B8 US, 0x1C bytes
     MarioMotKpa kpa;
 } MarioMotWork;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 typedef struct MarioStayWork {     // US only, MarioWork 0x2AC: mot_stay's counters left the scratch block
     s32 jabaraWait;                // 0x2AC
     s32 holdTimer;                 // 0x2B0, only cleared on US
@@ -431,7 +432,7 @@ typedef struct MarioWork {
     f32 baseWalkSpeed;            // 0x184
     f32 baseDashSpeed;            // 0x188, same on US
     f32 moveDist;                  // 0x18C, distance to move this frame (marioMove)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 jumpStartSpeed;            // 0x190 US only (+4 from here): baseSpeed at jump start
 #endif
     f32 controlStickSensitivity;   // 0x190
@@ -493,7 +494,7 @@ typedef struct MarioWork {
     void* balloonNpc;              // 0x264, NpcEntry*
     s32 slitPosSet;                // 0x268, mot_slit: slitPos is valid
     Vec slitPos;                   // 0x26C, mot_slit saved position
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 soundId[5];                // 0x278, US: 5 sounds (+8 from here)
 #else
     s32 soundId[3];                // 0x278
@@ -511,7 +512,7 @@ typedef struct MarioWork {
     f32 dirEvtTargetDir;           // 0x294
     s32 dirEvtMsec;                // 0x298
     s32 dirEvtFrame;               // 0x29C
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     MarioStayWork stay;            // 0x2AC US only (+0x18 from here)
 #endif
     MarioMotWork mot;              // 0x2A0 JP, 0x2B8 US
@@ -598,7 +599,7 @@ void marioPreDisp(void);
 void marioDispBlur(CameraId camId, void* param);
 void marioDisp(CameraId camId, void* param);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define MARIO_STAY(mp) ((mp)->stay)
 #else
 #define MARIO_STAY(mp) ((mp)->mot.stay)

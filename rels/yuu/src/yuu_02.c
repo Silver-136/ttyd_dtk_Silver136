@@ -1,5 +1,6 @@
 // yuu_02 (遊技場, Pianta Parlor): minigame 3, Tube Mode (roll, rolling course); entered from gor_03.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_yuuranking.h"
 #include "evt/evt_cmd.h"
@@ -92,7 +93,7 @@ EvtWord minigame03_start_cam_cancel[17];
 EvtWord minigame03_start[193];
 EvtWord minigame03_end[217];
 EvtWord s_en1_turn[30];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord yuu_02_init_evt[262];
 #else
 EvtWord yuu_02_init_evt[29];
@@ -905,7 +906,7 @@ EVT_BEGIN(yuu_02_init_evt)
     SPAWN_EVENT(s_en1_turn)
     SPAWN_EVENT(minigame03_main)
     CALL_CHILD(evt_yuunpc_minigame3)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_mon"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("E_mon"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_mon"), MAP_OBJ_FLAG_DISABLED)

@@ -1654,7 +1654,7 @@ static EVT_BEGIN(evt_bg)
     LOOP(0)
         SET_FLOAT_VALUE(LW(0), GW(0))
         ADD_FLOAT(LW(10), LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         IF_FLOAT_GREATER(LW(10), FLOAT(0.0f))
             ADD_FLOAT(LW(10), FLOAT(-800.0f))
         END_IF

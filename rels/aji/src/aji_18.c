@@ -1,5 +1,6 @@
 // aji_18 (敵のアジト, X-Naut Fortress): the door with three key locks (key_lock_koujyou) and the machine.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -39,7 +40,7 @@ static BeroEntry bero_entry_data[3];
 EvtWord evt_machine[266];
 EvtWord key_lock_koujyou[14];
 static EvtWord evt_koopa_after[118];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord aji_18_init_evt[301];
 #else
 EvtWord aji_18_init_evt[299];
@@ -372,13 +373,13 @@ EVT_BEGIN(aji_18_init_evt)
             IF_INT_EQUAL(LW(15), 0)
                 CALL(evt_mario_set_party, 0, 1)
                 CALL(evt_party_run, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             END_IF
 #endif
                 // US recovery is outside the missing-partner branch; the other version keeps it inside.
             CALL(evt_pouch_mario_recovery)
                 CALL(evt_pouch_all_party_recovery)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_status_gauge_force_update)
 #else
             END_IF

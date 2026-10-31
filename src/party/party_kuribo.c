@@ -1,5 +1,6 @@
 // Goombella (kuribo): partner init, follow and the tattle ability.
 
+#include "version.h"
 #include "party/party_kuribo.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario_party.h"
@@ -16,7 +17,7 @@
 #include "system.h"
 #include "dolphin/mtx.h"
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US has no local duplicate: this is the global kuribo_init
 #define kuribo_init_800C23B4 kuribo_init
 #endif

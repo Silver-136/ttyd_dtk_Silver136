@@ -34,7 +34,7 @@
 #include "assets/_mariost_icon_tlut.inc"
 #include "assets/_mariost_banner_tex.inc"
 const char cardFileName[] = "mariost_save_file";
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 const char cardGameTitle[] = "Paper Mario";
 const char cardDateFormat[0x12] = "%2d/%2d save data";
 #else
@@ -311,7 +311,7 @@ void cardMain(void) {
 }
 
 void cardCopy2Main(s32 slot) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     void* savedMapAlloc;
     s32 savedSoundMode;
     CardSaveSlot* save;
@@ -334,7 +334,7 @@ void cardCopy2Main(s32 slot) {
     savedFbatData = gp->fbatData;
     savedMapAlloc = gp->mapAlloc;
     progressive = (u32)(gp->flags & GW_FLAG_PROGRESSIVE);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     language = gp->language;
 #endif
     savedSoundMode = gp->soundMode;
@@ -349,7 +349,7 @@ void cardCopy2Main(s32 slot) {
     memcpy(&_jdt.readFlags, &save->data.informant, sizeof(InformantUnknown));
     gp->resetType = 0;
     gp->resetButtonDown = 0;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     gp->softResetWait = 0;
 #endif
     gp->dvdError = 0;
@@ -367,7 +367,7 @@ void cardCopy2Main(s32 slot) {
     } else {
         gp->flags &= ~GW_FLAG_PROGRESSIVE;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     gp->language = language;
 #endif
 }
@@ -447,7 +447,7 @@ void cardWrite(s32 slot) {
         gp->flags &= ~GW_FLAG_SAVE_LOADED;
         gp->flags &= ~GW_FLAG_NO_ENTRANCE;
         gp->resetType = 0;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         gp->resetButtonDown = 0;
         gp->softResetWait = 0;
 #endif

@@ -1,5 +1,6 @@
 // Pause menu: opening and closing the menu, item use from the menu, and the shared text and texture helpers.
 
+#include "version.h"
 #include "win/win_main.h"
 #include "icon_ids.h"
 #include "eff/eff_recovery.h"
@@ -35,7 +36,7 @@
 #include "evt/evt_sub.h"
 #include "win/win_root.h"
 #include "driver/itemdrv.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 char* strstr(const char* str, const char* sub);
 #endif
 #include "driver/msgdrv.h"
@@ -133,7 +134,7 @@ void winOpenDisable(void) {
 }
 
 typedef struct {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     const char* s[6];
 #else
     const char* s[2];
@@ -231,7 +232,7 @@ void winMain(void) {
                     if (keyGetButton(0) & PAD_TRIGGER_L) {
                         break;
                     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     if ((gp->flags & GW_FLAG_E3) && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG0_07_GOOMBELLA_JOINS) {
                         break;
                     }
@@ -271,13 +272,13 @@ void winMain(void) {
                 for (i = 0; i < 4; i++) {
                     padRumbleHardOff(i);
                 }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
                 fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
                 {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/%s", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us", winGetMapTplName());
 #else
                     const char* name = winGetMapTplName();
@@ -382,7 +383,7 @@ void winMain(void) {
                 break;
 
             case WIN_MENU_ITEM_USE: {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 WindowPartyDt* list[11]; /* FAKE */ // US frame is 96 bytes; only 7 entries used
 #else
                 WindowPartyDt* list[7];
@@ -477,7 +478,7 @@ void winDispKoopa(CameraId camId, void* param) {
  */
 static const WinLangTbl winLangTbl = {{
     "jp", "us",
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     "ge", "fr", "sp", "it"
 #endif
 }};
@@ -746,7 +747,7 @@ EVT_BEGIN(evt_lecture_msg)
     CALL(lecture_step_wait, 2)
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_02"), 0, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(500)
     CALL(lecture_step_wait, 3)
     WAIT_MS(500)
@@ -754,7 +755,7 @@ EVT_BEGIN(evt_lecture_msg)
     WAIT_MS(500)
 #endif
     CALL(lecture_step_wait, 5)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(500)
 #endif
     CALL(evt_msg_continue)
@@ -773,7 +774,7 @@ EVT_BEGIN(evt_lecture_msg)
     CALL(evt_msg_print, 0, STRING("lecture_badge_07"), 0, 0)
     CALL(lecture_step_wait, 10)
     CALL(evt_msg_continue)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_17_BADGE_TUTORIAL)
             BREAK_LOOP
@@ -784,7 +785,7 @@ EVT_BEGIN(evt_lecture_msg)
     WAIT_MS(500)
     CALL(lecture_key_mask_off)
     RETURN
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EVT_END_PAD() // US: the script ends with one zero word (object 0x1E4 bytes)
 #else
 EVT_END()
@@ -951,7 +952,7 @@ void winFontInit(void) {
 
 /** Pre-US winFontSet: always formats into a 1 KB buffer, then draws it. */
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     char buf[0x1000];
     const char* msg = fmt;
 #else
@@ -961,7 +962,7 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     Mtx scl;
     va_list args;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (strstr(fmt, "%")) {
         va_start(args, fmt);
         vsprintf(buf, fmt, args);
@@ -975,7 +976,7 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     FontDrawMessageMtx(trans, msg);
 }
 
@@ -1003,7 +1004,7 @@ void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* f
 
 /** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     char buf[0x1000];
     const char* msg = fmt;
 #else
@@ -1012,7 +1013,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     Mtx trans;
     Mtx scl;
     va_list args;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 ref;
 
     if (strstr(fmt, "%")) {
@@ -1040,7 +1041,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     FontDrawStringMtx(trans, msg);
 #else
     FontDrawStringMtx(trans, buf);
@@ -1049,7 +1050,7 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 
 /** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     char buf[0x1000];
     const char* msg = fmt;
 #else
@@ -1059,7 +1060,7 @@ void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     Mtx scl;
     va_list args;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (strstr(fmt, "%")) {
         va_start(args, fmt);
         vsprintf(buf, fmt, args);
@@ -1074,7 +1075,7 @@ void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
     FontDrawEdge();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     FontDrawStringMtx(trans, msg);
     FontDrawEdgeOff();
 }
@@ -1116,7 +1117,7 @@ void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
     }
 }
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     char buf[0x400];
     va_list args;
@@ -1389,7 +1390,7 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     GXTexObj obj;
     f32 sy;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (iconId == ICON_115) {
         iconId = ICON_114;
     }

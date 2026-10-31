@@ -21,7 +21,7 @@
 #include "evt/evt_img.h"
 #include "driver/mapdrv.h"
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US-only named constant (dispdrv reads it by name), followed by a zero word
 #pragma force_active on
 const f32 float_1_8041f770 = 1.0f;

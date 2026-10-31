@@ -1,12 +1,13 @@
 // Item table (itemDataTable): names, icons, prices, sort order, HP/FP values and use scripts of every item and badge.
 
+#include "version.h"
 #include "data/item_data.h"
 #include "battle/battle_mario.h"
 #include "battle/battle_item_data.h"
 
 ItemData itemDataTable[340] = {
     {/*"むこうアイテム"*/"\x82\xDE\x82\xB1\x82\xA4\x83\x41\x83\x43\x83\x65\x83\x80", "in_unknown_item", "msg_unknown_item", "msg_unknown_item", 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x00, 0x00, 0x00, 0x00, 0x0, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ふしぎなふくろ"*/"\x82\xD3\x82\xB5\x82\xAC\x82\xC8\x82\xD3\x82\xAD\x82\xEB", "in_item_pouch", "msg_item_pouch", "msg_item_pouch", 0x0, 0xFA, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0xA3, 0x0, NULL},
     {/*"スリットへんか"*/"\x83\x58\x83\x8A\x83\x62\x83\x67\x82\xD6\x82\xF1\x82\xA9", "in_unknown_item", "in_unknown_item", "in_unknown_item", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0xAD, 0x0, NULL},
     {/*"ロールへんか"*/"\x83\x8D\x81\x5B\x83\x8B\x82\xD6\x82\xF1\x82\xA9", "in_unknown_item", "in_unknown_item", "in_unknown_item", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0xAE, 0x0, NULL},
@@ -159,12 +160,12 @@ ItemData itemDataTable[340] = {
     {/*"チュウボウのなべ"*/"\x83\x60\x83\x85\x83\x45\x83\x7B\x83\x45\x82\xCC\x82\xC8\x82\xD7", "in_chuubou_no_nabe", "msg_chuubou_no_nabe", "msg_chuubou_no_nabe", 0x0, 0x72, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x10E, 0x0, NULL},
     {/*"きんのゆびわ"*/"\x82\xAB\x82\xF1\x82\xCC\x82\xE4\x82\xD1\x82\xED", "in_gold_pearl_ring", "msg_gold_pearl_ring", "msg_gold_pearl_ring", 0x0, 0x73, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x113, 0x0, NULL},
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"かいがらピアス"*/"\x82\xA9\x82\xA2\x82\xAA\x82\xE7\x83\x73\x83\x41\x83\x58", /*"in_shell_pierces"*/"\x69\x6E\x5F\x73\x68\x65\x6C\x6C\x5F\x70\x69\x65\x72\x63\x65\x73", /*"msg_shell_pierces"*/"\x6D\x73\x67\x5F\x73\x68\x65\x6C\x6C\x5F\x70\x69\x65\x72\x63\x65\x73", /*"msg_shell_pierces"*/"\x6D\x73\x67\x5F\x73\x68\x65\x6C\x6C\x5F\x70\x69\x65\x72\x63\x65\x73", 0x0, 0x74, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x118, 0x0, NULL},
 #else
     {/*"かいがらピアス"*/"\x82\xA9\x82\xA2\x82\xAA\x82\xE7\x83\x73\x83\x41\x83\x58", /*"in_shell_pierceｓ"*/"\x69\x6E\x5F\x73\x68\x65\x6C\x6C\x5F\x70\x69\x65\x72\x63\x65\x82\x93", /*"msg_shell_pierceｓ"*/"\x6D\x73\x67\x5F\x73\x68\x65\x6C\x6C\x5F\x70\x69\x65\x72\x63\x65\x82\x93", /*"msg_shell_pierceｓ"*/"\x6D\x73\x67\x5F\x73\x68\x65\x6C\x6C\x5F\x70\x69\x65\x72\x63\x65\x82\x93", 0x0, 0x74, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x111, 0x0, NULL},
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"うんてんしのサイン"*/"\x82\xA4\x82\xF1\x82\xC4\x82\xF1\x82\xB5\x82\xCC\x83\x54\x83\x43\x83\x93", "in_train_autograph", "msg_train_autograph", "msg_train_autograph", 0x0, 0x75, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x122, 0x0, NULL},
     {/*"ふるぼけたにっき"*/"\x82\xD3\x82\xE9\x82\xDA\x82\xAF\x82\xBD\x82\xC9\x82\xC1\x82\xAB", "in_ghost_diary", "msg_ghost_diary", "msg_ghost_diary", 0x0, 0x76, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x10E, 0x0, NULL},
     {/*"もうふ"*/"\x82\xE0\x82\xA4\x82\xD3", "in_blanket", "msg_blanket", "msg_blanket", 0x0, 0x77, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x114, 0x0, NULL},
@@ -244,7 +245,7 @@ ItemData itemDataTable[340] = {
     {/*"サファイアスター"*/"\x83\x54\x83\x74\x83\x40\x83\x43\x83\x41\x83\x58\x83\x5E\x81\x5B", "in_sapphire_star", "msg_sapphire_star", "msg_sapphire_star", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x0, 0x0, NULL},
     {/*"ガーネットスター"*/"\x83\x4B\x81\x5B\x83\x6C\x83\x62\x83\x67\x83\x58\x83\x5E\x81\x5B", "in_garnet_star", "msg_garnet_star", "msg_garnet_star", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x0, 0x0, NULL},
     {/*"クリスタルスター"*/"\x83\x4E\x83\x8A\x83\x58\x83\x5E\x83\x8B\x83\x58\x83\x5E\x81\x5B", "in_crystal_star", "msg_crystal_star", "msg_crystal_star", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x0, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"コイン"*/"\x83\x52\x83\x43\x83\x93", "in_coin", "msg_unknown_item", "msg_unknown_item", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x193, 0x0, NULL},
     {/*"モンテ"*/"\x83\x82\x83\x93\x83\x65", "in_monte", "msg_unknown_item", "msg_unknown_item", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x147, 0x0, NULL},
     {/*"ハート"*/"\x83\x6E\x81\x5B\x83\x67", "in_unknown_item", "msg_unknown_item", "msg_unknown_item", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x191, 0x0, NULL},
@@ -362,7 +363,7 @@ ItemData itemDataTable[340] = {
     {/*"しかえしのこな"*/"\x82\xB5\x82\xA9\x82\xA6\x82\xB5\x82\xCC\x82\xB1\x82\xC8", "in_shikaeshi_no_kona", "msg_shikaeshi_no_kona", "msg_shikaeshi_no_kona", 0x3, 0x4E, 0xF, 0xA, 0x5, 0x7, 0x00, 0x00, 0x00, 0x00, 0xC3, 0x0, &ItemWeaponData_Shikaeshino_Kona},
 #endif
     {/*"カメののろい"*/"\x83\x4A\x83\x81\x82\xCC\x82\xCC\x82\xEB\x82\xA2", "in_kame_no_noroi", "msg_kame_no_noroi", "msg_kame_no_noroi", 0x3, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x0, 0x0, &ItemWeaponData_Kameno_Noroi},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF", "in_kinoko_itame", "msg_kinoko_itame", "list_kinoko_itame", 0x7, 0x54, 0xA, 0x7, 0x5, 0x5, 0x00, 0x06, 0x02, 0x00, 0xB3, 0x0, NULL},
     {/*"キノコホイルやき"*/"\x83\x4C\x83\x6D\x83\x52\x83\x7A\x83\x43\x83\x8B\x82\xE2\x82\xAB", "in_kinoko_foil_yaki", "msg_kinoko_foil_yaki", "list_kinoko_foil_yaki", 0x7, 0x55, 0xA, 0x7, 0x5, 0xF, 0x00, 0x0F, 0x05, 0x00, 0xB4, 0x0, NULL},
     {/*"キノコステーキ"*/"\x83\x4C\x83\x6D\x83\x52\x83\x58\x83\x65\x81\x5B\x83\x4C", "in_kinoko_steak", "msg_kinoko_steak", "list_kinoko_steak", 0x7, 0x56, 0xA, 0x7, 0x5, 0x2D, 0x00, 0x1E, 0x0A, 0x00, 0xB5, 0x0, NULL},
@@ -495,7 +496,7 @@ ItemData itemDataTable[340] = {
     {/*"ミニミニフミィ"*/"\x83\x7E\x83\x6A\x83\x7E\x83\x6A\x83\x74\x83\x7E\x83\x42", "in_minimini_fumi", "msg_minimini_fumi", "menu_minimini_fumi", 0x0, 0x4, 0x4B, 0x34, 0x5, 0x25, 0x01, 0x00, 0x00, 0x00, 0x22, 0x0, &badgeWeapon_MiniminiFumi},
     {/*"ネムラセフミィ"*/"\x83\x6C\x83\x80\x83\x89\x83\x5A\x83\x74\x83\x7E\x83\x42", "in_nemurase_fumi", "msg_nemurase_fumi", "menu_nemurase_fumi", 0x0, 0x5, 0x4B, 0x34, 0x5, 0x25, 0x01, 0x00, 0x00, 0x00, 0x23, 0x0, &badgeWeapon_NemuraseFumi},
     {/*"フニャフニャフミィ"*/"\x83\x74\x83\x6A\x83\x83\x83\x74\x83\x6A\x83\x83\x83\x74\x83\x7E\x83\x42", "in_funyafunya_jump", "msg_funyafunya_jump", "menu_funyafunya_jump", 0x0, 0x6, 0x4B, 0x34, 0x5, 0x25, 0x01, 0x00, 0x00, 0x00, 0x24, 0x0, &badgeWeapon_FunyafunyaJump},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ガツーンナグーリ"*/"\x83\x4B\x83\x63\x81\x5B\x83\x93\x83\x69\x83\x4F\x81\x5B\x83\x8A", "in_gatsun_naguri", "msg_gatsun_naguri", "menu_gatsun_naguri", 0x0, 0xB, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x45, 0x0, &badgeWeapon_GatsunHammer},
 #else
     {/*"ガツーンナグーリ"*/"\x83\x4B\x83\x63\x81\x5B\x83\x93\x83\x69\x83\x4F\x81\x5B\x83\x8A", "in_gatsun_naguri", "msg_gatsun_naguri", "menu_gatsun_naguri", 0x0, 0xB, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x46, 0x0, &badgeWeapon_GatsunHammer},
@@ -505,19 +506,19 @@ ItemData itemDataTable[340] = {
     {/*"ツラヌキナグーリ"*/"\x83\x63\x83\x89\x83\x6B\x83\x4C\x83\x69\x83\x4F\x81\x5B\x83\x8A", "in_tsuranuki_naguri", "msg_tsuranuki_naguri", "menu_tsuranuki_naguri", 0x0, 0xC, 0x4B, 0x34, 0x5, 0x25, 0x01, 0x00, 0x00, 0x00, 0xD, 0x0, &badgeWeapon_TsuranukiNaguri},
     {/*"コンランナグーリ"*/"\x83\x52\x83\x93\x83\x89\x83\x93\x83\x69\x83\x4F\x81\x5B\x83\x8A", "in_konran_hammer", "msg_konran_hammer", "menu_konran_hammer", 0x0, 0xE, 0x64, 0x46, 0x5, 0x32, 0x01, 0x00, 0x00, 0x00, 0x10, 0x0, &badgeWeapon_ConfuseHammer},
     {/*"ファイアナグーリ"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x69\x83\x4F\x81\x5B\x83\x8A", "in_fire_naguri", "msg_fire_naguri", "menu_fire_naguri", 0x0, 0x11, 0x64, 0x46, 0x5, 0x32, 0x03, 0x00, 0x00, 0x00, 0xF, 0x0, &badgeWeapon_FireNaguri},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"アイスナグーリ"*/"\x83\x41\x83\x43\x83\x58\x83\x69\x83\x4F\x81\x5B\x83\x8A", "in_ice_naguri", "msg_ice_naguri", "menu_ice_naguri", 0x0, 0xF, 0x4B, 0x34, 0x5, 0x25, 0x01, 0x00, 0x00, 0x00, 0x48, 0x0, &badgeWeapon_IceNaguri},
 #else
     {/*"アイスナグーリ"*/"\x83\x41\x83\x43\x83\x58\x83\x69\x83\x4F\x81\x5B\x83\x8A", "in_ice_naguri", "msg_ice_naguri", "menu_ice_naguri", 0x0, 0xF, 0x4B, 0x34, 0x5, 0x25, 0x01, 0x00, 0x00, 0x00, 0x49, 0x0, &badgeWeapon_IceNaguri},
 #endif
     {/*"ニカイアイテーム"*/"\x83\x6A\x83\x4A\x83\x43\x83\x41\x83\x43\x83\x65\x81\x5B\x83\x80", "in_2kai_item", "msg_2kai_item", "menu_2kai_item", 0x0, 0x17, 0x64, 0x46, 0x5, 0x32, 0x03, 0x00, 0x00, 0x00, 0x27, 0x0, &badgeWeapon_2KaiItem},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ニカイアイテームＰ"*/"\x83\x6A\x83\x4A\x83\x43\x83\x41\x83\x43\x83\x65\x81\x5B\x83\x80\x82\x6F", "in_2kai_item_p", "msg_2kai_item_p", "menu_2kai_item_p", 0x0, 0x18, 0x64, 0x46, 0x5, 0x32, 0x03, 0x00, 0x00, 0x00, 0x64, 0x0, &badgeWeapon_2KaiItem},
 #else
     {/*"ニカイアイテームＰ"*/"\x83\x6A\x83\x4A\x83\x43\x83\x41\x83\x43\x83\x65\x81\x5B\x83\x80\x82\x6F", "in_2kai_item_p", "msg_2kai_item_p", "menu_2kai_item_p", 0x0, 0x18, 0x64, 0x46, 0x5, 0x32, 0x03, 0x00, 0x00, 0x00, 0x61, 0x0, &badgeWeapon_2KaiItem},
 #endif
     {/*"チャージ"*/"\x83\x60\x83\x83\x81\x5B\x83\x57", "in_charge", "msg_charge", "menu_charge", 0x0, 0x15, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x25, 0x0, &badgeWeapon_Charge},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"チャージＰ"*/"\x83\x60\x83\x83\x81\x5B\x83\x57\x82\x6F", "in_charge_p", "msg_charge_p", "menu_charge_p", 0x0, 0x16, 0x4B, 0x34, 0x5, 0x25, 0x01, 0x00, 0x00, 0x00, 0x5F, 0x0, &badgeWeapon_Charge},
     {/*"スーパーアピール"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x41\x83\x73\x81\x5B\x83\x8B", "in_super_appeal", "msg_super_appeal", "menu_super_appeal", 0x0, 0x56, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x47, 0x0, NULL},
     {/*"スーパーアピールＰ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x41\x83\x73\x81\x5B\x83\x8B\x82\x6F", "in_super_appeal_p", "msg_super_appeal_p", "menu_super_appeal_p", 0x0, 0x57, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x61, 0x0, NULL},
@@ -527,25 +528,25 @@ ItemData itemDataTable[340] = {
     {/*"スーパーアピールＰ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x41\x83\x73\x81\x5B\x83\x8B\x82\x6F", "in_super_appeal_p", "msg_super_appeal_p", "menu_super_appeal_p", 0x0, 0x57, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x5E, 0x0, NULL},
 #endif
     {/*"パワープラス"*/"\x83\x70\x83\x8F\x81\x5B\x83\x76\x83\x89\x83\x58", "in_power_plus", "msg_power_plus", "menu_power_plus", 0x0, 0x22, 0x190, 0x118, 0xF, 0xC8, 0x06, 0x00, 0x00, 0x00, 0x2F, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"パワープラスＰ"*/"\x83\x70\x83\x8F\x81\x5B\x83\x76\x83\x89\x83\x58\x82\x6F", "in_power_plus_p", "msg_power_plus_p", "menu_power_plus_p", 0x0, 0x23, 0x190, 0x118, 0xF, 0xC8, 0x06, 0x00, 0x00, 0x00, 0x5D, 0x0, NULL},
 #else
     {/*"パワープラスＰ"*/"\x83\x70\x83\x8F\x81\x5B\x83\x76\x83\x89\x83\x58\x82\x6F", "in_power_plus_p", "msg_power_plus_p", "menu_power_plus_p", 0x0, 0x23, 0x190, 0x118, 0xF, 0xC8, 0x06, 0x00, 0x00, 0x00, 0x5A, 0x0, NULL},
 #endif
     {/*"モロハノヤイバー"*/"\x83\x82\x83\x8D\x83\x6E\x83\x6D\x83\x84\x83\x43\x83\x6F\x81\x5B", "in_morohano_yaiba", "msg_morohano_yaiba", "menu_morohano_yaiba", 0x0, 0x28, 0xC8, 0x8C, 0x5, 0x64, 0x02, 0x00, 0x00, 0x00, 0x35, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"モロハノヤイバーＰ"*/"\x83\x82\x83\x8D\x83\x6E\x83\x6D\x83\x84\x83\x43\x83\x6F\x81\x5B\x82\x6F", "in_morohano_yaiba_p", "msg_morohano_yaiba_p", "menu_morohano_yaiba_p", 0x0, 0x29, 0xFA, 0xAF, 0x5, 0x7D, 0x02, 0x00, 0x00, 0x00, 0x4E, 0x0, NULL},
 #else
     {/*"モロハノヤイバーＰ"*/"\x83\x82\x83\x8D\x83\x6E\x83\x6D\x83\x84\x83\x43\x83\x6F\x81\x5B\x82\x6F", "in_morohano_yaiba_p", "msg_morohano_yaiba_p", "menu_morohano_yaiba_p", 0x0, 0x29, 0xFA, 0xAF, 0x5, 0x7D, 0x02, 0x00, 0x00, 0x00, 0x4A, 0x0, NULL},
 #endif
     {/*"イチカバチーカ"*/"\x83\x43\x83\x60\x83\x4A\x83\x6F\x83\x60\x81\x5B\x83\x4A", "in_ichika_bachika", "msg_ichika_bachika", "menu_ichika_bachika", 0x0, 0x24, 0x64, 0x46, 0x5, 0x32, 0x04, 0x00, 0x00, 0x00, 0x36, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"イチカバチーカＰ"*/"\x83\x43\x83\x60\x83\x4A\x83\x6F\x83\x60\x81\x5B\x83\x4A\x82\x6F", "in_ichika_bachika_p", "msg_ichika_bachika_p", "menu_ichika_bachika_p", 0x0, 0xFFFF, 0x64, 0x46, 0x5, 0x32, 0x04, 0x00, 0x00, 0x00, 0x63, 0x0, NULL},
 #else
     {/*"イチカバチーカＰ"*/"\x83\x43\x83\x60\x83\x4A\x83\x6F\x83\x60\x81\x5B\x83\x4A\x82\x6F", "in_ichika_bachika_p", "msg_ichika_bachika_p", "menu_ichika_bachika_p", 0x0, 0xFFFF, 0x64, 0x46, 0x5, 0x32, 0x04, 0x00, 0x00, 0x00, 0x60, 0x0, NULL},
 #endif
     {/*"キケンデパワー"*/"\x83\x4C\x83\x50\x83\x93\x83\x66\x83\x70\x83\x8F\x81\x5B", "in_kiken_de_power", "msg_kiken_de_power", "menu_kiken_de_power", 0x0, 0x35, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x37, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"キケンデパワーＰ"*/"\x83\x4C\x83\x50\x83\x93\x83\x66\x83\x70\x83\x8F\x81\x5B\x82\x6F", "in_kiken_de_power_p", "msg_kiken_de_power_p", "menu_kiken_de_power_p", 0x0, 0x36, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x62, 0x0, NULL},
     {/*"ピンチデガンバル"*/"\x83\x73\x83\x93\x83\x60\x83\x66\x83\x4B\x83\x93\x83\x6F\x83\x8B", "in_pinch_de_ganbaru", "msg_pinch_de_ganbaru", "menu_pinch_de_ganbaru", 0x0, 0x31, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x49, 0x0, NULL},
     {/*"ピンチデガンバルＰ"*/"\x83\x73\x83\x93\x83\x60\x83\x66\x83\x4B\x83\x93\x83\x6F\x83\x8B\x82\x6F", "in_pinch_de_ganbaru_p", "msg_pinch_de_ganbaru_p", "menu_pinch_de_ganbaru_p", 0x0, 0x32, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x67, 0x0, NULL},
@@ -555,38 +556,38 @@ ItemData itemDataTable[340] = {
     {/*"ピンチデガンバルＰ"*/"\x83\x73\x83\x93\x83\x60\x83\x66\x83\x4B\x83\x93\x83\x6F\x83\x8B\x82\x6F", "in_pinch_de_ganbaru_p", "msg_pinch_de_ganbaru_p", "menu_pinch_de_ganbaru_p", 0x0, 0x32, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x4F, 0x0, NULL},
 #endif
     {/*"ナマクラヤイバー"*/"\x83\x69\x83\x7D\x83\x4E\x83\x89\x83\x84\x83\x43\x83\x6F\x81\x5B", "in_namakura_yaiba", "msg_namakura_yaiba", "menu_namakura_yaiba", 0x0, 0x2A, 0x96, 0x69, 0x5, 0x4B, 0x02, 0x00, 0x00, 0x00, 0x34, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ナマクラヤイバーＰ"*/"\x83\x69\x83\x7D\x83\x4E\x83\x89\x83\x84\x83\x43\x83\x6F\x81\x5B\x82\x6F", "in_namakura_yaiba_p", "msg_namakura_yaiba_p", "menu_namakura_yaiba_p", 0x0, 0x2B, 0xC8, 0x8C, 0x5, 0x64, 0x02, 0x00, 0x00, 0x00, 0x4F, 0x0, NULL},
 #else
     {/*"ナマクラヤイバーＰ"*/"\x83\x69\x83\x7D\x83\x4E\x83\x89\x83\x84\x83\x43\x83\x6F\x81\x5B\x82\x6F", "in_namakura_yaiba_p", "msg_namakura_yaiba_p", "menu_namakura_yaiba_p", 0x0, 0x2B, 0xC8, 0x8C, 0x5, 0x64, 0x02, 0x00, 0x00, 0x00, 0x4B, 0x0, NULL},
 #endif
     {/*"ピンチデマモール"*/"\x83\x73\x83\x93\x83\x60\x83\x66\x83\x7D\x83\x82\x81\x5B\x83\x8B", "in_pinch_de_mamoru", "msg_pinch_de_mamoru", "menu_pinch_de_mamoru", 0x0, 0x33, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x38, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ピンチデマモールＰ"*/"\x83\x73\x83\x93\x83\x60\x83\x66\x83\x7D\x83\x82\x81\x5B\x83\x8B\x82\x6F", "in_pinch_de_mamoru_p", "msg_pinch_de_mamoru_p", "menu_pinch_de_mamoru_p", 0x0, 0x34, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x54, 0x0, NULL},
 #else
     {/*"ピンチデマモールＰ"*/"\x83\x73\x83\x93\x83\x60\x83\x66\x83\x7D\x83\x82\x81\x5B\x83\x8B\x82\x6F", "in_pinch_de_mamoru_p", "msg_pinch_de_mamoru_p", "menu_pinch_de_mamoru_p", 0x0, 0x34, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x51, 0x0, NULL},
 #endif
     {/*"ボウギョプラス"*/"\x83\x7B\x83\x45\x83\x4D\x83\x87\x83\x76\x83\x89\x83\x58", "in_bougyo_plus", "msg_bougyo_plus", "menu_bougyo_plus", 0x0, 0x2E, 0x12C, 0xD2, 0x5, 0x96, 0x05, 0x00, 0x00, 0x00, 0x30, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ボウギョプラスＰ"*/"\x83\x7B\x83\x45\x83\x4D\x83\x87\x83\x76\x83\x89\x83\x58\x82\x6F", "in_bougyo_plus_p", "msg_bougyo_plus_p", "menu_bougyo_plus_p", 0x0, 0x2F, 0x12C, 0xD2, 0x5, 0x96, 0x05, 0x00, 0x00, 0x00, 0x56, 0x0, NULL},
 #else
     {/*"ボウギョプラスＰ"*/"\x83\x7B\x83\x45\x83\x4D\x83\x87\x83\x76\x83\x89\x83\x58\x82\x6F", "in_bougyo_plus_p", "msg_bougyo_plus_p", "menu_bougyo_plus_p", 0x0, 0x2F, 0x12C, 0xD2, 0x5, 0x96, 0x05, 0x00, 0x00, 0x00, 0x53, 0x0, NULL},
 #endif
     {/*"ナイスデボウギョ"*/"\x83\x69\x83\x43\x83\x58\x83\x66\x83\x7B\x83\x45\x83\x4D\x83\x87", "in_nice_de_bougyo", "msg_nice_de_bougyo", "menu_nice_de_bougyo", 0x0, 0x2C, 0x96, 0x69, 0x5, 0x4B, 0x02, 0x00, 0x00, 0x00, 0x31, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ナイスデボウギョＰ"*/"\x83\x69\x83\x43\x83\x58\x83\x66\x83\x7B\x83\x45\x83\x4D\x83\x87\x82\x6F", "in_nice_de_bougyo_p", "msg_nice_de_bougyo_p", "menu_nice_de_bougyo_p", 0x0, 0x2D, 0x96, 0x69, 0x5, 0x4B, 0x02, 0x00, 0x00, 0x00, 0x59, 0x0, NULL},
 #else
     {/*"ナイスデボウギョＰ"*/"\x83\x69\x83\x43\x83\x58\x83\x66\x83\x7B\x83\x45\x83\x4D\x83\x87\x82\x6F", "in_nice_de_bougyo_p", "msg_nice_de_bougyo_p", "menu_nice_de_bougyo_p", 0x0, 0x2D, 0x96, 0x69, 0x5, 0x4B, 0x02, 0x00, 0x00, 0x00, 0x56, 0x0, NULL},
 #endif
     {/*"ハートフエール"*/"\x83\x6E\x81\x5B\x83\x67\x83\x74\x83\x47\x81\x5B\x83\x8B", "in_heart_fueru", "msg_heart_fueru", "menu_heart_fueru", 0x0, 0x1F, 0x96, 0x69, 0x5, 0x4B, 0x03, 0x00, 0x00, 0x00, 0x9, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ハートフエールＰ"*/"\x83\x6E\x81\x5B\x83\x67\x83\x74\x83\x47\x81\x5B\x83\x8B\x82\x6F", "in_heart_fueru_p", "msg_heart_fueru_p", "menu_heart_fueru_p", 0x0, 0x20, 0x12C, 0xD2, 0x5, 0x96, 0x06, 0x00, 0x00, 0x00, 0x58, 0x0, NULL},
 #else
     {/*"ハートフエールＰ"*/"\x83\x6E\x81\x5B\x83\x67\x83\x74\x83\x47\x81\x5B\x83\x8B\x82\x6F", "in_heart_fueru_p", "msg_heart_fueru_p", "menu_heart_fueru_p", 0x0, 0x20, 0x12C, 0xD2, 0x5, 0x96, 0x06, 0x00, 0x00, 0x00, 0x55, 0x0, NULL},
 #endif
     {/*"フラワーフエール"*/"\x83\x74\x83\x89\x83\x8F\x81\x5B\x83\x74\x83\x47\x81\x5B\x83\x8B", "in_flower_fueru", "msg_flower_fueru", "menu_flower_fueru", 0x0, 0x21, 0x96, 0x69, 0x5, 0x4B, 0x03, 0x00, 0x00, 0x00, 0x5, 0x0, NULL},
     {/*"フラワーセツヤク"*/"\x83\x74\x83\x89\x83\x8F\x81\x5B\x83\x5A\x83\x63\x83\x84\x83\x4E", "in_flower_setuyaku", "msg_flower_setuyaku", "menu_flower_setuyaku", 0x0, 0x41, 0xFA, 0xAF, 0xA, 0x7D, 0x04, 0x00, 0x00, 0x00, 0x2E, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"フラワーセツヤクＰ"*/"\x83\x74\x83\x89\x83\x8F\x81\x5B\x83\x5A\x83\x63\x83\x84\x83\x4E\x82\x6F", "in_flower_setuyaku_p", "msg_flower_setuyaku_p", "menu_flower_setuyaku_p", 0x0, 0x42, 0xFA, 0xAF, 0xA, 0x7D, 0x04, 0x00, 0x00, 0x00, 0x5C, 0x0, NULL},
 #else
     {/*"フラワーセツヤクＰ"*/"\x83\x74\x83\x89\x83\x8F\x81\x5B\x83\x5A\x83\x63\x83\x84\x83\x4E\x82\x6F", "in_flower_setuyaku_p", "msg_flower_setuyaku_p", "menu_flower_setuyaku_p", 0x0, 0x42, 0xFA, 0xAF, 0xA, 0x7D, 0x04, 0x00, 0x00, 0x00, 0x59, 0x0, NULL},
@@ -594,7 +595,7 @@ ItemData itemDataTable[340] = {
     {/*"アイスノチカーラ"*/"\x83\x41\x83\x43\x83\x58\x83\x6D\x83\x60\x83\x4A\x81\x5B\x83\x89", "in_ice_no_chikara", "msg_ice_no_chikara", "menu_ice_no_chikara", 0x0, 0x4E, 0x4B, 0x34, 0x5, 0x25, 0x01, 0x00, 0x00, 0x00, 0x13, 0x0, NULL},
     {/*"トゲーヲガード"*/"\x83\x67\x83\x51\x81\x5B\x83\x92\x83\x4B\x81\x5B\x83\x68", "in_toge_wo_guard", "msg_toge_wo_guard", "menu_toge_wo_guard", 0x0, 0x4F, 0x96, 0x69, 0x5, 0x4B, 0x03, 0x00, 0x00, 0x00, 0x1C, 0x0, NULL},
     {/*"イツーモゲンキ"*/"\x83\x43\x83\x63\x81\x5B\x83\x82\x83\x51\x83\x93\x83\x4C", "in_itsumo_genki", "msg_itsumo_genki", "menu_itsumo_genki", 0x0, 0x52, 0x12C, 0xD2, 0x5, 0x96, 0x04, 0x00, 0x00, 0x00, 0x7, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"イツーモゲンキＰ"*/"\x83\x43\x83\x63\x81\x5B\x83\x82\x83\x51\x83\x93\x83\x4C\x82\x6F", "in_itsumo_genki_p", "msg_itsumo_genki_p", "menu_itsumo_genki_p", 0x0, 0x53, 0x12C, 0xD2, 0x5, 0x96, 0x04, 0x00, 0x00, 0x00, 0x50, 0x0, NULL},
 #else
     {/*"イツーモゲンキＰ"*/"\x83\x43\x83\x63\x81\x5B\x83\x82\x83\x51\x83\x93\x83\x4C\x82\x6F", "in_itsumo_genki_p", "msg_itsumo_genki_p", "menu_itsumo_genki_p", 0x0, 0x53, 0x12C, 0xD2, 0x5, 0x96, 0x04, 0x00, 0x00, 0x00, 0x4C, 0x0, NULL},
@@ -603,26 +604,26 @@ ItemData itemDataTable[340] = {
     {/*"ニバイダメージ"*/"\x83\x6A\x83\x6F\x83\x43\x83\x5F\x83\x81\x81\x5B\x83\x57", "in_2bai_damage", "msg_2bai_damage", "menu_2bai_damage", 0x0, 0x30, 0x1E, 0x15, 0x5, 0xF, 0x00, 0x00, 0x00, 0x00, 0x14, 0x0, NULL},
     {/*"ジャンプダケーヨ"*/"\x83\x57\x83\x83\x83\x93\x83\x76\x83\x5F\x83\x50\x81\x5B\x83\x88", "in_jump_only", "msg_jump_only", "menu_jump_only", 0x0, 0x26, 0x96, 0x69, 0x5, 0x4B, 0x02, 0x00, 0x00, 0x00, 0x2A, 0x0, NULL},
     {/*"ハンマーダケーヨ"*/"\x83\x6E\x83\x93\x83\x7D\x81\x5B\x83\x5F\x83\x50\x81\x5B\x83\x88", "in_hammer_only", "msg_hammer_only", "menu_hammer_only", 0x0, 0x27, 0x96, 0x69, 0x5, 0x4B, 0x02, 0x00, 0x00, 0x00, 0x2B, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ダメージガエシ"*/"\x83\x5F\x83\x81\x81\x5B\x83\x57\x83\x4B\x83\x47\x83\x56", "in_damage_gaeshi", "msg_damage_gaeshi", "menu_damage_gaeshi", 0x0, 0x51, 0x3E7, 0x2BB, 0x5, 0x1F4, 0x07, 0x00, 0x00, 0x00, 0x3F, 0x0, NULL},
 #else
     {/*"ダメージガエシ"*/"\x83\x5F\x83\x81\x81\x5B\x83\x57\x83\x4B\x83\x47\x83\x56", "in_damage_gaeshi", "msg_damage_gaeshi", "menu_damage_gaeshi", 0x0, 0x51, 0x3E7, 0x2BB, 0x5, 0x1F4, 0x07, 0x00, 0x00, 0x00, 0x40, 0x0, NULL},
 #endif
     {/*"ハッピーハート"*/"\x83\x6E\x83\x62\x83\x73\x81\x5B\x83\x6E\x81\x5B\x83\x67", "in_happy_heart", "msg_happy_heart", "menu_happy_heart", 0x0, 0x3E, 0x96, 0x69, 0x4, 0x4B, 0x02, 0x00, 0x00, 0x00, 0x2D, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ハッピーハートＰ"*/"\x83\x6E\x83\x62\x83\x73\x81\x5B\x83\x6E\x81\x5B\x83\x67\x82\x6F", "in_happy_heart_p", "msg_happy_heart_p", "menu_happy_heart_p", 0x0, 0x3F, 0x96, 0x69, 0x4, 0x4B, 0x02, 0x00, 0x00, 0x00, 0x5B, 0x0, NULL},
 #else
     {/*"ハッピーハートＰ"*/"\x83\x6E\x83\x62\x83\x73\x81\x5B\x83\x6E\x81\x5B\x83\x67\x82\x6F", "in_happy_heart_p", "msg_happy_heart_p", "menu_happy_heart_p", 0x0, 0x3F, 0x96, 0x69, 0x4, 0x4B, 0x02, 0x00, 0x00, 0x00, 0x58, 0x0, NULL},
 #endif
     {/*"ハッピーフラワー"*/"\x83\x6E\x83\x62\x83\x73\x81\x5B\x83\x74\x83\x89\x83\x8F\x81\x5B", "in_happy_flower", "msg_happy_flower", "menu_happy_flower", 0x0, 0x40, 0x96, 0x69, 0x4, 0x4B, 0x02, 0x00, 0x00, 0x00, 0x11, 0x0, NULL},
     {/*"ハートスイトール"*/"\x83\x6E\x81\x5B\x83\x67\x83\x58\x83\x43\x83\x67\x81\x5B\x83\x8B", "in_heart_suitoru", "msg_heart_suitoru", "menu_heart_suitoru", 0x0, 0x47, 0x64, 0x46, 0x5, 0x32, 0x01, 0x00, 0x00, 0x00, 0xA, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ハートスイトールＰ"*/"\x83\x6E\x81\x5B\x83\x67\x83\x58\x83\x43\x83\x67\x81\x5B\x83\x8B\x82\x6F", "in_heart_suitoru_p", "msg_heart_suitoru_p", "menu_heart_suitoru_p", 0x0, 0x48, 0x64, 0x46, 0x5, 0x32, 0x01, 0x00, 0x00, 0x00, 0x5A, 0x0, NULL},
 #else
     {/*"ハートスイトールＰ"*/"\x83\x6E\x81\x5B\x83\x67\x83\x58\x83\x43\x83\x67\x81\x5B\x83\x8B\x82\x6F", "in_heart_suitoru_p", "msg_heart_suitoru_p", "menu_heart_suitoru_p", 0x0, 0x48, 0x64, 0x46, 0x5, 0x32, 0x01, 0x00, 0x00, 0x00, 0x57, 0x0, NULL},
 #endif
     {/*"フラワスイトール"*/"\x83\x74\x83\x89\x83\x8F\x83\x58\x83\x43\x83\x67\x81\x5B\x83\x8B", "in_flower_suitoru", "msg_flower_suitoru", "menu_flower_suitoru", 0x0, 0x49, 0x64, 0x46, 0x5, 0x32, 0x01, 0x00, 0x00, 0x00, 0x6, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"フラワスイトールＰ"*/"\x83\x74\x83\x89\x83\x8F\x83\x58\x83\x43\x83\x67\x81\x5B\x83\x8B\x82\x6F", "in_flower_suitoru_p", "msg_flower_suitoru_p", "menu_flower_suitoru_p", 0x0, 0xFFFF, 0x64, 0x46, 0x5, 0x32, 0x02, 0x00, 0x00, 0x00, 0x55, 0x0, NULL},
     {/*"ピンチデラッキー"*/"\x83\x73\x83\x93\x83\x60\x83\x66\x83\x89\x83\x62\x83\x4C\x81\x5B", "in_pinch_de_lucky", "msg_pinch_de_lucky", "menu_pinch_de_lucky", 0x0, 0x37, 0x64, 0x46, 0x5, 0x32, 0x01, 0x00, 0x00, 0x00, 0x39, 0x0, NULL},
     {/*"ピンチデラッキーＰ"*/"\x83\x73\x83\x93\x83\x60\x83\x66\x83\x89\x83\x62\x83\x4C\x81\x5B\x82\x6F", "in_pinch_de_lucky_p", "msg_pinch_de_lucky_p", "menu_pinch_de_lucky_p", 0x0, 0x38, 0x64, 0x46, 0x5, 0x32, 0x01, 0x00, 0x00, 0x00, 0x53, 0x0, NULL},
@@ -632,7 +633,7 @@ ItemData itemDataTable[340] = {
     {/*"ピンチデラッキーＰ"*/"\x83\x73\x83\x93\x83\x60\x83\x66\x83\x89\x83\x62\x83\x4C\x81\x5B\x82\x6F", "in_pinch_de_lucky_p", "msg_pinch_de_lucky_p", "menu_pinch_de_lucky_p", 0x0, 0x38, 0x64, 0x46, 0x5, 0x32, 0x01, 0x00, 0x00, 0x00, 0x50, 0x0, NULL},
 #endif
     {/*"タマーニラッキー"*/"\x83\x5E\x83\x7D\x81\x5B\x83\x6A\x83\x89\x83\x62\x83\x4C\x81\x5B", "in_tamani_lucky", "msg_tamani_lucky", "menu_tamani_lucky", 0x0, 0x39, 0x96, 0x69, 0x3, 0x4B, 0x02, 0x00, 0x00, 0x00, 0x1B, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"タマーニラッキーＰ"*/"\x83\x5E\x83\x7D\x81\x5B\x83\x6A\x83\x89\x83\x62\x83\x4C\x81\x5B\x82\x6F", "in_tamani_lucky_p", "msg_tamani_lucky_p", "menu_tamani_lucky_p", 0x0, 0x3A, 0x96, 0x69, 0x5, 0x4B, 0x02, 0x00, 0x00, 0x00, 0x52, 0x0, NULL},
     {/*"ケッコウラッキー"*/"\x83\x50\x83\x62\x83\x52\x83\x45\x83\x89\x83\x62\x83\x4C\x81\x5B", "in_kekkou_lucky", "msg_kekkou_lucky", "menu_kekkou_lucky", 0x0, 0x3B, 0x1F4, 0x15E, 0x5, 0xFA, 0x07, 0x00, 0x00, 0x00, 0x3A, 0x0, NULL},
     {/*"ケッコウラッキーＰ"*/"\x83\x50\x83\x62\x83\x52\x83\x45\x83\x89\x83\x62\x83\x4C\x81\x5B\x82\x6F", "in_kekkou_lucky_p", "msg_kekkou_lucky_p", "menu_kekkou_lucky_p", 0x0, 0xFFFF, 0x1F4, 0x15E, 0x5, 0xFA, 0x07, 0x00, 0x00, 0x00, 0x51, 0x0, NULL},
@@ -662,7 +663,7 @@ ItemData itemDataTable[340] = {
     {/*"センセイサレナイ"*/"\x83\x5A\x83\x93\x83\x5A\x83\x43\x83\x54\x83\x8C\x83\x69\x83\x43", "in_sensei_sarenai", "msg_sensei_sarenai", "menu_sensei_sarenai", 0x0, 0x5E, 0x4B, 0x34, 0x2, 0x25, 0x01, 0x00, 0x00, 0x00, 0x1A, 0x0, NULL},
     {/*"ヤッツケアタック"*/"\x83\x84\x83\x62\x83\x63\x83\x50\x83\x41\x83\x5E\x83\x62\x83\x4E", "in_yattsuke_attack", "msg_yattsuke_attack", "menu_yattsuke_attack", 0x0, 0x5F, 0x64, 0x46, 0x5, 0x32, 0x01, 0x00, 0x00, 0x00, 0x1D, 0x0, NULL},
     {/*"ヤッツケーレ"*/"\x83\x84\x83\x62\x83\x63\x83\x50\x81\x5B\x83\x8C", "in_yattsuke_touch", "msg_yattsuke_touch", "menu_yattsuke_touch", 0x0, 0x60, 0x12C, 0xD2, 0x5, 0x96, 0x05, 0x00, 0x00, 0x00, 0x1E, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ノロノロアルーク"*/"\x83\x6D\x83\x8D\x83\x6D\x83\x8D\x83\x41\x83\x8B\x81\x5B\x83\x4E", "in_noronoro_aruku", "msg_noronoro_aruku", "menu_noronoro_aruku", 0x0, 0x6E, 0xA, 0x7, 0x5, 0x5, 0x00, 0x00, 0x00, 0x00, 0x40, 0x0, NULL},
     {/*"カンタンニナール"*/"\x83\x4A\x83\x93\x83\x5E\x83\x93\x83\x6A\x83\x69\x81\x5B\x83\x8B", "in_AC_easy", "msg_AC_easy", "menu_AC_easy", 0x0, 0x5C, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x41, 0x0, NULL},
     {/*"ムズカシクナール"*/"\x83\x80\x83\x59\x83\x4A\x83\x56\x83\x4E\x83\x69\x81\x5B\x83\x8B", "in_AC_difficult", "msg_AC_difficult", "menu_AC_difficult", 0x0, 0x5D, 0x32, 0x23, 0x5, 0x19, 0x01, 0x00, 0x00, 0x00, 0x42, 0x0, NULL},
@@ -676,13 +677,13 @@ ItemData itemDataTable[340] = {
     {/*"エムブレームＬ"*/"\x83\x47\x83\x80\x83\x75\x83\x8C\x81\x5B\x83\x80\x82\x6B", "in_super_emblem_l", "msg_super_emblem_l", "menu_super_emblem_l", 0x0, 0x67, 0x12C, 0xD2, 0x5, 0x96, 0x00, 0x00, 0x00, 0x00, 0x3, 0x0, NULL},
     {/*"エムブレームＷ"*/"\x83\x47\x83\x80\x83\x75\x83\x8C\x81\x5B\x83\x80\x82\x76", "in_super_emblem_w", "msg_super_emblem_w", "menu_super_emblem_w", 0x0, 0x68, 0x12C, 0xD2, 0x5, 0x96, 0x00, 0x00, 0x00, 0x00, 0x2, 0x0, NULL},
     {/*"サンカイアイテーム"*/"\x83\x54\x83\x93\x83\x4A\x83\x43\x83\x41\x83\x43\x83\x65\x81\x5B\x83\x80", "in_3kai_item", "msg_3kai_item", "in_unknown_item", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x06, 0x00, 0x00, 0x00, 0x28, 0x0, &badgeWeapon_3KaiItem},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ナニーカラッキーＰ"*/"\x83\x69\x83\x6A\x81\x5B\x83\x4A\x83\x89\x83\x62\x83\x4C\x81\x5B\x82\x6F", "in_unknown_item", "msg_unknown_item", "msg_unknown_item", 0x0, 0xFFFF, 0x64, 0x46, 0x5, 0x32, 0x02, 0x00, 0x00, 0x00, 0x3E, 0x0, NULL},
 #else
     {/*"ナニーカラッキーＰ"*/"\x83\x69\x83\x6A\x81\x5B\x83\x4A\x83\x89\x83\x62\x83\x4C\x81\x5B\x82\x6F", "in_unknown_item", "msg_unknown_item", "msg_unknown_item", 0x0, 0xFFFF, 0x64, 0x46, 0x5, 0x32, 0x02, 0x00, 0x00, 0x00, 0x3F, 0x0, NULL},
 #endif
     {/*"タツジーン"*/"\x83\x5E\x83\x63\x83\x57\x81\x5B\x83\x93", "in_unknown_item", "msg_unknown_item", "msg_unknown_item", 0x0, 0xFFFF, 0x64, 0x46, 0x5, 0x32, 0x01, 0x00, 0x00, 0x00, 0x0, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ドカーンジャンプ"*/"\x83\x68\x83\x4A\x81\x5B\x83\x93\x83\x57\x83\x83\x83\x93\x83\x76", "in_unknown_item", "in_unknown_item", "in_unknown_item", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x03, 0x00, 0x00, 0x00, 0x43, 0x0, &badgeWeapon_DokanJump},
     {/*"ドカーンナグーリ"*/"\x83\x68\x83\x4A\x81\x5B\x83\x93\x83\x69\x83\x4F\x81\x5B\x83\x8A", "in_unknown_item", "in_unknown_item", "in_unknown_item", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x01, 0x00, 0x00, 0x00, 0x46, 0x0, &badgeWeapon_DokanHammer},
 #else
@@ -691,13 +692,13 @@ ItemData itemDataTable[340] = {
 #endif
     {/*"ウルトラジシーン"*/"\x83\x45\x83\x8B\x83\x67\x83\x89\x83\x57\x83\x56\x81\x5B\x83\x93", "in_unknown_item", "in_unknown_item", "in_unknown_item", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x04, 0x00, 0x00, 0x00, 0xC, 0x0, &badgeWeapon_UltraJishinHammer},
     {/*"ボウギョコマンドー"*/"\x83\x7B\x83\x45\x83\x4D\x83\x87\x83\x52\x83\x7D\x83\x93\x83\x68\x81\x5B", "in_unknown_item", "in_unknown_item", "in_unknown_item", 0x0, 0xFFFF, 0x32, 0x23, 0x5, 0x19, 0x02, 0x00, 0x00, 0x00, 0x2C, 0x0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"ボウギョコマンドーP"*/"\x83\x7B\x83\x45\x83\x4D\x83\x87\x83\x52\x83\x7D\x83\x93\x83\x68\x81\x5B\x50", "in_unknown_item", "in_unknown_item", "in_unknown_item", 0x0, 0xFFFF, 0x32, 0x23, 0x5, 0x19, 0x02, 0x00, 0x00, 0x00, 0x57, 0x0, NULL},
 #else
     {/*"ボウギョコマンドーP"*/"\x83\x7B\x83\x45\x83\x4D\x83\x87\x83\x52\x83\x7D\x83\x93\x83\x68\x81\x5B\x50", "in_unknown_item", "in_unknown_item", "in_unknown_item", 0x0, 0xFFFF, 0x32, 0x23, 0x5, 0x19, 0x02, 0x00, 0x00, 0x00, 0x54, 0x0, NULL},
 #endif
     {/*"スーパーチャージ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x60\x83\x83\x81\x5B\x83\x57", "in_unknown_item", "in_unknown_item", "in_unknown_item", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x02, 0x00, 0x00, 0x00, 0x26, 0x0, &badgeWeapon_SuperCharge},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"スーパーチャージＰ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x60\x83\x83\x81\x5B\x83\x57\x82\x6F", "in_unknown_item", "in_unknown_item", "in_unknown_item", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x02, 0x00, 0x00, 0x00, 0x60, 0x0, &badgeWeapon_SuperCharge},
 #else
     {/*"スーパーチャージＰ"*/"\x83\x58\x81\x5B\x83\x70\x81\x5B\x83\x60\x83\x83\x81\x5B\x83\x57\x82\x6F", "in_unknown_item", "in_unknown_item", "in_unknown_item", 0x0, 0xFFFF, 0xA, 0x7, 0x5, 0x5, 0x02, 0x00, 0x00, 0x00, 0x5D, 0x0, &badgeWeapon_SuperCharge},

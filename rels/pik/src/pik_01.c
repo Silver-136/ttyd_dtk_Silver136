@@ -1,6 +1,7 @@
 // pik_01 (ピカリーヒルズ, Poshley Heights): the town square with Pennington's office and the souvenir shop; paths to pik_04
 // and the sanctum (pik_02), pipe to Rogueport Sewers (tik_17).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
 #include "evt/evt_window.h"
@@ -223,7 +224,7 @@ EVT_BEGIN(evt_powan)
     CALL(evt_msg_print, 0, STRING("stg6_pik_06"), 0, 0)
     WAIT_MS(300)
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_position, STRING("ポワン探偵"), -70, 5, -248)
 #else
     CALL(evt_npc_set_position, STRING("ポワン探偵"), -50, 10, -235)

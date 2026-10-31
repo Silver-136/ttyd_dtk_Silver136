@@ -1,6 +1,7 @@
 // hom_00 (途中駅ホーム, Excess Express platform): the platform where the Excess Express stops; the locked door into the station
 // (eki_00) needs the Station Key.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -73,7 +74,7 @@ static EvtWord evt_train[262];
 EvtWord evt_train_nidome[307];
 EvtWord evt_hom_touchaku[460];
 EvtWord evt_hom_touchaku_nidome[56];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord hom_00_init_evt[259];
 #else
 EvtWord hom_00_init_evt[247];
@@ -812,7 +813,7 @@ EVT_END()
 EVT_BEGIN(hom_00_init_evt)
     // NPCs, music, ambience, the save block and the recovery block.
     SET_VALUE(GF(15), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hasi_L"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hasi_R"), MAP_OBJ_FLAG_CLIP)
 #endif

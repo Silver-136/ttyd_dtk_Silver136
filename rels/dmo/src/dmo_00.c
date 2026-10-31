@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_urouro.h"
 #include "evt/evt_cmd.h"
@@ -81,7 +82,7 @@ static EvtWord koushukei_dai[63];
 EvtWord roten_move[25];
 EvtWord kuribo_move[25];
 EvtWord chusan_move[25];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord dmo_00_init_evt[268];
 #else
 EvtWord dmo_00_init_evt[262];
@@ -1053,7 +1054,7 @@ EVT_END()
 EVT_BEGIN(dmo_00_init_evt)
     CALL(demo_init)
     CALL(evt_npc_entry, STRING("peach"), STRING("c_peach"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_tribe, STRING("peach"), STRING("デモピーチ標準2"))
 #else
     CALL(evt_npc_set_tribe, STRING("peach"), STRING(/*"デモピーチ標準2"*/"\x83\x66\x83\x82\x83\x73\x81\x5B\x83\x60\x95\x57\x8F\x80\x32"))
@@ -1063,7 +1064,7 @@ EVT_BEGIN(dmo_00_init_evt)
     CALL(evt_npc_status_onoff, 1, STRING("peach"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_flag_onoff, 1, STRING("peach"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_entry, STRING("nazo"), STRING("c_nazo"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_tribe, STRING("nazo"), STRING("謎の人"))
 #else
     CALL(evt_npc_set_tribe, STRING("nazo"), STRING(/*"謎の人"*/"\x93\xE4\x82\xCC\x90\x6C"))
@@ -1080,7 +1081,7 @@ EVT_BEGIN(dmo_00_init_evt)
     CALL(evt_npc_pera_onoff, STRING("hako"), 0)
     CALL(evt_mobj_itembox, STRING("hako"), 340, 110, -20, MOBJ_ITEMBOX_BIG, 0, 0, 0)
     CALL(evt_mobj_flag_onoff, 1, STRING("hako"), MOBJ_FLAG_NO_DISP)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_entry, STRING("ロテン１"), STRING("c_roten"))
     CALL(evt_npc_set_tribe, STRING("ロテン１"), STRING("ロテン"))
     CALL(evt_npc_flag_onoff, 1, STRING("ロテン１"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR | NPC_FLAG_NO_WALL_COLLISION)
@@ -1125,7 +1126,7 @@ EVT_BEGIN(dmo_00_init_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("peach"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("nazo"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("hako"), NPC_FLAG_NO_DRAW)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ロテン１"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("クリボー１"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("チューさん１"), NPC_FLAG_NO_DRAW)
@@ -1138,7 +1139,7 @@ EVT_BEGIN(dmo_00_init_evt)
         SET_TYPE(0)
         CALL(demo_draw)
     END_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SPAWN_EVENT(PTR(demo_evt))
     SPAWN_EVENT(PTR(koushukei_dai))
 #else
@@ -1148,7 +1149,7 @@ EVT_BEGIN(dmo_00_init_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_sub_animgroup_async, STRING("OFF_d_maku_center"))
     END_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_fade_set_mapchange_type, 1, -1, -1, -1, 900)
     RETURN
 EVT_END()

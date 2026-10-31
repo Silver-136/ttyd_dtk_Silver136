@@ -3108,7 +3108,7 @@ void puniModePiyori(PuniData* p) {
                 }
             } else {
                 p->mode = p->prevMode;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 p->anim = 2;
 #endif
                 if (p->prevMode == PUNI_MODE_PARENT) {
@@ -3738,7 +3738,7 @@ void puniModeWonder(PuniData* p) {
             pos = p->pos;
             pos.y += 15.0f;
             pos.z += 3.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
 #else
             p->effect = effPuniBalloonEntry(1, pos.x, pos.y, pos.z, 1.5f);
@@ -3823,7 +3823,7 @@ void puniModeFunbari(PuniData* p) {
             p->vel.x = 0.5f;
             p->timer = 68;
             p->modeF0 = 1.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             p->dispOfs.y = 0.0f;
 #endif
             p->npc->flags |= NPC_FLAG_RECORD_DEFEAT;
@@ -3841,7 +3841,7 @@ void puniModeFunbari(PuniData* p) {
             }
             p->modeF0 += 7.0f;
             if (p->modeF0 >= 360.0f) p->modeF0 = 360.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             {
                 Vec start;
                 Vec s2;

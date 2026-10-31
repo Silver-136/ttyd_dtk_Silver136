@@ -155,7 +155,7 @@ typedef struct BattleAnnounce {
     s16 x;                           // 0x0
     s16 y;                           // 0x2
     s32 params[4];                   // 0x4
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     char text[0x100];                 // 0x14 (US 4 shorter)
 #else
     char text[0x104];                 // 0x14
@@ -175,7 +175,7 @@ typedef struct BattleWorkPartyInfo {
     BtlStatusCopy statusTurns;     // 0x4, saved from BattleUnit.sleepTurns
     u8 pad_22[0x24 - 0x22];   // 0x22, never accessed
     s32 statusFlags;          // 0x24, saved BattleUnit.statusFlags
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     u16 usCommandDisabled[2]; // US only: saved BattleUnit usCommandDisabled
 #endif
 } BattleWorkPartyInfo;
@@ -301,7 +301,7 @@ struct BattleWork {
     const char* acHelpMsg;              // 0x18FF0
     s32 acHelpDispType;                 // 0x18FF4
     u8 pad_18FF8[0x19038 - 0x18FF8];    // 0x18FF8, never accessed
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 commandDisabled[3]; // US
 #else
     s32 commandDisabled[5];             // 0x19038, set to 3 by Bowser's command-blocking attacks
@@ -334,7 +334,7 @@ void BattleFree(void* ptr);
 void* BattleAlloc(u32 size);
 
 // BTL_ALLOC/BTL_FREE: US routes these battle-heap sites through BattleAlloc/BattleFree; JP calls the heap directly.
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define BTL_ALLOC(size) BattleAlloc(size)
 #define BTL_FREE(ptr) BattleFree(ptr)
 #else

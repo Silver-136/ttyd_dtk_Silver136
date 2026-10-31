@@ -46,7 +46,7 @@ static GXColor col_mini[] = {
 };
 static GXColor* col_tbl[] = {col_normal, col_poison, col_mega, col_cold, col_confu, col_sleep, col_mini, col_normal};
 #pragma force_active on
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 u32 gap_07_8041E0A4_sdata[7] = {0,0,0,0,0,0,0};
 #else
 u32 gap_07_80417E8C_sdata[5] = {0,0,0,0,0};

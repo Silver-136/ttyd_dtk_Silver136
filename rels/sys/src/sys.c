@@ -1,6 +1,7 @@
 // sys.rel (システム, System): sys_00, an empty map, and sys_01, the chapter title card ("Prologue", "Chapter 1" ...)
 // that plays between chapters: the title's letters fly in over a rainbow light, followed by the chapter subtitle.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "eff/eff_itemget.h"
@@ -46,7 +47,7 @@ typedef struct SysChar {
     s32 state;
     s32 texid;
 } SysChar;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: room for 64 letters, plus the chapter subtitle rendered once into a texture
 #endif
 typedef struct SysWork {
@@ -59,7 +60,7 @@ typedef struct SysWork {
     s32 alpha;
     f32 angle;
     s32 count;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SysChar chars[64];
     smartEntry* msgTex; // 0x724
     u16 msgTexW;        // 0x728
@@ -74,11 +75,11 @@ SysWork* g_wp;
 USER_FUNC(bg);
 USER_FUNC(display);
 USER_FUNC(init);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 USER_FUNC(sys_01_start_end_wait);
 #endif
 USER_FUNC(start);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #endif
 void sys_01_release(void);
 static void _unresolved(void);
@@ -86,7 +87,7 @@ static void _epilog(void);
 void _prolog(void);
 
 EvtWord dummy_evt[2];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static u32 niji_tbl[6];
 #else
 static u32 niji_tbl[2];
@@ -102,7 +103,7 @@ s8 stage6_jp_tbl[6];
 s8 stage7_jp_tbl[6];
 s8 stage8_jp_tbl[6];
 s8* texid_jp_tbl[9];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 s8 prologue_us_tbl[9];
 s8 stage1_us_tbl[10];
 s8 stage2_us_tbl[10];
@@ -170,7 +171,7 @@ s8** lang_tbl[2];
 const char* lang_prefix[2];
 #endif
 EvtWord sys_01_init_evt[135];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_start[191];
 #else
 EvtWord evt_start[189];
@@ -206,7 +207,7 @@ EVT_END()
 
 /** Texture index of the rainbow light in the title palette, one per language. */
 static u32 niji_tbl[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     19, 26, 24, 27, 22, 22,
 #else
     19, 22,
@@ -288,7 +289,7 @@ static inline void setChanMatColor(GXColor init, s32 c) {
     GXSetChanMatColor(GX_COLOR0A0, color);
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 
 /** US: draws the chapter subtitle once, flat, and copies it into a texture that display_func bends */
 // US: draws the chapter subtitle once, flat, and copies it into a texture that display_func bends
@@ -406,7 +407,7 @@ void display_func(CameraId cameraId, void* param) {
     Vec eye;
     Vec up;
     Vec target;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 h;
     f32 size;
     s32 full;
@@ -431,7 +432,7 @@ void display_func(CameraId cameraId, void* param) {
 
     scroll = wp->scroll;
     wp->scroll++;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     if (scroll > 0x500) {
         scroll -= 0x500;
     }
@@ -510,7 +511,7 @@ void display_func(CameraId cameraId, void* param) {
     GXTexCoord2f32(0.0f, 1.0f);
     GXEnd();
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // US: the subtitle texture from sys_01_msg_tex_capture_func is bent into a ring strip and faded in along it
     PSMTXTrans(mtx, 0.0f, -40.0f, 0.0f);
     PSMTXRotRad(rot, 'z', 0.017453292f * wp->angle);
@@ -654,7 +655,7 @@ void display_func(CameraId cameraId, void* param) {
         if (chr->state == 0) {
             break;
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (chr->texid == -2) {
             continue;
         }
@@ -775,7 +776,7 @@ s8* texid_jp_tbl[] = {
 
 // US: one title texture set per language; -2 marks a word gap
 s8 prologue_us_tbl[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     19, 20, 21, 22, 21, 23, 24, 25, -1,
 #else
     17, 18, 19, 20, 19, 7, 21, 8, -1,
@@ -787,7 +788,7 @@ s8 prologue_us_tbl[] = {
  * -1 ends the list.
  */
 s8 stage1_us_tbl[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     4, 5, 6, 7, 8, 9, 10, -2, 11, -1,
 #else
     4, 5, 6, 7, 8, 9, -1,
@@ -799,7 +800,7 @@ s8 stage1_us_tbl[] = {
  * -1 ends the list.
  */
 s8 stage2_us_tbl[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     4, 5, 6, 7, 8, 9, 10, -2, 12, -1,
 #else
     4, 5, 6, 7, 8, 10, -1,
@@ -811,7 +812,7 @@ s8 stage2_us_tbl[] = {
  * -1 ends the list.
  */
 s8 stage3_us_tbl[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     4, 5, 6, 7, 8, 9, 10, -2, 13, -1,
 #else
     4, 5, 6, 7, 8, 11, -1,
@@ -823,7 +824,7 @@ s8 stage3_us_tbl[] = {
  * -1 ends the list.
  */
 s8 stage4_us_tbl[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     4, 5, 6, 7, 8, 9, 10, -2, 14, -1,
 #else
     4, 5, 6, 7, 8, 12, -1,
@@ -835,7 +836,7 @@ s8 stage4_us_tbl[] = {
  * -1 ends the list.
  */
 s8 stage5_us_tbl[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     4, 5, 6, 7, 8, 9, 10, -2, 15, -1,
 #else
     4, 5, 6, 7, 8, 13, -1,
@@ -847,7 +848,7 @@ s8 stage5_us_tbl[] = {
  * -1 ends the list.
  */
 s8 stage6_us_tbl[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     4, 5, 6, 7, 8, 9, 10, -2, 16, -1,
 #else
     4, 5, 6, 7, 8, 14, -1,
@@ -859,7 +860,7 @@ s8 stage6_us_tbl[] = {
  * -1 ends the list.
  */
 s8 stage7_us_tbl[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     4, 5, 6, 7, 8, 9, 10, -2, 17, -1,
 #else
     4, 5, 6, 7, 8, 15, -1,
@@ -871,7 +872,7 @@ s8 stage7_us_tbl[] = {
  * -1 ends the list.
  */
 s8 stage8_us_tbl[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     4, 5, 6, 7, 8, 9, 10, -2, 18, -1,
 #else
     4, 5, 6, 7, 8, 16, -1,
@@ -883,7 +884,7 @@ s8* texid_us_tbl[] = {
     prologue_us_tbl, stage1_us_tbl, stage2_us_tbl, stage3_us_tbl, stage4_us_tbl, stage5_us_tbl, stage6_us_tbl, stage7_us_tbl, stage8_us_tbl,
 };
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** Title letters of the prologue in German: effect-texture ids in drawing order, -1 ends the list. */
 s8 prologue_lang3_tbl[] = {
     19, 20, 21, 22, 21, 23, -1,
@@ -1192,7 +1193,7 @@ s8** lang_tbl[] = {
 
 /** File-name prefix of the title files of each language. */
 const char* lang_prefix[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     "jp", "us", "ge", "fr", "sp", "it", "du",
 #else
     "jp", "us",
@@ -1274,7 +1275,7 @@ EVT_BEGIN(evt_start)
     CALL(evt_fade_entry, 35, 0, 0, 0, 0)
     CALL(evt_fade_end_wait)
     CALL(start)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(sys_01_start_end_wait)
     WAIT_MS(3000)
 #else
@@ -1342,7 +1343,7 @@ EVT_END()
 
 USER_FUNC(display) {
     SysWork* wp;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 type = evtGetValue(event, event->args[0]);
     s32 i;
     SysChar* chr;
@@ -1363,7 +1364,7 @@ USER_FUNC(display) {
             wp->count++;
         }
         for (i = 0; i < wp->count; i++) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             // US: letters are laid out by width (gaps marked -2 are half width), centred on the title
             f32 left = 0.0f;
             f32 total = left;
@@ -1440,7 +1441,7 @@ USER_FUNC(display) {
                                 wp->angle -= 360.0f;
                             }
                             wp->alpha += 0x30;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                             if (wp->alpha > 0x4000) {
                                 wp->alpha = 0x4000;
                             }
@@ -1458,7 +1459,7 @@ USER_FUNC(display) {
             break;
     }
     if (wp->state != 0) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         dispEntry(CAMERA_3D, 0.0f, 2, sys_01_msg_tex_capture_func, wp);
 #endif
         dispEntry(CAMERA_3D_EFFECTA, 0.0f, 2, display_func, wp);
@@ -1494,7 +1495,7 @@ USER_FUNC(init) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** US: waits until every title letter has finished spinning in */
 // US: waits until every title letter has finished spinning in
 USER_FUNC(sys_01_start_end_wait) {

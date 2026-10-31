@@ -423,7 +423,7 @@ EVT_BEGIN(kpa_07_evt)
     WAIT_MS(2000)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 18)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_memcard_save_wrapper))
 #else
     CALL_CHILD(PTR(evt_memcard_save))

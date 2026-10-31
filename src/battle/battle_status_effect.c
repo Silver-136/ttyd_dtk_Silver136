@@ -320,7 +320,7 @@ void BSE_Kagegakure(BattleUnit* unit) {
     if (on) {
         if (unit->kageIcon == NULL) {
             sprintf(name, "_biK_%02x", unit->unitId);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             iconEntry(name, 0xA1);
 #else
             iconEntry(name, 0x99);

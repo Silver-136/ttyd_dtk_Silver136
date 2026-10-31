@@ -1088,7 +1088,7 @@ EVT_BEGIN(onryo_event)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_set_pos, 0, -1000, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_party_cont_onoff, 0, 0)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
 #endif
@@ -1115,13 +1115,13 @@ EVT_BEGIN(onryo_event)
     SET_VALUE(GSW_STORY_PROGRESS, STG5_00_LOGBOOK)
     LABEL(100)
     CALL(evt_mario_cont_onoff, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #else
     CALL(evt_party_cont_onoff, 0, 0)
 #endif
     CALL(evt_mario_set_pos, 5, 90, -100)
     CALL(evt_mario_set_dir, 90, 0, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #else
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
 #endif
@@ -2058,7 +2058,7 @@ static void draw(CameraId camera, void* param) {
     f32 viewport[6];
     f32 projection[7];
     CameraEntry* cam;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // US: logo texture per language (indexed by gp->language)
     s32 logoTex[6] = {0x15, 0x15, 0x16, 0x17, 0x18, 0x19};
 #endif
@@ -2071,7 +2071,7 @@ static void draw(CameraId camera, void* param) {
     cam = camGetPtr(CAMERA_2D);
     *camGetCurPtr() = *cam;
     winTexInit(*(TEXPalette**)wp->tpl->data);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     winTexSetNearest(logoTex[gp->language], (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
 #else
     winTexSetNearest(5, (Vec){0.0f, 100.0f + wp->y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, wp->alpha});
@@ -2340,7 +2340,7 @@ EVT_BEGIN(muj_20_init_evt)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 
 
 #endif
@@ -2369,7 +2369,7 @@ USER_FUNC(logo) {
         case 1:
             if (wp->counter < VERSION_PICK(180, FPS_FRAMES(180))) {
                 wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 255.0f, ++wp->counter, VERSION_PICK(180, FPS_FRAMES(180)));
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, FPS_FRAMES(180));
 #else
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, -50.0f, 0.0f, ++wp->counter, 180);
@@ -2388,7 +2388,7 @@ USER_FUNC(logo) {
         case 3:
             if (wp->counter < VERSION_PICK(120, FPS_FRAMES(120))) {
                 wp->alpha = intplGetValue(EASING_SINE_IN_OUT, 255.0f, 0.0f, ++wp->counter, VERSION_PICK(120, FPS_FRAMES(120)));
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, FPS_FRAMES(120));
 #else
                 wp->y = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 100.0f, ++wp->counter, 120);

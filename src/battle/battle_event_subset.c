@@ -1,5 +1,6 @@
 // Battle event subsets: reusable damage, death, confusion and blow-away scripts shared by units.
 
+#include "version.h"
 #include "battle/battle.h"
 #include "unit/unit_koura.h"
 #include "battle/battle_sub.h"
@@ -29,7 +30,7 @@ USER_FUNC(_set_hp_gauge_fade_flag);
 USER_FUNC(_check_at_dm_event_wait);
 USER_FUNC(_disable_restore_command_cursor);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord subsetevt_dead[612];
 #else
 EvtWord subsetevt_dead[608];
@@ -248,7 +249,7 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
                 CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 CALL(btlevtcmd_OffUnitFlag, LW(10), BATTLE_UNIT_FLAG_STOLEN_ITEM)
                 CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             END_IF

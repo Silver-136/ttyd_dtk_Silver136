@@ -2,6 +2,7 @@
 // the tables below, and runs their fades, volume mixes, 3D panning and the per-map reset; sound.c below it drives
 // MusyX and the streamed audio.
 
+#include "version.h"
 #include "libc_decls.h"
 #include "driver/seqdrv.h"
 #include "system.h"
@@ -17,7 +18,7 @@
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define PSND_FPS gp->framerate
 #define PSND_FRAME_MS (1000.0f / gp->framerate)
 #define PSND_FADE45 (750.0f / PSND_FRAME_MS)
@@ -6978,7 +6979,7 @@ BOOL psndENVOff_f_d(u32 flags, u32 fadetime, s32 unused) {
         fade->dipTimeMax = fadetime / PSND_FRAME_MS;
         fade->dipTime = fade->dipTimeMax;
         fade->dipPercent = silent;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (flags & PSND_QUICK) {
             fade->dipTime = (fade->dipTimeMax * fade->dipPercent) / 100;
         }

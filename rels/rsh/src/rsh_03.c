@@ -1,6 +1,7 @@
 // rsh_03 (列車, Excess Express): dining car: cook, waitress and shop clerk, the Smorg (moamoa) shop with its trade list,
 // and the lunch-missing mystery; doors to rsh_02 and rsh_04.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
 #include "evt/evt_window.h"
@@ -64,7 +65,7 @@ s32 iri_22_item_tbl[4];
 EvtWord talk_cook[351];
 static EvtWord init_waitless[29];
 s32 item_tbl_waitless[2];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord talk_waitless_pias_return[158];
 #else
 EvtWord talk_waitless_pias_return[112];
@@ -79,7 +80,7 @@ EvtWord evt_lanch_missing[761];
 static EvtWord talk_powan[184];
 NpcSetupInfo npc_data_lunch[7];
 static const char* msg_tbl[10];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_lunch_talk[113];
 #else
 EvtWord evt_lunch_talk[101];
@@ -92,7 +93,7 @@ static ShopperData35 shopper_data;
 EvtWord shop_door_open[27];
 EvtWord shop_door_close[31];
 EvtWord evt_shop_open[267];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_shop_close[420];
 #else
 EvtWord evt_shop_close[317];
@@ -103,30 +104,30 @@ static const char* access_tbl[16];
 static EvtWord evt_access[25];
 static EvtWord evt_access_entry[24];
 EvtWord rsh_03_init_evt[269];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord rsh_03_a_init_evt[141];
 #else
 EvtWord rsh_03_a_init_evt[62];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord rsh_03_b_init_evt[90];
 #else
 EvtWord rsh_03_b_init_evt[11];
 #endif
 static const char* window_tbl[5];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord rsh_03_c_init_evt[217];
 #else
 EvtWord rsh_03_c_init_evt[71];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord rsh_03_init_evt_nidome[219];
 #else
 EvtWord rsh_03_init_evt_nidome[140];
 #endif
 EvtWord rsh_03_a_init_evt_nidome[23];
 EvtWord rsh_03_b_init_evt_nidome[11];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord rsh_03_c_init_evt_nidome[80];
 #else
 EvtWord rsh_03_c_init_evt_nidome[50];
@@ -534,7 +535,7 @@ EVT_BEGIN(talk_waitless_pias_return)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_195"), 0, STRING("ウェイトレス"))
     CALL(evt_win_item_select, 0, PTR(item_tbl_waitless), LW(1), 0)
     IF_INT_NOT_EQUAL(LW(1), -1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_mario_adjust_dir)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_mario_get_dispdir, LW(3))
@@ -553,7 +554,7 @@ EVT_BEGIN(talk_waitless_pias_return)
         CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_4"))
         CALL(evt_msg_print, 0, STRING("stg6_rsh_196"), 0, STRING("ウェイトレス"))
         CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("A_1"))
         WAIT_MS(500)
 #endif
@@ -561,11 +562,11 @@ EVT_BEGIN(talk_waitless_pias_return)
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
         SET_VALUE(GSWF_STARPIECE_84, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("S_1"))
 #endif
         CALL(evt_msg_print, 0, STRING("stg6_rsh_197"), 0, STRING("ウェイトレス"))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("A_1"))
         WAIT_MS(500)
         CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("S_1"))
@@ -1143,7 +1144,7 @@ EVT_BEGIN(evt_lunch_talk)
         END_LOOP
         CALL(mario_flag, LW(10), LW(0))
         IF_INT_EQUAL(LW(0), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             BEGIN_INLINE_EVENT_GET_ID(LW(3))
 #else
             BEGIN_INLINE_EVENT
@@ -1164,7 +1165,7 @@ EVT_BEGIN(evt_lunch_talk)
                     WAIT_FRAMES(1)
                 END_LOOP
             END_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             LOOP(0)
                 IS_EVENT_RUNNING(LW(3), LW(4))
                 IF_INT_EQUAL(LW(4), 0)
@@ -1423,11 +1424,11 @@ EVT_BEGIN(evt_shop_close)
     CALL(evt_sub_get_mapname, LW(10))
     IF_STR_EQUAL(LW(10), STRING("rsh_03_c"))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("shop_close_yuka1"), MAP_OBJ_FLAG_HIDDEN)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("shop_close_sc"), MAP_OBJ_FLAG_HIDDEN)
 #endif
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_close"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_close"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("I_close"), MAP_OBJ_FLAG_HIDDEN)
@@ -1436,7 +1437,7 @@ EVT_BEGIN(evt_shop_close)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("shop_close_sc"), MAP_OBJ_FLAG_HIDDEN)
 #endif
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_open"), MAP_OBJ_FLAG_HIDDEN)
@@ -1727,7 +1728,7 @@ EVT_BEGIN(rsh_03_a_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
     SPAWN_EVENT(PTR(evt_sub_mail_event))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_open"), MAP_OBJ_FLAG_HIDDEN)
@@ -1758,7 +1759,7 @@ EVT_BEGIN(rsh_03_b_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(rsh_03_init_evt))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_open"), MAP_OBJ_FLAG_HIDDEN)
@@ -1808,7 +1809,7 @@ EVT_BEGIN(rsh_03_c_init_evt)
     CALL_CHILD(PTR(evt_rsh_window))
     CALL(fire, STRING("rousoku_1"))
     CALL(fire, STRING("rousoku_2"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_close"), MAP_OBJ_FLAG_HIDDEN)
@@ -1824,7 +1825,7 @@ EVT_BEGIN(rsh_03_c_init_evt)
         CASE_OR_EQUAL(STG6_19_GIVE_BLANKET)
         CASE_OR_EQUAL(STG6_43_CONDUCTOR_APPEARS)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shop_open_yuka"), MAP_OBJ_FLAG_HIDDEN)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(0))
         SWITCH(LW(0))
             CASE_OR_EQUAL(0)
@@ -1846,11 +1847,11 @@ EVT_BEGIN(rsh_03_c_init_evt)
         CASE_END
         CASE_DEFAULT
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shop_close_yuka1"), MAP_OBJ_FLAG_HIDDEN)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
 #endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shop_close_sc"), MAP_OBJ_FLAG_HIDDEN)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(0))
         SWITCH(LW(0))
             CASE_OR_EQUAL(0)
@@ -1923,7 +1924,7 @@ EVT_BEGIN(rsh_03_init_evt_nidome)
     END_IF
     CALL_CHILD(PTR(evt_rsh_03_rnd_npc_entry))
     CALL_CHILD(PTR(evt_access_entry))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_open"), MAP_OBJ_FLAG_HIDDEN)
@@ -1983,7 +1984,7 @@ EVT_BEGIN(rsh_03_c_init_evt_nidome)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shop_close_yuka1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shop_close_sc"), MAP_OBJ_FLAG_HIDDEN)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_close"), MAP_OBJ_FLAG_HIDDEN)

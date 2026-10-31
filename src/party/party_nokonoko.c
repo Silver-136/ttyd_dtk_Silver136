@@ -1,5 +1,6 @@
 // Koops (nokonoko): partner init, follow and the shell toss ability.
 
+#include "version.h"
 #include "party/party_move.h"
 #include "mario/mario.h"
 #include "mario/mario_party.h"
@@ -532,7 +533,7 @@ void nokonoko_use(PartyEntry* party) {
     case 52:
         if (ccwall(party, 1) != NULL) {
             partyGetMoveDirSpd(party, &dir, &spd);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             partyChkWallAround(party, &party->position, spd, dir, party->width, party->height);
 #else
             marioChkWallAround(&party->position, 1, spd, dir, party->width, party->height);

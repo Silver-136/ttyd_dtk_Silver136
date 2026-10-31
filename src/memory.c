@@ -1,5 +1,6 @@
 // Memory: the OS heaps, the map heap allocator (_mapAlloc/_mapFree) and the smart heap (smartAlloc) used for loaded files.
 
+#include "version.h"
 #include "memory.h"
 #include "system.h"
 #include <dolphin/os.h>
@@ -20,7 +21,7 @@ struct MapAllocEntry {
 SmartWork smartWork;
 
 //.sdata
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: no fixed battle heap (battle maps use a map sub-heap); the smart heap is index 4
 #define HEAP_COUNT 5
 #define SMART_HEAP 4
@@ -35,7 +36,7 @@ s32 size_table[HEAP_COUNT][2] = {
     {1, 0xD90},  // 0x364000, 3472 KiB (3.39 MiB)
     {1, 0xE0},   // 0x38000, 224 KiB
     {1, 0x80},   // 0x20000, 128 KiB
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     {1, 0x100},  // 0x40000, 256 KiB: the battle heap
 #endif
     {0, 0x64}    // the smart heap: 100 % of what is left
@@ -47,7 +48,7 @@ static SmartWork* wp = &smartWork;
 OSHeapHandle heapHandle[HEAP_COUNT];
 void* heapStart[HEAP_COUNT];
 void* heapEnd[HEAP_COUNT];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // uninitialized .sbss is laid out in reverse definition order
 u32 mapalloc_size;
 u32 R_battlemapalloc_size;
@@ -59,7 +60,7 @@ void* mapalloc_base_ptr;
 u32 mapalloc_size;
 BOOL g_bFirstSmartAlloc;
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US map heap: callers pass the heap base; battle maps get their own sub-heap
 #define MAPBASE_PARAM void* base_,
 #define MAPBASE ((MapAllocEntry*)base_)
@@ -124,7 +125,7 @@ void memInit(void) {
 
 static inline void mapallocInit(void) {
 // the declaration order differs per version (it sets which callee-saved register holds each)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     u32 size;
     MapAllocEntry* entry;
     u32 total;
@@ -142,7 +143,7 @@ static inline void mapallocInit(void) {
         memset(entry, 0, size);
         DCFlushRange(entry, size);
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // FAKE: total is a spare copy of mapalloc_size (read before the stores); reading mapalloc_size at its use changes the object
     total = mapalloc_size;
     mapalloc_base_ptr = entry;
@@ -191,7 +192,7 @@ void __memFree(HEAP_TYPE heap, void* ptr) {
     OSFreeToHeap(heapHandle[heap], ptr);
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // Descriptive name (not in the symbol maps).
 void battleMapAlloc(void) {
     MapAllocEntry* entry;
@@ -251,7 +252,7 @@ void* (_mapAlloc)(MAPBASE_PARAM u32 size) {
         bestEntry->next = (void*)((u8*)bestEntry + fullSize);
         bestEntry->size = usableSize;
         bestEntry->inuse = 1;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         bestEntry->currId = COUNT++;
 #endif
 
@@ -259,7 +260,7 @@ void* (_mapAlloc)(MAPBASE_PARAM u32 size) {
         restEntry->next = oldNext;
         restEntry->size = bestSize - fullSize;
         restEntry->inuse = 0;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         restEntry->currId = 0;
 #endif
 
@@ -307,7 +308,7 @@ void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
         freeEntry->next = (MapAllocEntry*)(((u8*)freeEntry + freeSize) - fullSize);
         freeEntry->size = freeSize - fullSize;
         freeEntry->inuse = 0;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         freeEntry->currId = 0;
 #endif
 
@@ -316,7 +317,7 @@ void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
         result = (void*)(usedEntry + 1);
         usedEntry->size = usableSize;
         usedEntry->inuse = 1;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         usedEntry->currId = COUNT++;
 #endif
 
@@ -328,7 +329,7 @@ void* (_mapAllocTail)(MAPBASE_PARAM u32 size) {
     }
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #pragma dont_inline on // US battleMapFree calls it
 #endif
 void (_mapFree)(MAPBASE_PARAM void* alloc) {
@@ -368,7 +369,7 @@ void (_mapFree)(MAPBASE_PARAM void* alloc) {
     entry->size = newSize;
     entry->inuse = 0;
 }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #pragma dont_inline reset
 #endif
 

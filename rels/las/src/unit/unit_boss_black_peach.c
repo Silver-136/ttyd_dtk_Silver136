@@ -379,7 +379,7 @@ BattleWeapon weapon_peach_black_thunder_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -424,7 +424,7 @@ BattleWeapon weapon_peach_black_energy_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -471,7 +471,7 @@ BattleWeapon weapon_peach_drain_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -621,7 +621,7 @@ BattleWeapon weapon_peach_black_wave_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -661,7 +661,7 @@ BattleWeapon weapon_peach_black_sigh_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -688,7 +688,7 @@ BattleWeapon weapon_peach_black_sigh_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, 0, 0, 0, 0, 0, 0, 0, // burnTime..atkChangeTime
     0, 0, 0, 0, // atkChangeStrength..defChangeStrength
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     90, // allergicChance
 #else
     60, // allergicChance
@@ -707,7 +707,7 @@ BattleWeapon weapon_peach_black_temptation_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -732,7 +732,7 @@ BattleWeapon weapon_peach_black_temptation_attack = {
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, // poisonStrength
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     75, // confuseChance
 #else
     50, // confuseChance
@@ -754,7 +754,7 @@ BattleWeapon weapon_peach_black_poison_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -778,7 +778,7 @@ BattleWeapon weapon_peach_black_poison_attack = {
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, 0, 0, 0, 0, // sleepChance..dizzyTime
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     75, // poisonChance
 #else
     50, // poisonChance
@@ -802,7 +802,7 @@ BattleWeapon weapon_peach_black_press_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -843,7 +843,7 @@ BattleWeapon weapon_peach_black_1000hand_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -863,7 +863,7 @@ BattleWeapon weapon_peach_black_1000hand_attack = {
     3, // acLevel
     2, // reserved_6F
     NULL, // acHelpMsg
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
 #else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE, // special
@@ -1775,7 +1775,7 @@ EVT_BEGIN(peach_change_evt)
     SET_VALUE(GW(12), 0)
     CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(btlevtcmd_SetHp, UNIT_ID_SELF, 90)
 #else
         CALL(btlevtcmd_SetHp, UNIT_ID_SELF, 112)
@@ -1806,7 +1806,7 @@ EVT_BEGIN(peach_phase_event)
         RETURN
     END_IF
     CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     IF_INT_LESS(LW(0), 90)
 #else
     IF_INT_LESS(LW(0), 112)
@@ -3478,7 +3478,7 @@ EVT_BEGIN(queen_attack_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
         CALL_CHILD(PTR(queen_attack_black_wave))
         CASE_EQUAL(3)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 60, 20, 30, 30)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 6, 100, 50, 30, 20, 30, 30)
@@ -3956,7 +3956,7 @@ EVT_BEGIN(queen_hand_1_attack_event)
     IF_INT_EQUAL(LW(0), 2)
         GOTO(99)
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(btlevtcmd_DrawLots, LW(0), 2, 50, 50)
 #else
     CALL(btlevtcmd_DrawLots, LW(0), 2, 100, 20)
@@ -4049,7 +4049,7 @@ EVT_BEGIN(queen_hand_2_attack_event)
     IF_INT_EQUAL(LW(0), 2)
         GOTO(99)
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(btlevtcmd_DrawLots, LW(0), 2, 50, 50)
 #else
     CALL(btlevtcmd_DrawLots, LW(0), 2, 100, 20)
@@ -4238,7 +4238,7 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_peach_black_1000hand_attack), LW(3), LW(4))
     CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(subsetevt_confuse_flustered)
 #else
         CALL_CHILD(PTR(subsetevt_confuse_flustered))
@@ -4253,7 +4253,7 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(evt_eff_softdelete, STRING("m_h_s2"))
     CALL(evt_eff_softdelete, STRING("m_h_s3"))
     CALL(evt_snd_sfxon, STRING("SFX_BOSS_QWEN_HANDS_MOVE1"), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
 #else
     BEGIN_INLINE_EVENT
@@ -4319,7 +4319,7 @@ EVT_BEGIN(queen_hand_small_1000hand_attack)
     CALL(evt_eff, STRING("m_h_s1"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
     CALL(evt_eff, STRING("m_h_s2"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
     CALL(evt_eff, STRING("m_h_s3"), STRING("mist2"), 0, 100, 15, 0, 150, 0, -1, 0, 0, 0, 0, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
     END_IF
@@ -4335,7 +4335,7 @@ EVT_BEGIN(queen_hand_small_attack_event)
     IF_INT_EQUAL(LW(0), 2)
         GOTO(99)
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(btlevtcmd_DrawLots, LW(0), 2, 50, 50)
 #else
     CALL(btlevtcmd_DrawLots, LW(0), 2, 60, 40)

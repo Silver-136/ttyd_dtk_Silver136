@@ -178,7 +178,7 @@ BOOL marioChkJabara(void) {
         }
         return FALSE;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && (u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER) &&
         mario->controlStickSensitivity) {
 #else
@@ -189,7 +189,7 @@ BOOL marioChkJabara(void) {
         marioChgPose("M_I_Y");
         marioVoiceGlareOn();
     }
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     if (mario->wMotionTimer >= 0x32) {
         mario->wMotionTimer = 0x32;
         if ((u16)mario->currMotionId == MARIO_MOTION_STAY && !((u32)mario->dispFlags & MARIO_DISP_FLAG_PAPER)) {

@@ -64,7 +64,7 @@ USER_FUNC(img_flag);
 static USER_FUNC(ramp_r);
 USER_FUNC(under);
 static USER_FUNC(zoom);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 USER_FUNC(pik_00_statuswin_force_off);
 #endif
 void irai_29_15_cb(s32 type, smartEntry* smart);
@@ -1106,7 +1106,7 @@ static EVT_BEGIN(init_papa)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // FAKE: the zero Vec initialisers of zoom sit here in .rodata
 static const Vec zoom_zero_a = {0.0f, 0.0f, 0.0f};
 static const Vec zoom_zero_b = {0.0f, 0.0f, 0.0f};
@@ -1240,7 +1240,7 @@ EVT_BEGIN(talk_papa_taihou_kyoka)
             END_LOOP
             WAIT_MS(500)
             CALL(evt_sub_status_gauge_force_close)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(pik_00_statuswin_force_off)
 #endif
             CALL(evt_msg_print, 0, STRING("stg7_pik_19"), 0, STRING("ナリキンパパ"))
@@ -2156,7 +2156,7 @@ void irai_29_15_cb(s32 type, smartEntry* smart) {
     }
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 
 /** Script helper: force-closes the status window (statusWinForceOff). */
 USER_FUNC(pik_00_statuswin_force_off) {
@@ -2179,7 +2179,7 @@ static USER_FUNC(zoom) {
     MarioWork* mario = marioGetPtr();
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     Vec v;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CameraParams out;
     f32 bank = 0.0f;
 

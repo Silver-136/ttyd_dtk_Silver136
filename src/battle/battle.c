@@ -1,5 +1,6 @@
 // Top-level battle entry: runs the battle main loop, checks for the end of the sequence and handles reset.
 
+#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_ac_help.h"
 #include "battle/battle_break_slot.h"
@@ -68,7 +69,7 @@ BOOL battleSeqEndCheck(void) {
 void BattleInit(FieldBattleInfo* info) {
     BattleWork* wp;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     wp = _battleWorkPointer = (BattleWork*)BattleAlloc(sizeof(BattleWork));
 #else
     wp = _battleWorkPointer = (BattleWork*)_mapAlloc(sizeof(BattleWork));
@@ -173,7 +174,7 @@ void BattleEnd(void) {
     if (subMenu) {
         BattleFree(subMenu);
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     BattleFree(wp);
 #else
     _mapFree(wp);
@@ -369,7 +370,7 @@ void BattleIncSeq(BattleWork* wp, BattleSequence seq) {
 }
 
 void* BattleAlloc(u32 size) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     return (_mapAlloc)(R_battlemapalloc_base_ptr, size);
 #else
     return __memAlloc(HEAP_BATTLE, size);
@@ -379,7 +380,7 @@ void* BattleAlloc(u32 size) {
 /** Frees memory from BattleAlloc; NULL is ignored. */
 void BattleFree(void* ptr) {
     if (ptr) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         (_mapFree)(R_battlemapalloc_base_ptr, ptr);
 #else
         __memFree(HEAP_BATTLE, ptr);
@@ -844,7 +845,7 @@ void BattlePartyInfoWorkInit(BattleWork* wp) {
         partyInfo->sizeMultiplier = 1.0;
         partyInfo->statusFlags = 0;
         memset(&partyInfo->statusTurns, 0, sizeof(partyInfo->statusTurns));
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         partyInfo->usCommandDisabled[0] = 0;
         partyInfo->usCommandDisabled[1] = 0;
 #endif

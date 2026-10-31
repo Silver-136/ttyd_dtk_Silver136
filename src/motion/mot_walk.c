@@ -1,5 +1,6 @@
 // Mario's walk and run motion.
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "pmario_sound.h"
@@ -353,7 +354,7 @@ void mot_dash(void) {
         if (!(player->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
             stickDir1 = player->wStickDir1;
             stickDir2 = player->wStickDir2;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1 || pouchEquipCheckBadge(ITEM_SLOW_GO)) {
 #else
             if ((stickDir1 * stickDir1) + (stickDir2 * stickDir2) <= 0xBD1) {

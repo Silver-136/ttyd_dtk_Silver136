@@ -1,6 +1,7 @@
 // gon_02 (ゴンババ, Hooktail Castle): first hall between gon_01 and gon_03.
 // Dry Bones-type enemies (karon) are set up here, plus a Power Bounce block.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -164,7 +165,7 @@ EVT_BEGIN(gon_02_init_evt)
     CALL(evt_npc_set_width, STRING("\"カロン02\""), 30)
     CALL(evt_npc_set_height, STRING("\"カロン02\""), 7)
     CALL(evt_npc_entry, STRING("\"カロン03\""), STRING("c_karon_g"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_position, STRING("\"カロン03\""), 360, 0, -33)
 #else
     CALL(evt_npc_set_position, STRING("\"カロン03\""), 310, 0, -33)

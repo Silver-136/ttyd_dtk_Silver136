@@ -609,7 +609,7 @@ FileEntry* _fileAlloc(const char* filename, s32 type, void (*callback)(FileEntry
 
     for (search = afp->firstused; search; search = search->next) {
         if (search->state && !strcmp(search->filename, filename)) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             while (search->entry) {
                 OSYieldThread();
             }

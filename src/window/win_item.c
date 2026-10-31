@@ -133,7 +133,7 @@ static WinMgrDesc window_desc[2] = {
     {0, 0, 8, -70, 150, 350, 264, {0xF0, 0xF0, 0xF0, 0xFF}, 0, itemUseDisp},
     {2, 0, 8, -280, 145, 200, 50, {0xFF, 0x99, 0x00, 0xFF}, 0, itemUseDisp2},
 };
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define WI_SLASH ((u32)gp->language != LANGUAGE_JP ? "/" : "\201^")
 #else
 #define WI_SLASH "\201^"
@@ -195,7 +195,7 @@ void winItemInit(WindowWork* w) {
     w->useWin[1] = winMgrEntry(&window_desc[1]);
     winMgrSetPriority(w->useWin[0], -200);
     winMgrSetPriority(w->useWin[1], -100);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
     fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
@@ -512,13 +512,13 @@ s32 winItemMain(WindowWork* w) {
     case 201:
         mail = mailGetPtr(w->item.mail[w->item.mailSel].id);
         if (mail->flags & MAIL_FLAG_PICTURE) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
             w->mailRes = (FileEntry*)fileAsyncf(FILE_TYPE_TPL, 0, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
 #endif
             if (w->mailRes) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/mail.tpl", getMarioStDvdRoot(), (u32)gp->language == LANGUAGE_JP ? "jp" : "us");
 #else
                 w->mailRes = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/mail.tpl", getMarioStDvdRoot());
@@ -786,7 +786,7 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
         }
         winIconSet(itemDataTable[id].icon_id, (Vec){(xo - 125.0f) + (cx = col * 204), y, 0.0f}, w->item.mode == 0 ? (Vec){0.8f, 0.8f, 0.8f} : (Vec){0.6666667f, 0.6666667f, 0.6666667f}, white3);
         winFontInit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         winFontSetWidth((Vec){(xo - 105.0f) + cx, scroll + (20.0f + yBase), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, grayed ? grayc : black, 155.0f, msgSearch(itemDataTable[id].name));
 #else
         winFontSetPitch(20.0f, (Vec){(xo - 105.0f) + cx, scroll + (20.0f + yBase), 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, grayed ? grayc : black, msgSearch(itemDataTable[id].name));
@@ -818,7 +818,7 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
     }
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * HP and FP labels by game language: Japanese (full-width), English, German, French, Spanish, Italian,
  * and an unused seventh row.
@@ -966,7 +966,7 @@ void itemUseDisp2(WinMgrEntry* entry) {
     WindowWork* wp = winGetPtr();
     GXColor color = {0, 0, 0, 255};
     if (!winMgrAction(wp->useWin[1])) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         const char* msg = msgSearch("msg_window_select_5");
         u16 lines;
         f32 w = (f32)FontGetMessageWidthLine(msg, &lines);

@@ -1,3 +1,4 @@
+#include "version.h"
 #include "system.h"
 #include "eff/eff_magic1_n64.h"
 #include "libc_decls.h"
@@ -101,7 +102,7 @@ BattleUnitKind unit_atmic_teresa = {
     100,
     0,
     50,
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     6,
 #else
     9999,
@@ -294,7 +295,7 @@ BattleWeapon weapon_atmic_teresa_bikkuri = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -336,7 +337,7 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -379,7 +380,7 @@ BattleWeapon weapon_atmic_teresa_breath = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed

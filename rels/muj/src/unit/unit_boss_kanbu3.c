@@ -1,5 +1,6 @@
 // Keelhaul Key (muj) battle unit: Lord Crump (kanbu3): its parts, defence/status tables, and attack events.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "zakogun.h"
 #include "evt/evt_cmd.h"
@@ -51,7 +52,7 @@ BattleUnitSetup entry_group2;
 BattleUnitSetup entry_group3;
 static EvtWord init_event[59];
 static EvtWord entry_event[45];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord damage_event[337];
 #else
 static EvtWord damage_event[315];
@@ -368,7 +369,7 @@ static EVT_BEGIN(damage_event)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_REVIVAL, LW(0))
             IF_INT_EQUAL(LW(0), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 CALL(btlevtcmd_GetDamageCode, UNIT_ID_SELF, LW(0))
                 SWITCH(LW(0))
                     CASE_EQUAL(24)
@@ -396,7 +397,7 @@ static EVT_BEGIN(damage_event)
     END_IF
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(btldefaultevt_Damage))
 #else
     CALL_CHILD(btldefaultevt_Damage)
@@ -946,7 +947,7 @@ static EVT_BEGIN(normal_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL_CHILD(PTR(subsetevt_confuse_flustered))
 #else
             CALL_CHILD(subsetevt_confuse_flustered)

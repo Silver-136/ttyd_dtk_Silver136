@@ -1,6 +1,7 @@
 // gor_02 (ゴロツキタウン, Rogueport): east side. Professor Frankly's house, Trouble Center, power-up shop, info shop;
 // exits to gor_01 and down to the underground (tik).
 
+#include "version.h"
 #include "system.h"
 #include "driver/animdrv.h"
 #include "driver/fadedrv.h"
@@ -218,7 +219,7 @@ EvtWord gor_02_event_00[18];
 EvtWord gor_02_event_01[30];
 static BeroEntry bero_entry_data[3];
 EvtWord powerupya_party_lank_rtn[786];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord powerupya_party_rtn[170];
 #else
 EvtWord powerupya_party_rtn[167];
@@ -233,7 +234,7 @@ EvtWord powerupya_orb_use[544];
 EvtWord powerupya_talk[119];
 EvtWord mapball_init[19];
 EvtWord powerupya_init[58];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord johoyaperfect_talk[169];
 #else
 EvtWord johoyaperfect_talk[146];
@@ -313,12 +314,12 @@ EvtWord evt_door_03_roll_entry[20];
 static EvtWord evt_door_04_00[12];
 static EvtWord evt_door_04_01[12];
 static EvtWord evt_wall_04[38];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord evt_door_04_open[19];
 #else
 static EvtWord evt_door_04_open[14];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord evt_door_04_close[21];
 #else
 static EvtWord evt_door_04_close[16];
@@ -364,7 +365,7 @@ EvtWord kurihakase_first_talk[787];
 EvtWord kurihakase_wall_remove[257];
 EvtWord kurihakase_lecture[286];
 EvtWord kurihakase_door[84];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord kurihakase_lecture_badge[282];
 #else
 EvtWord kurihakase_lecture_badge[272];
@@ -373,32 +374,32 @@ EvtWord Mario_Party_position[33];
 EvtWord book_open[42];
 EvtWord book_close[42];
 EvtWord book_center_init[22];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord epigraphy_map[621];
 #else
 EvtWord epigraphy_map[614];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage1[258];
 #else
 EvtWord epigraphy_map_after_stage1[251];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage2[400];
 #else
 EvtWord epigraphy_map_after_stage2[393];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage3[368];
 #else
 EvtWord epigraphy_map_after_stage3[361];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage4[297];
 #else
 EvtWord epigraphy_map_after_stage4[290];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord epigraphy_map_after_stage5[225];
 #else
 EvtWord epigraphy_map_after_stage5[218];
@@ -976,7 +977,7 @@ EVT_BEGIN(powerupya_party_rtn)
         IF_INT_NOT_EQUAL(LW(1), LW(8))
             CALL(evt_mario_goodbye_party, 0)
             CALL(evt_mario_hello_party, 0, LW(1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_party_stop, 0)
 #endif
         END_IF
@@ -1321,7 +1322,7 @@ EVT_BEGIN(powerupya_talk)
     IF_INT_EQUAL(GSWF_GOR_MERLON_HINT_PENDING, 1)
         IF_INT_EQUAL(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 0)
             CALL(evt_msg_print, 0, STRING("powerup_ev_01"), 0, STRING("me"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_cam3d_evt_set, -320, 114, 371, -320, 45, -23, 500, EASING_SINE_IN_OUT)
 #else
             CALL(evt_cam3d_evt_set, -355, 114, 371, -355, 45, -23, 500, EASING_SINE_IN_OUT)
@@ -1424,13 +1425,13 @@ EVT_BEGIN(johoyaperfect_talk)
             CALL(evt_msg_print_add, 0, LW(1))
             CALL(evt_msg_print_add, 0, STRING("johoyaperfect_07"))
             ELSE
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(0)
 #endif
             CALL(evt_msg_print_insert, 0, STRING("johoyaperfect_01"), 0, STRING("me"), LW(3), LW(2), LW(4))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 CASE_DEFAULT
                 CALL(evt_msg_fmt_int, 0, LW(14), STRING("johoyaperfect_01"), LW(4))
                 CALL(evt_msg_print_insert, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("me"), LW(3), LW(2))
@@ -2576,7 +2577,7 @@ EVT_BEGIN(borodo1_init)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG4_15_05_PEACH_X_NAUT_PHD_REPORT, STG5_43_X_NAUTS_RETREAT)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_set_position, STRING("me"), 475, 0, 275)
 #else
         CALL(evt_npc_set_position, STRING("me"), 550, 0, 275)
@@ -3726,7 +3727,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_door_04_open)
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_hitobj_onoff, STRING("polySurface1317"), 1, 0)
 #endif
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -3737,7 +3738,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_door_04_close)
     SPAWN_EVENT(PTR(gor_02_hitobj_on))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_hitobj_onoff, STRING("polySurface1317"), 1, 1)
 #endif
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -4443,7 +4444,7 @@ USER_FUNC(camera_front_check) {
     EvtWord* args = event->args;
     f32 angle = reviseAngle((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (marioGetPtr()->position.x < -300.0f) {
         evtSetValue(event, *args, 0);
         return EVT_RETURN_DONE;
@@ -5363,7 +5364,7 @@ EVT_BEGIN(kurihakase_lecture_badge)
     WAIT_MS(1000)
     CALL(evt_npc_move_position, STRING("クリハカセ"), -235, 0, 0, FLOAT(120.0f), 0)
     WAIT_MS(500)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_anim, STRING("クリハカセ"), STRING("A_2"))
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("クリハカセ"), STRING("S_1"))
@@ -5652,7 +5653,7 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #endif
@@ -5723,7 +5724,7 @@ EVT_BEGIN(epigraphy_map_after_stage1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #endif
@@ -5830,7 +5831,7 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     // The Rogueport theme and ambience resume.
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #endif
@@ -5933,7 +5934,7 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     // The Rogueport theme and ambience resume.
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #endif
@@ -6011,7 +6012,7 @@ EVT_BEGIN(epigraphy_map_after_stage4)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #endif
@@ -6077,7 +6078,7 @@ EVT_BEGIN(epigraphy_map_after_stage5)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #endif
@@ -6141,7 +6142,7 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_71_FRANKLYS_HOUSE_STG_6)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -6199,7 +6200,7 @@ EVT_BEGIN(kurihakase_after3minutes)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_snd_envoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -6408,7 +6409,7 @@ EVT_END()
 EVT_BEGIN(iri_19_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IMPORTANT_THING)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_item_entry, STRING("wr"), ITEM_WEDDING_RING, 525, 0, 160, ITEM_TYPE_STILL, GSWF_TROUBLE_WORK(1), 0)
 #else
             CALL(evt_item_entry, STRING("wr"), ITEM_WEDDING_RING, -65, 120, 196, ITEM_TYPE_STILL, GSWF_TROUBLE_WORK(1), 0)

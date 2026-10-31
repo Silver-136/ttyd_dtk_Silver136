@@ -1,5 +1,6 @@
 // Pit of 100 Trials battle unit: the Bandit (`borodo`): parts, stats, poses and AI scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -32,7 +33,7 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 static PoseTableEntry pose_table[20];
 static PoseTableEntry pose_table_item_have[18];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static BattleDataEntry data_table[2];
 #else
 static BattleDataEntry data_table[1];
@@ -94,7 +95,7 @@ static USER_FUNC(_steal_item) {
         }
         if (num > 0) {
             evtSetValue(event, itemVar, ITEM_COIN);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             evtSetValue(event, iconVar, 403);
 #else
             evtSetValue(event, iconVar, 395);
@@ -329,13 +330,13 @@ static PoseTableEntry pose_table_item_have[] = {
     {POSE_TYPE_ACTION, "S_2"},
 };
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 extern EvtWord _borodo_emergency_revival_event[];
 #endif
 
 /** Data table of the Bandit: event handlers keyed by tag (_borodo_emergency_revival_event). */
 static BattleDataEntry data_table[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {UNIT_DATA_EMERGENCY_REVIVAL_EVENT, _borodo_emergency_revival_event},
 #endif
     {0, NULL},
@@ -777,7 +778,7 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EVT_BEGIN(_borodo_emergency_revival_event)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
     SET_VALUE(LW(0), 48)

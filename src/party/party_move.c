@@ -1,5 +1,6 @@
 // Partner movement: the footmark trail behind Mario, target speed and direction, walking and the move modes.
 
+#include "version.h"
 #include "party.h"
 #include "mot/mot_plane.h"
 #include "driver/camdrv.h"
@@ -837,7 +838,7 @@ s32 partyMoveMain(PartyEntry* party, s32 hosei) {
             party->position.x = pos.x;
             party->position.z = pos.z;
         } else {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             partyChkWallAround(party, &pos, spd, dir, party->width, party->height);
 #else
             marioChkWallAround(&pos, 1, spd, dir, party->width, party->height);
@@ -1969,7 +1970,7 @@ BOOL partyGetAppearPos3(PartyEntry* party, Vec* out) {
             }
         } else {
             out->y = query.hitPos.y;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             partyChkWallAround(party, out, 2.0f, 0.0f, party->width, party->height);
 #else
             marioChkWallAround(out, 1, 2.0f, 0.0f, party->width, party->height);
@@ -2086,7 +2087,7 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
             continue;
         }
         out->y = query.hitPos.y;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         partyChkWallAround(party, out, 0.0f, 0.0f, 28.0f, 5.0f);
 #else
         marioChkWallAround(out, 1, 0.0f, 0.0f, 28.0f, 5.0f);

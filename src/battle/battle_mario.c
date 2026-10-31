@@ -182,7 +182,7 @@ BattleWeapon marioDefaultWeapon_Jump = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_NormalJump, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 4, 2, 1, 1, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 2, 2, 1, 1, 0, 0, 0}, // stageEffectRates
@@ -225,7 +225,7 @@ BattleWeapon marioWeapon_KururinJump = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_KururinJump, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 4, 5, 1, 1, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 2, 5, 1, 1, 0, 0, 0}, // stageEffectRates
@@ -250,7 +250,7 @@ BattleWeapon marioWeapon_KururinJump2 = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioJumpLv, // hpDamageFn
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {1, 2, 3, 4, 5, 6, 0, 0}, // hpDamageWork
 #else
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -274,7 +274,7 @@ BattleWeapon marioWeapon_KururinJump2 = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_KururinJump, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 5, 5, 100, 0, 20, 10, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
     {0, 5, 5, 100, 0, 10, 10, 5, 5, 5, 0, 0}, // stageEffectRates
@@ -295,7 +295,7 @@ BattleWeapon marioWeapon_JyabaraJump = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -304,7 +304,7 @@ BattleWeapon marioWeapon_JyabaraJump = {
     100, // bingoSlotChance
     50, // reserved_1B
     weaponGetPowerFromMarioJumpLv, // hpDamageFn
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {1, 2, 2, 4, 5, 6, 0, 0}, // hpDamageWork
 #else
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
@@ -328,7 +328,7 @@ BattleWeapon marioWeapon_JyabaraJump = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_JyabaraJump, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 5, 5, 100, 0, 20, 10, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
     {0, 5, 5, 100, 0, 10, 10, 5, 5, 5, 0, 0}, // stageEffectRates
@@ -349,7 +349,7 @@ BattleWeapon marioWeapon_JyabaraJumpFailed = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -495,7 +495,7 @@ BattleWeapon marioDefaultWeapon_Hammer = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_NormalHammer, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 3, 3, 100, 3, 6, 2, 3, 3, 0, 0, 0}, // stageEffectRates
 #else
     {0, 3, 3, 100, 3, 3, 2, 3, 3, 0, 0, 0}, // stageEffectRates
@@ -539,7 +539,7 @@ BattleWeapon marioWeapon_KaitenHammer = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_KaitenHammer, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 6, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 3, 5, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -594,7 +594,7 @@ BattleWeapon marioWeapon_UltraHammer = {
     4, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -624,7 +624,7 @@ BattleWeapon marioWeapon_UltraHammer = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_KaitenHammer, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 6, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 3, 5, 0, 0, 0, 0, 0}, // stageEffectRates
@@ -675,7 +675,7 @@ BattleWeapon marioWeapon_UltraHammerFinish = {
     100, // baseAccuracy
     0, 0, 0, // baseFpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -743,7 +743,7 @@ BattleWeapon badgeWeapon_TugitugiJump = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_TugiTugiJump, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 2, 2, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 2, 2, 0, 0, 0}, // stageEffectRates
@@ -861,7 +861,7 @@ BattleWeapon badgeWeapon_RenzokuJump = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_RenzokuJump, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 2, 2, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 2, 2, 0, 0, 0}, // stageEffectRates
@@ -878,7 +878,7 @@ BattleWeapon badgeWeapon_TatsumakiJump = {
     3, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     3, // stylishCommandMultiplier
@@ -980,7 +980,7 @@ BattleWeapon badgeWeapon_MiniminiFumi = {
     0, 0, 0, 0, 0, 0, 0, 0, // paybackTime..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_MiniminiFumi, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 6, 5, 1, 1, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 3, 5, 1, 1, 0, 0, 0}, // stageEffectRates
@@ -1023,7 +1023,7 @@ BattleWeapon badgeWeapon_NemuraseFumi = {
     0, 0, 0, 0, // hpRegenTime..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_NemuraseFumi, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 6, 5, 1, 1, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 3, 5, 1, 1, 0, 0, 0}, // stageEffectRates
@@ -1068,7 +1068,7 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
     0, 0, // fpRegenTime..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_FunyafunyaJump, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 6, 5, 1, 1, 0, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 3, 5, 1, 1, 0, 0, 0}, // stageEffectRates
@@ -1164,7 +1164,7 @@ BattleWeapon badgeWeapon_JishinHammer = {
     3, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -1306,7 +1306,7 @@ BattleWeapon badgeWeapon_TsuranukiNaguri = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_TsuranukiHammer, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 25, 25, 100, 0, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
     {0, 25, 25, 100, 0, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
@@ -1350,7 +1350,7 @@ BattleWeapon badgeWeapon_ConfuseHammer = {
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_NormalHammer, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 5, 5, 100, 0, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
     {0, 5, 5, 100, 0, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
@@ -1366,7 +1366,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
     5, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -1398,7 +1398,7 @@ BattleWeapon badgeWeapon_FireNaguri = {
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_FireNaguri, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
@@ -1418,7 +1418,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     5, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -1450,7 +1450,7 @@ BattleWeapon badgeWeapon_FireNaguriFailed = {
     0, 0, 0, 0, 0, // invisibleTime..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_FireNaguri, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 0, 0, 100, 0, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
@@ -1495,7 +1495,7 @@ BattleWeapon badgeWeapon_IceNaguri = {
     0, 0, 0, // hpRegenStrength..fpRegenStrength
     {0}, // pad_AE
     marioAttackEvent_IceNaguri, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 5, 5, 100, 0, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
     {0, 5, 5, 100, 0, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
@@ -2277,7 +2277,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
             SUBTRACT(LW(0), 3)
             SET_VALUE(LW(1), LW(0))
             SET_VALUE(LW(2), LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             SUBTRACT(LW(1), 7)
             ADD(LW(2), 5)
 #else
@@ -2290,7 +2290,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
             CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
             SWITCH(LW(6))
                 CASE_GREATER_OR_EQUAL(2)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_A_5"))
 #else
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_A_4"))
@@ -2387,7 +2387,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     LABEL(90)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_StopAC)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
 #endif
@@ -2397,7 +2397,7 @@ static EVT_BEGIN(marioAttackEvent_NormalJump)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 60)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // Outside JP a Stylish press is possible on the backflip.
     SET_VALUE(LW(6), 32)
     BEGIN_SIBLING_EVENT
@@ -3072,7 +3072,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
     CALL(btlevtcmd_ac_timing_flag_onoff, 1, 1)
     CALL(btlevtcmd_ac_timing_get_success_frame, LW(0))
     DIVIDE(LW(0), 2)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     ADD(LW(0), 4)
 #else
     ADD(LW(0), 2)
@@ -3085,7 +3085,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
         CALL(btlevtcmd_GetDamage, LW(3), LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         IF_INT_GREATER_OR_EQUAL(LW(0), 10)
             SET_VALUE(LW(0), 9)
         END_IF
@@ -3167,7 +3167,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
         CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
         CALL(btlevtcmd_GetDamage, LW(3), LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         IF_INT_GREATER_OR_EQUAL(LW(0), 10)
             SET_VALUE(LW(0), 9)
         END_IF
@@ -3194,7 +3194,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
     // possible on the way.
     LABEL(90)
     CALL(btlevtcmd_GetDamage, LW(3), LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     IF_INT_GREATER_OR_EQUAL(LW(0), 10)
         SET_VALUE(LW(0), 9)
     END_IF
@@ -3211,7 +3211,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 60)
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 8, 17, 29, 0)
 #else
         CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 11, 15, 29, 0)
@@ -3219,7 +3219,7 @@ EVT_BEGIN(marioAttackEvent_JyabaraJump)
         CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
         SWITCH(LW(6))
             CASE_GREATER_OR_EQUAL(2)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_A_5"))
 #else
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_A_4"))
@@ -3365,7 +3365,7 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
         CALL(btlevtcmd_GetDamage, LW(3), LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         IF_INT_GREATER_OR_EQUAL(LW(0), 10)
             SET_VALUE(LW(0), 9)
         END_IF
@@ -3401,7 +3401,7 @@ EVT_BEGIN(marioAttackEvent_GatsuDokaJump)
     // The screen shakes by the damage dealt and Mario backflips off the target.
     LABEL(90)
     CALL(btlevtcmd_GetDamage, LW(3), LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     IF_INT_GREATER_OR_EQUAL(LW(0), 10)
         SET_VALUE(LW(0), 9)
     END_IF
@@ -3863,7 +3863,7 @@ EVT_BEGIN(marioAttackEvent_TatsumakiJump)
     // Stylish: Mario rolls back to his place spinning (from the US version on the first Stylish is also
     // counted). A second press there ends in a confetti pose; a mistimed one plays the miss sound.
     LABEL(80)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(0), 1, 0, 0, 0)
 #endif
@@ -4057,7 +4057,7 @@ EVT_BEGIN(marioAttackEvent_RenzokuJump)
         CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, LW(6), 0, 0, -1, -1, 0, 0)
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(3)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 10, 17, 30, 0)
 #else
             CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 11, 15, 30, 0)
@@ -4291,7 +4291,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
         CALL(btlevtcmd_MarioJumpParam, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8))
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(3)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 10, 19, 30, 0)
 #else
             CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 13, 17, 30, 0)
@@ -4322,7 +4322,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
         CALL(btlevtcmd_MarioJumpParam, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(8))
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(3)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 10, 19, 30, 0)
 #else
             CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 13, 17, 30, 0)
@@ -4341,7 +4341,7 @@ EVT_BEGIN(marioAttackEvent_TugiTugiJump)
                 END_SWITCH
                 CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
                 CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(0), 1, -60, -30, 0)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
                 CASE_LESS_OR_EQUAL(-1)
                 CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_N_7"))
                 CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
@@ -4733,7 +4733,7 @@ EVT_BEGIN(marioAttackEvent_NormalHammer_Core)
     // apply and the first Stylish window opens.
     CALL(btlevtcmd_StopAC)
     CALL(btlevtcmd_GetDamage, LW(3), LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     IF_INT_GREATER_OR_EQUAL(LW(0), 10)
         SET_VALUE(LW(0), 9)
     END_IF
@@ -5524,7 +5524,7 @@ EVT_BEGIN(marioAttackEvent_JishinHammer)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_snd_voice, UNIT_ID_SELF, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
         CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, -30, 20, 0)
 #endif
@@ -5908,7 +5908,7 @@ EVT_BEGIN(marioAttackEvent_HammerNageru)
     // Stylish: Mario backflips in place; a second good press ends it in a pose with confetti.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_snd_voice, UNIT_ID_SELF, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
         CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, -40, 30, 0)
 #endif
@@ -6016,7 +6016,7 @@ EVT_BEGIN(marioAttackEvent_HammerNageru_object)
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
     END_IF
     CALL(btlevtcmd_GetDamage, LW(3), LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     IF_INT_GREATER_OR_EQUAL(LW(0), 10)
         SET_VALUE(LW(0), 9)
     END_IF
@@ -6540,7 +6540,7 @@ EVT_BEGIN(marioAttackEvent_MajinaiPowerUpCheck)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SPAWN_EVENT(evt_majinai_effect_se_btl)
     CALL(_battle_majinai_effect, -3)
     CALL_CHILD(PTR(marioAttackEvent_MajinaiJump))
@@ -6584,7 +6584,7 @@ EVT_BEGIN(marioAttackEvent_MajinaiDefenceUp)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SPAWN_EVENT(evt_majinai_effect_se_btl)
     CALL(_battle_majinai_effect, -3)
     CALL_CHILD(PTR(marioAttackEvent_MajinaiJump))
@@ -6608,7 +6608,7 @@ EVT_BEGIN(marioAttackEvent_MajinaiExpUp)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)
     SET_VALUE(LW(2), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SPAWN_EVENT(evt_majinai_effect_se_btl)
     CALL(_battle_majinai_effect, -3)
     CALL_CHILD(PTR(marioAttackEvent_MajinaiJump))

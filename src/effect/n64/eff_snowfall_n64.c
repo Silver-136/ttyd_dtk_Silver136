@@ -1,10 +1,11 @@
 // Paper Mario 64 effect: snowfall: `count` snow particles drifting down the screen.
 
+#include "version.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 #include "memory.h"
@@ -215,7 +216,7 @@ void effSnowfallMain(EffectEntry* effect) {
         p->position.z += p->velocity.z;
         cam_clip_chk(p, 550, h, life);
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (gp->inBattle == 0) {
         dispEntry(CAMERA_3D, dispCalcZ(&position), 10, (DispCallback)effSnowfallDisp, effect);
     } else {

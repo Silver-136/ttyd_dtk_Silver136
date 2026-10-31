@@ -1,5 +1,6 @@
 // las_24 (ラストダンジョン, Palace of Shadow): the room with the cloud blocks and the breaking floor.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
@@ -22,7 +23,7 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 USER_FUNC(las_24_adjust_for_framerate);
 #endif
 
@@ -37,7 +38,7 @@ static EvtWord haguruma_evt[194];
 EvtWord cloud_blk_evt[10];
 EvtWord break_floor_evt[5];
 EvtWord jump_evt[68];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord dai_evt[17];
 #else
 static EvtWord dai_evt[13];
@@ -298,7 +299,7 @@ static EVT_BEGIN(dai_evt)
     SET_VALUE(LW(0), STRING("S_move_dai"))
     SET_VALUE(LW(1), STRING("A_move_dai"))
     SET_VALUE(LW(2), 7200)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(las_24_adjust_for_framerate, LW(2), LW(2))
 #endif
     CALL_CHILD(PTR(move_dai))
@@ -360,7 +361,7 @@ EVT_BEGIN(las_24_init_evt)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 
 USER_FUNC(las_24_adjust_for_framerate) {
     EvtWord* args = event->args;

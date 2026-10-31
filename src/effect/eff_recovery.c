@@ -1,6 +1,7 @@
 // HP/FP recovery (type 0: HP heart, 1: FP flower, 4/5: large HP/FP): `amount` icons rise one after another with
 // shine sounds and sparkles; type 6 is the sparkle-only form.
 
+#include "version.h"
 #include "driver/camdrv.h"
 #include "eff/eff_magic1_n64.h"
 #include "eff/eff_recovery.h"
@@ -753,7 +754,7 @@ void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect) {
     w = 108.0f;
     for (i = 0; i < 2; i++) {
         if (i == 0) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if ((u32)gp->language == LANGUAGE_SP) {
                 effGetTexObj(173, &texObj);
             } else {
@@ -765,7 +766,7 @@ void effRecoveryDisp3(CameraId cameraId, EffectEntry* effect) {
             GXLoadTexObj(&texObj, GX_TEXMAP0);
             GXSetChanMatColor(GX_COLOR0A0, (GXColor){ 0x00, 0x00, 0x00, 0xA0 });
         } else {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if ((u32)gp->language == LANGUAGE_SP) {
                 effGetTexObj(172, &texObj);
             } else {

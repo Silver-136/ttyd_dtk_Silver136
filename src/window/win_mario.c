@@ -1,5 +1,6 @@
 // Pause menu: the Mario window (stats, special moves, equipped gear).
 
+#include "version.h"
 #include "win/win_main.h"
 #include "battle/battle_mario.h"
 #include "icon_ids.h"
@@ -306,7 +307,7 @@ s32 winMarioMain(WindowWork* w) {
 void winMarioMain2(void) {
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** US: plain ASCII digits */
 // US: plain ASCII digits
 const char* winZenkakuStr(s32 n) {
@@ -335,7 +336,7 @@ const char* winZenkakuStr(s32 n) {
     return tmp2;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 char winZenkakuStrPad_buf[0x100];
 
 /** Formats n zero-padded to digits places (the play time's hours and minutes); returns a shared static buffer. */
@@ -438,7 +439,7 @@ void fukidashi(WindowWork* w, u32 idx, f32 x, f32 y) {
 }
 
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 
 /**
  * Draws the Mario window (menu slot idx): name, level and rank, the gear and curse bubbles, HP/FP/BP,
@@ -504,7 +505,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     GXColor white;
     GXColor black;
     PouchData* pouch;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     f32 x;
     f32 y;
     f32 rowA;
@@ -530,7 +531,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     char buf[0x100];
 
     w = param;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     // FAKE: dead store; makes y the first float referenced, so its later web (the mode label x) is split before x's (register order)
     y = 0.0f;
 #endif
@@ -550,7 +551,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     winIconSet(ICON_MARIO, (Vec){cx, 142.0f + y, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, white);
     cx += 20.0f;
     winFontInit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     winFontSetEdgeWidth((Vec){cx, 152.0f + y, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white, 45.0f, msgSearch("msg_menu_mario_level"));
     sprintf(buf, "%s", winZenkakuStr(pouch->level));
     nameW = FontGetMessageWidth(buf);
@@ -568,7 +569,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     winTexInit(*w->res->data);
     winTexSet(0xB0, (Vec){x - 255.0f, 112.0f + y, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
     winFontInit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     winFontSetWidth((Vec){x - 240.0f, 124.0f + y, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, 140.0f, msgSearch(BattleGetRankNameLabel(pouch->level)));
 #else
     winFontSet((Vec){x - 240.0f, 124.0f + y, 0.0f}, (Vec){0.7f, 0.7f, 0.7f}, black, msgSearch(BattleGetRankNameLabel(pouch->level)));
@@ -586,7 +587,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     for (i = 0; i < 3; i++) {
         GXColor cols[3] = {{0xCB, 0x8C, 0xA2, 0xFE}, {0xCB, 0xBE, 0x89, 0xFE}, {0x94, 0xB9, 0xC7, 0xFE}};
         GXColor reds[3] = {{0xA7, 0x3C, 0x3C, 0xFF}, {0x37, 0x69, 0x1E, 0xFF}, {0x0F, 0x21, 0x7A, 0xFF}};
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // Descriptive name (not in the symbol maps).
         const char* const stat_name_tbl[7][3] = {
             {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"},
@@ -602,7 +603,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
 #endif
         const char* ruby[3] = {"msg_menu_mario_ruby_hp", "msg_menu_mario_ruby_fp", "msg_menu_mario_ruby_bp"};
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         rowL = 50.0f + (x - 270.0f) - 2.0f;
         nameW2 = FontGetMessageWidth(stat_name_tbl[gp->language][i]);
 #else
@@ -613,7 +614,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         winTexInit(*w->res->data);
         GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
         GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         winTexSet(0xAF, (Vec){rowL, (cx2 = (y - 38.0f) - (f32)(i * 34)) - 4.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, cols[i]);
         winFontInit();
         winFontSet((Vec){col - nameW2 / 2.0f, 12.0f + cx2, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, stat_name_tbl[gp->language][i]);
@@ -627,7 +628,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     }
 
     winIconInit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     winIconSet(ICON_HP, (Vec){col2 = 110.0f + (x - 270.0f), row0 = 4.0f + (y - 38.0f), 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
     winIconSet(ICON_FP, (Vec){col2, row1 = 4.0f + (rowB = (y - 38.0f) - 34.0f), 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
     winIconSet(ICON_BP, (Vec){col2, 4.0f + (rowA = (y - 38.0f) - 68.0f), 0.0f}, (Vec){0.82f, 0.82f, 0.82f}, white);
@@ -674,7 +675,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     if (w->mario.specialCount > 0) {
         winKirinukiGX(w, 0, 10.0f + x, (20.0f + (130.0f + y)) - 20.0f, 260.0f, 80.0f);
         winIconInit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         col6 = 10.0f + (40.0f + x);
         nameW3 = 106.0f + y;
         winIconSet(ICON_MENU_SP, (Vec){col6, nameW3, 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, white);
@@ -709,7 +710,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         }
     }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // FAKE: two dead int guards (gz is 0; folded after register allocation, no code): the first redefines q1/q2 so
     // they are not propagated, the second consumes them into y
     {
@@ -729,7 +730,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     left = 10.0f + x;
     winKirinukiGX(w, 0, left, 10.0f + (20.0f + y), 260.0f, 150.0f);
     winIconInit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     rowB2 = 10.0f + (20.0f + x);
     winIconSet(ICON_STAR_POINT, (Vec){rowB2, 10.0f + y, 0.0f}, (Vec){0.62f, 0.62f, 0.62f}, white);
     winIconSet(ICON_ITEM_COIN, (Vec){rowB2, 10.0f + (y - 28.0f), 0.0f}, (Vec){0.62f, 0.62f, 0.62f}, white);
@@ -788,7 +789,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         hour = (u64)secs / 3600;
         min = (u64)secs % 3600 / 60;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     winFontSetR((Vec){2.0f + (2.0f + ((8.0f + (172.0f + x)) - 16.0f)), rowA3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%s", winZenkakuStrPad(hour, 2));
     winFontSetR((Vec){numX, rowA3, 0.0f}, (Vec){0.9f, 0.9f, 0.9f}, black, "%s", winZenkakuStrPad(min, 2));
 
@@ -824,7 +825,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
     animPoseDrawMtx(w->mario.poseId, mtx, 2, 0.0f, 5.0f);
 
     if (w->mario.mode) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         const char* msg = msgSearch("msg_menu_mario_sac_waza");
         winWazaGX(w, 0, x - 270.0f, 160.0f, 270.0f, 254.0f);
         winFontInit();
@@ -845,7 +846,7 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
         for (i = 0; i < w->mario.specialCount; i++) {
             char sbuf[0x20];
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             winFontSetWidth((Vec){y2, (f32)(130 - i * 26), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, black, 180.0f, msgSearch(superActionTable[i]->name));
             // FAKE: the star power cost (s8 baseSpCost, never negative) is read unsigned (lbz with no extsb), as by the old u8 view of the move table
             sprintf(sbuf, "%s", winZenkakuStr((u8)superActionTable[i]->baseSpCost));

@@ -279,7 +279,7 @@ EvtWord marco_jewel[22];
 static EvtWord epilogue_npc_entry[48];
 static EvtWord epilogue_evt_sub[160];
 static EvtWord epilogue_evt[313];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord dai_disp[52];
 #endif
 EvtWord gor_01_init_evt[VERSION_PICK(546, 548)];
@@ -396,7 +396,7 @@ static USER_FUNC(get_value) {
     EvtWord* args = event->args;
     ShopSel* wp = (ShopSel*)evtGetValue(event, args[0]);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     evtSetValue(event, args[1], (s32)msgSearch(itemDataTable[wp->items[wp->sel]].name));
 #else
     evtSetValue(event, args[1], (EvtWord)itemDataTable[wp->items[wp->sel]].id);
@@ -432,7 +432,7 @@ static EVT_BEGIN(sell_evt)
         RETURN
     END_IF
     CALL(evt_sub_get_language, LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(evt_msg_print_insert, 0, STRING("badgeshop_08"), 0, STRING("バッジ店員"), LW(2), LW(3))
@@ -503,7 +503,7 @@ EVT_BEGIN(zaiko_buy_evt)
         RETURN
     END_IF
     CALL(evt_sub_get_language, LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(evt_msg_print_insert, 0, STRING("badgeshop_00"), 0, STRING("バッジ店員"), LW(2), LW(3), LW(4))
@@ -766,7 +766,7 @@ EVT_BEGIN(nancy_init_check)
     // Control returns to Mario, who is expected to stay put; the script waits until he takes a step or one
     // second passes.
     CALL(evt_mario_key_onoff, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
 #endif
@@ -894,7 +894,7 @@ EVT_BEGIN(nancy_init_check)
     CALL(evt_npc_restart_regular_event, STRING("me"))
     CALL(evt_npc_change_interrupt, STRING("me"), 6, PTR(nancy_talk))
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
 #endif
@@ -1037,7 +1037,7 @@ EVT_BEGIN(nancy_talk)
             WAIT_MS(500)
             CALL(evt_npc_move_position, STRING("me"), -370, -30, 0, FLOAT(80.0f), 0)
             WAIT_WHILE(GF(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_npc_set_position, STRING("me"), -405, 10, -100)
 #else
             CALL(evt_npc_set_position, STRING("me"), -455, 10, -170)
@@ -1045,7 +1045,7 @@ EVT_BEGIN(nancy_talk)
             CALL(evt_npc_set_ry, STRING("me"), 270)
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
             SET_VALUE(LW(0), STRING("w_bero"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL_CHILD(bero_case_switch_on)
 #else
             CALL_CHILD(PTR(bero_case_switch_on))
@@ -2050,7 +2050,7 @@ EVT_BEGIN(bottakuru_talk)
     // Charlieton quotes the price of the chosen item; for a badge (id 240 and up) he also gives its BP cost.
     IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
         CALL(evt_sub_get_language, LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SWITCH(LW(0))
             CASE_EQUAL(0)
             CALL(evt_msg_print_insert, 0, STRING("bottakuru_07"), 0, STRING("me"), LW(2), LW(3), LW(4))
@@ -3036,7 +3036,7 @@ EVT_BEGIN(evt_badge_dummy)
     CALL(evt_win_coin_on, 0, LW(8))
     CALL(get_value, LW(10), LW(11), LW(12), LW(13), LW(14))
     CALL(evt_sub_get_language, LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(evt_msg_print_insert, 0, STRING("badgeshop_00"), 0, STRING("バッジ店員"), LW(11), LW(13), LW(14))
@@ -3585,7 +3585,7 @@ EVT_END()
  * restores the doors, the music and ambience, and stops the fading, muttering and dripping events.
  */
 EVT_BEGIN(house_03_f2_close)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i03_f1_naka"), MAP_OBJ_FLAG_HIDDEN)
 #endif
     BEGIN_INLINE_EVENT
@@ -5386,7 +5386,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                     CALL(evt_mario_set_pose, STRING("M_S_1"))
                     CALL(evt_npc_move_position, STRING("チュチュリーナ"), LW(0), LW(2), 0, 40, 0)
                     WAIT_MS(1000)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     CALL(evt_cam3d_evt_set, -516, 290, 230, -516, 225, -140, 800, EASING_SINE_IN_OUT)
 #else
                     CALL(evt_cam3d_evt_set, -525, 290, 230, -525, 225, -140, 800, EASING_SINE_IN_OUT)
@@ -5395,7 +5395,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                     // Ms. Mowz joins the party and the partner lecture plays.
                     SET_VALUE(LW(8), STRING("チュチュリーナ"))
                     SET_VALUE(LW(9), PARTY_MEMBER_MS_MOWZ)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     CALL_CHILD(all_party_lecture)
 #else
                     CALL_CHILD(PTR(all_party_lecture))
@@ -5621,7 +5621,7 @@ static EVT_BEGIN(epilogue_evt)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EVT_BEGIN(dai_disp)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -5733,7 +5733,7 @@ EVT_BEGIN(gor_01_init_evt)
     // Create the plaza NPCs; Flavio gets his footstep sounds.
     CALL_CHILD(luigi_npcEnt)
     CALL(evt_npc_setup, PTR(npcEnt))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_sound_data_set, STRING("マルコ"), STRING("SFX_STG5_MARCO_MOVE1L"), STRING("SFX_STG5_MARCO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
 #else
     CALL(evt_npc_sound_data_set, STRING(/*"マルコ"*/"\x83\x7D\x83\x8B\x83\x52"), STRING("SFX_STG5_MARCO_MOVE1L"), STRING("SFX_STG5_MARCO_MOVE1R"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR)
@@ -5753,7 +5753,7 @@ EVT_BEGIN(gor_01_init_evt)
     CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -565, 162, -160, ITEM_TYPE_STILL, GSWF_STARPIECE_05, 0)
     // Until Flavio's talk the Skull Gem lies on the ground.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_32_CHATTING_WITH_FLAVIO)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_item_entry, STRING("ドクロジュエル"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
         CALL(evt_item_flag_on, STRING("ドクロジュエル"), ITEM_FLAG_NO_TOUCH)
         CALL(evt_item_status_on, STRING("ドクロジュエル"), ITEM_FLAG2_NO_PARTNER)
@@ -5830,7 +5830,7 @@ EVT_BEGIN(gor_01_init_evt)
     // Map object culling for the fence, stage and houses.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_saku"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dai"), MAP_OBJ_FLAG_CLIP)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SPAWN_EVENT(dai_disp)
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_f1A"), MAP_OBJ_FLAG_CLIP)
@@ -5900,7 +5900,7 @@ SimpleRecipe R_simple_recipe_table[] = {
  * releases.
  */
 CookRecipe R_cookbook_recipe_table[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {"キノコ", "かみなりゴロゴロ", "びりびりキノコ"}, // ITEM_MUSHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
     {"キノコ", "かみなりドッカン", "びりびりキノコ"}, // ITEM_MUSHROOM + ITEM_THUNDER_RAGE -> ITEM_VOLT_SHROOM
     {"キノコ", "ファイアフラワー", "キノコホイルやき"}, // ITEM_MUSHROOM + ITEM_FIRE_FLOWER -> ITEM_SHROOM_ROAST
@@ -6615,7 +6615,7 @@ USER_FUNC(wait_mahojin) {
 
 /** Allocates the item list used by Trouble Center job 9; args[0] is the number of Courage Shells Mario carries. */
 USER_FUNC(iri_09_item_tbl_alloc) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 n = evtGetValue(event, event->args[0]);
     iri_09_item_tbl = _mapAlloc((n + 1) * sizeof(s32));
 #else
@@ -6728,7 +6728,7 @@ USER_FUNC(cook_chk2) {
         evtSetValue(event, (volatile u32)args[2], item2);
         return EVT_RETURN_DONE;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     for (i = 0; i < 292; i++) {
 #else
     for (i = 0; i < 289; i++) {
@@ -6774,7 +6774,7 @@ USER_FUNC(get_item_name) {
     EvtWord* args = event->args;
     s32 item = evtGetValue(event, args[0]);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     ItemData* data = &itemDataTable[item];
     evtSetValue(event, args[1], (s32)msgSearch(data->name));
 #else

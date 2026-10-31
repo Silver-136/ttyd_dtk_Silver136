@@ -1,6 +1,7 @@
 // dou_07 (洞窟, Pirate's Grotto): room where the Black Key (0x24) opens a chest and the paper genie (peramajin) gives the Boat Curse (story 246, 247).
 // Elmos (erumosu) appears here; P-Down D-Up badge; the door leads to dou_08.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -36,7 +37,7 @@ static USER_FUNC(bgm_start_wait);
 static void majin_callback(s32 type);
 
 static EvtWord erumosu_regl[2];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord erumosu_dead[28];
 #else
 EvtWord erumosu_dead[25];
@@ -58,7 +59,7 @@ EVT_BEGIN(erumosu_dead)
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     SET_VALUE(GSWF_DOU_07_EMBER_DEFEATED, 1)
     SPAWN_EVENT(PTR(enemy_event_dead_event))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(1000)
     ADD(LW(1), 150)
     CALL(evt_item_entry, STRING("item_key"), ITEM_BLACK_KEY_0x24, LW(0), LW(1), LW(2), ITEM_TYPE_FALL, GSWF_DOU_07_BLACK_KEY, 0)

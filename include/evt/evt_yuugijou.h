@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/types.h>
 #include "evt/evt_cmd.h"
 
@@ -12,7 +13,7 @@ typedef struct PiantaParlorWork {
     u32 dispTick; //0x0C, counter-animation tick
     u32 dispTokens; //0x10, token count currently shown (counts toward tokens)
     // four minigames x five ranks (+1 spare slot); defaults set in yuugijou_init
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // US keeps eight record rows (0x258 bytes in all): recordScore 0xD4, recordParam 0x194, pad_134 at 0x254
     s32 recordOn[8][6]; //0x14
     s32 recordScore[8][6]; //0xD4

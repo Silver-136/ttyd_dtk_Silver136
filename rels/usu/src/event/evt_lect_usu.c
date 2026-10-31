@@ -782,7 +782,7 @@ EVT_BEGIN(vivian_party_lecture)
     CALL(evt_msg_print_add, 0, STRING("lecture_friends_13"))
     CALL(evt_party_vivian_unhold, 0)
     CALL(evt_cam_letter_box_disable, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_party_stop, 0)
     WAIT_FRAMES(16)
     CALL(evt_mario_wait_landon)

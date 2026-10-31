@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/types.h>
 #include "evt/evt_word.h"
 #include "battle/battle_damage.h"
@@ -903,7 +904,7 @@ typedef struct BattleUnit {
     };
     u8 pad_136[2];                               // 0x136, never accessed
     s32 statusFlags;                            // 0x138
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     u16 usCommandDisabled[2]; // US only (+4 from here): per-unit turns left for the two command blocks JP keeps in BattleWork commandDisabled[3..4]
 #endif
     s32 protectId;                               // 0x13C

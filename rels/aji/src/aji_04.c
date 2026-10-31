@@ -1,6 +1,7 @@
 // aji_04 (敵のアジト, X-Naut Fortress): the quiz room: the stone statue (sekizou) asks its quiz questions
 // (kuizu_sekizou); with two Yux.
 
+#include "version.h"
 #include "data_tables.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -34,7 +35,7 @@
 #include "evt/evt_bero.h"
 #include "aji.h"
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #endif
 static void callback(s32 type, void** work);
 void kuti_callback(s32 type, void** work);
@@ -57,7 +58,7 @@ EvtWord quiz_ok[19];
 EvtWord quiz_ng[21];
 EvtWord UNK_0x00022be8[21];
 EvtWord UNK_0x00022c3c[66];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord kuizu_sekizou[980];
 #else
 EvtWord kuizu_sekizou[920];
@@ -646,7 +647,7 @@ EVT_BEGIN(kuizu_sekizou)
                 CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
                 SPAWN_EVENT(PTR(sekizou_talk))
                 CALL(evt_msg_print, 0, STRING("stg7_aji_29"), PTR(kuti_callback), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 CALL(evt_npc_set_position, STRING("バリアーン１"), 50, 200, -50)
                 CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 200, 50)
                 CALL(evt_npc_flag_onoff, 1, STRING("バリアーン１"), NPC_FLAG_INSTANT_TURN)
@@ -659,7 +660,7 @@ EVT_BEGIN(kuizu_sekizou)
                 CALL(evt_npc_set_position, STRING("バリアーン２"), 50, 250, 50)
 #endif
                 BEGIN_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 200, 20, 300)
                     LOOP(0)
                         CALL(evt_sub_intpl_msec_get_value)
@@ -676,7 +677,7 @@ EVT_BEGIN(kuizu_sekizou)
                 END_INLINE_EVENT
                 WAIT_MS(300)
                 BEGIN_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 200, 20, 300)
                     LOOP(0)
                         CALL(evt_sub_intpl_msec_get_value)
@@ -693,7 +694,7 @@ EVT_BEGIN(kuizu_sekizou)
                 END_INLINE_EVENT
                 WAIT_MS(300)
                 WAIT_MS(500)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 CALL(evt_npc_flag_onoff, 0, STRING("バリアーン１"), NPC_FLAG_INSTANT_TURN)
                 CALL(evt_npc_flag_onoff, 0, STRING("バリアーン２"), NPC_FLAG_INSTANT_TURN)
 #endif

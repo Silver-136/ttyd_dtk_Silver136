@@ -717,7 +717,7 @@ HitEntry* marioSearchGround(f32* y, f32* b, f32* c, f32 spd, f32 h) {
     spd += 0.01f;
     yl = 5.0f + __fabsf(h);
     *b = -1.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (mario->currMotionId != MARIO_MOTION_HAMMER_2) {
         if (mario->baseSpeed) {
             a = revise360(mario->directionView - mario->targetYaw);
@@ -1376,7 +1376,7 @@ f32 marioChkOverhead(void) {
                         marioChgStayMotion();
                     }
                 } else {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     {
                         /* FAKE: redundant second test reproduces the target's double beq */
                         s32 m = mario->baseSpeed > mario->baseWalkSpeed ? 2 : 1;
@@ -1542,7 +1542,7 @@ HitEntry* marioSearchHead(Vec* pos, f32* h, f32 dd) {
         } else {
             if (hit) {
                 outPos.y = (s32)(100.0f * outPos.y + hh) / 100.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 if (mario->jumpVelocityY < -10.0f) {
                     *h = outPos.y - pos->y - a;
                     return NULL;
@@ -1747,7 +1747,7 @@ void marioCheckWall(f32 dx, f32 dz) {
         } else {
             mario->frontWallDist = h;
             mario->hitobjWall = hit;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             {
                 s32 lim = strncmp(hitGetName(hit), "dokan", 5) != 0 ? 20 : 10;
                 if (++mario->wallPushTimer >= lim) {
@@ -2060,7 +2060,7 @@ HitEntry* searchFrontWall(Vec* pos, f32* h, f32 dx, f32 dz, f32 w) {
             heights[0] = 0.75f * mario->wPlayerCollisionBox.y;
             heights[1] = 0.5f * mario->wPlayerCollisionBox.y;
             heights[2] = 11.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (kpaGetLevel() == 2) {
                 count = 4;
                 heights[3] = 30.0f;

@@ -1,5 +1,6 @@
 // tou2: Glitz Pit arena REL shared code/prolog (registers tou_03) plus ranking, rule and champion belt helpers.
 
+#include "version.h"
 #include "tou2.h"
 #include "evt/evt_story.h"
 #include "dolphin/types.h"
@@ -407,7 +408,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     Mtx scale;
     Mtx mtx;
     char entry[0x100];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     const char* title;
     const char* name;
     f32 nameW;
@@ -417,7 +418,7 @@ static void disp_proc(CameraId cameraId, void* param) {
     winW = 250.0f;
     left = -winW / 2.0f;
     windowDispGX_System(0, 0xFF, left - 30.0f, 165.0f, 310.0f, 330.0f);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((u32)gp->language == LANGUAGE_JP) {
         title = "\x83\x89\x83\x93\x83\x4C\x83\x93\x83\x4F";
     } else {
@@ -436,7 +437,7 @@ static void disp_proc(CameraId cameraId, void* param) {
         FontDrawColor(color);
     }
     top = 135.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     FontDrawMessage(-width / 2, top, title);
 #else
     FontDrawMessage(-width / 2, top, "\x83\x89\x83\x93\x83\x4C\x83\x93\x83\x4F");
@@ -458,7 +459,7 @@ static void disp_proc(CameraId cameraId, void* param) {
         }
         PSMTXScale(scale, 0.8f, 0.8f, 0.8f);
         if (num != 0) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if ((u32)gp->language == LANGUAGE_JP) {
                 sprintf(entry, "%s%s", num / 10 ? suuji[num / 10] : "", suuji[num % 10]);
             } else {
@@ -484,14 +485,14 @@ static void disp_proc(CameraId cameraId, void* param) {
             GXColor color = nameColor;
             FontDrawColor(color);
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         name = msgSearch(fighters[rank_wp->entries[i].id].name);
         nameW = FontGetMessageWidth(name);
 #endif
         x = 40.0f + x;
         PSMTXTrans(mtx, x, y, 0.0f);
         PSMTXConcat(mtx, scale, mtx);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (nameW > 220.0f) {
             PSMTXScale(scale, 220.0f / nameW, 1.0f, 1.0f);
             PSMTXConcat(mtx, scale, mtx);

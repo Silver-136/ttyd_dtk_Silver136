@@ -295,7 +295,7 @@ static EVT_BEGIN(attack_event)
         WAIT_FRAMES(LW(0))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_GESSO_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(btlevtcmd_ftof, 67, LW(0))
 #else
     CALL(btlevtcmd_ftof, 64, LW(0))

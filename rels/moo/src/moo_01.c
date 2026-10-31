@@ -1,5 +1,6 @@
 // moo_01 (月, the Moon): a crater field between moo_00 and moo_05, with a rock to blow up.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -22,16 +23,16 @@
 
 
 static BeroEntry bero_entry_data[3];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #else
 static EvtWord rock_main[79];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord rock_evt0[15];
 #else
 static EvtWord rock_evt0[21];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord rock_evt1[15];
 #else
 static EvtWord rock_evt1[21];
@@ -75,7 +76,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 static EVT_BEGIN(rock_main)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -101,7 +102,7 @@ EVT_END()
 #endif
 
 static EVT_BEGIN(rock_evt0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(GSWF_MOO_01_ROCK_01_BLOWN, 1)
 #else
     CALL(evt_mario_key_onoff, 0)
@@ -109,7 +110,7 @@ static EVT_BEGIN(rock_evt0)
     SET_VALUE(LW(10), STRING("S_iwa_01"))
     SET_VALUE(LW(11), STRING("A_iwa_01"))
     CALL_CHILD(PTR(rock_main))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     SET_VALUE(GSWF_MOO_01_ROCK_01_BLOWN, 1)
     CALL(evt_mario_key_onoff, 1)
 #endif
@@ -118,7 +119,7 @@ static EVT_BEGIN(rock_evt0)
 EVT_END()
 
 static EVT_BEGIN(rock_evt1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(GSWF_MOO_01_ROCK_08_BLOWN, 1)
 #else
     CALL(evt_mario_key_onoff, 0)
@@ -126,7 +127,7 @@ static EVT_BEGIN(rock_evt1)
     SET_VALUE(LW(10), STRING("S_iwa_08"))
     SET_VALUE(LW(11), STRING("A_iwa_08"))
     CALL_CHILD(PTR(rock_main))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     SET_VALUE(GSWF_MOO_01_ROCK_08_BLOWN, 1)
     CALL(evt_mario_key_onoff, 1)
 #endif

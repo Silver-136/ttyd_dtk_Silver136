@@ -1,5 +1,6 @@
 // Battle unit Crazee Dayzee (パンジーさん): gra.rel's copy.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -125,7 +126,7 @@ BattleWeapon weapon_pansy_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -148,7 +149,7 @@ BattleWeapon weapon_pansy_attack = {
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE, // special
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     50, // sleepChance
 #else
     75, // sleepChance

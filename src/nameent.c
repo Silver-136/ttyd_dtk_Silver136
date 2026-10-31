@@ -29,7 +29,7 @@ s32 nameMain(void);
 void nameEntDisp(CameraId cameraId, void* param);
 
 //.data
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define NAME_LANG_PICK(jp, en) ((u32)gp->language == LANGUAGE_JP ? (jp) : (en))
 #else
 #define NAME_LANG_PICK(jp, en) (jp)
@@ -114,7 +114,7 @@ void nameEntReInit(void) {
     wp->loadState = 3;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 const char* latin_tbl[] = {
     "A", "B", "C", "D", "E", "a",
     "b", "c", "d", "e", "\xFC", "\xFA",
@@ -141,7 +141,7 @@ const char* latin_tbl[] = {
 #endif
 
 BOOL nameEntPrepare(void) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     const char* lang[6] = {"jp", "us", "ge", "fr", "sp", "it"};
     return fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0;
 #else
@@ -156,7 +156,7 @@ void nameEntOn(s32 type) {
     wp->type = type;
     wp->loadState = 1;
     wp->state = 0;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((u32)gp->language == LANGUAGE_JP) {
         wp->charTable = hiragana_tbl;
     } else {
@@ -174,14 +174,14 @@ void nameEntOn(s32 type) {
     wp->caretY = wp->caretTargetY = 135.0f;
     strcpy(wp->name, "");
     for (i = 0; i < 8; i++) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         strcat(wp->name, (u32)gp->language == LANGUAGE_JP ? "\x81\x40" : " ");
 #else
         strcat(wp->name, "\x81\x40");
 #endif
     }
     wp->maskAlpha = 0.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((u32)gp->language == LANGUAGE_JP) {
         switch (type) {
             case 2:
@@ -244,7 +244,7 @@ const char* nameEntGetName(void) {
     if (wp->state != 101) {
         return NULL;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((u32)gp->language == LANGUAGE_JP) {
         for (j = 7; j >= 1; j--) {
             if (strncmp(&wp->name[j * 2], "\x81\x40", 2)) {
@@ -275,15 +275,15 @@ const char* nameEntGetName(void) {
 
 /** Loads the language's name.tpl into tplFile once the async read has finished; FALSE while it is still loading. */
 static inline BOOL nameEntLoad(void) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     const char* lang[6] = {"jp", "us", "ge", "fr", "sp", "it"};
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]) != 0U) {
 #else
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/w/jp/name.tpl", getMarioStDvdRoot()) != 0U) {
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         wp->tplFile = fileAllocf(FILE_TYPE_TPL, "%s/w/%s/name.tpl", getMarioStDvdRoot(), lang[gp->language]);
 #else
         wp->tplFile = fileAllocf(FILE_TYPE_TPL, "%s/w/jp/name.tpl", getMarioStDvdRoot());
@@ -334,7 +334,7 @@ s32 nameMain(void) {
             if ((wp->flags & NAMEENT_FLAG_INPUT_ON) && gp->debugFlag == 0) {
                 if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
                     off = wp->cursorX;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     // FAKE: no-op (s32) cast; the plain ?: changes the object
                     if (off >= 10 && wp->cursorY >= (s32)((u32)gp->language == LANGUAGE_JP ? 4 : 6)) {
 #else
@@ -359,7 +359,7 @@ s32 nameMain(void) {
                                 s32 n;
                                 s32 k;
                                 s32 o;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                                 if ((u32)gp->language == LANGUAGE_JP) {
                                     n = strlen(wp->name) / 2;
                                     for (k = 0, o = 0; k < n; o += 2, k++) {
@@ -422,7 +422,7 @@ s32 nameMain(void) {
                                 break;
                         }
                     } else if (wp->nameLen < 8) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                         if ((u32)gp->language == LANGUAGE_JP) {
                             ((u16*)wp->name)[wp->nameLen] = *(u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + off];
                         } else {
@@ -440,7 +440,7 @@ s32 nameMain(void) {
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_SET1));
                     } else if (wp->nameLen == 8) {
                         wp->nameLen = 7;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                         if ((u32)gp->language == LANGUAGE_JP) {
                             ((u16*)wp->name)[wp->nameLen] = *(u16*)wp->charTable[wp->cursorY * NAMEENT_COLS + wp->cursorX];
                         } else {
@@ -454,7 +454,7 @@ s32 nameMain(void) {
                         psndSFXOn(SFX_NAME_WORD(PSND_SFX_FILE_MOJI_SET1));
                     }
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_START) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     if ((u32)gp->language == LANGUAGE_JP) {
                         len = strlen(wp->name) / 2;
                         for (j = 0, off = 0; j < len; off += 2, j++) {
@@ -514,7 +514,7 @@ s32 nameMain(void) {
                     }
 #endif
                 } else if (keyGetButtonTrg(0) & PAD_BUTTON_B) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     if ((u32)gp->language == LANGUAGE_JP) {
                         if (wp->nameLen == 0 && wp->type == 0 && !strncmp(wp->name, "\x81\x40", 2)) {
                             psndSFXOn(SFX_NAME_WORD(PSND_SFX_CURSOR_CANCEL1));
@@ -617,7 +617,7 @@ s32 nameMain(void) {
                 }
             }
             idx = wp->cursorX;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (idx > 9 && wp->cursorY > ((u32)gp->language == LANGUAGE_JP ? 3 : 5)) {
 #else
             if (idx > 9 && wp->cursorY > 3) {
@@ -722,7 +722,7 @@ void nameEntDisp(CameraId cameraId, void* param) {
             }
         }
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     for (j = (u32)gp->language == LANGUAGE_JP ? 0 : 2; j < 4; j++) {
 #else
     for (j = 0; j < 4; j++) {
@@ -743,7 +743,7 @@ void nameEntDisp(CameraId cameraId, void* param) {
     FontDrawStart();
     for (n = 0; n < 8; n++) {
         memset(buf, 0, sizeof(buf));
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if ((u32)gp->language == LANGUAGE_JP) {
             strncpy(buf, &wp->name[n * 2], 2);
         } else {

@@ -1,5 +1,6 @@
 // yuu_00 (遊技場, Pianta Parlor): minigame 1, Plane Mode (hikoki); entered from gor_03.
 
+#include "version.h"
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "evt/evt_yuuranking.h"
@@ -45,7 +46,7 @@ typedef struct HikokiWork {
     s32 monteCount;
     EventEntry* viewEvent;
 } HikokiWork;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 USER_FUNC(yuuminigame1_floor_chk);
 USER_FUNC(yuuminigame1_floor_on_off);
 #endif
@@ -78,17 +79,17 @@ EvtWord light_sub_event[497];
 EvtWord minigame01_main[35];
 EvtWord minigame01_start_cam[40];
 EvtWord minigame01_start_cam_cancel[20];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord minigame01_start[1504];
 #else
 EvtWord minigame01_start[355];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord minigame01_end[224];
 #else
 EvtWord minigame01_end[236];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord yuu_00_init_evt[437];
 #else
 EvtWord yuu_00_init_evt[11];
@@ -107,7 +108,7 @@ static EVT_BEGIN(minigame_view_monte)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EVT_BEGIN(minigame01_floor_delete)
     CALL(yuuminigame1_floor_chk, LW(0), LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
@@ -363,7 +364,7 @@ EVT_BEGIN(minigame01_start)
     CALL(yuu_atai_init)
     CALL(yuu_atai_push, LW(0))
     CALL(evt_map_playanim, STRING("neon_01"), MAP_ANIM_PLAY_LOOP, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_random, 5, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -412,7 +413,7 @@ EVT_BEGIN(minigame01_start)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         // Motions 3 to 5: the same three speeds, starting from the other end.
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("S_dai_01"))
@@ -463,7 +464,7 @@ EVT_BEGIN(minigame01_start)
 #endif
     CALL(yuuminigame_set_dataadr, 1, LW(15))
 // Platform 2 (S_dai_02) slides along Z, with the same choice of motions.
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_random, 5, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -512,7 +513,7 @@ EVT_BEGIN(minigame01_start)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         // Motions 3 to 5: the same three speeds, starting from the other end.
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("S_dai_02"))
@@ -563,7 +564,7 @@ EVT_BEGIN(minigame01_start)
 #endif
     CALL(yuuminigame_set_dataadr, 2, LW(15))
 // Platform 3 (S_dai_03) moves on X and Z at once, with the same choice of motions.
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_random, 5, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -604,7 +605,7 @@ EVT_BEGIN(minigame01_start)
     SET_VALUE(LW(3), 150)
     SET_VALUE(LW(4), 2000)
     SET_VALUE(LW(5), 200)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SET_VALUE(LW(6), 4)
 #else
     SET_VALUE(LW(6), 3)
@@ -616,7 +617,7 @@ EVT_BEGIN(minigame01_start)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         // Motions 3 to 5: the same three speeds, starting from the other end.
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("S_dai_03"))
@@ -667,7 +668,7 @@ EVT_BEGIN(minigame01_start)
 #endif
     CALL(yuuminigame_set_dataadr, 3, LW(15))
 // Platform 4 (S_dai_04) also moves on X and Z at once.
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_random, 5, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -716,7 +717,7 @@ EVT_BEGIN(minigame01_start)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         // Motions 3 to 5: the same three speeds, starting from the other end.
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("S_dai_04"))
@@ -767,7 +768,7 @@ EVT_BEGIN(minigame01_start)
 #endif
     CALL(yuuminigame_set_dataadr, 4, LW(15))
 // Platform 5 (S_dai_05), the last and highest-scoring one, also moves on X and Z at once.
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_random, 5, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -816,7 +817,7 @@ EVT_BEGIN(minigame01_start)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         // Motions 3 to 5: the same three speeds, starting from the other end.
         CASE_EQUAL(3)
         SET_VALUE(LW(0), STRING("S_dai_05"))
@@ -868,7 +869,7 @@ EVT_BEGIN(minigame01_start)
     CALL(yuuminigame_set_dataadr, 5, LW(15))
     // The platforms are ready. On the first round the camera flies over the course; A or B skips it.
     CALL(yuu_atai_pop, LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(yuuminigame1_floor_on_off, LW(0), 1)
 #endif
     CALL(yuuminigame1_opening_chk, LW(0), LW(1))
@@ -921,7 +922,7 @@ EVT_BEGIN(minigame01_end)
     CALL(evt_cam_letter_box_onoff, 1, 0)
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE2"), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(yuu_atai_push, LW(0))
     CALL(yuu_atai_push, LW(1))
     CALL(yuu_atai_push, LW(2))
@@ -1022,7 +1023,7 @@ EVT_BEGIN(yuu_00_init_evt)
     CALL(evt_map_playanim, STRING("neon_02"), MAP_ANIM_PLAY_LOOP, 0)
     SPAWN_EVENT(PTR(minigame01_main))
     CALL_CHILD(PTR(evt_yuunpc_minigame1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("saka_k_1"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("saka_k_2"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("saka_k_3"), MAP_OBJ_FLAG_DISABLED)
@@ -1313,7 +1314,7 @@ USER_FUNC(yuuminigame1_opening_chk) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** args[0] = minigame work pointer, args[1] = on/off. Sets or clears the "platforms exist" bit (flags bit 1). */
 USER_FUNC(yuuminigame1_floor_on_off) {
     EvtWord* args = event->args;
@@ -1383,7 +1384,7 @@ void yuuminigame_main_1hikoki(EventEntry* event, BOOL isFirstCall) {
             wp->subEvent->lwData[0] = data->coins;
             wp->subEvent->lwData[1] = data->result;
             wp->subEvent->lwData[2] = data->monteCount;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             wp->subEvent->lwData[3] = event->lwData[0];
 #endif
             data->phase++;
@@ -1399,7 +1400,7 @@ void yuuminigame_disp_1hikoki(CameraId camera, void* param) {
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data) {
     MarioWork* mario = marioGetPtr();
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     EventEntry* sub;
 
     if (mario->hitobjStandOn != NULL) {
@@ -1421,14 +1422,14 @@ BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
             data->result = 2;
         }
         if (!strcmp("A_dai_04", hitGetName(mario->hitobjStandOn))) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             data->result = 2;
 #else
             data->result = 3;
 #endif
         }
         if (!strcmp("A_dai_05", hitGetName(mario->hitobjStandOn))) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             data->result = 3;
 #else
             data->result = 5;
@@ -1453,7 +1454,7 @@ BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
         partyKeyOff();
         yuucounter_flag_on(2);
         return TRUE;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         }
 #endif
     }

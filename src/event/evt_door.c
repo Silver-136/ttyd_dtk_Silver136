@@ -1,6 +1,7 @@
 // Scripts and commands for house doors: opening, walking in and out, inside/outside map groups
 // and NPC visibility.
 
+#include "version.h"
 #include "data_tables.h"
 #include "evt/evt_door.h"
 #include "evt/evt_cmd.h"
@@ -79,7 +80,7 @@ EvtWord door_dark2[34];
 EvtWord door_light[30];
 EvtWord door_light2[30];
 EvtWord evt_door_open[508];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_door_open_bom_01[336];
 #else
 EvtWord evt_door_open_bom_01[338];
@@ -859,7 +860,7 @@ EVT_BEGIN(evt_door_open_bom_01)
     END_IF
     CALL(door_dark_flag, LW(0), 1)
     SPAWN_EVENT(PTR(door_open_se))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(evt_mario_party_door_halve_hitbox)
 #endif
     CALL(evt_door_param, LW(0), 6, LW(7), LW(8), LW(9))

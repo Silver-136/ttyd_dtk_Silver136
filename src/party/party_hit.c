@@ -1,5 +1,6 @@
 // Partner collision: ground, wall and ceiling checks for the partners.
 
+#include "version.h"
 #include "party.h"
 #include "driver/hitdrv.h"
 #include "driver/mobjdrv.h"
@@ -18,7 +19,7 @@
 
 #include "mario/mario_party.h"
 #include "mario/mario_sbr.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 #include <math.h>
@@ -427,14 +428,14 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     f32 bestD, d;
     f32 rd, maxD;
     HitEntry* best;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 count;
 #endif
     HitEntry* hit;
     s32 i;
 
     sincosf(&sn, &cs, ang);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     count = 3;
 #endif
     arr[0] = 0.75f * partyGetHeight(party);
@@ -443,7 +444,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         arr[2] = 1.0f;
     } else {
         arr[2] = 11.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (!strcmp(gp->currentMapName, "gor_02") && party->position.y >= 120.0f && party->position.x <= 350.0f) {
             arr[3] = 1.0f;
             count = 4;
@@ -461,7 +462,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         dir1.z = cs;
         qdir = dir1;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     for (i = 0; i < count; i++) {
 #else
     for (i = 0; i < 3; i++) {
@@ -496,7 +497,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         v.x += 0.5f * (mx - dot * nn.x);
         v.z += 0.5f * (mz - dot * nz);
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     hit = NULL;
 #endif
     sincosf(&sn2, &cs2, ang + 45.0f);
@@ -508,7 +509,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
         dir2.z = cs2;
         qdir = dir2;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     for (i = 0; i < count; i++) {
 #else
     for (i = 0; i < 3; i++) {
@@ -522,7 +523,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     }
     // This probe loop has no break, so hit keeps the last height's result (the +45 loop above stops at its first hit).
     if (hit) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         hit = NULL;
         sincosf(&sn2, &cs2, ang - 45.0f);
         for (i = 0; i < count; i++) {
@@ -565,14 +566,14 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
 HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
     f32 sn, cs;
     f32 d, dy, hh;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 w, maxD;
 #endif
     HitEntry* hit;
     Vec p, nrm;
 
     sincosf(&sn, &cs, ang);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // US: with flag 0x1000 set the partner checks walls with a width of 6
     w = party->width;
     if (party->flags & PARTY_FLAG_PAPER_MODE) {
@@ -601,7 +602,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
             dy = 1.0f;
         }
         p = party->position;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         d = maxD;
 #else
         d = 0.5f * party->width + dist;
@@ -769,7 +770,7 @@ void partyHitStrippedPool(f32* f, s32 i) {
     f[5] = (f32)i;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 
 /* FAKE: inline add keeps the original fadds operand order (pos.y, 10.0f) */
 static inline f32 party_addf(f32 a, f32 b) { return a + b; }

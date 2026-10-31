@@ -1,5 +1,6 @@
 // Rogueport Sewers (tik) battle unit: Blooper (gesso), the body: its parts, defence/status tables, and attack events.
 
+#include "version.h"
 #include "eff/n64/eff_opuku_jetw_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -22,7 +23,7 @@
 #include "manager/evtmgr_cmd.h"
 #include "battle/battle_damage.h"
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #else
 USER_FUNC(_test_rtn);
 #endif
@@ -45,10 +46,10 @@ static PoseTableEntry pose_table_ceil[12];
 PoseTableEntry gesso_pose_table_turn[10];
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 EvtWord gesso_arm_wait_event[4];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord battle_entry_event[313];
 #else
 static EvtWord battle_entry_event[315];
@@ -57,7 +58,7 @@ static EvtWord init_event[121];
 BattleUnitSetup entry_gesso_left_arm_entry_data;
 BattleUnitSetup entry_gesso_right_arm_entry_data;
 static EvtWord damage_event[34];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord phase_event[497];
 #else
 static EvtWord phase_event[488];
@@ -229,7 +230,7 @@ static BattleUnitKindPart parts[] = {
     {1, "btl_un_gesso", "c_gesso", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 103, -175, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 EVT_BEGIN(gesso_arm_wait_event)
     CALL(_test_rtn)
     RETURN
@@ -296,7 +297,7 @@ static EVT_BEGIN(battle_entry_event)
         CALL(btlevtcmd_AnimeWaitPlayComplete, LW(3), 1)
         CALL(btlevtcmd_StartWaitEvent, LW(3))
     END_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #else
     SPAWN_EVENT(gesso_arm_wait_event)
 #endif
@@ -409,7 +410,7 @@ EVT_END()
  */
 // Count the fallen and standing phases separately before restoring the ceiling state and arms.
 static EVT_BEGIN(phase_event)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         RETURN
@@ -584,7 +585,7 @@ BattleWeapon weapon_gesso_ikasumi_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -712,7 +713,7 @@ USER_FUNC(_ikasumi_effect) {
     return EVT_RETURN_DONE;
 }
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 /**
  * Debug routine (JP and earlier).
  * Lets the d-pad select the Blooper or one of its two tentacles,

@@ -1,5 +1,6 @@
 // Mini-game banner effect: start, finish and retire messages (types 0-2) with sounds, laid out per language.
 
+#include "version.h"
 #include "eff/eff_minigame.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -32,7 +33,7 @@ typedef struct MiniGameWork {
 void effMiniGameMain(EffectEntry* effect);
 void effMiniGameDisp(CameraId cameraId, EffectEntry* effect);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 typedef struct MiniGameTbl {
     u8* tbl;
     s32 len;
@@ -97,7 +98,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
     s32 st;
 
     effect = effEntry();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     n = type_tbl[type][gp->language].len / 2 + 1;
 #else
     n = 1;
@@ -129,7 +130,7 @@ EffectEntry* effMiniGameEntry(s32 type, f32 x, f32 y, f32 z) {
     work->delay = 0;
     work->pad2c = 0;
     for (i = 1, work = work + 1; i < effect->count; i++, work++) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (type == 0) {
             work->state = (i < 4) ? 0 : 20;
         } else if (type == 1) {
@@ -516,7 +517,7 @@ void effMiniGameDisp(CameraId cameraId, EffectEntry* effect) {
             PSMTXConcat(cam->view, mtx, mtx);
             GXLoadPosMtxImm(mtx, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             texId = type_tbl[type][gp->language].tbl[(i - 1) * 2 + (1 - s)];
 #else
             switch (type) {

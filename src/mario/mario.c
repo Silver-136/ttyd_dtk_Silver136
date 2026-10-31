@@ -1,6 +1,7 @@
 // Mario's work (MarioWork): init, per-frame main, the key/control locks, pose and paper changes, display and
 // shadow, and the per-map start-up hooks.
 
+#include "version.h"
 #include "mario/mario.h"
 #include "driver/animdrv.h"
 #include "driver/hitdrv.h"
@@ -466,7 +467,7 @@ BOOL marioCheckMenuDisable(void) {
     if (!mario_bomhei_keychk()) {
         return TRUE;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (vivianGetStatus()) {
         if (!(partyGetPtr(marioGetPartyId())->flags & PARTY_FLAG_IS_EVT_USE)) {
             if (vivianGetStatus() == 2) {
@@ -577,7 +578,7 @@ void marioFBattlePost(void) {
     if (wp->currMotionId == MARIO_MOTION_YOSHI) {
         marioYoshiForceCancel();
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {
         PartyEntry* party = partyGetPtr(marioGetPartyId());
         if (party) {
@@ -819,7 +820,7 @@ void marioSoundInit(void) {
     wp->soundId[0] = -1;
     wp->soundId[1] = -1;
     wp->soundId[2] = -1;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     wp->soundId[3] = -1;
     wp->soundId[4] = -1;
 #endif
@@ -2085,7 +2086,7 @@ void marioPreDisp(void) {
         dy = (f32)cos(3.1415927f * wp->targetYaw / 180.0f);
         zo = 14.0f * -dy;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     else if (wp->characterId == CHARACTER_PEACH) {
         size = 13.333333f;
         xo = 6.0f * (f32)sin(3.1415927f * wp->targetYaw / 180.0f);

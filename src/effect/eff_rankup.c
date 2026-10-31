@@ -1,6 +1,7 @@
 // Rank-up banner: plays the EFF_Rankup model animation once (EFF_TekiKyouka, "enemy strengthening", before US);
 // from US on the model is chosen per language.
 
+#include "version.h"
 #include "eff/eff_rankup.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"
@@ -9,7 +10,7 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * Animation group of the rank-up effect by language
  * (Japanese, English, German, French, Spanish, Italian).
@@ -58,7 +59,7 @@ void effRankupMain(EffectEntry* effect) {
     BOOL inBattle;
 
     position = (Vec){ work->position.x, work->position.y, work->position.z };
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     inBattle = !!gp->inBattle;
 #else
     inBattle = gp->inBattle != 0;
@@ -75,14 +76,14 @@ void effRankupMain(EffectEntry* effect) {
     }
     switch (work->state) {
         case 0:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (!animGroupBaseAsync(eff_rankup_str_tbl[gp->language], inBattle, NULL)) {
 #else
             if (!animGroupBaseAsync("EFF_TekiKyouka", inBattle, NULL)) {
 #endif
                 return;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             // FAKE: no-op (u32) cast (animPoseEntry takes s32); removing it changes the object
             work->poseId = animPoseEntry(eff_rankup_str_tbl[gp->language], (u32)inBattle);
 #else

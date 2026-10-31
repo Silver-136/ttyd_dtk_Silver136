@@ -1,5 +1,6 @@
 // Scripts and commands for saving and loading on the memory card (cardmgr).
 
+#include "version.h"
 #include "evt/evt_cmd.h"
 #include "seq/seq_load.h"
 #include "evt/evt_fade.h"
@@ -652,7 +653,7 @@ EVT_BEGIN(evt_memcard_save)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EVT_BEGIN(evt_memcard_save_wrapper)
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(evt_memcard_save)

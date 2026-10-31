@@ -1,5 +1,6 @@
 // Battle units: creating, spawning, deleting and updating the units and parts that fight in a battle.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "battle/battle.h"
 #include "system.h"
@@ -1682,7 +1683,7 @@ void BtlUnit_SetParamFromPouch(BattleUnit* unit) {
         unit->sizeMultiplier = info->sizeMultiplier;
         unit->statusFlags = info->statusFlags;
         unit->statusTurns = info->statusTurns;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         unit->usCommandDisabled[0] = info->usCommandDisabled[0];
         unit->usCommandDisabled[1] = info->usCommandDisabled[1];
 #endif
@@ -1746,7 +1747,7 @@ void BtlUnit_SetParamToPouch(BattleUnit* unit) {
         info->sizeMultiplier = unit->sizeMultiplier;
         info->statusFlags = unit->statusFlags;
         info->statusTurns = unit->statusTurns;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         info->usCommandDisabled[0] = unit->usCommandDisabled[0];
         info->usCommandDisabled[1] = unit->usCommandDisabled[1];
 #endif

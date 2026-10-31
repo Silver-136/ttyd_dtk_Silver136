@@ -2003,7 +2003,7 @@ EVT_BEGIN(ItemEvent_Nemure_Yoikoyo)
     CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_shake_h, 0, 1, 0, 10000, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_PARTY_IN_AUDIENCE)
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))

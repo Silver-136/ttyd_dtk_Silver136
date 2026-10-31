@@ -1,5 +1,6 @@
 // seq_gameOverInit, seq_gameOverExit and evt_snd_bgm_unpause are in src/event/evt_snd.c
 // (0x80077EC4..0x80077F88); in the original that code is the tail of this file.
+#include "version.h"
 #include "driver/camdrv.h"
 #include "driver/fadedrv.h"
 #include "driver/seqdrv.h"
@@ -77,49 +78,49 @@ EVT_END()
 EVT_BEGIN(fall_gameover)
     SET_VALUE(LW(0), STRING("g"))
     SPAWN_EVENT(_fall_char)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(166)
 #else
     WAIT_FRAMES(10)
 #endif
     SET_VALUE(LW(0), STRING("a"))
     SPAWN_EVENT(_fall_char)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(333)
 #else
     WAIT_FRAMES(20)
 #endif
     SET_VALUE(LW(0), STRING("m"))
     SPAWN_EVENT(_fall_char)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(166)
 #else
     WAIT_FRAMES(10)
 #endif
     SET_VALUE(LW(0), STRING("e"))
     SPAWN_EVENT(_fall_char)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(166)
 #else
     WAIT_FRAMES(10)
 #endif
     SET_VALUE(LW(0), STRING("o"))
     SPAWN_EVENT(_fall_char)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(166)
 #else
     WAIT_FRAMES(10)
 #endif
     SET_VALUE(LW(0), STRING("v"))
     SPAWN_EVENT(_fall_char)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(166)
 #else
     WAIT_FRAMES(10)
 #endif
     SET_VALUE(LW(0), STRING("e2"))
     SPAWN_EVENT(_fall_char)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(500)
 #else
     WAIT_FRAMES(30)
@@ -133,7 +134,7 @@ EVT_BEGIN(fall_gameover)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(1000)
 #else
     WAIT_FRAMES(60)
@@ -141,7 +142,7 @@ EVT_BEGIN(fall_gameover)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EVT_BEGIN(fall_gameover_es)
     SET_VALUE(LW(0), STRING("f"))
     SPAWN_EVENT(_fall_char)
@@ -211,7 +212,7 @@ EVT_BEGIN(evt_gameover)
     CALL(evt_mario_set_pose, STRING("M_D_2"))
     CALL(evt_mario_set_dir, 180, 0, 0)
     CALL(evt_mario_adjust_dir)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(0))
     IF_INT_EQUAL(LW(0), LANGUAGE_SP)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("g"), MAP_OBJ_FLAG_HIDDEN)
@@ -254,21 +255,21 @@ EVT_BEGIN(evt_gameover)
     CALL(evt_mapobj_trans, 1, STRING("v"), 0, 200, 0)
     CALL(evt_mapobj_trans, 1, STRING("e2"), 0, 200, 0)
     CALL(evt_mapobj_trans, 1, STRING("r"), 0, 200, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     END_IF
 #endif
     CALL(evt_cam_ctrl_onoff, CAMERA_3D, 1)
     CALL(evt_cam3d_evt_set, 0, 208, 653, 0, 91, -30, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_map_playanim, STRING("anm_hokori"), MAP_ANIM_PLAY_LOOP, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(0))
     IF_INT_EQUAL(LW(0), LANGUAGE_SP)
         CALL_CHILD(fall_gameover_es)
         ELSE
 #endif
     CALL_CHILD(fall_gameover)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     END_IF
 #endif
     RETURN

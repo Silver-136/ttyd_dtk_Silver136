@@ -1,6 +1,7 @@
 // pik_02 (ピカリーヒルズ, Poshley Sanctum): the sanctum hall, whose Garnet Star on the altar is a fake taken by the Shadow
 // Sirens and Doopliss.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/fadedrv.h"
 #include "kpa_act.h"
@@ -78,7 +79,7 @@ EvtWord evt_kaiga[14];
 static EvtWord evt_daiza[27];
 EvtWord pik_02_koopa_evt[1256];
 EvtWord nise_starstone_init[18];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord pik_02_init_evt[172];
 #else
 EvtWord pik_02_init_evt[166];
@@ -206,7 +207,7 @@ static BeroEntry bero_data[] = {
         BERO_DIR_AUTO, // directionId
         BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         80, // length
 #else
         -1, // length
@@ -1170,7 +1171,7 @@ EVT_BEGIN(pik_02_koopa_evt)
     WAIT_MS(2000)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 20)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(evt_memcard_save_wrapper)
 #else
     CALL_CHILD(PTR(evt_memcard_save))
@@ -1257,7 +1258,7 @@ EVT_BEGIN(pik_02_init_evt)
         SPAWN_EVENT(PTR(pik_02_koopa_evt))
     END_IF
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_jav"), MAP_OBJ_FLAG_CLIP)
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("saku_2"), MAP_OBJ_FLAG_CLIP)

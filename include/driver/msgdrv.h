@@ -1,5 +1,6 @@
 #pragma once
 
+#include "version.h"
 #include <dolphin/os.h>
 #include "driver/windowdrv.h"
 #include "memory.h"
@@ -62,7 +63,7 @@ typedef struct MsgWinData {
     u8 pad_2C[0x30 - 0x2C]; //0x2C
     OSTime lastUpdateTime; //0x30, reset every msgMain; the delta advances the scroll
     s32 charCount; //0x38, MsgChar entries in use
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     MsgChar entries[0xA00]; //0x3C (US: twice as many, so every field below moves by 0x7800)
 #else
     MsgChar entries[0x500]; //0x3C

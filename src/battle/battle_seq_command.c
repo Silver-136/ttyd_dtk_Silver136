@@ -1,5 +1,6 @@
 // Battle command menus: building and handling the action, weapon, item and target selection menus.
 
+#include "version.h"
 #include "battle/battle_seq_command.h"
 
 #define CMD_DISABLE_NONE (0)
@@ -1944,7 +1945,7 @@ void BattleCommandDisplay_WeaponMultiItemCancelCheckDisp(CameraId camId, void* p
     FontDrawStart();
     x = 0.0f;
     FontDrawString(x - w, 27.0f, buf);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     FontDrawString(-20.0f, -13.0f, msgSearch("btl_msg_lvup_yes"));
     FontDrawString(-20.0f, -38.0f, msgSearch("btl_msg_lvup_no"));
 #else
@@ -2845,7 +2846,7 @@ void* BattleSetConfuseAct(BattleWork* wp, BattleUnit* unit) {
     if (unit->currentKind != UNIT_MARIO && (unit->currentKind < TYPE_PARTNER_MIN || unit->currentKind >= TYPE_PARTNER_MAX)) {
         return subsetevt_confuse_flustered;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (cmd->dipMode) {
         unit->moveState = 0;
         cmd->dipMode = 0;

@@ -1,5 +1,6 @@
 // tou_01 (闘技場, Glitzville): the front plaza: stands, neon signs and townsfolk; leads to tou_00 and tou_02.
 
+#include "version.h"
 #include "driver/mapdrv.h"
 #include "evt/evt_story.h"
 #include "evt/evt_win.h"
@@ -77,7 +78,7 @@ static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
 USER_FUNC(yami_oowareru_check);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 USER_FUNC(tou_01_kanban_moji_flag_sync);
 #endif
 static USER_FUNC(yami_view);
@@ -99,7 +100,7 @@ EvtWord evt_sakaba_1[26];
 EvtWord evt_sakaba_2[26];
 EvtWord evt_sakaba_3[26];
 EvtWord evt_sakaba_4[29];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_wall2[38];
 #else
 EvtWord evt_wall2[19];
@@ -187,7 +188,7 @@ EvtWord evt_telbox[124];
 EvtWord evt_mail[175];
 static EvtWord evt_key[7];
 static EvtWord mobj_box00[36];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord tou_01_init_evt[1641];
 #else
 EvtWord tou_01_init_evt[627];
@@ -415,25 +416,25 @@ EVT_END()
 
 EVT_BEGIN(evt_wall2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     IF_INT_EQUAL(LW(1), 0)
         SPAWN_EVENT(PTR(evt_sakaba_4))
         WAIT_MS(150)
 #endif
     SPAWN_EVENT(PTR(evt_sakaba_1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         WAIT_MS(150)
 #else
     WAIT_MS(100)
 #endif
     SPAWN_EVENT(PTR(evt_sakaba_2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         WAIT_MS(150)
 #else
     WAIT_MS(100)
 #endif
     SPAWN_EVENT(PTR(evt_sakaba_3))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         ELSE
         SPAWN_EVENT(PTR(evt_sakaba_3))
         WAIT_MS(150)
@@ -445,7 +446,7 @@ EVT_BEGIN(evt_wall2)
     WAIT_MS(100)
 #endif
     SPAWN_EVENT(PTR(evt_sakaba_4))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     END_IF
 #endif
     RETURN
@@ -3518,7 +3519,7 @@ EVT_BEGIN(tou_01_init_evt)
     CALL(evt_mapobj_trans, 1, STRING("gondora"), 0, 300, 0)
     CALL(evt_hit_bind_update, STRING("a_gondora"))
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("gondora"), MAP_OBJ_FLAG_HIDDEN)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 180, 610, 160, 0, 0, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("J_hot"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("E_hot"), MAP_OBJ_FLAG_DISABLED)
@@ -3782,12 +3783,12 @@ EVT_BEGIN(tou_01_init_evt)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, PARTNER_GOOMBELLA)
             CALL(evt_party_run, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_IF
 #endif
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_status_gauge_force_update)
 #else
         END_IF
@@ -3809,7 +3810,7 @@ EVT_BEGIN(tou_01_init_evt)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: copy the sign board's map-blend exemptions onto the localized letter objects
 static inline void kanbanCopyFlags(MapObject* kanban, const char* name) {
     MapObject* obj = mapGetMapObj(name);

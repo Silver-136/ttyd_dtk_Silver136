@@ -1,6 +1,7 @@
 // mri_00 (巨木の中, The Great Tree): outside the tree: the sealed trunk opened with Flurrie's gust
 // (open_bigtree), the pipe from the sewers (tik_16), and the Punies' scene as the world goes dark.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
@@ -133,7 +134,7 @@ EvtWord sekai_yami_puni[70];
 static EvtWord sekai_yami_evt[322];
 static EvtWord minnnanokoe_evt[620];
 static EvtWord evt_switch_init[17];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord mri_00_init_evt[377];
 #else
 EvtWord mri_00_init_evt[296];
@@ -1809,12 +1810,12 @@ EVT_BEGIN(mri_00_init_evt)
         IF_INT_EQUAL(LW(15), PARTY_MEMBER_NONE)
             CALL(evt_mario_set_party, 0, PARTY_MEMBER_GOOMBELLA)
             CALL(evt_party_run, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_IF
 #endif
             CALL(evt_pouch_mario_recovery)
             CALL(evt_pouch_all_party_recovery)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_status_gauge_force_update)
 #else
         END_IF
@@ -1911,7 +1912,7 @@ EVT_BEGIN(mri_00_init_evt)
             SPAWN_EVENT(PTR(minnnanokoe_evt))
         END_IF
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("J_kan"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_kan"), MAP_OBJ_FLAG_DISABLED)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("F_kan"), MAP_OBJ_FLAG_DISABLED)

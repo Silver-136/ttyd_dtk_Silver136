@@ -1,5 +1,6 @@
 // Battle menu drawing: the action, weapon-select and operation menus and the pieces they are built from.
 
+#include "version.h"
 #include "battle/battle_disp.h"
 
 #define SUBMENU_ICON_VISIBLE (1)
@@ -38,7 +39,7 @@ void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle);
 #include "sdk/texPalette.h"
 #include "icon_ids.h"
 // US: menu animation lengths scale with the display rate (gp->framerate is 60 or 50)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define FRAMES(n) (gp->framerate * (n) / 60)
 #define FRAMES_STEP(jp, n, x) ((x) * ((n) / gp->framerate))
 #else
@@ -273,7 +274,7 @@ void DrawMainIconHukidasi(BattleSubMenu* menu, BattleCommandAct* act, Mtx m, f32
     }
     name = act->name;
     PSMTXTrans(trn, 0.0f, 52.5f, 0.0f);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {
         // US: long command names are squeezed to 90 units wide
         f32 w = FontGetMessageWidth(name);
@@ -733,7 +734,7 @@ void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle) {
     btlDispTexPlane2(mtx, id, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}, 0);
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US: per-language "DANGER"/"PERIL" textures, the marks drawn larger outside Japanese, and the
 // Mario and partner marks split into two functions drawn in an order that keeps the front one on top.
 u16 danger_icon_tbl[6] = {6, 7, 8, 7, 9, 10};
@@ -773,13 +774,13 @@ void DrawMenuPinchMark(void) {
     u32 id;
 
     cam = camGetPtr(CAMERA_2D);
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     btlDispGXInit2D();
 #endif
     unit = BattleGetMarioPtr(wp);
     if (unit->currentHp > 0 && unit->currentHp < unit->maxHp && unit->currentHp <= 5) {
         if (unit->currentHp == 1) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             id = peril_icon_tbl[gp->language];
 #else
             id = (gp->language ? 0 : -1) + 9;
@@ -830,7 +831,7 @@ void DrawMenuPinchMark(void) {
             g = 0xE9;
             b = 0x40;
             a = 0xFF;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             id = danger_icon_tbl[gp->language];
 #else
             id = (gp->language ? 0 : -1) + 7;
@@ -838,7 +839,7 @@ void DrawMenuPinchMark(void) {
         }
         TEXGetGXTexObjFromPalette(*wp->menuTex->data, &texobj, id);
         GXLoadTexObj(&texobj, GX_TEXMAP0);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         btlGetScreenPoint(&unit->position, &p);
         if (unit->position.x > -120.0f) {
             PSMTXTrans(m, p.x - 20.0f, 60.0f + p.y, 20.0f);
@@ -1016,7 +1017,7 @@ void DrawMenuCursorAndScrollArrow(const Vec* v) {
 
     bob = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 10.0f, menu->bobTimer, 6);
     menu->bobTimer++;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (menu->bobTimer >= gp->framerate * 12 / 60) {
 #else
     if (menu->bobTimer >= 12) {
@@ -1427,7 +1428,7 @@ void BattleMenuDisp_ActSelect_Init(BattleWork* wp, BattleCursor* cursor, BattleC
                 idx = 0;
             }
             menu->iconState[idx] = 0;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             menu->iconTimer[idx] = (i * (gp->framerate * 10 / 60)) / 2;
 #else
             menu->iconTimer[idx] = (i * 10) / 2;

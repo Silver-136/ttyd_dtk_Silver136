@@ -1,6 +1,7 @@
 // gon_08 (ゴンババ, Hooktail Castle): room linking gon_04, gon_09 and gon_12.
 // Nokkos (nokkosu) gives a side request with a Special Card reward; Life Shroom, floating block, Castle Key (0x0F) lock (story 52).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -36,7 +37,7 @@ static EvtWord door03_close[12];
 static EvtWord door03_open[12];
 static BeroEntry bero_entry_data[4];
 static EvtWord init_0[37];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord main_0[465];
 #else
 static EvtWord main_0[491];
@@ -45,7 +46,7 @@ static s32 key_tbl[2];
 static EvtWord evt_chk[23];
 static EvtWord evt_unlock[10];
 EvtWord nokkosu_init[16];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord nokkosu_talk[226];
 #else
 EvtWord nokkosu_talk[157];
@@ -236,7 +237,7 @@ static EVT_BEGIN(main_0)
             SET_FLOAT_VALUE(LW(8), FLOAT(-0.19921875f))
             SET_FLOAT_VALUE(LW(9), 0)
         END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
 #else
         BEGIN_SIBLING_EVENT
@@ -256,7 +257,7 @@ static EVT_BEGIN(main_0)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(0)
             END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_INLINE_EVENT
 #else
         END_SIBLING_EVENT
@@ -380,7 +381,7 @@ static EVT_BEGIN(main_0)
         END_INLINE_EVENT
         // A block that came down shakes the camera again and the scene waits a moment.
         IF_INT_EQUAL(LW(10), 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             BEGIN_INLINE_EVENT
 #else
             BEGIN_SIBLING_EVENT
@@ -398,7 +399,7 @@ static EVT_BEGIN(main_0)
                 IF_INT_EQUAL(LW(1), 1)
                     GOTO(2)
                 END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             END_INLINE_EVENT
 #else
             END_SIBLING_EVENT
@@ -468,7 +469,7 @@ EVT_END()
  */
 EVT_BEGIN(nokkosu_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_TRY_TO_FIND_ME)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_set_position, STRING("me"), -185, 500, -165)
 #else
         CALL(evt_npc_set_position, STRING("me"), -230, 500, -120)
@@ -481,7 +482,7 @@ EVT_END()
 EVT_BEGIN(nokkosu_talk)
     // Nokkos is made intangible so he can move freely.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     BEGIN_INLINE_EVENT
         // Mario walks up to Nokkos and faces him.
         CALL(evt_mario_mov_pos2, -206, -147, FLOAT(120.0f))
@@ -502,7 +503,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_party_wait_landon, 0)
     CALL(evt_party_outofscreen, 0, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_party_set_pos, 0, -200, 500, -87)
 #else
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -511,7 +512,7 @@ EVT_BEGIN(nokkosu_talk)
         CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
 #endif
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // The partner walks up next to Mario and Nokkos greets them.
     CALL(evt_party_move_pos2, 0, -228, -130, FLOAT(120.0f))
     CALL(evt_party_set_dir, 0, 90, 200)
@@ -524,12 +525,12 @@ EVT_BEGIN(nokkosu_talk)
         CALL(evt_mario_goodbye_party, 0)
         CALL(evt_mario_hello_party, 0, 2)
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_party_stop, 0)
 #endif
     // Koops comments on the visit.
     CALL(evt_msg_print, 0, STRING("irai_07_01"), 0, STRING("party"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
     IF_INT_GREATER_OR_EQUAL(LW(3), LW(0))
@@ -546,7 +547,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_msg_print, 0, STRING("irai_07_04"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("irai_07_05"), 0, STRING("party"))
     CALL(evt_msg_print, 0, STRING("irai_07_06"), 0, STRING("me"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("me"))
@@ -557,7 +558,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_item_flag_on, STRING("irai_item"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_get_item, STRING("irai_item"))
     CALL(evt_msg_print, 0, STRING("irai_07_07"), 0, STRING("me"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_ry, STRING("me"), 90)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("me"))

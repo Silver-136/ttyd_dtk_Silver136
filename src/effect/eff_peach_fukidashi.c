@@ -1,6 +1,7 @@
 // Peach speech bubble (fukidashi: speech balloon) placed next to the speaker's head; types 0-2.
 // effSetPeachFukiBatu sets the name of the cross ("batu") mark.
 
+#include "version.h"
 #include "eff/eff_peach_fukidashi.h"
 #include "driver/dispdrv.h"
 #include "driver/icondrv.h"
@@ -138,7 +139,7 @@ void effPeachFukidashiDisp(CameraId cameraId, EffectEntry* effect) {
 
     // red cross over the icon
     if (work->flags & 0x80) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         char text[32] = "\xD7"; // US: Latin-1 multiplication sign
 #else
         char text[32] = "\x81\x7E";

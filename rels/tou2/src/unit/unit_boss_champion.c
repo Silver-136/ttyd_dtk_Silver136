@@ -1,5 +1,6 @@
 // unit_boss_champion: Rawk Hawk (champion), boss, battle unit.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"
@@ -102,7 +103,7 @@ BattleUnitKind unit_boss_champion = {
     100,
     0,
     50,
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     7,
 #else
     8,
@@ -453,7 +454,7 @@ BattleWeapon weapon_champion_roof_shake_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -494,7 +495,7 @@ BattleWeapon weapon_champion_roof_shake_last_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed

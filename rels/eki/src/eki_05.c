@@ -1,5 +1,6 @@
 // eki_05 (駅, Riverside Station): room with a treasure chest holding Ultra Boots and an elevator key item; doors to eki_04 and eki_06.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
@@ -29,7 +30,7 @@ EvtWord grass_open_2[23];
 EvtWord evt_boots[42];
 EvtWord evt_elvkey[5];
 static EvtWord evt_head[38];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord eki_05_init_evt[112];
 #else
 EvtWord eki_05_init_evt[106];
@@ -233,7 +234,7 @@ EVT_BEGIN(eki_05_init_evt)
             WAIT_MS(100)
         END_LOOP
     END_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_CLIP)
 #endif
     RETURN

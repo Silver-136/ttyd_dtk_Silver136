@@ -1,6 +1,7 @@
 // kpa (クッパ編, Bowser's interludes): registers kpa_00..kpa_07 and runs the side-scrolling stages: the object and item
 // streams, coins, score, lives, the timer and the status display.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_twoddisp.h"
 #include "evt/evt_cmd.h"
@@ -504,14 +505,14 @@ EVT_BEGIN(kpa_stage_start)
     CALL(evt_mario_set_dispdir, 180)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_twoddisp_init)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_twoddisp_entry, STRING("batu"), 477)
 #else
     CALL(evt_twoddisp_entry, STRING("batu"), 469)
 #endif
     CALL(evt_twoddisp_set_base_position, STRING("batu"), 20, -50)
     CALL(evt_twoddisp_set_position, STRING("batu"), 10, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_twoddisp_entry, STRING("mugen"), 529)
 #else
     CALL(evt_twoddisp_entry, STRING("mugen"), 526)
@@ -543,14 +544,14 @@ EVT_END()
  * stage and time numbers of the Bowser interlude HUD.
  */
 u16 numeric_id[] = {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     0x1E1, 0x1E3, 0x1E5, 0x1E7, 0x1E9, 0x1EB, 0x1ED, 0x1EF, 0x1F1, 0x1F3,
 #else
     0x1D9, 0x1DB, 0x1DD, 0x1DF, 0x1E1, 0x1E3, 0x1E5, 0x1E7, 0x1E9, 0x1EB,
 #endif
 };
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 u16 kpa_status_icon_tbl[6][3] = {
     { 0x21A, 0x221, 0x21C }, { 0x21B, 0x221, 0x21C }, { 0x21B, 0x222, 0x21D },
     { 0x21B, 0x223, 0x21E }, { 0x21B, 0x224, 0x21F }, { 0x21B, 0x225, 0x220 },
@@ -646,21 +647,21 @@ void kpa_status_disp(CameraId camera, void* param) {
 
     pos.x = -210.0f;
     pos.y = 160.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     iconDispGx(1.0f, &pos, 0x10, kpa_status_icon_tbl[gp->language][0]);
 #else
     iconDispGx(1.0f, &pos, 0x10, (u32)gp->language ? 0x210 : 0x206);
 #endif
     pos.x = 50.0f;
     pos.y = 160.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     iconDispGx(1.0f, &pos, 0x10, kpa_status_icon_tbl[gp->language][1]);
 #else
     iconDispGx(1.0f, &pos, 0x10, 0x208);
 #endif
     pos.x = 220.0f;
     pos.y = 160.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     iconDispGx(1.0f, &pos, 0x10, kpa_status_icon_tbl[gp->language][2]);
 #else
     iconDispGx(1.0f, &pos, 0x10, 0x207);

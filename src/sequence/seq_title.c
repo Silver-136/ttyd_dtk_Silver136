@@ -1,5 +1,6 @@
 // Title sequence: the title screen and its "press start" prompt.
 
+#include "version.h"
 #include "seq/seq_title.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
@@ -22,7 +23,7 @@
 #include "seq/seq_e3.h"
 
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define PSTATIC
 #else
 #define PSTATIC static
@@ -37,7 +38,7 @@ TitleWork work2;
  */
 TitleWork* wp2 = &work2;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define TITLE_FRAMES_PER_SEC (gp->framerate)
 #else
 #define TITLE_FRAMES_PER_SEC 60
@@ -163,7 +164,7 @@ void titleMain(SequenceWork* work) {
                 } else {
                     wp2->topPosY = 120.0f;
                     wp2->bottomPosY = -170.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     wp2->counter = 0;
 #endif
                     wp2->frame = 0;
@@ -188,7 +189,7 @@ void titleMain(SequenceWork* work) {
             wp2->counter++;
             if (wp2->counter > TITLE_FRAMES_PER_SEC) {
                 titleLoadDemo();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 wp2->counter = 0;
 #endif
                 wp2->frame = 0;
@@ -196,7 +197,7 @@ void titleMain(SequenceWork* work) {
             }
             break;
         case 3:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             wp2->counter++;
             if (wp2->counter > TITLE_FRAMES_PER_SEC) {
 #endif
@@ -210,7 +211,7 @@ void titleMain(SequenceWork* work) {
             } else if (++wp2->idle > TITLE_FRAMES_PER_SEC * 20 - TITLE_FRAMES_PER_SEC) {
                 wp2->state = 20;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             }
 #endif
             break;
@@ -324,7 +325,7 @@ void disp1(CameraId cameraId, void* param) {
     GXSetViewport(cam->viewport[0], cam->viewport[1], cam->viewport[2],
                   cam->viewport[3], cam->viewport[4], cam->viewport[5]);
     winTexInit(*wp2->texture->data);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     winTexSet(5, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #else
     winTexSet(7, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
@@ -341,7 +342,7 @@ void disp2(CameraId cameraId, void* param) {
     f32 vp[GX_VIEWPORT_SZ];
     s32 alpha;
     f32 s;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 tbl[6] = {21, 21, 22, 23, 24, 25};
 #endif
 
@@ -353,7 +354,7 @@ void disp2(CameraId cameraId, void* param) {
     GXSetViewport(cam->viewport[0], cam->viewport[1], cam->viewport[2],
                   cam->viewport[3], cam->viewport[4], cam->viewport[5]);
     winTexInit(*wp2->texture->data);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     winTexSetNearest(tbl[gp->language], (Vec){wp2->topPosX, wp2->topPosY - 20.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
     winTexSet(gp->language + 9, (Vec){wp2->bottomPosX, wp2->bottomPosY, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #else
@@ -369,7 +370,7 @@ void disp2(CameraId cameraId, void* param) {
     if (alpha > 255) {
         alpha = 255;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     pressStartGX(alpha, 0.0f, -122.0f);
 #else
     pressStartGX(alpha, 0.0f, -110.0f);
@@ -392,7 +393,7 @@ PSTATIC void pressStartGX(s32 alpha, f32 x, f32 y) {
     GXTexObj startText, gradient;
     Mtx mtx, scaleMtx;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     TEXGetGXTexObjFromPalette(*wp2->texture->data, &startText, gp->language + 15);
     GXLoadTexObj(&startText, GX_TEXMAP0);
     TEXGetGXTexObjFromPalette(*wp2->texture->data, &gradient, 6);

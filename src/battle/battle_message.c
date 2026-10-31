@@ -1,5 +1,6 @@
 // Battle message announcements: the on-screen text banner shown by battle scripts.
 
+#include "version.h"
 #include "battle/battle.h"
 #include "data/item_data.h"
 #include "driver/dispdrv.h"
@@ -9,7 +10,7 @@
 #include "manager/fontmgr.h"
 #include <stdio.h>
 #include "evt/evt_msg.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include <string.h>
 #include "mario/mariost.h"
 #endif
@@ -21,13 +22,13 @@ void _disp(CameraId cameraId, void* param);
 // s32 type, s32 x, s32 y, const char* msg, s32 frames
 USER_FUNC(btlevtcmd_AnnounceMessage) {
     BattleAnnounce* announce = &_battleWorkPointer->announce;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     const char* text;
 #endif
     EvtWord* args = event->args;
     s32 type, x, y, frames;
     const char* msg;
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     const char* text;
 #endif
 
@@ -46,7 +47,7 @@ USER_FUNC(btlevtcmd_AnnounceMessage) {
         text = msgSearch(msg);
         switch (type) {
             case 1:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 if ((u32)gp->language == LANGUAGE_JP) {
                     sprintf(announce->text, text, msgSearch(itemDataTable[announce->params[0]].name));
                 } else {
@@ -63,7 +64,7 @@ USER_FUNC(btlevtcmd_AnnounceMessage) {
         }
     }
     dispEntry(CAMERA_2D, 900.0f, 1, _disp, NULL);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (type == 2) {
         if (BattlePadCheckTrigger(PAD_BUTTON_A) || BattlePadCheckTrigger(PAD_BUTTON_B)) {
             event->userdata[0] = 0;

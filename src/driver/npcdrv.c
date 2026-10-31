@@ -1,6 +1,7 @@
 // NPC driver: the NPC entries, their movement, collision and events, and the field-battle (fbat)
 // encounter, talk and first-strike checks.
 
+#include "version.h"
 #include "driver/npcdrv.h"
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -323,7 +324,7 @@ void npcDisp(CameraId camId, void* param) {
     rotY = reviseAngle(-entry->direction);
     mtx_setup(entry, mtx, -1);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // US: the dimmed colour is applied for every render mode
     color = entry->color;
     if (entry->statusFlags & NPC_STATUS_DARKEN) {
@@ -404,7 +405,7 @@ void npcDisp_offscreen(CameraId camId, void* param) {
     rotY = reviseAngle(-entry->direction);
     mtx_setup(entry, mtx, -1);
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     npcDimColor(entry);
     switch (dispGetCurWork()->renderMode) {
         case 0:
@@ -583,7 +584,7 @@ s32 npcEntry(const char* description, const char* animName) {
     return i;
 }
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 /** Zero vector left over in the NPC driver's constants; nothing reads it (its place differs by version). */
 static const Vec sZeroVec3 = {0.0f, 0.0f, 0.0f};
 #endif
@@ -677,7 +678,7 @@ void npcMoveG(NpcEntry* npc);
 BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
 void npcKoopaModeMain(void);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** US: probe the wall from a copy of the position first, then slide along it */
 // US: probe the wall from a copy of the position first, then slide along it
 static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
@@ -800,7 +801,7 @@ void npcMain(void) {
                                 entry->position.x += mx;
                                 entry->position.z += mz;
                             } else {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                                 npcMoveSide(entry, mx, mz);
 #else
                                 entry->wallHit = npcHitCheckSide(entry, &entry->position.x, &entry->position.z,
@@ -956,13 +957,13 @@ void npcMain(void) {
                             f32 dx, dy, dz;
                             int trig;
                             Vec dv;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                             f32 sd;
 #endif
                             dx = m->position.x - entry->position.x;
                             dz = m->position.z - entry->position.z;
                             dy = m->position.y - entry->position.y;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                             // US: in the Bowser levels the search range shrinks with kpaGetLevel()
                             dist = sqrtf(dx * dx + dz * dz);
                             sd = dist;
@@ -1015,7 +1016,7 @@ void npcMain(void) {
                                     trig = 0;
                                 } else {
                                     f32 angleToMario;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                                     if (sd > 0.25f * entry->searchRange) {
                                         if (sd > entry->searchRange) {
 #else
@@ -1209,7 +1210,7 @@ void npcMain(void) {
     }
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** Zero vector left over in the NPC driver's constants; nothing reads it (its place differs by version). */
 static const Vec sZeroVec3 = {0.0f, 0.0f, 0.0f};
 #endif
@@ -1450,7 +1451,7 @@ void npcMoveG(NpcEntry* npc) {
             f64 ad = __fabs(dy);
             f32 hh = 0.8f * npc->height;
             dist = hh + (f32)ad;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             // US: also probe the floor at both side edges of the NPC
             if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
                                               npc->position.x, npc->position.y + hh, npc->position.z, 0.0f,
@@ -1466,7 +1467,7 @@ void npcMoveG(NpcEntry* npc) {
                 npc->statusFlags &= ~NPC_STATUS_AIRBORNE;
                 npc->position.y = hitY;
                 npc->jumpTicks = 0;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             } else if ((npc->groundHit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &dist, &hitNX, &hitNY, &hitNZ,
                                               npc->position.x + 0.5f * npc->width, npc->position.y + hh,
                                               npc->position.z, 0.0f, -1.0f, 0.0f)) != NULL) {
@@ -1691,14 +1692,14 @@ void npcStrippedAnnouncePool(f32* f) {
 }
 
 void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 height;
 #endif
     FirstStrikeInfo* firstStrike = param;
     const char* message;
     f32 x;
     f32 y;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     u16 lines;
     u16 width;
     f32 shakeX;
@@ -1719,7 +1720,7 @@ void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     message = msgSearch(firstStrike->msg_tag);
     x = firstStrike->x;
     y = firstStrike->y;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     width = FontGetMessageWidthLine(message, &lines);
     lines++;
     height = lines * 29 + 3;
@@ -1754,7 +1755,7 @@ void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     FontDrawEdge();
     FontDrawColor((GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     FontDrawScale(0.1f);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     for (i = 0; i < lines; i++) {
         FontDrawStringShake(mulf(0.1f, x - width / 2), mulf(0.1f, y + -29 * i - 3.0f), buf[i]);
     }
@@ -2152,7 +2153,7 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
     }
     do {
         if (b->recoveredItems[i]) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             ItemEntry* item = itemEntry(NULL, b->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x, npc->position.y,
                                           npc->position.z);
             if (item) {
@@ -3377,7 +3378,7 @@ void npcGetBackItemEntry(NpcEntry* npc) {
 
     for (i = 0; i < 8; i++) {
         if (info->recoveredItems[i]) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             ItemEntry* item = itemEntry(NULL, info->recoveredItems[i], ITEM_TYPE_DROP_LONG, -1, NULL, npc->position.x,
                                           npc->position.y, npc->position.z);
             if (item) {

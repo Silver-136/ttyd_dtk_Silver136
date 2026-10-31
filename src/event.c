@@ -1,6 +1,7 @@
 /* "event" - story event flags
  * Story event data: the story flags set as the story progresses.
  */
+#include "version.h"
 #include "event.h"
 #include "evt/evt_story.h"
 #include "driver/swdrv.h"
@@ -17,7 +18,7 @@
 #include "statuswindow.h"
 #include "party.h"
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define NAME_EN(x) , x
 #else
 #define NAME_EN(x)
@@ -435,7 +436,7 @@ EventData stage6_evt[] = {
     {0, 1, 0, 326, "STG6_43", "電車出発" NAME_EN("Conductor Appears"), "hom_00", "n_bero_2", NULL},
     {0, 1, 0, 327, "STG6_44", "２日目終了" NAME_EN("End of Day 2"), "rsh_02_c", "w_bero", stg6_44_init},
     {0, 1, 0, 328, "STG6_45", "３日目スタート" NAME_EN("Day 3 Starts"), "rsh_02_a", "w_bero", NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 1, 0, 329, "STG6_46", "運転手" NAME_EN("Engineer"), "rsh_00_a", "w_bero", stg6_47_00_init},
     {0, 1, 0, 330, "STG6_47_00", "倉庫のモアモア" NAME_EN("Baggage Car Smorgs"), "rsh_05_a", "e_bero", NULL},
 #else

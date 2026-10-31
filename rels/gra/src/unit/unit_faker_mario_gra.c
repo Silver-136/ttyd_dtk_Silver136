@@ -1,5 +1,6 @@
 // Battle unit the fake Mario (Doopliss with Mario's name) (にせマリオ): gra.rel's copy.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle.h"
@@ -874,7 +875,7 @@ static USER_FUNC(vivian_comeback) {
     return EVT_RETURN_YIELD;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 
 /** US only: restore the moves of the unit for this turn. */
 // US only: restore the moves of the unit for this turn.

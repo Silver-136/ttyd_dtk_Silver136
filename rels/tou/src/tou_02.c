@@ -46,7 +46,7 @@
 #include "evt/evt_npc.h"
 #include "driver/extdrv.h"
 #include "driver/seqdrv.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #endif
 
 typedef struct Fan {
@@ -2190,7 +2190,7 @@ EVT_END()
 static EVT_BEGIN(evt_poster_8)
     SET_VALUE(GSWF_TOU_02_POSTER_8_REMOVED, 1)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_13_MAJORS_1ST_PL)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_mapobj_get_position, STRING("p_m_8"), LW(0), LW(1), LW(2))
@@ -2281,7 +2281,7 @@ EVT_BEGIN(tou_02_init_evt)
     // Music: the lobby theme early in the chapter and after it, the main Glitz Pit theme in between.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -2311,7 +2311,7 @@ EVT_BEGIN(tou_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     IF_INT_EQUAL(GSWF_TOU_02_ARENA_TOUR_RETURN, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(bero_case_entry)
         SPAWN_EVENT(PTR(evt_tougi2))
         ELSE
@@ -2326,7 +2326,7 @@ EVT_BEGIN(tou_02_init_evt)
     // NPCs and the Star Piece panel.
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(PTR(init_kinopio_f))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_change_interrupt, STRING("キノピオ女"), 6, PTR(talk_kinopio_f))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -260, 0, -120, STRING("sita"), 125, GSWF_STARPIECE_56)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_02_THE_GUARD_BACKS_OFF)
@@ -2347,7 +2347,7 @@ EVT_BEGIN(tou_02_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSWF_TOU_02_GUARD_STEPPED_ASIDE, 0)
             SET_VALUE(LW(0), 3)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL_CHILD(bero_case_switch_off)
             SET_VALUE(LW(0), 4)
             CALL_CHILD(bero_case_switch_off)
@@ -2360,7 +2360,7 @@ EVT_BEGIN(tou_02_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_npc_set_position, STRING("キノピオ女"), 0, -1000, 0)
             CALL(evt_npc_set_position, STRING("キノピオ４"), 0, -1000, 0)
 #else
@@ -2374,7 +2374,7 @@ EVT_BEGIN(tou_02_init_evt)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_mario_set_party, 0, 1)
             CALL(evt_party_run, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         END_IF
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
@@ -2389,7 +2389,7 @@ EVT_BEGIN(tou_02_init_evt)
         SET_VALUE(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 1)
         SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // The big screen's animation and its sounds.
     CALL(evt_map_playanim, STRING("anm_paneru"), MAP_ANIM_PLAY_LOOP, 0)
 #else
@@ -2398,7 +2398,7 @@ EVT_BEGIN(tou_02_init_evt)
     BEGIN_INLINE_EVENT
         LOOP(0)
             LOOP(0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 CALL(evt_map_checkanim, STRING("anm_paneru"), LW(0), LW(1))
                 IF_INT_LESS(LW(1), 5333)
                     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN2"), 178, 0, -98, 0)
@@ -2412,7 +2412,7 @@ EVT_BEGIN(tou_02_init_evt)
                 WAIT_FRAMES(1)
             END_LOOP
             WAIT_FRAMES(10)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN1"), 178, 0, -98, 0)
             LOOP(0)
                 CALL(evt_map_checkanim, STRING("anm_paneru"), LW(0), LW(1))
@@ -2430,7 +2430,7 @@ EVT_BEGIN(tou_02_init_evt)
                 WAIT_FRAMES(1)
             END_LOOP
             WAIT_FRAMES(5)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_AMB_OBJ_SCREEN1"), 178, 0, -98, 0)
             LOOP(0)
                 CALL(evt_map_checkanim, STRING("anm_paneru"), LW(0), LW(1))
@@ -2448,7 +2448,7 @@ EVT_BEGIN(tou_02_init_evt)
     END_INLINE_EVENT
     // The fan crowd scene.
     CALL_CHILD(PTR(evt_momikucha))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("p_p_1_e"), MAP_OBJ_FLAG_DISABLED)

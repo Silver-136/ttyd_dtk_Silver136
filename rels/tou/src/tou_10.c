@@ -1,5 +1,6 @@
 // tou_10 (闘技場, Glitz Pit): the minor-league locker room; exits to tou_03, tou_04, tou_05; Yoshi egg and fighter scenes.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -72,30 +73,30 @@ EvtWord talk_iron[30];
 EvtWord init_iron2[45];
 EvtWord talk_iron2[30];
 static NpcSetupInfo npcEnt[11];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_saisyo_after[733];
 #else
 EvtWord evt_saisyo_after[691];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_saisyo_after_re[367];
 #else
 EvtWord evt_saisyo_after_re[325];
 #endif
 EvtWord evt_tou_chibi_yoshi[424];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord evt_1st_leagu[235];
 #else
 static EvtWord evt_1st_leagu[214];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_1st_leagu_re[249];
 #else
 EvtWord evt_1st_leagu_re[228];
 #endif
 static EvtWord evt_door[25];
 EvtWord evt_rec[274];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord evt_gardman[202];
 #else
 static EvtWord evt_gardman[198];
@@ -122,7 +123,7 @@ USER_FUNC(tou_10_mario_keyoff_check) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** Script helper: returns DONE once Mario has left his talking motion, otherwise blocks. */
 s32 tou_10_mario_talk_end_wait(void) {
     return marioGetPtr()->currMotionId != MARIO_MOTION_TALK ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
@@ -816,13 +817,13 @@ EVT_BEGIN(evt_saisyo_after)
         WAIT_MS(1000)
         CALL(evt_item_delete, STRING("fmoney"))
         CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
 #endif
         CALL(evt_msg_print_insert, 0, STRING("stg3_tou_91"), 0, 0, 3)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_91"), 3)
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
@@ -855,13 +856,13 @@ EVT_BEGIN(evt_saisyo_after)
         WAIT_MS(1000)
         CALL(evt_item_delete, STRING("fmoney"))
         CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
 #endif
         CALL(evt_msg_print_insert, 0, STRING("stg3_tou_93_3"), 0, 0, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_93_3"), 1)
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
@@ -1003,13 +1004,13 @@ EVT_BEGIN(evt_saisyo_after_re)
         WAIT_MS(1000)
         CALL(evt_item_delete, STRING("fmoney"))
         CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
 #endif
         CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_030"), 0, 0, 3)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_re_030"), 3)
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
@@ -1038,13 +1039,13 @@ EVT_BEGIN(evt_saisyo_after_re)
         WAIT_MS(1000)
         CALL(evt_item_delete, STRING("fmoney"))
         CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(15))
         SWITCH(LW(15))
             CASE_EQUAL(0)
 #endif
         CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_034"), 0, 0, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CASE_DEFAULT
             CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_re_034"), 1)
             CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
@@ -1258,13 +1259,13 @@ static EVT_BEGIN(evt_1st_leagu)
     WAIT_MS(1000)
     CALL(evt_item_delete, STRING("fmoney"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(15))
     SWITCH(LW(15))
         CASE_EQUAL(0)
 #endif
     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_179_01"), 0, STRING("キノシコワ"), LW(10))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_179_01"), LW(10))
         CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, STRING("キノシコワ"))
@@ -1332,13 +1333,13 @@ EVT_BEGIN(evt_1st_leagu_re)
     WAIT_MS(1000)
     CALL(evt_item_delete, STRING("fmoney"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(15))
     SWITCH(LW(15))
         CASE_EQUAL(0)
 #endif
     CALL(evt_msg_print_insert, 0, STRING("stg3_tou_179_01"), 0, 0, LW(10))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CASE_DEFAULT
         CALL(evt_msg_fmt_int, 0, LW(14), STRING("stg3_tou_179_01"), LW(10))
         CALL(evt_msg_print, MSG_PRINT_DIRECT_TEXT, LW(14), 0, 0)
@@ -1499,7 +1500,7 @@ static EVT_BEGIN(evt_gardman)
     // Take control once Mario has landed and finished talking.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_wait_landon)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_FRAMES(10)
     CALL(tou_10_mario_talk_end_wait)
     WAIT_FRAMES(10)

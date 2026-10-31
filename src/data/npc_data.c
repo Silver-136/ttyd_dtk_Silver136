@@ -1,5 +1,6 @@
 // NPC kind table: the model and animation names of every NPC type.
 
+#include "version.h"
 #include "data/npc_data.h"
 #include "driver/npcdrv.h"
 #include "evt/evt_npc.h"
@@ -37,7 +38,7 @@ NpcTribeInfo npcTribe[] = {
     {/*"店員男"*/"\x93\x58\x88\xF5\x92\x6A", "c_gshop_m", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {/*"店員女"*/"\x93\x58\x88\xF5\x8F\x97", "c_gshop_w", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
     {/*"バッジ屋店員"*/"\x83\x6F\x83\x62\x83\x57\x89\xAE\x93\x58\x88\xF5", "c_tyusan_t", "CHU_S_1", "CHU_Z_1", "CHU_S_1", "CHU_T_1", "CHU_W_1", "CHU_R_1", "CHU_S_1", "CHU_S_1", 30.0f, 30.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_KINOPIO_MOVE1L", "SFX_FLD_NPC_KINOPIO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"バニーテレサ"*/"\x83\x6F\x83\x6A\x81\x5B\x83\x65\x83\x8C\x83\x54", "c_bteresa2", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "Z_1", "Z_1", 25.0f, 38.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_TELESA_MOVE1", NULL, 0, NULL, NULL},
 #else
     {/*"バニーテレサ"*/"\x83\x6F\x83\x6A\x81\x5B\x83\x65\x83\x8C\x83\x54", "c_bteresa", "BTS_S_1", "BTS_Z_1", "BTS_S_1", "BTS_T_1", "BTS_W_1", "BTS_R_1", "BTS_Z_1", "BTS_Z_1", 25.0f, 38.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_ENM_TELESA_MOVE1", NULL, 0, NULL, NULL},
@@ -219,7 +220,7 @@ NpcTribeInfo npcTribe[] = {
     {/*"ピーチ姫（ラスト用）"*/"\x83\x73\x81\x5B\x83\x60\x95\x50\x81\x69\x83\x89\x83\x58\x83\x67\x97\x70\x81\x6A", "c_peach_f", "P_S_9F", "P_Z_9F", "P_S_9F", "P_T_9F", "P_W_9F", "P_R_9F", "P_S_9F", "P_S_9F", 20.0f, 47.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_PEACH_MOVE1L", "SFX_PEACH_MOVE1R", 12000, NULL, "SFX_PEACH_LANDING1"},
     {/*"ブラックピーチ"*/"\x83\x75\x83\x89\x83\x62\x83\x4E\x83\x73\x81\x5B\x83\x60", "c_b_peach_b", "KRT_S_1", "KRT_Z_1", "KRT_S_1", "KRT_T_1", "KRT_W_1", "KRT_W_1", "KRT_S_1", "KRT_S_1", 20.0f, 47.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
     {/*"影の女王"*/"\x89\x65\x82\xCC\x8F\x97\x89\xA4", "c_q_kage", "KRT_S_1", "KRT_Z_1", "KRT_S_1", "KRT_T_1", "KRT_S_1", "KRT_S_1", "KRT_S_1", "KRT_S_1", 20.0f, 47.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"トゲノコ"*/"\x83\x67\x83\x51\x83\x6D\x83\x52", "c_togenoko", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "D_1", "K_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_NOKO_MOVE3L", "SFX_FLD_ENM_NOKO_MOVE3R", 12000, "SFX_FLD_ENM_NOKO_JUMP1", NULL},
 #else
     {/*"トゲノコ"*/"\x83\x67\x83\x51\x83\x6D\x83\x52", "c_togenoko", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_ENM_NOKO_MOVE3L", "SFX_FLD_ENM_NOKO_MOVE3R", 12000, "SFX_FLD_ENM_NOKO_JUMP1", NULL},
@@ -229,7 +230,7 @@ NpcTribeInfo npcTribe[] = {
     {/*"カメックババ（地上）"*/"\x83\x4A\x83\x81\x83\x62\x83\x4E\x83\x6F\x83\x6F\x81\x69\x92\x6E\x8F\xE3\x81\x6A", "c_kamek_be", "S_1", "Z_1", "S_1", "T_1", "W_1", "R_1", "S_1", "S_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 70.0f, "SFX_KUPPA_KAMEBABA_MOVE1L", "SFX_KUPPA_KAMEBABA_MOVE1R", 12000, "SFX_KUPPA_KAMEBABA_JUMP1", "SFX_KUPPA_KAMEBABA_LANDING1"},
     {/*"カメックババ（息切れ）"*/"\x83\x4A\x83\x81\x83\x62\x83\x4E\x83\x6F\x83\x6F\x81\x69\x91\xA7\x90\xD8\x82\xEA\x81\x6A", "c_kamek_be", "I_1", "Z_1", "I_1", "T_3", "I_2", "I_2", "I_1", "I_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 70.0f, "SFX_KUPPA_KAMEBABA_MOVE1L", "SFX_KUPPA_KAMEBABA_MOVE1R", 12000, "SFX_KUPPA_KAMEBABA_JUMP1", "SFX_KUPPA_KAMEBABA_LANDING1"},
     {/*"カメックババ（風船）"*/"\x83\x4A\x83\x81\x83\x62\x83\x4E\x83\x6F\x83\x6F\x81\x69\x95\x97\x91\x44\x81\x6A", "c_kamek_be", "S_3", "Z_3", "S_3", "T_11", "W_3", "W_3", "S_3", "S_3", 30.0f, 50.0f, 0.0f, 0.0f, 0.0f, 70.0f, NULL, NULL, 0, NULL, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {/*"カメック"*/"\x83\x4A\x83\x81\x83\x62\x83\x4E", "c_kamek", "KMK_S_1", "KMK_Z_1", "KMK_S_1", "KMK_T_1", "KMK_W_1", "KMK_R_1", "KMK_D_1", "KMK_K_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},
 #else
     {/*"カメック"*/"\x83\x4A\x83\x81\x83\x62\x83\x4E", "c_kamek", "KMK_S_1", "KMK_Z_1", "KMK_S_1", "KMK_T_1", "KMK_W_1", "KMK_R_1", "KMK_S_1", "KMK_S_1", 30.0f, 40.0f, 0.0f, 0.0f, 0.0f, 20.0f, NULL, NULL, 0, NULL, NULL},

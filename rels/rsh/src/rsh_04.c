@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -37,19 +38,19 @@ static BeroEntry bero_data_c[3];
 static const char* door_3[7];
 static const char* door_4[7];
 static const char* door_5[7];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_rsh_konarikin_irai_party_talk[89];
 #else
 EvtWord evt_rsh_konarikin_irai_party_talk[85];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_allow_kamotsu[77];
 #else
 EvtWord evt_allow_kamotsu[73];
 #endif
 EvtWord evt_mario_chuumoku[10];
 EvtWord evt_party_chuumoku[11];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_shorui_funshitu[362];
 #else
 EvtWord evt_shorui_funshitu[352];
@@ -59,7 +60,7 @@ EvtWord evt_daijisouna_kami[208];
 EvtWord evt_syasyou_auto_talk[27];
 static EvtWord init_syashou[56];
 static s32 item_tbl2[2];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord talk_syashou[413];
 #else
 static EvtWord talk_syashou[367];
@@ -76,7 +77,7 @@ static EvtWord init_mama[37];
 static EvtWord talk_mama[57];
 static EvtWord init_konari[46];
 s32 item_tbl3[2];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord talk_konari[265];
 #else
 static EvtWord talk_konari[219];
@@ -103,7 +104,7 @@ static EvtWord evt_access_entry[25];
 static EvtWord evt_door_msg[102];
 EvtWord evt_narikin_room[87];
 EvtWord evt_powan_room[83];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord rsh_04_init_evt[214];
 #else
 EvtWord rsh_04_init_evt[201];
@@ -313,11 +314,11 @@ EVT_BEGIN(evt_rsh_konarikin_irai_party_talk)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_107_6"), 0, STRING("party"))
     END_SWITCH
     CALL(evt_party_run, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_10_THE_CONDUCTOR_ZIP_TOAD)
 #endif
     SET_VALUE(GSW_STORY_PROGRESS, STG6_10_THE_CONDUCTOR_ZIP_TOAD)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     END_IF
 #endif
     RETURN
@@ -329,12 +330,12 @@ EVT_END()
  * the story advances to STG6_16_THE_BAGGAGE_CAR and the baggage car door (bero case) is switched on.
  */
 EVT_BEGIN(evt_allow_kamotsu)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("車掌"), NPC_FLAG_NO_HIT)
 #endif
     CALL(evt_mario_mov_pos, -360, -100, 500)
     CALL(evt_mario_set_dir_npc, STRING("車掌"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_set_dir_to_target, STRING("車掌"), STRING("mario"))
 #endif
     CALL(evt_msg_print, 0, STRING("stg6_rsh_126"), 0, STRING("車掌"))
@@ -344,7 +345,7 @@ EVT_BEGIN(evt_allow_kamotsu)
     WAIT_MS(600)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_127"), 0, STRING("車掌"))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("車掌"), NPC_FLAG_NO_HIT)
 #endif
     CALL(evt_npc_move_position, STRING("車掌"), -395, -145, 1000, 0, 1)
@@ -392,7 +393,7 @@ EVT_BEGIN(evt_shorui_funshitu)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_party_move_pos, 0, 255, -150, 500)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_party_set_dir_npc, 0, STRING("ポワン探偵"))
         END_IF
     END_INLINE_EVENT
@@ -435,7 +436,7 @@ EVT_BEGIN(evt_shorui_funshitu)
     WAIT_MS(500)
     SPAWN_EVENT_GET_ID(PTR(evt_mario_chuumoku), LW(10))
     SPAWN_EVENT_GET_ID(PTR(evt_party_chuumoku), LW(11))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
 #else
     CALL(evt_npc_flag_onoff, 1, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), NPC_FLAG_NO_HIT)
@@ -506,7 +507,7 @@ EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     DELETE_EVENT(LW(10))
     DELETE_EVENT(LW(11))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 0, STRING("ポワン探偵"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_flag_onoff, 0, STRING("サラリーマン"), NPC_FLAG_NO_TALK_BALLOON)
@@ -536,7 +537,7 @@ EVT_BEGIN(evt_daijisouna_kami)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_party_move_pos, 0, 275, -160, 500)
 #else
             CALL(evt_party_move_pos, 0, 245, -160, 500)
@@ -702,7 +703,7 @@ static EVT_BEGIN(talk_syashou)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_142"), 0, 0)
         CALL(evt_win_item_select, 0, PTR(item_tbl2), LW(1), 0)
         IF_INT_NOT_EQUAL(LW(1), -1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_mario_adjust_dir)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_mario_get_dispdir, LW(3))
@@ -775,7 +776,7 @@ EVT_END()
  * while Mario stands in cabin 3 on day 2 without talking to anybody; started by evt_powan_room.
  */
 EVT_BEGIN(talk_sarary_repeat)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("サラリーマン"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_get_position, STRING("サラリーマン"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("サラリーマン"), LW(3))
@@ -788,7 +789,7 @@ EVT_BEGIN(talk_sarary_repeat)
     ADD(LW(1), LW(3))
     ADD(LW(1), 10)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_01"), 0, STRING("サラリーマン"))
 #else
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_01"), 0, STRING(/*"サラリーマン"*/"\x83\x54\x83\x89\x83\x8A\x81\x5B\x83\x7D\x83\x93"))
@@ -910,7 +911,7 @@ EVT_END()
  * Repeats the parents' conversation (talk_papa_mama) when Mario talks to him at the right stage.
  */
 EVT_BEGIN(talk_papa_repeat)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ナリキンパパ"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_get_position, STRING("ナリキンパパ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ナリキンパパ"), LW(3))
@@ -922,7 +923,7 @@ EVT_BEGIN(talk_papa_repeat)
     ADD(LW(1), LW(3))
     ADD(LW(1), 15)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_01"), 0, STRING("ナリキンパパ"))
 #else
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_01"), 0, STRING(/*"ナリキンパパ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x70\x83\x70"))
@@ -979,7 +980,7 @@ EVT_END()
  * repeats the parents' conversation (talk_papa_mama) when Mario talks to her at the right stage.
  */
 EVT_BEGIN(talk_mama_repeat)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ナリキンママ"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_get_position, STRING("ナリキンママ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ナリキンママ"), LW(3))
@@ -991,7 +992,7 @@ EVT_BEGIN(talk_mama_repeat)
     ADD(LW(1), LW(3))
     ADD(LW(1), 10)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_02"), 0, STRING("ナリキンママ"))
 #else
     CALL(evt_msg_print, 0, STRING("stg6_rsh_85_02"), 0, STRING(/*"ナリキンママ"*/"\x83\x69\x83\x8A\x83\x4C\x83\x93\x83\x7D\x83\x7D"))
@@ -1116,7 +1117,7 @@ static EVT_BEGIN(talk_konari)
                 IF_INT_NOT_EQUAL(LW(1), ITEM_AUTOGRAPH)
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_100"), 0, 0)
                     ELSE
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     CALL(evt_mario_adjust_dir)
                     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                     CALL(evt_mario_get_dispdir, LW(3))
@@ -1162,7 +1163,7 @@ EVT_END()
  * salaryman's while Mario stands in cabin 3; started by evt_powan_room.
  */
 EVT_BEGIN(talk_powan_repeat)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_flag_onoff, 1, STRING("ポワン探偵"), NPC_FLAG_NO_TALK_BALLOON)
     CALL(evt_npc_get_position, STRING("ポワン探偵"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_height, STRING("ポワン探偵"), LW(3))
@@ -1175,7 +1176,7 @@ EVT_BEGIN(talk_powan_repeat)
     ADD(LW(1), LW(3))
     SUBTRACT(LW(1), 4)
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_02"), 0, STRING("ポワン探偵"))
 #else
     CALL(evt_msg_print, 0, STRING("stg6_rsh_165_02"), 0, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"))
@@ -1565,7 +1566,7 @@ EVT_BEGIN(rsh_04_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_45_DAY_3_STARTS)
         SET_VALUE(LW(0), 0)
         CALL_CHILD(PTR(bero_case_switch_on))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_49_POSHLEY_HEIGHTS)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_55_PEACH_GRODUS_X_NAUT)

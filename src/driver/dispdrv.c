@@ -3,6 +3,7 @@
  * queue and dispDraw calls the callbacks of one camera after setting each render mode's blend, alpha and Z state.
  */
 
+#include "version.h"
 #include "driver/dispdrv.h"
 #include "memory.h"
 #include "system.h"
@@ -12,7 +13,7 @@
 
 #define DISP_MAX_ENTRIES 1024
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US reads its 1.0f from a fadedrv global (the name float_1_8041f770 is a label, the original name is unknown)
 #define DISP_ONE float_1_8041f770
 #else

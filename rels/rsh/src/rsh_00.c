@@ -1,6 +1,7 @@
 // rsh_00 (列車, Excess Express): the driver's cab: driver NPC, controls and schedule board, a Smorg (moamoa) window
 // scene; door to rsh_01.
 
+#include "version.h"
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -324,14 +325,14 @@ void moamoa_init(void) {
             if (x < 185.0f) {
                 z = randf(-160.0f, -165.0f);
             } else if (x < 257.0f) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 z = 0.8f * (x - 185.0f) + -160.0f;
                 z += 50.0f;
 #else
                 z = 0.8f * (x - 185.0f) + -160.0f;
 #endif
             } else {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 z = randf(-90.0f, -20.0f);
                 z += 50.0f;
 #else

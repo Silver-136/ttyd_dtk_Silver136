@@ -36,7 +36,7 @@ typedef struct WinMgrSelectTbl {
 } WinMgrSelectTbl;
 
 void qqsort(void* base, u32 n, u32 size, int (*compare)(void*, void*));
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 u16 pouchEquipBadge(s32 index);
 int select_comp_bteresa(void* a, void* b);
 #endif
@@ -69,7 +69,7 @@ static u16 party_icon_table[] = {ICON_PARTY_GOOMBELLA, ICON_PARTY_KOOPS, ICON_PA
 static const char* party_labelname_table[] = {"_kur", "_nok", "_win", "_yos", "_viv", "_bom", "_chu"};
 static s32 mario_status_icon_table[] = {ICON_HP, ICON_FP, ICON_BP};
 static const char* mario_status_labelname_table[] = {"_hp", "_fp", "_bp"};
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static const char* mario_status_name_table[][3] = {
     {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"},
     {"HP", "FP", "BP"},
@@ -733,7 +733,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             for (i = 0; i < MAX_BADGES; i++) {
                 id = (u16)pouchHaveBadge(i);
                 if (id) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     if (sel->type == 12 && id == pouchEquipBadge(i)) {
                         sel->items[sel->numItems].flags |= SELECT_ITEM_EQUIPPED;
                     }
@@ -898,7 +898,7 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                     sel->items[sel->numItems++].id = i + 1;
                 }
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), select_comp_bteresa);
 #endif
             break;
@@ -965,7 +965,7 @@ int select_comp_type(void* a, void* b) {
     return -(x < y);
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** US: badge list sorted by (buy price * 2 + 2) / 3 */
 // US: badge list sorted by (buy price * 2 + 2) / 3
 int select_comp_bteresa(void* a, void* b) {
@@ -1319,7 +1319,7 @@ void select_disp(WinMgrEntry* entry) {
             if (sel->newItem == 0) {
                 ofs = ofs + 0.0f;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (sel->items[i].flags & SELECT_ITEM_EQUIPPED) {
                 if (sel->items[i].flags & SELECT_ITEM_GRAY) {
                     winIconGrayInit();
@@ -1336,7 +1336,7 @@ void select_disp(WinMgrEntry* entry) {
             }
             winIconSet(item->icon_id, (Vec){entry->x + 35, sel->scrollY + (ofs + (entry->y - 44 - i * 24)), 0.0f}, (Vec){0.5f, 0.5f, 0.5f}, iconcol);
             winFontInit();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             winFontSetWidth((Vec){entry->x + 60, sel->scrollY + (ofs + (entry->y - 32 - i * 24)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
                        *((sel->items[i].flags & SELECT_ITEM_GRAY) ? &gray : &black), 185.0f, msgSearch(item->name));
 #else
@@ -1375,7 +1375,7 @@ void select_disp(WinMgrEntry* entry) {
                 continue;
             }
             sprintf(buf, "%d", price);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             tw = FontGetMessageWidth(buf);
             if (tw > 30.0) {
                 tw = 30.0f;
@@ -1417,7 +1417,7 @@ void select_disp(WinMgrEntry* entry) {
                 msg = msgSearch("msg_window_title_1");
                 break;
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         tw = FontGetMessageWidth(msg);
         if (tw > 120.0f) {
             tw = 120.0f;
@@ -1506,7 +1506,7 @@ static inline s32 select_party_icon(u16 id) {
  * cursor and scroll arrows.
  */
 void select_disp_party(WinMgrEntry* entry) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 tw;
 #endif
     WinMgrSelect* sel = entry->param;
@@ -1563,7 +1563,7 @@ void select_disp_party(WinMgrEntry* entry) {
         }
         GXSetScissor(left, top, wd, ht);
         msg = msgSearch("msg_window_title_7");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         tw = FontGetMessageWidth(msg);
         if (tw > 100.0f) {
             tw = 100.0f;
@@ -1577,7 +1577,7 @@ void select_disp_party(WinMgrEntry* entry) {
         winFontSetEdge((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white, msg);
 #endif
         msg = msgSearch("msg_window_title_8");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         tw = FontGetMessageWidth(msg);
         if (tw > 65.0f) {
             tw = 65.0f;
@@ -1608,7 +1608,7 @@ void select_disp_party(WinMgrEntry* entry) {
  * the value after raising or lowering it by its step (5, 5, 3).
  */
 void select_disp_mario(WinMgrEntry* entry) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 tw;
 #endif
     WinMgrSelect* sel = entry->param;
@@ -1690,7 +1690,7 @@ void select_disp_mario(WinMgrEntry* entry) {
         }
         GXSetScissor(left, top, wd, ht);
         msg = msgSearch("msg_window_title_9");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         tw = FontGetMessageWidth(msg);
         if (tw > 100.0f) {
             tw = 100.0f;
@@ -1704,7 +1704,7 @@ void select_disp_mario(WinMgrEntry* entry) {
         winFontSetEdge((Vec){entry->x + (entry->width * 3 / 5 - 120) * 2 / 3 + w, entry->y + 14, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white2, msg);
 #endif
         msg = msgSearch("msg_window_title_10");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         tw = FontGetMessageWidth(msg);
         if (tw > 65.0f) {
             tw = 65.0f;
@@ -1734,7 +1734,7 @@ void select_disp_mario(WinMgrEntry* entry) {
  * and for type 17 the price of unread entries with a coin icon. Despite the name it serves both 17 and 18.
  */
 void select_disp_luigi(WinMgrEntry* entry) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 tw;
 #endif
     WinMgrEntry* ent = entry;
@@ -1774,7 +1774,7 @@ void select_disp_luigi(WinMgrEntry* entry) {
             } else {
                 col = &black;
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             winFontSetWidth((Vec){ent->x + 25, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, 200.0f, info->initEndPos);
 #else
             winFontSet((Vec){ent->x + 25, sel->scrollY + (zero + (ent->y - 32 - i * 24)), 0.0f}, (Vec){0.8f, 0.8f, 0.8f}, *col, info->initEndPos);
@@ -1800,7 +1800,7 @@ void select_disp_luigi(WinMgrEntry* entry) {
                 msg = msgSearch("msg_window_title_6");
                 break;
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         tw = FontGetMessageWidth(msg);
         if (tw > 120.0f) {
             tw = 120.0f;
@@ -1882,7 +1882,7 @@ void select_disp2(WinMgrEntry* entry) {
             break;
     }
     if (!(wp->entries[sel->descriptorId[1]].flags & WINMGR_FLAG_ANIMATING)) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         Mtx trans;
         Mtx scale;
         f32 tw;

@@ -2,6 +2,7 @@
  * Lots of helper functions for complex math.
  */
 
+#include "version.h"
 #include "system.h"
 #include <dolphin/gx.h>
 #include <dolphin/pad.h>
@@ -529,7 +530,7 @@ static inline DEMOPadStatus* GET_DEMO_PAD_STATUS(u32 i) {
     return DemoPad + i;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define KEY_REPEAT_FRAMES(n) ((gp->framerate * (n)) / 60)
 #else
 #define KEY_REPEAT_FRAMES(n) (n)
@@ -586,7 +587,7 @@ void makeKey(void) {
         gp->triggerRight[i] = GET_DEMO_PAD_STATUS(i)->pst.triggerRight;
     }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     for (i = 0; i < 4; i++) {
         if ((gp->button[i] & (PAD_BUTTON_X | PAD_BUTTON_Y | PAD_BUTTON_START)) == (PAD_BUTTON_X | PAD_BUTTON_Y | PAD_BUTTON_START)) {
             gp->button[i] = 0;
@@ -816,7 +817,7 @@ f32 sysFrame2SecFloat(f32 frame) {
 }
 
 s32 sysMsec2Frame(s32 msec) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     return (msec * gp->framerate) / 1000;
 #else
     return (msec * 60) / 1000;
@@ -824,7 +825,7 @@ s32 sysMsec2Frame(s32 msec) {
 }
 
 f32 sysMsec2FrameFloat(f32 msec) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     return (msec * (f32)gp->framerate) / 1000.0f;
 #else
     return (msec * 60.0f) / 1000.0f;
@@ -1034,7 +1035,7 @@ void* memcpy_as4(void* dest, const void* src, u32 count) {
 
 // The original file had debug functions that the linker dead-stripped; their constants
 // stayed in the literal pools. These stand-ins recreate the pool contents in order.
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * US pools the int->float constant between the strings and the doubles;
  * functions are emitted in reverse order, so the doubles come first in the source
@@ -1075,7 +1076,7 @@ void systemStrippedPool1(const char** str, f32* f, f64* d, f32 x) {
     str[9] = "SIN_DECEL";
     f[1] = sqrtf(x);
     str[10] = "[%8s:% 4d] %s";
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 }
 #else
     d[0] = 1.5;

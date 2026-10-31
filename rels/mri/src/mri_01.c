@@ -1,6 +1,7 @@
 // mri_01 (巨木の中, The Great Tree): the Puni Elder's room: the Elder and the Punies, troubles (irai), the
 // first X-Naut battle, the Magnus von Grapple fight with Lord Crump, the Crystal Star, and Bowser's interludes.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_story.h"
 #include "evt/evt_window.h"
@@ -3554,7 +3555,7 @@ EVT_BEGIN(mri_01_koopa_second_evt)
     WAIT_MS(2000)
     SET_VALUE(LF(10), 0)
     SET_VALUE(LW(0), 9)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(evt_memcard_save_wrapper)
 #else
     CALL_CHILD(PTR(evt_memcard_save))

@@ -67,7 +67,7 @@
 #include "mario/mario_pouch.h"
 #include <dolphin/pad.h>
 #include <demo/DEMOPad.h>
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #endif
 
 typedef struct FuwaTable {
@@ -460,7 +460,7 @@ USER_FUNC(evt_exchange_msg_set) {
     const char* msg = msgSearch((const char*)evtGetValue(event, args[1]));
     s32 n = exchange_ret_tbl_no();
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((u32)gp->language == LANGUAGE_JP) {
         sprintf(exchange_msgp, msg, value, exchange_ryokin_medal_tbl[n][0].medal, exchange_ryokin_medal_tbl[n][0].ryokin, exchange_ryokin_medal_tbl[n][1].medal, exchange_ryokin_medal_tbl[n][1].ryokin, exchange_ryokin_medal_tbl[n][2].medal, exchange_ryokin_medal_tbl[n][2].ryokin);
     } else {
@@ -939,7 +939,7 @@ EVT_BEGIN(maffiaboss_ticket_check)
     CALL(evt_msg_print, 0, STRING("mac_2_117"), 0, STRING("マフィアボス"))
     // Mario is near the desk: Don Pianta walks over to him and hands over the Blimp Ticket.
     IF_INT_EQUAL(LW(5), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 #else
         CALL(evt_npc_flag_onoff, 1, STRING("マフィアボス"), NPC_FLAG_NO_WALL_COLLISION)
@@ -951,7 +951,7 @@ EVT_BEGIN(maffiaboss_ticket_check)
         CALL_CHILD(PTR(maffiaboss_ticket_put))
         CALL(evt_msg_print, 0, STRING("mac_2_118"), 0, STRING("マフィアボス"))
         CALL(evt_npc_move_position, STRING("マフィアボス"), LW(10), LW(12), 0, FLOAT(60.0f), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 #else
         CALL(evt_npc_flag_onoff, 0, STRING("マフィアボス"), NPC_FLAG_NO_WALL_COLLISION)
@@ -1677,14 +1677,14 @@ EVT_BEGIN(maffiaboss_desk_talk)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir_npc, STRING("マフィアボス"))
     END_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_VALUE(GF(10), 1)
 #endif
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(800)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SET_VALUE(GF(10), 0)
 #endif
     END_INLINE_EVENT
@@ -1695,7 +1695,7 @@ EVT_BEGIN(maffiaboss_desk_talk)
         END_INLINE_EVENT
     END_IF
     CALL_CHILD(PTR(maffiaboss_talk_common))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_WHILE(GF(10))
 #endif
     CALL(evt_party_run, 0)
@@ -1778,7 +1778,7 @@ EVT_BEGIN(maffia1_talk)
         IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 0)
             CALL(evt_msg_print, 0, STRING("mac_2_070"), 0, STRING("me"))
             ELSE
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_msg_print, 0, STRING(VERSION_PICK("mac_2_116_buka", "mac_2_116_buka1")), 0, STRING("me"))
 #else
             CALL(evt_msg_print, 0, STRING("mac_2_116_buka1"), 0, STRING("me"))
@@ -2222,7 +2222,7 @@ EVT_BEGIN(exchange_return_sub)
     SET_VALUE(LW(0), 48)
     CALL_CHILD(PTR(bteresa_n_fadein))
     CALL(yuugijou_get_montemedal_keep, LW(1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_get_language, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -2276,7 +2276,7 @@ EVT_BEGIN(exchange_keep_sub)
             SET_VALUE(LW(0), 48)
             CALL_CHILD(PTR(bteresa_n_fadein))
             CALL(yuugijou_get_montemedal, LW(1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(evt_sub_get_language, LW(0))
             SWITCH(LW(0))
                 CASE_EQUAL(0)
@@ -2504,7 +2504,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
     // Teresa quotes the price (and the BP a badge needs) and asks Mario to confirm.
     IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
         CALL(evt_sub_get_language, LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SWITCH(LW(0))
             CASE_EQUAL(0)
             CALL(evt_msg_print_insert, 0, STRING("bunny_teresa_67"), 0, STRING("me"), LW(2), LW(3), LW(4))
@@ -2907,7 +2907,7 @@ EVT_BEGIN(slot_set)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_party_stop, 0)
 #endif
     CALL(yuugijou_get_takeoutflag, LW(0))
@@ -2920,7 +2920,7 @@ EVT_BEGIN(slot_set)
             CALL(yuugijou_montemedal_return)
         END_IF
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     BEGIN_SIBLING_EVENT
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_party_move_pos2, 0, -225, LW(2), FLOAT(60.0f))
@@ -2962,7 +2962,7 @@ EVT_BEGIN(slot_set)
     LABEL(0)
     CALL(evt_cam3d_evt_off, 600, EASING_SINE_IN_OUT)
     WAIT_MS(600)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_party_run, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)
@@ -3120,7 +3120,7 @@ EVT_BEGIN(exchange_set)
     // The Pianta Changer greets Mario, explaining the rates the first time.
     IF_INT_EQUAL(GSWF_GOR_PIANTA_CHANGER_FIRST_USE_DONE, 0)
         CALL(exchange_ryokin_medal, 0, LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_get_language, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
@@ -5672,7 +5672,7 @@ EVT_BEGIN(gor_03_init_evt)
     CALL_CHILD(PTR(gor_03_dokan_init_evt))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(evt_bero_info_run)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
@@ -5692,7 +5692,7 @@ EVT_BEGIN(gor_03_init_evt)
     END_SWITCH
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     SET_VALUE(LW(0), PTR(&door_data_01_0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(evt_door_entry)
     IF_INT_EQUAL(GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE, 1)
         SET_VALUE(LW(0), PTR(&door_data_01_1))
@@ -5709,7 +5709,7 @@ EVT_BEGIN(gor_03_init_evt)
     SET_VALUE(LW(0), PTR(&door_data_02_0r))
     CALL_CHILD(PTR(monte_evt_door_entry))
     SET_VALUE(LW(0), PTR(&door_data_02_1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_03))
     CALL_CHILD(evt_door_entry)
@@ -5721,7 +5721,7 @@ EVT_BEGIN(gor_03_init_evt)
     SET_VALUE(LW(0), PTR(&door_data_03_roll))
     CALL_CHILD(PTR(evt_door_03_entry))
     SET_VALUE(LW(0), PTR(&door_data_04))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(evt_door_entry)
 #else
     CALL_CHILD(PTR(evt_door_entry))
@@ -5781,7 +5781,7 @@ EVT_BEGIN(gor_03_init_evt)
     END_IF
     SPAWN_EVENT(PTR(tenin_fuwafuwa))
     SPAWN_EVENT(PTR(casino_fuwafuwa))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SPAWN_EVENT(evt_sub_mail_event)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kuzi"), 0, PTR(kuzi_keiziban_entry), 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_02"), MAP_OBJ_FLAG_CLIP)

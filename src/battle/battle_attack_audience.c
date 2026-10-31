@@ -1,10 +1,11 @@
 // Audience attacks: audience members throwing items, and item announcements.
 
+#include "version.h"
 #include "driver/itemdrv.h"
 #include "driver/camdrv.h"
 #include "evt/evt_msg.h"
 #include "battle/battle_sub.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #include <string.h>
 #endif
@@ -173,7 +174,7 @@ void _get_item_announce_disp(CameraId cameraId, void* param) {
 
     no = BattleAudience_GetPresentItemNo();
     itemName = msgSearch(itemDataTable[no].name);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // FAKE: (u32) cast before the compare with LANGUAGE_JP; the plain compare changes the object
     if ((u32)gp->language == LANGUAGE_JP) {
         msg = msgSearch("btl_msg_get_item");
@@ -262,7 +263,7 @@ void* btlataudGetMoveEventPtr(s32 id) {
     }
 }
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 __declspec(section ".data") static s32 btlataudevtDummyPad[1] = {0};
 #endif
 /** Fallback audience attack for units without their own: hit the member holding the item and resume. */

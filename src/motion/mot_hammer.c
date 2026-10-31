@@ -1,6 +1,7 @@
 // Mario's hammer motions: the normal swing (mot_hammer) and the charged spin (mot_hammer2), with block and wall
 // hits.
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "mario/mario.h"
@@ -378,7 +379,7 @@ s32 marioChkHammer2(void) {
         }
         return 0;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (mario->flags & MARIO_FLAG_BG_MODE) {
         mario->wMotionTimer = 0;
     } else {
@@ -452,7 +453,7 @@ static inline void mot_ham(f32 shiftZ, f32 zoom) {
     }
 
 static inline void h2LightOn(void) {
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     marioPaperLightOn();
 #endif
 }
@@ -485,7 +486,7 @@ void mot_hammer2(void) {
         mario->mot.hammer2.flags = 0;
         mario->currSubMotionId = 0;
         mario->mot.hammer2.sfxId = -1;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         mario->savedDisplayDirection = mario->displayDirection;
 #endif
     }
@@ -721,7 +722,7 @@ void mot_ham2_post(void) {
         m->camShiftRate.z = 0.01f;
     }
     marioPaperOff();
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     marioPaperLightOn();
 #endif
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;

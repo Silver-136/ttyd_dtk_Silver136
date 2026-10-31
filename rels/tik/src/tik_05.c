@@ -1120,7 +1120,7 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
  * Parts of it are written with hand-expanded math to keep the original code.
  */
 USER_FUNC(tiz_broken) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 sq; // FAKE: tb_sqrtf expanded by hand (see below)
     f64 guess;
 #endif
@@ -1163,7 +1163,7 @@ USER_FUNC(tiz_broken) {
                     }
                 }
                 if (dx || dy) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     // FAKE: sqrtf(dx * dx + dy * dy) expanded by hand with the
                     // value and Newton guess in function-scope locals (sq, guess);
                     // same instructions, but the temps of the inline colour differently in US.
@@ -1200,13 +1200,13 @@ USER_FUNC(tiz_broken) {
                 p->vel.x = -nx * param_tbl[1];
                 p->vel.y = -ny * param_tbl[1];
                 p->vel.z = 10.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 p->vel.x *= 60.0f / gp->framerate;
                 p->vel.y *= 60.0f / gp->framerate;
                 p->vel.z *= 60.0f / gp->framerate;
 #endif
                 angle = 6.2831855f * angleABf(0.0f, 0.0f, dx, dy) / 360.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 inv = param_tbl[3];
                 p->gx = inv * polySinf(angle);
                 p->gy = inv * -polyCosf(angle);
@@ -1215,7 +1215,7 @@ USER_FUNC(tiz_broken) {
                 p->gx = nx * polySinf(angle);
                 p->gy = nx * -polyCosf(angle);
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 p->gx *= 60.0f / gp->framerate;
                 p->gy *= 60.0f / gp->framerate;
 #endif
@@ -1532,7 +1532,7 @@ USER_FUNC(stardust_setting) {
     return EVT_RETURN_DONE;
 }
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 /**
  * Script helper (JP and earlier).
  * Checks whether an EXI device of ID 0x05070000 is attached to channel 0;
@@ -2458,7 +2458,7 @@ EVT_BEGIN(mahojin_event7)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 90)
 #endif
     CALL(evt_mario_mov_pos2, 0, -250, FLOAT(120.0f))
@@ -3010,7 +3010,7 @@ EVT_END()
 EVT_BEGIN(tik_05_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(evt_bero_info_run)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
@@ -3048,7 +3048,7 @@ EVT_BEGIN(tik_05_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG0_12_02_PAPER_MAGE_1)
         SET_VALUE(LW(0), STRING("n_bero"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(bero_case_switch_off)
 #else
         CALL_CHILD(PTR(bero_case_switch_off))
@@ -3056,7 +3056,7 @@ EVT_BEGIN(tik_05_init_evt)
         CALL_CHILD(PTR(large_door_stg0_init))
         CASE_LESS(STG7_52_THE_PEDESTAL)
         SET_VALUE(LW(0), STRING("n_bero"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(bero_case_switch_off)
         CASE_EQUAL(STG7_52_THE_PEDESTAL)
         SET_VALUE(LW(0), STRING("n_bero"))
@@ -3093,7 +3093,7 @@ EVT_BEGIN(tik_05_init_evt)
     CALL(evt_sub_animgroup_async, STRING("TIZ_stg_5"))
     CALL(evt_sub_animgroup_async, STRING("TIZ_stg_6"))
     CALL(evt_sub_animgroup_async, STRING("TIZ_stg_7"))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(is_dol_viewer)
 #endif
     RETURN

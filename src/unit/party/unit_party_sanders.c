@@ -1,5 +1,6 @@
 // Battle unit data and scripts for Bobbery (Sanders) as a partner.
 
+#include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_stage.h"
@@ -52,17 +53,17 @@ BattleWeapon partyWeapon_SandersCounterSet;
 BattleWeapon partyWeapon_SandersSuperBombAttack;
 EvtWord partySandersAttack_FirstAttack[321];
 EvtWord partySandersAttack_NormalAttack[970];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord partySandersAttack_SuperBombAttack[1118];
 #else
 EvtWord partySandersAttack_SuperBombAttack[1116];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord partySandersAttack_CounterSet[242];
 #else
 EvtWord partySandersAttack_CounterSet[201];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord partySandersAttack_TimeBombSet[331];
 #else
 EvtWord partySandersAttack_TimeBombSet[290];
@@ -437,7 +438,7 @@ BattleWeapon partyWeapon_SandersCounterSet = {
     0, 0, 0, 0, 0, 0, // invisibleChance..fpRegenStrength
     {0}, // pad_AE
     partySandersAttack_CounterSet, // attackEvtScript
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {0, 5, 5, 100, 20, 10, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 #else
     {0, 5, 5, 100, 20, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
@@ -458,7 +459,7 @@ BattleWeapon partyWeapon_SandersSuperBombAttack = {
     9, // baseFpCost
     0, 0, // baseSpCost..superguardsAllowed
     1.0f, // reserved_14
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     1, // stylishCommandMultiplier
 #else
     2, // stylishCommandMultiplier
@@ -847,7 +848,7 @@ EVT_BEGIN(partySandersAttack_NormalAttack)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(btldefaultevt_SuitoruBadgeEffect))
 #else
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
@@ -1009,7 +1010,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     CALL(btlevtcmd_GetResultAC, LW(6))
     IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
         CALL(evt_eff, STRING(""), STRING("sandars"), 3, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         ELSE
         CALL(evt_eff, STRING(""), STRING("sandars"), 4, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     END_IF
@@ -1181,7 +1182,7 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(btldefaultevt_SuitoruBadgeEffect))
 #else
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
@@ -1234,7 +1235,7 @@ EVT_BEGIN(partySandersAttack_CounterSet)
         CALL(btlevtcmd_ACSuccessEffect, LW(6), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), LW(6))
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 12, 12, 0)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
     SWITCH(LW(6))
@@ -1256,7 +1257,7 @@ EVT_BEGIN(partySandersAttack_CounterSet)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     END_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
 #endif
@@ -1351,7 +1352,7 @@ EVT_BEGIN(partySandersAttack_TimeBombSet)
                 ADD(LW(13), 1)
                 IF_INT_GREATER_OR_EQUAL(LW(13), 3)
                     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     WAIT_FRAMES(10)
                     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 12, 12, 10)
                     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
@@ -1374,7 +1375,7 @@ EVT_BEGIN(partySandersAttack_TimeBombSet)
             WAIT_FRAMES(1)
             SET_VALUE(LW(14), 5)
         END_LOOP
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         DEBUG_PUT_MSG(STRING("イベント終了"))
 #else
         DEBUG_PUT_MSG(STRING(/*"イベント終了"*/"\x83\x43\x83\x78\x83\x93\x83\x67\x8F\x49\x97\xB9"))
@@ -1386,7 +1387,7 @@ EVT_BEGIN(partySandersAttack_TimeBombSet)
     CALL(btlevtcmd_StopAC)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     LABEL(90)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
 #endif

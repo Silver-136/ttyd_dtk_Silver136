@@ -1,5 +1,6 @@
 // Mario's paper slit motion (side-step through bars): turning sideways, sliding along walls and turning back.
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "mario/mario.h"
@@ -390,7 +391,7 @@ void marioSlitForceCancel(void) {
  */
 void mot_slit_post(void) {
     MarioWork* mario = marioGetPtr();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     u16 id;
     if (mario->slitState >= 10) {
         id = mario->currMotionId;
@@ -440,7 +441,7 @@ void mot_slit_post(void) {
         mapResetPaperAmbColor();
         mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (mario->currMotionId != MARIO_MOTION_ROLL) {
             allPartyForceSlitOff();
         } else {
@@ -528,7 +529,7 @@ static inline BOOL slitContinueChk(void) {
     return FALSE;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define SPEEDCHK_COND(m) ((m)->baseSpeed >= (m)->baseDashSpeed || (m)->controlStickSensitivity)
 #else
 #define SPEEDCHK_COND(m) ((m)->baseSpeed >= (m)->baseDashSpeed)
@@ -589,7 +590,7 @@ static inline void slitCamFix(void) {
     p->camShiftRate.z = 0.004f;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #define SLITSTOP(m)               \
     if (!marioChkKey()) {         \
         (m)->baseSpeed = 0.0f;    \
@@ -663,7 +664,7 @@ void mot_slit(void) {
         if (!m->controlStickSensitivity) {
             m->baseSpeed = 0.0f;
             marioChgPose("M_S_1");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         } else {
             if (SPEEDCHK_COND(m)) {
                 slitSpeedDown(m);
@@ -989,7 +990,7 @@ void mot_slit(void) {
         m->slitTimer2 = 0;
         m->flags &= ~MARIO_FLAG_PAPER_MODE;
         m->wPlayerCollisionBox.x = 20.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (m->controlStickSensitivity) {
             slitSpeedDown(m);
         }
@@ -1018,7 +1019,7 @@ void mot_slit(void) {
         if (!m->controlStickSensitivity) {
             m->baseSpeed = 0.0f;
             marioChgPose("M_S_1");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         } else {
             slitSpeedDown(m);
             m->directionView = m->controlStickAngle;
@@ -1033,7 +1034,7 @@ void mot_slit(void) {
         if (!m->controlStickSensitivity) {
             m->baseSpeed = 0.0f;
             marioChgPose("M_S_1");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         } else {
             slitSpeedDown(m);
 #endif
@@ -1045,7 +1046,7 @@ void mot_slit(void) {
         mapResetPaperAmbColor();
         m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         allPartySlitOff();
 #endif
         slitCamFix();

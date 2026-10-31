@@ -86,7 +86,7 @@ USER_FUNC(bgm_start_wait);
 USER_FUNC(stone_bg);
 void coingetDisp(WinMgrEntry* entry);
 
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 s32 evt_sub_mail_event_end[1];
 #endif
 
@@ -336,13 +336,13 @@ EVT_BEGIN(evt_sub_starstone)
     IF_INT_EQUAL(LF(8), 0)
         CALL(evt_mario_set_pose, STRING("M_N_3"))
     END_IF
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(evt_fade_entry, 9, 300, 255, 255, 255)
 #endif
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GET_STARSTONE1"))
     CALL(bgm_start_wait)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     // Fade back in; the camera closes in while the star spirals up around him, spinning,
     // until it hovers overhead.
     CALL(evt_fade_entry, FADE_IN_BLACK, 300, 255, 255, 255)
@@ -356,7 +356,7 @@ EVT_BEGIN(evt_sub_starstone)
     SET_VALUE(LW(7), LW(1))
     SET_FLOAT_VALUE(LW(8), FLOAT(35.0f))
     SET_FLOAT_VALUE(LW(9), LW(3))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 0, 3600, 2833)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -377,7 +377,7 @@ EVT_BEGIN(evt_sub_starstone)
         ADD_FLOAT(LW(6), LW(4))
         CALL(evt_item_set_position, LW(7), LW(5), LW(9), LW(6))
         CALL(stone_ry, LW(7), LW(0))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SET_FLOAT_VALUE(LW(2), FLOAT(0.20507813f))
         SET_FLOAT_VALUE(LW(3), FLOAT(0.28222656f))
         CALL(evt_sub_scale_by_fps, LW(2), LW(3))
@@ -552,7 +552,7 @@ EVT_BEGIN(evt_sub_starstone)
         SET_VALUE(LW(0), 22)
     END_IF
     SET_VALUE(LF(10), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_memcard_save_wrapper))
 #else
     CALL_CHILD(PTR(evt_memcard_save))
@@ -862,7 +862,7 @@ EVT_BEGIN(mail_evt_rsh_03_a)
         SET_VALUE(LW(11), LW(1))
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), -100, -2000, -100, 2000, LW(5))
 #else
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 400, -2000, 400, 2000, LW(5))
@@ -1160,7 +1160,7 @@ EVT_BEGIN(mail_evt_pik_00)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EVT_BEGIN(evt_sub_mail_event)
 #else
 EvtWord evt_sub_mail_event[] = {
@@ -1175,7 +1175,7 @@ EvtWord evt_sub_mail_event[] = {
     END_IF
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_EQUAL(LW(0), STRING("nok_01"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_nok_01))
 #else
         CALL_CHILD(mail_evt_nok_01)
@@ -1183,7 +1183,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_03"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_gor_03))
 #else
         CALL_CHILD(mail_evt_gor_03)
@@ -1191,7 +1191,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_02"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SPAWN_EVENT(PTR(mail_evt_gor_02))
         CALL_CHILD(PTR(mail_evt_gor_02_2))
 #else
@@ -1201,7 +1201,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_01"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SPAWN_EVENT(PTR(mail_evt_gor_01_2))
         CALL_CHILD(PTR(mail_evt_gor_01))
 #else
@@ -1211,7 +1211,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("gor_04"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_gor_04))
         RETURN
     END_IF
@@ -1223,7 +1223,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("rsh_03_a"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_rsh_03_a_2))
 #else
         CALL_CHILD(mail_evt_rsh_03_a_2)
@@ -1232,7 +1232,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_hom_00))
 #else
         CALL_CHILD(mail_evt_hom_00)
@@ -1240,7 +1240,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("bom_01"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_bom_01))
 #else
         CALL_CHILD(mail_evt_bom_01)
@@ -1248,7 +1248,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("tik_00"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_tik_00))
 #else
         CALL_CHILD(mail_evt_tik_00)
@@ -1256,7 +1256,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("win_01"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_win_01))
 #else
         CALL_CHILD(mail_evt_win_01)
@@ -1264,7 +1264,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("tou_01"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_tou_01))
 #else
         CALL_CHILD(mail_evt_tou_01)
@@ -1272,7 +1272,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("usu_01"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_usu_01))
 #else
         CALL_CHILD(mail_evt_usu_01)
@@ -1280,7 +1280,7 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     IF_STR_EQUAL(LW(0), STRING("pik_00"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL_CHILD(PTR(mail_evt_pik_00))
 #else
         CALL_CHILD(mail_evt_pik_00)
@@ -1288,14 +1288,14 @@ EvtWord evt_sub_mail_event[] = {
         RETURN
     END_IF
     RETURN
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EVT_END()
 #else
 };
 #endif
 
 #pragma force_active on
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 __declspec(section ".data") s32 evt_sub_mail_event_end[] = {
     1,
 };
@@ -1726,7 +1726,7 @@ USER_FUNC(evt_sub_status_gauge_check_update) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // Descriptive name (not in the symbol maps).
 USER_FUNC(evt_sub_status_gauge_force_update) {
     statusWinForceUpdate();
@@ -1843,7 +1843,7 @@ void coingetDisp(WinMgrEntry* entry) {
     s32* work = entry->param;
     char buf[0x400];
     if (work[1]) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         u16 lines;
         s32 w;
 
@@ -2028,7 +2028,7 @@ USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 USER_FUNC(evt_sub_scale_by_fps) {
     EvtWord* args = event->args;
     s32 a0 = args[0];

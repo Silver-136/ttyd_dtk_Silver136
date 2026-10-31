@@ -2,6 +2,7 @@
 // (toge) follower movement helpers, the tree's door events, the planter (ueki) animation, and the Puni save and
 // Puni-item events.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -119,7 +120,7 @@ EvtWord mri_punipuni_itemselect[40];
 EvtWord mri_punipuni_itemset[36];
 EvtWord mri_punipuni_itemremove[29];
 EvtWord mri_hikari_color[66];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord mri_countdown[176];
 #else
 EvtWord mri_countdown[174];
@@ -232,7 +233,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_mri_door_close)
     BEGIN_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         WAIT_MS(600)
 #else
         WAIT_MS(200)
@@ -299,7 +300,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_mri_door_naname_close)
     BEGIN_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         WAIT_MS(600)
 #else
         WAIT_MS(200)
@@ -574,7 +575,7 @@ EVT_BEGIN(mri_countdown)
     IF_STR_EQUAL(LW(0), STRING("mri_01"))
         CALL(evt_sub_countdown_set_restart_time, 100000)
     END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_FRAMES(5)
 #endif
     LOOP(0)

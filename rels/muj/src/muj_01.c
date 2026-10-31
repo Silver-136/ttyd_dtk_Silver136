@@ -1,6 +1,7 @@
 // muj_01 (無人島, Keelhaul Key): the castaways' camp: the shop and the inn, the sailors and the
 // dancers, and the crew's homesickness, split and persuasion (kyoshu_event, nakamaware_event, settoku_event).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_urouro.h"
 #include "evt/evt_window.h"
@@ -72,7 +73,7 @@ static EvtWord garawaru_init[39];
 static EvtWord garawaru_talk[270];
 static EvtWord marco_init[31];
 EvtWord marco_kyorokyoro[28];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord marco_talk[848];
 #else
 static EvtWord marco_talk[831];
@@ -556,7 +557,7 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_88_01"), 0, 0)
         END_INLINE_EVENT
         WAIT_MS(3000)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         IF_INT_EQUAL(LF(10), 0)
             CALL(evt_msg_print, 0, STRING("stg5_muj_89"), 0, STRING("party"))
             ELSE
@@ -2066,7 +2067,7 @@ static EVT_BEGIN(sekai_yami_evt)
     // Someone screams as the darkness spreads.
     CALL(evt_msg_print, 0, STRING("stg8_dark_06"), 0, 0)
     BEGIN_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         WAIT_MS(100)
         LOOP(1)
 #else
@@ -2078,14 +2079,14 @@ static EVT_BEGIN(sekai_yami_evt)
             CALL(evt_fade_entry, FADE_OUT_BLACK, 0, 255, 255, 255)
             WAIT_MS(100)
             CALL(evt_fade_entry, FADE_IN_BLACK, 0, 255, 255, 255)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             WAIT_MS(400)
 #else
             WAIT_MS(100)
 #endif
         END_LOOP
     END_INLINE_EVENT
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     WAIT_MS(1200)
 #else
     WAIT_MS(1000)

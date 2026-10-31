@@ -33,7 +33,7 @@ typedef struct FakerParam {
     f32 size;
     FakerStatus status;
     s32 statusFlags;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     u16 commandDisabled[2];
 #endif
     s16 currentHp;
@@ -47,7 +47,7 @@ static USER_FUNC(_anime_load_wait);
 USER_FUNC(_gullible_party_info_init);
 USER_FUNC(_load_param);
 USER_FUNC(_save_param);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 USER_FUNC(faker_mario_sync_max_moves);
 #endif
 static USER_FUNC(vivian_comeback);
@@ -179,7 +179,7 @@ USER_FUNC(_save_param) {
     }
     p->size = party->sizeMultiplier;
     p->statusFlags = party->statusFlags;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     p->commandDisabled[0] = party->usCommandDisabled[0];
     p->commandDisabled[1] = party->usCommandDisabled[1];
 #endif
@@ -217,7 +217,7 @@ USER_FUNC(_load_param) {
     }
     party->sizeMultiplier = p->size;
     party->statusFlags = p->statusFlags;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     party->usCommandDisabled[0] = p->commandDisabled[0];
     party->usCommandDisabled[1] = p->commandDisabled[1];
 #endif
@@ -814,7 +814,7 @@ EVT_BEGIN(phase_event_fmario)
             CALL(btlevtcmd_SetUnitWork, LW(3), SHADOW_TAIL_WORK_X, LW(0))
             CALL(btlevtcmd_SetUnitWork, LW(3), SHADOW_TAIL_WORK_Y, LW(1))
             CALL(btlevtcmd_SetUnitWork, LW(3), SHADOW_TAIL_WORK_Z, LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             CALL(faker_mario_sync_max_moves, LW(3))
 #endif
             WAIT_FRAMES(1)
@@ -1496,7 +1496,7 @@ USER_FUNC(_gullible_party_info_init) {
                 break;
         }
         p->maxFp = p->currentFp = pouch->baseMaxFP;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         p->commandDisabled[0] = 0;
         p->commandDisabled[1] = 0;
 #endif
@@ -1504,7 +1504,7 @@ USER_FUNC(_gullible_party_info_init) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** US only: restore the moves of the unit for this turn. */
 // US only: set this turn's maximum move count to the remaining-move count.
 USER_FUNC(faker_mario_sync_max_moves) {

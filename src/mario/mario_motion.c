@@ -1,6 +1,7 @@
 // Mario's motion table and motion changes (marioChgMot), jump and fall parameters, and the checks that start
 // jumps, hammer, spin and the paper transformations from the controls.
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "mario/mario.h"
 #include "mario/mariost.h"
@@ -79,7 +80,7 @@ MarioMotTblEntry marioMotTbl[] = {
     {mot_walk, NULL, NULL},
     {mot_dash, NULL, NULL},
     {mot_jump, NULL, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {mot_jumpNpc, NULL, mot_jumpNpc_post},
 #else
     {mot_jumpNpc, NULL, NULL},
@@ -143,7 +144,7 @@ void marioChgMoveMotion(void) {
         allPartyForceRideOn();
         return;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((u16)(mario->currMotionId - MARIO_MOTION_DAMAGE) <= 1) {
         return;
     }
@@ -666,7 +667,7 @@ void marioFall(void) {
         mot_fall_roll();
         return;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK)) {
         rub = marioGetRub(PAD_BUTTON_A, &a, &b, &c);
         if (mario->buttonHold & PAD_BUTTON_A) {
@@ -685,7 +686,7 @@ void marioFall(void) {
             mario->position.y += spd;
         } else {
             mario->position.y = y;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (!(mario->trigFlags & MARIO_TRIG_FLAG_JABARA_MOVE_CHK) && (mario->trigFlags & MARIO_TRIG_FLAG_JABARA_CHK) && marioPriCheckJabara() && a != -1 && rub >= 0) {
 #else
             if (marioPriCheckJabara() && a != -1 && rub >= 0) {
@@ -799,7 +800,7 @@ void marioLandOn(void) {
         }
         return;
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (mario->controlStickSensitivity > 0.0f && !(mario->trigFlags & MARIO_TRIG_FLAG_START_JABARA_SPIN) && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
 #else
     if (mario->controlStickSensitivity > 0.0f && !(mario->flags & MARIO_FLAG_FORCED_MOVEMENT)) {
@@ -814,7 +815,7 @@ void marioLandOn(void) {
             return;
         }
         if (!(mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (marioPriCheckJabara()) {
                 if (mario->buttonHold & PAD_BUTTON_A) {
                     marioChgMot(MARIO_MOTION_STAY);

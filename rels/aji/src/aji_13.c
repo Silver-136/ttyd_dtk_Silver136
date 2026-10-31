@@ -43,7 +43,7 @@
 
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling);
 BOOL hitIsGroup(HitEntry* target, HitEntry* group);
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
 #else
 #include "memory.h"
 #endif
@@ -641,7 +641,7 @@ EVT_BEGIN(move_up_down)
         END_IF
         IF_INT_NOT_EQUAL(LW(3), 0)
             IF_INT_NOT_EQUAL(GF(1), 0)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
                 MULTIPLY_FLOAT(LW(0), FLOAT(100.0f))
 #endif
                 GOTO(5)
@@ -656,7 +656,7 @@ EVT_BEGIN(move_up_down)
             IF_INT_EQUAL(GF(1), 0)
                 SET_VALUE(LW(8), LW(4))
                 ELSE
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 MULTIPLY_FLOAT(LW(0), FLOAT(100.0f))
 #endif
                 SET_VALUE(LW(8), LW(0))

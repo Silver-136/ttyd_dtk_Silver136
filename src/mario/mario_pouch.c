@@ -1,6 +1,7 @@
 // Mario's pouch (save data): items, badges, coins, HP/FP, Star Points and level, partners, Star Pieces and
 // Shine Sprites, the item and badge sorts.
 
+#include "version.h"
 #include "mario/mario_pouch.h"
 #include "driver/msgdrv.h"
 #include "mario/mario_party.h"
@@ -9,7 +10,7 @@
 #include "data/item_data.h"
 #include "memory.h"
 #include <string.h>
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 #include "driver/swdrv.h"
@@ -94,7 +95,7 @@ void pouchInit(void) {
             party->techLevel = 0;
         }
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     strcpy(mpp->yoshiName, msgSearch("name_party3"));
 #else
     strcpy(mpp->yoshiName, "チビヨッシー");
@@ -120,7 +121,7 @@ ItemType pouchKeepItem(s32 id) {
 ItemType pouchHaveBadge(s32 id) {
     return mpp->badges[id];
 }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 ItemType pouchEquipBadge(s32 id) {
     return mpp->equippedBadges[id];
 }
@@ -471,7 +472,7 @@ void pouchHiraToKata(const char* src, char* dst) {
     u16* s = (u16*)src;
     u16* d = (u16*)dst;
     s32 i;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((u32)gp->language == LANGUAGE_JP) {
         s = (u16*)src; /* FAKE: s and d re-assigned (both already hold these values) inside the language branch */
         d = (u16*)dst;
@@ -508,7 +509,7 @@ void pouchHiraToKata(const char* src, char* dst) {
 #endif
 
 static inline void pouchAiueoConv(const char* src, char* dst) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     u16* s;
     u16* d;
     s32 len = strlen(src) / 2;
@@ -519,7 +520,7 @@ static inline void pouchAiueoConv(const char* src, char* dst) {
 #endif
     u16 c;
     s32 i;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((u32)gp->language == LANGUAGE_JP) {
         s = (u16*)src; /* FAKE: s and d set inside the language branch, the same spelling as in pouchHiraToKata */
         d = (u16*)dst;
@@ -614,7 +615,7 @@ void pouchSortItem(s32 mode) {
     BOOL swap;
     s16 t2, t1;
     PouchData* pp[1];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s16 bn;
     s16 bj;
     const char* idb;
@@ -666,7 +667,7 @@ void pouchSortItem(s32 mode) {
         memcpy(pp[0]->keyItems, keys, sizeof(keys));
     }
     if ((u32)(mode - 4) <= 2 || (u32)(mode - 11) <= 1 || mode == 13) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         /* FAKE: block-scoped (shadowing j/i) locals and separate sort counter m steer register colouring */
         ItemData* a;
         ItemData* b;
@@ -688,7 +689,7 @@ void pouchSortItem(s32 mode) {
             badges[n] = 0;
             equipped[n] = 0;
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         for (m = 0; m < i - 1; m++) {
             for (j = m + 1; j < i; j++) {
                 BOOL swap;
@@ -741,7 +742,7 @@ void pouchSortItem(s32 mode) {
                     }
                 }
                 if (swap) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     t1 = badges[m];
                     t2 = equipped[m];
                     badges[m] = badges[j];

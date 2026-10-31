@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/types.h>
 #include "evt/evt_cmd.h"
 #include "sdk/texPalette.h"
@@ -121,7 +122,7 @@ typedef struct WinLogPage {
     f32 y;          // 0x8
     f32 ty;         // 0xC
     s32 num;        // 0x10
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 page;       // US only: page shown in the "%d/%d" counter
 #endif
     s32 cursor;     // 0x14

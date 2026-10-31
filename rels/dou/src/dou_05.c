@@ -1,6 +1,7 @@
 // dou_05 (洞窟, Pirate's Grotto): room with waterfalls, a big door opened by a blue switch (story 245) and a lock opened with the Grotto Key.
 // Save block, a badge chest and a hidden brick; doors to dou_03 and dou_06.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -281,7 +282,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_item_entry, STRING("item00"), ITEM_DEFEND_PLUS_P, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
 #else
     CALL(evt_item_entry, STRING("item00"), ITEM_DAMAGE_DODGE_P, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)

@@ -1,5 +1,6 @@
 // Pit of 100 Trials battle unit: the Ice Puff (`bllizard`): parts, stats, poses and AI scripts.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "eff/n64/eff_kumokumo_n64.h"
 #include "evt/evt_cmd.h"
@@ -176,7 +177,7 @@ static BattleWeapon weapon_bllizard_bllizard_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed
@@ -203,7 +204,7 @@ static BattleWeapon weapon_bllizard_bllizard_attack = {
     0, 0, 0, 0, 0, 0, 0, 0, // sleepChance..poisonTime
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, // burnTime
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     60, // freezeChance
 #else
     30, // freezeChance

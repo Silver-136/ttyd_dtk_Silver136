@@ -1,5 +1,6 @@
 // Mario's jump, fall and landing motions: jump data tables and mot_jump, mot_fall, mot_land and mot_upstairs.
 
+#include "version.h"
 #include "sfx_name_word.h"
 #include "mario/mario_hit.h"
 #include "koopa_motion.h"
@@ -9,7 +10,7 @@
 #include "mot/mot_jump.h"
 #include "mot/mot_stay.h"
 #include "mot/mot_jabara.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 #include "dolphin/types.h"
@@ -54,7 +55,7 @@ void marioPreJump(void) {
     clear_hitobj_ride();
     marioSetJumpPara();
     mario->lastGroundPos = mario->position;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     mario->jumpStartSpeed = mario->baseSpeed;
 #endif
 }
@@ -359,7 +360,7 @@ static inline void jumpSfx(MarioWork* mario) {
     psndSFXOn_3D(SFX_NAME_WORD(id), &mario->position);
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // Descriptive name (not in the symbol maps).
 void mot_jumpNpc_post(void) {
     MarioWork* mario = marioGetPtr();
@@ -490,7 +491,7 @@ void mot_fall(void) {
         mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
         mario->flags &= ~MARIO_FLAG_IS_JUMPING;
         mario->flags |= MARIO_FLAG_IS_FALLING;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_MOVE_CHK;
         mario->trigFlags &= ~MARIO_TRIG_FLAG_START_JABARA_SPIN;
 #endif
@@ -524,7 +525,7 @@ void mot_fall(void) {
         break;
     }
     mario->airTimer++;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     mario->trigFlags &= ~MARIO_TRIG_FLAG_JABARA_CHK;
     if (marioPriCheckJabara() && mario->jumpStartSpeed == 0.0f && mario->jumpPeakAirTime != 0 && mario->jumpPeakAirTime < mario->airTimer) {
         if (mario->airTimer < 0x12) {

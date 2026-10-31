@@ -1,6 +1,7 @@
 // The Great Tree (mri) battle unit: Poison Puff (dokugassun): its parts, defence/status tables, and the attack, poison
 // gas and barrier events.
 
+#include "version.h"
 #include "eff/n64/eff_vapor_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -228,7 +229,7 @@ static BattleWeapon weapon_dokugassun_poisongas_attack = {
     0, NULL, // itemId..description
     100, // baseAccuracy
     0, 0, // baseFpCost..baseSpCost
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     2, // superguardsAllowed
 #else
     0, // superguardsAllowed

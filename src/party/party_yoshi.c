@@ -1,5 +1,6 @@
 // Yoshi: partner init, follow, the ride (Mario on Yoshi's back) and the flutter jump.
 
+#include "version.h"
 #include "dolphin/types.h"
 #include "eff/eff_magic1_n64.h"
 #include "driver/animdrv.h"
@@ -663,7 +664,7 @@ void yoshi_use(PartyEntry* party) {
             }
             yoshiAddFloorMove(party);
             partyChkGnd(party);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             movePos(&party->position.x, &party->position.z, mario->hitobjFront ? -0.1f : 0.1f, toMovedir(mario->displayDirection));
 #endif
             if (party->useStruct) {
@@ -693,7 +694,7 @@ void yoshi_use(PartyEntry* party) {
 
     switch (party->useMotionId) {
         case 20:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             YOSHI_WORK(party)->dir = (party->displayDirectionTarget >= 90.0f && party->displayDirectionTarget <= 270.0f) ? 1 : -1;
 #else
             YOSHI_WORK(party)->dir = (mario->displayDirection >= 90.0f && mario->displayDirection <= 270.0f) ? 1 : -1;
@@ -1065,7 +1066,7 @@ void inertia(PartyEntry* party) {
     s32 dir;
 
     if (!sx) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (yoshiGetStatus() != YOSHI_STATUS_FLUTTER) {
             vz = vx = 0.0f;
         } else {
@@ -1349,7 +1350,7 @@ void checkWall(PartyEntry* party, f32 spd, f32 dir) {
             yoshi_damageToge(party);
         }
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     partyChkWallAround(party, &pos, spd, dir, party->width, mario->wPlayerCollisionBox.y);
 #else
     marioChkWallAround(&pos, 1, spd, dir, party->width, mario->wPlayerCollisionBox.y);

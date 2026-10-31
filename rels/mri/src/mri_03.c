@@ -1,6 +1,7 @@
 // mri_03 (巨木の中, The Great Tree): the jail: the red and blue cells (red_jail_open, blue_jail_open) holding
 // the Puni Elder and the Punies, the Elder's rescue and the Punies joining Mario.
 
+#include "version.h"
 #include "mri_puni.h"
 #include "driver/animdrv.h"
 #include "driver/fadedrv.h"
@@ -77,13 +78,13 @@ static EvtWord evt_unlock00[6];
 EvtWord evt_unlock00_01[4];
 s32 key_table00[2];
 EvtWord evt_check00[23];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord blue_jail_open[60];
 #else
 EvtWord blue_jail_open[65];
 #endif
 EvtWord evt_opendoor01[19];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord evt_unlock01[9];
 #else
 static EvtWord evt_unlock01[8];
@@ -96,7 +97,7 @@ static EvtWord mario_kirimomi_event[50];
 EvtWord party_kirimomi_event[57];
 s32 JailAwayTable_New[15];
 EvtWord kinoko_small[35];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord guide_sister[769];
 #else
 EvtWord guide_sister[775];
@@ -824,7 +825,7 @@ EVT_END()
  */
 EVT_BEGIN(blue_jail_open)
     SET_VALUE(GSWF_MRI_03_BLUE_JAIL_OPENED, 1)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(evt_mario_key_onoff, 0)
 #endif
     WAIT_MS(1000)
@@ -841,11 +842,11 @@ EVT_BEGIN(blue_jail_open)
     END_LOOP
     CALL(evt_hitobj_onoff, STRING("A_hako_l_01"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("S_hako_l1"), 1, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(guide_sister)
 #endif
     CALL(evt_mario_key_onoff, 1)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     SPAWN_EVENT(PTR(guide_sister))
     CALL(evt_exit_case_evt)
 #endif
@@ -866,7 +867,7 @@ EVT_END()
  * Starts the blue cell opening scene.
  */
 static EVT_BEGIN(evt_unlock01)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
 #else
@@ -1227,7 +1228,7 @@ EVT_END()
  * Sets the story to STG2_20_PUNIO_PETUNI.
  */
 EVT_BEGIN(guide_sister)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     // The Punies step back from the opened blue cell and Mario and his partner relax.
     CALL(evt_mario_key_onoff, 0)
 #endif
@@ -1432,7 +1433,7 @@ EVT_BEGIN(guide_sister)
     END_IF
     SET_VALUE(GSW_STORY_PROGRESS, STG2_20_PUNIO_PETUNI)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(evt_mario_key_onoff, 1)
 #endif
     RETURN

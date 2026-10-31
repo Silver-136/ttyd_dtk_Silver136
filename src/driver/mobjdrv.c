@@ -1,6 +1,7 @@
 // Map object (mobj) driver: blocks, item boxes, switches and the other interactive map objects:
 // their update, hit checks and drawing.
 
+#include "version.h"
 #include "driver/mobjdrv.h"
 #include "driver/mapdrv.h"
 #include "driver/npcdrv.h"
@@ -721,7 +722,7 @@ void mobjMain(void) {
             continue;
         }
         // FAKE: `gp->inBattle != 0 ||` is always false here; without it the object changes
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8)) && !(entry->flags & MOBJ_FLAG_PAPER_TEX)) {
 #else
         if (gp->inBattle == 0 && (gp->inBattle != 0 || ((u32)fbat > 1 && fbat != 8))) {

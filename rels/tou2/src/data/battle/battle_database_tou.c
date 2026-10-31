@@ -1,3 +1,4 @@
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_weapon_power.h"
@@ -1741,7 +1742,7 @@ NpcSetupBattleInfo btlsetup_tou_tbl[] = {
         -1, // swFlag
         NULL, // altSelect
         btlgrpsel_tou_btlno_tou_01_24_off, // select
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         (NPC_BATTLE_NO_GAME_OVER | NPC_BATTLE_STORY), // battleFlags
 #else
         NPC_BATTLE_STORY, // battleFlags

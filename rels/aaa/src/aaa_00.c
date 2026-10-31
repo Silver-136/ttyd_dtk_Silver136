@@ -1,6 +1,7 @@
 // aaa_00 (マリオの家, Mario Bros.' house): the prologue, where Parakarry (パレッタ) delivers Peach's letter with the
 // treasure map before the title logo fades in, and the house scenes of the epilogue.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "driver/animdrv.h"
 #include "driver/fadedrv.h"
@@ -59,18 +60,18 @@ static EvtWord door_1_open[12];
 static EvtWord door_1_close[14];
 static DoorParam door_1;
 static EvtWord evt_prologue[713];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord evt_prologue2[196];
 #else
 EvtWord evt_prologue2[193];
 #endif
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord epilogue_evt[328];
 #else
 static EvtWord epilogue_evt[318];
 #endif
 static EvtWord epilogue_npc_entry[68];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 static EvtWord epilogue_evt2[500];
 #else
 static EvtWord epilogue_evt2[495];
@@ -432,7 +433,7 @@ EVT_BEGIN(evt_prologue2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -85, 30, -310)
     CALL(evt_mario_set_dir, 90, 0, 0)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     CALL(evt_mario_adjust_dir)
 #endif
     CALL(evt_party_stop, 0)
@@ -444,7 +445,7 @@ EVT_BEGIN(evt_prologue2)
     CALL(evt_npc_flag_onoff, 1, STRING("ルイージ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_cam3d_evt_set, -376, 154, 65, -63, 75, -247, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_set_dir, 90, 0, 0)
 #endif
     CALL(evt_fade_end_wait)
@@ -553,13 +554,13 @@ static EVT_BEGIN(epilogue_evt)
     // Luigi asks about the "newfangled mail gadget" and Mario jumps for joy.
     CALL(evt_msg_print, 0, STRING("ep_34"), 0, STRING("ルイージ"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_set_dir, 90, 0, 0)
 #endif
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_jump_pos, -128, 30, -196, 400, 1, 20)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_LANDING3"), LW(0), LW(1), LW(2), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_set_dir, 90, 0, 0)
 #endif
     CALL(evt_cam3d_evt_set, -307, 117, 9, -58, 58, -244, 1200, EASING_SINE_IN_OUT)
@@ -638,7 +639,7 @@ static EVT_BEGIN(epilogue_evt2)
     CALL(evt_cam3d_evt_set, -375, 154, 66, -62, 81, -248, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_set_dir, 90, 0, 0)
 #endif
     WAIT_MS(1000)

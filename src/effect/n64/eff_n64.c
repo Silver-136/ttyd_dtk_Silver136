@@ -1,7 +1,8 @@
+#include "version.h"
 #include "eff/eff_n64.h"
 #include "driver/arcdrv.h"
 #include "manager/dvdmgr.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #endif
 #include "memory.h"
@@ -191,7 +192,7 @@ void effTexSetupN64(void) {
     wp->effTextureLoaded = FALSE;
     wp->effTexture = (TEXPalette*)arcOpen("effect_n64.tpl", 0, 0);
     if (wp->effTexture == NULL) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         lang = (u32)gp->language == LANGUAGE_JP ? "jp" : "us";
         sprintf(path, "%s/e/%s/effect_n64.tpl", getMarioStDvdRoot(), lang);
 #else

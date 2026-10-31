@@ -1,6 +1,7 @@
 // Break banner: a row of language-specific letter sprites that drop in with star dust, bounce, then fly off.
 // Spawned by the battle break slot.
 
+#include "version.h"
 #include "eff/eff_break.h"
 #include "driver/dispdrv.h"
 #include "mario/mariost.h"
@@ -19,7 +20,7 @@ typedef struct EffBreakWork {
     f32 scale;     // 0x20
 } EffBreakWork;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /**
  * Effect texture ids of the banner's letter sprites, left to right, one list per language (Japanese, English,
  * German, French, Spanish, Italian); the Spanish banner has seven letters. Indexed through texid_tbl.
@@ -73,7 +74,7 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     s32 count;
     s32 i;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     GXTexObj texObj;
     f32 a;
     f32 b;
@@ -103,7 +104,7 @@ EffectEntry* effBreakEntry(s32 type, s32 duration, f32 x, f32 y, f32 z) {
     work->scale = 2.0f;
     w = work + 1;
     for (i = 1; i < effect->count; i++, w++) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         // a: centre of this letter (letters 72 apart), b: half the word width; the texture objects fetched in
         // these loops are not used
         a = 0.0f;
@@ -249,7 +250,7 @@ void effBreakDisp(CameraId cameraId, EffectEntry* effect) {
     width = 48.0f;
     work++;
     for (i = 1; i < effect->count; i++, work++) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         effGetTexObj(texid_tbl[gp->language].ids[i - 1], &texObj);
 #else
         effGetTexObj(texid_tbl[gp->language != LANGUAGE_JP][i - 1], &texObj);

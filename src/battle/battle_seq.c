@@ -1,5 +1,6 @@
 // Battle sequence: the phase and turn flow, and the action, move and command-selection steps of a battle.
 
+#include "version.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_seq.h"
 #include "battle/battle.h"
@@ -1776,7 +1777,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000046:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->currentHp > 0 && unit->usCommandDisabled[0]) {
@@ -1794,7 +1795,7 @@ void btlseqTurn(BattleWork* wp) {
             break;
 
         case 0x3000048:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             for (i = 0; i < BATTLE_UNIT_MAX; i++) {
                 unit = BattleGetUnitPtr(wp, i);
                 if (unit && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) && unit->currentHp > 0 && unit->usCommandDisabled[1]) {

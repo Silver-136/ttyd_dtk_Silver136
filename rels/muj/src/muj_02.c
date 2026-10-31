@@ -1,6 +1,7 @@
 // muj_02 (無人島, Keelhaul Key): the jungle with the pipe to the sewers (tik_17) and the couple's
 // lost wedding ring (lost_wedding_ring); Fuzzies.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
@@ -34,7 +35,7 @@
 #include "data_tables.h"
 #include "mario/mario_pouch.h"
 #include "manager/evtmgr_cmd.h"
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 #include "mario/mariost.h"
 #include "evt/evt_npc.h"
 #include "driver/hitdrv.h"
@@ -66,7 +67,7 @@ static EvtWord evt_kusa_2[20];
 static EvtWord evt_kusa_6[20];
 static TreeAccess tree_tbl[7];
 static KusaAccess kusa_tbl[7];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord muj_02_init_evt[115];
 #else
 EvtWord muj_02_init_evt[104];
@@ -582,7 +583,7 @@ EVT_END()
 static TreeAccess tree_tbl[] = {
     {5, "A_treeA_01", "treeA_01_m", "treeA_01_ha", 0, NULL},
     {5, "A_treeA_02", "treeA_02_m", "treeA_02_ha", 0, NULL},
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     {5, "A_treeB_01", "treeB_01_m", "treeB_01_ha", 0, NULL},
     {5, "A_treeB_02", "treeB_02_m", "treeB_02_ha", 0, NULL},
     {5, "A_treeB_03", "treeB_03_m", "treeB_03_ha", 0, NULL},
@@ -631,12 +632,12 @@ EVT_BEGIN(muj_02_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_npc_check_delete, STRING("チョロボン２"))
 #endif
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_59_ROGUEPORT_DOCK)
         CALL(evt_npc_check_delete, STRING("チョロボン１"))
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         CALL(evt_npc_check_delete, STRING("チョロボン２"))
 #endif
         CALL(evt_npc_check_delete, STRING("チョロボン７"))
@@ -647,13 +648,13 @@ EVT_BEGIN(muj_02_init_evt)
     CALL(evt_eff64, STRING("sunlight"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -200, 60, -90, ITEM_HEAD_RATTLE, 0, GSWF_MUJ_02_HEAD_RATTLE_BADGE_BLOCK, 1)
     CALL(evt_mobj_badgeblk, STRING("mobj_hatena"), -135, 0, 135, ITEM_COURAGE_SHELL, 0, GSWF_MUJ_02_COURAGE_SHELL_BLOCK, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_43_X_NAUTS_RETREAT)
         SET_VALUE(LW(0), PTR(tree_tbl_treeb_evt))
         ELSE
 #endif
     SET_VALUE(LW(0), PTR(tree_tbl))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SET_VALUE(GSWF_MUJ_02_KEEL_MANGO_TREE, 1)
     END_IF
 #endif
@@ -665,14 +666,14 @@ EVT_BEGIN(muj_02_init_evt)
 EVT_END()
 
 void printCount(CameraId camera, void* param) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     char buf[32];
 #else
     char buf[36];
 #endif
     s32 n;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     n = evtGetValue(NULL, GW(0));
     FontDrawStart();
     switch ((u32)gp->language) {

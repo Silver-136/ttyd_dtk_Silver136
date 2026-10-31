@@ -1,6 +1,7 @@
 // aji_09 (敵のアジト, X-Naut Fortress): the locker room: the changing booths (kou) and lockers (rokka) where
 // Peach puts on an X-Naut uniform (peach_evt_fuku_g).
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -666,7 +667,7 @@ EVT_BEGIN(peach_evt_kou2_out)
 EVT_END()
 
 EVT_BEGIN(s_bero_out)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mario_key_onoff, 0)
 #endif
     IF_INT_EQUAL(GSWF_AJI_PEACH_IN_UNIFORM, 0)
@@ -695,15 +696,15 @@ EVT_BEGIN(s_bero_out)
         CALL(evt_fade_set_mapchange_type, 0, 0, 0, 9, 300)
         CALL(evt_bero_mapchange, STRING("aji_17"), STRING("w_bero"))
         ELSE
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
         CALL(evt_mario_key_onoff, 0)
 #endif
         CALL(evt_msg_print, 0, STRING("peach_aji_155_01"), 0, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     END_IF
 #endif
         CALL(evt_mario_key_onoff, 1)
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
     END_IF
 #endif
     RETURN

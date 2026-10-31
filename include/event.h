@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "version.h"
 #include <dolphin/types.h>
 
 typedef struct EventData {
@@ -10,7 +11,7 @@ typedef struct EventData {
     u16 id;                  // 0x4
     const char* textId;      // 0x8
     const char* nameJp;      // 0xC
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     const char* nameEn;      // 0x10
 #endif
     const char* mapName;     // 0x10
@@ -20,7 +21,7 @@ typedef struct EventData {
 
 typedef struct EventStage {
     const char* name; // 0x0
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     const char* nameEn; // 0x4
 #endif
     EventData* data;  // 0x4

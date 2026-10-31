@@ -1,6 +1,7 @@
 // Script commands that control NPCs: entry, position, movement, jumps, animations, flags and
 // battle setup (npcdrv).
 
+#include "version.h"
 #include "evt/evt_npc.h"
 #include "party.h"
 #include "mario/mario_party.h"
@@ -1981,7 +1982,7 @@ USER_FUNC(evt_npc_battle_start) {
     info = &fbat->info;
     if (isFirstCall) {
         fbat->target = npc;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         marioFBattlePrepare();
 #endif
         marioCtrlOff();
@@ -2018,7 +2019,7 @@ USER_FUNC(evt_npc_wait_battle_end) {
         partyCtrlOn();
     }
     L_psndBGM_stop();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     marioFBattlePost();
 #endif
     return EVT_RETURN_DONE;
@@ -2785,7 +2786,7 @@ USER_FUNC(evt_fbat_trans_floor_position) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** US-only: like evt_fbat_trans_floor_position, but also probes at x +/- width/2 and keeps the highest floor */
 // US-only: like evt_fbat_trans_floor_position, but also probes at x +/- width/2 and keeps the highest floor
 USER_FUNC(evt_fbat_trans_floor_position_wide) {

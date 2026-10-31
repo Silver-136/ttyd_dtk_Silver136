@@ -1,6 +1,7 @@
 // eki_03 (駅, Riverside Station): paper-panel poster puzzle room with a power-up block and bricks
 // Thunder Rage and HP Plus items; doors to eki_01 and eki_04.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
@@ -54,7 +55,7 @@ EvtWord evt_poster_12[22];
 EvtWord evt_poster_13[7];
 EvtWord evt_poster_14[7];
 EvtWord evt_poster_15[7];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord eki_03_init_evt[470];
 #else
 EvtWord eki_03_init_evt[471];
@@ -334,7 +335,7 @@ EVT_BEGIN(eki_03_init_evt)
     // The HP Plus item, the Shine Sprite block and the brick blocks (one holds a Thunder Rage).
     CALL(evt_item_entry, STRING("item"), ITEM_HP_PLUS, -550, 220, -50, ITEM_TYPE_STILL, GSWF_EKI_03_HP_PLUS, 0)
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 450, 100, 10, 0, GSWF_SHINE_36, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL(evt_mobj_blk, STRING("blk01"), 250, 300, -100, 0, 0, LSWF_EKI_03_BRICK_BLK01)
 #else
     CALL(evt_mobj_brick, STRING("blk01"), 250, 300, -100, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF_EKI_03_BRICK_BLK01)

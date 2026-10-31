@@ -1,5 +1,6 @@
 // Countdown timer: the on-screen time limit that timed events start, save, restart and end.
 
+#include "version.h"
 #include "countdown.h"
 
 #include "driver/camdrv.h"
@@ -36,7 +37,7 @@ void countDownSaveReStart(void) {
     if ((work->flags & COUNTDOWN_FLAG_RUNNING) != 0) {
         u32 ticks = OS_TIMER_CLOCK / 1000;
         s64 ms = work->elapsed / ticks;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         s32 rem = work->limit - ms;
         if (rem < 0) {
             rem = 0;
@@ -53,7 +54,7 @@ void countDownSaveReStart(void) {
         } else {
             wp->sfxId = psndSFXOn("SFX_STG7_ALART_WARNING1");
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         wp->flags &= ~COUNTDOWN_FLAG_TIME_UP;
 #endif
     }

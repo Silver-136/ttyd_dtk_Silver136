@@ -1,6 +1,7 @@
 // Script commands that start effects by effect-set name: evt_eff for the GameCube effects,
 // evt_eff64 for the N64-style effects.
 
+#include "version.h"
 #include "eff/n64/eff_thunderflare_n64.h"
 #include "mario/mario.h"
 #include "evt/evt_eff.h"
@@ -952,7 +953,7 @@ USER_FUNC(evt_eff_fukidashi) {
         case FUKIDASHI_AT_PARTNER:
             party = partyGetPtr(marioGetPartyId());
             if (party) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 // US: the Flurrie bubble sits at a fixed height
                 {
                     f32 yy = 2.0f * party->height / 3.0f;

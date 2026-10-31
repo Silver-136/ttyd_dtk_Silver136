@@ -1,6 +1,7 @@
 // Script commands and main functions for map objects (mobj): blocks, switches, save blocks,
 // item boxes, jump stands, locks and Bowser's side-scrolling stage objects.
 
+#include "version.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_story.h"
 #include "evt/evt_sub.h"
@@ -1650,7 +1651,7 @@ EVT_END()
 extern s32 msgWindow_Entry(const char* msg, s32 a, s32 b);
 
 s32 mobj_lock(MapObjectEntry* mobj) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 i;
     s32 item;
 #else
@@ -1689,7 +1690,7 @@ s32 mobj_lock(MapObjectEntry* mobj) {
         if (mobj->typeDataU[0] & 0x80000000) {
             item = 0;
             for (i = 0; ; i++) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 s32* list = mobj->typeDataList[0];
                 s32 r;
                 if (list[i] == -1) {
@@ -2327,7 +2328,7 @@ EVT_BEGIN(mobj_save_blk_sysevt)
         SET_VALUE(GSWF_MAIN_SAVED_SINCE_GOOMBELLA_JOINED, 1)
     END_IF
     SET_VALUE(LW(0), 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     CALL_CHILD(PTR(evt_memcard_save_wrapper))
 #else
     CALL_CHILD(PTR(evt_memcard_save))
@@ -2421,7 +2422,7 @@ USER_FUNC(evt_mobj_save_blk) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 /** Plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit; not in JP. */
 // US-only plain block (MOBJ_Block / MOBJ_PinkBlock) that runs an event when hit.
 s32 mobj_blk(MapObjectEntry* mobj) {
@@ -3308,7 +3309,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             ((MarioWork*)item)->position.y = *joint;
         }
         p = partyGetPtr(marioGetPartyId());
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (p && !(((PartyEntry*)p)->flags & PARTY_FLAG_IS_BEING_USED)) {
 #else
         if (p) {
@@ -3318,7 +3319,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
             }
         }
         p = partyGetPtr(marioGetExtraPartyId());
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (p && !(((PartyEntry*)p)->flags & PARTY_FLAG_IS_BEING_USED)) {
 #else
         if (p) {
@@ -4430,7 +4431,7 @@ USER_FUNC(evt_mobj_koopa_fireber_dodai) {
         npc->hazardFlags |= (KPA_ENCOUNT_STOMP | KPA_ENCOUNT_FIRE | KPA_ENCOUNT_STAR | KPA_ENCOUNT_MOBJ);
         npc->position.x = x;
         npc->position.y = 25.0f + y + 25.0f * i;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         npc->position.z = 175.0f + z + i;
 #else
         npc->position.z = 175.0f + z;

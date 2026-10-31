@@ -1,6 +1,7 @@
 // Game start-up and the main loop: marioStInit initialises every driver, marioStMain/marioStDisp run them each
 // frame; also the DVD error check thread and the rumble check.
 
+#include "version.h"
 #include "mario/mariost.h"
 
 #include "battle/battle.h"
@@ -73,7 +74,7 @@ GlobalWork* gp = &marioSt;
 //.sbss
 OSTime none_key;
 s32 _mariostSystemLevel;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 BOOL R_bReset; // before DvdCheckTreadOn: .sbss is emitted in reverse
 #endif
 BOOL DvdCheckTreadOn;
@@ -210,7 +211,7 @@ void marioStInit(void) {
     gp->areaFadeOutDuration = 300;
     gp->areaFadeInType = FADE_OUT_BLACK;
     gp->areaFadeInDuration = 300;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (VIGetTvFormat() == VI_NTSC) {
         gp->framerate = 60;
     } else {
@@ -230,7 +231,7 @@ void marioStInit(void) {
     badgeShop_init(); //Badge Shop
     yuugijou_init(); //Pianta Parlor
     johoya_init(); //information broker (johoya)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 670 * 1024);
 #else
     gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
@@ -428,7 +429,7 @@ void viPostCallback(u32 retraceCount) {
     if (gp->retraceLocalTime > (OS_TIMER_CLOCK * (OSTime)359999999)) {
         gp->retraceLocalTime = (OS_TIMER_CLOCK * (OSTime)359999999);
     }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (!gp->dvdError && !winCheck()) {
         if (!(gp->systemLevelFlags & SYSTEM_LEVEL_STOP_LV3)) {
             gp->systemLv3Time += gp->retraceDeltaTime;
@@ -507,7 +508,7 @@ exitcheck:
 }
 
 void* gcDvdCheckThread(void* param) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 prevStatus = 0;
     s32 stableCount = 0;
     u32 prevRetrace = 0;
@@ -522,7 +523,7 @@ void* gcDvdCheckThread(void* param) {
         msgId = 0;
         switch (DVDGetDriveStatus()) {
             case DVD_STATE_COVER_OPEN:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 msgId = 10;
 #else
                 msgId = 5;
@@ -530,7 +531,7 @@ void* gcDvdCheckThread(void* param) {
                 gp->dvdError = TRUE;
                 break;
             case DVD_STATE_NO_DISK:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 msgId = 11;
 #else
                 msgId = 6;
@@ -538,7 +539,7 @@ void* gcDvdCheckThread(void* param) {
                 gp->dvdError = TRUE;
                 break;
             case DVD_STATE_WRONG_DISK:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 msgId = 11;
 #else
                 msgId = 6;
@@ -546,7 +547,7 @@ void* gcDvdCheckThread(void* param) {
                 gp->dvdError = TRUE;
                 break;
             case DVD_STATE_RETRY:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 msgId = 12;
 #else
                 msgId = 7;
@@ -554,7 +555,7 @@ void* gcDvdCheckThread(void* param) {
                 gp->dvdError = TRUE;
                 break;
             case DVD_STATE_FATAL_ERROR:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 msgId = 13;
 #else
                 msgId = 8;
@@ -567,7 +568,7 @@ void* gcDvdCheckThread(void* param) {
             case DVD_STATE_BUSY:
                 break;
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (DVDGetDriveStatus() != prevStatus) {
             prevStatus = DVDGetDriveStatus();
             stableCount = 0;
@@ -589,7 +590,7 @@ void* gcDvdCheckThread(void* param) {
                 gp->dvdError = FALSE;
             }
         }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (gp->dvdError && stableCount > 10) {
 #else
         if (gp->dvdError) {
@@ -681,7 +682,7 @@ void gcRumbleCheck(void) {
 void gcResetCheck(void) {
     u32 code;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if ((gp->resetType || R_bReset) && (R_bReset = TRUE, !cardIsExec())) {
 #else
     if (gp->resetType) {
@@ -711,7 +712,7 @@ void gcResetCheck(void) {
                     code = OS_RESET_HOTRESET;
                 }
             }
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             code |= gp->language << 2;
 #endif
             OSResetSystem(OS_RESET_RESTART, code, FALSE);

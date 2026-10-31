@@ -1,5 +1,6 @@
 // Slot-machine event (break slot): spinning reels, card symbols and combination effects.
 
+#include "version.h"
 #include "battle/battle_break_slot.h"
 #include "battle/battle.h"
 #include "battle/battle_audience.h"
@@ -539,7 +540,7 @@ void BattleBreakSlot_Main(void) {
                 BattleAudienceAddTargetNum(0.0f, updown);
                 slot->phase = 8;
                 slot->flags &= ~4;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 {
 #else
                 // FAKE: no-op (u32) cast; the plain comparison changes the object
@@ -877,7 +878,7 @@ void BattleBreakSlotDispReel(CameraId camId, void* param) {
 }
 
 void BattleBreakSlot_End(void) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     BattleFree(BattleBreakSlotReelGetPtr(0)->cards);
     BattleFree(BattleBreakSlotReelGetPtr(1)->cards);
     BattleFree(BattleBreakSlotReelGetPtr(2)->cards);

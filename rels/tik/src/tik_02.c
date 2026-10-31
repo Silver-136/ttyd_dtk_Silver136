@@ -1,6 +1,7 @@
 // tik_02 (埋没した都市, Rogueport Sewers): the Blooper (gesso) boss room with the moving floating island (ukishima_move); the
 // way to Petal Meadows (hei_00).
 
+#include "version.h"
 #include "eff/n64/eff_ripple_n64.h"
 #include "eff/n64/eff_hokori_n64.h"
 #include "battle/battle_unit.h"
@@ -462,7 +463,7 @@ static EVT_BEGIN(ukishima_apper)
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, -30, 0, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_1"), 65, LW(0), 0)
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_2"), -71, LW(0), 0)
 #else
@@ -480,7 +481,7 @@ static EVT_BEGIN(ukishima_apper)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -10, 400)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_1"), 65, LW(0), 0)
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_2"), -71, LW(0), 0)
 #else
@@ -497,7 +498,7 @@ static EVT_BEGIN(ukishima_apper)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -10, 0, 400)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_1"), 65, LW(0), 0)
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_2"), -71, LW(0), 0)
 #else
@@ -515,7 +516,7 @@ static EVT_BEGIN(ukishima_apper)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -5, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_1"), 65, LW(0), 0)
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_2"), -71, LW(0), 0)
 #else
@@ -532,7 +533,7 @@ static EVT_BEGIN(ukishima_apper)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -5, 0, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_1"), 65, LW(0), 0)
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_2"), -71, LW(0), 0)
 #else
@@ -550,7 +551,7 @@ static EVT_BEGIN(ukishima_apper)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -1, 200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_1"), 65, LW(0), 0)
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_2"), -71, LW(0), 0)
 #else
@@ -567,7 +568,7 @@ static EVT_BEGIN(ukishima_apper)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -1, 0, 200)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_1"), 65, LW(0), 0)
         CALL(evt_mapobj_trans, 0, STRING("ugo_yuka_2"), -71, LW(0), 0)
 #else
@@ -746,7 +747,7 @@ EVT_BEGIN(geso_battle)
     WAIT_MS(500)
     SET_VALUE(LW(4), STRING("ugo_yuka_1"))
     SET_VALUE(LW(5), STRING("a_ugo_yuka_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_FLOAT_VALUE(LW(6), 65)
     SET_FLOAT_VALUE(LW(7), 32)
 #else
@@ -758,7 +759,7 @@ EVT_BEGIN(geso_battle)
     SPAWN_EVENT(PTR(ukishima_move))
     SET_VALUE(LW(4), STRING("ugo_yuka_2"))
     SET_VALUE(LW(5), STRING("a_ugo_yuka_2"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     SET_FLOAT_VALUE(LW(6), -71)
     SET_FLOAT_VALUE(LW(7), -34)
 #else
@@ -873,7 +874,7 @@ EVT_BEGIN(tik_02_init_evt)
         ELSE
         SET_VALUE(LW(4), STRING("ugo_yuka_1"))
         SET_VALUE(LW(5), STRING("a_ugo_yuka_1"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SET_FLOAT_VALUE(LW(6), 65)
         SET_FLOAT_VALUE(LW(7), 32)
 #else
@@ -885,7 +886,7 @@ EVT_BEGIN(tik_02_init_evt)
         SPAWN_EVENT(PTR(ukishima_move))
         SET_VALUE(LW(4), STRING("ugo_yuka_2"))
         SET_VALUE(LW(5), STRING("a_ugo_yuka_2"))
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         SET_FLOAT_VALUE(LW(6), -71)
         SET_FLOAT_VALUE(LW(7), -34)
 #else

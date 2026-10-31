@@ -1,6 +1,7 @@
 // Partner entries (PartyEntry): creating, removing and drawing partners, poses and paper animations, and the
 // appear positions.
 
+#include "version.h"
 #include "party.h"
 #include "driver/animdrv.h"
 #include "mario/mario_pouch.h"
@@ -1444,7 +1445,7 @@ static inline void partyChgRunM(PartyEntry* party) {
 s32 partyDokanInit(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     party->displayDirectionTarget = revise360(180.0f + mario->displayDirection);
     party->displayDirection = mario->displayDirection;
     party->moveDir = mario->moveDirection;
@@ -1455,7 +1456,7 @@ s32 partyDokanInit(PartyEntry* party) {
         case 2:
         case 3:
             partyPaperOn(party, "p_dokan_y");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             partyChgPaper(party, "PM_D_1A");
             partyChgPoseId(party, 0);
             party->spinSpeed = 30.0f;
@@ -1470,7 +1471,7 @@ s32 partyDokanInit(PartyEntry* party) {
             break;
         case 0:
             party->scale = (Vec){0.0f, 0.0f, 0.0f};
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
@@ -1494,14 +1495,14 @@ s32 partyDokanInit(PartyEntry* party) {
             break;
         case 5:
             partyPaperOn(party, "p_dokan_x");
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             partyChgPaper(party, "PM_D_1A");
             partyChgPoseId(party, 0);
 #endif
             party->spinSpeed = 26.0f;
             party->motionStep = 10;
             party->rotOfsY = 10.0f;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
             party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
             animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
@@ -1570,7 +1571,7 @@ s32 partyDokanInit(PartyEntry* party) {
 s32 partyDokanMain(PartyEntry* party) {
     MarioWork* mario = party->playerPtr;
     s32 n;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     f32 s;
     f32 c;
 #endif
@@ -1579,7 +1580,7 @@ s32 partyDokanMain(PartyEntry* party) {
         case 0:
             party->position = mario->position;
             party->displayDirection = revise360(party->displayDirection + party->spinSpeed);
-#ifndef VERSION_G8ME01
+#if VERSION < VERSION_US
             party->scale.x += 0.05f;
             if (party->scale.x >= 1.0f) {
                 party->scale.x = 1.0f;
@@ -1590,7 +1591,7 @@ s32 partyDokanMain(PartyEntry* party) {
             break;
         case 10:
             party->rot.x += party->spinSpeed;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             party->position = mario->position;
             sincosf(&s, &c, mario->targetYaw);
             party->position.x = mario->position.x + -5.0f * s;
@@ -1604,7 +1605,7 @@ s32 partyDokanMain(PartyEntry* party) {
                     partyChgPaper(party, "PM_D_1B");
                     party->moveFrames = 18;
                     party->motionStep = 101;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     party->flags2 |= PARTY_DISP_FLAG_NO_FLIP;
                     party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
                     animPoseSetMaterialLightFlagOff(party->paperAnimGroup, MATERIAL_LIGHT_PAPER);
@@ -1627,7 +1628,7 @@ s32 partyDokanMain(PartyEntry* party) {
             switch (party->dirKind) {
                 case 0:
                 case 1:
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                     party->position.z -= 0.2f;
 #else
                     party->position.z += -0.2f;
@@ -1827,7 +1828,7 @@ void L_allPartyRideOn(void) {
 void allPartyRideOff(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party && party->runMode == PARTY_RUN_RIDE) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (!(party->trigFlags & PARTY_TRIG_CHG_RUN_MODE)) {
             party->motionStep = 100;
         } else {
@@ -1839,7 +1840,7 @@ void allPartyRideOff(void) {
     }
     party = partyGetPtr(marioGetExtraPartyId());
     if (party && party->runMode == PARTY_RUN_RIDE) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (!(party->trigFlags & PARTY_TRIG_CHG_RUN_MODE)) {
             party->motionStep = 100;
         } else {
@@ -1858,7 +1859,7 @@ void allPartyRideOff(void) {
 void allPartyRideOff2(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     if (party && party->runMode == PARTY_RUN_RIDE) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (!(party->trigFlags & PARTY_TRIG_CHG_RUN_MODE)) {
             party->motionStep = 101;
         } else {
@@ -1870,7 +1871,7 @@ void allPartyRideOff2(void) {
     }
     party = partyGetPtr(marioGetExtraPartyId());
     if (party && party->runMode == PARTY_RUN_RIDE) {
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (!(party->trigFlags & PARTY_TRIG_CHG_RUN_MODE)) {
             party->motionStep = 101;
         } else {
@@ -2258,7 +2259,7 @@ void party_damage_return(PartyEntry* party) {
             break;
         case 20:
             marioGetScreenPos(party->position, &x, &y, &z);
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (y > -100.0f) {
                 party->position.y += 20.0f;
             }

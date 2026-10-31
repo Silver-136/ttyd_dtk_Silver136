@@ -1,5 +1,6 @@
 // Mario's tube (roll) motion: rolling up, moving through small gaps and unrolling.
 
+#include "version.h"
 #pragma defer_codegen on
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
@@ -26,7 +27,7 @@ typedef struct MotRollWork {
     s32 squashTrigger;  // 0x08: nonzero restarts the squash animation (-> squashState 1)
     s32 squashState;    // 0x0C: y-scale squash state machine (1.4 / back to 1.0)
     s32 squashTimer;     // 0x10, never accessed
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     s32 sfxId;          // 0x14: US only, rolling sound (PSND_SFX_MARIO_ROLL_MOVE1), -1 when off
 #endif
 } MotRollWork;          // size 0x14 JP, 0x18 US
@@ -358,7 +359,7 @@ s32 marioRollCancel(void) {
 void mot_roll_post(void) {
     MarioWork* mario = marioGetPtr();
     MarioWork* m = marioGetPtr();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
         psndSFXOff(marioGetPtr()->motRoll->sfxId);
         marioGetPtr()->motRoll->sfxId = -1;
@@ -412,7 +413,7 @@ void marioRollForceCancel(void) {
     MarioWork* mario = marioGetPtr();
     if (mario->currMotionId == MARIO_MOTION_ROLL) {
         MarioWork* m = marioGetPtr();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
             psndSFXOff(marioGetPtr()->motRoll->sfxId);
             marioGetPtr()->motRoll->sfxId = -1;
@@ -493,7 +494,7 @@ void marioReInit_roll(void) {
     memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
     {
         MarioWork* t = marioGetPtr();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (marioGetPtr()->motStruct) {
             marioGetPtr()->motRoll->sfxId = -1;
         }
@@ -581,7 +582,7 @@ void mot_roll(void) {
         memset(marioGetPtr()->motStruct, 0, sizeof(MotRollWork));
         {
             MarioWork* t = marioGetPtr();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (marioGetPtr()->motStruct) {
                 marioGetPtr()->motRoll->sfxId = -1;
             }
@@ -676,7 +677,7 @@ void mot_roll(void) {
         mario->displayDirection = 0.0f;
         {
             MarioWork* m = marioGetPtr();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
                 psndSFXOff(marioGetPtr()->motRoll->sfxId);
                 marioGetPtr()->motRoll->sfxId = -1;
@@ -1109,7 +1110,7 @@ void mot_roll(void) {
     }
     if (mario->baseSpeed) {
         MarioWork* m = marioGetPtr();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (marioGetPtr()->motStruct && (u32)marioGetPtr()->motRoll->sfxId == (u32)-1) {
             marioGetPtr()->motRoll->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_ROLL_MOVE1), &m->position);
 #else
@@ -1120,7 +1121,7 @@ void mot_roll(void) {
         }
     } else {
         MarioWork* m = marioGetPtr();
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         if (marioGetPtr()->motStruct && marioGetPtr()->motRoll->sfxId != -1U) {
             psndSFXOff(marioGetPtr()->motRoll->sfxId);
             marioGetPtr()->motRoll->sfxId = -1;

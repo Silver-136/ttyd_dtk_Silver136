@@ -189,7 +189,7 @@ void _btlSamplingEnemy(BattleWorkWeaponTargets* d) {
             }
             if (flags & TARGET_CLASS_ONLY_MAIN_OR_SEMI_PARTS) {
                 u32 a = part->attributes;
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
                 if (!((a & kMainPart) || (a & kImportantPart) || (a & kSemiImportantPart)) || (a & 0x10) || (a & kNotMainTarget)) {
 #else
                 if (!((a & kMainPart) || (a & kImportantPart) || (a & kSemiImportantPart)) || (a & kNotMainTarget)) {

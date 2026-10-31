@@ -1,5 +1,6 @@
 // Partner table (partyDataTbl): each partner's model and its init, move, use and exit functions, and the partner pose name tables.
 
+#include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "data/party_data.h"
@@ -12,7 +13,7 @@
 #include "party/party_yoshi.h"
 #include "party/party_vivian.h"
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 // US has no local duplicates of these: use the global functions
 #define bomhei_init_800BFBB0 bomhei_init
 #define kuribo_init_800C23B4 kuribo_init

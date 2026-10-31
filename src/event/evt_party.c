@@ -1,6 +1,7 @@
 // Script commands that control the partner: position, movement, poses, flags and the
 // partner-specific actions (Koops, Bobbery, Flurrie, Vivian, Yoshi).
 
+#include "version.h"
 #include "evt/evt_party.h"
 #include "driver/camdrv.h"
 #include "driver/hitdrv.h"
@@ -1046,7 +1047,7 @@ USER_FUNC(evt_party_cloud_breathout) {
     return EVT_RETURN_BLOCK;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 
 /** US only. */
 // US only.

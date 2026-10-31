@@ -82,7 +82,7 @@ EvtWord* irai_start_event[30];
 EvtWord irai_end_event_null[2];
 EvtWord irai_end_event01[13];
 EvtWord irai_end_event04[8];
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EvtWord irai_end_event19[15];
 #endif
 EvtWord* irai_end_event[30];
@@ -300,7 +300,7 @@ EVT_BEGIN(irai_end_event04)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 EVT_BEGIN(irai_end_event19)
     DEBUG_PUT_MSG(STRING("ピートンの依頼キャンセル"))
     CALL(evt_item_delete_check, STRING("wr"), LW(0))
@@ -315,7 +315,7 @@ EVT_END()
 EvtWord* irai_end_event[] = {
     irai_end_event01, irai_end_event_null, irai_end_event_null, irai_end_event04, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
     irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
     irai_end_event_null, irai_end_event_null, irai_end_event19, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
 #else
     irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
@@ -351,7 +351,7 @@ EVT_END()
 
 EVT_BEGIN(gor_irai_main)
     IF_INT_EQUAL(GSWF_TROUBLE_BOARD_EXPLAINED, 0)
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
         BEGIN_INLINE_EVENT
             CALL(evt_mario_set_dir, 270, 200, 0)
         END_INLINE_EVENT
@@ -504,7 +504,7 @@ EVT_BEGIN(gor_irai_tenshu_main)
                 // Mario declined to cancel.
                 CALL(evt_msg_print_add, 0, STRING("irai_12"))
             END_IF
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
             SET_VALUE(LW(0), 1)
 #endif
         END_IF
@@ -844,7 +844,7 @@ USER_FUNC(irai_end_func) {
     return EVT_RETURN_DONE;
 }
 
-#ifdef VERSION_G8ME01
+#if VERSION >= VERSION_US
 
 // US: text centered in a boxW-wide box at x, x-squeezed to maxW; w is the width variable of the caller.
 // A macro, not an inline function: as a function the US float registers change.
