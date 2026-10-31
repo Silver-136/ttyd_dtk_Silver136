@@ -47,6 +47,7 @@ static EvtWord all_fire_attack_event[321];
 static EvtWord wait_event[6];
 
 static USER_FUNC(bubble_copy_status) {
+    // Copy capped current HP and size-change state, then synchronize the new HP gauge.
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
     s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
@@ -277,7 +278,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -659,6 +660,7 @@ static EVT_BEGIN(all_fire_attackEvent_sub)
     RETURN
 EVT_END()
 
+// Only the hit branch advances to the next target; avoidance exits the entire sweep.
 static EVT_BEGIN(all_fire_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

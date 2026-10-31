@@ -283,7 +283,7 @@ EVT_END()
 static EVT_BEGIN(switch1_evt)
     IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
         SET_VALUE(GSWF_LAS_19_SWITCH_1_ON, 1)
-        ELSE
+    ELSE
         SET_VALUE(GSWF_LAS_19_SWITCH_1_ON, 0)
     END_IF
     RETURN
@@ -292,7 +292,7 @@ EVT_END()
 static EVT_BEGIN(switch2_evt)
     IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
         SET_VALUE(GSWF_LAS_19_SWITCH_2_ON, 1)
-        ELSE
+    ELSE
         SET_VALUE(GSWF_LAS_19_SWITCH_2_ON, 0)
     END_IF
     RETURN
@@ -307,10 +307,10 @@ EVT_BEGIN(las_19_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("chgmap_evt"))
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
-        ELSE
+    ELSE
         IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
-            ELSE
+        ELSE
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
         END_IF
     END_IF
@@ -321,7 +321,7 @@ EVT_BEGIN(las_19_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_08_THE_NEW_PATH)
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_futa"), STRING("A_futa"), PTR(cloud_evt))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_futa"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_futa"), 0, 0)
     END_IF
@@ -329,7 +329,7 @@ EVT_BEGIN(las_19_init_evt)
     IF_STR_EQUAL(LW(0), STRING("chgmap_evt"))
         CALL(evt_npc_check_delete, STRING("マホーン１"))
         SPAWN_EVENT(PTR(change_map_evt))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(evt_bero_info_run))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
@@ -337,7 +337,7 @@ EVT_BEGIN(las_19_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
         CALL(evt_npc_check_delete, STRING("マホーン２"))
         CALL(evt_npc_check_delete, STRING("マホーン３"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kai_20"), MAP_OBJ_FLAG_HIDDEN)
@@ -353,12 +353,12 @@ EVT_BEGIN(las_19_init_evt)
         CALL(evt_mobj_switch_float_blk, STRING("switch2"), 450, -320, -45, STRING(""), 0, PTR(switch2_evt), 0)
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
             CALL(evt_mobj_set_anim, STRING("switch1"), STRING("A_3"))
-            ELSE
+        ELSE
             CALL(evt_mobj_set_anim, STRING("switch1"), STRING("S_1"))
         END_IF
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
             CALL(evt_mobj_set_anim, STRING("switch2"), STRING("A_3"))
-            ELSE
+        ELSE
             CALL(evt_mobj_set_anim, STRING("switch2"), STRING("S_1"))
         END_IF
     END_IF

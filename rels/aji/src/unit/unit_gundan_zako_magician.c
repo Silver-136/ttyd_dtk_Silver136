@@ -54,6 +54,7 @@ static USER_FUNC(kanbu_get_id) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
 
+    // Select the first occupied slot with this initial kind, without checking its current HP or alliance.
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit != NULL && unit->initialKind == UNIT_LORD_CRUMP_CHAPTER5) {
@@ -448,7 +449,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -806,7 +807,7 @@ static EVT_BEGIN(hunyahunya_bottle_event)
 EVT_END()
 
 static EVT_BEGIN(yokeyoke_bottle_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_yokeyoke_bottle))
     CALL_CHILD(attack_common_event1)
@@ -908,6 +909,7 @@ static EVT_BEGIN(minimini_bottle_event)
         LABEL(90)
         GOTO(97)
         LABEL(91)
+        // Defence is requested only for the first selected target, even if that target misses.
         IF_INT_EQUAL(LW(10), 0)
             CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         END_IF

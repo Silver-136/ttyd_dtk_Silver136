@@ -542,9 +542,9 @@ EVT_BEGIN(clouda_nakama)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_mov_pos2, 255, LW(2), FLOAT(120.0f))
     CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("necklace"), 2)
+    CALL(evt_item_flag_on, STRING("necklace"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_set_position, STRING("necklace"), 280, 50, 0)
-    CALL(evt_mario_dump_item, 63)
+    CALL(evt_mario_dump_item, ITEM_NECKLACE)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
@@ -952,7 +952,7 @@ EVT_BEGIN(touch_door)
         CASE_BETWEEN(STG2_05_02_FLURRIE_REQUEST, STG2_07_MARIO_VS_SHADOW_SIRENS)
         CALL_CHILD(PTR(clouda_irai_ato))
         CASE_EQUAL(STG2_08_SHADOW_SIRENS_LOSE)
-        CALL(evt_mario_check_key_item, 63, LW(0))
+        CALL(evt_mario_check_key_item, ITEM_NECKLACE, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL_CHILD(PTR(clouda_irai_ato))
             ELSE
@@ -1244,6 +1244,7 @@ void mirror_ball(void* param) {
 }
 
 void flower_disp(CameraId camera, void* param) {
+    // rose_table_direct stores screen x/y and target scale in Vec.z, not depth.
     FlowerWork* wp = param;
     CameraEntry* cam = camGetPtr(camera);
     GXTexObj tex;

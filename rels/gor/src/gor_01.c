@@ -781,7 +781,7 @@ EVT_BEGIN(nancy_init_check)
     CALL(evt_mario_normalize)
     CALL(evt_mario_wait_landon)
     CALL(evt_mario_get_party, LW(0))
-    IF_INT_EQUAL(LW(0), 5)
+    IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
         LOOP(0)
             CALL(evt_mario_party_use_check, LW(0))
             IF_INT_EQUAL(LW(0), 0)
@@ -1902,7 +1902,7 @@ EVT_BEGIN(bottakuru_talk)
         CALL(evt_msg_print, 0, STRING("bottakuru_05"), 0, STRING("me"))
         GOTO(0)
     END_IF
-    IF_INT_GREATER_OR_EQUAL(LW(1), 240)
+    IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
         CALL(evt_sub_get_language, LW(0))
 #ifdef VERSION_G8ME01
         SWITCH(LW(0))
@@ -1947,7 +1947,7 @@ EVT_BEGIN(bottakuru_talk)
     CALL(evt_pouch_add_item, LW(1), LW(0))
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_win_coin_off, LW(12))
-        IF_INT_GREATER_OR_EQUAL(LW(1), 240)
+        IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
             CALL(evt_msg_print_add, 0, STRING("bottakuru_12"))
             ELSE
             CALL(evt_msg_print_add, 0, STRING("bottakuru_13"))
@@ -2889,17 +2889,17 @@ DoorParam door_data_02_f2 = {
 };
 
 USER_FUNC(house03_f1_fade_func) {
-    s32 v = evtGetValue(event, event->args[0]);
+    s32 intensity = evtGetValue(event, event->args[0]);
 
-    mapGrpSetColor("S_i03_f1_naka", (GXColor){v, v, v, 0xFF});
+    mapGrpSetColor("S_i03_f1_naka", (GXColor){intensity, intensity, intensity, 0xFF});
     return EVT_RETURN_DONE;
 }
 
 USER_FUNC(house03_f2_fade_func) {
-    u8 v = evtGetValue(event, event->args[0]);
+    u8 intensity = evtGetValue(event, event->args[0]);
 
-    mapGrpSetColor("S_i03_f2_naka", (GXColor){v, v, v, 0xFF});
-    mapGrpSetColor("S_ie_03_f21_doa", (GXColor){v, v, v, 0xFF});
+    mapGrpSetColor("S_i03_f2_naka", (GXColor){intensity, intensity, intensity, 0xFF});
+    mapGrpSetColor("S_ie_03_f21_doa", (GXColor){intensity, intensity, intensity, 0xFF});
     return EVT_RETURN_DONE;
 }
 
@@ -3625,8 +3625,8 @@ EVT_BEGIN(christine_nakama)
     CALL(evt_cam3d_evt_set, 0, 134, 984, 0, 38, 442, 0, EASING_SINE_IN_OUT)
     CALL(evt_party_stop, 0)
     BEGIN_INLINE_EVENT
-        CALL(evt_pouch_party_join, 1)
-        CALL(evt_mario_set_party_pos, 0, 1, 25, 0, 625)
+        CALL(evt_pouch_party_join, PARTY_MEMBER_GOOMBELLA)
+        CALL(evt_mario_set_party_pos, 0, PARTY_MEMBER_GOOMBELLA, 25, 0, 625)
         CALL(evt_party_set_dir, 0, 270, 0)
         CALL(evt_party_move_pos2, 0, 25, 500, FLOAT(150.0f))
         WAIT_FRAMES(1)
@@ -4836,7 +4836,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
                     CALL(evt_mario_set_pose, STRING("M_S_1"))
                     CALL(evt_msg_print, 0, STRING("irai_16_05"), 0, STRING("チュチュリーナ"))
                     CALL(evt_pouch_get_havebadgecnt, LW(0))
-                    IF_INT_LESS(LW(0), 200)
+                    IF_INT_LESS(LW(0), MAX_BADGES)
                         CALL(evt_msg_continue)
                         CALL(evt_item_entry, STRING("mb"), ITEM_ATTACK_FX_B, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                         CALL(evt_item_get_item, STRING("mb"))
@@ -4912,7 +4912,7 @@ EVT_BEGIN(iri_16_tyutyu_talk)
 #endif
                     WAIT_MS(800)
                     SET_VALUE(LW(8), STRING("チュチュリーナ"))
-                    SET_VALUE(LW(9), 7)
+                    SET_VALUE(LW(9), PARTY_MEMBER_MS_MOWZ)
 #ifdef VERSION_G8ME01
                     CALL_CHILD(all_party_lecture)
 #else
@@ -5232,11 +5232,11 @@ EVT_BEGIN(gor_01_init_evt)
 #ifdef VERSION_G8ME01
         CALL(evt_item_entry, STRING("ドクロジュエル"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
         CALL(evt_item_flag_on, STRING("ドクロジュエル"), 2)
-        CALL(evt_item_status_on, STRING("ドクロジュエル"), 33554432)
+        CALL(evt_item_status_on, STRING("ドクロジュエル"), ITEM_FLAG2_NO_PARTNER)
 #else
         CALL(evt_item_entry, STRING(/*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
         CALL(evt_item_flag_on, STRING(/*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), 2)
-        CALL(evt_item_status_on, STRING(/*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), 33554432)
+        CALL(evt_item_status_on, STRING(/*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), ITEM_FLAG2_NO_PARTNER)
 #endif
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
     END_IF
@@ -6079,7 +6079,7 @@ USER_FUNC(iri_09_item_tbl_make) {
     s32 i;
 
     for (i = 0; i < n; i++) {
-        iri_09_item_tbl[i] = 143;
+        iri_09_item_tbl[i] = ITEM_COURAGE_SHELL;
     }
     iri_09_item_tbl[i] = -1;
     evtSetValue(event, args[1], (EvtWord)iri_09_item_tbl);
@@ -6410,9 +6410,9 @@ EVT_BEGIN(cooking_evt)
                 WAIT_MS(500)
                 CALL(evt_msg_print, 0, STRING("irai_18_004"), 0, STRING("ナンシー"))
                 CALL(evt_mario_set_pose, STRING("M_N_1"))
-                SET_VALUE(LW(13), 183)
-                SET_VALUE(LW(14), 148)
-                SET_VALUE(LW(15), 154)
+                SET_VALUE(LW(13), ITEM_HONEY_SHROOM)
+                SET_VALUE(LW(14), ITEM_MUSHROOM)
+                SET_VALUE(LW(15), ITEM_HONEY_SYRUP)
                 CALL_CHILD(PTR(cooking_evt_sub))
                 CALL(evt_msg_print, 0, STRING("irai_18_005"), 0, STRING("ナンシー"))
                 SET_VALUE(LF(0), 0)
@@ -6630,11 +6630,11 @@ USER_FUNC(chk_cook_msg) {
     s32 item = evtGetValue(event, args[0]);
     s32 msg;
 
-    if (item == 195 || item == 196) {
+    if (item == ITEM_ZESS_DELUXE || item == ITEM_ZESS_DYNAMITE) {
         msg = 0;
-    } else if ((item >= 193 && item <= 197) || item == 232 || item == 200) {
+    } else if ((item >= ITEM_ZESS_DINNER && item <= ITEM_ZESS_TEA) || item == ITEM_ZESS_COOKIE || item == ITEM_ZESS_FRAPPE) {
         msg = 1;
-    } else if (item == 182) {
+    } else if (item == ITEM_MISTAKE) {
         msg = 2;
     } else {
         msg = chk_cook_eff_type(item) + 3;

@@ -482,7 +482,7 @@ EVT_BEGIN(mario_shabon_check)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_set_pose, STRING("M_S_1"))
-    CALL(evt_mario_set_motion, 0)
+    CALL(evt_mario_set_motion, MARIO_MOTION_STAY)
     WAIT_MS(500)
     CALL(evt_party_run, 0)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)

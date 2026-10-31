@@ -200,6 +200,7 @@ EVT_BEGIN(jin_03_kaidan_oku_kesu)
     RETURN
 EVT_END()
 
+// Position 0 keeps the middle stairs, 1 keeps the front stairs, and other values keep the rear stairs.
 EVT_BEGIN(jin_03_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))

@@ -17,7 +17,7 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_SPIN_DONE 0    // 1 ends the sibling loop that spins a thrown bone part (25 degrees per frame); the throw sets 0, the landing 1
+#define UNIT_WORK_SPIN_DONE 0    // 1 ends bone-spin siblings; normal attack sets it at label 98, but the summon script has no local set-to-1
 #define UNIT_WORK_REWARD_GIVEN 1 // 1 once its coins and EXP were paid out (first collapse or death), so they are paid only once
 #define UNIT_WORK_REVIVE_TURNS 2 // turns until it rebuilds itself: fake_dead_event sets 2-4; rebirth_event counts down and revives at 0; attack_event runs rebirth_event while >= 1
 
@@ -121,10 +121,70 @@ static StatusVulnerability regist = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_red_honenoko", "c_karon_r_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
-    {2, "btl_un_red_honenoko", "c_karon_r_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
-    {3, "btl_un_red_honenoko", "c_nagehone_g", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
-    {4, "btl_un_red_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {
+        1, // partNum
+        "btl_un_red_honenoko", // partName
+        "c_karon_r_h", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {0.0f, 35.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 45.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kMainPart | kGuardTargetPart, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
+    {
+        2, // partNum
+        "btl_un_red_honenoko", // partName
+        "c_karon_r_h", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {15.0f, 25.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 0.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
+    {
+        3, // partNum
+        "btl_un_red_honenoko", // partName
+        "c_nagehone_g", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {15.0f, 25.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 0.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
+    {
+        4, // partNum
+        "btl_un_red_honenoko", // partName
+        "c_karon_g_h", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {15.0f, 25.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 0.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
 };
 
 static BattleWeapon weapon_honenoko_attack = {
@@ -163,6 +223,7 @@ static BattleWeapon weapon_honenoko_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+// Red Bones summons a Dull Bones here, not another Red Bones.
 static BattleUnitSetup entry_honenoko = {
     &unit_honenoko, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -311,6 +372,7 @@ static EVT_BEGIN(fake_dead_event)
     RETURN
 EVT_END()
 
+// Reassembly consumes this attack turn, even when the countdown reaches zero.
 static EVT_BEGIN(rebirth_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REVIVE_TURNS, LW(0))
     SUBTRACT(LW(0), 1)
@@ -628,6 +690,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+// Only the size-change duration and strength are copied to the summoned unit.
 static USER_FUNC(honenoko_copy_status) {
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));

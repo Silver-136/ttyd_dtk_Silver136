@@ -22,6 +22,7 @@
 #include "driver/camdrv.h"
 #include "win/win_main.h"
 #include "dolphin/gx.h"
+#include <dolphin/pad.h>
 #include "manager/filemgr.h"
 #include "memory.h"
 #include "system.h"
@@ -469,7 +470,7 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_MS(500)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)

@@ -103,7 +103,7 @@ static DispWork* dwp;
 static FighterData fighterDt[23];
 static FighterData fighterDt_re[21];
 static void rankingControll(void);
-// A macro, not an inline function: as a function the registers at the call sites change.
+// Count the visible fighters preceding the player entry.
 #define GET_RANK(rank, i)                                       \
     rank = 0;                                                   \
     for (i = 0; i < rank_wp->num; i++) {                        \
@@ -136,7 +136,7 @@ static void insert(s32* list, s32 num, s32 from, s32 to);
             }                                                                             \
         }                                                                                 \
     }
-// A macro, not an inline function: as a function rankingControll's registers and local statics change.
+// Find the first listed fighter carrying the requested FighterData flag.
 #define FIND_FLAG(k, list, n, flag)                                 \
     for (k = 0; k < n; k++) {                                       \
         if (fighterDt[rank_wp->entries[list[k]].id].flags & flag) { \
@@ -479,7 +479,7 @@ static void rankingControll(void) {
     for (i = 0; i < nwin; i++) {
         work[i] = rank_wp->entries[win[i]];
     }
-    work[nwin].flags = 4;
+    work[nwin].flags = RANK_FLAG_PLAYER;
     work[nwin].id = 20;
     work[nwin].score = 0;
     for (i = 0; i < nlose; i++) {
@@ -517,6 +517,7 @@ static USER_FUNC(evt_tou_get_next_match) {
         }
     }
     GET_RANK(rank, i);
+    // A kept condition selects the fighter above; otherwise select below when available.
     if (rank > 0) {
         if (flag) {
             evtSetValue(event, args[0], list[rank - 1]);
@@ -666,6 +667,7 @@ USER_FUNC(evt_tou_get_rule_msg2) {
             break;
         }
     }
+    // An unknown rule ID uses the final entry of the selected division table.
     if (i == num) {
         i = num - 1;
     }
@@ -1391,6 +1393,7 @@ EVT_BEGIN(dummy_party_msg_win)
     RETURN
 EVT_END()
 
+// Keep a talkable NPC proxy at the partner position while hiding and stopping the actual party actor.
 EVT_BEGIN(party_npc_replace)
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_get_party, LW(3))
@@ -2126,7 +2129,7 @@ EVT_BEGIN(evt_doku_cake)
     CALL(evt_npc_set_ry, STRING("キノシコワ"), 90)
     WAIT_MS(300)
     CALL(evt_item_entry, STRING("doku_cake"), ITEM_POISONED_CAKE, 20, 25, -25, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-    CALL(evt_item_status_on, STRING("doku_cake"), 33554432)
+    CALL(evt_item_status_on, STRING("doku_cake"), ITEM_FLAG2_NO_PARTNER)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_cake"), 0, PTR(evt_eat_doku_cake), 0)
     WAIT_MS(500)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -130, 0, FLOAT(80.0f), 1)
@@ -2377,6 +2380,7 @@ EVT_BEGIN(evt_michel_7)
     RETURN
 EVT_END()
 
+// Wait for the story-selected NPC, then update the monitor texture and fade while remaining active.
 USER_FUNC(make_monitor) {
     NpcEntry* npc = npcNameToPtr_NoAssert(evtGetValue(NULL, GSW_STORY_PROGRESS) < STG3_34_RETURN_TO_ROGUEPORT ? "\203K\203\223\203X" : "\203L\203m\203V\203R\203\217");
     GansWork* wp;
@@ -2453,6 +2457,7 @@ USER_FUNC(chk) {
 }
 
 // Descriptive name (not in the symbol maps); placeholder unk_tou_0000063c, JP tou .text+0x578. See docs/NAME_PROVENANCE.md.
+// Accumulate 241 eligible checks; ineligible controls or motions pause rather than reset the count.
 USER_FUNC(tou_mario_free_wait) {
     MarioWork* mario = marioGetPtr();
 
@@ -2872,6 +2877,7 @@ EVT_BEGIN(evt_mail_2)
     RETURN
 EVT_END()
 
+// Only accepting the cake consumes it and restores health; declining leaves it available.
 EVT_BEGIN(evt_eat_cake)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -2928,7 +2934,7 @@ EVT_BEGIN(evt_cake_init)
         IF_INT_EQUAL(GSWF_TOU_RANK_6_CAKE_DONE, 0)
             IF_INT_EQUAL(GSWF_TOU_CAKE_ON_TABLE, 0)
                 CALL(evt_item_entry, STRING("cake"), ITEM_CAKE, 20, 25, -25, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-                CALL(evt_item_status_on, STRING("cake"), 33554432)
+                CALL(evt_item_status_on, STRING("cake"), ITEM_FLAG2_NO_PARTNER)
             END_IF
         END_IF
     END_IF
@@ -3142,6 +3148,7 @@ EVT_BEGIN(evt_tamago_hello2)
     RETURN
 EVT_END()
 
+// Compare visible ranks first; an unchanged rank is then described relative to the last opponent.
 EVT_BEGIN(evt_tou_ranking_msg)
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_LESS(LW(0), GSW_GLITZ_PIT_RANK_BEFORE_MATCH)
@@ -3169,6 +3176,7 @@ EVT_BEGIN(evt_tou_ranking_msg)
     RETURN
 EVT_END()
 
+// Reward routing uses the room and pre-match rank; later one-time events use the current rank.
 EVT_BEGIN(evt_tou_match_after_default)
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 10)

@@ -167,6 +167,7 @@ static EvtWord evt_after_peach[188];
 EvtWord tou_02_init_evt[VERSION_PICK(576, 919)];
 
 int __cvt_ull_flt();
+// Consecutive texture entries with the same group and pose form one animation range.
 static void pose_init(void) {
     char name[32];
     char anim[32];
@@ -199,6 +200,7 @@ static void pose_init(void) {
     fan_wp->animNum++;
 }
 
+// Restart at frame zero after the pose duration; excess elapsed time is not carried into the next cycle.
 static void pose_main(void) {
     s32 i;
     ExtdrvPose* pose;
@@ -1733,6 +1735,7 @@ void ext_fan_main(void) {
             }
         }
     }
+    // Exclude hidden anchor fans and every fan that has left the walking state.
     fan_wp->count = fan_wp->num;
 
     {
@@ -1861,6 +1864,7 @@ EVT_BEGIN(mario_momikucha_msg)
     RETURN
 EVT_END()
 
+// If both first-time mob scenes qualify, the champion Mario selection takes priority.
 EVT_BEGIN(evt_momikucha)
     SET_VALUE(LF(0), 0)
     SET_VALUE(GF(10), 0)
@@ -2236,7 +2240,7 @@ EVT_BEGIN(tou_02_init_evt)
 #ifdef VERSION_G8ME01
     CALL(evt_map_playanim, STRING("anm_paneru"), MAP_ANIM_PLAY_LOOP, 0)
 #else
-    CALL(evt_map_playanim, STRING(("anm_paneru")), 1, 0)
+    CALL(evt_map_playanim, STRING(("anm_paneru")), MAP_ANIM_PLAY_LOOP, 0)
 #endif
     BEGIN_INLINE_EVENT
         LOOP(0)

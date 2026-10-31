@@ -1048,6 +1048,7 @@ BattleGroupSetup btlgrp_hei_hei_09_03_off_2 = {
     5, // reserved_1C
 };
 
+// The initial group contains only Gold Fuzzy; its damage event summons the horde later.
 BattleUnitSetup btlparty_hei_hei_10_01_off_1[] = {
     {
         &unit_gold_chorobon, // mUnitKindParams
@@ -1837,6 +1838,7 @@ NpcBattleSelect R_btlgrpsel_hei_btlno_hei_12_02_off[] = {
     {0},
 };
 
+// Relative selection weights: three Goomba-only groups at 10 each, then the mixed group at 50.
 NpcBattleSelect btlgrpsel_hei_btlno_hei_13_02_off[] = {
     {10, &btlgrp_hei_hei_13_02_on_1, hei_btlstage_data},
     {10, &btlgrp_hei_hei_13_02_on_2, hei_btlstage_data},

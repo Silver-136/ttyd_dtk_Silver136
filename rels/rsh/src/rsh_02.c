@@ -96,6 +96,7 @@ EvtWord rsh_02_c_init_evt_nidome[136];
 EvtWord evt_nidome_bed[126];
 
 // Descriptive name (not in the symbol maps); placeholder unk_rsh_00002384, JP rsh .text+0x22C0. See docs/NAME_PROVENANCE.md.
+// Wait until neither roll-cancel protection nor continued slit movement prevents normalization.
 USER_FUNC(mario_normalize_wait) {
     if (!marioRollCancelDisable() && !marioSlitContinueChk()) {
         return EVT_RETURN_DONE;
@@ -521,13 +522,14 @@ EVT_BEGIN(talk_yuurei)
             WAIT_MS(1000)
             CALL(evt_npc_set_anim, STRING("ゆうれい"), STRING("S_1"))
             CALL(evt_item_entry, STRING("mofu"), ITEM_BLANKET, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
-            CALL(evt_item_flag_on, STRING("mofu"), 8)
+            CALL(evt_item_flag_on, STRING("mofu"), ITEM_FLAG_BGM_SILENT)
             CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
             CALL(evt_item_get_item, STRING("mofu"))
             CALL(evt_item_get_item_end_wait, STRING("mofu"))
             CALL(evt_snd_bgmoff, PSND_PAUSE)
             CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_STG5_GHOST1"))
             CALL(evt_msg_print, 0, STRING("stg6_rsh_138"), 0, 0)
+            // Wait for the background alpha loop to acknowledge its hold before changing the ghost directly.
             SET_VALUE(GSWF_RSH_GHOST_FADE_HOLD, 1)
             LOOP(0)
                 IF_INT_EQUAL(GSWF_RSH_GHOST_FADE_HELD, 1)
@@ -630,6 +632,7 @@ EVT_BEGIN(talk_yuurei)
     RETURN
 EVT_END()
 
+// Report contact with this NPC only while player input/control and the system level permit it.
 USER_FUNC(toron_check) {
     NpcEntry* hit = fbatHitCheckAll();
     // トロン
@@ -791,6 +794,7 @@ EVT_BEGIN(evt_1day_end)
     RETURN
 EVT_END()
 
+// When armed, the first type-3 notification starts shaking and the second stops that event.
 void yuurei_callback(s32 type, void* param) {
     EventEntry* ev = (*(MsgWinData**)param)->event;
 
@@ -805,6 +809,7 @@ void yuurei_callback(s32 type, void* param) {
     }
 }
 
+// Start the reaction on the second type-3 notification (the counter starts at zero).
 void powan_callback(s32 type, void* param) {
     MsgWinData* work = *(MsgWinData**)param;
 
@@ -900,6 +905,7 @@ EVT_BEGIN(evt_bed)
 EVT_END()
 
 EVT_BEGIN(evt_toron_catch)
+    // GF(0) requests the jumping loop to stop; GF(1) acknowledges its cleanup.
     SET_VALUE(LW(10), 0)
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 0)

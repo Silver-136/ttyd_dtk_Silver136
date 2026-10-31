@@ -120,10 +120,70 @@ static StatusVulnerability regist = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
-    {2, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
-    {3, "btl_un_honenoko", "c_nagehone_g", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
-    {4, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
+    {
+        1, // partNum
+        "btl_un_honenoko", // partName
+        "c_karon_g_h", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {0.0f, 35.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 45.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kMainPart | kGuardTargetPart, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
+    {
+        2, // partNum
+        "btl_un_honenoko", // partName
+        "c_karon_g_h", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {15.0f, 25.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 0.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
+    {
+        3, // partNum
+        "btl_un_honenoko", // partName
+        "c_nagehone_g", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {15.0f, 25.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 0.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
+    {
+        4, // partNum
+        "btl_un_honenoko", // partName
+        "c_karon_g_h", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {15.0f, 25.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 0.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
 };
 
 static BattleWeapon weapon_honenoko_attack = {
@@ -310,6 +370,7 @@ static EVT_BEGIN(fake_dead_event)
     RETURN
 EVT_END()
 
+// The attack dispatcher spends this turn counting down/reassembling, then starts the wait event.
 static EVT_BEGIN(rebirth_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBIRTH_TURNS, LW(0))
     SUBTRACT(LW(0), 1)
@@ -627,6 +688,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+// The summoned unit inherits only the size-change duration and strength here.
 static USER_FUNC(honenoko_copy_status) {
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));

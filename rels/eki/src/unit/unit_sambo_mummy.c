@@ -1421,6 +1421,7 @@ static EVT_BEGIN(attack_spike_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(6), POSE_TYPE_NEUTRAL)
+    // CheckDamage returns 21 for superguard types 2/3; this projectile handles its own return hit.
     IF_INT_EQUAL(LW(5), 21)
         CALL(evt_snd_sfxoff, LW(14))
         CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(11))
@@ -1607,6 +1608,7 @@ static EVT_BEGIN(sambo_rabbit_move)
     RETURN
 EVT_END()
 
+// Body counts 4, 3, 2, 1 select stack parts 1, 2, 3, 4; part 5 is the detached body.
 static EVT_BEGIN(_body_param_set)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BODY_COUNT, LW(0))
     SWITCH(LW(0))

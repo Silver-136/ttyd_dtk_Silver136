@@ -234,7 +234,7 @@ USER_FUNC(hammer_on) {
     BattleAudienceMember* member = BattleAudienceGetPtr(48);
 
     aud->flags &= ~AUDIENCE_FLAG_EVENT_CTRL;
-    if (BattleAudienceItemOn(48, 0xEF, 1) == TRUE) {
+    if (BattleAudienceItemOn(48, ITEM_AUDIENCE_HAMMER, 1) == TRUE) {
         member->flags &= ~AUDIENCE_MEMBER_FLAG_NO_ESCAPE;
         aud->flags |= AUDIENCE_FLAG_EVENT_CTRL;
         return EVT_RETURN_DONE;
@@ -262,28 +262,28 @@ USER_FUNC(blinkAP) {
 
 USER_FUNC(spot_square) {
     EvtWord* args = event->args;
-    s32 time;
-    s32 wait;
+    s32 fadeFrames;
+    s32 holdFrames;
 
     point[0] = evtGetFloat(event, args[0]);
     point[1] = evtGetFloat(event, args[1]);
     point[2] = evtGetFloat(event, args[2]);
     point[3] = evtGetFloat(event, args[3]);
-    time = evtGetValue(event, args[4]);
-    wait = evtGetValue(event, args[5]);
+    fadeFrames = evtGetValue(event, args[4]);
+    holdFrames = evtGetValue(event, args[5]);
     if (isFirstCall) {
         dark = 0;
         darkCount = 0;
     }
     darkCount++;
-    if (darkCount >= 0 && darkCount <= time) {
-        dark = intplGetValue(EASING_LINEAR, 0.0f, 192.0f, darkCount, time);
+    if (darkCount >= 0 && darkCount <= fadeFrames) {
+        dark = intplGetValue(EASING_LINEAR, 0.0f, 192.0f, darkCount, fadeFrames);
     }
-    if (darkCount >= time + wait && darkCount <= wait + time * 2) {
-        dark = intplGetValue(EASING_LINEAR, 192.0f, 0.0f, darkCount - (time + wait), time);
+    if (darkCount >= fadeFrames + holdFrames && darkCount <= holdFrames + fadeFrames * 2) {
+        dark = intplGetValue(EASING_LINEAR, 192.0f, 0.0f, darkCount - (fadeFrames + holdFrames), fadeFrames);
     }
     dispEntry(CAMERA_2D, 500.0f, 2, spot_square_disp, NULL);
-    return darkCount >= wait + time * 2 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
+    return darkCount >= holdFrames + fadeFrames * 2 ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
 void Quads2D(f32 x0, f32 y0, f32 x1, f32 y1) {
@@ -537,7 +537,7 @@ EVT_BEGIN(actend_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LESSON, LW(0))

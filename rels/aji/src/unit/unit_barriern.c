@@ -527,7 +527,7 @@ EVT_END()
 
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -765,6 +765,7 @@ static s32 barriern_satellite_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32
     }
     part = BtlUnit_GetPartsPtr(unit, 1);
     {
+        // The satellite body uses the owner counter; its afterimages use n + 1 below.
         f32 s = intplGetValue(EASING_QUADRATIC_OUT, 0.8f, scale, zanzou_count[0], frames);
         BtlUnit_SetPartsScale(part, s, s, 1.0f);
     }
@@ -1750,6 +1751,7 @@ static USER_FUNC(barriern_wawawa_set_target) {
         i++;
         barriern_wawawa_get_next_target(&unitIdx[i], &partIdx[i]);
     }
+    // Fill five target pairs even though this unit fires only three shots.
     for (i = 0; i < 5; i++) {
         s32 r = irand(num);
         evtSetValue(event, *args++, unitIdx[r]);

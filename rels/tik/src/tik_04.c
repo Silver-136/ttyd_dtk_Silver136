@@ -196,6 +196,7 @@ EVT_BEGIN(puni_soguu_2)
     RETURN
 EVT_END()
 
+// Accept only the two intended landing surfaces; otherwise show the hint and watch the next flight.
 EVT_BEGIN(plane_tobashi_check)
     LOOP(0)
         CALL(evt_mario_get_motion, LW(0))
@@ -240,6 +241,7 @@ EVT_BEGIN(tik04_wall_blow_evt)
     RETURN
 EVT_END()
 
+// Animate the captured scenery, then detach all three objects before releasing the capture.
 EVT_BEGIN(kaidan_pera)
     CALL(evt_paper_entry, STRING("OFF_d_meku"))
     CALL(evt_img_entry, STRING("capture_img"))
@@ -291,7 +293,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_HAPPY_HEART_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), 258)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)

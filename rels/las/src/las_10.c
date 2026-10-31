@@ -87,8 +87,8 @@ USER_FUNC(make_kagi_tbl) {
     s32 i;
 
     for (i = 0; i < 8; i++) {
-        if ((s32)pouchCheckItem(i + 0x26) > 0) {
-            kagi_tbl[n++] = i + 0x26;
+        if ((s32)pouchCheckItem(i + ITEM_PALACE_KEY_0x26) > 0) {
+            kagi_tbl[n++] = i + ITEM_PALACE_KEY_0x26;
         }
     }
     kagi_tbl[n] = -1;
@@ -648,7 +648,7 @@ EVT_BEGIN(kagi1_evt)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg8_las_32_01"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -678,7 +678,7 @@ EVT_BEGIN(kagi2_evt)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg8_las_32_01"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -708,7 +708,7 @@ EVT_BEGIN(kagi3_evt)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg8_las_32_01"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -738,7 +738,7 @@ EVT_BEGIN(kagi4_evt)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg8_las_32_01"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -768,7 +768,7 @@ EVT_BEGIN(kagi5_evt)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg8_las_32_01"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -798,7 +798,7 @@ EVT_BEGIN(kagi6_evt)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg8_las_32_01"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -828,7 +828,7 @@ EVT_BEGIN(kagi7_evt)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg8_las_32_01"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -858,7 +858,7 @@ EVT_BEGIN(kagi8_evt)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg8_las_32_01"), 0, 0)
         CALL(evt_mario_key_onoff, 1)
         RETURN
@@ -1010,7 +1010,7 @@ EVT_BEGIN(kagi_8_on)
         WAIT_MS(4000)
         CALL(evt_snd_sfxoff, LW(5))
         SET_VALUE(GF(0), 1)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_hitobj_onoff, STRING("A113_daiza1"), 1, 1)
@@ -1031,49 +1031,49 @@ EVT_BEGIN(kagi_8_on)
     CALL(evt_hit_bind_mapobj, STRING("A113_daiza8"), STRING("S_kagi8"))
     IF_INT_EQUAL(GSWF_LAS_10_KEY_SLOT_1_FILLED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(kagi1_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi1"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza1"))
     END_IF
     IF_INT_EQUAL(GSWF_LAS_10_KEY_SLOT_2_FILLED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi2"), 0, PTR(kagi2_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi2"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza2"))
     END_IF
     IF_INT_EQUAL(GSWF_LAS_10_KEY_SLOT_3_FILLED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi3"), 0, PTR(kagi3_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi3"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza3"))
     END_IF
     IF_INT_EQUAL(GSWF_LAS_10_KEY_SLOT_4_FILLED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi4"), 0, PTR(kagi4_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi4"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza4"))
     END_IF
     IF_INT_EQUAL(GSWF_LAS_10_KEY_SLOT_5_FILLED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi5"), 0, PTR(kagi5_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi5"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza5"))
     END_IF
     IF_INT_EQUAL(GSWF_LAS_10_KEY_SLOT_6_FILLED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi6"), 0, PTR(kagi6_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi6"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza6"))
     END_IF
     IF_INT_EQUAL(GSWF_LAS_10_KEY_SLOT_7_FILLED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi7"), 0, PTR(kagi7_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi7"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza7"))
     END_IF
     IF_INT_EQUAL(GSWF_LAS_10_KEY_SLOT_8_FILLED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi8"), 0, PTR(kagi8_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_rotate, 1, STRING("S_kagi8"), 0, 180, 0)
         CALL(evt_hit_bind_update, STRING("A113_daiza8"))
     END_IF
@@ -1083,7 +1083,7 @@ EVT_END()
 EVT_BEGIN(kagi_8_init)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
         CALL_CHILD(PTR(kagi_8_off))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(kagi_8_on))
     END_IF
     RETURN
@@ -1130,12 +1130,12 @@ EVT_BEGIN(las_10_init_evt)
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
             CALL(evt_snd_set_rev_mode, 2)
-            ELSE
+        ELSE
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
             CALL(evt_snd_set_rev_mode, 2)
         END_IF
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS4"))
         CALL(evt_snd_set_rev_mode, 2)
@@ -1150,7 +1150,7 @@ EVT_BEGIN(las_10_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_05_STAR_KEY_SLOT)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hosi_on"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_daiza1"), 0, PTR(daiza_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hosi_off"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SPAWN_EVENT(PTR(kagi_8_init))
@@ -1174,7 +1174,7 @@ EVT_BEGIN(las_10_init_evt)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_CELESTIAL_MOVE2"), 0, 400, -150, LW(10))
         CALL(evt_snd_sfx_dist, LW(10), 10)
         CALL(evt_map_playanim, STRING("en"), MAP_ANIM_PLAY_LOOP, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hoshihoshi"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("group19"), MAP_OBJ_FLAG_CLIP)
@@ -1229,20 +1229,20 @@ USER_FUNC(temae_kesu) {
     mapGrpFlagOff("S11_kabe", MAP_OBJ_FLAG_HIDDEN);
     mapGrpFlagOff("S112_kabe", MAP_OBJ_FLAG_HIDDEN);
     mapGrpFlagOff("S113_kabe", MAP_OBJ_FLAG_HIDDEN);
-    // show the walls of the camera's octant and its neighbours
+    // Hide walls in the camera's octant and its neighbours.
     idx = (157.5f + cam->viewYaw) / 45.0f;
     idx %= 8;
     prev = idx != 0 ? idx - 1 : 7;
     next = idx == 7 ? 0 : idx + 1;
-    mapGrpFlagOn((const char*)kabe_list_1[idx], 1);
-    mapGrpFlagOn((const char*)kabe_list_1[prev], 1);
-    mapGrpFlagOn((const char*)kabe_list_1[next], 1);
-    mapGrpFlagOn((const char*)kabe_list_2[idx], 1);
-    mapGrpFlagOn((const char*)kabe_list_2[prev], 1);
-    mapGrpFlagOn((const char*)kabe_list_2[next], 1);
-    mapGrpFlagOn((const char*)kabe_list_3[idx], 1);
-    mapGrpFlagOn((const char*)kabe_list_3[prev], 1);
-    mapGrpFlagOn((const char*)kabe_list_3[next], 1);
+    mapGrpFlagOn((const char*)kabe_list_1[idx], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_1[prev], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_1[next], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_2[idx], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_2[prev], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_2[next], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_3[idx], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_3[prev], MAP_OBJ_FLAG_HIDDEN);
+    mapGrpFlagOn((const char*)kabe_list_3[next], MAP_OBJ_FLAG_HIDDEN);
     if (idx >= 2 && idx <= 4) {
         mapGrpFlagOn("S14_hashira", MAP_OBJ_FLAG_HIDDEN);
         mapGrpFlagOn("S115_hashira", MAP_OBJ_FLAG_HIDDEN);

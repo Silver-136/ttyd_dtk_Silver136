@@ -1049,6 +1049,7 @@ found:
             if (gy > party->position.y) {
                 dir = partyToMovedir(party, party->displayDirectionTarget);
                 sincosf(&s4, &c4, dir);
+                // On this upward-step path x/z are replaced by sin/cos*40 without a world-position origin.
                 // FAKE: spare temporary for 40.0f; the plain constant changes the object
                 {
                     f32 k = 40.0f;
@@ -2065,6 +2066,7 @@ void party_motion_beside_mario(PartyEntry* party) {
 }
 
 static inline void partyJumpFrontMove(PartyEntry* party) {
+    // With front-wall checks disabled, only the local Vec is moved; the party position is not updated.
     Vec v;
     HitEntry* hit;
     if (party->flags & PARTY_FLAG_DISABLE_FRONT_WALL_CHK) {
@@ -2902,6 +2904,7 @@ BOOL party_roll(PartyEntry* party) {
 }
 
 static f32 partyStayDist(PartyEntry* party) {
+    // Nonzero moveKind is supported here only for Flurrie and Vivian.
     f32 d;
     if (party->moveKind == 0) {
         d = 18.0f;
@@ -2951,6 +2954,7 @@ s32 getFrontFloor(PartyEntry* party, Vec* out, f32 dir) {
         q.targetPos.y = party->position.y + party->height;
         q.targetDistance = 100.0f;
         if (hitCheckVecFilter(&q, NULL)) {
+            // The returned normal is normalized; for finite unit normals the 45 threshold imposes no restriction.
             if (sqrtf(q.hitNormal.x * q.hitNormal.x + q.hitNormal.z * q.hitNormal.z) < 45.0f) {
                 y = q.hitPos.y;
                 goto found;

@@ -273,6 +273,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+// Refresh the flipped countdown to two; only a newly flipped unit plays the initial rotation.
 static EVT_BEGIN(dmg_turn_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -310,6 +311,7 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+// Count down on flipped attack turns, restoring upright defense and pose instead of attacking when it reaches zero.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -454,6 +456,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+// Each frame, disable only the preemptive front-spike counter while any of these six statuses is active.
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     LABEL(0)

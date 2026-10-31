@@ -39,6 +39,7 @@ static f32 SinTable[91];
 static EvtWord attack_event[597];
 static EvtWord wait_event[6];
 
+// Return this tutorial's attacker category: Mario = 0, Goombella = 1, everyone else = 2.
 static USER_FUNC(get_attacker) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -132,7 +133,22 @@ static StatusVulnerability regist = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_togekuri", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
+    {
+        1, // partNum
+        "btl_un_togekuri", // partName
+        "c_kuribo", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {0.0f, 25.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 30.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kMainPart | kGuardTargetPart, // attributes
+        kCounterTopSpiky, // counterAttributes
+        pose_table, // poseTable
+    },
 };
 
 static BattleWeapon weapon_togekuri_attack = {
@@ -411,6 +427,7 @@ static EVT_BEGIN(attack_event)
         GOTO(91)
         CASE_END
         CASE_DEFAULT
+        // Label 98 is not defined in this attack script.
         GOTO(98)
         CASE_END
     END_SWITCH

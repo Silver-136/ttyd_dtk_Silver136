@@ -198,7 +198,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -336,7 +336,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_KEEP, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -344,18 +344,18 @@ EVT_END()
 static USER_FUNC(krb_get_dir) {
     EvtWord* args = event->args;
     f32 x1 = evtGetFloat(event, args[0]);
-    f32 z1 = evtGetFloat(event, args[1]);
+    f32 y1 = evtGetFloat(event, args[1]);
     f32 x2 = evtGetFloat(event, args[2]);
-    f32 z2 = evtGetFloat(event, args[3]);
+    f32 y2 = evtGetFloat(event, args[3]);
     s32 dir = evtGetValue(event, args[4]);
     f32 dx = x2 - x1;
-    f32 dz = z2 - z1;
+    f32 dy = y2 - y1;
 
-    if (dx == 0.0f && dz == 0.0f) {
+    if (dx == 0.0f && dy == 0.0f) {
         evtSetValue(event, args[4], dir);
         return EVT_RETURN_DONE;
     }
-    evtSetValue(event, args[4], angleABf(dx, dz, 0.0f, 0.0f));
+    evtSetValue(event, args[4], angleABf(dx, dy, 0.0f, 0.0f));
     return EVT_RETURN_DONE;
 }
 

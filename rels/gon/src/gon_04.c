@@ -209,6 +209,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+// A clear area flag places block 1 225 units above its base; a set flag leaves it at the base.
 EVT_BEGIN(evt_gon_04flowblock_updown1_init)
     IF_INT_EQUAL(1, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
@@ -437,6 +438,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
     RETURN
 EVT_END()
 
+// A set area flag places block 2 200 units above its base; a clear flag leaves it at the base.
 EVT_BEGIN(evt_gon_04flowblock_updown2_init)
     IF_INT_EQUAL(0, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
@@ -454,6 +456,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2_init)
     RETURN
 EVT_END()
 
+// This switch moves block 2 only after the large level-1 block has been broken.
 EVT_BEGIN(evt_gon_04flowblock_updown2)
     SET_TYPE(239)
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
@@ -753,7 +756,7 @@ EVT_BEGIN(evt_kaidan_pera)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_party_use_check, LW(0))
-    IF_INT_EQUAL(LW(0), 2)
+    IF_INT_EQUAL(LW(0), PARTNER_KOOPS)
         CONVERT_MS_TO_FRAME(LW(0), 1500)
         LOOP(LW(0))
             WAIT_FRAMES(1)
@@ -1019,7 +1022,7 @@ EVT_BEGIN(gon_04_init_evt)
     CALL(evt_mobj_lv_blk, STRING("mobj_blk02"), FLOAT(545.0f), 150, -125, 0, GSWF_GON_04_LV2_BIG_BLOCK_2_BROKEN, STRING("MOBJ_Lv2BigBlock"))
     SPAWN_EVENT(PTR(evt_hashi))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_12_02_LOCK)
-        CALL(evt_mobj_lock, STRING("mobj_lock00"), 13, 595, 160, -50, 270, PTR(evt_chk), PTR(evt_unlock), GSWF_GON_04_DOOR_UNLOCKED)
+        CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_CASTLE_KEY_0x0D, 595, 160, -50, 270, PTR(evt_chk), PTR(evt_unlock), GSWF_GON_04_DOOR_UNLOCKED)
         SET_VALUE(LW(0), STRING("e_bero_1"))
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF

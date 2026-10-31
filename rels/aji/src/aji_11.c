@@ -202,6 +202,7 @@ EVT_BEGIN(peach_evt_disksys)
         RETURN
     END_IF
     CALL(evt_win_item_select, 0, PTR(item_list), LW(0), 0)
+    // Cancellation leaves the disk and the current interaction unchanged.
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)
@@ -218,7 +219,7 @@ EVT_BEGIN(peach_evt_disksys)
         CALL(evt_msg_print, 0, STRING("peach_aji_247"), 0, STRING("mario"))
         CALL(evt_map_playanim, STRING("monitor_02"), MAP_ANIM_PLAY_LOOP, 0)
         WAIT_MS(3000)
-        CALL(map_anim_flag_off, STRING("monitor_02"), 4)
+        CALL(map_anim_flag_off, STRING("monitor_02"), MAP_ANIM_FLAG_LOOP)
         CALL(evt_map_checkanim, STRING("monitor_02"), LW(0), LW(1))
         WAIT_MS(LW(1))
         CALL(evt_snd_sfxon_3d_ex, STRING("SFX_PEACH_MONITOR_OFF1"), 57, 0, -10, 255, 255, 1500, 16, 0)
@@ -253,6 +254,7 @@ EVT_END()
 
 EVT_BEGIN(peach_evt_tana2)
     CALL(evt_mario_key_onoff, 0)
+    // Remove the disk when returning it here, not when playing it in the monitor.
     CALL(evt_pouch_check_item, ITEM_DATA_DISK, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL(evt_pouch_remove_item, ITEM_DATA_DISK, LW(0))
@@ -352,6 +354,7 @@ USER_FUNC(map_anim_flag_off) {
 static USER_FUNC(peach_evt_toumei) {
     MarioWork* mario = marioGetPtr();
 
+    // Hide this actor by collapsing all three scale components.
     mario->scale.z = mario->scale.y = mario->scale.x = 0.0f;
     return EVT_RETURN_DONE;
 }

@@ -841,7 +841,7 @@ void create_main(void) {
                 break;
             case 8:
                 CARDSetCommentAddress(&wp->status, 0);
-                CARDSetIconAddress(&wp->status, 0x40);
+                CARDSetIconAddress(&wp->status, offsetof(CardMetadata, data.bannerTex));
                 CARDSetBannerFormat(&wp->status, CARD_STAT_BANNER_RGB5A3);
                 CARDSetIconAnim(&wp->status, CARD_STAT_ANIM_LOOP);
                 CARDSetIconFormat(&wp->status, 0, CARD_STAT_ICON_C8);
@@ -1290,7 +1290,7 @@ void memcard_open(void) {
         if ((result != CARD_RESULT_NOFILE) && (result != CARD_RESULT_NOPERM)) {
             if (result == CARD_RESULT_READY) {
                 if (!strcmp(stat.fileName, cardFileName)) {
-                    if ((stat.commentAddr == 0) && (stat.iconAddr == 0x40) && (stat.length == 0x22000)) {
+                    if ((stat.commentAddr == 0) && (stat.iconAddr == offsetof(CardMetadata, data.bannerTex)) && (stat.length == 0x22000)) {
                         wp->fileNo = fileNo;
                         break;
                     } else {

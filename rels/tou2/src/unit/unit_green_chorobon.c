@@ -415,7 +415,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -423,7 +423,7 @@ EVT_END()
 
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     CALL_CHILD(PTR(subsetevt_counter_damage))
@@ -681,28 +681,28 @@ static EVT_BEGIN(drain_attack_event)
     CALL_CHILD(return_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 static USER_FUNC(chorobon_copy_status) {
     EvtWord* args = event->args;
-    s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
-    s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
+    s32 sourceId = BattleTransID(event, evtGetValue(event, args[0]));
+    s32 destinationId = BattleTransID(event, evtGetValue(event, args[1]));
     BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
-    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
+    BattleUnit* sourceUnit = BattleGetUnitPtr(wp, sourceId);
+    BattleUnit* destinationUnit = BattleGetUnitPtr(wp, destinationId);
 
-    unit2->currentHp = unit1->currentHp;
-    if (unit2->currentHp > unit2->maxHp) {
-        unit2->currentHp = unit2->maxHp;
+    destinationUnit->currentHp = sourceUnit->currentHp;
+    if (destinationUnit->currentHp > destinationUnit->maxHp) {
+        destinationUnit->currentHp = destinationUnit->maxHp;
     }
-    unit2->mSizeChangeTurns = unit1->mSizeChangeTurns;
-    unit2->mSizeChangeStrength = unit1->mSizeChangeStrength;
-    unit2->hpGauge.prevHp = unit2->currentHp;
-    unit2->hpGauge.targetHp = unit2->currentHp;
-    unit2->hpGauge.barRatio = unit2->hpGauge.trailRatio = (f32)unit2->currentHp / unit2->maxHp;
+    destinationUnit->mSizeChangeTurns = sourceUnit->mSizeChangeTurns;
+    destinationUnit->mSizeChangeStrength = sourceUnit->mSizeChangeStrength;
+    destinationUnit->hpGauge.prevHp = destinationUnit->currentHp;
+    destinationUnit->hpGauge.targetHp = destinationUnit->currentHp;
+    destinationUnit->hpGauge.barRatio = destinationUnit->hpGauge.trailRatio = (f32)destinationUnit->currentHp / destinationUnit->maxHp;
     return EVT_RETURN_DONE;
 }
 

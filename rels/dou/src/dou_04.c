@@ -56,6 +56,7 @@ static NpcSetupInfo npcEnt[2];
 EvtWord dou_04_init_evt[96];
 
 USER_FUNC(evt_mario_check_menu) {
+    // Return the menu-disabled state, not whether a menu is currently open.
     EvtWord* args = event->args;
 
     evtSetValue(event, args[0], marioCheckMenuDisable());
@@ -82,6 +83,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+// Carry riders by the change in X translation, not by the full accumulated offset.
 EVT_BEGIN(box_trans)
     SET_FLOAT_VALUE(LW(3), 0)
     LOOP(0)
@@ -564,9 +566,9 @@ EVT_BEGIN(kuribo_talk)
                 CALL(evt_pouch_get_haveitemcnt, LW(0))
                 CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(1))
                 IF_INT_EQUAL(LW(1), 0)
-                    SET_VALUE(LW(1), 10)
+                    SET_VALUE(LW(1), HELD_ITEM_COUNT_BASE)
                     ELSE
-                    SET_VALUE(LW(1), 20)
+                    SET_VALUE(LW(1), MAX_HELD_ITEMS)
                 END_IF
                 IF_INT_LESS(LW(0), LW(1))
                     CALL(evt_msg_continue)
@@ -577,7 +579,7 @@ EVT_BEGIN(kuribo_talk)
                     CALL(evt_party_set_dir, 0, 270, 300)
                     WAIT_MS(300)
                     CALL(evt_item_set_position, STRING("ff"), -165, 10, 106)
-                    CALL(evt_item_flag_off, STRING("ff"), 2)
+                    CALL(evt_item_flag_off, STRING("ff"), ITEM_FLAG_NO_TOUCH_GET)
                     WAIT_MS(300)
                     CALL(evt_party_set_dir, 0, 90, 300)
                 END_IF

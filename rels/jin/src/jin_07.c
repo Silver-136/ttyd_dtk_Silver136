@@ -125,7 +125,7 @@ EVT_END()
 
 static EVT_BEGIN(check_roll)
     CALL(evt_mario_get_motion, LW(0))
-    IF_INT_EQUAL(LW(0), 22)
+    IF_INT_EQUAL(LW(0), MARIO_MOTION_ROLL)
         SET_VALUE(LW(0), 0)
         ELSE
         SET_VALUE(LW(0), 1)
@@ -238,7 +238,7 @@ static void senteresa_ext_init(void) {
 
     pTeresa = _mapAlloc(sizeof(Teresa) * 200);
     for (i = 0; i < n; i++, pose++) {
-        pose->flags = 2;
+        pose->flags = EXT_POSE_FLAG_BILLBOARD;
         pose->dir = 270.0f;
         PSMTXIdentity(*pose->mtx);
         pTeresa[i].pos.x = 0.0f;
@@ -292,6 +292,7 @@ void computePosHermite(ExtdrvPose* pose, Teresa* ter) {
     (*pose->mtx)[2][3] = ter->pos.z * h00 + m0.z * h10 + m1.z * h11 + ter->dst.z * h01;
 }
 
+// Release each Boo after its delay, count completed paths, and reset the renderer when all 200 finish.
 static void senteresa_ext_main(void) {
     ExtdrvPose* pose = extGetPosePtr();
     s32 n;
@@ -395,7 +396,6 @@ USER_FUNC(senteresa_okure_move) {
     f32 t2 = 2.0f * t;
     f32 h00 = (1.0f + t2) * u * u;
     f32 h10 = t * u * u;
-    f32 tt = t * t;
     f32 h11 = (t * t) * (t - 1.0f);
     f32 h01 = (3.0f - t2) * (t * t);
 
@@ -564,7 +564,7 @@ EVT_BEGIN(evt_teresa_box_open)
                 CALL(evt_item_set_gravity, STRING("teresa"), FLOAT(1.0f))
                 CALL(evt_item_set_bound_rate, STRING("teresa"), FLOAT(1.0f))
                 CALL(evt_item_set_jump_power, STRING("teresa"), FLOAT(100.0f))
-                CALL(evt_item_status_on, STRING("teresa"), 16)
+                CALL(evt_item_status_on, STRING("teresa"), ITEM_FLAG2_SKIP_BOUND_INIT)
                 CALL(evt_msg_print, 0, STRING("stg4_jin_72"), 0, STRING("テレサ"))
                 CALL(evt_npc_reverse_ry, STRING("テレサ"))
                 CALL(evt_npc_get_position, STRING("テレサ"), LW(0), LW(1), LW(2))

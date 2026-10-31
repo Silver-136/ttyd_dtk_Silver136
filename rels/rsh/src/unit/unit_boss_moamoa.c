@@ -80,7 +80,6 @@ USER_FUNC(moamoa_set_bodyScale);
 static void ext_moamoa_main(void);
 static void ext_moamoa_init(void);
 USER_FUNC(moamoa2_on);
-USER_FUNC(moamoa1_on);
 USER_FUNC(moamoa_bomb);
 USER_FUNC(moamoa_guruguru);
 USER_FUNC(evt_moamoa_mainUnitIdClear);
@@ -256,7 +255,15 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_moamoa", "c_g_moamoa_b", 0.0f, 0.0f, 0.0f, -2.0f, 53.0f, 20.0f, -4.0f, 63.0f, 20.0f, 20, 30, 255, &moamoa_defence, &defence_attr, kMainPart | kImmuneToDamageAndStatus, 0, moamoa1_pose_table},
+    {
+        1, "btl_un_moamoa", "c_g_moamoa_b",
+        0.0f, 0.0f, 0.0f,
+        -2.0f, 53.0f, 20.0f,
+        -4.0f, 63.0f, 20.0f,
+        20, 30, 255,
+        &moamoa_defence, &defence_attr,
+        kMainPart | kImmuneToDamageAndStatus, 0, moamoa1_pose_table,
+    },
 };
 
 BattleUnitSetup entry_boss_moamoa_tentacle_a = {
@@ -623,6 +630,7 @@ EVT_BEGIN(moamoa_mouth_on)
     RETURN
 EVT_END()
 
+// Count regrowth turns only while all limbs are absent; at regrowth, half HP selects mouth form.
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
     IF_INT_EQUAL(LW(0), 0)
@@ -1093,6 +1101,7 @@ USER_FUNC(moamoa_on) {
         strcpy(wp->groups[wp->numGroups].pose, pose);
         wp->groups[wp->numGroups].start = start;
         wp->groups[wp->numGroups].num = j - start + 1;
+        // BUG: the preceding particle loop left elem one past the allocated array.
         if (elem->type >= 2 && elem->type != 10) {
             wp->groups[wp->numGroups].speed = 12.0f;
         } else {
@@ -1324,6 +1333,7 @@ void moamoa_draw(CameraId cameraId, void* param) {
     extLoadTextureExit();
 }
 
+// Missing mouth contributes three, each missing tentacle one; the target scale follows their sum.
 USER_FUNC(moamoa_set_bodyScale) {
     BattleUnit* unit;
     s32 n;

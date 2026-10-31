@@ -38,6 +38,7 @@ EvtWord puni_nakama[93];
 EvtWord tik03_switch_evt[70];
 EvtWord tik_03_init_evt[116];
 
+// Returning after the boss clears the visit-local gift and game-win flags.
 EVT_BEGIN(bero_05_custom_in)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
         IF_INT_EQUAL(GSWF_MRI_LEFT_AFTER_BOSS_BATTLE, 0)
@@ -410,6 +411,7 @@ EVT_BEGIN(puni_switch)
     RETURN
 EVT_END()
 
+// Replace the guide NPC with the extra partner only after Mario reaches the open passage.
 EVT_BEGIN(puni_nakama)
     LOOP(0)
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_34_PUNIS_SECRET_PASSAGE)
@@ -427,7 +429,7 @@ EVT_BEGIN(puni_nakama)
     CALL(evt_party_stop, 1)
     CALL(evt_npc_get_position, STRING("ガイド"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("ガイド"), 0, -1000, 0)
-    CALL(evt_mario_set_party_pos, 1, 10, LW(0), LW(1), LW(2))
+    CALL(evt_mario_set_party_pos, 1, PARTY_MEMBER_PUNIO, LW(0), LW(1), LW(2))
     CALL(evt_mario_set_dir, 270, 300, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 35)

@@ -19,6 +19,7 @@ void _prolog(void);
 void _unresolved(void) {
 }
 
+// Restore normal Mario and partner rendering before running the module destructors.
 void _epilog(void) {
     voidfunctionptr* dtor;
 

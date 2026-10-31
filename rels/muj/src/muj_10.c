@@ -83,7 +83,7 @@ USER_FUNC(suifu_option_func) {
     s32 i;
 
     for (i = 0; i < 95; i++) {
-        // "- -y" reproduces the operand order of the original fadds
+        // FAKE: double-negation addition; either plain addition order changes the object.
         wp->npc[i].pos.y = wp->npc[i].basePos.y - -y;
     }
     return EVT_RETURN_DONE;
@@ -239,7 +239,7 @@ EVT_BEGIN(nazo_event)
         CALL(evt_mario_get_motion, LW(4))
         IF_INT_GREATER_OR_EQUAL(LW(0), -250)
             IF_STR_EQUAL(LW(3), STRING("A_hasi_ita"))
-                IF_INT_NOT_EQUAL(LW(4), 31)
+                IF_INT_NOT_EQUAL(LW(4), MARIO_MOTION_DAMAGE)
                     BREAK_LOOP
                 END_IF
             END_IF
@@ -707,6 +707,7 @@ void elmosalpha_func(NanNPC* npc) {
             if (elapsed < npc->duration) {
                 npc->color.a = intplGetValue(EASING_LINEAR, 0.0f, 255.0f, elapsed, npc->duration);
             } else {
+                // Keep the last interpolated alpha; completion does not force it to 255.
                 npc->state = 3;
             }
             break;

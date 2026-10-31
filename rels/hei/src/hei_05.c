@@ -61,6 +61,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+// Either linked enemy death marks both pillar enemies defeated before common death handling.
 static EVT_BEGIN(dead_evt1)
     SET_VALUE(GSWF_HEI_05_PILLAR_ENEMY_1_DEFEATED, 1)
     SET_VALUE(GSWF_HEI_05_PILLAR_ENEMY_2_DEFEATED, 1)
@@ -150,6 +151,7 @@ static EVT_BEGIN(door_open)
     RETURN
 EVT_END()
 
+// Alternate between the initial X plus one and the initial X; the decremented temporary is not used.
 static EVT_BEGIN(shake_evt)
     CALL(evt_npc_get_position, LW(0), LW(10), LW(11), LW(12))
     LOOP(0)
@@ -180,6 +182,7 @@ static EVT_BEGIN(hashira_evt_sub)
     RETURN
 EVT_END()
 
+// The optional second-enemy wakeup checks HEI_03 flags here, not this room's HEI_05 defeat flags.
 static EVT_BEGIN(hashira_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_get_position, LW(0), LW(10), LW(11), LW(12))

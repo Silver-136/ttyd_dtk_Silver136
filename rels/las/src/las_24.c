@@ -303,11 +303,11 @@ EVT_BEGIN(las_24_init_evt)
         IF_INT_EQUAL(GSWF_LAS_24_HAKO_BLOWN_AWAY, 0)
             CALL(evt_cloud_init)
             CALL(evt_cloud_ent, 0, STRING("S_hako"), STRING("A_hako"), PTR(cloud_blk_evt))
-            ELSE
+        ELSE
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("A_hako"), 1, 0)
         END_IF
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_hako"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_hako"), 1, 0)
     END_IF

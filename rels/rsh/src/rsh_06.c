@@ -520,6 +520,7 @@ static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+// With all == 0, enabling selects MOA_B; disabling clears the other kinds instead.
 static s32 evt_moamoa_kind_onoff(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     s32 on = evtGetValue(event, args[0]);
@@ -710,6 +711,7 @@ static void ext_moamoa_init(void) {
         moa->jitter = v;
     }
     evalOn();
+    // Warm up synchronously: 600 simulation updates, not 600 rendered frames.
     for (i = 0; i < 600; i++) {
         ext_moamoa_main();
     }
@@ -1287,6 +1289,7 @@ static void ext_moamoa_main(void) {
                 }
                 break;
             case MOAMOA_STATE_RESPAWN:
+                // Reuse a randomly chosen on-roof wander/jump member; retry until one is found.
                 PSMTXIdentity(*pose->mtx);
                 { Moamoa* mm;
                     do {
@@ -1416,6 +1419,7 @@ void moamoa_joint_position(Moamoa* moa, Vec* out) {
     Vec* b = anim->worldPositions[0] + wp->chainIdx[moa->group][1];
     Vec tmp;
 
+    // order/count stays below 1: order zero is at the child joint, later members approach the parent.
     t = (f32)moa->order / (f32)wp->chainNum[moa->group];
     PSVECScale(anim->worldPositions[0] + wp->chainIdx[moa->group][0], out, t);
     PSVECScale(b, &tmp, 1.0f - t);
@@ -1454,6 +1458,7 @@ static SharinData sharinDt[] = {
     {0},
 };
 
+// GW(0)/GW(1) supply per-update travel; radius converts it to wheel angle.
 static EVT_BEGIN(evt_sharin_main)
     SET_FLOAT_VALUE(LW(10), FLOAT(0.0f))
     SWITCH(LW(1))

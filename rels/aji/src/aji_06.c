@@ -363,6 +363,7 @@ EVT_BEGIN(peach_evt_check_all_kusuri_set)
     IF_INT_EQUAL(LSWF_AJI_06_DRINK_PENDING, 1)
         RETURN
     END_IF
+    // Test the slot sum; uniqueness follows from the held-potion bookkeeping.
     IF_INT_EQUAL(LW(0), 10)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_227"), 0, 0)
@@ -1128,6 +1129,7 @@ EVT_BEGIN(peach_evt_tyogo_sub)
     DELETE_EVENT(GW(0))
     SET_VALUE(LW(0), STRING("S_pato3"))
     CALL_CHILD(PTR(peach_evt_pato_off))
+    // Both endpoints are excluded; the stopwatch also includes the opening animation.
     IF_INT_GREATER(LW(1), 25000)
         IF_INT_LESS(LW(1), 35000)
             DEBUG_PUT_MSG(STRING("ほどよい　かねつじかん"))
@@ -1800,6 +1802,7 @@ USER_FUNC(yuka_anim_reverse_play) {
             yuka_anim.anim->frame = frame;
         }
     }
+    // Refresh the time baseline even while reverse playback is paused.
     yuka_anim.anim->time = YUKA_NOW();
     return EVT_RETURN_BLOCK;
 }

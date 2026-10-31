@@ -1353,6 +1353,7 @@ EVT_BEGIN(aji_10_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         CALL(evt_npc_check_delete, STRING("バリアーンカスタム"))
     END_IF
+    // The visited flag is already set before this test; retain the event words.
     SET_VALUE(GSWF_AJI_10_VISITED, 1)
     IF_INT_EQUAL(GSWF_AJI_10_VISITED, 0)
         SET_VALUE(LW(0), STRING("e_bero"))

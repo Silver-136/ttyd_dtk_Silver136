@@ -334,6 +334,7 @@ static s32 item_tbl_madam[] = {
     ITEM_GOLD_RING, -1,
 };
 
+// Item-selection cancellation gives no reward; a non-cancelled selection pays 30 coins, then removes the ring.
 static EVT_BEGIN(talk_madam_ring_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_200"), 0, STRING("マダム"))
@@ -529,6 +530,7 @@ static EVT_BEGIN(evt_daiji_kami)
     RETURN
 EVT_END()
 
+// Finish the arrival scene, advance the story, then transfer to Poshley Heights with an area fade.
 EVT_BEGIN(evt_pikary_arrival)
     CALL(evt_npc_set_position, STRING("ポワン探偵"), -100, 0, 0)
     CALL(evt_npc_set_position, STRING("車掌"), 0, 0, 0)
@@ -565,6 +567,7 @@ EVT_BEGIN(evt_pikary_arrival)
     RETURN
 EVT_END()
 
+// Triples: interaction hit, message before Rogueport Station, message from that story point onward.
 static const char* access_tbl[] = {
     "tana_5",
     "stg6_rsh_262",
@@ -962,6 +965,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
+                // Wait for the Bero execution bit before replacing the side exit with its interaction message.
                 BEGIN_INLINE_EVENT
                     CALL(evt_bero_exec_wait, 65536)
                     SET_VALUE(LW(0), STRING("s_bero"))
@@ -988,6 +992,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
             END_IF
+            // Revisit variant B leaves the current moving-train audio unchanged.
             IF_STR_EQUAL(LW(0), STRING("rsh_01_b"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_01_c"))
@@ -1008,6 +1013,7 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
     RETURN
 EVT_END()
 
+// Each revisit variant records one route flag for the shared rsh_08_a return map.
 EVT_BEGIN(rsh_01_a_init_evt_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         SET_VALUE(LW(0), PTR(bero_data_a))

@@ -94,7 +94,7 @@ static EVT_BEGIN(yari_trap_sub)
     END_IF
     SET_VALUE(GW(15), 1)
     LOOP(0)
-        CALL(evt_hitobj_attr_onoff, 1, 1, STRING("bb"), 2048)
+        CALL(evt_hitobj_attr_onoff, 1, 1, STRING("bb"), HIT_ATTR_TOGE)
         CALL(evt_mapobj_get_position, STRING("s02_yari"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_FLOOR_TRAP1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 0, 50, 150)
@@ -120,7 +120,7 @@ static EVT_BEGIN(yari_trap_sub)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
-        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("bb"), 2048)
+        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("bb"), HIT_ATTR_TOGE)
         WAIT_MS(2500)
         IF_INT_EQUAL(GW(15), 2)
             BREAK_LOOP
@@ -137,6 +137,7 @@ static EVT_BEGIN(yari_trap)
     RETURN
 EVT_END()
 
+// Each boat uses a state word (0 idle, 1 sinking, 2 awaiting step-off) and a height word.
 static EVT_BEGIN(dou_puka_event_init0)
     SET_VALUE(GW(0), 0)
     SET_VALUE(GW(1), 0)

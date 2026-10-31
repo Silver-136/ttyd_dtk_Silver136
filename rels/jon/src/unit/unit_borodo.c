@@ -142,7 +142,7 @@ static USER_FUNC(_steal_item) {
                 return EVT_RETURN_DONE;
             }
             unit->heldItem = item;
-            if (item >= 240 && item < 339) {
+            if (item >= BADGE_MIN && item < BADGE_MAX) {
                 if (target->currentKind == UNIT_MARIO) {
                     BtlUnit_EquipItem(target, 3, 0);
                 } else if (target->currentKind >= TYPE_PARTNER_MIN && target->currentKind < TYPE_PARTNER_MAX) {
@@ -340,7 +340,7 @@ static EVT_BEGIN(init_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-        ELSE
+    ELSE
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_item_have))
     END_IF
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -348,7 +348,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -380,7 +380,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_sub_random, LW(1), LW(0))
     IF_INT_LESS(LW(0), 25)
         CALL_CHILD(PTR(_borodo_normal_attack))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(_borodo_steal_attack))
     END_IF
     RETURN
@@ -496,7 +496,7 @@ static EVT_BEGIN(_borodo_normal_attack)
             SET_VALUE(LW(5), 360)
             SET_VALUE(LW(6), 0)
         END_IF
-        CALL(btlevtcmd_SetRotateOffsetFromCenterOffset, -2)
+        CALL(btlevtcmd_SetRotateOffsetFromCenterOffset, UNIT_ID_SELF)
         CALL(evt_sub_intpl_init, EASING_SINE_IN, LW(5), LW(6), 24)
         LOOP(25)
             CALL(evt_sub_intpl_get_value)
@@ -514,7 +514,7 @@ static EVT_BEGIN(_borodo_normal_attack)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -700,7 +700,7 @@ static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_CheckUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_STOLEN_ITEM, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-        ELSE
+    ELSE
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_item_have))
     END_IF
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
@@ -728,11 +728,11 @@ EVT_BEGIN(_borodo_emergency_revival_event)
         GOTO(6)
     END_IF
     CALL(btlevtcmd_ClearAllStatus, LW(10))
-    CALL(btlevtcmd_ConsumeItemReserve, LW(10), 151)
+    CALL(btlevtcmd_ConsumeItemReserve, LW(10), ITEM_LIFE_SHROOM)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         ADD(LW(1), 40)
-        CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), 151, 120)
+        CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 120)
     END_SIBLING_EVENT
     WAIT_FRAMES(90)
     SET_VALUE(LW(0), 30)

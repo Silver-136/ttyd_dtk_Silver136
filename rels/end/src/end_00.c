@@ -15,6 +15,7 @@
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
 #include "dolphin/exi.h"
+#include <dolphin/pad.h>
 
 #include "driver/animdrv.h"
 #include "driver/npcdrv.h"
@@ -544,7 +545,7 @@ USER_FUNC(evt_end_credit_npc_main) {
             animPoseSetAnim(actor->poseId, R_credits_npc_info[id].anim, 1);
 #else
             EXIGetType(0, 2, &type);
-            if (type != 0x05070000) {
+            if (type != EXI_IS_VIEWER) {
                 actor->poseId = animPoseEntry(R_credits_npc_info[id].agb, inBattle);
                 animPoseSetAnim(actor->poseId, R_credits_npc_info[id].anim, 1);
             } else {
@@ -1382,6 +1383,7 @@ USER_FUNC(evt_end_staff_roll_init) {
             return 0;
         }
     }
+    // FAKE: empty five-iteration loop retained; removing it changes the object.
     for (i = 0; i < 5; i++) {
     }
     return 2;

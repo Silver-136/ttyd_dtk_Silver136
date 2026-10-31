@@ -21,9 +21,9 @@
 #include "driver/seqdrv.h"
 typedef struct SharinData {
     const char* name;
-    s32 radiusType;
-    s32 driveSource;
-    EvtFloat speed;
+    s32 radiusType;    // 0/1/2 select the three wheel radii in evt_sharin_main
+    s32 driveSource;   // 0 reads GW(0), 1 reads GW(1), the train animation speeds
+    EvtFloat speed;    // signed angular multiplier (table entries use +1 or -1)
 } SharinData;
 typedef struct ClankData {
     const char* name;

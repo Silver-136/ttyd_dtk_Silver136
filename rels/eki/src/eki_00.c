@@ -367,6 +367,7 @@ static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     Moamoa* moa;
 
+    // FAKE: discarded pure getter call retained; removing it changes the retail object.
     extGetPosePtr();
     moa = wp->moa;
     for (i = 0; i < wp->count; i++, moa++) {
@@ -527,8 +528,8 @@ static void ext_moamoa_init(void) {
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = wp->target[0].x + dist * moa_sin(rad);
         (*pose->mtx)[1][3] = 0.0f;
-        // BUG: writes [0][3] (x) a second time, so x gets the z value and z stays 0 from PSMTXIdentity
-        // ([2][3] was presumably intended); the ground probe below then starts from that point.
+        // BUG: the z calculation overwrites the initial x translation; z remains zero from
+        // PSMTXIdentity, so the ground probe below uses the overwritten x and zero z.
         (*pose->mtx)[0][3] = wp->target[0].z - dist * moa_cos(rad);
         hitX = hitY = hitZ = 0.0f;
         hd = 1000000.0f;
@@ -1884,8 +1885,8 @@ static EVT_BEGIN(evt_head)
     CALL(evt_item_set_gravity, STRING("item"), FLOAT(1.0f))
     CALL(evt_item_set_bound_rate, STRING("item"), FLOAT(0.5996094f))
     CALL(evt_item_set_jump_power, STRING("item"), FLOAT(500.0f))
-    CALL(evt_item_status_on, STRING("item"), 16)
-    CALL(evt_item_flag_on, STRING("item"), 2048)
+    CALL(evt_item_status_on, STRING("item"), ITEM_FLAG2_SKIP_BOUND_INIT)
+    CALL(evt_item_flag_on, STRING("item"), ITEM_FLAG_NO_CEILING_HIT)
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()

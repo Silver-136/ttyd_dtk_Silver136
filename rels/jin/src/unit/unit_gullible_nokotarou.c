@@ -13,7 +13,7 @@
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
 #define UNIT_WORK_SPIN_ON 8       // 1 keeps the _koura_rotate_start spin loop running; _koura_rotate_stop and _restore_koura_pose clear it
-#define UNIT_WORK_SPIN_SPEED 9    // target spin speed in degrees per frame around y (45 before each attack); the loop ramps the current speed toward it by 1 per frame; the sign gives the direction
+#define UNIT_WORK_SPIN_SPEED 9    // signed target degrees/frame around Y; add 1 for nonnegative targets or subtract 1 for negative targets, then clamp to the target
 #define UNIT_WORK_SPIN_REVERSE 10 // nonzero makes the spin loop reverse direction (negates speed and target), then clears it
 
 
@@ -201,7 +201,15 @@ static BattleDataEntry data_table_nokotarou[] = {
 };
 
 static BattleUnitKindPart parts_nokotarou[] = {
-    {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_nokotarou, &defence_attr_nokotarou, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table_nokotarou_stay},
+    {
+        1, "btl_un_nokotarou", "c_pnk",
+        0.0f, 0.0f, 0.0f,
+        15.0f, 25.0f, 0.0f,
+        0.0f, 30.0f, 0.0f,
+        20, 30, 255,
+        &defence_nokotarou, &defence_attr_nokotarou,
+        kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table_nokotarou_stay,
+    },
 };
 
 static EVT_BEGIN(dmg_turn_event)
@@ -220,6 +228,7 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+// Spend each overturned action decrementing the counter; restore defense and poses only at zero.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)

@@ -59,6 +59,7 @@ static EvtWord wall_bomb[142];
 static HitDamageReturn hitDmgRetPoints[7];
 EvtWord tik_02_init_evt[207];
 
+// Alternate the offset every period milliseconds; zero duration keeps shaking until the event is stopped.
 USER_FUNC(tik_npc_buruburu) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -139,6 +140,7 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) 
     if (strcmp(target->joint->name, node->joint->name) == 0) {
         return TRUE;
     }
+    // A child search returns immediately, without continuing through this node's siblings.
     if (node->child != NULL) {
         return _hitIsGroupSub(target, node->child, TRUE);
     }
@@ -158,19 +160,19 @@ static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
 USER_FUNC(mario_hosei_all) {
     EvtWord* args = event->args;
     HitEntry* hit = hitNameToPtr((const char*)evtGetValue(event, args[0]));
-    f32 value = evtGetFloat(event, args[1]);
+    f32 floorDeltaX = evtGetFloat(event, args[1]);
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(0);
     PartyEntry* party2 = partyGetPtr(1);
 
     if (mario != NULL && hitIsGroup(mario->hitobjStandOn, hit)) {
-        mario->floorMove.x = value;
+        mario->floorMove.x = floorDeltaX;
     }
     if (party != NULL && hitIsGroup(party->hitobjStandOn, hit)) {
-        party->floorMoveX = value;
+        party->floorMoveX = floorDeltaX;
     }
     if (party2 != NULL && hitIsGroup(party2->hitobjStandOn, hit)) {
-        party2->floorMoveX = value;
+        party2->floorMoveX = floorDeltaX;
     }
     return EVT_RETURN_DONE;
 }
@@ -717,6 +719,7 @@ static EVT_BEGIN(wall_bomb)
     CALL(evt_mapobj_set_offscreen, 1, STRING("bom_kabe_3"), STRING("offscreen"))
     CALL(evt_offscreen_get_boundingbox2, STRING("offscreen"), LW(10), LW(11), LW(12), LW(13))
     SET_VALUE(LF(0), 0)
+    // Skip capture only when both bounding-box dimensions are zero.
     IF_INT_EQUAL(LW(12), 0)
         IF_INT_EQUAL(LW(13), 0)
             SET_VALUE(LF(0), 1)

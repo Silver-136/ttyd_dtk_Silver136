@@ -1446,6 +1446,7 @@ EVT_END()
 static USER_FUNC(_wave_offset) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
+    // Keep the variable references so the updated phases can be written back each frame.
     s32 varX = args[1];
     s32 stepX = evtGetValue(event, varX);
     s32 periodX = evtGetValue(event, args[2]);
@@ -1456,6 +1457,7 @@ static USER_FUNC(_wave_offset) {
     s32 ampY = evtGetValue(event, args[6]);
     BattleStageObject* obj = BattleSearchObjectPtr(name);
 
+    // Periods must be nonzero and the stage object present; phase division is intentionally integer.
     obj->positionOffset.x = ampX * sinfd(stepX * 360 / periodX);
     obj->positionOffset.y = ampY * sinfd(stepY * 360 / periodY + 270) + ampY;
     stepX++;

@@ -115,6 +115,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+// Four floating objects use state/height pairs GW(0/1), GW(2/3), GW(4/5), GW(6/7).
 static EVT_BEGIN(dou_puka_event_init0)
     SET_VALUE(GW(0), 0)
     SET_VALUE(GW(1), 0)
@@ -395,13 +396,14 @@ static EVT_BEGIN(bombwall_bomb)
     END_INLINE_EVENT
     SET_VALUE(LW(0), STRING("w_bero"))
     CALL_CHILD(PTR(bero_case_switch_on))
-    CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero"), 4)
+    CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero"), HIT_ATTR_NPC_ONLY)
     SET_VALUE(GSWF_DOU_09_BOMB_WALL_BLOWN, 1)
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_bom_ver2"))
     CALL(evt_offscreen_entry, STRING("offscreen"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("S_ki"), STRING("offscreen"))
     CALL(evt_offscreen_get_boundingbox2, STRING("offscreen"), LW(10), LW(11), LW(12), LW(13))
+    // Skip the capture animation only when both bounding-box dimensions are zero.
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(LW(12), 0)
         IF_INT_EQUAL(LW(13), 0)
@@ -432,7 +434,7 @@ static EVT_BEGIN(bombwall_init)
     IF_INT_EQUAL(GSWF_DOU_09_BOMB_WALL_BLOWN, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("w_bero"), 4)
+        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("w_bero"), HIT_ATTR_NPC_ONLY)
         CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_ki1"), 0, PTR(bombwall_bomb), 0)
         ELSE

@@ -579,7 +579,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -589,7 +589,7 @@ EVT_BEGIN(zonbaba_damage_sub_event)
     CALL(btlevtcmd_GetDamagePartsId, UNIT_ID_SELF, LW(11))
     IF_INT_EQUAL(LW(11), 1)
         CALL(btlevtcmd_AnimeChangePose, LW(10), 1, STRING("GNB_D_2"))
-        ELSE
+    ELSE
         CALL(btlevtcmd_AnimeChangePose, LW(10), 1, STRING("GNB_D_1"))
     END_IF
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))

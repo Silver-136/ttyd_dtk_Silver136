@@ -787,7 +787,7 @@ EVT_BEGIN(hom_00_init_evt)
         CALL(evt_map_playanim, STRING("hasi"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_42_DRAWBRIDGE_DOWN)
-        CALL(evt_hitobj_attr_onoff, 0, 1, STRING("n_bero_1"), 8388608)
+        CALL(evt_hitobj_attr_onoff, 0, 1, STRING("n_bero_1"), HIT_ATTR_BERO)
         CALL(evt_run_case_evt, CASE_FRONT, 1, STRING("n_bero_1"), 0, PTR(evt_train), 0)
         CALL(evt_map_playanim, STRING("n_1_door_open"), MAP_ANIM_PLAY_AT_END, 0)
     END_IF

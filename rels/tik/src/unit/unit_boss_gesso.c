@@ -289,7 +289,7 @@ static EVT_BEGIN(battle_entry_event)
     WAIT_MS(500)
     CALL(btlevtcmd_SetTalkPose, UNIT_ID_PARTNER, STRING("PKR_T_1"))
     CALL(btlevtcmd_SetStayPose, UNIT_ID_PARTNER, STRING("PKR_S_1"))
-    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_02_gs_03_01"), 0, -4)
+    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("tik_02_gs_03_01"), 0, UNIT_ID_PARTNER)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_PARTNER)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -353,13 +353,14 @@ static EVT_BEGIN(damage_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_BUSY, 3)
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, GESSO_UNIT_WORK_BUSY, 0)
     RETURN
 EVT_END()
 
+// Count the fallen and standing phases separately before restoring the ceiling state and arms.
 static EVT_BEGIN(phase_event)
 #ifdef VERSION_G8ME01
     CALL(btlevtcmd_CheckActStatus, UNIT_ID_SELF, LW(0))
@@ -554,6 +555,7 @@ BattleWeapon weapon_gesso_ikasumi_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+// Check defense timing only for the first selected target, while processing damage for every target.
 EVT_BEGIN(gesso_ikasumi_attack)
     SET_VALUE(LW(12), PTR(&weapon_gesso_ikasumi_attack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))

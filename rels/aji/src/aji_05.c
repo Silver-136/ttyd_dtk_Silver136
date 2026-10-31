@@ -83,7 +83,7 @@ static EVT_BEGIN(evt_box)
     CALL(evt_item_entry, STRING("dummy"), ITEM_CARD_KEY_0x1D, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_item_get_item, STRING("dummy"))
-    CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no1"), 2048)
+    CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no1"), HIT_ATTR_TOGE)
     SET_VALUE(GSWF_AJI_05_LIT_FLOOR_DONE, 1)
     WAIT_FRAMES(1)
     CALL_CHILD(PTR(hikaru_off))
@@ -122,7 +122,7 @@ static HitDamageReturn dmgReturnPt[] = {
 
 static EvtWord hikaru_yuka_init[] = {
     CALL_CHILD(hikaru_off)
-    CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no1"), 2048)
+    CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no1"), HIT_ATTR_TOGE)
     CALL(evt_mobj_itembox, STRING("box"), -255, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF_AJI_05_CARD_KEY_CHEST)
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
     BEGIN_INLINE_EVENT
@@ -151,7 +151,7 @@ EVT_BEGIN(aji_05_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL_CHILD(PTR(hikaru_off))
-        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no1"), 2048)
+        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no1"), HIT_ATTR_TOGE)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
@@ -181,7 +181,7 @@ static USER_FUNC(ride_chk) {
     } else {
         hit = (HitEntry*)mario->hitobjUnder;
     }
-    // panels stay lit for 30 frames after being touched
+    // Contact resets the counter to 30; the same call decrements it before testing visibility.
     for (i = 0; i < 24; i++) {
         if (hit != NULL) {
             sprintf(hitName, "A_hikaru_%02d", i + 1);
@@ -222,6 +222,7 @@ static USER_FUNC(thunder_main) {
         if (mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
             EffectEntry* eff;
 
+            // Latch until Mario leaves the damage motion so this effect starts only once per entry.
             event->userdata[0] = 1;
             psndSFXOn_3D("SFX_STG7_ELECTRIC_SHOCK1", &mario->position);
             eff = effAkariChargeN64Entry(0, 100, mario->position.x, 30.0f + mario->position.y, mario->position.z, 1.0f);

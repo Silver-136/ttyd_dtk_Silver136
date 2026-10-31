@@ -612,6 +612,7 @@ USER_FUNC(aud_suikomi) {
                 n++;
             }
         }
+        // Shuffle the occupied-seat IDs before taking the first twenty.
         for (i = 0; i < 1000; i++) {
             s32 a = irand(n);
             s32 b = irand(n);
@@ -622,7 +623,7 @@ USER_FUNC(aud_suikomi) {
         }
         for (i = 0; i < 20; i++) {
             mem = BattleAudienceGetPtr(ids[i]);
-            mem->flags |= 0x10;
+            mem->flags |= AUDIENCE_MEMBER_FLAG_NO_SYS_CTRL;
             BattleAudience_SetAnim(ids[i], 9, FALSE);
             mem->interpFramesTotal = i * 3 + 60;
             mem->counter = 0;
@@ -645,7 +646,7 @@ USER_FUNC(aud_suikomi) {
                 } else {
                     done++;
                     mem->flags &= ~4;
-                    mem->flags |= 2;
+                    mem->flags |= AUDIENCE_MEMBER_FLAG_NOT_EXIST;
                 }
                 mem->position.x = intplGetValue(EASING_QUADRATIC_OUT, mem->mHomePosition.x, x2, mem->interpFrameCounter, mem->interpFramesTotal);
                 mem->position.y = intplGetValue(EASING_CUBIC_IN, mem->mHomePosition.y, y2, mem->interpFrameCounter, mem->interpFramesTotal);
@@ -766,6 +767,7 @@ USER_FUNC(aud_fire_no_hit) {
             mem->flags |= 4;
             evt = evtEntry(aud_hit_event, 0, EVENT_START_IMMEDIATE);
             evt->lwData[0] = list[i];
+            // This miss path also starts aud_hit_event; only its first six arguments are set here.
             evt->lwData[1] = FLOAT(-275.0f);
             evt->lwData[2] = (s32)(1024.0f * (hy - 20.0f)) - EVTDAT_FLOAT_BASE;
             evt->lwData[3] = (s32)(1024.0f * hz) - EVTDAT_FLOAT_BASE;

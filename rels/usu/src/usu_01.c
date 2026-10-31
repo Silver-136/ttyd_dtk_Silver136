@@ -803,9 +803,9 @@ EVT_BEGIN(aunt_talk)
                 CALL(evt_pouch_get_haveitemcnt, LW(0))
                 CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(1))
                 IF_INT_EQUAL(LW(1), 0)
-                    SET_VALUE(LW(1), 10)
+                    SET_VALUE(LW(1), HELD_ITEM_COUNT_BASE)
                     ELSE
-                    SET_VALUE(LW(1), 20)
+                    SET_VALUE(LW(1), MAX_HELD_ITEMS)
                 END_IF
                 IF_INT_LESS(LW(0), LW(1))
                     CALL(evt_msg_continue)
@@ -2207,7 +2207,7 @@ USER_FUNC(get_item_list) {
     s32 n;
     s32 i;
 
-    for (i = 0, n = 0; i < 20; i++) {
+    for (i = 0, n = 0; i < MAX_HELD_ITEMS; i++) {
         if (pouchHaveItem(i)) {
             list[n] = pouchHaveItem(i);
             n++;
@@ -2893,7 +2893,7 @@ static EVT_BEGIN(evt_majin2)
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_PERAMAJIN_COME1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
-    CALL(evt_mario_set_camid, 7)
+    CALL(evt_mario_set_camid, CAMERA_3D_EFFECTB)
     CALL(evt_img_wait_animend, STRING("img"))
     CALL(lect_cam_save)
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
@@ -3037,7 +3037,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_DEFEND_PLUS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), 258)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)

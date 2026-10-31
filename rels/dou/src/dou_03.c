@@ -168,7 +168,7 @@ EVT_BEGIN(watergate_handle_init)
         CALL(evt_mapobj_flag_onoff, 0, 1, STRING("S_reba"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("s_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
-        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("s_bero"), 128)
+        CALL(evt_hitobj_attr_onoff, 1, 0, STRING("s_bero"), HIT_ATTR_SHIP_ONLY)
         CALL(evt_hitobj_onoff, STRING("A_reba"), 1, 0)
         ELSE
         CALL(evt_map_playanim, STRING("mon_up"), MAP_ANIM_PLAY_ONCE, 0)
@@ -251,6 +251,7 @@ EVT_BEGIN(nagare_bin)
     RETURN
 EVT_END()
 
+// Stop the stored barrel/bottle bobbing events before their downstream translation.
 EVT_BEGIN(watergate_handle)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
         CALL(evt_pouch_check_item, ITEM_GATE_HANDLE, LW(0))
@@ -314,7 +315,7 @@ EVT_BEGIN(watergate_handle)
         CALL(evt_party_run, 0)
         SET_VALUE(LW(0), STRING("s_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
-        CALL(evt_hitobj_attr_onoff, 1, 1, STRING("s_bero"), 128)
+        CALL(evt_hitobj_attr_onoff, 1, 1, STRING("s_bero"), HIT_ATTR_SHIP_ONLY)
         SET_VALUE(GSW_STORY_PROGRESS, STG5_22_FLOODGATE_HANDLE)
         CALL(evt_mario_key_onoff, 1)
         ELSE

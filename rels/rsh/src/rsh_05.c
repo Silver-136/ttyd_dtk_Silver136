@@ -234,6 +234,7 @@ static ExtTexInfo ext_moamoa_data[] = {
 };
 
 #pragma dont_inline on
+// Group contiguous model/animation samples; the last sampled frame becomes the playback duration.
 static void moamoa_pose_init(void) {
     ExtTexInfo* data = ext_moamoa_data;
     s32 i = 0;
@@ -404,6 +405,7 @@ static s32 evt_moamoa_ry_reset(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+// Block until every member has entered GONE; the escape scene resets the ext controller afterward.
 static s32 evt_moamoa_end_wait(EventEntry* event, BOOL isFirstCall) {
     s32 i;
     Moamoa* moa;
@@ -571,6 +573,7 @@ static void ext_moamoa_init(void) {
     }
     wp->mobj = mapGetMapObj("ressha");
     wp->mobjY = wp->mobj->animMtx[1][3];
+    // Pre-run 600 simulation updates; this does not wait for 600 rendered frames.
     for (i = 0; i < 600; i++) {
         ext_moamoa_main();
     }
@@ -807,6 +810,7 @@ static void ext_moamoa_main(void) {
         wp->breathPos.y = party->position.y;
         wp->breathPos.z = party->position.z - wp->breathDist * polyCosf(6.2831855f * wp->breathDir / 360.0f);
     }
+    // Each captive is freed after more than 50 nearby hits; cleared targets redirect to the other side.
     if (wp->targetHits[0] > 50) {
         wp->target[0] = wp->target[1];
         if (!(wp->flags & MOAMOA_WORK_FLAG_TARGET0_CLEARED)) {
@@ -843,6 +847,7 @@ static void ext_moamoa_main(void) {
         }
     }
 
+    // One ordinary hit per update; Bobbery's hit code 4 deliberately leaves that latch clear.
     pose = extGetPosePtr();
     sfx = 0;
     moa = wp->moa;
@@ -1368,8 +1373,8 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     f32 z = evtGetFloat(event, args[3]);
     f32 speed = evtGetFloat(event, args[4]);
     f32 gravity = evtGetFloat(event, args[5]);
-    s32 frames = evtGetValue(event, args[6]);
-    f32 t = 60.0f * frames / 1000.0f;
+    s32 durationMs = evtGetValue(event, args[6]);
+    f32 t = 60.0f * durationMs / 1000.0f;
     NpcEntry* npc = npcNameToPtr(name);
     f32 dy;
     f32 vy;

@@ -430,6 +430,7 @@ EVT_BEGIN(yashi_yure_init)
     RETURN
 EVT_END()
 
+// Only the first two shakes schedule coconut pickups; later shakes still increment the counter.
 EVT_BEGIN(yashi_yure)
     ADD(GW(10), 1)
     IF_INT_EQUAL(GW(10), 1)
@@ -459,7 +460,7 @@ EVT_BEGIN(yashi_yure)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_mapobj_trans, 1, STRING("S_yasi_mi02"), 0, -1000, 0)
             CALL(evt_item_entry, STRING("yashi00"), ITEM_COCONUT, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-            CALL(evt_item_flag_on, STRING("yashi00"), 2)
+            CALL(evt_item_flag_on, STRING("yashi00"), ITEM_FLAG_NO_TOUCH_GET)
             CALL(evt_item_get_item, STRING("yashi00"))
             CALL(evt_mario_key_onoff, 1)
         END_INLINE_EVENT
@@ -494,7 +495,7 @@ EVT_BEGIN(yashi_yure)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_mapobj_trans, 1, STRING("S_yasi_mi01"), 0, -1000, 0)
             CALL(evt_item_entry, STRING("yashi01"), ITEM_COCONUT, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-            CALL(evt_item_flag_on, STRING("yashi01"), 2)
+            CALL(evt_item_flag_on, STRING("yashi01"), ITEM_FLAG_NO_TOUCH_GET)
             CALL(evt_item_get_item, STRING("yashi01"))
             CALL(evt_mario_key_onoff, 1)
         END_INLINE_EVENT
@@ -571,6 +572,7 @@ USER_FUNC(mario_moveride_check) {
         }
     }
     event->lwData[0] = 0;
+    // Compare the stable table name pointer to detect a newly occupied bridge segment.
     if (name != NULL && event->lwData[1] != (EvtWord)name) {
         event->lwData[0] = (EvtWord)anim;
     }

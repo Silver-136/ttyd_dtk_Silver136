@@ -160,6 +160,7 @@ EVT_BEGIN(sekizou_move)
     RETURN
 EVT_END()
 
+// Wait for the full animation; a parallel event schedules the rotation sound near its end.
 EVT_BEGIN(animation_wait)
     CALL(evt_map_playanim, LW(0), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, LW(0), LW(1), LW(2))
@@ -474,6 +475,7 @@ EVT_BEGIN(a_sekizou_1)
     WAIT_MS(1500)
     WAIT_MS(500)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    // Question index, correct answers, and wrong answers; finish at five correct or three wrong.
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
     SET_VALUE(LW(13), 0)
@@ -743,6 +745,7 @@ EVT_BEGIN(hei_07_init_evt)
 EVT_END()
 
 
+// The message callback shares LW14 (mouth/marker count) and LW15 (mouth-animation mode) with the event.
 static void callback(s32 type, void** work) {
     EventEntry* evt = ((MsgWinData*)*work)->event;
     BOOL valid;

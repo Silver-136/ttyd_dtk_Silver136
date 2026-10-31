@@ -20,7 +20,7 @@ void _prolog(void);
 USER_FUNC(evt_usu_vivian_pose_set) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
-    partyPoseTbl[6][index] = (char*)evtGetValue(event, args[1]);
+    partyPoseTbl[PARTY_MEMBER_VIVIAN][index] = (char*)evtGetValue(event, args[1]);
     return EVT_RETURN_DONE;
 }
 
@@ -32,8 +32,8 @@ void _prolog(void) {
     }
     relSetEvtAddr("usu_00", usu_00_init_evt);
     relSetEvtAddr("usu_01", usu_01_init_evt);
-    pose_buf = _mapAlloc(sizeof(partyPoseTbl[6]));
-    memcpy(pose_buf, partyPoseTbl[6], sizeof(partyPoseTbl[6]));
+    pose_buf = _mapAlloc(sizeof(partyPoseTbl[PARTY_MEMBER_VIVIAN]));
+    memcpy(pose_buf, partyPoseTbl[PARTY_MEMBER_VIVIAN], sizeof(partyPoseTbl[PARTY_MEMBER_VIVIAN]));
 }
 
 void _epilog(void) {
@@ -42,7 +42,7 @@ void _epilog(void) {
     for (dtor = _dtors; *dtor != NULL; dtor++) {
         (*dtor)();
     }
-    memcpy(partyPoseTbl[6], pose_buf, sizeof(partyPoseTbl[6]));
+    memcpy(partyPoseTbl[PARTY_MEMBER_VIVIAN], pose_buf, sizeof(partyPoseTbl[PARTY_MEMBER_VIVIAN]));
     _mapFree(pose_buf);
 }
 

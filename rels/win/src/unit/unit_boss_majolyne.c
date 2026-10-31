@@ -354,7 +354,7 @@ EVT_END()
 static EVT_BEGIN(majo3_zoom)
     CALL(btlevtcmd_GetPos, LW(0), LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
-    CALL(evt_btl_camera_set_moveto, 0, LW(0), 65, 332, LW(0), 30, -340, 30, 11)
+    CALL(evt_btl_camera_set_moveto, 0, LW(0), 65, 332, LW(0), 30, -340, 30, EASING_SINE_IN_OUT)
     WAIT_FRAMES(37)
     RETURN
 EVT_END()
@@ -397,7 +397,7 @@ static EVT_BEGIN(damage_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(11), 1)
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -440,7 +440,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     SET_VALUE(GW(11), 2)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL_CHILD(PTR(subsetevt_dead_core_nospin_norotate))
     RETURN
 EVT_END()
@@ -909,6 +909,7 @@ static EVT_BEGIN(blizzard_attack_event)
     LABEL(90)
     GOTO(97)
     LABEL(91)
+    // Defense input is checked only for the first selected target.
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     END_IF
@@ -1027,9 +1028,7 @@ EVT_END()
 
 static USER_FUNC(majo3_sort) {
     MajoSortEntry tbl[3];
-    MajoSortEntry tmp1;
-    MajoSortEntry tmp3;
-    MajoSortEntry tmp2;
+    MajoSortEntry tmp;
     s32 i;
 
     for (i = 0; i < 3; i++) {
@@ -1037,19 +1036,19 @@ static USER_FUNC(majo3_sort) {
         tbl[i].value = event->lwData[i];
     }
     if (tbl[0].value < tbl[1].value) {
-        tmp1 = tbl[0];
+        tmp = tbl[0];
         tbl[0] = tbl[1];
-        tbl[1] = tmp1;
+        tbl[1] = tmp;
     }
     if (tbl[1].value < tbl[2].value) {
-        tmp2 = tbl[1];
+        tmp = tbl[1];
         tbl[1] = tbl[2];
-        tbl[2] = tmp2;
+        tbl[2] = tmp;
     }
     if (tbl[0].value < tbl[1].value) {
-        tmp3 = tbl[0];
+        tmp = tbl[0];
         tbl[0] = tbl[1];
-        tbl[1] = tmp3;
+        tbl[1] = tmp;
     }
     for (i = 0; i < 3; i++) {
         event->lwData[i] = tbl[i].id;

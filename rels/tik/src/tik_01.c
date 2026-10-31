@@ -51,6 +51,7 @@ EVT_BEGIN(lecture_badge_after_00_evt)
     RETURN
 EVT_END()
 
+// Remind Mario to equip a badge only between the badge tutorial and the Blooper battle.
 EVT_BEGIN(dokan_2_in_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_17_BADGE_TUTORIAL)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG0_19_BLOOPER_BATTLE)
@@ -419,6 +420,7 @@ EVT_BEGIN(gorotuki_sanninngumi)
     RETURN
 EVT_END()
 
+// Skip the capture animation only when both bounding-box dimensions are zero.
 EVT_BEGIN(wall_bomb00)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -459,6 +461,7 @@ EVT_BEGIN(wall_bomb00)
     RETURN
 EVT_END()
 
+// Skip the capture animation only when both bounding-box dimensions are zero.
 EVT_BEGIN(wall_bomb01)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -504,7 +507,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_DEFEND_PLUS_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), 258)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)

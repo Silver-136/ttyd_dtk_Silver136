@@ -17,6 +17,7 @@
 #include "pmario_sound.h"
 #include "dolphin/gx.h"
 #include "dolphin/mtx.h"
+#include <dolphin/pad.h>
 #include "sdk/texPalette.h"
 #include "manager/fontmgr.h"
 #include "driver/msgdrv.h"
@@ -1061,7 +1062,7 @@ EVT_BEGIN(evt_start)
 #endif
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_BITS_SET(LW(0), 4864)
+        IF_BITS_SET(LW(0), PAD_BUTTON_A | PAD_BUTTON_B | PAD_BUTTON_START)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -1202,7 +1203,7 @@ USER_FUNC(display) {
                         if (chr->timer < 0) {
                             chr->timer = 0;
                             chr->state++;
-                            effStardustN64SetDrawCam(effStardustN64Entry(4, chr->x, chr->y, chr->z, 40.0f), 5);
+                            effStardustN64SetDrawCam(effStardustN64Entry(4, chr->x, chr->y, chr->z, 40.0f), CAMERA_3D_EFFECTA);
                         }
                         break;
                     case 1:
@@ -1260,7 +1261,7 @@ USER_FUNC(bg) {
     EffectEntry* eff = effItemGetEntry(0, 0.0f, 0.0f, 0.0f);
 
     ((ItemGetWork*)eff->userdata)->state = 1;
-    ((ItemGetWork*)eff->userdata)->camera = 5;
+    ((ItemGetWork*)eff->userdata)->camera = CAMERA_3D_EFFECTA;
     return EVT_RETURN_DONE;
 }
 

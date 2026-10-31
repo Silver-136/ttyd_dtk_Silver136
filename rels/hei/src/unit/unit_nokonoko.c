@@ -238,6 +238,7 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+// Flipped attack turns count down from two; the recovery turn restores defense, pose, and hit offset instead of attacking.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -263,6 +264,7 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+// Separate first-strike script: damage is checked directly, without the normal attack's precheck or smoke loop.
 static EVT_BEGIN(first_attack_event)
     CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)

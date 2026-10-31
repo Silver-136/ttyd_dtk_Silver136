@@ -1283,6 +1283,7 @@ EVT_BEGIN(ele_2)
     CALL(evt_mapobj_get_position, STRING("ere2_m"), LW(2), LW(3), LW(4))
     CALL(evt_snd_sfx_pos, LW(9), LW(2), LW(3), LW(4))
 #endif
+    // This ride uses a different rider-height offset from Peach's -999 path.
     ADD(LW(0), -998)
     CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
     CALL(evt_mario_set_pos, LW(2), LW(0), LW(4))
@@ -1376,6 +1377,7 @@ EVT_BEGIN(key_lock)
     RETURN
 EVT_END()
 
+// Door and elevator lock messages share the same capped three-attempt counter.
 EVT_BEGIN(last_key_lock)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_45_02"), 0, 0)
@@ -2222,6 +2224,7 @@ EVT_END()
 USER_FUNC(get_password) {
     EvtWord* args = event->args;
 
+    // Compare against the localized message text rather than a hard-coded password.
     evtSetValue(event, args[0], (EvtWord)msgSearch("stg7_aji_password"));
     return EVT_RETURN_DONE;
 }

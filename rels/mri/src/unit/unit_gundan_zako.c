@@ -259,7 +259,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -277,6 +277,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+    // Roll 50/30/20 for charge, jump or growth; reroll growth while already Huge.
     LABEL(10)
     SET_VALUE(LW(0), 0)
     ADD(LW(0), 50)
@@ -360,7 +361,7 @@ static EVT_BEGIN(attack_common_event2)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(7.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -542,7 +543,7 @@ static EVT_BEGIN(jump_attack_event)
 EVT_END()
 
 static EVT_BEGIN(dekadeka_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_gundan_zako_dekadeka_bottle))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))

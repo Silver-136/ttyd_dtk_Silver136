@@ -406,21 +406,21 @@ s32 exchange_ret_tbl_no(void) {
     s32 n = evtGetValue(NULL, GSW_STORY_PROGRESS);
     s32 no = 0;
 
-    if (n >= 402) {
+    if (n >= STG8_END_AFTER_THE_BATTLE) {
         no = 8;
-    } else if (n >= 375) {
+    } else if (n >= STG7_25_00_1_BOWSER_POSHLEY_SANCTUM) {
         no = 7;
-    } else if (n >= 344) {
+    } else if (n >= STG6_55_04_BOWSER_RAWK_HAWK) {
         no = 6;
-    } else if (n >= 267) {
+    } else if (n >= STG5_49_BOWSER_TWILIGHT_TOWN_2) {
         no = 5;
-    } else if (n >= 218) {
+    } else if (n >= STG4_15_08_BOWSER_ROGUEPORT_DOCK) {
         no = 4;
-    } else if (n >= 171) {
+    } else if (n >= STG3_33_06_BOWSER_TREASURE) {
         no = 3;
-    } else if (n >= 117) {
+    } else if (n >= STG2_25_05_BOWSER_PETALBURG) {
         no = 2;
-    } else if (n >= 61) {
+    } else if (n >= STG1_19_02_BOWSER_CASTLE_INT) {
         no = 1;
     }
     return no;
@@ -2280,7 +2280,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_65"), 0, STRING("me"))
         GOTO(1)
     END_IF
-    IF_INT_GREATER_OR_EQUAL(LW(1), 240)
+    IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
         CALL(evt_sub_get_language, LW(0))
 #ifdef VERSION_G8ME01
         SWITCH(LW(0))
@@ -2323,7 +2323,7 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
     END_IF
     CALL(evt_pouch_add_item, LW(1), LW(0))
     IF_INT_EQUAL(LW(0), -1)
-        IF_INT_GREATER_OR_EQUAL(LW(1), 240)
+        IF_INT_GREATER_OR_EQUAL(LW(1), BADGE_MIN)
             CALL(evt_msg_print_add, 0, STRING("bunny_teresa_72"))
             ELSE
             CALL(evt_msg_print_add, 0, STRING("bunny_teresa_73"))
@@ -2970,49 +2970,49 @@ static EVT_BEGIN(kinopiko_b_talk)
     CALL(evt_mario_get_party, LW(0))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
-        IF_INT_EQUAL(LW(0), 5)
+        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_072_01"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_072"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG3_32_BOSS_BATTLE)
-        IF_INT_EQUAL(LW(0), 5)
+        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_073_01"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_073"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-        IF_INT_EQUAL(LW(0), 5)
+        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_074_01"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_074"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG5_43_X_NAUTS_RETREAT)
-        IF_INT_EQUAL(LW(0), 5)
+        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_075_01"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_075"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG6_54_WELCOME_BACK)
-        IF_INT_EQUAL(LW(0), 5)
+        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_076_01"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_076"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG7_20_LORD_CRUMP_DEFEATED)
-        IF_INT_EQUAL(LW(0), 5)
+        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_077_01"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_077"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG8_16_THE_RETURN_OF_THE_QUEEN)
-        IF_INT_EQUAL(LW(0), 5)
+        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_078_01"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_078"), 0, STRING("me"))
         END_IF
         CASE_DEFAULT
-        IF_INT_EQUAL(LW(0), 5)
+        IF_INT_EQUAL(LW(0), PARTY_MEMBER_FLURRIE)
             CALL(evt_msg_print, 0, STRING("gor_03_079_01"), 0, STRING("me"))
             ELSE
             CALL(evt_msg_print, 0, STRING("gor_03_079"), 0, STRING("me"))
@@ -4331,10 +4331,10 @@ EVT_BEGIN(uraguchi_check)
             SET_VALUE(GW(11), LW(0))
         END_IF
     END_IF
-    IF_INT_NOT_EQUAL(GW(10), 152)
+    IF_INT_NOT_EQUAL(GW(10), ITEM_DRIED_SHROOM)
         RETURN
     END_IF
-    IF_INT_NOT_EQUAL(GW(11), 141)
+    IF_INT_NOT_EQUAL(GW(11), ITEM_DIZZY_DIAL)
         RETURN
     END_IF
     CALL_CHILD(PTR(uraguchi_event))
@@ -4402,9 +4402,9 @@ EVT_BEGIN(majorin_nusumigiki)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_party_stop, 0)
-        CALL(evt_party_flg_onoff, 0, 16777216, 1)
+        CALL(evt_party_flg_onoff, 0, PARTY_FLAG_DISABLE_FRONT_WALL_CHK, 1)
         CALL(evt_party_move_pos2, 0, -450, 200, FLOAT(120.0f))
-        CALL(evt_party_flg_onoff, 0, 16777216, 0)
+        CALL(evt_party_flg_onoff, 0, PARTY_FLAG_DISABLE_FRONT_WALL_CHK, 0)
         CALL(evt_party_set_dir, 0, 90, 200)
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
@@ -4543,7 +4543,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_INT_EQUAL(LW(0), 256)
+        IF_INT_EQUAL(LW(0), PAD_BUTTON_A)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -5933,8 +5933,11 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
             }
             data->counter++;
             break;
-        case 5:
-{s32 n; s32 m;            n = 0;
+        case 5: {
+            s32 n;
+            s32 m;
+
+            n = 0;
             for (m = 0; m < 3; m++) {
                 if (data->state[m] == 0) {
                     n++;
@@ -5946,7 +5949,8 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                 data->counter = 0;
                 data->phase++;
             }
-            break;}
+            break;
+        }
         case 6:
             for (i = 0; i < 3; i++) {
                 gara2[i] = slotgara[data->nowSlot][i][(s32)(data->angle[data->nowSlot][i] / 45.0f)];
@@ -6218,28 +6222,28 @@ USER_FUNC(kuzi_get_keihin) {
     switch (evtGetValue(event, args[0])) {
         case 0:
             if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN)) {
-                item = 0x104;
+                item = ITEM_POWER_PLUS;
                 evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN, 1);
             } else {
-                item = 0xC4;
+                item = ITEM_ZESS_DYNAMITE;
             }
             break;
         case 1:
             if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN)) {
-                item = 0x12F;
+                item = ITEM_LUCKY_DAY;
                 evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN, 1);
             } else {
-                item = 0xC2;
+                item = ITEM_ZESS_SPECIAL;
             }
             break;
         case 2:
-            item = 0x96;
+            item = ITEM_ULTRA_SHROOM;
             break;
         case 3:
-            item = 0x97;
+            item = ITEM_LIFE_SHROOM;
             break;
         default:
-            item = 0x94;
+            item = ITEM_MUSHROOM;
             break;
     }
     evtSetValue(event, args[1], item);

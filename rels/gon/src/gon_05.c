@@ -228,6 +228,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+// Block 0 starts 525 units above its placed position when its area flag is clear.
 static EVT_BEGIN(init_0)
     IF_INT_EQUAL(1, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
@@ -456,6 +457,7 @@ static EVT_BEGIN(main_0)
     RETURN
 EVT_END()
 
+// Block 1 starts 489 units above its placed position when its area flag is set.
 EVT_BEGIN(init_1)
     IF_INT_EQUAL(0, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
@@ -790,12 +792,12 @@ EVT_BEGIN(gon_05_init_evt)
     CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -200, 240, -150, ITEM_TYPE_STILL, GSWF_STARPIECE_39, 0)
     CALL(evt_item_entry, STRING("item01"), ITEM_LAST_STAND_P, 210, 915, 150, ITEM_TYPE_STILL, GSWF_GON_05_LAST_STAND_P, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_13_03_LOCK_2)
-        CALL(evt_mobj_lock, STRING("mobj_lock00"), 12, -240, 750, 0, 90, PTR(evt_chk00), PTR(evt_unlock00), GSWF_GON_05_LOWER_DOOR_UNLOCKED)
+        CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_CASTLE_KEY_0x0C, -240, 750, 0, 90, PTR(evt_chk00), PTR(evt_unlock00), GSWF_GON_05_LOWER_DOOR_UNLOCKED)
         SET_VALUE(LW(0), STRING("w_bero_3"))
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_15_04_LOCK_4)
-        CALL(evt_mobj_lock, STRING("mobj_lock01"), 14, -240, 1900, 0, 90, PTR(evt_chk01), PTR(evt_unlock01), GSWF_GON_05_UPPER_DOOR_UNLOCKED)
+        CALL(evt_mobj_lock, STRING("mobj_lock01"), ITEM_CASTLE_KEY_0x0E, -240, 1900, 0, 90, PTR(evt_chk01), PTR(evt_unlock01), GSWF_GON_05_UPPER_DOOR_UNLOCKED)
         SET_VALUE(LW(0), STRING("w_bero_5"))
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF

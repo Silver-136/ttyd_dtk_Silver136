@@ -227,6 +227,7 @@ EVT_BEGIN(lost_wedding_ring)
     WAIT_MS(500)
     SET_VALUE(GW(0), 10)
     SPAWN_EVENT_GET_ID(PTR(lost_wedding_ring_sub), LW(0))
+    // Advance the count from 10 to 100, incrementing after each repeated message.
     LOOP(90)
         CALL(evt_msg_print_add, 0, STRING("stg5_muj_182_01"))
         ADD(GW(0), 1)
@@ -588,8 +589,6 @@ EVT_BEGIN(muj_02_init_evt)
     RETURN
 EVT_END()
 
-// (body lives in countDisp.c to keep the original definition order)
-// printCount comes first so the deferred compile emits both functions in the original order
 void printCount(CameraId camera, void* param) {
 #ifdef VERSION_G8ME01
     char buf[32];

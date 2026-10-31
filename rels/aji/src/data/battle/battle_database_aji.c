@@ -1287,6 +1287,7 @@ EVT_BEGIN(bgset_aji_space_event)
     SET_VALUE(LW(2), 0)
     SET_VALUE(LW(3), 0)
     LABEL(0)
+    // Each star keeps an independent frame counter and revolution period.
     CALL(_space_rotate, STRING("star_01"), LW(1), 7500)
     CALL(_space_rotate, STRING("star_02"), LW(2), 6750)
     CALL(_space_rotate, STRING("star_03"), LW(3), 6000)
@@ -1303,6 +1304,7 @@ static USER_FUNC(_space_rotate) {
     s32 total = evtGetValue(event, args[2]);
     BattleStageObject* obj = BattleSearchObjectPtr(name);
 
+    // Draw the current phase before advancing and wrapping the counter.
     obj->mRotation.z = 360.0f * step / total;
     step++;
     if (step >= total) {

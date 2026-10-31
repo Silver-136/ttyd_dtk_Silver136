@@ -645,6 +645,7 @@ BattleGroupSetup btlgrp_jin_jin_01_03_off_3 = {
     5, // reserved_1C
 };
 
+// These Swoopers start flying (unitWork[0] = 1), unlike the ceiling groups above.
 BattleUnitSetup btlparty_jin_jin_03_01_off_1[] = {
     {
         &unit_basabasa, // mUnitKindParams
@@ -1107,6 +1108,7 @@ BattleGroupSetup btlgrp_jin_jin_10_06_off_1 = {
     5, // reserved_1C
 };
 
+// The five test selectors reuse the single-Boo party with different stage entries.
 NpcBattleSelect btlgrpsel_jin_btlno_jin_test1_off[] = {
     {50, &btlgrp_jin_jin_00_01_off_1, &jin_btlstage_data[2]},
     {0},
@@ -1258,6 +1260,7 @@ NpcBattleSelect btlgrpsel_jin_btlno_jin_10_06_off[] = {
     {0},
 };
 
+// Table indices are battleInfoId values; entry 7 is the Atomic Boo encounter.
 NpcSetupBattleInfo btlsetup_jin_tbl[] = {
     {
         /*"マップstg_04_2"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x34\x5F\x32", // name

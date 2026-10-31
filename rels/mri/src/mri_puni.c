@@ -102,7 +102,7 @@ void evt_icon_disp_func(CameraId camId, void* param) {
     PuniData* p;
     s32 i;
     if (Punigp->floor == 9 || Punigp->floor == 12) {
-        for (i = 1; i < 211; i++) {
+        for (i = 1; i < PUNI_DATA_MAX; i++) {
             p = &Punidat[i];
             if ((p->flags & PUNI_FLAG_ACTIVE) && !(p->flags & (PUNI_FLAG_DEAD | PUNI_FLAG_NOT_IN_PARTY))) {
                 Vec a;
@@ -146,8 +146,6 @@ PuniTexInfo* _make_texbuf(PuniTexInfo* texbuf, s32 count, const char* group, con
 
 USER_FUNC(evt_make_texbuf) {
     PuniTexInfo* texbuf = Punitex;
-
-    texbuf = Punitex;
     texbuf = _make_texbuf(texbuf, 40, "c_puni", "S_1", 0.0f);
     texbuf = _make_texbuf(texbuf, 12, "c_puni", "S_1", 97.0f);
     texbuf = _make_texbuf(texbuf, 20, "c_puni", "W_1", 0.0f);
@@ -490,7 +488,7 @@ void _ymode_mri_16_00(PuniData* p) {
             p->pos.y = -400.0f;
         }
     }
-    if (!(p->flags2 & PUNI_FLAG2_CROSSING_LEDGE) && !(p->flags2 & PUNI_FLAG2_ON_SLOPE) && (old & 8)) {
+    if (!(p->flags2 & PUNI_FLAG2_CROSSING_LEDGE) && !(p->flags2 & PUNI_FLAG2_ON_SLOPE) && (old & PUNI_FLAG2_ON_SLOPE)) {
         if (p->pos.z > -76.46314f && p->prevPos.z <= -76.46314f) {
             p->pos = p->prevPos;
             p->pos.z -= 0.0002f;
@@ -535,7 +533,7 @@ void _ymode_mri_16_01(PuniData* p) {
             }
         }
     }
-    if (!(p->flags2 & PUNI_FLAG2_CROSSING_LEDGE) && !(p->flags2 & PUNI_FLAG2_ON_SLOPE) && (old & 8)) {
+    if (!(p->flags2 & PUNI_FLAG2_CROSSING_LEDGE) && !(p->flags2 & PUNI_FLAG2_ON_SLOPE) && (old & PUNI_FLAG2_ON_SLOPE)) {
         if (p->pos.z > 60.00006f && p->prevPos.z <= 60.00006f) {
             p->pos = p->prevPos;
             p->pos.z -= 0.0002f;
@@ -556,7 +554,6 @@ void _ymode_mri_16_01(PuniData* p) {
      ((z0) > _az ? _aok = 0 : 0), \
      ((z1) < _az ? _aok = 0 : 0), \
      _aok)
-//(x0,x1,z0,z1) (ok = 1, (p->pos.x < (x0) ? ok = 0 : 0), (p->pos.x > (x1) ? ok = 0 : 0), (p->pos.z < (z0) ? ok = 0 : 0), (p->pos.z > (z1) ? ok = 0 : 0), ok)
 void puniSetYPosition(PuniData* p) {
     if (p->flags & PUNI_FLAG_PUNI) {
         BOOL _aok;
@@ -1968,7 +1965,7 @@ void puniSearch(PuniData* p) {
 void puniModeChangeAttack(void) {
     s32 i;
     PuniData* p = &Punidat[1];
-    for (i = 1; i < 211; i++, p++) {
+    for (i = 1; i < PUNI_DATA_MAX; i++, p++) {
         if (p->flags & PUNI_FLAG_ACTIVE) {
             switch (p->mode) {
             case 0:
@@ -4137,7 +4134,7 @@ void puni_puni_init(void) {
     p->index = 0;
     p->groupId = 0;
     p = &Punidat[1];
-    for (i = 1; i < 211; i++) {
+    for (i = 1; i < PUNI_DATA_MAX; i++) {
         pose->flags = 1;
         pose->flags |= 2;
         pose->dir = 0.0f;
@@ -4146,6 +4143,7 @@ void puni_puni_init(void) {
         (*pose->mtx)[1][3] = -1000.0f;
         (*pose->mtx)[2][3] = 0.0f;
         pose->offsetY = 0.0f;
+        // This field aliases a billboard pose; its flags are not NpcEntry flags.
         p->npc = (NpcEntry*)pose;
         pose++;
         {
@@ -4165,8 +4163,8 @@ void puni_puni_init(void) {
     Punigp->showPuniCounter = 1;
     Punigp->puniCounterAlpha = 0xFF;
     Punigp->showRemaining = 0;
-    Punimap = _mapAlloc(0x24);
-    memset(Punimap, 0, 0x24);
+    Punimap = _mapAlloc(sizeof(PuniMap));
+    memset(Punimap, 0, sizeof(PuniMap));
 }
 
 void puniModeMain(PuniData* p);
@@ -5064,12 +5062,12 @@ s32 evt_puni_init(EventEntry *event, BOOL isFirstCall) {
     EvtWord d = evtGetValue(event, args[3]);
     if (isFirstCall) {
         puniInit();
-        return 0;
+        return EVT_RETURN_BLOCK;
     }
     puniAnimationInit_inl((s16**)puni_patern_table, (s16**)toge_patern_table);
     puniAnimationInit2();
     puniEntry(a, (PunidrvTexInfo*)tex, (void*)b, (void*)c, (void*)d);
-    return 2;
+    return EVT_RETURN_DONE;
 }
 
 USER_FUNC(evt_puni_set_yuka) {
@@ -6009,7 +6007,7 @@ USER_FUNC(evt_puni_move_position) {
     PuniData* p = &Punidat[evtGetValue(event, args[0])];
     f32 x = evtGetValue(event, args[1]);
     f32 z = evtGetValue(event, args[2]);
-    s32 frames = evtGetValue(event, args[3]);
+    s32 durationMs = evtGetValue(event, args[3]);
     u32 t;
 
     if (isFirstCall) {
@@ -6019,9 +6017,9 @@ USER_FUNC(evt_puni_move_position) {
         p->moveEnd.y = p->pos.y;
         p->moveEnd.z = z;
     }
-    if ((s32)(t = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime)) < frames) {
-        p->pos.x = intplGetValue(EASING_LINEAR, p->moveStart.x, p->moveEnd.x, t, frames);
-        p->pos.z = intplGetValue(EASING_LINEAR, p->moveStart.z, p->moveEnd.z, t, frames);
+    if ((s32)(t = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime)) < durationMs) {
+        p->pos.x = intplGetValue(EASING_LINEAR, p->moveStart.x, p->moveEnd.x, t, durationMs);
+        p->pos.z = intplGetValue(EASING_LINEAR, p->moveStart.z, p->moveEnd.z, t, durationMs);
         p->prevPos = p->pos;
         return EVT_RETURN_BLOCK;
     }
@@ -6082,7 +6080,6 @@ USER_FUNC(evt_puni_jump_position) {
     }
     t = OSTicksToMilliseconds((u32)gp->renderTime - (u32)p->startTime);
     if (t < frames) {
-        r = (f32)t / (f32)frames;
         r = (f32)t / (f32)frames;
         p->pos.x = intplGetValue(EASING_LINEAR, p->moveStart.x, x, (s32)t, frames);
         p->pos.z = intplGetValue(EASING_LINEAR, p->moveStart.z, z, (s32)t, frames);

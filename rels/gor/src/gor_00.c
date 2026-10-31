@@ -344,7 +344,7 @@ s16 dai3_run_animtbl[] = {
 EVT_BEGIN(no00_custom)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_05_1000_X_NAUTS_BEFORE)
         CALL(evt_mario_wait_landon)
-        CALL(evt_mario_flag_onoff, 1, 256)
+        CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_FLOORS_DISABLED)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
         ADD(LW(12), -80)
@@ -1502,6 +1502,7 @@ EVT_BEGIN(mokorim_talk)
                     CASE_EQUAL(1)
                     SET_VALUE(LW(0), 300)
                     CASE_EQUAL(2)
+                    // The two-investment payout is 600 coins in US and 500 in JP.
 #ifdef VERSION_G8ME01
                     SET_VALUE(LW(0), 600)
 #else
@@ -2730,7 +2731,7 @@ EVT_BEGIN(gundan1000tai_afterbattle)
     CALL(evt_npc_get_position, STRING("クリスチーヌ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_dir, STRING("クリスチーヌ"), LW(3))
     CALL(evt_npc_set_position, STRING("クリスチーヌ"), 0, -1000, 0)
-    CALL(evt_mario_set_party_pos, 1, 13, LW(0), LW(1), LW(2))
+    CALL(evt_mario_set_party_pos, 1, PARTY_MEMBER_GOOMBELLA_FOLLOWER, LW(0), LW(1), LW(2))
     CALL(evt_party_set_dir, 1, LW(3), -1)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
@@ -3007,8 +3008,8 @@ EVT_END()
 
 EVT_BEGIN(shukko_event)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_flag_onoff, 1, 1024)
-    CALL(evt_party_flg_onoff, 0, 16777216, 1)
+    CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_WALLS_DISABLED)
+    CALL(evt_party_flg_onoff, 0, PARTY_FLAG_DISABLE_FRONT_WALL_CHK, 1)
     CALL(evt_cam3d_evt_set, 85, 142, 398, 85, 90, 102, 1000, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos, 125, 140, 1000)
@@ -3272,31 +3273,31 @@ static USER_FUNC(make_itemsel_table) {
     s32 count;
     s32 i;
 
-    itemsel_table_ram = _mapAlloc(0x54);
+    itemsel_table_ram = _mapAlloc((MAX_HELD_ITEMS + 1) * sizeof(s32));
     p = itemsel_table_ram;
     count = 0;
     for (i = 0; i < 20; i++) {
         s32 item = pouch->heldItems[i];
 
-        if (item >= 0xB3 && item < 0xEC) {
+        if (item >= ITEM_SHROOM_FRY && item < ITEM_AUDIENCE_CAN) {
             *p++ = item;
             count++;
         }
-        if (item >= 0x94 && item < 0xA1) {
+        if (item >= ITEM_MUSHROOM && item < ITEM_POINT_SWAP) {
             *p++ = item;
             count++;
         }
         switch (item) {
-            case 0xA6:
-            case 0xA7:
-            case 0xA8:
-            case 0xA9:
-            case 0xAA:
-            case 0xAB:
-            case 0xAD:
-            case 0xAE:
-            case 0xAF:
-            case 0xB0:
+            case ITEM_COCONUT:
+            case ITEM_DRIED_BOUQUET:
+            case ITEM_MYSTIC_EGG:
+            case ITEM_GOLDEN_LEAF:
+            case ITEM_KEEL_MANGO:
+            case ITEM_FRESH_PASTA:
+            case ITEM_HOT_SAUCE:
+            case ITEM_TURTLEY_LEAF:
+            case ITEM_HORSETAIL:
+            case ITEM_PEACHY_PEACH:
                 *p++ = item;
                 count++;
                 break;
@@ -4842,7 +4843,7 @@ USER_FUNC(funeflag_save) {
     MapObject* b = mapGetMapObj("S_fune_b");
     MapObject* c = mapGetMapObj("S_fune_c");
     event->lwData[8] = b->flags & MAP_OBJ_FLAG_HIDDEN;
-    event->lwData[9] = c->flags & 1;
+    event->lwData[9] = c->flags & MAP_OBJ_FLAG_HIDDEN;
     return EVT_RETURN_DONE;
 }
 
@@ -5141,7 +5142,7 @@ static EVT_BEGIN(epilogue_npc_entry)
     CALL(evt_npc_set_position, STRING("サンダース"), -90, 15, 205)
     CALL(evt_npc_set_ry, STRING("サンダース"), 90)
     CALL(evt_npc_flag_onoff, 1, STRING("サンダース"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
-    CALL(evt_mario_chk_join_party, LW(0), 7)
+    CALL(evt_mario_chk_join_party, LW(0), PARTY_MEMBER_MS_MOWZ)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_npc_entry, STRING("チュチュリーナ"), STRING("c_tyutyu"))
         CALL(evt_npc_set_tribe, STRING("チュチュリーナ"), STRING("チュチュリーナ"))
@@ -5640,7 +5641,7 @@ EVT_BEGIN(return_gorotsuki_town)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_set_pos, 0, -1000, 0)
     CALL(evt_mario_kill_party, 0)
-    CALL(evt_mario_set_party, 0, 1)
+    CALL(evt_mario_set_party, 0, PARTY_MEMBER_GOOMBELLA)
     CALL(evt_cam3d_evt_set, 0, 700, 1420, 0, -10, 0, 0, EASING_SINE_IN_OUT)
     SET_FLOAT_VALUE(GW(0), FLOAT(0.0f))
     SET_VALUE(GF(0), 0)

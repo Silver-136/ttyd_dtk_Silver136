@@ -3497,11 +3497,11 @@ USER_FUNC(hi_fire_main) {
     for (i = 0; i < 6; i++) {
         mapObjGetPos(names[i], &pos);
         if (pos.y > 0.0f) {
-            f32* wk = hi_fire_eff[i]->userdata;
+            EffFireWork* wk = hi_fire_eff[i]->userdata;
 
-            wk[1] = pos.x;
-            wk[2] = pos.y - 15.0f;
-            wk[3] = pos.z;
+            wk->position.x = pos.x;
+            wk->position.y = pos.y - 15.0f;
+            wk->position.z = pos.z;
         }
     }
     return EVT_RETURN_BLOCK;

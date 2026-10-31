@@ -2093,6 +2093,7 @@ EVT_BEGIN(gor_04_init_evt)
         CALL(evt_npc_flag_onoff, 1, STRING("houki"), NPC_FLAG_NO_HIT)
         SPAWN_EVENT(PTR(gor_04_koopa_evt))
     END_IF
+    // US always restores HP here; JP restores it only when a partner must be supplied.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_55_04_BOWSER_RAWK_HAWK)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), 0)

@@ -112,6 +112,7 @@ static USER_FUNC(proj_off) {
     return EVT_RETURN_DONE;
 }
 
+// Render the shadow actor into the projection texture, then restore the caller's view and GX state.
 void make_gonbaba_projection(CameraId camera, void* param) {
     GonbabaProj* wp = param;
     CameraEntry saved;
@@ -153,6 +154,7 @@ void make_gonbaba_projection(CameraId camera, void* param) {
     GXSetScissor(left, top, width, height);
 }
 
+// Keep registering the shadow capture while this blocking event remains alive.
 USER_FUNC(make_gonbaba_projection_evt) {
     GonbabaProj* wp;
 
@@ -725,6 +727,7 @@ EVT_BEGIN(evt_snd)
     RETURN
 EVT_END()
 
+// Report whether the current partner is within 100 units of the pipe's fixed reference point.
 USER_FUNC(dist_check) {
     MarioWork* mario = marioGetPtr();
     PartyEntry* party = partyGetPtr(marioGetPartyId());

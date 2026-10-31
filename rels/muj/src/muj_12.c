@@ -499,7 +499,7 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_msg_print, 0, STRING("stg5_dou_29"), 0, STRING("コルテス"))
     WAIT_MS(1000)
     SET_VALUE(LW(10), STRING("stone"))
-    CALL(evt_item_flag_on, LW(10), 2)
+    CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(1), 50)
     CALL(evt_item_get_position, LW(10), LW(11), LW(12), LW(13))
@@ -758,6 +758,7 @@ EVT_BEGIN(muj_12_init_evt)
     RETURN
 EVT_END()
 
+// Requires 0 <= step < total and a nonzero accumulated speed.
 static f32 accdec_type(s32 step, s32 total, f32 start, f32 end) {
     f32 cur;
     f32 speed;
@@ -806,7 +807,7 @@ USER_FUNC(muj_item_move_3d_position) {
     }
     elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
     if (elapsed < frames) {
-        // the elapsed time is kept in the (dead) isFirstCall parameter
+        // FAKE: reuse the expired first-call parameter; direct elapsed arguments change the object.
         isFirstCall = elapsed;
         item->position.x = intplGetValue(mode, event->userdataf[1], x, isFirstCall, frames);
         item->position.y = intplGetValue(mode, event->userdataf[2], y, isFirstCall, frames);

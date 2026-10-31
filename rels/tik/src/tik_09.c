@@ -52,6 +52,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+// Start the pipe at zero offset, then raise it while updating its bound collision each step.
 EVT_BEGIN(evt_tik09_dokan)
     CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("dokan_1_s"))
     CALL(evt_mapobj_trans, 0, STRING("dokan_1_s"), 0, 0, 0)

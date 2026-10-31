@@ -281,7 +281,7 @@ EVT_BEGIN(las_14_init_evt)
         CALL(evt_las_cloud_init)
         CALL(evt_las_cloud_ent, PTR(&capturemap), STRING("A_kura"), PTR(cloud_evt))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kura"), 0, PTR(touch_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
     END_IF
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_14_PALACE_KEY_CHEST)

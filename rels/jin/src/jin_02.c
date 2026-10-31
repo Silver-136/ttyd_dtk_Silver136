@@ -111,6 +111,7 @@ static EVT_BEGIN(cam_shake)
     RETURN
 EVT_END()
 
+// The front switch increments the staircase position unless its current value is 1.
 EVT_BEGIN(evt_kaidan_temae)
     IF_INT_NOT_EQUAL(LSW_JIN_STAIRCASE_POS, 1)
         CALL(evt_mario_key_onoff, 0)

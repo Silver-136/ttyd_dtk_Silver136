@@ -665,7 +665,7 @@ static EVT_BEGIN(alpha_up_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_KILL_BUNSIN, 0)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
@@ -1660,7 +1660,7 @@ static USER_FUNC(eff_magic) {
     f32 tx = evtGetFloat(event, args[1]);
     f32 ty = evtGetFloat(event, args[2]);
     f32 tz = evtGetFloat(event, args[3]);
-    s32 type = evtGetValue(event, args[4]);
+    s32 lifetime = evtGetValue(event, args[4]);
     f32 x;
     f32 y;
     f32 z;
@@ -1671,7 +1671,7 @@ static USER_FUNC(eff_magic) {
     x += 25.0f * unit->mSizeMultiplier * unit->faceDirection;
     y += 20.0f * unit->mSizeMultiplier;
     z += 5.0f;
-    eff = effMagic1N64Entry(0, type, x, y, z, tx, ty, tz);
+    eff = effMagic1N64Entry(0, lifetime, x, y, z, tx, ty, tz);
     unit->work[UNIT_WORK_MAGIC_EFFECT] = (EvtWord)eff;
     ((EffMagic1N64Work*)eff->userdata)->scale = unit->mSizeMultiplier;
     return EVT_RETURN_DONE;
@@ -1731,7 +1731,7 @@ static USER_FUNC(kamec_copy_status) {
     BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
     BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
 
-    // the copy shares the real magikoopa's hp and status
+    // Copy the original's current HP and status bytes, then synchronize the clone's HP gauge.
     unit2->currentHp = unit1->currentHp;
     memcpy(&unit2->mSleepTurns, &unit1->mSleepTurns, 0x1E);
     unit2->hpGauge.prevHp = unit2->currentHp;
@@ -1746,7 +1746,7 @@ static USER_FUNC(kamec_shuffle) {
     s32 n = 0;
     s32 i;
 
-    // the real magikoopa and its copies
+    // Collect the original and clones, then perform ten random pair swaps of their current and home X/Z.
     for (i = 0; i < 64; i++) {
         kamecs[n] = wp->units[i];
         if (kamecs[n] != NULL && (kamecs[n]->currentKind == UNIT_MAGIKOOPA || kamecs[n]->currentKind == UNIT_MAGIKOOPA_CLONE)) {

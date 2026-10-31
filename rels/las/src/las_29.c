@@ -433,7 +433,7 @@ USER_FUNC(rou_hikari_front_onoff) {
     scale = on ? 0.0f : 0.5f;
     for (i = 39; i <= 62; i++) {
         sprintf(name, "S_rou%02d", i);
-        func(name, 1);
+        func(name, MAP_OBJ_FLAG_HIDDEN);
         sprintf(name, "hi%d", i);
         eff = effNameToPtr(name);
         ((EffFireWork*)eff->userdata)->scaleX = scale;
@@ -789,7 +789,7 @@ USER_FUNC(make_koe_pos) {
 }
 
 USER_FUNC(slowturnoff_check) {
-    return (npcNameToPtr((const char*)evtGetValue(event, event->args[0]))->flags & 0x8000) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+    return (npcNameToPtr((const char*)evtGetValue(event, event->args[0]))->flags & NPC_FLAG_INSTANT_TURN) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 }
 
 USER_FUNC(eff_b_peach_ripple) {
@@ -1634,7 +1634,7 @@ EVT_BEGIN(last_evt_3)
     CALL(evt_npc_get_battle_result, LW(0))
     IF_INT_EQUAL(LW(0), BATTLE_RESULT_STOPPED)
         SPAWN_EVENT(PTR(last_evt_3_1))
-        ELSE
+    ELSE
         SET_VALUE(GSW_STORY_PROGRESS, STG8_16_THE_RETURN_OF_THE_QUEEN)
         SPAWN_EVENT(PTR(last_evt_4))
     END_IF
@@ -2408,7 +2408,7 @@ EVT_BEGIN(last_evt_4)
         ADD(LW(3), 1)
         IF_INT_GREATER_OR_EQUAL(LW(3), 5)
             SUBTRACT_FLOAT(LW(5), FLOAT(5.6992188f))
-            ELSE
+        ELSE
             ADD_FLOAT(LW(5), FLOAT(5.6992188f))
         END_IF
     END_LOOP

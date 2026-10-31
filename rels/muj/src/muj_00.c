@@ -58,8 +58,7 @@ typedef struct OrbitData {
     f32 dist;
 } OrbitData;
 OrbitData* _op;
-// Advance orbiting actor i by d degrees and place position p on its circle around (cx, cz). A macro, not an inline:
-// it uses the caller's t, rad, r and x (an inline function with its own locals changes the object).
+// Advance actor i by d degrees around (cx, cz), using the caller's t, rad, r and x.
 #define ORBIT(i, p)           \
     op[i].angle += d;         \
     t = op[i].angle;          \
@@ -364,7 +363,7 @@ USER_FUNC(kaizoku_main_func) {
 }
 
 USER_FUNC(mario_main_init_func) {
-    _op = _mapAlloc(0x40);
+    _op = _mapAlloc(8 * sizeof(OrbitData));
     return EVT_RETURN_DONE;
 }
 
@@ -557,7 +556,8 @@ USER_FUNC(tobikakaru_init) {
     s32 i;
     NanNPC* npc;
 
-    p = _mapAlloc(0x1310);
+    // Preserve capacity for 305 records; the loops below initialize 295.
+    p = _mapAlloc(305 * sizeof(TobiWork));
     Tobidat = p;
     for (i = 0; i < 95; i++) {
         npc = &wp->npc[i + 10];

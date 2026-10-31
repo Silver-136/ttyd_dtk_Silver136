@@ -223,6 +223,7 @@ static const char* name_tbl[] = {
     "hasi_25",
 };
 
+// GW0 advances through the 25 bridge pieces; each flip captures the previous and next scene.
 EVT_BEGIN(bridge_evt_02)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, -15, 150, 500, -15, 45, 85, 500, EASING_SINE_IN_OUT)
@@ -313,7 +314,7 @@ EVT_BEGIN(nokotaro_get)
     CALL(evt_cam3d_evt_set, 400, 85, 255, 400, 40, -10, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     SET_VALUE(LW(8), STRING("ノコタロウ"))
-    SET_VALUE(LW(9), 2)
+    SET_VALUE(LW(9), PARTNER_KOOPS)
     CALL_CHILD(PTR(all_party_lecture))
 #ifdef VERSION_G8ME01
     CALL(evt_party_set_dir, 0, 90, 200)
@@ -540,6 +541,7 @@ EVT_BEGIN(evt_nokorin)
     CALL(evt_msg_print, 0, STRING("stg1_hei_12_06"), 0, STRING("party"))
     CALL(evt_cam3d_evt_set, 460, 126, 485, 460, 40, -8, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+    // These three flags join the Mario spin, partner spin, and dialogue events after the first pass.
     SET_VALUE(GF(10), 0)
     SET_VALUE(GF(11), 0)
     SET_VALUE(GF(12), 0)

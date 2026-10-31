@@ -392,7 +392,7 @@ static EVT_BEGIN(kamec_obaba_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_EQUAL(LW(1), 1)
         CALL(evt_btl_camera_set_moveto, 0, 135, 106, 296, 135, 55, -402, 30, 11)
-        ELSE
+    ELSE
         CALL(evt_btl_camera_set_moveto, 0, 140, 34, 296, 140, 50, -402, 30, 11)
     END_IF
     WAIT_FRAMES(37)
@@ -454,7 +454,7 @@ static EVT_BEGIN(damage_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(10), 1)
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -476,7 +476,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     WAIT_FRAMES(1)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -494,7 +494,7 @@ static EVT_BEGIN(dead_event)
         WAIT_MS(300)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_dead))
         SET_VALUE(GW(10), 2)
-        SET_VALUE(LW(10), -2)
+        SET_VALUE(LW(10), UNIT_ID_SELF)
         CALL_CHILD(subsetevt_dead_core_nospin_norotate)
         CASE_DEFAULT
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_SELF, STRING("KPA_D_1"))
@@ -506,7 +506,7 @@ static EVT_BEGIN(dead_event)
         WAIT_MS(700)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_dead))
         SET_VALUE(GW(10), 2)
-        SET_VALUE(LW(10), -2)
+        SET_VALUE(LW(10), UNIT_ID_SELF)
         CALL_CHILD(subsetevt_dead_core_nospin_norotate)
     END_SWITCH
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
@@ -538,7 +538,7 @@ static EVT_BEGIN(phase_event)
                     CALL(btlevtcmd_OnPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterTopSpiky)
                     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_forward_leaning))
                 END_IF
-                ELSE
+            ELSE
                 CALL(evt_sub_random, 99, LW(1))
                 IF_INT_LESS(LW(1), 100)
                     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LEANING, 0)
@@ -632,7 +632,7 @@ static EVT_BEGIN(attack_event)
         END_SWITCH
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(PTR(first_mario_damage_event))
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -717,9 +717,9 @@ static EVT_BEGIN(hip_attack_event)
         SET_VALUE(LW(15), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_KIND, LW(0))
         SWITCH(LW(0))
-            CASE_EQUAL(222)
+            CASE_EQUAL(UNIT_MARIO)
             CALL(mario_cannot_use_command, LW(15))
-            CASE_BETWEEN(224, 230)
+            CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
 #ifdef VERSION_G8ME01
             CALL(party_cannot_use_command, LW(15), LW(3))
 #else
@@ -1032,7 +1032,7 @@ EVT_BEGIN(first_mario_damage_check)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MARIO_HIT_TALK, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TARGET_KIND, LW(0))
-        IF_INT_EQUAL(LW(0), 222)
+        IF_INT_EQUAL(LW(0), UNIT_MARIO)
             CALL(btlevtcmd_GetTotalDamage, LW(3), LW(1))
             IF_INT_NOT_EQUAL(LW(1), 0)
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MARIO_HIT_TALK, 1)

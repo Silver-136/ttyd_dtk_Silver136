@@ -156,7 +156,22 @@ static BattleWeapon weapon_patakuri_attack = {
 };
 
 static BattleUnitKindPart parts_patakuri[] = {
-    {1, "btl_un_patakuri", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_patakuri, &defence_patakuri_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patakuri},
+    {
+        1, // partNum
+        "btl_un_patakuri", // partName
+        "c_kuribo", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {0.0f, 22.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 30.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence_patakuri, // defense
+        &defence_patakuri_attr, // defenseAttr
+        kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, // attributes
+        0, // counterAttributes
+        pose_table_patakuri, // poseTable
+    },
 };
 
 static PoseTableEntry pose_table_patakuri[] = {
@@ -207,6 +222,7 @@ static EVT_BEGIN(init_event_patakuri)
     RETURN
 EVT_END()
 
+// Losing wings installs the grounded Goomba part/data tables, then reinitializes its events.
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -228,7 +244,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_SetHomePos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KURI_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_MS(500)
-    CALL(btlevtcmd_ChangeKind, LW(10), 1)
+    CALL(btlevtcmd_ChangeKind, LW(10), UNIT_GOOMBA)
     CALL_CHILD(init_event)
     WAIT_FRAMES(1)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
@@ -567,7 +583,7 @@ static EVT_BEGIN(attack_event)
         LOOP(12)
             WAIT_FRAMES(1)
         END_LOOP
-        SET_VALUE(LW(15), 50)
+        SET_VALUE(LW(15), POSE_TYPE_ATTACK)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, LW(15))
     END_INLINE_EVENT
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

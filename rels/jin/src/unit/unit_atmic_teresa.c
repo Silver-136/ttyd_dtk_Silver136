@@ -203,7 +203,15 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_atmic_teresa", "c_atmic_trs", 0.0f, 0.0f, 0.0f, 10.0f, 80.0f, 0.0f, 0.0f, 110.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
+    {
+        1, "btl_un_atmic_teresa", "c_atmic_trs",
+        0.0f, 0.0f, 0.0f,
+        10.0f, 80.0f, 0.0f,
+        0.0f, 110.0f, 0.0f,
+        20, 30, 255,
+        &defence, &defence_attr,
+        kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table,
+    },
 };
 
 static StatusVulnerability regist = {
@@ -408,6 +416,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+// Face exposed: choose hide/press/scare with weights 30/20/20; face hidden: choose surprise/breath equally.
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -807,6 +816,7 @@ static EVT_BEGIN(breath_event)
     RETURN
 EVT_END()
 
+// Each selected target gets one precheck, then two intermediate damage calls and a final hit.
 EVT_BEGIN(breath_event_sub)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_atmic_teresa_breath), 0, LW(5))
     SWITCH(LW(5))
@@ -898,7 +908,7 @@ void teresa_ext_init(void) {
 
     teresa = BattleAlloc(sizeof(AtmTeresa) * 30);
     for (i = 0; i < extGetPoseNum(); i++, pose++) {
-        pose->flags = 1;
+        pose->flags = EXT_POSE_FLAG_VISIBLE;
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = 0.0f;
         (*pose->mtx)[1][3] = -1000.0f;

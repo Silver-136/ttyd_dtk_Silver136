@@ -123,10 +123,10 @@ EVT_BEGIN(vivian_check)
             CALL(evt_party_get_status, 6, LW(0))
             IF_INT_EQUAL(LW(0), 2)
                 ADD(LW(15), 4)
-                ELSE
+            ELSE
                 SUBTRACT(LW(15), 4)
             END_IF
-            ELSE
+        ELSE
             SUBTRACT(LW(15), 4)
         END_IF
         IF_INT_GREATER(LW(15), 160)

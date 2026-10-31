@@ -249,13 +249,14 @@ static EVT_BEGIN(mobj_box00)
 #else
     CALL(evt_item_entry, STRING("item00"), ITEM_DAMAGE_DODGE_P, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
 #endif
-    CALL(evt_item_flag_on, STRING("item00"), 258)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 
+// GW(0) is the per-frame opacity delta: -4 fades out, +4 fades in, 0 holds.
 EVT_BEGIN(waterfall_main)
     SET_VALUE(LW(0), 255)
     LOOP(0)

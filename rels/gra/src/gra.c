@@ -20,7 +20,7 @@ void _prolog(void);
 USER_FUNC(evt_gra_vivian_pose_set) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
-    partyPoseTbl[6][index] = (char*)evtGetValue(event, args[1]);
+    partyPoseTbl[PARTY_MEMBER_VIVIAN][index] = (char*)evtGetValue(event, args[1]);
     return EVT_RETURN_DONE;
 }
 
@@ -38,8 +38,8 @@ void _prolog(void) {
     relSetEvtAddr("gra_05", gra_05_init_evt);
     relSetEvtAddr("gra_06", gra_06_init_evt);
     relSetBtlAddr("gra", btlsetup_gra_tbl, btl_gra_setup_no_tbl);
-    pose_buf = _mapAlloc(sizeof(partyPoseTbl[6]));
-    memcpy(pose_buf, partyPoseTbl[6], sizeof(partyPoseTbl[6]));
+    pose_buf = _mapAlloc(sizeof(partyPoseTbl[PARTY_MEMBER_VIVIAN]));
+    memcpy(pose_buf, partyPoseTbl[PARTY_MEMBER_VIVIAN], sizeof(partyPoseTbl[PARTY_MEMBER_VIVIAN]));
 }
 
 void _epilog(void) {
@@ -48,7 +48,7 @@ void _epilog(void) {
     for (dtor = _dtors; *dtor != NULL; dtor++) {
         (*dtor)();
     }
-    memcpy(partyPoseTbl[6], pose_buf, sizeof(partyPoseTbl[6]));
+    memcpy(partyPoseTbl[PARTY_MEMBER_VIVIAN], pose_buf, sizeof(partyPoseTbl[PARTY_MEMBER_VIVIAN]));
     _mapFree(pose_buf);
 }
 

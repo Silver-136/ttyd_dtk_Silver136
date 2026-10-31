@@ -90,7 +90,7 @@ USER_FUNC(yami_oowareru_check);
 USER_FUNC(tou_01_kanban_moji_flag_sync);
 #endif
 static USER_FUNC(yami_view);
-extern s32 envSetYami[];
+void envSetYami(MapTevCallbackInfo* info);
 
 static EvtWord n_door_open[60];
 static EvtWord n_door_close[58];
@@ -562,6 +562,7 @@ static EVT_BEGIN(evt_kanban2)
         IF_INT_EQUAL(GF(10), 1)
             BREAK_LOOP
         END_IF
+        // Consume the random delay draw, but wait a fixed three seconds.
         CALL(evt_sub_random, 3000, LW(0))
         ADD(LW(0), 3000)
         WAIT_MS(3000)
@@ -611,12 +612,13 @@ static ShopperData35 shopper_data = {
     {"stg3_shop_00", "stg3_shop_01", "stg3_shop_02", "stg3_shop_03", "stg3_shop_04", "stg3_shop_05", "stg3_shop_06", "stg3_shop_07", "stg3_shop_08", "stg3_shop_09", "stg3_shop_10", "stg3_shop_11", "stg3_shop_12", "stg3_shop_13", "stg3_shop_14", "stg3_shop_15", "stg3_shop_16", "stg3_shop_17", "stg3_shop_18", "stg3_shop_19", "stg3_shop_20", "stg3_shop_21", "stg3_shop_22", "stg3_shop_23", "stg3_shop_24", "stg3_shop_25", "stg3_shop_26", "stg3_shop_27", "stg3_shop_28", "stg3_shop_29", "stg3_shop_30", "stg3_shop_31", "stg3_shop_32", "stg3_shop_33", "stg3_shop_34"}, // msgs
 };
 
+// Charge only after the item was successfully added to the pouch.
 EVT_BEGIN(evt_hotdog)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_set_dir_to_target, STRING("ホットドッグ"), STRING("mario"))
     CALL(evt_mario_get_party, LW(0))
-    IF_INT_EQUAL(LW(0), 4)
+    IF_INT_EQUAL(LW(0), PARTNER_YOSHI)
         CALL(evt_msg_print, 0, STRING("stg3_tou_13_01"), 0, STRING("ホットドッグ"))
         ELSE
         CALL(evt_msg_print, 0, STRING("stg3_tou_13"), 0, STRING("ホットドッグ"))
@@ -658,6 +660,7 @@ static USER_FUNC(proj_on) {
     return EVT_RETURN_DONE;
 }
 
+// Render the sphere into the projected shadow texture, restoring viewport, projection and scissor afterward.
 void make_shadow_disp(CameraId camera, void* param) {
     ShadowWork* wp = param;
     Mtx44 proj;
@@ -1528,6 +1531,7 @@ static EVT_BEGIN(init_sarary)
     RETURN
 EVT_END()
 
+// The sixth option switches pages; the other five options select digits 0..4 or 5..9.
 EVT_BEGIN(select_number)
     SET_VALUE(LW(15), 0)
     LOOP(0)
@@ -2185,6 +2189,7 @@ s32 yoshi_data[] = {
     -360, 0, 150, -290, 0, 40,
 };
 
+// Two close approaches at jump endpoints end the chase; intervening misses do not reset the count.
 EVT_BEGIN(evt_tamago_move)
     CALL(evt_npc_flag_onoff, 1, STRING("たまご"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_position, STRING("たまご"), -400, 10, -135)
@@ -2386,7 +2391,7 @@ EVT_BEGIN(talk_tamago)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kaunta_"), 0, PTR(evt_hotdog), 0)
     CALL(evt_npc_get_position, STRING("たまご"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("たまご"), 0, -1000, 0)
-    CALL(evt_mario_set_party_pos, 1, 8, LW(0), LW(1), LW(2))
+    CALL(evt_mario_set_party_pos, 1, PARTY_MEMBER_EGG, LW(0), LW(1), LW(2))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_sub_save_playtime, GSW_TOU_EGG_RECEIVED_TIME)
@@ -2395,6 +2400,7 @@ EVT_BEGIN(talk_tamago)
     RETURN
 EVT_END()
 
+// LW(0)/LW(1) are lift heights; LW(2) selects whether Mario and the main partner move with the platform.
 EVT_BEGIN(evt_gondora_updown)
     SET_VALUE(LW(3), LW(0))
     SET_VALUE(LW(4), LW(1))
@@ -3108,6 +3114,7 @@ static USER_FUNC(delete_npc_regl_evt) {
     return EVT_RETURN_DONE;
 }
 
+// Block until this point lies behind the camera-oriented darkness boundary.
 USER_FUNC(yami_oowareru_check) {
     EvtWord* args = event->args;
     f32 limit = evtGetFloat(event, args[0]);
@@ -3174,13 +3181,14 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_normalize)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_POWER_PLUS_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), 258)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 
+// Set up map objects and localized assets before selecting entrance-specific scenes.
 EVT_BEGIN(tou_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
@@ -3526,7 +3534,7 @@ EVT_BEGIN(tou_01_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), 0)
-            CALL(evt_mario_set_party, 0, 1)
+            CALL(evt_mario_set_party, 0, PARTNER_GOOMBELLA)
             CALL(evt_party_run, 0)
 #ifdef VERSION_G8ME01
         END_IF
@@ -3556,7 +3564,7 @@ EVT_BEGIN(tou_01_init_evt)
 EVT_END()
 
 #ifdef VERSION_G8ME01
-// US: copy the sign board's map-blend exemptions (MAP_OBJ_FLAG_NO_MAP_BLEND/2) onto the English letter objects
+// US: copy the sign board's map-blend exemptions onto the localized letter objects
 static inline void kanbanCopyFlags(MapObject* kanban, const char* name) {
     MapObject* obj = mapGetMapObj(name);
     if (obj != NULL) {

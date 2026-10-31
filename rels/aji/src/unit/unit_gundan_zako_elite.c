@@ -259,7 +259,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -296,6 +296,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     ADD(LW(0), 20)
     IF_INT_LESS(LW(1), LW(0))
+        // Reroll this selection if already huge instead of consuming the turn on another bottle.
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(2))
         IF_INT_EQUAL(LW(2), 0)
             CALL_CHILD(PTR(dekadeka_event))
@@ -348,6 +349,7 @@ static EVT_BEGIN(attack_common_event1)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 90)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+    // Stop the repeated movement sound once the approach has finished.
     DELETE_EVENT(LW(15))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 10)
     ADD(LW(2), 1)
@@ -360,7 +362,7 @@ static EVT_BEGIN(attack_common_event2)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(7.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -542,7 +544,7 @@ static EVT_BEGIN(jump_attack_event)
 EVT_END()
 
 static EVT_BEGIN(dekadeka_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_gundan_zako_dekadeka_bottle))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))

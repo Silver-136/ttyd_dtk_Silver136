@@ -163,7 +163,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, GESSO_ARM_WORK_BODY, LW(3))
@@ -177,14 +177,14 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 EVT_BEGIN(gesso_right_arm_damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
-    SET_VALUE(LW(14), 39)
+    SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
     SET_VALUE(LW(15), -1)
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_DAMAGE_SURPRISE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        SET_VALUE(LW(14), 38)
+        SET_VALUE(LW(14), POSE_TYPE_DAMAGE_SURPRISED)
     END_IF
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_POSE_EVENT)
@@ -433,6 +433,7 @@ EVT_BEGIN(gesso_arm_dead_event)
     RETURN
 EVT_END()
 
+// Start the body fall only after both arms are gone and no fall is already in progress.
 EVT_BEGIN(gesso_fall_check)
     CALL(btlevtcmd_GetUnitWork, LW(3), GESSO_UNIT_WORK_LEFT_ARM, LW(0))
     CALL(btlevtcmd_GetUnitId, LW(0), LW(0))
@@ -481,7 +482,7 @@ EVT_BEGIN(gesso_fall_check)
     CALL(btlevtcmd_SetRegistStatus, LW(3), PTR(R_regist_turn))
     CALL(btlevtcmd_SetHitOffset, LW(3), 1, -15, -90, 0)
     CALL(btlevtcmd_SetStatusIconOffset, UNIT_ID_SELF, 55, 113)
-    CALL(evt_btl_camera_shake_h, 0, 6, 0, 30, 4)
+    CALL(evt_btl_camera_shake_h, BTL_CAM_PRI_NORMAL, 6, 0, 30, 4)
     CALL(btlevtcmd_SetUnitWork, LW(3), GESSO_UNIT_WORK_STATE, 1)
     CALL(btlevtcmd_SetHitOffset, LW(3), 1, 51, 38, 30)
     CALL(btlevtcmd_SetHitCursorOffset, LW(3), 1, 51, 38, 30)
@@ -506,6 +507,7 @@ EVT_BEGIN(gesso_arm_damage_pose_event)
     RETURN
 EVT_END()
 
+// Select the arm animation from the target position, with X = -120 on the front side.
 static USER_FUNC(_check_zenei_kouei) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

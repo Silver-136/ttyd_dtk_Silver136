@@ -288,7 +288,7 @@ static EVT_BEGIN(attack_event)
         LOOP(12)
             WAIT_FRAMES(1)
         END_LOOP
-        SET_VALUE(LW(15), 50)
+        SET_VALUE(LW(15), POSE_TYPE_ATTACK)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, LW(15))
     END_INLINE_EVENT
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

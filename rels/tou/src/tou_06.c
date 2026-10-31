@@ -405,6 +405,7 @@ EVT_BEGIN(iri_13_init)
     IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
         RETURN
     END_IF
+    // Spawn only the remainder of the 20-item collection, using distinct shuffled positions.
     CALL(evt_pouch_check_item, ITEM_BATTLE_TRUNKS, LW(0))
     SET_VALUE(LW(1), 20)
     SUBTRACT(LW(1), LW(0))
@@ -463,7 +464,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_CHARGE_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), 2)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)
@@ -550,7 +551,7 @@ EVT_BEGIN(tou_06_init_evt)
         CALL(evt_mobj_flag_onoff, 0, STRING("aa"), MOBJ_FLAG_GRAVITY)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_15_UNLOCKING_THE_DOOR)
-        CALL(evt_mobj_lock, STRING("lock"), 19, 95, 210, 50, -80, PTR(evt_chk), PTR(evt_lock), GSWF_TOU_06_DOOR_UNLOCKED)
+        CALL(evt_mobj_lock, STRING("lock"), ITEM_STORAGE_KEY_0x13, 95, 210, 50, -80, PTR(evt_chk), PTR(evt_lock), GSWF_TOU_06_DOOR_UNLOCKED)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(PTR(bero_case_switch_off))
     END_IF
@@ -616,6 +617,7 @@ EVT_BEGIN(tou_06_init_evt)
     RETURN
 EVT_END()
 
+// The returned pointer uses one shared buffer; callers consume the name before requesting the next.
 USER_FUNC(iri_13_make_name) {
     static char name[8];
     EvtWord* args = event->args;
@@ -643,6 +645,7 @@ static USER_FUNC(get_pos) {
     return EVT_RETURN_DONE;
 }
 
+// Shuffle indices with 50 random pair swaps; this is not a Fisher-Yates shuffle.
 USER_FUNC(make_tbl) {
     s32 i;
     s32 a;
@@ -660,6 +663,7 @@ USER_FUNC(make_tbl) {
         tbl[a] = tbl[b];
         tbl[b] = tmp;
     }
+    // Before the special pickup is recorded, keep coordinate entry zero first.
     if (!evtGetValue(NULL, GSWF_TROUBLE_WORK(3))) {
         for (i = 0; i < 25; i++) {
             if (tbl[i] == 0) {

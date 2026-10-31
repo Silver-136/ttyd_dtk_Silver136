@@ -198,7 +198,7 @@ EVT_BEGIN(batten_leader_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 30)
-        ELSE
+    ELSE
         SET_VALUE(LW(1), 1)
     END_IF
     CALL(evt_btl_camera_set_moveto, 0, 83, 84, 349, 83, 60, 0, LW(1), 11)
@@ -212,7 +212,7 @@ static EVT_BEGIN(mario_party_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_NOT_EQUAL(LW(0), 2)
         SET_VALUE(LW(1), 30)
-        ELSE
+    ELSE
         SET_VALUE(LW(1), 1)
     END_IF
     CALL(evt_btl_camera_set_moveto, 0, -120, 58, 257, -120, 40, 0, LW(1), 11)
@@ -983,7 +983,7 @@ EVT_BEGIN(light_anim_rtn)
             READ_INT(LW(1))
             IF_INT_GREATER(LW(1), 0)
                 WAIT_MS(LW(1))
-                ELSE
+            ELSE
                 SWITCH(LW(1))
                     CASE_EQUAL(0)
                     WAIT_FRAMES(1)
@@ -1034,7 +1034,7 @@ EVT_BEGIN(light_anim_rtn)
             READ_INT(LW(1))
             IF_INT_GREATER(LW(1), 0)
                 WAIT_MS(LW(1))
-                ELSE
+            ELSE
                 SWITCH(LW(1))
                     CASE_EQUAL(0)
                     WAIT_FRAMES(1)
@@ -1085,7 +1085,7 @@ EVT_BEGIN(light_anim_rtn)
             READ_INT(LW(1))
             IF_INT_GREATER(LW(1), 0)
                 WAIT_MS(LW(1))
-                ELSE
+            ELSE
                 SWITCH(LW(1))
                     CASE_EQUAL(0)
                     WAIT_FRAMES(1)
@@ -1135,7 +1135,7 @@ EVT_BEGIN(light_anim_rtn)
         READ_INT(LW(1))
         IF_INT_GREATER(LW(1), 0)
             WAIT_MS(LW(1))
-            ELSE
+        ELSE
             SWITCH(LW(1))
                 CASE_EQUAL(0)
                 WAIT_FRAMES(1)
@@ -1188,7 +1188,7 @@ EVT_BEGIN(light_rod_anim_rtn)
         READ_INT(LW(1))
         IF_INT_GREATER(LW(1), 0)
             WAIT_MS(LW(1))
-            ELSE
+        ELSE
             SWITCH(LW(1))
                 CASE_EQUAL(0)
                 WAIT_FRAMES(1)
@@ -1437,7 +1437,7 @@ static EVT_BEGIN(entry_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SELF_SPELL, LW(0))
@@ -1471,7 +1471,7 @@ EVT_BEGIN(damage_sub_event)
     CALL(btlevtcmd_GetDamagePartsId, LW(10), LW(11))
     IF_INT_EQUAL(LW(11), 1)
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), 1, POSE_TYPE_DAMAGE)
-        ELSE
+    ELSE
         CALL(enzan_lw_save)
         SET_VALUE(LW(9), PTR(&btl_shuryolight_rod_off))
         SET_VALUE(LW(0), 9)
@@ -1494,7 +1494,7 @@ EVT_BEGIN(damage_sub_event)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MISFIRE_CHANCE, LW(1))
             IF_INT_LESS(LW(1), 0)
                 SET_VALUE(LW(1), 100)
-                ELSE
+            ELSE
                 MULTIPLY(LW(0), 10)
                 ADD(LW(1), LW(0))
                 IF_INT_GREATER(LW(1), 100)
@@ -1576,8 +1576,8 @@ EVT_BEGIN(monster_before_phase_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             SET_VALUE(LW(0), 1)
             CALL_CHILD(PTR(batten_leader_zoom))
-            CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, 65)
-            CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, 43)
+            CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, POSE_TYPE_TALK)
+            CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, POSE_TYPE_NEUTRAL)
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg8_las_68"), 0, -2)
             WAIT_MS(300)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
@@ -1640,7 +1640,7 @@ static EVT_BEGIN(dead_event)
     DELETE_EVENT(LW(0))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ROD_LIGHT_EVENT, LW(0))
     DELETE_EVENT(LW(0))
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL_CHILD(PTR(subsetevt_dead_core_nospin_norotate))
     RETURN
 EVT_END()
@@ -1959,7 +1959,7 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(9), PTR(&weapon_batten_leader_stop))
             CALL_CHILD(PTR(batten_leader_stop_attack_event))
         END_SWITCH
-        ELSE
+    ELSE
         CALL(btlevtcmd_DrawLots, LW(0), 6, 60, 40, 30, 20, 20, 20)
         SWITCH(LW(0))
             CASE_EQUAL(0)
@@ -2098,7 +2098,7 @@ EVT_BEGIN(batten_leader_thunder_attack_event)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -2217,7 +2217,7 @@ EVT_BEGIN(batten_leader_fire_attack_event)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(bts_x_flag_wait, LW(7))
     RETURN
 EVT_END()
@@ -2313,7 +2313,7 @@ EVT_BEGIN(batten_leader_ice_attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     LABEL(98)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -2508,7 +2508,7 @@ EVT_BEGIN(batten_leader_stop_attack_event)
             BREAK_LOOP
         END_IF
     END_LOOP
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

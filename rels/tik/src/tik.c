@@ -60,6 +60,7 @@ void _epilog(void) {
 void _unresolved(void) {
 }
 
+// An out-of-range destination is reset to the center, not clamped to the edge of the circle.
 USER_FUNC(evt_tik_villager_urouro_check_func) {
     EvtWord* args = event->args;
     s32 xVar = args[0];

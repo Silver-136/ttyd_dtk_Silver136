@@ -647,7 +647,7 @@ EVT_END()
 
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -895,6 +895,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LW(0), 2)
         CALL_CHILD(PTR(wawawa_attack_event))
         ELSE
+        // The recovery branch has zero weight: the roll is always below 100.
         SET_VALUE(LW(0), 100)
         ADD(LW(0), 0)
         SUBTRACT(LW(0), 1)

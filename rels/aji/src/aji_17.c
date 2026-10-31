@@ -2173,6 +2173,7 @@ static EVT_BEGIN(peach_evt_stg4)
             CALL(evt_map_replayanim, 0, STRING(("moza")))
             CALL(evt_msg_print, 0, STRING(("peach_aji_188")), 0, 0)
             CALL(evt_map_pauseanim, 0, STRING(("moza")))
+            // Restart the questions without clearing the alternate-introduction flag LF(15).
             SET_VALUE(LW(15), 0)
             CALL(evt_cam3d_evt_set, 0, 80, 44, 0, 130, -150, 0, EASING_SINE_IN_OUT)
             WAIT_FRAMES(1)
@@ -3308,6 +3309,7 @@ s32 set_local_rotate(EventEntry* event, BOOL isFirstCall) {
 
     dance_dt.rot = evtGetFloat(event, event->args[0]);
     r = dance_dt.rot;
+    // Adjust by at most one revolution rather than applying a full modulo.
     if (r > 6.2831855f) {
         dance_dt.rot = r - 6.2831855f;
     }
@@ -3457,6 +3459,7 @@ s32 btn_check(EventEntry* event, BOOL isFirstCall) {
     s32 x = btn & PAD_BUTTON_X;
     s32 ret = 0;
 
+    // A correct button combined with another dance button remains undecided.
     switch (dir) {
     case 1:
         if (a && !(b | x)) {

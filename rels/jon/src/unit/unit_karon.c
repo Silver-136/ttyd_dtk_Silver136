@@ -261,14 +261,14 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
 EVT_END()
 
 static EVT_BEGIN(dead_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(0), 48)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     LABEL(10)
@@ -326,7 +326,7 @@ static EVT_BEGIN(fake_dead_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REWARD_GIVEN, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_REWARD_GIVEN, 1)
-        SET_VALUE(LW(10), -2)
+        SET_VALUE(LW(10), UNIT_ID_SELF)
         CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         ADD(LW(2), 10)
@@ -424,7 +424,7 @@ static EVT_BEGIN(attack_event)
                 WAIT_MS(500)
                 GOTO(99)
             END_IF
-            ELSE
+        ELSE
             BREAK_LOOP
         END_IF
     END_LOOP
@@ -441,7 +441,7 @@ static EVT_BEGIN(attack_event)
                 WAIT_MS(500)
                 GOTO(99)
             END_IF
-            ELSE
+        ELSE
             BREAK_LOOP
         END_IF
     END_LOOP
@@ -585,7 +585,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
     WAIT_FRAMES(10)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -639,7 +639,7 @@ static EVT_BEGIN(link_attack_event)
         WAIT_FRAMES(1)
     END_LOOP
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     WAIT_MS(300)
     RETURN
 EVT_END()

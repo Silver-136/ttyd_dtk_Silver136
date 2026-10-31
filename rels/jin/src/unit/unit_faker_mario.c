@@ -323,7 +323,15 @@ static BattleDataEntry data_table_fmario[] = {
 };
 
 static BattleUnitKindPart parts_fmario[] = {
-    {1, "btl_un_rampell", "c_mario", 0.0f, 0.0f, 0.0f, 3.0f, 27.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_fmario, &defence_attr_fmario, kMainPart | kGuardTargetPart, 0, pose_table_fmario_stay},
+    {
+        1, "btl_un_rampell", "c_mario",
+        0.0f, 0.0f, 0.0f,
+        3.0f, 27.0f, 0.0f,
+        0.0f, 30.0f, 0.0f,
+        20, 30, 255,
+        &defence_fmario, &defence_attr_fmario,
+        kMainPart | kGuardTargetPart, 0, pose_table_fmario_stay,
+    },
 };
 
 static BattleWeapon weapon_masao_jump = {
@@ -542,6 +550,7 @@ static EVT_BEGIN(gparty_zoom)
     RETURN
 EVT_END()
 
+// GW(19) tracks Faker Mario and GW(20) the staged partner: 0 alive, 1 death detected, 2 death complete.
 static EVT_BEGIN(init_event_fmario)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event_fmario))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event_fmario))
@@ -563,6 +572,7 @@ static EVT_BEGIN(init_event_fmario)
         CASE_DEFAULT
         SET_VALUE(LW(12), PTR(&entry_gullible_yoshi))
     END_SWITCH
+    // The random choice above is consumed, but the initial partner is always Goombella.
     SET_VALUE(GW(18), 0)
     SET_VALUE(LW(12), PTR(&entry_gullible_christine))
     CALL(btlevtcmd_SpawnUnit, LW(3), LW(12), 0)
@@ -1240,6 +1250,7 @@ static EVT_BEGIN(marioAttackEvent_KaitenHammer)
     RETURN
 EVT_END()
 
+// Advance to the next staged partner; indices outside 0..3 return without spawning.
 EVT_BEGIN(party_change_event)
     ADD(GW(18), 1)
     IF_INT_GREATER(GW(18), 4)
@@ -1341,7 +1352,7 @@ USER_FUNC(_gullible_party_info_init) {
 }
 
 #ifdef VERSION_G8ME01
-// US only: restore the moves of the unit for this turn.
+// US only: set this turn's maximum move count to the remaining-move count.
 USER_FUNC(faker_mario_sync_max_moves) {
     BattleUnit* unit;
     s32 id = evtGetValue(event, event->args[0]);
@@ -1357,7 +1368,7 @@ USER_FUNC(faker_mario_sync_max_moves) {
 
 static USER_FUNC(vivian_comeback) {
     pouchGetPtr()->partyData[6].flags &= ~2;
-    return 1;
+    return EVT_RETURN_YIELD;
 }
 
 static EVT_BEGIN(wait_event_fmario)

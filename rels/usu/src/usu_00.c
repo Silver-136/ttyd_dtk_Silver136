@@ -244,7 +244,7 @@ static USER_FUNC(getYoshiColor) {
 }
 
 USER_FUNC(party_tev) {
-    animPoseSetMaterialFlagOff(partyGetPtr(0)->paperAnimGroup, MAP_OBJ_TEV_CALLBACK_MASK);
+    animPoseSetMaterialFlagOff(partyGetPtr(PARTY_SLOT_PARTY)->paperAnimGroup, MAP_OBJ_TEV_CALLBACK_MASK);
     return EVT_RETURN_DONE;
 }
 
@@ -1323,7 +1323,7 @@ EVT_BEGIN(usu00_vivian_joinup_event)
     CALL(evt_item_entry, STRING("ichikorori"), ITEM_SUPERBOMBOMB, LW(0), 10, LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     WAIT_MS(1000)
     CALL(evt_item_delete, STRING("ichikorori"))
-    CALL(evt_mario_dump_item, 67)
+    CALL(evt_mario_dump_item, ITEM_SUPERBOMBOMB)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_print, 0, STRING("stg4_usu_111"), 0, STRING("ビビアン"))
@@ -1436,7 +1436,7 @@ EVT_BEGIN(usu00_vivian_joinup_event)
     CALL(evt_cam3d_evt_set_npc_rel, STRING("ビビアン"), 0, 50, 290, 0, 45, 14, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     SET_VALUE(LW(8), STRING("ビビアン"))
-    SET_VALUE(LW(9), 6)
+    SET_VALUE(LW(9), PARTY_MEMBER_VIVIAN)
     CALL_CHILD(PTR(all_party_lecture))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_USU1"))
     CALL(evt_msg_print_party, STRING("stg4_usu_123"))
@@ -2733,7 +2733,7 @@ EVT_END()
 
 EVT_BEGIN(usu_00_koopa_second_evt)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_mario_set_motion, 0)
+    CALL(evt_mario_set_motion, MARIO_MOTION_STAY)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("カンブー"), LW(3), LW(4), LW(5))
     CALL(evt_sub_get_dir, LW(0), LW(2), LW(3), LW(5), LW(6))

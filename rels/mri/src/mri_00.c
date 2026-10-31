@@ -869,6 +869,7 @@ static USER_FUNC(evt_cloud_main) {
                 break;
             }
             hit = hitNameToPtr(wp->hitName);
+            // A brief loss of contact still builds progress until the grace timer expires.
             if (hit0 != hit && hit1 != hit && hit2 != hit && hit3 != hit) {
                 if (wp->timer == 0) {
                     wp->state = 10;
@@ -1599,8 +1600,8 @@ EVT_BEGIN(mri_00_init_evt)
     CALL(evt_cam_road_reset)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_05_BOWSER_PETALBURG)
         CALL(evt_mario_get_party, LW(15))
-        IF_INT_EQUAL(LW(15), 0)
-            CALL(evt_mario_set_party, 0, 1)
+        IF_INT_EQUAL(LW(15), PARTY_MEMBER_NONE)
+            CALL(evt_mario_set_party, 0, PARTY_MEMBER_GOOMBELLA)
             CALL(evt_party_run, 0)
 #ifdef VERSION_G8ME01
         END_IF

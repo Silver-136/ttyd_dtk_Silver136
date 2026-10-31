@@ -455,11 +455,13 @@ static USER_FUNC(test_glare) {
     MapObject* sun = mapGetMapObj("sun");
     u16* rect;
 
+    // FAKE: discarded getter call; removing it changes the object.
     marioGetPtr();
     if (isFirstCall) {
         sun->flags |= MAP_OBJ_FLAG_SCREEN_RECT;
         return EVT_RETURN_BLOCK;
     }
+    // 0x3FF marks off-screen bounds; an all-zero rectangle also disables glare.
     rect = sun->screenRect;
     if (rect[0] == 0x3FF || rect[1] == 0x3FF || rect[2] == 0x3FF || rect[3] == 0x3FF) {
         envGlareFilter(0, 0, 0, 0, 0);

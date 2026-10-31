@@ -48,7 +48,7 @@ static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
     camera->startTimeA = gp->renderTime;
     camera->durationA = 0;
     camera->stateA = 3;
-    camera->curveA = 11;
+    camera->curveA = EASING_SINE_IN_OUT;
 }
 
 static Vec daiv;
@@ -91,16 +91,16 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 EvtWord ship_majin_lecture_init[63];
 EvtWord ship_majin_lecture[888];
 
-static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
+static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 from, f32 to) {
     f32 rem = total - elapsed;
 
-    return (rem * end + elapsed * start) / total;
+    return (rem * from + elapsed * to) / total;
 }
 
 static USER_FUNC(lect_mario_ido_sum) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
-    s32 frames = evtGetValue(event, args[0]);
+    s32 durationMs = evtGetValue(event, args[0]);
     s32 elapsed;
 
     if (isFirstCall) {
@@ -110,13 +110,13 @@ static USER_FUNC(lect_mario_ido_sum) {
         evtSetFloat(event, LW(2), mario->position.z);
     }
     elapsed = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, wwstart));
-    if (elapsed > frames) {
-        elapsed = frames;
+    if (elapsed > durationMs) {
+        elapsed = durationMs;
     }
-    mario->position.x = lect_mario_ido_sub(elapsed, frames, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
-    mario->position.y = lect_mario_ido_sub(elapsed, frames, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
-    mario->position.z = lect_mario_ido_sub(elapsed, frames, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
-    if (elapsed >= frames) {
+    mario->position.x = lect_mario_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
+    mario->position.y = lect_mario_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
+    mario->position.z = lect_mario_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
+    if (elapsed >= durationMs) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
@@ -196,7 +196,7 @@ static void lecture_button_disp(CameraId camera, void* param) {
             }
             pos = disp->pos;
             pos.y += ofs;
-            iconDispGxAlpha(&pos, 0x50, btn->iconId, btn->alpha, 1.0f);
+            iconDispGxAlpha(&pos, ICON_FLAG_2D | ICON_FLAG_NO_MAP_BLEND, btn->iconId, btn->alpha, 1.0f);
         }
     }
 }
@@ -297,6 +297,7 @@ static USER_FUNC(lecture_button_set_seq) {
     return EVT_RETURN_DONE;
 }
 
+// Despite its name, this helper returns the prompt sequence state, not the icon ID.
 static USER_FUNC(lecture_button_get_icon_id) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -409,7 +410,7 @@ static USER_FUNC(lect_mobj_hit_nasi) {
     }
     for (i = 0; i < 2; i++) {
         if (mobj->hitObj[i].name != NULL && strcmp(mobj->hitObj[i].name, "") != 0) {
-            hitGrpFlagOn(mobj->hitObj[i].name, 1);
+            hitGrpFlagOn(mobj->hitObj[i].name, HIT_FLAG_OFF);
         }
     }
     return EVT_RETURN_DONE;

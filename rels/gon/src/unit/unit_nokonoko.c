@@ -160,7 +160,22 @@ static StatusVulnerability regist = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_nokonoko", "c_nokoteki", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table},
+    {
+        1, // partNum
+        "btl_un_nokonoko", // partName
+        "c_nokoteki", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {0.0f, 30.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 40.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kMainPart | kGuardTargetPart | kIsShelled, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
 };
 
 static BattleWeapon weapon_nokonoko_attack = {
@@ -238,6 +253,7 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+// Each flipped turn decrements the counter; the final recovery still returns without attacking.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)

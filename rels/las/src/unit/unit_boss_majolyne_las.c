@@ -524,7 +524,7 @@ static EVT_BEGIN(damage_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(11), 1)
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -545,7 +545,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     WAIT_FRAMES(1)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -567,7 +567,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     SET_VALUE(GW(11), 2)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL_CHILD(PTR(subsetevt_dead_core_nospin_norotate))
     RETURN
 EVT_END()
@@ -763,7 +763,7 @@ static EVT_BEGIN(phase_event)
                         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("btl_majo3_05"), 0, GW(9))
                         WAIT_MS(200)
                     END_IF
-                    CALL(btlevtcmd_ResetFaceDirection, -2)
+                    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
                     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -793,7 +793,7 @@ static EVT_BEGIN(phase_event)
                         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("btl_majo3_07"), 0, GW(10))
                         WAIT_MS(200)
                     END_IF
-                    CALL(btlevtcmd_ResetFaceDirection, -2)
+                    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
                     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
                     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -941,14 +941,14 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(4), UW(9))
             CALL_CHILD(PTR(powder_attack_event))
             GOTO(90)
-            ELSE
+        ELSE
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
             CALL_CHILD(PTR(blizzard_attack_event))
         END_IF
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1060,7 +1060,7 @@ static EVT_BEGIN(blizzard_attack_event)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
     IF_INT_GREATER_OR_EQUAL(LW(5), 0)
         CALL(evt_eff, 0, STRING("ibuki"), 0, LW(0), LW(1), LW(2), 180, 0, 0, 0, 0, 0, 0, 0)
-        ELSE
+    ELSE
         CALL(evt_eff, 0, STRING("ibuki"), 1, LW(0), LW(1), LW(2), 180, 0, 0, 0, 0, 0, 0, 0)
     END_IF
     WAIT_FRAMES(150)
@@ -1174,7 +1174,7 @@ static EVT_BEGIN(powder_attack_event)
     LABEL(99)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(250)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

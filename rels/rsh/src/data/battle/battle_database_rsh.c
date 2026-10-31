@@ -70,6 +70,7 @@ BattleGroupSetup btlgrp_rsh_rsh_06_01_off_1 = {
     5, // reserved_1C
 };
 
+// Test and story selectors share the boss party and stage; setup flags/music differ below.
 NpcBattleSelect btlgrpsel_rsh_btlno_rsh_test1_off[] = {
     {50, &btlgrp_rsh_rsh_06_01_off_1, rsh_btlstage_data},
     {0},
@@ -123,6 +124,7 @@ EVT_BEGIN(bgset_rsh_bg_event)
     RETURN
 EVT_END()
 
+// Write the current linear offset before decrementing; total..0 is an inclusive cycle.
 USER_FUNC(_set_offset) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -142,6 +144,6 @@ USER_FUNC(_set_offset) {
     return EVT_RETURN_DONE;
 }
 USER_FUNC(_set_destroy_flag) {
-    _battleWorkPointer->stageObjectWork.flags |= 8;
+    _battleWorkPointer->stageObjectWork.flags |= STAGE_FLAG_NO_BG_B_DESTROY;
     return EVT_RETURN_DONE;
 }

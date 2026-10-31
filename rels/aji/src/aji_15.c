@@ -91,6 +91,7 @@ USER_FUNC(peach_set_pos) {
     f32 z = evtGetFloat(event, args[2]);
     MarioWork* mario = marioGetPtr();
 
+    // Write the position directly while the event controls the movement path.
     mario->position = (Vec){x, y, z};
     return EVT_RETURN_DONE;
 }
@@ -122,6 +123,7 @@ EVT_BEGIN(peach_evt_syawa_main)
             CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(48.0f))
         END_IF
     END_IF
+    // Use the cached or explicitly adjusted X value; the preceding moves do not refresh these locals.
     IF_INT_GREATER_OR_EQUAL(LW(0), 25)
         CALL(evt_mario_mov_pos2, 25, -41, FLOAT(48.0f))
     END_IF
@@ -153,6 +155,7 @@ EVT_BEGIN(peach_evt_syawa_main)
             GOTO(21)
         END_IF
     END_INLINE_EVENT
+    // The child supplies height through GW(0), while this interpolation supplies depth.
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, -45, -15, 600)
     LABEL(10)
     CALL(evt_sub_intpl_msec_get_value)
@@ -195,6 +198,7 @@ EVT_BEGIN(peach_evt_syawa_main)
         GOTO(0)
     END_IF
     WAIT_MS(500)
+    // Retain the steam event ID so emission can be deleted after the shower closes.
     SPAWN_EVENT_GET_ID(PTR(peach_evt_yuge), LW(9))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_sub_random, 2, LW(3))

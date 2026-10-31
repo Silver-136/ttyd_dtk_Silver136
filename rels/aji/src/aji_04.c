@@ -425,6 +425,7 @@ EVT_BEGIN(kuizu_sekizou)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, 0, 83, 591, 0, 100, 91, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+    // Count questions, correct answers, and wrong answers separately.
     SET_VALUE(LW(13), 0)
     SET_VALUE(LW(14), 0)
     SET_VALUE(LW(15), 0)
@@ -672,6 +673,7 @@ EVT_BEGIN(kuizu_sekizou)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_QUAKE1"), LW(10))
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 1500)
     CALL(evt_snd_sfxoff, LW(10))
+    // Both quiz outcomes reach this reward; collecting it advances the story again.
     CALL(evt_item_entry, STRING("dummy"), ITEM_ELEVATOR_KEY_0x1C, 50, 100, 0, ITEM_TYPE_FALL, -1, PTR(evt_item))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
     SPAWN_EVENT(PTR(sekizou_talk))
@@ -709,14 +711,14 @@ static void callback(s32 type, void** work) {
             if (evt->lwData[5] == 3) {
                 psndSFXOn("SFX_STG7_QUIZ_START1");
             } else if (evt->lwData[5] == 4) {
-                psndBGMOff(0x400);
+                psndBGMOff(PSND_PAUSE);
                 psndBGMOn(PSND_SLOT(1), "BGM_EVT_QUIZ2");
             }
         }
     } else if (type == 3) {
         evt->lwData[5]++;
         if (evt->lwData[5] == 1) {
-            psndBGMOff(0x400);
+            psndBGMOff(PSND_PAUSE);
             psndBGMOn(PSND_SLOT(1), "BGM_EVT_QUIZ2");
         }
     }

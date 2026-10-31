@@ -272,6 +272,7 @@ static USER_FUNC(mario_chk) {
         event->userdata[0] = 0;
         event->userdata[1] = 0;
     }
+    // The ordered route revisits panels; clamp its final step rather than wrapping this lookup.
     n = 0;
     j = event->userdata[0];
     if (j >= 50) {
@@ -296,6 +297,7 @@ static USER_FUNC(mario_chk) {
     sprintf(name, "A_hikaru_%02d", n);
     hitGrpAttrOff(name, 0x800);
 #ifdef VERSION_G8ME01
+    // This version exposes a third route entry; the other version exposes two.
     j++;
     if (j >= 50) {
         j = 49;
@@ -309,6 +311,7 @@ static USER_FUNC(mario_chk) {
     hitGrpAttrOff(name, 0x800);
 #endif
     event->userdata[1]++;
+    // The strict threshold advances after 21 or 61 calls, depending on whether the start was entered.
     if (event->userdata[1] > (event->userdata[2] == 0 ? 20 : 60)) {
         event->userdata[1] = 0;
         event->userdata[0]++;

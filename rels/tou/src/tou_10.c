@@ -127,10 +127,11 @@ USER_FUNC(tou_10_mario_keyoff_check) {
 
 #ifdef VERSION_G8ME01
 s32 tou_10_mario_talk_end_wait(void) {
-    return marioGetPtr()->currMotionId != MARIO_MOTION_TALK ? 2 : 0;
+    return marioGetPtr()->currMotionId != MARIO_MOTION_TALK ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 #endif
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006ec8, JP tou .text+0x6E04. See docs/NAME_PROVENANCE.md.
+// Accumulate 241 eligible checks; blocked controls or other motions pause rather than reset the count.
 USER_FUNC(tou_10_mario_free_wait) {
     MarioWork* mario = marioGetPtr();
 
@@ -164,6 +165,7 @@ USER_FUNC(setYoshiColor) {
         ((u8*)&start)[i] = swByteGet(i + 508);
     }
     minutes = (s32)OSTicksToSeconds(gp->retraceLocalTime - start) / 60;
+    // The elapsed whole-minute count repeats every 20 minutes across the seven color intervals.
     minutes %= 20;
     if (minutes <= 5) {
         pouchSetPartyColor(PARTNER_YOSHI, 0);
@@ -1777,6 +1779,7 @@ EVT_BEGIN(tou_10_init_evt)
     RETURN
 EVT_END()
 
+// Only the single full-width-space placeholder selects the default localized name.
 USER_FUNC(name_check) {
     EvtWord* args = event->args;
 

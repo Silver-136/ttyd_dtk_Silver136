@@ -23,6 +23,7 @@ static f32 spline_dt[9];
 EvtWord evt_anim2[147];
 EvtWord tou_20_init_evt[223];
 
+// Random offsets span [-50,50], [-20,20], [-10,30]; delays span 300..800 ms, inclusive.
 static EVT_BEGIN(evt_tou_balloon)
     CALL(evt_mapobj_get_position, STRING("tou_enkei1"), LW(13), LW(14), LW(15))
     SUBTRACT(LW(14), 20)
@@ -110,6 +111,7 @@ EVT_BEGIN(evt_anim2)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_sub_spline_init, 1, 11, PTR(spline_dt), 3, 0, 10000)
+    // Once the spline completes, retain its final position while the independent bobbing continues.
     SET_VALUE(LW(3), 1)
     LOOP(0)
         IF_INT_EQUAL(LW(3), 1)

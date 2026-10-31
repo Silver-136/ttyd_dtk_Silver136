@@ -362,7 +362,7 @@ static EVT_BEGIN(marco_talk)
             ADD(LW(3), 20)
         END_IF
         CALL(evt_item_entry, STRING("watasu"), LW(0), LW(3), LW(4), LW(5), ITEM_TYPE_STILL, -1, 0)
-        CALL(evt_item_flag_on, STRING("watasu"), 2)
+        CALL(evt_item_flag_on, STRING("watasu"), ITEM_FLAG_NO_TOUCH_GET)
         WAIT_MS(500)
         CALL(evt_npc_set_anim, STRING("me"), STRING("I_1"))
         WAIT_MS(500)
@@ -373,6 +373,7 @@ static EVT_BEGIN(marco_talk)
         END_INLINE_EVENT
         CALL(evt_npc_set_anim, STRING("me"), STRING("I_2"))
         WAIT_MS(500)
+        // The reset is LF(1), while the food-range tests below set and inspect LF(0).
         SET_VALUE(LF(1), 0)
         IF_INT_GREATER_OR_EQUAL(LW(0), 165)
             IF_INT_LESS(LW(0), 177)
@@ -394,7 +395,7 @@ static EVT_BEGIN(marco_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_31_02_03"), 0, STRING("me"))
             RETURN
         END_IF
-        IF_INT_NOT_EQUAL(LW(0), 166)
+        IF_INT_NOT_EQUAL(LW(0), ITEM_COCONUT)
             CALL(evt_msg_print, 0, STRING("stg5_muj_31_02_04"), 0, STRING("me"))
             RETURN
         END_IF
@@ -404,7 +405,7 @@ static EVT_BEGIN(marco_talk)
         CALL(evt_npc_set_anim, STRING("me"), STRING("I_2"))
         WAIT_MS(500)
         CALL(evt_item_entry, STRING("itemwine"), ITEM_CHUCKOLA_COLA, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-        CALL(evt_item_flag_on, STRING("itemwine"), 2)
+        CALL(evt_item_flag_on, STRING("itemwine"), ITEM_FLAG_NO_TOUCH_GET)
         CALL(evt_item_get_item, STRING("itemwine"))
         CALL(evt_msg_print, 0, STRING("stg5_muj_31_03"), 0, STRING("me"))
         SET_VALUE(GSW_STORY_PROGRESS, STG5_17_WINE_OBTAINED)

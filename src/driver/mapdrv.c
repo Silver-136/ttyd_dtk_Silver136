@@ -3427,6 +3427,7 @@ void mapGrpFlagOff(const char* name, u32 flags) {
 }
 
 void _setOffScrnId(MapObject* obj, s32 id, BOOL doNext) {
+    // Requires a non-NULL object; group offscreen operations pass their lookup result without a check.
     obj->offscreenId = id;
     if (id != -1) {
         obj->flags |= MAP_OBJ_FLAG_OFFSCREEN;
@@ -3481,6 +3482,7 @@ void mapGrpSetOffScreen(const char* name, const char* offscreen) {
 void mapObjClearOffScreen(const char* name) {
     MapObject* obj = mapGetMapObj(name);
 
+    // Requires name to resolve to a map object.
     obj->offscreenId = -1;
     obj->flags &= ~MAP_OBJ_FLAG_OFFSCREEN;
 }

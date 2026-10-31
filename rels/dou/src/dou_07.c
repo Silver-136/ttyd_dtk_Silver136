@@ -278,7 +278,7 @@ EVT_BEGIN(peramajin_after)
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_PERAMAJIN_COME1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
-    CALL(evt_mario_set_camid, 7)
+    CALL(evt_mario_set_camid, CAMERA_3D_EFFECTB)
     CALL(evt_img_wait_animend, STRING("img"))
     CALL(evt_mapobj_color, 1, STRING("s02_moku"), 255, 255, 255, 255)
     CALL(lect_cam_save)
@@ -372,5 +372,6 @@ static void majin_callback(s32 type) {
 
 
 static USER_FUNC(bgm_start_wait) {
+    // Wait for BGM slot 1 before beginning the curse presentation.
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }

@@ -285,7 +285,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -658,6 +658,7 @@ void zakogun_ext_main2(void) {
                     zako->pos.y = zako->target.y;
                     zako->state = 40;
                     work->count++;
+                    // The final damage check waits until every falling member has landed.
                     if (work->count == 25) {
                         unit->work[UNIT_WORK_ALL_LANDED] = 1;
                     }

@@ -240,6 +240,7 @@ static void senteresa_ext_init(void) {
     s32 n = extGetPoseNum();
     s32 i;
 
+    // One record per pose in the 200-pose evt_ext_entry below.
     pTeresa = _mapAlloc(sizeof(Teresa) * 200);
     for (i = 0; i < n; i++, pose++) {
         pose->flags = 3;
@@ -403,7 +404,7 @@ EVT_END()
 
 static EVT_BEGIN(check_roll)
     CALL(evt_mario_get_motion, LW(0))
-    IF_INT_EQUAL(LW(0), 22)
+    IF_INT_EQUAL(LW(0), MARIO_MOTION_ROLL)
         SET_VALUE(LW(0), 0)
         ELSE
         SET_VALUE(LW(0), 1)
@@ -1148,6 +1149,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+// Texture ranges: S_1 0..15, W_1 16..25, D_1 26..33, A_2 34..45.
 static ExtTexInfo senteresa_ext_entry_data[] = {
     {"c_teresa", "S_1", 0.0f},
     {"c_teresa", "S_1", 5.0f},
@@ -1198,6 +1200,8 @@ static ExtTexInfo senteresa_ext_entry_data[] = {
     {0},
 };
 
+// Swarm states: 0 delay, 1 fade in, 2 barrier, 3 stagger, 4 orbit, 5 approach,
+// 6 attached, 9 gesture, 10 knocked away, 20..22 gather, 30 disperse, 80 lift, 99 inactive.
 static void senteresa_ext_main(void) {
     ExtdrvPose* pose = extGetPosePtr();
     MarioWork* mp = marioGetPtr();
@@ -1663,6 +1667,7 @@ USER_FUNC(senteresa_get_random_position) {
     return EVT_RETURN_DONE;
 }
 
+// Keep already knocked-away Boos in state 10; delay all other poses in orbit state 4.
 USER_FUNC(senteresa_tikaduku_stop) {
     s32 n = extGetPoseNum();
     s32 i;
@@ -2120,6 +2125,7 @@ EVT_BEGIN(senteresa_evt)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(300)
+    // All 200 dispersal completions were counted before resetting the ext controller.
     CALL(senteresa_end)
     CALL(evt_mario_key_onoff, 1)
     SET_VALUE(GSWF_JIN_00_ATOMIC_BOO_DEFEATED, 1)
@@ -2234,6 +2240,7 @@ USER_FUNC(senteresa_get_rot_center) {
     return EVT_RETURN_DONE;
 }
 
+// Attached Boos scale walking/dashing speed down linearly; 20 attachments trigger ejection.
 USER_FUNC(senteresa_mario_spd) {
     MarioWork* mp = marioGetPtr();
     f32 scale = (20 - g_nNumHarituku[0]) / 20.0f;

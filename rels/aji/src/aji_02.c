@@ -145,7 +145,7 @@ static EVT_BEGIN(evt_box)
     CALL(evt_item_get_item, STRING("dummy"))
     SET_VALUE(GSW_STORY_PROGRESS, STG7_09_ELEVATOR_KEY_A_LIT_FLOOR)
     WAIT_FRAMES(1)
-    CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no01"), 2048)
+    CALL(evt_hitobj_attr_onoff, 1, 0, STRING("A_no01"), HIT_ATTR_TOGE)
     CALL(all_flag_off)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
@@ -172,7 +172,7 @@ static HitDamageReturn dmgReturnPt[] = {
 
 static EvtWord hikaru_yuka_init[] = {
     CALL_CHILD(hikaru_off)
-    CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no01"), 2048)
+    CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no01"), HIT_ATTR_TOGE)
     CALL(evt_mobj_itembox, STRING("box"), 160, 10, -10, MOBJ_ITEMBOX_GRAY, 0, PTR(evt_box), GSWF_AJI_02_ELEVATOR_KEY_CHEST)
     CALL(evt_hit_damage_return_set, PTR(dmgReturnPt))
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yukayu1"), MAP_OBJ_FLAG_HIDDEN)
@@ -279,7 +279,7 @@ static USER_FUNC(ride_chk) {
     } else {
         hit = (HitEntry*)mario->hitobjUnder;
     }
-    // panels stay lit for 30 frames after being touched
+    // Contact resets the counter to 30; this call decrements it before testing visibility.
     for (i = 0; i < 30; i++) {
         if (hit != NULL) {
             sprintf(hitName, "A_hikaru_%02d", i + 1);
@@ -397,7 +397,7 @@ USER_FUNC(hikaru_on_func) {
     s32 count = root_data[idx].count;
     s32 i;
 
-    // light the panels on the chosen route
+    // Show the selected route and clear its hazards; every other panel is hidden and hazardous.
     for (i = 1; i <= 30; i++) {
         u8* p = panels;
         s32 j;
@@ -425,6 +425,7 @@ USER_FUNC(hikaru_on_func) {
     return EVT_RETURN_DONE;
 }
 
+// Hide both visual sets without changing the panel collision attributes.
 USER_FUNC(hikaru_off_func) {
     char name[64];
     s32 i;

@@ -100,6 +100,7 @@ void winPartyInit(WindowWork* wp) {
                 !(pouch->partyData[j].flags & 2)) {
                 if (wp->flags & WINDOW_FLAG_8BIT) {
                     poseName = winPartyDt[i].poseName2;
+                    // Initialization uses the Yoshi-color animation for every partner; display selects each partner again.
                     switch (pouchGetPartyColor(PARTNER_YOSHI)) {
                         case 0:
                             animName = "R_5";

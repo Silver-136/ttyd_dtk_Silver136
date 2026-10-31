@@ -202,6 +202,7 @@ EVT_BEGIN(irekawatta_mario_init)
     RETURN
 EVT_END()
 
+// LW(0)==1 resumes after the staged Star Stone scene; both paths continue with the partner departure.
 EVT_BEGIN(irekawatta_mario)
     IF_INT_EQUAL(LW(0), 1)
         GOTO(100)
@@ -375,7 +376,7 @@ EVT_BEGIN(ranperu_lastbattle)
     CALL(evt_mario_normalize)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        CALL(evt_mario_hello_party, 0, 6)
+        CALL(evt_mario_hello_party, 0, PARTY_MEMBER_VIVIAN)
     END_IF
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
@@ -489,6 +490,7 @@ EVT_BEGIN(hontonosugata_mario_init)
     RETURN
 EVT_END()
 
+// The Ruby Star follows the hidden dummy during its bounces, then Vivian until the handoff.
 EVT_BEGIN(hontonosugata_mario)
     CALL_CHILD(PTR(hontonosugata_mario_init))
     CALL(evt_item_entry, STRING("rubystar"), ITEM_RUBY_STAR, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
@@ -818,6 +820,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+// The ascent waits for the partner jump; the descent temporarily disables the spring hit object.
 EVT_BEGIN(jin_04_jumpstand)
     IF_INT_EQUAL(LW(0), 0)
         SWITCH(GSW_STORY_PROGRESS)
@@ -919,6 +922,6 @@ static USER_FUNC(getYoshiColor) {
     return EVT_RETURN_DONE;
 }
 USER_FUNC(vivian_away) {
-    pouchGetPtr()->partyData[6].flags |= 2;
+    pouchGetPtr()->partyData[PARTNER_VIVIAN].flags |= 2;
     return EVT_RETURN_DONE;
 }

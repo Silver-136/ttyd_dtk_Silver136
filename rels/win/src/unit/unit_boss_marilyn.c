@@ -306,7 +306,7 @@ static EVT_BEGIN(damage_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GW(12), 1)
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -364,7 +364,7 @@ static EVT_BEGIN(dead_event)
     LABEL(99)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MRR_D_3"))
     SET_VALUE(GW(12), 2)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL_CHILD(PTR(subsetevt_dead_core_nospin_norotate))
     RETURN
 EVT_END()
@@ -614,6 +614,7 @@ static EVT_BEGIN(thunder_attack_event)
     LABEL(90)
     GOTO(97)
     LABEL(91)
+    // Defense input is checked only for the first selected target.
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     END_IF

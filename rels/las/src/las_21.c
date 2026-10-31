@@ -224,7 +224,7 @@ EVT_BEGIN(floatblk_evt)
         SET_FLOAT_VALUE(LW(10), FLOAT(0.099609375f))
         SET_FLOAT_VALUE(LW(9), FLOAT(0.049804688f))
         SET_VALUE(LF(1), 0)
-        ELSE
+    ELSE
         SET_FLOAT_VALUE(LW(10), FLOAT(-0.099609375f))
         SET_FLOAT_VALUE(LW(9), FLOAT(-0.049804688f))
         SET_VALUE(LF(1), 1)
@@ -246,13 +246,13 @@ EVT_BEGIN(floatblk_evt)
     IF_INT_EQUAL(LF(1), 0)
         IF_INT_EQUAL(LF(0), 1)
             CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_MOVE1"), LW(0), LW(1), LW(2), LW(8))
-            ELSE
+        ELSE
             CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_MOVE1"), LW(0), LW(1), LW(2), LW(8))
         END_IF
-        ELSE
+    ELSE
         IF_INT_EQUAL(LF(0), 1)
             CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_DOWN1"), LW(0), LW(1), LW(2), 0)
-            ELSE
+        ELSE
             CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_DOWN1"), LW(0), LW(1), LW(2), 0)
         END_IF
         SET_VALUE(LW(8), -1)
@@ -284,7 +284,7 @@ EVT_BEGIN(floatblk_evt)
             SET_FLOAT_VALUE(LW(10), FLOAT(-0.099609375f))
             SET_FLOAT_VALUE(LW(9), FLOAT(-0.049804688f))
             SET_VALUE(LF(1), 1)
-            ELSE
+        ELSE
             SET_FLOAT_VALUE(LW(10), FLOAT(0.099609375f))
             SET_FLOAT_VALUE(LW(9), FLOAT(0.099609375f))
             SET_VALUE(LF(1), 0)
@@ -299,7 +299,7 @@ EVT_BEGIN(floatblk_evt)
                 CALL(evt_mobj_set_y_position, LW(15), LW(11))
                 SET_VALUE(LF(0), 1)
             END_IF
-            ELSE
+        ELSE
             IF_INT_LESS_OR_EQUAL(LW(0), LW(11))
                 CALL(evt_mobj_set_y_position, LW(15), LW(11))
                 SET_VALUE(LF(0), 1)
@@ -350,7 +350,7 @@ EVT_BEGIN(floatblk21_1_evt)
         SET_VALUE(LW(3), -130)
         SET_VALUE(LW(4), -580)
         SET_VALUE(LSWF_LAS_21_BLK1_LOWERED, 1)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), STRING("21blk1"))
         SET_VALUE(LW(1), STRING("MOBJ_21blk1"))
         SET_VALUE(LW(2), STRING("21switch1"))
@@ -362,7 +362,7 @@ EVT_BEGIN(floatblk21_1_evt)
     CALL(evt_mobj_get_y_position, STRING("21blk1"), LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), -130)
         SET_VALUE(LSWF_LAS_21_BLK1_LOWERED, 0)
-        ELSE
+    ELSE
         SET_VALUE(LSWF_LAS_21_BLK1_LOWERED, 1)
     END_IF
     RETURN
@@ -377,7 +377,7 @@ EVT_BEGIN(floatblk21_2_evt)
         SET_VALUE(LW(3), -130)
         SET_VALUE(LW(4), -580)
         SET_VALUE(LSWF_LAS_21_BLK2_LOWERED, 1)
-        ELSE
+    ELSE
         SET_VALUE(LW(0), STRING("21blk2"))
         SET_VALUE(LW(1), STRING("MOBJ_21blk2"))
         SET_VALUE(LW(2), STRING("21switch2"))
@@ -389,7 +389,7 @@ EVT_BEGIN(floatblk21_2_evt)
     CALL(evt_mobj_get_y_position, STRING("21blk2"), LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), -130)
         SET_VALUE(LSWF_LAS_21_BLK2_LOWERED, 0)
-        ELSE
+    ELSE
         SET_VALUE(LSWF_LAS_21_BLK2_LOWERED, 1)
     END_IF
     RETURN
@@ -398,7 +398,7 @@ EVT_END()
 EVT_BEGIN(las_21_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
@@ -410,7 +410,7 @@ EVT_BEGIN(las_21_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_under"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
         CALL(evt_npc_check_delete, STRING("ワンワン２"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
         SET_VALUE(LW(0), STRING("w_bero"))
@@ -424,12 +424,12 @@ EVT_BEGIN(las_21_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
             SET_VALUE(LW(0), -220)
-            ELSE
+        ELSE
             SET_VALUE(LW(0), -580)
         END_IF
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
             SET_VALUE(LW(1), -120)
-            ELSE
+        ELSE
             SET_VALUE(LW(1), -580)
         END_IF
         SET_VALUE(LW(2), -580)

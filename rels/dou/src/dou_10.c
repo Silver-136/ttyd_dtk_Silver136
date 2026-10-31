@@ -438,6 +438,7 @@ EVT_BEGIN(namiyoke_se)
         IF_INT_EQUAL(LW(11), 1)
             CALL(evt_sub_entrymgr_getreg, LW(9), LW(6), LW(3), LW(4), LW(5))
             IF_INT_EQUAL(LW(12), 0)
+                // Initial sound position repeats X as Z; later updates use the stored Z.
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_MINIGAME_WAVE1"), LW(3), LW(4), LW(3), LW(13))
                 SET_VALUE(LW(12), 1)
                 ELSE
@@ -599,6 +600,7 @@ USER_FUNC(namiyoke_fail_stop) {
 }
 
 USER_FUNC(dou_namiatari_check) {
+    // Waves at Y <= -45 are inactive; between -45 and -5 their X/Z extents grow linearly.
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
     f32 x = evtGetFloat(event, args[0]);
@@ -696,7 +698,7 @@ USER_FUNC(namiyoke_set_mapobj) {
     f32 y = evtGetFloat(event, args[2]);
     f32 z = evtGetFloat(event, args[3]);
 
-    mapObjTranslate((const char*)namiyoke_mapobj[idx], x, y, z);
+    mapObjTranslate(namiyoke_mapobj[idx], x, y, z);
     return EVT_RETURN_DONE;
 }
 
@@ -737,6 +739,7 @@ USER_FUNC(evt_sub_entrymgr_setreg) {
 }
 
 USER_FUNC(evt_sub_entrymgr_check) {
+    // BUG: an unused entry does not advance e, so later entries are not checked.
     EvtWord* args = event->args;
     EntryMgr* mgr = (EntryMgr*)evtGetValue(event, args[0]);
     EntryMgrEntry* e = mgr->entries;

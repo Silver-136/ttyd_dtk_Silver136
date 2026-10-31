@@ -283,7 +283,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -556,6 +556,7 @@ void zakogun_ext_main3(void) {
                 }
                 break;
             case 35:
+                // Wait for all five hundred members to finish assembling.
                 if (work->count == 500) {
                     zako->state = 40;
                 }

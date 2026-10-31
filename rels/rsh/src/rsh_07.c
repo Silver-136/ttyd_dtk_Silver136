@@ -127,6 +127,7 @@ static NpcSetupInfo npc_data[] = {
     {0},
 };
 
+// Alternating interaction-hit names and message IDs, terminated by a null hit name.
 static const char* access_tbl[] = {
     "nittei",
     "stg6_rsh_c_00_1",
@@ -184,6 +185,7 @@ EVT_BEGIN(rsh_07_init_evt)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_3"))
             END_IF
+            // This variant leaves the current moving-train audio unchanged.
             IF_STR_EQUAL(LW(0), STRING("rsh_07_b"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_07_c"))

@@ -313,7 +313,7 @@ EVT_BEGIN(majinaisi_table_talk)
     CALL(evt_map_checkanim, STRING("anm_ten"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_msg_print, 0, STRING("majinaisi_08"), 0, STRING("me"))
-    CALL(evt_mario_set_motion, 0)
+    CALL(evt_mario_set_motion, MARIO_MOTION_STAY)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("majinai_BOX"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_blend_off, 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("majinai_BOX"), MAP_OBJ_FLAG_NO_MAP_BLEND)
@@ -419,15 +419,16 @@ static USER_FUNC(effect_stardust) {
     f32 vx = evtGetFloat(event, args[4]);
     f32 vy = evtGetFloat(event, args[5]);
     s32 count = evtGetValue(event, args[6]);
-    s32 camera = evtGetValue(event, args[7]);
+    s32 lifetime = evtGetValue(event, args[7]);
 
-    effStardustEntry(type, count, camera, x, y, z, vx, vy);
+    effStardustEntry(type, count, lifetime, x, y, z, vx, vy);
     return EVT_RETURN_DONE;
 }
 static USER_FUNC(setmertn) {
     event->ownerNPC = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
 }
+// Each selection indexes a pair: coin price followed by the number of uses.
 USER_FUNC(majinaisi_ryokin_kaisu) {
     EvtWord* args = event->args;
     s32 idx = evtGetValue(event, args[0]);

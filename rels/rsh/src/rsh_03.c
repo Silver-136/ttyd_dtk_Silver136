@@ -136,25 +136,27 @@ USER_FUNC(iri_22_make_item_tbl) {
     s32 i;
 
     bought = evtGetValue(NULL, GSW_TROUBLE_WORK(0));
+    // Up to three unsubmitted ingredients, followed by the remaining -1 terminator.
     for (i = 0; i < 4; i++) {
         iri_22_item_tbl[i] = -1;
     }
     n = 0;
     if (!(bought & 1) && (s32)pouchCheckItem(ITEM_GOLDEN_LEAF) != 0) {
-        iri_22_item_tbl[0] = 0xA9;
+        iri_22_item_tbl[0] = ITEM_GOLDEN_LEAF;
         n = 1;
     }
     if (!(bought & 2) && (s32)pouchCheckItem(ITEM_MYSTIC_EGG) != 0) {
-        iri_22_item_tbl[n++] = 0xA8;
+        iri_22_item_tbl[n++] = ITEM_MYSTIC_EGG;
     }
     if (!(bought & 4) && (s32)pouchCheckItem(ITEM_KEEL_MANGO) != 0) {
-        iri_22_item_tbl[n++] = 0xAA;
+        iri_22_item_tbl[n++] = ITEM_KEEL_MANGO;
     }
     evtSetValue(event, args[0], (EvtWord)iri_22_item_tbl);
     evtSetValue(event, args[1], n);
     return EVT_RETURN_DONE;
 }
 
+// Remember the latest non-NULL talk target; a later NULL result does not clear the cached name.
 static USER_FUNC(mario_flag) {
     static BOOL flg;
     EvtWord* args = event->args;
@@ -193,7 +195,7 @@ USER_FUNC(omiseFukki) {
     cam->startTimeA = gp->renderTime;
     cam->durationA = OSMillisecondsToTicks(500);
     cam->stateA = 3;
-    cam->curveA = 11;
+    cam->curveA = EASING_SINE_IN_OUT;
     return EVT_RETURN_DONE;
 }
 
@@ -391,15 +393,15 @@ EVT_BEGIN(talk_cook)
         LABEL(0)
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
         SWITCH(LW(1))
-            CASE_EQUAL(169)
+            CASE_EQUAL(ITEM_GOLDEN_LEAF)
             CALL(evt_pouch_remove_item, ITEM_GOLDEN_LEAF, LW(0))
             CALL(evt_msg_print, 0, STRING("irai_22_10"), 0, 0)
             OR(GSW_TROUBLE_WORK(0), 1)
-            CASE_EQUAL(168)
+            CASE_EQUAL(ITEM_MYSTIC_EGG)
             CALL(evt_pouch_remove_item, ITEM_MYSTIC_EGG, LW(0))
             CALL(evt_msg_print, 0, STRING("irai_22_11"), 0, 0)
             OR(GSW_TROUBLE_WORK(0), 2)
-            CASE_EQUAL(170)
+            CASE_EQUAL(ITEM_KEEL_MANGO)
             CALL(evt_pouch_remove_item, ITEM_KEEL_MANGO, LW(0))
             CALL(evt_msg_print, 0, STRING("irai_22_12"), 0, 0)
             OR(GSW_TROUBLE_WORK(0), 4)

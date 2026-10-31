@@ -273,6 +273,7 @@ EVT_BEGIN(tik_19_init_evt)
     RETURN
 EVT_END()
 
+// Restart the chest animation after each completed loop, then return to idle when requested.
 static void majin_callback(s32 type) {
     MapObjectEntry* mobj = mobjNameToPtr("box");
 

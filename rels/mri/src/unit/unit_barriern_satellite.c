@@ -149,7 +149,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -229,6 +229,7 @@ static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     x = args[3];
     y = args[4];
     z = args[5];
+    // Skip num * (num - 1) / 2 entries to reach this satellite-count group.
     p = VecData;
     for (i = 0; i < num; i++) {
         for (j = 0; j < i; j++) {

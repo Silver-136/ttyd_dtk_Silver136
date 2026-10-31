@@ -32,6 +32,7 @@
 #include "dolphin/gx.h"
 #include "dolphin/mtx.h"
 #include "dolphin/os.h"
+#include <dolphin/pad.h>
 #include "string.h"
 #include "stdio.h"
 #include "evt/evt_cam.h"
@@ -427,6 +428,7 @@ void demo_window(CameraId cameraId, void* param) {
     h = GXGetTexObjHeight(&obj);
     GXSetNumChans(1);
     GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+    // FAKE: alpha multiplied by 255 and divided back; using winAlpha directly changes the object.
     GXSetChanMatColor(GX_COLOR0A0, (GXColor){0xFF, 0xFF, 0xFF, wp->winAlpha * 255 / 255});
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_PTIDENTITY);
@@ -551,7 +553,7 @@ EVT_BEGIN(buttonCheck)
     CALL(evt_fade_end_wait)
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
-        IF_BITS_SET(LW(0), 4352)
+        IF_BITS_SET(LW(0), PAD_BUTTON_A | PAD_BUTTON_START)
             SET_VALUE(GF(10), 1)
             CALL(evt_fade_set_mapchange_type, 1, 17, 500, -1, -1)
             CALL(evt_seq_set_seq, SEQ_MAP_CHANGE, STRING("title"), 0)
@@ -923,7 +925,7 @@ EVT_BEGIN(demo_evt)
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -85, 50, 590, -85, 28, 442, 15000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
-    CALL(evt_npc_set_camid, STRING("hako"), 5)
+    CALL(evt_npc_set_camid, STRING("hako"), CAMERA_3D_EFFECTA)
     CALL(evt_npc_set_anim, STRING("hako"), STRING("A_1"))
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT

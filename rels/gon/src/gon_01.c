@@ -119,6 +119,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+// Animate separate Mario and partner bounce arcs before restoring controls and reopening the door.
 EVT_BEGIN(honenoko_oidasare_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_MAKE_DISP_DIR)

@@ -139,7 +139,7 @@ void setupDataBase(const char* areaName, const char* mapName) {
             memset(dead, 0, sizeof(fbat->deadInfo));
             strcpy(dead->mapName, mapName);
         } else if (!(attr->flags & 2) && (attr->flags & 4)) {
-            memset(&fbat->deadInfo[2], 0, 0x4d8);
+            memset(&fbat->deadInfo[2], 0, sizeof(fbat->deadInfo) - 2 * sizeof(NpcDeadInfo));
         }
     }
 

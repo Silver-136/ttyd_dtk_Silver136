@@ -331,13 +331,88 @@ static BattleDataEntry data_table[] = {
 
 static BattleUnitKindPart parts[] = {
 #ifdef VERSION_G8ME01
-    {1, "btl_un_gonbaba", "c_gonbaba", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, kImportantPart | kPartUnitWorkDefense, 0, pose_table},
-    {2, "btl_un_gonbaba", "c_gonbaba", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kPartUnitWorkDefense | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden, 0, pose_table},
+    {
+        1, // partNum
+        "btl_un_gonbaba", // partName
+        "c_gonbaba", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {230.0f, 36.0f, 60.0f}, // hitBaseOffset
+        {230.0f, 36.0f, 60.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kImportantPart | kPartUnitWorkDefense, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
+    {
+        2, // partNum
+        "btl_un_gonbaba", // partName
+        "c_gonbaba", // modelName
+        {100.0f, 0.0f, 0.0f}, // positionOffset
+        {250.0f, 110.0f, 25.0f}, // hitBaseOffset
+        {250.0f, 110.0f, 25.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kMainPart | kGuardTargetPart | kPartUnitWorkDefense | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
 #else
-    {1, "btl_un_gonbaba", "c_gonbaba", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, 0x22, 0, pose_table},
-    {2, "btl_un_gonbaba", "c_gonbaba", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, 0x1600029, 0, pose_table},
+    {
+        1, // partNum
+        "btl_un_gonbaba", // partName
+        "c_gonbaba", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {230.0f, 36.0f, 60.0f}, // hitBaseOffset
+        {230.0f, 36.0f, 60.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        0x22, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
+    {
+        2, // partNum
+        "btl_un_gonbaba", // partName
+        "c_gonbaba", // modelName
+        {100.0f, 0.0f, 0.0f}, // positionOffset
+        {250.0f, 110.0f, 25.0f}, // hitBaseOffset
+        {250.0f, 110.0f, 25.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        0x1600029, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
 #endif
-    {3, "btl_un_gonbaba", "c_gonbaba4", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden, 0, pose_table},
+    {
+        3, // partNum
+        "btl_un_gonbaba", // partName
+        "c_gonbaba4", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {0.0f, 0.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 0.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence, // defense
+        &defence_attr, // defenseAttr
+        kNotTargetable | kHidden, // attributes
+        0, // counterAttributes
+        pose_table, // poseTable
+    },
 };
 
 static EVT_BEGIN(battle_entry_event)
@@ -1229,6 +1304,7 @@ EVT_BEGIN(gonbaba_damage_sub_event)
     RETURN
 EVT_END()
 
+// The first defeat enters negotiation; only a defeat after negotiation takes the final death path.
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_NEGOTIATED, LW(0))
     IF_INT_EQUAL(LW(0), 0)

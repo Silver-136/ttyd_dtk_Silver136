@@ -174,7 +174,7 @@ static USER_FUNC(mario_chk) {
 }
 
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
-    // whether target is group or one of its descendants
+    // Compare joint names through the child-first search, excluding the root's siblings.
     return _hitIsGroupSub(target, group, FALSE);
 }
 
@@ -182,6 +182,7 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) 
     if (strcmp(target->joint->name, node->joint->name) == 0) {
         return TRUE;
     }
+    // A child search returns immediately, so this node's siblings are not searched afterward.
     if (node->child != NULL) {
         return _hitIsGroupSub(target, node->child, TRUE);
     }

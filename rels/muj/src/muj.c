@@ -86,6 +86,7 @@ USER_FUNC(muj_ship_puka_func) {
     s32 index = evtGetValue(event, args[0]);
     f32 value = evtGetFloat(event, args[1]);
 
+    // The mask repeats the sixteen-sample displacement table.
     evtSetFloat(event, args[2], value * muj_ship_puka_data[index & 0xF]);
     return EVT_RETURN_DONE;
 }
@@ -247,6 +248,7 @@ USER_FUNC(muj_npc_buruburu) {
             break;
     }
     event->userdataf[0] = offset;
+    // A zero duration keeps shaking indefinitely and does not restore the saved position.
     if (duration == 0) {
         return EVT_RETURN_BLOCK;
     }

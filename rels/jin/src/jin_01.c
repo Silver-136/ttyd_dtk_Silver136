@@ -117,6 +117,7 @@ static EVT_BEGIN(cam_shake)
     RETURN
 EVT_END()
 
+// The rear switch decrements the staircase position when the current value is at most 1.
 EVT_BEGIN(evt_kaidan_oku)
     IF_INT_LESS_OR_EQUAL(LSW_JIN_STAIRCASE_POS, 1)
         CALL(evt_mario_key_onoff, 0)

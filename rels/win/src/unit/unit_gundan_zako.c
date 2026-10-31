@@ -271,7 +271,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -314,6 +314,7 @@ static EVT_BEGIN(attack_event)
             GOTO(99)
         END_IF
     END_IF
+    // Redraw if the bottle was chosen while already Huge.
     GOTO(10)
     LABEL(99)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -554,7 +555,7 @@ static EVT_BEGIN(jump_attack_event)
 EVT_END()
 
 static EVT_BEGIN(dekadeka_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_gundan_zako_dekadeka_bottle))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))

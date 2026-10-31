@@ -270,6 +270,7 @@ static const char* door_5[] = {
     "5_door_close",
 };
 
+// Both hints are required. US advances the story only if needed; JP writes this story step unconditionally.
 EVT_BEGIN(evt_rsh_konarikin_irai_party_talk)
     IF_INT_EQUAL(GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD, 0)
         RETURN
@@ -351,6 +352,7 @@ EVT_BEGIN(evt_party_chuumoku)
     RETURN
 EVT_END()
 
+// Each timed speech signals GF(0); the main movement waits for it before starting the next speech.
 EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_POWAN1"))
     CALL(evt_cam3d_evt_set, 220, 130, 250, 220, 55, -180, 500, EASING_SINE_IN_OUT)
@@ -486,6 +488,7 @@ static s32 item_tbl[] = {
     ITEM_VITAL_PAPER, -1,
 };
 
+// Cancelling leaves the clue unresolved; accepting displays a temporary paper without consuming the pouch item.
 EVT_BEGIN(evt_daijisouna_kami)
     CALL(evt_cam3d_evt_set, 220, 107, 165, 220, 45, -180, 500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -1006,7 +1009,7 @@ static EVT_BEGIN(talk_konari)
             IF_INT_EQUAL(LW(1), -1)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_101"), 0, 0)
                 ELSE
-                IF_INT_NOT_EQUAL(LW(1), 77)
+                IF_INT_NOT_EQUAL(LW(1), ITEM_AUTOGRAPH)
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_100"), 0, 0)
                     ELSE
 #ifdef VERSION_G8ME01
@@ -1237,7 +1240,7 @@ EVT_BEGIN(evt_tana_5)
     END_IF
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_item_entry, STRING("_item00"), ITEM_STAR_PIECE, -260, 0, -240, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("_item00"), 2)
+    CALL(evt_item_flag_on, STRING("_item00"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_get_item, STRING("_item00"))
     SET_VALUE(GSWF_STARPIECE_85, 1)
     CALL(evt_mario_key_onoff, 1)
@@ -1317,6 +1320,7 @@ static EVT_BEGIN(evt_door_msg)
     RETURN
 EVT_END()
 
+// GW(14)/GW(15) hold the two repeat-message event IDs for the active room.
 EVT_BEGIN(evt_narikin_room)
     SET_TYPE(0)
     SET_VALUE(LF(0), 0)
@@ -1727,6 +1731,7 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1"))
             END_IF
+            // Revisit variant B retains the current moving-train audio.
             IF_STR_EQUAL(LW(0), STRING("rsh_04_b"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_04_c"))
@@ -1788,6 +1793,7 @@ EVT_BEGIN(rsh_04_c_init_evt_nidome)
 EVT_END()
 
 
+// Suspend room-repeat dialogue while field-battle mode 2 or the ghost-diary window is active.
 static USER_FUNC(mario_flag) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();

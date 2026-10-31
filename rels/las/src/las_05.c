@@ -483,12 +483,12 @@ s32 party_hit_check(f32 x, f32 z, f32* dir) {
     dx = __fabsf(x - party->position.x);
     dz = __fabsf(z - party->position.z);
     switch (party->currentMemberId) {
-        case 2:
+        case PARTY_MEMBER_KOOPS:
             switch (nokonokoGetStatus()) {
                 case 2:
-                case 3:
+                case PARTY_MEMBER_BOBBERY:
                 case 4:
-                case 5:
+                case PARTY_MEMBER_FLURRIE:
                     active = 1;
                     break;
             }
@@ -640,7 +640,7 @@ EVT_BEGIN(kurokaron_move)
                 IF_INT_EQUAL(LF(0), 0)
                     WAIT_MS(GW(1))
                     SET_VALUE(LF(0), 1)
-                    ELSE
+                ELSE
                     CALL(evt_sub_random, 300, LW(5))
                     ADD(LW(5), GW(1))
                     WAIT_MS(LW(5))
@@ -1219,10 +1219,10 @@ static EVT_BEGIN(senkaron_event)
                         IF_INT_EQUAL(LW(7), 0)
                             CALL(evt_mario_set_pose, STRING("M_S_1"))
                         END_IF
-                        ELSE
+                    ELSE
                         SET_VALUE(LW(7), 0)
                     END_IF
-                    ELSE
+                ELSE
                     CALL(evt_mario_get_motion, LW(8))
                     IF_INT_EQUAL(LW(8), 0)
                         CALL(evt_mario_get_dispdir, LW(5))
@@ -1234,7 +1234,7 @@ static EVT_BEGIN(senkaron_event)
                         END_IF
                         IF_INT_EQUAL(LF(1), 0)
                             CALL(evt_mario_set_dispdir, 0)
-                            ELSE
+                        ELSE
                             CALL(evt_mario_set_dispdir, 180)
                         END_IF
                     END_IF
@@ -1281,7 +1281,7 @@ static EVT_BEGIN(senkaron_event)
                     IF_INT_EQUAL(LF(0), 0)
                         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(14))
                         SET_VALUE(LF(0), 1)
-                        ELSE
+                    ELSE
                         CALL(evt_sub_get_stopwatch, LW(14), LW(0))
                         SWITCH(LW(15))
                             CASE_EQUAL(0)
@@ -1314,7 +1314,7 @@ static EVT_BEGIN(senkaron_event)
                             CALL(set_party_y_pos, LW(1))
                         END_IF
                     END_IF
-                    ELSE
+                ELSE
                     CALL(mario_land_on)
                     CALL(party_land_on)
                     CALL(chk_mario_ctrloff, LW(0))

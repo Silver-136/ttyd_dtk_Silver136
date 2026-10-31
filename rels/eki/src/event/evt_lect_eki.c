@@ -90,7 +90,7 @@ static USER_FUNC(lecture_button_get_icon_id);
 static USER_FUNC(x_flag_wait);
 static USER_FUNC(x_flag_add);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
-extern s32 evt_mario_dispflag_onoff[];
+USER_FUNC(evt_mario_dispflag_onoff);
 
 EvtWord boots_lv3_juyoitem_lecture_init[104];
 EvtWord boots_lv3_juyoitem_lecture_sub01[29];
@@ -203,7 +203,7 @@ static void lecture_button_disp(CameraId camera, void* param) {
             }
             pos = disp->pos;
             pos.y += ofs;
-            iconDispGxAlpha(&pos, 0x50, btn->iconId, btn->alpha, 1.0f);
+            iconDispGxAlpha(&pos, ICON_FLAG_2D | ICON_FLAG_NO_MAP_BLEND, btn->iconId, btn->alpha, 1.0f);
         }
     }
 }
@@ -445,7 +445,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture_sub02)
     CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_A_PRESSED)
     LOOP(0)
         CALL(evt_mario_get_motion, LW(3))
-        IF_INT_EQUAL(LW(3), 0)
+        IF_INT_EQUAL(LW(3), MARIO_MOTION_STAY)
             BREAK_LOOP
         END_IF
         WAIT_FRAMES(1)
@@ -533,7 +533,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         SET_VALUE(LW(7), 0)
         CALL(mainwindow_opendisable)
         CALL(evt_mario_trigflag_onoff, 1, MARIO_TRIG_FLAG_DISABLE_SUB_STICK)
-        CALL(evt_mario_set_enable_key, 256)
+        CALL(evt_mario_set_enable_key, PAD_BUTTON_A)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_mario_key_onoff, 1)

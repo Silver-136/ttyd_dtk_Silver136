@@ -260,6 +260,7 @@ EVT_BEGIN(trap_main)
     RETURN
 EVT_END()
 
+// Consume one x/z pair for every Puni index, including those not trapped.
 EVT_BEGIN(trap_restore)
     CALL(evt_puni_wait_systemmode, 2)
     SET_VALUE(LW(10), 1)
@@ -562,7 +563,7 @@ EVT_BEGIN(trap_check)
     SET_VALUE(LW(8), 1)
     LOOP(0)
         CALL(evt_puni_get_flag, LW(8), LW(9))
-        AND(LW(9), 1024)
+        AND(LW(9), PUNI_FLAG_ACTIVE)
         IF_INT_NOT_EQUAL(LW(9), 0)
             CALL(evt_puni_get_position, LW(8), LW(0), LW(1), LW(2))
             SET_VALUE(LW(9), 0)

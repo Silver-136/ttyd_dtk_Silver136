@@ -47,14 +47,15 @@ static USER_FUNC(make_list) {
     s32 n = 0;
 
     if ((s32)pouchCheckItem(ITEM_CARD_KEY_0x1D) > 0) {
-        key_list[n++] = 0x1D;
+        key_list[n++] = ITEM_CARD_KEY_0x1D;
     }
     if ((s32)pouchCheckItem(ITEM_CARD_KEY_0x1E) > 0) {
-        key_list[n++] = 0x1E;
+        key_list[n++] = ITEM_CARD_KEY_0x1E;
     }
     if ((s32)pouchCheckItem(ITEM_CARD_KEY_0x1F) > 0) {
-        key_list[n++] = 0x1F;
+        key_list[n++] = ITEM_CARD_KEY_0x1F;
     }
+    // At most three available keys precede the item-selection sentinel.
     key_list[n] = -1;
     return EVT_RETURN_DONE;
 }
@@ -148,7 +149,7 @@ EVT_BEGIN(evt_machine)
     CALL(make_list)
     CALL(evt_win_item_select, 0, PTR(key_list), LW(10), 0)
     SWITCH(LW(10))
-        CASE_EQUAL(29)
+        CASE_EQUAL(ITEM_CARD_KEY_0x1D)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
@@ -160,7 +161,7 @@ EVT_BEGIN(evt_machine)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg7_aji_67_01"), 0, 0)
         END_IF
-        CASE_EQUAL(30)
+        CASE_EQUAL(ITEM_CARD_KEY_0x1E)
         IF_INT_EQUAL(LW(0), 1)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
@@ -172,7 +173,7 @@ EVT_BEGIN(evt_machine)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg7_aji_67_01"), 0, 0)
         END_IF
-        CASE_EQUAL(31)
+        CASE_EQUAL(ITEM_CARD_KEY_0x1F)
         IF_INT_EQUAL(LW(0), 2)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
@@ -342,7 +343,8 @@ EVT_BEGIN(aji_18_init_evt)
 #ifdef VERSION_G8ME01
             END_IF
 #endif
-                CALL(evt_pouch_mario_recovery)
+                // US recovery is outside the missing-partner branch; the other version keeps it inside.
+            CALL(evt_pouch_mario_recovery)
                 CALL(evt_pouch_all_party_recovery)
 #ifdef VERSION_G8ME01
             CALL(evt_sub_status_gauge_force_update)

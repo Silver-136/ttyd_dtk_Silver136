@@ -160,7 +160,22 @@ static StatusVulnerability regist_patapata = {
 };
 
 static BattleUnitKindPart parts_patapata[] = {
-    {1, "btl_un_patapata", "c_nokoteki", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence_patapata, &defence_patapata_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patapata},
+    {
+        1, // partNum
+        "btl_un_patapata", // partName
+        "c_nokoteki", // modelName
+        {0.0f, 0.0f, 0.0f}, // positionOffset
+        {0.0f, 30.0f, 0.0f}, // hitBaseOffset
+        {0.0f, 40.0f, 0.0f}, // hitCursorBaseOffset
+        20, // shadowSize
+        30, // reserved_32
+        255, // baseAlpha
+        &defence_patapata, // defense
+        &defence_patapata_attr, // defenseAttr
+        kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, // attributes
+        0, // counterAttributes
+        pose_table_patapata, // poseTable
+    },
 };
 
 static PoseTableEntry pose_table_patapata[] = {
@@ -211,6 +226,7 @@ static EVT_BEGIN(init_event_patapata)
     RETURN
 EVT_END()
 
+// Grounding installs the Koopa form; a damage count above one also runs its flip event.
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -222,7 +238,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_ChangeDataTable, LW(10), PTR(data_table))
     CALL(btlevtcmd_ReplaceParts, LW(10), LW(11), PTR(parts), 1)
     CALL(btlevtcmd_AnimeChangePoseDirect, LW(10), LW(11), STRING("NKT_D_1"))
-    CALL(btlevtcmd_ChangeKind, LW(10), 14)
+    CALL(btlevtcmd_ChangeKind, LW(10), UNIT_KOOPA_TROOPA)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_KIND_CHANGED)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
@@ -579,6 +595,7 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+// Each flipped turn counts down; even the turn that restores the shell consumes the attack.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)

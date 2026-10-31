@@ -284,7 +284,15 @@ static StatusVulnerability regist = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_met", "c_met", 0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 0.0f, 0.0f, 25.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
+    {
+        1, "btl_un_met", "c_met",
+        0.0f, 0.0f, 0.0f,
+        0.0f, 20.0f, 0.0f,
+        0.0f, 25.0f, 0.0f,
+        20, 30, 255,
+        &defence, &defence_attr,
+        kMainPart | kGuardTargetPart, 0, pose_table,
+    },
 };
 
 static EVT_BEGIN(init_event)
@@ -294,6 +302,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+// Install ground or ceiling handlers; the ceiling branch also replaces the pose and data tables.
 static EVT_BEGIN(init_event2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CEILING, LW(15))
     IF_INT_EQUAL(LW(15), 0)
@@ -354,6 +363,7 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+// Restore normal defense once the predecremented overturn counter reaches zero.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -571,6 +581,7 @@ static EVT_BEGIN(counter_damage_event_ceil)
     RETURN
 EVT_END()
 
+// Drop from the ceiling into the flipped ground state with zeroed defense tables.
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_FALL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, 0)

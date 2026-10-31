@@ -96,6 +96,7 @@ static TreeAccess ki_data[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+// Award Horsetail at ten hammer hits, at most once until this room is initialized again.
 EVT_BEGIN(evt_anm_kan)
     IF_INT_EQUAL(GF(0), 1)
         GOTO(99)

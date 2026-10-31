@@ -64,6 +64,7 @@ static s32 color_change_evt(s32 on) {
     return 0;
 }
 
+// Keep removing the shadow-material override from the current partner while this event is blocked.
 static USER_FUNC(check) {
     if (partyGetPtr(0) != NULL) {
         animPoseSetMaterialFlagOff(partyGetPtr(0)->paperAnimGroup, MAP_OBJ_TEV_CALLBACK(10));
@@ -88,6 +89,7 @@ USER_FUNC(evt_kagemario_change) {
     return EVT_RETURN_DONE;
 }
 
+// Clear both remembered partner slots before the solo Shadow Mario section.
 static USER_FUNC(test) {
     marioGetPtr()->prevPartyMemberId[0] = 0;
     marioGetPtr()->prevPartyMemberId[1] = 0;

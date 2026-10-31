@@ -257,7 +257,7 @@ static EVT_BEGIN(thunder_event)
     CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterElectric)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetEnemyBelong, LW(3), LW(10))
-        IF_INT_EQUAL(LW(10), 0)
+        IF_INT_EQUAL(LW(10), ALLIANCE_PLAYER)
             SET_VALUE(LW(10), 125)
         ELSE
             SET_VALUE(LW(10), -125)
@@ -340,6 +340,7 @@ static EVT_BEGIN(thunder_event)
     LABEL(90)
     GOTO(97)
     LABEL(91)
+    // Check defense once, at the first target that reaches the damage branch.
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         SET_VALUE(LW(6), 1)
@@ -428,7 +429,7 @@ static EVT_BEGIN(dmg_first_attack_pos)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN

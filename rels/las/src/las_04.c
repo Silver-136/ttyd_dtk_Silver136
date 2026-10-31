@@ -530,7 +530,7 @@ void _firebar_trans(FirebarWork* wp) {
         hit = _firebar_hitCheck2(wp);
         angle1 = angleABf(wp->pos.x, wp->pos.z, mario->position.x, mario->position.z);
         angle2 = angleABf(wp->pos.x, wp->pos.z, wp->balls[wp->count - 1].pos.x, wp->balls[wp->count - 1].pos.z);
-    diff = compAngle(angle1, angle2);
+        diff = compAngle(angle1, angle2);
         if (hit > 0) {
             wp->hitCount = 0;
             if (wp->callback != NULL) {
@@ -702,7 +702,7 @@ USER_FUNC(coin_entry) {
     s32 w = evtGetValue(event, args[3]);
     ItemEntry* item = itemEntry(NULL, ITEM_COIN, ITEM_TYPE_SCATTER_TIMED, -1, NULL, x, y, z);
 
-    itemStatusOn(item, 0x10);
+    itemStatusOn(item, ITEM_FLAG2_SKIP_BOUND_INIT);
     item->bounceFactor = 0.8f;
     item->gravityScale = 1.0f;
     item->maxBounces = 5;

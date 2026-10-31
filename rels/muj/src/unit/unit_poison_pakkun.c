@@ -348,6 +348,7 @@ static EVT_BEGIN(breath_event)
     LABEL(90)
     GOTO(97)
     LABEL(91)
+    // Later targets skip defence resolution even if the first target was avoided.
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_poison_pakkun_breath_attack))
     END_IF
@@ -462,7 +463,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -677,7 +678,7 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_MS(500)
     CALL_CHILD(return_event)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -730,7 +731,7 @@ static USER_FUNC(shadow_scale_memory) {
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 
-    if (_battleWorkPointer->stageObjectWork.flags & 0x20) {
+    if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
         evtSetValue(event, args[0], 0);
     } else {
         evtSetValue(event, args[0], 1);

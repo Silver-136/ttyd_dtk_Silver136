@@ -16,7 +16,7 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_SOUND_VOLUME 1 // volume of its wait sounds (snd_se volume): 127 at init and each attack; sound_gensui_event cuts it to 70 % (min 32) while asleep or stopped
+#define UNIT_WORK_SOUND_VOLUME 1 // volume of its wait sounds (snd_se volume): 127 at init and each attack; sound_gensui_event reduces it each wait cycle to about 70 % (min 32)
 #define UNIT_WORK_CHAIN_MODE 2   // how chain_main places the chain links: 2 record their shape relative to the stake (then 1), 1 keep that shape, 0 hang them between chomp and stake
 // BattleUnitPart.work slots (btlevtcmd_Get/SetPartsWork)
 #define PARTS_WORK_OFFSET_X 0 // chain links (parts 1-8): x offset from the stake (part 9) recorded in chain mode 2
@@ -239,7 +239,7 @@ static EVT_BEGIN(chain_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_MODE, 2)

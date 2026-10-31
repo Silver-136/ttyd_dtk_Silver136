@@ -285,7 +285,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -500,7 +500,7 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_MS(500)
     CALL_CHILD(return_event)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -546,6 +546,7 @@ static USER_FUNC(shadow_scale_memory) {
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);
     BattleUnitPart* part = BtlUnit_GetPartsPtr(unit, 1);
 
+    // Cache the scale as a numeric integer work value.
     unit->work[0] = part->shadowScale;
     return EVT_RETURN_DONE;
 }
@@ -553,7 +554,7 @@ static USER_FUNC(shadow_scale_memory) {
 static USER_FUNC(pakkun_ceil_exist) {
     EvtWord* args = event->args;
 
-    if (_battleWorkPointer->stageObjectWork.flags & 0x20) {
+    if (_battleWorkPointer->stageObjectWork.flags & STAGE_FLAG_NO_IRON_FRAME) {
         evtSetValue(event, args[0], 0);
     } else {
         evtSetValue(event, args[0], 1);

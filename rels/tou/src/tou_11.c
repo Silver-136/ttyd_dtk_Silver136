@@ -116,6 +116,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+// Mark this scene seen before starting the guard choreography and map transition.
 EVT_BEGIN(evt_tojikome)
     IF_INT_EQUAL(GSWF_TOU_11_LOCKED_IN_SEEN, 1)
         RETURN

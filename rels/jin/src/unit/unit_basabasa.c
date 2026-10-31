@@ -180,7 +180,15 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_basabasa", "c_basabasa", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_ceil},
+    {
+        1, "btl_un_basabasa", "c_basabasa",
+        0.0f, 0.0f, 0.0f,
+        0.0f, 25.0f, 0.0f,
+        0.0f, 0.0f, 0.0f,
+        20, 30, 255,
+        &defence, &defence_attr,
+        kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_ceil,
+    },
 };
 
 static StatusVulnerability regist = {
@@ -256,6 +264,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+// Permanently leave the ceiling: switch attributes, pose/damage handlers, offsets, and home position.
 static EVT_BEGIN(ceil_sky_event)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -316,6 +325,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+// Leave the ceiling after nonzero damage, unless zero HP without revival ends this damage path.
 static EVT_BEGIN(damage_event_ceil)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -470,7 +480,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("BSA_S_1"))
         WAIT_FRAMES(1)
     END_IF
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

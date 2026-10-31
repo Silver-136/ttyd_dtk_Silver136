@@ -575,7 +575,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(bunsin_event))
         RETURN
-        ELSE
+    ELSE
         CALL(mahorn_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -586,7 +586,7 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
             CALL_CHILD(PTR(attack_magic_event))
             GOTO(99)
-            ELSE
+        ELSE
             LABEL(10)
             SET_VALUE(LW(0), 0)
             ADD(LW(0), 30)
@@ -790,7 +790,7 @@ static EVT_BEGIN(hand_ctrl_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_KILL_BUNSIN, 0)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
@@ -799,7 +799,7 @@ static EVT_BEGIN(damage_event)
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_KILL_BUNSIN, 1)
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LW(0), -2)
         CALL_CHILD(PTR(bunsin_kill_event))
         RETURN
@@ -925,7 +925,7 @@ EVT_END()
 static EVT_BEGIN(avoid_miss_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BUNSIN, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
-        SET_VALUE(LW(0), -2)
+        SET_VALUE(LW(0), UNIT_ID_SELF)
         CALL_CHILD(PTR(bunsin_kill_event))
     END_IF
     RETURN
@@ -1065,7 +1065,7 @@ static EVT_BEGIN(attack_punch_event)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
         WAIT_FRAMES(45)
         LABEL(99)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         RETURN
 EVT_END()
 
@@ -1099,7 +1099,7 @@ static EVT_BEGIN(attack_enemy_common_event)
     SPAWN_EVENT(attack_enemy_common_event_sub1)
     SET_VALUE(LW(15), LW(14))
     SPAWN_EVENT(attack_enemy_common_event_sub1)
-    SET_VALUE(LW(15), -2)
+    SET_VALUE(LW(15), UNIT_ID_SELF)
     CALL_CHILD(attack_enemy_common_event_sub1)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_MAGIC2"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1156,7 +1156,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         SPAWN_EVENT(attack_enemy_common_event_sub_no_hit)
         SET_VALUE(LW(15), LW(14))
         SPAWN_EVENT(attack_enemy_common_event_sub_no_hit)
-        SET_VALUE(LW(15), -2)
+        SET_VALUE(LW(15), UNIT_ID_SELF)
         CALL_CHILD(attack_enemy_common_event_sub_no_hit)
         GOTO(98)
         LABEL(91)
@@ -1169,7 +1169,7 @@ static EVT_BEGIN(attack_enemy_common_event)
         SPAWN_EVENT(attack_enemy_common_event_sub_hit)
         SET_VALUE(LW(15), LW(14))
         SPAWN_EVENT(attack_enemy_common_event_sub_hit)
-        SET_VALUE(LW(15), -2)
+        SET_VALUE(LW(15), UNIT_ID_SELF)
         CALL_CHILD(attack_enemy_common_event_sub_hit)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -1200,14 +1200,14 @@ static EVT_BEGIN(attack_enemy_all_common_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    SET_VALUE(LW(15), -2)
+    SET_VALUE(LW(15), UNIT_ID_SELF)
     CALL_CHILD(attack_enemy_common_event_sub1)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_MAGIC2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         WAIT_FRAMES(25)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_MAGIC2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
-    SET_VALUE(LW(15), -2)
+    SET_VALUE(LW(15), UNIT_ID_SELF)
     CALL_CHILD(attack_enemy_common_event_sub2)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(6), 0)
@@ -1393,7 +1393,7 @@ static EVT_BEGIN(attack_magic_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -1408,7 +1408,7 @@ static EVT_BEGIN(attack_magic_event)
     END_IF
     CALL_CHILD(PTR(attack_enemy_common_event))
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1426,7 +1426,7 @@ static EVT_BEGIN(confuse_magic_event)
     END_IF
     CALL_CHILD(PTR(attack_enemy_common_event))
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1444,7 +1444,7 @@ static EVT_BEGIN(all_attack_magic_event)
     END_IF
     CALL_CHILD(PTR(attack_enemy_all_common_event))
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1489,7 +1489,7 @@ static EVT_BEGIN(support_friend_common_event)
 EVT_END()
 
 static EVT_BEGIN(dekadeka_magic_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -1502,12 +1502,12 @@ static EVT_BEGIN(dekadeka_magic_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(katikati_magic_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -1520,12 +1520,12 @@ static EVT_BEGIN(katikati_magic_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(trans_magic_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -1538,12 +1538,12 @@ static EVT_BEGIN(trans_magic_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(yokeyoke_magic_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -1556,12 +1556,12 @@ static EVT_BEGIN(yokeyoke_magic_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(recover_magic_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -1577,16 +1577,16 @@ static EVT_BEGIN(recover_magic_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(30)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(bunsin_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL_CHILD(support_friend_common_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_OFFSHOOT1"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    SET_VALUE(LW(0), -2)
+    SET_VALUE(LW(0), UNIT_ID_SELF)
     CALL_CHILD(alpha_down_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     LOOP(0)
@@ -1618,7 +1618,7 @@ static EVT_BEGIN(bunsin_event)
     CALL(mahorn_shuffle)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MAHO_OFFSHOOT2"), EVT_NULLPTR, 0, EVT_NULLPTR)
-    SET_VALUE(LW(0), -2)
+    SET_VALUE(LW(0), UNIT_ID_SELF)
     SPAWN_EVENT(alpha_up_event)
     CALL(mahorn_get_bunsin, LW(1), LW(2), LW(3), LW(4))
     SET_VALUE(LW(0), LW(1))
@@ -1682,7 +1682,7 @@ static EVT_BEGIN(wait_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("MAH_Z_2"))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("MAH_Z_2"))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 5, STRING("MAH_Z_2"))
-        ELSE
+    ELSE
         BEGIN_SIBLING_EVENT
             LABEL(10)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("MAH_S_4A"))
@@ -2018,7 +2018,7 @@ static USER_FUNC(hand_init) {
     BtlUnit_GetPos(unit, &x, &y, &z);
     for (j = 0, i = 2; i <= 5; i++, j++) {
         BtlUnit_SetAnim(BtlUnit_GetPartsPtr(unit, i), "MAH_Z_2");
-        dest = BTL_ALLOC(12);
+        dest = BTL_ALLOC(sizeof(Vec));
         unit->work[j] = (EvtWord)dest;
         dest[0] = 0.0f;
         dest[1] = 0.0f;

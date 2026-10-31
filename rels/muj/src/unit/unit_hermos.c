@@ -55,6 +55,7 @@ static USER_FUNC(bubble_copy_status) {
     BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
     BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
 
+    // Copy HP and size-change state only; the other status fields are left unchanged.
     unit2->currentHp = unit1->currentHp;
     if (unit2->currentHp > unit2->maxHp) {
         unit2->currentHp = unit2->maxHp;
@@ -321,7 +322,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -791,6 +792,7 @@ static EVT_BEGIN(all_fire_attack_event)
         CASE_END
     END_SWITCH
     LABEL(90)
+    // An avoided target ends the entire sweep rather than advancing to the next target.
     GOTO(98)
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)

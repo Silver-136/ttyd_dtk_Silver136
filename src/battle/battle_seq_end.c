@@ -913,6 +913,7 @@ void _LvupParamHelpMsgDisp(CameraId camId, void* param) {
     f32 zero = 0.0f;
 
     pouch = pouchGetPtr();
+    // Requires selected in 0..2; other values leave msg unset.
     switch (work->selected) {
         case 0:
             msg = msgSearch("help_btl_levelup_hp");

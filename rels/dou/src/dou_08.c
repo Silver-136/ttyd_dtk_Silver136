@@ -55,6 +55,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+// Bottle bobbing; the separate barrel event below keeps the same bytecode shape.
 static EVT_BEGIN(dou_puka_event_main0)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))

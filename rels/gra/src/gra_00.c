@@ -447,13 +447,13 @@ EVT_BEGIN(evt_machibuse)
 #ifdef VERSION_G8ME01
         CALL(evt_sub_get_language, LW(1))
         SWITCH(LW(1))
-            CASE_EQUAL(0)
+            CASE_EQUAL(LANGUAGE_JP)
             SET_VALUE(LW(2), STRING("ランペル"))
-            CASE_OR_EQUAL(1)
+            CASE_OR_EQUAL(LANGUAGE_US)
             CASE_OR_EQUAL(6)
             SET_VALUE(LW(2), STRING("Doopliss"))
             CASE_END
-            CASE_EQUAL(5)
+            CASE_EQUAL(LANGUAGE_IT)
             SET_VALUE(LW(2), STRING("Rampel"))
             CASE_DEFAULT
             SET_VALUE(LW(2), STRING("Rumpel"))

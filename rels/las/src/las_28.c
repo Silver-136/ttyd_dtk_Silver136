@@ -220,7 +220,7 @@ static EVT_BEGIN(first_evt)
             SET_FLOAT_VALUE(LW(0), FLOAT(-180.0f))
             CALL_CHILD(PTR(w_door_open))
             BREAK_LOOP
-            ELSE
+        ELSE
             CALL_CHILD(PTR(w_door_open))
         END_IF
     END_LOOP
@@ -237,7 +237,7 @@ static EVT_BEGIN(first_evt)
             SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
             CALL_CHILD(PTR(w_door_close))
             BREAK_LOOP
-            ELSE
+        ELSE
             CALL_CHILD(PTR(w_door_close))
         END_IF
     END_LOOP
@@ -414,7 +414,7 @@ EVT_BEGIN(syuryo_evt)
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
     IF_INT_GREATER_OR_EQUAL(LW(4), 0)
         CALL(evt_party_move_pos, 0, LW(0), LW(2), 600)
-        ELSE
+    ELSE
         CALL(evt_party_jump_pos, 0, LW(0), LW(1), LW(2), 600, 0, -1000)
     END_IF
     CALL(evt_party_set_dir, 0, 90, -1)
@@ -564,7 +564,7 @@ EVT_BEGIN(syuryo_evt)
                 SET_VALUE(LW(0), 180)
                 CALL(evt_npc_set_rotate, STRING("ピーチ姫"), 0, LW(0), 0)
                 BREAK_LOOP
-                ELSE
+            ELSE
                 CALL(evt_npc_set_rotate, STRING("ピーチ姫"), 0, LW(0), 0)
             END_IF
             WAIT_FRAMES(1)
@@ -576,7 +576,7 @@ EVT_BEGIN(syuryo_evt)
                 SET_VALUE(LW(0), 0)
                 CALL(evt_npc_set_rotate, STRING("ピーチ姫"), 0, LW(0), 0)
                 BREAK_LOOP
-                ELSE
+            ELSE
                 CALL(evt_npc_set_rotate, STRING("ピーチ姫"), 0, LW(0), 0)
             END_IF
             WAIT_FRAMES(1)
@@ -700,7 +700,7 @@ EVT_BEGIN(syuryo_evt)
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("stg8_las_83"), 0, STRING("シュリョー"))
-        ELSE
+    ELSE
         CALL(evt_msg_print, 0, STRING("stg8_las_84"), 0, STRING("シュリョー"))
         CALL(evt_npc_set_ry, STRING("シュリョー"), 90)
         WAIT_MS(300)
@@ -1211,7 +1211,7 @@ EVT_BEGIN(las_28_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-        ELSE
+    ELSE
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
     END_IF
@@ -1229,7 +1229,7 @@ EVT_BEGIN(las_28_init_evt)
         CALL(evt_hit_bind_update, STRING("A_gyoku"))
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isu"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_i02_f2_isu_04C"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isu_tao"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_i02_f2_isu_04C1"), 1, 0)
     END_IF
@@ -1260,7 +1260,7 @@ EVT_BEGIN(las_28_init_evt)
                 CALL(evt_npc_set_anim, STRING("シュリョー"), STRING("A_3B"))
                 SPAWN_EVENT(PTR(koopa_evt))
             END_INLINE_EVENT
-            ELSE
+        ELSE
             SPAWN_EVENT(PTR(syuryo_evt))
         END_IF
     END_IF

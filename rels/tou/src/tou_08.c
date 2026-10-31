@@ -710,6 +710,7 @@ static EVT_BEGIN(evt_1st_leagu)
     RETURN
 EVT_END()
 
+// This entrance is available only for the first title-match escape; the return path is separate.
 EVT_BEGIN(evt_toile_door)
     IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
@@ -911,8 +912,8 @@ USER_FUNC(tou_08_belt_camid) {
     // ベルト
     NpcEntry* npc = npcNameToPtr("\x83\x78\x83\x8B\x83\x67");
 
-    ((EffStarStoneWork*)eff->userdata)->cam = 7;
-    npc->cameraId = 7;
+    ((EffStarStoneWork*)eff->userdata)->cam = CAMERA_3D_EFFECTB;
+    npc->cameraId = CAMERA_3D_EFFECTB;
     return EVT_RETURN_DONE;
 }
 
@@ -1109,6 +1110,7 @@ static EVT_BEGIN(epilogue_evt)
 EVT_END()
 
 #ifdef VERSION_G8ME01
+// Pause/restart these regular events only when Hammer Bros. exists; the post-match child always starts.
 EVT_BEGIN(evt_match_after_stop_npcs)
     SPAWN_EVENT_GET_ID(PTR(evt_tou_match_after_default), LW(10))
     CALL(evt_npc_check, STRING("ハンマーブロス"), LW(0))
@@ -1158,6 +1160,7 @@ EVT_BEGIN(tou_08_init_evt)
             SET_VALUE(GSW_STORY_PROGRESS, STG3_20_MAJORS_10TH_PLACE)
         END_IF
     END_SWITCH
+    // These pending story jumps are consumed after the rank-based minimum progress updates.
     IF_INT_EQUAL(GSWF_TOU_08_JUMP_STORY_CONFISCATED, 1)
         SET_VALUE(GSWF_TOU_08_JUMP_STORY_CONFISCATED, 0)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_20_04_CONFISCATED)

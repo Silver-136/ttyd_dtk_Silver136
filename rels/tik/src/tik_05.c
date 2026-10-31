@@ -314,6 +314,7 @@ static USER_FUNC(starstone_set_ry) {
     f32 ry = evtGetFloat(event, args[1]);
     EffectEntry* eff = effNameToPtr(name);
 
+    // Remove whole turns using truncation toward zero, leaving negative angles negative.
     ((EffStarStoneWork*)eff->userdata)->rot.y = ry - 360.0f * ((s32)ry / 360);
     return EVT_RETURN_DONE;
 }
@@ -639,6 +640,7 @@ static USER_FUNC(cam_kaiten_init) {
     ckp1 = _mapAlloc(sizeof(KaitenParam));
     memset(ckp1, 0, sizeof(KaitenParam));
     ckpw = _mapAlloc(sizeof(KaitenParam));
+    // BUG: ckp1 is cleared again instead of clearing the newly allocated ckpw.
     memset(ckp1, 0, sizeof(KaitenParam));
     ckp0->pos.x = evtGetFloat(event, args[0]);
     ckp0->pos.y = evtGetFloat(event, args[1]);
@@ -913,6 +915,7 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
     GXSetCurrentMtx(GX_PNMTX0);
     PSMTXIdentity(ident);
+    // Each row has thirty-eight drawn pieces followed by one skipped entry.
     p = broken_wp->pieces->address;
     for (y = 0, yo = 0; y < 30; y++, yo += 16, p++) {
         py = 232.0f - yo;

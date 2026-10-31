@@ -145,6 +145,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+// Restore the saved pipe height and bound collision before processing the arrival event.
 static EVT_BEGIN(evt_switch_00_init)
     CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("S_dakan_1"))
     IF_INT_EQUAL(GSWF_TIK_17_PIK_PIPE_RAISED, 1)
@@ -223,7 +224,7 @@ static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_FP_PLUS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item01"), 258)
+    CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box01"))
     CALL(evt_item_get_item, STRING("item01"))
     CALL(evt_mario_key_onoff, 1)

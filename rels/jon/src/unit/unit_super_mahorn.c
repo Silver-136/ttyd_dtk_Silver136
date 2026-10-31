@@ -575,7 +575,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(bunsin_event))
         RETURN
-        ELSE
+    ELSE
         CALL(mahorn_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -586,7 +586,7 @@ static EVT_BEGIN(attack_event)
             SET_VALUE(LW(9), PTR(&weapon_mahorn_attack_magic))
             CALL_CHILD(PTR(attack_magic_event))
             GOTO(99)
-            ELSE
+        ELSE
             LABEL(10)
             SET_VALUE(LW(0), 0)
             ADD(LW(0), 30)
@@ -799,7 +799,7 @@ static EVT_BEGIN(damage_event)
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_KILL_BUNSIN, 1)
         END_IF
-        ELSE
+    ELSE
         SET_VALUE(LW(0), -2)
         CALL_CHILD(PTR(bunsin_kill_event))
         RETURN
@@ -1393,7 +1393,7 @@ static EVT_BEGIN(attack_magic_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -1682,7 +1682,7 @@ static EVT_BEGIN(wait_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 3, STRING("MAH_Z_2"))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("MAH_Z_2"))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 5, STRING("MAH_Z_2"))
-        ELSE
+    ELSE
         BEGIN_SIBLING_EVENT
             LABEL(10)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("MAH_S_4A"))

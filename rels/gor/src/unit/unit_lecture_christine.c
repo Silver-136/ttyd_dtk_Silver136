@@ -198,7 +198,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -388,7 +388,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_006"), 0, -6)
         WAIT_FRAMES(1)
         LABEL(11)
-        CALL(btlevtcmd_PadCheckTrigger, 0, 256, LW(0))
+        CALL(btlevtcmd_PadCheckTrigger, 0, PAD_BUTTON_A, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             WAIT_FRAMES(1)
             GOTO(11)
@@ -405,7 +405,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_014"), 0, -6)
         WAIT_FRAMES(1)
         LABEL(12)
-        CALL(btlevtcmd_PadCheckTrigger, 0, 512, LW(0))
+        CALL(btlevtcmd_PadCheckTrigger, 0, PAD_BUTTON_B, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             WAIT_FRAMES(1)
             GOTO(12)
@@ -427,9 +427,9 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(3)
-        CALL(_config_key_record, 256)
+        CALL(_config_key_record, PAD_BUTTON_A)
         CASE_EQUAL(7)
-        CALL(_config_key_record, 512)
+        CALL(_config_key_record, PAD_BUTTON_B)
     END_SWITCH
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -480,7 +480,7 @@ EVT_BEGIN(lecture_zutsuki_attack_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END_PAD()
@@ -488,18 +488,18 @@ EVT_END_PAD()
 static USER_FUNC(_krb_get_dir) {
     EvtWord* args = event->args;
     f32 x1 = evtGetFloat(event, args[0]);
-    f32 z1 = evtGetFloat(event, args[1]);
+    f32 y1 = evtGetFloat(event, args[1]);
     f32 x2 = evtGetFloat(event, args[2]);
-    f32 z2 = evtGetFloat(event, args[3]);
+    f32 y2 = evtGetFloat(event, args[3]);
     s32 dir = evtGetValue(event, args[4]);
     f32 dx = x2 - x1;
-    f32 dz = z2 - z1;
+    f32 dy = y2 - y1;
 
-    if (dx == 0.0f && dz == 0.0f) {
+    if (dx == 0.0f && dy == 0.0f) {
         evtSetValue(event, args[4], dir);
         return EVT_RETURN_DONE;
     }
-    evtSetValue(event, args[4], angleABf(dx, dz, 0.0f, 0.0f));
+    evtSetValue(event, args[4], angleABf(dx, dy, 0.0f, 0.0f));
     return EVT_RETURN_DONE;
 }
 

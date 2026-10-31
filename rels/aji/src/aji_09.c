@@ -309,6 +309,7 @@ EVT_BEGIN(evt_rokka_open)
     SET_VALUE(LW(4), LW(9))
     SET_VALUE(LW(10), 1)
     CALL(evt_run_case_evt, CASE_STAND_ON, 1, LW(4), 0, PTR(evt_rokka_close), LW(12))
+    // Each closing trigger remembers both IDs so it can remove the other trigger.
     CALL(evt_set_case_wrk, LW(11), 11, LW(11))
     CALL(evt_set_case_wrk, LW(11), 12, LW(12))
     CALL(evt_set_case_wrk, LW(12), 11, LW(11))
@@ -639,7 +640,7 @@ EVT_BEGIN(s_bero_out)
         END_LOOP
         BEGIN_INLINE_EVENT
             CALL(evt_bero_get_start_position, LW(0), LW(1), LW(2))
-            CALL(evt_mario_flag_onoff, 1, 256)
+            CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_FLOORS_DISABLED)
             CALL(evt_mario_mov_pos2, LW(0), 450, FLOAT(150.0f))
         END_INLINE_EVENT
         WAIT_MS(150)
@@ -817,6 +818,7 @@ EVT_END()
 USER_FUNC(dot_mario) {
     PartyEntry* party = partyGetPtr(0);
 
+    // Keep the event blocked until the dot-mode animation group is available.
     if (!animGroupBaseAsync("d_mario", 0, NULL)) {
         return EVT_RETURN_BLOCK;
     }
@@ -836,6 +838,7 @@ USER_FUNC(check_kou_evt) {
     s32 value;
     s32 result;
 
+    // The enter/exit argument is evaluated but does not affect this condition.
     evtGetValue(event, args[0]);
     value = evtGetValue(event, args[1]);
     result = 0;

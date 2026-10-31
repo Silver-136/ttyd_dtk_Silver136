@@ -54,6 +54,7 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+// First opening advances the story; later openings record the separately reset exit state.
 static EVT_BEGIN(evt_dakuto)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.049804688f), FLOAT(0.0f), 500)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DUCT_KOUSHI_HIT1"), 188, 0, 0, 0)

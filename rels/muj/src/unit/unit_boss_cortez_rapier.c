@@ -204,7 +204,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -327,6 +327,7 @@ static EVT_BEGIN(attack_event)
     LABEL(90)
     GOTO(97)
     LABEL(91)
+    // Later targets skip defence resolution even if the first target was avoided.
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     END_IF

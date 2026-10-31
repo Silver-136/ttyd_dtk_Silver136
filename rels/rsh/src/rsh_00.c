@@ -41,7 +41,7 @@ typedef struct MoamoaPoseDef {
     char model[16];
     char anim[8];
     s16 loop;
-    f32 frames;         // length of the pose in frames
+    f32 frames;         // last sampled frame, used as the playback duration
     s32 start;
     s32 count;
 } MoamoaPoseDef;
@@ -183,6 +183,7 @@ ExtTexInfo moamoa_data[] = {
 };
 
 #pragma dont_inline on
+// Build one definition for each contiguous model/animation group in the texture table.
 static void moamoa_pose_init(void) {
     ExtTexInfo* data = moamoa_data;
     s32 i = 0;
@@ -371,6 +372,7 @@ static void ext_disp(CameraId camera, void* param) {
     extLoadTextureExit();
 }
 
+// States: 0 hidden, 1 start delay, 2 wait, 3 emerge, 4 hold the final position.
 void moamoa_main(void) {
     s32 i;
     ExtdrvPose* pose;
@@ -428,6 +430,7 @@ void moamoa_dispent(void) {
     dispEntry(CAMERA_3D, 0.0f, 1, ext_disp, NULL);
 }
 
+// Set one emergence target without resetting its timer or animation pose.
 USER_FUNC(evt_moamoa_set_one) {
     EvtWord* args = event->args;
     Moamoa* moa;
@@ -668,6 +671,7 @@ EVT_BEGIN(evt_handle)
     RETURN
 EVT_END()
 
+// Randomly animate one control per iteration; the three empty day-3 tests do not gate those actions.
 EVT_BEGIN(regu_unten)
     SET_VALUE(LW(2), 0)
     SET_VALUE(LW(3), 0)
@@ -1025,6 +1029,7 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_RSH1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_RSH1_4"))
             END_IF
+            // Revisit variant B retains the current moving-train audio.
             IF_STR_EQUAL(LW(0), STRING("rsh_00_b"))
             END_IF
             IF_STR_EQUAL(LW(0), STRING("rsh_00_c"))

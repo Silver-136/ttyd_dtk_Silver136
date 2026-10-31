@@ -145,7 +145,15 @@ static BattleDataEntry data_table_yoshi[] = {
 };
 
 static BattleUnitKindPart parts_yoshi[] = {
-    {1, "btl_un_yoshi", "c_babyyoshi", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_yoshi, &defence_attr_yoshi, kMainPart | kGuardTargetPart, 0, pose_table_yoshi_stay},
+    {
+        1, "btl_un_yoshi", "c_babyyoshi",
+        0.0f, 0.0f, 0.0f,
+        15.0f, 25.0f, 0.0f,
+        0.0f, 30.0f, 0.0f,
+        20, 30, 255,
+        &defence_yoshi, &defence_attr_yoshi,
+        kMainPart | kGuardTargetPart, 0, pose_table_yoshi_stay,
+    },
 };
 
 static EVT_BEGIN(init_event_yoshi)
@@ -184,7 +192,7 @@ static EVT_BEGIN(dead_event_yoshi)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     WAIT_FRAMES(1)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -305,6 +313,7 @@ static EVT_BEGIN(attack_event_yoshi)
     CALL(btl_yoshi_yoroyoro_jump_calc_param, UNIT_ID_SELF, LW(6), LW(7), LW(8), LW(10), LW(9))
     CALL(btl_yoshi_yoroyoro_jump_move, UNIT_ID_SELF, LW(6), LW(7), LW(8), LW(10), LW(9))
     DELETE_EVENT(LW(13))
+    // Select 1..5 intermediate hits; the loop follows them with a separate final hit.
     CALL(evt_sub_random, 4, LW(11))
     ADD(LW(11), 1)
     SET_VALUE(LW(10), 0)
@@ -411,7 +420,7 @@ static EVT_BEGIN(attack_event_yoshi)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

@@ -395,7 +395,7 @@ static EVT_BEGIN(entry_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -417,7 +417,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
@@ -429,7 +429,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_VOICE_KOOPA_SATIATED2_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_D_2"))
     WAIT_MS(700)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL_CHILD(subsetevt_dead_core_nospin_norotate)
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -511,7 +511,7 @@ static EVT_BEGIN(attack_event)
         END_SWITCH
     END_SWITCH
     LABEL(90)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -972,13 +972,13 @@ static USER_FUNC(party_cannot_use_command) {
     s32 var = event->args[0];
 #ifdef VERSION_G8ME01
     s32 id = evtGetValue(event, event->args[1]);
-    s32 weapon = 0;
+    s32 icon = 0;
     BattleUnit* unit;
 
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
 #else
-    s32 weapon = 0;
+    s32 icon = 0;
 #endif
 #ifdef VERSION_G8ME01
 
@@ -987,27 +987,27 @@ static USER_FUNC(party_cannot_use_command) {
             if (unit != NULL) {
                 unit->usCommandDisabled[0] = 3;
             }
-            weapon = 344;
+            icon = 344;
             break;
         case 1:
             if (unit != NULL) {
                 unit->usCommandDisabled[1] = 3;
             }
-            weapon = 340;
+            icon = 340;
 #else
     switch (r) {
         case 0:
             wp->commandDisabled[3] = 3;
-            weapon = 336;
+            icon = 336;
             break;
         case 1:
             wp->commandDisabled[4] = 3;
-            weapon = 332;
+            icon = 332;
 #endif
             break;
     }
     event->lwData[0] = (EvtWord)cmd_disable_string[r + 3];
-    evtSetValue(event, var, weapon);
+    evtSetValue(event, var, icon);
     return EVT_RETURN_DONE;
 }
 
@@ -1015,36 +1015,36 @@ static USER_FUNC(mario_cannot_use_command) {
     BattleWork* wp = _battleWorkPointer;
     s32 r = irand(2);
     s32 var = event->args[0];
-    s32 weapon = 0;
+    s32 icon = 0;
 
     switch (r) {
         case 0:
             wp->commandDisabled[0] = 3;
 #ifdef VERSION_G8ME01
-            weapon = 334;
+            icon = 334;
 #else
-            weapon = 326;
+            icon = 326;
 #endif
             break;
         case 1:
             wp->commandDisabled[1] = 3;
 #ifdef VERSION_G8ME01
-            weapon = 337;
+            icon = 337;
 #else
-            weapon = 329;
+            icon = 329;
 #endif
             break;
         case 2:
             wp->commandDisabled[2] = 3;
 #ifdef VERSION_G8ME01
-            weapon = 340;
+            icon = 340;
 #else
-            weapon = 332;
+            icon = 332;
 #endif
             break;
     }
     event->lwData[0] = (EvtWord)cmd_disable_string[r];
-    evtSetValue(event, var, weapon);
+    evtSetValue(event, var, icon);
     return EVT_RETURN_DONE;
 }
 

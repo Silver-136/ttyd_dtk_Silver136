@@ -839,7 +839,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
@@ -2325,6 +2325,7 @@ USER_FUNC(_cortez_recovery_audience) {
                     }
                 }
             }
+            // No branch above clears done, so this call falls through to audience deletion.
             if (!done) {
                 break;
             }
@@ -2472,6 +2473,7 @@ USER_FUNC(_cortez_check_drain_audience) {
         work->audienceId[i] = -1;
         work->eff[i] = NULL;
         work->seq[i] = 0;
+        // Select the ten right-hand seats from each of ten twenty-seat rows.
         seat = 10 + (i / 10) * 20 + i % 10;
         if ((u8)BattleAudience_GetExist(seat)) {
             work->audienceId[i] = seat;

@@ -106,6 +106,7 @@ static EVT_BEGIN(evt_light)
     RETURN
 EVT_END()
 
+// Inclusive random 0..100 selects the fast flap for values 0..19.
 static EVT_BEGIN(evt_wing)
     LOOP(0)
         CALL(evt_sub_random, 100, LW(0))
@@ -221,6 +222,7 @@ EVT_BEGIN(evt_to_tou)
     RETURN
 EVT_END()
 
+// The second lookup supplies the position used below; the first lookup is retained.
 EVT_BEGIN(evt_pos_keep)
     LOOP(0)
         CALL(evt_mapobj_get_position, STRING("gondora_1"), LW(0), LW(1), LW(2))
@@ -554,6 +556,7 @@ static EVT_BEGIN(hkoopa_init)
     RETURN
 EVT_END()
 
+// Follow the named effect until it disappears; the first call waits without moving it.
 USER_FUNC(kemuri_move) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

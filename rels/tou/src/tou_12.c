@@ -200,6 +200,7 @@ static EVT_BEGIN(talk_kinoshikowa)
     RETURN
 EVT_END()
 
+// Hidden dummy NPCs provide talk events for the separately posed injured NPCs.
 static NpcSetupInfo npcEnt[] = {
     {
         /*"マイケル"*/"\x83\x7D\x83\x43\x83\x50\x83\x8B", // name

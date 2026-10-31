@@ -150,7 +150,15 @@ static BattleDataEntry data_table_christine[] = {
 };
 
 static BattleUnitKindPart parts_christine[] = {
-    {1, "btl_un_christine", "c_pkr", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_christine, &defence_attr_christine, kMainPart | kGuardTargetPart, 0, pose_table_christine_stay},
+    {
+        1, "btl_un_christine", "c_pkr",
+        0.0f, 0.0f, 0.0f,
+        15.0f, 25.0f, 0.0f,
+        0.0f, 30.0f, 0.0f,
+        20, 30, 255,
+        &defence_christine, &defence_attr_christine,
+        kMainPart | kGuardTargetPart, 0, pose_table_christine_stay,
+    },
 };
 
 static EVT_BEGIN(fmario_zoom_christine)
@@ -205,7 +213,7 @@ static EVT_BEGIN(dead_event_christine)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(6.0f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     END_IF
     WAIT_FRAMES(1)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -271,6 +279,7 @@ static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(14), MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    // Select no intermediate hits, or 1..5; a separate final hit ends a successful sequence.
     CALL(btlevtcmd_DrawLots, LW(0), 2, 80, 20)
     SWITCH(LW(0))
         CASE_EQUAL(0)
@@ -422,7 +431,7 @@ static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -430,18 +439,18 @@ EVT_END()
 static USER_FUNC(_krb_get_dir) {
     EvtWord* args = event->args;
     f32 x1 = evtGetFloat(event, args[0]);
-    f32 z1 = evtGetFloat(event, args[1]);
+    f32 y1 = evtGetFloat(event, args[1]);
     f32 x2 = evtGetFloat(event, args[2]);
-    f32 z2 = evtGetFloat(event, args[3]);
+    f32 y2 = evtGetFloat(event, args[3]);
     s32 dir = evtGetValue(event, args[4]);
     f32 dx = x2 - x1;
-    f32 dz = z2 - z1;
+    f32 dy = y2 - y1;
 
-    if (dx == 0.0f && dz == 0.0f) {
+    if (dx == 0.0f && dy == 0.0f) {
         evtSetValue(event, args[4], dir);
         return EVT_RETURN_DONE;
     }
-    evtSetValue(event, args[4], angleABf(dx, dz, 0.0f, 0.0f));
+    evtSetValue(event, args[4], angleABf(dx, dy, 0.0f, 0.0f));
     return EVT_RETURN_DONE;
 }
 

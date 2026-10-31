@@ -47,6 +47,7 @@ EVT_BEGIN(jin_09_jumpstand)
     RETURN
 EVT_END()
 
+// Scripted entry waits for Mario to fall below Y=365 before rearming the upward exit at that height.
 EVT_BEGIN(jin_09_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))

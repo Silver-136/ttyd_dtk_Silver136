@@ -274,7 +274,7 @@ static USER_FUNC(cam_kaiten_set_direct) {
     camera->startTimeA = gp->renderTime;
     camera->durationA = 0;
     camera->stateA = 3;
-    camera->curveA = 11;
+    camera->curveA = EASING_SINE_IN_OUT;
     return EVT_RETURN_DONE;
 }
 
@@ -294,6 +294,7 @@ static USER_FUNC(cam_kaiten_init) {
     ckp1 = _mapAlloc(sizeof(KaitenParam));
     memset(ckp1, 0, sizeof(KaitenParam));
     ckpw = _mapAlloc(sizeof(KaitenParam));
+    // Clears the end parameters again; all working fields are copied from ckp0 below.
     memset(ckp1, 0, sizeof(KaitenParam));
     ckp0->pos.x = evtGetFloat(event, args[0]);
     ckp0->pos.y = evtGetFloat(event, args[1]);

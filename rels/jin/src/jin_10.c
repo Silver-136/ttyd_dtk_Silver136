@@ -102,6 +102,7 @@ USER_FUNC(set_pos) {
     return EVT_RETURN_DONE;
 }
 
+// The grille rises by one quarter of its X offset; Mario receives the same horizontal step.
 static EVT_BEGIN(push_evt)
     IF_INT_EQUAL(GF(0), 0)
         CALL(evt_mapobj_get_position, STRING("saku"), LW(0), LW(1), LW(2))
@@ -239,6 +240,7 @@ EVT_BEGIN(unpush_evt)
     RETURN
 EVT_END()
 
+// This loop polls Vivian and Mario proximity, but the distance test has no action in either branch.
 EVT_BEGIN(vivi_chk)
     LOOP(0)
         CALL(evt_party_get_status, 6, LW(0))

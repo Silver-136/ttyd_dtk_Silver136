@@ -239,7 +239,7 @@ static EVT_BEGIN(chain_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_MODE, 2)
@@ -721,7 +721,7 @@ static USER_FUNC(chain_init) {
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(wp, id);
     BtlUnit_GetPos(unit, &x, &y, &z);
-    // the chain links all start at the chomp
+    // Initialize intermediate links 2 through 7 at the chomp.
     for (i = 2; i <= 7; i++) {
         part = BtlUnit_GetPartsPtr(unit, i);
         BtlUnit_SetPartsPos(part, x, y, z);

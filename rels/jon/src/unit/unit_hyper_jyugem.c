@@ -270,16 +270,16 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HOLD, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(btldefaultevt_Damage))
-        ELSE
+    ELSE
         CALL(btlevtcmd_GetDamage, LW(10), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             SET_VALUE(LW(15), 1)
-            ELSE
+        ELSE
             SET_VALUE(LW(15), 0)
         END_IF
         CALL(btlevtcmd_CheckStatus, LW(10), STATUS_INSTANT_KILL, LW(14))
@@ -314,7 +314,7 @@ static EVT_BEGIN(damage_event)
             CALL(btlevtcmd_AnimeSetPoseTable, LW(10), 1, PTR(pose_table))
             CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
             CALL_CHILD(PTR(btldefaultevt_Damage))
-            ELSE
+        ELSE
             CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
             IF_INT_EQUAL(LW(0), 22)
                 GOTO(90)
@@ -446,7 +446,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
         CALL(btlevtcmd_DrawLots, LW(0), 2, 40, 90)
-        ELSE
+    ELSE
         CALL(btlevtcmd_DrawLots, LW(0), 2, 40, 70)
     END_IF
     SWITCH(LW(0))
@@ -465,7 +465,7 @@ static EVT_BEGIN(attack_event)
                     CALL_CHILD(PTR(friend_event))
                     GOTO(99)
                 END_IF
-                ELSE
+            ELSE
                 GOTO(9)
             END_IF
         END_LOOP
@@ -481,7 +481,7 @@ static EVT_BEGIN(attack_event)
                     CALL_CHILD(PTR(friend_event))
                     GOTO(99)
                 END_IF
-                ELSE
+            ELSE
                 GOTO(10)
             END_IF
         END_LOOP
@@ -496,7 +496,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
         CALL(btlevtcmd_DrawLots, LW(0), 3, 30, 30, 30)
-        ELSE
+    ELSE
         CALL(btlevtcmd_DrawLots, LW(0), 3, 30, 30, 10)
     END_IF
     SWITCH(LW(0))
@@ -669,7 +669,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden | kNoShadow)
     WAIT_FRAMES(10)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -728,7 +728,7 @@ static EVT_BEGIN(friend_event)
     CALL(btlevtcmd_SetRotateOffset, LW(3), 0, 0, 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(10)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

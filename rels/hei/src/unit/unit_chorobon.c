@@ -298,6 +298,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+// Skip the home-hop only for a lethal counter result without revival.
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     SET_VALUE(LW(10), -2)
@@ -401,6 +402,7 @@ static EVT_BEGIN(drain_attack_event)
     WAIT_MS(1000)
     GOTO(98)
     LABEL(91)
+    // Counter-precheck results 14 (electrified) and 17 (Hold Fast) use the zero-power counter weapon.
     SET_VALUE(LF(0), 0)
     CALL(btlevtcmd_PreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_drain_attack), 256, LW(5))
     IF_INT_EQUAL(LW(5), 17)
@@ -474,6 +476,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_chorobon_drain_attack))
     SET_VALUE(LW(9), PTR(&weapon_chorobon_drain_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    // Positive recorded HP damage supplies the later recovery amount.
     CALL(btlevtcmd_GetHpDamage, LW(3), LW(10))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
@@ -558,7 +561,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL_CHILD(return_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

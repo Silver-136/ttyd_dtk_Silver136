@@ -428,7 +428,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -455,7 +455,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
 EVT_END()
 
 static EVT_BEGIN(dmg_turn_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_SetHitOffset, LW(10), LW(11), 0, -20, 0)
     CALL(btlevtcmd_SetPartsDefenceTable, LW(10), LW(11), PTR(&defence_turn))
@@ -484,7 +484,7 @@ static EVT_BEGIN(dmg_turn_event)
 EVT_END()
 
 static EVT_BEGIN(wakeup_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetOverTurnCount, LW(10), LW(0))
     SUBTRACT(LW(0), 1)
@@ -545,7 +545,7 @@ static EVT_BEGIN(attack_event)
             GOTO(99)
         END_IF
         GOTO(99)
-        ELSE
+    ELSE
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CHARGE, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(0), 0)
@@ -581,7 +581,7 @@ static EVT_BEGIN(attack_event)
                 IF_INT_EQUAL(LW(3), -1)
                     GOTO(10)
                 END_IF
-                ELSE
+            ELSE
                 GOTO(9)
             END_IF
         END_LOOP
@@ -595,7 +595,7 @@ static EVT_BEGIN(attack_event)
                 IF_INT_EQUAL(LW(3), -1)
                     GOTO(10)
                 END_IF
-                ELSE
+            ELSE
                 GOTO(11)
             END_IF
         END_LOOP
@@ -762,7 +762,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TOGENOKO_MOVE6"), EVT_NULLPTR, 0, EVT_NULLPTR)
     GOTO(98)
     LABEL(98)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     WAIT_MS(500)
     RETURN
 EVT_END()
@@ -894,12 +894,12 @@ static EVT_BEGIN(shell_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
     WAIT_FRAMES(3)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(charge_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_togenoko_charge))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -930,7 +930,7 @@ static EVT_BEGIN(charge_event)
 EVT_END()
 
 static EVT_BEGIN(guard_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(10)
@@ -965,7 +965,7 @@ static EVT_BEGIN(guard_event)
 EVT_END()
 
 static EVT_BEGIN(guard_cancel_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(10)

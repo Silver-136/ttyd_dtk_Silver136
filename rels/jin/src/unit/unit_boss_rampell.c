@@ -87,7 +87,7 @@ static USER_FUNC(_mario_makkuro_set) {
 }
 
 #ifdef VERSION_G8ME01
-// US only: restore the moves of the unit for this turn.
+// US only: set this turn's maximum move count to the remaining-move count.
 USER_FUNC(boss_rampell_sync_max_moves) {
     BattleUnit* unit;
     s32 id = evtGetValue(event, event->args[0]);
@@ -103,8 +103,8 @@ USER_FUNC(boss_rampell_sync_max_moves) {
 #endif
 
 static USER_FUNC(vivian_comeback) {
-    pouchGetPtr()->partyData[6].flags &= ~2;
-    return 1;
+    pouchGetPtr()->partyData[PARTNER_VIVIAN].flags &= ~2;
+    return EVT_RETURN_YIELD;
 }
 
 
@@ -225,7 +225,15 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_hatena", "c_ranpel", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 40.0f, 0.0f, 30, 40, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
+    {
+        1, "btl_un_hatena", "c_ranpel",
+        0.0f, 0.0f, 0.0f,
+        0.0f, 35.0f, 0.0f,
+        0.0f, 40.0f, 0.0f,
+        30, 40, 255,
+        &defence, &defence_attr,
+        kMainPart | kGuardTargetPart, 0, pose_table,
+    },
 };
 
 static BattleWeapon weapon_rampell_attack = {
@@ -271,6 +279,7 @@ EVT_BEGIN(rampell_zoom)
     RETURN
 EVT_END()
 
+// Replace this unit with the Mario-copy setup, preserving HP unless it is below the 10 HP minimum.
 EVT_BEGIN(to_faker_mario)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_TALK_STATE, 2)
     CALL(btlevtcmd_WaitAttackEnd)
@@ -403,6 +412,7 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+// While able to act, transform below half HP or from turn 5 onward; state 0 first delivers the opening line.
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), 67108867)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -892,6 +902,7 @@ static EVT_BEGIN(damage_event_fmario)
     RETURN
 EVT_END()
 
+// The two-entry selector chooses normal jump or hammer; the extra switch cases are retained below.
 static EVT_BEGIN(attack_event_fmario)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)

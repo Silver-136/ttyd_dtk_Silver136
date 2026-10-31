@@ -659,6 +659,7 @@ void elmos1000tai_seq00(NanNPC* npc) {
             if (t < npc->duration) {
                 npc->color.a = intplGetValue(EASING_LINEAR, 0.0f, 255.0f, t, npc->duration);
             } else {
+                // Keep the last interpolated alpha; there is no forced 255 endpoint.
                 npc->state = 3;
             }
             break;
@@ -2267,6 +2268,7 @@ USER_FUNC(logo) {
     if ((u32)fileAsyncf(FILE_TYPE_TPL, NULL, "%s/mariost.tpl", getMarioStDvdRoot()) == 0) {
         return EVT_RETURN_BLOCK;
     }
+    // Fade states increment the same counter once for alpha and again for vertical position.
     switch (wp->state) {
         case 0:
             wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/mariost.tpl", getMarioStDvdRoot());

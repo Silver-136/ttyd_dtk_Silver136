@@ -285,7 +285,7 @@ USER_FUNC(evt_unitwin_selltable_setup) {
             wp->itemFlags[i] |= UNITWIN_ITEM_UNAVAILABLE;
         }
     }
-    wp->evt = evtEntryType(select_evt, 0, 0x20, 0);
+    wp->evt = evtEntryType(select_evt, 0, EVENT_START_IMMEDIATE, 0);
     wp->evt->lwData[0] = (EvtWord)wp;
     for (i = 0; i < 3; i++) {
         wp->winId[i] = winMgrEntry(&unitwin_desc[i]);
@@ -738,7 +738,7 @@ void evt_unitwin_disp_func(CameraId cameraId, void* param) {
             } else {
                 h = 8 - wp->count;
                 h = (h > 0 ? h : 0) * 24;
-                max = 99;
+                max = BADGE_COUNT;
                 title = msgSearch("msg_window_title_2");
                 titleX = 40;
             }

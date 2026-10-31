@@ -119,11 +119,13 @@ void _epilog(void) {
 void _unresolved(void) {
 }
 USER_FUNC(evt_dou_normal_puka) {
+    // LW(0) is the sample counter; its low four bits wrap the 16-entry bobbing curve.
     evtSetFloat(event, event->args[0], dou_normal_puka_data[event->lwData[0] & 0xF]);
     return EVT_RETURN_DONE;
 }
 USER_FUNC(dou_mario_pos_osreport_func) {
-    MarioWork* mario = marioGetPtr();
+    // This diagnostic helper polls input but remains blocked; it does not finish the event.
+    marioGetPtr();
 
     keyGetButtonTrg(0);
     return EVT_RETURN_BLOCK;

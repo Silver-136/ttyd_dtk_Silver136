@@ -44,6 +44,7 @@ static EVT_BEGIN(n_door_close)
     RETURN
 EVT_END()
 
+// Entering clears both room warp markers; exiting marks only this room pending.
 static EVT_BEGIN(toile_in)
     SET_VALUE(GSWF_TOU_09_TOILET_WARP_PENDING, 0)
     SET_VALUE(GSWF_TOU_08_TOILET_WARP_PENDING, 0)

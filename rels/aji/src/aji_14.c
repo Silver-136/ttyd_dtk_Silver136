@@ -78,6 +78,7 @@ USER_FUNC(waku) {
     AnimationPose* pose;
     s32 i;
 
+    // Copy each visible robot locator to its arm, then move every cached world position below the scene.
     // ロボット
     npc = npcNameToPtr_NoAssert("\x83\x8D\x83\x7B\x83\x62\x83\x67");
     if (npc != NULL) {
@@ -349,6 +350,7 @@ EVT_BEGIN(evt_boss2)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // Parent LW(10) retains the event ID; the child uses its own LW(10) as the bobbing angle.
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         SET_VALUE(LW(10), 0)
         CALL(evt_item_get_position, STRING("dummy"), LW(0), LW(1), LW(2))
@@ -375,6 +377,7 @@ EVT_BEGIN(evt_boss2)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, 0, 0, FLOAT(80.0f))
     SET_VALUE(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
+    // Stop the item-position writer before the star-acquisition child takes control.
     DELETE_EVENT(LW(10))
     SET_VALUE(LW(0), 7)
     SET_VALUE(LW(1), STRING("dummy"))

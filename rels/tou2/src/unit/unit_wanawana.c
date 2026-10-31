@@ -228,7 +228,7 @@ USER_FUNC(replace_evt) {
     GXInitTexObj(&wp->obj, wp->tex->address, w / 2, h / 2, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
     GXInitTexObjLOD(&wp->obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
     PSMTXIdentity(wp->mtx);
-    animGetPtr()->poses[part->poseId].flags |= 0x10;
+    animGetPtr()->poses[part->poseId].flags |= ANIM_POSE_FLAG_CHANGE_TEXTURE;
     part->dispCallback = replace_callback;
     unit->countersetWeapon = (struct BattleWeapon*)wp; // reused as the WanaWork pointer
     unit->screenTexBuf = wp->tex;
@@ -249,7 +249,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN

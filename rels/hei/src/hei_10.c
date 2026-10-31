@@ -448,6 +448,7 @@ s32 evt_chorobon_escape(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+// Keep the extended-pose system alive until every Fuzzy reaches the escape-complete state.
 s32 evt_chorobon_wait(EventEntry* event, BOOL isFirstCall) {
     ExtdrvPose* pose = extGetPosePtr();
     Chorobon* chb = wp->chb;
@@ -467,6 +468,7 @@ static inline s32 npc_jump_get_time(EventEntry* event, EvtWord* args) {
 }
 
 #pragma opt_propagation off
+// A zero duration derives flight time from horizontal distance and speed; a nonzero duration sets the speed.
 static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
@@ -517,11 +519,11 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
     t -= 1.0f;
     if (t < 0.0f) {
         npc->position = (Vec){x, y, z};
-        return 1;
+        return EVT_RETURN_YIELD;
     }
     event->userdata[0] = *(s32*)&t;
     event->userdata[1] = *(s32*)&vy;
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 #pragma opt_propagation reset
 

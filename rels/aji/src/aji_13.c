@@ -106,6 +106,7 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) 
         return TRUE;
     }
     if (node->child != NULL) {
+        // Return this branch result directly, including a miss.
         return _hitIsGroupSub(target, node->child, TRUE);
     }
     if (checkSibling && node->sibling != NULL) {
@@ -115,7 +116,7 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) 
 }
 
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
-    // whether target is group or one of its descendants
+    // Search by joint name, excluding the root sibling chain; child recursion skips the current node's siblings.
     return _hitIsGroupSub(target, group, FALSE);
 }
 
@@ -450,6 +451,7 @@ static USER_FUNC(mario_chk) {
         HitEntry* hit = hitNameToPtr((const char*)name_tbl[i]);
         if (hit != NULL && hit->mapObj != NULL) {
             Vec pos = (Vec){hit->mapObj->transformMtx[0][3], hit->mapObj->transformMtx[1][3], hit->mapObj->transformMtx[2][3]};
+            // Cache this frame's translation delta before replacing the previous position.
             PSVECSubtract(&pos, &work[i].pos, &work[i].delta);
             work[i].pos = pos;
         }

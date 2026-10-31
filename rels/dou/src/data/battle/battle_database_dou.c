@@ -1499,6 +1499,7 @@ NpcTerritoryInfo btl_dou_setup_no_tbl[] = {
     {0},
 };
 
+// Integer-degree phases drive horizontal sine motion and a nonnegative vertical wave offset.
 static USER_FUNC(_wave_offset) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

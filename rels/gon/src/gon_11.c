@@ -52,7 +52,7 @@ typedef struct CloudWork {
     char groupNames[8][0x20];
     char hitName[0x20];
     s32 limit;
-    s32 counter;
+    s32 counter; // Advances by 2 during contact and the loss-of-contact grace period.
     EventEntry* evt;
     void* endEvt;
     s32 timer;
@@ -611,6 +611,7 @@ static void _img_alloc_capture(const char* name, s32 shadowId, const char* offNa
     evt_img_alloc_capture(&event, TRUE);
 }
 
+// Projects eight offsets and clips right/bottom extents; this helper always returns TRUE.
 static BOOL _get_boundingbox(const char* name, s32* x, s32* y, s32* w, s32* h) {
     Vec pos;
     Vec screen;
@@ -732,7 +733,7 @@ static s32 evt_cloud_main(EventEntry *event, BOOL isFirstCall) {
             break;
 
         case 1:
-            if ((mario->displayDirectionTarget > 90.0f) && ((mario->displayDirectionTarget <= 270.0f) ^ 0)) {
+            if ((mario->displayDirectionTarget > 90.0f) && (mario->displayDirectionTarget <= 270.0f)) {
                 strcpy(wp->animName, "P_oof_cloud_2");
             } else {
                 strcpy(wp->animName, "P_oof_cloud_1");

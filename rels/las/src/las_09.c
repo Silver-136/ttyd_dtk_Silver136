@@ -329,7 +329,7 @@ static EVT_BEGIN(first_evt)
             SET_FLOAT_VALUE(LW(0), FLOAT(-180.0f))
             CALL_CHILD(PTR(w_door_open))
             BREAK_LOOP
-            ELSE
+        ELSE
             CALL_CHILD(PTR(w_door_open))
         END_IF
     END_LOOP
@@ -346,7 +346,7 @@ static EVT_BEGIN(first_evt)
             SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
             CALL_CHILD(PTR(w_door_close))
             BREAK_LOOP
-            ELSE
+        ELSE
             CALL_CHILD(PTR(w_door_close))
         END_IF
     END_LOOP
@@ -393,7 +393,7 @@ EVT_BEGIN(bomb_wanwan)
         CALL(evt_img_onoff, STRING("img"), 1)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
         CALL(evt_img_wait_animend, STRING("img"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, LW(14), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_img_onoff, STRING("img"), 0)
@@ -620,7 +620,7 @@ EVT_BEGIN(switch_2_evt)
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change1"), STRING("Ship_Change1"))
-    CALL(evt_hitobj_attr_onoff, 0, 1, STRING("Ship_Change1"), 32768)
+    CALL(evt_hitobj_attr_onoff, 0, 1, STRING("Ship_Change1"), HIT_ATTR_SHIP_PANEL2)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -904,13 +904,13 @@ EVT_BEGIN(las_09_init_evt)
     END_IF
     IF_INT_EQUAL(GSWF_LAS_09_CHAIN_CHOMP_1_BLOWN_UP, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_wan1"), 0, PTR(bomb_wanwan1_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wan3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_wan1"), 0, 0)
     END_IF
     IF_INT_EQUAL(GSWF_LAS_09_CHAIN_CHOMP_2_BLOWN_UP, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_wan2"), 0, PTR(bomb_wanwan2_evt), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wan1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_wan2"), 0, 0)
     END_IF
@@ -928,8 +928,8 @@ EVT_BEGIN(las_09_init_evt)
         CALL(evt_mapobj_rotate, 0, STRING("S_daizadai2_2"), 0, 0, -180)
         CALL(evt_mapobj_rotate, 0, STRING("S_daizadai2_3"), 0, 0, 180)
         CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change1"), STRING("Ship_Change1"))
-        ELSE
-        CALL(evt_hitobj_attr_onoff, 0, 0, STRING("Ship_Change1"), 32768)
+    ELSE
+        CALL(evt_hitobj_attr_onoff, 0, 0, STRING("Ship_Change1"), HIT_ATTR_SHIP_PANEL2)
     END_IF
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_den"), MAP_OBJ_FLAG_CLIP)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
@@ -945,7 +945,7 @@ EVT_BEGIN(las_09_init_evt)
                 CALL(evt_bero_exec_wait, 65536)
                 SPAWN_EVENT(PTR(majyorin_evt_main))
             END_INLINE_EVENT
-            ELSE
+        ELSE
             SPAWN_EVENT(PTR(majyorin_evt))
         END_IF
     END_IF

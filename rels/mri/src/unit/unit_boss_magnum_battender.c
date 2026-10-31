@@ -413,7 +413,7 @@ static EVT_BEGIN(waku_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_CheckDamagePattern, UNIT_ID_SELF, ATTACKPATTERN_PRESS, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -524,7 +524,7 @@ static EVT_BEGIN(dead_event)
             END_INLINE_EVENT
         END_IF
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetCoin, LW(10), LW(0))
     CALL(btlevtcmd_StoreCoin, LW(0))
@@ -625,7 +625,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -1180,7 +1180,7 @@ static EVT_BEGIN(arm_event_end)
 EVT_END()
 
 static EVT_BEGIN(damage_event_r)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))

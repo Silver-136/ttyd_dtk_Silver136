@@ -428,7 +428,7 @@ static EVT_BEGIN(kamec_obaba_zoom)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     IF_INT_EQUAL(LW(1), 1)
         CALL(evt_btl_camera_set_moveto, 0, 135, 106, 296, 135, 55, -402, 30, 11)
-        ELSE
+    ELSE
         CALL(evt_btl_camera_set_moveto, 0, 140, 34, 296, 140, 50, -402, 30, 11)
     END_IF
     WAIT_FRAMES(37)
@@ -451,7 +451,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INSTANT_KILL, LW(0))
@@ -480,7 +480,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 static EVT_BEGIN(dmg_fall_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kFloating)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kHammerlikeCannotTarget)
@@ -488,8 +488,8 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_2"))
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
-    CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, 65)
-    CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, 43)
+    CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, POSE_TYPE_TALK)
+    CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
     BEGIN_INLINE_EVENT
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -539,7 +539,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_3"))
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_dead))
         SET_VALUE(GW(11), 2)
-        SET_VALUE(LW(10), -2)
+        SET_VALUE(LW(10), UNIT_ID_SELF)
         CALL_CHILD(PTR(subsetevt_dead_core_nospin_norotate))
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
         CASE_EQUAL(1)
@@ -553,7 +553,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_3"))
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_dead))
         SET_VALUE(GW(11), 2)
-        SET_VALUE(LW(10), -2)
+        SET_VALUE(LW(10), UNIT_ID_SELF)
         CALL_CHILD(PTR(subsetevt_dead_core_nospin_norotate))
         CASE_EQUAL(2)
         DEBUG_PUT_MSG(STRING("カメックオババ　死亡イベント　クッパ死亡"))
@@ -566,7 +566,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_3"))
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_dead))
         SET_VALUE(GW(11), 2)
-        SET_VALUE(LW(10), -2)
+        SET_VALUE(LW(10), UNIT_ID_SELF)
         CALL_CHILD(PTR(subsetevt_dead_core_nospin_norotate))
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
     END_SWITCH
@@ -611,8 +611,8 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_sky))
-    CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, 65)
-    CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, 43)
+    CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, POSE_TYPE_TALK)
+    CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         LOOP(0)
@@ -765,7 +765,7 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(9), PTR(&weapon_kamec_obaba_dekadeka_magic))
         CALL_CHILD(PTR(dekadeka_magic_event))
         GOTO(99)
-        ELSE
+    ELSE
         SET_VALUE(LW(9), PTR(&weapon_kamec_obaba_attack_magic))
         CALL_CHILD(PTR(attack_magic_event))
         GOTO(99)
@@ -864,10 +864,10 @@ static EVT_BEGIN(magic_common_event1)
         CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(13))
         IF_INT_NOT_EQUAL(LW(3), LW(13))
             CALL_CHILD(PTR(ground_magic_common_event1))
-            ELSE
+        ELSE
             CALL_CHILD(PTR(ground_magic_common_event2))
         END_IF
-        ELSE
+    ELSE
         CALL_CHILD(PTR(sky_magic_common_event))
     END_IF
     RETURN
@@ -877,7 +877,7 @@ static EVT_BEGIN(magic_common_event2)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, KAMEC_OBABA_WORK_SKY, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(ground_magic_common_event2))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(sky_magic_common_event))
     END_IF
     RETURN
@@ -983,7 +983,7 @@ static EVT_BEGIN(attack_magic_event)
         WAIT_FRAMES(30)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
         LABEL(99)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         RETURN
 EVT_END()
 
@@ -1003,7 +1003,7 @@ EVT_BEGIN(magic_select_pri_obaba)
     IF_INT_LESS(LW(0), LW(5))
         SET_VALUE(LW(3), GW(8))
         SET_VALUE(LW(4), 1)
-        ELSE
+    ELSE
         SET_VALUE(LW(3), -2)
         SET_VALUE(LW(4), 1)
     END_IF
@@ -1026,7 +1026,7 @@ EVT_BEGIN(magic_select_pri_koopa)
     IF_INT_LESS(LW(0), LW(5))
         SET_VALUE(LW(3), GW(8))
         SET_VALUE(LW(4), 1)
-        ELSE
+    ELSE
         SET_VALUE(LW(3), -2)
         SET_VALUE(LW(4), 1)
     END_IF
@@ -1055,7 +1055,7 @@ static EVT_BEGIN(dekadeka_magic_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     WAIT_FRAMES(30)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1090,14 +1090,14 @@ static EVT_BEGIN(recover_magic_event)
         ADD(LW(0), -30)
         ADD(LW(1), 100)
         ADD(LW(2), 10)
-        ELSE
+    ELSE
         ADD(LW(1), 50)
         ADD(LW(2), 10)
     END_IF
     CALL(evt_eff, STRING(""), STRING("recovery"), 0, LW(0), LW(1), LW(2), 8, 0, 0, 0, 0, 0, 0, 0)
     WAIT_FRAMES(40)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -1172,7 +1172,7 @@ static USER_FUNC(eff_staff) {
     if (isFirstCall) {
         unit->work[KAMEC_OBABA_WORK_STAFF_EFFECT] = (EvtWord)effThunderflareN64Entry(0, 60, 0.0f, -1000.0f, 0.0f, 1.0f);
     }
-    if (!(((EffectEntry*)unit->work[KAMEC_OBABA_WORK_STAFF_EFFECT])->flags & 1)) {
+    if (!(((EffectEntry*)unit->work[KAMEC_OBABA_WORK_STAFF_EFFECT])->flags & EFFECT_FLAG_ACTIVE)) {
         return EVT_RETURN_DONE;
     }
     wk = ((EffectEntry*)unit->work[KAMEC_OBABA_WORK_STAFF_EFFECT])->userdata;

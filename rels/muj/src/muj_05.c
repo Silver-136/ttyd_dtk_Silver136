@@ -101,8 +101,10 @@ USER_FUNC(evt_dokuroiwa_command_check) {
     s32 i;
     EvtWord* args = event->args;
 
+    // FAKE: empty seven-iteration loop; removing it changes the object.
     for (i = 0; i < 7; i++) {
     }
+    // Report 0 for the first unfilled slot, 1 for a mismatch, or 2 when all seven match.
     result = 2;
     for (i = 0; i < 7; i++) {
         s32 cmd = command_work[i];
@@ -123,6 +125,7 @@ USER_FUNC(evt_dokuroiwa_command_set) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
 
+    // The caller must supply a nonnegative index; only the upper bound is checked here.
     if (index < 7) {
         command_work[index] = evtGetValue(event, args[1]);
     }
@@ -350,7 +353,7 @@ static EVT_BEGIN(marco_talk)
                     CASE_EQUAL(2)
                     CALL(evt_msg_print_add, 0, STRING("stg5_muj_93_03_03"))
                     CALL(evt_item_entry, STRING("jewel"), ITEM_SKULL_GEM, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-                    CALL(evt_item_flag_on, STRING("jewel"), 2)
+                    CALL(evt_item_flag_on, STRING("jewel"), ITEM_FLAG_NO_TOUCH_GET)
                     CALL(evt_item_get_item, STRING("jewel"))
                 END_SWITCH
                 ELSE
@@ -1092,7 +1095,7 @@ EVT_BEGIN(dokuroiwa_bomb)
     CALL(evt_msg_print, 0, STRING("stg5_muj_93_08"), 0, STRING("マルコ"))
     CALL(evt_item_entry, STRING("jewel00"), ITEM_SKULL_GEM, 225, 200, -25, ITEM_TYPE_FALL, -1, 0)
     SET_VALUE(LW(8), STRING("jewel00"))
-    CALL(evt_item_flag_on, LW(8), 16)
+    CALL(evt_item_flag_on, LW(8), ITEM_FLAG_CUSTOM_BOUND)
     CALL(evt_item_set_gravity, LW(8), FLOAT(1.0f))
     CALL(evt_item_set_bound_rate, LW(8), FLOAT(0.69921875f))
     CALL(evt_item_set_jump_power, LW(8), FLOAT(0.0f))

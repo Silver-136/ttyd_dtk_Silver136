@@ -395,6 +395,7 @@ EVT_BEGIN(ufo_main)
         IF_INT_EQUAL(LW(1), 1)
             GOTO(0)
         END_IF
+        // Both outcomes use the same closing animation; the result only controls item transport.
         CALL(item_chk, LW(0), LW(8))
         IF_INT_EQUAL(LW(0), 1)
             CALL_CHILD(PTR(hand_success))
@@ -473,8 +474,8 @@ EVT_BEGIN(ufo_main)
                 CALL(evt_sub_random, 90, LW(0))
                 ADD(LW(0), 45)
                 CALL(evt_item_set_bound_next_dir, LW(8), LW(0))
-                CALL(evt_item_flag_on, LW(8), 512)
-                CALL(evt_item_status_on, LW(8), 16)
+                CALL(evt_item_flag_on, LW(8), ITEM_FLAG_BOUND_NEXT)
+                CALL(evt_item_status_on, LW(8), ITEM_FLAG2_SKIP_BOUND_INIT)
                 CALL(evt_item_change_mode, LW(8), 5)
             END_INLINE_EVENT
             CALL_CHILD(PTR(hand_release))
@@ -1124,6 +1125,7 @@ USER_FUNC(item_chk) {
         item = itemNameToPtr(name);
         if (item != NULL) {
             f32 dist = distABf(item->position.x, item->position.z, x, z);
+            // Choose the nearest item strictly within 20 units in XZ; equal distances keep the earlier index.
             if (dist < minDist) {
                 minDist = dist;
                 found = item;

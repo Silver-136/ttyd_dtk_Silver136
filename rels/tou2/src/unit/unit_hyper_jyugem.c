@@ -48,14 +48,14 @@ static EvtWord wait_event[6];
 
 static USER_FUNC(togezo_copy_status) {
     EvtWord* args = event->args;
-    s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
-    s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
+    s32 sourceId = BattleTransID(event, evtGetValue(event, args[0]));
+    s32 destinationId = BattleTransID(event, evtGetValue(event, args[1]));
     BattleWork* wp = _battleWorkPointer;
-    BattleUnit* unit1 = BattleGetUnitPtr(wp, id1);
-    BattleUnit* unit2 = BattleGetUnitPtr(wp, id2);
+    BattleUnit* sourceUnit = BattleGetUnitPtr(wp, sourceId);
+    BattleUnit* destinationUnit = BattleGetUnitPtr(wp, destinationId);
 
-    unit2->mSizeChangeTurns = unit1->mSizeChangeTurns;
-    unit2->mSizeChangeStrength = unit1->mSizeChangeStrength;
+    destinationUnit->mSizeChangeTurns = sourceUnit->mSizeChangeTurns;
+    destinationUnit->mSizeChangeStrength = sourceUnit->mSizeChangeStrength;
     return EVT_RETURN_DONE;
 }
 
@@ -310,7 +310,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_HOLD, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -356,22 +356,22 @@ static EVT_BEGIN(damage_event)
             CALL_CHILD(PTR(btldefaultevt_Damage))
             ELSE
             CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
-            IF_INT_EQUAL(LW(0), 22)
+            IF_INT_EQUAL(LW(0), DAMAGE_CODE_STATUS_ONLY)
                 GOTO(90)
             END_IF
-            IF_INT_EQUAL(LW(0), 30)
+            IF_INT_EQUAL(LW(0), DAMAGE_CODE_NO_DAMAGE)
                 GOTO(90)
             END_IF
-            IF_INT_EQUAL(LW(0), 31)
+            IF_INT_EQUAL(LW(0), DAMAGE_CODE_AVOID_TOP_SPIKY)
                 GOTO(90)
             END_IF
-            IF_INT_EQUAL(LW(0), 38)
+            IF_INT_EQUAL(LW(0), DAMAGE_CODE_LUCKY)
                 GOTO(90)
             END_IF
-            IF_INT_EQUAL(LW(0), 39)
+            IF_INT_EQUAL(LW(0), DAMAGE_CODE_DODGY)
                 GOTO(90)
             END_IF
-            IF_INT_EQUAL(LW(0), 41)
+            IF_INT_EQUAL(LW(0), DAMAGE_CODE_PROTECTED)
                 GOTO(90)
             END_IF
             CALL(btlevtcmd_CheckStatus, LW(10), STATUS_POISON, LW(15))
@@ -709,7 +709,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden | kNoShadow)
     WAIT_FRAMES(10)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
@@ -768,7 +768,7 @@ static EVT_BEGIN(friend_event)
     CALL(btlevtcmd_SetRotateOffset, LW(3), 0, 0, 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(10)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     RETURN
 EVT_END()
 

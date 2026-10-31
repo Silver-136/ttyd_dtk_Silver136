@@ -91,9 +91,9 @@ static USER_FUNC(effect_stardust) {
     f32 vx = evtGetFloat(event, args[4]);
     f32 vy = evtGetFloat(event, args[5]);
     s32 count = evtGetValue(event, args[6]);
-    s32 camera = evtGetValue(event, args[7]);
+    s32 lifetime = evtGetValue(event, args[7]);
 
-    effStardustEntry(type, count, camera, x, y, z, vx, vy);
+    effStardustEntry(type, count, lifetime, x, y, z, vx, vy);
     return EVT_RETURN_DONE;
 }
 
@@ -165,6 +165,7 @@ static USER_FUNC(enzan_cam_turn_keisan) {
     return EVT_RETURN_DONE;
 }
 
+// Move through two full camera revolutions as the interpolation parameter runs from zero to one hundred.
 static USER_FUNC(enzan_cam_turn_keisan_f) {
     f32 t = evtGetFloat(event, event->args[0]) / 100.0f;
     CameraEntry* cam = camGetPtr(CAMERA_3D);
@@ -208,6 +209,7 @@ static USER_FUNC(enzan_set_f_i) {
     return EVT_RETURN_DONE;
 }
 
+// Save all sixteen local words in the shared backup before the animation reuses them.
 static USER_FUNC(enzan_lw_save) {
     s32 i;
 

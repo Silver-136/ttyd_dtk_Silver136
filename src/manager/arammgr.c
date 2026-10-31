@@ -126,7 +126,7 @@ ARAMEntry* aramMgrToAramAsync(void* src, u32 size) {
     }
     // entry is still NULL here when all entries are in use; the pool is assumed to have room.
     memset(entry, 0, sizeof(ARAMEntry));
-    size = (size + 31) & ~31;
+    size = OSRoundUp32B(size);
     addr = wp->nextAddr;
     wp->nextAddr += size;
     if (wp->nextAddr >= wp->baseAddr + wp->size) {

@@ -20,7 +20,7 @@
 #define UNIT_WORK_FUSE_LIT 0   // 1 once attack_event lit it (with BATTLE_UNIT_FLAG_FUSE_LIT_UNUSED); freeze puts it out; phase_event counts down only while 1; _fire_point_callback draws the flame only while 1
 #define UNIT_WORK_COUNTDOWN 1  // countdown 3, 2, 1, 0 (phase_event steps it while lit; at 0 the next phase explodes); picks pose tables, G_1-G_4 poses and the flame locator
 #define UNIT_WORK_FUSE_SFX 2   // sound id of the looping SFX_ENM_HEAVYB_WAIT1 started when lit; -1 = none; stopped by freeze, death and explosion
-#define UNIT_WORK_GUARD_STEP 3 // which guard weapon the next unlit turn uses: 0 weapon_heavy_bomb_guard, 1 _guard_2, 2 _guard_3 (cycles)
+#define UNIT_WORK_GUARD_STEP 3 // which guard weapon the next lit turn uses: 0 weapon_heavy_bomb_guard, 1 _guard_2, 2 _guard_3 (cycles)
 
 static USER_FUNC(_set_draw_callback);
 USER_FUNC(btlevtcmd_AfterReactionEntry);
@@ -713,6 +713,7 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+// Visit every selected target, including after a failed precheck, then remove this unit.
 static EVT_BEGIN(explosion_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_FUSE_SFX, LW(0))
     CALL(evt_snd_sfxoff, LW(0))

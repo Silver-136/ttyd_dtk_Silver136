@@ -198,6 +198,7 @@ EVT_BEGIN(evt_sw_complete)
     RETURN
 EVT_END()
 
+// The three switch counters target 1, 10 and 3 hits. A counter resets one hit past its target.
 void sw_cntup(MapObjectEntry* mobj) {
     if (strcmp(mobj->name, "MOBJ_eki_06_su1") == 0) {
         evtSetValue(NULL, GW(0), evtGetValue(NULL, GW(0)) + 1);

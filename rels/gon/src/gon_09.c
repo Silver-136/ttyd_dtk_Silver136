@@ -97,6 +97,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+// With this configuration, a clear moved flag places the block 200 units above its base position.
 static EVT_BEGIN(init_0)
     IF_INT_EQUAL(1, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_09_FLOAT_BLOCK_MOVED, 0)
@@ -198,6 +199,7 @@ static EVT_BEGIN(main_0)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
             END_IF
         END_IF
+        // LW2/LW3 are the endpoints, LW4 is the current height, and LW8/LW9 are acceleration/velocity.
         SET_FLOAT_VALUE(LW(4), LW(2))
         SET_VALUE(LF(0), 0)
         LOOP(0)
@@ -218,6 +220,7 @@ static EVT_BEGIN(main_0)
             END_IF
             GOTO(2)
             LABEL(1)
+            // A head-contact match while descending reverses the endpoints and cancels the switch event.
             IF_INT_EQUAL(LW(10), 1)
                 SET_FLOAT_VALUE(LW(5), LW(2))
                 SET_FLOAT_VALUE(LW(2), LW(3))

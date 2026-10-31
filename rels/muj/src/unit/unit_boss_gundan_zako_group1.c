@@ -329,7 +329,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -372,7 +372,7 @@ static EVT_BEGIN(damage_event)
 EVT_END()
 
 EVT_BEGIN(damage_event_kaiten_hammer)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
@@ -979,6 +979,7 @@ void zakogun_ext_main1(void) {
                 if (zako->timer <= 10) {
                     zako->state = 58;
                     if (i == 0) {
+                        // Cue the single damage check before landing; all six must later return to state 20.
                         unit->work[UNIT_WORK_HIT_CUE]++;
                         zakogun_set_pose(zako, 0, 20, 2);
                     }

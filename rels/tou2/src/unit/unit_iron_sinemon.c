@@ -245,7 +245,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(0))
@@ -310,20 +310,20 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
             CALL(yoshi_exist, LW(0))
             IF_INT_EQUAL(LW(0), 0)
-                CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, 65)
-                CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, 69)
+                CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, POSE_TYPE_TALK)
+                CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, POSE_TYPE_ACTION)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_268"), 0, -2)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TWIN_ID, LW(0))
-                CALL(btlevtcmd_SetTalkPoseType, LW(0), 65)
-                CALL(btlevtcmd_SetStayPoseType, LW(0), 69)
+                CALL(btlevtcmd_SetTalkPoseType, LW(0), POSE_TYPE_TALK)
+                CALL(btlevtcmd_SetStayPoseType, LW(0), POSE_TYPE_ACTION)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_269"), 0, LW(0))
                 ELSE
-                CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, 65)
-                CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, 69)
+                CALL(btlevtcmd_SetTalkPoseType, UNIT_ID_SELF, POSE_TYPE_TALK)
+                CALL(btlevtcmd_SetStayPoseType, UNIT_ID_SELF, POSE_TYPE_ACTION)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_270"), 0, -2)
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_TWIN_ID, LW(0))
-                CALL(btlevtcmd_SetTalkPoseType, LW(0), 65)
-                CALL(btlevtcmd_SetStayPoseType, LW(0), 69)
+                CALL(btlevtcmd_SetTalkPoseType, LW(0), POSE_TYPE_TALK)
+                CALL(btlevtcmd_SetStayPoseType, LW(0), POSE_TYPE_ACTION)
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg3_tou_271"), 0, LW(0))
             END_IF
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
@@ -440,7 +440,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(evt_btl_camera_noshake, 0)
     LABEL(99)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
@@ -476,7 +476,7 @@ static USER_FUNC(yoshi_exist) {
     PouchData* pouch = pouchGetPtr();
     s32 exist = 0;
 
-    if (pouch->partyData[4].flags & 1) {
+    if (pouch->partyData[PARTNER_YOSHI].flags & 1) {
         exist = 1;
     }
     evtSetValue(event, args[0], exist);

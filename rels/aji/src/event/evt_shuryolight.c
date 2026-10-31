@@ -168,6 +168,7 @@ static void shuryolight_callback(void* param, s32 group, Mtx* modeling) {
             break;
         }
     }
+    // Only the first light bound to this group is advanced and drawn.
     if (i != 5) {
         animPoseMain(lights[i].npc->poseId);
         animPoseDrawShape(lights[i].npc->poseId, lights[i].shape);
@@ -260,6 +261,7 @@ static USER_FUNC(evt_shuryolight_get_anim_time) {
     ShuryoLight* light = &slhp->lights[index];
     AnimData* data = animPoseGetAnimDataPtr(light->npc->poseId);
 
+    // Convert the loop span from 60 Hz frames to integer milliseconds.
     evtSetValue(event, args[1], 1000.0f * (data->loopInfo[2] - data->loopInfo[1]) / 60.0f);
     return EVT_RETURN_DONE;
 }
@@ -273,10 +275,11 @@ static USER_FUNC(evt_shuryolight_get_status) {
 }
 USER_FUNC(evt_shuryolight_run_evt) {
     EvtWord* args = event->args;
-    s32* power = (s32*)evtGetValue(event, args[0]);
-    s32* head = (s32*)evtGetValue(event, args[1]);
-    s32* tue = (s32*)evtGetValue(event, args[2]);
+    EvtWord* power = (EvtWord*)evtGetValue(event, args[0]);
+    EvtWord* head = (EvtWord*)evtGetValue(event, args[1]);
+    EvtWord* tue = (EvtWord*)evtGetValue(event, args[2]);
 
+    // A null script leaves that channel and its existing event unchanged.
     if (power != NULL) {
         slhp->powerEvt = shuryolightRunEvt(power, slhp->powerEvt);
     }

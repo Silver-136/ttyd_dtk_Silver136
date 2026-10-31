@@ -232,6 +232,7 @@ static EVT_BEGIN(damage_event_pata)
     RETURN
 EVT_END()
 
+// Replace winged parts/data with the ground form before the optional turnover path.
 static EVT_BEGIN(dmg_fall_event_pata)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -249,7 +250,7 @@ static EVT_BEGIN(dmg_fall_event_pata)
     CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(1.0f))
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 10, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_SetHomePos, LW(10), LW(0), LW(1), LW(2))
-    CALL(btlevtcmd_ChangeKind, LW(10), 72)
+    CALL(btlevtcmd_ChangeKind, LW(10), UNIT_BUZZY_BEETLE)
     CALL(btlevtcmd_GetHpDamageCount, LW(10), LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
         CALL_CHILD(PTR(init_event))
@@ -647,6 +648,7 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+// A flipped attack turn runs this countdown/recovery path instead of attacking.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -898,6 +900,7 @@ static EVT_BEGIN(ceil_fall_ready_event)
     RETURN
 EVT_END()
 
+// A completed drop attack restores the upright ground form, not the flipped damage-fall state.
 static EVT_BEGIN(attack_event_ceil)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)

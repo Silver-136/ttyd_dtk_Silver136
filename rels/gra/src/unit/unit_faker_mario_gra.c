@@ -323,7 +323,7 @@ static EVT_BEGIN(init_event_fmario)
     CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_fmario))
     CALL(btlevtcmd_SetEventDamage, UNIT_ID_SELF, PTR(damage_event_fmario))
     CALL(btlevtcmd_SetEventConfusion, UNIT_ID_SELF, PTR(btldefaultevt_Confuse))
-    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, -1610612736)
+    CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kImmuneToDamageAndStatus | kImmuneToStatus)
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BOSS_NM_MOVE1L"), STRING("SFX_BOSS_NM_MOVE1R"), 0, 20, 20)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BOSS_NM_MOVE1L"), STRING("SFX_BOSS_NM_MOVE1R"), 0, 10, 10)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -762,7 +762,7 @@ EVT_END()
 
 static USER_FUNC(vivian_comeback) {
     pouchGetPtr()->partyData[6].flags &= ~2;
-    return 1;
+    return EVT_RETURN_YIELD;
 }
 
 #ifdef VERSION_G8ME01

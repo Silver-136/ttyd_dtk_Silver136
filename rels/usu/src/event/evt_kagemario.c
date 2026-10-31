@@ -65,8 +65,8 @@ static s32 color_change_evt(s32 on) {
 }
 
 static USER_FUNC(check) {
-    if (partyGetPtr(0) != NULL) {
-        animPoseSetMaterialFlagOff(partyGetPtr(0)->paperAnimGroup, MAP_OBJ_TEV_CALLBACK(10));
+    if (partyGetPtr(PARTY_SLOT_PARTY) != NULL) {
+        animPoseSetMaterialFlagOff(partyGetPtr(PARTY_SLOT_PARTY)->paperAnimGroup, MAP_OBJ_TEV_CALLBACK(10));
     }
     return EVT_RETURN_BLOCK;
 }
@@ -89,8 +89,8 @@ static USER_FUNC(evt_kagemario_change) {
 }
 
 static USER_FUNC(test) {
-    marioGetPtr()->prevPartyMemberId[0] = 0;
-    marioGetPtr()->prevPartyMemberId[1] = 0;
+    marioGetPtr()->prevPartyMemberId[PARTY_SLOT_PARTY] = PARTY_MEMBER_NONE;
+    marioGetPtr()->prevPartyMemberId[PARTY_SLOT_FOLLOWER] = PARTY_MEMBER_NONE;
     return EVT_RETURN_DONE;
 }
 

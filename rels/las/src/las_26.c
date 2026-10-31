@@ -131,7 +131,7 @@ EVT_BEGIN(bonbaba_evt)
             SET_FLOAT_VALUE(LW(0), FLOAT(0.0f))
             CALL_CHILD(PTR(w_door_close))
             BREAK_LOOP
-            ELSE
+        ELSE
             CALL_CHILD(PTR(w_door_close))
         END_IF
     END_LOOP
@@ -412,7 +412,7 @@ EVT_BEGIN(bomb_wall)
         CALL(evt_img_onoff, STRING("img"), 1)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
         CALL(evt_img_wait_animend, STRING("img"))
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -434,12 +434,12 @@ EVT_BEGIN(las_26_init_evt)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
         CALL(evt_snd_set_rev_mode, 2)
-        ELSE
+    ELSE
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
             CALL(evt_snd_set_rev_mode, 2)
-            ELSE
+        ELSE
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
             CALL(evt_snd_set_rev_mode, 2)
@@ -452,20 +452,20 @@ EVT_BEGIN(las_26_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_after"), 1, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_ana_before1"), 0, PTR(bomb_wall), 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_ana_before1"), 1, 0)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yukaato"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_yukaato"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yukamae"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_yukamae"), 1, 0)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_03_THE_PALACE_GARDEN)
         SPAWN_EVENT(PTR(bonbaba_evt))
-        ELSE
+    ELSE
         CALL_CHILD(PTR(evt_bero_info_run))
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
@@ -474,7 +474,7 @@ EVT_BEGIN(las_26_init_evt)
         CASE_GREATER_OR_EQUAL(STG8_04_GLOOMTAIL)
         IF_INT_EQUAL(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 0)
             CALL(evt_hitobj_onoff, STRING("baba"), 1, 1)
-            ELSE
+        ELSE
             CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
         END_IF
         CASE_DEFAULT

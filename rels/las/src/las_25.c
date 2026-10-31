@@ -199,7 +199,7 @@ EVT_END()
 EVT_BEGIN(las_25_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
-        ELSE
+    ELSE
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
@@ -212,7 +212,7 @@ EVT_BEGIN(las_25_init_evt)
         CALL(evt_npc_check_delete, STRING("ファントム４"))
         CALL(evt_npc_check_delete, STRING("ファントム５"))
         CALL(evt_npc_check_delete, STRING("ファントム６"))
-        ELSE
+    ELSE
         CALL(evt_npc_check_delete, STRING("ファントム１"))
         CALL(evt_npc_check_delete, STRING("ファントム２"))
     END_IF
@@ -221,7 +221,7 @@ EVT_BEGIN(las_25_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_under"), 1, 0)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hikou"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_hi"), 1, 0)
-        ELSE
+    ELSE
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_yuka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_be"), 1, 0)
         CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi"))

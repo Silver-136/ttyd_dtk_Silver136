@@ -140,6 +140,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+// Restore the saved pipe height and bound collision before processing the arrival event.
 static EVT_BEGIN(evt_switch_00_init)
     CALL(evt_hit_bind_mapobj, STRING("a_dokan_1"), STRING("S_dakan_1"))
     IF_INT_EQUAL(GSWF_TIK_16_MRI_PIPE_RAISED, 1)

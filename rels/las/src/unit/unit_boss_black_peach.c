@@ -1412,7 +1412,7 @@ EVT_BEGIN(peach_init_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 0)
-        ELSE
+    ELSE
         CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_shadow_queen), 0)
         CALL(btlevtcmd_SetPos, UNIT_ID_SELF, 0, -1000, 0)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNotTargetable | kHidden | kNoShadow)
@@ -1477,7 +1477,7 @@ EVT_BEGIN(peach_entry_event)
 EVT_END()
 
 EVT_BEGIN(peach_damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -2524,7 +2524,7 @@ EVT_BEGIN(queen_phase_event)
                 SET_VALUE(GW(11), 3)
                 SET_VALUE(GW(14), 1)
                 CALL_CHILD(PTR(queen_hp_drain_evt))
-                ELSE
+            ELSE
                 CALL_CHILD(PTR(queen_hp_drain_evt_miss))
             END_IF
             CALL_CHILD(PTR(queen_last_attack_message_evt))
@@ -3172,7 +3172,7 @@ EVT_END()
 
 EVT_BEGIN(queen_damage_event)
     CALL(btlevtcmd_GetDamageCode, UNIT_ID_SELF, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 22)
+    IF_INT_NOT_EQUAL(LW(0), DAMAGE_CODE_STATUS_ONLY)
         ADD(GW(12), 1)
         IF_INT_EQUAL(GW(18), 0)
             SET_VALUE(GW(18), 1)
@@ -3186,7 +3186,7 @@ EVT_BEGIN(queen_damage_event)
             END_LOOP
         END_INLINE_EVENT
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -3595,7 +3595,7 @@ EVT_BEGIN(queen_hand_1_damage_event)
         SET_VALUE(GW(18), 1)
     END_IF
     ADD(GW(12), 1)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -3683,7 +3683,7 @@ EVT_BEGIN(queen_hand_2_damage_event)
         SET_VALUE(GW(18), 1)
     END_IF
     ADD(GW(12), 1)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -3958,12 +3958,12 @@ EVT_BEGIN(queen_hand_small_damage_event)
             WAIT_MS(70)
         END_LOOP
     END_INLINE_EVENT
-END_IF
-SET_VALUE(LW(10), -2)
-SET_VALUE(LW(11), 1)
-CALL_CHILD(PTR(btldefaultevt_Damage))
-CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
-RETURN
+    END_IF
+    SET_VALUE(LW(10), UNIT_ID_SELF)
+    SET_VALUE(LW(11), 1)
+    CALL_CHILD(PTR(btldefaultevt_Damage))
+    CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+    RETURN
 EVT_END()
 
 EVT_BEGIN(queen_hand_small_dead_event)
@@ -4047,9 +4047,9 @@ USER_FUNC(queen_hand_small_1000hand_2_evt) {
             break;
         case 2:
         case 99:
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(queen_hand_small_1000hand_1_evt) {
@@ -4093,9 +4093,9 @@ USER_FUNC(queen_hand_small_1000hand_1_evt) {
             break;
         case 2:
         case 99:
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(queen_hand_small_drag_1_evt) {
@@ -4169,9 +4169,9 @@ USER_FUNC(queen_hand_small_drag_1_evt) {
             break;
         case 4:
         case 99:
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(queen_hand_small_drag_2_evt) {
@@ -4204,9 +4204,9 @@ USER_FUNC(queen_hand_small_drag_2_evt) {
             for (i = 0; i < hand_wp->num; i++, pose++) {
                 pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
             }
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(queen_hand_small_drag_3_evt) {
@@ -4253,9 +4253,9 @@ USER_FUNC(queen_hand_small_drag_3_evt) {
             break;
         case 2:
         case 99:
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(queen_hand_small_drag_4_evt) {
@@ -4288,9 +4288,9 @@ USER_FUNC(queen_hand_small_drag_4_evt) {
             for (i = 0; i < hand_wp->num; i++, pose++) {
                 pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
             }
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(queen_hand_small_dead_evt) {
@@ -4323,9 +4323,9 @@ USER_FUNC(queen_hand_small_dead_evt) {
             for (i = 0; i < hand_wp->num; i++, pose++) {
                 pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
             }
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(queen_hand_small_entry_evt) {
@@ -4372,9 +4372,9 @@ USER_FUNC(queen_hand_small_entry_evt) {
             break;
         case 2:
         case 99:
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(slot_init) {
@@ -4443,9 +4443,9 @@ USER_FUNC(queen_hp_drain_5_evt) {
             break;
         case 2:
         case 99:
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(queen_hp_drain_4_evt) {
@@ -4485,9 +4485,9 @@ USER_FUNC(queen_hp_drain_4_evt) {
             }
             event->userdata[0] = 99;
         case 99:
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(queen_hp_drain_3_evt) {
@@ -4520,9 +4520,9 @@ USER_FUNC(queen_hp_drain_3_evt) {
             for (i = 0; i < hand_wp->num; i++, pose++) {
                 pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
             }
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(queen_hp_drain_2_evt) {
@@ -4570,9 +4570,9 @@ USER_FUNC(queen_hp_drain_2_evt) {
             break;
         case 2:
         case 99:
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(queen_hp_drain_1_evt) {
@@ -4605,9 +4605,9 @@ USER_FUNC(queen_hp_drain_1_evt) {
             for (i = 0; i < hand_wp->num; i++, pose++) {
                 pose->flags &= ~EXT_POSE_FLAG_VISIBLE;
             }
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(queen_get_aud_num) {
@@ -4694,9 +4694,9 @@ USER_FUNC(peach_hand1000_dark_drag_1_evt) {
             break;
         case 4:
         case 99:
-            return 1;
+            return EVT_RETURN_YIELD;
     }
-    return 0;
+    return EVT_RETURN_BLOCK;
 }
 
 USER_FUNC(eff_queen_set_alpha_evt) {

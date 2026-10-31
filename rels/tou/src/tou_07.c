@@ -92,6 +92,7 @@ USER_FUNC(tou_07_snd_off) {
     return EVT_RETURN_DONE;
 }
 
+// Restore HP and FP only; unlike evt_pouch_mario_recovery, this leaves AP unchanged.
 USER_FUNC(mario_recovery) {
     pouchSetHP(pouchGetMaxHP());
     pouchSetFP(pouchGetMaxFP());
@@ -567,7 +568,7 @@ EVT_BEGIN(evt_tou_bed)
             CALL(evt_cam3d_evt_set, -75, 160, 266, 155, 65, -10, 0, EASING_SINE_IN_OUT)
         END_IF
         WAIT_FRAMES(1)
-        CALL(evt_mario_flag_onoff, 1, 768)
+        CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL)
         IF_INT_EQUAL(LF(0), 1)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP5"), LW(0), LW(1), LW(2), 0)
@@ -614,7 +615,7 @@ EVT_BEGIN(evt_tou_bed)
         DELETE_EVENT(LW(10))
         CALL(paper_off)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
-        CALL(evt_mario_flag_onoff, 0, 768)
+        CALL(evt_mario_flag_onoff, 0, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL)
         IF_INT_EQUAL(LF(0), 1)
             IF_INT_NOT_EQUAL(LW(12), 0)
                 CALL(evt_mario_set_party_pos, 0, LW(12), 75, 37, 100)
@@ -668,7 +669,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_POWER_PLUS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item00"), 2)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_mario_key_onoff, 1)
@@ -782,6 +783,7 @@ EVT_BEGIN(tou_07_init_evt)
     RETURN
 EVT_END()
 
+// Hold the sleeping paper pose/direction until the bed event deletes this blocking child.
 static USER_FUNC(paper_on) {
     f32 value = evtGetFloat(event, event->args[0]);
     MarioWork* mario = marioGetPtr();
@@ -807,8 +809,8 @@ USER_FUNC(tou_07_belt_camid) {
     // ベルト
     NpcEntry* npc = npcNameToPtr("\x83\x78\x83\x8B\x83\x67");
 
-    ((EffStarStoneWork*)eff->userdata)->cam = 7;
-    npc->cameraId = 7;
+    ((EffStarStoneWork*)eff->userdata)->cam = CAMERA_3D_EFFECTB;
+    npc->cameraId = CAMERA_3D_EFFECTB;
     return EVT_RETURN_DONE;
 }
 

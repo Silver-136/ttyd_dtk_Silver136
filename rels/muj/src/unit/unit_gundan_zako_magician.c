@@ -425,7 +425,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -783,7 +783,7 @@ static EVT_BEGIN(hunyahunya_bottle_event)
 EVT_END()
 
 static EVT_BEGIN(yokeyoke_bottle_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_yokeyoke_bottle))
     CALL_CHILD(attack_common_event1)
@@ -885,6 +885,7 @@ static EVT_BEGIN(minimini_bottle_event)
         LABEL(90)
         GOTO(97)
         LABEL(91)
+        // Only target ordinal zero runs the defence command; an avoided first target still advances.
         IF_INT_EQUAL(LW(10), 0)
             CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         END_IF
@@ -1021,6 +1022,7 @@ static USER_FUNC(kanbu_get_id) {
     BattleWork* wp = _battleWorkPointer;
     BattleUnit* unit;
 
+    // Return the first occupied slot whose original kind is chapter-five Crump.
     for (i = 0; i < 64; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit != NULL && unit->initialKind == UNIT_LORD_CRUMP_CHAPTER5) {

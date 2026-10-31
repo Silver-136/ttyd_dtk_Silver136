@@ -45,7 +45,7 @@ static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
     camera->startTimeA = gp->renderTime;
     camera->durationA = 0;
     camera->stateA = 3;
-    camera->curveA = 11;
+    camera->curveA = EASING_SINE_IN_OUT;
 }
 
 static Vec daiv;
@@ -193,7 +193,7 @@ static void lecture_button_disp(CameraId camera, void* param) {
             }
             pos = disp->pos;
             pos.y += ofs;
-            iconDispGxAlpha(&pos, 0x50, btn->iconId, btn->alpha, 1.0f);
+            iconDispGxAlpha(&pos, ICON_FLAG_2D | ICON_FLAG_NO_MAP_BLEND, btn->iconId, btn->alpha, 1.0f);
         }
     }
 }
@@ -294,6 +294,7 @@ static USER_FUNC(lecture_button_set_seq) {
     return EVT_RETURN_DONE;
 }
 
+// Despite its name, this query returns the sequence state, not the icon ID.
 static USER_FUNC(lecture_button_get_icon_id) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -406,7 +407,7 @@ static USER_FUNC(lect_mobj_hit_nasi) {
     }
     for (i = 0; i < 2; i++) {
         if (mobj->hitObj[i].name != NULL && strcmp(mobj->hitObj[i].name, "") != 0) {
-            hitGrpFlagOn(mobj->hitObj[i].name, 1);
+            hitGrpFlagOn(mobj->hitObj[i].name, HIT_FLAG_OFF);
         }
     }
     return EVT_RETURN_DONE;

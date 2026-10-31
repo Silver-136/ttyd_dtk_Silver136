@@ -542,7 +542,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_FREEZE, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -705,7 +705,7 @@ static EVT_BEGIN(dead_event)
         CASE_END
     END_SWITCH
     LABEL(10)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL_CHILD(PTR(subsetevt_dead_core))
     RETURN
     LABEL(50)
@@ -761,7 +761,7 @@ static EVT_BEGIN(explosion_event)
         GOTO(10)
     END_IF
     LABEL(99)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     CALL_CHILD(subsetevt_dead_core)
     CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 0)
     RETURN

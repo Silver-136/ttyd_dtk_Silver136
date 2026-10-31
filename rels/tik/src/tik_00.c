@@ -567,6 +567,7 @@ static USER_FUNC(evt_osreport) {
     return EVT_RETURN_DONE;
 }
 
+// Preserve the caller's local words and shared global words while the card animation reuses them.
 USER_FUNC(uranai_init_func) {
     char name[64];
     s32 i;
@@ -620,6 +621,7 @@ void uranai_cap(CameraId cameraId, void* param) {
     GXGetScissor(&sx, &sy, &sw, &sh);
     GXSetViewport(0.0f, 0.0f, w, h, 0.0f, 1.0f);
     GXSetScissor(1, 1, w - 2, h - 2);
+    // The width/height quotient is computed with integer division before conversion to the aspect ratio.
     C_MTXPerspective(projMtx, 25.0f, w / h, 1.0f, 1000.0f);
     GXSetProjection(projMtx, GX_PERSPECTIVE);
     {
@@ -703,6 +705,7 @@ USER_FUNC(uranai_bbox) {
     s32 w = evtGetValue(event, args[2]);
     s32 h = evtGetValue(event, args[3]);
 
+    // BUG: all four fields receive x; the y, w and h arguments are ignored.
     uranai_wp->x = x;
     uranai_wp->y = x;
     uranai_wp->w = x;
@@ -710,6 +713,7 @@ USER_FUNC(uranai_bbox) {
     return EVT_RETURN_DONE;
 }
 
+// Apply the current alpha before subtracting eight; completion follows the last positive alpha, seven.
 USER_FUNC(card_xlu) {
     const char* name = (const char*)evtGetValue(event, LW(2));
 
@@ -2701,7 +2705,7 @@ static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_SOFT_STOMP, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("item01"), 258)
+    CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box01"))
     CALL(evt_item_get_item, STRING("item01"))
     CALL(evt_mario_key_onoff, 1)

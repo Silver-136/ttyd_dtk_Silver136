@@ -217,7 +217,7 @@ static void lecture_button_disp(CameraId camera, void* param) {
             }
             pos = disp->pos;
             pos.y += ofs;
-            iconDispGxAlpha(&pos, 0x50, btn->iconId, btn->alpha, 1.0f);
+            iconDispGxAlpha(&pos, ICON_FLAG_2D | ICON_FLAG_NO_MAP_BLEND, btn->iconId, btn->alpha, 1.0f);
         }
     }
 }
@@ -623,7 +623,7 @@ static USER_FUNC(evt_nomal_cange) {
 
 static USER_FUNC(set_dir) {
     s32 dir = evtGetValue(event, event->args[0]);
-    PartyEntry* party = partyGetPtr(0);
+    PartyEntry* party = partyGetPtr(PARTY_SLOT_PARTY);
 
     if (party != NULL) {
         s32 angle = dir > 180 ? 270 : 90;
@@ -946,7 +946,7 @@ EVT_BEGIN(roll_majin_lecture)
         CALL(evt_cam_letter_box_disable, 1)
         CALL(mainwindow_opendisable)
         CALL(evt_mario_trigflag_onoff, 1, MARIO_TRIG_FLAG_DISABLE_SUB_STICK)
-        CALL(evt_mario_set_enable_key, 32)
+        CALL(evt_mario_set_enable_key, PAD_TRIGGER_R)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_mario_key_onoff, 1)
         LOOP(0)
@@ -954,7 +954,7 @@ EVT_BEGIN(roll_majin_lecture)
             CALL(evt_mario_get_pos, 0, LW(5), LW(1), LW(6))
             CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
             CALL(evt_mario_get_motion, LW(3))
-            IF_INT_EQUAL(LW(3), 22)
+            IF_INT_EQUAL(LW(3), MARIO_MOTION_ROLL)
                 BREAK_LOOP
             END_IF
             IF_INT_EQUAL(LW(7), 0)

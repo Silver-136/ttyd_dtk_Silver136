@@ -399,7 +399,7 @@ void chorogun_ext_init(void) {
 
     chorogun = BattleAlloc(sizeof(Chorogun) * 1000);
     for (i = 0; i < extGetPoseNum(); i++, pose++) {
-        pose->flags = 1;
+        pose->flags = EXT_POSE_FLAG_VISIBLE;
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = 0.0f;
         (*pose->mtx)[1][3] = -1000.0f;
@@ -669,6 +669,7 @@ void chorogun_ext_disp(CameraId camera, void* param) {
     extLoadTextureExit();
 }
 
+// Count active crowd members; escape clears this flag before the visual exit finishes.
 USER_FUNC(chorogun_get_alive_num) {
     EvtWord* args = event->args;
     s32 i;
@@ -764,6 +765,7 @@ USER_FUNC(chorogun_dive_target) {
     p = &pose[sel];
     row = (*p->mtx)[2];
     dx = x - (*p->mtx)[0][3];
+    // Both offsets use the current Z translation, including the vertical calculation.
     dy = y - row[3];
     dz = z - row[3];
     c->vel.x = dx / t;

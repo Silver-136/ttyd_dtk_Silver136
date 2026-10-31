@@ -413,7 +413,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -468,6 +468,7 @@ static EVT_BEGIN(dmg_turn_event)
     RETURN
 EVT_END()
 
+// Recovery consumes this attack opportunity, including the turn that restores the standing stance.
 static EVT_BEGIN(wakeup_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -848,6 +849,7 @@ static EVT_BEGIN(shell_attack_event)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 0, MOVE_SOUND_NONE, 0)
     GOTO(97)
     LABEL(91)
+    // Resolve the defense command once, at the first selected target that passes the damage precheck.
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         SET_VALUE(LW(6), 1)
@@ -884,7 +886,7 @@ static EVT_BEGIN(shell_attack_event)
 EVT_END()
 
 static EVT_BEGIN(charge_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_togenoko_charge))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
@@ -1001,6 +1003,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+// Count occupied slots whose current kind is Koopatrol, without filtering alliance or HP.
 static USER_FUNC(togenoko_getnum) {
     EvtWord* args = event->args;
     s32 num = 0;

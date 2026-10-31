@@ -1007,7 +1007,7 @@ static void rankingControll(void) {
             }
         }
 
-        // Check if a match is booked (2532), and move our opponent (507) to above us for the fight.
+        // If a match is booked, move the entry with the saved opponent index to the front of the below-player list.
         if (swGet(2532)) { // GSWF_GLITZ_PIT_LAST_OPPONENT_SAVED
             for (idx = 0; idx < nBelow; idx++) {
                 if (below[idx] == swByteGet(507)) { // GSW_GLITZ_PIT_LAST_OPPONENT
@@ -1119,7 +1119,7 @@ static void rankingInit(void) {
     // We need to handle the excluded entries if we're doing rematches
     temp = evtGetValue(NULL, GSW_STORY_PROGRESS);
     count = 21;
-    if (temp < 172) {
+    if (temp < STG3_34_RETURN_TO_ROGUEPORT) {
         count = 23;
     }
     rank_wp->count = count;

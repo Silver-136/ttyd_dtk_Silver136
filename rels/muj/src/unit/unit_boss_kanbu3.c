@@ -347,7 +347,7 @@ static EVT_BEGIN(damage_event)
             END_IF
         END_IF
     END_IF
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
 #ifdef VERSION_G8ME01
     CALL_CHILD(PTR(btldefaultevt_Damage))
@@ -513,6 +513,7 @@ static EVT_BEGIN(dead_event)
     CALL(zakogun_ext_init3)
     WAIT_FRAMES(120)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, 2)
+    // The replacement table omits the revival event, so this revival happens only once.
     CALL(btlevtcmd_ChangeDataTable, UNIT_ID_SELF, PTR(data_table2))
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
@@ -689,6 +690,7 @@ static EVT_BEGIN(attack_event)
             END_IF
         END_IF
         ELSE
+        // The random range ends at 49, so this branch always chooses the normal attack.
         SET_VALUE(LW(0), 50)
         ADD(LW(0), 0)
         SUBTRACT(LW(0), 1)
@@ -755,7 +757,7 @@ EVT_BEGIN(no_event)
 EVT_END()
 
 static EVT_BEGIN(charge_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_kanbu3_charge))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))

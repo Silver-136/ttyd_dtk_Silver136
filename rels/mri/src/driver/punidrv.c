@@ -123,8 +123,8 @@ void puniEntry(s32 poseNum, PunidrvTexInfo* texInfo, void (*initFunc)(void), voi
     wp->colors = Colors;
     wp->uvs = UVs;
     wp->sort = __memAlloc(HEAP_EXT, poseNum * sizeof(PunidrvSort));
-    wp->dl = __memAlloc(HEAP_EXT, texNum * 0x80);
-    DCInvalidateRange(wp->dl, texNum * 0x80);
+    wp->dl = __memAlloc(HEAP_EXT, texNum * sizeof(*wp->dl));
+    DCInvalidateRange(wp->dl, texNum * sizeof(*wp->dl));
     wp->dlSize = __memAlloc(HEAP_EXT, texNum * sizeof(u32));
     memset(wp->poses, 0, wp->poseNum * sizeof(PunidrvPose));
     for (i = 0; i < poseNum; i++) {
@@ -165,7 +165,7 @@ void puniMakeTexture(CameraId camId, void* param) {
         wp->vtx[n++] = x0 * scale;
         wp->vtx[n++] = -y1 * scale;
         wp->vtx[n++] = 0.0f;
-        GXBeginDisplayList(wp->dl[i], 0x80);
+        GXBeginDisplayList(wp->dl[i], sizeof(*wp->dl));
         v = i * 4;
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition1x16(v++);
@@ -426,6 +426,7 @@ GXColor shadow_col[8] ATTRIBUTE_ALIGN(32) = {
 
 void puniLoadTev(void) {
     GXColor blend;
+    // FAKE: unused color locals retained; removing them changes the object.
     GXColor unused0 = {0xFF, 0xFF, 0xFF, 0xFF};
     GXColor unused1 = {0xFF, 0xFF, 0xFF, 0xFF};
     GXColor fogColor = {0xFF, 0xFF, 0xFF, 0xFF};
@@ -518,7 +519,7 @@ void puniDrawShadow(void) {
             }
             GXLoadPosMtxImm(mtx, GX_PNMTX0);
             GXSetCurrentMtx(GX_PNMTX0);
-            GXCallDisplayList(shadow_dl, 0x20);
+            GXCallDisplayList(shadow_dl, sizeof(shadow_dl));
         }
     }
 }

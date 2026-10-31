@@ -106,7 +106,7 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
 static USER_FUNC(lect_mario_ido_sum) {
     EvtWord* args = event->args;
     MarioWork* mario = marioGetPtr();
-    s32 frames = evtGetValue(event, args[0]);
+    s32 durationMs = evtGetValue(event, args[0]);
     s32 elapsed;
 
     if (isFirstCall) {
@@ -116,13 +116,13 @@ static USER_FUNC(lect_mario_ido_sum) {
         evtSetFloat(event, LW(2), mario->position.z);
     }
     elapsed = OSTicksToMilliseconds((u64)OSDiffTick(event->lifetime, wwstart));
-    if (elapsed > frames) {
-        elapsed = frames;
+    if (elapsed > durationMs) {
+        elapsed = durationMs;
     }
-    mario->position.x = lect_mario_ido_sub(elapsed, frames, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
-    mario->position.y = lect_mario_ido_sub(elapsed, frames, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
-    mario->position.z = lect_mario_ido_sub(elapsed, frames, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
-    if (elapsed >= frames) {
+    mario->position.x = lect_mario_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(3)), evtGetFloat(event, LW(0)));
+    mario->position.y = lect_mario_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(4)), evtGetFloat(event, LW(1)));
+    mario->position.z = lect_mario_ido_sub(elapsed, durationMs, evtGetFloat(event, LW(5)), evtGetFloat(event, LW(2)));
+    if (elapsed >= durationMs) {
         return EVT_RETURN_DONE;
     }
     return EVT_RETURN_BLOCK;
@@ -415,7 +415,7 @@ static USER_FUNC(lect_mobj_hit_nasi) {
     }
     for (i = 0; i < 2; i++) {
         if (mobj->hitObj[i].name != NULL && strcmp(mobj->hitObj[i].name, "") != 0) {
-            hitGrpFlagOn(mobj->hitObj[i].name, 1);
+            hitGrpFlagOn(mobj->hitObj[i].name, HIT_FLAG_OFF);
         }
     }
     return EVT_RETURN_DONE;
@@ -576,7 +576,7 @@ EVT_BEGIN(boots_lv2_juyoitem_lecture)
         CALL(mainwindow_opendisable)
         CALL(evt_mario_trigflag_onoff, 1, MARIO_TRIG_FLAG_DISABLE_STICK)
         CALL(evt_mario_trigflag_onoff, 1, MARIO_TRIG_FLAG_DISABLE_SUB_STICK)
-        CALL(evt_mario_set_enable_key, 256)
+        CALL(evt_mario_set_enable_key, PAD_BUTTON_A)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_mario_key_onoff, 1)
@@ -585,14 +585,14 @@ EVT_BEGIN(boots_lv2_juyoitem_lecture)
             WAIT_FRAMES(1)
             CALL(evt_mario_get_motion, LW(3))
             IF_INT_EQUAL(LW(7), 0)
-                IF_INT_EQUAL(LW(3), 17)
+                IF_INT_EQUAL(LW(3), MARIO_MOTION_HIP_2)
                     CALL(lecture_button_set_seq, 0, 3)
                     ADD(LW(7), 1)
                     CALL(x_flag_set, 1, 2)
                 END_IF
                 ELSE
                 IF_INT_EQUAL(LW(7), 1)
-                    IF_INT_NOT_EQUAL(LW(3), 17)
+                    IF_INT_NOT_EQUAL(LW(3), MARIO_MOTION_HIP_2)
                         BREAK_LOOP
                     END_IF
                 END_IF

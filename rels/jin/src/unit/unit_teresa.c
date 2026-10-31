@@ -120,7 +120,15 @@ static StatusVulnerability regist = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_teresa", "c_teresa", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
+    {
+        1, "btl_un_teresa", "c_teresa",
+        0.0f, 0.0f, 0.0f,
+        0.0f, 25.0f, 0.0f,
+        0.0f, 30.0f, 0.0f,
+        20, 30, 255,
+        &defence, &defence_attr,
+        kMainPart | kGuardTargetPart, 0, pose_table,
+    },
 };
 
 static BattleWeapon weapon_teresa_attack = {
@@ -312,6 +320,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+// Unavailable special actions fall through to later choices using the same random roll.
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -479,12 +488,12 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 1, 0, 0, 0)
-        CALL(btlevtcmd_ResetFaceDirection, -2)
+        CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         RETURN
 EVT_END()
 
 static EVT_BEGIN(trans_myself_event)
-    SET_VALUE(LW(3), -2)
+    SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_INVISIBLE, LW(8))
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_teresa_trans_myself))
@@ -603,7 +612,7 @@ static EVT_BEGIN(trans_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(20)
-    CALL(btlevtcmd_ResetFaceDirection, -2)
+    CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     LABEL(99)
     RETURN
 EVT_END()
@@ -682,7 +691,7 @@ EVT_END()
 
 static USER_FUNC(teresa_check_trans) {
     EvtWord* args = event->args;
-    s32 num = 0;
+    s32 eligibleCount = 0;
     s32 id = evtGetValue(event, args[0]);
     s32 self;
     s32 i;
@@ -693,14 +702,14 @@ static USER_FUNC(teresa_check_trans) {
         BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
         if (unit != NULL) {
             if (unit->currentKind == UNIT_BOO && !BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) && i != self) {
-                num++;
+                eligibleCount++;
             }
             if (unit->currentKind == UNIT_DARK_BOO && !BtlUnit_CheckStatus(unit, STATUS_INVISIBLE) && i != self) {
-                num++;
+                eligibleCount++;
             }
         }
     }
-    if (num >= 1) {
+    if (eligibleCount >= 1) {
         evtSetValue(event, args[1], 1);
     } else {
         evtSetValue(event, args[1], 0);
@@ -709,21 +718,21 @@ static USER_FUNC(teresa_check_trans) {
 }
 static USER_FUNC(teresa_check_move) {
     EvtWord* args = event->args;
-    s32 num = 0;
+    s32 eligibleCount = 0;
     s32 i;
 
     for (i = 0; i < 64; i++) {
         BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, i);
         if (unit != NULL) {
             if (unit->currentKind == UNIT_BOO && unit->work[UNIT_WORK_RAISED] == 0) {
-                num++;
+                eligibleCount++;
             }
             if (unit->currentKind == UNIT_DARK_BOO && unit->work[UNIT_WORK_RAISED] == 0) {
-                num++;
+                eligibleCount++;
             }
         }
     }
-    if (num >= 1) {
+    if (eligibleCount >= 1) {
         evtSetValue(event, args[0], 1);
     } else {
         evtSetValue(event, args[0], 0);

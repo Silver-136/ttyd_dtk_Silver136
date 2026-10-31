@@ -34,7 +34,7 @@
 
 USER_FUNC(evt_mario_dispflag_onoff);
 void gans_msg_callback(s32 type, void** work);
-extern s32 evt_pouch_add_coin[];
+USER_FUNC(evt_pouch_add_coin);
 
 static EvtWord evt_dakuto[90];
 static EvtWord n_door_open[12];
@@ -276,6 +276,7 @@ EVT_BEGIN(evt_hiki_close)
     RETURN
 EVT_END()
 
+// LW(0)/LW(1) carry the drawer object and its bound hit name across open/close trigger swaps.
 EVT_BEGIN(evt_hiki_open)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -418,6 +419,7 @@ static EVT_BEGIN(init_kinoshikowa)
 EVT_END()
 
 static EVT_BEGIN(talk_kinoshikowa)
+    // First confirm all 20 trunks; after that acknowledgement, reward the player only once none remain.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
         CALL(evt_pouch_check_item, ITEM_BATTLE_TRUNKS, LW(0))
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
@@ -936,6 +938,7 @@ EVT_BEGIN(evt_nozoki_msg)
     RETURN
 EVT_END()
 
+// The first peek runs the story scene; later peeks keep the capture open until A is pressed.
 EVT_BEGIN(evt_nozoki)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1356,6 +1359,7 @@ EVT_BEGIN(tou_05_init_evt)
     RETURN
 EVT_END()
 
+// Type-2 page notifications advance the counter used by the synchronized Mario reaction.
 void gans_msg_callback(s32 type, void** work) {
     EventEntry* evt = ((MsgWinData*)*work)->event;
     if (type == 2) {

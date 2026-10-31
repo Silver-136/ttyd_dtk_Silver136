@@ -472,6 +472,7 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+// LW(0) selects the guard layout; retain its home position while stepping away from nearby Mario.
 EVT_BEGIN(move_g)
     SET_VALUE(LF(0), 0)
     SWITCH(LW(0))
@@ -1138,6 +1139,7 @@ static EVT_BEGIN(init_brots)
     RETURN
 EVT_END()
 
+// Reuse a map-allocated selection string; US measures localized entries, while JP uses a fixed width.
 static USER_FUNC(make_list) {
     static char* tmp;
     static const char* list[] = {
@@ -1470,6 +1472,7 @@ EVT_BEGIN(evt_gans)
     RETURN
 EVT_END()
 
+// The minors-room escort waits for the concurrent dialogue to finish before opening the destination door.
 static EVT_BEGIN(evt_kinoshikowa)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("キノシコワ"), -350, 0, -570)
@@ -2037,6 +2040,7 @@ static EVT_BEGIN(evt_lock)
     RETURN
 EVT_END()
 
+// Trigger once Mario enters the central X interval; the seen flag is set only after the conversation.
 EVT_BEGIN(evt_souko_talk)
     IF_INT_EQUAL(GSWF_TOU_04_STORAGE_ROOM_TALK_SEEN, 1)
         RETURN
@@ -2365,7 +2369,7 @@ EVT_BEGIN(tou_04_init_evt)
         CALL(evt_mario_clear_party, 1)
     END_IF
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
-        CALL(evt_mobj_lock, STRING("lock"), 18, 0, 10, -550, 0, PTR(evt_chk), PTR(evt_lock), GSWF_TOU_04_STORAGE_DOOR_UNLOCKED)
+        CALL(evt_mobj_lock, STRING("lock"), ITEM_STORAGE_KEY_0x12, 0, 10, -550, 0, PTR(evt_chk), PTR(evt_lock), GSWF_TOU_04_STORAGE_DOOR_UNLOCKED)
         SET_VALUE(LW(0), STRING("s_bero_4"))
         CALL_CHILD(PTR(bero_case_switch_off))
         ELSE

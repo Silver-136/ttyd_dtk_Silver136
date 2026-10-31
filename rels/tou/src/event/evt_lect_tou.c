@@ -56,7 +56,7 @@ static inline void effitemget_cam_move(CameraEntry* camera, Vec ofs) {
     camera->startTimeA = gp->renderTime;
     camera->durationA = 0;
     camera->stateA = 3;
-    camera->curveA = 11;
+    camera->curveA = EASING_SINE_IN_OUT;
 }
 
 static EffectEntry* eff;
@@ -321,6 +321,7 @@ static USER_FUNC(lecture_button_set_seq) {
     return EVT_RETURN_DONE;
 }
 
+// Despite its original name, this returns the prompt sequence, not its icon ID.
 static USER_FUNC(lecture_button_get_icon_id) {
     EvtWord* args = event->args;
     s32 index = evtGetValue(event, args[0]);
@@ -781,7 +782,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
         SET_VALUE(LW(12), 0)
         CALL(mainwindow_opendisable)
         CALL(evt_mario_trigflag_onoff, 1, MARIO_TRIG_FLAG_DISABLE_SUB_STICK)
-        CALL(evt_mario_set_enable_key, 512)
+        CALL(evt_mario_set_enable_key, PAD_BUTTON_B)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_mario_key_onoff, 1)
         LOOP(0)
@@ -1084,6 +1085,7 @@ static f32 lect_party_ido_sub(f32 elapsed, f32 total, f32 end, f32 start) {
     return (rem * end + elapsed * start) / total;
 }
 
+// This path waits on its first call; both movement helpers share wwstart and must not overlap.
 static USER_FUNC(lect_party_ido_sum) {
     EvtWord* args = event->args;
     PartyEntry* party = partyGetPtr(args[0] == 0 ? partyCtrlNo : 1);

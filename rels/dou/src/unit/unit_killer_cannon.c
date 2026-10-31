@@ -31,6 +31,7 @@ static EvtWord friend_event_sky[318];
 static EvtWord wait_event[6];
 
 static USER_FUNC(killer_copy_status) {
+    // Transfer only the size-change duration and strength to the spawned projectile.
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));
     s32 id2 = BattleTransID(event, evtGetValue(event, args[1]));
@@ -178,7 +179,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -191,6 +192,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+    // Six firing choices retain weights 15, 0, 10, 20, 0, 10 in this order.
     SET_VALUE(LW(0), 15)
     ADD(LW(0), 0)
     ADD(LW(0), 10)

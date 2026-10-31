@@ -138,7 +138,7 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) 
 }
 
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
-    // whether target is group or one of its descendants
+    // Match joint names along the recursive child-first search; a child result returns without resuming this node's siblings.
     return _hitIsGroupSub(target, group, FALSE);
 }
 
@@ -1544,6 +1544,7 @@ static EVT_BEGIN(bombwall_init)
     RETURN
 EVT_END()
 
+// Both sound-state flags reset to 1 each pass, so neither sound-start nor sound-stop branch is reached here.
 EVT_BEGIN(bombwall_suifuout_secheck)
     LOOP(0)
         SET_VALUE(LW(0), 0)
@@ -1757,6 +1758,7 @@ static EVT_BEGIN(dai3_shurai_after)
     RETURN
 EVT_END()
 
+// Carry the rider by the ship's XY rotation delta only after a previous sample on the same named hit group.
 USER_FUNC(dou_mario_kaiten_hosei) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     HitEntry* hit = hitNameToPtr(name);

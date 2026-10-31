@@ -126,7 +126,15 @@ static BattleDataEntry data_table[] = {
 };
 
 static BattleUnitKindPart parts[] = {
-    {1, "btl_un_moamoa_tentacle_c", "c_g_moamoa_b", 0.0f, 0.0f, 0.0f, 88.0f, 88.0f, 10.0f, 93.0f, 93.0f, 10.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
+    {
+        1, "btl_un_moamoa_tentacle_c", "c_g_moamoa_b",
+        0.0f, 0.0f, 0.0f,
+        88.0f, 88.0f, 10.0f,
+        93.0f, 93.0f, 10.0f,
+        20, 30, 255,
+        &defence, &defence_attr,
+        kMainPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table,
+    },
 };
 
 static BattleWeapon weapon_moamoa_attack = {
@@ -180,12 +188,13 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
 EVT_END()
 
+// Clear this tentacle's body slot; expose the body only after all three tentacle slots are empty.
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_ARM_DOWN1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1C"))
@@ -232,6 +241,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+// Consume one animation segment, wait for the body's hit signal, then consume the next segment.
 static EVT_BEGIN(evt_attack_other_arm)
     SET_INT_READ_ADDR(LW(1))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_ARM_MOVE1"), EVT_NULLPTR, 0, LW(15))

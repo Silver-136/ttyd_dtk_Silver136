@@ -284,7 +284,7 @@ USER_FUNC(evt_mri_door_naname_func) {
     f32 z0 = evtGetFloat(event, args[2]);
     f32 x1 = evtGetFloat(event, args[3]);
     f32 z1 = evtGetFloat(event, args[4]);
-    s32 frames = evtGetValue(event, args[5]);
+    s32 durationMs = evtGetValue(event, args[5]);
     s32 mode = evtGetValue(event, args[6]);
     s32 elapsed;
 
@@ -292,12 +292,12 @@ USER_FUNC(evt_mri_door_naname_func) {
         event->savedTime = gp->renderTime;
     }
     elapsed = OSTicksToMilliseconds((u32)gp->renderTime - (u32)event->savedTime);
-    if (elapsed < frames) {
+    if (elapsed < durationMs) {
         f32 x;
         f32 z;
         isFirstCall = elapsed;
-        x = intplGetValue(mode, x0, x1, isFirstCall, frames);
-        z = intplGetValue(mode, z0, z1, isFirstCall, frames);
+        x = intplGetValue(mode, x0, x1, isFirstCall, durationMs);
+        z = intplGetValue(mode, z0, z1, isFirstCall, durationMs);
         mapObjTranslate(name, x, 0.0f, z);
         return EVT_RETURN_BLOCK;
     }
@@ -348,7 +348,7 @@ s32 mri_itemsel_table[] = {
 
 EVT_BEGIN(mri_punipuni_setup)
     CALL(evt_item_entry, LW(10), ITEM_PUNI_ORB, 0, -20000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, LW(10), 2)
+    CALL(evt_item_flag_on, LW(10), ITEM_FLAG_NO_TOUCH_GET)
     RETURN
 EVT_END()
 

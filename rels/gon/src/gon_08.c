@@ -145,6 +145,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+// With this configuration, a set moved flag raises the block 600 units above its base position.
 static EVT_BEGIN(init_0)
     IF_INT_EQUAL(0, 0)
         IF_INT_NOT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
@@ -246,6 +247,7 @@ static EVT_BEGIN(main_0)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
             END_IF
         END_IF
+        // LW2/LW3 are the endpoints, LW4 is the current height, and LW8/LW9 are acceleration/velocity.
         SET_FLOAT_VALUE(LW(4), LW(2))
         SET_VALUE(LF(0), 0)
         LOOP(0)
@@ -377,6 +379,7 @@ static s32 key_tbl[] = {
     ITEM_CASTLE_KEY_0x0F, -1,
 };
 
+// If the key is present, cancel the lock event only when the item selection is cancelled.
 static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0F, LW(0))
     IF_INT_GREATER(LW(0), 0)
@@ -474,7 +477,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_party_run, 0)
 #endif
     CALL(evt_item_entry, STRING("irai_item"), ITEM_SPECIAL_CARD, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
-    CALL(evt_item_flag_on, STRING("irai_item"), 2)
+    CALL(evt_item_flag_on, STRING("irai_item"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_get_item, STRING("irai_item"))
     CALL(evt_msg_print, 0, STRING("irai_07_07"), 0, STRING("me"))
 #ifdef VERSION_G8ME01

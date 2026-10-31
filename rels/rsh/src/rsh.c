@@ -224,6 +224,7 @@ EVT_BEGIN(evt_rsh_door_init)
     RETURN
 EVT_END()
 
+// Door record: room model, room background, door model, outside hit, open animation, inside hit, close animation.
 EVT_BEGIN(evt_rsh_door_entry)
     SET_INT_READ_ADDR(LW(0))
     READ_INT(LW(1))
@@ -973,6 +974,7 @@ typedef struct RshDebugStr {
 
 static const RshDebugStr rsh_debug_str_init = {0};
 
+// Nine passenger choices: three in rsh_01, two in rsh_03, four in rsh_04.
 EVT_BEGIN(evt_rsh_rnd_npc_init)
     SET_VALUE(GSW_RSH_01_RANDOM_NPCS, 0)
     SET_VALUE(GSW_RSH_03_RANDOM_NPCS, 0)
@@ -1221,6 +1223,7 @@ USER_FUNC(evt_rsh_get_rnd_npc_data) {
     return EVT_RETURN_DONE;
 }
 
+// Unknown room/group falls back to the first passenger; valid groups rely on a valid index.
 RshRndNpc* _get_rnd_npc_data(s32 room, s32 group, s32 index) {
     RshRndNpc* data = NULL;
 
@@ -1272,6 +1275,7 @@ RshRndNpc* _get_rnd_npc_data(s32 room, s32 group, s32 index) {
     return &data[index];
 }
 
+// OR a choice into its packed field; the initializer clears each saved word before setting choices.
 USER_FUNC(evt_rsh_set_rnd_npc) {
     EvtWord* args = event->args;
     s32 room = evtGetValue(event, args[0]);
@@ -1455,6 +1459,7 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
     if (y1 > gp->efbHeight) {
         y1 = gp->efbHeight;
     }
+    // Copy the even-aligned screen rectangle into a half-resolution RGB5A3 reflection texture.
     width = x1 - x0;
     height = y1 - y0;
     halfWidth = width / 2;
@@ -1492,6 +1497,7 @@ void rsh_window_tev(MapTevCallbackInfo* info) {
     info->texMap = texMap;
 }
 
+// Ready when the capture is hidden or its first animation loop has completed.
 BOOL img_wait(void) {
     ImageEntry* img = imgNameToPtr("capture_img", gp->inBattle != 0);
 

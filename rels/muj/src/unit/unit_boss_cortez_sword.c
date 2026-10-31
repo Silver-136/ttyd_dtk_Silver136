@@ -223,7 +223,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -360,6 +360,7 @@ EVT_BEGIN(cortez_weapon_phase_event)
                 CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(5), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
                 CALL(btlevtcmd_SetHomePos, UNIT_ID_SELF, LW(0), LW(5), LW(2))
                 CALL_CHILD(PTR(cortez_weapon_set_formation_attribute))
+                // Recover to full HP and clear statuses when the down-turn countdown expires.
                 CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
                 CALL(btlevtcmd_SetHp, UNIT_ID_SELF, LW(0))
                 CALL(btlevtcmd_ClearAllStatus, UNIT_ID_SELF)
@@ -548,6 +549,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_SWORD_DANCE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
     WAIT_FRAMES(7)
+    // Reuse the first swing's precheck result for the second swing.
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
         GOTO(90)

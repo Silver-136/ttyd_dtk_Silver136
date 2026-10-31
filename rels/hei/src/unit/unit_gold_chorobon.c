@@ -209,6 +209,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+// Hop toward LW(5..7), limiting intermediate X steps to LW(8); the final hop uses the exact destination.
 EVT_BEGIN(gold_chorobon_rabbit_move)
     LOOP(2)
         CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)
@@ -320,6 +321,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+// Summon the horde once at 1-7 HP; a non-reviving lethal hit sends an already-called horde away first.
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -535,6 +537,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+// Return the first occupied slot whose initial kind is Gold Fuzzy, or -1 if none exists.
 USER_FUNC(get_gold_chorobon_id) {
     EvtWord* args = event->args;
     BattleWork* wp = _battleWorkPointer;

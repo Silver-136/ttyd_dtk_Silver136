@@ -110,6 +110,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+// Raise the bound gate 150 units at 2 units per frame, wait, then lower it at 10 per frame.
 EVT_BEGIN(evt_ori_open)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 2)
@@ -201,6 +202,7 @@ EVT_BEGIN(tsuritenjo_event)
     RETURN
 EVT_END()
 
+// Keep the chest talking on callbacks 0/5; callback 2 returns it to its idle animation.
 static void majin_callback(s32 type) {
     MapObjectEntry* mobj = mobjNameToPtr("box");
 
@@ -224,6 +226,7 @@ static s32 key_tbl[] = {
     ITEM_BLACK_KEY_0x22, -1,
 };
 
+// First contact only sets the talk flag; later contacts check/select the Black Key before opening.
 static EVT_BEGIN(evt_majin)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)

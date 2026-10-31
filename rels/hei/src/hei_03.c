@@ -151,6 +151,7 @@ static EVT_BEGIN(door_open)
     RETURN
 EVT_END()
 
+// Alternate between the initial X plus one and the initial X; the decremented temporary is not used.
 static EVT_BEGIN(shake_evt)
     CALL(evt_npc_get_position, LW(0), LW(10), LW(11), LW(12))
     LOOP(0)

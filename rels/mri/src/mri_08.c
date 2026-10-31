@@ -385,7 +385,7 @@ static EVT_BEGIN(puni_win)
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_ANIM)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイドsp"), NPC_FLAG_TALK_POSE)
     CALL(evt_puni_get_flag, 1, LW(0))
-    AND(LW(0), 16384)
+    AND(LW(0), PUNI_FLAG_DEAD)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_DEAD)
         CALL(evt_npc_set_anim, STRING("ガイドsp"), STRING("S_1"))
@@ -461,6 +461,7 @@ static EVT_BEGIN(puni_winlose_check)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // Loss takes priority if both sides report annihilation on the same check.
     IF_INT_EQUAL(LW(10), 1)
         SPAWN_EVENT(PTR(puni_lose))
         RETURN

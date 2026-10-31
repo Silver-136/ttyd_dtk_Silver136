@@ -30,6 +30,7 @@ EVT_BEGIN(oshimodo_event_sub)
     RETURN
 EVT_END()
 
+// Run the pipe rejection dialogue asynchronously and record that this pipe was tried.
 static EVT_BEGIN(oshimodo_event)
     SPAWN_EVENT(PTR(oshimodo_event_sub))
     SET_VALUE(GSWF_TIK_08_PIPE_REJECTED, 1)

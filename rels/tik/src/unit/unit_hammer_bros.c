@@ -15,7 +15,7 @@
 #include "battle/battle_damage.h"
 
 // BattleUnit.work slots (btlevtcmd_Get/Set/AddUnitWork)
-#define UNIT_WORK_THROW_TARGET 0      // slots 0-4: target unit of each hammer in nagemakuri_attack_event (5 random picks from hammer_bros_nagemakuri_set_target; 4 are thrown) (slots 0-4)
+#define UNIT_WORK_THROW_TARGET 0      // slots 0-4: five randomly selected target units; only the first four are thrown at
 #define UNIT_WORK_THROW_TARGET_PART 5 // slots 5-9: target part for slots 0-4 (slots 5-9)
 #define UNIT_WORK_THROW_HIT 10        // slots 10-14: 1 once a non-final hammer hit the target of throw n (PreCheckDamage result 1); the last hammer at that target then hits with the final-hit flag without a new check; slot 10 does the same for the renzoku attack; attack_event clears them (slots 10-14)
 
@@ -73,6 +73,7 @@ static void hammer_bros_get_target(s32* unitIdx, s32* partIdx) {
     *partIdx = target->partIdx;
 }
 
+// Collect the sampled targets, then choose five unit/part pairs independently with replacement.
 static USER_FUNC(hammer_bros_nagemakuri_set_target) {
     EvtWord* args = event->args;
     s32 unitIdx[20];
@@ -328,7 +329,7 @@ static EVT_BEGIN(init_event)
 EVT_END()
 
 static EVT_BEGIN(damage_event)
-    SET_VALUE(LW(10), -2)
+    SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
     CALL_CHILD(PTR(btldefaultevt_Damage))
     RETURN
@@ -716,6 +717,7 @@ static EVT_BEGIN(nagemakuri_attack_event)
     RETURN
 EVT_END()
 
+// Look ahead among the remaining throws to distinguish an intermediate hit from the last hit on this unit/part.
 static EVT_BEGIN(nagemakuri_attack_event_sub)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(13), LW(3))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(14), LW(4))

@@ -2600,6 +2600,7 @@ static USER_FUNC(_wave_offset) {
     s32 ampY = evtGetValue(event, args[6]);
     BattleStageObject* obj = BattleSearchObjectPtr(name);
 
+    // Integer division quantizes each phase to degrees before evaluating the sine.
     obj->positionOffset.x = ampX * sinfd(stepX * 360 / periodX);
     obj->positionOffset.y = ampY * sinfd(stepY * 360 / periodY + 270) + ampY;
     stepX++;
@@ -2615,6 +2616,7 @@ static USER_FUNC(_wave_offset) {
     return EVT_RETURN_DONE;
 }
 
+// Advance independent horizontal and vertical phases for each of the three animated wave objects.
 EVT_BEGIN(bgset_tik_wave_event)
     SET_VALUE(LW(0), 0)
     SET_VALUE(LW(1), 0)

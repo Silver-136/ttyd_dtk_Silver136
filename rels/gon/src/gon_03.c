@@ -399,7 +399,7 @@ static EVT_BEGIN(senkaron_event)
                 END_IF
                 IF_INT_GREATER(LW(7), 0)
                     CALL(evt_mario_get_motion, LW(8))
-                    IF_INT_EQUAL(LW(8), 0)
+                    IF_INT_EQUAL(LW(8), MARIO_MOTION_STAY)
                         CALL(evt_mario_get_pose, LW(9))
                         IF_STR_NOT_EQUAL(LW(9), STRING("M_I_O"))
                             CALL(evt_mario_set_pose, STRING("M_I_O"))
@@ -722,7 +722,7 @@ static void senkaron_ext_init(void) {
 
     senkaron = _mapAlloc(sizeof(Senkaron) * 1000);
     for (i = extGetPoseNum() - 1; i >= 0; i--, pose++) {
-        pose->flags = 3;
+        pose->flags = EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD;
         pose->dir = randf(0.0f, 360.0f);
         PSMTXIdentity(*pose->mtx);
         (*pose->mtx)[0][3] = randf(-385.0f, 375.0f);
@@ -756,6 +756,7 @@ static void senkaron_ext_main(void) {
     mario = marioGetPtr();
     scale = mario->wPlayerCollisionBox.x / 2;
     marioPushedFlag = 0;
+    // The hammer counter repeats every 15 updates; the crowd-repulsion test uses update 10.
     if (mario->currMotionId == MARIO_MOTION_HAMMER) {
         if (++marioHammerFrame == 15) {
             marioHammerFrame = 0;

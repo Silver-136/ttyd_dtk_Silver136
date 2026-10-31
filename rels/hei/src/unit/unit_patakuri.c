@@ -207,6 +207,7 @@ static EVT_BEGIN(init_event_patakuri)
     RETURN
 EVT_END()
 
+// Remove the wings, install the ground parts and data, then register the Goomba event set.
 static EVT_BEGIN(dmg_fall_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -228,7 +229,7 @@ static EVT_BEGIN(dmg_fall_event)
     CALL(btlevtcmd_SetHomePos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KURI_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_MS(500)
-    CALL(btlevtcmd_ChangeKind, LW(10), 1)
+    CALL(btlevtcmd_ChangeKind, LW(10), UNIT_GOOMBA)
     CALL_CHILD(init_event)
     WAIT_FRAMES(1)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
@@ -549,7 +550,7 @@ static EVT_BEGIN(attack_event)
         LOOP(12)
             WAIT_FRAMES(1)
         END_LOOP
-        SET_VALUE(LW(15), 50)
+        SET_VALUE(LW(15), POSE_TYPE_ATTACK)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, LW(15))
     END_INLINE_EVENT
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))

@@ -158,7 +158,7 @@ static EVT_BEGIN(evt_head)
     CALL(evt_item_set_gravity, STRING("elvkey"), FLOAT(1.0f))
     CALL(evt_item_set_bound_rate, STRING("elvkey"), FLOAT(0.5996094f))
     CALL(evt_item_set_jump_power, STRING("elvkey"), FLOAT(500.0f))
-    CALL(evt_item_status_on, STRING("elvkey"), 16)
+    CALL(evt_item_status_on, STRING("elvkey"), ITEM_FLAG2_SKIP_BOUND_INIT)
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()

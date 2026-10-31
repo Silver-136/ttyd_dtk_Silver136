@@ -346,7 +346,7 @@ EVT_BEGIN(mugen_kairou_init)
             SET_VALUE(LW(0), STRING("e_bero_1"))
             CALL_CHILD(PTR(bero_case_switch_on))
         END_SWITCH
-        ELSE
+    ELSE
         CALL(hi_onoff, 4, 1)
         CALL(hi_onoff, 5, 1)
         CALL(hi_onoff, 6, 1)
