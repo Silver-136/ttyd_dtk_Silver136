@@ -2,6 +2,7 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
+#include "libc/stdlib.h"
 #include "evt/evt_bg.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_ext.h"

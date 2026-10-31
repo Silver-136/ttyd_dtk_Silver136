@@ -4,6 +4,7 @@
 #include "driver/envdrv.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_hit.h"
+#include "driver/hitdrv.h"
 #include "evt/evt_mario.h"
 #include "evt/evt_mobj.h"
 #include "evt/evt_msg.h"

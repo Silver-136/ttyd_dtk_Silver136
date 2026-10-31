@@ -18,7 +18,6 @@
 #include "mri_puni.h"
 #include "party/party_motion.h"
 #include "evt/evt_snd.h"
-#include "rels/mri/include/mri.h"
 #include "driver/npcdrv.h"
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"

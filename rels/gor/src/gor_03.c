@@ -52,7 +52,6 @@
 #include "evt/evt_bero.h"
 #include "evt/evt_door.h"
 #include "evt/evt_sub.h"
-#include "gor.h"
 #include "evt/evt_shop.h"
 #include "evt/evt_lottery.h"
 #include "data_tables.h"

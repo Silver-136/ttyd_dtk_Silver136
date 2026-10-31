@@ -19,7 +19,6 @@
 #include "dolphin/mtx.h"
 #include "system.h"
 #include "pmario_sound.h"
-#include "gor.h"
 
 typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];

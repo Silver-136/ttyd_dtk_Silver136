@@ -31,7 +31,6 @@
 #include "dolphin/mtx.h"
 #include "pmario_sound.h"
 #include "stdlib.h"
-#include "mri.h"
 #include "mri_puni.h"
 #include "driver/seqdrv.h"
 

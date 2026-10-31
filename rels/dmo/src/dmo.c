@@ -1,6 +1,5 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
-#include "rels/dmo/include/dmo.h"
 
 #include "data/mapdata.h"
 #include "dmo.h"

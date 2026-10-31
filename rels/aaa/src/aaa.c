@@ -1,6 +1,5 @@
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
-#include "rels/aaa/include/aaa.h"
 
 #include "data/mapdata.h"
 #include "aaa.h"
