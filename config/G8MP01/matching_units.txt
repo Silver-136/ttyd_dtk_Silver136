@@ -67,6 +67,7 @@ MarioSt/TRK_MINNOW_DOLPHIN.a/CircleBuffer
 MarioSt/TRK_MINNOW_DOLPHIN.a/MWCriticalSection_gc
 MarioSt/TRK_MINNOW_DOLPHIN.a/MWTrace
 MarioSt/TRK_MINNOW_DOLPHIN.a/UDP_Stubs
+MarioSt/TRK_MINNOW_DOLPHIN.a/__exception
 MarioSt/TRK_MINNOW_DOLPHIN.a/dispatch
 MarioSt/TRK_MINNOW_DOLPHIN.a/dolphin_trk
 MarioSt/TRK_MINNOW_DOLPHIN.a/dolphin_trk_glue
@@ -151,6 +152,7 @@ MarioSt/battle/battle_stage_object
 MarioSt/battle/battle_status_effect
 MarioSt/battle/battle_status_icon
 MarioSt/battle/battle_sub
+MarioSt/battle/battle_ufo
 MarioSt/battle/battle_unit
 MarioSt/battle/battle_unit_event
 MarioSt/battle/battle_weapon_power
