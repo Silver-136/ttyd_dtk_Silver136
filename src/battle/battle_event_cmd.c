@@ -2565,12 +2565,10 @@ USER_FUNC(btlevtcmd_OffToken) {
     id = evtGetValue(event, args[0]);
     id = BattleTransID(event, id);
     unit = BattleGetUnitPtr(_battleWorkPointer, id);
-    // FAKE: nested blocks around an enum copy of args[1]; unit->mTokenFlags &= ~args[1] changes the object
+    // FAKE: block-scoped enum mask copy; direct args[1] changes the object
     {
-        {
-            BattleUnitToken_Flags m = (BattleUnitToken_Flags)args[1];
-            unit->mTokenFlags &= ~m;
-        }
+        BattleUnitToken_Flags m = (BattleUnitToken_Flags)args[1];
+        unit->mTokenFlags &= ~m;
     }
     return EVT_RETURN_DONE;
 }

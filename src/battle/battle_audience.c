@@ -1814,7 +1814,6 @@ void BattleAudienceApSrcCtrlProcess(void) {
     s32 k;
     f32 dy;
     f32 dx;
-    Vec tmp;
     Vec tmp2;
 
     if (!(base->flags & AUDIENCE_FLAG_SP_GAINED)) {
@@ -1890,9 +1889,7 @@ void BattleAudienceApSrcCtrlProcess(void) {
                 s->timer = 0;
                 s->duration = 20 + irand(20);
                 s->startPos = s->position;
-                // FAKE: Vec temporary for the statusGetApPos result; assigning it directly changes the object
-                tmp = statusGetApPos();
-                s->targetPos = tmp;
+                s->targetPos = statusGetApPos();
                 dx = s->startPos.x - s->targetPos.x;
                 dy = s->startPos.y - s->targetPos.y;
                 s->radius = s->startRadius = sqrt(dx * dx + dy * dy);

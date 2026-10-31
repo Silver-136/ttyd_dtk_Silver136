@@ -71,11 +71,10 @@ CardData* cardGetFilePtr(void) {
 }
 
 void cardBufReset(void) {
-    s32 flags;
     s32 timeout;
 
-    // FAKE: unused copy of the volatile flags word; dropping it changes the object
-    flags = wp->flags;
+    // FAKE: extra volatile status read; removing it changes the object
+    wp->flags;
     if (wp->flags & CARD_FLAG_BUSY) {
         CARDCancel(&wp->info);
         for (timeout = 1000000; timeout > 0; timeout--) {

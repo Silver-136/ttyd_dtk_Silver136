@@ -690,11 +690,7 @@ static inline void mapLoadHeader_(MapWork* wp, BOOL group) {
             if (sizeCheck < wp->entries[group].header.file.fileSize) {
                 wp->entries[group].header.strings = (const char*)&data[sizeCheck];
             }
-            // FAKE: second MapWork pointer so the entry address is recomputed (not CSE'd with &wp->entries[group]); same store
-            {
-                MapWork* wo2 = wp;
-                wo2->entries[group].header.rawFile = data;
-            }
+            wp->entries[group].header.rawFile = data;
             mapLoadReloc_(&wp->entries[group]);
         }
     }

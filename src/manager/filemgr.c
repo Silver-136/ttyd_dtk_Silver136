@@ -133,21 +133,21 @@ void fileGarbageDataAdrClear(FileEntry* entry) {
             if ((void*)tpl->descriptorArray >= tpl) {
                 // FAKE: no-op (u16) cast on the u16 counter; the plain comparison changes the object
                 for (i = 0; (u16)i < tpl->numDescriptors; i++) {
-                    off = i * sizeof(TEXDescriptor); // FAKE: descriptor fields read by byte offset; descriptorArray[i].textureHeader/.CLUTHeader changes the object
-                    img = *(TEXHeader**)((u8*)tpl->descriptorArray + off);
+                    off = i * sizeof(TEXDescriptor); // FAKE: descriptor relocation stores retain byte-offset addressing; descriptor field loads use typed indexing
+                    img = tpl->descriptorArray[i].textureHeader;
                     if (img) {
                         if (img->unpacked) {
                             img->unpacked = FALSE;
-                            img = *(TEXHeader**)((u8*)tpl->descriptorArray + off);
+                            img = tpl->descriptorArray[i].textureHeader;
                             img->data -= (AddrWord)tpl;
                         }
                         *(AddrWord*)((u8*)tpl->descriptorArray + off) -= (AddrWord)tpl;
                     }
-                    pal = *(CLUTHeader**)((u8*)tpl->descriptorArray + off + offsetof(TEXDescriptor, CLUTHeader));
+                    pal = tpl->descriptorArray[i].CLUTHeader;
                     if (pal) {
                         if (pal->unpacked) {
                             pal->unpacked = FALSE;
-                            pal = *(CLUTHeader**)((u8*)tpl->descriptorArray + off + offsetof(TEXDescriptor, CLUTHeader));
+                            pal = tpl->descriptorArray[i].CLUTHeader;
                             pal->data -= (AddrWord)tpl;
                         }
                         *(AddrWord*)((u8*)tpl->descriptorArray + off + offsetof(TEXDescriptor, CLUTHeader)) -= (AddrWord)tpl;

@@ -65,7 +65,6 @@ void effPuniBalloonMain(EffectEntry* effect) {
     Vec tmp;
     s32 type;
     s32 i;
-    PuniBalloonWork* p;
 
     tmp = (Vec){0.0f, 0.0f, 0.0f};
     tmp.x = work->position.x;
@@ -91,17 +90,15 @@ void effPuniBalloonMain(EffectEntry* effect) {
     }
     work->scale += (1.0f - work->scale) / 10.0f;
     work->rotation = 20.0f * (f32)sin(work->frame / 20.0f);
-    // FAKE: p is a per-iteration copy of the advancing work pointer; iterating p directly changes the object
     for (i = 1, work++; i < effect->count; i++, work++) {
-        p = work;
-        p->position.x += p->velocity.x;
-        p->position.y += p->velocity.y;
-        p->position.z += p->velocity.z;
-        p->velocity.y += -0.1f;
-        p->velocity.x *= 0.98f;
-        p->velocity.y *= 0.98f;
-        p->velocity.z *= 0.98f;
-        p->scale *= 0.9f;
+        work->position.x += work->velocity.x;
+        work->position.y += work->velocity.y;
+        work->position.z += work->velocity.z;
+        work->velocity.y += -0.1f;
+        work->velocity.x *= 0.98f;
+        work->velocity.y *= 0.98f;
+        work->velocity.z *= 0.98f;
+        work->scale *= 0.9f;
     }
     dispEntry(CAMERA_3D, dispCalcZ(&pos), 2, (DispCallback)effPuniBalloonDisp, effect);
 }
@@ -170,7 +167,6 @@ static void balloon_0(CameraId cameraId, EffectEntry* effect) {
 
 static void balloon_1(CameraId cameraId, EffectEntry* effect) {
     PuniBalloonWork* work = effect->userdata;
-    PuniBalloonWork* p;
     CameraEntry* cam = camGetPtr(cameraId);
     s32 i;
     Mtx mC, mA, mB, mD;
@@ -198,11 +194,9 @@ static void balloon_1(CameraId cameraId, EffectEntry* effect) {
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_S16, 0);
-    // FAKE: p is a per-iteration copy of the advancing work pointer; iterating p directly changes the object
     for (i = 1, work++; i < effect->count; i++, work++) {
-        p = work;
-        PSMTXTrans(mA, p->position.x, p->position.y, p->position.z);
-        PSMTXScale(mD, p->scale, p->scale, p->scale);
+        PSMTXTrans(mA, work->position.x, work->position.y, work->position.z);
+        PSMTXScale(mD, work->scale, work->scale, work->scale);
         PSMTXConcat(mA, mD, mA);
         PSMTXConcat(mC, mA, mA);
         GXLoadPosMtxImm(mA, GX_PNMTX0);

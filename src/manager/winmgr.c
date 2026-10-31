@@ -1094,7 +1094,7 @@ void winMgrSelectDelete(WinMgrSelect* sel) {
     WinMgrSelect* sel2;
     items3 = (sel2 = (sel3 = sel))->items;
     items2 = items3;
-    heap = (heap = HEAP_DEFAULT);
+    heap = HEAP_DEFAULT;
     items = items2;
     __memFree(HEAP_DEFAULT, items);
     __memFree(heap, sel3);

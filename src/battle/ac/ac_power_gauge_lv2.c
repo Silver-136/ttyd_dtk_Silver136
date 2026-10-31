@@ -309,11 +309,7 @@ static void actionCommandDisp(f32 x, f32 y) {
         if (g->inZone) {
             id = ICON_AC_ON;
         }
-        // FAKE: pos zeroed through a copied inner temporary; initializing pos directly changes the object
-        {
-            Vec zero = {0.0f, 0.0f, 0.0f};
-            pos = zero;
-        }
+        pos = (Vec){0.0f, 0.0f, 0.0f};
         pos.x = 120.0f + px;
         pos.y = py;
         iconDispGx(&pos, 0x10, id, 1.0f);

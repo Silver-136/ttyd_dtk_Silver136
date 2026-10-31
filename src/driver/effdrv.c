@@ -309,23 +309,22 @@ EffectSet* effGetSet(const char* name) {
 
 // Hermite interpolation of the 22 channels of two keys into buf (MayaHermitKey: value at +2, in/out tangents at
 // +4/+6, step flag at +9 of each 8-byte channel; the s16 values are read through GQR5, see effMayaSetGQR)
-// FAKE: the `register` locals and their declaration order give the target register allocation (without
-// `register` both versions change)
+// FAKE: channel fields are read through byte offsets; typed channel indexing changes the object
 static inline void effMayaKeyInterp(MayaHermitKey* prev, MayaHermitKey* curr, f32 t, f32* buf) {
     s32 i;
     f32* out;
-    register s8* pb;
-    register s8* pa;
+    s8* pb;
+    s8* pa;
     pa = (s8*)prev;
     pb = (s8*)curr;
     out = buf;
     for (i = 0; i < 22; i++) {
-        register f32 qd0;
-        register f32 qm1;
+        f32 qd0;
+        f32 qm1;
         f32 u;
-        register f32 qv1;
-        register f32 qm0;
-        register f32 qv0;
+        f32 qv1;
+        f32 qm0;
+        f32 qv0;
         f32 dt;
         f32 s;
         f32 s3;
