@@ -51,11 +51,11 @@ typedef enum MotJabaraFlags {
  * with a 40-unit upward zoom offset.
  */
 static inline void jabaraSetSpd(f32 shiftZ, f32 shiftRate, f32 zoom) {
-    MarioWork* mp = marioGetPtr();
-    mp->camShiftTargetZ = shiftZ;
-    mp->camShiftRate.z = shiftRate;
-    mp->camZoom = zoom;
-    mp->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
+    MarioWork* mario = marioGetPtr();
+    mario->camShiftTargetZ = shiftZ;
+    mario->camShiftRate.z = shiftRate;
+    mario->camZoom = zoom;
+    mario->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
 }
 
 /**
@@ -64,17 +64,17 @@ static inline void jabaraSetSpd(f32 shiftZ, f32 shiftRate, f32 zoom) {
  * resets the 20x37 collision box and releases the front-pose and facing locks.
  */
 static inline void jabaraResetPose(void) {
-    MarioWork* m2 = marioGetPtr();
-    m2->displayDirection = m2->mot.jabara.dir;
-    m2->displayDirectionTarget = m2->mot.jabara.dir;
-    m2->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
-    m2->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
-    m2->rot = (Vec){0.0f, 0.0f, 0.0f};
-    m2->wPlayerCollisionBox.x = 20.0f;
-    m2->wPlayerCollisionBox.y = 37.0f;
+    MarioWork* mario = marioGetPtr();
+    mario->displayDirection = mario->mot.jabara.dir;
+    mario->displayDirectionTarget = mario->mot.jabara.dir;
+    mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
+    mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
+    mario->rot = (Vec){0.0f, 0.0f, 0.0f};
+    mario->wPlayerCollisionBox.x = 20.0f;
+    mario->wPlayerCollisionBox.y = 37.0f;
     marioAdjustMoveDir();
-    m2->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-    m2->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 }
 
 /**
@@ -83,11 +83,11 @@ static inline void jabaraResetPose(void) {
  */
 static inline void* jabaraHitFront(f32 ang) {
     f32 sn, cs, hx, hy, hz, dist, nx, ny, nz;
-    MarioWork* mp = marioGetPtr();
-    f32 px = mp->position.x;
-    f32 py = 2.0f + (mp->position.y + mp->wPlayerCollisionBox.y);
-    f32 pz = mp->position.z;
-    dist = 0.5f * mp->wPlayerCollisionBox.x;
+    MarioWork* mario = marioGetPtr();
+    f32 px = mario->position.x;
+    f32 py = 2.0f + (mario->position.y + mario->wPlayerCollisionBox.y);
+    f32 pz = mario->position.z;
+    dist = 0.5f * mario->wPlayerCollisionBox.x;
     sincosf(&sn, &cs, ang);
     return hitCheckFilter(NULL, &hx, &hy, &hz, &dist, &nx, &ny, &nz, px, py, pz, sn, 0.0f, cs);
 }
@@ -214,13 +214,13 @@ static inline f32 jabaraHitPosZ(HitEntry* hit) {
 }
 
 static inline void jabaraLand(f32 y, void* hit) {
-    MarioWork* mp = marioGetPtr();
-    mp->airTimer = 0;
-    mp->jumpPeakAirTime = 0;
-    mp->hitobjStandOn = hit;
-    mp->hitobjJumpFrom = NULL;
-    mp->position.y = y;
-    mp->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+    MarioWork* mario = marioGetPtr();
+    mario->airTimer = 0;
+    mario->jumpPeakAirTime = 0;
+    mario->hitobjStandOn = hit;
+    mario->hitobjJumpFrom = NULL;
+    mario->position.y = y;
+    mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
 }
 
 #define ANIM_STEP() animPoseSetLocalTime(mario->paperAnimGroupId[marioAnimeId()], (f32)(s32)mario->mot.jabara.animFrame)
@@ -430,8 +430,8 @@ void mot_jabara(void) {
             marioPaperOff();
             {
                 // FAKE: spare copy of hitobjStandOn in its own block; passing the field directly changes the object
-                void* h = mario->hitobjStandOn;
-                jabaraLand(mario->lastGroundPos.y, h);
+                void* standOn = mario->hitobjStandOn;
+                jabaraLand(mario->lastGroundPos.y, standOn);
             }
             camFollowYOn();
             marioGetPtr();
@@ -816,29 +816,29 @@ void mot_jabara_post(void) {
  * s < 0 (no overhead hit) uses the reverse swing state 0xB.
  */
 void jabaraSwingStart(s32 side) {
-    MarioWork* mp = marioGetPtr();
-    mp->mot.jabara.rotTimer = 4;
-    mp->mot.jabara.rotSpeed = 24.0f;
+    MarioWork* mario = marioGetPtr();
+    mario->mot.jabara.rotTimer = 4;
+    mario->mot.jabara.rotSpeed = 24.0f;
     marioGetPtr()->motJabara->swingAccel = 2.4f;
     marioGetPtr()->motJabara->swingDecel = -0.4f;
     marioGetPtr()->motJabara->swingRotStep = 0.18f;
     if (side < 0) {
-        mp->mot.jabara.state = 0xb;
+        mario->mot.jabara.state = 0xb;
     } else {
-        mp->mot.jabara.state = 1;
+        mario->mot.jabara.state = 1;
     }
 }
 
 
 /** Starts a gentle swing while Mario moves hanging under a ceiling, if he is not already swinging. */
 void jabaraSwingWalk(void) {
-    MarioWork* mp = marioGetPtr();
-    if (mp->mot.jabara.state != 0) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->mot.jabara.state != 0) {
         return;
     }
-    mp->mot.jabara.state = 1;
-    mp->mot.jabara.rotTimer = 10;
-    mp->mot.jabara.rotSpeed = 0.0f;
+    mario->mot.jabara.state = 1;
+    mario->mot.jabara.rotTimer = 10;
+    mario->mot.jabara.rotSpeed = 0.0f;
     marioGetPtr()->motJabara->swingAccel = 0.1f;
     marioGetPtr()->motJabara->swingDecel = -0.1f;
     marioGetPtr()->motJabara->swingRotStep = 0.18f;
@@ -850,174 +850,174 @@ void jabaraSwingWalk(void) {
  * and lets A or B cut the push short.
  */
 void swingMain(void) {
-    MarioWork* m = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
     if (marioGetPtr()->motStruct) {
-        if (m->currSubMotionId < 0x5a && (m->buttonTrg & (PAD_BUTTON_A | PAD_BUTTON_B)) && !(marioGetPtr()->motJabara->flags & JABARA_FLAG_SWING)) {
-            m->mot.jabara.rotTimer = 0;
+        if (mario->currSubMotionId < 0x5a && (mario->buttonTrg & (PAD_BUTTON_A | PAD_BUTTON_B)) && !(marioGetPtr()->motJabara->flags & JABARA_FLAG_SWING)) {
+            mario->mot.jabara.rotTimer = 0;
             marioGetPtr()->motJabara->flags |= JABARA_FLAG_SWING;
         }
-        switch (m->mot.jabara.state) {
+        switch (mario->mot.jabara.state) {
         case 0:
             break;
         case 1:
-            if (m->mot.jabara.rotTimer > 0) {
-                m->mot.jabara.rotTimer--;
-                m->mot.jabara.rotSpeed += marioGetPtr()->motJabara->swingAccel;
-                if (m->mot.jabara.rotSpeed >= 40.0f) {
-                    m->mot.jabara.rotSpeed = 40.0f;
+            if (mario->mot.jabara.rotTimer > 0) {
+                mario->mot.jabara.rotTimer--;
+                mario->mot.jabara.rotSpeed += marioGetPtr()->motJabara->swingAccel;
+                if (mario->mot.jabara.rotSpeed >= 40.0f) {
+                    mario->mot.jabara.rotSpeed = 40.0f;
                 }
-            } else if (m->mot.jabara.rotTimer == 0) {
-                m->mot.jabara.rotSpeed += marioGetPtr()->motJabara->swingDecel;
-                if (m->mot.jabara.rotSpeed <= 0.0f) {
-                    m->mot.jabara.rotSpeed = 0.0f;
-                    m->mot.jabara.rotAccel = 0.1f;
-                    if (m->rot.x >= 180.0f) {
-                        m->mot.jabara.state = 2;
+            } else if (mario->mot.jabara.rotTimer == 0) {
+                mario->mot.jabara.rotSpeed += marioGetPtr()->motJabara->swingDecel;
+                if (mario->mot.jabara.rotSpeed <= 0.0f) {
+                    mario->mot.jabara.rotSpeed = 0.0f;
+                    mario->mot.jabara.rotAccel = 0.1f;
+                    if (mario->rot.x >= 180.0f) {
+                        mario->mot.jabara.state = 2;
                     } else {
-                        m->mot.jabara.state = 4;
+                        mario->mot.jabara.state = 4;
                     }
                 }
             }
             if (marioGetPtr()->motJabara->flags & JABARA_FLAG_SWING) {
-                f32 old = m->rot.x;
-                m->rot.x = revise360(old + m->mot.jabara.rotSpeed);
-                if (m->rot.x < old) {
-                    m->mot.jabara.rotSpeed = 1.4f;
-                    m->mot.jabara.rotAccel = 0.1f;
-                    if (m->rot.x >= 180.0f) {
-                        m->mot.jabara.state = 2;
+                f32 old = mario->rot.x;
+                mario->rot.x = revise360(old + mario->mot.jabara.rotSpeed);
+                if (mario->rot.x < old) {
+                    mario->mot.jabara.rotSpeed = 1.4f;
+                    mario->mot.jabara.rotAccel = 0.1f;
+                    if (mario->rot.x >= 180.0f) {
+                        mario->mot.jabara.state = 2;
                     } else {
-                        m->mot.jabara.state = 4;
+                        mario->mot.jabara.state = 4;
                     }
                 }
             } else {
-                m->rot.x = revise360(m->rot.x + m->mot.jabara.rotSpeed);
+                mario->rot.x = revise360(mario->rot.x + mario->mot.jabara.rotSpeed);
             }
             break;
         default:
             break;
         }
-        switch (m->mot.jabara.state) {
+        switch (mario->mot.jabara.state) {
         case 2:
-            m->mot.jabara.rotSpeed = m->mot.jabara.rotSpeed + m->mot.jabara.rotAccel;
-            m->rot.x = revise360(m->rot.x + m->mot.jabara.rotSpeed);
-            if (m->rot.x < 180.0f) {
-                m->mot.jabara.state = 3;
-                m->mot.jabara.rotAccel = m->mot.jabara.rotAccel + marioGetPtr()->motJabara->swingRotStep;
+            mario->mot.jabara.rotSpeed = mario->mot.jabara.rotSpeed + mario->mot.jabara.rotAccel;
+            mario->rot.x = revise360(mario->rot.x + mario->mot.jabara.rotSpeed);
+            if (mario->rot.x < 180.0f) {
+                mario->mot.jabara.state = 3;
+                mario->mot.jabara.rotAccel = mario->mot.jabara.rotAccel + marioGetPtr()->motJabara->swingRotStep;
             }
             break;
         case 3:
-            m->mot.jabara.rotSpeed = m->mot.jabara.rotSpeed - m->mot.jabara.rotAccel;
-            if (m->mot.jabara.rotSpeed <= 0.0f) {
-                m->mot.jabara.rotSpeed = 0.0f;
-                m->mot.jabara.state = 4;
-                m->mot.jabara.rotAccel = m->mot.jabara.rotAccel - marioGetPtr()->motJabara->swingRotStep;
-                if (__fabsf(m->rot.x) < 0.8f) {
-                    m->mot.jabara.state = 0;
+            mario->mot.jabara.rotSpeed = mario->mot.jabara.rotSpeed - mario->mot.jabara.rotAccel;
+            if (mario->mot.jabara.rotSpeed <= 0.0f) {
+                mario->mot.jabara.rotSpeed = 0.0f;
+                mario->mot.jabara.state = 4;
+                mario->mot.jabara.rotAccel = mario->mot.jabara.rotAccel - marioGetPtr()->motJabara->swingRotStep;
+                if (__fabsf(mario->rot.x) < 0.8f) {
+                    mario->mot.jabara.state = 0;
                 }
             }
-            m->rot.x = revise360(m->rot.x + m->mot.jabara.rotSpeed);
+            mario->rot.x = revise360(mario->rot.x + mario->mot.jabara.rotSpeed);
             break;
         case 4:
-            m->mot.jabara.rotSpeed = m->mot.jabara.rotSpeed - m->mot.jabara.rotAccel;
-            m->rot.x = revise360(m->rot.x + m->mot.jabara.rotSpeed);
-            if (m->rot.x > 180.0f) {
-                m->mot.jabara.state = 5;
-                m->mot.jabara.rotAccel = m->mot.jabara.rotAccel + marioGetPtr()->motJabara->swingRotStep;
+            mario->mot.jabara.rotSpeed = mario->mot.jabara.rotSpeed - mario->mot.jabara.rotAccel;
+            mario->rot.x = revise360(mario->rot.x + mario->mot.jabara.rotSpeed);
+            if (mario->rot.x > 180.0f) {
+                mario->mot.jabara.state = 5;
+                mario->mot.jabara.rotAccel = mario->mot.jabara.rotAccel + marioGetPtr()->motJabara->swingRotStep;
             }
             break;
         case 5:
-            m->mot.jabara.rotSpeed = m->mot.jabara.rotSpeed + m->mot.jabara.rotAccel;
-            if (m->mot.jabara.rotSpeed >= 0.0f) {
-                m->mot.jabara.rotSpeed = 0.0f;
-                m->mot.jabara.state = 2;
-                m->mot.jabara.rotAccel = m->mot.jabara.rotAccel - marioGetPtr()->motJabara->swingRotStep;
-                if (__fabsf(m->rot.x) < 0.8f) {
-                    m->mot.jabara.state = 0;
+            mario->mot.jabara.rotSpeed = mario->mot.jabara.rotSpeed + mario->mot.jabara.rotAccel;
+            if (mario->mot.jabara.rotSpeed >= 0.0f) {
+                mario->mot.jabara.rotSpeed = 0.0f;
+                mario->mot.jabara.state = 2;
+                mario->mot.jabara.rotAccel = mario->mot.jabara.rotAccel - marioGetPtr()->motJabara->swingRotStep;
+                if (__fabsf(mario->rot.x) < 0.8f) {
+                    mario->mot.jabara.state = 0;
                 }
             }
-            m->rot.x = revise360(m->rot.x + m->mot.jabara.rotSpeed);
+            mario->rot.x = revise360(mario->rot.x + mario->mot.jabara.rotSpeed);
             break;
         }
-        switch (m->mot.jabara.state) {
+        switch (mario->mot.jabara.state) {
         case 0xa:
             break;
         case 0xb:
-            if (m->mot.jabara.rotTimer > 0) {
-                m->mot.jabara.rotTimer--;
-                m->mot.jabara.rotSpeed += marioGetPtr()->motJabara->swingAccel;
-                if (m->mot.jabara.rotSpeed >= 40.0f) {
-                    m->mot.jabara.rotSpeed = 40.0f;
+            if (mario->mot.jabara.rotTimer > 0) {
+                mario->mot.jabara.rotTimer--;
+                mario->mot.jabara.rotSpeed += marioGetPtr()->motJabara->swingAccel;
+                if (mario->mot.jabara.rotSpeed >= 40.0f) {
+                    mario->mot.jabara.rotSpeed = 40.0f;
                 }
-            } else if (m->mot.jabara.rotTimer == 0) {
-                m->mot.jabara.rotSpeed += marioGetPtr()->motJabara->swingDecel;
-                if (m->mot.jabara.rotSpeed <= 0.0f) {
-                    m->mot.jabara.rotSpeed = 1.4f;
-                    m->mot.jabara.rotAccel = 0.1f;
-                    if (m->rot.x >= 180.0f) {
-                        m->mot.jabara.state = 0xc;
+            } else if (mario->mot.jabara.rotTimer == 0) {
+                mario->mot.jabara.rotSpeed += marioGetPtr()->motJabara->swingDecel;
+                if (mario->mot.jabara.rotSpeed <= 0.0f) {
+                    mario->mot.jabara.rotSpeed = 1.4f;
+                    mario->mot.jabara.rotAccel = 0.1f;
+                    if (mario->rot.x >= 180.0f) {
+                        mario->mot.jabara.state = 0xc;
                     } else {
-                        m->mot.jabara.state = 0xe;
+                        mario->mot.jabara.state = 0xe;
                     }
                 }
             }
             if (marioGetPtr()->motJabara->flags & JABARA_FLAG_SWING) {
-                f32 old = m->rot.x;
-                m->rot.x = revise360(old - m->mot.jabara.rotSpeed);
-                if (m->rot.x > old) {
-                    m->mot.jabara.rotSpeed = 5.0f;
-                    m->mot.jabara.rotAccel = 0.1f;
-                    if (m->rot.x >= 180.0f) {
-                        m->mot.jabara.state = 0xc;
+                f32 old = mario->rot.x;
+                mario->rot.x = revise360(old - mario->mot.jabara.rotSpeed);
+                if (mario->rot.x > old) {
+                    mario->mot.jabara.rotSpeed = 5.0f;
+                    mario->mot.jabara.rotAccel = 0.1f;
+                    if (mario->rot.x >= 180.0f) {
+                        mario->mot.jabara.state = 0xc;
                     } else {
-                        m->mot.jabara.state = 0xe;
+                        mario->mot.jabara.state = 0xe;
                     }
                 }
             } else {
-                m->rot.x = revise360(m->rot.x - m->mot.jabara.rotSpeed);
+                mario->rot.x = revise360(mario->rot.x - mario->mot.jabara.rotSpeed);
             }
             break;
         }
-        switch (m->mot.jabara.state) {
+        switch (mario->mot.jabara.state) {
         case 0xc:
-            m->mot.jabara.rotSpeed = m->mot.jabara.rotSpeed + m->mot.jabara.rotAccel;
-            m->rot.x = revise360(m->rot.x - m->mot.jabara.rotSpeed);
-            if (m->rot.x > 180.0f) {
-                m->mot.jabara.state = 0xd;
-                m->mot.jabara.rotAccel = m->mot.jabara.rotAccel + marioGetPtr()->motJabara->swingRotStep;
+            mario->mot.jabara.rotSpeed = mario->mot.jabara.rotSpeed + mario->mot.jabara.rotAccel;
+            mario->rot.x = revise360(mario->rot.x - mario->mot.jabara.rotSpeed);
+            if (mario->rot.x > 180.0f) {
+                mario->mot.jabara.state = 0xd;
+                mario->mot.jabara.rotAccel = mario->mot.jabara.rotAccel + marioGetPtr()->motJabara->swingRotStep;
             }
             break;
         case 0xd:
-            m->mot.jabara.rotSpeed = m->mot.jabara.rotSpeed - m->mot.jabara.rotAccel;
-            if (m->mot.jabara.rotSpeed <= 0.0f) {
-                m->mot.jabara.rotSpeed = 0.0f;
-                m->mot.jabara.state = 0xe;
-                m->mot.jabara.rotAccel = m->mot.jabara.rotAccel - marioGetPtr()->motJabara->swingRotStep;
-                if (__fabsf(m->rot.x) < 0.8f) {
-                    m->mot.jabara.state = 0;
+            mario->mot.jabara.rotSpeed = mario->mot.jabara.rotSpeed - mario->mot.jabara.rotAccel;
+            if (mario->mot.jabara.rotSpeed <= 0.0f) {
+                mario->mot.jabara.rotSpeed = 0.0f;
+                mario->mot.jabara.state = 0xe;
+                mario->mot.jabara.rotAccel = mario->mot.jabara.rotAccel - marioGetPtr()->motJabara->swingRotStep;
+                if (__fabsf(mario->rot.x) < 0.8f) {
+                    mario->mot.jabara.state = 0;
                 }
             }
-            m->rot.x = revise360(m->rot.x - m->mot.jabara.rotSpeed);
+            mario->rot.x = revise360(mario->rot.x - mario->mot.jabara.rotSpeed);
             break;
         case 0xe:
-            m->mot.jabara.rotSpeed = m->mot.jabara.rotSpeed - m->mot.jabara.rotAccel;
-            m->rot.x = revise360(m->rot.x - m->mot.jabara.rotSpeed);
-            if (m->rot.x < 180.0f) {
-                m->mot.jabara.state = 0xf;
-                m->mot.jabara.rotAccel = m->mot.jabara.rotAccel + marioGetPtr()->motJabara->swingRotStep;
+            mario->mot.jabara.rotSpeed = mario->mot.jabara.rotSpeed - mario->mot.jabara.rotAccel;
+            mario->rot.x = revise360(mario->rot.x - mario->mot.jabara.rotSpeed);
+            if (mario->rot.x < 180.0f) {
+                mario->mot.jabara.state = 0xf;
+                mario->mot.jabara.rotAccel = mario->mot.jabara.rotAccel + marioGetPtr()->motJabara->swingRotStep;
             }
             break;
         case 0xf:
-            m->mot.jabara.rotSpeed = m->mot.jabara.rotSpeed + m->mot.jabara.rotAccel;
-            if (m->mot.jabara.rotSpeed >= 0.0f) {
-                m->mot.jabara.rotSpeed = 0.0f;
-                m->mot.jabara.state = 0xc;
-                m->mot.jabara.rotAccel = m->mot.jabara.rotAccel - marioGetPtr()->motJabara->swingRotStep;
-                if (__fabsf(m->rot.x) < 0.8f) {
-                    m->mot.jabara.state = 0xa;
+            mario->mot.jabara.rotSpeed = mario->mot.jabara.rotSpeed + mario->mot.jabara.rotAccel;
+            if (mario->mot.jabara.rotSpeed >= 0.0f) {
+                mario->mot.jabara.rotSpeed = 0.0f;
+                mario->mot.jabara.state = 0xc;
+                mario->mot.jabara.rotAccel = mario->mot.jabara.rotAccel - marioGetPtr()->motJabara->swingRotStep;
+                if (__fabsf(mario->rot.x) < 0.8f) {
+                    mario->mot.jabara.state = 0xa;
                 }
             }
-            m->rot.x = revise360(m->rot.x - m->mot.jabara.rotSpeed);
+            mario->rot.x = revise360(mario->rot.x - mario->mot.jabara.rotSpeed);
             break;
         }
     }

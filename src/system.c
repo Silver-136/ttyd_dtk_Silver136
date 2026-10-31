@@ -81,15 +81,15 @@ f32 distABf(f32 x1, f32 y1, f32 x2, f32 y2) {
 }
 
 /** Returns the signed shortest turn in degrees from angle1 to angle2 (within -180..180). */
-f32 compAngle(f32 from, f32 to) {
-    if (fabsf(to - from) >= 180.0f) {
-        if (to < from) {
-            to += 360.0f;
+f32 compAngle(f32 from, f32 angle2) {
+    if (fabsf(angle2 - from) >= 180.0f) {
+        if (angle2 < from) {
+            angle2 += 360.0f;
         } else {
-            to -= 360.0f;
+            angle2 -= 360.0f;
         }
     }
-    return to - from;
+    return angle2 - from;
 }
 
 /**

@@ -366,7 +366,7 @@ void effGonbabaBreathDisp(CameraId cameraId, EffectEntry* effect) {
     CameraEntry* cam;
     s32 type;
     s32 alpha;
-    f32 f4 = 4.0f;
+    f32 quadSize = 4.0f;
 
     cam = camGetPtr(cameraId);
     type = work->type;
@@ -454,13 +454,13 @@ void effGonbabaBreathDisp(CameraId cameraId, EffectEntry* effect) {
                 c.a = (work->alpha * alpha) / 255;
                 GXSetChanMatColor(GX_COLOR0A0, c);
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                GXPosition3f32((-f4 / 2.0f), f4 * 0.5f, 0.0f);
+                GXPosition3f32((-quadSize / 2.0f), quadSize * 0.5f, 0.0f);
                 GXTexCoord2f32(0.0f, 0.0f);
-                GXPosition3f32(f4 * 0.5f, f4 * 0.5f, 0.0f);
+                GXPosition3f32(quadSize * 0.5f, quadSize * 0.5f, 0.0f);
                 GXTexCoord2f32(1.0f, 0.0f);
-                GXPosition3f32(f4 * 0.5f, (-f4 / 2.0f), 0.0f);
+                GXPosition3f32(quadSize * 0.5f, (-quadSize / 2.0f), 0.0f);
                 GXTexCoord2f32(1.0f, 1.0f);
-                GXPosition3f32((-f4 / 2.0f), (-f4 / 2.0f), 0.0f);
+                GXPosition3f32((-quadSize / 2.0f), (-quadSize / 2.0f), 0.0f);
                 GXTexCoord2f32(0.0f, 1.0f);
                 break;
             }

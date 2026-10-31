@@ -389,59 +389,59 @@ void marioSlitForceCancel(void) {
  * turn into paper has finished; when switching to Tube Mode the partners turn back by request).
  */
 void mot_slit_post(void) {
-    MarioWork* m = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
 #ifdef VERSION_G8ME01
     u16 id;
-    if (m->slitState >= 10) {
-        id = m->currMotionId;
-        if (id == MARIO_MOTION_SLIT || (id == MARIO_MOTION_FALL_2 || id == MARIO_MOTION_UPSTAIRS) || m->currMotionId <= MARIO_MOTION_JUMP_2 ||
-            m->currMotionId == MARIO_MOTION_JUMP_3) {
+    if (mario->slitState >= 10) {
+        id = mario->currMotionId;
+        if (id == MARIO_MOTION_SLIT || (id == MARIO_MOTION_FALL_2 || id == MARIO_MOTION_UPSTAIRS) || mario->currMotionId <= MARIO_MOTION_JUMP_2 ||
+            mario->currMotionId == MARIO_MOTION_JUMP_3) {
             return;
         }
 #else
-    u16 id = m->currMotionId;
-    if (id == MARIO_MOTION_SLIT || (id == MARIO_MOTION_FALL_2 || id == MARIO_MOTION_UPSTAIRS) || m->currMotionId <= MARIO_MOTION_JUMP_2 ||
-        m->currMotionId == MARIO_MOTION_JUMP_3) {
+    u16 id = mario->currMotionId;
+    if (id == MARIO_MOTION_SLIT || (id == MARIO_MOTION_FALL_2 || id == MARIO_MOTION_UPSTAIRS) || mario->currMotionId <= MARIO_MOTION_JUMP_2 ||
+        mario->currMotionId == MARIO_MOTION_JUMP_3) {
         return;
 #endif
     }
-    if (!(m->flags & MARIO_FLAG_PAPER_MODE)) {
-        if (m->dispFlags & MARIO_DISP_FLAG_SLIT) {
-            m->wPlayerCollisionBox.x = 20.0f;
-            if (m->directionView >= 180.0f) {
-                m->displayDirection = 0.0f;
-                m->displayDirectionTarget = m->displayDirection;
+    if (!(mario->flags & MARIO_FLAG_PAPER_MODE)) {
+        if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
+            mario->wPlayerCollisionBox.x = 20.0f;
+            if (mario->directionView >= 180.0f) {
+                mario->displayDirection = 0.0f;
+                mario->displayDirectionTarget = mario->displayDirection;
             } else {
-                m->displayDirection = 180.0f;
-                m->displayDirectionTarget = m->displayDirection;
+                mario->displayDirection = 180.0f;
+                mario->displayDirectionTarget = mario->displayDirection;
             }
-            slitClearFlags(m);
+            slitClearFlags(mario);
             marioPaperOff();
             mapResetPaperAmbColor();
-            m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+            mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
             marioAdjustMoveDir();
             allPartyForceSlitOff();
         }
-    } else if (m->currMotionId != MARIO_MOTION_FALL) {
-        m->flags &= ~MARIO_FLAG_PAPER_MODE;
-        m->wPlayerCollisionBox.x = 20.0f;
-        if (m->directionView >= 180.0f) {
-            m->displayDirection = 0.0f;
-            m->displayDirectionTarget = m->displayDirection;
+    } else if (mario->currMotionId != MARIO_MOTION_FALL) {
+        mario->flags &= ~MARIO_FLAG_PAPER_MODE;
+        mario->wPlayerCollisionBox.x = 20.0f;
+        if (mario->directionView >= 180.0f) {
+            mario->displayDirection = 0.0f;
+            mario->displayDirectionTarget = mario->displayDirection;
         } else {
-            m->displayDirection = 180.0f;
-            m->displayDirectionTarget = m->displayDirection;
+            mario->displayDirection = 180.0f;
+            mario->displayDirectionTarget = mario->displayDirection;
         }
-        m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
-        m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
-        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
-        m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
+        mario->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
+        mario->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
+        mario->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
+        mario->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
         marioPaperOff();
         mapResetPaperAmbColor();
-        m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+        mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         marioAdjustMoveDir();
 #ifdef VERSION_G8ME01
-        if (m->currMotionId != MARIO_MOTION_ROLL) {
+        if (mario->currMotionId != MARIO_MOTION_ROLL) {
             allPartyForceSlitOff();
         } else {
             allPartySlitOffReq();
@@ -454,27 +454,27 @@ void mot_slit_post(void) {
 
 /** Re-applies the Paper Mode animation (p_slit, PM_S_1A) when mario.c rebuilds Mario's look while he is paper. */
 void marioForceSlitAnime(void) {
-    MarioWork* m = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
     marioPaperOff();
     marioChgPaper(NULL);
     marioPaperOn("p_slit");
     marioChgPose("M_S_1");
     marioChgPaper("PM_S_1A");
-    m->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
+    mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
 }
 
 static inline void slitInit(void) {
-    MarioWork* m = marioGetPtr();
-    m->mot.slit.reserved_0 = 0.0f;
-    m->mot.slit.counter = 0;
-    m->mot.slit.count = 0;
-    m->mot.slit.timer = 0;
-    m->mot.slit.side = 0;
-    m->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-    m->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
-    m->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
-    m->dispFlags |= MARIO_DISP_FLAG_SLIT;
-    if (m->paperPoseId == -1) {
+    MarioWork* mario = marioGetPtr();
+    mario->mot.slit.reserved_0 = 0.0f;
+    mario->mot.slit.counter = 0;
+    mario->mot.slit.count = 0;
+    mario->mot.slit.timer = 0;
+    mario->mot.slit.side = 0;
+    mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+    mario->flags &= ~(MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP);
+    mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
+    mario->dispFlags |= MARIO_DISP_FLAG_SLIT;
+    if (mario->paperPoseId == -1) {
         GXColor tmp;
         GXColor col = {0, 0, 0, 255};
         col.r = 0xa8;
@@ -484,7 +484,7 @@ static inline void slitInit(void) {
         mapSetPaperAmbColor(&tmp);
         marioPaperOn("p_slit");
     }
-    if (!m->controlStickSensitivity) {
+    if (!mario->controlStickSensitivity) {
         marioChgPose("M_S_1");
     }
     marioChgPaper("PM_S_1A");
@@ -495,20 +495,20 @@ static inline void slitInit(void) {
  * sideways standing state, 6-unit collision width, partners turned paper too.
  */
 void marioReInit_slit(void) {
-    MarioWork* m = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
     slitInit();
-    m->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
-    m->currMotionId = MARIO_MOTION_SLIT;
-    m->slitState = 10;
-    m->displayDirection = 270.0f;
-    m->displayDirectionTarget = m->displayDirection;
+    mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+    mario->currMotionId = MARIO_MOTION_SLIT;
+    mario->slitState = 10;
+    mario->displayDirection = 270.0f;
+    mario->displayDirectionTarget = mario->displayDirection;
     marioChgPose("M_S_1");
     marioChgPaper("PM_S_1B");
-    m->slitState = 10;
-    m->mot.slit.count = 0;
-    m->wPlayerCollisionBox.x = 6.0f;
-    m->flags |= MARIO_FLAG_PAPER_MODE;
-    m->dispFlags |= MARIO_DISP_FLAG_SLIT;
+    mario->slitState = 10;
+    mario->mot.slit.count = 0;
+    mario->wPlayerCollisionBox.x = 6.0f;
+    mario->flags |= MARIO_FLAG_PAPER_MODE;
+    mario->dispFlags |= MARIO_DISP_FLAG_SLIT;
     allPartySlitOn();
 }
 
@@ -549,21 +549,21 @@ static inline void slitSpeedDown(MarioWork* m) {
  * in background mode always half.
  */
 static inline f32 slitWalkSpeed(void) {
-    MarioWork* p = marioGetPtr();
-    f32 spd = p->baseWalkSpeed;
-    if (p->flags & MARIO_FLAG_PAPER_MODE) {
-        if (p->mot.slit.timer != 0) {
+    MarioWork* mario = marioGetPtr();
+    f32 spd = mario->baseWalkSpeed;
+    if (mario->flags & MARIO_FLAG_PAPER_MODE) {
+        if (mario->mot.slit.timer != 0) {
             return spd;
         }
         {
-            int a = p->wStickDir1;
-            int b = p->wStickDir2;
+            int a = mario->wStickDir1;
+            int b = mario->wStickDir2;
             if (a * a + b * b <= (55 * 55)) {
                 spd *= 0.5f;
             }
 
         }
-    } else if (p->flags & MARIO_FLAG_BG_MODE) {
+    } else if (mario->flags & MARIO_FLAG_BG_MODE) {
         spd *= 0.5f;
     }
     return spd;

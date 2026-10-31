@@ -804,14 +804,14 @@ static USER_FUNC(eff_staff) {
     f32 x;
     f32 y;
     f32 z;
-    f32* wk;
+    f32* barrier;
 
-    wk = effSyuryouEntry(0, 90, 0.0f, -1000.0f, 0.0f)->userdata;
+    barrier = effSyuryouEntry(0, 90, 0.0f, -1000.0f, 0.0f)->userdata;
     BtlUnit_GetPos(unit, &x, &y, &z);
-    wk[1] = x + 6.0f * (unit->sizeMultiplier * unit->faceDirection);
-    wk[2] = y + 68.0f * unit->sizeMultiplier;
-    wk[3] = 5.0f + z;
-    wk[4] = unit->sizeMultiplier;
+    barrier[1] = x + 6.0f * (unit->sizeMultiplier * unit->faceDirection);
+    barrier[2] = y + 68.0f * unit->sizeMultiplier;
+    barrier[3] = 5.0f + z;
+    barrier[4] = unit->sizeMultiplier;
     return EVT_RETURN_DONE;
 }
 /**
@@ -897,17 +897,17 @@ USER_FUNC(check_satellite) {
             unit->work[UNIT_WORK_SHIELD_EFFECT] = (EvtWord)effSyuryouEntry(1, 1000, 0.0f, -1000.0f, 0.0f);
         }
         if (unit->work[UNIT_WORK_SHIELD_EFFECT] != 0) {
-            f32* ud = ((EffectEntry*)unit->work[UNIT_WORK_SHIELD_EFFECT])->userdata;
+            f32* barrier = ((EffectEntry*)unit->work[UNIT_WORK_SHIELD_EFFECT])->userdata;
             f32 ex;
             f32 ey;
             f32 ez;
 
             BtlUnit_GetPos(unit, &ex, &ey, &ez);
-            ud[1] = ex;
-            ud[2] = ey - 12.5f * unit->sizeMultiplier;
-            ud[3] = 10.0f + ez;
+            barrier[1] = ex;
+            barrier[2] = ey - 12.5f * unit->sizeMultiplier;
+            barrier[3] = 10.0f + ez;
 
-            ud[4] = 2.5f * unit->sizeMultiplier;
+            barrier[4] = 2.5f * unit->sizeMultiplier;
         }
         part->attributes |= kImmuneToNegativeStatus;
         part2->attributes |= kImmuneToDamageAndStatus;

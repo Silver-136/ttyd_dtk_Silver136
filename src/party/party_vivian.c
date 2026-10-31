@@ -232,17 +232,17 @@ void vivian_move(PartyEntry* party) {
 static inline void vivianFollow(PartyEntry* party) {
     HitEntry* hit;
     u8 id;
-    MarioWork* m = party->playerPtr;
+    MarioWork* mario = party->playerPtr;
     f32 groundY, gy, gz;
     f32 sx, sy, sz;
     f32 ofs;
 
-    marioGetScreenPos(m->position, &sx, &sy, &sz);
+    marioGetScreenPos(mario->position, &sx, &sy, &sz);
     hit = marioSearchGround(&groundY, &gy, &gz, 37.0f, -37.0f);
     if (hit && !(hitGetAttr(hit) & (HIT_ATTR_WATER_HAZARD | HIT_ATTR_TOGE))) {
-        m->hitobjStandOn = hit;
-        m->position.y = groundY;
-        if (m->floorMove.y < 0.0f) {
+        mario->hitobjStandOn = hit;
+        mario->position.y = groundY;
+        if (mario->floorMove.y < 0.0f) {
             groundY += 0.2f;
         }
     }
@@ -252,15 +252,15 @@ static inline void vivianFollow(PartyEntry* party) {
         if (party->work.vivian.followOfs < -13.0f) {
             party->work.vivian.followOfs = -13.0f;
         }
-        party->moveTarget = m->position;
-        movePos(&party->moveTarget.x, &party->moveTarget.z, party->work.vivian.followOfs, toMovedirSimple(m->displayDirection));
-        movePos(&party->moveTarget.x, &party->moveTarget.z, 0.0f, toMovedirSimple(m->displayDirection));
-        if (0.0f == m->displayDirectionTarget) {
+        party->moveTarget = mario->position;
+        movePos(&party->moveTarget.x, &party->moveTarget.z, party->work.vivian.followOfs, toMovedirSimple(mario->displayDirection));
+        movePos(&party->moveTarget.x, &party->moveTarget.z, 0.0f, toMovedirSimple(mario->displayDirection));
+        if (0.0f == mario->displayDirectionTarget) {
             ofs = -2.5f;
         } else {
             ofs = 2.5f;
         }
-        movePos(&party->moveTarget.x, &party->moveTarget.z, ofs, toMovedir(270.0f + m->displayDirection));
+        movePos(&party->moveTarget.x, &party->moveTarget.z, ofs, toMovedir(270.0f + mario->displayDirection));
     } else {
         if (id >= 4) {
             party->work.vivian.followOfs += 0.4f;
@@ -268,20 +268,20 @@ static inline void vivianFollow(PartyEntry* party) {
                 party->work.vivian.followOfs = 0.0f;
             }
         }
-        party->moveTarget = m->position;
-        movePos(&party->moveTarget.x, &party->moveTarget.z, party->work.vivian.followOfs, toMovedirSimple(m->displayDirection));
-        if (0.0f == m->displayDirectionTarget) {
+        party->moveTarget = mario->position;
+        movePos(&party->moveTarget.x, &party->moveTarget.z, party->work.vivian.followOfs, toMovedirSimple(mario->displayDirection));
+        if (0.0f == mario->displayDirectionTarget) {
             ofs = -2.5f;
         } else {
             ofs = 2.5f;
         }
-        movePos(&party->moveTarget.x, &party->moveTarget.z, ofs, toMovedir(270.0f + m->displayDirection));
+        movePos(&party->moveTarget.x, &party->moveTarget.z, ofs, toMovedir(270.0f + mario->displayDirection));
     }
     if (strcmp(gp->currentMapName, "eki_02") == 0) {
 #ifdef VERSION_G8ME01
-        partyChkWallAround(party, &m->position, 0.0f, m->directionView, m->wPlayerCollisionBox.z, 0.5f);
+        partyChkWallAround(party, &mario->position, 0.0f, mario->directionView, mario->wPlayerCollisionBox.z, 0.5f);
 #else
-        marioChkWallAround(&m->position, 1, 0.0f, m->directionView, m->wPlayerCollisionBox.z, 0.5f);
+        marioChkWallAround(&mario->position, 1, 0.0f, mario->directionView, mario->wPlayerCollisionBox.z, 0.5f);
 #endif
     }
 }

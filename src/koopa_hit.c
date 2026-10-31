@@ -23,10 +23,10 @@ static inline f32 kpa_nrmToAngle(f32 x, f32 y, f32 z) {
 }
 
 /** Tilts Bowser's groundRot to match the floor normal (x, y, z) and returns the floor's slope in degrees. */
-static inline f32 kpa_nrmSet(MarioWork* m, f32 x, f32 y, f32 z) {
-    m->groundRot.x = (s32)(angleABf(0.0f, 0.0f, 100.0f * z, 100.0f * y) - 180.0f);
-    m->groundRot.y = 0.0f;
-    m->groundRot.z = (s32)(angleABf(0.0f, 0.0f, 100.0f * x, 100.0f * y) - 180.0f);
+static inline f32 kpa_nrmSet(MarioWork* mario, f32 x, f32 y, f32 z) {
+    mario->groundRot.x = (s32)(angleABf(0.0f, 0.0f, 100.0f * z, 100.0f * y) - 180.0f);
+    mario->groundRot.y = 0.0f;
+    mario->groundRot.z = (s32)(angleABf(0.0f, 0.0f, 100.0f * x, 100.0f * y) - 180.0f);
     return kpa_nrmToAngle(x, y, z);
 }
 
@@ -101,23 +101,23 @@ s32 kpaEnemyFireHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
  * 3 touched while he is invincible, 4 he gets hurt, 0 no contact.
  */
 s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
-    MarioWork* m;
+    MarioWork* mario;
     f32 dh, dw, dx, dy;
 
-    m = marioGetPtr();
+    mario = marioGetPtr();
 
     if (kpaEnemyFireHitChk(x, y, z, h, w)) {
         return KPA_ENEMY_HIT_FIRE;
     }
     // FAKE: no-op self-assignment; fixes the scheduling of the position.y load
-    m->wPlayerCollisionBox.y = m->wPlayerCollisionBox.y;
-    dh = 0.5f * (m->wPlayerCollisionBox.y + h);
-    dw = 0.5f * (m->wPlayerCollisionBox.x + w);
-    dx = __fabsf(m->position.x - x);
-    dy = __fabsf(m->position.y + 0.5f * m->wPlayerCollisionBox.y - y - 0.5f * h);
+    mario->wPlayerCollisionBox.y = mario->wPlayerCollisionBox.y;
+    dh = 0.5f * (mario->wPlayerCollisionBox.y + h);
+    dw = 0.5f * (mario->wPlayerCollisionBox.x + w);
+    dx = __fabsf(mario->position.x - x);
+    dy = __fabsf(mario->position.y + 0.5f * mario->wPlayerCollisionBox.y - y - 0.5f * h);
     if (dy <= dh && dx <= dw) {
-        if ((m->flags & MARIO_FLAG_IS_FALLING) && m->position.y > y) {
-            if (kpaGetLevel() == 0 && kpaGetStageType() != 1 && m->mutekiTimer == 0 && z < 50.0f) {
+        if ((mario->flags & MARIO_FLAG_IS_FALLING) && mario->position.y > y) {
+            if (kpaGetLevel() == 0 && kpaGetStageType() != 1 && mario->mutekiTimer == 0 && z < 50.0f) {
                 marioChgMot(MARIO_MOTION_JUMP_NPC);
             }
             return KPA_ENEMY_HIT_STOMP;
@@ -125,10 +125,10 @@ s32 kpaEnemyHitChk(f32 x, f32 y, f32 z, f32 h, f32 w) {
         if (kpaMutekiCheck() == 1) {
             return KPA_ENEMY_HIT_STAR;
         }
-        if (m->mutekiTimer != 0) {
+        if (mario->mutekiTimer != 0) {
             return KPA_ENEMY_HIT_STAR;
         }
-        if (m->kpaNoHitTimer == 0) {
+        if (mario->kpaNoHitTimer == 0) {
             return KPA_ENEMY_HIT_BOWSER;
         }
     }
@@ -288,27 +288,27 @@ HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
     s32* tbl;
     HitEntry* hit;
     HitEntry* best;
-    MarioWork* m;
+    MarioWork* mario;
     f32 deg, rad, off, c, s_, x, y, z, hx, hy, hz, nx, ny, nz, d;
     f32 oy, oz;
     s32 md;
 
-    m = marioGetPtr();
-    if (m->flags & MARIO_FLAG_IS_FALLING) {
+    mario = marioGetPtr();
+    if (mario->flags & MARIO_FLAG_IS_FALLING) {
         return NULL;
     }
     best = NULL;
-    if (m->baseSpeed) {
-        deg = m->directionView;
+    if (mario->baseSpeed) {
+        deg = mario->directionView;
     } else {
-        deg = toMovedir(m->displayDirection);
+        deg = toMovedir(mario->displayDirection);
     }
     off = *outB;
     *outB = -1.0f;
     kpa_headClear();
     tbl = headchkofs[kpaGetLevel()];
     n = *tbl++;
-    if (!(m->flags & MARIO_FLAG_IS_JUMPING)) {
+    if (!(mario->flags & MARIO_FLAG_IS_JUMPING)) {
         switch (kpaGetLevel()) {
         case 0:
             off = 2.0f;
@@ -326,7 +326,7 @@ HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
     } else {
         switch (kpaGetLevel()) {
         case 0:
-            if (m->currMotionId == MARIO_MOTION_KPA_SWIM) {
+            if (mario->currMotionId == MARIO_MOTION_KPA_SWIM) {
                 off = 10.0f;
             } else {
                 off = hgt;
@@ -345,12 +345,12 @@ HitEntry* kpaSearchHead(f32 hgt, Vec* pos, f32* outB) {
         oy = tbl[1];
         md = tbl[2];
         tbl += 3;
-        if (md == 0 && !(m->flags & MARIO_FLAG_IS_JUMPING)) {
+        if (md == 0 && !(mario->flags & MARIO_FLAG_IS_JUMPING)) {
             continue;
         }
-        x = m->position.x + s_;
-        y = m->position.y + oy;
-        z = m->position.z + oz;
+        x = mario->position.x + s_;
+        y = mario->position.y + oy;
+        z = mario->position.z + oz;
         d = off;
         hit = hitCheckFilter(NULL, &hx, &hy, &hz, &d, &nx, &ny, &nz, x, y, z, 0.0f, 1.0f, 0.0f);
         if (hit) {
@@ -452,35 +452,35 @@ HitEntry* kpaChkHitobjRide(void) {
  * Declared void, the kpaWork pointer lands in r3 instead of r4, so the long return type stays.
  */
 long kpaClearHitobjRide(void) {
-    MarioWork* m = marioGetPtr();
-    m->kpaWork->rideHit[0] = NULL;
-    m->kpaWork->rideHit[1] = NULL;
-    m->kpaWork->rideHit[2] = NULL;
-    m->kpaWork->rideHit[3] = NULL;
-    m->kpaWork->rideHit[4] = NULL;
-    m->kpaWork->rideHit[5] = NULL;
-    m->kpaWork->rideHit[6] = NULL;
-    m->kpaWork->rideHit[7] = NULL;
-    m->kpaWork->rideHit[8] = NULL;
-    m->kpaWork->rideHit[9] = NULL;
+    MarioWork* mario = marioGetPtr();
+    mario->kpaWork->rideHit[0] = NULL;
+    mario->kpaWork->rideHit[1] = NULL;
+    mario->kpaWork->rideHit[2] = NULL;
+    mario->kpaWork->rideHit[3] = NULL;
+    mario->kpaWork->rideHit[4] = NULL;
+    mario->kpaWork->rideHit[5] = NULL;
+    mario->kpaWork->rideHit[6] = NULL;
+    mario->kpaWork->rideHit[7] = NULL;
+    mario->kpaWork->rideHit[8] = NULL;
+    mario->kpaWork->rideHit[9] = NULL;
 }
 
 /** The object Bowser's body spheres touched this frame (kpaHitCheck), or NULL when the player is not Bowser. */
 HitEntry* kpaGetHitobj(void) {
-    MarioWork* m = marioGetPtr();
-    if (m->characterId != CHARACTER_BOWSER) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->characterId != CHARACTER_BOWSER) {
         return NULL;
     }
-    return m->kpaWork->objHit;
+    return mario->kpaWork->objHit;
 }
 
 /** The object his fire breath touched this frame (kpaFireMain), or NULL when the player is not Bowser. */
 HitEntry* kpaGetHitFlame(void) {
-    MarioWork* m = marioGetPtr();
-    if (m->characterId != CHARACTER_BOWSER) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->characterId != CHARACTER_BOWSER) {
         return NULL;
     }
-    return m->kpaWork->flameHit;
+    return mario->kpaWork->flameHit;
 }
 
 typedef struct HeadSphere {
@@ -555,16 +555,16 @@ HitEntry* kpaHitCheck(void) {
     s32 i;
     HitEntry* hit;
     s32 n;
-    MarioWork* m;
+    MarioWork* mario;
     HitEntry* best;
     f32 x, y, z, r, sn;
 
     best = NULL;
-    m = marioGetPtr();
-    if (m->characterId != CHARACTER_BOWSER) {
+    mario = marioGetPtr();
+    if (mario->characterId != CHARACTER_BOWSER) {
         return NULL;
     }
-    m->kpaWork->objHit = NULL;
+    mario->kpaWork->objHit = NULL;
     kpa_headClear();
     if (kpaFireAttackCheck() == 1) {
         return NULL;
@@ -572,40 +572,40 @@ HitEntry* kpaHitCheck(void) {
     p = head_sphere_data[kpaGetLevel()];
     n = *p++;
     for (j = 0; j < n; j++) {
-        sn = (f32)sin(3.1415927f * m->directionView / 180.0f);
-        x = m->position.x + p[0] * sn;
-        sn = (f32)cos(3.1415927f * m->directionView / 180.0f);
-        z = m->position.z - p[0] * sn;
-        y = m->position.y + p[1];
+        sn = (f32)sin(3.1415927f * mario->directionView / 180.0f);
+        x = mario->position.x + p[0] * sn;
+        sn = (f32)cos(3.1415927f * mario->directionView / 180.0f);
+        z = mario->position.z - p[0] * sn;
+        y = mario->position.y + p[1];
         r = p[2];
         i = p[3];
         p += 4;
         switch (i) {
         case 1:
-            if (!(m->flags & MARIO_FLAG_IS_JUMPING)) {
+            if (!(mario->flags & MARIO_FLAG_IS_JUMPING)) {
                 continue;
             }
             break;
         case 2:
-            if (m->flags & MARIO_FLAG_IS_JUMPING) {
+            if (mario->flags & MARIO_FLAG_IS_JUMPING) {
                 continue;
             }
             break;
         case 3:
-            if (m->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) {
+            if (mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) {
                 continue;
             }
             break;
         }
         hit = hitCheckSphereFilter(NULL, x, y, z, r);
-        if ((m->flags & MARIO_FLAG_IS_JUMPING) && (hitGetAttr(hit) & HIT_ATTR_MOBJ) && mobjHitObjPtrToPtr(hit)->position.y > y) {
+        if ((mario->flags & MARIO_FLAG_IS_JUMPING) && (hitGetAttr(hit) & HIT_ATTR_MOBJ) && mobjHitObjPtrToPtr(hit)->position.y > y) {
             marioGetPtr()->kpaWork->headHit[j] = hit;
         }
         if (hit) {
             best = hit;
         }
     }
-    m->kpaWork->objHit = best;
+    mario->kpaWork->objHit = best;
     return best;
 }
 

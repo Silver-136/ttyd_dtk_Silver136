@@ -714,13 +714,13 @@ static s32 moamoa_hit_check(ExtdrvPose* pose, Moamoa* moa) {
         wp->bounceCount = 0;
     }
     if (mario->currMotionId == MARIO_MOTION_HAMMER && wp->hammerFrames > 10) {
-        f32 r2;
+        f32 hammerRad;
         f32 t;
         cam = camGetPtr(CAMERA_3D);
         t = cam->viewYaw;
-        r2 = 6.2831855f * reviseAngle((f32)(mario->displayDirection - 90.0f) + t) / 360.0f;
-        angle = 35.0f * moa_sin(r2) + mario->position.x;
-        dist = mario->position.z - 35.0f * moa_cos(r2);
+        hammerRad = 6.2831855f * reviseAngle((f32)(mario->displayDirection - 90.0f) + t) / 360.0f;
+        angle = 35.0f * moa_sin(hammerRad) + mario->position.x;
+        dist = mario->position.z - 35.0f * moa_cos(hammerRad);
         if (distABf((*pose->mtx)[0][3], (*pose->mtx)[2][3], angle, dist) < 35.0f) {
             return 2;
         }

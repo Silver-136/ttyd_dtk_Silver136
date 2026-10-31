@@ -1185,14 +1185,14 @@ void puniTargetSearch(PuniData* p) {
  * each a signed 16-bit map coordinate.
  */
 void puniswGetindex(s32 base, s32 idx, s32* val, Vec* pos) {
-    u8 b0, b1, b2, b3, b4, b5, b6;
+    u8 slotFloor, b1, b2, b3, b4, b5, b6;
     s32 off;
     s32 x;
     s32 y;
     s32 z;
 
     off = base + idx * PUNI_LSW_SLOT_SIZE;
-    b0 = _swByteGet(off + EVTDAT_LSW_BASE);
+    slotFloor = _swByteGet(off + EVTDAT_LSW_BASE);
     b1 = _swByteGet(off + 150000001);
     b2 = _swByteGet(off + 150000002);
     b3 = _swByteGet(off + 150000003);
@@ -1200,7 +1200,7 @@ void puniswGetindex(s32 base, s32 idx, s32* val, Vec* pos) {
     b5 = _swByteGet(off + 150000005);
     b6 = _swByteGet(off + 150000006);
 
-    *val = b0;
+    *val = slotFloor;
     x = b1 + (b2 << 8);
     if (x & 0x8000) {
         x |= 0xFFFF0000;
@@ -1567,8 +1567,8 @@ void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
     Vec hit;
     Vec diff;
     Vec old;
-    f32 b1, b2, b3;
-    f32 c1, c2, c3;
+    f32 hitX, b2, b3;
+    f32 hitNX, c2, c3;
     f32 d;
     p->hitCheck = NULL;
     p->hitMove = NULL;
@@ -1590,7 +1590,7 @@ void puniMoveHitLimited(PuniData* p, Vec start, Vec dir, f32 dist) {
         d = PSVECMag(&diff);
         if (d > 0.0f) {
             PSVECNormalize(&diff, &diff);
-            p->hitCheck = hitCheckFilter(NULL, &b1, &b2, &b3, &d, &c1, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
+            p->hitCheck = hitCheckFilter(NULL, &hitX, &b2, &b3, &d, &hitNX, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
             if (p->hitCheck != NULL) {
                 p->pos = old;
             }
@@ -1606,8 +1606,8 @@ void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
     Vec diff;
     Vec refl;
     Vec old;
-    f32 b1, b2, b3;
-    f32 c1, c2, c3;
+    f32 hitX, b2, b3;
+    f32 hitNX, c2, c3;
     f32 d;
     p->hitCheck = NULL;
     p->hitMove = NULL;
@@ -1635,7 +1635,7 @@ void puniMoveHit(PuniData* p, Vec start, Vec dir, f32 dist) {
             PSVECNormalize(&diff, &diff);
             start = old;
             start.y += 1.0f;
-            p->hitCheck = hitCheckFilter(NULL, &b1, &b2, &b3, &d, &c1, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
+            p->hitCheck = hitCheckFilter(NULL, &hitX, &b2, &b3, &d, &hitNX, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
             if (p->hitCheck != NULL) {
                 p->pos = old;
             }
@@ -3765,8 +3765,8 @@ static inline void puniMoveHitLimitedInl(PuniData* p, Vec* s2, Vec* d2, f32 dist
     Vec hit;
     Vec diff;
     Vec old;
-    f32 b1, b2, b3;
-    f32 c1, c2, c3;
+    f32 hitX, b2, b3;
+    f32 hitNX, c2, c3;
     f32 d;
     p->hitCheck = NULL;
     p->hitMove = NULL;
@@ -3788,7 +3788,7 @@ static inline void puniMoveHitLimitedInl(PuniData* p, Vec* s2, Vec* d2, f32 dist
         d = PSVECMag(&diff);
         if (d > 0.0f) {
             PSVECNormalize(&diff, &diff);
-            p->hitCheck = hitCheckFilter(NULL, &b1, &b2, &b3, &d, &c1, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
+            p->hitCheck = hitCheckFilter(NULL, &hitX, &b2, &b3, &d, &hitNX, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
             if (p->hitCheck != NULL) {
                 p->pos = old;
             }
@@ -4783,8 +4783,8 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
     Vec diff;
     Vec refl;
     Vec old;
-    f32 b1, b2, b3;
-    f32 c1, c2, c3;
+    f32 hitX, b2, b3;
+    f32 hitNX, c2, c3;
     f32 d;
     p->hitCheck = NULL;
     p->hitMove = NULL;
@@ -4810,7 +4810,7 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
         d = PSVECMag(&diff);
         if (d > 0.0f) {
             PSVECNormalize(&diff, &diff);
-            p->hitCheck = hitCheckFilter(NULL, &b1, &b2, &b3, &d, &c1, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
+            p->hitCheck = hitCheckFilter(NULL, &hitX, &b2, &b3, &d, &hitNX, &c2, &c3, old.x, old.y + 1.0f, old.z, diff.x, diff.y, diff.z);
             if (p->hitCheck != NULL) {
                 p->pos = old;
             }
@@ -5786,7 +5786,7 @@ USER_FUNC(evt_puni_wait_systemmode) {
  */
 static inline void puni_swget_idx(s32 idx, s32* val, Vec* pos) {
     s32 off;
-    u8 b6, b5, b4, b3, b2, b1, b0;
+    u8 zHi, b5, b4, b3, b2, b1, b0;
     s32 x;
     s32 y;
     s32 z;
@@ -5798,7 +5798,7 @@ static inline void puni_swget_idx(s32 idx, s32* val, Vec* pos) {
     b3 = _swByteGet(off + 3);
     b4 = _swByteGet(off + 4);
     b5 = _swByteGet(off + 5);
-    b6 = _swByteGet(off + 6);
+    zHi = _swByteGet(off + 6);
 
     *val = b0;
     x = b1 + (b2 << 8);
@@ -5809,7 +5809,7 @@ static inline void puni_swget_idx(s32 idx, s32* val, Vec* pos) {
     if (y & 0x8000) {
         y |= 0xFFFF0000;
     }
-    z = b5 + (b6 << 8);
+    z = b5 + (zHi << 8);
     if (z & 0x8000) {
         z |= 0xFFFF0000;
     }
@@ -6741,7 +6741,7 @@ USER_FUNC(evt_puni_dokan_onoff) {
  * z shorts (sign-extended) stored 7 bytes per slot from LSW base.
  */
 static inline void puniswGetindex_inl(s32 base, s32 idx, s32* val, Vec* pos) {
-    u8 b6, b5, b4, b3, b2, b1, b0;
+    u8 zHi, b5, b4, b3, b2, b1, b0;
     s32 off;
     s32 x;
     s32 y;
@@ -6754,7 +6754,7 @@ static inline void puniswGetindex_inl(s32 base, s32 idx, s32* val, Vec* pos) {
     b3 = _swByteGet(off + 150000003);
     b4 = _swByteGet(off + 150000004);
     b5 = _swByteGet(off + 150000005);
-    b6 = _swByteGet(off + 150000006);
+    zHi = _swByteGet(off + 150000006);
 
     *val = b0;
     x = b1 + (b2 << 8);
@@ -6765,7 +6765,7 @@ static inline void puniswGetindex_inl(s32 base, s32 idx, s32* val, Vec* pos) {
     if (y & 0x8000) {
         y |= 0xFFFF0000;
     }
-    z = b5 + (b6 << 8);
+    z = b5 + (zHi << 8);
     if (z & 0x8000) {
         z |= 0xFFFF0000;
     }

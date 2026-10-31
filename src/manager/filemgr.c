@@ -505,13 +505,13 @@ void fileGarbageMoveMem(void* data, FileEntry* file) {
  * mode 0 drops every preloaded file at once, waiting out reads in flight.
  * Then all released files (state 2) are freed and their entries returned to the free list.
  */
-void _fileGarbage(BOOL a1) {
+void _fileGarbage(BOOL mode) {
     FileEntry* f;
     FileEntry* prev;
     FileEntry* first;
     FileEntry* next;
 
-    if (a1 == 0) {
+    if (mode == 0) {
         for (f = afp->firstused; f; f = f->next) {
             if (f->state == 3) {
                 if (f->entry) {
@@ -526,7 +526,7 @@ void _fileGarbage(BOOL a1) {
                 f->state = 2;
             }
         }
-    } else if (a1 == 1) {
+    } else if (mode == 1) {
         for (f = afp->firstused; f; f = f->next) {
             if (f->state == 3) {
                 if (f->entry) {

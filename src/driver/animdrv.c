@@ -1397,13 +1397,13 @@ void animPoseMain(s32 poseId) {
             b = (s8)d[3];
             v += d[0] * 4;
             if (b < 0x59 && b > -0x59) {
-                f32 h;
+                f32 hb;
                 x = __OSs8tof32((s8*)(d + 1));
                 t2 = t * t;
                 t3 = apmMul(t, t2);
-                h = -2.0f * t3 + 3.0f * t2;
+                hb = -2.0f * t3 + 3.0f * t2;
                 *(f32*)v = *(f32*)v + ((t + (t3 - 2.0f * t2)) * (dt * tanfTbl[(s8)d[2] + 0x59]) +
-                                h * (0.0625f * x) +
+                                hb * (0.0625f * x) +
                                 (t3 - t2) * (dt * tanfTbl[b + 0x59]));
             }
         }

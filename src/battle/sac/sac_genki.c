@@ -472,7 +472,7 @@ void main_weapon(s32 idx) {
     GenkiObject* o;
     s32 near;
     f32 min;
-    EffStarStoneWork* ew;
+    EffStarStoneWork* star;
 
     for (i = 2; i > 0; i--) {
         wp->trail[i] = wp->trail[i - 1];
@@ -645,20 +645,20 @@ void main_weapon(s32 idx) {
     }
 
     if (wp->eff) {
-        ew = wp->eff->userdata;
-        ew->position.x = wp->pos.x;
-        ew->position.y = wp->pos.y;
-        ew->position.z = wp->pos.z;
-        ew->scale = 1.125f;
-        ew->a = 255;
+        star = wp->eff->userdata;
+        star->position.x = wp->pos.x;
+        star->position.y = wp->pos.y;
+        star->position.z = wp->pos.z;
+        star->scale = 1.125f;
+        star->a = 255;
     }
     for (i = 0; i < 3; i++) {
-        ew = wp->effs[i]->userdata;
-        ew->position.x = wp->trail[i].x;
-        ew->position.y = wp->trail[i].y;
-        ew->position.z = wp->trail[i].z;
-        ew->scale = 1.125f;
-        ew->a = 255 - (i + 1) * 50;
+        star = wp->effs[i]->userdata;
+        star->position.x = wp->trail[i].x;
+        star->position.y = wp->trail[i].y;
+        star->position.z = wp->trail[i].z;
+        star->scale = 1.125f;
+        star->a = 255 - (i + 1) * 50;
     }
 }
 
@@ -1023,7 +1023,7 @@ static void disp_3D(CameraId cam, void* param) {
     Vec p1;
     Mtx m;
     Mtx m2;
-    RecoveryWork* ew;
+    RecoveryWork* rec;
     f32 s;
 
     w = get_ptr();
@@ -1034,10 +1034,10 @@ static void disp_3D(CameraId cam, void* param) {
     if (w->state) {
         BtlUnit_GetHomePos(mario, &mx, &my, &mz);
         my += 60.0f;
-        ew = w->rec0->userdata;
-        ew->position.x = mx;
-        ew->position.y = my - 10.0f;
-        ew->position.z = 5.0f + mz;
+        rec = w->rec0->userdata;
+        rec->position.x = mx;
+        rec->position.y = my - 10.0f;
+        rec->position.z = 5.0f + mz;
         if (w->disp0 >= 10.0f) {
             p = (Vec){6.0f + mx, my, 8.0f + mz};
         } else {
@@ -1050,10 +1050,10 @@ static void disp_3D(CameraId cam, void* param) {
         if (w->partyArg != -1) {
             BtlUnit_GetHomePos(party, &px, &py, &pz);
             py += 60.0f;
-            ew = w->rec1->userdata;
-            ew->position.x = px;
-            ew->position.y = py - 10.0f;
-            ew->position.z = 5.0f + pz;
+            rec = w->rec1->userdata;
+            rec->position.x = px;
+            rec->position.y = py - 10.0f;
+            rec->position.z = 5.0f + pz;
             if (w->disp1 >= 10.0f) {
                 p1 = (Vec){6.0f + px, py, 8.0f + pz};
             } else {
@@ -1067,10 +1067,10 @@ static void disp_3D(CameraId cam, void* param) {
             BtlUnit_GetHomePos(party, &px, &py, &pz);
             mx = 0.5f * (mx + px);
             my += 90.0f;
-            ew = w->rec2->userdata;
-            ew->position.x = mx;
-            ew->position.y = my - 10.0f;
-            ew->position.z = 5.0f + mz;
+            rec = w->rec2->userdata;
+            rec->position.x = mx;
+            rec->position.y = my - 10.0f;
+            rec->position.z = 5.0f + mz;
             if (w->disp2 >= 10.0f) {
                 p = (Vec){6.0f + mx, my, 8.0f + mz};
             } else {
@@ -1083,10 +1083,10 @@ static void disp_3D(CameraId cam, void* param) {
         } else {
             BtlUnit_GetHomePos(mario, &mx, &my, &mz);
             my += 90.0f;
-            ew = w->rec2->userdata;
-            ew->position.x = mx;
-            ew->position.y = my - 10.0f;
-            ew->position.z = 5.0f + mz;
+            rec = w->rec2->userdata;
+            rec->position.x = mx;
+            rec->position.y = my - 10.0f;
+            rec->position.z = 5.0f + mz;
             if (w->disp2 >= 10.0f) {
                 p = (Vec){6.0f + mx, my, 8.0f + mz};
             } else {

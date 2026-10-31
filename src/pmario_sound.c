@@ -6192,7 +6192,7 @@ sgfound:
     psnd.sfxDelay = 0;
 }
 
-s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u16 dist, s32 r10) {
+s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 posOnly, u16 dist, s32 ignoreSfxOff) {
     s32 sid;
     s32 k;
     PaperSoundEffect *s;
@@ -6209,7 +6209,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     if (entry->fxId == 0) {
         return -1;
     }
-    if ((psnd.flags & PSND_FLAG_NO_SFX) && (r10 == 0)) {
+    if ((psnd.flags & PSND_FLAG_NO_SFX) && (ignoreSfxOff == 0)) {
         return -1;
     }
     if ((((sid == 0x5B) || (sid == 0x8CA)) || (((u32) (sid - 0x1BE)) <= 1)) || (sid == 0x205)) {
@@ -6295,7 +6295,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     sfx->pitch = entry->pitch;
     if (pos != NULL) {
         sfx->position = *pos;
-        if (r8 == 0) {
+        if (posOnly == 0) {
             sfx->flags |= PSFX_FLAG_3D;
         } else {
             sfx->flags |= PSFX_FLAG_POS_UNUSED;

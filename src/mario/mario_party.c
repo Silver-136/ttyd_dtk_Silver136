@@ -12,19 +12,19 @@
 
 /** Removes the partner in Mario's first party slot (currPartySlotId[0]) and marks the slot empty (-1). */
 static inline void marioPartyKillSlot0(void) {
-    MarioWork* wp = marioGetPtr();
-    if (wp->currPartySlotId[0] >= 0) {
-        partyKill(wp->currPartySlotId[0]);
-        wp->currPartySlotId[0] = -1;
+    MarioWork* mario = marioGetPtr();
+    if (mario->currPartySlotId[0] >= 0) {
+        partyKill(mario->currPartySlotId[0]);
+        mario->currPartySlotId[0] = -1;
     }
 }
 
 /** Removes the follower in Mario's second party slot (currPartySlotId[1], the partyEntry2 members) and empties it. */
 static inline void marioPartyKillSlot1(void) {
-    MarioWork* wp = marioGetPtr();
-    if (wp->currPartySlotId[1] >= 0) {
-        partyKill(wp->currPartySlotId[1]);
-        wp->currPartySlotId[1] = -1;
+    MarioWork* mario = marioGetPtr();
+    if (mario->currPartySlotId[1] >= 0) {
+        partyKill(mario->currPartySlotId[1]);
+        mario->currPartySlotId[1] = -1;
     }
 }
 
@@ -36,46 +36,46 @@ static inline void marioPartyKillSlot1(void) {
  * Always returns 0; marioUsePartyMain later fires the ability.
  */
 s32 marioUseParty(void) {
-    MarioWork* wp = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
     PartyEntry* party;
 
     if (N_marioChkUseParty()) {
-        wp->partyUseDelay = 0;
-        wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
+        mario->partyUseDelay = 0;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
-    if ((wp->trigFlags & MARIO_TRIG_FLAG_USE_PARTNER) && marioKeyOffChk()) {
-        wp->partyUseDelay = 0;
-        wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
+    if ((mario->trigFlags & MARIO_TRIG_FLAG_USE_PARTNER) && marioKeyOffChk()) {
+        mario->partyUseDelay = 0;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
     party = partyGetPtr(marioGetPartyId());
     if (party != NULL && party->runMode == 3) {
         return 0;
     }
-    if (wp->currPartySlotId[0] < 0) {
-        wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
+    if (mario->currPartySlotId[0] < 0) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
-    if (wp->flags & MARIO_FLAG_IS_8_BIT) {
+    if (mario->flags & MARIO_FLAG_IS_8_BIT) {
         return 0;
     }
     if (fbatPreventMarioEventChk()) {
-        wp->partyUseDelay = 0;
-        wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
+        mario->partyUseDelay = 0;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
-    if ((wp->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) || wp->airTimer != 0) {
-        wp->partyUseDelay = 0;
-        wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
+    if ((mario->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING)) || mario->airTimer != 0) {
+        mario->partyUseDelay = 0;
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
-    if (wp->currMotionId != MARIO_MOTION_STAY && wp->currMotionId != MARIO_MOTION_WALK && wp->currMotionId != MARIO_MOTION_DASH) {
-        wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
+    if (mario->currMotionId != MARIO_MOTION_STAY && mario->currMotionId != MARIO_MOTION_WALK && mario->currMotionId != MARIO_MOTION_DASH) {
+        mario->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
         return 0;
     }
     // party can be NULL (marioGetPartyId may return -1 even with a partner slot set); it is dereferenced here before the NULL check below.
-    if ((wp->dispFlags & MARIO_DISP_FLAG_SLIT) || party->slitOn == 1) {
+    if ((mario->dispFlags & MARIO_DISP_FLAG_SLIT) || party->slitOn == 1) {
         return 0;
     }
     if (partyGetPtr(marioGetPartyId())->flags & PARTY_FLAG_IS_BEING_USED) {
@@ -92,9 +92,9 @@ s32 marioUseParty(void) {
     if (party->currentMemberId == 4 && yoshiGetStatus()) {
         return 0;
     }
-    if (!(wp->trigFlags & MARIO_TRIG_FLAG_USE_PARTNER) && (wp->buttonTrg & PAD_BUTTON_X)) {
-        wp->trigFlags |= MARIO_TRIG_FLAG_USE_PARTNER;
-        wp->partyUseDelay = 5;
+    if (!(mario->trigFlags & MARIO_TRIG_FLAG_USE_PARTNER) && (mario->buttonTrg & PAD_BUTTON_X)) {
+        mario->trigFlags |= MARIO_TRIG_FLAG_USE_PARTNER;
+        mario->partyUseDelay = 5;
     }
     return 0;
 }
@@ -106,17 +106,17 @@ s32 marioUseParty(void) {
  */
 // Descriptive name (not in the symbol maps; docs/NAME_PROVENANCE.md).
 s32 marioUsePartyMain(void) {
-    MarioWork* wp = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
 
-    if (wp->trigFlags & MARIO_TRIG_FLAG_USE_PARTNER) {
+    if (mario->trigFlags & MARIO_TRIG_FLAG_USE_PARTNER) {
         if (marioKeyOffChk()) {
-            wp->partyUseDelay = 0;
-            wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
+            mario->partyUseDelay = 0;
+            mario->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
             return 0;
         }
-        if (--wp->partyUseDelay <= 0) {
-            wp->partyUseDelay = 0;
-            wp->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
+        if (--mario->partyUseDelay <= 0) {
+            mario->partyUseDelay = 0;
+            mario->trigFlags &= ~MARIO_TRIG_FLAG_USE_PARTNER;
             return partyDoWork();
         }
     }
@@ -130,28 +130,28 @@ s32 marioUsePartyMain(void) {
  * Used on save load, after battles and in the E3 sequence; returns the party slot or -1.
  */
 s32 marioPartyEntry(PartyId id) {
-    MarioWork* wp = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
     s32 ret;
 
     if (id < 8) {
         if (!partyChkJoin(id)) {
             return -1;
         }
-        if (wp->currPartySlotId[0] >= 0) {
+        if (mario->currPartySlotId[0] >= 0) {
             marioPartyKillSlot0();
         }
         ret = partyEntry(id);
         if (ret >= 0) {
-            wp->currPartySlotId[0] = ret;
+            mario->currPartySlotId[0] = ret;
             partyHello(partyGetPtr(ret));
         }
     } else {
-        if (wp->currPartySlotId[1] >= 0) {
+        if (mario->currPartySlotId[1] >= 0) {
             marioPartyKillSlot1();
         }
         ret = partyEntry2(id);
         if (ret >= 0) {
-            wp->currPartySlotId[1] = ret;
+            mario->currPartySlotId[1] = ret;
             partyHello(partyGetPtr(ret));
         }
     }
@@ -165,22 +165,22 @@ s32 marioPartyEntry(PartyId id) {
  */
 s32 marioPartyHello(PartyId id) {
     s32 ret = -1;
-    MarioWork* wp = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
 
     if (id < 8) {
         if (!partyChkJoin(id)) {
             return -1;
         }
-        if (wp->currPartySlotId[0] < 0) {
+        if (mario->currPartySlotId[0] < 0) {
             ret = partyEntryHello(id);
             if (ret >= 0) {
-                wp->currPartySlotId[0] = ret;
+                mario->currPartySlotId[0] = ret;
             }
         }
     } else {
         ret = partyEntry2Hello(id);
         if (ret >= 0) {
-            wp->currPartySlotId[1] = ret;
+            mario->currPartySlotId[1] = ret;
         }
     }
     return ret;
@@ -226,18 +226,18 @@ s32 marioGetParty(void) {
  * (PARTY_FLAG_IS_PARTNER is set by partyEntry2 on followers). -1 when no partner is out. Pass it to partyGetPtr.
  */
 s32 marioGetPartyId(void) {
-    MarioWork* wp = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
     PartyEntry* party;
     s32 partyId;
 
-    partyId = wp->currPartySlotId[0];
+    partyId = mario->currPartySlotId[0];
     if (partyId >= 0) {
         party = partyGetPtr(partyId);
         if ((party != NULL) && !(party->flags & PARTY_FLAG_IS_PARTNER)) {
             return partyId;
         }
     }
-    partyId = wp->currPartySlotId[1];
+    partyId = mario->currPartySlotId[1];
     if (partyId >= 0) {
         party = partyGetPtr(partyId);
         if ((party != NULL) && !(party->flags & PARTY_FLAG_IS_PARTNER)) {
@@ -252,11 +252,11 @@ s32 marioGetPartyId(void) {
  * flagged PARTY_FLAG_IS_PARTNER), or -1. The counterpart of marioGetPartyId.
  */
 s32 marioGetExtraPartyId(void) {
-    MarioWork* wp = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
     PartyEntry* party;
     s32 partyId;
 
-    partyId = wp->currPartySlotId[0];
+    partyId = mario->currPartySlotId[0];
     if (partyId >= 0) {
         party = partyGetPtr(partyId);
         if ((party != NULL) && (party->flags & PARTY_FLAG_IS_PARTNER)) {
@@ -264,7 +264,7 @@ s32 marioGetExtraPartyId(void) {
         }
     }
 
-    partyId = wp->currPartySlotId[1];
+    partyId = mario->currPartySlotId[1];
     if (partyId >= 0) {
         party = partyGetPtr(partyId);
         if ((party != NULL) && (party->flags & PARTY_FLAG_IS_PARTNER)) {

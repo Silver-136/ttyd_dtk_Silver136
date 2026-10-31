@@ -351,16 +351,16 @@ void marioItemGetDisable(void) {
  * run each frame from Bowser's main loop (koopa.c).
  */
 void marioItemGetChk(void) {
-    MarioWork* wp;
+    MarioWork* work;
     s32 timer;
 
-    wp = mp;
+    work = mp;
     timer = mp->itemGetDisableTimer;
     if (timer > 0) {
         timer--;
-        wp->itemGetDisableTimer = (s16)timer;
+        work->itemGetDisableTimer = (s16)timer;
         if ((s16)timer <= 0) {
-            wp->itemGetDisableTimer = 0;
+            work->itemGetDisableTimer = 0;
             mp->flags &= ~MARIO_FLAG_ITEM_GET_DISABLED;
         }
     }

@@ -18,16 +18,16 @@ USER_FUNC(evt_hitobj_onoff) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);
     s32 isGroup = evtGetValue(event, args[1]);
-    s32 on = evtGetValue(event, args[2]);
+    s32 off = evtGetValue(event, args[2]);
 
     if (isGroup == 0) {
-        if (on != 0) {
+        if (off != 0) {
             hitObjFlagOff(name, HIT_FLAG_OFF);
         } else {
             hitObjFlagOn(name, HIT_FLAG_OFF);
         }
     } else {
-        if (on != 0) {
+        if (off != 0) {
             hitGrpFlagOff(name, HIT_FLAG_OFF);
         } else {
             hitGrpFlagOn(name, HIT_FLAG_OFF);
@@ -109,18 +109,18 @@ USER_FUNC(evt_hit_get_position) {
 USER_FUNC(evt_hitobj_flag_onoff) {
     EvtWord* args = event->args;
     s32 isGroup = evtGetValue(event, args[0]);
-    s32 on = evtGetValue(event, args[1]);
+    s32 off = evtGetValue(event, args[1]);
     const char* name = (const char*)evtGetValue(event, args[2]);
     s32 flag = args[3];
 
     if (isGroup == 0) {
-        if (on == 0) {
+        if (off == 0) {
             hitObjFlagOff(name, flag);
         } else {
             hitObjFlagOn(name, flag);
         }
     } else {
-        if (on == 0) {
+        if (off == 0) {
             hitGrpFlagOff(name, flag);
         } else {
             hitGrpFlagOn(name, flag);
@@ -136,18 +136,18 @@ USER_FUNC(evt_hitobj_flag_onoff) {
 USER_FUNC(evt_hitobj_attr_onoff) {
     EvtWord* args = event->args;
     s32 isGroup = evtGetValue(event, args[0]);
-    s32 on = evtGetValue(event, args[1]);
+    s32 off = evtGetValue(event, args[1]);
     const char* name = (const char*)evtGetValue(event, args[2]);
     s32 attr = args[3];
 
     if (isGroup == 0) {
-        if (on == 0) {
+        if (off == 0) {
             hitObjAttrOff(name, attr);
         } else {
             hitObjAttrOn(name, attr);
         }
     } else {
-        if (on == 0) {
+        if (off == 0) {
             hitGrpAttrOff(name, attr);
         } else {
             hitGrpAttrOn(name, attr);

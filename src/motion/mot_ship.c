@@ -141,17 +141,17 @@ s32 marioShipGetDir(void) {
  * 0 otherwise or when not in Boat Mode. mario.c blocks control during 1 and 2.
  */
 s32 marioShipChanging(void) {
-    MarioWork* m = marioGetPtr();
-    if (m->currMotionId != MARIO_MOTION_SHIP) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->currMotionId != MARIO_MOTION_SHIP) {
         return 0;
     }
-    if (m->currSubMotionId == 10) {
+    if (mario->currSubMotionId == 10) {
         return 2;
     }
-    if ((m->currSubMotionId >= 0 && m->currSubMotionId <= 12) || (m->currSubMotionId >= 30 && m->currSubMotionId <= 48)) {
+    if ((mario->currSubMotionId >= 0 && mario->currSubMotionId <= 12) || (mario->currSubMotionId >= 30 && mario->currSubMotionId <= 48)) {
         return 1;
     }
-    if (m->currSubMotionId == 50 || m->currSubMotionId == 52) {
+    if (mario->currSubMotionId == 50 || mario->currSubMotionId == 52) {
         return 3;
     }
     return 0;
@@ -203,13 +203,13 @@ BOOL marioChkShipPlace(HitEntry* hit) {
  * when mario.c rebuilds his look while sailing.
  */
 void marioForceShipAnime(void) {
-    MarioWork* m = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
     marioPaperOff();
     marioChgPaper(NULL);
     marioPaperOn(paper_ship[marioGetColor()]);
     marioChgPaper("PM_H_1B");
     marioChgPose("M_Z_1");
-    m->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
+    mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
 }
 
 /**
@@ -218,25 +218,25 @@ void marioForceShipAnime(void) {
  * starts the wake effect and seats the partners.
  */
 void marioReInit_ship(void) {
-    MarioWork* m = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
     void* p;
     s32 t, u;
     f32 a, b;
-    m->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
+    mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
     p = __memAlloc(HEAP_DEFAULT, sizeof(MotShipWork));
     marioGetPtr()->motStruct = p;
     memset(marioGetPtr()->motStruct, 0, sizeof(MotShipWork));
-    m->currMotionId = MARIO_MOTION_SHIP;
-    m->dispOfs.y = -15.0f;
-    m->currSubMotionId = 0x32;
-    m->wPlayerCollisionBox.x = 40.0f;
-    m->wPlayerCollisionBox.y = 40.0f;
+    mario->currMotionId = MARIO_MOTION_SHIP;
+    mario->dispOfs.y = -15.0f;
+    mario->currSubMotionId = 0x32;
+    mario->wPlayerCollisionBox.x = 40.0f;
+    mario->wPlayerCollisionBox.y = 40.0f;
     marioPaperOn(paper_ship[marioGetColor()]);
     marioChgPaper("PM_H_1A");
     marioChgPose("M_Z_1");
-    m->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
-    m->mot.ship.animTime = 0x58;
-    marioSetPaperAnimeLocalTime(m->mot.ship.animTime);
+    mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
+    mario->mot.ship.animTime = 0x58;
+    marioSetPaperAnimeLocalTime(mario->mot.ship.animTime);
     marioGetPtr()->motShip->sfxId = -1;
     marioGetPtr()->motShip->flags = 0;
     marioGetPtr()->motShip->baseY = 0.0f;
@@ -247,19 +247,19 @@ void marioReInit_ship(void) {
     marioGetPtr()->motShip->bobAngle = 0.0f;
     marioGetPtr()->motShip->bobSpeed = 4.25f;
     marioGetPtr()->motShip->wakeEff = effFunemizuEntry(0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->cam = m->camId;
+    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->cam = mario->camId;
     allPartyForceRideOn();
 }
 
 void mot_ship_post(void) {
-    MarioWork* m = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
     s32 t;
     allPartyRideOff();
-    if (m->dispFlags & MARIO_DISP_FLAG_PAPER) {
+    if (mario->dispFlags & MARIO_DISP_FLAG_PAPER) {
         marioPaperOff();
     }
-    m->wPlayerCollisionBox.x = 20.0f;
-    m->wPlayerCollisionBox.y = 37.0f;
+    mario->wPlayerCollisionBox.x = 20.0f;
+    mario->wPlayerCollisionBox.y = 37.0f;
     marioGetPtr();
     if (marioGetPtr()->motStruct != NULL) {
         if ((u32)marioGetPtr()->motShip->sfxId != 0xFFFFFFFFU) {
@@ -267,9 +267,9 @@ void mot_ship_post(void) {
             marioGetPtr()->motShip->sfxId = -1;
         }
     }
-    m->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
-    m->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
-    m->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_DIR_FLIP;
     marioOfsRotReset();
     if (marioGetPtr()->motStruct != NULL) {
         __memFree(HEAP_DEFAULT, marioGetPtr()->motStruct);
@@ -292,7 +292,7 @@ static inline void shipLerpTurn(f32 t, f32 k) {
  * s when moving, otherwise a gentle 0.3/0.6 pulse following the bob.
  */
 static inline void shipEff(f32 s) {
-    MarioWork* mm = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
     f32 zz = 0.0f;
     if (!s) {
         s32 c;
@@ -302,11 +302,11 @@ static inline void shipEff(f32 s) {
         shipLerpWake(s, 0.1f);
         s = marioGetPtr()->motShip->wakeScale;
     }
-    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.x = mm->position.x;
-    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.y = mm->position.y + zz;
-    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.z = mm->position.z;
+    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.x = mario->position.x;
+    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.y = mario->position.y + zz;
+    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->position.z = mario->position.z;
     ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->size = s;
-    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->yaw = mm->displayDirection;
+    ((EffFunemizuWork*)marioGetPtr()->motShip->wakeEff->userdata)->yaw = mario->displayDirection;
 }
 
 // FAKE: case-0 block as an inline helper so hit/attr/r are inline temps numbered
@@ -928,13 +928,13 @@ void mot_ship(void) {
 
 /** Starts the boat falling (gentle fall curve) when it sails off a ledge; called from mario_hit.c. */
 void marioShipChgFall(void) {
-    MarioWork* m = marioGetPtr();
-    if (!(m->flags & MARIO_FLAG_IS_FALLING)) {
-        m->flags |= MARIO_FLAG_IS_FALLING;
-        m->jumpVelocityY = -0.1f;
-        m->jumpAccelerationY = -0.2f;
-        m->jumpJerkY = 0.024f;
-        m->jumpSnapY = -0.004f;
+    MarioWork* mario = marioGetPtr();
+    if (!(mario->flags & MARIO_FLAG_IS_FALLING)) {
+        mario->flags |= MARIO_FLAG_IS_FALLING;
+        mario->jumpVelocityY = -0.1f;
+        mario->jumpAccelerationY = -0.2f;
+        mario->jumpJerkY = 0.024f;
+        mario->jumpSnapY = -0.004f;
     }
 }
 
@@ -943,11 +943,11 @@ void marioShipChgFall(void) {
  * mario_hit.c uses it to pick the boat's floor checks.
  */
 BOOL marioChkShipMoveMode(void) {
-    MarioWork* m = marioGetPtr();
-    if (m->currMotionId != MARIO_MOTION_SHIP) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->currMotionId != MARIO_MOTION_SHIP) {
         return FALSE;
     }
-    if (m->currSubMotionId >= 50 && m->currSubMotionId <= 52) {
+    if (mario->currSubMotionId >= 50 && mario->currSubMotionId <= 52) {
         return TRUE;
     }
     return FALSE;

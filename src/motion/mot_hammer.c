@@ -415,11 +415,11 @@ s32 marioChkHammer2(void) {
 
 /** Moves the camera in for a spin hammer charge level: z shift and zoom, with a 40-unit upward zoom offset. */
 static inline void mot_ham(f32 shiftZ, f32 zoom) {
-    MarioWork* m = marioGetPtr();
-    m->camShiftTargetZ = shiftZ;
-    m->camShiftRate.z = 0.005f;
-    m->camZoom = zoom;
-    m->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
+    MarioWork* mario = marioGetPtr();
+    mario->camShiftTargetZ = shiftZ;
+    mario->camShiftRate.z = 0.005f;
+    mario->camZoom = zoom;
+    mario->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
 }
 
 #define H2_LEVEL_UP(lvl, shiftZ, zoom)                     \
@@ -869,8 +869,8 @@ static const char isB3_str[] = "MOBJ_Lv3BigBlock";
  * returning the wall hit and its position and normal through the pointers.
  */
 static HitEntry* hammerHitWall(f32 ang, f32* s, f32* co, f32* len, f32* hx, f32* hy, f32* hz, f32* nx, f32* ny, f32* nz) {
-    MarioWork* m = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
     sincosf(s, co, ang);
-    *len = 2.0f * m->wPlayerCollisionBox.x;
-    return hitCheckFilter(NULL, hx, hy, hz, len, nx, ny, nz, m->position.x, 0.5f * m->wPlayerCollisionBox.y + m->position.y, m->position.z, *s, 0.0f, *co);
+    *len = 2.0f * mario->wPlayerCollisionBox.x;
+    return hitCheckFilter(NULL, hx, hy, hz, len, nx, ny, nz, mario->position.x, 0.5f * mario->wPlayerCollisionBox.y + mario->position.y, mario->position.z, *s, 0.0f, *co);
 }

@@ -159,12 +159,12 @@ USER_FUNC(search_result) {
 static inline int chuchu_findTreasure2(PartyEntry* cpp, f32 range, Vec* bestPos) {
     u32 i;
     int found;
-    MarioWork* pl;
+    MarioWork* mario;
     ChuchuTreasure* tbl;
     f32 minDist;
 
     found = 0;
-    pl = cpp->playerPtr;
+    mario = cpp->playerPtr;
     minDist = 10000.0f;
     tbl = chuchu_treasure_tbl;
     for (i = 0; i < sizeof(chuchu_treasure_tbl) / sizeof(chuchu_treasure_tbl[0]); i++, tbl++) {
@@ -176,7 +176,7 @@ static inline int chuchu_findTreasure2(PartyEntry* cpp, f32 range, Vec* bestPos)
             p.y = tbl->y;
             p.z = tbl->z;
             pos = p;
-            d = PSVECDistance(&pl->position, &pos);
+            d = PSVECDistance(&mario->position, &pos);
             if (!(range < d) && minDist > d) {
                 minDist = d;
                 found = 1;

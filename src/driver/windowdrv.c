@@ -661,8 +661,8 @@ void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, 
     Mtx tec_mtx1, tec_mtx2;
     Mtx majo_mtx1, majo_mtx2, majo_mtx3, majo_mtx4;
     f32 r;
-    f32 xx;
-    f32 y2;
+    f32 tailBaseX;
+    f32 tailBaseY;
 
     camera = camGetCurPtr();
     GXSetTevColor(GX_TEVREG0, (GXColor){0xFF, 0xFF, 0xFF, alpha});
@@ -1006,22 +1006,22 @@ void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, 
     // puts it on the other edge
     if (tailFlags & 1) {
         if (tailFlags & 4) {
-            xx = (0.7f * width) + x;
+            tailBaseX = (0.7f * width) + x;
         } else {
-            xx = (0.38f * width) + x;
+            tailBaseX = (0.38f * width) + x;
         }
 
         if (tailFlags & 8) {
-            y2 = -((0.175f * height) - y);
+            tailBaseY = -((0.175f * height) - y);
             y = ((0.225f * height) + y);
-            if (y2 >= tailY) goto end;
+            if (tailBaseY >= tailY) goto end;
         } else {
-            y2 = -((0.8f * height) - y);
+            tailBaseY = -((0.8f * height) - y);
             y = -((1.2f * height) - y);
-            if (y2 <= tailY) goto end;
+            if (tailBaseY <= tailY) goto end;
         }
-        r = (xx - (((xx - tailX) * (y2 - y)) / (y2 - tailY)));
-        if (tailX >= xx) {
+        r = (tailBaseX - (((tailBaseX - tailX) * (tailBaseY - y)) / (tailBaseY - tailY)));
+        if (tailX >= tailBaseX) {
             if (r > tailX) {
                 r = tailX;
             }
@@ -1050,10 +1050,10 @@ void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, 
         GXBegin(GX_QUADS, GX_VTXFMT0, 4u);
 
 
-        GXPosition3f32(xx - 0.05f * width, y2, 0.0f);
+        GXPosition3f32(tailBaseX - 0.05f * width, tailBaseY, 0.0f);
         GXTexCoord2f32(0.0f, 0.0f);
 
-        GXPosition3f32(xx + 0.05f * width, y2, 0.0f);
+        GXPosition3f32(tailBaseX + 0.05f * width, tailBaseY, 0.0f);
         GXTexCoord2f32(1.0f, 0.0f);
 
         GXPosition3f32(r + 0.05f * width, y, 0.0f);

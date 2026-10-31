@@ -100,9 +100,9 @@ static inline f32 rollCos(f32 a) { return (f32)cos(a); }
 static inline s32 makeVec(f32 half) {
     s32 w = 0;
     s32 r = w;
-    MarioWork* m = marioGetPtr();
-    f32 c = (f32)(s32)(10.0f * m->moveDirection) / 10.0f;
-    f32 x = angleABf(0.0f, 0.0f, (f32)(s32)m->wStickDir1, (f32)(s32)m->wStickDir2);
+    MarioWork* mario = marioGetPtr();
+    f32 c = (f32)(s32)(10.0f * mario->moveDirection) / 10.0f;
+    f32 x = angleABf(0.0f, 0.0f, (f32)(s32)mario->wStickDir1, (f32)(s32)mario->wStickDir2);
     f32 lo;
     f32 hi;
     lo = c - half;
@@ -531,12 +531,12 @@ void marioReInit_roll(void) {
 /** 1 when Mario cannot unroll here: roll locked, ceiling overhead, no floor under him or walls around him. */
 static inline s32 rollChk(void) {
     s32 r;
-    MarioWork* m = marioGetPtr();
-    if (m->mot.roll.flags & ROLL_FLAG_FIX) {
+    MarioWork* mario = marioGetPtr();
+    if (mario->mot.roll.flags & ROLL_FLAG_FIX) {
         r = 1;
-    } else if (m->flags & MARIO_FLAG_IS_TOUCHING_CEILING) {
+    } else if (mario->flags & MARIO_FLAG_IS_TOUCHING_CEILING) {
         r = 1;
-    } else if (!m->hitobjStandOn) {
+    } else if (!mario->hitobjStandOn) {
         r = 1;
     } else if (marioSlitChkWallAround()) {
         r = 1;

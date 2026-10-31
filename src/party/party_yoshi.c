@@ -387,15 +387,15 @@ static void searchHead(PartyEntry* party);
  */
 // Descriptive name (inline helper; not in the symbol maps).
 static inline f32 getOfs(PartyEntry* party) {
-    MarioWork* p = party->playerPtr;
+    MarioWork* mario = party->playerPtr;
     f32 ofs = 0.0f;
 
     if (!strcmp(party->animName, "PYS_S_2")) {
-        ofs += 2.0f * ofs_PYS_S_2[p->poseTime];
+        ofs += 2.0f * ofs_PYS_S_2[mario->poseTime];
     } else if (!strcmp(party->animName, "PYS_R_2")) {
-        ofs += 2.0f * ofs_PYS_R_2[p->poseTime];
+        ofs += 2.0f * ofs_PYS_R_2[mario->poseTime];
     } else if (!strcmp(party->animName, "PYS_F_1")) {
-        ofs += 2.0f * ofs_PYS_F_1[p->poseTime];
+        ofs += 2.0f * ofs_PYS_F_1[mario->poseTime];
     }
     return ofs;
 }
@@ -1272,11 +1272,11 @@ void searchGround2(PartyEntry* party) {
 
 /** Looks for a ceiling above Yoshi (10 units over his height) and stores it in Mario's hitobjHead. */
 static void searchHead(PartyEntry* party) {
-    MarioWork* p = party->playerPtr;
+    MarioWork* mario = party->playerPtr;
     Vec pos = party->position;
     f32 height = partyGetHeight(party);
 
-    p->hitobjHead = marioSearchHead(&pos, &height, 10.0f);
+    mario->hitobjHead = marioSearchHead(&pos, &height, 10.0f);
 }
 
 /**
