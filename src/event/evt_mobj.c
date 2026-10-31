@@ -3302,7 +3302,7 @@ s32 mobj_kururing_floor(MapObjectEntry* mobj) {
         mobj->flags |= MOBJ_FLAG_PAPER_TEX;
         dispEntry(CAMERA_SHADOW, 0.0f, 0, (DispCallback)kururing_capture, mobj);
         // FAKE: joint points at worldPositions[0][1].y (the y read below) so its web is the unnamed add temp, not a named load (colours before mario's call temp)
-        joint = &animPoseGetAnimPosePtr(mobj->poseId)->worldPositions[0][1].y;
+        joint = &((Vec*)animPoseGetAnimPosePtr(mobj->poseId)->worldPositions->address)[1].y;
         item = marioGetPtr();
         if (kururing_in_box(mobj->position.x, mobj->position.z, ((MarioWork*)item)->position.x, ((MarioWork*)item)->position.z, 30.0f)) {
             ((MarioWork*)item)->position.y = *joint;

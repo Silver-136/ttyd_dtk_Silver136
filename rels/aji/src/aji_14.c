@@ -95,7 +95,7 @@ USER_FUNC(waku) {
         pose = animPoseGetAnimPosePtr(npc->poseId);
         animPoseWorldPositionEvalOn(npc->poseId);
         if (pose->worldPositions != NULL) {
-            Vec* positions = *pose->worldPositions;
+            Vec* positions = (Vec*)pose->worldPositions->address;
             s32 idx = animPoseGetGroupIdx(npc->poseId, "locator17");
 
             if (npc->position.y >= 0.0f) {
@@ -106,7 +106,7 @@ USER_FUNC(waku) {
                 // 腕
                 npcNameToPtr("\x98\x67")->position = hidden;
             }
-            positions = *pose->worldPositions;
+            positions = (Vec*)pose->worldPositions->address;
             for (i = 0; i < pose->numWorldPositions; i++) {
                 positions[i] = (Vec){0.0f, -1000.0f, 0.0f};
             }
@@ -119,7 +119,7 @@ USER_FUNC(waku) {
         pose = animPoseGetAnimPosePtr(npc->poseId);
         animPoseWorldPositionEvalOn(npc->poseId);
         if (pose->worldPositions != NULL) {
-            Vec* positions = *pose->worldPositions;
+            Vec* positions = (Vec*)pose->worldPositions->address;
             s32 idx = animPoseGetGroupIdx(npc->poseId, "locator17");
 
             if (npc->position.y >= 0.0f) {
@@ -130,7 +130,7 @@ USER_FUNC(waku) {
                 // 腕2
                 npcNameToPtr("\x98\x67\x82\x51")->position = hidden;
             }
-            positions = *pose->worldPositions;
+            positions = (Vec*)pose->worldPositions->address;
             for (i = 0; i < pose->numWorldPositions; i++) {
                 positions[i] = (Vec){0.0f, -1000.0f, 0.0f};
             }

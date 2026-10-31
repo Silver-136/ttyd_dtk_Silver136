@@ -1574,7 +1574,7 @@ void end_ext_moamoa_init(void) {
 // Descriptive name (not in the symbol maps); placeholder unk_end_00000440, JP end .text+0x37C. See docs/NAME_PROVENANCE.md.
 void end_ext_moamoa_main(void) {
     NpcEntry* npc = npcNameToPtr("\203\202\203A\203\202\203A");
-    Vec* wpos = *animPoseGetAnimPosePtr(npc->poseId)->worldPositions;
+    Vec* wpos = (Vec*)animPoseGetAnimPosePtr(npc->poseId)->worldPositions->address;
     s32 i;
     ExtdrvPose* pose;
     EndMoa* elem;
@@ -1619,7 +1619,7 @@ void end_ext_moamoa_main(void) {
     }
     ap = animPoseGetAnimPosePtr(npc->poseId);
     n = ap->numWorldPositions;
-    p = *ap->worldPositions;
+    p = (Vec*)ap->worldPositions->address;
     for (i = 0; i < n; i++) {
         p[i] = (Vec){0.0f, -1000.0f, 0.0f};
     }
@@ -1673,7 +1673,7 @@ USER_FUNC(evt_end_moamoa_init) {
     evtSetValue(event, LW(10), (EvtWord)end_moa_ext_data);
     ap = animPoseGetAnimPosePtr(npc->poseId);
     n = ap->numWorldPositions;
-    p = *ap->worldPositions;
+    p = (Vec*)ap->worldPositions->address;
     for (i = 0; i < n; i++) {
         p[i] = (Vec){0.0f, -1000.0f, 0.0f};
     }

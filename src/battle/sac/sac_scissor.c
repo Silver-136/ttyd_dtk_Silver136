@@ -84,15 +84,7 @@ typedef struct ScissorWork {
     /* 0x110 */ u8 pad110[4];
     /* 0x114 */ Pt* points; // cursor path as Pt pairs (0x1000 bytes, up to 0x200 points)
     /* 0x118 */ struct ScissorTri* tris; // triangle list (0x3000 bytes), drawn by scissor_disp_region
-    /* 0x11C */ s32 phase;
-    /* 0x120 */ s32 phaseStep;
-    /* 0x124 */ Vec pos;
-    /* 0x130 */ Vec from;
-    /* 0x13C */ Vec to;
-    /* 0x148 */ u8 pad148[0xC];
-    /* 0x154 */ Vec scale;
-    /* 0x160 */ Vec rot;
-    /* 0x16C */ EffectEntry* eff;
+    SacStarStone star;
     /* 0x170 */ smartEntry* smart;
 } ScissorWork;
 
@@ -669,53 +661,53 @@ s32 star_control(EventEntry* evt, BOOL first) {
         s->starX[0] = s->cursorX;
         s->starY[0] = s->cursorY;
     }
-    switch (w->phase) {
+    switch (w->star.state) {
     case 1:
-        w->phase = 2;
-        w->phaseStep = 0;
-        w->eff = effStarStoneEntry(3, 0.0f, -1000.0f, 0.0f, 1.0f);
-        BtlUnit_GetPos(mario, &w->pos.x, &w->pos.y, &w->pos.z);
-        w->pos.y += mario->sizeMultiplier * (f32)mario->height + 37.0f;
-        w->from = w->pos;
-        w->to = w->pos;
-        w->to.y += 50.0f;
-        w->to.z += -1.0f;
-        w->scale = (Vec){0.0f, 0.0f, 0.0f};
-        w->rot = (Vec){0.0f, 0.0f, 0.0f};
+        w->star.state = 2;
+        w->star.timer = 0;
+        w->star.eff = effStarStoneEntry(3, 0.0f, -1000.0f, 0.0f, 1.0f);
+        BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
+        w->star.pos.y += mario->sizeMultiplier * (f32)mario->height + 37.0f;
+        w->star.from = w->star.pos;
+        w->star.to = w->star.pos;
+        w->star.to.y += 50.0f;
+        w->star.to.z += -1.0f;
+        w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
+        w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
     case 2:
-        w->phaseStep++;
-        if (w->phaseStep <= 100) {
-            w->pos.x = intplGetValue(EASING_LINEAR, w->from.x, w->to.x, w->phaseStep, 100);
-            w->pos.y = intplGetValue(EASING_LINEAR, w->from.y, w->to.y, w->phaseStep, 100);
-            w->pos.z = intplGetValue(EASING_LINEAR, w->from.z, w->to.z, w->phaseStep, 100);
-            w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->phaseStep, 100);
+        w->star.timer++;
+        if (w->star.timer <= 100) {
+            w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 100);
+            w->star.pos.y = intplGetValue(EASING_LINEAR, w->star.from.y, w->star.to.y, w->star.timer, 100);
+            w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 100);
+            w->star.scale.x = w->star.scale.y = w->star.scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star.timer, 100);
         } else {
-            w->pos.x = w->to.x;
-            w->pos.y = w->to.y;
-            w->pos.z = w->to.z;
-            w->scale.x = w->scale.y = w->scale.z = 2.0f;
+            w->star.pos.x = w->star.to.x;
+            w->star.pos.y = w->star.to.y;
+            w->star.pos.z = w->star.to.z;
+            w->star.scale.x = w->star.scale.y = w->star.scale.z = 2.0f;
         }
-        w->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->phaseStep, 120);
-        if (w->phaseStep >= 120) {
-            w->phase = 3;
-            w->phaseStep = 0;
-            w->from = w->pos;
-            w->to.y = 300.0f;
+        w->star.rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star.timer, 120);
+        if (w->star.timer >= 120) {
+            w->star.state = 3;
+            w->star.timer = 0;
+            w->star.from = w->star.pos;
+            w->star.to.y = 300.0f;
         }
         break;
     case 3:
-        w->phaseStep++;
-        w->pos.y = intplGetValue(EASING_QUADRATIC_IN, w->from.y, w->to.y, w->phaseStep, 60);
-        if (w->phaseStep >= 60) {
-            w->phase = 4;
-            w->phaseStep = 0;
-            w->pos = (Vec){0.0f, 300.0f, 0.0f};
-            w->scale = (Vec){1.0f, 1.0f, 1.0f};
-            w->rot = (Vec){0.0f, 0.0f, 0.0f};
-            w->from.y = w->pos.y;
-            w->to.y = 0.0f;
-            s->cursorX = w->pos.x;
-            s->cursorY = w->pos.y;
+        w->star.timer++;
+        w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 60);
+        if (w->star.timer >= 60) {
+            w->star.state = 4;
+            w->star.timer = 0;
+            w->star.pos = (Vec){0.0f, 300.0f, 0.0f};
+            w->star.scale = (Vec){1.0f, 1.0f, 1.0f};
+            w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
+            w->star.from.y = w->star.pos.y;
+            w->star.to.y = 0.0f;
+            s->cursorX = w->star.pos.x;
+            s->cursorY = w->star.pos.y;
             for (i = 0; i < 4; i++) {
                 s->starX[i] = 0.0f;
                 s->starY[i] = -1000.0f;
@@ -723,36 +715,36 @@ s32 star_control(EventEntry* evt, BOOL first) {
         }
         break;
     case 4:
-        w->phaseStep++;
-        w->pos.y = intplGetValue(EASING_QUADRATIC_OUT, w->from.y, w->to.y, w->phaseStep, 60);
-        s->cursorX = w->pos.x;
-        s->cursorY = w->pos.y;
-        if (w->phaseStep >= 60) {
-            w->phase = 5;
-            w->phaseStep = 0;
+        w->star.timer++;
+        w->star.pos.y = intplGetValue(EASING_QUADRATIC_OUT, w->star.from.y, w->star.to.y, w->star.timer, 60);
+        s->cursorX = w->star.pos.x;
+        s->cursorY = w->star.pos.y;
+        if (w->star.timer >= 60) {
+            w->star.state = 5;
+            w->star.timer = 0;
         }
         break;
     case 5:
     case 6:
         break;
     }
-    if (w->eff) {
-        EffStarStoneWork* e = (EffStarStoneWork*)w->eff->userdata;
-        if (w->phase >= 4) {
+    if (w->star.eff) {
+        EffStarStoneWork* e = (EffStarStoneWork*)w->star.eff->userdata;
+        if (w->star.state >= 4) {
             e->position.x = 0.0f;
             e->position.y = -1000.0f;
             e->position.z = 0.0f;
         } else {
-            e->position.x = w->pos.x;
-            e->position.y = w->pos.y;
-            e->position.z = w->pos.z;
+            e->position.x = w->star.pos.x;
+            e->position.y = w->star.pos.y;
+            e->position.z = w->star.pos.z;
         }
-        e->rot.x = w->rot.x;
-        e->rot.y = w->rot.y;
-        e->rot.z = w->rot.z;
-        e->scale = 1.5f * w->scale.x;
+        e->rot.x = w->star.rot.x;
+        e->rot.y = w->star.rot.y;
+        e->rot.z = w->star.rot.z;
+        e->scale = 1.5f * w->star.scale.x;
     }
-    if (w->phase >= 4 && w->phase <= 6) {
+    if (w->star.state >= 4 && w->star.state <= 6) {
         dispEntry(CAMERA_2D, 0.0f, 2, star_disp2D, NULL);
     }
     return 0;
@@ -761,7 +753,7 @@ s32 star_control(EventEntry* evt, BOOL first) {
 /** Draws the drawing cursor with its four fading trail copies. */
 void star_disp2D(CameraId camera, void* param) {
     ScissorWork* w = GetScissorPtr();
-    if (w->phase >= 2 && w->phase <= 6) {
+    if (w->star.state >= 2 && w->star.state <= 6) {
         star_disp2D_sub(0, 255);
         star_disp2D_sub(1, 192);
         star_disp2D_sub(2, 128);
@@ -785,12 +777,12 @@ void star_disp2D_sub(s32 idx, s32 alpha) {
     struct ScissorStars* s = &w->stars;
     f32 x, y, z;
     GXColor col;
-    if (w->phase >= 6) {
-        w->phaseStep++;
-        if (w->phaseStep > 30) {
-            w->phaseStep = 30;
+    if (w->star.state >= 6) {
+        w->star.timer++;
+        if (w->star.timer > 30) {
+            w->star.timer = 30;
         }
-        alpha = (s32)intplGetValue(EASING_LINEAR, (f32)(u8)alpha, 0.0f, w->phaseStep, 30);
+        alpha = (s32)intplGetValue(EASING_LINEAR, (f32)(u8)alpha, 0.0f, w->star.timer, 30);
     }
     col = (GXColor){0xFF, 0xFF, 0xFF, 0x00};
     col.a = alpha;
@@ -804,10 +796,10 @@ void star_disp2D_sub(s32 idx, s32 alpha) {
         y = s->starY[idx - 1];
     }
     PSMTXTrans(transMtx, x, y - 20.0f, z);
-    PSMTXScale(scaleMtx, w->scale.x, w->scale.y, w->scale.z);
-    PSMTXRotRad(rotX, 'x', 0.017453292f * w->rot.x);
-    PSMTXRotRad(rotY, 'y', 0.017453292f * w->rot.y);
-    PSMTXRotRad(rotZ, 'z', 0.017453292f * w->rot.z);
+    PSMTXScale(scaleMtx, w->star.scale.x, w->star.scale.y, w->star.scale.z);
+    PSMTXRotRad(rotX, 'x', 0.017453292f * w->star.rot.x);
+    PSMTXRotRad(rotY, 'y', 0.017453292f * w->star.rot.y);
+    PSMTXRotRad(rotZ, 'z', 0.017453292f * w->star.rot.z);
     PSMTXConcat(rotZ, rotY, rotMtx);
     PSMTXConcat(rotX, rotMtx, rotMtx);
     PSMTXConcat(scaleMtx, rotMtx, rotMtx);
@@ -820,7 +812,7 @@ s32 scissor_timer_get(EventEntry* evt) {
     ScissorWork* w = GetScissorPtr();
     EvtWord* args = evt->args;
     if (w->timer <= 59) {
-        w->phase = 6;
+        w->star.state = 6;
     }
     evtSetValue(evt, args[0], w->timer);
     return 2;
@@ -925,7 +917,7 @@ s32 scissor_control(EventEntry* evt, BOOL first) {
         w->stars.cursorY = 200.0f;
     }
     if (w->timer <= 59) {
-        w->phase = 6;
+        w->star.state = 6;
         return 2;
     }
     if (gp->retraceCount % 6 == 0 && w->stars.count < 0x200) {
@@ -1262,8 +1254,8 @@ s32 scissor_init(void) {
 /** Cleanup when the move ends: deletes the star effect and frees the capture and the two buffers. */
 s32 scissor_end(void) {
     ScissorWork* w = GetScissorPtr();
-    effDelete(((EffStarStoneWork*)w->eff->userdata)->dust);
-    effDelete(w->eff);
+    effDelete(((EffStarStoneWork*)w->star.eff->userdata)->dust);
+    effDelete(w->star.eff);
     if (w->smart != NULL) {
         smartFree(w->smart);
         w->smart = NULL;
@@ -1276,13 +1268,13 @@ s32 scissor_end(void) {
 /** Starts the star rising out of Mario (star_control). */
 static s32 star_stone_appear(void) {
     ScissorWork* w = GetScissorPtr();
-    w->phase = 1;
+    w->star.state = 1;
     return 2;
 }
 
 /** Waits until the star has dropped into place as the drawing cursor. */
 s32 wait_star_standby(void) {
-    return GetScissorPtr()->phase == 5 ? 2 : 0;
+    return GetScissorPtr()->star.state == 5 ? 2 : 0;
 }
 
 /**

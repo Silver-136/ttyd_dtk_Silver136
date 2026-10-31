@@ -1586,7 +1586,7 @@ void capture(CameraId camera, void* param) {
     animPoseDrawMtx(m->pose1, t, 3, 0.0f, 1.0f);
     animPosePeraOn(m->pose1);
     if (m->id == UNIT_SMORG) {
-        gpos = *animPoseGetAnimPosePtr(m->pose1)->worldPositions;
+        gpos = (Vec*)animPoseGetAnimPosePtr(m->pose1)->worldPositions->address;
         cnt = smartAlloc(g_moamoa_chain_num * 4, 3)->address;
         idx = smartAlloc(2000, 3)->address;
         memset(cnt, 0, g_moamoa_chain_num * 4);

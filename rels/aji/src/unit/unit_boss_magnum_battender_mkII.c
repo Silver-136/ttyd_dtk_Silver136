@@ -458,6 +458,7 @@ static USER_FUNC(waku_main) {
     AnimationPose* pose;
     s32 idx;
     f32 yaw;
+    Vec* positions;
 
     animGetPtr();
     id = BattleTransID(event, id);
@@ -469,8 +470,9 @@ static USER_FUNC(waku_main) {
     animPoseGetAnimBaseDataPtr(poseId);
     pose = animPoseGetAnimPosePtr(poseId);
     idx = animPoseGetGroupIdx(poseId, "locator17");
-    BtlUnit_SetPartsPos(waku, (*pose->worldPositions)[idx].x, (*pose->worldPositions)[idx].y,
-                        (*pose->worldPositions)[idx].z);
+    positions = pose->worldPositions->address;
+    BtlUnit_SetPartsPos(waku, positions[idx].x, positions[idx].y,
+                        positions[idx].z);
     yaw = camGetPtr(CAMERA_3D)->viewYaw;
     BtlUnit_SetPartsRotate(waku, 0.0f, -yaw, 0.0f);
     return EVT_RETURN_DONE;

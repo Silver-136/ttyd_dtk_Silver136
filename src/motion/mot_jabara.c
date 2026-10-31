@@ -25,7 +25,6 @@
 #include "mot/mot_slit.h"
 #include "mario/mario_kemuri.h"
 
-BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 
 typedef struct MotJabaraWork {
     u32 flags;          // 0x00: MotJabaraFlags
@@ -164,7 +163,8 @@ static inline BOOL priChk(void) {
 
 BOOL marioChkJabara(void) {
     MarioWork* mario = marioGetPtr();
-    s32 rubCount, rubDir, rubMag;
+    s32 rubCount, rubDir;
+    f32 rubMag;
     if (!priChk()) {
         return FALSE;
     }
@@ -261,7 +261,7 @@ void mot_jabara(void) {
     Vec v68;
     s32 rubCount;
     s32 rubDir;
-    s32 rubMag;
+    f32 rubMag;
     s32 overheadHit;
     f32 hitY;
     f32 overheadDist;

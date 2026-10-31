@@ -3,6 +3,7 @@
 #pragma once
 
 #include "manager/filemgr.h"
+#include "memory.h"
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
@@ -282,9 +283,9 @@ typedef struct AnimationPose {
     Mtx matrix;                         // 0x124
     AnimPoseDispCallback dispCallback;                 // 0x154
     void* dispUserDataCallback;         // 0x158
-    Vec** worldPositions;               // 0x15C, filled while animPoseWorldPositionEvalOn is set
+    smartEntry* worldPositions;               // 0x15C, filled while animPoseWorldPositionEvalOn is set
     s32 numWorldPositions;              // 0x160
-    Mtx** worldMatrices;                // 0x164, filled while animPoseWorldMatrixEvalOn is set
+    smartEntry* worldMatrices;                // 0x164, filled while animPoseWorldMatrixEvalOn is set
     s32 numWorldMatrices;               // 0x168
     u8 pad_16C[0x170 - 0x16C];          // 0x16C, never accessed
 } AnimationPose;

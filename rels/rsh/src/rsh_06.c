@@ -634,7 +634,7 @@ void evalOn(void) {
     animPoseWorldPositionEvalOn(npc->poseId);
     wp->animPoseId = npc->poseId;
     anim = animPoseGetAnimPosePtr(npc->poseId);
-    pos = anim->worldPositions[0];
+    pos = ((Vec*)anim->worldPositions->address);
     n = anim->numWorldPositions;
     for (i = 0; i < n; i++) {
         pos[i] = (Vec){0.0f, -1000.0f, 0.0f};
@@ -1491,12 +1491,12 @@ void moamoa_joint_position(Moamoa* moa, Vec* out) {
     NpcEntry* npc = npcNameToPtr("base");
     AnimationPose* anim = animPoseGetAnimPosePtr(npc->poseId);
     f32 t;
-    Vec* b = anim->worldPositions[0] + wp->chainIdx[moa->group][1];
+    Vec* b = ((Vec*)anim->worldPositions->address) + wp->chainIdx[moa->group][1];
     Vec tmp;
 
     // order/count stays below 1: order zero is at the child joint, later members approach the parent.
     t = (f32)moa->order / (f32)wp->chainNum[moa->group];
-    PSVECScale(anim->worldPositions[0] + wp->chainIdx[moa->group][0], out, t);
+    PSVECScale(((Vec*)anim->worldPositions->address) + wp->chainIdx[moa->group][0], out, t);
     PSVECScale(b, &tmp, 1.0f - t);
     PSVECAdd(out, &tmp, out);
 }

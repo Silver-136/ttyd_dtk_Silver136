@@ -145,7 +145,7 @@ static inline BOOL marioLandChk(f32 vy) {
     return FALSE;
 }
 
-void partyMoveBehindMario3(PartyEntry* party, s32 a, f32 dir);
+
 
 /**
  * Prepares a pipe arrival (evt_bero's pipe entry script): disables floors;

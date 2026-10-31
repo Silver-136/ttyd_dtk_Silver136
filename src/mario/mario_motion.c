@@ -66,7 +66,7 @@ void mot_shadow(void);
 void mot_partyUse(void);
 void mot_dummy(void);
 
-BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
+
 BOOL marioCreviceWallChk(Vec pos);
 void* fbatNpcTalkCheck(void);
 
@@ -619,7 +619,7 @@ void marioFall(void) {
     f32 spd;
     s32 b;
     s32 a;
-    s32 c;
+    f32 c;
     f32 y;
     void* hit;
 
@@ -1052,7 +1052,7 @@ s32 marioRollChgChk(void) {
     MarioWork* mario = marioGetPtr();
     s32 b;
     s32 a;
-    s32 c;
+    f32 c;
     if (mario->flags & MARIO_FLAG_IS_8_BIT) {
         return 0;
     }

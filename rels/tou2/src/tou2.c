@@ -301,7 +301,7 @@ USER_FUNC(tou_champion_belt) {
         champion_belt_onoff = 0;
     }
     pose = animPoseGetAnimPosePtr(npc->poseId);
-    positions = *pose->worldPositions;
+    positions = (Vec*)pose->worldPositions->address;
     group = animPoseGetGroupIdx(npc->poseId, "locator8");
     angle = reviseAngle(camGetRy() - pose->rotationY);
     eff = event->userdatap[0];

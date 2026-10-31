@@ -31,7 +31,6 @@
 #include "party/party_vivian.h"
 
 s32 partyMoveMain(PartyEntry* party, s32 hosei);
-extern void party_set_behind_dir(PartyEntry* party);
 static void flyMain(PartyEntry* party);
 
 Footmark footmarkBuf[2][80];
@@ -968,13 +967,13 @@ void partyMoveBehindMario(PartyEntry* party, s32 arg) {
  * partyMoveBehindMario for evt_mario.c's scripted moves:
  * also keeps a set homeDir (party_set_behind_dir) and uses the smaller push box around Mario.
  */
-void partyMoveBehindMario3(PartyEntry* party, s32 arg) {
+void partyMoveBehindMario3(PartyEntry* party, s32 arg, f32 dir) {
     if (party->currentMemberId == PARTY_MEMBER_YOSHI && party->runMode == 3) {
         return;
     }
     party->trigFlags |= PARTY_TRIG_BEHIND_DIR_SET;
     party->trigFlags |= PARTY_TRIG_HALF_PUSH;
-    party_set_behind_dir(party);
+    party_set_behind_dir(party, dir);
     party->moveArg = arg;
     partyChgMoveMode(party, 2);
     partyChgMot(party, PARTY_MOTION_WALK);

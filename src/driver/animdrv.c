@@ -2350,10 +2350,10 @@ void dispProc(s32 parentId, s32 groupId, s32 xluStage, s32 nextKeyframe, f32 ble
             pos.x = (*g_modeling_mtx)[0][3];
             pos.y = (*g_modeling_mtx)[1][3];
             pos.z = (*g_modeling_mtx)[2][3];
-            (*wp->curPose->worldPositions)[groupId] = pos;
+            ((Vec*)wp->curPose->worldPositions->address)[groupId] = pos;
         }
         if (wp->curPose->flags & ANIM_POSE_FLAG_WORLD_MATRIX_EVAL) {
-            PSMTXCopy(*g_modeling_mtx, (*wp->curPose->worldMatrices)[groupId]);
+            PSMTXCopy(*g_modeling_mtx, ((Mtx*)wp->curPose->worldMatrices->address)[groupId]);
         }
         pose = wp->curPose;
         if (pose->flags & ANIM_POSE_FLAG_VIVIAN && groupId == pose->vivianGroupNo[0]) {
@@ -2782,10 +2782,10 @@ void animPoseRelease(s32 poseId) {
         animPaperPoseRelease(poseId);
     } else {
         if (pose->flags & ANIM_POSE_FLAG_WORLD_POSITION_EVAL) {
-            smartFree((smartEntry*)pose->worldPositions);
+            smartFree(pose->worldPositions);
         }
         if (pose->flags & ANIM_POSE_FLAG_WORLD_MATRIX_EVAL) {
-            smartFree((smartEntry*)pose->worldMatrices);
+            smartFree(pose->worldMatrices);
         }
         animPoseFileRelease(pose->fileId);
         pose->flags = 0;
@@ -3255,10 +3255,10 @@ void evalProc(s32 parentId, s32 groupId) {
             pos.x = (*g_modeling_mtx)[0][3];
             pos.y = (*g_modeling_mtx)[1][3];
             pos.z = (*g_modeling_mtx)[2][3];
-            (*wp->curPose->worldPositions)[groupId] = pos;
+            ((Vec*)wp->curPose->worldPositions->address)[groupId] = pos;
         }
         if (wp->curPose->flags & ANIM_POSE_FLAG_WORLD_MATRIX_EVAL) {
-            PSMTXCopy(*g_modeling_mtx, (*wp->curPose->worldMatrices)[groupId]);
+            PSMTXCopy(*g_modeling_mtx, ((Mtx*)wp->curPose->worldMatrices->address)[groupId]);
         }
         if (!(wp->curPose->flags & ANIM_POSE_FLAG_VIVIAN) || groupId != wp->curPose->vivianGroupNo[0]) {
             evalProc(groupId, group->childGroupId);
@@ -3292,7 +3292,7 @@ void animPoseWorldPositionEvalOn(s32 poseId) {
                 break;
         }
         pose->numWorldPositions = data->groupCount;
-        pose->worldPositions = (Vec**)smartAlloc(sizeof(Vec) * data->groupCount, heap);
+        pose->worldPositions = smartAlloc(sizeof(Vec) * data->groupCount, heap);
     }
 }
 
@@ -3302,7 +3302,7 @@ void animPoseWorldPositionEvalOff(s32 poseId) {
 
     if (pose->flags & ANIM_POSE_FLAG_WORLD_POSITION_EVAL) {
         pose->flags &= ~ANIM_POSE_FLAG_WORLD_POSITION_EVAL;
-        smartFree((smartEntry*)pose->worldPositions);
+        smartFree(pose->worldPositions);
         pose->worldPositions = NULL;
     }
 }
@@ -3330,7 +3330,7 @@ void animPoseWorldMatrixEvalOn(s32 poseId) {
                 break;
         }
         pose->numWorldMatrices = data->groupCount;
-        pose->worldMatrices = (Mtx**)smartAlloc(sizeof(Mtx) * data->groupCount, heap);
+        pose->worldMatrices = smartAlloc(sizeof(Mtx) * data->groupCount, heap);
     }
 }
 

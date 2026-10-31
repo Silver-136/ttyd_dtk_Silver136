@@ -68,4 +68,7 @@ f32 partyGetTargetDist3D(s32 id, Vec* p);
 
 f32 partyUpdMoveSpd(PartyEntry* party);
 
+void partyMoveBehindMario3(PartyEntry* party, s32 arg, f32 dir);
+void party_set_behind_dir(PartyEntry* party, f32 dir);
+
 s32 partyGetFootmarkId(PartyEntry* party);

@@ -1055,7 +1055,7 @@ USER_FUNC(moamoa1_on) {
         wp->poseId[i] = part->poseId;
         animPoseWorldPositionEvalOn(wp->poseId[i]);
         ap = animPoseGetAnimPosePtr(wp->poseId[i]);
-        p = *ap->worldPositions;
+        p = (Vec*)ap->worldPositions->address;
         for (j = 0; j < ap->numWorldPositions; j++, p++) {
             *p = (Vec){0.0f, -1000.0f, 0.0f};
         }
@@ -1097,7 +1097,7 @@ USER_FUNC(moamoa2_on) {
     wp->poseId[4] = BattleGetUnitPartsPtr(unit->work[MOAMOA_UNIT_WORK_MOUTH], 1)->poseId;
     animPoseWorldPositionEvalOn(wp->poseId[4]);
     ap = animPoseGetAnimPosePtr(wp->poseId[4]);
-    p = *ap->worldPositions;
+    p = (Vec*)ap->worldPositions->address;
     for (i = 0; i < ap->numWorldPositions; i++, p++) {
         *p = (Vec){0.0f, -1000.0f, 0.0f};
     }
@@ -1154,7 +1154,7 @@ USER_FUNC(moamoa_on) {
     wp->poseId[0] = BattleGetUnitPartsPtr(wp->unitId, 1)->poseId;
     animPoseWorldPositionEvalOn(wp->poseId[0]);
     ap = animPoseGetAnimPosePtr(wp->poseId[0]);
-    p = *ap->worldPositions;
+    p = (Vec*)ap->worldPositions->address;
     for (i = 0; i < ap->numWorldPositions; i++, p++) {
         *p = (Vec){0.0f, -1000.0f, 0.0f};
     }
@@ -1388,7 +1388,7 @@ static void ext_moamoa_main(void) {
         for (j = 0; j < 5; j++) {
             if (j == 0 || unit->work[j + 2] != -1) {
                 ap = animPoseGetAnimPosePtr(wp->poseId[j]);
-                joint[j] = (*ap->worldPositions)[animPoseGetGroupIdx(wp->poseId[j], "joint_core")];
+                joint[j] = ((Vec*)ap->worldPositions->address)[animPoseGetGroupIdx(wp->poseId[j], "joint_core")];
                 PSVECSubtract(&joint[0], &joint[j], &ofs[j]);
             }
         }
@@ -1402,8 +1402,8 @@ static void ext_moamoa_main(void) {
                 continue;
             }
             ap = animPoseGetAnimPosePtr(e4->poseId);
-            a = &(*ap->worldPositions)[wp->chainIdx[e4->chain][0]];
-            b = &(*ap->worldPositions)[wp->chainIdx[e4->chain][1]];
+            a = &((Vec*)ap->worldPositions->address)[wp->chainIdx[e4->chain][0]];
+            b = &((Vec*)ap->worldPositions->address)[wp->chainIdx[e4->chain][1]];
             t = e4->t;
             s = 1.0f - t;
             if (a->y == -1000.0f || b->y == -1000.0f) {

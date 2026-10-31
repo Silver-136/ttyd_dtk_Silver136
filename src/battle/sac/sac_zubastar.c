@@ -86,15 +86,7 @@ typedef struct ZubaStarWork {
     /* 0x0A8 */ ZSObj* ptrs[200];
     /* 0x3C8 */ ZSLine lines[16];
     /* 0x588 */ smartEntry* capture;
-    /* 0x58C */ s32 stone_state;
-    /* 0x590 */ s32 timer;
-    /* 0x594 */ Vec pos;
-    /* 0x5A0 */ Vec start;
-    /* 0x5AC */ Vec end;
-    /* 0x5B8 */ u8 pad5b8[0xC];
-    /* 0x5C4 */ Vec scale;
-    /* 0x5D0 */ Vec rot;
-    /* 0x5DC */ EffectEntry* eff;
+    SacStarStone star;
 } ZubaStarWork;
 
 ZubaStarWork* GetZubaStarPtr(void);
@@ -146,13 +138,13 @@ s32 zubastar_get_kouten(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, 
 /** Starts the star's appearance over Mario. */
 static USER_FUNC(star_stone_appear) {
     ZubaStarWork* w = GetZubaStarPtr();
-    w->stone_state = 1;
+    w->star.state = 1;
     return 2;
 }
 
 /** Waits until the star has reached its place at the top of the screen. */
 USER_FUNC(wait_star_stone_up) {
-    return GetZubaStarPtr()->stone_state == 4 ? 2 : 0;
+    return GetZubaStarPtr()->star.state == 4 ? 2 : 0;
 }
 
 void zubaStarDispStar(CameraId cam, void* param);
@@ -167,62 +159,62 @@ void zubaStarDispStar(CameraId cam, void* param);
 static USER_FUNC(main_star) {
     ZubaStarWork* w = GetZubaStarPtr();
     BattleUnit* mario = BattleGetMarioPtr(_battleWorkPointer);
-    switch (w->stone_state) {
+    switch (w->star.state) {
     case 0:
         break;
     case 1:
-        w->stone_state = 2;
-        w->timer = 0;
-        w->eff = effStarStoneEntry(6, 0.0f, -1000.0f, 0.0f, 1.0f);
-        BtlUnit_GetPos(mario, &w->pos.x, &w->pos.y, &w->pos.z);
-        w->pos.y += mario->sizeMultiplier * mario->height + 37.0f;
-        w->start = w->pos;
-        w->end = w->pos;
-        w->end.y += 50.0f;
-        w->end.z += -1.0f;
-        w->scale = (Vec){0.0f, 0.0f, 0.0f};
-        w->rot = (Vec){0.0f, 0.0f, 0.0f};
+        w->star.state = 2;
+        w->star.timer = 0;
+        w->star.eff = effStarStoneEntry(6, 0.0f, -1000.0f, 0.0f, 1.0f);
+        BtlUnit_GetPos(mario, &w->star.pos.x, &w->star.pos.y, &w->star.pos.z);
+        w->star.pos.y += mario->sizeMultiplier * mario->height + 37.0f;
+        w->star.from = w->star.pos;
+        w->star.to = w->star.pos;
+        w->star.to.y += 50.0f;
+        w->star.to.z += -1.0f;
+        w->star.scale = (Vec){0.0f, 0.0f, 0.0f};
+        w->star.rot = (Vec){0.0f, 0.0f, 0.0f};
     case 2:
-        w->timer++;
-        if (w->timer <= 100) {
-            w->pos.x = intplGetValue(EASING_LINEAR, w->start.x, w->end.x, w->timer, 100);
-            w->pos.y = intplGetValue(EASING_LINEAR, w->start.y, w->end.y, w->timer, 100);
-            w->pos.z = intplGetValue(EASING_LINEAR, w->start.z, w->end.z, w->timer, 100);
-            w->scale.x = w->scale.y = w->scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->timer, 100);
+        w->star.timer++;
+        if (w->star.timer <= 100) {
+            w->star.pos.x = intplGetValue(EASING_LINEAR, w->star.from.x, w->star.to.x, w->star.timer, 100);
+            w->star.pos.y = intplGetValue(EASING_LINEAR, w->star.from.y, w->star.to.y, w->star.timer, 100);
+            w->star.pos.z = intplGetValue(EASING_LINEAR, w->star.from.z, w->star.to.z, w->star.timer, 100);
+            w->star.scale.x = w->star.scale.y = w->star.scale.z = intplGetValue(EASING_LINEAR, 0.0f, 2.0f, w->star.timer, 100);
         } else {
-            w->pos.x = w->end.x;
-            w->pos.y = w->end.y;
-            w->pos.z = w->end.z;
-            w->scale.x = w->scale.y = w->scale.z = 2.0f;
+            w->star.pos.x = w->star.to.x;
+            w->star.pos.y = w->star.to.y;
+            w->star.pos.z = w->star.to.z;
+            w->star.scale.x = w->star.scale.y = w->star.scale.z = 2.0f;
         }
-        w->rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->timer, 120);
-        if (w->timer >= 120) {
-            w->stone_state = 3;
-            w->timer = 0;
-            w->start = w->pos;
-            w->end.y = 300.0f;
+        w->star.rot.y = intplGetValue(EASING_QUADRATIC_OUT, 0.0f, 2160.0f, w->star.timer, 120);
+        if (w->star.timer >= 120) {
+            w->star.state = 3;
+            w->star.timer = 0;
+            w->star.from = w->star.pos;
+            w->star.to.y = 300.0f;
         }
         break;
     case 3:
-        w->timer++;
-        w->pos.y = intplGetValue(EASING_QUADRATIC_IN, w->start.y, w->end.y, w->timer, 60);
-        if (w->timer >= 60) {
-            w->stone_state = 4;
-            w->timer = 0;
+        w->star.timer++;
+        w->star.pos.y = intplGetValue(EASING_QUADRATIC_IN, w->star.from.y, w->star.to.y, w->star.timer, 60);
+        if (w->star.timer >= 60) {
+            w->star.state = 4;
+            w->star.timer = 0;
         }
         break;
     case 4:
         break;
     }
-    if (w->eff) {
-        EffStarStoneWork* d = (EffStarStoneWork*)w->eff->userdata;
-        d->position.x = w->pos.x;
-        d->position.y = w->pos.y;
-        d->position.z = w->pos.z;
-        d->rot.x = w->rot.x;
-        d->rot.y = w->rot.y;
-        d->rot.z = w->rot.z;
-        d->scale = 1.5f * w->scale.x;
+    if (w->star.eff) {
+        EffStarStoneWork* d = (EffStarStoneWork*)w->star.eff->userdata;
+        d->position.x = w->star.pos.x;
+        d->position.y = w->star.pos.y;
+        d->position.z = w->star.pos.z;
+        d->rot.x = w->star.rot.x;
+        d->rot.y = w->star.rot.y;
+        d->rot.z = w->star.rot.z;
+        d->scale = 1.5f * w->star.scale.x;
     }
     dispEntry(CAMERA_3D, 0.0f, 2, zubaStarDispStar, NULL);
     return 0;
@@ -915,8 +907,8 @@ USER_FUNC(zubastar_init) {
 USER_FUNC(zubastar_end) {
     ZubaStarWork* w = GetZubaStarPtr();
     s32 i;
-    effDelete(((EffStarStoneWork*)w->eff->userdata)->dust);
-    effDelete(w->eff);
+    effDelete(((EffStarStoneWork*)w->star.eff->userdata)->dust);
+    effDelete(w->star.eff);
     for (i = 0; i < 200; i++) {
         if (w->ptrs[i] != NULL) {
             if (w->ptrs[i]->v != NULL) {
