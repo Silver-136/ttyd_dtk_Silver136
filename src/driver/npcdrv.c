@@ -2326,7 +2326,11 @@ static inline BOOL fbat_canHit(NpcEntry* npc) {
 #define CONTINUE_IF_NPC_NOT_HITTABLE(f1000, bit)                                                                     \
     if (npc == NULL) continue;                                                                                       \
     if (!(npc->flags & NPC_FLAG_READY)) continue;                                                                    \
-    if (f1000) { if (!(npc->flags & NPC_FLAG_ENEMY)) continue; } else { if (npc->flags & NPC_FLAG_ENEMY) continue; } \
+    if (f1000) { \
+        if (!(npc->flags & NPC_FLAG_ENEMY)) continue; \
+    } else { \
+        if (npc->flags & NPC_FLAG_ENEMY) continue; \
+    } \
     if (soft && !((*(u32*)&((NpcEntry*)npc)->reactionFlags) & (bit))) continue;                                      \
     if (npc->flags & NPC_FLAG_NO_PLAYER_ATTACK) continue;                                                            \
     if (npc->flags & NPC_FLAG_NO_HIT) continue;                                                                      \

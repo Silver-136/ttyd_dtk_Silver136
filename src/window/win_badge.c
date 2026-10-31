@@ -418,7 +418,12 @@ void badge_disp(WindowWork* w, f32 xo, f32 yo) {
         winTexInit((TEXPalette*)*w->res->data);
         for (j = 0; j < *cost; j++) {
             // FAKE: the texture id goes through a spare temporary t in a comma expression; equipped ? 0x1C : 0x1D changes the object
-            { s32 t; winTexSet((t = 0x1D, equipped ? t = 0x1C : 0, t), (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)rowOff)), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, colA); }
+            {
+                s32 t;
+                winTexSet((t = 0x1D, equipped ? t = 0x1C : 0, t),
+                          (Vec){(160.0f + xo) + j * 13, (scroll + ((yo + 110.0f) - (f32)rowOff)), 0.0f},
+                          (Vec){1.0f, 1.0f, 1.0f}, colA);
+            }
         }
     }
     GXSetScissor(0, 0, 0x260, 0x1E0);

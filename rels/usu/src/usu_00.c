@@ -2410,7 +2410,12 @@ void kpaSen_ext_main(void) {
                 break;
             case 1:
                 if (i < 100) {
-pose->texId = calcPose(i, kpaSen[i].pose1Lo, kpaSen[i].pose1Hi, 1); if (i % 10 == 0) { kpaSen[i].t = kpaSen[i].t; pose[i / 10].dir = pose[i / 10].dir; (*pose[i / 10].mtx)[0][3] = (*pose[i / 10].mtx)[0][3]; }
+                    pose->texId = calcPose(i, kpaSen[i].pose1Lo, kpaSen[i].pose1Hi, 1);
+                    if (i % 10 == 0) {
+                        kpaSen[i].t = kpaSen[i].t;
+                        pose[i / 10].dir = pose[i / 10].dir;
+                        (*pose[i / 10].mtx)[0][3] = (*pose[i / 10].mtx)[0][3];
+                    }
                 } else {
                     pose->texId = calcPose(i - 100, kpaSen[i].pose1Lo, kpaSen[i].pose1Hi, 1);
                 }

@@ -515,8 +515,19 @@ void _ymode_mri_16_01(PuniData* p) {
             else STAIR_Y_BY_X(-90.0f, 30.0f)
             else STAIR_Y_BY_X(-70.0f, 20.0f)
             else STAIR_Y_BY_X(-50.0f, 10.0f)
-            else if (p->pos.x <= (-30.0f)) { f32 t = ((-30.0f) - p->pos.x) / 20.0f; f32 u; if (t > 0.5f) { u = (t - 0.5f) / 0.5f; } else { u = 0.0f; } { f32 bz = (0.0f); p->pos.y = 10.0f * u + bz; } }
-            else {
+            else if (p->pos.x <= (-30.0f)) {
+                f32 t = ((-30.0f) - p->pos.x) / 20.0f;
+                f32 u;
+                if (t > 0.5f) {
+                    u = (t - 0.5f) / 0.5f;
+                } else {
+                    u = 0.0f;
+                }
+                {
+                    f32 bz = (0.0f);
+                    p->pos.y = 10.0f * u + bz;
+                }
+            } else {
                 p->pos.y = 0.0f;
             }
             if (p->pos.y < 80.0f && p->pos.y > 0.0f) {
@@ -536,7 +547,15 @@ void _ymode_mri_16_01(PuniData* p) {
     }
 }
 
-#define IN_RECT_XZ(p, x0, x1, z0, z1) (_aok = 1, _ax = (p)->pos.x, _az = (p)->pos.z, ((x0) > _ax ? _aok = 0 : 0), ((x1) < _ax ? _aok = 0 : 0), ((z0) > _az ? _aok = 0 : 0), ((z1) < _az ? _aok = 0 : 0), _aok)
+#define IN_RECT_XZ(p, x0, x1, z0, z1) \
+    (_aok = 1, \
+     _ax = (p)->pos.x, \
+     _az = (p)->pos.z, \
+     ((x0) > _ax ? _aok = 0 : 0), \
+     ((x1) < _ax ? _aok = 0 : 0), \
+     ((z0) > _az ? _aok = 0 : 0), \
+     ((z1) < _az ? _aok = 0 : 0), \
+     _aok)
 //(x0,x1,z0,z1) (ok = 1, (p->pos.x < (x0) ? ok = 0 : 0), (p->pos.x > (x1) ? ok = 0 : 0), (p->pos.z < (z0) ? ok = 0 : 0), (p->pos.z > (z1) ? ok = 0 : 0), ok)
 void puniSetYPosition(PuniData* p) {
     if (p->flags & PUNI_FLAG_PUNI) {
