@@ -701,8 +701,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             break;
         case 6:
         case 7: {
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x1C);
-            memset(sel->items, 0, 0x1C);
+            sel->items = __memAlloc(HEAP_DEFAULT, 7 * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, 7 * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
             for (i = 0; party_id_table[i] != 0; i++) {
                 if (partyChkJoin(party_id_table[i])) {
@@ -722,8 +722,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             break;
         }
         case 8: {
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x1C);
-            memset(sel->items, 0, 0x1C);
+            sel->items = __memAlloc(HEAP_DEFAULT, 7 * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, 7 * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
             for (i = 0; party_id_table[i] != 0; i++) {
                 if (partyChkJoin(party_id_table[i]) && party_id_table[i] != evtGetValue(NULL, GW(1))) {
@@ -740,8 +740,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
             mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;
             mario_status_point_table[2] = &pouchGetPtr()->maximumBP;
-            sel->items = __memAlloc(HEAP_DEFAULT, 0xC);
-            memset(sel->items, 0, 0xC);
+            sel->items = __memAlloc(HEAP_DEFAULT, 3 * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, 3 * sizeof(WinMgrSelectItem));
             for (i = 0; i < 3; i++) {
                 sel->items[i].id = i;
                 cnt = 0;
@@ -769,8 +769,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             mario_status_point_table[0] = &pouchGetPtr()->baseMaxHP;
             mario_status_point_table[1] = &pouchGetPtr()->baseMaxFP;
             mario_status_point_table[2] = &pouchGetPtr()->maximumBP;
-            sel->items = __memAlloc(HEAP_DEFAULT, 8);
-            memset(sel->items, 0, 8);
+            sel->items = __memAlloc(HEAP_DEFAULT, 2 * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, 2 * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
             for (i = 0; i < 3; i++) {
                 if (i != evtGetValue(NULL, GW(1))) {
@@ -796,8 +796,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             break;
         case 13:
             m = getBadgeStarmaniacTableMaxCount();
-            sel->items = __memAlloc(HEAP_DEFAULT, m * 4);
-            memset(sel->items, 0, m * 4);
+            sel->items = __memAlloc(HEAP_DEFAULT, m * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, m * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
             for (i = 0; i < BADGE_COUNT; i++) {
                 m = (s16)badgeShop_get(bdsw->starmaniac_table, i + BADGE_MIN);
@@ -812,8 +812,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             qqsort(sel->items, sel->numItems, sizeof(WinMgrSelectItem), select_comp_starpiece);
             break;
         case 14:
-            sel->items = __memAlloc(HEAP_DEFAULT, 0x10);
-            memset(sel->items, 0, 0x10);
+            sel->items = __memAlloc(HEAP_DEFAULT, 4 * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, 4 * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
             for (i = 0; i < 4; i++) {
                 m = badge_bottakuru_table[evtGetValue(NULL, GSW_BADGESHOP_CHARLIETON_STOCK + i)];
@@ -824,8 +824,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             break;
         case 15:
             m = getBadgeBottakuru100TableMaxCount();
-            sel->items = __memAlloc(HEAP_DEFAULT, m * 4);
-            memset(sel->items, 0, m * 4);
+            sel->items = __memAlloc(HEAP_DEFAULT, m * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, m * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
             for (i = 0; i < m; i++) {
                 sel->items[sel->numItems++].id = badge_bottakuru100_table[i];
@@ -833,8 +833,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
             break;
         case 16:
             m = getBadgeBteresaTableMaxCount();
-            sel->items = __memAlloc(HEAP_DEFAULT, m * 4);
-            memset(sel->items, 0, m * 4);
+            sel->items = __memAlloc(HEAP_DEFAULT, m * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, m * sizeof(WinMgrSelectItem));
             sel->numItems = 0;
             for (i = 0; i < 338; i++) {
                 if ((s16)badgeShop_get(bdsw->bteresa_table, i + 1) > 0) {
@@ -853,8 +853,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 tbl = jdt->readFlags.luigiRead;
             }
             sel->numItems = jdt->count;
-            sel->items = __memAlloc(HEAP_DEFAULT, (sel->numItems + 1) * 4);
-            memset(sel->items, 0, (sel->numItems + 1) * 4);
+            sel->items = __memAlloc(HEAP_DEFAULT, (sel->numItems + 1) * sizeof(WinMgrSelectItem));
+            memset(sel->items, 0, (sel->numItems + 1) * sizeof(WinMgrSelectItem));
             for (i = 0; i < sel->numItems; i++) {
                 sel->items[i].id = i;
                 if (johoya_get(tbl, jdt->info[i].storyId)) {
@@ -870,8 +870,8 @@ WinMgrSelect* winMgrSelectEntry(EvtWord type, s32 newItem, BOOL cancelOk) {
                 count = 0;
                 while (list[count++] != -1) {
                 }
-                sel->items = __memAlloc(HEAP_DEFAULT, (count + 1) * 4);
-                memset(sel->items, 0, (count + 1) * 4);
+                sel->items = __memAlloc(HEAP_DEFAULT, (count + 1) * sizeof(WinMgrSelectItem));
+                memset(sel->items, 0, (count + 1) * sizeof(WinMgrSelectItem));
                 sel->numItems = 0;
                 if (newItem) {
                     sel->items[sel->numItems++].id = newItem;

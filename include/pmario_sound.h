@@ -77,7 +77,7 @@ typedef enum PaperSfxFlags {
     PSFX_FLAG_ENV = (1 << 5),               // 0x20, environment sound (PSND_SFX_ENV)
     PSFX_FLAG_FADE_OUT = (1 << 6),          // 0x40
     PSFX_FLAG_KEEP = (1 << 7),              // 0x80, survives psndSFXAllOff (PSND_SFX_KEEP)
-    PSFX_FLAG_NEW_UNUSED = (1 << 8),        // 0x100, set at the start, cleared once started; never read
+    PSFX_FLAG_NEW = (1 << 8),               // 0x100, new since the SFX update; repeated same-id starts add delay
     PSFX_FLAG_NO_MUTE = (1 << 9),           // 0x200, not muted by PSND_FLAG_MUTE_SFX (entry specialFlag 1)
     PSFX_FLAG_DOOR_MUTE = (1 << 10),        // 0x400, silent while PSND_FLAG_DOOR_IN (PSND_SFX_DOOR_MUTE)
     PSFX_FLAG_BYPASS_MUTE = (1 << 11),      // 0x800, PSND_SFX_BYPASS_MUTE

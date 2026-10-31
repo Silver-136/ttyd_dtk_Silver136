@@ -11,6 +11,12 @@
 
 
 
+// Local setup parameter slots, named from their exact consumers below.
+typedef enum MonosiriTargetParam {
+    MONOSIRI_TARGET_PARAM_UNIT_ID = 0,
+    MONOSIRI_TARGET_PARAM_PARTS_ID = 1,
+} MonosiriTargetParam;
+
 typedef struct MonosiriTargetWork {
     s32 frame;      // 0x0
     s32 maxFrames;  // 0x4
@@ -48,8 +54,8 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
     if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
         autoCommand = TRUE;
     }
-    unit = BattleGetUnitPtr(work, work->actionCommands.params[0]);
-    parts = BtlUnit_GetPartsPtr(unit, work->actionCommands.params[1]);
+    unit = BattleGetUnitPtr(work, work->actionCommands.params[MONOSIRI_TARGET_PARAM_UNIT_ID]);
+    parts = BtlUnit_GetPartsPtr(unit, work->actionCommands.params[MONOSIRI_TARGET_PARAM_PARTS_ID]);
 
     switch (work->actionCommands.mAcState) {
         case 0:

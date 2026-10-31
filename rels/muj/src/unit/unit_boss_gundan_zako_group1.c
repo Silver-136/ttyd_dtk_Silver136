@@ -47,11 +47,29 @@ typedef struct ZakoGun {
     Vec ofs;
     Vec rot;
 } ZakoGun;
-typedef struct ZakoGunWork { s32 flag; s32 targetId;
+typedef struct ZakoGunWork {
+    s32 flag;
+    s32 targetId;
 #ifdef VERSION_G8ME01
-    u8 us_pad08[0xC]; // US: 12 more bytes here
+    u8 us_pad08[0xC];
+    // US: 12 more bytes here
 #endif
-    s32 state; s32 timer; Vec pos; u8 field_0x1c[0x34 - 0x1c]; f32 radius; f32 angle; f32 speed; u8 field_0x40[0x48 - 0x40]; Vec start; Vec end; s32 timer2; s32 steps; s32 count; s32 sfx; ZakoGun* zako; } ZakoGunWork;
+    s32 state;
+    s32 timer;
+    Vec pos;
+    u8 field_0x1c[0x34 - 0x1c];
+    f32 radius;
+    f32 angle;
+    f32 speed;
+    u8 field_0x40[0x48 - 0x40];
+    Vec start;
+    Vec end;
+    s32 timer2;
+    s32 steps;
+    s32 count;
+    s32 sfx;
+    ZakoGun* zako;
+} ZakoGunWork;
 extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
 void zakogun_ext_main1(void);

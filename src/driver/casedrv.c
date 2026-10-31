@@ -54,9 +54,9 @@ s32 caseEntry(CaseSetup* setup) {
     memset(entry, 0, sizeof(CaseEntry));
     entry->caseId = i;
     entry->flags = 0;
-    entry->conditionId = setup->conditionId & ~0x8000;
-    if (setup->conditionId & 0x8000) {
-        entry->flags |= 4u;
+    entry->conditionId = setup->conditionId & ~CASE_SETUP_SHOW_HINT;
+    if (setup->conditionId & CASE_SETUP_SHOW_HINT) {
+        entry->flags |= CASE_FLAG_SHOW_HINT;
     }
     entry->flags |= CASE_FLAG_ACTIVE;
     strcpy(entry->hitObjName, setup->hitObjName);

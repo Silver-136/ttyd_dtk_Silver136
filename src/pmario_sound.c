@@ -5957,7 +5957,7 @@ void psndSFXMain(void) {
         e = &pssfxlist[sfx[0]->listId & PSND_SFX_INDEX_MASK];
         cnt++;
         if (sfx[0]->flags & PSFX_FLAG_START) {
-            sfx[0]->flags &= ~PSFX_FLAG_NEW_UNUSED;
+            sfx[0]->flags &= ~PSFX_FLAG_NEW;
             if (sfx[0]->delay) {
                 sfx[0]->delay--;
                 continue;
@@ -6171,7 +6171,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     delay = 0;
     for (i = 0; i < 40; i++) {
         PaperSoundEffect *t = pssfx + i;
-        if ((((((u32) t->listId) != 0xFFFFFFFF) && (((u32) (t->listId & PSND_SFX_INDEX_MASK)) == ((u32) sid))) && (t->flags & 0x100)) && (delay == 0)) {
+        if ((((((u32) t->listId) != 0xFFFFFFFF) && (((u32) (t->listId & PSND_SFX_INDEX_MASK)) == ((u32) sid))) && (t->flags & PSFX_FLAG_NEW)) && (delay == 0)) {
             delayPtr = (u16*)(& psnd.sfxDelay);
             delay = (*delayPtr += 8);
         }
@@ -6209,7 +6209,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
     if (pan == 0xFF) {
         pan = entry->pan;
     }
-    sfx->flags = PSFX_FLAG_START | PSFX_FLAG_NEW_UNUSED;
+    sfx->flags = PSFX_FLAG_START | PSFX_FLAG_NEW;
     if (psnd.flags & PSND_FLAG_BATTLE_START) {
         sfx->flags |= PSFX_FLAG_BATTLE_START;
     }

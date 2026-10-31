@@ -3,7 +3,10 @@
 #include <dolphin/types.h>
 
 // CaseEntry.conditionId: what triggers the case event (caseMain); hit object names compare with Mario's hit
-// objects. CaseSetup.conditionId may add 0x8000.
+// objects. CaseSetup.conditionId may add CASE_SETUP_SHOW_HINT.
+// CaseSetup.conditionId modifier; caseEntry moves it into CASE_FLAG_SHOW_HINT.
+#define CASE_SETUP_SHOW_HINT 0x8000
+
 typedef enum CaseCondition {
     CASE_STAND_ON = 0, // standing on the hit object
     CASE_NOT_STAND_ON = 1, // not standing on it
@@ -27,14 +30,15 @@ typedef enum CaseCondition {
     CASE_LSWF = 19, // _swGet(swFlag)
 } CaseCondition;
 
-// CaseEntry.flags (0x4, set from CaseSetup.conditionId | 0x8000, is never read)
+// CaseEntry.flags; the setup hint modifier is read by Mario's balloon checks.
 typedef enum CaseEntryFlags {
     CASE_FLAG_ACTIVE = (1 << 0),    // 0x1, entry in use (caseEntry; caseDelete clears it)
     CASE_FLAG_TRIGGERED = (1 << 1), // 0x2, condition met this frame; caseMain runs the event and clears it
+    CASE_FLAG_SHOW_HINT = (1 << 2), // 0x4, enables the interaction-balloon checks
 } CaseEntryFlags;
 
 typedef struct CaseSetup {
-    u16 conditionId; //0x0, trigger condition (CaseEntry.conditionId list); | 0x8000 = flag (sets CaseEntry flags bit 2)
+    u16 conditionId; //0x0, trigger condition (CaseEntry.conditionId list); | CASE_SETUP_SHOW_HINT enables the interaction hint
     u8 pad_2[2]; //0x2
     const char* hitObjName; //0x4
     u32 swFlag; //0x8

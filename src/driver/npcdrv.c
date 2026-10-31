@@ -2540,7 +2540,14 @@ void* fbatHitCheck(u32 flags, void* result) {
                     if (dist >= res.dist) continue;
                     res.dist = dist;
                     hit = npc;
-                    { FbatHitResult* rp = &res; if (pouchGetHammerLv() < 3) { rp->kind = FBAT_HIT_SPIN_HAMMER; } else { rp->kind = FBAT_HIT_ULTRA_SPIN_HAMMER; } } // FAKE: store through a pointer to res (keeps the two branch stores, no if-conversion); same field
+                    {
+                        FbatHitResult* rp = &res;
+                        if (pouchGetHammerLv() < 3) {
+                            rp->kind = FBAT_HIT_SPIN_HAMMER;
+                        } else {
+                            rp->kind = FBAT_HIT_ULTRA_SPIN_HAMMER;
+                        }
+                    } // FAKE: store through a pointer to res (keeps the two branch stores, no if-conversion); same field
                     if (!soft) fbatSetAttackAnnounce(res.kind);
                     break;
                 }
@@ -2554,7 +2561,14 @@ void* fbatHitCheck(u32 flags, void* result) {
                     if (dist >= res.dist) continue;
                     res.dist = dist;
                     hit = npc;
-                    { FbatHitResult* rp = &res; if (pouchGetHammerLv() < 3) { rp->kind = FBAT_HIT_SPIN_HAMMER; } else { rp->kind = FBAT_HIT_ULTRA_SPIN_HAMMER; } } // FAKE: store through a pointer to res (keeps the two branch stores, no if-conversion); same field
+                    {
+                        FbatHitResult* rp = &res;
+                        if (pouchGetHammerLv() < 3) {
+                            rp->kind = FBAT_HIT_SPIN_HAMMER;
+                        } else {
+                            rp->kind = FBAT_HIT_ULTRA_SPIN_HAMMER;
+                        }
+                    } // FAKE: store through a pointer to res (keeps the two branch stores, no if-conversion); same field
                     if (!soft) fbatSetAttackAnnounce(res.kind);
                     break;
                 }

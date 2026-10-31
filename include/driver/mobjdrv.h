@@ -16,14 +16,15 @@ typedef struct MapObjectHitEntry {
 } MapObjectHitEntry;
 
 // MapObjectEntry.flags, named from mobjMain and the evt_mobj setters. The MOBJ_FLAG_HIT_* bits arm one hit source
-// each; mobjMain stores the bit that fired in MapObjectEntry.hitFlag and sets MOBJ_FLAG_HIT. 0x20 (set by the lock
-// and item box setups, never tested) is not named.
+// each; mobjMain stores the bit that fired in MapObjectEntry.hitFlag and sets MOBJ_FLAG_HIT.
+// MOBJ_FLAG_SHOW_HINT is read by mobjGetHint and Mario's interaction-balloon/jump checks.
 typedef enum MapObjectFlags {
     MOBJ_FLAG_ACTIVE = (1 << 0),               // 0x1, slot in use (mobjEntry; cleared on delete)
     MOBJ_FLAG_NO_SHADOW = (1 << 1),            // 0x2, no shadow (set once a falling/floating object rests)
     MOBJ_FLAG_UPDATE_MTX = (1 << 2),           // 0x4, matrix recalculated on the next update, then cleared
     MOBJ_FLAG_HIT = (1 << 3),                  // 0x8, a hit fired; no new hit checks until cleared
     MOBJ_FLAG_HITEVT_OFF = (1 << 4),           // 0x10, evt_mobj_hitevt_onoff(name, 0)
+    MOBJ_FLAG_SHOW_HINT = (1 << 5),           // 0x20, mobjGetHint; lock/item-box interaction prompt
     MOBJ_FLAG_GRAVITY = (1 << 6),              // 0x40, falls and bounces off the floor
     MOBJ_FLAG_NO_CULL = (1 << 7),              // 0x80, drawn without the view frustum check
     MOBJ_FLAG_HIT_EVERY_FRAME = (1 << 8),      // 0x100, MOBJ_FLAG_HIT is cleared again every frame

@@ -1653,6 +1653,10 @@
 // iri_12_makkino_fall_return test it
 #define GSWF_PIT_BONETAIL_DEFEATED GSWF(5085)
 
+// Shared inn-stay counter: kinopio_house_talk_evt increments it after a completed stay, caps it at 100,
+// and runs evt_50 on reaching 50. This names observed script behavior, not original source metadata.
+#define GSW_INN_STAY_COUNT GSW(1)
+
 // low byte of the coins the thief takes in steel_coin (gor_02); thief_talk (gor_01) adds it back to Mario's coins;
 // the tou2.c swByteSet/Get(2*id+519+j) hits are a computed index (519+), not this value
 #define GSW_GOR_STOLEN_COINS_LOW GSW(2)

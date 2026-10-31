@@ -1008,7 +1008,7 @@ BOOL mobjGetHint(MapObjectEntry* entry) {
     if (entry == NULL) {
         return FALSE;
     }
-    return (entry->flags >> 5) & 1;
+    return (entry->flags >> 5) & 1; // MOBJ_FLAG_SHOW_HINT, normalized to BOOL
 }
 
 BOOL mobjCheckExec(void) {

@@ -1702,7 +1702,7 @@ USER_FUNC(evt_mobj_lock) {
     mobj->mainFunc = mobj_lock;
     mobj->event = val;
     mobj->extraEvent = val2;
-    mobj->flags |= (MOBJ_FLAG_NO_SHADOW | MOBJ_FLAG_UPDATE_MTX | 0x20);
+    mobj->flags |= (MOBJ_FLAG_NO_SHADOW | MOBJ_FLAG_UPDATE_MTX | MOBJ_FLAG_SHOW_HINT);
     mobj->flags |= MOBJ_FLAG_HIT_A_BUTTON;
     mobj->flagVar = flagVar;
     mobj->state = 0;
@@ -1811,7 +1811,7 @@ s32 mobj_itembox(MapObjectEntry* mobj) {
         if (mobj->eventId && evtCheckID(mobj->eventId) == 1) {
             break;
         }
-        mobj->flags &= ~0x20;
+        mobj->flags &= ~MOBJ_FLAG_SHOW_HINT;
         mobj_itemb(mobj);
         marioKeyOn();
         partyKeyOn();
@@ -1822,7 +1822,7 @@ s32 mobj_itembox(MapObjectEntry* mobj) {
     case 99:
         evtSetValue(NULL, mobj->flagVar, 1);
         mobj->flags |= MOBJ_FLAG_HIT;
-        mobj->flags &= ~0x20;
+        mobj->flags &= ~MOBJ_FLAG_SHOW_HINT;
         if (!strcmp(mobj->animName, "MOBJ_BlackTreasureBox")) {
             animPoseSetAnim(mobj->poseId, "S_4", 1);
         } else {
@@ -1879,7 +1879,7 @@ USER_FUNC(evt_mobj_itembox) {
     mobj->mainFunc = mobj_itembox;
     mobj->event = val;
     mobj->extraEvent = val2;
-    mobj->flags |= (MOBJ_FLAG_UPDATE_MTX | 0x20 | MOBJ_FLAG_GRAVITY);
+    mobj->flags |= (MOBJ_FLAG_UPDATE_MTX | MOBJ_FLAG_SHOW_HINT | MOBJ_FLAG_GRAVITY);
     mobj->flags |= MOBJ_FLAG_HIT_A_BUTTON;
     mobj->flagVar = flagVar;
     mobj->state = 0;
@@ -1944,7 +1944,7 @@ USER_FUNC(evt_mobj_signboard) {
     mobjSetPosition(name, x, y, z);
     mobj->mainFunc = mobj_signboard;
     mobj->event = val;
-    mobj->flags |= (MOBJ_FLAG_UPDATE_MTX | 0x20);
+    mobj->flags |= (MOBJ_FLAG_UPDATE_MTX | MOBJ_FLAG_SHOW_HINT);
     mobj->flags |= MOBJ_FLAG_HIT_A_BUTTON;
     mobj->flagVar = flagVar;
     mobj->state = 0;

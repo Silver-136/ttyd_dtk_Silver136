@@ -1,3 +1,4 @@
+#include "evt/evt_save_flags.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_fade.h"
@@ -33,6 +34,9 @@ extern USER_FUNC(evt_mario_flag_onoff);
 extern USER_FUNC(evt_pouch_add_coin);
 extern USER_FUNC(evt_win_coin_off);
 extern USER_FUNC(evt_win_coin_on);
+
+// These values describe this shared inn event, not generic story progress.
+enum { INN_COMMEMORATIVE_STAY = 50, INN_STAY_COUNT_CAP = 100 };
 
 typedef struct KinopioWork {
     s32 breakfastItem; // 0x0
@@ -390,11 +394,11 @@ EVT_BEGIN(kinopio_house_talk_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(snd_on)
-    ADD(GSW(1), 1)
-    IF_INT_GREATER(GSW(1), 100)
-        SET_VALUE(GSW(1), 100)
+    ADD(GSW_INN_STAY_COUNT, 1)
+    IF_INT_GREATER(GSW_INN_STAY_COUNT, INN_STAY_COUNT_CAP)
+        SET_VALUE(GSW_INN_STAY_COUNT, INN_STAY_COUNT_CAP)
     END_IF
-    IF_INT_EQUAL(GSW(1), 50)
+    IF_INT_EQUAL(GSW_INN_STAY_COUNT, INN_COMMEMORATIVE_STAY)
         CALL_CHILD(evt_50)
         CALL(get_npcname, LW(0))
         CALL(evt_npc_flag_onoff, 0, LW(0), NPC_FLAG_NO_HIT)

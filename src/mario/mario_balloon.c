@@ -59,7 +59,7 @@ static inline BOOL chkBalloonStand(HitEntry* hit) {
             }
         } else {
             entry = caseCheckHitObj(hit);
-            if (entry != NULL && (entry->flags & 4) && entry->conditionId == CASE_FRONT_A) {
+            if (entry != NULL && (entry->flags & CASE_FLAG_SHOW_HINT) && entry->conditionId == CASE_FRONT_A) {
                 ret = TRUE;
             }
         }
@@ -79,7 +79,7 @@ static inline BOOL chkBalloonJump(HitEntry* hit) {
         } else {
             entry = caseCheckHitObj(hit);
             if (entry != NULL) {
-                if (entry->flags & 4) {
+                if (entry->flags & CASE_FLAG_SHOW_HINT) {
                     if (entry->conditionId == CASE_FRONT_A || entry->conditionId == CASE_PUSH_A) {
                         ret = TRUE;
                     }
@@ -112,7 +112,7 @@ static inline BOOL chkBalloonPush(HitEntry* hit) {
             } else {
                 entry = caseCheckHitObj(hit);
                 if (entry != NULL) {
-                    if (entry->flags & 4) {
+                    if (entry->flags & CASE_FLAG_SHOW_HINT) {
                         if (entry->conditionId == CASE_PUSH_A || entry->conditionId == CASE_STAND_ON_A) {
                             ret = TRUE;
                         }
@@ -230,7 +230,7 @@ BOOL chkBalloon(HitEntry* hit) {
         } else {
             entry = caseCheckHitObj(hit);
             if (entry != NULL) {
-                if (entry->flags & 4) {
+                if (entry->flags & CASE_FLAG_SHOW_HINT) {
                     if (entry->conditionId == CASE_FRONT_A || entry->conditionId == CASE_JUMP_FROM_A ||
                         entry->conditionId == CASE_PUSH_A || entry->conditionId == CASE_STAND_ON_A) {
                         ret = TRUE;

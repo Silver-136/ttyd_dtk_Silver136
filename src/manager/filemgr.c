@@ -11,6 +11,9 @@
 #include "libc_decls.h"
 #include "addr_word.h"
 
+// File-entry pool capacity; unrelated to the filename buffer size.
+enum { FILE_ENTRY_CAPACITY = 0x400 };
+
 //.bss
 char _filename[0x400]; //for fileAllocf/fileAsyncf vsprintf
 
@@ -28,18 +31,18 @@ void fileInit(void) {
     FileEntry* ptr;
     int i;
 
-    afp->entries = __memAlloc(HEAP_DEFAULT, sizeof(FileEntry) * 0x400);
+    afp->entries = __memAlloc(HEAP_DEFAULT, sizeof(FileEntry) * FILE_ENTRY_CAPACITY);
     afp->archiveType = 0;
     afp->firstused = 0;
     afp->lastused = 0;
-    memset(afp->entries, 0, sizeof(FileEntry) * 0x400);
+    memset(afp->entries, 0, sizeof(FileEntry) * FILE_ENTRY_CAPACITY);
 
-    for (ptr = afp->entries, i = 0; i < 0x400; i++, ptr++) {
+    for (ptr = afp->entries, i = 0; i < FILE_ENTRY_CAPACITY; i++, ptr++) {
         ptr->next = ptr + 1;
     }
 
     afp->firstavailable = afp->entries;
-    afp->lastavailable = &afp->entries[0x3FF];
+    afp->lastavailable = &afp->entries[FILE_ENTRY_CAPACITY - 1];
     afp->lastavailable->next = NULL;
 }
 

@@ -11,6 +11,14 @@
 
 
 
+// Local setup parameter slots, named from their exact consumers below.
+typedef enum ShotTargetParam {
+    SHOT_TARGET_PARAM_UNIT_ID = 0,
+    SHOT_TARGET_PARAM_PARTS_ID = 1,
+    SHOT_TARGET_PARAM_START_FRAMES = 2,
+    SHOT_TARGET_PARAM_RUMBLE_DIFFICULTY = 3,
+} ShotTargetParam;
+
 typedef struct ShotTargetWork {
     s32 frame;    // 0x0
     s32 endTimer; // 0x4
@@ -50,7 +58,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
     if (ac->mAcUnit->badgesEquipped.AutoCommand) {
         autoCommand = TRUE;
     }
-    difficulty = work->actionCommands.params[3];
+    difficulty = work->actionCommands.params[SHOT_TARGET_PARAM_RUMBLE_DIFFICULTY];
     do {
         sfxName = "SFX_AC_CURSOR_MOVE1";
         repeat = FALSE;
@@ -58,8 +66,8 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
             case 0:
                 _ac_disp_init(work);
                 ac->result = AC_RESULT_RUNNING;
-                unit = BattleGetUnitPtr(work, work->actionCommands.params[0]);
-                parts = BtlUnit_GetPartsPtr(unit, work->actionCommands.params[1]);
+                unit = BattleGetUnitPtr(work, work->actionCommands.params[SHOT_TARGET_PARAM_UNIT_ID]);
+                parts = BtlUnit_GetPartsPtr(unit, work->actionCommands.params[SHOT_TARGET_PARAM_PARTS_ID]);
                 BtlUnit_GetHitPos(unit, parts, &hit.x, &hit.y, &hit.z);
                 cw->hitPos = hit;
                 cw->inRange = 0;
@@ -76,7 +84,7 @@ s32 battleAcMain_ShotTarget(BattleWork* work) {
             case 99:
                 break;
             case 100:
-                cw->frame = work->actionCommands.params[2];
+                cw->frame = work->actionCommands.params[SHOT_TARGET_PARAM_START_FRAMES];
                 ac->mAcState = 1000;
                 cw->sfxId = psndSFXOn(sfxName);
             case 1000:

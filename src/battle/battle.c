@@ -19,6 +19,9 @@
 #include "statuswindow.h"
 #include "battle/battle_stage.h"
 
+// Separate capacities: unit-slot indexes versus the after-reaction queue.
+enum { BATTLE_UNIT_SLOT_COUNT = 64, BATTLE_AFTER_REACTION_COUNT = 64 };
+
 typedef enum EquipFlags {
     EQUIP_RESET = 1 << 0,   // 0x1, clear/reset equipped badges
     EQUIP_MARIO = 1 << 1,   // 0x2, equip Mario (non-P) badges
@@ -138,7 +141,7 @@ void BattleEnd(void) {
     int i;
     void* subMenu;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit) {
             BtlUnit_Delete(unit);
@@ -227,7 +230,7 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
 
     wp->activeUnitId = -1;
     wp->badgeEquippedFlags = 0;
-    for (j = 0; j < 200; j++) {
+    for (j = 0; j < MAX_BADGES; j++) {
         switch (pouch->equippedBadges[j]) {
             case ITEM_QUICK_CHANGE:
                 wp->badgeEquippedFlags |= BATTLE_BADGE_QUICK_CHANGE;
@@ -364,7 +367,7 @@ BattleUnit* BattleGetUnitPtr(BattleWork* wp, s32 index) {
     if (index < -1) {
         return NULL;
     }
-    if (index < 64) {
+    if (index < BATTLE_UNIT_SLOT_COUNT) {
         return wp->units[index];
     }
 
@@ -372,7 +375,7 @@ BattleUnit* BattleGetUnitPtr(BattleWork* wp, s32 index) {
 }
 
 void BattleSetUnitPtr(BattleWork* wp, s32 index, BattleUnit* unit) {
-    if (index < 64) {
+    if (index < BATTLE_UNIT_SLOT_COUNT) {
         wp->units[index] = unit;
     }
 }
@@ -385,7 +388,7 @@ BattleUnitPart* BattleGetUnitPartsPtr(s32 index, s32 partNum) {
 BattleUnit* BattleGetSystemPtr(BattleWork* wp) {
     s32 i;
     BattleUnit* unit;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit != NULL && unit->currentKind == UNIT_SYSTEM) {
             return unit;
@@ -397,7 +400,7 @@ BattleUnit* BattleGetSystemPtr(BattleWork* wp) {
 BattleUnit* BattleGetMarioPtr(BattleWork* wp) {
     s32 i;
     BattleUnit* unit;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit != NULL && unit->currentKind == UNIT_MARIO && unit->mAlliance == ALLIANCE_PLAYER) {
             return unit;
@@ -409,7 +412,7 @@ BattleUnit* BattleGetMarioPtr(BattleWork* wp) {
 BattleUnit* BattleGetPartyPtr(BattleWork* wp) {
     s32 i;
     BattleUnit* unit;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {
         unit = BattleGetUnitPtr(wp, i);
         if (unit != NULL && !(unit->flags & BATTLE_UNIT_FLAG_SWAPPED_OUT) && unit->currentKind >= TYPE_PARTNER_MIN &&
             unit->currentKind < TYPE_PARTNER_MAX && unit->mAlliance == ALLIANCE_PLAYER) {
@@ -444,7 +447,7 @@ BattleUnit* BattleChangeParty(BattleWork* wp) {
         return NULL;
     }
     unit = BtlUnit_Spawn(&entryunit_party[kind - TYPE_PARTNER_MIN], 1);
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {
         s32 id = wp->movePriorityQueue[i];
         if (id != -1) {
             if (id == oldId) {
@@ -541,7 +544,7 @@ void BtlUnit_EquipItem(BattleUnit* unit, EquipFlags flags, ItemType type) {
 
         if (unit->currentKind != UNIT_SYSTEM) {
             if (flags & (EQUIP_MARIO | EQUIP_PARTNER)) {
-                for (i = 0; i < 200; i++) {
+                for (i = 0; i < MAX_BADGES; i++) {
                     _EquipItem(unit, flags & ~EQUIP_RESET, pouch->equippedBadges[i]);
                 }
             } else {
@@ -820,7 +823,7 @@ f32 BattleGetFloorHeight(BattleWork* wp, f32 x, f32 y, f32 z) {
 void BattleCheckUnitBroken(BattleWork* wp) {
     s32 i;
 
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_UNIT_SLOT_COUNT; i++) {
         BattleUnit* unit = BattleGetUnitPtr(wp, i);
         if (unit && unit->flags & BATTLE_UNIT_FLAG_BROKEN) {
             BtlUnit_Delete(unit);
@@ -831,7 +834,7 @@ void BattleCheckUnitBroken(BattleWork* wp) {
 void BattleAfterReactionQueueInit(void) {
     BattleAfterReaction* base = _battleWorkPointer->afterReactions;
     s32 i;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_AFTER_REACTION_COUNT; i++) {
         base[i].unitId = -1;
         base[i].tag = 0;
     }
@@ -840,17 +843,17 @@ void BattleAfterReactionQueueInit(void) {
 void BattleAfterReactionEntry(s32 unitId, s32 tag) {
     BattleAfterReaction* base = _battleWorkPointer->afterReactions;
     s32 i;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_AFTER_REACTION_COUNT; i++) {
         if (base[i].unitId != -1 && unitId == base[i].unitId) {
             return;
         }
     }
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_AFTER_REACTION_COUNT; i++) {
         if (base[i].unitId == -1) {
             break;
         }
     }
-    if (i < 64) {
+    if (i < BATTLE_AFTER_REACTION_COUNT) {
         base[i].unitId = unitId;
         base[i].tag = tag;
     }
@@ -860,14 +863,14 @@ void BattleAfterReactionRelease(s32 unitId, s32 tag) {
     s32 i;
     s32 j;
     BattleAfterReaction* base = _battleWorkPointer->afterReactions;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_AFTER_REACTION_COUNT; i++) {
         if (base[i].unitId != -1 && unitId == base[i].unitId && tag == base[i].tag) {
-            for (j = i; j < 63; j++) {
+            for (j = i; j < BATTLE_AFTER_REACTION_COUNT - 1; j++) {
                 base[j].unitId = base[j + 1].unitId;
                 base[j].tag = base[j + 1].tag;
             }
-            base[63].unitId = -1;
-            base[63].tag = 0;
+            base[BATTLE_AFTER_REACTION_COUNT - 1].unitId = -1;
+            base[BATTLE_AFTER_REACTION_COUNT - 1].tag = 0;
             i--;
         }
     }
@@ -878,7 +881,7 @@ BOOL BattleAfterReactionMain(void) {
     BattleWork* wp = _battleWorkPointer;
     BattleAfterReaction* base = wp->afterReactions;
     s32 i;
-    for (i = 0; i < 64; i++) {
+    for (i = 0; i < BATTLE_AFTER_REACTION_COUNT; i++) {
         id = base[i].unitId;
         if (id != -1) {
             s32 tag = base[i].tag;
