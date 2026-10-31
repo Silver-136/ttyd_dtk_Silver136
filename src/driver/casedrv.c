@@ -102,7 +102,7 @@ void caseMain(void) {
     if (marioStGetSystemLevel() == 0 && !winCheck() && gp->inBattle == 0 &&
         !fbatPreventMarioEventChk() && marioCaseEventValidChk()) {
         if (mario->currMotionId != MARIO_MOTION_STAY && mario->currMotionId != MARIO_MOTION_WALK && mario->currMotionId != MARIO_MOTION_DASH &&
-            yoshiGetStatus() != 1) {
+            yoshiGetStatus() != YOSHI_STATUS_RIDING) {
             btn = 0;
         }
         pressedA = btn & PAD_BUTTON_A;

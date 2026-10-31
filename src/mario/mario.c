@@ -359,7 +359,7 @@ static inline BOOL marioChkYoshiKey(void) {
     if (mp->keyOffCount) {
         return FALSE;
     }
-    if (yoshiGetStatus() == 1) {
+    if (yoshiGetStatus() == YOSHI_STATUS_RIDING) {
         return TRUE;
     }
     return FALSE;

@@ -760,7 +760,7 @@ USER_FUNC(evt_party_yoshi_ride) {
     ride = args[1];
     if (isFirstCall) {
         if (ride) {
-            if (yoshiGetStatus() != 0) {
+            if (yoshiGetStatus() != YOSHI_STATUS_INACTIVE) {
                 return EVT_RETURN_DONE;
             }
             p->flags |= PARTY_FLAG_IS_EVT_USE;
@@ -771,12 +771,12 @@ USER_FUNC(evt_party_yoshi_ride) {
         }
     }
     if (ride) {
-        if (yoshiGetStatus() == 1) {
+        if (yoshiGetStatus() == YOSHI_STATUS_RIDING) {
             p->flags &= ~PARTY_FLAG_IS_EVT_USE;
             return EVT_RETURN_DONE;
         }
     } else {
-        if (yoshiGetStatus() == 0) {
+        if (yoshiGetStatus() == YOSHI_STATUS_INACTIVE) {
             p->flags &= ~PARTY_FLAG_IS_EVT_USE;
             return EVT_RETURN_DONE;
         }
@@ -792,7 +792,7 @@ USER_FUNC(evt_party_yoshi_fly) {
         return EVT_RETURN_DONE;
     }
     if (isFirstCall) {
-        if (yoshiGetStatus() != 1) {
+        if (yoshiGetStatus() != YOSHI_STATUS_RIDING) {
             return EVT_RETURN_DONE;
         }
         p->flags |= PARTY_FLAG_IS_EVT_USE;

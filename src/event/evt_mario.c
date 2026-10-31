@@ -726,7 +726,7 @@ USER_FUNC(evt_mario_normalize) {
                     event->userdata[0] = 1;
                 }
             } else if (mp->currMotionId == MARIO_MOTION_YOSHI) {
-                if (yoshiGetStatus() != 2 && marioGetoffYoshi()) {
+                if (yoshiGetStatus() != YOSHI_STATUS_FLUTTER && marioGetoffYoshi()) {
                     event->userdata[0] = 3;
                 }
             } else if (mp->currMotionId == MARIO_MOTION_VIVIAN) {
@@ -768,7 +768,7 @@ USER_FUNC(evt_mario_normalize) {
         case 3:
             if (mp->currMotionId != MARIO_MOTION_YOSHI) {
                 event->userdata[0] = 4;
-            } else if (yoshiGetStatus() == 0) {
+            } else if (yoshiGetStatus() == YOSHI_STATUS_INACTIVE) {
                 event->userdata[0] = 4;
             }
             break;

@@ -228,6 +228,25 @@ typedef u32 SfxNameWord;
 #define PSND_SFX_BOSS_BPCH_DRAIN2 0xF20
 #define PSND_SFX_BOSS_QWEN_HAND_IN1 0xF3C
 /* BGM and ENV ids passed by number: the index in psbgmlist and psenvlistname */
+#define PSND_BGM_STG2_MRI1 0x4F
+#define PSND_BGM_STG2_MRI2 0x50
+#define PSND_BGM_STG5_MUJ1 0x5A
+#define PSND_BGM_STG5_DOU1 0x5B
+#define PSND_BGM_EVT_DANGER4 0xA4
+#define PSND_BGM_ZAKO_BATTLE1 0x7B
+#define PSND_BGM_KOBOSS_BATTLE1 0x7D
+#define PSND_BGM_CHUBOSS_BATTLE1 0x7E
+#define PSND_BGM_BATTLE_WIN1 0x90
+#define PSND_BGM_BATTLE_WIN2 0x91
+#define PSND_BGM_BATTLE_WIN3 0x92
+#define PSND_BGM_BOSS_STG8_KOOPA 0x8C
+#define PSND_BGM_EVT_KUPPA2 0xC3
+#define PSND_BGM_STG3_TOU1 0x53
+#define PSND_BGM_STG3_TOU2 0x54
+#define PSND_BGM_BOSS_STG1_GONBABA1 0x80
+#define PSND_BGM_BOSS_STG3_3RDLEADER1 0x81
+#define PSND_BGM_BOSS_STG8_LAST_BOSS1 0x8D
+#define PSND_BGM_BOSS_STG8_LAST_BOSS2 0x8E
 #define PSND_BGM_BATTLE_LOSE1 0x93
 #define PSND_ENV_SYS_FL1 0x75
 /* the bits of an id that select the pssfxlist entry */

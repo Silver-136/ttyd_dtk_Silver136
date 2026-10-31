@@ -104,7 +104,7 @@ void bomhei_bye(PartyEntry* party) {
 }
 
 void bomhei_init_800BFBB0(PartyEntry* party) {
-    party->memberKind = 3;
+    party->memberKind = PARTY_MEMBER_BOBBERY;
     party->moveKind = 0;
     party->height = 28.0f;
     party->width = 28.0f;

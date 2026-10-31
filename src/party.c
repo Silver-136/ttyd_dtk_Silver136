@@ -114,7 +114,7 @@ static inline const char* partyChgPoseIdNoPinch_inl(PartyEntry* party, s32 index
         return party->animName;
     }
     pinch = FALSE;
-    if (party->currentMemberId < 8) {
+    if (party->currentMemberId < MAIN_PARTY_MEMBER_MAX) {
         if (partyGetHp(party->currentMemberId) <= 5) {
             pinch = TRUE;
         }
@@ -1220,7 +1220,7 @@ s32 partyGoodbyeMain(PartyEntry* party) {
                     party->runMode = 8;
                 }
             } else if (party->currentMemberId == PARTY_MEMBER_YOSHI) {
-                if (yoshiGetStatus() == 0) {
+                if (yoshiGetStatus() == YOSHI_STATUS_INACTIVE) {
                     party->motionStep = 10;
                     party->runMode = 8;
                 }
@@ -1580,7 +1580,7 @@ void getRidePos(PartyEntry* party, Vec* pos) {
 
     if (mario->currMotionId == MARIO_MOTION_YOSHI) {
         angle = 3.1415927f * toMovedir(mario->displayDirectionTarget) / 180.0f;
-        if (yoshiGetStatus() != 2) {
+        if (yoshiGetStatus() != YOSHI_STATUS_FLUTTER) {
             pos->x = mario->position.x - 10.0f * (f32)sin(angle);
             pos->z = mario->position.z - 10.0f * (f32)cos(angle);
             pos->y = 20.0f + mario->position.y;
@@ -1592,7 +1592,7 @@ void getRidePos(PartyEntry* party, Vec* pos) {
         if (party->currentSlotId) {
             ride = partyGetPtr(marioGetPartyId());
             sincosf(&s, &c, toMovedir2(mario->displayDirectionTarget, 10.0f));
-            if (yoshiGetStatus() != 2) {
+            if (yoshiGetStatus() != YOSHI_STATUS_FLUTTER) {
                 pos->x = ride->position.x - 12.0f * s;
                 pos->z = ride->position.z - 12.0f * c;
                 pos->y = 20.0f + ride->position.y;

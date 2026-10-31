@@ -190,11 +190,16 @@ static const char** msg_tbl[2] = { msg_jp, msg_us };
 #endif
 
 // local prototypes
+typedef enum RomFontLanguage {
+    ROM_FONT_LANGUAGE_SJIS = 0,
+    ROM_FONT_LANGUAGE_ASCII = 1,
+} RomFontLanguage;
+
 void romFontMake(void);
 
 const char* romFontGetMessage(s32 msg) {
 #ifdef VERSION_G8ME01
-    if (wp->language != 0 && (u32)gp->language == LANGUAGE_JP) {
+    if (wp->language != ROM_FONT_LANGUAGE_SJIS && (u32)gp->language == LANGUAGE_JP) {
         return msg_tbl[1][msg];
     }
     return msg_tbl[gp->language][msg];
@@ -207,9 +212,9 @@ void romFontInit(void) {
     wp->glyphs = 0;
     wp->uniqueChars = 0;
     if (OSGetFontEncode() == OS_FONT_ENCODE_SJIS) {
-        wp->language = 0;
+        wp->language = ROM_FONT_LANGUAGE_SJIS;
     } else {
-        wp->language = 1;
+        wp->language = ROM_FONT_LANGUAGE_ASCII;
     }
     romFontMake();
 }
@@ -244,12 +249,12 @@ void romFontMake(void) {
         for (i = 0; (str = msg_tbl[t][i]) != NULL; i++) {
             /* ASCII mode (language != 0) skips the Japanese table (t == 0). */
             s32 k = 0;
-            if (wp->language == 0 || t != 0) {
+            if (wp->language == ROM_FONT_LANGUAGE_SJIS || t != 0) {
                 for (;;) {
                     u32 b = str[k];
                     u16 w = *(u16*)(str + k);
 #ifdef VERSION_G8ME01
-                    if (wp->language != 0) {
+                    if (wp->language != ROM_FONT_LANGUAGE_SJIS) {
                         if (b == 0) {
                             break;
                         }
@@ -414,7 +419,7 @@ void romFontPrintGX(f32 x, f32 y, f32 scale, GXColor* color, const char* msg, ..
         u16 c16 = *(u16*)&buf[i]; // big-endian lead<<8 | trail, for double-byte
 
 #ifdef VERSION_G8ME01
-        if (wp->language != 0) {
+        if (wp->language != ROM_FONT_LANGUAGE_SJIS) {
             if (c == 0x0A) {
                 curX = 0;
                 curY -= 24;
@@ -488,7 +493,7 @@ s32 romFontGetWidth(const char* message) {
         c = message[i];
         c16 = *(u16*)&message[i];
 #ifdef VERSION_G8ME01
-        if (wp->language != 0) {
+        if (wp->language != ROM_FONT_LANGUAGE_SJIS) {
             if (c == 0x00) {
                 if (max < width) {
                     max = width;

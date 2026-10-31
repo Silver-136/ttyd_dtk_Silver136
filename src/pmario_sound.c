@@ -25,6 +25,9 @@
 #define PSND_SET_FADE(w) ((w)->sfxFadeMax = PSND_FADE45, (w)->sfxFadeTime = PSND_FADE45)
 #endif
 
+// Initial and zero-request frequency for the sound low-pass controls.
+#define PSND_DEFAULT_LPF_FREQUENCY 32000
+
 typedef struct SoundBGMEntry {
     const char* name;
     u32 flags;
@@ -5578,65 +5581,65 @@ BOOL psndBGMOn_f_d(u32 flags, const char* bgm_name, u32 fadetime, u32 fadeout, s
     id = i;
     fade = &psbgm[fl & 0xF].fade;
     if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_20_PUNIO_PETUNI) && ((evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_21_BUBBLES_2) || (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_21_04_ESCAPE))) {
-        if (strcmp(gp->currentMapName, "mri_00") && (i == 0x4F)) {
-            id = 0x50;
+        if (strcmp(gp->currentMapName, "mri_00") && (i == PSND_BGM_STG2_MRI1)) {
+            id = PSND_BGM_STG2_MRI2;
         }
     }
     if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG5_40_TRUE_IDENTITY) && (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG5_42_PIRATES_VS_X_NAUTS)) {
-        if ((id == 0x5A) || (id == 0x5B)) {
-            id = 0xA4;
+        if ((id == PSND_BGM_STG5_MUJ1) || (id == PSND_BGM_STG5_DOU1)) {
+            id = PSND_BGM_EVT_DANGER4;
         }
     }
     if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED) && (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE)) {
         PaperSoundBGM *b0;
-        if (id == 0x4F) {
-            id = 0xA4;
+        if (id == PSND_BGM_STG2_MRI1) {
+            id = PSND_BGM_EVT_DANGER4;
         }
-        if (id == 0x50) {
-            id = 0xA4;
+        if (id == PSND_BGM_STG2_MRI2) {
+            id = PSND_BGM_EVT_DANGER4;
         }
-        if (id == 0x7B) {
+        if (id == PSND_BGM_ZAKO_BATTLE1) {
             return 0;
         }
-        if (id == 0x7D) {
+        if (id == PSND_BGM_KOBOSS_BATTLE1) {
             return 0;
         }
-        if (id == 0x7E) {
+        if (id == PSND_BGM_CHUBOSS_BATTLE1) {
             return 0;
         }
         if (((idx == 0) && (fl & PSND_CONTINUE)) && (fade->state != 4)) {
             return 0;
         }
         b0 = psbgm;
-        if (((id == 0x90) || (id == 0x91)) && (b0->listId == 0xA4)) {
+        if (((id == PSND_BGM_BATTLE_WIN1) || (id == PSND_BGM_BATTLE_WIN2)) && (b0->listId == PSND_BGM_EVT_DANGER4)) {
             return 0;
         }
-        if ((id == 0x92) && (b0->listId == 0xA4)) {
+        if ((id == PSND_BGM_BATTLE_WIN3) && (b0->listId == PSND_BGM_EVT_DANGER4)) {
             psndBGMOff_f_d(PSND_PAUSE, 750, 1);
         }
     }
     if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_00_WELCOME_TO_GLITZVILLE) && (evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_00_WELCOME_TO_STAGE_4)) {
         PaperSoundBGM *b0;
-        if (id == 0x8C) {
+        if (id == PSND_BGM_BOSS_STG8_KOOPA) {
             return 0;
         }
         b0 = psbgm;
-        if (((id == 0x90) || (id == 0x91)) && (b0->listId == 0xC3)) {
+        if (((id == PSND_BGM_BATTLE_WIN1) || (id == PSND_BGM_BATTLE_WIN2)) && (b0->listId == PSND_BGM_EVT_KUPPA2)) {
             return 0;
         }
-        if (((id == 0) && (b0->listId == 0xC3)) && (!(fl & PSND_CONTINUE))) {
+        if (((id == 0) && (b0->listId == PSND_BGM_EVT_KUPPA2)) && (!(fl & PSND_CONTINUE))) {
             return 0;
         }
-        if ((id == 0x92) && (b0->listId == 0xC3)) {
+        if ((id == PSND_BGM_BATTLE_WIN3) && (b0->listId == PSND_BGM_EVT_KUPPA2)) {
             psndBGMOff_f_d(PSND_PAUSE, 750, 1);
         }
     }
-    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_32_BOSS_BATTLE) && (id == 0x53)) {
-        id = 0x54;
+    if ((evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_32_BOSS_BATTLE) && (id == PSND_BGM_STG3_TOU1)) {
+        id = PSND_BGM_STG3_TOU2;
     }
-    if ((id == 0x90) || (id == 0x91)) {
+    if ((id == PSND_BGM_BATTLE_WIN1) || (id == PSND_BGM_BATTLE_WIN2)) {
         old = psbgm[1].listId;
-        if ((((old == 0x80) || ((old - 0x81) <= 0xB)) || (old == 0x8E)) || (old == 0x8D)) {
+        if ((((old == PSND_BGM_BOSS_STG1_GONBABA1) || ((old - PSND_BGM_BOSS_STG3_3RDLEADER1) <= 0xB)) || (old == PSND_BGM_BOSS_STG8_LAST_BOSS2)) || (old == PSND_BGM_BOSS_STG8_LAST_BOSS1)) {
             return 0;
         }
     }
@@ -5780,11 +5783,11 @@ BOOL psndBGMOff_f_d(s32 flags, u32 fadetime, u32 force) {
         return FALSE;
     }
     if (!force) {
-        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE && bgm->listId == 0xA4) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG2_23_TIME_BOMB_ACTIVATED && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG2_24_BOSS_BATTLE && bgm->listId == PSND_BGM_EVT_DANGER4) {
             return FALSE;
         }
-        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_00_WELCOME_TO_GLITZVILLE && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_00_WELCOME_TO_STAGE_4 && psbgm[0].listId == 0xC3) {
-            if (bgm->listId != 0x92) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_00_WELCOME_TO_GLITZVILLE && evtGetValue(NULL, GSW_STORY_PROGRESS) < STG4_00_WELCOME_TO_STAGE_4 && psbgm[0].listId == PSND_BGM_EVT_KUPPA2) {
+            if (bgm->listId != PSND_BGM_BATTLE_WIN3) {
                 return FALSE;
             }
             psndBGMOn_f_d(PSND_CONTINUE | PSND_FADEIN, NULL, 750, 750, 1);
@@ -6249,7 +6252,7 @@ s32 __psndSFXOn(const char *name, u8 vol, u8 pan, u16 pitch, Vec *pos, u32 r8, u
         }
     }
     sfx->dist = dist;
-    sfx->lpf = 0x7D00;
+    sfx->lpf = PSND_DEFAULT_LPF_FREQUENCY;
     sfx->serial = ++(*((u16*)(&psnd.sfxSerial)));
     idx |= (*((u16*)(&psnd.sfxSerial))) << 8;
     return idx;
@@ -6830,8 +6833,8 @@ BOOL psndENVOn_f_d(u32 flags, const char* name, u32 fadetime, s32 unused) {
     }
     *env = id;
     fade->state = 0;
-    *(u16*)((u8*)psnd.envLpf + o) = 0x7D00;
-    *(u16*)((u8*)psnd.envFreq + o) = 0x7D00;
+    *(u16*)((u8*)psnd.envLpf + o) = PSND_DEFAULT_LPF_FREQUENCY;
+    *(u16*)((u8*)psnd.envFreq + o) = PSND_DEFAULT_LPF_FREQUENCY;
     if (flags & PSND_FADEIN) {
         fade->state = 1;
         fade->time = fadetime / PSND_FRAME_MS;
@@ -6904,7 +6907,7 @@ BOOL psndENV_LPF(s32 id, u16 freq) {
         return FALSE;
     }
     if (freq == 0) {
-        freq = 0x7D00;
+        freq = PSND_DEFAULT_LPF_FREQUENCY;
     }
     psnd.envFreq[id & 0xF] = freq;
     return TRUE;

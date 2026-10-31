@@ -271,7 +271,7 @@ void cloud_move(PartyEntry* party) {
 }
 
 void cloud_init(PartyEntry* party) {
-    party->memberKind = 5;
+    party->memberKind = PARTY_MEMBER_FLURRIE;
     party->moveKind = 1;
     party->height = 38.0f;
     party->width = 24.0f;

@@ -91,7 +91,7 @@ s32 evt_get_yoshi_frm(void) {
 
 void L_sweatEntry(PartyEntry* party, void* hit) {
     party->hitobjStandOn = hit;
-    if (yoshiGetStatus() == 1 && !(party->playerPtr->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP))) {
+    if (yoshiGetStatus() == YOSHI_STATUS_RIDING && !(party->playerPtr->flags & (MARIO_FLAG_IS_JUMPING | MARIO_FLAG_IS_FALLING | MARIO_FLAG_IS_STEPPING | MARIO_FLAG_HAS_INPUT_JUMP))) {
         party->playerPtr->hitobjStandOn = hit;
     }
 }
@@ -113,23 +113,23 @@ void sweatMain(PartyEntry* party) {
 
 s32 yoshiGetStatus(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
-    s32 status = 5;
+    s32 status = YOSHI_STATUS_OTHER;
     u8 motion;
 
     if (party == NULL || party->currentMemberId != PARTY_MEMBER_YOSHI || !(party->flags & PARTY_FLAG_IS_BEING_USED)) {
-        return 0;
+        return YOSHI_STATUS_INACTIVE;
     }
     motion = party->useMotionId;
     if (motion >= 10 && motion <= 13) {
-        status = 1;
+        status = YOSHI_STATUS_RIDING;
     } else if (motion >= 20 && motion <= 22) {
-        status = 2;
+        status = YOSHI_STATUS_FLUTTER;
     } else if (motion >= 100 && motion <= 101) {
-        status = 5;
+        status = YOSHI_STATUS_OTHER;
     } else if (motion >= 60 && motion <= 65) {
-        status = 3;
+        status = YOSHI_STATUS_STAND_JUMP;
     } else if (motion >= 50 && motion <= 52) {
-        status = 4;
+        status = YOSHI_STATUS_FALL;
     }
     return status;
 }
@@ -161,7 +161,7 @@ s32 marioGetoffYoshi(void) {
     if (!(party->flags & PARTY_FLAG_IS_BEING_USED)) {
         return 0;
     }
-    if (yoshiGetStatus() == 1) {
+    if (yoshiGetStatus() == YOSHI_STATUS_RIDING) {
         party->useMotionId = 100;
         return 1;
     }
@@ -213,7 +213,7 @@ void marioYoshiForceCancel(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
     PartyEntry* extra;
 
-    if (yoshiGetStatus() == 0) {
+    if (yoshiGetStatus() == YOSHI_STATUS_INACTIVE) {
         return;
     }
     resetOfs(party);
@@ -245,7 +245,7 @@ void yoshi_bye(PartyEntry* party) {
         partyGoodbyeInit(party);
     }
     if (party->flags & PARTY_FLAG_IS_BEING_USED) {
-        if (yoshiGetStatus() == 1) {
+        if (yoshiGetStatus() == YOSHI_STATUS_RIDING) {
             party->useMotionId = 100;
         }
         yoshi_use(party);
@@ -517,7 +517,7 @@ void yoshi_use(PartyEntry* party) {
             if (party->runMode == 8) {
                 break;
             }
-            if (yoshiGetStatus() == 1) {
+            if (yoshiGetStatus() == YOSHI_STATUS_RIDING) {
                 party->floorMoveX = mario->floorMove.x;
                 party->floorMoveY = mario->floorMove.y;
                 party->floorMoveZ = mario->floorMove.z;
@@ -751,7 +751,7 @@ void yoshi_use(PartyEntry* party) {
     }
 
     yoshiAnimeCtrl(party);
-    if (party->useMotionId == 13 || yoshiGetStatus() == 3 || yoshiGetStatus() == 4 || yoshiGetStatus() == 2) {
+    if (party->useMotionId == 13 || yoshiGetStatus() == YOSHI_STATUS_STAND_JUMP || yoshiGetStatus() == YOSHI_STATUS_FALL || yoshiGetStatus() == YOSHI_STATUS_FLUTTER) {
         ox = 0.0f;
         oz = 0.0f;
         movePos(&ox, &oz, -6.0f, toMovedir(party->displayDirection));
@@ -999,7 +999,7 @@ void inertia(PartyEntry* party) {
 
     if (!sx) {
 #ifdef VERSION_G8ME01
-        if (yoshiGetStatus() != 2) {
+        if (yoshiGetStatus() != YOSHI_STATUS_FLUTTER) {
             vz = vx = 0.0f;
         } else {
             k = -0.07f;

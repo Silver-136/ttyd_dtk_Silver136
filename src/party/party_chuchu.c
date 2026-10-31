@@ -148,7 +148,7 @@ static inline int chuchu_findTreasure2(PartyEntry* cpp, f32 range, Vec* bestPos)
     pl = cpp->playerPtr;
     minDist = 10000.0f;
     tbl = chuchu_treasure_tbl;
-    for (i = 0; i < 40; i++, tbl++) {
+    for (i = 0; i < sizeof(chuchu_treasure_tbl) / sizeof(chuchu_treasure_tbl[0]); i++, tbl++) {
         if (strcmp(gp->currentMapName, tbl->map) == 0 && evtGetValue(NULL, tbl->flag) == 0) {
             Vec pos;
             Vec p = vecB;
@@ -274,7 +274,7 @@ static inline int chuchu_findTreasure(PartyEntry* cpp, f32 range) {
     player2 = cpp->playerPtr;
     tbl = chuchu_treasure_tbl;
     minDist = 10000.0f;
-    for (i = 0; i < 40; i++, tbl++) {
+    for (i = 0; i < sizeof(chuchu_treasure_tbl) / sizeof(chuchu_treasure_tbl[0]); i++, tbl++) {
         if (strcmp(gp->currentMapName, tbl->map) == 0 && evtGetValue(NULL, tbl->flag) == 0) {
             Vec pos;
             Vec p = vecB;
@@ -307,7 +307,7 @@ BOOL chuchu_searchObject(void) {
 }
 
 void chuchu_init(PartyEntry* party) {
-    party->memberKind = 7;
+    party->memberKind = PARTY_MEMBER_MS_MOWZ;
     party->moveKind = 0;
     party->height = 20.0f;
     party->width = 24.0f;

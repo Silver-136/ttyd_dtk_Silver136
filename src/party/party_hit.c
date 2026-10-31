@@ -396,7 +396,7 @@ HitEntry* partySearchWallFront(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
 #endif
     arr[0] = 0.75f * partyGetHeight(party);
     arr[1] = 0.5f * partyGetHeight(party);
-    if ((party->flags & (PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING)) || yoshiGetStatus() == 2) {
+    if ((party->flags & (PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING)) || yoshiGetStatus() == YOSHI_STATUS_FLUTTER) {
         arr[2] = 1.0f;
     } else {
         arr[2] = 11.0f;
