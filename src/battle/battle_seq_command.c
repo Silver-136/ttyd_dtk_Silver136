@@ -56,6 +56,7 @@ void BattleCommandDisplay_MultiItemMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_TargetSelectMenuDisp(CameraId camId, void* param);
 void BattleCommandDisplay_ProtectPartnerSelectMenuDisp(CameraId camId, void* param);
 
+// local prototypes
 extern BattleWeapon marioDefaultWeapon_Jump;
 extern BattleWeapon marioWeapon_KururinJump;
 extern BattleWeapon marioDefaultWeapon_Hammer;
@@ -882,6 +883,7 @@ void _btlcmd_MakeOperationTable(BattleWork* wp) {
     }
 }
 
+// propagation optimisation off for _btlcmd_MakeMultiItemTable: the original register allocation and scheduling need it
 #pragma opt_propagation off
 /**
  * Builds the menu shown before the item list when Double Dip or Triple Dip is equipped:

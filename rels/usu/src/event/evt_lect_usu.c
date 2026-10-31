@@ -822,6 +822,7 @@ EVT_END()
  * (this map area's copy has only Vivian's) and the game is restored.
  */
 EVT_BEGIN(all_party_lecture)
+    // The partner NPC steps out of the scene and joins the party at its spot.
     CALL(evt_mario_normalize)
     IF_INT_NOT_EQUAL(LW(9), 1)
         IF_INT_NOT_EQUAL(LW(9), 5)
@@ -839,6 +840,7 @@ EVT_BEGIN(all_party_lecture)
         ELSE
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     END_IF
+    // The joining jingle plays over the item-get backdrop with this partner's "has joined your party!" line.
     CALL(evt_party_set_camid, 0, 7)
     SPAWN_EVENT_GET_ID(PTR(all_party_lecture_otosub), LW(11))
     CALL(lect_itemget_kesan, 0, FLOAT(600.0f), LW(0), LW(1), LW(2))
@@ -863,6 +865,7 @@ EVT_BEGIN(all_party_lecture)
         CASE_EQUAL(7)
         CALL(evt_msg_print, 0, STRING("lecture_friends_17"), 0, 0)
     END_SWITCH
+    // Stop the jingle, then fold the scene into the lecture frame with the lecture music.
     IS_EVENT_RUNNING(LW(11), LW(12))
     IF_INT_EQUAL(LW(12), 1)
         DELETE_EVENT(LW(11))
@@ -902,6 +905,7 @@ EVT_BEGIN(all_party_lecture)
     WAIT_FRAMES(1)
     CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_cont_onoff, 0, 1)
+    // The lesson: Mario blinks out of sight, Vivian's lesson plays, then Mario and the partner blink back in.
     CALL(lect_test_systemlevel)
     SWITCH(LW(9))
         CASE_EQUAL(6)
@@ -932,6 +936,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 0)
         WAIT_MS(100)
     END_LOOP
+    // Back to the normal camera, music and sounds; the lecture frame folds away.
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
     CALL(evt_mario_init_camid)
@@ -1020,6 +1025,7 @@ EVT_END()
  * and disappears.
  */
 EVT_BEGIN(roll_majin_lecture)
+    // The chest spirit appears at the camera's focus and follows it.
     BEGIN_SIBLING_EVENT
         CALL(lecture_button_rtn)
     END_SIBLING_EVENT
@@ -1044,6 +1050,7 @@ EVT_BEGIN(roll_majin_lecture)
     CALL(evt_npc_set_camid, STRING("ペラ魔人"), 7)
     CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_1"))
     WAIT_MS(200)
+    // The spirit mocks Mario, curses him with flashes of light and tells him to hold R and rotate the stick.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_12"), 0, STRING("ペラ魔人"))
     CALL(evt_mario_set_pose, STRING("M_N_H"))
@@ -1056,6 +1063,7 @@ EVT_BEGIN(roll_majin_lecture)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_13"), 0, STRING("ペラ魔人"))
     CALL(evt_msg_print_add, 0, STRING("stg4_usu_majin3_14"))
+    // Practice: only R and the stick work, with button prompts, until Mario rolls into a tube.
     LOOP(0)
         CALL(lecture_button_flag_on_off, 0, 2, 1)
         CALL(lecture_button_set_icon_id, 0, ICON_TRIGGER_R)

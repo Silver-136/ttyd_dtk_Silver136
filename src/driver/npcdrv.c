@@ -1715,6 +1715,7 @@ void _fbatFirstAttackAnnouceDisp(CameraId camId, void* param) {
     f32 shakeY;
 
 #endif
+    // US: the announcement may span up to four lines
     message = msgSearch(firstStrike->msg_tag);
     x = firstStrike->x;
     y = firstStrike->y;
@@ -3327,6 +3328,10 @@ EVT_BEGIN(evt_majinai_effect_se_fld)
     RETURN
 EVT_END()
 
+/**
+ * Battle version of Merlee's spell sounds (the BTL sound set), same timing;
+ * spawned by battle_mario.c when her curse fires in battle.
+ */
 EVT_BEGIN(evt_majinai_effect_se_btl)
     CALL(btlevtcmd_ftomsec, 29, LW(10))
     WAIT_MS(LW(10))
@@ -3346,6 +3351,10 @@ EVT_BEGIN(evt_majinai_effect_se_btl)
     RETURN
 EVT_END()
 
+/**
+ * After a won battle with Merlee's coin curse: plays her spell effect and sounds over Mario,
+ * shows "msg_mj_coin_up" and, when it was her last use, "msg_mj_last".
+ */
 EVT_BEGIN(_evt_majinai_coin_up_effect)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     SPAWN_EVENT(evt_majinai_effect_se_fld)
@@ -3358,6 +3367,10 @@ EVT_BEGIN(_evt_majinai_coin_up_effect)
     RETURN
 EVT_END()
 
+/**
+ * Drops the items an enemy carried back (recoveredItems) at its position and clears them;
+ * same item flags per version as fbatRecoverItems. Called by a script helper.
+ */
 void npcGetBackItemEntry(NpcEntry* npc) {
     NpcBattleInfo* info = &npc->battleInfo;
     s32 i;
@@ -3409,6 +3422,7 @@ void npcKoopaModeMain(void) {
     fire = jump;
     if (mario->characterId == CHARACTER_BOWSER) jump = kpaJumpChk();
     if (mario->characterId == CHARACTER_BOWSER) fire = kpaFireAttackCheck();
+    // FieldBattleData kpaJumpScore / kpaJumpKills / kpaComboCount, read through the byte pointer
     if (jump) {
         if (data->kpaJumpScore > 0 && data->kpaJumpKills >= 2) {
             Vec pos = mario->position;

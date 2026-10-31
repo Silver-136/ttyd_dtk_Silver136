@@ -218,6 +218,12 @@ void gor_yuuranking_draw_msg_fit_right(f32 x, f32 y, f32 scale, const char* msg,
     RETURN
 EVT_END()
 
+/**
+ * Draw callback of the Pianta Parlor ranking and result board:
+ * draws the frame and title of the minigame, the five ranked scores with their rank labels,
+ * the player's score and the Monte (token) count that is being counted up.
+ * US keeps separate 60Hz and 50Hz tables.
+ */
 static void evt_yuuranking_disp_func(CameraId camera, void* param) {
 #ifdef VERSION_G8ME01
     const char* head;

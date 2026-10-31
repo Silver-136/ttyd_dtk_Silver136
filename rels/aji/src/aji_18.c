@@ -216,6 +216,7 @@ EVT_BEGIN(evt_machine)
     RETURN
 EVT_END()
 
+/** Case script of the exit e_bero while the factory door is locked: shows the locked-door text stg7_aji_67_02. */
 EVT_BEGIN(key_lock_koujyou)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_67_02"), 0, 0)
@@ -223,6 +224,11 @@ EVT_BEGIN(key_lock_koujyou)
     RETURN
 EVT_END()
 
+/**
+ * Scene played when Mario returns through e_bero after Lord Crump's defeat:
+ * Mario and the partner walk in, the partner speaks stg7_aji_43 to 45 (Mario thinks, then nods),
+ * and the partner is set to run after Mario again.
+ */
 static EVT_BEGIN(evt_koopa_after)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -270,6 +276,7 @@ static USER_FUNC(sysflag) {
 
 EVT_BEGIN(aji_18_init_evt)
     CALL(sysflag)
+    // The fortress music and ambience start and the exits are set up.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))
     CALL(evt_snd_set_rev_mode, 1)
@@ -321,6 +328,8 @@ EVT_BEGIN(aji_18_init_evt)
         SET_VALUE(LW(0), 2)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi3"), 0, PTR(evt_machine), 0)
     END_IF
+    // Before the factory door opens, the east exit is locked behind the key slots, and the light panels show
+    // red.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_16_FACTORY_DOOR)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(key_lock_koujyou), GW(10))
         SET_VALUE(LW(0), STRING("e_bero"))
@@ -361,6 +370,7 @@ EVT_BEGIN(aji_18_init_evt)
             SPAWN_EVENT(PTR(evt_koopa_after))
         END_IF
     END_SWITCH
+    // The emergency lights start.
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN
 EVT_END()

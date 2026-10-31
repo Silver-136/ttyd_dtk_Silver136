@@ -611,6 +611,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event for the Z-Yux: flashes the body white, then runs the default damage handler (btldefaultevt_Damage). */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -619,6 +620,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table event 48, run when the battle opens with Mario's or his partner's First Strike on the Z-Yux:
+ * raises it to y=20 and waits for the attack to end.
+ */
 static EVT_BEGIN(barriern_dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 20)
@@ -641,6 +646,7 @@ static EVT_BEGIN(satellite_blur_on)
     RETURN
 EVT_END()
 
+/** Clears the blur part attribute 0x4000000 on every living satellite of the Z-Yux. */
 static EVT_BEGIN(satellite_blur_off)
     SET_VALUE(LW(2), 4)
     LOOP(4)
@@ -654,6 +660,11 @@ static EVT_BEGIN(satellite_blur_off)
     RETURN
 EVT_END()
 
+/**
+ * Script function: plays the Yux's afterimage effect of the barrier ring on the unit args[0] (type 0: the five
+ * ghost- ring parts 2 to 6 start large at 1.7 to 4.5 times and shrink in toward the body over 36 frames
+ * while fading in to alpha 64).
+ */
 static USER_FUNC(barriern_zanzou) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

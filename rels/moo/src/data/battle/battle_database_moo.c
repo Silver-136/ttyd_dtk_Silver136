@@ -1389,6 +1389,11 @@ EVT_BEGIN(bgset_moo_space_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: turns the stage object named in args[0] around Z. args[1] is a script variable holding the
+ * current step, args[2] the number of steps in one turn:
+ * it sets the rotation to 360 degrees times step/total and advances and wraps the step.
+ */
 static USER_FUNC(_space_rotate) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

@@ -263,6 +263,7 @@ EVT_END()
  * It then returns home.
  */
 static EVT_BEGIN(bllizard_event)
+    // Pick the party as the target; a confused Ice Puff with nobody to hit gets flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -279,20 +280,24 @@ static EVT_BEGIN(bllizard_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+    // Declare the attack on every enemy; the Ice Puff drops its ice barrier.
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterIcy)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
+    // It floats off to the left side of the stage.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE3"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, -40, 15, LW(2), 30, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    // It charges up its icy breath.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BLIZ_KUMO_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2B"))
     WAIT_FRAMES(60)
+    // It blows a huge cloud of ice across the stage toward the party.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_BLIZ_KUMO_CHARGE_ATTACK1"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(5))
@@ -312,6 +317,7 @@ static EVT_BEGIN(bllizard_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(20)
     SET_VALUE(LW(6), 0)
+    // Check each party member in turn; those the breath reaches take the damage.
     LABEL(0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -350,6 +356,7 @@ static EVT_BEGIN(bllizard_event)
         GOTO(98)
     END_IF
     GOTO(0)
+    // The breath dies down and the Ice Puff floats back home.
     LABEL(98)
     WAIT_FRAMES(60)
     CALL(evt_snd_sfxoff, LW(15))
@@ -410,6 +417,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Background loop of the Ice Puff, run for as long as it exists:
+ * each frame it shows the ice barrier effect while part 1 carries counter attribute 64 and removes the effect
+ * when the attribute is gone.
+ */
 static EVT_BEGIN(barrier_event)
     LABEL(0)
     WAIT_FRAMES(1)
@@ -428,6 +440,7 @@ static EVT_BEGIN(barrier_event)
     RETURN
 EVT_END()
 
+/** Data event 48 of the Ice Puff: after a first strike it is set to y 10 and waits for the attack to end. */
 static EVT_BEGIN(dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
@@ -436,6 +449,10 @@ static EVT_BEGIN(dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * Damage script of the Ice Puff: a hit that is not a 512-only damage code breaks its ice barrier (clears counter
+ * attribute 64 and removes the effect) before the default damage handling runs.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -451,10 +468,17 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Empty counter script (just returns). */
 static EVT_BEGIN(counter_event)
     RETURN
 EVT_END()
 
+/**
+ * Before the player's phase, if the Ice Puff can act and its barrier is down,
+ * it has a 50 percent chance to swap height: from the low position (unit work 0 set) it rises to y 40
+ * and sets part attributes 0x600000, otherwise it drops to y 10 and clears them.
+ * The new height becomes its home position.
+ */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_EQUAL(LW(0), 0)
@@ -493,7 +517,15 @@ static EVT_BEGIN(unison_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * The Ice Puff's ramming attack: it picks a target (the one hit first on a first strike),
+ * shrinks while rattling, rises and lunges into the target.
+ * A hit deals damage with a small camera shake, a miss or block ends with the lunge;
+ * either way it floats back up and home.
+ */
 static EVT_BEGIN(normal_attack_event)
+    // Pick the target (the First Strike target, or an enemy item use, or a sampled enemy); a confused Ice Puff
+    // with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -511,6 +543,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+    // Declare the attack.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -520,6 +553,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
+    // It shakes from side to side and slowly shrinks, winding up.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         LOOP(10)
@@ -536,6 +570,7 @@ static EVT_BEGIN(normal_attack_event)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+    // It pulls back and lunges at the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2A"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -549,6 +584,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(10), LW(11), LW(12))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(10), LW(11), LW(12), 40, -40, EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
     CALL(evt_snd_sfxoff, LW(15))
+    // Find out whether the lunge connects.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -574,6 +610,7 @@ static EVT_BEGIN(normal_attack_event)
     END_SWITCH
     LABEL(90)
     GOTO(98)
+    // Hit: the damage is dealt.
     LABEL(91)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -581,6 +618,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(98)
+    // It floats back up and home, puffing back out to full size.
     LABEL(98)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 40)
@@ -600,6 +638,11 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: args[0] = unit.
+ * Keeps the cold cloud effect (a Kumokumo particle,
+ * created on the first call and stored in work[1]) hovering at the Ice Puff's position, scaled by its size.
+ */
 static USER_FUNC(eff_ice_barrier) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

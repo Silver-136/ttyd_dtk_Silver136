@@ -166,6 +166,7 @@ void gcResetCheck(void);
 
 void marioStInit(void) {
     static u8 stack[0x1000];
+    // the releases also start cold after a shutdown reset
     if (!OSIsRestart() || (OSGetResetCode() & OS_RESET_SHUTDOWN)) {
         DEMOInit(&GXNtsc480IntDfMarioSt);
     } else {
@@ -220,6 +221,7 @@ void marioStInit(void) {
     if (OSGetFontEncode() == OS_FONT_ENCODE_SJIS && !(gp->flags & GW_FLAG_E3)) {
         gp->language = LANGUAGE_JP;
     } else {
+        // game language: 1 English, 2 German, 3 French, 4 Spanish, 5 Italian
         gp->language = LANGUAGE_US;
     }
     gp->framerate = 60;
@@ -352,6 +354,8 @@ void marioStMain(void) {
             }
         }
         if (i >= 4) {
+            // After two minutes without input in the field or in battle, raise the kiosk timeout flag
+            // (only read in kiosk mode, by seq_game and seq_battle).
             if (OSTicksToSeconds(OSGetTime() - none_key) > 120 && (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE)) {
                 gp->flags |= GW_FLAG_E3_TIMEOUT;
             }

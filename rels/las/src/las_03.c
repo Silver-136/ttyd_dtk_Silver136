@@ -201,6 +201,12 @@ EVT_BEGIN(toge_evt_sub)
     RETURN
 EVT_END()
 
+/**
+ * Event script: runs the spike floor.
+ * Sets the damage-return points, binds the 9 trap hit objects to their map objects,
+ * then every frame checks whether Mario is within 90 units of one of the 9 traps (unless he is in motion 32)
+ * and spawns toge_evt_sub for it.
+ */
 EVT_BEGIN(toge_evt)
     CALL(evt_hit_damage_return_set, PTR(dmgRetPoint))
     CALL_CHILD(PTR(evt_gazigazi_entry))
@@ -235,6 +241,10 @@ EVT_BEGIN(toge_evt)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_03: music and ambience, the doors to las_02 and las_04,
+ * the All or Nothing badge block, and starts the spike trap event.
+ */
 EVT_BEGIN(las_03_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))

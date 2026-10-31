@@ -512,6 +512,7 @@ static EVT_BEGIN(talk_soncho)
         IF_INT_NOT_EQUAL(LW(0), 3)
             IF_INT_EQUAL(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 0)
                 SET_VALUE(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 1)
+                // First conversation: Mario asks about the cannon and the mayor denies there is one.
                 CALL(evt_msg_print, 0, STRING("stg7_bom_20"), 0, STRING("me"))
                 WAIT_MS(300)
                 CALL(evt_mario_set_pose, STRING("M_I_2"))
@@ -555,6 +556,7 @@ static EVT_BEGIN(talk_soncho)
             WAIT_MS(300)
             CALL(evt_party_move_pos2, 0, 80, 300, FLOAT(60.0f))
             CALL(evt_party_set_dir_npc, 0, STRING("me"))
+            // The partner scolds the mayor for lying, and the mayor explains the rules (stg7_bom_24 to 32_02).
             CALL(evt_msg_print, 0, STRING("stg7_bom_24"), 0, STRING("party"))
             WAIT_MS(300)
             CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 60)
@@ -573,6 +575,7 @@ static EVT_BEGIN(talk_soncho)
             WAIT_MS(300)
             CALL(evt_msg_print, 0, STRING("stg7_bom_29"), 0, STRING("party"))
             WAIT_MS(300)
+            // The cannon can only be fired with the permission of Goldbob and General White.
             CALL(evt_msg_print, 0, STRING("stg7_bom_30"), 0, STRING("me"))
             WAIT_MS(300)
             CALL(evt_msg_print, 0, STRING("stg7_bom_31"), 0, STRING("party"))
@@ -586,11 +589,14 @@ static EVT_BEGIN(talk_soncho)
             CALL(evt_mario_set_pose, STRING("M_N_2"))
             WAIT_MS(500)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
+            // The mayor tells Mario to come back once he has found them; the story advances.
             CALL(evt_msg_print, 0, STRING("stg7_bom_33"), 0, STRING("me"))
             SET_VALUE(GSW_STORY_PROGRESS, STG7_02_MAYOR_BOB)
             CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
             CALL(evt_party_run, 0)
         END_IF
+        // Reminders: the mayor asks whether Mario forgot who to meet, and what has been done so far depends on
+        // the two permissions.
         CASE_LESS(STG7_03_GOLDBOB)
         SET_VALUE(LW(0), 0)
         IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
@@ -610,12 +616,14 @@ static EVT_BEGIN(talk_soncho)
             END_IF
             CASE_EQUAL(1)
             IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
+                // Hints about where to find Goldbob and General White (stg7_bom_38_01 and 38_02).
                 CALL(evt_msg_print, 0, STRING("stg7_bom_38_01"), 0, STRING("me"))
             END_IF
             IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 0)
                 IF_INT_EQUAL(GSWF_USU_GENERAL_WHITE_HINT_HEARD, 0)
                     CALL(evt_msg_print, 0, STRING("stg7_bom_38_02"), 0, STRING("me"))
                     ELSE
+                    // Once both are found, White's wandering scene runs.
                     CALL_CHILD(PTR(urotuku_white))
                 END_IF
             END_IF
@@ -637,6 +645,8 @@ EVT_END()
  * while that job is active, with a short walk-up of Mario and the partner.
  */
 static EVT_BEGIN(talk_murabito_e)
+    // Trouble Center job 30: the villager asks Mario to erase the graffiti on the 50th floor of the Pit of 100
+    // Trials.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
 #ifdef VERSION_G8ME01
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
@@ -686,6 +696,7 @@ static EVT_BEGIN(talk_murabito_e)
 #ifdef VERSION_G8ME01
             IF_INT_EQUAL(LF(0), 0)
 #endif
+                // Mario has erased it: the villager thanks him.
                 CALL(evt_msg_print, 0, STRING("irai_30_004"), 0, 0)
 #ifdef VERSION_G8ME01
                 ELSE
@@ -701,6 +712,7 @@ static EVT_BEGIN(talk_murabito_e)
                 END_IF
                 IF_INT_LESS(LW(0), LW(1))
                     CALL(evt_msg_continue)
+                    // He gives Mario a Snow Bunny as the reward.
                     CALL(evt_item_entry, STRING("sr"), ITEM_SNOW_BUNNY, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("sr"))
                     CALL(evt_item_get_item_end_wait, STRING("sr"))
@@ -715,6 +727,7 @@ static EVT_BEGIN(talk_murabito_e)
                     CALL(evt_npc_move_position, STRING("me"), LW(0), LW(2), 0, 60, 0)
                     CALL(evt_npc_status_onoff, 0, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
                 END_IF
+                // He explains his own wish, and the job is complete.
                 CALL(evt_msg_print, 0, STRING("irai_30_006"), 0, 0)
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 1)
@@ -727,6 +740,7 @@ static EVT_BEGIN(talk_murabito_e)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_71_01)
+        // Otherwise his remarks change with the story, up to the cannon.
         CALL(evt_msg_print, 0, STRING("stg7_bom_10_00"), 0, STRING("me"))
         CASE_LESS(STG7_04_BACK_ONLINE)
         CALL(evt_msg_print, 0, STRING("stg7_bom_10"), 0, STRING("me"))
@@ -1075,6 +1089,7 @@ EVT_END()
 EVT_BEGIN(iri_25_white_bed)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
+    // Mario is asked again and again whether to keep bouncing on General White's bed (irai_25_02 to 12).
     CALL(evt_msg_print, 0, STRING("irai_25_02"), 0, 0)
     CALL(evt_msg_select, 0, STRING("irai_25_yesno"))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1163,6 +1178,7 @@ EVT_BEGIN(iri_25_white_bed)
     RETURN
     LABEL(101)
     CALL(evt_party_run, 0)
+    // After the last hop General White wakes with a grunt and greets Mario (irai_25_14 and 15).
     CALL(evt_msg_print, 0, STRING("irai_25_14"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("ホワイト"), STRING("N_2"))
@@ -1182,6 +1198,7 @@ EVT_BEGIN(iri_25_white_bed)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(1000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+    // White learns that Mario has brought a delivery from Goldbob (irai_25_16 and 17) and takes the package.
     CALL(evt_msg_print, 0, STRING("irai_25_16"), 0, STRING("ホワイト"))
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
@@ -1205,6 +1222,8 @@ EVT_END()
 EVT_BEGIN(evt_white_bed)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
+    // Mario is asked whether to wake the sleeping White by bouncing on his bed; he keeps jumping while the
+    // player agrees.
     CALL(evt_msg_print, 0, STRING("stg7_bom_43"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg7_bom_43_yn"))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1301,11 +1320,13 @@ EVT_BEGIN(evt_white_bed)
     CALL_CHILD(PTR(mario_jump))
     GOTO(1)
     LABEL(0)
+    // Answering no gives up with a guilty remark.
     CALL(evt_msg_print_add, 0, STRING("stg7_bom_54"))
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     RETURN
     LABEL(1)
+    // General White finally wakes up (stg7_bom_55 to 59).
     CALL(evt_msg_print, 0, STRING("stg7_bom_55"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("ホワイト"), STRING("N_2"))
@@ -1326,6 +1347,7 @@ EVT_BEGIN(evt_white_bed)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAND_UP1_4"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(800)
+    // He recognises Mario's mustache, hat and hammer and learns why Mario needs the cannon.
     CALL(evt_msg_print, 0, STRING("stg7_bom_57"), 0, STRING("ホワイト"))
     WAIT_MS(300)
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
@@ -1359,6 +1381,7 @@ EVT_BEGIN(evt_white_bed)
         ADD(LW(0), 1)
     END_IF
     IF_INT_EQUAL(LW(0), 2)
+        // Once both Goldbob's approval and White's waking are done, the story advances.
         SET_VALUE(GSW_STORY_PROGRESS, STG7_03_GOLDBOB)
     END_IF
     CALL(evt_party_run, 0)
@@ -1561,6 +1584,7 @@ static USER_FUNC(yami_view) {
  * the mayor speaks stg8_dark_08 and the map changes to las_26 at the sekai_yami2 entrance.
  */
 static EVT_BEGIN(sekai_yami_evt)
+    // Mario and the partner are parked off-stage while the mayor and three villagers are placed in the village.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -1574,6 +1598,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_status_onoff, 1, STRING("ボムヘイE"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_status_onoff, 1, STRING("ボムヘイF"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_status_onoff, 1, STRING("ボムヘイG"), NPC_STATUS_FACE_MOVE_DIR)
+    // The village is tinted dark to show the world of darkness.
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_bom02"), MAP_OBJ_TEV_CALLBACK(1))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bom02"), MAP_OBJ_FLAG_DISPLAY_LIST)
@@ -1585,6 +1610,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(yami_view, -800)
     CALL(evt_cam3d_evt_set, -30, 88, 723, -30, 55, 24, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
+    // An earthquake rumbles and the screen shakes.
     CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), LW(15))
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
@@ -1694,6 +1720,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_wait_pera, STRING("村長"))
     CALL(evt_cam3d_evt_set, -30, 55, 473, -30, 35, 24, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+    // The mayor wonders what has happened, and the map changes to las_26.
     CALL(evt_msg_print, 0, STRING("stg8_dark_08"), 0, STRING("村長"))
     WAIT_MS(2000)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
@@ -1777,6 +1804,8 @@ static KinopioData kino_dt = {
  */
 EVT_BEGIN(bom_02_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
+    // Exits are set up. During the chapter 8 finale the entrance decides the music: the darkness scene is
+    // silent, the crowd scene has its own theme.
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     SET_VALUE(LF(0), 0)
@@ -1793,10 +1822,12 @@ EVT_BEGIN(bom_02_init_evt)
             SET_VALUE(LF(0), 1)
         END_IF
     END_IF
+    // Normally the village music and ambience play.
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_BOM1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_BOM3"))
     END_IF
+    // Snow falls and the villagers, the shop and the inn are set up.
     CALL_CHILD(PTR(evt_bom_snowfall))
     CALL(evt_npc_setup, PTR(npcEnt))
     SWITCH(GSW_STORY_PROGRESS)
@@ -1806,22 +1837,26 @@ EVT_BEGIN(bom_02_init_evt)
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
     CALL(evt_kinopio_setup, PTR(&kino_dt))
     SET_VALUE(LW(0), PTR(&ie1_door))
+    // The doors of the inn, the shop and General White's house are registered.
     CALL_CHILD(PTR(evt_door_entry))
     SET_VALUE(LW(0), PTR(&ie2_door))
     CALL_CHILD(PTR(evt_door_entry))
     SET_VALUE(LW(0), PTR(&ie3_door))
     CALL_CHILD(PTR(evt_door_entry))
     SET_VALUE(LW(0), STRING("group3713047r"))
+    // The wind vanes on the rooftops start to turn.
     SPAWN_EVENT(PTR(evt_bom_01_karakara))
     SET_VALUE(LW(0), STRING("group3713048r"))
     SPAWN_EVENT(PTR(evt_bom_01_karakara))
     SET_VALUE(LW(0), STRING("group3713049r"))
     SPAWN_EVENT(PTR(evt_bom_01_karakara))
+    // Shine Sprite block, the spinning floor panel, the Star Piece and Inn Coupon pickups and the save block.
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 425, 0, -45, 0, GSWF_SHINE_40, 0)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -30, 0, 115, STRING("S_wakuaaa"), 125, GSWF_STARPIECE_94)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 210, 30, -168, ITEM_TYPE_STILL, GSWF_STARPIECE_93, 0)
     CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -220, 5, -115, ITEM_TYPE_STILL, GSWF_BOM_02_INN_COUPON, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -300, 65, 10, 0, 0)
+    // Chapter 8 finale: entering as sekai_yami2 or minnnanokoe starts the matching cutscene.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami2"))
@@ -1831,9 +1866,11 @@ EVT_BEGIN(bom_02_init_evt)
             SPAWN_EVENT(PTR(minnnanokoe_evt))
         END_IF
     END_IF
+    // The steam animation (yuge) starts.
     CALL(evt_eff, 0, STRING("nice"), 0, 0, -1000, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff, 0, STRING("nice"), 1, 0, -1000, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_map_playanim, STRING("yuge"), MAP_ANIM_PLAY_LOOP, 0)
+    // Once the twilight hint has been given and White is still asleep, his bed can be bounced on.
     IF_INT_EQUAL(GSWF_USU_GENERAL_WHITE_HINT_HEARD, 1)
         IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 0)
             CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_w_bed"), 0, PTR(evt_white_bed), 0)
@@ -1845,6 +1882,7 @@ EVT_BEGIN(bom_02_init_evt)
     CALL(evt_map_replace_mapobj, STRING("hi4"), 1)
     CALL(evt_map_replace_mapobj, STRING("hi5"), 1)
     CALL(evt_map_replace_mapobj, STRING("hi6"), 1)
+    // Trouble Center job 25 (the package for White): his bed can be bounced on to wake him.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(4), 1)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(6), 0)
@@ -1854,6 +1892,7 @@ EVT_BEGIN(bom_02_init_evt)
             END_IF
         END_IF
     END_IF
+    // Once Trouble Center job 30 is solved, its Snow Bunny is placed on the ground.
     IF_INT_EQUAL(LF(0), 0)
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 1)
             CALL(evt_item_entry, STRING("iri_30"), ITEM_SNOW_BUNNY, 50, 0, 35, ITEM_TYPE_STILL, GSWF_BOM_02_SNOW_BUNNY, 0)
@@ -1865,6 +1904,10 @@ EVT_BEGIN(bom_02_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: args[0] is an NPC name and args[1] picks a TEV callback slot (low four bits);
+ * turns that callback on in the NPC's animation materials. Does nothing if the NPC does not exist.
+ */
 static USER_FUNC(anim_tevcallback) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

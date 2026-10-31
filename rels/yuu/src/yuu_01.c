@@ -185,6 +185,7 @@ static EVT_BEGIN(minigame_view_monte)
     RETURN
 EVT_END()
 
+/** Puts Mario on the Boat Mode starting spot (x -800, z 200) facing right. */
 EVT_BEGIN(yuu_01_kaijo_init)
     CALL(evt_mario_set_pos, -800, 0, 200)
     CALL(evt_mario_set_dir, 90, 0, 0)
@@ -197,6 +198,10 @@ EVT_BEGIN(yuu_01_kaijo_init2)
     RETURN
 EVT_END()
 
+/**
+ * Set-up for minigame 2 (Boat Mode): freezes Mario's controls, allocates the minigame work area,
+ * dismisses the partners, starts the crowd and boat-water sounds and sets phase 1.
+ */
 EVT_BEGIN(minigame02_main)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(yuu_01_kaijo_init))
@@ -211,6 +216,10 @@ EVT_BEGIN(minigame02_main)
     RETURN
 EVT_END()
 
+/**
+ * Opening cutscene of Boat Mode: pans the 3D camera along the river,
+ * then shows the "menu_title_minigame2" title card.
+ */
 EVT_BEGIN(minigame02_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-560.0f), FLOAT(565.0f), FLOAT(1185.0f), FLOAT(-560.0f), FLOAT(75.0f), FLOAT(155.0f), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -224,6 +233,10 @@ EVT_BEGIN(minigame02_start_cam)
     RETURN
 EVT_END()
 
+/**
+ * Cleans up when the player skips the opening camera:
+ * frees the title card, turns off the event camera and puts Mario at the start spot.
+ */
 EVT_BEGIN(minigame02_start_cam_cancel)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_yuutitle_free)
@@ -234,6 +247,10 @@ EVT_BEGIN(minigame02_start_cam_cancel)
     RETURN
 EVT_END()
 
+/**
+ * Phase 1 of Boat Mode: plays the opening camera (skippable), starts the minigame music,
+ * shows the countdown effect, gives Mario control and starts the 70-second coin counter.
+ */
 EVT_BEGIN(minigame02_start)
     CALL(yuuminigame2_opening_chk, LW(0), LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
@@ -332,6 +349,7 @@ EVT_BEGIN(minigame02_end)
 EVT_END()
 
 EVT_BEGIN(yuu_01_init_evt)
+    // The room's lights, clouds and water start animating.
     CALL(evt_map_playanim, STRING("den1"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("den2"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("kumo"), MAP_ANIM_PLAY_LOOP, 0)
@@ -402,6 +420,7 @@ EVT_BEGIN(yuu_01_init_evt)
     SET_VALUE(LW(12), 2)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
     CALL(yuuminigame_set_dataadr, 4, LW(15))
+    // The eight small whirlpools (S_uzu1-8), which spin the boat around, slide back and forth.
     CALL(yuuminigame2_get_name, 5, LW(0), LW(1), LW(11))
     SET_VALUE(LW(0), LW(0))
     SET_VALUE(LW(1), LW(1))
@@ -466,6 +485,7 @@ EVT_BEGIN(yuu_01_init_evt)
     SET_VALUE(LW(12), 2)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
     CALL(yuuminigame_set_dataadr, 8, LW(15))
+    // Small whirlpools 5 to 8.
     CALL(yuuminigame2_get_name, 9, LW(0), LW(1), LW(11))
     SET_VALUE(LW(0), LW(0))
     SET_VALUE(LW(1), LW(1))
@@ -530,6 +550,7 @@ EVT_BEGIN(yuu_01_init_evt)
     SET_VALUE(LW(12), 2)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
     CALL(yuuminigame_set_dataadr, 12, LW(15))
+    // The eight barrels (S_taru01-08) bob and float back and forth across the course.
     CALL(yuuminigame2_get_name, 13, LW(0), LW(1), LW(11))
     SET_VALUE(LW(0), LW(0))
     SET_VALUE(LW(1), LW(1))
@@ -658,6 +679,7 @@ EVT_BEGIN(yuu_01_init_evt)
     SET_VALUE(LW(12), 1)
     SPAWN_EVENT_GET_ID(PTR(moving_floor), LW(15))
     CALL(yuuminigame_set_dataadr, 20, LW(15))
+    // The game is set up and the audience appears.
     SPAWN_EVENT(PTR(minigame02_main))
 #ifdef VERSION_G8ME01
     CALL_CHILD(evt_yuunpc_minigame2)
@@ -688,6 +710,12 @@ EVT_BEGIN(yuu_01_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Per-frame rules of Boat Mode: detects Mario's boat touching a big whirlpool (index 1 to 4,
+ * which drags him down and back and costs a point) or a small whirlpool (5 to 12, which spins the boat),
+ * applies the movement, and ends the round (TRUE) when Mario reaches the far end (x <= -700, z <= 0)
+ * or the counter runs out.
+ */
 BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, FuneWork* data) {
     MarioWork* mario = marioGetPtr();
     Vec box[3];

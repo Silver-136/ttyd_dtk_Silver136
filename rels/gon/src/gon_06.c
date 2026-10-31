@@ -253,9 +253,11 @@ static s32 key_tbl[] = {
 
 // First contact only sets the talk flag; later contacts check/select the Black Key before opening.
 static EVT_BEGIN(evt_majin)
+    // Mario is frozen and turns toward the black chest.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_mario_adjust_dir)
+    // First visit: the chest talks to Mario.
     IF_INT_EQUAL(GSWF_GON_06_BLACK_CHEST_FIRST_TALK_DONE, 0)
         CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
         ADD(LW(1), 30)
@@ -267,8 +269,10 @@ static EVT_BEGIN(evt_majin)
                 CALL(evt_mario_set_dir, 270, 200, 0)
             END_IF
         END_INLINE_EVENT
+        // The chest is startled by visitors.
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_12_01"), 0, 0)
+        // The camera moves in and the chest swings on its base.
         CALL(evt_cam3d_evt_set, 380, 125, 418, 380, 55, 24, 650, EASING_SINE_IN_OUT)
         CALL(evt_mobj_get_position, STRING("box"), LW(3), LW(4), LW(5))
         ADD(LW(4), 30)
@@ -276,6 +280,7 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_mobj_set_anim, STRING("box"), STRING("A_3"))
         CALL(evt_mobj_wait_animation_end, STRING("box"))
         CALL(evt_snd_sfxoff, LW(15))
+        // The chest chats with Mario while he shrugs, startles and shakes his head in turn.
         WAIT_MS(300)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_12_02"), PTR(majin_callback), 0)
@@ -308,10 +313,12 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_12_07"), PTR(majin_callback), 0)
+        // The talk is over: the chest keeps the story-flag so it only plays once.
         CALL(evt_mobj_exec_cancel, STRING("box"))
         SET_VALUE(GSWF_GON_06_BLACK_CHEST_FIRST_TALK_DONE, 1)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         ELSE
+        // Later visits: without the Black Key the chest reminds Mario to find it.
         CALL(evt_pouch_check_item, ITEM_BLACK_KEY_0x22, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
             CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
@@ -320,6 +327,7 @@ static EVT_BEGIN(evt_majin)
             CALL(evt_msg_print, 0, STRING("stg1_gon_12_08"), PTR(majin_callback), 0)
             CALL(evt_mobj_exec_cancel, STRING("box"))
             ELSE
+            // Mario carries the Black Key: the chest greets him.
             CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
             ADD(LW(1), 30)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -333,6 +341,7 @@ static EVT_BEGIN(evt_majin)
                 END_IF
             END_INLINE_EVENT
             CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
+            // Mario backs out of the menu and the chest tells him to use the key.
             IF_INT_EQUAL(LW(0), -1)
                 CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
                 ADD(LW(1), 30)
@@ -340,6 +349,8 @@ static EVT_BEGIN(evt_majin)
                 CALL(evt_msg_print, 0, STRING("stg1_gon_12_10"), PTR(majin_callback), 0)
                 CALL(evt_mobj_exec_cancel, STRING("box"))
                 ELSE
+                // Mario hands over the Black Key and the partner steps aside; the chest cackles as the curse is
+                // set up.
                 BEGIN_INLINE_EVENT
                     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                     ADD(LW(0), 35)

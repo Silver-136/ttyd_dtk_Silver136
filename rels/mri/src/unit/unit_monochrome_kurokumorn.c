@@ -262,6 +262,7 @@ EVT_END()
  * then hits each target in turn.
  */
 static EVT_BEGIN(thunder_event)
+    // The Dark Puff targets the whole opposing side with its charged lightning.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -280,6 +281,7 @@ static EVT_BEGIN(thunder_event)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    // It holds pose A_2B for a second while the charge sound plays, then poses A_3A and A_3B.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_CHARGE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2B"))
     WAIT_FRAMES(30)
@@ -288,6 +290,7 @@ static EVT_BEGIN(thunder_event)
     WAIT_FRAMES(20)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3B"))
     CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterElectric)
+    // Eight lightning bolts crash down in pairs around the opposing side, 12 frames apart.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetEnemyBelong, LW(3), LW(10))
         IF_INT_EQUAL(LW(10), 0)
@@ -344,6 +347,7 @@ static EVT_BEGIN(thunder_event)
         CALL(evt_eff64, STRING(""), STRING("pokopi_thunder_n64"), 0, LW(0), 210, LW(2), LW(0), 0, LW(2), FLOAT(4.0f), 20, 0, 0, 0)
         WAIT_FRAMES(12)
     END_SIBLING_EVENT
+    // The screen shakes and the damage is worked out for each target in turn.
     WAIT_FRAMES(10)
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 30, 0)
     SET_VALUE(LW(6), 0)
@@ -372,6 +376,7 @@ static EVT_BEGIN(thunder_event)
     END_SWITCH
     LABEL(90)
     GOTO(97)
+    // A hit applies the Action Command defence result (for the first target only) and the electric damage.
     LABEL(91)
     IF_INT_EQUAL(LW(6), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
@@ -385,6 +390,7 @@ static EVT_BEGIN(thunder_event)
         GOTO(98)
     END_IF
     GOTO(0)
+    // After a pause (30 frames) it returns to its idle pose.
     LABEL(98)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
@@ -565,6 +571,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
+    // The Dark Puff shivers and squashes down for 40 frames, getting ready to ram.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         LOOP(10)
@@ -581,6 +588,7 @@ static EVT_BEGIN(normal_attack_event)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+    // It rears back (A_2A) and dives to a spot behind itself.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2A"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -589,6 +597,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
     WAIT_FRAMES(10)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
+    // Then it flies at the target in a long arc (A_1A).
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE2"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(10), LW(11), LW(12))
@@ -617,8 +626,10 @@ static EVT_BEGIN(normal_attack_event)
         SET_VALUE(LW(15), 1)
         CASE_END
     END_SWITCH
+    // The tackle misses or is blocked: it goes by the target.
     LABEL(90)
     GOTO(98)
+    // The tackle hits: the screen shakes, the Action Command defence result is applied and damage is dealt.
     LABEL(91)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -626,6 +637,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(98)
+    // It floats back up and home, restoring its normal size.
     LABEL(98)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 40)

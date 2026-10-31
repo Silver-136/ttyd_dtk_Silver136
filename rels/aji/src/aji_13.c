@@ -593,6 +593,7 @@ EVT_BEGIN(move_left_right)
 EVT_END()
 
 EVT_BEGIN(move_up_down)
+    // The hit area is tied to the platform and the row's heights are scaled for smooth movement.
     SET_VALUE(LW(5), LW(0))
     SET_VALUE(LW(6), LW(1))
     SET_VALUE(LW(7), LW(2))
@@ -607,6 +608,7 @@ EVT_BEGIN(move_up_down)
     IF_STR_EQUAL(LW(5), STRING("A_ugoku_2"))
         SET_VALUE(LW(3), 1)
         SET_VALUE(GF(1), 0)
+        // The first platform (A_ugoku_2) starts only after someone is standing on it.
         BEGIN_SIBLING_EVENT
             LOOP(0)
                 CALL(evt_mario_get_name_hitobj_head, LW(10))
@@ -623,6 +625,7 @@ EVT_BEGIN(move_up_down)
         ELSE
         SET_VALUE(LW(3), 0)
     END_IF
+    // Each cycle the platform glides from its first height to its second over the row's time, then pauses.
     LOOP(0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(7), LW(8), LW(9))
         LABEL(0)
@@ -672,6 +675,7 @@ EVT_BEGIN(move_up_down)
             WAIT_FRAMES(1)
         END_LOOP
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, LW(8), LW(7), LW(9))
+        // Then it glides back, and the cycle repeats forever.
         LABEL(1)
         CALL(evt_sub_intpl_msec_get_value)
         DIVIDE_FLOAT(LW(0), FLOAT(100.0f))

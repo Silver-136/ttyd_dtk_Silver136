@@ -551,6 +551,7 @@ BattleWeapon partyWeapon_ChuchurinaKiss = {
  * then returns home.
  */
 EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
+    // Find the chosen enemy and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -562,10 +563,13 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
+    // Camera follows her and the target.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_PART_TO_PART)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
+    // Against an enemy with pre-emptive front spikes (pre-check result 5) she first walks up in front of it,
+    // and the damage check there pricks her on the spikes.
     CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_EQUAL(LW(5), 5)
         CALL(btlevtcmd_GetStatusMg, LW(3), LW(6))
@@ -580,6 +584,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
+    // She walks to the slap point beside the enemy and faces it.
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(5))
     MULTIPLY_FLOAT(LW(5), 12)
     CALL(_get_binta_hit_position, UNIT_ID_SELF, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -593,6 +598,8 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    // Camera closes in; she winds up while the left-right stick gauge command is set up from the difficulty
+    // and her rank.
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_A1_1"))
@@ -644,6 +651,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         CALL(btlevtcmd_StartAC, 1)
     END_SIBLING_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(0))
+    // While the command runs she pulses and turns redder as the gauge fills.
     BEGIN_SIBLING_EVENT_GET_ID(LW(14))
         SET_VALUE(LW(6), 0)
         SET_VALUE(LW(5), 5)
@@ -675,6 +683,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
             SET_VALUE(LW(5), 5)
         END_LOOP
     END_SIBLING_EVENT
+    // Command over: the number of slaps comes from her rank (2, 3 or 4).
     CALL(btlevtcmd_ResultAC)
     DELETE_EVENT(LW(14))
     DELETE_EVENT(LW(15))
@@ -687,6 +696,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         CASE_DEFAULT
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, 2)
     END_SWITCH
+    // She leans back to wind up the first slap.
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 300)
     CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
@@ -712,6 +722,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         END_LOOP
     END_SIBLING_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(14))
+    // Each slap starts here: check whether the enemy can be slapped.
     SET_VALUE(LW(13), 18)
     SET_VALUE(LW(10), 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_EVENT_ID, 0)
@@ -733,6 +744,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
+    // She cannot hit it: the enemy's dodge or counter plays, she spins round, looks dejected and goes home.
     IF_INT_NOT_EQUAL(LW(5), 1)
         DELETE_EVENT(LW(14))
         SET_VALUE(LW(14), 0)
@@ -761,6 +773,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         CALL(btlevtcmd_InviteApInfoReport)
         GOTO(95)
     END_IF
+    // Slaps alternate right and left; the last slap, or one after a failed command, uses the final-slap weapon.
     SET_VALUE(LW(0), LW(10))
     MODULO(LW(0), 2)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -793,6 +806,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
     ELSE
         SET_VALUE(LW(12), PTR(&partyWeapon_ChuchurinaNormalAttackRightLast))
     END_IF
+    // If the enemy would counter this slap, she straightens up, the slap lands and the script ends here.
     LABEL(21)
     CALL(btlevtcmd_PreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), LW(12), 256, LW(0))
     SWITCH(LW(0))
@@ -839,6 +853,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
             RETURN
             CASE_END
         END_SWITCH
+        // The slap lands: a screen shake, a slap sound (a heavier one for the last slap) and the damage.
         CALL(evt_btl_camera_shake_h, 0, 2, 0, 12, 13)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(10), LW(0))
@@ -862,6 +877,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
                 CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
             END_IF
         END_IF
+        // Rating for this slap: the success effect and the audience's reaction.
         CALL(btlevtcmd_GetResultAC, LW(6))
         IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
             CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
@@ -877,6 +893,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         ELSE
             CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
         END_IF
+        // Good command: she swings back for the next slap, or spins round between slaps from the third slap on.
         IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
             SWITCH(LW(10))
                 CASE_LESS_OR_EQUAL(2)
@@ -973,6 +990,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
                 WAIT_FRAMES(10)
             END_SWITCH
         ELSE
+            // Failed command: she spins twice, staggers dizzily and the move ends.
             BEGIN_SIBLING_EVENT_GET_ID(LW(15))
                 CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, LW(8), EVT_NULLPTR)
                 SET_VALUE(LW(7), 720)
@@ -1003,17 +1021,20 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
             CALL(btlevtcmd_InviteApInfoReport)
             GOTO(95)
         END_IF
+        // Next slap from the other side while slaps remain.
         MULTIPLY(LW(13), -1)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_MAX_SLAPS, LW(0))
         IF_INT_LESS(LW(10), LW(0))
             GOTO(10)
         END_IF
+        // After the last slap: audience AP and a pleased pose.
         LABEL(90)
         CALL(btlevtcmd_StopAC)
         CALL(evt_audience_ap_recovery)
         CALL(btlevtcmd_InviteApInfoReport)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_A1_3"))
         WAIT_FRAMES(40)
+        // She runs home; after a good command a stylish window near the end of the run lets her hop with a pose.
         LABEL(95)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -1058,6 +1079,7 @@ EVT_BEGIN(partyChuchurinaAttack_NormalAttack)
         ELSE
             CALL(btlevtcmd_WaitEventEnd, LW(15))
         END_IF
+        // End of the move: face forward, apply the HP and FP drain badges, back to idle.
         LABEL(99)
         CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
         CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
@@ -1070,6 +1092,7 @@ EVT_END()
  * weapon (_make_madowase_weapon) that is then applied to each target; misses make the target dodge.
  */
 EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
+    // Declare the move on all enemies and pay for it; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
@@ -1080,6 +1103,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
+    // Set up the hold-and-release gauge command from the difficulty.
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AcSetFlag, AC_REPEATEDLY_LV_FLAG_NO_FULL_BONUS | AC_REPEATEDLY_LV_FLAG_FAST_GAUGE_DISP | AC_REPEATEDLY_LV_FLAG_HOLD_OVERHEAT)
@@ -1114,6 +1138,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     CALL(btlevtcmd_AcSetParamAll, 1, 240, 178, LW(0), LW(1), 100, 1, EVT_NULLPTR)
     CALL(btlevtcmd_AcSetGaugeParam, 34, 68, 100, 100)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
+    // Camera pulls back over her and the gauge command runs.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, LW(0), 73, 400, LW(0), 43, 0, 40, 5)
@@ -1121,6 +1146,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     CALL(btlevtcmd_StartAC, 1)
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_StopAC)
+    // She spins on the spot.
     WAIT_FRAMES(20)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_I_1"))
     LOOP(40)
@@ -1128,6 +1154,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+    // Footsteps for her and her three copies switch to the teasing sounds.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_A4_1"))
     CALL(btlevtcmd_SetWalkSound, UNIT_ID_SELF, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 15, 13)
     CALL(btlevtcmd_SetRunSound, UNIT_ID_SELF, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 7, 7)
@@ -1145,6 +1172,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     CALL(btlevtcmd_SetPartsRunSound, UNIT_ID_SELF, 4, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 7, 7)
     CALL(btlevtcmd_SetPartsDiveSound, UNIT_ID_SELF, 4, STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1L"), STRING("SFX_BTL_CHURINA_CONFUSE_MOVE1R"), 0, 7, 7)
     CALL(btlevtcmd_SetPartsJumpSound, UNIT_ID_SELF, 4, STRING("SFX_BTL_CHURINA_CONFUSE_JUMP1"), STRING("SFX_BTL_CHURINA_CONFUSE_LANDING1"))
+    // Three copies of her pop out of puffs of smoke around her and drop to the floor.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 40)
     SUBTRACT(LW(2), 20)
@@ -1200,6 +1228,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 4, 0, 0, 0)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 4, POSE_TYPE_NEUTRAL)
     END_SIBLING_EVENT
+    // All four of them blur, and the camera pans forward with them.
     WAIT_FRAMES(85)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART1_RUNNING, 1)
@@ -1226,6 +1255,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 1, LW(0), 90, 500, LW(0), 60, 0, LW(7), 0)
     END_SIBLING_EVENT
+    // She dashes forward and zigzags back and forth, then vanishes in a puff.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
         WAIT_FRAMES(40)
@@ -1256,6 +1286,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kMotionBlur)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART1_RUNNING, 0)
     END_SIBLING_EVENT
+    // Each copy dashes forward and zigzags in its own pattern, then vanishes in a puff.
     BEGIN_SIBLING_EVENT
         SET_VALUE(LW(6), 2)
         CALL(btlevtcmd_SetPartsFallAccel, UNIT_ID_SELF, LW(6), FLOAT(0.69921875f))
@@ -1364,6 +1395,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 4, kMotionBlur)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART4_RUNNING, 0)
     END_SIBLING_EVENT
+    // Wait until all four have finished.
     LABEL(9)
     SET_VALUE(LW(0), 0)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_PART1_RUNNING, LW(1))
@@ -1378,6 +1410,8 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         WAIT_FRAMES(1)
         GOTO(9)
     END_IF
+    // For each enemy: if it can be reached, apply a copy of the weapon with the dizzy chance from the gauge;
+    // otherwise its dodge plays.
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CHURINA_CONFUSE1"), 0)
     SET_VALUE(LW(10), 0)
     SET_VALUE(LW(15), 0)
@@ -1410,15 +1444,18 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     ELSE
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
+    // Next enemy.
     LABEL(50)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_NOT_EQUAL(LW(3), -1)
         ADD(LW(10), 1)
         GOTO(10)
     END_IF
+    // Nothing was hit: the audience is let down.
     IF_INT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
     END_IF
+    // Camera back to normal; she leaps back spinning, with a stylish window during the leap.
     LABEL(80)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -1453,6 +1490,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
     END_SIBLING_EVENT
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
+    // Stylish hit: a cheerful pose and she dashes home; otherwise (before JP, a dizzy pose first) she runs home.
     SWITCH(LW(6))
         CASE_GREATER_OR_EQUAL(2)
         CALL(btlevtcmd_AudienceDeclareAcrobatResult, LW(12), 1, 0, 0, 0)
@@ -1481,6 +1519,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, EASING_CUBIC_IN, 0, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     END_SWITCH
+    // End of the move: apply the HP and FP drain badges and restore her normal footstep sounds.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL_CHILD(btldefaultevt_SuitoruBadgeEffect)
@@ -1493,6 +1532,7 @@ EVT_BEGIN(partyChuchurinaAttack_MadowaseAttack)
 EVT_END()
 
 EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
+    // Declare the move and pay for it; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
@@ -1503,6 +1543,8 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
+    // Against an enemy with pre-emptive front spikes (pre-check result 5) she just runs up beside it (US and
+    // later with a stylish window on the way) and the damage check runs there without the action command.
     SET_VALUE(LW(14), 0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&partyWeapon_ChuchurinaItemSteal), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_EQUAL(LW(5), 5)
@@ -1588,6 +1630,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
 #else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
 #endif
+    // Camera closes in on her as she puckers up.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, 1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -1595,6 +1638,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     WAIT_MS(200)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_K_1"))
     WAIT_FRAMES(6)
+    // She cannot reach it: the enemy's dodge plays and the move ends.
     IF_INT_NOT_EQUAL(LW(5), 1)
         WAIT_FRAMES(20)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
@@ -1614,6 +1658,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
         CALL(btlevtcmd_StopAC)
         GOTO(90)
     END_IF
+    // She blows a kiss at the enemy, whose held item is shown above it.
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&partyWeapon_ChuchurinaItemSteal), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -1627,6 +1672,8 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_CHURINA_KISS1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_OnUnitFlag, LW(3), BATTLE_UNIT_FLAG_SHOW_ITEM_WHILE_ACTING)
     WAIT_FRAMES(20)
+    // She closes her eyes, the screen turns grey around her and the stop-the-gauge command runs, its speed and
+    // success zone set from the difficulty and the enemy's item.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_Z_1"))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
     CALL(btlevtcmd_AnimeFlagOnOff, UNIT_ID_SELF, 1, PART_ANIM_NO_DISP, 1)
@@ -1646,6 +1693,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     CALL(btlevtcmd_StartAC, 1)
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_GetResultAC, LW(6))
+    // Success: she strikes a pose; then she leaps onto the enemy.
     IF_BITS_SET(LW(6), AC_RESULT_SUCCESS)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_A4_1"))
     END_IF
@@ -1662,6 +1710,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
     ADD(LW(2), 8)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
+    // Try the steal. Nothing taken: she falls off, the colour returns and she runs home.
     CALL(btlevtcmd_GetResultAC, LW(6))
     CALL(_chuchu_item_steal, LW(3), LW(14), LW(6))
     IF_INT_EQUAL(LW(14), 0)
@@ -1685,6 +1734,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
         GOTO(99)
     END_IF
+// Stolen: the rating effect and a heart sound, the colour returns and she flips back down off the enemy.
 #ifdef VERSION_G8ME01
     CALL(btlevtcmd_GetResultPrizeLv, 0, 0, LW(6))
 #else
@@ -1714,6 +1764,8 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 0, 0)
     END_INLINE_EVENT
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
+    // Camera back to normal; with a stolen item she carries its icon home over her head,
+    // and the item message shows.
     LABEL(90)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -1755,6 +1807,7 @@ EVT_BEGIN(partyChuchurinaAttack_ItemSteal)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, 0, EASING_CUBIC_IN, 0, MOVE_SOUND_FROM_TABLE)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     END_IF
+    // End of the move: audience AP, back to idle.
     LABEL(99)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
@@ -1768,6 +1821,7 @@ EVT_END()
  * with the recovery effect, then returns home.
  */
 EVT_BEGIN(partyChuchurinaAttack_Kiss)
+    // Find the chosen ally and pay for the move; with no target, skip to the end.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
@@ -1790,6 +1844,7 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
         CALL(btlevtcmd_CalculateFaceDirection, LW(3), LW(4), UNIT_ID_SELF, -1, FACE_DIR_TOWARD_UNIT, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, LW(3), LW(15))
     END_IF
+    // Set up the alternate-A-and-B gauge command from the difficulty.
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AcGetDifficulty, LW(0))
@@ -1827,6 +1882,7 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
     CALL(btlevtcmd_AcSetParamAll, 11, LW(0), 178, LW(1), LW(2), 12, 37, EVT_NULLPTR)
     CALL(btlevtcmd_AcSetGaugeParam, 36, 72, 100, 100)
     CALL(btlevtcmd_AcSetFlag, AC_REPEATEDLY_LV_FLAG_MIN_LEVEL_1)
+    // The command runs while she walks up to the ally.
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
     WAIT_FRAMES(22)
     CALL(btlevtcmd_StartAC, 1)
@@ -1843,6 +1899,7 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
         CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
         CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     END_SIBLING_EVENT
+    // Rating from the gauge level, which is also the HP she restores.
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_AcGetOutputParam, 2, LW(5))
     SWITCH(LW(5))
@@ -1886,6 +1943,7 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
     MULTIPLY(LW(6), 45)
     CALL(evt_eff, 0, STRING("kiss"), 0, LW(0), LW(1), LW(2), LW(6), 0, 0, 0, 0, 0, 0, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_CHURINA_KISS1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    // Hearts rise from the ally, and two seconds later it regains HP by the gauge level.
     WAIT_FRAMES(40)
     CALL(btlevtcmd_GetPartsPos, LW(3), LW(4), LW(12), LW(13), LW(14))
     CALL(btlevtcmd_GetHeight, LW(3), LW(5))
@@ -1898,6 +1956,7 @@ EVT_BEGIN(partyChuchurinaAttack_Kiss)
         WAIT_FRAMES(120)
         CALL(btlevtcmd_RecoverHp, LW(3), LW(4), LW(5))
     END_INLINE_EVENT
+    // Stylish window after the kiss.
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 20)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
     SWITCH(LW(6))
@@ -1972,6 +2031,7 @@ EVT_END()
  * strikes her Tease pose (PCH_A4_1) and then PCH_Y_1 to knock out the chosen audience member, and runs home.
  */
 static EVT_BEGIN(attack_audience_event)
+    // She runs off the edge of the stage.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageSize, LW(3), EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(4))
@@ -1982,6 +2042,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(8), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     WAIT_FRAMES(20)
+    // She reappears at the edge of the audience and the camera follows her to the chosen audience member.
     CALL(_get_attack_aud_no, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetStageAudienceAreaSize, LW(4), EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(5))
@@ -1995,6 +2056,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(evt_btl_camera_set_zoom, 0, 100)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 24)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+    // She strikes her Tease pose, then a cheer, and the audience member is knocked out; the camera returns later.
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PCH_A4_1"))
     CALL(btlevtcmd_ftof, 52, LW(0))
@@ -2009,6 +2071,7 @@ static EVT_BEGIN(attack_audience_event)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_MS(1000)
     END_SIBLING_EVENT
+    // She runs out of the audience, re-enters from the other side of the stage and walks home.
     CALL(btlevtcmd_ftof, 35, LW(0))
     WAIT_FRAMES(LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)

@@ -291,11 +291,13 @@ EVT_END()
  * (powerdown_10) when that happened, else that it is finished (powerdown_13).
  */
 EVT_BEGIN(powerdownya_mario_level_rtn)
+    // Chet Rippo turns Mario away if he cannot pay 39 coins.
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), 39)
         CALL(evt_msg_print_add, 0, STRING("powerdown_04"))
         RETURN
     END_IF
+    // Mario picks the stat to raise and the stat to lower, and confirms the trade.
     CALL(evt_msg_continue)
     CALL(evt_win_coin_on, 0, LW(12))
     LOOP(0)
@@ -330,6 +332,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
         END_IF
         CALL(evt_msg_continue)
     END_LOOP
+    // Mario pays 39 coins, the music stops and Chet Rippo starts his chant.
     CALL(evt_pouch_get_coin, LW(0))
     SUBTRACT(LW(0), 39)
     CALL(evt_pouch_set_coin, LW(0))
@@ -351,6 +354,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
         END_IF
     END_LOOP
     WAIT_MS(500)
+    // The power-down music plays, the walls of the house fold open and the camera pulls back over the light.
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_POWERDOWN1"))
     CALL(bgm_start_wait)
@@ -391,6 +395,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -9, 212, 886, -9, 56, 0, 1600, EASING_SINE_IN_OUT)
     WAIT_MS(1600)
+    // For seven seconds the camera turns around Mario while crystal waves pulse and he glows.
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 100, 7000)
         LOOP(0)
@@ -420,6 +425,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
         CALL(evt_mario_set_pose, STRING("M_I_Z"))
     END_INLINE_EVENT
     WAIT_MS(7000)
+    // The light fades, the house closes up again and the camera returns.
     CALL(evt_eff_softdelete, STRING("aaax"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(500)
@@ -472,6 +478,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // Mario poses, the music comes back and the new HP, FP and BP are set; Chet Rippo says if badges came off.
     CALL(evt_mario_set_pose, STRING("M_V_2"))
     WAIT_MS(1500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -490,6 +497,7 @@ EVT_BEGIN(powerdownya_mario_level_rtn)
 EVT_END()
 
 EVT_BEGIN(powerdownya_party_lank_rtn)
+    // Chet Rippo turns Mario away if he cannot pay 39 coins (or, from JP on, if no partner can lose a rank).
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), 39)
         CALL(evt_msg_print_add, 0, STRING("powerdown_04"))
@@ -500,6 +508,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         CALL(evt_msg_print_add, 0, STRING("powerdown_07"))
         RETURN
     END_IF
+    // Mario picks the partner to rank up and the partner to rank down, and confirms the trade.
     CALL(evt_msg_continue)
     CALL(evt_win_coin_on, 0, LW(12))
     LOOP(0)
@@ -534,6 +543,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         END_IF
         CALL(evt_msg_continue)
     END_LOOP
+    // Mario pays 39 coins, the partner losing a rank is brought out and Chet Rippo starts his chant.
     CALL(evt_pouch_get_coin, LW(0))
     SUBTRACT(LW(0), 39)
     CALL(evt_pouch_set_coin, LW(0))
@@ -553,6 +563,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
 #ifdef VERSION_G8ME01
     CALL(evt_party_stop, 0)
 #endif
+    // The house walls fold open and the camera pulls back over the light (power-down music from JP on).
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -20, 500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(5))
@@ -603,6 +614,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -9, 212, 886, -9, 56, 0, 1600, EASING_SINE_IN_OUT)
     WAIT_MS(1600)
+    // For seven seconds the camera turns: the partner losing a rank spins away, then the other one glows.
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 100, 7000)
         LOOP(0)
@@ -690,6 +702,7 @@ EVT_BEGIN(powerdownya_party_lank_rtn)
         WAIT_MS(2000)
         CALL(evt_party_set_breed_pose, 0, 1)
     END_INLINE_EVENT
+    // The light fades, the house closes up again and the camera returns, and the partner cheers.
     WAIT_MS(7000)
     CALL(evt_eff_softdelete, STRING("aaax"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("down_pira"), MAP_OBJ_FLAG_HIDDEN)

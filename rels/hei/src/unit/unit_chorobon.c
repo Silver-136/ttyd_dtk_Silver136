@@ -369,6 +369,7 @@ EVT_END()
 
 static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    // Target: it picks one for its drain attack.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_chorobon_drain_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_chorobon_drain_attack), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -380,6 +381,7 @@ static EVT_BEGIN(drain_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_chorobon_drain_attack))
+    // The attack is declared.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_chorobon_drain_attack))
@@ -389,6 +391,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
+    // It flutters across to the target in two hops.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(4.0f), FLOAT(0.5996094f))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(5), LW(6), LW(7))
@@ -405,6 +408,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 5)
     SUBTRACT(LW(1), 10)
     SUBTRACT(LW(2), 2)
+    // It jumps onto the target; the pre-damage check decides between a dodge and a hit.
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_drain_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -428,6 +432,7 @@ static EVT_BEGIN(drain_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // Miss: it lands beside the target (which dodges for some kinds of miss) and waits.
     LABEL(90)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -443,6 +448,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("CBN_N_1"))
     WAIT_MS(1000)
     GOTO(98)
+    // Hit: if the target has a counter that would hurt it (shock), the counter weapon replaces the attack.
     LABEL(91)
     // Counter-precheck results 14 (electrified) and 17 (Hold Fast) use the zero-power counter weapon.
     SET_VALUE(LF(0), 0)
@@ -460,6 +466,7 @@ static EVT_BEGIN(drain_attack_event)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
     END_IF
+    // It latches onto the target, which plays its hurt pose while the Fuzzy sucks at it.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_CHORO1_ATTACK1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetBodyId, LW(3), LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(0), POSE_TYPE_DAMAGE_DRAINED)
@@ -486,6 +493,7 @@ static EVT_BEGIN(drain_attack_event)
         END_IF
         CALL(btlevtcmd_SetDispOffset, LW(3), 0, 0, 0)
     END_INLINE_EVENT
+    // The Fuzzy swells up as it drinks, then lets go and the drain damage is dealt.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_CHORO1_ATTACK1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(14), 20)
@@ -513,6 +521,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
+    // Having drunk its fill, it hops away from the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_CHORO1_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_chorobon_drain_attack))
@@ -560,6 +569,7 @@ static EVT_BEGIN(drain_attack_event)
         ADD(LW(6), 45)
         ADD(LW(7), 10)
         IF_INT_EQUAL(LW(9), PTR(&weapon_chorobon_drain_attack))
+            // The damage dealt is added to its own HP (and FP) with a recovery effect.
             CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, LW(1), LW(10))
             CALL(evt_eff, STRING(""), STRING("recovery"), 7, LW(5), LW(6), LW(7), LW(10), 0, 0, 0, 0, 0, 0, 0)
         ELSE
@@ -573,6 +583,7 @@ static EVT_BEGIN(drain_attack_event)
         ADD(LW(1), 30)
         CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_ENM_CHORO1_ATTACK3"), 0, 0, -1, -1, 0, 0)
         LOOP(2)
+            // It bounces back in smaller hops, shrinking to normal size.
             CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)
             WAIT_FRAMES(1)
         END_LOOP
@@ -596,6 +607,7 @@ static EVT_BEGIN(drain_attack_event)
         WAIT_FRAMES(1)
     END_LOOP
     GOTO(98)
+    // It hops back to its home position.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)

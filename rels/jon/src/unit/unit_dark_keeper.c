@@ -321,6 +321,8 @@ EVT_END()
  * then laughs three times (pose T_1, SFX_ENM_MONBAN_LAUGH1).
  */
 static EVT_BEGIN(normal_attack_event)
+    // Pick the target (after a First Strike the one already chosen, otherwise sampled from the enemies); a
+    // confused Dark Craw with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -338,6 +340,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+    // Declare the attack.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -347,6 +350,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
+    // It winds up in pose A_1, stamping its feet in turn.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MONBAN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1"))
     WAIT_FRAMES(20)
@@ -358,6 +362,7 @@ static EVT_BEGIN(normal_attack_event)
             WAIT_FRAMES(5)
         END_LOOP
     END_SIBLING_EVENT
+    // It runs at the target.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_2"))
     WAIT_FRAMES(60)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MONBAN_MOVE3"), EVT_NULLPTR, 0, LW(15))
@@ -368,6 +373,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), LW(5))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
+    // Find out whether the charge connects.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -390,12 +396,14 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // Miss or dodge: it runs on past the target.
     LABEL(90)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 30)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     WAIT_FRAMES(60)
     GOTO(98)
+    // Hit: the damage is dealt and the Dark Craw rebounds in two hops.
     LABEL(91)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -412,6 +420,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MONBAN_MOVE2L"), EVT_NULLPTR, 0, EVT_NULLPTR)
     GOTO(98)
+    // It walks home and laughs three times.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -434,6 +443,8 @@ EVT_END()
  * The part is checked as it flies, hits or is dodged, and the Craw laughs three times afterwards.
  */
 static EVT_BEGIN(throw_attack_event)
+    // Pick the target (after a First Strike the one already chosen, otherwise sampled from the enemies); a
+    // confused Dark Craw with nobody to hit gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -451,6 +462,7 @@ static EVT_BEGIN(throw_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+    // Declare the attack.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -460,6 +472,7 @@ static EVT_BEGIN(throw_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
+    // It winds up and hurls its spear (part 2), which spins toward the target in an arc.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_MONBAN_THROW1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2"))
     WAIT_FRAMES(28)
@@ -486,6 +499,7 @@ static EVT_BEGIN(throw_attack_event)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 30, 0, FLOAT(0.5f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 30, MOVE_SOUND_FROM_TABLE)
+    // Find out whether the spear hits as it flies in.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -508,11 +522,13 @@ static EVT_BEGIN(throw_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // Miss or dodge: the spear sails on past the target.
     LABEL(90)
     CALL(btlevtcmd_JumpPartsContinue, UNIT_ID_SELF, 2)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
     GOTO(98)
+    // Hit: the spear strikes and the damage is dealt.
     LABEL(91)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
@@ -521,6 +537,7 @@ static EVT_BEGIN(throw_attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     WAIT_FRAMES(2)
     GOTO(98)
+    // The Dark Craw laughs three times.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("T_1"))

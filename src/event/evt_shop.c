@@ -136,6 +136,8 @@ WinMgrDesc list_desc[] = {
  * then runs the shop's own buy_evt with LW(0) = the item id.
  */
 static EVT_BEGIN(buy_evt)
+    // Mario stops and the item's highlight goes away;
+    // a first-time shopper hears the shopping explanation instead.
     CALL(evt_mario_normalize)
     SET_VALUE(LW(10), LW(0))
     CALL(disp_off, LW(10))
@@ -144,6 +146,7 @@ static EVT_BEGIN(buy_evt)
         CALL_CHILD(PTR(first_shopping_evt))
         RETURN
     END_IF
+    // The shopkeeper turns to Mario, the coin and point windows open, and he names the item and its price.
     CALL(shopper_name, LW(9))
     CALL(evt_set_dir_to_target, LW(9), STRING("mario"))
     CALL(evt_win_coin_on, 0, LW(8))
@@ -167,6 +170,7 @@ static EVT_BEGIN(buy_evt)
         CALL(evt_msg_print_insert, 0, LW(14), 0, LW(9), LW(11), LW(13))
     END_IF
 #endif
+    // Mario decides: "no", too few coins or a full item bag each end the purchase with the shopkeeper's line.
     CALL(get_msg, LW(10), 24, LW(14))
     CALL(evt_msg_select, 0, LW(14))
     IF_INT_EQUAL(LW(0), 1)
@@ -192,6 +196,7 @@ static EVT_BEGIN(buy_evt)
         CALL(point_disp_onoff, 0)
         RETURN
     END_IF
+    // Bought: a shop point is added (two during a timed double-points sale) and the coins are paid.
     CALL(set_buy_item_id, LW(12))
     CALL(evt_sub_load_progresstime, GSW_SHOP_MRI_07_SALE_START_TIME, LW(0))
     CALL(evt_sub_load_progresstime, GSW_SHOP_USU_01_SALE_START_TIME, LW(1))
@@ -210,6 +215,7 @@ static EVT_BEGIN(buy_evt)
 #else
     CALL(evt_msg_continue)
 #endif
+    // The first item ever bought brings up the item tutorial, except on kiosk units.
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_CLEAR(LW(0), GW_FLAG_E3)
         IF_INT_EQUAL(GSWF_ITEM_TUTORIAL_SEEN, 0)
@@ -217,6 +223,8 @@ static EVT_BEGIN(buy_evt)
             CALL(evt_msg_print, 0, STRING("item_first_hit"), 0, 0)
         END_IF
     END_IF
+    // Hand out every shop point prize now reached; at 300 points the shopkeeper announces the maximum and the
+    // count resets.
     LOOP(0)
         CALL(chk_shop_point, LW(0), LW(1), LW(2))
         IF_INT_EQUAL(LW(0), -1)
@@ -253,6 +261,7 @@ static EVT_BEGIN(buy_evt)
             CALL(point_disp_onoff, 0)
             SET_VALUE(LF(0), 1)
         END_IF
+        // With a full item bag the prize is kept for later (the 300-point prize is remembered by a flag).
         CALL(evt_pouch_add_item, LW(1), LW(0))
         IF_INT_EQUAL(LW(0), -1)
             CALL(get_msg, LW(10), 27, LW(14))
@@ -265,6 +274,7 @@ static EVT_BEGIN(buy_evt)
         END_IF
         CALL(exchange_shop_point)
     END_LOOP
+    // Finally the shop's own after-purchase script runs, if it has one.
     LABEL(123)
     CALL(get_buy_evt, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
@@ -284,6 +294,7 @@ EVT_END()
  */
 EVT_BEGIN(shopper_talk_evt)
     CALL(evt_mario_key_onoff, 0)
+    // The shop's hook script runs first and may end the talk or keep its message box open.
     CALL(get_ptr, LW(10))
     SET_VALUE(LF(10), 0)
     CALL(get_fook_evt, LW(0))
@@ -297,6 +308,7 @@ EVT_BEGIN(shopper_talk_evt)
             SET_VALUE(LF(10), 1)
         END_IF
     END_IF
+    // A first-time shopper hears the shopping explanation.
     IF_INT_EQUAL(GSWF_SHOP_TUTORIAL_SEEN, 0)
         SET_VALUE(GSWF_SHOP_TUTORIAL_SEEN, 1)
         CALL_CHILD(PTR(first_shopping_evt))
@@ -304,6 +316,7 @@ EVT_BEGIN(shopper_talk_evt)
         RETURN
     END_IF
     SET_VALUE(LF(0), 0)
+    // Hand out shop point prizes Mario earned but could not carry, one at a time.
     LOOP(0)
         CALL(chk_shop_point, LW(0), LW(1), LW(2))
         IF_INT_EQUAL(GSWF_SHOP_POINT_PRIZE_PENDING, 1)
@@ -315,6 +328,8 @@ EVT_BEGIN(shopper_talk_evt)
                 CALL(evt_mario_key_onoff, 1)
                 RETURN
             END_IF
+            // Nothing (left) to hand out: greet Mario, with the double-points greeting during a timed sale at
+            // the Great Tree, Twilight Town or the Excess Express shop.
             SET_VALUE(LF(11), 0)
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("mri_07"))
@@ -368,6 +383,7 @@ EVT_BEGIN(shopper_talk_evt)
             END_IF
             BREAK_LOOP
         END_IF
+        // A prize that still does not fit is kept for later.
         CALL(evt_pouch_add_item, LW(1), LW(0))
         IF_INT_EQUAL(LW(0), -1)
             CALL(get_msg, LW(10), 29, LW(14))
@@ -380,6 +396,7 @@ EVT_BEGIN(shopper_talk_evt)
             END_IF
             BREAK_LOOP
         END_IF
+        // "Here's your prize": the prize is marked as given.
         CALL(get_msg, LW(10), 28, LW(14))
         IF_INT_EQUAL(LF(10), 0)
 #ifdef VERSION_G8ME01
@@ -418,6 +435,7 @@ EVT_BEGIN(shopper_talk_evt)
             SET_VALUE(GSWF_SHOP_POINT_PRIZE_PENDING, 0)
         END_IF
     END_LOOP
+    // The counter menu: shop, sell, store, withdraw or check shop points.
     CALL(shop_flag_onoff, 1, SHOP_FLAG_TALKING)
     CALL(get_msg, LW(10), 23, LW(14))
     CALL(evt_msg_select, 0, LW(14))
@@ -697,6 +715,7 @@ EVT_BEGIN(evt_shoplist)
     RETURN
 EVT_END()
 
+/** Per-shop driver script; evt_shop_main_func does all the work every frame. */
 static EVT_BEGIN(main_evt)
     CALL(evt_shop_main_func)
     RETURN

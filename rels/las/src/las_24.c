@@ -247,6 +247,10 @@ static EVT_BEGIN(haguruma_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: runs when the cloud over the big stone block has been blown away by Flurrie.
+ * Sets GSWF_LAS24_BLOCK_UNCOVERED and makes the block solid.
+ */
 EVT_BEGIN(cloud_blk_evt)
     SET_VALUE(GSWF_LAS_24_HAKO_BLOWN_AWAY, 1)
     CALL(evt_mobj_flag_onoff, 0, STRING("blk"), MOBJ_FLAG_HIT_EVERY_FRAME)
@@ -258,6 +262,11 @@ EVT_BEGIN(break_floor_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the red jump stand.
+ * Mario jumps from the stand at (-500, -200) to the ledge at (-450, -200);
+ * if a partner is present it first jumps to the ledge when it stands on the stand ("MOBJ_jump").
+ */
 EVT_BEGIN(jump_evt)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_party, LW(0))

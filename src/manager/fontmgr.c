@@ -291,6 +291,7 @@ static void FontDrawStringVec(Vec pos, const s8* str) {
 #ifdef VERSION_G8ME01
 // US: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
 void FontDrawString(f32 x, f32 y, const char* msg) {
+    // US: FontDrawString and FontDrawStringPitch are wrappers over FontDrawStringVecPitch
     FontDrawStringVecPitch((Vec){x, y, 0.0f}, -1.0f, (const s8*)msg);
 }
 #else
@@ -373,6 +374,7 @@ void FontDrawStringVecPitch(Vec pos, f32 pitch, const s8* msg) {
             msg += 2;
         } else {
 #ifdef VERSION_G8ME01
+            // US: skips <command> tags instead of drawing them
             switch (c = *msg) {
                 case '<':
                     msg = (const s8*)msgGetCommand((char*)(msg + 1), cmd, arg);

@@ -137,6 +137,7 @@ EVT_BEGIN(apper_elmos)
 EVT_END()
 
 EVT_BEGIN(peramajin_before)
+    // The Ember has already appeared (Black Key stage): the chest now wants the key.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_21_GROTTO_KEY)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_normalize)
@@ -152,6 +153,7 @@ EVT_BEGIN(peramajin_before)
                 CALL(evt_mario_set_dir, 270, 200, 0)
             END_IF
         END_INLINE_EVENT
+        // Mario has no Black Key: the chest tells him to beat the ghost and get it, then stays shut.
         CALL(evt_pouch_check_item, ITEM_BLACK_KEY_0x24, LW(10))
         IF_INT_LESS_OR_EQUAL(LW(10), 0)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -161,9 +163,11 @@ EVT_BEGIN(peramajin_before)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
+        // Mario has the key: the chest asks him to pick it from the item menu.
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_09"), PTR(majin_callback), 0)
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(10), 0)
+        // Mario cancels the menu: the chest sulks and stays shut.
         IF_INT_EQUAL(LW(10), -1)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
             CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_10"), PTR(majin_callback), 0)
@@ -172,6 +176,8 @@ EVT_BEGIN(peramajin_before)
             CALL(evt_mario_key_onoff, 1)
             RETURN
         END_IF
+        // Mario picks the key: the partner steps aside and the chest says it will start its curse; the key is
+        // used up.
         BEGIN_INLINE_EVENT
             CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
             ADD(LW(3), 35)
@@ -192,6 +198,7 @@ EVT_BEGIN(peramajin_before)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
+    // First visit (before the Ember has appeared): Mario faces the chest, which shouts and wobbles.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
@@ -213,6 +220,7 @@ EVT_BEGIN(peramajin_before)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
     CALL(evt_snd_sfxoff, LW(15))
     WAIT_MS(300)
+    // The chest rejoices that someone finally came, then asks to be left to its spiel as Mario reacts.
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_02"), PTR(majin_callback), 0)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
@@ -233,6 +241,7 @@ EVT_BEGIN(peramajin_before)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(800)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+    // It grumbles that this is the fourth cursing chest Mario has met and gives in.
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_06"), PTR(majin_callback), 0)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
@@ -240,6 +249,7 @@ EVT_BEGIN(peramajin_before)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_07"), PTR(majin_callback), 0)
+    // The Ember ghost appears from the chest and the story advances to the Grotto key stage.
     CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_APPEAR1"), 0)
     CALL_CHILD(PTR(apper_elmos))
     CALL(evt_mobj_exec_cancel, STRING("mobj_box00"))
@@ -250,6 +260,7 @@ EVT_BEGIN(peramajin_before)
 EVT_END()
 
 EVT_BEGIN(peramajin_after)
+    // The chest has opened: Mario receives the Boat Curse and the music changes.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))
@@ -258,6 +269,7 @@ EVT_BEGIN(peramajin_after)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_PERAMAJIN1"))
     CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(bgm_start_wait)
+    // The wooden room fades and the paper genie unfolds from the chest.
     SET_VALUE(LW(1), 60)
     LOOP(LW(1))
         SET_VALUE(LW(0), 255)
@@ -283,6 +295,7 @@ EVT_BEGIN(peramajin_after)
         WAIT_MS(1000)
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_PERAMAJIN_COME1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
+    // The genie floats in and the boat-mode lecture runs.
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
     CALL(evt_mario_set_camid, CAMERA_3D_EFFECTB)
     CALL(evt_img_wait_animend, STRING("img"))
@@ -294,6 +307,7 @@ EVT_BEGIN(peramajin_after)
     CALL(evt_party_run, 0)
     CALL_CHILD(PTR(ship_majin_lecture))
     CALL(evt_party_stop, 0)
+    // Mario flickers while the lecture ends and he returns to his spot.
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         WAIT_MS(100)
@@ -312,6 +326,7 @@ EVT_BEGIN(peramajin_after)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_PERAMAJIN_GOOUT1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
+    // The genie leaves and the music fades.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_2"))
     CALL(evt_img_wait_animend, STRING("img"))
@@ -335,6 +350,11 @@ EVT_BEGIN(peramajin_after)
     RETURN
 EVT_END()
 
+/**
+ * Init script of dou_07, the black chest room: music and ambience, exit, a ship-change platform, waves,
+ * the black chest, the P-Down D-Up item, the Ember (once it has appeared and not been defeated)
+ * and the Black Key item once the Ember is beaten.
+ */
 EVT_BEGIN(dou_07_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU7"))
@@ -362,6 +382,11 @@ EVT_BEGIN(dou_07_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Message callback for the black chest's speech:
+ * type 0 (text starts) plays the chest's talking animation A_2,
+ * type 5 (while text runs) restarts it once it has looped, type 2 (text ends) returns it to the idle S_1.
+ */
 static void majin_callback(s32 type) {
     MapObjectEntry* mobj = mobjNameToPtr("mobj_box00");
 

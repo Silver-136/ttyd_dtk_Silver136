@@ -576,6 +576,7 @@ EVT_END()
  * and falls off screen, or, when stomped flat on the ground, slides and sways down off screen like a leaf.
  */
 EVT_BEGIN(enemy_2d_common_dead_event)
+    // The enemy stops, puffs into smoke with the defeat sound and takes its hurt pose.
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_NO_WATER_DRAG)
     CALL(pressCheck, LW(15))
@@ -587,6 +588,7 @@ EVT_BEGIN(enemy_2d_common_dead_event)
     CALL(evt_npc_set_damage_anim, STRING("me"))
     CALL(evt_npc_get_kpencount_type, STRING("me"), LW(0))
     SWITCH(LW(0))
+        // Stomped: an enemy in mid-air scores and flips off screen.
         CASE_FLAG(KPA_ENCOUNT_STOMP)
         IF_INT_EQUAL(LW(15), 0)
             CALL(evt_npc_calc_score, STRING("me"))
@@ -595,6 +597,8 @@ EVT_BEGIN(enemy_2d_common_dead_event)
             CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
             ADD(LW(0), LW(3))
             CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(0.0f), -300)
+        // Stomped flat on the ground: it lies squashed for half a second,
+        // then sways down off screen like a falling leaf.
         ELSE
             CALL(evt_npc_calc_score, STRING("me"))
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
@@ -641,6 +645,7 @@ EVT_BEGIN(enemy_2d_common_dead_event)
                 END_IF
             END_LOOP
         END_IF
+        // Hit by fire: scores with the fire combo and flips off screen.
         CASE_FLAG(KPA_ENCOUNT_FIRE)
         CALL(evt_npc_calc_score, STRING("me"))
         SPAWN_EVENT(PTR(_2d_dead_rotate_event))
@@ -649,6 +654,8 @@ EVT_BEGIN(enemy_2d_common_dead_event)
         CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
         ADD(LW(0), LW(3))
         CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
+        // Every other way of defeat (8 is a block bumped from below, 16 is lava,
+        // 32 gives no score) flips it off screen too.
         CASE_FLAG(KPA_ENCOUNT_STAR)
         CALL(evt_npc_calc_score, STRING("me"))
         SPAWN_EVENT(PTR(_2d_dead_rotate_event))
@@ -677,6 +684,7 @@ EVT_BEGIN(enemy_2d_common_dead_event)
         CALL(_2d_get_dead_jump_offset, STRING("me"), LW(3))
         ADD(LW(0), LW(3))
         CALL(_2d_dead_jump, STRING("me"), LW(0), LW(1), LW(2), 600, FLOAT(40.0f), FLOAT(65.0f), -300)
+        // Anything else: a short pause only.
         CASE_DEFAULT
         WAIT_MS(500)
     END_SWITCH
@@ -1280,6 +1288,7 @@ EVT_BEGIN(met_set_anim_wait_event)
     RETURN
 EVT_END()
 
+/** Sets the walking pose of a Buzzy Beetle or Spike Top, normal or on the ceiling (see met_set_anim_wait_event). */
 EVT_BEGIN(met_set_anim_walk_event)
     CALL(evt_npc_get_btlsetup_work, STRING("me"), 0, LW(15))
     IF_INT_EQUAL(LW(15), 0)
@@ -1300,6 +1309,7 @@ EVT_BEGIN(met_set_anim_walk_event)
     RETURN
 EVT_END()
 
+/** Init event of Buzzy Beetles walking on the ground. */
 EVT_BEGIN(met_init_event)
     CALL_CHILD(PTR(met_init_event_common))
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_GRAVITY)
@@ -1308,6 +1318,7 @@ EVT_BEGIN(met_init_event)
     RETURN
 EVT_END()
 
+/** Init event of Buzzy Beetles clinging to the ceiling. */
 EVT_BEGIN(met_init_event_ceil)
     CALL_CHILD(PTR(met_init_event_common))
     CALL(evt_npc_set_btlsetup_work, STRING("me"), 0, 1)
@@ -1315,6 +1326,7 @@ EVT_BEGIN(met_init_event_ceil)
     RETURN
 EVT_END()
 
+/** Init event of Spike Tops walking on the ground (unit work 0 is 1 for the spiked variant). */
 EVT_BEGIN(togemet_init_event)
     CALL_CHILD(PTR(met_init_event_common))
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_GRAVITY)
@@ -1323,6 +1335,7 @@ EVT_BEGIN(togemet_init_event)
     RETURN
 EVT_END()
 
+/** Init event of Spike Tops clinging to the ceiling. */
 EVT_BEGIN(togemet_init_event_ceil)
     CALL_CHILD(PTR(met_init_event_common))
     CALL(evt_npc_set_btlsetup_work, STRING("me"), 0, 1)
@@ -1330,6 +1343,7 @@ EVT_BEGIN(togemet_init_event_ceil)
     RETURN
 EVT_END()
 
+/** Move event of Buzzy Beetles and Spike Tops, on the ground or ceiling: wanders like a Goomba with their own poses. */
 EVT_BEGIN(met_move_event)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
     CALL_CHILD(PTR(met_set_anim_wait_event))
@@ -1347,6 +1361,10 @@ EVT_BEGIN(met_move_event)
     RETURN
 EVT_END()
 
+/**
+ * Find event of Buzzy Beetles and Spike Tops: on the ground, "!" balloon and a shell spin 256 units at Mario;
+ * on the ceiling, drops straight down onto the floor in attack mode and stays on the ground from then on.
+ */
 EVT_BEGIN(met_find_event)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
     CALL(evt_npc_set_rotate, STRING("me"), 0, 0, 0)
@@ -1418,6 +1436,7 @@ EVT_BEGIN(met_find_event)
     RETURN
 EVT_END()
 
+/** Lost event of Buzzy Beetles and Spike Tops: "?" balloon, looks back and forth and resumes. */
 EVT_BEGIN(met_lost_event)
     CALL(evt_npc_sound_data_reset, STRING("me"))
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
@@ -1432,6 +1451,7 @@ EVT_BEGIN(met_lost_event)
     RETURN
 EVT_END()
 
+/** Return event of Buzzy Beetles and Spike Tops: walks 100 units toward home. */
 EVT_BEGIN(met_return_event)
     CALL(evt_npc_sound_data_reset, STRING("me"))
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
@@ -1477,6 +1497,7 @@ EVT_BEGIN(patamet_move_event)
     RETURN
 EVT_END()
 
+/** Find event of Parabuzzies: "!" balloon, swoops 100 units toward Mario, looks around and glides back up. */
 EVT_BEGIN(patamet_find_event)
     CALL(evt_npc_sound_data_set, STRING("me"), STRING("SFX_FLD_ENM_PATAMET_MOVE2"), 0, 0, 0, 0)
     CALL(evt_npc_set_run_anim, STRING("me"))
@@ -1500,6 +1521,7 @@ EVT_BEGIN(patamet_find_event)
     RETURN
 EVT_END()
 
+/** Lost event of Parabuzzies: "?" balloon, looks back and forth and resumes. */
 EVT_BEGIN(patamet_lost_event)
     CALL(evt_npc_sound_data_reset, STRING("me"))
     CALL(evt_npc_set_stay_anim, STRING("me"))
@@ -1512,6 +1534,7 @@ EVT_BEGIN(patamet_lost_event)
     RETURN
 EVT_END()
 
+/** Return event of Parabuzzies: four bobbing glides toward home. */
 EVT_BEGIN(patamet_return_event)
     CALL(evt_npc_sound_data_reset, STRING("me"))
     CALL(evt_npc_set_stay_anim, STRING("me"))
@@ -1539,6 +1562,10 @@ EVT_BEGIN(patamet_return_event)
     RETURN
 EVT_END()
 
+/**
+ * Move event of Fuzzies: bounces 2 to 4 times 50 units in random directions,
+ * turns to face Mario and pauses up to half a second.
+ */
 EVT_BEGIN(chorobon_move_event)
     CALL(evt_npc_set_scale, STRING("me"), 1, 1, 1)
     CALL(evt_npc_set_walk_anim, STRING("me"))
@@ -1567,6 +1594,7 @@ EVT_BEGIN(chorobon_move_event)
     RETURN
 EVT_END()
 
+/** Find event of Fuzzies: "!" balloon and three quick bounces toward Mario. */
 EVT_BEGIN(chorobon_find_event)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
     LOOP(3)
@@ -1587,6 +1615,7 @@ EVT_BEGIN(chorobon_find_event)
     RETURN
 EVT_END()
 
+/** Lost event of Fuzzies: resets its scale and walking pose and resumes. */
 EVT_BEGIN(chorobon_lost_event)
     CALL(evt_npc_set_scale, STRING("me"), 1, 1, 1)
     CALL(evt_npc_set_walk_anim, STRING("me"))
@@ -1594,6 +1623,7 @@ EVT_BEGIN(chorobon_lost_event)
     RETURN
 EVT_END()
 
+/** Return event of Fuzzies: one bounce toward home. */
 EVT_BEGIN(chorobon_return_event)
     CALL(evt_npc_set_scale, STRING("me"), 1, 1, 1)
     CALL(evt_npc_set_walk_anim, STRING("me"))
@@ -1610,6 +1640,7 @@ EVT_BEGIN(chorobon_return_event)
     RETURN
 EVT_END()
 
+/** Move event of Crazee Dayzees: wanders like a Goomba. */
 EVT_BEGIN(pansy_move_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
     CALL(evt_sub_random, 360, LW(3))
@@ -1624,6 +1655,7 @@ EVT_BEGIN(pansy_move_event)
     RETURN
 EVT_END()
 
+/** Find event of Crazee Dayzees: starts its singing sound, "!" balloon and chases Mario. */
 EVT_BEGIN(pansy_find_event)
     CALL(evt_npc_sound_data_set, STRING("me"), STRING("SFX_FLD_ENM_PANZI_MOVE2"), STRING("SFX_FLD_ENM_PANZI_MOVE2"), 30000, 0, 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
@@ -1635,6 +1667,7 @@ EVT_BEGIN(pansy_find_event)
     RETURN
 EVT_END()
 
+/** Lost event of Crazee Dayzees: stops singing, "?" balloon, looks back and forth and resumes. */
 EVT_BEGIN(pansy_lost_event)
     CALL(evt_npc_sound_data_reset, STRING("me"))
     CALL(evt_npc_set_anim, STRING("me"), STRING("PAN_S_1"))
@@ -1647,6 +1680,7 @@ EVT_BEGIN(pansy_lost_event)
     RETURN
 EVT_END()
 
+/** Return event of Crazee Dayzees: walks 100 units toward home. */
 EVT_BEGIN(pansy_return_event)
     CALL(evt_npc_sound_data_reset, STRING("me"))
     CALL(evt_npc_set_anim, STRING("me"), STRING("PAN_S_1"))
@@ -1661,6 +1695,7 @@ EVT_BEGIN(pansy_return_event)
     RETURN
 EVT_END()
 
+/** Move event of Amazy Dayzees: wanders like a Goomba. */
 EVT_BEGIN(twinkling_pansy_move_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
     CALL(evt_sub_random, 360, LW(3))
@@ -1675,6 +1710,7 @@ EVT_BEGIN(twinkling_pansy_move_event)
     RETURN
 EVT_END()
 
+/** Find event of Amazy Dayzees: "!" balloon, then runs 300 units away from Mario instead of chasing him. */
 EVT_BEGIN(twinkling_pansy_find_event)
     CALL(evt_npc_sound_data_set, STRING("me"), STRING("SFX_FLD_ENM_PANZI_MOVE2"), STRING("SFX_FLD_ENM_PANZI_MOVE2"), 30000, 0, 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
@@ -1687,6 +1723,7 @@ EVT_BEGIN(twinkling_pansy_find_event)
     RETURN
 EVT_END()
 
+/** Lost event of Amazy Dayzees: "?" balloon, looks back and forth with its sparkling poses and resumes. */
 EVT_BEGIN(twinkling_pansy_lost_event)
     CALL(evt_npc_sound_data_reset, STRING("me"))
     CALL(evt_npc_set_anim, STRING("me"), STRING("PAN_S_1_K"))
@@ -1699,6 +1736,7 @@ EVT_BEGIN(twinkling_pansy_lost_event)
     RETURN
 EVT_END()
 
+/** Return event of Amazy Dayzees: walks 100 units toward home with its sparkling walk. */
 EVT_BEGIN(twinkling_pansy_return_event)
     CALL(evt_npc_sound_data_reset, STRING("me"))
     CALL(evt_npc_set_anim, STRING("me"), STRING("PAN_S_1_K"))
@@ -1713,6 +1751,10 @@ EVT_BEGIN(twinkling_pansy_return_event)
     RETURN
 EVT_END()
 
+/**
+ * Init event of bone-throwing Dry Bones: standard enemy flags plus a helper NPC slave_0 with the same model as
+ * its bone (KRN_H_1), harmless and intangible until thrown.
+ */
 EVT_BEGIN(karon_init_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
     CALL(mahoon_get_groupname, LW(10))
@@ -1725,6 +1767,7 @@ EVT_BEGIN(karon_init_event)
     RETURN
 EVT_END()
 
+/** Move event of bone-throwing Dry Bones: hides the bone helper and wanders like a Goomba. */
 EVT_BEGIN(karon_move_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_DRAW)
@@ -1742,6 +1785,11 @@ EVT_BEGIN(karon_move_event)
     RETURN
 EVT_END()
 
+/**
+ * Find event of bone-throwing Dry Bones: "!" balloon,
+ * turns to Mario and throws its spinning bone in an arc at where he stands (the bone attacks in mode 12),
+ * then puts the bone away and resumes.
+ */
 EVT_BEGIN(karon_find_event)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
     CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(0))
@@ -1780,6 +1828,7 @@ EVT_BEGIN(karon_find_event)
     RETURN
 EVT_END()
 
+/** Lost event of bone-throwing Dry Bones: looks back and forth and resumes. */
 EVT_BEGIN(karon_lost_event)
     CALL(evt_npc_set_stay_anim, STRING("me"))
     CALL(evt_npc_reverse_ry, STRING("me"))
@@ -1790,6 +1839,7 @@ EVT_BEGIN(karon_lost_event)
     RETURN
 EVT_END()
 
+/** Return event of bone-throwing Dry Bones: walks 100 units toward home. */
 EVT_BEGIN(karon_return_event)
     CALL(evt_npc_set_stay_anim, STRING("me"))
     WAIT_MS(500)
@@ -1802,6 +1852,7 @@ EVT_BEGIN(karon_return_event)
     RETURN
 EVT_END()
 
+/** Blow event of bone-throwing Dry Bones: puts its bone away harmlessly, then the usual blow handling. */
 EVT_BEGIN(karon_blow_event)
     CALL(evt_npc_set_attack_mode, STRING("slave_0"), 0)
     CALL(evt_npc_flag_onoff, 1, STRING("slave_0"), NPC_FLAG_NO_HIT)
@@ -1810,6 +1861,7 @@ EVT_BEGIN(karon_blow_event)
     RETURN
 EVT_END()
 
+/** Init event of walking Dull Bones: lies collapsed as a pile of bones (KRN_Z_2; unit work 0 is 1 while collapsed). */
 EVT_BEGIN(honenoko2_init_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
@@ -1818,6 +1870,7 @@ EVT_BEGIN(honenoko2_init_event)
     RETURN
 EVT_END()
 
+/** Move event of walking Dull Bones: stays collapsed as a pile of bones, re-collapsing if it was standing. */
 EVT_BEGIN(honenoko2_move_event)
     DEBUG_PUT_MSG(STRING("[EVENT] HONENOKO MOVE\n"))
     LABEL(0)
@@ -1836,6 +1889,7 @@ EVT_BEGIN(honenoko2_move_event)
     RETURN
 EVT_END()
 
+/** Find event of walking Dull Bones: reassembles (KRN_D_3, KRN_D_4) and chases Mario. */
 EVT_BEGIN(honenoko2_find_event)
     DEBUG_PUT_MSG(STRING("[EVENT] HONENOKO FIND\n"))
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
@@ -1853,6 +1907,7 @@ EVT_BEGIN(honenoko2_find_event)
     RETURN
 EVT_END()
 
+/** Lost event of walking Dull Bones: waits a second and collapses into a pile again. */
 EVT_BEGIN(honenoko2_lost_event)
     DEBUG_PUT_MSG(STRING("[EVENT] HONENOKO LOST\n"))
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
@@ -1866,6 +1921,7 @@ EVT_BEGIN(honenoko2_lost_event)
     RETURN
 EVT_END()
 
+/** Return event of walking Dull Bones: stands a second, then walks 100 units toward home. */
 EVT_BEGIN(honenoko2_return_event)
     DEBUG_PUT_MSG(STRING("[EVENT] HONENOKO RETURN\n"))
     CALL(evt_npc_set_anim, STRING("me"), STRING("KRN_S_1"))
@@ -1880,6 +1936,7 @@ EVT_BEGIN(honenoko2_return_event)
     RETURN
 EVT_END()
 
+/** Init event of Bullet Bills: enemy flags, never jumps, always drawn, and its defeat is not recorded. */
 EVT_BEGIN(killer_init_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
@@ -1888,6 +1945,10 @@ EVT_BEGIN(killer_init_event)
     RETURN
 EVT_END()
 
+/**
+ * Move event of a Bullet Bill fired by its Bill Blaster:
+ * flies 2000 units straight ahead at speed 200 in attack mode, then bursts in smoke and is parked out of sight.
+ */
 EVT_BEGIN(killer_move_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
@@ -1905,6 +1966,10 @@ EVT_BEGIN(killer_move_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of Bullet Bills: defeat smoke and sound and the usual drops,
+ * then the bullet is parked out of sight (y -1000) instead of deleted, so its blaster can fire it again.
+ */
 EVT_BEGIN(killer_dead_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
@@ -1945,6 +2010,7 @@ EVT_BEGIN(killer_dead_event)
     RETURN
 EVT_END()
 
+/** Init event of Bill Blasters: enemy flags; remembers its facing in unit work 0. */
 EVT_BEGIN(killer_cannon_init_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
     CALL(evt_npc_get_dir, STRING("me"), LW(0))
@@ -1952,6 +2018,11 @@ EVT_BEGIN(killer_cannon_init_event)
     RETURN
 EVT_END()
 
+/**
+ * Move event of Bill Blasters: every 3.3 s fires one of its two bullet NPCs (named after the blaster plus 1 or
+ * 2, by turns): firing pose and sound, smoke at the muzzle,
+ * places the bullet there facing its way and restarts it with killer_move_event.
+ */
 EVT_BEGIN(killer_cannon_move_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
     CALL(evt_npc_get_unitwork, STRING("me"), 0, LW(0))
@@ -1994,6 +2065,7 @@ EVT_BEGIN(killer_cannon_move_event)
     RETURN
 EVT_END()
 
+/** Move event of Pokeys: stands in place. */
 EVT_BEGIN(sambo_move_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
@@ -2004,6 +2076,7 @@ EVT_BEGIN(sambo_move_event)
     RETURN
 EVT_END()
 
+/** Find event of Pokeys: "!" balloon and a slow chase of Mario. */
 EVT_BEGIN(sambo_find_event)
     CALL(evt_npc_set_anim, STRING("me"), STRING("SNB_S_1"))
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
@@ -2013,6 +2086,7 @@ EVT_BEGIN(sambo_find_event)
     RETURN
 EVT_END()
 
+/** Lost event of Pokeys: "?" balloon and resumes standing. */
 EVT_BEGIN(sambo_lost_event)
     CALL(evt_npc_set_anim, STRING("me"), STRING("SNB_S_1"))
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 1, 0, 0, 0, 0, 0, 0, 30)
@@ -2020,6 +2094,7 @@ EVT_BEGIN(sambo_lost_event)
     RETURN
 EVT_END()
 
+/** Return event of Pokeys: walks straight back to its home position. */
 EVT_BEGIN(sambo_return_event)
     CALL(evt_npc_set_anim, STRING("me"), STRING("SNB_S_1"))
     CALL(evt_set_dir_to_home, STRING("me"))
@@ -2030,6 +2105,7 @@ EVT_BEGIN(sambo_return_event)
     RETURN
 EVT_END()
 
+/** Init event of Bald Clefts (shinnosuke): enemy flags, no attack mode. */
 EVT_BEGIN(sinnosuke_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_UPDATE_BY_EVENT)
@@ -2039,6 +2115,7 @@ EVT_BEGIN(sinnosuke_init_event)
     RETURN
 EVT_END()
 
+/** Move event of Bald Clefts: sits still disguised as a rock (SIS_Z_3). */
 EVT_BEGIN(sinnosuke_move_event)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_UPDATE_BY_EVENT)
@@ -2049,6 +2126,10 @@ EVT_BEGIN(sinnosuke_move_event)
     RETURN
 EVT_END()
 
+/**
+ * Find event of Bald Clefts: "!" balloon, spins round out of its rock disguise,
+ * then keeps charging 100 units at Mario in attack mode 13 with short rests.
+ */
 EVT_BEGIN(sinnosuke_find_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_anim, STRING("me"), STRING("SIS_Z_3"))
@@ -2092,6 +2173,7 @@ EVT_BEGIN(sinnosuke_find_event)
     RETURN
 EVT_END()
 
+/** Lost event of Bald Clefts: "?" balloon, looks back and forth and resumes. */
 EVT_BEGIN(sinnosuke_lost_event)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
     CALL(evt_npc_set_anim, STRING("me"), STRING("SIS_S_1"))
@@ -2104,6 +2186,7 @@ EVT_BEGIN(sinnosuke_lost_event)
     RETURN
 EVT_END()
 
+/** Return event of Bald Clefts: walks back home and spins back into its rock disguise. */
 EVT_BEGIN(sinnosuke_return_event)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
     CALL(evt_npc_set_anim, STRING("me"), STRING("SIS_W_1"))
@@ -2135,6 +2218,7 @@ EVT_BEGIN(sinnosuke_return_event)
     RETURN
 EVT_END()
 
+/** Init event of Clefts (shinemon): enemy flags, jumping, no attack mode. */
 EVT_BEGIN(sinemon_init_event)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_UPDATE_BY_EVENT)
@@ -2144,6 +2228,7 @@ EVT_BEGIN(sinemon_init_event)
     RETURN
 EVT_END()
 
+/** Move event of Clefts: sits still disguised as a rock (SIN_Z_3). */
 EVT_BEGIN(sinemon_move_event)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_UPDATE_BY_EVENT)
@@ -2155,6 +2240,10 @@ EVT_BEGIN(sinemon_move_event)
     RETURN
 EVT_END()
 
+/**
+ * Find event of Clefts: "!" balloon, spins round out of its rock disguise,
+ * then keeps charging 100 units at Mario in attack mode 14 with short rests.
+ */
 EVT_BEGIN(sinemon_find_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_anim, STRING("me"), STRING("SIN_Z_3"))
@@ -2198,6 +2287,7 @@ EVT_BEGIN(sinemon_find_event)
     RETURN
 EVT_END()
 
+/** Lost event of Clefts: "?" balloon, looks back and forth and resumes. */
 EVT_BEGIN(sinemon_lost_event)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
     CALL(evt_npc_set_anim, STRING("me"), STRING("SIN_S_1"))
@@ -2210,6 +2300,7 @@ EVT_BEGIN(sinemon_lost_event)
     RETURN
 EVT_END()
 
+/** Return event of Clefts: walks back home and spins back into its rock disguise. */
 EVT_BEGIN(sinemon_return_event)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
     CALL(evt_npc_set_anim, STRING("me"), STRING("SIN_W_1"))
@@ -2241,6 +2332,7 @@ EVT_BEGIN(sinemon_return_event)
     RETURN
 EVT_END()
 
+/** Move event of Bristles: wanders like a Goomba. */
 EVT_BEGIN(togedaruma_move_event)
     CALL(evt_npc_set_rotate, STRING("me"), 0, 0, 0)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
@@ -2256,6 +2348,7 @@ EVT_BEGIN(togedaruma_move_event)
     RETURN
 EVT_END()
 
+/** Find event of Bristles: "!" balloon, then chases Mario spinning 45 degrees a frame in attack mode 15. */
 EVT_BEGIN(togedaruma_find_event)
     CALL(evt_npc_set_rotate, STRING("me"), 0, 0, 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
@@ -2274,6 +2367,7 @@ EVT_BEGIN(togedaruma_find_event)
     RETURN
 EVT_END()
 
+/** Lost event of Bristles: stops spinning, "?" balloon, looks back and forth and resumes. */
 EVT_BEGIN(togedaruma_lost_event)
     CALL(evt_npc_set_rotate, STRING("me"), 0, 0, 0)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
@@ -2286,6 +2380,7 @@ EVT_BEGIN(togedaruma_lost_event)
     RETURN
 EVT_END()
 
+/** Return event of Bristles: walks 100 units toward home. */
 EVT_BEGIN(togedaruma_return_event)
     CALL(evt_npc_set_rotate, STRING("me"), 0, 0, 0)
     CALL(evt_npc_set_attack_mode, STRING("me"), 0)
@@ -2299,6 +2394,7 @@ EVT_BEGIN(togedaruma_return_event)
     RETURN
 EVT_END()
 
+/** Init event of Yux: enemy flags, no jumping, and a hidden harmless helper slave_0 (c_baria) for its beam. */
 EVT_BEGIN(barriern_init_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
     CALL(evt_npc_slave_entry, STRING("me"), 0, STRING("c_baria"), LW(0), PTR(enemy_slave_common_dead_event))
@@ -2310,6 +2406,10 @@ EVT_BEGIN(barriern_init_event)
     RETURN
 EVT_END()
 
+/**
+ * Move event of Yux: hides the beam, then floats 100 units at a time 50 above the floor (30 to 60 in the full
+ * game), pausing between moves.
+ */
 EVT_BEGIN(barriern_move_event)
     CALL_CHILD(PTR(enemy_common_flag_init_event))
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
@@ -2366,6 +2466,7 @@ EVT_BEGIN(barriern2_move_event)
     RETURN
 EVT_END()
 
+/** Dead event of Yux: stops its beam sound and hides the beam, then the usual defeat and drops. */
 EVT_BEGIN(barriern_dead_event)
     CALL(evt_npc_get_unitwork, STRING("me"), 0, LW(10))
     CALL(evt_snd_sfxoff, LW(10))
@@ -2374,6 +2475,10 @@ EVT_BEGIN(barriern_dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Find event of Yux: "!" balloon, winds up, then fires its growing beam (slave_0, attack mode 17) 500 units
+ * toward Mario over 1.25 s with its sound, puts it away and rests before resuming.
+ */
 EVT_BEGIN(barriern_find_event)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("me"), 0, 0, 0, 0, 0, 0, 0, 30)
     CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(0))
@@ -2421,6 +2526,10 @@ EVT_BEGIN(barriern_find_event)
     RETURN
 EVT_END()
 
+/**
+ * Draw callback for Pider's thread: a thin white vertical quad from its territory base (ceiling anchor) down to
+ * its body.
+ */
 static void piders_draw_yarn_sub(CameraId cameraId, void* param) {
     NpcEntry* npc = param;
     CameraEntry* cam = camGetPtr(CAMERA_3D);
@@ -4927,6 +5036,7 @@ EVT_END()
  * then swims 100 units up and forward toward him with its sound, stopping at a ceiling, and repeats.
  */
 EVT_BEGIN(gesso2D_move_event)
+    // Wait until the camera scrolls to within 250 units of the Blooper.
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     LABEL(0)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_NO_FIND_ONCE)
@@ -4940,6 +5050,8 @@ EVT_BEGIN(gesso2D_move_event)
     GOTO(0)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     LABEL(1)
+    // Sink, slowly speeding up, until the Blooper is below Mario or close to the floor;
+    // while Mario is far away it just keeps sinking.
     SET_FLOAT_VALUE(LW(1), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(13), FLOAT(0.0f))
     LOOP(0)
@@ -4972,6 +5084,7 @@ EVT_BEGIN(gesso2D_move_event)
             CALL(evt_npc_set_position, STRING("me"), LW(0), LW(14), LW(2))
         END_IF
     END_LOOP
+    // Turn to Mario and aim 100 units ahead and 50 up (never above 350), still sinking for one more second.
     CALL(evt_get_target_dir, STRING("me"), STRING("mario"), LW(0))
     CALL(evt_npc_set_ry, STRING("me"), LW(0))
     CALL(evt_npc_get_position, STRING("me"), LW(10), LW(11), LW(12))
@@ -4994,6 +5107,7 @@ EVT_BEGIN(gesso2D_move_event)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // Swim up to that point with the swim sound, stopping early at a ceiling, then start sinking again.
     CALL(evt_npc_set_anim, STRING("me"), STRING("A_1"))
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_GESSO_MOVE1"), LW(10), LW(11), LW(12), 0)
     CALL(evt_npc_set_unitwork, STRING("me"), 0, 0)

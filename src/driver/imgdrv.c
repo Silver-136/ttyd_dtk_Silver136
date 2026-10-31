@@ -216,6 +216,7 @@ void imgDisp_ProjPlane(CameraId camId, void* param) {
     Vec pos;
     s32 flags;
 
+    // shadowId is 0, 1 or 2 (imgSetShadow); another value would leave flags and mtx unset
     switch (entry->shadowId) {
         case 0:
             return;

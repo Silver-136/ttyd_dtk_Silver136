@@ -5260,6 +5260,7 @@ USER_FUNC(btlevtcmd_GetResultPrizeLv) {
     s32 id, value, index;
 
     id = evtGetValue(event, args[0]);
+    // Both ids mean "no unit" here, not the system unit.
     if (id != -1 && id != UNIT_ID_SYSTEM) {
         unit = BattleGetUnitPtr(_battleWorkPointer, BattleTransID(event, id));
     }

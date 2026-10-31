@@ -389,6 +389,7 @@ EVT_BEGIN(imgend)
 EVT_END()
 
 EVT_BEGIN(evt_up)
+    // The ride up: the elevator doors slide open.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -408,6 +409,7 @@ EVT_BEGIN(evt_up)
     CALL(evt_hitobj_onoff, STRING("a_door_2"), 1, 0)
     CALL(evt_cam3d_evt_set, FLOAT(-78.0f), FLOAT(133.0f), FLOAT(-450.0f), FLOAT(307.0f), FLOAT(56.5f), FLOAT(-65.0f), 800, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
+        // Mario steps into the elevator box.
         CALL(evt_mario_mov_pos2, 435, 45, FLOAT(80.0f))
         CALL(evt_mario_set_dir, 90, 200, 0)
     END_INLINE_EVENT
@@ -437,6 +439,7 @@ EVT_BEGIN(evt_up)
     CALL(evt_cam3d_evt_set, FLOAT(-78.0f), FLOAT(1463.0f), FLOAT(-450.0f), FLOAT(307.0f), FLOAT(1386.5f), FLOAT(-65.0f), 10000, EASING_SINE_IN_OUT)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
+    // The elevator box rises.
     CALL(evt_hit_bind_mapobj, STRING("a_hako"), STRING("hako"))
     CALL(evt_snd_sfxon, STRING("SFX_STG6_PIK_ELEVATOR_MOVE1"), LW(9))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 13250, 10000)
@@ -458,6 +461,7 @@ EVT_BEGIN(evt_up)
     CALL(evt_snd_sfxoff, LW(9))
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
+    // The upper floor fades in and its doors open.
     SPAWN_EVENT(PTR(imgend))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(9))
@@ -477,6 +481,7 @@ EVT_BEGIN(evt_up)
         WAIT_MS(300)
         CALL(evt_cam3d_evt_off, 800, EASING_SINE_IN_OUT)
     END_INLINE_EVENT
+    // Mario walks out onto the upper floor.
     CALL(evt_mario_mov_pos2, 383, -10, FLOAT(80.0f))
     CALL(evt_party_move_pos2, 0, 360, 10, FLOAT(80.0f))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -499,6 +504,7 @@ EVT_BEGIN(evt_up)
 EVT_END()
 
 EVT_BEGIN(evt_down)
+    // The ride down: the elevator doors slide open.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(9))
@@ -518,6 +524,7 @@ EVT_BEGIN(evt_down)
     CALL(evt_hitobj_onoff, STRING("a_door_3"), 1, 0)
     CALL(evt_cam3d_evt_set, FLOAT(-78.0f), FLOAT(1463.0f), FLOAT(-450.0f), FLOAT(307.0f), FLOAT(1386.5f), FLOAT(-65.0f), 800, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
+        // Mario steps into the elevator box.
         CALL(evt_mario_mov_pos2, 435, 45, FLOAT(80.0f))
         CALL(evt_mario_set_dir, 90, 200, 0)
     END_INLINE_EVENT
@@ -548,6 +555,7 @@ EVT_BEGIN(evt_down)
     CALL(evt_cam3d_evt_set, FLOAT(-78.0f), FLOAT(133.0f), FLOAT(-450.0f), FLOAT(307.0f), FLOAT(56.5f), FLOAT(-65.0f), 10000, EASING_SINE_IN_OUT)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
+    // The elevator box sinks.
     CALL(evt_hit_bind_mapobj, STRING("a_hako"), STRING("hako"))
     CALL(evt_snd_sfxon, STRING("SFX_STG6_PIK_ELEVATOR_MOVE1"), LW(9))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 13250, 0, 10000)
@@ -569,6 +577,7 @@ EVT_BEGIN(evt_down)
     CALL(evt_snd_sfxoff, LW(9))
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_party_cont_onoff, 0, 1)
+    // The street fades in and its doors open.
     SPAWN_EVENT(PTR(imgend))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PIK_ELEVATOR_DOOR1"), LW(0), LW(1), LW(2), LW(9))
@@ -586,6 +595,7 @@ EVT_BEGIN(evt_down)
     END_LOOP
     CALL(evt_snd_sfxoff, LW(9))
     CALL(evt_cam3d_evt_off, 800, EASING_SINE_IN_OUT)
+    // Mario walks out onto the street.
     CALL(evt_mario_mov_pos2, 383, -10, FLOAT(80.0f))
     CALL(evt_party_move_pos2, 0, 360, 10, FLOAT(80.0f))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

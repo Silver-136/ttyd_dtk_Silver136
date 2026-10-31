@@ -1254,6 +1254,12 @@ EVT_BEGIN(sys_01_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Runs after the chapter title appears: waits for the fade,
+ * starts the chapter-start jingle (not for chapters 3, 5 and 6), opens the curtain,
+ * waits for the title letters to settle, then changes map to the first map of that chapter (gor_10 for the
+ * prologue, hei_00, win_06, tou_20, usu_00, muj_20, rsh_02_a, bom_00 and las_00 for chapters 1 to 8).
+ */
 EVT_BEGIN(evt_start)
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)

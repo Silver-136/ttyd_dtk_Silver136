@@ -210,6 +210,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage reaction: runs the default damage handling (btldefaultevt_Damage) with LW(10) = -2 (the unit itself)
+ * and LW(11) = 1.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -217,6 +221,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Intro of the Goomba pair in the Glitz Pit (runs once, on turn 1, for the unit with work 0 set,
+ * while GSWF_TOU_GOOMBA_BROS_FIRST_STRIKE_SEEN is clear):
+ * pans the camera, has the partner complain about the attack before the bell (Goombella stg3_tou_83_kur,
+ * Koops stg3_tou_83_nok, Flurrie stg3_tou_83_win, by unit kind 224, 225, 227) and the Goomba answer that it was
+ * a welcome gift for the rookie (stg3_tou_84), then sets the flag.
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_INTRO_TALK, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -255,7 +266,15 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * The Goomba's headbonk (weapon_kuriboo_attack): picks a target (or uses an item), walks up to it and jumps onto
+ * it with its body tilted along the arc (krb_get_dir).
+ * A miss carries the jump on past the target and it lands with two hops; a hit plays SFX_ENM_KURI_ATTACK1,
+ * applies the damage and bounces it back in three hops.
+ * It then walks home.
+ */
 static EVT_BEGIN(attack_event)
+    // In a first strike it waits, then uses the target of that strike; otherwise it chooses a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
@@ -273,6 +292,7 @@ static EVT_BEGIN(attack_event)
         END_IF
         GOTO(99)
     END_IF
+    // A Goomba Bros. uses an enemy item if one fits.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -285,6 +305,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_kuriboo_attack))
+    // The attack is announced.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_kuriboo_attack))
@@ -294,6 +315,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
+    // It walks around behind its target, then turns back to face it and pauses.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 1)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
@@ -304,6 +326,7 @@ static EVT_BEGIN(attack_event)
     BEGIN_INLINE_EVENT
         CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(5), LW(6), LW(7))
         SET_VALUE(LW(8), 0)
+        // It leaps at the target, spinning in the air as it goes.
         LOOP(32)
             CALL(btlevtcmd_GetPosFloat, UNIT_ID_SELF, LW(9), LW(10), LW(11))
             CALL(krb_get_dir, LW(5), LW(6), LW(9), LW(10), LW(8))
@@ -322,6 +345,7 @@ static EVT_BEGIN(attack_event)
     END_INLINE_EVENT
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 32, MOVE_SOUND_FROM_TABLE)
+    // Find out how the target reacts to the leap.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_kuriboo_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -344,6 +368,7 @@ static EVT_BEGIN(attack_event)
         GOTO(91)
         CASE_END
     END_SWITCH
+    // The leap missed: it lands past the target and hops on in two small steps.
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
@@ -356,6 +381,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 10, MOVE_SOUND_FROM_TABLE)
     WAIT_MS(500)
     GOTO(95)
+    // The leap connects: the damage is applied and it bounces back in three shrinking hops.
     LABEL(91)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -375,6 +401,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 10)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 6, MOVE_SOUND_FROM_TABLE)
     GOTO(95)
+    // It walks back to its home position.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_ENM_KURI_MOVE1"), STRING("SFX_ENM_KURI_MOVE2"), 0, 3, 3, 0, 0)
@@ -388,11 +415,18 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Idle event: sets the unit's body part 1 to the pose given by its pose table for its current state. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: arg0/arg1 = x/y of the previous position, arg2/arg3 = x/y of the current one;
+ * arg4 receives the angle (degrees) of the step between them, or keeps its incoming value when the points
+ * coincide.
+ * The headbonk uses it each frame as the Goomba's z rotation, so it leans along its jump arc.
+ */
 static USER_FUNC(krb_get_dir) {
     EvtWord* args = event->args;
     f32 x1 = evtGetFloat(event, args[0]);

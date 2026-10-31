@@ -85,6 +85,7 @@ s32 marioUseParty(void) {
     if (party == NULL) {
         return 0;
     }
+    // 1 = PARTY_MEMBER_GOOMBELLA, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
     if (party->currentMemberId == PARTY_MEMBER_GOOMBELLA && !(party->flags & PARTY_FLAG_IS_GROUNDED)) {
         return 0;
     }

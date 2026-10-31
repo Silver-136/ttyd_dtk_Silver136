@@ -207,31 +207,37 @@ EVT_BEGIN(star_effect)
     RETURN
 EVT_END()
 
+/** Announces the Mushroom BINGO! result (msg_slot_HP_max) for 120 frames. */
 EVT_BEGIN(msg_hp_max)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -205, STRING("msg_slot_HP_max"), 120)
     RETURN
 EVT_END()
 
+/** Announces the Fire Flower BINGO! result (msg_slot_FP_max). */
 EVT_BEGIN(msg_fp_max)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -205, STRING("msg_slot_FP_max"), 120)
     RETURN
 EVT_END()
 
+/** Announces the Star BINGO! result (msg_slot_SP_max). */
 EVT_BEGIN(msg_star_max)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -205, STRING("msg_slot_SP_max"), 120)
     RETURN
 EVT_END()
 
+/** Announces the Shine Sprite BINGO! result (msg_slot_HPFPSP_max). */
 EVT_BEGIN(msg_super_max)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -205, STRING("msg_slot_HPFPSP_max"), 120)
     RETURN
 EVT_END()
 
+/** Announces the Poison Mushroom BINGO! result (msg_slot_HPFPSP_half). */
 EVT_BEGIN(msg_fault)
     CALL(btlevtcmd_AnnounceMessage, 0, 0, -205, STRING("msg_slot_HPFPSP_half"), 120)
     RETURN
 EVT_END()
 
+/** Returns the battle's Bingo slot state. */
 BreakSlotWork* BattleBreakSlotGetPtr(void) {
     return &_battleWorkPointer->breakSlot;
 }

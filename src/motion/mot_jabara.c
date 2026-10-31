@@ -99,6 +99,12 @@ static EVT_BEGIN(quake_evt)
     RETURN
 EVT_END()
 
+/**
+ * Spring Jump phase for other systems: 0 not springing, 1 rising (0x14), 2 grabbing a ceiling (0x46-0x47),
+ * 3 hanging and moving under it (0x50), 4 bumping a ceiling (0x28-0x2B), 5 swinging (0x32-0x34),
+ * 6 falling (0x1E-0x1F, counts as a jump attack on enemies in npcdrv), 7 anything else.
+ * Items and the hit code also check it.
+ */
 s32 marioGetJabaraState(void) {
     s32 state = 7;
     MarioWork* mario = marioGetPtr();

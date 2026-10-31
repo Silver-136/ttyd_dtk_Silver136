@@ -493,6 +493,10 @@ static EVT_BEGIN(majolyne_down)
     RETURN
 EVT_END()
 
+/**
+ * Event script: Beldam rises out of her shadow at the position in LW(0..2):
+ * the second shadow sound plays, battle_evt_majo_disp_on shows her and she is moved there.
+ */
 static EVT_BEGIN(majolyne_up)
     BEGIN_INLINE_EVENT
         WAIT_MS(250)
@@ -503,6 +507,7 @@ static EVT_BEGIN(majolyne_up)
     RETURN
 EVT_END()
 
+/** Camera helper of the Shadow Sirens fight: moves the battle camera to a close view at the X in LW(0). */
 static EVT_BEGIN(majo3_zoom)
     CALL(btlevtcmd_GetPos, LW(0), LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
@@ -511,24 +516,34 @@ static EVT_BEGIN(majo3_zoom)
     RETURN
 EVT_END()
 
+/**
+ * Event script: zooms the battle camera on the third Siren in the fight (GW(10), shown as Vivian by the Doopliss
+ * unit) via majo3_zoom.
+ */
 EVT_BEGIN(btl_vivian_zoom)
     SET_VALUE(LW(0), GW(10))
     CALL_CHILD(PTR(majo3_zoom))
     RETURN
 EVT_END()
 
+/** Event script: zooms the battle camera on Marilyn (GW(9)) via majo3_zoom. */
 EVT_BEGIN(btl_marilyn_zoom)
     SET_VALUE(LW(0), GW(9))
     CALL_CHILD(PTR(majo3_zoom))
     RETURN
 EVT_END()
 
+/** Event script: zooms the battle camera on Beldam (GW(8)) via majo3_zoom. */
 EVT_BEGIN(btl_majolyne_zoom)
     SET_VALUE(LW(0), GW(8))
     CALL_CHILD(PTR(majo3_zoom))
     RETURN
 EVT_END()
 
+/**
+ * Init event of Beldam: installs her wait, phase, attack, damage and confusion events,
+ * clears her unit work (8 and 9 attack counters, 3 shadow follow flag) and starts the shadow-following event.
+ */
 static EVT_BEGIN(init_event)
     CALL(btlevtcmd_SetEventWait, UNIT_ID_SELF, PTR(wait_event))
     CALL(btlevtcmd_SetEventPhase, UNIT_ID_SELF, PTR(phase_event))
@@ -544,6 +559,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of Beldam: when the hit defeats her (damage flag 0x400) sets GW(11) = 1 (she is going down; the
+ * other Sirens' scripts check it), then runs the default damage handling for every hit.
+ */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_DEATH, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -555,6 +574,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of Beldam: the camera moves to her and she speaks her last line (btl_majo3_08,
+ * or btl_majo3_11 when both Marilyn and the third Siren are already down),
+ * GW(11) is set to 2 and the slow death sequence runs.
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(3), LW(4), LW(5))
@@ -597,10 +621,16 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Event script: ranks the three Shadow Sirens (Beldam GW(8), Marilyn GW(9), the third GW(10)) by current HP,
+ * highest first, using majo3_sort, and stores each living one's rank 0..2 in its unit work[5].
+ * A defeated Siren (GW(11..13) nonzero) is left out.
+ */
 EVT_BEGIN(majo_unison_phase_event)
     SET_VALUE(LW(0), -1)
     SET_VALUE(LW(1), -1)
     SET_VALUE(LW(2), -1)
+    // Read the HP of each Siren that is still standing.
     IF_INT_EQUAL(GW(13), 0)
         CALL(btlevtcmd_GetUnitWork, GW(10), MAJO_WORK_NEXT_LINE_POS, LW(6))
         SWITCH(LW(6))
@@ -643,7 +673,9 @@ EVT_BEGIN(majo_unison_phase_event)
             SET_VALUE(LW(5), 3)
         END_SWITCH
     END_IF
+    // Sort them by HP.
     CALL(majo3_sort)
+    // Hand out ranks 0 to 2 in the Sirens' unit work, highest HP first.
     SWITCH(LW(0))
         CASE_EQUAL(1)
         IF_INT_EQUAL(GW(13), 0)
@@ -689,6 +721,11 @@ EVT_BEGIN(majo_unison_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of the Sirens' unison move: after the player phase it lets the Sirens' shared phase event run,
+ * and when the ranking of their HP (unit work 4 and 5) has changed it sinks into her shadow,
+ * comes up in the spot matching her new rank and lets the others know.
+ */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -722,6 +759,11 @@ static EVT_BEGIN(unison_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Phase event of Beldam: after the player phase it handles her counters (unit work 6 and 9),
+ * speaks about her allies' state (btl_majo3_03 and btl_majo3_04 when they fall low on HP)
+ * and sets unit work 7 of Marilyn and the third Siren so they react.
+ */
 static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -746,6 +788,7 @@ static EVT_BEGIN(phase_event)
             DEBUG_PUT_REG(LW(1))
             IF_INT_LESS(LW(1), LW(0))
                 CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, MAJO_WORK_LOW_HP_TALK_DONE, 1)
+                // When her own HP is low, Beldam curses Mario.
                 CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                 CALL_CHILD(PTR(btl_majolyne_zoom))
                 CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("btl_majo3_03"), 0, -2)
@@ -774,6 +817,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_GetHp, GW(9), LW(1))
                 IF_INT_LESS(LW(1), LW(0))
                     CALL(btlevtcmd_SetUnitWork, GW(9), MAJO_WORK_LOW_HP_TALK_DONE, 1)
+                    // Beldam asks after Marilyn, who groans in reply.
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                     CALL_CHILD(PTR(btl_majolyne_zoom))
                     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, GW(9), -1, FACE_DIR_TOWARD_UNIT, LW(15))
@@ -804,6 +848,7 @@ static EVT_BEGIN(phase_event)
                 CALL(btlevtcmd_GetHp, GW(10), LW(1))
                 IF_INT_LESS(LW(1), LW(0))
                     CALL(btlevtcmd_SetUnitWork, GW(10), MAJO_WORK_LOW_HP_TALK_DONE, 1)
+                    // Beldam scolds the third Siren for letting her HP fall, who apologises.
                     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
                     CALL_CHILD(PTR(btl_majolyne_zoom))
                     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, GW(10), -1, FACE_DIR_TOWARD_UNIT, LW(15))
@@ -830,6 +875,11 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of Beldam: can use an item; otherwise she follows an order in unit work 8:
+ * blizzard first, then powder attacks (weapon_majolyne_powder_attack1 to 5,
+ * depending on where each of the Sirens stands), and blizzard again, repeating the cycle.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -843,10 +893,12 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
+        // Beldam opens with the blizzard.
         CALL_CHILD(PTR(blizzard_attack_event))
         CASE_EQUAL(1)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 2)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_powder_attack4))
+        // Then comes a powder attack, whose kind depends on where the Sirens stand.
         CALL_CHILD(PTR(powder_attack_check))
         CALL_CHILD(PTR(powder_attack_event))
         CASE_EQUAL(2)
@@ -858,6 +910,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 4)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
         SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
+        // Another blizzard follows.
         CALL_CHILD(PTR(blizzard_attack_event))
         CASE_EQUAL(4)
         SET_UW_BASE(GW(15))
@@ -924,6 +977,7 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(1), 40)
         IF_INT_LESS(LW(0), LW(1))
             SET_VALUE(LW(9), PTR(&weapon_majolyne_kagenuke_attack1))
+            // Sometimes she uses her kagenuke attack instead.
             CALL_CHILD(PTR(kagenuke_attack_event))
             GOTO(90)
         END_IF
@@ -969,6 +1023,7 @@ static EVT_BEGIN(attack_event)
         ELSE
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, 2)
             SET_VALUE(LW(9), PTR(&weapon_majolyne_blizzard_attack1))
+            // The cycle ends with a blizzard and starts over.
             CALL_CHILD(PTR(blizzard_attack_event))
         END_IF
     END_SWITCH
@@ -978,6 +1033,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Shadow-step attack of Beldam (kagenuke): she goes into her shadow, comes up beside one target and hits it,
+ * which can dodge or takes the damage with the action command defence check.
+ */
 static EVT_BEGIN(kagenuke_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1054,6 +1113,11 @@ static EVT_BEGIN(kagenuke_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Blizzard attack of Beldam (weapon_majolyne_blizzard_attack1):
+ * she raises her arms (MJR_A1_2 to A1_4) and blasts a blizzard at one target,
+ * which can dodge or takes the damage with the action command defence check and may be frozen.
+ */
 static EVT_BEGIN(blizzard_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1132,6 +1196,10 @@ static EVT_BEGIN(blizzard_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Target check for Beldam's powder attacks: picks a target among the party for the weapon in LW(9)
+ * and returns it in LW(3) and LW(4).
+ */
 static EVT_BEGIN(powder_attack_check)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
@@ -1139,6 +1207,11 @@ static EVT_BEGIN(powder_attack_check)
     RETURN
 EVT_END()
 
+/**
+ * Powder attack of Beldam (weapon_majolyne_powder_attack1 to 5, one per place of the Siren in the unison line):
+ * she throws her powder at the chosen target (MJR_A2_1, MJR_A2_2) and the cloud hits it with the dodge
+ * or defence check, with its status effect.
+ */
 static EVT_BEGIN(powder_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -1203,11 +1276,16 @@ static EVT_BEGIN(powder_attack_event)
     RETURN
 EVT_END()
 
+/** Wait event of Beldam: plays her idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Event script: keeps Beldam's shadow position following her feet:
+ * stores her floor position in unit work[0..2] every frame while work[3] is 0, until the unit is gone.
+ */
 EVT_BEGIN(majo3_shadow_tail_event)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
@@ -1232,6 +1310,10 @@ EVT_BEGIN(majo3_shadow_tail_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: sorts three (HP, unit id) pairs held in LW(0..2) (HP) and LW(3..5) (id) by descending HP,
+ * leaving the ordered unit ids in LW(0..2).
+ */
 static USER_FUNC(majo3_sort) {
     MajoSortEntry tbl[3];
     MajoSortEntry tmp1;

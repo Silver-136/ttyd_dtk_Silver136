@@ -585,7 +585,17 @@ EVT_BEGIN(ship_majin_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * The paper genie's boat-move lecture on the ship-change platform:
+ * the genie curses Mario with flashes of light and explains Boat Mode (stg1_gon_majin4_12 to 14), the Boat
+ * Panel slides in, and Mario must try it with a flashing button prompt: only Y works until he is a boat, he
+ * sails right and back, then only Y works until he turns back. The practice repeats while the player answers
+ * "Run that by me again" (stg1_gon_majin4_16, 17); otherwise the genie says goodbye (stg1_gon_majin4_18), the
+ * panel slides back, the genie is moved out of sight and MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON is cleared.
+ */
 EVT_BEGIN(ship_majin_lecture)
+    // Lecture starts: the on-screen button prompt is set up and the Boat Panel (S_Ship_Change_01) is placed
+    // at x -50, its hit area following it from now on.
     CALL(evt_mario_trigflag_onoff, 1, MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON)
     BEGIN_SIBLING_EVENT
         CALL(lecture_button_rtn)
@@ -604,6 +614,7 @@ EVT_BEGIN(ship_majin_lecture)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
+    // The paper genie is drawn on the lecture camera and kept just below its look-at point.
     CALL(evt_npc_flag_onoff, 1, STRING("ペラ魔人"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_flag_onoff, 1, STRING("ペラ魔人"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_set_camid, STRING("ペラ魔人"), 7)
@@ -616,6 +627,8 @@ EVT_BEGIN(ship_majin_lecture)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+    // The genie gloats and curses Mario, the light flashes over him four times, and the genie explains that Y
+    // now turns him into a paper boat in certain places.
     CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_1"))
     WAIT_MS(200)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -629,6 +642,7 @@ EVT_BEGIN(ship_majin_lecture)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_13"), 0, STRING("ペラ魔人"))
+    // The camera pans and the Boat Panel slides left from x -50 until it stops at x -270.
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(80.0f), FLOAT(42.0f), FLOAT(-101.799805f), 1000, EASING_SINE_IN_OUT)
     SET_FLOAT_VALUE(LW(1), FLOAT(2.6660156f))
     CALL(dai_moveti_get, LW(0), LW(2), LW(3))
@@ -643,8 +657,11 @@ EVT_BEGIN(ship_majin_lecture)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // The genie tells Mario to try it: a Boat Panel glows when he stands on it.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_14"), 0, STRING("ペラ魔人"))
+    // Once Mario passes x -220 the camera follows him; the Boat Panel's glow events (evt_ride_airport while
+    // he stands on it, evt_nonride_airport after) run.
     BEGIN_SIBLING_EVENT
         LOOP(0)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -688,9 +705,12 @@ EVT_BEGIN(ship_majin_lecture)
             DELETE_EVENT(LW(2))
         END_IF
     END_INLINE_EVENT
+    // Mario walks onto the panel at x -200 and the genie tells him to press Y and become a paper boat.
     CALL(evt_mario_mov_pos2, FLOAT(-200.0f), FLOAT(0.0f), FLOAT(80.0f))
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_14_1"), 0, STRING("ペラ魔人"))
+    // Practice loop: the button prompt appears and flashes while the player is asked to turn Mario into a
+    // boat.
     LOOP(0)
         CALL(lecture_button_flag_on_off, 0, 2, 1)
         CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_Y)
@@ -713,6 +733,7 @@ EVT_BEGIN(ship_majin_lecture)
                 END_IF
             END_LOOP
         END_INLINE_EVENT
+        // Only the Y button is enabled (stick off) until Mario is in boat form (MARIO_MOTION_SHIP).
         CALL(evt_cam_letter_box_disable, 1)
         CALL(mainwindow_opendisable)
         CALL(evt_mario_trigflag_onoff, 1, MARIO_TRIG_FLAG_DISABLE_STICK)
@@ -736,6 +757,7 @@ EVT_BEGIN(ship_majin_lecture)
         CALL(evt_mario_set_enable_key, 0)
         CALL(mainwindow_openenable)
         CALL(evt_cam_letter_box_disable, 0)
+        // Controls are locked again; the button prompt fades.
         BEGIN_SIBLING_EVENT
             CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_Y_PRESSED)
             WAIT_MS(300)
@@ -745,6 +767,7 @@ EVT_BEGIN(ship_majin_lecture)
         END_SIBLING_EVENT
         CALL(x_flag_set, 0, 2)
         CALL(lecture_button_set_seq, 0, 3)
+        // Mario sails right across the platform and back left, with the genie crowing about his shame.
         LOOP(0)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             IF_INT_LESS_OR_EQUAL(LW(1), FLOAT(-614.0f))
@@ -768,6 +791,7 @@ EVT_BEGIN(ship_majin_lecture)
         CALL(evt_mario_mov_pos2, FLOAT(-145.0f), FLOAT(0.0f), FLOAT(80.0f))
         CALL(evt_snd_sfxoff, LW(3))
         WAIT_MS(500)
+        // The genie tells Mario to return to normal by approaching the panel and pressing Y.
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_15_0"), 0, STRING("ペラ魔人"))
         CALL(lecture_button_flag_on_off, 0, 2, 1)
@@ -776,6 +800,7 @@ EVT_BEGIN(ship_majin_lecture)
         CALL(lecture_button_set_seq, 0, 2)
         CALL(lecture_button_seq_wait, 0, 1)
         CALL(x_flag_set, 0, 1)
+        // The prompt is shown again; the player must turn back to Mario.
         BEGIN_INLINE_EVENT
             LOOP(0)
                 CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_Y_PRESSED)
@@ -792,6 +817,7 @@ EVT_BEGIN(ship_majin_lecture)
                 END_IF
             END_LOOP
         END_INLINE_EVENT
+        // Only the Y button is enabled (stick off) until Mario leaves boat form.
         CALL(evt_cam_letter_box_disable, 1)
         CALL(mainwindow_opendisable)
         CALL(evt_mario_trigflag_onoff, 1, MARIO_TRIG_FLAG_DISABLE_STICK)
@@ -814,6 +840,7 @@ EVT_BEGIN(ship_majin_lecture)
         CALL(evt_mario_trigflag_onoff, 0, MARIO_TRIG_FLAG_DISABLE_SUB_STICK)
         CALL(evt_mario_set_enable_key, 0)
         CALL(mainwindow_openenable)
+        // Controls are locked again and the Boat Panel's glow events run once more.
         CALL(x_flag_set, 0, 2)
         CALL(lecture_button_set_seq, 0, 3)
         WAIT_FRAMES(1)
@@ -849,6 +876,8 @@ EVT_BEGIN(ship_majin_lecture)
                 DELETE_EVENT(LW(2))
             END_IF
         END_INLINE_EVENT
+        // The genie asks whether Mario understands; on "Run that by me again" he says to just press Y and try
+        // again, and the loop repeats; otherwise it exits.
         CALL(evt_msg_print_add, 0, STRING("stg1_gon_majin4_15_1"))
         CALL(evt_msg_select, 0, STRING("stg1_gon_majin4_16"))
         CALL(evt_cam_letter_box_disable, 0)
@@ -861,6 +890,8 @@ EVT_BEGIN(ship_majin_lecture)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The platform slides back into place while the genie says goodbye and thanks Mario for letting him do his
+    // thing.
     BEGIN_INLINE_EVENT
         CALL(x_flag_set, 0, 1)
         SET_FLOAT_VALUE(LW(1), FLOAT(2.6660156f))
@@ -881,6 +912,7 @@ EVT_BEGIN(ship_majin_lecture)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print_add, 0, STRING("stg1_gon_majin4_18"))
     CALL(x_flag_wait, 0, 2)
+    // The camera returns, the genie plays his P_2 animation and is moved out of sight, and the lecture ends.
     CALL(lect_map_cam_chg, STRING("S_Ship_Change_01"), 4)
     CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_2"))
     WAIT_MS(200)
@@ -890,6 +922,7 @@ EVT_BEGIN(ship_majin_lecture)
     RETURN
 EVT_END()
 
+/** Script helper: sets args[0] to TRUE while the R trigger is held on controller 1. */
 static USER_FUNC(lect_push_r_check) {
     EvtWord* args = event->args;
 

@@ -339,15 +339,19 @@ EVT_END()
  * then reports that everyone has gathered. The camera is restored and the Punies unfreeze at the end.
  */
 EVT_BEGIN(elder_talk_sub)
+    // The Elder asks what Mario wants and offers three choices: just saying hi, lost Punies, or "I love you".
     CALL(evt_msg_print, 0, STRING("stg2_mri_e15_22"), 0, STRING("me"))
     CALL(evt_msg_select, 0, STRING("stg2_mri_e15_22_sel"))
     SWITCH(LW(0))
         CASE_EQUAL(0)
+        // Plain greeting: he reminds Mario the Crystal Star is at the bottom of the tree.
         CALL(evt_msg_print_add, 0, STRING("stg2_mri_e15_28"))
         CASE_EQUAL(1)
         CALL(elder_talk_sub_punicheck, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(0)
+            // Lost Punies: if any are lost the Elder calls them back with a loud shout and a camera zoom;
+            // otherwise he says none are missing, or that everyone is trapped in a cell.
             CALL(evt_msg_print_add, 0, STRING("stg2_mri_e15_23"))
             CALL(evt_cam3d_evt_set, -75, 77, 303, -75, 25, 7, 500, EASING_SINE_IN_OUT)
             WAIT_MS(1000)
@@ -396,6 +400,8 @@ EVT_BEGIN(elder_talk_sub)
         CALL(evt_party_stop, 0)
         CALL(evt_cam3d_evt_set, -75, 77, 303, -75, 25, 7, 500, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
+        // "I love you": the Elder is offended and launches into a long story about how she became the Puni
+        // elder.
         CALL(evt_msg_print, 0, STRING("stg2_mri_e15_29"), 0, STRING("me"))
         CALL(elder_talk_sub_fadeoff, 0)
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, 1500)
@@ -923,6 +929,7 @@ EVT_BEGIN(bigtree_firstbattle)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // Punio leads Mario into the empty village; he wonders where everyone is and calls out.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     BEGIN_INLINE_EVENT
@@ -966,6 +973,7 @@ EVT_BEGIN(bigtree_firstbattle)
     DELETE_EVENT(LW(9))
     CALL(evt_msg_print, 0, STRING("stg2_mri_e11_01"), 0, LW(10))
     CALL(evt_cam3d_evt_set, 350, 115, 400, 350, 45, 7, 500, EASING_SINE_IN_OUT)
+    // The music stops as the door opens and the village doors close behind them.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     WAIT_MS(580)
     CALL(evt_mapobj_get_position, STRING("S_lights_r"), LW(0), LW(1), LW(2))
@@ -1003,6 +1011,7 @@ EVT_BEGIN(bigtree_firstbattle)
     CALL(evt_npc_set_position, LW(11), 445, 0, 30)
     CALL(evt_npc_set_ry, LW(11), 270)
     CALL(evt_npc_move_position, LW(11), 337, 50, 0, FLOAT(120.0f), 0)
+    // Danger music: two X-Naut grunts burst in.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
     CALL(evt_snd_bgm_scope, 0, -1)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), LW(10), 0, 0, 0, 0, 0, 0, 0, 60)
@@ -1044,6 +1053,8 @@ EVT_BEGIN(bigtree_firstbattle)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("ガイド"), 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
+    // The grunts recognize Mario and argue whether to report him to Lord Crump or capture him themselves for
+    // the credit.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e11_02"), 0, LW(10))
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), LW(11), 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
@@ -1069,6 +1080,7 @@ EVT_BEGIN(bigtree_firstbattle)
     END_INLINE_EVENT
     WAIT_MS(250)
     CALL(evt_npc_release_filednpc, 1)
+    // The battle with the X-Nauts (battle info 4) starts and the script waits for it to end.
     CALL(evt_npc_set_battle_info, LW(10), 4)
     CALL(evt_npc_battle_start, LW(10))
     CALL(evt_npc_wait_battle_end)
@@ -1097,6 +1109,7 @@ EVT_BEGIN(bigtree_firstbattle)
 EVT_END()
 
 EVT_BEGIN(meet_rival)
+    // The beaten grunts decide to run back and report to Lord Crump.
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LW(15), 5)
     LOOP(9)
@@ -1143,6 +1156,7 @@ EVT_BEGIN(meet_rival)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_DOOR_LAMP"), LW(0), LW(1), LW(2), 0)
         CALL(evt_map_playanim, STRING("doalight02"), MAP_ANIM_PLAY_ONCE, 0)
         WAIT_MS(1000)
+        // The village music returns and Punio calls the hiding Punies out.
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
@@ -1166,6 +1180,8 @@ EVT_BEGIN(meet_rival)
     SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
     CALL(evt_npc_move_position, LW(10), -60, 50, 0, FLOAT(180.0f), 0)
     DELETE_EVENT(LW(9))
+    // Punio thanks Mario; the Puni theme starts as the few remaining Punies creep out and see the huge,
+    // mustached Mario.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e12_00"), 0, LW(10))
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_SLOT(1), STRING("BGM_EVT_STG2_PUNI1"), 2000)
@@ -1220,6 +1236,7 @@ EVT_BEGIN(meet_rival)
     WAIT_MS(1000)
     CALL(evt_puni_get_position, 5, LW(0), LW(1), LW(2))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
+    // The Punies are frightened of Mario, with one comment after another about his size and his mustache.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e12_02"), 0, 0)
     CALL(evt_puni_set_position, 6, 60, 0, -66)
     CALL(evt_puni_pera_onoff, 6, 1)
@@ -1363,6 +1380,7 @@ EVT_BEGIN(meet_rival)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_PUNI_JUMP1"), LW(10), LW(11), LW(12), 0)
     END_INLINE_EVENT
     CALL(evt_npc_jump_position_nohit, LW(10), LW(0), LW(1), LW(2), 200, 18)
+    // Punio explains that Mario is a friend and asks the Punies to gather.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e12_12"), 0, LW(10))
     BEGIN_INLINE_EVENT
         WAIT_MS(350)
@@ -1497,6 +1515,7 @@ EVT_BEGIN(meet_rival)
     SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
     CALL(evt_npc_move_position, LW(11), 20, -21, 0, FLOAT(120.0f), 0)
     DELETE_EVENT(LW(9))
+    // Puniper, the rival, doubts that Mario is an ally and quarrels with Punio.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e12_14"), 0, LW(11))
     CALL(evt_cam3d_evt_set, 3, 71, 226, 3, 49, 104, 1000, EASING_SINE_IN_OUT)
     SET_VALUE(GF(0), 1)
@@ -1547,6 +1566,8 @@ EVT_BEGIN(meet_rival)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e12_17_02"), 0, LW(10))
     CALL(evt_cam3d_evt_set, 0, 80, 309, 0, 28, 9, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+    // Puniper explains that the elder, Petuni and the other Punies were captured by the X-Nauts; Punio is
+    // shocked and vows to save them.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e12_18"), 0, LW(11))
     CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
     BEGIN_INLINE_EVENT
@@ -1586,6 +1607,7 @@ EVT_BEGIN(meet_rival)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_PUNI_JUMP1"), LW(10), LW(11), LW(12), 0)
     END_INLINE_EVENT
     CALL(evt_npc_jump_position_nohit, LW(11), LW(0), LW(1), LW(2), 200, 18)
+    // Puniper scoffs that nobody can beat the giants and sets Punio and Mario a challenge.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e12_22"), 0, LW(11))
     CALL(evt_msg_print, 0, STRING("stg2_mri_e12_23"), 0, LW(10))
     CALL(evt_msg_print, 0, STRING("stg2_mri_e12_24"), 0, LW(11))
@@ -1699,6 +1721,7 @@ EVT_BEGIN(rival_nakama)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // Puniper, the rival, sneers that Punio will not impress him; the freed Puni Elder arrives and scolds him.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
@@ -1761,6 +1784,7 @@ EVT_BEGIN(rival_nakama)
         WAIT_MS(300)
         CALL(evt_npc_set_ry, STRING("ライバル"), 270)
     END_INLINE_EVENT
+    // The Elder orders everyone to help Mario; Puniper grudgingly agrees.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e15_03"), 0, STRING("プニ族長老"))
     WAIT_WHILE(GF(0))
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, FLOAT(3.0f), FLOAT(1.0f), 200)
@@ -1804,6 +1828,7 @@ EVT_BEGIN(rival_nakama)
         ADD(LW(10), 1)
     END_LOOP
     CALL(evt_snd_bgmoff, PSND_PAUSE)
+    // Ten Punies join Mario's party (Punio and Puniper among them) with the party jingle.
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("FF_GET_KEYITEM1"))
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
@@ -1827,6 +1852,7 @@ EVT_BEGIN(rival_nakama)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_npc_set_ry, STRING("ライバル"), 90)
+    // Punio thanks the others; the Elder tells Mario where the Crystal Star is hidden and that he must hurry.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e15_12"), 0, STRING("ガイド"))
     CALL(evt_cam3d_evt_set, -50, 115, 400, -50, 45, 7, 500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -1875,6 +1901,7 @@ EVT_BEGIN(rival_nakama)
     WAIT_MS(1500)
     CALL(evt_cam3d_evt_set, -75, 69, 253, -75, 25, 7, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+    // The Elder gives Mario the Puni Orb to place on the pedestals around the tree.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e15_16"), 0, STRING("プニ族長老"))
     CALL(evt_npc_set_ry, STRING("ガイド"), 270)
     CALL(evt_npc_set_ry, STRING("ライバル"), 270)
@@ -1913,6 +1940,7 @@ EVT_BEGIN(rival_nakama)
     SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
     CALL(evt_npc_move_position, STRING("ガイド"), -19, 56, 0, FLOAT(120.0f), 0)
     DELETE_EVENT(LW(9))
+    // Punio rallies the group to rescue everyone; the village music returns.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e15_18"), 0, STRING("ガイド"))
     SET_VALUE(LW(10), 5)
     LOOP(9)
@@ -1942,6 +1970,10 @@ EVT_BEGIN(rival_nakama)
     RETURN
 EVT_END()
 
+/**
+ * The Puni elder explains the Punies' powers to Mario right after the Puni Orb scene,
+ * with a camera shake as a Puni lands on Mario. Sets GSWF_MRI01_ELDER_POWERS_EXPLAINED.
+ */
 EVT_BEGIN(elder_kaisetsu)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -2292,6 +2324,7 @@ EVT_BEGIN(boss_battle)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // Controls off; Lord Crump bursts into the village.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
@@ -2307,6 +2340,7 @@ EVT_BEGIN(boss_battle)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The Puni Elder bars the way; Crump scoffs and calls her an old geezer.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e24_00"), 0, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"))
     CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2), 225, 30)
@@ -2359,6 +2393,7 @@ EVT_BEGIN(boss_battle)
         SET_FLOAT_VALUE(LW(0), FLOAT(0.39941406f))
         CALL(evt_npc_set_scale, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(0), LW(0))
     END_INLINE_EVENT
+    // The Elder's back gives out as she tries to stand up to him.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e24_02"), 0, STRING(/*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56"))
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_CUBIC_OUT, FLOAT(3.0f), FLOAT(1.0f), 200)
@@ -2406,6 +2441,7 @@ EVT_BEGIN(boss_battle)
     WAIT_MS(333)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e24_04_02"), 0, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"))
     WAIT_MS(250)
+    // Mario's partner steps in front of her and Crump laughs; the Punies hide.
     CALL(evt_msg_print_party, STRING("stg2_mri_e24_05"))
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_npc_set_ry, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), 90)
@@ -2457,6 +2493,7 @@ EVT_BEGIN(boss_battle)
     WAIT_MS(1000)
     CALL(evt_cam3d_evt_set, -180, 152, 548, -180, 57, 7, 0, EASING_SINE_IN_OUT)
     WAIT_MS(333)
+    // Crump sets the time bomb and calls his giant machine.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e24_07"), 0, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"))
     CALL(evt_npc_get_position, STRING(/*"第三勢力幹部"*/"\x91\xE6\x8E\x4F\x90\xA8\x97\xCD\x8A\xB2\x95\x94"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_SWITCH_APPEAR1"), LW(0), LW(1), LW(2), 0)
@@ -2501,6 +2538,7 @@ EVT_BEGIN(boss_battle)
     WAIT_MS(1000)
     CALL(evt_npc_set_anim, LW(10), STRING("S_1"))
     CALL(evt_npc_sound_data_reset, LW(10))
+    // Magnus von Grapple lands in the village to the sound of its entrance theme.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_MAGNUM_APP1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_snd_sfxon, STRING("SFX_STG2_BOSS_APPEAR2"), LW(9))
@@ -2585,6 +2623,7 @@ EVT_BEGIN(boss_battle)
     CALL(evt_npc_set_position, STRING(/*"ボスロボット"*/"\x83\x7B\x83\x58\x83\x8D\x83\x7B\x83\x62\x83\x67"), 90, 0, 30)
     CALL(evt_cam3d_evt_set, 70, 156, 549, 70, 60, 7, 0, EASING_SINE_IN_OUT)
     SET_VALUE(LW(0), 0)
+    // Control returns briefly, then the victory scene begins.
     SPAWN_EVENT(boss_battle_win)
     RETURN
 EVT_END()
@@ -2661,6 +2700,7 @@ EVT_END()
 
 EVT_BEGIN(boss_battle_win)
     CALL(evt_cam3d_evt_set, 70, 156, 549, 70, 60, 7, 0, EASING_SINE_IN_OUT)
+    // The robot sparks and breaks down; the Punies come out of hiding.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_party_stop, 0)
@@ -2766,6 +2806,7 @@ EVT_BEGIN(boss_battle_win)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The Punies in the party run up to the wreckage (the Jabbi among them, if he joined).
     IF_INT_EQUAL(GSWF_MRI_JABBLE_JOINED, 1)
         CALL(evt_puni_set_mode, 3, PUNI_MODE_INERT)
         CALL(evt_puni_set_position, 3, -120, 0, 10)
@@ -2877,6 +2918,7 @@ EVT_BEGIN(boss_battle_win)
         MULTIPLY(LW(13), 9)
         ADD(LW(13), LW(0))
         CALL(evt_npc_set_position, STRING("ダミー"), LW(0), LW(1), LW(2))
+        // The Emerald Star is created off screen and then slid into place above the wreckage.
         CALL(evt_item_entry, STRING("item00"), ITEM_EMERALD_STAR, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
         SET_VALUE(LW(8), STRING("ダミー"))
         SET_VALUE(LW(9), STRING("item00"))
@@ -2895,6 +2937,7 @@ EVT_BEGIN(boss_battle_win)
         CALL(evt_item_set_position, STRING("item00"), LW(14), 0, LW(2))
     END_INLINE_EVENT
     WAIT_MS(800)
+    // Lord Crump rages at Magnus's failure, vows revenge and calls his X-Nauts to retreat.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_HAPPY1"))
     CALL(evt_msg_print, 0, STRING("stg2_mri_e25_00_00"), 0, LW(10))
     WAIT_MS(500)
@@ -2977,6 +3020,7 @@ EVT_BEGIN(boss_battle_win)
         ADD(LW(0), -80)
         ADD(LW(1), 30)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
+        // The Punies cheer and the grunts flee in a panic.
         CALL(evt_msg_print, 0, STRING("stg2_mri_e25_00_03"), 0, 0)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -3038,6 +3082,7 @@ EVT_BEGIN(boss_battle_win)
     CALL(evt_npc_set_ry, STRING("ライバルsp"), 90)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_HAPPY1"))
     CALL(evt_msg_print_party, STRING("stg2_mri_e25_00"))
+    // Punio celebrates; the Elder tells Mario to take the Emerald Star.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e25_01"), 0, STRING("ガイドsp"))
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
@@ -3053,6 +3098,7 @@ EVT_BEGIN(boss_battle_win)
     END_INLINE_EVENT
     CALL(evt_npc_set_ry_lr, STRING("ライバルsp"), 0)
     CALL(evt_mario_mov_pos, -50, 60, 500)
+    // The story advances and the Emerald Star is held up for the Star Stone sequence.
     SET_VALUE(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
     CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
     CALL(evt_item_set_position, STRING("item00"), 0, -1000, 0)
@@ -3196,6 +3242,7 @@ EVT_BEGIN(puni_mario_wait)
 EVT_END()
 
 EVT_BEGIN(mri_01_koopa_first_evt)
+    // Bowser and Kammy arrive in the village after the doors close behind them.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -415, 0, 30)
     CALL(evt_mario_set_dir, 90, 0, 0)
@@ -3233,6 +3280,7 @@ EVT_BEGIN(mri_01_koopa_first_evt)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_PUNI_JUMP1"), LW(10), LW(11), LW(12), 0)
     END_INLINE_EVENT
     CALL(evt_npc_jump_position_nohit, STRING("プニ族"), LW(0), LW(1), LW(2), 200, 10)
+    // A Puni sees the giant Bowser and tells everyone to hide.
     CALL(evt_msg_print, 0, STRING("kpa_stg3_000"), 0, STRING("プニ族"))
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("プニ族B"), LW(10), LW(11), LW(12))
@@ -3255,6 +3303,8 @@ EVT_BEGIN(mri_01_koopa_first_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg3_000_01"), 0, STRING("mario"))
     CALL(evt_cam3d_evt_set, -165, 135, 365, -310, 65, 7, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+    // Bowser's theme: he grumbles about Mario cheating, Kammy asks what he said, and he points out the little
+    // creatures they saw.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
     CALL(evt_snd_bgm_scope, 0, 1)
     WAIT_MS(500)
@@ -3270,6 +3320,7 @@ EVT_BEGIN(mri_01_koopa_first_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg3_002"), 0, STRING("ババ"))
     CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_NO_HIT)
     CALL(evt_mario_set_dir, 90, 300, 0)
+    // The story advances and Bowser gets his controls back.
     SET_VALUE(GSW_STORY_PROGRESS, STG3_33_05_BOWSER_THE_GREAT_TREE)
     CALL(evt_npc_set_position, STRING("ライバル"), -198, -5, 53)
     CALL(evt_npc_set_ry, STRING("ライバル"), 270)
@@ -3291,6 +3342,7 @@ EVT_BEGIN(mri_01_koopa_first_evt)
 EVT_END()
 
 EVT_BEGIN(mri_01_koopa_second_evt)
+    // Bowser leaps up to the Puni Elder, who suddenly grows huge and shouts at him to begone.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_zoom_in, 15, 800, 0, EASING_SINE_IN_OUT)
@@ -3334,6 +3386,7 @@ EVT_BEGIN(mri_01_koopa_second_evt)
     END_INLINE_EVENT
     CALL(evt_msg_print, 0, STRING("kpa_stg3_008"), 0, STRING("プニ族長老"))
     CALL(evt_fade_out, 700)
+    // The Elder accuses him of being one of the evildoers; Kammy insists she knows where the Crystal Star is.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG2_PUNI1"))
     CALL(evt_npc_set_scale, STRING("プニ族長老"), FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     CALL(evt_mario_set_pos, 0, 0, 25)
@@ -3406,6 +3459,7 @@ EVT_BEGIN(mri_01_koopa_second_evt)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_THINK1_2"), LW(0), LW(1), LW(2), 0)
     CALL(kpa_chg_pose, STRING("KPA_N_1"))
     WAIT_MS(500)
+    // Kammy and the Elder call each other old and squabble; Bowser answers a choice about it.
     CALL(evt_msg_select, 0, STRING("kpa_stg3_014"))
     CALL(evt_cam3d_evt_set, -20, 151, 500, -20, 67, 27, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
@@ -3422,6 +3476,8 @@ EVT_BEGIN(mri_01_koopa_second_evt)
     CALL(evt_cam3d_evt_set, 45, 151, 500, 45, 67, 27, 300, EASING_SINE_IN_OUT)
     WAIT_MS(300)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_4"), STRING("KPA_T_3"))
+    // Bowser demands to know where the Crystal Star is; the Elder says he is too late because it was given to
+    // a mustached man.
     CALL(evt_msg_print, 0, STRING("kpa_stg3_018_1"), 0, STRING("mario"))
     CALL(evt_msg_print, 0, STRING("kpa_stg3_019"), 0, STRING("プニ族長老"))
     CALL(kpa_chg_pose, STRING("KPA_O_1"))
@@ -3450,6 +3506,8 @@ EVT_BEGIN(mri_01_koopa_second_evt)
     WAIT_MS(250)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_4"), STRING("KPA_T_3"))
     CALL(evt_msg_print, 0, STRING("kpa_stg3_023"), 0, STRING("mario"))
+    // The story advances, the screen closes to a spot, the game is saved and the scene ends in Rogueport
+    // (tou_02).
     SET_VALUE(GSW_STORY_PROGRESS, STG3_33_06_BOWSER_TREASURE)
     WAIT_MS(2000)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
@@ -3476,6 +3534,7 @@ EVT_END()
  */
 EVT_BEGIN(mri_01_init_evt)
     SET_VALUE(LF(0), 0)
+    // Start the Puni system and register the doors and planters, unless Bowser's interlude is running.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_33_04_PEACH_BACK_TO_TEC)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG3_33_05_BOWSER_THE_GREAT_TREE)
             SET_VALUE(LF(0), 1)
@@ -3556,12 +3615,14 @@ EVT_BEGIN(mri_01_init_evt)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_15_11_PUNIES)
         IF_INT_EQUAL(GSWF_MRI_01_ELDER_TIP_SEEN, 0)
+            // Once the Puni group exists, the Elder explains the Punies' powers if she has not yet.
             SPAWN_EVENT(PTR(elder_kaisetsu))
         END_IF
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_04_PEACH_BACK_TO_TEC)
         CALL(evt_mario_set_mode, 2)
         CALL(evt_mario_kill_party, 0)
+        // Bowser's visit: Kammy is created and the first (or, later, second) part of the interlude plays.
         CALL(evt_npc_entry, STRING("ババ"), STRING("c_kamek_be"))
         CALL(evt_npc_set_tribe, STRING("ババ"), STRING("カメックババ（地上）"))
         CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)

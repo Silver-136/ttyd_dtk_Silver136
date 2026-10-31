@@ -1832,6 +1832,7 @@ void _mapDispMapObj(CameraId cam, MapObject* obj) {
         GXSetCullMode(culling[obj->joints->drawMode->cullMode]);
     }
     mapSetObjFog(obj);
+    // a translucent-pass object is not drawn when it is hidden, unlit-only or fully transparent
     if (obj->flags & MAP_OBJ_FLAG_GROUP_MEMBER) {
         if (obj->flags & MAP_OBJ_FLAG_DISABLED) {
             goto end;
@@ -2082,6 +2083,7 @@ void mapDisp(void) {
             if ((obj->flags & MAP_OBJ_FLAG_CLIP) && !mapClipOffFlag) {
                 joint = obj->joints;
                 clipped = FALSE;
+                // the eight bounding-box corners, unrolled: the first one inside the view skips to `vis`
                 v.x = joint->bboxMax.x;
                 v.y = joint->bboxMax.y;
                 v.z = joint->bboxMax.z;
@@ -3671,6 +3673,7 @@ void mapObjSetOffScreen(const char* name, const char* offscreen) {
     MapWork* wp;
     MapEntry* entry;
 
+    // the search exits through `done` (an inline helper returning the object, or a flag, changes the code)
     wp = &mapWork[activeGroup];
     if (!name) {
         obj = NULL;

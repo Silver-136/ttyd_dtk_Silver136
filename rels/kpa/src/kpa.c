@@ -157,6 +157,10 @@ EVT_BEGIN(kpa_read_mobj)
     RETURN
 EVT_END()
 
+/**
+ * Pickup script for the stage coins made by kpa_read_item; LW(0)..LW(2) = coin position.
+ * Adds a coin to Bowser's coin tally through kpa_add_coin.
+ */
 EVT_BEGIN(kpa_coin_evt)
     CALL(kpa_add_coin, LW(0), LW(1), LW(2))
     RETURN
@@ -177,6 +181,10 @@ EVT_BEGIN(kpa_read_item)
     RETURN
 EVT_END()
 
+/**
+ * REL entry point: runs the static constructors
+ * and registers the init script of each of the eight kpa maps (kpa_00..kpa_07) with the map loader.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 

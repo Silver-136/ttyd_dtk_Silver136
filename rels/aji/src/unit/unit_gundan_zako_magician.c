@@ -494,17 +494,20 @@ EVT_END()
  * officer the dodgy bottle or the regen bottle.
  */
 static EVT_BEGIN(attack_event)
+    // After a First Strike it always throws the fire bottle.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(fire_bottle_event))
         GOTO(99)
     END_IF
+    // It uses an item instead of a bottle when one is ready.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+    // Look for an X-Naut officer in the battle: with one present it picks from a different mix of bottles.
     CALL(kanbu_get_id, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(10)
@@ -520,6 +523,8 @@ static EVT_BEGIN(attack_event)
     ADD(LW(0), 10)
     ADD(LW(0), 5)
     SUBTRACT(LW(0), 1)
+    // No officer: a random number picks a bottle by weight (fire, Defense-down, Dodgy, shrink, heal one ally,
+    // heal all).
     CALL(evt_sub_random, LW(0), LW(1))
     SET_VALUE(LW(0), 20)
     IF_INT_LESS(LW(1), LW(0))
@@ -561,6 +566,8 @@ static EVT_BEGIN(attack_event)
     ADD(LW(0), 20)
     ADD(LW(0), 20)
     SUBTRACT(LW(0), 1)
+    // With an officer: a random number picks the fire bottle, the Dodgy bottle for the officer or the regen
+    // bottle.
     CALL(evt_sub_random, LW(0), LW(1))
     SET_VALUE(LW(0), 60)
     IF_INT_LESS(LW(1), LW(0))
@@ -651,12 +658,14 @@ EVT_END()
  * ends by resetting the camera and facing.
  */
 static EVT_BEGIN(attack_common_event2)
+    // Pick the bottle's pose for the bottle being thrown (fire or Defense-down).
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_fire_bottle))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1A"))
     END_IF
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_hunyahunya_bottle))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1B"))
     END_IF
+    // The bottle (part 2) appears in its hand as it winds up.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 10)
     ADD(LW(1), 20)
@@ -669,6 +678,7 @@ static EVT_BEGIN(attack_common_event2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2B"))
     END_IF
     WAIT_FRAMES(24)
+    // It hurls the bottle in a high arc toward the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD2_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(24)
@@ -679,6 +689,7 @@ static EVT_BEGIN(attack_common_event2)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 0, FLOAT(6.0f), FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
+    // Hit check: a miss or dodge shatters the bottle, a hit goes on to the damage and status.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -701,6 +712,7 @@ static EVT_BEGIN(attack_common_event2)
         GOTO(98)
         CASE_END
         LABEL(90)
+        // Miss: the bottle smashes on the ground beside the target in a shower of glass.
         CALL(btlevtcmd_JumpPartsContinue, UNIT_ID_SELF, 2)
         CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
         LOOP(12)
@@ -721,6 +733,7 @@ static EVT_BEGIN(attack_common_event2)
         LOOP(12)
             CALL(evt_eff64, STRING(""), STRING("glass_n64"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 30, 0, 0, 0, 0, 0, 0)
         END_LOOP
+        // Hit: the bottle smashes on the target and the damage and status effect are applied.
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD2_CRASH1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -730,6 +743,7 @@ static EVT_BEGIN(attack_common_event2)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
         GOTO(98)
         LABEL(98)
+        // The camera and facing return to normal.
         WAIT_FRAMES(10)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_FRAMES(30)
@@ -898,9 +912,11 @@ EVT_END()
  */
 static EVT_BEGIN(minimini_bottle_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_minimini_bottle))
+    // It samples a target, but the bottle reaches every opposing unit.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
+    // No valid target: a confused PhD is flustered, otherwise the turn is skipped.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -909,12 +925,14 @@ static EVT_BEGIN(minimini_bottle_event)
         END_IF
         GOTO(99)
     END_IF
+    // Wind-up: it steps up to its throwing spot (attack_common_event1).
     CALL_CHILD(attack_common_event1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1E"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 10)
     ADD(LW(1), 20)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
+    // It lifts the bottle (part 2) and throws it high over the opposing side.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD2_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3C"))
     WAIT_FRAMES(24)
@@ -938,6 +956,7 @@ static EVT_BEGIN(minimini_bottle_event)
     LOOP(12)
         CALL(evt_eff64, STRING(""), STRING("glass_n64"), 0, LW(10), 0, 0, FLOAT(1.0f), 30, 0, 0, 0, 0, 0, 0)
     END_LOOP
+    // The bottle bursts over the opposing side in a shower of shrinking mist.
     BEGIN_INLINE_EVENT
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD2_CRASH1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_2"))
@@ -948,6 +967,8 @@ static EVT_BEGIN(minimini_bottle_event)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
     LABEL(0)
+    // Each target in turn gets the hit check and then the shrink effect; the action-command result is read
+    // once.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -985,6 +1006,7 @@ static EVT_BEGIN(minimini_bottle_event)
             GOTO(0)
         END_IF
         LABEL(98)
+        // The camera returns to normal.
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_FRAMES(60)
         LABEL(99)

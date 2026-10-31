@@ -467,6 +467,10 @@ static EVT_BEGIN(evt_lock)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of the train door: returns 1 in LW(0) only while the story is at "Drawbridge down",
+ * so the door can be used just then.
+ */
 EVT_BEGIN(evt_train_door)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG6_42_DRAWBRIDGE_DOWN)
         SET_VALUE(LW(0), 0)
@@ -541,6 +545,12 @@ static EVT_BEGIN(evt_train)
     RETURN
 EVT_END()
 
+/**
+ * Exit event of the train door on the second trip:
+ * Mario boards, the crossing barrier closes, attendant 2 calls the train off,
+ * the train starts (hom_10_evt_resha_start, or start2 on the return trip),
+ * the train-leg counter is set to 1 (outbound) or 3 (return) and the map changes to rsh_02_c.
+ */
 EVT_BEGIN(evt_train_nidome)
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
@@ -548,6 +558,7 @@ EVT_BEGIN(evt_train_nidome)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
     END_IF
+    // Mario freezes and the train door slides open.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_hitobj_onoff, STRING("n_bero_1"), 0, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -555,6 +566,7 @@ EVT_BEGIN(evt_train_nidome)
     CALL(evt_map_playanim, STRING("n_1_door_open"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, STRING("n_1_door_open"), LW(0), LW(1))
     WAIT_MS(LW(1))
+    // Mario and his partners walk up to the door.
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos, -820, 12, 500)
         CALL(evt_mario_set_dir, 90, 200, 0)
@@ -573,6 +585,7 @@ EVT_BEGIN(evt_train_nidome)
     WAIT_MS(200)
     CALL(evt_party_move_pos, 1, -810, 30, 500)
     CALL(evt_party_set_dir, 1, 270, 200)
+    // Attendant 2 walks over and the door closes behind them.
     CALL(evt_npc_status_onoff, 1, STRING("駅員2"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("駅員2"), -800, 80, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_reverse_ry, STRING("駅員2"))
@@ -585,6 +598,7 @@ EVT_BEGIN(evt_train_nidome)
     CALL(evt_map_checkanim, STRING("n_1_door_close"), LW(0), LW(1))
     WAIT_MS(LW(1))
     WAIT_MS(300)
+    // He calls the train off and the crossing barrier opens.
     CALL(evt_msg_print, 0, STRING("stg6_eki_05"), 0, STRING("駅員2"))
     WAIT_MS(400)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_CROSSING_OPEN1"), -170, 30, 0, LW(10))
@@ -592,6 +606,7 @@ EVT_BEGIN(evt_train_nidome)
     CALL(evt_map_checkanim, STRING("shadanki"), LW(0), LW(1))
     WAIT_MS(LW(1))
     CALL(evt_snd_sfxoff, LW(10))
+    // Everyone vanishes from the platform and the train pulls out, outbound or on the return trip.
     SET_VALUE(GF(15), 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("eki_03_S"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group614"), MAP_OBJ_FLAG_HIDDEN)
@@ -616,6 +631,7 @@ EVT_BEGIN(evt_train_nidome)
         SPAWN_EVENT(PTR(hom_10_evt_resha_start2))
     END_IF
     WAIT_MS(10000)
+    // The train is marked as departed, the trip leg is set and the map changes to the train (rsh_02_c).
     SET_VALUE(GSWF_HOM_TRAIN_BOARDED_UNUSED, 1)
     SET_VALUE(GSWF_HOM_BOARDED_AT_RIVERSIDE_UNUSED, 1)
     WAIT_FRAMES(1)
@@ -630,7 +646,13 @@ EVT_BEGIN(evt_train_nidome)
     RETURN
 EVT_END()
 
+/**
+ * Arrival cutscene at Riverside Station (story before 27):
+ * the Excess Express pulls in, the doors open, the fake Zip Toad and Pennington step off, the fake turns into
+ * Doopliss, who speaks and hops away, the story becomes "Riverside Station" and the map changes to rsh_02_b.
+ */
 EVT_BEGIN(evt_hom_touchaku)
+    // The party is hidden and the platform NPCs are moved off screen.
     CALL(evt_snd_bgm_scope, 0, 1)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -646,6 +668,7 @@ EVT_BEGIN(evt_hom_touchaku)
     CALL(evt_npc_set_ry, STRING(/*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3"), 90)
     CALL(evt_npc_set_position, STRING(/*"駅員2"*/"\x89\x77\x88\xF5\x32"), -750, 80, 100)
     CALL(evt_seq_wait, SEQ_GAME)
+    // A caption is shown while the Excess Express rolls into the platform and stops.
     BEGIN_INLINE_EVENT
         WAIT_MS(3000)
         CALL(evt_telop_entry, 11)
@@ -661,6 +684,7 @@ EVT_BEGIN(evt_hom_touchaku)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(1000)
+    // The camera moves to the door; Pennington and the fake Zip Toad step off while the door opens and closes.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, -810, 232, 628, -810, 137, 87, 0, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
@@ -702,6 +726,7 @@ EVT_BEGIN(evt_hom_touchaku)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(1)
     END_IF
+    // The fake Zip Toad turns around, then changes into Doopliss in a puff of smoke.
     LOOP(3)
         CALL(evt_npc_reverse_ry, STRING(/*"トロン"*/"\x83\x67\x83\x8D\x83\x93"))
         WAIT_MS(500)
@@ -724,6 +749,7 @@ EVT_BEGIN(evt_hom_touchaku)
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -780, 194, 481, -780, 125, 87, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+    // Doopliss says his piece and hops away across the platform.
     CALL(evt_msg_print, 0, STRING("stg6_hom_01_02"), 0, STRING(/*"ランペル"*/"\x83\x89\x83\x93\x83\x79\x83\x8B"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -780, 259, 776, -780, 137, 87, 500, EASING_SINE_IN_OUT)
@@ -740,11 +766,16 @@ EVT_BEGIN(evt_hom_touchaku)
         END_IF
     END_LOOP
     CALL(evt_snd_bgm_scope, 0, 0)
+    // The story advances to Riverside Station and the map changes to rsh_02_b.
     SET_VALUE(GSW_STORY_PROGRESS, STG6_27_RIVERSIDE_STATION)
     CALL(evt_bero_mapchange, STRING("rsh_02_b"), STRING("hom_touchaku"))
     RETURN
 EVT_END()
 
+/**
+ * Arrival cutscene on the second visit (entering through "nidome"):
+ * the train pulls in, GSWF_TRAIN_AT_RIVERSIDE is set and the map changes to rsh_02_b.
+ */
 EVT_BEGIN(evt_hom_touchaku_nidome)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -766,7 +797,15 @@ EVT_BEGIN(evt_hom_touchaku_nidome)
     RETURN
 EVT_END()
 
+/**
+ * Riverside Station platform (hom_00) map init:
+ * sets up the NPCs, music, save block and recovery block, the train on the correct side,
+ * the sun's heat-haze effect and glare, the station clock,
+ * the drawbridge and the locked station door (opened with the Station Key),
+ * and starts the arrival or drawbridge scene as the story requires.
+ */
 EVT_BEGIN(hom_00_init_evt)
+    // NPCs, music, ambience, the save block and the recovery block.
     SET_VALUE(GF(15), 0)
 #ifdef VERSION_G8ME01
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hasi_L"), MAP_OBJ_FLAG_CLIP)
@@ -778,6 +817,7 @@ EVT_BEGIN(hom_00_init_evt)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -175, 140, -170, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 15, -125, 140, -170, 0, 0)
+    // The train is placed on the correct side of the platform.
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(PTR(hom_10_evt_resha_right))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
@@ -797,6 +837,7 @@ EVT_BEGIN(hom_00_init_evt)
             END_IF
         END_IF
     END_IF
+    // The sun's heat haze and glare, and the station clock hands.
     CALL(evt_map_set_tevcallback, 2, PTR(sun_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sun"), MAP_OBJ_TEV_CALLBACK(2))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sun"), MAP_OBJ_FLAG_DISPLAY_LIST)
@@ -812,6 +853,7 @@ EVT_BEGIN(hom_00_init_evt)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
+    // The drawbridge scene, the doors, and the arrival scenes of the first and second visits.
     IF_INT_EQUAL(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
         SPAWN_EVENT(PTR(evt_bridge_down))
         RETURN
@@ -851,6 +893,10 @@ EVT_BEGIN(hom_00_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Texture-environment callback for the sun: every frame it fills a 64x64 indirect texture with a scrolling sine
+ * wave and sets up an indirect warp so the sun shimmers like a heat haze.
+ */
 static void sun_tev(MapTevCallbackInfo* info) {
     static const s32 texmtx_tbl[] = {
         GX_TEXMTX0, GX_TEXMTX1, GX_TEXMTX2, GX_TEXMTX3, GX_TEXMTX4,

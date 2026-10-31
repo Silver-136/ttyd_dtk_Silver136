@@ -54,6 +54,10 @@ EVT_BEGIN(evt_gazigazi)
     RETURN
 EVT_END()
 
+/**
+ * Shakes the camera as Mario lands back on solid ground after a damage return;
+ * uses a shorter shake in background (2D) mode.
+ */
 void marioDmgRetQuakeOn(void) {
     EvtWord* evt;
     if (marioBgmodeChk() == 0) {

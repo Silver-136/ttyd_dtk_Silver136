@@ -472,6 +472,11 @@ EVT_BEGIN(sanders_party_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * Bobbery's lecture after he joins (lecture_friends_15 and 16):
+ * his field move is demonstrated with evt_party_thunders_use while the camera pans,
+ * then he strikes a pose (O_1) and returns to standing (S_1).
+ */
 EVT_BEGIN(sanders_party_lecture)
     CALL(evt_msg_print, 0, STRING("lecture_friends_15_0_1"), 0, 0)
     CALL(evt_msg_print, 0, STRING("lecture_friends_15_1"), 0, 0)
@@ -492,6 +497,10 @@ EVT_BEGIN(sanders_party_lecture)
     RETURN
 EVT_END()
 
+/**
+ * Sub-event of the partner lecture: holds the current music
+ * and plays the get-partner jingle on channel 1 for two seconds.
+ */
 static EVT_BEGIN(all_party_lecture_otosub)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GET_PARTY1"))
@@ -511,6 +520,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_npc_get_position, LW(8), LW(0), LW(1), LW(2))
         CALL(evt_npc_get_dir, LW(8), LW(3))
         CALL(evt_npc_set_position, LW(8), 0, -1000, 0)
+        // The partner joins the party and the item-get backdrop appears behind him.
         CALL(evt_pouch_party_join, LW(9))
         CALL(evt_mario_set_party_pos, 0, LW(9), LW(0), LW(1), LW(2))
         CALL(set_dir, LW(3))
@@ -525,6 +535,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     SWITCH(LW(9))
         CASE_EQUAL(1)
+        // A system message announces the new partner.
         CALL(evt_msg_print, 0, STRING("lecture_friends_00"), 0, 0)
         CASE_EQUAL(2)
         CALL(evt_msg_print, 0, STRING("lecture_friends_04"), 0, 0)
@@ -555,6 +566,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_npc_stop_for_event)
     WAIT_MS(1000)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
+    // The lecture music starts and the partner demonstrates his moves.
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_LECTURE1"))
     CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(lect_cam_save)
@@ -583,6 +595,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(lect_test_systemlevel)
     SWITCH(LW(9))
         CASE_EQUAL(3)
+        // Bobbery gets his own demonstration set up first.
         CALL_CHILD(PTR(sanders_party_lecture_init))
     END_SWITCH
     LOOP(6)
@@ -622,6 +635,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    // The lecture ends: the music resumes and the camera goes back to normal.
     CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_PARTY_LECTURE1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
     CALL(evt_img_wait_animend, STRING("img"))
@@ -635,6 +649,10 @@ EVT_BEGIN(all_party_lecture)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: switches on the hit boxes of the map object named args[0] (or the calling object for "me")
+ * so it can be hit again.
+ */
 static USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;
@@ -646,6 +664,7 @@ static USER_FUNC(lect_mobj_hit_nasi) {
         mobj = event->thisMapObj;
     }
     for (i = 0; i < 2; i++) {
+        // name is an array inside MapObjectHitEntry, so the NULL test is always true (as in the game); strcmp does the work
         if (mobj->hitObj[i].name != NULL && strcmp(mobj->hitObj[i].name, "") != 0) {
             hitGrpFlagOn(mobj->hitObj[i].name, HIT_FLAG_OFF);
         }

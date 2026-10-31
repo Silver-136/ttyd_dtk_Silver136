@@ -1219,6 +1219,7 @@ EVT_BEGIN(marioAttackEvent_Genki0)
     RETURN
 EVT_END()
 
+/** Attack event of Sweet Feast (marioWeapon_Genki1): runs genki_evt_common in mode 1. */
 EVT_BEGIN(marioAttackEvent_Genki1)
     SET_VALUE(LW(15), 1)
     CALL_CHILD(genki_evt_common)
@@ -1325,6 +1326,10 @@ EVT_BEGIN(genki_evt_common)
     RETURN
 EVT_END()
 
+/**
+ * Cures the unit in LW(9) of sleep, stop, dizzy, poison, confusion, burn, freeze, tiny, attack down,
+ * defense down and slow, then clears the command-blocking turns (recover_cmd_disable).
+ */
 EVT_BEGIN(status_recover_evt)
     CALL(btlevtcmd_CheckStatus, LW(9), STATUS_SLEEP, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1375,6 +1380,7 @@ EVT_BEGIN(status_recover_evt)
 EVT_END()
 
 
+/** The minigame's work area, kept in the battle's shared action-command work buffer. */
 static GenkiWork* get_ptr(void) {
     return (GenkiWork*)_battleWorkPointer->actionCommands.work;
 }

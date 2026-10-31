@@ -279,8 +279,11 @@ EVT_END()
  */
 EVT_BEGIN(evt_gon_04flowblock_updown1)
     SET_TYPE(239)
+    // The switch is disabled while the block moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
+        // Decide the direction from the saved state (only the ELSE arm below can run): with LSWF(6) clear the
+        // block is high and sinks 225 units, with it set the block is low and rises.
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(1, 0)
             IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
@@ -333,6 +336,8 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
 #else
         END_SIBLING_EVENT
 #endif
+        // The camera shakes and the block starts to move, with a heavy or light floating-block sound depending
+        // on its size.
         WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("mobj_fltbl01"), LW(12), LW(13), LW(14))
         CALL(evt_mobj_get_kindname, STRING("mobj_fltbl01"), LW(11))
@@ -361,6 +366,8 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
             END_IF
         END_IF
+        // The block moves a little each frame; if a sinking block comes down on Mario's head it turns back
+        // up, its state flag is flipped and the switch is reset.
         SET_FLOAT_VALUE(LW(4), LW(2))
         SET_VALUE(LF(0), 0)
         LOOP(0)
@@ -420,6 +427,8 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
+        // The block reaches its destination and the moving sound stops; a block that has sunk stops with a
+        // thump and a screen shake.
         IF_INT_EQUAL(LF(1), 0)
             CALL(evt_snd_sfxoff, LW(15))
         END_IF
@@ -466,11 +475,14 @@ EVT_BEGIN(evt_gon_04flowblock_updown1)
 #endif
             WAIT_MS(1000)
         END_IF
+        // The block's saved up/down state is flipped.
         IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
             SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 1)
             ELSE
             SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_1_MOVED, 0)
         END_IF
+        // Dead code: IF_INT_NOT_EQUAL(1, 0) is always true, so this branch (the switch just resetting after a
+        // short wait) never runs.
         ELSE
         CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw01"))
         SET_VALUE(LW(0), 0)
@@ -518,8 +530,12 @@ EVT_END()
 // This switch moves block 2 only after the large level-1 block has been broken.
 EVT_BEGIN(evt_gon_04flowblock_updown2)
     SET_TYPE(239)
+    // The switch is disabled while the block moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(GSWF_GON_04_LV1_BIG_BLOCK_BROKEN, 0)
+        // The block only moves once big block A in this room has been broken.
+        // Decide the direction from the saved state: a low block will rise 200 units, a raised one will sink
+        // back.
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(0, 0)
             IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
@@ -572,6 +588,8 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
 #else
         END_SIBLING_EVENT
 #endif
+        // The camera shakes and the block starts to move, with a heavy or light floating-block sound depending
+        // on its size.
         WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("mobj_fltbl02"), LW(12), LW(13), LW(14))
         CALL(evt_mobj_get_kindname, STRING("mobj_fltbl02"), LW(11))
@@ -600,6 +618,8 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_S_FLOAT_DOWN1"), LW(12), LW(13), LW(14), LW(15))
             END_IF
         END_IF
+        // The block moves a little each frame; if a sinking block comes down on Mario's head it turns back
+        // up, its state flag is flipped and the switch is reset.
         SET_FLOAT_VALUE(LW(4), LW(2))
         SET_VALUE(LF(0), 0)
         LOOP(0)
@@ -659,6 +679,8 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
+        // The block reaches its destination and the moving sound stops; a block that has sunk stops with a
+        // thump and a screen shake.
         IF_INT_EQUAL(LF(1), 0)
             CALL(evt_snd_sfxoff, LW(15))
         END_IF
@@ -705,11 +727,13 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
 #endif
             WAIT_MS(1000)
         END_IF
+        // The block's saved up/down state is flipped.
         IF_INT_EQUAL(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
             SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 1)
             ELSE
             SET_VALUE(LSWF_GON_04_FLOAT_BLOCK_2_MOVED, 0)
         END_IF
+        // Big block A is not broken yet: the block stays put and the switch resets after a short wait.
         ELSE
         CALL(evt_mobj_exec_cancel, STRING("mobj_fltsw02"))
         SET_VALUE(LW(0), 0)

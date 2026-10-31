@@ -104,6 +104,11 @@ static EVT_BEGIN(evt_chorobon)
     RETURN
 EVT_END()
 
+/**
+ * Petal Meadows hei_08 map init: sets the fortress music and reverb and the water effect;
+ * until the Moon Stone is taken, parks the Fuzzy above the room
+ * and places the Moon Stone item whose pickup runs evt_chorobon; later the Fuzzy gets its battle info back.
+ */
 EVT_BEGIN(hei_08_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
@@ -136,6 +141,7 @@ EVT_BEGIN(hei_08_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: removes the whole Fuzzy (Chorobon) group from the map after the fight. */
 static USER_FUNC(npc_dead) {
     // チョロボン
     npcGroupDead(npcNameToPtr("\x83\x60\x83\x87\x83\x8D\x83\x7B\x83\x93"), FALSE);

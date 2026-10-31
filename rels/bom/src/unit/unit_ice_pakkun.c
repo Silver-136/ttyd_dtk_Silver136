@@ -285,6 +285,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table event 37, run by the default damage event when an attacker is hurt by the Frost Piranha's spiky head
+ * (damage code 31): it flinches (pose type 31, 250 ms), returns to its idle pose PKF_S_1 and flashes the
+ * "toge_flush" spike effect above its head, 50 units up (63 when Huge, 37 when Tiny).
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE_GUARDED)
     WAIT_MS(250)
@@ -307,6 +312,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Frost Piranha: runs the default damage script with LW(10) = -2 and LW(11) = 1. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -314,6 +320,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Reaction when the Frost Piranha is hurt by a counter:
+ * plays the damage pose PKF_D_1 for a second and, if the hit carries damage code 512 (and not 2048),
+ * returns to its place via return_event.
+ */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_D_1"))
     WAIT_MS(1000)
@@ -328,6 +339,11 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Script run when the ceiling-hanging Frost Piranha is made to fall (the ceil-fall hook):
+ * it ducks, drops to the ground at its home position with its ground hit offsets and pose table restored,
+ * and settles in pose PKF_S_1.
+ */
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -362,6 +378,12 @@ static EVT_BEGIN(ceil_fall_ready_event)
     RETURN
 EVT_END()
 
+/**
+ * Brings the Frost Piranha back to its place after an attack:
+ * if a ceiling exists (pakkun_ceil_exist) it randomly goes back to the ground
+ * or hangs from the ceiling at height 130 (upside-down hit offsets, ceiling pose table and the ceil-fall hook),
+ * otherwise it returns to the ground.
+ */
 static EVT_BEGIN(return_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(pakkun_ceil_exist, LW(0))
@@ -428,7 +450,14 @@ static EVT_BEGIN(return_event)
     RETURN
 EVT_END()
 
+/**
+ * The Frost Piranha's bite: picks a target (the first-attack target on a pre-emptive strike),
+ * rises from its position (ground or ceiling), swings its head in the bite poses (PKF_A_1A to 1C,
+ * SFX_ENM_PAKKUN_ATTACK1) and checks the damage;
+ * a miss makes the target dodge, a hit applies it with guard flag 256; then it returns via return_event.
+ */
 static EVT_BEGIN(normal_attack_event)
+    // Choose the target: the First Strike victim, otherwise a sampled opposing unit.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
@@ -438,6 +467,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     END_IF
+    // No valid target: a confused Frost Piranha is flustered, otherwise the turn is skipped.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -446,10 +476,12 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
+    // The attack is declared and the guard window opens.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
+    // It sinks out of sight, its shadow shrinking (on the ceiling it retracts the other way).
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_small, UNIT_ID_SELF)
@@ -461,6 +493,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_4"))
     END_IF
     WAIT_MS(300)
+    // Out of sight it moves to a spot beside the target and turns to face it.
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -469,11 +502,13 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(500)
+    // The camera follows it.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
+    // It shoots up in front of the target, its shadow growing back.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_return, UNIT_ID_SELF)
@@ -482,12 +517,14 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
     WAIT_MS(150)
+    // The bite: its head swings through the bite poses (PKF_A_1A to 1C).
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1A"))
     WAIT_MS(200)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1B"))
     WAIT_MS(200)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1C"))
+    // Hit check: a miss or dodge ends the bite, a hit goes on to the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -513,6 +550,7 @@ static EVT_BEGIN(normal_attack_event)
     LABEL(90)
     GOTO(98)
     LABEL(91)
+    // Hit: the camera shakes and the damage is dealt with the action-command result.
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
@@ -520,6 +558,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(98)
     LABEL(98)
+    // Retreat: it returns to its hole (return_event).
     WAIT_MS(500)
     CALL_CHILD(return_event)
     LABEL(99)
@@ -527,11 +566,18 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/** Wait script of the Frost Piranha: shows its idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (args[0] is a battle unit): grows part 1's shadow back from zero to the scale saved by
+ * shadow_scale_memory over 15 frames; blocks until done.
+ * return_event, ceil_fall_ready_event and normal_attack_event run it as the Frost Piranha pops back out
+ * (on the ground or hanging from the ceiling) after ducking out of sight.
+ */
 static USER_FUNC(shadow_scale_return) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

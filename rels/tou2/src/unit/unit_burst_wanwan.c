@@ -247,6 +247,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Runs alongside the Red Chomp for the whole battle:
+ * every frame calls chain_main to update the chain links, until the unit no longer exists.
+ */
 static EVT_BEGIN(chain_event)
     LABEL(0)
     WAIT_FRAMES(1)
@@ -260,6 +264,11 @@ static EVT_BEGIN(chain_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Red Chomp: sets unit work 0 to 1 and work 2 to 2 and,
+ * with attribute 4 (UNIT_ATTR_FLOATING) set on it, runs the default damage reaction,
+ * then clears the attribute and unit work 2.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -350,7 +359,17 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Red Chomp: uses an enemy item if one fits,
+ * otherwise picks a target (BATTLE_FLAG_FIRST_ATTACK uses the first-strike target),
+ * hops twice on the spot barking, then lunges at the target on its chain
+ * and bites (damage with weapon_wanwan_attack).
+ * A miss falls short and it pulls back; a hit shakes the camera first.
+ * A confused unit with no target runs subsetevt_confuse_flustered. It always ends back in the wait event.
+ */
 static EVT_BEGIN(attack_event)
+    // Choose the target: the First Strike target if the battle opened with one,
+    // otherwise it may use an item or pick a normal target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
@@ -366,6 +385,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_wanwan_attack))
         CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_wanwan_attack), LW(3), LW(4))
     END_IF
+    // No target left: a confused Red Chomp is flustered; either way it ends its turn.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -374,6 +394,7 @@ static EVT_BEGIN(attack_event)
         END_IF
         GOTO(99)
     END_IF
+    // The attack is announced and the Chomp turns toward the target; its idle animation stops.
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, 127)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, LW(14))
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_wanwan_attack))
@@ -384,11 +405,13 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_ChangePartsFaceDirection, UNIT_ID_SELF, 1, LW(15))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
+    // The camera frames the Chomp and its target.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_PART_TO_PART)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_A_1"))
+    // The Chomp hops twice on the spot, barking.
     LOOP(2)
         CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 1, 20, 0, FLOAT(0.69921875f))
@@ -400,6 +423,7 @@ static EVT_BEGIN(attack_event)
         END_SIBLING_EVENT
         CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 1, LW(0), 0, LW(2), 20, MOVE_SOUND_FROM_TABLE)
     END_LOOP
+    // It rears back on its chain, then lunges at the target with a bark.
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(20)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_S_1A"))
@@ -418,6 +442,7 @@ static EVT_BEGIN(attack_event)
     END_IF
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 1, 0, FLOAT(16.0f), FLOAT(0.0f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 1, LW(0), LW(1), 10, 0, MOVE_SOUND_FROM_TABLE)
+    // Check how the target defends against the bite.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_wanwan_attack), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -440,6 +465,7 @@ static EVT_BEGIN(attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // The target dodged: the Chomp falls short and pulls back in.
     LABEL(90)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT1"), LW(14), 0, EVT_NULLPTR)
@@ -448,6 +474,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 1, 0, FLOAT(8.0f), FLOAT(0.0f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
     GOTO(98)
+    // The bite lands: the camera shakes, the damage is dealt and the Chomp pulls back in.
     LABEL(91)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -461,6 +488,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 1, 0, FLOAT(8.0f), FLOAT(0.25f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
     GOTO(98)
+    // The camera returns and the Chomp goes back to its idle animation.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(250)
@@ -471,8 +499,16 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Idle behaviour of the Red Chomp, chosen by status: asleep (status 1) it rocks slowly in "WAN_N_1";
+ * stopped or frozen (2, 9) it stays in "WAN_Y_1" making occasional sounds;
+ * confused, poisoned or dizzy (5, 4, 3) it hops in a looping series of landings;
+ * otherwise it hops in place in a similar loop with its barking poses.
+ * The loops run as sibling events with the bark sounds from wait_sound_event1 and wait_sound_event2.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_MODE, 0)
+    // Asleep: the Red Chomp sways slowly from side to side in its sleeping pose.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_SLEEP, LW(15))
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_MODE, 2)
@@ -495,6 +531,7 @@ static EVT_BEGIN(wait_event)
         END_SIBLING_EVENT
         GOTO(98)
     END_IF
+    // Stopped or frozen: it stays still in its stunned pose, making an occasional sound.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_STOP, LW(14))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_FREEZE, LW(15))
     OR(LW(15), LW(14))
@@ -510,6 +547,8 @@ static EVT_BEGIN(wait_event)
         END_SIBLING_EVENT
         GOTO(98)
     END_IF
+    // Confused, poisoned or dizzy: it keeps hopping in place in a looping series of landings,
+    // barking out of time.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CONFUSE, LW(13))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_POISON, LW(14))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DIZZY, LW(15))
@@ -550,6 +589,7 @@ static EVT_BEGIN(wait_event)
         END_SIBLING_EVENT
         GOTO(98)
     END_IF
+    // Otherwise it keeps hopping in place, alternating barking poses with each landing.
     BEGIN_SIBLING_EVENT
         LABEL(4)
         CALL_CHILD(sound_gensui_event)
@@ -593,6 +633,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Lowers the Red Chomp's sound volume in unit work 1 to 70% of its value each call,
+ * with a floor of 32 ("gensui" is attenuation); wait_event uses it so the idle barks fade.
+ */
 static EVT_BEGIN(sound_gensui_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, LW(11))
     MULTIPLY_FLOAT(LW(11), FLOAT(0.69921875f))
@@ -603,6 +647,10 @@ static EVT_BEGIN(sound_gensui_event)
     RETURN
 EVT_END()
 
+/**
+ * Plays the first two bark sounds of a hop at the unit's current volume (LW(11)),
+ * then the third after LW(10) frames.
+ */
 static EVT_BEGIN(wait_sound_event1)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT1"), LW(11), 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT3"), LW(11), 0, EVT_NULLPTR)
@@ -611,6 +659,7 @@ static EVT_BEGIN(wait_sound_event1)
     RETURN
 EVT_END()
 
+/** Plays the fourth bark sound ("SFX_ENM_WAN_WAIT4") after LW(10) frames, at the unit's current volume (LW(11)). */
 static EVT_BEGIN(wait_sound_event2)
     WAIT_FRAMES(LW(10))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT4"), LW(11), 0, EVT_NULLPTR)

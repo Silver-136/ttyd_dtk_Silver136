@@ -108,6 +108,10 @@ EVT_BEGIN(shuryolight_pow_normal)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the power lamp in its "blinking" state (used while Grodus is angry or the barrier is active):
+ * lit for 0.7 to 4.7 seconds, then dim for 200 ms, repeated forever.
+ */
 EVT_BEGIN(shuryolight_pow_tenmetu)
     LOOP(0)
         CALL(evt_shuryolight_set_anim, 0, 1)
@@ -122,6 +126,10 @@ EVT_BEGIN(shuryolight_pow_tenmetu)
     RETURN
 EVT_END()
 
+/**
+ * Event script: idle pattern of the three head lamps:
+ * lights 3, 2 and 1 light up in turn, 400 ms each, with a longer pause between rounds.
+ */
 EVT_BEGIN(shuryolight_head_normal)
     SET_VALUE(LW(0), 3)
     LOOP(0)
@@ -137,6 +145,10 @@ EVT_BEGIN(shuryolight_head_normal)
     RETURN
 EVT_END()
 
+/**
+ * Event script: makes the three head lamps blink together in animation 4 (the fast blink),
+ * waiting for the first animation to end each round.
+ */
 EVT_BEGIN(shuryolight_head_tenmetu)
     LOOP(0)
         CALL(evt_shuryolight_set_anim, 1, 4)
@@ -147,6 +159,7 @@ EVT_BEGIN(shuryolight_head_tenmetu)
     RETURN
 EVT_END()
 
+/** Event script: switches the three head lamps off (animation 3). */
 EVT_BEGIN(shuryolight_head_off)
     CALL(evt_shuryolight_set_anim, 1, 3)
     CALL(evt_shuryolight_set_anim, 2, 3)
@@ -154,6 +167,10 @@ EVT_BEGIN(shuryolight_head_off)
     RETURN
 EVT_END()
 
+/**
+ * Event script: loops the staff light (light 4) through its four animations:
+ * start, hold for a second, end, hold for a second.
+ */
 EVT_BEGIN(shuryolight_tue_normal)
     LOOP(0)
         CALL(evt_shuryolight_set_anim, 4, 0)
@@ -168,6 +185,10 @@ EVT_BEGIN(shuryolight_tue_normal)
     RETURN
 EVT_END()
 
+/**
+ * Display callback for Grodus's lamps: when the pose group being drawn is one of the lamp locators,
+ * draws that lamp's shape (on newer versions after advancing its animation).
+ */
 static void shuryolight_callback(void* param, s32 group, Mtx* modeling) {
     ShuryoLight* lights = param;
     s32 i;

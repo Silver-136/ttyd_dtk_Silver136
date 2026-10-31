@@ -331,6 +331,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage script of the Boo: runs the default damage handling on itself. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), -2)
     SET_VALUE(LW(11), 1)
@@ -404,7 +405,15 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * The Boo's normal attack: it picks a target, fades out,
+ * reappears in front of it with SFX_ENM_TELESA_ATTACK1 and swipes in pose A_2.
+ * A hit deals damage with a small camera shake; a miss leaves it covering its face (X_1).
+ * It then turns around and floats back home.
+ */
 static EVT_BEGIN(normal_attack_event)
+    // Pick the target (the one already chosen after a First Strike, otherwise sampled from the enemies); a
+    // confused Boo with nobody to hit just gets flustered.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -421,6 +430,7 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
+    // Declare the attack and frame the target with the camera.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_teresa_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -429,6 +439,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
+    // The Boo floats toward the target, fading out and back in as it goes.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TELESA_MOVE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
@@ -450,6 +461,7 @@ static EVT_BEGIN(normal_attack_event)
             CALL(btlevtcmd_SetAlpha, UNIT_ID_SELF, 1, LW(7))
         END_LOOP
     END_SIBLING_EVENT
+    // It reappears right in front of the target, turning to face it.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 15)
     ADD(LW(2), 5)
@@ -463,8 +475,10 @@ static EVT_BEGIN(normal_attack_event)
         WAIT_FRAMES(9)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_TELESA_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
+    // The swipe, with its attack cry.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2"))
     WAIT_FRAMES(15)
+    // Find out whether the swipe connects.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_teresa_attack), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -486,11 +500,13 @@ static EVT_BEGIN(normal_attack_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+        // Miss or dodge: the Boo waits, then covers its face in embarrassment (X_1).
         LABEL(90)
         WAIT_FRAMES(30)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("X_1"))
         WAIT_FRAMES(60)
         GOTO(98)
+        // Hit: a small camera shake and the damage is dealt.
         LABEL(91)
         CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -499,6 +515,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_teresa_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
         WAIT_FRAMES(30)
         GOTO(98)
+        // Spin around and float back home.
         LABEL(98)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
@@ -510,6 +527,12 @@ static EVT_BEGIN(normal_attack_event)
         RETURN
 EVT_END()
 
+/**
+ * The Boo makes itself invisible: it declares an attack on itself,
+ * spins and fades out (unless it already is invisible, status 18),
+ * and the weapon (weapon_teresa_trans_myself: a sure status 18, Invisible, for 2 turns) applies the invisibility
+ * to it.
+ */
 static EVT_BEGIN(trans_myself_event)
     SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
@@ -668,6 +691,13 @@ static EVT_BEGIN(move_event)
     RETURN
 EVT_END()
 
+/**
+ * Per-Boo part of move_event for the unit in LW(3):
+ * after a delay (none for the casting Boo itself,
+ * 60 to 79 frames for the others) it sets that Boo's unit work 0 to 1, sets attributes 0x600000 on part 1,
+ * spins it for 60 frames while the caster speaks (pose T_1), and raises it to y 40 with SFX_ENM_TELESA_MOVE1,
+ * which becomes its new home position.
+ */
 static EVT_BEGIN(move_event_sub)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(1))
     IF_INT_EQUAL(LW(3), LW(1))
@@ -702,11 +732,16 @@ static EVT_BEGIN(move_event_sub)
     RETURN
 EVT_END()
 
+/** Wait script: plays the Boo's idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Battle script helper: sets args[1] to 1 when at least one other Boo
+ * or Dark Boo that has no status 0x12 is on the field, else 0.
+ */
 static USER_FUNC(teresa_check_trans) {
     EvtWord* args = event->args;
     s32 eligibleCount = 0;

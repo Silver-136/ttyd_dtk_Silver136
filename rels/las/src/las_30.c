@@ -140,6 +140,7 @@ static EVT_BEGIN(rousoku_init)
     RETURN
 EVT_END()
 
+/** Event script: the first treasure chest of las_30 opens and Mario receives an Ultra Shroom. */
 static EVT_BEGIN(mobj_box01)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
@@ -151,6 +152,7 @@ static EVT_BEGIN(mobj_box01)
     RETURN
 EVT_END()
 
+/** Event script: the second treasure chest of las_30 opens and Mario receives a Jammin' Jelly. */
 static EVT_BEGIN(mobj_box02)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box02"), LW(0), LW(1), LW(2))
@@ -162,6 +164,11 @@ static EVT_BEGIN(mobj_box02)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_30, the long stairs between las_28 and las_29:
+ * at STORY_STG8_15_GRODUS the danger music plays, otherwise silence with the Palace ambience;
+ * a save block, a recovery block, two chests (an Ultra Shroom and a Jammin' Jelly) and the torches.
+ */
 EVT_BEGIN(las_30_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER2"))
@@ -182,6 +189,7 @@ EVT_BEGIN(las_30_init_evt)
     RETURN
 EVT_END_PAD()
 
+/** Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1]. */
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
 

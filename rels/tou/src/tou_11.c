@@ -139,6 +139,7 @@ static NpcSetupInfo npcEnt[] = {
 
 // Mark this scene seen before starting the guard choreography and map transition.
 EVT_BEGIN(evt_tojikome)
+    // Plays only once, with the music stopped.
     IF_INT_EQUAL(GSWF_TOU_11_LOCKED_IN_SEEN, 1)
         RETURN
     END_IF
@@ -151,6 +152,7 @@ EVT_BEGIN(evt_tojikome)
     CALL(evt_npc_set_position, STRING("ガードマン"), 0, 0, -160)
     CALL(evt_npc_status_onoff, 1, STRING("ガードマン"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_seq_wait, SEQ_GAME)
+    // The guard opens the door and leads Mario and the partner into the room.
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
@@ -193,6 +195,7 @@ EVT_BEGIN(evt_tojikome)
     CALL(evt_mario_mov_pos2, 0, -80, FLOAT(60.0f))
     CALL(evt_mario_mov_pos2, 30, -80, FLOAT(60.0f))
     CALL(evt_mario_set_dir_npc, STRING("ガードマン"))
+    // The guard tells them to wait here and they look puzzled.
     CALL(evt_msg_print, 0, STRING("stg3_tou_409"), 0, STRING("ガードマン"))
     WAIT_MS(300)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -200,6 +203,7 @@ EVT_BEGIN(evt_tojikome)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("m"), 0, 1, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING("p"), 0, 1, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(500)
+    // He leaves through the door, which shuts behind him.
     CALL(evt_npc_move_position, STRING("ガードマン"), 0, -100, 0, FLOAT(70.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -225,6 +229,7 @@ EVT_BEGIN(evt_tojikome)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_npc_move_position, STRING("ガードマン"), 0, -200, 0, FLOAT(70.0f), 1)
+    // The partner wonders why they are in a minor-league locker room, then the scene irises to the arena.
     CALL(evt_party_stop, 0)
     CALL(evt_msg_print_party, STRING("stg3_tou_409_01"))
     WAIT_MS(1000)

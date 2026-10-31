@@ -262,6 +262,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 static EVT_BEGIN(poisongas_event)
+    // The Puff picks a target from the opposing side; with none it gives up (flustered if confused).
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -273,6 +274,7 @@ static EVT_BEGIN(poisongas_event)
         END_IF
         GOTO(99)
     END_IF
+    // Declare an attack on every opposing unit and pay the cost.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
@@ -291,6 +293,8 @@ static EVT_BEGIN(poisongas_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3A"))
     WAIT_FRAMES(20)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3B"))
+    // The poison barrier drops and, in a side script,
+    // green gas puffs spray across the targets' side of the stage.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_OffPartsCounterAttribute, UNIT_ID_SELF, 1, kCounterPoisonStatus)
     BEGIN_SIBLING_EVENT
@@ -310,6 +314,8 @@ static EVT_BEGIN(poisongas_event)
     WAIT_FRAMES(10)
     SET_VALUE(LW(6), 0)
     LABEL(0)
+    // Each target in turn: the pre-check decides whether it avoids the gas;
+    // the first hit also resolves the guard result.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -349,6 +355,7 @@ static EVT_BEGIN(poisongas_event)
     END_IF
     GOTO(0)
     LABEL(98)
+    // After the last target the Puff pauses, drifts back to its home position and returns to its idle pose.
     WAIT_FRAMES(60)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE3"), EVT_NULLPTR, 0, LW(15))
@@ -412,6 +419,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Background loop on the Poison Puff: every 31 frames, while its poison barrier is up,
+ * spawns the green poison cloud around it (eff_poison_barrier); ends when the unit is gone.
+ */
 static EVT_BEGIN(barrier_event)
     LABEL(0)
     WAIT_FRAMES(31)
@@ -428,6 +439,11 @@ static EVT_BEGIN(barrier_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table event 48, which the default damage script runs
+ * when the player strikes first (damage code 0x39 from battle_seq.c):
+ * drops the Puff to height 10 so it can be hit and waits for the attack to end.
+ */
 static EVT_BEGIN(dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 10)
@@ -436,6 +452,10 @@ static EVT_BEGIN(dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * Damage handler: runs the shared default damage script (btldefaultevt_Damage) with its default parameters
+ * (LW(10) = -2, LW(11) = 1).
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -443,10 +463,18 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Counter handler of the Poison Puff: empty, it does nothing. */
 static EVT_BEGIN(counter_event)
     RETURN
 EVT_END()
 
+/**
+ * Before the player's phase, if the Puff can act and its barrier is down, with a 25% chance it changes height:
+ * from high (unit work 0 = 0) it dives to height 10,
+ * where hammers and shell tosses can reach it (unit work 0 = 1);
+ * from low it rises to height 40 and turns PART_ATTR_HAMMERLIKE_CANNOT_TARGET
+ * and PART_ATTR_SHELL_TOSSLIKE_CANNOT_TARGET back on. The new height becomes its home.
+ */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_EQUAL(LW(0), 0)
@@ -485,7 +513,14 @@ static EVT_BEGIN(unison_phase_event)
     RETURN
 EVT_END()
 
+/**
+ * The Poison Puff's body slam (weapon_dokugassun_attack, 8 damage to one enemy):
+ * picks a target (or the first-strike target), floats over, squashes and rises,
+ * then dives onto the target, handles guard and miss results and returns home.
+ */
 static EVT_BEGIN(normal_attack_event)
+    // A First Strike aims at the first-strike target;
+    // otherwise the Puff picks a target from the opposing side.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -502,6 +537,7 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
+    // Declare the attack, wait for any guard and pay the cost.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -512,6 +548,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
+    // Wind-up: the Puff trembles and shrinks for 40 frames while the camera follows it.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         LOOP(10)
@@ -528,6 +565,7 @@ static EVT_BEGIN(normal_attack_event)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+    // It rises to height 60 and leans away from the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2A"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -537,6 +575,7 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_FRAMES(10)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KUMO_MOVE2"), EVT_NULLPTR, 0, LW(15))
+    // Dive onto the target; the pre-check decides whether it is dodged or the hit lands.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(10), LW(11), LW(12))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(10), LW(11), LW(12), 40, -40, EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
@@ -566,6 +605,7 @@ static EVT_BEGIN(normal_attack_event)
     END_SWITCH
     LABEL(90)
     GOTO(98)
+    // Hit: the camera shakes, the guard result is resolved and the damage is dealt.
     LABEL(91)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -574,6 +614,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(98)
     LABEL(98)
+    // The Puff floats back up, drifts to its home position and sets its size back to normal.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 40)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(10), LW(11), LW(12))
@@ -592,6 +633,10 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: spawns three green vapor puffs around the Poison Puff (args[0]) at random offsets,
+ * sized by its size multiplier, as its poison cloud.
+ */
 static USER_FUNC(eff_poison_barrier) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

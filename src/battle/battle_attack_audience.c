@@ -273,6 +273,7 @@ EVT_BEGIN(btlataudevtDummy)
     RETURN
 EVT_END()
 
+/** Returns the unit's own "attack the audience" script (unit data slot 6), or btlataudevtDummy when it has none. */
 EvtWord* btlataudGetAttackEventPtr(s32 unitId) {
     EvtWord* p = BtlUnit_GetData(BattleGetUnitPtr(_battleWorkPointer, unitId), UNIT_DATA_ATTACK_AUDIENCE);
     if (p == NULL) {

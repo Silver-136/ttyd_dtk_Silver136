@@ -297,8 +297,10 @@ EVT_END()
  */
 static EVT_BEGIN(main_0)
     SET_TYPE(239)
+    // The switch is pressed: the block stops reacting to hits while it moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
+        // The block rises if it is down and falls if it is up (remembered in a room flag).
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(1, 0)
             IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
@@ -313,6 +315,7 @@ static EVT_BEGIN(main_0)
                 SET_VALUE(LW(10), 0)
             END_IF
         END_IF
+        // Work out the target height, 525 units from here, and the speed.
         IF_INT_EQUAL(LW(10), 0)
             CALL(evt_mobj_get_y_position, STRING("blk_0"), LW(2))
             SET_FLOAT_VALUE(LW(3), LW(2))
@@ -351,6 +354,7 @@ static EVT_BEGIN(main_0)
 #else
         END_SIBLING_EVENT
 #endif
+        // After the camera shake, the block starts to float and its movement sound plays.
         WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("blk_0"), LW(12), LW(13), LW(14))
         CALL(evt_mobj_get_kindname, STRING("blk_0"), LW(11))
@@ -381,6 +385,7 @@ static EVT_BEGIN(main_0)
         END_IF
         SET_FLOAT_VALUE(LW(4), LW(2))
         SET_VALUE(LF(0), 0)
+        // Each frame the block moves toward its target height.
         LOOP(0)
             CALL(evt_mario_get_party, LW(5))
             IF_INT_EQUAL(LW(5), 0)
@@ -399,6 +404,8 @@ static EVT_BEGIN(main_0)
             END_IF
             GOTO(2)
             LABEL(1)
+            // If a falling block lands on Mario or his partner it turns around and rises again, and the switch
+            // is cancelled.
             IF_INT_EQUAL(LW(10), 1)
                 SET_FLOAT_VALUE(LW(5), LW(2))
                 SET_FLOAT_VALUE(LW(2), LW(3))
@@ -439,8 +446,10 @@ static EVT_BEGIN(main_0)
             WAIT_FRAMES(1)
         END_LOOP
         IF_INT_EQUAL(LF(1), 0)
+            // The block has arrived: the moving sound stops.
             CALL(evt_snd_sfxoff, LW(15))
         END_IF
+        // The landing thud plays for a block that came down.
         BEGIN_INLINE_EVENT
             CALL(evt_mobj_get_position, STRING("blk_0"), LW(13), LW(14), LW(15))
             CALL(evt_mobj_get_kindname, STRING("blk_0"), LW(12))
@@ -458,6 +467,7 @@ static EVT_BEGIN(main_0)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_STOP1"), LW(13), LW(14), LW(15), 0)
             END_IF
         END_INLINE_EVENT
+        // A block that came down shakes the camera again and the scene waits a moment.
         IF_INT_EQUAL(LW(10), 1)
 #ifdef VERSION_G8ME01
             BEGIN_INLINE_EVENT
@@ -484,12 +494,14 @@ static EVT_BEGIN(main_0)
 #endif
             WAIT_MS(1000)
         END_IF
+        // Remember the block's new position for the next press.
         IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
             SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 1)
             ELSE
             SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_0_MOVED, 0)
         END_IF
         ELSE
+        // Unused: cancel the switch and wait a few frames.
         CALL(evt_mobj_exec_cancel, STRING("sw_0"))
         SET_VALUE(LW(0), 0)
         LOOP(0)
@@ -535,8 +547,10 @@ EVT_END()
  */
 EVT_BEGIN(main_1)
     SET_TYPE(239)
+    // The switch is pressed: the block stops reacting to hits while it moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
+        // The block rises if it is down and falls if it is up (remembered in a room flag).
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(0, 0)
             IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
@@ -551,6 +565,7 @@ EVT_BEGIN(main_1)
                 SET_VALUE(LW(10), 0)
             END_IF
         END_IF
+        // Work out the target height, 525 units from here, and the speed.
         IF_INT_EQUAL(LW(10), 0)
             CALL(evt_mobj_get_y_position, STRING("blk_1"), LW(2))
             SET_FLOAT_VALUE(LW(3), LW(2))
@@ -589,6 +604,7 @@ EVT_BEGIN(main_1)
 #else
         END_SIBLING_EVENT
 #endif
+        // After the camera shake, the block starts to float and its movement sound plays.
         WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("blk_1"), LW(12), LW(13), LW(14))
         CALL(evt_mobj_get_kindname, STRING("blk_1"), LW(11))
@@ -619,6 +635,7 @@ EVT_BEGIN(main_1)
         END_IF
         SET_FLOAT_VALUE(LW(4), LW(2))
         SET_VALUE(LF(0), 0)
+        // Each frame the block moves toward its target height.
         LOOP(0)
             CALL(evt_mario_get_party, LW(5))
             IF_INT_EQUAL(LW(5), 0)
@@ -637,6 +654,8 @@ EVT_BEGIN(main_1)
             END_IF
             GOTO(2)
             LABEL(1)
+            // If a falling block lands on Mario or his partner it turns around and rises again, and the switch
+            // is cancelled.
             IF_INT_EQUAL(LW(10), 1)
                 SET_FLOAT_VALUE(LW(5), LW(2))
                 SET_FLOAT_VALUE(LW(2), LW(3))
@@ -677,8 +696,10 @@ EVT_BEGIN(main_1)
             WAIT_FRAMES(1)
         END_LOOP
         IF_INT_EQUAL(LF(1), 0)
+            // The block has arrived: the moving sound stops.
             CALL(evt_snd_sfxoff, LW(15))
         END_IF
+        // The landing thud plays for a block that came down.
         BEGIN_INLINE_EVENT
             CALL(evt_mobj_get_position, STRING("blk_1"), LW(13), LW(14), LW(15))
             CALL(evt_mobj_get_kindname, STRING("blk_1"), LW(12))
@@ -696,6 +717,7 @@ EVT_BEGIN(main_1)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_STOP1"), LW(13), LW(14), LW(15), 0)
             END_IF
         END_INLINE_EVENT
+        // A block that came down shakes the camera again and the scene waits a moment.
         IF_INT_EQUAL(LW(10), 1)
 #ifdef VERSION_G8ME01
             BEGIN_INLINE_EVENT
@@ -722,12 +744,14 @@ EVT_BEGIN(main_1)
 #endif
             WAIT_MS(1000)
         END_IF
+        // Remember the block's new position for the next press.
         IF_INT_EQUAL(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
             SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 1)
             ELSE
             SET_VALUE(LSWF_GON_05_FLOAT_BLOCK_1_MOVED, 0)
         END_IF
         ELSE
+        // Unused: cancel the switch and wait a few frames.
         CALL(evt_mobj_exec_cancel, STRING("sw_1"))
         SET_VALUE(LW(0), 0)
         LOOP(0)

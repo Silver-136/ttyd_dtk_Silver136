@@ -716,6 +716,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Yux: resets its colour tint and runs the default damage reaction. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -724,6 +725,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table hook (entry 48) for the Yux, run when the battle opens with a First Strike on it (damage code
+ * 0x39):
+ * sets its y position to 20 and waits for the attack to end.
+ */
 static EVT_BEGIN(barriern_dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 20)
@@ -732,6 +738,10 @@ static EVT_BEGIN(barriern_dmg_first_attack_pos)
     RETURN
 EVT_END()
 
+/**
+ * Turns on the afterimage blur and a part attribute on each of the Yux's (up to two) Mini-Yux,
+ * so they glow while they move.
+ */
 static EVT_BEGIN(satellite_blur_on)
     SET_VALUE(LW(2), 4)
     LOOP(2)
@@ -746,6 +756,7 @@ static EVT_BEGIN(satellite_blur_on)
     RETURN
 EVT_END()
 
+/** Turns off the part attribute that satellite_blur_on set on the Mini-Yux. */
 static EVT_BEGIN(satellite_blur_off)
     SET_VALUE(LW(2), 4)
     LOOP(2)
@@ -759,6 +770,7 @@ static EVT_BEGIN(satellite_blur_off)
     RETURN
 EVT_END()
 
+/** Plays the afterimage blur (type 0) of the Mini-Yux args[1] of the Yux args[0]. */
 static USER_FUNC(barriern_satellite_zanzou) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));

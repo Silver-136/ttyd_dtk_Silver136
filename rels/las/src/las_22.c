@@ -291,11 +291,13 @@ EVT_BEGIN(kaitendai_evt)
     CALL(evt_hit_bind_mapobj, STRING("A_hgm_dai_04"), STRING("S_hgm_dai_04"))
     CALL(evt_hit_bind_mapobj, STRING("A_hgm_dai_05"), STRING("S_hgm_dai_05"))
     CALL(evt_mapobj_get_position, STRING("A_hgm_dai_01"), LW(13), LW(14), LW(15))
+    // The turntable starts to spin with its starting sound.
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_FLOOR_ROUND_START1"), LW(13), LW(14), LW(15), 0)
     LOOP(0)
         SET_VALUE(LF(0), 0)
         SET_VALUE(LF(1), 0)
         CALL(evt_mario_get_name_hitobj_ride, LW(2))
+        // Each frame, work out which of the four small platforms Mario stands on.
         IF_STR_EQUAL(LW(2), STRING("A_hgm_dai_02"))
             CALL(evt_hit_get_position, STRING("A_hgm_dai_02"), LW(3), LW(4), LW(5))
             SET_VALUE(LF(0), 1)
@@ -312,6 +314,7 @@ EVT_BEGIN(kaitendai_evt)
             CALL(evt_hit_get_position, STRING("A_hgm_dai_05"), LW(3), LW(4), LW(5))
             SET_VALUE(LF(0), 1)
         END_IF
+        // And which one the partner stands on.
         CALL(evt_party_get_name_hitobj_ride, 0, LW(6))
         IF_STR_EQUAL(LW(6), STRING("A_hgm_dai_02"))
             CALL(evt_hit_get_position, STRING("A_hgm_dai_02"), LW(7), LW(8), LW(9))
@@ -339,6 +342,8 @@ EVT_BEGIN(kaitendai_evt)
         CALL(evt_hit_bind_update, STRING("A_hgm_dai_03"))
         CALL(evt_hit_bind_update, STRING("A_hgm_dai_04"))
         CALL(evt_hit_bind_update, STRING("A_hgm_dai_05"))
+        // Turn the centre platform and the small ones in opposite directions and move whoever is standing on
+        // them along.
         IF_INT_EQUAL(LF(0), 1)
             CALL(evt_hit_get_position, LW(2), LW(10), LW(11), LW(12))
             SUBTRACT_FLOAT(LW(10), LW(3))

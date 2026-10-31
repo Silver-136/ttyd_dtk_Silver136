@@ -559,6 +559,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Z-Yux: resets its body color to white and runs the default damage handling. */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_SetRGB, UNIT_ID_SELF, 1, 255, 255, 255)
     SET_VALUE(LW(10), -2)
@@ -567,6 +568,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table event 48, run when the battle opens with Mario's or his partner's First Strike on the Z-Yux:
+ * raises it to y = 20 and waits for the attack to end.
+ */
 static EVT_BEGIN(barriern_dmg_first_attack_pos)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 20)
@@ -589,6 +594,7 @@ static EVT_BEGIN(satellite_blur_on)
     RETURN
 EVT_END()
 
+/** Event script: turns the blur trail off on every satellite part of the Z-Yux. */
 static EVT_BEGIN(satellite_blur_off)
     SET_VALUE(LW(2), 4)
     LOOP(4)
@@ -602,6 +608,10 @@ static EVT_BEGIN(satellite_blur_off)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (runs until done): the Z-Yux's afterimage effect that draws in (type 0); args[0] is the Z-Yux.
+ * See barriern_zanzou_sub.
+ */
 static USER_FUNC(barriern_zanzou) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

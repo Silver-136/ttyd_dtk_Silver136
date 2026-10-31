@@ -157,6 +157,7 @@ static EvtWord gonbaba_down_shake[83];
 EvtWord zonbaba_first_event[677];
 
 EVT_BEGIN(jon_init_evt)
+    // When map events are skipped (a debug warp), the floor number is derived from the name of the map.
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         CALL(evt_sub_get_mapname, LW(0))
@@ -182,6 +183,8 @@ EVT_BEGIN(jon_init_evt)
             SET_VALUE(GSW_PIT_FLOOR, 99)
         END_IF
     END_IF
+    // Remember the deepest floor reached, then set up the signboard, the mover, the trader and the enemies of
+    // this floor.
     SET_VALUE(LSW_JON_PIT_FLOOR, GSW_PIT_FLOOR)
     SET_VALUE(LW(0), LSW_JON_PIT_FLOOR)
     ADD(LW(0), 1)
@@ -192,6 +195,8 @@ EVT_BEGIN(jon_init_evt)
     CALL_CHILD(PTR(idouya_setup))
     CALL_CHILD(PTR(gyousyou_setup))
     CALL_CHILD(PTR(enemy_setup))
+    // Choose the floor layout from the floor number: the boss floor, a rest-room floor, the floor before one,
+    // or a plain floor.
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
     ADD(LW(0), 1)
     SET_VALUE(LW(1), LW(0))
@@ -241,6 +246,8 @@ EVT_BEGIN(jon_init_evt)
     END_SWITCH
     CALL_CHILD(PTR(iri_12_init))
     CALL(evt_sub_get_mapname, LW(0))
+    // On floor 50 the graffiti wall of Trouble Center job 30 shows its before or after state and reacts to
+    // Bobbery.
     IF_STR_EQUAL(LW(0), STRING("jon_04"))
         IF_INT_EQUAL(GSW_PIT_FLOOR, 49)
             IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 0)
@@ -1056,6 +1063,8 @@ NpcSetupInfo npcEnt_zonbaba[] = {
 };
 
 EVT_BEGIN(enemy_setup)
+    // No enemy on a floor where the mover is, nor on the rest-room floors (every tenth floor except floor
+    // 100).
     CALL(evt_npc_check, STRING("移動屋"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN
@@ -1068,6 +1077,8 @@ EVT_BEGIN(enemy_setup)
             RETURN
         END_IF
     END_IF
+    // Look up this floor's species and battle, create the enemy NPC and pick a random spot for it on the left
+    // or right half of the room.
     CALL(enemy_info, GSW_PIT_FLOOR, LW(0), LW(1), LW(2))
     CALL(evt_npc_entry, STRING("敵"), LW(0))
     CALL(evt_npc_set_tribe, STRING("敵"), LW(1))
@@ -1083,6 +1094,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_sub_random, 200, LW(4))
         ADD(LW(4), -100)
     END_IF
+    // Goomba family and their Hyper and Dark versions: one setup, placed on the ground.
     IF_STR_EQUAL(LW(1), STRING("クリボー"))
         CALL(evt_npc_setup, PTR(npcEnt_kuriboo))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1107,6 +1119,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_kuriboo))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
+    // Paragoomba family: flying, so placed above the ground.
     IF_STR_EQUAL(LW(1), STRING("パタクリ"))
         CALL(evt_npc_setup, PTR(npcEnt_patakuri))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 50, LW(4))
@@ -1119,6 +1132,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_patakuri))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 50, LW(4))
     END_IF
+    // Spania family (Spania, Hyper Spania and the like).
     IF_STR_EQUAL(LW(1), STRING("ヒンニャー"))
         CALL(evt_npc_setup, PTR(npcEnt_hannya))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1131,6 +1145,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_hannya))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
+    // Fuzzy family and the Green and Flower Fuzzies.
     IF_STR_EQUAL(LW(1), STRING("チョロボン"))
         CALL(evt_npc_setup, PTR(npcEnt_chorobon))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1143,6 +1158,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_chorobon))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
+    // Moon Cleft and Bald Cleft families.
     IF_STR_EQUAL(LW(1), STRING("シンエモン"))
         CALL(evt_npc_setup, PTR(npcEnt_sinemon))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1163,6 +1179,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_sinnosuke))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
+    // Koopa Troopa and Paratroopa families.
     IF_STR_EQUAL(LW(1), STRING("ノコノコ敵"))
         CALL(evt_npc_setup, PTR(npcEnt_nokonoko))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1183,6 +1200,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_patapata))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 50, LW(4))
     END_IF
+    // Buzzy Beetle and Parabuzzy families.
     IF_STR_EQUAL(LW(1), STRING("メット"))
         CALL(evt_npc_setup, PTR(npcEnt_met))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1195,6 +1213,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_patamet))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 50, LW(4))
     END_IF
+    // Pokey and Bone/Mummy Pokey, then the bony enemies.
     IF_STR_EQUAL(LW(1), STRING("サンボ"))
         CALL(evt_npc_setup, PTR(npcEnt_sambo))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1211,6 +1230,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_karon))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
+    // Poison Puff family (the other puffy clouds share this setup).
     IF_STR_EQUAL(LW(1), STRING("ドクガッスン"))
         CALL(evt_npc_setup, PTR(npcEnt_dokugassun))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 10, LW(4))
@@ -1227,6 +1247,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_dokugassun))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 10, LW(4))
     END_IF
+    // Pider family: the spiders hang high above the floor and keep that height as their home position.
     IF_STR_EQUAL(LW(1), STRING("パイダース"))
         CALL(evt_npc_setup, PTR(npcEnt_piders))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 140, LW(4))
@@ -1237,6 +1258,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 140, LW(4))
         CALL(evt_npc_set_home_position, STRING("敵"), LW(3), 140, LW(4))
     END_IF
+    // Bandit-type thieves share the Goomba setup.
     IF_STR_EQUAL(LW(1), STRING("ボロドー"))
         CALL(evt_npc_setup, PTR(npcEnt_kuriboo))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1249,6 +1271,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_dokugassun))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 10, LW(4))
     END_IF
+    // Bob-omb, Boo, bubble and Chain-Chomp style enemies.
     IF_STR_EQUAL(LW(1), STRING("ボムへい"))
         CALL(evt_npc_setup, PTR(npcEnt_kuriboo))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1307,6 +1330,7 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_mahoon))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 20, LW(4))
     END_IF
+    // Piranha Plants, Koopatrols, the Swoopers, Bristles and Crazee Dayzees.
     IF_STR_EQUAL(LW(1), STRING("パックンフラワー"))
         CALL(evt_npc_setup, PTR(npcEnt_pakkun))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
@@ -1355,6 +1379,8 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_setup, PTR(npcEnt_pansy))
         CALL(evt_npc_set_position, STRING("敵"), LW(3), 0, LW(4))
     END_IF
+    // Bonetail on floor 100: an invisible-to-billboard NPC at the room centre whose appearance is scripted by
+    // zonbaba_first_event.
     IF_STR_EQUAL(LW(1), STRING("ゾンババ"))
         CALL(evt_npc_setup, PTR(npcEnt_zonbaba))
         CALL(evt_npc_set_position, STRING("敵"), 0, 0, 0)
@@ -1364,10 +1390,12 @@ EVT_BEGIN(enemy_setup)
         CALL(evt_npc_set_ry, STRING("敵"), 0)
         SPAWN_EVENT(PTR(zonbaba_first_event))
     END_IF
+    // Make the chosen spot the enemy's home, then arm its battle and watch for its defeat.
     CALL(evt_npc_get_position, STRING("敵"), LW(3), LW(4), LW(5))
     CALL(evt_npc_set_battle_info, STRING("敵"), LW(2))
     CALL(setup_npc_ex_para, STRING("敵"))
     CALL(yattukeFlag)
+    // Wait until the enemy is dead, then open the exit pipe and report the kill to Trouble Center job 12.
     BEGIN_INLINE_EVENT
         LABEL(1)
         WAIT_FRAMES(1)
@@ -1587,6 +1615,7 @@ EVT_BEGIN(idouya_setup)
 EVT_END()
 
 EVT_BEGIN(talk_gyousyou)
+    // The trader pitches his "hot products" to Mario and asks whether he wants to see them (yes or no).
     CALL(evt_msg_print, 0, STRING("100kai_item_01"), 0, STRING("me"))
     CALL(evt_msg_select, 0, STRING("100kai_item_00"))
     IF_INT_EQUAL(LW(0), 1)
@@ -1594,6 +1623,7 @@ EVT_BEGIN(talk_gyousyou)
         RETURN
     END_IF
     CALL(evt_msg_continue)
+    // Show the coin window and the list of goods; closing it ends the sale with a goodbye.
     LABEL(0)
     CALL(evt_win_coin_on, 0, LW(12))
     CALL(evt_win_other_select, 15)
@@ -1602,12 +1632,15 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_msg_print, 0, STRING("100kai_item_10"), 0, STRING("me"))
         RETURN
     END_IF
+    // Not enough coins for the chosen item: the trader says so and the list comes back.
     CALL(evt_pouch_get_coin, LW(0))
     IF_INT_LESS(LW(0), LW(3))
         CALL(evt_win_coin_off, LW(12))
         CALL(evt_msg_print, 0, STRING("100kai_item_03"), 0, STRING("me"))
         GOTO(0)
     END_IF
+    // The trader names the item and its price and asks Mario to confirm (the English text swaps the order of
+    // name and price for some languages).
     IF_INT_GREATER_OR_EQUAL(LW(1), 240)
         CALL(evt_sub_get_language, LW(0))
 #ifdef VERSION_G8ME01
@@ -1653,6 +1686,7 @@ EVT_BEGIN(talk_gyousyou)
         CALL(evt_msg_print_add, 0, STRING("100kai_item_05"))
         RETURN
     END_IF
+    // Mario agrees: the item goes into his pouch, or the trader sighs that he cannot carry any more.
     CALL(evt_pouch_add_item, LW(1), LW(0))
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_win_coin_off, LW(12))
@@ -1663,6 +1697,7 @@ EVT_BEGIN(talk_gyousyou)
         END_IF
         RETURN
     END_IF
+    // Take the price in coins, thank Mario and offer the list again.
     MULTIPLY(LW(3), -1)
     CALL(evt_pouch_add_coin, LW(3))
     CALL(evt_win_coin_wait, LW(12))
@@ -2338,6 +2373,11 @@ EVT_BEGIN(setup_normal)
     RETURN
 EVT_END()
 
+/**
+ * Trouble Center job 12 (the lost sailor, マッキノ):
+ * when Mario enters a pipe with the sailor following, he hops in too, spinning and shrinking as a paper model,
+ * and sinks into the pipe.
+ */
 EVT_BEGIN(iri_12_dokan_in_sub)
     LOOP(0)
         CALL(evt_npc_get_unitwork, STRING("マッキノ"), 0, LW(0))
@@ -2429,6 +2469,11 @@ EVT_BEGIN(iri_12_dokan_in)
     RETURN
 EVT_END()
 
+/**
+ * Shared tail of the sailor's farewell scripts:
+ * he turns into a paper model, walks into the pipe to the side spinning and shrinking,
+ * and is moved far below the map.
+ */
 EVT_BEGIN(iri_12_makkino_return_dokan)
     CALL(evt_npc_set_ry, STRING("マッキノ"), 90)
     WAIT_FRAMES(1)
@@ -2491,6 +2536,7 @@ EVT_BEGIN(iri_12_makkino_return_dokan)
     RETURN
 EVT_END()
 
+/** Sailor's farewell at a rest room: he walks over, thanks Mario (irai_12_011) and leaves through the pipe. */
 EVT_BEGIN(iri_12_makkino_return)
     CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("マッキノ"), 72, 0, 0, 120, 4)
@@ -2500,6 +2546,10 @@ EVT_BEGIN(iri_12_makkino_return)
     RETURN
 EVT_END()
 
+/**
+ * Sailor's farewell on floor 100 after Bonetail:
+ * he walks over, thanks Mario (irai_12_011), controls return, and he leaves through the pipe.
+ */
 EVT_BEGIN(iri_12_makkino_return_b100)
     CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("マッキノ"), -205, -75, 0, 120, 4)
@@ -2511,6 +2561,10 @@ EVT_BEGIN(iri_12_makkino_return_b100)
     RETURN
 EVT_END()
 
+/**
+ * Sailor's farewell when Bonetail falls while the job is running:
+ * he walks up, thanks Mario (irai_12_011), then leaves through the pipe.
+ */
 EVT_BEGIN(iri_12_makkino_return_zonbaba)
     CALL(evt_npc_flag_onoff, 1, STRING("マッキノ"), NPC_FLAG_NO_HIT)
     WAIT_MS(500)
@@ -2523,6 +2577,10 @@ EVT_BEGIN(iri_12_makkino_return_zonbaba)
     RETURN
 EVT_END()
 
+/**
+ * Moves the sailor to the side of the exit pipe (x = -40), stopping his own movement script first.
+ * If Mario stands in the way he is nudged aside. Afterwards the sailor talks again (iri_12_makkino_talk).
+ */
 EVT_BEGIN(iri_12_makkino_move_dokan_side)
     CALL(evt_npc_set_unitwork, STRING("マッキノ"), 0, 1)
     CALL(evt_npc_get_reglid, STRING("マッキノ"), LW(0))
@@ -2552,6 +2610,10 @@ EVT_BEGIN(iri_12_makkino_move_dokan_side)
     RETURN
 EVT_END()
 
+/**
+ * Death hook of the floor's enemy: while job 12 is on and the sailor follows Mario,
+ * wait 0.8 s and send the sailor to the pipe (iri_12_makkino_move_dokan_side).
+ */
 EVT_BEGIN(iri_12_enemy_dead_event)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
@@ -2564,6 +2626,7 @@ EVT_BEGIN(iri_12_enemy_dead_event)
     RETURN
 EVT_END()
 
+/** Sailor's nervous pacing while an enemy is still alive: walks back and forth between x = -175 and x = -73 forever. */
 EVT_BEGIN(iri_12_makkino_urouro)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("マッキノ"), -175, 109, 0, 120, 4)
@@ -2574,6 +2637,7 @@ EVT_BEGIN(iri_12_makkino_urouro)
     RETURN
 EVT_END()
 
+/** Sailor trembling in fear on floor 100 before Bonetail is beaten: walks to x = -440, then shakes sideways forever. */
 EVT_BEGIN(iri_12_makkino_buruburu)
     CALL(evt_npc_move_position, STRING("マッキノ"), -440, -124, 0, 120, 4)
     CALL(evt_npc_get_position, STRING("マッキノ"), LW(0), LW(1), LW(2))
@@ -2589,6 +2653,11 @@ EVT_BEGIN(iri_12_makkino_buruburu)
     RETURN
 EVT_END()
 
+/**
+ * Wakes the sailor: plays his wake-up animation,
+ * restores normal talk and move animations and turns him toward Mario.
+ * Started by the message callback when his text reaches page 2.
+ */
 EVT_BEGIN(iri_12_makkino_okiru)
     CALL(evt_npc_set_anim, STRING("マッキノ"), STRING("O_1"))
     CALL(evt_npc_wait_anim, STRING("マッキノ"), 1)
@@ -2600,6 +2669,12 @@ EVT_BEGIN(iri_12_makkino_okiru)
     RETURN
 EVT_END()
 
+/**
+ * Talk script of the sailor Makkino (マッキノ) in Trouble Center job 12.
+ * With no enemy left on the floor, his first talk plays irai_12_008, sets GSWF_TROUBLE_WORK_1,
+ * drops his talk script and sends him to the pipe side; later talks play irai_12_010.
+ * With an enemy still around he says irai_12_007 before the first talk and irai_12_009 after it.
+ */
 static EVT_BEGIN(iri_12_makkino_talk)
     CALL(evt_npc_check, STRING("敵"), LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -2621,6 +2696,11 @@ static EVT_BEGIN(iri_12_makkino_talk)
     RETURN
 EVT_END()
 
+/**
+ * Sailor drops in on an ordinary floor after Mario descends:
+ * appears at the pipe start, lands, and either walks to the pipe side (no enemy) or paces nervously
+ * until the enemy is beaten. Re-enables his talk script.
+ */
 EVT_BEGIN(iri_12_makkino_fall)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_bero_exec_wait, 2)
@@ -2646,6 +2726,10 @@ EVT_BEGIN(iri_12_makkino_fall)
     RETURN
 EVT_END()
 
+/**
+ * Sailor drops in on a rest-room floor: lands, then does his farewell (iri_12_makkino_return),
+ * or the Bonetail variants on floor 100, and marks the job's return flag (GSWF_TROUBLE_WORK_2).
+ */
 EVT_BEGIN(iri_12_makkino_fall_return)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -2673,6 +2757,11 @@ EVT_BEGIN(iri_12_makkino_fall_return)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the sailor model (c_suifu_k, tribe 水夫)
+ * and starts the drop-in script for a rest room (iri_12_makkino_fall_return)
+ * or an ordinary floor (iri_12_makkino_fall).
+ */
 EVT_BEGIN(iri_12_init_fall)
     CALL(evt_npc_entry, STRING("マッキノ"), STRING("c_suifu_k"))
     CALL(evt_npc_set_tribe, STRING("マッキノ"), STRING("水夫"))
@@ -2716,6 +2805,10 @@ static EVT_BEGIN(iri_12_init)
     RETURN
 EVT_END()
 
+/**
+ * Examining the graffiti wall on floor 50 (Trouble Center job 30):
+ * a short message (irai_30_007), then control is returned.
+ */
 EVT_BEGIN(evt_iri_30_touch_rakugaki)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("irai_30_007"), 0, 0)
@@ -2723,6 +2816,12 @@ EVT_BEGIN(evt_iri_30_touch_rakugaki)
     RETURN
 EVT_END()
 
+/**
+ * Bobbery's bomb hits the floor-50 graffiti (job 30):
+ * closes the message, plays the wall-break sound,
+ * captures the wall into an offscreen image and animates it away,
+ * swapping the "before" objects for the "after" ones. Sets GSWF_TROUBLE_WORK_1.
+ */
 EVT_BEGIN(evt_iri_30_bomb_rakugaki)
     CALL(evt_msg_close, STRING("irai_30_007"))
     CALL(evt_del_case_evt, 1, LW(15))
@@ -2768,6 +2867,10 @@ EVT_BEGIN(evt_iri_30_bomb_rakugaki)
     RETURN
 EVT_END()
 
+/**
+ * Part of the Bonetail (Gonbaba) intro: 3.7 seconds in,
+ * plays its footstep sound at the enemy and shakes the camera for 800 ms.
+ */
 static EVT_BEGIN(gonbaba_standup_shake)
     WAIT_MS(3700)
     CALL(evt_npc_get_position, STRING("敵"), LW(0), LW(1), LW(2))
@@ -2776,6 +2879,10 @@ static EVT_BEGIN(gonbaba_standup_shake)
     RETURN
 EVT_END()
 
+/**
+ * Part of the Bonetail intro: over 8 seconds it pushes the map fog's near
+ * and far distances out (by 400 and 1600 units), so the room's fog thins as he rises.
+ */
 static EVT_BEGIN(gonbaba_fog_change)
     CALL(evt_map_get_fog, LW(4), LW(5), LW(6), LW(7), LW(8), LW(9))
     SET_VALUE(GW(0), LW(5))
@@ -2813,6 +2920,11 @@ static EVT_BEGIN(gonbaba_fog_change)
     RETURN
 EVT_END()
 
+/**
+ * Bonetail slumping to the ground after it is beaten on floor 100:
+ * plays its two falling sounds (the second is positional and fades out over 10 seconds) and shakes the camera,
+ * starting strong and dying down to a rumble.
+ */
 static EVT_BEGIN(gonbaba_down_shake)
     CALL(evt_npc_get_position, STRING("敵"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon, STRING("SFX_STG1_GNB_DOWN1"), 0)
@@ -2843,6 +2955,8 @@ static EVT_BEGIN(gonbaba_down_shake)
 EVT_END()
 
 EVT_BEGIN(zonbaba_first_event)
+    // Arriving on floor 100 for the first time: Bonetail is hidden underground and the chest is not placed
+    // yet; if he was already beaten the room is set up with only the chest.
     IF_INT_EQUAL(GSWF_PIT_BONETAIL_DEFEATED, 1)
         CALL(evt_npc_set_position, STRING("敵"), 0, -1000, 0)
         CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
@@ -2850,6 +2964,7 @@ EVT_BEGIN(zonbaba_first_event)
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
         RETURN
     END_IF
+    // Fog closes in and control is taken from Mario while Bonetail is placed in front of him, asleep.
     CALL(evt_map_set_fog, 2, 400, 1000, 0, 10, 40)
     CALL(evt_map_fog_onoff, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -2873,6 +2988,7 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mario_set_dir_npc, STRING("敵"))
     CALL(evt_party_set_dir_npc, 0, STRING("敵"))
+    // Bonetail wakes with a roar and stands up while the ground shakes.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_GONBABA_FLY2"))
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon_3d_ex, STRING("SFX_STG1_GNB_ROAR2"), 0, 0, 0, 255, 255, 4300, 16, 0)
@@ -2882,6 +2998,7 @@ EVT_BEGIN(zonbaba_first_event)
     END_INLINE_EVENT
     SPAWN_EVENT(PTR(gonbaba_standup_shake))
     SPAWN_EVENT(PTR(gonbaba_fog_change))
+    // The camera pulls back to show his size; the screen shakes.
     CALL(evt_cam3d_evt_set, -755, 24, 376, -84, 114, -22, 4500, EASING_SINE_IN_OUT)
     WAIT_MS(4000)
     LOOP(30)
@@ -2891,10 +3008,12 @@ EVT_BEGIN(zonbaba_first_event)
         WAIT_MS(15)
     END_LOOP
     WAIT_MS(3000)
+    // The Bonetail battle starts and the script waits for it to end.
     CALL(evt_npc_set_battle_info, STRING("敵"), 51)
     CALL(evt_npc_battle_start, STRING("敵"))
     CALL(evt_npc_wait_battle_end)
     CALL(evt_cam3d_evt_set, -769, 50, 527, -22, 114, 7, 1, EASING_SINE_IN_OUT)
+    // Bonetail is beaten: he collapses where he stood, shaking the room as he falls.
     CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_H_1"))
     CALL(evt_map_fog_onoff, 0)
     CALL(evt_npc_set_position, STRING("敵"), 0, 60, 0)
@@ -2932,6 +3051,7 @@ EVT_BEGIN(zonbaba_first_event)
     WAIT_MS(600)
     CALL(evt_cam3d_evt_set, -145, 80, 882, 104, 114, 81, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+    // His mouth opens and the treasure chest tumbles out, bouncing across the floor.
     CALL(evt_mobj_itembox, STRING("box"), 250, 60, 0, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
     BEGIN_INLINE_EVENT
@@ -2987,6 +3107,7 @@ EVT_BEGIN(zonbaba_first_event)
         CALL(evt_mobj_set_y_position, STRING("box"), 0)
     END_INLINE_EVENT
     WAIT_MS(1000)
+    // Mario and his partner react to the chest; the room returns to normal.
     CALL(evt_npc_set_anim, STRING("敵"), STRING("GNB_H_3"))
     WAIT_MS(200)
     CALL(evt_cam3d_evt_set, 255, 105, 648, 255, 55, 150, 500, EASING_SINE_IN_OUT)
@@ -3020,6 +3141,7 @@ EVT_BEGIN(zonbaba_first_event)
     RETURN
 EVT_END()
 
+/** Script helper: blocks until Bonetail's NPC is standing on the ground (groundHit set). */
 static USER_FUNC(gonbaba_wait_landon) {
     // 敵
     return npcNameToPtr("\223G")->groundHit ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;

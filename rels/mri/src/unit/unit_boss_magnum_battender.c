@@ -427,6 +427,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Per-frame loop that runs for as long as Magnus exists: moves the frame part to its place (waku_main). */
 static EVT_BEGIN(waku_event)
     LABEL(0)
     WAIT_FRAMES(1)
@@ -440,6 +441,12 @@ static EVT_BEGIN(waku_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of Magnus: marks the frame as non-targetable while a hit with damage pattern 10 is processed,
+ * runs the default damage reaction, then the first time its HP drops to 7
+ * or below (work 6) the status window closes, the camera moves in
+ * and Magnus speaks his low-HP line (stg2_mri_e24_15) before the fight goes on.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -474,6 +481,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Starts the charging light effect (a glow of 1.5 scale) at x, y,
+ * z (args[0] to args[2]) for Magnus's defeat scene and remembers it.
+ */
 static USER_FUNC(eff_dead) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);
@@ -705,6 +716,8 @@ EVT_BEGIN(stamp_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_STAMP_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_STAMP_TALK_DONE, 1)
+        // The first time, the camera swings around and Magnus shouts out the name of his attack before it
+        // starts.
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
         CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_EVENT)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
@@ -727,6 +740,7 @@ EVT_BEGIN(stamp_attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(0), LW(2), FACE_DIR_TOWARD_X, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+    // He steps back 50 units to give himself room.
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, -50, 0, 0, 120, MOVE_SOUND_FROM_TABLE, 1)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
@@ -736,6 +750,7 @@ EVT_BEGIN(stamp_attack_event)
     ELSE
         SET_VALUE(LW(15), 0)
     END_IF
+    // He lifts a leg high (MGN_A2_1) with a hydraulic whine and the mechanism creaks (MGN_A2_2).
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_LEG_UP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_1"))
     WAIT_MS(450)
@@ -746,6 +761,8 @@ EVT_BEGIN(stamp_attack_event)
         END_LOOP
     END_SIBLING_EVENT
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_2"))
+    // The leg comes slamming down on the target (MGN_A2_3 or A2_4, depending on how far away it is) and the
+    // screen shakes.
     WAIT_MS(1000)
     IF_INT_EQUAL(LW(15), 1)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_3"))
@@ -776,12 +793,15 @@ EVT_BEGIN(stamp_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // The stomp misses or is blocked: the target jumps clear.
     LABEL(90)
     GOTO(95)
+    // The stomp lands: the Action Command defence result is applied and damage is dealt.
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_batten_stamp_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_batten_stamp_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(95)
+    // After a pause he pulls the leg back up (MGN_A2_5 or A2_6) and returns to his place.
     LABEL(95)
     WAIT_MS(1000)
     IF_INT_EQUAL(LW(15), 1)
@@ -815,6 +835,7 @@ static EVT_BEGIN(shake_attack_event)
         END_IF
         RETURN
     END_IF
+    // Magnus raises himself (MGN_A3_3) to pound the ground.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_batten_shake_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -829,12 +850,14 @@ static EVT_BEGIN(shake_attack_event)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_I_O"))
         END_IF
     END_IF
+    // He slams the floor (MGN_A3_4): a quake shakes the whole room and dust rains down from the ceiling.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_QUAKE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_CAILING1"), EVT_NULLPTR, 0, LW(15))
     CALL(evt_btl_camera_shake_h, 0, 7, 0, 30, 0)
     CALL(eff_hokori, 0, 250, 0, 80)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A3_4"))
+    // Mario, if he can act, is put into his flinching pose while the quake runs.
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(20)
         CALL(eff_hokori, 100, 250, 0, 80)
@@ -857,10 +880,13 @@ static EVT_BEGIN(shake_attack_event)
         END_LOOP
         CALL(evt_btl_camera_shake_h, 0, 6, 0, 60, 0)
     END_SIBLING_EVENT
+    // After the tremors die down he straightens up and the damage is worked out for each target in turn.
     WAIT_FRAMES(120)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(6), 0)
+    // For each target: a miss means they just recover, a hit applies the damage (the Action Command result is
+    // applied once).
     LABEL(10)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(95)
@@ -907,6 +933,7 @@ static EVT_BEGIN(shake_attack_event)
     LABEL(93)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     GOTO(10)
+    // The camera resets after a one second pause.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(1000)

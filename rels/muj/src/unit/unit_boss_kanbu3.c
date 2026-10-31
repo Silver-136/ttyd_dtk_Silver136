@@ -361,6 +361,8 @@ EVT_END()
  */
 static EVT_BEGIN(damage_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
+    // With the crowd of 500 X-Nauts in play, a knockout hit that no Life Shroom saves makes Lord Crump show
+    // his hurt pose.
     IF_INT_EQUAL(LW(0), 2)
         CALL(btlevtcmd_CheckDamageCode, UNIT_ID_SELF, DAMAGE_RESULT_ZERO_HP, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -381,6 +383,7 @@ static EVT_BEGIN(damage_event)
 #endif
                 CALL(btlevtcmd_WaitAttackEnd)
                 WAIT_FRAMES(120)
+                // After 120 frames the crowd flees (zakogun_escape3).
                 CALL(check_exist_group, LW(0))
                 IF_INT_NOT_EQUAL(LW(0), -1)
                     CALL(evt_snd_sfxon, STRING("SFX_BOSS_TEAM_3RD_ESCAPE1"), LW(13))
@@ -400,6 +403,7 @@ static EVT_BEGIN(damage_event)
 #endif
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
     IF_INT_EQUAL(LW(0), 0)
+        // With the first group in play, the first hit that leaves him at 15 HP or less makes him call it off.
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 15)
             CALL(btlevtcmd_WaitAttackEnd)
@@ -415,6 +419,7 @@ static EVT_BEGIN(damage_event)
                 ELSE
                 GOTO(10)
             END_IF
+            // He waves his arms (C_2) while the group runs off.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_ON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_2"))
             WAIT_FRAMES(16)
@@ -438,6 +443,7 @@ static EVT_BEGIN(damage_event)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
             CALL(evt_btl_camera_set_moveto, 1, 166, 88, 422, 166, 60, 0, 20, 11)
             WAIT_FRAMES(20)
+            // The camera swings around and he warns the party they will not get off that easily.
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg5_muj_125_01"), 0, -2)
             CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
             CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -453,10 +459,12 @@ static EVT_BEGIN(damage_event)
             CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_2"))
             WAIT_FRAMES(60)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
+            // He shouts for the X-Nauts.
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg5_muj_125_02"), 0, -2)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             WAIT_MS(500)
             CALL(zakogun_ext_init2)
+            // The second group of X-Nauts arrives, with the ceiling coming down on the stage.
             CALL(btlevtcmd_SpawnUnit, LW(0), PTR(&entry_group2), 0)
             CALL(btlevtcmd_SetPos, LW(0), 0, 80, 0)
             CALL(btlevtcmd_SetHomePos, LW(0), 0, 80, 0)
@@ -492,6 +500,7 @@ static EVT_BEGIN(dead_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(btlevtcmd_WaitAttackEnd)
+        // Lord Crump has been defeated for the first time: the group of X-Nauts in play runs away.
         CALL(check_exist_group, LW(0))
         IF_INT_NOT_EQUAL(LW(0), -1)
             CALL(btlevtcmd_GetUnitWork, LW(0), ZAKO_GROUP1_WORK_DYING, LW(1))
@@ -501,6 +510,7 @@ static EVT_BEGIN(dead_event)
         END_IF
         CALL(check_exist_group, LW(0))
         IF_INT_NOT_EQUAL(LW(0), -1)
+            // Group 1 is called off (group 2 flees as the ceiling rises).
             CALL(zakogun_escape1)
             CALL(btlevtcmd_KillUnit, LW(0), 0)
         END_IF
@@ -522,6 +532,7 @@ static EVT_BEGIN(dead_event)
         END_IF
         CASE_END
     END_SWITCH
+    // Lord Crump drops his guard and runs off to the right.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
@@ -531,6 +542,7 @@ static EVT_BEGIN(dead_event)
     CALL(evt_btl_camera_set_moveto, 0, 220, 87, 419, 220, 60, 0, 60, 11)
     WAIT_FRAMES(60)
     CALL(evt_batstage_set_aud_dark, 0, 1, 0)
+    // Five healing sparkles appear as he recovers to full HP and loses the KO status.
     CALL(evt_eff, STRING(""), STRING("recovery"), 0, 250, 30, 104, 4, 0, 0, 0, 0, 0, 0, 0)
     WAIT_FRAMES(30)
     CALL(evt_eff, STRING(""), STRING("recovery"), 0, 220, 30, 103, 5, 0, 0, 0, 0, 0, 0, 0)
@@ -551,6 +563,7 @@ static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 80)
     SUBTRACT(LW(2), 20)
+    // The huge crowd of 500 X-Nauts (group 3) arrives as he runs back.
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_group3), 0)
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
@@ -573,6 +586,7 @@ static EVT_BEGIN(dead_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_EVENT, BTL_CAM_MODE_FREE)
     CALL(evt_btl_camera_set_moveto, 1, 166, 88, 422, 166, 60, 0, 20, 11)
     WAIT_FRAMES(20)
+    // He says he is down but not out.
     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("stg5_muj_125_03"), 0, -2)
     CALL(evt_btl_camera_set_prilimit, BTL_CAM_PRI_NORMAL)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -616,6 +630,7 @@ EVT_END()
  * he plays the call-back sound and pose C_1 and brings in horde group 1, 2 or 3 according to unit work 0.
  */
 EVT_BEGIN(call_event)
+    // If no X-Naut group is on the stage yet, Lord Crump waves them in.
     CALL(check_exist_group, LW(15))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
     SWITCH(LW(0))
@@ -641,6 +656,7 @@ EVT_BEGIN(call_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
+        // He beckons (C_1, C_2) and the X-Nauts answer his call.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_CALL_BACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("C_1"))
         WAIT_FRAMES(16)
@@ -671,11 +687,13 @@ EVT_BEGIN(call_event)
     END_INLINE_EVENT
     IF_INT_EQUAL(LW(15), -1)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_GROUP, LW(0))
+        // Which group comes depends on how far the battle has gone.
         SWITCH(LW(0))
             CASE_EQUAL(0)
             CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
             SUBTRACT(LW(0), 80)
             SUBTRACT(LW(2), 20)
+            // Group 1, then group 2 (with the ceiling coming down), then group 3 (the crowd of 500) arrives.
             CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_group1), 0)
             CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_SetHomePos, LW(3), LW(0), LW(1), LW(2))
@@ -941,11 +959,13 @@ static EVT_BEGIN(normal_attack_event)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
+    // Lord Crump runs at his target (R_2), stopping 60 units short of it.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_2"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 60)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 1)
+    // He jumps (A_1A, A_1B) and comes down over the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1A"))
@@ -976,12 +996,15 @@ static EVT_BEGIN(normal_attack_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+        // He misses or is blocked: the target gets out of the way and he comes down on the spot.
         LABEL(90)
         GOTO(98)
+        // He hits: the Action Command defence result is applied and damage is dealt.
         LABEL(91)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         GOTO(98)
+        // The belly flop: he lands flat (A_1C) with a heavy thud and the screen shakes, then bounces twice.
         LABEL(98)
         CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1C"))
@@ -1002,6 +1025,7 @@ static EVT_BEGIN(normal_attack_event)
             WAIT_FRAMES(7)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KANBU_HIP_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         END_SIBLING_EVENT
+        // He lies dazed for a moment (D_1), then hops up and gets back on his feet.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_1"))
         WAIT_FRAMES(15)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1010,6 +1034,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
         WAIT_FRAMES(10)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+        // He runs back to his starting spot.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("R_1"))
         CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(7.0f))
@@ -1017,6 +1042,10 @@ static EVT_BEGIN(normal_attack_event)
         RETURN
 EVT_END()
 
+/**
+ * Script helper: writes the battle unit id of the horde (the unit of kind 0x64, 0x65 or 0x66) to args[0],
+ * or -1 if none is on the stage.
+ */
 USER_FUNC(check_exist_group) {
     s32 i;
     EvtWord* args = event->args;

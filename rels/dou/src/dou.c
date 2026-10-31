@@ -51,6 +51,10 @@ EVT_BEGIN(dou_normal_puka)
     RETURN
 EVT_END()
 
+/**
+ * One dip of a floating platform: sinks the offset in LW(6) to LW(2) over 300 ms, holds for LW(3) ms,
+ * then rises back to 0 over 300 ms. The debug messages are "sink" and "float" in Japanese.
+ */
 EVT_BEGIN(dou_puka_event_sub)
     DEBUG_PUT_MSG(STRING("しずむ"))
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_OUT, 0, LW(2), 300)
@@ -76,6 +80,11 @@ EVT_BEGIN(dou_puka_event_sub)
     RETURN
 EVT_END()
 
+/**
+ * REL module prolog, run when dou.rel is loaded:
+ * runs the static constructors, registers the init scripts of dou_00 to dou_13
+ * and the Pirate's Grotto battle setup tables.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 

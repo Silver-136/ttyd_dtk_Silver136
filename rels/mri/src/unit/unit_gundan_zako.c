@@ -424,7 +424,9 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
+    // The X-Naut runs up to its target (the shared run-up script).
     CALL_CHILD(attack_common_event1)
+    // It hops forward with a battle cry (A_3) and swings at the target as it lands next to it.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD1_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -468,6 +470,7 @@ static EVT_BEGIN(normal_attack_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+        // The swing misses or is blocked: the X-Naut stumbles past (D_2), then shakes itself off (D_3).
         LABEL(90)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD1_MISS1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
@@ -480,6 +483,8 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("D_3"))
         WAIT_FRAMES(10)
         GOTO(98)
+        // The swing connects: the screen shakes, the Action Command defence result is applied and damage is
+        // dealt, then it hops back and stands up straight.
         LABEL(91)
         CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -496,6 +501,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("S_1"))
         WAIT_FRAMES(20)
         GOTO(98)
+        // It runs back to its starting spot (the shared return script).
         LABEL(98)
         CALL_CHILD(attack_common_event2)
         RETURN

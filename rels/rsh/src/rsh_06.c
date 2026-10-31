@@ -1750,6 +1750,7 @@ EVT_END()
  * plays the engine sounds and ramps the wheel speeds GW(0) and GW(1) up to -15 (leftward).
  */
 static EVT_BEGIN(hom_10_evt_resha_start)
+    // The train starts moving: the station flags are cleared and the bell rings.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
     SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
@@ -1763,6 +1764,7 @@ static EVT_BEGIN(hom_10_evt_resha_start)
         CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1"), 0)
     END_IF
     IF_STR_EQUAL(LW(0), STRING("hom_00"))
+        // The engine sounds start and the wheel speeds ramp up to the left (outbound).
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
             CALL(evt_snd_sfxon, STRING("SFX_STG6_TRAIN_MOVE1_2"), 0)
             ELSE
@@ -1852,6 +1854,7 @@ EVT_END()
  * but ramps the speeds up to +15 (rightward).
  */
 static EVT_BEGIN(hom_10_evt_resha_start2)
+    // The train starts moving on the return trip: the station flags are cleared.
     SET_VALUE(GSWF_HOM_TRAIN_MOVING, 1)
     SET_VALUE(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
     SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
@@ -1918,6 +1921,7 @@ static EVT_BEGIN(hom_10_evt_resha_start2)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+        // The wheel speeds ramp up to the right.
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(0))
         LOOP(0)
             SET_FLOAT_VALUE(GW(1), GW(0))
@@ -2290,6 +2294,7 @@ EVT_BEGIN(evt_great_moamoa)
     CALL(evt_mario_normalize)
     CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_NO_PUSH)
     CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_NO_HIT)
+    // The swarm gathers and merges into the giant Smorg.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_244"), 0, 0)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group339"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group340"), MAP_OBJ_FLAG_HIDDEN)
@@ -2371,6 +2376,7 @@ EVT_BEGIN(evt_great_moamoa)
     WAIT_MS(500)
     CALL(evt_party_stop, 0)
     WAIT_MS(300)
+    // Mario and his partner react.
     CALL(evt_msg_print_party, STRING("stg6_rsh_245"))
     WAIT_MS(300)
     CALL(evt_party_run, 0)
@@ -2397,6 +2403,7 @@ EVT_BEGIN(evt_great_moamoa)
     WAIT_MS(2000)
     CALL(evt_snd_sfxoff, GW(2))
     CALL(evt_npc_set_battle_info, STRING("base"), 1)
+    // The battle with the giant Smorg starts.
     CALL(evt_npc_battle_start, STRING("base"))
     CALL(evt_npc_wait_battle_end)
     CALL(evt_cam3d_evt_set, -50, 355, 534, -50, 260, -8, 0, EASING_SINE_IN_OUT)
@@ -2439,6 +2446,7 @@ EVT_BEGIN(evt_great_moamoa)
     CALL(evt_npc_set_anim, STRING("konari"), STRING("Z_1"))
     CALL(evt_npc_set_anim, STRING("powan"), STRING("Z_1"))
     CALL(evt_moamoa_kind_onoff, 0, 0)
+    // After the fight the Smorg falls apart.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_247"), 0, STRING("base"))
     WAIT_MS(500)
     CALL(evt_npc_get_position, STRING("base"), LW(0), LW(1), LW(2))
@@ -2460,6 +2468,7 @@ EVT_BEGIN(evt_great_moamoa)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(2000)
+    // The story advances and the map changes to rsh_01_a.
     SET_VALUE(GSW_STORY_PROGRESS, STG6_48_SMORG_MIASMA)
     CALL(evt_bero_mapchange, STRING("rsh_01_a"), STRING("w_bero"))
     RETURN
@@ -2531,6 +2540,10 @@ EVT_BEGIN(moamoa_debug)
     RETURN
 EVT_END()
 
+/**
+ * Shared map init for rsh_06 on the first trip:
+ * starts the train-exterior scene and the music and ambience for the story stage.
+ */
 EVT_BEGIN(rsh_06_init_evt)
     CALL_CHILD(PTR(evt_resha_init))
     SWITCH(GSW_STORY_PROGRESS)
@@ -2578,6 +2591,10 @@ EVT_BEGIN(rsh_06_a_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Shared map init for rsh_06 on the second visit:
+ * train-exterior scene plus the music for the station the train has reached.
+ */
 EVT_BEGIN(rsh_06_init_evt_nidome)
     CALL_CHILD(PTR(evt_resha_init))
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
@@ -2597,6 +2614,7 @@ EVT_BEGIN(rsh_06_init_evt_nidome)
     RETURN
 EVT_END()
 
+/** Init script of rsh_06_a on the second visit: door back to rsh_05 plus rsh_06_init_evt_nidome. */
 EVT_BEGIN(rsh_06_a_init_evt_nidome)
     SET_VALUE(LW(0), PTR(bero_data_a))
     CALL(evt_bero_get_info)
@@ -2605,6 +2623,11 @@ EVT_BEGIN(rsh_06_a_init_evt_nidome)
     RETURN
 EVT_END()
 
+/**
+ * Script helper used by evt_ramp: writes into LW(10) a swaying angle,
+ * 1.8 times the absolute value of GW(0) times sin(retraceCount / 15),
+ * which the script applies to the lamp objects (ranpu, ranpu_c) so they swing with the train.
+ */
 static s32 ramp_r(EventEntry* event, BOOL isFirstCall) {
     f32 amp = __fabsf(evtGetFloat(event, GW(0)));
     f32 wave = sin(gp->retraceCount / 15.0f);

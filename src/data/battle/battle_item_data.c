@@ -812,6 +812,7 @@ BattleWeapon ItemWeaponData_Tankobu = {
 
 /** POW Block: a POW Block appears above Mario, he hits it and every enemy takes 2 damage as the stage shakes. */
 EVT_BEGIN(ItemEvent_Pow_Block)
+    // The camera closes in on the user; on the player's side they first walk forward.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -825,11 +826,13 @@ EVT_BEGIN(ItemEvent_Pow_Block)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, -60, LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     END_IF
+    // The user holds up the POW Block, which is used up.
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_ITEM)
     CALL(btlevtcmd_CommandFlyItem, UNIT_ID_SELF, 40)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_ACTION)
     CALL(btlevtcmd_ConsumeItem, UNIT_ID_SELF)
+    // The POW Block appears above the user's head in a puff of smoke.
     CALL(btlevtcmd_CheckCommandUnit, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -856,6 +859,7 @@ EVT_BEGIN(ItemEvent_Pow_Block)
         WAIT_MS(2050)
         CALL(evt_eff, STRING(""), STRING("kemuri_test"), 2, LW(0), LW(1), LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
+    // The camera pulls back and the user walks under the block.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_ACTION)
     WAIT_FRAMES(5)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -867,6 +871,7 @@ EVT_BEGIN(ItemEvent_Pow_Block)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_NEUTRAL)
     WAIT_FRAMES(30)
+    // The user jumps, hits the block from below and walks home after landing.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.8f))
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_JUMP)
@@ -880,6 +885,7 @@ EVT_BEGIN(ItemEvent_Pow_Block)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_NEUTRAL)
     END_SIBLING_EVENT
+    // The block bounces and the stage shakes; sleeping audience members wake up.
     BEGIN_INLINE_EVENT
         WAIT_FRAMES(5)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -892,6 +898,7 @@ EVT_BEGIN(ItemEvent_Pow_Block)
     END_INLINE_EVENT
     CALL(evt_audience_reflesh_natural_all, 100)
     WAIT_FRAMES(7)
+    // Every enemy takes the damage unless it dodges (a miss, a lucky dodge or Dodgy).
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&ItemWeaponData_Pow_Block))
     CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
@@ -913,6 +920,7 @@ EVT_BEGIN(ItemEvent_Pow_Block)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
     GOTO(10)
     LABEL(90)
+    // The user returns home.
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&ItemWeaponData_Pow_Block))
     WAIT_FRAMES(150)
@@ -1248,6 +1256,7 @@ BattleWeapon ItemWeaponData_Kaminari_Gorogoro = {
  * then every enemy takes 6 damage.
  */
 EVT_BEGIN(ItemEvent_Kirakira_Otoshi_Core)
+    // The camera pulls back and the targets are chosen (a random one if the player did not pick it).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     WAIT_FRAMES(30)
@@ -1275,6 +1284,7 @@ EVT_BEGIN(ItemEvent_Kirakira_Otoshi_Core)
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
         END_IF
     END_IF
+    // Single target: one star streaks from above the user down onto the target.
     CALL(evt_snd_sfxon, STRING("SFX_ITEM_KIRAKIRA_FALL1"), 0)
     IF_INT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -1284,6 +1294,7 @@ EVT_BEGIN(ItemEvent_Kirakira_Otoshi_Core)
         CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_KIRAKIRA_FALL1"), LW(0), LW(1), LW(2), 0)
         WAIT_FRAMES(50)
     ELSE
+        // All enemies: the camera shakes five times while sparks hit random enemies.
         BEGIN_SIBLING_EVENT
             WAIT_MS(500)
             LOOP(5)
@@ -1311,6 +1322,7 @@ EVT_BEGIN(ItemEvent_Kirakira_Otoshi_Core)
                 WAIT_MS(500)
             END_LOOP
         END_SIBLING_EVENT
+        // Sixty stars rain down at random spots over the enemies' side of the stage.
         LOOP(60)
             CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
             CALL(btlevtcmd_GetStageSize, EVT_NULLPTR, LW(1), EVT_NULLPTR)
@@ -1342,6 +1354,7 @@ EVT_BEGIN(ItemEvent_Kirakira_Otoshi_Core)
             CALL(evt_eff64, STRING(""), STRING("sstar_n64"), 2, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), FLOAT(8.0f), 0, 0, 0, 0)
             WAIT_FRAMES(3)
         END_LOOP
+        // After the shower the enemies are picked again for the damage.
         WAIT_FRAMES(50)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         CALL(btlevtcmd_CheckCommandUnit, UNIT_ID_SELF, LW(0))
@@ -1355,6 +1368,7 @@ EVT_BEGIN(ItemEvent_Kirakira_Otoshi_Core)
             CALL(btlevtcmd_GetSelectEnemy, LW(10), LW(11))
         END_IF
     END_IF
+    // Each target takes the damage unless it dodges; the single-target version stops after one.
     LABEL(10)
     IF_INT_EQUAL(LW(10), -1)
         GOTO(90)
@@ -1379,6 +1393,7 @@ EVT_BEGIN(ItemEvent_Kirakira_Otoshi_Core)
     WAIT_MS(80)
     GOTO(10)
     LABEL(90)
+    // The user returns home.
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
     CALL_CHILD(_return_home_event)
@@ -1438,6 +1453,7 @@ BattleWeapon ItemWeaponData_Kirakira_Otoshi = {
 
 /** Ice Storm: an icy wind blows over the enemies for 3 ice damage each, with a chance to freeze them for two turns. */
 EVT_BEGIN(ItemEvent_Koorino_Ibuki)
+    // The camera closes in on the user; on the player's side they first walk forward.
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Koorino_Ibuki))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -1452,6 +1468,7 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, -60, LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     END_IF
+    // The user holds up the Ice Storm, which is used up, and the camera pulls back.
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_ITEM)
@@ -1461,6 +1478,7 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     WAIT_FRAMES(30)
+    // The targets are chosen (a random one for a single target when the user is not Mario or a partner).
     CALL(btlevtcmd_CheckCommandUnit, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
@@ -1481,6 +1499,7 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
         END_IF
     END_IF
+    // The icy wind blows from the user towards the enemies and clears any fog from the stage.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_ICE_WIND1"), LW(0), LW(1), LW(2), LW(15))
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
@@ -1496,6 +1515,7 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
     CALL(btlevtcmd_StageDispellFog)
     WAIT_MS(2000)
     CALL(evt_snd_sfxoff, LW(15))
+    // Each target takes the damage unless it dodges (a miss, a lucky dodge or Dodgy).
     LABEL(10)
     IF_INT_EQUAL(LW(10), -1)
         GOTO(90)
@@ -1519,6 +1539,7 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
     END_IF
     GOTO(10)
     LABEL(90)
+    // The user returns home.
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
     CALL_CHILD(PTR(_return_home_event))
@@ -1569,6 +1590,7 @@ BattleWeapon ItemWeaponData_Koorino_Ibuki = {
 
 /** Earthquake: the stage shakes and dust falls, and every enemy that is not floating takes 5 damage. */
 EVT_BEGIN(ItemEvent_Yurayura_Jishin)
+    // The camera closes in on the user; on the player's side they first walk forward.
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Yurayura_Jishin))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -1583,6 +1605,7 @@ EVT_BEGIN(ItemEvent_Yurayura_Jishin)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, -60, LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     END_IF
+    // The user holds up the Earthquake, which is used up, and the camera pulls back.
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_ITEM)
@@ -1592,6 +1615,7 @@ EVT_BEGIN(ItemEvent_Yurayura_Jishin)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     WAIT_FRAMES(30)
+    // Dust falls from above while the stage shakes harder and harder.
     BEGIN_SIBLING_EVENT
         CALL(evt_eff64, 0, STRING("hokori_n64"), 0, 0, 300, 0, 150, 0, 0, 0, 0, 0, 0, 0)
         WAIT_MS(600)
@@ -1609,6 +1633,7 @@ EVT_BEGIN(ItemEvent_Yurayura_Jishin)
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 30, 13)
     WAIT_MS(333)
     CALL(evt_snd_sfxoff, LW(10))
+    // The targets are chosen (a random one for a single target when the user is not Mario or a partner).
     CALL(btlevtcmd_CheckCommandUnit, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
@@ -1629,6 +1654,7 @@ EVT_BEGIN(ItemEvent_Yurayura_Jishin)
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
         END_IF
     END_IF
+    // Each target takes the damage unless it dodges (a miss, a lucky dodge or Dodgy).
     LABEL(10)
     IF_INT_EQUAL(LW(10), -1)
         GOTO(90)
@@ -1652,6 +1678,7 @@ EVT_BEGIN(ItemEvent_Yurayura_Jishin)
     END_IF
     GOTO(10)
     LABEL(90)
+    // The user returns home.
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(150)
     CALL_CHILD(PTR(_return_home_event))
@@ -2944,12 +2971,14 @@ BattleWeapon ItemWeaponData_Attiike_Shisshi = {
  * one of the recovery, status or attack item scripts on a fitting target.
  */
 EVT_BEGIN(ItemEvent_Naniga_Okorukana)
+    // Mystery is announced, then the roulette spins and lands on an item.
     SET_VALUE(LW(12), PTR(&ItemWeaponData_Naniga_Okorukana))
     CALL_CHILD(PTR(ItemEvent_Support_Sub_UseDeclere))
     WAIT_FRAMES(30)
     CALL(_naniga_okorukana_check, UNIT_ID_SELF, LW(13))
     SWITCH(LW(13))
         CASE_EQUAL(ITEM_MUSHROOM)
+        // Mushroom, Ultra Shroom, Dried Shroom, Honey Syrup or Jammin' Jelly: it heals an automatic target.
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Kinoko))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
@@ -2980,6 +3009,7 @@ EVT_BEGIN(ItemEvent_Naniga_Okorukana)
         SET_VALUE(LW(9), ITEM_JAMMIN_JELLY)
         CALL_CHILD(PTR(ItemEvent_Recovery_Core))
         CASE_EQUAL(ITEM_VOLT_SHROOM)
+        // Volt Shroom, Repel Cape, Slow Shroom or Gradual Syrup: its effect on an automatic target.
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Biribiri_Kinoko))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
@@ -3000,6 +3030,7 @@ EVT_BEGIN(ItemEvent_Naniga_Okorukana)
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
         CALL_CHILD(PTR(ItemEvent_Jiwajiwa_Syrup_Core))
         CASE_EQUAL(ITEM_THUNDER_BOLT)
+        // Thunder Bolt, Thunder Rage, Fire Flower, Shooting Star or Stopwatch: its attack on the enemies.
         SET_VALUE(LW(12), PTR(&ItemWeaponData_Kaminari_Gorogoro))
         SET_VALUE(LW(8), LW(12))
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
@@ -3025,6 +3056,7 @@ EVT_BEGIN(ItemEvent_Naniga_Okorukana)
         CALL_CHILD(PTR(ItemEvent_Automatic_Target))
         CALL_CHILD(PTR(ItemEvent_Stop_Watch_Core))
         CASE_DEFAULT
+        // Any other result: nothing happens.
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_SWITCH
@@ -4039,6 +4071,7 @@ BattleWeapon ItemWeaponData_FutarideForever = {
  * Zess Dynamite also shows fire pillars and the cook's ghostly image, the bombs explode.
  */
 EVT_BEGIN(ItemEvent_ThrowAttack)
+    // The camera closes in on the user; on the player's side they first walk forward.
     CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(12))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
@@ -4053,6 +4086,7 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
         CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, -60, LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)
     END_IF
+    // The user holds up the dish, which is used up, and the camera pulls back.
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(9), POSE_TYPE_ITEM)
     CALL(btlevtcmd_CommandFlyItem, UNIT_ID_SELF, 40)
@@ -4066,6 +4100,7 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
+    // The targets are chosen (a random one for a single target when the user is not Mario or a partner).
     CALL(btlevtcmd_CheckCommandUnit, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
@@ -4086,6 +4121,7 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
             CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(10), LW(11))
         END_IF
     END_IF
+    // If the user is Mario, he takes a throwing pose.
     CALL(btlevtcmd_GetUnitKind, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), UNIT_MARIO)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_C_1"))
@@ -4094,6 +4130,7 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
             CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
         END_SIBLING_EVENT
     END_IF
+    // The dish flies in an arc at the target, or at the middle of the enemies' side for an all-enemy dish.
     CALL(btlevtcmd_CheckWeaponPluralTarget, LW(12), LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetHitPos, LW(10), LW(11), LW(5), LW(6), LW(7))
@@ -4110,6 +4147,7 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
     END_IF
     CALL(_get_throw_first_pos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(_throw_item_icon, LW(9), LW(0), LW(1), LW(2), LW(5), LW(6), LW(7))
+    // Zess Dynamite raises fire pillars and the cook's ghostly image; Coconut Bomb and Egg Bomb explode.
     SWITCH(LW(9))
         CASE_EQUAL(ITEM_ZESS_DYNAMITE)
         CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_THUNDERS_ATTACK4"), LW(5), LW(6), LW(7), 0)
@@ -4131,6 +4169,7 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
         CALL(evt_snd_sfxon_3d, STRING("SFX_BTL_THUNDERS_ATTACK3"), LW(5), LW(6), LW(7), 0)
         CASE_END
     END_SWITCH
+    // Each target takes the damage unless it dodges (a miss, a lucky dodge or Dodgy).
     LABEL(10)
     IF_INT_EQUAL(LW(10), -1)
         GOTO(90)
@@ -4154,6 +4193,7 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
     END_IF
     GOTO(10)
     LABEL(90)
+    // The user returns home.
     CALL(evt_audience_ap_recovery)
     WAIT_FRAMES(30)
     CALL_CHILD(PTR(_return_home_event))
@@ -4334,6 +4374,7 @@ EVT_BEGIN(ItemEvent_Poison_Kinoko)
         WAIT_FRAMES(60)
         CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 999)
     END_IF
+    // the original script has one END_IF too many; the interpreter ignores it
     END_IF // unmatched: the IF above is already closed
     CALL(evt_audience_ap_recovery)
     CALL_CHILD(PTR(_return_home_event))

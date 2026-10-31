@@ -65,6 +65,10 @@ EVT_BEGIN(evt_win_door_open_pure)
     RETURN
 EVT_END()
 
+/**
+ * Door script run when Mario enters a Boggly Woods house door:
+ * starts the bero walk-in after 1 second and opens the doors over 800 ms via evt_win_door_open_pure.
+ */
 EVT_BEGIN(evt_win_door_open)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
@@ -76,6 +80,11 @@ EVT_BEGIN(evt_win_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Boggly Woods double-door close animation without the walk:
+ * plays the wooden door-shut sound and swings the two door map objects (LW(8), LW(9)) shut over LW(1) ms;
+ * LW(0) picks the direction.
+ */
 EVT_BEGIN(evt_win_door_close_pure)
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, LW(8), LW(10), LW(11), LW(12))
@@ -100,6 +109,10 @@ EVT_BEGIN(evt_win_door_close_pure)
     RETURN
 EVT_END()
 
+/**
+ * Door script run when Mario leaves a Boggly Woods house:
+ * snaps the doors to the open angle, starts the bero walk after 200 ms, then closes them over 800 ms.
+ */
 EVT_BEGIN(evt_win_door_close)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -117,6 +130,10 @@ EVT_BEGIN(evt_win_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Hammer reaction of a Boggly Woods tree: plays the hit-tree and falling-leaves sounds at the tree
+ * and shakes its trunk (LW(2)) and leaves (LW(3)) back and forth.
+ */
 EVT_BEGIN(_tree_anime)
     CALL(evt_mapobj_get_position, LW(2), LW(4), LW(5), LW(6))
     CALL(evt_snd_sfxon_3d, STRING("SFX_HIT_TREE1"), LW(4), LW(5), LW(6), 0)
@@ -141,6 +158,12 @@ EVT_BEGIN(_tree_anime)
     RETURN
 EVT_END()
 
+/**
+ * Registers hammerable trees from the table at LW(0):
+ * reads rows of four words (hit object, trunk, leaves, extra script)
+ * until a hit object of 0 and installs _tree_anime as the hammer case script on each hit object.
+ * Nothing in the tree calls it (the win maps use evt_sub_tree_access_entry).
+ */
 EVT_BEGIN(win_tree_entry)
     SET_INT_READ_ADDR(LW(0))
     LOOP(0)
@@ -153,6 +176,11 @@ EVT_BEGIN(win_tree_entry)
     RETURN
 EVT_END()
 
+/**
+ * Loops forever playing the Puni walking sound at the position of the NPC "ガイド" (the Puni guide's stand-in in
+ * guide_bigtree)
+ * every 5 frames; guide_bigtree spawns it for each walk and deletes it after.
+ */
 EVT_BEGIN(win_puni_walk_se)
     LOOP(0)
         CALL(evt_npc_get_position, STRING("ガイド"), LW(0), LW(1), LW(2))
@@ -162,6 +190,10 @@ EVT_BEGIN(win_puni_walk_se)
     RETURN
 EVT_END()
 
+/**
+ * REL entry point for win.rel: runs the static constructors,
+ * registers the init scripts of win_00 to win_06 and the Boggly Woods battle setup tables.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 

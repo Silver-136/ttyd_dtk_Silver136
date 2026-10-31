@@ -551,6 +551,7 @@ static s32 npc_jump(EventEntry* event, BOOL isFirstCall) {
             speed = dist / t;
         }
         vy = dy / t + gravity * t / 2.0f;
+        // The floats are stored as their bit patterns through the word view (a float store gives different code).
         event->userdata[0] = *(s32*)&t;
         event->userdata[1] = *(s32*)&vy;
         event->userdata[2] = *(s32*)&speed;

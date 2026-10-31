@@ -389,6 +389,10 @@ EVT_BEGIN(hikari_off_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: lights candle LW(0) (its fire effect grows to 0.65 over 150 ms, then settles at 0.5,
+ * with the candle- on sound); LW(1) selects the dark variant.
+ */
 EVT_BEGIN(hikari_on_evt)
     SET_VALUE(LW(10), LW(0))
     SET_VALUE(LW(9), LW(1))
@@ -997,6 +1001,7 @@ EVT_END()
  * and the party is taken to gor_01 (sekai_yami1).
  */
 EVT_BEGIN(last_evt_1)
+    // Mario and his partner walk in through the west door and it closes behind them.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_set_position, STRING("ピーチ姫"), 135, 15, 0)
@@ -1033,6 +1038,8 @@ EVT_BEGIN(last_evt_1)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // Peach screams; Grodus tells Mario he is too late and that the coffin behind him holds the legendary
+    // treasure.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
@@ -1068,6 +1075,7 @@ EVT_BEGIN(last_evt_1)
     CALL(evt_npc_set_ry, STRING("ピーチ姫"), 270)
     WAIT_FRAMES(1)
     WAIT_MS(500)
+    // Grodus explains the Shadow Queen will possess Peach; Peach apologizes to Mario for the map she sent.
     CALL(evt_msg_print_party, STRING("stg8_las_112"))
     CALL(evt_cam3d_evt_set, 20, 100, 300, 115, 60, 20, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -1079,6 +1087,7 @@ EVT_BEGIN(last_evt_1)
     CALL(evt_msg_print, 0, STRING("stg8_las_114"), 0, STRING("シュリョー"))
     CALL(evt_npc_set_ry, STRING("シュリョー"), 90)
     WAIT_MS(300)
+    // The witch music starts as the sealed coffin lights up; the screen flashes white.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_WITCH_APPEAR1"))
     CALL(evt_npc_set_anim, STRING("シュリョー"), STRING("A_3A"))
     WAIT_MS(170)
@@ -1132,6 +1141,7 @@ EVT_BEGIN(last_evt_1)
     END_LOOP
     CALL(evt_cam3d_evt_set, 52, 143, 432, 183, 87, 44, 800, EASING_SINE_IN_OUT)
     WAIT_MS(1600)
+    // The grave shakes, slides and sinks, and white light bursts out of it.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_WITCH"))
     CALL(evt_mapobj_get_position, STRING("S_o_hikari1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_GRAVE_LIGHT1"), LW(0), LW(1), LW(2), 0)
@@ -1301,6 +1311,7 @@ EVT_BEGIN(last_evt_1)
     CALL(evt_eff_softdelete, STRING("uzu"))
     WAIT_MS(2000)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
+    // The scene ends and the party is taken to Rogueport (gor_01).
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("gor_01"), STRING("sekai_yami1"))
     CALL(evt_mario_key_onoff, 1)
@@ -1313,6 +1324,7 @@ EVT_END()
  * and the map changes to usu_00 (sekai_yami2).
  */
 EVT_BEGIN(last_evt_2)
+    // The Shadow Queen speaks through Peach and orders Grodus around.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, -310, 0, 0)
@@ -1362,6 +1374,7 @@ EVT_BEGIN(last_evt_2)
     CALL(evt_cam3d_evt_set, -80, 125, 268, 200, 180, -12, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(500)
+    // She strikes Peach down with a blast; the hall flashes white.
     CALL(evt_msg_print, 0, STRING("stg8_las_119"), 0, STRING("影の女王"))
     CALL(evt_cam3d_evt_set, -140, 100, 284, 178, 75, -34, 4000, EASING_SINE_IN_OUT)
     CALL(evt_npc_get_position, STRING("影の女王"), LW(0), LW(1), LW(2))
@@ -1392,6 +1405,7 @@ EVT_BEGIN(last_evt_2)
     END_LOOP
 #endif
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_WHITE, 300, FADE_IN_BLACK, 300)
+    // The scene ends in the dark world (usu_00).
     CALL(evt_bero_mapchange, STRING("usu_00"), STRING("sekai_yami2"))
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1410,6 +1424,7 @@ EVT_END()
 #endif
 
 EVT_BEGIN(last_evt_3)
+    // Light floods the hall; the Shadow Queen is reborn in Peach's body.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, -310, 0, 0)
@@ -1462,6 +1477,7 @@ EVT_BEGIN(last_evt_3)
     CALL(evt_npc_set_anim, STRING("ブラックピーチ"), STRING("KRT_L_2"))
     WAIT_MS(200)
     CALL(evt_npc_set_autotalkpose, STRING("ブラックピーチ"), STRING("KRT_L_3"), STRING("KRT_T_3"))
+    // She announces her rebirth; Grodus asks her to destroy Mario but she refuses his command.
     CALL(evt_msg_print, 0, STRING("stg8_las_120"), 0, STRING("ブラックピーチ"))
     CALL(evt_cam3d_evt_set, -330, 100, 332, -330, 40, -13, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -1561,6 +1577,7 @@ EVT_BEGIN(last_evt_3)
     END_INLINE_EVENT
     CALL(evt_npc_set_anim, STRING("ブラックピーチ"), STRING("KRT_S_1"))
     WAIT_MS(500)
+    // She puts Grodus in his place and strikes him down; his light effects vanish.
     CALL(evt_msg_print, 0, STRING("stg8_las_125"), 0, STRING("ブラックピーチ"))
     WAIT_MS(500)
     CALL(evt_npc_set_anim, STRING("ブラックピーチ"), STRING("KRT_A_1"))
@@ -1608,6 +1625,7 @@ EVT_BEGIN(last_evt_3)
     CALL(evt_msg_print_party, STRING("stg8_las_127"))
     WAIT_MS(1000)
     CALL(evt_npc_set_position, STRING("マジョリン"), -50, 0, 150)
+    // Beldam, Marilyn and Doopliss greet their returned queen and report that they found her a vessel.
     CALL(evt_msg_print, 0, STRING("stg8_las_128"), 0, STRING("マジョリン"))
     CALL(evt_npc_set_position, STRING("マジョリン"), 0, -1000, 0)
     CALL(rou_hikari_front_onoff, 1, 1)
@@ -1657,6 +1675,7 @@ EVT_BEGIN(last_evt_3)
     SUBTRACT(LW(0), 10)
     CALL(evt_npc_move_position, STRING("ブラックピーチ"), LW(0), LW(2), 0, FLOAT(60.0f), 0)
     WAIT_MS(500)
+    // She notices Mario and his partner and offers Mario the choice of refusing her or serving her.
     CALL(evt_msg_print, 0, STRING("stg8_las_134"), 0, STRING("ブラックピーチ"))
     CALL(evt_cam3d_evt_set, -330, 78, 235, -330, 35, -11, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
@@ -1686,6 +1705,7 @@ EVT_BEGIN(last_evt_3)
     WAIT_FRAMES(1)
     IF_INT_EQUAL(LW(0), 1)
         WAIT_MS(500)
+        // If Mario agrees to serve her, the world is swallowed by darkness (the bad ending message).
         CALL(evt_msg_print, 0, STRING("stg8_las_137"), 0, STRING("ブラックピーチ"))
         CALL(evt_cam3d_evt_set, -330, 100, 332, -330, 40, -12, 800, EASING_SINE_IN_OUT)
         WAIT_MS(800)
@@ -1724,6 +1744,7 @@ EVT_BEGIN(last_evt_3)
 #ifndef VERSION_G8ME01
     CALL(evt_npc_delete, STRING("にせマリオ"))
 #endif
+    // If he refuses, she is amused and decides to destroy them.
     CALL(evt_msg_print, 0, STRING("stg8_las_140"), 0, STRING("ブラックピーチ"))
     CALL(rou_hikari_front_onoff, 1, 1)
     CALL(evt_cam3d_evt_set, 125, 77, 237, 125, 57, -13, 800, EASING_SINE_IN_OUT)
@@ -1745,10 +1766,13 @@ EVT_BEGIN(last_evt_3)
     CALL(evt_mario_mov_pos2, 0, 0, FLOAT(120.0f))
     CALL(evt_npc_release_filednpc, 1)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    // The battle with the Shadow Queen in Peach's form starts and the script waits for it to end.
     CALL(evt_npc_set_battle_info, STRING("ブラックピーチ"), 16)
     CALL(evt_npc_battle_start, STRING("ブラックピーチ"))
     CALL(evt_npc_wait_battle_end)
     CALL(rou_hikari_front_onoff, 0, 1)
+    // Depending on the result either the follow-up scene begins (last_evt_3_1) or the story advances and the
+    // ending starts (last_evt_4).
     CALL(evt_npc_get_battle_result, LW(0))
     IF_INT_EQUAL(LW(0), BATTLE_RESULT_STOPPED)
         SPAWN_EVENT(PTR(last_evt_3_1))
@@ -1790,6 +1814,7 @@ EVT_END()
  * voices of everyone) to continue with last_evt_3_2.
  */
 EVT_BEGIN(last_evt_3_1)
+    // The defeated Shadow Queen hovers over the floor.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, 0, 0, 0)
@@ -1818,6 +1843,7 @@ EVT_BEGIN(last_evt_3_1)
     SET_VALUE(GF(2), 0)
     SPAWN_EVENT(PTR(b_peach_fuwafuwa))
     WAIT_MS(500)
+    // She asks Mario again whether he will serve her; Mario answers and the Queen decides he must perish.
     CALL(evt_msg_print, 0, STRING("stg8_las_146"), PTR(b_peach_msgcb), STRING("ブラックピーチ"))
     CALL(evt_npc_flag_onoff, 1, STRING("マジョリン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_flag_onoff, 1, STRING("マリリン"), NPC_FLAG_INSTANT_TURN)
@@ -1840,6 +1866,8 @@ EVT_BEGIN(last_evt_3_1)
     CALL(radiation_entry, STRING("rad"), LW(0), LW(1), LW(2), FLOAT(1.0f))
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     WAIT_MS(500)
+    // A strange light appears; the screen flashes white and the scene moves to gor_01, where everyone's voices
+    // reach Mario (last_evt_3_2).
     CALL(evt_msg_print, 0, STRING("stg8_las_148_01"), PTR(b_peach_msgcb), STRING("ブラックピーチ"))
     CALL(evt_mario_set_pose, STRING("M_I_N"))
     CALL(evt_cam3d_evt_set, 0, 74, 236, 0, 30, -10, 0, EASING_SINE_IN_OUT)
@@ -2024,6 +2052,7 @@ EVT_BEGIN(majo_kyorokyoro)
 EVT_END()
 
 EVT_BEGIN(last_evt_3_2)
+    // Voices of everyone Mario met call out to him in the darkness.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_pos, 0, 0, 0)
@@ -2078,6 +2107,7 @@ EVT_BEGIN(last_evt_3_2)
         ADD(LW(0), 3)
         MODULO(LW(0), 20)
     END_LOOP
+    // The voices speak in turn while the Sirens flutter about in confusion.
     SPAWN_EVENT_GET_ID(PTR(koe_evt), GW(0))
     SPAWN_EVENT_GET_ID(PTR(majo_kyorokyoro), GW(2))
     WAIT_MS(1000)
@@ -2146,6 +2176,7 @@ EVT_BEGIN(last_evt_3_2)
     WAIT_FRAMES(1)
     WAIT_MS(500)
     CALL(evt_msg_pri, 20)
+    // The Shadow Queen is shaken by the voices and the light that surrounds Mario.
     CALL(evt_msg_print, 0, STRING("stg8_las_148_76"), PTR(b_peach_msgcb), STRING("ブラックピーチ"))
     CALL(evt_npc_get_position, STRING("ブラックピーチ"), LW(0), LW(1), LW(2))
     CALL(evt_eff64, 0, STRING("stardust_n64"), 1, LW(0), LW(1), LW(2), 30, 0, 0, 0, 0, 0, 0, 0)
@@ -2276,6 +2307,7 @@ EVT_BEGIN(last_evt_3_2)
     END_INLINE_EVENT
     CALL(evt_msg_pri, 20)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+    // Peach calls to Mario from inside the Queen; his partner answers.
     CALL(evt_msg_print, 0, STRING("stg8_las_149"), 0, STRING("ピーチ姫"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
@@ -2323,6 +2355,7 @@ EVT_BEGIN(last_evt_3_2)
     CALL(evt_msg_pri, 20)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_7F"), STRING("P_T_7F"))
+    // Peach gives Mario her last strength; the Queen rages at her disobedience.
     CALL(evt_msg_print, 0, STRING("stg8_las_153"), 0, STRING("ピーチ姫"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 153, 51, 1000)
     LABEL(0)
@@ -2385,6 +2418,7 @@ EVT_BEGIN(last_evt_3_2)
     CALL(evt_msg_print, 0, STRING("stg8_las_155"), PTR(b_peach_msgcb), STRING("ブラックピーチ"))
     CALL(evt_msg_pri, 20)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+    // Peach says farewell and the Queen threatens Mario once more.
     CALL(evt_msg_print, 0, STRING("stg8_las_156"), 0, STRING("ピーチ姫"))
     CALL(evt_npc_flag_onoff, 0, STRING("ブラックピーチ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 51, 0, 1000)
@@ -2427,9 +2461,11 @@ EVT_BEGIN(last_evt_3_2)
     DELETE_EVENT(GW(2))
     CALL(evt_npc_release_filednpc, 1)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    // The second battle with the Shadow Queen (battle 17) starts and the script waits for it to end.
     CALL(evt_npc_set_battle_info, STRING("ブラックピーチ"), 17)
     CALL(evt_npc_battle_start, STRING("ブラックピーチ"))
     CALL(evt_npc_wait_battle_end)
+    // The story advances and the ending begins (last_evt_4).
     SET_VALUE(GSW_STORY_PROGRESS, STG8_16_THE_RETURN_OF_THE_QUEEN)
     WAIT_FRAMES(1)
     CALL(rou_hikari_front_onoff, 0, 1)
@@ -2439,6 +2475,7 @@ EVT_BEGIN(last_evt_3_2)
 EVT_END()
 
 EVT_BEGIN(last_evt_4)
+    // The Shadow Queen is gone: the music stops and the Sirens and Mario's partners speak.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -2480,6 +2517,7 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kuro"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kabekesu"), MAP_OBJ_FLAG_HIDDEN)
 #ifdef VERSION_G8ME01
+    // Professor Frankly (クリハカセ) arrives and the hall flashes white as the Queen's power fades.
     CALL(evt_npc_entry, STRING("クリハカセ"), STRING("c_kuri_h"))
     CALL(evt_npc_set_tribe, STRING("クリハカセ"), STRING("クリハカセ"))
     CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
@@ -2494,6 +2532,8 @@ EVT_BEGIN(last_evt_4)
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE1"), LW(9))
+        // White flashes fill the hall; the Shadow Queen and her dark form vanish from the room and Peach is
+        // placed in front of Mario.
         SPAWN_EVENT_GET_ID(PTR(evt_sub_stopwatch), LW(15))
         LOOP(0)
             IF_INT_NOT_EQUAL(GF(0), 0)
@@ -2767,6 +2807,7 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_npc_flag_onoff, 0, STRING("マジョリン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_flag_onoff, 0, STRING("マリリン"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_flag_onoff, 0, STRING("ランペル"), NPC_FLAG_INSTANT_TURN)
+    // Beldam, Marilyn and Doopliss speak their last words; the partners answer.
     CALL(evt_msg_print, 0, STRING("stg8_las_173"), 0, STRING("マジョリン"))
     CALL(evt_npc_majo_disp_off, STRING("マジョリン"))
     WAIT_MS(300)
@@ -2822,6 +2863,7 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_cam3d_evt_set, 15, 85, 258, 15, 38, -13, 1500, EASING_SINE_IN_OUT)
     CALL(evt_party_move_pos, 0, 0, 10, 1500)
     WAIT_MS(1700)
+    // The ending music begins; the partners say what they will do next.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_ENDING1"))
     WAIT_MS(300)
     CALL(rou_hikari_front_onoff, 0, 0)
@@ -2860,6 +2902,7 @@ EVT_BEGIN(last_evt_4)
     CALL(evt_npc_set_position, STRING("ピーチ姫"), LW(0), LW(1), LW(2))
     WAIT_MS(300)
     CALL(evt_npc_flag_onoff, 0, STRING("ピーチ姫"), NPC_FLAG_TALK_POSE)
+    // Peach thanks Mario and his friends.
     CALL(evt_msg_print, 0, STRING("stg8_las_179"), 0, STRING("ピーチ姫"))
     CALL(evt_npc_set_anim, STRING("ピーチ姫"), STRING("P_A_1F"))
     CALL(evt_npc_wait_anim, STRING("ピーチ姫"), FLOAT(1.0f))
@@ -2948,6 +2991,7 @@ EVT_BEGIN(last_evt_4)
         CALL(evt_party_set_dir, 0, 270, 300)
     END_INLINE_EVENT
 #ifdef VERSION_G8ME01
+    // Professor Frankly walks in and congratulates them.
     CALL(evt_msg_print, 0, STRING("stg8_las_185"), 0, STRING("クリハカセ"))
 #else
     CALL(evt_msg_print, 0, STRING("stg8_las_185"), 0, STRING(/*"クリハカセ"*/"\x83\x4E\x83\x8A\x83\x6E\x83\x4A\x83\x5A"))
@@ -3001,6 +3045,7 @@ EVT_BEGIN(last_evt_4)
 #endif
     ADD(LW(0), 5)
     ADD(LW(1), 20)
+    // A chest grows into view, drops to the floor and bounces to a stop.
     CALL(evt_mobj_itembox, STRING("box"), LW(0), LW(1), LW(2), MOBJ_ITEMBOX_GOLDEN, 0, 0, 0)
     CALL(evt_mobj_set_scale, STRING("box"), FLOAT(0.2998047f), FLOAT(0.2998047f), FLOAT(0.2998047f))
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_GRAVITY)
@@ -3143,8 +3188,10 @@ EVT_BEGIN(last_evt_4)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 0, 300, 840, 0, -20, 0, 4000, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
+    // The music and screen fade out.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_fade_out, 1800)
+    // The story is set to the end of the main game and the scene moves to Rogueport (gor_11).
     SET_VALUE(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 1, FADE_IN_BLACK, 300)
     CALL(evt_bero_mapchange, STRING("gor_11"), 0)

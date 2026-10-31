@@ -954,6 +954,7 @@ void mot_slit(void) {
         {
             MarioWork* p = marioGetPtr();
             p->slitPosSet = 1;
+            // copy
             p->slitPos = p->position;
         }
     case 0x5b:

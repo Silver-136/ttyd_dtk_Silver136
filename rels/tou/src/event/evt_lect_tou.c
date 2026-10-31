@@ -474,7 +474,14 @@ EVT_BEGIN(yoshi_party_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * The Yoshi lecture run by all_party_lecture (lecture_friends_09_0_1 to 11): press X to get on and off (Mario
+ * mounts, dismounts and mounts again), riding is faster (he rides across and back), pressing A while riding
+ * floats briefly (Yoshi flutters twice), then Mario gets off and the text explains Yoshi's Ground Pound and Gulp
+ * battle moves.
+ */
 EVT_BEGIN(yoshi_party_lecture)
+    // Yoshi primer: press X to get on and off, and Mario hops on, off and on again.
     CALL(evt_msg_print, 0, STRING("lecture_friends_09_0_1"), 0, 0)
     CALL(evt_msg_print, 0, STRING("lecture_friends_09_1"), 0, 0)
     CALL(evt_cam_letter_box_disable, 1)
@@ -484,6 +491,7 @@ EVT_BEGIN(yoshi_party_lecture)
     CALL(evt_party_yoshi_ride, 0, 0)
     WAIT_MS(1000)
     CALL(evt_party_yoshi_ride, 0, 1)
+    // Riding is faster: Yoshi carries Mario across and back with his footstep sounds.
     CALL(evt_msg_print_add, 0, STRING("lecture_friends_09_1_1"))
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(470.0f), FLOAT(71.0f), FLOAT(30.0f), FLOAT(-101.799805f), 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -534,11 +542,13 @@ EVT_BEGIN(yoshi_party_lecture)
     CALL(x_flag_set, 0, 2)
     CALL(evt_mario_set_dir, 90, 300, 0)
     CALL(evt_party_set_dir, 0, 90, 300)
+    // Pressing A while riding floats briefly: Yoshi flutters twice.
     CALL(evt_msg_print_add, 0, STRING("lecture_friends_10"))
     LOOP(2)
         CALL(evt_party_yoshi_fly, 0, 1, 1000)
         WAIT_MS(300)
     END_LOOP
+    // Mario gets off, Yoshi steps aside and the text explains Ground Pound and Gulp in battle.
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(-2.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_mario_set_dir, 270, 300, 0)
@@ -560,6 +570,10 @@ EVT_BEGIN(yoshi_party_lecture)
     RETURN
 EVT_END()
 
+/**
+ * Side event of the partner-join cutscene: fades the music out,
+ * starts the partner-get jingle ("BGM_FF_GET_PARTY1") and runs for 2 seconds alongside the item-get effect.
+ */
 static EVT_BEGIN(all_party_lecture_otosub)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GET_PARTY1"))
@@ -567,7 +581,17 @@ static EVT_BEGIN(all_party_lecture_otosub)
     RETURN
 EVT_END()
 
+/**
+ * Partner-join sequence for the partner LW(9) (whose NPC LW(8) it replaces, unless it is Goombella, 1):
+ * the partner joins the party, the item-get backdrop and jingle (all_party_lecture_otosub) show the
+ * "joined your party" message (lecture_friends_00, 04, 07, 09 with the Yoshi's name, 12, 15 or 17),
+ * then the screen is captured into a paper image over the lecture music and Mario blinks in.
+ * Only the Yoshi (4) gets a lecture in this file (yoshi_party_lecture_init, yoshi_party_lecture);
+ * afterwards they
+ * blink out, the camera and sound are restored and the paper image closes.
+ */
 EVT_BEGIN(all_party_lecture)
+    // The new partner (unless it is Goombella) takes the place of its NPC and joins the party.
     CALL(evt_mario_normalize)
     IF_INT_NOT_EQUAL(LW(9), 1)
         IF_INT_NOT_EQUAL(LW(9), 5)
@@ -585,6 +609,7 @@ EVT_BEGIN(all_party_lecture)
         ELSE
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     END_IF
+    // The item-get backdrop and jingle play while the "joined your party" message is shown.
     CALL(evt_party_set_camid, 0, 7)
     SPAWN_EVENT_GET_ID(PTR(all_party_lecture_otosub), LW(11))
     CALL(lect_itemget_kesan, 0, FLOAT(600.0f), LW(0), LW(1), LW(2))
@@ -609,12 +634,14 @@ EVT_BEGIN(all_party_lecture)
         CASE_EQUAL(7)
         CALL(evt_msg_print, 0, STRING("lecture_friends_17"), 0, 0)
     END_SWITCH
+    // The jingle is cut short if it is still playing and the field music resumes.
     IS_EVENT_RUNNING(LW(11), LW(12))
     IF_INT_EQUAL(LW(12), 1)
         DELETE_EVENT(LW(11))
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
+    // The screen is frozen into a paper image over the lecture music, the partner held off to one side.
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_set_camid, 7)
     CALL(effitemget_open, STRING("sub_bg"))
@@ -648,6 +675,7 @@ EVT_BEGIN(all_party_lecture)
     WAIT_FRAMES(1)
     CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_cont_onoff, 0, 1)
+    // Mario blinks in and, for Yoshi, the lecture is set up and played.
     CALL(lect_test_systemlevel)
     SWITCH(LW(9))
         CASE_EQUAL(4)
@@ -668,6 +696,7 @@ EVT_BEGIN(all_party_lecture)
         CASE_EQUAL(4)
         CALL_CHILD(PTR(yoshi_party_lecture))
     END_SWITCH
+    // Mario and the partner blink out; the camera, music and paper image are restored.
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
@@ -701,6 +730,10 @@ EVT_BEGIN(all_party_lecture)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the Super Hammer tutorial: Mario is moved to the lecture spot,
+ * the Toad guide (キノピコ) is placed beside him, and the camera and controls are prepared.
+ */
 EVT_BEGIN(hammer_lv2_juyoitem_lecture_init)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
     CALL(evt_mario_set_pos, 0, 0, 120)
@@ -725,6 +758,10 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * Super Hammer tutorial prompt, part 1: button 0 (A, blinking) bright and button 1 dimmed;
+ * animates button 0's icon between two frames every 300 ms until the script is stopped.
+ */
 EVT_BEGIN(hammer_lv2_juyoitem_lecture_sub01)
     CALL(lecture_button_set_alpha, 0, 255)
     CALL(lecture_button_set_alpha, 1, 128)
@@ -763,7 +800,14 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture_sub02)
     RETURN
 EVT_END()
 
+/**
+ * The Super Hammer lecture by Toadette (キノピコ, lecture_s_hammer_04 to 13): she explains holding B, rotating the
+ * stick and releasing, with the B and stick button prompts (sub01, sub02) tracking Mario's input while he tries
+ * it; she praises him and offers another try (yes/no), says he has mastered it, drops a big block
+ * (MOBJ_Lv1BigBigBlock) to show it can be broken, mentions it also works in battle and walks off.
+ */
 EVT_BEGIN(hammer_lv2_juyoitem_lecture)
+    // Toadette greets Mario and explains the Super Hammer: hold B, rotate the stick, then release.
     BEGIN_SIBLING_EVENT
         CALL(lecture_button_rtn)
     END_SIBLING_EVENT
@@ -776,6 +820,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
     CALL(evt_npc_move_position, STRING("キノピコ"), LW(0), LW(2), 0, FLOAT(80.0f), 0)
     CALL(evt_msg_print, 0, STRING("lecture_s_hammer_04"), 0, STRING("キノピコ"))
     CALL(evt_msg_print_add, 0, STRING("lecture_s_hammer_05"))
+    // Practice round: Toadette cheers him on while the B and stick prompts follow his input.
     LOOP(0)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("lecture_s_hammer_06"), 0, 0)
@@ -825,6 +870,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
         CALL(evt_mario_set_enable_key, PAD_BUTTON_B)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_mario_key_onoff, 1)
+        // Mario's input is watched until he winds up and releases the Super Hammer.
         LOOP(0)
             CALL(lect_status_off)
             CALL(evt_mario_get_pos, 0, LW(5), LW(1), LW(6))
@@ -866,6 +912,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
+        // Practice done: the controls come back and Mario strikes a victory pose.
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(lect_status_on)
@@ -884,6 +931,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         CALL(evt_mario_adjust_dir)
         CALL(evt_mario_set_dir, 90, 150, 0)
+        // Toadette praises him and asks whether he wants to try again.
         CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(26.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_2"), STRING("T_2"))
@@ -896,6 +944,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // He has mastered it: Toadette steps aside and drops a big block beside Mario.
     CALL(evt_msg_print_add, 0, STRING("lecture_s_hammer_11"))
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(52.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
@@ -920,6 +969,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
     CALL(evt_mobj_set_position, LW(1), LW(2), LW(3), LW(4))
     CALL(evt_mobj_set_gravity_bound, LW(1), FLOAT(0.16601563f), FLOAT(1.0f))
     CALL(evt_snd_sfxon, STRING("SFX_EVT_LECTURE_BLOCK_FALL1"), LW(7))
+    // The block lands with a thud that shakes the camera.
     BEGIN_INLINE_EVENT
         LOOP(0)
             CALL(evt_mobj_get_position, LW(1), LW(2), LW(3), LW(4))
@@ -946,6 +996,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // Toadette says the Super Hammer breaks big blocks like this one, and the block blinks away.
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("A_2"))
     WAIT_MS(170)
@@ -961,6 +1012,7 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
     END_LOOP
     CALL(evt_mobj_delete, LW(1))
     WAIT_MS(300)
+    // She adds that it works in battle too, says goodbye and walks off.
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(52.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("lecture_s_hammer_13"), 0, STRING("キノピコ"))
@@ -973,6 +1025,13 @@ EVT_BEGIN(hammer_lv2_juyoitem_lecture)
     RETURN
 EVT_END()
 
+/**
+ * Key-item lecture wrapper: opens the item-get view for the item juyoitem_get_no returned, plays the lecture
+ * music, captures the screen into a paper image, and for item number 10 runs the Super Hammer lecture with
+ * Toadette (hammer_lv2_juyoitem_lecture_init, hammer_lv2_juyoitem_lecture);
+ * then Mario blinks out, the camera and
+ * sound are restored, the paper image closes and Mario returns to the field.
+ */
 EVT_BEGIN(all_juyoitem_lecture_rel)
     CALL(evt_mario_normalize)
     CALL(juyoitem_get_no, LW(10))
@@ -1052,6 +1111,10 @@ EVT_BEGIN(all_juyoitem_lecture_rel)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: args[0] = map object name ("me" = this object);
+ * turns on flag 1 on both of its collision groups, which switches off their hits (nasi = none).
+ */
 static USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;

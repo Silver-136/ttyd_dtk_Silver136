@@ -710,6 +710,7 @@ static USER_FUNC(enzan_cam_turn_keisan_f) {
  * Ends by restoring the music and the interior.
  */
 EVT_BEGIN(powerupya_party_lank_rtn)
+    // The partner and Mario face the stone and the music dips.
     BEGIN_SIBLING_EVENT
         LOOP(0)
             CALL(evt_party_set_dir_pos, 0, -362, -200)
@@ -718,6 +719,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
         END_LOOP
     END_SIBLING_EVENT
     CALL(enzan_lw_save)
+    // Merlon announces the ceremony; the stone's glow rises.
     CALL(evt_snd_bgmoff_f, PSND_PAUSE, 2000)
     CALL(evt_msg_print, 0, STRING("powerup_12"), 0, STRING("me"))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 20, 1000)
@@ -732,12 +734,14 @@ EVT_BEGIN(powerupya_party_lank_rtn)
     END_LOOP
     WAIT_MS(500)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
+    // The ceremony music starts and a lens flare blooms over the stone.
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_POWERUP1"))
     CALL(bgm_start_wait)
     CALL(evt_eff64, STRING("aaax"), STRING("lensflare_n64"), 0, -362, 44, -200, FLOAT(1.0f), -1, 0, 0, 0, 0, 0, 0)
     WAIT_MS(500)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
+    // Merlon speaks again; the shop interior fades out so only the stone, Mario and the partner remain.
     CALL(evt_msg_print, 0, STRING("powerup_14"), 0, STRING("me"))
     CALL(bgScrollControll, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
@@ -764,6 +768,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
         END_LOOP
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+        // The crystal pillars swing up while the camera shakes and rises above the stone.
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 90, 1600)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
@@ -783,6 +788,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
     CALL(evt_cam3d_evt_set, -362, 193, 686, -362, 37, -200, 1600, EASING_SINE_IN_OUT)
     WAIT_MS(1600)
     BEGIN_INLINE_EVENT
+        // The camera circles the stone as crystals and sparkles gather around the partner.
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 100, 7000)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
@@ -808,6 +814,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
         ADD_FLOAT(LW(7), FLOAT(18.0f))
         CALL(evt_eff64, STRING("cccx"), STRING("pokopi_pcharge_n64"), 2, LW(3), LW(7), LW(5), FLOAT(1.0f), -1, 0, 0, 0, 0, 0, 0)
         WAIT_MS(500)
+        // The partner shakes and strikes the power-up pose, one pose per partner.
         CALL(evt_mario_get_party, LW(1))
         SWITCH(LW(1))
             CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
@@ -827,6 +834,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
         END_SWITCH
     END_INLINE_EVENT
     WAIT_MS(7000)
+    // The glow fades.
     CALL(evt_eff_softdelete, STRING("aaax"))
     IF_INT_EQUAL(GSWF_GOR_UP_ARROW_USED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
@@ -834,9 +842,11 @@ EVT_BEGIN(powerupya_party_lank_rtn)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     WAIT_MS(500)
+    // A bright release flashes.
     CALL(evt_eff64, STRING("dddx"), STRING("release_n64"), 65283, -362, 44, -200, FLOAT(1.0f), 200, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1500)
     CALL(evt_eff_softdelete, STRING("cccx"))
+    // The partner relaxes and star dust sprays out around them.
     CALL(evt_mario_get_party, LW(1))
     SWITCH(LW(1))
         CASE_EQUAL(PARTY_MEMBER_GOOMBELLA)
@@ -860,6 +870,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
     CALL(effect_stardust, 0, LW(3), LW(7), LW(5), FLOAT(50.0f), FLOAT(50.0f), 20, 120)
     BEGIN_INLINE_EVENT
         WAIT_MS(400)
+        // The shop interior fades back in and the pillars swing down.
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 255, 1200)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
@@ -900,6 +911,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
         CALL(evt_map_set_blend, 0, 0, 0, 0, 0)
         CALL(evt_set_bgtpl, 0)
     END_INLINE_EVENT
+    // The camera returns to normal and the partner cheers, again with its own pose.
     CALL(evt_cam3d_evt_off, 1600, EASING_SINE_IN_OUT)
     WAIT_MS(1400)
     CALL(evt_party_set_breed_pose, 0, 1)
@@ -931,6 +943,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
         CALL(evt_party_set_pose, 0, STRING("PCH_Y_1"))
     END_SWITCH
     WAIT_MS(1500)
+    // The music returns to the shop theme.
     CALL(evt_party_set_breed_pose, 0, 1)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)
     CALL(enzan_lw_load)
@@ -1130,6 +1143,7 @@ EVT_BEGIN(powerupya_party_move)
 EVT_END()
 
 EVT_BEGIN(powerupya_orb_use)
+    // Mario holds out the Up Arrow: it floats across to Merlon and vanishes.
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_C_3"))
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
@@ -1147,6 +1161,7 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_item_delete, STRING("watasu"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     WAIT_MS(500)
+    // Merlon reacts to the arrow and speaks.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("powerup_ev_04"), 0, STRING("me"))
     CALL(evt_mario_set_pose, STRING("M_N_1"))
@@ -1154,11 +1169,13 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("me"), 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
+    // The camera moves in on Merlon as he muses over it.
     CALL(evt_cam3d_evt_set, -335, 100, 158, -335, 33, -236, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("powerup_ev_05"), 0, STRING("me"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+    // Merlon spins on the spot; star dust sprays and the shine sounds play.
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_2"))
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
@@ -1172,6 +1189,7 @@ EVT_BEGIN(powerupya_orb_use)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
+    // He spins up into the air while Mario and the partner look on in surprise.
     SPAWN_EVENT_GET_ID(PTR(powerupya_stardust), LW(5))
     CALL(evt_npc_get_position, STRING("me"), LW(7), LW(8), LW(9))
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_STARSTONE_SHINE1"), LW(7), LW(8), LW(9), LW(6))
@@ -1197,6 +1215,7 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(2000)
     CALL(evt_npc_get_position, STRING("me"), LW(7), LW(8), LW(9))
+    // He crashes back down with a thud and the camera shakes; the Ultra Stone falls from him.
     CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BREAK_FLOOR1"), LW(7), LW(8), LW(9), 0)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1000)
     WAIT_MS(500)
@@ -1219,6 +1238,7 @@ EVT_BEGIN(powerupya_orb_use)
         END_IF
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
+        // He spins again and drops back to the floor, then speaks.
         CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, 2160, 1600)
         LOOP(0)
             CALL(evt_sub_intpl_msec_get_value)
@@ -1245,6 +1265,7 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     WAIT_MS(750)
     CALL(evt_msg_print, 0, STRING("powerup_ev_06"), 0, STRING("me"))
+    // Mario and the partner walk over to the stone while Merlon picks it up.
     SPAWN_EVENT(PTR(powerupya_mario_move))
     CALL(evt_party_stop, 0)
     SPAWN_EVENT(PTR(powerupya_party_move))
@@ -1256,6 +1277,7 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_npc_move_position, STRING("me"), -338, -160, 0, FLOAT(120.0f), 0)
     CALL(evt_npc_set_ry_lr, STRING("me"), 0)
     WAIT_MS(1500)
+    // The ceremony music starts and a lens flare shines over the stone.
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_POWERUP1"))
     CALL(bgm_start_wait)
@@ -1265,14 +1287,17 @@ EVT_BEGIN(powerupya_orb_use)
     WAIT_MS(1500)
     CALL(evt_eff_softdelete, STRING("aaax"))
     SET_VALUE(GSWF_GOR_UP_ARROW_USED, 1)
+    // The blue stone turns red and the music fades.
     CALL(stonechangertn, STRING("S_i01_sui_aka"))
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
     WAIT_MS(2000)
+    // Merlon hops back to his table and speaks; the Up Arrow is removed from the inventory.
     CALL(evt_npc_jump_position_nohit, STRING("me"), -320, 0, -205, 500, 50)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("powerup_ev_07"), 0, STRING("me"))
     CALL(evt_pouch_remove_item, ITEM_UP_ARROW, LW(0))
     SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
+    // Control returns to the player and the shop music resumes.
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_party_run, 0)
@@ -1477,30 +1502,36 @@ EVT_END()
 static EVT_BEGIN(kurihakase_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG0_10_01_FRANKLYS_TUTORIAL)
+        // Frankly's line for the story stage: after the tutorial, the Prologue.
         CALL(evt_msg_print, 0, STRING("mac_0_085"), 0, STRING("me"))
         CASE_LESS(STG1_00_PETAL_MEADOWS)
         CALL(evt_msg_print, 0, STRING("gor_02_013"), 0, STRING("me"))
         CASE_LESS(STG1_18_PEACH_CAUGHT)
         CALL(evt_msg_print, 0, STRING("gor_02_014"), 0, STRING("me"))
         CASE_BETWEEN(STG1_17_FATHER_SON_REUNITED, STG1_30_ZESS_T)
+        // Chapter 1: before and after the Petal Meadows trip.
         CALL(evt_msg_print, 0, STRING("mac_1_000"), 0, STRING("me"))
         CASE_LESS(STG2_00_BOGGLY_WOODS)
         CALL(evt_msg_print, 0, STRING("gor_02_015"), 0, STRING("me"))
         CASE_LESS(STG2_25_01_PEACH_CRUMP_X_NAUTS)
         CALL(evt_msg_print, 0, STRING("gor_02_016"), 0, STRING("me"))
         CASE_BETWEEN(STG2_25_AFTER_THE_BOSS_BATTLE, STG2_40_THOUSAND_YEAR_DOOR)
+        // Chapter 2.
         CALL(evt_msg_print, 0, STRING("mac_2_000"), 0, STRING("me"))
         CASE_LESS(STG3_00_WELCOME_TO_GLITZVILLE)
         CALL(evt_msg_print, 0, STRING("gor_02_017"), 0, STRING("me"))
         CASE_LESS(STG3_33_PEACH_THE_SECRET_WEAPON)
         CALL(evt_msg_print, 0, STRING("gor_02_018"), 0, STRING("me"))
         CASE_BETWEEN(STG3_33_PEACH_THE_SECRET_WEAPON, STG3_50_THOUSAND_YEAR_DOOR)
+        // Chapter 3.
         CALL(evt_msg_print, 0, STRING("mac_3_000"), 0, STRING("me"))
         CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
         IF_INT_EQUAL(GSWF_TIK_08_PIPE_REJECTED, 0)
             CALL(evt_msg_print, 0, STRING("gor_02_019"), 0, STRING("me"))
             ELSE
             IF_INT_EQUAL(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 0)
+                // After the Twilight Town trip: the partner speaks up, Frankly stares in surprise,
+                // then answers.
                 CALL(evt_party_stop, 0)
                 CALL(evt_msg_print_party, STRING("mac_3_008"))
                 CALL(evt_msg_print, 0, STRING("mac_3_009"), 0, STRING("me"))
@@ -1511,10 +1542,12 @@ static EVT_BEGIN(kurihakase_talk)
                 SET_VALUE(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 1)
                 CALL(evt_party_run, 0)
                 ELSE
+                // Later Chapter 3 lines.
                 CALL(evt_msg_print, 0, STRING("gor_02_020"), 0, STRING("me"))
             END_IF
         END_IF
         CASE_BETWEEN(STG4_15_02_BACK_TO_NORMAL, STG4_30_THOUSAND_YEAR_DOOR)
+        // Chapter 4, including the steps around Bobbery.
         CALL(evt_msg_print, 0, STRING("mac_4_000"), 0, STRING("me"))
         CASE_LESS(STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
         CALL(evt_msg_print, 0, STRING("gor_02_021"), 0, STRING("me"))
@@ -1526,6 +1559,7 @@ static EVT_BEGIN(kurihakase_talk)
         CASE_EQUAL(STG4_34_BOBBERY_DECLINES)
         CALL(evt_msg_print, 0, STRING("mac_4_060"), 0, STRING("me"))
         CASE_BETWEEN(STG5_44_PEACH_TECS_REQUEST_2, STG5_60_RETURN_TO_KEELHAUL)
+        // Chapter 5.
         CALL(evt_msg_print, 0, STRING("mac_5_000"), 0, STRING("me"))
         CASE_LESS(STG5_59_ROGUEPORT_DOCK)
         CALL(evt_msg_print, 0, STRING("gor_02_023"), 0, STRING("me"))
@@ -1534,6 +1568,7 @@ static EVT_BEGIN(kurihakase_talk)
         CASE_LESS(STG6_55_PEACH_GRODUS_X_NAUT)
         CALL(evt_msg_print, 0, STRING("gor_02_025"), 0, STRING("me"))
         CASE_BETWEEN(STG6_55_PEACH_GRODUS_X_NAUT, STG6_70_THOUSAND_YEAR_DOOR)
+        // Chapter 6: if Mario was away long, Frankly remarks on how much time has passed.
         CALL(evt_msg_print, 0, STRING("mac_6_000"), 0, STRING("me"))
         CASE_EQUAL(STG6_71_FRANKLYS_HOUSE_STG_6)
         CALL(evt_sub_load_progresstime, GSW_GOR_FRANKLY_STG6_START_TIME, LW(0))
@@ -1557,6 +1592,7 @@ static EVT_BEGIN(kurihakase_talk)
                 CALL(evt_msg_print, 0, STRING("mac_6_006_06"), 0, STRING("クリハカセ"))
             END_SWITCH
             ELSE
+            // Chapter 7: the screen goes to letterbox and a timer event starts.
             CALL(evt_cam_letter_box_disable, 1)
             CALL(evt_cam_letter_box_onoff, 1, 0)
             WAIT_MS(1000)
@@ -1574,6 +1610,7 @@ static EVT_BEGIN(kurihakase_talk)
             CALL(evt_msg_print, 0, STRING("gor_02_027"), 0, STRING("me"))
         END_IF
         CASE_LESS(STG7_25_00_BOWSER_POSHLEY_HEIGHTS)
+        // Chapter 8: Frankly's last lines, including his reaction to Mario's pose.
         CALL(evt_msg_print, 0, STRING("gor_02_028"), 0, STRING("me"))
         CASE_GREATER_OR_EQUAL(STG9_00_EPILOGUE)
         IF_INT_EQUAL(GSWF_GOR_FRANKLY_EPILOGUE_TALK_DONE, 0)
@@ -1604,6 +1641,7 @@ EVT_BEGIN(oyabun_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         IF_INT_EQUAL(GSWF_GOR_ISHNAIL_FIRST_TALK_DONE, 0)
+            // Before the Pianta Parlor story step: a first line, then a repeat line on later visits.
             CALL(evt_msg_print, 0, STRING("gor_02_000"), 0, STRING("me"))
             SET_VALUE(GSWF_GOR_ISHNAIL_FIRST_TALK_DONE, 1)
             ELSE
@@ -1611,10 +1649,13 @@ EVT_BEGIN(oyabun_talk)
         END_IF
         CASE_EQUAL(STG2_41_FRANKLYS_HOUSE_STG_2)
         IF_INT_EQUAL(GSWF_GOR_ISHNAIL_PASSWORD_TOLD, 1)
+            // At the step where Mario needs to find the Parlor's secret:
+            // the boss grumbles that this is the Robbo Thieves' fortress.
             CALL(evt_msg_print, 0, STRING("mac_2_040"), 0, STRING("me"))
             RETURN
         END_IF
         IF_INT_EQUAL(GSWF_GOR_ISHNAIL_DON_PIANTA_TALK_DONE, 0)
+            // Danger music starts and Mario answers with a hand-up pose between the boss's lines.
             CALL(evt_snd_bgmoff, PSND_PAUSE)
             CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_DANGER3"))
             CALL(evt_snd_envoff, PSND_PAUSE)
@@ -1638,6 +1679,7 @@ EVT_BEGIN(oyabun_talk)
             CALL(evt_msg_print, 0, STRING("mac_2_016"), 0, STRING("me"))
         END_IF
         BEGIN_INLINE_EVENT
+            // The boss offers to sell his inside information for 64 coins; Mario can agree or refuse.
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAND_UP1_2"), LW(0), LW(1), LW(2), 0)
         END_INLINE_EVENT
@@ -1649,6 +1691,8 @@ EVT_BEGIN(oyabun_talk)
             CALL(evt_msg_print_add, 0, STRING("mac_2_018"))
             CALL(evt_msg_select, 0, STRING("mac_2_018_yesno"))
             IF_INT_EQUAL(LW(0), 0)
+                // If Mario cannot pay he is turned away; if he agrees the coins are taken,
+                // with the coin gauge updating.
                 CALL(evt_pouch_get_coin, LW(3))
                 IF_INT_LESS(LW(3), 64)
                     CALL(evt_msg_print_add, 0, STRING("mac_2_020"))
@@ -1669,10 +1713,12 @@ EVT_BEGIN(oyabun_talk)
                     END_LOOP
                     CALL(status_gauge_force_off)
                     WAIT_MS(300)
+                    // Mario pays and the boss crows over the sale.
                     CALL(evt_msg_print, 0, STRING("mac_2_019"), 0, STRING("me"))
                     GOTO(38)
                 END_IF
                 ELSE
+                // Mario changes his mind or dithers: the boss throws him out.
                 CALL(evt_msg_print_add, 0, STRING("mac_2_021"))
                 CALL(evt_snd_envoff, PSND_FADEOUT | PSND_SLOT(1))
                 CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
@@ -1684,6 +1730,7 @@ EVT_BEGIN(oyabun_talk)
             CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
             RETURN
         END_IF
+        // The sale: the camera moves in on the boss and he gives the hint about the Pianta Parlor.
         LABEL(38)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_cam3d_evt_set, LW(0), 72, -753, LW(0), 52, -600, 500, EASING_SINE_IN_OUT)
@@ -1700,6 +1747,7 @@ EVT_BEGIN(oyabun_talk)
         SET_VALUE(GSWF_GOR_ISHNAIL_PASSWORD_TOLD, 1)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_END_TO_GLITZVILLE)
+        // After the hint: one line per story stage about Don Pianta and Glitzville.
         CALL(evt_msg_print, 0, STRING("gor_02_002"), 0, STRING("me"))
         CASE_LESS(STG3_32_BOSS_BATTLE)
         CALL(evt_msg_print, 0, STRING("gor_02_003"), 0, STRING("me"))
@@ -2132,14 +2180,18 @@ EVT_END()
 static EVT_BEGIN(sanders_talk)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_33_MEET_BOBBERY)
+        // Before Mario meets Bobbery: Sanders brushes him off and opens the door.
         CALL(evt_msg_print, 0, STRING("mac_4_049_01"), 0, STRING("me"))
         CALL_CHILD(PTR(sanders_open_door))
         CASE_EQUAL(STG4_33_MEET_BOBBERY)
         IF_INT_EQUAL(GSWF_GOR_BOBBERY_HOME_LEARNED, 0)
+            // First visit at the Bobbery step: he claims never to have heard of the Admiral.
             CALL(evt_msg_print, 0, STRING("mac_4_050"), 0, STRING("me"))
             CALL_CHILD(PTR(sanders_open_door))
             SET_VALUE(GSWF_GOR_BOBBERY_FIRST_DENIAL_HEARD, 1)
             ELSE
+            // Later visits: Mario and the partner press him about being the Admiral
+            // and about a navigator job; he refuses ("no means no").
             CALL(evt_party_stop, 0)
             CALL(evt_msg_print, 0, STRING("mac_4_051"), 0, STRING("me"))
             CALL(evt_party_set_dir_npc, 0, STRING("me"))
@@ -2155,8 +2207,10 @@ static EVT_BEGIN(sanders_talk)
             SET_VALUE(GSW_STORY_PROGRESS, STG4_34_BOBBERY_DECLINES)
         END_IF
         CASE_EQUAL(STG4_34_BOBBERY_DECLINES)
+        // He refuses again before the letter step.
         CALL(evt_msg_print, 0, STRING("mac_4_057"), 0, STRING("me"))
         CASE_EQUAL(STG4_35_ADVICE_FROM_PODLEY)
+        // At the letter step: Mario, the partner and Sanders line up and Mario hands over the old letter.
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         CALL(evt_msg_print, 0, STRING("mac_4_077"), 0, STRING("me"))
         BEGIN_INLINE_EVENT
@@ -2182,6 +2236,7 @@ static EVT_BEGIN(sanders_talk)
         ADD_FLOAT(LW(1), 2)
         ADD_FLOAT(LW(2), 5)
         CALL(evt_item_set_position, STRING("item00"), LW(0), LW(1), LW(2))
+        // Sanders is puzzled by the letter, then recognizes the handwriting: it is from Scarlette.
         CALL(evt_msg_print, 0, STRING("mac_4_078"), 0, STRING("me"))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1"), LW(0), LW(1), LW(2), 0)
@@ -2202,6 +2257,7 @@ static EVT_BEGIN(sanders_talk)
         CALL(evt_npc_jump_position_nohit, STRING("me"), LW(0), LW(1), LW(2), 225, 30)
         WAIT_MS(500)
         DELETE_EVENT(GW(0))
+        // The music turns sentimental; Sanders reads the letter aloud and breaks down.
         CALL(evt_snd_bgmoff_f, PSND_PAUSE, 2000)
         CALL(evt_msg_print, 0, STRING("mac_4_079"), 0, STRING("me"))
         CALL(evt_item_get_position, STRING("item00"), LW(0), LW(1), LW(2))
@@ -2236,6 +2292,7 @@ static EVT_BEGIN(sanders_talk)
         CALL(evt_msg_print, 0, STRING("mac_4_082"), 0, STRING("me"))
         CALL(evt_item_set_position, STRING("tegami"), 0, -1000, 0)
         WAIT_MS(300)
+        // He walks to his door and opens it for fresh air while the others wait; then closes it again.
         CALL(evt_npc_set_ry, STRING("me"), 270)
         CALL(evt_npc_move_position, STRING("me"), 0, -140, 0, FLOAT(60.0f), 0)
         SPAWN_EVENT(PTR(evt_gor_door_open_sanders))
@@ -2256,6 +2313,7 @@ static EVT_BEGIN(sanders_talk)
         CALL(evt_npc_set_ry, STRING("me"), 270)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         WAIT_MS(500)
+        // He agrees to be the navigator; the partner reacts and the old letter is removed from the inventory.
         CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 2000)
         CALL(evt_msg_print, 0, STRING("mac_4_084"), 0, STRING("me"))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -2266,6 +2324,7 @@ static EVT_BEGIN(sanders_talk)
         CALL(evt_msg_print_party, STRING("mac_4_086"))
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+        // Bobbery joins the party and the map music resumes.
         CALL(evt_party_stop, 1)
         CALL(evt_mario_set_party_pos, 1, PARTY_MEMBER_BOBBERY_FOLLOWER, LW(0), LW(1), LW(2))
         CALL(evt_party_run, 1)
@@ -2301,6 +2360,8 @@ static s32 item_tbl[] = {
 EVT_BEGIN(kuribo4_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SAFE_DELIVERY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
+            // Trouble Center job 2: if Mario carries a Box, the Goomba asks for it
+            // and takes the one Mario hands over.
             CALL(evt_pouch_check_item, ITEM_BOX, LW(0))
             IF_INT_GREATER_OR_EQUAL(LW(0), 1)
                 CALL(evt_msg_print, 0, STRING("irai_02_03"), 0, STRING("me"))
@@ -2316,10 +2377,13 @@ EVT_BEGIN(kuribo4_talk)
     END_IF
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
+            // Trouble Center job 13: the Goomba wants Battle Trunks;
+            // Mario hands them over one at a time from a list.
             CALL(evt_pouch_check_item, ITEM_BATTLE_TRUNKS, LW(0))
             IF_INT_GREATER(LW(0), 0)
                 CALL(iri_13_make_item_tbl)
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
+                    // He asks for trunks and Mario nods and shrugs between his lines.
                     CALL(evt_msg_print, 0, STRING("irai_13_001"), 0, 0)
                     CALL(evt_mario_set_pose, STRING("M_N_5B"))
                     WAIT_MS(500)
@@ -2355,6 +2419,7 @@ EVT_BEGIN(kuribo4_talk)
                         CALL(evt_pouch_remove_item, ITEM_BATTLE_TRUNKS, LW(0))
                     END_LOOP
                 END_IF
+                // No trunks left in the inventory: he thanks Mario for the ones he got and the list is freed.
                 CALL(evt_pouch_check_item, ITEM_BATTLE_TRUNKS, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
                     CALL(evt_msg_print, 0, STRING("irai_13_004"), 0, 0)
@@ -2366,6 +2431,7 @@ EVT_BEGIN(kuribo4_talk)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
+        // Otherwise: a line per story stage.
         CALL(evt_msg_print, 0, STRING("gor_02_030_00"), 0, STRING("me"))
         CASE_LESS(STG2_25_AFTER_THE_BOSS_BATTLE)
         CALL(evt_msg_print, 0, STRING("gor_02_030_01"), 0, STRING("me"))
@@ -2614,6 +2680,7 @@ EVT_BEGIN(kuragarisan_init)
 EVT_END()
 
 EVT_BEGIN(kuragarisan_write_name)
+    // The partner is moved to the left and walks over to Mario while Darkly looks on.
     CALL(evt_npc_get_position, STRING("me"), LW(13), LW(14), LW(15))
     CALL(evt_npc_get_dir, STRING("me"), LW(12))
     CALL(evt_party_stop, 0)
@@ -2639,6 +2706,8 @@ EVT_BEGIN(kuragarisan_write_name)
         WAIT_MS(10000)
         SET_VALUE(GF(1), 0)
     END_INLINE_EVENT
+    // Darkly says Mario needs something with his name on it to get through the pipe; Mario nods,
+    // then shakes his head.
     CALL(evt_msg_print, 0, STRING("mac_3_011"), 0, STRING("me"))
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(500)
@@ -2659,6 +2728,8 @@ EVT_BEGIN(kuragarisan_write_name)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+    // Darkly asks the partner to come over; the walk times out after 10 seconds
+    // and the partner is placed next to Mario.
     CALL(evt_msg_print, 0, STRING("mac_3_015"), 0, STRING("me"))
     LOOP(0)
         IF_INT_EQUAL(GF(0), 0)
@@ -2676,6 +2747,7 @@ EVT_BEGIN(kuragarisan_write_name)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // Darkly walks up to Mario and writes "MARIO" on the seat of his overalls with a pen.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -2692,6 +2764,7 @@ EVT_BEGIN(kuragarisan_write_name)
     WAIT_MS(1500)
     CALL(evt_npc_set_anim, STRING("me"), STRING("A_1C"))
     WAIT_MS(300)
+    // He tells Mario the writing is done; the partner reacts (Yoshi's chosen name is worked into his line).
     CALL(evt_msg_print, 0, STRING("mac_3_016"), PTR(kuragarisan_msgcb), STRING("me"))
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), PARTY_MEMBER_YOSHI)
@@ -2716,6 +2789,7 @@ EVT_BEGIN(kuragarisan_write_name)
     END_SWITCH
     ADD(LW(0), 5)
     SUBTRACT(LW(2), LW(3))
+    // Then he writes the partner's name on the partner the same way.
     CALL(evt_npc_move_position, STRING("me"), LW(0), LW(2), 0, 60, 0)
     CALL(evt_npc_set_ry, STRING("me"), 270)
     WAIT_MS(300)
@@ -2727,6 +2801,7 @@ EVT_BEGIN(kuragarisan_write_name)
     WAIT_MS(1500)
     CALL(evt_npc_set_anim, STRING("me"), STRING("A_1C"))
     WAIT_MS(300)
+    // The partner and Darkly comment; Darkly walks back to his place and the story moves on.
     CALL(evt_msg_print_party, STRING("mac_3_018"))
     CALL(evt_msg_print, 0, STRING("mac_3_019"), 0, STRING("me"))
     CALL(evt_npc_move_position, STRING("me"), LW(13), LW(15), 0, 60, 0)
@@ -3999,6 +4074,11 @@ EVT_BEGIN(evt_gor_door_open_sanders)
     RETURN
 EVT_END()
 
+/**
+ * Door half of evt_gor_door_open (Mario going through Sanders's secret door):
+ * plays evt_gor_door_open_sanders, waits
+ * half a second, then tips "S_ie_03_doao" 90 degrees about x over half a second and plays SFX_DOOR_DOWN1.
+ */
 EVT_BEGIN(evt_gor_door_open_sub)
     CALL_CHILD(PTR(evt_gor_door_open_sanders))
     WAIT_MS(500)
@@ -4016,6 +4096,7 @@ EVT_BEGIN(evt_gor_door_open_sub)
     RETURN
 EVT_END()
 
+/** Stores the float args[1] into the integer variable args[0] (float to integer conversion). */
 static USER_FUNC(enzan_set_i_f) {
     EvtWord* args = event->args;
     s32 var = args[0];
@@ -4670,6 +4751,7 @@ EVT_BEGIN(cam_yurasu_event)
 EVT_END()
 
 EVT_BEGIN(steel_coin)
+    // Setup: the thief is placed off to the left and Mario and the partner come in from the left edge.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kmn"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_npc_set_ry, STRING("盗賊"), 270)
     CALL(evt_npc_set_position, STRING("盗賊"), -300, 0, 0)
@@ -4690,6 +4772,7 @@ EVT_BEGIN(steel_coin)
     SET_VALUE(GF(0), 1)
     SET_VALUE(GF(1), 1)
     BEGIN_INLINE_EVENT
+        // The thief runs in from the right at full speed, with a running sound that follows him.
         CALL(evt_npc_move_position, STRING("盗賊"), -620, 0, 0, FLOAT(300.0f), 0)
         CALL(evt_npc_set_position, STRING("盗賊"), 0, -1000, 0)
         SET_VALUE(GF(0), 0)
@@ -4709,6 +4792,7 @@ EVT_BEGIN(steel_coin)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         LOOP(0)
+            // He barrels into Mario with a crash and a stealing sound; the camera shakes and Mario spins.
             CALL(evt_npc_get_position, STRING("盗賊"), LW(0), LW(1), LW(2))
             CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
             SUBTRACT(LW(0), 20)
@@ -4721,6 +4805,7 @@ EVT_BEGIN(steel_coin)
         SPAWN_EVENT(PTR(cam_yurasu_event))
         SPAWN_EVENT(PTR(mario_kirimomi_event))
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -600, 30, 0)
+        // The thief calls out a quick "Oops! Pardon me" and runs off.
         CALL(evt_msg_print, 0, STRING("mac_0_062"), 0, 0)
         SET_VALUE(GF(1), 0)
     END_INLINE_EVENT
@@ -4731,6 +4816,7 @@ EVT_BEGIN(steel_coin)
         CALL(evt_party_move_pos2, 0, -550, 0, FLOAT(120.0f))
         CALL(evt_party_set_dir, 0, 270, 200)
     END_INLINE_EVENT
+    // The partner shouts after the thief and wakes Mario up: half of his coins are gone.
     CALL(evt_cam3d_evt_set, -450, 103, 330, -525, 43, -6, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_msg_print_party, STRING("mac_0_063"))
@@ -4745,6 +4831,8 @@ EVT_BEGIN(steel_coin)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
     CALL(evt_msg_print_party, STRING("mac_0_064"))
+    // Mario jumps in surprise while the status window shows the coins dropping; half of them are taken
+    // and the amount is remembered so the thief can give them back later.
     CALL(evt_mario_set_pose, STRING("M_I_N"))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -4773,6 +4861,7 @@ EVT_BEGIN(steel_coin)
     DEBUG_PUT_REG(GSW_GOR_STOLEN_COINS_HIGH)
     WAIT_MS(2000)
     CALL(evt_StatusClose)
+    // The partner fumes about the town and the scene ends.
     CALL(evt_party_set_dir, 0, 270, -1)
     WAIT_MS(500)
     CALL(evt_msg_print_party, STRING("mac_0_065"))
@@ -4786,6 +4875,7 @@ EVT_BEGIN(steel_coin)
 EVT_END()
 
 EVT_BEGIN(kurihakase_first_talk)
+    // Setup: Frankly is placed in his house and the door finishes closing behind Mario and the partner.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_naka"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_npc_set_position, STRING("クリハカセ"), -115, 0, -225)
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 90)
@@ -4796,6 +4886,7 @@ EVT_BEGIN(kurihakase_first_talk)
     WAIT_MS(500)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 30)
     WAIT_MS(500)
+    // The partner calls out for the Professor; the camera pushes in and the Professor music starts.
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
     CALL(evt_mario_set_dir, 90, 200, 0)
     CALL(evt_party_move_pos2, 0, -190, -100, FLOAT(120.0f))
@@ -4808,6 +4899,7 @@ EVT_BEGIN(kurihakase_first_talk)
     CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 270)
     WAIT_MS(200)
+    // Frankly wakes up, mumbling, and the partner and Mario walk over to his desk.
     CALL(evt_msg_print, 0, STRING("mac_0_066_01"), 0, STRING("クリハカセ"))
     CALL(evt_cam3d_evt_set, -185, 95, 82, -185, 42, -217, 500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -4819,6 +4911,8 @@ EVT_BEGIN(kurihakase_first_talk)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, -225, -210, FLOAT(120.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)
+    // Frankly tries to recall where he knows the partner from, guessing wrong names
+    // and fidgeting with a growing camera zoom.
     CALL(evt_msg_print, 0, STRING("mac_0_067"), 0, STRING("クリハカセ"))
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 90)
     WAIT_MS(200)
@@ -4839,11 +4933,13 @@ EVT_BEGIN(kurihakase_first_talk)
     WAIT_MS(700)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("クリハカセ"), 0, 0, 0, 0, 0, 0, 0, 30)
     WAIT_MS(500)
+    // He remembers: she is Goombella, from his archaeology class.
     CALL(evt_msg_print, 0, STRING("mac_0_067_05"), 0, STRING("クリハカセ"))
     CALL(evt_cam3d_evt_set, -185, 95, 82, -185, 42, -217, 500, EASING_SINE_IN_OUT)
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 270)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("mac_0_067_06"), 0, STRING("クリハカセ"))
+    // Goombella cheers for U Goom; Frankly says he remembers her, but who is that with her?
     CALL(evt_msg_print_party, STRING("mac_0_068"))
     WAIT_MS(333)
     CALL(evt_msg_print, 0, STRING("mac_0_069"), 0, STRING("クリハカセ"))
@@ -4860,6 +4956,7 @@ EVT_BEGIN(kurihakase_first_talk)
         CALL(evt_msg_print, 0, STRING("mac_0_069_01"), 0, STRING("クリハカセ"))
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
+    // Frankly shouts "WHO?" at Mario, who tumbles over; Goombella introduces him as the famous Mario.
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -4878,12 +4975,16 @@ EVT_BEGIN(kurihakase_first_talk)
     END_INLINE_EVENT
     CALL(evt_msg_print, 0, STRING("mac_0_069_02"), 0, STRING("party"))
     WAIT_MS(333)
+    // Frankly apologizes for being out of touch and asks what they want;
+    // Goombella says they are after the legendary treasure.
     CALL(evt_msg_print, 0, STRING("mac_0_069_03"), 0, STRING("クリハカセ"))
     CALL(evt_party_move_pos2, 0, -185, -215, FLOAT(40.0f))
     CALL(evt_cam3d_evt_set, -185, 64, -21, -185, 30, -218, 300, EASING_SINE_IN_OUT)
     CALL(evt_msg_print_party, STRING("mac_0_070"))
     CALL(evt_cam3d_evt_set, -140, 64, -21, -140, 30, -218, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+    // Frankly knows the legend: the Thousand-Year Door lies below this town
+    // and needs the seven Crystal Stars.
     CALL(evt_msg_print, 0, STRING("mac_0_071"), 0, STRING("クリハカセ"))
     CALL(evt_cam3d_evt_set, -250, 95, 122, -185, 45, -217, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -4902,12 +5003,14 @@ EVT_BEGIN(kurihakase_first_talk)
     CALL(evt_msg_print_party, STRING("mac_0_076"))
     CALL(evt_cam3d_evt_set, -140, 64, -21, -140, 30, -218, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+    // He points out the missing piece, the Magical Map, and Goombella says Mario has it.
     CALL(evt_msg_print, 0, STRING("mac_0_077"), 0, STRING("クリハカセ"))
     CALL(evt_cam3d_evt_set, -185, 95, 82, -185, 42, -217, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_msg_print_party, STRING("mac_0_078"))
     CALL(evt_npc_get_position, STRING("クリハカセ"), LW(0), LW(1), LW(2))
     CALL(evt_npc_jump_position_nohit, STRING("クリハカセ"), LW(0), LW(1), LW(2), 225, 30)
+    // Frankly is stunned and hops with shock.
     CALL(evt_msg_print, 0, STRING("mac_0_079"), 0, STRING("クリハカセ"))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -170, -225, FLOAT(80.0f))
@@ -4920,6 +5023,7 @@ EVT_BEGIN(kurihakase_first_talk)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -160, 70, -19, -160, 40, -217, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
+    // Mario hands over the Magical Map, which Frankly raises before him in awe.
     CALL(evt_mario_set_pose, STRING("M_C_3"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     ADD(LW(0), 20)
@@ -4942,6 +5046,7 @@ EVT_BEGIN(kurihakase_first_talk)
     WAIT_MS(660)
     CALL(evt_item_set_position, STRING("item00"), 0, -1000, 0)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+    // Frankly names Mario his hero and says they must set off at once to look for the pedestal.
     CALL(evt_cam3d_evt_set, -155, 78, 30, -155, 40, -217, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("mac_0_081"), 0, STRING("クリハカセ"))
@@ -4952,6 +5057,7 @@ EVT_BEGIN(kurihakase_first_talk)
     CALL(evt_npc_flag_onoff, 0, STRING("クリハカセ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_msg_print, 0, STRING("mac_0_082"), 0, STRING("クリハカセ"))
     CALL(evt_npc_get_position, STRING("クリハカセ"), LW(0), LW(1), LW(2))
+    // Frankly leaves; the partners return and the music and ambience resume.
     CALL(evt_npc_set_position, STRING("クリハカセ"), 0, -1000, 0)
     CALL(evt_party_stop, 1)
     CALL(evt_mario_set_party_pos, 1, PARTY_MEMBER_FRANKLY, LW(0), LW(1), LW(2))
@@ -5142,6 +5248,7 @@ EVT_BEGIN(kurihakase_door)
 EVT_END()
 
 EVT_BEGIN(kurihakase_lecture_badge)
+    // Mario and the partner wait inside the house after entering; Mario looks around.
     CALL(evt_door_end_wait)
     SET_VALUE(GF(0), 1)
     CALL(evt_mario_key_onoff, 0)
@@ -5152,6 +5259,7 @@ EVT_BEGIN(kurihakase_lecture_badge)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         SET_VALUE(GF(0), 0)
     END_INLINE_EVENT
+    // A message announces that the partner is back by the door; the Professor is placed at the front door.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_0_121_01"), 0, 0)
     WAIT_WHILE(GF(0))
@@ -5162,6 +5270,7 @@ EVT_BEGIN(kurihakase_lecture_badge)
     CALL(evt_mario_mov_pos2, -265, 0, FLOAT(120.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_naka"), MAP_OBJ_FLAG_HIDDEN)
+    // Frankly steps up to his desk; the camera moves in and he hands Mario a Power Smash badge.
     CALL(evt_npc_set_position, STRING("クリハカセ"), -215, 0, -93)
     CALL(evt_item_entry, STRING("item00"), ITEM_POWER_SMASH, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
@@ -5185,8 +5294,10 @@ EVT_BEGIN(kurihakase_lecture_badge)
     CALL(evt_npc_set_anim, STRING("クリハカセ"), STRING("S_1"))
 #endif
     DELETE_EVENT(LW(10))
+    // Mario receives the Power Smash badge.
     CALL(evt_item_get_item, STRING("item00"))
     CALL(evt_npc_move_position, STRING("クリハカセ"), -215, 0, 0, FLOAT(120.0f), 0)
+    // Frankly asks whether Mario would like a lesson on badges; Mario can accept or decline.
     CALL(evt_msg_print, 0, STRING("mac_0_121_02"), 0, STRING("クリハカセ"))
     CALL(evt_msg_select, 0, STRING("mac_0_121_02_yesno"))
     IF_INT_EQUAL(LW(0), 0)
@@ -5199,6 +5310,7 @@ EVT_BEGIN(kurihakase_lecture_badge)
     END_IF
     CALL(evt_msg_print_add, 0, STRING("mac_0_121_05"))
     GOTO(20)
+    // He explains how the lesson works and waits for the A button.
     LABEL(10)
     CALL(evt_msg_print_add, 0, STRING("mac_0_121_04"))
     LOOP(0)
@@ -5209,8 +5321,10 @@ EVT_BEGIN(kurihakase_lecture_badge)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // The badge lesson window opens; afterwards Frankly closes with a short remark.
     CALL(lecture)
     CALL(evt_msg_print, 0, STRING("mac_0_121_05"), 0, STRING("クリハカセ"))
+    // Frankly walks back to his usual spot in the house and control returns to the player.
     LABEL(20)
     CALL(evt_npc_move_position, STRING("クリハカセ"), -215, 0, 0, FLOAT(120.0f), 0)
     SET_VALUE(GF(0), 1)
@@ -5287,6 +5401,8 @@ EVT_BEGIN(book_center_init)
 EVT_END()
 
 EVT_BEGIN(epigraphy_map)
+    // Mario's Star Power gauge is filled and control is taken away while Mario
+    // and the partner are moved into place.
     CALL(evt_pouch_get_max_ap, LW(0))
     CALL(evt_pouch_set_ap, LW(0))
     CALL(evt_mario_key_onoff, 0)
@@ -5298,12 +5414,14 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_party_cont_onoff, 0, 1)
     SPAWN_EVENT(PTR(Mario_Party_position))
     CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
+    // A hidden Peach stand-in is loaded; a short narration plays over a camera view of the house.
     CALL(evt_npc_entry, STRING("ピーチダミー"), STRING("c_peach"))
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(2000)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_0_102"), 0, 0)
     WAIT_MS(2000)
+    // The screen irises out, then back in on the inside of Frankly's house.
     CALL(evt_fade_entry, 2, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     SET_VALUE(LW(0), PTR(&door_data_02))
@@ -5313,12 +5431,15 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_fade_entry, 1, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
+    // The partner and Frankly talk about the light that shone on Mario;
+    // Frankly offers to show the special move outside.
     CALL(evt_msg_print_party, STRING("mac_0_103"))
     CALL(evt_msg_print, 0, STRING("mac_0_103_01"), 0, STRING("クリハカセ"))
     WAIT_MS(500)
     CALL(evt_msg_print_party, STRING("mac_0_103_02"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("mac_0_103_03"), 0, STRING("クリハカセ"))
+    // Mario can accept or decline; the choice only changes the lines Frankly says.
     CALL(evt_msg_select, 0, STRING("mac_0_103_03_yesno"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("mac_0_103_04"))
@@ -5332,6 +5453,7 @@ EVT_BEGIN(epigraphy_map)
     LABEL(10)
     CALL(evt_msg_print_add, 0, STRING("mac_0_103_05"))
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
+        // The group walks outside and Frankly starts the special move demonstration battle.
         CALL(evt_party_move_pos2, 0, -220, -90, FLOAT(120.0f))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT_GET_ID(LW(11))
@@ -5345,11 +5467,13 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_npc_wait_battle_end)
     DELETE_EVENT(LW(10))
     DELETE_EVENT(LW(11))
+    // Back in the house after the demonstration, Frankly reads the Magical Map.
     CALL(evt_npc_set_position, STRING("クリハカセ"), -140, 0, -225)
     CALL_CHILD(PTR(Mario_Party_position))
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("mac_0_104"), 0, STRING("クリハカセ"))
     LABEL(20)
+    // Frankly explains where the next Crystal Star lies and that a pipe under the city leads there.
     CALL(evt_msg_print_party, STRING("mac_0_105"))
     CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
     WAIT_MS(800)
@@ -5383,6 +5507,7 @@ EVT_BEGIN(epigraphy_map)
     WAIT_MS(500)
     CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+    // He learns that Princess Peach sent the map and had visited him.
     CALL(evt_msg_print, 0, STRING("mac_0_111"), 0, STRING("クリハカセ"))
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -5393,6 +5518,7 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_msg_print, 0, STRING("mac_0_114"), 0, STRING("クリハカセ"))
     CALL(evt_cam3d_evt_set, -150, 100, 82, -150, 47, -217, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+    // He walks to the table, spreads the map out and then hands it back to Mario.
     CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_move_position, STRING("クリハカセ"), -150, -205, 0, FLOAT(60.0f), 0)
     WAIT_MS(500)
@@ -5428,12 +5554,14 @@ EVT_BEGIN(epigraphy_map)
     CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(60.0f))
     CALL(evt_cam3d_evt_set, -180, 100, 82, -180, 47, -217, 500, EASING_SINE_IN_OUT)
     WAIT_MS(200)
+    // The partner and Frankly wish them luck; Frankly stays behind in town.
     CALL(evt_msg_print_party, STRING("mac_0_117"))
     CALL(evt_msg_print, 0, STRING("mac_0_118"), 0, STRING("クリハカセ"))
     CALL(evt_msg_print_party, STRING("mac_0_119"))
     CALL(evt_mario_set_dir, 270, 200, 0)
     WAIT_MS(500)
     CALL(evt_msg_print_party, STRING("mac_0_120"))
+    // The camera returns to normal, the party follows Mario and the Rogueport theme resumes.
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry, -190, 30, 325)
     CALL(evt_party_run, 0)
@@ -5515,6 +5643,7 @@ EVT_BEGIN(epigraphy_map_after_stage1)
 EVT_END()
 
 EVT_BEGIN(epigraphy_map_after_stage2)
+    // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -5525,6 +5654,7 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(2000)
+    // A caption narrates the visit; the screen irises out and back in on the inside of the house.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_2_002_01"), 0, 0)
     CALL(evt_fade_entry, 2, 500, 0, 0, 0)
@@ -5537,6 +5667,7 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
     CALL_CHILD(PTR(book_close))
+    // Frankly and the partner study the map; the camera moves in as he works out the next Crystal Star.
     CALL(evt_msg_print, 0, STRING("mac_2_002_02"), 0, STRING("クリハカセ"))
     CALL(evt_msg_print_party, STRING("mac_2_002_03"))
     CALL(evt_cam3d_evt_set, -140, 70, 4, -140, 32, -218, 500, EASING_SINE_IN_OUT)
@@ -5549,6 +5680,7 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("mac_2_002_06"), 0, STRING("クリハカセ"))
     BEGIN_INLINE_EVENT
+        // Surprise: a startled sting plays.
         CALL(evt_snd_bgmoff, PSND_PAUSE)
         CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SURPRISED2"))
         WAIT_MS(2000)
@@ -5557,6 +5689,7 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+    // Mario and the partner fall over with a crash and the camera shakes, then they get back up.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_FALL_CRUSH1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_D_8"))
@@ -5568,6 +5701,7 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     CALL(evt_mario_set_pose, STRING("M_U_3"))
     CALL(evt_party_set_breed_pose, 0, 1)
     WAIT_MS(500)
+    // The partner and Frankly work out where to go next.
     CALL(evt_cam3d_evt_set, -208, 70, 4, -208, 32, -218, 500, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     CALL(evt_msg_print_party, STRING("mac_2_002_07"))
@@ -5595,10 +5729,12 @@ EVT_BEGIN(epigraphy_map_after_stage2)
     CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_msg_print, 0, STRING("mac_2_011"), 0, STRING("クリハカセ"))
+    // The camera returns to normal and control goes back to the player.
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry, -190, 30, 325)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
+    // The Rogueport theme and ambience resume.
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
 #ifdef VERSION_G8ME01
@@ -5610,6 +5746,7 @@ EVT_BEGIN(epigraphy_map_after_stage2)
 EVT_END()
 
 EVT_BEGIN(epigraphy_map_after_stage3)
+    // Control is taken away; Mario and the partner are moved into place and the camera frames the town.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -5620,6 +5757,7 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     CALL(evt_cam3d_evt_set, -170, 75, 717, -170, 75, -8, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(2000)
+    // A caption narrates the visit; the screen irises out and back in on the inside of the house.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_3_001_01"), 0, 0)
     CALL(evt_fade_entry, 2, 500, 0, 0, 0)
@@ -5633,6 +5771,7 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     CALL(evt_fade_entry, 1, 500, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(1000)
+    // Frankly and the partner study the map and he starts to decipher it.
     CALL(evt_msg_print, 0, STRING("mac_3_001_02"), 0, STRING("クリハカセ"))
     WAIT_MS(250)
     CALL(evt_msg_print_party, STRING("mac_3_001_03"))
@@ -5655,6 +5794,7 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     CALL(evt_msg_print_party, STRING("mac_3_003"))
     CALL(evt_cam3d_evt_set, -140, 60, -40, -140, 30, -218, 500, EASING_SINE_IN_OUT)
     WAIT_MS(750)
+    // Frankly goes to fetch a book from his shelf and puts it on the table.
     CALL(evt_msg_print, 0, STRING("mac_3_004"), 0, STRING("クリハカセ"))
     BEGIN_INLINE_EVENT
         CALL(evt_cam3d_evt_set, -185, 90, 78, -185, 40, -218, 500, EASING_SINE_IN_OUT)
@@ -5669,6 +5809,8 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     WAIT_MS(500)
     CALL_CHILD(PTR(book_open))
     WAIT_MS(500)
+    // He gets an idea and explains where the next Crystal Star lies;
+    // if the Twilight Town pipe has not been found yet he adds a hint.
     CALL(evt_npc_move_position, STRING("クリハカセ"), -145, -225, 0, FLOAT(60.0f), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("クリハカセ"), 0, 0, 0, 0, 0, 0, 0, 30)
     WAIT_MS(500)
@@ -5679,15 +5821,18 @@ EVT_BEGIN(epigraphy_map_after_stage3)
         ELSE
         CALL(evt_msg_print_party, STRING("mac_3_007"))
         CALL(evt_msg_print, 0, STRING("mac_3_009"), 0, STRING("クリハカセ"))
+        // The partner comments; Frankly stares in surprise before answering.
         WAIT_MS(1500)
         CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("クリハカセ"), 0, 0, 0, 0, 0, 0, 0, 60)
         WAIT_MS(1000)
         CALL(evt_msg_print, 0, STRING("mac_3_010"), 0, STRING("クリハカセ"))
     END_IF
+    // The camera returns to normal and control goes back to the player.
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_bero_set_mario_bottomless_respawn_pos_on_bero_entry, -190, 30, 325)
     CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
+    // The Rogueport theme and ambience resume.
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
 #ifdef VERSION_G8ME01
@@ -6282,6 +6427,7 @@ EVT_END()
  * (the epigraphy scenes at Professor Frankly's, Frankly's lecture, the Chapter 6 research, the epilogue).
  */
 EVT_BEGIN(gor_02_init_evt)
+    // Music and ambience: Frankly's theme during his scenes, otherwise the Rogueport theme.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_OR_EQUAL(STG0_15_THE_PEDESTAL)
         CASE_OR_EQUAL(STG1_30_ZESS_T)
@@ -6300,6 +6446,7 @@ EVT_BEGIN(gor_02_init_evt)
         END_IF
     END_SWITCH
     SET_VALUE(LW(0), PTR(bero_entry_data))
+    // The exits are set up.
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_58_FAIR_WINDS)
@@ -6307,6 +6454,8 @@ EVT_BEGIN(gor_02_init_evt)
         ELSE
         SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
     END_IF
+    // The NPCs are created, including the thief and Goombella stand-in used in cutscenes, and the water
+    // and light animations start.
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG0_07_GOOMBELLA_JOINS)
         CALL(evt_npc_entry, STRING("盗賊"), STRING("c_borodo_n"))
@@ -6317,6 +6466,8 @@ EVT_BEGIN(gor_02_init_evt)
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("noname"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("ie_01_light"), MAP_ANIM_PLAY_LOOP, 0)
+    // Fall recovery points, the spinning Star Piece floors, the item box, the three Shine Sprite blocks
+    // and the three Star Pieces are set up.
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -220, 0, 50, STRING("S_yuka_A01"), 125, GSWF_STARPIECE_07)
@@ -6380,6 +6531,7 @@ EVT_BEGIN(gor_02_init_evt)
         CALL_CHILD(PTR(evt_door_entry))
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_10_REMOVING_THE_FENCE)
+        // The fence piece and the extra NPCs are set up.
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_saku04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_saku_04"), 1, 0)
     END_IF
@@ -6415,6 +6567,7 @@ EVT_BEGIN(gor_02_init_evt)
     SPAWN_EVENT(PTR(gor_goki2_urouro))
     SPAWN_EVENT(PTR(gor_irai_init))
     IF_INT_EQUAL(GSWF_GOR_02_HIDDEN_WALL_BLOWN_AWAY, 0)
+        // The wall cover Flurrie can blow away in front of the thieves' back door is set up.
         CALL(evt_cloud_init)
         CALL(evt_cloud_ent, 0, STRING("S_i04_kabe_msk"), STRING("A_i04_kabe_msk"), PTR(evt_cloud))
         BEGIN_INLINE_EVENT
@@ -6439,6 +6592,7 @@ EVT_BEGIN(gor_02_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i04_kabe_msk"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_i04_kabe_msk"), 1, 0)
     END_IF
+    // The harbors for the ships, mail, and the epilogue scene are set up.
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_sanbashi_01"), STRING("Ship_Change01"))
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_sanbashi_02"), STRING("Ship_Change02"))
     SPAWN_EVENT(PTR(front_wall_keshi))

@@ -1067,11 +1067,14 @@ EVT_END()
  * Otherwise it counts down the turns the ribs stay open (unit work 11) and closes them when it reaches 0.
  */
 static EVT_BEGIN(phase_event)
+    // After the enemy phase Cortez rolls a new formation for his weapons (a random number from 0 to 2).
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_ENEMY)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(evt_sub_random, 3, LW(0))
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_FORMATION, LW(0))
     END_IF
+    // Before the player's turn, in the second form's middle or lower stance and not hit since the last turn,
+    // he straightens up.
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_EQUAL(LW(0), 0)
         GOTO(50)
@@ -1089,6 +1092,7 @@ static EVT_BEGIN(phase_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         GOTO(50)
     END_IF
+    // He stops idling and closes his ribs if they are open.
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RIB_OPEN_TURNS, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1114,9 +1118,12 @@ static EVT_BEGIN(phase_event)
     END_SIBLING_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, 1)
+    // His poses, defence and hit areas are reset to match the stance, and he goes back to idling.
     CALL_CHILD(cortez_reset_pose_table)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
+    // Otherwise the ribs stay open for a few turns: the counter goes down each turn and the ribs close again
+    // at 0.
     LABEL(50)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_EQUAL(LW(0), 0)
@@ -1322,6 +1329,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
+    // Cortez declares the bone rain against every target on the player's side.
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
@@ -1329,6 +1337,8 @@ EVT_BEGIN(at2_hone_rain_attack_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(1)
+        // He winds up for the bone rain (KRT_3A_1, 3A_2 or 3A_3, depending on his stance) for about 1.7
+        // seconds.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_3A_1"))
         CASE_EQUAL(2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_3A_2"))
@@ -1340,6 +1350,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
         CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
         CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     END_SIBLING_EVENT
+    // He throws his bones into the air (part 5 flies up and disappears).
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_BONE_FLY1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 5, kHidden)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 5, STRING("KRT_A_1"))
@@ -1348,6 +1359,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
         WAIT_MS(500)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 5, kHidden)
     END_INLINE_EVENT
+    // Eight loose bones (parts 12 to 19) are tossed up and start to fall over the player's side.
     SET_VALUE(LW(5), 12)
     SPAWN_EVENT(_bone_rain_event)
     SET_VALUE(LW(5), 13)
@@ -1364,6 +1376,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
     SPAWN_EVENT(_bone_rain_event)
     SET_VALUE(LW(5), 19)
     SPAWN_EVENT(_bone_rain_event)
+    // Two larger bones (parts 6 and 9) tumble down toward the first two targets, spinning as they fall.
     BEGIN_INLINE_EVENT_GET_ID(LW(15))
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 6, LW(0), LW(1), LW(2))
@@ -1402,6 +1415,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
+    // For each target, the bones that reach it either miss (the target dodges) or hit.
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -1422,6 +1436,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
         CASE_DEFAULT
         GOTO(90)
     END_SWITCH
+    // A bone that missed its target lands past it and keeps spinning.
     LABEL(90)
     IF_INT_EQUAL(LW(10), 0)
         BEGIN_INLINE_EVENT
@@ -1455,6 +1470,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
         END_INLINE_EVENT
     END_IF
     GOTO(97)
+    // A bone hits: the Action Command defence result is applied once, then damage is dealt and the bone lands.
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
@@ -1489,6 +1505,7 @@ EVT_BEGIN(at2_hone_rain_attack_event)
             END_LOOP
         END_INLINE_EVENT
     END_IF
+    // On to the next target; when all are done there is a short pause (84 frames).
     LABEL(97)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_NOT_EQUAL(LW(3), -1)
@@ -1799,6 +1816,8 @@ EVT_BEGIN(at1_midaregiri_attack)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
+    // Cortez picks a stance depending on whether the target is in the front or back row (KRT_A2_1 or
+    // KRT_A2_2).
     CALL(_check_zenei_kouei, LW(3), LW(13))
     IF_INT_EQUAL(LW(13), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_A2_1"))
@@ -1807,6 +1826,7 @@ EVT_BEGIN(at1_midaregiri_attack)
     END_IF
     SET_VALUE(LW(0), 0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    // His sword shakes with four swishes, timed to the moves of the animation.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_ftomsec, 33, LW(0))
         WAIT_MS(LW(0))
@@ -1827,6 +1847,7 @@ EVT_BEGIN(at1_midaregiri_attack)
         WAIT_MS(LW(0))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_SWORD_SHAKE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
+    // The flurry: he slashes through the target several times in a row.
     LABEL(10)
     SWITCH(LW(10))
         CASE_EQUAL(0)
@@ -1860,6 +1881,7 @@ EVT_BEGIN(at1_midaregiri_attack)
     END_SWITCH
     LABEL(90)
     GOTO(97)
+    // The slashes land: the Action Command defence result is applied and damage is dealt.
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     IF_INT_GREATER_OR_EQUAL(LW(10), 3)
@@ -1872,6 +1894,7 @@ EVT_BEGIN(at1_midaregiri_attack)
     IF_INT_LESS_OR_EQUAL(LW(10), 3)
         GOTO(10)
     END_IF
+    // He finishes his animation and goes back to idling.
     LABEL(99)
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -1953,8 +1976,11 @@ BattleUnitSetup entry_saber = {
 EVT_BEGIN(cortez_reset_pose_table)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
     SWITCH(LW(0))
+        // First form: his plain pose table.
         CASE_EQUAL(0)
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_1))
+        // Second form, upper stance: the pose and defence tables depend on whether his ribs are open and
+        // whether the bone rain is charged.
         CASE_EQUAL(1)
         CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 160, 120, 50)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RIB_OPEN_TURNS, LW(0))
@@ -1985,6 +2011,7 @@ EVT_BEGIN(cortez_reset_pose_table)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 20, 15, 0)
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 2, 0, 0, 0)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 2, 0, 0, 0)
+        // Second form, middle stance: the same choices with the middle-stance tables and a lower hit area.
         CASE_EQUAL(2)
         CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 160, 85, 50)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RIB_OPEN_TURNS, LW(0))
@@ -2015,6 +2042,7 @@ EVT_BEGIN(cortez_reset_pose_table)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 1, 10, 10, 0)
         CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 2, -7, -20, 0)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 2, -7, -20, 0)
+        // Second form, lower stance: the same choices with the lower-stance tables.
         CASE_EQUAL(3)
         CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 150, 85, 50)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_RIB_OPEN_TURNS, LW(0))
@@ -2049,6 +2077,7 @@ EVT_BEGIN(cortez_reset_pose_table)
         CALL(btlevtcmd_SetHitCursorOffset, UNIT_ID_SELF, 2, -20, -35, 0)
         CASE_DEFAULT
         CALL(btlevtcmd_SetKissHitOffset, UNIT_ID_SELF, 30, 50, 50)
+        // Final form: a single set of poses and defences.
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_3))
         CALL(btlevtcmd_SetPartsDefenceTable, UNIT_ID_SELF, 1, PTR(&defence_mode3))
         CALL(btlevtcmd_SetPartsDefenceAttrTable, UNIT_ID_SELF, 1, PTR(&defence_attr_mode3))
@@ -2060,6 +2089,13 @@ EVT_BEGIN(cortez_reset_pose_table)
     RETURN
 EVT_END()
 
+/**
+ * Data event (tag 9) of Cortez's damage reaction:
+ * resets his pose table, then plays a miss sound at the hit position when the hit did no damage,
+ * or holds a hurt pose for 30 frames (on the rib cage, part 2, the rib-hurt pose for his stance).
+ * When the last hit of an attack lands on the rib cage in the second form without defeating him
+ * and the ribs are closed, it opens them (mode2_rib_open_event).
+ */
 static EVT_BEGIN(cortez_damage_sub_event)
     CALL_CHILD(PTR(cortez_reset_pose_table))
     CALL(btlevtcmd_GetDamage, UNIT_ID_SELF, LW(0))
@@ -2117,16 +2153,31 @@ LABEL(99)
 RETURN
 EVT_END()
 
+/**
+ * Runs each time Cortez's HP reaches 0.
+ * In the first form (unit work 5 = 0) he collapses as his swords fall,
+ * heals to full and behind a curtain fade becomes the second form (model c_korutesu2, attack_event_mode2,
+ * the bone pile targetable).
+ * In the second form his bones fall, he heals to full
+ * and becomes the third form (c_korutesu3, attack_event_mode3, unit work 5 = 4), while his four weapons appear,
+ * fly to their formation spots and start taking turns.
+ * In the third form his remaining weapons are broken (their break data event),
+ * he crumbles with the enemy-death sound and smoke,
+ * his coins and experience are stored with the Star Point effect and he is removed.
+ */
 static EVT_BEGIN(dead_event)
+    // Cortez has just been defeated: his statuses are cleared and any attack in progress finishes.
     CALL(btlevtcmd_ClearAllStatus, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
+        // First form defeated: he moves on to the second form and its attacks.
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, 1)
         CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_mode2))
         CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, 1, 999)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 4, kNotTargetable)
+        // He collapses (KRT_D2_1) and his four swords fall to the floor one after another.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_D2_1"))
         BEGIN_SIBLING_EVENT
             CALL(btlevtcmd_ftomsec, 125, LW(0))
@@ -2154,6 +2205,7 @@ static EVT_BEGIN(dead_event)
             CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, kHidden)
         END_SIBLING_EVENT
         CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
+        // He pulls himself back up (KRT_D2_2) and heals to full HP.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_D2_2"))
         BEGIN_SIBLING_EVENT
             CALL(btlevtcmd_ftomsec, 33, LW(0))
@@ -2166,6 +2218,8 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
         CALL(btlevtcmd_GetMaxHp, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_SetHp, UNIT_ID_SELF, LW(0))
+        // Behind a closing curtain he turns into the second form (model c_korutesu2) and the curtain opens
+        // again.
         CALL(evt_fade_entry, 24, 1000, 0, 0, 0)
         CALL(evt_fade_set_anim_ofs_pos, 0, 130)
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
@@ -2185,6 +2239,7 @@ static EVT_BEGIN(dead_event)
         CASE_OR_EQUAL(1)
         CASE_OR_EQUAL(2)
         CASE_OR_EQUAL(3)
+        // Second form defeated: he switches to the final form's attacks and his bones crash to the floor.
         CALL(btlevtcmd_SetEventAttack, UNIT_ID_SELF, PTR(attack_event_mode3))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_BONE_FALL1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
@@ -2256,6 +2311,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 3, kHidden)
         CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 3)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_SWORD, LW(3))
+        // His four weapons come to life one after another, targetable again and ready to take a turn.
         CALL(btlevtcmd_AnimeChangePoseFromTable, LW(3), 1)
         CALL(btlevtcmd_OffPartsAttribute, LW(3), 1, (kNotTargetable | kHidden | kNoShadow))
         CALL(btlevtcmd_OffAttribute, LW(3), kUnitNoHpGauge)
@@ -2279,6 +2335,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 4, kNotTargetable | kHidden | kNoShadow)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNotTargetable)
         SET_VALUE(LW(11), 1)
+        // Each weapon flies to its formation spot around him and starts taking turns.
         LOOP(4)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LW(11), LW(9))
             BEGIN_INLINE_EVENT
@@ -2302,6 +2359,7 @@ static EVT_BEGIN(dead_event)
         CALL(evt_fade_set_anim_ofs_pos, 0, 130)
         CALL(evt_fade_set_anim_virtual_pos, 0, 0, 80)
         CALL(evt_fade_end_wait)
+        // Behind another curtain he becomes the final form (model c_korutesu3) and heals to full HP.
         CALL(btlevtcmd_AnimeChangeGroup, UNIT_ID_SELF, 1, STRING("c_korutesu3"))
         CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table_mode_3))
         CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
@@ -2321,6 +2379,7 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_reset_turn)
         CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
         CASE_END
+        // Final form defeated: any weapon still standing is broken (its break event runs).
         CASE_DEFAULT
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_SWORD, LW(3))
         IF_INT_NOT_EQUAL(LW(3), -1)
@@ -2350,6 +2409,7 @@ static EVT_BEGIN(dead_event)
             CALL(btlevtcmd_GetDataFromDataTable, LW(3), LW(0), UNIT_DATA_WEAPON_BREAK_EVENT)
             CALL(btlevtcmd_RunHitEventDirect, LW(3), 0, LW(0), 0)
         END_IF
+        // He crumbles (KRT_D_3) with a long rattle of bones.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_D_3"))
         BEGIN_SIBLING_EVENT
             WAIT_MS(1500)
@@ -2357,6 +2417,7 @@ static EVT_BEGIN(dead_event)
         END_SIBLING_EVENT
         CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kHidden | kNoShadow)
+        // The enemy-death sound plays and smoke covers him.
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_ENEMY_DIE1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
@@ -2369,8 +2430,10 @@ static EVT_BEGIN(dead_event)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(3), LW(1), LW(2))
         ADD(LW(2), 10)
         ADD(LW(1), 30)
+        // His coins and experience are paid out with the Star Point effect.
         CALL(evt_eff, STRING(""), STRING("star_point"), 0, LW(3), LW(1), LW(2), LW(0), 0, 0, 0, 0, 0, 0, 0)
         WAIT_MS(1000)
+        // Cortez is removed from the battle.
         CALL(btlevtcmd_KillUnit, UNIT_ID_SELF, 1)
     END_SWITCH
     RETURN
@@ -2412,6 +2475,12 @@ EVT_BEGIN(mode2_rib_close_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event when the bone pile (part 4) is hit in the later forms:
+ * sets unit work 7 (hit since the last turn) and, on the last hit of the attack,
+ * knocks him one stance lower (mode_change_event) while the bone pile shakes for 30 frames.
+ * Runs dead_event if the hit defeated him.
+ */
 EVT_BEGIN(mode2_honeduka_damage_event)
     CALL(btlevtcmd_OnUnitFlag, UNIT_ID_SELF, BATTLE_UNIT_FLAG_SHOW_HP)
     SET_VALUE(LW(8), 0)
@@ -2443,6 +2512,12 @@ EVT_BEGIN(mode2_honeduka_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Knocks Cortez one stance lower in the second form:
+ * from the upper stance (unit work 5 = 1) to the middle (KRT_1H_1) and from the middle to the lower (KRT_2H_1),
+ * which also opens his ribs; the lower stance stays.
+ * Each step plays the move sound and resets his pose and defence tables.
+ */
 EVT_BEGIN(mode_change_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_UNIT_WORK_MODE, LW(0))
     SWITCH(LW(0))
@@ -2481,6 +2556,10 @@ EVT_BEGIN(mode_change_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: writes 1 to args[1] if the unit args[0] stands left of x = -120 (the front or back guard side),
+ * otherwise 0; Cortez uses it to choose which attack pose to play.
+ */
 static USER_FUNC(_check_zenei_kouei) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

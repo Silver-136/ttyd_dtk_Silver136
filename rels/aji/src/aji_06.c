@@ -937,6 +937,7 @@ EVT_END()
 EVT_BEGIN(peach_evt_kusuri_nomu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_adjust_dir)
+    // Peach drinks the potion and a cloud of smoke covers her.
     CALL(peach_chg_pose, STRING("P_M_1"))
     WAIT_MS(500)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_bika"), MAP_OBJ_FLAG_HIDDEN)
@@ -984,9 +985,11 @@ EVT_BEGIN(peach_evt_kusuri_nomu)
             END_IF
         END_SWITCH
         SET_VALUE(LSW_AJI_06_WRONG_POTION_EFFECT, LW(2))
+        // She panics, TEC calls it unsuccessful and asks her to start over.
         CALL(evt_msg_print, 0, STRING("peach_aji_234"), 0, STRING("mario"))
         CALL(evt_msg_print, 0, STRING("peach_aji_235"), 0, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_236"), 0, STRING("mario"))
+        // Peach returns to normal, the machine is reset and the buttons can be used again.
         SPAWN_EVENT(PTR(peach_evt_sugata_modoru))
         CALL_CHILD(PTR(peach_evt_kaihei_open_all))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_sui1"), 0, PTR(peach_evt_tyogo_entry), GW(5))
@@ -997,12 +1000,14 @@ EVT_BEGIN(peach_evt_kusuri_nomu)
         SET_VALUE(LW(0), STRING("S_pato1"))
         SPAWN_EVENT_GET_ID(PTR(peach_evt_pato_on), GW(0))
         ELSE
+        // The right potion: the music fades and Peach becomes invisible.
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         WAIT_MS(300)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_PEACH_TOUMEI1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_peach_set_condition, 2)
         WAIT_MS(1000)
+        // TEC congratulates her and asks her to take her clothes off; Peach objects but agrees.
         CALL(evt_msg_print, 0, STRING("peach_aji_237"), 0, 0)
         CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("P_S_3"), STRING("P_T_3"))
         CALL(evt_msg_print, 0, STRING("peach_aji_238"), 0, STRING("mario"))
@@ -1016,6 +1021,7 @@ EVT_BEGIN(peach_evt_kusuri_nomu)
         CALL(evt_cam3d_event_from_road, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5), LW(6), LW(7), LW(8), LW(9))
         CALL(evt_cam3d_evt_set, LW(4), LW(5), LW(6), LW(7), LW(8), LW(9), 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
+        // Peach walks over toward the door of the lab.
         CALL(evt_mario_mov_pos2, 114, 76, FLOAT(72.0f))
         CALL(evt_mario_mov_pos2, 90, 104, FLOAT(72.0f))
         CALL(evt_mario_mov_pos2, -80, 115, FLOAT(72.0f))
@@ -1026,6 +1032,7 @@ EVT_BEGIN(peach_evt_kusuri_nomu)
         WAIT_MS(2000)
         CALL(peach_evt_toumei_onoff, 1)
         CALL(evt_mario_mov_pos2, 100, 115, FLOAT(72.0f))
+        // TEC explains the plan: find the data disk in Sir Grodus's room and insert it into the computer.
         CALL(evt_msg_print, 0, STRING("peach_aji_240"), 0, 0)
         CALL(evt_msg_print, 0, STRING("peach_aji_241"), 0, STRING("mario"))
         CALL(evt_msg_print, 0, STRING("peach_aji_242"), 0, 0)
@@ -1131,6 +1138,8 @@ s32 peach_evt_bika_move_data[] = {
  */
 EVT_BEGIN(peach_evt_tyogo_sub)
     CALL(evt_mario_key_onoff, 0)
+    // The machine stops its floor and TEC tells Peach to press the button where the beaker stops
+    // (peach_aji_230).
     CALL(evt_map_pauseanim, 0, STRING("yuka"))
     CALL(evt_snd_sfxoff, GW(3))
     CALL_CHILD(PTR(peach_evt_wait_memo))
@@ -1143,8 +1152,11 @@ EVT_BEGIN(peach_evt_tyogo_sub)
     SET_VALUE(GW(13), 0)
     SET_VALUE(LSWF_AJI_06_DISPENSE_WINDOW_OPEN, 0)
     SET_VALUE(LSWF_AJI_06_DISPENSE_PRESSED, 0)
+    // The liquid colour is reset and Peach gets control back for the pouring round.
     CALL(kusuri_color_init)
     CALL(evt_mario_key_onoff, 1)
+    // The beaker visits each stop in turn; Peach has up to 3 seconds to press the button to pour the potion
+    // for that slot.
     SET_INT_READ_ADDR(PTR(peach_evt_bika_move_data))
     READ_INT(LW(2))
     LOOP(0)
@@ -1220,6 +1232,7 @@ EVT_BEGIN(peach_evt_tyogo_sub)
     SET_VALUE(LW(0), STRING("S_pato2"))
     CALL_CHILD(PTR(peach_evt_pato_off))
     CALL_CHILD(PTR(peach_evt_wait_memo))
+    // TEC asks Peach to stop the heating after exactly 30 seconds; the stopwatch runs.
     CALL(evt_msg_print, 0, STRING("peach_aji_230_01"), 0, 0)
     SET_VALUE(LW(0), STRING("S_pato3"))
     SPAWN_EVENT_GET_ID(PTR(peach_evt_pato_on), GW(0))
@@ -1266,6 +1279,7 @@ EVT_BEGIN(peach_evt_tyogo_sub)
         DIVIDE(LW(1), 1000)
         DEBUG_PUT_REG(LW(1))
     END_IF
+    // A perfect score turns the beaker the right colour; anything less turns it the wrong colour.
     IF_INT_GREATER_OR_EQUAL(GW(13), 9)
         SPAWN_EVENT_GET_ID(PTR(kusuri_color_seiko), GW(2))
         ELSE
@@ -1288,7 +1302,15 @@ EVT_BEGIN(peach_evt_tyogo_sub)
     RETURN
 EVT_END()
 
+/**
+ * Starts the machine (case script on the start switch A_sui1):
+ * closes the hatches, stops the sirens, runs the needle (peach_evt_hari_on) and the arm,
+ * then calls peach_evt_tyogo_sub.
+ * Afterwards asks whether to drink the result (peach_aji_231): yes attaches peach_evt_kusuri_nomu to A_bika1;
+ * no empties the machine and opens the hatches for another try.
+ */
 EVT_BEGIN(peach_evt_tyogo)
+    // The machine is started: the hatches close and the sirens stop.
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1310,6 +1332,7 @@ EVT_BEGIN(peach_evt_tyogo)
         GOTO(0)
     END_IF
     CALL(evt_mapobj_trans, 1, STRING("S_bika"), 0, 0, 0)
+    // The needle and the arm start to run.
     SPAWN_EVENT_GET_ID(PTR(peach_evt_hari_on), GW(1))
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
@@ -1366,6 +1389,7 @@ EVT_BEGIN(peach_evt_tyogo)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(5)
     END_IF
+    // The pouring and heating round (peach_evt_tyogo_sub) runs.
     CALL_CHILD(PTR(peach_evt_tyogo_sub))
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, -152, -42, 3300)
     LABEL(12)
@@ -1426,6 +1450,7 @@ EVT_BEGIN(peach_evt_tyogo)
     END_IF
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(peach_evt_wait_memo))
+    // TEC asks whether the result came out right; if so Peach is asked to drink it.
     CALL(evt_msg_print, 0, STRING("peach_aji_231"), 0, 0)
     CALL(evt_msg_select, 0, STRING("peach_aji_227_sel"))
     IF_INT_EQUAL(LW(0), 0)
@@ -1439,6 +1464,7 @@ EVT_BEGIN(peach_evt_tyogo)
         CALL(evt_del_case_evt, 0, GW(8))
         CALL(evt_del_case_evt, 0, GW(9))
         ELSE
+        // If not, the machine is emptied and reopened for another try.
         CALL(evt_msg_print_add, 0, STRING("peach_aji_231_01"))
         CALL(evt_mapobj_scale, 0, STRING("S_naka"), 0, 0, 0)
         CALL(evt_mapobj_trans, 0, STRING("S_bika"), 0, -100, 0)
@@ -1453,12 +1479,17 @@ EVT_BEGIN(peach_evt_tyogo)
     RETURN
 EVT_END()
 
+/**
+ * Case script entry for the start switch: spawns peach_evt_tyogo and leaves the case
+ * so the switch can be used again later.
+ */
 EVT_BEGIN(peach_evt_tyogo_entry)
     SPAWN_EVENT(PTR(peach_evt_tyogo))
     CALL(evt_exit_case_evt)
     RETURN
 EVT_END()
 
+/** Holds up the red potion item (kusuri_aka) when Peach takes it and waits for the get-item display to end. */
 EVT_BEGIN(peach_evt_kusuri_aka)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_item_get_item, STRING("kusuri_aka"))
@@ -1469,6 +1500,7 @@ EVT_BEGIN(peach_evt_kusuri_aka)
     RETURN
 EVT_END()
 
+/** Holds up the blue potion item (kusuri_ao) when Peach takes it and waits for the get-item display to end. */
 EVT_BEGIN(peach_evt_kusuri_ao)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_item_get_item, STRING("kusuri_ao"))
@@ -1479,6 +1511,7 @@ EVT_BEGIN(peach_evt_kusuri_ao)
     RETURN
 EVT_END()
 
+/** Holds up the orange potion item (kusuri_ki) when Peach takes it and waits for the get-item display to end. */
 EVT_BEGIN(peach_evt_kusuri_ki)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_item_get_item, STRING("kusuri_ki"))
@@ -1489,6 +1522,7 @@ EVT_BEGIN(peach_evt_kusuri_ki)
     RETURN
 EVT_END()
 
+/** Holds up the green potion item (kusuri_mid) when Peach takes it and waits for the get-item display to end. */
 EVT_BEGIN(peach_evt_kusuri_mid)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_item_get_item, STRING("kusuri_mid"))
@@ -1499,6 +1533,7 @@ EVT_BEGIN(peach_evt_kusuri_mid)
     RETURN
 EVT_END()
 
+/** Waits until no memo text is being shown (LSWF(11) = 0), so that machine messages do not collide with a memo. */
 EVT_BEGIN(peach_evt_wait_memo)
     LOOP(0)
         IF_INT_EQUAL(LSWF_AJI_06_PEACH_MSG_OPEN, 0)
@@ -1512,6 +1547,7 @@ EVT_BEGIN(peach_evt_wait_memo)
     RETURN
 EVT_END()
 
+/** Peach reads recipe memo 1 (peach_aji_225_1); LSWF(11) is set while the text is up. */
 EVT_BEGIN(peach_evt_memo1)
     SET_VALUE(LSWF_AJI_06_PEACH_MSG_OPEN, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -1521,6 +1557,7 @@ EVT_BEGIN(peach_evt_memo1)
     RETURN
 EVT_END()
 
+/** Peach reads recipe memo 2 (peach_aji_225_2). */
 EVT_BEGIN(peach_evt_memo2)
     SET_VALUE(LSWF_AJI_06_PEACH_MSG_OPEN, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -1530,6 +1567,7 @@ EVT_BEGIN(peach_evt_memo2)
     RETURN
 EVT_END()
 
+/** Peach reads recipe memo 3 (peach_aji_225_3). */
 EVT_BEGIN(peach_evt_memo3)
     SET_VALUE(LSWF_AJI_06_PEACH_MSG_OPEN, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -1539,6 +1577,7 @@ EVT_BEGIN(peach_evt_memo3)
     RETURN
 EVT_END()
 
+/** Peach reads recipe memo 4 (peach_aji_225_4). */
 EVT_BEGIN(peach_evt_memo4)
     SET_VALUE(LSWF_AJI_06_PEACH_MSG_OPEN, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -1631,6 +1670,7 @@ static EVT_BEGIN(peach_evt_stg5)
     RETURN
 EVT_END()
 
+/** Case script of the three wrong potions at the end of the puzzle: only shows peach_aji_256 (the wrong one). */
 EVT_BEGIN(peach_evt_matigai_kusuri)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_256"), 0, 0)
@@ -1712,6 +1752,15 @@ EVT_BEGIN(peach_evt_door)
     RETURN
 EVT_END()
 
+/**
+ * Chapter 5 setup of the potion lab on re-entry:
+ * same potion shelves as peach_evt_stg5 at fixed positions,
+ * with the wrong-potion scripts (peach_evt_matigai_kusuri) on three of the four machine slots
+ * and the right-potion script (peach_evt_tadashii_kusuri) on the fourth.
+ * It then switches off the s_bero entrance, attaches peach_evt_door to it, shows peach_aji_251 to 254,
+ * walks Peach to the changing spot, plays the cloth-change sound,
+ * removes her invisibility (peach_evt_toumei_onoff 0) and shows peach_aji_255.
+ */
 static EVT_BEGIN(peach_evt_stg5_1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_dami"), MAP_OBJ_FLAG_HIDDEN)
@@ -1759,6 +1808,10 @@ static EVT_BEGIN(peach_evt_stg5_1)
     RETURN
 EVT_END()
 
+/**
+ * Initial state of the potion machine: hides the sirens, empties the tubes and the mixing tank,
+ * turns the arm and needle to their rest pose and sets the lamp objects hika1 to 4 hidden and kesu1 to 4 shown.
+ */
 EVT_BEGIN(kikai_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_pato1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_SINGLE, 1, STRING("S_pato2"), MAP_OBJ_FLAG_HIDDEN)
@@ -1784,6 +1837,7 @@ EVT_BEGIN(kikai_init)
     RETURN
 EVT_END()
 
+/** Reading a note in the lab: shows stg7_aji_32_01 with controls frozen. */
 static EVT_BEGIN(evt_memo1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_32_01"), 0, 0)
@@ -1791,6 +1845,7 @@ static EVT_BEGIN(evt_memo1)
     RETURN
 EVT_END()
 
+/** Reading a second note in the lab: shows stg7_aji_32_02 with controls frozen. */
 static EVT_BEGIN(evt_memo2)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_32_02"), 0, 0)
@@ -1798,6 +1853,7 @@ static EVT_BEGIN(evt_memo2)
     RETURN
 EVT_END()
 
+/** Case script of the wall note A_memo3 (Mario's visit): reads stg7_aji_32_03. */
 EVT_BEGIN(evt_memo3)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_32_03"), 0, 0)
@@ -1805,6 +1861,7 @@ EVT_BEGIN(evt_memo3)
     RETURN
 EVT_END()
 
+/** Case script of the wall note A_memo4 (Mario's visit): reads stg7_aji_32_04. */
 EVT_BEGIN(evt_memo4)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_32_04"), 0, 0)
@@ -1813,6 +1870,7 @@ EVT_BEGIN(evt_memo4)
 EVT_END()
 
 EVT_BEGIN(aji_06_init_evt)
+    // Peach's visits get her own music; later visits use the fortress music and ambience.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -1825,6 +1883,7 @@ EVT_BEGIN(aji_06_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_bero_get_entername, LW(0))
+    // Entering from the ceiling (tenjo): Mario and his partner drop into the lab and land.
     IF_STR_EQUAL(LW(0), STRING("tenjo"))
         CALL(evt_cam_letter_box_disable, 1)
         CALL(evt_mario_key_onoff, 0)
@@ -1844,11 +1903,13 @@ EVT_BEGIN(aji_06_init_evt)
             CALL(evt_cam_letter_box_disable, 0)
         END_INLINE_EVENT
     END_IF
+    // The alarm and the potion machine start up.
     SPAWN_EVENT(PTR(evt_emergency))
     SPAWN_EVENT(PTR(kikai_init))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_20_LORD_CRUMP_DEFEATED)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
     END_IF
+    // Chapter 5: Peach takes over, her partner is dismissed and TEC's request scene starts.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_44_PEACH_TECS_REQUEST_2)
         CALL(evt_mario_set_mode, 1)
         CALL(evt_mario_kill_party, 0)
@@ -1861,6 +1922,7 @@ EVT_BEGIN(aji_06_init_evt)
         CALL(peach_evt_toumei_onoff, 1)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
     END_IF
+    // Disk search: Peach is still invisible and the next scene starts.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_46_PEACH_DISK_SEARCH)
         CALL(evt_mario_set_mode, 1)
         CALL(evt_mario_kill_party, 0)
@@ -1868,6 +1930,7 @@ EVT_BEGIN(aji_06_init_evt)
         CALL(evt_npc_check_delete, STRING("軍団ザコ魔法使い"))
         SPAWN_EVENT(PTR(peach_evt_stg5_1))
     END_IF
+    // Peach can read the notes on the walls; the machine's lamps start switched off.
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_memo1"), 0, PTR(evt_memo1), 0)

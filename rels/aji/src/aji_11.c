@@ -266,6 +266,11 @@ EVT_BEGIN(peach_evt_disksys)
     RETURN
 EVT_END()
 
+/**
+ * Case script of the shelf (tana) before the disk is found:
+ * Peach looks at the shelf (peach_aji_245), takes the Data Disk (ITEM_DATA_DISK) and shows it (peach_aji_246),
+ * sets GSWF_AJI11_PEACH5_DATA_DISK_TAKEN and attaches the console script to a_disksys.
+ */
 EVT_BEGIN(peach_evt_tana1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("peach_aji_245"), 0, STRING("mario"))
@@ -295,6 +300,13 @@ EVT_BEGIN(peach_evt_tana2)
     RETURN
 EVT_END()
 
+/**
+ * Peach's chapter 5 setup of the storage room: if system flag bit 64 is set it clears it
+ * and sets Peach's condition to 2, makes her invisible,
+ * then attaches the shelf (tana) and disk system (a_disksys) scripts according to whether the data disk has been
+ * taken or read.
+ * It overwrites the w_bero exit with her own, and once says peach_aji_244 (GSWF_AJI11_PEACH5_ROOM_REMARK).
+ */
 static EVT_BEGIN(peach_evt_stg5)
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), 64)

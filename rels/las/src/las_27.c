@@ -135,6 +135,11 @@ static EVT_BEGIN(shan_init)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_27, the hall before the throne rooms:
+ * ambience only (no music), the doors to las_25 and las_28, a save block, a recovery block,
+ * and 28 lit wall torches.
+ */
 EVT_BEGIN(las_27_init_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
@@ -148,6 +153,7 @@ EVT_BEGIN(las_27_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1]. */
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
 

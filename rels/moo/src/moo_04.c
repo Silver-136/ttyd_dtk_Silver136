@@ -279,6 +279,10 @@ EVT_BEGIN(moo_04_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: makes Mario and the partner spin end over end during the flight.
+ * args[0] is their scale, which shrinks over the flight; both rotate 10 degrees per call.
+ */
 static USER_FUNC(mario_kirimomi) {
     f32 scale = evtGetFloat(event, event->args[0]);
     MarioWork* mario = marioGetPtr();

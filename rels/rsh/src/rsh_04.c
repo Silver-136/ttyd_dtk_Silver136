@@ -374,6 +374,7 @@ EVT_END()
 
 // Each timed speech signals GF(0); the main movement waits for it before starting the next speech.
 EVT_BEGIN(evt_shorui_funshitu)
+    // The lost documents scene: Pennington's theme plays and he questions the salaryman.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_POWAN1"))
     CALL(evt_cam3d_evt_set, 220, 130, 250, 220, 55, -180, 500, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -395,6 +396,7 @@ EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("サラリーマン"))
     WAIT_MS(500)
     CALL(evt_mario_set_dir_npc, STRING("サラリーマン"))
+    // The salaryman answers while Pennington presses him.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_168"), 0, STRING("サラリーマン"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_168_01"), 0, STRING("ポワン探偵"))
@@ -431,6 +433,7 @@ EVT_BEGIN(evt_shorui_funshitu)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_TALK_POSE)
+        // The salaryman paces and mumbles.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_169_00"), 0, 0)
         CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_POSE)
         SET_VALUE(GF(0), 1)
@@ -487,6 +490,7 @@ EVT_BEGIN(evt_shorui_funshitu)
     CALL(evt_cam3d_evt_set, 225, 93, 115, 225, 40, -180, 500, EASING_SINE_IN_OUT)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     WAIT_MS(500)
+    // The screen blurs as the mystery deepens.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_169_04"), 0, 0)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     DELETE_EVENT(LW(10))
@@ -613,6 +617,7 @@ static EVT_BEGIN(talk_syashou)
     END_SWITCH
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_01_THE_CONDUCTOR)
+        // His first greeting.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_06"), 0, 0)
         WAIT_MS(300)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -626,6 +631,7 @@ static EVT_BEGIN(talk_syashou)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_01_THE_CONDUCTOR)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
         IF_INT_EQUAL(LSWF_RSH_04_CONDUCTOR_TALK_TOGGLE, 0)
+            // Ticket and autograph hints.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_07"), 0, 0)
             SET_VALUE(LSWF_RSH_04_CONDUCTOR_TALK_TOGGLE, 1)
             ELSE
@@ -646,6 +652,7 @@ static EVT_BEGIN(talk_syashou)
         CASE_LESS(STG6_13_TALK_TO_THE_CONDUCTOR)
         IF_INT_EQUAL(GSWF_RSH_CONDUCTOR_BLANKET_TALK_DONE, 0)
             SET_VALUE(GSWF_RSH_CONDUCTOR_BLANKET_TALK_DONE, 1)
+            // The night talk: he asks Mario to help.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_111"), 0, 0)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_114"), 0, 0)
@@ -658,6 +665,7 @@ static EVT_BEGIN(talk_syashou)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_113"))
         END_IF
         CASE_LESS(STG6_15_GHOST_REQUEST)
+        // Hints for the ghost and the baggage car.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_115"), 0, 0)
         CASE_LESS(STG6_16_THE_BAGGAGE_CAR)
         CALL_CHILD(PTR(evt_allow_kamotsu))
@@ -666,6 +674,7 @@ static EVT_BEGIN(talk_syashou)
         CASE_LESS(STG6_18_BLANKET_EXCHANGE)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_129"), 0, 0)
         CASE_LESS(STG6_19_GIVE_BLANKET)
+        // The Blanket exchange: he takes the Blanket and gives a Mushroom.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_142"), 0, 0)
         CALL(evt_win_item_select, 0, PTR(item_tbl2), LW(1), 0)
         IF_INT_NOT_EQUAL(LW(1), -1)
@@ -689,6 +698,7 @@ static EVT_BEGIN(talk_syashou)
             CALL(evt_item_entry, STRING("orei"), ITEM_MUSHROOM, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("orei"))
             CALL(evt_item_get_item_end_wait, STRING("orei"))
+            // Lines for day 2, day 3 and the return trip.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_145"), 0, 0)
             SET_VALUE(GSW_STORY_PROGRESS, STG6_19_GIVE_BLANKET)
             CALL(evt_pouch_remove_item, ITEM_BLANKET, LW(0))
@@ -1009,6 +1019,7 @@ s32 item_tbl3[] = {
 static EVT_BEGIN(talk_konari)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
+        // Early on, Little Narikin's lines follow the story.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_17"), 0, 0)
         CASE_LESS(STG6_07_SYLVIA)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_90"), 0, 0)
@@ -1016,6 +1027,7 @@ static EVT_BEGIN(talk_konari)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_08_BUB)
             SET_VALUE(GSW_STORY_PROGRESS, STG6_08_BUB)
+            // He asks Mario for an autograph.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_91"), 0, 0)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_94"), 0, 0)
@@ -1029,6 +1041,7 @@ static EVT_BEGIN(talk_konari)
         END_IF
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
         CASE_LESS(STG6_12_GIVE_AUTOGRAPH)
+        // With the Autograph, Mario can hand it over.
         CALL(evt_pouch_check_item, ITEM_AUTOGRAPH, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
             IF_INT_EQUAL(GSWF_RSH_BUB_HINT_GIVEN, 0)
@@ -1069,6 +1082,7 @@ static EVT_BEGIN(talk_konari)
                     CALL(evt_item_delete, STRING("sign"))
 #endif
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_97"), 0, 0)
+                    // He pays Mario with a Shine Sprite.
                     CALL(evt_item_entry, STRING("orei"), ITEM_SHINE_SPRITE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("orei"))
                     CALL(evt_item_get_item_end_wait, STRING("orei"))
@@ -1080,6 +1094,7 @@ static EVT_BEGIN(talk_konari)
             END_IF
         END_IF
         CASE_LESS(STG6_19_GIVE_BLANKET)
+        // Later lines follow the story stage.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_102"), 0, 0)
         CASE_LESS(STG6_20_END_OF_DAY_1)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_147_11"), 0, 0)

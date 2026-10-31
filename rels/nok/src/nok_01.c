@@ -486,8 +486,10 @@ EVT_BEGIN(boss_noko_talk)
             WAIT_WHILE(GF(0))
             CALL(evt_mario_sleep_on)
         END_INLINE_EVENT
+        // The mayor asks Mario for help with Trouble Center request 8.
         CALL(evt_msg_print, 0, STRING("irai_08_001"), PTR(iri_08_msg), STRING("me"))
         CALL(evt_mario_sleep_off)
+        // He forgot to set out the tea and gives Mario a Turtley Leaf.
         CALL(evt_msg_print, 0, STRING("irai_08_002"), 0, STRING("me"))
         CALL(evt_pouch_get_haveitemcnt, LW(0))
         CALL(evt_pouch_check_item, ITEM_STRANGE_SACK, LW(1))
@@ -516,6 +518,7 @@ EVT_BEGIN(boss_noko_talk)
             CALL(evt_npc_wait_pera, STRING("me"))
             CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
         END_IF
+        // Request 8 is marked solved.
         CALL(evt_msg_print, 0, STRING("irai_08_004"), 0, STRING("me"))
         SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
         SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_LISTEN_TO_ME), 1)
@@ -528,6 +531,7 @@ EVT_BEGIN(boss_noko_talk)
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 ELSE
                 IF_INT_EQUAL(GSWF_TROUBLE_WORK(2), 0)
+                    // Request 17: the mayor takes the Routing Slip from Mario.
                     CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
                     CALL(evt_win_item_select, 0, PTR(iri_17_item_tbl), LW(0), 0)
                     IF_INT_NOT_EQUAL(LW(0), -1)
@@ -546,12 +550,14 @@ EVT_BEGIN(boss_noko_talk)
             END_IF
         END_IF
     END_IF
+    // With no request pending, his talk follows the story.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_02_TALKING_WITH_KROOP)
         CALL_CHILD(PTR(boss_noko_open_gate))
         CASE_LESS(STG1_08_OPENING_THE_PATH)
         IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
             IF_INT_EQUAL(GSWF_HEI_MOON_STONE_TAKEN, 1)
+                // After the Sun Stone and Moon Stone errand he congratulates Mario.
                 CALL(evt_msg_print, 0, STRING("stg1_nok_56"), 0, 0)
                 RETURN
             END_IF
@@ -590,6 +596,7 @@ EVT_BEGIN(nokorin_talk)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
         IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_FIRST_TALK_DONE, 0)
             SET_VALUE(GSWF_NOK_KOOPIE_KOO_FIRST_TALK_DONE, 1)
+            // Koopie Koo introduces herself to Mario.
             CALL(evt_msg_print, 0, STRING("stg1_nok_64"), 0, 0)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_NOD1_5"), LW(0), LW(1), LW(2), 0)
@@ -598,6 +605,7 @@ EVT_BEGIN(nokorin_talk)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             CALL(evt_msg_print, 0, STRING("stg1_nok_64_01"), 0, 0)
             ELSE
+            // She confides her worries about her boyfriend Koops.
             CALL(evt_msg_print, 0, STRING("stg1_nok_65"), 0, 0)
             IF_INT_EQUAL(GSWF_NOK_KOOPIE_KOO_CONFESSION_SEEN, 0)
                 SET_VALUE(GSWF_NOK_KOOPIE_KOO_CONFESSION_SEEN, 1)
@@ -614,6 +622,7 @@ EVT_BEGIN(nokorin_talk)
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 2)
                 SET_VALUE(GSWF_NOK_KOOPIE_KOO_BLESSING_DONE, 1)
+                // Koops is in the party: she apologizes to him and hops away.
                 CALL(evt_msg_print, 0, STRING("stg1_nok_67"), 0, 0)
                 CALL(evt_msg_print, 0, STRING("stg1_nok_68"), 0, 0)
                 CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
@@ -635,6 +644,7 @@ EVT_BEGIN(nokorin_talk)
     CASE_LESS(STG2_00_BOGGLY_WOODS)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
+        // Chapter 2 on: she cheers Koops on and asks Mario to look after him.
         CALL(evt_msg_print, 0, STRING("stg1_nok_71"), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, STRING("stg1_nok_72"), 0, 0)
@@ -656,6 +666,7 @@ EVT_BEGIN(nokorin_talk)
     CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
     CALL(evt_mario_get_party, LW(0))
     IF_INT_EQUAL(LW(0), 2)
+        // The late game: she wonders whether Koops has changed.
         CALL(evt_msg_print, 0, STRING("stg1_nok_77"), 0, 0)
         ELSE
         CALL(evt_msg_print, 0, STRING("stg1_nok_78"), 0, 0)
@@ -1134,6 +1145,10 @@ EVT_BEGIN(nokotarou_tabidachi)
     RETURN
 EVT_END()
 
+/**
+ * Set-up for nokotarou_tabidachi: creates the Goombella NPC (クリスチーヌ), positions Mario, Koops, his father,
+ * Koopie Koo and the mayor in a line, removes the active partner and starts the scene.
+ */
 EVT_BEGIN(nokotarou_tabidachi_init)
     CALL(evt_npc_entry, STRING("クリスチーヌ"), STRING("c_pkr"))
     CALL(evt_npc_set_anim, STRING("クリスチーヌ"), STRING("PKR_S_1"))
@@ -1158,6 +1173,12 @@ EVT_BEGIN(nokotarou_tabidachi_init)
 EVT_END()
 
 
+/**
+ * Script helper: sets the view matrix of the yami (darkness) overlay (envSetYamiView) to look from (-100 + d,
+ * 100, 0) at (d, 0, 0), with d the float args[0].
+ * sekai_yami_evt sweeps d from -600 to 600 to pass the darkness across the village;
+ * minnnanokoe_evt sets it to 600.
+ */
 static USER_FUNC(yami_view) {
     f32 z = evtGetFloat(event, event->args[0]);
     Mtx mtx;
@@ -1618,6 +1639,7 @@ static KusaAccess kusa_data[] = {
  */
 EVT_BEGIN(nok_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
+    // Register the exits, then pick the music: the village theme or the dark finale tracks.
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     SPAWN_EVENT(PTR(evt_switch_init))
@@ -1665,6 +1687,7 @@ EVT_BEGIN(nok_01_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_mon"), 1, 0)
     END_IF
     SET_VALUE(LW(0), PTR(kusa_data))
+    // Set up the bushes, the spinning floor, the Mega Rush P badge and the Turtley Leaf.
     CALL_CHILD(PTR(evt_sub_kusa_access_entry))
     SET_VALUE(LSWF_NOK_01_TURTLEY_LEAF, 0)
     CALL(evt_sub_random, 2, LSW_NOK_01_LEAF_BUSH)
@@ -1701,11 +1724,13 @@ EVT_BEGIN(nok_01_init_evt)
     IF_STR_EQUAL(LW(0), STRING("nokotarou"))
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
+        // Entering through nokotarou heals Mario and starts Koops's goodbye scene.
         CALL_CHILD(PTR(nokotarou_tabidachi_init))
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
+            // The chapter 8 finale scenes start from here.
             SPAWN_EVENT(PTR(sekai_yami_evt))
         END_IF
         IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))

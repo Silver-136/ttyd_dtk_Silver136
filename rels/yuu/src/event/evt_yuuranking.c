@@ -219,6 +219,13 @@ static EVT_BEGIN(main_evt)
     RETURN
 EVT_END()
 
+/**
+ * Draws the minigame score/ranking window.
+ * In mode 0 it shows the title and the score tally for the finished round (score,
+ * the monte earned and the bonus multiplier, revealed phase by phase);
+ * in modes 1 and 2 it lists the top five records of the minigame type (score or time, and the monte earned),
+ * highlighting the new entry in red.
+ */
 static void evt_yuuranking_disp_func(CameraId camera, void* param) {
 #ifdef VERSION_G8ME01
     const char* head;

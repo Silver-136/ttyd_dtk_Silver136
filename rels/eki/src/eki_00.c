@@ -1507,6 +1507,11 @@ static EVT_BEGIN(evt_origami)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the Smorg swarm of the Riverside Station cutscene:
+ * enters the two Moamoa NPCs (moa_a, moa_b) off-screen at y = -1000
+ * and registers the ext-pose callbacks (ext_moamoa_data/init/main/dispent) that draw the swarm.
+ */
 static EVT_BEGIN(evt_moamoa_init)
     CALL(evt_npc_entry, STRING("moa_a"), STRING("c_n_moa_a"))
     CALL(evt_npc_set_position, STRING("moa_a"), 0, -1000, 0)
@@ -1516,6 +1521,12 @@ static EVT_BEGIN(evt_moamoa_init)
     RETURN
 EVT_END()
 
+/**
+ * The scene where Mario and his partner first see the Smorg:
+ * both turn around, the partner (Goombella, Koops, Flurrie, Yoshi, Vivian, Bobbery or Ms. Mowz,
+ * chosen by evt_mario_get_party) says its own line (stg6_eki_02_0 to _6), a surprise jingle plays,
+ * the camera moves in on the swarm and the danger BGM starts.
+ */
 static EVT_BEGIN(evt_meet_moamoa)
     CALL(evt_party_stop, 0)
     BEGIN_INLINE_EVENT
@@ -1659,6 +1670,7 @@ static EVT_BEGIN(evt_elv_init)
 EVT_END()
 
 EVT_BEGIN(evt_elv_down)
+    // The elevator doors open and Mario walks to the doorway.
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_ELEVATOR_OPEN1"), LW(0), LW(1), LW(2), 0)
@@ -1671,6 +1683,7 @@ EVT_BEGIN(evt_elv_down)
     CALL(evt_map_checkanim, STRING("anm_ere_door_1"), LW(0), LW(1))
     ADD(LW(1), 1)
     WAIT_MS(LW(1))
+    // The partner follows into the cage and Mario steps in.
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, 190, -65, FLOAT(60.0f))
         CALL(evt_party_stop, 0)
@@ -1680,10 +1693,12 @@ EVT_BEGIN(evt_elv_down)
     END_INLINE_EVENT
     CALL(evt_mario_mov_pos2, 190, -160, FLOAT(60.0f))
     CALL(evt_mario_set_dir, 270, 200, 0)
+    // The upper floor is captured into a picture that will fade away over the ride.
     CALL(evt_mapobj_set_offscreen, 1, STRING("s_eki_00"), STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_eki_07"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_00"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_onoff, STRING("capture_img"), 1)
+    // The doors close.
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_ELEVATOR_CLOSE1"), LW(0), LW(1), LW(2), 0)
@@ -1693,6 +1708,7 @@ EVT_BEGIN(evt_elv_down)
     CALL(evt_map_playanim, STRING("anm_ere_door_2"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, STRING("anm_ere_door_2"), LW(0), LW(2))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 0, LW(2))
+    // The old floor picture fades out as the doors shut.
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(img_set_color, STRING("capture_img"), 255, 255, 255, LW(0))
@@ -1702,6 +1718,7 @@ EVT_BEGIN(evt_elv_down)
         END_IF
     END_LOOP
     CALL(evt_img_onoff, STRING("capture_img"), 0)
+    // The elevator moves with its motion sound and rumble, then the bell rings.
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_ELEVATOR_MOVE1"), LW(0), LW(1), LW(2), LW(10))
@@ -1716,6 +1733,8 @@ EVT_BEGIN(evt_elv_down)
     CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_ELEVATOR_BELL1"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(400)
+    // The picture now shows the lower floor; before the Smorgs are swatted the swarm is drawn into the
+    // picture instead of the scene.
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_eki_00"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("s_eki_07"), STRING("offscreen"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
@@ -1723,6 +1742,7 @@ EVT_BEGIN(evt_elv_down)
         CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_ACTIVE)
         CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
     END_IF
+    // The doors open and the new floor fades in.
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_ELEVATOR_OPEN1"), LW(0), LW(1), LW(2), 0)
@@ -1741,6 +1761,9 @@ EVT_BEGIN(evt_elv_down)
         END_IF
     END_LOOP
     CALL(evt_img_onoff, STRING("capture_img"), 0)
+    // The lower floor replaces the picture and the swarm becomes active on it. The lever works only at the
+    // Smorg-swatting step and is shown pulled after it, the bridge switch appears at the origami-stairs step,
+    // the uncollected Close Call P is moved down out of the way, and the stairs show by story step.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
         CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_ACTIVE)
         CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
@@ -1779,6 +1802,7 @@ EVT_BEGIN(evt_elv_down)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_ori"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_kabe"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+    // The partner and Mario walk out of the cage and the doors close behind them.
     BEGIN_INLINE_EVENT
         CALL(evt_party_stop, 0)
         WAIT_MS(100)
@@ -1798,6 +1822,8 @@ EVT_BEGIN(evt_elv_down)
     END_INLINE_EVENT
     CALL(evt_map_playanim, STRING("anm_ere_door_2"), MAP_ANIM_PLAY_ONCE, 0)
     WAIT_MS(500)
+    // On the first ride down Mario and the partner first see the Smorgs (which sets the encounter step);
+    // while the story is at that step the danger music plays on arrival.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_39_SMORG_1ST_ENCOUNTER)
         CALL_CHILD(PTR(evt_meet_moamoa))
     END_IF
@@ -1816,6 +1842,7 @@ EVT_END()
  * cage.
  */
 EVT_BEGIN(evt_elv_up)
+    // The music fades; the doors open and Mario walks to the doorway.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
@@ -1829,6 +1856,7 @@ EVT_BEGIN(evt_elv_up)
     CALL(evt_map_checkanim, STRING("anm_ere_door_1"), LW(0), LW(1))
     ADD(LW(1), 1)
     WAIT_MS(LW(1))
+    // The partner follows into the cage and Mario steps in.
     BEGIN_INLINE_EVENT
         CALL(evt_hitobj_onoff, STRING("ere__A"), 0, 0)
         CALL(evt_party_move_pos, 0, 190, -65, 500)
@@ -1841,6 +1869,8 @@ EVT_BEGIN(evt_elv_up)
     CALL(evt_mario_mov_pos, 190, -160, 500)
     CALL(evt_mario_set_dir, 270, 0, 0)
     WAIT_MS(500)
+    // The lower floor is captured into a picture that will fade away over the ride; before the Smorgs are
+    // swatted the swarm stops and is drawn into that picture.
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_eki_00"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("s_eki_07"), STRING("offscreen"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_eki_07"), MAP_OBJ_FLAG_HIDDEN)
@@ -1849,6 +1879,7 @@ EVT_BEGIN(evt_elv_up)
         CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_ACTIVE)
         CALL(evt_moamoa_flag_onoff, 1, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
     END_IF
+    // The doors close and the old floor fades out.
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_ELEVATOR_CLOSE1"), LW(0), LW(1), LW(2), 0)
@@ -1870,6 +1901,7 @@ EVT_BEGIN(evt_elv_up)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
         CALL(evt_moamoa_flag_onoff, 0, MOAMOA_WORK_FLAG_DRAW_OFFSCREEN)
     END_IF
+    // The elevator moves with its motion sound and rumble, then the bell rings.
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_ELEVATOR_MOVE1"), LW(0), LW(1), LW(2), LW(10))
@@ -1884,6 +1916,7 @@ EVT_BEGIN(evt_elv_up)
     CALL(evt_mapobj_get_position, STRING("d_1"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_ELEVATOR_BELL1"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(400)
+    // The picture now shows the upper floor and fades in as the doors open on it.
     CALL(evt_mapobj_set_offscreen, 1, STRING("s_eki_00"), STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_eki_07"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
@@ -1905,6 +1938,8 @@ EVT_BEGIN(evt_elv_up)
         END_IF
     END_LOOP
     CALL(evt_img_onoff, STRING("capture_img"), 0)
+    // The upper floor replaces the picture: the lower floor's bridge switch is removed, the uncollected
+    // Close Call P is moved back up, and the floors' hit areas swap.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
     END_IF
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)
@@ -1923,6 +1958,7 @@ EVT_BEGIN(evt_elv_up)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_40_SWATTING_SMORGS)
         CALL(evt_del_case_evt, 0, GW(10))
     END_IF
+    // The partner and Mario walk out of the cage and the doors close behind them.
     BEGIN_INLINE_EVENT
         CALL(evt_party_jump_pos, 0, 190, 0, -65, 500, 0, -1000)
         CALL(evt_party_stop, 0)

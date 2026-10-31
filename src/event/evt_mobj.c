@@ -342,6 +342,8 @@ USER_FUNC(evt_mobj_hit_onoff) {
     s32 on = evtGetValue(event, args[1]);
     MapObjectEntry* mobj = mobjNameToPtr(name);
     s32 i;
+    // The original tests the address of the name array, which is never NULL, so
+    // both hit groups are switched even when a slot is unused.
     if (on) {
         for (i = 0; i < 2; i++) {
             if (mobj->hitObj[i].name) {
@@ -3134,6 +3136,7 @@ USER_FUNC(evt_mobj_breaking_floor) {
 
 // ---- kpa ----
 
+// ---- kpa ----
 typedef struct KpaPoleScoreWork {
     char str[8];
     f32 x;

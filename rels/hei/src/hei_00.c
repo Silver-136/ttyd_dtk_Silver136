@@ -259,6 +259,11 @@ EVT_BEGIN(make_proj_evt)
     RETURN
 EVT_END()
 
+/**
+ * Hooktail's flyover shadow: for 361 frames moves the projector across the meadow (three interpolated GW
+ * values), shakes the camera and projects the dragon's shadow over the map and the characters,
+ * then restores the normal map objects.
+ */
 EVT_BEGIN(evt_gonbaba_shadow)
     SPAWN_EVENT_GET_ID(PTR(make_proj_evt), LW(9))
     SET_VALUE(GW(0), 0)
@@ -429,6 +434,7 @@ EVT_END()
  * Sets the story progress to "The Shadow of Hooktail".
  */
 EVT_BEGIN(gonbaba_evt)
+    // Waits until Mario walks east of x=-100.
     LABEL(1)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(0), -100)
@@ -440,6 +446,7 @@ EVT_BEGIN(gonbaba_evt)
         CALL(evt_mario_goodbye_party, 0)
         CALL(evt_mario_hello_party, 0, 1)
     END_IF
+    // Mario freezes and Hooktail's roar echoes from off-screen; Mario and his partner react.
     CALL(evt_mario_key_onoff, 0)
     WAIT_FRAMES(1)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -461,6 +468,7 @@ EVT_BEGIN(gonbaba_evt)
         CALL(evt_mario_set_pose, STRING("M_I_N"))
     END_INLINE_EVENT
     WAIT_MS(1000)
+    // Hooktail's shadow passes over the field.
     CALL_CHILD(PTR(evt_gonbaba_shadow))
     CALL(evt_mario_get_pos, 0, LW(0), LW(2), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
@@ -478,6 +486,7 @@ EVT_BEGIN(gonbaba_evt)
     CALL(evt_mario_set_dir_npc, STRING("（・ｘ・）"))
     WAIT_MS(1000)
     CALL(evt_mario_cont_onoff, 0)
+    // Hooktail's sprite flies in from the back, grows and swoops away.
     CALL(evt_npc_set_position, STRING("（・ｘ・）"), 0, 210, -500)
     CALL(evt_npc_set_anim, STRING("（・ｘ・）"), STRING("GNB_F_1"))
     CALL(evt_npc_pera_onoff, STRING("（・ｘ・）"), 0)
@@ -531,6 +540,7 @@ EVT_BEGIN(gonbaba_evt)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(1000)
+    // The camera returns to Mario and his partner comments on what they saw.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_cam3d_evt_set_xyz, 270, LW(1), LW(2), 0, 7000, EASING_SINE_IN_OUT)
     WAIT_MS(9500)
@@ -1282,16 +1292,19 @@ EVT_END()
  * save block, music and kiosk pipe.
  */
 EVT_BEGIN(hei_00_init_evt)
+    // The Bowser interlude (Peach shall we dance) starts a Koopa scene.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_02_PEACH_SHALL_WE_DANCE)
         CALL(evt_mario_set_mode, 2)
         SPAWN_EVENT(PTR(hei_00_koopa_evt))
     END_IF
+    // Register the exits and the NPCs of the room.
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     SET_VALUE(LW(0), STRING("dokan"))
     CALL_CHILD(PTR(bero_case_switch_off))
     CALL(evt_npc_setup, PTR(npcEnt))
+    // Story-dependent cutscenes: the opening and the Hooktail flyover.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_00_PETAL_MEADOWS)
         SPAWN_EVENT(PTR(first_evt))
     END_IF
@@ -1315,6 +1328,7 @@ EVT_BEGIN(hei_00_init_evt)
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_moji"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_moji"), 1, 0)
+    // Before that: the timer switch that opens the path, and the tablet once both stones are in place.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_08_OPENING_THE_PATH)
         CALL(evt_mapobj_get_position, STRING("isi_3"), LW(0), LW(1), LW(2))
         CALL(evt_mapobj_get_position, STRING("isi_4"), LW(10), LW(11), LW(12))
@@ -1327,6 +1341,7 @@ EVT_BEGIN(hei_00_init_evt)
             END_IF
         END_IF
     END_IF
+    // Restore the Sun Stone and Moon Stone sockets according to which stones Mario has taken and placed.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_TAKEN, 1)
         IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
@@ -1343,6 +1358,7 @@ EVT_BEGIN(hei_00_init_evt)
             CALL_CHILD(PTR(setting_moon_stone))
         END_IF
     END_IF
+    // Trees, wheat animation, Mushroom block, save block and the Hooktail shadow NPC.
     SET_VALUE(LW(0), PTR(ki_data))
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
     CALL(evt_map_playanim, STRING("anm_mugi_1"), MAP_ANIM_PLAY_LOOP, 0)
@@ -1351,6 +1367,7 @@ EVT_BEGIN(hei_00_init_evt)
     CALL(evt_npc_pera_onoff, STRING("ゴンババ影"), 0)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG2_25_02_PEACH_SHALL_WE_DANCE)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
+            // Field music and ambience, except during the Bowser interlude and the epilogue.
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI1"))
         END_IF

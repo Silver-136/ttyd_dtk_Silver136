@@ -160,6 +160,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Mini-Yux: runs the default damage reaction. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -167,20 +168,27 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Phase event of the Mini-Yux: nothing; its Yux does the acting. */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/** Unison-phase event of the Mini-Yux: restarts its wait event and does nothing else. */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
+/** Attack event of the Mini-Yux: restarts its wait event; the Yux makes the attacks itself. */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
+/**
+ * Idle loop of the Mini-Yux: plays its idle pose and, every 30 to 150 frames, if its flag is set and it can act,
+ * plays the S_4 pose for 3 seconds.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     LABEL(0)
@@ -203,6 +211,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Gives the starting ring offset of Mini-Yux number args[2] when there are args[1] of them (1 to 4 in a ring);
+ * the same helper as in the Yux's file.
+ */
 static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     EvtWord* args = event->args;
     BattleUnit* unit;

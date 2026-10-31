@@ -62,6 +62,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
     if (work->actionCommands.mAcUnit->badgesEquipped.AutoCommand) {
         autoCommand = TRUE;
     }
+    // params: 0 unit id, 1 parts id
     unit = BattleGetUnitPtr(work, work->actionCommands.params[MONOSIRI_TARGET_PARAM_UNIT_ID]);
     parts = BtlUnit_GetPartsPtr(unit, work->actionCommands.params[MONOSIRI_TARGET_PARAM_PARTS_ID]);
 
@@ -86,6 +87,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
             cw->frame = 0;
             cw->sfxId = psndSFXOn("SFX_AC_CURSOR_MOVE1");
             work->actionCommands.mAcState = 1000;
+        // fall through
         case 1000:
             cw->frame++;
             cw->pos.x = (cw->hitPos.x - 80.0f) + intplGetValue(EASING_LINEAR, 0.0f, 160.0f, cw->frame, cw->maxFrames);
@@ -123,6 +125,7 @@ s32 battleAcMain_MonosiriTarget(BattleWork* work) {
             if (cw->sfxId != -1) {
                 psndSFXOff(cw->sfxId);
             }
+        // fall through
         case 1003:
             cw->endTimer--;
             if (cw->endTimer <= 0) {

@@ -286,6 +286,7 @@ s32 johoya_data_make(const char* prefix, s32 type) {
                         tagdone = TRUE;
                         //fallthrough
 
+                    // fallthrough
                     case ',': //found new tag data
                         tagdata++;
                         if (tagNum == 0) {

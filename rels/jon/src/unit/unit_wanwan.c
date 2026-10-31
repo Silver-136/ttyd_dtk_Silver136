@@ -253,6 +253,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Event run for as long as the Chain-Chomp exists:
+ * updates its chain (chain_main) every frame and ends when the unit is gone.
+ */
 static EVT_BEGIN(chain_event)
     LABEL(0)
     WAIT_FRAMES(1)
@@ -266,6 +270,10 @@ static EVT_BEGIN(chain_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Chain-Chomp: marks it as being damaged (unit work 2 = 2, attribute 4) around the default
+ * damage handling.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -298,6 +306,11 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of the Chain-Chomp: all 9 of its parts spin with the death sound for 48 frames,
+ * a smoke puff and the coins, experience and star points appear,
+ * and the parts tip over before the unit is killed (with a different kill mode for damage code 0x400).
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(0), 48)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -360,6 +373,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
+        // Pick a target for the attack; a confused unit that has none flusters.
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
@@ -383,6 +397,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, 127)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, LW(14))
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_wanwan_attack))
+    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_wanwan_attack))
@@ -390,6 +405,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_ChangePartsFaceDirection, UNIT_ID_SELF, 1, LW(15))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
+    // The Chain-Chomp rears back and hops twice on the spot.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_PART_TO_PART)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -408,6 +424,7 @@ static EVT_BEGIN(attack_event)
     END_LOOP
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(20)
+        // It lunges at the target with its chain stretched taut.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_S_1A"))
     END_SIBLING_EVENT
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_ATTACK1"), LW(14), 0, EVT_NULLPTR)
@@ -422,6 +439,7 @@ static EVT_BEGIN(attack_event)
     IF_INT_LESS(LW(1), 0)
         SET_VALUE(LW(1), 0)
     END_IF
+    // Its last jump carries it onto the target to bite.
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 1, 0, FLOAT(16.0f), FLOAT(0.0f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 1, LW(0), LW(1), 10, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_wanwan_attack), 0, LW(5))
@@ -447,6 +465,7 @@ static EVT_BEGIN(attack_event)
         CASE_END
     END_SWITCH
     LABEL(90)
+    // It lunges past the target and lands beyond it.
     WAIT_FRAMES(30)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT1"), LW(14), 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_S_1A"))
@@ -454,10 +473,12 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 1, 0, FLOAT(8.0f), FLOAT(0.0f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
     GOTO(98)
+    // The attack connects.
     LABEL(91)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
+    // Deal the damage, reduced by the action command defence.
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_wanwan_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_wanwan_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     WAIT_FRAMES(30)
@@ -467,9 +488,11 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 1, 0, FLOAT(8.0f), FLOAT(0.25f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
     GOTO(98)
+    // Wrap up the attack.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(250)
+    // The attack is over; back to waiting.
     LABEL(99)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 1)
     CALL(btlevtcmd_ChangePartsFaceDirection, UNIT_ID_SELF, 1, -1)
@@ -477,10 +500,18 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Wait event of the Chain-Chomp: picks the idle behaviour by status.
+ * Asleep (status 1) it breathes with a slow tilting;
+ * stopped or frozen (statuses 2 and 9) it holds pose WAN_Y_1;
+ * dizzy, poisoned or confused (statuses 3 to 5) it hops slowly; otherwise it hops in place barking, with sounds.
+ * Each runs in a sibling event and the event then loops forever.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_STATE, 0)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_SLEEP, LW(15))
     IF_INT_NOT_EQUAL(LW(15), 0)
+        // Asleep, it breathes with a slow tilt.
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_STATE, 2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_N_1"))
         CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 1, 0, 10, 0)
@@ -506,6 +537,7 @@ static EVT_BEGIN(wait_event)
     OR(LW(15), LW(14))
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_STATE, 2)
+        // Stopped or frozen, it holds pose WAN_Y_1.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_Y_1"))
         BEGIN_SIBLING_EVENT
             LABEL(5)
@@ -522,6 +554,7 @@ static EVT_BEGIN(wait_event)
     OR(LW(15), LW(13))
     OR(LW(15), LW(14))
     IF_INT_NOT_EQUAL(LW(15), 0)
+        // Dizzy, poisoned or confused, it hops slowly in place.
         BEGIN_SIBLING_EVENT
             LABEL(3)
             CALL_CHILD(sound_gensui_event)
@@ -556,6 +589,7 @@ static EVT_BEGIN(wait_event)
         END_SIBLING_EVENT
         GOTO(98)
     END_IF
+    // Otherwise it hops in place, barking.
     BEGIN_SIBLING_EVENT
         LABEL(4)
         CALL_CHILD(sound_gensui_event)
@@ -599,6 +633,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper event: lowers the volume of the Chain-Chomp's barking (unit work 1) by about 30 percent,
+ * to a minimum of 32, each time it is called.
+ */
 static EVT_BEGIN(sound_gensui_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, LW(11))
     MULTIPLY_FLOAT(LW(11), FLOAT(0.69921875f))
@@ -609,6 +647,10 @@ static EVT_BEGIN(sound_gensui_event)
     RETURN
 EVT_END()
 
+/**
+ * Plays the Chain-Chomp's first bark sound set (WAIT1 and WAIT3, then WAIT2 after LW(10) frames) at the volume
+ * in LW(11).
+ */
 static EVT_BEGIN(wait_sound_event1)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT1"), LW(11), 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT3"), LW(11), 0, EVT_NULLPTR)
@@ -617,12 +659,20 @@ static EVT_BEGIN(wait_sound_event1)
     RETURN
 EVT_END()
 
+/** Plays the Chain-Chomp's second bark sound (WAIT4) after LW(10) frames at the volume in LW(11). */
 static EVT_BEGIN(wait_sound_event2)
     WAIT_FRAMES(LW(10))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT4"), LW(11), 0, EVT_NULLPTR)
     RETURN
 EVT_END_PAD()
 
+/**
+ * Per-frame script helper that animates the Chomp's chain (parts 2-9). args[0] = unit.
+ * Part 9 is the stake, behind the chomp; when work[2] is 2 the current link layout is recorded relative to the
+ * stake and when it is 1 the links keep that shape (the Chomp has been pulled away).
+ * Otherwise the links hang as a sagging chain between the Chomp (part 1, kept below y = 110) and the stake,
+ * each link moved to a fixed distance from its neighbour and held above the floor.
+ */
 static USER_FUNC(chain_main) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;

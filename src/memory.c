@@ -123,6 +123,7 @@ void memInit(void) {
 }
 
 static inline void mapallocInit(void) {
+// the declaration order differs per version (it sets which callee-saved register holds each)
 #ifdef VERSION_G8ME01
     u32 size;
     MapAllocEntry* entry;

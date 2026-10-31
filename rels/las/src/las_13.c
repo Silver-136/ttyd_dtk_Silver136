@@ -88,6 +88,12 @@ static EVT_BEGIN(box_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: checks the red switch riddle after each press.
+ * When switch 1 has been hit twice and switch 2 three times (switch 2 only counts before switch 1 is touched),
+ * it sparkles both switches away, plays a success jingle and makes the key chest (Palace Key 0x28) appear,
+ * then sets GSWF_LAS13_RED_SWITCHES_SOLVED.
+ */
 EVT_BEGIN(switch_check)
     SET_VALUE(LW(0), 0)
     IF_INT_EQUAL(LSW_LAS_13_SWITCH_1_COUNT, 2)
@@ -124,6 +130,10 @@ EVT_BEGIN(switch_check)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the first switch of las_13 was hit.
+ * Counts the hit in LSW(1) (up to 255) and re-checks the puzzle with switch_check.
+ */
 static EVT_BEGIN(switch1_evt)
     IF_INT_LESS(LSW_LAS_13_SWITCH_1_COUNT, 255)
         ADD(LSW_LAS_13_SWITCH_1_COUNT, 1)
@@ -132,6 +142,10 @@ static EVT_BEGIN(switch1_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the second switch of las_13 was hit.
+ * Counts the hit in LSW(2) (up to 255) only while LSW(1) is 0, and re-checks the puzzle with switch_check.
+ */
 static EVT_BEGIN(switch2_evt)
     IF_INT_EQUAL(LSW_LAS_13_SWITCH_1_COUNT, 0)
         IF_INT_LESS(LSW_LAS_13_SWITCH_2_COUNT, 255)
@@ -142,6 +156,7 @@ static EVT_BEGIN(switch2_evt)
     RETURN
 EVT_END()
 
+/** Event script: reading the hint plate of las_13 (stg8_las_38). */
 static EVT_BEGIN(hint_plate)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg8_las_38"), 0, 0)
@@ -149,6 +164,11 @@ static EVT_BEGIN(hint_plate)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_13, a Riddle Tower room:
+ * music, the door back to las_10, the two red floating switches (until solved),
+ * the key chest (hidden until solved) and the hint plate.
+ */
 EVT_BEGIN(las_13_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
@@ -171,6 +191,7 @@ EVT_BEGIN(las_13_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: spawns a small star sparkle effect above the point (args[0], args[1], args[2]). */
 static USER_FUNC(small_star) {
     EvtWord* args = event->args;
     f32 x = evtGetFloat(event, args[0]);

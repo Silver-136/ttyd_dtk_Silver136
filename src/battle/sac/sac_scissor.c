@@ -1292,10 +1292,12 @@ s32 wait_star_standby(void) {
  * Then pays the Star Power and gives each damaged enemy a finishing hit.
  */
 EVT_BEGIN(marioAttackEvent_Scissor)
+    // Art Attack's work is set up and the star's flight starts.
     CALL(scissor_init)
     BEGIN_SIBLING_EVENT
         CALL(star_control)
     END_SIBLING_EVENT
+    // Crystal Star opening: Mario holds up the star item and the Crystal Star appears in stardust.
     CALL_CHILD(sac_start_camera_evt)
     WAIT_MS(500)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_SAC_START1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1311,6 +1313,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
     CALL(evt_snd_sfxoff, LW(11))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_FRAMES(40)
+    // Mario puts the item away and returns home, and the camera pulls back to show the whole stage.
     CALL_CHILD(sac_mario_item_on_end_evt)
     CALL_CHILD(sac_mario_back_home)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_I_Y"))
@@ -1319,6 +1322,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
         CALL(evt_btl_camera_set_moveto, 0, 75, 105, 600, 75, 55, 0, 30, 0)
     END_SIBLING_EVENT
+    // Once the star is in place as the drawing cursor, the timer runs, the crowd cheers and help shows.
     CALL(wait_star_standby)
     BEGIN_SIBLING_EVENT
         CALL(scissor_timer_main)
@@ -1328,6 +1332,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
     END_SIBLING_EVENT
     CALL(sac_ac_help_on)
     LOOP(0)
+        // Each pass: the screen is readied for a cut-out while the player draws; time running out ends it.
         SET_VALUE(LW(10), STRING("OFF_d_bom"))
         CALL(evt_paper_entry, LW(10))
         CALL(evt_offscreen_entry, STRING("ofs"))
@@ -1345,6 +1350,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
             GOTO(90)
         END_IF
         WAIT_FRAMES(1)
+        // The drawn loop is closed and the area inside it is captured from the screen.
         CALL(scissor_tess)
         WAIT_FRAMES(1)
         CALL(scissor_offscreen)
@@ -1352,6 +1358,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
         WAIT_FRAMES(1)
         CALL(scissor_ofscreen_ok, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
+            // The loop cuts that piece out and hurts the enemies inside; hitting them all earns a rating.
             CALL(evt_snd_sfxon, STRING("SFX_BTL_SAC_KAKONDEPON2"), 0)
             CALL(evt_img_onoff, STRING("img"), 1)
             CALL(evt_img_set_shadow, STRING("img"), 2)
@@ -1363,6 +1370,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
             CALL(evt_img_clear_virtual_point, STRING("img"))
             WAIT_FRAMES(60)
         END_IF
+        // The cut-out is cleared before the next loop.
         CALL(evt_img_onoff, STRING("img"), 0)
         CALL(evt_img_set_shadow, STRING("img"), 0)
         CALL(evt_img_release, STRING("img"))
@@ -1374,6 +1382,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
         END_IF
     END_LOOP
     LABEL(90)
+    // Time's up: Mario pays the Star Power and each enemy that took damage gets the finishing hit.
     CALL(sac_ac_help_off)
     CALL(sac_cheer_end)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1392,6 +1401,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     GOTO(95)
     LABEL(97)
+    // The camera resets and the drawing work is freed.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(1000)
     CALL(scissor_end)

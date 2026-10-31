@@ -104,6 +104,12 @@ static EVT_BEGIN(evt_chorobon)
     RETURN
 EVT_END()
 
+/**
+ * Petal Meadows hei_12 map init: sets the fortress music and reverb;
+ * until the Sun Stone is taken, parks the Fuzzy above the room
+ * and places the Sun Stone item whose pickup makes the Fuzzy jump in and fight;
+ * later the Fuzzy gets its battle info back.
+ */
 EVT_BEGIN(hei_12_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
@@ -134,6 +140,7 @@ EVT_BEGIN(hei_12_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: removes the whole Fuzzy (Chorobon) group from the map after the fight. */
 static USER_FUNC(npc_dead) {
     // チョロボン
     npcGroupDead(npcNameToPtr("\x83\x60\x83\x87\x83\x8D\x83\x7B\x83\x93"), FALSE);

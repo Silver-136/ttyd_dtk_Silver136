@@ -413,6 +413,7 @@ EVT_BEGIN(init_yuurei)
         IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 0)
             SET_VALUE(LW(0), 0)
             LOOP(0)
+                // Once Mario has been inside cabin 4 with Vivian for a while, the ghost fades in.
                 IF_INT_EQUAL(GSWF_RSH_02_IN_ROOM_4, 1)
                     CALL(evt_mario_party_use_check, LW(1))
                     IF_INT_EQUAL(LW(1), 6)
@@ -462,6 +463,7 @@ EVT_BEGIN(init_yuurei)
             IF_INT_EQUAL(LW(1), 1)
                 GOTO(2)
             END_IF
+            // She then pulses her transparency forever, pausing while Mario talks to her.
             IF_INT_EQUAL(GSWF_RSH_GHOST_FADE_HOLD, 1)
                 SET_VALUE(GSWF_RSH_GHOST_FADE_HELD, 1)
                 LOOP(0)
@@ -516,12 +518,14 @@ static s32 item_tbl2[] = {
 
 EVT_BEGIN(talk_yuurei)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
+    // The ghost's music plays and her quest begins.
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_STG5_GHOST1"))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_15_GHOST_REQUEST)
         SET_VALUE(LW(13), 0)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_14_GHOST_T)
             SET_VALUE(GSW_STORY_PROGRESS, STG6_14_GHOST_T)
+            // She introduces herself and asks Mario a favour.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_118"), PTR(yuurei_callback), 0)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_119"), PTR(yuurei_callback), 0)
@@ -537,11 +541,13 @@ EVT_BEGIN(talk_yuurei)
             CALL(evt_msg_print_add, 0, STRING("stg6_rsh_121"))
         END_IF
         CASE_LESS(STG6_17_GHOST_DIARY)
+        // She asks for her Ragged Diary.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_122"), 0, 0)
         CASE_LESS(STG6_18_BLANKET_EXCHANGE)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_135"), 0, 0)
         CALL(evt_win_item_select, 0, PTR(item_tbl2), LW(1), 0)
         IF_INT_NOT_EQUAL(LW(1), -1)
+            // She takes the diary and gives Mario a Blanket in return.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_136"), 0, 0)
             CALL(evt_npc_set_anim, STRING("ゆうれい"), STRING("A_1"))
             WAIT_MS(1000)
@@ -629,6 +635,7 @@ EVT_BEGIN(talk_yuurei)
                 END_IF
             END_LOOP
             SET_VALUE(GSWF_RSH_GHOST_FADE_HOLD, 0)
+            // Afterwards she repeats a hint or a closing line for each stage.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_139"), 0, 0)
             CALL(evt_pouch_remove_item, ITEM_RAGGED_DIARY, LW(0))
             SET_VALUE(GSW_STORY_PROGRESS, STG6_18_BLANKET_EXCHANGE)
@@ -1033,10 +1040,12 @@ EVT_BEGIN(evt_toron_catch)
     CALL(evt_npc_jump_position_nohit, STRING("トロン"), LW(3), 0, LW(4), 500, 30)
     CALL(evt_npc_jump_position_nohit, STRING("トロン"), -220, 0, -170, 500, 30)
     CALL(evt_npc_set_autotalkpose, STRING("トロン"), STRING("C_1"), STRING("T_4"))
+    // Zip Toad is caught and says his piece.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_182"), 0, STRING("トロン"))
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
     CALL(evt_fade_set_mapchange_type, 0, FADE_OUT_BLACK, 2000, FADE_IN_BLACK, 2000)
+    // The story advances and the map changes to rsh_02_b.
     SET_VALUE(GSW_STORY_PROGRESS, STG6_26_ZIP_TOAD_CAUGHT)
     CALL(evt_bero_mapchange, STRING("rsh_02_b"), STRING("w_bero"))
     RETURN
@@ -1079,6 +1088,7 @@ EVT_BEGIN(evt_toron_catch2)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(2000)
+    // Pennington, the salaryman and Zip Toad talk over the caught thief.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_183"), 0, STRING("ポワン探偵"))
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_184"), 0, STRING("トロン"))
@@ -1090,6 +1100,7 @@ EVT_BEGIN(evt_toron_catch2)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_NO_REAR_POSE)
     CALL(evt_mario_mov_pos2, -210, -150, FLOAT(60.0f))
     WAIT_MS(1000)
+    // The stolen items are laid out: the Briefcase, the Gold Ring and the Shell Earrings.
     CALL(evt_item_entry, STRING("a"), ITEM_BRIEFCASE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_item_get_item, STRING("a"))
     CALL(evt_item_get_item_end_wait, STRING("a"))
@@ -1110,6 +1121,7 @@ EVT_BEGIN(evt_toron_catch2)
         IF_INT_NOT_EQUAL(LW(1), -1)
             BREAK_LOOP
         END_IF
+        // The salaryman gets his briefcase back.
         CALL(evt_msg_print, 0, STRING("stg6_rsh_190"), 0, STRING("サラリーマン"))
     END_LOOP
     CALL(evt_pouch_remove_item, ITEM_BRIEFCASE, LW(0))
@@ -1127,6 +1139,7 @@ EVT_BEGIN(evt_toron_catch2)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_189_01"), 0, STRING("サラリーマン"))
     WAIT_MS(500)
     CALL(evt_mario_set_dir_npc, STRING("ポワン探偵"))
+    // Pennington sums up the case.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_191"), 0, STRING("ポワン探偵"))
     CALL(evt_npc_flag_onoff, 0, STRING("トロン"), NPC_FLAG_ENEMY)
     CALL(evt_pouch_remove_item, ITEM_VITAL_PAPER, LW(0))
@@ -1139,6 +1152,7 @@ EVT_BEGIN(evt_toron_catch2)
     WAIT_MS(500)
     WAIT_MS(1000)
     CALL(evt_fade_set_mapchange_type, 1, 2, 500, 1, 500)
+    // The train arrives and the map changes to hom_00.
     CALL(evt_bero_mapchange, STRING("hom_00"), STRING("hom_touchaku"))
     RETURN
 EVT_END()
@@ -1150,6 +1164,7 @@ EVT_BEGIN(evt_toron_appear)
     CALL(evt_npc_set_ry, STRING("トロン"), 270)
     CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
     WAIT_FRAMES(1)
+    // Wait until Mario has found the clue and hides in the shadows with Vivian.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_24_02_ANOTHER_CLUE)
         GOTO(100)
     END_IF
@@ -1282,6 +1297,7 @@ EVT_BEGIN(evt_toron_appear)
         END_LOOP
     END_IF
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
+    // Toron jumps out and taunts Mario.
     CALL(evt_msg_print, 0, STRING("stg6_rsh_181"), 0, STRING("トロン"))
     WAIT_MS(500)
     CALL(evt_npc_pera_onoff, STRING("トロン"), 1)
@@ -1458,6 +1474,7 @@ EVT_BEGIN(rsh_02_init_evt)
 EVT_END()
 
 EVT_BEGIN(rsh_02_a_init_evt)
+    // Decide whether a scripted entry is pending, then run the shared car init.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_20_END_OF_DAY_1)
         SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
     END_IF
@@ -1523,6 +1540,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
                 WAIT_MS(3000)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_13"), 0, 0)
                 WAIT_MS(2000)
+                // The first-time intro dialogue at the start of the chapter.
                 CALL(evt_msg_print_party, STRING("stg6_rsh_pro_01"))
                 WAIT_MS(300)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1553,6 +1571,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
                 CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
                 ADD(LW(0), 10)
                 ADD(LW(2), 5)
+                // The Vital Paper clue.
                 CALL(evt_item_entry, STRING("letter"), ITEM_VITAL_PAPER, LW(0), LW(1), LW(2), ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                 WAIT_MS(1000)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_pro_03"), 0, 0)
@@ -1576,6 +1595,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
                 CALL(evt_party_run, 0)
                 CALL(evt_mario_key_onoff, 1)
             END_INLINE_EVENT
+            // The morning messages after sleeping (day 2, day 3 and Poshley Heights).
             CASE_LESS(STG6_21_DAY_2)
             SET_VALUE(GSW_STORY_PROGRESS, STG6_21_DAY_2)
             BEGIN_INLINE_EVENT
@@ -1594,6 +1614,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
                 CALL(evt_mario_get_party, LW(0))
                 SWITCH(LW(0))
                     CASE_EQUAL(1)
+                    // On day 3 the partner speaks.
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_230_0"), 0, STRING("party"))
                     CASE_EQUAL(2)
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_230_1"), 0, STRING("party"))
@@ -1825,6 +1846,7 @@ EVT_END()
  * or Rogueport (gor_04) depending on the direction of the trip; otherwise it uses the normal doors.
  */
 EVT_BEGIN(rsh_02_a_init_evt_nidome)
+    // Second visit: run the shared init and show the clean floors.
     CALL_CHILD(PTR(rsh_02_init_evt_nidome))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
@@ -1876,6 +1898,7 @@ EVT_BEGIN(rsh_02_a_init_evt_nidome)
                 CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                 CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_TRAIN_CHIME1"), LW(0), LW(1), LW(2), 0)
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
+                    // Waking up on the way sends the train on to Poshley Heights or Rogueport.
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_c_03"), 0, 0)
                     ELSE
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_c_05"), 0, 0)
@@ -1920,6 +1943,7 @@ EVT_BEGIN(rsh_02_a_init_evt_nidome)
         ELSE
         SET_VALUE(LW(0), PTR(bero_data_a))
         CALL(evt_bero_get_info)
+        // Otherwise the normal doors are used.
         CALL_CHILD(PTR(evt_bero_info_run))
     END_IF
     RETURN

@@ -208,6 +208,10 @@ EVT_BEGIN(win_06_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: stores a camera-orbit parameter set in slot args[0] (0, 1 or the working copy):
+ * position (args[1..3]), target (args[4..6]), angle (args[7]) and distance (args[8]).
+ */
 static USER_FUNC(cam_kaiten_set_para) {
     EvtWord* args = event->args;
     KaitenParam* p;

@@ -46,6 +46,8 @@ EVT_BEGIN(kpa_00_first_evt)
 EVT_END()
 
 EVT_BEGIN(kpa_00_fly_evt)
+    // Cutscene start: controls are off and Mario is moved out of sight; Bowser's airship and Kammy are placed
+    // small and far away.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_npc_flag_onoff, 1, STRING("ババ"), NPC_FLAG_NO_SHADOW)
@@ -57,6 +59,8 @@ EVT_BEGIN(kpa_00_fly_evt)
     CALL(evt_npc_set_scale, STRING("ババ"), FLOAT(0.099609375f), FLOAT(0.099609375f), FLOAT(0.099609375f))
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     CALL(evt_cam3d_evt_set, 0, 134, 534, 0, 45, -8, 0, EASING_SINE_IN_OUT)
+    // The camera holds on the sky while the airship and Kammy's broom swing in sine-wave arcs and grow as they
+    // approach.
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(500)
     SET_FLOAT_VALUE(GW(0), FLOAT(-1.0f))
@@ -111,6 +115,7 @@ EVT_BEGIN(kpa_00_fly_evt)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
         WAIT_MS(1500)
+        // Kammy puffs her magic smoke and her flying sound loops until she reaches her mark.
         CALL(evt_npc_kamek_kemuri2, STRING("ババ"), 2000, 1)
     END_INLINE_EVENT
     SET_VALUE(GF(0), 0)
@@ -142,6 +147,7 @@ EVT_BEGIN(kpa_00_fly_evt)
         END_IF
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
+    // The airship flies across the screen with its engine sound following it.
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_AIRSHIP_MOVE1"), 0, 0, 0, LW(3))
     SET_VALUE(LW(4), -1000)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 210, 3000)
@@ -159,6 +165,8 @@ EVT_BEGIN(kpa_00_fly_evt)
     END_IF
     CALL(evt_snd_sfxoff, LW(3))
     WAIT_MS(800)
+    // The story advances to Bowser's castle interior; the music fades, the screen closes to a spot, and the
+    // game is saved.
     SET_VALUE(GSW_STORY_PROGRESS, STG1_19_02_BOWSER_CASTLE_INT)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 1000)
@@ -174,6 +182,7 @@ EVT_BEGIN(kpa_00_fly_evt)
 #endif
     CALL(evt_mario_set_mode, 0)
     CALL(evt_fade_set_mapchange_type, 1, 59, 0, 58, 0)
+    // The scene ends in Petalburg (nok_01).
     CALL(evt_bero_mapchange, STRING("nok_01"), STRING("nokotarou"))
     RETURN
 EVT_END()

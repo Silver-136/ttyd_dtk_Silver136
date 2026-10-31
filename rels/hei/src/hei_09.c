@@ -74,6 +74,10 @@ EVT_BEGIN(hei_09_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Texture-environment callback for the water in the Shhwonk Fortress rooms:
+ * hands the map object's TEV info to envSetWater.
+ */
 void hei_test_water_tev(MapTevCallbackInfo* info) {
     envSetWater(info);
 }

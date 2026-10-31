@@ -280,6 +280,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage script of the Dry Bones: runs the default damage handling on itself. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -287,6 +288,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Real defeat script of the Dry Bones (data event 49):
+ * it spins for 48 frames (SFX_BTL_ENEMY_DIE1_1) and bursts into smoke.
+ * Its coins and experience are stored only if they were not paid already (unit work 1, which fake_dead_event
+ * also sets), a star-point effect shows the experience, it tips over,
+ * returns any item it held and is removed from the battle.
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(0), 48)
@@ -339,6 +347,13 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Collapse script of the Dry Bones (data event 15):
+ * it walks home, pays its coins and experience out once (unit work 1), shows the star-point effect,
+ * crumbles into a pile of bones (KRN_D_2, SFX_ENM_HONENOKO_CRUMBLE1)
+ * and is taken off the field for 2 to 3 turns (unit work 2), after which rebirth_event brings it back.
+ * Its hit offset is lowered by 20.
+ */
 static EVT_BEGIN(fake_dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
@@ -377,6 +392,11 @@ static EVT_BEGIN(fake_dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Count-down for a collapsed Dry Bones, run from its attack script:
+ * unit work 2 goes down by one each turn, and at 0 it pieces itself back together (KRN_D_3 and D_4,
+ * SFX_ENM_HONENOKO_UNITE1 and UNITE2) with full HP and a normal hit offset.
+ */
 static EVT_BEGIN(rebirth_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REBIRTH_TURNS, LW(0))
     SUBTRACT(LW(0), 1)
@@ -397,6 +417,13 @@ static EVT_BEGIN(rebirth_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the Dry Bones. On a first strike it just throws its bone.
+ * If it is collapsed (unit work 2 above 0) it runs rebirth_event.
+ * Otherwise, after an item check, it draws a random number:
+ * 50 in 100 for a single bone throw, 30 in 100 for the three-bone link attack
+ * and 20 in 100 to call a friend (call_friend_event, trying space to its right first and then to its left).
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -471,6 +498,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Plays the avoid reaction on the target in LW(3) (animation 38, 39 or 40) according to the pre-damage result in
+ * LW(5): 3, 6 or 2.
+ */
 static EVT_BEGIN(start_avoid)
     IF_INT_EQUAL(LW(5), 3)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -484,7 +515,16 @@ static EVT_BEGIN(start_avoid)
     RETURN
 EVT_END()
 
+/**
+ * The Dry Bones' single bone throw: it rears back (KRN_A_1 and A_2) and throws a bone (part 2,
+ * spinning at 25 degrees a frame, SFX_ENM_HONENOKO_BONE_THROW2) at the target.
+ * A dodging target gets its avoid reaction (start_avoid) as the bone reaches it,
+ * and the damage is dealt on impact. The bone then lands behind the target and is hidden again.
+ * After a first strike it pauses first. When confused with no target it is flustered.
+ */
 static EVT_BEGIN(normal_attack_event)
+    // After a First Strike it pauses a moment; otherwise it picks a target (a confused Dry Bones with nobody
+    // to hit gets flustered).
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
@@ -503,17 +543,20 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_honenoko_attack))
+    // Declare the attack.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_honenoko_attack))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(500)
+    // It rears back to throw a bone.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_1"))
     WAIT_MS(250)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_2"))
     WAIT_MS(250)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_SEND_GROUP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    // The bone (part 2) leaves its hand and spins toward the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_BONE_THROW2"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("KRN_H_1"))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
@@ -530,6 +573,7 @@ static EVT_BEGIN(normal_attack_event)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+    // Find out whether the bone hits.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -549,6 +593,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // Miss or dodge: the target ducks aside as the bone reaches it and the bone clatters down behind.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -582,6 +627,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     CALL(evt_snd_sfxoff, LW(15))
     GOTO(98)
+    // Hit: the bone strikes and the damage is dealt; the bone then drops behind the target.
     LABEL(91)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 15)
     ADD(LW(1), 14)
@@ -598,6 +644,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 0, FLOAT(2.0f), FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     GOTO(98)
+    // The bone is hidden again and the Dry Bones goes back to idling.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
@@ -610,6 +657,10 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Plays the avoid reaction on the target in LW(3) (animation 38, 39 or 40) according to the pre-damage result in
+ * LW(11): 3, 6 or 2. Used by the link attack's bones.
+ */
 static EVT_BEGIN(start_avoid2)
     IF_INT_EQUAL(LW(11), 3)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -623,6 +674,11 @@ static EVT_BEGIN(start_avoid2)
     RETURN
 EVT_END()
 
+/**
+ * The Dry Bones' link attack: it picks a target and throws three bones (parts 2, 3 and 4) one after another,
+ * 40 and 35 frames apart, each from link_attack_event_sub.
+ * It waits until all three are done (unit work 4 reaches -1).
+ */
 static EVT_BEGIN(link_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LINK_HIT, 0)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -664,7 +720,15 @@ static EVT_BEGIN(link_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * One bone throw of the link attack, with the bone part in LW(12).
+ * The Dry Bones rears back (KRN_A_1 and A_2) and throws a bone (SFX_ENM_HONENOKO_BONE_THROW3) that spins at the
+ * target.
+ * The target is checked in turn; only the last bone (LW(13) = 3) reads the defence action command result
+ * and uses the full damage argument 256. Each bone lands behind the target and is hidden again.
+ */
 static EVT_BEGIN(link_attack_event_sub)
+    // The Dry Bones rears back and throws one of its three bones.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_1"))
     WAIT_MS(250)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_2"))
@@ -672,6 +736,7 @@ static EVT_BEGIN(link_attack_event_sub)
     CALL(btlevtcmd_AddUnitWork, UNIT_ID_SELF, UNIT_WORK_LINK_BONE_COUNT, 1)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LINK_BONE_COUNT, LW(13))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_SEND_GROUP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    // The bone spins toward the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_BONE_THROW3"), EVT_NULLPTR, 0, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, LW(12), STRING("KRN_H_1"))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, LW(12), kHidden)
@@ -689,6 +754,7 @@ static EVT_BEGIN(link_attack_event_sub)
         END_LOOP
     END_SIBLING_EVENT
     IF_INT_EQUAL(LW(13), 3)
+        // Find out whether this bone hits (only the last bone reads the defence command).
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_link_attack), DAMAGE_RESULT_FINAL_HIT, LW(11))
     ELSE
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_link_attack), DAMAGE_RESULT_FINAL_HIT, LW(11))
@@ -717,6 +783,7 @@ static EVT_BEGIN(link_attack_event_sub)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // Miss or dodge: the target ducks aside as the bone reaches it and the bone clatters down behind.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -750,6 +817,7 @@ static EVT_BEGIN(link_attack_event_sub)
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     CALL(evt_snd_sfxoff, LW(15))
     GOTO(98)
+    // Hit: this bone deals its damage; only the last one carries the full hit.
     LABEL(91)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LINK_HIT, 1)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 15)
@@ -770,6 +838,7 @@ static EVT_BEGIN(link_attack_event_sub)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(12), 0, FLOAT(2.0f), FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     GOTO(98)
+    // The bone is hidden again; the last bone ends the whole attack.
     LABEL(98)
     IF_INT_EQUAL(LW(13), 3)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
@@ -787,6 +856,8 @@ static EVT_BEGIN(call_friend_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     SET_VALUE(LW(10), 0)
+    // Six rounds: each time it winds up (A_3, A_4) and throws a spinning bone to the free spot, where a heap
+    // of bones grows a little.
     LOOP(6)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_3"))
         WAIT_FRAMES(5)
@@ -849,6 +920,7 @@ static EVT_BEGIN(call_friend_event)
         ADD(LW(10), 1)
     END_LOOP
     WAIT_FRAMES(15)
+    // The heap pulls itself together.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 6, STRING("KRN_D_3"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_UNITE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(60)
@@ -856,6 +928,7 @@ static EVT_BEGIN(call_friend_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_UNITE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_S_1"))
+    // A new Dry Bones joins the fight there, with the same size status.
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_honenoko), 0)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 6, kHidden | kNoShadow)
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
@@ -865,11 +938,17 @@ static EVT_BEGIN(call_friend_event)
     RETURN
 EVT_END()
 
+/** Wait script: plays the Dry Bones' idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: args[0] = source unit, args[1] = destination unit.
+ * Copies the size-change status (turns and strength) from the Bones unit to the unit it has just spawned in its
+ * place (entry_honenoko).
+ */
 static USER_FUNC(honenoko_copy_status) {
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));

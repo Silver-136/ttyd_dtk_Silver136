@@ -463,6 +463,8 @@ EVT_END()
  * handles the guard and avoid cases, then runs return_event.
  */
 static EVT_BEGIN(normal_attack_event)
+    // A First Strike aims at the first-strike target after a short pause;
+    // otherwise the plant picks a target from the opposing side.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
@@ -480,10 +482,12 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
+    // Declare the attack, wait for any guard and pay the cost.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
+    // The plant sinks into the ground while its shadow shrinks (from the floor or from the ceiling pose).
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_small, UNIT_ID_SELF)
@@ -497,12 +501,15 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_MS(300)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
+    // Underground it slides next to the target and turns toward it.
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 45)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(500)
+    // The camera follows as the plant pops out of the ground with its shadow growing
+    // back, then winds up its bite.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -522,6 +529,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1B"))
     WAIT_MS(200)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1C"))
+    // Bite: the damage pre-check decides whether the target dodges or the hit lands.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -547,6 +555,7 @@ static EVT_BEGIN(normal_attack_event)
     LABEL(90)
     GOTO(98)
     LABEL(91)
+    // Hit: the camera shakes, the guard result is resolved and the damage is dealt.
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
@@ -554,6 +563,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(98)
     LABEL(98)
+    // After a pause the plant ducks down and resurfaces at its home spot (return_event).
     WAIT_MS(500)
     CALL_CHILD(return_event)
     LABEL(99)
@@ -561,6 +571,7 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/** Wait event of the Piranha Plant: switches to pose-table entry 1 (PKF_N_1 on the floor, PKF_N_2 on the ceiling). */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

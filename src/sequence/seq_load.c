@@ -1207,6 +1207,7 @@ static EVT_BEGIN(evt_shake)
     RETURN
 EVT_END()
 
+/** Preloads the Mario, Bowser and Peach story-transition animations before a saved file is continued. */
 EVT_BEGIN(evt_continue)
     CALL(evt_sub_animgroup_async, STRING("OFF_f_in_out_mario"))
     CALL(evt_sub_animgroup_async, STRING("OFF_f_in_out_kuppa"))

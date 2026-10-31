@@ -2136,6 +2136,7 @@ void BtlUnit_PoseSoundInit(BattleUnitPart* part) {
 }
 
 #pragma push
+// propagation optimisation off for BtlUnit_ControlPoseSoundMain, BtlUnit_snd_se, BtlUnit_snd_se_pos and 4 more: the original register allocation and scheduling need it
 #pragma opt_propagation off
 /**
  * Plays the sound effects tied to a part's current animation:

@@ -431,6 +431,7 @@ FLAGONOFF(dispflag, dispFlags)
 
 FLAGONOFF(trigflag, trigFlags)
 
+/** Arg 0 = on/off: enables or disables Mario's control (marioCtrlOn/Off). */
 USER_FUNC(evt_mario_cont_onoff) {
     if (!evtGetValue(event, event->args[0])) {
         marioCtrlOff();

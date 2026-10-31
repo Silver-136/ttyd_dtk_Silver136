@@ -315,6 +315,7 @@ void BattleStageDispDark(CameraId camId, void* param) {
 // (a propagated constant load is an unnamed temp numbered above every named local); `s` is taken directly
 // rather than through STG because with propagation off the inline's return temp would take its place.
 #pragma push
+// propagation optimisation off for BattleStageDispLight, BattleStageOnLightInCommand, BattleStageOffLightInCommand and 7 more: the original register allocation and scheduling need it
 #pragma opt_propagation off
 /**
  * Display callback from BattleStageDisp: draws each active light as an additive beam,
@@ -489,6 +490,7 @@ void BattleStageLightRelease(s32 idx, s32 time, u8 mode) {
     }
 }
 
+// propagation optimisation off for BattleStageLightSetLightColor: the original register allocation and scheduling need it
 #pragma opt_propagation off
 /**
  * Starts a fade of light idx's colour to (r, g, b) over time frames with interpolation curve mode;
@@ -508,6 +510,7 @@ void BattleStageLightSetLightColor(s32 idx, u8 r, u8 g, u8 b, s32 time, u8 mode)
 }
 #pragma opt_propagation reset
 
+// propagation optimisation off for BattleStageLightSetWidth: the original register allocation and scheduling need it
 #pragma opt_propagation off
 /**
  * Starts a fade of light idx's beam radius to width over time frames with interpolation curve mode;
@@ -527,6 +530,7 @@ void BattleStageLightSetWidth(s32 idx, s32 width, s32 time, u8 mode) {
 }
 #pragma opt_propagation reset
 
+// propagation optimisation off for BattleStageLightSetPosition: the original register allocation and scheduling need it
 #pragma opt_propagation off
 /**
  * Starts a move of light idx's source position to (x, y, z) over time frames with interpolation curve mode;
@@ -551,6 +555,7 @@ void BattleStageLightSetPosition(s32 idx, f32 x, f32 y, f32 z, s32 time, u8 mode
 #pragma opt_propagation reset
 
 #pragma dont_inline on
+// propagation optimisation off for BattleStageLightSetTarget: the original register allocation and scheduling need it
 #pragma opt_propagation off
 /**
  * Starts a move of the point light idx shines at to (x, y, z) over time frames with interpolation curve mode,
@@ -591,6 +596,7 @@ void BattleStageLightSetTargetByUnit(s32 idx, s32 unitId, f32 x, f32 y, f32 z, s
     BattleStageLightSetTarget(idx, px, py, pz, time, mode);
 }
 
+// propagation optimisation off for BattleStageLightSetUpVec: the original register allocation and scheduling need it
 #pragma opt_propagation off
 /**
  * Starts a turn of light idx's up vector (where its beam fan starts) to (x, y, z) over time frames with

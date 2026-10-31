@@ -269,6 +269,7 @@ EVT_END()
  * 2 damage and a 50% chance of Poison (1 a turn for 10 turns); then it returns (return_event).
  */
 static EVT_BEGIN(breath_event)
+    // Choose the targets for the breath; if there are none a confused plant is flustered and the turn ends.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_poison_pakkun_breath_attack))
@@ -281,11 +282,13 @@ static EVT_BEGIN(breath_event)
         END_IF
         GOTO(99)
     END_IF
+    // The breath is announced and the guard timing is awaited.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_poison_pakkun_breath_attack))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_poison_pakkun_breath_attack))
+    // It sinks into the ground and its shadow shrinks.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_small, UNIT_ID_SELF)
@@ -299,16 +302,19 @@ static EVT_BEGIN(breath_event)
     WAIT_MS(300)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
+    // Underground, it moves to the front of the field (x of -40) and turns toward the target.
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, -40, 0, LW(2))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(500)
+    // The camera frames the plant and its target.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
+    // It pops back up, its shadow growing back.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_return, UNIT_ID_SELF)
@@ -316,6 +322,7 @@ static EVT_BEGIN(breath_event)
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
+    // It gulps air with three mouth sounds, then holds still.
     WAIT_MS(500)
     BEGIN_SIBLING_EVENT
         LOOP(3)
@@ -326,6 +333,7 @@ static EVT_BEGIN(breath_event)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_S_2"))
     WAIT_MS(1000)
+    // The breath: it spits a stream of poison gas at the party.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_POISON1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_3A"))
     WAIT_MS(300)
@@ -346,6 +354,7 @@ static EVT_BEGIN(breath_event)
             END_LOOP
         END_IF
     END_SIBLING_EVENT
+    // Check each target in turn: dodged targets are skipped, the rest take the damage (and maybe poison).
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
     LABEL(10)
@@ -386,6 +395,7 @@ static EVT_BEGIN(breath_event)
         ADD(LW(10), 1)
         GOTO(10)
     END_IF
+    // The breath dies down; it burrows home and returns to waiting.
     WAIT_MS(1000)
     CALL(btlevtcmd_CheckAttribute, UNIT_ID_SELF, kCeiling, LW(15))
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_3C"))
@@ -474,6 +484,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Data-table event 37, run by the default damage event when an attacker is hurt by the Putrid Piranha's spiky head
+ * (damage code 31): it flinches (pose type 31, 250 ms), returns to its idle pose PKF_S_1 and flashes the
+ * "toge_flush" spike effect above its head, 50 units up (63 when Huge, 37 when Tiny).
+ */
 static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE_GUARDED)
     WAIT_MS(250)
@@ -496,6 +511,7 @@ static EVT_BEGIN(dmg_avoid_counter_thorn_head_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Putrid Piranha: runs the default damage reaction. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -503,6 +519,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event (tags 25 to 36) for when the Putrid Piranha is hurt by a counter while attacking:
+ * holds its hurt pose for a second and, unless that knocked it out for good, burrows home (return_event).
+ */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_D_1"))
     WAIT_MS(1000)
@@ -517,6 +537,12 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Ceiling-fall event of a Putrid Piranha hanging from the ceiling,
+ * run when the stage's overhead iron frame falls (_fall_frame_event):
+ * it burrows (shadow shrinks), moves to ground level at its home x and z
+ * and pops back up with its ground pose table, offsets and shadow restored.
+ */
 static EVT_BEGIN(ceil_fall_ready_event)
     CALL(btlevtcmd_SetEventCeilFall, UNIT_ID_SELF, 0)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -551,6 +577,12 @@ static EVT_BEGIN(ceil_fall_ready_event)
     RETURN
 EVT_END()
 
+/**
+ * Return of the Putrid Piranha after an attack:
+ * it burrows and re-emerges at its home spot, on the ground or,
+ * when the stage has a ceiling (pakkun_ceil_exist) and a coin flip says so,
+ * hanging from the ceiling with ceil_fall_ready_event armed.
+ */
 static EVT_BEGIN(return_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(pakkun_ceil_exist, LW(0))
@@ -617,7 +649,12 @@ static EVT_BEGIN(return_event)
     RETURN
 EVT_END()
 
+/**
+ * Bite of the Putrid Piranha: it burrows, pops up in front of one target (the first-strike target on a first
+ * strike) and bites it for 3 damage, then returns (return_event).
+ */
 static EVT_BEGIN(normal_attack_event)
+    // Choose the target: the First Strike target if the battle opened with one, otherwise a normal pick.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
@@ -627,6 +664,7 @@ static EVT_BEGIN(normal_attack_event)
         CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
         CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     END_IF
+    // No target left: a confused plant is flustered; either way it ends its turn.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -635,10 +673,12 @@ static EVT_BEGIN(normal_attack_event)
         END_IF
         GOTO(99)
     END_IF
+    // The attack is announced and the guard timing is awaited.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
+    // It sinks into the ground (or up into the ceiling) and its shadow shrinks.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_small, UNIT_ID_SELF)
@@ -652,23 +692,27 @@ static EVT_BEGIN(normal_attack_event)
     WAIT_MS(300)
     CALL(btlevtcmd_OnAttribute, UNIT_ID_SELF, kUnitHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
+    // Underground, it moves to a spot 45 units in front of the target and turns to face it.
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 45)
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, LW(0), 0, LW(2))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(500)
+    // The camera frames the plant and its target.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     CALL(btlevtcmd_SetHitOffset, UNIT_ID_SELF, 1, 0, 0, 0)
+    // It pops up again, its shadow growing back.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PAKKUN_MOVE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         CALL(shadow_scale_return, UNIT_ID_SELF)
     END_SIBLING_EVENT
     CALL(btlevtcmd_OffAttribute, UNIT_ID_SELF, kUnitHidden)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 1, kNoShadow)
+    // Wind-up: it rears back, then lunges with the bite.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_E_1"))
     WAIT_MS(150)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1A"))
@@ -677,6 +721,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1B"))
     WAIT_MS(200)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKF_A_1C"))
+    // Check how the target defends against the bite.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -699,8 +744,10 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // The bite missed (the target dodged).
     LABEL(90)
     GOTO(98)
+    // The bite lands: the camera shakes and the damage is dealt.
     LABEL(91)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -708,6 +755,7 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     GOTO(98)
+    // It burrows home and returns to waiting.
     LABEL(98)
     WAIT_MS(500)
     CALL_CHILD(return_event)
@@ -716,11 +764,16 @@ static EVT_BEGIN(normal_attack_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of the Putrid Piranha: sets the idle pose from its current pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: grows the shadow of the plant's body part from 0 back to its stored size over 15 frames,
+ * after it comes out of the ground.
+ */
 static USER_FUNC(shadow_scale_return) {
     s32 id = BattleTransID(event, evtGetValue(event, event->args[0]));
     BattleUnit* unit = BattleGetUnitPtr(_battleWorkPointer, id);

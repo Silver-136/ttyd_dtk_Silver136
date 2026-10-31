@@ -34,6 +34,11 @@ EVT_BEGIN(minigame_end)
     RETURN
 EVT_END()
 
+/**
+ * Retail: the pause window during a minigame.
+ * Freezes Mario in place, runs the minigame's own window script (evtYuuSetWindowEvt),
+ * asks whether to quit and runs minigame_end on the first choice, then flags it closed.
+ */
 EVT_BEGIN(window_open)
     CALL(evt_mario_cont_onoff, 0)
     BEGIN_SIBLING_EVENT
@@ -56,6 +61,7 @@ EVT_BEGIN(window_open)
     RETURN
 EVT_END()
 
+/** Clamps a value to zero from below; used for the per-rank values of the default records. */
 static inline s32 MAX0(s32 x) {
     return x >= 0 ? x : 0;
 }

@@ -737,6 +737,7 @@ EVT_BEGIN(regu_unten)
     SET_VALUE(LW(6), 0)
     SET_VALUE(LW(7), 0)
     LOOP(0)
+        // The driver stays still during the stages when the train is stopped or he is busy.
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_27_RIVERSIDE_STATION)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG6_43_CONDUCTOR_APPEARS)
                 RETURN
@@ -761,6 +762,7 @@ EVT_BEGIN(regu_unten)
         CALL(evt_sub_random, 300, LW(10))
         SWITCH(LW(10))
             CASE_LESS(100)
+            // Otherwise he pulls the three handles to random settings so he seems to steer.
             IF_INT_LESS(GSW_STORY_PROGRESS, STG6_45_DAY_3_STARTS)
             END_IF
             SET_VALUE(LW(2), LW(3))
@@ -827,12 +829,14 @@ static EVT_BEGIN(talk_unten)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG6_06_PENNINGTONS_ASSISTANT)
         IF_INT_EQUAL(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 0)
+            // His greeting alternates and early lines mention Pennington's assistant.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_00"), 0, 0)
             SET_VALUE(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 1)
             ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_01"), 0, 0)
             SET_VALUE(LSWF_RSH_00_ENGINEER_TALK_TOGGLE, 0)
         END_IF
+        // He asks for the conductor and signs an autograph for Mario.
         CASE_LESS(STG6_10_THE_CONDUCTOR_ZIP_TOAD)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
         CASE_LESS(STG6_11_OBTAIN_AUTOGRAPH)
@@ -853,6 +857,7 @@ static EVT_BEGIN(talk_unten)
         SET_VALUE(GSW_STORY_PROGRESS, STG6_11_OBTAIN_AUTOGRAPH)
         CASE_LESS(STG6_12_GIVE_AUTOGRAPH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_01"), 0, 0)
+        // Hints for each later stage of the train mystery.
         CASE_LESS(STG6_19_GIVE_BLANKET)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_01_02"), 0, 0)
         CASE_LESS(STG6_21_DAY_2)
@@ -868,6 +873,7 @@ static EVT_BEGIN(talk_unten)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_209"), 0, 0)
         CASE_LESS(STG6_44_END_OF_DAY_2)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_217"), 0, 0)
+        // The Smorg scene (evt_moamoa) before the engineer stage.
         CASE_LESS(STG6_46_ENGINEER)
         CALL_CHILD(PTR(evt_moamoa))
         CASE_LESS(STG6_48_SMORG_MIASMA)
@@ -877,6 +883,7 @@ static EVT_BEGIN(talk_unten)
         CASE_LESS(STG6_57_A_MAIL_FROM_PEACH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_253"), 0, 0)
         CASE_DEFAULT
+        // After the story he comments on where the train is.
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_c_08_1"), 0, 0)
             RETURN

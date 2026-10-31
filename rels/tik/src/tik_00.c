@@ -435,6 +435,11 @@ EVT_BEGIN(evt_uranai_cap)
     RETURN
 EVT_END()
 
+/**
+ * Script helper.
+ * Sets the running event's owner NPC to the NPC named by args[0] (Merluvlee),
+ * so "me" in her scripts refers to her.
+ */
 static USER_FUNC(setmertn) {
     event->ownerNPC = npcNameToPtr((const char*)evtGetValue(event, event->args[0]));
     return EVT_RETURN_DONE;
@@ -837,6 +842,7 @@ EVT_END()
  * Merluvlee is hidden during the flip and shown again at the end.
  */
 EVT_BEGIN(uranai_main)
+    // The cards fly up from below the table, spinning in, while Merluvlee is hidden behind them.
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
         CALL(evt_snd_sfxon, STRING("SFX_EVT_FORTUNE_CARD_MOVE1"), 0)
@@ -856,6 +862,7 @@ EVT_BEGIN(uranai_main)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The nine cards are dealt out one by one, each sliding in from the side to its place in the row.
     SET_FLOAT_VALUE(LW(8), FLOAT(0.0f))
     SET_INT_READ_ADDR(PTR(&name_tbl))
     LOOP(9)
@@ -900,6 +907,7 @@ EVT_BEGIN(uranai_main)
         ADD_FLOAT(LW(8), FLOAT(0.19921875f))
         WAIT_MS(300)
     END_LOOP
+    // The row of cards tips up to stand.
     WAIT_MS(1000)
     CALL(evt_snd_sfxon, STRING("SFX_EVT_FORTUNE_CARD_MOVE3"), 0)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 600, 1000)
@@ -920,6 +928,7 @@ EVT_BEGIN(uranai_main)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The cards are shuffled and fanned out in a stack.
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 600, -600, 1500)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -948,6 +957,7 @@ EVT_BEGIN(uranai_main)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The cards fly off the table one by one; the middle one stays behind.
     SET_FLOAT_VALUE(LW(8), FLOAT(0.0f))
     SET_FLOAT_VALUE(LW(9), FLOAT(0.0f))
     SET_INT_READ_ADDR(PTR(&name_tbl))
@@ -980,6 +990,7 @@ EVT_BEGIN(uranai_main)
         ADD_FLOAT(LW(8), FLOAT(0.19921875f))
         ADD_FLOAT(LW(9), FLOAT(1.0f))
     END_LOOP
+    // The chosen card is brought to the front, spins and rises, showing its face.
     WAIT_MS(1200)
     CALL(card_camid, STRING("card_omote_5"), 4)
     CALL(card_camid, STRING("card_ura_5"), 4)
@@ -1045,6 +1056,7 @@ EVT_BEGIN(uranai_main)
             END_IF
         END_LOOP
     END_INLINE_EVENT
+    // The card finishes spinning, Merluvlee reappears and the animation ends.
     WAIT_MS(2500)
     DELETE_EVENT(LW(9))
     SET_VALUE(LW(0), GW(15))
@@ -1092,6 +1104,7 @@ EVT_END()
  * Declining or not having enough coins ends the talk.
  */
 EVT_BEGIN(uranaisi_table_talk)
+    // Mario walks up to the table and Merluvlee turns to face him; the party waits.
     CALL(setmertn, STRING("うらない師"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1111,6 +1124,7 @@ EVT_BEGIN(uranaisi_table_talk)
                     CALL(evt_msg_print, 0, STRING("uranaisi_19"), 0, STRING("me"))
                 END_IF
             END_IF
+            // She asks whether he wants a reading; "No" ends the talk.
             CALL(evt_msg_select, 0, STRING("uranaisi_03"))
             IF_INT_EQUAL(LW(0), 1)
                 CALL(evt_msg_print_add, 0, STRING("uranaisi_06"))
@@ -1120,6 +1134,8 @@ EVT_BEGIN(uranaisi_table_talk)
             ELSE
             CALL(evt_msg_print, 0, STRING("uranaisi_02"), 0, STRING("me"))
         END_IF
+        // A menu lists the three readings with their prices (My Next Path, Star Pieces, Shine Sprites);
+        // cancelling ends the talk.
         SET_VALUE(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 1)
         CALL(evt_win_coin_on, 0, LW(12))
         CALL(evt_uranaisi_msg_alloc)
@@ -1131,6 +1147,7 @@ EVT_BEGIN(uranaisi_table_talk)
             CALL(evt_msg_print_add, 0, STRING("uranaisi_06"))
             GOTO(0)
         END_IF
+        // If Mario cannot afford the chosen reading, she says her visions need coins and the talk ends.
         CALL(uranaisi_ryokin, LW(0), LW(2))
         CALL(evt_pouch_get_coin, LW(1))
         IF_INT_LESS(LW(1), LW(2))
@@ -1138,6 +1155,7 @@ EVT_BEGIN(uranaisi_table_talk)
             CALL(evt_win_coin_off, LW(12))
             GOTO(0)
         END_IF
+        // She agrees to look for what he seeks and the price is paid in coins.
         SWITCH(LW(0))
             CASE_EQUAL(0)
             CALL(evt_msg_print_add, 0, STRING("uranaisi_08"))
@@ -1161,6 +1179,8 @@ EVT_BEGIN(uranaisi_table_talk)
         CALL_CHILD(PTR(uranai_main))
         CALL(evt_npc_set_anim, STRING("me"), STRING("D_1"))
         WAIT_MS(170)
+        // The chosen reading follows: the next step in the story, where the Star Pieces are,
+        // or where the Shine Sprites are.
         SWITCH(LW(0))
             CASE_EQUAL(0)
             CALL_CHILD(PTR(uranaisi_next_evt))
@@ -1207,6 +1227,7 @@ EVT_BEGIN(starmaniac_get_event)
 EVT_END()
 
 EVT_BEGIN(starmaniac_talk)
+    // If Dazzle has no badges left to trade, he apologises and the talk ends.
     CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
         CALL(evt_msg_print, 0, STRING("starmaniac_02"), 0, STRING("me"))
@@ -1219,18 +1240,21 @@ EVT_BEGIN(starmaniac_talk)
         ELSE
         CALL(evt_msg_print, 0, STRING("starmaniac_01"), 0, STRING("me"))
     END_IF
+    // He asks if Mario wants to trade; "No way!" sends him off with a farewell.
     CALL(evt_msg_select, 0, STRING("starmaniac_03"))
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_05"))
         CALL(tik_snd_on)
         RETURN
     END_IF
+    // Mario has no Star Pieces: Dazzle accuses him of trying to swindle him and ends the talk.
     CALL(evt_pouch_get_starpiece, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_06"))
         CALL(tik_snd_on)
         RETURN
     END_IF
+    // Mario picks which badge to trade for from the list; backing out earns a "LAME!" and ends the talk.
     CALL(evt_msg_print_add, 0, STRING("starmaniac_07"))
     LABEL(0)
     CALL(evt_win_coin_on, 2, LW(12))
@@ -1264,6 +1288,8 @@ EVT_BEGIN(starmaniac_talk)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_11"))
         GOTO(0)
     END_IF
+    // Mario is out of badge room: Dazzle sends him away; otherwise the badge is handed over
+    // and the Star Pieces are paid.
     CALL(evt_pouch_add_item, LW(1), LW(0))
     IF_INT_EQUAL(LW(0), -1)
         CALL(evt_win_coin_off, LW(12))
@@ -1277,6 +1303,7 @@ EVT_BEGIN(starmaniac_talk)
     CALL(evt_win_coin_wait, LW(12))
     WAIT_MS(500)
     CALL(evt_win_coin_off, LW(12))
+    // If Dazzle is out of badges, or Mario out of Star Pieces, he cheers and the talk ends.
     CALL(evt_badgeShop_starmaniac_get_kind_cnt, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_msg_print_add, 0, STRING("starmaniac_12"))
@@ -1289,6 +1316,7 @@ EVT_BEGIN(starmaniac_talk)
         CALL(tik_snd_on)
         RETURN
     END_IF
+    // Otherwise he offers another trade: accepting loops back to the badge list, declining ends the talk.
     CALL(evt_msg_print_add, 0, STRING("starmaniac_13"))
     CALL(evt_msg_select, 0, STRING("starmaniac_10"))
     IF_INT_EQUAL(LW(0), 1)

@@ -71,16 +71,19 @@ EVT_BEGIN(default_entevt)
     RETURN
 EVT_END()
 
+/** Exit script for entrances without one: LW(0) = 0 so the exit goes ahead. */
 EVT_BEGIN(default_outevt)
     SET_VALUE(LW(0), 0)
     RETURN
 EVT_END()
 
+/** Arrival through a "none" entrance (type 0xF00): no walk-in, just gives control back to the player. */
 EVT_BEGIN(evt_bero_info_run_none)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 
+/** Arrival through a gate entrance (type 3): no walk-in, just gives control back to the player. */
 EVT_BEGIN(evt_bero_info_run_gate)
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -1462,6 +1465,8 @@ EVT_END()
  * switching background mode when the two pipes differ; the exit is re-registered.
  */
 EVT_BEGIN(bero_case_exec_pipe_sub)
+    // The camera leaves road mode. Alongside, unless Mario goes from a normal pipe into a background pipe,
+    // the camera waits until he is inside and then glides over to the destination pipe.
     BEGIN_INLINE_EVENT
         CALL(evt_camera_change_event_from_road)
     END_INLINE_EVENT
@@ -1505,6 +1510,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
             END_IF
         END_INLINE_EVENT
     END_IF
+    // Mario sinks into the pipe with the pipe sound, posed for the pipe's direction.
     CALL(evt_bero_disppos_save)
     CALL(evt_bero_get_info_length, LW(1), LW(10))
     CALL(bero_get_position_pipe_pure, 0, LW(10))
@@ -1525,7 +1531,9 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         CALL(evt_mario_paper_pose_dokan, 3)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
     END_SWITCH
+    // He is inside: let the camera move.
     POKE_INT(1, PTR(&BeroCAM))
+    // After a moment the destination pipe's own entry script runs, and Mario is moved under that pipe.
     IF_INT_EQUAL(LW(13), 0)
         SET_VALUE(LW(0), LW(4))
         AND_RAW(LW(0), BERO_TYPE_BG_MODE)
@@ -1555,6 +1563,8 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         CALL(evt_bero_get_info_length, LW(1), LW(10))
         CALL(bero_get_position_pipe_pure, 1, LW(10))
         CALL(bero_set_disp_position_pipe)
+        // He pops out of the destination pipe in its layer (background or normal) with the pipe sound,
+        // gets control back, and the pipe he left re-arms once he steps off.
         WAIT_MS(500)
         IF_INT_NOT_EQUAL(LF(1), 0)
             CALL(evt_mario_bgmode_on)
@@ -1578,6 +1588,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         SPAWN_EVENT(PTR(evt_bero_nonride_check))
         CALL(evt_bero_cam_shift_init)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
+        // With a destination map (the pipe exit never spawns this case) he just takes the entrance's layer.
         ELSE
         CALL(evt_bero_disppos_load)
         CALL(evt_mario_paper_pose_off)
@@ -1589,6 +1600,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
             CALL(evt_mario_bgmode_off)
         END_IF
     END_IF
+    // Field enemies resume and the exits are live again.
     CALL(evt_npc_change_fbat_mode, 1)
     CALL(evt_npc_start_for_event)
     CALL(evt_bero_exec_onoff, 0, 65536)
@@ -1862,10 +1874,12 @@ EVT_END()
  * sets the pipe fade and spawns the walk-in.
  */
 EVT_BEGIN(evt_bero_info_run)
+    // Find the entrance Mario arrived by and whether he is in paper form.
     CALL(evt_bero_get_into_info)
     CALL(evt_bero_set_now_number, LW(1))
     CALL(evt_bero_read_mario_pera)
     CALL(evt_sub_get_system_flag, LW(0))
+    // Loading a save: no walk-in; only arm the exits and start the NPCs.
     IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
         DEBUG_PUT_MSG(STRING("\203Z\201[\203u\203u\203\215\203b\203N\202\251\202\347\202\314\203\215\201[\203h\216\236\202\314\217\210\227\235"))
         CALL(evt_bero_exec_onoff, 0, 1)
@@ -1886,6 +1900,8 @@ EVT_BEGIN(evt_bero_info_run)
         CALL_CHILD(PTR(bero_case_entry))
         RETURN
     END_IF
+    // Normal arrival: lock the controls. A background entrance hides the partners;
+    // otherwise they follow Mario in, out of the pipe for a pipe entrance.
     CALL(evt_bero_exec_get, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         RETURN
@@ -1913,6 +1929,7 @@ EVT_BEGIN(evt_bero_info_run)
             CALL(evt_mario_set_prev_party, 1)
         END_IF
     END_IF
+    // Pipe entrance: Mario starts tucked inside the pipe, facing out along its direction.
     SET_VALUE(LW(0), LW(4))
     AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
     IF_INT_EQUAL(LW(0), BERO_TYPE_PIPE)
@@ -1927,6 +1944,8 @@ EVT_BEGIN(evt_bero_info_run)
             CALL(evt_mario_dokan_prepare, 0)
         END_SWITCH
     END_IF
+    // Place Mario and the partners at the entrance, choose the pipe fade-in for its direction
+    // and start the walk-in.
     CALL_CHILD(PTR(evt_bero_initial_pos))
     IF_BITS_CLEAR(LW(4), BERO_TYPE_FLAG_NO_FADE)
         SET_VALUE(LW(0), LW(4))

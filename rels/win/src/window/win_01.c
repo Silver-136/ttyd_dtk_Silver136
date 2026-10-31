@@ -233,6 +233,7 @@ EVT_BEGIN(guide_bigtree)
 EVT_END()
 
 static EVT_BEGIN(peach_mail)
+    // Wait until Mario walks to the back of the path, left or right of the middle.
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS(LW(2), -200)
@@ -250,6 +251,7 @@ static EVT_BEGIN(peach_mail)
     WAIT_FRAMES(1)
     GOTO(0)
     LABEL(1)
+    // The mail jingle plays and the partner points out that mail has arrived; Mario waits for A.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
@@ -271,6 +273,7 @@ static EVT_BEGIN(peach_mail)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // The field music returns and the camera moves in on Mario.
     CALL(evt_mario_balloon_off)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
@@ -289,6 +292,7 @@ static EVT_BEGIN(peach_mail)
         CALL(evt_cam3d_evt_set, 184, 86, LW(3), 184, 38, LW(4), 1000, EASING_SINE_IN_OUT)
     END_IF
     WAIT_MS(1000)
+    // Mario reads Peach's letter, the partner reacts, and Mario can move again.
     CALL(evt_mario_set_pose, STRING("M_N_9"))
     WAIT_MS(500)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))

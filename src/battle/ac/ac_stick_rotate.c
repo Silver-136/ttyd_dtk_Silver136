@@ -403,6 +403,7 @@ void battleAcDisp_StickRotate(CameraId cameraId, void* param) {
 #undef work
 }
 
+// no automatic inlining for _get_icon_id, actionCommandDisp, actionCommandDisp2, as in the original (the object differs without it)
 #pragma auto_inline off
 /** Icon of the stick tilted in direction 1-8 (see _GetInputDir), or centred for anything else. */
 u16 _get_icon_id(s8 dir) {

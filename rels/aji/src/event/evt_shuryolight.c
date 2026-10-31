@@ -112,6 +112,10 @@ EVT_BEGIN(shuryolight_pow_normal)
     RETURN
 EVT_END()
 
+/**
+ * Blinking pattern for the power lamp (light 0) of Grodus's staff base:
+ * lit for 0.7 to 4.7 seconds at random, then off for 200 ms, forever.
+ */
 static EVT_BEGIN(shuryolight_pow_tenmetu)
     LOOP(0)
         CALL(evt_shuryolight_set_anim, 0, 1)
@@ -126,6 +130,10 @@ static EVT_BEGIN(shuryolight_pow_tenmetu)
     RETURN
 EVT_END()
 
+/**
+ * Normal pattern of the three head lamps (lights 1 to 3):
+ * they light one at a time from the third to the first, 400 ms apiece, pause, and repeat.
+ */
 EVT_BEGIN(shuryolight_head_normal)
     SET_VALUE(LW(0), 3)
     LOOP(0)
@@ -141,6 +149,10 @@ EVT_BEGIN(shuryolight_head_normal)
     RETURN
 EVT_END()
 
+/**
+ * Flashing pattern for the three head lamps (lights 1 to 3):
+ * plays animation 4 on all of them and waits for it to end, forever.
+ */
 static EVT_BEGIN(shuryolight_head_tenmetu)
     LOOP(0)
         CALL(evt_shuryolight_set_anim, 1, 4)
@@ -151,6 +163,7 @@ static EVT_BEGIN(shuryolight_head_tenmetu)
     RETURN
 EVT_END()
 
+/** Turns the three head lamps (lights 1 to 3) off by setting animation 3 on each. */
 static EVT_BEGIN(shuryolight_head_off)
     CALL(evt_shuryolight_set_anim, 1, 3)
     CALL(evt_shuryolight_set_anim, 2, 3)
@@ -158,6 +171,10 @@ static EVT_BEGIN(shuryolight_head_off)
     RETURN
 EVT_END()
 
+/**
+ * Normal pattern of the staff lamp (light 4): plays its animation 0, holds 1 for a second, plays animation 2,
+ * holds 3 for a second, forever.
+ */
 EVT_BEGIN(shuryolight_tue_normal)
     LOOP(0)
         CALL(evt_shuryolight_set_anim, 4, 0)

@@ -291,6 +291,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Dark Bones: runs the default damage handling on its body part (unit LW(10) = -2, part 1). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -298,6 +299,13 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of the Dark Bones: it spins for 48 frames with the death sound, a smoke puff appears and the coins,
+ * experience and star points are awarded once (unit work 1 guards it);
+ * then it tips over and the unit is killed: KO'd and deleted
+ * when the hit defeated it for good (damage flag 0x400,
+ * which a reviving unit only gets from fire or explosions), otherwise only marked inactive (KILL_UNIT_INACTIVE).
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(0), 48)
@@ -350,6 +358,13 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Event when the Dark Bones runs out of HP but can rebuild itself:
+ * it moves to its home position, awards the reward once,
+ * collapses into a pile of bones (KRN_D_2, crumble sound),
+ * stays there for a second and sets unit work 2 to 2 or 3,
+ * the number of turns until rebirth_event brings it back.
+ */
 static EVT_BEGIN(fake_dead_event)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(2), LW(3), LW(4))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
@@ -388,6 +403,11 @@ static EVT_BEGIN(fake_dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Turn event of the collapsed Dark Bones: counts unit work 2 down and, when it reaches zero,
+ * reassembles it (KRN_D_3 and KRN_D_4 with the reunite sounds),
+ * clears attribute 0x20000 and restores its HP to the maximum.
+ */
 static EVT_BEGIN(rebirth_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_REVIVE_TURNS, LW(0))
     SUBTRACT(LW(0), 1)
@@ -408,6 +428,13 @@ static EVT_BEGIN(rebirth_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of the Dark Bones: when confused it throws a plain bone;
+ * when collapsed it rebuilds itself (rebirth_event);
+ * otherwise it can use an item, or draws a number from 0 to 99:
+ * bone throw (50), three-bone throw (30) or calling a Dry Bones friend (20).
+ * For the call it first checks that there is room beside it by turning to both sides with btlevtcmd_CheckSpace.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -482,6 +509,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Helper child script of the bone throw: given the pre-check result in LW(5) it makes the target start its dodge
+ * reaction (avoid type 38, 39 or 40) as the bone passes it.
+ */
 static EVT_BEGIN(start_avoid)
     IF_INT_EQUAL(LW(5), 3)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -495,10 +526,18 @@ static EVT_BEGIN(start_avoid)
     RETURN
 EVT_END()
 
+/**
+ * Attack of the Dark Bones: it picks a target (weapon_honenoko_attack),
+ * winds up (KRN_A_1, KRN_A_2) and throws a spinning bone (part 2) in an arc;
+ * the target can dodge as the bone passes (start_avoid).
+ * If the bone is not avoided it lands on the target with the action command defence check,
+ * and the bone then bounces off.
+ */
 static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         WAIT_MS(750)
+        // Pick a target for the attack; a confused unit that has none flusters.
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
         CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -514,12 +553,14 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_honenoko_attack))
+    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_honenoko_attack))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(500)
+    // Wind up and raise a bone above its head.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_1"))
     WAIT_MS(250)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_2"))
@@ -537,10 +578,12 @@ static EVT_BEGIN(normal_attack_event)
             IF_INT_EQUAL(LW(14), 1)
                 BREAK_LOOP
             END_IF
+            // The bone spins as it is hurled at the target in an arc.
             CALL(btlevtcmd_AddPartsRotate, UNIT_ID_SELF, 2, 0, 0, 25)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+    // Find out whether the attack will connect or miss.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -560,6 +603,7 @@ static EVT_BEGIN(normal_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // The attack misses or is dodged.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         LOOP(0)
@@ -568,6 +612,7 @@ static EVT_BEGIN(normal_attack_event)
                 CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
                 IF_INT_LESS_OR_EQUAL(LW(0), LW(6))
+                    // The target can dodge as the bone passes.
                     CALL_CHILD(start_avoid)
                     BREAK_LOOP
                 END_IF
@@ -589,38 +634,46 @@ static EVT_BEGIN(normal_attack_event)
     CALL(btlevtcmd_GetStageSize, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(9))
     MULTIPLY(LW(0), LW(9))
+    // The bone sails on past the target and drops.
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 0, FLOAT(8.0f), FLOAT(0.049804688f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     CALL(evt_snd_sfxoff, LW(15))
     GOTO(98)
+    // The attack connects.
     LABEL(91)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 15)
     ADD(LW(1), 14)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+    // The bone lands on the target.
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 0, FLOAT(8.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     CALL(evt_snd_sfxoff, LW(15))
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+    // Deal the damage, reduced by the action command defence.
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_honenoko_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_honenoko_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), -50)
+    // The bone bounces off the target.
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 0, FLOAT(2.0f), FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     GOTO(98)
+    // Wrap up the attack.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SPIN_DONE, 1)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
     WAIT_FRAMES(10)
+    // The attack is over; back to waiting.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
+/** Helper child script of the three-bone throw: like start_avoid but the pre-check result comes from LW(11). */
 static EVT_BEGIN(start_avoid2)
     IF_INT_EQUAL(LW(11), 3)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_LUCKY)
@@ -634,6 +687,11 @@ static EVT_BEGIN(start_avoid2)
     RETURN
 EVT_END()
 
+/**
+ * Attack of the Dark Bones: three bones thrown at one target in sequence (weapon_honenoko_link_attack).
+ * It spawns link_attack_event_sub for bone parts 2, 3 and 4, 40 and 35 frames apart,
+ * and waits until the last one has finished (unit work 4 = -1).
+ */
 static EVT_BEGIN(link_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LINK_HIT, 0)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -675,7 +733,14 @@ static EVT_BEGIN(link_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * One bone of the three-bone throw of the Dark Bones: LW(12) is the bone part (2, 3 or 4).
+ * Wind-up, a spinning arc to the target and dodge or hit handling as in normal_attack_event;
+ * the third bone does the damage check, and if an earlier bone hit,
+ * unit work 3 makes the following ones hit too.
+ */
 static EVT_BEGIN(link_attack_event_sub)
+    // Wind up and raise a bone above its head.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_1"))
     WAIT_MS(250)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_2"))
@@ -695,6 +760,7 @@ static EVT_BEGIN(link_attack_event_sub)
             IF_INT_EQUAL(LW(14), 1)
                 BREAK_LOOP
             END_IF
+            // The bone spins as it is hurled at the target in an arc.
             CALL(btlevtcmd_AddPartsRotate, UNIT_ID_SELF, LW(12), 0, 0, 25)
             WAIT_FRAMES(1)
         END_LOOP
@@ -736,6 +802,7 @@ static EVT_BEGIN(link_attack_event_sub)
                 CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2))
                 CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
                 IF_INT_LESS_OR_EQUAL(LW(0), LW(6))
+                    // The target can dodge as the bone passes.
                     CALL_CHILD(start_avoid2)
                     BREAK_LOOP
                 END_IF
@@ -757,6 +824,7 @@ static EVT_BEGIN(link_attack_event_sub)
     CALL(btlevtcmd_GetStageSize, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(9))
     MULTIPLY(LW(0), LW(9))
+    // The bone sails on past the target and drops.
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(12), 0, FLOAT(8.0f), FLOAT(0.049804688f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     CALL(evt_snd_sfxoff, LW(15))
@@ -767,6 +835,7 @@ static EVT_BEGIN(link_attack_event_sub)
     ADD(LW(1), 14)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+    // The bone lands on the target.
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(12), 0, FLOAT(8.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     CALL(evt_snd_sfxoff, LW(15))
@@ -778,6 +847,7 @@ static EVT_BEGIN(link_attack_event_sub)
     END_IF
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), -50)
+    // The bone bounces off the target.
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, LW(12), 0, FLOAT(2.0f), FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, LW(12), LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE)
     GOTO(98)
@@ -793,12 +863,14 @@ static EVT_BEGIN(link_attack_event_sub)
 EVT_END()
 
 static EVT_BEGIN(call_friend_event)
+    // The camera zooms in on the Dark Bones.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, -1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     SET_VALUE(LW(10), 0)
     LOOP(6)
+        // It throws up pieces of itself, one by one, and they pile up beside it.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_3"))
         WAIT_FRAMES(5)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_A_4"))
@@ -860,6 +932,7 @@ static EVT_BEGIN(call_friend_event)
         ADD(LW(10), 1)
     END_LOOP
     WAIT_FRAMES(15)
+    // The pile reassembles into a Dry Bones.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 6, STRING("KRN_D_3"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_UNITE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(60)
@@ -867,6 +940,7 @@ static EVT_BEGIN(call_friend_event)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_HONENOKO_UNITE2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRN_S_1"))
+    // The new Dry Bones appears in that spot, copying the status of its caller.
     CALL(btlevtcmd_SpawnUnit, LW(3), PTR(&entry_honenoko), 0)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 6, kHidden | kNoShadow)
     CALL(btlevtcmd_SetPos, LW(3), LW(0), LW(1), LW(2))
@@ -876,6 +950,7 @@ static EVT_BEGIN(call_friend_event)
     RETURN
 EVT_END()
 
+/** Wait event of the Dark Bones: plays the idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN

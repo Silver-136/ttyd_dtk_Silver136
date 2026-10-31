@@ -1454,11 +1454,18 @@ EVT_BEGIN(bgset_muj_wave_event)
     RETURN
 EVT_END()
 
+/** Battle background event that adds the sunlight_n64 effect (sunlight_bt) over the beach stage. */
 EVT_BEGIN(bgset_muj_sun_event)
     CALL(evt_eff64, STRING("sunlight_bt"), STRING("sunlight_n64"), 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     RETURN
 EVT_END()
 
+/**
+ * Script helper for bgset_muj_wave_event: moves the battle stage object named args[0] by a sine wave in x
+ * (period args[2], amplitude args[3]) and y (period args[5], amplitude args[6]);
+ * args[1] and args[4] are the script variables holding the two current steps,
+ * which it advances and wraps each call.
+ */
 static USER_FUNC(_wave_offset) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

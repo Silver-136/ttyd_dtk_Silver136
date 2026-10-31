@@ -29,6 +29,7 @@ EVT_BEGIN(evt_gazigazi_entry)
     RETURN
 EVT_END()
 
+/** Plays the bite sound at LW(0..2) and loops the biting animation until evt_gazigazi_appear deletes it. */
 EVT_BEGIN(evt_gazigazi_anim_loop)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MARIO_GAJIGAJI1"), LW(0), LW(1), LW(2), 0)
     LOOP(0)
@@ -38,6 +39,11 @@ EVT_BEGIN(evt_gazigazi_anim_loop)
     RETURN
 EVT_END()
 
+/**
+ * Spawned by mot_damage's evt_gazigazi when Mario takes hazard damage:
+ * the biter rises 40 units at LW(0..2) over 300 ms, chomps,
+ * sinks back over 600 ms and is parked out of sight again.
+ */
 EVT_BEGIN(evt_gazigazi_appear)
     SET_VALUE(LW(10), LW(0))
     SET_VALUE(LW(11), LW(1))

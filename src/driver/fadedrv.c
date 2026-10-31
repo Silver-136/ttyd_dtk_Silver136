@@ -150,6 +150,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
     } else if (((u32)(type - 3) <= 2 || type == 6) && duration < 1000) {
         duration = 1000;
     }
+    // no default: a type without a case here would go on with entry and id uninitialised
     switch (type) {
         case 0x1: case 0x2: case 0x3: case 0x4: case 0x5: case 0x6: case 0x9: case 0xA: case 0xB: case 0xC: case 0xD: case 0xE: case 0xF:
             id = 0;

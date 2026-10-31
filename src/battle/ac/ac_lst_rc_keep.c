@@ -276,6 +276,7 @@ void battleAcDelete_LstRcKeep(BattleWork* work) {
     work->actionCommands.mAcState = 1005;
 }
 
+// actionCommandDisp size-optimised, as in the original (the object differs without it)
 #pragma optimize_for_size on
 /**
  * Draws the two stick icons (shown tilted until the last step),

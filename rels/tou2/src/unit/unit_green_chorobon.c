@@ -465,6 +465,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event: runs the default battle damage reaction on the unit itself (part 1). */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -472,6 +473,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Reaction when the Fuzzy is hurt by a counterattack:
+ * restores its scale, runs subsetevt_counter_damage with the damage code and,
+ * unless that hit knocked it out for good, hops back home with return_event.
+ */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -489,6 +495,7 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/** Makes the Fuzzy hop back to its home position with rabbit_move (up to 40 units per hop). */
 static EVT_BEGIN(return_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(4.0f), FLOAT(0.5996094f))
@@ -498,8 +505,16 @@ static EVT_BEGIN(return_event)
     RETURN
 EVT_END()
 
+/**
+ * The Green Fuzzy's drain attack: hops up to the target, jumps on it and clings on, shaking it.
+ * If an electric counter protects the target it takes weapon_chorobon_drain_attack_biribiri_counterd instead
+ * and the move ends.
+ * Otherwise the target takes the weapon damage, and the Fuzzy swells by the HP drained and recovers that much,
+ * with a recovery sparkle. After a miss it hops past and waits a second. It then hops home with return_event.
+ */
 static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    // Pick a target; with none available the attack ends (a confused Fuzzy just flusters instead).
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_chorobon_drain_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_chorobon_drain_attack), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -511,6 +526,7 @@ static EVT_BEGIN(drain_attack_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_chorobon_drain_attack))
+    // The attack is announced and the Fuzzy turns to face its target.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_chorobon_drain_attack))
@@ -526,6 +542,7 @@ static EVT_BEGIN(drain_attack_event)
     SET_VALUE(LW(6), 0)
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(5), 50)
     SET_VALUE(LW(8), 50)
+    // The Fuzzy hops across the stage toward the target.
     CALL_CHILD(rabbit_move)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)
@@ -537,6 +554,7 @@ static EVT_BEGIN(drain_attack_event)
     SUBTRACT(LW(1), 10)
     SUBTRACT(LW(2), 2)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
+    // Find out how the target reacts: a dodge or a miss sends the Fuzzy hopping past, a hit continues below.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_drain_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -559,6 +577,7 @@ static EVT_BEGIN(drain_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // The attack missed: the Fuzzy hops over the target, lands behind it and settles back to its idle pose.
     LABEL(90)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -576,6 +595,7 @@ static EVT_BEGIN(drain_attack_event)
     GOTO(98)
     LABEL(91)
     SET_VALUE(LF(0), 0)
+    // The attack connects: check for a counter (spikes or shock) before the bite.
     CALL(btlevtcmd_PreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_drain_attack), 256, LW(5))
     IF_INT_EQUAL(LW(5), 17)
         SET_VALUE(LF(0), 1)
@@ -590,6 +610,7 @@ static EVT_BEGIN(drain_attack_event)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
     END_IF
+    // The Fuzzy latches on and the target shakes from side to side as it is drained.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_CHORO2_ATTACK1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetBodyId, LW(3), LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(0), POSE_TYPE_DAMAGE_DRAINED)
@@ -643,6 +664,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_add_zoom, 0, -50)
+    // The Fuzzy squashes down and bites; the damage is applied and the target is left in its hurt pose.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_CHORO2_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_chorobon_drain_attack))
@@ -689,6 +711,7 @@ static EVT_BEGIN(drain_attack_event)
         ADD(LW(6), 45)
         ADD(LW(7), 10)
         IF_INT_EQUAL(LW(9), PTR(&weapon_chorobon_drain_attack))
+            // The Fuzzy hops off and swells up, healing itself with the points it drained.
             CALL(btlevtcmd_RecoverHp, UNIT_ID_SELF, LW(1), LW(10))
             CALL(evt_eff, STRING(""), STRING("recovery"), 7, LW(5), LW(6), LW(7), LW(10), 0, 0, 0, 0, 0, 0, 0)
         ELSE
@@ -729,6 +752,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_nomove_y_onoff, 0, 0)
+    // The Fuzzy hops back to its home position and goes back to waiting.
     CALL_CHILD(return_event)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     LABEL(99)
@@ -737,6 +761,10 @@ static EVT_BEGIN(drain_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: arg0 = source unit, arg1 = destination unit;
+ * copies the HP (capped to the max) and size-change status so a replacement unit continues in the same state.
+ */
 static USER_FUNC(chorobon_copy_status) {
     EvtWord* args = event->args;
     s32 sourceId = BattleTransID(event, evtGetValue(event, args[0]));

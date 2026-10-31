@@ -67,6 +67,8 @@ EvtWord btldefaultevt_DefendParty[7];
  * and finally walks or floats the unit back to its home position and restarts its wait event.
  */
 EVT_BEGIN(btldefaultevt_Damage)
+    // The unit is set upright; a frozen unit that shatters loses its freeze and bursts into ice
+    // (the shatter chance is 0, so this never happens).
     CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FREEZE_CRUSH, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
@@ -74,6 +76,8 @@ EVT_BEGIN(btldefaultevt_Damage)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         CALL(evt_eff64, STRING(""), STRING("freeze_n64"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 1, 0, 0, 0, 0, 0, 0)
     END_IF
+    // Damage pattern 2 (Yoshi's Gulp, Flurrie's Lip Lock, the Quake Hammer moves):
+    // the unit freezes in its hurt pose for good, and the attacker's script takes it from here.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_DAMAGE_MOTION, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
@@ -85,6 +89,8 @@ EVT_BEGIN(btldefaultevt_Damage)
         WAIT_FRAMES(1)
         GOTO(0)
     END_IF
+    // Damage pattern 3 (Flurrie's Gale Force on a unit it can blow away):
+    // the unit trembles in its hurt pose until the attack ends.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_DAMAGE_MOTION_BLOW, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
@@ -102,6 +108,7 @@ EVT_BEGIN(btldefaultevt_Damage)
             GOTO(1)
         END_IF
     END_IF
+    // Damage pattern 20 (Ms. Mowz's Kiss Thief): the unit holds pose 5 until the attack ends.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_CHUCHURINA_ITEMSTEAL, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(14), POSE_TYPE_CONFUSE)
@@ -112,6 +119,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         CALL(btlevtcmd_WaitAttackEnd)
         GOTO(10)
     END_IF
+    // Yoshi's Gulp hitting the unit's body (damage pattern 7) runs its data-table event 54 if it has one.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_SWALLOW_SAMBO_BODY, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_SWALLOW_BODY_EVENT)
@@ -119,17 +127,21 @@ EVT_BEGIN(btldefaultevt_Damage)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_SWALLOW_BODY_EVENT)
         END_IF
     END_IF
+    // The Ultra Hammer's acrobatic hit (damage pattern 18) plays its own spin reaction.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_ULTRA_HAMMER_ACROBAT, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(subset_ultra_hammer_acrobat_damage_event))
         GOTO(10)
     END_IF
+    // A guarded hit: the unit holds its guard pose for half a second.
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_GUARD, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE_GUARDED)
         WAIT_FRAMES(30)
         GOTO(10)
     END_IF
+    // Attacks stopped before they land: codes 31-37 (the attack bounced off this unit's spikes or flames)
+    // run data-table events 37-43, and a Superguard (42) runs event 47.
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(DAMAGE_CODE_AVOID_TOP_SPIKY)
@@ -157,6 +169,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_AVOID_COUNTER_EVENT)
         GOTO(10)
         CASE_EQUAL(DAMAGE_CODE_LUCKY)
+        // Lucky (code 38): the unit's own lucky event, else the lucky jingle.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_AVOID_LUCKY_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_AVOID_LUCKY_EVENT)
@@ -165,6 +178,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         END_IF
         GOTO(10)
         CASE_EQUAL(DAMAGE_CODE_DODGY)
+        // Miss (code 39): the unit's own miss event, else a miss sound and the paper-dodge animation.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_AVOID_DODGY_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_AVOID_DODGY_EVENT)
@@ -206,12 +220,14 @@ EVT_BEGIN(btldefaultevt_Damage)
         END_IF
         GOTO(10)
         CASE_EQUAL(DAMAGE_CODE_MISS)
+        // Dodge (code 40): the unit's data-table dodge event 46.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_AVOID_MISS_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_AVOID_MISS_EVENT)
             ELSE
         END_IF
     END_SWITCH
+    // Ms. Mowz's Love Slap (damage patterns 21 and 22) plays the slap from the left or the right.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_CHUCHURINA_BINTA_L, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
@@ -226,9 +242,11 @@ EVT_BEGIN(btldefaultevt_Damage)
         CALL(btlevtcmd_WaitAttackEnd)
         RETURN
     END_IF
+    // The main reaction, chosen by the hit type.
     CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(DAMAGE_CODE_FIRST_ATTACK_POS)
+        // The battle opened with Mario's or the partner's First Strike on this unit: data-table event 48.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_FIRST_ATTACK_POS_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_FIRST_ATTACK_POS_EVENT)
@@ -239,6 +257,8 @@ EVT_BEGIN(btldefaultevt_Damage)
         CASE_OR_EQUAL(DAMAGE_CODE_ELECTRIC)
         CASE_OR_EQUAL(DAMAGE_CODE_ICE)
         CASE_OR_EQUAL(DAMAGE_CODE_NORMAL)
+        // Normal, ice, electric and no-damage hits: the HP gauge shows and the hurt reaction plays
+        // (hurt pose 38 for damage pattern 1).
         CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
         SET_VALUE(LW(14), POSE_TYPE_DAMAGE)
         SET_VALUE(LW(15), -1)
@@ -252,6 +272,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         CALL_CHILD(PTR(subsetevt_damage))
         CASE_END
         CASE_EQUAL(DAMAGE_CODE_STATUS_ONLY)
+        // A hit that only inflicted a status: the unit shows pose 35 for 45 frames if it has one.
         CALL(btlevtcmd_CheckDefinePosetype, LW(10), LW(11), POSE_TYPE_DAMAGE_STATUS, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             SET_VALUE(LW(14), POSE_TYPE_DAMAGE_STATUS)
@@ -264,6 +285,8 @@ EVT_BEGIN(btldefaultevt_Damage)
             WAIT_FRAMES(45)
         END_IF
         CASE_EQUAL(DAMAGE_CODE_FIRE)
+        // Fire and explosion hits: the unit's data-table events 11 and 12,
+        // else the normal hurt reaction with pose 29.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_DAMAGE_FIRE_EXPLOSION_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_FIRE_EXPLOSION_EVENT)
@@ -290,6 +313,8 @@ EVT_BEGIN(btldefaultevt_Damage)
             CALL_CHILD(PTR(subsetevt_damage))
         END_IF
         CASE_EQUAL(DAMAGE_CODE_COUNTER_TOP_SPIKY)
+        // This unit is an attacker hurt by its target's counter (codes 43-55: spikes, fire, ice, electricity,
+        // explosions, poison, Payback, Hold Fast): data-table events 24-36, else the standard counter reaction.
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(2), UNIT_DATA_COUNTER_TOP_SPIKY_EVENT)
         IF_INT_NOT_EQUAL(LW(2), 0)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_COUNTER_TOP_SPIKY_EVENT)
@@ -399,6 +424,8 @@ EVT_BEGIN(btldefaultevt_Damage)
         CASE_DEFAULT
     END_SWITCH
     LABEL(10)
+    // After the reaction: a defeated unit plays its KO;
+    // a unit at 0 HP that is not out (like a Dull Bones pile) runs its own event 15.
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_DEATH, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         WAIT_FRAMES(30)
@@ -411,6 +438,7 @@ EVT_BEGIN(btldefaultevt_Damage)
             RETURN
         END_IF
     END_IF
+    // A backfiring move, or a unit that used Defend, finishes with its own event.
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_BACKFIRE, LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(_backfire, LW(10))
@@ -421,11 +449,13 @@ EVT_BEGIN(btldefaultevt_Damage)
         CALL_CHILD(PTR(btldefaultevt_guard_return))
         RETURN
     END_IF
+    // Unless this was the move's last hit, the unit waits for the whole attack to end.
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(1))
     IF_INT_EQUAL(LW(1), 0)
         CALL(btlevtcmd_WaitAttackEnd)
     END_IF
     LABEL(99)
+    // A floating unit flies back to its home position if the hit moved it.
     CALL(btlevtcmd_CheckAttribute, LW(10), kFloating, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetPos, LW(10), LW(5), LW(6), LW(7))
@@ -447,6 +477,7 @@ EVT_BEGIN(btldefaultevt_Damage)
         END_IF
         LABEL(101)
         ELSE
+        // A ground unit walks back to its home position if the hit moved it.
         CALL(btlevtcmd_GetPos, LW(10), LW(5), LW(6), LW(7))
         CALL(btlevtcmd_GetHomePos, LW(10), LW(2), LW(3), LW(4))
         IF_INT_EQUAL(LW(2), LW(5))
@@ -466,11 +497,18 @@ EVT_BEGIN(btldefaultevt_Damage)
         END_IF
         LABEL(102)
     END_IF
+    // The unit faces its usual way and its idle animation restarts.
     CALL(btlevtcmd_ResetFaceDirection, LW(10))
     CALL(btlevtcmd_StartWaitEvent, LW(10))
     RETURN
 EVT_END()
 
+/**
+ * Partner switch from the command menu: loads the new partner's animations,
+ * shrinks the old partner as it jumps to Mario, swaps in the new one with a cheer from the audience,
+ * grows it as it jumps to its home position and removes the old unit.
+ * The switch ends Mario's turn unless Quick Change is equipped (and he is not confused).
+ */
 EVT_BEGIN(btldefaultevt_ChangeParty)
     CALL(_anime_load)
     CALL(btlevtcmd_GetPartyId, UNIT_ID_SELF, LW(3))
@@ -522,6 +560,10 @@ EVT_BEGIN(btldefaultevt_ChangeParty)
     RETURN
 EVT_END()
 
+/**
+ * Jitters the unit sideways for electric-shock paralysis ("biribiri"), then restarts its wait event.
+ * battle_seq would run it for Electric units, but its chance there is irand(100) < 0, so it never plays.
+ */
 EVT_BEGIN(btldefaultevt_BiribiriMove)
     CALL(evt_sub_intpl_init, EASING_WAVE_SHRINKING_FASTER, 0, 5, 16)
     LABEL(0)
@@ -535,6 +577,10 @@ EVT_BEGIN(btldefaultevt_BiribiriMove)
     RETURN
 EVT_END()
 
+/**
+ * Moves a unit (LW(10), part LW(11)) in front of the unit it protects, running or diving if it floats,
+ * and ends in the guard pose; run for damage code 56.
+ */
 EVT_BEGIN(btldefaultevt_guard_move)
     CALL(btlevtcmd_AnimeCmpPoseType, LW(10), LW(11), POSE_TYPE_RUN, 40, LW(2))
     IF_INT_EQUAL(LW(2), 0)
@@ -557,6 +603,10 @@ EVT_BEGIN(btldefaultevt_guard_move)
     RETURN
 EVT_END()
 
+/**
+ * After a protecting unit has taken the hit, moves it back to its home position,
+ * ends the guard and restarts its wait event.
+ */
 EVT_BEGIN(btldefaultevt_guard_return)
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_CheckGuardMotionEnable, LW(10), LW(0))
@@ -585,6 +635,7 @@ EVT_BEGIN(btldefaultevt_guard_return)
     RETURN
 EVT_END()
 
+/** Action for a unit that does nothing this turn: restarts its wait event. */
 EVT_BEGIN(btldefaultevt_Appeal)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), POSE_TYPE_NEUTRAL)
@@ -630,6 +681,10 @@ EVT_BEGIN(btldefaultevt_Appeal)
     RETURN
 EVT_END()
 
+/**
+ * Shared Defend action (LW(12) = the defend weapon):
+ * pays the cost, spins the unit twice, marks it as defending, shows the "defend" message and returns to waiting.
+ */
 EVT_BEGIN(_Defence_core)
     CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(3))
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
@@ -654,7 +709,15 @@ EVT_BEGIN(_Defence_core)
     RETURN
 EVT_END()
 
+/**
+ * The Run Away command: Mario and the partner turn and run in place
+ * while the escape action command plays (the gauge uses the enemy group's run rate).
+ * On a miss both stumble and walk home; on a success they run off screen,
+ * the audience reacts and the battle ends (after _event_MajinaiEnd when Merlee's spells ran out).
+ */
 EVT_BEGIN(btldefaultevt_Escape)
+    // The camera frames the party and the Run Away Action Command is set up,
+    // its gauge set by the enemy group's escape rate.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_ESCAPE)
     CALL(_btl_escape_reset_move_color_lv_player_unit_all)
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, 3)
@@ -666,6 +729,7 @@ EVT_BEGIN(btldefaultevt_Escape)
     CALL(btlevtcmd_AcSetFlag, AC_REPEATEDLY_FLAG_ESCAPE_UNUSED | AC_REPEATEDLY_FLAG_PLAIN_GAUGE)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 5, 1, 0)
     CALL(_set_escape_ac_hlp_msg)
+    // The partner, then Mario, turns away from the enemies and hops twice.
     BEGIN_INLINE_EVENT
         CALL(btlevtcmd_GetPartnerId, UNIT_ID_SELF, LW(10))
         IF_INT_NOT_EQUAL(LW(10), -1)
@@ -690,6 +754,7 @@ EVT_BEGIN(btldefaultevt_Escape)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
+    // The audience reacts and both run in place, slowly edging back, while the player fills the gauge.
     CALL(btlevtcmd_audience_code_escape)
     CALL(evt_snd_sfxon, STRING("SFX_MARIO_BATTLE_STAMP1"), LW(15))
     BEGIN_INLINE_EVENT
@@ -708,6 +773,7 @@ EVT_BEGIN(btldefaultevt_Escape)
             END_IF
         END_IF
     END_INLINE_EVENT
+    // The Action Command runs; Mario hops when it ends.
     CALL(btlevtcmd_StartAC, 1)
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_StopAC)
@@ -715,6 +781,7 @@ EVT_BEGIN(btldefaultevt_Escape)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_GetResultAC, LW(6))
+    // The escape failed: the partner and Mario dash a few steps, trip and fall, and the audience reacts.
     IF_BITS_CLEAR(LW(6), AC_RESULT_SUCCESS)
         CALL(evt_snd_sfxoff, LW(15))
         CALL(evt_snd_sfxon, STRING("SFX_MARIO_RUN_AWAY_MISS1"), 0)
@@ -758,6 +825,7 @@ EVT_BEGIN(btldefaultevt_Escape)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_FRAMES(40)
         CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_FLOAT_ACTIVE)
+        // Both get up and walk back to their home positions; the turn goes on.
         BEGIN_SIBLING_EVENT_GET_ID(LW(15))
             CALL(btlevtcmd_GetPartnerId, UNIT_ID_SELF, LW(10))
             IF_INT_NOT_EQUAL(LW(10), -1)
@@ -784,6 +852,7 @@ EVT_BEGIN(btldefaultevt_Escape)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         RETURN
     END_IF
+    // The escape worked: the partner and Mario dash off the side of the stage while the audience reacts.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetPartnerId, UNIT_ID_SELF, LW(10))
         IF_INT_NOT_EQUAL(LW(10), -1)
@@ -803,6 +872,7 @@ EVT_BEGIN(btldefaultevt_Escape)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 200)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE, 0)
+    // When Merlee's spells ran out during this battle, her farewell plays first; then the battle ends.
     SET_VALUE(LW(15), 0)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_MAJINAI_END)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -817,6 +887,7 @@ EVT_BEGIN(btldefaultevt_Escape)
     RETURN
 EVT_END()
 
+/** Confused unit's action: the confused pose for 30 frames, then the unit's confusion action script. */
 EVT_BEGIN(btldefaultevt_Confuse)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), POSE_TYPE_CONFUSE)
@@ -826,6 +897,10 @@ EVT_BEGIN(btldefaultevt_Confuse)
     RETURN
 EVT_END()
 
+/**
+ * Run instead of a unit's action in zero gravity when it cannot act there:
+ * zooms on it and shows the "can't move in zero gravity" message.
+ */
 EVT_BEGIN(btldefaultevt_CantMoveZeroGravity)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), POSE_TYPE_ZERO_GRAVITY)
@@ -840,6 +915,11 @@ EVT_BEGIN(btldefaultevt_CantMoveZeroGravity)
     RETURN
 EVT_END()
 
+/**
+ * HP Drain and FP Drain badge effect after an attack:
+ * heals the attacker by its equipped HP Drain and then FP Drain power, capped at the damage it dealt this turn,
+ * with the recovery effect over its head.
+ */
 EVT_BEGIN(btldefaultevt_SuitoruBadgeEffect)
     CALL(_get_heart_suitoru_point, UNIT_ID_SELF, LW(5))
     IF_INT_GREATER_OR_EQUAL(LW(5), 1)
@@ -874,6 +954,7 @@ EVT_BEGIN(btldefaultevt_SuitoruBadgeEffect)
     RETURN
 EVT_END()
 
+/** Data-table event for avoiding a counter: the unit spins round five times (1800 degrees) over 40 frames. */
 EVT_BEGIN(btldefaultevt_avoid_counter_event)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_AVOID_COUNTER)
     BEGIN_SIBLING_EVENT_GET_ID(LW(0))

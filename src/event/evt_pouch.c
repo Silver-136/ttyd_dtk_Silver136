@@ -27,6 +27,10 @@ GETTER(evt_pouch_get_starpiece, pouchGetStarPiece)
 SETTER(evt_pouch_add_starpiece, pouchAddStarPiece)
 SETTER(evt_pouch_get_starstone, pouchGetStarStone)
 
+/**
+ * Gives Mario item, key item or badge args[0] through pouchGetItem;
+ * args[1] gets 0 if it was added and -1 if there was no room.
+ */
 USER_FUNC(evt_pouch_add_item) {
     EvtWord* args = event->args;
     if (pouchGetItem(evtGetValue(event, args[0])) == 1) {

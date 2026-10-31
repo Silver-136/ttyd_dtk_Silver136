@@ -220,6 +220,7 @@ EVT_END()
  * If no free space is found on either side nothing is launched.
  */
 static EVT_BEGIN(attack_event)
+    // It uses an item instead if one is ready.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -236,6 +237,8 @@ static EVT_BEGIN(attack_event)
     SUBTRACT(LW(0), 1)
     CALL(evt_sub_random, LW(0), LW(1))
     SET_VALUE(LW(0), 15)
+    // Front-barrel launch: it looks for free space beside itself (trying up to three spots) and fires a
+    // Bullet Bill there.
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
         SET_VALUE(LW(14), 160)
@@ -264,6 +267,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         GOTO(99)
     END_IF
+    // Charged front-barrel launch (extra charging flashes); it adds no weight, so it is never drawn.
     ADD(LW(0), 0)
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -293,6 +297,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         GOTO(99)
     END_IF
+    // A second front-barrel launch with its own weight.
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -321,6 +326,8 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         GOTO(99)
     END_IF
+    // Upper-barrel launch: the barrel is raised, a Bullet Bill is fired into free space and the barrel is
+    // lowered again.
     ADD(LW(0), 20)
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -366,6 +373,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         GOTO(99)
     END_IF
+    // Charged upper-barrel launch; it adds no weight, so it is never drawn.
     ADD(LW(0), 0)
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -411,6 +419,7 @@ static EVT_BEGIN(attack_event)
         END_LOOP
         GOTO(99)
     END_IF
+    // A second upper-barrel launch with its own weight.
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
         SET_VALUE(LW(15), 0)
@@ -456,6 +465,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
     LABEL(99)
+    // If no free space was found nothing is launched, and it goes back to waiting.
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()

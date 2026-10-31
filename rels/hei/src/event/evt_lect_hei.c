@@ -467,16 +467,25 @@ EVT_BEGIN(nokotaro_party_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * Koops' tutorial (the partner lecture): Koops kicks his shell twice,
+ * then a blue switch block (TESTMOBJ) is dropped in for him to hit and hold;
+ * the lecture_friends_05 messages explain the kick and the hold. The camera and Koops are restored at the end.
+ */
 EVT_BEGIN(nokotaro_party_lecture)
+    // Koops introduces himself and the camera moves in for the lesson.
     CALL(evt_msg_print, 0, STRING("lecture_friends_04_0_1"), 0, 0)
     CALL(evt_msg_print, 0, STRING("lecture_friends_04_1"), 0, 0)
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(100.0f), FLOAT(630.0f), FLOAT(45.0f), FLOAT(39.0f), FLOAT(-100.0f), 1000, EASING_LINEAR)
     WAIT_MS(1500)
     CALL(evt_cam_letter_box_disable, 1)
+    // Koops kicks his shell twice.
     LOOP(2)
         CALL(evt_party_nokotaro_kick, 0)
         WAIT_MS(500)
     END_LOOP
+    // A blue switch block is dropped for Koops to hit; the lesson runs twice, explaining the kick and then
+    // the hold.
     CALL(evt_npc_change_fbat_mode, 8)
     SET_VALUE(LW(8), 2)
     LOOP(LW(8))
@@ -532,6 +541,7 @@ EVT_BEGIN(nokotaro_party_lecture)
         END_SWITCH
         CALL(evt_party_nokotaro_hold_cancel, 0)
     END_LOOP
+    // The camera and Koops are restored and the lecture ends with a last tip.
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_npc_change_fbat_mode, 7)
     CALL(x_flag_set, 0, 1)
@@ -556,6 +566,10 @@ EVT_BEGIN(nokotaro_party_lecture)
     RETURN
 EVT_END()
 
+/**
+ * Sub-event of the partner lecture: holds the current music
+ * and plays the get-partner jingle on channel 1 for two seconds.
+ */
 static EVT_BEGIN(all_party_lecture_otosub)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GET_PARTY1"))
@@ -563,7 +577,15 @@ static EVT_BEGIN(all_party_lecture_otosub)
     RETURN
 EVT_END()
 
+/**
+ * Shared "partner joins" cutscene run by each partner's pickup scene (LW(8) the partner NPC, LW(9) the partner
+ * id): the partner joins the party with a fanfare,
+ * an "itemget" background appears and the lecture message for that partner plays, then the game is restored.
+ * For Koops the extra kick tutorial runs inside it.
+ */
 EVT_BEGIN(all_party_lecture)
+    // Mario stops and the previous partner is sent away; the new partner takes the NPC's place in the
+    // party.
     CALL(evt_mario_normalize)
     IF_INT_NOT_EQUAL(LW(9), 1)
         IF_INT_NOT_EQUAL(LW(9), 5)
@@ -581,6 +603,8 @@ EVT_BEGIN(all_party_lecture)
         ELSE
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     END_IF
+    // The partner-join jingle plays, an "itemget" backdrop appears and the lecture message for that partner
+    // plays.
     CALL(evt_party_set_camid, 0, 7)
     SPAWN_EVENT_GET_ID(PTR(all_party_lecture_otosub), LW(11))
     CALL(lect_itemget_kesan, 0, FLOAT(600.0f), LW(0), LW(1), LW(2))
@@ -611,6 +635,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
     END_IF
+    // The lecture music starts and the partner is shown in a paper cut-out frame.
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mario_set_camid, 7)
     CALL(effitemget_open, STRING("sub_bg"))
@@ -649,6 +674,7 @@ EVT_BEGIN(all_party_lecture)
         CASE_EQUAL(2)
         CALL_CHILD(PTR(nokotaro_party_lecture_init))
     END_SWITCH
+    // Mario and the partner blink in and out while their lesson plays (for Koops the kick tutorial).
     LOOP(6)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_LECTUREN_BLINKING1"), LW(0), LW(1), LW(2), 0)
@@ -674,6 +700,7 @@ EVT_BEGIN(all_party_lecture)
         CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 0)
         WAIT_MS(100)
     END_LOOP
+    // The camera, music and ambience are restored and the paper frame folds away.
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
     CALL(evt_mario_init_camid)
@@ -697,6 +724,10 @@ EVT_BEGIN(all_party_lecture)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: turns on the collision groups of the map object named args[0] ("me" means the running event's
+ * own object) so they can be hit.
+ */
 static USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;
@@ -708,6 +739,7 @@ static USER_FUNC(lect_mobj_hit_nasi) {
         mobj = event->thisMapObj;
     }
     for (i = 0; i < 2; i++) {
+        // hitObj[i].name is an array, so the NULL test is always true; the original code has it and MWCC still emits the compare.
         if (mobj->hitObj[i].name != NULL && strcmp(mobj->hitObj[i].name, "") != 0) {
             hitGrpFlagOn(mobj->hitObj[i].name, HIT_FLAG_OFF);
         }

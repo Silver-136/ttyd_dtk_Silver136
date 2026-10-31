@@ -279,6 +279,7 @@ EVT_END()
  * with a random 0 to 4 bonus hops, 20% chance) and the pre-damage check decides between a dodge and a hit.
  */
 static EVT_BEGIN(attack_event_christine)
+    // She may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -288,12 +289,14 @@ static EVT_BEGIN(attack_event_christine)
     SET_VALUE(LW(12), PTR(&enemyWeapon_ChristineNormalAttack))
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    // Target: she picks one for her headbonk.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
+    // The attack is declared.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
@@ -302,6 +305,7 @@ static EVT_BEGIN(attack_event_christine)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 200)
+    // She runs to a spot in front of the target.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
     CALL(btlevtcmd_GetTakeoffPosition, UNIT_ID_SELF, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -321,6 +325,7 @@ static EVT_BEGIN(attack_event_christine)
         ADD(LW(11), 1)
     END_SWITCH
     SET_VALUE(LW(10), 0)
+    // Each stomp: the pre-damage check decides between a dodge and a hit.
     LABEL(10)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
@@ -337,6 +342,7 @@ static EVT_BEGIN(attack_event_christine)
         CASE_DEFAULT
         WAIT_MS(1000)
     END_SWITCH
+    // Wind-up: she crouches (PKR_A_2B) and then jumps (PKR_J_1A) with a Goomba jump cry.
     IF_INT_LESS_OR_EQUAL(LW(10), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PKR_A_2B"))
         WAIT_FRAMES(20)
@@ -347,6 +353,7 @@ static EVT_BEGIN(attack_event_christine)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_KURI_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_INLINE_EVENT
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
+    // Last stomp: she spins in the air and comes down on the target.
     IF_INT_GREATER_OR_EQUAL(LW(10), LW(11))
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
         ADD(LW(2), 5)
@@ -391,6 +398,8 @@ static EVT_BEGIN(attack_event_christine)
         IF_INT_EQUAL(LW(5), 2)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
+        // Miss: she is knocked away or bounces off (the target dodges for some kinds of miss)
+        // and lands in two hops.
         CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 0, 0)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
@@ -404,6 +413,8 @@ static EVT_BEGIN(attack_event_christine)
         WAIT_MS(500)
         GOTO(95)
     END_IF
+    // Hit: she squashes against the target and the camera zooms in; she stomps again for each bonus hop,
+    // the last one dealing the damage.
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     LOOP(4)
         CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.07910156f), FLOAT(-0.119140625f), 0)
@@ -426,6 +437,7 @@ static EVT_BEGIN(attack_event_christine)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
+    // The stomps end and she bounces off in three small hops.
     LABEL(90)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetRotate, UNIT_ID_SELF, EVT_NULLPTR, EVT_NULLPTR, LW(6))
@@ -455,6 +467,7 @@ static EVT_BEGIN(attack_event_christine)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 12, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
+    // She walks back to her home position.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -468,6 +481,10 @@ static EVT_BEGIN(attack_event_christine)
     RETURN
 EVT_END()
 
+/**
+ * Battle script helper: computes the angle (degrees) of the vector from (args[0], args[1]) to (args[2], args[3])
+ * into args[4]; leaves the old value in place when the two points coincide.
+ */
 static USER_FUNC(_krb_get_dir) {
     EvtWord* args = event->args;
     f32 x1 = evtGetFloat(event, args[0]);

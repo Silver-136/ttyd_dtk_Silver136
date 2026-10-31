@@ -64,6 +64,7 @@ static EVT_BEGIN(evt_majin)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
     IF_INT_EQUAL(GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE, 0)
+        // First visit: the chest cries out, Mario and the partners gather round, and it rattles open a crack.
         CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
         ADD(LW(1), 30)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -93,6 +94,7 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_mobj_wait_animation_end, STRING("box"))
         CALL(evt_snd_sfxoff, LW(15))
         WAIT_MS(300)
+        // The voice says only the hero can hear it, and tells of being cursed and locked in the box.
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("mac_majin_02"), PTR(majin_callback), 0)
         CALL(evt_mario_set_pose, STRING("M_I_G"))
@@ -109,6 +111,7 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("mac_majin_04"), PTR(majin_callback), 0)
+        // Frankly warns Mario not to trust the box, but the voice offers help in finding the Crystal Stars.
         CALL(evt_cam3d_evt_set, 30, 91, 283, 30, 40, -13, 500, EASING_SINE_IN_OUT)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("mac_majin_05"), 0, STRING("extparty"))
@@ -117,6 +120,7 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("mac_majin_06"), PTR(majin_callback), 0)
         WAIT_MS(500)
+        // Goombella asks what to do, and the voice begs Mario to find its key.
         CALL(evt_msg_print_party, STRING("mac_majin_07"))
         BEGIN_INLINE_EVENT
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -131,6 +135,7 @@ static EVT_BEGIN(evt_majin)
         SET_VALUE(GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE, 1)
         CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
         ELSE
+        // Later visits without the Black Key: the voice just pleads for it.
         CALL(evt_pouch_check_item, ITEM_BLACK_KEY_0x21, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
             CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
@@ -139,6 +144,7 @@ static EVT_BEGIN(evt_majin)
             CALL(evt_msg_print, 0, STRING("mac_majin_09"), PTR(majin_callback), 0)
             CALL(evt_mobj_exec_cancel, STRING("box"))
             ELSE
+            // With the key, Mario picks it from his items; backing out makes the voice beg him to hurry.
             CALL(evt_mobj_get_position, STRING("box"), LW(0), LW(1), LW(2))
             ADD(LW(1), 30)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
@@ -151,6 +157,7 @@ static EVT_BEGIN(evt_majin)
                 CALL(evt_msg_print, 0, STRING("mac_majin_11"), PTR(majin_callback), 0)
                 CALL(evt_mobj_exec_cancel, STRING("box"))
                 ELSE
+                // Mario and the partners step back, the key is used up and the voice laughs as the chest opens.
                 BEGIN_INLINE_EVENT
                     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
                     IF_INT_LESS_OR_EQUAL(LW(3), LW(0))
@@ -259,6 +266,11 @@ static EVT_BEGIN(evt_majin2)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of tik_19, the black chest room.
+ * Registers the airport harbor, the curse-demon paper animation (OFF_d_kusya),
+ * places the black chest whose paper demon (peramajin) gives Mario the airplane power, and the Star Piece panel.
+ */
 EVT_BEGIN(tik_19_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))

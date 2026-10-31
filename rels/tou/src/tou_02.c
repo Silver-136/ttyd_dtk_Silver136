@@ -846,8 +846,10 @@ EVT_BEGIN(talk_kino5)
     CALL(evt_pouch_get_yoshiname, LW(10))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
+        // Before Gonzales debuts the son is a fan of Prince Mush.
         CALL(evt_msg_print, 0, STRING(("stg3_npc_02_06_01")), 0, 0)
         CASE_LESS(STG3_32_BOSS_BATTLE)
+        // Up to the title match the line follows Mario's rank, naming the Yoshi when he is the partner.
         CALL(evt_tou_get_ranking, LW(0))
         SWITCH(LW(0))
             CASE_GREATER(15)
@@ -877,6 +879,7 @@ EVT_BEGIN(talk_kino5)
             END_IF
         END_SWITCH
         CASE_DEFAULT
+        // After chapter 3: a farewell, or comments on Mario's return to the league.
         IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 4)
@@ -1473,6 +1476,7 @@ static NpcSetupInfo npcEnt[] = {
 };
 
 EVT_BEGIN(evt_tougi2)
+    // Mario and the partner wait behind the arena door they came out of (the upper one for n_bero_2).
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     SET_VALUE(LF(0), 0)
@@ -1494,6 +1498,7 @@ EVT_BEGIN(evt_tougi2)
         ELSE
         CALL(evt_cam3d_evt_set, 0, 90, 190, 0, 38, -158, 0, EASING_SINE_IN_OUT)
     END_IF
+    // The door opens and they step into the lobby.
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 2)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -1534,6 +1539,7 @@ EVT_BEGIN(evt_tougi2)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The partner asks how to get the Crystal Star, steal it or fight to the top, and answers Mario's choice.
     CALL(evt_msg_print_party, STRING(("stg3_tou_33")))
     CALL(evt_msg_select, 0, STRING(("stg3_tou_33_yn")))
     IF_INT_EQUAL(LW(0), 0)
@@ -1557,6 +1563,7 @@ EVT_BEGIN(evt_tougi2)
             CALL(evt_msg_print_add, 0, STRING(("stg3_tou_35_win")))
         END_SWITCH
     END_IF
+    // Mario nods, the partner sums up and the story moves on.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING(("SFX_VOICE_MARIO_NOD1_4")), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING(("M_N_2")))
@@ -2232,6 +2239,7 @@ EVT_END()
  * and the first-visit scenes (evt_tougi2, evt_momikucha, doors to tou_01, tou_03 and tou_04).
  */
 EVT_BEGIN(tou_02_init_evt)
+    // Music: the lobby theme early in the chapter and after it, the main Glitz Pit theme in between.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
 #ifdef VERSION_G8ME01
@@ -2260,6 +2268,7 @@ EVT_BEGIN(tou_02_init_evt)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING(("ENV_STG3_TOU2")))
 #endif
     END_SWITCH
+    // Entrances; coming back from the arena intro plays evt_tougi2.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     IF_INT_EQUAL(GSWF_TOU_02_ARENA_TOUR_RETURN, 1)
@@ -2275,6 +2284,7 @@ EVT_BEGIN(tou_02_init_evt)
         CALL_CHILD(PTR(evt_bero_info_run))
 #endif
     END_IF
+    // NPCs and the Star Piece panel.
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(PTR(init_kinopio_f))
 #ifdef VERSION_G8ME01
@@ -2341,6 +2351,7 @@ EVT_BEGIN(tou_02_init_evt)
         SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)
     END_IF
 #ifdef VERSION_G8ME01
+    // The big screen's animation and its sounds.
     CALL(evt_map_playanim, STRING("anm_paneru"), MAP_ANIM_PLAY_LOOP, 0)
 #else
     CALL(evt_map_playanim, STRING(("anm_paneru")), MAP_ANIM_PLAY_LOOP, 0)
@@ -2396,6 +2407,7 @@ EVT_BEGIN(tou_02_init_evt)
             END_LOOP
         END_LOOP
     END_INLINE_EVENT
+    // The fan crowd scene.
     CALL_CHILD(PTR(evt_momikucha))
 #ifdef VERSION_G8ME01
     CALL(evt_sub_get_language, LW(0))

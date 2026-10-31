@@ -840,6 +840,7 @@ USER_FUNC(evt_btl_camera_set_homing_unitparts) {
     Vec pos;
     Vec hit;
 
+    /* pri shares a register with u in the original */
     u = (BattleUnit*)evtGetValue(event, args[0]); // FAKE: u holds the priority word first (one register in the target)
     unit = evtGetValue(event, args[1]);
     parts = evtGetValue(event, args[2]);

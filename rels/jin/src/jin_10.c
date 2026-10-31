@@ -166,8 +166,14 @@ static EVT_BEGIN(push_evt)
     RETURN
 EVT_END()
 
+/**
+ * Looping script that moves the sliding gate (saku) back toward its resting place when Mario stops pushing:
+ * the gate slides back at 0.5 units per frame unless Mario, his partner or Vivian is blocking it,
+ * and plays the grid-movement sound while it moves.
+ */
 EVT_BEGIN(unpush_evt)
     LOOP(0)
+        // Waits while Mario is pushing the gate.
         LOOP(0)
             CALL(evt_mario_get_name_hitobj_push, LW(0))
             IF_STR_NOT_EQUAL(LW(0), STRING("a_saku"))
@@ -175,6 +181,7 @@ EVT_BEGIN(unpush_evt)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
+        // Checks whether Mario, his partner or Vivian is standing in the gate's way back.
         SET_VALUE(LF(0), 1)
         CALL(evt_mapobj_get_position, STRING("saku"), LW(0), LW(1), LW(2))
         CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
@@ -225,6 +232,7 @@ EVT_BEGIN(unpush_evt)
                 BREAK_LOOP
             END_LOOP
         END_IF
+        // Slides the gate back and plays its grid-movement sound.
         IF_INT_EQUAL(LF(0), 0)
             IF_INT_EQUAL(GF(0), 1)
                 CALL(evt_snd_sfxoff, GW(3))
@@ -279,6 +287,10 @@ EVT_BEGIN(vivi_chk)
     RETURN
 EVT_END()
 
+/**
+ * Creepy Steeple jin_10 map init: sets music, the shadow-Mario tint and the exits,
+ * adds the Tornado Jump badge block and the pushable sliding gate (saku) with its push and release scripts.
+ */
 EVT_BEGIN(jin_10_init_evt)
     SET_VALUE(GF(0), 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))

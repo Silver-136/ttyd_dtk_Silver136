@@ -976,6 +976,7 @@ EVT_END()
  * clones exist and on random chances.
  */
 static EVT_BEGIN(attack_event)
+    // At the start of a first strike the Magikoopa goes straight into its attack spell.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(LW(9), PTR(&weapon_kamec_attack_magic))
@@ -986,11 +987,13 @@ static EVT_BEGIN(attack_event)
     IF_INT_NOT_EQUAL(LW(0), 0)
         RETURN
     END_IF
+    // Use an enemy item if one fits.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
         GOTO(99)
     END_IF
+    // Alone on the stage (no clones), it casts the attack spell, heals itself or makes clones of itself.
     CALL(kamec_get_live_num, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         LABEL(10)
@@ -1018,6 +1021,7 @@ static EVT_BEGIN(attack_event)
             GOTO(99)
         END_IF
         ELSE
+        // With clones about, it rolls for its spell: the attack spell first,
         CALL(kamec_get_bunsin, LW(1), LW(2), LW(3), LW(4), LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
@@ -1047,6 +1051,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(1), 20)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_dekadeka_magic))
+                // the Huge spell on an ally,
                 CALL_CHILD(PTR(dekadeka_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
@@ -1056,6 +1061,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(1), 20)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_katikati_magic))
+                // the defense-boosting spell,
                 CALL_CHILD(PTR(katikati_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
@@ -1065,6 +1071,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(1), 0)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_biribiri_magic))
+                // the Electric spell,
                 CALL_CHILD(PTR(biribiri_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
@@ -1074,6 +1081,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(1), 0)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_trans_magic))
+                // the Invisible spell,
                 CALL_CHILD(PTR(trans_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
@@ -1083,6 +1091,7 @@ static EVT_BEGIN(attack_event)
             ADD(LW(1), 0)
             IF_INT_LESS(LW(0), LW(1))
                 SET_VALUE(LW(9), PTR(&weapon_kamec_recover_magic))
+                // and the healing spells, for one ally or for all.
                 CALL_CHILD(PTR(recover_magic_event))
                 IF_INT_EQUAL(LW(0), 0)
                     GOTO(20)
@@ -1111,6 +1120,7 @@ EVT_END()
  * and the magic sounds (SFX_ENM_KAMEKU_MAGIC1, 4 and 8).
  */
 static EVT_BEGIN(ground_magic_common_event1)
+    // Casting begins on the ground: the casting sound repeats while the staff glows on the caster and each clone.
     BEGIN_SIBLING_EVENT
         LOOP(2)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1147,6 +1157,7 @@ static EVT_BEGIN(ground_magic_common_event1)
             CALL(eff_staff2, UNIT_ID_SELF)
         END_SIBLING_EVENT
     END_IF
+    // The caster and every clone raise their staffs together.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_1A"))
     IF_INT_NOT_EQUAL(LW(11), -1)
         CALL(btlevtcmd_AnimeChangePose, LW(11), 1, STRING("KMR_A_1A"))
@@ -1161,6 +1172,7 @@ static EVT_BEGIN(ground_magic_common_event1)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMR_A_1A"))
     END_IF
     WAIT_FRAMES(60)
+    // The staffs wave and the magic gathers.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_1B"))
     IF_INT_NOT_EQUAL(LW(11), -1)
@@ -1194,6 +1206,7 @@ static EVT_BEGIN(ground_magic_common_event1)
         WAIT_FRAMES(10)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC8"), EVT_NULLPTR, 0, EVT_NULLPTR)
     END_SIBLING_EVENT
+    // The staffs are thrust forward to release the spell.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_1D"))
     IF_INT_NOT_EQUAL(LW(11), -1)
         CALL(btlevtcmd_AnimeChangePose, LW(11), 1, STRING("KMR_A_1D"))
@@ -1256,6 +1269,7 @@ EVT_END()
  * the KMR_A_3A to KMR_A_3D poses played in step on all of them, and the magic sounds.
  */
 static EVT_BEGIN(sky_magic_common_event)
+    // Casting begins in the air: the casting sound repeats while the staff glows on the caster and each clone.
     BEGIN_SIBLING_EVENT
         LOOP(2)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1292,6 +1306,7 @@ static EVT_BEGIN(sky_magic_common_event)
             CALL(eff_staff2, UNIT_ID_SELF)
         END_SIBLING_EVENT
     END_IF
+    // The caster and every clone raise their staffs together.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_3A"))
     IF_INT_NOT_EQUAL(LW(11), -1)
         CALL(btlevtcmd_AnimeChangePose, LW(11), 1, STRING("KMR_A_3A"))
@@ -1306,6 +1321,7 @@ static EVT_BEGIN(sky_magic_common_event)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMR_A_3A"))
     END_IF
     WAIT_FRAMES(60)
+    // The staffs wave and the magic gathers.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC8"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_3B"))
     IF_INT_NOT_EQUAL(LW(11), -1)
@@ -1336,6 +1352,7 @@ static EVT_BEGIN(sky_magic_common_event)
         CALL(btlevtcmd_AnimeChangePose, LW(14), 1, STRING("KMR_A_3C"))
     END_IF
     WAIT_FRAMES(15)
+    // The staffs are thrust forward to release the spell.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KMR_A_3D"))
     IF_INT_NOT_EQUAL(LW(11), -1)
         CALL(btlevtcmd_AnimeChangePose, LW(11), 1, STRING("KMR_A_3D"))
@@ -1413,6 +1430,7 @@ EVT_END()
  * and damage are applied. Then all of them return to their normal pose.
  */
 static EVT_BEGIN(attack_magic_event)
+    // Use the target of the opening first attack if there was one, otherwise choose a target.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
@@ -1430,15 +1448,19 @@ static EVT_BEGIN(attack_magic_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+    // The attack is announced.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(15), 0)
+    // The Magikoopa and its clones go through the casting motions.
     CALL_CHILD(magic_common_event1)
+    // Magic bolts shoot toward the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_KAMEKU_MAGIC3_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+    // Find out how the target reacts to the bolts.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -1457,6 +1479,7 @@ static EVT_BEGIN(attack_magic_event)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+        // The spell missed: the bolts fly on past the target, which gets out of their way.
         LABEL(90)
         BEGIN_SIBLING_EVENT
             WAIT_FRAMES(1)
@@ -1493,6 +1516,7 @@ static EVT_BEGIN(attack_magic_event)
         CALL_CHILD(attack_magic_event_sub_no_hit)
         WAIT_FRAMES(60)
         GOTO(98)
+        // The bolts hit: the damage is applied.
         LABEL(91)
         CALL(kamec_get_bunsin, LW(6), LW(7), LW(8), LW(13), LW(0))
         SET_VALUE(LW(14), UNIT_ID_SELF)
@@ -1509,6 +1533,7 @@ static EVT_BEGIN(attack_magic_event)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         GOTO(98)
+        // The Magikoopa and its clones lower their staffs.
         LABEL(98)
         WAIT_FRAMES(30)
         CALL(kamec_get_bunsin, LW(6), LW(7), LW(8), LW(9), LW(0))
@@ -1757,6 +1782,13 @@ static EVT_BEGIN(all_recover_magic_event)
     RETURN
 EVT_END()
 
+/**
+ * The Magikoopa's clone spell: it casts (SFX_ENM_KAMEKU_OFFSHOOT1), fades out,
+ * and spawns a clone (spawn_event) at every free spot in 40-unit steps from its own position,
+ * first toward the front up to the middle of the stage, then back up to x 170.
+ * kamec_shuffle mixes up the positions, and the Magikoopa
+ * and up to four clones fade back in together (SFX_ENM_KAMEKU_OFFSHOOT2).
+ */
 static EVT_BEGIN(bunsin_magic_event)
     SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
@@ -1812,6 +1844,14 @@ static EVT_BEGIN(bunsin_magic_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper that fires a Magikoopa's magic shot:
+ * args[0] is the caster, args[1] to args[3] the target point
+ * and args[4] the lifetime in frames (effMagic1N64Entry type 0 flies from the start to the target over that
+ * time).
+ * It starts at the wand tip (25 units ahead, 20 up, scaled by size, 5 toward the camera);
+ * the effect is kept in the caster's work[5] for eff_magic_get_posX and scaled to the caster's size.
+ */
 static USER_FUNC(eff_magic) {
     EvtWord* args = event->args;
     s32 id = BattleTransID(event, evtGetValue(event, args[0]));

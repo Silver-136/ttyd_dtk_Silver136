@@ -193,6 +193,10 @@ EVT_BEGIN(evt_last_mail_init)
     RETURN
 EVT_END()
 
+/**
+ * Plays the Last Mail scene: the camera pans across the room for five seconds,
+ * Peach fades away over two seconds, the text stg7_aji_58 appears and the map changes to aji_17.
+ */
 EVT_BEGIN(evt_last_mail)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_cam3d_evt_set, -100, 80, 285, -100, 40, -13, 5000, EASING_LINEAR)
@@ -212,6 +216,10 @@ EVT_BEGIN(evt_last_mail)
     RETURN
 EVT_END()
 
+/**
+ * Opens the east door e_bero for Peach with the door sound bero_open_door_play_se (the door swings 180 degrees
+ * over half a second).
+ */
 EVT_BEGIN(peach_evt_door_open)
     CALL(evt_cam3d_evt_set, 35, 114, 334, 157, 54, 17, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -318,6 +326,10 @@ EVT_BEGIN(peach_evt_stg2_1)
     RETURN
 EVT_END()
 
+/**
+ * Peach's chapter 2 scene in her room: Peach's BGM, peach_aji_73 and 74,
+ * then peach_evt_stg2_1 is spawned and GSWF_AJI16_PEACH2_SCENE_DONE is set.
+ */
 static EVT_BEGIN(peach_evt_stg2)
     CALL(evt_mario_set_mode, 1)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_PEACH1"))
@@ -427,6 +439,10 @@ static EVT_BEGIN(peach_evt_stg6)
     RETURN
 EVT_END()
 
+/**
+ * Case script on the doors Peach may not use here:
+ * freezes controls, suspends other event types and shows peach_aji_38_01.
+ */
 static EVT_BEGIN(peach_evt_door_stop)
     CALL(evt_mario_key_onoff, 0)
     SUSPEND_TYPES_OTHER(239)
@@ -502,6 +518,7 @@ EVT_BEGIN(aji_16_init_evt)
     RETURN
 EVT_END()
 
+/** Script function: sets Mario's (Peach's) pose to the animation named in args[0]. */
 static USER_FUNC(peach_set_pose) {
     const char* pose = (const char*)evtGetValue(event, event->args[0]);
     MarioWork* mario = marioGetPtr();

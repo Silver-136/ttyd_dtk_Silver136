@@ -170,6 +170,7 @@ static BeroEntry bero_entry_data[] = {
 };
 
 EVT_BEGIN(gra_06_saku_open)
+    // The gate and its chain rattle, as if the gate were locked.
     CALL(evt_mapobj_get_position, STRING("kusari"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_GATE_CLOSED1"), LW(10), LW(11), LW(12), 0)
     SET_VALUE(LW(0), 0)
@@ -204,6 +205,7 @@ EVT_BEGIN(gra_06_saku_open)
             WAIT_FRAMES(1)
         END_LOOP
     END_LOOP
+    // If Mario is up at the gate with a partner, the partner comments.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_GREATER(LW(2), 160)
         CALL(evt_mario_get_party, LW(0))
@@ -214,6 +216,7 @@ EVT_BEGIN(gra_06_saku_open)
         END_IF
         RETURN
     END_IF
+    // The two gate leaves swing open.
     CALL(evt_mapobj_get_position, STRING("kusari"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_GATE_OPEN1"), LW(0), LW(1), LW(2), 0)
     BEGIN_INLINE_EVENT
@@ -235,6 +238,7 @@ EVT_BEGIN(gra_06_saku_open)
             WAIT_FRAMES(1)
         END_LOOP
     END_INLINE_EVENT
+    // The chain drops away with a clank and is hidden.
     BEGIN_INLINE_EVENT
         WAIT_FRAMES(15)
         CALL(evt_mapobj_get_position, STRING("kusari"), LW(10), LW(11), LW(12))
@@ -300,6 +304,7 @@ EVT_END()
  * control returns and the Steeple door's n_bero case is switched on again.
  */
 EVT_BEGIN(teresa_oidasare_evt)
+    // Mario and his partner are placed high above the trail, as if dropped out of the Steeple.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_mario_set_dir, 270, 0, 0)
@@ -316,6 +321,7 @@ EVT_BEGIN(teresa_oidasare_evt)
     CALL(evt_mario_cont_onoff, 1)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
 #endif
+    // They fall and land hard, with the camera shaking.
     CALL(evt_mario_set_pose, STRING("M_D_1"))
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))
@@ -384,6 +390,7 @@ EVT_BEGIN(teresa_oidasare_evt)
         CASE_EQUAL(5)
         CALL(evt_party_set_pose, 0, STRING("PWD_S_1"))
     END_SWITCH
+    // Control returns and the Steeple door is switched on again.
     CALL(evt_cam3d_evt_off, 0, EASING_SINE_IN_OUT)
 #ifndef VERSION_G8ME01
     CALL(evt_mario_cont_onoff, 1)

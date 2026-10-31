@@ -857,6 +857,7 @@ void btlUnitPartsDisp(CameraId camId, BattleUnitPart* param) {
 
 // FAKE: per-function opt_dead_assignments off keeps the unused height store; without it the object changes
 #pragma push
+// dead assignments optimisation off for btlUnitItemDisp, btlUnitItemDisp2, btlUnitStolenItemDisp and 15 more: the original register allocation and scheduling need it
 #pragma opt_dead_assignments off
 void btlUnitItemDisp(CameraId camId, BattleUnit* unit) {
     BattleWork* wp = _battleWorkPointer;
@@ -1244,6 +1245,7 @@ void _pose_two_pattern(BattleUnitPart* part) {
 
 // FAKE: unused constant local kept by a per-function opt_dead_assignments off; without them the object changes
 #pragma push
+// dead assignments optimisation off for btlDispAnimeSpeed, btlGetScreenPoint, btlDispTex4 and 3 more: the original register allocation and scheduling need it
 #pragma opt_dead_assignments off
 /** Sets a part's status animation speed (2 for Fast, 0.5 for Slow) and applies it times its scripted speed. */
 void btlDispAnimeSpeed(BattleUnitPart* part, f32 speed) {

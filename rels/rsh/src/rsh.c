@@ -292,6 +292,7 @@ EVT_BEGIN(evt_rsh_door_open)
     CALL(evt_hitobj_attr_onoff, 0, 1, LW(4), 8388608)
     CALL(evt_hitobj_attr_onoff, 0, 1, LW(6), 8388608)
     CALL(evt_cam_letter_box_disable, 1)
+    // Mario walks into the cabin as the door slides open and the page turns to reveal it.
     CALL(evt_mario_key_onoff, 0)
     CALL(img_wait)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
@@ -338,6 +339,7 @@ EVT_BEGIN(evt_rsh_door_open)
         CALL(evt_img_wait_animend, STRING("capture_img"))
         CALL(evt_img_onoff, STRING("capture_img"), 0)
     END_INLINE_EVENT
+    // Control returns once Mario is inside.
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_hitobj_attr_onoff, 0, 0, LW(4), 8388608)
@@ -354,6 +356,8 @@ EVT_BEGIN(evt_rsh_door_open)
         SET_VALUE(LF(0), 1)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
+        // Entering cabin 5 at the blanket stage makes Mario's partner remark that they should leave
+        // everything to the conductor.
         IF_STR_EQUAL(LW(1), STRING("heya_5"))
             SWITCH(GSW_STORY_PROGRESS)
                 CASE_EQUAL(STG6_19_GIVE_BLANKET)
@@ -380,6 +384,7 @@ EVT_BEGIN(evt_rsh_door_open)
                 END_SWITCH
                 CALL(evt_party_run, 0)
                 CALL(evt_mario_key_onoff, 1)
+                // During the vital clue stage the background music dips for the ghost scenes.
                 CASE_BETWEEN(STG6_24_A_VITAL_CLUE, STG6_24_02_ANOTHER_CLUE)
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
                 CASE_EQUAL(STG6_43_CONDUCTOR_APPEARS)
@@ -448,6 +453,7 @@ EVT_BEGIN(evt_rsh_door_open)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
         IF_STR_EQUAL(LW(1), STRING("heya_5"))
+            // Remember which cabin Mario is now inside.
             SET_VALUE(GSWF_RSH_04_IN_ROOM_5, 1)
         END_IF
         IF_STR_EQUAL(LW(1), STRING("heya_3"))
@@ -478,6 +484,7 @@ EVT_BEGIN(evt_rsh_door_close)
     CALL(evt_hitobj_attr_onoff, 0, 1, LW(6), 8388608)
     CALL(img_wait)
     BEGIN_INLINE_EVENT
+        // Leaving a cabin at certain stages starts a scripted map change to rsh_04.
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_06_PENNINGTONS_ASSISTANT)
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_04_a"))
@@ -497,6 +504,7 @@ EVT_BEGIN(evt_rsh_door_close)
             END_IF
         END_IF
     END_INLINE_EVENT
+    // In rsh_02_c the ghost's voice is heard once as Mario leaves.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_15_GHOST_REQUEST)
         CALL(evt_sub_get_mapname, LW(10))
         IF_STR_EQUAL(LW(10), STRING("rsh_02_c"))
@@ -537,6 +545,7 @@ EVT_BEGIN(evt_rsh_door_close)
             END_IF
         END_IF
     END_INLINE_EVENT
+    // Remember that Mario is no longer inside a cabin.
     SET_VALUE(GSWF_RSH_04_IN_ROOM_5, 0)
     SET_VALUE(GSWF_RSH_04_IN_ROOM_3, 0)
     SET_VALUE(GSWF_RSH_02_IN_ROOM_4, 0)
@@ -547,6 +556,7 @@ EVT_BEGIN(evt_rsh_door_close)
     CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 1, 0, 0, 608, 480)
     CALL(evt_mapobj_set_offscreen, 1, STRING("rouka"), STRING("offscreen"))
     CALL(evt_img_onoff, STRING("capture_img"), 0)
+    // The cabin is captured and the page turns back as Mario walks out into the corridor.
     CALL_CHILD(PTR(kami_offscreen_check))
     CALL_CHILD(PTR(simi_offscreen_check))
     CALL(evt_npc_check, STRING("車掌"), LW(0))

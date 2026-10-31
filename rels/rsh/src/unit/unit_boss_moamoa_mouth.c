@@ -320,6 +320,7 @@ const char* mouth_Attack_front[] = {
  * damage-checks every selected target, sets the main body's unit work 0 back to 1 and finishes with A_2_4.
  */
 static EVT_BEGIN(evt_attack)
+    // Choose the targets for the mouth's attack; a confused mouth is flustered when there are none.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_moamoa_attack))
     IF_INT_EQUAL(LW(3), -1)
@@ -330,6 +331,7 @@ static EVT_BEGIN(evt_attack)
         END_IF
         RETURN
     END_IF
+    // The camera closes in on the mouth and its target, and the attack is announced.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -338,10 +340,12 @@ static EVT_BEGIN(evt_attack)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_moamoa_attack))
+    // The main body freezes its idle animation while the mouth strikes.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MOAMOA_LIMB_WORK_BODY, LW(6))
     CALL(btlevtcmd_SetUnitWork, LW(6), MOAMOA_UNIT_WORK_LIMB_HIT, 0)
     CALL(btlevtcmd_AnimeChangePose, LW(6), 1, STRING("S_1_1"))
     SET_VALUE(LW(15), 0)
+    // The mouth rears up and gapes open.
     SET_INT_READ_ADDR(PTR(&mouth_Attack_front))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_ARM_MOVE4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     LOOP(0)
@@ -353,6 +357,7 @@ static EVT_BEGIN(evt_attack)
         WAIT_FRAMES(1)
         CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     END_LOOP
+    // A pause, then the mouth snaps down (or the mouth's closing animation runs on its own).
     WAIT_MS(1000)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_ARM_MOVE5"), EVT_NULLPTR, 0, EVT_NULLPTR)
     IF_INT_EQUAL(LW(15), 0)
@@ -389,6 +394,7 @@ static EVT_BEGIN(evt_attack)
         END_SIBLING_EVENT
         WAIT_MS(70)
     END_IF
+    // Every target is checked in turn: those who dodge are skipped, the rest take the bite.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
     LOOP(0)
@@ -413,6 +419,7 @@ static EVT_BEGIN(evt_attack)
         END_IF
         ADD(LW(10), 1)
     END_LOOP
+    // The main body resumes idling and the mouth finishes its animation and returns.
     CALL(btlevtcmd_SetUnitWork, LW(6), MOAMOA_UNIT_WORK_LIMB_HIT, 1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     IF_INT_EQUAL(LW(15), 0)

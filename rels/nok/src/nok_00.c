@@ -281,9 +281,11 @@ s32 iri_15_item_tbl2[] = {
 EVT_BEGIN(nokonoko_F_talk)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_THE_FOOD_I_WANT)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
+            // Bub-ulber introduces himself and asks Mario to bring him something to eat.
             CALL(evt_msg_print, 0, STRING("irai_15_001"), 0, 0)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
             ELSE
+            // He asks whether Mario has brought something; Mario picks an item.
             CALL(evt_msg_print, 0, STRING("irai_15_002"), 0, 0)
             SET_VALUE(LF(0), 0)
             CALL(evt_pouch_get_haveitemcnt, LW(0))
@@ -298,6 +300,7 @@ EVT_BEGIN(nokonoko_F_talk)
                 IF_INT_EQUAL(LW(0), 159)
                     CALL(evt_pouch_remove_item, ITEM_HOT_DOG, LW(0))
                     IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
+                        // A Hot Dog: Bub-ulber is delighted, then asks for a Mousse Cake.
                         CALL(evt_msg_print, 0, STRING("irai_15_003"), 0, 0)
                         SET_VALUE(GSWF_TROUBLE_WORK(1), 1)
                         ELSE
@@ -314,6 +317,7 @@ EVT_BEGIN(nokonoko_F_talk)
                 ELSE
                 IF_INT_EQUAL(LW(0), 206)
                     CALL(evt_pouch_remove_item, ITEM_MOUSSE_CAKE, LW(0))
+                    // A Mousse Cake: he pays Mario with a Dried Bouquet.
                     CALL(evt_msg_print, 0, STRING("irai_15_005"), 0, 0)
                     CALL(evt_item_entry, STRING("df"), ITEM_DRIED_BOUQUET, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("df"))
@@ -322,6 +326,7 @@ EVT_BEGIN(nokonoko_F_talk)
                     CALL(evt_sub_save_playtime, GSW_NOK_FOOD_I_WANT_DONE_TIME_UNUSED)
                     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
                     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_THE_FOOD_I_WANT), 1)
+                    // The request is recorded as solved and the play time is saved.
                     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                     ELSE
                     IF_INT_EQUAL(LF(0), 0)
@@ -335,6 +340,7 @@ EVT_BEGIN(nokonoko_F_talk)
         RETURN
     END_IF
     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_THE_FOOD_I_WANT), 1)
+        // After the request, he offers to swap another Dried Bouquet for a Hot Dog.
         CALL(evt_msg_print, 0, STRING("irai_15_010"), 0, 0)
         CALL(evt_msg_select, 0, STRING("irai_15_010_sel"))
         IF_INT_EQUAL(LW(0), 0)
@@ -369,6 +375,7 @@ EVT_BEGIN(nokonoko_F_talk)
     END_IF
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG1_06_01_GOLD_FUZZY)
+        // Without a request, he chats about the weather; the lines change as the story advances.
         CALL(evt_msg_print, 0, STRING("stg1_nok_17"), 0, 0)
         CASE_LESS(STG1_17_FATHER_SON_REUNITED)
         CALL(evt_msg_print, 0, STRING("stg1_nok_17_01"), 0, 0)
@@ -836,6 +843,7 @@ EVT_BEGIN(nok_00_koopa_npc_entry)
 EVT_END()
 
 EVT_BEGIN(nok_00_koopa_evt)
+    // The Bowser interlude begins in the quiet village.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_NOK1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_NOK1"))
     CALL(evt_mario_key_onoff, 0)
@@ -871,6 +879,7 @@ EVT_BEGIN(nok_00_koopa_evt)
     CALL(evt_npc_flag_onoff, 0, STRING("ノコノコA"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_ry, STRING("ノコノコA"), 270)
     WAIT_MS(300)
+    // Koopa A greets the arrival and runs in panic when he sees Bowser.
     CALL(evt_msg_print, 0, STRING("kpa_stg2_004"), 0, STRING("ノコノコA"))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_KUPPA1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_NOK1"))
@@ -911,6 +920,7 @@ EVT_BEGIN(nok_00_koopa_evt)
     CALL(evt_cam3d_evt_set, -335, 133, 430, -335, 55, -13, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_1"), STRING("KPA_T_1"))
+    // Bowser scoffs at the cowardly Koopa.
     CALL(evt_msg_print, 0, STRING("kpa_stg2_007"), 0, STRING("mario"))
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("ババ"), 0, 0, 0, 0, 0, 0, 0, 60)
     WAIT_MS(1000)
@@ -931,6 +941,7 @@ EVT_BEGIN(nok_00_koopa_evt)
     SET_VALUE(GF(0), 1)
     WAIT_FRAMES(1)
     CALL(evt_npc_flag_onoff, 0, STRING("ババ"), NPC_FLAG_NO_HIT)
+    // Kammy shouts that Peach is over there.
     CALL(evt_msg_print, 0, STRING("kpa_stg2_008"), 0, STRING("ババ"))
     CALL(evt_cam3d_evt_set, 290, 144, 479, 290, 57, -13, 2000, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
@@ -940,6 +951,7 @@ EVT_BEGIN(nok_00_koopa_evt)
     WAIT_MS(400)
     CALL(evt_mario_set_pos, 200, 0, 40)
     WAIT_FRAMES(1)
+    // Bowser spots the poster of Princess Peach and declares he has found her.
     CALL(evt_msg_print, 0, STRING("kpa_stg2_009"), 0, STRING("mario"))
     CALL(evt_cam3d_evt_set, 300, 192, 363, 300, 105, -130, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -989,6 +1001,7 @@ EVT_BEGIN(nok_00_koopa_evt)
         END_LOOP
         CALL(evt_npc_set_anim, STRING("ババ"), STRING("A_4"))
     END_INLINE_EVENT
+    // Kammy explains that Peach is speechless with joy; Bowser laughs along.
     CALL(evt_msg_print, 0, STRING("kpa_stg2_013"), PTR(nok_stg2_013_cb), STRING("ババ"))
     CALL(evt_mario_set_dir, 90, 300, 0)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_3"), STRING("KPA_T_2"))
@@ -996,6 +1009,7 @@ EVT_BEGIN(nok_00_koopa_evt)
     CALL(evt_npc_flag_onoff, 0, STRING("ノコノコA"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_set_position, STRING("ノコノコA"), 420, 0, 0)
     CALL(evt_npc_set_ry, STRING("ノコノコA"), 270)
+    // Koopa A cries out: the poster is his life's treasure.
     CALL(evt_msg_print, 0, STRING("kpa_stg2_015"), 0, STRING("ノコノコA"))
     CALL(kpa_chg_pose, STRING("KPA_S_1"))
     SET_VALUE(GW(0), 0)
@@ -1094,6 +1108,7 @@ EVT_BEGIN(nok_00_koopa_evt)
     CALL(evt_cam3d_evt_set, 208, 177, 333, 208, 97, -134, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_5"), STRING("KPA_T_5"))
+    // Bowser realizes it is only a poster.
     CALL(evt_msg_print, 0, STRING("kpa_stg2_017"), 0, STRING("mario"))
     CALL(evt_msg_print, 0, STRING("kpa_stg2_018"), 0, STRING("ババ"))
     WAIT_MS(1000)
@@ -1111,12 +1126,14 @@ EVT_BEGIN(nok_00_koopa_evt)
         SET_VALUE(GF(1), 1)
     END_INLINE_EVENT
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_2"), STRING("KPA_T_4"))
+    // Bowser, embarrassed, complains that he looks like a fool.
     CALL(evt_msg_print, 0, STRING("kpa_stg2_019"), 0, STRING("mario"))
     LABEL(99)
     WAIT_FRAMES(1)
     IF_INT_EQUAL(GF(1), 0)
         GOTO(99)
     END_IF
+    // The story advances and the game is saved.
     SET_VALUE(GSW_STORY_PROGRESS, STG2_25_05_BOWSER_PETALBURG)
     CALL(evt_fade_entry, 6, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
@@ -1130,10 +1147,19 @@ EVT_BEGIN(nok_00_koopa_evt)
 #endif
     CALL(evt_mario_set_mode, 0)
     CALL(evt_fade_set_mapchange_type, 1, 59, 0, 58, 0)
+    // The scene continues into the next Bowser stage (mri_00).
     CALL(evt_bero_mapchange, STRING("mri_00"), STRING(""))
     RETURN
 EVT_END()
 
+/**
+ * Map init script for nok_00: sets up Mario's entrance (the first-visit cutscene,
+ * or the Bowser interlude when that is the story state), the NPCs, doors of the inn, shop and house,
+ * the item shop, the inn's Kinopio, the save block, ambient butterflies,
+ * the pit-fall return points and the star piece panel.
+ * During the Trouble Center era before the father-and-son reunion it also starts the Kizayarou-style
+ * running-around sequence.
+ */
 EVT_BEGIN(nok_00_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_04_BOWSER_ACTION_STAGE)
         CALL(evt_mario_set_mode, 2)

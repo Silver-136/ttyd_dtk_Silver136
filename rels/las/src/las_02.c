@@ -137,6 +137,10 @@ static EVT_BEGIN(rousoku_init)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_02: music and ambience, the doors to las_01 and las_03, the Shooting Star badge block,
+ * links the two Bombshell Bill Blasters if they exist, and lights the 18 torches.
+ */
 EVT_BEGIN(las_02_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))

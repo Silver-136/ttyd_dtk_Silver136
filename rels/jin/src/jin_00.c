@@ -1016,6 +1016,7 @@ EVT_END()
  * vanishes and starts the 1000-Boos swarm (senteresa_evt); when it ends the story becomes "1000 Boos".
  */
 EVT_BEGIN(tyuou_teresa_talk)
+    // The central Boo asks Mario whether he means to be mean to it; a no sends him away.
     CALL(evt_msg_print, 0, STRING("stg4_jin_54"), 0, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"))
     CALL(evt_msg_select, 0, STRING("stg4_jin_54_yn"))
     IF_INT_EQUAL(LW(0), 0)
@@ -1024,6 +1025,7 @@ EVT_BEGIN(tyuou_teresa_talk)
     ELSE
         CALL(evt_msg_continue)
     END_IF
+    // The Boo is startled; Mario and his partner jump back as the camera swings.
     CALL(evt_cam3d_evt_set, 70, 165, 472, 70, 72, -45, 1000, EASING_SINE_IN_OUT)
     CALL(evt_npc_set_anim, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), STRING("A_1"))
     WAIT_MS(1000)
@@ -1073,6 +1075,7 @@ EVT_BEGIN(tyuou_teresa_talk)
             WAIT_MS(60)
         END_LOOP
     END_INLINE_EVENT
+    // The Boo swells to four times its size and shouts for the others to come out.
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 100, 400, 100)
         LABEL(1)
@@ -1104,6 +1107,7 @@ EVT_BEGIN(tyuou_teresa_talk)
     END_IF
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg4_jin_57"), 0, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"))
+    // The Boo fades out and the swarm of Boos starts; the story advances once it ends.
     CALL(evt_cam3d_evt_set, 70, 400, 1125, 70, 200, -13, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     BEGIN_INLINE_EVENT
@@ -1916,6 +1920,7 @@ USER_FUNC(senteresa_huttobu) {
 }
 
 EVT_BEGIN(senteresa_evt)
+    // The swarm of 200 Boos is created and Mario waits until the Boos have appeared.
     CALL(evt_ext_entry, 200, PTR(senteresa_ext_entry_data), PTR(senteresa_ext_init), PTR(senteresa_ext_main), PTR(senteresa_ext_dispent))
     LOOP(0)
         CALL(senteresa_get_seq, 199, LW(0))
@@ -1924,6 +1929,7 @@ EVT_BEGIN(senteresa_evt)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // Boo chatter pops up around Mario while the swarm closes in.
     SET_VALUE(GW(0), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(600)
@@ -2060,6 +2066,8 @@ EVT_BEGIN(senteresa_evt)
             END_IF
         END_LOOP
     END_INLINE_EVENT
+    // Main loop: the swarm follows Mario; once 20 Boos have been blown away it gives up, and if 20 cling to
+    // him they carry him out of the Steeple.
     LOOP(0)
         PEEK_INT(LW(0), PTR(g_nNumHuttobasu))
         IF_INT_GREATER_OR_EQUAL(LW(0), 20)
@@ -2099,6 +2107,7 @@ EVT_BEGIN(senteresa_evt)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // The swarm stops closing in and the central Boo reappears, fading back in.
     CALL(senteresa_tikaduku_stop)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(2500)
@@ -2144,6 +2153,7 @@ EVT_BEGIN(senteresa_evt)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(0)
     END_IF
+    // The Boos gather together into the Atomic Boo.
     CALL(evt_npc_get_position, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
     CALL(evt_npc_get_dir, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), LW(3))
     CALL(evt_npc_set_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
@@ -2165,6 +2175,7 @@ EVT_BEGIN(senteresa_evt)
     CALL(evt_npc_set_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
     CALL(evt_npc_flag_onoff, 1, STRING(/*"中央テレサ"*/"\x92\x86\x89\x9B\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 0, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), NPC_FLAG_NO_DRAW)
+    // The Atomic Boo speaks, startling Mario, then floats toward him shaking the camera.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg4_jin_62"), 0, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"))
     CALL(evt_cam3d_evt_off, 400, EASING_SINE_IN_OUT)
@@ -2202,6 +2213,7 @@ EVT_BEGIN(senteresa_evt)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(300)
+    // The Boos jeer at Mario from all sides.
     SET_VALUE(GW(0), 0)
     BEGIN_INLINE_EVENT
         WAIT_MS(100)
@@ -2263,11 +2275,14 @@ EVT_BEGIN(senteresa_evt)
         CALL(evt_msg_print, 0, STRING("stg4_jin_63"), 0, 0)
         WAIT_MS(750)
     END_INLINE_EVENT
+    // The Atomic Boo fight starts.
     CALL(evt_npc_get_position, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_battle_info, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"), 7)
     CALL(evt_npc_battle_start, STRING(/*"アトミックテレサ"*/"\x83\x41\x83\x67\x83\x7E\x83\x62\x83\x4E\x83\x65\x83\x8C\x83\x54"))
     CALL(evt_npc_wait_battle_end)
     ADD(LW(1), 50)
+    // After the fight the Lucky Start pops out, the remaining Boos are blown away and the Atomic Boo is
+    // marked as defeated.
     CALL(evt_item_entry, STRING("item_99"), ITEM_LUCKY_START, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_JIN_00_LUCKY_START, 0)
     CALL(evt_item_flag_on, STRING("item_99"), ITEM_FLAG_BADGE_RETURN)
     SET_VALUE(GSWF_JIN_00_LUCKY_START, 1)
@@ -2289,6 +2304,12 @@ EVT_BEGIN(senteresa_evt)
     RETURN
 EVT_END()
 
+/**
+ * Creepy Steeple main hall (jin_00) map init: sets the steeple music and reverb, the shadow-Mario tint,
+ * save block, exits and the Boo NPCs; places the Steeple Key and its lock (north door), the statue-push puzzle,
+ * resumes or starts the 1000-Boos scene by the story step and removes the other Boos
+ * when the Atomic Boo is not yet defeated.
+ */
 EVT_BEGIN(jin_00_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))

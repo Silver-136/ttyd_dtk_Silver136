@@ -170,6 +170,10 @@ EVT_BEGIN(evt_mri_door_open_pure)
     RETURN
 EVT_END()
 
+/**
+ * Door open used by the doors' entry triggers: one second after the call Mario walks through the door (bero),
+ * while the door animation runs.
+ */
 EVT_BEGIN(evt_mri_door_open)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
@@ -180,6 +184,10 @@ EVT_BEGIN(evt_mri_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Reverse of the open animation: the door slides back out of the wall, pauses, then slides closed.
+ * LW(9) is the direction and LW(10) the map object name.
+ */
 EVT_BEGIN(evt_mri_door_close_pure)
     IF_INT_EQUAL(LW(9), 0)
         SET_VALUE(LW(2), -5)
@@ -218,6 +226,10 @@ EVT_BEGIN(evt_mri_door_close_pure)
     RETURN
 EVT_END()
 
+/**
+ * Door close used when Mario leaves through the door:
+ * he starts walking after a short delay (shorter in the JP releases) while the door closes.
+ */
 EVT_BEGIN(evt_mri_door_close)
     BEGIN_INLINE_EVENT
 #ifdef VERSION_G8ME01
@@ -231,6 +243,10 @@ EVT_BEGIN(evt_mri_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Opens a diagonal (naname) door: slides it along its slanted track with a door sound, pauses,
+ * then retracts it into the wall. LW(10) is the door's map object name.
+ */
 EVT_BEGIN(evt_mri_door_naname_open_pure)
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, LW(10), LW(11), LW(12), LW(13))
@@ -246,6 +262,7 @@ EVT_BEGIN(evt_mri_door_naname_open_pure)
     RETURN
 EVT_END()
 
+/** Open for diagonal doors: one second after the call Mario walks through while the door animation runs. */
 EVT_BEGIN(evt_mri_door_naname_open)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
@@ -255,6 +272,10 @@ EVT_BEGIN(evt_mri_door_naname_open)
     RETURN
 EVT_END()
 
+/**
+ * Closes a diagonal door: it slides back out of the wall, pauses,
+ * then returns along its track to its closed position. LW(10) is the map object name.
+ */
 EVT_BEGIN(evt_mri_door_naname_close_pure)
     CALL(evt_mapobj_trans, 1, LW(10), FLOAT(-34.5f), FLOAT(0.0f), FLOAT(-46.5f))
     WAIT_MS(500)
@@ -272,6 +293,10 @@ EVT_BEGIN(evt_mri_door_naname_close_pure)
     RETURN
 EVT_END()
 
+/**
+ * Close for diagonal doors: Mario starts walking after a short delay (shorter in the JP releases)
+ * while the door closes.
+ */
 EVT_BEGIN(evt_mri_door_naname_close)
     BEGIN_INLINE_EVENT
 #ifdef VERSION_G8ME01

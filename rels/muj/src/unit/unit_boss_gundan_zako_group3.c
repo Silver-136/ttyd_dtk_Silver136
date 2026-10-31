@@ -299,6 +299,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of X-Naut group 3: the X-Nauts take the hurt pose when the hit did damage
+ * or the group has one of several statuses (KO, sleep, dizzy, confusion, freeze, stop, poison, burn, tiny,
+ * defense down, slow or allergic), then the default damage reaction runs.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -340,6 +345,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Death event of X-Naut group 3: marks the group dying (unit work 1),
+ * the 500 X-Nauts collapse (zakogun_dead3) with the enemy-death sounds and smoke,
+ * its coins and experience are stored with the Star Point effect and the unit is removed.
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 1, 1)
     CALL(zakogun_dead3)
@@ -465,6 +475,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Per-frame update of formation 3: moves the ring of 500 X-Nauts around the formation centre (radius, angle,
+ * speed) and turns each one along the ring.
+ */
 void zakogun_ext_main3(void) {
     s32 i;
     BattleUnit* unit = zakogun_get_ptr();

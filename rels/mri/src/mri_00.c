@@ -1122,6 +1122,7 @@ f32 guide_move_data[] = {
  */
 EVT_BEGIN(open_bigtree)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
+    // A success jingle plays over the music as the clouds clear and the controls are taken.
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SUCCESS1"))
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 1)
@@ -1157,6 +1158,7 @@ EVT_BEGIN(open_bigtree)
     WAIT_MS(1200)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
+    // Punio appears on the ledge and jumps down to Mario and Flurrie.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e10_00"), 0, STRING("extparty"))
     CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
     CALL(evt_npc_set_position, STRING("ガイド"), LW(0), LW(1), LW(2))
@@ -1187,6 +1189,7 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_npc_flag_onoff, 0, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_cam3d_evt_set, -26, 275, 213, -26, 192, -216, 0, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+    // Mario and Flurrie talk with Punio about the tree.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e10_01"), 0, STRING("party"))
     CALL(evt_mario_set_dir, 270, 200, 0)
     WAIT_MS(500)
@@ -1199,6 +1202,7 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_npc_set_position, STRING("ガイド"), 226, 0, -225)
     CALL(evt_npc_set_ry, STRING("ガイド"), 270)
     CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
+    // Punio runs to the hidden door and unlocks it; the lamp lights and the secret door (S_doa) swings open.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e10_02"), 0, STRING("ガイド"))
     CALL(evt_cam3d_evt_set, 140, 90, 193, 140, 45, -154, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -1220,6 +1224,7 @@ EVT_BEGIN(open_bigtree)
     SPAWN_EVENT_GET_ID(PTR(mri_puni_walk_se), LW(9))
     CALL(evt_npc_move_position, STRING("ガイド"), 140, -140, 0, FLOAT(120.0f), 0)
     DELETE_EVENT(LW(9))
+    // Punio walks through and invites Mario and Flurrie in.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e10_03"), 0, STRING("ガイド"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -26, 275, 213, -26, 192, -216, 0, EASING_SINE_IN_OUT)
@@ -1235,6 +1240,11 @@ EVT_BEGIN(open_bigtree)
     RETURN
 EVT_END()
 
+/**
+ * Chapter 2 epilogue back in the tree's front yard:
+ * the Punies thank Mario, with Punio, the Puni elder and Punio's sister talking, and the party is praised.
+ * Sets the story to STORY_STG2_26_PRAISE_FROM_THE_PUNI.
+ */
 EVT_BEGIN(mario_see_you)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -1286,6 +1296,10 @@ EVT_BEGIN(mario_see_you)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the dark view (yami view) camera used for the dark scenes:
+ * a look-at matrix 100 units to the side of x, handed to the environment manager.
+ */
 static USER_FUNC(yami_view) {
     f32 x = evtGetFloat(event, event->args[0]);
     Mtx mtx;
@@ -1761,12 +1775,14 @@ EVT_BEGIN(mri_00_init_evt)
     SET_VALUE(LW(7), 0)
     SET_VALUE(LW(8), 0)
     SET_VALUE(LW(9), 0)
+    // Start the Puni system, the switches and the doors.
     CALL_CHILD(PTR(mri_puni_init))
     CALL_CHILD(PTR(evt_switch_init))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_cam_road_reset)
+    // After Bowser's Petalburg scene and the boss, set up the Punies' thank-you scenes (mario_see_you).
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_05_BOWSER_PETALBURG)
         CALL(evt_mario_get_party, LW(15))
         IF_INT_EQUAL(LW(15), PARTY_MEMBER_NONE)
@@ -1802,6 +1818,7 @@ EVT_BEGIN(mri_00_init_evt)
     SET_VALUE(LW(1), 1)
     SET_VALUE(LW(2), -295)
     SET_FLOAT_VALUE(LW(3), FLOAT(1.0f))
+    // The waterfall effects play on the tree.
     SPAWN_EVENT(PTR(mri_waterfall_effect))
     SET_VALUE(LW(0), 531)
     SET_VALUE(LW(1), 1)
@@ -1809,6 +1826,7 @@ EVT_BEGIN(mri_00_init_evt)
     SET_FLOAT_VALUE(LW(3), FLOAT(1.0f))
     SPAWN_EVENT(PTR(mri_waterfall_effect))
     SET_VALUE(LF(0), 0)
+    // Chapter 8 music: the witch theme or the voices theme, depending on which door Mario came through.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
@@ -1824,6 +1842,7 @@ EVT_BEGIN(mri_00_init_evt)
     END_IF
     IF_INT_EQUAL(LF(0), 0)
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG2_02_TO_THE_GREAT_TREE)
+            // Chapter 2 music and ambience for the Great Tree.
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG2_MRI1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
             ELSE
@@ -1834,11 +1853,13 @@ EVT_BEGIN(mri_00_init_evt)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI2"))
         END_IF
     END_IF
+    // The FP Plus badge sits on the ground until Mario picks it up.
     CALL(evt_item_entry, STRING("i"), ITEM_FP_PLUS, 528, 0, 110, ITEM_TYPE_GROUND, GSWF_MRI_00_FP_PLUS, 0)
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG2_10_SECRET_ENTRANCE_REVEALED)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
             IF_INT_EQUAL(GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO, 1)
+                // While Punio follows Mario, the three dancer Punies dance in the yard.
                 CALL_CHILD(PTR(odoriko_1_init))
                 CALL_CHILD(PTR(odoriko_2_init))
                 CALL_CHILD(PTR(odoriko_3_init))
@@ -1862,6 +1883,7 @@ EVT_BEGIN(mri_00_init_evt)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_15_GRODUS)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("sekai_yami1"))
+            // In chapter 8 the dark-world scene or the voices scene runs, depending on the entrance.
             SPAWN_EVENT(PTR(sekai_yami_evt))
         END_IF
         IF_STR_EQUAL(LW(0), STRING("minnnanokoe"))

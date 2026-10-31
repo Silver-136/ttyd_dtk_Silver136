@@ -272,6 +272,7 @@ EVT_END()
  */
 // Body Slam uses the shared attack-level power callback, then restores position and facing.
 static EVT_BEGIN(attack_event_clauda)
+    // She may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -280,12 +281,14 @@ static EVT_BEGIN(attack_event_clauda)
     END_IF
     SET_VALUE(LW(12), PTR(&enemyWeapon_ClaudaNormalAttack))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    // Target: she picks one for her body slam.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
+    // The attack is declared.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
@@ -296,6 +299,7 @@ static EVT_BEGIN(attack_event_clauda)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    // Wind-up: Flurrie crouches (PWD_A1_1) and then leaps into the air.
     WAIT_MS(400)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_A1_1"))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_CLAUD_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -304,6 +308,7 @@ static EVT_BEGIN(attack_event_clauda)
     ADD(LW(2), 5)
     CALL(btlevtcmd_GetResultAC, LW(5))
     IF_BITS_CLEAR(LW(5), AC_RESULT_SUCCESS)
+        // She aims a little off the mark when the action command is not successful.
         CALL(evt_sub_random, 40, LW(5))
         SUBTRACT(LW(5), 20)
         ADD(LW(0), LW(5))
@@ -311,6 +316,7 @@ static EVT_BEGIN(attack_event_clauda)
         SUBTRACT(LW(5), 10)
         ADD(LW(1), LW(5))
     END_IF
+    // She comes down on the target; the pre-damage check decides between a dodge and a hit.
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(6))
     IF_INT_NOT_EQUAL(LW(6), 1)
@@ -323,6 +329,7 @@ static EVT_BEGIN(attack_event_clauda)
         IF_INT_EQUAL(LW(6), 2)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
+        // Impact: she lands flat (PWD_A1_2, PWD_D_3) and the camera shakes as the slam hits for its damage.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_A1_2"))
         CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PWD_D_3"))
@@ -334,6 +341,7 @@ static EVT_BEGIN(attack_event_clauda)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(evt_btl_camera_shake_h, 0, 8, 0, 30, 13)
+    // She squashes and swells back to full size.
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         CALL(evt_sub_intpl_init_float, EASING_SINE_IN_OUT, FLOAT(1.0f), FLOAT(0.39941406f), 10)
         LOOP(10)
@@ -368,6 +376,7 @@ static EVT_BEGIN(attack_event_clauda)
     END_SIBLING_EVENT
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     WAIT_MS(700)
+    // She walks back to her home position.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)

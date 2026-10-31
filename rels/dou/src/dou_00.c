@@ -114,6 +114,11 @@ EVT_BEGIN(totsunyu_event)
     RETURN
 EVT_END()
 
+/**
+ * Init script of dou_00, the entrance cave of Pirate's Grotto:
+ * music and ambience, the exits to Keelhaul Key (muj_05) and dou_01, waves, a save block,
+ * a Ruin Powder item and the water-surface shader on the pool.
+ */
 EVT_BEGIN(dou_00_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU1"))

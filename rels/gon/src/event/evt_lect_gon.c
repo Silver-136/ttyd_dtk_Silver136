@@ -628,6 +628,8 @@ EVT_BEGIN(slit_majin_lecture_init)
 EVT_END()
 
 EVT_BEGIN(slit_majin_lecture)
+    // Set up the lesson: the button prompt icon appears beside Mario and the genie floats in front of the
+    // camera.
     BEGIN_SIBLING_EVENT
         CALL(lecture_button_rtn)
     END_SIBLING_EVENT
@@ -645,10 +647,12 @@ EVT_BEGIN(slit_majin_lecture)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+    // The genie laughs at Mario for falling for the trap and explains the castle's curse.
     CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_1"))
     WAIT_MS(200)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg1_gon_12_12"), 0, STRING("ペラ魔人"))
+    // Mario is dazzled by flashes of light.
     CALL(evt_mario_set_pose, STRING("M_N_H"))
     LOOP(4)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -657,8 +661,10 @@ EVT_BEGIN(slit_majin_lecture)
     END_LOOP
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
+    // The genie announces the paper curse and tells Mario to hold the R button.
     CALL(evt_msg_print, 0, STRING("stg1_gon_12_13"), 0, STRING("ペラ魔人"))
     CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_14"))
+    // Practice loop: the prompt icon blinks while Mario tries to turn sideways.
     LOOP(0)
         LOOP(0)
             CALL(lecture_button_flag_on_off, 0, 2, 1)
@@ -691,6 +697,7 @@ EVT_BEGIN(slit_majin_lecture)
             CALL(evt_mario_set_enable_key, 32)
             CALL(evt_mario_key_onoff, 1)
             CALL(evt_mario_key_onoff, 1)
+            // Mario is moved only by the check; the lesson is passed once he stays paper-thin for 180 frames.
             LOOP(0)
                 CALL(lect_status_off)
                 CALL(evt_mario_get_pos, 0, LW(5), LW(1), LW(6))
@@ -717,6 +724,7 @@ EVT_BEGIN(slit_majin_lecture)
                 END_IF
             END_LOOP
             CALL(evt_msg_continue)
+            // Control is returned to normal and the prompt is dismissed.
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_mario_key_onoff, 0)
             CALL(lect_status_on)
@@ -741,6 +749,7 @@ EVT_BEGIN(slit_majin_lecture)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
             CALL(lecture_button_seq_wait, 0, 1)
             WAIT_MS(300)
+            // If Mario failed to hold paper mode, the genie scolds him and he tries again.
             IF_INT_EQUAL(LW(11), 1)
                 BREAK_LOOP
                 ELSE
@@ -750,7 +759,9 @@ EVT_BEGIN(slit_majin_lecture)
         END_LOOP
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg1_gon_12_15"), 0, STRING("ペラ魔人"))
+        // The genie asks whether Mario understands the curse.
         CALL(evt_msg_select, 0, STRING("stg1_gon_12_15_yn"))
+        // No: the genie scolds him and the lesson repeats.
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_16"))
             ELSE
@@ -758,6 +769,7 @@ EVT_BEGIN(slit_majin_lecture)
         END_IF
     END_LOOP
     CALL(evt_msg_print_add, 0, STRING("stg1_gon_12_17"))
+    // The genie says farewell and disappears.
     CALL(evt_npc_set_anim, STRING("ペラ魔人"), STRING("P_2"))
     WAIT_MS(200)
     CALL(evt_npc_set_camid, STRING("ペラ魔人"), 4)

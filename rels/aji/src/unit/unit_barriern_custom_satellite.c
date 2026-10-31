@@ -162,6 +162,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event for the Mini-X-Yux: runs the default damage handler (btldefaultevt_Damage) with LW(10) = -2
+ * and LW(11) = 1.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -169,20 +173,35 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Phase event of the Mini-X-Yux: does nothing (the parent Yux does the acting). */
 static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/**
+ * Unison phase script of the Mini-X-Yux: does nothing
+ * but restart the wait event (the parent Yux moves its satellites).
+ */
 static EVT_BEGIN(unison_phase_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
+/**
+ * Attack script of the Mini-X-Yux: does nothing but restart the wait event;
+ * the ring that starts from it in the combined attack is a part of the parent Yux,
+ * moved by the parent's scripts.
+ */
 static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
 EVT_END()
 
+/**
+ * Idle script of the Mini-X-Yux: loops the idle pose and,
+ * every 0.5 to 2.5 seconds while its work 1 is set and it can act with no bad status,
+ * plays the S_4 pose for 3 seconds.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     LABEL(0)
@@ -205,6 +224,11 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Script function: returns the starting offset of satellite index args[2]
+ * when the Yux has args[1] satellites (1 to 4 laid out as a fixed pattern 25 units apart,
+ * mirrored by the facing direction) in the variables args[3] to args[5] as x, y and z.
+ */
 static USER_FUNC(battleGetBarriernSatelliteInitPos) {
     EvtWord* args = event->args;
     BattleUnit* unit;

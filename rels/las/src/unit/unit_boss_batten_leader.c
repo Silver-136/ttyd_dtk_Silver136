@@ -1064,6 +1064,7 @@ LightSeq1 btl_shuryolight_rod_off = {{{"L_3A", -1}}, NULL};
  * -2 blinks randomly, -3 and -4 are random waits). Runs the table forever in a sibling event.
  */
 EVT_BEGIN(light_anim_rtn)
+    // First head lamp (part 4): play the animation sequence given in LW(6) over and over.
     BEGIN_SIBLING_EVENT
         SET_INT_READ_ADDR(LW(6))
         LOOP(0)
@@ -1115,6 +1116,7 @@ EVT_BEGIN(light_anim_rtn)
             END_IF
         END_LOOP
     END_SIBLING_EVENT
+    // Second head lamp (part 5): play the sequence given in LW(7).
     BEGIN_SIBLING_EVENT
         SET_INT_READ_ADDR(LW(7))
         LOOP(0)
@@ -1166,6 +1168,7 @@ EVT_BEGIN(light_anim_rtn)
             END_IF
         END_LOOP
     END_SIBLING_EVENT
+    // Third head lamp: play the sequence given in LW(8).
     BEGIN_SIBLING_EVENT
         SET_INT_READ_ADDR(LW(8))
         LOOP(0)
@@ -1217,6 +1220,7 @@ EVT_BEGIN(light_anim_rtn)
             END_IF
         END_LOOP
     END_SIBLING_EVENT
+    // Power lamp (part 3): play the sequence given in LW(5), looping in the main event.
     SET_INT_READ_ADDR(LW(5))
     LOOP(0)
         READ_INT(LW(1))
@@ -1331,6 +1335,7 @@ EVT_END()
 EVT_BEGIN(light_pose_change)
     CALL(enzan_lw_save2)
     CALL(btlevtcmd_AnimeGetPose, UNIT_ID_SELF, 1, LW(0))
+    // Casting poses A_1B and A_1C: the head lamps blink quickly and the power lamp stays steady.
     IF_STR_EQUAL(LW(0), STRING("A_1B"))
         CALL(enzan_lw_save)
         SET_VALUE(LW(5), PTR(&btl_shuryolight_pow_normal))
@@ -1358,6 +1363,7 @@ EVT_BEGIN(light_pose_change)
         SET_VALUE(LW(0), 2)
         GOTO(0)
     END_IF
+    // Other poses (hurt, dizzy, dead and so on) use their own mix of steady, blinking, random or dark lamps.
     IF_STR_EQUAL(LW(0), STRING("H_1"))
         CALL(enzan_lw_save)
         SET_VALUE(LW(5), PTR(&btl_shuryolight_pow_normal))
@@ -1441,6 +1447,7 @@ EVT_BEGIN(light_pose_change)
     IF_INT_NOT_EQUAL(LW(0), LW(1))
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_PATTERN, LW(0))
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_EVENT, LW(0))
+        // Restart the lamp animation event with the chosen sequences.
         DELETE_EVENT(LW(0))
         SPAWN_EVENT_GET_ID(PTR(light_anim_rtn), LW(0))
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_LIGHT_EVENT, LW(0))

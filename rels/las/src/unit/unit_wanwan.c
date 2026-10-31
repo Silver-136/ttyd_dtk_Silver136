@@ -247,6 +247,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Event run for as long as the Chain-Chomp exists:
+ * updates its chain (chain_main) every frame and ends when the unit is gone.
+ */
 static EVT_BEGIN(chain_event)
     LABEL(0)
     WAIT_FRAMES(1)
@@ -260,6 +264,10 @@ static EVT_BEGIN(chain_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of the Chain-Chomp: marks it as being damaged (unit work 2 = 2, attribute 4) around the default
+ * damage handling.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -292,6 +300,11 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Dead event of the Chain-Chomp: all 9 of its parts spin with the death sound for 48 frames,
+ * a smoke puff and the coins, experience and star points appear,
+ * and the parts tip over before the unit is killed (with a different kill mode for damage code 0x400).
+ */
 static EVT_BEGIN(dead_event)
     SET_VALUE(LW(0), 48)
     CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_BTL_ENEMY_DIE1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -356,6 +369,7 @@ static EVT_BEGIN(attack_event)
         WAIT_MS(750)
         CALL(btlevtcmd_GetFirstAttackTarget, LW(3), LW(4))
     ELSE
+        // If the AI wants to use a held item, it does that instead and ends its turn.
         CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(LW(0))
@@ -383,6 +397,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangePartsFaceDirection, UNIT_ID_SELF, 1, LW(15))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 0, 0)
+    // The idle loop is stopped and the camera moves in on the Chain-Chomp.
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_SELF)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_PART_TO_PART)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
@@ -404,12 +419,14 @@ static EVT_BEGIN(attack_event)
         WAIT_FRAMES(20)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_S_1A"))
     END_SIBLING_EVENT
+    // It lunges forward at the target with its chain stretched out behind it.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_ATTACK1"), LW(14), 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 40)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 1, 30, 0, FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 1, LW(0), 0, LW(2), 30, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("WAN_A_1"))
+    // It leaps at the target with its mouth open (WAN_A_1).
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_ATTACK2"), LW(14), 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     SUBTRACT(LW(1), 10)
@@ -440,6 +457,7 @@ static EVT_BEGIN(attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // The bite misses or is blocked: it drops to the ground in front of the target and growls.
     LABEL(90)
     WAIT_FRAMES(30)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT1"), LW(14), 0, EVT_NULLPTR)
@@ -448,6 +466,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 1, 0, FLOAT(8.0f), FLOAT(0.0f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
     GOTO(98)
+    // The bite lands: the camera shakes, the Action Command defence result is applied and damage is dealt.
     LABEL(91)
     CALL(evt_btl_camera_shake_h, 0, 1, 1, 8, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -461,6 +480,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 1, 0, FLOAT(8.0f), FLOAT(0.25f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 1, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
     GOTO(98)
+    // The camera resets.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(250)
@@ -471,8 +491,17 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Wait event of the Chain-Chomp: picks the idle behaviour by status.
+ * Asleep (status 1) it breathes with a slow tilting;
+ * stopped or frozen (statuses 2 and 9) it stays in its stunned pose;
+ * dizzy, poisoned or confused (statuses 3 to 5) it hops slowly;
+ * otherwise it hops in place barking, with sounds.
+ * Each runs in a sibling event and the event then loops forever.
+ */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_STATE, 0)
+    // Asleep: the Chain-Chomp lies still (WAN_N_1) and rocks slowly from side to side.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_SLEEP, LW(15))
     IF_INT_NOT_EQUAL(LW(15), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHAIN_STATE, 2)
@@ -495,6 +524,7 @@ static EVT_BEGIN(wait_event)
         END_SIBLING_EVENT
         GOTO(98)
     END_IF
+    // Stopped or frozen: it stays in its stunned pose (WAN_Y_1), only growling now and then.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_STOP, LW(14))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_FREEZE, LW(15))
     OR(LW(15), LW(14))
@@ -510,12 +540,14 @@ static EVT_BEGIN(wait_event)
         END_SIBLING_EVENT
         GOTO(98)
     END_IF
+    // Dizzy, poisoned or confused: it hops about slowly in a tired pattern, landing with a thud each time.
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_CONFUSE, LW(13))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_POISON, LW(14))
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DIZZY, LW(15))
     OR(LW(15), LW(13))
     OR(LW(15), LW(14))
     IF_INT_NOT_EQUAL(LW(15), 0)
+        // Normally it bounces on the spot, barking and landing with a thud on each hop (WAN_A_1 and WAN_S_1A).
         BEGIN_SIBLING_EVENT
             LABEL(3)
             CALL_CHILD(sound_gensui_event)
@@ -593,6 +625,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper event: lowers the volume of the Chain-Chomp's barking (unit work 1) by about 30 percent,
+ * to a minimum of 32, each time it is called.
+ */
 static EVT_BEGIN(sound_gensui_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_SOUND_VOLUME, LW(11))
     MULTIPLY_FLOAT(LW(11), FLOAT(0.69921875f))
@@ -603,6 +639,10 @@ static EVT_BEGIN(sound_gensui_event)
     RETURN
 EVT_END()
 
+/**
+ * Plays the Chain-Chomp's first bark sound set (WAIT1 and WAIT3, then WAIT2 after LW(10) frames) at the volume
+ * in LW(11).
+ */
 static EVT_BEGIN(wait_sound_event1)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT1"), LW(11), 0, EVT_NULLPTR)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT3"), LW(11), 0, EVT_NULLPTR)
@@ -611,12 +651,20 @@ static EVT_BEGIN(wait_sound_event1)
     RETURN
 EVT_END()
 
+/** Plays the Chain-Chomp's second bark sound (WAIT4) after LW(10) frames at the volume in LW(11). */
 static EVT_BEGIN(wait_sound_event2)
     WAIT_FRAMES(LW(10))
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_WAN_WAIT4"), LW(11), 0, EVT_NULLPTR)
     RETURN
 EVT_END_PAD()
 
+/**
+ * Script helper (runs every frame): lays out the Chain-Chomp's chain.
+ * The chain has nine parts; part 9 is the stake behind the chomp and parts 2..8 are the links.
+ * Normally the links hang like a catenary between the chomp (part 1) and the stake,
+ * sagging by 300 / length squared; with work[2] == 2 it records the current shape
+ * and with work[2] == 1 it keeps the recorded shape fixed (used after the chomp is knocked loose).
+ */
 static USER_FUNC(chain_main) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -681,6 +729,7 @@ static USER_FUNC(chain_main) {
         len = 10.0f;
     }
     sag = 300.0f / (len * len);
+    // keep the chomp below the top of the stage
     part = BtlUnit_GetPartsPtr(unit, 1);
     BtlUnit_GetPartsPos(part, &x, &y, &z);
     if (y > 110.0f) {

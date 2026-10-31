@@ -2625,18 +2625,21 @@ EVT_BEGIN(_object_turn_event_A1)
     RETURN
 EVT_END()
 
+/** Default destroy script for background layer A2: runs _object_turn_event_core with LW(9) = 1. */
 EVT_BEGIN(_object_turn_event_A2)
     SET_VALUE(LW(9), 1)
     CALL_CHILD(PTR(_object_turn_event_core))
     RETURN
 EVT_END()
 
+/** Default destroy script for background layer B: runs _object_turn_event_core with LW(9) = 2. */
 EVT_BEGIN(_object_turn_event_B)
     SET_VALUE(LW(9), 2)
     CALL_CHILD(PTR(_object_turn_event_core))
     RETURN
 EVT_END()
 
+/** Turns one nozzle (index in the event's unitId) to its new direction; started by _Nozzle_Change_Check. */
 EVT_BEGIN(_nozzle_turn_event)
     CALL(_nozzle_turn)
     RETURN
@@ -2657,6 +2660,10 @@ EVT_BEGIN(_nozzle_work_event_0)
     RETURN
 EVT_END()
 
+/**
+ * Nozzle attack during battle (BattleStage_NozzleWorkCheck(1)):
+ * _nozzle_work_event_core with LW(10) = 1, which also lets a type-0 nozzle set fill the stage with fog.
+ */
 EVT_BEGIN(_nozzle_work_event_1)
     SET_VALUE(LW(10), 1)
     CALL_CHILD(PTR(_nozzle_work_event_core))

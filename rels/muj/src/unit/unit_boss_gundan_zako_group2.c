@@ -301,6 +301,11 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Damage event of X-Naut group 2: the X-Nauts take the hurt pose when the hit did damage
+ * or the group has one of several statuses (KO, sleep, dizzy, confusion, freeze, stop, poison, burn, tiny,
+ * defense down, slow or allergic), then the default damage reaction runs.
+ */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -342,6 +347,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Death event of X-Naut group 2: marks the group dying (unit work 2),
+ * raises the ceiling (up_ceil) as the 25 X-Nauts collapse (zakogun_dead2) with the enemy-death sounds
+ * and smoke across the stage, stores its coins and experience with the Star Point effect and removes the unit.
+ */
 static EVT_BEGIN(dead_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, ZAKO_GROUP2_WORK_DYING, 1)
     BEGIN_INLINE_EVENT
@@ -382,6 +392,10 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack event of X-Naut group 2: 50/50 between dropping onto one target (fall_attack_event)
+ * and shaking the ceiling (shake_attack_event).
+ */
 static EVT_BEGIN(attack_event)
     SET_VALUE(LW(0), 50)
     ADD(LW(0), 50)
@@ -398,6 +412,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Group 2's fall attack: picks one target and the 25 X-Nauts hop along the ceiling until above it
+ * and drop onto it one by one (zakogun_attack2), while hit_check_event deals the hits.
+ */
 EVT_BEGIN(fall_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ALL_LANDED, 0)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_HIT_LANDED, 0)
@@ -431,6 +449,11 @@ EVT_BEGIN(fall_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Group 2's shaking attack: the X-Nauts rock the ceiling (zakogun_attack2_yusuri, shake_ceil) with growing
+ * camera shakes, then debris (fall effects) rains across the stage and hits the first
+ * and the next selected target (weapon_gundan_zako_group2_yusuri_attack).
+ */
 static EVT_BEGIN(shake_attack_event)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ALL_LANDED, 0)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_group2_yusuri_attack))
@@ -509,6 +532,10 @@ static EVT_BEGIN(shake_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: lowers the stage objects if_body and
+ * if_wire from height 250 to 130 over 120 frames (the ceiling the horde stands on comes down).
+ */
 USER_FUNC(down_ceil) {
     u8* ceil = &_battleWorkPointer->stageObjectWork.flags;
     BattleStageObject* body = BattleSearchObjectPtr("if_body");

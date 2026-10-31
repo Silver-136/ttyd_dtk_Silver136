@@ -124,10 +124,13 @@ EVT_END()
  * he gasps, switches to his surprised pose and talk poses, and the camera is released.
  */
 EVT_BEGIN(name_seikai)
+    // Doopliss gasps and strikes his surprised pose.
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_NM_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_set_anim, STRING("にせマリオ"), STRING("EM_O_2"))
     CALL(evt_npc_set_autotalkpose, STRING("にせマリオ"), STRING("EM_Z_3"), STRING("EM_T_4"))
+    // The camera closes in step by step as he stammers "Wha...", "What did you just say?!?" and "It can't
+    // be...".
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(10), LW(11), LW(12))
     ADD(LW(2), LW(12))
@@ -160,6 +163,7 @@ EVT_BEGIN(name_seikai)
     CALL(evt_cam3d_evt_set, LW(10), 43, LW(13), LW(10), 30, LW(12), 500, EASING_SINE_IN_OUT)
     WAIT_MS(600)
     CALL(evt_msg_print, 0, STRING("stg4_gra_14"), 0, STRING("にせマリオ"))
+    // He throws a fit ("NO! NO! NO!", "WHY?", "HOW?") while the camera spins around the scene.
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
@@ -191,6 +195,7 @@ EVT_BEGIN(name_seikai)
     END_LOOP
     CALL(cam_r, 0)
     CALL(evt_snd_sfxoff, LW(10))
+    // The camera pulls back and Mario and his partner twirl in place until the rant is over.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_npc_get_position, STRING("にせマリオ"), LW(3), LW(4), LW(5))
     ADD(LW(0), LW(3))
@@ -271,6 +276,7 @@ EVT_BEGIN(name_seikai)
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 0)
     SET_VALUE(GF(2), 0)
+    // Doopliss panics: he runs off to the west, comes back, and finally drops out of sight.
     CALL(evt_npc_flag_onoff, 1, STRING("にせマリオ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 0, STRING("にせマリオ"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_status_onoff, 1, STRING("にせマリオ"), NPC_STATUS_FACE_MOVE_DIR)
@@ -296,6 +302,7 @@ EVT_BEGIN(name_seikai)
     CALL(evt_npc_move_position, STRING("にせマリオ"), 200, LW(2), 0, FLOAT(300.0f), 0)
     CALL(evt_npc_set_position, STRING("にせマリオ"), 0, -1000, 0)
     SET_VALUE(GF(0), 1)
+    // The camera frames Mario and his partner and the partner reacts, then they set off again.
     CALL(zoom, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
     CALL(evt_party_get_pos, 0, LW(13), LW(14), LW(15))
@@ -327,6 +334,7 @@ EVT_BEGIN(name_seikai)
 EVT_END()
 
 EVT_BEGIN(evt_machibuse)
+    // Waits until Mario steps into the strip of road where Doopliss ambushes him.
     SET_VALUE(LF(0), 0)
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -337,6 +345,7 @@ EVT_BEGIN(evt_machibuse)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // The music fades out and Mario freezes, turning to face the middle of the road.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 120)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -362,6 +371,7 @@ EVT_BEGIN(evt_machibuse)
     CALL(evt_cam3d_evt_set, -88, 352, 517, -88, 257, -25, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+    // Doopliss's appearance music starts and Mario and his partner are placed for the scene.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_FF_ENV_RPL_APPEAR1"))
     CALL(evt_snd_envoff, PSND_PAUSE)
     CALL_CHILD(PTR(evt_yabure_on))
@@ -389,6 +399,7 @@ EVT_BEGIN(evt_machibuse)
         ADD(LW(0), -75)
     END_IF
     WAIT_MS(200)
+    // Doopliss drops in with a jump and cheers.
     BEGIN_INLINE_EVENT
         CALL(evt_npc_set_position, STRING("にせマリオ"), -145, 270, -25)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_LANPEL_M_FALL1"), -145, 270, -25, LW(10))
@@ -413,6 +424,7 @@ EVT_BEGIN(evt_machibuse)
     ADD(LW(3), 542)
     CALL(evt_cam3d_evt_set, LW(0), 137, LW(3), LW(0), 30, LW(2), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+    // His first taunts (on the first meeting he tells Mario that he now has his name and his body).
     IF_INT_LESS(GSW_STORY_PROGRESS, STG4_11_02_WAITING_DOOPLISS)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("stg4_gra_01"), 0, STRING("にせマリオ"))
@@ -428,6 +440,7 @@ EVT_BEGIN(evt_machibuse)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING("M_I_Y"))
     WAIT_MS(1000)
+    // He offers to give Mario's name back if he guesses his real name; the lines depend on the story stage.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_11_02_WAITING_DOOPLISS)
         CALL(evt_msg_print, 0, STRING("stg4_gra_03"), 0, STRING("にせマリオ"))
@@ -447,6 +460,8 @@ EVT_BEGIN(evt_machibuse)
         CASE_DEFAULT
         CALL(evt_msg_print, 0, STRING("stg4_gra_09"), 0, STRING("にせマリオ"))
     END_SWITCH
+    // The name-entry screen opens; a right guess plays name_seikai, takes The Letter P away and ends the
+    // scene.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_13_04_THE_LETTER_P)
         SET_VALUE(LW(0), 2)
@@ -490,10 +505,13 @@ EVT_BEGIN(evt_machibuse)
             RETURN
         END_IF
     END_SWITCH
+    // A wrong guess: Doopliss mocks it and attacks, starting the fight.
     CALL(evt_msg_print, 0, STRING("stg4_gra_04"), 0, STRING("にせマリオ"))
     CALL(evt_npc_set_battle_info, STRING("にせマリオ"), 2)
     CALL(evt_npc_battle_start, STRING("にせマリオ"))
     CALL(evt_npc_wait_battle_end)
+    // After the fight the story advances and Doopliss shoves Mario out of the area, back to Twilight Town
+    // or the previous trail screen.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG4_11_02_WAITING_DOOPLISS)
         SET_VALUE(GSW_STORY_PROGRESS, STG4_11_02_WAITING_DOOPLISS)
@@ -605,6 +623,12 @@ EVT_BEGIN(evt_majin_key)
     RETURN
 EVT_END()
 
+/**
+ * Init script of gra_00, the first Twilight Trail map:
+ * starts the trail music and Twilight Town ambience, sets up the shadow Mario effect, the exits,
+ * the shake-tree spots, two brick blocks, the Black Key (if not taken yet)
+ * and the ambush for the story range around the lost Superbomb.
+ */
 EVT_BEGIN(gra_00_init_evt)
     SET_VALUE(GSWF_GRA_00_ENTERED, 1)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_GRA1"))
@@ -629,6 +653,11 @@ EVT_BEGIN(gra_00_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper that rolls the 3D camera: args[0] is the roll angle in degrees (0 resets the camera).
+ * While rolled it also bobs the camera with the frame counter and lowers the camera to y 97 looking at y 45.
+ * Used for the tilted camera in Doopliss's scenes.
+ */
 static USER_FUNC(cam_r) {
     f32 roll = evtGetFloat(event, event->args[0]);
     CameraEntry* cam = camGetPtr(CAMERA_3D);

@@ -275,6 +275,7 @@ const char* hosi_name[] = {
 
 EVT_BEGIN(hosi_sw_check)
     SET_VALUE(LW(0), 0)
+    // Compare the seven star switches against the solution (1, 3, 4 and 6 on, the others off).
     IF_INT_EQUAL(LSWF_LAS_20_STAR_02_LIT, 1)
         ADD(LW(0), 1)
     END_IF
@@ -296,6 +297,7 @@ EVT_BEGIN(hosi_sw_check)
     IF_INT_EQUAL(LSWF_LAS_20_STAR_08_LIT, 0)
         ADD(LW(0), 1)
     END_IF
+    // Solved: controls off and the camera looks up at the stars.
     IF_INT_EQUAL(LW(0), 7)
         CALL(evt_mario_key_onoff, 0)
         WAIT_MS(1000)
@@ -348,6 +350,7 @@ EVT_BEGIN(hosi_sw_check)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
             ADD(LW(0), 1)
         END_LOOP
+        // The stars flash in a running light, the room quakes, and the switches vanish.
         CALL(evt_snd_sfxon, STRING("SFX_STG8_STAR_LIGHTUP2"), 0)
         WAIT_MS(100)
         CALL(evt_snd_sfxon, STRING("SFX_STG8_QUAKE3"), LW(10))
@@ -360,6 +363,7 @@ EVT_BEGIN(hosi_sw_check)
         CALL(evt_mobj_delete, STRING("hosi_06_sw"))
         CALL(evt_mobj_delete, STRING("hosi_07_sw"))
         CALL(evt_mobj_delete, STRING("hosi_08_sw"))
+        // The story advances to the solved star puzzle and Mario regains control.
         SET_VALUE(GSW_STORY_PROGRESS, STG8_11_STAR_PUZZLE)
         CALL(evt_cam3d_evt_off, 800, EASING_SINE_IN_OUT)
         CALL(evt_mario_key_onoff, 1)
@@ -367,6 +371,10 @@ EVT_BEGIN(hosi_sw_check)
     RETURN
 EVT_END()
 
+/**
+ * Event script: toggles one star (LW(0) lit model, LW(1) dark model, LW(2) the switch state flag in LSWF):
+ * lighting it plays a stardust effect and sound, switching it off hides the lit model again.
+ */
 EVT_BEGIN(hosi_onoff)
     GET_INT_INDEXED(LW(2), LW(3))
     IF_INT_EQUAL(LW(3), 0)
@@ -384,6 +392,7 @@ EVT_BEGIN(hosi_onoff)
     RETURN
 EVT_END()
 
+/** Event script: red switch for star 2. Toggles the star (LSWF(1)) and then checks the puzzle. */
 EVT_BEGIN(hosi_02_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_02a"))
     SET_VALUE(LW(1), STRING("S_hosi_02b"))
@@ -393,6 +402,7 @@ EVT_BEGIN(hosi_02_sw_evt)
     RETURN
 EVT_END()
 
+/** Event script: red switch for star 3. Toggles the star (LSWF(2)) and then checks the puzzle. */
 EVT_BEGIN(hosi_03_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_03a"))
     SET_VALUE(LW(1), STRING("S_hosi_03b"))
@@ -402,6 +412,7 @@ EVT_BEGIN(hosi_03_sw_evt)
     RETURN
 EVT_END()
 
+/** Event script: red switch for star 4. Toggles the star (LSWF(3)) and then checks the puzzle. */
 EVT_BEGIN(hosi_04_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_04a"))
     SET_VALUE(LW(1), STRING("S_hosi_04b"))
@@ -411,6 +422,7 @@ EVT_BEGIN(hosi_04_sw_evt)
     RETURN
 EVT_END()
 
+/** Event script: red switch for star 5. Toggles the star (LSWF(4)) and then checks the puzzle. */
 EVT_BEGIN(hosi_05_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_05a"))
     SET_VALUE(LW(1), STRING("S_hosi_05b"))
@@ -420,6 +432,7 @@ EVT_BEGIN(hosi_05_sw_evt)
     RETURN
 EVT_END()
 
+/** Event script: red switch for star 6. Toggles the star (LSWF(5)) and then checks the puzzle. */
 EVT_BEGIN(hosi_06_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_06a"))
     SET_VALUE(LW(1), STRING("S_hosi_06b"))
@@ -429,6 +442,7 @@ EVT_BEGIN(hosi_06_sw_evt)
     RETURN
 EVT_END()
 
+/** Event script: red switch for star 7. Toggles the star (LSWF(6)) and then checks the puzzle. */
 EVT_BEGIN(hosi_07_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_07a"))
     SET_VALUE(LW(1), STRING("S_hosi_07b"))
@@ -438,6 +452,7 @@ EVT_BEGIN(hosi_07_sw_evt)
     RETURN
 EVT_END()
 
+/** Event script: red switch for star 8. Toggles the star (LSWF(7)) and then checks the puzzle. */
 EVT_BEGIN(hosi_08_sw_evt)
     SET_VALUE(LW(0), STRING("S_hosi_08a"))
     SET_VALUE(LW(1), STRING("S_hosi_08b"))
@@ -482,6 +497,11 @@ EVT_BEGIN(hosi_init)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_20, the star switch room of the Palace:
+ * music and ambience, the door, the gear animation, the moving platform with its red switch, the star puzzle,
+ * and two hidden blocks with a Repel Cape and a Life Shroom.
+ */
 EVT_BEGIN(las_20_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS5"))

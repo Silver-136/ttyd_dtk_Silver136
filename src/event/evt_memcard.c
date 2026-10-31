@@ -213,9 +213,11 @@ EVT_BEGIN(evt_memcard_check)
             CALL(memcard_buf_reset)
         END_IF
         SWITCH(LW(0))
+            // Loaded: the game may start.
             CASE_EQUAL(0)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_lord_finish"))
             SET_VALUE(GF(0), 1)
+            // No card, or some other device in Slot A: offer to play without saving.
             CASE_EQUAL(CARD_RESULT_NOCARD)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_nocard"))
             CALL_CHILD(PTR(evt_memcard_nosave))
@@ -317,6 +319,7 @@ EVT_BEGIN(evt_memcard_check)
             CASE_EQUAL(CARD_RESULT_NOPERM)
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_different_savedata_2"))
             CALL_CHILD(PTR(evt_memcard_nosave))
+            // Damaged card: it cannot be used.
             CASE_DEFAULT
             CALL(evt_msg_print_add, 0, STRING("msg_mcard_damage"))
             CALL_CHILD(PTR(evt_memcard_nosave))
@@ -444,6 +447,7 @@ EVT_END()
  * and on failure warns that the game was not saved and offers to try again.
  */
 EVT_BEGIN(evt_memcard_save)
+    // Ask "Save all game progress up to this point?" (the new-file save skips the question).
     SET_VALUE(LW(10), LW(0))
     IF_INT_EQUAL(LW(10), 23)
         GOTO(1)
@@ -465,6 +469,7 @@ EVT_BEGIN(evt_memcard_save)
         CALL(evt_msg_continue)
         RETURN
     END_IF
+    // Remember the save kind and write the save file.
     LABEL(1)
     SET_VALUE(GSW_SAVE_RESUME_POINT, LW(10))
     IF_INT_EQUAL(LW(10), 23)
@@ -482,6 +487,9 @@ EVT_BEGIN(evt_memcard_save)
     LABEL(4)
     SET_VALUE(LF(11), 0)
     CALL(memcard_code, LW(0))
+    // Saved, or explain why not: no card, wrong device, a corrupted card (offer to format
+    // and create a save file, then write again), no save file (offer to create one),
+    // not the original card, no space (offer the Memory Card Screen) or a damaged card.
     SWITCH(LW(0))
         CASE_EQUAL(0)
         CALL(evt_msg_print_add, 0, STRING("msg_mcard_save_finish"))
@@ -620,6 +628,8 @@ EVT_BEGIN(evt_memcard_save)
     IF_INT_EQUAL(LF(11), 1)
         GOTO(4)
     END_IF
+    // After a failure outside Save Blocks and the new-file save,
+    // warn that progress was not saved and offer to save again.
     IF_INT_EQUAL(LW(10), 0)
         CALL(evt_msg_continue)
         RETURN

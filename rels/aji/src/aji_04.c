@@ -395,6 +395,10 @@ EVT_BEGIN(quiz_ng)
     RETURN
 EVT_END()
 
+/**
+ * Makes the statue's mouth (kuti, kuti2) open to 70 degrees and close again within 0.2 seconds;
+ * spawned from kuti_callback while the statue's message is being printed.
+ */
 EVT_BEGIN(UNK_0x00022be8)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
@@ -429,6 +433,7 @@ EVT_BEGIN(kuizu_sekizou)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 2000)
+    // The statue wakes up with a rumble and a camera shake.
     CALL(evt_snd_sfxon, STRING("SFX_STG7_QUAKE1"), GW(10))
     BEGIN_INLINE_EVENT
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 2500)
@@ -453,6 +458,7 @@ EVT_BEGIN(kuizu_sekizou)
         SET_VALUE(LW(2), STRING("DOSN"))
         CALL_CHILD(PTR(sekizou_kaiten))
         SPAWN_EVENT(PTR(sekizou_talk))
+        // If Mario bails out, the statue scolds him and lets him go.
         CALL(evt_msg_print_add, 0, STRING("stg7_aji_04"))
         WAIT_MS(500)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
@@ -466,6 +472,7 @@ EVT_BEGIN(kuizu_sekizou)
     SET_VALUE(LW(2), STRING("DOSN"))
     CALL_CHILD(PTR(sekizou_kaiten))
     SPAWN_EVENT(PTR(sekizou_talk))
+    // If he takes the challenge, the quiz set appears and the quiz music starts.
     CALL(evt_msg_print_add, 0, STRING("stg7_aji_05"))
     WAIT_MS(500)
     CALL(evt_map_playanim, STRING("anm_denshoku"), MAP_ANIM_PLAY_LOOP, 0)
@@ -479,6 +486,7 @@ EVT_BEGIN(kuizu_sekizou)
     SET_VALUE(LW(13), 0)
     SET_VALUE(LW(14), 0)
     SET_VALUE(LW(15), 0)
+    // The questions are read one at a time from the quiz table; each is multiple choice.
     SET_INT_READ_ADDR(PTR(&kuizu_data))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     LOOP(0)
@@ -518,6 +526,7 @@ EVT_BEGIN(kuizu_sekizou)
             END_IF
             IF_INT_EQUAL(LW(0), 0)
                 SPAWN_EVENT(PTR(sekizou_talk))
+                // The statue asks "You sure about that?" and Mario confirms or chooses again.
                 CALL(evt_msg_print_add, 0, STRING("stg7_aji_20"))
                 CALL(evt_msg_select, 0, STRING("stg7_aji_03"))
                 IF_INT_EQUAL(LW(0), 0)
@@ -537,6 +546,7 @@ EVT_BEGIN(kuizu_sekizou)
         CALL(evt_msg_continue)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, 95, 65, 0)
         ADD(LW(13), 1)
+        // A right answer earns a fanfare; the statue reacts to the first, fourth and fifth correct answers.
         IF_INT_EQUAL(LF(0), 1)
             IF_INT_EQUAL(LW(14), 4)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_GOOD_SOUND2"), 0)
@@ -590,6 +600,7 @@ EVT_BEGIN(kuizu_sekizou)
             IF_INT_EQUAL(LW(15), 2)
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND2"), 0)
                 ELSE
+                // A wrong answer sounds a buzzer and the statue gloats; the third wrong answer ends the quiz.
                 CALL(evt_snd_sfxon, STRING("SFX_STG7_BAD_SOUND1"), 0)
             END_IF
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato2"), MAP_OBJ_FLAG_HIDDEN)
@@ -741,6 +752,10 @@ EVT_BEGIN(kuizu_sekizou)
     RETURN
 EVT_END()
 
+/**
+ * Initial state of the quiz statue: eyes (me_mae) shown,
+ * the quiz set hidden below the floor and the quiz case script attached to a_sekizou_1_a.
+ */
 EVT_BEGIN(sekizou_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("me_mae"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("me_ato"), MAP_OBJ_FLAG_HIDDEN)
@@ -752,6 +767,12 @@ EVT_BEGIN(sekizou_init)
     RETURN
 EVT_END()
 
+/**
+ * Message callback for the quiz texts: on the stg7_aji_06 question counts text pages (type 3) to play
+ * SFX_STG7_QUIZ_START1 on the third page and switch to BGM_EVT_QUIZ2 on the fourth,
+ * and on the other texts switches to BGM_EVT_QUIZ2 on the first page;
+ * from the JP release on, text type 5 also makes the statue's mouth flap.
+ */
 static void callback(s32 type, void** work) {
     EventEntry* evt = ((MsgWinData*)*work)->event;
 

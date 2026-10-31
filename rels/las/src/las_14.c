@@ -285,6 +285,11 @@ static EVT_BEGIN(evt_cloud_main_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the cloud puzzle of las_14 is solved.
+ * The key chest becomes visible and solid, the collision A_kura is turned on,
+ * GSWF_LAS14_FLURRIE_GUST_SOLVED is set and a success jingle plays.
+ */
 static EVT_BEGIN(cloud_evt)
     CALL(evt_mobj_flag_onoff, 0, STRING("box"), MOBJ_FLAG_NO_DISP)
     CALL(evt_mobj_hit_onoff, STRING("box"), 1)
@@ -298,10 +303,12 @@ static EVT_BEGIN(cloud_evt)
     RETURN
 EVT_END()
 
+/** Event script: touch handler on the cloud hit area; intentionally empty. */
 EVT_BEGIN(touch_evt)
     RETURN
 EVT_END()
 
+/** Event script: reading the hint plate of las_14 (stg8_las_39). */
 static EVT_BEGIN(hint_plate)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg8_las_39"), 0, 0)
@@ -309,6 +316,11 @@ static EVT_BEGIN(hint_plate)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_14, a Riddle Tower room (the chest holds Palace Key 0x29):
+ * music, the door to las_10, the cloud Flurrie must blow away (hit area A_kura)
+ * until GSWF_LAS14_FLURRIE_GUST_SOLVED, the key chest (hidden until solved) and the hint plate.
+ */
 EVT_BEGIN(las_14_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
@@ -333,6 +345,13 @@ EVT_BEGIN(las_14_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper (runs as its own event, one per cloud): the state machine of the cloud puzzle.
+ * While Flurrie is the partner and her gust hits the cloud's hit area, it captures the cloud's paper animation,
+ * plays the wind sound, and counts how long she keeps blowing;
+ * once the count passes the limit (180) it runs the end event and the cloud disappears for good.
+ * If she stops for more than half a second it resets.
+ */
 static USER_FUNC(evt_cloud_main) {
     CloudWork* wp = (CloudWork*)event->lwData[0];
     s32 group = gp->inBattle != 0;

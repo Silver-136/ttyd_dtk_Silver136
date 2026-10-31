@@ -264,6 +264,7 @@ EVT_END()
  * A miss or block makes him tumble back, and he then walks home.
  */
 static EVT_BEGIN(attack_event_yoshi)
+    // He may use an enemy item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
@@ -273,12 +274,14 @@ static EVT_BEGIN(attack_event_yoshi)
     SET_VALUE(LW(12), PTR(&enemyWeapon_YoshiNormalAttack))
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    // Target: he picks one for his stomp.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(12), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
+    // The attack is declared.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
@@ -294,6 +297,7 @@ static EVT_BEGIN(attack_event_yoshi)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     BEGIN_INLINE_EVENT_GET_ID(LW(13))
         LOOP(0)
+            // He runs in place with a patter of steps, then hops.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1L"), EVT_NULLPTR, 0, EVT_NULLPTR)
             WAIT_FRAMES(2)
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_PARTY_BATTLE_MOVE1R"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -305,6 +309,7 @@ static EVT_BEGIN(attack_event_yoshi)
     DELETE_EVENT(LW(13))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    // Flutter jump: he leaps, flaps his legs in the air over the target and works out the dive.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_J_1A"))
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.2998047f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -351,6 +356,7 @@ static EVT_BEGIN(attack_event_yoshi)
     CALL(evt_sub_random, 4, LW(11))
     ADD(LW(11), 1)
     SET_VALUE(LW(10), 0)
+    // Each stomp: the pre-damage check decides between a dodge and a hit.
     LABEL(10)
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
@@ -382,6 +388,7 @@ static EVT_BEGIN(attack_event_yoshi)
         WAIT_FRAMES(15)
         LOOP(LW(0))
             SET_VALUE(LW(2), LW(1))
+            // He spins in the air and dives onto the target.
             CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BTL_YOSHI_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             LOOP(LW(2))
                 CALL(btlevtcmd_AddRotate, UNIT_ID_SELF, 0, 0, LW(15))
@@ -423,6 +430,7 @@ static EVT_BEGIN(attack_event_yoshi)
         GOTO(95)
     END_IF
     IF_INT_LESS(LW(10), LW(11))
+        // Hit: the stomp lands; he bounces up and dives again until the last one deals the damage.
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), 0, LW(5))
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -435,6 +443,7 @@ static EVT_BEGIN(attack_event_yoshi)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
+    // Miss: he tumbles back (the target dodges for some kinds of miss).
     LABEL(90)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -446,6 +455,7 @@ static EVT_BEGIN(attack_event_yoshi)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 16, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
     WAIT_FRAMES(20)
+    // He walks back to his home position.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)

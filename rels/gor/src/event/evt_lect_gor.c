@@ -497,6 +497,11 @@ EVT_BEGIN(christine_party_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * Goombella's partner lecture (lecture_friends_00 to 03):
+ * after the introduction a Goomba (クリボー３) walks in from the right,
+ * a speech balloon appears over it as an example, then it walks back and Goombella does her pose.
+ */
 EVT_BEGIN(christine_party_lecture)
     CALL(evt_msg_print, 0, STRING("lecture_friends_00_0_1"), 0, 0)
     CALL(evt_msg_print, 0, STRING("lecture_friends_00_1"), 0, 0)
@@ -528,6 +533,10 @@ EVT_BEGIN(christine_party_lecture)
     RETURN
 EVT_END()
 
+/**
+ * Sets up Ms. Mowz's (チュチュリーナ) partner lecture:
+ * Mario is placed at the start of the stage, the camera moves in and the partner glides next to him.
+ */
 EVT_BEGIN(chuchulina_party_lecture_init)
     CALL(evt_mapdisp_onoff, 0)
     CALL(evt_mario_set_pos, 0, 0, -600)
@@ -542,6 +551,11 @@ EVT_BEGIN(chuchulina_party_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * Ms. Mowz's partner lecture (lecture_friends_17 to 20):
+ * she sniffs, a treasure box falls in beside Mario,
+ * Mowz sniffs it out with a speech balloon and the box flashes and disappears.
+ */
 EVT_BEGIN(chuchulina_party_lecture)
     CALL(evt_msg_print, 0, STRING("lecture_friends_17_0_1"), 0, 0)
     CALL(evt_msg_print, 0, STRING("lecture_friends_17_1"), 0, 0)
@@ -605,6 +619,10 @@ EVT_BEGIN(chuchulina_party_lecture)
     RETURN
 EVT_END()
 
+/**
+ * Sub-event of the partner lecture: holds the current music
+ * and plays the get-partner jingle on channel 1 for two seconds.
+ */
 static EVT_BEGIN(all_party_lecture_otosub)
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_GET_PARTY1"))
@@ -613,6 +631,8 @@ static EVT_BEGIN(all_party_lecture_otosub)
 EVT_END()
 
 EVT_BEGIN(all_party_lecture)
+    // The new partner joins: unless it is Goombella (already beside Mario), the placeholder NPC is swapped for
+    // the real party member at the same spot.
     CALL(evt_mario_normalize)
     IF_INT_NOT_EQUAL(LW(9), 1)
         IF_INT_NOT_EQUAL(LW(9), 5)
@@ -630,11 +650,13 @@ EVT_BEGIN(all_party_lecture)
         ELSE
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     END_IF
+    // The party-join fanfare starts and the partner is shown in a bright item-get style effect.
     CALL(evt_party_set_camid, 0, 7)
     SPAWN_EVENT_GET_ID(PTR(all_party_lecture_otosub), LW(11))
     CALL(lect_itemget_kesan, 0, FLOAT(600.0f), LW(0), LW(1), LW(2))
     CALL(evt_eff, STRING("sub_bg"), STRING("itemget"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(effitemgetchange_cam, STRING("sub_bg"), 5)
+    // The partner explains itself in a text box that depends on who it is.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     SWITCH(LW(9))
         CASE_EQUAL(1)
@@ -654,6 +676,7 @@ EVT_BEGIN(all_party_lecture)
         CASE_EQUAL(7)
         CALL(evt_msg_print, 0, STRING("lecture_friends_17"), 0, 0)
     END_SWITCH
+    // The fanfare is cut off if still playing and the field music resumes.
     IS_EVENT_RUNNING(LW(11), LW(12))
     IF_INT_EQUAL(LW(12), 1)
         DELETE_EVENT(LW(11))
@@ -664,6 +687,8 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_mario_set_camid, 7)
     CALL(effitemget_open, STRING("sub_bg"))
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
+    // A lecture jingle plays and the scene is set up for the demonstration: the field music and ambience are
+    // held.
     CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_PARTY_LECTURE1_1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_stop_for_event)
     WAIT_MS(1000)
@@ -679,6 +704,7 @@ EVT_BEGIN(all_party_lecture)
     ADD(LW(3), 2016)
     CALL(evt_party_set_pos, 0, LW(0), LW(3), LW(2))
     CALL(effitemgetchange_cam, STRING("sub_bg"), 4)
+    // The lecture screen is set up as a paper seal image in the upper right corner.
     CALL(evt_paper_entry, STRING("OFF_d_seal_upper_right"))
     CALL(evt_img_entry, STRING("img"))
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_d_seal_upper_right"))
@@ -694,12 +720,14 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_party_set_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_cont_onoff, 0, 1)
     CALL(lect_test_systemlevel)
+    // Goombella and Ms. Mowz get a special demonstration setup.
     SWITCH(LW(9))
         CASE_EQUAL(1)
         CALL_CHILD(PTR(christine_party_lecture_init))
         CASE_EQUAL(7)
         CALL_CHILD(PTR(chuchulina_party_lecture_init))
     END_SWITCH
+    // Mario blinks out and in while the lecture stage is prepared.
     LOOP(6)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_LECTUREN_BLINKING1"), LW(0), LW(1), LW(2), 0)
@@ -711,12 +739,14 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_EVT_LECTUREN_BLINKING1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_HIDE)
+    // Goombella demonstrates her Tattle on a Goomba, or Ms. Mowz sniffs out a treasure box, on the stage.
     SWITCH(LW(9))
         CASE_EQUAL(1)
         CALL_CHILD(PTR(christine_party_lecture))
         CASE_EQUAL(7)
         CALL_CHILD(PTR(chuchulina_party_lecture))
     END_SWITCH
+    // Mario and the partner flicker in turn as the stage ends.
     LOOP(6)
         CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
         CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
@@ -729,6 +759,7 @@ EVT_BEGIN(all_party_lecture)
     END_LOOP
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
+    // The cameras are restored and the field music returns.
     CALL(evt_mario_init_camid)
     CALL(evt_party_init_camid, 0)
     CALL(lect_cam_load, 0)
@@ -740,6 +771,7 @@ EVT_BEGIN(all_party_lecture)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_FADEIN, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_OFF_PARTY_LECTURE1"), LW(0), LW(1), LW(2), 0)
+    // The paper seal folds away and the NPCs are released.
     CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
     CALL(evt_img_wait_animend, STRING("img"))
     CALL(evt_img_release, STRING("img"))
@@ -750,6 +782,10 @@ EVT_BEGIN(all_party_lecture)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the Ultra Hammer lecture: Mario is moved aside while the Toad guide (キノピコ) is placed next to the stage
+ * and the camera is set to face them.
+ */
 EVT_BEGIN(hammer_lv3_juyoitem_lecture_init)
     CALL(evt_mapdisp_onoff, 0)
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
@@ -775,6 +811,10 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * Button prompt animation for the Ultra Hammer lecture, step one:
+ * the first prompt is bright and flashes between two icons while the second is dimmed.
+ */
 EVT_BEGIN(hammer_lv3_juyoitem_lecture_sub01)
     CALL(lecture_button_set_alpha, 0, 255)
     CALL(lecture_button_set_alpha, 1, 128)
@@ -788,6 +828,10 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture_sub01)
     RETURN
 EVT_END()
 
+/**
+ * Button prompt animation for the Ultra Hammer lecture, step two:
+ * the second prompt is bright and cycles through the eight direction icons while the first is dimmed.
+ */
 EVT_BEGIN(hammer_lv3_juyoitem_lecture_sub02)
     CALL(lecture_button_set_alpha, 0, 128)
     CALL(lecture_button_set_alpha, 1, 255)
@@ -813,7 +857,14 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture_sub02)
     RETURN
 EVT_END()
 
+/**
+ * The Ultra Hammer lecture (lecture_u_hammer_04 to 07):
+ * the Toad guide walks in and explains how to use the hammer with the button prompts,
+ * and checks that Mario presses A and B himself.
+ * Guess on the detail: the prompts and button checks follow the sub01 and sub02 animations.
+ */
 EVT_BEGIN(hammer_lv3_juyoitem_lecture)
+    // The button prompt icons are prepared and Toadette walks up to Mario.
     BEGIN_SIBLING_EVENT
         CALL(lecture_button_rtn)
     END_SIBLING_EVENT
@@ -824,8 +875,11 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 85)
     CALL(evt_npc_move_position, STRING("キノピコ"), LW(0), LW(2), 0, FLOAT(80.0f), 0)
+    // She congratulates Mario on the Ultra Hammer and explains the new hammer technique: hold B and twist the
+    // stick.
     CALL(evt_msg_print, 0, STRING("lecture_u_hammer_04"), 0, STRING("キノピコ"))
     CALL(evt_msg_print_add, 0, STRING("lecture_u_hammer_05"))
+    // Practice loop: Toadette tells Mario to try it, and nags him now and then until he does.
     LOOP(0)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("lecture_u_hammer_06"), 0, 0)
@@ -855,6 +909,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
             CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_1"), STRING("T_1"))
             CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("S_1"))
         END_INLINE_EVENT
+        // The camera frames Mario and the button prompts start flashing.
         CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(85.0f), FLOAT(520.0f), FLOAT(0.0f), FLOAT(40.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
         CALL(lecture_button_flag_on_off, 0, 2, 1)
@@ -867,6 +922,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
         CALL(lecture_button_seq_wait, 1, 1)
         SPAWN_EVENT_GET_ID(PTR(hammer_lv3_juyoitem_lecture_sub01), LW(11))
         SET_VALUE(LW(7), 0)
+        // Mario gets limited control; the lesson watches his hammer charge.
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         SET_VALUE(LW(7), 0)
         SET_VALUE(LW(12), 0)
@@ -917,6 +973,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
             END_IF
             WAIT_FRAMES(1)
         END_LOOP
+        // Mario released the charge: control returns to normal and the prompts are dismissed.
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_key_onoff, 0)
@@ -928,6 +985,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
         CALL(lecture_button_set_seq, 0, 3)
         CALL(lecture_button_set_seq, 1, 3)
         CALL(evt_msg_continue)
+        // Mario strikes a pose, then turns to Toadette.
         CALL(evt_mario_set_pose, STRING("M_V_2"))
         WAIT_MS(500)
         CALL(lecture_button_seq_wait, 0, 1)
@@ -938,6 +996,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
         CALL(evt_mario_set_dir, 90, 150, 0)
         CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(26.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_LINEAR)
         WAIT_MS(1000)
+        // Toadette asks whether Mario understood; if not, the practice repeats.
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_2"), STRING("T_2"))
         CALL(evt_msg_print, 0, STRING("lecture_u_hammer_08"), 0, STRING("キノピコ"))
         CALL(evt_msg_select, 0, STRING("lecture_u_hammer_09"))
@@ -948,6 +1007,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // Toadette is pleased and steps aside to show what the new hammer can do.
     CALL(evt_msg_print_add, 0, STRING("lecture_u_hammer_11"))
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(52.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
@@ -959,6 +1019,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("A_1"))
     WAIT_MS(200)
+    // A test block falls in front of Mario.
     SET_VALUE(LW(1), STRING("TESTMOBJ"))
     CALL(evt_mobj_entry, LW(1), STRING("MOBJ_Lv2Block"))
     CALL(lect_mobj_hit_nasi, LW(1))
@@ -977,6 +1038,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     WAIT_MS(400)
     CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("A_2"))
     WAIT_MS(170)
+    // Toadette comments as the block flashes and disappears.
     CALL(evt_msg_print, 0, STRING("lecture_u_hammer_12"), 0, STRING("キノピコ"))
     WAIT_MS(300)
     LOOP(6)
@@ -987,6 +1049,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     END_LOOP
     CALL(evt_mobj_delete, LW(1))
     WAIT_MS(300)
+    // She gives a few last pointers, strolling along in the room.
     CALL(evt_msg_print, 0, STRING("lecture_u_hammer_13"), 0, STRING("キノピコ"))
     CALL(evt_npc_flag_onoff, 0, STRING("キノピコ"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_4"), STRING("T_4"))
@@ -1011,6 +1074,7 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     CALL(evt_npc_move_position, STRING("キノピコ"), LW(0), LW(2), 0, FLOAT(30.0f), 0)
     CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("S_4"))
     WAIT_MS(1500)
+    // Toadette says goodbye and walks off.
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
     ADD(LW(0), 70)
     CALL(evt_npc_set_ry, STRING("キノピコ"), 90)
@@ -1023,6 +1087,12 @@ EVT_BEGIN(hammer_lv3_juyoitem_lecture)
     RETURN
 EVT_END()
 
+/**
+ * Ceremony for picking up an important item (the item entry is in LW(8), its effect in LW(9)):
+ * the item flies up to the item-get effect, the lecture jingle plays, a paper page cutout opens and,
+ * for item 11 (the Ultra Hammer), the Toad guide gives the hammer lecture;
+ * at the end Mario blinks back into the field, the music resumes and the item is hidden.
+ */
 EVT_BEGIN(all_juyoitem_lecture_rel)
     CALL(evt_mario_normalize)
     CALL(juyoitem_get_no, LW(10))
@@ -1102,6 +1172,10 @@ EVT_BEGIN(all_juyoitem_lecture_rel)
     RETURN
 EVT_END()
 
+/**
+ * Script helper that turns on the collision of a map object's two hit objects without making it solid,
+ * so the lecture's treasure box can be placed on the stage.
+ */
 static USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;

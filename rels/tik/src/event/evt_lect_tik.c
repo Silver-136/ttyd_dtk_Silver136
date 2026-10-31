@@ -581,7 +581,14 @@ EVT_BEGIN(plane_majin_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * The paper demon's lecture on plane mode (mac_majin_13 to mac_majin_19).
+ * The demon explains the power with flashes (SFX_EVT_PERAMAJIN_LIGHT1), shows button icons to press,
+ * has Mario ride the plane and try it while the sync flags track his progress,
+ * and asks if he wants to hear it again (mac_majin_17); at the end the status window comes back.
+ */
 EVT_BEGIN(plane_majin_lecture)
+    // The button prompt and the moving airplane panel are set up; the paper demon hovers before the camera.
     BEGIN_SIBLING_EVENT
         CALL(lecture_button_rtn)
     END_SIBLING_EVENT
@@ -614,6 +621,7 @@ EVT_BEGIN(plane_majin_lecture)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+    // The demon reveals his trick, laughs at Mario and curses him in flashes of light.
     CALL(evt_npc_set_anim, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"), STRING("P_1"))
     WAIT_MS(200)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
@@ -627,6 +635,7 @@ EVT_BEGIN(plane_majin_lecture)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_majin_14"), 0, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"))
+    // The camera pans as the airplane panel slides in beside Mario.
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(80.0f), FLOAT(42.0f), FLOAT(-101.799805f), 1000, EASING_SINE_IN_OUT)
     SET_FLOAT_VALUE(LW(1), FLOAT(2.6660156f))
     CALL(dai_moveti_get, LW(0), LW(2), LW(3))
@@ -641,6 +650,7 @@ EVT_BEGIN(plane_majin_lecture)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // The demon explains airplane panels; the lesson below repeats until Mario says he gets it.
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("mac_majin_15"), 0, STRING(/*"ペラ魔人"*/"\x83\x79\x83\x89\x96\x82\x90\x6C"))
     LOOP(0)
@@ -694,6 +704,7 @@ EVT_BEGIN(plane_majin_lecture)
                 WAIT_FRAMES(1)
             END_LOOP
         END_SIBLING_EVENT
+        // Mario walks onto the panel and is told to press the button; its icon flashes until he does.
         CALL(evt_mario_mov_pos2, FLOAT(-200.0f), FLOAT(0.0f), FLOAT(80.0f))
         CALL(evt_msg_print_add, 0, STRING("mac_majin_15_1"))
         CALL(lecture_button_set_pos, 0, FLOAT(-200.0f), FLOAT(-25.0f), FLOAT(0.0f))
@@ -727,6 +738,7 @@ EVT_BEGIN(plane_majin_lecture)
         END_LOOP
         CALL(evt_msg_continue)
         CALL(evt_mario_paper_plane, 1)
+        // Mario turns into a paper airplane and glides off the panel, and the view follows him down.
         CALL(x_flag_set, 0, 2)
         CALL(lecture_button_set_seq, 0, 3)
         BEGIN_INLINE_EVENT
@@ -764,6 +776,7 @@ EVT_BEGIN(plane_majin_lecture)
                 WAIT_FRAMES(1)
             END_LOOP
         END_INLINE_EVENT
+        // The demon explains steering and asks whether Mario got all that.
         CALL(lecture_button_seq_wait, 0, 1)
         CALL(lecture_button_flag_on_off, 0, 2, 0)
         WAIT_MS(300)
@@ -784,6 +797,7 @@ EVT_BEGIN(plane_majin_lecture)
             CALL(evt_cam3d_evt_set, FLOAT(-300.0f), FLOAT(-460.0f), FLOAT(457.0f), FLOAT(-300.0f), FLOAT(-558.0f), FLOAT(-101.799805f), 1200, EASING_LINEAR)
             CALL(x_flag_set, 0, 2)
             CALL(evt_mario_paper_plane, 0)
+            // After "I zoned out", Mario lands, the panel slides back in and the demon goes over it again.
             CALL(evt_mario_wait_landon)
             CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(80.0f), FLOAT(42.0f), FLOAT(-101.799805f), 1000, EASING_SINE_IN_OUT)
             SET_FLOAT_VALUE(LW(1), FLOAT(2.6660156f))
@@ -804,6 +818,7 @@ EVT_BEGIN(plane_majin_lecture)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The demon hints at how to change back; Mario drops out of plane mode and the demon leaves.
     CALL(evt_msg_print_add, 0, STRING("mac_majin_18_1"))
     CALL(x_flag_set, 1, 2)
     WAIT_FRAMES(2)
@@ -819,6 +834,7 @@ EVT_BEGIN(plane_majin_lecture)
     RETURN
 EVT_END_PAD()
 
+/** Script helper. Stores TRUE in args[0] while the R trigger is held on controller 0, otherwise FALSE. */
 static USER_FUNC(lect_push_r_check) {
     EvtWord* args = event->args;
 

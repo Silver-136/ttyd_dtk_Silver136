@@ -25,6 +25,9 @@ typedef struct ColorEntry {
 /** Water tint used when the current map has no entry in funemizu_color_tbl: plain white. */
 static const GXColor funemizu_default_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
+// Model data in the exporter's layout: indexed vertex arrays (positions, normals, colours, texture coordinates),
+// display lists of GX commands (each padded to 32 bytes with GX_NOP) and, per list table, the list sizes in
+// 32-byte units for GXCallDisplayList.
 static s16 funemizu_vertex_tbl[] __attribute__((aligned(32))) = { 20079, -636, 0, 13766, 0, 0, 8902, 0, 0, 5574, 0, 0, 0, 0, 0, 13766, 1536, 0, 8902, 2560, 0, 5574, 2560, 0, 512, 0, 0, 18154, 899, 0, 13766, 3328, 0, 8902, 5376, 0, 5574, 5488, 0, 2246, 2982, 0, 14542, -396, 1249, 10016, 0, 1249, 6528, 0, 1249, 4142, 0, 1249, 512, 0, 1249, 10016, 957, 1249, 6528, 1596, 1249, 4142, 1596, 1249, 13161, 560, 1249, 10016, 2074, 1249, 6528, 3351, 1249, 4142, 3422, 1249, 1755, 1859, 1249};
 static s16 funemizu_texcoord0_tbl[] __attribute__((aligned(32))) = { 1024, 4096, 1024, 2048, 0, 3072, 2048, 4096, 2048, 2048, 3072, 4096, 3072, 2048, 4096, 4096, 4096, 2048, 1024, 256, 0, 256, 2048, 256, 3072, 256, 4096, 256, -19456, 4096, -19456, 2048, -20480, 3072, -18432, 4096, -18432, 2048, -17408, 4096, -17408, 2048, -16384, 3072, -19456, 256, -20480, 256, -18432, 256, -17408, 256, -16384, 256};
 static u8 funemizu_dl_0_0[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x0A, 0x09, 0x00, 0x01, 0x0A, 0x00, 0x00, 0x00, 0x02, 0x0A, 0x00, 0x01, 0x09, 0x05, 0x00, 0x01, 0x01, 0x0B, 0x00, 0x01, 0x0B, 0x06, 0x00, 0x01, 0x04, 0x0C, 0x00, 0x01, 0x0C, 0x07, 0x00, 0x01, 0x06, 0x0D, 0x00, 0x01, 0x0D, 0x08, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };

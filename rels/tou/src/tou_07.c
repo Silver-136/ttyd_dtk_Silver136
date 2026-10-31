@@ -270,6 +270,8 @@ static EVT_BEGIN(evt_sensyu)
 EVT_END()
 
 static EVT_BEGIN(evt_champion)
+    // Mario and his partner stand at the door of the champion's room with Jolene; she opens the door
+    // and shows them in.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, 0, 0, -160)
     CALL(evt_party_set_pos, 0, 0, 0, -165)
@@ -312,10 +314,12 @@ static EVT_BEGIN(evt_champion)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The camera moves in and Jolene says this is now the champion's room.
     CALL(evt_cam3d_evt_set, 20, 90, 189, 20, 60, -9, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg3_tou_449"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
+    // Jolene bows out and leaves, closing the door behind her.
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("M_1"))
     WAIT_MS(600)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
@@ -345,6 +349,7 @@ static EVT_BEGIN(evt_champion)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The partner looks around the room with Mario, puzzled and then startled by what they find.
     CALL(evt_cam3d_evt_set, 63, 78, 139, 63, 55, -9, 1000, EASING_SINE_IN_OUT)
     CALL(evt_party_move_pos2, 0, 85, -100, FLOAT(60.0f))
     CALL(evt_party_set_dir, 0, 270, 200)
@@ -366,6 +371,7 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1000)
+    // The camera sweeps around the room as the two trade thoughts about it.
     CALL(evt_cam3d_evt_set, -75, 68, 270, 59, 78, 2, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     LOOP(2)
@@ -385,6 +391,7 @@ static EVT_BEGIN(evt_champion)
         CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         WAIT_MS(1500)
     END_INLINE_EVENT
+    // The jingle of Mario's phone mail sounds and he starts to vibrate; a "!" balloon appears over his head.
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_MAIL_RECEPTION2"))
     SPAWN_EVENT_GET_ID(PTR(evt_sub_mail_vibration), LW(10))
@@ -398,6 +405,7 @@ static EVT_BEGIN(evt_champion)
         WAIT_FRAMES(1)
     END_LOOP
     CALL(evt_mario_balloon_bikkuri)
+    // Mario waits for A to be pressed, then the mail arrives with a rumble.
     LOOP(0)
         CALL(evt_key_get_buttontrg, 0, LW(0))
         IF_INT_EQUAL(LW(0), 256)
@@ -419,11 +427,13 @@ static EVT_BEGIN(evt_champion)
     CALL(evt_snd_sfxon_3d, STRING("SFX_MAIL_RECEPTION2"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_N_10"))
     WAIT_MS(500)
+    // He reads the mail, and the partner reacts.
     CALL(evt_msg_print, 0, STRING("stg3_tou_450_06"), 0, 0)
     WAIT_MS(300)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_print_party, STRING("stg3_tou_450_07"))
     WAIT_MS(300)
+    // The mail is received and opened, the story moves on to the new champion and control returns.
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_pouch_receive_mail, 43)
@@ -435,6 +445,7 @@ static EVT_BEGIN(evt_champion)
 EVT_END()
 
 EVT_BEGIN(evt_champion_re)
+    // Jolene waits in the champion's room with Mario and his partner; the camera frames her.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, 65, 0, -95)
     CALL(evt_party_set_pos, 0, 95, 0, -105)
@@ -445,6 +456,7 @@ EVT_BEGIN(evt_champion_re)
     CALL(evt_cam3d_evt_set, 45, 91, 266, 45, 57, -11, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
+    // She congratulates Mario on winning the title back.
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_140"), 0, STRING("キノシコワ"))
     CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_move_position, STRING("キノシコワ"), 40, -95, 0, FLOAT(80.0f), 1)
@@ -466,6 +478,7 @@ EVT_BEGIN(evt_champion_re)
     CALL(evt_item_get_item_end_wait, STRING("belt"))
     CALL(evt_npc_delete, STRING("ベルト"))
     CALL(evt_eff_delete, STRING("belt"))
+    // She guesses he means to move on and keeps him registered to defend his title.
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_141"), 0, STRING("キノシコワ"))
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(300)
@@ -474,6 +487,7 @@ EVT_BEGIN(evt_champion_re)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(300)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+    // She says she must plan Rawk Hawk's return, bows out and leaves through the door.
     CALL(evt_msg_print, 0, STRING("stg3_tou_re_143"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("M_1"))
@@ -510,6 +524,7 @@ EVT_BEGIN(evt_champion_re)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // The rematch champion flag is set and control returns to Mario.
     SET_VALUE(GSWF_TOU_CHAMPION_TITLE_REGAINED, 1)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     CALL(evt_mario_key_onoff, 1)
@@ -530,6 +545,11 @@ static EVT_BEGIN(evt_dakuto)
     RETURN
 EVT_END()
 
+/**
+ * Hitting the air duct cover (win_kabe) with the hammer or pressing A at it before it is knocked off:
+ * the cover rattles (two SFX_STG3_AIRDUCT_SHAKE1 sounds and the anm_futa animation) but stays on;
+ * evt_dakuto handles the hit that knocks it off.
+ */
 EVT_BEGIN(evt_dakuto2)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
@@ -546,6 +566,11 @@ EVT_BEGIN(evt_dakuto2)
     RETURN
 EVT_END()
 
+/**
+ * Rest in the Glitz Pit bed (stg3_yado_00/01, with a yes/no prompt):
+ * partners leave, Mario hops in and sleeps with the sound muted, HP and FP are restored,
+ * and the partners return.
+ */
 EVT_BEGIN(evt_tou_bed)
 #ifdef VERSION_G8ME01
     CALL(tou_07_mario_keyoff_check, LW(0))
@@ -553,6 +578,7 @@ EVT_BEGIN(evt_tou_bed)
         RETURN
     END_IF
 #endif
+    // Work out which Glitz Pit room's bed this is, since the camera and bed spot differ per room.
     CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LF(0), 0)
     SET_VALUE(LF(1), 0)
@@ -567,9 +593,11 @@ EVT_BEGIN(evt_tou_bed)
     IF_STR_EQUAL(LW(0), STRING("tou_10"))
         SET_VALUE(LF(2), 1)
     END_IF
+    // The attendant asks whether Mario wants to rest; saying no ends the scene.
     CALL(evt_msg_print, 0, STRING("stg3_yado_00"), 0, 0)
     CALL(evt_msg_select, 0, STRING("stg3_yado_01"))
     CALL(evt_msg_continue)
+    // Mario sends his partners away and the camera frames the bed.
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mario_get_party, LW(12))
         CALL(evt_mario_get_exparty, LW(13))
@@ -585,6 +613,7 @@ EVT_BEGIN(evt_tou_bed)
             CALL(evt_cam3d_evt_set, -75, 160, 266, 155, 65, -10, 0, EASING_SINE_IN_OUT)
         END_IF
         WAIT_FRAMES(1)
+        // Mario hops into the bed.
         CALL(evt_mario_flag_onoff, 1, MARIO_FLAG_FLOORS_DISABLED | MARIO_FLAG_FORCE_WALL)
         IF_INT_EQUAL(LF(0), 1)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -606,6 +635,8 @@ EVT_BEGIN(evt_tou_bed)
         END_IF
         CALL(evt_mario_adjust_dir)
         WAIT_MS(200)
+        // He falls asleep: the music is swapped for a lullaby, the screen irises out and Mario
+        // and his partners recover.
         BEGIN_INLINE_EVENT_GET_ID(LW(10))
             CALL(paper_on, FLOAT(-45.0f))
         END_INLINE_EVENT
@@ -629,6 +660,7 @@ EVT_BEGIN(evt_tou_bed)
         END_IF
         CALL(evt_pouch_all_party_recovery)
         WAIT_MS(3000)
+        // The sleep ends: Mario wakes and the partners return to their places beside him.
         DELETE_EVENT(LW(10))
         CALL(paper_off)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
@@ -660,6 +692,7 @@ EVT_BEGIN(evt_tou_bed)
             END_IF
             CALL(evt_mario_set_pos, 228, 17, -90)
         END_IF
+        // The camera and music return to normal and the screen fades back in.
         CALL(evt_mario_set_dir, 270, 0, 0)
         CALL(evt_party_set_dir, 0, 270, 0)
         CALL(evt_party_set_dir, 1, 270, 0)
@@ -671,17 +704,23 @@ EVT_BEGIN(evt_tou_bed)
         CALL(tou_07_snd_on)
         CALL(evt_fade_entry, FADE_IN_BLACK, 1000, 0, 0, 0)
     END_IF
+    // Control returns to the player.
     CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
     CALL(evt_mario_key_onoff, 1)
     RETURN
 EVT_END()
 
+/** Bed entry point: registers evt_tou_bed to run when Mario presses A in front of the bed named in LW(0). */
 static EVT_BEGIN(bed_entry)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(0), 0, PTR(evt_tou_bed), 0)
     RETURN
 EVT_END()
 
+/**
+ * Opens the room's item box (mobj_box00): takes control from Mario,
+ * the box pops an item (ITEM_POWER_PLUS, the Power Plus badge) and Mario receives it.
+ */
 static EVT_BEGIN(mobj_box00)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
@@ -693,13 +732,19 @@ static EVT_BEGIN(mobj_box00)
     RETURN
 EVT_END()
 
+/**
+ * Map init for tou_07, the champion's room: bed collision, the paper-slit animation, NPCs,
+ * the champion's belt and the air duct entrance, depending on story progress (including the new champion stage).
+ */
 EVT_BEGIN(tou_07_init_evt)
+    // Set up the doors, the bed and the paper-slit animation, and place the NPCs.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_hitobj_name_callback, STRING("a_bed"), PTR(bed_entry))
     CALL(evt_sub_animgroup_async, STRING("p_slit"))
     CALL(evt_npc_setup, PTR(npcEnt))
+    // If Mario has no rank left to climb, the story jumps to the new-champion point.
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_EQUAL(LW(0), 0)
@@ -708,6 +753,7 @@ EVT_BEGIN(tou_07_init_evt)
             END_IF
         END_IF
     END_IF
+    // Show the champion's belt display, or the empty case if Mario is not the champion.
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("e_1"), MAP_OBJ_FLAG_HIDDEN)
@@ -736,6 +782,7 @@ EVT_BEGIN(tou_07_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kankikuti"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("win_kabe"), 1, 0)
     END_IF
+    // Match-making is set up at the board and the match monitor starts.
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("M_make"), 0, PTR(evt_tou_match_make_default), 0)
     CALL_CHILD(PTR(evt_tou_monitor_init))
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
@@ -768,12 +815,14 @@ EVT_BEGIN(tou_07_init_evt)
         END_IF
         RETURN
     END_IF
+    // Otherwise, the pending Grubba escort starts his speech scene.
     IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG3_GANCE1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         SPAWN_EVENT(PTR(evt_sensyu))
         RETURN
     END_IF
+    // Choose the music and ambience for the story point.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
         CALL(evt_snd_envoff, PSND_FADEOUT)

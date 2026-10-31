@@ -215,36 +215,46 @@ static EVT_BEGIN(evt_poster_4)
     RETURN
 EVT_END()
 
+/** Case event for poster 5: sets GSWF_EKI03_POSTER_5_BLOWN and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_5)
     SET_VALUE(GSWF_EKI_03_POSTER_5_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
+/** Case event for poster 6: sets GSWF_EKI03_POSTER_6_BLOWN and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_6)
     SET_VALUE(GSWF_EKI_03_POSTER_6_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
+/** Case event for poster 7: sets GSWF_EKI03_POSTER_7_BLOWN and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_7)
     SET_VALUE(GSWF_EKI_03_POSTER_7_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
+/** Case event for poster 8: sets GSWF_EKI03_POSTER_8_BLOWN and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_8)
     SET_VALUE(GSWF_EKI_03_POSTER_8_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
+/** Case event for poster 9: sets GSWF_EKI03_POSTER_9_BLOWN and rechecks the posters with evt_chk. */
 static EVT_BEGIN(evt_poster_9)
     SET_VALUE(GSWF_EKI_03_POSTER_9_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
+/**
+ * Case event when poster 10 is blown off the wall by Flurrie:
+ * sets GSWF_EKI03_POSTER_10_BLOWN, turns off the hit area of the poster behind it (a_kami_13)
+ * and checks whether all posters are gone.
+ */
 EVT_BEGIN(evt_poster_10)
     SET_VALUE(GSWF_EKI_03_POSTER_10_BLOWN_AWAY, 1)
     CALL(evt_hitobj_onoff, STRING("a_kami_13"), 1, 0)
@@ -252,6 +262,11 @@ EVT_BEGIN(evt_poster_10)
     RETURN
 EVT_END()
 
+/**
+ * Case event when poster 11 is blown off: sets its flag,
+ * turns off the hit areas of the four neighbouring posters (a_kami_14, a_kami_15, a_kami_6, a_kami_7) it
+ * covered, then checks whether all are gone.
+ */
 EVT_BEGIN(evt_poster_11)
     SET_VALUE(GSWF_EKI_03_POSTER_11_BLOWN_AWAY, 1)
     CALL(evt_hitobj_onoff, STRING("a_kami_14"), 1, 0)
@@ -271,25 +286,35 @@ EVT_BEGIN(evt_poster_12)
     RETURN
 EVT_END()
 
+/** Case event when poster 13 is blown off: sets GSWF_EKI03_POSTER_13_BLOWN and checks whether all posters are gone. */
 EVT_BEGIN(evt_poster_13)
     SET_VALUE(GSWF_EKI_03_POSTER_13_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
+/** Case event when poster 14 is blown off: sets GSWF_EKI03_POSTER_14_BLOWN and checks whether all posters are gone. */
 EVT_BEGIN(evt_poster_14)
     SET_VALUE(GSWF_EKI_03_POSTER_14_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
+/** Case event when poster 15 is blown off: sets GSWF_EKI03_POSTER_15_BLOWN and checks whether all posters are gone. */
 EVT_BEGIN(evt_poster_15)
     SET_VALUE(GSWF_EKI_03_POSTER_15_BLOWN_AWAY, 1)
     CALL_CHILD(PTR(evt_chk))
     RETURN
 EVT_END()
 
+/**
+ * Map init for eki_03: sets up the doors to eki_01 and eki_04, the HP Plus item,
+ * the Shine Sprite block (power-up block), the brick blocks (one holds a Thunder Rage),
+ * the sun's heat-haze shader and glare, and the 15 posters that Flurrie can blow away.
+ * Posters already blown are hidden; the wall behind them is opened by evt_chk once all are gone.
+ */
 EVT_BEGIN(eki_03_init_evt)
+    // Doors, music and ambience; the music is dipped in volume.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
@@ -297,6 +322,7 @@ EVT_BEGIN(eki_03_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG6_EKI4"))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+    // The HP Plus item, the Shine Sprite block and the brick blocks (one holds a Thunder Rage).
     CALL(evt_item_entry, STRING("item"), ITEM_HP_PLUS, -550, 220, -50, ITEM_TYPE_STILL, GSWF_EKI_03_HP_PLUS, 0)
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 450, 100, 10, 0, GSWF_SHINE_36, 0)
 #ifdef VERSION_G8ME01
@@ -305,6 +331,7 @@ EVT_BEGIN(eki_03_init_evt)
     CALL(evt_mobj_brick, STRING("blk01"), 250, 300, -100, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF_EKI_03_BRICK_BLK01)
 #endif
     CALL(evt_mobj_brick, STRING("blk02"), 250, 385, -100, ITEM_THUNDER_RAGE, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_EKI_03_THUNDER_RAGE_HIDDEN_BLOCK)
+    // The sun gets its heat-haze shimmer and glare.
     CALL(evt_map_set_tevcallback, 2, PTR(sun_tev))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sun"), MAP_OBJ_TEV_CALLBACK(2))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sun"), MAP_OBJ_FLAG_DISPLAY_LIST)
@@ -312,6 +339,8 @@ EVT_BEGIN(eki_03_init_evt)
     BEGIN_INLINE_EVENT
         CALL(test_glare)
     END_INLINE_EVENT
+    // The first posters on the walls: each one Flurrie has not yet blown away is made blowable; blown ones are
+    // hidden along with their hit areas.
     CALL(evt_cloud_init)
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_1_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_0"), STRING("a_kami_1"), PTR(evt_poster_1))
@@ -331,6 +360,7 @@ EVT_BEGIN(eki_03_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("kami_16"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_3"), 1, 0)
     END_IF
+    // The posters in the middle of the room (4 to 9), with the same handling.
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_4_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_4"), STRING("a_kami_4"), PTR(evt_poster_4))
         ELSE
@@ -367,6 +397,7 @@ EVT_BEGIN(eki_03_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_9"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_12"), 1, 0)
     END_IF
+    // Posters 10 to 13 also open up extra hit areas once blown away.
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_10_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_10"), STRING("a_kami_10"), PTR(evt_poster_10))
         ELSE
@@ -405,6 +436,7 @@ EVT_BEGIN(eki_03_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kami_14"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_kami_11"), 1, 0)
     END_IF
+    // Poster 15; then the wall behind the posters is closed until all are gone.
     IF_INT_EQUAL(GSWF_EKI_03_POSTER_15_BLOWN_AWAY, 0)
         CALL(evt_cloud_ent, 0, STRING("kami_15"), STRING("a_kami_11"), PTR(evt_poster_15))
         ELSE
@@ -418,6 +450,10 @@ EVT_BEGIN(eki_03_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Map TEV callback for the "sun" object: redraws a 64x64 indirect texture every frame as a scrolling sine wave
+ * and uses it to warp the sun's texture, giving a heat-haze shimmer.
+ */
 static void sun_tev(MapTevCallbackInfo* info) {
     static const s32 texmtx_tbl[] = {
         GX_TEXMTX0, GX_TEXMTX1, GX_TEXMTX2, GX_TEXMTX3, GX_TEXMTX4,

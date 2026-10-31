@@ -324,12 +324,14 @@ BattleWeapon weapon_gesso_right_arm_rear_attack = {
  * stage (_check_zenei_kouei) and damage-checks the targets.
  */
 static EVT_BEGIN(attack_event)
+    // The tentacle may use an item instead of attacking.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+    // Pick the front or rear swat at random and choose a target.
     CALL(evt_sub_random, 1, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         SET_VALUE(LW(12), PTR(&weapon_gesso_right_arm_front_attack))
@@ -342,10 +344,13 @@ static EVT_BEGIN(attack_event)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
+    // The attack is announced and the guard timing is awaited.
     CALL(btlevtcmd_WeaponAftereffect, LW(12))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
+    // The first time the target is Mario, the Blooper stops to ask whether he thinks it would taste good (yes
+    // or no).
     SET_VALUE(LW(11), 0)
     CALL(btlevtcmd_GetUnitKind, LW(3), LW(0))
     IF_INT_EQUAL(LW(0), UNIT_MARIO)
@@ -376,6 +381,7 @@ static EVT_BEGIN(attack_event)
             END_INLINE_EVENT
         END_IF
     END_IF
+    // The tentacle swings across the stage, from the near or far side depending on where the target stands.
     CALL(_check_zenei_kouei, LW(3), LW(13))
     IF_INT_EQUAL(LW(13), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("GSO_A1_1"))
@@ -396,6 +402,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_ftof, 94, LW(0))
 #endif
     WAIT_FRAMES(LW(0))
+    // The swat lands unless the target dodges; then the damage is dealt.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 1)
         SWITCH(LW(5))
@@ -410,6 +417,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
     END_IF
+    // The swing finishes and the tentacle returns to waiting.
     CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     LABEL(99)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -417,11 +425,18 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Wait script of the right tentacle: shows its idle pose from the pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Death script shared by the two tentacles.
+ * Plays the arm's retreat sound and pose (GSO_F1_1),
+ * clears the body's slot that pointed to this arm (the left arm waits 50 frames, the right 80) and
+ * then runs the fall check; finally kills the arm unit.
+ */
 EVT_BEGIN(gesso_arm_dead_event)
     CALL(btlevtcmd_GetUnitKind, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), UNIT_BLOOPER_RIGHT_TENTACLE)
@@ -525,6 +540,7 @@ EVT_BEGIN(gesso_fall_check)
     RETURN
 EVT_END()
 
+/** When a tentacle is hit, makes the Blooper body (unit work 0) stop waiting and take the same damage pose (LW(14)). */
 EVT_BEGIN(gesso_arm_damage_pose_event)
     CALL(btlevtcmd_GetUnitKind, UNIT_ID_SELF, LW(0))
     IF_INT_EQUAL(LW(0), UNIT_BLOOPER_RIGHT_TENTACLE)

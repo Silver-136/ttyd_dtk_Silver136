@@ -160,7 +160,9 @@ void BattleAudienceCtrlProcessKinopio(s32 index) {
     }
 }
 
+// propagation optimisation off for BattleAudienceCtrlProcessKinopioWait: the original register allocation and scheduling need it
 #pragma opt_propagation off
+// lifetimes optimisation off for BattleAudienceCtrlProcessKinopioWait: the original register allocation and scheduling need it
 #pragma opt_lifetimes off
 /**
  * Status 0, idle: faces the stage (or away, for back-facing seats) and now and

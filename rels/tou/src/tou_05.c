@@ -168,10 +168,12 @@ static BeroEntry bero_data[] = {
 
 EVT_BEGIN(evt_takurami)
     CALL(evt_mario_key_onoff, 0)
+    // The partner spots a paper in the drawer and Mario takes it out.
     CALL(evt_msg_print_party, STRING("stg3_tou_456_01"))
     CALL(evt_party_stop, 0)
     CALL(evt_party_move_pos2, 0, 100, 60, FLOAT(60.0f))
     CALL(evt_party_stop, 0)
+    // Mario reads the paper and is shocked; a startled bubble pops up.
     CALL(evt_mario_set_pose, STRING("M_L_2"))
     WAIT_MS(3000)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -181,9 +183,12 @@ EVT_BEGIN(evt_takurami)
     WAIT_MS(1000)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kami_2"), MAP_OBJ_FLAG_HIDDEN)
+    // The partner explains the blueprints of a machine under the ring powered by a Crystal Star,
+    // and the music fades out.
     CALL(evt_msg_print_party, STRING("stg3_tou_458"))
     WAIT_MS(300)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
+    // Grubba flings the office door open and walks in on them.
     CALL(evt_npc_set_position, STRING("ガンス"), 0, 0, -160)
     CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
@@ -212,12 +217,14 @@ EVT_BEGIN(evt_takurami)
             END_IF
         END_LOOP
     END_INLINE_EVENT
+    // The camera cuts to Grubba, who is caught red-handed and speaks.
     CALL(evt_cam3d_evt_set, 0, 82, 150, 0, 37, -112, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("ガンス"), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1500)
     CALL(evt_msg_print, 0, STRING("stg3_tou_459"), 0, STRING("ガンス"))
     WAIT_MS(300)
+    // Mario and his partner turn to confront him; the partner accuses him over King K and Bandy Andy.
     CALL(evt_mario_set_pos, 130, 0, 44)
     CALL(evt_party_set_pos, 0, 78, 0, 85)
     CALL(evt_party_set_dir, 0, 270, 0)
@@ -229,6 +236,7 @@ EVT_BEGIN(evt_takurami)
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 0, 82, 150, 0, 37, -112, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
+    // Grubba bolts for the door and leaves, closing it behind him.
     CALL(evt_msg_print, 0, STRING("stg3_tou_461"), 0, STRING("ガンス"))
     WAIT_MS(300)
     CALL(evt_npc_move_position, STRING("ガンス"), 0, -130, 0, FLOAT(100.0f), 1)
@@ -257,10 +265,13 @@ EVT_BEGIN(evt_takurami)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The camera returns to normal and the partner urges Mario to go after him.
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_msg_print_party, STRING("stg3_tou_462"))
     WAIT_MS(300)
+    // The story moves on to Grubba's plans, the office door's entrance is switched on
+    // and control returns to Mario.
     SET_VALUE(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
     SET_VALUE(LW(0), 0)
     CALL_CHILD(PTR(bero_case_switch_on))
@@ -303,6 +314,7 @@ EVT_BEGIN(evt_hiki_open)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
+    // The partner comes over to the desk when it is the special drawer and Grubba's secret is still unknown.
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
             BEGIN_INLINE_EVENT
@@ -316,12 +328,14 @@ EVT_BEGIN(evt_hiki_open)
             END_INLINE_EVENT
         END_IF
     END_IF
+    // Mario steps up to the desk.
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         ADD(LW(0), 20)
         CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(60.0f))
         CALL(evt_mario_set_dir, 270, 300, 0)
     END_INLINE_EVENT
+    // The drawer slides open with its drawer sound.
     CALL(evt_mapobj_get_position, LW(0), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG3_DRAWER_OPEN1"), LW(10), LW(11), LW(12), 0)
     SET_VALUE(LW(8), LW(0))
@@ -337,9 +351,11 @@ EVT_BEGIN(evt_hiki_open)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // A button case is registered so the drawer can be pushed shut again.
     SET_VALUE(LW(0), LW(8))
     SET_VALUE(LW(1), LW(9))
     CALL(evt_run_case_evt, CASE_PUSH, 1, LW(1), 0, PTR(evt_hiki_close), 0)
+    // The special drawer plays the discovery scene of Grubba's secret paper.
     IF_STR_EQUAL(LW(0), STRING("hikidasi_H"))
         IF_INT_LESS(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
             CALL_CHILD(PTR(evt_takurami))
@@ -350,6 +366,7 @@ EVT_BEGIN(evt_hiki_open)
             RETURN
         END_IF
     END_IF
+    // The other drawer holds a Star Piece, which Mario takes the first time only.
     IF_STR_EQUAL(LW(0), STRING("hikidasi_N"))
         IF_INT_EQUAL(GSWF_TOU_05_DRAWER_STAR_PIECE, 0)
             CALL(evt_item_entry, STRING("item02"), ITEM_STAR_PIECE, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
@@ -462,6 +479,8 @@ static EVT_BEGIN(talk_kinoshikowa)
                 END_IF
             END_IF
             ELSE
+            // With the trunks gone from his pack she thanks him, pays 30 coins and the job is finished;
+            // while he still carries any she complains about the smell.
             IF_INT_EQUAL(LW(0), 0)
                 CALL(evt_msg_print, 0, STRING("irai_13_03"), 0, 0)
                 CALL(evt_sub_get_coin, 30)
@@ -480,6 +499,8 @@ static EVT_BEGIN(talk_kinoshikowa)
         END_IF
         RETURN
     END_IF
+    // Job 23 (Toodles's magazine): if Mario already has the Wrestling Mag she insists she only reads it to
+    // follow trends.
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_MUST_HAVE_THAT_BOOK)
         CALL(evt_pouch_check_item, ITEM_WRESTLING_MAG, LW(0))
         IF_INT_GREATER(LW(0), 0)
@@ -489,6 +510,8 @@ static EVT_BEGIN(talk_kinoshikowa)
             WAIT_MS(200)
             CALL(evt_msg_print, 0, STRING("irai_23_03"), 0, 0)
             ELSE
+            // Otherwise she promises to return it soon, gives in when Mario insists,
+            // hurries to the back of the office with the camera following her and fetches it.
             CALL(evt_msg_print, 0, STRING("irai_23_00"), 0, 0)
             CALL(evt_mario_set_pose, STRING("M_N_3"))
             WAIT_MS(500)
@@ -534,6 +557,7 @@ static EVT_BEGIN(talk_kinoshikowa)
             WAIT_MS(200)
             CALL(evt_npc_set_anim, STRING("me"), STRING("M_1"))
             WAIT_MS(200)
+            // She hands the Wrestling Mag over to Mario.
             CALL(evt_msg_print, 0, STRING("irai_23_02"), 0, 0)
             CALL(evt_item_entry, STRING("pm"), ITEM_WRESTLING_MAG, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("pm"))
@@ -542,6 +566,7 @@ static EVT_BEGIN(talk_kinoshikowa)
         END_IF
         RETURN
     END_IF
+    // Outside the jobs she says nothing early in the story and later tells Mario she is busy.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_32_BOSS_BATTLE)
         CASE_DEFAULT
@@ -655,6 +680,7 @@ static EVT_BEGIN(evt_kinoshikowa)
 EVT_END()
 
 static EVT_BEGIN(evt_sensyu)
+    // The map's music fades out and, after a pause, Grubba's theme starts as he notices Mario.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envoff, PSND_FADEOUT)
     CALL(evt_mario_key_onoff, 0)
@@ -665,12 +691,14 @@ static EVT_BEGIN(evt_sensyu)
     CALL(evt_mario_set_dir_npc, STRING("ガンス"))
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING("eff"), STRING("ガンス"), 0, 0, 0, 0, 0, 0, 0, 0)
     WAIT_MS(1000)
+    // Grubba welcomes the new challenger and the camera pushes in while the partner steps aside.
     CALL(evt_msg_print, 0, STRING("stg3_tou_43"), 0, STRING("ガンス"))
     CALL(evt_cam3d_evt_set, 75, 114, 386, 75, 45, -8, 1000, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         CALL(evt_party_move_pos2, 0, 0, -30, FLOAT(60.0f))
         CALL(evt_party_set_dir_npc, 0, STRING("ガンス"))
     END_INLINE_EVENT
+    // Mario raises his hand to volunteer and nods as Grubba explains the contract.
     CALL(evt_mario_mov_pos2, 20, 0, FLOAT(60.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)
     WAIT_MS(300)
@@ -687,8 +715,10 @@ static EVT_BEGIN(evt_sensyu)
     WAIT_MS(800)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_45"), 0, STRING("ガンス"))
+    // Grubba asks whether Mario wants to fight (a yes/no menu); either answer carries on.
     CALL(evt_msg_select, 0, STRING("stg3_tou_45_yn"))
     CALL(evt_msg_print_add, 0, STRING("stg3_tou_46_00"))
+    // Grubba circles around Mario, the camera following, talking as he goes.
     CALL(evt_npc_flag_onoff, 1, STRING("ガンス"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_status_onoff, 1, STRING("ガンス"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("ガンス"), 120, -70, 0, FLOAT(50.0f), 1)
@@ -720,6 +750,7 @@ static EVT_BEGIN(evt_sensyu)
     WAIT_MS(300)
     CALL(evt_set_dir_to_target, STRING("ガンス"), STRING("mario"))
     CALL(evt_cam3d_evt_set, -15, 80, 189, -15, 45, -8, 300, EASING_SINE_IN_OUT)
+    // Mario is startled and shakes his head from side to side.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_set_pose, STRING("M_N_5B"))
@@ -734,10 +765,12 @@ static EVT_BEGIN(evt_sensyu)
     WAIT_MS(500)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     WAIT_MS(300)
+    // The camera pulls back for Grubba's last words.
     CALL(evt_cam3d_evt_set, 0, 140, 534, 0, 45, -80, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_msg_print, 0, STRING("stg3_tou_47"), 0, STRING("ガンス"))
     WAIT_MS(300)
+    // Grubba leaves through the door.
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("ガンス"), -10, -120, 0, FLOAT(80.0f), 1)
         CALL(evt_npc_move_position, STRING("ガンス"), 10, -120, 0, FLOAT(80.0f), 1)
@@ -754,6 +787,7 @@ static EVT_BEGIN(evt_sensyu)
         CALL(evt_npc_move_position, STRING("ガンス"), 0, -200, 0, FLOAT(80.0f), 1)
         CALL(evt_npc_set_position, STRING("ガンス"), 0, -1000, 0)
     END_INLINE_EVENT
+    // Mario follows into the corridor; the Grubba escort is queued and the map changes to the corridor.
     WAIT_MS(2000)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, 0, -200, FLOAT(60.0f))
@@ -823,6 +857,7 @@ EVT_BEGIN(evt_sensyu2)
 EVT_END()
 
 static EVT_BEGIN(evt_1st_leagu)
+    // Mario and his partner stand in Grubba's office; the camera frames the desk.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     CALL(evt_npc_set_position, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), 0, 0, -160)
@@ -837,6 +872,7 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     WAIT_MS(3000)
+    // After a long pause the door swings open and Jolene walks in.
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(bero_open_door_play_se)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -180, 500)
@@ -862,6 +898,7 @@ static EVT_BEGIN(evt_1st_leagu)
         CALL(evt_party_stop, 0)
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
+    // Mario and his partner step aside and the door shuts.
     BEGIN_INLINE_EVENT
         WAIT_MS(800)
         CALL(evt_mario_mov_pos2, -10, -20, FLOAT(60.0f))
@@ -877,6 +914,7 @@ static EVT_BEGIN(evt_1st_leagu)
             END_IF
         END_LOOP
     END_INLINE_EVENT
+    // Grubba, startled, leaps out from behind the desk (the drawer is shoved shut).
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_npc_get_position, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), LW(0), LW(1), LW(2))
     CALL(evt_npc_sound_data_set, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -893,6 +931,7 @@ static EVT_BEGIN(evt_1st_leagu)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // Jolene and Grubba talk about Mario's promotion to the majors.
     CALL(evt_set_dir_to_target, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_287"), 0, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"))
     WAIT_MS(300)
@@ -902,6 +941,7 @@ static EVT_BEGIN(evt_1st_leagu)
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg3_tou_290"), 0, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
     WAIT_MS(300)
+    // The camera slowly moves in as Grubba walks over to Mario.
     CALL(evt_cam3d_evt_set, 15, 90, 269, 15, 37, -26, 4000, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), 70, -100, 0, FLOAT(50.0f), 1)
@@ -914,6 +954,7 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_set_dir_to_target, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_291"), 0, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
     WAIT_MS(300)
+    // Grubba hands Mario 30 coins and Mario holds them up.
     CALL(evt_pouch_add_coin, 30)
     CALL(evt_mario_set_pose, STRING("M_I_U"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -922,11 +963,13 @@ static EVT_BEGIN(evt_1st_leagu)
     WAIT_MS(1000)
     CALL(evt_item_delete, STRING("coin"))
     CALL(evt_mario_set_pose, STRING("M_S_1"))
+    // Grubba and Jolene finish talking.
     CALL(evt_msg_print, 0, STRING("stg3_tou_292_02"), 0, 0)
     CALL(evt_msg_print, 0, STRING("stg3_tou_292"), 0, STRING(/*"ガンス"*/"\x83\x4B\x83\x93\x83\x58"))
     WAIT_MS(300)
     CALL(evt_msg_print, 0, STRING("stg3_tou_293"), 0, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"))
     WAIT_MS(300)
+    // Jolene leaves through the door.
     CALL(evt_npc_move_position, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), 0, -100, 0, FLOAT(50.0f), 1)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT(bero_open_door_play_se)
@@ -942,6 +985,7 @@ static EVT_BEGIN(evt_1st_leagu)
         CALL(evt_npc_move_position, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), 0, -200, 0, FLOAT(50.0f), 1)
         CALL(evt_npc_set_position, STRING(/*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F"), 0, -1000, 0)
     END_INLINE_EVENT
+    // Mario follows, the escort to the major-league room is queued and the map changes to the corridor.
     CALL(evt_party_run, 0)
     CALL(evt_mario_mov_pos2, 0, -200, FLOAT(60.0f))
     SET_VALUE(GSWF_TOU_JOLENE_ESCORT_TO_MAJORS, 1)
@@ -963,6 +1007,7 @@ EVT_END()
 
 // The first peek runs the story scene; later peeks keep the capture open until A is pressed.
 EVT_BEGIN(evt_nozoki)
+    // Mario freezes in place; the first time, Grubba and Jolene are placed in the office below.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_12_JOLENES_SECRET)
@@ -976,6 +1021,8 @@ EVT_BEGIN(evt_nozoki)
         CALL(evt_npc_flag_onoff, 1, STRING("キノシコワ"), NPC_FLAG_NO_HIT)
         CALL(evt_npc_status_onoff, 1, STRING("キノシコワ"), NPC_STATUS_FACE_MOVE_DIR)
     END_IF
+    // The camera moves in and the dark panel over the vent peels open like a page,
+    // letting Mario see into the office.
     CALL(evt_cam3d_evt_set, 0, 145, 534, 0, 50, -8, 2000, EASING_SINE_IN_OUT)
     WAIT_MS(2000)
     CALL(evt_paper_entry, STRING("OFF_d_meku"))
@@ -999,6 +1046,8 @@ EVT_BEGIN(evt_nozoki)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_wait_animend, STRING("img"))
     CALL(evt_img_onoff, STRING("img"), 0)
+    // The first time: Grubba and Jolene talk below about the storage room intruder,
+    // King K's disappearance and keeping it quiet.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_12_JOLENES_SECRET)
         CALL(evt_msg_print, 0, STRING("stg3_tou_316_05"), 0, STRING("ガンス"))
         WAIT_MS(300)
@@ -1014,6 +1063,7 @@ EVT_BEGIN(evt_nozoki)
         WAIT_MS(300)
         CALL(evt_msg_print, 0, STRING("stg3_tou_316_10"), 0, STRING("キノシコワ"))
         WAIT_MS(300)
+        // The camera pulls back; Grubba asks where Jolene keeps vanishing to and she refuses to say.
         CALL(evt_cam3d_evt_set, 0, 145, 534, 0, 50, -8, 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
         CALL(evt_msg_print, 0, STRING("stg3_tou_316_11"), 0, STRING("ガンス"))
@@ -1035,6 +1085,7 @@ EVT_BEGIN(evt_nozoki)
         WAIT_MS(300)
         CALL(evt_msg_print, 0, STRING("stg3_tou_316_17"), 0, STRING("ガンス"))
         WAIT_MS(300)
+        // Jolene leaves through the door, and Grubba grumbles that good fighters are a dying breed.
         CALL(evt_npc_move_position, STRING("キノシコワ"), 0, -120, 0, FLOAT(80.0f), 1)
         SET_VALUE(LW(1), 0)
         SPAWN_EVENT(PTR(bero_open_door_play_se))
@@ -1063,6 +1114,7 @@ EVT_BEGIN(evt_nozoki)
         END_LOOP
         CALL(evt_msg_print, 0, STRING("stg3_tou_320"), 0, STRING("ガンス"))
         WAIT_MS(300)
+        // Mario and his partner crouch in the vent; the partner whispers to him and Mario nods.
         CALL(evt_mario_set_pos, -20, 150, 0)
         CALL(evt_mario_set_dir, 90, 0, 0)
         CALL(evt_party_set_pos, 0, 20, 150, 0)
@@ -1079,6 +1131,8 @@ EVT_BEGIN(evt_nozoki)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
         CALL(evt_cam3d_evt_set, 100, 114, 386, 100, 45, -8, 0, EASING_SINE_IN_OUT)
         WAIT_FRAMES(1)
+        // Grubba hears something in the ceiling and asks who is there; Mario answers with a noise (Squeak,
+        // Meow or Belch) and Grubba reacts.
         CALL(evt_msg_print, 0, STRING("stg3_tou_322"), 0, STRING("ガンス"))
         CALL(evt_msg_select, 0, STRING("stg3_tou_322_yn"))
         CALL(evt_msg_continue)
@@ -1095,6 +1149,7 @@ EVT_BEGIN(evt_nozoki)
             CALL(evt_msg_print, 0, STRING("stg3_tou_324_01_kur"), 0, 0)
             CALL(evt_msg_print, 0, STRING("stg3_tou_325_02"), 0, STRING("ガンス"))
         END_SWITCH
+        // Grubba shrugs it off, goes back to the ring and leaves the office.
         CALL(evt_cam3d_evt_set, 0, 145, 534, 0, 50, -8, 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
         CALL(evt_npc_move_position, STRING("ガンス"), 115, -80, 0, FLOAT(80.0f), 1)
@@ -1124,6 +1179,8 @@ EVT_BEGIN(evt_nozoki)
                 BREAK_LOOP
             END_IF
         END_LOOP
+        // The panel closes again and the partner sums up what they heard;
+        // the story moves on to Jolene's secret.
         WAIT_MS(500)
         BEGIN_INLINE_EVENT
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1143,6 +1200,7 @@ EVT_BEGIN(evt_nozoki)
         WAIT_MS(300)
         SET_VALUE(GSW_STORY_PROGRESS, STG3_20_12_JOLENES_SECRET)
         ELSE
+        // On later visits Mario just looks down into the office until A is pressed, then the panel closes.
         LOOP(0)
             CALL(evt_key_get_buttontrg, 0, LW(0))
             IF_BITS_SET(LW(0), 256)
@@ -1163,6 +1221,7 @@ EVT_BEGIN(evt_nozoki)
         CALL(evt_offscreen_delete, STRING("ofs"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
+    // The camera returns to normal and control goes back to Mario.
     CALL(evt_cam3d_evt_off, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     CALL(evt_party_run, 0)
@@ -1230,7 +1289,13 @@ EVT_BEGIN(evt_sensyu_reentry)
     RETURN
 EVT_END()
 
+/**
+ * Map init for tou_05, Grubba's office: sets up the Star Piece, the desk papers and the camera animation,
+ * drops Mario in from the ceiling when he enters through "fall",
+ * and chooses the scene to run from the story progress.
+ */
 EVT_BEGIN(tou_05_init_evt)
+    // Set up the doors, the camera animation and the Star Piece on the floor.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
@@ -1238,6 +1303,8 @@ EVT_BEGIN(tou_05_init_evt)
     CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, -135, 0, 105, ITEM_TYPE_STILL, GSWF_STARPIECE_57, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("paifu"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_bero_get_entername, LW(0))
+    // Entering through the air vent ("fall"): Mario drops into the office from the ceiling
+    // and the partner follows a moment later.
     IF_STR_EQUAL(LW(0), STRING("fall"))
         CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_set_pos, -775, 150, 10)
@@ -1262,6 +1329,8 @@ EVT_BEGIN(tou_05_init_evt)
             CALL(evt_party_cont_onoff, 0, 1)
         END_INLINE_EVENT
     END_IF
+    // Show the vent's dark panel to match the entrance, and bind the two desk drawers once the vent trip is
+    // done.
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("fall"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_Y"), MAP_OBJ_FLAG_HIDDEN)
@@ -1280,6 +1349,8 @@ EVT_BEGIN(tou_05_init_evt)
         CALL(evt_hit_bind_mapobj, LW(1), LW(0))
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(1), 0, PTR(evt_hiki_open), 0)
     END_IF
+    // Place the NPCs; talking to Grubba's desk becomes available early in the story,
+    // and the vent peek is set up.
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_03_GRUBBA)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_p_tukue"), 0, PTR(talk_gans), 0)
@@ -1293,6 +1364,7 @@ EVT_BEGIN(tou_05_init_evt)
         END_IF
     END_IF
     CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_nozoki"), 0, PTR(evt_nozoki), 0)
+    // Mario falling through the vent is sent on to the next room once he drops below the floor.
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("fall"))
         BEGIN_INLINE_EVENT
@@ -1306,6 +1378,8 @@ EVT_BEGIN(tou_05_init_evt)
             CALL(evt_bero_mapchange, STRING("tou_06"), STRING("fall"))
         END_INLINE_EVENT
     END_IF
+    // Unless map events are being skipped, choose the scene: Grubba's first-visit speech,
+    // the promotion scene, or none.
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
@@ -1348,6 +1422,7 @@ EVT_BEGIN(tou_05_init_evt)
             END_SWITCH
         END_IF
     END_IF
+    // Show the open or closed air duct, depending on whether the way out has been used.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_30_04_AIR_DUCT_EXIT)
         SET_VALUE(LF(0), 0)
@@ -1376,6 +1451,7 @@ EVT_BEGIN(tou_05_init_evt)
             END_IF
         END_IF
     END_IF
+    // Switch on the hidden walls and doors.
     CALL(evt_hitobj_onoff, STRING("haiku_kabe"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("kore"), 1, 0)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero"), 4)

@@ -63,6 +63,7 @@ EVT_BEGIN(_fall_char)
     RETURN
 EVT_END()
 
+/** Same as _fall_char for the last letter, with the shorter fall_data2 bounce (19 frames). */
 EVT_BEGIN(_fall_char_last)
     SET_INT_READ_ADDR(PTR(fall_data2))
     LOOP(19)
@@ -187,6 +188,11 @@ EVT_BEGIN(fall_gameover_es)
 EVT_END()
 #endif
 
+/**
+ * Game over scene on sys_00: hides the partners, lays Mario down in his fallen pose facing the camera,
+ * hides the letters of the other language, sets the camera,
+ * plays the dust animation and runs the falling-letters script.
+ */
 EVT_BEGIN(evt_gameover)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)

@@ -133,6 +133,10 @@ EVT_BEGIN(door_open_se)
     RETURN
 EVT_END()
 
+/**
+ * Plays the door-shut sound matching DoorParam.se at the door's map object;
+ * same table as door_open_se, except se 4 reuses the second wood sound.
+ */
 EVT_BEGIN(door_close_se)
     CALL(evt_door_param, LW(0), 8, LW(1))
     CALL(evt_door_param, LW(0), 1, LW(2), LW(3), LW(4))
@@ -171,6 +175,10 @@ EVT_BEGIN(door_close_se)
     RETURN
 EVT_END()
 
+/**
+ * Plays SFX_DOOR_FALL1 at the door's map object for any nonzero DoorParam.se;
+ * spawned by evt_door_open when the door has a wall event (evtWall).
+ */
 EVT_BEGIN(door_down_se)
     CALL(evt_door_param, LW(0), 8, LW(1))
     CALL(evt_door_param, LW(0), 1, LW(2), LW(3), LW(4))
@@ -183,6 +191,10 @@ EVT_BEGIN(door_down_se)
     RETURN
 EVT_END()
 
+/**
+ * Plays SFX_HOUSE_OPEN1 at the door's map object when the house front swings open,
+ * unless DoorParam.flags bit 2 asks for no sound.
+ */
 EVT_BEGIN(house_open_se)
     CALL(evt_door_param, LW(0), 9, LW(1))
     IF_BITS_SET(LW(1), 2)

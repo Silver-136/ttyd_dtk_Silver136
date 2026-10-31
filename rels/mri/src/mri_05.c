@@ -335,6 +335,11 @@ static EVT_BEGIN(punipuni_ball00_init)
     RETURN
 EVT_END()
 
+/**
+ * Hit/talk script of the orb pedestal (orb A): if empty,
+ * Mario picks an item to put on it (cancel ends the script), the orb appears and the light beam is shown;
+ * if full, Mario takes the orb back and the beam is hidden. Mario is frozen during this.
+ */
 static EVT_BEGIN(punipuni_ball00)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(GSWF_MRI_05_PUNI_ORB_PLACED_1, 0)
@@ -356,6 +361,11 @@ static EVT_BEGIN(punipuni_ball00)
     RETURN
 EVT_END()
 
+/**
+ * Sets up the second Puni Orb pedestal (punipuni01) of the bubble room:
+ * if the orb is already on it, places it and lights the beam; otherwise hides the beam.
+ * Sets the pedestal's target position and floor.
+ */
 EVT_BEGIN(punipuni_ball01_init)
     CALL_CHILD(PTR(mri_punipuni_setup))
     IF_INT_EQUAL(GSWF_MRI_05_PUNI_ORB_PLACED_2, 1)
@@ -554,6 +564,10 @@ EVT_BEGIN(evt_shabon_s)
             CALL(evt_sub_random, 60, LW(2))
             ADD(LW(3), -80)
             ADD(LW(2), 55)
+            // First loop: a bubble effect rises from the bottom of the room at a random spot, then pops near
+            // the top.
+            // First loop: a bubble effect rises from the bottom of the room at a random spot, then pops near
+            // the top.
             CALL(evt_eff, STRING("shabon1eff"), STRING("puni_balloon"), 0, LW(3), -319, LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
             CALL(evt_sub_random, 280, LW(4))
             ADD(LW(4), -69)
@@ -587,6 +601,7 @@ EVT_BEGIN(evt_shabon_s)
             CALL(evt_sub_random, 20, LW(2))
             ADD(LW(3), -50)
             ADD(LW(2), 100)
+            // Second loop, running independently, does the same.
             CALL(evt_eff, STRING("shabon2eff"), STRING("puni_balloon"), 0, LW(3), -319, LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
             CALL(evt_sub_random, 280, LW(4))
             ADD(LW(4), -69)
@@ -619,6 +634,7 @@ EVT_BEGIN(evt_shabon_s)
         CALL(evt_sub_random, 160, LW(2))
         ADD(LW(3), 60)
         SUBTRACT(LW(2), 100)
+        // Third loop, again independent.
         CALL(evt_eff, STRING("shabon3eff"), STRING("puni_balloon"), 0, LW(3), -319, LW(2), FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_sub_random, 280, LW(4))
         ADD(LW(4), -69)

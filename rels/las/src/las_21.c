@@ -245,6 +245,10 @@ EVT_BEGIN(floatblk_stop_se)
     RETURN
 EVT_END()
 
+/**
+ * Event script: shakes the camera for a moment (strength easing from 0.01 down to 0.003)
+ * when a floating block lands.
+ */
 EVT_BEGIN(floatblk_shake)
     CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 10, 3, 4)
     LABEL(0)
@@ -257,6 +261,13 @@ EVT_BEGIN(floatblk_shake)
     RETURN
 EVT_END()
 
+/**
+ * Event script: moves a floating block between two heights.
+ * LW(0) is the block object, LW(1) its hit object, LW(2) the switch that started it,
+ * LW(3) and LW(4) the start and end Y. The block accelerates up to 2 units per frame, plays the move sound,
+ * carries Mario and the partner standing on it,
+ * reverses if one of them hits its underside while it is coming down, and shakes the camera when it lands.
+ */
 EVT_BEGIN(floatblk_evt)
     SET_VALUE(LW(15), LW(0))
     SET_VALUE(LW(14), LW(1))
@@ -272,9 +283,11 @@ EVT_BEGIN(floatblk_evt)
         SET_FLOAT_VALUE(LW(9), FLOAT(-0.049804688f))
         SET_VALUE(LF(1), 1)
     END_IF
+    // The block starts moving toward its other height and the camera shakes.
     SPAWN_EVENT(PTR(floatblk_shake))
     WAIT_MS(500)
     CALL(evt_mobj_get_position, LW(15), LW(0), LW(1), LW(2))
+    // The block's colour decides whether the large or the small float sound plays.
     CALL(evt_mobj_get_kindname, LW(15), LW(3))
     SET_VALUE(LF(0), 0)
     IF_STR_EQUAL(LW(3), STRING("MOBJ_green_big02_FlowBlock"))
@@ -300,9 +313,12 @@ EVT_BEGIN(floatblk_evt)
         END_IF
         SET_VALUE(LW(8), -1)
     END_IF
+    // Each frame the block speeds up to 2 units per frame and carries Mario and his partner if they stand on
+    // it.
     CALL(evt_mobj_get_y_position, LW(15), LW(7))
     LOOP(0)
         SET_VALUE(LF(0), 0)
+        // If the block is coming down and one of them is under it, it reverses.
         IF_INT_EQUAL(LF(1), 1)
             CALL(evt_mario_get_name_hitobj_head, LW(0))
             IF_STR_EQUAL(LW(0), LW(14))
@@ -375,6 +391,7 @@ EVT_BEGIN(floatblk_evt)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // It lands at the end height; the move sound stops and the landing sound plays.
     CALL(evt_snd_sfxoff, LW(8))
     SPAWN_EVENT(PTR(floatblk_stop_se))
     IF_INT_EQUAL(LF(1), 1)
@@ -384,6 +401,10 @@ EVT_BEGIN(floatblk_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: switch handler for floating block 21blk1:
+ * toggles it between Y -130 and Y -580 using floatblk_evt and remembers the position in LSWF(8).
+ */
 EVT_BEGIN(floatblk21_1_evt)
     SET_TYPE(239)
     IF_INT_EQUAL(LSWF_LAS_21_BLK1_LOWERED, 0)
@@ -411,6 +432,10 @@ EVT_BEGIN(floatblk21_1_evt)
     RETURN
 EVT_END()
 
+/**
+ * Event script: switch handler for floating block 21blk2:
+ * toggles it between Y -130 and Y -580 and remembers the position in LSWF(9).
+ */
 EVT_BEGIN(floatblk21_2_evt)
     SET_TYPE(239)
     IF_INT_EQUAL(LSWF_LAS_21_BLK2_LOWERED, 0)
@@ -495,6 +520,7 @@ EVT_BEGIN(las_21_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: sets the first partner's Y position to args[0]; does nothing if there is none. */
 static USER_FUNC(set_party_y_pos) {
     EvtWord* args = event->args;
     PartyEntry* party = partyGetPtr(0);

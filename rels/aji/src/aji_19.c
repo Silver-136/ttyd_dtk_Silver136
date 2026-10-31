@@ -124,6 +124,10 @@ EVT_BEGIN(evt_hajimete)
     RETURN
 EVT_END()
 
+/**
+ * Init script of aji_19, the entrance room of the fortress:
+ * plays BGM_STG7_DUN1, sets up the exits and the conveyor check, and runs evt_hajimete on the first visit.
+ */
 EVT_BEGIN(aji_19_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI1"))

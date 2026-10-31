@@ -189,6 +189,10 @@ EVT_BEGIN(npc_rotate)
     RETURN
 EVT_END()
 
+/**
+ * Makes Lord Crump pace back and forth along z=-215 between x=30 and x=120 while the rest of the scene plays,
+ * until GF(0) is set and he stops at x=75. Clears GF(1) when it ends.
+ */
 EVT_BEGIN(kanbu_urouro)
     CALL(evt_npc_set_ry, LW(10), 270)
     WAIT_MS(200)
@@ -269,6 +273,7 @@ EVT_BEGIN(dai3_kanbu)
     RETURN
 EVT_END()
 
+/** Flashes the screen once with the light sound while GF(0) is set. */
 EVT_BEGIN(flash_and_wait)
     WAIT_WHILE(GF(0))
     SET_VALUE(GF(0), 1)
@@ -457,6 +462,7 @@ static EVT_BEGIN(punipuni_mario_halt)
 EVT_END()
 
 EVT_BEGIN(time_bomb)
+    // Controls off, the music fades out and the room begins to shake.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     SET_VALUE(GF(10), 0)
@@ -484,6 +490,7 @@ EVT_BEGIN(time_bomb)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0029296875f), FLOAT(0.0f), 300)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.00390625f), FLOAT(0.0f), 300)
     SET_VALUE(GF(0), 0)
+    // The quakes grow stronger and the room flashes.
     SPAWN_EVENT(PTR(flash_and_wait))
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0048828125f), FLOAT(0.0f), 300)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.005859375f), FLOAT(0.0f), 300)
@@ -535,6 +542,7 @@ EVT_BEGIN(time_bomb)
         CALL(evt_eff64, STRING("ripple02"), STRING("ripple_n64"), 0, 0, 150, -340, 0, 0, 0, 0, 0, 0, 0, 0)
         WAIT_MS(400)
     END_INLINE_EVENT
+    // The Crystal Star appears in a ripple of light and spins above the floor.
     CALL(evt_snd_sfxon, STRING("SFX_STG2_STARSTONE_APPEAR1"), 0)
     CALL(evt_item_entry, STRING("item00"), ITEM_EMERALD_STAR, 0, 120, -340, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
@@ -559,6 +567,7 @@ EVT_BEGIN(time_bomb)
     CALL(evt_cam3d_evt_set, 0, 95, 283, 0, 55, -215, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_msg_print_party, STRING("stg2_mri_e23_00_00"))
+    // Lord Crump grabs the Crystal Star to the Third Force's theme.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_3RD_ENEMY"))
     CALL(evt_npc_set_position, STRING("第三勢力幹部"), 175, 0, -194)
     CALL(evt_npc_move_position, STRING("第三勢力幹部"), 0, -215, 0, FLOAT(180.0f), 0)
@@ -591,6 +600,7 @@ EVT_BEGIN(time_bomb)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_MRI9"))
     CALL(evt_msg_print_party, STRING("stg2_mri_e23_00"))
     SET_VALUE(LW(10), STRING("第三勢力幹部"))
+    // He gloats, then reveals a remote time bomb switch to bury Mario and the Punies.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e23_01"), 0, LW(10))
     WAIT_MS(500)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), LW(10), 0, 0, 0, 0, 0, 0, 0, 60)
@@ -625,6 +635,7 @@ EVT_BEGIN(time_bomb)
     CALL(evt_msg_print, 0, STRING("stg2_mri_e23_04"), 0, LW(10))
     CALL(evt_npc_get_position, LW(10), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_BOMB_TIMER_SET1"), LW(0), LW(1), LW(2), 0)
+    // He sets the timer, the danger music begins and Crump flees down a pipe.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_DANGER4"))
     CALL(evt_sub_countdown_start, 300000, 300000)
     CALL(evt_npc_set_anim, LW(10), STRING("I_7"))

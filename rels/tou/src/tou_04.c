@@ -906,8 +906,11 @@ EVT_END()
  * and gives story- dependent lines about the league, Grubba and the rematch.
  */
 EVT_BEGIN(talk_g_4)
+    // Before the match with Grubba is arranged, the guard lets Mario through the first time he asks to become
+    // a fighter.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_03_GRUBBA)
+        // He steps aside, out of the doorway, and a door to Grubba's office opens for Mario.
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
         IF_INT_EQUAL(LW(3), -350)
@@ -928,15 +931,20 @@ EVT_BEGIN(talk_g_4)
             SET_VALUE(LW(0), 5)
             CALL_CHILD(PTR(bero_case_switch_on))
             ELSE
+            // On later visits he only tells Mario to go talk to Mr. Grubba.
             CALL(evt_msg_print, 0, STRING("stg3_tou_42_01"), 0, 0)
         END_IF
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
+        // While Grubba's plans unfold the guard sends Mario to Grubba, saying he ran by toward the ring,
+        // or that the office is closed to visitors.
         CALL(evt_msg_print, 0, STRING("stg3_tou_42_01"), 0, 0)
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
         CALL(evt_msg_print, 0, STRING("stg3_tou_102_02"), 0, 0)
         CASE_LESS(STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_msg_print, 0, STRING("stg3_tou_102_01"), 0, 0)
         CASE_DEFAULT
+        // After the return to Rogueport the guard stands at his post: he welcomes Mario back to the league
+        // or waves him in to see Ms. Jolene.
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         IF_INT_EQUAL(LW(0), -350)
             SWITCH(GSW_TROUBLE_ACCEPTED)
@@ -955,6 +963,7 @@ EVT_BEGIN(talk_g_4)
                     RETURN
                 END_IF
             END_SWITCH
+            // He steps aside and opens the way to the office.
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
             CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT)
@@ -1906,6 +1915,7 @@ EVT_BEGIN(evt_gardman2)
 EVT_END()
 
 EVT_BEGIN(evt_gardman3)
+    // The guard opens the door of the major-league locker room.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
     SET_VALUE(LW(1), 6)
@@ -1918,6 +1928,8 @@ EVT_BEGIN(evt_gardman3)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // Guard 3 steps out into the corridor and Mario and his partner follow him through;
+    // the door swings shut behind them.
     BEGIN_INLINE_EVENT
         CALL(evt_npc_status_onoff, 1, STRING("ガードマン３"), NPC_STATUS_FACE_MOVE_DIR)
         CALL(evt_npc_move_position, STRING("ガードマン３"), -550, -300, 0, FLOAT(60.0f), 1)
@@ -1942,6 +1954,7 @@ EVT_BEGIN(evt_gardman3)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The partner asks why they are not heading to the ring, and the guard says a special match is this way.
     CALL(evt_party_stop, 0)
     WAIT_MS(300)
     CALL(evt_msg_print_party, STRING("stg3_tou_407"))
@@ -1950,6 +1963,8 @@ EVT_BEGIN(evt_gardman3)
     CALL(evt_set_dir_to_target, STRING("ガードマン３"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg3_tou_408"), 0, STRING("ガードマン３"))
     WAIT_MS(300)
+    // The other guards stand aside (intangible) as the guard leads Mario along the long corridor,
+    // and the partner protests.
     CALL(evt_npc_flag_onoff, 1, STRING("ガードマン４"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING("ガードマン５"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING("ガードマン６"), NPC_FLAG_NO_HIT)
@@ -1984,6 +1999,7 @@ EVT_BEGIN(evt_gardman3)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // At the far end the guard opens the door to the title match room.
     SET_VALUE(LW(1), 1)
     SPAWN_EVENT(PTR(bero_open_door_play_se))
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 180, 500)
@@ -1994,6 +2010,7 @@ EVT_BEGIN(evt_gardman3)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // They walk through, and the map changes to the title match room.
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("ガードマン３"), 590, 300, 0, FLOAT(60.0f), 1)
         CALL(evt_mario_mov_pos2, 590, 300, FLOAT(90.0f))
@@ -2299,6 +2316,7 @@ EVT_END()
  * and story progress.
  */
 EVT_BEGIN(tou_04_init_evt)
+    // Set up the doors, guards, the Last Stand badge on the floor and the two save blocks.
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(PTR(evt_bero_info_run))
@@ -2308,6 +2326,8 @@ EVT_BEGIN(tou_04_init_evt)
     CALL(evt_item_entry, STRING("item_01"), ITEM_LAST_STAND, 515, 15, 125, ITEM_TYPE_STILL, GSWF_TOU_04_LAST_STAND, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save1"), -520, 60, -110, 0, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save3"), 450, 60, -465, 0, 0)
+    // If one of the pending escort scenes is waiting (Grubba, or Jolene bringing Mario to the minors,
+    // majors or champion's room), Mario and his partner start in place for it and it runs.
     SET_VALUE(LW(1), 0)
     IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
         CALL(kemuri_stop)
@@ -2358,6 +2378,7 @@ EVT_BEGIN(tou_04_init_evt)
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU4"))
         END_IF
     END_IF
+    // Reset the guard-escort flags so only the one for the trip about to run stays set.
     IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
         SET_VALUE(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 0)
         SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 0)
@@ -2376,6 +2397,8 @@ EVT_BEGIN(tou_04_init_evt)
         SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 0)
         SET_VALUE(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 0)
     END_IF
+    // Run the guard escort for the trip that is pending (minors, majors, title room or champion's room),
+    // with Mario placed at its starting door.
     IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 1)
         CALL(evt_mario_set_pos, -625, 0, 300)
         CALL(evt_party_set_pos, 0, -640, 0, 300)
@@ -2415,6 +2438,8 @@ EVT_BEGIN(tou_04_init_evt)
         SPAWN_EVENT(PTR(evt_toile2))
         RETURN
     END_IF
+    // Close every door and open only those that fit the story: Grubba's office early on,
+    // then the door for Mario's current ranking.
     SET_VALUE(LW(2), 0)
     LOOP(11)
         SET_VALUE(LW(0), LW(2))
@@ -2440,6 +2465,8 @@ EVT_BEGIN(tou_04_init_evt)
             CALL_CHILD(PTR(bero_case_switch_on))
         END_SWITCH
     END_SWITCH
+    // Always-open doors, and the special doors for the minor-league return, the first Rawk Hawk match
+    // and Grubba's plans.
     SET_VALUE(LW(0), 0)
     CALL_CHILD(PTR(bero_case_switch_on))
     SET_VALUE(LW(0), 8)
@@ -2476,6 +2503,7 @@ EVT_BEGIN(tou_04_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("e_bero"), 0, PTR(boss_msg), 0)
 #endif
     END_IF
+    // After Grubba's plans, the guard's office door stays shut unless Mario was called back by Jolene.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
         IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             SET_VALUE(LW(0), 5)
@@ -2493,6 +2521,7 @@ EVT_BEGIN(tou_04_init_evt)
             END_IF
         END_IF
     END_IF
+    // Housekeeping: a poisoned partner is removed, and a pending match sends the partner away.
     CALL(evt_cam_road_reset)
     IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
         IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
@@ -2504,6 +2533,8 @@ EVT_BEGIN(tou_04_init_evt)
         CALL(evt_party_stop, 1)
         CALL(evt_mario_clear_party, 1)
     END_IF
+    // The storage room is locked until Mario has the key;
+    // when he is a top-eleven fighter the storage-room talk starts.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
         CALL(evt_mobj_lock, STRING("lock"), ITEM_STORAGE_KEY_0x12, 0, 10, -550, 0, PTR(evt_chk), PTR(evt_lock), GSWF_TOU_04_STORAGE_DOOR_UNLOCKED)
         SET_VALUE(LW(0), STRING("s_bero_4"))
@@ -2522,6 +2553,7 @@ EVT_BEGIN(tou_04_init_evt)
             END_IF
         END_IF
     END_IF
+    // Rawk Hawk's escape scene and the rematch return from the ring play at their story points.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_20_05_MAJORS_4TH_PL)
         SPAWN_EVENT(PTR(evt_bred_nigeru))
     END_IF

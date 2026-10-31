@@ -104,6 +104,7 @@ EVT_BEGIN(kpa_07_hipattack_eff)
 EVT_END()
 
 EVT_BEGIN(kpa_07_evt)
+    // The scene opens on the empty room; Kammy is hidden until she catches up with Bowser.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_set_pos, -249, 0, 0)
     CALL(evt_npc_set_position, STRING("ババ"), -349, 0, 0)
@@ -128,6 +129,7 @@ EVT_BEGIN(kpa_07_evt)
     CALL(evt_npc_set_tribe, STRING("ババ"), STRING("カメックババ（地上）"))
     WAIT_FRAMES(1)
     CALL(evt_npc_set_autotalkpose, STRING("ババ"), STRING("K_1"), STRING("T_7"))
+    // Out-of-breath Kammy reaches Bowser and tells him she has found something.
     CALL(evt_msg_print, 0, STRING("kpa_stg6_009"), 0, STRING("ババ"))
     CALL(evt_npc_set_anim, STRING("ババ"), STRING("S_1"))
     CALL(evt_mario_set_dir, 270, 300, 0)
@@ -143,6 +145,7 @@ EVT_BEGIN(kpa_07_evt)
     WAIT_MS(500)
     CALL(evt_mario_set_dir, 90, 300, 0)
     WAIT_MS(300)
+    // The camera pans to the Crystal Star embedded in the wall; it shines as Bowser sees it.
     CALL(evt_cam3d_evt_set, -117, 127, 302, 196, 59, -14, 1500, EASING_SINE_IN_OUT)
     WAIT_MS(1500)
     CALL(evt_npc_set_stay_anim, STRING("ババ"))
@@ -157,6 +160,7 @@ EVT_BEGIN(kpa_07_evt)
     CALL(evt_cam3d_evt_set, 95, 124, 428, 95, 55, -17, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(300)
+    // Kammy explains; Rawk Hawk bursts in, introduces himself and challenges Bowser.
     CALL(evt_msg_print, 0, STRING("kpa_stg6_012_1"), PTR(kpa_stg6_012_1_cb), STRING("ババ"))
     CALL(evt_npc_move_position, STRING("ババ"), 140, 0, 0, FLOAT(60.0f), 0)
     CALL(evt_npc_set_position, STRING("ブレッドハート"), -150, 0, 0)
@@ -171,6 +175,7 @@ EVT_BEGIN(kpa_07_evt)
     CALL(evt_msg_print, 0, STRING("kpa_stg6_013_1"), 0, STRING("mario"))
     CALL(evt_cam3d_evt_set, -144, 82, 240, -144, 42, -17, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
+    // Rawk Hawk boasts and runs at Bowser.
     CALL(evt_msg_print, 0, STRING("kpa_stg6_014"), PTR(kpa_stg6_014_cb), STRING("ブレッドハート"))
     CALL(evt_cam3d_evt_set, -60, 157, 551, -60, 70, -17, 1000, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT
@@ -190,6 +195,7 @@ EVT_BEGIN(kpa_07_evt)
     SET_VALUE(GF(0), 0)
     SET_VALUE(GF(1), 0)
     CALL(evt_npc_get_position, STRING("ブレッドハート"), LW(0), LW(1), LW(2))
+    // Rawk Hawk leaps at Bowser; Bowser flattens him with a hip attack that also knocks Kammy down.
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_BRED_TACKLE1"), LW(0), LW(1), LW(2), 0)
     SET_VALUE(GW(0), LW(1))
     BEGIN_INLINE_EVENT
@@ -288,6 +294,7 @@ EVT_BEGIN(kpa_07_evt)
     CALL(evt_cam3d_evt_set, 0, 103, 302, 0, 40, -17, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
     CALL(evt_npc_set_autotalkpose, STRING("ブレッドハート"), STRING("S_7"), STRING("T_7"))
+    // The flattened Rawk Hawk and Kammy talk; the star falls from the wall.
     CALL(evt_msg_print, 0, STRING("kpa_stg6_017"), 0, STRING("ブレッドハート"))
     CALL(evt_cam3d_evt_set, 105, 115, 378, 105, 55, -17, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
@@ -306,6 +313,7 @@ EVT_BEGIN(kpa_07_evt)
     SET_FLOAT_VALUE(LW(7), FLOAT(-0.39941406f))
     SET_FLOAT_VALUE(LW(8), FLOAT(0.0f))
     SET_VALUE(LF(0), 0)
+    // The star drops, bounces and breaks in two.
     CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_STONE_FALL1"), LW(0), LW(1), LW(2), LW(15))
     LOOP(0)
         ADD_FLOAT(LW(0), LW(3))
@@ -339,6 +347,7 @@ EVT_BEGIN(kpa_07_evt)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_SURPRISED2_1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_npc_set_autotalkpose, STRING("mario"), STRING("KPA_S_5"), STRING("KPA_T_5"))
+    // Kammy sees it is a glass fake; the squashed Rawk Hawk says Gonzales has the real one.
     CALL(evt_msg_print, 0, STRING("kpa_stg6_020_1"), 0, STRING("mario"))
     CALL(evt_cam3d_evt_set, 130, 80, 304, 130, 30, -17, 800, EASING_SINE_IN_OUT)
     WAIT_MS(800)
@@ -388,12 +397,14 @@ EVT_BEGIN(kpa_07_evt)
                 BREAK_LOOP
             END_IF
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+            // Bowser flies into a rage, shaking the room.
             CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_ANGRY1"), LW(0), LW(1), LW(2), 0)
             CALL(evt_snd_sfxon_3d, STRING("SFX_KUPPA_ANGRY2"), LW(0), LW(1), LW(2), 0)
             WAIT_MS(300)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(2000)
+    // The story advances; the game is saved and the scene ends in Rogueport (gor_04).
     SET_VALUE(GSW_STORY_PROGRESS, STG6_55_04_BOWSER_RAWK_HAWK)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     CALL(evt_fade_entry, 6, 300, 0, 0, 0)

@@ -395,6 +395,7 @@ void seq_logoMain(SequenceWork* work) {
 void logoDisp(CameraId camId, void* param) {
     GXRenderModeObj* rmode;
     f32 width, height, x, y;
+    // stack variables
     Mtx44 ortho;
     Mtx position;
     f32 projection[GX_PROJECTION_SZ];

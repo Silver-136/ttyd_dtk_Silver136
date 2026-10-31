@@ -74,6 +74,8 @@ EvtWord subset_attack_ready_jump_event[2];
  * US on, a revived enemy also loses its holding-stolen-item flag.
  */
 EVT_BEGIN(subsetevt_dead)
+    // The command cursor will no longer return to this unit.
+    // Mario and the partners first float or walk back home; enemies skip ahead.
     CALL(_disable_restore_command_cursor)
     CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
     SWITCH(LW(0))
@@ -99,10 +101,12 @@ EVT_BEGIN(subsetevt_dead)
     END_IF
     CALL(btlevtcmd_ResetFaceDirection, LW(10))
     LABEL(1)
+    // The unit is marked KO'd.
     CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 1, 1, 1)
     CALL(btlevtcmd_GetUnitKind, LW(10), LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(UNIT_MARIO)
+        // Mario: his Life Shroom revival (data-table event 51) when one saves him, else his KO event 49.
         CALL(btlevtcmd_ClearAllStatus, LW(10))
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
         IF_INT_NOT_EQUAL(LW(1), 0)
@@ -111,6 +115,7 @@ EVT_BEGIN(subsetevt_dead)
             CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
         END_IF
         CASE_BETWEEN(UNIT_GOOMBELLA, UNIT_MS_MOWZ)
+        // A partner saved by a Life Shroom runs its own revival event if it has one, else the one below.
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
         IF_INT_NOT_EQUAL(LW(1), 0)
             CALL(btlevtcmd_ClearAllStatus, LW(10))
@@ -118,6 +123,7 @@ EVT_BEGIN(subsetevt_dead)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
                 ELSE
+                // The partner keels over, the Life Shroom icon shows above it and the Shroom is used up.
                 CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_KO)
                 BEGIN_SIBLING_EVENT
                     CALL(btlevtcmd_AnimeWaitPlayComplete, LW(10), LW(11))
@@ -132,10 +138,12 @@ EVT_BEGIN(subsetevt_dead)
                     CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 90)
                 END_SIBLING_EVENT
                 WAIT_FRAMES(90)
+                // In the retail releases the partner's event 67 also runs (Koops uses it to stand upright).
                 CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_REVIVE_EVENT)
                 IF_INT_NOT_EQUAL(LW(0), 0)
                     CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_REVIVE_EVENT)
                 END_IF
+                // The partner gets back up with 10 HP, the recovery sparkle shows and it hops back to idle.
                 CALL(btlevtcmd_OnOffStatus, LW(10), STATUS_INSTANT_KILL, 0, 0, 0)
                 CALL(btlevtcmd_SetHp, LW(10), 0)
                 CALL(btlevtcmd_RecoverHp, LW(10), LW(11), 10)
@@ -150,6 +158,7 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
             END_IF
             ELSE
+            // No Life Shroom: the partner runs its KO event and falls over.
             CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DEAD_EVENT)
@@ -162,6 +171,7 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_AnimeWaitPlayComplete, LW(10), LW(11))
                 CALL(btlevtcmd_snd_se, LW(10), STRING("SFX_PARTY_BATTLE_DIE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
             END_SIBLING_EVENT
+            // A KO'd partner standing in front of Mario swaps places with him, as long as Mario still has HP.
             CALL(btlevtcmd_GetHomePos, LW(10), LW(0), LW(1), LW(2))
             CALL(btlevtcmd_GetPartnerId, LW(10), LW(4))
             CALL(btlevtcmd_GetHomePos, LW(4), LW(6), LW(7), LW(8))
@@ -181,6 +191,7 @@ EVT_BEGIN(subsetevt_dead)
             END_IF
         END_IF
         CASE_DEFAULT
+        // Enemies: a Life Shroom revival runs the unit's own event 51 when it has one.
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_REVIVAL, LW(1))
         IF_INT_NOT_EQUAL(LW(1), 0)
             CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
@@ -188,6 +199,7 @@ EVT_BEGIN(subsetevt_dead)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
                 CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_EMERGENCY_REVIVAL_EVENT)
                 ELSE
+                // The standard enemy revival: the enemy spins and tips over, and the Life Shroom icon shows.
                 CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_HIDE_HELD_ITEM)
                 SET_VALUE(LW(0), 48)
                 LABEL(5)
@@ -215,6 +227,7 @@ EVT_BEGIN(subsetevt_dead)
                     CALL(btlevtcmd_DispItemIcon, LW(0), LW(1), LW(2), ITEM_LIFE_SHROOM, 120)
                 END_SIBLING_EVENT
                 WAIT_FRAMES(90)
+                // The enemy rights itself, recovers 10 HP with the recovery sparkle, hops up and idles again.
                 SET_VALUE(LW(0), 30)
                 LABEL(7)
                 WAIT_FRAMES(1)
@@ -245,6 +258,7 @@ EVT_BEGIN(subsetevt_dead)
             END_IF
         ELSE
 #endif
+            // No Life Shroom: the enemy's own KO event 49, else the standard spin-and-smoke defeat.
             CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DEAD_EVENT)
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_ClearAllStatus, LW(10))
@@ -257,6 +271,11 @@ EVT_BEGIN(subsetevt_dead)
     RETURN
 EVT_END()
 
+/**
+ * Standard enemy defeat: spins the unit, puffs it away in smoke,
+ * banks its coins and Star Points (with the star point effect at the unit's offset), tips it over,
+ * returns any item it stole and removes the unit.
+ */
 EVT_BEGIN(subsetevt_dead_core)
     CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_PRE_DEAD_EVENT)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -310,6 +329,10 @@ EVT_BEGIN(subsetevt_dead_core)
     RETURN
 EVT_END()
 
+/**
+ * Enemy defeat without the spin and tip-over: smoke, coins and Star Points, stolen item returned,
+ * then the unit is removed.
+ */
 EVT_BEGIN(subsetevt_dead_core_nospin_norotate)
     CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_PRE_DEAD_EVENT)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -343,6 +366,10 @@ EVT_BEGIN(subsetevt_dead_core_nospin_norotate)
     RETURN
 EVT_END()
 
+/**
+ * Reaction when a unit avoids an attack by stepping back (damage code 41):
+ * it backs away, waits in the guard pose until the attack ends and walks home.
+ */
 EVT_BEGIN(btldefaultevt_avoid_guard)
     CALL(btlevtcmd_AnimeCmpPoseType, LW(10), LW(11), POSE_TYPE_RUN, 40, LW(2))
     IF_INT_EQUAL(LW(2), 0)
@@ -366,7 +393,15 @@ EVT_BEGIN(btldefaultevt_avoid_guard)
     RETURN
 EVT_END()
 
+/**
+ * The hurt reaction for a hit, called from btldefaultevt_Damage with the hurt pose in LW(14) and the pose
+ * after it in LW(15): flipped or grounded units, hammer knockback (Spin Hammer, Ultra Hammer), slaps,
+ * Gale Force and Yoshi's swallow patterns run the unit's data-table event or the matching subset;
+ * a squashing hit flattens the unit for 1.5 to 3 seconds; other hits hold the hurt pose.
+ * A hit that does no damage shakes the unit with a miss sound (retail also fades the HP gauge on the last hit).
+ */
 EVT_BEGIN(subsetevt_damage)
+    // A flipped shell or a winged unit knocked to the ground runs the unit's own event 13 or 14 and stops here.
     CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FLIPPED, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_TURN_EVENT)
@@ -377,6 +412,8 @@ EVT_BEGIN(subsetevt_damage)
         CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_FALL_EVENT)
         RETURN
     END_IF
+    // Hits the unit's data table can take over: shell attacks (pattern 8, event 16) and pattern 9 (event 17);
+    // Spin and Ultra Hammer knockback (14, 16) uses event 18, a hit by a knocked-back unit (15, 17) event 19.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_ROTATE_SHELL_ATTACK, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_ROTATE_SHELL_ATTACK_EVENT)
@@ -425,6 +462,7 @@ EVT_BEGIN(subsetevt_damage)
             RETURN
         END_IF
     END_IF
+    // Ms. Mowz's Love Slap (patterns 21-24) uses the unit's events 20-23 when it has them.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_CHUCHURINA_BINTA_L, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_BINTA_L_EVENT)
@@ -457,12 +495,15 @@ EVT_BEGIN(subsetevt_damage)
             RETURN
         END_IF
     END_IF
+    // Flurrie's Gale Force breath (pattern 25) blows the unit back.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_BLOW, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(subsetevt_blow_damage)
         CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
         RETURN
     END_IF
+    // Yoshi's Gulp (pattern 4 failed swallow, 5 spat out, 6 spat at another enemy)
+    // uses the unit's events 55-57 when it has them.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_SWALLOW_FAILED, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_SWALLOW_FAILED_EVENT)
@@ -487,11 +528,13 @@ EVT_BEGIN(subsetevt_damage)
             RETURN
         END_IF
     END_IF
+    // A unit with its own hurt event (data-table event 9) plays it instead of everything below.
     CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_DAMAGE_SUB_EVENT)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_RunDataEventChild, LW(10), UNIT_DATA_DAMAGE_SUB_EVENT)
         RETURN
     END_IF
+    // Otherwise the standard Gulp reactions play.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_SWALLOW_FAILED, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(subsetevt_swallow_failed_damage)
@@ -507,6 +550,8 @@ EVT_BEGIN(subsetevt_damage)
         CALL_CHILD(subsetevt_swallow_shot_damage)
         RETURN
     END_IF
+    // The hit did damage. A squashing last hit flattens the unit
+    // (pattern 10: Flurrie's Body Slam and similar; 11: stomps; 12: stamps).
     CALL(btlevtcmd_GetDamage, LW(10), LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), 1)
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
@@ -525,6 +570,8 @@ EVT_BEGIN(subsetevt_damage)
             END_IF
             GOTO(11)
             LABEL(10)
+            // The unit squashes flat, stays flat for 1.5 seconds (3 for pattern 11, 2.5 for 12),
+            // then springs back up with a squish sound.
             CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
             BEGIN_SIBLING_EVENT_GET_ID(LW(0))
                 CALL(evt_sub_intpl_init_float, EASING_CUBIC_OUT, FLOAT(1.0f), FLOAT(0.14941406f), 10)
@@ -572,12 +619,14 @@ EVT_BEGIN(subsetevt_damage)
             WAIT_FRAMES(60)
             RETURN
             LABEL(11)
+            // A Spin Hammer knockback on the last hit sends the unit flying into the others.
             CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_KAITEN_HAMMER, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
                 CALL_CHILD(subsetevt_shot_damage)
                 RETURN
             END_IF
         END_IF
+        // Ultra Hammer knockback and Ms. Mowz's Love Slap hits play their own reactions.
         CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_ULTRA_HAMMER, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL_CHILD(subsetevt_shot_damage)
@@ -603,6 +652,8 @@ EVT_BEGIN(subsetevt_damage)
             CALL_CHILD(subsetevt_binta_damage_right_last)
             RETURN
         END_IF
+        // Blooper's ink (pattern 13) holds the hurt pose for 2 seconds with animation flag 32 set;
+        // pattern 26 holds it 2 seconds and any other hit 1 second, then the follow-up pose in LW(15) shows.
         CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_IKASUMI, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_AnimeFlagOnOff, LW(10), LW(11), PART_ANIM_INKED, 1)
@@ -629,10 +680,12 @@ EVT_BEGIN(subsetevt_damage)
         END_IF
         RETURN
         ELSE
+        // In the retail releases a no-damage last hit fades the HP gauge out.
         CALL(btlevtcmd_CheckDamageCode, LW(10), DAMAGE_RESULT_FINAL_HIT, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(_set_hp_gauge_fade_flag, LW(10))
         END_IF
+        // No damage: a normal hit still shows the hurt pose; anything else plays the miss sound.
         CALL(btlevtcmd_GetDamageCode, LW(10), LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(DAMAGE_CODE_NORMAL)
@@ -644,6 +697,7 @@ EVT_BEGIN(subsetevt_damage)
             END_IF
             RETURN
             CASE_DEFAULT
+            // The miss sound plays and the unit shudders for 24 frames.
             CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS2"), 0)
             CALL(btlevtcmd_SetDispOffset, LW(10), -2, 0, 0)
             WAIT_FRAMES(1)
@@ -698,6 +752,11 @@ EVT_BEGIN(subsetevt_damage)
     RETURN
 EVT_END()
 
+/**
+ * Hurt reaction for an attacker damaged by the target's counter (LW(0) = damage code: spikes, fire, ice,
+ * electric, explosions, poison, Payback and so on):
+ * the attacker hops back with the matching pose, Mario cries out on the spike and fire counters.
+ */
 EVT_BEGIN(subsetevt_counter_damage)
     CALL(btlevtcmd_OnUnitFlag, LW(10), BATTLE_UNIT_FLAG_SHOW_HP)
     BEGIN_SIBLING_EVENT
@@ -753,6 +812,11 @@ EVT_BEGIN(subsetevt_counter_damage)
     RETURN
 EVT_END()
 
+/**
+ * Swaps Mario and the partner (the front-and-back switch):
+ * both arc to each other's home positions and the Koops shell shield follows Mario.
+ * Retail only moves the shell when it still has HP.
+ */
 EVT_BEGIN(btldefaultevt_ChangePosition)
     CALL(btlevtcmd_GetGuardKouraId, UNIT_ID_MARIO, LW(10))
     IF_INT_NOT_EQUAL(LW(10), -1)
@@ -805,6 +869,10 @@ EVT_BEGIN(btldefaultevt_ChangePosition)
     RETURN
 EVT_END()
 
+/**
+ * Happy Heart badge regeneration: the unit strikes its happy pose (retail: only when it is not frozen,
+ * asleep or stopped) and waits a moment.
+ */
 EVT_BEGIN(subsetevt_happy_heart)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
     CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_HEART, LW(0))
@@ -825,6 +893,7 @@ EVT_BEGIN(subsetevt_happy_heart)
     RETURN
 EVT_END()
 
+/** Happy Flower badge regeneration: like subsetevt_happy_heart for FP. */
 EVT_BEGIN(subsetevt_happy_flower)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(5))
     CALL(btlevtcmd_CheckDefinePosetype, UNIT_ID_SELF, LW(5), POSE_TYPE_HAPPY_FLOWER, LW(0))
@@ -845,6 +914,7 @@ EVT_BEGIN(subsetevt_happy_flower)
     RETURN
 EVT_END()
 
+/** Fright: the unit hops, runs off the edge of the stage and is removed from the battle (no coins or Star Points). */
 EVT_BEGIN(subsetevt_terror)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 20, FLOAT(0.0f), FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -857,6 +927,10 @@ EVT_BEGIN(subsetevt_terror)
     RETURN
 EVT_END()
 
+/**
+ * Gale Force blow-away that fails: the unit spins up and flies to the stage edge,
+ * then lands back on the floor there.
+ */
 EVT_BEGIN(subsetevt_blow_damage)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
@@ -877,6 +951,10 @@ EVT_BEGIN(subsetevt_blow_damage)
     RETURN
 EVT_END()
 
+/**
+ * Gale Force blow-away that succeeds: the unit spins and flies off the stage;
+ * its coins and Star Points are still banked before it is removed.
+ */
 EVT_BEGIN(subsetevt_blow_dead)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_CLAUD_BREATH3"), 0)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
@@ -900,6 +978,10 @@ EVT_BEGIN(subsetevt_blow_dead)
     RETURN
 EVT_END()
 
+/**
+ * A hammer knockback hit sends the unit flying into the units behind it:
+ * Spin Hammer (damage pattern 14) or Ultra Hammer, with the matching "involved" weapon in LW(12).
+ */
 EVT_BEGIN(subsetevt_shot_damage)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     CALL(btlevtcmd_OnToken, LW(10), kKnockedAway)
@@ -914,6 +996,10 @@ EVT_BEGIN(subsetevt_shot_damage)
     RETURN
 EVT_END()
 
+/**
+ * Spin Hammer knockback: the unit spins and flies along the line of enemies behind it, hitting each one,
+ * then off the stage edge; it comes back home unless the hit KO'd it.
+ */
 EVT_BEGIN(subsetevt_shot_damage_kaiten)
     BEGIN_SIBLING_EVENT_GET_ID(LW(13))
         LABEL(0)
@@ -997,7 +1083,12 @@ EVT_BEGIN(subsetevt_shot_damage_kaiten)
     RETURN
 EVT_END()
 
+/**
+ * Ultra Hammer knockback: the unit tumbles through the enemies behind it to the last one,
+ * damaging each as it passes (_check_through_pos), flies off the stage and bounces back to its home position.
+ */
 EVT_BEGIN(subsetevt_shot_damage_ultra)
+    // The unit starts spinning the way it faces and keeps spinning while it flies.
     BEGIN_SIBLING_EVENT_GET_ID(LW(13))
         CALL(btlevtcmd_SetRotateOffsetFromCenterOffset, LW(10))
         CALL(btlevtcmd_GetFaceDirection, LW(10), LW(0))
@@ -1009,6 +1100,8 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
             WAIT_FRAMES(1)
         END_LOOP
     END_SIBLING_EVENT
+    // Find this unit in the line of enemies and the last enemy behind it;
+    // with none behind it, the unit just flies off.
     CALL(btlevtcmd_GetFriendBelong, LW(10), LW(0))
     CALL(btlevtcmd_SamplingEnemy, LW(10), LW(0), LW(12))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1033,6 +1126,7 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
     IF_INT_EQUAL(LW(8), -1)
         GOTO(50)
     END_IF
+    // The unit flies in an arc to just past the last enemy.
     BEGIN_SIBLING_EVENT_GET_ID(LW(5))
         CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(5.0f), FLOAT(0.39941406f))
         CALL(btlevtcmd_GetHitPos, LW(8), LW(9), LW(0), LW(1), LW(2))
@@ -1040,6 +1134,8 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
         CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
         CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
     END_SIBLING_EVENT
+    // While it flies, every enemy it passes is hit by the knocked-back unit,
+    // unless it dodges or the attack misses.
     CALL(btlevtcmd_GetFriendBelong, LW(10), LW(0))
     CALL(btlevtcmd_SamplingEnemy, LW(10), LW(0), LW(12))
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1090,6 +1186,7 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
     GOTO(31)
     DELETE_EVENT(LW(5))
     LABEL(50)
+    // The unit flies off the stage edge.
     CALL(btlevtcmd_GetStageSize, LW(5), EVT_NULLPTR, EVT_NULLPTR)
     SET_VALUE(LW(0), 0)
     CALL(btlevtcmd_FaceDirectionSub, LW(10), LW(0), LW(5))
@@ -1097,6 +1194,7 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
     CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(5.0f), FLOAT(0.099609375f))
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), 80, LW(2), 0, MOVE_SOUND_FROM_TABLE)
     WAIT_FRAMES(30)
+    // For an Ultra Hammer hit it waits off stage until Mario's attack script calls it back.
     CALL(btlevtcmd_CheckDamagePattern, LW(10), ATTACKPATTERN_ULTRA_HAMMER, LW(5))
     IF_INT_NOT_EQUAL(LW(5), 0)
         CALL(btlevtcmd_OnToken, LW(10), kKnockedAwayWaiting)
@@ -1107,6 +1205,8 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
             GOTO(55)
         END_IF
     END_IF
+    // It drops back in from the other side and bounces home;
+    // for an Ultra Hammer hit it signals Mario's script and waits for the attack to end.
     MULTIPLY(LW(0), -1)
     CALL(btlevtcmd_SetPos, LW(10), LW(0), 80, LW(2))
     CALL(btlevtcmd_GetHomePos, LW(10), LW(0), LW(1), LW(2))
@@ -1119,6 +1219,7 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
     END_IF
     // No IF_* is open here: this END_IF has no matching IF.
     END_IF
+    // A last hop at home, then the spin stops.
     CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(0.0f), FLOAT(0.14941406f))
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
     WAIT_FRAMES(30)
@@ -1131,6 +1232,7 @@ EVT_BEGIN(subsetevt_shot_damage_ultra)
     RETURN
 EVT_END()
 
+/** Yoshi's Gulp on a unit that could not be swallowed: it is knocked back with a hop. */
 EVT_BEGIN(subsetevt_swallow_failed_damage)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -1145,6 +1247,7 @@ EVT_BEGIN(subsetevt_swallow_failed_damage)
     RETURN
 EVT_END()
 
+/** Yoshi spits a swallowed unit out without hitting anyone: it lands with a hop. */
 EVT_BEGIN(subsetevt_swallow_spew_damage)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
@@ -1159,7 +1262,12 @@ EVT_BEGIN(subsetevt_swallow_spew_damage)
     RETURN
 EVT_END()
 
+/**
+ * Yoshi's Gulp spits the unit at the enemy behind it:
+ * it flies at that enemy and damages it, then bounces away, or flies off past x = 400 when nothing is hit.
+ */
 EVT_BEGIN(subsetevt_swallow_shot_damage)
+    // The spat-out unit becomes Yoshi's projectile and looks for the enemy behind it in line.
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     SET_VALUE(LW(12), PTR(&partyWeapon_YoshiNomikomi_Involved))
     CALL(btlevtcmd_GetFriendBelong, LW(10), LW(0))
@@ -1167,6 +1275,7 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     LABEL(0)
     IF_INT_EQUAL(LW(3), -1)
+        // No enemies in line: the unit lands with two hops.
         CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
         CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(0.5f))
@@ -1184,6 +1293,7 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
         CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
         GOTO(0)
     END_IF
+    // The next enemy in line is the target; with none, the unit lands with two hops.
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     DEBUG_PUT_REG(LW(3))
     IF_INT_EQUAL(LW(3), -1)
@@ -1199,6 +1309,7 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
         WAIT_FRAMES(20)
         GOTO(99)
     END_IF
+    // The unit flies at the target, which takes the hit unless it dodges or the attack misses.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_JumpSetting, LW(10), 0, FLOAT(5.0f), FLOAT(0.099609375f))
     CALL(btlevtcmd_JumpPosition, LW(10), LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE)
@@ -1217,6 +1328,7 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
         CASE_DEFAULT
     END_SWITCH
     LABEL(20)
+    // Without a hit the unit keeps flying until it leaves the stage (past x = 400).
     BEGIN_SIBLING_EVENT_GET_ID(LW(5))
         CALL(btlevtcmd_JumpContinue, LW(10))
     END_SIBLING_EVENT
@@ -1241,6 +1353,7 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
     LABEL(25)
     GOTO(99)
     LABEL(50)
+    // After a hit the unit bounces back off the target with two hops.
     CALL(btlevtcmd_GetPos, LW(10), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetFallAccel, LW(10), FLOAT(0.5f))
     CALL(btlevtcmd_FaceDirectionAdd, LW(10), LW(0), 30)
@@ -1254,6 +1367,12 @@ EVT_BEGIN(subsetevt_swallow_shot_damage)
     RETURN
 EVT_END()
 
+/**
+ * Reaction for damage pattern 18, which no weapon in the tree uses (btldefaultevt_Damage checks for it):
+ * the unit takes pose type 39 and spins once around (18 degrees a frame for 20 frames, the way it faces),
+ * then waits 10 frames.
+ * Guess: meant for an Ultra Hammer acrobatic hit, from the name.
+ */
 EVT_BEGIN(subset_ultra_hammer_acrobat_damage_event)
     CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), POSE_TYPE_DAMAGE)
@@ -1284,6 +1403,7 @@ EVT_BEGIN(subsetevt_confuse_flustered)
     RETURN
 EVT_END()
 
+/** Slap from the left (damage pattern 21): the unit twists one turn round over 20 frames. */
 EVT_BEGIN(subsetevt_binta_damage_left)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
@@ -1303,6 +1423,7 @@ EVT_BEGIN(subsetevt_binta_damage_left)
     RETURN
 EVT_END()
 
+/** Slap from the right (damage pattern 22): the mirror of subsetevt_binta_damage_left. */
 EVT_BEGIN(subsetevt_binta_damage_right)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
@@ -1322,6 +1443,12 @@ EVT_BEGIN(subsetevt_binta_damage_right)
     RETURN
 EVT_END()
 
+/**
+ * Final slap from the left (pattern 23): the unit spins six times round over 90 frames inside a whirlwind
+ * effect.
+ * Pattern 23 is the last left slap of Ms. Mowz's Love Slap (partyWeapon_ChuchurinaNormalAttackLeftLast)
+ * and of its copy enemyWeapon_ChuchurinaNormalAttackLlast in las.
+ */
 EVT_BEGIN(subsetevt_binta_damage_left_last)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
@@ -1348,6 +1475,7 @@ EVT_BEGIN(subsetevt_binta_damage_left_last)
     RETURN
 EVT_END()
 
+/** Final slap from the right (pattern 24): the mirror of subsetevt_binta_damage_left_last. */
 EVT_BEGIN(subsetevt_binta_damage_right_last)
     CALL(btlevtcmd_AnimeChangePoseType, LW(10), LW(11), LW(14))
     CALL(btlevtcmd_SetRotate, LW(10), 0, 0, 0)
@@ -1374,6 +1502,10 @@ EVT_BEGIN(subsetevt_binta_damage_right_last)
     RETURN
 EVT_END()
 
+/**
+ * A unit recovers from a status that stopped it (sleep, stop, freeze and similar):
+ * its data-table event 8 if it has one, else it returns to its normal pose with a small hop.
+ */
 EVT_BEGIN(subsetevt_status_recovery)
     CALL(btlevtcmd_CheckDataOfDataTable, LW(10), LW(0), UNIT_DATA_STATUS_RECOVERY_EVENT)
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1416,16 +1548,19 @@ EVT_BEGIN(subsetevt_check_target_movable)
     RETURN
 EVT_END()
 
+/** Plays the miss sound for an attack that did nothing. */
 EVT_BEGIN(subsetevt_nodamage_motion)
     CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS2"), 0)
     RETURN
 EVT_END()
 
+/** Pause after the HP Regen status heals a unit at turn start. */
 EVT_BEGIN(subsetevt_regeneration)
     WAIT_FRAMES(60)
     RETURN
 EVT_END()
 
+/** Empty data-table event 7 (attack ready) for partners that have nothing to do there. */
 EVT_BEGIN(subset_attack_ready_jump_event)
     RETURN
 EVT_END()

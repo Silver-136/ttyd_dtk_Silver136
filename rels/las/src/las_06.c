@@ -137,6 +137,10 @@ static EVT_BEGIN(rousoku_init)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for las_06: music and ambience, the doors to las_05 and las_07, an Ultra Shroom block,
+ * links the two pairs of Bombshell Bill Blasters, and lights the 18 torches.
+ */
 EVT_BEGIN(las_06_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
@@ -157,6 +161,7 @@ EVT_BEGIN(las_06_init_evt)
     RETURN
 EVT_END()
 
+/** Script helper: builds the torch map-object name "hi<args[0]>" and returns it in args[1]. */
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
 

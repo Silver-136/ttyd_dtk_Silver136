@@ -710,6 +710,7 @@ PoseSoundTiming posesound_normal_attack[] = {
  * then pounds it once per hit the command earned before returning home.
  */
 EVT_BEGIN(partyYoshiAttack_NormalAttack)
+    // Pick the target, pay the cost and aim the camera at Yoshi.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
@@ -725,6 +726,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     WAIT_FRAMES(20)
+    // He faces the enemy and revs his legs in place, the footsteps speeding up.
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, 2, 1)
@@ -747,6 +749,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     END_SIBLING_EVENT
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_R_5"))
     WAIT_FRAMES(25)
+    // The camera moves to the enemy and Yoshi leaps toward it; the action command (tap R) is set up for his rank.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_PART_TO_PART)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, LW(3), LW(4))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -783,6 +786,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     END_SIBLING_EVENT
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 25, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
+    // He flutters over the enemy while the command runs; its result is the number of pounds.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_3"))
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(6), LW(7), LW(8))
     ADD(LW(7), 40)
@@ -796,6 +800,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     CALL(btlevtcmd_WaitEventEnd, LW(15))
     SET_VALUE(LW(13), 1)
     CALL(btlevtcmd_AcGetOutputParam, 2, LW(14))
+    // Each pound: check whether it connects; before the first one, pressing A makes him spin (the stylish).
     LABEL(50)
     IF_INT_GREATER_OR_EQUAL(LW(13), 2)
         CALL(btlevtcmd_CommandPreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_NO_EVADE, LW(5))
@@ -852,6 +857,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
     ELSE
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_1"))
     END_IF
+    // He drops onto the enemy; on a miss the enemy dodges and Yoshi crashes to the floor, ending the move.
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 4, 0, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     IF_INT_NOT_EQUAL(LW(5), 1)
@@ -882,6 +888,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
         CALL(btlevtcmd_InviteApInfoReport)
         GOTO(95)
     END_IF
+    // A hit: with a successful command, the pounds after the first show a rising rating (Nice, Good...).
     CALL(btlevtcmd_ac_timing_flag_onoff, 1, 1)
     WAIT_FRAMES(2)
     CALL(btlevtcmd_ac_timing_flag_onoff, 0, 1)
@@ -954,6 +961,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
         END_IF
         CALL(btlevtcmd_AudienceDeclareACResult, LW(12), -1)
     END_IF
+    // He bounces up for the next pound until all earned pounds are used.
     LABEL(90)
     ADD(LW(13), 1)
     IF_INT_LESS_OR_EQUAL(LW(13), LW(14))
@@ -963,6 +971,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 20, MOVE_SOUND_FROM_TABLE)
         GOTO(50)
     END_IF
+    // He hops back down to the floor; pressing A on the landing is the stylish.
     CALL(btlevtcmd_StopAC)
     CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -986,6 +995,7 @@ EVT_BEGIN(partyYoshiAttack_NormalAttack)
         CASE_DEFAULT
         CALL(evt_audience_acrobat_notry)
     END_SWITCH
+    // The audience refills Star Power, then he walks home.
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
     LABEL(95)
@@ -1009,6 +1019,7 @@ EVT_END()
  * swallowed whole for their experience.
  */
 EVT_BEGIN(partyYoshiAttack_Nomikomi)
+    // Pick the target and pay the cost.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
@@ -1020,6 +1031,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
+    // Action command (hold R, release when the light comes on): the window shrinks at higher difficulty.
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(15))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_AcGetDifficulty, LW(0))
@@ -1056,6 +1068,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     CALL(evt_btl_camera_set_zoom, 0, 250)
     WAIT_FRAMES(22)
     CALL(btlevtcmd_StartAC, 1)
+    // Once R is pressed he walks up to the enemy (a pre-emptive spiky enemy hurts him on the way).
     LABEL(5)
     CALL(btlevtcmd_AcGetOutputParam, 0, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1088,6 +1101,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 80, MOVE_SOUND_FROM_TABLE, 0)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    // He shoots out his tongue; a miss plays the enemy's dodge reaction.
     CALL(btlevtcmd_ResultAC)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_2"))
     CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_SWALLOW1"), 0)
@@ -1104,6 +1118,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
         WAIT_FRAMES(50)
         GOTO(90)
     END_IF
+    // Enemies that cannot be swallowed, or a failed command, just take a 0-damage tongue hit.
     WAIT_FRAMES(7)
     CALL(_get_swallow_param, LW(3), LW(7))
     IF_INT_EQUAL(LW(7), -1)
@@ -1117,6 +1132,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
         WAIT_FRAMES(43)
         GOTO(90)
     END_IF
+    // Swallow attribute 8: the enemy plays its gulp reaction (damage pattern 7) and Yoshi lets it go.
     CALL(evt_snd_sfxon, STRING("SFX_BTL_YOSHI_SWALLOW2"), 0)
     CALL(_check_swallow_attribute, LW(3), 8, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1129,6 +1145,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
         WAIT_FRAMES(54)
         GOTO(90)
     END_IF
+    // He pulls the enemy into his mouth; it is hidden while inside.
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     CALL(btlevtcmd_DamageDirect, LW(3), LW(4), 0, 0, 2, 1)
@@ -1143,6 +1160,8 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     WAIT_FRAMES(7)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
+    // Roll against the enemy's swallow rate: on a pass he spits it out (as a shot at the enemies behind with
+    // attribute 2), with the rating effect and a stylish chance.
     CALL(evt_sub_random, 99, LW(0))
     IF_INT_GREATER_OR_EQUAL(LW(0), LW(7))
         BEGIN_INLINE_EVENT
@@ -1187,6 +1206,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
         CALL(btlevtcmd_WaitEventEnd, LW(15))
         GOTO(90)
     END_IF
+    // Otherwise he swallows it whole: the enemy is removed and its experience kept.
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_SWALLOWED, 1)
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
@@ -1215,6 +1235,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
             GOTO(90)
         END_IF
     END_IF
+    // An enemy with swallow attribute 4 lets him breathe fire over every enemy.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("PYS_A_4"))
     WAIT_FRAMES(22)
     BEGIN_SIBLING_EVENT
@@ -1239,6 +1260,7 @@ EVT_BEGIN(partyYoshiAttack_Nomikomi)
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(10), LW(11), PTR(&partyWeapon_YoshiNomikomi_Fire), DAMAGE_RESULT_FINAL_HIT | DAMAGE_RESULT_GULP, LW(5))
     CALL(btlevtcmd_GetSelectNextEnemy, LW(10), LW(11))
     GOTO(10)
+    // Star Power refill, then he runs home; after a whole swallow the run home ends with a stylish spin chance.
     LABEL(90)
     CALL(btlevtcmd_StopAC)
     CALL(evt_audience_ap_recovery)
@@ -1292,6 +1314,7 @@ EVT_END()
  * hits can shrink the enemies. Ends with an optional stylish.
  */
 EVT_BEGIN(partyYoshiAttack_EggAttack)
+    // Pay the cost and pick a random target for each of the six egg parts.
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
@@ -1346,6 +1369,8 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, PARTS_WORK_PRECHECK, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, PARTS_WORK_LAST_AT_TARGET, 0)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, PARTS_WORK_EVENT, 0)
+    // Action command (press A when the light comes on to lay an egg): up to 3 eggs, 4 at Ultra rank;
+    // less time at higher difficulty.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_PART)
     CALL(evt_btl_camera_set_homing_unitparts, 0, UNIT_ID_SELF, 1, -1, 0)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -1386,6 +1411,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     CALL(btlevtcmd_StartAC, 1)
     SET_VALUE(LW(12), 2)
+    // Wait for each egg; if the command ends with none laid he groans and the move ends.
     LABEL(5)
     CALL(btlevtcmd_AcGetOutputParam, 0, LW(13))
     ADD(LW(13), 1)
@@ -1411,6 +1437,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
         WAIT_FRAMES(1)
         GOTO(5)
     END_IF
+    // A new egg: the rating effect for the count so far, and a random colour (green, yellow or pink).
     SET_VALUE(LW(0), LW(12))
     SUBTRACT(LW(0), 1)
     SWITCH(LW(0))
@@ -1440,6 +1467,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(12), POSE_TYPE_ACTION)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), 1, 4)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_WEAPON, PTR(&partyWeapon_YoshiEggAttack_Minimini))
+    // The egg pops out of Yoshi with a spin and rolls to its place behind him.
     LABEL(20)
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
     CALL(btlevtcmd_SetPartsScale, UNIT_ID_SELF, LW(12), FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
@@ -1482,6 +1510,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     WAIT_FRAMES(10)
     ADD(LW(12), 1)
     GOTO(5)
+    // All eggs laid: mark the last egg aimed at each enemy, which deals that enemy's final hit.
     LABEL(25)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 2, PARTS_WORK_LAST_AT_TARGET, -1)
     CALL(btlevtcmd_SetPartsWork, UNIT_ID_SELF, 3, PARTS_WORK_LAST_AT_TARGET, -1)
@@ -1510,6 +1539,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     IF_INT_GREATER_OR_EQUAL(LW(12), 2)
         GOTO(26)
     END_IF
+    // Decide in advance whether each egg connects; once an egg hits an enemy, the later eggs at it cannot miss.
     SET_VALUE(LW(12), 2)
     LABEL(28)
     CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_LAST_AT_TARGET, LW(0))
@@ -1550,6 +1580,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
         ADD(LW(12), 1)
         GOTO(28)
     END_IF
+    // He throws the eggs one by one, each with a throwing pose for its colour (_egg_attack_event).
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     SET_VALUE(LW(12), 2)
@@ -1590,6 +1621,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
         CALL(btlevtcmd_GetPartsWork, UNIT_ID_SELF, LW(12), PARTS_WORK_TARGET_PART, LW(4))
         GOTO(30)
     END_IF
+    // Stylish after the last throw, then the Star Power refill.
     CALL(btlevtcmd_StopAC)
     CALL(btlevtcmd_ACRStart, UNIT_ID_SELF, 0, 15, 15, 20)
     CALL(btlevtcmd_ACRGetResult, LW(6), LW(7))
@@ -1606,6 +1638,7 @@ EVT_BEGIN(partyYoshiAttack_EggAttack)
     END_SWITCH
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
+    // Wait for every egg to land, then he runs home.
     LABEL(95)
     SET_VALUE(LW(12), 2)
     LABEL(96)
@@ -1692,6 +1725,7 @@ EVT_END()
  * then waits for the herd to finish.
  */
 EVT_BEGIN(partyYoshiAttack_CallGuard)
+    // Target every enemy and pay the cost.
     SET_VALUE(LW(12), PTR(&partyWeapon_YoshiCallGuard))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(12))
@@ -1705,6 +1739,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
     CALL(btlevtcmd_RunDataEventChild, UNIT_ID_SELF, UNIT_DATA_ATTACK_READY_EVENT)
+    // Action command (alternate L and R to fill the gauge): its length depends on the difficulty.
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AcGetDifficulty, LW(0))
@@ -1743,6 +1778,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
     CALL(btlevtcmd_AcSetGaugeParam, 60, 80, 100, 100)
     CALL(btlevtcmd_AcSetFlag, AC_REPEATEDLY_LV_FLAG_MIN_LEVEL_1)
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 6, 1, 0)
+    // The camera pulls back; Yoshi winds up while the command runs, then calls the herd.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, 1)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 4)
@@ -1763,6 +1799,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
     MULTIPLY(LW(5), 30)
     CALL(evt_eff, 0, STRING("kiss"), 3, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_snd_sfxon_3d, STRING("SFX_ENM_TOGENOKO_CALL1"), LW(0), LW(1), LW(2), 0)
+    // Stylish chance as he calls.
     CALL(btlevtcmd_ftof, 33, LW(0))
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         WAIT_FRAMES(LW(0))
@@ -1785,6 +1822,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
             CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_NEUTRAL)
         END_SIBLING_EVENT
     END_SWITCH
+    // The herd of Yoshis runs across the stage while the screen rumbles.
     BEGIN_INLINE_EVENT_GET_ID(LW(9))
         WAIT_MS(1000)
         CALL(_gundan_yoshi_run_effect, UNIT_ID_SELF)
@@ -1795,6 +1833,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
     CALL(evt_btl_camera_shake_h, 0, 1, 0, 6000, 0)
     WAIT_MS(1000)
     CALL(_wait_yoshig_run, UNIT_ID_SELF)
+    // Each enemy in turn as the herd reaches it: a miss plays its dodge reaction.
     SET_VALUE(LW(15), 0)
     LABEL(70)
     IF_INT_EQUAL(LW(3), -1)
@@ -1817,6 +1856,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
         END_IF
         GOTO(75)
     END_IF
+    // The herd tramples it once per hit the gauge earned; the last trample carries the rating effect.
     CALL(btlevtcmd_AcGetOutputParam, 2, LW(14))
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         LOOP(LW(14))
@@ -1856,6 +1896,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
     LABEL(75)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     GOTO(70)
+    // Wait for the herd to leave, stop the rumble, refill Star Power and end the turn.
     LABEL(90)
     CALL(_wait_yoshig_complete, UNIT_ID_SELF)
     CALL(evt_btl_camera_noshake, 1)

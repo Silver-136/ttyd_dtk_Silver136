@@ -259,6 +259,8 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(0)
+        // Step 0, before the player's phase: Frankly introduces the Jump action command
+        // and asks Mario to jump on an enemy.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
@@ -278,6 +280,8 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(2)
+        // Step 1, after Mario's jump: Frankly points out the NICE rating,
+        // then asks Goombella to take her turn and she answers.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 3)
@@ -319,6 +323,7 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(4)
+        // Step 2, before the player's phase: Frankly explains the Guard action command Mario just did.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 5)
@@ -334,6 +339,8 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(6)
+        // Step 3, after the attack: Frankly praises the Action Command,
+        // then asks Goombella to attack Mario once more for the Superguard lesson.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 7)
@@ -385,6 +392,8 @@ static EVT_BEGIN(phase_event)
             RETURN
         END_IF
         CASE_EQUAL(8)
+        // Step 4, before the player's phase: Frankly explains the Superguard
+        // and offers more practice (a yes or no choice).
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LECTURE_FRANKLI_WORK_STEP, 9)
@@ -414,6 +423,8 @@ static EVT_BEGIN(phase_event)
             END_IF
         END_IF
         CASE_EQUAL(9)
+        // Step 5, before the player's phase: Frankly's feedback on Mario's practice try (nicely done,
+        // a little early or a little late).
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
@@ -431,6 +442,7 @@ static EVT_BEGIN(phase_event)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
             RETURN
         END_IF
+        // Step 6, after the player's phase: the same feedback after the next try.
         CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
         IF_INT_NOT_EQUAL(LW(0), 0)
             CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 180, 0, 20)
@@ -488,8 +500,10 @@ EVT_BEGIN(lecAttackEvent_Jump)
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
+        // Frankly explains how the Action Command details appear once a target is chosen.
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_001"), 0, -6)
     END_IF
+    // The attack is declared.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
@@ -501,6 +515,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
     CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 1, 1, 0)
+    // Mario walks up to the enemy.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(3.0f))
     CALL(btlevtcmd_GetTakeoffPosition, UNIT_ID_SELF, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -514,6 +529,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
     LABEL(10)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     ADD(LW(2), 5)
+    // He jumps (M_J_1B) with his jump cry and the jump slows into a hover just above the enemy.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1B"))
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         CALL(btlevtcmd_MarioJumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 36, 3, MOVE_SOUND_FROM_TABLE)
@@ -525,6 +541,8 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         IF_INT_LESS_OR_EQUAL(LW(10), 0)
+            // Frankly freezes the action and tells Mario to press A just before landing,
+            // then waits for the button.
             BEGIN_SIBLING_EVENT_GET_ID(LW(0))
                 CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 0, 180, 20)
                 LOOP(21)
@@ -560,6 +578,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
         DIVIDE(LW(0), 2)
         WAIT_FRAMES(LW(0))
     END_IF
+    // The timing of the press is judged and stored for the lecture.
     CALL(btlevtcmd_ac_timing_flag_onoff, 0, 1)
     CALL(btlevtcmd_ResultAC)
     IF_INT_EQUAL(LW(10), 0)
@@ -579,6 +598,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
     END_IF
     CALL(btlevtcmd_GetResultAC, LW(6))
     IF_BITS_CLEAR(LW(6), AC_RESULT_SUCCESS)
+        // The stomp lands for its damage.
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         IF_INT_EQUAL(LW(10), 0)
@@ -590,6 +610,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
         CALL(btlevtcmd_InviteApInfoReport)
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_WeaponAftereffect, LW(0))
+        // He bounces off the enemy in three small hops.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_J_1B"))
         CALL(btlevtcmd_SetFallAccel, UNIT_ID_SELF, FLOAT(0.69921875f))
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -603,6 +624,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
         CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
         GOTO(95)
     END_IF
+    // Success: a second stomp follows with a cheer and the NICE effect.
     CALL(btlevtcmd_snd_voice, UNIT_ID_SELF, 2)
     CALL(btlevtcmd_GetResultCountAC, LW(6))
     IF_INT_LESS_OR_EQUAL(LW(6), 1)
@@ -636,6 +658,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_WeaponAftereffect, LW(0))
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 1)
+        // A last bounce and the lecture moves on to its next step.
         BEGIN_SIBLING_EVENT_GET_ID(LW(14))
             CALL(evt_sub_intpl_init, EASING_CUBIC_OUT, 180, 0, 20)
             LOOP(21)
@@ -658,6 +681,7 @@ EVT_BEGIN(lecAttackEvent_Jump)
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 8)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 8, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_WaitEventEnd, LW(14))
+    // He walks back to his home position.
     LABEL(95)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
@@ -689,6 +713,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(99)
     END_IF
+    // The attack is declared.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_CommandPayWeaponCost, UNIT_ID_SELF)
@@ -697,6 +722,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     IF_INT_EQUAL(LW(0), 5)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
+        // Frankly tells Mario to tilt and hold the stick left, and waits until he does.
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_008"), 0, -6)
         LABEL(1)
         CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))
@@ -725,6 +751,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
         END_LOOP
         CALL(btlevtcmd_SetRotate, UNIT_ID_LECTURE, 0, 180, 0)
     END_SIBLING_EVENT
+    // The hammer swing action command starts.
     BEGIN_SIBLING_EVENT_GET_ID(LW(15))
         CALL(btlevtcmd_CommandGetWeaponActionLv, LW(0))
         CALL(btlevtcmd_AcSetDifficulty, UNIT_ID_SELF, LW(0))
@@ -736,6 +763,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
             CALL(btlevtcmd_AcSetFlag, 0)
         END_IF
         CALL(btlevtcmd_SetupAC, UNIT_ID_SELF, 3, 1, 0)
+        // Mario walks up to the enemy.
         CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
         CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, EVT_NULLPTR, LW(1), EVT_NULLPTR)
@@ -750,6 +778,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
         CALL(evt_btl_camera_set_zoom, 0, 350)
+        // He lifts the hammer (M_H_1A, M_H_1B) while the gauge charges.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_H_1A"))
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_MARIO_HAMMER_HOLD1"), EVT_NULLPTR, 0, EVT_NULLPTR)
         WAIT_FRAMES(30)
@@ -780,6 +809,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
                         CALL(btlevtcmd_AcSetParam, 2, 1)
                         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
                         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
+                        // Frankly tells him to keep holding the stick.
                         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_009"), 0, -6)
                         LABEL(6)
                         CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))
@@ -806,6 +836,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     IF_INT_EQUAL(LW(0), 5)
         CALL(btlevtcmd_SetTalkPose, UNIT_ID_LECTURE, STRING("T_1"))
         CALL(btlevtcmd_SetStayPose, UNIT_ID_LECTURE, STRING("S_1"))
+        // Frankly tells him to release the stick when the light comes on, and waits.
         CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t2_010"), 0, -6)
         LABEL(10)
         CALL(btlevtcmd_PadCheckNow, 0, 262144, LW(0))
@@ -822,6 +853,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 0)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_STEP, LW(0))
     IF_INT_EQUAL(LW(0), 9)
+        // The release is judged and stored for the lecture.
         CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
         SWITCH(LW(0))
             CASE_EQUAL(3)
@@ -832,12 +864,14 @@ EVT_BEGIN(lecAttackEvent_Hammer)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_LECTURE, LECTURE_FRANKLI_WORK_ATTACK_RESULT, 3)
         END_SWITCH
     END_IF
+    // He swings the hammer down (M_H_1C) and hits the ground.
     CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_SWING1"), 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_H_1C"))
     WAIT_FRAMES(7)
     CALL(evt_snd_sfxon, STRING("SFX_MARIO_HAMMER_HIT_GROUND2"), 0)
     CALL(btlevtcmd_GetResultAC, LW(6))
     IF_BITS_CLEAR(LW(6), AC_RESULT_SUCCESS)
+        // The hit lands for its damage.
         CALL(btlevtcmd_CommandCheckDamage, UNIT_ID_SELF, LW(3), LW(4), DAMAGE_RESULT_FINAL_HIT, LW(5))
         CALL(btlevtcmd_CommandGetWeaponAddress, UNIT_ID_SELF, LW(0))
         CALL(btlevtcmd_AudienceDeclareACResult, LW(0), -1)
@@ -858,6 +892,7 @@ EVT_BEGIN(lecAttackEvent_Hammer)
     CALL(evt_audience_ap_recovery)
     CALL(btlevtcmd_InviteApInfoReport)
     WAIT_FRAMES(30)
+    // He stands up straight and walks back to his home position.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("M_S_1"))
     WAIT_FRAMES(10)
     LABEL(95)

@@ -61,6 +61,10 @@ static EVT_BEGIN(sound_evt)
     RETURN
 EVT_END()
 
+/**
+ * Spawns the item-reveal effect at (x, y, z) for `item`, using `list` as the item table;
+ * called from the battle item code (battle_item_data.c).
+ */
 EffectEntry* effNanigaEntry(s32 type, f32 x, f32 y, f32 z, s32* list, s32 item) {
     EffectEntry* effect;
     EffNanigaWork* work;

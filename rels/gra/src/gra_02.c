@@ -215,6 +215,10 @@ EVT_BEGIN(gra_02_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper run once from the init script: switches on paper-style no-ambient lighting for the pig
+ * shopkeeper's model.
+ */
 static USER_FUNC(booboo_main) {
     animPoseSetMaterialLightFlagOn(npcNameToPtr(booboo_name[0])->poseId, MATERIAL_LIGHT_PAPER_PLAIN);
     return EVT_RETURN_DONE;

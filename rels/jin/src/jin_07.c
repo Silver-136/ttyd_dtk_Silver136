@@ -478,10 +478,12 @@ USER_FUNC(senteresa_okure_move) {
  * Sets the story to "Boo box".
  */
 EVT_BEGIN(evt_teresa_box_open)
+    // The music stops and Mario freezes.
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
     CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 1, 100, 400, 0, 38, 48, 500, EASING_SINE_IN_OUT)
+    // The box shakes violently.
     CALL(evt_mapobj_get_position, STRING("hako"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_BOX_SWING1"), LW(10), LW(11), LW(12), LW(13))
     LOOP(30)
@@ -496,6 +498,7 @@ EVT_BEGIN(evt_teresa_box_open)
     CALL(evt_snd_sfxoff, LW(13))
     CALL(evt_mapobj_trans, 1, STRING("hako"), 0, 0, 0)
     WAIT_MS(300)
+    // Its lid swings open.
     CALL(evt_mapobj_get_position, STRING("hako"), LW(10), LW(11), LW(12))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG4_TBOX_OPEN1"), LW(10), LW(11), LW(12), 0)
     BEGIN_INLINE_EVENT
@@ -517,6 +520,7 @@ EVT_BEGIN(evt_teresa_box_open)
         CALL(evt_cam3d_evt_set, 0, 152, 567, 0, 57, 26, 250, EASING_QUADRATIC_IN)
         SET_VALUE(GF(0), 1)
     END_INLINE_EVENT
+    // A swarm of 200 little Boos pours out of the box.
     CALL(evt_ext_entry, 200, PTR(senteresa_ext_entry_data), PTR(senteresa_ext_init), PTR(senteresa_ext_main), PTR(senteresa_ext_dispent))
     CALL(evt_snd_bgmoff, PSND_PAUSE)
     CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_FF_ENV_SURPRISED2"))
@@ -528,6 +532,7 @@ EVT_BEGIN(evt_teresa_box_open)
         WAIT_MS(5500)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
     END_INLINE_EVENT
+    // The Boos jeer at Mario with speech bubbles as they fly out.
     BEGIN_INLINE_EVENT
         LOOP(0)
             IF_INT_EQUAL(GF(0), 1)
@@ -562,6 +567,7 @@ EVT_BEGIN(evt_teresa_box_open)
             WAIT_MS(LW(0))
         END_LOOP
     END_INLINE_EVENT
+    // Waits until the whole swarm has left the box.
     LOOP(0)
         PEEK_INT(LW(0), PTR(g_nNumEndProc))
         IF_INT_EQUAL(LW(0), 200)
@@ -570,6 +576,8 @@ EVT_BEGIN(evt_teresa_box_open)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(1200)
+    // A late Boo floats in after the others and asks Mario a question; it tosses him an item depending on
+    // his answer.
     CALL(evt_npc_set_position, STRING("テレサ"), 0, 6, 80)
     CALL(evt_npc_set_ry, STRING("テレサ"), 90)
     CALL(evt_npc_flag_onoff, 0, STRING("テレサ"), NPC_FLAG_NO_DRAW)
@@ -644,6 +652,7 @@ EVT_BEGIN(evt_teresa_box_open)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // The late Boo vanishes, the story advances to "Boo box" and control returns.
     CALL(evt_npc_set_position, STRING("テレサ"), 0, -1000, 0)
     CALL(evt_cam_shift_reset)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)

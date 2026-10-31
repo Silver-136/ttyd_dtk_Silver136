@@ -521,14 +521,17 @@ EVT_BEGIN(nokorin_pose)
 EVT_END()
 
 EVT_BEGIN(evt_nokorin)
+    // Skipped once Koopie Koo has said her farewell.
     IF_INT_EQUAL(GSWF_HEI_01_KOOPIE_KOO_FAREWELL_SEEN, 1)
         RETURN
     END_IF
+    // Waits until Koops has joined the party.
     LABEL(0)
     WAIT_FRAMES(1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_07_KOOPS_JOINS)
         GOTO(0)
     END_IF
+    // Mario freezes and walks forward; Koopie Koo calls out from the east and Mario spots her.
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
@@ -557,6 +560,7 @@ EVT_BEGIN(evt_nokorin)
         WAIT_MS(2000)
         CALL(evt_mario_set_pose, STRING("M_S_1"))
     END_INLINE_EVENT
+    // The camera pans to her as she rolls in, and Mario and his partner take their places.
     CALL(evt_cam3d_evt_set, 550, 89, 279, 550, 38, -8, 1000, EASING_SINE_IN_OUT)
     CALL(evt_npc_move_position, STRING("ノコリン"), 550, 0, 0, FLOAT(80.0f), 1)
     WAIT_MS(2000)
@@ -571,6 +575,7 @@ EVT_BEGIN(evt_nokorin)
     END_IF
     CALL(evt_cam3d_evt_set, 400, 89, 279, 400, 38, -8, 0, EASING_SINE_IN_OUT)
     WAIT_MS(200)
+    // She and the party talk about Koops fighting Hooktail, with the camera cutting between them.
     CALL(evt_msg_print, 0, STRING("stg1_hei_12_02"), 0, STRING("party"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, 460, 126, 485, 460, 40, -8, 0, EASING_SINE_IN_OUT)
@@ -640,6 +645,7 @@ EVT_BEGIN(evt_nokorin)
         CALL(evt_msg_print, 0, STRING("stg1_hei_12_07"), 0, 0)
         SET_VALUE(GF(12), 1)
     END_INLINE_EVENT
+    // She spins her shell while the camera follows her.
     CALL_CHILD(PTR(nokorin_pose))
     BEGIN_INLINE_EVENT
         CALL(evt_npc_get_position, STRING("ノコリン"), LW(0), LW(1), LW(2))
@@ -667,6 +673,7 @@ EVT_BEGIN(evt_nokorin)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(1000)
+    // She rolls back through them toward the east, knocking them down again, and rolls off screen.
     SET_VALUE(GF(10), 0)
     SET_VALUE(GF(11), 0)
     SET_VALUE(GF(12), 0)
@@ -746,6 +753,7 @@ EVT_BEGIN(evt_nokorin)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(1000)
+    // The partners comment; Koops promises to come back stronger and Mario nods.
     CALL(evt_msg_print, 0, STRING("stg1_hei_12_09"), 0, STRING("party"))
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_get_pos, 0, LW(3), LW(4), LW(5))
@@ -764,6 +772,7 @@ EVT_BEGIN(evt_nokorin)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+    // The farewell is marked as done and control returns.
     SET_VALUE(GSWF_HEI_01_KOOPIE_KOO_FAREWELL_SEEN, 1)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_party_run, 0)
@@ -814,6 +823,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 
 static EVT_BEGIN(peach_mail)
     LABEL(0)
+    // Waits until Mario walks west of x=200.
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_GREATER(LW(0), 200)
         WAIT_FRAMES(1)
@@ -854,6 +864,7 @@ static EVT_BEGIN(peach_mail)
         WAIT_FRAMES(1)
     END_LOOP
     WAIT_MS(300)
+    // The partner comments; Mario waits for A to open the mail.
     CALL(evt_msg_print_party, STRING("stg1_gon_44"))
     CALL(evt_mario_balloon_bikkuri)
     LOOP(0)
@@ -870,6 +881,7 @@ static EVT_BEGIN(peach_mail)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_HAND_UP1_4"), LW(0), LW(1), LW(2), 0)
     DELETE_EVENT(LW(10))
     WAIT_FRAMES(1)
+    // The camera zooms in as Mario holds the letter and reads it, with the partner joining in.
     CALL(evt_sub_rumble_onoff, 1, 0)
     CALL(evt_cam3d_evt_set_rel, 0, 48, 267, 20, 38, 5, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -921,6 +933,11 @@ EVT_BEGIN(christine_hei_01)
     RETURN
 EVT_END()
 
+/**
+ * Petal Meadows hei_01 map init: registers the exits, the Fire Flower block, the Star Piece,
+ * bushes and the pipe in the grass, starts the flip bridge switch until the bridge story step, spawns Koops,
+ * Nokorin and Goombella's tip scenes and the Peach mail scene, and starts the field music.
+ */
 EVT_BEGIN(hei_01_init_evt)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
@@ -967,6 +984,10 @@ EVT_BEGIN(hei_01_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: turns Mario's partner to face the direction given by args[0] (270 or 90 degrees depending on
+ * whether it is past 180).
+ */
 static USER_FUNC(set_dir) {
     s32 dir = evtGetValue(event, event->args[0]);
     PartyEntry* party = partyGetPtr(0);

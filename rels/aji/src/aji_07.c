@@ -107,6 +107,7 @@ static USER_FUNC(scale_func) {
 }
 
 EVT_BEGIN(tensou_ride)
+    // Mario and his partner walk onto the teleporter pad.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
@@ -143,6 +144,7 @@ EVT_BEGIN(tensou_ride)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // They spin faster and faster, shrink and rise out of sight.
     CALL(evt_mario_cam_off)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
@@ -179,6 +181,8 @@ EVT_BEGIN(tensou_ride)
     END_LOOP
     WAIT_MS(2000)
     CALL(evt_snd_sfxoff, LW(9))
+    // The map changes: to the Rogueport sewers normally, or to the Moon (moo_04) during the story point of the
+    // last mail.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_25_THE_LAST_MAIL)
         SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 1)

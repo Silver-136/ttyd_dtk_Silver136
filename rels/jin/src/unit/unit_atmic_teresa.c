@@ -610,6 +610,7 @@ EVT_END()
  */
 EVT_BEGIN(surprise_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    // Target: it picks the targets for its attack.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_atmic_teresa_surprise))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_atmic_teresa_surprise), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -621,9 +622,11 @@ EVT_BEGIN(surprise_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_atmic_teresa_surprise))
+    // The attack is declared.
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_atmic_teresa_surprise))
+    // It hides its face with a sound and floats toward the targets.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_FACE_HIDE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 1, 0, 180, 0)
@@ -637,6 +640,7 @@ EVT_BEGIN(surprise_event)
     CALL(evt_btl_camera_set_zoom, 0, 200)
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_FACE_HIDDEN, 0)
     CALL(btlevtcmd_AnimeSetPoseTable, UNIT_ID_SELF, 1, PTR(pose_table))
+    // Surprise: it uncovers its face with a startled cry and lunges.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2"))
     CALL(btlevtcmd_SetPartsRotate, UNIT_ID_SELF, 1, 0, 0, 0)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, 0, LW(1), LW(2), 10, 0, EASING_CUBIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
@@ -646,6 +650,7 @@ EVT_BEGIN(surprise_event)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
     LABEL(0)
+    // The pre-damage check decides between a dodge and a hit for each target.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_atmic_teresa_surprise), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -669,8 +674,10 @@ EVT_BEGIN(surprise_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // Miss: the target dodges (for some kinds of miss).
     LABEL(90)
     GOTO(97)
+    // Hit: the surprise lands for its damage.
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_atmic_teresa_surprise))
@@ -684,6 +691,7 @@ EVT_BEGIN(surprise_event)
         GOTO(0)
     END_IF
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
+    // It floats back to its home position.
     LABEL(98)
     WAIT_FRAMES(90)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -702,6 +710,7 @@ EVT_END()
  */
 EVT_BEGIN(bikkuri_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    // Target: it picks the targets for its attack.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_atmic_teresa_bikkuri))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_atmic_teresa_bikkuri), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -713,9 +722,12 @@ EVT_BEGIN(bikkuri_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_atmic_teresa_bikkuri))
+    // The attack is declared.
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
+    // The press weapon pays the cost here; both cost nothing, so it makes no difference.
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_atmic_teresa_press))
+    // Eight small Boos pop out one after another around the target while the Atomic Boo circles.
     CALL(teresa_appear_bikkuri)
     WAIT_FRAMES(75)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT)
@@ -728,12 +740,14 @@ EVT_BEGIN(bikkuri_event)
     CALL(teresa_wait_bikkuri)
     CALL(evt_snd_sfxoff, LW(15))
     WAIT_FRAMES(30)
+    // A startled cry; the camera homes in on the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_ATMTLSA_SURPRISED2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
     LABEL(0)
+    // The pre-damage check decides between a dodge and a hit for each target.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_atmic_teresa_bikkuri), 0, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -756,8 +770,10 @@ EVT_BEGIN(bikkuri_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // Miss: the target dodges (for some kinds of miss).
     LABEL(90)
     GOTO(97)
+    // Hit: the Boos rush the target together for the weapon damage.
     LABEL(91)
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_atmic_teresa_bikkuri))
@@ -770,6 +786,8 @@ EVT_BEGIN(bikkuri_event)
         ADD(LW(10), 1)
         GOTO(0)
     END_IF
+    // It whistles to call the Boos back, they merge into it with a puff of smoke
+    // and the Atomic Boo settles down.
     LABEL(98)
     WAIT_FRAMES(30)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)

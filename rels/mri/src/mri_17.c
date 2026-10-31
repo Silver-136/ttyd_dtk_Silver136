@@ -306,6 +306,7 @@ EVT_BEGIN(trap_restore)
     RETURN
 EVT_END()
 
+/** Dust puffs along the base of the trap cage at eight fixed positions when it drops. */
 EVT_BEGIN(wana_kemuri)
     CALL(evt_eff, 0, STRING("kemuri_test"), 0, -18, 25, 76, FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff, 0, STRING("kemuri_test"), 0, 5, 10, 70, FLOAT(1.0f), 0, 0, 0, 0, 0, 0, 0)
@@ -318,6 +319,11 @@ EVT_BEGIN(wana_kemuri)
     RETURN
 EVT_END()
 
+/**
+ * The trap's two paper animations: the cage (S_hako) drops over the Punies with grid sounds,
+ * dust and a camera shake, then the pipe (S_dokan1) pops out of the floor next to it with its appearing sounds.
+ * Both are played as captured paper animations, and the solid cage and pipe replace them at the end.
+ */
 EVT_BEGIN(wana_offscreen)
     CALL(evt_img_entry, STRING("capture_img"))
     CALL(evt_img_set_paper, STRING("capture_img"), STRING("OFF_d_batan"))
@@ -379,6 +385,7 @@ EVT_BEGIN(trap_event)
     CALL(evt_npc_flag_onoff, 1, STRING("第三勢力幹部"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ａ"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("第三勢力部下Ｂ"), NPC_FLAG_NO_HIT | NPC_FLAG_TALK_POSE | NPC_FLAG_NO_WALL_COLLISION)
+    // Mario and his partner walk in with the Puni Orb in place; Punio runs ahead.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     WAIT_MS(500)
@@ -409,8 +416,10 @@ EVT_BEGIN(trap_event)
     DELETE_EVENT(LW(9))
     CALL(evt_cam3d_evt_set, 13, 110, 326, 13, 56, 20, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+    // The cage falls on the Punies and Punio wonders what happened.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00_01"), 0, STRING("ガイド"))
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, 5, 230, 0)
+    // Lord Crump laughs and drops in with two X-Naut grunts in front of the cage.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_3RD_ENEMY"))
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00_02"), 0, 0)
     CALL(evt_cam3d_evt_set, 50, 164, 624, 50, 56, 7, 500, EASING_SINE_IN_OUT)
@@ -468,6 +477,7 @@ EVT_BEGIN(trap_event)
     CALL(evt_npc_sound_data_reset, STRING("第三勢力幹部"))
     CALL(evt_cam3d_evt_set, 50, 121, 451, 50, 43, 7, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
+    // Crump taunts the party, boasts about the trap and says he can now take the Crystal Star.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00_03"), 0, STRING("第三勢力幹部"))
     CALL(evt_cam3d_evt_set, 50, 151, 548, 50, 56, 7, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -511,6 +521,7 @@ EVT_BEGIN(trap_event)
     WAIT_MS(500)
     CALL(evt_npc_set_ry, STRING("ガイド"), 90)
     CALL(evt_mario_set_dir, 270, 200, 0)
+    // The X-Nauts leave and Punio asks Mario what to do.
     CALL(evt_msg_print, 0, STRING("stg2_mri_e18_00_05"), 0, STRING("ガイド"))
     CALL(evt_npc_get_position, STRING("ガイド"), LW(0), LW(1), LW(2))
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
@@ -616,6 +627,11 @@ EVT_BEGIN(trap_check)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the orb pedestal in the trap room: the light beam model is hidden;
+ * the shared Puni-switch setup runs; if the orb is already on the pedestal it is placed there
+ * and its target is on. The target is placed in front of the pedestal.
+ */
 static EVT_BEGIN(punipuni_ball00_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_sui_hikari"), MAP_OBJ_FLAG_HIDDEN)
     CALL_CHILD(PTR(mri_punipuni_setup))
@@ -628,6 +644,11 @@ static EVT_BEGIN(punipuni_ball00_init)
     RETURN
 EVT_END()
 
+/**
+ * Hit/talk script of the orb pedestal: if empty,
+ * Mario picks an item to put on it (cancel ends the script) and the orb is placed; if full, Mario takes it back.
+ * Mario is frozen during this.
+ */
 static EVT_BEGIN(punipuni_ball00)
     CALL(evt_mario_key_onoff, 0)
     IF_INT_EQUAL(GSWF_MRI_17_PUNI_ORB_PLACED, 0)
@@ -649,6 +670,10 @@ static EVT_BEGIN(punipuni_ball00)
     RETURN
 EVT_END()
 
+/**
+ * Init script of the breaking floor: until the floor has fallen (GSWF_MRI17_FLOOR_BROKEN is 0) the lower floor
+ * piece (A_f2_rak_01) has its collision off.
+ */
 static EVT_BEGIN(breakyuka_init)
     IF_INT_EQUAL(GSWF_MRI_17_BREAKING_FLOOR_BROKEN, 0)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak_01"), 1, 0)
@@ -697,6 +722,10 @@ static EVT_BEGIN(breakyuka_main)
     RETURN
 EVT_END()
 
+/**
+ * Scene on first arrival in the pipe room: the partner walks to the strange statue,
+ * looks left and right and comments on it (stg2_mri_e18_00_11).
+ */
 EVT_BEGIN(strange_statue)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_bero_exec_wait, 65536)
@@ -734,6 +763,11 @@ EVT_BEGIN(switch_event)
     RETURN
 EVT_END()
 
+/**
+ * Map init script of mri_17, the cage trap room:
+ * sets up the Puni, the Puni Orb pedestal, the breaking floor, the blue switch and a Star Piece,
+ * and starts trap_check, trap_main or trap_restore according to the story state.
+ */
 EVT_BEGIN(mri_17_init_evt)
     CALL(evt_puni_mem_init)
     CALL(evt_puni_set_yuka, 17, 0, -309, -1000, -1000, 6, 0)
@@ -794,6 +828,7 @@ EVT_BEGIN(mri_17_init_evt)
     RETURN
 EVT_END()
 
+/** Sets the z-offset used to order the image named in args[0] (in the battle or field list) to the float in args[1]. */
 static USER_FUNC(set_depthPlaneOffset) {
     EvtWord* args = event->args;
     ImageEntry* img = imgNameToPtr((const char*)evtGetValue(event, args[0]), gp->inBattle != 0);

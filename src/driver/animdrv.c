@@ -296,6 +296,7 @@ static AnimationWork* wp = &work;
 
 //.sbss
 s32 anim_unused_sbss;
+//.sbss
 Mtx* g_modeling_mtx;
 s32 g_modeling_mtx_lv;
 
@@ -2070,6 +2071,7 @@ void renderProc(s32 shapeId, s32 unused) {
 
     int j, k, l, k2, jj;
 
+    // stack variables
     s32 clr0VtxSize, posVtxSize, nrmVtxSize;
     s32 drawCount;
     Mtx camMtx, invCamMtx;
@@ -2410,6 +2412,7 @@ void animPoseDraw(s32 poseId, f32 x, f32 y, f32 z, f32 rotY, f32 scale, s32 xluM
     animPoseDrawMtx(poseId, matrix, xluMode, rotY, scale);
 }
 
+// _animPoseDrawMtx
 void animPoseMainSub(AnimationPose* pose);
 
 /** Wraps an angle in degrees into 0..360. */

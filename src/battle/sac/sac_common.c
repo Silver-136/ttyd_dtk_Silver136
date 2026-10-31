@@ -37,6 +37,11 @@ EVT_BEGIN(sac_start_camera_evt)
     RETURN
 EVT_END()
 
+/**
+ * Mario steps 15 units forward with a happy shout and the crowd cheers;
+ * he strikes pose M_P_2 and the Magical Map (treasure_map effect) and an item-get glow appear above his head,
+ * removed again by sac_mario_item_on_end_evt.
+ */
 EVT_BEGIN(sac_mario_item_on_evt)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -65,6 +70,7 @@ EVT_BEGIN(sac_mario_item_on_end_evt)
     RETURN
 EVT_END()
 
+/** Six bursts of stardust 50 units above Mario, 10 frames apart, while the Crystal Star appears. */
 EVT_BEGIN(sac_start_stardust)
     LOOP(6)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -75,6 +81,7 @@ EVT_BEGIN(sac_start_stardust)
     RETURN
 EVT_END()
 
+/** Walks Mario back to his home position after the opening pose. */
 EVT_BEGIN(sac_mario_back_home)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -82,6 +89,7 @@ EVT_BEGIN(sac_mario_back_home)
     RETURN
 EVT_END()
 
+/** Per-enemy script of sac_enemy_slide_go: slides the unit 480 units to the right (off stage) at speed 5. */
 EVT_BEGIN(enemy_slide_go_evt)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(0), 480)
@@ -90,6 +98,7 @@ EVT_BEGIN(enemy_slide_go_evt)
     RETURN
 EVT_END()
 
+/** Per-enemy script of sac_enemy_slide_return: slides the unit back to its home position at speed 7. */
 EVT_BEGIN(enemy_slide_return_evt)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(7.0f))
@@ -97,6 +106,7 @@ EVT_BEGIN(enemy_slide_return_evt)
     RETURN
 EVT_END()
 
+// functions are emitted in reverse definition order (-inline deferred)
 USER_FUNC(sac_wao) {
     s32 num = BattleAudience_GetAudienceNum();
 

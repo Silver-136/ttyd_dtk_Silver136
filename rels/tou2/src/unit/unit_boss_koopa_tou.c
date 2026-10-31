@@ -560,6 +560,7 @@ static EVT_BEGIN(attack_event)
 EVT_END()
 
 static EVT_BEGIN(hip_attack_event)
+    // Choose a target; a confused Bowser with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -570,12 +571,14 @@ static EVT_BEGIN(hip_attack_event)
         END_IF
         RETURN
     END_IF
+    // The attack is announced.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
+    // Bowser stomps up to the target, then crouches and leaps into the air.
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
@@ -585,6 +588,7 @@ static EVT_BEGIN(hip_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_2A"))
     WAIT_MS(300)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_2B"))
+    // He tucks in and drops, aiming his Hip Drop at the target.
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(25)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_2C"))
@@ -596,6 +600,7 @@ static EVT_BEGIN(hip_attack_event)
     SUBTRACT(LW(2), 20)
     CALL(btlevtcmd_JumpPosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 50, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOOPA_HIP_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    // Check how the target defends against the slam.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -618,11 +623,13 @@ static EVT_BEGIN(hip_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // The target dodged: Bowser lands next to it and waits.
     LABEL(90)
     CALL(btlevtcmd_JumpContinue, UNIT_ID_SELF)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_2E"))
     WAIT_MS(500)
     GOTO(98)
+    // The Hip Drop lands: the damage is dealt and the camera shakes.
     LABEL(91)
     CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
@@ -631,6 +638,8 @@ static EVT_BEGIN(hip_attack_event)
     WAIT_MS(500)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_2E"))
     WAIT_MS(300)
+    // If Mario guards poorly, one of his commands is sealed: its icon is tossed across the screen
+    // and an announcement tells which.
     CALL(btlevtcmd_GetResultACDefence, LW(7))
     IF_INT_LESS_OR_EQUAL(LW(7), 3)
         SET_VALUE(LW(15), 0)
@@ -672,6 +681,7 @@ static EVT_BEGIN(hip_attack_event)
             END_SIBLING_EVENT
         END_IF
     END_IF
+    // Bowser walks back home and returns to his stance.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(250)
@@ -845,6 +855,7 @@ static EVT_BEGIN(critical_bite_attack_event)
 EVT_END()
 
 static EVT_BEGIN(fire_attack_event)
+    // Choose the targets; a confused Bowser with none is flustered.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
@@ -855,10 +866,12 @@ static EVT_BEGIN(fire_attack_event)
         END_IF
         RETURN
     END_IF
+    // The attack is announced.
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
     CALL(btlevtcmd_AttackDeclareAll, UNIT_ID_SELF)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
+    // Bowser stomps out in front of the party and faces it, the camera swinging to frame the line-up.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_R_1"))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 120)
@@ -873,6 +886,7 @@ static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_CalculateFaceDirection, UNIT_ID_SELF, -1, LW(3), LW(4), FACE_DIR_TOWARD_UNIT, LW(15))
     CALL(btlevtcmd_ChangeFaceDirection, UNIT_ID_SELF, LW(15))
     WAIT_MS(170)
+    // He rears back and inhales with a roar.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_1A"))
     WAIT_MS(300)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_VOICE_KOOPA_FIRE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -881,6 +895,7 @@ static EVT_BEGIN(fire_attack_event)
         WAIT_MS(1500)
         CALL(evt_snd_sfxoff, LW(15))
     END_INLINE_EVENT
+    // He breathes out a long jet of fire for about a second and a half.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_1B"))
     WAIT_MS(300)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
@@ -899,6 +914,7 @@ static EVT_BEGIN(fire_attack_event)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
     LABEL(10)
+    // Each target is checked in turn: those who dodge duck out of the flames, the rest take the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -934,6 +950,7 @@ static EVT_BEGIN(fire_attack_event)
         ADD(LW(10), 1)
         GOTO(10)
     END_IF
+    // The flames die down and Bowser walks back home.
     LABEL(98)
     WAIT_MS(1200)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KPA_A_1D"))

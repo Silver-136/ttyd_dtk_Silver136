@@ -734,7 +734,14 @@ EVT_BEGIN(watarikiri_suifu_init)
     RETURN
 EVT_END()
 
+/**
+ * Script for one sailor (nannpc id in LW(0)) of the crowd crossing the floating islands:
+ * hops across the barrels in six random-sized jumps, pausing between them,
+ * and finally lands on the right-hand platform; the last three sailors (97 to
+ * 99) are swapped for the named NPCs Sailor C, D and E, the others go to their resting place from suifudata_after.
+ */
 EVT_BEGIN(ukishima_watari_run)
+    // A sailor of the crowd faces right and sets off across the floating barrels.
     CALL(evt_nannpc_set_work, LW(0), 0, 0)
     CALL(evt_nannpc_set_dir, LW(0), 90)
     CALL(evt_sub_random, 20, LW(10))
@@ -745,6 +752,7 @@ EVT_BEGIN(ukishima_watari_run)
     ADD(LW(13), 30)
     CALL(evt_sub_random, 300, LW(14))
     ADD(LW(14), 300)
+    // First hop: a short random-sized jump onto the first barrel, then a short random pause.
     CALL(evt_nannpc_get_position, LW(0), LW(7), LW(8), LW(9))
     CALL(evt_nannpc_jump_position, LW(0), LW(10), 37, LW(12), LW(14), LW(13))
     CALL(evt_sub_random, 30, LW(10))
@@ -758,6 +766,7 @@ EVT_BEGIN(ukishima_watari_run)
     ADD(LW(13), 30)
     CALL(evt_sub_random, 300, LW(14))
     ADD(LW(14), 300)
+    // Second hop onto the next barrel.
     CALL(evt_nannpc_get_position, LW(0), LW(7), LW(8), LW(9))
     CALL(evt_nannpc_jump_position, LW(0), LW(10), 25, LW(12), LW(14), LW(13))
     CALL(evt_sub_random, 30, LW(10))
@@ -784,6 +793,7 @@ EVT_BEGIN(ukishima_watari_run)
     ADD(LW(13), 30)
     CALL(evt_sub_random, 300, LW(14))
     ADD(LW(14), 300)
+    // Third and fourth hops, each a little farther with random size and pause.
     CALL(evt_nannpc_get_position, LW(0), LW(7), LW(8), LW(9))
     CALL(evt_nannpc_jump_position, LW(0), LW(10), 25, LW(12), LW(14), LW(13))
     CALL(evt_sub_random, 30, LW(10))
@@ -810,13 +820,17 @@ EVT_BEGIN(ukishima_watari_run)
     ADD(LW(13), 30)
     CALL(evt_sub_random, 300, LW(14))
     ADD(LW(14), 300)
+    // Last random hop onto the final barrel.
     CALL(evt_nannpc_get_position, LW(0), LW(7), LW(8), LW(9))
     CALL(evt_nannpc_jump_position, LW(0), LW(10), 25, LW(12), LW(14), LW(13))
     CALL(evt_sub_random, 30, LW(10))
     ADD(LW(10), 50)
     WAIT_MS(LW(10))
+    // The final long jump lands on the right-hand platform.
     CALL(evt_nannpc_get_position, LW(0), LW(7), LW(8), LW(9))
     CALL(evt_nannpc_jump_position, LW(0), 625, 50, 0, 250, 50)
+    // The last three sailors turn into the named Sailors C, D and E on the platform; the others go to their
+    // resting spots.
     SWITCH(LW(0))
         CASE_EQUAL(97)
         CALL(evt_nannpc_set_position, 97, 0, -1000, 0)
@@ -857,6 +871,14 @@ EVT_BEGIN(ukishima_watari_run)
     RETURN
 EVT_END()
 
+/**
+ * Cutscene when both island switches have been pressed:
+ * the camera pans over the islands, the crowd speaks (stg5_dou_14 and 15),
+ * then the 95 sailors cross one after another (each is released once it is standing high enough on the bobbing
+ * barrels) until all have crossed.
+ * Sets GSWF_DOU11_SAILORS_CROSSED, removes the invisible ship hit area (fune_atari),
+ * gives control back and starts suifu_orei.
+ */
 EVT_BEGIN(ukishima_watari)
     CALL(evt_cam3d_evt_set, 160, 174, 527, 160, 79, -14, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
@@ -916,6 +938,10 @@ EVT_BEGIN(ukishima_watari)
     RETURN
 EVT_END()
 
+/**
+ * Checks the two island switches (A and B) after one is pressed: if only one is down the camera goes back;
+ * if both are down, plays the success jingle and starts the sailors' crossing (ukishima_watari).
+ */
 EVT_BEGIN(ukishima_check)
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
     ADD(LW(0), GSWF_DOU_11_SWITCH_2_PRESSED)
@@ -934,18 +960,26 @@ EVT_BEGIN(ukishima_check)
     RETURN
 EVT_END()
 
+/**
+ * Makes a floating island or barrel appear: after 0.5 seconds it plays SFX_STG5_BARREL_APPEAR1
+ * and shows two ripple effects on the water at its position,
+ * then unhides the map object in LW(2) and enables its hit area LW(3).
+ */
 static EVT_BEGIN(ukishima_apper)
+    // A splash sound plays as the island or barrel comes up.
     BEGIN_INLINE_EVENT
         WAIT_MS(500)
         CALL(evt_mapobj_get_position, LW(2), LW(10), LW(11), LW(12))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_BARREL_APPEAR1"), LW(10), LW(11), LW(12), 0)
     END_INLINE_EVENT
+    // Two ripples spread on the water above it.
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, LW(2), LW(10), LW(11), LW(12))
         CALL(evt_eff64, STRING(""), STRING("ripple_n64"), 0, LW(10), 5, LW(12), 0, 0, 0, 0, 0, 0, 0, 0)
         WAIT_MS(400)
         CALL(evt_eff64, STRING(""), STRING("ripple_n64"), 0, LW(10), 5, LW(12), 0, 0, 0, 0, 0, 0, 0, 0)
     END_INLINE_EVENT
+    // The island becomes visible and solid, and rises out of the water.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, LW(3), 1, 1)
     CALL(evt_hit_bind_mapobj, LW(3), LW(2))
@@ -959,6 +993,7 @@ static EVT_BEGIN(ukishima_apper)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // It overshoots upward and bobs back down a few times until it settles.
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, -10, 300)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value_para, LW(0), LW(1))
@@ -1022,6 +1057,10 @@ static EVT_BEGIN(ukishima_apper)
     RETURN
 EVT_END()
 
+/**
+ * At map load: hides the first pair of barrels (S_taru_n01, n02) and their hit areas
+ * until the first island switch has been pressed.
+ */
 EVT_BEGIN(ukishima_init1)
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
     ADD(LW(0), GSWF_DOU_11_SWITCH_2_PRESSED)
@@ -1034,6 +1073,11 @@ EVT_BEGIN(ukishima_init1)
     RETURN
 EVT_END()
 
+/**
+ * First blue island switch pressed: the camera looks at the first stretch,
+ * the first pair of barrels pops up out of the water (ukishima_apper) and starts bobbing,
+ * then ukishima_check runs.
+ */
 EVT_BEGIN(ukishima_part1)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(500)
@@ -1068,6 +1112,10 @@ EVT_BEGIN(ukishima_init2)
     RETURN
 EVT_END()
 
+/**
+ * Second blue island switch pressed: the camera looks at the second stretch,
+ * the second pair of barrels pops up out of the water and starts bobbing, then ukishima_check runs.
+ */
 EVT_BEGIN(ukishima_part2)
     CALL(evt_mario_key_onoff, 0)
     WAIT_MS(500)
@@ -1116,6 +1164,11 @@ EVT_BEGIN(ukishima_switch2_evt)
     RETURN
 EVT_END()
 
+/**
+ * Keeps the stranded sailors bobbing with the barrels:
+ * for every sailor with work flag 0 set, offsets it by GW(0) vertically
+ * and puts its shadow at the matching height (higher for sailors on the Z <= 0 side).
+ */
 EVT_BEGIN(torinoko_suifu_pukapuka)
     LOOP(0)
         SET_VALUE(LW(0), 0)
@@ -1143,6 +1196,11 @@ EVT_BEGIN(torinoko_suifu_pukapuka)
     RETURN
 EVT_END()
 
+/**
+ * The stranded sailors keep shouting for help: forever shows six speech bubbles at fixed positions
+ * (stg5_dou_13_01 to
+ * 06) over the crowd, one after another.
+ */
 EVT_BEGIN(_suifu_sakebu)
     LOOP(0)
         WAIT_MS(700)
@@ -1179,6 +1237,11 @@ EVT_BEGIN(_suifu_sakebu)
     RETURN
 EVT_END()
 
+/**
+ * Runs while the sailors are still stranded: whenever Mario stands on the left platform (X 0 to 300, Z -140 to
+ * 140, on the ground) it runs the shouting (_suifu_sakebu), and stops it when he leaves.
+ * Ends once both island switches are pressed.
+ */
 EVT_BEGIN(torinoko_suifu_sakebu)
     LOOP(0)
         LOOP(0)
@@ -1287,6 +1350,11 @@ EVT_BEGIN(torinoko_suifu_init)
     RETURN
 EVT_END()
 
+/**
+ * First-sight cutscene of the stranded sailors:
+ * hides Sailors C to E, Mario sees the crowd shouting (stg5_dou_11 and the small_00 to 05 lines),
+ * the camera pans over them, and then the message stg5_dou_13. Sets GSWF_DOU11_STRANDED_SAILORS_SEEN.
+ */
 EVT_BEGIN(torinoko_suifu)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_npc_set_position, STRING("水夫C"), 0, -1000, 0)
@@ -1338,6 +1406,7 @@ EVT_BEGIN(torinoko_suifu)
 EVT_END()
 
 EVT_BEGIN(suifu_orei)
+    // Sailors C, D and E are placed on the right-hand platform facing the wall of barrels.
     CALL(evt_npc_set_position, STRING("水夫C"), 825, 100, -125)
     CALL(evt_npc_set_ry, STRING("水夫C"), 270)
     CALL(evt_npc_set_position, STRING("水夫D"), 775, 50, 50)
@@ -1348,6 +1417,7 @@ EVT_BEGIN(suifu_orei)
     CALL(evt_npc_set_position, STRING("水夫E"), 750, 50, -25)
 #endif
     CALL(evt_npc_set_ry, STRING("水夫E"), 270)
+    // Wait until Mario reaches the right-hand platform.
     LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_mario_get_name_hitobj_ride, LW(4))
@@ -1364,6 +1434,7 @@ EVT_BEGIN(suifu_orei)
         WAIT_FRAMES(1)
     END_LOOP
     DELETE_EVENT(GW(10))
+    // Control is taken from Mario; he and his partner turn to face the sailors.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_npc_flag_onoff, 1, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -1376,11 +1447,13 @@ EVT_BEGIN(suifu_orei)
         CALL(evt_party_stop, 0)
         CALL(evt_party_set_dir, 0, 90, 200)
     END_INLINE_EVENT
+    // Sailors D and E thank Mario for helping them across.
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 3000)
     CALL(evt_set_dir_to_target, STRING("水夫D"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_16"), 0, STRING("水夫D"))
     CALL(evt_set_dir_to_target, STRING("水夫E"), STRING("mario"))
     CALL(evt_msg_print, 0, STRING("stg5_dou_16_01"), 0, STRING("水夫E"))
+    // Monie appears, startled, and runs across the platform asking for help.
     SET_INT_READ_ADDR(PTR(suifudata_after))
     SET_VALUE(LW(10), 95)
     MULTIPLY(LW(10), 4)
@@ -1398,6 +1471,7 @@ EVT_BEGIN(suifu_orei)
     CALL(evt_npc_move_position, STRING("モニー"), 700, 0, 0, FLOAT(180.0f), 0)
     CALL(evt_npc_set_ry, STRING("モニー"), 270)
     CALL(evt_msg_print, 0, STRING("stg5_dou_16_03"), 0, STRING("モニー"))
+    // Peeton runs in after her; Monie keeps pleading while Mario reacts with surprise and a raised hand.
     SET_INT_READ_ADDR(PTR(suifudata_after))
     SET_VALUE(LW(10), 96)
     MULTIPLY(LW(10), 4)
@@ -1426,6 +1500,7 @@ EVT_BEGIN(suifu_orei)
     CALL(evt_mario_set_pose, STRING("M_I_2"))
     WAIT_MS(1000)
     CALL(evt_msg_print, 0, STRING("stg5_dou_16_06"), 0, STRING("モニー"))
+    // Monie and Peeton become talkable, the story moves on to the stranded sailors step and control returns.
     CALL(evt_npc_flag_onoff, 0, STRING("モニー"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_change_interrupt, STRING("モニー"), 6, PTR(mony_talk))
     CALL(evt_npc_flag_onoff, 0, STRING("ピートン"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -1612,6 +1687,11 @@ EVT_BEGIN(bombwall_suifuout_secheck)
     RETURN
 EVT_END()
 
+/**
+ * Script for one sailor (nannpc id in LW(0)) fleeing through the new hole in the wall:
+ * walks to the hole, jumps over it in two or three hops with random spacing and speed,
+ * runs off along Z = -50 and is moved below the map.
+ */
 EVT_BEGIN(bombwall_suifuout)
     CALL(evt_nannpc_set_work, LW(0), 0, 0)
     CALL(evt_nannpc_get_position, LW(0), LW(1), LW(2), LW(3))
@@ -1672,7 +1752,13 @@ EVT_BEGIN(bombwall_suifuout)
     RETURN
 EVT_END()
 
+/**
+ * After Bobbery has blown the wall: the camera shows Sailor C, D, Peeton,
+ * Monie and the crowd (95 sailors) leaving through the hole one
+ * after another with thanks (stg5_dou_17_12 to 15), then Sailor E; the camera returns to Mario.
+ */
 EVT_BEGIN(bombwall_after)
+    // Control is taken from Mario, who turns toward the new hole in the wall.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_LESS_OR_EQUAL(LW(0), 780)
@@ -1680,6 +1766,7 @@ EVT_BEGIN(bombwall_after)
         ELSE
         CALL(evt_mario_set_dir, 270, 200, 0)
     END_IF
+    // The camera shows the platform; Sailor C hops through the hole first and thanks Mario.
     CALL(evt_npc_flag_onoff, 1, STRING("水夫C"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("水夫D"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_npc_flag_onoff, 1, STRING("水夫E"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -1692,6 +1779,7 @@ EVT_BEGIN(bombwall_after)
     CALL(evt_msg_print, 0, STRING("stg5_dou_17_12"), 0, STRING("水夫C"))
     CALL(evt_npc_move_position, STRING("水夫C"), 780, -185, 0, FLOAT(180.0f), 0)
     CALL(evt_npc_set_position, STRING("水夫C"), 0, -1000, 0)
+    // Sailor D follows through the hole and thanks Mario.
     CALL(evt_npc_set_ry, STRING("水夫D"), 270)
     WAIT_MS(200)
     CALL(evt_npc_move_position, STRING("水夫D"), 673, -38, 0, FLOAT(180.0f), 0)
@@ -1705,6 +1793,7 @@ EVT_BEGIN(bombwall_after)
     CALL(evt_msg_print, 0, STRING("stg5_dou_17_13"), 0, STRING("水夫D"))
     CALL(evt_npc_move_position, STRING("水夫D"), 780, -185, 0, FLOAT(180.0f), 0)
     CALL(evt_npc_set_position, STRING("水夫D"), 0, -1000, 0)
+    // Peeton and Monie follow and Monie says thanks for the rescue.
     SET_VALUE(GF(0), 1)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_set_ry, STRING("ピートン"), 270)
@@ -1730,6 +1819,7 @@ EVT_BEGIN(bombwall_after)
     WAIT_MS(300)
     WAIT_WHILE(GF(0))
     CALL(evt_msg_print, 0, STRING("stg5_dou_17_14"), 0, STRING("モニー"))
+    // Peeton and Monie leave, then the crowd of 95 sailors streams out of the hole one after another.
     CALL(evt_nannpc_set_subfunc, 2, 0)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_move_position, STRING("ピートン"), 800, -185, 0, FLOAT(180.0f), 0)
@@ -1756,6 +1846,7 @@ EVT_BEGIN(bombwall_after)
         END_IF
         WAIT_MS(60)
     END_LOOP
+    // Sailor E is last to go, thanking Mario.
     WAIT_MS(1000)
     CALL(evt_npc_set_ry, STRING("水夫E"), 270)
     WAIT_MS(200)
@@ -1770,6 +1861,7 @@ EVT_BEGIN(bombwall_after)
     CALL(evt_msg_print, 0, STRING("stg5_dou_17_15"), 0, STRING("水夫E"))
     CALL(evt_npc_move_position, STRING("水夫E"), 780, -185, 0, FLOAT(180.0f), 0)
     CALL(evt_npc_set_position, STRING("水夫E"), 0, -1000, 0)
+    // The camera returns to Mario and control is restored.
     WAIT_MS(500)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
@@ -2557,6 +2649,7 @@ static HitDamageReturn hitDmgRetPoints[] = {
 };
 
 EVT_BEGIN(dou_11_init_evt)
+    // Music, ambience and exits for the room; the NPCs are set up and Monie and Peeton get their ring models.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG5_DOU1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG5_DOU12"))
     CALL(evt_snd_set_rev_mode, 2)
@@ -2568,6 +2661,8 @@ EVT_BEGIN(dou_11_init_evt)
     CALL(evt_npc_set_tribe, STRING("ピートン"), STRING("ピートン（指輪）"))
     CALL(evt_map_playanim, STRING("nami"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("moku"), MAP_ANIM_PLAY_LOOP, 0)
+    // The bombable wall is set up; at the wave-dodging step the stranded sailors cutscenes are prepared, and at
+    // the kicked-off step the escape-route scene starts.
     SPAWN_EVENT(PTR(bombwall_init))
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG5_29_WAVE_DODGING)
@@ -2595,6 +2690,7 @@ EVT_BEGIN(dou_11_init_evt)
             SPAWN_EVENT(PTR(suifu_orei))
         END_IF
     END_IF
+    // Between the shipwrecked-sailors and escape-route steps the sailors stand in their finished positions.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_30_SHIPWRECKED_SAILORS)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG5_35_ESCAPE_ROUTE)
             SPAWN_EVENT(PTR(watarikiri_suifu_init))
@@ -2610,6 +2706,8 @@ EVT_BEGIN(dou_11_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n04"), 1, 0)
     END_IF
+    // The background ship sways, the damage-return points depend on the story step, and the bobbing barrels and
+    // bottles start.
     SPAWN_EVENT(PTR(haikei_funeyure))
     CALL(evt_map_entry_airport_harbor, 0, STRING("S_hikou"), STRING("A_hikou"))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG5_30_SHIPWRECKED_SAILORS)
@@ -2653,6 +2751,7 @@ EVT_BEGIN(dou_11_init_evt)
     IF_INT_GREATER_OR_EQUAL(LW(0), 2)
         SPAWN_EVENT(PTR(pukapuka_watari_init02))
     END_IF
+    // Ship-change platform; after Cortez attacks, dust shaking starts.
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_01"), STRING("Ship_Change_01"))
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_40_TRUE_IDENTITY)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG5_41_RETURN_TO_THE_GROTTO)

@@ -1002,6 +1002,8 @@ void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, 
     }
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
 
+    // the speech tail pointing at (tailX, tailY): tailMode & 1 draws it, & 4 moves its base along the window, & 8
+    // puts it on the other edge
     if (tailFlags & 1) {
         if (tailFlags & 4) {
             xx = (0.7f * width) + x;

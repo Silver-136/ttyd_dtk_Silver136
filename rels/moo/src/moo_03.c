@@ -49,6 +49,11 @@ static EVT_BEGIN(party_damage_pose)
     RETURN
 EVT_END()
 
+/**
+ * Event script: the flight through space, run when moo_03 loads.
+ * Mario and the partner, in their hurt poses, glide across the screen from left to right (X -304 to 304) with a
+ * flying sound, the partner speaks a line (stg7_moo_01_xxx, one per partner) and the map changes to moo_04.
+ */
 static EVT_BEGIN(mario_fly)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
@@ -119,6 +124,11 @@ static EVT_BEGIN(mario_fly)
     RETURN
 EVT_END()
 
+/**
+ * Map init script for moo_03, the space view during the flight to the Moon:
+ * music and ambience, one animating star, camera distance set from the field of view (z)
+ * and the flight scene (mario_fly) with Mario and the partner tumbling.
+ */
 EVT_BEGIN(moo_03_init_evt)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_MON1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_MOO3"))
@@ -133,6 +143,10 @@ EVT_BEGIN(moo_03_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: stores in LW(0) the camera distance, as an event float,
+ * at which 240 units fit the field of view (tan of 12.5 degrees).
+ */
 static USER_FUNC(z) {
     f32 t = tan(0.21816612780094147);
     // evt float encoding of the distance that fits 240 units in the fov

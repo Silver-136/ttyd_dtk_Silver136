@@ -501,6 +501,8 @@ const char* MOAMOA_TAIJOU[] = {
 };
 
 static EVT_BEGIN(dead_event)
+    // Once the last attack has finished, Smorg's remaining tentacles (or its second-form arm) collapse
+    // and vanish one by one.
     CALL(btlevtcmd_WaitAttackEnd)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MOAMOA_UNIT_WORK_MOUTH_FORM, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 1)
@@ -546,6 +548,7 @@ static EVT_BEGIN(dead_event)
             CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, LW(0), -1)
         END_IF
     END_IF
+    // Smorg's body sags and crumples through its defeat animations.
     SET_INT_READ_ADDR(PTR(&MOAMOA_TAIJOU))
     LOOP(0)
         READ_INT(LW(2))
@@ -556,6 +559,7 @@ static EVT_BEGIN(dead_event)
         WAIT_FRAMES(1)
         CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     END_LOOP
+    // A pause, a lump sound, then the body keeps collapsing.
     WAIT_MS(1000)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_LUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     LOOP(0)
@@ -567,6 +571,7 @@ static EVT_BEGIN(dead_event)
         WAIT_FRAMES(1)
         CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     END_LOOP
+    // The swarm swirls up, smoke puffs out and the party is paid its coins, experience and star points.
     CALL(moamoa_guruguru)
     WAIT_MS(500)
     SET_VALUE(LW(10), -2)
@@ -587,6 +592,7 @@ static EVT_BEGIN(dead_event)
         LOOP(LW(0))
         END_LOOP
     END_IF
+    // The final explosion scatters the swarm, and the boss unit is removed.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_EXPLOSION1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(moamoa_bomb)
     CALL(evt_moamoa_mainUnitIdClear)

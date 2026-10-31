@@ -564,6 +564,10 @@ EVT_BEGIN(yuu_03_icon_monte_entry_evt)
     RETURN
 EVT_END()
 
+/**
+ * Runs the wind particle effect for one gust: clears the particles for the direction in LW(1)
+ * and updates them each frame until GW(0) becomes 1 (gust over) or 2 (abort).
+ */
 EVT_BEGIN(ryushi_event)
     SET_VALUE(GW(0), 0)
     CALL(evt_ryushi_clr, LW(1))
@@ -580,18 +584,24 @@ EVT_BEGIN(ryushi_event)
     RETURN
 EVT_END()
 
+/** Puts Mario on the Paper Mode starting spot (x -1650) facing right. */
 EVT_BEGIN(yuu_03_kaijo_init)
     CALL(evt_mario_set_pos, -1650, 0, 0)
     CALL(evt_mario_set_dir, 90, 0, 0)
     RETURN
 EVT_END()
 
+/** Puts Mario back on the start spot after the opening camera or between rounds (x -1520) facing right. */
 EVT_BEGIN(yuu_03_kaijo_init2)
     CALL(evt_mario_set_pos, -1520, 0, 0)
     CALL(evt_mario_set_dir, 90, 0, 0)
     RETURN
 EVT_END()
 
+/**
+ * Set-up for minigame 4 (Paper Mode): freezes Mario's controls, allocates the minigame work area,
+ * dismisses the partners, starts the crowd sound and sets phase 1.
+ */
 EVT_BEGIN(minigame04_main)
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(yuu_03_kaijo_init))
@@ -605,6 +615,10 @@ EVT_BEGIN(minigame04_main)
     RETURN
 EVT_END()
 
+/**
+ * Opening cutscene of Paper Mode: pans the 3D camera along the course,
+ * then shows the "menu_title_minigame4" title card.
+ */
 EVT_BEGIN(minigame04_start_cam)
     CALL(evt_cam3d_evt_set, FLOAT(-1520.0f), FLOAT(335.0f), FLOAT(850.0f), FLOAT(-1520.0f), FLOAT(65.0f), FLOAT(-25.0f), 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
@@ -618,6 +632,10 @@ EVT_BEGIN(minigame04_start_cam)
     RETURN
 EVT_END()
 
+/**
+ * Cleans up when the player skips the opening camera:
+ * frees the title card, turns off the event camera and puts Mario at the start spot.
+ */
 EVT_BEGIN(minigame04_start_cam_cancel)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_yuutitle_free)
@@ -629,6 +647,10 @@ EVT_BEGIN(minigame04_start_cam_cancel)
     RETURN
 EVT_END()
 
+/**
+ * Phase 1 of Paper Mode: plays the opening camera (skippable), starts the minigame music,
+ * shows the countdown effect, gives Mario control, lets the Pianta NPC go and starts the counter (limit 701).
+ */
 EVT_BEGIN(minigame04_start)
     CALL(yuuminigame4_opening_chk, LW(0), LW(1))
     IF_INT_NOT_EQUAL(LW(1), 0)
@@ -676,6 +698,8 @@ EVT_BEGIN(minigame04_end)
     SET_VALUE(GF(0), 1)
     SET_VALUE(LW(3), 1)
     BEGIN_INLINE_EVENT
+        // If Mario finished in time and is above the course, he walks on to the goal side (x 1650) on landing;
+        // otherwise the event just waits until he is standing on something.
         IF_INT_LESS(LW(0), 701)
             LOOP(0)
                 CALL(evt_mario_get_name_hitobj_ride, LW(0))
@@ -705,6 +729,7 @@ EVT_BEGIN(minigame04_end)
             CALL(evt_mario_normalize)
         END_IF
     END_INLINE_EVENT
+    // Running the counter out to 701 plays the failure effect; otherwise the success effect plays.
     IF_INT_GREATER_OR_EQUAL(LW(0), 701)
         CALL(eff_call_minigame, 2, 0, 0, 500)
         WAIT_MS(4000)
@@ -712,6 +737,7 @@ EVT_BEGIN(minigame04_end)
         CALL(eff_call_minigame, 1, 0, 0, 500)
         WAIT_MS(4000)
     END_IF
+    // The tally screen shows the score and Mario receives his piantas, then the ranking screen records it.
     CALL(evt_yuucounter_free)
     CALL(yuugijou_montemedal_disp_onoff, 1)
     CALL(evt_yuuranking_alloc, 0, 0, 1, 0, LW(0), 0, LW(1), 701)
@@ -726,6 +752,7 @@ EVT_BEGIN(minigame04_end)
     WAIT_FRAMES(1)
     CALL(yuuranking_wait_button)
     CALL(evt_yuuranking_free)
+    // With fewer than 10 piantas the game ends; otherwise the player picks Continue (10 piantas) or Quit.
     SET_VALUE(LW(1), 10)
     CALL(yuugijou_get_montemedal, LW(0))
     IF_INT_LESS(LW(0), LW(1))
@@ -733,6 +760,7 @@ EVT_BEGIN(minigame04_end)
         ELSE
         CALL(evt_msg_select, 0, STRING("sysyuu_03_00"))
     END_IF
+    // Quitting sends Mario back through the pipe to gor_03.
     IF_INT_NOT_EQUAL(LW(0), 0)
         SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
         CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
@@ -741,6 +769,7 @@ EVT_BEGIN(minigame04_end)
         CALL(evt_bero_mapchange, STRING("gor_03"), STRING("A_dokan_02"))
         RETURN
     END_IF
+    // Continuing pays 10 piantas; the course fades out, Mario goes back to the start and the racers line up.
     MULTIPLY(LW(1), -1)
     CALL(yuugijou_add_montemedal, 0, LW(1))
     CALL(yuugijou_montemedal_wait)

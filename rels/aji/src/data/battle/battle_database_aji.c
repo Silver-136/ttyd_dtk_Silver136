@@ -1331,6 +1331,11 @@ EVT_BEGIN(bgset_aji_space_event)
     RETURN
 EVT_END()
 
+/**
+ * Script function: advances the step counter in the variable args[1] by one (wrapping at args[2])
+ * and turns the battle stage object named args[0] to 360 degrees times step over total around Z. Used for the
+ * rotating star backdrops.
+ */
 static USER_FUNC(_space_rotate) {
     EvtWord* args = event->args;
     const char* name = (const char*)evtGetValue(event, args[0]);

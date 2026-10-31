@@ -350,6 +350,7 @@ const char* C_of_C_Attack_back[] = {
 };
 
 static EVT_BEGIN(evt_attack)
+    // Choose the target for the tentacle's swat; a confused tentacle is flustered when there is none.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_moamoa_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_moamoa_attack), LW(3), LW(4))
@@ -361,6 +362,7 @@ static EVT_BEGIN(evt_attack)
         END_IF
         RETURN
     END_IF
+    // The camera closes in on the tentacle and its target, and the attack is announced.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -369,12 +371,14 @@ static EVT_BEGIN(evt_attack)
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_moamoa_attack))
+    // The swing is chosen by where the target stands: in front (the near side) or toward the back.
     CALL(boss_moamoa_check_zenei_kouei, LW(3), LW(1))
     IF_INT_EQUAL(LW(1), 0)
         SET_VALUE(LF(0), 0)
     ELSE
         SET_VALUE(LF(0), 1)
     END_IF
+    // The main body freezes its idle animation, and the other two tentacles that are still alive swing along.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, MOAMOA_LIMB_WORK_BODY, LW(6))
     CALL(btlevtcmd_SetUnitWork, LW(6), MOAMOA_UNIT_WORK_LIMB_HIT, 0)
     CALL(btlevtcmd_AnimeChangePose, LW(6), 1, STRING("S_1_1"))
@@ -391,6 +395,7 @@ static EVT_BEGIN(evt_attack)
         SET_VALUE(LW(5), 1)
         SPAWN_EVENT(evt_attack_other_arm)
     END_IF
+    // The tentacle's arm sound starts, and it sweeps back and forth through its swing animation.
     IF_INT_EQUAL(LF(0), 0)
         SET_INT_READ_ADDR(PTR(&C_of_C_Attack_front))
         SET_VALUE(LW(15), 1)
@@ -418,6 +423,7 @@ static EVT_BEGIN(evt_attack)
         WAIT_FRAMES(1)
         CALL(btlevtcmd_AnimeWaitPlayComplete, UNIT_ID_SELF, 1)
     END_LOOP
+    // A pause, a heavy arm-slam sound, then the swat comes down.
     WAIT_MS(1000)
     IF_INT_EQUAL(LF(0), 0)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MOA_G_ARM_MOVE3"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -458,6 +464,7 @@ static EVT_BEGIN(evt_attack)
         END_SIBLING_EVENT
         WAIT_MS(70)
     END_IF
+    // The swat's hit is checked: a target that dodges is missed, otherwise it takes the damage.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_moamoa_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_EQUAL(1)
@@ -471,6 +478,7 @@ static EVT_BEGIN(evt_attack)
         CASE_EQUAL(2)
         CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
     END_SWITCH
+    // The main body resumes idling and the tentacle finishes its animation.
     CALL(btlevtcmd_SetUnitWork, LW(6), MOAMOA_UNIT_WORK_LIMB_HIT, 1)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     IF_INT_EQUAL(LW(15), 0)

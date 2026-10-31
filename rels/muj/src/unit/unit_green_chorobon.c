@@ -460,6 +460,7 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Damage event of the Green Fuzzy: runs the default damage reaction. */
 static EVT_BEGIN(damage_event)
     SET_VALUE(LW(10), UNIT_ID_SELF)
     SET_VALUE(LW(11), 1)
@@ -467,6 +468,11 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Data event (tags 25 to 36) for when the Green Fuzzy is hurt by a counter while attacking:
+ * resets its scale, plays the counter damage reaction and, unless that knocked it out for good,
+ * hops home (return_event).
+ */
 static EVT_BEGIN(counter_damage_event)
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
     SET_VALUE(LW(10), UNIT_ID_SELF)
@@ -484,6 +490,7 @@ static EVT_BEGIN(counter_damage_event)
     RETURN
 EVT_END()
 
+/** The Green Fuzzy hops back to its home position in hops of 40 (rabbit_move). */
 static EVT_BEGIN(return_event)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(4.0f), FLOAT(0.5996094f))
@@ -493,6 +500,11 @@ static EVT_BEGIN(return_event)
     RETURN
 EVT_END()
 
+/**
+ * Drain attack of the Green Fuzzy: it hops up to one target,
+ * jumps onto it and drains it (weapon_chorobon_drain_attack), healing itself by the amount drained,
+ * then hops home.
+ */
 static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_chorobon_drain_attack))
@@ -521,9 +533,11 @@ static EVT_BEGIN(drain_attack_event)
     SET_VALUE(LW(6), 0)
     CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(5), 50)
     SET_VALUE(LW(8), 50)
+    // It hops over toward its target in bounds.
     CALL_CHILD(rabbit_move)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
     CALL(evt_btl_camera_set_zoom, 0, 350)
+    // The camera pulls back and the Green Fuzzy crouches, then leaps high up onto its target.
     CALL(evt_btl_camera_nomove_y_onoff, 0, 1)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 60, 0, FLOAT(0.69921875f))
@@ -554,6 +568,8 @@ static EVT_BEGIN(drain_attack_event)
         GOTO(98)
         CASE_END
     END_SWITCH
+    // The leap misses or is blocked: it bounces off in two hops, lands in front of the target and waits a
+    // moment.
     LABEL(90)
     CALL(btlevtcmd_JumpSetting, UNIT_ID_SELF, 0, FLOAT(3.0f), FLOAT(0.19921875f))
     CALL(btlevtcmd_GetPos, LW(3), LW(0), LW(1), LW(2))
@@ -569,6 +585,7 @@ static EVT_BEGIN(drain_attack_event)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("CBN_N_1"))
     WAIT_MS(1000)
     GOTO(98)
+    // The leap lands. First it checks whether the target is protected by a shock counter.
     LABEL(91)
     SET_VALUE(LF(0), 0)
     CALL(btlevtcmd_PreCheckCounter, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_chorobon_drain_attack), 256, LW(5))
@@ -578,6 +595,7 @@ static EVT_BEGIN(drain_attack_event)
     IF_INT_EQUAL(LW(5), 14)
         SET_VALUE(LF(0), 1)
     END_IF
+    // If the target shocks it, the Green Fuzzy takes the counter damage instead and the attack ends there.
     IF_INT_EQUAL(LF(0), 1)
         CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_chorobon_drain_attack))
@@ -585,6 +603,7 @@ static EVT_BEGIN(drain_attack_event)
         CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
         RETURN
     END_IF
+    // It clings to the target, which shakes while the Green Fuzzy latches on.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_CHORO2_ATTACK1_1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetBodyId, LW(3), LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, LW(3), LW(0), POSE_TYPE_DAMAGE_DRAINED)
@@ -611,6 +630,7 @@ static EVT_BEGIN(drain_attack_event)
         END_IF
         CALL(btlevtcmd_SetDispOffset, LW(3), 0, 0, 0)
     END_INLINE_EVENT
+    // It drains the target for about 90 frames (CBN_A_2), then squashes down.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_CHORO2_ATTACK1_2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_GetFaceDirection, UNIT_ID_SELF, LW(15))
     SET_VALUE(LW(14), 20)
@@ -640,11 +660,13 @@ static EVT_BEGIN(drain_attack_event)
     CALL(evt_btl_camera_add_zoom, 0, -50)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_CHORO2_ATTACK2"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
+    // The Action Command defence result is applied and it drains HP from the target.
     CALL(btlevtcmd_ResultACDefence, LW(3), PTR(&weapon_chorobon_drain_attack))
     SET_VALUE(LW(9), PTR(&weapon_chorobon_drain_attack))
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     CALL(btlevtcmd_GetHpDamage, LW(3), LW(10))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_WALK)
+    // If it drained anything it swells up, and then it heals itself by that amount with a recovery effect.
     IF_INT_GREATER_OR_EQUAL(LW(10), 1)
         CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.5f), FLOAT(0.5f), 0)
     END_IF
@@ -695,6 +717,7 @@ static EVT_BEGIN(drain_attack_event)
     LOOP(2)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         ADD(LW(1), 30)
+        // It hops home in two bounces.
         CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_ENM_CHORO2_ATTACK3"), 0, 0, -1, -1, 0, 0)
         LOOP(2)
             CALL(btlevtcmd_AddScale, UNIT_ID_SELF, FLOAT(0.15917969f), FLOAT(-0.23925781f), 0)
@@ -720,6 +743,7 @@ static EVT_BEGIN(drain_attack_event)
         WAIT_FRAMES(1)
     END_LOOP
     GOTO(98)
+    // The camera resets and the Green Fuzzy gets back to its starting spot.
     LABEL(98)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -732,6 +756,11 @@ static EVT_BEGIN(drain_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: copies the current HP (capped to the max HP),
+ * size change turns and strength of unit args[0] to unit args[1] and resets the second unit's HP gauge;
+ * friend_event uses it so a newly split Green Fuzzy starts with its parent's HP and size.
+ */
 static USER_FUNC(chorobon_copy_status) {
     EvtWord* args = event->args;
     s32 id1 = BattleTransID(event, evtGetValue(event, args[0]));

@@ -432,6 +432,10 @@ EVT_BEGIN(aud_hit_event)
     RETURN
 EVT_END()
 
+/**
+ * Event run on a thrown audience member that missed:
+ * moves it over LW(5) frames to the miss position, deletes it and lowers the audience size by one.
+ */
 EVT_BEGIN(aud_no_hit_event)
     CALL(evt_audience_move_position_frame, LW(0), LW(1), LW(2), LW(3), LW(4), LW(5))
     CALL(evt_audience_delete, LW(0))
@@ -439,6 +443,10 @@ EVT_BEGIN(aud_no_hit_event)
     RETURN
 EVT_END()
 
+/**
+ * Script function: keeps the frame part (part 3) of the boss on the locator17 bone of its body part
+ * and turns it to face the camera each frame; args[0] is the unit.
+ */
 static USER_FUNC(waku_main) {
     BattleWork* wp = _battleWorkPointer;
     EvtWord* args = event->args;
@@ -1114,6 +1122,8 @@ EVT_END()
  * when still unused (unit work 7).
  */
 static EVT_BEGIN(attack_event)
+    // If the fists are out (unit work 0 is 1), it counts down how long they stay away and calls them back
+    // when none are left.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(arm_check, 0, LW(0))
@@ -1128,12 +1138,14 @@ static EVT_BEGIN(attack_event)
             END_IF
         END_IF
     END_IF
+    // It uses an item instead of attacking when one is ready.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+    // Arms on: it uses the drill on its first attack and while its HP is above 63.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DRILL_TALK_DONE, LW(0))
@@ -1146,12 +1158,14 @@ static EVT_BEGIN(attack_event)
             CALL_CHILD(PTR(drill_attack_event))
             GOTO(99)
             ELSE
+            // After that the first thing it does is split its arms off into two fists (arm_bunri_event).
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_LAUNCHED, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL_CHILD(PTR(arm_bunri_event))
                 GOTO(99)
             END_IF
             CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
+            // Above 35 HP: drill or splitting the arms off, 40 weight each.
             IF_INT_GREATER(LW(0), 35)
                 SET_VALUE(LW(0), 0)
                 ADD(LW(0), 40)
@@ -1167,6 +1181,8 @@ static EVT_BEGIN(attack_event)
                     GOTO(99)
                 END_IF
                 ELSE
+                // 35 HP or less: the audience attack comes first if it is unused and there are 20 audience
+                // members; then drill 40, separation 40, audience attack 25.
                 CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_TALK_DONE, LW(0))
                 IF_INT_EQUAL(LW(0), 0)
                     CALL(get_aud_num, LW(0))
@@ -1204,11 +1220,13 @@ static EVT_BEGIN(attack_event)
             END_IF
         END_IF
         ELSE
+        // Fists out: above 35 HP it throws the boomerang.
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_GREATER(LW(0), 35)
             CALL_CHILD(PTR(boomerang_attack_event))
             GOTO(99)
             ELSE
+            // 35 HP or less: the audience attack first if unused, then boomerang 75 or audience attack 20.
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_TALK_DONE, LW(0))
             IF_INT_EQUAL(LW(0), 0)
                 CALL(get_aud_num, LW(0))
@@ -1240,6 +1258,7 @@ static EVT_BEGIN(attack_event)
         END_IF
     END_IF
     LABEL(99)
+    // The facing is reset and it goes back to waiting.
     CALL(btlevtcmd_ResetFaceDirection, -2)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
     RETURN
@@ -1254,9 +1273,11 @@ EVT_END()
  * then reappears at the right edge and walks home.
  */
 EVT_BEGIN(drill_attack_event)
+    // Choose a target.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_batten_drill_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_batten_drill_attack), LW(3), LW(4))
+    // No valid target: a confused boss is flustered, otherwise the turn is skipped.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1264,6 +1285,8 @@ EVT_BEGIN(drill_attack_event)
         END_IF
         RETURN
     END_IF
+    // The first time (unit work 5), Crump announces the drill attack over a close-up of the boss
+    // (stg7_aji_41_02).
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_DRILL_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_DRILL_TALK_DONE, 1)
@@ -1280,10 +1303,12 @@ EVT_BEGIN(drill_attack_event)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
         WAIT_MS(500)
     END_IF
+    // The attack is declared and the guard window opens.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_batten_drill_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_batten_drill_attack))
+    // Wind-up: it crouches and fires its jets (MGN_A3_1, MGN_A3_2).
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_DRILL_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A3_1"))
     WAIT_MS(800)
@@ -1293,10 +1318,13 @@ EVT_BEGIN(drill_attack_event)
         CALL(drill_jet, UNIT_ID_SELF)
     END_SIBLING_EVENT
     WAIT_MS(300)
+    // It jets straight up and off the top of the screen.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 300)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
     WAIT_MS(300)
+    // It reappears high above the stage upside down and plunges back down in a tornado, drill first
+    // (MGN_A3_3).
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, -125, 500, 0)
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 180, 0, 0)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A3_3"))
@@ -1314,6 +1342,7 @@ EVT_BEGIN(drill_attack_event)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // The camera shakes as the drill bores through the floor.
     CALL(evt_btl_camera_shake_h, 0, 7, 0, 80, 0)
     SET_VALUE(LW(6), 0)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
@@ -1321,6 +1350,7 @@ EVT_BEGIN(drill_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(97)
     END_IF
+    // Each target in turn gets the hit check and then the damage; the action-command result is read once.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_batten_drill_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -1356,6 +1386,7 @@ EVT_BEGIN(drill_attack_event)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     GOTO(10)
     LABEL(97)
+    // It keeps drilling until it has passed below the floor out of sight.
     LOOP(0)
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         IF_INT_LESS_OR_EQUAL(LW(1), -200)
@@ -1363,8 +1394,10 @@ EVT_BEGIN(drill_attack_event)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // The camera returns to normal.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     WAIT_MS(200)
+    // It reappears upright at the right edge of the stage and walks back to its home position.
     CALL(btlevtcmd_SetRotate, UNIT_ID_SELF, 0, 0, 0)
     CALL(btlevtcmd_GetHomePos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_SetPos, UNIT_ID_SELF, 400, LW(1), LW(2))
@@ -1375,9 +1408,11 @@ EVT_BEGIN(drill_attack_event)
 EVT_END()
 
 EVT_BEGIN(boomerang_attack_event)
+    // Choose a target; the boomerang flies across every target.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_batten_boomerang_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_batten_boomerang_attack), LW(3), LW(4))
+    // No valid target: a confused boss is flustered, otherwise the turn is skipped.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1385,10 +1420,12 @@ EVT_BEGIN(boomerang_attack_event)
         END_IF
         RETURN
     END_IF
+    // The attack is declared and the guard window opens.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_batten_boomerang_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, PTR(&weapon_batten_boomerang_attack))
+    // The boss splits its boomerang part (part 4) off its body (MGN_A6_1).
     BEGIN_SIBLING_EVENT
         WAIT_MS(900)
         CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_BOOME_DIVIDE1"), EVT_NULLPTR, 0, EVT_NULLPTR)
@@ -1412,12 +1449,14 @@ EVT_BEGIN(boomerang_attack_event)
         WAIT_MS(2500)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 4, STRING("MGN_A4_3"))
     END_SIBLING_EVENT
+    // The boomerang swings in two short arcs in front of the boss.
     CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 4, LW(0), LW(1), LW(2))
     ADD(LW(1), 30)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 25)
     CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, 4, LW(0), LW(1), LW(2), 80, -40, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 25)
     CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, 4, LW(0), LW(1), LW(2), 80, 40, EASING_LINEAR, 0, MOVE_SOUND_FROM_TABLE)
+    // Then it sails across the whole party to the far side of the stage.
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_DivePartsPosition, UNIT_ID_SELF, 4, -400, 120, LW(2), 40, -20, EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
     END_SIBLING_EVENT
@@ -1430,6 +1469,8 @@ EVT_BEGIN(boomerang_attack_event)
     IF_INT_EQUAL(LW(3), -1)
         GOTO(97)
     END_IF
+    // Each target in turn gets the hit check and then the damage as the boomerang passes; the action-command
+    // result is read once.
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), PTR(&weapon_batten_boomerang_attack), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
         CASE_OR_EQUAL(4)
@@ -1466,6 +1507,7 @@ EVT_BEGIN(boomerang_attack_event)
     GOTO(10)
     LABEL(97)
     WAIT_MS(700)
+    // The boomerang part is hidden again and the camera returns to normal.
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 4, kHidden)
     CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 4, kNoShadow)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -1480,9 +1522,11 @@ EVT_END()
  * and fires them at the target in ten rounds of two (aud_attack_event_sub).
  */
 EVT_BEGIN(aud_attack_event)
+    // Choose a target.
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), PTR(&weapon_batten_aud_attack))
     CALL(btlevtcmd_ChoiceSamplingEnemy, PTR(&weapon_batten_aud_attack), LW(3), LW(4))
+    // No valid target: a confused boss is flustered, otherwise the turn is skipped.
     IF_INT_EQUAL(LW(3), -1)
         CALL(btlevtcmd_CheckToken, UNIT_ID_SELF, kConfusedAction, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 0)
@@ -1490,6 +1534,8 @@ EVT_BEGIN(aud_attack_event)
         END_IF
         RETURN
     END_IF
+    // The first time (unit work 7), Crump talks over a close-up of the boss before the attack
+    // (stg7_aji_41_04).
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
@@ -1513,6 +1559,7 @@ EVT_BEGIN(aud_attack_event)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
         WAIT_MS(500)
     END_IF
+    // The attack is declared and the guard window opens.
     CALL(btlevtcmd_WeaponAftereffect, PTR(&weapon_batten_aud_attack))
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
@@ -1528,6 +1575,7 @@ EVT_BEGIN(aud_attack_event)
         WAIT_MS(700)
         CALL(evt_snd_sfxoff, LW(15))
     END_SIBLING_EVENT
+    // Wind-up: the boss opens its pod and fires its jets (a different pose set is used with the fists out).
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_1"))
@@ -1546,6 +1594,7 @@ EVT_BEGIN(aud_attack_event)
     END_IF
     WAIT_MS(300)
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_JUMP1"), EVT_NULLPTR, 0, EVT_NULLPTR)
+    // It rises on its jets while the camera moves to the audience and the audience area darkens.
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     ADD(LW(1), 300)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
@@ -1575,11 +1624,13 @@ EVT_BEGIN(aud_attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A5_3"))
     END_IF
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_MBTN_INHALE1"), EVT_NULLPTR, 0, LW(15))
+    // It sucks 20 audience members into its pod.
     CALL(aud_suikomi, UNIT_ID_SELF)
     BEGIN_SIBLING_EVENT
         CALL(aud_scream_fadeout)
     END_SIBLING_EVENT
     CALL(evt_snd_sfxoff, LW(15))
+    // It sinks back down and the jets shut off.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_7"))
@@ -1593,6 +1644,7 @@ EVT_BEGIN(aud_attack_event)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_IN, 0, MOVE_SOUND_FROM_TABLE)
     CALL(aud_jet_end)
     WAIT_MS(300)
+    // The audience lighting comes back, the camera returns and the boss goes back to its home position.
     CALL(evt_batstage_return_aud_dark_base, 30, 0)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
@@ -1625,6 +1677,7 @@ EVT_BEGIN(aud_attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A5_4"))
     END_IF
     WAIT_MS(1200)
+    // The first time (unit work 7 is 0), Crump speaks again before the shots (stg7_aji_41_05).
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_TALK_DONE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_TALK_DONE, 1)
@@ -1651,6 +1704,7 @@ EVT_BEGIN(aud_attack_event)
         CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
         WAIT_MS(500)
     END_IF
+    // It takes aim at the target (aud_target_mark).
     CALL(btlevtcmd_GetPartsPos, LW(3), LW(4), LW(0), LW(1), LW(2))
     ADD(LW(1), 20)
     CALL(aud_target_mark, LW(0), LW(1), LW(2))
@@ -1661,6 +1715,7 @@ EVT_BEGIN(aud_attack_event)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A5_5"))
     END_IF
     SET_VALUE(LW(10), 0)
+    // It fires the audience members at the target in ten rounds of two (aud_attack_event_sub).
     CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_AUD_HIT, 0)
     LOOP(10)
         WAIT_MS(250)
@@ -1675,6 +1730,7 @@ EVT_BEGIN(aud_attack_event)
     CALL(evt_eff, STRING(""), STRING("machingegun"), 0, LW(0), LW(1), LW(2), 170, FLOAT(8.0f), FLOAT(2.0996094f), 0, 0, 0, 0, 0)
     WAIT_MS(250)
     CALL(evt_eff, STRING(""), STRING("machingegun"), 0, LW(0), LW(1), LW(2), 185, FLOAT(8.0f), FLOAT(2.0996094f), 0, 0, 0, 0, 0)
+    // The boss closes its pod again and the camera returns to normal.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_ARMS_OUT, LW(0))
     IF_INT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("MGN_A2_8"))

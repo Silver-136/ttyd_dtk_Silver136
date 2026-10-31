@@ -269,9 +269,11 @@ USER_FUNC(cam_yure) {
  * the last line mac_0_013_01, then the map changes to gor_00 (Rogueport).
  */
 EVT_BEGIN(evt_mezame)
+    // Mario is asleep aboard the ship to Rogueport; the screen fades in.
     CALL(evt_seq_wait, SEQ_GAME)
     WAIT_MS(1000)
     CALL(evt_fade_end_wait)
+    // Mario snores in the background while the scene waits.
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         WAIT_MS(2000)
         LOOP(0)
@@ -280,10 +282,12 @@ EVT_BEGIN(evt_mezame)
         END_LOOP
     END_INLINE_EVENT
     WAIT_MS(3000)
+    // A ship's crewman politely wakes Mario and tells him Rogueport has come into view; the sea ambience starts.
     CALL(evt_msg_print, 0, STRING("mac_0_012"), 0, 0)
     WAIT_MS(2000)
     CALL(evt_msg_print, 0, STRING("mac_0_013"), 0, 0)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
+    // The snoring stops and Mario wakes with a start.
     DELETE_EVENT(LW(10))
     WAIT_MS(300)
     CALL(evt_snd_sfxchk, GW(2), LW(0))
@@ -291,6 +295,7 @@ EVT_BEGIN(evt_mezame)
         CALL(evt_snd_sfxoff, GW(2))
     END_IF
     CALL(evt_snd_sfxon, STRING("SFX_VOICE_MARIO_FIND1_2"), 0)
+    // The eyelids slowly open a little...
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 2400, 1200, 2000)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -301,6 +306,7 @@ EVT_BEGIN(evt_mezame)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // ...flutter closed and open again twice as Mario blinks...
     CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 1200, 2400, 100)
     LOOP(0)
         CALL(evt_sub_intpl_msec_get_value)
@@ -331,6 +337,7 @@ EVT_BEGIN(evt_mezame)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // ...and open fully as the eyelid overlay clears.
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_QUADRATIC_IN, 500, 0, 2000)
@@ -354,10 +361,12 @@ EVT_BEGIN(evt_mezame)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // The crewman says they will arrive shortly and asks Mario to prepare to disembark.
     WAIT_MS(3000)
     CALL(evt_msg_print, 0, STRING("mac_0_013_01"), 0, 0)
     WAIT_MS(300)
     WAIT_MS(2000)
+    // Mario is sent on to Rogueport (gor_00).
     CALL(evt_bero_mapchange, STRING("gor_00"), 0)
     RETURN
 EVT_END()

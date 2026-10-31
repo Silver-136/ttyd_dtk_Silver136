@@ -258,6 +258,7 @@ EVT_END()
  * then returns home.
  */
 static EVT_BEGIN(attack_event)
+    // While the Rapier is knocked down it only goes back to idling.
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, CORTEZ_WEAPON_WORK_DOWN_TURNS, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
@@ -275,6 +276,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(12))
     CALL(btlevtcmd_AnimeWaitPlayLoopTiming, UNIT_ID_SELF, 1)
+    // The Rapier lies flat and spins six times in 60 frames, boring through the air.
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("KRT_Z_1"))
     BEGIN_SIBLING_EVENT
         CALL(btlevtcmd_SetRotateOffset, UNIT_ID_SELF, 0, 13, 0)
@@ -291,6 +293,7 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_TransStageFloorPosition, LW(0), LW(1), LW(2))
     SET_VALUE(LW(1), 20)
     CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 60, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
+    // It flies across the whole stage through every target, with a whirring sound.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_BOSS_KOR_SWORD_DANCE2"), EVT_NULLPTR, 0, LW(9))
     BEGIN_SIBLING_EVENT_GET_ID(LW(13))
         SET_VALUE(LW(5), 5)
@@ -324,6 +327,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), LW(14), 0, EASING_QUADRATIC_IN, 0, MOVE_SOUND_NONE)
     END_SIBLING_EVENT
     SET_VALUE(LW(10), 0)
+    // As it passes each target, that target is checked in turn.
     LABEL(10)
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), EVT_NULLPTR, EVT_NULLPTR)
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(1), EVT_NULLPTR, EVT_NULLPTR)
@@ -361,12 +365,14 @@ static EVT_BEGIN(attack_event)
     END_SWITCH
     LABEL(90)
     GOTO(97)
+    // A hit applies the damage (the Action Command defence result is used for the first target only).
     LABEL(91)
     // Later targets skip defence resolution even if the first target was avoided.
     IF_INT_EQUAL(LW(10), 0)
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(12))
     END_IF
     CALL(btlevtcmd_CheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(12), DAMAGE_RESULT_FINAL_HIT, LW(5))
+    // If a target Superguarded, the Rapier is repelled: it tumbles backwards and recoils home at once.
     IF_INT_EQUAL(LW(5), 21)
         DELETE_EVENT(LW(13))
         CALL(evt_snd_sfxoff, LW(9))
@@ -399,6 +405,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_DivePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 40, 0, EASING_QUADRATIC_OUT, 0, MOVE_SOUND_FROM_TABLE)
         RETURN
     END_IF
+    // After the last target, it flies back in from the other side of the stage and returns home.
     LABEL(97)
     CALL(btlevtcmd_GetSelectNextEnemy, LW(3), LW(4))
     IF_INT_NOT_EQUAL(LW(3), -1)

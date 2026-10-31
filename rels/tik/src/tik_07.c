@@ -304,6 +304,7 @@ static EVT_BEGIN(mobj_box00)
 EVT_END()
 
 EVT_BEGIN(tik_07_init_evt)
+    // The drop-in scene, the exits, the music, and the room's blocks, chest, Shine Sprite and Star Pieces.
     CALL_CHILD(PTR(tik_07_down_evt))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
@@ -321,6 +322,7 @@ EVT_BEGIN(tik_07_init_evt)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 460, 160, -450, ITEM_TYPE_STILL, GSWF_STARPIECE_27, 0)
     CALL(evt_item_set_scale, STRING("item_00"), FLOAT(0.5996094f))
     CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 125, 0, -60, ITEM_TYPE_STILL, GSWF_STARPIECE_28, 0)
+    // Four platforms that slide back and forth.
     SET_VALUE(LW(0), STRING("ugo_1"))
     SET_VALUE(LW(1), STRING("a_ugo_1"))
     SET_VALUE(LW(2), -20)
@@ -365,6 +367,7 @@ EVT_BEGIN(tik_07_init_evt)
     SET_VALUE(LW(11), 0)
     SET_VALUE(LW(12), 0)
     SPAWN_EVENT(PTR(moving_floor))
+    // The pair of balance-scale platforms: the one Mario stands on sinks as the other rises.
     SET_VALUE(GW(0), 5000)
     SET_VALUE(GW(1), 0)
     SET_VALUE(LW(0), STRING("kur_1"))
@@ -392,6 +395,7 @@ EVT_BEGIN(tik_07_init_evt)
         CALL(evt_npc_check_delete, STRING("ハンニャー１"))
         CALL(evt_npc_check_delete, STRING("ハンニャー２"))
     END_IF
+    // Between chapters 6 and 7 the Fahr Outpost pipe leads to the chapter 7 title screen instead.
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_71_01)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG7_00_START)
             SET_VALUE(LW(0), STRING("dokan__1"))
@@ -401,6 +405,7 @@ EVT_BEGIN(tik_07_init_evt)
             CALL_CHILD(PTR(bero_case_switch_on))
         END_IF
     END_IF
+    // Peach's e-mail arrives here on the way back from Twilight Town.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_16_LEAVING_TWILIGHT_TOWN)
         SPAWN_EVENT(PTR(peach_mail))
     END_IF

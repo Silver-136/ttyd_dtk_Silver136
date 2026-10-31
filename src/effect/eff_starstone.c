@@ -358,6 +358,7 @@ EffectEntry* effStarStoneEntry(s32 type, f32 x, f32 y, f32 z, f32 scale) {
     if (!(work->flags & STAR_STONE_FLAG_PLAIN)) {
         c = color_tbl[work->type];
         work->dust = effSnowDustN64Entry(2, 4, 0, x, y - 10.0f * work->scale, z, 20.0f * work->scale, 20.0f * work->scale, 1.0f);
+        // re-read through the entries each time (the original code does not keep the pointers)
         ((EffSnowDustN64Work*)work->dust->userdata)->kr = c[0];
         ((EffSnowDustN64Work*)work->dust->userdata)->kg = c[1];
         ((EffSnowDustN64Work*)work->dust->userdata)->kb = c[2];
@@ -506,6 +507,7 @@ void effStarStoneMain(EffectEntry* effect) {
             ((EffSnowDustN64Work*)w->dust->userdata)->position.y = w->position.y - 10.0f * w->scale;
             ((EffSnowDustN64Work*)w->dust->userdata)->position.z = w->position.z;
         } else {
+            // parked out of sight once the stone falls
             ((EffSnowDustN64Work*)w->dust->userdata)->position.x = 0.0f;
             ((EffSnowDustN64Work*)w->dust->userdata)->position.y = -1000.0f;
             ((EffSnowDustN64Work*)w->dust->userdata)->position.z = 0.0f;

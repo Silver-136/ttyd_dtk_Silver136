@@ -65,6 +65,10 @@ EVT_BEGIN(muj_ship_puka)
     RETURN
 EVT_END()
 
+/**
+ * REL prolog: runs the static constructors, registers each Keelhaul Key map's init event (muj_00..muj_21)
+ * and the area's battle setup tables with the map loader.
+ */
 void _prolog(void) {
     voidfunctionptr* ctor;
 

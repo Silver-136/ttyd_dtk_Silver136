@@ -480,23 +480,28 @@ EVT_END()
  * each only if he lacks that status. A pick that is not allowed rolls again.
  */
 static EVT_BEGIN(attack_event)
+    // In a first strike the X-Naut PhD simply throws its fire bottle.
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(PTR(fire_bottle_event))
         GOTO(99)
     END_IF
+    // Otherwise the AI may use a held item instead.
     CALL(btlevtcmd_EnemyItemUseCheck, UNIT_ID_SELF, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
         CALL_CHILD(LW(0))
         CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)
         RETURN
     END_IF
+    // It checks whether Lord Crump is on the field, since that changes what it will do.
     CALL(kanbu_get_id, LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
         GOTO(10)
         ELSE
         GOTO(20)
     END_IF
+    // Without Crump: a weighted roll picks fire bottle 20, hunyahunya bottle 10, a dodgy potion for itself 10
+    // (only if not already Dodgy), shrinking bottle 20, healing one ally 10 or healing all allies 5.
     LABEL(10)
     SET_VALUE(LW(0), 0)
     ADD(LW(0), 20)
@@ -509,11 +514,13 @@ static EVT_BEGIN(attack_event)
     CALL(evt_sub_random, LW(0), LW(1))
     SET_VALUE(LW(0), 20)
     IF_INT_LESS(LW(1), LW(0))
+        // Fire bottle: a flaming bottle at one target.
         CALL_CHILD(PTR(fire_bottle_event))
         GOTO(99)
     END_IF
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
+        // Hunyahunya bottle thrown at one target.
         CALL_CHILD(PTR(hunyahunya_bottle_event))
         GOTO(99)
     END_IF
@@ -521,26 +528,32 @@ static EVT_BEGIN(attack_event)
     IF_INT_LESS(LW(1), LW(0))
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_DODGY, LW(2))
         IF_INT_EQUAL(LW(2), 0)
+            // Yokeyoke potion: it makes itself Dodgy.
             CALL_CHILD(PTR(yokeyoke_bottle_event))
             GOTO(99)
         END_IF
     END_IF
     ADD(LW(0), 20)
     IF_INT_LESS(LW(1), LW(0))
+        // Minimini bottle: a shrinking bottle at the whole opposing side.
         CALL_CHILD(PTR(minimini_bottle_event))
         GOTO(99)
     END_IF
     ADD(LW(0), 10)
     IF_INT_LESS(LW(1), LW(0))
+        // It heals one ally.
         CALL_CHILD(PTR(one_recover_event))
         GOTO(99)
     END_IF
     ADD(LW(0), 5)
     IF_INT_LESS(LW(1), LW(0))
+        // It heals every ally.
         CALL_CHILD(PTR(all_recover_event))
         GOTO(99)
     END_IF
     GOTO(10)
+    // With Lord Crump on the field: fire bottle 60, a Dodgy potion for Crump 20, an HP-regen potion for Crump
+    // 20; Crump only gets one he does not already have.
     LABEL(20)
     SET_VALUE(LW(0), 0)
     ADD(LW(0), 60)
@@ -550,6 +563,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_sub_random, LW(0), LW(1))
     SET_VALUE(LW(0), 60)
     IF_INT_LESS(LW(1), LW(0))
+        // Fire bottle at one target.
         CALL_CHILD(PTR(fire_bottle_event))
         GOTO(99)
     END_IF
@@ -558,6 +572,7 @@ static EVT_BEGIN(attack_event)
         CALL(kanbu_get_id, LW(3), LW(4))
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_DODGY, LW(2))
         IF_INT_EQUAL(LW(2), 0)
+            // A Dodgy potion handed to Lord Crump.
             CALL_CHILD(PTR(yokeyoke_bottle_event_with_kanbu))
             GOTO(99)
         END_IF
@@ -567,6 +582,7 @@ static EVT_BEGIN(attack_event)
         CALL(kanbu_get_id, LW(3), LW(4))
         CALL(btlevtcmd_CheckStatus, LW(3), STATUS_HP_REGEN, LW(2))
         IF_INT_EQUAL(LW(2), 0)
+            // An HP-regen potion handed to Lord Crump.
             CALL_CHILD(PTR(ziwaziwa_bottle_event))
             GOTO(99)
         END_IF
@@ -639,6 +655,7 @@ EVT_END()
  */
 static EVT_BEGIN(attack_common_event2)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_fire_bottle))
+        // The X-Naut PhD takes the bottle in hand (part 2): a flaming one or a hunyahunya one.
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1A"))
     END_IF
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_hunyahunya_bottle))
@@ -648,6 +665,7 @@ static EVT_BEGIN(attack_common_event2)
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 10)
     ADD(LW(1), 20)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
+    // It winds up (A_1B or A_2B) with a grunt...
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD2_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_fire_bottle))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_1B"))
@@ -656,6 +674,7 @@ static EVT_BEGIN(attack_common_event2)
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_2B"))
     END_IF
     WAIT_FRAMES(24)
+    // ...and hurls the bottle, which arcs toward the target.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD2_ATTACK4"), EVT_NULLPTR, 0, EVT_NULLPTR)
     BEGIN_SIBLING_EVENT
         WAIT_FRAMES(24)
@@ -687,6 +706,7 @@ static EVT_BEGIN(attack_common_event2)
         CASE_DEFAULT
         GOTO(98)
         CASE_END
+        // The bottle misses or is blocked: it flies past, smashes into glass shards and the part is put back.
         LABEL(90)
         CALL(btlevtcmd_JumpPartsContinue, UNIT_ID_SELF, 2)
         CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
@@ -699,6 +719,8 @@ static EVT_BEGIN(attack_common_event2)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
         GOTO(98)
+        // The bottle hits: a fire bottle bursts into flame and smoke, the glass shatters, the Action Command
+        // defence result is applied and damage is dealt.
         LABEL(91)
         IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_fire_bottle))
             CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
@@ -716,6 +738,7 @@ static EVT_BEGIN(attack_common_event2)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kHidden)
         CALL(btlevtcmd_OnPartsAttribute, UNIT_ID_SELF, 2, kNoShadow)
         GOTO(98)
+        // After a short pause the camera resets.
         LABEL(98)
         WAIT_FRAMES(10)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
@@ -725,6 +748,10 @@ static EVT_BEGIN(attack_common_event2)
         RETURN
 EVT_END()
 
+/**
+ * Toss of an X-Naut PhD potion to Lord Crump (dodgy and HP-regen potions):
+ * the bottle (part 2) lands at his feet and shatters, then the status is applied to him.
+ */
 static EVT_BEGIN(attack_common_event3)
     IF_INT_EQUAL(LW(9), PTR(&weapon_gundan_zako_magician_yokeyoke_bottle))
         CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1D"))
@@ -799,6 +826,10 @@ static EVT_BEGIN(attack_common_event3)
         RETURN
 EVT_END()
 
+/**
+ * The X-Naut PhD throws the fire bottle at one enemy (the first-strike target on a first strike):
+ * 4 fire damage and a 75% chance of Burn for 3 turns.
+ */
 static EVT_BEGIN(fire_bottle_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_fire_bottle))
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_FIRST_ATTACK)
@@ -823,6 +854,10 @@ static EVT_BEGIN(fire_bottle_event)
     RETURN
 EVT_END()
 
+/**
+ * The X-Naut PhD throws the hunyahunya (limp) bottle at one enemy:
+ * 4 damage and a 75% chance of Defense -3 for 3 turns.
+ */
 static EVT_BEGIN(hunyahunya_bottle_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_hunyahunya_bottle))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -842,6 +877,7 @@ static EVT_BEGIN(hunyahunya_bottle_event)
     RETURN
 EVT_END()
 
+/** The X-Naut PhD drinks the yokeyoke (dodge) potion itself: Dodgy for 3 turns. */
 static EVT_BEGIN(yokeyoke_bottle_event)
     SET_VALUE(LW(3), UNIT_ID_SELF)
     SET_VALUE(LW(4), 1)
@@ -869,6 +905,10 @@ static EVT_BEGIN(yokeyoke_bottle_event)
     RETURN
 EVT_END()
 
+/**
+ * The X-Naut PhD throws the minimini (shrinking) bottle into the middle of the enemy side:
+ * it hits every target for 3 damage with a 75% chance of shrinking each (size -2 for 3 turns).
+ */
 static EVT_BEGIN(minimini_bottle_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_minimini_bottle))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -882,12 +922,14 @@ static EVT_BEGIN(minimini_bottle_event)
         END_IF
         GOTO(99)
     END_IF
+    // The X-Naut PhD steps up and prepares to throw (the shared run-up script).
     CALL_CHILD(attack_common_event1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 2, STRING("B_1E"))
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 10)
     ADD(LW(1), 20)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
+    // It winds up (A_3C) and hurls the minimini bottle into the middle of the opposing side.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_3RD2_ATTACK3"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("A_3C"))
     WAIT_FRAMES(24)
@@ -905,6 +947,7 @@ static EVT_BEGIN(minimini_bottle_event)
         SET_VALUE(LW(10), -125)
     END_IF
     CALL(btlevtcmd_GetHitPos, LW(3), LW(4), LW(0), LW(1), LW(2))
+    // The bottle lands there and bursts into a cloud of smoke and glass.
     CALL(btlevtcmd_JumpPartsSetting, UNIT_ID_SELF, 2, 0, FLOAT(6.0f), FLOAT(0.2998047f))
     CALL(btlevtcmd_JumpPartsPosition, UNIT_ID_SELF, 2, LW(10), 0, 0, 0, MOVE_SOUND_FROM_TABLE)
     CALL(evt_eff, STRING(""), STRING("kemuri_test"), 20, LW(10), 50, 0, FLOAT(2.399414f), 0, 0, 0, 0, 0, 0, 0)
@@ -920,6 +963,7 @@ static EVT_BEGIN(minimini_bottle_event)
     END_INLINE_EVENT
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
     SET_VALUE(LW(10), 0)
+    // Each target is checked in turn.
     LABEL(0)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), 0, LW(5))
     SWITCH(LW(5))
@@ -944,6 +988,8 @@ static EVT_BEGIN(minimini_bottle_event)
         CASE_END
         LABEL(90)
         GOTO(97)
+        // A hit applies the damage and a chance of shrinking the target (the defence result counts for the
+        // first target only).
         LABEL(91)
         // Only target ordinal zero runs the defence command; an avoided first target still advances.
         IF_INT_EQUAL(LW(10), 0)
@@ -957,6 +1003,7 @@ static EVT_BEGIN(minimini_bottle_event)
             ADD(LW(10), 1)
             GOTO(0)
         END_IF
+        // The camera resets after a pause.
         LABEL(98)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
         WAIT_FRAMES(60)
@@ -965,6 +1012,7 @@ static EVT_BEGIN(minimini_bottle_event)
         RETURN
 EVT_END()
 
+/** The X-Naut PhD shakes a recovery bottle and heals one ally (possibly itself) by 10 HP. */
 static EVT_BEGIN(one_recover_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_one_recover))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1003,6 +1051,7 @@ static EVT_BEGIN(one_recover_event)
     RETURN
 EVT_END()
 
+/** The X-Naut PhD shakes a recovery bottle and heals every ally by 5 HP. */
 static EVT_BEGIN(all_recover_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_all_recover))
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
@@ -1052,6 +1101,7 @@ static EVT_BEGIN(all_recover_event)
     RETURN
 EVT_END()
 
+/** The X-Naut PhD tosses the yokeyoke (dodge) potion to Lord Crump (kanbu_get_id): Dodgy for 3 turns. */
 static EVT_BEGIN(yokeyoke_bottle_event_with_kanbu)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_yokeyoke_bottle))
     CALL(kanbu_get_id, LW(3), LW(4))
@@ -1061,6 +1111,7 @@ static EVT_BEGIN(yokeyoke_bottle_event_with_kanbu)
     RETURN
 EVT_END()
 
+/** The X-Naut PhD tosses the ziwaziwa (gradual) potion to Lord Crump (kanbu_get_id): HP Regen of 2 for 5 turns. */
 static EVT_BEGIN(ziwaziwa_bottle_event)
     SET_VALUE(LW(9), PTR(&weapon_gundan_zako_magician_ziwaziwa_bottle))
     CALL(kanbu_get_id, LW(3), LW(4))
@@ -1070,11 +1121,16 @@ static EVT_BEGIN(ziwaziwa_bottle_event)
     RETURN
 EVT_END()
 
+/** Wait (idle) event of the X-Naut PhD: sets the idle pose from its pose table. */
 static EVT_BEGIN(wait_event)
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_SELF, 1)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: finds the battle unit of kind 99 (Lord Crump, the horde leader) and writes its id to args[0]
+ * and its body part id to args[1] (0 when none exists).
+ */
 static USER_FUNC(kanbu_get_id) {
     EvtWord* args = event->args;
     s32 id = -1;

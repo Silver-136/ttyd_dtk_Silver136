@@ -36,11 +36,13 @@ EVT_BEGIN(quake_kpaLandOn_evt)
     RETURN
 EVT_END()
 
+/** Stronger 60-frame camera shake for Bowser's ground pound landing. */
 EVT_BEGIN(quake_kpaHipAttack_evt)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.01953125f), 60)
     RETURN
 EVT_END()
 
+/** Starts the fast drop of the ground pound (sub-state 0x14) with its fixed downward physics. */
 static inline void kpa_hip_launch(MarioWork* m) {
     m->currSubMotionId = 20;
     m->jumpAccelerationY = -0.4744f;

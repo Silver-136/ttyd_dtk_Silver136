@@ -204,8 +204,10 @@ EVT_END()
  */
 static EVT_BEGIN(main_0)
     SET_TYPE(239)
+    // The switch is pressed: the block stops reacting to hits while it moves.
     CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
     IF_INT_NOT_EQUAL(1, 0)
+        // The block rises if it is down and falls if it is up (remembered in a room flag).
         SET_VALUE(LW(10), 0)
         IF_INT_EQUAL(0, 0)
             IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
@@ -220,6 +222,7 @@ static EVT_BEGIN(main_0)
                 SET_VALUE(LW(10), 0)
             END_IF
         END_IF
+        // Work out the target height, a fixed distance up or down, and the speed.
         IF_INT_EQUAL(LW(10), 0)
             CALL(evt_mobj_get_y_position, STRING("blk_0"), LW(2))
             SET_FLOAT_VALUE(LW(3), LW(2))
@@ -258,6 +261,7 @@ static EVT_BEGIN(main_0)
 #else
         END_SIBLING_EVENT
 #endif
+        // After the camera shake, the block starts to float and its movement sound plays.
         WAIT_MS(500)
         CALL(evt_mobj_get_position, STRING("blk_0"), LW(12), LW(13), LW(14))
         CALL(evt_mobj_get_kindname, STRING("blk_0"), LW(11))
@@ -289,6 +293,7 @@ static EVT_BEGIN(main_0)
         // LW2/LW3 are the endpoints, LW4 is the current height, and LW8/LW9 are acceleration/velocity.
         SET_FLOAT_VALUE(LW(4), LW(2))
         SET_VALUE(LF(0), 0)
+        // Each frame the block moves toward its target height.
         LOOP(0)
             CALL(evt_mario_get_party, LW(5))
             IF_INT_EQUAL(LW(5), 0)
@@ -307,6 +312,8 @@ static EVT_BEGIN(main_0)
             END_IF
             GOTO(2)
             LABEL(1)
+            // If a falling block lands on Mario or his partner it turns around and rises again, and the switch
+            // is cancelled.
             IF_INT_EQUAL(LW(10), 1)
                 SET_FLOAT_VALUE(LW(5), LW(2))
                 SET_FLOAT_VALUE(LW(2), LW(3))
@@ -347,8 +354,10 @@ static EVT_BEGIN(main_0)
             WAIT_FRAMES(1)
         END_LOOP
         IF_INT_EQUAL(LF(1), 0)
+            // The block has arrived: the moving sound stops.
             CALL(evt_snd_sfxoff, LW(15))
         END_IF
+        // The landing thud plays for a block that came down.
         BEGIN_INLINE_EVENT
             CALL(evt_mobj_get_position, STRING("blk_0"), LW(13), LW(14), LW(15))
             CALL(evt_mobj_get_kindname, STRING("blk_0"), LW(12))
@@ -366,6 +375,7 @@ static EVT_BEGIN(main_0)
                 CALL(evt_snd_sfxon_3d, STRING("SFX_MOBJ_BLOCK_B_FLOAT_STOP1"), LW(13), LW(14), LW(15), 0)
             END_IF
         END_INLINE_EVENT
+        // A block that came down shakes the camera again and the scene waits a moment.
         IF_INT_EQUAL(LW(10), 1)
 #ifdef VERSION_G8ME01
             BEGIN_INLINE_EVENT
@@ -392,12 +402,14 @@ static EVT_BEGIN(main_0)
 #endif
             WAIT_MS(1000)
         END_IF
+        // Remember the block's new position for the next press.
         IF_INT_EQUAL(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
             SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 1)
             ELSE
             SET_VALUE(LSWF_GON_08_FLOAT_BLOCK_MOVED, 0)
         END_IF
         ELSE
+        // Unused: cancel the switch and wait a few frames.
         CALL(evt_mobj_exec_cancel, STRING("sw_0"))
         SET_VALUE(LW(0), 0)
         LOOP(0)
@@ -460,15 +472,19 @@ EVT_BEGIN(nokkosu_init)
 EVT_END()
 
 EVT_BEGIN(nokkosu_talk)
+    // Nokkos is made intangible so he can move freely.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
 #ifdef VERSION_G8ME01
     BEGIN_INLINE_EVENT
+        // Mario walks up to Nokkos and faces him.
         CALL(evt_mario_mov_pos2, -206, -147, FLOAT(120.0f))
         CALL(evt_mario_set_dir, 90, 200, 0)
     END_INLINE_EVENT
 #else
+    // Nokkos greets Mario.
     CALL(evt_msg_print, 0, STRING("irai_07_00"), 0, STRING("me"))
 #endif
+    // Wait until the partner is free, then put the partner beside Mario.
     LOOP(0)
         CALL(evt_mario_party_use_check, LW(0))
         IF_INT_EQUAL(LW(0), 0)
@@ -489,11 +505,13 @@ EVT_BEGIN(nokkosu_talk)
 #endif
     END_IF
 #ifdef VERSION_G8ME01
+    // The partner walks up next to Mario and Nokkos greets them.
     CALL(evt_party_move_pos2, 0, -228, -130, FLOAT(120.0f))
     CALL(evt_party_set_dir, 0, 90, 200)
     CALL(evt_npc_set_ry_lr, STRING("me"), 0)
     CALL(evt_msg_print, 0, STRING("irai_07_00"), 0, STRING("me"))
 #endif
+    // Koops is swapped in if another partner was along.
     CALL(evt_mario_get_party, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 2)
         CALL(evt_mario_goodbye_party, 0)
@@ -502,6 +520,7 @@ EVT_BEGIN(nokkosu_talk)
 #ifdef VERSION_G8ME01
     CALL(evt_party_stop, 0)
 #endif
+    // Koops comments on the visit.
     CALL(evt_msg_print, 0, STRING("irai_07_01"), 0, STRING("party"))
 #ifdef VERSION_G8ME01
     CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -514,6 +533,7 @@ EVT_BEGIN(nokkosu_talk)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("me"))
 #endif
+    // Nokkos explains his trouble; Mario and the partner answer.
     CALL(evt_msg_print, 0, STRING("irai_07_02"), 0, STRING("me"))
     CALL(evt_msg_print, 0, STRING("irai_07_03"), 0, STRING("party"))
     CALL(evt_msg_print, 0, STRING("irai_07_04"), 0, STRING("me"))
@@ -525,6 +545,7 @@ EVT_BEGIN(nokkosu_talk)
     CALL(evt_npc_wait_pera, STRING("me"))
     CALL(evt_party_run, 0)
 #endif
+    // Nokkos hands over a Special Card as thanks.
     CALL(evt_item_entry, STRING("irai_item"), ITEM_SPECIAL_CARD, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_flag_on, STRING("irai_item"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_get_item, STRING("irai_item"))
@@ -534,8 +555,10 @@ EVT_BEGIN(nokkosu_talk)
     WAIT_FRAMES(1)
     CALL(evt_npc_wait_pera, STRING("me"))
 #endif
+    // Nokkos jumps down off the ledge and out of sight.
     CALL(evt_npc_jump_position_nohit, STRING("me"), -66, 100, -112, 800, 220)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
+    // The time is recorded and the request is marked solved.
     CALL(evt_sub_save_playtime, GSW_GON_TRY_TO_FIND_ME_DONE_TIME_UNUSED)
     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_TRY_TO_FIND_ME), 1)

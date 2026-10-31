@@ -573,6 +573,7 @@ HitEntry* partySearchFrontWall(PartyEntry* party, Vec* pos, f32 dist, f32 ang) {
 
     sincosf(&sn, &cs, ang);
 #ifdef VERSION_G8ME01
+    // US: with flag 0x1000 set the partner checks walls with a width of 6
     w = party->width;
     if (party->flags & PARTY_FLAG_PAPER_MODE) {
         w = 6.0f;

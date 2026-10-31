@@ -947,6 +947,7 @@ static BeroEntry bero_data[] = {
 };
 
 EVT_BEGIN(evt_tougi)
+    // Place Mario and the partner at whichever south door they came through, facing the fight in the ring.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 0)
     SET_VALUE(LF(0), 0)
@@ -971,6 +972,7 @@ EVT_BEGIN(evt_tougi)
     CALL(evt_cam3d_evt_set, 0, 563, 962, 0, 554, 412, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     CALL(evt_npc_sound_data_set, STRING(/*"相手"*/"\221\212\216\350"), EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR, EVT_NULLPTR, PTR("SFX_STG3_TOGENOKO_DOWN1"))
+    // The door swings open and the camera pans across the arena.
     SET_FLOAT_VALUE(LW(0), FLOAT(-180.0f))
     IF_INT_EQUAL(LF(0), 0)
         CALL_CHILD(s1_door_open)
@@ -986,6 +988,7 @@ EVT_BEGIN(evt_tougi)
     ELSE
         CALL(evt_cam3d_evt_set, 0, 240, 1187, 0, 170, 742, 1500, EASING_SINE_IN_OUT)
     END_IF
+    // Mario and the partner walk in and the door swings shut behind them.
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         SUBTRACT(LW(2), 230)
@@ -1018,6 +1021,7 @@ EVT_BEGIN(evt_tougi)
     IF_INT_EQUAL(LW(1), 1)
         GOTO(2)
     END_IF
+    // The partner reacts, and Rawk Hawk tells the Dark Koopatrol it is time to feel the Rawk.
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 90, 300, 0)
     END_INLINE_EVENT
@@ -1032,6 +1036,7 @@ EVT_BEGIN(evt_tougi)
     CALL(evt_msg_print, 0, PTR("stg3_tou_26"), 0, PTR(/*("\203`\203\203\203\223\203s\203\207\203\223")*/("\203`\203\203\203\223\203s\203\207\203\223")))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -85, 172, 326, -85, 96, -104, 1000, EASING_SINE_IN_OUT)
+    // Rawk Hawk backs off and flattens his opponent with a flying body slam that shakes the ring.
     CALL(evt_npc_get_position, STRING(/*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223"), LW(10), LW(11), LW(12))
     CALL(evt_npc_status_onoff, 1, STRING(/*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_get_position, STRING(/*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223"), LW(0), LW(1), LW(2))
@@ -1075,6 +1080,7 @@ EVT_BEGIN(evt_tougi)
     END_INLINE_EVENT
     CALL(evt_msg_print, 0, PTR("stg3_tou_27"), 0, PTR(/*("\221\212\216\350")*/("\221\212\216\350")))
     CALL(evt_cam3d_evt_set, 65, 172, 326, 65, 96, -104, 1000, EASING_SINE_IN_OUT)
+    // Grubba walks into the ring as Rawk Hawk gloats over the beaten fighter and dares anyone to challenge him.
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_status_onoff, 1, STRING(/*"ガンス"*/"\203K\203\223\203X"), NPC_STATUS_FACE_MOVE_DIR)
@@ -1111,6 +1117,7 @@ EVT_BEGIN(evt_tougi)
     CALL(evt_npc_set_anim, PTR(/*("\203`\203\203\203\223\203s\203\207\203\223")*/("\203`\203\203\203\223\203s\203\207\203\223")), PTR("H_2"))
     WAIT_MS(200)
     CALL(evt_npc_set_anim, PTR(/*("\203`\203\203\203\223\203s\203\207\203\223")*/("\203`\203\203\203\223\203s\203\207\203\223")), PTR("S_3"))
+    // Rawk Hawk shows off his Champ's Belt, which sparkles as the crowd cheers.
     CALL(evt_npc_entry, PTR(/*("\203x\203\213\203g")*/("\203x\203\213\203g")), PTR("c_bred_h"))
     CALL(evt_npc_get_position, STRING(/*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 5)
@@ -1121,6 +1128,7 @@ EVT_BEGIN(evt_tougi)
     CALL(evt_eff, 0, PTR("starstone"), 9, LW(0), LW(1), LW(2), FLOAT(0.75f), 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_snd_sfxon_3d, PTR("SFX_STG3_WIN_AUDIENCE2"), LW(0), LW(1), LW(2), 0)
     WAIT_MS(2000)
+    // Mario and the partner turn to the champion and the partner comments on him.
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_cam3d_evt_set, 0, 95, 692, 0, 43, 397, 0, EASING_SINE_IN_OUT)
     ELSE
@@ -1139,6 +1147,7 @@ EVT_BEGIN(evt_tougi)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print_party, PTR("stg3_tou_32"))
     WAIT_MS(300)
+    // Fade out to the lobby.
     CALL(evt_fade_set_mapchange_type, 0, 2, 500, 1, 500)
     SET_VALUE(GSWF_TOU_02_ARENA_TOUR_RETURN, 1)
     IF_INT_EQUAL(LF(0), 0)
@@ -4262,6 +4271,7 @@ s32 gans_white_off(EventEntry* event, BOOL isFirstCall) {
 
 static EVT_BEGIN(evt_boss)
 #ifdef VERSION_G8ME01
+    // Hide the stage props, lock the east door, place Grubba in the ring and set the Crystal Star spinning.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group34"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_kai_right"), 0, 0)
     SET_VALUE(LW(0), STRING("e_bero"))
@@ -4295,6 +4305,7 @@ static EVT_BEGIN(evt_boss)
         END_LOOP
     END_INLINE_EVENT
     CALL(evt_mario_get_pos, 0, LW(10), LW(11), LW(12))
+    // Wait until Mario steps onto the ring.
     LOOP(0)
         CALL(evt_mario_get_name_hitobj_ride, LW(9))
 #ifdef VERSION_G8ME01
@@ -4306,6 +4317,7 @@ static EVT_BEGIN(evt_boss)
         END_IF
         WAIT_FRAMES(1)
     END_LOOP
+    // Mario walks up to Grubba, who starts his theme and scolds the snoops; the ground starts to rumble.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
     CALL(evt_cam3d_evt_set, 0, 197, 484, 0, 110, -8, 2000, EASING_SINE_IN_OUT)
@@ -4333,6 +4345,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #ifdef VERSION_G8ME01
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED1"), LW(0), LW(1), LW(2), 0)
+    // Mario and the partner are startled and Mario jumps up into the ring.
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING("m"), 0, 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
     IF_INT_GREATER(LW(1), 50)
@@ -4361,6 +4374,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_mario_jump_pos, -150, 60, 0, 500, 0, -1000)
     CALL(evt_mario_set_dir, 90, 200, 0)
 #ifdef VERSION_G8ME01
+    // The ring blocks sink and Grubba's power-absorbing machine rises with him on top.
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("butai_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("butai_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("tyuubu"), MAP_ANIM_PLAY_LOOP, 0)
@@ -4490,6 +4504,7 @@ static EVT_BEGIN(evt_boss)
     WAIT_FRAMES(1)
 #ifdef VERSION_G8ME01
     CALL(evt_msg_print, 0, STRING("stg3_tou_466"), 0, STRING("ガンス"))
+    // Grubba powers up: the machine whirs faster, the screen shakes and he swells.
     SET_VALUE(GF(0), 0)
     BEGIN_INLINE_EVENT
         CALL(evt_npc_set_anim, STRING("ガンス"), STRING("P_1"))
@@ -4601,6 +4616,7 @@ static EVT_BEGIN(evt_boss)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, 0, 170, 385, 0, 135, -11, 300, EASING_SINE_IN_OUT)
     WAIT_MS(300)
+    // In a white flash Grubba becomes Macho Grubba and shouts his new name; Mario and the partner react.
     CALL(gans_white_on)
 #ifdef VERSION_G8ME01
     CALL(evt_paper_entry, STRING("OFF_d_bom"))
@@ -4655,6 +4671,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_cam3d_evt_set, 0, 170, 385, 0, 135, -11, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
 #ifdef VERSION_G8ME01
+    // Macho Grubba threatens to snack on their energy and the boss battle starts.
     CALL(evt_msg_print, 0, STRING("stg3_tou_468"), 0, STRING("マッチョガンス"))
 #else
     CALL(evt_msg_print, 0, STRING(("stg3_tou_468")), 0, STRING(("\203}\203b\203`\203\207\203K\203\223\203X")))
@@ -4667,6 +4684,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_npc_battle_start, STRING("マッチョガンス"))
     CALL(evt_npc_wait_battle_end)
     CALL(evt_mario_kill_party, 1)
+    // After the battle Grubba is back to normal size, slumped on the floor and wondering how he lost.
     CALL(evt_snd_sfxon, STRING("SFX_STG3_ABSORB_DEVICE2"), LW(15))
     CALL(evt_snd_sfx_vol, LW(15), 38)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_POSE_LOCK)
@@ -4701,6 +4719,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_msg_print, 0, STRING(("stg3_tou_473")), 0, STRING(("\203K\203\223\203X")))
 #endif
     WAIT_MS(300)
+    // The music-box theme plays and Jolene runs in, thanks Mario and admits she sent him the mysterious emails.
     SET_VALUE(GF(10), 1)
     CALL(evt_cam3d_evt_set, -130, 140, 385, -130, 105, -11, 700, EASING_SINE_IN_OUT)
     WAIT_MS(700)
@@ -4781,6 +4800,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_msg_print, 0, STRING("stg3_tou_473_07"), 0, STRING("キノシコワ"))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -25, 197, 574, -25, 105, -8, 3000, EASING_SINE_IN_OUT)
+    // Jolene climbs into the ring and demands answers; Grubba admits what he did to her brother, Prince Mush.
     CALL(evt_npc_move_position, STRING("キノシコワ"), -280, 20, 0, FLOAT(60.0f), 1)
     CALL(evt_npc_jump_position_nohit, STRING("キノシコワ"), -250, 20, 20, 500, 30)
     CALL(evt_npc_jump_position_nohit, STRING("キノシコワ"), -215, 40, 20, 500, 30)
@@ -4822,6 +4842,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_msg_print, 0, STRING(("stg3_tou_473_07_03")), 0, STRING(("\203L\203m\203V\203R\203\217")))
 #endif
     WAIT_MS(300)
+    // Light pours from the machine and Prince Mush is released from it, spinning back to full size.
     CALL(evt_cam3d_evt_set, -160, 150, 288, -160, 100, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
 #ifdef VERSION_G8ME01
@@ -4944,6 +4965,7 @@ static EVT_BEGIN(evt_boss)
         END_LOOP
         CALL(evt_snd_sfx_vol, LW(15), 38)
     END_INLINE_EVENT
+    // Prince Mush wakes up confused and is reunited with Jolene.
     CALL(evt_cam3d_evt_set, 100, 166, 536, 100, 90, -8, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
     WAIT_MS(2000)
@@ -4993,6 +5015,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_msg_print_party, STRING(("stg3_tou_473_07_09")))
 #endif
     WAIT_MS(300)
+    // Jolene gives Mario the Crystal Star; the machine winds down and the stone pops out onto the ring.
     CALL(evt_cam3d_evt_set, 0, 356, 1016, 25, 180, 32, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(500)
@@ -5052,6 +5075,7 @@ static EVT_BEGIN(evt_boss)
     CALL(item_jump, FLOAT(0.0f), FLOAT(60.0f), FLOAT(100.0f))
     CALL(item_jump, FLOAT(0.0f), FLOAT(60.0f), FLOAT(100.0f))
     WAIT_MS(1000)
+    // Last words from the partner and Jolene; Mario nods, the story advances and he collects the star.
     CALL(evt_cam3d_evt_set, -160, 150, 288, -160, 100, -8, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
     WAIT_MS(500)
@@ -5115,15 +5139,18 @@ EVT_END()
  * with hit effects and sounds. The announcer is placed at the ring edge.
  */
 EVT_BEGIN(evt_watch_match)
+    // Grubba (or later the announcer) stands at the edge of the ring to watch.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_npc_set_position, STRING(("\203K\203\223\203X")), 0, 60, -130)
         ELSE
         CALL(evt_npc_set_position, STRING(("\203L\203m\203V\203R\203\217")), 0, 60, -130)
     END_IF
     CALL(evt_npc_flag_onoff, 1, STRING(("\221I\216\3501")), NPC_FLAG_INTANGIBLE)
+    // The two fighters spar forever, picking one of three routines at random each round.
     LOOP(0)
         CALL(evt_sub_random, 3, LW(0))
         SWITCH(LW(0))
+            // Each in turn charges, leaps across the ring and lands a hit, then backs off.
             CASE_EQUAL(0)
             CALL(evt_npc_move_position, STRING(("\221I\216\3501")), -30, 0, 0, FLOAT(200.0f), 0)
             CALL(evt_npc_jump_position_nohit, STRING(("\221I\216\3501")), 20, 60, 0, 500, 30)
@@ -5141,6 +5168,7 @@ EVT_BEGIN(evt_watch_match)
             CALL(evt_npc_jump_position_nohit, STRING(("\221I\216\3502")), -60, 60, 0, 500, 30)
             CALL(evt_npc_jump_position_nohit, STRING(("\221I\216\3502")), -30, 60, 0, 300, 20)
             CALL(evt_npc_move_position, STRING(("\221I\216\3502")), 80, 0, 0, FLOAT(200.0f), 0)
+            // They clash in the middle, then trade up to three more blows while chasing across the ring.
             CASE_EQUAL(1)
             BEGIN_INLINE_EVENT_GET_ID(LW(12))
                 CALL(evt_npc_move_position, STRING(("\221I\216\3501")), -10, 0, 300, 0, 0)
@@ -5196,6 +5224,7 @@ EVT_BEGIN(evt_watch_match)
                 END_IF
                 WAIT_FRAMES(1)
             END_LOOP
+            // They leap at each other and collide in mid-air, then fall back to their corners.
             CASE_DEFAULT
             BEGIN_INLINE_EVENT_GET_ID(LW(12))
                 CALL(evt_npc_move_position, STRING(("\221I\216\3501")), -40, 0, 500, 0, 0)
@@ -5518,6 +5547,7 @@ EVT_END()
  * It also removes the partners if they are still poisoned and wires up the spectator talk scripts.
  */
 EVT_BEGIN(tou_03_init_evt)
+    // Ambience: silence during Grubba's finale, otherwise the arena crowd noise.
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
@@ -5533,6 +5563,7 @@ EVT_BEGIN(tou_03_init_evt)
 #endif
         END_INLINE_EVENT
     END_SWITCH
+    // Map setup: the upper level hidden unless Mario came in by the upper door, stage lights, crowd and monitor.
     CALL(evt_bero_get_entername, LW(0))
 #ifdef VERSION_G8ME01
     IF_STR_NOT_EQUAL(LW(0), STRING("s_bero_2"))
@@ -5574,6 +5605,7 @@ EVT_BEGIN(tou_03_init_evt)
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         RETURN
     END_IF
+    // NPCs and doors.
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL_CHILD(PTR(npc_entry))
     SWITCH(GSW_STORY_PROGRESS)
@@ -5623,6 +5655,7 @@ EVT_BEGIN(tou_03_init_evt)
             CALL(evt_mario_kill_party, 1)
         END_IF
     END_IF
+    // What happens in the ring: the title-match scene, a booked match, or two fighters sparring.
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
             IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
@@ -5672,6 +5705,7 @@ EVT_BEGIN(tou_03_init_evt)
             SPAWN_EVENT(PTR(evt_watch_match))
         END_SWITCH
     END_IF
+    // Talkable spectators in the stands (except during Grubba's finale).
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG3_31_GRUBBAS_PLANS)
 #ifdef VERSION_G8ME01
         CALL(evt_hitobj_onoff, STRING("a_kyaku_A"), 1, 1)

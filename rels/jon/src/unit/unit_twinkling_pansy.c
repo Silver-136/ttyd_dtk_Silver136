@@ -281,6 +281,7 @@ EVT_END()
  */
 static EVT_BEGIN(song_event)
     CALL(btlevtcmd_GetEnemyBelong, UNIT_ID_SELF, LW(0))
+    // Pick a target for the attack; a confused unit that has none flusters.
     CALL(btlevtcmd_SamplingEnemy, UNIT_ID_SELF, LW(0), LW(9))
     CALL(btlevtcmd_ChoiceSamplingEnemy, LW(9), LW(3), LW(4))
     IF_INT_EQUAL(LW(3), -1)
@@ -292,6 +293,7 @@ static EVT_BEGIN(song_event)
         GOTO(99)
     END_IF
     CALL(btlevtcmd_WeaponAftereffect, LW(9))
+    // Announce the attack; the camera swings to follow it.
     CALL(btlevtcmd_AttackDeclare, UNIT_ID_SELF, LW(3), LW(4))
     CALL(btlevtcmd_WaitGuardMove)
     CALL(btlevtcmd_PayWeaponCost, UNIT_ID_SELF, LW(9))
@@ -307,6 +309,7 @@ static EVT_BEGIN(song_event)
         SUBTRACT(LW(0), 2)
         WAIT_FRAMES(1)
     END_LOOP
+    // The Amazy Dayzee sings: music notes drift out while the stage tints darker.
     CALL(btlevtcmd_snd_se, UNIT_ID_SELF, STRING("SFX_ENM_PANSY_ATTACK1"), EVT_NULLPTR, 0, EVT_NULLPTR)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ATTACK)
     BEGIN_SIBLING_EVENT
@@ -323,6 +326,7 @@ static EVT_BEGIN(song_event)
     WAIT_FRAMES(120)
     SET_VALUE(LW(6), 0)
     CALL(btlevtcmd_GetSelectEnemy, LW(3), LW(4))
+    // Check every target in turn: a miss makes it dodge, a hit deals damage.
     LABEL(10)
     CALL(btlevtcmd_PreCheckDamage, UNIT_ID_SELF, LW(3), LW(4), LW(9), DAMAGE_RESULT_FINAL_HIT, LW(5))
     SWITCH(LW(5))
@@ -346,10 +350,13 @@ static EVT_BEGIN(song_event)
         GOTO(97)
         CASE_END
     END_SWITCH
+    // The attack misses or is dodged.
     LABEL(90)
     GOTO(97)
+    // The attack connects.
     LABEL(91)
     IF_INT_EQUAL(LW(6), 0)
+        // Deal the damage, reduced by the action command defence.
         CALL(btlevtcmd_ResultACDefence, LW(3), LW(9))
         SET_VALUE(LW(6), 1)
     END_IF
@@ -361,6 +368,7 @@ static EVT_BEGIN(song_event)
         GOTO(98)
     END_IF
     GOTO(10)
+    // All targets done: the stage lighting fades back to normal.
     LABEL(98)
     SET_VALUE(LW(0), 192)
     SET_VALUE(LW(1), 255)
@@ -376,6 +384,7 @@ static EVT_BEGIN(song_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_ACTION)
     WAIT_MS(500)
+    // The attack is over; back to waiting.
     LABEL(99)
     CALL(btlevtcmd_ResetFaceDirection, UNIT_ID_SELF)
     CALL(btlevtcmd_StartWaitEvent, UNIT_ID_SELF)

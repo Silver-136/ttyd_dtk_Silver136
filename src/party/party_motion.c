@@ -439,6 +439,7 @@ void party_motion_stay(PartyEntry* party) {
                         partyChgMot(party, PARTY_MOTION_WALK);
                         partyClearFootmark2();
                     }
+                // 3 = PARTY_MEMBER_BOBBERY, 4 = PARTY_MEMBER_YOSHI: the char-sized enum constants change the s8 compares
                 } else if (other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == 3) {
                     if (mario->currMotionId != MARIO_MOTION_DAMAGE && mario->currMotionId != MARIO_MOTION_HIP && mario->currMotionId != MARIO_MOTION_HIP_2 &&
                         distABf(party->position.x, party->position.z, mario->position.x, mario->position.z) >= lim) {

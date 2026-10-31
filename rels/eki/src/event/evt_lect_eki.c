@@ -496,6 +496,10 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture_init)
     RETURN
 EVT_END()
 
+/**
+ * Lecture helper: shows the two button icons (A solid, the stick icon dimmed)
+ * and flips the A icon between its pressed and released pictures every 300 ms.
+ */
 EVT_BEGIN(boots_lv3_juyoitem_lecture_sub01)
     CALL(lecture_button_set_alpha, 0, 255)
     CALL(lecture_button_set_alpha, 1, 128)
@@ -509,6 +513,11 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture_sub01)
     RETURN
 EVT_END()
 
+/**
+ * Lecture helper: while Mario is crouching on the spring (A held),
+ * shows the A icon pressed and dimmed and cycles the stick icon around its directions every 15 ms to show
+ * where to push; runs until the main lecture script deletes it.
+ */
 EVT_BEGIN(boots_lv3_juyoitem_lecture_sub02)
     CALL(lecture_button_set_icon_id, 0, ICON_BUTTON_A_PRESSED)
     LOOP(0)
@@ -541,7 +550,16 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture_sub02)
     RETURN
 EVT_END()
 
+/**
+ * The Ultra Boots lecture proper.
+ * Kinopiko explains the spring jump (lecture_u_boots_04 to 08):
+ * the player holds A to crouch and releases it to launch, while the button icons show the controls;
+ * the script lets Mario try it until he reaches the target height,
+ * after which Kinopiko offers to repeat the lesson (lecture_u_boots_10 and 11)
+ * and finally says goodbye (lecture_u_boots_13) and leaves.
+ */
 EVT_BEGIN(boots_lv3_juyoitem_lecture)
+    // The camera switches to the lecture view and Toadette walks up to Mario.
     BEGIN_SIBLING_EVENT
         CALL(lecture_button_rtn)
     END_SIBLING_EVENT
@@ -552,8 +570,12 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
     SUBTRACT(LW(0), 85)
     CALL(evt_npc_move_position, STRING("キノピコ"), LW(0), LW(2), 0, FLOAT(80.0f), 0)
+    // Toadette congratulates Mario on the Ultra Boots and explains the Spring Jump: hold A, rotate the stick,
+    // release A.
     CALL(evt_msg_print, 0, STRING("lecture_u_boots_04"), 0, STRING("キノピコ"))
     CALL(evt_msg_print_add, 0, STRING("lecture_u_boots_05"))
+    // Practice loop: the prompt tells Mario to try it, and Toadette encourages him now and then until he
+    // reaches the target height.
     LOOP(0)
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("lecture_u_boots_06"), 0, 0)
@@ -583,6 +605,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
             CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_1"), STRING("T_1"))
             CALL(evt_npc_set_anim, STRING("キノピコ"), STRING("S_1"))
         END_INLINE_EVENT
+        // The camera moves in and the on-screen button icons show the controls.
         CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(85.0f), FLOAT(520.0f), FLOAT(0.0f), FLOAT(40.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
         CALL(lecture_button_set_pos, 0, FLOAT(-200.0f), FLOAT(-25.0f), FLOAT(0.0f))
@@ -595,6 +618,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         CALL(lecture_button_set_seq, 1, 2)
         CALL(lecture_button_seq_wait, 0, 1)
         CALL(lecture_button_seq_wait, 1, 1)
+        // Mario gets limited controls; the button icons change as he crouches and launches.
         SPAWN_EVENT_GET_ID(PTR(boots_lv3_juyoitem_lecture_sub01), LW(11))
         SET_VALUE(LW(7), 0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -637,6 +661,8 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         CALL(evt_mario_trigflag_onoff, 0, MARIO_TRIG_FLAG_DISABLE_SUB_STICK)
         CALL(evt_mario_set_enable_key, 0)
         CALL(mainwindow_openenable)
+        // Mario reached the height: controls are restored and Toadette explains how the Spring Jump lets him
+        // grab pipes overhead.
         DELETE_EVENT(LW(11))
         CALL(lecture_button_set_seq, 0, 3)
         CALL(lecture_button_set_seq, 1, 3)
@@ -656,6 +682,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_mario_set_pos, LW(0), LW(1), 0)
         CALL(evt_mario_set_dir, 90, 300, 0)
+        // Toadette steps next to Mario and asks if he wants to try again.
         CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(80.0f), FLOAT(455.0f), FLOAT(26.0f), FLOAT(30.0f), FLOAT(-100.0f), 1000, EASING_SINE_IN_OUT)
         WAIT_MS(1000)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -664,6 +691,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         CALL(evt_npc_set_ry, STRING("キノピコ"), 270)
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_2"), STRING("T_2"))
         CALL(evt_msg_print, 0, STRING("lecture_u_boots_10"), 0, STRING("キノピコ"))
+        // If he says "One more time" the loop repeats; otherwise it ends.
         CALL(evt_msg_select, 0, STRING("lecture_u_boots_11"))
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_1"), STRING("T_1"))
         IF_INT_EQUAL(LW(0), 0)
@@ -672,6 +700,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
             BREAK_LOOP
         END_IF
     END_LOOP
+    // Toadette says goodbye, telling him he has mastered the Spring Jump, and walks off.
     CALL(evt_msg_print_add, 0, STRING("lecture_u_boots_13"))
     CALL(evt_npc_get_position, STRING("キノピコ"), LW(0), LW(1), LW(2))
     ADD(LW(0), 100)
@@ -682,6 +711,13 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
     RETURN
 EVT_END()
 
+/**
+ * Entry point of the key-item lecture, run when Mario first picks up a key item such as the Ultra Boots (the
+ * Ultra Boots case calls it through lect_juyoitem_rel_set):
+ * stops the map, plays the lecture music, shows the item on its own camera,
+ * then runs the lecture for the item (only item 8, the Ultra Boots, has one here),
+ * blinks Mario back in with the lecture sound, restores the camera and music and lets the map run again.
+ */
 EVT_BEGIN(all_juyoitem_lecture_rel)
     CALL(evt_mario_normalize)
     CALL(juyoitem_get_no, LW(10))
@@ -761,6 +797,11 @@ EVT_BEGIN(all_juyoitem_lecture_rel)
     RETURN
 EVT_END()
 
+/**
+ * Script helper: turns on hit-group flag 1 for the hit objects of the map object named by args[0] ("me" means
+ * the object running the script), which the hit checks skip, so the object loses its collision (nasi = none).
+ * Unused in this file.
+ */
 static USER_FUNC(lect_mobj_hit_nasi) {
     const char* name = (const char*)evtGetValue(event, event->args[0]);
     MapObjectEntry* mobj;
@@ -772,6 +813,7 @@ static USER_FUNC(lect_mobj_hit_nasi) {
         mobj = event->thisMapObj;
     }
     for (i = 0; i < 2; i++) {
+        // hitObj[i].name is an array, so the NULL test is always true; the original code has it and MWCC still emits the compare.
         if (mobj->hitObj[i].name != NULL && strcmp(mobj->hitObj[i].name, "") != 0) {
             hitGrpFlagOn(mobj->hitObj[i].name, 1);
         }

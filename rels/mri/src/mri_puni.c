@@ -3996,6 +3996,7 @@ void puniModePrehagure(PuniData* p) {
 void puniModeHagure(PuniData* p) {
     switch (p->modeStep) {
         case 0:
+            // the bubble follows an NpcEntry-shaped view whose position field is p->bubblePos
             p->effect = effFukidashiEntry(4, 0, (NpcEntry*)((u8*)&p->bubblePos - offsetof(NpcEntry, position)), 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, -1);
             p->anim = 6;
             p->flags |= PUNI_FLAG_COLLIDE;

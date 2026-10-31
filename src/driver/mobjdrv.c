@@ -54,6 +54,7 @@ CubeDrawMode front2MSJ = {{0, 1, 0, 0, 0, 0}, 0};
 
 // cube vertex positions (cubeDVP) and normals (cubeDVN), listed in cubeDDT
 
+// static data from inlined header functions
 typedef struct CubeVtxData34 {
     s32 count;
     Vec v[34];
@@ -566,6 +567,7 @@ s32 mobjEntry(const char* name, const char* animPoseName) {
     }
     // the search for an active entry with the same name has no effect: its result is not used
 
+    // SPM uses this to assert the name isn't duplicate, here it's just pointless
     for (idx = 0, entry = wp->entries; idx < entryCount; idx++, entry++) {
         if ((entry->flags & MOBJ_FLAG_ACTIVE) == 0) {
             break;
@@ -758,6 +760,9 @@ void mobjMain(void) {
             hit = 0;
             hitPtr = entry->hitObj[0].hitObject;
             if (mario->characterId != CHARACTER_BOWSER) {
+                // The first hit kind that applies wins. The goto is kept: the hammer and partner checks
+                // fall through to the next kind when their inner test fails, and no if/else-if form of
+                // that gives the same code (the partner blocks merge or re-test the flag).
                 if ((entry->flags & MOBJ_FLAG_HIT_HAMMER) && mario->hitobjHammer == hitPtr) {
                     if (marioGetPtr()->position.y <= 5.0f + entry->position.y) {
                         entry->hitFlag = MOBJ_FLAG_HIT_HAMMER;
