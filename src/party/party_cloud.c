@@ -14,6 +14,17 @@
 #include "libc_decls.h"
 #include "party/party_move.h"
 
+// Flurrie use-motion states, not Mario motion ids.
+typedef enum CloudUseState {
+    CLOUD_USE_APPROACH_INIT = 0,
+    CLOUD_USE_APPROACH = 1,
+    CLOUD_USE_BREATH_INIT = 10,
+    CLOUD_USE_BREATH_START = 11,
+    CLOUD_USE_BREATHING = 12,
+    CLOUD_USE_BREATH_FINISH = 13,
+    CLOUD_USE_CLEANUP = 20,
+} CloudUseState;
+
 Vec cloud_at;
 
 
@@ -101,7 +112,7 @@ u8 cloudGetStatus(void) {
     if (party == NULL || (party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) == 0)) {
         status = 0;
         return status;
-    } else if (party->useMotionId == 10 && party->useMotionId < 20) {
+    } else if (party->useMotionId == CLOUD_USE_BREATH_INIT && party->useMotionId < CLOUD_USE_CLEANUP) {
         status = 1;
     }
 
@@ -116,7 +127,7 @@ f32 cloudGetBreathDir(void) {
         return 0.0f;
     }
 
-    if ((party->flags & PARTY_FLAG_IS_BEING_USED) != 0 && party->useMotionId < 10) {
+    if ((party->flags & PARTY_FLAG_IS_BEING_USED) != 0 && party->useMotionId < CLOUD_USE_BREATH_INIT) {
         breathDir = -1.0f;
     } else if (party->useStruct == NULL) {
         breathDir = 0.0f;
@@ -143,7 +154,7 @@ f32 cloudGetBreathPower(f32 size, Vec* pos) {
 
     val = 10.0f;
     if (party->currentMemberId == PARTY_MEMBER_FLURRIE && (party->flags & PARTY_FLAG_IS_BEING_USED) != 0 &&
-        party->useMotionId >= 10 && __fabs(party->position.y - pos->y - 18.0f) <= val) {
+        party->useMotionId >= CLOUD_USE_BREATH_INIT && __fabs(party->position.y - pos->y - 18.0f) <= val) {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
         reach = cloud->breathDist;
         if (-((0.5f * size) - distABf(party->position.x, party->position.z, pos->x, pos->z)) <= reach) {
@@ -172,7 +183,7 @@ struct HitEntry* cloudGetHitBreathout(s32 which) {
     }
 
     if (party->currentMemberId != PARTY_MEMBER_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0 ||
-        party->useMotionId < 10) {
+        party->useMotionId < CLOUD_USE_BREATH_INIT) {
         return NULL;
     }
 
@@ -201,7 +212,7 @@ f32 cloudGetBreathDist(void) {
     }
 
     if (party->currentMemberId != PARTY_MEMBER_FLURRIE || (party->flags & PARTY_FLAG_IS_BEING_USED) == 0 ||
-        party->useMotionId < 10) {
+        party->useMotionId < CLOUD_USE_BREATH_INIT) {
         breathDist = 0.0f;
     } else {
         PartyCloud* cloud = (PartyCloud*)party->useStruct;
@@ -315,7 +326,7 @@ void cloud_use(PartyEntry* party) {
     } else {
         partyChgPose(party, partyChgPoseId(party, 1));
         partyChgRunMode(party, 2);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
     }
 }
 
@@ -335,7 +346,7 @@ void _cloud_use(PartyEntry* party) {
         party->work.cloud.hoverAngleBits = 0;
         party->work.cloud.hoverSpeedBits = 0;
         marioAdjustMoveDir();
-        party->useMotionId = 0;
+        party->useMotionId = CLOUD_USE_APPROACH_INIT;
         party->useStruct = __memAlloc(HEAP_DEFAULT, sizeof(PartyCloud));
         memset(party->useStruct, 0, sizeof(PartyCloud));
         CLOUD_WORK(party)->reserved_0 = 100.0f;
@@ -354,11 +365,11 @@ void _cloud_use(PartyEntry* party) {
     }
 
     switch (party->useMotionId) {
-    case 0:
+    case CLOUD_USE_APPROACH_INIT:
         mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->moveFrames = 4;
-        party->useMotionId = 1;
-    case 1:
+        party->useMotionId = CLOUD_USE_APPROACH;
+    case CLOUD_USE_APPROACH:
         cloudCalcPos(party);
         party->displayDirection = mario->displayDirection;
         party->displayDirectionTarget = mario->displayDirectionTarget;
@@ -368,8 +379,8 @@ void _cloud_use(PartyEntry* party) {
         if (--party->moveFrames > 0) {
             break;
         }
-        party->useMotionId = 10;
-    case 10:
+        party->useMotionId = CLOUD_USE_BREATH_INIT;
+    case CLOUD_USE_BREATH_INIT:
         cloudCalcPos(party);
         party->position = party->moveTarget;
         if (party->work.cloud.breathEffect == NULL) {
@@ -386,7 +397,7 @@ void _cloud_use(PartyEntry* party) {
         marioChgPose("M_A_2A");
         partyChgPose(party, "PWD_A_5");
         party->moveFrames = 16;
-        party->useMotionId = 11;
+        party->useMotionId = CLOUD_USE_BREATH_START;
         mario->dispFlags |= MARIO_DISP_FLAG_NO_REAR_POSE;
         mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->flags2 |= PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
@@ -399,7 +410,7 @@ void _cloud_use(PartyEntry* party) {
         if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId == 0xFFFFFFFF) {
             CLOUD_WORK(party)->sfxId = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_CLAUD_WIND1), &party->playerPtr->position);
         }
-    case 11:
+    case CLOUD_USE_BREATH_START:
         cloudCalcPos(party);
         party->position = party->moveTarget;
         if (--party->moveFrames > 0) {
@@ -410,8 +421,8 @@ void _cloud_use(PartyEntry* party) {
         if (mario->currMotionId == MARIO_MOTION_CLOUD)
 #endif
         marioChgPose("M_A_2B");
-        party->useMotionId = 12;
-    case 12:
+        party->useMotionId = CLOUD_USE_BREATHING;
+    case CLOUD_USE_BREATHING:
         cloudCalcPos(party);
         party->position = party->moveTarget;
         partyUpdateKeyData(party);
@@ -469,31 +480,31 @@ void _cloud_use(PartyEntry* party) {
         CLOUD_WORK(party)->hitSweep[0] = NULL;
         CLOUD_WORK(party)->hitSweep[1] = NULL;
         party->moveFrames = sysMsec2Frame(200);
-        party->useMotionId = 13;
+        party->useMotionId = CLOUD_USE_BREATH_FINISH;
         if (party->flags & PARTY_FLAG_IS_EVT_USE) {
-            party->useMotionId = 20;
+            party->useMotionId = CLOUD_USE_CLEANUP;
         }
         if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
             psndSFXOff(CLOUD_WORK(party)->sfxId);
             CLOUD_WORK(party)->sfxId = -1;
         }
         break;
-    case 13:
+    case CLOUD_USE_BREATH_FINISH:
         cloudCalcPos(party);
         party->position = party->moveTarget;
         partyUpdateKeyData(party);
         if (party->buttonTrg & PAD_BUTTON_X) {
-            party->useMotionId = 10;
+            party->useMotionId = CLOUD_USE_BREATH_INIT;
         }
         if (--party->moveFrames <= 0) {
-            party->useMotionId = 20;
+            party->useMotionId = CLOUD_USE_CLEANUP;
             break;
         }
         if (party->stickX == 0 && party->stickY == 0) {
             break;
         }
-        party->useMotionId = 20;
-    case 20:
+        party->useMotionId = CLOUD_USE_CLEANUP;
+    case CLOUD_USE_CLEANUP:
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         if (CLOUD_WORK(party) != NULL && (u32)CLOUD_WORK(party)->sfxId != 0xFFFFFFFF) {
             psndSFXOff(CLOUD_WORK(party)->sfxId);
@@ -518,7 +529,7 @@ void _cloud_use(PartyEntry* party) {
         partyChgRunMode(party, 2);
         party->moveArg = 0;
         partyChgMoveMode(party, 2);
-        partyChgMot(party, 1);
+        partyChgMot(party, PARTY_MOTION_WALK);
         if (!(party->flags & PARTY_FLAG_IS_EVT_USE)) {
             mario->camShiftRate.x = 0.01f;
             mario->camShiftTargetX = 0.0f;

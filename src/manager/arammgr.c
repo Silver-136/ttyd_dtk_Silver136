@@ -4,6 +4,8 @@
 #include <string.h>
 
 #define ARAM_OWNER 0x19751128
+#define ARAM_GARBAGE_BUFFER_SIZE 0x8000
+#define ARAM_POOL_BYTES 0x3FC000
 
 //.bss
 static ARAMWork work;
@@ -17,7 +19,7 @@ void aramMgrInit(void) {
         ARInit(wp->arStack, 8);
     }
     ARQInit();
-    wp->size = 0x3FC000;
+    wp->size = ARAM_POOL_BYTES;
     wp->count = 64;
     wp->baseAddr = ARAlloc(wp->size);
     wp->nextAddr = wp->baseAddr;
@@ -77,10 +79,10 @@ void aramMgrGarbage(void) {
     addr = wp->baseAddr;
     for (curr = wp->head; curr != NULL; curr = curr->next) {
         if (curr->aramAddr != addr) {
-            wp->bufferSize = 0x8000;
+            wp->bufferSize = ARAM_GARBAGE_BUFFER_SIZE;
             wp->buffer = __memAlloc(HEAP_DEFAULT, wp->bufferSize);
             n = (curr->size + (wp->bufferSize - 1)) / wp->bufferSize;
-            for (i = 0, offset = 0; i < n; i++, offset += 0x8000) {
+            for (i = 0, offset = 0; i < n; i++, offset += ARAM_GARBAGE_BUFFER_SIZE) {
                 wp->busy = 1;
                 ARQPostRequest(&wp->request, ARAM_OWNER, ARQ_TYPE_ARAM_TO_MRAM, ARQ_PRIORITY_LOW,
                     curr->aramAddr + offset, (u32)wp->buffer, wp->bufferSize, aramCallbackGarbage);

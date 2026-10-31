@@ -662,7 +662,7 @@ USER_FUNC(_set_effect_luck) {
             psndSFXOn(sfx);
             // FAKE: block-local EffectEntry* temporary; assigning effNiceEntry(...)->userdata directly changes the object
             {
-                EffectEntry* e = effNiceEntry(6, x - 45.0f, 60.0f + y, z);
+                EffectEntry* e = effNiceEntry(NICE_EFFECT_LUCKY, x - 45.0f, 60.0f + y, z);
                 effect = e->userdata;
                 effect->overallScale = 0.75f;
             }

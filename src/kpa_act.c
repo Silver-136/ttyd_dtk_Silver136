@@ -16,6 +16,8 @@ typedef struct KpaScore {
     Vec pos;
 } KpaScore;
 
+#define KPA_SCORE_SLOT_COUNT 50
+
 KpaScore* ksdp;
 USER_FUNC(kpa_score_disp_main);
 EVT_BEGIN(kpa_score_disp_evt)
@@ -33,7 +35,7 @@ void kpaScoreDisp(CameraId cameraId, void* param) {
     PSMTXScale(scale, 0.5f, 0.5f, 0.5f);
     FontDrawStart();
     FontDrawColor((GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    for (i = 0; i < 50; i++) {
+    for (i = 0; i < KPA_SCORE_SLOT_COUNT; i++) {
         if (ksdp[i].timer != 0) {
             PSMTXTrans(m, ksdp[i].pos.x, ksdp[i].pos.y, 300.0f);
             PSMTXConcat(m, scale, m);
@@ -44,7 +46,7 @@ void kpaScoreDisp(CameraId cameraId, void* param) {
 
 USER_FUNC(kpa_score_disp_main) {
     s32 i;
-    for (i = 0; i < 50; i++) {
+    for (i = 0; i < KPA_SCORE_SLOT_COUNT; i++) {
         if (ksdp[i].timer != 0) {
             ksdp[i].pos.y += 1.0f;
             ksdp[i].timer--;
@@ -68,9 +70,9 @@ USER_FUNC(kpa_score_disp_init) {
     }
     e->uwBase = event->uwBase;
     e->ufBase = event->ufBase;
-    ksdp = _mapAlloc(50 * sizeof(KpaScore));
+    ksdp = _mapAlloc(KPA_SCORE_SLOT_COUNT * sizeof(KpaScore));
     // FAKE: (s32) cast on the u32 counter (signed compare); the plain `i < 50` changes the object
-    for (i = 0; (s32)i < 50; i++) {
+    for (i = 0; (s32)i < KPA_SCORE_SLOT_COUNT; i++) {
         ksdp[i].str[0] = 0;
         ksdp[i].timer = 0;
         ksdp[i].pos = (Vec){0.0f, 0.0f, 0.0f};
@@ -98,7 +100,7 @@ static inline void kpaSetScoreStr(s32 score, Vec* pos) {
     s32 j;
     s32 n;
     s32 i;
-    for (i = 0; i < 50; i++) {
+    for (i = 0; i < KPA_SCORE_SLOT_COUNT; i++) {
         if (ksdp[i].timer == 0) {
             d[0] = score / 10000;
             t = score % 10000;

@@ -238,7 +238,7 @@ void partySetForceMove(PartyEntry* party, s32 frames, f32 dir, f32 speed) {
     party->forceMoveFrames = frames;
     party->moveSpeed = speed;
     partyChgRunMode(party, 9);
-    partyChgMot(party, 1);
+    partyChgMot(party, PARTY_MOTION_WALK);
 }
 
 s32 partyEntryHello(s32 memberId) {
@@ -649,7 +649,7 @@ void partyReInit(void) {
         party->hitobjUnder = NULL;
         partyChgPose(party, partyChgPoseIdNoPinch_inl(party, 1)); // FAKE: see partyChgPoseIdNoPinch_inl
         partyChgRunMode(party, 2);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
         party->yoshiPsndSFXId = -1;
         party->scale = (Vec){1.0f, 1.0f, 1.0f};
     }
@@ -696,7 +696,7 @@ void partyReInit(void) {
             pose = partyChgPoseId(party, 1);
             partyChgPose(party, pose);
             partyChgRunMode(party, 2);
-            partyChgMot(party, 0);
+            partyChgMot(party, PARTY_MOTION_STAY);
         } else {
             pose = partyChgPoseId(party, 1);
             partyChgPose(party, pose);
@@ -814,7 +814,7 @@ void partyPrevRunMode(PartyEntry* party) {
         party->flags2 &= ~PARTY_DISP_FLAG_NO_MAKE_DISP_DIR;
         party->runMode = 1;
         partyUsePost(party);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
     } else if (party->runMode == 11) {
         MarioWork* mario = party->playerPtr;
         partyChgRunMo(party);
@@ -828,7 +828,7 @@ void partyPrevRunMode(PartyEntry* party) {
         party->flags2 &= ~PARTY_DISP_FLAG_HIDE;
         partyShadowOn(party);
         partyUsePost(party);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
     } else {
         if (party->runMode == 12) {
             partyShadowOn(party);
@@ -836,7 +836,7 @@ void partyPrevRunMode(PartyEntry* party) {
         partyUsePost(party);
         party->runMode = party->prevRunMode;
         party->trigFlags |= PARTY_TRIG_CHG_RUN_MODE;
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
     }
 }
 
@@ -920,7 +920,7 @@ void driveParty(PartyEntry* party) {
                 partyChgPoseId(party, 1);
                 party->moveSpeed = 0.0f;
                 party->flags &= ~PARTY_FLAG_IS_BEING_USED;
-                partyChgMot(party, 0);
+                partyChgMot(party, PARTY_MOTION_STAY);
             }
             party_dp = &partyDataTbl[party->currentMemberId];
             party_dp->move_func(party);

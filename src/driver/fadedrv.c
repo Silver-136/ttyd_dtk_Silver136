@@ -144,7 +144,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
                     break;
             }
             break;
-        case 0x16: case 0x17: case 0x18: case 0x19: case 0x1A: case 0x1B: case 0x1C: case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28: case 0x33:
+        case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x18: case 0x19: case 0x1A: case 0x1B: case 0x1C: case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28: case 0x33:
             id = 1;
             entry = &wp->entries[1];
             break;
@@ -227,7 +227,7 @@ void fadeEntry(s32 type, s32 duration, GXColor color) {
             entry->animName = "A_2";
             entry->imageType = 2;
             break;
-        case 0x16:
+        case FADE_CURTAIN_UP_DOWN_A1:
             entry->animFile = "OFF_d_maku_up_down";
             entry->animName = "A_1";
             entry->imageType = 2;
@@ -643,7 +643,7 @@ void fadeMain(void) {
                         break;
                 }
                 break;
-            case 0x16:
+            case FADE_CURTAIN_UP_DOWN_A1:
                 switch (entry->state) {
                     case 0:
                         if (animGroupBaseAsync(entry->animFile, entry->imageType, NULL) == 0) {
@@ -800,7 +800,7 @@ void fadeMain(void) {
                 break;
         }
         switch (entry->type) {
-            case 0x16: case 0x17: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28:
+            case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x23: case 0x24: case 0x25: case 0x26: case 0x27: case 0x28:
                 dispEntry(CAMERA_FADE, 0.0f, 0, disp_maku, entry);
                 break;
             case 0x1B: case 0x1C: case 0x3F: case 0x40:
@@ -1069,7 +1069,7 @@ void disp_maku(CameraId camId, void* param) {
             }
     }
     switch (entry->type) {
-        case 0x16: case 0x17: case 0x18: case 0x19: case 0x1A: case 0x1B: case 0x1C:
+        case FADE_CURTAIN_UP_DOWN_A1: case 0x17: case 0x18: case 0x19: case 0x1A: case 0x1B: case 0x1C:
         case 0x1D: case 0x1E: case 0x1F: case 0x20: case 0x21: case 0x22: case 0x23:
         case 0x24: case 0x25: case 0x26: case 0x27: case 0x28: case 0x33: case 0x3F: case 0x40:
             break;

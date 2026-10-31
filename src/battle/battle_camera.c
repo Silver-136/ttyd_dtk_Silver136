@@ -545,7 +545,7 @@ void battleCameraMain(void) {
     }
 }
 
-void battleCameraMoveTo(s32 mode, s32 clamp, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ,
+void battleCameraMoveTo(s32 applyOffsets, s32 clampX, f32 x, f32 y, f32 z, f32 atX, f32 atY, f32 atZ,
                         f32* dX, f32* dY, f32* dZ, f32* dAtX, f32* dAtY, f32* dAtZ) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
     BattleWork* wp = _battleWorkPointer;
@@ -558,7 +558,7 @@ void battleCameraMoveTo(s32 mode, s32 clamp, f32 x, f32 y, f32 z, f32 atX, f32 a
     if (wp->cameraWork.zoomSpeedLv < 0 || wp->cameraWork.zoomSpeedLv >= 6) {
         wp->cameraWork.zoomSpeedLv = 1;
     }
-    if (mode == 1) {
+    if (applyOffsets == 1) {
         if (wp->flags & BATTLE_FLAG_PARTY_IN_AUDIENCE) {
             f32 mz = mario->mHomePosition.z;
             f32 ox = 0.0f;
@@ -582,7 +582,7 @@ void battleCameraMoveTo(s32 mode, s32 clamp, f32 x, f32 y, f32 z, f32 atX, f32 a
     if (half < 0.0f) {
         half = 0.0f;
     }
-    if (clamp == 1) {
+    if (clampX == 1) {
         if (x > 100.0f + half) {
             x = 100.0f + half;
         }

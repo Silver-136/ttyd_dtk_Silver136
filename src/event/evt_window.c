@@ -240,6 +240,10 @@ USER_FUNC(evt_win_one_message) {
     return EVT_RETURN_BLOCK;
 }
 
+#define COIN_WINDOW_COINS 0
+#define COIN_WINDOW_SHINE_SPRITES 1
+#define COIN_WINDOW_STAR_PIECES 2
+
 static void coin_disp(WinMgrEntry* entry) {
     CoinWin* w;
     s32 target;
@@ -253,15 +257,15 @@ static void coin_disp(WinMgrEntry* entry) {
         return;
     }
     switch (w->type) {
-    case 0:
+    case COIN_WINDOW_COINS:
         target = pouchGetCoin();
         icon = ICON_ITEM_COIN;
         break;
-    case 1:
+    case COIN_WINDOW_SHINE_SPRITES:
         target = pouchGetSuperCoin();
         icon = ICON_ITEM_SHINE_SPRITE;
         break;
-    case 2:
+    case COIN_WINDOW_STAR_PIECES:
         target = pouchGetStarPiece();
         icon = ICON_ITEM_STAR_PIECE;
         break;
@@ -307,13 +311,13 @@ USER_FUNC(evt_win_coin_on) {
     w->id = winMgrEntry(&coin_desc);
     w->timer = 0;
     switch (type) {
-    case 0:
+    case COIN_WINDOW_COINS:
         w->coins = pouchGetCoin();
         break;
-    case 1:
+    case COIN_WINDOW_SHINE_SPRITES:
         w->coins = pouchGetSuperCoin();
         break;
-    case 2:
+    case COIN_WINDOW_STAR_PIECES:
         w->coins = pouchGetStarPiece();
         break;
     }
@@ -327,13 +331,13 @@ USER_FUNC(evt_win_coin_off) {
     CoinWin* w = (CoinWin*)evtGetValue(event, event->args[0]);
     s32 coins;
     switch (w->type) {
-    case 0:
+    case COIN_WINDOW_COINS:
         coins = pouchGetCoin();
         break;
-    case 1:
+    case COIN_WINDOW_SHINE_SPRITES:
         coins = pouchGetSuperCoin();
         break;
-    case 2:
+    case COIN_WINDOW_STAR_PIECES:
         coins = pouchGetStarPiece();
         break;
     }
@@ -349,13 +353,13 @@ USER_FUNC(evt_win_coin_wait) {
     CoinWin* w = (CoinWin*)evtGetValue(event, event->args[0]);
     s32 coins;
     switch (w->type) {
-    case 0:
+    case COIN_WINDOW_COINS:
         coins = pouchGetCoin();
         break;
-    case 1:
+    case COIN_WINDOW_SHINE_SPRITES:
         coins = pouchGetSuperCoin();
         break;
-    case 2:
+    case COIN_WINDOW_STAR_PIECES:
         coins = pouchGetStarPiece();
         break;
     }

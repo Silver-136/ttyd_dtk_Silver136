@@ -1913,7 +1913,7 @@ USER_FUNC(btlevtcmd_StartAvoid) {
             pos.y += -50.0f;
         }
         pos.x -= 45.0f;
-        entry = effNiceEntry(6, pos.x, pos.y, pos.z);
+        entry = effNiceEntry(NICE_EFFECT_LUCKY, pos.x, pos.y, pos.z);
         ((NiceEffectWork*)entry->userdata)->overallScale = 0.75f;
     }
     unit->damagePattern = 0;
@@ -4937,7 +4937,7 @@ USER_FUNC(btlevtcmd_AudienceDeclareAcrobatResult) {
         if (pos.x > 150.0f) {
             pos.x = 150.0f;
         }
-        eff = effNiceEntry(7, pos.x + x, pos.y + y, pos.z + z);
+        eff = effNiceEntry(NICE_EFFECT_ACROBAT, pos.x + x, pos.y + y, pos.z + z);
         ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
     } else {
         BattleAudience_Case_AcrobatBad();

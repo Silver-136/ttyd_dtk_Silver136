@@ -88,7 +88,7 @@ void seq_battleMain(SequenceWork* work) {
     switch (work->state) {
         case 0: {
             GXColor color = {0, 0, 0, 255};
-            fadeEntry(0x16, 1000, color);
+            fadeEntry(FADE_CURTAIN_UP_DOWN_A1, 1000, color);
             work->state++;
             work->counter = 0;
             break;
@@ -208,7 +208,7 @@ void seq_battleMain(SequenceWork* work) {
             break;
         case 10: {
             GXColor color = {0, 0, 0, 255};
-            fadeEntry(0x16, 200, color);
+            fadeEntry(FADE_CURTAIN_UP_DOWN_A1, 200, color);
             work->state++;
             break;
         }

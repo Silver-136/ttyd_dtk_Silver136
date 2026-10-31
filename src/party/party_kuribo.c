@@ -288,7 +288,7 @@ void kuribo_use(PartyEntry* party) {
         }
         partyChgRunMode(party, 2);
         partyChgMoveMode(party, 0);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
         partyChgPoseId(party, 1);
         party->flags &= ~PARTY_FLAG_IS_BEING_USED;
         party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;

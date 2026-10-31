@@ -37,12 +37,12 @@
 s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 9, 8, 6, 4, 3, 2, 1, 0, 0, 0, 0, 0};
 
 EVT_BEGIN(longQuake_evt)
-    CALL(evt_cam_shake, CAMERA_3D, PTR(0xF24A7A8F), PTR(0xF24A7A8F), 600)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(15.0f / 1024.0f), FLOAT(15.0f / 1024.0f), 600)
     RETURN
 EVT_END()
 
 static EVT_BEGIN(quake_evt)
-    CALL(evt_cam_shake, CAMERA_3D, PTR(0xF24A7A8F), PTR(0xF24A7A8F), 200)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(15.0f / 1024.0f), FLOAT(15.0f / 1024.0f), 200)
     RETURN
 EVT_END()
 
@@ -216,7 +216,7 @@ void bomhei_use(PartyEntry* party) {
             (party->useMotionId >= 50 && party->useMotionId <= 51) || party->useMotionId == 60) {
             partyChkGnd(party);
             if (party->flags & PARTY_FLAG_IS_GROUNDED) {
-                partyChgMot(party, 0);
+                partyChgMot(party, PARTY_MOTION_STAY);
                 party->velY = 0.0f;
             }
             if (strcmp(gp->currentMapName, "muj_05") == 0 && party->hitobjStandOn != NULL &&

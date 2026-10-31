@@ -5144,13 +5144,13 @@ s32 searchPSSFXList(const char* name) {
     if (SFX_NAME_IS_ID(name)) {
         return SFX_NAME_ID(name);
     }
-    for (i = 0; i < 4242; i++) {
+    for (i = 0; i < (s32)(sizeof(pssfxlist) / sizeof(pssfxlist[0])); i++) {
         if (!strcmp(entry->name, name)) {
             break;
         }
         entry++;
     }
-    if (i >= 4242) {
+    if (i >= (s32)(sizeof(pssfxlist) / sizeof(pssfxlist[0]))) {
         i = 0;
     }
     return i;
@@ -5537,7 +5537,7 @@ static inline void psndBGMSearchP(const char* name, s32* pi) {
         *pi = SFX_NAME_ID(name);
         return;
     }
-    for (*pi = 0; *pi < 0x106; (*pi)++, entry++) {
+    for (*pi = 0; *pi < (s32)(sizeof(psbgmlist) / sizeof(psbgmlist[0])); (*pi)++, entry++) {
         if (!strcmp(entry->name, name)) {
             break;
         }

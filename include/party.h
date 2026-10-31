@@ -29,6 +29,16 @@ typedef enum PartyMember {
 } PartyMember;
 #pragma enumsalwaysint on
 
+// PartyEntry.motionId / partyChgMot, dispatched by the party move-mode handlers.
+typedef enum PartyMotion {
+    PARTY_MOTION_STAY = 0,
+    PARTY_MOTION_WALK = 1,
+    PARTY_MOTION_JUMP = 2,
+    PARTY_MOTION_FALL = 3,
+    PARTY_MOTION_UPSTAIRS = 6,
+    PARTY_MOTION_DAMAGE = 7,
+} PartyMotion;
+
 #pragma enumsalwaysint off
 typedef enum PartyFlags {
     PARTY_FLAG_IS_ACTIVE = (1 << 0),

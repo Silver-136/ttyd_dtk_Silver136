@@ -1547,7 +1547,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
     damage = 0;
     if (!(weapon->special & SPECIAL_UNGUARDABLE) && BtlUnit_GetACPossibility(target) && BattleActionCommandGetDefenceResult() == 5) {
         BtlUnit_GetHitPos(target, part, &hit.x, &hit.y, &hit.z);
-        eff = effNiceEntry(2, hit.x - 60.0f, 45.0f + hit.y, hit.z - 10.0f);
+        eff = effNiceEntry(NICE_EFFECT_GREAT, hit.x - 60.0f, 45.0f + hit.y, hit.z - 10.0f);
         ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
         flags |= DAMAGE_RESULT_SUPERGUARD;
         psndSFXOn("SFX_SYSTEM_GREAT1");
@@ -1602,7 +1602,7 @@ s32 BattleCheckDamage(BattleUnit* attacker, BattleUnit* target, BattleUnitPart* 
         if (!(weapon->special & SPECIAL_UNGUARDABLE) && BtlUnit_GetACPossibility(target)) {
             if (BattleActionCommandGetDefenceResult() > 3) {
                 BtlUnit_GetHitPos(target, part, &hit2.x, &hit2.y, &hit2.z);
-                eff = effNiceEntry(0, hit2.x - 60.0f, 45.0f + hit2.y, hit2.z - 10.0f);
+                eff = effNiceEntry(NICE_EFFECT_NICE, hit2.x - 60.0f, 45.0f + hit2.y, hit2.z - 10.0f);
                 ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
                 flags |= DAMAGE_RESULT_GUARD;
                 psndSFXOn("SFX_SYSTEM_NICE1");

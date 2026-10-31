@@ -18,6 +18,7 @@ typedef enum FadeType {
 
     FADE_OUT_WHITE = 17,
     FADE_IN_WHITE2 = 18,
+    FADE_CURTAIN_UP_DOWN_A1 = 22, // OFF_d_maku_up_down, animation A_1
 
 
 

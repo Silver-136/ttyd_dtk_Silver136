@@ -3995,7 +3995,7 @@ USER_FUNC(_object_fall_attack) {
                                         p.y += -50.0f;
                                     }
                                     p.x -= 45.0f;
-                                    eff = effNiceEntry(6, p.x, p.y, p.z);
+                                    eff = effNiceEntry(NICE_EFFECT_LUCKY, p.x, p.y, p.z);
                                     ((NiceEffectWork*)eff->userdata)->overallScale = 0.75f;
                                     unit2->damagePattern = 0;
                                     BattleRunHitEvent(unit2, DAMAGE_RESULT_FINAL_HIT | DAMAGE_CODE_LUCKY);

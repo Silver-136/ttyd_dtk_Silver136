@@ -537,7 +537,7 @@ static inline f32 partyUpdSpd2(PartyEntry* party) {
 }
 
 static inline f32 partyChkUpdSpd(PartyEntry* party) {
-    if (party->forceMoveFrames != 0 || party->motionId == 2 || party->motionId == 3 || party->motionId == 6) {
+    if (party->forceMoveFrames != 0 || party->motionId == PARTY_MOTION_JUMP || party->motionId == PARTY_MOTION_FALL || party->motionId == PARTY_MOTION_UPSTAIRS) {
         return party->moveSpeed;
     }
     return partyUpdSpd2(party);
@@ -564,7 +564,7 @@ f32 partyForceSetSpd(PartyEntry* party, f32 spd) {
 
 // Descriptive name (not in the symbol maps); placeholder unk_800c92c4, JP 0x800C92C4. See docs/NAME_PROVENANCE.md.
 f32 partyUpdMoveSpd(PartyEntry* party) {
-    if (party->forceMoveFrames != 0 || party->motionId == 2 || party->motionId == 3 || party->motionId == 6) {
+    if (party->forceMoveFrames != 0 || party->motionId == PARTY_MOTION_JUMP || party->motionId == PARTY_MOTION_FALL || party->motionId == PARTY_MOTION_UPSTAIRS) {
         return party->moveSpeed;
     }
     return partyUpdSpd(party);
@@ -852,7 +852,7 @@ void partyChgMoveMode(PartyEntry* party, s32 mode) {
 }
 
 void partyChgMot(PartyEntry* party, s32 mot) {
-    if (party->motionId == 3) {
+    if (party->motionId == PARTY_MOTION_FALL) {
         party->flags &= ~(PARTY_FLAG_IS_JUMPING | PARTY_FLAG_IS_FALLING | PARTY_FLAG_IS_STEPPING);
         party->flags &= ~(PARTY_FLAG_DISABLE_FRONT_WALL_CHK | PARTY_FLAG_FORCE_FALL);
         party->flags &= ~PARTY_FLAG_DISABLE_FLOORS;
@@ -871,7 +871,7 @@ void partyMoveBehindMario(PartyEntry* party, s32 arg) {
     }
     party->moveArg = arg;
     partyChgMoveMode(party, 2);
-    partyChgMot(party, 1);
+    partyChgMot(party, PARTY_MOTION_WALK);
 }
 
 void partyMoveBehindMario3(PartyEntry* party, s32 arg) {
@@ -883,7 +883,7 @@ void partyMoveBehindMario3(PartyEntry* party, s32 arg) {
     party_set_behind_dir(party);
     party->moveArg = arg;
     partyChgMoveMode(party, 2);
-    partyChgMot(party, 1);
+    partyChgMot(party, PARTY_MOTION_WALK);
 }
 
 void partyMoveBesideMario(PartyEntry* party, s32 arg) {
@@ -892,7 +892,7 @@ void partyMoveBesideMario(PartyEntry* party, s32 arg) {
     }
     party->moveArg = arg;
     partyChgMoveMode(party, 3);
-    partyChgMot(party, 1);
+    partyChgMot(party, PARTY_MOTION_WALK);
 }
 
 void partyMoveCheckWall(PartyEntry* party) {
@@ -1077,7 +1077,7 @@ void party_move_mode_wait(PartyEntry* party) {
         case 1:
         case 2:
         case 6:
-            partyChgMot(party, 0);
+            partyChgMot(party, PARTY_MOTION_STAY);
             break;
         case 3:
             party_motion_fall(party);
@@ -1105,7 +1105,7 @@ void partyWalkInit(PartyEntry* party) {
     if (!(mario->flags & MARIO_FLAG_PARTY_WALK_DISABLED)) {
         partyChgPoseId(party, 1);
         partyChgMoveMode(party, 1);
-        partyChgMot(party, 0);
+        partyChgMot(party, PARTY_MOTION_STAY);
     }
 }
 
@@ -1172,7 +1172,7 @@ void party_move_mode_stay(PartyEntry* party) {
         case 1:
         case 2:
         case 6:
-            partyChgMot(party, 0);
+            partyChgMot(party, PARTY_MOTION_STAY);
             break;
         case 3:
             party_motion_fall(party);
@@ -1294,7 +1294,7 @@ void partyForceWalk(PartyEntry* party) {
             partyChgWalkPose(party, party->moveSpeed);
             pos = party->position;
             if (partySearchFrontWall(party, &pos, party->moveSpeed, party->targetDir)) {
-                partyChgMot(party, 2);
+                partyChgMot(party, PARTY_MOTION_JUMP);
             } else {
                 party->position.x = pos.x;
                 party->position.z = pos.z;
@@ -1312,7 +1312,7 @@ void partyForceWalk(PartyEntry* party) {
             }
             party->hitobjStandOn = hit;
             if (!hit) {
-                partyChgMot(party, 3);
+                partyChgMot(party, PARTY_MOTION_FALL);
                 party->accelY = -1.0f;
             } else if (attr & HIT_ATTR_SHALLOW_WATER) {
                 party->flags |= PARTY_FLAG_IN_SHALLOW_WATER;
@@ -1368,7 +1368,7 @@ void partyMoveFlyInit(PartyEntry* party, s32 arg) {
     party->reserved_3E = 0;
     partyChgPoseId(party, 1);
     partyChgMoveMode(party, 1);
-    partyChgMot(party, 0);
+    partyChgMot(party, PARTY_MOTION_STAY);
 }
 
 void partyFlyMain(PartyEntry* party) {

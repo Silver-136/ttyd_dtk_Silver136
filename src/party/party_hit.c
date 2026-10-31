@@ -167,7 +167,7 @@ void partyChkGnd(PartyEntry* party) {
         party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
         if (hit == NULL) {
             party->flags &= ~PARTY_FLAG_IS_GROUNDED;
-            partyChgMot(party, 3);
+            partyChgMot(party, PARTY_MOTION_FALL);
             party->gravity = -1.0f;
         } else {
             party->flags |= PARTY_FLAG_IS_GROUNDED;
@@ -183,7 +183,7 @@ void partyChkGnd(PartyEntry* party) {
             if (stepY - party->position.y >= 5.0f && party->groundSlope <= 30.0f) {
                 party->stepY = stepY;
                 if (party->moveSpeed) {
-                    partyChgMot(party, 6);
+                    partyChgMot(party, PARTY_MOTION_UPSTAIRS);
                 }
             }
         }
