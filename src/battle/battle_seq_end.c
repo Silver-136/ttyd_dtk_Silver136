@@ -1,3 +1,5 @@
+// Battle end sequence: victory results, level-up (rank-up) selection and returning to the field.
+
 #include "battle/battle_seq_end.h"
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -110,6 +112,12 @@ USER_FUNC(btlevtcmd_BtlStageObjFlagOnOff);
 USER_FUNC(btlevtcmd_BtlStageObjGetRotate);
 USER_FUNC(btlevtcmd_BtlStageObjSetRotate);
 
+/**
+ * Mario's rank titles: Rising Star from level 1, B-list Star at 10, A-list Star at 20 and Superstar at 30,
+ * each with the message shown when he reaches it (the level-1 entry reuses butai_01 and is never shown);
+ * a 0xFFFF entry ends the list. Read by _get_rank_data for the level-up show and by BattleGetRankNameLabel
+ * for the pause menu's Mario page.
+ */
 RankUpData _rank_up_data[] = {
     {1, 0, "msg_menu_mario_name_0", "butai_01"},
     {10, 1, "msg_menu_mario_name_1", "butai_01"},
@@ -130,6 +138,10 @@ EVT_BEGIN(_event_MajinaiEnd)
 EVT_END()
 
 #ifdef VERSION_G8ME01
+/**
+ * Label textures of the HP, FP and BP level-up blocks, one per text language (gp->language),
+ * drawn by _lvup_select_object_disp.
+ */
 s32 hp_tex_tbl[6] = {52, 52, 53, 54, 54, 55};
 s32 fp_tex_tbl[6] = {56, 56, 57, 58, 58, 58};
 s32 bp_tex_tbl[6] = {59, 59, 60, 61, 62, 63};

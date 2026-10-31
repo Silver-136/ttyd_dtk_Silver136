@@ -1,3 +1,5 @@
+// ARC archive reader (SDK): opens files by path inside a packed .arc archive in memory.
+
 #include "sdk/arc.h"
 #include <dolphin/os.h>
 #include "libc_decls.h"

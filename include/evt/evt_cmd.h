@@ -1,3 +1,5 @@
+// The script-writing macros: EVT_BEGIN/EVT_END, the opcode macros and the operand helpers (PTR, FLOAT, LW...).
+
 #pragma once
 
 #include <dolphin/types.h>

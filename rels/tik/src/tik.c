@@ -1,3 +1,6 @@
+// Rogueport Sewers (tik, chika: underground): the REL prolog/epilog, the map list, and the shared wandering event for
+// the sewer residents (tik_villager_urouro).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_npc.h"

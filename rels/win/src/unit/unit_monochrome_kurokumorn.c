@@ -38,6 +38,11 @@ static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[12];
 
+/**
+ * Unit data of the Dark Puff (btl_un_monochrome_kurokumorn), the grey Ruff Puff of Boggly Woods: 3 HP,
+ * level 10. It tackles for 2 damage or, after charging, strikes every target with lightning.
+ * Boggly Woods' battle groups use it.
+ */
 BattleUnitKind unit_monochrome_kurokumorn = {
     UNIT_DARK_PUFF, // mUnitType
     "btl_un_monochrome_kurokumorn", // name
@@ -86,8 +91,10 @@ BattleUnitKind unit_monochrome_kurokumorn = {
     data_table, // dataTable
 };
 
+/** Flat damage reduction of the Dark Puff against normal, fire, ice, explosion and electric hits: none. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element attributes of the Dark Puff: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -115,10 +122,15 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * The Dark Puff's single part: the Puff model (c_kmoon_wb), the main target;
+ * hammer-like and shell-toss moves cannot target it while it floats high.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_monochrome_kurokumorn", "c_kmoon_wb", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
+/** The Dark Puff's tackle: 2 damage to one opposing target, a plain attack that can be guarded. */
 static BattleWeapon weapon_kurokumorn_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -155,6 +167,7 @@ static BattleWeapon weapon_kurokumorn_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** The Dark Puff's lightning: 2 electric damage to every opposing target, ignoring defense. */
 static BattleWeapon weapon_kurokumorn_thunder_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -372,6 +385,9 @@ static EVT_BEGIN(thunder_event)
     RETURN
 EVT_END()
 
+/**
+ * Poses of the Dark Puff: idle, status, hurt, move, charge and talking animations (the names have no prefix).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -392,6 +408,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Data table of the Dark Puff: event 42 does nothing (counter_event) and event 48 (First Strike)
+ * lowers the Puff to height 10.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ELECTRIC_EVENT, counter_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},

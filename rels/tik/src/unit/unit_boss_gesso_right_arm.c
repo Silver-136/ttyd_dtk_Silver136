@@ -42,6 +42,10 @@ EvtWord gesso_arm_dead_event[130];
 EvtWord gesso_fall_check[219];
 EvtWord gesso_arm_damage_pose_event[35];
 
+/**
+ * Unit kind of the R. Tentacle (HP 3, level 0):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 BattleUnitKind unit_boss_gesso_right_arm = {
     UNIT_BLOOPER_RIGHT_TENTACLE, // mUnitType
     "btl_un_gesso_right_arm", // name
@@ -90,10 +94,18 @@ BattleUnitKind unit_boss_gesso_right_arm = {
     gesso_right_arm_data_table, // dataTable
 };
 
+/** Defence of the R. Tentacle: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the R. Tentacle: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the R. Tentacle (percent chance to take each status):
+ * immune to sleep, stop, dizzy, poison, confusion, electric shock, freeze, growing huge, shrinking, attack up,
+ * attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
+ * invisibility and instant kill.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -126,6 +138,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "GSO_S1_1"},
 };
 
+/** Data table of the Blooper's R. Tentacle: its damage reaction for the hit tags 24 to 36. */
 BattleDataEntry gesso_right_arm_data_table[] = {
     {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, gesso_right_arm_damage_event},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, gesso_right_arm_damage_event},
@@ -142,12 +155,14 @@ BattleDataEntry gesso_right_arm_data_table[] = {
     {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, gesso_right_arm_damage_event},
 };
 
+/** Data table of the R. Tentacle: event handlers for its arm hit pose and being defeated. */
 static BattleDataEntry data_table[] = {
     {10, gesso_arm_damage_pose_event},
     {UNIT_DATA_DEAD_EVENT, gesso_arm_dead_event},
     {0},
 };
 
+/** Body part of the R. Tentacle (model c_gesso2): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_gesso_right_arm", "c_gesso2", 0.0f, 0.0f, 0.0f, 85.0f, -110.0f, 0.0f, 85.0f, -110.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, VERSION_PICK(0x680009, 0x2680009), 0, pose_table},
 };
@@ -226,6 +241,7 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/** Weapon of the R. Tentacle's front swat: 1 damage. */
 BattleWeapon weapon_gesso_right_arm_front_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -262,6 +278,7 @@ BattleWeapon weapon_gesso_right_arm_front_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the R. Tentacle's rear swat: 1 damage. */
 BattleWeapon weapon_gesso_right_arm_rear_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

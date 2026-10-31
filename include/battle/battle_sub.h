@@ -1,3 +1,5 @@
+// Declares the battle unit transition ids and movement and math helpers.
+
 #pragma once
 
 #include "battle/battle.h"

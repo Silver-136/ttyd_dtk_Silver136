@@ -1,3 +1,5 @@
+// kpa_act.c: the Bowser interlude coin and score counters (kpaAddCoin, kpaAddScore, kpa_score_disp_init).
+
 #pragma once
 
 #include "dolphin/types.h"

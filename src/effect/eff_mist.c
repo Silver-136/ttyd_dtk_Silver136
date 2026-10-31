@@ -1,3 +1,5 @@
+// Mist effect rising around a point for a given life; types 0-6.
+
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"

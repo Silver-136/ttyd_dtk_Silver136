@@ -1,3 +1,6 @@
+// evt_yuuranking: Pianta Parlor ranking board: score records and their display for the minigames.
+// Rogueport-side copy of the helpers in the yuu REL.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -21,6 +24,7 @@
 #include <dolphin/pad.h>
 #include "icon_ids.h"
 
+/** White colour, kept from the original but never used. */
 const GXColor yuuranking_unused_color = {0xFF, 0xFF, 0xFF, 0xFF};
 typedef struct YuuRankingWork {
     EventEntry* event;

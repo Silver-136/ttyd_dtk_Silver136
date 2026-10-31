@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: blow, count puffs streamed from a point along a direction vector.
+
 #include "eff/eff_n64.h"
 #include "eff/n64/eff_blow_n64.h"
 #include "driver/camdrv.h"
@@ -30,6 +32,7 @@ typedef struct EffBlowN64Work {
     s32 delay;    // 0x64
 } EffBlowN64Work;
 
+/** Camera-facing 16x16 quad each blown streak is stretched and rotated from. */
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF},
     {8, -8, 0, 1024, 0, 0xFF, 0xFF, 0xFF, 0xFF},

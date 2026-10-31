@@ -71,6 +71,7 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
+/** Exits of las_26: west door w_bero to las_25 (e_bero_1); south entrance s_bero to las_28 (from26). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

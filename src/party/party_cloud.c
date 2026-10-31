@@ -1,3 +1,5 @@
+// Flurrie (cloud): partner init, follow, hover and the gust (breath) ability.
+
 #define _MATH_H_
 #include "party/party_cloud.h"
 #include "dolphin/types.h"

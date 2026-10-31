@@ -232,6 +232,7 @@ static EVT_BEGIN(mario_party_zoom)
     RETURN
 EVT_END()
 
+/** Weapon of Grodus's thunder spell: damage 7. */
 BattleWeapon weapon_batten_leader_thunder = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -320,6 +321,7 @@ BattleWeapon weapon_batten_leader_fire = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Grodus's ice spell: damage 5; inflicts Frozen (30%). */
 BattleWeapon weapon_batten_leader_ice = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -364,6 +366,7 @@ BattleWeapon weapon_batten_leader_ice = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Grodus's shikaeshi support spell. */
 BattleWeapon weapon_batten_leader_shikaeshi = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -400,6 +403,7 @@ BattleWeapon weapon_batten_leader_shikaeshi = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Grodus's spell that makes a unit dodgy: inflicts Dodgy. */
 BattleWeapon weapon_batten_leader_yokeyoke = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -437,6 +441,7 @@ BattleWeapon weapon_batten_leader_yokeyoke = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Grodus's spell that freezes its target in time: inflicts Stop (30%). */
 BattleWeapon weapon_batten_leader_stop = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -479,6 +484,10 @@ BattleWeapon weapon_batten_leader_stop = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Unit data of Grodus in the Palace of Shadow: 50 HP, level 87;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_batten_leader = {
     UNIT_GRODUS, // mUnitType
     "btl_un_batten_leader", // name
@@ -527,10 +536,22 @@ BattleUnitKind unit_boss_batten_leader = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of Grodus against each element (normal, fire, ice, explosion, electric):
+ * 1 against every element, so each hit is cut by 1.
+ */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/**
+ * Damage modifiers of Grodus per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of Grodus while invincible per element (normal, fire, ice, explosion, electric): normal:
+ * immune, fire: immune, ice: immune, explosion: immune, electric: immune.
+ */
 BattleUnitDefenseAttr defence_attr_muteki = {{2, 2, 2, 2, 2}};
 
 static StatusVulnerability regist = {
@@ -562,6 +583,7 @@ u8 defencecopy[8] __attribute__((aligned(4))) = { // defenses[5] copied into the
     1, 1, 1, 1, 1, 0, 0, 0,
 };
 
+/** Pose table of Grodus: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -583,6 +605,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Pose table of Grodus while dizzy and wobbling:
+ * animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table_furafura[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -604,12 +630,17 @@ static PoseTableEntry pose_table_furafura[] = {
     {POSE_TYPE_ACTION, "X_1"},
 };
 
+/**
+ * Data table of Grodus: event scripts and values the battle looks up by tag (damage reactions, dodge, first
+ * strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, damage_sub_event},
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Parts of Grodus: 7 parts with their hit boxes, defence tables and pose tables. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_batten_leader", "c_shuryo", 0.0f, 0.0f, 0.0f, 0.0f, 56.0f, 0.0f, -6.0f, 55.0f, 0.0f, 53, 69, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_batten_leader", "c_shuryo", 0.0f, 0.0f, 0.0f, 18.0f, 9.0f, 0.0f, 16.0f, 15.0f, 0.0f, 64, 36, 255, &defence, &defence_attr, kNoHpLoss | kImmuneToStatus, 0, NULL},
@@ -951,6 +982,7 @@ USER_FUNC(battleGetBattenSatelliteInitPos) {
     return EVT_RETURN_DONE;
 }
 
+/** Setup used to spawn one of Grodus's satellites: unit kind, alliance, position and turn phase. */
 BattleUnitSetup entry_batten_satellite = {
     &unit_boss_batten_satellite, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -962,50 +994,73 @@ BattleUnitSetup entry_batten_satellite = {
     NULL, // itemDropTable
 };
 
+/** Lamp sequence of Grodus's power lamp: a steady cycle of its lit and dim animations. */
 LightSeq3 btl_shuryolight_pow_normal = {{{"L_1B", -2}, {"L_1A", 80}, {"L_1B", 80}}, NULL};
 
+/** Lamp sequence of Grodus's power lamp: blinking. */
 LightSeq1 btl_shuryolight_pow_tenmetu2 = {{{"L_4E", 0}}, NULL};
 
+/** Lamp sequence of Grodus's power lamp: blinking. */
 LightSeq2 btl_shuryolight_pow_tenmetu = {{{"L_1B", -3}, {"L_1A", 200}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 1: a steady cycle of its lit and dim animations. */
 LightSeq4 btl_shuryolight_head_1_normal = {{{"L_4A", 400}, {"L_4A", 400}, {"L_4B", 400}, {"L_4A", 400}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 2: a steady cycle of its lit and dim animations. */
 LightSeq4 btl_shuryolight_head_2_normal = {{{"L_3A", 400}, {"L_3B", 400}, {"L_3A", 400}, {"L_3A", 400}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 3: a steady cycle of its lit and dim animations. */
 LightSeq4 btl_shuryolight_head_3_normal = {{{"L_2B", 400}, {"L_2A", 400}, {"L_2A", 400}, {"L_2A", 400}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 1: a fast cycle. */
 LightSeq4 btl_shuryolight_head_1_quick = {{{"L_4A", 200}, {"L_4A", 200}, {"L_4B", 200}, {"L_4A", 200}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 2: a fast cycle. */
 LightSeq4 btl_shuryolight_head_2_quick = {{{"L_3A", 200}, {"L_3B", 200}, {"L_3A", 200}, {"L_3A", 200}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 3: a fast cycle. */
 LightSeq4 btl_shuryolight_head_3_quick = {{{"L_2B", 200}, {"L_2A", 200}, {"L_2A", 200}, {"L_2A", 200}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 1: random flicker. */
 LightSeq2 btl_shuryolight_head_1_random = {{{"L_4A", -4}, {"L_4B", -4}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 2: random flicker. */
 LightSeq2 btl_shuryolight_head_2_random = {{{"L_3A", -4}, {"L_3B", -4}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 3: random flicker. */
 LightSeq2 btl_shuryolight_head_3_random = {{{"L_2B", -4}, {"L_2A", -4}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 1: blinking. */
 LightSeq1 btl_shuryolight_head_1_tenmetu = {{{"L_4E", 0}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 2: blinking. */
 LightSeq1 btl_shuryolight_head_2_tenmetu = {{{"L_3E", 0}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 3: blinking. */
 LightSeq1 btl_shuryolight_head_3_tenmetu = {{{"L_2E", 0}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 1: dark. */
 LightSeq1 btl_shuryolight_head_1_off = {{{"L_4A", -1}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 2: dark. */
 LightSeq1 btl_shuryolight_head_2_off = {{{"L_3A", -1}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 3: dark. */
 LightSeq1 btl_shuryolight_head_3_off = {{{"L_2A", -1}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 1: lit. */
 LightSeq1 btl_shuryolight_head_1_on = {{{"L_4B", -1}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 2: lit. */
 LightSeq1 btl_shuryolight_head_2_on = {{{"L_3B", -1}}, NULL};
 
+/** Lamp sequence of Grodus's head lamp 3: lit. */
 LightSeq1 btl_shuryolight_head_3_on = {{{"L_2B", -1}}, NULL};
 
+/** Lamp sequence of Grodus's staff lamp: a steady cycle of its lit and dim animations. */
 LightSeq4 btl_shuryolight_rod_normal = {{{"L_3C", 0}, {"L_3B", 1000}, {"L_3D", 0}, {"L_3A", 1000}}, NULL};
 
+/** Lamp sequence of Grodus's staff lamp: dark. */
 LightSeq1 btl_shuryolight_rod_off = {{{"L_3A", -1}}, NULL};
 
 /**
@@ -1726,6 +1781,10 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Guess: spline path of five control points that Grodus's satellite 1 of 1 follows
+ * when it flies back into place.
+ */
 static Vec splineTableIn1_1[] = {
     {38.0f, 45.0f, 5.0f},
     {30.4f, -0.6000023f, -5.0f},
@@ -1734,6 +1793,10 @@ static Vec splineTableIn1_1[] = {
     {0.0f, 45.0f, -5.0f},
 };
 
+/**
+ * Guess: spline path of five control points that Grodus's satellite 1 of 2 follows
+ * when it flies back into place.
+ */
 static Vec splineTableIn2_1[] = {
     {38.0f, 45.0f, 5.0f},
     {30.4f, -0.6000023f, -5.0f},
@@ -1742,6 +1805,10 @@ static Vec splineTableIn2_1[] = {
     {0.0f, 45.0f, -5.0f},
 };
 
+/**
+ * Guess: spline path of five control points that Grodus's satellite 2 of 2 follows
+ * when it flies back into place.
+ */
 static Vec splineTableIn2_2[] = {
     {-38.0f, 45.0f, 5.0f},
     {-30.4f, 90.600006f, -5.0f},
@@ -1750,6 +1817,10 @@ static Vec splineTableIn2_2[] = {
     {0.0f, 45.0f, -5.0f},
 };
 
+/**
+ * Guess: spline path of five control points that Grodus's satellite 1 of 3 follows
+ * when it flies back into place.
+ */
 static Vec splineTableIn3_1[] = {
     {0.0f, 83.0f, 5.0f},
     {0.0f, 113.4f, -5.0f},
@@ -1758,6 +1829,10 @@ static Vec splineTableIn3_1[] = {
     {0.0f, 45.0f, -5.0f},
 };
 
+/**
+ * Guess: spline path of five control points that Grodus's satellite 2 of 3 follows
+ * when it flies back into place.
+ */
 static Vec splineTableIn3_2[] = {
     {38.0f, 7.0f, 5.0f},
     {60.8f, -15.799999f, -5.0f},
@@ -1766,6 +1841,10 @@ static Vec splineTableIn3_2[] = {
     {0.0f, 45.0f, -5.0f},
 };
 
+/**
+ * Guess: spline path of five control points that Grodus's satellite 3 of 3 follows
+ * when it flies back into place.
+ */
 static Vec splineTableIn3_3[] = {
     {-38.0f, 7.0f, 5.0f},
     {-60.8f, -15.799999f, -5.0f},
@@ -1774,6 +1853,10 @@ static Vec splineTableIn3_3[] = {
     {0.0f, 45.0f, -5.0f},
 };
 
+/**
+ * Guess: spline path of five control points that Grodus's satellite 1 of 4 follows
+ * when it flies back into place.
+ */
 static Vec splineTableIn4_1[] = {
     {38.0f, 83.0f, 5.0f},
     {45.600002f, 98.2f, -5.0f},
@@ -1782,6 +1865,10 @@ static Vec splineTableIn4_1[] = {
     {0.0f, 45.0f, -5.0f},
 };
 
+/**
+ * Guess: spline path of five control points that Grodus's satellite 2 of 4 follows
+ * when it flies back into place.
+ */
 static Vec splineTableIn4_2[] = {
     {-38.0f, 83.0f, 5.0f},
     {-45.600002f, 98.2f, -5.0f},
@@ -1790,6 +1877,10 @@ static Vec splineTableIn4_2[] = {
     {0.0f, 45.0f, -5.0f},
 };
 
+/**
+ * Guess: spline path of five control points that Grodus's satellite 3 of 4 follows
+ * when it flies back into place.
+ */
 static Vec splineTableIn4_3[] = {
     {38.0f, 7.0f, 5.0f},
     {45.600002f, -8.200001f, -5.0f},
@@ -1798,6 +1889,10 @@ static Vec splineTableIn4_3[] = {
     {0.0f, 45.0f, -5.0f},
 };
 
+/**
+ * Guess: spline path of five control points that Grodus's satellite 4 of 4 follows
+ * when it flies back into place.
+ */
 static Vec splineTableIn4_4[] = {
     {-38.0f, 7.0f, 5.0f},
     {-45.600002f, -8.200001f, -5.0f},
@@ -1806,6 +1901,7 @@ static Vec splineTableIn4_4[] = {
     {0.0f, 45.0f, -5.0f},
 };
 
+/** Guess: spline path of five control points that Grodus's satellite 1 of 1 follows when it flies out. */
 static Vec splineTableOut1_1[] = {
     {0.0f, 45.0f, -5.0f},
     {-53.2f, -8.200001f, -5.0f},
@@ -1814,6 +1910,7 @@ static Vec splineTableOut1_1[] = {
     {38.0f, 45.0f, 5.0f},
 };
 
+/** Guess: spline path of five control points that Grodus's satellite 1 of 2 follows when it flies out. */
 static Vec splineTableOut2_1[] = {
     {0.0f, 45.0f, -5.0f},
     {7.6f, 90.600006f, -5.0f},
@@ -1822,6 +1919,7 @@ static Vec splineTableOut2_1[] = {
     {38.0f, 45.0f, 5.0f},
 };
 
+/** Guess: spline path of five control points that Grodus's satellite 2 of 2 follows when it flies out. */
 static Vec splineTableOut2_2[] = {
     {0.0f, 45.0f, -5.0f},
     {-7.6f, -0.6000023f, -5.0f},
@@ -1830,6 +1928,7 @@ static Vec splineTableOut2_2[] = {
     {-38.0f, 45.0f, 5.0f},
 };
 
+/** Guess: spline path of five control points that Grodus's satellite 1 of 3 follows when it flies out. */
 static Vec splineTableOut3_1[] = {
     {0.0f, 45.0f, -5.0f},
     {0.0f, 83.0f, -5.0f},
@@ -1838,6 +1937,7 @@ static Vec splineTableOut3_1[] = {
     {0.0f, 83.0f, 5.0f},
 };
 
+/** Guess: spline path of five control points that Grodus's satellite 2 of 3 follows when it flies out. */
 static Vec splineTableOut3_2[] = {
     {0.0f, 45.0f, -5.0f},
     {38.0f, 14.6f, -5.0f},
@@ -1846,6 +1946,7 @@ static Vec splineTableOut3_2[] = {
     {38.0f, 7.0f, 5.0f},
 };
 
+/** Guess: spline path of five control points that Grodus's satellite 3 of 3 follows when it flies out. */
 static Vec splineTableOut3_3[] = {
     {0.0f, 45.0f, -5.0f},
     {-38.0f, 14.6f, -5.0f},
@@ -1854,6 +1955,7 @@ static Vec splineTableOut3_3[] = {
     {-38.0f, 7.0f, 5.0f},
 };
 
+/** Guess: spline path of five control points that Grodus's satellite 1 of 4 follows when it flies out. */
 static Vec splineTableOut4_1[] = {
     {0.0f, 45.0f, -5.0f},
     {38.0f, 75.4f, -5.0f},
@@ -1862,6 +1964,7 @@ static Vec splineTableOut4_1[] = {
     {38.0f, 83.0f, 5.0f},
 };
 
+/** Guess: spline path of five control points that Grodus's satellite 2 of 4 follows when it flies out. */
 static Vec splineTableOut4_2[] = {
     {0.0f, 45.0f, -5.0f},
     {-38.0f, 75.4f, -5.0f},
@@ -1870,6 +1973,7 @@ static Vec splineTableOut4_2[] = {
     {-38.0f, 83.0f, 5.0f},
 };
 
+/** Guess: spline path of five control points that Grodus's satellite 3 of 4 follows when it flies out. */
 static Vec splineTableOut4_3[] = {
     {0.0f, 45.0f, -5.0f},
     {38.0f, 14.6f, -5.0f},
@@ -1878,6 +1982,7 @@ static Vec splineTableOut4_3[] = {
     {38.0f, 7.0f, 5.0f},
 };
 
+/** Guess: spline path of five control points that Grodus's satellite 4 of 4 follows when it flies out. */
 static Vec splineTableOut4_4[] = {
     {0.0f, 45.0f, -5.0f},
     {-38.0f, 14.6f, -5.0f},

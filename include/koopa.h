@@ -1,3 +1,5 @@
+// koopa.c: Bowser (koopa) as the player in the side-scrolling interludes: level, camera, attack and invincibility functions.
+
 #pragma once
 
 #include "dolphin/types.h"

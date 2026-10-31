@@ -1,3 +1,5 @@
+// Script commands for NPCs that wander about at random ("urouro").
+
 #include "evt/evt_cmd.h"
 #include "evt/evt_npc.h"
 #include "driver/animdrv.h"

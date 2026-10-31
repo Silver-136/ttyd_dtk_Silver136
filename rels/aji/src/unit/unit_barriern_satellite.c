@@ -27,6 +27,7 @@ static EvtWord unison_phase_event[5];
 static EvtWord attack_event[5];
 static EvtWord wait_event[56];
 
+/** Unit data of the Mini-Yux: 1 HP, level 0; the battle starts it from init_event. */
 BattleUnitKind unit_barriern_satellite = {
     UNIT_MINI_YUX, // mUnitType
     "btl_un_barriern_satellite", // name
@@ -75,10 +76,16 @@ BattleUnitKind unit_barriern_satellite = {
     data_table, // dataTable
 };
 
+/** Defence of the Mini-Yux: none against any element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Elemental reactions of the Mini-Yux: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Parts of the Mini-Yux: part 1 is its body and parts 2 to 6 are the five ghost rings drawn as afterimages
+ * while it spins.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_barriern_satellite", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
     {2, "btl_un_barriern_satellite", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -113,6 +120,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/** Pose table of the Mini-Yux: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_2"},
     {POSE_TYPE_STOP, "Y_2"},
@@ -133,6 +141,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_2"},
 };
 
+/** Event table of the Mini-Yux: empty, it has no special reactions. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };

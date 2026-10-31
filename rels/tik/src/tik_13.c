@@ -13,6 +13,7 @@
 static BeroEntry bero_entry_data[2];
 EvtWord tik_13_init_evt[60];
 
+/** Doors of this room: the east exit back to tik_02. */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName

@@ -1,3 +1,5 @@
+// arcdrv.c: the archive driver (ArchiveEntry, arcEntry/arcDataCheck): where loaded archives sit in memory.
+
 #pragma once
 
 #include <dolphin/types.h>

@@ -1,3 +1,5 @@
+// eff_mario_balloon.c: balloon effect entry (effMarioBalloonEntry) and its work struct (MarioBalloonWork).
+
 #pragma once
 
 #include "driver/effdrv.h"

@@ -702,6 +702,7 @@ static EVT_BEGIN(evt_wall)
     RETURN
 EVT_END()
 
+/** Actors that pass through the village house door during its scenes: General White and his crew. */
 const char* door_npc[] = {
     /*"ホワイト"*/"\203z\203\217\203C\203g",
     /*"ペントリット"*/"\203y\203\223\203g\203\212\203b\203g",
@@ -723,6 +724,7 @@ static EVT_BEGIN(door_close)
     RETURN
 EVT_END()
 
+/** The village house door on the square, with the map objects it swaps and its open and close handlers. */
 DoorParam door = {
     0, // flags
     3, // type
@@ -744,6 +746,7 @@ DoorParam door = {
     door_close, // evtClose
 };
 
+/** Exits of this room: the west door to bom_04 and the east door to bom_02. */
 static BeroEntry bero_entry_data[] = {
     {
         ("w_bero"), // hitName
@@ -1070,6 +1073,10 @@ static void ext_dispent(void) {
     }
 }
 
+/**
+ * Sprite animation table for the Bob-omb crowd (c_bom_sen); it is filled in at run time for the cannon
+ * scene.
+ */
 static ExtTexInfo ext_data[] = {
     {0},
     {0},
@@ -1337,11 +1344,13 @@ EVT_BEGIN(open_hatch)
     RETURN
 EVT_END()
 
+/** Control points of the camera path (a spline) used in the cannon launch scene. */
 static f32 spline_dt[] = {
     -200.0f, 0.0f, 650.0f, 590.0f, 200.0f, -2150.0f, 1380.0f, 100.0f,
     -4950.0f,
 };
 
+/** The cannon crew: each name with the message key of his drill call (stg7_bom_65_a to d). */
 const char* oh_data[] = {
     /*"\203j\203g\203\215"*/"\203j\203g\203\215", "stg7_bom_65_a",
     /*"\203y\203\223\203g\203\212\203b\203g"*/"\203y\203\223\203g\203\212\203b\203g", "stg7_bom_65_b",
@@ -2270,6 +2279,7 @@ static EVT_BEGIN(musume_c_entry)
     RETURN
 EVT_END()
 
+/** The cast of the village square: the mayor, Nitro and the Bob-omb soldier D. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"村長"*/"\221\272\222\267", // name

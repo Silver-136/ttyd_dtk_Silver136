@@ -149,6 +149,7 @@ EvtWord evt_seacret[131];
 static EvtWord mobj_box00[34];
 EvtWord pik_00_init_evt[410];
 
+/** Return point of the hazard floor mod_1 of the station area. */
 static HitDamageReturn dmgReturnPt[] = {
     {"mod_1", {0.0f, -1000.0f, 0.0f}},
     {0},
@@ -881,6 +882,7 @@ EVT_BEGIN(resha_noru)
     RETURN
 EVT_END()
 
+/** Doors and exits of pik_00: se_bero to pik_04; n_bero to rsh_01_a. */
 static BeroEntry bero_data[] = {
     {
         "se_bero", // hitName
@@ -1294,6 +1296,7 @@ static EVT_BEGIN(init_mama)
     RETURN
 EVT_END()
 
+/** Items the player may offer for Trouble Center request 29: the Present only, ended by -1. */
 s32 iri_29_item_tbl[] = {
     ITEM_PRESENT, -1,
 };
@@ -1445,6 +1448,7 @@ static EVT_BEGIN(init_madam)
     RETURN
 EVT_END()
 
+/** Items the player may give the madam: the Gold Ring only, ended by -1. */
 static s32 item_tbl_madam[] = {
     ITEM_GOLD_RING, -1,
 };
@@ -1466,6 +1470,7 @@ static EVT_BEGIN(talk_madam_ring_return)
     RETURN
 EVT_END()
 
+/** Items the player may offer for Trouble Center request 23: the Wrestling Mag only, ended by -1. */
 s32 iri_23_item_tbl[] = {
     ITEM_WRESTLING_MAG, -1,
 };
@@ -1545,6 +1550,10 @@ static EVT_BEGIN(talk_sarary)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the station and villas: the station attendant, Goldbob's wife and Goldbob, Little Narikin, the
+ * madam and the salaryman.
+ */
 static NpcSetupInfo npc_data[] = {
     {
         /*"駅員"*/"\x89\x77\x88\xF5", // name
@@ -1653,6 +1662,7 @@ static EVT_BEGIN(evt_wall)
     RETURN
 EVT_END()
 
+/** Map objects inside the first villa: the badge chest. */
 const char* ie1_mobj[] = {
     "mobj_badge_gat",
     NULL,
@@ -1677,6 +1687,7 @@ static EVT_BEGIN(door_1_close)
     RETURN
 EVT_END()
 
+/** Door of the first villa: the outer door, its hit areas and the inside room (naka). */
 static DoorParam door_1 = {
     0, // flags
     2, // type
@@ -1730,6 +1741,7 @@ static EVT_BEGIN(evt_wall_2)
     RETURN
 EVT_END()
 
+/** NPCs inside the second villa: the madam. */
 const char* door_2_npc[] = {
     /*"マダム"*/"\x83\x7D\x83\x5F\x83\x80",
     NULL,
@@ -1754,6 +1766,7 @@ static EVT_BEGIN(door_2_close)
     RETURN
 EVT_END()
 
+/** Door of the second villa: the outer door, its hit areas and the inside room (naka_). */
 static DoorParam door_2 = {
     0, // flags
     2, // type

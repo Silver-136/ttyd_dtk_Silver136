@@ -1,3 +1,5 @@
+// Script commands for character and map lighting.
+
 #include "evt/evt_light.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/animdrv.h"

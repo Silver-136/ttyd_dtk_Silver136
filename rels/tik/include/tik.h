@@ -1,3 +1,6 @@
+// Rogueport Sewers (tik, chika: underground): declarations of the area's map init events, battle tables and the plane-
+// mode lecture.
+
 #pragma once
 
 #include "dolphin/types.h"

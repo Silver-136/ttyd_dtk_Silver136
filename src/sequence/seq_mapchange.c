@@ -1,3 +1,5 @@
+// Map change sequence: unloads the old map, loads the next area REL and map, and starts its scripts.
+
 #include "evt/evt_cam.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_seq.h"
@@ -118,6 +120,7 @@ void seq_mapChangeExit(SequenceWork* work) {
 typedef struct {
     const char* s[VERSION_PICK(2, 7)];
 } LangTbl;
+/** Folder name of each language, used to load that language's window textures (win.tpl) on a map change. */
 static const LangTbl lang_tbl = {{
     "jp", "us",
 #ifdef VERSION_G8ME01
@@ -508,6 +511,10 @@ void _load(const char* prevMapName, const char* newMapName, const char* beroName
 
 static const char mc_tou_03[] = "tou_03";
 static const char mc_rel_fmt[] = "%s/rel/%s.rel";
+/**
+ * Names the map change compares and builds with: Glitzville and the tou2 REL it switches to for tou_03,
+ * the area REL path, and the test (tst) and Pit of 100 Trials (jon) areas, whose REL gets its own buffer.
+ */
 static const char mc_tou[] = "tou";
 static const char mc_tou2[] = "tou2";
 static const char mc_tst[] = "tst";

@@ -1,3 +1,5 @@
+// Partner table (partyDataTbl): each partner's model and its init, move, use and exit functions, and the partner pose name tables.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "data/party_data.h"
@@ -22,6 +24,10 @@ void kuribo_init_800C23B4(PartyEntry* party);
 void vivian_init_801809C0(PartyEntry* party);
 
 
+/**
+ * One entry per partner id (empty for 0): the partner's field model and the functions that set it up, move it,
+ * use its field ability and remove it; partyEntryMain and the other party calls read it by partner id.
+ */
 PartyData partyDataTbl[] = {
     {0},
     {"c_pkr", kuribo_init_800C23B4, partyMoveWalk, kuribo_use, kuribo_use_post, kuribo_bye, NULL, NULL, NULL, NULL},
@@ -45,6 +51,10 @@ PartyData partyDataTbl[] = {
     {"c_tyutyu", chuchu_init, partyMoveWalk, chuchu_use, NULL, kuribo_bye, NULL, NULL, NULL, NULL},
 };
 
+/**
+ * Pose names for each party member in the field, by party member id (row) and pose index (column);
+ * party.c reads them. Indexes 1-3 (stand, walk, run) switch to the low-HP versions 12-14.
+ */
 char* partyPoseTbl[20][15] = {
     {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
     {"PKR_Z_1", "PKR_S_1", "PKR_W_1", "PKR_R_1", "PKR_J_1A", "PKR_J_1B", "PKR_N_1", "PKR_T_1", "PKR_D_1", "PKR_D_4", "PKR_S_1", "PKR_S_1", "PKR_D_2", "PKR_W_2", "PKR_R_2"},

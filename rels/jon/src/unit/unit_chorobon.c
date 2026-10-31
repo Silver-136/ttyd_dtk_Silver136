@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Fuzzy (`chorobon`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -31,6 +33,7 @@ static EvtWord return_event[24];
 static EvtWord drain_attack_event[887];
 static EvtWord wait_event[6];
 
+/** Unit data of the Fuzzy: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_chorobon = {
     UNIT_FUZZY, // mUnitType
     "btl_un_chorobon", // name
@@ -79,8 +82,10 @@ BattleUnitKind unit_chorobon = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Fuzzy: none, every attack type does full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element response of the Fuzzy: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -108,10 +113,12 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/** Body part of the Fuzzy: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_chorobon", "c_chorobon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Attack data for the Fuzzy's drain attack: 1 damage. */
 static BattleWeapon weapon_chorobon_drain_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -161,6 +168,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Attack data for the Fuzzy's stand-in for a drain the target counters (electrified or Hold Fast): no
+ * damage.
+ */
 static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -194,6 +205,7 @@ static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Pose table of the Fuzzy: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "CBN_N_1"},
     {POSE_TYPE_STOP, "CBN_Y_1"},
@@ -215,6 +227,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "CBN_S_1"},
 };
 
+/** Data table of the Fuzzy: event handlers keyed by tag (counter_damage_event). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event},
@@ -278,6 +291,7 @@ static EVT_BEGIN(rabbit_move)
     RETURN
 EVT_END()
 
+/** Sound table of the Fuzzy: the sound each animation plays while it runs. */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"CBN_S_1", 0.5833333f, NULL, "SFX_ENM_CHORO1_MOVE1", 0, 1},
     {"CBN_S_1", 0.8333333f, NULL, "SFX_ENM_CHORO1_WAIT2", 0, 1},

@@ -1,3 +1,5 @@
+// Inn scripts and helpers: the innkeeper talk, payment, sleeping in the bed and breakfast.
+
 #include "evt/evt_save_flags.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"

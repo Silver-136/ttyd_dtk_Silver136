@@ -42,6 +42,11 @@ static EvtWord return_event[256];
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Piranha Plant (btl_un_pakkun_flower): 15 HP, level 33,
+ * a ground plant that dives underground and bites for 9 damage. win.rel carries this copy,
+ * but no battle group of Boggly Woods places it.
+ */
 static BattleUnitKind unit_pakkun_flower = {
     UNIT_PIRANHA_PLANT, // mUnitType
     "btl_un_pakkun_flower", // name
@@ -87,8 +92,12 @@ static BattleUnitKind unit_pakkun_flower = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
+/**
+ * Flat damage reduction of the Piranha Plant against normal, fire, ice, explosion and electric hits: none.
+ */
 static BattleUnitDefense defence = {0};
 
+/** Element attributes of the Piranha Plant: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -116,6 +125,10 @@ static StatusVulnerability regist = {
     30, // ohko
 };
 
+/**
+ * The Piranha Plant's single part: the plant model (c_pakflwr),
+ * the main target and the part that covers for allies.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -135,6 +148,10 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/**
+ * The Piranha Plant's bite: 9 damage to the front-most opposing target,
+ * a hammer-like attack that can be guarded.
+ */
 static BattleWeapon weapon_pakkun_flower_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -217,6 +234,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PKF_S_1"},
 };
 
+/**
+ * Poses of the Piranha Plant while it hangs from the stage's iron frame on the ceiling;
+ * the same slots as pose_table.
+ */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "PKF_N_2"},
     {POSE_TYPE_STOP, "PKF_Y_2"},
@@ -238,6 +259,11 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "PKF_S_3"},
 };
 
+/**
+ * Data table of the Piranha Plant: event 37 (an attacker is hurt by its spiky head) flashes the spikes,
+ * events 25 to 36 (it is hurt by a target's counter) play counter_damage_event and event 48
+ * (First Strike) does nothing.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

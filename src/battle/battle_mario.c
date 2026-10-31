@@ -1,3 +1,5 @@
+// Mario's battle attacks and badge weapons: jumps, hammers, items and special actions.
+
 #include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -142,6 +144,10 @@ EvtWord _MajinaiPoseReset[14];
 EvtWord marioAttackEvent_MajinaiDefenceUp[29];
 EvtWord marioAttackEvent_MajinaiExpUp[27];
 
+/**
+ * Mario's Jump (0 FP): a stomp with a second one on a timed press, damage from his boots level.
+ * Also his first strike after jumping on an enemy in the field (_GetFirstAttackWeapon in battle_seq.c).
+ */
 BattleWeapon marioDefaultWeapon_Jump = {
     "btl_wn_mario_normal_jump", // name
     ICON_ITEM_BOOTS, // icon
@@ -183,6 +189,7 @@ BattleWeapon marioDefaultWeapon_Jump = {
 #endif
 };
 
+/** Spin Jump (2 FP, Super Boots): Mario's first stomp; the dive after it uses marioWeapon_KururinJump2. */
 BattleWeapon marioWeapon_KururinJump = {
     "btl_wn_mario_kururin_jump", // name
     ICON_ITEM_ULTRA_BOOTS, // icon
@@ -225,6 +232,10 @@ BattleWeapon marioWeapon_KururinJump = {
 #endif
 };
 
+/**
+ * Spin Jump's second hit: the dive Mario makes after spinning above the target on a successful press.
+ * JP and earlier give it less damage at the higher boots levels.
+ */
 BattleWeapon marioWeapon_KururinJump2 = {
     "btl_wn_mario_kururin_jump", // name
     ICON_ITEM_ULTRA_BOOTS, // icon
@@ -270,6 +281,10 @@ BattleWeapon marioWeapon_KururinJump2 = {
 #endif
 };
 
+/**
+ * Spring Jump (4 FP, Ultra Boots): Mario springs high into the air and drops on the chosen enemy.
+ * JP and earlier give it less damage with the Ultra Boots.
+ */
 BattleWeapon marioWeapon_JyabaraJump = {
     "btl_wn_mario_jyabara_jump", // name
     ICON_ITEM_SUPER_BOOTS, // icon
@@ -320,6 +335,10 @@ BattleWeapon marioWeapon_JyabaraJump = {
 #endif
 };
 
+/**
+ * Spring Jump that hits the iron frame hanging over the stage instead of an enemy:
+ * no damage, only the weapon's after-effects on the stage (marioAttackEvent_JyabaraJump).
+ */
 BattleWeapon marioWeapon_JyabaraJumpFailed = {
     "btl_wn_mario_jyabara_jump", // name
     ICON_ITEM_SUPER_BOOTS, // icon
@@ -362,6 +381,10 @@ BattleWeapon marioWeapon_JyabaraJumpFailed = {
     {0, 50, 50, 100, 0, 0, 0, 50, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Mario's first strike after hitting an enemy with the Super Hammer spin in the field
+ * (_GetFirstAttackWeapon type 5); runs marioAttackEvent_FirstAttackKaitenHammer.
+ */
 BattleWeapon marioDefaultWeapon_FirstAttackKaitenHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -434,6 +457,10 @@ BattleWeapon marioDefaultWeapon_FirstAttackUltraHammer = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Mario's Hammer (0 FP): a hold-and-release swing at the front enemy, damage from his hammer level.
+ * Also his first strike after hitting an enemy with the hammer in the field.
+ */
 BattleWeapon marioDefaultWeapon_Hammer = {
     "btl_wn_mario_normal_hammer", // name
     ICON_ITEM_HAMMER, // icon
@@ -475,6 +502,7 @@ BattleWeapon marioDefaultWeapon_Hammer = {
 #endif
 };
 
+/** Super Hammer (2 FP): Mario's spinning swing that knocks the target back into the enemies behind it. */
 BattleWeapon marioWeapon_KaitenHammer = {
     "btl_wn_mario_kaiten_hammer", // name
     ICON_ITEM_SUPER_HAMMER, // icon
@@ -518,6 +546,10 @@ BattleWeapon marioWeapon_KaitenHammer = {
 #endif
 };
 
+/**
+ * The 1-damage hit taken by each enemy a Super Hammer target is knocked into;
+ * set by subsetevt_shot_damage in battle_event_subset.c.
+ */
 BattleWeapon marioWeapon_KaitenHammerInvolved = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -548,6 +580,10 @@ BattleWeapon marioWeapon_KaitenHammerInvolved = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Ultra Hammer (4 FP): the stronger spinning swing with a whirlwind; it knocks the target back
+ * and then hits it again with marioWeapon_UltraHammerFinish.
+ */
 BattleWeapon marioWeapon_UltraHammer = {
     "btl_wn_mario_ultra_hammer", // name
     ICON_ITEM_ULTRA_HAMMER, // icon
@@ -595,6 +631,10 @@ BattleWeapon marioWeapon_UltraHammer = {
 #endif
 };
 
+/**
+ * The 3-damage hit taken by each enemy an Ultra Hammer target is knocked into;
+ * set by subsetevt_shot_damage in battle_event_subset.c.
+ */
 BattleWeapon marioWeapon_UltraHammerInvolved = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -625,6 +665,7 @@ BattleWeapon marioWeapon_UltraHammerInvolved = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Ultra Hammer's extra hit on the knocked-back target (marioAttackEvent_KaitenHammer). */
 BattleWeapon marioWeapon_UltraHammerFinish = {
     "btl_wn_mario_ultra_hammer", // name
     ICON_ITEM_ULTRA_HAMMER, // icon
@@ -667,6 +708,7 @@ BattleWeapon marioWeapon_UltraHammerFinish = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 5, 0, 0}, // stageEffectRates
 };
 
+/** Multibounce badge (2 FP): Mario stomps each enemy in turn, one timed press per bounce. */
 BattleWeapon badgeWeapon_TugitugiJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -708,6 +750,7 @@ BattleWeapon badgeWeapon_TugitugiJump = {
 #endif
 };
 
+/** Power Jump badge (2 FP): one stronger stomp on a single enemy, run by marioAttackEvent_GatsunJump. */
 BattleWeapon badgeWeapon_GatsunJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -745,6 +788,7 @@ BattleWeapon badgeWeapon_GatsunJump = {
     {0, 25, 25, 100, 25, 25, 25, 5, 25, 5, 0, 0}, // stageEffectRates
 };
 
+/** Mega Jump badge (6 FP): Power Jump's stomp with still more damage, run by marioAttackEvent_DokanJump. */
 BattleWeapon badgeWeapon_DokanJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -782,6 +826,7 @@ BattleWeapon badgeWeapon_DokanJump = {
     {0, 25, 25, 100, 25, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 };
 
+/** Power Bounce badge (3 FP): Mario keeps bouncing on one enemy for as long as his timed presses succeed. */
 BattleWeapon badgeWeapon_RenzokuJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -823,6 +868,7 @@ BattleWeapon badgeWeapon_RenzokuJump = {
 #endif
 };
 
+/** Tornado Jump badge (3 FP): a stomp, then on a second command a tornado that hits the airborne enemies. */
 BattleWeapon badgeWeapon_TatsumakiJump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -864,6 +910,10 @@ BattleWeapon badgeWeapon_TatsumakiJump = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * The tornado of Tornado Jump: the 2-damage hit on each airborne enemy after a successful second command.
+ * Has no attack script of its own; marioAttackEvent_TatsumakiJump uses it for those targets.
+ */
 BattleWeapon badgeWeapon_TatsumakiJumpInvolved = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1025,6 +1075,7 @@ BattleWeapon badgeWeapon_FunyafunyaJump = {
 #endif
 };
 
+/** Power Smash badge (2 FP): one stronger hammer blow, run by marioAttackEvent_GatsunHammer. */
 BattleWeapon badgeWeapon_GatsunHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1062,6 +1113,7 @@ BattleWeapon badgeWeapon_GatsunHammer = {
     {0, 25, 25, 100, 25, 25, 25, 5, 25, 5, 0, 0}, // stageEffectRates
 };
 
+/** Mega Smash badge (6 FP): Power Smash with still more damage, sharing marioAttackEvent_GatsunHammer. */
 BattleWeapon badgeWeapon_DokanHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1099,6 +1151,10 @@ BattleWeapon badgeWeapon_DokanHammer = {
     {0, 25, 25, 100, 25, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Quake Hammer badge (3 FP): Mario slams the ground and the quake hits every enemy that is not floating,
+ * ignoring Defense and flipping shelled enemies.
+ */
 BattleWeapon badgeWeapon_JishinHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1140,6 +1196,7 @@ BattleWeapon badgeWeapon_JishinHammer = {
     {0, 50, 50, 100, 50, 25, 25, 5, 25, 5, 0, 0}, // stageEffectRates
 };
 
+/** Mega Quake badge (7 FP): the stronger Quake Hammer slam, with a shorter command window. */
 BattleWeapon badgeWeapon_UltraJishinHammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1177,6 +1234,7 @@ BattleWeapon badgeWeapon_UltraJishinHammer = {
     {0, 50, 50, 100, 50, 5, 5, 5, 5, 5, 0, 0}, // stageEffectRates
 };
 
+/** Hammer Throw badge (2 FP): Mario throws his hammer at the chosen enemy. */
 BattleWeapon badgeWeapon_HammerNageru = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1347,6 +1405,10 @@ BattleWeapon badgeWeapon_FireNaguri = {
 #endif
 };
 
+/**
+ * Fire Drive when its Action Command fails: aimed at Mario's own side,
+ * so marioAttackEvent_FireNaguri checks it only against Mario himself instead of the enemies.
+ */
 BattleWeapon badgeWeapon_FireNaguriFailed = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1479,6 +1541,7 @@ BattleWeapon badgeWeapon_Charge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** The partner's Charge command from the Charge P badge; otherwise the same as badgeWeapon_Charge. */
 BattleWeapon badgeWeapon_ChargeP = {
     "btl_wn_mario_normal_charge", // name
     ICON_ITEM_BOOTS, // icon
@@ -1518,6 +1581,7 @@ BattleWeapon badgeWeapon_ChargeP = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Mario's Super Charge command from the Super Charge badge (2 FP), run by _SuperCharge_core. */
 BattleWeapon badgeWeapon_SuperCharge = {
     "btl_wn_mario_super_charge", // name
     ICON_ITEM_BOOTS, // icon
@@ -1557,6 +1621,7 @@ BattleWeapon badgeWeapon_SuperCharge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** The partner's Super Charge command from the Super Charge P badge (2 FP). */
 BattleWeapon badgeWeapon_SuperChargeP = {
     "btl_wn_mario_super_charge", // name
     ICON_ITEM_BOOTS, // icon
@@ -1596,6 +1661,10 @@ BattleWeapon badgeWeapon_SuperChargeP = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Double Dip (4 FP): lets Mario or a partner use two items in one turn.
+ * Has no attack script; battle_seq_command.c only uses it to check and pay the FP cost.
+ */
 BattleWeapon badgeWeapon_2KaiItem = {
     "btl_wn_2kai_item", // name
     0, // icon
@@ -1660,6 +1729,10 @@ BattleWeapon badgeWeapon_3KaiItem = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Mario's Defend command: raises his Defense by 1 for the turn
+ * (btldefaultevt_Defend in battle_event_default.c). Its item is the unused Defend badge.
+ */
 BattleWeapon badgeWeapon_DefenceCommand = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1695,6 +1768,10 @@ BattleWeapon badgeWeapon_DefenceCommand = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * The partner's Defend command: raises the partner's Defense by 1 for the turn (btldefaultevt_DefendParty).
+ * Its item is the unused Defend badge P.
+ */
 BattleWeapon badgeWeapon_DefenceCommandP = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1730,6 +1807,7 @@ BattleWeapon badgeWeapon_DefenceCommandP = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Clock Out (2 Star Power, the Emerald Star's move): stops the enemies in time; run by sac_bakugame.c. */
 BattleWeapon marioWeapon_BakuGame = {
     "btl_wn_sac_bakugame", // name
     ICON_SAC_BAKUGAME, // icon
@@ -1771,6 +1849,7 @@ BattleWeapon marioWeapon_BakuGame = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Art Attack (4 Star Power, the Ruby Star's move): Mario draws circles around the enemies; sac_scissor.c. */
 BattleWeapon marioWeapon_Scissor = {
     "btl_wn_sac_scissor", // name
     ICON_SAC_SCISSOR, // icon
@@ -1809,6 +1888,7 @@ BattleWeapon marioWeapon_Scissor = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Supernova (6 Star Power, the Crystal Star's move): a blast that damages every enemy; sac_zubastar.c. */
 BattleWeapon marioWeapon_ZubaStar = {
     "btl_wn_sac_zubastar", // name
     ICON_SAC_ZUBASTAR, // icon
@@ -1847,6 +1927,10 @@ BattleWeapon marioWeapon_ZubaStar = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Sweet Treat (1 Star Power, from the Magical Map): restores Mario's HP and the partner's HP and FP
+ * by how many targets the player hits; sac_genki.c.
+ */
 BattleWeapon marioWeapon_Genki0 = {
     "btl_wn_sac_genki0", // name
     ICON_SAC_GENKI0, // icon
@@ -1885,6 +1969,7 @@ BattleWeapon marioWeapon_Genki0 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Sweet Feast (5 Star Power, the Sapphire Star's move): the bigger version of Sweet Treat; sac_genki.c. */
 BattleWeapon marioWeapon_Genki1 = {
     "btl_wn_sac_genki1", // name
     ICON_SAC_GENKI1, // icon
@@ -1923,6 +2008,7 @@ BattleWeapon marioWeapon_Genki1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Earth Tremor (2 Star Power, the Diamond Star's move): a quake that damages every enemy; sac_deka.c. */
 BattleWeapon marioWeapon_Deka = {
     "btl_wn_sac_dekkaku_dokkan", // name
     ICON_SAC_DEKA, // icon
@@ -1961,6 +2047,10 @@ BattleWeapon marioWeapon_Deka = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Power Lift (3 Star Power, the Gold Star's move): raises Mario's and the partner's Attack and Defense
+ * for 3 turns by the levels earned in the grid game; sac_muki.c.
+ */
 BattleWeapon marioWeapon_Muki = {
     "btl_wn_sac_mukimuki_body", // name
     ICON_SAC_MUKI, // icon
@@ -1999,6 +2089,7 @@ BattleWeapon marioWeapon_Muki = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Showstopper (2 Star Power, the Garnet Star's move): may knock out every enemy at once; sac_suki.c. */
 BattleWeapon marioWeapon_Suki = {
     "btl_wn_sac_sukkari_sukkiri", // name
     ICON_SAC_SUKI, // icon
@@ -2038,6 +2129,11 @@ BattleWeapon marioWeapon_Suki = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Mario's Special moves in Star Power bit order (the order the Crystal Stars are collected);
+ * the NULL slots are unused.
+ * Read by the battle Special menu (battle_seq_command.c) and the pause menu's Mario page (win_mario.c).
+ */
 BattleWeapon* superActionTable[] = {
     &marioWeapon_Genki0, &marioWeapon_Deka, &marioWeapon_BakuGame, &marioWeapon_Muki, &marioWeapon_Scissor, &marioWeapon_Genki1,
     &marioWeapon_Suki, &marioWeapon_ZubaStar, NULL, NULL, NULL, NULL,
@@ -5735,6 +5831,7 @@ EVT_BEGIN(marioAttackEvent_HammerNageru_object)
     RETURN
 EVT_END()
 
+/** Empty effect name passed to evt_eff and evt_eff64 for Fire Drive's sparks and smoke. */
 static const char battle_mario_nullstr[4] = "";
 extern const f32 battle_mario_one;
 
@@ -6671,4 +6768,5 @@ USER_FUNC(_paper_light_off) {
     return EVT_RETURN_DONE;
 }
 
+/** The 1.0 scale passed to effFireEntry for the flames on Fire Drive's fireball (_mario_fire_ball_controll). */
 const f32 battle_mario_one = 1.0f;

@@ -1,3 +1,5 @@
+// Partner collision: ground, wall and ceiling checks for the partners.
+
 #include "party.h"
 #include "driver/hitdrv.h"
 #include "driver/mobjdrv.h"

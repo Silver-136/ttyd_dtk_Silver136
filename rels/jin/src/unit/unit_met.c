@@ -1,3 +1,5 @@
+// Buzzy Beetle (met): enemy battle unit; Creepy Steeple's copy of the unit data and scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -45,6 +47,10 @@ static EvtWord ceil_fall_ready_event[158];
 static EvtWord attack_event_ceil[467];
 static EvtWord wait_event_ceil[6];
 
+/**
+ * Unit kind of the Buzzy Beetle:
+ * 5 HP, level 16, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_met = {
     UNIT_BUZZY_BEETLE, // mUnitType
     "btl_un_met", // name
@@ -93,6 +99,10 @@ BattleUnitKind unit_met = {
     data_table, // dataTable
 };
 
+/**
+ * Pose table of the Buzzy Beetle:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "MET_N_1"},
     {POSE_TYPE_STOP, "MET_Y_1"},
@@ -114,6 +124,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MET_S_1"},
 };
 
+/**
+ * Pose table of the Buzzy Beetle while on the ceiling:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "SMT_N_1"},
     {POSE_TYPE_STOP, "SMT_Y_1"},
@@ -135,6 +149,10 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "SMT_S_1"},
 };
 
+/**
+ * Pose table of the Buzzy Beetle while flipped over:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "MET_N_2"},
     {POSE_TYPE_STOP, "MET_Y_2"},
@@ -155,12 +173,17 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "MET_S_2"},
 };
 
+/** Event table of the Buzzy Beetle: its reaction to being flipped over, nothing special on a First Strike. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/**
+ * Event table of the Buzzy Beetle:
+ * the reaction when it is hurt while attacking (tags 25-36), nothing special on a First Strike.
+ */
 static BattleDataEntry data_table_ceil[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event_ceil},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event_ceil},
@@ -178,6 +201,7 @@ static BattleDataEntry data_table_ceil[] = {
     {0},
 };
 
+/** Buzzy Beetle's attack: 3 damage to a single target, a shell-toss-style hit. */
 static BattleWeapon weapon_met_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -214,6 +238,7 @@ static BattleWeapon weapon_met_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Buzzy Beetle's ceiling attack: 4 damage to a single target, a jump-style hit. */
 static BattleWeapon weapon_met_ceil_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -250,12 +275,25 @@ static BattleWeapon weapon_met_ceil_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of the Buzzy Beetle's body: 4 against normal, ice and electric hits;
+ * immune to fire and explosions (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
+/**
+ * Defence attributes of the Buzzy Beetle's body: fire (takes no damage), explosion (takes no damage);
+ * every other type is dealt normally.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
 
+/** Defence of the Buzzy Beetle's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
 
+/**
+ * Defence attributes of the Buzzy Beetle's body while flipped over:
+ * none, so every damage type is dealt normally.
+ */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
 static StatusVulnerability regist = {
@@ -283,6 +321,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Buzzy Beetle: a single part using the model "c_met". */
 static BattleUnitKindPart parts[] = {
     {
         1, "btl_un_met", "c_met",

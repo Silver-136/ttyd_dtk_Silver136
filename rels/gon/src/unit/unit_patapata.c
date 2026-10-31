@@ -1,3 +1,5 @@
+// Koopa Paratroopa (patapata): battle unit used in Hooktail Castle (it turns into a Koopa Troopa when its wings are lost).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -46,6 +48,7 @@ static EvtWord first_attack_event[302];
 static EvtWord attack_event[548];
 static EvtWord wait_event[6];
 
+/** Unit data of the Koopa Paratroopa: 4 HP, level 9; the battle starts it from init_event_patapata. */
 BattleUnitKind unit_patapata = {
     UNIT_PARATROOPA, // mUnitType
     "btl_un_patapata", // name
@@ -94,6 +97,7 @@ BattleUnitKind unit_patapata = {
     data_table_patapata, // dataTable
 };
 
+/** Weapon data for the Koopa Paratroopa's aerial kick: 2 damage, one target. */
 static BattleWeapon weapon_patapata_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -130,8 +134,10 @@ static BattleWeapon weapon_patapata_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Defence of the Koopa Paratroopa: 1 against every element. */
 static BattleUnitDefense defence_patapata = {{1, 1, 1, 1, 1}};
 
+/** Elemental reactions of the Koopa Paratroopa: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_patapata_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist_patapata = {
@@ -159,6 +165,7 @@ static StatusVulnerability regist_patapata = {
     100, // ohko
 };
 
+/** Body part of the Koopa Paratroopa (winged), model c_nokoteki: its one target part. */
 static BattleUnitKindPart parts_patapata[] = {
     {
         1, // partNum
@@ -178,6 +185,10 @@ static BattleUnitKindPart parts_patapata[] = {
     },
 };
 
+/**
+ * Pose table of the Koopa Paratroopa: the animation each battle pose (idle, hurt, walk, attack and so on)
+ * plays.
+ */
 static PoseTableEntry pose_table_patapata[] = {
     {POSE_TYPE_SLEEP, "PTP_N_1"},
     {POSE_TYPE_STOP, "PTP_Y_1"},
@@ -199,12 +210,20 @@ static PoseTableEntry pose_table_patapata[] = {
     {POSE_TYPE_ACTION, "PTP_S_1"},
 };
 
+/**
+ * Event table of the Koopa Paratroopa: being knocked out of the air (dmg_fall_event, tag 14) and the First
+ * Strike reaction (patapata_dmg_first_attack_pos, tag 48).
+ */
 static BattleDataEntry data_table_patapata[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, patapata_dmg_first_attack_pos},
     {0, NULL},
 };
 
+/**
+ * Sound table of the Koopa Paratroopa: which sound each of its poses (idle, walk, run, attack and so on)
+ * plays, and when.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"PTP_S_1", 0.01f, NULL, "SFX_ENM_PATA_WAIT1", 0, 1},
     {"PTP_W_1", 0.01f, NULL, "SFX_ENM_PATA_MOVE1", 0, 1},
@@ -441,6 +460,9 @@ static EVT_BEGIN(attack_event_patapata)
     RETURN
 EVT_END()
 
+/**
+ * Pose table of the Koopa Troopa: the animation each battle pose (idle, hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "NKT_N_1"},
     {POSE_TYPE_STOP, "NKT_Y_1"},
@@ -462,6 +484,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "NKT_S_1"},
 };
 
+/**
+ * Pose table of the Koopa Troopa while it lies flipped on its back: the animation each battle pose (idle,
+ * hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "NKT_N_2"},
     {POSE_TYPE_STOP, "NKT_B_1"},
@@ -482,16 +508,23 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "NKT_S_2"},
 };
 
+/**
+ * Event table of the Koopa Troopa: being flipped onto its back (dmg_turn_event, tag 13) and the First Strike
+ * reaction (does nothing).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Defence of the Koopa Troopa: 1 against every element. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Elemental reactions of the Koopa Troopa: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+/** Defence of the Koopa Troopa while it lies flipped on its back: none against any element. */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -519,6 +552,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/** Body part of the Koopa Troopa (shelled), model c_nokoteki: its one target part. */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -538,6 +572,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon data for the Koopa Troopa's shell attack: 2 damage, a hammer-type hit, one target. */
 static BattleWeapon weapon_nokonoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

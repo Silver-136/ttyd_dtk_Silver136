@@ -1,3 +1,5 @@
+// Enemy item use: decides which healing, support or attack item an enemy unit should use.
+
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
 #include "data/item_data.h"

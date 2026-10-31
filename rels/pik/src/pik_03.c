@@ -75,6 +75,7 @@ EVT_BEGIN(bero_out)
     RETURN
 EVT_END()
 
+/** Doors and exits of pik_03: s_bero to pik_02. */
 static BeroEntry bero_data[] = {
     {
         "s_bero", // hitName

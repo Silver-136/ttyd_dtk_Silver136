@@ -1,3 +1,5 @@
+// rsh: Excess Express (ressha, train), shared code for the whole area: car door open/close, window scenery, random passenger NPCs and their talk events, REL prolog/epilog.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -622,6 +624,10 @@ static const s32 rsh_texmtx_tbl[] = {
     GX_TEXMTX0, GX_TEXMTX1, GX_TEXMTX2, GX_TEXMTX3, GX_TEXMTX4, GX_TEXMTX5, GX_TEXMTX6, GX_TEXMTX7, GX_TEXMTX8, GX_TEXMTX9,
 };
 
+/**
+ * Candidate passengers for random slot 1 of the car rsh_01: the model, NPC name and talk event of each, one
+ * of which is rolled for a new game.
+ */
 RshRndNpc rsh_01_rnd_npc_1[] = {
     {"c_kinopiko_v", /*"キノピオ女紫"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97\x8E\x87", evt_rsh_rnd_npc_2_1_talk},
     {"c_kinopio_b", /*"キノピオ青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x90\xC2", evt_rsh_rnd_npc_2_2_talk},
@@ -630,17 +636,29 @@ RshRndNpc rsh_01_rnd_npc_1[] = {
     {"c_kuribo_n", /*"NPCクリボー"*/"\x4E\x50\x43\x83\x4E\x83\x8A\x83\x7B\x81\x5B", evt_rsh_rnd_npc_2_5_talk},
 };
 
+/**
+ * Candidate passengers for random slot 2 of the car rsh_01: the model, NPC name and talk event of each, one
+ * of which is rolled for a new game.
+ */
 RshRndNpc rsh_01_rnd_npc_2[] = {
     {"c_kinopiko_p", /*"キノピオ女桃"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97\x93\x8D", evt_rsh_rnd_npc_2_6_talk},
     {"c_kinopio_b", /*"キノピオ青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x90\xC2", evt_rsh_rnd_npc_2_8_talk},
     {"c_kinopiko", /*"キノピオ女"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97", evt_rsh_rnd_npc_2_9_talk},
 };
 
+/**
+ * Candidate passengers for random slot 3 of the car rsh_01: the model, NPC name and talk event of each, one
+ * of which is rolled for a new game.
+ */
 RshRndNpc rsh_01_rnd_npc_3[] = {
     {"c_kokinopio_y", /*"キノピオ子黄緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x89\xA9\x97\xCE", evt_rsh_rnd_npc_2_7_talk},
     {"c_kokinopio_b", /*"キノピオ子青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x90\xC2", evt_rsh_rnd_npc_2_10_talk},
 };
 
+/**
+ * Candidate passengers for random slot 1 of the car rsh_03: the model, NPC name and talk event of each, one
+ * of which is rolled for a new game.
+ */
 RshRndNpc rsh_03_rnd_npc_1[] = {
     {"c_kinopio", /*"キノピオ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49", evt_rsh_rnd_npc_3_1_talk},
     {"c_kinopiko_p", /*"キノピオ女桃"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8F\x97\x93\x8D", evt_rsh_rnd_npc_3_2_talk},
@@ -657,6 +675,10 @@ RshRndNpc rsh_03_rnd_npc_1[] = {
     {"c_nokonoko", /*"ノコノコ"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52", evt_rsh_rnd_npc_4_5_talk},
 };
 
+/**
+ * Candidate passengers for random slot 2 of the car rsh_03: the model, NPC name and talk event of each, one
+ * of which is rolled for a new game.
+ */
 RshRndNpc rsh_03_rnd_npc_2[] = {
     {"c_kokinopio_g", /*"キノピオ子緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x97\xCE", evt_rsh_rnd_npc_3_6_talk},
     {"c_kokinopio_y", /*"キノピオ子黄緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x89\xA9\x97\xCE", evt_rsh_rnd_npc_3_10_talk},
@@ -667,21 +689,37 @@ RshRndNpc rsh_03_rnd_npc_2[] = {
     {"c_nokonoko", /*"ノコノコ"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52", evt_rsh_rnd_npc_4_10_talk},
 };
 
+/**
+ * Candidate passengers for random slot 1 of the car rsh_04: the model, NPC name and talk event of each, one
+ * of which is rolled for a new game.
+ */
 RshRndNpc rsh_04_rnd_npc_1[] = {
     {"c_kinopio_g", /*"キノピオ緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x97\xCE", evt_rsh_rnd_npc_5_2_talk},
     {"c_kinopio_b", /*"キノピオ青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x90\xC2", evt_rsh_rnd_npc_5_10_talk},
 };
 
+/**
+ * Candidate passengers for random slot 2 of the car rsh_04: the model, NPC name and talk event of each, one
+ * of which is rolled for a new game.
+ */
 RshRndNpc rsh_04_rnd_npc_2[] = {
     {"c_nokonoko", /*"ノコノコ"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52", evt_rsh_rnd_npc_5_8_talk},
     {"c_kinopio", /*"キノピオ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49", evt_rsh_rnd_npc_5_9_talk},
 };
 
+/**
+ * Candidate passengers for random slot 3 of the car rsh_04: the model, NPC name and talk event of each, one
+ * of which is rolled for a new game.
+ */
 RshRndNpc rsh_04_rnd_npc_3[] = {
     {"c_kokinopio_g", /*"キノピオ子緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x97\xCE", evt_rsh_rnd_npc_5_5_talk},
     {"c_kokinopio", /*"キノピオ子"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71", evt_rsh_rnd_npc_5_6_talk},
 };
 
+/**
+ * Candidate passengers for random slot 4 of the car rsh_04: the model, NPC name and talk event of each, one
+ * of which is rolled for a new game.
+ */
 RshRndNpc rsh_04_rnd_npc_4[] = {
     {"c_kokinopio_b", /*"キノピオ子青"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x90\xC2", evt_rsh_rnd_npc_5_1_talk},
     {"c_kokinopio_y", /*"キノピオ子黄緑"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x89\xA9\x97\xCE", evt_rsh_rnd_npc_5_3_talk},
@@ -1079,6 +1117,10 @@ EVT_BEGIN(evt_rsh_rnd_npc_5_10_talk)
     RETURN
 EVT_END()
 
+/**
+ * Shift-JIS labels (car-passenger numbers) of the candidates in rsh_01_rnd_npc_1; only the leftover debug
+ * print uses them.
+ */
 const char* rsh_01_rnd_npc_1_list[] = {
     /*"２−１"*/"\x82\x51\x81\x7C\x82\x50",
     /*"２−２"*/"\x82\x51\x81\x7C\x82\x51",
@@ -1087,17 +1129,29 @@ const char* rsh_01_rnd_npc_1_list[] = {
     /*"２−５"*/"\x82\x51\x81\x7C\x82\x54",
 };
 
+/**
+ * Shift-JIS labels (car-passenger numbers) of the candidates in rsh_01_rnd_npc_2; only the leftover debug
+ * print uses them.
+ */
 const char* rsh_01_rnd_npc_2_list[] = {
     /*"２−６"*/"\x82\x51\x81\x7C\x82\x55",
     /*"２−８"*/"\x82\x51\x81\x7C\x82\x57",
     /*"２−９"*/"\x82\x51\x81\x7C\x82\x58",
 };
 
+/**
+ * Shift-JIS labels (car-passenger numbers) of the candidates in rsh_01_rnd_npc_3; only the leftover debug
+ * print uses them.
+ */
 const char* rsh_01_rnd_npc_3_list[] = {
     /*"２−７"*/"\x82\x51\x81\x7C\x82\x56",
     /*"２−１０"*/"\x82\x51\x81\x7C\x82\x50\x82\x4F",
 };
 
+/**
+ * Shift-JIS labels (car-passenger numbers) of the candidates in rsh_03_rnd_npc_1; only the leftover debug
+ * print uses them.
+ */
 const char* rsh_03_rnd_npc_1_list[] = {
     /*"３−１"*/"\x82\x52\x81\x7C\x82\x50",
     /*"３−２"*/"\x82\x52\x81\x7C\x82\x51",
@@ -1114,6 +1168,10 @@ const char* rsh_03_rnd_npc_1_list[] = {
     /*"４−５"*/"\x82\x53\x81\x7C\x82\x54",
 };
 
+/**
+ * Shift-JIS labels (car-passenger numbers) of the candidates in rsh_03_rnd_npc_2; only the leftover debug
+ * print uses them.
+ */
 const char* rsh_03_rnd_npc_2_list[] = {
     /*"３−６"*/"\x82\x52\x81\x7C\x82\x55",
     /*"３−１０"*/"\x82\x52\x81\x7C\x82\x50\x82\x4F",
@@ -1124,21 +1182,37 @@ const char* rsh_03_rnd_npc_2_list[] = {
     /*"４−１０"*/"\x82\x53\x81\x7C\x82\x50\x82\x4F",
 };
 
+/**
+ * Shift-JIS labels (car-passenger numbers) of the candidates in rsh_04_rnd_npc_1; only the leftover debug
+ * print uses them.
+ */
 const char* rsh_04_rnd_npc_1_list[] = {
     /*"５−２"*/"\x82\x54\x81\x7C\x82\x51",
     /*"５−１０"*/"\x82\x54\x81\x7C\x82\x50\x82\x4F",
 };
 
+/**
+ * Shift-JIS labels (car-passenger numbers) of the candidates in rsh_04_rnd_npc_2; only the leftover debug
+ * print uses them.
+ */
 const char* rsh_04_rnd_npc_2_list[] = {
     /*"５−８"*/"\x82\x54\x81\x7C\x82\x57",
     /*"５−９"*/"\x82\x54\x81\x7C\x82\x58",
 };
 
+/**
+ * Shift-JIS labels (car-passenger numbers) of the candidates in rsh_04_rnd_npc_3; only the leftover debug
+ * print uses them.
+ */
 const char* rsh_04_rnd_npc_3_list[] = {
     /*"５−５"*/"\x82\x54\x81\x7C\x82\x54",
     /*"５−６"*/"\x82\x54\x81\x7C\x82\x55",
 };
 
+/**
+ * Shift-JIS labels (car-passenger numbers) of the candidates in rsh_04_rnd_npc_4; only the leftover debug
+ * print uses them.
+ */
 const char* rsh_04_rnd_npc_4_list[] = {
     /*"５−１"*/"\x82\x54\x81\x7C\x82\x50",
     /*"５−３"*/"\x82\x54\x81\x7C\x82\x52",
@@ -1178,6 +1252,7 @@ typedef struct RshDebugStr {
     char str[256];
 } RshDebugStr;
 
+/** Zeroed 256-byte template for the debug line buffer of the leftover debug print. */
 static const RshDebugStr rsh_debug_str_init = {0};
 
 // Nine passenger choices: three in rsh_01, two in rsh_03, four in rsh_04.

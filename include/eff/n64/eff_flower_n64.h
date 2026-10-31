@@ -1,3 +1,5 @@
+// eff_flower_n64.c: Paper Mario 64 Flower effect entry (effFlowerN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

@@ -67,6 +67,7 @@ static EvtWord trans_magic_event[4];
 static EvtWord recover_magic_event[90];
 static EvtWord wait_event[6];
 
+/** Weapon of Kammy Koopa's magic blast: damage 5. */
 BattleWeapon weapon_kamec_obaba_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -103,6 +104,7 @@ BattleWeapon weapon_kamec_obaba_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Kammy Koopa's spell that makes a unit huge: inflicts a size change. */
 BattleWeapon weapon_kamec_obaba_dekadeka_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -141,6 +143,7 @@ BattleWeapon weapon_kamec_obaba_dekadeka_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Kammy Koopa's spell that electrifies a unit: inflicts Electrified. */
 BattleWeapon weapon_kamec_obaba_biribiri_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -179,6 +182,7 @@ BattleWeapon weapon_kamec_obaba_biribiri_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Kammy Koopa's spell that raises Defense: inflicts a defense change. */
 BattleWeapon weapon_kamec_obaba_katikati_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -218,6 +222,7 @@ BattleWeapon weapon_kamec_obaba_katikati_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Kammy Koopa's spell that turns a unit invisible: inflicts Invisible. */
 BattleWeapon weapon_kamec_obaba_trans_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -255,6 +260,7 @@ BattleWeapon weapon_kamec_obaba_trans_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Kammy Koopa's healing spell. */
 BattleWeapon weapon_kamec_obaba_recover_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -290,6 +296,10 @@ BattleWeapon weapon_kamec_obaba_recover_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Unit data of Kammy Koopa in the Palace of Shadow: 50 HP, level 48;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_kamec_obaba = {
     UNIT_KAMMY_KOOPA, // mUnitType
     "btl_un_kamec_obaba", // name
@@ -338,8 +348,16 @@ BattleUnitKind unit_boss_kamec_obaba = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of Kammy Koopa against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of Kammy Koopa per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -367,6 +385,7 @@ static StatusVulnerability regist = {
     5, // ohko
 };
 
+/** Pose table of Kammy Koopa: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -387,6 +406,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Pose table of Kammy Koopa while in the air: animation names for each pose type (idle, walk, hurt, attack
+ * and so on).
+ */
 static PoseTableEntry pose_table_sky[] = {
     {POSE_TYPE_SLEEP, "N_2"},
     {POSE_TYPE_STOP, "Y_2"},
@@ -407,17 +430,26 @@ static PoseTableEntry pose_table_sky[] = {
     {POSE_TYPE_ACTION, "S_2"},
 };
 
+/**
+ * Pose table of Kammy Koopa once defeated: animation names for each pose type (idle, walk, hurt, attack and
+ * so on).
+ */
 static PoseTableEntry pose_table_dead[] = {
     {POSE_TYPE_NORMAL, "D_3"},
     {POSE_TYPE_DAMAGE, "D_3"},
     {POSE_TYPE_ACTION, "D_3"},
 };
 
+/**
+ * Data table of Kammy Koopa: event scripts and values the battle looks up by tag (damage reactions, dodge,
+ * first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Parts of Kammy Koopa: 2 parts with their hit boxes, defence tables and pose tables. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_kamec_obaba", "c_kamek_bb", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_sky},
     {2, "btl_un_kamec_obaba", "c_kamek_bb", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},

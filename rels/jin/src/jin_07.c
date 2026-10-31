@@ -159,6 +159,10 @@ static EVT_BEGIN(check_roll)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room: the west exit (w_bero_2) to jin_08, the west exit (w_bero_1) to jin_08 and the east
+ * exit (e_bero) to jin_06.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero_2", // hitName
@@ -230,6 +234,7 @@ static EVT_BEGIN(evt_unlock)
     RETURN
 EVT_END()
 
+/** NPC of the room: the Boo (Teresa), which cannot be touched. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"テレサ"*/"\x83\x65\x83\x8C\x83\x54", // name
@@ -243,6 +248,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Four Boo models of the room's effect (c_teresa), all playing animation W_1 from start frames 1 to 4. */
 static ExtTexInfo senteresa_ext_entry_data[] = {
     {"c_teresa", "W_1", 1.0f},
     {"c_teresa", "W_1", 2.0f},

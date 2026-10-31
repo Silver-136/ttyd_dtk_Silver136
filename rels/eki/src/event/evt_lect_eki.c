@@ -1,3 +1,5 @@
+// Riverside Station (eki) key-item lecture: when Ultra Boots are picked up, Kinopiko gives the Ultra Boots tutorial (all_juyoitem_lecture_rel).
+
 #include "icon_ids.h"
 #include "eff/eff_fukidashi.h"
 #include "eff/eff_itemget.h"

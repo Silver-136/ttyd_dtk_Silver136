@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: thunder flare: a glowing flare sprite with a color pair, used by the thunder effect.
+
 #include "eff/n64/eff_thunderflare_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -23,6 +25,10 @@ typedef struct EffThunderflareN64Elem {
     s32 color[6]; // 0x30
 } EffThunderflareN64Elem;
 
+/**
+ * 16x16 quad drawn for each spark, white at the top shading to red at the bottom,
+ * followed by an unused larger copy turned 45 degrees.
+ */
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 250, 250, 250, 255},
     {8, -8, 0, 1024, 0, 250, 250, 250, 255},

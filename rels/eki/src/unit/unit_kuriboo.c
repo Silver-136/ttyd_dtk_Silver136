@@ -1,3 +1,5 @@
+// Goomba (kuriboo): enemy battle unit; Riverside Station's copy of the unit data and scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -28,6 +30,7 @@ static EvtWord phase_event[2];
 static EvtWord attack_event[492];
 static EvtWord wait_event[6];
 
+/** Unit data of the Goomba: 2 HP, level 7; the battle starts it from init_event. */
 BattleUnitKind unit_kuriboo = {
     UNIT_GOOMBA, // mUnitType
     "btl_un_kuriboo", // name
@@ -76,6 +79,7 @@ BattleUnitKind unit_kuriboo = {
     data_table, // dataTable
 };
 
+/** Pose table of the Goomba: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KUR_N_1"},
     {POSE_TYPE_STOP, "KUR_Y_1"},
@@ -99,13 +103,16 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
+/** Event table of the Goomba: the First Strike reaction (does nothing). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Defence of the Goomba: none against any element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Elemental reactions of the Goomba: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -133,10 +140,12 @@ static StatusVulnerability regist = {
     150, // ohko
 };
 
+/** Body part of the Goomba, model c_kuribo: its one target part. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_kuriboo", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon data for the Goomba's headbonk: 1 damage, a jump-type hit, one target. */
 static BattleWeapon weapon_kuriboo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

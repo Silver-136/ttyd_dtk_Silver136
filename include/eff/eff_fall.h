@@ -1,3 +1,5 @@
+// eff_fall.c: falling-object effect: effFallEntry and effFallCheckHit.
+
 #pragma once
 
 #include <dolphin/types.h>

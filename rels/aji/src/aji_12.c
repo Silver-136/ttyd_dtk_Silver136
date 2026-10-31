@@ -53,6 +53,7 @@ static EVT_BEGIN(e_door_open)
     RETURN
 EVT_END()
 
+/** Exit of this room: the east door to aji_10. */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -75,6 +76,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Hit areas of the electrified floor panels, in panel order. */
 const char* hit_list[] = {
     "A_hikaru_01",
     "A_hikaru_02",
@@ -155,6 +157,7 @@ static EVT_BEGIN(evt_box)
     RETURN
 EVT_END()
 
+/** Where Mario is put back after taking damage from the electrified floor: the map position named mod_01. */
 static HitDamageReturn dmgReturnPt[] = {
     {"mod_01", {0.0f, -1000.0f, 0.0f}},
     {0},

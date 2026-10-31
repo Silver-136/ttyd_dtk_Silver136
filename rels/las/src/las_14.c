@@ -214,6 +214,7 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
+/** Exit of las_14: west door w_bero_1 to las_10 (se_bero_1). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
@@ -247,12 +248,20 @@ static EVT_BEGIN(box_evt)
     RETURN
 EVT_END()
 
+/**
+ * Map groups (S_kabe1, S_ten) that the cloud of this room (evt_las_cloud_ent) draws into its offscreen
+ * buffer; the cloud's paper animation is a capture of them. The empty string ends the list.
+ */
 static const char* capturemap[] = {
     "S_kabe1",
     "S_ten",
     "",
 };
 
+/**
+ * The eight corners of a 100-unit box around a cloud's hit object; _get_boundingbox projects them to the
+ * screen to size the cloud capture.
+ */
 static Vec v_list[] = {
     {-50.0f, 100.0f, 50.0f},
     {50.0f, 100.0f, 50.0f},

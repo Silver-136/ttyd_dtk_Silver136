@@ -1,3 +1,5 @@
+// evtmgr.c: the event (script) manager: EventEntry, EventOpcode, the LW/LF/GW/GF banks and the script run loop.
+
 #pragma once
 
 #include "evt/evt_word.h"

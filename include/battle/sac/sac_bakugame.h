@@ -1,3 +1,5 @@
+// Declares the Clock Out (sac_bakugame) special move events.
+
 #pragma once
 
 #include <dolphin/types.h>

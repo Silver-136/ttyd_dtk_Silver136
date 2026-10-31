@@ -203,6 +203,7 @@ EVT_BEGIN(dummy_evt)
     RETURN
 EVT_END()
 
+/** Texture index of the rainbow light in the title palette, one per language. */
 static u32 niji_tbl[] = {
 #ifdef VERSION_G8ME01
     19, 26, 24, 27, 22, 22,
@@ -211,6 +212,9 @@ static u32 niji_tbl[] = {
 #endif
 };
 
+/**
+ * Message keys of the chapter title subtitles, indexed by chapter (the prologue first, then chapters 1 to 8).
+ */
 static const char* msg_tbl[] = {
     "msg_stg_seq_prolouge", "msg_stg_seq_stg1", "msg_stg_seq_stg2", "msg_stg_seq_stg3", "msg_stg_seq_stg4", "msg_stg_seq_stg5", "msg_stg_seq_stg6", "msg_stg_seq_stg7",
     "msg_stg_seq_stg8",
@@ -718,42 +722,52 @@ void display_func(CameraId cameraId, void* param) {
     GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
 }
 
+/** Title letters of the prologue in Japanese: effect-texture ids in drawing order, -1 ends the list. */
 s8 prologue_jp_tbl[] = {
     16, 17, 17, 6, 18, -1,
 };
 
+/** Title letters of chapter 1 in Japanese: effect-texture ids in drawing order, -1 ends the list. */
 s8 stage1_jp_tbl[] = {
     4, 5, 6, 7, 8, -1,
 };
 
+/** Title letters of chapter 2 in Japanese: effect-texture ids in drawing order, -1 ends the list. */
 s8 stage2_jp_tbl[] = {
     4, 5, 6, 7, 9, -1,
 };
 
+/** Title letters of chapter 3 in Japanese: effect-texture ids in drawing order, -1 ends the list. */
 s8 stage3_jp_tbl[] = {
     4, 5, 6, 7, 10, -1,
 };
 
+/** Title letters of chapter 4 in Japanese: effect-texture ids in drawing order, -1 ends the list. */
 s8 stage4_jp_tbl[] = {
     4, 5, 6, 7, 11, -1,
 };
 
+/** Title letters of chapter 5 in Japanese: effect-texture ids in drawing order, -1 ends the list. */
 s8 stage5_jp_tbl[] = {
     4, 5, 6, 7, 12, -1,
 };
 
+/** Title letters of chapter 6 in Japanese: effect-texture ids in drawing order, -1 ends the list. */
 s8 stage6_jp_tbl[] = {
     4, 5, 6, 7, 13, -1,
 };
 
+/** Title letters of chapter 7 in Japanese: effect-texture ids in drawing order, -1 ends the list. */
 s8 stage7_jp_tbl[] = {
     4, 5, 6, 7, 14, -1,
 };
 
+/** Title letters of chapter 8 in Japanese: effect-texture ids in drawing order, -1 ends the list. */
 s8 stage8_jp_tbl[] = {
     4, 5, 6, 7, 15, -1,
 };
 
+/** Title letter tables of the Japanese version, indexed by chapter (the prologue first). */
 s8* texid_jp_tbl[] = {
     prologue_jp_tbl, stage1_jp_tbl, stage2_jp_tbl, stage3_jp_tbl, stage4_jp_tbl, stage5_jp_tbl, stage6_jp_tbl, stage7_jp_tbl, stage8_jp_tbl,
 };
@@ -767,6 +781,10 @@ s8 prologue_us_tbl[] = {
 #endif
 };
 
+/**
+ * Title letters of chapter 1 in English: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage1_us_tbl[] = {
 #ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 11, -1,
@@ -775,6 +793,10 @@ s8 stage1_us_tbl[] = {
 #endif
 };
 
+/**
+ * Title letters of chapter 2 in English: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage2_us_tbl[] = {
 #ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 12, -1,
@@ -783,6 +805,10 @@ s8 stage2_us_tbl[] = {
 #endif
 };
 
+/**
+ * Title letters of chapter 3 in English: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage3_us_tbl[] = {
 #ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 13, -1,
@@ -791,6 +817,10 @@ s8 stage3_us_tbl[] = {
 #endif
 };
 
+/**
+ * Title letters of chapter 4 in English: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage4_us_tbl[] = {
 #ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 14, -1,
@@ -799,6 +829,10 @@ s8 stage4_us_tbl[] = {
 #endif
 };
 
+/**
+ * Title letters of chapter 5 in English: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage5_us_tbl[] = {
 #ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 15, -1,
@@ -807,6 +841,10 @@ s8 stage5_us_tbl[] = {
 #endif
 };
 
+/**
+ * Title letters of chapter 6 in English: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage6_us_tbl[] = {
 #ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 16, -1,
@@ -815,6 +853,10 @@ s8 stage6_us_tbl[] = {
 #endif
 };
 
+/**
+ * Title letters of chapter 7 in English: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage7_us_tbl[] = {
 #ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 17, -1,
@@ -823,6 +865,10 @@ s8 stage7_us_tbl[] = {
 #endif
 };
 
+/**
+ * Title letters of chapter 8 in English: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage8_us_tbl[] = {
 #ifdef VERSION_G8ME01
     4, 5, 6, 7, 8, 9, 10, -2, 18, -1,
@@ -831,179 +877,319 @@ s8 stage8_us_tbl[] = {
 #endif
 };
 
+/** Title letter tables of the English version, indexed by chapter (the prologue first). */
 s8* texid_us_tbl[] = {
     prologue_us_tbl, stage1_us_tbl, stage2_us_tbl, stage3_us_tbl, stage4_us_tbl, stage5_us_tbl, stage6_us_tbl, stage7_us_tbl, stage8_us_tbl,
 };
 
 #ifdef VERSION_G8ME01
+/** Title letters of the prologue in German: effect-texture ids in drawing order, -1 ends the list. */
 s8 prologue_lang3_tbl[] = {
     19, 20, 21, 22, 21, 23, -1,
 };
 
+/**
+ * Title letters of chapter 1 in German: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage1_lang3_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, -2, 11, -1,
 };
 
+/**
+ * Title letters of chapter 2 in German: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage2_lang3_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, -2, 12, -1,
 };
 
+/**
+ * Title letters of chapter 3 in German: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage3_lang3_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, -2, 13, -1,
 };
 
+/**
+ * Title letters of chapter 4 in German: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage4_lang3_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, -2, 14, -1,
 };
 
+/**
+ * Title letters of chapter 5 in German: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage5_lang3_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, -2, 15, -1,
 };
 
+/**
+ * Title letters of chapter 6 in German: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage6_lang3_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, -2, 16, -1,
 };
 
+/**
+ * Title letters of chapter 7 in German: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage7_lang3_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, -2, 17, -1,
 };
 
+/**
+ * Title letters of chapter 8 in German: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage8_lang3_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, -2, 18, -1,
 };
 
+/** Title letter tables of the German version, indexed by chapter (the prologue first). */
 s8* texid_lang3_tbl[] = {
     prologue_lang3_tbl, stage1_lang3_tbl, stage2_lang3_tbl, stage3_lang3_tbl, stage4_lang3_tbl, stage5_lang3_tbl, stage6_lang3_tbl, stage7_lang3_tbl, stage8_lang3_tbl,
 };
 
+/** Title letters of the prologue in French: effect-texture ids in drawing order, -1 ends the list. */
 s8 prologue_lang4_tbl[] = {
     20, 21, 22, 23, 22, 24, 25, 26, -1,
 };
 
+/**
+ * Title letters of chapter 1 in French: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage1_lang4_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, 11, -2, 12, -1,
 };
 
+/**
+ * Title letters of chapter 2 in French: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage2_lang4_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, 11, -2, 13, -1,
 };
 
+/**
+ * Title letters of chapter 3 in French: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage3_lang4_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, 11, -2, 14, -1,
 };
 
+/**
+ * Title letters of chapter 4 in French: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage4_lang4_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, 11, -2, 15, -1,
 };
 
+/**
+ * Title letters of chapter 5 in French: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage5_lang4_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, 11, -2, 16, -1,
 };
 
+/**
+ * Title letters of chapter 6 in French: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage6_lang4_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, 11, -2, 17, -1,
 };
 
+/**
+ * Title letters of chapter 7 in French: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage7_lang4_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, 11, -2, 18, -1,
 };
 
+/**
+ * Title letters of chapter 8 in French: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage8_lang4_tbl[] = {
     4, 5, 6, 7, 8, 9, 10, 11, -2, 19, -1,
 };
 
+/** Title letter tables of the French version, indexed by chapter (the prologue first). */
 s8* texid_lang4_tbl[] = {
     prologue_lang4_tbl, stage1_lang4_tbl, stage2_lang4_tbl, stage3_lang4_tbl, stage4_lang4_tbl, stage5_lang4_tbl, stage6_lang4_tbl, stage7_lang4_tbl, stage8_lang4_tbl,
 };
 
+/** Title letters of the prologue in Spanish: effect-texture ids in drawing order, -1 ends the list. */
 s8 prologue_lang5_tbl[8] = {
     16, 17, 18, 19, 20, 21, 20, -1,
 };
 
+/**
+ * Title letters of chapter 1 in Spanish: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage1_lang5_tbl[] = {
     4, 5, 6, 7, -2, 8, -1,
 };
 
+/**
+ * Title letters of chapter 2 in Spanish: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage2_lang5_tbl[] = {
     4, 5, 6, 7, -2, 9, -1,
 };
 
+/**
+ * Title letters of chapter 3 in Spanish: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage3_lang5_tbl[] = {
     4, 5, 6, 7, -2, 10, -1,
 };
 
+/**
+ * Title letters of chapter 4 in Spanish: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage4_lang5_tbl[] = {
     4, 5, 6, 7, -2, 11, -1,
 };
 
+/**
+ * Title letters of chapter 5 in Spanish: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage5_lang5_tbl[] = {
     4, 5, 6, 7, -2, 12, -1,
 };
 
+/**
+ * Title letters of chapter 6 in Spanish: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage6_lang5_tbl[] = {
     4, 5, 6, 7, -2, 13, -1,
 };
 
+/**
+ * Title letters of chapter 7 in Spanish: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage7_lang5_tbl[] = {
     4, 5, 6, 7, -2, 14, -1,
 };
 
+/**
+ * Title letters of chapter 8 in Spanish: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage8_lang5_tbl[] = {
     4, 5, 6, 7, -2, 15, -1,
 };
 
+/** Title letter tables of the Spanish version, indexed by chapter (the prologue first). */
 s8* texid_lang5_tbl[] = {
     prologue_lang5_tbl, stage1_lang5_tbl, stage2_lang5_tbl, stage3_lang5_tbl, stage4_lang5_tbl, stage5_lang5_tbl, stage6_lang5_tbl, stage7_lang5_tbl, stage8_lang5_tbl,
 };
 
+/** Title letters of the prologue in Italian: effect-texture ids in drawing order, -1 ends the list. */
 s8 prologue_lang6_tbl[8] = {
     17, 18, 19, 20, 19, 21, 19, -1,
 };
 
+/**
+ * Title letters of chapter 1 in Italian: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage1_lang6_tbl[8] = {
     4, 5, 6, 7, 8, -2, 9, -1,
 };
 
+/**
+ * Title letters of chapter 2 in Italian: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage2_lang6_tbl[8] = {
     4, 5, 6, 7, 8, -2, 10, -1,
 };
 
+/**
+ * Title letters of chapter 3 in Italian: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage3_lang6_tbl[8] = {
     4, 5, 6, 7, 8, -2, 11, -1,
 };
 
+/**
+ * Title letters of chapter 4 in Italian: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage4_lang6_tbl[8] = {
     4, 5, 6, 7, 8, -2, 12, -1,
 };
 
+/**
+ * Title letters of chapter 5 in Italian: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage5_lang6_tbl[8] = {
     4, 5, 6, 7, 8, -2, 13, -1,
 };
 
+/**
+ * Title letters of chapter 6 in Italian: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage6_lang6_tbl[8] = {
     4, 5, 6, 7, 8, -2, 14, -1,
 };
 
+/**
+ * Title letters of chapter 7 in Italian: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage7_lang6_tbl[8] = {
     4, 5, 6, 7, 8, -2, 15, -1,
 };
 
+/**
+ * Title letters of chapter 8 in Italian: effect-texture ids in drawing order, -2 leaves a gap between words,
+ * -1 ends the list.
+ */
 s8 stage8_lang6_tbl[8] = {
     4, 5, 6, 7, 8, -2, 16, -1,
 };
 
+/** Title letter tables of the Italian version, indexed by chapter (the prologue first). */
 s8* texid_lang6_tbl[] = {
     prologue_lang6_tbl, stage1_lang6_tbl, stage2_lang6_tbl, stage3_lang6_tbl, stage4_lang6_tbl, stage5_lang6_tbl, stage6_lang6_tbl, stage7_lang6_tbl, stage8_lang6_tbl,
 };
 
+/** The title tables of every language, indexed by the game language. */
 s8** lang_tbl[] = {
     texid_jp_tbl, texid_us_tbl, texid_lang3_tbl, texid_lang4_tbl, texid_lang5_tbl, texid_lang6_tbl,
 #else
+/** The title tables of every language, indexed by the game language. */
 s8** lang_tbl[] = {
     texid_jp_tbl, texid_us_tbl,
 #endif
 };
 
+/** File-name prefix of the title files of each language. */
 const char* lang_prefix[] = {
 #ifdef VERSION_G8ME01
     "jp", "us", "ge", "fr", "sp", "it", "du",

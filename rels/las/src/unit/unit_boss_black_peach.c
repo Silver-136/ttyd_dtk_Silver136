@@ -236,6 +236,11 @@ EvtWord queen_hand_small_damage_event[48];
 EvtWord queen_hand_small_dead_event[32];
 EvtWord queen_hand_small_wait_event[6];
 
+/**
+ * Unit data of the Shadow Queen (possessing Peach), the first phase of the final fight, in the Palace of
+ * Shadow: 150 HP;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_black_peach = {
     UNIT_SHADOW_QUEEN_PEACH, // mUnitType
     "btl_un_black_peach", // name
@@ -284,8 +289,16 @@ BattleUnitKind unit_boss_black_peach = {
     peach_data_table, // dataTable
 };
 
+/**
+ * Defence of the Shadow Queen (possessing Peach) against each element (normal, fire, ice, explosion,
+ * electric): none, so every hit does its full damage.
+ */
 BattleUnitDefense peach_defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of the Shadow Queen (possessing Peach) per element (normal, fire, ice, explosion,
+ * electric): none, so no element is a weakness, an immunity or a heal.
+ */
 BattleUnitDefenseAttr peach_defence_attr = {{0, 0, 0, 0, 0}};
 
 StatusVulnerability peach_regist = {
@@ -313,6 +326,10 @@ StatusVulnerability peach_regist = {
     0, // ohko
 };
 
+/**
+ * Pose table of the Shadow Queen (possessing Peach): animation names for each pose type (idle, walk, hurt,
+ * attack and so on).
+ */
 PoseTableEntry peach_pose_table[] = {
     {POSE_TYPE_SLEEP, "KRT_N_1"},
     {POSE_TYPE_STOP, "KRT_Z_1"},
@@ -334,11 +351,18 @@ PoseTableEntry peach_pose_table[] = {
     {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
+/**
+ * Data table of the Shadow Queen (possessing Peach): event scripts and values the battle looks up by tag
+ * (damage reactions, dodge, first strike and so on).
+ */
 BattleDataEntry peach_data_table[] = {
     {UNIT_DATA_DEAD_EVENT, peach_dead_event},
     {0, NULL},
 };
 
+/**
+ * Parts of the Shadow Queen (possessing Peach): 7 parts with their hit boxes, defence tables and pose tables.
+ */
 BattleUnitKindPart peach_parts[] = {
     {1, "btl_un_shadow_queen", "c_b_peach_b", 0.0f, VERSION_PICK(0.0f, 2.0f), 0.0f, -2.0f, 44.0f, 0.0f, -2.0f, 44.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, kMainPart | kGuardTargetPart, 0, peach_pose_table},
     {2, "btl_un_shadow_queen", "c_q_kage_b", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, 0x3018000, 0, peach_pose_table},
@@ -349,6 +373,7 @@ BattleUnitKindPart peach_parts[] = {
     {7, "btl_un_shadow_hand_big_2", "c_b_hand", 160.0f, 0.0f, 50.0f, 0.0f, 38.0f, 5.0f, 0.0f, 38.0f, 5.0f, 41, 61, 255, &peach_defence, &peach_defence_attr, 0x13018000, 0, peach_pose_table},
 };
 
+/** Weapon of the Shadow Queen's black thunder: damage 7. */
 BattleWeapon weapon_peach_black_thunder_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -390,6 +415,10 @@ BattleWeapon weapon_peach_black_thunder_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the Shadow Queen's energy move that changes attack and defence:
+ * inflicts an attack change, a defense change.
+ */
 BattleWeapon weapon_peach_black_energy_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -436,6 +465,7 @@ BattleWeapon weapon_peach_black_energy_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the possessed Peach's life drain: damage 7. */
 BattleWeapon weapon_peach_drain_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -476,6 +506,7 @@ BattleWeapon weapon_peach_drain_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the dark drag, in which the hands drag at the target: damage 3. */
 BattleWeapon weapon_peach_dark_drag_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -511,6 +542,7 @@ BattleWeapon weapon_peach_dark_drag_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the last hit of the dark drag. */
 BattleWeapon weapon_peach_dark_drag_last_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -547,6 +579,7 @@ BattleWeapon weapon_peach_dark_drag_last_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the possessed Peach's charge-up. */
 BattleWeapon weapon_peach_dark_charge_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -582,6 +615,7 @@ BattleWeapon weapon_peach_dark_charge_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Shadow Queen's wave of dark energy over the party: damage 7. */
 BattleWeapon weapon_peach_black_wave_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -762,6 +796,7 @@ BattleWeapon weapon_peach_black_poison_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the big hand's press: damage 7. */
 BattleWeapon weapon_peach_black_press_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -802,6 +837,7 @@ BattleWeapon weapon_peach_black_press_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the small hand's thousand-hands attack: damage 3. */
 BattleWeapon weapon_peach_black_1000hand_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -846,6 +882,10 @@ BattleWeapon weapon_peach_black_1000hand_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Unit data of the Shadow Queen in the Palace of Shadow: 150 HP;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_shadow_queen = {
     UNIT_SHADOW_QUEEN_DEMON,
     "btl_un_shadow_queen",
@@ -912,8 +952,16 @@ BattleUnitKind unit_boss_shadow_queen = {
     queen_data_table,
 };
 
+/**
+ * Defence of the Shadow Queen against each element (normal, fire, ice, explosion, electric):
+ * 1 against every element, so each hit is cut by 1.
+ */
 BattleUnitDefense queen_defence = {{1, 1, 1, 1, 1}};
 
+/**
+ * Damage modifiers of the Shadow Queen per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 BattleUnitDefenseAttr queen_defence_attr = {{0, 0, 0, 0, 0}};
 
 StatusVulnerability queen_regist = {
@@ -941,12 +989,27 @@ StatusVulnerability queen_regist = {
     0, // ohko
 };
 
+/**
+ * Defence of the Shadow Queen while she is invincible:
+ * defence 99 against every kind of hit, so no attack does damage.
+ */
 BattleUnitDefense queen_muteki_defence = {{99, 99, 99, 99, 99}};
 
+/**
+ * Damage modifiers of the Shadow Queen while she is invincible per element (normal, fire, ice, explosion,
+ * electric): normal: immune, fire: immune, ice: immune, explosion: immune, electric: immune.
+ */
 BattleUnitDefenseAttr queen_muteki_defence_attr = {{2, 2, 2, 2, 2}};
 
+/**
+ * Status vulnerability of the Shadow Queen while she is invincible:
+ * percent chance that each status takes hold (100 is normal); immune to Sleep.
+ */
 StatusVulnerability queen_muteki_regist = {0};
 
+/**
+ * Pose table of the Shadow Queen: animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 PoseTableEntry queen_pose_table[] = {
     {POSE_TYPE_SLEEP, "KRT_S_1"},
     {POSE_TYPE_STOP, "KRT_S_1"},
@@ -968,6 +1031,10 @@ PoseTableEntry queen_pose_table[] = {
     {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
+/**
+ * Pose table of the Shadow Queen's big hands: animation names for each pose type (idle, walk, hurt, attack
+ * and so on).
+ */
 PoseTableEntry queen_hand_pose_table[] = {
     {POSE_TYPE_NORMAL, "KRT_S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_S_1"},
@@ -975,11 +1042,16 @@ PoseTableEntry queen_hand_pose_table[] = {
     {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
+/**
+ * Data table of the Shadow Queen: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 BattleDataEntry queen_data_table[] = {
     {UNIT_DATA_DEAD_EVENT, queen_dead_event},
     {0, NULL},
 };
 
+/** Parts of the Shadow Queen: 6 parts with their hit boxes, defence tables and pose tables. */
 BattleUnitKindPart queen_parts[] = {
     {1, "btl_un_shadow_queen", "c_b_peach_b", 0.0f, VERSION_PICK(0.0f, 2.0f), 0.0f, 0.0f, 47.0f, 0.0f, 0.0f, 47.0f, 0.0f, 41, 61, 255, &queen_defence, &queen_defence_attr, kMainPart | kGuardTargetPart, 0, peach_pose_table},
     {2, "btl_un_shadow_queen", "c_q_kage_b", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &queen_defence, &queen_defence_attr, 0x2018000, 0, queen_pose_table},
@@ -988,6 +1060,10 @@ BattleUnitKindPart queen_parts[] = {
     {5, "btl_un_shadow_queen", "c_q_kage_f", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 41, 61, 255, &queen_defence, &queen_defence_attr, 0x13018000, 0, queen_pose_table},
 };
 
+/**
+ * Unused table of 36 offsets named hair_offset in the symbol map;
+ * the Shadow Queen's unit code does not read it.
+ */
 f32 hair_offset[] = {
     -13.0f, 63.0f, 5.0f, 57.0f, -24.0f, -40.0f, -10.0f, 61.0f,
     -7.0f, 24.0f, 17.0f, -16.0f, -10.0f, 60.0f, -9.0f, -27.0f,
@@ -1022,6 +1098,10 @@ EVT_BEGIN(shadow_queen_1000)
     RETURN
 EVT_END()
 
+/**
+ * Unit data of the Shadow Queen's first big hand in the Palace of Shadow: 5 HP;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_shadow_hand_1 = {
     UNIT_SHADOW_QUEEN_LEFT_RIGHT_HAND,
     "btl_un_shadow_queen",
@@ -1088,8 +1168,16 @@ BattleUnitKind unit_boss_shadow_hand_1 = {
     queen_hand_1_data_table,
 };
 
+/**
+ * Defence of the Shadow Queen's first big hand against each element (normal, fire, ice, explosion,
+ * electric): none, so every hit does its full damage.
+ */
 BattleUnitDefense queen_hand_1_defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of the Shadow Queen's first big hand per element (normal, fire, ice, explosion,
+ * electric): none, so no element is a weakness, an immunity or a heal.
+ */
 BattleUnitDefenseAttr queen_hand_1_defence_attr = {{0, 0, 0, 0, 0}};
 
 StatusVulnerability queen_hand_1_regist = {
@@ -1117,6 +1205,10 @@ StatusVulnerability queen_hand_1_regist = {
     0, // ohko
 };
 
+/**
+ * Pose table of the Shadow Queen's first big hand:
+ * animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 PoseTableEntry queen_hand_1_pose_table[] = {
     {POSE_TYPE_NORMAL, "KRT_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "KRT_Q_1"},
@@ -1128,15 +1220,26 @@ PoseTableEntry queen_hand_1_pose_table[] = {
     {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
+/**
+ * Data table of the Shadow Queen's first big hand:
+ * event scripts and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 BattleDataEntry queen_hand_1_data_table[] = {
     {UNIT_DATA_DEAD_EVENT, queen_hand_1_dead_event},
     {0, NULL},
 };
 
+/**
+ * Part of the Shadow Queen's first big hand: its one body part with hit box, defence tables and pose table.
+ */
 BattleUnitKindPart queen_hand_1_parts[] = {
     {1, "btl_un_shadow_hand_big_1", "c_b_hand", 0.0f, 0.0f, 0.0f, 16.0f, 47.0f, 30.0f, 16.0f, 47.0f, 30.0f, 41, 61, 255, &queen_hand_1_defence, &queen_hand_1_defence_attr, 0x3018009, 0, queen_hand_1_pose_table},
 };
 
+/**
+ * Unit data of the Shadow Queen's second big hand in the Palace of Shadow: 5 HP;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_shadow_hand_2 = {
     UNIT_SHADOW_QUEEN_LEFT_RIGHT_HAND,
     "btl_un_shadow_queen",
@@ -1203,8 +1306,16 @@ BattleUnitKind unit_boss_shadow_hand_2 = {
     queen_hand_2_data_table,
 };
 
+/**
+ * Defence of the Shadow Queen's second big hand against each element (normal, fire, ice, explosion,
+ * electric): none, so every hit does its full damage.
+ */
 BattleUnitDefense queen_hand_2_defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of the Shadow Queen's second big hand per element (normal, fire, ice, explosion,
+ * electric): none, so no element is a weakness, an immunity or a heal.
+ */
 BattleUnitDefenseAttr queen_hand_2_defence_attr = {{0, 0, 0, 0, 0}};
 
 StatusVulnerability queen_hand_2_regist = {
@@ -1232,6 +1343,10 @@ StatusVulnerability queen_hand_2_regist = {
     0, // ohko
 };
 
+/**
+ * Pose table of the Shadow Queen's second big hand:
+ * animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 PoseTableEntry queen_hand_2_pose_table[] = {
     {POSE_TYPE_NORMAL, "KRT_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "KRT_Q_1"},
@@ -1243,15 +1358,26 @@ PoseTableEntry queen_hand_2_pose_table[] = {
     {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
+/**
+ * Data table of the Shadow Queen's second big hand:
+ * event scripts and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 BattleDataEntry queen_hand_2_data_table[] = {
     {UNIT_DATA_DEAD_EVENT, queen_hand_2_dead_event},
     {0, NULL},
 };
 
+/**
+ * Part of the Shadow Queen's second big hand: its one body part with hit box, defence tables and pose table.
+ */
 BattleUnitKindPart queen_hand_2_parts[] = {
     {1, "btl_un_shadow_hand_big_2", "c_b_hand", 0.0f, 0.0f, 0.0f, 28.0f, 56.0f, 20.0f, 28.0f, 56.0f, 20.0f, 41, 61, 255, &queen_hand_2_defence, &queen_hand_2_defence_attr, 0x3018009, 0, queen_hand_2_pose_table},
 };
 
+/**
+ * Unit data of the Shadow Queen's small hand in the Palace of Shadow: 8 HP;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_shadow_hand_small = {
     UNIT_SHADOW_QUEEN_DEAD_HANDS,
     "btl_un_shadow_queen",
@@ -1318,8 +1444,16 @@ BattleUnitKind unit_boss_shadow_hand_small = {
     queen_hand_small_data_table,
 };
 
+/**
+ * Defence of the Shadow Queen's small hand against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 BattleUnitDefense queen_hand_small_defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of the Shadow Queen's small hand per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 BattleUnitDefenseAttr queen_hand_small_defence_attr = {{0, 0, 0, 0, 0}};
 
 StatusVulnerability queen_hand_small_regist = {
@@ -1347,6 +1481,10 @@ StatusVulnerability queen_hand_small_regist = {
     0, // ohko
 };
 
+/**
+ * Pose table of the Shadow Queen's small hand: animation names for each pose type (idle, walk, hurt, attack
+ * and so on).
+ */
 PoseTableEntry queen_hand_small_pose_table[] = {
     {POSE_TYPE_NORMAL, "KRT_S_1"},
     {POSE_TYPE_DAMAGE_FIRE, "KRT_S_1"},
@@ -1358,15 +1496,21 @@ PoseTableEntry queen_hand_small_pose_table[] = {
     {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
+/**
+ * Data table of the Shadow Queen's small hand: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 BattleDataEntry queen_hand_small_data_table[] = {
     {UNIT_DATA_DEAD_EVENT, queen_hand_small_dead_event},
     {0, NULL},
 };
 
+/** Part of the Shadow Queen's small hand: its one body part with hit box, defence tables and pose table. */
 BattleUnitKindPart queen_hand_small_parts[] = {
     {1, "btl_un_shadow_hand_small", "c_b_hand", 0.0f, 0.0f, 0.0f, 70.0f, 18.0f, 0.0f, 70.0f, 18.0f, 0.0f, 188, 40, 255, &queen_hand_small_defence, &queen_hand_small_defence_attr, 0x3008009, 0, queen_hand_small_pose_table},
 };
 
+/** Setup used to spawn the Shadow Queen: unit kind, alliance, position and turn phase. */
 BattleUnitSetup entry_shadow_queen = {
     &unit_boss_shadow_queen, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -1378,6 +1522,7 @@ BattleUnitSetup entry_shadow_queen = {
     NULL, // itemDropTable
 };
 
+/** Setup used to spawn the Shadow Queen's first big hand: unit kind, alliance, position and turn phase. */
 BattleUnitSetup entry_shadow_hand_1 = {
     &unit_boss_shadow_hand_1, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -1389,6 +1534,7 @@ BattleUnitSetup entry_shadow_hand_1 = {
     NULL, // itemDropTable
 };
 
+/** Setup used to spawn the Shadow Queen's second big hand: unit kind, alliance, position and turn phase. */
 BattleUnitSetup entry_shadow_hand_2 = {
     &unit_boss_shadow_hand_2, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -1400,6 +1546,7 @@ BattleUnitSetup entry_shadow_hand_2 = {
     NULL, // itemDropTable
 };
 
+/** Setup used to spawn the Shadow Queen's small hand: unit kind, alliance, position and turn phase. */
 BattleUnitSetup entry_shadow_hand_small = {
     &unit_boss_shadow_hand_small, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

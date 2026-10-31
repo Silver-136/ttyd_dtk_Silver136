@@ -1,3 +1,5 @@
+// Scripts and commands for the map damage hazard that moves toward Mario (Gazigazi).
+
 #include "evt/evt_cmd.h"
 #include "evt/evt_npc.h"
 #include "evt/evt_snd.h"

@@ -1,3 +1,5 @@
+// eff_recover_heart_n64.c: recovery heart effect entry (effRecoverHeartN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

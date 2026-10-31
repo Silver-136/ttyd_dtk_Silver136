@@ -1,3 +1,5 @@
+// shadowdrv.c: the shadow driver (DepthShadowWork, ProjShadowWork): blob, cylinder, projected and depth shadows.
+
 #pragma once
 
 #include <dolphin/gx.h>

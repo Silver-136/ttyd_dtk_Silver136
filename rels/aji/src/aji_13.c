@@ -181,6 +181,7 @@ static EVT_BEGIN(evt_haikei_in)
     RETURN
 EVT_END()
 
+/** Exits of this room: the west door to aji_18 and the east door to aji_14. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -413,6 +414,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Hit areas of the 13 moving platform groups whose movement is measured to carry Mario along. */
 static const char* name_tbl[] = {
     "A_ugoku_1",
     "A_ugoku_2",
@@ -429,6 +431,7 @@ static const char* name_tbl[] = {
     "A_ugoku_h_9",
 };
 
+/** Hit areas of the clockwork (zenmai) platform groups. */
 const char* name_tbl2[] = {
     "A_zenmai1",
     "A_zenmai2",
@@ -734,6 +737,10 @@ EVT_BEGIN(move_r)
     RETURN
 EVT_END()
 
+/**
+ * The platforms that slide sideways: for each, the hit area, the map object, the two end positions and the
+ * travel time.
+ */
 ShikakeMoveTbl7 left_right_tbl = {
     {
         {"A_ugoku_1", "S_ugoku_1", 0, -150, 3000},
@@ -747,6 +754,10 @@ ShikakeMoveTbl7 left_right_tbl = {
     {NULL, NULL},
 };
 
+/**
+ * The platforms that move up and down: hit area, map object, the two end positions and the travel time of
+ * each.
+ */
 ShikakeMoveTbl6 up_down_tbl = {
     {
         {"A_ugoku_2", "S_ugoku_2", 0, -150, 2800},
@@ -759,6 +770,10 @@ ShikakeMoveTbl6 up_down_tbl = {
     {NULL, NULL},
 };
 
+/**
+ * The clockwork (zenmai) platforms that rotate: hit area, map object, the two angles and the swing time of
+ * each.
+ */
 ShikakeMoveTbl15 r_tbl = {
     {
         {"A_zenmai1", "S_zenmai1", 0, 360, 6000},
@@ -949,6 +964,7 @@ EVT_BEGIN(evt_key_get)
     RETURN
 EVT_END()
 
+/** Key item list for the item menu in the conveyor room: the Card Key. */
 static s32 key_tbl[] = {
     ITEM_CARD_KEY_0x20, -1,
 };

@@ -1,3 +1,5 @@
+// Ember (hermos): battle unit used in Pirate's Grotto.
+
 #include "battle/battle_unit.h"
 #include "eff/eff_fire.h"
 #include "evt/evt_cmd.h"
@@ -74,6 +76,7 @@ static USER_FUNC(bubble_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/** Unit data of the Ember: 8 HP, level 20; the battle starts it from init_event. */
 BattleUnitKind unit_hermos = {
     UNIT_EMBER, // mUnitType
     "btl_un_hermos", // name
@@ -122,8 +125,13 @@ BattleUnitKind unit_hermos = {
     data_table, // dataTable
 };
 
+/** Defence of the Ember: none against any element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Elemental reactions of the Ember: takes 1 extra damage from ice and explosion attacks; is healed by fire
+ * attacks.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 3, 1, 1, 0}};
 
 static StatusVulnerability regist = {
@@ -151,6 +159,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Pose table of the Ember: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -172,6 +181,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Event table of the Ember: a fire hit (damage_fire_explosion_event, tag 11), the attacker being burned by
+ * its flames (avoid_fire_event, tag 40) and the First Strike reaction (does nothing).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_FIRE_EXPLOSION_EVENT, damage_fire_explosion_event},
     {UNIT_DATA_AVOID_FIRE_EVENT, avoid_fire_event},
@@ -179,11 +192,13 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Parts of the Ember: part 1 is its body (the target) and part 2 is the fireball it spits. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_hermos", "c_elmos", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kWeakToIcePower, kCounterFiery, pose_table},
     {2, NULL, "c_elmos", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon data for the Ember's body charge: 3 damage, fire element, one target. */
 static BattleWeapon weapon_bubble_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -222,6 +237,7 @@ static BattleWeapon weapon_bubble_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for the Ember's fireball: 2 damage, fire element, one target, may inflict burn (75%). */
 static BattleWeapon weapon_bubble_fire_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -261,6 +277,10 @@ static BattleWeapon weapon_bubble_fire_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon data for the Ember's unused wall of flames: 2 damage, fire element, every target, may inflict burn
+ * (75%).
+ */
 static BattleWeapon weapon_bubble_all_fire_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -304,6 +324,7 @@ static BattleWeapon weapon_bubble_all_fire_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Setup for the Ember that splits off when the Ember is hit by fire or an explosion. */
 static BattleUnitSetup entry_bubble = {
     &unit_hermos, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

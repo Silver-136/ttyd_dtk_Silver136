@@ -1,3 +1,5 @@
+// unit_boomerang_bros: Boomerang Bro, battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -44,6 +46,10 @@ EvtWord normal_attack_event_confuse[322];
 EvtWord renzoku_attack_event_confuse[328];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Boomerang Bro (HP 7, level 20):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 BattleUnitKind unit_boomerang_bros = {
     UNIT_BOOMERANG_BRO, // mUnitType
     "btl_un_boomerang_bros", // name
@@ -92,10 +98,13 @@ BattleUnitKind unit_boomerang_bros = {
     data_table, // dataTable
 };
 
+/** Defence of the Boomerang Bro: 1 damage points off every hit. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Element reactions of the Boomerang Bro: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Status vulnerability of the Boomerang Bro (percent chance to take each status): resists most statuses. */
 static StatusVulnerability regist = {
     80, // sleep
     80, // stop
@@ -142,10 +151,12 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "BRO_S_1"},
 };
 
+/** Data table of the Boomerang Bro: empty; it has no event hooks. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Parts of the Boomerang Bro (4 parts): hit positions, defences, attributes and pose tables. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_boomerang_bros", "c_burosu_b", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_boomerang_bros", "c_burosu_b", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -153,6 +164,7 @@ static BattleUnitKindPart parts[] = {
     {4, "btl_un_boomerang_bros", "c_burosu_b", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon of the Boomerang Bro's attack: 2 damage. */
 BattleWeapon weapon_boomerang_bros_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -189,6 +201,7 @@ BattleWeapon weapon_boomerang_bros_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Boomerang Bro's rapid-fire attack: 2 damage. */
 BattleWeapon weapon_boomerang_bros_renzoku_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

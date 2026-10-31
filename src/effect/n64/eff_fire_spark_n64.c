@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: fire sparks, count sparks launched within a range with a set upward and forward speed.
+
 #include "eff/eff_n64.h"
 #include "eff/n64/eff_fire_spark_n64.h"
 #include "driver/camdrv.h"
@@ -30,12 +32,14 @@ typedef struct EffFireSparkN64Work {
 void effFireSparkMain(EffectEntry* effect);
 void effFireSparkDisp(CameraId cameraId, EffectEntry* effect);
 
+/** Spark size over its 30-step cycle: grows in, holds at full size, then shrinks away. */
 static f32 scale_data[30] = {
     0.01f, 0.05f, 0.1f, 0.2f, 0.35f, 0.5f, 0.65f, 0.8f, 0.95f, 1.0f,
     1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
     1.0f, 0.95f, 0.8f, 0.65f, 0.5f, 0.35f, 0.2f, 0.1f, 0.05f, 0.01f,
 };
 
+/** Camera-facing 4x4 spark sprite. */
 effN64Vtx size4x4_tex32x32_vtx[] = {
     {-2, -2, 0, 0, 0, 0, 0, 0, 255},
     {2, -2, 0, 1024, 0, 0, 0, 0, 255},

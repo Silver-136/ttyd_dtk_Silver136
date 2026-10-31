@@ -1,3 +1,5 @@
+// Declares the battle weapon data for usable items.
+
 #pragma once
 
 #include "evt/evt_cmd.h"

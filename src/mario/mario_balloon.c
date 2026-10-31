@@ -1,3 +1,5 @@
+// The speech/action balloon over Mario's head ("!" and "?"): which NPC, item box or object it points at.
+
 #include "mario/mario.h"
 #include "driver/casedrv.h"
 #include "driver/effdrv.h"

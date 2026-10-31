@@ -30,6 +30,11 @@ static EvtWord wakeup_event[104];
 static EvtWord attack_event[454];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Cleft (btl_un_monochrome_sinemon), the grey Cleft of Boggly Woods: 2 HP, level 12,
+ * a spiky rock that charges head first for 2 damage and can be flipped onto its back.
+ * Boggly Woods' battle groups use it.
+ */
 BattleUnitKind unit_monochrome_sinemon = {
     UNIT_CLEFT, // mUnitType
     "btl_un_monochrome_sinemon", // name
@@ -78,10 +83,16 @@ BattleUnitKind unit_monochrome_sinemon = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Cleft: 2 against normal, ice, explosion and electric hits;
+ * immune to fire (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{2, 99, 2, 2, 2}};
 
+/** Element response of the Cleft: immune to fire, which does no damage at all. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
+/** Damage reduction of the Cleft while it is flipped onto its back: none against any element. */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -109,10 +120,18 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * The Cleft's single part: the Cleft model (c_sinemon_w), the main target and the part that covers for
+ * allies; it can be flipped by explosions and carries a spiky top.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_monochrome_sinemon", "c_sinemon_w", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, kCounterTopSpiky, pose_table},
 };
 
+/**
+ * The Cleft's head-butt charge: 2 damage to the front-most opposing target,
+ * a hammer-like attack that can be guarded.
+ */
 static BattleWeapon weapon_sinemon_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -188,6 +207,11 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "SIN_D_2"},
 };
 
+/**
+ * Data table of the Cleft: event 13 flips it onto its back (dmg_turn_event),
+ * event 37 (an attacker is hurt by its spiky top) flashes the spikes and event 48
+ * (First Strike) does nothing.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},

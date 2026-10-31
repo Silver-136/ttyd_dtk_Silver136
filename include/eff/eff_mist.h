@@ -1,3 +1,5 @@
+// eff_mist.c: mist effect entry (effMistEntry).
+
 #pragma once
 
 #include "driver/effdrv.h"

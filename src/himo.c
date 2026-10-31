@@ -1,3 +1,5 @@
+// A ribbon (himo, "string") drawn as a spline between two matrices, for Vivian (vivihimo, vivihimoDisp).
+
 #include "driver/camdrv.h"
 #include "mario/mariost.h"
 #include <dolphin/gx.h>

@@ -1,3 +1,5 @@
+// mario_hit.c: Mario's collision checks against the map hit data (ground, walls, ceiling, slit and entrance checks).
+
 #pragma once
 
 #include "dolphin/types.h"

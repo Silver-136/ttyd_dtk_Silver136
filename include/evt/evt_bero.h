@@ -1,3 +1,5 @@
+// evt_bero.c: map entrances and exits (bero): BeroEntry, BeroINFO and the script commands and scripts for them.
+
 #pragma once
 
 #include <dolphin/types.h>

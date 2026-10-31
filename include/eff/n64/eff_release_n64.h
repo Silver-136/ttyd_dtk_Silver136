@@ -1,3 +1,5 @@
+// eff_release_n64.c: glowing orb effect entry (effReleaseN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

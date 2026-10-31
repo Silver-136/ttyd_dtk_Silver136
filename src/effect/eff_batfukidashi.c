@@ -1,3 +1,5 @@
+// Coin speech bubble (CoinFukidashi, fukidashi: speech balloon) showing a number; bobs up and down and fades in and out.
+
 #include "eff/eff_batfukidashi.h"
 #include "driver/dispdrv.h"
 #include "manager/fontmgr.h"

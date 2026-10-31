@@ -1,3 +1,5 @@
+// Declares the battle information functions used to set up and read back a battle.
+
 #pragma once
 
 #include <dolphin/types.h>

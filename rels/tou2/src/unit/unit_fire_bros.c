@@ -1,3 +1,5 @@
+// unit_fire_bros: Fire Bro, battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_camera.h"
@@ -108,6 +110,10 @@ USER_FUNC(fire_bros_nagemakuri_set_target) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of the Fire Bro: 7 HP and level 20, with its parts, status vulnerability, init event and event
+ * data table.
+ */
 BattleUnitKind unit_fire_bros = {
     UNIT_FIRE_BRO, // mUnitType
     "btl_un_fire_bros", // name
@@ -156,8 +162,13 @@ BattleUnitKind unit_fire_bros = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Fire Bro: 1 against normal, ice, explosion and electric hits;
+ * immune to fire (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Damage-type reactions of the Fire Bro: immune to fire. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -206,10 +217,18 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "BRO_S_1"},
 };
 
+/**
+ * Event data table of the Fire Bro: no custom reactions, so the standard battle handlers run for every
+ * event.
+ */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Parts of the Fire Bro: 7 parts: parts 1 to 7 (model c_burosu_f), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_fire_bros", "c_burosu_f", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_fire_bros", "c_burosu_f", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -220,6 +239,7 @@ static BattleUnitKindPart parts[] = {
     {7, "btl_un_fire_bros", "c_burosu_f", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon record of the Fire Bro's fireball throw: 3 damage and inflicts burn (30%). */
 BattleWeapon weapon_fire_bros_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -259,6 +279,7 @@ BattleWeapon weapon_fire_bros_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon record of the Fire Bro's rapid-fire fireball throws: 2 damage and inflicts burn (30%). */
 BattleWeapon weapon_fire_bros_renzoku_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -298,6 +319,10 @@ BattleWeapon weapon_fire_bros_renzoku_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon record of the Fire Bro's fireball barrage on the whole party: 1 damage, can hit several targets
+ * and inflicts burn (30%).
+ */
 BattleWeapon weapon_fire_bros_nagemakuri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

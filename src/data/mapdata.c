@@ -1,6 +1,9 @@
+// World, area and map tables, and the lookups that bind a loaded area REL's scripts and battle setups to them.
+
 #include "data/mapdata.h"
 #include <string.h>
 
+/** Developer test maps (tst); relSetEvtAddr fills in each init script when the REL loads. */
 MapData tst_bt00 = { "tst_bt00", NULL };
 MapData tst_00 = { "tst_00", NULL };
 MapData tst_01 = { "tst_01", NULL };
@@ -14,19 +17,23 @@ MapData tst_npc = { "tst_npc", NULL };
 MapData tst_nakayama = { "tst_nakayama", NULL };
 MapData tst_item_00 = { "tst_item_00", NULL };
 
+/** Guess: Battle stage test maps (bti); relSetEvtAddr fills in each init script when the REL loads. */
 MapData bti_01 = { "bti_01", NULL };
 MapData bti_02 = { "bti_02", NULL };
 MapData bti_03 = { "bti_03", NULL };
 MapData bti_04 = { "bti_04", NULL };
 
+/** Guess: Battle background test maps (stg); relSetEvtAddr fills in each init script when the REL loads. */
 MapData stg_01_0 = { "stg_01_0", NULL };
 MapData stg_01_1 = { "stg_01_1", NULL };
 MapData stg_01_2 = { "stg_01_2", NULL };
 MapData stg_01_3 = { "stg_01_3", NULL };
 MapData stg_01_4 = { "stg_01_4", NULL };
 
+/** Maps of Mario's house (aaa); relSetEvtAddr fills in each init script when the REL loads. */
 MapData aaa_00 = { "aaa_00", NULL };
 
+/** Maps of Rogueport (gor); relSetEvtAddr fills in each init script when the REL loads. */
 MapData gor_00 = { "gor_00", NULL };
 MapData gor_01 = { "gor_01", NULL };
 MapData gor_02 = { "gor_02", NULL };
@@ -36,6 +43,7 @@ MapData gor_10 = { "gor_10", NULL };
 MapData gor_11 = { "gor_11", NULL };
 MapData gor_12 = { "gor_12", NULL };
 
+/** Maps of the Rogueport Sewers (tik); relSetEvtAddr fills in each init script when the REL loads. */
 MapData tik_00 = { "tik_00", NULL };
 MapData tik_01 = { "tik_01", NULL };
 MapData tik_02 = { "tik_02", NULL };
@@ -56,12 +64,14 @@ MapData tik_19 = { "tik_19", NULL };
 MapData tik_20 = { "tik_20", NULL };
 MapData tik_21 = { "tik_21", NULL };
 
+/** Maps of Fahr Outpost (bom); relSetEvtAddr fills in each init script when the REL loads. */
 MapData bom_00 = { "bom_00", NULL };
 MapData bom_01 = { "bom_01", NULL };
 MapData bom_02 = { "bom_02", NULL };
 MapData bom_03 = { "bom_03", NULL };
 MapData bom_04 = { "bom_04", NULL };
 
+/** Maps of the Moon (moo); relSetEvtAddr fills in each init script when the REL loads. */
 MapData moo_00 = { "moo_00", NULL };
 MapData moo_01 = { "moo_01", NULL };
 MapData moo_02 = { "moo_02", NULL };
@@ -71,6 +81,7 @@ MapData moo_05 = { "moo_05", NULL };
 MapData moo_06 = { "moo_06", NULL };
 MapData moo_07 = { "moo_07", NULL };
 
+/** Maps of the X-Naut Fortress (aji); relSetEvtAddr fills in each init script when the REL loads. */
 MapData aji_00 = { "aji_00", NULL };
 MapData aji_01 = { "aji_01", NULL };
 MapData aji_02 = { "aji_02", NULL };
@@ -92,6 +103,7 @@ MapData aji_17 = { "aji_17", NULL };
 MapData aji_18 = { "aji_18", NULL };
 MapData aji_19 = { "aji_19", NULL };
 
+/** Maps of Hooktail Castle (gon); relSetEvtAddr fills in each init script when the REL loads. */
 MapData gon_00 = { "gon_00", NULL };
 MapData gon_01 = { "gon_01", NULL };
 MapData gon_02 = { "gon_02", NULL };
@@ -108,9 +120,11 @@ MapData gon_12 = { "gon_12", NULL };
 MapData gon_13 = { "gon_13", NULL };
 MapData gon_bt00 = { "gon_bt00", NULL };
 
+/** Maps of Petalburg (nok); relSetEvtAddr fills in each init script when the REL loads. */
 MapData nok_00 = { "nok_00", NULL };
 MapData nok_01 = { "nok_01", NULL };
 
+/** Maps of Petal Meadows (hei); relSetEvtAddr fills in each init script when the REL loads. */
 MapData hei_00 = { "hei_00", NULL };
 MapData hei_01 = { "hei_01", NULL };
 MapData hei_02 = { "hei_02", NULL };
@@ -127,6 +141,7 @@ MapData hei_12 = { "hei_12", NULL };
 MapData hei_13 = { "hei_13", NULL };
 MapData hei_bt00 = { "hei_bt00", NULL };
 
+/** Maps of Keelhaul Key (muj); relSetEvtAddr fills in each init script when the REL loads. */
 MapData muj_00 = { "muj_00", NULL };
 MapData muj_01 = { "muj_01", NULL };
 MapData muj_02 = { "muj_02", NULL };
@@ -139,6 +154,7 @@ MapData muj_12 = { "muj_12", NULL };
 MapData muj_20 = { "muj_20", NULL };
 MapData muj_21 = { "muj_21", NULL };
 
+/** Maps of Pirate's Grotto (dou); relSetEvtAddr fills in each init script when the REL loads. */
 MapData dou_00 = { "dou_00", NULL };
 MapData dou_01 = { "dou_01", NULL };
 MapData dou_02 = { "dou_02", NULL };
@@ -154,6 +170,7 @@ MapData dou_11 = { "dou_11", NULL };
 MapData dou_12 = { "dou_12", NULL };
 MapData dou_13 = { "dou_13", NULL };
 
+/** Maps of the Excess Express (rsh); relSetEvtAddr fills in each init script when the REL loads. */
 MapData rsh_00_a = { "rsh_00_a", NULL };
 MapData rsh_00_b = { "rsh_00_b", NULL };
 MapData rsh_00_c = { "rsh_00_c", NULL };
@@ -176,17 +193,20 @@ MapData rsh_07_b = { "rsh_07_b", NULL };
 MapData rsh_07_c = { "rsh_07_c", NULL };
 MapData rsh_08_a = { "rsh_08_a", NULL };
 
+/** Maps of Poshley Heights (pik); relSetEvtAddr fills in each init script when the REL loads. */
 MapData pik_00 = { "pik_00", NULL };
 MapData pik_01 = { "pik_01", NULL };
 MapData pik_02 = { "pik_02", NULL };
 MapData pik_03 = { "pik_03", NULL };
 MapData pik_04 = { "pik_04", NULL };
 
+/** Riverside Station platform maps (hom); relSetEvtAddr fills in each init script when the REL loads. */
 MapData hom_00 = { "hom_00", NULL };
 MapData hom_10 = { "hom_10", NULL };
 MapData hom_11 = { "hom_11", NULL };
 MapData hom_12 = { "hom_12", NULL };
 
+/** Maps of Riverside Station (eki); relSetEvtAddr fills in each init script when the REL loads. */
 MapData eki_00 = { "eki_00", NULL };
 MapData eki_01 = { "eki_01", NULL };
 MapData eki_02 = { "eki_02", NULL };
@@ -195,6 +215,7 @@ MapData eki_04 = { "eki_04", NULL };
 MapData eki_05 = { "eki_05", NULL };
 MapData eki_06 = { "eki_06", NULL };
 
+/** Maps of Boggly Woods (win); relSetEvtAddr fills in each init script when the REL loads. */
 MapData win_00 = { "win_00", NULL };
 MapData win_01 = { "win_01", NULL };
 MapData win_02 = { "win_02", NULL };
@@ -203,6 +224,7 @@ MapData win_04 = { "win_04", NULL };
 MapData win_05 = { "win_05", NULL };
 MapData win_06 = { "win_06", NULL };
 
+/** Maps of the Great Tree (mri); relSetEvtAddr fills in each init script when the REL loads. */
 MapData mri_00 = { "mri_00", NULL };
 MapData mri_01 = { "mri_01", NULL };
 MapData mri_02 = { "mri_02", NULL };
@@ -225,9 +247,11 @@ MapData mri_18 = { "mri_18", NULL };
 MapData mri_19 = { "mri_19", NULL };
 MapData mri_20 = { "mri_20", NULL };
 
+/** Maps of Twilight Town (usu); relSetEvtAddr fills in each init script when the REL loads. */
 MapData usu_00 = { "usu_00", NULL };
 MapData usu_01 = { "usu_01", NULL };
 
+/** Maps of Twilight Trail (gra); relSetEvtAddr fills in each init script when the REL loads. */
 MapData gra_00 = { "gra_00", NULL };
 MapData gra_01 = { "gra_01", NULL };
 MapData gra_02 = { "gra_02", NULL };
@@ -236,6 +260,7 @@ MapData gra_04 = { "gra_04", NULL };
 MapData gra_05 = { "gra_05", NULL };
 MapData gra_06 = { "gra_06", NULL };
 
+/** Maps of Creepy Steeple (jin); relSetEvtAddr fills in each init script when the REL loads. */
 MapData jin_00 = { "jin_00", NULL };
 MapData jin_01 = { "jin_01", NULL };
 MapData jin_02 = { "jin_02", NULL };
@@ -249,6 +274,7 @@ MapData jin_09 = { "jin_09", NULL };
 MapData jin_10 = { "jin_10", NULL };
 MapData jin_11 = { "jin_11", NULL };
 
+/** Maps of the Glitz Pit (tou); relSetEvtAddr fills in each init script when the REL loads. */
 MapData tou_00 = { "tou_00", NULL };
 MapData tou_01 = { "tou_01", NULL };
 MapData tou_02 = { "tou_02", NULL };
@@ -265,6 +291,7 @@ MapData tou_12 = { "tou_12", NULL };
 MapData tou_13 = { "tou_13", NULL };
 MapData tou_20 = { "tou_20", NULL };
 
+/** Maps of the Palace of Shadow (las); relSetEvtAddr fills in each init script when the REL loads. */
 MapData las_00 = { "las_00", NULL };
 MapData las_01 = { "las_01", NULL };
 MapData las_02 = { "las_02", NULL };
@@ -297,6 +324,7 @@ MapData las_28 = { "las_28", NULL };
 MapData las_29 = { "las_29", NULL };
 MapData las_30 = { "las_30", NULL };
 
+/** Maps of Bowser's chapters (kpa); relSetEvtAddr fills in each init script when the REL loads. */
 MapData kpa_00 = { "kpa_00", NULL };
 MapData kpa_01 = { "kpa_01", NULL };
 MapData kpa_02 = { "kpa_02", NULL };
@@ -306,6 +334,7 @@ MapData kpa_05 = { "kpa_05", NULL };
 MapData kpa_06 = { "kpa_06", NULL };
 MapData kpa_07 = { "kpa_07", NULL };
 
+/** Maps of the Pit of 100 Trials (jon); relSetEvtAddr fills in each init script when the REL loads. */
 MapData jon_00 = { "jon_00", NULL };
 MapData jon_01 = { "jon_01", NULL };
 MapData jon_02 = { "jon_02", NULL };
@@ -314,20 +343,25 @@ MapData jon_04 = { "jon_04", NULL };
 MapData jon_05 = { "jon_05", NULL };
 MapData jon_06 = { "jon_06", NULL };
 
+/** Maps of the Pianta Parlor minigames (yuu); relSetEvtAddr fills in each init script when the REL loads. */
 MapData yuu_00 = { "yuu_00", NULL };
 MapData yuu_01 = { "yuu_01", NULL };
 MapData yuu_02 = { "yuu_02", NULL };
 MapData yuu_03 = { "yuu_03", NULL };
 
+/** Maps of the quiz minigame (qiz); relSetEvtAddr fills in each init script when the REL loads. */
 MapData qiz_00 = { "qiz_00", NULL };
 
+/** Maps of the system maps (sys); relSetEvtAddr fills in each init script when the REL loads. */
 MapData sys_00 = { "sys_00", NULL };
 MapData sys_01 = { "sys_01", NULL };
 
 MapData dmo_00 = { "dmo_00", NULL };
 
+/** Maps of the story digest (dig); relSetEvtAddr fills in each init script when the REL loads. */
 MapData dig_00 = { "dig_00", NULL };
 
+/** Maps of the ending (end); relSetEvtAddr fills in each init script when the REL loads. */
 MapData end_00 = { "end_00", NULL };
 
 AreaData area_kwb = { "tst",
@@ -465,6 +499,7 @@ AreaData area_dig = { "dig", "ダイジェスト", NULL, NULL, { &dig_00, NULL }
 
 AreaData area_end = { "end", "エンディング", NULL, NULL, { &end_00, NULL } };
 
+/** The whole game world: every area in order, scanned by mapDataPtr and areaDataPtr to look up maps and areas. */
 WorldData world_data = { "MarioSt", "マリオの世界", { &area_kwb, &area_bti, &area_stg, &area_aaa, &area_gor, &area_tik,
                                                       &area_gon, &area_hei, &area_nok, &area_win, &area_mri, &area_tou,
                                                       &area_usu, &area_gra, &area_jin, &area_muj, &area_dou, &area_pik,

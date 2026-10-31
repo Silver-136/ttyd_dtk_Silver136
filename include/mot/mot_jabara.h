@@ -1,3 +1,5 @@
+// mot_jabara.c: Mario's Spring Jump (jabara, "bellows") motion, mot_grasp, and the jabara state and overhead checks.
+
 #pragma once
 
 #include "dolphin/types.h"

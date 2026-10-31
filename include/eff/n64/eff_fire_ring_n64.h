@@ -1,3 +1,5 @@
+// eff_fire_ring_n64.c: Paper Mario 64 fire ring: one 90-vertex ring mesh with two scrolling textures that grows, spawns fire dust and fades over its last 10 frames (effFireRingN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

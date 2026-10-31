@@ -48,6 +48,10 @@ EVT_BEGIN(dou_03_custom)
     RETURN
 EVT_END()
 
+/**
+ * Exits (beros) of this room: w_bero_1 to dou_12, w_bero_2 to dou_12, w_bero_3 to dou_04, e_bero_1 to dou_05,
+ * e_bero_2 to dou_05, e_bero_3 to dou_05 and s_bero to dou_09.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
@@ -177,6 +181,7 @@ EVT_BEGIN(watergate_handle_init)
     RETURN
 EVT_END()
 
+/** Items offered in the item menu at the floodgate winch: only the Gate Handle. */
 static s32 itemsel_table[] = {
     ITEM_GATE_HANDLE, -1,
 };
@@ -427,6 +432,9 @@ static EVT_BEGIN(dou_puka_event_main2)
     RETURN
 EVT_END()
 
+/**
+ * Hazard-water floors of this room (map hit names) and the point each puts Mario back at after he is bitten.
+ */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_01", {0.0f, -1000.0f, 0.0f}},
     {"mod_02", {0.0f, -1000.0f, 0.0f}},

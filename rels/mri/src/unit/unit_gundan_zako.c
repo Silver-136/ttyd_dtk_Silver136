@@ -33,6 +33,10 @@ static EvtWord jump_attack_event[324];
 static EvtWord dekadeka_event[125];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the X-Naut: 4 HP, 30x36 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_gundan_zako = {
     UNIT_X_NAUT, // mUnitType
     "btl_un_gundan_zako", // name
@@ -81,8 +85,10 @@ BattleUnitKind unit_gundan_zako = {
     data_table, // dataTable
 };
 
+/** Defence of the X-Naut: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the X-Naut: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -110,6 +116,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Pose table of the X-Naut: maps its battle poses to its animations. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -129,14 +136,19 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Event table of the X-Naut: it has no special event scripts. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Parts of the X-Naut: 1 part (model c_zako_n). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_gundan_zako", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 28.0f, 0.0f, 0.0f, 38.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/**
+ * Weapon of the X-Naut (attack): targets one unit for 3 damage; used by normal_attack_event.
+ */
 static BattleWeapon weapon_gundan_zako_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -173,6 +185,9 @@ static BattleWeapon weapon_gundan_zako_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the X-Naut (jump attack): targets one unit for 3 damage; used by jump_attack_event.
+ */
 static BattleWeapon weapon_gundan_zako_jump_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -209,6 +224,10 @@ static BattleWeapon weapon_gundan_zako_jump_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the X-Naut (dekadeka bottle): targets one unit, makes the target Huge (3 turns);
+ * used by dekadeka_event.
+ */
 static BattleWeapon weapon_gundan_zako_dekadeka_bottle = {
     NULL, 0, // name..icon
     {0}, // pad_06

@@ -1,3 +1,5 @@
+// Rogueport Sewers (tik) battle unit: Goomba (kuriboo): its parts, defence/status tables, and attack events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -28,6 +30,10 @@ static EvtWord phase_event[2];
 static EvtWord attack_event[492];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Goomba (HP 2, level 7): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_kuriboo = {
     UNIT_GOOMBA, // mUnitType
     "btl_un_kuriboo", // name
@@ -99,15 +105,22 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
+/** Data table of the Goomba: event handlers for a First Strike on it (no reaction). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Defence of the Goomba: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Goomba: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Goomba (percent chance to take each status):
+ * extra prone to stop, fright, gale force and instant kill.
+ */
 static StatusVulnerability regist = {
     100, // sleep
     110, // stop
@@ -133,10 +146,12 @@ static StatusVulnerability regist = {
     150, // ohko
 };
 
+/** Body part of the Goomba (model c_kuribo): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_kuriboo", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of the Goomba's attack: 1 damage, jump-type contact attack. */
 static BattleWeapon weapon_kuriboo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

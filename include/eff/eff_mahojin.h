@@ -1,3 +1,5 @@
+// eff_mahojin.c: magic-circle effect entry (effMahojinEntry) and its work struct (EffMahojinWork).
+
 #pragma once
 
 #include "driver/effdrv.h"

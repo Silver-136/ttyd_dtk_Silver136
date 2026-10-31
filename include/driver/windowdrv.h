@@ -1,3 +1,5 @@
+// windowdrv.c: the window driver (WindowEntry, WindowType): window frames, speech bubbles and system windows.
+
 #pragma once
 
 #include <dolphin/gx.h>

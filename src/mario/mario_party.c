@@ -1,3 +1,6 @@
+// Mario's side of the partners: which partner is out, calling them (entry/hello/goodbye/kill), the partner
+// button, and partner join/leave, HP and level helpers.
+
 #include "mario/mario_party.h"
 #include "mario/mario.h"
 #include "party.h"

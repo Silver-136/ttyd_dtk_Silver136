@@ -539,6 +539,9 @@ EVT_BEGIN(evt_machibuse)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room: the east exit (e_bero) to gra_01 and the west exit (w_bero) to usu_01 (Twilight Town).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -575,6 +578,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * NPC of the trail's start: the fake Mario (Doopliss's disguise) shown in the story scenes; it has no events
+ * of its own.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"にせマリオ"*/"\x82\xC9\x82\xB9\x83\x7D\x83\x8A\x83\x49", // name
@@ -588,6 +595,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Tree Mario can hit on this stretch of the trail: A_ki_1 (model part S_gra00_ki). */
 static TreeAccess tree_tbl[] = {
     {2, "A_ki_1", "S_gra00_ki", NULL, 0, NULL},
     {7, NULL, NULL, NULL, 0, NULL},

@@ -1,3 +1,5 @@
+// Lava Bubble (bubble): battle unit used in Pirate's Grotto.
+
 #include "battle/battle_unit.h"
 #include "eff/eff_fire.h"
 #include "evt/evt_cmd.h"
@@ -73,6 +75,7 @@ static USER_FUNC(bubble_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/** Unit data of the Lava Bubble: 6 HP, level 21; the battle starts it from init_event. */
 BattleUnitKind unit_bubble = {
     UNIT_LAVA_BUBBLE, // mUnitType
     "btl_un_bubble", // name
@@ -121,8 +124,13 @@ BattleUnitKind unit_bubble = {
     data_table, // dataTable
 };
 
+/** Defence of the Lava Bubble: none against any element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Elemental reactions of the Lava Bubble: takes 1 extra damage from ice and explosion attacks; is healed by
+ * fire attacks.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 3, 1, 1, 0}};
 
 static StatusVulnerability regist = {
@@ -150,6 +158,9 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * Pose table of the Lava Bubble: the animation each battle pose (idle, hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -171,6 +182,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Event table of the Lava Bubble: a fire hit (damage_fire_explosion_event, tag 11), the attacker being burned
+ * by its flames (avoid_fire_event, tag 40) and the First Strike reaction (does nothing).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_FIRE_EXPLOSION_EVENT, damage_fire_explosion_event},
     {UNIT_DATA_AVOID_FIRE_EVENT, avoid_fire_event},
@@ -178,11 +193,13 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Parts of the Lava Bubble: part 1 is its body (the target) and part 2 is the fireball it spits. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_bubble", "c_bubble", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kWeakToIcePower, kCounterFiery, pose_table},
     {2, NULL, "c_bubble", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon data for the Lava Bubble's body charge: 4 damage, fire element, one target. */
 static BattleWeapon weapon_bubble_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -221,6 +238,7 @@ static BattleWeapon weapon_bubble_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for the Lava Bubble's fireball: 3 damage, fire element, one target, may inflict burn (75%). */
 static BattleWeapon weapon_bubble_fire_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -260,6 +278,7 @@ static BattleWeapon weapon_bubble_fire_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Setup for the Lava Bubble that splits off when the Lava Bubble is hit by fire or an explosion. */
 static BattleUnitSetup entry_bubble = {
     &unit_bubble, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

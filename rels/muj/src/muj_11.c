@@ -57,6 +57,7 @@ static EVT_BEGIN(e_open)
     RETURN
 EVT_END()
 
+/** Doors and exits of muj_11: w_bero to muj_10; e_bero to muj_12. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Spiny (`togezo`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -48,6 +50,10 @@ static EvtWord guard_event[95];
 static EvtWord guard_cancel_event[89];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Spiny in the Pit of 100 Trials: 3 HP, level 9;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_togezo = {
     UNIT_SPINY, // mUnitType
     "btl_un_togezo", // name
@@ -96,8 +102,16 @@ BattleUnitKind unit_togezo = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Spiny against each element (normal, fire, ice, explosion, electric):
+ * 3 against every element, so each hit is cut by 3.
+ */
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 
+/**
+ * Damage modifiers of the Spiny per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -125,10 +139,22 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/**
+ * Defence of the Spiny while flipped over against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence_turn = {0};
 
+/**
+ * Damage modifiers of the Spiny while flipped over per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
+/**
+ * Status vulnerability of the Spiny while flipped over:
+ * percent chance that each status takes hold (100 is normal).
+ */
 static StatusVulnerability regist_turn = {
     100, // sleep
     100, // stop
@@ -154,10 +180,22 @@ static StatusVulnerability regist_turn = {
     100, // ohko
 };
 
+/**
+ * Defence of the Spiny while it is curled up guarding:
+ * defence 99 against every kind of hit, so no attack does damage.
+ */
 static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
 
+/**
+ * Damage modifiers of the Spiny while guarding per element (normal, fire, ice, explosion, electric): normal:
+ * immune, fire: immune, ice: immune, explosion: immune, electric: immune.
+ */
 static BattleUnitDefenseAttr defence_attr_guard = {{2, 2, 2, 2, 2}};
 
+/**
+ * Status vulnerability of the Spiny while guarding:
+ * percent chance that each status takes hold (100 is normal).
+ */
 static StatusVulnerability regist_guard = {
     100, // sleep
     100, // stop
@@ -183,6 +221,7 @@ static StatusVulnerability regist_guard = {
     100, // ohko
 };
 
+/** Pose table of the Spiny: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "TGZ_N_1"},
     {POSE_TYPE_STOP, "TGZ_Y_1"},
@@ -201,6 +240,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "TGZ_S_1"},
 };
 
+/**
+ * Pose table of the Spiny while flipped over: animation names for each pose type (idle, walk, hurt, attack
+ * and so on).
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "TGZ_N_2"},
     {POSE_TYPE_STOP, "TGZ_Y_2"},
@@ -218,6 +261,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "TGZ_S_2"},
 };
 
+/**
+ * Pose table of the Spiny while guarding: animation names for each pose type (idle, walk, hurt, attack and
+ * so on).
+ */
 static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_SLEEP, "TGZ_P_1"},
     {POSE_TYPE_STOP, "TGZ_P_1"},
@@ -233,6 +280,10 @@ static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_ACTION, "TGZ_P_1"},
 };
 
+/**
+ * Data table of the Spiny: event scripts and values the battle looks up by tag (damage reactions, dodge,
+ * first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_event},
@@ -241,12 +292,20 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Data table of the Spiny while flipped over: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table_turn[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/**
+ * Data table of the Spiny while guarding: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table_guard[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_event},
     {UNIT_DATA_AVOID_THORN_EVENT, dmg_avoid_counter_thorn_event},
@@ -254,10 +313,12 @@ static BattleDataEntry data_table_guard[] = {
     {0},
 };
 
+/** Part of the Spiny: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_togezo", "c_togezo", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, kCounterTopSpiky | kCounterFrontSpiky, pose_table},
 };
 
+/** Weapon of the Spiny's roll: damage 3. */
 static BattleWeapon weapon_togezo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

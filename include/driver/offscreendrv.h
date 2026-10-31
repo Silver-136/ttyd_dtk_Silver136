@@ -1,3 +1,5 @@
+// offscreendrv.c: the offscreen driver (OffscreenEntry): named screen regions copied into textures each frame.
+
 #pragma once
 
 #include <dolphin/types.h>

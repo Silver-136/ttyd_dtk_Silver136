@@ -1,3 +1,6 @@
+// Mario's motion table and motion changes (marioChgMot), jump and fall parameters, and the checks that start
+// jumps, hammer, spin and the paper transformations from the controls.
+
 #include "dolphin/types.h"
 #include "mario/mario.h"
 #include "mario/mariost.h"
@@ -67,6 +70,10 @@ BOOL marioGetRub(s32 mask, s32* a, s32* b, s32* c);
 BOOL marioCreviceWallChk(Vec pos);
 void* fbatNpcTalkCheck(void);
 
+/**
+ * Mario's motions by motion id (standing, walking, dashing, jumping, ... and Bowser's): the function that runs
+ * each frame, an unused slot and the cleanup run when Mario leaves the motion; marioMotion calls through it.
+ */
 MarioMotTblEntry marioMotTbl[] = {
     {mot_stay, NULL, mot_stay_post},
     {mot_walk, NULL, NULL},
@@ -115,6 +122,10 @@ MarioMotTblEntry marioMotTbl[] = {
     {mot_dummy, NULL, NULL},
 };
 
+/**
+ * Mario's normal jump physics: rising speed, acceleration, jerk and snap; the same for falling; an unread height
+ * and the fastest fall speed. Bowser's jump also starts from the rising values.
+ */
 MarioJumpData marioJumpData = {
     {8.0f, -0.84f, 0.08f, -0.02f},
     {-0.1f, -0.2f, 0.024f, -0.004f},

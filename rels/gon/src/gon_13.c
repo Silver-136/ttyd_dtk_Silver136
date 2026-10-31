@@ -19,6 +19,7 @@ EvtWord item_get03[34];
 static EvtWord switch_evt[68];
 EvtWord gon_13_init_evt[56];
 
+/** Exits (beros) of this room: w_bero to gon_07. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

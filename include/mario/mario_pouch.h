@@ -1,3 +1,5 @@
+// mario_pouch.c: the pouch (inventory and save data): PouchData, PouchPartyData, ItemType ids, pouch* functions.
+
 #pragma once
 
 #include <dolphin/types.h>

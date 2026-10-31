@@ -1,3 +1,5 @@
+// unit_borodo: Bandit, battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -164,6 +166,10 @@ static USER_FUNC(_steal_item) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit kind of the Bandit (HP 5, level 11): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_borodo = {
     UNIT_BANDIT, // mUnitType
     "btl_un_borodo", // name
@@ -212,6 +218,7 @@ BattleUnitKind unit_borodo = {
     data_table, // dataTable
 };
 
+/** Weapon of the Bandit's attack: 2 damage, hammer-type contact attack. */
 static BattleWeapon weapon_borodo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -248,10 +255,13 @@ static BattleWeapon weapon_borodo_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Defence of the Bandit: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Bandit: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Status vulnerability of the Bandit (percent chance to take each status): resists most statuses. */
 static StatusVulnerability regist = {
     100, // sleep
     90, // stop
@@ -325,6 +335,7 @@ static PoseTableEntry pose_table_item_have[] = {
 extern EvtWord _borodo_emergency_revival_event[];
 #endif
 
+/** Data table of the Bandit: event handlers for its emergency revival. */
 static BattleDataEntry data_table[] = {
 #ifdef VERSION_G8ME01
     {UNIT_DATA_EMERGENCY_REVIVAL_EVENT, _borodo_emergency_revival_event},
@@ -332,6 +343,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of the Bandit (model c_borodo): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_borodo", "c_borodo", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };

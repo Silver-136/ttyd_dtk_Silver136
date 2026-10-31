@@ -1,3 +1,6 @@
+// Mario's pouch (save data): items, badges, coins, HP/FP, Star Points and level, partners, Star Pieces and
+// Shine Sprites, the item and badge sorts.
+
 #include "mario/mario_pouch.h"
 #include "driver/msgdrv.h"
 #include "mario/mario_party.h"
@@ -17,6 +20,10 @@ PouchData* mpp_gap;
 static PouchData* mpp;
 extern void qqsort(void* array, s32 num, s32 size, void* compare);
 
+/**
+ * Max HP of each partner by partner id (row) and HP level
+ * (column: levels 0 to 2, then 200 for the cap).
+ */
 s16 _party_max_hp_table[8][4] = {
     {0, 0, 0, 0},
     {10, 20, 30, 200},

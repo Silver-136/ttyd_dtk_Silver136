@@ -1,3 +1,5 @@
+// Battle database of Poshley Heights (pik.rel): stage data, enemy groups and the encounter tables of its maps.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_weapon_power.h"
@@ -40,11 +42,13 @@ NpcBattleSelect btlgrpsel_pik_btlno_pik_03_09_off[2];
 NpcSetupBattleInfo btlsetup_pik_tbl[11];
 NpcTerritoryInfo btl_pik_setup_no_tbl[11];
 
+/** Scenery props of the Poshley Heights battle stage (stg_06_4) with their positions. */
 BattleStageObjectData pik_btlobject_data[] = {
     {"C", 2, 3, {0}, 0, 60, {0}},
     {"A2", 2, 1, {0.0f, 0.0f, -74.0f}, 0, 60, {0}},
 };
 
+/** The Poshley Heights battle stage (bti_01 backdrop, stg_06_4 scenery). */
 BattleStageData pik_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -454,6 +458,9 @@ NpcBattleSelect btlgrpsel_pik_btlno_pik_03_09_off[] = {
     {0},
 };
 
+/**
+ * Encounter table of Poshley Heights: one entry per battle number with its enemy group pool and battle music.
+ */
 NpcSetupBattleInfo btlsetup_pik_tbl[] = {
     {
         /*"マップstg_06_4"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x36\x5F\x34", // name

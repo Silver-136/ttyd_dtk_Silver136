@@ -1,3 +1,5 @@
+// Mario's jump, fall and landing motions: jump data tables and mot_jump, mot_fall, mot_land and mot_upstairs.
+
 #include "sfx_name_word.h"
 #include "mario/mario_hit.h"
 #include "koopa_motion.h"
@@ -22,6 +24,10 @@
 
 
 
+/**
+ * Jump curves (speed, acceleration, jerk, snap): Mario's launch off a blue jump stand (mot_jumpStand), with its
+ * fall and easing values; then the jump off a red switch, rising then falling (marioSetJumpPara).
+ */
 static f32 marioJumpStandData[] = {1.52f, -0.188f, 2.925f, -0.847f, -0.1f, -0.4f, 0.024f, -0.004f, 0.125f, 0.7f};
 f32 marioJumpSwData[] = {2.5f, -0.1f, 0.02f, -0.01f, -0.08f, -0.4f, 0.0f, -0.002f};
 

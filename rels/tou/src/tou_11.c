@@ -79,6 +79,7 @@ static EVT_BEGIN(e_door_close)
     RETURN
 EVT_END()
 
+/** Doors of this room: the north door to the main corridor tou_04 and the east door to tou_09. */
 static BeroEntry bero_data[] = {
     {
         "n_bero", // hitName
@@ -119,6 +120,7 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/** NPCs of this room: the guard who brings Mario here before the title match (evt_tojikome). */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガードマン"*/"\x83\x4B\x81\x5B\x83\x68\x83\x7D\x83\x93", // name

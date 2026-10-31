@@ -77,6 +77,7 @@ static KusaAccess kusa_data[11];
 static BeroEntry bero_entry_data[2];
 EvtWord aaa_00_init_evt[81];
 
+/** The two actors of the house: Parakarry, who delivers the letter in the prologue, and Luigi. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"パレッタ"*/"\x83\x70\x83\x8C\x83\x62\x83\x5E", // name
@@ -130,6 +131,7 @@ static EVT_BEGIN(evt_wall)
     RETURN
 EVT_END()
 
+/** Actors that stay in view during the house door scenes: Luigi. */
 static const char* ie_npc[] = {
     /*"ルイージ"*/"\x83\x8B\x83\x43\x81\x5B\x83\x57",
     NULL,
@@ -154,6 +156,10 @@ static EVT_BEGIN(door_1_close)
     RETURN
 EVT_END()
 
+/**
+ * The front door of Mario's house, with the outside and inside map objects it swaps and the open and close
+ * sound handlers.
+ */
 static DoorParam door_1 = {
     0, // flags
     3, // type
@@ -676,11 +682,13 @@ static EVT_BEGIN(epilogue_evt2)
     RETURN
 EVT_END()
 
+/** The tree outside the house that can be shaken, ending with a terminator entry. */
 static TreeAccess ki_data[] = {
     {6, "A_ki_1", "S_ki_1", "S_ha_1", 0, NULL},
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/** The ten grass patches around the house that can be cut, ending with a terminator entry. */
 static KusaAccess kusa_data[] = {
     {0, "A_kusa_01", "S_kusa_01", NULL},
     {0, "A_kusa_02", "S_kusa_02", NULL},
@@ -695,6 +703,7 @@ static KusaAccess kusa_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/** Exit of this room: the pipe named dokan_1. */
 static BeroEntry bero_entry_data[] = {
     {
         "dokan_1", // hitName

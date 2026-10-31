@@ -1,3 +1,5 @@
+// Scanning: plays the EFF_Scan model animation once at a point, then removes itself.
+
 #include "eff/eff_scanning.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"

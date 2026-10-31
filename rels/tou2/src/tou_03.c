@@ -307,6 +307,12 @@ EvtWord evt_kyaku_check[105];
 #endif
 EvtWord tou_03_init_evt[VERSION_PICK(370, 372)];
 
+/**
+ * Animation frames of the cardboard crowd in the stands:
+ * model, animation and frame time of each texture frame for the Toad, Toadette, vendor (c_roten) and Lakitu
+ * spectators.
+ * evt_kyaku registers it with the billboard driver and pose_init groups the frames into animations.
+ */
 ExtTexInfo ext_kyaku_data[] = {
     {("c_kinopio"), ("KNP_S_1"), 0.0f},
     {("c_kinopio"), ("KNP_S_1"), 10.0f},
@@ -875,6 +881,10 @@ static EVT_BEGIN(s2_close)
     RETURN
 EVT_END()
 
+/**
+ * Doors of the ring: the west and east doors out to the corridor (tou_04) and the two south doors back to
+ * the lobby (tou_02), each with its own swinging-door scripts.
+ */
 static BeroEntry bero_data[] = {
     {
         ("w_bero"), // hitName
@@ -1167,6 +1177,10 @@ EVT_BEGIN(init_kinosikowa)
     RETURN
 EVT_END()
 
+/**
+ * NPCs set up with the ring: Grubba, Jolene (the announcer once Grubba is gone; her init script swaps in
+ * the microphone model), Macho Grubba for the boss fight and Prince Mush for the finale.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガンス"*/"\203K\203\223\203X", // name
@@ -4012,6 +4026,7 @@ static f32 cosf(f32 x) {
     return cos(x);
 }
 
+/** A zero vector placed with the Star Stone jump code; nothing in this file reads it. */
 static const Vec item_jump_zero = {0.0f, 0.0f, 0.0f};
 /**
  * Moves the item named "stone" (the Star Stone) along a ballistic arc towards the target (arg0..arg2) at the
@@ -4076,6 +4091,10 @@ s32 item_jump(EventEntry* event, BOOL isFirstCall) {
     return item_jump_sub(event, isFirstCall, 1.0f, 0.5f);
 }
 
+/**
+ * The nine ring blocks of the arena (block_1 to block_9);
+ * after Grubba's machine starts, evt_boss watches each one and plays the falling sound when it starts to move.
+ */
 const char* block_data[] = {
     "block_1", "block_2", "block_3", "block_4", "block_5", "block_6", "block_7", "block_8",
     "block_9",

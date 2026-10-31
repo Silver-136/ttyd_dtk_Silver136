@@ -91,6 +91,10 @@ EVT_BEGIN(evt_slit2)
     RETURN
 EVT_END()
 
+/**
+ * Exits of this room: the south door to aji_01, and three more south exits that lead to the ceiling spots
+ * (tenjo) of aji_06, aji_07 and aji_09.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "s_bero_1", // hitName

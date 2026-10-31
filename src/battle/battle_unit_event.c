@@ -1,3 +1,5 @@
+// Battle unit events: running the hit, phase, wait and init event scripts attached to a unit.
+
 #include "battle/battle_unit_event.h"
 
 /**

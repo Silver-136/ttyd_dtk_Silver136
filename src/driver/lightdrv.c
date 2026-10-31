@@ -1,3 +1,6 @@
+// Light driver: the named map and character lights (ambient, point, spot, directional) and the GX
+// light setup for the lights nearest to an object.
+
 #include "driver/lightdrv.h"
 #include "driver/camdrv.h"
 #include "driver/mapdrv.h"
@@ -76,6 +79,7 @@ void lightReInit(void) {
     memset(wp->entries, 0, sizeof(LightEntry) * wp->count);
 }
 
+/** The camera's forward axis; lightMain turns it into world space to place the paper characters' light. */
 static const Vec camDir = {0.0f, 0.0f, 1.0f};
 
 /**

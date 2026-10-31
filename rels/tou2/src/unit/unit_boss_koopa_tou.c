@@ -1,3 +1,5 @@
+// unit_boss_koopa_tou: Bowser, boss unit used in the Glitz Pit REL, battle unit.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -71,6 +73,10 @@ static EvtWord fire_attack_event[345];
 static EvtWord wait_event[6];
 static const char* cmd_disable_string[5];
 
+/**
+ * Unit kind of the Bowser (HP 30, level 39): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_boss_koopa_tou = {
     UNIT_BOWSER_CHAPTER3, // mUnitType
     "btl_un_koopa", // name
@@ -119,10 +125,16 @@ BattleUnitKind unit_boss_koopa_tou = {
     data_table, // dataTable
 };
 
+/** Defence of the Bowser: 1 damage points off every hit. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Element reactions of the Bowser: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Bowser (percent chance to take each status):
+ * immune to fright, gale force and instant kill; resists most other statuses.
+ */
 static StatusVulnerability regist = {
     70, // sleep
     60, // stop
@@ -190,15 +202,18 @@ static PoseTableEntry pose_table_forward_leaning[] = {
     {POSE_TYPE_ACTION, "KPA_S_8"},
 };
 
+/** Data table of the Bowser: event handlers for being defeated. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Body part of the Bowser (model c_koopa): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_koopa", "c_koopa", 0.0f, 0.0f, 0.0f, 34.0f, 62.0f, 0.0f, 22.0f, 78.0f, 0.0f, 70, 80, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of Bowser's Hip Drop: 3 damage, jump-type contact attack. */
 static BattleWeapon weapon_koopa_hip_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -236,6 +251,7 @@ static BattleWeapon weapon_koopa_hip_attack = {
     {0, 25, 25, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Bowser's bite: 3 damage, hammer-type contact attack; may inflict poison (30%). */
 static BattleWeapon weapon_koopa_bite_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -275,6 +291,7 @@ static BattleWeapon weapon_koopa_bite_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Bowser's critical bite: 2 damage, hammer-type contact attack. */
 static BattleWeapon weapon_koopa_critical_bite_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -311,6 +328,7 @@ static BattleWeapon weapon_koopa_critical_bite_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Bowser's Fire Breath: 3 damage. */
 static BattleWeapon weapon_koopa_fire_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -944,6 +962,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/** Message keys announcing which command (jump, hammer, item, partner move or partner item) was sealed. */
 static const char* cmd_disable_string[] = {
     "btl_jump_cmd_disable",
     "btl_hammer_cmd_disable",

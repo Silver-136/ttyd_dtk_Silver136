@@ -1,3 +1,5 @@
+// Paragoomba (patakuri): battle unit used in Petal Meadows.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -42,6 +44,10 @@ static EvtWord phase_event[2];
 static EvtWord attack_event[492];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Paragoomba:
+ * 2 HP, level 7, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_patakuri = {
     UNIT_PARAGOOMBA, // mUnitType
     "btl_un_patakuri", // name
@@ -90,8 +96,10 @@ BattleUnitKind unit_patakuri = {
     data_table_patakuri, // dataTable
 };
 
+/** Defence of the Paragoomba's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Paragoomba's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_patakuri_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist_patakuri = {
@@ -119,6 +127,7 @@ static StatusVulnerability regist_patakuri = {
     150, // ohko
 };
 
+/** Paragoomba's attack: 1 damage to a single target, a plain attack. */
 static BattleWeapon weapon_patakuri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -155,10 +164,15 @@ static BattleWeapon weapon_patakuri_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Body part of the Paragoomba: a single part using the model "c_kuribo". */
 static BattleUnitKindPart parts_patakuri[] = {
     {1, "btl_un_patakuri", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_patakuri, &defence_patakuri_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patakuri},
 };
 
+/**
+ * Pose table of the Paragoomba:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table_patakuri[] = {
     {POSE_TYPE_SLEEP, "PTK_N_1"},
     {POSE_TYPE_STOP, "PTK_Y_1"},
@@ -181,12 +195,17 @@ static PoseTableEntry pose_table_patakuri[] = {
     {POSE_TYPE_ACTION, "PTK_S_1"},
 };
 
+/** Event table of the Paragoomba: its fall when knocked out of the air, its reaction to a First Strike. */
 static BattleDataEntry data_table_patakuri[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, patakuri_dmg_first_attack_pos},
     {0, NULL},
 };
 
+/**
+ * Sound timing of the Paragoomba:
+ * the sound effect played at set points of its idle, walk and run animations.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"PTK_S_1", 0.01f, NULL, "SFX_ENM_PATAKURI_WAIT1", 0, 1},
     {"PTK_W_1", 0.01f, NULL, "SFX_ENM_PATAKURI_MOVE1", 0, 1},
@@ -371,6 +390,10 @@ static EVT_BEGIN(wait_event_patakuri)
     RETURN
 EVT_END()
 
+/**
+ * Pose table of the Paragoomba:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KUR_N_1"},
     {POSE_TYPE_STOP, "KUR_Y_1"},
@@ -394,13 +417,16 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
+/** Event table of the Paragoomba: nothing special on a First Strike. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Defence of the Paragoomba's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {0};
 
+/** Defence attributes of the Paragoomba's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -428,6 +454,7 @@ static StatusVulnerability regist = {
     150, // ohko
 };
 
+/** Body part of the Paragoomba: a single part using the model "c_kuribo". */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -447,6 +474,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Paragoomba's attack: 1 damage to a single target, a jump-style hit. */
 static BattleWeapon weapon_kuriboo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

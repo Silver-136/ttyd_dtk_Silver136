@@ -1,3 +1,5 @@
+// eff_torch.c: torch flame effect entry (effTorchEntry) with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

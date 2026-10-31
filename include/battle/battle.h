@@ -1,3 +1,5 @@
+// Declares the battle work structure, battle flags and the top-level battle functions.
+
 #pragma once
 
 #include <dolphin/types.h>

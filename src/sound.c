@@ -1,3 +1,6 @@
+// sound.c: the sound driver over MusyX (Sound*): sound effects with 3D emitters, songs, ADPCM streams read from the
+// DVD, reverb, output mode, and loading the sound project data into ARAM.
+
 #define _MATH_H_ // skip math.h (its sqrtf statics are not in this TU)
 #include "sound.h"
 #include <dolphin/os.h>
@@ -1602,6 +1605,7 @@ void _ssDVDReadAsync_cache_next(s32 result, DVDFileInfo* fileInfo) {
     }
 }
 
+/** Step sizes of the streamed-music DPCM decoder (ssDecodeDPCM): each 4-bit delta is scaled by one of them. */
 s16 dtbl[16] = {0x0001, 0x0007, 0x0018, 0x003B, 0x0053, 0x006F, 0x00EC, 0x022B,
                 0x02E6, 0x0375, 0x041C, 0x08AD, 0x0CD5, 0x1150, 0x1B32, 0x2454};
 

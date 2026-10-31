@@ -1,3 +1,5 @@
+// item_data.c: the item table itemDataTable (ItemData: names, prices, icon, HP/FP restored, battle weapon).
+
 #pragma once
 
 #include <dolphin/types.h>

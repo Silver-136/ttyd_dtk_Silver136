@@ -1,3 +1,5 @@
+// eff_confetti_n64.c: Paper Mario 64 Confetti effect entry (effConfettiN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

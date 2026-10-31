@@ -1,3 +1,5 @@
+// Bullet Bill (killer): battle unit used in Pirate's Grotto.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_subset.h"
@@ -25,6 +27,7 @@ static EvtWord start_avoid[26];
 static EvtWord attack_event[407];
 static EvtWord wait_event[6];
 
+/** Unit data of the Bullet Bill: 2 HP, level 1; the battle starts it from init_event. */
 BattleUnitKind unit_killer = {
     UNIT_BULLET_BILL, // mUnitType
     "btl_un_killer", // name
@@ -73,8 +76,10 @@ BattleUnitKind unit_killer = {
     data_table, // dataTable
 };
 
+/** Defence of the Bullet Bill: 1 against every element. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Elemental reactions of the Bullet Bill: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -102,10 +107,12 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Bullet Bill, model c_kilr: its one target part. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_killer", "c_kilr", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon data for the Bullet Bill's charge: 4 damage, one target. */
 static BattleWeapon weapon_killer_charge_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -142,6 +149,9 @@ static BattleWeapon weapon_killer_charge_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Pose table of the Bullet Bill: the animation each battle pose (idle, hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KIL_N_1"},
     {POSE_TYPE_STOP, "KIL_D_1"},
@@ -163,6 +173,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KIL_S_1"},
 };
 
+/** Event table of the Bullet Bill: the First Strike reaction (does nothing). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},

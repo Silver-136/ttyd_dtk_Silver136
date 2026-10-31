@@ -20,6 +20,7 @@ static BeroEntry bero_entry_data[2];
 EvtWord jin_09_jumpstand[21];
 EvtWord jin_09_init_evt[214];
 
+/** Doors of this room: the east exit (e_bero) to jin_10. */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName

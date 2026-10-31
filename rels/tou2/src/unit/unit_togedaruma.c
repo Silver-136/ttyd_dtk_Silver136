@@ -1,3 +1,5 @@
+// unit_togedaruma: Bristle (`togedaruma`), battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -32,6 +34,10 @@ static EvtWord wakeup_event[134];
 static EvtWord attack_event[358];
 static EvtWord wait_event[102];
 
+/**
+ * Unit data of the Bristle: 2 HP and level 16, with its parts, status vulnerability, init event and event
+ * data table.
+ */
 BattleUnitKind unit_togedaruma = {
     UNIT_BRISTLE, // mUnitType
     "btl_un_togedaruma", // name
@@ -80,10 +86,19 @@ BattleUnitKind unit_togedaruma = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Bristle: 4 against normal, ice, explosion and electric hits;
+ * immune to fire (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{4, 99, 4, 4, 4}};
 
+/** Damage-type reactions of the Bristle: immune to fire. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
+/**
+ * Defense of the Bristle against normal, fire, ice, explosion and electric attacks while it is flipped
+ * onto its back: none, so it takes full damage from every element.
+ */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -150,6 +165,11 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "TGD_S_5"},
 };
 
+/**
+ * Event data table of the Bristle: scripts that replace the standard handling for being flipped over by a
+ * stomp (tag 13), an attacker being hurt by its spiked head (tag 37) and an attacker being hurt by its
+ * front spikes (tags 38-39).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -159,10 +179,15 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Parts of the Bristle: a single body part (part 1, model c_togedaruma), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_togedaruma", "c_togedaruma", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, kCounterTopSpiky | kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };
 
+/** Weapon record of the Bristle's rolling attack: 1 damage and counts as a hammer-type hit. */
 static BattleWeapon weapon_togedaruma_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

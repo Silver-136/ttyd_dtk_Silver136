@@ -69,6 +69,11 @@ EVT_BEGIN(dokan_2_in_evt)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room: the west exit to tik_00, two east exits to tik_02 (the lower one behind the second
+ * bombable wall), the pipe to tik_15, the pipe up to Rogueport (gor_02), two pairs of pipes that link spots
+ * inside the room, the door to the power-down shop (tik_11) and the door to the charm-caster's house (tik_12).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName

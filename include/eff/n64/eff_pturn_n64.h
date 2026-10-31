@@ -1,3 +1,5 @@
+// eff_pturn_n64.c: counter pop-up effect entry (effPturnN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

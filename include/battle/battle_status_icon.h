@@ -1,3 +1,5 @@
+// Declares the status icon structures and functions.
+
 #pragma once
 
 #include <dolphin/mtx.h>

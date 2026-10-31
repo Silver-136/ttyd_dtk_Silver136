@@ -1,3 +1,5 @@
+// Partner movement: the footmark trail behind Mario, target speed and direction, walking and the move modes.
+
 #include "party.h"
 #include "driver/camdrv.h"
 #include "driver/hitdrv.h"
@@ -36,6 +38,10 @@ Footmark footmarkBuf[2][80];
 s32 writeId[2];
 s32 readId[2];
 
+/**
+ * Map objects a partner must not stand on when following Mario:
+ * chests, jump stands, Save and Heart blocks, switches and the eki_06 objects.
+ */
 static const char* objNames[] = {
     "MOBJ_TreasureBox",
     "MOBJ_BigTreasureBox",

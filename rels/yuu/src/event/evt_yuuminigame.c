@@ -1,3 +1,5 @@
+// evt_yuuminigame: Pianta Parlor minigame framework: shared work alloc/free, main and display callbacks.
+
 #include "eff/eff_minigame.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"

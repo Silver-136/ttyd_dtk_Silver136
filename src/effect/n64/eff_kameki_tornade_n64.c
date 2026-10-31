@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: Magikoopa (kameki) tornado of eight spinning, scrolling layers around a point.
+
 #include "eff/n64/eff_kameki_tornade_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"

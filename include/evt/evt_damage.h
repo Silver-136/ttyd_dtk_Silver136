@@ -1,3 +1,5 @@
+// evt_damage.c: the Gazigazi map damage hazard scripts (evt_gazigazi_appear, evt_gazigazi_entry).
+
 #pragma once
 
 #include "dolphin/types.h"

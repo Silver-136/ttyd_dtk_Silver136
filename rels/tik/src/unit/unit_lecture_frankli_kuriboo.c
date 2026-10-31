@@ -1,3 +1,6 @@
+// Rogueport Sewers (tik) battle unit: Professor Frankly (frankli) in his lecture battle: its parts, defence/status
+// tables, and the lecture events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_cmd.h"
@@ -43,6 +46,11 @@ static USER_FUNC(_battle_set_lecture_unit_id) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit kind of the Goomba in Prof.
+ * Frankly's lecture (HP 10, level 1): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_lecture_frankli_kuriboo = {
     UNIT_TUTORIAL_FRANKLY_B4, // mUnitType
     "btl_un_frankli", // name
@@ -91,10 +99,19 @@ BattleUnitKind unit_lecture_frankli_kuriboo = {
     data_table, // dataTable
 };
 
+/** Defence of the Goomba in Prof. Frankly's lecture: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Goomba in Prof. Frankly's lecture: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Goomba in Prof.
+ * Frankly's lecture (percent chance to take each status):
+ * immune to sleep, stop, dizzy, poison, confusion, electric shock, burn, freeze, growing huge, shrinking,
+ * attack up, attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
+ * invisibility and instant kill.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -128,10 +145,15 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Data table of the Goomba in Prof. Frankly's lecture: empty; it has no event hooks. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Body part of the Goomba in Prof.
+ * Frankly's lecture (model c_kuri_h): hit position, defences, attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_frankli", "c_kuri_h", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kUntattleable | kNoHpLoss, 0, pose_table},
 };

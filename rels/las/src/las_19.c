@@ -117,6 +117,10 @@ static EVT_BEGIN(e2_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Exits of las_19: west door w_bero to las_09 (e_bero); east door e_bero_1 to las_21 (w_bero); east door
+ * e_bero_2 to las_21 (w_bero); north road n_bero to las_20 (s_bero_1).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -212,6 +216,7 @@ const char* mapgrp_name_1[] = {
     "S_kai_25",
 };
 
+/** The last five staircase pieces, raised after those in mapgrp_name_1. */
 const char* mapgrp_name_2[] = {
     "S_kai_20",
     "S_kai_21",

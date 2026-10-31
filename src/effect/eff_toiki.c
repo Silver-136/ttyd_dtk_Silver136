@@ -129,7 +129,9 @@ static u8 queen_toiki_dl_0_13[] __attribute__((aligned(32))) = {
     0x98, 0x00, 0x04, 0x15, 0x00, 0x01, 0x1A, 0x1E, 0x00, 0x00, 0x1B, 0x0A, 0x00, 0x01, 0x19, 0x1D,
     0x00, 0x00, 0x18, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
+/** Display lists of the Shadow Queen's breath cloud model, drawn with the sizes below. */
 static u8* queen_toiki_dl_0_tbl[] = { queen_toiki_dl_0_0, queen_toiki_dl_0_1, queen_toiki_dl_0_2, queen_toiki_dl_0_3, queen_toiki_dl_0_4, queen_toiki_dl_0_5, queen_toiki_dl_0_6, queen_toiki_dl_0_7, queen_toiki_dl_0_8, queen_toiki_dl_0_9, queen_toiki_dl_0_10, queen_toiki_dl_0_11, queen_toiki_dl_0_12, queen_toiki_dl_0_13 };
+/** Display-list sizes (32-byte units) of the Shadow Queen's breath cloud model. */
 static u8 queen_toiki_dl_0_size_tbl[] = { 3, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
 /**

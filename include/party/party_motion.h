@@ -1,3 +1,5 @@
+// party_motion.c: partner motions (follow, jump, fall, stay, slit, upstairs).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

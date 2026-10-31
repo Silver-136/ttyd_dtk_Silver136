@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: a soft puff of steam (vapor) that grows and fades; its two colors are set in the work data.
+
 #include "eff/n64/eff_vapor_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -7,20 +9,34 @@
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 
+/** A table of plus and minus ones that nothing in this effect reads. */
 f32 vaporUnused[16] = {-1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, -1.0f, 1.0f, 1.0f, -1.0f, 1.0f, -1.0f};
+/**
+ * Sideways offset of the steam puff over its first 30 frames, one row of 30 per type (type 1 drifts left).
+ */
 static s8 dx_data[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -8, -15, -21, -26, -30, -34, -37, -39, -40, -41, -42, -43, -44, -45, -46, -47, -48, -49, -50, -51, -52, -53, -54, -55, -56, -57, -58, -59, -60, -61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
+/** Size of the steam puff in percent over its first 30 frames, one row of 30 per type. */
 static u8 scale_data[] = {
     40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 52, 55, 57, 60, 62, 65, 67, 70, 72, 75, 77, 80, 82, 85, 87, 90, 92, 95, 97, 100, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69
 };
+/**
+ * Position in the smoke animation strip over the puff's first 30 frames, one row of 30 per type;
+ * the draw cross-fades between neighbouring frames.
+ */
 static u8 seq_data[] = {
     0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 190, 195, 210, 208, 211, 214, 217, 220, 223, 226, 229, 232, 235, 238, 241, 244, 247, 250, 253, 255, 0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 190, 195, 210, 208, 211, 214, 217, 220, 223, 226, 229, 232, 235, 238, 241, 244, 247, 250, 253, 255, 0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 190, 195, 210, 208, 211, 214, 217, 220, 223, 226, 229, 232, 235, 238, 241, 244, 247, 250, 253, 255
 };
+/**
+ * Twist of the steam puff in degrees over its first 30 frames, one row per type:
+ * type 1 leans further and further as it drifts, type 2 is turned upside down.
+ */
 static u8 rz_data[3][30] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180, 180
 };
 
+/** The steam puff quads standing on their base point, one per frame of the smoke strip. */
 static effN64Vtx size64x64_tex32x32_vtx[] = {
     {-32, 0, 2, 0, 1024, 120, 120, 0, 255},
     {32, 0, 2, 1024, 1024, 120, 120, 0, 255},

@@ -34,6 +34,10 @@ static f32 angleABTBL[] = { 1.0f,       1.273187f,  1.27303f,   1.272768f,  1.27
                             1.053216f,  1.049087f,  1.04496f,   1.040838f,  1.036721f,  1.0326101f, 1.028504f,
                             1.024406f,  1.020316f,  1.016234f,  1.0121599f, 1.0080971f, 1.004043f,  1.0f };
 
+/**
+ * The build date and time of this release (from R_build.c);
+ * the title screen shows them while Z is held.
+ */
 const char* build_date_ptr = R_build_date;
 const char* build_time_ptr = R_build_time;
 

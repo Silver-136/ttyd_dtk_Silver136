@@ -223,6 +223,11 @@ USER_FUNC(hi_fire_end) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Scenery pieces of the Palace of Shadow battle stages
+ * (floor, wall, rotating gears, pedestals, corridor segments); las_btlstage_data entries point into this
+ * array.
+ */
 BattleStageObjectData las_btlobject_data[] = {
     {"A1", 2, 0, {93.0f, 0.0f, -64.0f}, 0, 60, {0}},
     {"B", 2, 2, {0}, 0, 60, {0}},
@@ -264,6 +269,10 @@ BattleStageObjectData las_btlobject_data[] = {
     {"C", 2, 3, {0}, 0, 60, {0}},
 };
 
+/**
+ * Battle stages of the Palace of Shadow: the backdrop folders, the pieces from las_btlobject_data and the
+ * background hit and event scripts (the gear-room backdrop rotates its gears).
+ */
 BattleStageData las_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -2745,6 +2754,10 @@ NpcBattleSelect btlgrpsel_las_btlno_las_25_06_off[] = {
     {0},
 };
 
+/**
+ * Encounter settings of every Palace of Shadow map: which battle choice its enemies use, the battle music
+ * and the random audience rolls.
+ */
 NpcSetupBattleInfo btlsetup_las_tbl[] = {
     {
         /*"マップstg_08_0"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x38\x5F\x30", // name

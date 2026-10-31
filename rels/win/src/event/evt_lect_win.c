@@ -1,3 +1,6 @@
+// Partner lecture in Boggly Woods: the tutorial scenes that teach a new partner's field move (win.rel's copy of the
+// lecture code).
+
 #include "icon_ids.h"
 #include "eff/eff_mario_balloon.h"
 #include "eff/eff_fukidashi.h"

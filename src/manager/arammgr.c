@@ -1,3 +1,6 @@
+// ARAM manager: allocates auxiliary RAM, copies data between main memory and ARAM with ARQ, and
+// collects the space of freed entries.
+
 #include "manager/arammgr.h"
 #include "memory.h"
 #include <dolphin/os.h>

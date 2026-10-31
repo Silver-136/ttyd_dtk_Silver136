@@ -1,3 +1,5 @@
+// Boo (teresa): enemy battle unit; Creepy Steeple's copy of the unit data and scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
@@ -42,6 +44,7 @@ static EvtWord move_event[84];
 static EvtWord move_event_sub[103];
 static EvtWord wait_event[6];
 
+/** Unit data of the Boo: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_teresa = {
     UNIT_BOO, // mUnitType
     "btl_un_teresa", // name
@@ -90,8 +93,10 @@ BattleUnitKind unit_teresa = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Boo: none, every attack type does full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element response of the Boo: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -119,6 +124,7 @@ static StatusVulnerability regist = {
     10, // ohko
 };
 
+/** Body part of the Boo: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {
         1, "btl_un_teresa", "c_teresa",
@@ -131,6 +137,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Attack data for the Boo's swipe: 3 damage. */
 static BattleWeapon weapon_teresa_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -167,6 +174,7 @@ static BattleWeapon weapon_teresa_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Boo's vanishing act that turns itself invisible: no damage, 100% Invisible. */
 static BattleWeapon weapon_teresa_trans_myself = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -204,6 +212,7 @@ static BattleWeapon weapon_teresa_trans_myself = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Boo's spell that turns another Boo invisible: no damage, 100% Invisible. */
 static BattleWeapon weapon_teresa_trans = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -241,6 +250,7 @@ static BattleWeapon weapon_teresa_trans = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Boo's group float-up move: no damage. */
 static BattleWeapon weapon_teresa_move = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -275,6 +285,7 @@ static BattleWeapon weapon_teresa_move = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Pose table of the Boo: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -295,6 +306,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Data table of the Boo: empty, no special event handlers. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };

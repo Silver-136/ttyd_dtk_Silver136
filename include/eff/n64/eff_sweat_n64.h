@@ -1,3 +1,5 @@
+// eff_sweat_n64.c: Paper Mario 64 sweat drops flung out in a fan, 6 (type 0) or 4 (type 1); effSweatN64Entry and EffSweatN64Work.
+
 #pragma once
 
 #include <dolphin/types.h>

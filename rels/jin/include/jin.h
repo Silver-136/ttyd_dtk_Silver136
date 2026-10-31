@@ -1,3 +1,5 @@
+// Declarations for the Creepy Steeple (jin) area: battle tables, per-room init events, the shadow-Mario party event, the Vivian pose function and the area's battle units.
+
 #pragma once
 
 #include "dolphin/types.h"

@@ -1,3 +1,5 @@
+// Goombella (kuribo): partner init, follow and the tattle ability.
+
 #include "party/party_kuribo.h"
 #include "evt/evt_cmd.h"
 #include "mario/mario_party.h"

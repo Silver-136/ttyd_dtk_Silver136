@@ -1,3 +1,5 @@
+// Vivian: partner init, follow and the shadow (hide in the floor) ability.
+
 #include "party/party_vivian.h"
 #include "driver/animdrv.h"
 #include "mario/mario.h"

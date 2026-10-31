@@ -1,3 +1,6 @@
+// The Great Tree (mri) battle unit: Yux (barriern), which creates Mini-Yux shields: its parts, defence/status tables,
+// and attack events.
+
 #include "system.h"
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -124,6 +127,10 @@ static EvtWord wawawa_attack_event_sub_no_last[10];
 static EvtWord wawawa_attack_event_sub_last[93];
 static EvtWord wait_event[116];
 
+/**
+ * Unit data of the Yux: 3 HP, 40x40 units in size; ties together its sounds, parts, status vulnerability,
+ * init event and event table.
+ */
 BattleUnitKind unit_barriern = {
     UNIT_YUX, // mUnitType
     "btl_un_barriern", // name
@@ -172,10 +179,13 @@ BattleUnitKind unit_barriern = {
     data_table, // dataTable
 };
 
+/** Defence of the Yux: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Yux: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Parts of the Yux: 11 parts (model c_baria). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 12.0f, 0.0f, 0.0f, 22.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
     {2, "btl_un_barriern", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -215,6 +225,10 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * Weapon of the Yux (ring attack): targets one unit for 2 damage, ignores Defense;
+ * used by wakka_attack_event.
+ */
 static BattleWeapon weapon_wakka_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -255,6 +269,10 @@ static BattleWeapon weapon_wakka_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the Yux (three-ring attack): targets every unit for 1 damage, ignores Defense;
+ * used by wawawa_attack_event, wawawa_attack_event_sub_no_last.
+ */
 static BattleWeapon weapon_wawawa_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -295,6 +313,10 @@ static BattleWeapon weapon_wawawa_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Spawn setup for the Mini-Yux (unit_barriern_satellite): enemy side, placed off-screen at first;
+ * used by init_event, unison_phase_event.
+ */
 static BattleUnitSetup entry_barriern_satellite = {
     &unit_barriern_satellite, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -306,6 +328,7 @@ static BattleUnitSetup entry_barriern_satellite = {
     NULL, // itemDropTable
 };
 
+/** Pose table of the Yux: maps its battle poses to its animations. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -462,11 +485,13 @@ static s32 barriern_zanzou_sub(BOOL isFirstCall, BattleUnit* unit, f32* scales, 
     return EVT_RETURN_BLOCK;
 }
 
+/** Event table of the Yux: barriern_dmg_first_attack_pos (tag 48). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, barriern_dmg_first_attack_pos},
     {0, NULL},
 };
 
+/** Mini-Yux 1 of 1 flies back into its Yux along this five-point path. */
 static Vec splineTableIn1_1[] = {
     {25.0f, 0.0f, 0.0f},
     {20.0f, -30.0f, -1.0f},
@@ -475,6 +500,7 @@ static Vec splineTableIn1_1[] = {
     {0.0f, 0.0f, -1.0f},
 };
 
+/** Mini-Yux 1 of 2 flies back into its Yux along this five-point path. */
 static Vec splineTableIn2_1[] = {
     {25.0f, 0.0f, 0.0f},
     {20.0f, -30.0f, -1.0f},
@@ -483,6 +509,7 @@ static Vec splineTableIn2_1[] = {
     {0.0f, 0.0f, -1.0f},
 };
 
+/** Mini-Yux 2 of 2 flies back into its Yux along this five-point path. */
 static Vec splineTableIn2_2[] = {
     {-25.0f, 0.0f, 0.0f},
     {-20.0f, 30.0f, -1.0f},
@@ -491,6 +518,7 @@ static Vec splineTableIn2_2[] = {
     {0.0f, 0.0f, -1.0f},
 };
 
+/** Mini-Yux 1 of 3 flies back into its Yux along this five-point path. */
 static Vec splineTableIn3_1[] = {
     {0.0f, 25.0f, 0.0f},
     {0.0f, 45.0f, -1.0f},
@@ -499,6 +527,7 @@ static Vec splineTableIn3_1[] = {
     {0.0f, 0.0f, -1.0f},
 };
 
+/** Mini-Yux 2 of 3 flies back into its Yux along this five-point path. */
 static Vec splineTableIn3_2[] = {
     {25.0f, -25.0f, 0.0f},
     {40.0f, -40.0f, -1.0f},
@@ -507,6 +536,7 @@ static Vec splineTableIn3_2[] = {
     {0.0f, 0.0f, -1.0f},
 };
 
+/** Mini-Yux 3 of 3 flies back into its Yux along this five-point path. */
 static Vec splineTableIn3_3[] = {
     {-25.0f, -25.0f, 0.0f},
     {-40.0f, -40.0f, -1.0f},
@@ -515,6 +545,7 @@ static Vec splineTableIn3_3[] = {
     {-0.0f, 0.0f, -1.0f},
 };
 
+/** Mini-Yux 1 of 4 flies back into its Yux along this five-point path. */
 static Vec splineTableIn4_1[] = {
     {25.0f, 25.0f, 0.0f},
     {30.0f, 35.0f, -1.0f},
@@ -523,6 +554,7 @@ static Vec splineTableIn4_1[] = {
     {0.0f, 0.0f, -1.0f},
 };
 
+/** Mini-Yux 2 of 4 flies back into its Yux along this five-point path. */
 static Vec splineTableIn4_2[] = {
     {-25.0f, 25.0f, 0.0f},
     {-30.0f, 35.0f, -1.0f},
@@ -531,6 +563,7 @@ static Vec splineTableIn4_2[] = {
     {0.0f, 0.0f, -1.0f},
 };
 
+/** Mini-Yux 3 of 4 flies back into its Yux along this five-point path. */
 static Vec splineTableIn4_3[] = {
     {25.0f, -25.0f, 0.0f},
     {30.0f, -35.0f, -1.0f},
@@ -539,6 +572,7 @@ static Vec splineTableIn4_3[] = {
     {0.0f, 0.0f, -1.0f},
 };
 
+/** Mini-Yux 4 of 4 flies back into its Yux along this five-point path. */
 static Vec splineTableIn4_4[] = {
     {-25.0f, -25.0f, 0.0f},
     {-30.0f, -35.0f, -1.0f},
@@ -547,6 +581,7 @@ static Vec splineTableIn4_4[] = {
     {-0.0f, 0.0f, -1.0f},
 };
 
+/** Mini-Yux 1 of 1 flies out of its Yux to its ring position along this five-point path. */
 static Vec splineTableOut1_1[] = {
     {0.0f, 0.0f, -1.0f},
     {-35.0f, -35.0f, -1.0f},
@@ -555,6 +590,7 @@ static Vec splineTableOut1_1[] = {
     {25.0f, 0.0f, 0.0f},
 };
 
+/** Mini-Yux 1 of 2 flies out of its Yux to its ring position along this five-point path. */
 static Vec splineTableOut2_1[] = {
     {0.0f, 0.0f, -1.0f},
     {5.0f, 30.0f, -1.0f},
@@ -563,6 +599,7 @@ static Vec splineTableOut2_1[] = {
     {25.0f, 0.0f, 0.0f},
 };
 
+/** Mini-Yux 2 of 2 flies out of its Yux to its ring position along this five-point path. */
 static Vec splineTableOut2_2[] = {
     {0.0f, 0.0f, -1.0f},
     {-5.0f, -30.0f, -1.0f},
@@ -571,6 +608,7 @@ static Vec splineTableOut2_2[] = {
     {-25.0f, 0.0f, 0.0f},
 };
 
+/** Mini-Yux 1 of 3 flies out of its Yux to its ring position along this five-point path. */
 static Vec splineTableOut3_1[] = {
     {0.0f, 0.0f, -1.0f},
     {0.0f, 25.0f, -1.0f},
@@ -579,6 +617,7 @@ static Vec splineTableOut3_1[] = {
     {0.0f, 25.0f, 0.0f},
 };
 
+/** Mini-Yux 2 of 3 flies out of its Yux to its ring position along this five-point path. */
 static Vec splineTableOut3_2[] = {
     {0.0f, 0.0f, -1.0f},
     {25.0f, -20.0f, -1.0f},
@@ -587,6 +626,7 @@ static Vec splineTableOut3_2[] = {
     {25.0f, -25.0f, 0.0f},
 };
 
+/** Mini-Yux 3 of 3 flies out of its Yux to its ring position along this five-point path. */
 static Vec splineTableOut3_3[] = {
     {0.0f, 0.0f, -1.0f},
     {-25.0f, -20.0f, -1.0f},
@@ -595,6 +635,7 @@ static Vec splineTableOut3_3[] = {
     {-25.0f, -25.0f, 0.0f},
 };
 
+/** Mini-Yux 1 of 4 flies out of its Yux to its ring position along this five-point path. */
 static Vec splineTableOut4_1[] = {
     {0.0f, 0.0f, -1.0f},
     {25.0f, 20.0f, -1.0f},
@@ -603,6 +644,7 @@ static Vec splineTableOut4_1[] = {
     {25.0f, 25.0f, 0.0f},
 };
 
+/** Mini-Yux 2 of 4 flies out of its Yux to its ring position along this five-point path. */
 static Vec splineTableOut4_2[] = {
     {0.0f, 0.0f, -1.0f},
     {-25.0f, 20.0f, -1.0f},
@@ -611,6 +653,7 @@ static Vec splineTableOut4_2[] = {
     {-25.0f, 25.0f, 0.0f},
 };
 
+/** Mini-Yux 3 of 4 flies out of its Yux to its ring position along this five-point path. */
 static Vec splineTableOut4_3[] = {
     {0.0f, 0.0f, -1.0f},
     {25.0f, -20.0f, -1.0f},
@@ -619,6 +662,7 @@ static Vec splineTableOut4_3[] = {
     {25.0f, -25.0f, 0.0f},
 };
 
+/** Mini-Yux 4 of 4 flies out of its Yux to its ring position along this five-point path. */
 static Vec splineTableOut4_4[] = {
     {0.0f, 0.0f, -1.0f},
     {-25.0f, -20.0f, -1.0f},

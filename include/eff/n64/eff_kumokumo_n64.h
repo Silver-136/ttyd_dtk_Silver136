@@ -1,3 +1,5 @@
+// eff_kumokumo_n64.c: cloud (kumokumo) effect entry (effKumokumoN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

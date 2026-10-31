@@ -1,3 +1,6 @@
+// Scripts and commands for house doors: opening, walking in and out, inside/outside map groups
+// and NPC visibility.
+
 #include "data_tables.h"
 #include "evt/evt_door.h"
 #include "evt/evt_cmd.h"

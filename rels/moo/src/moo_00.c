@@ -59,6 +59,7 @@ static EvtWord rock_evt1[21];
 #endif
 EvtWord moo_00_init_evt[133];
 
+/** Exits of moo_00: west road w_bero to moo_07 (e_bero); east road e_bero to moo_01 (w_bero). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -95,6 +96,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Three control points (x, y, z) of the path Mario and his partner tumble along in the crash landing: from
+ * high above the landing site down to the ground.
+ */
 static f32 spline_dt[] = {
     -320.0f, 200.0f, -170.0f, -220.0f, 100.0f, -170.0f, -120.0f, 0.0f,
     -170.0f,

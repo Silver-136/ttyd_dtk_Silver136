@@ -1,3 +1,5 @@
+// Declares the action-command help text functions.
+
 #pragma once
 
 #include <dolphin/types.h>

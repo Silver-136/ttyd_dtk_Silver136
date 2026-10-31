@@ -68,6 +68,7 @@ static EVT_BEGIN(urouro_move)
     RETURN
 EVT_END()
 
+/** NPC of the shed: the shopkeeper who has been turned into a pig, who wanders around and talks to Mario. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ブタお店の主人"*/"\x83\x75\x83\x5E\x82\xA8\x93\x58\x82\xCC\x8E\xE5\x90\x6C", // name
@@ -90,6 +91,7 @@ EVT_BEGIN(w_bero_2_in)
     RETURN
 EVT_END()
 
+/** Doors of this room: the west exit (w_bero_1) to gra_01 and the west exit (w_bero_2) to gra_03. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
@@ -176,6 +178,7 @@ EVT_BEGIN(gra02_straw_blow_evt)
     RETURN
 EVT_END()
 
+/** Name of the NPC that gets paper-style lighting: the pig shopkeeper. */
 static const char* booboo_name[] = {
     /*"ブタお店の主人"*/"\x83\x75\x83\x5E\x82\xA8\x93\x58\x82\xCC\x8E\xE5\x90\x6C",
 };

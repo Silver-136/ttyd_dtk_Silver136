@@ -1,3 +1,6 @@
+// Rogueport Sewers (tik, chika: underground): the paper demon's (peramajin) lecture on the plane power
+// (plane_majin_lecture).
+
 #include "icon_ids.h"
 #include "eff/eff_fukidashi.h"
 #include "eff/eff_itemget.h"

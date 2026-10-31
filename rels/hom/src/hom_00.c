@@ -100,6 +100,10 @@ static EVT_BEGIN(n_2_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room: the north exit (n_bero_1) to rsh_01_b (Excess Express) and the north exit (n_bero_2)
+ * to eki_00 (Riverside Station).
+ */
 static BeroEntry bero_data[] = {
     {
         "n_bero_1", // hitName
@@ -140,6 +144,7 @@ static BeroEntry bero_data[] = {
     {0},
 };
 
+/** Doors of this room: the north exit (n_bero_1) to rsh_01_b (Excess Express). */
 BeroEntry bero_data_nidome[] = {
     {
         "n_bero_1", // hitName
@@ -423,6 +428,7 @@ EVT_BEGIN(evt_bridge_down)
     RETURN
 EVT_END()
 
+/** Item list of the station door's key picker: only the Station Key (-1 ends the list). */
 static s32 key_tbl[] = {
     ITEM_STATION_KEY_0x18, -1,
 };

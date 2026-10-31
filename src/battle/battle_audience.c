@@ -1,3 +1,5 @@
+// Battle audience: the crowd in the stands, their types, movement, mood and the items they throw.
+
 #include "battle/battle_audience.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
@@ -112,6 +114,7 @@ void BattleAudienceNoiseMain(void);
 
 #pragma force_active on
 
+/** Weapon for an empty can thrown by a spectator (ITEM_AUDIENCE_CAN): 1 damage plus 1 per extra hit. */
 BattleWeapon weapon_data_akikan = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -144,6 +147,7 @@ BattleWeapon weapon_data_akikan = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon for a rock thrown by a spectator (ITEM_AUDIENCE_ROCK); copied into presentWeapon like the can's. */
 BattleWeapon weapon_data_brick = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -176,6 +180,7 @@ BattleWeapon weapon_data_brick = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon for a bone thrown by a Dull Bones in the audience (ITEM_AUDIENCE_BONE). */
 BattleWeapon weapon_data_bone = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -208,6 +213,7 @@ BattleWeapon weapon_data_bone = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon for a hammer thrown by a Hammer Bro in the audience (ITEM_AUDIENCE_HAMMER). */
 BattleWeapon weapon_data_hammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -240,6 +246,11 @@ BattleWeapon weapon_data_hammer = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 #pragma force_active reset
+/**
+ * Seating layout per Mario's rank (Rising Star, B-List Star, A-List Star, Superstar): how many seats are open in
+ * each of the ten rows (centred in the 20 columns), so the stands fill out as the rank goes up.
+ * The free-seat pickers (BattleAudience_NoUsedHaitiRand and kin) choose from these seats.
+ */
 s32 haiti_data[][10] = {
     { 18, 16, 16, 0, 0, 0, 0, 0, 0, 0 },
     { 18, 18, 18, 16, 16, 14, 0, 0, 0, 0 },

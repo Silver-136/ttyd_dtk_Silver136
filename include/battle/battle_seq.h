@@ -1,3 +1,5 @@
+// Declares the battle sequence manager and wait helpers.
+
 #pragma once
 
 #include "battle/battle.h"

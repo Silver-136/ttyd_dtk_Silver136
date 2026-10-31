@@ -1,3 +1,5 @@
+// Riverside Station (eki) battle database: stages, backgrounds and enemy groups of Goombas, Dark Puffs, Spiky Parabuzzies and Pokey Mummies per room.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_weapon_power.h"
@@ -61,6 +63,10 @@ NpcBattleSelect btlgrpsel_eki_btlno_eki_04_05_off[2];
 NpcSetupBattleInfo btlsetup_eki_tbl[20];
 NpcTerritoryInfo btl_eki_setup_no_tbl[20];
 
+/**
+ * Props of the Riverside Station battle stage: each entry names a model of the backdrop and where it stands,
+ * the last entries being the background layers.
+ */
 BattleStageObjectData eki_btlobject_data[] = {
     {"lamp_01", 2, 0, {-116.0f, 0.0f, -59.0f}, 0, 60, {0}},
     {"lamp_02", 2, 0, {116.0f, 0.0f, -59.0f}, 10, 50, {0}},
@@ -88,6 +94,10 @@ BattleStageObjectData eki_btlobject_data[] = {
     {"C", 2, 3, {0}, 0, 60, {0}},
 };
 
+/**
+ * Battle stage of Riverside Station: the stage model directories, the props above, the backdrop weapons and
+ * the background event that runs during the fight.
+ */
 BattleStageData eki_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -842,6 +852,10 @@ NpcBattleSelect btlgrpsel_eki_btlno_eki_04_05_off[] = {
     {0},
 };
 
+/**
+ * Field battle setups of Riverside Station: one entry per battle id in btl_eki_setup_no_tbl, giving the
+ * stage, the group selection and the battle music.
+ */
 NpcSetupBattleInfo btlsetup_eki_tbl[] = {
     {
         /*"マップstg_06_1"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x36\x5F\x31", // name

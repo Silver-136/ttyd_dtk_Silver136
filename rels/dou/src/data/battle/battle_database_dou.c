@@ -1,3 +1,5 @@
+// Pirate's Grotto (dou) battle setups: enemy groups, battle stages and the field-battle tables for the area's maps.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -90,6 +92,10 @@ NpcSetupBattleInfo btlsetup_dou_tbl[28];
 NpcTerritoryInfo btl_dou_setup_no_tbl[28];
 EvtWord bgset_dou_wave_event[77];
 
+/**
+ * Props of the Pirate's Grotto battle stage: each entry names a model of the backdrop and where it stands,
+ * the last entries being the background layers.
+ */
 BattleStageObjectData dou_btlobject_data[] = {
     {"taki", 2, 2, {0}, 0, 60, {0}},
     {"B_kabe", 2, 2, {0}, 10, 50, {0}},
@@ -144,6 +150,10 @@ BattleStageObjectData dou_btlobject_data[] = {
     {"nami_01", 2, 3, {0}, 0, 60, {0}},
 };
 
+/**
+ * Battle stage of Pirate's Grotto: the stage model directories, the props above, the backdrop weapons and the
+ * background event that runs during the fight.
+ */
 BattleStageData dou_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -1194,6 +1204,10 @@ NpcBattleSelect btlgrpsel_dou_btlno_dou_13_99_off[] = {
     {0},
 };
 
+/**
+ * Field battle setups of Pirate's Grotto: one entry per battle id in btl_dou_setup_no_tbl, giving the stage,
+ * the group selection and the battle music.
+ */
 NpcSetupBattleInfo btlsetup_dou_tbl[] = {
     {
         /*"マップstg_05_3"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x35\x5F\x33", // name

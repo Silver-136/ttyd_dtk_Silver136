@@ -1,3 +1,5 @@
+// The chapter title card ("telop") shown when a chapter starts.
+
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -28,6 +30,10 @@ typedef struct TelopWork {
 #define TELOP_TEX_A 0x81
 #define TELOP_TEX_B 0x80
 #endif
+/**
+ * Message labels of the area name banners, one per area id
+ * (Rogueport, Petal Meadows, Petalburg and so on up to the Palace of Shadow).
+ */
 static const char* msg_tbl[] = {
     "menu_monosiri_gor", "menu_monosiri_hei", "menu_monosiri_nok", "menu_monosiri_gon",
     "menu_monosiri_win", "menu_monosiri_mri", "menu_monosiri_tou", "menu_monosiri_usu",
@@ -37,6 +43,7 @@ static const char* msg_tbl[] = {
 };
 
 static TelopWork work;
+/** State of the area name banner (fade timer and the area shown); wp points to it. */
 static TelopWork* wp = &work;
 
 void telop(CameraId cameraId, void* param);

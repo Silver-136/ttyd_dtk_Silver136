@@ -1,3 +1,5 @@
+// Bristle (togedaruma): battle unit used in Petal Meadows.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -32,6 +34,10 @@ static EvtWord wakeup_event[134];
 static EvtWord attack_event[358];
 static EvtWord wait_event[102];
 
+/**
+ * Unit kind of the Bristle:
+ * 2 HP, level 16, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_togedaruma = {
     UNIT_BRISTLE, // mUnitType
     "btl_un_togedaruma", // name
@@ -80,10 +86,16 @@ BattleUnitKind unit_togedaruma = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Bristle's body: 4 against normal, ice, explosion and electric hits;
+ * immune to fire (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{4, 99, 4, 4, 4}};
 
+/** Defence attributes of the Bristle's body: fire (takes no damage); every other type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
+/** Defence of the Bristle's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -111,6 +123,10 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * Pose table of the Bristle:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "TGD_N_1"},
     {POSE_TYPE_STOP, "TGD_I_1"},
@@ -132,6 +148,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "TGD_S_4"},
 };
 
+/**
+ * Pose table of the Bristle while flipped over:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "TGD_N_2"},
     {POSE_TYPE_STOP, "TGD_I_2"},
@@ -150,6 +170,11 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "TGD_S_5"},
 };
 
+/**
+ * Event table of the Bristle:
+ * its reaction to being flipped over, the counter for an attacker hurt by its spikes,
+ * the counter for an attacker hurt by its spikes, nothing special on a First Strike.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -159,10 +184,12 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of the Bristle: a single part using the model "c_togedaruma". */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_togedaruma", "c_togedaruma", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, kCounterTopSpiky | kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };
 
+/** Bristle's attack: 1 damage to a single target, a hammer-style hit. */
 static BattleWeapon weapon_togedaruma_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

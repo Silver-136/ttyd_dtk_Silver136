@@ -1,3 +1,6 @@
+// Message driver: loads the message files, looks messages up by tag, parses their markup into
+// characters, icons and animations, and runs the speech windows and selection lists.
+
 #include "driver/msgdrv.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
@@ -21,8 +24,10 @@
 #include "eff/eff_magic1_n64.h"
 #include "battle/battle_unit.h"
 #include "driver/mapdrv.h"
+/** Red "No messages" text shown in place of a message key that is not found, Japanese version (ErrMessage). */
 const char R_no_messages_JP[] = "<col ff0000ff>\203\201\203b\203Z\201[\203W\202\252\202\240\202\350\202\334\202\271\202\361</col>\n<key>";
 #ifdef VERSION_G8ME01
+/** The same red "No messages" text for each other language, tagged with its name; ErrMessage picks one. */
 const char R_no_messages_US[] = "<col ff0000ff>No messages.[English]<col>\012<key>";
 const char R_no_messages_DE[] = "<col ff0000ff>No messages.[German]<col>\012<key>";
 const char R_no_messages_FR[] = "<col ff0000ff>No messages.[French]<col>\012<key>";
@@ -30,6 +35,7 @@ const char R_no_messages_ES[] = "<col ff0000ff>No messages.[Spanish]<col>\012<ke
 const char R_no_messages_IT[] = "<col ff0000ff>No messages.[Italian]<col>\012<key>";
 const char R_no_messages_DU[] = "<col ff0000ff>No messages.[Dutch]<col>\012<key>";
 #else
+/** The same red "No messages" text for each other language, tagged with its name; ErrMessage picks one. */
 const char R_no_messages_US[] = "<col ff0000ff>No messages.<col>\n<key>";
 #endif
 
@@ -77,6 +83,7 @@ MsgIcon msgIcon[] = {
     {"ANM_PAD_START", ICON_BUTTON_START_ANIM}
 };
 
+/** Sound effects of the message windows by window type: the sound when it opens, then the one when it closes. */
 s32 msgWindowOpen_SE_Data[] = {
     0x16, 0x17, 0x1A, 0x1B, 0x20, 0x21, 0x1C, 0x1D,
     0x20, 0x21, 0x1C, 0x1D, 0x18, 0x19, 0x22, 0x23,

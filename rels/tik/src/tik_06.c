@@ -44,6 +44,11 @@ static EVT_BEGIN(oshimodo_event)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room: the pipe to the Pit of 100 Trials (jon_00), the pipe to tik_18, the pipe Mario comes out
+ * of from tik_10 and tik_14 (entering it only shows "You can't enter from here!") and the east exit to the
+ * Thousand-Year Door room (tik_05).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "dokan_1", // hitName

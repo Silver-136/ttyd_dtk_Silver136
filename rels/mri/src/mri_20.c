@@ -21,6 +21,7 @@ static EvtWord evt_ueki_08[20];
 static KusaAccess ueki_access_data[7];
 EvtWord mri_20_init_evt[123];
 
+/** Exit of mri_20: pipe dokan1 to mri_04. */
 BeroEntry bero_black_shadow[] = {
     {
         "dokan1", // hitName
@@ -41,6 +42,10 @@ BeroEntry bero_black_shadow[] = {
     },
 };
 
+/**
+ * Exits of mri_20: pipe dokan1 to mri_03 (dokan); pipe dokan2 to mri_02 (dokan3); dokan3 (scripted pipe);
+ * dokan4 (scripted pipe).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "dokan1", // hitName
@@ -123,6 +128,10 @@ static EVT_BEGIN(evt_ueki_08)
     RETURN
 EVT_END()
 
+/**
+ * Plants Mario can search in mri_20: A_ueki01, A_ueki02, A_ueki03, A_ueki04, A_ueki05, A_ueki08
+ * (runs evt_ueki_08 when searched).
+ */
 static KusaAccess ueki_access_data[] = {
     {1, "A_ueki01", "S_ueki01", NULL},
     {1, "A_ueki02", "S_ueki02", NULL},

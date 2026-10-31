@@ -1,3 +1,5 @@
+// evtmgr_cmd.c: the script interpreter's opcode handler (evtmgrCmd) and the value accessors evtGetValue/evtSetValue.
+
 #pragma once
 
 #include <dolphin/types.h>

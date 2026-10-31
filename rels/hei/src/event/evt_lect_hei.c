@@ -1,3 +1,5 @@
+// Petal Meadows (hei) partner-lecture scripts: the Koops (nokotarou) tutorial and the shared partner-join cutscene (all_party_lecture) with helpers.
+
 #include "icon_ids.h"
 #include "eff/eff_mario_balloon.h"
 #include "eff/eff_fukidashi.h"

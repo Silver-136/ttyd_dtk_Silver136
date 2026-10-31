@@ -1,3 +1,5 @@
+// The Great Tree (mri) battle unit: Pider (piders): its parts, defence/status tables, and attack events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
@@ -98,6 +100,10 @@ static USER_FUNC(piders_yarn_init) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of the Pider: 5 HP, 46x56 units in size; ties together its sounds, parts, status vulnerability,
+ * init event and event table.
+ */
 BattleUnitKind unit_piders = {
     UNIT_PIDER, // mUnitType
     "btl_un_piders", // name
@@ -146,8 +152,10 @@ BattleUnitKind unit_piders = {
     data_table, // dataTable
 };
 
+/** Defence of the Pider: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Pider: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -196,6 +204,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PAI_S_1"},
 };
 
+/**
+ * Event table of the Pider: dead_event (tag 49), blow_dead_event (tag 58), battle_end_event (tag 63),
+ * dmg_first_attack_pos (tag 48).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_BLOW_DEAD_EVENT, blow_dead_event},
@@ -204,6 +216,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Parts of the Pider: 5 parts (model c_paid). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_piders", "c_paid", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
     {2, "btl_un_piders", "c_paid", 0.0f, 0.0f, 5.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -399,6 +412,7 @@ static void piders_get_next_target(s32* unitIdx, s32* partIdx) {
     }
 }
 
+/** Weapon of the Pider's single web-wad: targets one unit for 2 damage; used by attack_event. */
 static BattleWeapon weapon_piders_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -435,6 +449,7 @@ static BattleWeapon weapon_piders_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Pider's three-web-wad combo (renzoku): 1 damage per wad; used by attack_event. */
 static BattleWeapon weapon_piders_renzoku_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

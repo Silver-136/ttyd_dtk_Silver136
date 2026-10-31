@@ -34,6 +34,10 @@ static EvtWord normal_attack_event[391];
 static EvtWord throw_attack_event[343];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Dark Craw: 20 HP and level 28, with its parts, status vulnerability, init event and
+ * event data table.
+ */
 BattleUnitKind unit_dark_keeper = {
     UNIT_DARK_CRAW, // mUnitType
     "btl_un_dark_keeper", // name
@@ -82,8 +86,13 @@ BattleUnitKind unit_dark_keeper = {
     data_table, // dataTable
 };
 
+/**
+ * Defense of the Dark Craw against normal, fire, ice, explosion and electric attacks: none, so it takes
+ * full damage from every element.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Damage-type reactions of the Dark Craw: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -111,6 +120,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Pose table of the Dark Craw: maps each battle pose (idle, hurt, attacking and so on) to its animation. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -132,17 +142,26 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_2"},
 };
 
+/**
+ * Event data table of the Dark Craw: scripts that replace the standard handling for an attacker being hurt
+ * by its spiked head (tag 37).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/**
+ * Parts of the Dark Craw: 2 parts: parts 1 and 2 (model c_monban_t), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_dark_keeper", "c_monban_t", 0.0f, 0.0f, 0.0f, 8.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
     {2, "btl_un_dark_keeper", "c_monban_t", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon record of the Dark Craw's charge: 6 damage and counts as a hammer-type hit. */
 static BattleWeapon weapon_monban_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -179,6 +198,7 @@ static BattleWeapon weapon_monban_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon record of the Dark Craw's thrown-weapon attack: 6 damage. */
 static BattleWeapon weapon_monban_throw_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -215,6 +235,10 @@ static BattleWeapon weapon_monban_throw_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Sound cues for the animations of the Dark Craw: each entry plays a sound effect at a set time within a
+ * pose, such as SFX_ENM_MONBAN_WAIT1.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"S_2", 0.6666667f, NULL, "SFX_ENM_MONBAN_WAIT1", 0, 1},
     {NULL, 0.0f, NULL, NULL, 0, 1},

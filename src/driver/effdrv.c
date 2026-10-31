@@ -1,3 +1,5 @@
+// Effect driver: the effect entry pool, the effect textures and the Maya-exported effect animations.
+
 #include "driver/effdrv.h"
 #include "hwaccess.h"
 #include <dolphin/os/OSFastCast.h>

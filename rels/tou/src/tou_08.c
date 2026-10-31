@@ -134,6 +134,7 @@ static EVT_BEGIN(toile_out)
     RETURN
 EVT_END()
 
+/** Exits of this room: the door back to the main corridor tou_04 and the restroom pipe down to tou_04. */
 static BeroEntry bero_data[] = {
     {
         "n_bero", // hitName
@@ -386,6 +387,10 @@ static EVT_BEGIN(talk_uranoko)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the major-league locker room: Grubba, Jolene, a guard, the Koopatrol and Shady Koopa fighters
+ * and Rawk Hawk.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガンス"*/"\x83\x4B\x83\x93\x83\x58", // name

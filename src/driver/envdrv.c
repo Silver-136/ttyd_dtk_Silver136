@@ -1,3 +1,6 @@
+// Environment driver: screen effects drawn with the map: glare, blur, depth of field and the
+// environment textures.
+
 #include "driver/envdrv.h"
 #include "driver/arcdrv.h"
 #include "driver/dispdrv.h"
@@ -19,6 +22,7 @@
 
 //.data
 
+/** Glare filter type 0: the screen copy added back 16 times, up to 7 pixels off in a cross: a star glow. */
 EnvironmentGlare envGlare0 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1, 5.25f, 16,
     {
@@ -29,6 +33,7 @@ EnvironmentGlare envGlare0 = {
     }
 };
 
+/** Glare filter type 1: the screen copy added back 8 times in a small ring around each pixel, a soft glow. */
 EnvironmentGlare envGlare1 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1_2, 3.5f, 8,
     {
@@ -37,6 +42,7 @@ EnvironmentGlare envGlare1 = {
     }
 };
 
+/** Glare filter type 2: the screen copy added back 52 times over a filled diamond: a strong bloom. */
 EnvironmentGlare envGlare2 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1_4, 3.5f, 52,
     {
@@ -56,6 +62,7 @@ EnvironmentGlare envGlare2 = {
     }
 };
 
+/** Glare filter type 3: the screen copy added back 16 times on a diamond ring 3 to 4 pixels out, a halo. */
 EnvironmentGlare envGlare3 = {
     GX_BM_BLEND, GX_BL_ONE, GX_BL_ONE, GX_TEV_KCSEL_7_8, GX_TEV_KCSEL_1_2, 3.5f, 16,
     {
@@ -71,6 +78,7 @@ static EnvironmentWork work[2];
 
 //.sbss
 TEXPalette* env_tpl = NULL;
+/** Set once env.tpl has finished loading and is unpacked; cleared by envInit. */
 s32 tpl_ok = 0;
 
 //local prototypes
@@ -259,6 +267,7 @@ void envMain(void) {
     dispEntry(CAMERA_3D, 5000.0f, 8, envDisp2, NULL);
 }
 
+/** Texture matrix slots (GX_TEXMTX0 to 9) by index, for the environment textures and depth of field. */
 static const s32 texmtx_tbl[] = {30, 33, 36, 39, 42, 45, 48, 51, 54, 57};
 
 static inline f32 env_sin(f32 x) {
@@ -346,6 +355,7 @@ static inline f32 dofDiv(f32 a, f32 b) { return a / b; }
     GXPosition3f32(-(s32)(g)->fbWidth / (half), -(s32)(g)->efbHeight / (half), 0.0f);  \
     GXTexCoord2f32(0.0f, 1.0f)
 
+/** Opaque white, the TEV colour of the depth-of-field pass (envDisp_DepthOfField). */
 static const GXColor white = {0xFF, 0xFF, 0xFF, 0xFF};
 
 #pragma opt_propagation off

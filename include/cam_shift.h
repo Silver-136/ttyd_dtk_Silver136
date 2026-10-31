@@ -1,3 +1,5 @@
+// cam_shift.c: the field camera shift (camShiftInit/camShiftMain), panned with the C stick.
+
 #pragma once
 
 #include "driver/camdrv.h"

@@ -1,3 +1,5 @@
+// Parabuzzy (patamet): battle unit used in Pirate's Grotto.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -60,6 +62,7 @@ static EvtWord ceil_fall_ready_event[158];
 static EvtWord attack_event_ceil[467];
 static EvtWord wait_event_ceil[6];
 
+/** Unit data of the Parabuzzy: 5 HP, level 20; the battle starts it from init_event_pata. */
 BattleUnitKind unit_patamet = {
     UNIT_PARABUZZY, // mUnitType
     "btl_un_patamet", // name
@@ -108,6 +111,7 @@ BattleUnitKind unit_patamet = {
     data_table_pata, // dataTable
 };
 
+/** Weapon data for the Parabuzzy's dive attack: 3 damage, a jump-type hit, one target. */
 static BattleWeapon weapon_patamet_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -144,8 +148,13 @@ static BattleWeapon weapon_patamet_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of the Parabuzzy while it still has its wings: 4 against normal, ice and electric hits;
+ * immune to fire and explosions (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence_pata = {{4, 99, 4, 99, 4}};
 
+/** Elemental reactions of the Parabuzzy: is immune to fire and explosion attacks. */
 static BattleUnitDefenseAttr defence_attr_pata = {{0, 2, 0, 2, 0}};
 
 static StatusVulnerability regist_pata = {
@@ -173,6 +182,10 @@ static StatusVulnerability regist_pata = {
     95, // ohko
 };
 
+/**
+ * Pose table of the winged Parabuzzy: the animation each battle pose (idle, hurt, fly, attack and so on)
+ * plays.
+ */
 static PoseTableEntry pose_table_pata[] = {
     {POSE_TYPE_SLEEP, "PMT_N_1"},
     {POSE_TYPE_STOP, "PMT_Y_1"},
@@ -194,16 +207,25 @@ static PoseTableEntry pose_table_pata[] = {
     {POSE_TYPE_ACTION, "PMT_S_1"},
 };
 
+/**
+ * Event table of the Parabuzzy: being knocked out of the air (dmg_fall_event_pata, tag 14) and the First
+ * Strike reaction (dmg_first_attack_pos_event_pata, tag 48).
+ */
 static BattleDataEntry data_table_pata[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event_pata},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos_event_pata},
     {0, NULL},
 };
 
+/** Body part of the Parabuzzy (winged), model c_met: its one target part. */
 static BattleUnitKindPart parts_pata[] = {
     {1, "btl_un_patamet", "c_met", 0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 0.0f, 0.0f, 25.0f, 0.0f, 20, 30, 255, &defence_pata, &defence_attr_pata, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_pata},
 };
 
+/**
+ * Sound table of the Parabuzzy: which sound each of its poses (idle, walk, run, attack and so on) plays, and
+ * when.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"PMT_S_1", 0.01f, NULL, "SFX_ENM_PATAMET_WAIT1", 0, 1},
     {"PMT_W_1", 0.01f, NULL, "SFX_ENM_PATAMET_WAIT1", 0, 1},
@@ -395,6 +417,9 @@ static EVT_BEGIN(wait_event_pata)
     RETURN
 EVT_END()
 
+/**
+ * Pose table of the Buzzy Beetle: the animation each battle pose (idle, hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "MET_N_1"},
     {POSE_TYPE_STOP, "MET_Y_1"},
@@ -416,6 +441,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MET_S_1"},
 };
 
+/**
+ * Pose table of the Buzzy Beetle while it clings to the ceiling: the animation each battle pose (idle, hurt,
+ * walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "SMT_N_1"},
     {POSE_TYPE_STOP, "SMT_Y_1"},
@@ -437,6 +466,10 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "SMT_S_1"},
 };
 
+/**
+ * Pose table of the Buzzy Beetle while it lies flipped on its back: the animation each battle pose (idle,
+ * hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "MET_N_2"},
     {POSE_TYPE_STOP, "MET_Y_2"},
@@ -457,12 +490,20 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "MET_S_2"},
 };
 
+/**
+ * Event table of the Buzzy Beetle: being flipped onto its back (dmg_turn_event, tag 13) and the First Strike
+ * reaction (does nothing).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/**
+ * Event table of the Buzzy Beetle while it clings to the ceiling: its counter-damage reactions (tags 25 to
+ * 36, all running counter_damage_event_ceil) and the First Strike reaction (does nothing).
+ */
 static BattleDataEntry data_table_ceil[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event_ceil},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event_ceil},
@@ -480,6 +521,7 @@ static BattleDataEntry data_table_ceil[] = {
     {0},
 };
 
+/** Weapon data for the Buzzy Beetle's shell attack: 3 damage, a shell-toss-type hit, one target. */
 static BattleWeapon weapon_met_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -516,6 +558,7 @@ static BattleWeapon weapon_met_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for the Buzzy Beetle's drop from the ceiling: 4 damage, a jump-type hit, one target. */
 static BattleWeapon weapon_met_ceil_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -552,12 +595,22 @@ static BattleWeapon weapon_met_ceil_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of the Parabuzzy once it has lost its wings: 4 against normal, ice and electric hits;
+ * immune to fire and explosions (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
+/** Elemental reactions of the Buzzy Beetle: is immune to fire and explosion attacks. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
 
+/** Defence of the Buzzy Beetle while it lies flipped on its back: none against any element. */
 static BattleUnitDefense defence_turn = {0};
 
+/**
+ * Elemental reactions of the Buzzy Beetle while it lies flipped on its back: none, every element hurts it
+ * normally.
+ */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
 static StatusVulnerability regist = {
@@ -585,6 +638,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Buzzy Beetle, model c_met: its one target part. */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum

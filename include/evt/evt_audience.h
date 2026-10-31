@@ -1,3 +1,5 @@
+// evt_audience.c: script commands for the battle audience (flags, positions, animations).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

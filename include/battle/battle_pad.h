@@ -1,3 +1,5 @@
+// Declares the battle controller input structure and its update functions.
+
 #pragma once
 
 #include <dolphin/pad.h>

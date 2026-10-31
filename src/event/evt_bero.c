@@ -1,3 +1,6 @@
+// Script commands and scripts for map entrances and exits ("bero"): roads, doors, pipes and gates,
+// Mario's walk in and out, and the camera changes around them.
+
 #include "evt/evt_bero.h"
 #include "cam_road.h"
 #include "driver/hitdrv.h"
@@ -38,6 +41,11 @@ f32 BeroEX, BeroEY, BeroEZ; //end position
 Vec BeroPT, BeroAT;
 BOOL BeroMarioGO;
 
+/**
+ * Stand-in entrance for an arrival with no entrance name: no hit object, normal type,
+ * direction and start point worked out automatically. The entrance lookup falls back to it
+ * when gp->beroEnterName is empty.
+ */
 BeroEntry bero_null[] = {
     {
         NULL, // hitName

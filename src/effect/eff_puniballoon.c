@@ -1,3 +1,5 @@
+// Puni balloon (puni: the Punies): a wobbling balloon (type 0) that pops into a burst of small pieces (type 1).
+
 #include "driver/camdrv.h"
 #include "eff/eff_puniballoon.h"
 #include "driver/dispdrv.h"

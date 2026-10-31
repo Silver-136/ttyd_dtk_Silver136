@@ -1,3 +1,5 @@
+// Action command: air gauge (ac_air_gauge); press A repeatedly to fill a gauge that constantly drains.
+
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_pad.h"
@@ -31,6 +33,10 @@ typedef struct GaugeKey {
 GaugeKey _table_0[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 GaugeKey _table_1[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 GaugeKey _table_2[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
+/**
+ * Gauge curve keys {frame, value, flag; -1 ends it} of the final curve:
+ * copy 3 of the 7 static tables the inlined header code emits, never read here.
+ */
 GaugeKey _table_3[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 GaugeKey _table_4[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};
 GaugeKey _table_5[5] = {{0, 0.0f, 1}, {20, 1.0f, 1}, {40, 1.0f, 1}, {80, 0.0f, 0}, {-1, -1.0f, 0}};

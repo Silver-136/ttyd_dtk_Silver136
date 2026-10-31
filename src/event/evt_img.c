@@ -1,3 +1,5 @@
+// Script commands for 2D images and pictures (imgdrv).
+
 #include "driver/animdrv.h"
 #include "driver/imgdrv.h"
 #include "driver/offscreendrv.h"

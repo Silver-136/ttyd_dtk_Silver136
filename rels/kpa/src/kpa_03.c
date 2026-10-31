@@ -19,6 +19,10 @@ static EvtWord jumpstand_evt[60];
 static NpcSetupInfo npcEnt[1];
 EvtWord kpa_03_init_evt[44];
 
+/**
+ * Blocks, hidden blocks, pipes and obstacle blocks of side-scrolling stage 2 by the sea, listed from left to
+ * right.
+ */
 static EvtWord kpa_act_stg2_mobj[] = {
     KPA_OBJ_SANGO(-1275.0f, 0.0f), KPA_OBJ_BRICK_2(-1100.0f, 200.0f), KPA_OBJ_SANGO(-1100.0f, 250.0f),
     KPA_OBJ_BRICK_2(-925.0f, 0.0f), KPA_OBJ_BRICK_2(-925.0f, 50.0f), KPA_OBJ_BRICK_2(-925.0f, 100.0f),
@@ -46,6 +50,7 @@ static EvtWord kpa_act_stg2_mobj[] = {
     KPA_OBJ_BRICK_2(1475.0f, 350.0f), KPA_OBJ_END,
 };
 
+/** Coins Bowser can collect in side-scrolling stage 2, as x and z positions. */
 EvtWord kpa_act_stg2_item[] = {
     KPA_ITEM(-1050.0f, 212.5f), KPA_ITEM(-1000.0f, 212.5f), KPA_ITEM(-875.0f, 12.5f),
     KPA_ITEM(-875.0f, 62.5f), KPA_ITEM(-825.0f, 12.5f), KPA_ITEM(-825.0f, 62.5f), KPA_ITEM(-775.0f, 12.5f),
@@ -131,6 +136,7 @@ static EVT_BEGIN(jumpstand_evt)
     RETURN
 EVT_END()
 
+/** No NPCs: the side-scrolling stage is built from the block, pipe and item lists instead. */
 static NpcSetupInfo npcEnt[] = {
     {0},
 };

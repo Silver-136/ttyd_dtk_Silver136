@@ -152,6 +152,10 @@ NpcSetupBattleInfo btlsetup_tik_tbl[30];
 NpcTerritoryInfo btl_tik_setup_no_tbl[30];
 EvtWord bgset_tik_wave_event[59];
 
+/**
+ * Scenery props of the Rogueport Sewers battle stages (stg_00_1, stg_00_2 and stg_00_3), in order, with their
+ * positions.
+ */
 BattleStageObjectData tik_btlobject_data[] = {
     {"isi_2", 2, 0, {-150.0f, 0.0f, -23.0f}, 10, 50, {0}},
     {"isi_3", 2, 0, {-60.0f, 0.0f, -54.0f}, 20, 40, {0}},
@@ -175,6 +179,10 @@ BattleStageObjectData tik_btlobject_data[] = {
     {"C", 2, 3, {0}, 0, 60, {0}},
 };
 
+/**
+ * The four Rogueport Sewers battle stages, each with its slice of tik_btlobject_data and the wave background
+ * script.
+ */
 BattleStageData tik_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -2256,6 +2264,10 @@ NpcBattleSelect btlgrpsel_tik_btlno_tik_20_06_off[] = {
     {0},
 };
 
+/**
+ * Encounter table of the Rogueport Sewers: one entry per battle number with its stage, enemy group pool,
+ * battle music and random-roll ranges.
+ */
 NpcSetupBattleInfo btlsetup_tik_tbl[] = {
     {
         /*"マップstg_00_1"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x30\x5F\x31", // name

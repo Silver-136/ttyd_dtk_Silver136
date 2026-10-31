@@ -28,6 +28,10 @@ static EvtWord phase_event[2];
 static EvtWord attack_event[492];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Goomba (btl_un_kuriboo): 2 HP, level 7, a plain headbonk for 1 damage.
+ * It is a copy of the common enemy that win.rel carries, but no battle group of Boggly Woods places it.
+ */
 static BattleUnitKind unit_kuriboo = {
     UNIT_GOOMBA, // mUnitType
     "btl_un_kuriboo", // name
@@ -96,13 +100,16 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
+/** Data table of the Goomba: event 48 (First Strike) does nothing. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Flat damage reduction of the Goomba against normal, fire, ice, explosion and electric hits: none. */
 static BattleUnitDefense defence = {0};
 
+/** Element attributes of the Goomba: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -130,6 +137,9 @@ static StatusVulnerability regist = {
     150, // ohko
 };
 
+/**
+ * The Goomba's single part: the Goomba model (c_kuribo), the main target and the part that covers for allies.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -149,6 +159,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** The Goomba's headbonk: 1 damage to one opposing target, a jump-like attack that can be guarded. */
 static BattleWeapon weapon_kuriboo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

@@ -1,3 +1,5 @@
+// imgdrv.c: the image driver (ImageEntry, ImageShadow): paper poses drawn as flat images, with captured shadows.
+
 #pragma once
 
 #include "driver/camdrv.h"

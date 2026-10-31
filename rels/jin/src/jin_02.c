@@ -59,6 +59,7 @@ EVT_BEGIN(n1_open)
     RETURN
 EVT_END()
 
+/** Doors of this room: the north exit (n_bero_2) to jin_03 and the north exit (n_bero_1) to jin_00. */
 static BeroEntry bero_entry_data[] = {
     {
         "n_bero_2", // hitName

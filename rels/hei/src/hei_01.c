@@ -74,6 +74,7 @@ EVT_BEGIN(bero_out_event)
     RETURN
 EVT_END()
 
+/** Doors of this room: the west exit (w_bero) to hei_13 and the east exit (e_bero) to nok_00 (Petalburg). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -166,6 +167,7 @@ static EVT_BEGIN(evt_kusa_7)
     RETURN
 EVT_END()
 
+/** Grass patches Mario can hit on this field (a_kusa_2 to a_kusa_8); three of them run events when cut. */
 static KusaAccess kusa_data[] = {
     {0, "a_kusa_2", "kusa_2", evt_kusa_2},
     {0, "a_kusa_3", "kusa_7", NULL},
@@ -196,6 +198,10 @@ EVT_BEGIN(kusa_dokan)
     RETURN
 EVT_END()
 
+/**
+ * The 25 parts of the bridge (hasi_1 to hasi_25) that are captured into the paper image of the
+ * bridge-flipping scene.
+ */
 static const char* name_tbl[] = {
     "hasi_1",
     "hasi_2",
@@ -758,6 +764,10 @@ EVT_BEGIN(evt_nokorin)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the field: Koops (Nokotaro), who is met here and joins as a partner, and Koopie Koo (Nokorin), who
+ * tries to talk him out of fighting Hooktail.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ノコタロウ"*/"\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45", // name
@@ -786,6 +796,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Guess: damage-return spots for the map objects mod_00 and mod_01, registered with
+ * evt_hit_damage_return_set; both sit far below the field.
+ */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_00", {0.0f, -1000.0f, 0.0f}},
     {"mod_01", {0.0f, -1000.0f, 0.0f}},

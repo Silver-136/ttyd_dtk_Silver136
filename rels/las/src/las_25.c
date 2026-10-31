@@ -113,6 +113,10 @@ static EVT_BEGIN(e2_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Exits of las_25: west door w_bero to las_23 (e_bero_1); east door e_bero_1 to las_26 (w_bero); east door
+ * e_bero_2 to las_27 (w_bero); north road n_bero_1 to las_24 (s_bero_2).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -187,6 +191,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Exit of las_25: west door w_bero to las_23 (e_bero_2). */
 static BeroEntry w_bero_mapchg[] = {
     {
         "w_bero", // hitName
@@ -208,6 +213,7 @@ static BeroEntry w_bero_mapchg[] = {
     },
 };
 
+/** Item list for the key window: only Palace Key 0x30 (-1 ends the list). */
 static s32 key_tbl[] = {
     ITEM_PALACE_KEY_0x30, -1,
 };

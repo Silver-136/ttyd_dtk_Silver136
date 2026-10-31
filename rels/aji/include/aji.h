@@ -1,3 +1,5 @@
+// X-Naut Fortress (aji, ajito: hideout): declarations of the area's map init events and shared events.
+
 #pragma once
 
 #include "dolphin/types.h"

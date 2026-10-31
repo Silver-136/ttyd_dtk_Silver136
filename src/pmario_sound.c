@@ -1,3 +1,7 @@
+// pmario_sound.c: the game's sound layer (psnd*). It plays BGM, ambient ENV sounds and sound effects by name from
+// the tables below, and runs their fades, volume mixes, 3D panning and the per-map reset; sound.c below it drives
+// MusyX and the streamed audio.
+
 #include "libc_decls.h"
 #include "driver/seqdrv.h"
 #include "system.h"
@@ -4549,6 +4553,10 @@ SoundEffectEntry pssfxlist[] = {
     {"", 0, "", 0, 0, 0, 0, 0, 0, 0}
 };
 
+/**
+ * Environment sounds (wind, water, crowds and other map ambience): the effect each one plays, its volume and
+ * whether it loops or repeats at random intervals and positions; the id is its index in psenvlistname.
+ */
 SoundEnvList psenvlist[] = {
     {0x1, 0x102E, 0x41, 0x0, 0x0, 0x7, 0x3, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
     {0x1, 0x102F, 0x41, 0x0, 0x0, 0x7, 0x3, 0.0f, 0.0f, 0.0f, 0x14, 0x32, 0x12},
@@ -4913,6 +4921,7 @@ const char* psenvlistname[] = {
     "ENV_SYS_FL1"
 };
 
+/** Paths of the sound name databases for music, environment sounds and effects; nothing in the game reads them. */
 const char psdb_bgm_txt[0x28] = "%s/sound/proj/pmario_sound_bgm_txt.db";
 const char psdb_env_txt[0x28] = "%s/sound/proj/pmario_sound_env_txt.db";
 const char psdb_sfx_txt[0x28] = "%s/sound/proj/pmario_sound_sfx_txt.db";

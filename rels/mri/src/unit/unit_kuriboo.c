@@ -1,3 +1,5 @@
+// The Great Tree (mri) battle unit: Goomba (kuriboo): its parts, defence/status tables, and attack events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -28,6 +30,10 @@ static EvtWord phase_event[2];
 static EvtWord attack_event[492];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Goomba; ties together its sounds, parts, status vulnerability, init event
+ * and event table.
+ */
 static BattleUnitKind unit_kuriboo = {
     UNIT_GOOMBA, // mUnitType
     "btl_un_kuriboo", // name
@@ -96,13 +102,16 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
+/** Event table of the Goomba: it has no special event scripts. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Defence of the Goomba: 0 against every kind of hit. */
 static BattleUnitDefense defence = {0};
 
+/** Defence attributes of the Goomba: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -130,6 +139,7 @@ static StatusVulnerability regist = {
     150, // ohko
 };
 
+/** Parts of the Goomba: 1 part (model c_kuribo). */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -149,6 +159,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon of the Goomba (attack): targets one unit for 1 damage; used by attack_event. */
 static BattleWeapon weapon_kuriboo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

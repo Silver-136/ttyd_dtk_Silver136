@@ -1,3 +1,5 @@
+// sound.h: the game's sound layer over MusyX: music (SoundSong*), sound effects (SoundEfx*), streamed audio and sample banks.
+
 #pragma once
 
 /* SLIB File Structure:

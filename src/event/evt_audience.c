@@ -1,3 +1,5 @@
+// Script commands for the battle audience: audience flags, positions and reactions.
+
 #include "evt/evt_audience.h"
 #include "battle/battle_audience.h"
 #include "system.h"

@@ -163,6 +163,10 @@ static EVT_BEGIN(kizayarou_init)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of this map: the Shadow Sirens Vivian, Marilyn and Beldam, who appear here during chapter 2,
+ * and Fabio, the client of trouble 28.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ビビアン"*/"\x83\x72\x83\x72\x83\x41\x83\x93", // name
@@ -215,6 +219,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Exits of this map: west to win_06 (the pipe from Rogueport Sewers) and east to win_01. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -920,6 +925,7 @@ static EVT_BEGIN(ki_data_evt_01)
     RETURN
 EVT_END()
 
+/** Trees of this map that shake when Mario hammers them; the first drops a Sleepy Sheep once. */
 static TreeAccess tree_access_data[] = {
     {4, "A_tree_01", "S_tree_mki_01", "S_tree_ha01", 0, ki_data_evt_01},
     {4, "A_tree_02", "S_tree_mki_02", "S_tree_ha02", 0, NULL},

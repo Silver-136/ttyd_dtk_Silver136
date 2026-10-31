@@ -98,6 +98,10 @@ static EvtWord bunsin_event[152];
 static EvtWord spawn_event[76];
 static EvtWord wait_event[386];
 
+/**
+ * Unit data of the Dark Wizzerd: 10 HP, 48x44 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_super_mahorn = {
     UNIT_DARK_WIZZERD, // mUnitType
     "btl_un_super_mahorn", // name
@@ -146,6 +150,10 @@ BattleUnitKind unit_super_mahorn = {
     data_table, // dataTable
 };
 
+/**
+ * Unit data of the Dark Wizzerd clone; ties together its sounds, parts, status vulnerability, init event
+ * and event table.
+ */
 static BattleUnitKind unit_super_mahorn_bunsin = {
     UNIT_DARK_WIZZERD_CLONE, // mUnitType
     "btl_un_super_mahorn_bunsin", // name
@@ -190,8 +198,10 @@ static BattleUnitKind unit_super_mahorn_bunsin = {
     (BattleDataEntry*)data_table_bunsin, // dataTable
 };
 
+/** Defence of the Dark Wizzerd: 2 against every kind of hit. */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/** Defence attributes of the Dark Wizzerd: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -244,6 +254,7 @@ static StatusVulnerability regist_bunsin = {
     0, // ohko
 };
 
+/** Parts of the Dark Wizzerd: 5 parts (model c_maho_b). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_super_mahorn", "c_maho_b", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_super_mahorn", "c_maho_b", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
@@ -252,6 +263,10 @@ static BattleUnitKindPart parts[] = {
     {5, "btl_un_super_mahorn", "c_maho_b", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
 };
 
+/**
+ * Weapon of the Dark Wizzerd (attack magic): targets one unit for 5 damage, ignores Defense;
+ * used by attack_event.
+ */
 static BattleWeapon weapon_mahorn_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -288,6 +303,10 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the Dark Wizzerd (all attack magic): targets every unit for 5 damage, electric element;
+ * used by attack_event.
+ */
 static BattleWeapon weapon_mahorn_all_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -329,6 +348,9 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the Dark Wizzerd (attack punch): targets one unit for 5 damage; used by attack_event.
+ */
 static BattleWeapon weapon_mahorn_attack_punch = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -365,6 +387,10 @@ static BattleWeapon weapon_mahorn_attack_punch = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the Dark Wizzerd (trans magic): targets one unit, inflicts Invisible (3 turns);
+ * used by attack_event.
+ */
 static BattleWeapon weapon_mahorn_trans_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -402,6 +428,10 @@ static BattleWeapon weapon_mahorn_trans_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the Dark Wizzerd (yokeyoke magic): targets one unit, inflicts Dodgy (3 turns);
+ * used by attack_event.
+ */
 static BattleWeapon weapon_mahorn_yokeyoke_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -438,6 +468,10 @@ static BattleWeapon weapon_mahorn_yokeyoke_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the Dark Wizzerd (dekadeka magic): targets one unit, makes the target Huge (3 turns);
+ * used by attack_event.
+ */
 static BattleWeapon weapon_mahorn_dekadeka_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -475,6 +509,10 @@ static BattleWeapon weapon_mahorn_dekadeka_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the Dark Wizzerd (katikati magic): targets one unit, raises Defense (3 turns);
+ * used by attack_event.
+ */
 static BattleWeapon weapon_mahorn_katikati_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -513,6 +551,7 @@ static BattleWeapon weapon_mahorn_katikati_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Dark Wizzerd (recover magic): targets one unit; used by attack_event. */
 static BattleWeapon weapon_mahorn_recover_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -547,6 +586,10 @@ static BattleWeapon weapon_mahorn_recover_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Spawn setup for the Dark Wizzerd clone (unit_super_mahorn_bunsin): enemy side,
+ * placed off-screen at first; used by spawn_event.
+ */
 static BattleUnitSetup entry_mahorn = {
     &unit_super_mahorn_bunsin, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -694,6 +737,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MAH_S_1"},
 };
 
+/**
+ * Event table of the Dark Wizzerd: mahorn_subset_dead_event (tag 49),
+ * mahorn_subset_blow_dead_event (tag 58), avoid_miss_event (tag 46).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, mahorn_subset_dead_event},
     {UNIT_DATA_BLOW_DEAD_EVENT, mahorn_subset_blow_dead_event},
@@ -702,6 +749,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Event table of the Dark Wizzerd clone: avoid_miss_event (tag 46). */
 static BattleDataEntry data_table_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},

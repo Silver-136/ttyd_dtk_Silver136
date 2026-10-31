@@ -1,3 +1,5 @@
+// Script commands that register, run and remove case events (hit-triggered scripts, casedrv).
+
 #include "evt/evt_case.h"
 #include "driver/casedrv.h"
 #include "manager/evtmgr.h"

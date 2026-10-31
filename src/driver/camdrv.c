@@ -1,3 +1,6 @@
+// Camera driver: the fixed set of cameras (offscreen, shadow, background, 3D, 2D, fade...), their
+// projection and view matrices, and the per-frame camera update.
+
 #include "driver/camdrv.h"
 #include "driver/mapdrv.h"
 #include "driver/seqdrv.h"

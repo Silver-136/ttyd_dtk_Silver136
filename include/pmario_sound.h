@@ -1,3 +1,5 @@
+// pmario_sound.c: the game's sound API (psnd*): BGM, ENV and sound effects (PaperSoundWork and its entry structs).
+
 #pragma once
 
 #include <dolphin/mtx.h>

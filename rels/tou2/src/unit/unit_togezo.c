@@ -1,3 +1,5 @@
+// unit_togezo: Spiny, battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -48,6 +50,10 @@ static EvtWord guard_event[95];
 static EvtWord guard_cancel_event[89];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Spiny: 3 HP and level 9, with its parts, status vulnerability, init event and event
+ * data table.
+ */
 BattleUnitKind unit_togezo = {
     UNIT_SPINY, // mUnitType
     "btl_un_togezo", // name
@@ -96,8 +102,10 @@ BattleUnitKind unit_togezo = {
     data_table, // dataTable
 };
 
+/** Defense of the Spiny against normal, fire, ice, explosion and electric attacks: 3, 3, 3, 3, 3. */
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 
+/** Damage-type reactions of the Spiny: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -125,10 +133,22 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/**
+ * Defense of the Spiny against normal, fire, ice, explosion and electric attacks while it is flipped onto
+ * its back: none, so it takes full damage from every element.
+ */
 static BattleUnitDefense defence_turn = {0};
 
+/**
+ * Damage-type reactions of the Spiny while it is flipped onto its back: none, so every element hurts it
+ * normally.
+ */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
+/**
+ * Status vulnerability of the Spiny while it is flipped onto its back, as the percent chance each status
+ * takes hold: every status lands at the normal rate.
+ */
 static StatusVulnerability regist_turn = {
     100, // sleep
     100, // stop
@@ -154,10 +174,22 @@ static StatusVulnerability regist_turn = {
     100, // ohko
 };
 
+/**
+ * Defence of the Spiny while it is curled up guarding:
+ * defence 99 against every kind of hit, so no attack does damage.
+ */
 static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
 
+/**
+ * Damage-type reactions of the Spiny while it is curled up guarding: immune to normal, fire, ice,
+ * explosion and electric.
+ */
 static BattleUnitDefenseAttr defence_attr_guard = {{2, 2, 2, 2, 2}};
 
+/**
+ * Status vulnerability of the Spiny while it is curled up guarding, as the percent chance each status
+ * takes hold: every status lands at the normal rate.
+ */
 static StatusVulnerability regist_guard = {
     100, // sleep
     100, // stop
@@ -233,6 +265,10 @@ static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_ACTION, "TGZ_P_1"},
 };
 
+/**
+ * Event data table of the Spiny: scripts that replace the standard handling for being flipped over by a
+ * stomp (tag 13) and an attacker being hurt by its spikes (tags 37 and 39).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_event},
@@ -241,12 +277,20 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Event data table of the Spiny while it is flipped onto its back: scripts that replace the standard
+ * handling for being flipped over by a stomp (tag 13).
+ */
 static BattleDataEntry data_table_turn[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/**
+ * Event data table of the Spiny while it is curled up guarding: scripts that replace the standard handling
+ * for an attacker being hurt by its spikes (tags 37 and 39).
+ */
 static BattleDataEntry data_table_guard[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_event},
     {UNIT_DATA_AVOID_THORN_EVENT, dmg_avoid_counter_thorn_event},
@@ -254,10 +298,15 @@ static BattleDataEntry data_table_guard[] = {
     {0},
 };
 
+/**
+ * Parts of the Spiny: a single body part (part 1, model c_togezo), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_togezo", "c_togezo", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, kCounterTopSpiky | kCounterFrontSpiky, pose_table},
 };
 
+/** Weapon record of the Spiny's rolling attack: 3 damage and counts as a hammer-type hit. */
 static BattleWeapon weapon_togezo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

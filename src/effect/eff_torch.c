@@ -1,3 +1,5 @@
+// Torch flame: a camera-facing flame made of six overlapping scrolling flame textures; `scale` sets its size.
+
 #include "eff/eff_torch.h"
 #include "driver/dispdrv.h"
 #include "mario/mariost.h"

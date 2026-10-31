@@ -77,6 +77,10 @@ USER_FUNC(puni_get_id) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Exits of mri_16: dokan1 (scripted pipe); pipe dokan2 to mri_18 (dokan2); dokan3 (scripted pipe); dokan4
+ * (scripted pipe); dokan6 (scripted pipe); pipe dokan7 to mri_13 (dokan).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "dokan1", // hitName
@@ -367,6 +371,10 @@ EVT_BEGIN(switch_up_down)
     RETURN
 EVT_END()
 
+/**
+ * Where Mario is put back after damage from falling through the floor panels: the lower floor on either
+ * side, or a point far below the room.
+ */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"S_f2_yuka01_l", {-248.0f, 80.0f, 27.0f}},
     {"S_f2_yuka01_r", {248.0f, 80.0f, 27.0f}},

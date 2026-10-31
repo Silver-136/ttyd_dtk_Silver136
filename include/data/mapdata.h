@@ -1,3 +1,5 @@
+// mapdata.c: the world, area and map tables (WorldData, AreaData, MapData) and the lookups that bind area REL scripts.
+
 #pragma once
 
 #include <dolphin/types.h>

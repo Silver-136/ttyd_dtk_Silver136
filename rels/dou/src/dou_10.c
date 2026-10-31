@@ -69,6 +69,9 @@ static EvtWord dou_puka_event_main0[60];
 static HitDamageReturn hitDmgRetPoints[4];
 EvtWord dou_10_init_evt[64];
 
+/**
+ * Exits (beros) of this room: w_bero_1 to dou_09, w_bero_2 to dou_09, n_bero to dou_06 and e_bero to dou_11.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
@@ -137,6 +140,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Map objects of the 15 waves that are moved along their lanes by the wave script. */
 const char* namiyoke_mapobj[] = {
     "S_nami1",
     "S_nami2",
@@ -595,6 +599,9 @@ static EVT_BEGIN(dou_puka_event_main0)
     RETURN
 EVT_END()
 
+/**
+ * Hazard-water floors of this room (map hit names) and the point each puts Mario back at after he is bitten.
+ */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_01", {-700.0f, 50.0f, -90.0f}},
     {"mod_03", {-130.0f, 50.0f, -90.0f}},

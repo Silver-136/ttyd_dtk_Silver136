@@ -1,3 +1,5 @@
+// Dust and splash effects under Mario's feet (walking, landing, running on water).
+
 #include "mario/mario.h"
 #include "mario/mariost.h"
 #include "driver/effdrv.h"

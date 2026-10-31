@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: a jagged yellow lightning bolt between two points, wobbling from frame to frame.
+
 #include "eff/n64/eff_pokopi_thunder_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -12,6 +14,11 @@
 #include <math.h>
 #include "eff/eff_n64.h"
 
+/**
+ * Wobble frames of the lightning bolt (yuragi, "sway"), one row per frame:
+ * twelve sideways offsets of the bolt's points,
+ * then twelve ribbon widths that thin it out toward the far end. Used by types 0 and 2.
+ */
 u8 yuragi_data[11][24] = {
     {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 9, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0},
     {5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0},
@@ -25,6 +32,7 @@ u8 yuragi_data[11][24] = {
     {30, 30, 25, 25, 35, 20, 15, 10, 15, 15, 5, 0, 2, 2, 2, 2, 2, 2, 6, 2, 2, 2, 6, 5},
     {27, 27, 22, 22, 32, 17, 12, 7, 12, 12, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0},
 };
+/** The wobble frames used by type 1, a looser bolt with wider swings. */
 u8 yuragi_data2[11][24] = {
     {25, 25, 25, 5, 25, 5, 25, 25, 5, 25, 25, 25, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0},
     {15, 15, 15, 25, 15, 15, 5, 25, 25, 15, 25, 25, 4, 4, 4, 4, 4, 3, 2, 1, 0, 0, 0, 0},

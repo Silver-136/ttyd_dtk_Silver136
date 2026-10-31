@@ -1,3 +1,5 @@
+// npc_data.c: the NPC kind tables (npcTribe) and the AI and territory type tables (NpcAiInfo, npc_ai_type_table).
+
 #pragma once
 
 #include "driver/npcdrv.h"

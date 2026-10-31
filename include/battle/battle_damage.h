@@ -1,3 +1,5 @@
+// Declares the damage and counterattack work structures and the damage functions.
+
 #pragma once
 
 #include <dolphin/types.h>

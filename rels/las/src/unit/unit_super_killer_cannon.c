@@ -43,6 +43,10 @@ static USER_FUNC(killer_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of the B. Bill Blaster: 10 HP, 52x38 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_super_killer_cannon = {
     UNIT_BOMBSHELL_BILL_BLASTER, // mUnitType
     "btl_un_super_killer_cannon", // name
@@ -91,8 +95,10 @@ BattleUnitKind unit_super_killer_cannon = {
     data_table, // dataTable
 };
 
+/** Defence of the B. Bill Blaster: 4 against every kind of hit. */
 static BattleUnitDefense defence = {{4, 4, 4, 4, 4}};
 
+/** Defence attributes of the B. Bill Blaster: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -120,12 +126,17 @@ static StatusVulnerability regist = {
     90, // ohko
 };
 
+/** Parts of the B. Bill Blaster: 3 parts (model c_killtai_g). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 35, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kNotTargetable, 0, pose_table},
     {3, "btl_un_super_killer_cannon", "c_killtai_g", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kNotTargetable, 0, pose_table},
 };
 
+/**
+ * Spawn setup for the Bombshell Bill (unit_super_killer): enemy side, placed off-screen at first;
+ * used by friend_event.
+ */
 static BattleUnitSetup entry_killer = {
     &unit_super_killer, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -156,6 +167,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KTA_S_1"},
 };
 
+/** Event table of the B. Bill Blaster: it has no special event scripts. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };

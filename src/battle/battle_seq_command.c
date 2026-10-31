@@ -1,3 +1,5 @@
+// Battle command menus: building and handling the action, weapon, item and target selection menus.
+
 #include "battle/battle_seq_command.h"
 #include "battle/battle.h"
 #include "battle/battle_monosiri.h"
@@ -71,7 +73,9 @@ u16 _battleGetPartyIcon(s32 kind);
 s32 _btlcmd_MakePartyTable(BattleWork* wp);
 void _btlcmd_UpdateSelectWeaponTable(BattleWork* wp, s32 type);
 
+/** Jump badges listed in Mario's Jump menu, in menu order, when equipped (_btlcmd_MakeSelectWeaponTable). */
 s32 _jump_badge_table[8] = {ITEM_POWER_JUMP, ITEM_MULTIBOUNCE, ITEM_SHRINK_STOMP, ITEM_SLEEPY_STOMP, ITEM_SOFT_STOMP, ITEM_TORNADO_JUMP, ITEM_POWER_BOUNCE, ITEM_MEGA_JUMP};
+/** Hammer badges listed in Mario's Hammer menu, in menu order, when equipped (_btlcmd_MakeSelectWeaponTable). */
 s32 _hammer_badge_table[9] = {ITEM_POWER_SMASH, ITEM_PIERCING_BLOW, ITEM_HAMMER_THROW, ITEM_HEAD_RATTLE, ITEM_ICE_SMASH, ITEM_FIRE_DRIVE, ITEM_QUAKE_HAMMER, ITEM_MEGA_SMASH, ITEM_MEGA_QUAKE};
 
 /**
@@ -653,6 +657,10 @@ s32 _btlcmd_MakeSelectWeaponTable(BattleWork* wp, s32 type) {
     return num;
 }
 
+/**
+ * Partner list for the battle's change-partner menu: unit kind, name, menu icon and help message for each partner
+ * (entry 0 empty). _btlcmd_MakePartyTable lists the ones Mario has; _battleGetPartyIcon reads the icons.
+ */
 BattleCheckPartyEntry _checkPartyTable[8] = {
     {0, NULL, 0, NULL},
     {UNIT_GOOMBELLA, "btl_cmd_pt_christine", ICON_PARTY_GOOMBELLA, "btl_hlp_cmd_operation_party1"},

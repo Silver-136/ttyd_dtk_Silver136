@@ -1,3 +1,6 @@
+// Hit (collision) driver: builds the collision objects from the map joints and answers the ray and
+// sphere checks against them.
+
 #include "driver/hitdrv.h"
 #include "addr_word.h"
 #include "hwaccess.h"

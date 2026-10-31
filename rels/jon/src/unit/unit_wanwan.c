@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Chain-Chomp (`wanwan`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
@@ -46,6 +48,10 @@ static EvtWord sound_gensui_event[22];
 static EvtWord wait_sound_event1[25];
 static EvtWord wait_sound_event2[12];
 
+/**
+ * Unit data of the Chain-Chomp in the Pit of 100 Trials: 7 HP, level 32;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_wanwan = {
     UNIT_CHAIN_CHOMP, // mUnitType
     "btl_un_wanwan", // name
@@ -94,8 +100,16 @@ BattleUnitKind unit_wanwan = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Chain-Chomp: 5 against normal, explosion and electric hits;
+ * immune to fire and ice (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{5, 99, 99, 5, 5}};
 
+/**
+ * Damage modifiers of the Chain-Chomp per element (normal, fire, ice, explosion, electric): fire:
+ * immune, ice: immune.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 2, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -123,6 +137,9 @@ static StatusVulnerability regist = {
     90, // ohko
 };
 
+/**
+ * Pose table of the Chain-Chomp: animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "WAN_N_1"},
     {POSE_TYPE_STOP, "WAN_Y_1"},
@@ -145,6 +162,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "WAN_S_1A"},
 };
 
+/**
+ * Data table of the Chain-Chomp: event scripts and values the battle looks up by tag (damage reactions,
+ * dodge, first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
@@ -163,6 +184,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Parts of the Chain-Chomp: 9 parts with their hit boxes, defence tables and pose tables. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kAbsolutePosition, 0, pose_table},
     {2, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -175,6 +197,7 @@ static BattleUnitKindPart parts[] = {
     {9, "btl_un_wanwan", "c_wanwan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon of the Chain-Chomp's lunge and bite: damage 6. */
 static BattleWeapon weapon_wanwan_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

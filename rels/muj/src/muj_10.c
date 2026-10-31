@@ -126,6 +126,7 @@ static EVT_BEGIN(megane_talk)
     RETURN
 EVT_END()
 
+/** NPCs of the hidden dock: the bespectacled sailor. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"めがね水夫"*/"\x82\xDF\x82\xAA\x82\xCB\x90\x85\x95\x76", // name
@@ -222,6 +223,7 @@ static EVT_BEGIN(bero_in_event)
     RETURN
 EVT_END()
 
+/** Doors and exits of muj_10: w_bero to dou_11 (Pirate's Grotto); A_b_bero03 to muj_11. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -346,6 +348,10 @@ EVT_BEGIN(oidasare_event)
     RETURN
 EVT_END()
 
+/**
+ * Mass-NPC figure table of the crowd on the hidden dock: model, animation set and start offset of each sailor
+ * (c_boro_k) and Ember (c_elmos).
+ */
 ExtTexInfo test_ext_entry_data[] = {
     {"c_boro_k", "S_1", 0.0f},
     {"c_boro_k", "S_1", 2.0f},
@@ -380,6 +386,7 @@ ExtTexInfo test_ext_entry_data[] = {
     {0},
 };
 
+/** Frame sequence of the sailors on the hidden dock, ended by -1. */
 static s16 suifu_animtbl[] = {
     0, 0, 1, 1, 2, 2, 3, 3,
     4, 4, 5, 5, 6, 6, 7, 7,
@@ -389,12 +396,14 @@ static s16 suifu_animtbl[] = {
     -1, 0,
 };
 
+/** Frame sequence of the Embers on the hidden dock, ended by -1. */
 static s16 elmos_animtbl[] = {
     20, 20, 21, 21, 22, 22, 23, 23,
     24, 24, 25, 25, 26, 26, 27, 27,
     28, 28, 29, 29, -1, 0,
 };
 
+/** Positions (x, y, z, facing) of the 95 sailors on the hidden dock, placed by senin_event. */
 s32 senin_event_suifupos[] = {
     8, 120, -206, 269, -17, 120, -283, 270,
     21, 120, -308, 270, 33, 120, -308, 270,
@@ -446,6 +455,7 @@ s32 senin_event_suifupos[] = {
     -218, 69, -152, 90,
 };
 
+/** Positions (x, y, z) of the 60 Embers around the hidden dock, placed by senin_event. */
 s32 senin_event_erumospos[] = {
     -128, 167, -132, -121, 191, -133, -117, 157,
     -93, -112, 145, -78, -114, 167, -79, -143,
@@ -619,6 +629,7 @@ static EVT_BEGIN(dai3_shurai_after)
     RETURN
 EVT_END()
 
+/** Return points of the hazard-water floors of the hidden dock. */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"A_yuka01", {0.0f, -1000.0f, 0.0f}},
     {"A_yuka02", {0.0f, -1000.0f, 0.0f}},

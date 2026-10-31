@@ -72,6 +72,7 @@ NpcSetupBattleInfo btlsetup_mri_tbl[22];
 NpcTerritoryInfo btl_mri_setup_no_tbl[22];
 EvtWord stg_02_1_init_evt[8];
 
+/** Scenery pieces of the Great Tree battle stages; mri_btlstage_data entries point into this array. */
 BattleStageObjectData mri_btlobject_data[] = {
     {"S_isk_01", 2, 0, {19.0f, 0.0f, -55.0f}, 0, 60, {0}},
     {"S_ueki_01", 2, 1, {-188.0f, 0.0f, 48.0f}, 0, 60, {0}},
@@ -118,6 +119,7 @@ BattleStageObjectData mri_btlobject_data[] = {
     {"C", 2, 3, {0}, 0, 60, {0}},
 };
 
+/** Battle stages of the Great Tree: backdrop folders, scenery pieces and background scripts. */
 BattleStageData mri_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -932,6 +934,10 @@ NpcBattleSelect btlgrpsel_mri_btlno_mri_mb_off[] = {
     {0},
 };
 
+/**
+ * Encounter settings of every Great Tree map: which battle choice its enemies use, the battle music and the
+ * random audience rolls.
+ */
 NpcSetupBattleInfo btlsetup_mri_tbl[] = {
     {
         /*"マップstg_02_1_1"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x32\x5F\x31\x5F\x31", // name

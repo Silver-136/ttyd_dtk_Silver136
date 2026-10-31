@@ -1,3 +1,5 @@
+// eff_kemuri.c: work data for the smoke puffs (effKemuriData, effKemuri2Data).
+
 #pragma once
 
 #include "driver/effdrv.h"

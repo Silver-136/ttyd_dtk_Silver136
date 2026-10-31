@@ -1,3 +1,5 @@
+// eff_kameki_tornade_n64.c: Magikoopa tornado effect entry (effKamekiTornadeN64Entry) and its work struct.
+
 #pragma once
 
 #include <dolphin/mtx.h>

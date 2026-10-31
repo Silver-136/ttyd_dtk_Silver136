@@ -90,6 +90,10 @@ static USER_FUNC(_leg_smoke_effect) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Weapon data for Hooktail's stomp: damage from its own formula (weaponGetPower_Gonbaba), a hammer-type hit,
+ * one target.
+ */
 BattleWeapon weapon_gonbaba_fumituke_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -131,6 +135,10 @@ BattleWeapon weapon_gonbaba_fumituke_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 10, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon data for Hooktail's fire breath: damage from its own formula (weaponGetPower_Gonbaba), fire element,
+ * every target.
+ */
 BattleWeapon weapon_gonbaba_firebreath_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -171,6 +179,7 @@ BattleWeapon weapon_gonbaba_firebreath_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for Hooktail's bite: 5 damage, every target. */
 BattleWeapon weapon_gonbaba_kamituki_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -205,6 +214,7 @@ BattleWeapon weapon_gonbaba_kamituki_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Unit data of Hooktail: 20 HP, level 65; the battle starts it from init_event. */
 BattleUnitKind unit_boss_gonbaba = {
     UNIT_HOOKTAIL,
     "btl_un_gonbaba",
@@ -275,8 +285,10 @@ BattleUnitKind unit_boss_gonbaba = {
     data_table,
 };
 
+/** Defence of Hooktail: 1 against every element. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Elemental reactions of Hooktail: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -304,6 +316,7 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/** Pose table of Hooktail: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
@@ -316,6 +329,11 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "GNB_S_3"},
 };
 
+/**
+ * Pose table of Hooktail once she is weakened, installed by gonbaba_damage_sub_event on each hit with the
+ * Attack FX R sound (which she takes for a cricket): stay and talk become GNB_S_4 and GNB_T_4, pose 39
+ * becomes GNB_V_1. negotiation_event puts the normal table back.
+ */
 static PoseTableEntry pose_table_weak[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
@@ -328,12 +346,20 @@ static PoseTableEntry pose_table_weak[] = {
     {POSE_TYPE_ACTION, "GNB_S_4"},
 };
 
+/**
+ * Event table of Hooktail: its damage handler (gonbaba_damage_sub_event, tag 9) and its defeat (dead_event,
+ * tag 49).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, gonbaba_damage_sub_event},
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/**
+ * Parts of Hooktail: part 1 is her body, part 2 her head, and part 3 a hidden piece shown while she eats the
+ * audience.
+ */
 static BattleUnitKindPart parts[] = {
 #ifdef VERSION_G8ME01
     {

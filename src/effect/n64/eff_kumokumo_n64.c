@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: cloud (kumokumo) drawn from model display-list data; types 0-4.
+
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -112,7 +114,9 @@ GXColor cloud_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 0}, {255, 255, 255, 51}, {255, 255, 255, 102}, {255, 255, 255, 127},
     {255, 255, 255, 204},
 };
+/** The round cloud model's four display lists. */
 void* cloud_dl_0_tbl[] = {cloud_dl_0_0, cloud_dl_0_1, cloud_dl_0_2, cloud_dl_0_3};
+/** Size in 32-byte units of each of the round cloud model's four display lists. */
 u8 cloud_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
 s8 batten_normal_tbl[] __attribute__((aligned(32))) = {
     0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -124,7 +128,9 @@ GXColor batten_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 127}, {255, 255, 255, 204},
 };
 void* batten_dl_0_tbl[] = {batten_dl_0_0, batten_dl_0_1, batten_dl_0_2, batten_dl_0_3};
+/** Size in 32-byte units of each of the X-shaped (batten) cloud model's four display lists. */
 u8 batten_dl_0_size_tbl[] = {0x03, 0x03, 0x03, 0x03};
+/** Extra Z rotation in degrees of a cloud puff over its 31-frame cycle, swinging up to about 185. */
 u8 rz_tbl[] = {0x00, 0x09, 0x12, 0x1C, 0x25, 0x2F, 0x39, 0x43, 0x4D, 0x57, 0x61, 0x6B, 0x74, 0x7D, 0x86, 0x8F, 0x97, 0x9F, 0xA6, 0xAD, 0xB4, 0xB8, 0xB9, 0xB9, 0xB6, 0xB4, 0xB1, 0xAE, 0xAE, 0xAF, 0xB4};
 
 void effKumokumoMain(EffectEntry* effect);

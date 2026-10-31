@@ -1,3 +1,5 @@
+// Script commands for the tutorial (lecture) scenes: system level checks and camera save/load.
+
 #include "evt/evt_lecture.h"
 #include "driver/camdrv.h"
 #include "manager/evtmgr_cmd.h"

@@ -1,3 +1,5 @@
+// Script commands for Mario's pouch: coins, star pieces, items, badges, HP/FP, partners and mail.
+
 #include "evt/evt_cmd.h"
 #include "mario/mario_party.h"
 #include "mario/mario_pouch.h"

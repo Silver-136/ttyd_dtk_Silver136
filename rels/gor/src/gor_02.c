@@ -500,6 +500,7 @@ EVT_BEGIN(gor_02_event_01)
     RETURN
 EVT_END()
 
+/** Exits of this room: the west exit w_bero back to gor_01 and the pipe dokan down to tik_01. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -1081,6 +1082,7 @@ EVT_BEGIN(powerupya_direct_talk)
     RETURN
 EVT_END()
 
+/** Items the item picker offers in Merlon's shop: the Up Arrow; -1 ends the list. */
 s32 powerupya_item_tbl[] = {
     108, -1,
 };
@@ -1839,6 +1841,7 @@ EVT_BEGIN(tozokudan2_init)
     RETURN
 EVT_END()
 
+/** Items the item picker offers for the thief's door lock: the House Key; -1 ends the list. */
 static s32 key_tbl[] = {
     ITEM_HOUSE_KEY, -1,
 };
@@ -2289,6 +2292,7 @@ EVT_BEGIN(kuribo4_regl)
     RETURN
 EVT_END()
 
+/** Items the item picker offers the fourth Goomba for Trouble Center job 2: the Box; -1 ends the list. */
 static s32 item_tbl[] = {
     ITEM_BOX, -1,
 };
@@ -2782,6 +2786,11 @@ static EVT_BEGIN(luigi_talk)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of this room:
+ * Merlon, Grifty, Professor Frankly, the bandit gang (the boss and three members), Sanders, a Goomba,
+ * the Trouble Center thieves and villagers, Darkly and Luigi.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"パワーアップ屋"*/"\x83\x70\x83\x8F\x81\x5B\x83\x41\x83\x62\x83\x76\x89\xAE", // name
@@ -2991,6 +3000,7 @@ static EVT_BEGIN(evt_wall_01)
     RETURN
 EVT_END()
 
+/** NPCs shown inside house 01 (Merlon's shop) when its door opens. */
 static const char* door_data_01_npc[] = {
     /*"パワーアップ屋"*/"\x83\x70\x83\x8F\x81\x5B\x83\x41\x83\x62\x83\x76\x89\xAE",
     NULL,
@@ -3050,6 +3060,11 @@ static EVT_BEGIN(evt_door_01_close)
     RETURN
 EVT_END()
 
+/**
+ * Door of house 01, Merlon's power-up shop:
+ * its door and wall pieces, hit areas and the scripts for entering, leaving and the open
+ *  and close animation.
+ */
 static DoorParam door_data_01 = {
     0, // flags
     3, // type
@@ -3098,6 +3113,7 @@ static EVT_BEGIN(evt_wall_02)
     RETURN
 EVT_END()
 
+/** NPCs shown inside house 02 (Professor Frankly's house) when its door opens. */
 static const char* door_data_02_npc[] = {
     /*"クリハカセ"*/"\x83\x4E\x83\x8A\x83\x6E\x83\x4A\x83\x5A",
     NULL,
@@ -3181,6 +3197,11 @@ EVT_BEGIN(evt_door_02_close)
     RETURN
 EVT_END()
 
+/**
+ * Door of house 02, Professor Frankly's house:
+ * its door and wall pieces, hit areas and the scripts for entering, leaving and the open
+ *  and close animation.
+ */
 static DoorParam door_data_02 = {
     0, // flags
     3, // type
@@ -3254,11 +3275,13 @@ static EVT_BEGIN(evt_wall_03)
     RETURN
 EVT_END()
 
+/** NPCs shown inside house 03 (Bobbery's house) when its door opens. */
 static const char* door_data_03_npc[] = {
     /*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58",
     NULL,
 };
 
+/** Map objects shown inside house 03 when its door opens: the block pblk2. */
 static const char* door_data_03_mobj[] = {
     "pblk2",
     NULL,
@@ -3321,6 +3344,11 @@ static EVT_BEGIN(evt_door_03_open)
     RETURN
 EVT_END()
 
+/**
+ * Door of house 03, Bobbery's house:
+ * its door and wall pieces, hit areas and the scripts for entering, leaving and the open
+ *  and close animation.
+ */
 static DoorParam door_data_03 = {
     0, // flags
     3, // type
@@ -3486,6 +3514,10 @@ EVT_BEGIN(evt_wall_03_roll)
     RETURN
 EVT_END()
 
+/**
+ * Rolling-shutter side entrance of house 03:
+ * it shares the interior with the front door but has its own wall script.
+ */
 static DoorParam door_data_03_roll = {
     0, // flags
     3, // type
@@ -3570,11 +3602,13 @@ static EVT_BEGIN(evt_door_04_close)
     RETURN
 EVT_END()
 
+/** NPCs shown inside house 04 (the thieves' house) when its door opens. */
 static const char* door_data_04_npc[] = {
     /*"盗賊団３"*/"\x93\x90\x91\xAF\x92\x63\x82\x52",
     NULL,
 };
 
+/** Items shown inside house 04: the three star pieces item_star4 to item_star6. */
 static const char* door_data_04_item[] = {
     "item_star4",
     "item_star5",
@@ -3582,6 +3616,11 @@ static const char* door_data_04_item[] = {
     NULL,
 };
 
+/**
+ * Front door of house 04, the thieves' house:
+ * its door and wall pieces, hit areas and the scripts for entering, leaving and the open
+ *  and close animation.
+ */
 static DoorParam door_data_04 = {
     0, // flags
     3, // type
@@ -3644,6 +3683,7 @@ EVT_BEGIN(evt_wall_04_ura)
     RETURN
 EVT_END()
 
+/** Back door of house 04, usable once Flurrie has blown the wall cover away. */
 DoorParam door_data_04_ura = {
     0, // flags
     3, // type
@@ -3683,6 +3723,7 @@ EVT_BEGIN(evt_wall_05)
     RETURN
 EVT_END()
 
+/** NPCs shown inside house 05 (the bandit boss's house): the boss and two gang members. */
 const char* door_data_05_npc[] = {
     /*"盗賊団親分"*/"\x93\x90\x91\xAF\x92\x63\x90\x65\x95\xAA",
     /*"盗賊団１"*/"\x93\x90\x91\xAF\x92\x63\x82\x50",
@@ -3690,6 +3731,7 @@ const char* door_data_05_npc[] = {
     NULL,
 };
 
+/** Shorter NPC list of house 05: the boss and one gang member. */
 const char* door_data_05_npc_01[] = {
     /*"盗賊団親分"*/"\x93\x90\x91\xAF\x92\x63\x90\x65\x95\xAA",
     /*"盗賊団１"*/"\x93\x90\x91\xAF\x92\x63\x82\x50",
@@ -3722,6 +3764,10 @@ EVT_BEGIN(evt_door_05_close)
     RETURN
 EVT_END()
 
+/**
+ * Door of house 05, the bandit boss's house:
+ * its door and wall pieces, hit areas and the entry script (there is no exit script).
+ */
 DoorParam door_data_05 = {
     0, // flags
     3, // type
@@ -3848,11 +3894,13 @@ EVT_BEGIN(evt_wall_06)
     RETURN
 EVT_END()
 
+/** NPCs shown inside house 06 (the thief's locked house): one gang member. */
 const char* door_data_06_npc[] = {
     /*"盗賊団２"*/"\x93\x90\x91\xAF\x92\x63\x82\x51",
     NULL,
 };
 
+/** Empty NPC list of house 06, used when nobody is inside. */
 const char* door_data_06_npc_01[] = {
     NULL,
 };
@@ -3878,6 +3926,10 @@ EVT_BEGIN(evt_door_06_close)
     RETURN
 EVT_END()
 
+/**
+ * Door of house 06, the thief's locked house (Trouble Center job 1):
+ * its door and wall pieces, hit areas and the entry script.
+ */
 DoorParam door_data_06 = {
     2, // flags
     3, // type
@@ -5875,6 +5927,10 @@ EVT_BEGIN(kurihakase_after3minutes)
     RETURN
 EVT_END()
 
+/**
+ * Spots Mario is put back on when he falls or is hurt on a hazard:
+ * each collision area names the position he returns to (a position far below the map marks the ship change zones).
+ */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"A_ground_01", {267.0f, 0.0f, 149.0f}},
     {"dokan", {-264.0f, 0.0f, 326.0f}},
@@ -5974,39 +6030,51 @@ static EVT_BEGIN(mobj_box01)
     RETURN
 EVT_END()
 
+/** Prologue enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 s32 stg0_list[] = {
     8,
 };
 
+/** Chapter 1 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 s32 stg1_list[] = {
     18, 20, 22, 23,
 };
 
+/** Chapter 2 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 s32 stg2_list[] = {
     29, 30, 33, 34,
 };
 
+/** Chapter 3 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 s32 stg3_list[] = {
     65,
 };
 
+/** Chapter 5 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 s32 stg5_list[] = {
     93, 99,
 };
 
+/** Chapter 6 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 s32 stg6_list[] = {
     107,
 };
 
+/** Chapter 7 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 s32 stg7_list[] = {
     117, 118, 28, 120, 119, 121,
 };
 
+/** Chapter 8 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 s32 stg8_list[] = {
     131, 132, 133, 134, 135, 144, 145, 146,
     147, 150,
 };
 
+/**
+ * Frankly's notes table for the wastebasket:
+ * from each story step on, the chapter list of enemy Tattles Mario can still learn, with the list's length.
+ */
 MonosiriFollow follow[] = {
     {23, stg0_list, 1},
     {56, stg1_list, 4},

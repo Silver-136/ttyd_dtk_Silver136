@@ -635,6 +635,7 @@ EVT_BEGIN(door_teresa_s)
     RETURN
 EVT_END()
 
+/** Doors of this room: the west exit (w_bero) to usu_00 (Twilight Town). */
 BeroEntry bero_stg4majo3nin[] = {
     {
         "w_bero", // hitName
@@ -656,6 +657,12 @@ BeroEntry bero_stg4majo3nin[] = {
     },
 };
 
+/**
+ * Doors of this room: the north exit (n_bero_1) to jin_05, the hole (ana) to jin_06, the west exit (w_bero)
+ * to gra_06 (Twilight Trail), the north exit (n_bero_3) to jin_01, the south exit (s_bero) to jin_02, the
+ * north exit (n_bero_2) to jin_04, the east exit (e_bero_3) to jin_03, the east exit (e_bero_1) to jin_03
+ * and the east exit (e_bero_2) to jin_03.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "n_bero_1", // hitName
@@ -935,6 +942,7 @@ static EVT_BEGIN(evt_key)
     RETURN
 EVT_END()
 
+/** Item list of the lock's key picker: only the Steeple Key (-1 ends the list). */
 static s32 lock_tbl[] = {
     ITEM_STEEPLE_KEY_0x16, -1,
 };
@@ -1159,6 +1167,10 @@ EVT_BEGIN(atomic_teresa_init)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the main hall: the Boos (the central one, those at the far and near doors, the Atomic Boo boss and
+ * the numbered 1001 to 1006 Boos).
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"テレサ"*/"\x83\x65\x83\x8C\x83\x54", // name

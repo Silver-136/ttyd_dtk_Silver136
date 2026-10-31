@@ -1,3 +1,5 @@
+// eff_freeze_n64.c: Paper Mario 64 Freeze effect entry (effFreezeN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

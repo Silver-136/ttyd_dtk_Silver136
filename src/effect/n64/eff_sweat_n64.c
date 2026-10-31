@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: sweat drops flung out in a fan (six for type 0, four for type 1); used by the Yoshi partner.
+
 #include "eff/n64/eff_sweat_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"

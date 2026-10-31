@@ -1,3 +1,5 @@
+// Paper Mario 64 smoke effect 12 (kemuri: smoke) with a duration and scale; types 0-2.
+
 #include "eff/n64/eff_kemuri12_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -7,6 +9,7 @@
 #include <dolphin/mtx.h>
 
 
+/** Camera-facing 32x32 smoke puff, used by types 0-2. */
 static effN64Vtx size32x32_tex32x32_vtx[] = {
     {-16, -16, 0, 0, 0, 0, 0, 0, 255},
     {16, -16, 0, -1024, 0, 0, 0, 0, 255},
@@ -14,6 +17,7 @@ static effN64Vtx size32x32_tex32x32_vtx[] = {
     {-16, 16, 0, 0, 1024, 0, 0, 0, 255},
 };
 
+/** Lava-coloured (yougan) smoke mesh with extra quads, used by types above 2. */
 effN64Vtx size32x32_tex32x32_yougan_vtx[] = {
     {-16, -16, 15, 0, 0, 0, 0, 0, 255},
     {16, -16, 15, -1024, 0, 0, 0, 0, 255},

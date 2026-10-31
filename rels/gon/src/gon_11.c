@@ -126,6 +126,7 @@ static EVT_BEGIN(door01_open)
     RETURN
 EVT_END()
 
+/** Exits (beros) of this room: w_bero to gon_10. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -598,11 +599,16 @@ EVT_BEGIN(gonbaba_event)
     RETURN
 EVT_END()
 
+/**
+ * Map group that the dark cloud of Trouble Center request 16 (evt_iri_16_cloud_ent) draws into its offscreen
+ * buffer; the cloud's paper animation is a capture of it. An empty string ends the list.
+ */
 static const char* capturemap[] = {
     "gon_11_S",
     "\0",
 };
 
+/** Corners of a box, as offsets from its centre, that a script helper projects to the screen. */
 static Vec v_list[] = {
     {-50.0f, 100.0f, 50.0f},
     {50.0f, 100.0f, 50.0f},

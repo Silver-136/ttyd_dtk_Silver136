@@ -1,3 +1,5 @@
+// unit_hyper_jyugem: Dark Lakitu, battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
@@ -63,6 +65,10 @@ static USER_FUNC(togezo_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of the Dark Lakitu: 13 HP and level 26, with its parts, status vulnerability, init event and
+ * event data table.
+ */
 static BattleUnitKind unit_hyper_jyugem = {
     UNIT_DARK_LAKITU, // mUnitType
     "btl_un_hyper_jyugem", // name
@@ -108,8 +114,13 @@ static BattleUnitKind unit_hyper_jyugem = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
+/**
+ * Defense of the Dark Lakitu against normal, fire, ice, explosion and electric attacks: none, so it takes
+ * full damage from every element.
+ */
 static BattleUnitDefense defence = {0};
 
+/** Damage-type reactions of the Dark Lakitu: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -177,12 +188,20 @@ static PoseTableEntry pose_table_hold[] = {
     {POSE_TYPE_ACTION, "JGM_S_2"},
 };
 
+/**
+ * Event data table of the Dark Lakitu: scripts that replace the standard handling for an attacker being
+ * hurt by its spiked head (tag 37) and the battle opening with a First Strike on it (tag 48).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos_event},
     {0},
 };
 
+/**
+ * Parts of the Dark Lakitu: 2 parts: parts 1 and 2 (model c_jugemu_b), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -218,6 +237,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon record of the Dark Lakitu's egg throw: 5 damage and counts as a jump-type hit. */
 static BattleWeapon weapon_jyugem_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -254,6 +274,7 @@ static BattleWeapon weapon_jyugem_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon record of the Dark Lakitu's charge-up: no HP damage. */
 static BattleWeapon weapon_jyugem_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -289,6 +310,10 @@ static BattleWeapon weapon_jyugem_charge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Setup of the Sky-Blue Spiny that hatches from the egg (normal_attack_event) or is called in by
+ * friend_event: unit kind, side, turn phase and starting position.
+ */
 static BattleUnitSetup entry_togezo = {
     &unit_hyper_togezo, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

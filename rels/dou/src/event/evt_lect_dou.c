@@ -1,3 +1,5 @@
+// Pirate's Grotto (dou) lecture script: the paper genie (peramajin) teaches the boat move on a ship-change platform, run when the Boat Curse is found in dou_07.
+
 #include "icon_ids.h"
 #include "eff/eff_fukidashi.h"
 #include "eff/eff_itemget.h"

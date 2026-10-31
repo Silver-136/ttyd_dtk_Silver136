@@ -550,6 +550,7 @@ EVT_BEGIN(village_chief_pig_init)
     RETURN
 EVT_END()
 
+/** Item menu choices in the Mayor's trouble 17: only the Routing Slip, which Mario hands over to finish it. */
 s32 iri_15_item_tbl[] = {
     ITEM_ROUTING_SLIP, -1,
 };
@@ -709,6 +710,7 @@ static EVT_BEGIN(vivian_init)
     RETURN
 EVT_END()
 
+/** Item menu choices when Mario talks to Vivian while she searches: only the Super Bombomb. */
 static s32 key_tbl[] = {
     ITEM_SUPERBOMBOMB, -1,
 };
@@ -802,6 +804,10 @@ static EVT_BEGIN(urouro_move)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of this map: the human villagers A to E and K, the Mayor, Vivian and the innkeeper,
+ * their pig forms (pig villagers A, D, E, K and the pig Mayor) and the five crows A to E on the rooftops.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"村人Ａ"*/"\x91\xBA\x90\x6C\x82\x60", // name
@@ -1855,6 +1861,10 @@ EVT_BEGIN(chief_pig_event)
     RETURN
 EVT_END()
 
+/**
+ * Twilight Town inn (house 3), run by the innkeeper: breakfast item 176 and price 10 coins, the bed and camera
+ * spots for sleeping, and the innkeeper's lines usugurayado_00 to 13.
+ */
 static KinopioData kino_dt = {
     176, // breakfastItem
     {250.0f, 16.0f, -300.0f}, // breakfastPos
@@ -1869,16 +1879,22 @@ static KinopioData kino_dt = {
     NULL, NULL, // toBedEvt..fromBedEvt
 };
 
+/** NPCs hidden and shown with the inn's interior (house 3): the innkeeper. */
 static const char* yado_npc[] = {
     /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5",
     NULL,
 };
 
+/** Map objects hidden and shown with the inn's interior: its save block. */
 const char* yado_mobj[] = {
     "pblk00",
     NULL,
 };
 
+/**
+ * NPCs that belong to the Mayor's house (house 2) interior: the Mayor in human and pig form, the fake Mario
+ * and the partners who can stand inside during his scenes.
+ */
 const char* village_chief_npc[] = {
     /*"村長"*/"\x91\xBA\x92\xB7",
     /*"ブタ村長"*/"\x83\x75\x83\x5E\x91\xBA\x92\xB7",
@@ -1919,6 +1935,7 @@ static EVT_BEGIN(evt_wall_1)
     RETURN
 EVT_END()
 
+/** NPCs that belong to house 1's interior: villager B. */
 const char* door_1_npc[] = {
     /*"村人Ｂ"*/"\x91\xBA\x90\x6C\x82\x61",
     NULL,
@@ -1940,6 +1957,7 @@ static EVT_BEGIN(door_1_close)
     RETURN
 EVT_END()
 
+/** House 1, a villager's house with a fold-down front wall (door S_ie1_door). */
 static DoorParam door_1 = {
     0, // flags
     3, // type
@@ -2045,6 +2063,7 @@ EVT_BEGIN(evt_door2_close)
     RETURN
 EVT_END()
 
+/** House 2, the Mayor's house (door S__ie2_door), opened for him in the chapter 4 arrival scene. */
 static DoorParam door_2 = {
     0, // flags
     3, // type
@@ -2114,6 +2133,7 @@ static EVT_BEGIN(door_3_close)
     RETURN
 EVT_END()
 
+/** House 3, the inn (door S_ie3_door), with the innkeeper and the save block inside. */
 static DoorParam door_3 = {
     0, // flags
     3, // type
@@ -2153,6 +2173,7 @@ EVT_BEGIN(dokan_1_evt)
     RETURN
 EVT_END()
 
+/** Exits of this map: the pipe down to tik_08 in the Rogueport Sewers and the east road to usu_01. */
 static BeroEntry bero_entry_data[] = {
     {
         "dokan_1", // hitName
@@ -2202,6 +2223,10 @@ static EVT_BEGIN(oshimodo_event)
     RETURN
 EVT_END()
 
+/**
+ * Replacement for the pipe while Doopliss has Mario's name: it does not lead anywhere and pushes Mario back out
+ * (oshimodo_event).
+ */
 static BeroEntry bero_oshimodo[] = {
     {
         "dokan_1", // hitName
@@ -2253,6 +2278,7 @@ EVT_BEGIN(koopa_dokan_evt)
     RETURN
 EVT_END()
 
+/** Replacement for the pipe in Bowser's interlude: Bowser tries it and is told off (koopa_dokan_evt). */
 BeroEntry bero_koopa_dokan[] = {
     {
         "dokan_1", // hitName
@@ -2339,6 +2365,7 @@ static EVT_BEGIN(evt_ki_2)
     RETURN
 EVT_END()
 
+/** Trees of the town square: tree 1 and tree 2 (where crows C, D and E perch) react to being shaken. */
 static TreeAccess tree_tbl[] = {
     {2, "A_ki_1", "S_usu00_ki01", NULL, 0, evt_ki_1},
     {2, "A_ki_2", "S_usu00_ki02", NULL, 0, evt_ki_2},
@@ -2390,6 +2417,10 @@ EVT_BEGIN(evt_kusa_06)
     RETURN
 EVT_END()
 
+/**
+ * Bushes of the town square: bush 1 has Bowser's line in his interlude, bush 4 hides a Star Piece and bush 6
+ * coins; the rest only rustle.
+ */
 static KusaAccess kusa_tbl[] = {
     {2, "A_kusa_01", "S_kusa_01", kusa_01_evt},
     {2, "A_kusa_02", "S_kusa_02", NULL},
@@ -2454,6 +2485,7 @@ EVT_BEGIN(usu_00_touch_ichikorori_ball)
     RETURN
 EVT_END()
 
+/** The five pig NPCs (pig villagers A, D, E, K and the pig Mayor), whose models get the paper lighting. */
 static BoobooName booboo_name[] = {
     {/*"ブタ村人Ａ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x60", 2, 1},
     {/*"ブタ村人Ｄ"*/"\x83\x75\x83\x5E\x91\xBA\x90\x6C\x82\x63", 0, 1},
@@ -2462,6 +2494,10 @@ static BoobooName booboo_name[] = {
     {/*"ブタ村長"*/"\x83\x75\x83\x5E\x91\xBA\x92\xB7", 9, 0},
 };
 
+/**
+ * Sprite list of the 200-strong crowd in Bowser's second Twilight Town scene: X-Nauts (c_zako_n) for Crump's
+ * side, Koopatrols, Hammer Bros and Magikoopas for Kammy's, each pose with a staggered start time.
+ */
 ExtTexInfo kpaSen_ext_entry_data[] = {
     {"c_zako_n", "S_1", 0.0f},
     {"c_zako_n", "S_1", 8.0f},

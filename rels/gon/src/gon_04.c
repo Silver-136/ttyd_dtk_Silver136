@@ -149,6 +149,10 @@ static EVT_BEGIN(e3_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Exits (beros) of this room: w_bero_1 to gon_03, w_bero_2 to gon_08, e_bero_1 to gon_05, e_bero_2 to gon_05
+ * and e_bero_3 to gon_05.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
@@ -721,6 +725,7 @@ EVT_BEGIN(evt_gon_04flowblock_updown2)
     RETURN
 EVT_END()
 
+/** Positions (x, z) where dust puffs rise when the first folding stairs land. */
 KemuriPos kemuri_pos1[] = {
     {150, 20},
     {130, 55},
@@ -729,6 +734,7 @@ KemuriPos kemuri_pos1[] = {
     {185, 75},
 };
 
+/** Positions (x, z) where dust puffs rise when the second folding stairs land. */
 KemuriPos kemuri_pos2[] = {
     {315, 75},
     {270, 30},
@@ -987,6 +993,7 @@ EVT_BEGIN(evt_hashi)
     RETURN
 EVT_END()
 
+/** Items offered in the item menu at the castle lock: only the Castle Key (0x0D). */
 static s32 key_tbl[] = {
     ITEM_CASTLE_KEY_0x0D, -1,
 };

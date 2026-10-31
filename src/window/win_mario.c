@@ -1,3 +1,5 @@
+// Pause menu: the Mario window (stats, special moves, equipped gear).
+
 #include "win/win_main.h"
 #include "battle/battle_mario.h"
 #include "icon_ids.h"
@@ -34,6 +36,12 @@ typedef struct LinkDt {
 } LinkDt;
 
 
+/**
+ * Entries of the pause menu's Mario screen: level, Star Rank, hammer, boots, HP, FP, BP,
+ * the four curses, Star Power, special moves, Star Points, coins, Star Pieces,
+ * Shine Sprites and play time. Each gives the cursor spot, Mario's poses, the item it needs,
+ * its help text and the entry reached by up, down, left and right. winMarioMain moves through it.
+ */
 LinkDt linkDt[18] = {
     {-268, 142, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_lv", {6, 1, 11, 9}},
     {-268, 118, "M_S_1", NULL, "S_1", 0, 0, "msg_menu_mario_star_r", {0, 2, 11, 7}},

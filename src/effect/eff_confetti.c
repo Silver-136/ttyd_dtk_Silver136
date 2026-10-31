@@ -1,3 +1,5 @@
+// Confetti: forwards to the Paper Mario 64 confetti effect (effConfettiN64Entry) with scale 1.
+
 #include "eff/eff_confetti.h"
 #include "eff/n64/eff_confetti_n64.h"
 

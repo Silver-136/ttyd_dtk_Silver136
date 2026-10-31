@@ -1,3 +1,5 @@
+// Action command: mash a button repeatedly with graded levels (ac_repeatedly_lv); more presses, higher level.
+
 #include "battle/ac/ac_table.h"
 #include "icon_ids.h"
 #include "battle/battle.h"

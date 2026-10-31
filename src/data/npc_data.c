@@ -1,8 +1,14 @@
+// NPC kind table: the model and animation names of every NPC type.
+
 #include "data/npc_data.h"
 #include "driver/npcdrv.h"
 #include "evt/evt_npc.h"
 #include "npc_event.h"
 
+/**
+ * Every NPC and field-enemy kind, keyed by its Japanese name: model, stand/talk/walk/run animations, size,
+ * and footstep, jump and landing sounds. npcGetTribe and the map setup look kinds up here when creating NPCs.
+ */
 NpcTribeInfo npcTribe[] = {
     {/*"クリスチーヌ"*/"\x83\x4E\x83\x8A\x83\x58\x83\x60\x81\x5B\x83\x6B", "c_pkr", "PKR_S_1", "PKR_Z_1", "PKR_S_1", "PKR_T_1", "PKR_W_1", "PKR_R_1", "PKR_D_1", "PKR_D_1", 20.0f, 27.0f, 0.0f, 0.0f, 0.0f, 20.0f, "SFX_FLD_NPC_PARTY_MOVE1L", "SFX_FLD_NPC_PARTY_MOVE1R", 12000, "SFX_FLD_NPC_PARTY_JUMP1", "SFX_FLD_NPC_PARTY_LANDING1"},
     {/*"ノコノコ"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52", "c_nokonoko", "NOK_S_1", "NOK_Z_1", "NOK_S_1", "NOK_T_1", "NOK_W_1", "NOK_R_1", "NOK_S_1", "NOK_S_1", 30.0f, 35.0f, 0.0f, 0.0f, 0.0f, 50.0f, "SFX_FLD_NPC_NOKO_MOVE1L", "SFX_FLD_NPC_NOKO_MOVE1R", 12000, "SFX_FLD_NPC_JUMP1", "SFX_FLD_NPC_LANDING1"},
@@ -346,6 +352,10 @@ NpcTribeInfo npcTribe[] = {
     {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, NULL, NULL, 0, NULL, NULL}
 };
 
+/**
+ * Movement types a map's setup file can give a field NPC (Japanese names: none, standing, test enemy,
+ * 2D Blooper, 2D X-Naut, wandering): flags and the init, move, defeat, spotted and blow-away scripts.
+ */
 NpcAiInfo npc_ai_type_table[] = {
     {/*"なし"*/"\x82\xC8\x82\xB5", 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
     {/*"不動キャラ汎用"*/"\x95\x73\x93\xAE\x83\x4C\x83\x83\x83\x89\x94\xC4\x97\x70", 0, npc_init_evt, NULL, NULL, NULL, NULL, NULL, NULL},
@@ -406,6 +416,7 @@ NpcAiInfo npc_ai_type_table[] = {
     {NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL},
 };
 
+/** Territory shapes a map's setup file can name for an NPC (none, circle, square), read by setupDataBase. */
 NpcTerritoryInfo npc_define_territory_type[] = {
     {"NPC_TERRITORY_TYPE_NOTHING", NPC_TERRITORY_TYPE_NOTHING},
     {"NPC_TERRITORY_TYPE_CIRCLE", NPC_TERRITORY_TYPE_CIRCLE},

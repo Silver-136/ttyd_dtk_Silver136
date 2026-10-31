@@ -1,3 +1,5 @@
+// Palace of Shadow battle unit: the Dull Bones (`honenoko`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
@@ -55,6 +57,10 @@ static USER_FUNC(honenoko_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of the Dull Bones: 1 HP, 36x40 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_honenoko = {
     UNIT_DULL_BONES, // mUnitType
     "btl_un_honenoko", // name
@@ -103,8 +109,10 @@ BattleUnitKind unit_honenoko = {
     data_table, // dataTable
 };
 
+/** Defence of the Dull Bones: 1 against every kind of hit. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Defence attributes of the Dull Bones: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -132,6 +140,7 @@ static StatusVulnerability regist = {
     50, // ohko
 };
 
+/** Parts of the Dull Bones: 4 parts (model c_karon_g_h, c_nagehone_g). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -139,6 +148,9 @@ static BattleUnitKindPart parts[] = {
     {4, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/**
+ * Weapon of the Dull Bones (attack): targets one unit for 2 damage; used by normal_attack_event.
+ */
 static BattleWeapon weapon_honenoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -175,6 +187,10 @@ static BattleWeapon weapon_honenoko_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Spawn setup for the Dull Bones (unit_honenoko): enemy side, placed off-screen at first;
+ * used by call_friend_event.
+ */
 static BattleUnitSetup entry_honenoko = {
     &unit_honenoko, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -208,6 +224,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRN_S_1"},
 };
 
+/** Event table of the Dull Bones: dead_event (tag 49), fake_dead_event (tag 15). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FAKE_DEAD_EVENT, fake_dead_event},

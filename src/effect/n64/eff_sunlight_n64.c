@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: sunlight: soft white light beams that fade in and out over `lifetime` frames.
+
 #include "version.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -231,6 +233,7 @@ void effSunlightDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetProjectionv(proj);
 }
 
+/** Five long slanted light shafts in screen space, each a textured quad, drawn for the sunlight beams. */
 effN64Vtx testsrc__s_v[] = {
     {531, 442, 25, 0, 0, 255, 255, 255, 255},
     {707, 284, 25, 512, 0, 255, 255, 255, 255},

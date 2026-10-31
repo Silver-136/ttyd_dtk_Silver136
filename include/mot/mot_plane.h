@@ -1,3 +1,5 @@
+// mot_plane.c: Mario's paper airplane motion (mot_plane, mot_plane_post) and its work struct MotPlaneWork.
+
 #pragma once
 
 #include <dolphin/types.h>

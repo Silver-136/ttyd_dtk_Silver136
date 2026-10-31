@@ -1,3 +1,5 @@
+// Paper Mario 64 smoke effect 3 (kemuri: smoke) at a point, oriented by an angle.
+
 #include "eff/n64/eff_kemuri3_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"

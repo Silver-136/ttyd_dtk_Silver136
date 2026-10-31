@@ -25,6 +25,7 @@ static BeroEntry bero_entry_data[2];
 static EvtWord evt_chorobon[136];
 EvtWord hei_08_init_evt[104];
 
+/** Doors of this room: the east exit (e_bero) to hei_09. */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName

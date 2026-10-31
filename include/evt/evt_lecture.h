@@ -1,3 +1,5 @@
+// evt_lecture.c: script commands for the tutorial (lecture) scenes: system level checks and camera save/load.
+
 #pragma once
 
 #include "evt/evt_cmd.h"

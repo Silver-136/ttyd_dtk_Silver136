@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: fire dust, count glowing particles spread within a range and height.
+
 #include "eff/eff_n64.h"
 #include "eff/n64/eff_fire_dust_n64.h"
 #include "driver/camdrv.h"
@@ -30,11 +32,13 @@ typedef struct EffFireDustWork {
     f32 unk68;      // 0x68
 } EffFireDustWork;
 
+/** Fire-dust particle size over its 20-step cycle: swells to 1.5 then shrinks (the ten steps are listed twice). */
 static f32 scale_data[] = {
     0.2f, 0.4f, 0.8f, 1.3f, 1.5f, 1.3f, 0.9f, 0.6f, 0.4f, 0.3f,
     0.2f, 0.4f, 0.8f, 1.3f, 1.5f, 1.3f, 0.9f, 0.6f, 0.4f, 0.3f,
 };
 
+/** Fire-dust particle quads: eight cells of the texture strip, one picked per particle. */
 static effN64Vtx size8x8_tex22x22_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 704, 0, 0, 0, 0, 255},

@@ -58,7 +58,9 @@ EvtWord kosho_event[517];
 EvtWord coin_effect[151];
 EvtWord muj_12_init_evt[60];
 
+/** White fade-out colour of the screen flash in the Cortez scenes. */
 static const GXColor evtflash_col1 = {0xFF, 0xFF, 0xFF, 0xFF};
+/** White fade-in colour of the screen flash in the Cortez scenes. */
 static const GXColor evtflash_col2 = {0xFF, 0xFF, 0xFF, 0xFF};
 
 /**
@@ -176,6 +178,7 @@ static EVT_BEGIN(w_open)
     RETURN
 EVT_END()
 
+/** Doors and exits of muj_12: w_bero to muj_11. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

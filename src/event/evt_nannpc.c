@@ -1,3 +1,5 @@
+// Script commands for crowd NPCs (nannpc): many simple sprite NPCs drawn through extdrv.
+
 #include "evt/evt_cmd.h"
 #include "evt/evt_nannpc.h"
 #include "driver/extdrv.h"

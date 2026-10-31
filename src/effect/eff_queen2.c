@@ -1,3 +1,6 @@
+// Shadow Queen charge-up (queen2): a dark sphere fades in and grows while a charge light gathers,
+// then two flashes (Boo and indirect effects) as the sphere fades out.
+
 #include "eff/eff_queen2.h"
 #include "eff/eff_indirect.h"
 #include "eff/eff_teresa.h"

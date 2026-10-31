@@ -1,3 +1,6 @@
+// Flame (Fire): a flickering flame with smoke puffs; types 0-8 pick the look, types 5-7 also throw sparks.
+// Used for burning units and fire attacks.
+
 #include "eff/eff_fire.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -28,11 +31,19 @@ typedef struct FireScaleKey {
     f32 value;
 } FireScaleKey;
 
+/**
+ * Looping 200-frame flicker of the flame's size (frame, scale between 0.95 and 1.1) for flame types 3 and 8;
+ * read by effFireMain.
+ */
 FireScaleKey scale1[] = {
     { 0, 1.0f },     { 20, 1.1f },    { 30, 1.0f },    { 45, 1.05f },   { 60, 0.95f },
     { 70, 1.05f },   { 80, 1.025f },  { 100, 1.1f },   { 120, 1.0f },   { 130, 1.025f },
     { 160, 0.95f },  { 180, 1.025f }, { 200, 1.0f },
 };
+/**
+ * Eight vertex colours of the layered flame for the spark-throwing types: orange fire (type 5), blue (6)
+ * and green (7). Read by effFireDisp3.
+ */
 static GXColor col_tbl[3][8] = {
     { { 0xAC, 0x2E, 0x00, 0xFF }, { 0xE0, 0x22, 0x00, 0xFF }, { 0xFD, 0x5F, 0x00, 0xFF }, { 0xFD, 0x5F, 0x04, 0xFF },
       { 0xFF, 0x69, 0x00, 0xFF }, { 0xFF, 0x8A, 0x00, 0xFF }, { 0xFF, 0xB7, 0x00, 0xFF }, { 0xFF, 0xD7, 0x00, 0xFF } },
@@ -76,6 +87,7 @@ void effFireDisp(CameraId cameraId, EffectEntry* effect);
 void effFireDisp2(CameraId cameraId, EffectEntry* effect);
 void effFireDisp3(CameraId cameraId, EffectEntry* effect);
 
+/** Slower looping 200-frame swell of the flame's size (up to 1.2) for flame type 4; read by effFireMain. */
 FireScaleKey scale2[] = {
     { 0, 1.0f },
     { 100, 1.2f },

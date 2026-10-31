@@ -1,3 +1,5 @@
+// Palace of Shadow battle unit: the Phantom Ember (`phantom`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "eff/eff_fire.h"
 #include "evt/evt_cmd.h"
@@ -71,6 +73,10 @@ static USER_FUNC(bubble_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of the Phantom Ember: 10 HP, 26x36 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_phantom = {
     UNIT_PHANTOM_EMBER, // mUnitType
     "btl_un_phantom", // name
@@ -119,8 +125,13 @@ BattleUnitKind unit_phantom = {
     data_table, // dataTable
 };
 
+/** Defence of the Phantom Ember: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Defence attributes of the Phantom Ember: fire hits heal it; ice hits do one extra damage;
+ * explosion hits do one extra damage.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 3, 1, 1, 0}};
 
 static StatusVulnerability regist = {
@@ -148,6 +159,7 @@ static StatusVulnerability regist = {
     90, // ohko
 };
 
+/** Pose table of the Phantom Ember: maps its battle poses to its animations. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -169,6 +181,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Event table of the Phantom Ember: damage_fire_explosion_event (tag 11), avoid_fire_event (tag 40). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_FIRE_EXPLOSION_EVENT, damage_fire_explosion_event},
     {UNIT_DATA_AVOID_FIRE_EVENT, avoid_fire_event},
@@ -176,11 +189,15 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Parts of the Phantom Ember: 1 part (model c_phantom). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_phantom", "c_phantom", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kWeakToIcePower, kCounterFiery, pose_table},
     {2, NULL, "c_phantom", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/**
+ * Weapon of the Phantom Ember (attack): targets one unit for 5 damage, fire element; used by attack_event.
+ */
 static BattleWeapon weapon_bubble_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -219,6 +236,10 @@ static BattleWeapon weapon_bubble_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the Phantom Ember (fire attack): targets one unit for 5 damage, fire element, ignores Defense,
+ * may inflict Burn (75%, 3 turns); used by attack_event.
+ */
 static BattleWeapon weapon_bubble_fire_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -258,6 +279,10 @@ static BattleWeapon weapon_bubble_fire_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Spawn setup for the Phantom Ember (unit_phantom): enemy side, placed off-screen at first;
+ * used by friend_event.
+ */
 static BattleUnitSetup entry_bubble = {
     &unit_phantom, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

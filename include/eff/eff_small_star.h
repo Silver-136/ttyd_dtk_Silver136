@@ -1,3 +1,5 @@
+// eff_small_star.c: small-star effect entry (effSmallStarEntry) and camera change (effSmallStarCamChg).
+
 #pragma once
 
 #include "driver/effdrv.h"

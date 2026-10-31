@@ -76,6 +76,7 @@ static USER_FUNC(kanbu_get_id) {
     return EVT_RETURN_DONE;
 }
 
+/** Unit data of the X-Naut PhD: 9 HP, level 27; the battle starts it from init_event. */
 BattleUnitKind unit_gundan_zako_magician = {
     UNIT_X_NAUT_PHD, // mUnitType
     "btl_un_gundan_zako_magician", // name
@@ -124,8 +125,10 @@ BattleUnitKind unit_gundan_zako_magician = {
     data_table, // dataTable
 };
 
+/** Defence of the X-Naut PhD: none against any element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Elemental reactions of the X-Naut PhD: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -153,6 +156,9 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * Pose table of the X-Naut PhD: the animation each battle pose (idle, hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -172,15 +178,21 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Event table of the X-Naut PhD: empty, it has no special reactions. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Parts of the X-Naut PhD: part 1 is his body (the target) and part 2 is the bottle he throws. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_gundan_zako_magician", "c_zako_m", 0.0f, 0.0f, 0.0f, 0.0f, 28.0f, 0.0f, 0.0f, 38.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_gundan_zako_magician", "c_zako_m", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13018000, 0, pose_table},
 };
 
+/**
+ * Weapon data for the X-Naut PhD's fire bottle: 4 damage, fire element, a jump-type hit, one target, may
+ * inflict burn (75%).
+ */
 static BattleWeapon weapon_gundan_zako_magician_fire_bottle = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -220,6 +232,10 @@ static BattleWeapon weapon_gundan_zako_magician_fire_bottle = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon data for the X-Naut PhD's Defense-down bottle: 4 damage, a jump-type hit, one target, may inflict
+ * defense change (75%).
+ */
 static BattleWeapon weapon_gundan_zako_magician_hunyahunya_bottle = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -260,6 +276,7 @@ static BattleWeapon weapon_gundan_zako_magician_hunyahunya_bottle = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for the X-Naut PhD's Dodgy bottle: no damage, one target, may inflict Dodgy (100%). */
 static BattleWeapon weapon_gundan_zako_magician_yokeyoke_bottle = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -296,6 +313,7 @@ static BattleWeapon weapon_gundan_zako_magician_yokeyoke_bottle = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for the X-Naut PhD's shrink bottle: 3 damage, every target, may inflict size change (75%). */
 static BattleWeapon weapon_gundan_zako_magician_minimini_bottle = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -339,6 +357,7 @@ static BattleWeapon weapon_gundan_zako_magician_minimini_bottle = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for the X-Naut PhD's heal-one bottle: no damage, one target. */
 static BattleWeapon weapon_gundan_zako_magician_one_recover = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -373,6 +392,7 @@ static BattleWeapon weapon_gundan_zako_magician_one_recover = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for the X-Naut PhD's heal-all bottle: no damage, every target. */
 static BattleWeapon weapon_gundan_zako_magician_all_recover = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -406,6 +426,7 @@ static BattleWeapon weapon_gundan_zako_magician_all_recover = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for the X-Naut PhD's regen bottle: no damage, one target. */
 static BattleWeapon weapon_gundan_zako_magician_ziwaziwa_bottle = {
     NULL, 0, // name..icon
     {0}, // pad_06

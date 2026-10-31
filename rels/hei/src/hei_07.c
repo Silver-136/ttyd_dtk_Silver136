@@ -53,6 +53,7 @@ QuizEntry quiz_data[8];
 EvtWord a_sekizou_1[1018];
 EvtWord hei_07_init_evt[114];
 
+/** Doors of this room: the west exit (w_bero) to hei_06 and the pipe (dokan) to hei_10. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -431,6 +432,10 @@ static EVT_BEGIN(offscreen_to_normal)
     RETURN
 EVT_END()
 
+/**
+ * The eight questions of the quiz statue in Shhwonk Fortress: for each, the statue animation, the question
+ * message, the answer choices message and the number of the correct choice.
+ */
 QuizEntry quiz_data[] = {
     {"anm_1mon", "stg1_hei_23", "stg1_hei_q_01", 0},
     {"anm_2mon", "stg1_hei_24", "stg1_hei_q_02", 2},

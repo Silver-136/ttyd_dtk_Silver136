@@ -337,6 +337,7 @@ static USER_FUNC(npc_set_pos) {
     return EVT_RETURN_DONE;
 }
 
+/** Names of the five smoke puffs that pour out of Bowser's failing airship in tou_00_koopa_evt. */
 const char* kemuri_name[] = {
     "kosyo01",
     "kosyo02",
@@ -603,6 +604,7 @@ USER_FUNC(kemuri_move) {
     return EVT_RETURN_BLOCK;
 }
 
+/** NPCs of this map: Bowser in his airship, who flies over Glitzville in the chapter 4 interlude. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"飛クッパ"*/"\x94\xF2\x83\x4E\x83\x62\x83\x70", // name

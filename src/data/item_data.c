@@ -1,3 +1,5 @@
+// Item table (itemDataTable): names, icons, prices, sort order, HP/FP values and use scripts of every item and badge.
+
 #include "data/item_data.h"
 #include "battle/battle_mario.h"
 #include "battle/battle_item_data.h"

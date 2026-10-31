@@ -538,6 +538,10 @@ EVT_BEGIN(kpa_stage_start)
     RETURN
 EVT_END()
 
+/**
+ * Icon ids of the digits 0 to 9 (ten u16 values packed into five words), used to draw the score,
+ * stage and time numbers of the Bowser interlude HUD.
+ */
 u16 numeric_id[] = {
 #ifdef VERSION_G8ME01
     0x1E1, 0x1E3, 0x1E5, 0x1E7, 0x1E9, 0x1EB, 0x1ED, 0x1EF, 0x1F1, 0x1F3,

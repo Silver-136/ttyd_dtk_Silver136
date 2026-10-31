@@ -1,3 +1,5 @@
+// Small stars ("SmallStar", miss star) around a point; count, delay and index come from the caller.
+
 #include "eff/eff_miss_star.h"
 #include "driver/dispdrv.h"
 #include "mario/mariost.h"
@@ -20,6 +22,10 @@ typedef struct EffMissStarWork {
     f32 alpha;        // 0x40
 } EffMissStarWork;
 
+/**
+ * Launch directions of the miss stars, fanning from straight up round the side to straight down;
+ * the caller's index picks the first and each star takes the next one.
+ */
 Vec spd_tbl[15] = {
     { 0.0f, 4.5f, 0.0f },  { 1.0f, 4.0f, 0.0f },  { 2.0f, 3.0f, 0.0f },
     { 3.0f, 2.0f, 0.0f },  { 3.5f, 1.0f, 0.0f },  { 4.0f, 0.0f, 0.0f },
@@ -28,6 +34,7 @@ Vec spd_tbl[15] = {
     { 2.0f, -3.0f, 0.0f }, { 1.0f, -4.0f, 0.0f }, { 0.0f, -4.5f, 0.0f },
 };
 
+/** Size of each miss star in turn, between 0.8 and 1.1 so the burst looks uneven. */
 Vec scale_tbl[15] = {
     { 1.0f, 1.0f, 1.0f },    { 0.8f, 0.8f, 0.8f },    { 0.9f, 0.9f, 0.9f },
     { 1.1f, 1.1f, 1.1f },    { 1.0f, 1.0f, 1.0f },    { 0.8f, 0.8f, 0.8f },

@@ -1,3 +1,5 @@
+// eff_spark.c: spark effect entry (effSparkEntry) with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

@@ -36,6 +36,10 @@ const char* C_of_C_Attack_back[8];
 static EvtWord evt_attack[387];
 static EvtWord wait_event[32];
 
+/**
+ * Unit kind of the Smorg Miasma (HP 4, level 0):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 BattleUnitKind unit_boss_moamoa_tentacle_c = {
     UNIT_SMORG_MIASMA_TENTACLE_A, // mUnitType
     "btl_un_moamoa_tentacle_a", // name
@@ -84,10 +88,18 @@ BattleUnitKind unit_boss_moamoa_tentacle_c = {
     data_table, // dataTable
 };
 
+/** Defence of the Smorg Miasma: 1 damage points off every hit. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Element reactions of the Smorg Miasma: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Smorg Miasma (percent chance to take each status):
+ * immune to sleep, stop, dizzy, poison, confusion, electric shock, burn, freeze, growing huge, shrinking,
+ * attack up, attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
+ * invisibility and instant kill.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -120,11 +132,13 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1C_1"},
 };
 
+/** Data table of the Smorg Miasma: event handlers for being defeated. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Body part of the Smorg Miasma (model c_g_moamoa_b): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {
         1, "btl_un_moamoa_tentacle_c", "c_g_moamoa_b",
@@ -137,6 +151,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon of the Smorg Miasma's attack: 5 damage. */
 static BattleWeapon weapon_moamoa_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -296,18 +311,21 @@ static EVT_BEGIN(evt_attack_other_arm)
     RETURN
 EVT_END()
 
+/** Animation names tentacle A plays, in order, while tentacle C attacks (A holds its pose). */
 const char* A_of_C_Attack[] = {
     "S_1A_1",
     NULL,
     NULL,
 };
 
+/** Animation names tentacle B plays, in order, while tentacle C attacks (B holds its pose). */
 const char* B_of_C_Attack[] = {
     "S_1B_1",
     NULL,
     NULL,
 };
 
+/** Animation names tentacle C plays, in order, for its swing when the target stands in front. */
 const char* C_of_C_Attack_front[] = {
     "A_1C_1",
     "A_1C_2",
@@ -319,6 +337,7 @@ const char* C_of_C_Attack_front[] = {
     NULL,
 };
 
+/** Animation names tentacle C plays, in order, for its swing when the target stands toward the back. */
 const char* C_of_C_Attack_back[] = {
     "A_1C_5",
     "A_1C_6",

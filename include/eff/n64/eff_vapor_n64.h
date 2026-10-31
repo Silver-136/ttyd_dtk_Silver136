@@ -1,3 +1,5 @@
+// eff_vapor_n64.c: vapor effect entry (effVaporN64Entry) and its work data (EffVaporN64Work).
+
 #pragma once
 
 #include "driver/effdrv.h"

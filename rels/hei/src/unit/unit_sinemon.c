@@ -1,3 +1,5 @@
+// Moon Cleft (sinemon): battle unit used in Petal Meadows.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -30,6 +32,10 @@ static EvtWord wakeup_event[104];
 static EvtWord attack_event[454];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Moon Cleft:
+ * 6 HP, level 26, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 static BattleUnitKind unit_sinemon = {
     UNIT_MOON_CLEFT, // mUnitType
     "btl_un_sinemon", // name
@@ -75,10 +81,18 @@ static BattleUnitKind unit_sinemon = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
+/**
+ * Defence of the Moon Cleft's body: 5 against normal, ice, explosion and electric hits;
+ * immune to fire (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{5, 99, 5, 5, 5}};
 
+/**
+ * Defence attributes of the Moon Cleft's body: fire (takes no damage); every other type is dealt normally.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
+/** Defence of the Moon Cleft's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -106,6 +120,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Moon Cleft: a single part using the model "c_sinemon". */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -125,6 +140,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Moon Cleft's attack: 5 damage to a single target, a hammer-style hit. */
 static BattleWeapon weapon_sinemon_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -161,6 +177,10 @@ static BattleWeapon weapon_sinemon_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Pose table of the Moon Cleft:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "SIN_N_1"},
     {POSE_TYPE_STOP, "SIN_Y_1"},
@@ -182,6 +202,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "SIN_S_1"},
 };
 
+/**
+ * Pose table of the Moon Cleft while flipped over:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "SIN_N_2"},
     {POSE_TYPE_STOP, "SIN_Y_2"},
@@ -200,6 +224,11 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "SIN_D_2"},
 };
 
+/**
+ * Event table of the Moon Cleft:
+ * its reaction to being flipped over, the counter for an attacker hurt by its spikes,
+ * nothing special on a First Strike.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},

@@ -1,3 +1,5 @@
+// Boat water (funemizu: boat water): ripples and splash spray around a boat, tinted with a per-map water colour.
+
 #include "eff/eff_funemizu.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -20,6 +22,7 @@ typedef struct ColorEntry {
     GXColor color;
 } ColorEntry;
 
+/** Water tint used when the current map has no entry in funemizu_color_tbl: plain white. */
 static const GXColor funemizu_default_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 static s16 funemizu_vertex_tbl[] __attribute__((aligned(32))) = { 20079, -636, 0, 13766, 0, 0, 8902, 0, 0, 5574, 0, 0, 0, 0, 0, 13766, 1536, 0, 8902, 2560, 0, 5574, 2560, 0, 512, 0, 0, 18154, 899, 0, 13766, 3328, 0, 8902, 5376, 0, 5574, 5488, 0, 2246, 2982, 0, 14542, -396, 1249, 10016, 0, 1249, 6528, 0, 1249, 4142, 0, 1249, 512, 0, 1249, 10016, 957, 1249, 6528, 1596, 1249, 4142, 1596, 1249, 13161, 560, 1249, 10016, 2074, 1249, 6528, 3351, 1249, 4142, 3422, 1249, 1755, 1859, 1249};
@@ -72,16 +75,31 @@ static s8 funemizu_normal_tbl[] __attribute__((aligned(32))) = { 0, 0, 64};
 static u8 funemizu_color0_tbl[] __attribute__((aligned(32))) = { 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 static u8 funemizu_dl_0_1[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x07, 0x04, 0x00, 0x00, 0x07, 0x08, 0x00, 0x00, 0x08, 0x03, 0x00, 0x00, 0x05, 0x07, 0x00, 0x01, 0x06, 0x02, 0x00, 0x00, 0x03, 0x06, 0x00, 0x01, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00 };
 static u8 funemizu_dl_0_2[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x04, 0x00, 0x00, 0x00, 0x02, 0x01, 0x00, 0x00, 0x00, 0x05, 0x00, 0x01, 0x01, 0x06, 0x00, 0x01, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+/** The three display lists of the type 0 wake's base layer, drawn with the sizes below. */
 static u8* funemizu_dl_0_tbl[] = { funemizu_dl_0_0, funemizu_dl_0_1, funemizu_dl_0_2 };
+/**
+ * Sizes in 32-byte units of the three display lists of the type 0 wake's base layer (the wake of
+ * Mario's paper boat and of ships); used by funemizuCallDL.
+ */
 static u8 funemizu_dl_0_size_tbl[] = { 0x02, 0x01, 0x01};
 static u8 funemizu_dl_1_1[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x04, 0x12, 0x00, 0x00, 0x15, 0x15, 0x00, 0x01, 0x14, 0x11, 0x00, 0x00, 0x13, 0x10, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static u8 funemizu_dl_1_2[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x04, 0x0E, 0x00, 0x00, 0x10, 0x0F, 0x00, 0x00, 0x0E, 0x13, 0x00, 0x01, 0x0F, 0x14, 0x00, 0x01, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static u8 funemizu_dl_1_3[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x04, 0x15, 0x00, 0x01, 0x14, 0x14, 0x00, 0x01, 0x12, 0x10, 0x00, 0x00, 0x11, 0x0F, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 static u8* funemizu_dl_1_tbl[] = { funemizu_dl_1_0, funemizu_dl_1_1, funemizu_dl_1_2, funemizu_dl_1_3 };
+/**
+ * Sizes in 32-byte units of the four display lists of the type 0 wake's stretched, scrolling outer layer;
+ * used by effFunemizuDisp.
+ */
 static u8 funemizu_dl_1_size_tbl[] = { 0x02, 0x01, 0x01, 0x01 };
 static s8 gor_fune_normal_tbl[] __attribute__((aligned(32))) = { 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 static u8 gor_fune_color0_tbl[] __attribute__((aligned(32))) = { 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+/** The two base-layer display lists of the type 2 wake, drawn with the sizes below. */
 static u8* gor_fune_dl_0_tbl[] = { gor_fune_dl_0_0, gor_fune_dl_0_1 };
+/**
+ * Sizes in 32-byte units of the base-layer display lists of the type 2 wake, the second wake mesh gor_00
+ * shows beside the ship arriving in Rogueport harbour; used by effFunemizuDisp.
+ * The outer layer's lists and sizes follow.
+ */
 static u8 gor_fune_dl_0_size_tbl[] = { 0x02, 0x02};
 static u8* gor_fune_dl_1_tbl[] = { gor_fune_dl_1_0, gor_fune_dl_1_1 };
 static u8 gor_fune_dl_1_size_tbl[] = { 0x02, 0x02};

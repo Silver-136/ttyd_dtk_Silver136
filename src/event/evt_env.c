@@ -1,3 +1,5 @@
+// Script commands for environment effects (envdrv).
+
 #include "evt/evt_env.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/envdrv.h"

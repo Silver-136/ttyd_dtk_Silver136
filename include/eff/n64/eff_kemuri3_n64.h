@@ -1,3 +1,5 @@
+// eff_kemuri3_n64.c: smoke effect 3 entry (effKemuri3N64Entry).
+
 #pragma once
 
 #include <dolphin/types.h>

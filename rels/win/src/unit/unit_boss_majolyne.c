@@ -66,6 +66,11 @@ EvtWord majo3_shadow_tail_event[79];
 EvtWord majo3_shadow_tail_event[78];
 #endif
 
+/**
+ * Unit data of Beldam (btl_un_majolyne1), the Shadow Sirens' leader in Boggly Woods: 9 HP, level 26.
+ * Vivian's init script spawns her and her sister Marilyn at the start of the fight,
+ * and Beldam's phase script drives the sisters' lines.
+ */
 BattleUnitKind unit_boss_majolyne = {
     UNIT_BELDAM_CHAPTER2, // mUnitType
     "btl_un_majolyne1", // name
@@ -114,8 +119,10 @@ BattleUnitKind unit_boss_majolyne = {
     data_table, // dataTable
 };
 
+/** Flat damage reduction of Beldam against normal, fire, ice, explosion and electric hits: none. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element attributes of Beldam: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -164,15 +171,18 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MJR_S_1"},
 };
 
+/** Data table of Beldam: event 49 (she is defeated) runs dead_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Beldam's single part: her model (c_majyorin), the main target and the part that covers for allies. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_majolyne1", "c_majyorin", 0.0f, 0.0f, 0.0f, 5.0f, 20.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Beldam's shadow-slip push: 1 ice-element damage to one opposing target, guardable. */
 static BattleWeapon weapon_majolyne_kagenuke_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -210,6 +220,7 @@ static BattleWeapon weapon_majolyne_kagenuke_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Beldam's blizzard: 2 ice-element damage to every opposing target, ignoring defense. */
 static BattleWeapon weapon_majolyne_blizzard_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -251,6 +262,9 @@ static BattleWeapon weapon_majolyne_blizzard_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Beldam's enlarging powder: aimed at an ally of hers, it always hits and makes the target Huge for 3 turns.
+ */
 static BattleWeapon weapon_majolyne_powder_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -289,6 +303,7 @@ static BattleWeapon weapon_majolyne_powder_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Beldam's shrinking powder: aimed at an enemy, it makes the target Tiny for 3 turns. */
 static BattleWeapon weapon_majolyne_powder_attack2 = {
     NULL, 0, // name..icon
     {0}, // pad_06

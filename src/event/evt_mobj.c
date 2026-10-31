@@ -1,3 +1,6 @@
+// Script commands and main functions for map objects (mobj): blocks, switches, save blocks,
+// item boxes, jump stands, locks and Bowser's side-scrolling stage objects.
+
 #include "evt/evt_cmd.h"
 #include "driver/mobjdrv.h"
 #include "driver/animdrv.h"
@@ -66,6 +69,7 @@ static EVT_BEGIN(evt_shake)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0f), FLOAT(0.009765625f), 200)
     RETURN
 EVT_END()
+/** Animation names of the coloured switch blocks, in the order mobj_switch_float_blk steps through them. */
 const char* _switch_anim[] = {"A_1", "A_2", "A_3", "A_4", "A_5", "S_1"};
 
 // FAKE: the hit pointer is tested as a signed word (cmpwi); a pointer or BOOL test compiles to cmplwi

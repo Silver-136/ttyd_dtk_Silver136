@@ -1,3 +1,5 @@
+// Pause menu root: the tabs, help text, sort menu and shared window frames, and the sort functions for every list.
+
 #include "driver/windowdrv.h"
 #include "win/win_main.h"
 #include "battle/battle_monosiri.h"
@@ -1550,45 +1552,53 @@ void winWazaGX(WindowWork* wp, s32 a, f32 x, f32 y, f32 w, f32 h) {
     winWazaQuad(wp, 0x9D, x + (w - 16.0f), y - (h - 16.0f), 16.0f, 16.0f);
 }
 
+/** Sort options (Z) of the Items list: by name or by type. */
 WinSortData sort_1[] = {
     {"msg_menu_sort_aiueo", sort_1_1_func},
     {"msg_menu_sort_kind", sort_1_2_func},
     {NULL, NULL},
 };
+/** Sort options of the Important Items list: by name or by type. */
 WinSortData sort_2[] = {
     {"msg_menu_sort_aiueo", sort_2_1_func},
     {"msg_menu_sort_kind", sort_2_2_func},
     {NULL, NULL},
 };
+/** Sort options of the full badge list: by name, by type or by BP cost. */
 WinSortData sort_3[] = {
     {"msg_menu_sort_aiueo", sort_3_1_func},
     {"msg_menu_sort_kind", sort_3_2_func},
     {"msg_menu_sort_bp", sort_3_3_func},
     {NULL, NULL},
 };
+/** Sort options of the equipped badge list: by name, by type or by BP cost. */
 WinSortData sort_4[] = {
     {"msg_menu_sort_aiueo", sort_4_1_func},
     {"msg_menu_sort_kind", sort_4_2_func},
     {"msg_menu_sort_bp", sort_4_3_func},
     {NULL, NULL},
 };
+/** Sort options of the Journal's badge log: by name, by type or by BP cost. */
 WinSortData sort_5[] = {
     {"msg_menu_sort_aiueo", sort_5_1_func},
     {"msg_menu_sort_kind", sort_5_2_func},
     {"msg_menu_sort_bp", sort_5_3_func},
     {NULL, NULL},
 };
+/** Sort options of the Journal's recipe log: by name or by type. */
 WinSortData sort_6[] = {
     {"msg_menu_sort_aiueo", sort_6_1_func},
     {"msg_menu_sort_kind", sort_6_2_func},
     {NULL, NULL},
 };
+/** Sort options of the Tattle Log: by number, by where the enemy appears most, or by name. */
 WinSortData sort_7[] = {
     {"msg_menu_sort_number", sort_7_1_func},
     {"msg_menu_sort_place", sort_7_2_func},
     {"msg_menu_sort_aiueo", sort_7_3_func},
     {NULL, NULL},
 };
+/** Sort options of the mail list: by name or by number. */
 WinSortData sort_8[] = {
     {"msg_menu_sort_aiueo", sort_8_1_func},
     {"msg_menu_sort_number", sort_8_2_func},

@@ -1,3 +1,5 @@
+// Camera shift: pans the field camera sideways with the C stick (L/R shift) and eases it back.
+
 #include "driver/camdrv.h"
 #include "mario/mario.h"
 #include "mario/mariost.h"
@@ -21,6 +23,10 @@ typedef struct CamShiftWork {
 } CamShiftWork;
 
 static CamShiftWork work;
+/**
+ * State of the sideways camera lead
+ * (the camera drifts ahead of where Mario is heading); wp is the pointer the code uses.
+ */
 static CamShiftWork* wp = &work;
 
 void camShiftInit(void) {

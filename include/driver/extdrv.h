@@ -1,3 +1,5 @@
+// extdrv.c: the ext driver (ExtdrvPose, ExtdrvTex): many copies of one paper animation drawn as flat textured quads.
+
 #pragma once
 
 #include <dolphin/types.h>

@@ -1,3 +1,5 @@
+// eff_nokotarou.c: Koops (nokotarou) effect entry (effNokotarouEntry), its work struct and main/draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

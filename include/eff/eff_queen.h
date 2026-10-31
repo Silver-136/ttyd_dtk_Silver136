@@ -1,3 +1,5 @@
+// eff_queen.c: Shadow Queen tornado effect entry (effQueenEntry) with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

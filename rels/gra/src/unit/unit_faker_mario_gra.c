@@ -42,6 +42,10 @@ static EvtWord marioAttackEvent_NormalHammer[299];
 static EvtWord marioAttackEvent_KaitenHammer[299];
 static EvtWord wait_event_fmario[6];
 
+/**
+ * Unit kind of Doopliss as Mario:
+ * 40 HP, level 0, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_faker_mario_gra = {
     UNIT_DOOPLISS_CHAPTER4_INVINCIBLE, // mUnitType
     "btl_un_hatena", // name
@@ -90,8 +94,14 @@ BattleUnitKind unit_faker_mario_gra = {
     data_table_fmario, // dataTable
 };
 
+/** Defence of Doopliss as Mario's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence_fmario = {{0, 0, 0, 0, 0}};
 
+/**
+ * Defence attributes of Doopliss as Mario's body:
+ * normal (takes no damage), fire (takes no damage), ice (takes no damage), explosion (takes no damage),
+ * electric (takes no damage); every other type is dealt normally.
+ */
 static BattleUnitDefenseAttr defence_attr_fmario = {{2, 2, 2, 2, 2}};
 
 static StatusVulnerability regist_fmario = {
@@ -119,6 +129,10 @@ static StatusVulnerability regist_fmario = {
     0, // ohko
 };
 
+/**
+ * Pose table of Doopliss as Mario:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table_fmario_stay[] = {
     {POSE_TYPE_SLEEP, "EM_N_1"},
     {POSE_TYPE_STOP, "EM_Y_2"},
@@ -137,15 +151,18 @@ static PoseTableEntry pose_table_fmario_stay[] = {
     {POSE_TYPE_ACTION, "EM_S_1"},
 };
 
+/** Event table of Doopliss as Mario: its defeat script. */
 static BattleDataEntry data_table_fmario[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_fmario},
     {0, NULL},
 };
 
+/** Body part of Doopliss as Mario: a single part using the model "c_mario". */
 static BattleUnitKindPart parts_fmario[] = {
     {1, "btl_un_hatena", "c_mario", 0.0f, 0.0f, 0.0f, 3.0f, 27.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_fmario, &defence_attr_fmario, kMainPart | kGuardTargetPart, 0, pose_table_fmario_stay},
 };
 
+/** Doopliss as Mario's jump: no damage to a single target, a jump-style hit. */
 static BattleWeapon weapon_masao_jump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -182,6 +199,7 @@ static BattleWeapon weapon_masao_jump = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Doopliss as Mario's hammer: no damage to a single target, a hammer-style hit. */
 static BattleWeapon weapon_masao_hammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -218,6 +236,7 @@ static BattleWeapon weapon_masao_hammer = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Doopliss as Mario's kururin jump: no damage to a single target, a jump-style hit. */
 static BattleWeapon weapon_masao_kururin_jump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -254,6 +273,7 @@ static BattleWeapon weapon_masao_kururin_jump = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Doopliss as Mario's kaiten hammer: no damage to a single target, a hammer-style hit. */
 static BattleWeapon weapon_masao_kaiten_hammer = {
     NULL, 0, // name..icon
     {0}, // pad_06

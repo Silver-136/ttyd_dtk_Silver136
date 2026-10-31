@@ -1,3 +1,5 @@
+// memory.c: the heaps (HEAP_TYPE, __memAlloc), the map heap (_mapAlloc) and the smart heap for loaded files.
+
 #pragma once
 
 #include <dolphin/gx.h>

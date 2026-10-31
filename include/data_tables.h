@@ -1,3 +1,5 @@
+// Layouts of data tables that scripts and battle code read (PoseSoundTiming, DoorParam, QuizEntry...).
+
 #pragma once
 
 #include <dolphin/types.h>

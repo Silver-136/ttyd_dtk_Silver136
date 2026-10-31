@@ -43,6 +43,7 @@ EVT_BEGIN(muj_03_event_01)
     RETURN
 EVT_END()
 
+/** Doors and exits of muj_03: w_bero to muj_02; e_bero to muj_04. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -178,6 +179,7 @@ static EVT_BEGIN(evt_kusa_7)
     RETURN
 EVT_END()
 
+/** Trees of muj_03 that Mario can shake with his hammer (4 in all). */
 static TreeAccess tree_tbl[] = {
     {5, "A_treeA_01", "treeA_01_m", "treeA_01_ha", 0, NULL},
     {5, "A_treeA_02", "treeA_02_m", "treeA_02_ha", 0, NULL},
@@ -186,6 +188,10 @@ static TreeAccess tree_tbl[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/**
+ * Bushes of muj_03 that Mario can check for hidden things (8 in all); A_kuwa_move_05 runs evt_kusa_5,
+ * A_kuwa_move_07 runs evt_kusa_7.
+ */
 static KusaAccess kusa_tbl[] = {
     {1, "A_kuwa_move_01", "S_kuwa_move_01", NULL},
     {1, "A_kuwa_move_02", "S_kuwa_move_02", NULL},

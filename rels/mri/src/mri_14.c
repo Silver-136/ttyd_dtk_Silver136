@@ -131,6 +131,7 @@ static EVT_BEGIN(first_time_w_bero)
     RETURN
 EVT_END()
 
+/** Exits of mri_14: west road w_bero to mri_13 (e_bero); pipe dokan to mri_15 (dokan). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -783,6 +784,7 @@ static EVT_BEGIN(yuka_check)
     RETURN
 EVT_END()
 
+/** Plants Mario can search in mri_14: A_ueki01, A_ueki03, A_ueki04, A_ueki06, A_ueki07, A_ueki08. */
 static KusaAccess ueki_access_data[] = {
     {1, "A_ueki01", "S_ueki01", NULL},
     {1, "A_ueki03", "S_ueki03", NULL},

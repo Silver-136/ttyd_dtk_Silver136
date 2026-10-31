@@ -1,3 +1,5 @@
+// Nozzle effect (nozle): a nozzle model drawn from display-list data, placed and rotated by the caller for a set life.
+
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -327,6 +329,7 @@ static u32 nozle_1_dl_0_7[] __attribute__((aligned(32))) = {0x9800040E, 0x000111
 static u32 nozle_1_dl_0_8[] __attribute__((aligned(32))) = {0x9800030C, 0x00040C0C, 0x1B00040D, 0x0D0A0002, 0x0A0A0000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_0_9[] __attribute__((aligned(32))) = {0x98000316, 0x00000101, 0x15000102, 0x02000001, 0x03030000, 0x00000000, 0x00000000, 0x00000000};
 static void* nozle_1_dl_0_tbl[] __attribute__((aligned(32))) = {nozle_1_dl_0_0, nozle_1_dl_0_1, nozle_1_dl_0_2, nozle_1_dl_0_3, nozle_1_dl_0_4, nozle_1_dl_0_5, nozle_1_dl_0_6, nozle_1_dl_0_7, nozle_1_dl_0_8, nozle_1_dl_0_9};
+/** Display-list sizes (32-byte units) for the first layer of nozzle model 1 (type 0). */
 static u8 nozle_1_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01};
 static u32 nozle_1_dl_1_5[] __attribute__((aligned(32))) = {0x98000424, 0x00011F1F, 0x3F000114, 0x14260000, 0x20204000, 0x00161600, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_1_6[] __attribute__((aligned(32))) = {0x9800043F, 0x00011414, 0x31000115, 0x15400000, 0x16163200, 0x00171700, 0x00000000, 0x00000000};
@@ -334,11 +337,14 @@ static u32 nozle_1_dl_1_7[] __attribute__((aligned(32))) = {0x98000431, 0x000115
 static u32 nozle_1_dl_1_8[] __attribute__((aligned(32))) = {0x9800032F, 0x00042727, 0x3E000428, 0x282D0002, 0x25250000, 0x00000000, 0x00000000, 0x00000000};
 static u32 nozle_1_dl_1_9[] __attribute__((aligned(32))) = {0x98000339, 0x00000909, 0x38000107, 0x07230001, 0x06060000, 0x00000000, 0x00000000, 0x00000000};
 static void* nozle_1_dl_1_tbl[] __attribute__((aligned(32))) = {nozle_1_dl_1_0, nozle_1_dl_1_1, nozle_1_dl_1_2, nozle_1_dl_1_3, nozle_1_dl_1_4, nozle_1_dl_1_5, nozle_1_dl_1_6, nozle_1_dl_1_7, nozle_1_dl_1_8, nozle_1_dl_1_9};
+/** Display-list sizes for the second layer of nozzle model 1 (type 0), drawn over the first. */
 static u8 nozle_1_dl_1_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01};
 static s8 nozle_3_normal_tbl[] __attribute__((aligned(32))) = {
     0, 0, 64, 0,
 };
+/** Display-list sizes for list set 0 of nozzle model 3 (type 2), drawn after set 1. */
 static u8 nozle_3_dl_0_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
+/** Display-list sizes for list set 1 of nozzle model 3 (type 2), drawn first. */
 static u8 nozle_3_dl_1_size_tbl[] = {0x06, 0x06, 0x05, 0x03, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
 static s8 nozle_4_normal_tbl[] __attribute__((aligned(32))) = {
     0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -349,7 +355,12 @@ static GXColor nozle_4_color0_tbl[] __attribute__((aligned(32))) = {
     {255, 255, 255, 127}, {255, 255, 255, 76}, {255, 255, 255, 0},
 };
 static void* nozle_4_dl_0_tbl[] = {nozle_4_dl_0_0, nozle_4_dl_0_1, nozle_4_dl_0_2, nozle_4_dl_0_3, nozle_4_dl_0_4, nozle_4_dl_0_5, nozle_4_dl_0_6, nozle_4_dl_0_7};
+/** Display-list sizes for nozzle model 4, drawn once for each spray piece of type 3. */
 static u8 nozle_4_dl_0_size_tbl[] = {0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02, 0x02};
+/**
+ * Width and height percentages per frame as a type 0 or 2 nozzle grows in; read backwards from its
+ * remaining life as it shrinks away at the end.
+ */
 static u8 scale_dt[][2] = {{0, 0}, {11, 13}, {22, 27}, {34, 41}, {46, 55}, {57, 69}, {68, 82}, {79, 94}, {87, 105}, {94, 113}, {100, 120}, {102, 123}, {103, 124}, {101, 123}, {98, 120}, {95, 116}, {90, 111}, {86, 107}, {83, 103}, {81, 101}, {80, 100}, {0, 0}};
 
 /**

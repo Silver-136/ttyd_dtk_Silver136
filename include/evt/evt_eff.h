@@ -1,3 +1,5 @@
+// evt_eff.c: script commands that start and delete effects by name (evt_eff, evt_eff64).
+
 #pragma once
 
 #include <dolphin/types.h>

@@ -1,3 +1,5 @@
+// Battle stage: spotlights, lighting, audience darkening and screen capture.
+
 #include "battle/battle_stage.h"
 #include "battle/battle.h"
 #include "battle/battle_unit.h"

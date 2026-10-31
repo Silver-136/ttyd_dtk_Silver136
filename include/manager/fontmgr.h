@@ -1,3 +1,5 @@
+// fontmgr.c: the font manager: the binary font (BFN) file structures and text drawing.
+
 #pragma once
 
 #include <dolphin/gx.h>

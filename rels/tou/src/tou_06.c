@@ -108,6 +108,7 @@ static EVT_BEGIN(w_door_close)
     RETURN
 EVT_END()
 
+/** Doors of the storage room: the north door back to the main corridor tou_04 and the west door to tou_12. */
 static BeroEntry bero_data[] = {
     {
         "n_bero", // hitName
@@ -195,6 +196,7 @@ EVT_BEGIN(evt_kaidan)
     RETURN
 EVT_END()
 
+/** Map objects of the second, labelled container, which Flurrie's gust blows away together (evt_kontena2). */
 const char* cloud_kontena2_list[] = {
     "kontena_2",
     "fuda_1",
@@ -216,6 +218,7 @@ static EVT_BEGIN(evt_block_broken)
     RETURN
 EVT_END()
 
+/** Items offered when Mario uses the storage room lock: just the Storage Key (the list ends with -1). */
 static s32 key_tbl[] = {
     ITEM_STORAGE_KEY_0x13, -1,
 };
@@ -407,6 +410,10 @@ EVT_BEGIN(evt_chuchu)
     RETURN
 EVT_END()
 
+/**
+ * The 25 spots (x, y, z each) where Trouble Center job 13's Battle Trunks can lie;
+ * make_tbl shuffles their order and get_pos reads them.
+ */
 static s32 list[] = {
     -305, 250, 130, -221, 200, 5, -235, 200,
     85, -159, 250, -14, -129, 200, 45, 80,
@@ -471,6 +478,7 @@ EVT_BEGIN(iri_13_init)
     RETURN
 EVT_END()
 
+/** NPCs of the storage room: Ms. Mowz, for her scene on the first visit. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"チュチュリーナ"*/"\x83\x60\x83\x85\x83\x60\x83\x85\x83\x8A\x81\x5B\x83\x69", // name

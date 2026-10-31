@@ -1,3 +1,5 @@
+// party_kuribo.c: Goombella's (kuribo) field partner functions (init, use, bye) and christineGetStatus.
+
 #pragma once
 
 #include <dolphin/types.h>

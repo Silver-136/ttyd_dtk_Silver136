@@ -56,6 +56,7 @@ static EVT_BEGIN(w_door_close)
     RETURN
 EVT_END()
 
+/** The one door of this room: the west door back to the storage room tou_06. */
 static BeroEntry bero_data[] = {
     {
         "w_bero", // hitName

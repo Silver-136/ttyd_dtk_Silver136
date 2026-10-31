@@ -74,6 +74,10 @@ static USER_FUNC(togenoko_getnum) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of the Dark Koopatrol in the Pit of 100 Trials: 25 HP, level 30;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_togenoko_ace = {
     UNIT_DARK_KOOPATROL, // mUnitType
     "btl_un_togenoko_ace", // name
@@ -122,8 +126,16 @@ BattleUnitKind unit_togenoko_ace = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Dark Koopatrol against each element (normal, fire, ice, explosion, electric):
+ * 2 against every element, so each hit is cut by 2.
+ */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/**
+ * Damage modifiers of the Dark Koopatrol per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -151,10 +163,22 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * Defence of the Dark Koopatrol while flipped over against each element (normal, fire, ice, explosion,
+ * electric): none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence_turn = {0};
 
+/**
+ * Damage modifiers of the Dark Koopatrol while flipped over per element (normal, fire, ice, explosion,
+ * electric): none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
+/**
+ * Status vulnerability of the Dark Koopatrol while flipped over:
+ * percent chance that each status takes hold (100 is normal).
+ */
 static StatusVulnerability regist_turn = {
     100, // sleep
     100, // stop
@@ -180,10 +204,22 @@ static StatusVulnerability regist_turn = {
     100, // ohko
 };
 
+/**
+ * Defence of the Dark Koopatrol while it is withdrawn into its shell:
+ * defence 99 against every kind of hit, so no attack does damage.
+ */
 static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
 
+/**
+ * Damage modifiers of the Dark Koopatrol while guarding per element (normal, fire, ice, explosion,
+ * electric): normal: immune, fire: immune, ice: immune, explosion: immune, electric: immune.
+ */
 static BattleUnitDefenseAttr defence_attr_guard = {{2, 2, 2, 2, 2}};
 
+/**
+ * Status vulnerability of the Dark Koopatrol while guarding:
+ * percent chance that each status takes hold (100 is normal).
+ */
 static StatusVulnerability regist_guard = {
     100, // sleep
     100, // stop
@@ -209,6 +245,9 @@ static StatusVulnerability regist_guard = {
     100, // ohko
 };
 
+/**
+ * Pose table of the Dark Koopatrol: animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -230,6 +269,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Pose table of the Dark Koopatrol while flipped over:
+ * animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "N_2"},
     {POSE_TYPE_STOP, "Z_2"},
@@ -248,6 +291,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "S_2"},
 };
 
+/**
+ * Pose table of the Dark Koopatrol while guarding:
+ * animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_SLEEP, "A_1"},
     {POSE_TYPE_STOP, "A_1"},
@@ -266,6 +313,10 @@ static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_ACTION, "A_1"},
 };
 
+/**
+ * Pose table of the Dark Koopatrol while guarding and flipped over:
+ * animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table_guard_turn[] = {
     {POSE_TYPE_SLEEP, "G_1"},
     {POSE_TYPE_STOP, "G_1"},
@@ -284,6 +335,10 @@ static PoseTableEntry pose_table_guard_turn[] = {
     {POSE_TYPE_ACTION, "G_1"},
 };
 
+/**
+ * Data table of the Dark Koopatrol: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -291,12 +346,20 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Data table of the Dark Koopatrol while flipped over:
+ * event scripts and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table_turn[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/**
+ * Data table of the Dark Koopatrol while guarding:
+ * event scripts and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table_guard[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -304,10 +367,12 @@ static BattleDataEntry data_table_guard[] = {
     {0},
 };
 
+/** Part of the Dark Koopatrol: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_togenoko_ace", "c_togenoko_b", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, kCounterTopSpiky, pose_table},
 };
 
+/** Weapon of the Dark Koopatrol's thrust: damage 5. */
 static BattleWeapon weapon_togenoko_normal_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -345,6 +410,7 @@ static BattleWeapon weapon_togenoko_normal_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Dark Koopatrol's shell spin: damage 5. */
 static BattleWeapon weapon_togenoko_shell_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -382,6 +448,7 @@ static BattleWeapon weapon_togenoko_shell_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Dark Koopatrol's charge-up. */
 static BattleWeapon weapon_togenoko_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -531,6 +598,7 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/** Setup used to spawn a Dark Koopatrol: unit kind, alliance, position and turn phase. */
 static BattleUnitSetup entry_togenoko = {
     &unit_togenoko_ace, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

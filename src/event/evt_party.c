@@ -1,3 +1,6 @@
+// Script commands that control the partner: position, movement, poses, flags and the
+// partner-specific actions (Koops, Bobbery, Flurrie, Vivian, Yoshi).
+
 #include "evt/evt_party.h"
 #include "driver/camdrv.h"
 #include "driver/hitdrv.h"

@@ -1,3 +1,5 @@
+// Bald Cleft (sinnosuke): battle unit used in Petal Meadows.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -28,6 +30,10 @@ static EvtWord wakeup_event[99];
 static EvtWord attack_event[454];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Bald Cleft:
+ * 2 HP, level 12, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_sinnosuke = {
     UNIT_BALD_CLEFT, // mUnitType
     "btl_un_sinnosuke", // name
@@ -76,10 +82,18 @@ BattleUnitKind unit_sinnosuke = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Bald Cleft's body: 2 against normal, ice, explosion and electric hits;
+ * immune to fire (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{2, 99, 2, 2, 2}};
 
+/**
+ * Defence attributes of the Bald Cleft's body: fire (takes no damage); every other type is dealt normally.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
+/** Defence of the Bald Cleft's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -107,10 +121,12 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Bald Cleft: a single part using the model "c_sinnosuke". */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_sinnosuke", "c_sinnosuke", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, 0, pose_table},
 };
 
+/** Bald Cleft's attack: 1 damage to a single target, a hammer-style hit. */
 static BattleWeapon weapon_sinnosuke_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -147,6 +163,10 @@ static BattleWeapon weapon_sinnosuke_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Pose table of the Bald Cleft:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "SIS_N_1"},
     {POSE_TYPE_STOP, "SIS_Y_1"},
@@ -168,6 +188,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "SIS_S_1"},
 };
 
+/**
+ * Pose table of the Bald Cleft while flipped over:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "SIS_N_2"},
     {POSE_TYPE_STOP, "SIS_Y_2"},
@@ -186,6 +210,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "SIS_D_2"},
 };
 
+/** Event table of the Bald Cleft: its reaction to being flipped over, nothing special on a First Strike. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},

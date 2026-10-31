@@ -1,3 +1,5 @@
+// koopa_motion.c: Bowser's motions in the side-scrolling interludes (kpa_walk, kpa_jump, kpa_hip, swim, power-ups).
+
 void kpa_dash(void);
 void kpa_walk(void);
 

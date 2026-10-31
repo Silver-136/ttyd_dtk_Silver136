@@ -1,3 +1,5 @@
+// Declarations for the Riverside Station (eki) area: battle setup tables, the per-room init events, the key-item lecture event and the area's battle units.
+
 #pragma once
 
 #include "dolphin/types.h"

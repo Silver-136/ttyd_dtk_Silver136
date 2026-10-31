@@ -1,3 +1,5 @@
+// mot_ship.c: Mario's paper boat motion (mot_ship, mot_ship_post), swirl (whirlpool) power and ship-place checks.
+
 #pragma once
 
 #include "dolphin/types.h"

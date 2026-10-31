@@ -1,3 +1,5 @@
+// eff_bomb_n64.c: Paper Mario 64 Bomb effect entry (effBombN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

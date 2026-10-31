@@ -1,3 +1,5 @@
+// evt_hit.c: script commands for map collision objects (hitdrv).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

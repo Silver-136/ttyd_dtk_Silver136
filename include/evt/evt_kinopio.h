@@ -1,3 +1,5 @@
+// evt_kinopio.c: inn scripts and helpers (evt_kinopio_setup, bed and payment commands); kinopio is Toad.
+
 #pragma once
 
 #include "evt/evt_cmd.h"

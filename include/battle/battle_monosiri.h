@@ -1,3 +1,5 @@
+// Declares the Tattle entry structure and the Tattle flag function.
+
 #pragma once
 
 #include <dolphin/types.h>

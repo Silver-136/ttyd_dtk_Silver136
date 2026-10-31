@@ -150,6 +150,10 @@ static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
     return _hitIsGroupSub(target, group, FALSE);
 }
 
+/**
+ * Sprite entries for the crowd of sailors (evt_nannpc_init): the c_boro_k model with its S_1 animation, one
+ * entry per animation phase offset.
+ */
 static ExtTexInfo ext_entry_data[] = {
     {"c_boro_k", "S_1", 0.0f},
     {"c_boro_k", "S_1", 2.0f},
@@ -184,6 +188,10 @@ static ExtTexInfo ext_entry_data[] = {
     {0},
 };
 
+/**
+ * Animation frame table for a sailor of the crowd while it stands or hops about: each frame of the first 21
+ * appears twice.
+ */
 static s16 suifu_animtbl[] = {
     0, 0, 1, 1, 2, 2, 3, 3,
     4, 4, 5, 5, 6, 6, 7, 7,
@@ -193,6 +201,7 @@ static s16 suifu_animtbl[] = {
     -1, 0,
 };
 
+/** Animation frame table for a sailor of the crowd while it runs, ending with -1. */
 static s16 suifu_run_animtbl[] = {
     20, 20, 21, 21, 22, 22, 23, 23,
     24, 24, 25, 25, 26, 26, 27, 27,
@@ -316,6 +325,7 @@ static EVT_BEGIN(peton_talk)
     RETURN
 EVT_END()
 
+/** NPC setup of dou_11: the named sailors C, D and E of the crowd, Monie and Peeton. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"水夫C"*/"\x90\x85\x95\x76\x43", // name
@@ -380,6 +390,11 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Exits (beros) of this room: w_bero to dou_10, e_bero to muj_10, n_bero to muj_00, dokan_1 (script only),
+ * dokan_4 (script only), dokan_2 (script only), dokan_6 (script only), dokan_3 (script only), dokan_5 (script
+ * only), dokan_7 (script only) and dokan_8 (script only).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -560,6 +575,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Starting positions of the 100 sailors on the left platform: x, y, z and facing direction for each. */
 s32 suifudata[] = {
     155, 63, -3, 270, 162, 60, -50, 270,
     122, 86, -17, 90, 180, 96, 2, 90,
@@ -613,6 +629,10 @@ s32 suifudata[] = {
     140, 24, 20, 270, 190, 24, 25, 270,
 };
 
+/**
+ * Resting positions of the sailors on the right-hand platform after they have crossed: x, y, z and facing
+ * direction for each.
+ */
 s32 suifudata_after[] = {
     637, 70, -109, 270, 694, 70, -139, 270,
     688, 70, -130, 270, 656, 70, -138, 90,
@@ -2489,6 +2509,9 @@ EVT_BEGIN(pukapuka_watari_init02)
     RETURN
 EVT_END()
 
+/**
+ * Hazard-water floors of this room (map hit names) and the point each puts Mario back at after he is bitten.
+ */
 HitDamageReturn hitDmgRetPoints_1st[] = {
     {"mod_01", {400.0f, 15.0f, 0.0f}},
     {"mod_02", {-650.0f, 200.0f, 0.0f}},
@@ -2509,6 +2532,9 @@ HitDamageReturn hitDmgRetPoints_1st[] = {
     {0},
 };
 
+/**
+ * Hazard-water floors of this room (map hit names) and the point each puts Mario back at after he is bitten.
+ */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_01", {725.0f, 50.0f, 90.0f}},
     {"mod_02", {-650.0f, 200.0f, 0.0f}},

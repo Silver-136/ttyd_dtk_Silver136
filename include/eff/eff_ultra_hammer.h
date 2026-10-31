@@ -1,3 +1,5 @@
+// eff_ultra_hammer.c: Ultra Hammer effect entry (effUltraHammerEntry) and its work data (EffUltraHammerData).
+
 #pragma once
 
 #include <dolphin/mtx.h>

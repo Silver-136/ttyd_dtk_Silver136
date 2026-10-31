@@ -1,3 +1,6 @@
+// Falling stage object (Fall): types 0-8 drop objects onto the battle stage (bugs, forks, lights, a bucket and tub,
+// meteors, a Koopa) with matching impact sounds; spawned by the battle stage objects.
+
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -1038,6 +1041,7 @@ void effFallDispInseki(CameraId cameraId, EffectEntry* effect) {
     }
 }
 
+/** Opaque white, the tint register colour the falling water is drawn with in effFallDispWater. */
 static const GXColor white255 = { 255, 255, 255, 255 };
 /** Draws the falling water (type 3) as translucent quads. */
 void effFallDispWater(CameraId cameraId, EffectEntry* effect) {

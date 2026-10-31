@@ -1,3 +1,6 @@
+// Boo (teresa) vanish: type 0 shrinks and spins a sprite, then puffs into smoke with sounds;
+// type 1 is a growing, fading sprite.
+
 #include "eff/eff_teresa.h"
 #include "eff/eff_kemu_test.h"
 #include "driver/dispdrv.h"

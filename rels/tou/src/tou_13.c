@@ -22,6 +22,7 @@ EvtWord evt_nusumi[182];
 static EvtWord evt_first[42];
 EvtWord tou_13_init_evt[117];
 
+/** Exits of this passage: east to the champion's room tou_07 and west to Grubba's office tou_05. */
 static BeroEntry bero_data[] = {
     {
         "e_bero_", // hitName

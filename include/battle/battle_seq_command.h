@@ -1,3 +1,5 @@
+// Declares the battle command menu structures (weapon and party tables).
+
 #pragma once
 
 #include <dolphin/types.h>

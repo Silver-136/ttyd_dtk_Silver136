@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: water jet (jetw) from a point with a scale and lifetime.
+
 #include "eff/n64/eff_opuku_jetw_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -13,6 +15,10 @@ typedef struct JetwEnt {
     u8 alpha, pad;
 } JetwEnt;
 
+/**
+ * Steps of the type 0 water spray's three streams (20 per stream): blob offset, size,
+ * tilt and fade as each blob rises.
+ */
 static JetwEnt adata[] = {
     {0, 0, 30, 140, 0, 255, 0},
     {0, 6, 30, 120, 0, 250, 0},
@@ -115,6 +121,7 @@ static struct {
     {0, 42, 120, 54, 90, 40, 0},
 }, 0};
 
+/** 16x16 quad drawn for the central blob and for every blob in the spray streams. */
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 255, 255, 255, 255},
     {8, -8, 0, 1024, 0, 255, 255, 255, 255},
@@ -122,6 +129,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 1024, 255, 255, 255, 255},
 };
 
+/** A tall 6x22 quad standing on its origin; nothing in this effect draws it. */
 effN64Vtx size6x22_tex32x32_vtx[] = {
     {-3, 0, 0, 0, 0, 255, 255, 255, 255},
     {3, 0, 0, 1024, 0, 255, 255, 255, 255},

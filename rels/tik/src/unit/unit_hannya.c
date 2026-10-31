@@ -1,3 +1,5 @@
+// Rogueport Sewers (tik) battle unit: Spania (hannya): its parts, defence/status tables, and attack events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -27,6 +29,10 @@ static EvtWord damage_event[10];
 static EvtWord attack_event[455];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Spania (HP 3, level 8): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_hannya = {
     UNIT_SPANIA, // mUnitType
     "btl_un_hannya", // name
@@ -75,10 +81,17 @@ BattleUnitKind unit_hannya = {
     data_table, // dataTable
 };
 
+/** Defence of the Spania: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Spania: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Spania (percent chance to take each status): immune to dodgy and invisibility;
+ * extra prone to stop, poison, electric shock, burn, growing huge, attack up, defence up, fright, gale force,
+ * speed up and instant kill; resists most other statuses.
+ */
 static StatusVulnerability regist = {
     100, // sleep
     120, // stop
@@ -104,16 +117,22 @@ static StatusVulnerability regist = {
     150, // ohko
 };
 
+/**
+ * Data table of the Spania: event handlers for the attacker hurt by its spikes
+ * and a First Strike on it (no reaction).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Body part of the Spania (model c_hannya): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_hannya", "c_hannya", 0.0f, 0.0f, 0.0f, 0.0f, 27.0f, 0.0f, 0.0f, 37.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
+/** Weapon of the Spania's attack: 1 damage, hammer-type contact attack. */
 static BattleWeapon weapon_hannya_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

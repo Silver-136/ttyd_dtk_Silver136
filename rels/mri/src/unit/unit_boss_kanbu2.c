@@ -1,3 +1,6 @@
+// The Great Tree (mri) battle unit: Lord Crump (kanbu2) in the Magnus von Grapple fight: its parts, defence/status
+// tables, and attack events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -27,6 +30,10 @@ static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_guard[18];
 static EvtWord normal_attack_event[365];
 
+/**
+ * Unit data of Lord Crump: 15 HP, 56x59 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_boss_kanbu2 = {
     UNIT_UNUSED_CRUMP2, // mUnitType
     "btl_un_kanbu2", // name
@@ -75,10 +82,16 @@ BattleUnitKind unit_boss_kanbu2 = {
     data_table, // dataTable
 };
 
+/** Defence of Lord Crump: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of Lord Crump: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of Lord Crump (percent chance each status takes hold): immune to fright, Gale Force,
+ * instant KO; the rest take hold at 80% or better.
+ */
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -104,16 +117,19 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/** Event table of Lord Crump: dead_event (tag 49). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Parts of Lord Crump: 1 part (model c_kanbu). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_kanbu2", "c_kanbu", 0.0f, 0.0f, 0.0f, 0.0f, 45.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of Lord Crump (attack): targets one unit for 2 damage; used by attack_event. */
 BattleWeapon weapon_kanbu2_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -209,6 +225,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/** Pose table of Lord Crump: maps its battle poses to its animations. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -230,6 +247,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Poses of Lord Crump while he is guarding (set by guard_event). */
 static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},

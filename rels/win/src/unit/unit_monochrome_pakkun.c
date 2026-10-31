@@ -42,6 +42,11 @@ static EvtWord return_event[256];
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Pale Piranha (btl_un_monochrome_pakkun), the grey Piranha Plant of Boggly Woods: 4 HP,
+ * level 11, and a bite for 2 damage. Boggly Woods' battle groups use it,
+ * and it can hang from the ceiling frame.
+ */
 BattleUnitKind unit_monochrome_pakkun = {
     UNIT_PALE_PIRANHA, // mUnitType
     "btl_un_monochrome_pakkun", // name
@@ -90,8 +95,10 @@ BattleUnitKind unit_monochrome_pakkun = {
     data_table, // dataTable
 };
 
+/** Flat damage reduction of the Pale Piranha against normal, fire, ice, explosion and electric hits: none. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element attributes of the Pale Piranha: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -119,10 +126,18 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * The Pale Piranha's single part: the plant model (c_pakflwr_t),
+ * the main target and the part that covers for allies; its head carries a spiky counter.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_monochrome_pakkun", "c_pakflwr_t", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
+/**
+ * The Pale Piranha's bite: 2 damage to the front-most opposing target,
+ * a hammer-like attack that can be guarded.
+ */
 static BattleWeapon weapon_pakkun_flower_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -205,6 +220,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PKF_S_1"},
 };
 
+/**
+ * Poses of the Pale Piranha while it hangs from the stage's iron frame on the ceiling;
+ * the same slots as pose_table.
+ */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "PKF_N_2"},
     {POSE_TYPE_STOP, "PKF_Y_2"},
@@ -226,6 +245,11 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "PKF_S_3"},
 };
 
+/**
+ * Data table of the Pale Piranha: event 37 (an attacker is hurt by its spiky head) flashes the spikes,
+ * events 25 to 36 (it is hurt by a target's counter) play counter_damage_event and event 48
+ * (First Strike) does nothing.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

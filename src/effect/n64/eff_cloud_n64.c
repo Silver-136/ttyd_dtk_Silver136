@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: cloud puff sprite scaled by the given scale; types 0-3 pick the colours.
+
 #include "eff/n64/eff_cloud_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"

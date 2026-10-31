@@ -235,6 +235,7 @@ EVT_BEGIN(puni_11_talk)
     RETURN
 EVT_END()
 
+/** NPCs of the Pider hall: the rival Puni and Punies 6 to 11. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ライバル"*/"\x83\x89\x83\x43\x83\x6F\x83\x8B", // name
@@ -339,6 +340,11 @@ static EVT_BEGIN(bero_s_doa_open)
     RETURN
 EVT_END()
 
+/**
+ * Exits of mri_06: east door e_bero to mri_15 (w_bero); west road w_bero to mri_07 (e_bero); east road
+ * e_bero02 to mri_08 (w_bero); west road w_bero02 to mri_11 (e_bero); pipe dokan1 to mri_19 (dokan2); dokan2
+ * (scripted pipe); dokan3 (scripted pipe).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -476,6 +482,10 @@ EVT_BEGIN(ueki_evt_02)
     RETURN
 EVT_END()
 
+/**
+ * Plants Mario can search in mri_06: A_ueki01, A_ueki02 (runs ueki_evt_02 when searched), A_ueki03,
+ * A_ueki04, A_ueki05, A_ueki06.
+ */
 static KusaAccess ueki_access_data[] = {
     {1, "A_ueki01", "S_ueki01", NULL},
     {1, "A_ueki02", "S_ueki02", ueki_evt_02},

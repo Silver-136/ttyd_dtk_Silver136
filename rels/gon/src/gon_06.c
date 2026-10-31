@@ -86,6 +86,7 @@ static EVT_BEGIN(door02_open)
     RETURN
 EVT_END()
 
+/** Exits (beros) of this room: w_bero to gon_05 and e_bero to gon_07. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -243,6 +244,7 @@ static USER_FUNC(bgm_start_wait) {
     return psndBGMStartCheck(1) ? EVT_RETURN_DONE : EVT_RETURN_BLOCK;
 }
 
+/** Items offered in the item menu at the chest: only the Black Key (0x22). */
 static s32 key_tbl[] = {
     ITEM_BLACK_KEY_0x22, -1,
 };

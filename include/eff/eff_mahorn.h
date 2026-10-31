@@ -1,3 +1,5 @@
+// eff_mahorn.c: Wizzerd (mahorn) effect entry (effMahornEntry) with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

@@ -1099,6 +1099,10 @@ USER_FUNC(yuu_00_cam_shift_reset) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Names of the floor areas below the course for yuuminigame1_gamerule;
+ * landing on one scores -5 (02, 05), -10 (03), -15 (06) or -20 (04).
+ */
 static const char yuu00_gnd_02[] = "A_ground_02";
 static const char yuu00_gnd_05[] = "A_ground_05";
 static const char yuu00_gnd_03[] = "A_ground_03";

@@ -64,6 +64,7 @@
 typedef struct FuwaTable {
     f32 v[40];
 } FuwaTable;
+/** Up-and-down offsets, in 40 steps, that make an NPC float in place. */
 static const FuwaTable fuwa_table = {{0.0f, 0.5f, 1.0f, 1.4f, 1.8f, 2.0f, 2.3f, 2.5f, 2.6f, 2.7f, 2.7f, 2.7f, 2.6f, 2.5f, 2.3f, 2.0f, 1.8f, 1.4f, 1.0f, 0.5f, -0.0f, -0.5f, -1.0f, -1.4f, -1.8f, -2.0f, -2.3f, -2.5f, -2.6f, -2.7f, -2.7f, -2.7f, -2.6f, -2.5f, -2.3f, -2.0f, -1.8f, -1.4f, -1.0f, -0.5f}};
 typedef struct ExchangeRyokin {
     s32 ryokin;
@@ -696,6 +697,10 @@ EVT_BEGIN(gor_03_down_evt)
     RETURN
 EVT_END()
 
+/**
+ * Exits (beros) of this room: n_bero to gor_04, e_bero to gor_01, dokan_1 to tik_07, s_bero to tik_07 and
+ * A_dokan_02 to yuu_00.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "n_bero", // hitName
@@ -783,6 +788,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Exits (beros) of this room: A_dokan_02 to yuu_00. */
 BeroEntry yuu_00_data[] = {
     {
         "A_dokan_02", // hitName
@@ -803,6 +809,7 @@ BeroEntry yuu_00_data[] = {
     },
 };
 
+/** Exits (beros) of this room: A_dokan_02 to yuu_01. */
 BeroEntry yuu_01_data[] = {
     {
         "A_dokan_02", // hitName
@@ -823,6 +830,7 @@ BeroEntry yuu_01_data[] = {
     },
 };
 
+/** Exits (beros) of this room: A_dokan_02 to yuu_02. */
 BeroEntry yuu_02_data[] = {
     {
         "A_dokan_02", // hitName
@@ -843,6 +851,7 @@ BeroEntry yuu_02_data[] = {
     },
 };
 
+/** Exits (beros) of this room: A_dokan_02 to yuu_03. */
 BeroEntry yuu_03_data[] = {
     {
         "A_dokan_02", // hitName
@@ -1881,6 +1890,7 @@ static EVT_BEGIN(peton_init)
     RETURN
 EVT_END()
 
+/** Items offered in the item menu for Trouble Center job 19: only the Wedding Ring. */
 s32 iri_19_item_tbl[] = {
     ITEM_WEDDING_RING, -1,
 };
@@ -2036,6 +2046,7 @@ EVT_BEGIN(cherry_talk)
     RETURN
 EVT_END()
 
+/** NPC setup of Cherry (Jerry), the Bob-omb from Luigi's story. */
 NpcSetupInfo cherryEnt[] = {
     {
         /*"チェリー"*/"\x83\x60\x83\x46\x83\x8A\x81\x5B", // name
@@ -2248,6 +2259,11 @@ EVT_BEGIN(gor_03_dokan_down_evt)
     RETURN
 EVT_END()
 
+/**
+ * Exchange rates of the Pianta Changer: for each of nine story stages (row picked by exchange_ret_tbl_no),
+ * three offers of coins paid and piantas (Monte medals) received.
+ * Every row is the same: 1 pianta for 3 coins, 5 for 15, 10 for 30.
+ */
 ExchangeRyokin exchange_ryokin_medal_tbl[][3] = {
     {{3, 1}, {15, 5}, {30, 10}},
     {{3, 1}, {15, 5}, {30, 10}},
@@ -2736,6 +2752,7 @@ EVT_BEGIN(kyaku4_talk)
     RETURN
 EVT_END()
 
+/** Depth positions where the payout piantas (Monte medals) fall, one for each of the two slot machines. */
 f32 montemedalzpos[] = {
     -235.0f, -160.0f,
 };
@@ -2840,6 +2857,7 @@ EVT_BEGIN(slot2_set)
     RETURN
 EVT_END()
 
+/** Map group names of the reels of the two slot machines, 17 names for each machine. */
 SlotDrum drumname[2] = { // flat initializer, 17 names per slot machine
     "S_srot01_dram_01",
     "S_srot01_dram_02",
@@ -2877,10 +2895,12 @@ SlotDrum drumname[2] = { // flat initializer, 17 names per slot machine
     "neon_05",
 };
 
+/** Talk scripts of the two slot machines in the Pianta Parlor, indexed by machine. */
 EvtWord* slotevttbl[] = {
     slot1_set, slot2_set,
 };
 
+/** Symbol pattern of the slot machine reels, one value per reel stop. */
 s32 slotgara[2][3][8] = {
     {
         {0, 0, 2, 0, 1, 1, 0, 1},
@@ -2894,6 +2914,7 @@ s32 slotgara[2][3][8] = {
     },
 };
 
+/** Symbol pattern of the slot machine reels as seen from the upside-down side, one value per reel stop. */
 s32 upsidegara[2][3][8] = {
     {
         {0, 0, 2, 0, 1, 1, 0, 1},
@@ -2910,6 +2931,7 @@ s32 upsidegara[2][3][8] = {
 typedef struct I3 {
     s32 v[3];
 } I3;
+/** Icon numbers of the three prompts drawn beside the spinning slot reel. */
 static const I3 disp_slot_icons = {{ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT}};
 
 /**
@@ -3308,6 +3330,10 @@ EVT_BEGIN(kuribo_1_talk)
     RETURN
 EVT_END()
 
+/**
+ * NPC setup of the west side and the Pianta Parlor: Don Pianta and his henchmen, Monie and Peeton, the
+ * lottery Bob-omb Lucky, Luigi, Bunny Teresa, the customers, the clerk, the Toads, the Koopa and the Goomba.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"マフィアボス"*/"\x83\x7D\x83\x74\x83\x42\x83\x41\x83\x7B\x83\x58", // name
@@ -3611,6 +3637,7 @@ EVT_BEGIN(evt_door_01_10)
     RETURN
 EVT_END()
 
+/** NPCs tied to the back-door shop door: the clerk. */
 static const char* door_data_01_npc[] = {
     /*"店員"*/"\x93\x58\x88\xF5",
     NULL,
@@ -3731,6 +3758,10 @@ EVT_BEGIN(evt_door_01_1_close)
     RETURN
 EVT_END()
 
+/**
+ * Front door of building 1 (the shop with the clerk): the door leaves, hit areas, inside and outside map
+ * groups and the scripts for opening and closing.
+ */
 DoorParam door_data_01_0 = {
     0, // flags
     3, // type
@@ -3751,6 +3782,7 @@ DoorParam door_data_01_0 = {
     evt_door_01_0_close, // evtClose
 };
 
+/** Back door of building 1, which the clerk unlocks. */
 DoorParam door_data_01_1 = {
     0, // flags
     3, // type
@@ -3822,6 +3854,7 @@ EVT_BEGIN(evt_wall_02_0)
     RETURN
 EVT_END()
 
+/** NPCs tied to the Pianta Parlor door: Bunny Teresa and the parlor customers. */
 const char* door_data_02_0_npc[] = {
     /*"バニーテレサ"*/"\x83\x6F\x83\x6A\x81\x5B\x83\x65\x83\x8C\x83\x54",
     /*"客１"*/"\x8B\x71\x82\x50",
@@ -3877,11 +3910,13 @@ EVT_BEGIN(door_data_02_0_close)
     RETURN
 EVT_END()
 
+/** Map objects tied to the Pianta Parlor door: the spinning Star Piece panel. */
 const char* door_data_02_mobj[] = {
     "kururin1",
     NULL,
 };
 
+/** Left ground-floor door of the Pianta Parlor (house 2). */
 DoorParam door_data_02_0l = {
     0, // flags
     3, // type
@@ -3902,6 +3937,7 @@ DoorParam door_data_02_0l = {
     door_data_02_0_close, // evtClose
 };
 
+/** Right ground-floor door of the Pianta Parlor (house 2). */
 DoorParam door_data_02_0r = {
     0, // flags
     3, // type
@@ -3957,6 +3993,7 @@ EVT_BEGIN(evt_wall_02_1)
     RETURN
 EVT_END()
 
+/** NPCs tied to the syndicate office door: Don Pianta, his henchmen, Francesca and Frankie. */
 const char* door_data_02_1_npc[] = {
     /*"マフィアボス"*/"\x83\x7D\x83\x74\x83\x42\x83\x41\x83\x7B\x83\x58",
     /*"マフィア１"*/"\x83\x7D\x83\x74\x83\x42\x83\x41\x82\x50",
@@ -4093,6 +4130,7 @@ EVT_BEGIN(evt_door_02_1_close)
     RETURN
 EVT_END()
 
+/** Upstairs door of the Pianta Parlor, leading to Don Pianta's office. */
 DoorParam door_data_02_1 = {
     0, // flags
     3, // type
@@ -4134,6 +4172,7 @@ static EVT_BEGIN(evt_wall_03)
     RETURN
 EVT_END()
 
+/** NPCs tied to the third house door: a Koopa. */
 static const char* door_data_03_npc[] = {
     /*"ノコノコＡ"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x82\x60",
     NULL,
@@ -4155,6 +4194,7 @@ EVT_BEGIN(door_data_03_close)
     RETURN
 EVT_END()
 
+/** Door of house 3. */
 static DoorParam door_data_03 = {
     0, // flags
     3, // type
@@ -4235,6 +4275,7 @@ static EVT_BEGIN(evt_door_03_close)
     RETURN
 EVT_END()
 
+/** Roll-in entrance of house 3. */
 static DoorParam door_data_03_roll = {
     0, // flags
     3, // type
@@ -4289,6 +4330,7 @@ static EVT_BEGIN(evt_wall_04)
     RETURN
 EVT_END()
 
+/** NPCs tied to the fourth house door: a Toad and a Toad kid. */
 static const char* door_data_04_npc[] = {
     /*"キノピオＡ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x82\x60",
     /*"キノピオ子供Ａ"*/"\x83\x4C\x83\x6D\x83\x73\x83\x49\x8E\x71\x8B\x9F\x82\x60",
@@ -4311,6 +4353,7 @@ EVT_BEGIN(evt_door_04_close_snd)
     RETURN
 EVT_END()
 
+/** Door of house 4. */
 static DoorParam door_data_04 = {
     0, // flags
     3, // type
@@ -4355,6 +4398,7 @@ static EVT_BEGIN(evt_door_04_close)
     RETURN
 EVT_END()
 
+/** Roll-in entrance of house 4. */
 DoorParam door_data_04_roll = {
     0, // flags
     3, // type
@@ -4566,6 +4610,7 @@ EVT_BEGIN(uraguchi_check)
     RETURN
 EVT_END()
 
+/** Item pedestals of the back-door shop in building 1: for each, the map object and its hit area. */
 static ShopObj obj_list[] = {
     {"S_item_01", "A_item_01"},
     {"S_item_02", "A_item_02"},
@@ -4575,6 +4620,11 @@ static ShopObj obj_list[] = {
     {"S_item_06", "A_item_06"},
 };
 
+/**
+ * Goods of the shop in building 1 whose clerk guards the Pianta Syndicate's back door, item and price in
+ * coins: Super Shroom 20, Volt Shroom 10, Dried Shroom 2, Life Shroom 50, Dizzy Dial 12, Thunder Bolt 10.
+ * Buying the Dried Shroom and then the Dizzy Dial starts the password scene (uraguchi_check).
+ */
 static ShopItem goods_list[] = {
     {ITEM_SUPER_SHROOM, 20},
     {ITEM_VOLT_SHROOM, 10},
@@ -4584,6 +4634,10 @@ static ShopItem goods_list[] = {
     {ITEM_THUNDER_BOLT, 10},
 };
 
+/**
+ * Coins this shop pays when Mario sells these items (its stock plus a few others, such as the Whacka Bump for
+ * 64); they replace the item table's sell prices only while the sell menu runs.
+ */
 static ShopDb trade_list[] = {
     {ITEM_SUPER_SHROOM, 10, 0},
     {ITEM_VOLT_SHROOM, 5, 0},
@@ -4599,6 +4653,7 @@ static ShopDb trade_list[] = {
     {0},
 };
 
+/** Clerk of the back-door shop: name, buy callback and the shop's message keys. */
 static ShopperData35 shopper_data = {
     /*"店員"*/"\x93\x58\x88\xF5", // name
     NULL, // fook_evt

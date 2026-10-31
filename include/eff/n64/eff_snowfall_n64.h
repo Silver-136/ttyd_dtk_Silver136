@@ -1,3 +1,5 @@
+// eff_snowfall_n64.c: snowfall effect entry (effSnowfallN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

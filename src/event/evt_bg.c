@@ -1,3 +1,5 @@
+// Script commands for the map background (bgdrv).
+
 #include "evt/evt_bg.h"
 #include "driver/bgdrv.h"
 #include "manager/evtmgr_cmd.h"

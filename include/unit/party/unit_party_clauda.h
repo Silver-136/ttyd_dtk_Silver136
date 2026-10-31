@@ -1,3 +1,5 @@
+// unit_party_clauda.c: Flurrie's (Clauda) battle weapons, pose table and unit kind as a partner.
+
 #pragma once
 
 #include "battle/battle_database_common.h"

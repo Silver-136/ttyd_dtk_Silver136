@@ -1,3 +1,5 @@
+// unit_lecture_frankli: Professor Frankly in the action-command tutorial battle.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -34,6 +36,10 @@ EvtWord lecAttackEvent_Jump[735];
 EvtWord lecAttackEvent_Hammer[651];
 EvtWord lecture_end_event[51];
 
+/**
+ * Unit kind of Prof. Frankly:
+ * 10 HP, level 1, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_lecture_frankli = {
     UNIT_TUTORIAL_FRANKLY_B2, // mUnitType
     "btl_un_frankli", // name
@@ -82,10 +88,13 @@ BattleUnitKind unit_lecture_frankli = {
     data_table, // dataTable
 };
 
+/** Defence of Prof. Frankly's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of Prof. Frankly's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Status vulnerability of Prof. Frankly: immune to every status. */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -111,6 +120,10 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/**
+ * Pose table of Prof. Frankly:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_KO, "D_1"},
     {POSE_TYPE_NORMAL, "S_1"},
@@ -119,6 +132,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Prof. Frankly's jump: damage from Mario's level to a single target, a jump-style hit. */
 BattleWeapon _lec_weapon_jump = {
     "btl_wn_mario_normal_jump", // name
     ICON_ITEM_BOOTS, // icon
@@ -156,6 +170,7 @@ BattleWeapon _lec_weapon_jump = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Prof. Frankly's hammer: damage from Mario's level to a single target, a hammer-style hit. */
 BattleWeapon _lec_weapon_hammer = {
     "btl_wn_mario_normal_hammer", // name
     ICON_ITEM_HAMMER, // icon
@@ -193,6 +208,10 @@ BattleWeapon _lec_weapon_hammer = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Event table of Prof. Frankly: the jump and hammer practice weapons
+ *  and the end-of-lecture script (the tags are one higher in the retail versions).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_LECTURE_JUMP_WEAPON, &_lec_weapon_jump},
     {UNIT_DATA_LECTURE_HAMMER_WEAPON, &_lec_weapon_hammer},
@@ -200,6 +219,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of Prof. Frankly: a single part using the model "c_kuri_h". */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_frankli", "c_kuri_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kUntattleable, 0, pose_table},
 };

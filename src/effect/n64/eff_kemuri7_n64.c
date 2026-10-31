@@ -1,3 +1,5 @@
+// Paper Mario 64 smoke effect 7 (kemuri: smoke) at a point with an angle and a side.
+
 #include "eff/n64/eff_kemuri7_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -32,6 +34,7 @@ typedef struct EffKemuri7N64Work {
     f32 cosAngle;     // 0x84
 } EffKemuri7N64Work;
 
+/** Flat 10x10 snow footprint quad lying on the ground. */
 effN64Vtx foot_vtx[] = {
     {-5, 0, -5, 0, 1024, 0, 0, 0, 255},
     {5, 0, -5, 1024, 1024, 0, 0, 0, 255},

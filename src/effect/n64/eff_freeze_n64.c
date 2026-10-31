@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: freeze, a pale ice-coloured sprite at a point that also spawns snow dust.
+
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -23,6 +25,7 @@ typedef struct EffFreezeN64Work {
     EffectEntry* dust;  // 0x28
 } EffFreezeN64Work;
 
+/** Camera-facing 32x64 ice block sprite, one four-vertex set per glint frame. */
 static effN64Vtx size32x64_tex32x64_vtx[] = {
     {-16, 0, 3, 0, 0, 0, 0, 0, 255},
     {16, 0, 3, 1024, 0, 0, 0, 0, 255},

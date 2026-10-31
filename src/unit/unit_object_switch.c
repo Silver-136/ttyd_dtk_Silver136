@@ -1,3 +1,5 @@
+// Battle unit data for the switch stage object (unit_object_switch).
+
 #include "battle/battle.h"
 #include "battle/battle_event_cmd.h"
 #include "battle/battle_event_default.h"
@@ -15,6 +17,10 @@ static StatusVulnerability regist;
 static BattleDataEntry data_table[1];
 static EvtWord init_event[25];
 
+/**
+ * Unit data of the stage switch: an invisible prop (hidden part, no HP gauge, 999 HP) that stands in for a
+ * map switch the player can hit during a battle. It never takes a turn.
+ */
 BattleUnitKind unit_object_switch = {
     UNIT_UNUSED_SWITCH,     // mUnitType
     "btl_un_switch",        // name
@@ -63,10 +69,18 @@ BattleUnitKind unit_object_switch = {
     data_table,             // dataTable
 };
 
+/**
+ * The switch takes no damage reduction and has no elemental defence; every hit just triggers its wobble.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
+/** The switch has no status vulnerabilities (all zero). */
 static StatusVulnerability regist = {0};
 
+/**
+ * Poses of the switch: every pose uses the same still frame of the Mario model (M_S_1),
+ * apart from one slot that uses M_O_1.
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_NORMAL, "M_S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "M_S_1"},
@@ -74,6 +88,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "M_S_1"},
 };
 
+/**
+ * The switch's single part: a hidden, shadowless Mario-model body (guard cover,
+ * no HP gauge) used only as a hit target.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1,                    // partNum
@@ -93,6 +111,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** The switch has no data table events. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
@@ -137,6 +156,9 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Vertical offsets applied on successive frames by _rumble_switch: a decaying wobble that settles at zero.
+ */
 static s32 _data[] = {
     -5, 0, 15, 0, -15, 0, 14, 0, -13, 0, 12, 0, -11, 0, 10, 0, -9, 0,
     8, 0, -7, 0, 6, 0, -6, 0, 5, 0, -4, 0, 2, 0, -2, 0, 0,

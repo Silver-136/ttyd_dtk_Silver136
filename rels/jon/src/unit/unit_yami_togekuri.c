@@ -36,6 +36,10 @@ static f32 SinTable[91];
 static EvtWord attack_event[597];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Spiky Gloomba in the Pit of 100 Trials: 7 HP, level 13;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_yami_togekuri = {
     UNIT_SPIKY_GLOOMBA, // mUnitType
     "btl_un_yami_togekuri", // name
@@ -84,8 +88,16 @@ BattleUnitKind unit_yami_togekuri = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Spiky Gloomba against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of the Spiky Gloomba per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -113,10 +125,12 @@ static StatusVulnerability regist = {
     80, // ohko
 };
 
+/** Part of the Spiky Gloomba: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_yami_togekuri", "c_kuribo_y", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
+/** Weapon of the Spiky Gloomba's spiked tumble: damage 4. */
 static BattleWeapon weapon_togekuri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -153,6 +167,9 @@ static BattleWeapon weapon_togekuri_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Pose table of the Spiky Gloomba: animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "TGK_N_1"},
     {POSE_TYPE_STOP, "TGK_Y_1"},
@@ -175,6 +192,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "TGK_S_1"},
 };
 
+/**
+ * Data table of the Spiky Gloomba: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
@@ -247,6 +268,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Sine of 0 to 90 degrees in one-degree steps; the Spiky Gloomba's krb_get_dir searches it to turn a slope
+ * into an angle.
+ */
 static f32 SinTable[] = {
     0.0f, 0.017452f, 0.034899f, 0.052336f, 0.069756f, 0.087156f, 0.104528f, 0.121869f,
     0.139173f, 0.156434f, 0.173648f, 0.190809f, 0.207912f, 0.224951f, 0.241922f, 0.258819f,

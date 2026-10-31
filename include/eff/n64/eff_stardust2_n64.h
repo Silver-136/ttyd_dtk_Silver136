@@ -1,3 +1,5 @@
+// eff_stardust2_n64.c: stardust entry (effStardust2N64Entry) and draw camera setter (effStardust2N64SetDrawCam).
+
 #pragma once
 
 #include "driver/effdrv.h"

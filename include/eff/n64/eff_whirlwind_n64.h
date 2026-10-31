@@ -1,3 +1,5 @@
+// eff_whirlwind_n64.c: whirlwind effect entry (effWhirlwindN64Entry) and its work data (EffWhirlwindN64Work).
+
 #pragma once
 
 #include "driver/effdrv.h"

@@ -1,3 +1,5 @@
+// Script commands for the unit windows (unitwin): the shop, partner and item list windows.
+
 #include "evt/evt_cmd.h"
 #include "driver/icondrv.h"
 #include "driver/camdrv.h"
@@ -99,12 +101,18 @@ void unitwin_help_disp(WinMgrEntry* entry);
 void unitwin_point_disp(WinMgrEntry* entry);
 void unitwin_name_disp(WinMgrEntry* entry);
 
+/** The three windows of the unit window: the name plate, the help text box and the points counter. */
 WinMgrDesc unitwin_desc[3] = {
     {0, 0, 8, -150, 120, 300, 50, {0x2B, 0xA4, 0xFF, 0xFF}, NULL, unitwin_name_disp},
     {0, 0, 8, -240, -130, 500, 80, {0xF0, 0xF0, 0xF0, 0xFF}, unitwin_help_main, unitwin_help_disp},
     {2, 0, 8, -250, -130, 150, 45, {0xF0, 0xF0, 0xF0, 0xFF}, NULL, unitwin_point_disp},
 };
 
+/**
+ * Tables of the unit window (partner and Mario lists): the partner ids in menu order (Goombella, Koops, Flurrie,
+ * Yoshi, Vivian, Bobbery, Ms. Mowz, ended by 0), their icons and name labels, and the HP, FP and BP rows
+ * (icon, label, name and the amount a level-up adds: 5, 5 and 3).
+ */
 static s32 party_id_table[8] = {1, 2, 5, 4, 6, 3, 7, 0};
 static s32 party_icon_table[7] = {ICON_PARTY_GOOMBELLA, ICON_PARTY_KOOPS, ICON_PARTY_FLURRIE, ICON_PARTY_YOSHI, ICON_PARTY_VIVIAN, ICON_PARTY_BOBBERY, ICON_PARTY_MS_MOWZ};
 static const char* party_labelname_table[7] = {"_kur", "_nok", "_win", "_yos", "_viv", "_bom", "_chu"};

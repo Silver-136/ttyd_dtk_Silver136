@@ -34,6 +34,7 @@ static EvtWord normal_attack_event[391];
 static EvtWord throw_attack_event[343];
 static EvtWord wait_event[6];
 
+/** Unit data of the Dark Craw: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_dark_keeper = {
     UNIT_DARK_CRAW, // mUnitType
     "btl_un_dark_keeper", // name
@@ -82,8 +83,10 @@ BattleUnitKind unit_dark_keeper = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Dark Craw: none, every attack type does full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element response of the Dark Craw: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -111,6 +114,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Pose table of the Dark Craw: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -132,17 +136,20 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_2"},
 };
 
+/** Data table of the Dark Craw: event handlers keyed by tag (dmg_avoid_counter_thorn_head_event). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Body parts of the Dark Craw: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_dark_keeper", "c_monban_t", 0.0f, 0.0f, 0.0f, 8.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
     {2, "btl_un_dark_keeper", "c_monban_t", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Attack data for the Dark Craw's charge: 6 damage. */
 static BattleWeapon weapon_monban_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -179,6 +186,7 @@ static BattleWeapon weapon_monban_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Dark Craw's spear throw: 6 damage. */
 static BattleWeapon weapon_monban_throw_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -215,6 +223,7 @@ static BattleWeapon weapon_monban_throw_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Sound table of the Dark Craw: the sound each animation plays while it runs. */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"S_2", 0.6666667f, NULL, "SFX_ENM_MONBAN_WAIT1", 0, 1},
     {NULL, 0.0f, NULL, NULL, 0, 1},

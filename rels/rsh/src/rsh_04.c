@@ -120,6 +120,7 @@ EvtWord rsh_04_a_init_evt_nidome[28];
 EvtWord rsh_04_b_init_evt_nidome[28];
 EvtWord rsh_04_c_init_evt_nidome[38];
 
+/** Doors and exits of rsh_04 variant a: w_bero to rsh_05_a; e_bero to rsh_03_a. */
 static BeroEntry bero_data_a[] = {
     {
         "w_bero", // hitName
@@ -160,6 +161,7 @@ static BeroEntry bero_data_a[] = {
     {0},
 };
 
+/** Doors and exits of rsh_04 variant b: w_bero to rsh_05_a; e_bero to rsh_03_b. */
 static BeroEntry bero_data_b[] = {
     {
         "w_bero", // hitName
@@ -200,6 +202,7 @@ static BeroEntry bero_data_b[] = {
     {0},
 };
 
+/** Doors and exits of rsh_04 variant c: w_bero to rsh_05_a; e_bero to rsh_03_c. */
 static BeroEntry bero_data_c[] = {
     {
         "w_bero", // hitName
@@ -240,6 +243,10 @@ static BeroEntry bero_data_c[] = {
     {0},
 };
 
+/**
+ * Map objects of cabin 3 for evt_rsh_door_entry: the room, backdrop, door, door hit areas and open and close
+ * animations.
+ */
 static const char* door_3[] = {
     "heya_3",
     "haikei_3",
@@ -250,6 +257,10 @@ static const char* door_3[] = {
     "3_door_close",
 };
 
+/**
+ * Map objects of cabin 4 for evt_rsh_door_entry: the room, backdrop, door, door hit areas and open and close
+ * animations.
+ */
 static const char* door_4[] = {
     "heya_4",
     "haikei_4",
@@ -260,6 +271,10 @@ static const char* door_4[] = {
     "4_door_close",
 };
 
+/**
+ * Map objects of cabin 5 for evt_rsh_door_entry: the room, backdrop, door, door hit areas and open and close
+ * animations.
+ */
 static const char* door_5[] = {
     "heya_5",
     "haikei_5",
@@ -489,6 +504,7 @@ EVT_BEGIN(evt_shorui_funshitu)
     RETURN
 EVT_END()
 
+/** Items the player may hand over: the Vital Paper only, ended by -1. */
 static s32 item_tbl[] = {
     ITEM_VITAL_PAPER, -1,
 };
@@ -585,6 +601,7 @@ static EVT_BEGIN(init_syashou)
     RETURN
 EVT_END()
 
+/** Items the player may hand to the conductor: the Blanket only, ended by -1. */
 static s32 item_tbl2[] = {
     ITEM_BLANKET, -1,
 };
@@ -984,6 +1001,7 @@ static EVT_BEGIN(init_konari)
     RETURN
 EVT_END()
 
+/** Items the player may hand over for the autograph: the Autograph only, ended by -1. */
 s32 item_tbl3[] = {
     ITEM_AUTOGRAPH, -1,
 };
@@ -1179,6 +1197,7 @@ static EVT_BEGIN(talk_powan)
     RETURN
 EVT_END()
 
+/** NPCs of the car: the conductor, the salaryman, Goldbob and his wife, Little Narikin and Pennington. */
 static NpcSetupInfo npc_data[] = {
     {
         /*"車掌"*/"\x8E\xD4\x8F\xB6", // name
@@ -1273,6 +1292,7 @@ EVT_BEGIN(evt_tana_5)
     RETURN
 EVT_END()
 
+/** Luggage shelves of the car: each shelf hit area with the message it shows and the script a shelf runs. */
 static ShelfAccessTbl3 access_tbl = {
     {
         {"tana_3", "stg6_rsh_272", NULL, "stg6_rsh_267"},
@@ -1568,6 +1588,7 @@ EVT_BEGIN(rsh_04_b_init_evt)
     RETURN
 EVT_END()
 
+/** Map objects of the scenery that passes by the windows. */
 static const char* window_tbl[] = {
     "mado_uturi_1",
     "mado_uturi_2",
@@ -1607,6 +1628,7 @@ EVT_BEGIN(rsh_04_c_init_evt)
     RETURN
 EVT_END()
 
+/** Doors and exits of rsh_04 variant a (return trip): w_bero to rsh_07_a; e_bero to rsh_03_a. */
 static BeroEntry bero_data_a_return[] = {
     {
         "w_bero", // hitName
@@ -1647,6 +1669,7 @@ static BeroEntry bero_data_a_return[] = {
     {0},
 };
 
+/** Doors and exits of rsh_04 variant b (return trip): w_bero to rsh_07_b; e_bero to rsh_03_b. */
 static BeroEntry bero_data_b_return[] = {
     {
         "w_bero", // hitName
@@ -1687,6 +1710,7 @@ static BeroEntry bero_data_b_return[] = {
     {0},
 };
 
+/** Doors and exits of rsh_04 variant c (return trip): w_bero to rsh_07_c; e_bero to rsh_03_c. */
 static BeroEntry bero_data_c_return[] = {
     {
         "w_bero", // hitName

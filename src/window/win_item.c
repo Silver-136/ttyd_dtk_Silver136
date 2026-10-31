@@ -1,3 +1,5 @@
+// Pause menu: the item window (items, important items, mail and the Koopa book).
+
 #include "version.h"
 #include "win/win_main.h"
 #include "win/win_party.h"
@@ -28,6 +30,7 @@ void itemUseDisp2(WinMgrEntry* entry);
 void item_disp(WindowWork* w, f32 xo, f32 yo);
 
 
+/** Pages of Super Luigi volume 1 for the book reader in the item menu, ending with NULL. */
 static const char* luigi_book_1[] = {
     "msg_luigi_book1_txt1",
     "msg_luigi_book1_txt2",
@@ -44,6 +47,7 @@ static const char* luigi_book_1[] = {
     NULL,
 };
 
+/** Pages of Super Luigi volume 2 ("Allies in Adventure"). */
 static const char* luigi_book_2[] = {
     "msg_luigi_book2_txt1",
     "msg_luigi_book2_txt2",
@@ -60,6 +64,7 @@ static const char* luigi_book_2[] = {
     NULL,
 };
 
+/** Pages of Super Luigi volume 3 ("The Voice of a Princess"). */
 static const char* luigi_book_3[] = {
     "msg_luigi_book3_txt1",
     "msg_luigi_book3_txt2",
@@ -76,6 +81,7 @@ static const char* luigi_book_3[] = {
     NULL,
 };
 
+/** Pages of Super Luigi volume 4 ("The Shards of Truth"). */
 static const char* luigi_book_4[] = {
     "msg_luigi_book4_txt1",
     "msg_luigi_book4_txt2",
@@ -92,6 +98,7 @@ static const char* luigi_book_4[] = {
     NULL,
 };
 
+/** Pages of Super Luigi volume 5 ("Journey's End"). */
 static const char* luigi_book_5[] = {
     "msg_luigi_book5_txt1",
     "msg_luigi_book5_txt2",
@@ -108,11 +115,19 @@ static const char* luigi_book_5[] = {
     NULL,
 };
 
+/**
+ * The five Super Luigi books, indexed by item id minus ITEM_SUPER_LUIGI1;
+ * using one in the item menu opens the book reader.
+ */
 const char** luigi_book_list[] = {luigi_book_1, luigi_book_2, luigi_book_3, luigi_book_4, luigi_book_5};
 
 u16 menu_skip_list[] = {9, 10, 11, 6, 7, 8, 5, 3, 2, 4, 0x32, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78};
 
 
+/**
+ * Windows opened when an item is used from the menu: the target list of Mario and his partners, and the
+ * small orange "Use it on whom?" title above it.
+ */
 static WinMgrDesc window_desc[2] = {
     {0, 0, 8, -70, 150, 350, 264, {0xF0, 0xF0, 0xF0, 0xFF}, 0, itemUseDisp},
     {2, 0, 8, -280, 145, 200, 50, {0xFF, 0x99, 0x00, 0xFF}, 0, itemUseDisp2},
@@ -803,6 +818,10 @@ void item_disp(WindowWork* w, f32 xo, f32 yo) {
 }
 
 #ifdef VERSION_G8ME01
+/**
+ * HP and FP labels by game language: Japanese (full-width), English, German, French, Spanish, Italian,
+ * and an unused seventh row.
+ */
 static const char* hpfp_name_table[7][2] = {
     {"\202g\202o", "\202e\202o"},
     {"HP", "FP"},

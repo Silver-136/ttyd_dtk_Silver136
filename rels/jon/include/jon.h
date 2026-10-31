@@ -1,3 +1,5 @@
+// Pit of 100 Trials (jon, "dungeon"): the area's shared declarations (init scripts, battle tables, unit kinds).
+
 #pragma once
 
 #include "dolphin/types.h"

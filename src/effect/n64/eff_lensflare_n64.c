@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: lens flare made of a bright head and five rings along a flare axis.
+
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -23,6 +25,7 @@ typedef struct EffLensflareN64Elem {
     f32 speed;    // 0x30
 } EffLensflareN64Elem;
 
+/** Spinning 48x48 glow at the head of the lens flare. */
 static effN64Vtx size48x48_tex32x32_vtx[] = {
     {-24, -24, 0, 0, 0, 0, 0, 0, 255},
     {24, -24, 0, 1024, 0, 0, 0, 0, 255},
@@ -30,6 +33,7 @@ static effN64Vtx size48x48_tex32x32_vtx[] = {
     {-24, 24, 0, 0, 1024, 0, 0, 0, 255},
 };
 
+/** 10x10 shape of the lens flare's streak elements, drawn four times per element. */
 static effN64Vtx size10x10_tex32x32_vtx[] = {
     {0, -5, 0, 0, 0, 0, 0, 0, 255},
     {10, -5, 0, 1024, 0, 0, 0, 0, 255},

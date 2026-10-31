@@ -1,3 +1,5 @@
+// "LasMon" effect: plays the MOBJ_EFF_las_mon animation at a point; types 0 and 1 pick the animation.
+
 #include "eff/eff_las_mon.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"

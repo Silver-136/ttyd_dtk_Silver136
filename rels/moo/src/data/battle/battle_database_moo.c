@@ -1,3 +1,5 @@
+// Battle database of the Moon (moo.rel): stage data, enemy groups and the encounter tables of its maps.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -82,6 +84,7 @@ NpcSetupBattleInfo btlsetup_moo_tbl[17];
 NpcTerritoryInfo btl_moo_setup_no_tbl[17];
 EvtWord bgset_moo_space_event[35];
 
+/** Scenery pieces of the Moon battle stage; moo_btlstage_data points into this array. */
 BattleStageObjectData moo_btlobject_data[] = {
     {"B", 2, 2, {0}, 0, 60, {0}},
     {"space", 2, 3, {0}, 0, 60, {0}},
@@ -90,6 +93,7 @@ BattleStageObjectData moo_btlobject_data[] = {
     {"star_03", 2, 3, {0}, 0, 60, {0}},
 };
 
+/** The battle stage used for fights on the Moon: its backdrop folder and scenery pieces. */
 BattleStageData moo_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -1178,6 +1182,10 @@ NpcBattleSelect btlgrpsel_moo_btlno_moo_05_05_off[] = {
     {0},
 };
 
+/**
+ * Encounter settings of every Moon map: which battle choice its enemies use, the battle music and the random
+ * audience rolls.
+ */
 NpcSetupBattleInfo btlsetup_moo_tbl[] = {
     {
         /*"マップstg_07_4"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x37\x5F\x34", // name

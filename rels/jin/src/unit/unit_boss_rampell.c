@@ -1,3 +1,5 @@
+// Doopliss (rampell): boss battle unit used in Creepy Steeple.
+
 #include "battle/battle_unit.h"
 #include "eff/eff_scanning.h"
 #include "evt/evt_cmd.h"
@@ -131,6 +133,10 @@ static USER_FUNC(eff_scanning) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit kind of Doopliss:
+ * 40 HP, level 52, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_boss_rampell = {
     UNIT_DOOPLISS_CHAPTER4_FIGHT1, // mUnitType
     "btl_un_hatena", // name
@@ -179,8 +185,10 @@ BattleUnitKind unit_boss_rampell = {
     data_table, // dataTable
 };
 
+/** Defence of Doopliss's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of Doopliss's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -208,6 +216,9 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/**
+ * Pose table of Doopliss: the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -229,11 +240,13 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Event table of Doopliss: its defeat script. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Body part of Doopliss: a single part using the model "c_ranpel". */
 static BattleUnitKindPart parts[] = {
     {
         1, "btl_un_hatena", "c_ranpel",
@@ -246,6 +259,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Doopliss's attack: 4 damage to a single target, a plain attack. */
 static BattleWeapon weapon_rampell_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -654,8 +668,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/** Defence of Doopliss's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence_fmario = {0};
 
+/** Defence attributes of Doopliss's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr_fmario = {0};
 
 static StatusVulnerability regist_fmario = {
@@ -683,6 +699,9 @@ static StatusVulnerability regist_fmario = {
     3, // ohko
 };
 
+/**
+ * Pose table of Doopliss: the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table_fmario_stay[] = {
     {POSE_TYPE_SLEEP, "EM_N_1"},
     {POSE_TYPE_STOP, "EM_Y_2"},
@@ -701,11 +720,13 @@ static PoseTableEntry pose_table_fmario_stay[] = {
     {POSE_TYPE_ACTION, "EM_S_1"},
 };
 
+/** Event table of Doopliss: its defeat script. */
 static BattleDataEntry data_table_fmario[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_fmario},
     {0},
 };
 
+/** Body part of Doopliss: a single part using the model "c_mario". */
 static BattleUnitKindPart parts_fmario[] = {
     {
         1, // partNum
@@ -725,6 +746,7 @@ static BattleUnitKindPart parts_fmario[] = {
     },
 };
 
+/** Doopliss's jump: 2 damage to a single target, a jump-style hit. */
 static BattleWeapon weapon_masao_jump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -761,6 +783,7 @@ static BattleWeapon weapon_masao_jump = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Doopliss's hammer: 4 damage to a single target, a hammer-style hit. */
 static BattleWeapon weapon_masao_hammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -797,6 +820,7 @@ static BattleWeapon weapon_masao_hammer = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Doopliss's kururin jump: 2 damage to a single target, a jump-style hit. */
 static BattleWeapon weapon_masao_kururin_jump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -833,6 +857,7 @@ static BattleWeapon weapon_masao_kururin_jump = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Doopliss's kaiten hammer: 4 damage to a single target, a hammer-style hit. */
 static BattleWeapon weapon_masao_kaiten_hammer = {
     NULL, 0, // name..icon
     {0}, // pad_06

@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Pokey (`sambo`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -55,6 +57,10 @@ static EvtWord wait_event[36];
 static EvtWord sambo_rabbit_move[74];
 static EvtWord _body_param_set[49];
 
+/**
+ * Unit data of the Pokey in the Pit of 100 Trials: 4 HP, level 11;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_sambo = {
     UNIT_POKEY, // mUnitType
     "btl_un_sambo", // name
@@ -103,8 +109,16 @@ BattleUnitKind unit_sambo = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Pokey against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of the Pokey per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -132,6 +146,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/** Weapon of the Pokey's head attack with a stack of 4 segments: damage 2. */
 static BattleWeapon weapon_sambo_head_attack_4 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -168,6 +183,7 @@ static BattleWeapon weapon_sambo_head_attack_4 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Pokey's head attack with a stack of 3 segments: damage 2. */
 static BattleWeapon weapon_sambo_head_attack_3 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -204,6 +220,7 @@ static BattleWeapon weapon_sambo_head_attack_3 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Pokey's head attack with a stack of 2 segments: damage 2. */
 static BattleWeapon weapon_sambo_head_attack_2 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -276,6 +293,7 @@ static BattleWeapon weapon_sambo_head_attack_1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Pokey's thrown-segment attack with a stack of 4 segments: damage 3. */
 static BattleWeapon weapon_sambo_spike_attack_4 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -312,6 +330,7 @@ static BattleWeapon weapon_sambo_spike_attack_4 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Pokey's thrown-segment attack with a stack of 3 segments: damage 3. */
 static BattleWeapon weapon_sambo_spike_attack_3 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -348,6 +367,7 @@ static BattleWeapon weapon_sambo_spike_attack_3 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Pokey's thrown-segment attack with a stack of 2 segments: damage 3. */
 static BattleWeapon weapon_sambo_spike_attack_2 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -384,6 +404,7 @@ static BattleWeapon weapon_sambo_spike_attack_2 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Pose table of the Pokey while its stack is 4 segments tall: animation names for each pose type. */
 static PoseTableEntry pose_table_body4[] = {
     {POSE_TYPE_SLEEP, "SNB_N_1"},
     {POSE_TYPE_STOP, "SNB_Y_1"},
@@ -405,6 +426,7 @@ static PoseTableEntry pose_table_body4[] = {
     {POSE_TYPE_ACTION, "SNB_S_1"},
 };
 
+/** Pose table of the Pokey while its stack is 3 segments tall: animation names for each pose type. */
 static PoseTableEntry pose_table_body3[] = {
     {POSE_TYPE_SLEEP, "SNB_N_2"},
     {POSE_TYPE_STOP, "SNB_Y_2"},
@@ -428,6 +450,7 @@ static PoseTableEntry pose_table_body3[] = {
     {POSE_TYPE_ACTION, "SNB_S_2"},
 };
 
+/** Pose table of the Pokey while its stack is 2 segments tall: animation names for each pose type. */
 static PoseTableEntry pose_table_body2[] = {
     {POSE_TYPE_SLEEP, "SNB_N_3"},
     {POSE_TYPE_STOP, "SNB_Y_3"},
@@ -451,6 +474,7 @@ static PoseTableEntry pose_table_body2[] = {
     {POSE_TYPE_ACTION, "SNB_S_3"},
 };
 
+/** Pose table of the Pokey while its stack is 1 segment tall: animation names for each pose type. */
 static PoseTableEntry pose_table_body1[] = {
     {POSE_TYPE_SLEEP, "SNB_N_4"},
     {POSE_TYPE_STOP, "SNB_Y_4"},
@@ -474,12 +498,17 @@ static PoseTableEntry pose_table_body1[] = {
     {POSE_TYPE_ACTION, "SNB_S_4"},
 };
 
+/** Pose table of the loose segment (part 5) of the Pokey: animation names for each pose type. */
 static PoseTableEntry pose_table_parts[] = {
     {POSE_TYPE_NORMAL, "SNB_B_1"},
     {POSE_TYPE_DAMAGE, "SNB_B_1"},
     {POSE_TYPE_ACTION, "SNB_B_1"},
 };
 
+/**
+ * Data table of the Pokey: event scripts and values the battle looks up by tag (damage reactions, dodge,
+ * first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_side_event},
     {UNIT_DATA_AVOID_THORN_EVENT, dmg_avoid_counter_thorn_side_event},
@@ -491,6 +520,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Parts of the Pokey: the four body segments (parts 1 to 4, tallest first)
+ * and the loose segment (part 5) it throws or loses.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_sambo", "c_sanbo", 0.0f, 0.0f, 0.0f, 0.0f, 84.0f, 0.0f, 0.0f, 90.0f, 0.0f, 20, 90, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky | kCounterFrontSpiky, pose_table_body4},
     {2, "btl_un_sambo", "c_sanbo", 0.0f, 0.0f, 0.0f, 0.0f, 64.0f, 0.0f, 0.0f, 70.0f, 0.0f, 20, 70, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow, kCounterTopSpiky | kCounterFrontSpiky, pose_table_body3},
@@ -1609,6 +1642,9 @@ static EVT_BEGIN(call_friend_event)
     RETURN
 EVT_END()
 
+/**
+ * Setup used to spawn a short Pokey (called by another Pokey): unit kind, alliance, position and turn phase.
+ */
 static BattleUnitSetup entry_sambo = {
     &unit_sambo, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

@@ -1,3 +1,5 @@
+// unit_boss_kanbu1: Lord Crump (X-Naut leader), boss battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -45,6 +47,10 @@ static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_guard[18];
 static EvtWord normal_attack_event[365];
 
+/**
+ * Unit kind of Lord Crump:
+ * 5 HP, level 20, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_boss_kanbu1 = {
     UNIT_LORD_CRUMP_PROLOGUE, // mUnitType
     "btl_un_kanbu1", // name
@@ -93,10 +99,13 @@ BattleUnitKind unit_boss_kanbu1 = {
     data_table, // dataTable
 };
 
+/** Defence of Lord Crump's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of Lord Crump's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Status vulnerability of Lord Crump, as a percent of the normal chance: immune to fright, instant kill. */
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -122,16 +131,19 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/** Event table of Lord Crump: nothing special on a First Strike, its defeat script. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Body part of Lord Crump: a single part using the model "c_kanbu". */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_kanbu1", "c_kanbu", 0.0f, 0.0f, 0.0f, 0.0f, 45.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Lord Crump's attack: 1 damage to a single target, a hammer-style hit. */
 BattleWeapon weapon_kanbu1_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -168,6 +180,10 @@ BattleWeapon weapon_kanbu1_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Setup entry that adds Goombella as a unit of Lord Crump's battle
+ * (his init script places her at (-140, 0, 5)).
+ */
 BattleUnitSetup entry_npc_christine = {
     &unit_npc_christine, // mUnitKindParams
     ALLIANCE_NEUTRAL, // alliance
@@ -412,6 +428,10 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Pose table of Lord Crump:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -433,6 +453,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Pose table of Lord Crump while guarding:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},

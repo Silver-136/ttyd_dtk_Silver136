@@ -1,3 +1,5 @@
+// unit_hennya: Spunia, battle unit, one of the three spinning spiked enemies (Spania, Spunia, Spinia).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -27,6 +29,10 @@ static EvtWord damage_event[10];
 static EvtWord attack_event[455];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Spunia: 12 HP and level 33, with its parts, status vulnerability, init event and event
+ * data table.
+ */
 static BattleUnitKind unit_hennya = {
     UNIT_SPUNIA, // mUnitType
     "btl_un_hennya", // name
@@ -72,8 +78,10 @@ static BattleUnitKind unit_hennya = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
+/** Defense of the Spunia against normal, fire, ice, explosion and electric attacks: 2, 2, 2, 2, 2. */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/** Damage-type reactions of the Spunia: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -101,12 +109,20 @@ static StatusVulnerability regist = {
     30, // ohko
 };
 
+/**
+ * Event data table of the Spunia: scripts that replace the standard handling for an attacker being hurt by
+ * its spiked head (tag 37).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/**
+ * Parts of the Spunia: a single body part (part 1, model c_hannya_t), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -126,6 +142,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon record of the Spunia's charge: 7 damage and counts as a hammer-type hit. */
 static BattleWeapon weapon_hannya_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -162,6 +179,7 @@ static BattleWeapon weapon_hannya_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Pose table of the Spunia: maps each battle pose (idle, hurt, attacking and so on) to its animation. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},

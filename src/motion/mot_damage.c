@@ -1,3 +1,5 @@
+// Mario's damage motions: knock-back, falling in water, spikes (toge) and the return to the last safe spot.
+
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "driver/npcdrv.h"

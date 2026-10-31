@@ -1,3 +1,6 @@
+// Background driver: loads and draws the backdrop texture behind a map or battle stage (scrolling,
+// translation and colour multiply), one set of state for the field and one for battle.
+
 #include "driver/bgdrv.h"
 #include "driver/arcdrv.h"
 #include "driver/camdrv.h"

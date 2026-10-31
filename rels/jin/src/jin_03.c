@@ -122,6 +122,10 @@ EVT_BEGIN(w3_open)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room: the north exit (n_bero) to jin_01, the south exit (s_bero) to jin_02, the west exit
+ * (w_bero3) to jin_00, the west exit (w_bero1) to jin_00 and the west exit (w_bero2) to jin_00.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "n_bero", // hitName

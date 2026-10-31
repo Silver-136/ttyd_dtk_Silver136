@@ -18,6 +18,11 @@ typedef struct BDWork {
 } BDWork;
 
 
+/**
+ * Buttons the button-press command can ask for: A, B, X, Y, then L, R and Z;
+ * random picks use the first four or all seven.
+ * Used by Tornado Jump's second part and Vivian's Veil and Fiery Jinx.
+ */
 static u32 _button_table[7] = {PAD_BUTTON_A, PAD_BUTTON_B, PAD_BUTTON_X, PAD_BUTTON_Y, PAD_TRIGGER_L, PAD_TRIGGER_R, PAD_TRIGGER_Z};
 
 static void actionCommandDisp(s32 unused, f32 x, f32 y);

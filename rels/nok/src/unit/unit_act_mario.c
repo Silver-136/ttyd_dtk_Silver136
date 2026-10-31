@@ -59,6 +59,10 @@ EvtWord _act_clauda_breath_attack[269];
 EvtWord _act_teresa_attack[190];
 EvtWord _act_atmic_teresa_press_attack[188];
 
+/**
+ * Unit kind of the Mario actor (HP 10, level 1):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 BattleUnitKind unit_act_mario = {
     UNIT_EPILOGUE_DOOPLISS_MARIO, // mUnitType
     "btl_un_act_mario", // name
@@ -107,10 +111,18 @@ BattleUnitKind unit_act_mario = {
     data_table, // dataTable
 };
 
+/** Defence of the Mario actor: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Mario actor: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Mario actor (percent chance to take each status):
+ * immune to sleep, stop, dizzy, poison, confusion, electric shock, burn, freeze, growing huge, shrinking,
+ * attack up, attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
+ * invisibility and instant kill.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -146,10 +158,12 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "EM_S_1"},
 };
 
+/** Data table of the Mario actor: empty; it has no event hooks. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of the Mario actor (model c_mario): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_act_mario", "c_mario", 0.0f, 0.0f, 0.0f, -5.0f, 30.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
@@ -191,6 +205,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Cast of Flurrie's epilogue stage play: Flurrie as Clauda, two Boos, the Atomic Boo, two Toads,
+ * Toadette and Goombella, with their starting spots.
+ */
 BattleUnitSetup entry_unit_data[] = {
     {
         &unit_act_clauda, // mUnitKindParams

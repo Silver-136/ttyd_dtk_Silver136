@@ -1,3 +1,5 @@
+// Bowser's collision in the side-scrolling interludes: ground, head, walls, and enemy and flame hits.
+
 #include "eff/eff_gonbaba_breath.h"
 #include "driver/camdrv.h"
 #include "driver/hitdrv.h"
@@ -524,6 +526,10 @@ static HeadSphereSet4 head_sphere_data_lv3 = {
     {-43, 142, 74, 1},
     },
 };
+/**
+ * Bowser's collision spheres for each power-up level (small, normal, big, giant): count, then forward offset,
+ * height, radius and when each is active; kpaHitCheck tests them against map objects through head_sphere_data.
+ */
 static HeadSphereSet1 head_sphere_data_lv0 = {
     1,
     {

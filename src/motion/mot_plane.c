@@ -1,3 +1,5 @@
+// Mario's paper airplane motion (plane panel): take-off, gliding, landing and the camera while flying.
+
 #include "dolphin/types.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_snd.h"
@@ -24,6 +26,10 @@ BOOL chkCollision(f32* outY);
 static void flyMain(void);
 
 
+/**
+ * Tuning values of Mario's paper airplane flight: top speed, gravity and drag, the nose-up and nose-down pitch
+ * limits, turn and glide rates, and the pose offsets for each phase of the flight.
+ */
 f32 planeData[41] = {
     5.0f, -0.02f, -0.03f, 25.0f, -45.0f, 0.4f, 1.0f, 0.1f, -0.1f, 1.5f,
     0.2f, 0.05f, 3.4f, 1.0f, 0.025f, 0.045f, 0.8f, 1.5f, -0.3f, -5.0f,
@@ -55,6 +61,7 @@ static inline void planeSetSpd(f32 targetZ, f32 rate, f32 zoom) {
     m->camZoomOfs = (Vec){0.0f, 40.0f, 0.0f};
 }
 
+/** Paper airplane animation for each of Mario's colours (marioGetColor). */
 const char* paper_plane[4] = {"p_hikohki", "p_hikohki_g", "p_hikohki_y", "p_hikohki_v"};
 
 /** Stops the plane's looping flight sound if it is playing. */

@@ -1,3 +1,5 @@
+// arammgr.c: the ARAM manager (ARAMEntry, ARAMWork): auxiliary RAM allocation and ARQ transfers.
+
 #pragma once
 
 #include <dolphin/ar.h>

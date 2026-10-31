@@ -38,6 +38,7 @@ static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[12];
 
+/** Unit data of the Dark Puff: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_monochrome_kurokumorn = {
     UNIT_DARK_PUFF, // mUnitType
     "btl_un_monochrome_kurokumorn", // name
@@ -86,8 +87,10 @@ BattleUnitKind unit_monochrome_kurokumorn = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Dark Puff: none, every attack type does full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element response of the Dark Puff: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -115,10 +118,12 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Dark Puff: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_monochrome_kurokumorn", "c_kmoon_wb", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
+/** Attack data for the Dark Puff's ramming lunge: 2 damage. */
 static BattleWeapon weapon_kurokumorn_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -155,6 +160,7 @@ static BattleWeapon weapon_kurokumorn_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Dark Puff's lightning attack on the whole party: 2 damage. */
 static BattleWeapon weapon_kurokumorn_thunder_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -374,6 +380,7 @@ static EVT_BEGIN(thunder_event)
     RETURN
 EVT_END()
 
+/** Pose table of the Dark Puff: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -394,6 +401,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Data table of the Dark Puff: event handlers keyed by tag (counter_event, dmg_first_attack_pos). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ELECTRIC_EVENT, counter_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},

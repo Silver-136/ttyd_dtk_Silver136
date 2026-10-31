@@ -1,3 +1,5 @@
+// Battle unit data for the Bob-omb bomb (unit_bomzou) and its explosion weapon, used by Bobbery.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -33,10 +35,13 @@ static EvtWord damage_event[10];
 static EvtWord attack_event[5];
 static EvtWord dead_event[6];
 
+/** Damage reduction of the bomb: none. It has 1 HP, so any hit knocks it out (and sets it off). */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** The bomb has no elemental defence. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** The bomb has no status vulnerabilities (all zero). */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -62,6 +67,7 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/** Poses while the fuse has 3 or more turns left (all frames use B_2). */
 static PoseTableEntry pose_table_3[] = {
     {POSE_TYPE_NORMAL, "B_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_2"},
@@ -69,6 +75,7 @@ static PoseTableEntry pose_table_3[] = {
     {POSE_TYPE_ACTION, "B_2"},
 };
 
+/** Poses while the fuse has 2 turns left (all frames use B_3). */
 static PoseTableEntry pose_table_2[] = {
     {POSE_TYPE_NORMAL, "B_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_3"},
@@ -76,6 +83,7 @@ static PoseTableEntry pose_table_2[] = {
     {POSE_TYPE_ACTION, "B_3"},
 };
 
+/** Poses while the fuse has 1 turn left (all frames use B_4). */
 static PoseTableEntry pose_table_1[] = {
     {POSE_TYPE_NORMAL, "B_4"},
     {POSE_TYPE_DAMAGE_GUARDED, "B_4"},
@@ -83,6 +91,11 @@ static PoseTableEntry pose_table_1[] = {
     {POSE_TYPE_ACTION, "B_4"},
 };
 
+/**
+ * Unit data of the bomb that Admiral Bobbery's Bomb Squad leaves on the field (its debug name in the game
+ * text is "BOMBZO GLOBAL 1701"): 1 HP, no HP gauge or damage numbers,
+ * explodes when its fuse runs out or when it is destroyed.
+ */
 BattleUnitKind unit_bomzou = {
     UNIT_BOMB_SQUAD_BOMB, // mUnitType
     "btl_un_bomzou", // name
@@ -131,6 +144,10 @@ BattleUnitKind unit_bomzou = {
     data_table, // dataTable
 };
 
+/**
+ * The bomb's blast: 3 damage with the explosion element to every enemy in range, ignoring guarding,
+ * able to shatter frozen enemies; used by explosion_event.
+ */
 BattleWeapon weapon_bomzou_explosion = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -162,6 +179,10 @@ BattleWeapon weapon_bomzou_explosion = {
     {0, 10, 10, 100, 30, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * The bomb's single part: the bomb model (c_bakudan), the main target,
+ * which cannot be tattled or have its HP shown.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_bomzou", "c_bakudan", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kUntattleable, 0, pose_table_3},
 };
@@ -313,6 +334,10 @@ static EVT_BEGIN(explosion_event)
     RETURN
 EVT_END_PAD()
 
+/**
+ * Data table events: knocked out (49) queues the blast, tag 53 is the blast itself,
+ * and the battle end (63) cuts off the fuse sound.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_EXPLOSION_EVENT_BOMZOU, explosion_event},

@@ -1,3 +1,5 @@
+// Bobbery (bomhei): partner init, follow and the bomb ability.
+
 #include "driver/casedrv.h"
 #include "dolphin/types.h"
 #include "mario/mario.h"
@@ -34,6 +36,7 @@
 
 
 
+/** Height bob of Bobbery over Mario's head per frame of Mario's carry walk (M_W_7), in quarter units. */
 s32 m_w_7_sync[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 9, 9, 8, 7, 5, 3, 1, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 9, 8, 6, 4, 3, 2, 1, 0, 0, 0, 0, 0};
 
 /** Camera shake of 600 ms (camera 4), run when Bobbery's blast hits a bomb rock (isBombRock). */

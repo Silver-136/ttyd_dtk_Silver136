@@ -45,6 +45,7 @@ static EvtWord attack_event[10];
 EvtWord batten_satellite_attack_attack_event[304];
 static EvtWord wait_event[6];
 
+/** Weapon of Grodus X's attack: damage 4. */
 BattleWeapon weapon_batten_satellite_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -81,6 +82,10 @@ BattleWeapon weapon_batten_satellite_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Unit data of Grodus's satellite (Grodus X) in the Palace of Shadow: 3 HP;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_batten_satellite = {
     UNIT_GRODUS_X, // mUnitType
     "btl_un_batten_satellite", // name
@@ -129,8 +134,16 @@ BattleUnitKind unit_boss_batten_satellite = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of Grodus's satellite (Grodus X) against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of Grodus's satellite (Grodus X) per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -158,6 +171,10 @@ static StatusVulnerability regist = {
     90, // ohko
 };
 
+/**
+ * Pose table of Grodus's satellite (Grodus X): animation names for each pose type (idle, walk, hurt, attack
+ * and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -179,6 +196,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Data table of Grodus's satellite (Grodus X): event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, dmg_counter_event},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, dmg_counter_event},
@@ -250,6 +271,7 @@ EVT_BEGIN(dmg_counter_event)
     RETURN
 EVT_END()
 
+/** Part of Grodus's satellite (Grodus X): its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_batten_satellite", "c_shuryo_p", 0.0f, 0.0f, 0.0f, -4.0f, -2.0f, 0.0f, -6.0f, 1.0f, 0.0f, 14, 14, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };

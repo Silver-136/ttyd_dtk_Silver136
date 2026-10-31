@@ -853,6 +853,7 @@ EVT_BEGIN(powerdownya_init)
     RETURN
 EVT_END()
 
+/** NPCs of this room: Chet Rippo, whose counter talk is registered on the A_power_down area. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"パワーダウン屋"*/"\x83\x70\x83\x8F\x81\x5B\x83\x5F\x83\x45\x83\x93\x89\xAE", // name
@@ -869,6 +870,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Doors of this room: the west exit back to tik_01. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

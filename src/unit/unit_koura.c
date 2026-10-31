@@ -1,3 +1,5 @@
+// Battle unit data for the Koopa shell (unit_koura), used by Koops, with its cracked poses.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -29,6 +31,11 @@ static EvtWord damage_event[10];
 static EvtWord wait_event[6];
 static EvtWord attack_event[2];
 
+/**
+ * Unit data of the giant shell that Koops' Shell Shield drops over Mario (unit work 0 holds the shielded
+ * unit): 2 parts, a solid shell and a hidden spare part, with data events for opening, closing,
+ * cracking and breaking.
+ */
 BattleUnitKind unit_koura = {
     UNIT_SHELL_SHIELD, // mUnitType
     "btl_un_koura", // name
@@ -77,6 +84,11 @@ BattleUnitKind unit_koura = {
     data_table, // dataTable
 };
 
+/**
+ * Data table events: 59 opens the shell off Mario, 60 closes it over him,
+ * 9 reacts to damage by picking the crack stage, 61 refreshes the crack poses,
+ * 62 removes the shell at once and 49 plays the break animation.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_KOURA_OPEN_EVENT, koura_open},
     {UNIT_DATA_KOURA_CLOSE_EVENT, koura_close},
@@ -87,10 +99,13 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Damage reduction of the shell: none (its limited HP is what makes it wear down). */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** The shell has no elemental defence. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** The shell has no status vulnerabilities (all zero). */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -116,6 +131,9 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/**
+ * Poses of the intact shell: standing (PKO_S_1), hurt (PKO_D_1) and the shield pose over Mario (PKO_Z_1).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_NORMAL, "PKO_S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "PKO_S_1"},
@@ -124,6 +142,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PKO_S_1"},
 };
 
+/** Poses of the cracked shell (HP 4-6), used once damage_core or pose_tbl_reset notice the damage. */
 PoseTableEntry pose_table_crack_lv1[] = {
     {POSE_TYPE_NORMAL, "PKO_S_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "PKO_S_2"},
@@ -132,6 +151,7 @@ PoseTableEntry pose_table_crack_lv1[] = {
     {POSE_TYPE_ACTION, "PKO_S_2"},
 };
 
+/** Poses of the badly cracked shell (HP 3 or less). */
 PoseTableEntry pose_table_crack_lv2[] = {
     {POSE_TYPE_NORMAL, "PKO_S_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "PKO_S_3"},
@@ -140,6 +160,10 @@ PoseTableEntry pose_table_crack_lv2[] = {
     {POSE_TYPE_ACTION, "PKO_S_3"},
 };
 
+/**
+ * Parts of the shell: part 1 is the shell itself (main target, cannot be tattled); part 2 is a hidden,
+ * untargetable copy that plays the second half in the break animation.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 20.0f, 40.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kUntattleable, 0, pose_table},
     {2, "btl_un_koura", "c_koura", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow, 0, pose_table},

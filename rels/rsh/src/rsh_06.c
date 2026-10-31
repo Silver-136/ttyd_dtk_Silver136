@@ -278,6 +278,10 @@ EvtWord rsh_06_a_init_evt[32];
 EvtWord rsh_06_init_evt_nidome[41];
 EvtWord rsh_06_a_init_evt_nidome[11];
 
+/**
+ * Animation table of the swarm of small Smorgs (c_n_moa_a) that merge into the giant Smorg:
+ * the figure, its animation set and a start offset for each.
+ */
 static ExtTexInfo ext_moamoa_data[] = {
     {"c_n_moa_a", "S_1", 0.0f},
     {"c_n_moa_a", "S_1", 2.0f},
@@ -2218,6 +2222,7 @@ EVT_BEGIN(evt_resha_init)
     RETURN
 EVT_END()
 
+/** Doors and exits of rsh_06 variant a: w_bero to rsh_05_a. */
 static BeroEntry bero_data_a[] = {
     {
         "w_bero", // hitName
@@ -2469,6 +2474,7 @@ EVT_BEGIN(evt_great_moamoa)
     RETURN
 EVT_END()
 
+/** Animation names the Smorg debug leftover cycles through when a button is pressed. */
 const char* pose_name[] = {
     "Z_1", "H_1", "S_1", "U_1", "H_2", "S_2", "P_1",
     "S_3",

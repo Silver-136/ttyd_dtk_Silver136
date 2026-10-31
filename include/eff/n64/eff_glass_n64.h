@@ -1,3 +1,5 @@
+// eff_glass_n64.c: Paper Mario 64 Glass effect entry (effGlassN64Entry) and its work data (EffGlassN64Work).
+
 #pragma once
 
 #include "driver/effdrv.h"

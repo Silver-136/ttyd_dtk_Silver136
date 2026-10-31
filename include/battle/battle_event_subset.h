@@ -1,3 +1,5 @@
+// Declares the reusable battle event subset scripts (damage, death, confusion).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

@@ -1,3 +1,5 @@
+// evt_item.c: script commands for field items: spawning, bouncing, collecting and flags (itemdrv).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

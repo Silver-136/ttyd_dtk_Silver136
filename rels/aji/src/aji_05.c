@@ -55,6 +55,7 @@ static EVT_BEGIN(e_door_open)
     RETURN
 EVT_END()
 
+/** Exit of this room: the east door to aji_17. */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -117,11 +118,16 @@ static EVT_BEGIN(hikaru_off)
     RETURN
 EVT_END()
 
+/** Where Mario is put back after taking damage from the electrified floor: the map position named mod_01. */
 static HitDamageReturn dmgReturnPt[] = {
     {"mod_01", {0.0f, -1000.0f, 0.0f}},
     {0},
 };
 
+/**
+ * Setup script of the electrified floor room: resets the panels, places the treasure chest holding the card
+ * key and starts the panel and lightning scripts.
+ */
 static EvtWord hikaru_yuka_init[] = {
     CALL_CHILD(hikaru_off)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no1"), HIT_ATTR_TOGE)

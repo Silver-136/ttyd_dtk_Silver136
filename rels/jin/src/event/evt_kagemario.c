@@ -1,3 +1,5 @@
+// Creepy Steeple (jin): shadow-Mario (kagemario) effect, darkens Mario's colours during story steps 201-211 and clears the partners for steps 201-205.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_mario.h"

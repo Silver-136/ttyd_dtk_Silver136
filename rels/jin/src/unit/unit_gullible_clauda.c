@@ -1,3 +1,5 @@
+// Flurrie (clauda) partner unit for the Doopliss fight in Creepy Steeple (placed off screen in the battle setup).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -26,6 +28,10 @@ static EvtWord dead_event_clauda[177];
 static EvtWord attack_event_clauda[393];
 static EvtWord wait_event_clauda[6];
 
+/**
+ * Unit kind of the Flurrie double:
+ * 10 HP, level 0, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_gullible_clauda = {
     UNIT_FLURRIE_CHAPTER4, // mUnitType
     "btl_un_gullible_clauda", // name
@@ -111,8 +117,10 @@ static BattleWeapon enemyWeapon_ClaudaNormalAttack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Defence of the Flurrie double's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence_clauda = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Flurrie double's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr_clauda = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist_clauda = {
@@ -140,11 +148,13 @@ static StatusVulnerability regist_clauda = {
     0, // ohko
 };
 
+/** Event table of the Flurrie double: its defeat script. */
 static BattleDataEntry data_table_clauda[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_clauda},
     {0, NULL},
 };
 
+/** Body part of the Flurrie double: a single part using the model "c_windy". */
 static BattleUnitKindPart parts_clauda[] = {
     {
         1, "btl_un_clauda", "c_windy",

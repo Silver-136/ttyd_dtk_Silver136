@@ -1,3 +1,5 @@
+// Bowser's motions in the side-scrolling interludes: walk, jump, fall, power-ups and damage.
+
 #include "mario/mario.h"
 #include "koopa.h"
 #include "mario/mario_motion.h"
@@ -18,6 +20,10 @@
 #include "eff/eff_mizutama.h"
 #include "mario/mario_hit.h"
 
+/**
+ * Bowser's walk and dash speeds per power-up level in 3D stages (kpa_walk, kpa_dash), then the walk animation
+ * rates stored with them (all 0), then the scale-flicker steps of the power-up and power-down motions.
+ */
 f32 _walkSpdTbl[4] = {0.6f, 1.4f, 1.4f, 1.4f};
 f32 _dashSpdTbl[4] = {1.2f, 2.0f, 2.0f, 2.0f};
 s32 _rateTbl[4] = {0, 0, 0, 0};

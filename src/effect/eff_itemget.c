@@ -1,3 +1,6 @@
+// Item get / use sparkle (ItemGet): sparkles spread around the item position, spawned when Mario obtains or uses an
+// item. Element 0 is the header: types 0, 3 and 9 draw seven sparkles, type 10 (item use in battle) five.
+
 #include "driver/camdrv.h"
 #include "eff/eff_itemget.h"
 #include "driver/dispdrv.h"
@@ -14,13 +17,23 @@ void effItemGetMain(EffectEntry* effect);
 void effItemGetDisp(CameraId cameraId, EffectEntry* effect);
 void effItemUseDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Pop-in size of the sparkle burst over its first 12 frames, in percent: it swells from nothing to 121%
+ * and settles at 100%. Read by effItemGetMain.
+ */
 static u8 scale_data[12] = { 0x00, 0x12, 0x26, 0x3B, 0x4E, 0x60, 0x6E, 0x78, 0x79, 0x72, 0x69, 0x64 };
+/** Light grey-white used as the sparkles' highlight colour beside the per-type tint; set by both draw functions. */
 GXColor white = { 0xE1, 0xE1, 0xE1, 0xFF };
+/**
+ * Sparkle tint per effect type 0-9 (gold, green, lime, red, yellow-green, blue, orange, pink, slate
+ * blue, gold). Read by effItemGetDisp and effItemUseDisp.
+ */
 static GXColor color_tbl[10] = {
     { 0xC8, 0xB2, 0x25, 0xFF }, { 0x26, 0xA3, 0x52, 0xFF }, { 0x5C, 0xCA, 0x10, 0xFF }, { 0xCB, 0x4C, 0x4D, 0xFF },
     { 0x7E, 0xC2, 0x1E, 0xFF }, { 0x30, 0x9C, 0xBF, 0xFF }, { 0xEB, 0x7D, 0x06, 0xFF }, { 0xE8, 0x5B, 0xD0, 0xFF },
     { 0x51, 0x75, 0x9D, 0xFF }, { 0xC8, 0xB2, 0x25, 0xFF },
 };
+/** Base size of the sparkles per effect type 0-9, in tenths: 5.0 for types 0-2 down to 1.0. */
 u8 size_tbl[10] = { 0x32, 0x32, 0x32, 0x28, 0x0C, 0x0C, 0x0C, 0x0A, 0x0A, 0x0F};
 
 /**

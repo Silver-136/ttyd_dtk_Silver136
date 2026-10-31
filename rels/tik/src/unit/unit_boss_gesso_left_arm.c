@@ -30,6 +30,10 @@ BattleWeapon weapon_gesso_left_arm_attack;
 static EvtWord attack_event[171];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the L. Tentacle (HP 3, level 0):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 BattleUnitKind unit_boss_gesso_left_arm = {
     UNIT_BLOOPER_LEFT_TENTACLE, // mUnitType
     "btl_un_gesso_left_arm", // name
@@ -78,10 +82,18 @@ BattleUnitKind unit_boss_gesso_left_arm = {
     gesso_left_arm_data_table, // dataTable
 };
 
+/** Defence of the L. Tentacle: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the L. Tentacle: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the L. Tentacle (percent chance to take each status):
+ * immune to sleep, stop, dizzy, poison, confusion, electric shock, freeze, growing huge, shrinking, attack up,
+ * attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
+ * invisibility and instant kill.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -114,6 +126,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "GSO_S1_1"},
 };
 
+/** Data table of the Blooper's L. Tentacle: its damage reaction for the hit tags 24 to 36. */
 BattleDataEntry gesso_left_arm_data_table[] = {
     {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, gesso_left_arm_damage_event},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, gesso_left_arm_damage_event},
@@ -130,12 +143,14 @@ BattleDataEntry gesso_left_arm_data_table[] = {
     {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, gesso_left_arm_damage_event},
 };
 
+/** Data table of the L. Tentacle: event handlers for its arm hit pose and being defeated. */
 static BattleDataEntry data_table[] = {
     {10, gesso_arm_damage_pose_event},
     {UNIT_DATA_DEAD_EVENT, gesso_arm_dead_event},
     {0},
 };
 
+/** Body part of the L. Tentacle (model c_gesso3): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_gesso_left_arm", "c_gesso3", 0.0f, 0.0f, 0.0f, 270.0f, 20.0f, 0.0f, 270.0f, 20.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, VERSION_PICK(0x80009, 0x2080009), 0, pose_table},
 };
@@ -211,6 +226,7 @@ static EVT_BEGIN(phase_event)
     RETURN
 EVT_END()
 
+/** Weapon of the L. Tentacle's swat: 1 damage. */
 BattleWeapon weapon_gesso_left_arm_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

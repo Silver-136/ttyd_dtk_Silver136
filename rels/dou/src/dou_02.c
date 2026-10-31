@@ -36,6 +36,7 @@ static HitDamageReturn hitDmgRetPoints[8];
 static EvtWord evt_ride_ship[15];
 EvtWord dou_02_init_evt[139];
 
+/** Exits (beros) of this room: w_bero_1 to dou_01, e_bero_1 to dou_12 and e_bero_2 to dou_12. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
@@ -314,6 +315,9 @@ static EVT_BEGIN(dou_puka_event_sub1)
     RETURN
 EVT_END()
 
+/**
+ * Hazard-water floors of this room (map hit names) and the point each puts Mario back at after he is bitten.
+ */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_01", {0.0f, -1000.0f, 0.0f}},
     {"mod_02", {0.0f, -1000.0f, 0.0f}},

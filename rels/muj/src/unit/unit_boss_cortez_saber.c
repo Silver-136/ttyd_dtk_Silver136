@@ -37,6 +37,10 @@ static EvtWord attack_event[414];
 static EvtWord wait_event[10];
 static EvtWord cortez_damage_sub_event[25];
 
+/**
+ * Unit data of Cortez Sabre: 4 HP, 120x50 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_boss_cortez_saber = {
     UNIT_CORTEZ_SABER, // mUnitType
     "btl_un_cortez_saber", // name
@@ -85,8 +89,10 @@ BattleUnitKind unit_boss_cortez_saber = {
     data_table, // dataTable
 };
 
+/** Defence of Cortez Sabre: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of Cortez Sabre: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -114,6 +120,9 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/**
+ * Weapon of Cortez Sabre (float attack): targets one unit for 3 damage; used by attack_event.
+ */
 BattleWeapon weapon_cortez_saber_float_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -159,6 +168,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
+/** Pose table of Cortez Sabre once it is broken off: only the lying pose KRT_Z_1. */
 static PoseTableEntry pose_table_break[] = {
     {POSE_TYPE_NORMAL, "KRT_Z_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_Z_1"},
@@ -166,6 +176,12 @@ static PoseTableEntry pose_table_break[] = {
     {POSE_TYPE_ACTION, "KRT_Z_1"},
 };
 
+/**
+ * Event table of Cortez Sabre: cortez_damage_sub_event (tag 9), cortez_weapon_dead_event (tag 49),
+ * cortez_weapon_break_event (tags 70, 71), cortez_weapon_blow_dead_event (tag 58),
+ * cortez_weapon_counter_damage_event (tags 36, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35),
+ * avoid_thorn_event (tags 39, 37, 38).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
     {UNIT_DATA_DEAD_EVENT, cortez_weapon_dead_event},
@@ -190,6 +206,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Parts of Cortez Sabre: 1 part (model c_buki1). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_cortez_saber", "c_buki1", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };

@@ -1,3 +1,5 @@
+// Glitz Pit (tou, togijo "arena"): declarations shared by the area's maps (tou_00 to tou_13, tou_20).
+
 #pragma once
 
 #include "dolphin/types.h"

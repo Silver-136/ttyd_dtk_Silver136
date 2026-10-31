@@ -1,3 +1,5 @@
+// Declares the audience animation bytecode and its opcodes.
+
 #pragma once
 
 /* Audience animation bytecode (interpreted by BattleAudienceAnimMain); every command is a run of s32 words. */

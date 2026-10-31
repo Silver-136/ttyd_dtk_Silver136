@@ -111,6 +111,7 @@ static EVT_BEGIN(talk_unten)
     RETURN
 EVT_END()
 
+/** NPCs of the small room: the driver. */
 static NpcSetupInfo npc_data[] = {
     {
         /*"運転手"*/"\x89\x5E\x93\x5D\x8E\xE8", // name
@@ -223,6 +224,7 @@ EVT_BEGIN(rsh_07_b_init_evt)
     RETURN
 EVT_END()
 
+/** Map objects of the scenery that passes by the windows. */
 static const char* window_tbl[] = {
     "mado_uturi_1",
     "mado_uturi_2",

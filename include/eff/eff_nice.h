@@ -1,3 +1,5 @@
+// eff_nice.c: "NICE" rating-text effect entry (effNiceEntry), effNiceAsync and its work struct (NiceEffectWork).
+
 #pragma once
 
 #include "driver/effdrv.h"

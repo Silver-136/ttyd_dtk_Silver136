@@ -1,3 +1,6 @@
+// Mario's hammer motions: the normal swing (mot_hammer) and the charged spin (mot_hammer2), with block and wall
+// hits.
+
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "mario/mario.h"
@@ -27,6 +30,10 @@ s32 marioGetRub(s32 mask, s32* a, s32* b, f32* c);
 
 
 
+/**
+ * Hammer hit sounds of the Attack FX badges: pairs of badge (R, B, G, Y, P) and the sound it swaps in;
+ * with several equipped, each swing moves on to the next one worn.
+ */
 s32 se_data[] = {
     ITEM_ATTACK_FX_R, 357,
     ITEM_ATTACK_FX_B, 359,
@@ -849,6 +856,7 @@ HitEntry* hitEstimate(s32* out) {
     return hit;
 }
 
+/** Names of the small and big blocks that only a level 1, 2 or 3 hammer (Hammer, Super, Ultra) can break. */
 static const char isS1_str[] = "MOBJ_Lv1Block";
 static const char isB1_str[] = "MOBJ_Lv1BigBlock";
 static const char isS2_str[] = "MOBJ_Lv2Block";

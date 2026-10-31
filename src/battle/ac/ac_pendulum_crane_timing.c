@@ -42,6 +42,10 @@ typedef struct PendulumWork {
 } PendulumWork;
 
 
+/**
+ * Shell Shield HP by swing position, as pairs of (upper end of the position range 0-100, HP):
+ * 2 at the ends rising to 8 in the middle. Used by Koops's Shell Shield and to colour its gauge.
+ */
 u16 _hp_tbl[] = {20, 2, 35, 4, 45, 6, 55, 8, 65, 6, 80, 4, 100, 2};
 
 s32 _get_angle_hp(s32 hp);

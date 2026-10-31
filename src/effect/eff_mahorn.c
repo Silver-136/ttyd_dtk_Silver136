@@ -1,3 +1,5 @@
+// Wizzerd effect (mahorn: Wizzerd) of rings growing and fading around a point; count and duration come from the caller.
+
 #include "eff/eff_mahorn.h"
 #include "driver/dispdrv.h"
 #include "memory.h"

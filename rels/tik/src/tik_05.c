@@ -202,6 +202,11 @@ static EVT_BEGIN(n_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room: the west exit to tik_06, the east exit to tik_04 (which can start the scene of looking
+ * at the Door, look_large_door) and the Thousand-Year Door itself,
+ * which leads to the Palace of Shadow (las_00).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -277,6 +282,7 @@ static EVT_BEGIN(kurihakase_talk)
     RETURN
 EVT_END()
 
+/** NPCs of this room: Professor Frankly, who waits by the pedestal in chapter 7. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"クリハカセ"*/"\x83\x4E\x83\x8A\x83\x6E\x83\x4A\x83\x5A", // name
@@ -1204,16 +1210,23 @@ USER_FUNC(tiz_broken) {
 #pragma opt_propagation reset
 #pragma opt_lifetimes reset
 
+/** The work area tiz_broken uses for the shattering screen. */
 BrokenWork* broken_wp = &broken_work;
 
+/**
+ * Tuning values of the shattering screen (tiz_broken), named in name_tbl: the delay per unit of distance
+ * from the centre, the starting speed, the speed factor, the outward pull and the spin added each frame.
+ */
 f32 param_tbl[] = {
     90.0f, 23.0f, 0.98f, 19.4f, 2.0f,
 };
 
+/** Guess: step sizes for adjusting each param_tbl value in a debug menu; nothing in the game reads them. */
 f32 add_tbl[] = {
     1.0f, 0.1f, 0.01f, 0.1f, 1.0f,
 };
 
+/** Names of the param_tbl values, apparently for the same debug menu; unused. */
 static const char* name_tbl[] = {
     "delay",
     "v0",

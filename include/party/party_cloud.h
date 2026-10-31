@@ -1,3 +1,5 @@
+// party_cloud.c: Flurrie's (cloud) field partner functions and the Gale Force work (PartyCloud, PartyCloudSweep).
+
 #pragma once
 
 #include <dolphin/mtx.h>

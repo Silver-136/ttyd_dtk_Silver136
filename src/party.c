@@ -1,3 +1,6 @@
+// Partner entries (PartyEntry): creating, removing and drawing partners, poses and paper animations, and the
+// appear positions.
+
 #include "party.h"
 #include "driver/animdrv.h"
 #include "mario/mario_pouch.h"
@@ -513,6 +516,10 @@ static inline s32 partyGetFreeSlot2(void) {
     return -1;
 }
 
+/**
+ * Animation group names for Yoshi's seven colours,
+ * indexed by the colour he hatched with (pouchGetPartyColor).
+ */
 char* yoshigroup[7] = {
     "c_babyyoshi",
     "c_babyyoshi2",

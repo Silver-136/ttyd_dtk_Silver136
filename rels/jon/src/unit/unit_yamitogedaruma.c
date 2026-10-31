@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Dark Bristle (`yamitogedaruma`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -33,6 +35,10 @@ static EvtWord wakeup_event[134];
 static EvtWord attack_event[358];
 static EvtWord wait_event[102];
 
+/**
+ * Unit data of the Dark Bristle in the Pit of 100 Trials: 8 HP, level 34;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_yamitogedaruma = {
     UNIT_DARK_BRISTLE, // mUnitType
     "btl_un_yamitogedaruma", // name
@@ -85,6 +91,10 @@ static BattleUnitDefense defence = {{4, VERSION_PICK(4, 99), 4, 4, 4}};
 
 static BattleUnitDefenseAttr defence_attr = {{0, VERSION_PICK(0, 2), 0, 0, 0}};
 
+/**
+ * Defence of the Dark Bristle while flipped over against each element (normal, fire, ice, explosion,
+ * electric): none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -112,6 +122,9 @@ static StatusVulnerability regist = {
     30, // ohko
 };
 
+/**
+ * Pose table of the Dark Bristle: animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "TGD_N_1"},
     {POSE_TYPE_STOP, "TGD_I_1"},
@@ -133,6 +146,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "TGD_S_4"},
 };
 
+/**
+ * Pose table of the Dark Bristle while flipped over:
+ * animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "TGD_N_2"},
     {POSE_TYPE_STOP, "TGD_I_2"},
@@ -151,6 +168,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "TGD_S_5"},
 };
 
+/**
+ * Data table of the Dark Bristle: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -160,10 +181,12 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Part of the Dark Bristle: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_yamitogedaruma", "c_togedaruma_b", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, kCounterTopSpiky | kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };
 
+/** Weapon of the Dark Bristle's roll: damage 8. */
 static BattleWeapon weapon_togedaruma_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

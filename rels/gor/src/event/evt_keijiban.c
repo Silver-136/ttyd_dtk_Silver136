@@ -174,6 +174,7 @@ USER_FUNC(keijiban_data_alloc) {
     return EVT_RETURN_DONE;
 }
 
+/** Notice board entries; empty here, so the board shows nothing. */
 KeijibanData _kjdt[] = {
     {0},
 };

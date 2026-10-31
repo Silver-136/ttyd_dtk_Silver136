@@ -1,3 +1,6 @@
+// Mario subroutines: stick and rub input, falling out of the map (bottomless respawn), move rate, gravity,
+// touched NPC, and the paper/plane/boat checks.
+
 #include "mario/mario_sbr.h"
 #include "mario/mario.h"
 #include "mario/mariost.h"

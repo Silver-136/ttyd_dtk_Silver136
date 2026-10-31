@@ -42,6 +42,10 @@ static EvtWord phase_event[2];
 static EvtWord attack_event[492];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Paragloomba in the Pit of 100 Trials: 7 HP, level 12;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_yami_patakuri = {
     UNIT_PARAGLOOMBA, // mUnitType
     "btl_un_yami_patakuri", // name
@@ -90,8 +94,16 @@ BattleUnitKind unit_yami_patakuri = {
     data_table_patakuri, // dataTable
 };
 
+/**
+ * Defence of the flying Paragloomba against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of the flying Paragloomba per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_patakuri_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist_patakuri = {
@@ -119,6 +131,7 @@ static StatusVulnerability regist_patakuri = {
     80, // ohko
 };
 
+/** Weapon of the flying Paragloomba's swoop: damage 3. */
 static BattleWeapon weapon_patakuri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -155,10 +168,15 @@ static BattleWeapon weapon_patakuri_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Part of the flying Paragloomba: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts_patakuri[] = {
     {1, "btl_un_yami_patakuri", "c_kuribo_y", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_patakuri, &defence_patakuri_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patakuri},
 };
 
+/**
+ * Pose table of the flying Paragloomba: animation names for each pose type (idle, walk, hurt, attack and so
+ * on).
+ */
 static PoseTableEntry pose_table_patakuri[] = {
     {POSE_TYPE_SLEEP, "PTK_N_1"},
     {POSE_TYPE_STOP, "PTK_Y_1"},
@@ -181,12 +199,20 @@ static PoseTableEntry pose_table_patakuri[] = {
     {POSE_TYPE_ACTION, "PTK_S_1"},
 };
 
+/**
+ * Data table of the flying Paragloomba: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table_patakuri[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, patakuri_dmg_first_attack_pos},
     {0, NULL},
 };
 
+/**
+ * Sound table of the Paragloomba once it has lost its wings (a Gloomba):
+ * for each pose name, the sound that plays with its animation.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"PTK_S_1", 0.01f, NULL, "SFX_ENM_PATAKURI_WAIT1", 0, 1},
     {"PTK_W_1", 0.01f, NULL, "SFX_ENM_PATAKURI_MOVE1", 0, 1},
@@ -368,6 +394,10 @@ static EVT_BEGIN(wait_event_patakuri)
     RETURN
 EVT_END()
 
+/**
+ * Pose table of the Paragloomba once it has lost its wings (a Gloomba):
+ * animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KUR_N_1"},
     {POSE_TYPE_STOP, "KUR_Y_1"},
@@ -391,13 +421,25 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
+/**
+ * Data table of the Paragloomba once it has lost its wings (a Gloomba):
+ * event scripts and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/**
+ * Defence of the Paragloomba once it has lost its wings (a Gloomba) against each element (normal, fire, ice,
+ * explosion, electric): none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence = {0};
 
+/**
+ * Damage modifiers of the Paragloomba once it has lost its wings (a Gloomba) per element (normal, fire, ice,
+ * explosion, electric): none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -425,6 +467,10 @@ static StatusVulnerability regist = {
     80, // ohko
 };
 
+/**
+ * Part of the Paragloomba once it has lost its wings (a Gloomba):
+ * its one body part with hit box, defence tables and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -444,6 +490,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon of the Gloomba's leap onto its target: damage 3. */
 static BattleWeapon weapon_kuriboo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

@@ -46,6 +46,7 @@ static EvtWord sound_gensui_event[22];
 static EvtWord wait_sound_event1[25];
 static EvtWord wait_sound_event2[12];
 
+/** Unit data of the Red Chomp: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_burst_wanwan = {
     UNIT_RED_CHOMP, // mUnitType
     "btl_un_burst_wanwan", // name
@@ -123,6 +124,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Pose table of the Red Chomp: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "WAN_N_1"},
     {POSE_TYPE_STOP, "WAN_Y_1"},
@@ -145,6 +147,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "WAN_S_1A"},
 };
 
+/** Data table of the Red Chomp: event handlers keyed by tag (dead_event, counter_damage_event). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
@@ -163,6 +166,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body parts of the Red Chomp: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_burst_wanwan", "c_wanwan_a", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kAbsolutePosition, 0, pose_table},
     {2, "btl_un_burst_wanwan", "c_wanwan_a", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -175,6 +179,7 @@ static BattleUnitKindPart parts[] = {
     {9, "btl_un_burst_wanwan", "c_wanwan_a", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Attack data for the Red Chomp's bite: 5 damage. */
 static BattleWeapon weapon_wanwan_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

@@ -1,3 +1,6 @@
+// Map driver: loads map.dat (joints, materials, animations), builds the display lists, and animates,
+// culls and draws the map objects.
+
 #include "driver/mapdrv.h"
 #include "driver/animdrv.h"
 #include "driver/arcdrv.h"
@@ -2036,6 +2039,10 @@ void mapDispMapGrp_bbox(CameraId cam, MapObject* obj) {
     GXReadBoundingBox(&obj->screenRect[0], &obj->screenRect[1], &obj->screenRect[2], &obj->screenRect[3]);
 }
 
+/**
+ * Lookup tables of the map drawing: a map part's cull mode, texture matrix and light slots by index, its
+ * texture wrap modes, and the GX texture and palette formats for the map file's codes (these two unused).
+ */
 const GXCullMode culling[4] = {GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL, GX_CULL_NONE};
 const GXTexMtx texmtx_tbl[10] = {GX_TEXMTX0, GX_TEXMTX1, GX_TEXMTX2, GX_TEXMTX3, GX_TEXMTX4, GX_TEXMTX5, GX_TEXMTX6, GX_TEXMTX7, GX_TEXMTX8, GX_TEXMTX9};
 const s32 texfmt_tbl[11] = {4, 5, 6, 14, 0, 1, 2, 3, 8, 9, 10};
@@ -3352,6 +3359,7 @@ void mapSetMaterialLight(s32 flags, Vec position) {
     }
 }
 
+/** Vertex formats of map geometry (float positions, normals and texture coordinates, RGBA8 colours). */
 const GXVtxAttrFmtList attr_fmt[12] = {
     {GX_VA_POS, GX_POS_XYZ, GX_F32, 0},
     {GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0},

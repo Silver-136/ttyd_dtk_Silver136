@@ -381,6 +381,12 @@ EVT_BEGIN(e5_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Exits of this room: the west door to aji_00, the east door to aji_02, the west door to aji_03, the east
+ * door to aji_04, the north door to aji_06, the north door to aji_07, the north door to aji_08, the north
+ * door to aji_09, the west door to aji_05, the east door to aji_10, the west door to aji_12, the east door
+ * to aji_18, the west door to aji_16 and the east door to aji_17.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
@@ -637,6 +643,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Replacement for the east door exit, swapped in with evt_bero_overwrite during Peach's scene so it leads on
+ * to aji_17 (w_bero).
+ */
 BeroEntry e_bero_5_peach[] = {
     {
         "e_bero_5", // hitName
@@ -655,6 +665,9 @@ BeroEntry e_bero_5_peach[] = {
     {0},
 };
 
+/**
+ * Key item the player can choose in the item menu to unlock the first card-key elevator: the Elevator Key.
+ */
 s32 elv_key1[] = {
     ITEM_ELEVATOR_KEY_0x1B, -1,
 };
@@ -693,6 +706,7 @@ EVT_BEGIN(elv_unlock1)
     RETURN
 EVT_END()
 
+/** Key item the player can choose to unlock the second elevator: the second Elevator Key. */
 s32 elv_key2[] = {
     ITEM_ELEVATOR_KEY_0x1C, -1,
 };
@@ -2218,6 +2232,7 @@ EVT_BEGIN(teshita3_regl)
     RETURN
 EVT_END()
 
+/** The three X-Naut underlings (teshita) in the central hall, each with its own setup and talk scripts. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"手下１"*/"\x8E\xE8\x89\xBA\x82\x50", // name

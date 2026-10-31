@@ -207,6 +207,7 @@ static void _mapclsofs_all(CloudWork* wp) {
     }
 }
 
+/** Scattered (x, z) spots, as pairs of 16-bit values, where the Punies stand for the thank-you scene. */
 static s16 puni_rand_position[] = {
     83, 10, 33, 31, 176, 118, -98, 49,
     148, 147, 160, 59, 195, 142, 223, 45,
@@ -259,6 +260,7 @@ EVT_BEGIN(mario_see_you_init)
     RETURN
 EVT_END()
 
+/** Eight control points (x, y, z) of the path followed in the seal_bigtree scene at the base of the tree. */
 static f32 spline_dt[] = {
     140.0f, 0.0f, -140.0f, -16.6162f, 0.0f, 14.542748f, -170.98557f, 0.0f,
     12.748371f, -257.16162f, 0.0f, -40.786213f, -192.75406f, 39.299995f, -129.2951f, -128.91687f,
@@ -752,6 +754,7 @@ EVT_BEGIN(out_dokan_1)
     RETURN
 EVT_END()
 
+/** Exit of mri_00: west road w_bero to win_03. */
 BeroEntry bero_lostitem[] = {
     {
         "w_bero", // hitName
@@ -771,6 +774,10 @@ BeroEntry bero_lostitem[] = {
     },
 };
 
+/**
+ * Exits of mri_00: west road w_bero to win_01 (n_bero); northeast door ne_bero to mri_01 (w_bero); pipe
+ * dokan_1 to tik_16 (dokan_1).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -854,6 +861,10 @@ EVT_BEGIN(first_bigtree)
     RETURN
 EVT_END()
 
+/**
+ * Map groups that the cloud in front of the tree (evt_mri_cloud_ent) draws into its offscreen buffer; the
+ * cloud's paper animation is a capture of them. An empty string ends the list.
+ */
 static const char* capturemap[] = {
     "S_non",
     "S_ha_10_07",
@@ -1083,6 +1094,10 @@ static EVT_BEGIN(evt_cloud_main_evt)
     RETURN
 EVT_END()
 
+/**
+ * Five control points (x, y, z) of the path followed in open_bigtree, the cutscene after the clouds are
+ * blown off the tree.
+ */
 f32 guide_move_data[] = {
     46.053036f, 145.50023f, -145.69612f, 84.1548f, 145.50023f, -166.70631f, 99.65739f, 143.0f,
     -188.3354f, 130.73201f, 155.65002f, -185.70927f, 160.16298f, 165.45027f, -184.42146f,

@@ -1,3 +1,5 @@
+// Memory: the OS heaps, the map heap allocator (_mapAlloc/_mapFree) and the smart heap (smartAlloc) used for loaded files.
+
 #include "memory.h"
 #include "system.h"
 #include <dolphin/os.h>

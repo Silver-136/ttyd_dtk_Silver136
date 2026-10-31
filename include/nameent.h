@@ -1,3 +1,5 @@
+// nameent.c: the name entry screen (NameEntryWork, nameEntOn/Off/Main) used to name a save file or Yoshi.
+
 #pragma once
 
 #include "manager/filemgr.h"

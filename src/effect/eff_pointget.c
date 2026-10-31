@@ -1,3 +1,5 @@
+// Point-gain display (PointGet): shows a number in 2D at a point for a set duration; types 0-2.
+
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -44,9 +46,11 @@ static PointGetTex tex_lang4[3] = { { 0, 0x7C, 0x7D }, { -1, -1, -1 }, { 1, 0x7E
 static PointGetTex tex_shadow_lang4[3] = { { 0, 0x7C, 0x7D }, { -1, -1, -1 }, { 1, 0x80, 0x81 } };
 static PointGetTex tex_lang5[7] = { { 1, 0x7C, 0x7D }, { -1, -1, -1 }, { 0, 0x7E, 0x7F }, { -1, -1, -1 }, { 1, 0x80, 0x81 }, { -1, -1, -1 }, { 1, 0x84, 0x85 } };
 static PointGetTex tex_shadow_lang5[7] = { { 1, 0x7C, 0x7D }, { -1, -1, -1 }, { 0, 0x7E, 0x7F }, { -1, -1, -1 }, { 1, 0x82, 0x83 }, { -1, -1, -1 }, { 1, 0x84, 0x85 } };
+/** Italian one-point and plural Star Point pieces: the number, then the word. */
 static PointGetTex tex_lang6[2] = { { 0, 0x7E, 0x7F }, { 1, 0x7C, 0x7D } };
 static PointGetTex tex_shadow_lang6[2] = { { 0, 0x7E, 0x7F }, { 1, 0x80, 0x81 } };
 
+/** Star Point message for each language: its one-point and plural piece lists and their piece count. */
 static PointGetTexSet texid_tbl[6] = {
     { { tex_jp, tex_jp }, 3 },
     { { tex_us, tex_shadow_us }, 5 },
@@ -56,6 +60,7 @@ static PointGetTexSet texid_tbl[6] = {
     { { tex_lang6, tex_shadow_lang6 }, 2 },
 };
 #else
+/** Star Point message for each language: its one-point and plural piece lists and their piece count. */
 static s32 texid_tbl[2][4] = { { 0x98, 0x99, 0x9A, 0x9B }, { 0x98, 0x99, 0x9A, 0x9B } };
 #endif
 

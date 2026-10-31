@@ -27,6 +27,10 @@ static EvtWord unison_phase_event[5];
 static EvtWord attack_event[5];
 static EvtWord wait_event[56];
 
+/**
+ * Unit data of the Mini-Yux: 1 HP, 16x16 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_barriern_satellite = {
     UNIT_MINI_YUX, // mUnitType
     "btl_un_barriern_satellite", // name
@@ -75,10 +79,13 @@ BattleUnitKind unit_barriern_satellite = {
     data_table, // dataTable
 };
 
+/** Defence of the Mini-Yux: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Mini-Yux: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Parts of the Mini-Yux: 6 parts (model c_baria). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_barriern_satellite", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
     {2, "btl_un_barriern_satellite", "c_baria", 0.0f, 0.0f, 0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 10.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -113,6 +120,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/** Pose table of the Mini-Yux: maps its battle poses to its animations. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_2"},
     {POSE_TYPE_STOP, "Y_2"},
@@ -133,6 +141,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_2"},
 };
 
+/** Event table of the Mini-Yux: it has no special event scripts. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };

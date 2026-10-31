@@ -46,6 +46,7 @@ static EvtWord friend_event[263];
 static EvtWord charge_event[102];
 static EvtWord wait_event[6];
 
+/** Unit data of the Dark Lakitu: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_hyper_jyugem = {
     UNIT_DARK_LAKITU, // mUnitType
     "btl_un_hyper_jyugem", // name
@@ -94,8 +95,10 @@ BattleUnitKind unit_hyper_jyugem = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Dark Lakitu: none, every attack type does full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element response of the Dark Lakitu: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -123,6 +126,7 @@ static StatusVulnerability regist = {
     50, // ohko
 };
 
+/** Pose table of the Dark Lakitu: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "JGM_N_1"},
     {POSE_TYPE_STOP, "JGM_Y_1"},
@@ -143,6 +147,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "JGM_S_1"},
 };
 
+/** Pose table of the Dark Lakitu, holding a Spiny: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_hold[] = {
     {POSE_TYPE_SLEEP, "JGM_S_2"},
     {POSE_TYPE_STOP, "JGM_S_2"},
@@ -163,17 +168,23 @@ static PoseTableEntry pose_table_hold[] = {
     {POSE_TYPE_ACTION, "JGM_S_2"},
 };
 
+/**
+ * Data table of the Dark Lakitu: event handlers keyed by tag (avoid_counter_thorn_head_event,
+ * dmg_first_attack_pos_event).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos_event},
     {0, NULL},
 };
 
+/** Body parts of the Dark Lakitu: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_hyper_jyugem", "c_jugemu_b", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
     {2, /*"ハイパーパイポ"*/"\x83\x6E\x83\x43\x83\x70\x81\x5B\x83\x70\x83\x43\x83\x7C", "c_jugemu_b", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Attack data for the Dark Lakitu's egg throw: 5 damage. */
 static BattleWeapon weapon_jyugem_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -210,6 +221,7 @@ static BattleWeapon weapon_jyugem_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Dark Lakitu's charge-up that powers up its next attack: no damage, next attack +5. */
 static BattleWeapon weapon_jyugem_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -245,6 +257,10 @@ static BattleWeapon weapon_jyugem_charge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Spawn setup for the Sky-Blue Spiny that the Dark Lakitu summons mid-battle: enemy side, parked
+ * off-screen until its script places it.
+ */
 static BattleUnitSetup entry_togezo = {
     &unit_hyper_togezo, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

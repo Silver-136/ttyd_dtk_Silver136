@@ -1,3 +1,5 @@
+// Koops (nokonoko): partner init, follow and the shell toss ability.
+
 #include "party/party_move.h"
 #include "mario/mario.h"
 #include "mario/mario_party.h"

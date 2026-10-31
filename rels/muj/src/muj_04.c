@@ -49,6 +49,7 @@ static TreeAccess tree_tbl[3];
 static KusaAccess kusa_tbl[5];
 EvtWord muj_04_init_evt[131];
 
+/** NPCs of the rope bridge: the nervous sailor, the bespectacled sailor and the two Embers. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58", // name
@@ -118,6 +119,7 @@ static EVT_BEGIN(evt_haikei_in)
     RETURN
 EVT_END()
 
+/** Doors and exits of muj_04: w_bero to muj_03; e_bero to muj_05; dokan_1; A_dokan. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -186,6 +188,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Hit areas of the 17 planks of the rope bridge, in order; mapanim holds the matching map animations. */
 const char* hitname[] = {
     "A_hasi01",
     "A_hasi02",
@@ -532,6 +535,10 @@ EVT_BEGIN(yashi_yure)
     RETURN
 EVT_END()
 
+/**
+ * Return points of the hazard areas around the rope bridge: its two ends (S_l_dai_03 and A_r_dai) and the
+ * pipe (dokan_1).
+ */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"S_l_dai_03", {-432.0f, 150.0f, 0.0f}},
     {"A_r_dai", {411.0f, 150.0f, 0.0f}},
@@ -539,12 +546,14 @@ static HitDamageReturn hitDmgRetPoints[] = {
     {0},
 };
 
+/** Trees of muj_04 that Mario can shake with his hammer (2 in all). */
 static TreeAccess tree_tbl[] = {
     {5, "A_treeA_02", "treeA_02_m", "treeA_02_ha", 0, NULL},
     {5, "A_treeA_04", "treeA_04_m", "treeA_04_ha", 0, NULL},
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/** Bushes of muj_04 that Mario can check for hidden things (4 in all). */
 static KusaAccess kusa_tbl[] = {
     {1, "A_kuwa_move_01", "S_kuwa_move_01", NULL},
     {1, "A_kuwa_move_02", "S_kuwa_move_02", NULL},

@@ -1,3 +1,6 @@
+// Game start-up and the main loop: marioStInit initialises every driver, marioStMain/marioStDisp run them each
+// frame; also the DVD error check thread and the rumble check.
+
 #include "mario/mariost.h"
 
 #include "battle/battle.h"
@@ -98,6 +101,7 @@ GXRenderModeObj sRMObjHReso = {
     8, 8, 10, 12, 10, 8, 8, //vfilter
 };
 
+/** Video mode of the boot logo screens in 60Hz mode (EURGB60), set by seq_logo after a hot reset. */
 GXRenderModeObj sRMObjHReso_prog = {
     VI_TVMODE_NTSC_PROG, //viTVmode
     0x260, //fbWidth
@@ -136,6 +140,7 @@ GXRenderModeObj GXNtsc480IntDfMarioSt = {
     8, 8, 10, 12, 10, 8, 8, //vfilter
 };
 
+/** The game's main video mode in 60Hz (EURGB60), used by marioStInit after a hot reset. */
 GXRenderModeObj GXNtsc480ProgMarioSt = {
     VI_TVMODE_NTSC_PROG, //viTVmode
     0x260, //fbWidth

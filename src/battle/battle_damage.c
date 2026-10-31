@@ -1,3 +1,5 @@
+// Battle damage: computes damage, defense, status effects, counterattacks and the resulting hit events.
+
 #include "eff/eff_nice.h"
 #include "eff/n64/eff_vapor_n64.h"
 #include "version.h"

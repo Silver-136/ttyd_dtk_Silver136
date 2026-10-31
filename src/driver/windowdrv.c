@@ -1,3 +1,6 @@
+// Window driver: the window list and the drawing of window frames, speech bubbles with their tails
+// and the system windows, from the window frame textures.
+
 #include "driver/windowdrv.h"
 #include "dolphin/os.h"
 #include "driver/arcdrv.h"
@@ -23,6 +26,7 @@ typedef enum WakuTexId {
     WAKU_MAJO_ARROW_DARK = 8
 } WakuTexId;
 
+/** White fog colour passed when the window drawing turns fog off; with fog off it has no effect. */
 static const GXColor fog_color = {0xFF, 0xFF, 0xFF, 0xFF};
 
 /** Turns GX fog off before drawing window frames (they are 2D and must not be fogged). */

@@ -111,6 +111,7 @@ static EVT_BEGIN(door03_open)
     RETURN
 EVT_END()
 
+/** Exits (beros) of this room: e_bero_1 to gon_04, e_bero_2 to gon_09 and w_bero to gon_12. */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero_1", // hitName
@@ -411,6 +412,7 @@ static EVT_BEGIN(main_0)
     RETURN
 EVT_END()
 
+/** Items offered in the item menu at the lock: only the Castle Key (0x0F). */
 static s32 key_tbl[] = {
     ITEM_CASTLE_KEY_0x0F, -1,
 };
@@ -534,6 +536,7 @@ EVT_BEGIN(nokkosu_talk)
     RETURN
 EVT_END()
 
+/** NPC setup of gon_08: Nokkos, who gives the side request. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ノッコス"*/"\x83\x6D\x83\x62\x83\x52\x83\x58", // name

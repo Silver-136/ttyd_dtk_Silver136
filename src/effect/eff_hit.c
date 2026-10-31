@@ -1,3 +1,5 @@
+// Hit flash: forwards to the Paper Mario 64 hit effect (effHitN64Entry).
+
 #include "eff/eff_hit.h"
 #include "eff/n64/eff_hit_n64.h"
 

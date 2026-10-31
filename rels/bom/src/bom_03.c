@@ -18,6 +18,7 @@ static EvtWord evt_tree[7];
 static BeroEntry bero_entry_data[3];
 EvtWord bom_03_init_evt[40];
 
+/** Trees of this map that can be shaken: 3 trees, each with its hit area, trunk and leaf models. */
 static TreeAccess tree_tbl[] = {
     {3, "A_ki1", "S_ki_1", "S_ha_1", 0, NULL},
     {3, "A_ki2", "S_ki_2", "S_ha_2", 0, NULL},
@@ -32,6 +33,7 @@ static EVT_BEGIN(evt_tree)
     RETURN
 EVT_END()
 
+/** Exits (beros) of this room: w_bero to bom_00 and e_bero to bom_04. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

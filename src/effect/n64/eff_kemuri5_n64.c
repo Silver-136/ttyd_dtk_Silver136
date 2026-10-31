@@ -1,3 +1,5 @@
+// Paper Mario 64 smoke effect 5 (kemuri: smoke) at a point, oriented by an angle.
+
 #include "eff/n64/eff_kemuri5_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -32,6 +34,7 @@ typedef struct EffKemuri5N64Work {
 } EffKemuri5N64Work;
 
 
+/** Camera-facing landing puff quad. */
 static effN64Vtx kmr_a_1_v[] = {
     {-8, 7, 0, 0, 0, 255, 255, 255, 255},
     {7, 7, 0, 512, 0, 255, 255, 255, 255},

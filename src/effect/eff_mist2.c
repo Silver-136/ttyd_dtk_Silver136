@@ -1,3 +1,5 @@
+// Mist effect 2: puffs that grow, spin and fade around a point; type 0 spawns 30 puffs, other types 10.
+
 #include "driver/camdrv.h"
 #include "eff/eff_mist2.h"
 #include "driver/dispdrv.h"

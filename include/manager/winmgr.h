@@ -1,3 +1,5 @@
+// winmgr.c: the window manager (WinMgrDesc, WinMgrEntry, winMgrEntry/Main) and the winMgrSelect* lists.
+
 #pragma once
 
 #include "driver/dispdrv.h"

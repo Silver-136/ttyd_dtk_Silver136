@@ -1,3 +1,5 @@
+// eff_butterfly_n64.c: Paper Mario 64 Butterfly effect entry (effButterflyN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

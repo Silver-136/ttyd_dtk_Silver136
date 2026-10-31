@@ -36,6 +36,7 @@ static EvtWord ceil_fall_ready_event[23];
 static EvtWord attack_event[683];
 static EvtWord wait_event[6];
 
+/** Unit data of the Swoopula: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_basabasa_chururu = {
     UNIT_SWOOPULA, // mUnitType
     "btl_un_basabasa_chururu", // name
@@ -84,10 +85,16 @@ BattleUnitKind unit_basabasa_chururu = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Swoopula: none, every attack type does full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element response of the Swoopula: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Attack data for the Swoopula's stand-in for a bite the target counters (electrified or Hold Fast): no
+ * damage.
+ */
 static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -121,6 +128,7 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Pose table of the Swoopula: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "CYU_N_1"},
     {POSE_TYPE_STOP, "CYU_Y_1"},
@@ -142,6 +150,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "CYU_S_1"},
 };
 
+/** Pose table of the Swoopula, on the ceiling: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "CYU_N_2"},
     {POSE_TYPE_STOP, "CYU_Y_2"},
@@ -163,6 +172,7 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "CYU_S_2"},
 };
 
+/** Data table of the Swoopula: event handlers keyed by tag (counter_damage_event, dmg_first_attack_pos). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event},
@@ -180,6 +190,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of the Swoopula: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_basabasa_chururu", "c_cyuru", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_ceil},
 };
@@ -209,6 +220,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Attack data for the Swoopula's draining bite: 4 damage. */
 static BattleWeapon weapon_basabasa_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -245,6 +257,7 @@ static BattleWeapon weapon_basabasa_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Sound table of the Swoopula: the sound each animation plays while it runs. */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"CYU_S_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
     {"CYU_W_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, 1},

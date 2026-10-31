@@ -1,3 +1,5 @@
+// eff_mobj_broken.c: broken map-object effect entry (effMObjBrokenEntry).
+
 #pragma once
 
 #include <dolphin/types.h>

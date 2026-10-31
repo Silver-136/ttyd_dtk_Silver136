@@ -1,3 +1,6 @@
+// Up/down number pop-up: a signed number drawn from icon textures that bounces in and fades;
+// used in battle for status strength changes (types 0 and 1 choose the style).
+
 #include "icon_ids.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -24,8 +27,13 @@ typedef struct EffUpdownWork {
 void effUpdownMain(EffectEntry* effect);
 void effUpdownDisp(CameraId cameraId, EffectEntry* effect);
 
+/** Digit icons 0-9 used to draw the number. */
 static u16 icon_id[10] = { ICON_NUMBER_SMALL_0, ICON_NUMBER_SMALL_1, ICON_NUMBER_SMALL_2, ICON_NUMBER_SMALL_3, ICON_NUMBER_SMALL_4, ICON_NUMBER_SMALL_5, ICON_NUMBER_SMALL_6, ICON_NUMBER_SMALL_7, ICON_NUMBER_SMALL_8, ICON_NUMBER_SMALL_9 };
 
+/**
+ * Bounce-in keys: width and height percentages per frame, starting wide and flat and settling
+ * at full size after 15 frames.
+ */
 static u8 scale_data[30] = {
     0x78, 0x00, 0x73, 0x0D, 0x6E, 0x1C, 0x68, 0x2C, 0x63, 0x3B, 0x5E, 0x4A, 0x59, 0x58, 0x55, 0x64,
     0x52, 0x6F, 0x50, 0x78, 0x50, 0x7B, 0x54, 0x78, 0x59, 0x71, 0x5F, 0x69, 0x64, 0x64,

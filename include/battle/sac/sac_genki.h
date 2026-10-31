@@ -1,3 +1,5 @@
+// Declares the Sweet Treat (sac_genki) special move events.
+
 #pragma once
 
 #include "dolphin/types.h"

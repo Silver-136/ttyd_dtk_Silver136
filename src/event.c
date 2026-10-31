@@ -22,6 +22,11 @@
 #define NAME_EN(x)
 #endif
 
+/**
+ * Story points of the prologue, from the new-game setup through Rogueport, Goombella joining,
+ * Professor Frankly and the Thousand-Year Door to the Blooper fight.
+ * Each row names the map and entrance it starts at and its setup.
+ */
 EventData stage0_evt[] = {
     {0, 0, 0, 0, "STG0_00", "プロローグ" NAME_EN("Prologue"), "aaa_00", "prologue", stg0_00_init},
     {0, 0, 0, 1, "STG0_01", "広場" NAME_EN("Plaza"), "aaa_00", "prologue", NULL},
@@ -50,6 +55,7 @@ EventData stage0_evt[] = {
     {0, 1, 0, 22, "STG0_END", "ステージ１へ" NAME_EN("To Stage 1"), "tik_02", "w_bero_1", NULL}
 };
 
+/** Story points of chapter 1, from Petal Meadows and Petalburg through Hooktail Castle and back. */
 EventData stage1_evt[] = {
     {0, 1, 0, 23, "STG1_00", "はじめてきた" NAME_EN("Petal Meadows"), "sys_01", "stg_1", NULL},
     {0, 1, 0, 24, "STG1_00_01", "ごんばばの影" NAME_EN("The Shadow of Hooktail"), "hei_00", "dokan_2", NULL},
@@ -107,6 +113,7 @@ EventData stage1_evt[] = {
     {0, 1, 10, 70, "STG1_END", "ステージ２へ" NAME_EN("To Stage 2"), "tik_03", "a_slit", NULL}
 };
 
+/** Story points of chapter 2, Boggly Woods and the Great Tree. */
 EventData stage2_evt[] = {
     {0, 2, 10, 71, "STG2_00", "不思議の森へご案内" NAME_EN("Boggly Woods"), "sys_01", "stg_2", stg2_00_init},
     {0, 2, 10, 72, "STG2_01", "魔女三人組もめる" NAME_EN("A Siren Argument"), "win_00", "w_bero", NULL},
@@ -178,6 +185,7 @@ EventData stage2_evt[] = {
     {0, 5, 0, 126, "STG2_END", "ウーロン街へ" NAME_EN("To Glitzville"), "gor_04", "s_bero", stg2_end_init}
 };
 
+/** Story points of chapter 3, Glitzville and the Glitz Pit. */
 EventData stage3_evt[] = {
     {0, 1, 0, 127, "STG3_00", "初めてのウーロン街" NAME_EN("Welcome to Glitzville"), "tou_20", "start", NULL},
     {0, 1, 0, 128, "STG3_01", "初めての闘技場（１Ｆ）" NAME_EN("Arena Intro (1F)"), "tou_03", "s_bero_1", NULL},
@@ -249,6 +257,7 @@ EventData stage3_evt[] = {
     {0, 5, 0, 177, "STG3_END", "ステージ４へ" NAME_EN("To Stage 4"), "tik_07", "e_bero", stg3_end_init}
 };
 
+/** Story points of chapter 4, Twilight Town and Creepy Steeple. */
 EventData stage4_evt[] = {
     {0, 1, 0, 178, "STG4_00", "ステージ４へようこそ" NAME_EN("Welcome to Stage 4"), "sys_01", "stg_4", stage4_00_init},
     {0, 1, 0, 179, "STG4_01_00", "門番と話した" NAME_EN("Gatekeeper Conversation"), "usu_01", "w_bero", NULL},
@@ -305,6 +314,7 @@ EventData stage4_evt[] = {
     {0, 6, 0, 229, "STG4_END", "船の出発" NAME_EN("Off to the Keys"), "gor_00", "n_bero", stg4_end_init}
 };
 
+/** Story points of chapter 5, the voyage to Keelhaul Key and the Pirate's Grotto. */
 EventData stage5_evt[] = {
     {0, 1, 0, 230, "STG5_00", "航海日誌" NAME_EN("Logbook"), "sys_01", "stg_5", NULL},
     {0, 1, 0, 231, "STG5_10", "怨霊襲撃" NAME_EN("Haunted"), "muj_20", NULL, NULL},
@@ -375,6 +385,7 @@ EventData stage5_evt[] = {
     {0, 6, 0, 281, "STG5_END", "列車発車" NAME_EN("The Train Leaves"), "gor_04", "s_bero", NULL}
 };
 
+/** Story points of chapter 6, the Excess Express and Riverside Station. */
 EventData stage6_evt[] = {
     {0, 1, 0, 282, "STG6_00", "スタート" NAME_EN("Start"), "sys_01", "stg_6", stg6_00_init},
     {0, 1, 0, 283, "STG6_01", "車掌と話す" NAME_EN("The Conductor"), "rsh_04_a", "e_bero", NULL},
@@ -454,6 +465,7 @@ EventData stage6_evt[] = {
     {0, 6, 0, 351, "STG6_END", "ボム村へ" NAME_EN("To Fahr Outpost"), "tik_07", "e_bero", stg6_end_init02}
 };
 
+/** Story points of chapter 7, Fahr Outpost and the X-Naut Fortress on the moon. */
 EventData stage7_evt[] = {
     {0, 1, 0, 352, "STG7_00", "STG7 スタート" NAME_EN("Start"), "sys_01", "stg_7", NULL},
     {0, 1, 0, 353, "STG7_01", "初めてのボム村" NAME_EN("Fahr Outpost (1st Visit)"), "bom_01", "w_bero", stg7_01_init},
@@ -497,6 +509,7 @@ EventData stage7_evt[] = {
     {0, 6, 0, 381, "STG7_END", "ラストダンジョンへ" NAME_EN("To the Last Dungeon"), "tik_05", "e_bero", NULL}
 };
 
+/** Story points of chapter 8, the Palace of Shadow up to the Crystal Stars and the final battle. */
 EventData stage8_evt[] = {
     {0, 1, 0, 382, "STG8_00", "スタート" NAME_EN("Start"), "sys_01", "stg_8", NULL},
     {0, 1, 0, 383, "STG8_01", "１０００体カロン" NAME_EN("1000 Dry Bones"), "las_05", "w_bero", NULL},
@@ -530,6 +543,9 @@ EventData stage8_evt[] = {
     {0, 1, 0, 402, "STG8_END", "バトル後" NAME_EN("After the Battle"), "las_29", "owari", NULL}
 };
 
+/**
+ * Story points of the ending: the epilogue scenes, the end credits and Rogueport after the game is cleared.
+ */
 EventData stage9_evt[] = {
     {0, 0, 0, 403, "STG9_00", "エピローグ" NAME_EN("Epilogue"), "gor_11", NULL, NULL},
     {0, 0, 0, 403, "STG9_00", "ゴロツキ港" NAME_EN("Rogueport Dock"), "gor_00", NULL, NULL},
@@ -551,6 +567,10 @@ EventData stage9_evt[] = {
     {0, 1, 0, 406, "STG9_END", "クリア後" NAME_EN("Rogueport"), "gor_00", "n_bero", NULL}
 };
 
+/**
+ * The chapter tables in order (prologue, chapters 1-8, ending) with their names and sizes.
+ * eventStgDtPtr and eventStgNum read it for the E3 scenario select.
+ */
 EventStage event_dt[] = {
     {"オープニング" NAME_EN("Opening"), stage0_evt, sizeof(stage0_evt) / sizeof(EventData)},
     {"ステージ１" NAME_EN("Stage 1"), stage1_evt, sizeof(stage1_evt) / sizeof(EventData)},

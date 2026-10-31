@@ -1,3 +1,5 @@
+// evt_npc.c: script commands for NPCs (NpcSetupInfo, npc entry, movement, animations, flags; npcdrv).
+
 #pragma once
 
 #include <dolphin/types.h>

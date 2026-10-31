@@ -1,3 +1,5 @@
+// Paper Mario 64 smoke effect 1 (kemuri: smoke) at a point; types 0-7 pick the smoke pattern.
+
 #include "eff/n64/eff_kemuri1_n64.h"
 #include "memory.h"
 #include "driver/camdrv.h"

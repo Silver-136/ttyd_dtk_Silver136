@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: curtain of water (wcurtain) at a point with a scale and lifetime.
+
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"

@@ -1,3 +1,5 @@
+// eff_radiation_n64.c: radiating rays effect entry (effRadiationN64Entry) and its work data (EffRadiationN64Work).
+
 #include "driver/camdrv.h"
 #pragma once
 

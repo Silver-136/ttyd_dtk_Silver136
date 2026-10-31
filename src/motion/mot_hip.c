@@ -1,3 +1,5 @@
+// Mario's spin jump / hip drop (mot_hip): the spin, the drop and the ground pound.
+
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "pmario_sound.h"

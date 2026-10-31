@@ -1,3 +1,5 @@
+// tou2: Glitz Pit arena REL shared code/prolog (registers tou_03) plus ranking, rule and champion belt helpers.
+
 #include "tou2.h"
 #include "dolphin/types.h"
 #include "dolphin/mtx.h"
@@ -130,6 +132,10 @@ static RankData rank_work;
 static DispWork disp_work;
 static s32 champion_belt_onoff;
 
+/**
+ * The Glitz Pit roster for the first visit, in FighterId order: each team's flags, name and title messages,
+ * battle setup, pre-fight taunt and victory lines, and starting ranking points.
+ */
 static FighterData fighterDt[23] = {
     { FIGHT_CHAMPION, "stg3_tou_sensyu_00", "stg3_tou_sensyu2_00", 22, "stg3_tou_400_02", "stg3_tou_400_03", 250 },                // Rawk Hawk
     { FIGHT_KOOPATROL | FIGHT_MAJOR, "stg3_tou_sensyu_01", "stg3_tou_sensyu2_01", 19, "stg3_tou_118_00", "stg3_tou_118_01", 200 }, // The Koopinator
@@ -182,6 +188,10 @@ static FighterData fighterDt_re[21] = {
     //{ FIGHT_MINOR, "stg3_tou_re_337", "stg3_tou_re_360", 21, "stg3_tou_re_219", "stg3_tou_re_220", 0 },                     // The Destructors (cut)
 };
 
+/**
+ * Grubba's special match conditions in the minor league (rank worse than 10):
+ * his request message, the condition text, the rule id and its two parameters.
+ */
 static RuleData ruleDt_2bu[10] = {
     { "stg3_tou_107_01", "stg3_tou_cp_000", 18, 3, 3 },
     { "stg3_tou_107_02", "stg3_tou_cp_001", 1, 1, 1 },
@@ -195,6 +205,7 @@ static RuleData ruleDt_2bu[10] = {
     { "stg3_tou_107_16", "stg3_tou_cp_009", 43, 1, 1 },
 };
 
+/** The match conditions in the major league (rank 10 or better): stricter counts and four extra rules. */
 static RuleData ruleDt_1bu[14] = {
     { "stg3_tou_107_01", "stg3_tou_cp_010", 18, 5, 5 },
     { "stg3_tou_107_02", "stg3_tou_cp_011", 1, 1, 1 },
@@ -212,6 +223,7 @@ static RuleData ruleDt_1bu[14] = {
     { "stg3_tou_107_20", "stg3_tou_cp_024", 63, 255, 255 },
 };
 
+/** The match conditions throughout the comeback: the major-league set with the rematch messages. */
 static RuleData ruleDt_re[14] = {
     { "stg3_tou_re_362", "stg3_tou_cp_040", 18, 5, 5 },
     { "stg3_tou_re_363", "stg3_tou_cp_041", 1, 1, 1 },
@@ -229,8 +241,10 @@ static RuleData ruleDt_re[14] = {
     { "stg3_tou_re_376", "stg3_tou_cp_054", 63, 255, 255 },
 };
 
+/** Pointers to the fighter ranking and to the ranking board's display work. */
 static RankData* rank_wp = &rank_work;
 static DispWork* dwp = &disp_work;
+/** Full-width digits 0-9 used to print rank numbers on the ranking board. */
 static const char* suuji[] = { "０", "１", "２", "３", "４", "５", "６", "７", "８", "９" };
 
 // disp_proc templates

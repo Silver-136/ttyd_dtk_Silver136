@@ -259,10 +259,17 @@ EVT_BEGIN(nokonoko_D_talk)
     RETURN
 EVT_END()
 
+/**
+ * Items the player may hand to Bub-ulber for Trouble Center request 15 on his first ask: the Hot Dog only,
+ * ended by -1.
+ */
 s32 iri_15_item_tbl1[] = {
     ITEM_HOT_DOG, -1,
 };
 
+/**
+ * Items the player may hand to Bub-ulber for request 15 on his second ask: the Mousse Cake only, ended by -1.
+ */
 s32 iri_15_item_tbl2[] = {
     ITEM_MOUSSE_CAKE, -1,
 };
@@ -452,6 +459,7 @@ static EVT_BEGIN(kizayarou_init)
     RETURN
 EVT_END()
 
+/** NPCs of the west village: General White. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ノコノコA"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x41", // name
@@ -551,6 +559,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Doors and exits of nok_00: w_bero to hei_01 (Petal Meadows); e_bero to nok_01. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -587,16 +596,22 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** NPCs inside the inn: the innkeeper. */
 static const char* yado_npc[] = {
     /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5",
     NULL,
 };
 
+/** Map group whose bounding-box culling is off while Mario is inside the inn: its outside front S_yad_mae. */
 const char* yado_map[] = {
     "S_yad_mae",
     NULL,
 };
 
+/**
+ * Door of the Petalburg inn: outside hit area A_yad_doa01, the inside room, its NPCs and the group
+ * kept from being culled while Mario is inside.
+ */
 static HouseParam yado_data = {
     1, // type
     9, // hitInKind
@@ -613,11 +628,13 @@ static HouseParam yado_data = {
     NULL, NULL, // mobjs..items
 };
 
+/** NPCs inside the shop: the clerk. */
 static const char* mise_npc[] = {
     /*"店員"*/"\x93\x58\x88\xF5",
     NULL,
 };
 
+/** Door of the Petalburg shop: outside hit area A_mise_doa, the inside room and the shop clerk. */
 static HouseParam mise_data = {
     1, // type
     9, // hitInKind
@@ -633,16 +650,19 @@ static HouseParam mise_data = {
     NULL, NULL, NULL, // noclip..items
 };
 
+/** NPCs inside the house: Koopa D. */
 static const char* ie_npc[] = {
     /*"ノコノコD"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x44",
     NULL,
 };
 
+/** Map group whose bounding-box culling is off while Mario is inside this house: its outside front S_ie_mae. */
 static const char* ie_map[] = {
     "S_ie_mae",
     NULL,
 };
 
+/** Door of a village house in the west half: outside hit area A_ie_doa, the inside room and its NPCs. */
 static HouseParam ie_data = {
     1, // type
     9, // hitInKind
@@ -659,6 +679,7 @@ static HouseParam ie_data = {
     NULL, NULL, // mobjs..items
 };
 
+/** Shelf slots of the Petalburg shop: the display model and hit area of each item on show. */
 static ShopObj obj_list[] = {
     {"S_item_01", "A_item_01"},
     {"S_item_02", "A_item_02"},
@@ -668,6 +689,7 @@ static ShopObj obj_list[] = {
     {"S_item_06", "A_item_06"},
 };
 
+/** Items the Petalburg shop sells with their prices in coins. */
 static ShopItem goods_list[] = {
     {ITEM_FIRE_FLOWER, 8},
     {ITEM_POW_BLOCK, 5},
@@ -677,6 +699,7 @@ static ShopItem goods_list[] = {
     {ITEM_MUSHROOM, 4},
 };
 
+/** Prices the Petalburg shop pays when Mario sells it items. */
 static ShopDb trade_list[] = {
     {ITEM_FIRE_FLOWER, 4, 0},
     {ITEM_POW_BLOCK, 2, 0},
@@ -693,12 +716,20 @@ static ShopDb trade_list[] = {
     {0},
 };
 
+/**
+ * The shop clerk's name and the 35 shop messages (shop_00 to shop_34) that drive the buying and selling
+ * dialogue.
+ */
 static ShopperData35 shopper_data = {
     /*"店員"*/"\x93\x58\x88\xF5", // name
     NULL, NULL, // fook_evt..buy_evt
     {"shop_00", "shop_01", "shop_02", "shop_03", "shop_04", "shop_05", "shop_06", "shop_07", "shop_08", "shop_09", "shop_10", "shop_11", "shop_12", "shop_13", "shop_14", "shop_15", "shop_16", "shop_17", "shop_18", "shop_19", "shop_20", "shop_21", "shop_22", "shop_23", "shop_24", "shop_25", "shop_26", "shop_27", "shop_28", "shop_29", "shop_30", "shop_31", "shop_32", "shop_33", "shop_34"}, // msgs
 };
 
+/**
+ * Inn data of Petalburg: the price of a night, the bed, the bedside and camera positions and the inn
+ * messages.
+ */
 static KinopioData kino_dt = {
     0, // breakfastItem
     {0}, // breakfastPos

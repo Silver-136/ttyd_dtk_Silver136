@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Poison Puff (`dokugassun`): parts, stats, poses and AI scripts.
+
 #include "eff/n64/eff_vapor_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -46,6 +48,7 @@ static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[13];
 
+/** Unit data of the Poison Puff: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_dokugassun = {
     UNIT_POISON_PUFF, // mUnitType
     "btl_un_dokugassun", // name
@@ -94,8 +97,10 @@ BattleUnitKind unit_dokugassun = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Poison Puff: none, every attack type does full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element response of the Poison Puff: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -123,10 +128,12 @@ static StatusVulnerability regist = {
     20, // ohko
 };
 
+/** Body part of the Poison Puff: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_dokugassun", "c_kmoon_g", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
+/** Attack data for the Poison Puff's charge: 8 damage. */
 static BattleWeapon weapon_dokugassun_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -163,6 +170,7 @@ static BattleWeapon weapon_dokugassun_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Poison Puff's poison gas breath: 10 damage. */
 static BattleWeapon weapon_dokugassun_poisongas_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -341,6 +349,7 @@ static EVT_BEGIN(poisongas_event)
     RETURN
 EVT_END()
 
+/** Pose table of the Poison Puff: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -361,6 +370,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Data table of the Poison Puff: event handlers keyed by tag (counter_event, dmg_first_attack_pos). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_POISON_EVENT, counter_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},

@@ -1,3 +1,5 @@
+// Rogueport Sewers (tik) battle unit: Magikoopa (kamec): its parts, defence/status tables, and attack events.
+
 #include "eff/n64/eff_thunderflare_n64.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_magic1_n64.h"
@@ -109,6 +111,10 @@ static USER_FUNC(eff_magic_get_posX) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit kind of the Magikoopa (HP 7, level 25): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_kamec = {
     UNIT_MAGIKOOPA, // mUnitType
     "btl_un_kamec", // name
@@ -157,6 +163,10 @@ BattleUnitKind unit_kamec = {
     data_table, // dataTable
 };
 
+/**
+ * Unit kind of the Magikoopa (HP 7, level 0): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_kamec_bunsin = {
     UNIT_MAGIKOOPA_CLONE,
     "btl_un_kamec_bunsin",
@@ -223,10 +233,13 @@ BattleUnitKind unit_kamec_bunsin = {
     data_table_bunsin,
 };
 
+/** Defence of the Magikoopa: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Magikoopa: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Status vulnerability of the Magikoopa (percent chance to take each status): resists most statuses. */
 static StatusVulnerability regist = {
     70, // sleep
     75, // stop
@@ -252,6 +265,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Status vulnerability of the Magikoopa (clone) (percent chance to take each status): immune to sleep. */
 static StatusVulnerability regist_bunsin = {0};
 
 static PoseTableEntry pose_table[] = {
@@ -294,6 +308,10 @@ static PoseTableEntry pose_table_sky[] = {
     {POSE_TYPE_ACTION, "KMK_S_2"},
 };
 
+/**
+ * Data table of the Magikoopa: event handlers for dodging, a First Strike on it (no reaction),
+ * being defeated and being blown away dead.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, kamec_subset_dead_event},
     {UNIT_DATA_BLOW_DEAD_EVENT, kamec_subset_blow_dead_event},
@@ -302,6 +320,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Data table of the airborne Magikoopa: its defeat, blown-away defeat, dodge,
+ * fall out of the air and First Strike reactions.
+ */
 static BattleDataEntry data_table_sky[] = {
     {UNIT_DATA_DEAD_EVENT, kamec_subset_dead_event},
     {UNIT_DATA_BLOW_DEAD_EVENT, kamec_subset_blow_dead_event},
@@ -311,12 +333,17 @@ static BattleDataEntry data_table_sky[] = {
     {0},
 };
 
+/** Data table of a Magikoopa clone: its dodge reaction; a First Strike on it is ignored. */
 static BattleDataEntry data_table_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/**
+ * Data table of an airborne Magikoopa clone: its dodge reaction,
+ * the fall when knocked out of the air and its First Strike reaction.
+ */
 static BattleDataEntry data_table_sky_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
@@ -324,11 +351,13 @@ static BattleDataEntry data_table_sky_bunsin[] = {
     {0},
 };
 
+/** Parts of the Magikoopa (2 parts): hit positions, defences, attributes and pose tables. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_kamec", "c_kamek", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_kamec", "c_kamek", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon of the Magikoopa's attack spell: 4 damage. */
 static BattleWeapon weapon_kamec_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -365,6 +394,7 @@ static BattleWeapon weapon_kamec_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Magikoopa's Huge spell: no HP damage; may inflict size change. */
 static BattleWeapon weapon_kamec_dekadeka_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -403,6 +433,7 @@ static BattleWeapon weapon_kamec_dekadeka_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Magikoopa's Electric spell: no HP damage; may inflict electric shock. */
 static BattleWeapon weapon_kamec_biribiri_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -441,6 +472,7 @@ static BattleWeapon weapon_kamec_biribiri_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Magikoopa's Invisible spell: no HP damage; may inflict invisibility. */
 static BattleWeapon weapon_kamec_trans_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -478,6 +510,7 @@ static BattleWeapon weapon_kamec_trans_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Magikoopa's defence-up spell: no HP damage; may inflict defence change. */
 static BattleWeapon weapon_kamec_katikati_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -517,6 +550,7 @@ static BattleWeapon weapon_kamec_katikati_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Magikoopa's heal spell: no HP damage. */
 static BattleWeapon weapon_kamec_recover_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -551,6 +585,7 @@ static BattleWeapon weapon_kamec_recover_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Magikoopa's heal-all spell: no HP damage. */
 static BattleWeapon weapon_kamec_all_recover_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -584,6 +619,7 @@ static BattleWeapon weapon_kamec_all_recover_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Spawn setup for a Magikoopa clone: starts far off-screen until the Magikoopa places it. */
 static BattleUnitSetup entry_kamec = {
     &unit_kamec_bunsin, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

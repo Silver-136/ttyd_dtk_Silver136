@@ -1,3 +1,5 @@
+// unit_kamec_red: Red Magikoopa with its clone (bunsin), battle unit.
+
 #include "eff/n64/eff_thunderflare_n64.h"
 #include "battle/battle_unit.h"
 #include "eff/eff_magic1_n64.h"
@@ -108,6 +110,10 @@ static USER_FUNC(eff_magic_get_posX) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of the Red Magikoopa: 7 HP and level 17, with its parts, status vulnerability, init event and
+ * event data table.
+ */
 BattleUnitKind unit_kamec_red = {
     UNIT_RED_MAGIKOOPA, // mUnitType
     "btl_un_kamec_red", // name
@@ -156,6 +162,10 @@ BattleUnitKind unit_kamec_red = {
     data_table, // dataTable
 };
 
+/**
+ * Unit data of the clone a Red Magikoopa conjures up: 7 HP and level 0, with its parts, status
+ * vulnerability, init event and event data table.
+ */
 BattleUnitKind unit_kamec_red_bunsin = {
     UNIT_RED_MAGIKOOPA_CLONE,
     "btl_un_kamec_red_bunsin",
@@ -222,8 +232,13 @@ BattleUnitKind unit_kamec_red_bunsin = {
     data_table_bunsin,
 };
 
+/**
+ * Defense of the Red Magikoopa against normal, fire, ice, explosion and electric attacks: none, so it
+ * takes full damage from every element.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Damage-type reactions of the Red Magikoopa: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -251,6 +266,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Status vulnerability of the Red Magikoopa for its clones: immune to every status effect. */
 static StatusVulnerability regist_bunsin = {0};
 
 static PoseTableEntry pose_table[] = {
@@ -293,6 +309,10 @@ static PoseTableEntry pose_table_sky[] = {
     {POSE_TYPE_ACTION, "KMR_S_2"},
 };
 
+/**
+ * Event data table of the Red Magikoopa: scripts that replace the standard handling for its defeat (tag
+ * 49), being blown away (tag 58) and an attack missing it (tag 46).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, kamec_subset_dead_event},
     {UNIT_DATA_BLOW_DEAD_EVENT, kamec_subset_blow_dead_event},
@@ -301,6 +321,11 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Event data table of the Red Magikoopa while it is flying: scripts that replace the standard handling for
+ * its defeat (tag 49), being blown away (tag 58), an attack missing it (tag 46), being knocked out of the
+ * air (tag 14) and the battle opening with a First Strike on it (tag 48).
+ */
 static BattleDataEntry data_table_sky[] = {
     {UNIT_DATA_DEAD_EVENT, kamec_subset_dead_event},
     {UNIT_DATA_BLOW_DEAD_EVENT, kamec_subset_blow_dead_event},
@@ -310,12 +335,21 @@ static BattleDataEntry data_table_sky[] = {
     {0},
 };
 
+/**
+ * Event data table of the Red Magikoopa for its clones: scripts that replace the standard handling for an
+ * attack missing it (tag 46).
+ */
 static BattleDataEntry data_table_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/**
+ * Event data table of the Red Magikoopa for its clones while flying: scripts that replace the standard
+ * handling for an attack missing it (tag 46), being knocked out of the air (tag 14) and the battle opening
+ * with a First Strike on it (tag 48).
+ */
 static BattleDataEntry data_table_sky_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
@@ -323,11 +357,16 @@ static BattleDataEntry data_table_sky_bunsin[] = {
     {0},
 };
 
+/**
+ * Parts of the Red Magikoopa: 2 parts: parts 1 and 2 (model c_kamek_r), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_kamec_red", "c_kamek_r", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_kamec_red", "c_kamek_r", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon record of the Red Magikoopa's attack spell: 4 damage and ignores Defense. */
 static BattleWeapon weapon_kamec_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -364,6 +403,7 @@ static BattleWeapon weapon_kamec_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon record of the Red Magikoopa's Huge spell: no HP damage and inflicts Huge. */
 static BattleWeapon weapon_kamec_dekadeka_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -402,6 +442,7 @@ static BattleWeapon weapon_kamec_dekadeka_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon record of the Red Magikoopa's Electric spell: no HP damage and inflicts shock. */
 static BattleWeapon weapon_kamec_biribiri_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -440,6 +481,7 @@ static BattleWeapon weapon_kamec_biribiri_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon record of the Red Magikoopa's Invisible spell: no HP damage and inflicts Invisible. */
 static BattleWeapon weapon_kamec_trans_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -477,6 +519,7 @@ static BattleWeapon weapon_kamec_trans_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon record of the Red Magikoopa's defense spell: no HP damage and inflicts Defense Up. */
 static BattleWeapon weapon_kamec_katikati_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -516,6 +559,7 @@ static BattleWeapon weapon_kamec_katikati_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon record of the Red Magikoopa's healing spell: no HP damage. */
 static BattleWeapon weapon_kamec_recover_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -550,6 +594,10 @@ static BattleWeapon weapon_kamec_recover_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon record of the Red Magikoopa's healing spell for all allies: no HP damage and can hit several
+ * targets.
+ */
 static BattleWeapon weapon_kamec_all_recover_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -583,6 +631,10 @@ static BattleWeapon weapon_kamec_all_recover_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Setup of the clone that spawn_event creates for the Magikoopa's clone spell: unit kind, side, turn phase
+ * and starting position.
+ */
 static BattleUnitSetup entry_kamec = {
     &unit_kamec_red_bunsin, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

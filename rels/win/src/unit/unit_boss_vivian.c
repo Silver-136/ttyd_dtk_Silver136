@@ -58,6 +58,10 @@ static EvtWord wait_event[7];
 static EvtWord wait_event[6];
 #endif
 
+/**
+ * Unit data of Vivian (btl_un_vivian1), the lead unit of the Shadow Sirens fight in Boggly Woods: 10 HP,
+ * level 26. Her init script spawns Marilyn and Beldam behind her.
+ */
 BattleUnitKind unit_boss_vivian = {
     UNIT_VIVIAN_CHAPTER2, // mUnitType
     "btl_un_vivian1", // name
@@ -106,8 +110,10 @@ BattleUnitKind unit_boss_vivian = {
     data_table, // dataTable
 };
 
+/** Flat damage reduction of Vivian against normal, fire, ice, explosion and electric hits: none. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element attributes of Vivian: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -156,15 +162,18 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PTR_S_4"},
 };
 
+/** Data table of Vivian: event 49 (she is defeated) runs dead_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Vivian's single part: her model (c_vivian), the main target and the part that covers for allies. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_vivian", "c_vivian", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Vivian's shadow-slip strike: 1 damage to one opposing target, guardable. */
 BattleWeapon weapon_vivian_kagenuke_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -201,6 +210,9 @@ BattleWeapon weapon_vivian_kagenuke_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Vivian's flame: 1 fire-element damage to every opposing target, ignoring defense and impossible to guard.
+ */
 BattleWeapon weapon_vivian_flame_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -242,6 +254,10 @@ BattleWeapon weapon_vivian_flame_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Spawn data for Marilyn: she is created far off-screen at (1000, 0, 1000) and Vivian's init script
+ * then moves her behind Vivian.
+ */
 static BattleUnitSetup entry_marilyn = {
     &unit_boss_marilyn, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -253,6 +269,10 @@ static BattleUnitSetup entry_marilyn = {
     NULL, // itemDropTable
 };
 
+/**
+ * Spawn data for Beldam: she is created far off-screen at (1000, 0, 1000) and Vivian's init script
+ * then moves her behind Vivian.
+ */
 static BattleUnitSetup entry_majolyne = {
     &unit_boss_majolyne, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

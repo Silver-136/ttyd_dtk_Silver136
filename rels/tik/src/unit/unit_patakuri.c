@@ -1,3 +1,5 @@
+// Rogueport Sewers (tik) battle unit: Paragoomba (patakuri): its parts, defence/status tables, and attack events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -42,6 +44,10 @@ static EvtWord phase_event[2];
 static EvtWord attack_event[492];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Paragoomba (HP 2, level 7): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_patakuri = {
     UNIT_PARAGOOMBA, // mUnitType
     "btl_un_patakuri", // name
@@ -90,10 +96,16 @@ BattleUnitKind unit_patakuri = {
     data_table_patakuri, // dataTable
 };
 
+/** Defence of the Paragoomba (Paragoomba form): no damage reduction. */
 static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
 
+/** Defence of the Paragoomba (Paragoomba form): no damage reduction. */
 static BattleUnitDefenseAttr defence_patakuri_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Paragoomba (Paragoomba form) (percent chance to take each status):
+ * extra prone to stop, dizzy, fright, gale force and instant kill.
+ */
 static StatusVulnerability regist_patakuri = {
     100, // sleep
     110, // stop
@@ -119,6 +131,7 @@ static StatusVulnerability regist_patakuri = {
     150, // ohko
 };
 
+/** Weapon of the Paragoomba's attack: 1 damage. */
 static BattleWeapon weapon_patakuri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -155,6 +168,10 @@ static BattleWeapon weapon_patakuri_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Body part of the Paragoomba (Paragoomba form) (model c_kuribo):
+ * hit position, defences, attributes and pose table.
+ */
 static BattleUnitKindPart parts_patakuri[] = {
     {1, "btl_un_patakuri", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence_patakuri, &defence_patakuri_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patakuri},
 };
@@ -181,12 +198,14 @@ static PoseTableEntry pose_table_patakuri[] = {
     {POSE_TYPE_ACTION, "PTK_S_1"},
 };
 
+/** Data table of the Paragoomba: its fall when knocked out of the air and its First Strike reaction. */
 static BattleDataEntry data_table_patakuri[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, patakuri_dmg_first_attack_pos},
     {0, NULL},
 };
 
+/** Sounds the Paragoomba's poses play as they animate: wing flaps while waiting, hovering and moving. */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"PTK_S_1", 0.01f, NULL, "SFX_ENM_PATAKURI_WAIT1", 0, 1},
     {"PTK_W_1", 0.01f, NULL, "SFX_ENM_PATAKURI_MOVE1", 0, 1},
@@ -394,15 +413,22 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
+/** Data table of the Paragoomba: event handlers for a First Strike on it (no reaction). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Defence of the Paragoomba: no damage reduction. */
 static BattleUnitDefense defence = {0};
 
+/** Element reactions of the Paragoomba: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+/**
+ * Status vulnerability of the Paragoomba (percent chance to take each status):
+ * extra prone to stop, fright, gale force and instant kill.
+ */
 static StatusVulnerability regist = {
     100, // sleep
     110, // stop
@@ -428,6 +454,7 @@ static StatusVulnerability regist = {
     150, // ohko
 };
 
+/** Parts of the Paragoomba : hit positions, defences, attributes and pose tables. */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -447,6 +474,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon of the Paragoomba's headbonk: 1 damage, jump-type contact attack. */
 static BattleWeapon weapon_kuriboo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

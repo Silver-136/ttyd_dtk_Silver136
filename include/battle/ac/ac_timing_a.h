@@ -1,3 +1,5 @@
+// Work area for the timing-A action command (ac_timing_a).
+
 #pragma once
 
 #include <dolphin/types.h>

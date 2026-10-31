@@ -1,3 +1,5 @@
+// eff_spirit.c: spirit orb effect entry (effSpiritEntry) with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

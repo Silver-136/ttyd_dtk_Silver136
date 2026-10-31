@@ -1,3 +1,6 @@
+// Shadow Mario (kagemario) on Twilight Trail: while Doopliss has Mario's name, Mario is drawn as a dark silhouette by
+// a map TEV callback (usu.rel and jin.rel have the same code).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_mario.h"

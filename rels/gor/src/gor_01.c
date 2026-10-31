@@ -990,6 +990,7 @@ EVT_BEGIN(nancy_regl)
     RETURN
 EVT_END()
 
+/** Items offered in the item menu when giving Zess T. something: only the Contact Lens. */
 s32 item_tbl_nancy[] = {
     ITEM_CONTACT_LENS, -1,
 };
@@ -2127,6 +2128,7 @@ EVT_BEGIN(kick_talk)
     RETURN
 EVT_END()
 
+/** NPC setup of Kick, Luigi's friend in chapters 2 and 3. */
 NpcSetupInfo kickEnt[] = {
     {
         /*"キック"*/"\x83\x4C\x83\x62\x83\x4E", // name
@@ -2156,6 +2158,7 @@ EVT_BEGIN(torque_talk)
     RETURN
 EVT_END()
 
+/** NPC setup of Torque, Luigi's friend in chapters 4 and 5. */
 NpcSetupInfo torqueEnt[] = {
     {
         /*"トルク"*/"\x83\x67\x83\x8B\x83\x4E", // name
@@ -2193,6 +2196,7 @@ EVT_BEGIN(kick2_talk)
     RETURN
 EVT_END()
 
+/** NPC setup of the second Kick, on the rooftop after Lord Crump's defeat. */
 NpcSetupInfo kick2Ent[] = {
     {
         /*"キック２"*/"\x83\x4C\x83\x62\x83\x4E\x82\x51", // name
@@ -2361,6 +2365,11 @@ EVT_BEGIN(thief_talk)
     RETURN
 EVT_END()
 
+/**
+ * NPC setup of the central plaza: the badge shop owner and clerk, the old Toad, Zess T., Marco, the bar
+ * owner, the shopkeepers, the inn clerk, the Goombas, the mice, the sailor Bob-omb, the rip-off merchant,
+ * Luigi and the thief.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"バッジ店長"*/"\x83\x6F\x83\x62\x83\x57\x93\x58\x92\xB7", // name
@@ -2622,6 +2631,7 @@ EVT_BEGIN(christine_nakama_before)
     RETURN
 EVT_END()
 
+/** Exits (beros) of this room: e_bero to gor_02, w_bero to gor_03 and s_bero to gor_00. */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -2705,11 +2715,16 @@ static EVT_BEGIN(evt_wall_01)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of house 01 kept lit (exempt from the darkening) while Mario is inside: Zess T. Swapped into the
+ * door's copy with evt_door_set_param once the Contact Lens is delivered.
+ */
 static const char* door_data_01_npc[] = {
     /*"ナンシー"*/"\x83\x69\x83\x93\x83\x56\x81\x5B",
     NULL,
 };
 
+/** Field items of house 01 kept lit while Mario is inside: the Honey Shroom of Trouble Center request 18. */
 const char* door_data_01_item[] = {
     "iri_18",
     NULL,
@@ -2731,6 +2746,10 @@ static EVT_BEGIN(evt_door_01_close)
     RETURN
 EVT_END()
 
+/**
+ * Door of house 01 (Zess T.'s house) before the Contact Lens is delivered: the door model, hit areas, inside
+ * and outside map groups and the scripts for opening and closing.
+ */
 static DoorParam door_data_01 = {
     0, // flags
     3, // type
@@ -2751,6 +2770,7 @@ static DoorParam door_data_01 = {
     evt_door_01_close, // evtClose
 };
 
+/** Door of house 01 after the Contact Lens is delivered. */
 DoorParam door_data_01_01 = {
     0, // flags
     3, // type
@@ -2799,6 +2819,10 @@ EVT_BEGIN(evt_wall_02_f1)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the item shop (house 02's ground floor) kept lit while Mario is inside: the shopkeeper and the
+ * clerk.
+ */
 static const char* door_data_02_npc[] = {
     /*"店長"*/"\x93\x58\x92\xB7",
     /*"店員"*/"\x93\x58\x88\xF5",
@@ -2829,6 +2853,7 @@ EVT_BEGIN(evt_door_02f1_close)
     RETURN
 EVT_END()
 
+/** Door of house 02's ground floor (the item shop) in its normal state. */
 DoorParam door_data_02_f1 = {
     0, // flags
     3, // type
@@ -2849,6 +2874,7 @@ DoorParam door_data_02_f1 = {
     evt_door_02f1_close, // evtClose
 };
 
+/** Door of house 02's ground floor while the Contact Lens has arrived but not yet been delivered. */
 DoorParam door_data_02_f1_01 = {
     0, // flags
     3, // type
@@ -2907,6 +2933,7 @@ EVT_BEGIN(evt_wall_02_f2)
     RETURN
 EVT_END()
 
+/** NPCs of the badge shop upstairs kept lit while Mario is inside: the badge shop owner and clerk. */
 const char* badgemise_npc[] = {
     /*"バッジ店長"*/"\x83\x6F\x83\x62\x83\x57\x93\x58\x92\xB7",
     /*"バッジ店員"*/"\x83\x6F\x83\x62\x83\x57\x93\x58\x88\xF5",
@@ -2968,6 +2995,10 @@ EVT_BEGIN(evt_badge_dummy)
     RETURN
 EVT_END()
 
+/**
+ * Display pedestals of the badge shop upstairs in house 02: for each, the map object, its hit area and the
+ * callback.
+ */
 UnitWinSell uwnobj_list[] = {
     {"S_item_07", "A_item_08", evt_badge_dummy},
     {"S_item_08", "A_item_09", evt_badge_dummy},
@@ -3008,6 +3039,7 @@ EVT_BEGIN(evt_close_02_01_f2)
     RETURN
 EVT_END()
 
+/** Door of house 02's upstairs (the badge shop). */
 DoorParam door_data_02_f2 = {
     0, // flags
     3, // type
@@ -3382,6 +3414,10 @@ EVT_BEGIN(evt_wall_03_f1)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of house 03 kept lit while Mario is inside: the bar owner (Podley), the old Toad and the others
+ * listed.
+ */
 static const char* door_data_03_npc[] = {
     /*"マスター"*/"\x83\x7D\x83\x58\x83\x5E\x81\x5B",
     /*"キノじい"*/"\x83\x4C\x83\x6D\x82\xB6\x82\xA2",
@@ -3395,11 +3431,13 @@ static const char* door_data_03_npc[] = {
     NULL,
 };
 
+/** Field items of house 03 kept lit while Mario is inside: the Skull Gem. */
 const char* door_data_03_item[] = {
     /*"ドクロジュエル"*/"\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B",
     NULL,
 };
 
+/** Door of house 03's ground floor (the bar). */
 DoorParam door_data_03_f1 = {
     0, // flags
     3, // type
@@ -3497,6 +3535,7 @@ EVT_BEGIN(evt_wall_03_f2)
     RETURN
 EVT_END()
 
+/** Door of house 03's upstairs. */
 DoorParam door_data_03_f2 = {
     0, // flags
     3, // type
@@ -3571,16 +3610,19 @@ static EVT_BEGIN(evt_door_04_close)
     RETURN
 EVT_END()
 
+/** NPCs of house 04 kept lit while Mario is inside: the thief. */
 static const char* door_data_04_npc[] = {
     /*"盗賊"*/"\x93\x90\x91\xAF",
     NULL,
 };
 
+/** Field items of house 04 kept lit while Mario is inside: the Star Piece (item_01). */
 static const char* door_data_04_item[] = {
     "item_01",
     NULL,
 };
 
+/** Door of house 04 (the thieves' house). */
 static DoorParam door_data_04 = {
     0, // flags
     3, // type
@@ -3628,6 +3670,7 @@ static EVT_BEGIN(koushukei_dai)
     RETURN
 EVT_END()
 
+/** Item pedestals of the shop in house 02: for each, the map object and its hit area. */
 static ShopObj obj_list[] = {
     {"S_item_01", "A_item_01"},
     {"S_item_02", "A_item_02"},
@@ -3637,6 +3680,11 @@ static ShopObj obj_list[] = {
     {"S_item_06", "A_item_06"},
 };
 
+/**
+ * Goods of the item shop in house 02, item and price in coins: Mushroom 5, Honey Syrup 5, Tasty Tonic 3,
+ * Fire Flower 10, Sleepy Sheep 8, Fright Mask 5. Sold before the Contact Lens arrives, and after it is
+ * delivered whenever Mario already has every Super Luigi book the story stage allows.
+ */
 static ShopItem goods_list[] = {
     {ITEM_MUSHROOM, 5},
     {ITEM_HONEY_SYRUP, 5},
@@ -3646,6 +3694,10 @@ static ShopItem goods_list[] = {
     {ITEM_FRIGHT_MASK, 5},
 };
 
+/**
+ * Goods of the item shop once the Contact Lens has arrived and until it is delivered:
+ * the Contact Lens (10 coins) takes the Mushroom's place.
+ */
 ShopItem goods_list2[] = {
     {ITEM_CONTACT_LENS, 10},
     {ITEM_HONEY_SYRUP, 5},
@@ -3655,6 +3707,10 @@ ShopItem goods_list2[] = {
     {ITEM_FRIGHT_MASK, 5},
 };
 
+/**
+ * Goods of the item shop after the lens is delivered while Mario has no Super Luigi book and the story allows
+ * one: the first book, Super Luigi (64 coins), takes the Mushroom's place.
+ */
 ShopItem goods_luigi1[] = {
     {ITEM_SUPER_LUIGI1, 64},
     {ITEM_HONEY_SYRUP, 5},
@@ -3664,6 +3720,10 @@ ShopItem goods_luigi1[] = {
     {ITEM_FRIGHT_MASK, 5},
 };
 
+/**
+ * Goods of the item shop while Mario has one Super Luigi book: Super Luigi 2 (128 coins) replaces the
+ * Mushroom.
+ */
 ShopItem goods_luigi2[] = {
     {ITEM_SUPER_LUIGI2, 128},
     {ITEM_HONEY_SYRUP, 5},
@@ -3673,6 +3733,10 @@ ShopItem goods_luigi2[] = {
     {ITEM_FRIGHT_MASK, 5},
 };
 
+/**
+ * Goods of the item shop while Mario has two Super Luigi books: Super Luigi 3 (128 coins) replaces the
+ * Mushroom.
+ */
 ShopItem goods_luigi3[] = {
     {ITEM_SUPER_LUIGI3, 128},
     {ITEM_HONEY_SYRUP, 5},
@@ -3682,6 +3746,10 @@ ShopItem goods_luigi3[] = {
     {ITEM_FRIGHT_MASK, 5},
 };
 
+/**
+ * Goods of the item shop while Mario has three Super Luigi books: Super Luigi 4 (128 coins) replaces the
+ * Mushroom.
+ */
 ShopItem goods_luigi4[] = {
     {ITEM_SUPER_LUIGI4, 128},
     {ITEM_HONEY_SYRUP, 5},
@@ -3691,6 +3759,10 @@ ShopItem goods_luigi4[] = {
     {ITEM_FRIGHT_MASK, 5},
 };
 
+/**
+ * Goods of the item shop while Mario has four Super Luigi books: Super Luigi 5 (256 coins) replaces the
+ * Mushroom.
+ */
 ShopItem goods_luigi5[] = {
     {ITEM_SUPER_LUIGI5, 256},
     {ITEM_HONEY_SYRUP, 5},
@@ -3700,6 +3772,10 @@ ShopItem goods_luigi5[] = {
     {ITEM_FRIGHT_MASK, 5},
 };
 
+/**
+ * Coins the item shop in house 02 pays when Mario sells these items (its stock plus a few others, such as the
+ * Whacka Bump for 55); they replace the item table's sell prices only while the sell menu runs.
+ */
 static ShopDb trade_list[] = {
     {ITEM_MUSHROOM, 2, 0},
     {ITEM_HONEY_SYRUP, 2, 0},
@@ -3722,6 +3798,7 @@ static ShopDb trade_list[] = {
     {0},
 };
 
+/** Shopkeeper of the item shop in house 02: name and the shop's message keys. */
 static ShopperData35 shopper_data = {
     /*"店長"*/"\x93\x58\x92\xB7", // name
     NULL, NULL, // fook_evt..buy_evt
@@ -3798,6 +3875,10 @@ EVT_BEGIN(gor_01_shop_setup)
     RETURN
 EVT_END()
 
+/**
+ * Inn setup (evt_kinopio_setup): the price of a night (5 coins), the bed, the camera and the clerk's position
+ * and the inn's message keys.
+ */
 static KinopioData kino_dt = {
     0, // breakfastItem
     {0}, // breakfastPos
@@ -5053,6 +5134,7 @@ EVT_BEGIN(iri_09_tentyo_talk)
     RETURN
 EVT_END()
 
+/** Items offered in the item menu for Trouble Center job 16: only Attack FX B. */
 s32 iri_16_item_tbl[] = {
     ITEM_ATTACK_FX_B_KEY_ITEM, -1,
 };
@@ -5637,6 +5719,10 @@ EVT_BEGIN(gor_01_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Zess T.'s one-ingredient recipes: for each ingredient, the dish made from it by itself before and after the
+ * cookbook is solved.
+ */
 SimpleRecipe R_simple_recipe_table[] = {
     {/*"ファイアフラワー"*/"\x83\x74\x83\x40\x83\x43\x83\x41\x83\x74\x83\x89\x83\x8F\x81\x5B", /*"あつあつスープ"*/"\x82\xA0\x82\xC2\x82\xA0\x82\xC2\x83\x58\x81\x5B\x83\x76", /*"あつあつスープ"*/"\x82\xA0\x82\xC2\x82\xA0\x82\xC2\x83\x58\x81\x5B\x83\x76"}, // ITEM_FIRE_FLOWER -> ITEM_SPICY_SOUP
     {/*"びりびりキノコ"*/"\x82\xD1\x82\xE8\x82\xD1\x82\xE8\x83\x4C\x83\x6D\x83\x52", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF", /*"キノコいため"*/"\x83\x4C\x83\x6D\x83\x52\x82\xA2\x82\xBD\x82\xDF"}, // ITEM_VOLT_SHROOM -> ITEM_SHROOM_FRY
@@ -5666,6 +5752,10 @@ SimpleRecipe R_simple_recipe_table[] = {
     {/*"たんこぶ"*/"\x82\xBD\x82\xF1\x82\xB1\x82\xD4", "", /*"ナンシースペシャル"*/"\x83\x69\x83\x93\x83\x56\x81\x5B\x83\x58\x83\x79\x83\x56\x83\x83\x83\x8B"}, // ITEM_WHACKA_BUMP -> ITEM_MISTAKE without the Cookbook (no result), ITEM_ZESS_SPECIAL with it
 };
 
+/**
+ * Zess T.'s two-ingredient recipes: pairs of ingredients and the dish they make. Version for the earlier
+ * releases.
+ */
 CookRecipe R_cookbook_recipe_table[] = {
 #ifdef VERSION_G8ME01
     {"キノコ", "かみなりゴロゴロ", "びりびりキノコ"}, // ITEM_MUSHROOM + ITEM_THUNDER_BOLT -> ITEM_VOLT_SHROOM
@@ -6276,6 +6366,7 @@ s32 R_mystery_cook_list[] = {
     ITEM_ZESS_TEA,
 };
 
+/** Dishes that get the special radiating light when Zess T. cooks them, ending with -1. */
 s32 special_cook_list[] = {
     ITEM_ZESS_SPECIAL,
     ITEM_ZESS_DELUXE,
@@ -6684,6 +6775,7 @@ EVT_BEGIN(cooking_evt_sub)
     RETURN
 EVT_END()
 
+/** Items offered in the item menu for Trouble Center job 18: only the Cookbook. */
 s32 iri_18_item_tbl[] = {
     ITEM_COOKBOOK, -1,
 };

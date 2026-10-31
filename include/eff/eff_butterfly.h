@@ -1,3 +1,5 @@
+// eff_butterfly.c: butterfly effect: effButterflyEntry.
+
 #pragma once
 
 #include "driver/effdrv.h"

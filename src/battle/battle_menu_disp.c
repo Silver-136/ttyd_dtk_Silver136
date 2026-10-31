@@ -1,3 +1,5 @@
+// Battle menu drawing: the action, weapon-select and operation menus and the pieces they are built from.
+
 #include "battle/battle_disp.h"
 
 #define SUBMENU_ICON_VISIBLE (1)
@@ -44,6 +46,10 @@ void DrawMenuPartyChangeButton_Sub(u32 id, f32 x, f32 y, f32 angle);
 #define FRAMES_STEP(jp, n, x) ((jp) * (x))
 #endif
 void FontDrawStringCenterMtx(Mtx mtx, const char* msg);
+/**
+ * Angles in degrees of the command icons around the battle menu's ring, one row each for 3, 4 and 5 commands
+ * (indexed by the icon's slot); used to place and turn the icons when the ring spins.
+ */
 f32 kakutable[3][5] = {{240.0f, 120.0f, 0.0f, 0.0f, 0.0f}, {270.0f, 180.0f, 90.0f, 0.0f, 0.0f}, {270.0f, 203.0f, 157.0f, 90.0f, 0.0f}};
 
 //.sdata

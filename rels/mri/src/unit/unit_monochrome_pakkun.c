@@ -42,6 +42,10 @@ static EvtWord return_event[256];
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Pale Piranha: 4 HP, 40x48 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_monochrome_pakkun = {
     UNIT_PALE_PIRANHA, // mUnitType
     "btl_un_monochrome_pakkun", // name
@@ -90,8 +94,10 @@ BattleUnitKind unit_monochrome_pakkun = {
     data_table, // dataTable
 };
 
+/** Defence of the Pale Piranha: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Pale Piranha: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -119,10 +125,12 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Parts of the Pale Piranha: 1 part (model c_pakflwr_t). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_monochrome_pakkun", "c_pakflwr_t", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
+/** Weapon of the Pale Piranha (flower attack): targets one unit for 2 damage; used by attack_event. */
 static BattleWeapon weapon_pakkun_flower_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -204,6 +212,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PKF_S_1"},
 };
 
+/** Poses of the Pale Piranha while it hangs from the ceiling, before it drops (the _2 and _3 animations). */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "PKF_N_2"},
     {POSE_TYPE_STOP, "PKF_Y_2"},
@@ -225,6 +234,10 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "PKF_S_3"},
 };
 
+/**
+ * Event table of the Pale Piranha: dmg_avoid_counter_thorn_head_event (tag 37),
+ * counter_damage_event (tags 26, 25, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

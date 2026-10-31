@@ -851,6 +851,10 @@ static EVT_BEGIN(musume_c_entry)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the camp: the rough sailor, Flavio, the bespectacled sailor, the nervous sailor, the shop and inn
+ * clerks, sailors A, bomb and D, the two ragged sailors, Mony, Peeton and the three Elmos ghosts.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガラの悪い水夫"*/"\x83\x4B\x83\x89\x82\xCC\x88\xAB\x82\xA2\x90\x85\x95\x76", // name
@@ -1043,6 +1047,7 @@ static EVT_BEGIN(bero_in_event)
     RETURN
 EVT_END()
 
+/** Doors and exits of muj_01: w_bero to muj_00; e_bero1 to muj_02. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -1179,6 +1184,7 @@ EVT_BEGIN(muj_00_door_close)
     RETURN
 EVT_END()
 
+/** NPCs inside the camp shop: the shop clerk. */
 static const char* mise_npc[] = {
     /*"店員"*/"\x93\x58\x88\xF5",
     NULL,
@@ -1216,6 +1222,10 @@ EVT_BEGIN(mise_data_close)
     RETURN
 EVT_END()
 
+/**
+ * Door of the camp shop: the outer door hit area A_mise_doa, the inside room S_mise and the scripts that run
+ * as the door opens and closes.
+ */
 static DoorParam mise_data = {
     0, // flags
     3, // type
@@ -1231,6 +1241,7 @@ static DoorParam mise_data = {
     mise_data_close, // evtClose
 };
 
+/** NPCs inside the camp inn: the innkeeper. */
 static const char* yado_npc[] = {
     /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5",
     NULL,
@@ -1259,6 +1270,10 @@ EVT_BEGIN(mise_close_event)
     RETURN
 EVT_END()
 
+/**
+ * Door of the camp inn: the outer door hit area A_yado_doa, the inside room and the scripts that run as the
+ * door opens and closes.
+ */
 static DoorParam yado_data = {
     0, // flags
     3, // type
@@ -1302,6 +1317,7 @@ EVT_BEGIN(evt_door_entry_custom01)
     RETURN
 EVT_END()
 
+/** Shelf slots of the camp shop: the display model and hit area of each of the six items on show. */
 static ShopObj obj_list[] = {
     {"S_item_01", "A_item_01"},
     {"S_item_02", "A_item_02"},
@@ -1311,6 +1327,10 @@ static ShopObj obj_list[] = {
     {"S_item_06", "A_item_06"},
 };
 
+/**
+ * Items the camp shop sells with their prices in coins: Ice Storm, Fire Flower, Sleepy Sheep, Fright Mask,
+ * Honey Syrup and Super Shroom.
+ */
 static ShopItem goods_list[] = {
     {ITEM_ICE_STORM, 15},
     {ITEM_FIRE_FLOWER, 5},
@@ -1320,6 +1340,7 @@ static ShopItem goods_list[] = {
     {ITEM_SUPER_SHROOM, 12},
 };
 
+/** Prices the camp shop pays when Mario sells it items; the stocked goods come first. */
 static ShopDb trade_list[] = {
     {ITEM_ICE_STORM, 10, 0},
     {ITEM_FIRE_FLOWER, 2, 0},
@@ -1335,12 +1356,20 @@ static ShopDb trade_list[] = {
     {0},
 };
 
+/**
+ * The shop clerk's name and the 35 shop messages (shop_00 to shop_34) that drive the buying and selling
+ * dialogue.
+ */
 static ShopperData35 shopper_data = {
     /*"店員"*/"\x93\x58\x88\xF5", // name
     NULL, NULL, // fook_evt..buy_evt
     {"shop_00", "shop_01", "shop_02", "shop_03", "shop_04", "shop_05", "shop_06", "shop_07", "shop_08", "shop_09", "shop_10", "shop_11", "shop_12", "shop_13", "shop_14", "shop_15", "shop_16", "shop_17", "shop_18", "shop_19", "shop_20", "shop_21", "shop_22", "shop_23", "shop_24", "shop_25", "shop_26", "shop_27", "shop_28", "shop_29", "shop_30", "shop_31", "shop_32", "shop_33", "shop_34"}, // msgs
 };
 
+/**
+ * Inn data of the camp: the price of a night, the bed, the bedside and camera positions, the innkeeper and
+ * the 14 inn messages (yado_00 to yado_13).
+ */
 static KinopioData kino_dt = {
     0, // breakfastItem
     {0}, // breakfastPos

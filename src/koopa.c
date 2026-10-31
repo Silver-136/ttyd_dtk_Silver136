@@ -1,3 +1,6 @@
+// Bowser (koopa) as the player in the Super Mario Bros. style side-scrolling interludes: work, level, camera,
+// fire attack and jump parameters.
+
 #include "eff/eff_gonbaba_breath.h"
 #include "mario/mario.h"
 #include "koopa.h"
@@ -33,6 +36,10 @@ const f32 vec3_802fc920[3] = {0.0f, 0.0f, 0.0f};
 extern f32 marioJumpData[];
 
 
+/**
+ * Bowser's size per power-up level (small, normal, big, giant): his width (kpaGetWidth) and model scale
+ * (kpaSetLevel); then the 28 voice clips of which one plays at random when the pause menu opens as Bowser.
+ */
 f32 kpaWidthDat[4] = {20.0f, 60.0f, 84.0f, 186.0f};
 f32 baseScaleTbl[4] = {0.3f, 1.0f, 1.4f, 3.1f};
 s32 kpaPauseSeTable[28] = {0x10C, 0x10D, 0x10E, 0x10F, 0x111, 0x112, 0x113, 0x114, 0x116, 0x117,

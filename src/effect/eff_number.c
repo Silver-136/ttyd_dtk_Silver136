@@ -1,3 +1,5 @@
+// Helper that draws a number (printed with "%d") from effect digit textures; the type picks the texture set.
+
 #include "driver/camdrv.h"
 #include "driver/effdrv.h"
 #include <dolphin/gx.h>

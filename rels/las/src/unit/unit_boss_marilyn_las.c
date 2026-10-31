@@ -54,6 +54,10 @@ static EvtWord wait_event[7];
 static EvtWord wait_event[6];
 #endif
 
+/**
+ * Unit data of Marilyn in the Palace of Shadow: 40 HP, level 57;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_marilyn_las = {
     UNIT_MARILYN_CHAPTER8, // mUnitType
     "btl_un_marilyn4", // name
@@ -102,8 +106,16 @@ BattleUnitKind unit_boss_marilyn_las = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of Marilyn against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of Marilyn per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -131,6 +143,7 @@ static StatusVulnerability regist = {
     5, // ohko
 };
 
+/** Pose table of Marilyn: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "MRR_N_1"},
     {POSE_TYPE_STOP, "MRR_Z_1"},
@@ -152,15 +165,21 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MRR_S_1"},
 };
 
+/**
+ * Data table of Marilyn: event scripts and values the battle looks up by tag (damage reactions, dodge, first
+ * strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Part of Marilyn: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_marilyn4", "c_maririn", 0.0f, 0.0f, 0.0f, 15.0f, 45.0f, 0.0f, 0.0f, 50.0f, 0.0f, 38, 56, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of Marilyn's kagenuke attack: damage 7. */
 static BattleWeapon weapon_marilyn_kagenuke_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -197,6 +216,7 @@ static BattleWeapon weapon_marilyn_kagenuke_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Marilyn's thunder: damage 7. */
 static BattleWeapon weapon_marilyn_thunder_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -237,6 +257,7 @@ static BattleWeapon weapon_marilyn_thunder_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Marilyn's charge-up. */
 static BattleWeapon weapon_marilyn_charge1 = {
     NULL, 0, // name..icon
     {0}, // pad_06

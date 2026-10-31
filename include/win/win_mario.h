@@ -1,3 +1,5 @@
+// win_mario.c: the pause menu Mario window (stats, special moves, equipped gear): winMarioInit/Main/Disp.
+
 #pragma once
 
 #include <dolphin/types.h>

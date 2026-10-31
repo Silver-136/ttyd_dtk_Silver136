@@ -1,3 +1,6 @@
+// Paper Mario 64 effect: akari (light) charge, 21 yellow sparks spin around a glow; type 0 draws in the 3D scene,
+// other types as a 2D overlay.
+
 #include "eff/n64/eff_akari_charge_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -12,6 +15,7 @@
 #include "libc_decls.h"
 #include <math.h>
 
+/** Spark quad of the charge glow (an 8x16 texture window), stretched along each spark's last step into a streak. */
 static effN64Vtx size2x8_tex8x16_vtx[] = {
     {-4, -4, 0, 0, 0, 255, 255, 255, 255},
     {4, -4, 0, 512, 0, 0, 0, 0, 255},

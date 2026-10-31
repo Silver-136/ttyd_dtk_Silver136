@@ -1,3 +1,7 @@
+// Paper Mario 64 effect: pale-yellow rays from a point: types 0-1 eight rays that rise and fade, other
+// types 16 spinning rays with scrolling textures; type + 10 draws in another display layer with plain alpha blending
+// and no depth test.
+
 #include "eff/eff_n64.h"
 #include "eff/n64/eff_radiation_n64.h"
 #include "driver/camdrv.h"
@@ -10,6 +14,7 @@
 void effRadiationMain(EffectEntry* effect);
 void effRadiationDisp(CameraId cameraId, EffectEntry* effect);
 
+/** 150x20 quad, starting at the centre and reaching outward, drawn for each ray of types 0-1. */
 effN64Vtx size150x20_tex32x32[] = {
     {0, 10, 0, 0, 0, 255, 255, 255, 255},
     {0, -10, 0, 1024, 0, 255, 255, 255, 255},
@@ -17,6 +22,10 @@ effN64Vtx size150x20_tex32x32[] = {
     {150, 10, 0, 0, 1024, 255, 255, 255, 255},
 };
 
+/**
+ * Fixed pose of each of the 16 spinning rays, five numbers per ray: X, Y and Z tilt in degrees,
+ * an unused value and the Z spin speed in tenths of a degree per frame.
+ */
 s32 r_data[] = {
     0, -20, 0, 1, 18,
     -10, -60, 45, -1, 4,

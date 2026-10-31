@@ -1,3 +1,5 @@
+// win_main.c: the pause menu work block shared by win_root and the five pause windows.
+
 #pragma once
 
 #include <dolphin/types.h>

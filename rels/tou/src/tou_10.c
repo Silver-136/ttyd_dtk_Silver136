@@ -218,6 +218,7 @@ static EVT_BEGIN(n_door_close)
     RETURN
 EVT_END()
 
+/** The one door of the minor-league locker room, out to the main corridor tou_04. */
 static BeroEntry bero_data[] = {
     {
         "n_bero", // hitName
@@ -589,6 +590,10 @@ EVT_BEGIN(talk_iron2)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the minor-league locker room: Jolene, the guard who fetches Mario, Grubba, Yoshi,
+ * the fighters King K, Master Crash, Bandy Andy, Cleftor and Poku, and the two Iron Clefts.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F", // name

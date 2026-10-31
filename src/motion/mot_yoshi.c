@@ -1,3 +1,5 @@
+// Mario's riding-Yoshi motion: clears his motion state when he gets on Yoshi (party_yoshi.c moves them both).
+
 #include "motion/mot_yoshi.h"
 #include "evt/evt_bero.h"
 #include "mario/mario.h"

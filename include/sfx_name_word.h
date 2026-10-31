@@ -1,3 +1,5 @@
+// SfxNameWord: a sound-name parameter that holds either a name pointer or an id (SFX_NAME_WORD, SFX_NAME_IS_ID).
+
 #pragma once
 
 #include <dolphin/types.h>

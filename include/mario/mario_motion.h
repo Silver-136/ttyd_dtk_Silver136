@@ -1,3 +1,5 @@
+// mario_motion.c: motion changes (marioChgMot), jump and fall parameters (MarioJumpData) and the motion-start checks.
+
 #include "dolphin/types.h"
 #include "mario/mario.h"
 

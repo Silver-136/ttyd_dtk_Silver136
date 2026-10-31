@@ -67,6 +67,10 @@ static EvtWord powder_attack_event[179];
 static EvtWord wait_event[6];
 EvtWord majo3_shadow_tail_event[78];
 
+/**
+ * Unit data of Beldam in the Palace of Shadow: 30 HP, level 57;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_majolyne_las = {
     UNIT_BELDAM_CHAPTER8, // mUnitType
     "btl_un_majolyne4", // name
@@ -115,8 +119,16 @@ BattleUnitKind unit_boss_majolyne_las = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of Beldam against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of Beldam per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -144,6 +156,7 @@ static StatusVulnerability regist = {
     5, // ohko
 };
 
+/** Pose table of Beldam: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "MJR_N_1"},
     {POSE_TYPE_STOP, "MJR_Z_1"},
@@ -165,15 +178,21 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MJR_S_1"},
 };
 
+/**
+ * Data table of Beldam: event scripts and values the battle looks up by tag (damage reactions, dodge, first
+ * strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Part of Beldam: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_majolyne4", "c_majyorin", 0.0f, 0.0f, 0.0f, 5.0f, 20.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of Beldam's kagenuke attack: damage 5. */
 static BattleWeapon weapon_majolyne_kagenuke_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -211,6 +230,7 @@ static BattleWeapon weapon_majolyne_kagenuke_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Beldam's blizzard: damage 5; inflicts Frozen (40%). */
 static BattleWeapon weapon_majolyne_blizzard_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -255,6 +275,7 @@ static BattleWeapon weapon_majolyne_blizzard_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Beldam's powder that changes its target's size: damage 2 to 4; inflicts a size change. */
 static BattleWeapon weapon_majolyne_powder_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -293,6 +314,7 @@ static BattleWeapon weapon_majolyne_powder_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Beldam's powder that changes its target's size: damage 2 to 4; inflicts a size change. */
 static BattleWeapon weapon_majolyne_powder_attack2 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -336,6 +358,7 @@ static BattleWeapon weapon_majolyne_powder_attack2 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Beldam's poison powder: damage 2 to 4; inflicts Poison. */
 BattleWeapon weapon_majolyne_powder_attack3 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -379,6 +402,7 @@ BattleWeapon weapon_majolyne_powder_attack3 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Beldam's powder that slows its target: damage 2 to 4; inflicts Slow. */
 BattleWeapon weapon_majolyne_powder_attack4 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -422,6 +446,7 @@ BattleWeapon weapon_majolyne_powder_attack4 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Beldam's powder that speeds its target up: damage 2 to 4; inflicts Fast. */
 BattleWeapon weapon_majolyne_powder_attack5 = {
     NULL, 0, // name..icon
     {0}, // pad_06

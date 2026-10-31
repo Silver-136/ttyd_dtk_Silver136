@@ -230,6 +230,10 @@ USER_FUNC(_load_param) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit kind of Doopliss as Mario:
+ * 40 HP, level 54, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_faker_mario = {
     UNIT_DOOPLISS_CHAPTER4_FIGHT2, // mUnitType
     "btl_un_rampell", // name
@@ -278,8 +282,10 @@ BattleUnitKind unit_faker_mario = {
     data_table_fmario, // dataTable
 };
 
+/** Defence of Doopliss as Mario's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence_fmario = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of Doopliss as Mario's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr_fmario = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist_fmario = {
@@ -307,6 +313,10 @@ static StatusVulnerability regist_fmario = {
     3, // ohko
 };
 
+/**
+ * Pose table of Doopliss as Mario:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table_fmario_stay[] = {
     {POSE_TYPE_SLEEP, "EM_N_1"},
     {POSE_TYPE_STOP, "EM_Y_2"},
@@ -325,11 +335,13 @@ static PoseTableEntry pose_table_fmario_stay[] = {
     {POSE_TYPE_ACTION, "EM_S_1"},
 };
 
+/** Event table of Doopliss as Mario: its defeat script. */
 static BattleDataEntry data_table_fmario[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_fmario},
     {0, NULL},
 };
 
+/** Body part of Doopliss as Mario: a single part using the model "c_mario". */
 static BattleUnitKindPart parts_fmario[] = {
     {
         1, "btl_un_rampell", "c_mario",
@@ -342,6 +354,7 @@ static BattleUnitKindPart parts_fmario[] = {
     },
 };
 
+/** Doopliss as Mario's jump: 2 damage to a single target, a jump-style hit. */
 static BattleWeapon weapon_masao_jump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -378,6 +391,7 @@ static BattleWeapon weapon_masao_jump = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Doopliss as Mario's hammer: 4 damage to a single target, a hammer-style hit. */
 static BattleWeapon weapon_masao_hammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -414,6 +428,7 @@ static BattleWeapon weapon_masao_hammer = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Doopliss as Mario's kururin jump: 2 damage to a single target, a jump-style hit. */
 static BattleWeapon weapon_masao_kururin_jump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -450,6 +465,7 @@ static BattleWeapon weapon_masao_kururin_jump = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Doopliss as Mario's kaiten hammer: 4 damage to a single target, a hammer-style hit. */
 static BattleWeapon weapon_masao_kaiten_hammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -486,6 +502,7 @@ static BattleWeapon weapon_masao_kaiten_hammer = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Setup entry that adds the Goombella double to Doopliss's battle. */
 BattleUnitSetup entry_gullible_christine = {
     &unit_gullible_christine, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -497,6 +514,7 @@ BattleUnitSetup entry_gullible_christine = {
     NULL, // itemDropTable
 };
 
+/** Setup entry that adds the Koops double to Doopliss's battle. */
 BattleUnitSetup entry_gullible_nokotarou = {
     &unit_gullible_nokotarou, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -508,6 +526,7 @@ BattleUnitSetup entry_gullible_nokotarou = {
     NULL, // itemDropTable
 };
 
+/** Setup entry that adds the Flurrie double to Doopliss's battle. */
 BattleUnitSetup entry_gullible_clauda = {
     &unit_gullible_clauda, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -519,6 +538,7 @@ BattleUnitSetup entry_gullible_clauda = {
     NULL, // itemDropTable
 };
 
+/** Setup entry that adds the Yoshi double to Doopliss's battle. */
 BattleUnitSetup entry_gullible_yoshi = {
     &unit_gullible_yoshi, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

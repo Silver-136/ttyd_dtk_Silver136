@@ -184,6 +184,10 @@ EvtWord attack_event_chuchurina[24];
 EvtWord attack_event_chuchurina_normal[831];
 EvtWord wait_event_chuchurina[6];
 
+/**
+ * Unit data of Doopliss in his own form in the Palace of Shadow: 40 HP, level 57;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_rampell_las = {
     UNIT_DOOPLISS_CHAPTER8, // mUnitType
     "btl_un_rampell", // name
@@ -232,8 +236,16 @@ BattleUnitKind unit_boss_rampell_las = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of Doopliss in his own form against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of Doopliss in his own form per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -261,6 +273,10 @@ static StatusVulnerability regist = {
     5, // ohko
 };
 
+/**
+ * Pose table of Doopliss in his own form: animation names for each pose type (idle, walk, hurt, attack and
+ * so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -282,15 +298,21 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Data table of Doopliss in his own form: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Part of Doopliss in his own form: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_rampell", "c_ranpel", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of Doopliss's own attack: damage 6. */
 static BattleWeapon weapon_rampell_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -327,6 +349,7 @@ static BattleWeapon weapon_rampell_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Setup used to spawn Marilyn: unit kind, alliance, position and turn phase. */
 static BattleUnitSetup entry_marilyn = {
     &unit_boss_marilyn_las, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -338,6 +361,7 @@ static BattleUnitSetup entry_marilyn = {
     NULL, // itemDropTable
 };
 
+/** Setup used to spawn Beldam: unit kind, alliance, position and turn phase. */
 static BattleUnitSetup entry_majolyne = {
     &unit_boss_majolyne_las, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -929,8 +953,16 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Defence of Doopliss as Mario against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence_fmario = {0};
 
+/**
+ * Damage modifiers of Doopliss as Mario per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr_fmario = {0};
 
 static StatusVulnerability regist_fmario = {
@@ -958,6 +990,7 @@ static StatusVulnerability regist_fmario = {
     5, // ohko
 };
 
+/** Pose table of Doopliss as Mario while standing in place: animation names for each pose type. */
 static PoseTableEntry pose_table_fmario_stay[] = {
     {POSE_TYPE_SLEEP, "EM_N_1"},
     {POSE_TYPE_STOP, "EM_Y_2"},
@@ -976,11 +1009,16 @@ static PoseTableEntry pose_table_fmario_stay[] = {
     {POSE_TYPE_ACTION, "EM_S_1"},
 };
 
+/**
+ * Data table of Doopliss as Mario: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table_fmario[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_fmario},
     {0},
 };
 
+/** Part of Doopliss as Mario: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts_fmario[] = {
     {
         1, // partNum
@@ -1000,6 +1038,7 @@ static BattleUnitKindPart parts_fmario[] = {
     },
 };
 
+/** Weapon of Doopliss's jump as Mario: damage 6. */
 static BattleWeapon weapon_masao_jump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1036,6 +1075,7 @@ static BattleWeapon weapon_masao_jump = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Doopliss's hammer swing as Mario: damage 6. */
 static BattleWeapon weapon_masao_hammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1072,6 +1112,7 @@ static BattleWeapon weapon_masao_hammer = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Doopliss's spin jump as Mario: damage 8. */
 static BattleWeapon weapon_masao_kururin_jump = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1108,6 +1149,7 @@ static BattleWeapon weapon_masao_kururin_jump = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Doopliss's spinning hammer as Mario: damage 8. */
 static BattleWeapon weapon_masao_kaiten_hammer = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1667,6 +1709,10 @@ static EVT_BEGIN(wait_event_fmario)
     RETURN
 EVT_END()
 
+/**
+ * Weapon of Doopliss's headbonk as Goombella: damage 1, 2 or 3 by the real partner's rank (Normal, Super, Ultra;
+ * weaponGetPowerFromGulliblePartyAttackLv).
+ */
 static BattleWeapon enemyWeapon_ChristineNormalAttack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1703,8 +1749,16 @@ static BattleWeapon enemyWeapon_ChristineNormalAttack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of Doopliss as Goombella against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence_christine = {0};
 
+/**
+ * Damage modifiers of Doopliss as Goombella per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr_christine = {0};
 
 static StatusVulnerability regist_christine = {
@@ -1732,11 +1786,16 @@ static StatusVulnerability regist_christine = {
     5, // ohko
 };
 
+/**
+ * Data table of Doopliss as Goombella: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table_christine[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_christine},
     {0},
 };
 
+/** Part of Doopliss as Goombella: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts_christine[] = {
     {
         1, // partNum
@@ -2021,6 +2080,10 @@ static EVT_BEGIN(wait_event_christine)
     RETURN
 EVT_END()
 
+/**
+ * Weapon of Doopliss's shell slam as Koops: damage 2, 3 or 5 by the real partner's rank (Normal, Super, Ultra;
+ * weaponGetPowerFromGulliblePartyAttackLv).
+ */
 static BattleWeapon enemyWeapon_NokotarouKouraAttack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2058,6 +2121,10 @@ static BattleWeapon enemyWeapon_NokotarouKouraAttack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of Doopliss's shell toss as Koops: damage 2, 3 or 5 by the real partner's rank (Normal, Super, Ultra;
+ * weaponGetPowerFromGulliblePartyAttackLv).
+ */
 static BattleWeapon enemyWeapon_NokotarouShubibinAttack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2095,10 +2162,22 @@ static BattleWeapon enemyWeapon_NokotarouShubibinAttack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of Doopliss as Koops against each element (normal, fire, ice, explosion, electric):
+ * 1 against every element, so each hit is cut by 1.
+ */
 static BattleUnitDefense defence_nokotarou = {{1, 1, 1, 1, 1}};
 
+/**
+ * Damage modifiers of Doopliss as Koops per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr_nokotarou = {0};
 
+/**
+ * Defence of Doopliss as Koops while flipped over against each element (normal, fire, ice, explosion,
+ * electric): none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence_turn_nokotarou = {0};
 
 static StatusVulnerability regist_nokotarou = {
@@ -2126,12 +2205,17 @@ static StatusVulnerability regist_nokotarou = {
     5, // ohko
 };
 
+/**
+ * Data table of Doopliss as Koops: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table_nokotarou[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_nokotarou},
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {0},
 };
 
+/** Part of Doopliss as Koops: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts_nokotarou[] = {
     {
         1, // partNum
@@ -2582,6 +2666,10 @@ static EVT_BEGIN(wait_event_nokotarou)
     RETURN
 EVT_END()
 
+/**
+ * Weapon of Doopliss's body slam as Flurrie: damage 2, 4 or 6 by the real partner's rank (Normal, Super, Ultra;
+ * weaponGetPowerFromGulliblePartyAttackLv).
+ */
 static BattleWeapon enemyWeapon_ClaudaNormalAttack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2619,8 +2707,16 @@ static BattleWeapon enemyWeapon_ClaudaNormalAttack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of Doopliss as Flurrie against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence_clauda = {0};
 
+/**
+ * Damage modifiers of Doopliss as Flurrie per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr_clauda = {0};
 
 static StatusVulnerability regist_clauda = {
@@ -2648,11 +2744,16 @@ static StatusVulnerability regist_clauda = {
     5, // ohko
 };
 
+/**
+ * Data table of Doopliss as Flurrie: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table_clauda[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_clauda},
     {0},
 };
 
+/** Part of Doopliss as Flurrie: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts_clauda[] = {
     {
         1, // partNum
@@ -2843,6 +2944,7 @@ static EVT_BEGIN(wait_event_clauda)
     RETURN
 EVT_END()
 
+/** Weapon of Doopliss's attack as Yoshi: damage 1 at every partner rank. */
 static BattleWeapon enemyWeapon_YoshiNormalAttack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2879,8 +2981,16 @@ static BattleWeapon enemyWeapon_YoshiNormalAttack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of Doopliss as Yoshi against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence_yoshi = {0};
 
+/**
+ * Damage modifiers of Doopliss as Yoshi per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr_yoshi = {0};
 
 static StatusVulnerability regist_yoshi = {
@@ -2908,11 +3018,16 @@ static StatusVulnerability regist_yoshi = {
     5, // ohko
 };
 
+/**
+ * Data table of Doopliss as Yoshi: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table_yoshi[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_yoshi},
     {0},
 };
 
+/** Part of Doopliss as Yoshi: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts_yoshi[] = {
     {
         1, // partNum
@@ -3184,8 +3299,16 @@ static EVT_BEGIN(wait_event_yoshi)
     RETURN
 EVT_END()
 
+/**
+ * Defence of Doopliss as Vivian against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 BattleUnitDefense defence_vivian = {0};
 
+/**
+ * Damage modifiers of Doopliss as Vivian per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 BattleUnitDefenseAttr defence_attr_vivian = {0};
 
 StatusVulnerability regist_vivian = {
@@ -3213,11 +3336,16 @@ StatusVulnerability regist_vivian = {
     5, // ohko
 };
 
+/**
+ * Data table of Doopliss as Vivian: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 BattleDataEntry data_table_vivian[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_vivian},
     {0},
 };
 
+/** Part of Doopliss as Vivian: its one body part with hit box, defence tables and pose table. */
 BattleUnitKindPart parts_vivian[] = {
     {
         1, // partNum
@@ -3237,6 +3365,10 @@ BattleUnitKindPart parts_vivian[] = {
     },
 };
 
+/**
+ * Weapon of Doopliss's kagenuke attack as Vivian: damage 3, 4 or 5 by the real partner's rank (Normal, Super, Ultra;
+ * weaponGetPowerFromGulliblePartyAttackLv).
+ */
 BattleWeapon weapon_vivian_kagenuke_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3438,8 +3570,16 @@ EVT_BEGIN(wait_event_vivian)
     RETURN
 EVT_END()
 
+/**
+ * Defence of Doopliss as Bobbery against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 BattleUnitDefense defence_sanders = {0};
 
+/**
+ * Damage modifiers of Doopliss as Bobbery per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 BattleUnitDefenseAttr defence_attr_sanders = {0};
 
 StatusVulnerability regist_sanders = {
@@ -3467,11 +3607,16 @@ StatusVulnerability regist_sanders = {
     5, // ohko
 };
 
+/**
+ * Data table of Doopliss as Bobbery: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 BattleDataEntry data_table_sanders[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_sanders},
     {0},
 };
 
+/** Part of Doopliss as Bobbery: its one body part with hit box, defence tables and pose table. */
 BattleUnitKindPart parts_sanders[] = {
     {
         1, // partNum
@@ -3491,6 +3636,10 @@ BattleUnitKindPart parts_sanders[] = {
     },
 };
 
+/**
+ * Weapon of Doopliss's attack as Bobbery: damage 4, 5 or 6 by the real partner's rank (Normal, Super, Ultra;
+ * weaponGetPowerFromGulliblePartyAttackLv).
+ */
 BattleWeapon enemyWeapon_SandersNormalAttack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3680,8 +3829,16 @@ EVT_BEGIN(wait_event_sanders)
     RETURN
 EVT_END()
 
+/**
+ * Defence of Doopliss as Ms. Mowz against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 BattleUnitDefense defence_chuchurina = {0};
 
+/**
+ * Damage modifiers of Doopliss as Ms. Mowz per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 BattleUnitDefenseAttr defence_attr_chuchurina = {0};
 
 StatusVulnerability regist_chuchurina = {
@@ -3709,11 +3866,16 @@ StatusVulnerability regist_chuchurina = {
     5, // ohko
 };
 
+/**
+ * Data table of Doopliss as Ms. Mowz: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 BattleDataEntry data_table_chuchurina[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_chuchurina},
     {0},
 };
 
+/** Part of Doopliss as Ms. Mowz: its one body part with hit box, defence tables and pose table. */
 BattleUnitKindPart parts_chuchurina[] = {
     {
         1, // partNum
@@ -3733,6 +3895,10 @@ BattleUnitKindPart parts_chuchurina[] = {
     },
 };
 
+/**
+ * Weapon of Doopliss's right-hand slaps as Ms. Mowz: no damage function, so these hits do no damage; only the
+ * last hit does.
+ */
 BattleWeapon enemyWeapon_ChuchurinaNormalAttackR = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3770,6 +3936,10 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackR = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of Doopliss's left-hand slaps as Ms. Mowz: no damage function, so these hits do no damage; only the
+ * last hit does.
+ */
 BattleWeapon enemyWeapon_ChuchurinaNormalAttackL = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3807,6 +3977,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackL = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the last right-hand hit of Doopliss's Ms. Mowz attack: damage 2, 3 or 4 by partner rank. */
 BattleWeapon enemyWeapon_ChuchurinaNormalAttackRlast = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3844,6 +4015,7 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackRlast = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the last left-hand hit of Doopliss's Ms. Mowz attack: damage 2, 3 or 4 by partner rank. */
 BattleWeapon enemyWeapon_ChuchurinaNormalAttackLlast = {
     NULL, 0, // name..icon
     {0}, // pad_06

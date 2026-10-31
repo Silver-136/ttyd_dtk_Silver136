@@ -1,3 +1,5 @@
+// Battle unit data for the tree stage object (unit_object_tree).
+
 #include "battle/battle.h"
 #include "battle/battle_stage_object.h"
 #include "battle/battle_sub.h"
@@ -22,6 +24,10 @@ static BattleDataEntry data_table[1];
 static EvtWord attack_event[5];
 static EvtWord wait_event[2];
 
+/**
+ * Unit data of the stage tree: an invisible prop (hidden part, no HP gauge, 999 HP) that stands in for a
+ * tree on the battle stage which the player can hit. It never takes a turn.
+ */
 BattleUnitKind unit_object_tree = {
     UNIT_UNUSED_TREE, // mUnitType
     "btl_un_tree", // name
@@ -70,6 +76,10 @@ BattleUnitKind unit_object_tree = {
     data_table, // dataTable
 };
 
+/**
+ * The tree's single part: a hidden, shadowless Mario-model body (guard cover,
+ * no HP gauge) used only as a hit target.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_tree", "b_mario", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHidden | kNoShadow, 0, pose_table},
 };
@@ -100,6 +110,9 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Vertical offsets applied on successive frames by _rumble_tree: a decaying wobble that settles at zero.
+ */
 static s32 _data[] = {
     -5, 0, 15, 0, -15, 0, 14, 0,
     -13, 0, 12, 0, -11, 0, 10, 0,
@@ -108,10 +121,13 @@ static s32 _data[] = {
     -2, 0, 0,
 };
 
+/** The tree takes no damage reduction; every hit just triggers its shake and tip-over. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** The tree has no elemental defence. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** The tree has no status vulnerabilities (all zero). */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -137,6 +153,10 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/**
+ * Poses of the tree: every pose uses the same still frame of the Mario model (M_S_1),
+ * apart from one slot that uses M_O_1.
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_NORMAL, "M_S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "M_S_1"},
@@ -144,6 +164,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "M_S_1"},
 };
 
+/** The tree has no data table events. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };

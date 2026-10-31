@@ -1,3 +1,6 @@
+// Keelhaul Key (muj) battle unit: the Bone Pile (honeduka) of the Cortez fight: its parts, defence/status tables, and
+// events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -20,6 +23,10 @@ static EvtWord damage_event[10];
 EvtWord honeduka_damage_sub_event[14];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Bone Pile: 100 HP, 100x100 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_boss_honeduka = {
     UNIT_CORTEZ_BONE_PILE, // mUnitType
     "btl_un_honeduka", // name
@@ -68,10 +75,18 @@ BattleUnitKind unit_boss_honeduka = {
     data_table, // dataTable
 };
 
+/** Defence of the Bone Pile: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Bone Pile: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Bone Pile (percent chance each status takes hold): immune to sleep, dizzy,
+ * confusion, Huge, Tiny, Attack Down, fright, Gale Force, Dodgy, Invisible, instant KO;
+ * resists freeze (50%), Defense Down (40%), allergic (50%), Slow (50%); the rest take hold at 80%
+ * or better.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     80, // stop
@@ -104,11 +119,13 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRT_Z_1"},
 };
 
+/** Event table of the Bone Pile: honeduka_damage_sub_event (tag 9). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, honeduka_damage_sub_event},
     {0, NULL},
 };
 
+/** Parts of the Bone Pile: 1 part (model c_honezuka). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_honeduka", "c_honezuka", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kUntattleable | kNoShadow, 0, pose_table},
 };

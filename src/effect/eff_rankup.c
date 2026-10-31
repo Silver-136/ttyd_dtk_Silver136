@@ -1,3 +1,6 @@
+// Rank-up banner: plays the EFF_Rankup model animation once (EFF_TekiKyouka, "enemy strengthening", before US);
+// from US on the model is chosen per language.
+
 #include "eff/eff_rankup.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"
@@ -7,6 +10,10 @@
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
 #ifdef VERSION_G8ME01
+/**
+ * Animation group of the rank-up effect by language
+ * (Japanese, English, German, French, Spanish, Italian).
+ */
 const char* eff_rankup_str_tbl[6] = {"EFF_Rankup", "EFF_Rankup_us", "EFF_Rankup_ge", "EFF_Rankup_fr", "EFF_Rankup_sp", "EFF_Rankup_it"};
 #endif
 

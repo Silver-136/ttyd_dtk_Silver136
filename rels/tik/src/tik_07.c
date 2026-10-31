@@ -46,6 +46,10 @@ EVT_BEGIN(bero_00_close_door)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room: the north exit to tik_08, the east exit to tik_00, the pipe to Fahr Outpost (bom_00), the
+ * pipe to tik_18, the pipe up to Rogueport (gor_03) and a pair of pipes that link spots inside the room.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "n_bero", // hitName
@@ -167,6 +171,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Stand-in for the Fahr Outpost pipe from the end of chapter 6 until chapter 7 has begun: it leads to the
+ * chapter 7 title screen (sys_01, stg_7) instead. Swapped in by the map init script.
+ */
 static BeroEntry bero_entry_data2[] = {
     {
         "dokan__1", // hitName

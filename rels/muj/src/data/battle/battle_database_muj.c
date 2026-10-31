@@ -89,6 +89,10 @@ NpcTerritoryInfo btl_muj_setup_no_tbl[16];
 EvtWord bgset_muj_wave_event[59];
 EvtWord bgset_muj_sun_event[18];
 
+/**
+ * Scenery props of the four Keelhaul Key battle stages, in order: each entry names a model of the stage file
+ * and where it stands.
+ */
 BattleStageObjectData muj_btlobject_data[] = {
     {"A1", 2, 0, {0.0f, 0.0f, -50.0f}, 0, 60, {0}},
     {"hata", 2, 1, {178.0f, 0.0f, -49.0f}, 0, 60, {0}},
@@ -123,6 +127,10 @@ BattleStageObjectData muj_btlobject_data[] = {
     {"if_body", 5, 6, {0.0f, 130.0f, 0.0f}, 0, 0, {0}},
 };
 
+/**
+ * The four Keelhaul Key battle stages (stg_05_1, stg_05_2, stg_05_5 and stg_05_0), each with its slice of
+ * muj_btlobject_data and the sun background script.
+ */
 BattleStageData muj_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -1241,6 +1249,10 @@ NpcBattleSelect btlgrpsel_muj_btlno_muj_03_04_off[] = {
     {0},
 };
 
+/**
+ * Encounter table of Keelhaul Key: one entry per battle number with its stage, enemy group pool, battle music
+ * and random-roll ranges.
+ */
 NpcSetupBattleInfo btlsetup_muj_tbl[] = {
     {
         /*"マップstg_05_0"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x35\x5F\x30", // name

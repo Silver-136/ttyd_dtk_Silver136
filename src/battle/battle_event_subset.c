@@ -1,3 +1,5 @@
+// Battle event subsets: reusable damage, death, confusion and blow-away scripts shared by units.
+
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
 #include "battle/battle_unit.h"

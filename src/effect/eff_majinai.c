@@ -1,3 +1,6 @@
+// Spell effect (majinai: charm/spell): plays the MOBJ_EFF_majinai animation while the map darkens and Mario glows,
+// with a stardust burst, then restores the map (states 0-3: load, darken, wait, restore). The type is stored, never read.
+
 #include "eff/eff_majinai.h"
 #include "eff/eff_stardust.h"
 #include "battle/battle.h"

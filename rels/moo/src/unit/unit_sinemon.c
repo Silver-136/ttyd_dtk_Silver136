@@ -30,6 +30,10 @@ static EvtWord wakeup_event[104];
 static EvtWord attack_event[454];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Moon Cleft: 6 HP, 26x32 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_sinemon = {
     UNIT_MOON_CLEFT, // mUnitType
     "btl_un_sinemon", // name
@@ -78,10 +82,19 @@ BattleUnitKind unit_sinemon = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Moon Cleft: 5 against normal, ice, explosion and electric hits;
+ * immune to fire (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{5, 99, 5, 5, 5}};
 
+/** Defence attributes of the Moon Cleft: immune to fire hits. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
 
+/**
+ * Defence of the Moon Cleft while it is flipped over onto its back: 0
+ * against every kind of hit (set by dmg_turn_event).
+ */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -109,10 +122,12 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Parts of the Moon Cleft: 1 part (model c_sinemon). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_sinemon", "c_sinemon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, kCounterTopSpiky, pose_table},
 };
 
+/** Weapon of the Moon Cleft (attack): targets one unit for 5 damage; used by attack_event. */
 static BattleWeapon weapon_sinemon_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -170,6 +185,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "SIN_S_1"},
 };
 
+/** Poses of the Moon Cleft while it lies flipped over on its back (set by dmg_turn_event). */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "SIN_N_2"},
     {POSE_TYPE_STOP, "SIN_Y_2"},
@@ -188,6 +204,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "SIN_D_2"},
 };
 
+/** Event table of the Moon Cleft: dmg_turn_event (tag 13), dmg_avoid_counter_thorn_head_event (tag 37). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},

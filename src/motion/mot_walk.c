@@ -1,3 +1,5 @@
+// Mario's walk and run motion.
+
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "pmario_sound.h"

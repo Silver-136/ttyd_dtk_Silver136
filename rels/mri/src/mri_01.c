@@ -257,6 +257,7 @@ static EVT_BEGIN(elder_init)
     RETURN
 EVT_END()
 
+/** Grid of (x, z) spots in the village where returning Punies are put back, filled column by column. */
 s32 puni_return_data[] = {
     200, 0, 200, 10, 200, 20, 200, 30,
     200, 40, 200, 50, 200, 60, 200, 70,
@@ -446,10 +447,12 @@ EVT_BEGIN(elder_talk_sub)
     RETURN
 EVT_END()
 
+/** Item list for the key window of Trouble Center job 10: only the Life Shroom (-1 ends the list). */
 s32 irai_item_tbl[] = {
     151, -1,
 };
 
+/** Item list for the item window of Trouble Center job 17: only the Routing Slip (-1 ends the list). */
 static s32 iri_17_item_tbl[] = {
     ITEM_ROUTING_SLIP, -1,
 };
@@ -712,6 +715,10 @@ static EVT_BEGIN(sister_talk)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the Elder's room: the guide Puni, the rival Puni, the Puni Elder, four other Punies, and the
+ * guide's sister.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガイド"*/"\x83\x4B\x83\x43\x83\x68", // name
@@ -846,6 +853,10 @@ EVT_BEGIN(out_mri_event)
     RETURN
 EVT_END()
 
+/**
+ * Exits of mri_01: west door w_bero to mri_00 (ne_bero); east door e_bero to mri_05 (w_bero); pipe dokan to
+ * mri_02 (dokan1).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -2121,6 +2132,7 @@ EVT_BEGIN(puni_taiki)
     RETURN
 EVT_END()
 
+/** Packed positions of the Punies in the Elder's room for the thank-you scene, one 32-bit value per Puni. */
 s32 puni_position[] = {
     19267575, 23724122, 25100278, 19857429, 20774962, 24182781, 21037044, 23789617,
     25100278, 17956936, 18415731, 18153523, 19136593, 24051726, 22151142, 20840431,
@@ -3134,6 +3146,11 @@ static EVT_BEGIN(evt_ueki_08)
     RETURN
 EVT_END()
 
+/**
+ * Plants Mario can search in mri_01: A_ueki01 (runs evt_ueki_01 when searched), A_ueki02
+ * (runs evt_ueki_02 when searched), A_ueki03 (runs evt_ueki_03 when searched), A_ueki08
+ * (runs evt_ueki_08 when searched).
+ */
 static KusaAccess ueki_access_data[] = {
     {1, "A_ueki01", "S_ueki01", evt_ueki_01},
     {1, "A_ueki02", "S_ueki02", evt_ueki_02},

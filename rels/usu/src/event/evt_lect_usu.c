@@ -1,3 +1,6 @@
+// Partner lecture in Twilight Town: the tutorial scenes that teach a new partner's field move (usu.rel's copy of the
+// lecture code).
+
 #include "version.h"
 #include "eff/eff_mario_balloon.h"
 #include "eff/eff_fukidashi.h"

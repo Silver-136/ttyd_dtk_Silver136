@@ -1,3 +1,5 @@
+// evt_fade.c: script commands for screen fades and transitions (fadedrv).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

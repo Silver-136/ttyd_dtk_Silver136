@@ -1,3 +1,5 @@
+// Ms. Mowz (chuchu): partner init, follow and the treasure search ability.
+
 #include "party/party_move.h"
 #include "driver/itemdrv.h"
 #include "driver/mobjdrv.h"
@@ -31,6 +33,7 @@ extern void partyWalkInit(PartyEntry* party, s32 mode);
 
 
 
+/** Map objects Ms. Mowz can sniff out: blocks, and from JP on the treasure chests and the Kururin floor. */
 char* mobj_list[] = {
     "MOBJ_TreasureBox",
     "MOBJ_BigTreasureBox",
@@ -49,6 +52,7 @@ char* mobj_list[] = {
     NULL,
 };
 
+/** Zero vector that starts the position of a nearby item when Ms. Mowz searches for treasure. */
 static const Vec vecA = {0.0f, 0.0f, 0.0f};
 
 USER_FUNC(set_msg);
@@ -70,6 +74,10 @@ EVT_BEGIN(msg_evt)
     RETURN
 EVT_END()
 
+/**
+ * Items hidden in the scenery that Ms. Mowz's sniffing can point at (in bushes, trees and the like): map,
+ * the flag set once the item is taken, and the spot's position.
+ */
 ChuchuTreasure chuchu_treasure_tbl[] = {
     {"hei_00", 0xF840715E, -468, 139, -127},
     {"hei_00", 0xF8406272, -408, 139, -127},
@@ -113,6 +121,7 @@ ChuchuTreasure chuchu_treasure_tbl[] = {
     {"tou_05", 0xF8407179, 100, 0, -28},
 };
 
+/** Zero vector that starts the position of a hidden scenery item during Ms. Mowz's treasure search. */
 static const Vec vecB = {0.0f, 0.0f, 0.0f};
 
 /**

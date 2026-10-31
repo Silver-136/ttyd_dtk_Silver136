@@ -1,3 +1,6 @@
+// Crystal Star effect: entry (effStarStoneEntry), draw function (effStarStoneDraw), flags (StarStoneFlags)
+// and per-effect work data (EffStarStoneWork).
+
 #pragma once
 
 #include "driver/camdrv.h"

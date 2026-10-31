@@ -149,6 +149,10 @@ static EVT_BEGIN(out_w_bero)
     RETURN
 EVT_END()
 
+/**
+ * Replacement for the west door, swapped in once Flurrie has asked for her necklace: it leads to win_00
+ * with an iris wipe, where the Sirens' sketch scene (witchtrio_picture) plays.
+ */
 BeroEntry bero_witchtrio[] = {
     {
         "w_bero", // hitName
@@ -170,6 +174,7 @@ BeroEntry bero_witchtrio[] = {
     },
 };
 
+/** Doors of this room: west back to win_03 and east into win_05, both with their opening animations. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -530,6 +535,7 @@ USER_FUNC(fade_alpha) {
     return EVT_RETURN_DONE;
 }
 
+/** Items Mario may hand Flurrie through her door in clouda_nakama: only the Necklace (-1 ends the list). */
 static s32 item_list[] = {
     ITEM_NECKLACE, -1,
 };
@@ -1161,6 +1167,10 @@ static u32 texture_0[] = {
     0x00000001, 0xFFFFFFFF, 0x00000001, 0xFFFFFFFF, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
 };
 
+/**
+ * Rose petals of Flurrie's entrance: the screen position (x, y) and final size (z) of each of the 55 flowers
+ * that evt_flower grows in flower_event.
+ */
 Vec rose_table_direct[] = {
     {-196.61f, 223.94f, 0.78f},
     {-141.56f, 219.43f, 0.76f},
@@ -1219,6 +1229,10 @@ Vec rose_table_direct[] = {
     {173.63f, -125.26f, 0.72f},
 };
 
+/**
+ * Another layout of rose petals: 60 (x, y) screen positions in rows along the edges of the screen.
+ * Nothing reads it; the petals use rose_table_direct.
+ */
 f32 rose_table[] = {
     -186.66667f, 230.0f, -133.33334f, 230.0f, -80.0f, 230.0f, -26.666672f, 230.0f,
     26.666656f, 230.0f, 80.0f, 230.0f, 133.33334f, 230.0f, 186.66666f, 230.0f,

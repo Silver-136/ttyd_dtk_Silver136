@@ -109,6 +109,7 @@ static EVT_BEGIN(e_door_open)
     RETURN
 EVT_END()
 
+/** Exits of this room: the west door to aji_01 and the east door to aji_11. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -161,6 +162,10 @@ static EVT_BEGIN(bero_peach_evt)
     RETURN
 EVT_END()
 
+/**
+ * Replacement for the east door exit, swapped in with evt_bero_overwrite during Peach's scene so it leads on
+ * to aji_11 (w_bero).
+ */
 static BeroEntry bero_peach_data[] = {
     {
         "e_bero", // hitName
@@ -1243,6 +1248,7 @@ static EVT_BEGIN(syuryo_init)
     RETURN
 EVT_END()
 
+/** Cast of Sir Grodus's room: three X-Naut underlings, Lord Crump, Sir Grodus, Beldam, Marilyn and Vivian. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"手下１"*/"\x8E\xE8\x89\xBA\x82\x50", // name

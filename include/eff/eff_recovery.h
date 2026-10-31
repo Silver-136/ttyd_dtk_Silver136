@@ -1,3 +1,5 @@
+// eff_recovery.c: HP/FP recovery effect entry (effRecoveryEntry) and its per-icon work data (RecoveryWork).
+
 #pragma once
 
 #include "driver/effdrv.h"

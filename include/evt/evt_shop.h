@@ -1,3 +1,5 @@
+// evt_shop.c: the item shops (ShopObj, ShopItem, ShopperData, ShopPoint) and their script commands.
+
 #pragma once
 
 #include <dolphin/types.h>

@@ -38,6 +38,10 @@ static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[12];
 
+/**
+ * Unit data of the Dark Puff: 3 HP and level 10, with its parts, status vulnerability, init event and
+ * event data table.
+ */
 BattleUnitKind unit_monochrome_kurokumorn = {
     UNIT_DARK_PUFF, // mUnitType
     "btl_un_monochrome_kurokumorn", // name
@@ -86,8 +90,13 @@ BattleUnitKind unit_monochrome_kurokumorn = {
     data_table, // dataTable
 };
 
+/**
+ * Defense of the Dark Puff against normal, fire, ice, explosion and electric attacks: none, so it takes
+ * full damage from every element.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Damage-type reactions of the Dark Puff: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -115,10 +124,15 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * Parts of the Dark Puff: a single body part (part 1, model c_kmoon_wb), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_monochrome_kurokumorn", "c_kmoon_wb", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
+/** Weapon record of the Dark Puff's swoop: 2 damage. */
 static BattleWeapon weapon_kurokumorn_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -155,6 +169,10 @@ static BattleWeapon weapon_kurokumorn_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon record of the Dark Puff's lightning attack on the whole party: 2 damage, can hit several targets
+ * and ignores Defense.
+ */
 static BattleWeapon weapon_kurokumorn_thunder_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -374,6 +392,7 @@ static EVT_BEGIN(thunder_event)
     RETURN
 EVT_END()
 
+/** Pose table of the Dark Puff: maps each battle pose (idle, hurt, attacking and so on) to its animation. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -394,6 +413,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Event data table of the Dark Puff: scripts that replace the standard handling for its counter hook (tag
+ * 42) and the battle opening with a First Strike on it (tag 48).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ELECTRIC_EVENT, counter_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},

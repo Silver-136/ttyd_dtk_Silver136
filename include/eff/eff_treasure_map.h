@@ -1,3 +1,5 @@
+// eff_treasure_map.c: treasure map effect entry (effTreasureMapEntry) and work data (EffTreasureMapWork).
+
 #pragma once
 
 #include "driver/camdrv.h"

@@ -22,6 +22,7 @@ EvtWord gra_01_after_ranpel2[94];
 static TreeAccess tree_tbl[4];
 EvtWord gra_01_init_evt[107];
 
+/** Doors of this room: the west exit (w_bero1) to gra_00 and the east exit (e_bero1) to gra_02. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero1", // hitName
@@ -87,6 +88,10 @@ EVT_BEGIN(gra_01_after_ranpel2)
     RETURN
 EVT_END()
 
+/**
+ * The three trees Mario can hit on this stretch of the trail (A_ki_1 to A_ki_3, model parts S_gra01_ki01 to
+ * ki03).
+ */
 static TreeAccess tree_tbl[] = {
     {2, "A_ki_1", "S_gra01_ki01", NULL, 0, NULL},
     {2, "A_ki_2", "S_gra01_ki02", NULL, 0, NULL},

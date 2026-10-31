@@ -1,3 +1,5 @@
+// evt_nannpc.c: the crowd NPC system (NanNPC): many simple sprite NPCs drawn through extdrv.
+
 #pragma once
 
 #include <dolphin/gx.h>

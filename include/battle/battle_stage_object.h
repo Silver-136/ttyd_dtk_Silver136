@@ -1,3 +1,5 @@
+// Declares the battle stage object data structure and functions.
+
 #pragma once
 
 #include <dolphin/mtx.h>

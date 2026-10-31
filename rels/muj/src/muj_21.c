@@ -42,6 +42,7 @@ EVT_BEGIN(peach_init)
     RETURN
 EVT_END()
 
+/** NPCs of the ending ship scene: Peach. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ピーチ姫"*/"\x83\x73\x81\x5B\x83\x60\x95\x50", // name

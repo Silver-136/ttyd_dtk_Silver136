@@ -1,3 +1,5 @@
+// Status window: the field HUD (HP, FP, star power gauge, coins, star points) and its show/hide logic.
+
 #include "icon_ids.h"
 #include "statuswindow.h"
 #include "battle/battle.h"

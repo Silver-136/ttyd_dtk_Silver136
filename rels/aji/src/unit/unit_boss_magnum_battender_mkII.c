@@ -147,6 +147,7 @@ static EvtWord damage_event_r[30];
 static EvtWord attack_event_r[368];
 static EvtWord wait_event_r[18];
 
+/** Unit data of Magnus von Grapple 2.0: 70 HP, level 84; the battle starts it from init_event. */
 BattleUnitKind unit_boss_magnum_battender_mkII = {
     UNIT_MAGNUS2_0, // mUnitType
     "btl_un_magnum_battender_mkii", // name
@@ -195,8 +196,10 @@ BattleUnitKind unit_boss_magnum_battender_mkII = {
     data_table, // dataTable
 };
 
+/** Defence of Magnus von Grapple 2.0: 2 against every element. */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/** Elemental reactions of Magnus von Grapple 2.0: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -224,6 +227,10 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/**
+ * Pose table of Magnus von Grapple 2.0: the animation each battle pose (idle, hurt, walk, attack and so on)
+ * plays.
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "MGN_S_1"},
     {POSE_TYPE_STOP, "MGN_2D_1"},
@@ -244,6 +251,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MGN_S_1"},
 };
 
+/** Pose table of Magnus von Grapple 2.0 once his arms have split off (poses without the fists). */
 static PoseTableEntry pose_table_no_arm[] = {
     {POSE_TYPE_SLEEP, "MGN_S_2"},
     {POSE_TYPE_STOP, "MGN_2D_2"},
@@ -263,11 +271,16 @@ static PoseTableEntry pose_table_no_arm[] = {
     {POSE_TYPE_ACTION, "MGN_S_2"},
 };
 
+/** Event table of Magnus von Grapple 2.0: its defeat (dead_event, tag 49). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/**
+ * Parts of Magnus von Grapple 2.0: part 1 is his body (the target), part 2 an extra part, part 3 the frame
+ * piece that follows the body's locator17 bone, and part 4 the boomerang that splits off his body.
+ */
 static BattleUnitKindPart parts[] = {
 #ifdef VERSION_G8ME01
     {1, "btl_un_magnum_battender_mkii", "c_mb_robo_2b", 0.0f, 0.0f, 0.0f, 37.0f, 103.0f, 30.0f, 37.0f, 113.0f, 61.0f, 106, 174, 255, &defence, &defence_attr, 0x600019, 0, pose_table},
@@ -279,6 +292,7 @@ static BattleUnitKindPart parts[] = {
     {4, "btl_un_magnum_battender_mkii", "c_mb_robo_2b", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon data for Magnus von Grapple 2.0's drill attack: 6 damage, a jump-type hit, one target. */
 BattleWeapon weapon_batten_drill_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -319,6 +333,7 @@ BattleWeapon weapon_batten_drill_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for Magnus von Grapple 2.0's boomerang: 6 damage, every target. */
 BattleWeapon weapon_batten_boomerang_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -359,6 +374,7 @@ BattleWeapon weapon_batten_boomerang_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for Magnus von Grapple 2.0's audience attack: 3 damage, one target. */
 BattleWeapon weapon_batten_aud_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -399,6 +415,7 @@ BattleWeapon weapon_batten_aud_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Setup for the X-Punch fists that Magnus von Grapple 2.0 spawns when he splits off his arms. */
 static BattleUnitSetup entry_rocket_punch = {
     &unit_boss_rocket_punch_mkII, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -1848,6 +1865,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Unit data of the X-Punch fist of Magnus von Grapple 2.0: 5 HP, level 0; the battle starts it from
+ * init_event_r.
+ */
 BattleUnitKind unit_boss_rocket_punch_mkII = {
     UNIT_X_PUNCH,
     "btl_un_rocket_punch_mkii",
@@ -1914,8 +1935,12 @@ BattleUnitKind unit_boss_rocket_punch_mkII = {
     data_table_r,
 };
 
+/** Defence of the X-Punch fist of Magnus von Grapple 2.0: none against any element. */
 static BattleUnitDefense defence_r = {{0, 0, 0, 0, 0}};
 
+/**
+ * Elemental reactions of the X-Punch fist of Magnus von Grapple 2.0: none, every element hurts it normally.
+ */
 static BattleUnitDefenseAttr defence_attr_r = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist_r = {
@@ -1943,6 +1968,7 @@ static StatusVulnerability regist_r = {
     0, // ohko
 };
 
+/** Pose table of the X-Punch fist: its flying and stay poses. */
 static PoseTableEntry pose_table_r[] = {
     {POSE_TYPE_SLEEP, "MGN_A1_9"},
     {POSE_TYPE_STOP, "MGN_A1_4"},
@@ -1960,14 +1986,20 @@ static PoseTableEntry pose_table_r[] = {
     {POSE_TYPE_ACTION, "MGN_A1_9"},
 };
 
+/** Event table of the X-Punch fist of Magnus von Grapple 2.0: empty, it has no special reactions. */
 static BattleDataEntry data_table_r[] = {
     {0, NULL},
 };
 
+/** Part of the X-Punch fist: its single flying fist part (the target). */
 static BattleUnitKindPart parts_r[] = {
     {1, "btl_un_rocket_punch_mkii", "c_mb_robo_2b", 0.0f, 0.0f, 0.0f, 0.0f, 10.0f, 0.0f, 0.0f, 10.0f, 0.0f, 106, 174, 255, &defence_r, &defence_attr_r, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, kCounterPreemptiveFrontSpiky, pose_table_r},
 };
 
+/**
+ * Weapon data for the X-Punch fist of Magnus von Grapple 2.0's rocket punch: 9 damage, a jump-type hit, one
+ * target.
+ */
 static BattleWeapon weapon_batten_rocket_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

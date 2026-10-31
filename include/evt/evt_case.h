@@ -1,3 +1,5 @@
+// evt_case.c: script commands that register, run and remove case events (casedrv).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

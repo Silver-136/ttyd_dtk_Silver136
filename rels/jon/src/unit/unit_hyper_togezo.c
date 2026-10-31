@@ -51,6 +51,7 @@ static EvtWord guard_cancel_event[89];
 static EvtWord charge_event[102];
 static EvtWord wait_event[6];
 
+/** Unit data of the Sky-Blue Spiny: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_hyper_togezo = {
     UNIT_SKY_BLUE_SPINY, // mUnitType
     "btl_un_hyper_togezo", // name
@@ -99,8 +100,10 @@ BattleUnitKind unit_hyper_togezo = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Sky-Blue Spiny: defence 4 against every attack type. */
 static BattleUnitDefense defence = {{4, 4, 4, 4, 4}};
 
+/** Element response of the Sky-Blue Spiny: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -128,10 +131,19 @@ static StatusVulnerability regist = {
     50, // ohko
 };
 
+/** Damage reduction of the Sky-Blue Spiny, flipped on its back: none, every attack type does full damage. */
 static BattleUnitDefense defence_turn = {0};
 
+/**
+ * Element response of the Sky-Blue Spiny, flipped on its back: none, every attack type is treated
+ * normally.
+ */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
+/**
+ * Status vulnerability of the Sky-Blue Spiny, flipped on its back (percent, 0 is immune): every status
+ * effect can land.
+ */
 static StatusVulnerability regist_turn = {
     100, // sleep
     100, // stop
@@ -157,10 +169,22 @@ static StatusVulnerability regist_turn = {
     100, // ohko
 };
 
+/**
+ * Defence of the Sky-Blue Spiny while it is curled up guarding:
+ * defence 99 against every kind of hit, so no attack does damage.
+ */
 static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
 
+/**
+ * Element response of the Sky-Blue Spiny, guarding: it is immune to normal hits and fire and ice and
+ * explosions and electricity.
+ */
 static BattleUnitDefenseAttr defence_attr_guard = {{2, 2, 2, 2, 2}};
 
+/**
+ * Status vulnerability of the Sky-Blue Spiny, guarding (percent, 0 is immune): every status effect can
+ * land.
+ */
 static StatusVulnerability regist_guard = {
     100, // sleep
     100, // stop
@@ -186,6 +210,7 @@ static StatusVulnerability regist_guard = {
     100, // ohko
 };
 
+/** Pose table of the Sky-Blue Spiny: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "TGZ_N_1"},
     {POSE_TYPE_STOP, "TGZ_Y_1"},
@@ -204,6 +229,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "TGZ_S_1"},
 };
 
+/** Pose table of the Sky-Blue Spiny, flipped on its back: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "TGZ_N_2"},
     {POSE_TYPE_STOP, "TGZ_Y_2"},
@@ -221,6 +247,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "TGZ_S_2"},
 };
 
+/** Pose table of the Sky-Blue Spiny, guarding: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_SLEEP, "TGZ_P_1"},
     {POSE_TYPE_STOP, "TGZ_P_1"},
@@ -236,6 +263,10 @@ static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_ACTION, "TGZ_P_1"},
 };
 
+/**
+ * Data table of the Sky-Blue Spiny: event handlers keyed by tag (dmg_turn_event,
+ * dmg_avoid_counter_thorn_event).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_event},
@@ -244,12 +275,16 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Data table of the Sky-Blue Spiny, flipped on its back: event handlers keyed by tag (dmg_turn_event). */
 static BattleDataEntry data_table_turn[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/**
+ * Data table of the Sky-Blue Spiny, guarding: event handlers keyed by tag (dmg_avoid_counter_thorn_event).
+ */
 static BattleDataEntry data_table_guard[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_event},
     {UNIT_DATA_AVOID_THORN_EVENT, dmg_avoid_counter_thorn_event},
@@ -257,10 +292,12 @@ static BattleDataEntry data_table_guard[] = {
     {0},
 };
 
+/** Body part of the Sky-Blue Spiny: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_hyper_togezo", "c_togezo_b", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, kCounterTopSpiky | kCounterFrontSpiky, pose_table},
 };
 
+/** Attack data for the Sky-Blue Spiny's rolling attack: 6 damage. */
 static BattleWeapon weapon_togezo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -297,6 +334,10 @@ static BattleWeapon weapon_togezo_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Attack data for the Sky-Blue Spiny's charge-up that powers up its next attack: no damage, next attack
+ * +6.
+ */
 static BattleWeapon weapon_togezo_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06

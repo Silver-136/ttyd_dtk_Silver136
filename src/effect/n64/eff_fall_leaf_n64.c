@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: falling leaves, four leaves drifting down for the given lifetime; types 0-4.
+
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -25,6 +27,7 @@ typedef struct EffFallLeafN64Work {
     s32 frame;     // 0x2C
 } EffFallLeafN64Work;
 
+/** 12x12 leaf quad for the falling leaves. */
 static effN64Vtx size12x12_tex64x64_vtx[] = {
     {-6, -6, 0, 0, 0, 0x19, 0x55, 0x11, 0xFF},
     {6, -6, 0, 2048, 0, 0x19, 0x55, 0x11, 0xFF},

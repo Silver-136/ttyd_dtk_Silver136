@@ -1,3 +1,5 @@
+// eff_guruguru_n64.c: Paper Mario 64 Guruguru effect entry (effGuruguruN64Entry) and its work data (EffGuruguruN64Work).
+
 #pragma once
 
 #include <dolphin/mtx.h>

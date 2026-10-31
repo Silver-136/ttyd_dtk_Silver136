@@ -1,3 +1,5 @@
+// Declares the battle stage spotlight and stage data structures and functions.
+
 #pragma once
 
 #include <dolphin/types.h>

@@ -1,3 +1,5 @@
+// cam_road.c: the camera road system (CamRoadCurve records and the road camera entry points that move the field camera).
+
 #pragma once
 
 #include "dolphin/types.h"

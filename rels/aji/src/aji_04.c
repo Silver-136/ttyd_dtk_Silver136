@@ -82,6 +82,7 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
+/** Exit of this room: the west door to aji_17. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -346,6 +347,10 @@ static EVT_BEGIN(offscreen_to_normal)
     RETURN
 EVT_END()
 
+/**
+ * The seven quiz questions of the stone statue: for each, the map animation, the question and choice text,
+ * and the number of the correct choice.
+ */
 QuizEntry kuizu_data[] = {
     {"anm_1mon", "stg7_aji_06", "stg7_aji_07", 2},
     {"anm_2mon", "stg7_aji_08", "stg7_aji_09", 3},

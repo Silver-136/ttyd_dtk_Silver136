@@ -1,3 +1,6 @@
+// Script commands for animated cloud overlays: an image drawn through an offscreen target over a
+// map group, with its own hit object and end event.
+
 #include "driver/camdrv.h"
 #include "driver/animdrv.h"
 #include "driver/hitdrv.h"

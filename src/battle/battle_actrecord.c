@@ -1,3 +1,5 @@
+// Battle action records: counts and points used to judge the conditions of the battle ranking.
+
 #include "battle/battle_actrecord.h"
 #include "battle/battle.h"
 

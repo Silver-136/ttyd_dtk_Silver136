@@ -1,3 +1,5 @@
+// seqdrv.c: the sequence driver (SequenceType, SequenceWork): switches the top-level game states (logo, title, game...).
+
 #pragma once
 
 #include <dolphin/types.h>

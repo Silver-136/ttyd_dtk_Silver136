@@ -104,6 +104,7 @@ USER_FUNC(mario_normalize_wait) {
     return EVT_RETURN_BLOCK;
 }
 
+/** Doors and exits of rsh_02 variant a: w_bero to rsh_03_a; e_bero to rsh_01_a. */
 static BeroEntry bero_data_a[] = {
     {
         "w_bero", // hitName
@@ -144,6 +145,7 @@ static BeroEntry bero_data_a[] = {
     {0},
 };
 
+/** Doors and exits of rsh_02 variant b: w_bero to rsh_03_b; e_bero to rsh_01_b. */
 static BeroEntry bero_data_b[] = {
     {
         "w_bero", // hitName
@@ -184,6 +186,7 @@ static BeroEntry bero_data_b[] = {
     {0},
 };
 
+/** Doors and exits of rsh_02 variant c: w_bero to rsh_03_c; e_bero to rsh_01_c. */
 static BeroEntry bero_data_c[] = {
     {
         "w_bero", // hitName
@@ -504,6 +507,7 @@ EVT_BEGIN(evt_shake2)
     RETURN
 EVT_END()
 
+/** Items the player may give the ghost: the Ragged Diary only, ended by -1. */
 static s32 item_tbl2[] = {
     ITEM_RAGGED_DIARY, -1,
 };
@@ -700,6 +704,7 @@ static EVT_BEGIN(talk_sarary)
     RETURN
 EVT_END()
 
+/** NPCs of the passenger car: the gourmet Toad, the ghost and Toron. */
 static NpcSetupInfo npc_data[] = {
     {
         /*"グルメキノピオ"*/"\x83\x4F\x83\x8B\x83\x81\x83\x4C\x83\x6D\x83\x73\x83\x49", // name
@@ -760,6 +765,10 @@ static NpcSetupInfo npc_data[] = {
     {0},
 };
 
+/**
+ * Map objects of cabin 3 for evt_rsh_door_entry: the room, backdrop, door, door hit areas and open and close
+ * animations.
+ */
 static const char* door_3[] = {
     "heya_3",
     "haikei_3",
@@ -770,6 +779,10 @@ static const char* door_3[] = {
     "3_door_close",
 };
 
+/**
+ * Map objects of cabin 4 for evt_rsh_door_entry: the room, backdrop, door, door hit areas and open and close
+ * animations.
+ */
 static const char* door_4[] = {
     "heya_4",
     "haikei_4",
@@ -780,6 +793,10 @@ static const char* door_4[] = {
     "4_door_close",
 };
 
+/**
+ * Map objects of cabin 5 for evt_rsh_door_entry: the room, backdrop, door, door hit areas and open and close
+ * animations.
+ */
 static const char* door_5[] = {
     "heya_5",
     "haikei_5",
@@ -1023,6 +1040,7 @@ EVT_BEGIN(evt_toron_catch)
     RETURN
 EVT_END()
 
+/** Items the player may hand over in the thief scene: the Briefcase only, ended by -1. */
 static s32 item_tbl[] = {
     ITEM_BRIEFCASE, -1,
 };
@@ -1676,6 +1694,7 @@ EVT_BEGIN(rsh_02_b_init_evt)
     RETURN
 EVT_END()
 
+/** Map objects of the scenery that passes by the windows of the three cabins. */
 static const char* window_tbl[] = {
     "mado_3_uturu",
     "mado_4_uturu",

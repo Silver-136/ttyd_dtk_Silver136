@@ -1,3 +1,5 @@
+// fadedrv.c: the fade driver (FadeType, fadeEntry): screen transitions and overlays.
+
 #pragma once
 
 #include "driver/imgdrv.h"

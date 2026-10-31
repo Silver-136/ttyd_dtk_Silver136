@@ -1,3 +1,5 @@
+// evt_sub.c: miscellaneous script commands: key input, countdowns, interpolation, angles, flags and play time.
+
 #pragma once
 
 #include "manager/winmgr.h"

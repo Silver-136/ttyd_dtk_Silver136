@@ -85,6 +85,7 @@ static EVT_BEGIN(e_door_open)
     RETURN
 EVT_END()
 
+/** Exits of las_03: west door w_bero to las_02 (e_bero); east door e_bero_1 to las_04 (w_bero). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -125,6 +126,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Where Mario is put back after damage from falling: the floor panels A_yuka_02 and A_yuka_03 send him to
+ * the point set at y = -1000 (the spike pit below).
+ */
 static HitDamageReturn dmgRetPoint[] = {
     {"A_yuka_02", {0.0f, -1000.0f, 0.0f}},
     {"A_yuka_03", {0.0f, -1000.0f, 0.0f}},

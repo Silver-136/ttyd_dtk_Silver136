@@ -95,6 +95,7 @@ static EvtWord bunsin_event[152];
 static EvtWord spawn_event[76];
 static EvtWord wait_event[386];
 
+/** Unit data of the Elite Wizzerd: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_mahorn_custom = {
     UNIT_ELITE_WIZZERD, // mUnitType
     "btl_un_mahorn_custom", // name
@@ -143,6 +144,7 @@ BattleUnitKind unit_mahorn_custom = {
     data_table, // dataTable
 };
 
+/** Unit data of the copies of the Elite Wizzerd that appear when it splits. */
 BattleUnitKind unit_mahorn_custom_bunsin = {
     UNIT_ELITE_WIZZERD_CLONE,
     "btl_un_mahorn_custom_bunsin",
@@ -209,8 +211,10 @@ BattleUnitKind unit_mahorn_custom_bunsin = {
     data_table_bunsin,
 };
 
+/** Damage reduction of the Elite Wizzerd: defence 5 against every attack type. */
 static BattleUnitDefense defence = {{5, 5, 5, 5, 5}};
 
+/** Element response of the Elite Wizzerd: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -263,6 +267,7 @@ static StatusVulnerability regist_bunsin = {
     0, // ohko
 };
 
+/** Body parts of the Elite Wizzerd: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
@@ -271,6 +276,7 @@ static BattleUnitKindPart parts[] = {
     {5, "btl_un_mahorn_custom", "c_maho_w", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
 };
 
+/** Attack data for the Elite Wizzerd's single-target magic: 8 damage. */
 static BattleWeapon weapon_mahorn_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -307,6 +313,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Elite Wizzerd's magic on all enemies: 8 damage. */
 static BattleWeapon weapon_mahorn_all_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -348,6 +355,7 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Elite Wizzerd's punch flurry: 8 damage. */
 static BattleWeapon weapon_mahorn_attack_punch = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -384,6 +392,7 @@ static BattleWeapon weapon_mahorn_attack_punch = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Elite Wizzerd's invisibility spell: no damage, 100% Invisible. */
 static BattleWeapon weapon_mahorn_trans_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -421,6 +430,7 @@ static BattleWeapon weapon_mahorn_trans_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Elite Wizzerd's dodgy spell: no damage, 100% Dodgy. */
 static BattleWeapon weapon_mahorn_yokeyoke_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -457,6 +467,7 @@ static BattleWeapon weapon_mahorn_yokeyoke_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Elite Wizzerd's size-up spell: no damage, 100% size change. */
 static BattleWeapon weapon_mahorn_dekadeka_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -494,6 +505,7 @@ static BattleWeapon weapon_mahorn_dekadeka_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Elite Wizzerd's defence-up spell: no damage, 100% defence change. */
 static BattleWeapon weapon_mahorn_katikati_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -532,6 +544,7 @@ static BattleWeapon weapon_mahorn_katikati_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Elite Wizzerd's healing spell: no damage. */
 static BattleWeapon weapon_mahorn_recover_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -566,6 +579,10 @@ static BattleWeapon weapon_mahorn_recover_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Spawn setup for the extra Elite Wizzerd created when it splits: enemy side, parked off-screen until its
+ * script places it.
+ */
 static BattleUnitSetup entry_mahorn = {
     &unit_mahorn_custom_bunsin, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -693,6 +710,7 @@ static EVT_BEGIN(attack_event_bunsin)
     RETURN
 EVT_END()
 
+/** Pose table of the Elite Wizzerd: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "MAH_N_1"},
     {POSE_TYPE_STOP, "MAH_Y_1"},
@@ -713,6 +731,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MAH_S_1"},
 };
 
+/**
+ * Data table of the Elite Wizzerd: event handlers keyed by tag (mahorn_subset_dead_event,
+ * mahorn_subset_blow_dead_event, avoid_miss_event).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, mahorn_subset_dead_event},
     {UNIT_DATA_BLOW_DEAD_EVENT, mahorn_subset_blow_dead_event},
@@ -721,6 +743,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Data table of the Elite Wizzerd, clone: event handlers keyed by tag (avoid_miss_event). */
 static BattleDataEntry data_table_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},

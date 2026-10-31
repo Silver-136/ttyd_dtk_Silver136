@@ -1,3 +1,5 @@
+// Declarations for the Hooktail Castle (gon) module: map init scripts, battle setup tables, the Paper Curse lecture scripts and the area's battle units.
+
 #pragma once
 
 #include "dolphin/types.h"

@@ -1,3 +1,5 @@
+// evt_movefloor.c: scripts and commands for moving floors, platforms that follow a path.
+
 #pragma once
 
 #include "dolphin/types.h"

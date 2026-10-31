@@ -1,3 +1,5 @@
+// eff_uranoko.c: uranoko effect entry (effUranokoEntry), its callbacks and work data (EffUranokoWork).
+
 #pragma once
 
 #include "driver/camdrv.h"

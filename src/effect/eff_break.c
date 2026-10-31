@@ -1,3 +1,6 @@
+// Break banner: a row of language-specific letter sprites that drop in with star dust, bounce, then fly off.
+// Spawned by the battle break slot.
+
 #include "eff/eff_break.h"
 #include "driver/dispdrv.h"
 #include "mario/mariost.h"
@@ -17,6 +20,10 @@ typedef struct EffBreakWork {
 } EffBreakWork;
 
 #ifdef VERSION_G8ME01
+/**
+ * Effect texture ids of the banner's letter sprites, left to right, one list per language (Japanese, English,
+ * German, French, Spanish, Italian); the Spanish banner has seven letters. Indexed through texid_tbl.
+ */
 static s16 tex_jp[] = { 145, 146, 147, 148, 149, 150 };
 static s16 tex_us[] = { 155, 156, 157, 158, 159, 160 };
 static s16 tex_lang3[] = { 151, 152, 153, 154, 155, 156 };
@@ -27,12 +34,18 @@ typedef struct TexIdEntry {
     s16* ids;
     s32 count;
 } TexIdEntry;
+/** Letter texture list and letter count per language, indexed by the game language; used to lay out and draw. */
 static TexIdEntry texid_tbl[] = {
     { tex_jp, 6 }, { tex_us, 6 }, { tex_lang3, 6 }, { tex_lang4, 6 }, { tex_lang5, 7 }, { tex_lang6, 6 },
 };
 #else
+/**
+ * Effect texture ids of the banner's letter sprites, left to right, one list per language (Japanese, English,
+ * German, French, Spanish, Italian); the Spanish banner has seven letters. Indexed through texid_tbl.
+ */
 static s32 tex_jp[] = { 0xAD, 0xAE, 0xAF, 0xB0, 0xB1, 0xB2 };
 static s32 tex_us[] = { 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6 };
+/** Letter texture list and letter count per language, indexed by the game language; used to lay out and draw. */
 static s32* texid_tbl[] = { tex_jp, tex_us };
 #endif
 

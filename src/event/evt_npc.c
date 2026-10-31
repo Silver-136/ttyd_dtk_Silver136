@@ -1,3 +1,6 @@
+// Script commands that control NPCs: entry, position, movement, jumps, animations, flags and
+// battle setup (npcdrv).
+
 #include "evt/evt_npc.h"
 #include "party.h"
 #include "mario/mario_party.h"

@@ -118,6 +118,7 @@ eff_set eff_set_n64[] = {
     {-1, NULL}
 };
 
+/** Fixed table of 128 random numbers that effTblRandN64 reads for repeatable effect randomness. */
 s32 _rand_table[] = {
     0x100B2AF5, 0x45B59924, 0x35094B45, 0x4ABFA67A,
     0x164F5371, 0x7B195845, 0x58562A56, 0x25733D41,

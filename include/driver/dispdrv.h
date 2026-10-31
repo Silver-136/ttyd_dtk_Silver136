@@ -1,3 +1,5 @@
+// dispdrv.c: the display driver (DispEntry, dispEntry/dispDraw): per-camera draw callbacks sorted by depth.
+
 #pragma once
 
 #include <dolphin/types.h>

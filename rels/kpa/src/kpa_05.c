@@ -22,6 +22,10 @@ static EvtWord jumpstand_evt[60];
 static NpcSetupInfo npcEnt[1];
 EvtWord kpa_05_init_evt[44];
 
+/**
+ * Blocks, hidden blocks, pipes and obstacle blocks of side-scrolling stage 3 over lava, listed from left to
+ * right.
+ */
 static EvtWord kpa_act_stg3_mobj[] = {
     KPA_OBJ_FIREBAR_DODAI_0(-1062.5f, 100.0f, 3, -229998976),
     KPA_OBJ_FIREBAR_DODAI_0(-687.5f, 100.0f, 2, -229997952),
@@ -40,6 +44,7 @@ static EvtWord kpa_act_stg3_mobj[] = {
     KPA_OBJ_BRICK_3(1300.0f, 25.0f), KPA_OBJ_DOKAN_2(1475.0f, 200.0f), KPA_OBJ_END,
 };
 
+/** Coins Bowser can collect in side-scrolling stage 3, as x and z positions. */
 EvtWord kpa_act_stg3_item[] = {
     KPA_ITEM(-175.0f, 175.0f), KPA_ITEM(-125.0f, 175.0f), KPA_ITEM(-25.0f, 175.0f), KPA_ITEM(25.0f, 175.0f),
     KPA_ITEM(250.0f, 0.0f), KPA_ITEM(300.0f, 0.0f), KPA_ITEM(350.0f, 0.0f), KPA_ITEM(350.0f, 25.0f),
@@ -116,6 +121,7 @@ static EVT_BEGIN(jumpstand_evt)
     RETURN
 EVT_END()
 
+/** No NPCs: the side-scrolling stage is built from the block, pipe and item lists instead. */
 static NpcSetupInfo npcEnt[] = {
     {0},
 };

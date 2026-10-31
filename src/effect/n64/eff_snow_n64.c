@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: a single snowflake that falls while tumbling for `lifetime` frames.
+
 #include "eff/n64/eff_snow_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"

@@ -1,3 +1,5 @@
+// Battle drawing helpers: 2D and textured-quad drawing, pose lookup and unit item display.
+
 #include "battle/battle_disp.h"
 #include "battle/battle.h"
 #include "battle/battle_menu_disp.h"

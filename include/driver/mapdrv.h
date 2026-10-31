@@ -1,3 +1,5 @@
+// mapdrv.c: the map driver: map.dat structures (joints, materials, display lists) and map object drawing and animation.
+
 #pragma once
 
 #include <dolphin/gx.h>

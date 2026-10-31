@@ -1,3 +1,5 @@
+// unit_kuriboo: Goomba, battle unit (Rogueport tutorial/early fights).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -28,6 +30,10 @@ static EvtWord phase_event[2];
 static EvtWord attack_event[492];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Goomba:
+ * 2 HP, level 7, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 static BattleUnitKind unit_kuriboo = {
     UNIT_GOOMBA, // mUnitType
     "btl_un_kuriboo", // name
@@ -73,6 +79,10 @@ static BattleUnitKind unit_kuriboo = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
+/**
+ * Pose table of the Goomba:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KUR_N_1"},
     {POSE_TYPE_STOP, "KUR_Y_1"},
@@ -96,13 +106,16 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
+/** Event table of the Goomba: nothing special on a First Strike. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Defence of the Goomba's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {0};
 
+/** Defence attributes of the Goomba's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -130,6 +143,7 @@ static StatusVulnerability regist = {
     150, // ohko
 };
 
+/** Body part of the Goomba: a single part using the model "c_kuribo". */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -149,6 +163,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Goomba's attack: 1 damage to a single target, a jump-style hit. */
 static BattleWeapon weapon_kuriboo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

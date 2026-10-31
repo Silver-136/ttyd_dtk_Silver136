@@ -1,3 +1,5 @@
+// eff_magic2_n64.c: Paper Mario 64 magic effect 2 entry (effMagic2N64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

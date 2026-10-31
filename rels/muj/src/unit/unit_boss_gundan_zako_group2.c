@@ -101,6 +101,10 @@ EvtWord hit_check_event2[7];
 EvtWord hit_check_event_sub[123];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of X-Nauts: 6 HP, 400x36 units in size; ties together its sounds, parts, status vulnerability,
+ * init event and event table.
+ */
 BattleUnitKind unit_boss_gundan_zako_group2 = {
     UNIT_X_NAUTS_CRUMP_FORMATION2, // mUnitType
     "btl_un_gundan_zako_group2", // name
@@ -149,10 +153,18 @@ BattleUnitKind unit_boss_gundan_zako_group2 = {
     data_table, // dataTable
 };
 
+/** Defence of X-Nauts: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of X-Nauts: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of X-Nauts (percent chance each status takes hold): immune to sleep, stop, dizzy,
+ * poison, confusion, electrified, burn, freeze, Huge, Tiny, Attack Up, Attack Down, Defense Up,
+ * Defense Down, allergic, fright, Gale Force, Fast, Slow, Dodgy, Invisible, instant KO;
+ * the rest take hold at 80% or better.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -185,16 +197,22 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "Z_1"},
 };
 
+/** Event table of X-Nauts: dead_event (tag 49). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Parts of X-Nauts: 1 part (model c_zako_n). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_gundan_zako_group2", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden | kNoShadow, 0, pose_table},
 };
 
+/**
+ * Weapon of X-Nauts (attack): targets one unit for 1 damage; used by fall_attack_event,
+ * hit_check_event_sub.
+ */
 BattleWeapon weapon_gundan_zako_group2_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -235,6 +253,9 @@ BattleWeapon weapon_gundan_zako_group2_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of X-Nauts (yusuri attack): targets every unit for 4 damage; used by shake_attack_event.
+ */
 BattleWeapon weapon_gundan_zako_group2_yusuri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

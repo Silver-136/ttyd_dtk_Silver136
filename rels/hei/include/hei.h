@@ -1,3 +1,5 @@
+// Declarations for the Petal Meadows (hei) module: map init scripts, battle setup tables and the area's battle units.
+
 #pragma once
 
 #include "dolphin/types.h"

@@ -112,6 +112,7 @@ EVT_BEGIN(w_bero_in_evt)
     RETURN
 EVT_END()
 
+/** Exits of this room: the west door to aji_15 and the east door to aji_01. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -152,6 +153,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Replacement for the east door exit, swapped in with evt_bero_overwrite during Peach's scene so it leads on
+ * to aji_01 (w_bero_5).
+ */
 static BeroEntry bero_peach_data[] = {
     {
         "e_bero", // hitName

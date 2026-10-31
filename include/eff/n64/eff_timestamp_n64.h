@@ -1,3 +1,5 @@
+// eff_timestamp_n64.c: timestamp digit effect entry (effTimestampN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

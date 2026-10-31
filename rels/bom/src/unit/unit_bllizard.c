@@ -57,6 +57,7 @@ static USER_FUNC(eff_ice_barrier_end) {
     return EVT_RETURN_DONE;
 }
 
+/** Unit data of the Ice Puff: 9 HP, level 25; the battle starts it from init_event. */
 BattleUnitKind unit_bllizard = {
     UNIT_ICE_PUFF, // mUnitType
     "btl_un_bllizard", // name
@@ -105,8 +106,10 @@ BattleUnitKind unit_bllizard = {
     data_table, // dataTable
 };
 
+/** Defence of the Ice Puff: none against any element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Elemental reactions of the Ice Puff: takes 1 extra damage from fire attacks; is healed by ice attacks. */
 static BattleUnitDefenseAttr defence_attr = {{0, 1, 3, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -134,10 +137,12 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Ice Puff, model c_kmoon_b: its one target part. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_bllizard", "c_kmoon_b", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
+/** Weapon data for the Ice Puff's dive attack: 4 damage, one target. */
 static BattleWeapon weapon_bllizard_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -365,6 +370,7 @@ static EVT_BEGIN(bllizard_event)
     RETURN
 EVT_END()
 
+/** Pose table of the Ice Puff: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -385,6 +391,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Event table of the Ice Puff: the attacker being hurt by its barrier (counter_event, tag 41) and the First
+ * Strike reaction (dmg_first_attack_pos, tag 48).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ICE_EVENT, counter_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},

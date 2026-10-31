@@ -1,3 +1,5 @@
+// Logo sequence: the boot logos and the progressive-scan prompt before the title.
+
 #include "seq/seq_logo.h"
 #include "libc_decls.h"
 #include "driver/arcdrv.h"

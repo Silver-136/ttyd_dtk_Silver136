@@ -140,6 +140,11 @@ static EVT_BEGIN(n_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Exits of las_09: west door w_bero to las_08 (e_bero_1); east door e_bero to las_19 (w_bero); north door
+ * n_bero to las_10 (s_bero); dokan_1 (scripted pipe); dokan_2 (scripted pipe); dokan_5 (scripted pipe);
+ * dokan_4 (scripted pipe).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -262,6 +267,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Where Mario is put back after falling through any of the 58 floor panels (mod_00 and up) that fall away
+ * when the Shadow Sirens battle ends; all send him to a point far below the floor.
+ */
 static HitDamageReturn dmgRetPoint[] = {
     {"mod_00", {0.0f, -1000.0f, 0.0f}},
     {"mod_01", {0.0f, -1000.0f, 0.0f}},

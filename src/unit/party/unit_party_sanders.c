@@ -1,3 +1,5 @@
+// Battle unit data and scripts for Bobbery (Sanders) as a partner.
+
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_stage.h"
@@ -76,6 +78,11 @@ static EvtWord attack_event[2];
 BattleUnitSetup entry_bomzou;
 static EvtWord party_win_reaction[9];
 
+/**
+ * Bobbery's normal pose table: animations for each status (stop, dizzy, poison, confusion, sleep, freeze,
+ * instant KO), the hurt poses, walking and running, low HP, the failed Run Away tumble, talking, item use,
+ * the command menu wait, the Appeal, zero gravity, the Defend stance and plain standing.
+ */
 PoseTableEntry pose_table_sanders_stay[] = {
     {POSE_TYPE_FREEZE, "D_4"},
     {POSE_TYPE_STOP, "D_4"},
@@ -104,6 +111,10 @@ PoseTableEntry pose_table_sanders_stay[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Bobbery's pose table while Hold Fast is active (wait_event swaps it in):
+ * the same poses, but he stands and idles with his fuse lit (A_3).
+ */
 PoseTableEntry pose_table_counter_sanders[] = {
     {POSE_TYPE_SLEEP, "N_2"},
     {POSE_TYPE_KO, "D_3"},
@@ -127,6 +138,11 @@ PoseTableEntry pose_table_counter_sanders[] = {
     {POSE_TYPE_ACTION, "A_3"},
 };
 
+/**
+ * Bobbery's data events: Appeal, the audience attack reaction, his move list (tag 1, __makeTechMenuFunc),
+ * First Strike (nothing), the victory pose, an empty step run after a move's cost is paid (7), the battle-end
+ * Hold Fast reset (retail only) and the spin when he superguards an attack (47).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_APPEAL_EVENT, sanders_appeal_event},
     {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
@@ -139,10 +155,15 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Bobbery's single battle part: his targetable body (model c_bomt_n) with the normal pose table. */
 BattleUnitKindPart unitpartsdata_Party_Sanders[] = {
     {1, "btl_un_sanders", "c_bomt_n", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_sanders_stay},
 };
 
+/**
+ * Bobbery's battle unit (UNIT_BOBBERY), listed in battle_party.c's partner table:
+ * one part, the partner hit sounds, no enemy HP gauge.
+ */
 BattleUnitKind unitdata_Party_Sanders = {
     UNIT_BOBBERY, // mUnitType
     "btl_un_sanders", // name
@@ -250,6 +271,11 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Weapon of Bobbery's First Strike, when he starts the battle by hitting an enemy in the field:
+ * an explosion on the front ground-bound enemy dealing 4, 5 or 6 damage at Normal, Super or Ultra rank,
+ * with no action command; it cannot be guarded.
+ */
 BattleWeapon partyWeapon_SandersFirstAttack = {
     NULL, // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -287,6 +313,10 @@ BattleWeapon partyWeapon_SandersFirstAttack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Bomb (0 FP): Bobbery explodes on the front ground-bound enemy (explosive, cannot be guarded).
+ * Damage by rank: 1, 2 or 3 on a failed action command, 4, 5 or 6 on success. Usable while confused.
+ */
 BattleWeapon partyWeapon_SandersNormalAttack = {
     "btl_wn_pbm_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -325,6 +355,10 @@ BattleWeapon partyWeapon_SandersNormalAttack = {
     {0, 10, 10, 100, 10, 10, 10, 5, 10, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Bomb Squad (3 FP): Bobbery throws up to three time bombs that explode a turn later.
+ * The weapon itself does no damage; the thrown bombs (unit_bomzou) do.
+ */
 BattleWeapon partyWeapon_SandersTimeBombSet = {
     "btl_wn_pbm_lv1", // name
     ICON_PARTNER_MOVE_LV1, // icon
@@ -363,6 +397,11 @@ BattleWeapon partyWeapon_SandersTimeBombSet = {
     {0}, // stageEffectRates
 };
 
+/**
+ * Hold Fast (4 FP): Bobbery targets himself and gains the Hold Fast status, which damages enemies
+ * that attack him directly. The 1-turn duration here is replaced per use by the action command result plus one
+ * (_make_counterset_weapon copies this weapon into his spare slot).
+ */
 BattleWeapon partyWeapon_SandersCounterSet = {
     "btl_wn_pbm_lv2", // name
     ICON_PARTNER_MOVE_LV2, // icon
@@ -405,6 +444,10 @@ BattleWeapon partyWeapon_SandersCounterSet = {
 #endif
 };
 
+/**
+ * Bob-ombast (9 FP): a massive explosion that hits every enemy (explosive, cannot be guarded).
+ * The damage is the action command's gauge result (weaponGetACOutputParam on output 2).
+ */
 BattleWeapon partyWeapon_SandersSuperBombAttack = {
     "btl_wn_pbm_lv3", // name
     ICON_PARTNER_MOVE_LV3, // icon
@@ -1482,10 +1525,13 @@ EVT_BEGIN(sanders_battle_end_event)
     RETURN
 EVT_END()
 
+/** Bobbery's defence: 0 against every element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Bobbery's defence attributes: normal (0) against every element, no weakness or immunity. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Bobbery's status chances: 100 for every status (badges lower them in battle). */
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -1516,6 +1562,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Setup for each time bomb that Bomb Squad spawns (unit_bomzou): on Bobbery's side,
+ * acting before the player's turn, placed off stage until the throw moves it.
+ */
 BattleUnitSetup entry_bomzou = {
     &unit_bomzou, // mUnitKindParams
     ALLIANCE_NEUTRAL, // alliance

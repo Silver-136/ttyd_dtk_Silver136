@@ -1,3 +1,5 @@
+// win_party.c: the pause menu partner window (partner stats and moves): winPartyInit/Main/Disp and winPartyDt.
+
 #pragma once
 
 #include "win/win_main.h"

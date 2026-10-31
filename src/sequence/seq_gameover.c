@@ -36,13 +36,16 @@ typedef struct GameOverWork {
 USER_FUNC(evt_mario_dispflag_onoff);
 
 static GameOverWork work;
+/** Points at the Game Over sequence's work. */
 static GameOverWork* wp = &work;
 
+/** Height of each GAME OVER letter per frame as it drops from 200 units and bounces to rest (_fall_char). */
 s32 fall_data[] = {
     200, 170, 140, 110, 80, 50, 20, 10, 26, 29, 30, 29, 26,
     10, 0, 12, 15, 16, 15, 11, 6, 0, 4, 3, 1, 0,
 };
 
+/** The shorter drop and bounce of the last GAME OVER letter, height per frame. */
 s32 fall_data2[] = {
     200, 170, 140, 110, 80, 50, 20, 0, 12, 15, 16, 15, 11, 6, 0, 4, 3, 1, 0,
 };

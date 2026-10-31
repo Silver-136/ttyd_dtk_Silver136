@@ -1,3 +1,5 @@
+// party_yoshi.c: Yoshi's field partner functions (init, use, bye, exit) and the yoshi speed and frame events.
+
 #pragma once
 
 #include "dolphin/types.h"

@@ -1318,6 +1318,11 @@ EVT_BEGIN(urouro_move_semai)
     RETURN
 EVT_END()
 
+/**
+ * NPC setup table of the east side of Twilight Town: villagers F to J, the shopkeeper and his wife,
+ * the dandy, the aunt and the three children, the gatekeeper, the pig forms of the dandy, the aunt,
+ * the gatekeeper and villagers I and J (shown only before the Doopliss fight) and the five crows F to J.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"村人Ｆ"*/"\x91\xBA\x90\x6C\x82\x65", // name
@@ -2066,6 +2071,10 @@ EVT_BEGIN(usu01_crowJ_talk_event)
     RETURN
 EVT_END()
 
+/**
+ * NPCs inside house 1, the aunt's home: the aunt in her human and pig forms and the three children;
+ * door_1 lists them as the house's interior NPCs.
+ */
 const char* minka_npc[] = {
     /*"おばさん"*/"\x82\xA8\x82\xCE\x82\xB3\x82\xF1",
     /*"ブタおばさん"*/"\x83\x75\x83\x5E\x82\xA8\x82\xCE\x82\xB3\x82\xF1",
@@ -2075,11 +2084,19 @@ const char* minka_npc[] = {
     NULL,
 };
 
+/**
+ * Item objects inside house 1: the Meteor Meal "iri_20" the aunt leaves for Mario when his items are full;
+ * door_1 lists them as the house's contents.
+ */
 const char* minka_item[] = {
     "iri_20",
     NULL,
 };
 
+/**
+ * NPCs inside the shop (house 2): the shopkeeper's wife, the dandy and his pig form,
+ * the shopkeeper and the black chest's demon (Peramajin); door_2_1 lists them as the interior NPCs.
+ */
 const char* shop_npc[] = {
     /*"お店の奥さん"*/"\x82\xA8\x93\x58\x82\xCC\x89\x9C\x82\xB3\x82\xF1",
     /*"キザ野郎"*/"\x83\x4C\x83\x55\x96\xEC\x98\x59",
@@ -2089,6 +2106,10 @@ const char* shop_npc[] = {
     NULL,
 };
 
+/**
+ * Map objects inside the shop (house 2): the storeroom lock, the black chest "pera_box" and the item chest
+ * "mobj_box00"; door_2_1 lists them as the shop's contents.
+ */
 const char* shop_mobj[] = {
     "usu_00_lock",
     "pera_box",
@@ -2096,6 +2117,10 @@ const char* shop_mobj[] = {
     NULL,
 };
 
+/**
+ * Pickup items lying in the shop (house 2): item_02 (Life Shroom), item_03 (Boo's Sheet),
+ * item_04 (Jammin' Jelly) and item_05 (Inn Coupon); door_2_1 lists them as the shop's contents.
+ */
 const char* shop_item[] = {
     "item_02",
     "item_03",
@@ -2156,6 +2181,11 @@ static EVT_BEGIN(door_1_close)
     RETURN
 EVT_END()
 
+/**
+ * Door of house 1 (the aunt's home, "S_usu01_ie1_door"): its collision,
+ * the inside and outside models and the open and close scripts,
+ * with the interior NPCs and items listed in minka_npc and minka_item.
+ */
 static DoorParam door_1 = {
     0, // flags
     3, // type
@@ -2301,6 +2331,11 @@ EVT_BEGIN(door_2_1_open)
     RETURN
 EVT_END()
 
+/**
+ * Front door of house 2, the shop ("S_usu01_ie2_door1"): its collision,
+ * the inside and outside models and its scripts, with the interior NPCs,
+ * map objects and items listed in shop_npc, shop_mobj and shop_item.
+ */
 DoorParam door_2_1 = {
     0, // flags
     3, // type
@@ -2695,6 +2730,7 @@ static EVT_BEGIN(evt_wall_3)
     RETURN
 EVT_END()
 
+/** Item objects inside house 3: "item01"; door_3 lists them as the house's contents. */
 const char* door_3_item[] = {
     "item01",
     NULL,
@@ -2716,6 +2752,10 @@ static EVT_BEGIN(door_3_close)
     RETURN
 EVT_END()
 
+/**
+ * Door of house 3 ("S_usu01_ie3_door"): its collision, the inside and outside models and the open and close
+ * scripts that dip the music and ambience while Mario is indoors, with the item list door_3_item.
+ */
 static DoorParam door_3 = {
     0, // flags
     3, // type
@@ -2736,6 +2776,10 @@ static DoorParam door_3 = {
     door_3_close, // evtClose
 };
 
+/**
+ * Map exits of this part of Twilight Town: the east exit "e_bero" leads to gra_00 (Twilight Trail) and the
+ * west exit "w_bero" leads back to usu_00.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -2881,6 +2925,7 @@ EVT_BEGIN(evt_monban_look)
     RETURN
 EVT_END()
 
+/** Item menu offered at the storeroom lock: only the Shop Key (-1 ends the list). */
 static s32 lock_tbl[] = {
     ITEM_SHOP_KEY, -1,
 };
@@ -2914,6 +2959,7 @@ EVT_BEGIN(unlock)
     RETURN
 EVT_END()
 
+/** Shop display objects: the six item stands (map object and hit area) of the Twilight Town shop. */
 static ShopObj obj_list[] = {
     {"mi02_S_item_01", "A_item_01"},
     {"mi02_mi02_S_item_02", "A_item_02"},
@@ -2947,6 +2993,11 @@ static ShopDb trade_list[] = {
     {0},
 };
 
+/**
+ * Shopper data of the shop woman (the shopkeeper's wife): her NPC name,
+ * no talk or buy hooks of its own (the init script adds them by story progress) and the shop's message
+ * keys "usugurashop_00" onward.
+ */
 static ShopperData35 shopper_data = {
     /*"お店の奥さん"*/"\x82\xA8\x93\x58\x82\xCC\x89\x9C\x82\xB3\x82\xF1", // name
     NULL, NULL, // fook_evt..buy_evt
@@ -2970,6 +3021,10 @@ EVT_BEGIN(shopper_talk2)
     RETURN
 EVT_END()
 
+/**
+ * NPC names of the pig forms (the dandy, the aunt, the gatekeeper, villagers I and J and the three young women)
+ * that booboo_main lights without scene ambient light.
+ */
 static BoobooName booboo_name[] = {
     {/*"ブタキザ野郎"*/"\x83\x75\x83\x5E\x83\x4C\x83\x55\x96\xEC\x98\x59", 7, 0},
     {/*"ブタおばさん"*/"\x83\x75\x83\x5E\x82\xA8\x82\xCE\x82\xB3\x82\xF1", 1, 0},
@@ -2986,6 +3041,7 @@ EVT_BEGIN(evt_roll_get)
     RETURN
 EVT_END()
 
+/** Item menu offered at the black chest: only the Black Key (-1 ends the list). */
 static s32 key_tbl[] = {
     ITEM_BLACK_KEY_0x23, -1,
 };
@@ -3246,6 +3302,10 @@ static EVT_BEGIN(evt_ki_3)
     RETURN
 EVT_END()
 
+/**
+ * Shakeable trees of this part of Twilight Town: three whose hammer hook startles crows F to J and a fourth
+ * with no hook; the type 7 row ends the list.
+ */
 static TreeAccess tree_tbl[] = {
     {2, "A_ki_1", "S_usu01_ki01", NULL, 0, evt_ki_1},
     {2, "A_ki_2", "S_usu01_ki02", NULL, 0, evt_ki_2},

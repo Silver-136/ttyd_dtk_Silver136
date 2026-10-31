@@ -72,6 +72,7 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
+/** Exit of this room: the west door to aji_17. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -94,21 +95,28 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** First safe route across the electrified floor, as the panel numbers to walk in order. */
 u8 root_0[] = {
     10, 9, 8, 7, 6, 5, 4, 3,
     2, 1,
 };
 
+/** Second safe route across the electrified floor, as panel numbers. */
 u8 root_1[] = {
     21, 8, 7, 6, 20, 19, 18, 17,
     16, 15, 14, 13, 12, 11,
 };
 
+/** Third safe route across the electrified floor, as panel numbers. */
 u8 root_2[] = {
     30, 29, 28, 27, 26, 17, 18, 19,
     20, 6, 5, 25, 24, 23, 22,
 };
 
+/**
+ * The three routes (panel list and length), one of which the game picks to show the way across the
+ * electrified floor.
+ */
 RootRoute root_data[] = {
     {root_0, 10},
     {root_1, 14},
@@ -173,11 +181,16 @@ static EVT_BEGIN(evt_box)
     RETURN
 EVT_END()
 
+/** Where Mario is put back after taking damage from the electrified floor: the map position named mod_01. */
 static HitDamageReturn dmgReturnPt[] = {
     {"mod_01", {0.0f, -1000.0f, 0.0f}},
     {0},
 };
 
+/**
+ * Setup script of the electrified floor room: resets the panels, places the treasure chest holding the
+ * elevator key and starts the panel and lightning scripts.
+ */
 static EvtWord hikaru_yuka_init[] = {
     CALL_CHILD(hikaru_off)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("A_no01"), HIT_ATTR_TOGE)

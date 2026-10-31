@@ -257,6 +257,7 @@ USER_FUNC(evt_end_credit_npc_get_wait_type) {
     return 2;
 }
 
+/** Pointer to the ending's work data (end_work), used by the ending callbacks. */
 EndWork* end_wp = &end_work;
 
 CreditMsg end_staff_roll_msg_tbl[] = {
@@ -651,6 +652,7 @@ EVT_BEGIN(end_credit_npc_parade)
 EVT_END()
 
 #ifdef VERSION_G8ME01
+/** Texture numbers of the overlay pictures shown during the ending, in the order they appear. */
 s32 end_overlay_tex_tbl[6] = {52, 52, 54, 55, 55, 56};
 #endif
 
@@ -1229,8 +1231,10 @@ EVT_BEGIN(end_credit_queen_evt)
     RETURN
 EVT_END()
 
+/** Model name of the Smorg silhouette used in the ending's closing pictures. */
 const char* end_moa_ext_anim = "c_n_moa_a";
 
+/** Animation name of the Smorg silhouette used in the ending's closing pictures. */
 const char* end_moa_ext_pose = "S_1";
 
 /** Script helper: queues the ending picture draw callback (end_image_disp) for this frame. */
@@ -1737,28 +1741,38 @@ EVT_END()
 
 f32 fd_end_00_negone_one_374[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
+/** Float constant -1 used by the ending's trigonometric code, placed here by the compiler. */
 f32 fd_end_00_neg_one_382 = -1.0f;
 
+/** Float constant pi used by the ending's trigonometric code, placed here by the compiler. */
 f32 fd_end_00___local_PI_383 = 3.1415927f;
 
+/** Float constant 3 pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
 f32 fd_end_00___local_3PIO2_385 = 4.712389f;
 
 f32 fd_end_00_one_negone_373[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
+/** Float constant pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
 f32 fd_end_00___local_PIO2_384 = 1.5707964f;
 
+/** Float constant 1 used by the ending's trigonometric code, placed here by the compiler. */
 f32 fd_end_00_one_381 = 1.0f;
 
 f32 fd_end_00_negone_one_360[2] __attribute__((aligned(8))) = {-1.0f, 1.0f};
 
+/** Float constant -1 used by the ending's trigonometric code, placed here by the compiler. */
 f32 fd_end_00_neg_one_365 = -1.0f;
 
+/** Float constant pi used by the ending's trigonometric code, placed here by the compiler. */
 f32 fd_end_00___local_PI_366 = 3.1415927f;
 
+/** Float constant 3 pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
 f32 fd_end_00___local_3PIO2_368 = 4.712389f;
 
 f32 fd_end_00_one_negone_359[2] __attribute__((aligned(8))) = {1.0f, -1.0f};
 
+/** Float constant pi / 2 used by the ending's trigonometric code, placed here by the compiler. */
 f32 fd_end_00___local_PIO2_367 = 1.5707964f;
 
+/** Float constant 1 used by the ending's trigonometric code, placed here by the compiler. */
 f32 fd_end_00_one_364 = 1.0f;

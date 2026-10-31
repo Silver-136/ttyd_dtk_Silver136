@@ -1,3 +1,5 @@
+// eff_number.c: number-drawing helper for effects (effNumberGX).
+
 #pragma once
 
 #include <dolphin/types.h>

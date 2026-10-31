@@ -1,3 +1,6 @@
+// Ultra Hammer effect: three stacked ring models (wakka: ring) with a scrolling texture that scroll in turn;
+// it ends after `counter` frames (0 or less: until removed).
+
 #include "eff/eff_ultra_hammer.h"
 #include "driver/dispdrv.h"
 #include "memory.h"
@@ -129,6 +132,7 @@ s16 wakka_texcoord0_tbl[] ATTRIBUTE_ALIGN(32) = {
     28672, 8192, // 41
 };
 
+/** The ring model's 20 display lists, drawn with wakka_dl_0_size_tbl. */
 void* wakka_dl_0_tbl[] = {
     wakka_dl_0_0, // 0
     wakka_dl_0_1, // 1
@@ -390,6 +394,7 @@ u8 wakka_dl_0_19[] ATTRIBUTE_ALIGN(32) = {
     GX_NOP, GX_NOP, GX_NOP, GX_NOP, GX_NOP,
 };
 
+/** Display-list sizes (32-byte units) of the ring model's lists. */
 u8 wakka_dl_0_size_tbl[] = {
     1, // 0
     1, // 1

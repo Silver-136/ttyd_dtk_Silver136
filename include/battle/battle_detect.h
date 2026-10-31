@@ -1,3 +1,5 @@
+// Declares the target detection and first-attacker functions.
+
 #pragma once
 
 #include <dolphin/types.h>

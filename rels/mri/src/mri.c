@@ -362,6 +362,7 @@ EVT_BEGIN(mri_puni_save)
     RETURN
 EVT_END()
 
+/** Item list for the Puni switch's item window: only the Puni Orb (-1 ends the list). */
 s32 mri_itemsel_table[] = {
     64, -1,
 };

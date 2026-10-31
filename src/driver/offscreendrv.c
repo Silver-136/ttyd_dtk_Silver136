@@ -1,3 +1,6 @@
+// Offscreen driver: named screen regions that are copied into textures each frame (for effects that
+// draw the scene into a texture), one set for the field and one for battle.
+
 #include "driver/offscreendrv.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"

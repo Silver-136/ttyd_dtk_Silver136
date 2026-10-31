@@ -1,3 +1,5 @@
+// eff_peach_fukidashi.c: Peach speech-bubble (fukidashi) effect entry, its main/draw callbacks and effSetPeachFukiBatu.
+
 #pragma once
 
 #include "driver/camdrv.h"

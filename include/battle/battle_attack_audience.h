@@ -1,3 +1,5 @@
+// Declares the audience attack events and lookup functions.
+
 #pragma once
 
 #include "evt/evt_cmd.h"

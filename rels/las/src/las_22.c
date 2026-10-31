@@ -98,6 +98,10 @@ EVT_BEGIN(door_dummy)
     RETURN
 EVT_END()
 
+/**
+ * Exits of las_22: west door w_bero to las_20 (e_bero); east door e_bero to las_24 (w_bero); south road
+ * s_bero to las_23 (n_bero_1).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -154,6 +158,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Front faces of the first group of gears of the turntable room, turned together by haguruma_evt. */
 static const char* haguruma_hontai[] = {
     "S_hgm_01a",
     "S_hgm_02a",
@@ -170,6 +175,7 @@ static const char* haguruma_hontai[] = {
     "S_hgm_20a",
 };
 
+/** Front faces of the second group of gears, turned the other way. */
 static const char* haguruma_hontai2[] = {
     "S_hgm_05a",
     "S_hgm_09a",
@@ -180,6 +186,7 @@ static const char* haguruma_hontai2[] = {
     "S_hgm_18a",
 };
 
+/** Shadow faces of the first group of gears, turned with haguruma_hontai. */
 static const char* haguruma_kage[] = {
     "S_hgm_01b",
     "S_hgm_02b",
@@ -194,6 +201,7 @@ static const char* haguruma_kage[] = {
     "S_hgm_16b",
 };
 
+/** Shadow faces of the second group of gears, turned with haguruma_hontai2. */
 static const char* haguruma_kage2[] = {
     "S_hgm_05b",
     "S_hgm_09b",
@@ -377,6 +385,7 @@ static EVT_BEGIN(dai_evt)
     RETURN
 EVT_END()
 
+/** Item list for the key window: only Palace Key 0x2F (-1 ends the list). */
 static s32 key_tbl[] = {
     ITEM_PALACE_KEY_0x2F, -1,
 };

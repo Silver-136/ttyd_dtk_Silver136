@@ -68,6 +68,7 @@ EVT_BEGIN(bero_02_into_event)
     RETURN
 EVT_END()
 
+/** Exits of mri_17: west road w_bero to mri_12 (e_bero_2); dokan1 (scripted pipe); dokan2 (scripted pipe). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -153,6 +154,7 @@ static EVT_BEGIN(rival_talk)
     RETURN
 EVT_END()
 
+/** NPCs of the cage trap scene: the guide Puni, his sister and the rival Puni. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガイド"*/"\x83\x4B\x83\x43\x83\x68", // name
@@ -193,6 +195,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Plants Mario can search in mri_17: A_f1_ueki01, A_f1_ueki02, A_f1_ueki03. */
 static KusaAccess ueki_access_data[] = {
     {1, "A_f1_ueki01", "S_f1_ueki01", NULL},
     {1, "A_f1_ueki02", "S_f1_ueki02", NULL},
@@ -200,6 +203,7 @@ static KusaAccess ueki_access_data[] = {
     {4, NULL, NULL, NULL},
 };
 
+/** Scattered (x, z) spots, as pairs of 16-bit values, where the caged Punies are placed. */
 s16 trap_position[] = {
     69, -22, 70, -9, 64, -11, 46, -34,
     39, -45, 56, -31, 64, -15, 39, -6,

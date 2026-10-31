@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: a snowman that drops in, then hops along a preset path kicking up snow dust and vapor.
+
 #include "eff/eff_n64.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -27,11 +29,18 @@ typedef struct EffSnowmanN64Work {
     s32 phase;     // 0x5C
 } EffSnowmanN64Work;
 
+/**
+ * Width of the snowman in percent over a hop: it crouches, stretches as it leaves the ground,
+ * then settles. The height is set to the opposite, so it keeps its volume.
+ */
 static s8 jump_hscale_data[] = {100, 90, 82, 76, 72, 70, 74, 89, 103, 116, 118, 120, 120, 120, 120, 118, 114, 110};
+/** Width in percent over the 27-frame landing squash, written as characters ('d' is 100). */
 static u8 land_hscale_data[] = "dZRLHFJYdlnlf`_`ceddddddddd";
 
+/** Width in percent over the long spinning hop: a long crouch, then the stretch as it takes off. */
 static u8 jump2_hscale_data[] = {100, 90, 82, 76, 72, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 74, 89, 103, 116, 118, 120, 120, 120, 120, 118, 114, 110};
 
+/** Turn in degrees over the long spinning hop: two sways back and forth before it leaves the ground. */
 static s8 jump2_ry_data[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 10, 16, 22, 28, 33, 38, 40, 41, 41, 40, 38, 33, 28, 22, 16, 10, 5, 1, 1, 5, 10, 16, 22, 28, 33, 38, 40, 41, 41, 40, 38, 33, 28, 22, 16, 10, 5, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 void effSnowmanMain(EffectEntry* effect);

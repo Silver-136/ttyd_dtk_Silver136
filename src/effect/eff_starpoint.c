@@ -1,3 +1,5 @@
+// Star Points: star icons launched up and outward from a point one after another, then falling and fading.
+
 #include "eff/eff_starpoint.h"
 #include "driver/dispdrv.h"
 #include "driver/icondrv.h"

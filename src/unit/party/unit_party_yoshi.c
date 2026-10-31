@@ -1,3 +1,5 @@
+// Battle unit data and scripts for Yoshi as a partner.
+
 #include "data_tables.h"
 #include "version.h"
 #include "battle/battle.h"
@@ -115,6 +117,11 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 u8 _yoshig_tpl_no_tbl[8] __attribute__((aligned(4)));
 
+/**
+ * Yoshi's pose table: animations for each status (stop, dizzy, poison, confusion, sleep, freeze, instant KO),
+ * the hurt poses, walking and running, low HP, the failed Run Away tumble, talking, item use,
+ * the command menu wait, the Appeal, zero gravity, the Defend stance and plain standing.
+ */
 PoseTableEntry pose_table_yoshi_stay[] = {
     {POSE_TYPE_FREEZE, "PYS_D_5"},
     {POSE_TYPE_STOP, "PYS_D_5"},
@@ -143,6 +150,11 @@ PoseTableEntry pose_table_yoshi_stay[] = {
     {POSE_TYPE_ACTION, "PYS_S_1"},
 };
 
+/**
+ * Yoshi's data events: Appeal, the audience attack reaction, his move list (tag 1, __makeTechMenuFunc), First
+ * Strike (nothing), the victory pose, an empty step run after a move's cost is paid (7) and the spin when he
+ * superguards an attack (47).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_APPEAL_EVENT, yoshi_appeal_event},
     {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
@@ -154,10 +166,13 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Yoshi's defence (shared by his egg parts): 0 against every element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Yoshi's defence attributes: normal (0) against every element, no weakness or immunity. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Yoshi's status chances: 100 for every status (badges lower them in battle). */
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -183,6 +198,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/** Pose table for a green Mini-Egg (egg parts 2-7): the CHU_C_1 egg model for every pose. */
 PoseTableEntry pose_table_egg_g[] = {
     {POSE_TYPE_NORMAL, "CHU_C_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "CHU_C_1"},
@@ -190,6 +206,7 @@ PoseTableEntry pose_table_egg_g[] = {
     {POSE_TYPE_ACTION, "CHU_C_1"},
 };
 
+/** Pose table for a yellow Mini-Egg: the CHU_C_2 egg model for every pose. */
 PoseTableEntry pose_table_egg_y[] = {
     {POSE_TYPE_NORMAL, "CHU_C_2"},
     {POSE_TYPE_DAMAGE_GUARDED, "CHU_C_2"},
@@ -197,6 +214,7 @@ PoseTableEntry pose_table_egg_y[] = {
     {POSE_TYPE_ACTION, "CHU_C_2"},
 };
 
+/** Pose table for a pink Mini-Egg: the CHU_C_3 egg model for every pose. */
 PoseTableEntry pose_table_egg_p[] = {
     {POSE_TYPE_NORMAL, "CHU_C_3"},
     {POSE_TYPE_DAMAGE_GUARDED, "CHU_C_3"},
@@ -204,6 +222,10 @@ PoseTableEntry pose_table_egg_p[] = {
     {POSE_TYPE_ACTION, "CHU_C_3"},
 };
 
+/**
+ * Yoshi's battle parts: part 1 is his targetable body (model c_babyyoshi);
+ * parts 2-7 are hidden, untargetable eggs (c_tamago) that Mini-Egg lays and throws.
+ */
 BattleUnitKindPart unitpartsdata_Party_Yoshi[] = {
     {1, "btl_un_yoshi", "c_babyyoshi", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_yoshi_stay},
     {2, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_egg_g},
@@ -214,6 +236,10 @@ BattleUnitKindPart unitpartsdata_Party_Yoshi[] = {
     {7, "btl_un_yoshi", "c_tamago", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_egg_g},
 };
 
+/**
+ * Yoshi's battle unit (UNIT_YOSHI), listed in battle_party.c's partner table:
+ * seven parts, the partner hit sounds and no enemy HP gauge.
+ */
 BattleUnitKind unitdata_Party_Yoshi = {
     UNIT_YOSHI, // mUnitType
     "btl_un_yoshi", // name
@@ -304,6 +330,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Ground Pound (0 FP): repeated pounds on one enemy from above (not ceiling enemies), 1 damage each,
+ * lowered by each earlier hit; flips shelled enemies and grounds winged ones. Usable while confused.
+ */
 BattleWeapon partyWeapon_YoshiNormalAttack = {
     "btl_wn_pys_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -345,6 +375,10 @@ BattleWeapon partyWeapon_YoshiNormalAttack = {
 #endif
 };
 
+/**
+ * Gulp (4 FP), the hit on an enemy spat out as a shot at the enemies behind it (swallow attribute 2):
+ * pierces defence; by rank 2, 3 or 3 damage on a failed action command, 4, 5 or 6 on success.
+ */
 BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
     "btl_wn_pys_lv1", // name
     ICON_PARTNER_MOVE_LV1, // icon
@@ -388,6 +422,10 @@ BattleWeapon partyWeapon_YoshiNomikomi_Shot = {
 #endif
 };
 
+/**
+ * Gulp (4 FP), the hit on an enemy that is spat straight out (no swallow attribute 2):
+ * pierces defence; by rank 2, 3 or 3 damage on a failed action command, 4, 5 or 6 on success.
+ */
 BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
     "btl_wn_pys_lv1", // name
     ICON_PARTNER_MOVE_LV1, // icon
@@ -431,6 +469,7 @@ BattleWeapon partyWeapon_YoshiNomikomi_Spew = {
 #endif
 };
 
+/** Gulp's 0-damage tongue hit on an enemy that cannot be swallowed or after a failed action command. */
 BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     "btl_wn_pys_lv1", // name
     ICON_PARTNER_MOVE_LV1, // icon
@@ -469,6 +508,10 @@ BattleWeapon partyWeapon_YoshiNomikomi_Dmg0 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Gulp's fire breath after swallowing an enemy with swallow attribute 4:
+ * 1 fire damage to every enemy, pierces defence.
+ */
 BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     "btl_wn_pys_lv1", // name
     ICON_PARTNER_MOVE_LV1, // icon
@@ -508,6 +551,10 @@ BattleWeapon partyWeapon_YoshiNomikomi_Fire = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Damage dealt to the enemy behind when Gulp spits an enemy into it (subsetevt_swallow_shot_damage):
+ * pierces defence; by rank 1, 2 or 3 damage on a failed action command, 4, 5 or 6 on success.
+ */
 BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -538,6 +585,10 @@ BattleWeapon partyWeapon_YoshiNomikomi_Involved = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Mini-Egg (3 FP): eggs thrown at random enemies, 1 damage each; a hit shrinks the enemy to Tiny
+ * (strength -2) for 3 turns. Cannot be guarded.
+ */
 BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
     "btl_wn_pys_lv2", // name
     ICON_PARTNER_MOVE_LV2, // icon
@@ -587,6 +638,10 @@ BattleWeapon partyWeapon_YoshiEggAttack_Minimini = {
 #endif
 };
 
+/**
+ * Stampede (6 FP): a herd of Yoshis tramples every enemy, 1 damage per trample, lowered by each earlier hit;
+ * the action command decides how many tramples. Cannot be guarded.
+ */
 BattleWeapon partyWeapon_YoshiCallGuard = {
     "btl_wn_pys_lv3", // name
     ICON_PARTNER_MOVE_LV3, // icon
@@ -629,6 +684,10 @@ BattleWeapon partyWeapon_YoshiCallGuard = {
 #endif
 };
 
+/**
+ * Footstep sounds during Ground Pound's run-up and flutter (walk, run, the fast-leg poses and the flutter pose):
+ * left and right steps played by _yoshi_slide_move_sound at fixed points of each loop.
+ */
 PoseSoundTiming posesound_normal_attack[] = {
     {"PYS_W_1", 0.01f, _yoshi_slide_move_sound, "SFX_PARTY_BATTLE_MOVE1L", 0, 1},
     {"PYS_W_1", 0.25f, _yoshi_slide_move_sound, "SFX_PARTY_BATTLE_MOVE1R", 0, 1},

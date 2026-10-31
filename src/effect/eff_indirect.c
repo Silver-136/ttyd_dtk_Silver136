@@ -1,3 +1,5 @@
+// Screen distortion (Indirect): copies the frame buffer and redraws it over a point through a texture; types 0-1.
+
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif

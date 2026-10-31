@@ -152,6 +152,7 @@ static EVT_BEGIN(s_door_close)
     RETURN
 EVT_END()
 
+/** Exit of this room: the south door to aji_17. */
 static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName
@@ -188,6 +189,10 @@ static EVT_BEGIN(bero_peach_evt)
     RETURN
 EVT_END()
 
+/**
+ * Replacement for the south door exit, swapped in with evt_bero_overwrite during Peach's scene so it leads
+ * on to aji_01 (n_bero_1).
+ */
 static BeroEntry bero_peach_data[] = {
     {
         "s_bero", // hitName
@@ -210,8 +215,10 @@ static BeroEntry bero_peach_data[] = {
     {0},
 };
 
+/** The colour of the potion currently in the beaker, packed as RGBA (initially opaque). */
 GXColor g_Kusuri_Col = {0, 0, 0, 255};
 
+/** Base colours of the four potions in RGBA: red, blue, yellow and green. */
 GXColor g_Kusuri_Src_Col[] = {
     {255, 0, 0, 255},
     {0, 0, 255, 255},
@@ -221,8 +228,10 @@ GXColor g_Kusuri_Src_Col[] = {
 
 s32 g_Kusuri2_No = 1;
 
+/** Potion number (minus 1) placed in the third mixing slot. */
 s32 g_Kusuri3_No = 2;
 
+/** Potion number (minus 1) placed in the fourth mixing slot. */
 s32 g_Kusuri4_No = 3;
 
 /**
@@ -303,14 +312,17 @@ EVT_BEGIN(peach_evt_kaihei_close_all)
     RETURN
 EVT_END()
 
+/** The correct recipe: the order in which the four potions must be dispensed into the beaker. */
 s32 kusuri_tyogo_list[] = {
     1, 2, 3, 2, 3, 1, 3, 4,
 };
 
+/** Potions Peach has placed in the machine so far (-1 for an empty slot). */
 s32 kusuri_list[] = {
     -1, -1, -1, -1, -1,
 };
 
+/** Ids of the four potion bottles, indexed by potion number minus 1. */
 s32 kusuri_id[] = {
     102, 101, 103, 104,
 };
@@ -1093,6 +1105,9 @@ EVT_BEGIN(kusuri_color_sippai)
     RETURN
 EVT_END()
 
+/**
+ * Route of the beaker along the machine: eight stops, each with a target x, travel time, slot and direction.
+ */
 s32 peach_evt_bika_move_data[] = {
     0, 77, 2310, 0, 0, 141, 1920, 1,
     0, 203, 1860, 2, 0, 141, 1860, 1,

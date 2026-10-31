@@ -16,6 +16,10 @@ static BeroEntry bero_entry_data[7];
 static HitDamageReturn hitDmgRetPoints[13];
 EvtWord tik_15_init_evt[91];
 
+/**
+ * Doors of this room: the pipes to tik_04 and tik_01, two west exits to tik_16, the east exit to tik_20
+ * and the north exit to tik_21.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "dokan_1", // hitName
@@ -118,6 +122,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Spots Mario is put back on after falling into one of this room's hazards (each object's own position). */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_1", {0.0f, -1000.0f, 0.0f}},
     {"mod_2", {0.0f, -1000.0f, 0.0f}},

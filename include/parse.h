@@ -1,3 +1,5 @@
+// parse.c: the text data parser for nested tagged blocks (ParseWork, parsePush/parsePop, parseTagGet1).
+
 #pragma once
 
 #include <dolphin/types.h>

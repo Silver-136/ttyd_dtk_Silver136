@@ -1,3 +1,6 @@
+// party.c: the partner system (PartyEntry, the PartyWork union, PartyMember, PartyFlags) and the party* functions.
+// Per-partner work structs (PartyWorkYoshi, Nokonoko, Bomhei, Cloud, Vivian) are declared here.
+
 #pragma once
 
 #include "mario/mario.h"

@@ -1,3 +1,5 @@
+// evt_lottery.c: the Pianta Parlor lottery (lottery_info, lotteryGetPtr, evt_lottery, evt_lottery_buy).
+
 #pragma once
 
 #include <dolphin/types.h>

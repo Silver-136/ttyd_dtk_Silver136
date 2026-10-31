@@ -1,3 +1,5 @@
+// eff_snow_dust_n64.c: snow dust effect entry (effSnowDustN64Entry) and its work data (EffSnowDustN64Work).
+
 #pragma once
 
 #include "driver/effdrv.h"

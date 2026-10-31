@@ -259,6 +259,7 @@ static EVT_BEGIN(n_door_close)
     RETURN
 EVT_END()
 
+/** Doors of this map: the Glitz Pit's front door, leading to the lobby (tou_02). */
 static BeroEntry bero_data[] = {
     {
         "a_door_mon", // hitName
@@ -333,11 +334,13 @@ EVT_BEGIN(evt_door_1_close)
     RETURN
 EVT_END()
 
+/** NPC hidden with the shop interior: the clerk. */
 static const char* mise_npc[] = {
     /*"店員"*/"\x93\x58\x88\xF5",
     NULL,
 };
 
+/** The item shop's door: opening it folds the front wall away to show the clerk inside. */
 static DoorParam door_1 = {
     1, // flags
     2, // type
@@ -457,6 +460,7 @@ EVT_BEGIN(evt_wall2)
     RETURN
 EVT_END()
 
+/** NPCs inside the tavern, shown only while its front is open: the keeper and his customers. */
 const char* sakaba_npc[] = {
     /*"酒場店主"*/"\x8E\xF0\x8F\xEA\x93\x58\x8E\xE5",
     /*"美女"*/"\x94\xFC\x8F\x97",
@@ -467,6 +471,7 @@ const char* sakaba_npc[] = {
     NULL,
 };
 
+/** Item inside the tavern, shown with it: the Star Piece item_03. */
 const char* sakaba_item[] = {
     "item_03",
     NULL,
@@ -491,6 +496,7 @@ EVT_BEGIN(evt_door_2_close)
     RETURN
 EVT_END()
 
+/** The tavern's door: opening it folds the front walls down to show the keeper, customers and Star Piece. */
 static DoorParam door_2 = {
     3, // flags
     2, // type
@@ -617,6 +623,7 @@ static EVT_BEGIN(evt_kanban2)
     RETURN
 EVT_END()
 
+/** Shelf spots of the item shop: the display model and the hit object for each of the six items for sale. */
 static ShopObj obj_list[] = {
     {"sina_1", "a_sina1"},
     {"sina_2", "a_sina_2"},
@@ -626,6 +633,10 @@ static ShopObj obj_list[] = {
     {"sina_6", "a_sina_6"},
 };
 
+/**
+ * The item shop's stock and prices:
+ * Earth Quake, Thunder Bolt, Power Punch, Repel Cape, Point Swap and Super Shroom.
+ */
 static ShopItem goods_list[] = {
     {ITEM_EARTH_QUAKE, 15},
     {ITEM_THUNDER_BOLT, 12},
@@ -635,6 +646,7 @@ static ShopItem goods_list[] = {
     {ITEM_SUPER_SHROOM, 15},
 };
 
+/** The prices this shop pays when Mario sells these items here. */
 static ShopDb trade_list[] = {
     {ITEM_EARTH_QUAKE, 7, 0},
     {ITEM_THUNDER_BOLT, 6, 0},
@@ -651,6 +663,7 @@ static ShopDb trade_list[] = {
     {0},
 };
 
+/** The shop clerk and the shop dialogue lines (stg3_shop_00 to 34) the shop system uses. */
 static ShopperData35 shopper_data = {
     /*"店員"*/"\x93\x58\x88\xF5", // name
     NULL, NULL, // fook_evt..buy_evt
@@ -1811,6 +1824,11 @@ static EVT_BEGIN(talk_sarary)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the plaza: the blimp, the tavern keeper, the shop clerk, the hot dog vendor and the runaway egg,
+ * the plaza family, the three girls, two Toads, a vendor, two Lakitus, the beauty, the dandy and the
+ * salaryman of Trouble Center request 24.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"飛空船"*/"\x94\xF2\x8B\xF3\x91\x44", // name
@@ -2289,6 +2307,7 @@ static EVT_BEGIN(evt_tamago_scale2)
     RETURN
 EVT_END()
 
+/** The ten points (x, y, z) the runaway egg hops between around the plaza in evt_tamago_move. */
 s32 yoshi_data[] = {
     -340, 0, 60, -285, 0, 0, -245, 0,
     40, -295, 0, 115, -330, 0, 185, -375,

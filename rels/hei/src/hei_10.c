@@ -215,6 +215,10 @@ static void ext_disp(CameraId camera, void* param) {
     extLoadTextureExit();
 }
 
+/**
+ * Doors of this room: the west exit (w_bero) to hei_09, the east exit (e_bero) to hei_11 and the pipe
+ * (dokan) to hei_07.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         ("w_bero"), // hitName
@@ -268,6 +272,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Start frames (0 to 38 in steps of 2) of the Fuzzy swarm's walking animation (c_chorobon, CBN_W_1), one per
+ * Fuzzy of the room's effect.
+ */
 static ExtTexInfo ext_data[] = {
     {("c_chorobon"), ("CBN_W_1"), 0.0f},
     {("c_chorobon"), ("CBN_W_1"), 2.0f},

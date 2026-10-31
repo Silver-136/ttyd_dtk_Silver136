@@ -1,3 +1,5 @@
+// Countdown timer: the on-screen time limit that timed events start, save, restart and end.
+
 #include "countdown.h"
 
 #include "driver/camdrv.h"

@@ -1,3 +1,5 @@
+// Declares the battle unit structure, flags and unit control functions.
+
 #pragma once
 
 #include <dolphin/types.h>

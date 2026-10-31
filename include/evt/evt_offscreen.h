@@ -1,3 +1,5 @@
+// evt_offscreen.c: script commands for offscreen render targets (offscreendrv).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

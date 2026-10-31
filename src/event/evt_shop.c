@@ -1,3 +1,5 @@
+// Scripts and commands for the item shops: the shop list window, buying, selling, shop points.
+
 #include "version.h"
 #include "evt/evt_shop.h"
 #include "evt/evt_cmd.h"
@@ -61,6 +63,10 @@ USER_FUNC(evt_win_item_select);
 USER_FUNC(get_ptr);
 USER_FUNC(get_value);
 
+/**
+ * Text colours of the shop windows: white for the item name, price, point count, list title and the list's
+ * "Pts." and "Prizes" headings; in the Shop Prizes list, prizes already earned are red and the rest black.
+ */
 static const GXColor shop_name_color = {0xFF, 0xFF, 0xFF, 0xFF};
 static const GXColor shop_price_color = {0xFF, 0xFF, 0xFF, 0xFF};
 static const GXColor shop_point_num_color = {0xFF, 0xFF, 0xFF, 0xFF};
@@ -87,12 +93,22 @@ EvtWord point_evt[VERSION_PICK(15, 35)];
 EvtWord evt_shoplist[10];
 static EvtWord main_evt[4];
 
+/**
+ * Windows shown while browsing a shop shelf: the item name and price,
+ * the item description and the shop point count.
+ */
 static WinMgrDesc window_desc[] = {
     {0, 0, 8, -150, 120, 300, 50, {0x2B, 0xA4, 0xFF, 0xFF}, NULL, name_disp},
     {0, 0, 8, -240, -130, 500, 80, {0xF0, 0xF0, 0xF0, 0xFF}, help_main, help_disp},
     {2, 0, 8, -250, -130, 150, 45, {0xF0, 0xF0, 0xF0, 0xFF}, NULL, point_disp},
 };
 
+/**
+ * Shop point prizes: 10 Mushroom, 20 Ice Storm, 30 Super Shroom, 50 Thunder Rage, 70 Shooting Star,
+ * 100 Gold Bar, 150 Life Shroom, 200 Ultra Shroom, 250 Jammin' Jelly
+ * and 300 Gold Bar x3 (the point count then resets). Ends with -1.
+ * Read by the prize checks and the Shop Prizes list.
+ */
 ShopPoint shopPointList[] = {
     {10, ITEM_MUSHROOM},
     {20, ITEM_ICE_STORM},
@@ -107,6 +123,10 @@ ShopPoint shopPointList[] = {
     {-1, -1},
 };
 
+/**
+ * Windows of the Shop Prizes list ("Just checking points..."): the title,
+ * the prize list and the shop point count.
+ */
 WinMgrDesc list_desc[] = {
     {0, 0, 8, -280, 160, 210, 80, {0x2B, 0xA4, 0xFF, 0xFF}, NULL, title_disp},
     {0, 3, 8, -60, 160, 340, 300, {0xF0, 0xF0, 0xF0, 0xFF}, NULL, list_disp},

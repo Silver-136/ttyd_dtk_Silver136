@@ -1,3 +1,5 @@
+// Pause menu: the badge window (equip and unequip badges).
+
 #include "version.h"
 #include "win/win_main.h"
 #include "data/item_data.h"

@@ -1,3 +1,5 @@
+// evt_party.c: script commands that control the partner: position, movement, poses, flags and camera.
+
 #pragma once
 
 #include "evt/evt_cmd.h"

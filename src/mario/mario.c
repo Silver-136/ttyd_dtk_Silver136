@@ -1,3 +1,6 @@
+// Mario's work (MarioWork): init, per-frame main, the key/control locks, pose and paper changes, display and
+// shadow, and the per-map start-up hooks.
+
 #include "mario/mario.h"
 #include "driver/animdrv.h"
 #include "driver/hitdrv.h"

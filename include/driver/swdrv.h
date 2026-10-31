@@ -1,3 +1,5 @@
+// swdrv.c: the saved work driver: global (swByteGet, swGet...) and area-local (_swGet...) saved words and flags.
+
 #pragma once
 
 #include <dolphin/types.h>

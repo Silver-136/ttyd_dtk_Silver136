@@ -44,6 +44,7 @@ static EVT_BEGIN(s_open)
     RETURN
 EVT_END()
 
+/** Doors of this room: the south exit (s_bero) to jin_10 and the hole (ana) to jin_07. */
 static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName

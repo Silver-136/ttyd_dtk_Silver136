@@ -1,3 +1,5 @@
+// event.c: the story event tables (EventData, EventStage): per-chapter progress points.
+
 #pragma once
 
 #include <dolphin/types.h>

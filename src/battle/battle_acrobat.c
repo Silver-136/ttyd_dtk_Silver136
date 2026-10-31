@@ -1,3 +1,5 @@
+// Acrobat timing window: a short timed-press prompt and its result, used during Mario and partner attacks.
+
 #include "battle/battle_acrobat.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_unit.h"

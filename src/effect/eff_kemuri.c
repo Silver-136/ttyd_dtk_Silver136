@@ -1,3 +1,6 @@
+// Smoke puff (kemuri: smoke) spread in a ring around a point; types 0-2 pick the size and how long it lasts.
+// Also holds effKemuri2Entry, a second smoke effect that drifts along a direction (dx, dz).
+
 #include "eff/eff_kemuri.h"
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -14,6 +17,10 @@ void effKemuriDisp(CameraId camId, void* param);
 static void effKemuri2Main(EffectEntry* entry);
 static void effKemuri2Disp(CameraId camId, void* param);
 
+/**
+ * Per-frame X and Y stretch (out of 128) of a type 0 landing puff over its first 30 frames: it spreads
+ * to 1.5 wide while flattening to 0.8 tall. Read by effKemuriMain.
+ */
 u8 touchdown_scale[30][2] = {
     {0x80, 0x80}, {0x82, 0x7F}, {0x84, 0x7E}, {0x87, 0x7D}, {0x89, 0x7C}, {0x8C, 0x7A},
     {0x8F, 0x79}, {0x92, 0x78}, {0x95, 0x77}, {0x98, 0x76}, {0x9B, 0x75}, {0x9D, 0x74},
@@ -22,6 +29,10 @@ u8 touchdown_scale[30][2] = {
     {0xBC, 0x67}, {0xBD, 0x67}, {0xBE, 0x66}, {0xBF, 0x66}, {0xBF, 0x66}, {0xC0, 0x66},
 };
 
+/**
+ * Per-frame X and Y stretch (out of 128) of the bigger type 2 puff over its first 30 frames: it billows
+ * to 2.0 wide and 1.2 tall. Read by effKemuriMain.
+ */
 u8 heavy_scale[30][2] = {
     {0x80, 0x80}, {0x84, 0x80}, {0x89, 0x81}, {0x8E, 0x82}, {0x93, 0x83}, {0x99, 0x85},
     {0x9E, 0x86}, {0xA4, 0x87}, {0xAA, 0x88}, {0xB0, 0x89}, {0xB6, 0x8A}, {0xBB, 0x8B},

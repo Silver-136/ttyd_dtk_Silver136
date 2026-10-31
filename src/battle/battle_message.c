@@ -1,3 +1,5 @@
+// Battle message announcements: the on-screen text banner shown by battle scripts.
+
 #include "battle/battle.h"
 #include "data/item_data.h"
 #include "driver/dispdrv.h"

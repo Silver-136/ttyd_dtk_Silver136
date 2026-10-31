@@ -1,3 +1,5 @@
+// eff_ripple_n64.c: ripple entry (effRippleN64Entry), tilt setter (effRippleN64SetRxRz), work data.
+
 #include "driver/camdrv.h"
 #pragma once
 

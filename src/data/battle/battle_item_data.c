@@ -1,3 +1,5 @@
+// Battle weapon data for usable items (mushrooms, cooked dishes and so on) and their effects.
+
 #include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
@@ -441,6 +443,10 @@ EVT_BEGIN(ItemEvent_Support_RefreshEffect)
     RETURN
 EVT_END()
 
+/**
+ * Stand-in battle data for cooking items that have none of their own (battle_seq_command puts it in the menu):
+ * heals one ally via ItemEvent_Recovery.
+ */
 BattleWeapon ItemWeaponData_CookingItem = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -471,6 +477,7 @@ BattleWeapon ItemWeaponData_CookingItem = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Mushroom: restores 5 HP to one ally (ItemEvent_Recovery). */
 BattleWeapon ItemWeaponData_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -507,6 +514,7 @@ BattleWeapon ItemWeaponData_Kinoko = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Life Shroom: restores 10 HP; also revives Mario or his partner when he falls (ItemEvent_Recovery). */
 BattleWeapon ItemWeaponData_Kinkyuu_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -543,6 +551,7 @@ BattleWeapon ItemWeaponData_Kinkyuu_Kinoko = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Super Shroom: restores 10 HP to one ally (ItemEvent_Recovery). */
 BattleWeapon ItemWeaponData_Super_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -579,6 +588,7 @@ BattleWeapon ItemWeaponData_Super_Kinoko = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Ultra Shroom: restores 50 HP to one ally (ItemEvent_Recovery). */
 BattleWeapon ItemWeaponData_Ultra_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -615,6 +625,7 @@ BattleWeapon ItemWeaponData_Ultra_Kinoko = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Dried Shroom: restores 1 HP to one ally (ItemEvent_Recovery). */
 BattleWeapon ItemWeaponData_Sinabita_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -651,6 +662,7 @@ BattleWeapon ItemWeaponData_Sinabita_Kinoko = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Honey Syrup: restores 5 FP to one ally (ItemEvent_Recovery). */
 BattleWeapon ItemWeaponData_Honey_Syrup = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -687,6 +699,7 @@ BattleWeapon ItemWeaponData_Honey_Syrup = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Maple Syrup: restores 10 FP to one ally (ItemEvent_Recovery). */
 BattleWeapon ItemWeaponData_Maple_Syrup = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -723,6 +736,7 @@ BattleWeapon ItemWeaponData_Maple_Syrup = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Jammin' Jelly: restores 50 FP to one ally (ItemEvent_Recovery). */
 BattleWeapon ItemWeaponData_Royal_Jelly = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -759,6 +773,7 @@ BattleWeapon ItemWeaponData_Royal_Jelly = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Whacka Bump: restores 25 HP and 25 FP to one ally (ItemEvent_Recovery). */
 BattleWeapon ItemWeaponData_Tankobu = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -906,6 +921,7 @@ EVT_BEGIN(ItemEvent_Pow_Block)
     RETURN
 EVT_END()
 
+/** POW Block: damages every enemy on the ground (ItemEvent_Pow_Block). */
 BattleWeapon ItemWeaponData_Pow_Block = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1017,6 +1033,7 @@ EVT_BEGIN(ItemEvent_Fire_Flower)
     RETURN
 EVT_END()
 
+/** Fire Flower: fireballs on every enemy, with a chance to burn (ItemEvent_Fire_Flower). */
 BattleWeapon ItemWeaponData_Fire_Flower = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1150,6 +1167,7 @@ EVT_BEGIN(ItemEvent_Kaminari)
     RETURN
 EVT_END()
 
+/** Thunder Rage: lightning on every enemy (ItemEvent_Kaminari_Dokkan). */
 BattleWeapon ItemWeaponData_Kaminari_Dokkan = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1187,6 +1205,7 @@ BattleWeapon ItemWeaponData_Kaminari_Dokkan = {
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
+/** Thunder Bolt: lightning on one enemy (ItemEvent_Kaminari_Gorogoro). */
 BattleWeapon ItemWeaponData_Kaminari_Gorogoro = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1380,6 +1399,7 @@ EVT_BEGIN(ItemEvent_Kirakira_Otoshi)
     RETURN
 EVT_END()
 
+/** Shooting Star: falling stars on every enemy (ItemEvent_Kirakira_Otoshi). */
 BattleWeapon ItemWeaponData_Kirakira_Otoshi = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1506,6 +1526,7 @@ EVT_BEGIN(ItemEvent_Koorino_Ibuki)
     RETURN
 EVT_END()
 
+/** Ice Storm: a cold wind on every enemy, with a chance to freeze (ItemEvent_Koorino_Ibuki). */
 BattleWeapon ItemWeaponData_Koorino_Ibuki = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1638,6 +1659,7 @@ EVT_BEGIN(ItemEvent_Yurayura_Jishin)
     RETURN
 EVT_END()
 
+/** Earth Quake: damages every enemy on the ground (ItemEvent_Yurayura_Jishin). */
 BattleWeapon ItemWeaponData_Yurayura_Jishin = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1749,6 +1771,7 @@ EVT_BEGIN(ItemEvent_Teresano_Fuku)
     RETURN
 EVT_END()
 
+/** Boo's Sheet: makes one ally invisible (ItemEvent_Teresano_Fuku). */
 BattleWeapon ItemWeaponData_Teresano_Fuku = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1807,6 +1830,7 @@ EVT_BEGIN(ItemEvent_Biribiri_Kinoko)
     RETURN
 EVT_END()
 
+/** Volt Shroom: electrifies one ally so direct attackers get hurt (ItemEvent_Biribiri_Kinoko). */
 BattleWeapon ItemWeaponData_Biribiri_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1866,6 +1890,7 @@ EVT_BEGIN(ItemEvent_Teki_Yokeeru)
     RETURN
 EVT_END()
 
+/** Repel Cape: makes one ally dodgy, harder to hit (ItemEvent_Teki_Yokeeru). */
 BattleWeapon ItemWeaponData_Teki_Yokeeru = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1904,6 +1929,7 @@ BattleWeapon ItemWeaponData_Teki_Yokeeru = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Ruin Powder: confuses every enemy (ItemEvent_Madowaseno_Kona). */
 BattleWeapon ItemWeaponData_Madowaseno_Kona = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1974,6 +2000,7 @@ EVT_BEGIN(ItemEvent_Nemure_Yoikoyo)
     RETURN
 EVT_END()
 
+/** Sleepy Sheep: puts every enemy to sleep (ItemEvent_Nemure_Yoikoyo). */
 BattleWeapon ItemWeaponData_Nemure_Yoikoyo = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2080,6 +2107,7 @@ EVT_BEGIN(ItemEvent_Stop_Watch)
     RETURN
 EVT_END()
 
+/** Stopwatch: stops every enemy (ItemEvent_Stop_Watch). */
 BattleWeapon ItemWeaponData_Stop_Watch = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2138,6 +2166,7 @@ EVT_BEGIN(ItemEvent_Guruguru_Memawashi)
     RETURN
 EVT_END()
 
+/** Dizzy Dial: makes every enemy dizzy (ItemEvent_Guruguru_Memawashi). */
 BattleWeapon ItemWeaponData_Guruguru_Memawashi = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2176,6 +2205,7 @@ BattleWeapon ItemWeaponData_Guruguru_Memawashi = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Power Punch: makes one ally huge, raising its attack (ItemEvent_Dekadeka_Drink). */
 BattleWeapon ItemWeaponData_Dekadeka_Drink = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2215,6 +2245,7 @@ BattleWeapon ItemWeaponData_Dekadeka_Drink = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Courage Shell: raises one ally's defence (ItemEvent_Katikati_Koura). */
 BattleWeapon ItemWeaponData_Katikati_Koura = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2339,6 +2370,7 @@ EVT_BEGIN(ItemEvent_Suitooru)
     RETURN
 EVT_END()
 
+/** HP Drain: damages one enemy and heals the user by the damage dealt (ItemEvent_Suitooru). */
 BattleWeapon ItemWeaponData_Suitooru = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2445,6 +2477,7 @@ EVT_BEGIN(ItemEvent_Teki_Kyouka)
     RETURN
 EVT_END()
 
+/** Trade Off: raises the enemies' level so they are worth more Star Points (ItemEvent_Teki_Kyouka). */
 BattleWeapon ItemWeaponData_Teki_Kyouka = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2481,6 +2514,7 @@ BattleWeapon ItemWeaponData_Teki_Kyouka = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Mini Mr. Mini: shrinks every enemy, lowering its attack (ItemEvent_Minimini_Kun). */
 BattleWeapon ItemWeaponData_Minimini_Kun = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2520,6 +2554,7 @@ BattleWeapon ItemWeaponData_Minimini_Kun = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Mr. Softener: lowers every enemy's defence (ItemEvent_Funyafunya_Kun). */
 BattleWeapon ItemWeaponData_Funyafunya_Kun = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2560,6 +2595,7 @@ BattleWeapon ItemWeaponData_Funyafunya_Kun = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Tasty Tonic: cures one ally's poison and other ailments (ItemEvent_Sukkiri_Drink). */
 BattleWeapon ItemWeaponData_Sukkiri_Drink = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2633,6 +2669,7 @@ EVT_BEGIN(ItemEvent_Jiwajiwa_Kinoko)
     RETURN
 EVT_END()
 
+/** Slow Shroom: one ally regains HP each turn for a while (ItemEvent_Jiwajiwa_Kinoko). */
 BattleWeapon ItemWeaponData_Jiwajiwa_Kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2692,6 +2729,7 @@ EVT_BEGIN(ItemEvent_Jiwajiwa_Syrup)
     RETURN
 EVT_END()
 
+/** Gradual Syrup: one ally regains FP each turn for a while (ItemEvent_Jiwajiwa_Syrup). */
 BattleWeapon ItemWeaponData_Jiwajiwa_Syrup = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2780,6 +2818,7 @@ EVT_BEGIN(ItemEvent_Irekaeeru)
     RETURN
 EVT_END()
 
+/** Point Swap: swaps the target's HP and FP (ItemEvent_Irekaeeru). */
 BattleWeapon ItemWeaponData_Irekaeeru = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2861,6 +2900,7 @@ EVT_BEGIN(ItemEvent_Attiike_Shisshi)
     RETURN
 EVT_END()
 
+/** Fright Mask: scares the enemies, which can make some flee (ItemEvent_Attiike_Shisshi). */
 BattleWeapon ItemWeaponData_Attiike_Shisshi = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -2992,6 +3032,7 @@ EVT_BEGIN(ItemEvent_Naniga_Okorukana)
     RETURN
 EVT_END()
 
+/** Mystery: turns into a random item effect when used (ItemEvent_Naniga_Okorukana). */
 BattleWeapon ItemWeaponData_Naniga_Okorukana = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3045,6 +3086,7 @@ s32 R_mystery_item_table[] = {
     ITEM_NULL, // end of list (_naniga_okorukana_check counts up to it)
 };
 
+/** Spite Pouch: gives one ally payback against direct attacks (ItemEvent_Shikaeshino_Kona). */
 BattleWeapon ItemWeaponData_Shikaeshino_Kona = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3082,6 +3124,7 @@ BattleWeapon ItemWeaponData_Shikaeshino_Kona = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Koopa Curse: slows one enemy (ItemEvent_Kameno_Noroi). */
 BattleWeapon ItemWeaponData_Kameno_Noroi = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3207,6 +3250,7 @@ EVT_BEGIN(ItemEvent_RecoveryAndStatus)
     RETURN
 EVT_END()
 
+/** Space Food (Zess T. cooking): restores 5 HP (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_SpaceFood = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3245,6 +3289,7 @@ BattleWeapon ItemWeaponData_SpaceFood = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Icicle Pop (Zess T. cooking): restores 10 HP (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_IceCandy = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3284,6 +3329,7 @@ BattleWeapon ItemWeaponData_IceCandy = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Zess Frappe (Zess T. cooking): restores 20 HP (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_NancyFrappe = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3323,6 +3369,7 @@ BattleWeapon ItemWeaponData_NancyFrappe = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Snow Bunny (Zess T. cooking): restores 15 HP but freezes the eater (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_SnowRabbit = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3362,6 +3409,7 @@ BattleWeapon ItemWeaponData_SnowRabbit = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Shroom Broth (Zess T. cooking): restores HP gradually (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_TeaKinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3404,6 +3452,7 @@ BattleWeapon ItemWeaponData_TeaKinoko = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Love Pudding (Zess T. cooking), electrified outcome: ItemEvent_RecoveryAndStatus picks it 40% of the time. */
 BattleWeapon ItemWeaponData_FirstLovePuddingBiribiri = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3443,6 +3492,7 @@ BattleWeapon ItemWeaponData_FirstLovePuddingBiribiri = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Love Pudding, invisible outcome: ItemEvent_RecoveryAndStatus picks it 40% of the time. */
 BattleWeapon ItemWeaponData_FirstLovePuddingTrans = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3481,6 +3531,7 @@ BattleWeapon ItemWeaponData_FirstLovePuddingTrans = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Love Pudding, sleepy outcome: ItemEvent_RecoveryAndStatus picks it 20% of the time. */
 BattleWeapon ItemWeaponData_FirstLovePuddingSleep = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3519,6 +3570,7 @@ BattleWeapon ItemWeaponData_FirstLovePuddingSleep = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Meteor Meal (Zess T. cooking): restores 7 HP, then more over time (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_StarryDinner = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3558,6 +3610,7 @@ BattleWeapon ItemWeaponData_StarryDinner = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Spicy Pasta (Zess T. cooking): restores 10 HP and 10 FP (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_KararinaPasta = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3595,6 +3648,7 @@ BattleWeapon ItemWeaponData_KararinaPasta = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Heartful Cake (Zess T. cooking): restores 20 FP but softens the eater (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_MeromeroCake = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3635,6 +3689,7 @@ BattleWeapon ItemWeaponData_MeromeroCake = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Peach Tart (Zess T. cooking), electrified outcome: ItemEvent_RecoveryAndStatus picks it 40% of the time. */
 BattleWeapon ItemWeaponData_PeachTaltBiribiri = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3674,6 +3729,7 @@ BattleWeapon ItemWeaponData_PeachTaltBiribiri = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Peach Tart, dodgy outcome: ItemEvent_RecoveryAndStatus picks it 40% of the time. */
 BattleWeapon ItemWeaponData_PeachTaltDodge = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3712,6 +3768,7 @@ BattleWeapon ItemWeaponData_PeachTaltDodge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Peach Tart, sleepy outcome: ItemEvent_RecoveryAndStatus picks it 20% of the time. */
 BattleWeapon ItemWeaponData_PeachTaltSleep = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3750,6 +3807,7 @@ BattleWeapon ItemWeaponData_PeachTaltSleep = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Electro Pop (Zess T. cooking): restores 15 FP (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_BiribiriCandy = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3789,6 +3847,7 @@ BattleWeapon ItemWeaponData_BiribiriCandy = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Healthy Salad (Zess T. cooking): restores 15 FP and cures poison (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_HealthySalad = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3842,6 +3901,7 @@ BattleWeapon ItemWeaponData_HealthySalad = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Fresh Juice (Zess T. cooking): restores 5 FP and cures poison (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_FreshJuice = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3895,6 +3955,7 @@ BattleWeapon ItemWeaponData_FreshJuice = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Hot Sauce (Zess T. cooking): battle data run by ItemEvent_RecoveryAndStatus. */
 BattleWeapon ItemWeaponData_RedKararing = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -3932,6 +3993,7 @@ BattleWeapon ItemWeaponData_RedKararing = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Couple's Cake (Zess T. cooking): restores HP slowly (ItemEvent_RecoveryAndStatus). */
 BattleWeapon ItemWeaponData_FutarideForever = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -4099,6 +4161,7 @@ EVT_BEGIN(ItemEvent_ThrowAttack)
     RETURN
 EVT_END()
 
+/** Zess Dynamite (Zess T. cooking): thrown at every enemy (ItemEvent_ThrowAttack). */
 BattleWeapon ItemWeaponData_NancyDynamite = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -4136,6 +4199,7 @@ BattleWeapon ItemWeaponData_NancyDynamite = {
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
+/** Coconut Bomb (Zess T. cooking): thrown at one enemy (ItemEvent_ThrowAttack). */
 BattleWeapon ItemWeaponData_CoconutsBomb = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -4173,6 +4237,7 @@ BattleWeapon ItemWeaponData_CoconutsBomb = {
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
+/** Courage Meal (Zess T. cooking): thrown at one enemy (ItemEvent_ThrowAttack). */
 BattleWeapon ItemWeaponData_KachikachiDish = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -4209,6 +4274,7 @@ BattleWeapon ItemWeaponData_KachikachiDish = {
     {0, 0, 0, 100, 0, 5, 5, 5, 5, 0, 0, 0}, // stageEffectRates
 };
 
+/** Egg Bomb (Zess T. cooking): thrown at one enemy (ItemEvent_ThrowAttack). */
 BattleWeapon ItemWeaponData_BomberEgg = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -4275,6 +4341,7 @@ EVT_BEGIN(ItemEvent_Poison_Kinoko)
     RETURN
 EVT_END()
 
+/** Poison Shroom (Zess T. cooking): poisons the eater (ItemEvent_Poison_Kinoko). */
 BattleWeapon ItemWeaponData_PoisonKinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -4698,6 +4765,7 @@ EVT_BEGIN(ItemEvent_LastDinner)
     RETURN
 EVT_END()
 
+/** Trial Stew (Zess T. cooking): a drastic effect on the eater (ItemEvent_LastDinner). */
 BattleWeapon ItemWeaponData_LastDinner = {
     NULL, 0, // name..icon
     {0}, // pad_06

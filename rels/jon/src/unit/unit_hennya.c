@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Spunia (`hennya`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -27,6 +29,7 @@ static EvtWord damage_event[10];
 static EvtWord attack_event[455];
 static EvtWord wait_event[6];
 
+/** Unit data of the Spunia: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_hennya = {
     UNIT_SPUNIA, // mUnitType
     "btl_un_hennya", // name
@@ -75,8 +78,10 @@ BattleUnitKind unit_hennya = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Spunia: defence 2 against every attack type. */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/** Element response of the Spunia: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -104,16 +109,19 @@ static StatusVulnerability regist = {
     30, // ohko
 };
 
+/** Data table of the Spunia: event handlers keyed by tag (dmg_avoid_counter_thorn_head_event). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Body part of the Spunia: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_hennya", "c_hannya_t", 0.0f, 0.0f, 0.0f, 0.0f, 27.0f, 0.0f, 0.0f, 37.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
+/** Attack data for the Spunia's spinning roll: 7 damage. */
 static BattleWeapon weapon_hannya_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -150,6 +158,7 @@ static BattleWeapon weapon_hannya_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Pose table of the Spunia: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},

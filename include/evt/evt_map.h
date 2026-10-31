@@ -1,3 +1,5 @@
+// evt_map.c: script commands for map objects and map-wide settings: animations, blend and fog (mapdrv).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

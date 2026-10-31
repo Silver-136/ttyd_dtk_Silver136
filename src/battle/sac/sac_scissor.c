@@ -1,3 +1,5 @@
+// Star-power special move Art Attack (sac_scissor): drawing around enemies with the star to damage them.
+
 #include "eff/eff_starstone.h"
 #include "icon_ids.h"
 #include "battle/battle_status_effect.h"
@@ -104,6 +106,10 @@ s32 scissor_damage_sub2(Vec pt);
 void scissor_damage_sub(BattleUnit* unit, s32* out);
 s32 scissor_intersection(f32 x1, f32 y1, f32 x2, f32 y2, f32 x3, f32 y3, f32 x4, f32 y4, f32* ox, f32* oy);
 
+/**
+ * Art Attack's per-loop hit: scissor_damage hits each enemy inside a closed loop with it, for the power
+ * weaponGetPower_Scissor worked out (0 to 3); it always hits, pierces defense and cannot be guarded.
+ */
 BattleWeapon weapon_scissor = {
     "btl_wn_sac_scissor", // name
     ICON_SAC_SCISSOR, // icon
@@ -142,6 +148,10 @@ BattleWeapon weapon_scissor = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Art Attack's finishing hit: no damage of its own, given by marioAttackEvent_Scissor to each enemy
+ * that took damage during the drawing, with damage pattern 27 for the hurt pose.
+ */
 BattleWeapon weapon_scissor_finish = {
     "btl_wn_sac_scissor", // name
     0, // icon

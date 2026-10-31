@@ -1,3 +1,5 @@
+// Spike Top (togemet): enemy battle unit; Creepy Steeple's copy of the unit data and scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -46,6 +48,7 @@ static EvtWord ceil_fall_ready_event[163];
 static EvtWord attack_event_ceil[426];
 static EvtWord wait_event_ceil[6];
 
+/** Unit data of the Spike Top: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_togemet = {
     UNIT_SPIKE_TOP, // mUnitType
     "btl_un_togemet", // name
@@ -94,6 +97,7 @@ BattleUnitKind unit_togemet = {
     data_table, // dataTable
 };
 
+/** Pose table of the Spike Top: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "TMT_N_1"},
     {POSE_TYPE_STOP, "TMT_Y_1"},
@@ -114,6 +118,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "TMT_S_1"},
 };
 
+/** Pose table of the Spike Top, on the ceiling: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "STM_N_1"},
     {POSE_TYPE_STOP, "STM_Y_1"},
@@ -134,6 +139,7 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "STM_S_1"},
 };
 
+/** Pose table of the Spike Top, flipped on its back: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "TMT_Y_2"},
     {POSE_TYPE_STOP, "TMT_Y_2"},
@@ -153,6 +159,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "TMT_S_3"},
 };
 
+/**
+ * Data table of the Spike Top: event handlers keyed by tag (dmg_turn_event,
+ * dmg_avoid_counter_thorn_head_event).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -160,6 +170,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Data table of the Spike Top, on the ceiling: event handlers keyed by tag (counter_damage_event_ceil). */
 static BattleDataEntry data_table_ceil[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event_ceil},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event_ceil},
@@ -177,6 +188,7 @@ static BattleDataEntry data_table_ceil[] = {
     {0},
 };
 
+/** Attack data for the Spike Top's spiked shell roll: 3 damage. */
 static BattleWeapon weapon_met_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -213,6 +225,7 @@ static BattleWeapon weapon_met_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Spike Top's drop from the ceiling: 5 damage. */
 static BattleWeapon weapon_met_ceil_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -249,12 +262,19 @@ static BattleWeapon weapon_met_ceil_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of the Spike Top: 4 against normal, ice and electric hits;
+ * immune to fire and explosions (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
+/** Element response of the Spike Top: it is immune to fire and explosions. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
 
+/** Damage reduction of the Spike Top, flipped on its back: none, every attack type does full damage. */
 static BattleUnitDefense defence_turn = {0};
 
+/** Element response of the Spike Top, flipped on its back: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
 static StatusVulnerability regist = {
@@ -282,6 +302,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Spike Top: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {
         1, "btl_un_togemet", "c_met",

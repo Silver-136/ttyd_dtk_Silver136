@@ -1,3 +1,5 @@
+// Balloon effect (Mario balloon) that follows Mario or a given NPC; types 0 and 1.
+
 #include "driver/camdrv.h"
 #include "eff/eff_mario_balloon.h"
 #include "driver/dispdrv.h"

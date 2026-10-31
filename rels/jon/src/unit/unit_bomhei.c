@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Bob-omb (`bomhei`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -37,6 +39,7 @@ static EvtWord damage_event_spark[25];
 static EvtWord attack_event_spark[288];
 static EvtWord wait_event_spark[27];
 
+/** Unit data of the Bob-omb: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_bomhei = {
     UNIT_BOB_OMB, // mUnitType
     "btl_un_bomhei", // name
@@ -85,10 +88,13 @@ BattleUnitKind unit_bomhei = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Bob-omb: defence 1 against every attack type. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Element response of the Bob-omb: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Pose table of the Bob-omb: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "BOM_N_1"},
     {POSE_TYPE_STOP, "BOM_Y_1"},
@@ -110,6 +116,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "BOM_S_1"},
 };
 
+/** Pose table of the Bob-omb, fuse lit: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_spark[] = {
     {POSE_TYPE_SLEEP, "BOM_N_2"},
     {POSE_TYPE_STOP, "BOM_Y_2"},
@@ -131,16 +138,19 @@ static PoseTableEntry pose_table_spark[] = {
     {POSE_TYPE_ACTION, "BOM_S_2"},
 };
 
+/** Data table of the Bob-omb: event handlers keyed by tag. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Data table of the Bob-omb, fuse lit: event handlers keyed by tag. */
 static BattleDataEntry data_table_spark[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Body part of the Bob-omb: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_bomhei", "c_bomhey", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterExplosive, pose_table},
 };
@@ -170,6 +180,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Attack data for the Bob-omb's body bump: 2 damage. */
 static BattleWeapon weapon_bomhei_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -206,6 +217,7 @@ static BattleWeapon weapon_bomhei_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Bob-omb's blast once its fuse is lit: 5 damage. */
 static BattleWeapon weapon_bomhei_bomb = {
     NULL, 0, // name..icon
     {0}, // pad_06

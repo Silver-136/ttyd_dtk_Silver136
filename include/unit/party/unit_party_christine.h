@@ -1,3 +1,5 @@
+// unit_party_christine.c: Goombella's (Christine) battle weapons, pose table and unit kind as a partner.
+
 #pragma once
 
 #include "battle/battle_database_common.h"

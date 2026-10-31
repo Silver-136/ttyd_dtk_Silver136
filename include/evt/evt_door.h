@@ -1,3 +1,5 @@
+// evt_door.c: scripts and commands for house doors (door_entry, evt_door_open/close and the door sound scripts).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

@@ -1,3 +1,5 @@
+// eff_ice.c: ice-block effect: effIceEntry and the ice mesh face-data pointers.
+
 #pragma once
 
 #include "driver/effdrv.h"

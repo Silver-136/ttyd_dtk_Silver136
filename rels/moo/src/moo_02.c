@@ -69,6 +69,10 @@ EVT_BEGIN(n_bero_out)
     RETURN
 EVT_END()
 
+/**
+ * Exits of moo_02: west road w_bero to moo_05 (e_bero); dokan_1 (scripted pipe); dokan_2 (scripted pipe);
+ * north gate n_bero to aji_00 (w_bero); east road e_bero to moo_06 (w_bero).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

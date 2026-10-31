@@ -1,3 +1,5 @@
+// mot_damage.c: Mario's damage motion (mot_damage, mot_damageToge), splash and quake helpers.
+
 #pragma once
 
 #include "dolphin/types.h"

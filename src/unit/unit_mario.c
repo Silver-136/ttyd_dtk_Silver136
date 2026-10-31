@@ -1,3 +1,5 @@
+// Battle unit data for Mario: defense, vulnerabilities, poses and data table.
+
 #include "battle/battle.h"
 #include "battle/battle_sub.h"
 #include "driver/animdrv.h"
@@ -53,6 +55,12 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 EvtWord mario_win_reaction[9];
 
+/**
+ * Mario's pose table: animations for each status (sleep, stop, dizzy, poison, confusion, freeze, instant KO),
+ * the hurt poses, walking and running, item use, the low-HP pants, the Happy Heart / Happy Flower
+ * cheer, the kiss reactions (retail only), the failed Run Away tumble, the command menu wait, the Appeal,
+ * zero gravity, the Defend stance and plain standing.
+ */
 PoseTableEntry pose_table_mario_stay[] = {
     {POSE_TYPE_POISON, "M_S_3"},
     {POSE_TYPE_SLEEP, "M_N_5"},
@@ -90,6 +98,11 @@ PoseTableEntry pose_table_mario_stay[] = {
     {POSE_TYPE_ACTION, "M_S_1"},
 };
 
+/**
+ * Mario's data events: Appeal, the audience attack reaction, First Strike (nothing), Life Shroom revival,
+ * death, the victory pose, the readied jump attack, the Yoshi-riding battle entry
+ * and the counter after a dodge.
+ */
 BattleDataEntry data_table_mario[] = {
     {UNIT_DATA_APPEAL_EVENT, mario_appeal_event},
     {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
@@ -103,10 +116,13 @@ BattleDataEntry data_table_mario[] = {
     {0, NULL},
 };
 
+/** Mario's base defence: 0 against every element (badges and statuses add to it in battle). */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Mario's defence attributes: normal (0) against every element, no weakness or immunity. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Mario's status chances: 100 for every status (badges such as Feeling Fine lower them in battle). */
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -132,18 +148,27 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/** Pose table for Mario's two hidden helper parts (2 and 3): the hidden KRN_H_1 animation for every pose. */
 PoseTableEntry pose_table_object[] = {
     {POSE_TYPE_NORMAL, "KRN_H_1"},
     {POSE_TYPE_DAMAGE, "KRN_H_1"},
     {POSE_TYPE_ACTION, "KRN_H_1"},
 };
 
+/**
+ * Mario's battle parts: part 1 is his visible, targetable body; parts 2 and 3 are hidden,
+ * untargetable world-position parts on the same model.
+ */
 BattleUnitKindPart unitpartsdata_Mario[] = {
     {1, "btl_un_mario", "b_mario", 0.0f, 0.0f, 0.0f, 16.0f, 36.0f, 5.0f, 0.0f, 40.0f, 0.0f, 20, 36, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_mario_stay},
     {2, "btl_un_mario", "b_mario", 0.0f, 0.0f, 0.0f, 16.0f, 36.0f, 5.0f, 0.0f, 40.0f, 0.0f, 20, 36, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_object},
     {3, "btl_un_mario", "b_mario", 0.0f, 0.0f, 0.0f, 16.0f, 36.0f, 5.0f, 0.0f, 40.0f, 0.0f, 20, 36, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_object},
 };
 
+/**
+ * Mario's battle unit (UNIT_MARIO), entered at the start of every battle by entryunit_mario in battle.c:
+ * three parts, Mario's hit sounds, required for clearing the battle and shown without an enemy HP gauge.
+ */
 BattleUnitKind unitdata_Mario = {
     UNIT_MARIO, // mUnitType
     "btl_un_mario", // name
@@ -684,6 +709,10 @@ EVT_BEGIN(btlataudevtMarioHammer)
     RETURN
 EVT_END()
 
+/**
+ * Pose sounds for Mario: on the low-HP pant pose M_S_3, at a quarter of the loop,
+ * mario_pinch_pose_sound_callback plays one of his relief voice clips.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"M_S_3", 0.25f, mario_pinch_pose_sound_callback, NULL, 0, 1},
     {NULL, 0.0f, NULL, NULL, 0, 1},

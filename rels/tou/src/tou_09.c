@@ -127,6 +127,10 @@ EVT_BEGIN(evt_in)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room: the north door to the main corridor tou_04 (kept shut by the map init),
+ * the toilet pipe to tou_04's restroom and the west door to tou_11.
+ */
 static BeroEntry bero_data[] = {
     {
         "n_bero", // hitName

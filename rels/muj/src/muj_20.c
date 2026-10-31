@@ -931,6 +931,10 @@ EVT_BEGIN(elmos_a_shuku)
     RETURN
 EVT_END()
 
+/**
+ * Mass-NPC figure table of the Embers (c_elmos) that crowd the ship at sea, one entry per figure with its
+ * animation offset.
+ */
 static ExtTexInfo ext_entry_data[] = {
     {"c_elmos", "S_1", 0.0f},
     {"c_elmos", "S_1", 1.0f},
@@ -955,6 +959,7 @@ static ExtTexInfo ext_entry_data[] = {
     {0},
 };
 
+/** Frame sequence of the Ember crowd on the voyage, ended by -1. */
 static s16 elmos_animtbl[] = {
     0, 1, 2, 3, 4, 5, 6, 7,
     8, 9, 10, 11, 12, 13, 14, 15,
@@ -980,6 +985,7 @@ static EVT_BEGIN(nannpc_mode_setup)
     RETURN
 EVT_END()
 
+/** Positions (x, y, z) of the mist clouds drifting around the ship, ended by -10000. */
 s32 mist_pos[] = {
     -400, 30, -200, -400, 30, -400, -400, 30,
     -600, -400, 30, -800, -400, 30, -1000, -400,

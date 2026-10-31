@@ -209,6 +209,7 @@ USER_FUNC(omiseFukki) {
     return EVT_RETURN_DONE;
 }
 
+/** Doors and exits of rsh_03 variant a: w_bero to rsh_04_a; e_bero to rsh_02_a. */
 static BeroEntry bero_data_a[] = {
     {
         "w_bero", // hitName
@@ -249,6 +250,7 @@ static BeroEntry bero_data_a[] = {
     {0},
 };
 
+/** Doors and exits of rsh_03 variant b: w_bero to rsh_04_b; e_bero to rsh_02_b. */
 static BeroEntry bero_data_b[] = {
     {
         "w_bero", // hitName
@@ -289,6 +291,7 @@ static BeroEntry bero_data_b[] = {
     {0},
 };
 
+/** Doors and exits of rsh_03 variant c: w_bero to rsh_04_c; e_bero to rsh_02_c. */
 static BeroEntry bero_data_c[] = {
     {
         "w_bero", // hitName
@@ -341,6 +344,7 @@ EVT_BEGIN(init_cook)
     RETURN
 EVT_END()
 
+/** Items the player may give the cook when returning his pot: the Galley Pot only, ended by -1. */
 s32 item_tbl_cook[] = {
     ITEM_GALLEY_POT, -1,
 };
@@ -359,6 +363,10 @@ EVT_BEGIN(talk_cook_nabe_return)
     RETURN
 EVT_END()
 
+/**
+ * Item list for Trouble Center request 22, rebuilt by a script helper each time with the ingredients Mario
+ * still has to deliver (Golden Leaf, Mystic Egg, Keel Mango); unused slots stay -1.
+ */
 s32 iri_22_item_tbl[] = {
     -1, -1, -1, -1,
 };
@@ -494,6 +502,7 @@ static EVT_BEGIN(init_waitless)
     RETURN
 EVT_END()
 
+/** Items the player may give the waitress: the Shell Earrings only, ended by -1. */
 s32 item_tbl_waitless[] = {
     ITEM_SHELL_EARRINGS, -1,
 };
@@ -663,6 +672,7 @@ EVT_BEGIN(move_waitless)
     RETURN
 EVT_END()
 
+/** NPCs of the dining car: the cook and the waitress. */
 static NpcSetupInfo npc_data[] = {
     {
         /*"コック"*/"\x83\x52\x83\x62\x83\x4E", // name
@@ -1002,6 +1012,10 @@ static EVT_BEGIN(talk_powan)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the dining car during the missing lunch mystery: the cook, the waitress, Toron, the salaryman, the
+ * shop clerk and Pennington.
+ */
 NpcSetupInfo npc_data_lunch[] = {
     {
         /*"コック"*/"\x83\x52\x83\x62\x83\x4E", // name
@@ -1065,6 +1079,9 @@ NpcSetupInfo npc_data_lunch[] = {
     {0},
 };
 
+/**
+ * Pairs of NPC name and message key (stg6_rsh_18_01 to 05) for the lines each person says in the lunch scene.
+ */
 static const char* msg_tbl[] = {
     /*"コック"*/"\x83\x52\x83\x62\x83\x4E",
     "stg6_rsh_18_01",
@@ -1160,6 +1177,7 @@ EVT_BEGIN(evt_shop_moamoa_talk)
     RETURN
 EVT_END()
 
+/** Shelf slots of the Smorg shop: the display model and hit area of each item on show. */
 static ShopObj obj_list[] = {
     {"sina_1", "a_sina_1"},
     {"sina_2", "a_sina_2"},
@@ -1169,6 +1187,7 @@ static ShopObj obj_list[] = {
     {"sina_6", "a_sina_6"},
 };
 
+/** Items the Smorg shop sells with their prices in coins. */
 static ShopItem goods_list[] = {
     {ITEM_THUNDER_RAGE, 15},
     {ITEM_MYSTERY, 3},
@@ -1178,6 +1197,7 @@ static ShopItem goods_list[] = {
     {ITEM_SUPER_SHROOM, 15},
 };
 
+/** Prices the Smorg shop pays when Mario sells it items. */
 static ShopDb trade_list[] = {
     {ITEM_THUNDER_RAGE, 7, 0},
     {ITEM_MYSTERY, 1, 0},
@@ -1199,6 +1219,7 @@ static ShopDb trade_list[] = {
     {0},
 };
 
+/** The shop clerk's name, the talk hook and the 35 shop messages (stg6_shop_00 to 34). */
 static ShopperData35 shopper_data = {
     /*"店員"*/"\x93\x58\x88\xF5", // name
     evt_shop_moamoa_talk, // fook_evt
@@ -1708,6 +1729,7 @@ EVT_BEGIN(rsh_03_b_init_evt)
     RETURN
 EVT_END()
 
+/** Map objects of the scenery that passes by the windows. */
 static const char* window_tbl[] = {
     "mado_uturi_1",
     "mado_uturi_2",

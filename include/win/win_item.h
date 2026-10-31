@@ -1,3 +1,5 @@
+// win_item.c: the pause menu item window (items, important items, mail, Koopa book): winItemInit/Main/Disp.
+
 #pragma once
 
 #include "dolphin/types.h"

@@ -1,3 +1,5 @@
+// Weapon power calculation: how much damage each kind of attack deals from levels, HP and badges.
+
 #include "battle/battle_weapon_power.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"

@@ -1,3 +1,6 @@
+// Keelhaul Key (muj, mujinto: desert island): declarations of the area's map init events, battle tables and shared
+// events.
+
 #pragma once
 
 #include "dolphin/types.h"

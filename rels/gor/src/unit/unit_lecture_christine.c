@@ -1,3 +1,5 @@
+// unit_lecture_christine: Goombella as she appears in the action-command tutorial battle.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/unit_work.h"
@@ -88,6 +90,10 @@ USER_FUNC(_config_key_record) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit kind of Goombella:
+ * 10 HP, level 1, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_lecture_christine = {
     UNIT_TUTORIAL_GOOMBELLA, // mUnitType
     "btl_un_christine", // name
@@ -136,10 +142,13 @@ BattleUnitKind unit_lecture_christine = {
     data_table, // dataTable
 };
 
+/** Defence of Goombella's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of Goombella's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Status vulnerability of Goombella: immune to every status. */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -165,15 +174,20 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/**
+ * Event table of Goombella in the tutorial battle: tag 36 is her reaction when she is hurt while attacking.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, lecture_christine_ac_counter_damage_event},
     {0, NULL},
 };
 
+/** Body part of Goombella: a single part using the model "c_pkr". */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_christine", "c_pkr", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kUntattleable | kNoHpLoss, 0, pose_table_christine_stay},
 };
 
+/** Setup entry that adds Prof. Frankly at (0, 0, -45) when the tutorial battle starts. */
 BattleUnitSetup entry_lecture_frankli = {
     &unit_lecture_frankli, // mUnitKindParams
     ALLIANCE_NEUTRAL, // alliance
@@ -283,6 +297,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Goombella's headbutt 1: 1 damage to a single target, a jump-style hit. */
 BattleWeapon lec_weapon_zutsuki_1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -318,6 +333,7 @@ BattleWeapon lec_weapon_zutsuki_1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Goombella's headbutt 2: 1 damage to a single target, a jump-style hit. */
 BattleWeapon lec_weapon_zutsuki_2 = {
     NULL, 0, // name..icon
     {0}, // pad_06

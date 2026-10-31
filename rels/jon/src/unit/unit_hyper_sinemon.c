@@ -31,6 +31,7 @@ static EvtWord wakeup_event[104];
 static EvtWord attack_event[595];
 static EvtWord wait_event[6];
 
+/** Unit data of the Hyper Cleft: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_hyper_sinemon = {
     UNIT_HYPER_CLEFT, // mUnitType
     "btl_un_hyper_sinemon", // name
@@ -81,6 +82,7 @@ BattleUnitKind unit_hyper_sinemon = {
 
 static BattleUnitDefense defence = {{3, 99, 3, 3, 3}};
 
+/** Damage reduction of the Hyper Cleft, flipped on its back: none, every attack type does full damage. */
 static BattleUnitDefense defence_turn = {0};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
@@ -110,10 +112,12 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Hyper Cleft: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_hyper_sinemon", "c_sinemon_h", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsBombFlippable, kCounterTopSpiky, pose_table},
 };
 
+/** Attack data for the Hyper Cleft's dash: 3 damage. */
 static BattleWeapon weapon_sinemon_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -150,6 +154,7 @@ static BattleWeapon weapon_sinemon_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Hyper Cleft's charge-up that powers up its next attack: no damage, next attack +6. */
 static BattleWeapon weapon_sinemon_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -185,6 +190,7 @@ static BattleWeapon weapon_sinemon_charge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Pose table of the Hyper Cleft: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "SIN_N_1"},
     {POSE_TYPE_STOP, "SIN_Y_1"},
@@ -206,6 +212,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "SIN_S_1"},
 };
 
+/** Pose table of the Hyper Cleft, flipped on its back: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "SIN_N_2"},
     {POSE_TYPE_STOP, "SIN_Y_2"},
@@ -224,6 +231,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "SIN_D_2"},
 };
 
+/**
+ * Data table of the Hyper Cleft: event handlers keyed by tag (dmg_turn_event,
+ * dmg_avoid_counter_thorn_head_event).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},

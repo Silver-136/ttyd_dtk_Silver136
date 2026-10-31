@@ -66,6 +66,7 @@ EVT_BEGIN(erumosu_dead)
     RETURN
 EVT_END()
 
+/** NPC setup of dou_07: the Ember (Elmos) that appears in the room. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"エルモス"*/"\x83\x47\x83\x8B\x83\x82\x83\x58", // name
@@ -90,6 +91,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Exits (beros) of this room: s_bero to dou_08. */
 static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName
@@ -110,6 +112,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Items offered in the item menu at the Black Key chest: only the Black Key. */
 static s32 key_tbl[] = {
     ITEM_BLACK_KEY_0x24, -1,
 };

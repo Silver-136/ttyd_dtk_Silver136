@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Dull Bones (`honenoko`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
@@ -60,6 +62,7 @@ static USER_FUNC(honenoko_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/** Unit data of the Dull Bones: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_honenoko = {
     UNIT_DULL_BONES, // mUnitType
     "btl_un_honenoko", // name
@@ -108,8 +111,10 @@ BattleUnitKind unit_honenoko = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Dull Bones: defence 1 against every attack type. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Element response of the Dull Bones: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -137,6 +142,7 @@ static StatusVulnerability regist = {
     50, // ohko
 };
 
+/** Body parts of the Dull Bones: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -144,6 +150,7 @@ static BattleUnitKindPart parts[] = {
     {4, "btl_un_honenoko", "c_karon_g_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Attack data for the Dull Bones' bone throw: 2 damage. */
 static BattleWeapon weapon_honenoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -180,6 +187,10 @@ static BattleWeapon weapon_honenoko_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Spawn setup for the extra Dull Bones created when it splits: enemy side, parked off-screen until its
+ * script places it.
+ */
 static BattleUnitSetup entry_honenoko = {
     &unit_honenoko, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -191,6 +202,7 @@ static BattleUnitSetup entry_honenoko = {
     NULL, // itemDropTable
 };
 
+/** Pose table of the Dull Bones: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KRN_N_1"},
     {POSE_TYPE_STOP, "KRN_Y_1"},
@@ -213,6 +225,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRN_S_1"},
 };
 
+/** Data table of the Dull Bones: event handlers keyed by tag (dead_event, fake_dead_event). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FAKE_DEAD_EVENT, fake_dead_event},

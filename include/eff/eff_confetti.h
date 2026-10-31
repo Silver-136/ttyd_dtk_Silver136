@@ -1,3 +1,5 @@
+// eff_confetti.c: confetti effect: effConfettiEntry.
+
 #pragma once
 
 #include "driver/effdrv.h"

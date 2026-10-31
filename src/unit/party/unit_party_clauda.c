@@ -1,3 +1,5 @@
+// Battle unit data and scripts for Flurrie (Clauda) as a partner.
+
 #include "unit/party/unit_party_clauda.h"
 #include "battle/battle.h"
 #include "eff/n64/eff_kumokumo_n64.h"
@@ -64,6 +66,11 @@ static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 static EvtWord party_win_reaction[11];
 
+/**
+ * Body Slam (btl_wn_pwd_normal), Flurrie's free basic move, run by partyClaudaAttack_NormalAttack: she drops onto
+ * one enemy after the line-up-the-cursors command, power from her rank. Shatters ice, flips shelled enemies,
+ * knocks winged ones down and is usable while confused.
+ */
 BattleWeapon partyWeapon_ClaudaNormalAttack = {
     "btl_wn_pwd_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -102,6 +109,11 @@ BattleWeapon partyWeapon_ClaudaNormalAttack = {
     {0, 20, 20, 100, 20, 10, 2, 5, 10, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Gale Force (btl_wn_pwd_lv1, 4 FP), run by partyClaudaAttack_BreathAttack: no damage, hits every enemy and can
+ * blow them out of the battle. The script applies a copy of it (_make_breath_weapon) whose gale chance comes
+ * from the press-and-release command.
+ */
 BattleWeapon partyWeapon_ClaudaBreathAttack = {
     "btl_wn_pwd_lv1", // name
     ICON_PARTNER_MOVE_LV1, // icon
@@ -146,6 +158,11 @@ BattleWeapon partyWeapon_ClaudaBreathAttack = {
 #endif
 };
 
+/**
+ * Lip Lock (btl_wn_pwd_lv2, 3 FP), run by partyClaudaAttack_PredationAttack: a kiss on one enemy that pierces
+ * defence; the damage comes from the press-on-the-light command (the script's copy, _make_kiss_weapon), and
+ * Flurrie regains the HP she drains.
+ */
 BattleWeapon partyWeapon_ClaudaPredationAttack = {
     "btl_wn_pwd_lv2", // name
     ICON_PARTNER_MOVE_LV2, // icon
@@ -188,6 +205,10 @@ BattleWeapon partyWeapon_ClaudaPredationAttack = {
     {0, 0, 0, 100, 0, 0, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Dodgy Fog (btl_wn_pwd_lv3, 4 FP), run by partyClaudaAttack_KumoGuard: always hits one ally, no damage, and makes
+ * it Dodgy; the script's copy (_make_kumoguard_weapon) sets the turns from the timed stick command.
+ */
 BattleWeapon partyWeapon_ClaudaKumogakureAttack = {
     "btl_wn_pwd_lv3", // name
     ICON_PARTNER_MOVE_LV3, // icon
@@ -256,6 +277,11 @@ PoseTableEntry pose_table_clauda_stay[] = {
     {POSE_TYPE_ACTION, "PWD_S_1"},
 };
 
+/**
+ * Flurrie's battle data events: Appeal (5), the reaction when an audience member is attacked (6), her move
+ * menu builder (1), nothing on a First Strike (48), the victory pose (64), an empty step run after a move's
+ * cost is paid (7) and the default spin when she superguards an attack (47).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_APPEAL_EVENT, clauda_appeal_event},
     {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
@@ -267,10 +293,16 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Flurrie's single body part: model c_windy with her defence, element and pose tables. */
 BattleUnitKindPart unitpartsdata_Party_Clauda[] = {
     {1, "btl_un_clauda", "c_windy", 0.0f, 0.0f, 0.0f, 16.0f, 44.0f, 5.0f, 0.0f, 44.0f, 0.0f, 26, 50, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_clauda_stay},
 };
 
+/**
+ * Flurrie's battle unit (name btl_un_clauda), used whenever she is the partner in a fight: size, hurt sounds,
+ * status table, body part and init script. She floats, and no HP gauge is drawn over her; her HP comes from the
+ * partner stats.
+ */
 BattleUnitKind unitdata_Party_Clauda = {
     UNIT_FLURRIE, // mUnitType
     "btl_un_clauda", // name
@@ -1248,10 +1280,13 @@ EVT_BEGIN(attack_good_audience_event)
     RETURN
 EVT_END()
 
+/** Flurrie's defence: 0 against every element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Flurrie's element reactions: none special, every element hits her normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Flurrie's status vulnerabilities: base rate (100) for every status. */
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop

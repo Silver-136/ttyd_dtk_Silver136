@@ -17,6 +17,7 @@ static BeroEntry bero_entry_data[4];
 static EvtWord item_get00[34];
 EvtWord tik_10_init_evt[44];
 
+/** Doors of this room: the pipes to tik_06, tik_09 and tik_14. */
 static BeroEntry bero_entry_data[] = {
     {
         "dokan_1", // hitName

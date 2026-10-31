@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: a burst of colored sparkle stars from a point; setters change color, scale and camera.
+
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -26,16 +28,22 @@ typedef struct EffStardustN64Work {
     s32 camera;   // 0x3c
 } EffStardustN64Work;
 
+/** RGB colours the sparkles cycle through (pinks, purples and blues), three bytes per step. */
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,
     0xB4, 0xFE, 0xB4, 0xD5, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5, 0xAC,
 };
 
+/** Distance out along its direction, in percent, over a sparkle's 7-frame burst. */
 static u8 speed_data[] = {0x1E, 0x3C, 0x50, 0x5F, 0x64, 0x68, 0x6A};
 
+/** Size in percent over a sparkle's 7-frame burst, written as characters ('d' is 100). */
 static u8 scale_data[] = "<Zdhjlm";
 
+/**
+ * Eight 16x16 quads, one per 22x22 cell of the sparkle strip, that each sparkle steps through as it twinkles.
+ */
 static effN64Vtx size8x8_tex22x22_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 704, 0, 0, 0, 0, 255},

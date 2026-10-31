@@ -1,3 +1,5 @@
+// unit_monochrome_pakkun: Pale Piranha Plant, battle unit.
+
 #include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -42,6 +44,10 @@ static EvtWord return_event[256];
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Pale Piranha: 4 HP and level 11, with its parts, status vulnerability, init event and
+ * event data table.
+ */
 BattleUnitKind unit_monochrome_pakkun = {
     UNIT_PALE_PIRANHA, // mUnitType
     "btl_un_monochrome_pakkun", // name
@@ -90,8 +96,13 @@ BattleUnitKind unit_monochrome_pakkun = {
     data_table, // dataTable
 };
 
+/**
+ * Defense of the Pale Piranha against normal, fire, ice, explosion and electric attacks: none, so it takes
+ * full damage from every element.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Damage-type reactions of the Pale Piranha: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -119,10 +130,15 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * Parts of the Pale Piranha: a single body part (part 1, model c_pakflwr_t), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_monochrome_pakkun", "c_pakflwr_t", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
+/** Weapon record of the Pale Piranha's bite: 2 damage and counts as a hammer-type hit. */
 static BattleWeapon weapon_pakkun_flower_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -226,6 +242,10 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "PKF_S_3"},
 };
 
+/**
+ * Event data table of the Pale Piranha: scripts that replace the standard handling for an attacker being
+ * hurt by its spiked head (tag 37) and the counter-damage reactions (tags 25-36).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

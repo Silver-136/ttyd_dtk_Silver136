@@ -1,3 +1,5 @@
+// Rogueport Sewers (tik) battle unit: Koopa Troopa (nokonoko): its parts, defence/status tables, and attack events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -33,6 +35,10 @@ static EvtWord first_attack_event[302];
 static EvtWord attack_event[548];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Koopa Troopa (HP 4, level 8):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 BattleUnitKind unit_nokonoko = {
     UNIT_KOOPA_TROOPA, // mUnitType
     "btl_un_nokonoko", // name
@@ -122,18 +128,25 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "NKT_S_2"},
 };
 
+/**
+ * Data table of the Koopa Troopa: event handlers for being flipped over and a First Strike on it (no reaction).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Defence of the Koopa Troopa: 1 damage points off every hit. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Element reactions of the Koopa Troopa: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Defence of the Koopa Troopa (flipped over): no damage reduction. */
 static BattleUnitDefense defence_turn = {0};
 
+/** Status vulnerability of the Koopa Troopa (percent chance to take each status): resists most statuses. */
 static StatusVulnerability regist = {
     95, // sleep
     100, // stop
@@ -159,10 +172,12 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/** Body part of the Koopa Troopa (model c_nokoteki): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_nokonoko", "c_nokoteki", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table},
 };
 
+/** Weapon of the Koopa Troopa's attack: 2 damage, hammer-type contact attack. */
 static BattleWeapon weapon_nokonoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

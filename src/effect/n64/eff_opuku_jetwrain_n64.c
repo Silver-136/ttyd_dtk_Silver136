@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: rain of water (jetwrain) from a water jet.
+
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -23,6 +25,10 @@ typedef struct EffOpukuJetwrainWork {
     s16 v[19][13]; // 0x11A
 } EffOpukuJetwrainWork;
 
+/**
+ * Four screen tiles (corner, right edge, bottom edge, both edges) whose corners are rewritten from the wave
+ * heights before each tile of the copied frame is redrawn, giving the rippling-water warp.
+ */
 static effN64Vtx opuku_jetwrain_vtx[16] = {
     {-160, -120, -320, 0, 0, 0, 0, 0, 255},
     {-144, -120, -320, 0x200, 0, 0, 0, 0, 255},

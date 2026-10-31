@@ -1,3 +1,5 @@
+// Declares the functions that run a unit's hit, phase and wait events.
+
 #pragma once
 
 #include <dolphin/types.h>

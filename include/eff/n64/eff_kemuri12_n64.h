@@ -1,3 +1,5 @@
+// eff_kemuri12_n64.c: smoke effect 12 entry (effKemuri12N64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

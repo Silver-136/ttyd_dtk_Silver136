@@ -1,3 +1,5 @@
+// Burst of smoke (kemu test) around a point with a stage-burst sound; the type picks the smoke pattern.
+
 #include "eff/eff_kemu_test.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -50,15 +52,25 @@ typedef struct {
     f32 v[4];
 } KemuF4;
 
+/** Sizes of the three grey puffs of the type 19 smoke, stacked and delayed 4 frames apart; used by effKemuTestEntry. */
 static const KemuF3 kemu_c = { { 0.5f, 0.3f, 0.8f } };
+/** Starting X offsets of the three type 19 grey puffs. */
 static const KemuF3 kemu_a = { { 0.0f, 10.0f, 10.0f } };
+/** Starting heights of the three type 19 grey puffs, rising one above the other. */
 static const KemuF3 kemu_b = { { 0.0f, 5.0f, 20.0f } };
+/** Launch angles in degrees of the type 5 puffs, fanned out from the centre at speed 3. */
 static const KemuF4 kemu_d = { { 0.0f, 120.0f, 180.0f, 240.0f } };
+/** Launch angles in degrees of the three type 21 puffs, 120 degrees apart. */
 static const KemuF3 kemu_e = { { 0.0f, 120.0f, 240.0f } };
+/** X offsets of the three small type 22 puffs. */
 static const KemuF3 kemu_f = { { 0.0f, 5.0f, -5.0f } };
+/** Y offsets of the three small type 22 puffs. */
 static const KemuF3 kemu_g = { { 5.0f, 0.0f, -2.0f } };
+/** Z offsets of the three small type 22 puffs, staggered front to back. */
 static const KemuF3 kemu_h = { { 0.0f, 1.0f, 2.0f } };
+/** Zero vector copied into the sound position for the type 3 stage-burst sound in effKemuTestEntry. */
 static const Vec kemu_pos = { 0.0f, 0.0f, 0.0f };
+/** Zero vector effKemuTestMain starts its per-frame scratch position from. */
 static const Vec kemu_tmp = { 0.0f, 0.0f, 0.0f };
 
 /** Sets the X and Z rotation used by type 11, which is drawn tilted rather than camera-facing. */

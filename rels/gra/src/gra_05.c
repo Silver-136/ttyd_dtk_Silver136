@@ -247,6 +247,11 @@ static EVT_BEGIN(out_evt2)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room: the west exit (w_bero) to gra_04, the east exit (e_bero) to gra_06, the hole (ana_1)
+ * to gra_05, the hole (ana_2) to gra_05, the hole (A_ana_1), which only runs its own script and the hole
+ * (A_ana_2), which only runs its own script.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

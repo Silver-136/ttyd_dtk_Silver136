@@ -1,3 +1,5 @@
+// evt_johoya.c: the informant (johoya) script commands, with the rumour records InformantInfo and their read flags.
+
 #pragma once
 
 #include "evt/evt_cmd.h"

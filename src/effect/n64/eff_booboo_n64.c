@@ -1,3 +1,7 @@
+// Paper Mario 64 effect: booboo, up to 11 3D Boo models (three walk-cycle model frames, ten skins by type, skins 8-9
+// pulse) that stand, bob, hop or sway; the entry takes no arguments and the caller fills in each slot's flags,
+// position and state.
+
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -226,6 +230,7 @@ u32 boo_dl_2_28[] __attribute__((aligned(32))) = {0x98000389, 0x2304116E, 0x0C01
 u32 boo_dl_2_29[] __attribute__((aligned(32))) = {0x9800038C, 0x1F04118D, 0x2001126D, 0x0A010400, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 u32 boo_dl_2_30[] __attribute__((aligned(32))) = {0x9800038C, 0x2504116D, 0x1301048B, 0x26010400, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
 u32 boo_dl_2_31[] __attribute__((aligned(32))) = {0x98000389, 0x2504118A, 0x2601046E, 0x16010400, 0x00000000, 0x00000000, 0x00000000, 0x00000000};
+/** Walk cycle of the Boos: which of the three Boo model frames to show on each of eight steps. */
 u8 anime_data_walk[] = {1, 1, 2, 2, 1, 1, 0, 0};
 
 static inline void booSetArrays(void) {

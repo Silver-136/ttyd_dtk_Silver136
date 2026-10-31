@@ -42,6 +42,10 @@ static EvtWord return_event[256];
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Piranha Plant; ties together its sounds, parts, status vulnerability, init event
+ * and event table.
+ */
 static BattleUnitKind unit_pakkun_flower = {
     UNIT_PIRANHA_PLANT, // mUnitType
     "btl_un_pakkun_flower", // name
@@ -87,8 +91,10 @@ static BattleUnitKind unit_pakkun_flower = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
+/** Defence of the Piranha Plant: 0 against every kind of hit. */
 static BattleUnitDefense defence = {0};
 
+/** Defence attributes of the Piranha Plant: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -116,6 +122,7 @@ static StatusVulnerability regist = {
     30, // ohko
 };
 
+/** Parts of the Piranha Plant: 1 part (model c_pakflwr). */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -135,6 +142,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon of the Piranha Plant (attack): targets one unit for 9 damage; used by attack_event. */
 static BattleWeapon weapon_pakkun_flower_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -213,6 +221,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PKF_S_1"},
 };
 
+/** Poses of the Piranha Plant while it hangs from the ceiling, before it drops (the _2 and _3 animations). */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "PKF_N_2"},
     {POSE_TYPE_STOP, "PKF_Y_2"},
@@ -234,6 +243,10 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "PKF_S_3"},
 };
 
+/**
+ * Event table of the Piranha Plant: dmg_avoid_counter_thorn_head_event (tag 37),
+ * counter_damage_event (tags 26, 25, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

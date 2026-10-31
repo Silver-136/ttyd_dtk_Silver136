@@ -1,3 +1,5 @@
+// src/sdk/arc.c: the SDK ARC archive reader (ARCHeader, ARCHandle).
+
 #pragma once
 
 #include <dolphin/types.h>

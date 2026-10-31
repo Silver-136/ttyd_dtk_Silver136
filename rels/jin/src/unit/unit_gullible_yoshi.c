@@ -1,3 +1,5 @@
+// Yoshi partner unit for the Doopliss fight in Creepy Steeple (placed off screen in the battle setup).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -26,6 +28,10 @@ static EvtWord dead_event_yoshi[177];
 static EvtWord attack_event_yoshi[748];
 static EvtWord wait_event_yoshi[7];
 
+/**
+ * Unit kind of the Yoshi double:
+ * 10 HP, level 0, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_gullible_yoshi = {
     UNIT_YOSHI_CHAPTER4, // mUnitType
     "btl_un_gullible_yoshi", // name
@@ -110,8 +116,10 @@ static BattleWeapon enemyWeapon_YoshiNormalAttack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Defence of the Yoshi double's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence_yoshi = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Yoshi double's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr_yoshi = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist_yoshi = {
@@ -139,11 +147,13 @@ static StatusVulnerability regist_yoshi = {
     0, // ohko
 };
 
+/** Event table of the Yoshi double: its defeat script. */
 static BattleDataEntry data_table_yoshi[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_yoshi},
     {0, NULL},
 };
 
+/** Body part of the Yoshi double: a single part using the model "c_babyyoshi". */
 static BattleUnitKindPart parts_yoshi[] = {
     {
         1, "btl_un_yoshi", "c_babyyoshi",

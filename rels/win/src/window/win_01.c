@@ -58,6 +58,10 @@ EVT_BEGIN(evt_dokan1)
     RETURN
 EVT_END()
 
+/**
+ * Exits of this map: west to win_00, east to win_02, the pipe pair dokan1/dokan_2 within this map,
+ * and the way into the Great Tree (mri_00).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -317,6 +321,7 @@ EVT_BEGIN(ki_data_evt_03)
     RETURN
 EVT_END()
 
+/** Trees of this map that shake when Mario hammers them; the third drops a coin once. */
 static TreeAccess tree_access_data[] = {
     {4, "A_tree_01", "S_tree_mki_01", "S_tree_ha01", 0, NULL},
     {4, "A_tree_02", "S_tree_mki_02", "S_tree_ha02", 0, NULL},

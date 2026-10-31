@@ -48,6 +48,7 @@ static EvtWord evt_f1_ueki_01[20];
 static KusaAccess ueki_access_data[7];
 EvtWord mri_13_init_evt[205];
 
+/** Exit of mri_13: east road e_bero to mri_14. */
 BeroEntry bero_dai3_kanbu[] = {
     {
         "e_bero", // hitName
@@ -67,6 +68,7 @@ BeroEntry bero_dai3_kanbu[] = {
     },
 };
 
+/** Exits of mri_13: east road e_bero to mri_14 (w_bero); pipe dokan to mri_16 (dokan7). */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -479,6 +481,10 @@ static EVT_BEGIN(evt_f1_ueki_01)
     RETURN
 EVT_END()
 
+/**
+ * Plants Mario can search in mri_13: A_f2_ueki02, A_f2_ueki03, A_f2_ueki04, A_f1_ueki01
+ * (runs evt_f1_ueki_01 when searched), A_f1_ueki02, A_f1_ueki03.
+ */
 static KusaAccess ueki_access_data[] = {
     {1, "A_f2_ueki02", "S_f2_ueki02", NULL},
     {1, "A_f2_ueki03", "S_f2_ueki03", NULL},

@@ -1,3 +1,5 @@
+// Item-reveal effect (naniga: "what is it") with "what" sounds and a smoke burst for the item shown.
+
 #include "data/item_data.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"

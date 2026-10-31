@@ -1,3 +1,5 @@
+// Level-up effect drawn in 2D at a point with a sound; types 0-4, type 0 also starts a screen-shake event.
+
 #include "eff/eff_levelup.h"
 #include "driver/dispdrv.h"
 #include "evt/evt_cmd.h"
@@ -24,6 +26,7 @@ typedef struct EffLevelupWork {
 } EffLevelupWork;
 
 #ifdef VERSION_G8ME01
+/** Effect texture ids of the banner's six letter sprites, one row per language (all rows are the same). */
 static s32 texid_tbl[6][6] = {
     { 118, 119, 120, 121, 122, 123 },
     { 118, 119, 120, 121, 122, 123 },
@@ -33,6 +36,10 @@ static s32 texid_tbl[6][6] = {
     { 118, 119, 120, 121, 122, 123 },
 };
 #endif
+/**
+ * Per-frame height of each banner letter as it drops in over 46 frames: it falls from 500 to the ground, then
+ * bounces twice. The first letter touching down shakes the camera. Read by effLevelupMain.
+ */
 u16 y_trans[] = {
     500, 500, 479, 458, 437, 416, 395, 375, 354, 333, 312, 291, 270,
     250, 229, 208, 187, 166, 145, 125, 104, 83, 62, 41, 20, 0,
@@ -41,8 +48,13 @@ u16 y_trans[] = {
 };
 #ifndef VERSION_G8ME01
 
+/** Effect texture ids of the banner's six letter sprites, one row per language (all rows are the same). */
 static s32 texid_tbl[2][6] = { { 146, 147, 148, 149, 150, 151 }, { 146, 147, 148, 149, 150, 151 } };
 #endif
+/**
+ * Per-frame vertical stretch in percent of the banner letters after the first two, once landed: they grow
+ * from nothing up to 175%, squash to 50% and settle at 100%. Read by effLevelupMain.
+ */
 u8 y_scale[] = { 0, 13, 40, 69, 98, 126, 149, 166, 175, 165, 136, 100, 67, 50, 73, 117, 130, 113, 100 };
 
 /** Shakes the camera slightly for 50 frames each time the first Level Up letter touches down (it bounces). */

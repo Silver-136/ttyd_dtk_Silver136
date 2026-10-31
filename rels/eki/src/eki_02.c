@@ -44,6 +44,7 @@ static EVT_BEGIN(s_open)
     RETURN
 EVT_END()
 
+/** Exits (beros) of this room: s_bero to eki_01. */
 static BeroEntry bero_data[] = {
     {
         "s_bero", // hitName

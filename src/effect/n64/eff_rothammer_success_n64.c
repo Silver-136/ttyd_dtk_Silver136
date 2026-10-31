@@ -21,6 +21,7 @@ typedef struct EffRotHammerSuccessWork {
     f32 scale;    // 0x30
 } EffRotHammerSuccessWork;
 
+/** 16x16 camera-facing quad drawn for each spinning yellow star. */
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 64, 0, 0, 0, 0, 255},

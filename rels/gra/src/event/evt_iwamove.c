@@ -1,3 +1,5 @@
+// The moving boulder (iwa) of Twilight Trail: one shared work block and the script that drives it.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "party.h"

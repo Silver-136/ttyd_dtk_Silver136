@@ -1,3 +1,5 @@
+// Koops (nokotarou) partner unit for the Doopliss fight in Creepy Steeple (placed off screen in the battle setup).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -41,6 +43,10 @@ static EvtWord attack_event_nokotarou_koura[393];
 static EvtWord attack_event_nokotarou_shubibin[339];
 static EvtWord wait_event_nokotarou[6];
 
+/**
+ * Unit kind of the Koops double:
+ * 10 HP, level 0, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_gullible_nokotarou = {
     UNIT_KOOPS_CHAPTER4, // mUnitType
     "btl_un_gullible_nokotarou", // name
@@ -163,10 +169,13 @@ static BattleWeapon enemyWeapon_NokotarouShubibinAttack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Defence of the Koops double's body per damage type: 1 against every damage type. */
 static BattleUnitDefense defence_nokotarou = {{1, 1, 1, 1, 1}};
 
+/** Defence attributes of the Koops double's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr_nokotarou = {{0, 0, 0, 0, 0}};
 
+/** Defence of the Koops double's body per damage type while flipped over: 0 against every damage type. */
 static BattleUnitDefense defence_turn_nokotarou = {0};
 
 static StatusVulnerability regist_nokotarou = {
@@ -194,12 +203,14 @@ static StatusVulnerability regist_nokotarou = {
     0, // ohko
 };
 
+/** Event table of the Koops double: its defeat script, its reaction to being flipped over. */
 static BattleDataEntry data_table_nokotarou[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_nokotarou},
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {0, NULL},
 };
 
+/** Body part of the Koops double: a single part using the model "c_pnk". */
 static BattleUnitKindPart parts_nokotarou[] = {
     {
         1, "btl_un_nokotarou", "c_pnk",

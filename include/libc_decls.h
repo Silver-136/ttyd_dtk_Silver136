@@ -1,3 +1,5 @@
+// Declarations of the C library and compiler runtime routines (math, string, sprintf, rand) the code calls.
+
 #pragma once
 
 #include "libc/stdarg.h"

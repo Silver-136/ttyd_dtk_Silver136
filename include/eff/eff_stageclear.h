@@ -1,3 +1,5 @@
+// eff_stageclear.c: stage clear banner effect entry (effStageClearEntry) and its end check (effStageClearEndChk).
+
 #pragma once
 
 #include "driver/effdrv.h"

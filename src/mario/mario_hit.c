@@ -1,3 +1,6 @@
+// Mario's collision: ground, walls, ceiling and landing checks (marioChkLandon, marioChkOverhead,
+// marioChkWallAround), slopes, steps and the hit objects he stands on or pushes.
+
 #include "mario/mario.h"
 #include "driver/hitdrv.h"
 #include "driver/mobjdrv.h"
@@ -29,6 +32,7 @@
 #include "koopa.h"
 #include "pmario_sound.h"
 
+/** Zero vectors that start the ray position and direction of Mario's collision checks and landing ray. */
 static const Vec zv0 = {0.0f, 0.0f, 0.0f};
 static const Vec zv1 = {0.0f, 0.0f, 0.0f};
 

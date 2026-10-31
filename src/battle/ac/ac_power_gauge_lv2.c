@@ -24,6 +24,10 @@ typedef struct PGLv2Work {
 } PGLv2Work;
 
 
+/**
+ * Lip Lock gauge speed by difficulty: how fast holding A fills the gauge (300 at the easiest down to 40),
+ * and how fast holding during a wrong window drains it (100 rising to 130).
+ */
 static s32 _power_table[] = {300, 200, 150, 100, 80, 60, 40};
 s32 _power_table2[] = {100, 100, 100, 100, 110, 120, 130};
 

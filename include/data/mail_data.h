@@ -1,3 +1,5 @@
+// mail_data.c: the Mail Box SP letter table (MailData, mail_data) and the mailGetPtr lookup.
+
 #pragma once
 
 #include <dolphin/types.h>

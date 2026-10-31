@@ -1,3 +1,5 @@
+// eff_particle.c: generic particle effect entry (effParticleEntry).
+
 #pragma once
 
 #include "driver/effdrv.h"

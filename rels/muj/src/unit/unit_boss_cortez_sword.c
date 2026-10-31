@@ -43,6 +43,10 @@ EvtWord cortez_weapon_dead_event[100];
 EvtWord cortez_weapon_break_event[88];
 EvtWord cortez_weapon_blow_dead_event[121];
 
+/**
+ * Unit data of Cortez Sword: 4 HP, 130x30 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_boss_cortez_sword = {
     UNIT_CORTEZ_SWORD, // mUnitType
     "btl_un_cortez_sword", // name
@@ -91,8 +95,10 @@ BattleUnitKind unit_boss_cortez_sword = {
     data_table, // dataTable
 };
 
+/** Defence of Cortez Sword: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of Cortez Sword: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -120,6 +126,9 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/**
+ * Weapon of Cortez Sword (float attack): targets one unit for 2 damage; used by attack_event.
+ */
 BattleWeapon weapon_cortez_sword_float_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -165,6 +174,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRT_S_1"},
 };
 
+/** Guess: pose table for the fallen Cortez Sword, only the lying pose KRT_Z_1. */
 PoseTableEntry pose_table_otitabuki[] = {
     {POSE_TYPE_NORMAL, "KRT_Z_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_Z_1"},
@@ -172,6 +182,10 @@ PoseTableEntry pose_table_otitabuki[] = {
     {POSE_TYPE_ACTION, "KRT_Z_1"},
 };
 
+/**
+ * Pose table of Cortez Sword once it is broken off:
+ * only the lying pose KRT_Z_1 (used by cortez_weapon_dead_event).
+ */
 static PoseTableEntry pose_table_break[] = {
     {POSE_TYPE_NORMAL, "KRT_Z_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "KRT_Z_1"},
@@ -179,6 +193,12 @@ static PoseTableEntry pose_table_break[] = {
     {POSE_TYPE_ACTION, "KRT_Z_1"},
 };
 
+/**
+ * Event table of Cortez Sword: cortez_damage_sub_event (tag 9), cortez_weapon_dead_event (tag 49),
+ * cortez_weapon_break_event (tags 70, 71), cortez_weapon_blow_dead_event (tag 58),
+ * cortez_weapon_counter_damage_event (tags 36, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35),
+ * avoid_thorn_event (tags 39, 37, 38).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
     {UNIT_DATA_DEAD_EVENT, cortez_weapon_dead_event},
@@ -203,6 +223,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Parts of Cortez Sword: 1 part (model c_buki2). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_cortez_sword", "c_buki2", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, kCounterTopSpiky | kCounterPreemptiveFrontSpiky | kCounterFrontSpiky, pose_table},
 };

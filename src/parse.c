@@ -1,3 +1,5 @@
+// Text data parser: walks nested tagged blocks and reads values from them.
+
 #include "parse.h"
 #include <string.h>
 #include <stdio.h>

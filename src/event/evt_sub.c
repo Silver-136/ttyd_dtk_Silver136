@@ -1,3 +1,6 @@
+// Miscellaneous script commands and scripts: tree and bush shaking, mail, star stones, splines,
+// countdowns, play time, area and language queries.
+
 #include "eff/eff_stageclear.h"
 #include "version.h"
 #include "eff/eff_itemget.h"
@@ -74,6 +77,7 @@ typedef struct SplineWork {
 static const char coin_fmt[] = "%f%f%f";
 #pragma force_active reset
 
+/** Black text colour of the "You got N coins!" line in the coin reward window (coingetDisp). */
 static const GXColor coin_black = {0x00, 0x00, 0x00, 0xFF};
 
 USER_FUNC(bgm_start_wait);
@@ -89,6 +93,10 @@ void coingetDisp(WinMgrEntry* entry);
 s32 evt_sub_mail_event_end[1];
 #endif
 
+/**
+ * Sway of a hammered tree, one row per frame for 25 frames: the trunk's tilt in degrees and the leaves' two
+ * offsets, swinging out and settling back to rest. tree_evt reads it.
+ */
 s32 tree_data[] = {
     -230000000, -230000000, -230000000, -230000547, -229998519, -229998338, -230001199, -229996749,
     -229996348, -230001643, -229995557, -229995012, -230001570, -229995811, -229995310, -230000702,
@@ -113,11 +121,19 @@ EVT_BEGIN(evt_sub_stopwatch)
     RETURN
 EVT_END()
 
+/**
+ * Sideways sway of a checked bush, one offset per frame for 12 frames, out and back to rest;
+ * kusa_evt reads it.
+ */
 static s32 kusa_data[] = {
     -230000000, -230001918, -230003070, -230002273, -230000794, -230000000, -230000794, -230002273,
     -230003070, -230002501, -230001249, -230000000,
 };
 
+/**
+ * The pale yellow "You got N coins!" window that evt_sub_get_coin opens for coin rewards;
+ * coingetDisp draws it.
+ */
 WinMgrDesc coinget_window_desc[] = {
     {0, 0, 8, -175, 120, 350, 42, {0xE1, 0xD7, 0x9B, 0xFF}, NULL, coingetDisp},
 };

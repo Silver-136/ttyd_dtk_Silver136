@@ -77,6 +77,7 @@ static USER_FUNC(_set_draw_callback) {
     return EVT_RETURN_DONE;
 }
 
+/** Unit data of the Bulky Bob-omb: 6 HP, level 22; the battle starts it from init_event. */
 BattleUnitKind unit_heavy_bom = {
     UNIT_BULKY_BOB_OMB, // mUnitType
     "btl_un_heavy_bom", // name
@@ -125,6 +126,7 @@ BattleUnitKind unit_heavy_bom = {
     data_table, // dataTable
 };
 
+/** Weapon data for the Bulky Bob-omb's self-destruct blast: 2 damage, explosion element, every target. */
 static BattleWeapon weapon_heavy_bomb_super_explosion = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -166,6 +168,10 @@ static BattleWeapon weapon_heavy_bomb_super_explosion = {
     {0, 50, 50, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon data for the Bulky Bob-omb's guard stance (step 1 of three): it targets only itself, always hits and
+ * deals no damage.
+ */
 static BattleWeapon weapon_heavy_bomb_guard = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -204,6 +210,10 @@ static BattleWeapon weapon_heavy_bomb_guard = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon data for the Bulky Bob-omb's guard stance (step 2 of three): it targets only itself, always hits and
+ * deals no damage.
+ */
 static BattleWeapon weapon_heavy_bomb_guard_2 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -241,6 +251,10 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon data for the Bulky Bob-omb's guard stance (step 3 of three): it targets only itself, always hits and
+ * deals no damage.
+ */
 static BattleWeapon weapon_heavy_bomb_guard_3 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -276,8 +290,10 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Defence of the Bulky Bob-omb: 1 against every element. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Elemental reactions of the Bulky Bob-omb: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -305,6 +321,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Pose table of the Bulky Bob-omb with its unlit fuse 3 steps long. */
 static PoseTableEntry pose_table_3[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_FREEZE, "Y_1"},
@@ -324,6 +341,7 @@ static PoseTableEntry pose_table_3[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Pose table of the Bulky Bob-omb with its lit fuse 3 steps long. */
 static PoseTableEntry pose_table_3_fire[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_FREEZE, "Y_1"},
@@ -343,6 +361,7 @@ static PoseTableEntry pose_table_3_fire[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Pose table of the Bulky Bob-omb with its unlit fuse 2 steps long. */
 static PoseTableEntry pose_table_2[] = {
     {POSE_TYPE_SLEEP, "N_2"},
     {POSE_TYPE_FREEZE, "Y_2"},
@@ -362,6 +381,7 @@ static PoseTableEntry pose_table_2[] = {
     {POSE_TYPE_ACTION, "S_2B"},
 };
 
+/** Pose table of the Bulky Bob-omb with its lit fuse 2 steps long. */
 static PoseTableEntry pose_table_2_fire[] = {
     {POSE_TYPE_SLEEP, "N_2"},
     {POSE_TYPE_FREEZE, "Y_2"},
@@ -381,6 +401,7 @@ static PoseTableEntry pose_table_2_fire[] = {
     {POSE_TYPE_ACTION, "S_2A"},
 };
 
+/** Pose table of the Bulky Bob-omb with its unlit fuse 1 step long. */
 static PoseTableEntry pose_table_1[] = {
     {POSE_TYPE_SLEEP, "N_3"},
     {POSE_TYPE_FREEZE, "Y_3"},
@@ -400,6 +421,7 @@ static PoseTableEntry pose_table_1[] = {
     {POSE_TYPE_ACTION, "S_3B"},
 };
 
+/** Pose table of the Bulky Bob-omb with its lit fuse 1 step long. */
 static PoseTableEntry pose_table_1_fire[] = {
     {POSE_TYPE_SLEEP, "N_3"},
     {POSE_TYPE_FREEZE, "Y_3"},
@@ -419,6 +441,7 @@ static PoseTableEntry pose_table_1_fire[] = {
     {POSE_TYPE_ACTION, "S_3A"},
 };
 
+/** Pose table of the Bulky Bob-omb with its lit fuse burned down to nothing. */
 static PoseTableEntry pose_table_0_fire[] = {
     {POSE_TYPE_SLEEP, "N_4"},
     {POSE_TYPE_FREEZE, "Y_4"},
@@ -438,6 +461,7 @@ static PoseTableEntry pose_table_0_fire[] = {
     {POSE_TYPE_ACTION, "S_4A"},
 };
 
+/** Pose table of the Bulky Bob-omb with its unlit fuse burned down to nothing. */
 static PoseTableEntry pose_table_0[] = {
     {POSE_TYPE_SLEEP, "N_4"},
     {POSE_TYPE_FREEZE, "Y_4"},
@@ -457,6 +481,7 @@ static PoseTableEntry pose_table_0[] = {
     {POSE_TYPE_ACTION, "S_4B"},
 };
 
+/** Pose table of the Bulky Bob-omb while its fuse burns down from 3 to 2 steps. */
 static PoseTableEntry pose_table_3_to_2[] = {
     {POSE_TYPE_SLEEP, "B_4"},
     {POSE_TYPE_FREEZE, "B_1"},
@@ -473,6 +498,7 @@ static PoseTableEntry pose_table_3_to_2[] = {
     {POSE_TYPE_ACTION, "B_1"},
 };
 
+/** Pose table of the Bulky Bob-omb while its fuse burns down from 2 to 1 steps. */
 static PoseTableEntry pose_table_2_to_1[] = {
     {POSE_TYPE_SLEEP, "B_5"},
     {POSE_TYPE_FREEZE, "B_2"},
@@ -489,6 +515,7 @@ static PoseTableEntry pose_table_2_to_1[] = {
     {POSE_TYPE_ACTION, "B_2"},
 };
 
+/** Pose table of the Bulky Bob-omb while its fuse burns down from 1 to 0 steps. */
 static PoseTableEntry pose_table_1_to_0[] = {
     {POSE_TYPE_SLEEP, "B_6"},
     {POSE_TYPE_FREEZE, "B_3"},
@@ -505,12 +532,20 @@ static PoseTableEntry pose_table_1_to_0[] = {
     {POSE_TYPE_ACTION, "B_3"},
 };
 
+/**
+ * Event table of the Bulky Bob-omb: its defeat (dead_event, tag 49) and its explosion (explosion_event, tag
+ * 52).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_EXPLOSION_EVENT, explosion_event},
     {0, NULL},
 };
 
+/**
+ * Sound table of the Bulky Bob-omb: which sound each of its poses (idle, walk, run, attack and so on) plays,
+ * and when.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"S_3A", 0.01f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, 1},
     {"S_3A", 0.26666668f, NULL, "SFX_ENM_HEAVYB_WAIT3", 0, 1},
@@ -523,6 +558,7 @@ static PoseSoundTiming pose_sound_timing_table[] = {
     {NULL, 0.0f, NULL, NULL, 0, 1},
 };
 
+/** Parts of the Bulky Bob-omb: part 1 is its body (the target) and part 2 is the flame drawn on its fuse. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_heavy_bom", "c_heavy", 0.0f, 0.0f, 0.0f, 15.0f, 50.0f, 0.0f, 0.0f, 65.0f, 0.0f, 65, 70, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_3},
     {2, /*"ヘビーボム"*/"\x83\x77\x83\x72\x81\x5B\x83\x7B\x83\x80", "c_heavy", 0.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 15, 15, 255, &defence, &defence_attr, kNotTargetable | kNoShadow, 0, pose_table_3},

@@ -1,3 +1,5 @@
+// unit_monban: Gus (monban, gatekeeper) battle unit, fought in Rogueport west side.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -35,6 +37,10 @@ static EvtWord normal_attack_event[391];
 static EvtWord throw_attack_event[343];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of Gus:
+ * 20 HP, level 45, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_monban = {
     UNIT_GUS, // mUnitType
     "btl_un_monban", // name
@@ -83,8 +89,10 @@ BattleUnitKind unit_monban = {
     data_table, // dataTable
 };
 
+/** Defence of Gus's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of Gus's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -112,6 +120,7 @@ static StatusVulnerability regist = {
     50, // ohko
 };
 
+/** Pose table of Gus: the animation played for each pose type (idle, hurt, walk, run, attack and so on). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -133,17 +142,20 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_2"},
 };
 
+/** Event table of Gus: the counter for an attacker hurt by its spikes, nothing special on a First Strike. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Body parts of Gus: 2 parts, all using the model "c_monban". */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_monban", "c_monban", 0.0f, 0.0f, 0.0f, 8.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
     {2, "btl_un_monban", "c_monban", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Gus's attack: 3 damage to a single target, a hammer-style hit. */
 static BattleWeapon weapon_monban_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -180,6 +192,7 @@ static BattleWeapon weapon_monban_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Gus's throw attack: 3 damage to a single target, a plain attack. */
 static BattleWeapon weapon_monban_throw_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -216,6 +229,7 @@ static BattleWeapon weapon_monban_throw_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Sound timing of Gus: the sound effect played at set points of its idle, walk and run animations. */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"S_2", 0.6666667f, NULL, "SFX_ENM_MONBAN_WAIT1", 0, 1},
     {NULL, 0.0f, NULL, NULL, 0, 1},

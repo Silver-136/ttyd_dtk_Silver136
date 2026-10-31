@@ -63,6 +63,7 @@ EVT_BEGIN(out_func)
     RETURN
 EVT_END()
 
+/** Exits (beros) of this room: w_bero to gon_06 and e_bero to gon_13. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

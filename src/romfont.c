@@ -1,3 +1,5 @@
+// ROM font: draws text with the console's built-in (IPL) font, for messages shown before the game font is loaded.
+
 #include "romfont.h"
 #include "dolphin/mtx.h"
 #include "dolphin/types.h"
@@ -63,6 +65,7 @@ const char* msg_us[21] = {
     NULL,
 };
 
+/** German system messages, laid out like msg_jp. */
 const char* msg_ge[21] = {
     "",
     "",
@@ -87,6 +90,7 @@ const char* msg_ge[21] = {
     NULL,
 };
 
+/** French system messages, laid out like msg_jp. */
 const char* msg_fr[21] = {
     "",
     "",
@@ -111,6 +115,7 @@ const char* msg_fr[21] = {
     NULL,
 };
 
+/** Spanish system messages, laid out like msg_jp. */
 const char* msg_sp[21] = {
     "",
     "",
@@ -135,6 +140,7 @@ const char* msg_sp[21] = {
     NULL,
 };
 
+/** Italian system messages, laid out like msg_jp. */
 const char* msg_it[21] = {
     "",
     "",
@@ -159,6 +165,10 @@ const char* msg_it[21] = {
     NULL,
 };
 
+/**
+ * The system message tables by language number (gp->language):
+ * Japanese, English, German, French, Spanish, Italian.
+ */
 static const char** msg_tbl[6] = { msg_jp, msg_us, msg_ge, msg_fr, msg_sp, msg_it };
 #else
 const char* msg_jp[10] = {
@@ -186,6 +196,10 @@ const char* msg_us[9] = {
     NULL
 };
 
+/**
+ * The system message tables by language number (gp->language):
+ * Japanese, English, German, French, Spanish, Italian.
+ */
 static const char** msg_tbl[2] = { msg_jp, msg_us };
 #endif
 

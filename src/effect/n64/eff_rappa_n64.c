@@ -1,3 +1,6 @@
+// Paper Mario 64 effect: rappa (trumpet): star-like sparks fired from a point in the direction set by pitch and yaw,
+// slowing down and fading over 30 frames.
+
 #include "eff/n64/eff_rappa_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -22,6 +25,7 @@ typedef struct EffRappaN64Work {
     s32 frame;    // 0x34
 } EffRappaN64Work;
 
+/** 16x16 camera-facing quad drawn for each trumpet spark. */
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 1024, 0, 0, 0, 0, 255},
@@ -29,6 +33,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
 };
 
+/** RGB colours the trumpet sparks cycle through (pinks, purples and blues), three bytes per step. */
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,

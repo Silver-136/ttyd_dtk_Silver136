@@ -1,3 +1,5 @@
+// eff_levelup.c: level-up effect entry (effLevelupEntry) with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

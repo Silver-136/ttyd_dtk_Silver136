@@ -96,6 +96,10 @@ BattleUnit* chorogun_get_ptr(void) {
     return NULL;
 }
 
+/**
+ * Unit kind of the Fuzzy Horde:
+ * 20 HP, level 19, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_chorobon_gundan = {
     UNIT_FUZZY_HORDE, // mUnitType
     "btl_un_chorobon_gundan", // name
@@ -144,12 +148,19 @@ BattleUnitKind unit_chorobon_gundan = {
     data_table, // dataTable
 };
 
+/** Defence of the Fuzzy Horde's body per damage type: 0 against every damage type. */
 static DefencePad defence = {{{0, 0, 0, 0, 0}}, {0}};
 
+/** Defence attributes of the Fuzzy Horde's body: none, so every damage type is dealt normally. */
 static DefenceAttrPad defence_attr = {{{0, 0, 0, 0, 0}}, {0}};
 
+/** Status vulnerability of the Fuzzy Horde: immune to every status. */
 static RegistPad regist = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, {0}};
 
+/**
+ * Pose table of the Fuzzy Horde:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "CBN_N_1"},
     {POSE_TYPE_STOP, "CBN_Y_1"},
@@ -168,15 +179,18 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "CBN_S_1"},
 };
 
+/** Event table of the Fuzzy Horde: nothing special on a First Strike. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Body part of the Fuzzy Horde: a single part using the model "c_chorobon". */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_chorobon_gundan", "c_chorobon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence.v, &defence_attr.v, kMainPart | kGuardTargetPart | kHidden | kNoShadow, 0, pose_table},
 };
 
+/** Fuzzy Horde's attack: 1 damage to a single target, a plain attack. */
 BattleWeapon weapon_chorobon_gundan_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -370,6 +384,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Sprite entries of the Fuzzy horde's extra Fuzzies:
+ * copies of the Fuzzy model playing the walk animation from staggered starting frames.
+ */
 ExtTexInfo chorogun_ext_entry_data[] = {
     {"c_chorobon", "CBN_W_1", 0.0f},
     {"c_chorobon", "CBN_W_1", 2.0f},

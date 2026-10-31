@@ -34,6 +34,7 @@ EVT_BEGIN(evt_bom_snowfall)
     RETURN
 EVT_END()
 
+/** The three trees of the snowfield that can be shaken, ending with a terminator entry. */
 static TreeAccess tree_tbl[] = {
     {3, "A_ki1", "S_ki_1", "S_ha_1", 0, NULL},
     {3, "A_ki2", "S_ki_2", "S_ha_2", 0, NULL},
@@ -63,6 +64,7 @@ static EVT_BEGIN(first_evt_dokan)
     RETURN
 EVT_END()
 
+/** Exits of this room: the pipe to tik_07 and the east door to bom_03. */
 static BeroEntry bero_entry_data[] = {
     {
         "dokan", // hitName

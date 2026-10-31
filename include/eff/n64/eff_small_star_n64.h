@@ -1,3 +1,5 @@
+// eff_small_star_n64.c: small-star effect entry (effSmallStarN64Entry) and camera change (effSmallStarN64CamChg).
+
 #pragma once
 
 #include "driver/effdrv.h"

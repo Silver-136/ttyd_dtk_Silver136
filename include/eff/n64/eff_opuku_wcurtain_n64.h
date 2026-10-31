@@ -1,3 +1,5 @@
+// eff_opuku_wcurtain_n64.c: water-curtain effect entry (effOpukuWcurtainN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

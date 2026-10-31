@@ -1,3 +1,5 @@
+// himo.c: the ribbon (himo, string) drawn as a spline for Vivian (vivihimo).
+
 #pragma once
 
 #include <dolphin/types.h>

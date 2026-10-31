@@ -1,3 +1,5 @@
+// mario_sbr.c: Mario subroutines: move-direction maths (toMovedir), bottomless-pit respawn and stick/rub input.
+
 #pragma once
 
 #include <dolphin/types.h>

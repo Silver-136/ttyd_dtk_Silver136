@@ -1,3 +1,5 @@
+// unit_party_yoshi.c: Yoshi's battle weapons and unit kind as a partner, and the Stampede part YoshiGundanPart.
+
 #pragma once
 
 #include "evt/evt_cmd.h"

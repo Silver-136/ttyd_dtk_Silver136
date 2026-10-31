@@ -1,3 +1,5 @@
+// Shadow driver: blob, cylinder, projected and depth shadows (shadowInit, shadowMain, shadowDisp).
+
 #include "driver/shadowdrv.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -20,6 +22,10 @@ void depthShadowEnd(CameraId cameraId, void* param);
 void shadowDisp(CameraId cameraId, void* param);
 
 
+/**
+ * The two light cameras that render shadow textures: 0, a fixed perspective light for the projected and depth
+ * shadows, and 1, an orthographic light that follows the character for character shadows (cswp).
+ */
 static ShadowConfig shadowConfig[2] = {
     {0, {-100.0f, 256.0f, 335.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, -20.0f, 20.0f, 356.0f, 741.0f, 0, 3, 0, -4.47f},
     {1, {135.0f, 40.0f, 41.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, -240.0f, 240.0f, 80.0f, 10000.0f, 1, 3, 0, 0.0f},
@@ -156,6 +162,7 @@ Mtx tmp_view;
 CharShadowWork* cswp = &char_shadow_work;
 ProjShadowWork* pswp = &proj_shadow_work;
 DepthShadowWork* dswp = &depth_shadow_work;
+/** Side lengths of the square shadow textures (400, 256, 128, 64 pixels) that a shadow config picks from. */
 u16 ShadowSizeTbl[4] = {0x190, 0x100, 0x80, 0x40};
 u8 cube_dl_bottom[32] ATTRIBUTE_ALIGN(32) = {
     0x80, 0x00, 0x04, 0x38, 0x01, 0x39, 0x01, 0x3A, 0x01, 0x3B, 0x01, 0x00,

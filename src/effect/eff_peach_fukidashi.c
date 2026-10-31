@@ -1,3 +1,6 @@
+// Peach speech bubble (fukidashi: speech balloon) placed next to the speaker's head; types 0-2.
+// effSetPeachFukiBatu sets the name of the cross ("batu") mark.
+
 #include "eff/eff_peach_fukidashi.h"
 #include "driver/dispdrv.h"
 #include "driver/icondrv.h"

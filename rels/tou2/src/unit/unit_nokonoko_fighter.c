@@ -33,6 +33,10 @@ static EvtWord first_attack_event[302];
 static EvtWord attack_event[548];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the KP Koopa: 4 HP and level 8, with its parts, status vulnerability, init event and event
+ * data table.
+ */
 BattleUnitKind unit_nokonoko_fighter = {
     UNIT_KP_KOOPA, // mUnitType
     "btl_un_nokonoko_fighter", // name
@@ -122,16 +126,26 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "NKT_S_2"},
 };
 
+/**
+ * Event data table of the KP Koopa: scripts that replace the standard handling for being flipped over by a
+ * stomp (tag 13).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Defense of the KP Koopa against normal, fire, ice, explosion and electric attacks: 1, 1, 1, 1, 1. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Damage-type reactions of the KP Koopa: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Defense of the KP Koopa against normal, fire, ice, explosion and electric attacks while it is flipped
+ * onto its back: none, so it takes full damage from every element.
+ */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -159,10 +173,15 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/**
+ * Parts of the KP Koopa: a single body part (part 1, model c_touginoko), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_nokonoko_fighter", "c_touginoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table},
 };
 
+/** Weapon record of the KP Koopa's spinning shell attack: 2 damage and counts as a hammer-type hit. */
 static BattleWeapon weapon_nokonoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

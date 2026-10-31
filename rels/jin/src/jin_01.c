@@ -71,6 +71,7 @@ static EVT_BEGIN(s2_open)
     RETURN
 EVT_END()
 
+/** Doors of this room: the south exit (s_bero_1) to jin_00 and the south exit (s_bero_2) to jin_03. */
 static BeroEntry bero_entry_data[] = {
     {
         "s_bero_1", // hitName
@@ -207,6 +208,7 @@ static EVT_BEGIN(ki_data_evt_01)
     RETURN
 EVT_END()
 
+/** The golden tree Mario can hit (A_gorden_tree); hitting it drops the Golden Leaf. */
 static TreeAccess ki_data[] = {
     {2, "A_gorden_tree", "S_golden_tree", NULL, 0, ki_data_evt_01},
     {7, NULL, NULL, NULL, 0, NULL},

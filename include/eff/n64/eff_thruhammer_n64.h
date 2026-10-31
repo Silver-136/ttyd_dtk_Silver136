@@ -1,3 +1,5 @@
+// eff_thruhammer_n64.c: hammer ring effect entry (effThruHammerN64Entry).
+
 #pragma once
 
 #include <dolphin/types.h>

@@ -1,3 +1,5 @@
+// Mario Bros.' house (aaa): declarations for the prologue opening scene (aaa_00).
+
 #pragma once
 
 #include "dolphin/types.h"

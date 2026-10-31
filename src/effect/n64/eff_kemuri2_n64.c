@@ -1,3 +1,5 @@
+// Paper Mario 64 smoke effect 2 (kemuri: smoke) drifting along a direction (dirX, dirZ); types 0-2.
+
 #include "eff/n64/eff_kemuri2_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -24,7 +26,9 @@ typedef struct EffKemuri2N64Work {
     s32 frame;      // 0x60
 } EffKemuri2N64Work;
 
+/** Short puff animation (types 0-1): the sprite cell on each frame, ending at the -1 marker. */
 static s8 anim_data_0[] = {0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 6, -1};
+/** Longer puff animation (type 2): the sprite cell on each frame, ending at the -1 marker. */
 static s8 anim_data_1[] = {0, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7, -1};
 static s8* anim_data_table[] = {anim_data_0, anim_data_1};
 

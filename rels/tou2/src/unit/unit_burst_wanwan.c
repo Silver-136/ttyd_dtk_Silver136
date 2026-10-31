@@ -46,6 +46,10 @@ static EvtWord sound_gensui_event[22];
 static EvtWord wait_sound_event1[25];
 static EvtWord wait_sound_event2[12];
 
+/**
+ * Unit kind of the Red Chomp (HP 6, level 24): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_burst_wanwan = {
     UNIT_RED_CHOMP, // mUnitType
     "btl_un_burst_wanwan", // name
@@ -94,10 +98,16 @@ BattleUnitKind unit_burst_wanwan = {
     data_table, // dataTable
 };
 
+/** Defence of the Red Chomp: 3 damage points off every hit. */
 static BattleUnitDefense defence = {{3, 99, 99, 3, 3}};
 
+/** Element reactions of the Red Chomp: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 2, 0, 0}};
 
+/**
+ * Status vulnerability of the Red Chomp (percent chance to take each status): immune to sleep;
+ * resists most other statuses.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     70, // stop
@@ -145,6 +155,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "WAN_S_1A"},
 };
 
+/**
+ * Data table of the Red Chomp: event handlers for the counter-hit reactions (tags 25-36),
+ * a First Strike on it (no reaction) and being defeated.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
@@ -163,6 +177,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Parts of the Red Chomp (9 parts): hit positions, defences, attributes and pose tables. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_burst_wanwan", "c_wanwan_a", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kAbsolutePosition, 0, pose_table},
     {2, "btl_un_burst_wanwan", "c_wanwan_a", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -175,6 +190,7 @@ static BattleUnitKindPart parts[] = {
     {9, "btl_un_burst_wanwan", "c_wanwan_a", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon of the Red Chomp's bite: 5 damage, hammer-type contact attack. */
 static BattleWeapon weapon_wanwan_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

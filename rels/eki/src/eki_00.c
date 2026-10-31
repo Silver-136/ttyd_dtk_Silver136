@@ -183,6 +183,10 @@ static EvtWord evt_head[42];
 static EvtWord evt_kanban[14];
 EvtWord eki_00_init_evt[99];
 
+/**
+ * Smorg (moamoa) sprite entries for the swarm in the cutscene: the c_n_moa_a model with its S_1 animation,
+ * one entry per animation phase offset.
+ */
 static ExtTexInfo ext_moamoa_data[] = {
     {"c_n_moa_a", "S_1", 0.0f},
     {"c_n_moa_a", "S_1", 2.0f},
@@ -1371,6 +1375,7 @@ static EVT_BEGIN(s_door_open)
     RETURN
 EVT_END()
 
+/** Exits (beros) of this room: e_bero to eki_01 and s_bero to the platform hom_00. */
 static BeroEntry bero_data[] = {
     {
         "e_bero", // hitName
@@ -1936,6 +1941,7 @@ EVT_BEGIN(evt_elv_up)
     RETURN
 EVT_END()
 
+/** Items offered in the item menu at the elevator: only the Elevator Key. */
 static s32 item_tbl[] = {
     ITEM_ELEVATOR_KEY_0x1A, -1,
 };

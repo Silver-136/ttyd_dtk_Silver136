@@ -1,3 +1,5 @@
+// koopa_hit.c: Bowser's collision in the side-scrolling interludes: ground, head, wall, enemy and flame checks.
+
 #pragma once
 
 #include "driver/hitdrv.h"

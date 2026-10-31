@@ -128,6 +128,10 @@ static USER_FUNC(teresa_check_trans) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit kind of the Dark Boo (HP 8, level 24): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_purple_teresa = {
     UNIT_DARK_BOO, // mUnitType
     "btl_un_purple_teresa", // name
@@ -176,10 +180,16 @@ BattleUnitKind unit_purple_teresa = {
     data_table, // dataTable
 };
 
+/** Defence of the Dark Boo: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Dark Boo: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Dark Boo (percent chance to take each status): immune to poison and slow;
+ * resists most other statuses.
+ */
 static StatusVulnerability regist = {
     40, // sleep
     40, // stop
@@ -205,10 +215,12 @@ static StatusVulnerability regist = {
     10, // ohko
 };
 
+/** Body part of the Dark Boo (model c_teresa_p): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_purple_teresa", "c_teresa_p", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of the Dark Boo's slap: 5 damage. */
 static BattleWeapon weapon_teresa_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -245,6 +257,10 @@ static BattleWeapon weapon_teresa_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon that makes a Boo invisible, used by trans_myself_event on the Dark Boo itself and by trans_event on
+ * another Boo: always hits, no HP damage, Invisible (status 18) for 2 turns.
+ */
 static BattleWeapon weapon_teresa_trans_myself = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -282,6 +298,10 @@ static BattleWeapon weapon_teresa_trans_myself = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Target-choosing weapon of trans_event (the Dark Boo turns another Boo invisible): its own side, not itself,
+ * no HP damage. Its Invisible entry is not what lands: trans_event applies weapon_teresa_trans_myself.
+ */
 static BattleWeapon weapon_teresa_trans = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -319,6 +339,10 @@ static BattleWeapon weapon_teresa_trans = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Target-choosing weapon of move_event, which lifts its Boos to height 40: its own side, always hits,
+ * no HP damage.
+ */
 static BattleWeapon weapon_teresa_move = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -373,6 +397,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Data table of the Dark Boo: empty; it has no event hooks. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };

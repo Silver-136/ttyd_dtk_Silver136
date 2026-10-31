@@ -1,3 +1,5 @@
+// File select sequence: the save file menu (new game, copy, delete, sound and rumble settings).
+
 #include "evt/evt_memcard.h"
 #include "evt/evt_sub.h"
 #include "seq/seq_load.h"
@@ -88,6 +90,10 @@ void loadMain(SequenceWork* seq);
 void loadDraw(CameraId camera, void* param);
 void continueGame(void);
 
+/**
+ * Panels of the file select menu: the four save files, then the copy, delete and back buttons and the sound
+ * and rumble buttons; each with its position, offsets and the panel the cursor moves to up, down, left, right.
+ */
 WinDt win_dt[9] = {
     {-140.0f, 75.0f, -120.0f, 60.0f, 13, 0, {7, 2, 1, 1}},
     {140.0f, 75.0f, -120.0f, 60.0f, 12, 0, {8, 3, 0, 0}},
@@ -100,6 +106,7 @@ WinDt win_dt[9] = {
     {130.0f, -190.0f, -100.0f, 0.0f, 20, 31, {5, 1, 7, 7}},
 };
 
+/** Cursor layout while choosing a file to delete or copy from: the four files and the bottom buttons. */
 WinDt win_dt2[7] = {
     {-140.0f, 75.0f, -120.0f, 60.0f, 13, 0, {6, 2, 1, 1}},
     {140.0f, 75.0f, -120.0f, 60.0f, 12, 0, {6, 3, 0, 0}},
@@ -110,6 +117,7 @@ WinDt win_dt2[7] = {
     {200.0f, -150.0f, -80.0f, 0.0f, 18, 30, {3, 1, 6, 6}},
 };
 
+/** Cursor layout while choosing the file to copy to: only the four save files. */
 WinDt win_dt3[4] = {
     {-140.0f, 75.0f, -120.0f, 60.0f, 13, 0, {2, 2, 1, 1}},
     {140.0f, 75.0f, -120.0f, 60.0f, 12, 0, {3, 3, 0, 0}},
@@ -118,6 +126,7 @@ WinDt win_dt3[4] = {
 };
 
 static LoadWork work;
+/** Points at the file-select (load) sequence's work. */
 static LoadWork* wp = &work;
 #ifdef VERSION_G8ME01
 __declspec(section ".sdata2") const u32 seq_logo_zero_color[2];
@@ -1184,6 +1193,7 @@ void loadDraw(CameraId camera, void* param) {
     *camGetCurPtr() = saved;
 }
 
+/** Icons of the seven Crystal Stars, drawn on a save file's panel for each star that file has collected. */
 s32 stone_id[7] = {
     ICON_SAC_DEKA, ICON_SAC_BAKUGAME, ICON_SAC_MUKI, ICON_SAC_SCISSOR,
     ICON_SAC_GENKI1, ICON_SAC_SUKI, ICON_SAC_ZUBASTAR

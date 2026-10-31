@@ -1,3 +1,5 @@
+// eff_miss_star.c: small-star effect entry (effMissStarEntry) with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

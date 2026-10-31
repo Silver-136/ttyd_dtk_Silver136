@@ -1,3 +1,5 @@
+// Declarations for the Excess Express (rsh) area: battle setup tables, per-room init events, shared door/window/random-passenger events and the Smorg (moamoa) battle units.
+
 #pragma once
 
 #include "dolphin/types.h"

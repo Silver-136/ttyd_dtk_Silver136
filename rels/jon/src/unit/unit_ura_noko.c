@@ -43,6 +43,10 @@ static EvtWord attack_event[548];
 static EvtWord ura_attack_event[560];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Shady Koopa in the Pit of 100 Trials: 8 HP, level 17;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_ura_noko = {
     UNIT_SHADY_KOOPA, // mUnitType
     "btl_un_ura_noko", // name
@@ -91,6 +95,9 @@ BattleUnitKind unit_ura_noko = {
     data_table, // dataTable
 };
 
+/**
+ * Pose table of the Shady Koopa: animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "NKT_N_1"},
     {POSE_TYPE_STOP, "NKT_Y_1"},
@@ -112,6 +119,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "NKT_S_1"},
 };
 
+/**
+ * Pose table of the Shady Koopa while flipped over:
+ * animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "NKT_N_2"},
     {POSE_TYPE_STOP, "NKT_B_1"},
@@ -132,16 +143,32 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "NKT_S_2"},
 };
 
+/**
+ * Data table of the Shady Koopa: event scripts and values the battle looks up by tag (damage reactions,
+ * dodge, first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/**
+ * Defence of the Shady Koopa against each element (normal, fire, ice, explosion, electric):
+ * 1 against every element, so each hit is cut by 1.
+ */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/**
+ * Damage modifiers of the Shady Koopa per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Defence of the Shady Koopa while flipped over against each element (normal, fire, ice, explosion,
+ * electric): none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -169,10 +196,12 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Part of the Shady Koopa: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_ura_noko", "c_uranoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table},
 };
 
+/** Weapon of the Koopa's shell ram: damage 3. */
 static BattleWeapon weapon_nokonoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -210,6 +239,7 @@ static BattleWeapon weapon_nokonoko_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Shady Koopa's attack from its back: damage 6. */
 static BattleWeapon weapon_ura_noko_ura_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

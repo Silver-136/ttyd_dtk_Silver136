@@ -1,3 +1,5 @@
+// Small stars: wrapper over the Paper Mario 64 small-star effect (effSmallStarN64Entry) and its camera change.
+
 #include "eff/eff_small_star.h"
 #include "eff/n64/eff_small_star_n64.h"
 

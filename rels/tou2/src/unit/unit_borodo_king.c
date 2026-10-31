@@ -1,3 +1,5 @@
+// unit_borodo_king: Big Bandit (Bandit king form), battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -164,6 +166,10 @@ static USER_FUNC(_steal_item) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit kind of the Big Bandit (HP 8, level 13):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 BattleUnitKind unit_borodo_king = {
     UNIT_BIG_BANDIT, // mUnitType
     "btl_un_borodo_king", // name
@@ -212,6 +218,7 @@ BattleUnitKind unit_borodo_king = {
     data_table, // dataTable
 };
 
+/** Weapon of the Big Bandit's charge: 3 damage, hammer-type contact attack. */
 static BattleWeapon weapon_borodo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -248,10 +255,13 @@ static BattleWeapon weapon_borodo_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Defence of the Big Bandit: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Big Bandit: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Status vulnerability of the Big Bandit (percent chance to take each status): resists most statuses. */
 static StatusVulnerability regist = {
     90, // sleep
     80, // stop
@@ -325,6 +335,7 @@ static PoseTableEntry pose_table_item_have[] = {
 extern EvtWord _borodo_king_emergency_revival_event[];
 #endif
 
+/** Data table of the Big Bandit: event handlers for its emergency revival. */
 static BattleDataEntry data_table[] = {
 #ifdef VERSION_G8ME01
     {UNIT_DATA_EMERGENCY_REVIVAL_EVENT, _borodo_king_emergency_revival_event},
@@ -332,6 +343,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of the Big Bandit (model c_borodo_g): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_borodo_king", "c_borodo_g", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };

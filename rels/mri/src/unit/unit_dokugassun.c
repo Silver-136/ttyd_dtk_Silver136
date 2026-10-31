@@ -1,3 +1,6 @@
+// The Great Tree (mri) battle unit: Poison Puff (dokugassun): its parts, defence/status tables, and the attack, poison
+// gas and barrier events.
+
 #include "eff/n64/eff_vapor_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -46,6 +49,10 @@ static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[13];
 
+/**
+ * Unit data of the Poison Puff; ties together its sounds, parts, status vulnerability, init event
+ * and event table.
+ */
 static BattleUnitKind unit_dokugassun = {
     UNIT_POISON_PUFF, // mUnitType
     "btl_un_dokugassun", // name
@@ -91,8 +98,10 @@ static BattleUnitKind unit_dokugassun = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
+/** Defence of the Poison Puff: 0 against every kind of hit. */
 static BattleUnitDefense defence = {0};
 
+/** Defence attributes of the Poison Puff: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -120,6 +129,7 @@ static StatusVulnerability regist = {
     20, // ohko
 };
 
+/** Parts of the Poison Puff: 1 part (model c_kmoon_g). */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -172,6 +182,7 @@ static USER_FUNC(eff_poison_breath) {
     return EVT_RETURN_DONE;
 }
 
+/** Weapon of the Poison Puff (attack): targets one unit for 8 damage; used by attack_event. */
 static BattleWeapon weapon_dokugassun_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -208,6 +219,10 @@ static BattleWeapon weapon_dokugassun_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the Poison Puff (poisongas attack): targets every unit for 10 damage, ignores Defense,
+ * may inflict Poison (50%, 10 turns); used by attack_event.
+ */
 static BattleWeapon weapon_dokugassun_poisongas_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -387,6 +402,7 @@ static EVT_BEGIN(poisongas_event)
     RETURN
 EVT_END()
 
+/** Pose table of the Poison Puff: maps its battle poses to its animations. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -441,6 +457,7 @@ static USER_FUNC(eff_poison_barrier) {
     return EVT_RETURN_DONE;
 }
 
+/** Event table of the Poison Puff: counter_event (tag 43), dmg_first_attack_pos (tag 48). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_POISON_EVENT, counter_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},

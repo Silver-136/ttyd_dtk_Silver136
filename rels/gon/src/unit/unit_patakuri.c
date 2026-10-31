@@ -1,3 +1,5 @@
+// Paragoomba (patakuri): battle unit used in Hooktail Castle.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -42,6 +44,7 @@ static EvtWord phase_event[2];
 static EvtWord attack_event[492];
 static EvtWord wait_event[6];
 
+/** Unit data of the Paragoomba: 2 HP, level 7; the battle starts it from init_event_patakuri. */
 BattleUnitKind unit_patakuri = {
     UNIT_PARAGOOMBA, // mUnitType
     "btl_un_patakuri", // name
@@ -90,8 +93,10 @@ BattleUnitKind unit_patakuri = {
     data_table_patakuri, // dataTable
 };
 
+/** Defence of the Paragoomba: none against any element. */
 static BattleUnitDefense defence_patakuri = {{0, 0, 0, 0, 0}};
 
+/** Elemental reactions of the Paragoomba: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_patakuri_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist_patakuri = {
@@ -119,6 +124,7 @@ static StatusVulnerability regist_patakuri = {
     150, // ohko
 };
 
+/** Weapon data for the Paragoomba's dive attack: 1 damage, one target. */
 static BattleWeapon weapon_patakuri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -155,6 +161,7 @@ static BattleWeapon weapon_patakuri_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Body part of the Paragoomba (winged), model c_kuribo: its one target part. */
 static BattleUnitKindPart parts_patakuri[] = {
     {
         1, // partNum
@@ -174,6 +181,9 @@ static BattleUnitKindPart parts_patakuri[] = {
     },
 };
 
+/**
+ * Pose table of the Paragoomba: the animation each battle pose (idle, hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table_patakuri[] = {
     {POSE_TYPE_SLEEP, "PTK_N_1"},
     {POSE_TYPE_STOP, "PTK_Y_1"},
@@ -196,12 +206,20 @@ static PoseTableEntry pose_table_patakuri[] = {
     {POSE_TYPE_ACTION, "PTK_S_1"},
 };
 
+/**
+ * Event table of the Paragoomba: being knocked out of the air (dmg_fall_event, tag 14) and the First Strike
+ * reaction (patakuri_dmg_first_attack_pos, tag 48).
+ */
 static BattleDataEntry data_table_patakuri[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, patakuri_dmg_first_attack_pos},
     {0, NULL},
 };
 
+/**
+ * Sound table of the Paragoomba: which sound each of its poses (idle, walk, run, attack and so on) plays, and
+ * when.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"PTK_S_1", 0.01f, NULL, "SFX_ENM_PATAKURI_WAIT1", 0, 1},
     {"PTK_W_1", 0.01f, NULL, "SFX_ENM_PATAKURI_MOVE1", 0, 1},
@@ -386,6 +404,7 @@ static EVT_BEGIN(wait_event_patakuri)
     RETURN
 EVT_END()
 
+/** Pose table of the Goomba: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KUR_N_1"},
     {POSE_TYPE_STOP, "KUR_Y_1"},
@@ -409,13 +428,16 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
+/** Event table of the Goomba: the First Strike reaction (does nothing). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Defence of the Goomba: none against any element. */
 static BattleUnitDefense defence = {0};
 
+/** Elemental reactions of the Goomba: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -443,6 +465,7 @@ static StatusVulnerability regist = {
     150, // ohko
 };
 
+/** Body part of the Goomba, model c_kuribo: its one target part. */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -462,6 +485,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon data for the Goomba's headbonk: 1 damage, a jump-type hit, one target. */
 static BattleWeapon weapon_kuriboo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

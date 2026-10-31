@@ -1,3 +1,6 @@
+// Fire pillar (hibashira: pillar of fire) animation; types 0-2 place one pillar, types 3-5 spread count pillars
+// between a start and an end point.
+
 #include "eff/eff_hibashira.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"

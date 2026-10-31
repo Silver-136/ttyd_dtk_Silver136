@@ -1,3 +1,5 @@
+// icondrv.c: the icon driver (IconEntry flags, icon.bin layout, iconEntry/iconDispGx): the button and item icons drawn on screen.
+
 #pragma once
 
 /*

@@ -1,3 +1,5 @@
+// Declares the action command manager, its work data and button-icon drawing helpers.
+
 #pragma once
 
 #include <dolphin/types.h>

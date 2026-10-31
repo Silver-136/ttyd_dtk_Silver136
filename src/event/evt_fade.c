@@ -1,3 +1,5 @@
+// Script commands for screen fades and transitions (fadedrv).
+
 #include "evt/evt_fade.h"
 #include "driver/fadedrv.h"
 #include "driver/camdrv.h"

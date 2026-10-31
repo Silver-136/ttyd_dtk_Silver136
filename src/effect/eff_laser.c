@@ -1,3 +1,5 @@
+// Laser effect: plays the MOBJ_EFF_laser animation at a point; types 0-3, one type also fades in white.
+
 #include "eff/eff_laser.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"

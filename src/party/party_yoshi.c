@@ -1,3 +1,5 @@
+// Yoshi: partner init, follow, the ride (Mario on Yoshi's back) and the flutter jump.
+
 #include "dolphin/types.h"
 #include "driver/animdrv.h"
 #include "driver/effdrv.h"

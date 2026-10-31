@@ -1,3 +1,6 @@
+// Paper Mario 64 effect: one glass shard that flies off in a random direction, falls and spins while its texture
+// shimmers; types 0-1 white, 2-3 green, odd types add a glint. Used when a Yux barrier shatters and for ice shards.
+
 #include "driver/effdrv.h"
 #include "eff/n64/eff_glass_n64.h"
 #include "eff/eff_n64.h"
@@ -8,6 +11,7 @@
 #include <dolphin/mtx.h>
 #include <stdlib.h>
 
+/** 16x16 glass shard sprite. */
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 1024, 0, 0, 0, 0, 255},
@@ -15,6 +19,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
 };
 
+/** 48x48 four-point flash the odd shard types add at the end of their glint cycle; its edges fade out. */
 static effN64Vtx size48x48_tex32x32_vtx[5] = {
     {-32, 0, 0, 0, 0, 255, 255, 255, 0},
     {0, -32, 0, 1024, 0, 255, 255, 255, 0},

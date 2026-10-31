@@ -1,3 +1,5 @@
+// The Great Tree (mri): the Puni crowd system's types (PuniWork, PuniData, PuniMap) and its user functions.
+
 #pragma once
 
 #include <dolphin/types.h>

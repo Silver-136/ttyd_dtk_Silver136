@@ -59,6 +59,7 @@ EVT_BEGIN(evt_dokan)
     RETURN
 EVT_END()
 
+/** Exits of mri_15: west door w_bero to mri_06 (e_bero); pipe dokan to mri_14 (dokan). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -225,6 +226,10 @@ EVT_BEGIN(ueki_evt_01)
     RETURN
 EVT_END()
 
+/**
+ * Plants Mario can search in mri_15: A_ueki01 (runs ueki_evt_01 when searched), A_ueki02, A_ueki03,
+ * A_ueki04, A_ueki05, A_ueki06.
+ */
 static KusaAccess ueki_access_data[] = {
     {1, "A_ueki01", "S_ueki01", ueki_evt_01},
     {1, "A_ueki02", "S_ueki02", NULL},

@@ -1,3 +1,6 @@
+// Wheat smoke effects (mugi: wheat) using the EFF_Mugi model, or EFF_Hana on the "win" map.
+// Entries: effMugiKemuriEntry and effMugiKemuri2Entry.
+
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
 #include "driver/mapdrv.h"

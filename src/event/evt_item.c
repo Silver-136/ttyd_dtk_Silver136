@@ -1,3 +1,5 @@
+// Script commands for field items: spawning, collecting and item flags (itemdrv).
+
 #include "evt/evt_cmd.h"
 #include "driver/itemdrv.h"
 #include "manager/evtmgr_cmd.h"

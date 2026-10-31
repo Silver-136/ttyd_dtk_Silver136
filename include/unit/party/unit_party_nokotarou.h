@@ -1,3 +1,5 @@
+// unit_party_nokotarou.c: Koops's (Nokotarou) battle weapons, pose tables and unit kind as a partner.
+
 #pragma once
 
 #include <dolphin/types.h>

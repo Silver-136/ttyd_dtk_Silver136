@@ -33,6 +33,11 @@ static EvtWord jump_attack_event[324];
 static EvtWord dekadeka_event[125];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the X-Naut (btl_un_gundan_zako): 4 HP, level 13, with a body slam,
+ * a jump attack and a growth potion that makes it Huge. win.rel carries this copy,
+ * but no battle group of Boggly Woods places it.
+ */
 static BattleUnitKind unit_gundan_zako = {
     UNIT_X_NAUT, // mUnitType
     "btl_un_gundan_zako", // name
@@ -78,8 +83,10 @@ static BattleUnitKind unit_gundan_zako = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
+/** Flat damage reduction of the X-Naut against normal, fire, ice, explosion and electric hits: none. */
 static BattleUnitDefense defence = {0};
 
+/** Element attributes of the X-Naut: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -107,6 +114,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Poses of the X-Naut: idle, status, hurt, run, attack and talking animations (the names have no prefix). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -126,10 +134,14 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** The X-Naut has no data table events. */
 static BattleDataEntry data_table[] = {
     {0},
 };
 
+/**
+ * The X-Naut's single part: the X-Naut model (c_zako_n), the main target and the part that covers for allies.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -149,6 +161,10 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/**
+ * The X-Naut's body slam: 3 damage to the front-most opposing target,
+ * a hammer-like attack that can be guarded.
+ */
 static BattleWeapon weapon_gundan_zako_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -185,6 +201,7 @@ static BattleWeapon weapon_gundan_zako_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** The X-Naut's jump attack: 3 damage to one opposing target, a jump-like attack that can be guarded. */
 static BattleWeapon weapon_gundan_zako_jump_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -221,6 +238,7 @@ static BattleWeapon weapon_gundan_zako_jump_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** The X-Naut's growth potion (dekadeka bottle): it drinks it itself and always grows Huge for 3 turns. */
 static BattleWeapon weapon_gundan_zako_dekadeka_bottle = {
     NULL, 0, // name..icon
     {0}, // pad_06

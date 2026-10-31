@@ -58,6 +58,10 @@ static EVT_BEGIN(first_evt_dokan)
     RETURN
 EVT_END()
 
+/**
+ * Exits of this map: the pipe down to Rogueport Sewers (tik_03), which holds Mario on his first arrival,
+ * and the east path to win_00.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "dokan1", // hitName

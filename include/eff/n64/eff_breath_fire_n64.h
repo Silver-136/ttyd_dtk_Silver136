@@ -1,3 +1,5 @@
+// eff_breath_fire_n64.c: Paper Mario 64 fire breath: entry effBreathFireN64Entry and work data EffBreathFireN64Work.
+
 #pragma once
 
 #include "driver/effdrv.h"

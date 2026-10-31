@@ -1,3 +1,5 @@
+// eff_wangflush_n64.c: flash burst effect entry (effWangFlushN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

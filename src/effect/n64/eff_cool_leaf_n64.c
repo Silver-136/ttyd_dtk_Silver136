@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: cool leaf, four leaves tumbling and spinning; types 0-2 pick the spin.
+
 #include "eff/eff_n64.h"
 #include "eff/n64/eff_cool_leaf_n64.h"
 #include "driver/camdrv.h"
@@ -27,6 +29,7 @@ typedef struct EffCoolLeafN64Work {
     f32 az;        // 0x38
 } EffCoolLeafN64Work;
 
+/** Two-sided 12x12 brown leaf quad, used by type 0. */
 static effN64Vtx size12x12_tex64x64_brown_vtx[] = {
     {-6, -6, 0, 0, 0, 0x19, 0x2A, 0x11, 0xFF},
     {6, -6, 0, 2048, 0, 0x19, 0x2A, 0x11, 0xFF},
@@ -38,6 +41,7 @@ static effN64Vtx size12x12_tex64x64_brown_vtx[] = {
     {-6, 6, 0, 0, 4096, 0x30, 0x36, 0x25, 0xFF},
 };
 
+/** Two-sided 12x12 red leaf quad, used by type 1. */
 static effN64Vtx size12x12_tex64x64_red_vtx[] = {
     {-6, -6, 0, 0, 0, 0x32, 0x15, 0x11, 0xFF},
     {6, -6, 0, 2048, 0, 0x32, 0x15, 0x11, 0xFF},

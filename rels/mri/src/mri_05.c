@@ -122,6 +122,7 @@ EVT_BEGIN(puni_5_talk)
     RETURN
 EVT_END()
 
+/** NPCs of the soap-bubble room: Punies 4 and 5. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"プニ族４"*/"\x83\x76\x83\x6A\x91\xB0\x82\x53", // name
@@ -166,6 +167,10 @@ static EVT_BEGIN(bero_s_doa_open)
     RETURN
 EVT_END()
 
+/**
+ * Exits of mri_05: west door w_bero to mri_01 (e_bero); dokan1 (scripted pipe); dokan2 (scripted pipe); pipe
+ * dokan3 to mri_02 (dokan2); pipe dokan4 to mri_19 (dokan1).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -296,6 +301,10 @@ static EVT_BEGIN(evt_ueki_04)
     RETURN
 EVT_END()
 
+/**
+ * Plants Mario can search in mri_05: A_ueki01, A_ueki02, A_ueki03, A_ueki04
+ * (runs evt_ueki_04 when searched), A_ueki05.
+ */
 static KusaAccess ueki_access_data[] = {
     {1, "A_ueki01", "S_ueki01", NULL},
     {1, "A_ueki02", "S_ueki02", NULL},

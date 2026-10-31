@@ -1,3 +1,5 @@
+// eff_hokori_n64.c: Paper Mario 64 Hokori effect entry (effHokoriN64Entry) and its work data (EffHokoriN64Work).
+
 #pragma once
 
 #include <dolphin/mtx.h>

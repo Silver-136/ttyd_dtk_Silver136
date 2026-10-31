@@ -1,3 +1,5 @@
+// Battle unit data for the invisible system unit (unit_system) that runs battle-wide scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_cmd.h"
@@ -14,10 +16,16 @@ static EvtWord damage_event[2];
 static EvtWord attack_event[2];
 static EvtWord wait_event[2];
 
+/** The system unit's single part: hidden, untargetable and without a shadow, so it never appears on stage. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_system", NULL, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kHidden | kNoShadow, 0, NULL},
 };
 
+/**
+ * The invisible system unit that the battle enters before Mario (entryunit_system in battle.c).
+ * It has no HP gauge, locked HP and is ignored when checking for a cleared battle;
+ * it exists to run battle-wide scripts.
+ */
 BattleUnitKind unit_system = {
     UNIT_SYSTEM, // mUnitType
     "btl_un_system", // name
@@ -79,14 +87,18 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/** Defence 0 against every element; it never takes hits anyway. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element response of the system unit: immune to every kind of hit. */
 static BattleUnitDefenseAttr defence_attr = {{2, 2, 2, 2, 2}};
 
+/** Data events for the system unit: none. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Status chances for the system unit: all 0, so no status can ever land on it. */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop

@@ -17,6 +17,10 @@ static EvtWord phase_event[2];
 static EvtWord attack_event[2];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Atomic Boo actor (HP 10, level 1):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 BattleUnitKind unit_act_atmic_teresa = {
     UNIT_EPILOGUE_ATOMIC_BOO, // mUnitType
     "btl_un_act_atmic_teresa", // name
@@ -65,10 +69,18 @@ BattleUnitKind unit_act_atmic_teresa = {
     data_table, // dataTable
 };
 
+/** Defence of the Atomic Boo actor: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Atomic Boo actor: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Atomic Boo actor (percent chance to take each status):
+ * immune to sleep, stop, dizzy, poison, confusion, electric shock, burn, freeze, growing huge, shrinking,
+ * attack up, attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
+ * invisibility and instant kill.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -104,10 +116,14 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Data table of the Atomic Boo actor: empty; it has no event hooks. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Body part of the Atomic Boo actor (model c_atmic_trs): hit position, defences, attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_teresa", "c_atmic_trs", 0.0f, 0.0f, 0.0f, 0.0f, 95.0f, 0.0f, 0.0f, 95.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };

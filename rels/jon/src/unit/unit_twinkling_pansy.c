@@ -29,6 +29,10 @@ static EvtWord song_event[300];
 static EvtWord escape_event[96];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Amazy Dayzee in the Pit of 100 Trials: 20 HP, level 100;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_twinkling_pansy = {
     UNIT_AMAZY_DAYZEE, // mUnitType
     "btl_un_twinkling_pansy", // name
@@ -77,8 +81,16 @@ BattleUnitKind unit_twinkling_pansy = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Amazy Dayzee against each element (normal, fire, ice, explosion, electric):
+ * 1 against every element, so each hit is cut by 1.
+ */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/**
+ * Damage modifiers of the Amazy Dayzee per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -106,10 +118,12 @@ static StatusVulnerability regist = {
     10, // ohko
 };
 
+/** Part of the Amazy Dayzee: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_twinkling_pansy", "c_kpansy", 0.0f, 0.0f, 0.0f, 0.0f, 29.0f, 0.0f, 0.0f, 34.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of the Amazy Dayzee's song, which hits the whole party: damage 20; inflicts Sleep (75%). */
 static BattleWeapon weapon_twinkling_pansy_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -179,6 +193,9 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Pose table of the Amazy Dayzee: animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "PAN_N_1"},
     {POSE_TYPE_STOP, "PAN_Y_1"},
@@ -200,6 +217,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PAN_S_1"},
 };
 
+/**
+ * Data table of the Amazy Dayzee: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},

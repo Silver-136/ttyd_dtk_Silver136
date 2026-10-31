@@ -1,3 +1,5 @@
+// Declares the slot-machine (break slot) reel structure and its functions.
+
 #pragma once
 
 #include "dolphin/types.h"

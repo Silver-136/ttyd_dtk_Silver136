@@ -1,3 +1,5 @@
+// Battle unit data and scripts for Goombella (Christine) as a partner.
+
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
 #include "battle/battle_monosiri.h"
@@ -96,6 +98,11 @@ PoseTableEntry pose_table_christine_stay[] = {
     {POSE_TYPE_ACTION, "PKR_S_1"},
 };
 
+/**
+ * Goombella's battle data events: Appeal (5), the reaction when an audience member is attacked (6), her move
+ * menu builder (1), nothing on a First Strike (48), the victory cheer (64), an empty step run after a move's
+ * cost is paid (7) and the default spin when she superguards an attack (47).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_APPEAL_EVENT, christine_appeal_event},
     {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
@@ -107,10 +114,15 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Goombella's single body part: model c_pkr with her defence, element and pose tables. */
 BattleUnitKindPart unitpartsdata_Party_Christine[] = {
     {1, "btl_un_christine", "c_pkr", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_christine_stay},
 };
 
+/**
+ * Goombella's battle unit (name btl_un_christine), used whenever she is the partner in a fight: size, hurt sounds,
+ * status table, body part and init script. No HP gauge is drawn over her; her HP comes from the partner stats.
+ */
 BattleUnitKind unitdata_Party_Christine = {
     UNIT_GOOMBELLA, // mUnitType
     "btl_un_christine", // name
@@ -200,6 +212,12 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Headbonk (btl_wn_pkr_normal), Goombella's free basic move, run by partyChristineAttack_NormalAttack:
+ * a jump on one enemy that is not on the ceiling, a timed A press before each landing for a second bonk,
+ * power from her rank.
+ * Flips shelled enemies and knocks winged ones down; usable while confused.
+ */
 BattleWeapon partyWeapon_ChristineNormalAttack = {
     "btl_wn_pkr_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -241,6 +259,10 @@ BattleWeapon partyWeapon_ChristineNormalAttack = {
 #endif
 };
 
+/**
+ * Tattle (btl_wn_pkr_lv1), run by partyChristineAttack_Monosiri: no damage, always hits one enemy part; the
+ * line-up-the-cursors command, then she reads out the enemy's tattle and its HP shows from then on.
+ */
 BattleWeapon partyWeapon_ChristineMonosiri = {
     "btl_wn_pkr_lv1", // name
     ICON_PARTNER_MOVE_LV1, // icon
@@ -278,6 +300,10 @@ BattleWeapon partyWeapon_ChristineMonosiri = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Multibonk (btl_wn_pkr_lv2, 3 FP), run by partyChristineAttack_RenzokuAttack: like Headbonk, but she keeps
+ * bonking the same enemy until a timed press is missed, each hit weaker than the last.
+ */
 BattleWeapon partyWeapon_ChristineRenzokuAttack = {
     "btl_wn_pkr_lv2", // name
     ICON_PARTNER_MOVE_LV2, // icon
@@ -324,6 +350,10 @@ BattleWeapon partyWeapon_ChristineRenzokuAttack = {
 #endif
 };
 
+/**
+ * Rally Wink (btl_wn_pkr_lv3, 4 FP), run by partyChristineAttack_Kiss: always hits one ally (Mario), no damage;
+ * the A/B press command, and success gives Mario another move this turn. Lists Fast (chance 100, 2 turns).
+ */
 BattleWeapon partyWeapon_ChristineKiss = {
     "btl_wn_pkr_lv3", // name
     ICON_PARTNER_MOVE_LV3, // icon
@@ -1323,10 +1353,13 @@ static EVT_BEGIN(attack_audience_event)
     RETURN
 EVT_END()
 
+/** Goombella's defence: 0 against every element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Goombella's element reactions: none special, every element hits her normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Goombella's status vulnerabilities: base rate (100) for every status. */
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop

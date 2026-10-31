@@ -1,3 +1,5 @@
+// Action command manager: sets up, runs, stops and scores action commands for the current attack or defense.
+
 #include "battle/battle_ac.h"
 #include "battle/battle.h"
 #include "battle/ac/ac_table.h"

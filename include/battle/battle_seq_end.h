@@ -1,3 +1,5 @@
+// Declares the battle end sequence data: rank-up information and result events.
+
 #pragma once
 
 #include <dolphin/types.h>

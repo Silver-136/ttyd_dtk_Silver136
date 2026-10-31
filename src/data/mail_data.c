@@ -1,3 +1,5 @@
+// Mail table: the letters Mario can receive on the Mail Box SP.
+
 #include "data/mail_data.h"
 
 MailData mail_data[44] = {

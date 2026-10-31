@@ -47,6 +47,10 @@ static EvtWord yokeyoke_bottle_event_with_kanbu[15];
 static EvtWord ziwaziwa_bottle_event[15];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the X-Naut PhD: 9 HP, 30x36 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_gundan_zako_magician = {
     UNIT_X_NAUT_PHD, // mUnitType
     "btl_un_gundan_zako_magician", // name
@@ -95,8 +99,10 @@ BattleUnitKind unit_gundan_zako_magician = {
     data_table, // dataTable
 };
 
+/** Defence of the X-Naut PhD: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the X-Naut PhD: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -124,6 +130,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Pose table of the X-Naut PhD: maps its battle poses to its animations. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -143,15 +150,21 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Event table of the X-Naut PhD: it has no special event scripts. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Parts of the X-Naut PhD: 3 parts (model c_zako_m). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_gundan_zako_magician", "c_zako_m", 0.0f, 0.0f, 0.0f, 0.0f, 28.0f, 0.0f, 0.0f, 38.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_gundan_zako_magician", "c_zako_m", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, 0x13018000, 0, pose_table},
 };
 
+/**
+ * Weapon of the X-Naut PhD (fire bottle): targets one unit for 4 damage, fire element,
+ * may inflict Burn (75%, 3 turns); used by attack_common_event1, attack_common_event2.
+ */
 static BattleWeapon weapon_gundan_zako_magician_fire_bottle = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -191,6 +204,10 @@ static BattleWeapon weapon_gundan_zako_magician_fire_bottle = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the X-Naut PhD (hunyahunya bottle): targets one unit for 4 damage, may lower Defense (75%,
+ * 3 turns); used by attack_common_event1, attack_common_event2.
+ */
 static BattleWeapon weapon_gundan_zako_magician_hunyahunya_bottle = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -231,6 +248,10 @@ static BattleWeapon weapon_gundan_zako_magician_hunyahunya_bottle = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the X-Naut PhD (yokeyoke bottle): targets one unit, inflicts Dodgy (3 turns);
+ * used by attack_common_event1, attack_common_event3.
+ */
 static BattleWeapon weapon_gundan_zako_magician_yokeyoke_bottle = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -267,6 +288,10 @@ static BattleWeapon weapon_gundan_zako_magician_yokeyoke_bottle = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the X-Naut PhD (minimini bottle): targets every unit for 3 damage,
+ * may make the target Tiny (75%, 3 turns); used by attack_common_event1, minimini_bottle_event.
+ */
 static BattleWeapon weapon_gundan_zako_magician_minimini_bottle = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -310,6 +335,10 @@ static BattleWeapon weapon_gundan_zako_magician_minimini_bottle = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the X-Naut PhD (one recover): targets one unit; used by attack_common_event1,
+ * one_recover_event.
+ */
 static BattleWeapon weapon_gundan_zako_magician_one_recover = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -344,6 +373,10 @@ static BattleWeapon weapon_gundan_zako_magician_one_recover = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the X-Naut PhD (all recover): targets every unit; used by attack_common_event1,
+ * all_recover_event.
+ */
 static BattleWeapon weapon_gundan_zako_magician_all_recover = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -377,6 +410,10 @@ static BattleWeapon weapon_gundan_zako_magician_all_recover = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the X-Naut PhD (ziwaziwa bottle): targets one unit; used by attack_common_event1,
+ * attack_common_event3.
+ */
 static BattleWeapon weapon_gundan_zako_magician_ziwaziwa_bottle = {
     NULL, 0, // name..icon
     {0}, // pad_06

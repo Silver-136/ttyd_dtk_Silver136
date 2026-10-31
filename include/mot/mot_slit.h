@@ -1,3 +1,5 @@
+// mot_slit.c: Mario's paper slit (side-step) motion, with its ability, button, floor and crevice checks.
+
 #include <dolphin/mtx.h>
 #include "dolphin/types.h"
 

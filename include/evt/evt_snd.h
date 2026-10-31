@@ -1,3 +1,6 @@
+// evt_snd.c: sound script commands for BGM (evt_snd_bgmon), SFX (evt_snd_sfxon_3d) and environment sounds
+// (evt_snd_envon).
+
 #pragma once
 
 #include <dolphin/types.h>

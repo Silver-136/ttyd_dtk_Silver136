@@ -1,3 +1,5 @@
+// romfont.c: the ROM font (the console's built-in font): glyph work (RomFontWork) and romFontPrintGX.
+
 #pragma once
 
 #include <dolphin/gx.h>

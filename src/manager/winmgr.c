@@ -1,3 +1,6 @@
+// Window manager: menu windows built from descriptors, and the selection lists of shops, partners,
+// level-ups, badges and the informant (winMgrSelect*).
+
 #include "version.h"
 #include "icon_ids.h"
 #include "manager/winmgr.h"
@@ -82,7 +85,9 @@ static const char* mario_status_name_table[][3] = {
 static const char* mario_status_name_table[] = {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"};
 #define MARIO_STATUS_NAME(id) mario_status_name_table[id]
 #endif
+/** What a level-up adds to Mario's HP, FP and BP: 5, 5 and 3. */
 static s32 mario_status_henka_table[] = {5, 5, 3};
+/** The ceiling of Mario's HP, FP and BP (200, 200 and 99). */
 s32 mario_status_max_table[] = {200, 200, 99};
 
 //.data
@@ -95,18 +100,21 @@ WinMgrDesc select_desc[] = {
     {0, 0, 8, -240, -130, 500, 80, {0xFF, 0xFF, 0xFF, 0xFF}, select_main3, select_disp3},
 };
 
+/** Windows of the partner selection menu: the list, the side window and the help box. */
 WinMgrDesc select_party_desc[] = {
     {0, 4, 8, -24, 116, 300, 240, {0xFF, 0xFF, 0xFF, 0xFF}, select_main, select_disp_party},
     {2, 0, 8, -280, 120, 240, 69, {0xFF, 0xFF, 0xFF, 0xFF}, NULL, select_disp2},
     {0, 0, 8, -240, -130, 500, 80, {0xFF, 0xFF, 0xFF, 0xFF}, select_main3, select_disp3_party},
 };
 
+/** Windows of the Mario status selection menu (HP, FP, BP): the list, the side window and the help box. */
 WinMgrDesc select_mario_desc[] = {
     {0, 5, 8, -24, 116, 300, 240, {0xFF, 0xFF, 0xFF, 0xFF}, select_main, select_disp_mario},
     {2, 0, 8, -280, 120, 240, 69, {0xFF, 0xFF, 0xFF, 0xFF}, NULL, select_disp2},
     {0, 0, 8, -240, -130, 500, 80, {0xFF, 0xFF, 0xFF, 0xFF}, select_main3, select_disp3_mario},
 };
 
+/** Windows of the menu type drawn by select_disp_luigi: the list and the side window (no help box). */
 WinMgrDesc select_luigi_desc[] = {
     {0, 1, 8, -24, 116, 300, 240, {0xFF, 0xFF, 0xFF, 0xFF}, select_main, select_disp_luigi},
     {2, 0, 8, -280, 120, 240, 45, {0xFF, 0xFF, 0xFF, 0xFF}, NULL, select_disp2},
@@ -117,6 +125,10 @@ WinMgrDesc select_johoya_perfect_desc[] = {
     {2, 0, 8, -280, 120, 240, 45, {0xFF, 0xFF, 0xFF, 0xFF}, NULL, select_disp2},
 };
 
+/**
+ * Window set (count and descriptors) of each selection menu type,
+ * indexed by the type passed to winMgrSelectEntry.
+ */
 WinMgrSelectTbl select_desc_tbl[] = {
     {3, select_desc},
     {3, select_desc},
@@ -1972,6 +1984,10 @@ void select_disp3_mario(WinMgrEntry* entry) {
     }
 }
 
+/**
+ * Message labels of the partners' names
+ * (Goombella, Koops, Flurrie, Vivian, Bobbery, Ms. Mowz), looked up for the window text.
+ */
 static const char name_party0[] = "name_party0";
 static const char name_party1[] = "name_party1";
 static const char name_party4[] = "name_party4";

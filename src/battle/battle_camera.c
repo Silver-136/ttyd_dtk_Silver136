@@ -1,3 +1,5 @@
+// Battle camera: modes, zoom, movement and tracking of units and the audience during battle.
+
 #include "battle/battle_camera.h"
 #include "battle/battle.h"
 #include "battle/battle_audience.h"

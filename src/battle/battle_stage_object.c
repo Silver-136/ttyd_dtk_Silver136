@@ -1,3 +1,5 @@
+// Battle stage objects: breakable and falling set pieces, their motion, shaking and destruction.
+
 #include "battle/battle_stage_object.h"
 #include "battle/battle.h"
 #include "battle/battle_audience.h"
@@ -536,6 +538,10 @@ void BattleStage_DestroyB(void) {
 }
 
 
+/**
+ * Base weapon of a nozzle spray aimed at Mario's side (it skips enemies):
+ * _nozzle_work_attack_set starts from it and adds the nozzle type's weapon once per nozzle pointing that way.
+ */
 BattleWeaponData _nozzle_at_base_mario = {{
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -568,6 +574,7 @@ BattleWeaponData _nozzle_at_base_mario = {{
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 }};
 
+/** Base weapon of a nozzle spray aimed at the enemy side (it skips Mario and his partner), used the same way. */
 BattleWeaponData _nozzle_at_base_monster = {{
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -1135,6 +1142,11 @@ BattleStageNozzleData battle_stage_nozzle_data[] = {
     },
 };
 
+/**
+ * Falling stage objects by Mario's rank: the weapon of the falling iron frame,
+ * the odds of each of the nine kinds of object that can drop on a unit (more kinds join at higher ranks),
+ * and each kind's weapon. Used by the object-fall event; kind 6 picks a random side to hit.
+ */
 BattleStageFallObjectData battle_stage_fall_object_data[] = {
     {
         {{
@@ -2398,6 +2410,7 @@ BattleStageFallObjectData battle_stage_fall_object_data[] = {
     },
 };
 
+/** The three stage nozzles (left, centre, right) at the front of the stage, placed from Mario's rank 1 up. */
 BattleStageObjectData _object_nozzle_data[] = {
     {"nozzle_l", 3, 4, {-120.0f, 0.0f, 90.0f}, 0, 0},
     {"nozzle_c", 3, 4, {0.0f, 0.0f, 90.0f}, 0, 0},
@@ -2594,15 +2607,19 @@ EVT_BEGIN(_object_fall_event)
     RETURN
 EVT_END()
 
+/** The escape wall at the left edge of the stage, which closes in battles that cannot be fled. */
 BattleStageObjectData _object_wall_data = {"escape_wall", 4, 5, {-175.0f, 0.0f, 0.0f}, 0, 0};
 
+/** The overhead spotlight; the entry with no name ends the list. */
 BattleStageObjectData _object_spot_light_data[] = {
     {"spotlight", 6, 7, {0.0f, 240.0f, 0.0f}, 0, 0},
     {NULL, 6, 7, {0.0f, 0.0f, 0.0f}, 0, 0},
 };
 
+/** Unit setup for a hittable stage tree, spawned for stage objects that ask for one (unit_object_tree.c). */
 BattleUnitSetup _entry_tree_data = {&unit_object_tree, 2, {0}, 0x04000005, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
 
+/** Unit setup for a hittable stage switch, spawned for stage objects that ask for one (unit_object_switch.c). */
 BattleUnitSetup _entry_switch_data = {&unit_object_switch, 2, {0}, 0x04000005, {-1000.0f, -1000.0f, -1000.0f}, 0, {0, 0, 0, 0}, NULL};
 
 /** Default destroy script for background layer A1: runs _object_turn_event_core with LW(9) = 0. */

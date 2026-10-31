@@ -460,6 +460,7 @@ EVT_BEGIN(boss_noko_open_gate)
     RETURN
 EVT_END()
 
+/** Items the player may hand to Mayor Kroop for request 17: the Routing Slip only, ended by -1. */
 static s32 iri_17_item_tbl[] = {
     ITEM_ROUTING_SLIP, -1,
 };
@@ -750,6 +751,7 @@ static EVT_BEGIN(odoriko_3_init)
     RETURN
 EVT_END()
 
+/** NPCs of the east village: the mayor, the gate guard, Koops, Koops's father and Koopie Koo. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ノコノコG"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x47", // name
@@ -858,6 +860,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * Doors and exits of nok_01: w_bero to nok_00; e_bero to hei_02 (Petal Meadows); dokan_1 to tik_16 (Rogueport
+ * Sewers).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -911,21 +917,25 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** NPCs inside the mayor's house: the mayor. */
 const char* son_npc[] = {
     /*"村長"*/"\x91\xBA\x92\xB7",
     NULL,
 };
 
+/** Map objects inside the mayor's house: the spinning floor kururin3. */
 const char* son_mobj[] = {
     "kururin3",
     NULL,
 };
 
+/** Items inside the mayor's house: the Turtley Leaf iri_08 of request 8. */
 const char* son_item[] = {
     "iri_08",
     NULL,
 };
 
+/** Door of the mayor's house: outside hit area A_son_doa, the inside room and its NPCs and objects. */
 HouseParam son_data = {
     1, // type
     9, // hitInKind
@@ -943,26 +953,31 @@ HouseParam son_data = {
     son_item, // items
 };
 
+/** NPCs inside Koops's house: Koops. */
 const char* taro_npc[] = {
     /*"ノコタロウ"*/"\x83\x6D\x83\x52\x83\x5E\x83\x8D\x83\x45",
     NULL,
 };
 
+/** Map group whose bounding-box culling is off while Mario is inside Koops's house: the room S_taro_in. */
 const char* taro_map[] = {
     "S_taro_in",
     NULL,
 };
 
+/** Map objects inside Koops's house: the box. */
 const char* taro_mobj[] = {
     "box",
     NULL,
 };
 
+/** Items inside Koops's house: item_01. */
 const char* taro_item[] = {
     "item_01",
     NULL,
 };
 
+/** Door of Koops's house: outside hit area A_taro_doa, the inside room and its NPCs and objects. */
 HouseParam taro_data = {
     1, // type
     9, // hitInKind
@@ -980,16 +995,19 @@ HouseParam taro_data = {
     taro_item, // items
 };
 
+/** NPCs inside the house: Koopa K. */
 static const char* ie_npc[] = {
     /*"ノコノコK"*/"\x83\x6D\x83\x52\x83\x6D\x83\x52\x4B",
     NULL,
 };
 
+/** Map group whose bounding-box culling is off while Mario is inside this house: S_ie_sit. */
 static const char* ie_map[] = {
     "S_ie_sit",
     NULL,
 };
 
+/** Door of a village house in the east half: outside hit area A_ie_doa, the inside room and its NPCs. */
 static HouseParam ie_data = {
     1, // type
     9, // hitInKind
@@ -1557,6 +1575,10 @@ static EVT_BEGIN(evt_kusa_6)
     RETURN
 EVT_END()
 
+/**
+ * Bushes of nok_01 that Mario can check for hidden things (3 in all); A_kamehapa_04 runs evt_kusa_4,
+ * A_kamehapa_05 runs evt_kusa_5, A_kamehapa_06 runs evt_kusa_6.
+ */
 static KusaAccess kusa_data[] = {
     {0, "A_kamehapa_04", "S_kamehapa_04", evt_kusa_4},
     {0, "A_kamehapa_05", "S_kamehapa_05", evt_kusa_5},

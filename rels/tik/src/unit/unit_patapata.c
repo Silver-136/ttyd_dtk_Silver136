@@ -1,3 +1,5 @@
+// Rogueport Sewers (tik) battle unit: Koopa Paratroopa (patapata): its parts, defence/status tables, and attack events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -46,6 +48,10 @@ static EvtWord first_attack_event[302];
 static EvtWord attack_event[548];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Paratroopa (HP 4, level 9): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_patapata = {
     UNIT_PARATROOPA, // mUnitType
     "btl_un_patapata", // name
@@ -94,6 +100,7 @@ BattleUnitKind unit_patapata = {
     data_table_patapata, // dataTable
 };
 
+/** Weapon of the Paratroopa's attack: 2 damage. */
 static BattleWeapon weapon_patapata_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -130,10 +137,16 @@ static BattleWeapon weapon_patapata_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Defence of the Paratroopa (Paratroopa form): 1 damage points off every hit. */
 static BattleUnitDefense defence_patapata = {{1, 1, 1, 1, 1}};
 
+/** Defence of the Paratroopa (Paratroopa form): no damage reduction. */
 static BattleUnitDefenseAttr defence_patapata_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Paratroopa (Paratroopa form) (percent chance to take each status):
+ * extra prone to dizzy and gale force; resists most other statuses.
+ */
 static StatusVulnerability regist_patapata = {
     95, // sleep
     100, // stop
@@ -159,6 +172,10 @@ static StatusVulnerability regist_patapata = {
     100, // ohko
 };
 
+/**
+ * Body part of the Paratroopa (Paratroopa form) (model c_nokoteki):
+ * hit position, defences, attributes and pose table.
+ */
 static BattleUnitKindPart parts_patapata[] = {
     {1, "btl_un_patapata", "c_nokoteki", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence_patapata, &defence_patapata_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patapata},
 };
@@ -184,12 +201,14 @@ static PoseTableEntry pose_table_patapata[] = {
     {POSE_TYPE_ACTION, "PTP_S_1"},
 };
 
+/** Data table of the Paratroopa: its fall when knocked out of the air and its First Strike reaction. */
 static BattleDataEntry data_table_patapata[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, patapata_dmg_first_attack_pos},
     {0, NULL},
 };
 
+/** Sounds the Paratroopa's poses play as they animate: wing flaps while waiting, hovering and moving. */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"PTP_S_1", 0.01f, NULL, "SFX_ENM_PATA_WAIT1", 0, 1},
     {"PTP_W_1", 0.01f, NULL, "SFX_ENM_PATA_MOVE1", 0, 1},
@@ -467,18 +486,25 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "NKT_S_2"},
 };
 
+/**
+ * Data table of the Paratroopa: event handlers for being flipped over and a First Strike on it (no reaction).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Defence of the Paratroopa: 1 damage points off every hit. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Element reactions of the Paratroopa: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+/** Defence of the Paratroopa (flipped over): no damage reduction. */
 static BattleUnitDefense defence_turn = {0};
 
+/** Status vulnerability of the Paratroopa (percent chance to take each status): resists most statuses. */
 static StatusVulnerability regist = {
     95, // sleep
     100, // stop
@@ -504,6 +530,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/** Parts of the Paratroopa : hit positions, defences, attributes and pose tables. */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -523,6 +550,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon of the Paratroopa's shell slam: 2 damage, hammer-type contact attack. */
 static BattleWeapon weapon_nokonoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

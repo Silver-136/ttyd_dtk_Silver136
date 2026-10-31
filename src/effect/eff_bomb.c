@@ -1,3 +1,6 @@
+// Bomb blast (Bomb): eight blast rays 45 degrees apart that stretch along two scale tables, plus a confetti burst;
+// lasts 36 frames. Element 0 of the work array is the header and is not drawn.
+
 #include "eff/eff_bomb.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -30,6 +33,10 @@ static u8 scale_dt[] = {
     15, 200, 200, 15, 200, 200, 15, 200, 200, 15, 200, 200, 15, 200, 200, 15, 200, 200,
 };
 
+/**
+ * Per-frame keys for the four diagonal blast rays, read by effBombMain: same triples as scale_dt (texture
+ * frame, X and Y stretch in percent), but they stay hidden for four frames and grow only to about 150%.
+ */
 static u8 scale_dt2[] = {
     0,  0,   0,   0,  0,   0,   0,  0,   0,   0,  0,   0,   0,  100, 100, 0,  101, 101,
     1,  103, 103, 1,  105, 105, 2,  106, 106, 2,  108, 108, 3,  110, 110, 3,  112, 112,

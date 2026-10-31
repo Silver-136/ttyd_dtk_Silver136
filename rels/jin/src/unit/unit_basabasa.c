@@ -1,3 +1,5 @@
+// Swooper (basabasa): enemy battle unit; Creepy Steeple's copy of the unit data and scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -35,6 +37,10 @@ static EvtWord ceil_fall_ready_event[23];
 static EvtWord attack_event[448];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Swooper:
+ * 6 HP, level 17, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_basabasa = {
     UNIT_SWOOPER, // mUnitType
     "btl_un_basabasa", // name
@@ -83,10 +89,15 @@ BattleUnitKind unit_basabasa = {
     data_table, // dataTable
 };
 
+/** Defence of the Swooper's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Swooper's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Stand-in weapon for the damage check when the Swooper's drain attack runs into a counter from its target (no damage of its own).
+ */
 static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -120,6 +131,10 @@ static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Pose table of the Swooper:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "BSA_N_1"},
     {POSE_TYPE_STOP, "BSA_Y_1"},
@@ -141,6 +156,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "BSA_S_1"},
 };
 
+/**
+ * Pose table of the Swooper while on the ceiling:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "BSA_N_2"},
     {POSE_TYPE_STOP, "BSA_Y_2"},
@@ -162,6 +181,10 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "BSA_S_2"},
 };
 
+/**
+ * Event table of the Swooper:
+ * the reaction when it is hurt while attacking (tags 25-36), its reaction to a First Strike.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event},
@@ -179,6 +202,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of the Swooper: a single part using the model "c_basabasa". */
 static BattleUnitKindPart parts[] = {
     {
         1, "btl_un_basabasa", "c_basabasa",
@@ -216,6 +240,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Swooper's attack: 3 damage to a single target, a plain attack. */
 static BattleWeapon weapon_basabasa_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -252,6 +277,9 @@ static BattleWeapon weapon_basabasa_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Sound timing of the Swooper: the sound effect played at set points of its idle, walk and run animations.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"BSA_S_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
     {"BSA_W_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, 1},

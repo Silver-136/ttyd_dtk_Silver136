@@ -1,3 +1,5 @@
+// unit_boss_champion: Rawk Hawk (champion), boss, battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"
@@ -84,6 +86,10 @@ USER_FUNC(ceil_exist) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit kind of the Rawk Hawk (HP 40, level 49):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 BattleUnitKind unit_boss_champion = {
     UNIT_RAWK_HAWK,
     "btl_un_champion",
@@ -154,10 +160,16 @@ BattleUnitKind unit_boss_champion = {
     data_table,
 };
 
+/** Defence of the Rawk Hawk: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Rawk Hawk: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Rawk Hawk (percent chance to take each status):
+ * immune to growing huge, fright, gale force and instant kill; resists most other statuses.
+ */
 static StatusVulnerability regist = {
     60, // sleep
     50, // stop
@@ -225,11 +237,13 @@ PoseTableEntry pose_table_roof[] = {
     {POSE_TYPE_ACTION, "S_8"},
 };
 
+/** Data table of the Rawk Hawk: event handlers for being defeated. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Body part of the Rawk Hawk (model c_bred_h): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_champion", "c_bred_h", 0.0f, 0.0f, 0.0f, 0.0f, 50.0f, 0.0f, 0.0f, 55.0f, 0.0f, 35, 70, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
@@ -249,6 +263,7 @@ USER_FUNC(init_ceil) {
     return EVT_RETURN_DONE;
 }
 
+/** Weapon of Rawk Hawk's Drop Kick: 4 damage, hammer-type contact attack. */
 BattleWeapon weapon_champion_drop_kick_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -285,6 +300,7 @@ BattleWeapon weapon_champion_drop_kick_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Rawk Hawk's Screw Attack: 4 damage, jump-type contact attack. */
 BattleWeapon weapon_champion_screw_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -321,6 +337,7 @@ BattleWeapon weapon_champion_screw_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Rawk Hawk's Flying Chop: 6 damage, jump-type contact attack. */
 BattleWeapon weapon_champion_flying_chop_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -357,6 +374,7 @@ BattleWeapon weapon_champion_flying_chop_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Rawk Hawk's Foot Stamp: 3 damage, jump-type contact attack. */
 BattleWeapon weapon_champion_foot_stamp_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -393,6 +411,7 @@ BattleWeapon weapon_champion_foot_stamp_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Rawk Hawk's healing move: its power value is 5. */
 BattleWeapon weapon_champion_healing = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -428,6 +447,7 @@ BattleWeapon weapon_champion_healing = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Rawk Hawk's Roof Shake: 1 damage. */
 BattleWeapon weapon_champion_roof_shake_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -468,6 +488,7 @@ BattleWeapon weapon_champion_roof_shake_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Rawk Hawk's final Roof Shake: no HP damage. */
 BattleWeapon weapon_champion_roof_shake_last_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

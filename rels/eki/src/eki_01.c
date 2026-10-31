@@ -96,6 +96,7 @@ static EVT_BEGIN(n_open)
     RETURN
 EVT_END()
 
+/** Exits (beros) of this room: e_bero to eki_03, w_dero to eki_00 and n_bero to eki_02. */
 static BeroEntry bero_data[] = {
     {
         "e_bero", // hitName
@@ -188,6 +189,7 @@ static EVT_BEGIN(evt_origami)
     RETURN
 EVT_END()
 
+/** Items offered in the item menu at the station lock: only the Station Key. */
 static s32 key_tbl[] = {
     ITEM_STATION_KEY_0x19, -1,
 };

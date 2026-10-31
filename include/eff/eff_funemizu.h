@@ -1,3 +1,5 @@
+// eff_funemizu.c: boat-water effect: effFunemizuEntry, effFunemizuGetMapColor and the work data (EffFunemizuWork).
+
 #pragma once
 
 #include "dolphin/gx/GXStruct.h"

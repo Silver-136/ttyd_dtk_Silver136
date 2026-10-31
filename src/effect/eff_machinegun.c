@@ -1,3 +1,5 @@
+// Machine-gun effect: a shot drawn moving from a point at a given angle, speed and scale.
+
 #include "eff/eff_machinegun.h"
 #include "driver/dispdrv.h"
 #include "memory.h"

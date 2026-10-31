@@ -22,6 +22,10 @@ EvtWord dou_puka_event_sub[54];
 EvtWord dou_puka_event[40];
 EvtWord dou_mario_pos_osreport[4];
 
+/**
+ * Up-and-down offsets, in 16 steps, that make a Pirate's Grotto platform bob on the water; one step is
+ * applied every 130 ms.
+ */
 f32 dou_normal_puka_data[] = {
     -0.0f, -0.5f, -1.0f, -1.5f, -2.0f, -2.2f, -2.5f, -2.7f,
     -2.7f, -2.7f, -2.5f, -2.2f, -2.0f, -1.5f, -1.0f, -0.5f,

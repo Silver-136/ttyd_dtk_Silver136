@@ -1,3 +1,5 @@
+// Excess Express (rsh) battle database: the Smorg (moamoa) boss setup, its stage and background scripting, and the area battle tables.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -23,6 +25,9 @@ NpcSetupBattleInfo btlsetup_rsh_tbl[3];
 NpcTerritoryInfo btl_rsh_setup_no_tbl[3];
 EvtWord bgset_rsh_bg_event[30];
 
+/**
+ * Scenery props of the Excess Express battle stage (stg_06_0): rocks and scenery hills with their positions.
+ */
 BattleStageObjectData rsh_btlobject_data[] = {
     {"r_mae", 2, 1, {170.0f, 0.0f, -50.0f}, 0, 60, {0}},
     {"r_oku", 2, 1, {170.0f, -1000.0f, -50.0f}, 10, 50, {0}},
@@ -33,6 +38,9 @@ BattleStageObjectData rsh_btlobject_data[] = {
     {"C", 2, 3, {0}, 0, 60, {0}},
 };
 
+/**
+ * The Excess Express battle stage (bti_01 backdrop, stg_06_0 scenery) with its scrolling background script.
+ */
 BattleStageData rsh_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -81,6 +89,10 @@ NpcBattleSelect btlgrpsel_rsh_btlno_rsh_06_01_off[] = {
     {0},
 };
 
+/**
+ * Encounter table of the Excess Express: the ordinary train fight and the Smorg boss fight, with their enemy
+ * pools and battle music.
+ */
 NpcSetupBattleInfo btlsetup_rsh_tbl[] = {
     {
         /*"マップstg_06_0"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x36\x5F\x30", // name

@@ -250,12 +250,20 @@ EVT_BEGIN(after_2hours)
     RETURN
 EVT_END()
 
+/**
+ * Eight control points (x, y, z) of the path the freed Puni Elder walks along when he leaves with Punio
+ * (elder_rescue).
+ */
 static f32 spline_dt[] = {
     132.0f, 0.0f, -153.0f, 95.267204f, 0.0f, -108.09037f, 81.30669f, 0.0f,
     -100.69795f, 79.727806f, 0.0f, -73.32686f, 117.33458f, 0.0f, -59.17779f, 162.0448f,
     0.0f, -53.076424f, 228.65108f, 0.0f, 36.325317f, 245.45486f, 0.0f, 22.319448f,
 };
 
+/**
+ * Five control points (x, y, z) of the path Punio (the guide Puni) walks along in elder_rescue after the
+ * elder leaves.
+ */
 f32 spline_dt1[] = {
     98.0f, 0.0f, -156.0f, 65.11044f, 0.0f, -80.236275f, 56.63583f, 0.0f,
     -57.388996f, -4.335236f, 0.0f, -40.86129f, -145.0f, 0.0f, -60.0f,
@@ -543,6 +551,7 @@ EVT_BEGIN(puni_3_talk)
     RETURN
 EVT_END()
 
+/** NPCs of the jail: the Puni Elder, the guide's sister, the guide Puni and Puni 3. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"プニ族長老"*/"\x83\x76\x83\x6A\x91\xB0\x92\xB7\x98\x56", // name
@@ -612,6 +621,7 @@ EVT_BEGIN(bero_custom_00)
     RETURN
 EVT_END()
 
+/** Exits of mri_03: pipe dokan to mri_20 (dokan1); west road w_bero to mri_04 (e_bero). */
 static BeroEntry bero_entry_data[] = {
     {
         "dokan", // hitName
@@ -649,6 +659,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Scattered (x, z) spots, as pairs of 16-bit values, where the Punies stand in the jail. */
 static s16 puni_rand_position[] = {
     -68, -143, -146, -199, -101, -286, -126, -253,
     -144, -149, -229, -226, -183, -191, -40, -200,
@@ -738,6 +749,7 @@ EVT_BEGIN(evt_unlock00_01)
     RETURN
 EVT_END()
 
+/** Item list for the red cell door's key window: only the Red Key (-1 ends the list). */
 s32 key_table00[] = {
     ITEM_RED_KEY, -1,
 };
@@ -811,6 +823,7 @@ static EVT_BEGIN(evt_unlock01)
     RETURN
 EVT_END()
 
+/** Item list for the blue cell door's key window: the Red Key and the Blue Key (-1 ends the list). */
 s32 key_table01[] = {
     ITEM_RED_KEY, ITEM_BLUE_KEY, -1,
 };
@@ -991,6 +1004,7 @@ EVT_BEGIN(party_kirimomi_event)
     RETURN
 EVT_END()
 
+/** Points (x, z pairs, 10000 ends the list) the Punies run to when they flee in the blue-cell scene. */
 s32 JailAwayTable_New[] = {
     -83, -216, -153, -195, -205, -154, -241, -95,
     -220, -25, -190, 0, -160, 40, 10000,
@@ -1511,6 +1525,7 @@ EVT_BEGIN(guide_sister_before)
     RETURN
 EVT_END()
 
+/** Plants Mario can search in mri_03: A_ueki01, A_ueki03, A_ueki04, A_ueki05. */
 static KusaAccess ueki_access_data[] = {
     {1, "A_ueki01", "S_ueki01", NULL},
     {1, "A_ueki03", "S_ueki03", NULL},

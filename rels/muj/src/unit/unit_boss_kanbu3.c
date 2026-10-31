@@ -1,3 +1,5 @@
+// Keelhaul Key (muj) battle unit: Lord Crump (kanbu3): its parts, defence/status tables, and attack events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_batstage.h"
@@ -74,6 +76,10 @@ static PoseTableEntry pose_table[18];
 static PoseTableEntry pose_table_guard[18];
 static EvtWord normal_attack_event[365];
 
+/**
+ * Unit data of Lord Crump: 30 HP, 56x59 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_boss_kanbu3 = {
     UNIT_LORD_CRUMP_CHAPTER5, // mUnitType
     "btl_un_kanbu3", // name
@@ -122,10 +128,13 @@ BattleUnitKind unit_boss_kanbu3 = {
     data_table, // dataTable
 };
 
+/** Defence of Lord Crump: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence of Lord Crump while he is guarding: 2 against every kind of hit (set by guard_event). */
 static BattleUnitDefense defence_guard = {{2, 2, 2, 2, 2}};
 
+/** Defence attributes of Lord Crump: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -153,21 +162,28 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/** Event table of Lord Crump: dead_event (tag 49). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/**
+ * Event table Lord Crump switches to after his first defeat: it no longer has the defeat script,
+ * so the next defeat ends the battle.
+ */
 BattleDataEntry data_table2[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Parts of Lord Crump: 1 part (model c_kanbu). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_kanbu3", "c_kanbu", 0.0f, 0.0f, 0.0f, 0.0f, 45.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of Lord Crump (attack): targets one unit for 3 damage; used by attack_event. */
 BattleWeapon weapon_kanbu3_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -204,6 +220,7 @@ BattleWeapon weapon_kanbu3_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Lord Crump (charge): targets one unit; used by charge_event. */
 BattleWeapon weapon_kanbu3_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -239,6 +256,7 @@ BattleWeapon weapon_kanbu3_charge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Spawn setup for the X-Naut PhD (unit_gundan_zako_magician): enemy side, placed off-screen at first. */
 BattleUnitSetup entry_kenkyu = {
     &unit_gundan_zako_magician, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -250,6 +268,10 @@ BattleUnitSetup entry_kenkyu = {
     NULL, // itemDropTable
 };
 
+/**
+ * Spawn setup for X-Nauts (unit_boss_gundan_zako_group1): enemy side, placed off-screen at first;
+ * used by call_event.
+ */
 BattleUnitSetup entry_group1 = {
     &unit_boss_gundan_zako_group1, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -261,6 +283,10 @@ BattleUnitSetup entry_group1 = {
     NULL, // itemDropTable
 };
 
+/**
+ * Spawn setup for X-Nauts (unit_boss_gundan_zako_group2): enemy side, placed off-screen at first;
+ * used by damage_event, call_event.
+ */
 BattleUnitSetup entry_group2 = {
     &unit_boss_gundan_zako_group2, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -272,6 +298,10 @@ BattleUnitSetup entry_group2 = {
     NULL, // itemDropTable
 };
 
+/**
+ * Spawn setup for X-Nauts (unit_boss_gundan_zako_group3): enemy side, placed off-screen at first;
+ * used by dead_event, call_event.
+ */
 BattleUnitSetup entry_group3 = {
     &unit_boss_gundan_zako_group3, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -844,6 +874,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/** Pose table of Lord Crump: maps its battle poses to its animations. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -865,6 +896,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Poses of Lord Crump while he is guarding (set by guard_event). */
 static PoseTableEntry pose_table_guard[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},

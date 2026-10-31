@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: water shield (wprotect) around a point that spawns water-damage splashes.
+
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -178,6 +180,10 @@ void effOpukuWprotectMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effOpukuWprotectDisp, effect);
 }
 
+/**
+ * The water shield's 40-vertex box (position, texture coordinate, grey colour),
+ * drawn with the upper vertices jittering every frame.
+ */
 PointData point_data[40] = {
     {25, 4, -25, 1025, 72, 176, 176, 176},
     {22, 0, -22, 963, 0, 176, 176, 176},
@@ -221,6 +227,7 @@ PointData point_data[40] = {
     {-22, 50, 22, 61, 1021, 240, 240, 240},
 };
 
+/** 8x8 quad drawn for each bubble rising inside the water shield. */
 static effN64Vtx size8x8_tex32x32_vtx[4] = {
     {-4, -4, 0, 0, 0, 0, 0, 0, 255},
     {4, -4, 0, 1024, 0, 0, 0, 0, 255},

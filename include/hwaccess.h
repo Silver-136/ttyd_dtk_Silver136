@@ -1,3 +1,6 @@
+// Named helpers for the few places where game code writes GameCube hardware registers
+// directly. With the Metrowerks compiler they expand to the original inline asm.
+
 #ifndef HWACCESS_H
 #define HWACCESS_H
 

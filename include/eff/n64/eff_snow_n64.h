@@ -1,3 +1,5 @@
+// eff_snow_n64.c: snowflake effect entry (effSnowN64Entry).
+
 #pragma once
 
 #include <dolphin/types.h>

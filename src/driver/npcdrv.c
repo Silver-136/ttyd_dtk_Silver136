@@ -1,3 +1,6 @@
+// NPC driver: the NPC entries, their movement, collision and events, and the field-battle (fbat)
+// encounter, talk and first-strike checks.
+
 #include "driver/npcdrv.h"
 #include "data/npc_data.h"
 #include "libc_decls.h"
@@ -574,6 +577,7 @@ s32 npcEntry(const char* description, const char* animName) {
 }
 
 #ifndef VERSION_G8ME01
+/** Zero vector left over in the NPC driver's constants; nothing reads it (its place differs by version). */
 static const Vec sZeroVec3 = {0.0f, 0.0f, 0.0f};
 #endif
 
@@ -1204,6 +1208,7 @@ void npcMain(void) {
 }
 
 #ifdef VERSION_G8ME01
+/** Zero vector left over in the NPC driver's constants; nothing reads it (its place differs by version). */
 static const Vec sZeroVec3 = {0.0f, 0.0f, 0.0f};
 #endif
 

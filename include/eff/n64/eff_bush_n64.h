@@ -1,3 +1,5 @@
+// eff_bush_n64.c: Paper Mario 64 Bush effect entry (effBushN64Entry).
+
 #pragma once
 
 #include <dolphin/types.h>

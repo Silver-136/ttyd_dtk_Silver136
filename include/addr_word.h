@@ -1,3 +1,5 @@
+// AddrWord: a pointer-sized integer (u32) for address arithmetic, and ADDR_WORD to relocate a pointer word in place.
+
 #pragma once
 
 #include <dolphin/types.h>

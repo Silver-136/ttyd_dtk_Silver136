@@ -1,3 +1,5 @@
+// Declares the battle menu drawing functions.
+
 #pragma once
 
 #include <dolphin/types.h>

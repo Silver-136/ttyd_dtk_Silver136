@@ -42,6 +42,7 @@ static EvtWord return_event[256];
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
+/** Unit data of the Piranha Plant: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_pakkun_flower = {
     UNIT_PIRANHA_PLANT, // mUnitType
     "btl_un_pakkun_flower", // name
@@ -90,8 +91,10 @@ BattleUnitKind unit_pakkun_flower = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Piranha Plant: none, every attack type does full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element response of the Piranha Plant: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -119,10 +122,12 @@ static StatusVulnerability regist = {
     30, // ohko
 };
 
+/** Body part of the Piranha Plant: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_pakkun_flower", "c_pakflwr", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
+/** Attack data for the Piranha Plant's bite: 9 damage. */
 static BattleWeapon weapon_pakkun_flower_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -183,6 +188,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Pose table of the Piranha Plant: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "PKF_N_1"},
     {POSE_TYPE_STOP, "PKF_Y_1"},
@@ -204,6 +210,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PKF_S_1"},
 };
 
+/** Pose table of the Piranha Plant, on the ceiling: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "PKF_N_2"},
     {POSE_TYPE_STOP, "PKF_Y_2"},
@@ -225,6 +232,10 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "PKF_S_3"},
 };
 
+/**
+ * Data table of the Piranha Plant: event handlers keyed by tag (dmg_avoid_counter_thorn_head_event,
+ * counter_damage_event).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

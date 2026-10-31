@@ -1,3 +1,5 @@
+// Pause menu: the partner window (choose a partner, partner stats and moves).
+
 #include "version.h"
 #include "win/win_main.h"
 #include "win/win_party.h"
@@ -75,6 +77,11 @@ BattleWeapon* chu_waza[4] = {
     &partyWeapon_ChuchurinaKiss,
 };
 
+/**
+ * The seven partners in Party screen order (Goombella, Koops, Flurrie, Yoshi, Vivian, Bobbery, Ms. Mowz):
+ * partner id, name icon and name, help text, menu model, its poses and move list.
+ * The Party screen's setup and drawing read it; Yoshi's name icon is switched to match his colour.
+ */
 WindowPartyDt winPartyDt[7] = {
     {1, ICON_PARTY_GOOMBELLA, "name_party0", "msg_menu_party_kuri", "EFF_m_kuriko", "W_1", "d_mario", "R_2", chri_waza},
     {2, ICON_PARTY_KOOPS, "name_party1", "msg_menu_party_noko", "EFF_m_noko", "W_1", "d_mario", "R_3", noko_waza},
@@ -352,6 +359,10 @@ void winPartyMain2(WindowWork* wp) {
     wp->party.angle += (wp->party.angleTarget - wp->party.angle) / 4.0f;
 }
 
+/**
+ * White (icons, textures, edged text) and black (HP numbers and plain text) used
+ * when drawing the Party screen.
+ */
 static const GXColor winPartyWhiteC = {0xFF, 0xFF, 0xFF, 0xFF};
 static const GXColor winPartyBlackC = {0x00, 0x00, 0x00, 0xFF};
 /**

@@ -1,3 +1,5 @@
+// Target detection: picks which enemies a weapon can hit and who attacks first.
+
 #include "version.h"
 #include "battle/battle_status_effect.h"
 #include "battle/battle.h"

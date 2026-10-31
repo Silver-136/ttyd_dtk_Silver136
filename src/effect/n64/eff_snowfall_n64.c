@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: snowfall: `count` snow particles drifting down the screen.
+
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -39,6 +41,10 @@ typedef struct EffSnowfallWork {
 void effSnowfallMain(EffectEntry* effect);
 void effSnowfallDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * A loose cluster of eight small flake quads drawn for every snowfall particle,
+ * so each one reads as several flakes.
+ */
 static effN64Vtx eff_snowfall_v[] = {
     {-78, 3, -38, 0, 2048, 0xFF, 0xFF, 0xFF, 0xFF},
     {-68, 3, -38, 2048, 2048, 0xFF, 0xFF, 0xFF, 0xFF},

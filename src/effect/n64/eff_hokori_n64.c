@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: dust (hokori) puffs scattered near the ground in a grey-brown tint.
+
 #include "eff/n64/eff_hokori_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -8,6 +10,7 @@
 #include <dolphin/mtx.h>
 #include <stdlib.h>
 
+/** Tall 16x32 dust puff, alternating with the square one for types 0-1. */
 effN64Vtx size16x32_tex32x64_vtx[] = {
     {-8, -32, 0, 0, 1024, 0, 0, 0, 255},
     {8, -32, 0, 1024, 1024, 0, 0, 0, 255},
@@ -15,6 +18,7 @@ effN64Vtx size16x32_tex32x64_vtx[] = {
     {-8, 0, 0, 0, 3040, 0, 0, 0, 255},
 };
 
+/** Square 16x16 dust puff, alternating with the tall one for types 0-1. */
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -16, 0, 0, 0, 0, 0, 0, 255},
     {8, -16, 0, 1024, 0, 0, 0, 0, 255},
@@ -22,6 +26,7 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 0, 0, 0, 1024, 0, 0, 0, 255},
 };
 
+/** Small 8x8 dust puff, used by types above 1. */
 static effN64Vtx size8x8_tex32x32_vtx[] = {
     {-4, -4, 0, 0, 0, 0, 0, 0, 255},
     {4, -4, 0, 1024, 0, 0, 0, 0, 255},

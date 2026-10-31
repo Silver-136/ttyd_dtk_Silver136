@@ -1,3 +1,5 @@
+// Spiky Parabuzzy (patatogemet): enemy battle unit; Riverside Station's copy of the unit data and scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -62,6 +64,7 @@ static EvtWord ceil_fall_ready_event[163];
 static EvtWord attack_event_ceil[426];
 static EvtWord wait_event_ceil[6];
 
+/** Unit data of the Spiky Parabuzzy: 5 HP, level 24; the battle starts it from init_event_pata. */
 BattleUnitKind unit_patatogemet = {
     UNIT_SPIKY_PARABUZZY,
     "btl_un_patatogemet",
@@ -132,6 +135,7 @@ BattleUnitKind unit_patatogemet = {
     data_table_pata,
 };
 
+/** Weapon data for the Spiky Parabuzzy's dive attack: 3 damage, a jump-type hit, one target. */
 static BattleWeapon weapon_patamet_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -168,8 +172,13 @@ static BattleWeapon weapon_patamet_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of the Spiky Parabuzzy while it still has its wings: 4 against normal, ice and electric hits;
+ * immune to fire and explosions (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence_pata = {{4, 99, 4, 99, 4}};
 
+/** Elemental reactions of the Spiky Parabuzzy: is immune to fire and explosion attacks. */
 static BattleUnitDefenseAttr defence_attr_pata = {{0, 2, 0, 2, 0}};
 
 static StatusVulnerability regist_pata = {
@@ -197,6 +206,10 @@ static StatusVulnerability regist_pata = {
     95, // ohko
 };
 
+/**
+ * Pose table of the winged Spiky Parabuzzy: the animation each battle pose (idle, hurt, fly, attack and so
+ * on) plays.
+ */
 static PoseTableEntry pose_table_pata[] = {
     {POSE_TYPE_SLEEP, "PTM_N_1"},
     {POSE_TYPE_STOP, "PTM_Y_1"},
@@ -218,6 +231,11 @@ static PoseTableEntry pose_table_pata[] = {
     {POSE_TYPE_ACTION, "PTM_S_1"},
 };
 
+/**
+ * Event table of the Spiky Parabuzzy: being knocked out of the air (dmg_fall_event_pata, tag 14), the spike
+ * counters (tag 37, dmg_avoid_counter_thorn_head_event_pata) and the First Strike reaction
+ * (dmg_first_attack_pos_event_pata, tag 48).
+ */
 static BattleDataEntry data_table_pata[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event_pata},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event_pata},
@@ -225,10 +243,15 @@ static BattleDataEntry data_table_pata[] = {
     {0, NULL},
 };
 
+/** Body part of the Spiky Parabuzzy (winged), model c_met: its one target part. */
 static BattleUnitKindPart parts_pata[] = {
     {1, "btl_un_patatogemet", "c_met", 0.0f, 0.0f, 0.0f, 0.0f, 23.0f, 0.0f, 0.0f, 28.0f, 0.0f, 20, 30, 255, &defence_pata, &defence_attr_pata, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, kCounterTopSpiky, pose_table_pata},
 };
 
+/**
+ * Sound table of the Spiky Parabuzzy: which sound each of its poses (idle, walk, run, attack and so on)
+ * plays, and when.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"PTM_S_1", 0.01f, NULL, "SFX_ENM_PATAMET_WAIT1", 0, 1},
     {"PTM_W_1", 0.01f, NULL, "SFX_ENM_PATAMET_WAIT1", 0, 1},
@@ -446,6 +469,7 @@ static EVT_BEGIN(wait_event_pata)
     RETURN
 EVT_END()
 
+/** Pose table of the Spike Top: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "TMT_N_1"},
     {POSE_TYPE_STOP, "TMT_Y_1"},
@@ -466,6 +490,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "TMT_S_1"},
 };
 
+/**
+ * Pose table of the Spike Top while it clings to the ceiling: the animation each battle pose (idle, hurt,
+ * walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "STM_N_1"},
     {POSE_TYPE_STOP, "STM_Y_1"},
@@ -486,6 +514,10 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "STM_S_1"},
 };
 
+/**
+ * Pose table of the Spike Top while it lies flipped on its back: the animation each battle pose (idle, hurt,
+ * walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "TMT_Y_2"},
     {POSE_TYPE_STOP, "TMT_Y_2"},
@@ -505,6 +537,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "TMT_S_3"},
 };
 
+/**
+ * Event table of the Spike Top: being flipped onto its back (dmg_turn_event, tag 13), the spike counters (tag
+ * 37, dmg_avoid_counter_thorn_head_event) and the First Strike reaction (does nothing).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -512,6 +548,10 @@ static BattleDataEntry data_table[] = {
     {0},
 };
 
+/**
+ * Event table of the Spike Top while it clings to the ceiling: its counter-damage reactions (tags 25 to 36,
+ * all running counter_damage_event_ceil) and the First Strike reaction (does nothing).
+ */
 static BattleDataEntry data_table_ceil[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event_ceil},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event_ceil},
@@ -529,6 +569,7 @@ static BattleDataEntry data_table_ceil[] = {
     {0},
 };
 
+/** Weapon data for the Spike Top's shell attack: 3 damage, a shell-toss-type hit, one target. */
 static BattleWeapon weapon_met_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -565,6 +606,7 @@ static BattleWeapon weapon_met_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for the Spike Top's drop from the ceiling: 5 damage, a jump-type hit, one target. */
 static BattleWeapon weapon_met_ceil_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -601,12 +643,22 @@ static BattleWeapon weapon_met_ceil_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of the Spiky Parabuzzy once it has lost its wings: 4 against normal, ice and electric hits;
+ * immune to fire and explosions (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
+/** Elemental reactions of the Spike Top: is immune to fire and explosion attacks. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
 
+/** Defence of the Spike Top while it lies flipped on its back: none against any element. */
 static BattleUnitDefense defence_turn = {0};
 
+/**
+ * Elemental reactions of the Spike Top while it lies flipped on its back: none, every element hurts it
+ * normally.
+ */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
 static StatusVulnerability regist = {
@@ -634,6 +686,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Spike Top, model c_met: its one target part. */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum

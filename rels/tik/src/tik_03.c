@@ -100,6 +100,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Stand-in for the Boggly Woods pipe until chapter 2 has begun: it leads to the chapter 2 title screen
+ * (sys_01, stg_2) instead. Swapped in by the map init script.
+ */
 static BeroEntry bero_entry_data2[] = {
     {
         "dokan", // hitName
@@ -147,6 +151,7 @@ static EVT_BEGIN(guide_talk)
     RETURN
 EVT_END()
 
+/** NPCs of this room: Punio, the Puni who leads Mario to Boggly Woods. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガイド"*/"\x83\x4B\x83\x43\x83\x68", // name

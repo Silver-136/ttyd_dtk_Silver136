@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: flower sprite that falls and spins; type 0 spins in place, others sway.
+
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"

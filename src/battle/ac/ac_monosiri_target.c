@@ -33,6 +33,7 @@ typedef struct MonosiriTargetWork {
 
 static void actionCommandDisp(f32 x, f32 y);
 
+/** Frames the Tattle cursor takes to cross the target, by difficulty (240 at the easiest down to 20). */
 s32 _frame_table[] = {240, 180, 120, 90, 70, 40, 20};
 
 /** Frames the Tattle cursor takes to cross the target, by action command difficulty: 240 at the easiest down to 20. */

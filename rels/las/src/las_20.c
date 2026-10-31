@@ -65,6 +65,10 @@ static EVT_BEGIN(e_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Exits of las_20: east door e_bero to las_22 (w_bero); south road s_bero_1 to las_19 (n_bero); south road
+ * s_bero_2 to las_21 (n_bero).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -119,6 +123,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Front faces of the first group of 14 gears of the star-switch room, turned together by haguruma_evt. */
 static const char* haguruma_hontai[] = {
     "S_hgm_01a",
     "S_hgm_02a",
@@ -136,6 +141,7 @@ static const char* haguruma_hontai[] = {
     "S_hgm_20a",
 };
 
+/** Front faces of the second group of six gears, turned the other way. */
 static const char* haguruma_hontai2[] = {
     "S_hgm_05a",
     "S_hgm_09a",
@@ -145,6 +151,7 @@ static const char* haguruma_hontai2[] = {
     "S_hgm_18a",
 };
 
+/** Shadow faces of the first group of gears (12 pieces), turned with haguruma_hontai. */
 static const char* haguruma_kage[] = {
     "S_hgm_01b",
     "S_hgm_02b",
@@ -160,6 +167,7 @@ static const char* haguruma_kage[] = {
     "S_hgm_16b",
 };
 
+/** Shadow faces of the second group of gears (5 pieces), turned with haguruma_hontai2. */
 static const char* haguruma_kage2[] = {
     "S_hgm_05b",
     "S_hgm_09b",

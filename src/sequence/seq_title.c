@@ -1,3 +1,5 @@
+// Title sequence: the title screen and its "press start" prompt.
+
 #include "seq/seq_title.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
@@ -29,6 +31,10 @@
 void FontDrawString(f32 x, f32 y, const char* msg);
 
 TitleWork work2;
+/**
+ * Title screen state (logo animation, the press-start prompt, the debug flag);
+ * wp2 is the pointer the code uses.
+ */
 TitleWork* wp2 = &work2;
 
 #ifdef VERSION_G8ME01

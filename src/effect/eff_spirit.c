@@ -1,3 +1,6 @@
+// Spirit: a glowing orb rises, then arcs from its start point to a target point over `time` frames,
+// shrinking while its color cycles yellow, cyan and magenta.
+
 #include "eff/eff_spirit.h"
 #include "driver/dispdrv.h"
 #include "memory.h"

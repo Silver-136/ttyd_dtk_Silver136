@@ -1,3 +1,5 @@
+// camdrv.c: the camera driver (CameraEntry, CameraId): the fixed camera set, projection and view matrices.
+
 #pragma once
 
 #include <dolphin/gx.h>

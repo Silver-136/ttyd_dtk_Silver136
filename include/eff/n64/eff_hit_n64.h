@@ -1,3 +1,5 @@
+// eff_hit_n64.c: Paper Mario 64 Hit effect entry (effHitN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

@@ -1,3 +1,5 @@
+// Battle unit data and scripts for Vivian as a partner.
+
 #include "unit/party/unit_party_vivian.h"
 #include "version.h"
 #include "battle/battle.h"
@@ -81,6 +83,11 @@ EvtWord vivian_appeal_event[80];
 static EvtWord party_win_reaction[18];
 static EvtWord attack_audience_event[189];
 
+/**
+ * Vivian's pose table: animations for each status (stop, dizzy, poison, confusion, sleep, freeze, instant KO),
+ * the hurt poses, gliding and fast gliding, low HP, the failed Run Away tumble, talking, item use,
+ * the command menu wait, zero gravity, the Defend stance and plain floating.
+ */
 PoseTableEntry pose_table_vivian_stay[] = {
     {POSE_TYPE_FREEZE, "PTR_D_4"},
     {POSE_TYPE_STOP, "PTR_D_4"},
@@ -108,6 +115,12 @@ PoseTableEntry pose_table_vivian_stay[] = {
     {POSE_TYPE_ACTION, "PTR_S_1"},
 };
 
+/**
+ * Vivian's data events: the Veil countdown each phase (tag 3), Appeal, the audience attack reaction, her move
+ * list (tag 1, __makeTechMenuFunc), the counter-hit reaction for tags 25-35, First Strike (nothing), the
+ * victory pose, an empty step run after a move's cost is paid (7) and the spin when she
+ * superguards an attack (47).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_HIDE_EVENT, vivian_hide_event},
     {UNIT_DATA_APPEAL_EVENT, vivian_appeal_event},
@@ -131,10 +144,15 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Vivian's single battle part: her targetable body (model c_vivian) with her pose table. */
 BattleUnitKindPart unitpartsdata_Party_Vivian[] = {
     {1, "btl_un_vivian", "c_vivian", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence.d, &defence_attr.d, kMainPart | kGuardTargetPart, 0, pose_table_vivian_stay},
 };
 
+/**
+ * Vivian's battle unit (UNIT_VIVIAN), listed in battle_party.c's partner table:
+ * a floating unit with one part, the partner hit sounds and no enemy HP gauge.
+ */
 BattleUnitKind unitdata_Party_Vivian = {
     UNIT_VIVIAN, // mUnitType
     "btl_un_vivian", // name
@@ -183,10 +201,13 @@ BattleUnitKind unitdata_Party_Vivian = {
     data_table, // dataTable
 };
 
+/** Vivian's defence: 0 against every element. */
 static VivDef defence = {{{0, 0, 0, 0, 0}}, {0, 0, 0}};
 
+/** Vivian's defence attributes: normal (0) against every element, no weakness or immunity. */
 static VivDefAttr defence_attr = {{{0, 0, 0, 0, 0}}, {0, 0, 0}};
 
+/** Vivian's status chances: 100 for every status (badges lower them in battle). */
 static VivRegist regist = {{100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100}, {0, 0}};
 
 /** Empty: partner moves come from the player's menu choices, not a unit attack script. */
@@ -383,6 +404,11 @@ EVT_BEGIN(vivian_hide_event)
     RETURN
 EVT_END()
 
+/**
+ * Shade Fist (0 FP): a punch from the shadows on any single enemy; damage by rank 3, 4 or 5
+ * (the same whether or not the action command succeeds); only a successful command burns it for 2 turns.
+ * Cannot be guarded; usable while confused.
+ */
 BattleWeapon partyWeapon_VivianNormalAttack = {
     "btl_wn_ptr_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -426,6 +452,10 @@ BattleWeapon partyWeapon_VivianNormalAttack = {
 #endif
 };
 
+/**
+ * Veil (1 FP): Vivian targets Mario and pulls him into the shadows with her so neither can be attacked
+ * until they come out. No damage (the damage values here are unused).
+ */
 BattleWeapon partyWeapon_VivianShadowGuard = {
     "btl_wn_ptr_lv1", // name
     ICON_PARTNER_MOVE_LV1, // icon
@@ -468,6 +498,10 @@ BattleWeapon partyWeapon_VivianShadowGuard = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Fiery Jinx (6 FP): fire on every enemy that pierces defence and burns for 3 turns (100% chance);
+ * the damage is the action command result (weaponGetACOutputParam on output 0). Cannot be guarded.
+ */
 BattleWeapon partyWeapon_VivianMagicalPowder = {
     "btl_wn_ptr_lv2", // name
     ICON_PARTNER_MOVE_LV2, // icon

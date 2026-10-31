@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: puffs of snowy dust; used by the freeze and Crystal Star effects.
+
 #include "eff/n64/eff_snow_dust_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -14,6 +16,7 @@ double sin(double);
 void effSnowDustMain(EffectEntry* effect);
 void effSnowDustDisp(CameraId cameraId, EffectEntry* effect);
 
+/** 8x8 quad drawn for each type 1 snowflake. */
 effN64Vtx size8x8_tex64x64_vtx[] = {
     {-4, -4, 0, 0, 0, 0, 0, 0, 255},
     {4, -4, 0, 2048, 0, 0, 0, 0, 255},
@@ -21,6 +24,7 @@ effN64Vtx size8x8_tex64x64_vtx[] = {
     {-4, 4, 0, 0, 2048, 0, 0, 0, 255},
 };
 
+/** 4x4 quad drawn for each type 0 and type 6 snowflake. */
 effN64Vtx size4x4_tex64x64_vtx[] = {
     {-2, -2, 0, 0, 0, 0, 0, 0, 255},
     {2, -2, 0, 2048, 0, 0, 0, 0, 255},
@@ -28,6 +32,7 @@ effN64Vtx size4x4_tex64x64_vtx[] = {
     {-2, 2, 0, 0, 2048, 0, 0, 0, 255},
 };
 
+/** 12x12 quad drawn for each type 2 and type 3 puff. */
 static effN64Vtx size12x12_tex64x64_vtx[] = {
     {-6, -6, 0, 0, 0, 0, 0, 0, 255},
     {6, -6, 0, 2048, 0, 0, 0, 0, 255},
@@ -35,6 +40,7 @@ static effN64Vtx size12x12_tex64x64_vtx[] = {
     {-6, 6, 0, 0, 2048, 0, 0, 0, 255},
 };
 
+/** 16x16 quad drawn for each type 4 and type 5 sparkle. */
 static effN64Vtx size16x16_tex64x64_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 2048, 0, 0, 0, 0, 255},
@@ -42,6 +48,7 @@ static effN64Vtx size16x16_tex64x64_vtx[] = {
     {-8, 8, 0, 0, 2048, 0, 0, 0, 255},
 };
 
+/** 32x32 glow diamond behind each sparkle: clear corners fading in to a solid centre vertex. */
 static effN64Vtx size32x32_tex32x32_vtx[5] = {
     {-32, 0, 0, 0, 0, 255, 255, 255, 0},
     {0, -32, 0, 1024, 0, 255, 255, 255, 0},
@@ -50,14 +57,17 @@ static effN64Vtx size32x32_tex32x32_vtx[5] = {
     {0, 0, 0, 0, 0, 255, 255, 255, 255},
 };
 
+/** Size of a pulsing puff (types 2 and 3) or a type 5 sparkle over its 30-step cycle: three quick swells. */
 static u8 scale_data[] = {
     2, 4, 8, 13, 15, 13, 9, 6, 4, 3, 2, 4, 8, 13, 15, 13, 9, 6, 4, 3, 2, 4, 8, 13, 15, 13, 9, 6, 4, 3,
 };
 
+/** Size of a type 4 sparkle over its 30-step cycle: a quick flare that then shrinks steadily away. */
 static u8 scale_data2[] = {
     40, 90, 81, 72, 65, 59, 53, 47, 43, 38, 34, 31, 28, 25, 22, 20, 18, 16, 15, 13, 12, 10, 9, 8, 7, 7, 6, 5, 5, 4,
 };
 
+/** Alpha of a drifting snowflake (types 0 and 1) over its 30-step cycle: fades in, holds, fades out. */
 static u8 a_data[] = {
     200, 250, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
     255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 250, 200

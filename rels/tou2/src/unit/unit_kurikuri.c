@@ -1,3 +1,5 @@
+// unit_kurikuri: Goomba Bros. (`kurikuri`), the Goomba pair of a Glitz Pit match (with Koopa messages), battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_msg.h"
@@ -33,6 +35,10 @@ static EvtWord phase_event[122];
 static EvtWord attack_event[492];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Goomba Bros.: hit points, level, size, sounds, parts, status vulnerability, init event
+ * and event data table.
+ */
 BattleUnitKind unit_kurikuri = {
     UNIT_GOOMBA_GLITZVILLE, // mUnitType
     "btl_un_kuriboo", // name
@@ -104,13 +110,22 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
+/**
+ * Event data table of the Goomba Bros.: no custom reactions, so the standard battle handlers run for every
+ * event.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/**
+ * Defense of the Goomba Bros. against normal, fire, ice, explosion and electric attacks: none, so it takes
+ * full damage from every element.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Damage-type reactions of the Goomba Bros.: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -138,10 +153,15 @@ static StatusVulnerability regist = {
     150, // ohko
 };
 
+/**
+ * Parts of the Goomba Bros.: a single body part (part 1, model c_kuribo), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_kuriboo", "c_kuribo", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon record of the Goomba Bros.' leaping attack: 1 damage and counts as a jump-type hit. */
 static BattleWeapon weapon_kuriboo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

@@ -32,6 +32,7 @@ static EvtWord evt_majin[487];
 static EvtWord evt_majin2[237];
 EvtWord tik_19_init_evt[52];
 
+/** Doors of this room: the south exit back to tik_04. */
 static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName
@@ -52,6 +53,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Items the black chest accepts: the Black Key (-1 ends the list). */
 static s32 key_tbl[] = {
     ITEM_BLACK_KEY_0x21, -1,
 };

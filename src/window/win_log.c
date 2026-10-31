@@ -1,3 +1,5 @@
+// Pause menu: the journal window (map, crystal stars, badge and recipe logs, tattle log).
+
 #include "win/win_main.h"
 #include "driver/animdrv.h"
 #include "driver/effdrv.h"
@@ -61,6 +63,13 @@ int compare_func6_2(void* a, void* b);
 void capture(CameraId camera, void* param);
 void monosiri_disp(CameraId camera, void* param);
 
+/**
+ * Dots of the Journal map: position on the map, big (a place) or small (the path between), the chapter switch
+ * that can also reveal it, the story progress that reveals it, and the area for its name and help text.
+ * The 93 dots cover every area of the map roughly in story order,
+ * from Rogueport and Petal Meadows to the Moon, the X-Naut Fortress and the Palace of Shadow.
+ * The map page draws them, and the cursor names the nearest big one.
+ */
 TubuDt tubuDt[] = {
     {14, -34, 1, 0, 3, "gor"},
     {-4, -31, 0, 2, 12, "gor"},

@@ -29,6 +29,10 @@ NpcBattleSelect btlgrpsel_gor_btlno_gor_02_01_off[2];
 NpcSetupBattleInfo btlsetup_gor_tbl[7];
 NpcTerritoryInfo btl_gor_setup_no_tbl[7];
 
+/**
+ * Props of the Rogueport battle stage: each entry names a model of the backdrop and where it stands, the last
+ * entries being the background layers.
+ */
 BattleStageObjectData gor_btlobject_data[] = {
     {"A1", 2, 0, {33.0f, 0.0f, -48.0f}, 0, 60, {0}},
     {"A2", 2, 1, {0.0f, 0.0f, 71.0f}, 0, 60, {0}},
@@ -38,6 +42,10 @@ BattleStageObjectData gor_btlobject_data[] = {
     {"C", 2, 3, {0}, 0, 60, {0}},
 };
 
+/**
+ * Battle stage of Rogueport: the stage model directories, the props above, the backdrop weapons and the
+ * background event that runs during the fight.
+ */
 BattleStageData gor_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -183,6 +191,10 @@ NpcBattleSelect btlgrpsel_gor_btlno_gor_02_01_off[] = {
     {0},
 };
 
+/**
+ * Field battle setups of Rogueport: one entry per battle id in btl_gor_setup_no_tbl, giving the stage, the
+ * group selection and the battle music.
+ */
 NpcSetupBattleInfo btlsetup_gor_tbl[] = {
     {
         /*"マップstg_00_0"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x30\x5F\x30", // name

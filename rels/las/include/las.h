@@ -1,3 +1,5 @@
+// Palace of Shadow (las): declarations shared by the area's maps (init scripts, shared scripts, battle tables).
+
 #pragma once
 
 #include "dolphin/types.h"

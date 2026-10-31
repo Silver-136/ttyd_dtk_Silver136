@@ -1,3 +1,5 @@
+// Paper Mario 64 smoke effect 8 (kemuri: smoke) at a point; types 0 and 1.
+
 #include "eff/n64/eff_kemuri8_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"

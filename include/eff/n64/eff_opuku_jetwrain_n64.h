@@ -1,3 +1,5 @@
+// eff_opuku_jetwrain_n64.c: water-jet rain effect entry (effOpukuJetwrainN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

@@ -1,3 +1,6 @@
+// Script commands for the information seller (johoya): the rumour tables and message labels
+// by story progress.
+
 #include "evt/evt_johoya.h"
 #include "driver/msgdrv.h"
 #include <string.h>

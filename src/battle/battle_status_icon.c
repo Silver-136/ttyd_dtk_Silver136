@@ -1,3 +1,5 @@
+// Battle status icons: the icons shown over units for statuses such as sleep and poison.
+
 #include "battle/battle_disp.h"
 #include "version.h"
 #include "battle/battle_status_icon.h"

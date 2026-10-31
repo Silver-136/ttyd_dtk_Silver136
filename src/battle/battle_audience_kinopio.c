@@ -1,3 +1,5 @@
+// Battle audience control for the Toad (kinopio) members: jumping, entering, singing and status behaviors.
+
 #include "battle/battle_audience.h"
 #include "battle/battle_audience.h"
 #include "battle/battle.h"
@@ -822,6 +824,7 @@ void BattleAudienceCtrlProcessKinopioSleep(s32 index, s32 front) {
     }
 }
 
+/** Weapon a Boo in the audience uses to turn a unit invisible for two turns (always hits, can't be guarded). */
 static BattleWeapon weapon_teresa_trans = {
     NULL, 0, // name..icon
     {0}, // pad_06

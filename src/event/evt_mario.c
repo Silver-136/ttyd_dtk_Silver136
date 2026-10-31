@@ -1,3 +1,6 @@
+// Script commands that control Mario: position, movement, direction, flags, motions and the
+// collision objects he touches.
+
 #include "evt/evt_cmd.h"
 #include "evt/evt_npc.h"
 #include "driver/camdrv.h"

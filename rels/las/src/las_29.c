@@ -170,6 +170,7 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
+/** Exit of las_29: west door w_bero to las_30 (e_bero). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -280,6 +281,10 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/**
+ * The 40 candles of the chamber (their positions and ids), sorted by X so all_hikari_onoff can light and
+ * snuff them in waves.
+ */
 HikariList40 hikari_data = {
     {
         {324, 38},
@@ -326,6 +331,9 @@ HikariList40 hikari_data = {
     -999,
 };
 
+/**
+ * The 27 candles of the second set (their positions and ids), sorted by X, lit and snuffed by hikari_onoff.
+ */
 HikariList27 hikari_data_2 = {
     {
         {325, 49},

@@ -1,3 +1,5 @@
+// eff_peach_dust_n64.c: Peach dust effect entry (effPeachDustN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

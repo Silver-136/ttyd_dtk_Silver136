@@ -54,6 +54,7 @@ EvtWord recover_event[88];
 static EvtWord attack_event[282];
 static EvtWord wait_event[6];
 
+/** Unit data of Bonetail: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_boss_zonbaba = {
     UNIT_BONETAIL,
     "btl_un_zonbaba",
@@ -128,10 +129,19 @@ BattleUnitKind unit_boss_zonbaba = {
     data_table,
 };
 
+/**
+ * Damage reduction of Bonetail: defence per attack type (normal 2, fire 2, ice 2, explosive 2, electric
+ * 0).
+ */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 0}};
 
+/** Element response of Bonetail: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of Bonetail (percent, 0 is immune): immune to sleep, stop, dizzy, confuse, freeze,
+ * huge, tiny, attack down, defence down, allergic, fright, gale force, slow, dodgy, invisible, instant KO.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -157,6 +167,7 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/** Pose table of Bonetail: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
@@ -169,6 +180,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "GNB_S_3"},
 };
 
+/** Pose table of Bonetail, weakened: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_weak[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
@@ -181,17 +193,20 @@ static PoseTableEntry pose_table_weak[] = {
     {POSE_TYPE_ACTION, "GNB_S_4"},
 };
 
+/** Data table of Bonetail: event handlers keyed by tag (zonbaba_damage_sub_event, dead_event). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, zonbaba_damage_sub_event},
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Body parts of Bonetail: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_zonbaba", "c_gonbaba_z", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, kImportantPart, 0, pose_table},
     {2, "btl_un_zonbaba", "c_gonbaba_z", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden, 0, pose_table},
 };
 
+/** Attack data for Bonetail's stomp: 8 damage. */
 BattleWeapon weapon_zonbaba_fumituke_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -233,6 +248,7 @@ BattleWeapon weapon_zonbaba_fumituke_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 10, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for Bonetail's bite: 8 damage. */
 BattleWeapon weapon_zonbaba_kamituki_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -272,6 +288,7 @@ BattleWeapon weapon_zonbaba_kamituki_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for Bonetail's freezing breath: 8 damage, 30% Freeze. */
 BattleWeapon weapon_zonbaba_cold_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -314,6 +331,7 @@ BattleWeapon weapon_zonbaba_cold_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for Bonetail's confusing breath: 8 damage, 30% Confusion. */
 BattleWeapon weapon_zonbaba_confuze_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -356,6 +374,7 @@ BattleWeapon weapon_zonbaba_confuze_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for Bonetail's sleep breath: 8 damage, 30% Sleep. */
 BattleWeapon weapon_zonbaba_sleep_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -398,6 +417,7 @@ BattleWeapon weapon_zonbaba_sleep_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for Bonetail's shrinking breath: 8 damage, 30% size change. */
 BattleWeapon weapon_zonbaba_minimini_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -440,6 +460,7 @@ BattleWeapon weapon_zonbaba_minimini_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for Bonetail's self-heal: no damage. */
 BattleWeapon weapon_zonbaba_recover = {
     NULL, 0, // name..icon
     {0}, // pad_06

@@ -109,6 +109,11 @@ static EVT_BEGIN(e2_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Exits of las_23: west door w_bero to las_21 (e_bero_1); east door e_bero_1 to las_25 (w_bero); east door
+ * e_bero_2 to las_25 (w_bero); north road n_bero_1 to las_22 (s_bero); north road n_bero_2 to las_24
+ * (s_bero_1).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -199,6 +204,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Exit of las_23: west door w_bero to las_21 (e_bero_2). */
 static BeroEntry w_bero_mapchg[] = {
     {
         "w_bero", // hitName
@@ -220,6 +226,7 @@ static BeroEntry w_bero_mapchg[] = {
     },
 };
 
+/** Where Mario is put back after falling into the pits A_oti_01 to A_oti_03 (a point far below the floor). */
 static HitDamageReturn dmgRetPoint[] = {
     {"A_oti_01", {0.0f, -1000.0f, 0.0f}},
     {"A_oti_02", {0.0f, -1000.0f, 0.0f}},

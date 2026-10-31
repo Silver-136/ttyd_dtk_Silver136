@@ -1,3 +1,6 @@
+// Script commands for system windows: item and party selection lists, name entry and
+// single-message windows.
+
 #include "evt/evt_cmd.h"
 #include "driver/icondrv.h"
 #include "driver/msgdrv.h"
@@ -36,9 +39,17 @@ s32 unk_80418b3c;
 static void coin_disp(WinMgrEntry* entry);
 static void oneMessageDisp(WinMgrEntry* entry);
 
+/**
+ * The pale yellow one-line message window near the top of the screen (the new mail notice)
+ * that evt_win_one_message opens.
+ */
 WinMgrDesc one_msg_desc = {
     0, 0, 8, -175, 120, 350, 42, {0xD7, 0xD0, 0x88, 0xFF}, NULL, oneMessageDisp
 };
+/**
+ * The small counter window for coins, Shine Sprites or Star Pieces that shops show while buying;
+ * see evt_win_coin_on.
+ */
 WinMgrDesc coin_desc = {
     2, 0, 8, -250, -75, 150, 45, {0xF0, 0xF0, 0xF0, 0xFF}, NULL, coin_disp
 };

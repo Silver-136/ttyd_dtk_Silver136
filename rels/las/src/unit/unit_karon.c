@@ -1,3 +1,5 @@
+// Palace of Shadow battle unit: the Dry Bones (`karon`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
@@ -61,6 +63,10 @@ static USER_FUNC(honenoko_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of the Dry Bones: 8 HP, 36x40 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_karon = {
     UNIT_DRY_BONES, // mUnitType
     "btl_un_karon", // name
@@ -109,8 +115,10 @@ BattleUnitKind unit_karon = {
     data_table, // dataTable
 };
 
+/** Defence of the Dry Bones: 2 against every kind of hit. */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/** Defence attributes of the Dry Bones: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -138,6 +146,7 @@ static StatusVulnerability regist = {
     90, // ohko
 };
 
+/** Parts of the Dry Bones: 6 parts (model c_karon_h, c_nagehone). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_karon", "c_karon_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_karon", "c_karon_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -147,6 +156,9 @@ static BattleUnitKindPart parts[] = {
     {6, "btl_un_karon", "c_karon_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/**
+ * Weapon of the Dry Bones (attack): targets one unit for 5 damage; used by normal_attack_event.
+ */
 static BattleWeapon weapon_honenoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -183,6 +195,9 @@ static BattleWeapon weapon_honenoko_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the Dry Bones (link attack): targets one unit for 3 damage; used by link_attack_event.
+ */
 static BattleWeapon weapon_honenoko_link_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -219,6 +234,10 @@ static BattleWeapon weapon_honenoko_link_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Spawn setup for the Dry Bones (unit_karon): enemy side, placed off-screen at first;
+ * used by call_friend_event.
+ */
 static BattleUnitSetup entry_honenoko = {
     &unit_karon, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -252,6 +271,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRN_S_1"},
 };
 
+/** Event table of the Dry Bones: dead_event (tag 49), fake_dead_event (tag 15). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FAKE_DEAD_EVENT, fake_dead_event},

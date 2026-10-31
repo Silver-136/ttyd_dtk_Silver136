@@ -23,6 +23,7 @@ static EvtWord evt_kusa_1[20];
 static KusaAccess kusa_data[16];
 EvtWord hei_02_init_evt[129];
 
+/** Doors of this room: the west exit (w_bero) to nok_01 (Petalburg) and the east exit (e_bero) to hei_03. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -67,6 +68,7 @@ EVT_BEGIN(evt_ki_6)
     RETURN
 EVT_END()
 
+/** Trees of this field that Mario can hit (a_ki_1 to a_ki_7); the fifth runs evt_ki_6 when hit. */
 static TreeAccess ki_data[] = {
     {0, "a_ki_1", "miki_1", "ha_temae_1", "ha_usiro_1", NULL},
     {0, "a_ki_2", "miki_2", "ha_temae_2", "ha_usiro_2", NULL},
@@ -86,6 +88,10 @@ static EVT_BEGIN(evt_kusa_1)
     RETURN
 EVT_END()
 
+/**
+ * Grass patches Mario can hit on this field (a_kusa_1 to a_kusa_13 and on); the first one runs an event when
+ * cut.
+ */
 static KusaAccess kusa_data[] = {
     {0, "a_kusa_1", "kusa_1", evt_kusa_1},
     {0, "a_kusa_2", "kusa_2", NULL},

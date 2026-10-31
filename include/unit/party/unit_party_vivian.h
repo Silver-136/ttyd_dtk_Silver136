@@ -1,3 +1,5 @@
+// unit_party_vivian.c: Vivian's battle weapons, pose table and unit kind as a partner, plus the majo display events.
+
 #pragma once
 
 #include "evt/evt_cmd.h"

@@ -1,3 +1,5 @@
+// Movie sequence: plays the opening THP movie (simple THP player).
+
 #include "seq/seq_demo.h"
 #include "dolphin/ai.h"
 #include "dolphin/dvd.h"

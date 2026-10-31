@@ -1,3 +1,5 @@
+// Bowser interlude score display: coins and score counters.
+
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr.h"
 #include "manager/evtmgr_cmd.h"

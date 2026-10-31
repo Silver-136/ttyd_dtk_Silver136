@@ -1,3 +1,5 @@
+// Mario's pipe (dokan) motion: going down or up a pipe with the partners.
+
 #include "dolphin/types.h"
 #include "mario/mario.h"
 #include "mario/mario_cam.h"

@@ -1,3 +1,5 @@
+// Camera roads: moves the field camera along the camera curves stored in each map's camroad file.
+
 #include "system.h"
 #include "driver/arcdrv.h"
 #include "driver/mapdrv.h"

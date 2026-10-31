@@ -1,3 +1,5 @@
+// Generic particle effect (Particle): count particles with random motion from a point for a given life.
+
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -48,6 +50,10 @@ typedef struct ParticleWork {
     f32 speed;            // 0xAC
 } ParticleWork;
 
+/**
+ * Spark (hibana) colour by remaining life, indexed by life / 8:
+ * a particle fades from white through yellow to a dark, transparent orange as it dies.
+ */
 GXColor hibana_col[32] = {
     {0x5F, 0x28, 0x00, 0x00},
     {0x69, 0x35, 0x00, 0x08},
@@ -83,6 +89,7 @@ GXColor hibana_col[32] = {
     {0xFF, 0xFF, 0xFF, 0xFF}
 };
 
+/** Random seed of the particle generator, advanced by pt_frand for every random draw in this file. */
 s32 seed = 1;
 
 /** Pseudo-random f32 in [0, 1) from a linear congruential generator on the global seed. */

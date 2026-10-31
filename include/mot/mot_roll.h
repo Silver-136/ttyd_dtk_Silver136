@@ -1,3 +1,5 @@
+// mot_roll.c: Mario's tube (roll) motion (mot_roll_post) and its cancel, key-lock and event-flag helpers.
+
 #pragma once
 
 #include "dolphin/types.h"

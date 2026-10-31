@@ -145,6 +145,10 @@ USER_FUNC(zakogun_ext_init3) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of X-Nauts: 10 HP, 260x52 units in size; ties together its sounds, parts, status vulnerability,
+ * init event and event table.
+ */
 BattleUnitKind unit_boss_gundan_zako_group3 = {
     UNIT_X_NAUTS_CRUMP_FORMATION3, // mUnitType
     "btl_un_gundan_zako_group3", // name
@@ -193,10 +197,18 @@ BattleUnitKind unit_boss_gundan_zako_group3 = {
     data_table, // dataTable
 };
 
+/** Defence of X-Nauts: 0 against every kind of hit. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of X-Nauts: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of X-Nauts (percent chance each status takes hold): immune to sleep, stop, dizzy,
+ * poison, confusion, electrified, burn, freeze, Huge, Tiny, Attack Up, Attack Down, Defense Up,
+ * Defense Down, allergic, fright, Gale Force, Fast, Slow, Dodgy, Invisible, instant KO;
+ * the rest take hold at 80% or better.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -229,16 +241,19 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "Z_1"},
 };
 
+/** Event table of X-Nauts: dead_event (tag 49). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Parts of X-Nauts: 1 part (model c_zako_n). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_gundan_zako_group3", "c_zako_n", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHidden | kNoShadow, 0, pose_table},
 };
 
+/** Weapon of X-Nauts (attack): targets one unit for 5 damage; used by attack_event. */
 BattleWeapon weapon_gundan_zako_group3_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

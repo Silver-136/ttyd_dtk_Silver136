@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: a star that streaks across the screen toward a target point, leaving a trail of 8 copies.
+
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -36,6 +38,7 @@ typedef struct EffSstarN64Work {
     effN64Vtx vtx[10]; // 0x1d0
 } EffSstarN64Work;
 
+/** 60x60 camera-facing quad drawn for the shooting star itself. */
 static effN64Vtx size64x64_tex64x64_vtx[] = {
     {-30, -30, 0, 0, 0, 0, 0, 0, 191},
     {30, -30, 0, 2048, 0, 0, 0, 0, 191},
@@ -43,6 +46,7 @@ static effN64Vtx size64x64_tex64x64_vtx[] = {
     {-30, 30, 0, 0, 2048, 0, 0, 0, 191},
 };
 
+/** 128x128 glow diamond around the star: clear corners fading in to a solid centre vertex. */
 effN64Vtx size128x128_tex32x32_vtx[] = {
     {-128, 0, 0, 0, 0, 255, 255, 255, 0},
     {0, -128, 0, 1024, 0, 255, 255, 255, 0},
@@ -51,6 +55,10 @@ effN64Vtx size128x128_tex32x32_vtx[] = {
     {0, 0, 0, 0, 0, 255, 255, 255, 255},
 };
 
+/**
+ * Template for the star's dust trail: five pairs of top and bottom points, widening along the trail,
+ * copied into the work and placed along the last eight frames' positions.
+ */
 effN64Vtx shooting_dust_vtx[10] = {
     {0, 8, 0, 0, 0, 0, 0, 0, 191},
     {0, -8, 0, 0, 2048, 0, 0, 0, 191},

@@ -1,3 +1,5 @@
+// Battle units: creating, spawning, deleting and updating the units and parts that fight in a battle.
+
 #include "battle/battle_unit.h"
 #include "battle/battle.h"
 #include "system.h"
@@ -19,6 +21,10 @@ double pow(double, double);
 void psndSFX_pit(s32 id, s16 pitch);
 void psndSFX_vol(s32 id, u8 vol);
 
+/**
+ * Items an enemy can use in battle (attack, status and healing items; 0 ends the list). Besides badges, only
+ * these pass BtlUnit_EnemyItemCanUseCheck, which decides whether an enemy may be given an item.
+ */
 s32 _enemy_can_use_item_table[] = {
     ITEM_THUNDER_BOLT, ITEM_FIRE_FLOWER, ITEM_POW_BLOCK, ITEM_THUNDER_RAGE, ITEM_SHOOTING_STAR, ITEM_ICE_STORM,
     ITEM_EARTH_QUAKE, ITEM_HP_DRAIN_ITEM, ITEM_SLEEPY_SHEEP, ITEM_STOPWATCH, ITEM_DIZZY_DIAL, ITEM_MINI_MR_MINI,

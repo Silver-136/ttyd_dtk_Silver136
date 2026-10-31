@@ -1,3 +1,5 @@
+// Action command: press A in time with the timing gauge (ac_timing_a); the standard attack timing prompt.
+
 #pragma defer_codegen off
 #include "battle/ac/ac_timing_a.h"
 #include "battle/battle.h"
@@ -16,6 +18,11 @@ typedef struct TimingAEntry {
 } TimingAEntry;
 
 
+/**
+ * Width of the A-press window for Mario's jumps and Goombella's Headbonk, one list per difficulty:
+ * pairs of (up to this many bounces, frames). The first entry is the normal window;
+ * Power Bounce and Multibonk walk the list, so it narrows as the bounces go on.
+ */
 TimingAEntry _ac_timing_a_timing_lv_0[] = {
     {4, 10}, {5, 9}, {6, 8}, {7, 7}, {8, 6}, {9, 5}, {99999, 1},
 };
@@ -38,6 +45,7 @@ TimingAEntry _ac_timing_a_timing_lv_6[] = {
     {0, 5}, {1, 4}, {2, 3}, {3, 2}, {8, 1}, {9, 1}, {99999, 1},
 };
 
+/** The window lists above by difficulty, read by battleAcTimingA_GetSuccessFrame. */
 TimingAEntry* _ac_timing_a_timing_tbl[] = {
     _ac_timing_a_timing_lv_0, _ac_timing_a_timing_lv_1, _ac_timing_a_timing_lv_2,
     _ac_timing_a_timing_lv_3, _ac_timing_a_timing_lv_4, _ac_timing_a_timing_lv_5,

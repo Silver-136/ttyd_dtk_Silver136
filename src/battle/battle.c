@@ -1,3 +1,5 @@
+// Top-level battle entry: runs the battle main loop, checks for the end of the sequence and handles reset.
+
 #include "battle/battle.h"
 #include "battle/battle_ac_help.h"
 #include "battle/battle_break_slot.h"
@@ -30,6 +32,10 @@ typedef enum EquipFlags {
 
 BattleWork* _battleWorkPointer;
 
+/**
+ * Battle entries Btl_UnitSetup makes at the start of every fight: Mario at his home spot (-100, 0, -5),
+ * and before him the invisible system unit (unit_system) that runs battle-wide events.
+ */
 BattleUnitSetup entryunit_mario = { &unitdata_Mario, 0, {0}, 0x04000002, {-100.0f, 0.0f, -5.0f} };
 BattleUnitSetup entryunit_system = { &unit_system, 0, {0}, 0x04000002 };
 

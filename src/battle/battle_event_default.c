@@ -1,3 +1,5 @@
+// Default battle events: standard guard, escape, damage and badge-effect scripts shared by all units.
+
 #include "eff/eff_fire.h"
 #include "battle/battle_event_default.h"
 #include "battle/battle.h"

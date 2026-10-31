@@ -1,3 +1,5 @@
+// eff_balloon_n64.c: Paper Mario 64 Balloon effect entry (effBalloonN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

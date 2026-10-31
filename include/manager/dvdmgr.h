@@ -1,3 +1,5 @@
+// dvdmgr.c: the DVD manager (DVDEntry, DVDFlags): prioritised file reads run on a separate thread.
+
 #pragma once
 
 #include <dolphin/dvd.h>

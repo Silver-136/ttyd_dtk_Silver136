@@ -18,6 +18,10 @@ static EvtWord kpa_goal[38];
 static NpcSetupInfo npcEnt[1];
 EvtWord kpa_02_init_evt[36];
 
+/**
+ * Blocks, hidden blocks, pipes and obstacle blocks of side-scrolling stage 1, listed from left to right,
+ * ending at the goal pole.
+ */
 EvtWord kpa_act_stg1_mobj[] = {
     KPA_OBJ_BRICK_2(-1225.0f, 125.0f), KPA_OBJ_BRICK_2(-1100.0f, 125.0f), KPA_OBJ_OJAMA_BLK(-1050.0f, 125.0f),
     KPA_OBJ_BRICK_2(-1000.0f, 125.0f), KPA_OBJ_BRICK_2(-1000.0f, 275.0f), KPA_OBJ_BRICK_2(-950.0f, 125.0f),
@@ -39,6 +43,7 @@ EvtWord kpa_act_stg1_mobj[] = {
     KPA_OBJ_POLE(1237.5f, 0.0f, kpa_goal), KPA_OBJ_END,
 };
 
+/** Coins Bowser can collect in side-scrolling stage 1, as x and z positions. */
 EvtWord kpa_act_stg1_item[] = {
     KPA_ITEM(-687.5f, 112.5f), KPA_ITEM(-650.0f, 112.5f), KPA_ITEM(-500.0f, 137.5f),
     KPA_ITEM(-462.5f, 137.5f), KPA_ITEM(-225.0f, 62.5f), KPA_ITEM(-187.5f, 62.5f), KPA_ITEM(150.0f, 125.0f),
@@ -90,6 +95,7 @@ static EVT_BEGIN(kpa_goal)
     RETURN
 EVT_END()
 
+/** No NPCs: the side-scrolling stage is built from the block, pipe and item lists instead. */
 static NpcSetupInfo npcEnt[] = {
     {0},
 };

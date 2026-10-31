@@ -114,6 +114,11 @@ EvtWord yuu_02_init_evt[262];
 EvtWord yuu_02_init_evt[29];
 #endif
 
+/**
+ * Checkpoints along the Tube Mode course, in order from the start around the loop to the goal.
+ * yuuminigame3_gamerule tracks which one Mario has passed and drops him back onto the last one
+ * after he falls off the course.
+ */
 Vec fukkipoint[] = {
     {300.0f, 0.0f, 300.0f},
     {750.0f, 0.0f, 300.0f},
@@ -141,6 +146,10 @@ EVT_BEGIN(yuu_02_icon_monte_entry_evt)
     RETURN
 EVT_END()
 
+/**
+ * Where fall_rtn places the Tube Mode coins: ten areas of the course (x range, z range, coin count)
+ * with the coins set on the floor below; coins of type 2 start hidden. A zero type ends the table.
+ */
 static MonteTable montetable[] = {
     {1500.0f, 990.0f, -200.0f, -300.0f, 1, 1},
     {1500.0f, 990.0f, -300.0f, -400.0f, 1, 2},

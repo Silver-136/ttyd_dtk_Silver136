@@ -134,6 +134,7 @@ EVT_BEGIN(evt_ie1_wall)
     RETURN
 EVT_END()
 
+/** Actors that stay in view during the inn door scenes: the innkeeper. */
 const char* ie1_npc[] = {
     /*"宿店員"*/"\x8F\x68\x93\x58\x88\xF5",
     NULL,
@@ -158,6 +159,7 @@ EVT_BEGIN(evt_ie1_door_close)
     RETURN
 EVT_END()
 
+/** The inn door, with the map objects it swaps and its open and close handlers. */
 DoorParam ie1_door = {
     0, // flags
     3, // type
@@ -198,6 +200,7 @@ EVT_BEGIN(evt_ie2_wall)
     RETURN
 EVT_END()
 
+/** Actors that stay in view during the shop door scenes: the shop clerk. */
 const char* ie2_npc[] = {
     /*"店員"*/"\x93\x58\x88\xF5",
     NULL,
@@ -225,6 +228,7 @@ EVT_BEGIN(evt_ie2_door_close)
     RETURN
 EVT_END()
 
+/** The shop door, with the map objects it swaps and its open and close handlers. */
 DoorParam ie2_door = {
     0, // flags
     3, // type
@@ -272,6 +276,7 @@ EVT_BEGIN(evt_ie3_wall)
     RETURN
 EVT_END()
 
+/** Actors that stay in view during General White's door scenes: White and villager G. */
 const char* ie3_npc[] = {
     /*"ホワイト"*/"\x83\x7A\x83\x8F\x83\x43\x83\x67",
     /*"ボムヘイG"*/"\x83\x7B\x83\x80\x83\x77\x83\x43\x47",
@@ -300,11 +305,13 @@ EVT_BEGIN(evt_ie3_door_close)
     RETURN
 EVT_END()
 
+/** Items kept in view during General White's door scenes. */
 const char* ie3_item[] = {
     "item_00",
     NULL,
 };
 
+/** General White's house door, with the map objects it swaps and its open and close handlers. */
 DoorParam ie3_door = {
     0, // flags
     3, // type
@@ -326,6 +333,7 @@ DoorParam ie3_door = {
     evt_ie3_door_close, // evtClose
 };
 
+/** Exit of this room: the west door to aji_01. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -805,6 +813,7 @@ static EVT_BEGIN(init_murabito_h)
     RETURN
 EVT_END()
 
+/** Item the player can hand over in the item menu for Trouble Center job 26: the Honey Candy. */
 s32 iri_26_item_tbl[] = {
     ITEM_HONEY_CANDY, -1,
 };
@@ -997,6 +1006,7 @@ EvtWord mario_jump_tail[] = {
 };
 #endif
 
+/** Item the player can hand over in the item menu for Trouble Center job 25: the Package. */
 s32 iri_25_item_tbl[] = {
     ITEM_PACKAGE, -1,
 };
@@ -1358,6 +1368,7 @@ static EVT_BEGIN(kiza_entry)
     RETURN
 EVT_END()
 
+/** The cast of the east village: the mayor, Bob-omb villagers E to I, the shop clerk and General White. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"村長"*/"\x91\xBA\x92\xB7", // name
@@ -1458,6 +1469,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** The six item display stands of the shop: each map object with its hit area. */
 static ShopObj obj_list[] = {
     {"S_item_01", "A_item_01"},
     {"S_item_02", "A_item_02"},
@@ -1467,6 +1479,7 @@ static ShopObj obj_list[] = {
     {"S_item_06", "A_item_06"},
 };
 
+/** What the shop sells, in the order of the stands, with the price in coins. */
 static ShopItem goods_list[] = {
     {ITEM_SHOOTING_STAR, 30},
     {ITEM_ICE_STORM, 6},
@@ -1476,6 +1489,10 @@ static ShopItem goods_list[] = {
     {ITEM_SUPER_SHROOM, 15},
 };
 
+/**
+ * Guess: price list of the items the shop deals in, including ones Mario can sell to it: each item with its
+ * coin price.
+ */
 static ShopDb trade_list[] = {
     {ITEM_SHOOTING_STAR, 15, 0},
     {ITEM_ICE_STORM, 3, 0},
@@ -1492,6 +1509,7 @@ static ShopDb trade_list[] = {
     {0},
 };
 
+/** The shop clerk's data: name and the message keys (shop_00 to shop_34) for his lines. */
 static ShopperData35 shopper_data = {
     /*"店員"*/"\x93\x58\x88\xF5", // name
     NULL, NULL, // fook_evt..buy_evt
@@ -1697,6 +1715,10 @@ static EVT_BEGIN(minnnanokoe_evt)
     RETURN
 EVT_END()
 
+/**
+ * The inn data: the breakfast item and position, the room price, the bed and camera positions and the
+ * innkeeper's message keys.
+ */
 static KinopioData kino_dt = {
     198, // breakfastItem
     {-425.0f, 50.0f, -200.0f}, // breakfastPos

@@ -38,6 +38,7 @@ static NpcSetupInfo npcEnt[2];
 static EvtWord epilogue_evt[64];
 EvtWord moo_04_init_evt[220];
 
+/** Three control points (x, y, z) of the path the partner flies along during the five seconds of the flight scene. */
 static f32 spline_dt[] = {
     -12.916925f, 123.84991f, 512.97614f, 17.94919f, 46.050007f, 5.011878f, 65.15421f, 48.400024f,
     -75.32023f,

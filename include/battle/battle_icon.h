@@ -1,3 +1,5 @@
+// Declares the battle icon structure and its entry, update and delete functions.
+
 #pragma once
 
 #include <dolphin/types.h>

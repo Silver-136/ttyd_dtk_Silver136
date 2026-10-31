@@ -47,6 +47,10 @@ static EvtWord shuryolight_head_tenmetu[20];
 static EvtWord shuryolight_head_off[14];
 EvtWord shuryolight_tue_normal[31];
 
+/**
+ * Animation names of the green lamp (the power lamp on the base of Grodus's staff): five animations L_1A to
+ * L_1E, indexed by animation number.
+ */
 static const char* green_light_anim[] = {
     "L_1C",
     "L_1B",
@@ -55,6 +59,7 @@ static const char* green_light_anim[] = {
     "L_1E",
 };
 
+/** Animation names of the yellow lamp (the third lamp on Grodus's head): five animations L_2A to L_2E. */
 static const char* yellow_light_anim[] = {
     "L_2C",
     "L_2B",
@@ -63,6 +68,10 @@ static const char* yellow_light_anim[] = {
     "L_2E",
 };
 
+/**
+ * Animation names of the red lamp (the second head lamp and the lamp on the staff): five animations L_3A to
+ * L_3E.
+ */
 static const char* red_light_anim[] = {
     "L_3C",
     "L_3B",
@@ -71,6 +80,7 @@ static const char* red_light_anim[] = {
     "L_3E",
 };
 
+/** Animation names of the orange lamp (the first lamp on Grodus's head): five animations L_4A to L_4E. */
 static const char* orange_light_anim[] = {
     "L_4C",
     "L_4B",

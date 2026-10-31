@@ -570,6 +570,10 @@ static EVT_BEGIN(first_evt_dokan)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room: the east exit (e_bero) to hei_13, the back exit (a_usiro_bero) to gon_00 (Hooktail
+ * Castle) and the pipe (a_h_dokan) to tik_02 (Rogueport Sewers).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -654,6 +658,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Doors of this room: the pipe (dokan_2) to hei_00. */
 static BeroEntry e3_bero[] = {
     {
         "dokan_2", // hitName
@@ -1019,6 +1024,7 @@ EVT_BEGIN(setting_sun_stone)
     RETURN
 EVT_END()
 
+/** Item list of the Sun Stone statue's picker: only the Sun Stone (-1 ends the list). */
 static s32 itemsel_table00[] = {
     ITEM_SUN_STONE, -1,
 };
@@ -1068,6 +1074,7 @@ EVT_BEGIN(setting_moon_stone)
     RETURN
 EVT_END()
 
+/** Item list of the Moon Stone statue's picker: only the Moon Stone (-1 ends the list). */
 static s32 itemsel_table01[] = {
     ITEM_MOON_STONE, -1,
 };
@@ -1119,6 +1126,10 @@ EVT_BEGIN(ki_data_evt_02)
     RETURN
 EVT_END()
 
+/**
+ * Trees of the room that Mario can hit (a_ki_1 to a_ki_3), with trunk and leaf parts; the first two run
+ * events when hit.
+ */
 static TreeAccess ki_data[] = {
     {0, "a_ki_1", "miki_1", "ha_temae_1", "ha_usiro_1", ki_data_evt_01},
     {0, "a_ki_2", "miki_2", "ha_temae_2", "ha_usiro_2", ki_data_evt_02},
@@ -1126,6 +1137,7 @@ static TreeAccess ki_data[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/** NPC of the room: Hooktail (Gonbaba), who appears in the flyover cutscene. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ババ"*/"\x83\x6F\x83\x6F", // name

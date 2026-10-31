@@ -1,3 +1,5 @@
+// eff_crystal_n64.c: Paper Mario 64 Crystal effect entry (effCrystalN64Entry) and its work data (EffCrystalN64Work).
+
 #pragma once
 
 #include "driver/effdrv.h"

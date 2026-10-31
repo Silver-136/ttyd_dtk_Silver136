@@ -1,3 +1,5 @@
+// Star-power special move Showstopper (sac_suki): the button-sequence game that can defeat enemies outright.
+
 #include "eff/n64/eff_crystal_n64.h"
 #include "eff/eff_starstone.h"
 #include "battle/battle.h"

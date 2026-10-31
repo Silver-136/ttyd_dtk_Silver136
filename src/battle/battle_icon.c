@@ -1,3 +1,5 @@
+// Battle icons: floating item and badge icons, with their script commands.
+
 #include "battle/battle_icon.h"
 #include "battle/battle.h"
 #include "data/item_data.h"

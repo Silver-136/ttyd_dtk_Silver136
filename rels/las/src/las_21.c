@@ -122,6 +122,10 @@ static EVT_BEGIN(e2_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Exits of las_21: west door w_bero to las_19 (e_bero_1); east door e_bero_1 to las_23 (w_bero); east door
+ * e_bero_2 to las_23 (w_bero); north road n_bero to las_20 (s_bero_2).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -196,6 +200,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Exit of las_21: west door w_bero to las_19 (e_bero_2). */
 static BeroEntry w_bero_mapchg[] = {
     {
         "w_bero", // hitName

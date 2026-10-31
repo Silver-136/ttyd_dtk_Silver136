@@ -1,3 +1,5 @@
+// eff_puniballoon.c: Puni balloon effect entry (effPuniBalloonEntry) and per-particle data (PuniBalloonWork).
+
 #pragma once
 
 #include "driver/effdrv.h"

@@ -1,3 +1,5 @@
+// unit_wanawana: wanawana battle unit (a trap; UNIT_UNUSED_WANAWANA in the unit table).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
@@ -48,6 +50,10 @@ static f32 tanf(f32 x) {
     return tan(x);
 }
 
+/**
+ * Unit data of the Trap: 2 HP and level 1, with its parts, status vulnerability, init event and event data
+ * table.
+ */
 BattleUnitKind unit_wanawana = {
     UNIT_UNUSED_WANAWANA, // mUnitType
     "btl_un_wanawana", // name
@@ -96,10 +102,19 @@ BattleUnitKind unit_wanawana = {
     data_table, // dataTable
 };
 
+/**
+ * Defense of the Trap against normal, fire, ice, explosion and electric attacks: none, so it takes full
+ * damage from every element.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Damage-type reactions of the Trap: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Trap, as the percent chance each status takes hold: every status lands at
+ * the normal rate.
+ */
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -125,6 +140,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/** Pose table of the Trap: maps each battle pose (idle, hurt, attacking and so on) to its animation. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_NORMAL, "S_1"},
     {POSE_TYPE_DAMAGE_GUARDED, "S_1"},
@@ -132,10 +148,15 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Event data table of the Trap: no custom reactions, so the standard battle handlers run for every event. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Parts of the Trap: a single body part (part 1, model nakayama_test4), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_wanawana", "nakayama_test4", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };

@@ -103,6 +103,10 @@ static EvtWord damage_event_r[30];
 static EvtWord attack_event_r[368];
 static EvtWord wait_event_r[18];
 
+/**
+ * Unit data of Magnus: 30 HP, 120x160 units in size; ties together its sounds, parts, status vulnerability,
+ * init event and event table.
+ */
 BattleUnitKind unit_boss_magnum_battender = {
     UNIT_MAGNUS, // mUnitType
     "btl_un_magnum_battender", // name
@@ -151,8 +155,10 @@ BattleUnitKind unit_boss_magnum_battender = {
     data_table, // dataTable
 };
 
+/** Defence of Magnus: 1 against every kind of hit. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Defence attributes of Magnus: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -200,6 +206,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MGN_S_1"},
 };
 
+/** Poses of Magnus after his arm has come off to be launched as the rocket fist. */
 static PoseTableEntry pose_table_no_arm[] = {
     {POSE_TYPE_SLEEP, "MGN_S_2"},
     {POSE_TYPE_STOP, "MGN_2D_2"},
@@ -219,11 +226,13 @@ static PoseTableEntry pose_table_no_arm[] = {
     {POSE_TYPE_ACTION, "MGN_S_2"},
 };
 
+/** Event table of Magnus: dead_event (tag 49). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Parts of Magnus: 4 parts (model c_mb_robo_1b). */
 static BattleUnitKindPart parts[] = {
 #ifdef VERSION_G8ME01
     {1, "btl_un_magnum_battender", "c_mb_robo_1b", 0.0f, 0.0f, 0.0f, 37.0f, 103.0f, 30.0f, 37.0f, 113.0f, 61.0f, 106, 174, 255, &defence, &defence_attr, 0x600019, 0, pose_table},
@@ -298,6 +307,7 @@ static USER_FUNC(arm_check) {
     return EVT_RETURN_DONE;
 }
 
+/** Weapon of Magnus (batten stamp attack): targets one unit for 2 damage; used by stamp_attack_event. */
 BattleWeapon weapon_batten_stamp_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -335,6 +345,10 @@ BattleWeapon weapon_batten_stamp_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of Magnus (batten shake attack): targets every unit for 2 damage, ignores Defense;
+ * used by shake_attack_event.
+ */
 BattleWeapon weapon_batten_shake_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -375,6 +389,10 @@ BattleWeapon weapon_batten_shake_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Spawn setup for Magnus' rocket fist (unit_boss_rocket_punch): enemy side, placed off-screen at first;
+ * used by arm_bunri_event, arm_return_event.
+ */
 static BattleUnitSetup entry_rocket_punch = {
     &unit_boss_rocket_punch, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -995,6 +1013,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Unit data of Magnus' rocket fist: 2 HP, 50x34 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_boss_rocket_punch = {
     UNIT_X_FIST,
     "btl_un_rocket_punch",
@@ -1061,8 +1083,10 @@ BattleUnitKind unit_boss_rocket_punch = {
     data_table_r,
 };
 
+/** Defence of Magnus' rocket fist: 0 against every kind of hit. */
 static BattleUnitDefense defence_r = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of Magnus' rocket fist: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr_r = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist_r = {
@@ -1107,14 +1131,19 @@ static PoseTableEntry pose_table_r[] = {
     {POSE_TYPE_ACTION, "MGN_A1_9"},
 };
 
+/** Event table of Magnus' rocket fist: it has no special event scripts. */
 static BattleDataEntry data_table_r[] = {
     {0, NULL},
 };
 
+/** Parts of Magnus' rocket fist: 1 part (model c_mb_robo_1b). */
 static BattleUnitKindPart parts_r[] = {
     {1, "btl_un_rocket_punch", "c_mb_robo_1b", 0.0f, 0.0f, 0.0f, 0.0f, 10.0f, 0.0f, 0.0f, 10.0f, 0.0f, 106, 174, 255, &defence_r, &defence_attr_r, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_r},
 };
 
+/**
+ * Weapon of Magnus (batten rocket attack): targets one unit for 4 damage; used by attack_event_r.
+ */
 static BattleWeapon weapon_batten_rocket_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

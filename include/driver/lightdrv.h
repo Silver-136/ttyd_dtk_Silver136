@@ -1,3 +1,5 @@
+// lightdrv.c: the light driver (LightEntry, LightEntryFlags): named map and character lights.
+
 #pragma once
 
 #include <dolphin/gx.h>

@@ -67,6 +67,7 @@ USER_FUNC(evt_mario_check_menu) {
     return EVT_RETURN_DONE;
 }
 
+/** Exits (beros) of this room: e_bero to dou_03. */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -458,6 +459,9 @@ EVT_BEGIN(lift_event)
     RETURN
 EVT_END()
 
+/**
+ * Hazard-water floors of this room (map hit names) and the point each puts Mario back at after he is bitten.
+ */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_01", {120.0f, 10.0f, 0.0f}},
     {"mod_02", {-90.0f, 10.0f, -110.0f}},
@@ -691,6 +695,7 @@ EVT_BEGIN(kuribo_talk)
     RETURN
 EVT_END()
 
+/** NPC setup of dou_04: the Goomba Kurichero, who talks to Mario about the Couples Cake request. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"クリチェロ"*/"\x83\x4E\x83\x8A\x83\x60\x83\x46\x83\x8D", // name

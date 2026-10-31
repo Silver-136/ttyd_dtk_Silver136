@@ -1,3 +1,6 @@
+// Peach as the player in the Peach interludes (X-Naut fortress): her poses, states (normal, transparent, happy,
+// angry...) and motions.
+
 #include "dolphin/types.h"
 #include "mario/mario.h"
 #include "mario/mario_motion.h"

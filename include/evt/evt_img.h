@@ -1,3 +1,5 @@
+// evt_img.c: script commands for 2D images and pictures (imgdrv).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

@@ -1,3 +1,6 @@
+// Icon driver: loads icon.tpl/icon.bin and draws icons (animated or still, 2D or 3D) and icon
+// digit numbers, one set of entries for the field and one for battle.
+
 #include "driver/icondrv.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
@@ -810,6 +813,7 @@ void iconSetAlpha(const char* name, u8 alpha) {
     }
 }
 
+/** Icons of the digits 0 to 9, large and small, used by the number drawing (iconNumberDispGx). */
 static u16 suuji[] = { ICON_NUMBER_0, ICON_NUMBER_1, ICON_NUMBER_2, ICON_NUMBER_3, ICON_NUMBER_4, ICON_NUMBER_5, ICON_NUMBER_6, ICON_NUMBER_7, ICON_NUMBER_8, ICON_NUMBER_9 };   // 0-9
 u16 suuji_s[] = { ICON_NUMBER_SMALL_0, ICON_NUMBER_SMALL_1, ICON_NUMBER_SMALL_2, ICON_NUMBER_SMALL_3, ICON_NUMBER_SMALL_4, ICON_NUMBER_SMALL_5, ICON_NUMBER_SMALL_6, ICON_NUMBER_SMALL_7, ICON_NUMBER_SMALL_8, ICON_NUMBER_SMALL_9 }; // 0-9 small
 

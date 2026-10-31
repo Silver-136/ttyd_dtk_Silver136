@@ -59,6 +59,7 @@ EvtWord hom_10_evt_resha_right[35];
 EvtWord hom_10_evt_resha_left[28];
 EvtWord hom_10_init_evt[140];
 
+/** Wheels of the train that spin while it runs: map object, wheel size, speed source and spin direction. */
 static SharinData sharinDt[] = {
     {"sha_1_1", 0, 0, FLOAT(1.0f)},
     {"sha_1_2", 0, 0, FLOAT(1.0f)},

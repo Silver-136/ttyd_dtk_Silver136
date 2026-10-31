@@ -1,3 +1,5 @@
+// Action command: rotate the control stick in circles (ac_stick_rotate); more rotations, stronger result.
+
 #include "battle/ac/ac_table.h"
 #include "icon_ids.h"
 #include "battle/battle.h"

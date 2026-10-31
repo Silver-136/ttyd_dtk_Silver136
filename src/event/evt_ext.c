@@ -1,3 +1,5 @@
+// Script commands for the extdrv crowd/sprite renderer.
+
 #include "evt/evt_ext.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/extdrv.h"

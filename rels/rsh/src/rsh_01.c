@@ -82,6 +82,10 @@ EVT_BEGIN(s_bero_open)
     RETURN
 EVT_END()
 
+/**
+ * Doors and exits of rsh_01 variant a: w_bero to rsh_02_a; e_bero to rsh_00_a; s_bero to pik_00 (Poshley
+ * Heights).
+ */
 static BeroEntry bero_data_a[] = {
     {
         "w_bero", // hitName
@@ -140,6 +144,10 @@ static BeroEntry bero_data_a[] = {
     {0},
 };
 
+/**
+ * Doors and exits of rsh_01 variant b: w_bero to rsh_02_b; e_bero to rsh_00_b; s_bero to hom_00 (Excess
+ * Express platform).
+ */
 static BeroEntry bero_data_b[] = {
     {
         "w_bero", // hitName
@@ -198,6 +206,7 @@ static BeroEntry bero_data_b[] = {
     {0},
 };
 
+/** Doors and exits of rsh_01 variant c: w_bero to rsh_02_c; e_bero to rsh_00_c; s_bero to rsh_01_c. */
 static BeroEntry bero_data_c[] = {
     {
         "w_bero", // hitName
@@ -256,6 +265,10 @@ static BeroEntry bero_data_c[] = {
     {0},
 };
 
+/**
+ * Map objects of cabin 3 for evt_rsh_door_entry: the room, backdrop, door, door hit areas and open and close
+ * animations.
+ */
 static const char* door_3[] = {
     "heya_3",
     "haikei_3",
@@ -266,6 +279,10 @@ static const char* door_3[] = {
     "3_door_close",
 };
 
+/**
+ * Map objects of cabin 4 for evt_rsh_door_entry: the room, backdrop, door, door hit areas and open and close
+ * animations.
+ */
 static const char* door_4[] = {
     "heya_4",
     "haikei_4",
@@ -344,6 +361,7 @@ static EVT_BEGIN(init_madam)
     RETURN
 EVT_END()
 
+/** Items the player may give the madam: the Gold Ring only, ended by -1. */
 static s32 item_tbl_madam[] = {
     ITEM_GOLD_RING, -1,
 };
@@ -444,6 +462,7 @@ static EVT_BEGIN(talk_madam)
     RETURN
 EVT_END()
 
+/** NPCs of the car on the first visit: Toron and the madam. */
 static NpcSetupInfo npc_data[] = {
     {
         /*"トロン"*/"\x83\x67\x83\x8D\x83\x93", // name
@@ -508,6 +527,7 @@ static NpcSetupInfo npc_data[] = {
     {0},
 };
 
+/** Second NPC setup of the car, used by the later-story entries: Toron and the madam. */
 NpcSetupInfo npc_data_2[] = {
     {
         /*"トロン"*/"\x83\x67\x83\x8D\x83\x93", // name
@@ -753,6 +773,7 @@ EVT_BEGIN(rsh_01_b_init_evt)
     RETURN
 EVT_END()
 
+/** Map objects of the scenery that passes by the windows of the car. */
 static const char* window_tbl[] = {
     "mado_uturi_3",
     "mado_uturi_4",
@@ -788,6 +809,10 @@ EVT_BEGIN(talk_syasyou)
     RETURN
 EVT_END()
 
+/**
+ * Doors and exits of rsh_01 variant a (return trip): w_bero to rsh_02_a; e_bero to rsh_08_a; s_bero to pik_00
+ * (Poshley Heights).
+ */
 static BeroEntry bero_data_a_return[] = {
     {
         "w_bero", // hitName
@@ -846,6 +871,10 @@ static BeroEntry bero_data_a_return[] = {
     {0},
 };
 
+/**
+ * Doors and exits of rsh_01 variant b (return trip): w_bero to rsh_02_b; e_bero to rsh_08_a; s_bero to hom_00
+ * (Excess Express platform).
+ */
 static BeroEntry bero_data_b_return[] = {
     {
         "w_bero", // hitName
@@ -904,6 +933,10 @@ static BeroEntry bero_data_b_return[] = {
     {0},
 };
 
+/**
+ * Doors and exits of rsh_01 variant c (return trip): w_bero to rsh_02_c; e_bero to rsh_08_a; s_bero to
+ * rsh_01_c.
+ */
 static BeroEntry bero_data_c_return[] = {
     {
         "w_bero", // hitName
@@ -962,6 +995,7 @@ static BeroEntry bero_data_c_return[] = {
     {0},
 };
 
+/** Replacement exit used when the train stands at Rogueport: s_bero leads to gor_04. */
 BeroEntry gor_bero[] = {
     {
         "s_bero", // hitName

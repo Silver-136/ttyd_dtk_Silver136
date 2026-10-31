@@ -1,3 +1,5 @@
+// Declares the battle action-record condition types and the functions that update them.
+
 #pragma once
 
 #include <dolphin/types.h>

@@ -1,3 +1,5 @@
+// unit_jyugem: Lakitu, battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -60,6 +62,10 @@ static USER_FUNC(togezo_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of the Lakitu: 5 HP and level 11, with its parts, status vulnerability, init event and event
+ * data table.
+ */
 BattleUnitKind unit_jyugem = {
     UNIT_LAKITU, // mUnitType
     "btl_un_jyugem", // name
@@ -108,8 +114,13 @@ BattleUnitKind unit_jyugem = {
     data_table, // dataTable
 };
 
+/**
+ * Defense of the Lakitu against normal, fire, ice, explosion and electric attacks: none, so it takes full
+ * damage from every element.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Damage-type reactions of the Lakitu: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -177,17 +188,26 @@ static PoseTableEntry pose_table_hold[] = {
     {POSE_TYPE_ACTION, "JGM_S_2"},
 };
 
+/**
+ * Event data table of the Lakitu: scripts that replace the standard handling for an attacker being hurt by
+ * its spiked head (tag 37) and the battle opening with a First Strike on it (tag 48).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos_event},
     {0, NULL},
 };
 
+/**
+ * Parts of the Lakitu: 2 parts: parts 1 and 2 (model c_jugemu), each with its defense tables, attributes
+ * and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_jyugem", "c_jugemu", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
     {2, /*"パイポ"*/"\x83\x70\x83\x43\x83\x7C", "c_jugemu", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon record of the Lakitu's egg throw: 2 damage and counts as a jump-type hit. */
 static BattleWeapon weapon_jyugem_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -224,6 +244,10 @@ static BattleWeapon weapon_jyugem_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Setup of the Spiny that hatches from the egg (normal_attack_event) or is called in by friend_event: unit
+ * kind, side, turn phase and starting position.
+ */
 static BattleUnitSetup entry_togezo = {
     &unit_togezo, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

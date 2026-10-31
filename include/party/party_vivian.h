@@ -1,3 +1,5 @@
+// party_vivian.c: Vivian's field partner functions (init, move, shadow, unhold) and her Mario motion mot_vivian.
+
 #pragma once
 
 #include <dolphin/types.h>

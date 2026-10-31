@@ -1,3 +1,5 @@
+// Declares the Art Attack (sac_scissor) special move event.
+
 #include "battle/battle_unit.h"
 #include "battle/battle_database_common.h"
 #pragma once

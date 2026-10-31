@@ -46,10 +46,15 @@ EvtWord majinaisi_init[10];
 static NpcSetupInfo npcEnt[2];
 EvtWord tik_12_init_evt[58];
 
+/**
+ * Merlee's charm prices, read by majinaisi_ryokin_kaisu: pairs of fee and the number of times the charm works,
+ * for Special (50 coins, 20), Normal (20 coins, 10) and Cheap (5 coins, 5).
+ */
 s32 majinaisi_ryokin_kaisu_tbl[] = {
     50, 20, 20, 10, 5, 5,
 };
 
+/** Doors of this room: the east exit back to tik_01. */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -336,6 +341,7 @@ EVT_BEGIN(majinaisi_table_talk)
     RETURN
 EVT_END()
 
+/** Items Merlee accepts for Trouble Center request 14: Cake Mix (-1 ends the list). */
 s32 iri_14_item_tbl[] = {
     ITEM_CAKE_MIX, -1,
 };
@@ -386,6 +392,7 @@ EVT_BEGIN(majinaisi_init)
     RETURN
 EVT_END()
 
+/** NPCs of this room: Merlee, whose table talk is registered on the a_majinai area. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"まじない師"*/"\x82\xDC\x82\xB6\x82\xC8\x82\xA2\x8E\x74", // name

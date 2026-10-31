@@ -1,3 +1,5 @@
+// Declares the Earth Tremor (sac_deka) special move event.
+
 #include "battle/battle_unit.h"
 #include "battle/battle_database_common.h"
 #pragma once

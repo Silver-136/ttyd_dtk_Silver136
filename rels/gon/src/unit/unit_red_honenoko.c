@@ -43,6 +43,7 @@ static EvtWord normal_attack_event[428];
 static EvtWord call_friend_event[311];
 static EvtWord wait_event[6];
 
+/** Unit data of the Red Bones: 5 HP, level 14; the battle starts it from init_event. */
 BattleUnitKind unit_red_honenoko = {
     UNIT_RED_BONES, // mUnitType
     "btl_un_red_honenoko", // name
@@ -91,8 +92,10 @@ BattleUnitKind unit_red_honenoko = {
     data_table, // dataTable
 };
 
+/** Defence of the Red Bones: 1 against every element. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Elemental reactions of the Red Bones: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -120,6 +123,10 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/**
+ * Parts of the Red Bones: part 1 is its body, part 2 the bone it throws, part 3 the piece it flings off when
+ * calling for help and part 4 the pile of bones that forms.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -187,6 +194,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon data for the Red Bones' bone throw: 3 damage, one target. */
 static BattleWeapon weapon_honenoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -235,6 +243,7 @@ static BattleUnitSetup entry_honenoko = {
     NULL, // itemDropTable
 };
 
+/** Pose table of the Red Bones: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KRN_N_1"},
     {POSE_TYPE_STOP, "KRN_Y_1"},
@@ -257,6 +266,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRN_S_1"},
 };
 
+/**
+ * Event table of the Red Bones: its defeat (dead_event, tag 49), its collapse into a pile of bones
+ * (fake_dead_event, tag 15) and the First Strike reaction (does nothing).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FAKE_DEAD_EVENT, fake_dead_event},

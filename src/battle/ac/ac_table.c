@@ -1,8 +1,14 @@
+// Table of all action commands: action-command ids and their handlers.
+
 #include "battle/ac/ac_table.h"
 
 #define AC_ENTRY(id, name) \
     { id, battleAcMain_##name, battleAcResult_##name, battleAcDisp_##name, battleAcDelete_##name }
 
+/**
+ * Every action command: its id (the type btlevtcmd_SetupAC passes to BattleActionCommandSetup,
+ * which looks it up here) and its main, result, draw and delete handlers. Ends with id 0.
+ */
 ActionCommandEntry ActionCommandList[] = {
     AC_ENTRY(1, TimingA),
     AC_ENTRY(11, TimingWide),

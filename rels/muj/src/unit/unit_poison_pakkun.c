@@ -48,6 +48,10 @@ static EvtWord return_event[256];
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Putrid Piranha (HP 8, level 20):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 BattleUnitKind unit_poison_pakkun = {
     UNIT_PUTRID_PIRANHA, // mUnitType
     "btl_un_poison_pakkun", // name
@@ -96,10 +100,16 @@ BattleUnitKind unit_poison_pakkun = {
     data_table, // dataTable
 };
 
+/** Defence of the Putrid Piranha: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Putrid Piranha: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Putrid Piranha (percent chance to take each status): immune to poison;
+ * resists most other statuses.
+ */
 static StatusVulnerability regist = {
     105, // sleep
     80, // stop
@@ -125,10 +135,14 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * Body part of the Putrid Piranha (model c_pakflwr_p): hit position, defences, attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_poison_pakkun", "c_pakflwr_p", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
+/** Weapon of the Putrid Piranha's attack: 3 damage, hammer-type contact attack. */
 BattleWeapon weapon_poison_pakkun_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -165,6 +179,7 @@ BattleWeapon weapon_poison_pakkun_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Putrid Piranha's breath: 2 damage, jump-type contact attack. */
 BattleWeapon weapon_poison_pakkun_breath_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -422,6 +437,10 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "PKF_S_3"},
 };
 
+/**
+ * Data table of the Putrid Piranha: event handlers for the counter-hit reactions (tags 25-36),
+ * the attacker hurt by its spikes and a First Strike on it (no reaction).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

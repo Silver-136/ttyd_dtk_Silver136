@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: green-white scrolling rings at a given angle, staggered in time (4 for type 0, else 1).
+
 #include "eff/n64/eff_thruhammer_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -28,6 +30,10 @@ typedef struct EffThruHammerN64Work {
     u8 r2, g2, b2;    // 0x53
 } EffThruHammerN64Work;
 
+/**
+ * The ring mesh: a flared band, solid at its inner edge and clear at its outer rim,
+ * scaled out into each ring.
+ */
 static effN64Vtx stg_thruhammer_v[] = {
     {-34, -2, 20, 4267, 1024, 255, 255, 255, 255},
     {-52, 50, 0, 3840, 2048, 255, 255, 255, 0},

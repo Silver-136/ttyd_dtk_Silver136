@@ -1,3 +1,5 @@
+// Declares the enemy item-use check function.
+
 #pragma once
 
 #include <dolphin/types.h>

@@ -82,6 +82,10 @@ EvtWord first_mario_damage_event[114];
 static EvtWord wait_event[6];
 static const char* cmd_disable_string[5];
 
+/**
+ * Unit data of Bowser in the Palace of Shadow: 70 HP, level 68;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_koopa = {
     UNIT_BOWSER_CHAPTER8, // mUnitType
     "btl_un_koopa", // name
@@ -130,8 +134,16 @@ BattleUnitKind unit_boss_koopa = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of Bowser against each element (normal, fire, ice, explosion, electric):
+ * 2 against every element, so each hit is cut by 2.
+ */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/**
+ * Damage modifiers of Bowser per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -159,6 +171,7 @@ static StatusVulnerability regist = {
     5, // ohko
 };
 
+/** Pose table of Bowser: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KPA_N_3"},
     {POSE_TYPE_STOP, "KPA_Z_6"},
@@ -180,6 +193,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KPA_S_1"},
 };
 
+/**
+ * Pose table of Bowser while leaning forward: animation names for each pose type (idle, walk, hurt, attack
+ * and so on).
+ */
 static PoseTableEntry pose_table_forward_leaning[] = {
     {POSE_TYPE_SLEEP, "KPA_N_2"},
     {POSE_TYPE_STOP, "KPA_Z_5"},
@@ -201,21 +218,31 @@ static PoseTableEntry pose_table_forward_leaning[] = {
     {POSE_TYPE_ACTION, "KPA_S_8"},
 };
 
+/**
+ * Pose table of Bowser once defeated: animation names for each pose type (idle, walk, hurt, attack and so
+ * on).
+ */
 static PoseTableEntry pose_table_dead[] = {
     {POSE_TYPE_NORMAL, "KPA_Z_3"},
     {POSE_TYPE_DAMAGE, "KPA_Z_3"},
     {POSE_TYPE_ACTION, "KPA_Z_3"},
 };
 
+/**
+ * Data table of Bowser: event scripts and values the battle looks up by tag (damage reactions, dodge, first
+ * strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Part of Bowser: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_koopa", "c_koopa", 0.0f, 0.0f, 0.0f, 34.0f, 62.0f, 0.0f, 22.0f, 78.0f, 0.0f, 70, 80, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of Bowser's hip drop: damage 7. */
 static BattleWeapon weapon_koopa_hip_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -253,6 +280,7 @@ static BattleWeapon weapon_koopa_hip_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Bowser's bite: damage 7; inflicts Poison (30%). */
 static BattleWeapon weapon_koopa_bite_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -292,6 +320,7 @@ static BattleWeapon weapon_koopa_bite_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Bowser's critical bite: damage 2. */
 static BattleWeapon weapon_koopa_critical_bite_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -328,6 +357,7 @@ static BattleWeapon weapon_koopa_critical_bite_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Bowser's fire breath: damage 7. */
 static BattleWeapon weapon_koopa_fire_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -368,6 +398,7 @@ static BattleWeapon weapon_koopa_fire_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Setup used to spawn Kammy Koopa: unit kind, alliance, position and turn phase. */
 BattleUnitSetup entry_kamec_obaba = {
     &unit_boss_kamec_obaba, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -1155,6 +1186,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Message keys shown when a battle command is disabled:
+ * jump, hammer, item, partner technique and partner item.
+ */
 static const char* cmd_disable_string[] = {
     "btl_jump_cmd_disable",
     "btl_hammer_cmd_disable",

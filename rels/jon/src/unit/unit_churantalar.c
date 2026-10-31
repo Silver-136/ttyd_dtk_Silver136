@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Arantula (`churantalar`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
@@ -104,6 +106,7 @@ static USER_FUNC(piders_yarn_init) {
     return EVT_RETURN_DONE;
 }
 
+/** Unit data of the Arantula: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_churantalar = {
     UNIT_ARANTULA, // mUnitType
     "btl_un_churantalar", // name
@@ -152,8 +155,10 @@ BattleUnitKind unit_churantalar = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Arantula: none, every attack type does full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element response of the Arantula: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -181,6 +186,7 @@ static StatusVulnerability regist = {
     30, // ohko
 };
 
+/** Pose table of the Arantula: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "PAI_N_1"},
     {POSE_TYPE_STOP, "PAI_Y_1"},
@@ -202,6 +208,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PAI_S_1"},
 };
 
+/**
+ * Data table of the Arantula: event handlers keyed by tag (dead_event, blow_dead_event, battle_end_event,
+ * ...).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_BLOW_DEAD_EVENT, blow_dead_event},
@@ -210,6 +220,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body parts of the Arantula: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
     {2, "btl_un_churantalar", "c_paid_b", 0.0f, 0.0f, 5.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -409,6 +420,7 @@ static void piders_get_next_target(s32* unitIdx, s32* partIdx) {
     }
 }
 
+/** Attack data for the Arantula's web throw: 7 damage. */
 static BattleWeapon weapon_piders_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -445,6 +457,7 @@ static BattleWeapon weapon_piders_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Arantula's chained web throws: 4 damage. */
 static BattleWeapon weapon_piders_renzoku_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

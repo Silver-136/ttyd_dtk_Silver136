@@ -46,6 +46,10 @@ static EvtWord return_event[24];
 static EvtWord attack_event[500];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Gold Fuzzy:
+ * 10 HP, level 27, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_gold_chorobon = {
     UNIT_GOLD_FUZZY, // mUnitType
     "btl_un_gold_chorobon", // name
@@ -94,10 +98,17 @@ BattleUnitKind unit_gold_chorobon = {
     data_table, // dataTable
 };
 
+/** Defence of the Gold Fuzzy's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Gold Fuzzy's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Gold Fuzzy, as a percent of the normal chance:
+ * immune to sleep, stop, dizzy, confuse, freeze, tiny, attack down, defense down, allergic, fright,
+ * gale force, slow, instant kill.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -123,6 +134,10 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/**
+ * Pose table of the Gold Fuzzy:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "CBN_N_1"},
     {POSE_TYPE_STOP, "CBN_Y_1"},
@@ -144,6 +159,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "CBN_S_1"},
 };
 
+/**
+ * Event table of the Gold Fuzzy:
+ * the reaction when it is hurt while attacking (tags 25-36), nothing special on a First Strike.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_TOP_SPIKY_EVENT, counter_damage_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
@@ -162,10 +181,12 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of the Gold Fuzzy: a single part using the model "c_chorobon_k". */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_gold_chorobon", "c_chorobon_k", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Gold Fuzzy's attack: 1 damage to a single target, a jump-style hit. */
 BattleWeapon weapon_gold_chorobon_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -202,6 +223,10 @@ BattleWeapon weapon_gold_chorobon_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Sound timing of the Gold Fuzzy:
+ * the sound effect played at set points of its idle, walk and run animations.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"CBN_S_1", 0.5833333f, NULL, "SFX_BOSS_G_CHORO_MOVE1", 0, 1},
     {"CBN_S_1", 0.8333333f, NULL, "SFX_BOSS_G_CHORO_WAIT2", 0, 1},
@@ -257,6 +282,10 @@ EVT_BEGIN(gold_chorobon_rabbit_move)
     RETURN
 EVT_END()
 
+/**
+ * Setup entry that adds the Fuzzy horde unit on the enemy side at (75, 0, 0)
+ * when the Gold Fuzzy calls for backup.
+ */
 BattleUnitSetup entry_chorogun = {
     &unit_chorobon_gundan, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

@@ -1,3 +1,6 @@
+// gor_irai: Trouble Center request system (irai): request state flags, request window and notice display.
+// Start/cancel/init/main/check/end helpers for the requests taken in Rogueport.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -90,6 +93,7 @@ EvtWord gor_irai_lecture[40];
 EvtWord gor_irai_main[VERSION_PICK(105, 126)];
 EvtWord gor_irai_tenshu_main[VERSION_PICK(258, 261)];
 
+/** Message keys of the client names, one for each Trouble Center job. */
 const char* irai_msg_client[] = {
     "irai_client_01", "irai_client_02", "irai_client_03", "irai_client_04", "irai_client_05", "irai_client_06",
     "irai_client_07", "irai_client_08", "irai_client_09", "irai_client_10", "irai_client_11", "irai_client_12",
@@ -98,6 +102,7 @@ const char* irai_msg_client[] = {
     "irai_client_25", "irai_client_26", "irai_client_27", "irai_client_28", "irai_client_29", "irai_client_30",
 };
 
+/** Message keys of the job descriptions, one for each Trouble Center job. */
 const char* irai_msg_contents[] = {
     "irai_contents_01", "irai_contents_02", "irai_contents_03", "irai_contents_04", "irai_contents_05",
     "irai_contents_06", "irai_contents_07", "irai_contents_08", "irai_contents_09", "irai_contents_10",
@@ -107,6 +112,7 @@ const char* irai_msg_contents[] = {
     "irai_contents_26", "irai_contents_27", "irai_contents_28", "irai_contents_29", "irai_contents_30",
 };
 
+/** Message keys of the help text that explains a job. */
 const char* irai_msg_exposition[] = {
     "irai_help_01",
     "irai_help_02",
@@ -140,12 +146,14 @@ const char* irai_msg_exposition[] = {
     "irai_help_30",
 };
 
+/** Message keys of the confirmation prompts shown before a job is taken. */
 const char* irai_msg_kakunin[] = {
     "irai_43", "irai_44", "irai_45", "irai_46", "irai_47", "irai_48", "irai_49", "irai_50", "irai_51", "irai_52",
     "irai_53", "irai_54", "irai_55", "irai_56", "irai_57", "irai_58", "irai_59", "irai_60", "irai_61", "irai_62",
     "irai_63", "irai_64", "irai_65", "irai_66", "irai_67", "irai_68", "irai_69", "irai_70", "irai_71", "irai_72",
 };
 
+/** Message keys shown when a job has already been taken. */
 const char* irai_msg_hikiukechu[] = {
     "irai_13",
     "irai_14",
@@ -179,46 +187,57 @@ const char* irai_msg_hikiukechu[] = {
     "irai_42",
 };
 
+/** Item the player hands over to finish Trouble Center job 1: the House Key. */
 s32 irai_item_data01[] = {
     ITEM_HOUSE_KEY, -1,
 };
 
+/** Item the player hands over to finish Trouble Center job 2: the Box. */
 s32 irai_item_data02[] = {
     ITEM_BOX, -1,
 };
 
+/** Item the player hands over to finish Trouble Center job 13: the Battle Trunks. */
 s32 irai_item_data13[] = {
     ITEM_BATTLE_TRUNKS, -1,
 };
 
+/** Item the player hands over to finish Trouble Center job 16: Attack FX B. */
 s32 irai_item_data16[] = {
     ITEM_ATTACK_FX_B_KEY_ITEM, -1,
 };
 
+/** Item the player hands over to finish Trouble Center job 17: the Routing Slip. */
 s32 irai_item_data17[] = {
     ITEM_ROUTING_SLIP, -1,
 };
 
+/** Item the player hands over to finish Trouble Center job 19: the Wedding Ring. */
 s32 irai_item_data19[] = {
     ITEM_WEDDING_RING, -1,
 };
 
+/** Item the player hands over to finish Trouble Center job 23: the Wrestling Mag. */
 s32 irai_item_data23[] = {
     ITEM_WRESTLING_MAG, -1,
 };
 
+/** Item the player hands over to finish Trouble Center job 25: the Package. */
 s32 irai_item_data25[] = {
     ITEM_PACKAGE, -1,
 };
 
+/** Item the player hands over to finish Trouble Center job 29: the Present. */
 s32 irai_item_data29[] = {
     ITEM_PRESENT, -1,
 };
 
+/** Empty item list for the Trouble Center jobs that ask for no item. */
 s32 irai_item_null[] = {
     -1,
 };
 
+/** Item lists for each Trouble Center job: the items the player can hand over to finish it. */
 s32* irai_item_table[] = {
     irai_item_data01, irai_item_data02, irai_item_null, irai_item_null, irai_item_null, irai_item_null,
     irai_item_null, irai_item_null, irai_item_null, irai_item_null, irai_item_null, irai_item_null,
@@ -246,6 +265,7 @@ EVT_BEGIN(irai_start_event04)
     RETURN
 EVT_END()
 
+/** Start scripts for each Trouble Center job, run when the job is taken; most do nothing. */
 EvtWord* irai_start_event[] = {
     irai_start_event01, irai_start_event_null, irai_start_event_null, irai_start_event04, irai_start_event_null,
     irai_start_event_null, irai_start_event_null, irai_start_event_null, irai_start_event_null,
@@ -287,6 +307,7 @@ EVT_BEGIN(irai_end_event19)
 EVT_END()
 #endif
 
+/** End scripts for each Trouble Center job, run when it is finished; most do nothing. */
 EvtWord* irai_end_event[] = {
     irai_end_event01, irai_end_event_null, irai_end_event_null, irai_end_event04, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,
     irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null, irai_end_event_null,

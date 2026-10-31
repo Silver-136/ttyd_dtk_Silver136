@@ -1,3 +1,5 @@
+// Debris from a broken map object (MObjBroken); types 0-7 pick the object, one type shows the EFF_sango model.
+
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"

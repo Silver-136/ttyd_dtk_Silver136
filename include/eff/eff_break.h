@@ -1,3 +1,5 @@
+// eff_break.c: break-banner effect: effBreakEntry, effBreakMain and effBreakDisp.
+
 #pragma once
 
 #include "driver/camdrv.h"

@@ -1,3 +1,5 @@
+// Declares the battle camera work structure and camera control functions.
+
 #pragma once
 
 #include <dolphin/mtx.h>

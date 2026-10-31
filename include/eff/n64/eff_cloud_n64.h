@@ -1,3 +1,5 @@
+// eff_cloud_n64.c: Paper Mario 64 Cloud effect entry (effCloudN64Entry) and its work data (EffCloudN64Work).
+
 #pragma once
 
 #include "driver/effdrv.h"

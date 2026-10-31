@@ -1,3 +1,5 @@
+// eff_akari_charge_n64.c: Paper Mario 64 akari charge: entry effAkariChargeN64Entry and work data EffAkariChargeN64Work.
+
 #pragma once
 
 #include "driver/effdrv.h"

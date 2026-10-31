@@ -297,6 +297,10 @@ EVT_BEGIN(jon_init_evt)
     RETURN
 EVT_END()
 
+/**
+ * Enemy number for each of the 100 floors of the Pit of 100 Trials: every group of twenty floors cycles through five
+ * numbers twice and then the next five twice, so the number grows by ten every twenty floors.
+ */
 u8 enemy_100[] = {
     1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 6, 7, 8, 9, 10,
     11, 12, 13, 14, 15, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 16, 17, 18, 19, 20,
@@ -305,6 +309,10 @@ u8 enemy_100[] = {
     41, 42, 43, 44, 45, 41, 42, 43, 44, 45, 46, 47, 48, 49, 46, 47, 48, 49, 46, 51,
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Goomba that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_kuriboo[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -330,6 +338,10 @@ NpcSetupInfo npcEnt_kuriboo[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Paragoomba that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_patakuri[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -355,6 +367,10 @@ NpcSetupInfo npcEnt_patakuri[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Spania that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_hannya[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -380,6 +396,10 @@ NpcSetupInfo npcEnt_hannya[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Fuzzy that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_chorobon[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -405,6 +425,10 @@ NpcSetupInfo npcEnt_chorobon[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Bald Cleft that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_sinnosuke[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -430,6 +454,10 @@ NpcSetupInfo npcEnt_sinnosuke[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Moon Cleft that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_sinemon[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -455,6 +483,10 @@ NpcSetupInfo npcEnt_sinemon[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Koopa Troopa that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_nokonoko[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -480,6 +512,10 @@ NpcSetupInfo npcEnt_nokonoko[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Paratroopa that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_patapata[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -505,6 +541,10 @@ NpcSetupInfo npcEnt_patapata[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Buzzy Beetle that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_met[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -530,6 +570,10 @@ NpcSetupInfo npcEnt_met[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Parabuzzy that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_patamet[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -555,6 +599,10 @@ NpcSetupInfo npcEnt_patamet[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Pokey that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_sambo[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -580,6 +628,10 @@ NpcSetupInfo npcEnt_sambo[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Dull Bones that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_honenoko[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -605,6 +657,10 @@ NpcSetupInfo npcEnt_honenoko[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Dry Bones that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_karon[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -630,6 +686,10 @@ NpcSetupInfo npcEnt_karon[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Poison Puff that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_dokugassun[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -655,6 +715,10 @@ NpcSetupInfo npcEnt_dokugassun[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Pider that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_piders[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -679,6 +743,10 @@ NpcSetupInfo npcEnt_piders[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Boo that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_teresa[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -704,6 +772,10 @@ NpcSetupInfo npcEnt_teresa[] = {
     {0},
 };
 
+/**
+ * Guess: floor enemy setup of the Pit of 100 Trials for the Bob-omb species, a wandering enemy that starts a
+ * battle on contact (picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_hbom[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -729,6 +801,10 @@ NpcSetupInfo npcEnt_hbom[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Lava Bubble that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_bubble[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -754,6 +830,10 @@ NpcSetupInfo npcEnt_bubble[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Chain-Chomp that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_wanwan[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -778,6 +858,10 @@ NpcSetupInfo npcEnt_wanwan[] = {
     {0},
 };
 
+/**
+ * Guess: floor enemy setup of the Pit of 100 Trials for the Wizzerd species, a wandering enemy that starts a
+ * battle on contact (picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_mahoon[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -803,6 +887,10 @@ NpcSetupInfo npcEnt_mahoon[] = {
     {0},
 };
 
+/**
+ * Guess: floor enemy setup of the Pit of 100 Trials for the Piranha Plant species, a wandering enemy that
+ * starts a battle on contact (picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_pakkun[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -828,6 +916,10 @@ NpcSetupInfo npcEnt_pakkun[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Koopatrol that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_togenoko[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -853,6 +945,10 @@ NpcSetupInfo npcEnt_togenoko[] = {
     {0},
 };
 
+/**
+ * Guess: floor enemy setup of the Pit of 100 Trials for the Swooper species, a wandering enemy that starts a
+ * battle on contact (picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_basabasa2[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -878,6 +974,10 @@ NpcSetupInfo npcEnt_basabasa2[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Bristle that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_togedaruma[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -903,6 +1003,10 @@ NpcSetupInfo npcEnt_togedaruma[] = {
     {0},
 };
 
+/**
+ * Floor enemy setup of the Pit of 100 Trials: a wandering Crazee Dayzee that starts a battle on contact
+ * (the species picked by enemy_info from enemy_100).
+ */
 NpcSetupInfo npcEnt_pansy[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -928,6 +1032,10 @@ NpcSetupInfo npcEnt_pansy[] = {
     {0},
 };
 
+/**
+ * Setup of Bonetail, the boss of floor 100 of the Pit of 100 Trials; his first appearance runs
+ * zonbaba_first_event.
+ */
 NpcSetupInfo npcEnt_zonbaba[] = {
     {
         /*"敵"*/"\x93\x47", // name
@@ -1279,6 +1387,10 @@ EVT_BEGIN(enemy_setup)
     RETURN
 EVT_END()
 
+/**
+ * Item ids of the rest-room chest rewards in the Pit of 100 Trials, one for every tenth floor
+ * (read by evt_open_box).
+ */
 s32 treasure_tbl[] = {
     245, 252, 287, 306, 1, 254, 255, 322,
     303, 291,
@@ -1433,6 +1545,10 @@ EVT_BEGIN(talk_idouya)
     RETURN
 EVT_END()
 
+/**
+ * The mover (idouya) that stands at the rest rooms and warps Mario to floors he has already reached;
+ * talk_idouya handles the conversation.
+ */
 NpcSetupInfo npcEnt_idouya[] = {
     {
         /*"移動屋"*/"\x88\xDA\x93\xAE\x89\xAE", // name
@@ -1568,6 +1684,10 @@ EVT_BEGIN(talk_gyousyou)
     RETURN
 EVT_END()
 
+/**
+ * The traveling trader (gyousyou) of the Pit of 100 Trials, who sells items to Mario; talk_gyousyou runs the
+ * shop.
+ */
 NpcSetupInfo npcEnt_gyousyou[] = {
     {
         /*"行商人"*/"\x8D\x73\x8F\xA4\x90\x6C", // name
@@ -1758,6 +1878,10 @@ EVT_BEGIN(floor_clear)
     RETURN
 EVT_END()
 
+/**
+ * Pipes of floor 100: the entrance pipe at the top (dokan_2, filled in by script) and the exit pipe to
+ * Rogueport (tik_06).
+ */
 BeroEntry bero_boss[] = {
     {
         "dokan_2", // hitName
@@ -1805,6 +1929,10 @@ EVT_BEGIN(setup_boss)
     RETURN
 EVT_END()
 
+/**
+ * Pipes of a rest-room floor: the entrance above (dokan_2, set by script), the exit to Rogueport (tik_06)
+ * and the pipe down to the next floor map (jon_00).
+ */
 BeroEntry bero_return[] = {
     {
         "dokan_2", // hitName
@@ -1858,6 +1986,7 @@ BeroEntry bero_return[] = {
     {0},
 };
 
+/** Replacement for the rest-room floor pipe down (dokan_3) from floor 50 on: it leads to jon_01. */
 BeroEntry bero_return2[] = {
     {
         "dokan_3", // hitName
@@ -1879,6 +2008,7 @@ BeroEntry bero_return2[] = {
     {0},
 };
 
+/** Replacement for the rest-room floor pipe down (dokan_3) from floor 70 on: it leads to jon_02. */
 BeroEntry bero_return3[] = {
     {
         "dokan_3", // hitName
@@ -1954,6 +2084,10 @@ EVT_BEGIN(setup_return)
     RETURN
 EVT_END()
 
+/**
+ * Pipes of the floor before a rest room: the entrance above (dokan_2, set by script) and the pipe down to
+ * jon_03.
+ */
 BeroEntry bero_prev_return[] = {
     {
         "dokan_2", // hitName
@@ -1990,6 +2124,7 @@ BeroEntry bero_prev_return[] = {
     {0},
 };
 
+/** Replacement for the pipe down (dokan_1) of the floor before a rest room in the 50s: it leads to jon_04. */
 BeroEntry bero_prev_return2[] = {
     {
         "dokan_1", // hitName
@@ -2011,6 +2146,9 @@ BeroEntry bero_prev_return2[] = {
     {0},
 };
 
+/**
+ * Replacement for the pipe down (dokan_1) of the floor before a rest room from the 70s: it leads to jon_05.
+ */
 BeroEntry bero_prev_return3[] = {
     {
         "dokan_1", // hitName
@@ -2032,6 +2170,9 @@ BeroEntry bero_prev_return3[] = {
     {0},
 };
 
+/**
+ * Replacement for the pipe down (dokan_1) of the floor before a rest room from the 90s: it leads to jon_06.
+ */
 BeroEntry bero_prev_return4[] = {
     {
         "dokan_1", // hitName
@@ -2088,6 +2229,7 @@ EVT_BEGIN(setup_prev_return)
     RETURN
 EVT_END()
 
+/** Pipes of an ordinary floor: the entrance above (dokan_2, set by script) and the pipe down to jon_00. */
 BeroEntry bero_normal[] = {
     {
         "dokan_2", // hitName
@@ -2124,6 +2266,7 @@ BeroEntry bero_normal[] = {
     {0},
 };
 
+/** Replacement for the pipe down (dokan_1) of an ordinary floor from floor 50 on: it leads to jon_01. */
 BeroEntry bero_normal2[] = {
     {
         "dokan_1", // hitName
@@ -2145,6 +2288,7 @@ BeroEntry bero_normal2[] = {
     {0},
 };
 
+/** Replacement for the pipe down (dokan_1) of an ordinary floor from floor 70 on: it leads to jon_02. */
 BeroEntry bero_normal3[] = {
     {
         "dokan_1", // hitName

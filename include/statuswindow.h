@@ -1,3 +1,5 @@
+// statuswindow.c: the field HUD of HP, FP, star power, coins and star points (StatusWindowWork).
+
 #pragma once
 
 #include <dolphin/mtx.h>

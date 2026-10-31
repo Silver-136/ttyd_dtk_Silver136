@@ -1,3 +1,5 @@
+// eff_sheep.c: sheep herd effect entry (effSheepEntry).
+
 #pragma once
 
 #include "driver/effdrv.h"

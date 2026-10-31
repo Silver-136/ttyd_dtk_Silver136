@@ -1,3 +1,5 @@
+// win_root.c: the pause menu root (tabs, help text, sort menu, shared frames) and the list sort comparers.
+
 #pragma once
 
 #include "dolphin/types.h"

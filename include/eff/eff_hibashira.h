@@ -1,3 +1,5 @@
+// eff_hibashira.c: fire-pillar effect: effHibashiraEntry, effHibashiraMain and effHibashiraDisp.
+
 #pragma once
 
 #include "driver/camdrv.h"

@@ -250,6 +250,7 @@ static EVT_BEGIN(sanders_init)
     RETURN
 EVT_END()
 
+/** Items the player may offer Bobbery in the Chuckola Cola scene: the Chuckola Cola only, ended by -1. */
 static s32 itemsel_table01[] = {
     ITEM_CHUCKOLA_COLA, -1,
 };
@@ -411,6 +412,7 @@ EVT_BEGIN(erumosu_b_dead)
     RETURN
 EVT_END()
 
+/** NPCs of the skull rock before the Embers are beaten: Bobbery, Flavio and the two Embers. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58", // name
@@ -473,6 +475,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** NPCs of the skull rock once the Embers have been beaten: Bobbery and Flavio. */
 NpcSetupInfo npcEnt_after[] = {
     {
         /*"サンダース"*/"\x83\x54\x83\x93\x83\x5F\x81\x5B\x83\x58", // name
@@ -501,6 +504,7 @@ NpcSetupInfo npcEnt_after[] = {
     {0},
 };
 
+/** Doors and exits of muj_05: w_bero to muj_04; e_bero to dou_00 (Pirate's Grotto). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -758,10 +762,12 @@ EVT_BEGIN(dokuroiwa_flush)
     RETURN
 EVT_END()
 
+/** The correct sequence of the seven eye strikes on the skull rock, in order. */
 s32 command_seikai[] = {
     2, 2, 2, 1, 1, 1, 1,
 };
 
+/** Items the player may offer at the skull rock: the Skull Gem only, ended by -1. */
 static s32 itemsel_table[] = {
     ITEM_SKULL_GEM, -1,
 };
@@ -1367,6 +1373,7 @@ static EVT_BEGIN(evt_kusa_1)
     RETURN
 EVT_END()
 
+/** Trees of muj_05 that Mario can shake with his hammer (5 in all). */
 static TreeAccess tree_tbl[] = {
     {5, "A_treeA_01", "treeA_01_m", "treeA_01_ha", 0, NULL},
     {5, "A_treeA_02", "treeA_02_m", "treeA_02_ha", 0, NULL},
@@ -1376,6 +1383,7 @@ static TreeAccess tree_tbl[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/** Bushes of muj_05 that Mario can check for hidden things (7 in all); A_kuwa_move_01 runs evt_kusa_1. */
 static KusaAccess kusa_tbl[] = {
     {1, "A_kuwa_move_01", "S_kuwa_move_01", evt_kusa_1},
     {1, "A_kuwa_move_02", "S_kuwa_move_02", NULL},

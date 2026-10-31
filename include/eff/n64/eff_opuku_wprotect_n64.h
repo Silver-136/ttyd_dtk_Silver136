@@ -1,3 +1,5 @@
+// eff_opuku_wprotect_n64.c: water-protect effect entry (effOpukuWprotectN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

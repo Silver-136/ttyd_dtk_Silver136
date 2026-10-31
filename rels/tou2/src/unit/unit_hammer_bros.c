@@ -1,3 +1,5 @@
+// unit_hammer_bros: Hammer Bro, battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_camera.h"
@@ -108,6 +110,10 @@ static USER_FUNC(hammer_bros_nagemakuri_set_target) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of the Hammer Bro: 7 HP and level 26, with its parts, status vulnerability, init event and
+ * event data table.
+ */
 BattleUnitKind unit_hammer_bros = {
     UNIT_HAMMER_BRO, // mUnitType
     "btl_un_hammer_bros", // name
@@ -156,8 +162,10 @@ BattleUnitKind unit_hammer_bros = {
     data_table, // dataTable
 };
 
+/** Defense of the Hammer Bro against normal, fire, ice, explosion and electric attacks: 1, 1, 1, 1, 1. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Damage-type reactions of the Hammer Bro: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -206,10 +214,18 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "BRO_S_1"},
 };
 
+/**
+ * Event data table of the Hammer Bro: no custom reactions, so the standard battle handlers run for every
+ * event.
+ */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Parts of the Hammer Bro: 6 parts: parts 1 to 6 (model c_burosu_h), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_hammer_bros", "c_burosu_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_hammer_bros", "c_burosu_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -219,6 +235,7 @@ static BattleUnitKindPart parts[] = {
     {6, "btl_un_hammer_bros", "c_burosu_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon record of the Hammer Bro's hammer throw: 4 damage and counts as a jump-type hit. */
 static BattleWeapon weapon_hammer_bros_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -255,6 +272,7 @@ static BattleWeapon weapon_hammer_bros_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon record of the Hammer Bro's rapid-fire hammer throws: 2 damage and counts as a jump-type hit. */
 static BattleWeapon weapon_hammer_bros_renzoku_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -291,6 +309,10 @@ static BattleWeapon weapon_hammer_bros_renzoku_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon record of the Hammer Bro's hammer barrage on the whole party: 2 damage, counts as a jump-type hit
+ * and can hit several targets.
+ */
 static BattleWeapon weapon_hammer_bros_nagemakuri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

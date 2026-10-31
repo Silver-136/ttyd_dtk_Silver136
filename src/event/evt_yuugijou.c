@@ -1,3 +1,5 @@
+// Script commands for the Pianta Parlor (yuugijou): minigame windows, Piantas and records.
+
 #include "icon_ids.h"
 #include "evt/evt_yuugijou.h"
 #include "evt/evt_cmd.h"

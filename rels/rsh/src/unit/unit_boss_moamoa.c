@@ -1,3 +1,5 @@
+// Smorg (moamoa): boss battle unit, the main body, used on the Excess Express.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -166,6 +168,10 @@ void moamoa_mainUnitIdClear(void) {
     wp->unitId = -1;
 }
 
+/**
+ * Unit kind of the Smorg (HP 50, level 78): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_boss_moamoa = {
     UNIT_SMORG, // mUnitType
     "btl_un_moamoa", // name
@@ -214,16 +220,29 @@ BattleUnitKind unit_boss_moamoa = {
     data_table, // dataTable
 };
 
+/** Defence of the Smorg: 2 damage points off every hit. */
 BattleUnitDefense moamoa_defence = {{2, 2, 2, 2, 2}};
 
+/**
+ * Empty defence table (all zeros) given to a tentacle's or mouth's part so it takes damage as normal
+ * while the arms are out.
+ */
 s32 moamoa_defence_no_parts[] = {
     0, 0,
 };
 
+/** Defence of the Smorg: 1 damage points off every hit. */
 BattleUnitDefense moamoa2_defence = {{1, 1, 1, 1, 1}};
 
+/** Element reactions of the Smorg: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Smorg (percent chance to take each status):
+ * immune to sleep, stop, dizzy, poison, confusion, electric shock, burn, freeze, growing huge, shrinking,
+ * attack up, attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
+ * invisibility and instant kill.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -263,11 +282,13 @@ PoseTableEntry moamoa1_weakness_pose_table[] = {
     {POSE_TYPE_ACTION, "S_1_3"},
 };
 
+/** Data table of the Smorg: event handlers for being defeated. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Body part of the Smorg (model c_g_moamoa_b): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {
         1, "btl_un_moamoa", "c_g_moamoa_b",
@@ -280,6 +301,9 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/**
+ * Spawn setup for Smorg's tentacle A: starts off-screen on the enemy side; the main body moves it into place.
+ */
 BattleUnitSetup entry_boss_moamoa_tentacle_a = {
     &unit_boss_moamoa_tentacle_a, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -291,6 +315,9 @@ BattleUnitSetup entry_boss_moamoa_tentacle_a = {
     NULL, // itemDropTable
 };
 
+/**
+ * Spawn setup for Smorg's tentacle B: starts off-screen on the enemy side; the main body moves it into place.
+ */
 BattleUnitSetup entry_boss_moamoa_tentacle_b = {
     &unit_boss_moamoa_tentacle_b, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -302,6 +329,9 @@ BattleUnitSetup entry_boss_moamoa_tentacle_b = {
     NULL, // itemDropTable
 };
 
+/**
+ * Spawn setup for Smorg's tentacle C: starts off-screen on the enemy side; the main body moves it into place.
+ */
 BattleUnitSetup entry_boss_moamoa_tentacle_c = {
     &unit_boss_moamoa_tentacle_c, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -313,6 +343,10 @@ BattleUnitSetup entry_boss_moamoa_tentacle_c = {
     NULL, // itemDropTable
 };
 
+/**
+ * Spawn setup for Smorg's mouth: starts off-screen on the enemy side;
+ * the main body moves it onto its own position.
+ */
 BattleUnitSetup entry_boss_moamoa_mouth = {
     &unit_boss_moamoa_mouth, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -324,6 +358,7 @@ BattleUnitSetup entry_boss_moamoa_mouth = {
     NULL, // itemDropTable
 };
 
+/** Weapon of the Smorg's tsunami: 0 damage. */
 BattleWeapon weapon_moamoa_tsunami_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -456,6 +491,10 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/**
+ * Animation names (S_1_2, then L_1_4; NULL separates steps) Smorg's body plays, in order,
+ * when it leaves its first form.
+ */
 const char* MOAMOA_TAIJOU[] = {
     "S_1_2",
     NULL,
@@ -563,6 +602,9 @@ static EVT_BEGIN(dead_event)
     RETURN
 EVT_END()
 
+/**
+ * Animation names (L_2_1 to L_2_5, then S_2) Smorg's body plays in order while it changes into its second form.
+ */
 const char* moamoa2_change_tbl[] = {
     "L_2_1",
     "L_2_3",
@@ -756,6 +798,7 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/** Animation and bone data for each of the 89 swarm segments that make up Smorg's body. */
 static ExtTexInfo ext_moamoa_data[] = {
     {"c_n_moa_a", "S_1", 0.0f},
     {"c_n_moa_a", "S_1", 2.0f},

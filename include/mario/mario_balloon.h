@@ -1,3 +1,5 @@
+// mario_balloon.c: the "!" / "?" balloon over Mario's head (marioBalloonOn/Off/Main, chkBalloon).
+
 #pragma once
 
 #include "dolphin/types.h"

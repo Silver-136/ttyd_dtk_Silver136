@@ -42,6 +42,10 @@ static ShopObj obj_list[] = {
     {"S_item_06", "A_item_06"},
 };
 
+/**
+ * What the Puni clerk sells and at what price in coins: HP Drain item, Ice Storm, Mystery, Mini Mr. Mini,
+ * Honey Syrup and Mushroom.
+ */
 static ShopItem goods_list[] = {
     {ITEM_HP_DRAIN_ITEM, 10},
     {ITEM_ICE_STORM, 15},
@@ -51,6 +55,7 @@ static ShopItem goods_list[] = {
     {ITEM_MUSHROOM, 3},
 };
 
+/** What the clerk buys from Mario and at what price (the trade-in list of the shop). */
 static ShopDb trade_list[] = {
     {ITEM_HP_DRAIN_ITEM, 5, 0},
     {ITEM_ICE_STORM, 7, 0},
@@ -260,6 +265,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Exit of mri_07: east road e_bero to mri_06 (w_bero). */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName

@@ -1,3 +1,5 @@
+// Mario's tube (roll) motion: rolling up, moving through small gaps and unrolling.
+
 #pragma defer_codegen on
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
@@ -35,6 +37,10 @@ f32 roll_grz;
 s32 roll_flyout_flag2;
 static __declspec(section ".rodata") Vec rollOfs = {0.0f, 40.0f, 0.0f};
 
+/**
+ * Tuning values of Mario's paper tube rolling: top speed, slowing, the slope push (180 or 140
+ * by which way he rolls across the tilt), and the speed factor on slopes.
+ */
 f32 rollData[] = {3.0f, -0.05f, -0.5f, 0.5f, 7.0f, 180.0f, 140.0f, 10.0f, 1.2f, 2.0f, 0.8f};
 
 /** Truncates x to one decimal place (toward zero). */

@@ -195,6 +195,7 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
+/** Exit of this room: the west door to aji_01. */
 static BeroEntry bero_entry_data[] = {
     {
         ("w_bero"), // hitName
@@ -998,11 +999,16 @@ static EVT_BEGIN(peach_evt_stg1)
     RETURN
 EVT_END()
 
+/**
+ * Lighting and camera setup for drawing the hologram dancer: ambient colour, camera position, up direction
+ * and look-at point.
+ */
 static const GXColor horogram_amb = {0xFF, 0xFF, 0xFF, 0xFF};
 static const Vec horogram_pos = {0.0f, 0.0f, 20.0f};
 static const Vec horogram_up = {0.0f, 1.0f, 0.0f};
 static const Vec horogram_target = {0.0f, 0.0f, 0.0f};
 
+/** The 15 points of a circle (radius about 110) that the dance partner steps around, one per beat. */
 f32 move_pos_list[15][2] = {
     {0.0f, -80.0f},
     {39.37592f, -74.69887f},
@@ -2069,6 +2075,10 @@ static EVT_BEGIN(peach_evt_stg3_1)
     RETURN
 EVT_END()
 
+/**
+ * TEC's quiz in Peach's chapter 4 scene: five questions, each with its lead-in message, the question, the
+ * answer menu and the number of the right answer.
+ */
 EvtWord peach_evt_stg4_quiz_data[5][4] = {
     (EvtWord)("peach_aji_174"), (EvtWord)("peach_aji_175"), (EvtWord)("peach_aji_175_sel"), 1, (EvtWord)("peach_aji_178"), (EvtWord)("peach_aji_179"), (EvtWord)("peach_aji_179_sel"), 0,
     (EvtWord)("peach_aji_180"), (EvtWord)("peach_aji_181"), (EvtWord)("peach_aji_183_sel"), 2, (EvtWord)("peach_aji_184"), (EvtWord)("peach_aji_185"), (EvtWord)("peach_aji_185_sel"), 1,
@@ -2978,6 +2988,7 @@ static EVT_BEGIN(syuryo_init)
     RETURN
 EVT_END()
 
+/** Cast of TEC's room besides TEC: two X-Naut underlings and Sir Grodus. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"手下１"*/"\216\350\211\272\202P", // name
@@ -3685,6 +3696,7 @@ s32 evt_fuki_btn_set_batu(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
+/** Suffix added to a pose name to get the matching pose of the mirrored hologram. */
 static const char horogram_pose_suffix[] = "R";
 /**
  * Script function: sets the pose args[0] on the hologram NPC

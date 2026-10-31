@@ -1,3 +1,5 @@
+// Declares the per-kind audience item and animation data structures.
+
 #pragma once
 
 #include "mario/mario_pouch.h"

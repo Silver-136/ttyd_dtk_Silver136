@@ -1,3 +1,5 @@
+// win_log.c: the pause menu journal window (logs and the tattle log): winLogInit/Main/Disp.
+
 #pragma once
 
 #include "dolphin/types.h"

@@ -1,3 +1,5 @@
+// Hooktail Castle (gon) battle setups: enemy groups, battle stages and the field-battle tables for the area's maps.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_weapon_power.h"
@@ -73,6 +75,10 @@ NpcBattleSelect btlgrpsel_gon_btlno_gon_11_01_off[2];
 NpcSetupBattleInfo btlsetup_gon_tbl[22];
 NpcTerritoryInfo btl_gon_setup_no_tbl[22];
 
+/**
+ * Props of the Hooktail Castle battle stage: each entry names a model of the backdrop and where it stands,
+ * the last entries being the background layers.
+ */
 BattleStageObjectData gon_btlobject_data[] = {
     {"B", 2, 2, {0}, 0, 60, {0}},
     {"C", 2, 3, {0}, 0, 60, {0}},
@@ -86,6 +92,10 @@ BattleStageObjectData gon_btlobject_data[] = {
     {"C", 2, 3, {0}, 0, 60, {0}},
 };
 
+/**
+ * Battle stage of Hooktail Castle: the stage model directories, the props above, the backdrop weapons and the
+ * background event that runs during the fight.
+ */
 BattleStageData gon_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -1850,6 +1860,10 @@ NpcBattleSelect btlgrpsel_gon_btlno_gon_11_01_off[] = {
     {0},
 };
 
+/**
+ * Field battle setups of Hooktail Castle: one entry per battle id in btl_gon_setup_no_tbl, giving the stage,
+ * the group selection and the battle music.
+ */
 NpcSetupBattleInfo btlsetup_gon_tbl[] = {
     {
         /*"マップstg_01_03"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x31\x5F\x30\x33", // name

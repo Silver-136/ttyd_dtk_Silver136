@@ -1,3 +1,6 @@
+// Spike flash (toge: spike): a flash that expands and fades with a pulsing glow behind it;
+// types 0-4 pick the color (0 cycles colors, 1 and 3 red, 2 blue, 4 white).
+
 #include "eff/eff_toge_flush.h"
 #include "driver/dispdrv.h"
 #include "mario/mariost.h"
@@ -21,6 +24,10 @@ typedef struct EffTogeFlushWork {
     s32 age;        // 0x30
 } EffTogeFlushWork;
 
+/**
+ * Colours the type 0 flash cycles through, one per frame: pale yellow, gold, cream, gold,
+ * two frames each.
+ */
 static u8 color_rotation_data[24] = {
     0xFF, 0xFF, 0x52, 0xFF, 0xFF, 0x52, 0xB5, 0x94, 0x00, 0xB5, 0x94, 0x00,
     0xFF, 0xFF, 0xD6, 0xFF, 0xFF, 0xD6, 0xB5, 0x94, 0x00, 0xB5, 0x94, 0x00,

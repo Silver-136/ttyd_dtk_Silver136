@@ -1,3 +1,5 @@
+// Declares the battle drawing helpers.
+
 #pragma once
 
 #include <dolphin/mtx.h>

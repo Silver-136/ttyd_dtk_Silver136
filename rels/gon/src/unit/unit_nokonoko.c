@@ -1,3 +1,5 @@
+// Koopa Troopa (nokonoko): battle unit used in Hooktail Castle.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -33,6 +35,7 @@ static EvtWord first_attack_event[302];
 static EvtWord attack_event[548];
 static EvtWord wait_event[6];
 
+/** Unit data of the Koopa Troopa: 4 HP, level 8; the battle starts it from init_event. */
 BattleUnitKind unit_nokonoko = {
     UNIT_KOOPA_TROOPA, // mUnitType
     "btl_un_nokonoko", // name
@@ -81,6 +84,9 @@ BattleUnitKind unit_nokonoko = {
     data_table, // dataTable
 };
 
+/**
+ * Pose table of the Koopa Troopa: the animation each battle pose (idle, hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "NKT_N_1"},
     {POSE_TYPE_STOP, "NKT_Y_1"},
@@ -102,6 +108,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "NKT_S_1"},
 };
 
+/**
+ * Pose table of the Koopa Troopa while it lies flipped on its back: the animation each battle pose (idle,
+ * hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "NKT_N_2"},
     {POSE_TYPE_STOP, "NKT_B_1"},
@@ -122,16 +132,23 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "NKT_S_2"},
 };
 
+/**
+ * Event table of the Koopa Troopa: being flipped onto its back (dmg_turn_event, tag 13) and the First Strike
+ * reaction (does nothing).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Defence of the Koopa Troopa: 1 against every element. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Elemental reactions of the Koopa Troopa: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Defence of the Koopa Troopa while it lies flipped on its back: none against any element. */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -159,6 +176,7 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/** Body part of the Koopa Troopa (shelled), model c_nokoteki: its one target part. */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -178,6 +196,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon data for the Koopa Troopa's shell attack: 2 damage, a hammer-type hit, one target. */
 static BattleWeapon weapon_nokonoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

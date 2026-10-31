@@ -1,3 +1,5 @@
+// unit_iron_sinemon2: Iron Cleft, the green one of the Glitz Pit pair (unit_iron_sinemon is the red one), battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -42,6 +44,10 @@ static EvtWord phase_event[188];
 static EvtWord attack_event[385];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Iron Cleft: 6 HP and level 18, with its parts, status vulnerability, init event and
+ * event data table.
+ */
 BattleUnitKind unit_iron_sinemon2 = {
     UNIT_IRON_CLEFT_GREEN, // mUnitType
     "btl_un_iron_sinemon2", // name
@@ -90,12 +96,29 @@ BattleUnitKind unit_iron_sinemon2 = {
     data_table, // dataTable
 };
 
+/**
+ * Defense of the Iron Cleft against normal, fire, ice, explosion and electric attacks: none, so it takes
+ * full damage from every element.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage-type reactions of the Iron Cleft: immune to normal, fire, ice, explosion and electric unless the
+ * attack pierces.
+ */
 static BattleUnitDefenseAttr defence_attr = {{4, 4, 4, 4, 4}};
 
+/**
+ * Defense of the Iron Cleft against normal, fire, ice, explosion and electric attacks while it is flipped
+ * onto its back: none, so it takes full damage from every element.
+ */
 static BattleUnitDefense defence_turn = {0};
 
+/**
+ * Status vulnerability of the Iron Cleft, as the percent chance each status takes hold: immune to sleep,
+ * stop, dizziness, poison, confusion, shock, burn, freeze, Huge, Tiny, Attack Up, Attack Down, Defense Up,
+ * Defense Down, allergy, Fright, Gale Force, Fast, Slow, Dodgy, Invisible and instant KO.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -121,10 +144,15 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/**
+ * Parts of the Iron Cleft: a single body part (part 1, model c_sinemon_m), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_iron_sinemon2", "c_sinemon_m", 0.0f, 0.0f, 0.0f, 0.0f, 37.0f, 0.0f, 0.0f, 45.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
+/** Weapon record of the Iron Cleft's charge: 4 damage, counts as a hammer-type hit and ignores Defense. */
 static BattleWeapon weapon_iron_sinemon_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -186,6 +214,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "SIN_S_1"},
 };
 
+/**
+ * Event data table of the Iron Cleft: scripts that replace the standard handling for an attacker being
+ * hurt by its spiked head (tag 37).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},

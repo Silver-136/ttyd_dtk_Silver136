@@ -1,3 +1,5 @@
+// eff_packn_bfire_n64.c: Piranha Plant (packn) fire-breath effect entry (effPacknBfireN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

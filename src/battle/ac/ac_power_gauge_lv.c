@@ -1,3 +1,5 @@
+// Action command: power gauge with levels (ac_power_gauge_lv); the gauge fill is graded into success levels.
+
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
 #include "battle/battle_pad.h"

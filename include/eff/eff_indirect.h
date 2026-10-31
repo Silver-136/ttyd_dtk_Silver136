@@ -1,3 +1,5 @@
+// eff_indirect.c: screen-distortion effect: effIndirectEntry, effIndirectMain and effIndirectDisp.
+
 #pragma once
 
 #include "driver/camdrv.h"

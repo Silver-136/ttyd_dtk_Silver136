@@ -1,3 +1,5 @@
+// Maya-exported effect animation keys: MayaHermitChannel (one Hermite channel) and MayaHermitKey (22 channels).
+
 #pragma once
 
 #include <dolphin/types.h>

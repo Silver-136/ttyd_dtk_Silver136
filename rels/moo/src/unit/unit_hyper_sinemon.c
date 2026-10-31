@@ -31,6 +31,10 @@ static EvtWord wakeup_event[104];
 static EvtWord attack_event[595];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Hyper Cleft; ties together its sounds, parts, status vulnerability, init event
+ * and event table.
+ */
 static BattleUnitKind unit_hyper_sinemon = {
     UNIT_HYPER_CLEFT, // mUnitType
     "btl_un_hyper_sinemon", // name
@@ -78,6 +82,10 @@ static BattleUnitKind unit_hyper_sinemon = {
 
 static BattleUnitDefense defence = {{3, 99, 3, 3, 3}};
 
+/**
+ * Defence of the Hyper Cleft while it is flipped over onto its back: 0
+ * against every kind of hit (set by dmg_turn_event).
+ */
 static BattleUnitDefense defence_turn = {0};
 
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 0, 0}};
@@ -107,6 +115,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Parts of the Hyper Cleft: 1 part (model c_sinemon_h). */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -126,6 +135,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon of the Hyper Cleft (attack): targets one unit for 3 damage; used by attack_event. */
 static BattleWeapon weapon_sinemon_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -162,6 +172,7 @@ static BattleWeapon weapon_sinemon_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Hyper Cleft (charge): targets one unit; used by attack_event. */
 static BattleWeapon weapon_sinemon_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -218,6 +229,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "SIN_S_1"},
 };
 
+/** Poses of the Hyper Cleft while it lies flipped over on its back (set by dmg_turn_event). */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "SIN_N_2"},
     {POSE_TYPE_STOP, "SIN_Y_2"},
@@ -236,6 +248,7 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "SIN_D_2"},
 };
 
+/** Event table of the Hyper Cleft: dmg_turn_event (tag 13), dmg_avoid_counter_thorn_head_event (tag 37). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},

@@ -1,3 +1,5 @@
+// eff_teresa.c: Boo vanish effect entry (effTeresaEntry) with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

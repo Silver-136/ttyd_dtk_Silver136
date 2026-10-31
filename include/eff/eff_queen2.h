@@ -1,3 +1,5 @@
+// eff_queen2.c: Shadow Queen charge-up effect entry (effQueen2Entry) with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

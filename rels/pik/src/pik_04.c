@@ -95,6 +95,7 @@ static EvtWord epilogue_evt_sub[91];
 static EvtWord epilogue_evt[63];
 EvtWord pik_04_init_evt[166];
 
+/** Doors and exits of pik_04: nw_bero to pik_00; se_bero to pik_01. */
 static BeroEntry bero_data[] = {
     {
         "nw_bero", // hitName
@@ -205,6 +206,7 @@ static EVT_BEGIN(door_1_close)
     RETURN
 EVT_END()
 
+/** Door of the house at ie_3: the outer door, its hit areas and the inside room. */
 static DoorParam door_1 = {
     0, // flags
     1, // type
@@ -281,6 +283,7 @@ static EVT_BEGIN(door_2_close)
     RETURN
 EVT_END()
 
+/** Door of the hotel: the outer door, its hit areas and the inside room. */
 static DoorParam door_2 = {
     0, // flags
     3, // type
@@ -916,6 +919,10 @@ EVT_BEGIN(evt_kinopio_from_bed)
     RETURN
 EVT_END()
 
+/**
+ * Inn data of the hotel: the price of a night, the bed, the bedside and camera positions, the clerk and the
+ * 14 inn messages.
+ */
 static KinopioData kino_dt = {
     221, // breakfastItem
     {360.0f, 33.0f, -235.0f}, // breakfastPos

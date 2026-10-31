@@ -19,6 +19,7 @@ static BeroEntry bero_entry_data[2];
 static EvtWord item_evt[68];
 EvtWord mri_10_init_evt[100];
 
+/** Exit of mri_10: south road s_bero to mri_09 (n_bero). */
 static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName

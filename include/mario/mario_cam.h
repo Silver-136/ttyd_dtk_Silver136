@@ -1,3 +1,5 @@
+// mario_cam.c: the field camera that follows Mario (marioCamMain, marioUpdateCam, zoom and follow-rate controls).
+
 #pragma once
 
 #include <dolphin/types.h>

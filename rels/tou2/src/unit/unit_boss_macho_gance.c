@@ -1,3 +1,5 @@
+// unit_boss_macho_gance: Macho Grubba, boss, battle unit.
+
 #include "system.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -77,6 +79,10 @@ EvtWord gance_rariat_attack_attack_event[446];
 EvtWord gance_body_attack_attack_event[515];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Macho Grubba (HP 60, level 70):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 BattleUnitKind unit_boss_macho_gance = {
     UNIT_MACHO_GRUBBA, // mUnitType
     "btl_un_macho_gance", // name
@@ -125,10 +131,16 @@ BattleUnitKind unit_boss_macho_gance = {
     data_table, // dataTable
 };
 
+/** Defence of the Macho Grubba: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Macho Grubba: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Macho Grubba (percent chance to take each status):
+ * immune to growing huge, fright, gale force and instant kill; resists most other statuses.
+ */
 static StatusVulnerability regist = {
     50, // sleep
     40, // stop
@@ -196,6 +208,10 @@ static PoseTableEntry pose_table_furafura[] = {
     {POSE_TYPE_ACTION, "X_1"},
 };
 
+/**
+ * Data table of the Macho Grubba: event handlers for the counter-hit reactions (tags 25-36),
+ * its damage reaction and being defeated.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_COUNTER_SUPERGUARD_EVENT, macho_gance_damage_event},
@@ -214,10 +230,12 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of the Macho Grubba (model c_m_gansu): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_macho_gance", "c_m_gansu", 0.0f, 0.0f, 0.0f, 26.0f, 77.0f, 0.0f, 25.0f, 81.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of Macho Grubba's Macho Speed (shout stg3_tou_471_01): no HP damage; Fast for 4 turns on himself. */
 BattleWeapon weapon_gance_macho_speed = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -255,6 +273,7 @@ BattleWeapon weapon_gance_macho_speed = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Macho Grubba's Macho build-up (shout stg3_tou_471_03): no HP damage; attack +3 for 1 turn. */
 BattleWeapon weapon_gance_build_up = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -293,6 +312,7 @@ BattleWeapon weapon_gance_build_up = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Macho Grubba's Macho Body (shout stg3_tou_471_05): no HP damage; defence +3 for 2 turns. */
 BattleWeapon weapon_gance_body = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -332,6 +352,7 @@ BattleWeapon weapon_gance_body = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Macho Grubba's Macho Footwork (shout stg3_tou_471_07): no HP damage; Dodgy for 2 turns. */
 BattleWeapon weapon_gance_footwork = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -369,6 +390,7 @@ BattleWeapon weapon_gance_footwork = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Macho Grubba's hip drop: 4 damage, jump-type contact attack. */
 BattleWeapon weapon_gance_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -405,6 +427,7 @@ BattleWeapon weapon_gance_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Macho Grubba's Macho charge (named posing in the code; shout stg3_tou_471_09): charge +4. */
 BattleWeapon weapon_gance_posing = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -441,6 +464,7 @@ BattleWeapon weapon_gance_posing = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Macho Grubba's lariat: 4 damage. */
 BattleWeapon weapon_gance_rariat_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -477,6 +501,7 @@ BattleWeapon weapon_gance_rariat_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Macho Grubba's Macho Body Press (shout stg3_tou_471_13): 4 damage, jump-type contact attack. */
 BattleWeapon weapon_gance_body_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

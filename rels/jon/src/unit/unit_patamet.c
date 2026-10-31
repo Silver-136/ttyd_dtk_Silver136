@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Parabuzzy (`patamet`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -60,6 +62,7 @@ static EvtWord ceil_fall_ready_event[158];
 static EvtWord attack_event_ceil[467];
 static EvtWord wait_event_ceil[6];
 
+/** Unit data of the Parabuzzy: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_patamet = {
     UNIT_PARABUZZY, // mUnitType
     "btl_un_patamet", // name
@@ -108,6 +111,7 @@ BattleUnitKind unit_patamet = {
     data_table_pata, // dataTable
 };
 
+/** Attack data for the Parabuzzy's dive from the air: 3 damage. */
 static BattleWeapon weapon_patamet_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -144,8 +148,13 @@ static BattleWeapon weapon_patamet_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of the Parabuzzy while it still has its wings: 4 against normal, ice and electric hits;
+ * immune to fire and explosions (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence_pata = {{4, 99, 4, 99, 4}};
 
+/** Element response of the Parabuzzy, flying form: it is immune to fire and explosions. */
 static BattleUnitDefenseAttr defence_attr_pata = {{0, 2, 0, 2, 0}};
 
 static StatusVulnerability regist_pata = {
@@ -173,6 +182,7 @@ static StatusVulnerability regist_pata = {
     95, // ohko
 };
 
+/** Pose table of the Parabuzzy, flying form: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_pata[] = {
     {POSE_TYPE_SLEEP, "PMT_N_1"},
     {POSE_TYPE_STOP, "PMT_Y_1"},
@@ -194,16 +204,22 @@ static PoseTableEntry pose_table_pata[] = {
     {POSE_TYPE_ACTION, "PMT_S_1"},
 };
 
+/**
+ * Data table of the Parabuzzy, flying form: event handlers keyed by tag (dmg_fall_event_pata,
+ * dmg_first_attack_pos_event_pata).
+ */
 static BattleDataEntry data_table_pata[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event_pata},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos_event_pata},
     {0, NULL},
 };
 
+/** Body part of the Parabuzzy, flying form: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts_pata[] = {
     {1, "btl_un_patamet", "c_met", 0.0f, 0.0f, 0.0f, 0.0f, 20.0f, 0.0f, 0.0f, 25.0f, 0.0f, 20, 30, 255, &defence_pata, &defence_attr_pata, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_pata},
 };
 
+/** Sound table of the Parabuzzy: the sound each animation plays while it runs. */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"PMT_S_1", 0.01f, NULL, "SFX_ENM_PATAMET_WAIT1", 0, 1},
     {"PMT_W_1", 0.01f, NULL, "SFX_ENM_PATAMET_WAIT1", 0, 1},
@@ -394,6 +410,7 @@ static EVT_BEGIN(wait_event_pata)
     RETURN
 EVT_END()
 
+/** Pose table of the Parabuzzy: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "MET_N_1"},
     {POSE_TYPE_STOP, "MET_Y_1"},
@@ -415,6 +432,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MET_S_1"},
 };
 
+/** Pose table of the Parabuzzy, on the ceiling: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "SMT_N_1"},
     {POSE_TYPE_STOP, "SMT_Y_1"},
@@ -436,6 +454,7 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "SMT_S_1"},
 };
 
+/** Pose table of the Parabuzzy, flipped on its back: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "MET_N_2"},
     {POSE_TYPE_STOP, "MET_Y_2"},
@@ -456,12 +475,14 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "MET_S_2"},
 };
 
+/** Data table of the Parabuzzy: event handlers keyed by tag (dmg_turn_event). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Data table of the Parabuzzy, on the ceiling: event handlers keyed by tag (counter_damage_event_ceil). */
 static BattleDataEntry data_table_ceil[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event_ceil},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event_ceil},
@@ -479,6 +500,7 @@ static BattleDataEntry data_table_ceil[] = {
     {0},
 };
 
+/** Attack data for the Parabuzzy's spiked shell roll: 3 damage. */
 static BattleWeapon weapon_met_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -515,6 +537,7 @@ static BattleWeapon weapon_met_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Parabuzzy's drop from the ceiling: 4 damage. */
 static BattleWeapon weapon_met_ceil_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -551,12 +574,19 @@ static BattleWeapon weapon_met_ceil_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of the Parabuzzy once it has lost its wings: 4 against normal, ice and electric hits;
+ * immune to fire and explosions (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
+/** Element response of the Parabuzzy: it is immune to fire and explosions. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
 
+/** Damage reduction of the Parabuzzy, flipped on its back: none, every attack type does full damage. */
 static BattleUnitDefense defence_turn = {0};
 
+/** Element response of the Parabuzzy, flipped on its back: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
 static StatusVulnerability regist = {
@@ -584,6 +614,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Parabuzzy: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum

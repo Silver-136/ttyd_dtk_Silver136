@@ -1,3 +1,5 @@
+// Ruff Puff (kurokumorn): enemy battle unit (thunder attack); Riverside Station's copy of the unit data and scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -38,6 +40,7 @@ static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[12];
 
+/** Unit data of the Ruff Puff: 7 HP, level 23; the battle starts it from init_event. */
 BattleUnitKind unit_kurokumorn = {
     UNIT_RUFF_PUFF, // mUnitType
     "btl_un_kurokumorn", // name
@@ -86,8 +89,10 @@ BattleUnitKind unit_kurokumorn = {
     data_table, // dataTable
 };
 
+/** Defence of the Ruff Puff: none against any element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Elemental reactions of the Ruff Puff: is healed by electric attacks. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 3}};
 
 static StatusVulnerability regist = {
@@ -115,10 +120,12 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Ruff Puff, model c_kmoon: its one target part. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_kurokumorn", "c_kmoon", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
+/** Weapon data for the Ruff Puff's body slam: 4 damage, one target. */
 static BattleWeapon weapon_kurokumorn_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -155,6 +162,7 @@ static BattleWeapon weapon_kurokumorn_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon data for the Ruff Puff's thunder blast: 4 damage, electric element, every target. */
 static BattleWeapon weapon_kurokumorn_thunder_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -376,6 +384,7 @@ static EVT_BEGIN(thunder_event)
     RETURN
 EVT_END()
 
+/** Pose table of the Ruff Puff: the animation each battle pose (idle, hurt, walk, attack and so on) plays. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -396,6 +405,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Event table of the Ruff Puff: the attacker being shocked by its charge (counter_event, tag 42) and the First
+ * Strike reaction (dmg_first_attack_pos, tag 48).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ELECTRIC_EVENT, counter_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},

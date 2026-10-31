@@ -1,3 +1,5 @@
+// Rogueport Sewers (tik) battle unit: Koopatrol (togenoko): its parts, defence/status tables, and attack events.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -58,6 +60,10 @@ static EvtWord guard_cancel_event[90];
 static EvtWord friend_event[88];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Koopatrol (HP 6, level 26): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_togenoko = {
     UNIT_KOOPATROL, // mUnitType
     "btl_un_togenoko", // name
@@ -106,10 +112,13 @@ BattleUnitKind unit_togenoko = {
     data_table, // dataTable
 };
 
+/** Defence of the Koopatrol: 2 damage points off every hit. */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/** Element reactions of the Koopatrol: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Status vulnerability of the Koopatrol (percent chance to take each status): resists most statuses. */
 static StatusVulnerability regist = {
     70, // sleep
     75, // stop
@@ -135,10 +144,16 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Defence of the Koopatrol (flipped over): no damage reduction. */
 static BattleUnitDefense defence_turn = {0};
 
+/** Element reactions of the Koopatrol (flipped over): no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
+/**
+ * Status vulnerability of the Koopatrol (flipped over) (percent chance to take each status):
+ * average vulnerability to every status.
+ */
 static StatusVulnerability regist_turn = {
     100, // sleep
     100, // stop
@@ -164,10 +179,22 @@ static StatusVulnerability regist_turn = {
     100, // ohko
 };
 
+/**
+ * Defence of the Koopatrol while it is withdrawn into its shell:
+ * defence 99 against every kind of hit, so no attack does damage.
+ */
 static BattleUnitDefense defence_guard = {{99, 99, 99, 99, 99}};
 
+/**
+ * Element reactions of the Koopatrol (guarding): normal: no damage, fire: no damage, ice: no damage, explosion:
+ * no damage, electric: no damage.
+ */
 static BattleUnitDefenseAttr defence_attr_guard = {{2, 2, 2, 2, 2}};
 
+/**
+ * Status vulnerability of the Koopatrol (guarding) (percent chance to take each status):
+ * average vulnerability to every status.
+ */
 static StatusVulnerability regist_guard = {
     100, // sleep
     100, // stop
@@ -268,6 +295,10 @@ static PoseTableEntry pose_table_guard_turn[] = {
     {POSE_TYPE_ACTION, "G_1"},
 };
 
+/**
+ * Data table of the Koopatrol: event handlers for being flipped over,
+ * the attacker hurt by its spikes and a First Strike on it (no reaction).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -275,12 +306,20 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Data table of the Koopatrol while flipped on its back: the flip-over reaction;
+ * a First Strike on it is ignored.
+ */
 static BattleDataEntry data_table_turn[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/**
+ * Data table of the Koopatrol while guarding in its shell:
+ * the spike counter, the flip-over reaction and an ignored First Strike.
+ */
 static BattleDataEntry data_table_guard[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
@@ -288,10 +327,12 @@ static BattleDataEntry data_table_guard[] = {
     {0},
 };
 
+/** Body part of the Koopatrol (model c_togenoko): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_togenoko", "c_togenoko", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 50.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, kCounterTopSpiky, pose_table},
 };
 
+/** Weapon of the Koopatrol's normal attack: 4 damage, hammer-type contact attack. */
 static BattleWeapon weapon_togenoko_normal_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -329,6 +370,7 @@ static BattleWeapon weapon_togenoko_normal_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Koopatrol's shell attack: 4 damage, shell-toss-type attack. */
 static BattleWeapon weapon_togenoko_shell_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -366,6 +408,7 @@ static BattleWeapon weapon_togenoko_shell_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Koopatrol's charge: no HP damage. */
 static BattleWeapon weapon_togenoko_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -506,6 +549,7 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/** Spawn setup for a Koopatrol: starts off-screen on the enemy side until it is moved into place. */
 static BattleUnitSetup entry_togenoko = {
     &unit_togenoko, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance

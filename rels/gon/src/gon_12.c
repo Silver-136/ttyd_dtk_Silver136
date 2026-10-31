@@ -57,6 +57,7 @@ static EVT_BEGIN(door_open)
     RETURN
 EVT_END()
 
+/** Exits (beros) of this room: e_bero to gon_08. */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -248,6 +249,7 @@ EVT_BEGIN(chuchurina_talk)
     RETURN
 EVT_END()
 
+/** NPC setup of gon_12: Ms. Mowz. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"チュチュリーナ"*/"\x83\x60\x83\x85\x83\x60\x83\x85\x83\x8A\x81\x5B\x83\x69", // name

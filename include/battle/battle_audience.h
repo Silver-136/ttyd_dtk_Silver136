@@ -1,3 +1,5 @@
+// Declares the audience member types and the battle audience control functions.
+
 #pragma once
 
 #include <dolphin/types.h>

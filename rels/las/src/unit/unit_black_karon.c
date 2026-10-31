@@ -49,6 +49,10 @@ static EvtWord link_attack_event_sub[402];
 static EvtWord call_friend_event[311];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Dark Bones in the Palace of Shadow: 20 HP, level 34;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_black_karon = {
     UNIT_DARK_BONES, // mUnitType
     "btl_un_black_karon", // name
@@ -97,8 +101,16 @@ BattleUnitKind unit_black_karon = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Dark Bones against each element (normal, fire, ice, explosion, electric):
+ * 2 against every element, so each hit is cut by 2.
+ */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/**
+ * Damage modifiers of the Dark Bones per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -126,6 +138,7 @@ static StatusVulnerability regist = {
     85, // ohko
 };
 
+/** Parts of the Dark Bones: the body and the bones (parts 2 to 6) it throws and piles up. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_black_karon", "c_karon_b_h", 0.0f, 0.0f, 0.0f, 0.0f, 35.0f, 0.0f, 0.0f, 45.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_black_karon", "c_karon_b_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
@@ -135,6 +148,7 @@ static BattleUnitKindPart parts[] = {
     {6, "btl_un_black_karon", "c_karon_h", 0.0f, 0.0f, 0.0f, 15.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table},
 };
 
+/** Weapon of the Dark Bones' bone throw: damage 5. */
 static BattleWeapon weapon_honenoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -171,6 +185,7 @@ static BattleWeapon weapon_honenoko_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of one bone of the Dark Bones' three-bone throw: damage 3. */
 static BattleWeapon weapon_honenoko_link_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -207,6 +222,9 @@ static BattleWeapon weapon_honenoko_link_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Setup used to spawn a Dry Bones (called by the Dark Bones): unit kind, alliance, position and turn phase.
+ */
 static BattleUnitSetup entry_honenoko = {
     &unit_karon, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -218,6 +236,9 @@ static BattleUnitSetup entry_honenoko = {
     NULL, // itemDropTable
 };
 
+/**
+ * Pose table of the Dark Bones: animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KRN_N_1"},
     {POSE_TYPE_STOP, "KRN_Y_1"},
@@ -240,6 +261,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRN_S_1"},
 };
 
+/**
+ * Data table of the Dark Bones: event scripts and values the battle looks up by tag (damage reactions,
+ * dodge, first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FAKE_DEAD_EVENT, fake_dead_event},

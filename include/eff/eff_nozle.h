@@ -1,3 +1,5 @@
+// eff_nozle.c: nozzle effect entry (effNozleEntry).
+
 #pragma once
 
 #include "driver/effdrv.h"

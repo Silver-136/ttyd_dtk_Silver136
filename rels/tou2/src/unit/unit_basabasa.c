@@ -1,3 +1,5 @@
+// unit_basabasa: Swooper, battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -35,6 +37,10 @@ static EvtWord ceil_fall_ready_event[23];
 static EvtWord attack_event[448];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Swooper (HP 6, level 17): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_basabasa = {
     UNIT_SWOOPER, // mUnitType
     "btl_un_basabasa", // name
@@ -83,10 +89,13 @@ BattleUnitKind unit_basabasa = {
     data_table, // dataTable
 };
 
+/** Defence of the Swooper: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Swooper: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Weapon of the Swooper's drain attack (biribiri counter variant): no HP damage. */
 static BattleWeapon weapon_basabasa_drain_attack_biribiri_counterd = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -162,6 +171,9 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "BSA_S_2"},
 };
 
+/**
+ * Data table of the Swooper: event handlers for the counter-hit reactions (tags 25-36) and a First Strike on it.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event},
@@ -179,10 +191,15 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of the Swooper (model c_basabasa): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_basabasa", "c_basabasa", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_ceil},
 };
 
+/**
+ * Status vulnerability of the Swooper (percent chance to take each status): extra prone to gale force;
+ * resists most other statuses.
+ */
 static StatusVulnerability regist = {
     80, // sleep
     85, // stop
@@ -208,6 +225,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Weapon of the Swooper's attack: 3 damage. */
 static BattleWeapon weapon_basabasa_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -244,6 +262,7 @@ static BattleWeapon weapon_basabasa_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Sounds the Swooper's poses play as they animate: wing flaps while waiting and moving. */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"BSA_S_1", 0.01f, NULL, "SFX_ENM_BASA_WAIT1", 0, 1},
     {"BSA_W_1", 0.01f, NULL, "SFX_ENM_BASA_MOVE1", 0, 1},

@@ -1,3 +1,5 @@
+// mot_jump.c: Mario's jump, fall and landing motions (mot_jump, mot_jumpStand, mot_fall, mot_land, mot_upstairs).
+
 #pragma once
 
 #include "dolphin/types.h"

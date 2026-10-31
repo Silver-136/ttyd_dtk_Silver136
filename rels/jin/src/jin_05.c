@@ -33,6 +33,7 @@ static EVT_BEGIN(check_roll)
     RETURN
 EVT_END()
 
+/** Doors of this room: the south exit (s_bero) to jin_00. */
 static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName

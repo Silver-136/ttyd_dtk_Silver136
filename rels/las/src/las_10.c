@@ -290,6 +290,13 @@ EVT_BEGIN(se2_door_open)
     RETURN
 EVT_END()
 
+/**
+ * Exits of las_10: south door s_bero to las_09 (n_bero); northwest door nw_bero_1 to las_11 (e_bero_1);
+ * northeast door ne_bero_1 to las_12 (w_bero_1); southwest door sw_bero_1 to las_13 (e_bero_1); southeast
+ * door se_bero_1 to las_14 (w_bero_1); northwest door nw_bero_2 to las_15 (e_bero_1); northeast door
+ * ne_bero_2 to las_16 (w_bero_1); southwest door sw_bero_2 to las_17 (e_bero_1); southeast door se_bero_2 to
+ * las_18 (w_bero_1).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName
@@ -456,6 +463,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Wall groups of the first tier of the Riddle Tower that are switched on or off together as Mario moves
+ * between sections.
+ */
 const char* kabe_list_1[] = {
     "S11_kabe4",
     "S11_kabe5",
@@ -467,6 +478,7 @@ const char* kabe_list_1[] = {
     "S11_kabe3",
 };
 
+/** Wall groups of the second tier of the Riddle Tower, switched with kabe_list_1. */
 const char* kabe_list_2[] = {
     "S112_kabe4",
     "S112_kabe5",
@@ -478,6 +490,7 @@ const char* kabe_list_2[] = {
     "S112_kabe3",
 };
 
+/** Wall groups of the third tier of the Riddle Tower, switched with the other two lists. */
 const char* kabe_list_3[] = {
     "S113_kabe4",
     "S113_kabe5",
@@ -727,6 +740,10 @@ EVT_BEGIN(kagi_rotate)
     RETURN
 EVT_END()
 
+/**
+ * Palace key item ids for the keys Mario still carries (-1 ends the list), filled in by make_kagi_tbl for
+ * the key window.
+ */
 s32 kagi_tbl[] = {
     -1, -1, -1, -1, -1, -1, -1, -1,
     -1,
@@ -1043,6 +1060,10 @@ EVT_BEGIN(kagi_8_off)
     RETURN
 EVT_END()
 
+/**
+ * The eight key stands as triples (model name, pedestal, effect name); a zero ends the list. Used when the
+ * stands rise out of the floor.
+ */
 const char* daiza_name[] = {
     "S_kagi1",
     "S113_daiza1",
@@ -1201,6 +1222,7 @@ EVT_BEGIN(kagi_8_syutugen)
     RETURN
 EVT_END()
 
+/** Item list for the pedestal key window: Palace Key 0x25 (-1 ends the list). */
 s32 daiza_key_tbl[] = {
     37, -1,
 };

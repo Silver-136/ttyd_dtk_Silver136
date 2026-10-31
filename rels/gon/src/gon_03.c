@@ -89,6 +89,7 @@ EvtWord senkarondummy_talk_event[2];
 EvtWord senkaron_entry_event[9];
 EvtWord senkaron_escape_event[4];
 
+/** NPC setup of gon_03: the Dry Bones dummy, Richard and the leader of the bone enemies. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"カロン1"*/"\x83\x4A\x83\x8D\x83\x93\x31", // name
@@ -167,6 +168,7 @@ static EVT_BEGIN(door02_open)
     RETURN
 EVT_END()
 
+/** Exits (beros) of this room: w_bero to gon_02 and e_bero to gon_04. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -207,6 +209,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** Poses Koops (Nokotaro, the partner) switches between during the hall scene. */
 const char* nokotaro_pose[] = {
     "PNK_L_1",
     "PNK_L_2",
@@ -655,6 +658,10 @@ EVT_BEGIN(leaderkaron_talk_event)
     RETURN
 EVT_END()
 
+/**
+ * Sprite entries for the crowd of Dry Bones in the hall: the c_karon_g_h model with its KRN_R_1 animation,
+ * one entry per animation phase offset.
+ */
 static ExtTexInfo senkaron_ext_entry_data[] = {
     {"c_karon_g_h", "KRN_R_1", 0.0f},
     {"c_karon_g_h", "KRN_R_1", 1.0f},

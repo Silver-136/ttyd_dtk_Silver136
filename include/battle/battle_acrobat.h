@@ -1,3 +1,5 @@
+// Declares the acrobat timing-window functions.
+
 #pragma once
 
 #include "battle/battle.h"

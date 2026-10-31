@@ -1,3 +1,5 @@
+// Glitz Pit arena (tou2, tou_03): the fighters' battle unit kinds, battle setups and fight/ranking user functions.
+
 #pragma once
 
 #include "dolphin/types.h"

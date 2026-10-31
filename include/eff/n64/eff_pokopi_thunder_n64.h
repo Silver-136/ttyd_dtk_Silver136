@@ -1,3 +1,5 @@
+// eff_pokopi_thunder_n64.c: lightning bolt entry (effPokopiThunderN64Entry), work data (EffPokopiThunderN64Work).
+
 #include "driver/camdrv.h"
 #pragma once
 

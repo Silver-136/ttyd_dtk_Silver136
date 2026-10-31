@@ -1,3 +1,5 @@
+// Swap effect (irekaeru: swap places): plays the language-specific EFF_Irekae animation at a point, fading in and out.
+
 #ifdef VERSION_G8ME01
 #include "mario/mariost.h"
 #endif
@@ -10,6 +12,10 @@
 #include "driver/effdrv.h"
 #include "driver/mapdrv.h"
 #ifdef VERSION_G8ME01
+/**
+ * Animation group of the partner-swap effect by language
+ * (Japanese, English, German, French, Spanish, Italian).
+ */
 const char* eff_irekae_str_tbl[6] = {"EFF_Irekae", "EFF_Irekae", "EFF_Irekae_D", "EFF_Irekae_F_Sp", "EFF_Irekae_F_Sp", "EFF_Irekae_I"};
 #endif
 

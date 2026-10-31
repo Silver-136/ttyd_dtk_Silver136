@@ -1,3 +1,5 @@
+// Pianta Parlor (yuu, yugijo "amusement hall"): types and data of its minigames (Monte, MonteTable, SlitWork).
+
 #pragma once
 
 #include "dolphin/types.h"

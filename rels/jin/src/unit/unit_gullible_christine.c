@@ -1,3 +1,5 @@
+// Goombella (christine) partner unit for the Doopliss fight in Creepy Steeple (placed off screen in the battle setup).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_sub.h"
@@ -31,6 +33,10 @@ static EvtWord dead_event_christine[147];
 static EvtWord attack_event_christine[690];
 static EvtWord wait_event_christine[7];
 
+/**
+ * Unit kind of the Goombella double:
+ * 10 HP, level 0, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_gullible_christine = {
     UNIT_GOOMBELLA_CHAPTER4, // mUnitType
     "btl_un_gullible_christine", // name
@@ -115,8 +121,10 @@ static BattleWeapon enemyWeapon_ChristineNormalAttack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Defence of the Goombella double's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence_christine = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Goombella double's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr_christine = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist_christine = {
@@ -144,11 +152,13 @@ static StatusVulnerability regist_christine = {
     0, // ohko
 };
 
+/** Event table of the Goombella double: its defeat script. */
 static BattleDataEntry data_table_christine[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event_christine},
     {0, NULL},
 };
 
+/** Body part of the Goombella double: a single part using the model "c_pkr". */
 static BattleUnitKindPart parts_christine[] = {
     {
         1, "btl_un_christine", "c_pkr",

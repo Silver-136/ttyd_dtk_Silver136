@@ -1,3 +1,5 @@
+// Audience attacks: audience members throwing items, and item announcements.
+
 #include "driver/itemdrv.h"
 #include "driver/camdrv.h"
 #include "evt/evt_msg.h"

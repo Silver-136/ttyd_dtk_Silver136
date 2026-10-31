@@ -1,3 +1,5 @@
+// Declares the status effect ids and the status effect functions.
+
 #pragma once
 
 #include <dolphin/types.h>

@@ -98,6 +98,10 @@ EvtWord rsh_00_a_init_evt_nidome[11];
 EvtWord rsh_00_b_init_evt_nidome[11];
 EvtWord rsh_00_c_init_evt_nidome[16];
 
+/**
+ * Figure table of the Smorg (moamoa) effect at the cab window: model c_n_moa_a with one animation offset per
+ * entry.
+ */
 ExtTexInfo moamoa_data[] = {
     {"c_n_moa_a", "S_1", 0.0f},
     {"c_n_moa_a", "S_1", 1.0f},
@@ -601,6 +605,7 @@ EVT_BEGIN(evt_rsh_moamoa_on_window)
     RETURN
 EVT_END()
 
+/** Doors and exits of rsh_00 variant a: w_bero to rsh_01_a. */
 static BeroEntry bero_data_a[] = {
     {
         "w_bero", // hitName
@@ -623,6 +628,7 @@ static BeroEntry bero_data_a[] = {
     {0},
 };
 
+/** Doors and exits of rsh_00 variant b: w_bero to rsh_01_b. */
 static BeroEntry bero_data_b[] = {
     {
         "w_bero", // hitName
@@ -645,6 +651,7 @@ static BeroEntry bero_data_b[] = {
     {0},
 };
 
+/** Doors and exits of rsh_00 variant c: w_bero to rsh_01_c. */
 static BeroEntry bero_data_c[] = {
     {
         "w_bero", // hitName
@@ -887,6 +894,7 @@ static EVT_BEGIN(talk_unten)
     RETURN
 EVT_END()
 
+/** NPCs of the driver's cab: the driver. */
 static NpcSetupInfo npc_data[] = {
     {
         /*"運転手"*/"\x89\x5E\x93\x5D\x8E\xE8", // name
@@ -903,6 +911,10 @@ static NpcSetupInfo npc_data[] = {
     {0},
 };
 
+/**
+ * Signboards of the cab: the schedule board (nittei) and the controls (soujyuu), each with the message it
+ * shows.
+ */
 static const char* access_tbl[] = {
     "nittei",
     "stg6_rsh_259",
@@ -1034,6 +1046,7 @@ EVT_BEGIN(rsh_00_b_init_evt)
     RETURN
 EVT_END()
 
+/** Map objects of the scenery that passes by the cab windows. */
 static const char* window_tbl[] = {
     "mado_uturi_1",
     "mado_uturi_2",

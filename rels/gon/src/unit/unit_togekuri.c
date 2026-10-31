@@ -1,3 +1,5 @@
+// Spiky Goomba (togekuri): battle unit used in Hooktail Castle.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
@@ -61,6 +63,10 @@ static USER_FUNC(get_attacker) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit kind of the Spiky Goomba:
+ * 2 HP, level 8, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_togekuri = {
     UNIT_SPIKY_GOOMBA, // mUnitType
     "btl_un_togekuri", // name
@@ -109,8 +115,10 @@ BattleUnitKind unit_togekuri = {
     data_table, // dataTable
 };
 
+/** Defence of the Spiky Goomba's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Spiky Goomba's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -138,6 +146,7 @@ static StatusVulnerability regist = {
     150, // ohko
 };
 
+/** Body part of the Spiky Goomba: a single part using the model "c_kuribo". */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -157,6 +166,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Spiky Goomba's attack: 2 damage to a single target, a jump-style hit. */
 static BattleWeapon weapon_togekuri_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -193,6 +203,10 @@ static BattleWeapon weapon_togekuri_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Pose table of the Spiky Goomba:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "TGK_N_1"},
     {POSE_TYPE_STOP, "TGK_Y_1"},
@@ -215,6 +229,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "TGK_S_1"},
 };
 
+/**
+ * Event table of the Spiky Goomba:
+ * the counter for an attacker hurt by its spikes, nothing special on a First Strike.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
@@ -347,6 +365,7 @@ static EVT_BEGIN(damage_event)
     RETURN
 EVT_END()
 
+/** Sine of each whole degree from 0 to 90, searched by bisection to turn a ratio into an angle. */
 static f32 SinTable[] = {
     0.0f, 0.017452f, 0.034899f, 0.052336f, 0.069756f, 0.087156f, 0.104528f, 0.121869f,
     0.139173f, 0.156434f, 0.173648f, 0.190809f, 0.207912f, 0.224951f, 0.241922f, 0.258819f,

@@ -213,11 +213,17 @@ s32 _kurokaron_run_away(f32 x, f32 z, f32 tx, f32 tz) {
     return result;
 }
 
+/** Which of the six waypoints of kurokaron_move_list Dark Bones is currently heading for. */
 u8 kurokaron_move_index = 0;
+/** State bits of Dark Bones: 1 patrol direction, 2 fleeing from Mario, 4 and 8 flee steering state. */
 u8 kurokaron_move_flag = 0;
+/** How many times in a row Dark Bones picked the same waypoint. */
 u8 kurokaron_same_goal = 0;
+/** Vivian's status on the previous frame, used to notice when she stops hiding Mario. */
 s32 kurokaron_vivian_prev_sts = 0;
+/** Frames Dark Bones stands still (set to 60 when Vivian stops hiding Mario next to him). */
 u8 kurokaron_stop_cnt = 0;
+/** Frames Dark Bones has been running away. */
 u16 kurokaron_run_cnt = 0;
 
 /**
@@ -629,6 +635,7 @@ static EVT_BEGIN(e_door_open)
     RETURN
 EVT_END()
 
+/** Exits of las_05: west door w_bero to las_04 (e_bero); east door e_bero_1 to las_06 (w_bero). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -669,8 +676,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** The waypoint Dark Bones last reached. */
 u8 kurokaron_prev_goal = 5;
 
+/** The six waypoints (x, z) around the room that Dark Bones patrols along. */
 f32 kurokaron_move_list[6][2] = {
     {500.0f, -130.0f}, {0.0f, -200.0f}, {-500.0f, -130.0f}, {-500.0f, 130.0f}, {0.0f, 200.0f}, {500.0f, 130.0f},
 };
@@ -725,6 +734,10 @@ EVT_BEGIN(kurokaron_move)
     RETURN
 EVT_END()
 
+/**
+ * Texture overrides for the swarm of Dull Bones: the head part c_karon_h gets a different frame of the
+ * KRN_R_1 animation for each of the 26 skeletons.
+ */
 static ExtTexInfo senkaron_ext_entry_data[] = {
     {"c_karon_h", "KRN_R_1", 0.0f},
     {"c_karon_h", "KRN_R_1", 1.0f},
@@ -754,6 +767,7 @@ static ExtTexInfo senkaron_ext_entry_data[] = {
     {0},
 };
 
+/** Distance thresholds used to decide how hard the Dull Bones swarm pushes Mario at a given range. */
 s32 move_check_list[] = {
     25, 52, 79, 107, 136, 166, 197, 229,
     263, 298, 335, 374, 416, 461, 510, 565,
@@ -1652,6 +1666,7 @@ static EVT_BEGIN(key_evt)
     RETURN
 EVT_END()
 
+/** Item list for the key window: only Palace Key 0x2E (-1 ends the list). */
 static s32 key_tbl[] = {
     ITEM_PALACE_KEY_0x2E, -1,
 };

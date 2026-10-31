@@ -1,3 +1,6 @@
+// Energy orb (Energy): a glowing sprite that spins, scales and pulses in brightness; type picks the colour pair.
+// Spawned by Mario's battle moves.
+
 #include "eff/eff_energy.h"
 #include "driver/dispdrv.h"
 #include "memory.h"

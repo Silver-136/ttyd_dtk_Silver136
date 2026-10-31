@@ -1,3 +1,5 @@
+// Declares the default battle event scripts shared by all units.
+
 #pragma once
 
 #include "evt/evt_cmd.h"

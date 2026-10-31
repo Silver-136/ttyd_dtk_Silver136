@@ -1,3 +1,5 @@
+// eff_coin_n64.c: Paper Mario 64 Coin effect entry (effCoinN64Entry).
+
 #pragma once
 
 #include <dolphin/types.h>

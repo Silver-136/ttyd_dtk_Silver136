@@ -1,3 +1,5 @@
+// Script commands for the Pianta Parlor lottery ticket.
+
 #include "evt/evt_lottery.h"
 #include "evt/evt_cmd.h"
 #include "mario/mariost.h"

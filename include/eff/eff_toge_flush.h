@@ -1,3 +1,5 @@
+// eff_toge_flush.c: spike flash effect entry (effTogeFlushEntry) with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

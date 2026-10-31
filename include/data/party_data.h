@@ -1,3 +1,5 @@
+// party_data.c: the partner table partyDataTbl (PartyData: init/move/use/exit functions) and the pose name tables.
+
 #pragma once
 
 #include "party.h"

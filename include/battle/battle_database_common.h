@@ -1,3 +1,5 @@
+// Declares the weapon special flags and shared battle drop-table types.
+
 #pragma once
 
 #include <dolphin/types.h>

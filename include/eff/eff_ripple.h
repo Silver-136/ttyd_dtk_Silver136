@@ -1,3 +1,5 @@
+// eff_ripple.c: water ripple entry (effRippleEntry) and setters for rx/rz, camera and position.
+
 #pragma once
 
 #include "driver/effdrv.h"

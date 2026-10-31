@@ -1,3 +1,5 @@
+// eff_rubble_n64.c: rubble chunk effect entry (effRubbleN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

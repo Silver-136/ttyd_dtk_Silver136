@@ -51,6 +51,10 @@ static EvtWord thunder_attack_event[235];
 static EvtWord charge_attack_event[58];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of Marilyn (btl_un_marilyn1), one of the Shadow Sirens in Boggly Woods: 12 HP, level 26.
+ * Vivian's init script spawns her; she slaps from the shadows, charges up and strikes with lightning.
+ */
 BattleUnitKind unit_boss_marilyn = {
     UNIT_MARILYN_CHAPTER2, // mUnitType
     "btl_un_marilyn1", // name
@@ -99,8 +103,10 @@ BattleUnitKind unit_boss_marilyn = {
     data_table, // dataTable
 };
 
+/** Flat damage reduction of Marilyn against normal, fire, ice, explosion and electric hits: none. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element attributes of Marilyn: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -149,15 +155,18 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MRR_S_1"},
 };
 
+/** Data table of Marilyn: event 49 (she is defeated) runs dead_event. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Marilyn's single part: her model (c_maririn), the main target and the part that covers for allies. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_marilyn1", "c_maririn", 0.0f, 0.0f, 0.0f, 15.0f, 45.0f, 0.0f, 0.0f, 50.0f, 0.0f, 38, 56, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Marilyn's shadow slap: 2 damage to one opposing target, guardable. */
 static BattleWeapon weapon_marilyn_kagenuke_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -194,6 +203,7 @@ static BattleWeapon weapon_marilyn_kagenuke_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Marilyn's lightning: 2 damage to every opposing target, ignoring defense and impossible to guard. */
 static BattleWeapon weapon_marilyn_thunder_attack1 = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -234,6 +244,7 @@ static BattleWeapon weapon_marilyn_thunder_attack1 = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Marilyn's charge-up: a self-targeted move that adds +2 charge to her next attack. */
 static BattleWeapon weapon_marilyn_charge1 = {
     NULL, 0, // name..icon
     {0}, // pad_06

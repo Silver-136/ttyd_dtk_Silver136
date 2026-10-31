@@ -291,6 +291,7 @@ static EVT_BEGIN(patolight_sound_off)
     RETURN
 EVT_END()
 
+/** Exits of mri_11: west road w_bero to mri_12 (e_bero); east road e_bero to mri_06 (w_bero02). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -621,6 +622,7 @@ static EVT_BEGIN(puni_vs_toge)
     RETURN
 EVT_END()
 
+/** Plants Mario can search in mri_11: A_ueki03, A_ueki04, A_ueki05. */
 static KusaAccess ueki_access_data[] = {
     {1, "A_ueki03", "S_ueki_03", NULL},
     {1, "A_ueki04", "S_ueki_04", NULL},

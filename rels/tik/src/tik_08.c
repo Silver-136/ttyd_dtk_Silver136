@@ -42,6 +42,10 @@ static EVT_BEGIN(oshimodo_event)
     RETURN
 EVT_END()
 
+/**
+ * Stand-in for the Twilight Town pipe until Frankly's talk at the end of chapter 3: entering it only pushes
+ * Mario back with "The pipe rejected you!". Swapped in by the map init script.
+ */
 static BeroEntry bero_oshimodo[] = {
     {
         "dokan", // hitName
@@ -62,6 +66,7 @@ static BeroEntry bero_oshimodo[] = {
     },
 };
 
+/** Doors of this room: the pipe to Twilight Town (usu_00) and the south exit back to tik_07. */
 static BeroEntry bero_entry_data[] = {
     {
         "dokan", // hitName
@@ -101,6 +106,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Stand-in for the Twilight Town pipe from the end of chapter 3 until chapter 4 has begun: it leads to the
+ * chapter 4 title screen (sys_01, stg_4) instead. Swapped in by the map init script.
+ */
 static BeroEntry bero_entry_data2[] = {
     {
         "dokan", // hitName

@@ -42,6 +42,7 @@ static EvtWord return_event[256];
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
+/** Unit data of the Frost Piranha: 10 HP, level 26; the battle starts it from init_event. */
 BattleUnitKind unit_ice_pakkun = {
     UNIT_FROST_PIRANHA, // mUnitType
     "btl_un_ice_pakkun", // name
@@ -90,8 +91,12 @@ BattleUnitKind unit_ice_pakkun = {
     data_table, // dataTable
 };
 
+/** Defence of the Frost Piranha: none against any element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Elemental reactions of the Frost Piranha: takes 1 extra damage from fire attacks; is healed by ice attacks.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 1, 3, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -119,10 +124,15 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Frost Piranha, model c_pakflwr_a: its one target part. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_ice_pakkun", "c_pakflwr_a", 0.0f, 0.0f, 0.0f, 0.0f, 40.0f, 0.0f, 0.0f, 0.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };
 
+/**
+ * Weapon data for the Frost Piranha's bite: 5 damage, a hammer-type hit, every target, may inflict freeze
+ * (30%).
+ */
 static BattleWeapon weapon_ice_pakkun_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -186,6 +196,9 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Pose table of the Frost Piranha: the animation each battle pose (idle, hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "PKF_N_1"},
     {POSE_TYPE_STOP, "PKF_Y_1"},
@@ -207,6 +220,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PKF_S_1"},
 };
 
+/**
+ * Pose table of the Frost Piranha while it clings to the ceiling: the animation each battle pose (idle, hurt,
+ * walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "PKF_N_2"},
     {POSE_TYPE_STOP, "PKF_Y_2"},
@@ -228,6 +245,11 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "PKF_S_3"},
 };
 
+/**
+ * Event table of the Frost Piranha: the spike counters (tag 37, dmg_avoid_counter_thorn_head_event), its
+ * counter-damage reactions (tags 25 to 36, all running counter_damage_event) and the First Strike reaction
+ * (does nothing).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

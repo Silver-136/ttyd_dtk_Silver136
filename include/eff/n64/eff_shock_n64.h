@@ -1,3 +1,5 @@
+// eff_shock_n64.c: shock flash effect entry (effShockN64Entry) and its work data (EffShockN64Work).
+
 #pragma once
 
 #include <dolphin/mtx.h>

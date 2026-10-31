@@ -1,3 +1,5 @@
+// countdown.c: the on-screen countdown timer (CountdownWork, countDownStart/Stop/Main) that timed events use.
+
 #pragma once
 
 #include <dolphin/types.h>

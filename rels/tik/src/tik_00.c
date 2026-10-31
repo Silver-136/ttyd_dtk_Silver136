@@ -207,6 +207,10 @@ static EvtWord epilogue_evt[127];
 static EvtWord mobj_box01[34];
 EvtWord tik_00_init_evt[214];
 
+/**
+ * Doors of the underground town: the west exit to tik_07,
+ * the east exit to tik_01 and the teleporter pad (tensou) that lands back in this map.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -259,6 +263,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** The shop's six item stands: each pairs a goods model with its hit area. */
 static ShopObj obj_list[] = {
     {"sina_1", "a_sina1"},
     {"sina_2", "a_sina_2"},
@@ -268,6 +273,10 @@ static ShopObj obj_list[] = {
     {"sina_6", "a_sina_6"},
 };
 
+/**
+ * Items the shop sells and their prices: Slow Shroom 15, Gradual Syrup 15, Ultra Shroom 200, Jammin' Jelly 200,
+ * Gold Bar 110 and Gold Bar x3 350.
+ */
 static ShopItem goods_list[] = {
     {ITEM_SLOW_SHROOM, 15},
     {ITEM_GRADUAL_SYRUP, 15},
@@ -277,6 +286,7 @@ static ShopItem goods_list[] = {
     {ITEM_GOLD_BAR_X3, 350},
 };
 
+/** Prices the shop pays when Mario sells it items, per item. */
 static ShopDb trade_list[] = {
     {ITEM_SLOW_SHROOM, 7, 0},
     {ITEM_GRADUAL_SYRUP, 7, 0},
@@ -292,6 +302,10 @@ static ShopDb trade_list[] = {
     {0},
 };
 
+/**
+ * Shopkeeper data: the clerk's name and the message keys (tik_shop_00 onward) for the shop's greetings
+ * and replies.
+ */
 static ShopperData35 shopper_data = {
     /*"店員"*/"\x93\x58\x88\xF5", // name
     NULL, NULL, // fook_evt..buy_evt
@@ -303,6 +317,10 @@ static ShopperData35 shopper_data = {
 typedef struct UranaiTag {
     char s[4];
 } UranaiTag;
+/**
+ * Four-byte copy of the string "pos", placed here so the string sits
+ * before the fortune-teller scripts' strings in read-only data.
+ */
 static const UranaiTag uranaisi_pos_tag = { "pos" };
 #endif
 
@@ -416,6 +434,10 @@ EVT_BEGIN(uranaisi_supercoin_evt)
     RETURN
 EVT_END()
 
+/**
+ * The nine fortune-telling cards (card_1 to card_9),
+ * each with the group that decides how it moves in the card animation.
+ */
 static CardName name_tbl[] = {
     {"card_1", 0},
     {"card_2", 1},
@@ -1582,6 +1604,10 @@ EVT_BEGIN(master_2_talk)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the underground town: Merluvlee the fortune-teller, Dazzle the Star Piece collector, the shop clerk,
+ * the informant and the other townsfolk.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"うらない師"*/"\x82\xA4\x82\xE7\x82\xC8\x82\xA2\x8E\x74", // name
@@ -1804,6 +1830,7 @@ EVT_BEGIN(evt_wall_01_02)
     RETURN
 EVT_END()
 
+/** NPCs inside the first house (Merluvlee's): shown when Mario goes in. */
 static const char* door_data_01_npc[] = {
     /*"うらない師"*/"\x82\xA4\x82\xE7\x82\xC8\x82\xA2\x8E\x74",
     NULL,
@@ -1862,6 +1889,10 @@ EVT_BEGIN(evt_close_01)
     RETURN
 EVT_END()
 
+/**
+ * Door of the first house (Merluvlee's): its door and house models, the hit areas inside and out,
+ * and the script that runs when Mario goes in.
+ */
 static DoorParam door_data_01 = {
     2, // flags
     3, // type
@@ -2012,6 +2043,7 @@ static EVT_BEGIN(evt_wall_02)
     RETURN
 EVT_END()
 
+/** NPCs inside the shop house: the clerk. */
 static const char* mise_npc[] = {
     /*"店員"*/"\x93\x58\x88\xF5",
     NULL,
@@ -2033,6 +2065,10 @@ EVT_BEGIN(evt_close_02)
     RETURN
 EVT_END()
 
+/**
+ * Door of the second house (the shop): its door and house models, the hit areas inside and out,
+ * and the script that runs when Mario goes in.
+ */
 static DoorParam door_data_02 = {
     2, // flags
     3, // type
@@ -2183,6 +2219,7 @@ static EVT_BEGIN(evt_wall_03)
     RETURN
 EVT_END()
 
+/** NPCs inside the third house: the informant, a Bandit, a Pink Bob-omb and the master. */
 static const char* door_data_03_npc[] = {
     /*"情報屋ケチ"*/"\x8F\xEE\x95\xF1\x89\xAE\x83\x50\x83\x60",
     /*"ボロドー４"*/"\x83\x7B\x83\x8D\x83\x68\x81\x5B\x82\x53",
@@ -2207,11 +2244,16 @@ EVT_BEGIN(evt_close_03)
     RETURN
 EVT_END()
 
+/** Map object (kururin1) that belongs to the third house. */
 static const char* door_data_03_mobj[] = {
     "kururin1",
     NULL,
 };
 
+/**
+ * Door of the third house: its door and house models, the hit areas inside and out,
+ * and the script that runs when Mario goes in.
+ */
 static DoorParam door_data_03 = {
     2, // flags
     3, // type
@@ -2345,6 +2387,10 @@ static EVT_BEGIN(evt_door_04_close)
     RETURN
 EVT_END()
 
+/**
+ * Door of the fourth house: its door and house models, the hit areas inside and out,
+ * and the scripts that run when Mario goes in and out.
+ */
 static DoorParam door_data_04 = {
     0, // flags
     3, // type

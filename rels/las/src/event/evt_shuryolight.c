@@ -1,3 +1,5 @@
+// Palace of Shadow (las, the "last" dungeon): the coloured lamps on Sir Grodus's (shuryo) field model and his staff, animated in the las_28 and las_29 scenes.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
@@ -47,6 +49,7 @@ EvtWord shuryolight_head_tenmetu[20];
 EvtWord shuryolight_head_off[14];
 EvtWord shuryolight_tue_normal[31];
 
+/** Animation names of Grodus's power lamp (green light): its five lit and dim states. */
 static const char* green_light_anim[] = {
     "L_1C",
     "L_1B",
@@ -55,6 +58,7 @@ static const char* green_light_anim[] = {
     "L_1E",
 };
 
+/** Animation names of Grodus's third head lamp (yellow light): its five lit and dim states. */
 static const char* yellow_light_anim[] = {
     "L_2C",
     "L_2B",
@@ -63,6 +67,7 @@ static const char* yellow_light_anim[] = {
     "L_2E",
 };
 
+/** Animation names of Grodus's second head lamp and staff lamp (red light): its five lit and dim states. */
 static const char* red_light_anim[] = {
     "L_3C",
     "L_3B",
@@ -71,6 +76,7 @@ static const char* red_light_anim[] = {
     "L_3E",
 };
 
+/** Animation names of Grodus's first head lamp (orange light): its five lit and dim states. */
 static const char* orange_light_anim[] = {
     "L_4C",
     "L_4B",

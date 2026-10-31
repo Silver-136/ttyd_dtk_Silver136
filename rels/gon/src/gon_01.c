@@ -59,6 +59,10 @@ static EVT_BEGIN(door01_open)
     RETURN
 EVT_END()
 
+/**
+ * Exits (beros) of this room: w_bero_1 to gon_00, w_bero_2 to gon_00, e_bero to gon_02 and e_bero_2 to
+ * gon_02.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
@@ -371,6 +375,9 @@ EVT_BEGIN(gon_01_GATEEVENT_evt)
     RETURN
 EVT_END()
 
+/**
+ * Hazard-water floors of this room (map hit names) and the point each puts Mario back at after he is bitten.
+ */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_00", {0.0f, -1000.0f, 0.0f}},
     {"mod_01", {0.0f, -1000.0f, 0.0f}},

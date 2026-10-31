@@ -1,3 +1,5 @@
+// envdrv.c: the environment driver (EnvironmentGlare and filter types): glare, blur and depth-of-field screen effects.
+
 #pragma once
 
 #include <dolphin/gx.h>

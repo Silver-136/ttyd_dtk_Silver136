@@ -17,6 +17,7 @@ static EvtWord kpa_goal[22];
 static NpcSetupInfo npcEnt[1];
 EvtWord kpa_06_init_evt[56];
 
+/** Blocks, pipes and obstacle blocks of the second half of stage 3, ending at the goal pole. */
 static EvtWord kpa_act_stg3_mobj[] = {
     KPA_OBJ_DOKAN_0(-225.0f, 0.0f), KPA_OBJ_BRICK_2(-175.0f, 0.0f), KPA_OBJ_BRICK_2(-125.0f, 0.0f),
     KPA_OBJ_BRICK_2(-125.0f, 50.0f), KPA_OBJ_BRICK_2(-75.0f, 0.0f), KPA_OBJ_BRICK_2(-75.0f, 50.0f),
@@ -67,6 +68,7 @@ static EVT_BEGIN(kpa_goal)
     RETURN
 EVT_END()
 
+/** No NPCs: the side-scrolling stage is built from the block, pipe and item lists instead. */
 static NpcSetupInfo npcEnt[] = {
     {0},
 };

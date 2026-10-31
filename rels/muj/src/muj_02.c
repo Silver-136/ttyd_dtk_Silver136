@@ -71,6 +71,7 @@ EvtWord muj_02_init_evt[115];
 EvtWord muj_02_init_evt[104];
 #endif
 
+/** Doors and exits of muj_02: w_bero to muj_01; e_bero to muj_03; dokan_1 to tik_17 (Rogueport Sewers). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -282,6 +283,7 @@ EVT_BEGIN(lost_wedding_ring)
     RETURN
 EVT_END()
 
+/** Items the player may hand over in the wedding-ring scene: the Wedding Ring only, ended by -1. */
 static s32 itemsel_table00[] = {
     ITEM_WEDDING_RING, -1,
 };
@@ -472,6 +474,7 @@ static EVT_BEGIN(peton_talk)
     RETURN
 EVT_END()
 
+/** NPCs of the jungle clearing: Mony and Peeton, the couple looking for their lost wedding ring. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"モニー"*/"\x83\x82\x83\x6A\x81\x5B", // name
@@ -500,6 +503,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Return point of the hazard-water floor A_yuka_01 of this room. */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"A_yuka_01", {0}},
     {0},
@@ -545,6 +549,7 @@ static EVT_BEGIN(evt_kusa_6)
     RETURN
 EVT_END()
 
+/** Trees of muj_02 that Mario can shake with his hammer (6 in all). */
 static TreeAccess tree_tbl[] = {
     {5, "A_treeA_01", "treeA_01_m", "treeA_01_ha", 0, NULL},
     {5, "A_treeA_02", "treeA_02_m", "treeA_02_ha", 0, NULL},
@@ -556,6 +561,7 @@ static TreeAccess tree_tbl[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/** Trees of muj_02 that Mario can shake with his hammer (6 in all); A_treeB_01 runs evt_treeb_01. */
 TreeAccess tree_tbl_treeb_evt[] = {
     {5, "A_treeA_01", "treeA_01_m", "treeA_01_ha", 0, NULL},
     {5, "A_treeA_02", "treeA_02_m", "treeA_02_ha", 0, NULL},
@@ -567,6 +573,10 @@ TreeAccess tree_tbl_treeb_evt[] = {
     {7, NULL, NULL, NULL, 0, NULL},
 };
 
+/**
+ * Bushes of muj_02 that Mario can check for hidden things (6 in all); A_kuwa_move_02 runs evt_kusa_2,
+ * A_kuwa_move_06 runs evt_kusa_6.
+ */
 static KusaAccess kusa_tbl[] = {
     {1, "A_kuwa_move_01", "S_kuwa_move_01", NULL},
     {1, "A_kuwa_move_02", "S_kuwa_move_02", evt_kusa_2},

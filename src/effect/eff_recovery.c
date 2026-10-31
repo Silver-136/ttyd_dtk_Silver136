@@ -1,3 +1,6 @@
+// HP/FP recovery (type 0: HP heart, 1: FP flower, 4/5: large HP/FP): `amount` icons rise one after another with
+// shine sounds and sparkles; type 6 is the sparkle-only form.
+
 #include "driver/camdrv.h"
 #include "eff/eff_recovery.h"
 #include "driver/dispdrv.h"
@@ -30,6 +33,10 @@ static inline void recoveryQuad(f32 l, f32 r, f32 t, f32 b, f32 u) {
     GXTexCoord2f32(0.0f, 1.0f);
 }
 
+/**
+ * Keyframes of the recovery icon over 79 frames: it grows from nothing while dropping into place,
+ * bounces, holds, then dips and shoots upward at the end.
+ */
 MayaHermitKey recovery_effHermit_0[] = {
     {
         0, // time
@@ -142,11 +149,13 @@ MayaHermitKey recovery_effHermit_0[] = {
         },
     },
 };
+/** Twelve pastel colours the recovery sparkles cycle through, one step per frame. */
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,
     0xB4, 0xFE, 0xB4, 0xD5, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5, 0xAC,
 };
+/** The recovery icon's square plane that carries the heart or flower texture. */
 s16 recovery_effFace_pPlane2_q007_0[] = {
     4, // vertex count
     -768, -768, 0, 0, 512,
@@ -155,10 +164,13 @@ s16 recovery_effFace_pPlane2_q007_0[] = {
     -768, 768, 0, 0, 0,
 };
 s16* recovery_effFaceDt_pPlane2_q007 = recovery_effFace_pPlane2_q007_0;
+/** The recovery icon's single animated part: its keyframes and plane. */
 MayaPoly recovery_effAnimRST[] = {
     {10, recovery_effHermit_0, 1, &recovery_effFaceDt_pPlane2_q007},
 };
+/** Part list of the recovery icon animation. */
 MayaKeyList recovery_effAnimRSTDt = {1, recovery_effAnimRST};
+/** Recovery icon animation (79 frames), started by effRecoveryEntry and drawn under each icon. */
 MayaAnimData recovery_effAnimDt = { { 0 }, 79.0f, &recovery_effAnimRSTDt };
 
 void effRecoveryMain(EffectEntry* effect);

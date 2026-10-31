@@ -262,6 +262,10 @@ EvtWord return_gorotsuki_town_init[25];
 EvtWord return_gorotsuki_town[625];
 EvtWord gor_00_init_evt[VERSION_PICK(537, 540)];
 
+/**
+ * Sprite entries for the extra townsfolk of the harbor (evt_nannpc_init): the c_zako_n model with its S_1
+ * animation, one entry per animation phase offset.
+ */
 ExtTexInfo nannpc_entry_data[] = {
     {"c_zako_n", "S_1", 0.0f},
     {"c_zako_n", "S_1", 2.0f},
@@ -330,6 +334,7 @@ static s16 dai3_animtbl[] = {
     -1, 0,
 };
 
+/** Animation frame table for the harbor crowd while it runs. Version for the earlier releases. */
 s16 dai3_run_animtbl[] = {
 #ifdef VERSION_G8ME01
     20, 20, 21, 21, 22, 22, 23, 23,
@@ -363,6 +368,7 @@ EVT_BEGIN(no00_custom)
     RETURN
 EVT_END()
 
+/** Exits (beros) of this room: n_bero to gor_01. */
 static BeroEntry bero_entry_data[] = {
     {
         "n_bero", // hitName
@@ -1709,6 +1715,7 @@ static EVT_BEGIN(luigi_talk)
     RETURN
 EVT_END()
 
+/** NPC setup of Luigi at the harbor. */
 static NpcSetupInfo luigiEnt[] = {
     {
         /*"ルイージ"*/"\x83\x8B\x83\x43\x81\x5B\x83\x57", // name
@@ -1751,6 +1758,7 @@ EVT_BEGIN(rakgan_talk)
     RETURN
 EVT_END()
 
+/** NPC setup of the second figure beside Luigi at the harbor (model c_lp_pansy). */
 NpcSetupInfo rakganEnt[] = {
     {
         /*"ラクガン"*/"\x83\x89\x83\x4E\x83\x4B\x83\x93", // name
@@ -1767,6 +1775,10 @@ NpcSetupInfo rakganEnt[] = {
     {0},
 };
 
+/**
+ * NPC setup of the harbor: Monie and Peeton, Marco, Cortez, the sailors and Bob-omb sailors, Mokorim, Baba
+ * and the other people of the docks.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"モニー"*/"\x83\x82\x83\x6A\x81\x5B", // name
@@ -3098,6 +3110,7 @@ EVT_BEGIN(shukko_event_move_ship_se01)
     RETURN
 EVT_END()
 
+/** Names of the NPCs on the pier that take part in the departure scene (flagged while the ship pulls away). */
 const char* shukko_npc_list[] = {
     /*"ガラの悪い水夫"*/"\x83\x4B\x83\x89\x82\xCC\x88\xAB\x82\xA2\x90\x85\x95\x76",
     /*"マルコ"*/"\x83\x7D\x83\x8B\x83\x52",
@@ -3312,6 +3325,10 @@ EVT_BEGIN(shukko_event)
     RETURN
 EVT_END()
 
+/**
+ * Sprite entries for the crowd of 100 sailors (evt_nannpc_init): the c_boro_k model with its S_1 animation,
+ * one entry per animation phase offset.
+ */
 ExtTexInfo nannpc_entry_data01[] = {
     {"c_boro_k", "S_1", 0.0f},
     {"c_boro_k", "S_1", 2.0f},
@@ -3356,6 +3373,10 @@ ExtTexInfo nannpc_entry_data01[] = {
     {0},
 };
 
+/**
+ * Animation frame table for a sailor of the crowd while it stands or hops about: each frame of the first 21
+ * appears twice.
+ */
 static s16 suifu_animtbl[] = {
     0, 0, 1, 1, 2, 2, 3, 3,
     4, 4, 5, 5, 6, 6, 7, 7,
@@ -3365,12 +3386,14 @@ static s16 suifu_animtbl[] = {
     -1, 0,
 };
 
+/** Animation frame table for a sailor of the crowd while it runs (frames 20 to 39, ending with -1). */
 static s16 suifu_run_animtbl[] = {
     20, 21, 22, 23, 24, 25, 26, 27,
     28, 29, 30, 31, 32, 33, 34, 35,
     36, 37, 38, 39, -1, 0,
 };
 
+/** Three points where the crowd sailors walk down the stairs; each picks one at random. */
 Vec suifu100kaidanDOWN[] = {
     {309.0f, 15.0f, -375.0f},
     {322.0f, 15.0f, -397.0f},
@@ -3378,6 +3401,7 @@ Vec suifu100kaidanDOWN[] = {
     {357.0f, 15.0f, -427.0f},
 };
 
+/** Three points where the crowd sailors walk up the stairs; each picks one at random. */
 Vec suifu100kaidanUP[] = {
     {143.0f, 115.0f, -514.0f},
     {167.0f, 115.0f, -534.0f},
@@ -4905,6 +4929,7 @@ static EVT_BEGIN(peach_mail)
     RETURN
 EVT_END()
 
+/** Up-and-down offsets, in 16 steps, that make a ship at the dock bob on the water. */
 f32 gor_ship_puka_data[] = {
     -0.0f, -0.5f, -1.0f, -1.5f, -2.0f, -2.200000047683716f, -2.5f, -2.700000047683716f, -2.700000047683716f, -2.700000047683716f, -2.5f, -2.200000047683716f, -2.0f, -1.5f, -1.0f, -0.5f,
 };
@@ -5350,6 +5375,9 @@ EVT_END()
 #ifdef VERSION_G8ME01
 // US: two more damage-return points
 #endif
+/**
+ * Hazard-water floors of this room (map hit names) and the point each puts Mario back at after he is bitten.
+ */
 static HitDamageReturn dmgRetPoint[] = {
     {"A_yuka", {0.0f, -1000.0f, 0.0f}},
     {"Ship_Change01", {-550.0f, 15.0f, 0.0f}},

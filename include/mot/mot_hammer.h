@@ -1,3 +1,5 @@
+// mot_hammer.c: Mario's hammer motions (mot_hammer, mot_hammer2 spin, mot_ham2_post) and the hammer level query.
+
 #pragma once
 
 #include <dolphin/types.h>

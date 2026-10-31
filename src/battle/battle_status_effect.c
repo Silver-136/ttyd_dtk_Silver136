@@ -1,3 +1,5 @@
+// Battle status effects: the visual effects of statuses on units and the status-change announcement.
+
 #include "version.h"
 #include "battle/battle_status_effect.h"
 #include "battle/battle_unit.h"
@@ -27,6 +29,11 @@ typedef struct StChgMsgData {
     const char* msg0;
 } StChgMsgData;
 
+/**
+ * Message for each status change announcement (the Japanese status name is only a label):
+ * msg1 when the status took hold, msg0 when not; only Charge differs ("...But it had no effect!").
+ * Ends with type -1.
+ */
 StChgMsgData _st_chg_msg_data[] = {
     { 4, "\202\307\202\255", "msg_st_chg_poison", "msg_st_chg_poison" },
     { 16, "\203`\203\203\201[\203W", "msg_st_chg_charge", "msg_st_chg_charge3" },

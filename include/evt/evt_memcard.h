@@ -1,3 +1,5 @@
+// evt_memcard.c: the memory card save/load scripts and commands (cardmgr).
+
 #pragma once
 
 #include "dolphin/types.h"

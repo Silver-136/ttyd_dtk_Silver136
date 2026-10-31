@@ -1,3 +1,6 @@
+// Case driver: "cases" run an event script when Mario touches, jumps on, stands on or hammers a
+// named hit object (or when a custom condition function says so).
+
 #include "driver/casedrv.h"
 #include "driver/hitdrv.h"
 #include "driver/npcdrv.h"

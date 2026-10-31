@@ -192,6 +192,10 @@ EvtWord rsh_05_a_init_evt[103];
 EvtWord rsh_05_init_evt_nidome[59];
 EvtWord rsh_05_a_init_evt_nidome[29];
 
+/**
+ * Animation table of the swarm of small Smorgs (c_n_moa_a): the figure, its animation set and a start offset
+ * for each.
+ */
 static ExtTexInfo ext_moamoa_data[] = {
     {("c_n_moa_a"), ("S_1"), 0.0f},
     {("c_n_moa_a"), ("S_1"), 2.0f},
@@ -1761,6 +1765,7 @@ static EVT_BEGIN(talk_waitless)
     RETURN
 EVT_END()
 
+/** Doors and exits of rsh_05 variant a: e_bero to rsh_04_a; w_bero to rsh_06_a. */
 static BeroEntry bero_data_a[] = {
     {
         ("e_bero"), // hitName
@@ -1799,6 +1804,7 @@ static BeroEntry bero_data_a[] = {
     {0},
 };
 
+/** Doors and exits of rsh_05 variant b: e_bero to rsh_04_b; w_bero to rsh_06_a. */
 static BeroEntry bero_data_b[] = {
     {
         ("e_bero"), // hitName
@@ -1837,6 +1843,7 @@ static BeroEntry bero_data_b[] = {
     {0},
 };
 
+/** Doors and exits of rsh_05 variant c: e_bero to rsh_04_c; w_bero to rsh_06_a. */
 static BeroEntry bero_data_c[] = {
     {
         ("e_bero"), // hitName
@@ -1875,6 +1882,7 @@ static BeroEntry bero_data_c[] = {
     {0},
 };
 
+/** NPCs of the car: the conductor. */
 static NpcSetupInfo npc_data[] = {
     {
         /*"車掌"*/"\x8e\xd4\x8f\xb6", // name
@@ -1929,6 +1937,7 @@ EVT_BEGIN(evt_ghost_diary_read)
     RETURN
 EVT_END()
 
+/** Shelf and crate hit areas of the car with the message each shows when Mario checks it. */
 static ShelfMsgTbl6 access_tbl = {
     {
         {"kihako_1", "stg6_rsh_275"},

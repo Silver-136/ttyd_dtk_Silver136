@@ -36,6 +36,7 @@ static EvtWord rock_evt1[21];
 #endif
 EvtWord moo_01_init_evt[93];
 
+/** Exits of moo_01: west road w_bero to moo_00 (e_bero); east road e_bero to moo_05 (w_bero). */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

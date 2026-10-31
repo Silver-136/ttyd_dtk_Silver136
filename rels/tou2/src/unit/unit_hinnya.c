@@ -1,3 +1,5 @@
+// unit_hinnya: Spinia, battle unit, one of the three spinning spiked enemies (Spania, Spunia, Spinia).
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -27,6 +29,10 @@ static EvtWord damage_event[10];
 static EvtWord attack_event[455];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Spinia: 3 HP and level 7, with its parts, status vulnerability, init event and event
+ * data table.
+ */
 BattleUnitKind unit_hinnya = {
     UNIT_SPINIA, // mUnitType
     "btl_un_hinnya", // name
@@ -75,8 +81,13 @@ BattleUnitKind unit_hinnya = {
     data_table, // dataTable
 };
 
+/**
+ * Defense of the Spinia against normal, fire, ice, explosion and electric attacks: none, so it takes full
+ * damage from every element.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Damage-type reactions of the Spinia: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -104,15 +115,24 @@ static StatusVulnerability regist = {
     150, // ohko
 };
 
+/**
+ * Event data table of the Spinia: no custom reactions, so the standard battle handlers run for every
+ * event.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/**
+ * Parts of the Spinia: a single body part (part 1, model c_hannya_n), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_hinnya", "c_hannya_n", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 37.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon record of the Spinia's charge: 1 damage and counts as a hammer-type hit. */
 static BattleWeapon weapon_hannya_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -149,6 +169,7 @@ static BattleWeapon weapon_hannya_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Pose table of the Spinia: maps each battle pose (idle, hurt, attacking and so on) to its animation. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},

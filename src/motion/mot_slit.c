@@ -1,3 +1,5 @@
+// Mario's paper slit motion (side-step through bars): turning sideways, sliding along walls and turning back.
+
 #include "dolphin/types.h"
 #include "driver/hitdrv.h"
 #include "mario/mario.h"

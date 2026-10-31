@@ -1,3 +1,5 @@
+// Script commands for the cameras: position, target, shake, zoom and 3D camera modes.
+
 #include "evt/evt_cam.h"
 #include "driver/camdrv.h"
 #include "driver/npcdrv.h"

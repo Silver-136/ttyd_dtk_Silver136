@@ -46,6 +46,10 @@ static EvtWord first_attack_event[302];
 static EvtWord attack_event[548];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Dark Paratroopa in the Pit of 100 Trials: 8 HP, level 17;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_yami_pata = {
     UNIT_DARK_PARATROOPA, // mUnitType
     "btl_un_yami_pata", // name
@@ -94,6 +98,7 @@ BattleUnitKind unit_yami_pata = {
     data_table_patapata, // dataTable
 };
 
+/** Weapon of the flying Dark Paratroopa's swoop: damage 4. */
 static BattleWeapon weapon_patapata_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -130,8 +135,16 @@ static BattleWeapon weapon_patapata_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of the flying Dark Paratroopa against each element (normal, fire, ice, explosion, electric):
+ * 2 against every element, so each hit is cut by 2.
+ */
 static BattleUnitDefense defence_patapata = {{2, 2, 2, 2, 2}};
 
+/**
+ * Damage modifiers of the flying Dark Paratroopa per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_patapata_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist_patapata = {
@@ -159,10 +172,15 @@ static StatusVulnerability regist_patapata = {
     70, // ohko
 };
 
+/** Part of the flying Dark Paratroopa: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts_patapata[] = {
     {1, "btl_un_yami_pata", "c_yaminoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence_patapata, &defence_patapata_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patapata},
 };
 
+/**
+ * Pose table of the flying Dark Paratroopa: animation names for each pose type (idle, walk, hurt, attack and
+ * so on).
+ */
 static PoseTableEntry pose_table_patapata[] = {
     {POSE_TYPE_SLEEP, "PTP_N_1"},
     {POSE_TYPE_STOP, "PTP_Y_1"},
@@ -184,12 +202,20 @@ static PoseTableEntry pose_table_patapata[] = {
     {POSE_TYPE_ACTION, "PTP_S_1"},
 };
 
+/**
+ * Data table of the flying Dark Paratroopa: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table_patapata[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, patapata_dmg_first_attack_pos},
     {0, NULL},
 };
 
+/**
+ * Sound table of the Dark Paratroopa once it has lost its wings (a Dark Koopa):
+ * for each pose name, the sound that plays with its animation.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"PTP_S_1", 0.01f, NULL, "SFX_ENM_PATA_WAIT1", 0, 1},
     {"PTP_W_1", 0.01f, NULL, "SFX_ENM_PATA_MOVE1", 0, 1},
@@ -423,6 +449,10 @@ static EVT_BEGIN(attack_event_patapata)
     RETURN
 EVT_END()
 
+/**
+ * Pose table of the Dark Paratroopa once it has lost its wings (a Dark Koopa):
+ * animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "NKT_N_1"},
     {POSE_TYPE_STOP, "NKT_Y_1"},
@@ -444,6 +474,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "NKT_S_1"},
 };
 
+/**
+ * Pose table of the Dark Paratroopa once it has lost its wings (a Dark Koopa) while flipped over:
+ * animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "NKT_N_2"},
     {POSE_TYPE_STOP, "NKT_B_1"},
@@ -464,16 +498,33 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "NKT_S_2"},
 };
 
+/**
+ * Data table of the Dark Paratroopa once it has lost its wings (a Dark Koopa):
+ * event scripts and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/**
+ * Defence of the Dark Paratroopa once it has lost its wings (a Dark Koopa) against each element (normal,
+ * fire, ice, explosion, electric): 2 against every element, so each hit is cut by 2.
+ */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/**
+ * Damage modifiers of the Dark Paratroopa once it has lost its wings (a Dark Koopa) per element (normal,
+ * fire, ice, explosion, electric): none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+/**
+ * Defence of the Dark Paratroopa once it has lost its wings (a Dark Koopa)
+ * while flipped over against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -501,6 +552,10 @@ static StatusVulnerability regist = {
     70, // ohko
 };
 
+/**
+ * Part of the Dark Paratroopa once it has lost its wings (a Dark Koopa):
+ * its one body part with hit box, defence tables and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -520,6 +575,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon of the Koopa's shell ram: damage 4. */
 static BattleWeapon weapon_nokonoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

@@ -1,3 +1,6 @@
+// Ext driver: draws many copies of one paper animation as flat textured quads with shadows; the
+// animation frame is rendered to a texture first.
+
 #include "driver/extdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/camdrv.h"
@@ -24,6 +27,7 @@ static ExtdrvWork work[2];
 void extMakeTexture(CameraId camId, void* param);
 static s32 compare(const void* a, const void* b);
 
+/** Sine of each whole degree, 450 entries so cosine is 90 further on: extMain turns each copy to its heading. */
 static f32 sintbl[450] = {
     0.0f, 0.0174519997f, 0.0348990001f, 0.0523359999f, 0.0697560012f, 0.0871559978f, 0.104528002f, 0.121868998f,
     0.139173001f, 0.156434f, 0.173648f, 0.190808997f, 0.207911998f, 0.224950999f, 0.241922006f, 0.258819014f,
@@ -478,6 +482,7 @@ __declspec(section ".sdata") static f32 shadow_vtx[16] = {
     1.2f, 0.0f, -1.2f,
 };
 
+/** Texture coordinates of the shadow quad's four corners. */
 static f32 shadow_coord[8] = {
     0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
 };

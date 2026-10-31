@@ -1,3 +1,5 @@
+// Petal Meadows (hei) battle setups: enemy groups, battle stages and the field-battle tables for the area's maps.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_weapon_power.h"
@@ -111,6 +113,11 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_13_04_off[4];
 NpcSetupBattleInfo btlsetup_hei_tbl[28];
 NpcTerritoryInfo btl_hei_setup_no_tbl[28];
 
+/**
+ * Scenery objects of the Petal Meadows battle stages (trees, grass, flowers, fences, rubble, the Shhwonk
+ * Fortress statues and the back and front wall pieces); each stage in hei_btlstage_data uses a slice of this
+ * list.
+ */
 BattleStageObjectData hei_btlobject_data[] = {
     {"ki_1", 2, 0, {136.0f, 0.0f, -63.0f}, 0, 60, {0}},
     {"ki_2", 2, 0, {86.0f, 0.0f, -30.0f}, 10, 50, {0}},
@@ -173,6 +180,10 @@ BattleStageObjectData hei_btlobject_data[] = {
     {"C", 2, 3, {0}, 0, 60, {0}},
 };
 
+/**
+ * The 11 battle stages of Petal Meadows: each pairs a stage model (stg_01_0, stg_01_4, stg_01_1, stg_01_2)
+ * with a slice of the scenery objects above.
+ */
 BattleStageData hei_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -286,6 +297,7 @@ BattleStageData hei_btlstage_data[] = {
     },
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_01_01, in Petal Meadows: Goomba x2, Spiky Goomba, Paragoomba. */
 BattleUnitSetup btlparty_hei_hei_01_01_off_1[] = {
     {
         &unit_kuriboo, // mUnitKindParams
@@ -329,6 +341,10 @@ BattleUnitSetup btlparty_hei_hei_01_01_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_01_01: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_01_01_off_1 = {
     4, // numEnemies
     btlparty_hei_hei_01_01_off_1, // enemyData
@@ -340,6 +356,7 @@ BattleGroupSetup btlgrp_hei_hei_01_01_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_02_02, in Petal Meadows: Paragoomba, Koopa Troopa. */
 BattleUnitSetup btlparty_hei_hei_02_02_off_1[] = {
     {
         &unit_patakuri, // mUnitKindParams
@@ -363,6 +380,10 @@ BattleUnitSetup btlparty_hei_hei_02_02_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_02_02: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_02_02_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_02_02_off_1, // enemyData
@@ -374,6 +395,7 @@ BattleGroupSetup btlgrp_hei_hei_02_02_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_02_03, in Petal Meadows: Koopa Troopa, Goomba. */
 BattleUnitSetup btlparty_hei_hei_02_03_off_1[] = {
     {
         &unit_nokonoko, // mUnitKindParams
@@ -397,6 +419,10 @@ BattleUnitSetup btlparty_hei_hei_02_03_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_02_03: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_02_03_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_02_03_off_1, // enemyData
@@ -408,6 +434,7 @@ BattleGroupSetup btlgrp_hei_hei_02_03_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_02_04, in Petal Meadows: Spiky Goomba, Koopa Troopa. */
 BattleUnitSetup btlparty_hei_hei_02_04_off_1[] = {
     {
         &unit_togekuri, // mUnitKindParams
@@ -431,6 +458,10 @@ BattleUnitSetup btlparty_hei_hei_02_04_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_02_04: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_02_04_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_02_04_off_1, // enemyData
@@ -442,6 +473,7 @@ BattleGroupSetup btlgrp_hei_hei_02_04_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_03_01, in Petal Meadows: Bald Cleft x2. */
 BattleUnitSetup btlparty_hei_hei_03_01_off_1[] = {
     {
         &unit_sinnosuke, // mUnitKindParams
@@ -465,6 +497,10 @@ BattleUnitSetup btlparty_hei_hei_03_01_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_03_01: the lineup above with the default heart and flower drops. Item drop
+ * weights: 0 held, 0 random, 100 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_03_01_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_03_01_off_1, // enemyData
@@ -475,6 +511,7 @@ BattleGroupSetup btlgrp_hei_hei_03_01_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_04_01, in Petal Meadows: Paragoomba x3. */
 BattleUnitSetup btlparty_hei_hei_04_01_off_1[] = {
     {
         &unit_patakuri, // mUnitKindParams
@@ -508,6 +545,10 @@ BattleUnitSetup btlparty_hei_hei_04_01_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_04_01: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_04_01_off_1 = {
     3, // numEnemies
     btlparty_hei_hei_04_01_off_1, // enemyData
@@ -519,6 +560,7 @@ BattleGroupSetup btlgrp_hei_hei_04_01_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 2 of BTLNO_HEI_04_01, in Petal Meadows: Paragoomba, Koopa Troopa. */
 BattleUnitSetup btlparty_hei_hei_04_01_off_2[] = {
     {
         &unit_patakuri, // mUnitKindParams
@@ -542,6 +584,10 @@ BattleUnitSetup btlparty_hei_hei_04_01_off_2[] = {
     },
 };
 
+/**
+ * Formation 2 of BTLNO_HEI_04_01: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_04_01_off_2 = {
     2, // numEnemies
     btlparty_hei_hei_04_01_off_2, // enemyData
@@ -553,6 +599,7 @@ BattleGroupSetup btlgrp_hei_hei_04_01_off_2 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_04_02, in Petal Meadows: Koopa Troopa x2. */
 BattleUnitSetup btlparty_hei_hei_04_02_off_1[] = {
     {
         &unit_nokonoko, // mUnitKindParams
@@ -576,6 +623,10 @@ BattleUnitSetup btlparty_hei_hei_04_02_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_04_02: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_04_02_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_04_02_off_1, // enemyData
@@ -587,6 +638,7 @@ BattleGroupSetup btlgrp_hei_hei_04_02_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 2 of BTLNO_HEI_04_02, in Petal Meadows: Koopa Troopa x3. */
 BattleUnitSetup btlparty_hei_hei_04_02_off_2[] = {
     {
         &unit_nokonoko, // mUnitKindParams
@@ -620,6 +672,10 @@ BattleUnitSetup btlparty_hei_hei_04_02_off_2[] = {
     },
 };
 
+/**
+ * Formation 2 of BTLNO_HEI_04_02: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_04_02_off_2 = {
     3, // numEnemies
     btlparty_hei_hei_04_02_off_2, // enemyData
@@ -631,6 +687,7 @@ BattleGroupSetup btlgrp_hei_hei_04_02_off_2 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_05_01, in Petal Meadows: Bristle x2. */
 BattleUnitSetup btlparty_hei_hei_05_01_off_1[] = {
     {
         &unit_togedaruma, // mUnitKindParams
@@ -654,6 +711,10 @@ BattleUnitSetup btlparty_hei_hei_05_01_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_05_01: the lineup above with the default heart and flower drops. Item drop
+ * weights: 0 held, 0 random, 100 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_05_01_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_05_01_off_1, // enemyData
@@ -664,6 +725,7 @@ BattleGroupSetup btlgrp_hei_hei_05_01_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_06_02, in Petal Meadows: Koopa Troopa, Spiky Goomba. */
 BattleUnitSetup btlparty_hei_hei_06_02_off_1[] = {
     {
         &unit_nokonoko, // mUnitKindParams
@@ -687,6 +749,10 @@ BattleUnitSetup btlparty_hei_hei_06_02_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_06_02: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_06_02_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_06_02_off_1, // enemyData
@@ -698,6 +764,7 @@ BattleGroupSetup btlgrp_hei_hei_06_02_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_06_03, in Petal Meadows: Paragoomba, Koopa Troopa x2. */
 BattleUnitSetup btlparty_hei_hei_06_03_off_1[] = {
     {
         &unit_patakuri, // mUnitKindParams
@@ -731,6 +798,10 @@ BattleUnitSetup btlparty_hei_hei_06_03_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_06_03: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_06_03_off_1 = {
     3, // numEnemies
     btlparty_hei_hei_06_03_off_1, // enemyData
@@ -742,6 +813,7 @@ BattleGroupSetup btlgrp_hei_hei_06_03_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 2 of BTLNO_HEI_06_03, in Petal Meadows: Paragoomba x2, Koopa Troopa. */
 BattleUnitSetup btlparty_hei_hei_06_03_off_2[] = {
     {
         &unit_patakuri, // mUnitKindParams
@@ -775,6 +847,10 @@ BattleUnitSetup btlparty_hei_hei_06_03_off_2[] = {
     },
 };
 
+/**
+ * Formation 2 of BTLNO_HEI_06_03: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_06_03_off_2 = {
     3, // numEnemies
     btlparty_hei_hei_06_03_off_2, // enemyData
@@ -786,6 +862,7 @@ BattleGroupSetup btlgrp_hei_hei_06_03_off_2 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_07_01, in Petal Meadows: Cleft x4. */
 BattleUnitSetup btlparty_hei_hei_07_01_off_1[] = {
     {
         &unit_monochrome_sinemon, // mUnitKindParams
@@ -829,6 +906,10 @@ BattleUnitSetup btlparty_hei_hei_07_01_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_07_01: the lineup above with the default heart and flower drops. Item drop
+ * weights: 0 held, 0 random, 100 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_07_01_off_1 = {
     4, // numEnemies
     btlparty_hei_hei_07_01_off_1, // enemyData
@@ -839,6 +920,7 @@ BattleGroupSetup btlgrp_hei_hei_07_01_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_08_01 and BTLNO_HEI_08_02, in Petal Meadows: Fuzzy x4. */
 BattleUnitSetup btlparty_hei_hei_08_01_off_1[] = {
     {
         &unit_chorobon, // mUnitKindParams
@@ -882,6 +964,10 @@ BattleUnitSetup btlparty_hei_hei_08_01_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_08_01 and BTLNO_HEI_08_02: the lineup above with the default heart and flower
+ * drops. Item drop weights: 0 held, 0 random, 100 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_08_01_off_1 = {
     4, // numEnemies
     btlparty_hei_hei_08_01_off_1, // enemyData
@@ -892,6 +978,7 @@ BattleGroupSetup btlgrp_hei_hei_08_01_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_09_01, in Petal Meadows: Fuzzy x2. */
 BattleUnitSetup btlparty_hei_hei_09_01_off_1[] = {
     {
         &unit_chorobon, // mUnitKindParams
@@ -915,6 +1002,10 @@ BattleUnitSetup btlparty_hei_hei_09_01_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_09_01: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_09_01_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_09_01_off_1, // enemyData
@@ -926,6 +1017,7 @@ BattleGroupSetup btlgrp_hei_hei_09_01_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 2 of BTLNO_HEI_09_01, in Petal Meadows: Fuzzy x3. */
 BattleUnitSetup btlparty_hei_hei_09_01_off_2[] = {
     {
         &unit_chorobon, // mUnitKindParams
@@ -959,6 +1051,10 @@ BattleUnitSetup btlparty_hei_hei_09_01_off_2[] = {
     },
 };
 
+/**
+ * Formation 2 of BTLNO_HEI_09_01: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_09_01_off_2 = {
     3, // numEnemies
     btlparty_hei_hei_09_01_off_2, // enemyData
@@ -970,6 +1066,7 @@ BattleGroupSetup btlgrp_hei_hei_09_01_off_2 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_09_03, in Petal Meadows: Fuzzy x2. */
 BattleUnitSetup btlparty_hei_hei_09_03_off_1[] = {
     {
         &unit_chorobon, // mUnitKindParams
@@ -993,6 +1090,10 @@ BattleUnitSetup btlparty_hei_hei_09_03_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_09_03: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_09_03_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_09_03_off_1, // enemyData
@@ -1004,6 +1105,7 @@ BattleGroupSetup btlgrp_hei_hei_09_03_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 2 of BTLNO_HEI_09_03, in Petal Meadows: Fuzzy x3. */
 BattleUnitSetup btlparty_hei_hei_09_03_off_2[] = {
     {
         &unit_chorobon, // mUnitKindParams
@@ -1037,6 +1139,10 @@ BattleUnitSetup btlparty_hei_hei_09_03_off_2[] = {
     },
 };
 
+/**
+ * Formation 2 of BTLNO_HEI_09_03: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_09_03_off_2 = {
     3, // numEnemies
     btlparty_hei_hei_09_03_off_2, // enemyData
@@ -1062,6 +1168,10 @@ BattleUnitSetup btlparty_hei_hei_10_01_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_10_01: the lineup above with the default heart and flower drops. Item drop
+ * weights: 0 held, 0 random, 100 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_10_01_off_1 = {
     1, // numEnemies
     btlparty_hei_hei_10_01_off_1, // enemyData
@@ -1072,6 +1182,7 @@ BattleGroupSetup btlgrp_hei_hei_10_01_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_11_01, in Petal Meadows: Fuzzy x2. */
 BattleUnitSetup btlparty_hei_hei_11_01_off_1[] = {
     {
         &unit_chorobon, // mUnitKindParams
@@ -1095,6 +1206,10 @@ BattleUnitSetup btlparty_hei_hei_11_01_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_11_01: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_11_01_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_11_01_off_1, // enemyData
@@ -1106,6 +1221,7 @@ BattleGroupSetup btlgrp_hei_hei_11_01_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 2 of BTLNO_HEI_11_01, in Petal Meadows: Fuzzy x3. */
 BattleUnitSetup btlparty_hei_hei_11_01_off_2[] = {
     {
         &unit_chorobon, // mUnitKindParams
@@ -1139,6 +1255,10 @@ BattleUnitSetup btlparty_hei_hei_11_01_off_2[] = {
     },
 };
 
+/**
+ * Formation 2 of BTLNO_HEI_11_01: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_11_01_off_2 = {
     3, // numEnemies
     btlparty_hei_hei_11_01_off_2, // enemyData
@@ -1150,6 +1270,7 @@ BattleGroupSetup btlgrp_hei_hei_11_01_off_2 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_11_03, in Petal Meadows: Fuzzy x2. */
 BattleUnitSetup btlparty_hei_hei_11_03_off_1[] = {
     {
         &unit_chorobon, // mUnitKindParams
@@ -1173,6 +1294,10 @@ BattleUnitSetup btlparty_hei_hei_11_03_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_11_03: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_11_03_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_11_03_off_1, // enemyData
@@ -1184,6 +1309,7 @@ BattleGroupSetup btlgrp_hei_hei_11_03_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 2 of BTLNO_HEI_11_03, in Petal Meadows: Fuzzy x3. */
 BattleUnitSetup btlparty_hei_hei_11_03_off_2[] = {
     {
         &unit_chorobon, // mUnitKindParams
@@ -1217,6 +1343,10 @@ BattleUnitSetup btlparty_hei_hei_11_03_off_2[] = {
     },
 };
 
+/**
+ * Formation 2 of BTLNO_HEI_11_03: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_11_03_off_2 = {
     3, // numEnemies
     btlparty_hei_hei_11_03_off_2, // enemyData
@@ -1228,6 +1358,7 @@ BattleGroupSetup btlgrp_hei_hei_11_03_off_2 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_12_01 and BTLNO_HEI_12_02, in Petal Meadows: Fuzzy x4. */
 BattleUnitSetup btlparty_hei_hei_12_01_off_1[] = {
     {
         &unit_chorobon, // mUnitKindParams
@@ -1271,6 +1402,10 @@ BattleUnitSetup btlparty_hei_hei_12_01_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_12_01 and BTLNO_HEI_12_02: the lineup above with the default heart and flower
+ * drops. Item drop weights: 0 held, 0 random, 100 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_12_01_off_1 = {
     4, // numEnemies
     btlparty_hei_hei_12_01_off_1, // enemyData
@@ -1281,6 +1416,7 @@ BattleGroupSetup btlgrp_hei_hei_12_01_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_13_02, in Petal Meadows: Goomba, Spiky Goomba. */
 BattleUnitSetup btlparty_hei_hei_13_02_off_1[] = {
     {
         &unit_kuriboo, // mUnitKindParams
@@ -1304,6 +1440,10 @@ BattleUnitSetup btlparty_hei_hei_13_02_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_13_02: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_13_02_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_13_02_off_1, // enemyData
@@ -1315,6 +1455,7 @@ BattleGroupSetup btlgrp_hei_hei_13_02_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_13_02, in Petal Meadows: Goomba x3. */
 BattleUnitSetup btlparty_hei_hei_13_02_on_1[] = {
     {
         &unit_kuriboo, // mUnitKindParams
@@ -1348,6 +1489,10 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_13_02: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_13_02_on_1 = {
     3, // numEnemies
     btlparty_hei_hei_13_02_on_1, // enemyData
@@ -1359,6 +1504,7 @@ BattleGroupSetup btlgrp_hei_hei_13_02_on_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 2 of BTLNO_HEI_13_02, in Petal Meadows: Goomba x4. */
 BattleUnitSetup btlparty_hei_hei_13_02_on_2[] = {
     {
         &unit_kuriboo, // mUnitKindParams
@@ -1402,6 +1548,10 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_2[] = {
     },
 };
 
+/**
+ * Formation 2 of BTLNO_HEI_13_02: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_13_02_on_2 = {
     4, // numEnemies
     btlparty_hei_hei_13_02_on_2, // enemyData
@@ -1413,6 +1563,7 @@ BattleGroupSetup btlgrp_hei_hei_13_02_on_2 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 3 of BTLNO_HEI_13_02, in Petal Meadows: Goomba x5. */
 BattleUnitSetup btlparty_hei_hei_13_02_on_3[] = {
     {
         &unit_kuriboo, // mUnitKindParams
@@ -1466,6 +1617,10 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_3[] = {
     },
 };
 
+/**
+ * Formation 3 of BTLNO_HEI_13_02: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_13_02_on_3 = {
     5, // numEnemies
     btlparty_hei_hei_13_02_on_3, // enemyData
@@ -1477,6 +1632,7 @@ BattleGroupSetup btlgrp_hei_hei_13_02_on_3 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_13_03, in Petal Meadows: Spiky Goomba x2. */
 BattleUnitSetup btlparty_hei_hei_13_03_off_1[] = {
     {
         &unit_togekuri, // mUnitKindParams
@@ -1500,6 +1656,10 @@ BattleUnitSetup btlparty_hei_hei_13_03_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_13_03: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_13_03_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_13_03_off_1, // enemyData
@@ -1511,6 +1671,7 @@ BattleGroupSetup btlgrp_hei_hei_13_03_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_13_03, in Petal Meadows: Spiky Goomba x2. */
 BattleUnitSetup btlparty_hei_hei_13_03_on_1[] = {
     {
         &unit_togekuri, // mUnitKindParams
@@ -1534,6 +1695,10 @@ BattleUnitSetup btlparty_hei_hei_13_03_on_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_13_03: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_13_03_on_1 = {
     2, // numEnemies
     btlparty_hei_hei_13_03_on_1, // enemyData
@@ -1545,6 +1710,7 @@ BattleGroupSetup btlgrp_hei_hei_13_03_on_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 2 of BTLNO_HEI_13_03, in Petal Meadows: Spiky Goomba x3. */
 BattleUnitSetup btlparty_hei_hei_13_03_on_2[] = {
     {
         &unit_togekuri, // mUnitKindParams
@@ -1578,6 +1744,10 @@ BattleUnitSetup btlparty_hei_hei_13_03_on_2[] = {
     },
 };
 
+/**
+ * Formation 2 of BTLNO_HEI_13_03: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_13_03_on_2 = {
     3, // numEnemies
     btlparty_hei_hei_13_03_on_2, // enemyData
@@ -1589,6 +1759,7 @@ BattleGroupSetup btlgrp_hei_hei_13_03_on_2 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_13_04, in Petal Meadows: Paragoomba x2. */
 BattleUnitSetup btlparty_hei_hei_13_04_off_1[] = {
     {
         &unit_patakuri, // mUnitKindParams
@@ -1612,6 +1783,10 @@ BattleUnitSetup btlparty_hei_hei_13_04_off_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_13_04: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_13_04_off_1 = {
     2, // numEnemies
     btlparty_hei_hei_13_04_off_1, // enemyData
@@ -1623,6 +1798,7 @@ BattleGroupSetup btlgrp_hei_hei_13_04_off_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 1 of BTLNO_HEI_13_04, in Petal Meadows: Paragoomba x2. */
 BattleUnitSetup btlparty_hei_hei_13_04_on_1[] = {
     {
         &unit_patakuri, // mUnitKindParams
@@ -1646,6 +1822,10 @@ BattleUnitSetup btlparty_hei_hei_13_04_on_1[] = {
     },
 };
 
+/**
+ * Formation 1 of BTLNO_HEI_13_04: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_13_04_on_1 = {
     2, // numEnemies
     btlparty_hei_hei_13_04_on_1, // enemyData
@@ -1657,6 +1837,7 @@ BattleGroupSetup btlgrp_hei_hei_13_04_on_1 = {
     5, // reserved_1C
 };
 
+/** Enemy lineup of formation 2 of BTLNO_HEI_13_04, in Petal Meadows: Paragoomba x4. */
 BattleUnitSetup btlparty_hei_hei_13_04_on_2[] = {
     {
         &unit_patakuri, // mUnitKindParams
@@ -1700,6 +1881,10 @@ BattleUnitSetup btlparty_hei_hei_13_04_on_2[] = {
     },
 };
 
+/**
+ * Formation 2 of BTLNO_HEI_13_04: the lineup above with the default heart and flower drops. Item drop
+ * weights: 25 held, 25 random, 50 none.
+ */
 BattleGroupSetup btlgrp_hei_hei_13_04_on_2 = {
     4, // numEnemies
     btlparty_hei_hei_13_04_on_2, // enemyData
@@ -1731,108 +1916,137 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_test4_off[] = {
     {0},
 };
 
+/** BTLNO_HEI_01_01 always fights Goomba x2, Spiky Goomba, Paragoomba on stage stg_01_0. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_01_01_off[] = {
     {10, &btlgrp_hei_hei_01_01_off_1, hei_btlstage_data},
     {0},
 };
 
+/** BTLNO_HEI_02_02 always fights Paragoomba, Koopa Troopa on stage stg_01_4. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_02_02_off[] = {
     {10, &btlgrp_hei_hei_02_02_off_1, &hei_btlstage_data[1]},
     {0},
 };
 
+/** BTLNO_HEI_02_03 always fights Koopa Troopa, Goomba on stage stg_01_4. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_02_03_off[] = {
     {10, &btlgrp_hei_hei_02_03_off_1, &hei_btlstage_data[1]},
     {0},
 };
 
+/** BTLNO_HEI_02_04 always fights Spiky Goomba, Koopa Troopa on stage stg_01_4. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_02_04_off[] = {
     {10, &btlgrp_hei_hei_02_04_off_1, &hei_btlstage_data[2]},
     {0},
 };
 
+/** BTLNO_HEI_03_01 always fights Bald Cleft x2 on stage stg_01_1. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_03_01_off[] = {
     {10, &btlgrp_hei_hei_03_01_off_1, &hei_btlstage_data[7]},
     {0},
 };
 
+/**
+ * BTLNO_HEI_04_01 picks one of its formations by weight (10:10) on stage stg_01_4: Paragoomba x3;
+ * Paragoomba, Koopa Troopa.
+ */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_04_01_off[] = {
     {10, &btlgrp_hei_hei_04_01_off_1, &hei_btlstage_data[4]},
     {10, &btlgrp_hei_hei_04_01_off_2, &hei_btlstage_data[4]},
     {0},
 };
 
+/**
+ * BTLNO_HEI_04_02 picks one of its formations by weight (10:10) on stage stg_01_4: Koopa Troopa x2; Koopa
+ * Troopa x3.
+ */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_04_02_off[] = {
     {10, &btlgrp_hei_hei_04_02_off_1, &hei_btlstage_data[3]},
     {10, &btlgrp_hei_hei_04_02_off_2, &hei_btlstage_data[3]},
     {0},
 };
 
+/** BTLNO_HEI_05_01 always fights Bristle x2 on stage stg_01_1. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_05_01_off[] = {
     {10, &btlgrp_hei_hei_05_01_off_1, &hei_btlstage_data[8]},
     {0},
 };
 
+/** BTLNO_HEI_06_02 always fights Koopa Troopa, Spiky Goomba on stage stg_01_4. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_06_02_off[] = {
     {10, &btlgrp_hei_hei_06_02_off_1, &hei_btlstage_data[5]},
     {0},
 };
 
+/**
+ * BTLNO_HEI_06_03 picks one of its formations by weight (10:10) on stage stg_01_4: Paragoomba, Koopa Troopa
+ * x2; Paragoomba x2, Koopa Troopa.
+ */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_06_03_off[] = {
     {10, &btlgrp_hei_hei_06_03_off_1, &hei_btlstage_data[6]},
     {10, &btlgrp_hei_hei_06_03_off_2, &hei_btlstage_data[6]},
     {0},
 };
 
+/** BTLNO_HEI_07_01 always fights Cleft x4 on stage stg_01_1. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_07_01_off[] = {
     {10, &btlgrp_hei_hei_07_01_off_1, &hei_btlstage_data[9]},
     {0},
 };
 
+/** BTLNO_HEI_08_01 always fights Fuzzy x4 on stage stg_01_2. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_08_01_off[] = {
     {10, &btlgrp_hei_hei_08_01_off_1, &hei_btlstage_data[10]},
     {0},
 };
 
+/** BTLNO_HEI_08_02 always fights Fuzzy x4 on stage stg_01_2. */
 NpcBattleSelect R_btlgrpsel_hei_btlno_hei_08_02_off[] = {
     {10, &btlgrp_hei_hei_08_01_off_1, &hei_btlstage_data[10]},
     {0},
 };
 
+/** BTLNO_HEI_09_01 picks one of its formations by weight (10:10) on stage stg_01_2: Fuzzy x2; Fuzzy x3. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_09_01_off[] = {
     {10, &btlgrp_hei_hei_09_01_off_1, &hei_btlstage_data[10]},
     {10, &btlgrp_hei_hei_09_01_off_2, &hei_btlstage_data[10]},
     {0},
 };
 
+/** BTLNO_HEI_09_03 picks one of its formations by weight (10:10) on stage stg_01_2: Fuzzy x2; Fuzzy x3. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_09_03_off[] = {
     {10, &btlgrp_hei_hei_09_03_off_1, &hei_btlstage_data[10]},
     {10, &btlgrp_hei_hei_09_03_off_2, &hei_btlstage_data[10]},
     {0},
 };
 
+/** BTLNO_HEI_10_01 always fights Gold Fuzzy on stage stg_01_2. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_10_01_off[] = {
     {10, &btlgrp_hei_hei_10_01_off_1, &hei_btlstage_data[10]},
     {0},
 };
 
+/** BTLNO_HEI_11_01 picks one of its formations by weight (10:10) on stage stg_01_2: Fuzzy x2; Fuzzy x3. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_11_01_off[] = {
     {10, &btlgrp_hei_hei_11_01_off_1, &hei_btlstage_data[10]},
     {10, &btlgrp_hei_hei_11_01_off_2, &hei_btlstage_data[10]},
     {0},
 };
 
+/** BTLNO_HEI_11_03 picks one of its formations by weight (10:10) on stage stg_01_2: Fuzzy x2; Fuzzy x3. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_11_03_off[] = {
     {10, &btlgrp_hei_hei_11_03_off_1, &hei_btlstage_data[10]},
     {10, &btlgrp_hei_hei_11_03_off_2, &hei_btlstage_data[10]},
     {0},
 };
 
+/** BTLNO_HEI_12_01 always fights Fuzzy x4 on stage stg_01_2. */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_12_01_off[] = {
     {10, &btlgrp_hei_hei_12_01_off_1, &hei_btlstage_data[10]},
     {0},
 };
 
+/** BTLNO_HEI_12_02 always fights Fuzzy x4 on stage stg_01_2. */
 NpcBattleSelect R_btlgrpsel_hei_btlno_hei_12_02_off[] = {
     {10, &btlgrp_hei_hei_12_01_off_1, &hei_btlstage_data[10]},
     {0},
@@ -1847,6 +2061,10 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_13_02_off[] = {
     {0},
 };
 
+/**
+ * BTLNO_HEI_13_03 picks one of its formations by weight (50:10:10) on stage stg_01_0: Spiky Goomba x2; Spiky
+ * Goomba x3; Spiky Goomba x2.
+ */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_13_03_off[] = {
     {50, &btlgrp_hei_hei_13_03_on_1, hei_btlstage_data},
     {10, &btlgrp_hei_hei_13_03_on_2, hei_btlstage_data},
@@ -1854,6 +2072,10 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_13_03_off[] = {
     {0},
 };
 
+/**
+ * BTLNO_HEI_13_04 picks one of its formations by weight (50:10:10) on stage stg_01_0: Paragoomba x2;
+ * Paragoomba x4; Paragoomba x2.
+ */
 NpcBattleSelect btlgrpsel_hei_btlno_hei_13_04_off[] = {
     {50, &btlgrp_hei_hei_13_04_on_1, hei_btlstage_data},
     {10, &btlgrp_hei_hei_13_04_on_2, hei_btlstage_data},

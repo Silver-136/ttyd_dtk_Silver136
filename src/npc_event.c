@@ -1,3 +1,5 @@
+// Field enemy and NPC behaviour scripts: the init, move, find, lose, blow and dead events of each enemy kind.
+
 #include "eff/eff_magic1_n64.h"
 #include "eff/eff_fire.h"
 #include "evt/evt_cmd.h"

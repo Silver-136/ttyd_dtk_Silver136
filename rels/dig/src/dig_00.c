@@ -207,10 +207,15 @@ static USER_FUNC(z) {
     return EVT_RETURN_DONE;
 }
 
+/** Pointer to the digest map's work counter, reached through a one-entry table. */
 static s32* wp[] = {
     work,
 };
 
+/**
+ * Cast of the digest movie: each entry names a character that walks, jumps, falls or pops up in front of the
+ * movie, with the set of actions it may perform.
+ */
 static DigAnim anim_tbl[] = {
     {/*"ダイジェストマリオ"*/"\x83\x5F\x83\x43\x83\x57\x83\x46\x83\x58\x83\x67\x83\x7D\x83\x8A\x83\x49", 7, 0},
     {/*"ルイージ"*/"\x83\x8B\x83\x43\x81\x5B\x83\x57", 7, 0},

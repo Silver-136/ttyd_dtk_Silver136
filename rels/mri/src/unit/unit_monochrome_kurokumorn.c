@@ -38,6 +38,10 @@ static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[12];
 
+/**
+ * Unit data of the Dark Puff; ties together its sounds, parts, status vulnerability, init event
+ * and event table.
+ */
 static BattleUnitKind unit_monochrome_kurokumorn = {
     UNIT_DARK_PUFF, // mUnitType
     "btl_un_monochrome_kurokumorn", // name
@@ -83,8 +87,10 @@ static BattleUnitKind unit_monochrome_kurokumorn = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
+/** Defence of the Dark Puff: 0 against every kind of hit. */
 static BattleUnitDefense defence = {0};
 
+/** Defence attributes of the Dark Puff: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -112,6 +118,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Parts of the Dark Puff: 1 part (model c_kmoon_wb). */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -131,6 +138,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon of the Dark Puff (attack): targets one unit for 2 damage; used by attack_event. */
 static BattleWeapon weapon_kurokumorn_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -167,6 +175,10 @@ static BattleWeapon weapon_kurokumorn_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon of the Dark Puff (thunder attack): targets every unit for 2 damage, electric element,
+ * ignores Defense; used by attack_event.
+ */
 static BattleWeapon weapon_kurokumorn_thunder_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -383,6 +395,7 @@ static EVT_BEGIN(thunder_event)
     RETURN
 EVT_END()
 
+/** Pose table of the Dark Puff: maps its battle poses to its animations. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -403,6 +416,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Event table of the Dark Puff: counter_event (tag 42), dmg_first_attack_pos (tag 48). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ELECTRIC_EVENT, counter_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},

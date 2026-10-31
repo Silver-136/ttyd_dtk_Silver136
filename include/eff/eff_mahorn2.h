@@ -1,3 +1,5 @@
+// eff_mahorn2.c: Wizzerd (mahorn) projectile effect entry (effMahorn2Entry) and its work struct (effMahorn2Data).
+
 #pragma once
 
 #include <dolphin/mtx.h>

@@ -1,3 +1,5 @@
+// eff_laser.c: laser effect entry (effLaserEntry) with its main and draw callbacks.
+
 #pragma once
 
 #include "driver/camdrv.h"

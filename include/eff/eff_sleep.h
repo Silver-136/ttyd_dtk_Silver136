@@ -1,3 +1,5 @@
+// eff_sleep.c: sleep-mark effect entry (effSleepEntry), its main callback and work data (effSleepData).
+
 #pragma once
 
 #include "driver/effdrv.h"

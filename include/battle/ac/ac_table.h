@@ -1,3 +1,5 @@
+// Declares the action-command entry table and the main, result, display and delete functions of each command.
+
 #pragma once
 
 #include "battle/battle.h"

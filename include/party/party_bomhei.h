@@ -1,3 +1,5 @@
+// party_bomhei.c: Admiral Bobbery's (bomhei) field partner functions (init, use, bye, exit) and bomb key checks.
+
 #pragma once
 
 #include "party.h"

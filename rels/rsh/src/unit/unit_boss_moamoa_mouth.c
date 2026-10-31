@@ -32,6 +32,10 @@ const char* mouth_Attack_front[7];
 static EvtWord evt_attack[302];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Smorg Miasma (mouth) (HP 6, level 0):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 BattleUnitKind unit_boss_moamoa_mouth = {
     UNIT_SMORG_MIASMA_CLAW, // mUnitType
     "btl_un_moamoa_mouth", // name
@@ -80,10 +84,18 @@ BattleUnitKind unit_boss_moamoa_mouth = {
     data_table, // dataTable
 };
 
+/** Defence of the Smorg Miasma (mouth): 1 damage points off every hit. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Element reactions of the Smorg Miasma (mouth): no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Smorg Miasma (mouth) (percent chance to take each status):
+ * immune to sleep, stop, dizzy, poison, confusion, electric shock, burn, freeze, growing huge, shrinking,
+ * attack up, attack down, defence up, defence down, allergy, fright, gale force, speed up, slow, dodgy,
+ * invisibility and instant kill.
+ */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -116,11 +128,15 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_2"},
 };
 
+/** Data table of the Smorg Miasma (mouth): event handlers for being defeated. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/**
+ * Body part of the Smorg Miasma (mouth) (model c_g_moamoa_b): hit position, defences, attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1, "btl_un_moamoa_mouth", "c_g_moamoa_b",
@@ -133,6 +149,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon of the Smorg Miasma (mouth)'s attack: 10 damage. */
 static BattleWeapon weapon_moamoa_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -284,6 +301,7 @@ static EVT_BEGIN(evt_attack_other_arm)
     RETURN
 EVT_END()
 
+/** Animation names (A_2_1, A_2_2) the Smorg mouth plays, in order, for its attack. */
 const char* mouth_Attack_front[] = {
     "A_2_1",
     "A_2_2",

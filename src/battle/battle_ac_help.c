@@ -1,3 +1,5 @@
+// Action command help text: displays the short on-screen hint that explains the current action command.
+
 #include "battle/battle_ac_help.h"
 #include "battle/battle.h"
 #include "battle/battle_audience.h"

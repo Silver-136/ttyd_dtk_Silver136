@@ -1,3 +1,5 @@
+// Declares the Showstopper (sac_suki) special move events.
+
 #pragma once
 
 #include "dolphin/types.h"

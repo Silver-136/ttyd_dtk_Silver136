@@ -1,3 +1,5 @@
+// The Great Tree (mri): punidrv, the Puni billboard renderer's types and entry points.
+
 #pragma once
 
 #include <dolphin/types.h>

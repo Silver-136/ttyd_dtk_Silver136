@@ -1,3 +1,5 @@
+// unit_lecture_frankli_sac: Professor Frankly in the special-action-command (star power) tutorial battle.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "statuswindow.h"
@@ -57,6 +59,10 @@ EvtWord actend_event[538];
 static EvtWord damage_event[75];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of Prof. Frankly:
+ * 10 HP, level 1, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_lecture_frankli_sac = {
     UNIT_TUTORIAL_FRANKLY_B3, // mUnitType
     "btl_un_frankli", // name
@@ -105,10 +111,13 @@ BattleUnitKind unit_lecture_frankli_sac = {
     data_table, // dataTable
 };
 
+/** Defence of Prof. Frankly's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of Prof. Frankly's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Status vulnerability of Prof. Frankly: immune to every status. */
 static StatusVulnerability regist = {
     0, // sleep
     0, // stop
@@ -134,6 +143,10 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/**
+ * Pose table of Prof. Frankly:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_KO, "D_1"},
     {POSE_TYPE_NORMAL, "S_1"},
@@ -142,10 +155,12 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Event table of Prof. Frankly: empty, so it has no special reactions. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of Prof. Frankly: a single part using the model "c_kuri_h". */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_frankli", "c_kuri_h", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kUntattleable | kNoHpLoss, 0, pose_table},
 };

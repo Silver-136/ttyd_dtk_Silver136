@@ -1,3 +1,5 @@
+// Slot-machine event (break slot): spinning reels, card symbols and combination effects.
+
 #include "battle/battle_break_slot.h"
 #include "battle/battle.h"
 #include "battle/battle_audience.h"
@@ -109,6 +111,10 @@ EVT_BEGIN(shine_effect)
     RETURN
 EVT_END()
 
+/**
+ * Weapon for the Poison Mushroom BINGO! (doku_kinoko_effect): halves the HP of Mario and the partner;
+ * always hits, pierces defense and can't be guarded.
+ */
 BattleWeapon weapon_doku_kinoko = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -138,6 +144,7 @@ BattleWeapon weapon_doku_kinoko = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon for the second half of the Poison Mushroom BINGO!: halves Mario's FP a second after the HP hit. */
 BattleWeapon weapon_doku_kinoko_fp = {
     NULL, 0, // name..icon
     {0}, // pad_06

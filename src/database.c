@@ -1,3 +1,6 @@
+// Map setup data: loads the per-map setup file and spawns the field enemies it lists (position, AI and
+// territory, battle setup), keeping the defeated-enemy records.
+
 #include "database.h"
 #include "driver/arcdrv.h"
 #include "manager/evtmgr.h"
@@ -248,6 +251,10 @@ void setupDataBase(const char* areaName, const char* mapName) {
     }
 }
 
+/**
+ * Field-enemy attributes of each map (area group number and reset flags), ending with a NULL-named entry:
+ * setupDataBase looks the map up here to decide when the defeated-enemy records are cleared.
+ */
 MapAttrEntry _map_attr_data[] = {
     { "tik_00", 16, 7 },
     { "tik_01", 16, 7 },

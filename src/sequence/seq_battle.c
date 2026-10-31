@@ -1,3 +1,5 @@
+// Battle sequence: loads the battle REL and map, runs the battle and returns to the field.
+
 #include "battle/battle.h"
 #include "battle/battle_information.h"
 #include "driver/animdrv.h"
@@ -368,7 +370,15 @@ void battle_exit(void) {
     }
 }
 
+/**
+ * gon_11, whose message file a debug battle loads when its menu has none, and the battle stage maps for
+ * Mario's rank (bti_01 to bti_04, the stage gets bigger as he rises).
+ */
 static const char gon11[] = "gon_11";
+/**
+ * Names of the battle stage maps for Mario's rank (bti_01 to bti_04, the stage gets bigger as he rises),
+ * and gon_11, whose message file a debug battle loads when its menu has none.
+ */
 static const char bti01[] = "bti_01";
 static const char bti02[] = "bti_02";
 static const char bti03[] = "bti_03";

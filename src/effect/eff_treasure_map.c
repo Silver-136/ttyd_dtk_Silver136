@@ -1,3 +1,5 @@
+// Treasure map: plays the EFF_treasure_map model animation at a point and fades out when removed.
+
 #include "eff/eff_treasure_map.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"

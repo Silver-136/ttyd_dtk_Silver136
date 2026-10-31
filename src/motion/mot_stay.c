@@ -1,3 +1,5 @@
+// Mario's standing and idle motions: idle poses, low-HP and sleep poses, and the automatic motion changes.
+
 #include "dolphin/types.h"
 #include "mario/mario.h"
 #include "mario/mario_cam.h"

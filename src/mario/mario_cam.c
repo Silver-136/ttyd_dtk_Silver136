@@ -1,3 +1,5 @@
+// The field camera that follows Mario: target, zoom and shift per motion (walk, jump, slit, plane, cloud ride).
+
 #include "mario/mario_cam.h"
 #include "driver/camdrv.h"
 #include "evt/evt_cam.h"

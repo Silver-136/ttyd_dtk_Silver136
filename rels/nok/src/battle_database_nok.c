@@ -16,6 +16,7 @@ NpcBattleSelect btlgrpsel_nok_btlno_hei_test1_off[2];
 NpcSetupBattleInfo btlsetup_nok_tbl[2];
 NpcTerritoryInfo btl_nok_setup_no_tbl[2];
 
+/** Scenery props of the Petalburg battle stage (stg_04_0): rocks and grass tufts with their positions. */
 BattleStageObjectData nok_btlobject_data[] = {
     {"ki_1", 2, 0, {-100.0f, 0.0f, -30.0f}, 0, 60, {0}},
     {"isi_A", 2, 0, {150.0f, 0.0f, -30.0f}, 10, 50, {0}},
@@ -29,6 +30,7 @@ BattleStageObjectData nok_btlobject_data[] = {
     {"C", 2, 3, {0}, 0, 60, {0}},
 };
 
+/** The Petalburg battle stage (bti_01 backdrop, stg_04_0 scenery) used by the epilogue stage-play fight. */
 BattleStageData nok_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -42,6 +44,7 @@ BattleStageData nok_btlstage_data[] = {
     },
 };
 
+/** Enemy of the epilogue stage play: the play's Mario (unit_act_mario). */
 BattleUnitSetup btlparty_nok_hei_ep[] = {
     {
         &unit_act_mario, // mUnitKindParams
@@ -71,6 +74,9 @@ NpcBattleSelect btlgrpsel_nok_btlno_hei_test1_off[] = {
     {0},
 };
 
+/**
+ * Encounter table of Petalburg: the single epilogue stage-play battle with its enemy pool and battle music.
+ */
 NpcSetupBattleInfo btlsetup_nok_tbl[] = {
     {
         /*"マップstg_01_0"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x31\x5F\x30", // name

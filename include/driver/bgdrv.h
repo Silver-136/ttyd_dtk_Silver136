@@ -1,3 +1,5 @@
+// bgdrv.c: the background driver (BackgroundWork, bgEntry/bgSetColor): the backdrop behind a map or battle stage.
+
 #pragma once
 
 #include <dolphin/gx.h>

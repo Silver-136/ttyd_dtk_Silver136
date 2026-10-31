@@ -1,3 +1,6 @@
+// Fade driver: screen transitions (iris, spot and colour fades, curtains, pipe and page-flip animations,
+// story-book frames) and the tec/soft-focus/white-out overlays.
+
 #include "driver/fadedrv.h"
 #include "driver/animdrv.h"
 #include "driver/arcdrv.h"

@@ -48,6 +48,7 @@ static USER_FUNC(killer_copy_status) {
     return EVT_RETURN_DONE;
 }
 
+/** Unit data of the Bill Blaster: 5 HP, level 22; the battle starts it from init_event. */
 BattleUnitKind unit_killer_cannon = {
     UNIT_BILL_BLASTER, // mUnitType
     "btl_un_killer_cannon", // name
@@ -96,8 +97,10 @@ BattleUnitKind unit_killer_cannon = {
     data_table, // dataTable
 };
 
+/** Defence of the Bill Blaster: 2 against every element. */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/** Elemental reactions of the Bill Blaster: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -125,12 +128,20 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * Parts of the Bill Blaster: part 1 is the cannon with its front barrel, and parts 2 and 3 are the pieces
+ * shown in its place while the barrel is raised for an upper launch.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_killer_cannon", "c_killtai", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 35, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_killer_cannon", "c_killtai", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kNotTargetable, 0, pose_table},
     {3, "btl_un_killer_cannon", "c_killtai", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0, 0, 255, &defence, &defence_attr, kNotTargetable, 0, pose_table},
 };
 
+/**
+ * Setup for the Bullet Bill the Bill Blaster fires; it starts hidden below the stage and is moved to the
+ * barrel.
+ */
 static BattleUnitSetup entry_killer = {
     &unit_killer, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -142,6 +153,9 @@ static BattleUnitSetup entry_killer = {
     NULL, // itemDropTable
 };
 
+/**
+ * Pose table of the Bill Blaster: the animation each battle pose (idle, hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KTA_N_1"},
     {POSE_TYPE_STOP, "KTA_Y_1"},
@@ -161,6 +175,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KTA_S_1"},
 };
 
+/** Event table of the Bill Blaster: empty, it has no special reactions. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };

@@ -1,3 +1,5 @@
+// Script commands for map collision objects: flags, positions and damage settings (hitdrv).
+
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/hitdrv.h"

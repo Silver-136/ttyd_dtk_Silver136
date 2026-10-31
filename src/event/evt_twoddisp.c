@@ -1,3 +1,5 @@
+// Script commands for 2D icon and text overlays.
+
 #include "evt/evt_cmd.h"
 #include "driver/dispdrv.h"
 #include "driver/icondrv.h"

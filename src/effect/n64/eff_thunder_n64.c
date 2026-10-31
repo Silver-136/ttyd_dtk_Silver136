@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: lightning strike with a charge light or flare and a shock flash; type picks variant.
+
 #include "eff/n64/eff_thunderflare_n64.h"
 #include "eff/eff_n64.h"
 #include "eff/n64/eff_akari_charge_n64.h"
@@ -34,6 +36,10 @@ typedef struct EffThunderN64Work {
 void effThunderMain(EffectEntry* effect);
 void effThunderDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * The lightning bolt mesh (inazuma, "lightning"): several jagged bolt shapes,
+ * of which each type draws its own set of triangles.
+ */
 effN64Vtx Ncube_inazuma_v[] = {
     {-85, -102, 0, 3887, 2048, 255, 255, 255, 255},
     {-135, -138, 0, 4053, 1024, 255, 255, 255, 255},

@@ -1,3 +1,5 @@
+// evt_msg.c: script commands for message windows: printing, choices, inserted strings and closing.
+
 #pragma once
 
 #include <dolphin/types.h>

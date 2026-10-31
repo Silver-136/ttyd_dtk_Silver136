@@ -1,3 +1,5 @@
+// Rating text (nice, good, great, wonderful, excellent, lucky) in per-language models, squashing and stretching, with a sound.
+
 #include "eff/eff_nice.h"
 #include "driver/animdrv.h"
 #include "mario/mariost.h"
@@ -67,6 +69,10 @@ const char* anim_lang6[] = {
     "EFF_lucky_I"
 };
 const char** anim_tbl[6] = { anim_jp, anim_us, anim_lang3, anim_lang4, anim_lang5, anim_lang6 };
+/**
+ * Letter textures spelling the Stylish text (type 7) in each language, drawn left to right;
+ * -1 leaves a gap.
+ */
 s16 acrobat_jp[] = {151, 152, 153, 154, 155, 156, 157};
 s16 acrobat_us[] = {161, 162, 163, 164, 165, 161, 166, 167};
 s16 acrobat_lang3[] = {157, 158, 158, 159, 160};
@@ -77,11 +83,17 @@ typedef struct AcrobatSet {
     s16* tex;
     s32 count;
 } AcrobatSet;
+/** Stylish letter list and letter count for each language, read by acrobatMain and the type 7 draw. */
 AcrobatSet acrobat_tbl[6] = { { acrobat_jp, 7 }, { acrobat_us, 8 }, { acrobat_lang3, 5 }, { acrobat_lang4, 6 }, { acrobat_lang5, 9 }, { acrobat_lang6, 10 } };
 #else
 static const char** anim_tbl[2] = { anim_jp, anim_us };
+/**
+ * Letter textures spelling the Stylish text (type 7) in each language, drawn left to right;
+ * -1 leaves a gap.
+ */
 s32 acrobat_jp[] = {179, 180, 181, 182, 183, 184, 185};
 s32 acrobat_us[] = {183, 184, 185, 186, 187, 188}; // includes nonexistent textures
+/** Stylish letter list and letter count for each language, read by acrobatMain and the type 7 draw. */
 s32* acrobat_tbl[2] = { acrobat_jp, acrobat_us };
 #endif
 

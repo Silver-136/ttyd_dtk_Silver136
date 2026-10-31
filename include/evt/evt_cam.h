@@ -1,3 +1,5 @@
+// evt_cam.c: script commands for the cameras (position, target, shake, zoom, 3D camera modes).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

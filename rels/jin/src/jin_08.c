@@ -82,6 +82,11 @@ EVT_BEGIN(evt_roll_in)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room:
+ * e_bero_1, the Steeple Key door back to jin_07 (it stays shut until unlocked), and e_bero_2,
+ * the ramp exit that also leads to jin_07.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero_1", // hitName
@@ -306,6 +311,7 @@ EVT_BEGIN(oumu_check)
     RETURN
 EVT_END()
 
+/** NPCs of this room: the parrot. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"オウム"*/"\x83\x49\x83\x45\x83\x80", // name
@@ -322,6 +328,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Items the key picker offers for the locked door: only the Steeple Key (-1 ends the list). */
 static s32 lock_tbl[] = {
     ITEM_STEEPLE_KEY_0x17, -1,
 };

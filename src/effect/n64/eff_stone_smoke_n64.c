@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: a puff of stone-gray smoke that grows and fades over `lifetime` frames.
+
 #include "eff/n64/eff_stone_smoke_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -7,6 +9,7 @@
 #include <dolphin/mtx.h>
 #include "driver/effdrv.h"
 
+/** 16x16 quad drawn for the smoke puff. */
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 1024, 0, 0, 0, 0, 255},
@@ -14,6 +17,10 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
 };
 
+/**
+ * Size in percent as the puff pops in over its first 7 frames, overshooting before it settles.
+ * scale_data2: the 7-frame size pulse it then loops while it rises.
+ */
 static u8 scale_data[7] = {0, 30, 80, 120, 112, 104, 100};
 static u8 scale_data2[7] = {94, 92, 100, 105, 107, 105, 100};
 

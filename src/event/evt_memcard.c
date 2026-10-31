@@ -1,3 +1,5 @@
+// Scripts and commands for saving and loading on the memory card (cardmgr).
+
 #include "evt/evt_cmd.h"
 #include "evt/evt_fade.h"
 #include "manager/cardmgr.h"

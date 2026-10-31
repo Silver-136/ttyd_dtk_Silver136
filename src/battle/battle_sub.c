@@ -1,3 +1,5 @@
+// Battle math and movement helpers: trig in degrees, position movement and unit transition ids.
+
 #include "battle/battle_sub.h"
 #include "battle/battle_unit.h"
 #include "battle/battle.h"

@@ -1,3 +1,5 @@
+// Script commands and scripts for moving floors (platforms that follow a path).
+
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
 #include "manager/evtmgr.h"
@@ -47,6 +49,10 @@ typedef struct MovingFloor {
 USER_FUNC(evt_mario_get_name_hitobj_head);
 USER_FUNC(evt_mario_get_name_hitobj_ride);
 
+/**
+ * Sine of each whole degree from 0 to 449 (the extra quarter turn lets it double as a cosine table).
+ * Only the WOBBLE macro reads it, for the 3-unit bob of kind 1 moving floors.
+ */
 static f32 sintbl[450] = {
     0.0f, 0.017452f, 0.034899f, 0.052336f, 0.069756f, 0.087156f, 0.104528f, 0.121869f,
     0.139173f, 0.156434f, 0.173648f, 0.190809f, 0.207912f, 0.224951f, 0.241922f, 0.258819f,

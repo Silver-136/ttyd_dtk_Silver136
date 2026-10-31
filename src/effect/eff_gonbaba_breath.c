@@ -13,6 +13,12 @@
 #include "libc_decls.h"
 #include "poly_trig.h"
 
+/**
+ * Colour sets of the dragon breath, one per breath kind: normal fire (orange), poison (olive green), mega
+ * (pale yellow), cold (ice blue), confusion (green), sleep (pale grey-pink) and mini (purple). In each set the
+ * first three colours tint the three nested layers of a breath puff, outermost first; the companion sparks fade
+ * from the fourth colour to the first. col_tbl picks a set by type % 10 (type 7, Bowser's flame, reuses normal).
+ */
 static GXColor col_normal[] = {
     {0xF2, 0x65, 0x22, 0xFF}, {0xF6, 0x86, 0x1E, 0xFF}, {0xF6, 0xAC, 0x1E, 0xFF}, {0xFF, 0xF5, 0x68, 0xFF}, {0x96, 0x5E, 0x1A, 0xFF},
 };

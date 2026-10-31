@@ -1,3 +1,6 @@
+// tou: Glitz Pit REL shared code and prolog/epilog; also the fighter ranking tables (init, reset, sort).
+// Registers the init events of tou_00..tou_20 (the arena tou_03 lives in the tou2 REL).
+
 #include "version.h"
 #include "mario/mariost.h"
 #include "battle/battle_unit.h"
@@ -785,6 +788,12 @@ static void printRanking(void) {
     }
 }
 
+/**
+ * The Glitz Pit fighters during chapter 3, by FighterId:
+ * from the champion Rawk Hawk down to the Goomba Bros., then Mario (The Great Gonzales)
+ * and the late arrivals Wings of Night and The Destructors.
+ * Each has its name, title, battle setup, pre-match and victory lines and starting ranking points.
+ */
 static FighterData fighterDt[] = {
     {4, "stg3_tou_sensyu_00", "stg3_tou_sensyu2_00", 22, "stg3_tou_400_02", "stg3_tou_400_03", 250},
     {4097, "stg3_tou_sensyu_01", "stg3_tou_sensyu2_01", 19, "stg3_tou_118_00", "stg3_tou_118_01", 200},
@@ -835,6 +844,10 @@ static FighterData fighterDt_re[] = {
     {8, "stg3_tou_re_335", "stg3_tou_re_358", 1, 0, 0, 0},
 };
 
+/**
+ * Grubba's special match conditions in the minor league (Mario ranked below 10th): the condition speech, the
+ * short condition shown in battle, the rule id and its two parameters.
+ */
 static RuleData ruleDt_2bu[] = {
     {"stg3_tou_107_01", "stg3_tou_cp_000", 18, 3, 3},
     {"stg3_tou_107_02", "stg3_tou_cp_001", 1, 1, 1},
@@ -848,6 +861,7 @@ static RuleData ruleDt_2bu[] = {
     {"stg3_tou_107_16", "stg3_tou_cp_009", 43, 1, 1},
 };
 
+/** Grubba's special match conditions in the major league, with stricter numbers and four extra rules. */
 static RuleData ruleDt_1bu[] = {
     {"stg3_tou_107_01", "stg3_tou_cp_010", 18, 5, 5},
     {"stg3_tou_107_02", "stg3_tou_cp_011", 1, 1, 1},
@@ -865,6 +879,7 @@ static RuleData ruleDt_1bu[] = {
     {"stg3_tou_107_20", "stg3_tou_cp_024", 63, 255, 255},
 };
 
+/** The match conditions after chapter 3, read out by Jolene instead of Grubba (the major-league rules). */
 static RuleData ruleDt_re[] = {
     {"stg3_tou_re_362", "stg3_tou_cp_040", 18, 5, 5},
     {"stg3_tou_re_363", "stg3_tou_cp_041", 1, 1, 1},
@@ -882,10 +897,13 @@ static RuleData ruleDt_re[] = {
     {"stg3_tou_re_376", "stg3_tou_cp_054", 63, 255, 255},
 };
 
+/** Pointer to the live ranking (rank_work) that the ranking helpers in this file work on. */
 static RankWork* rank_wp = &rank_work;
 
+/** Pointer to the ranking board's display state (disp_work). */
 static DispWork* dwp = &disp_work;
 
+/** Full-width digits 0 to 9, used to write ranking numbers into the ranking board text. */
 static const char* suuji[] = {
     /*"０"*/"\x82\x4F", /*"１"*/"\x82\x50", /*"２"*/"\x82\x51", /*"３"*/"\x82\x52", /*"４"*/"\x82\x53", /*"５"*/"\x82\x54", /*"６"*/"\x82\x55", /*"７"*/"\x82\x56",
     /*"８"*/"\x82\x57", /*"９"*/"\x82\x58",

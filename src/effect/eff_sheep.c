@@ -1,3 +1,6 @@
+// Sheep (hituji: sheep): a herd of 50 sheep (EFF_hituji model) running and hopping across the screen
+// with the item sleep sounds and puffs of smoke.
+
 #include "eff/eff_kemu_test.h"
 #include "battle/battle.h"
 #include "driver/animdrv.h"

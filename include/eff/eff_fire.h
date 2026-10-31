@@ -1,3 +1,5 @@
+// eff_fire.c: flame effect: effFireEntry and its work data (EffFireWork).
+
 #pragma once
 
 #include "driver/effdrv.h"

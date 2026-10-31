@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: music notes (onpu: musical note) at a point; types 0 and 1.
+
 #include "eff/n64/eff_onpu_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -21,6 +23,7 @@ typedef struct EffOnpuN64Work {
     f32 targetVy; // 0x30
 } EffOnpuN64Work;
 
+/** Camera-facing 16x32 music note quad. */
 static effN64Vtx size16x32_tex16x32_vtx[] = {
     {-8, 0, 0, 0, 0, 0, 0, 0, 255},
     {8, 0, 0, 512, 0, 0, 0, 0, 255},
@@ -28,6 +31,7 @@ static effN64Vtx size16x32_tex16x32_vtx[] = {
     {-8, 32, 0, 0, 1024, 0, 0, 0, 255},
 };
 
+/** Pastel colours the music note cycles through, as RGB entries. */
 static u8 color_rotation_data[] = {
     0xFE, 0xAC, 0xAC, 0xFE, 0xAC, 0xD5, 0xFE, 0xB4, 0x9A, 0xD5, 0xB4, 0xFE,
     0xB4, 0xB4, 0xFE, 0xB4, 0xDD, 0xFE, 0xB4, 0xFE, 0xFE, 0xB4, 0xFE, 0xD5,

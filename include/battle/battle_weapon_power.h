@@ -1,3 +1,5 @@
+// Declares the weapon power calculation functions.
+
 #pragma once
 
 #include <dolphin/types.h>

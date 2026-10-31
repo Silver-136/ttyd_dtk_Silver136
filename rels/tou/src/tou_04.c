@@ -320,6 +320,11 @@ static EVT_BEGIN(n2_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Doors of the Glitz Pit corridor: the west and east exits to tou_02, the south doors to tou_11, tou_09,
+ * tou_07 (the champion's room), tou_06, tou_05 (Grubba's office), tou_08 and tou_10,
+ * and the north doors to tou_03.
+ */
 static BeroEntry bero_data[] = {
     {
         "w_bero", // hitName
@@ -1331,6 +1336,7 @@ static EVT_BEGIN(talk_brots)
     RETURN
 EVT_END()
 
+/** NPCs of the corridor: Jolene, Grubba, the champion, one more resident and eleven guards. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"キノシコワ"*/"\x83\x4C\x83\x6D\x83\x56\x83\x52\x83\x8F", // name
@@ -2122,6 +2128,7 @@ static EVT_BEGIN(evt_toile2)
     RETURN
 EVT_END()
 
+/** Item list for the storage room door's key menu: just the Storage Key. */
 static s32 key_tbl[] = {
     ITEM_STORAGE_KEY_0x12, -1,
 };

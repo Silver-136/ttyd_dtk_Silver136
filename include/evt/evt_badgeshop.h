@@ -1,3 +1,5 @@
+// evt_badgeshop.c: BadgeShopWork and the script commands for the badge shop stock tables and bargains.
+
 #pragma once
 
 #include <dolphin/types.h>

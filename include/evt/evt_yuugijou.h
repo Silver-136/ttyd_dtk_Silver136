@@ -1,3 +1,5 @@
+// evt_yuugijou.c: the Pianta Parlor (yuugijou, amusement hall) work (PiantaParlorWork) and its minigame commands.
+
 #pragma once
 
 #include <dolphin/types.h>

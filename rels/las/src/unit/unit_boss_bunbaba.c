@@ -52,6 +52,10 @@ static EvtWord charge_event[55];
 static EvtWord attack_event[237];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of Gloomtail in the Palace of Shadow: 80 HP, level 76;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_boss_bunbaba = {
     UNIT_GLOOMTAIL,
     "btl_un_bunbaba",
@@ -122,8 +126,16 @@ BattleUnitKind unit_boss_bunbaba = {
     data_table,
 };
 
+/**
+ * Defence of Gloomtail against each element (normal, fire, ice, explosion, electric):
+ * 2 against every element, so each hit is cut by 2.
+ */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/**
+ * Damage modifiers of Gloomtail per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -151,6 +163,7 @@ static StatusVulnerability regist = {
     1, // ohko
 };
 
+/** Pose table of Gloomtail: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GNB_N_1"},
     {POSE_TYPE_CONFUSE, "GNB_X_1"},
@@ -163,17 +176,23 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "GNB_S_3"},
 };
 
+/**
+ * Data table of Gloomtail: event scripts and values the battle looks up by tag (damage reactions, dodge,
+ * first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, bunbaba_damage_sub_event},
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {0, NULL},
 };
 
+/** Parts of Gloomtail: 2 parts with their hit boxes, defence tables and pose tables. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_bunbaba", "c_gonbaba_b", 0.0f, 0.0f, 0.0f, 230.0f, 36.0f, 60.0f, 230.0f, 36.0f, 60.0f, 20, 30, 255, &defence, &defence_attr, kImportantPart, 0, pose_table},
     {2, "btl_un_bunbaba", "c_gonbaba_b", 100.0f, 0.0f, 0.0f, 250.0f, 110.0f, 25.0f, 250.0f, 110.0f, 25.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget | kHidden, 0, pose_table},
 };
 
+/** Weapon of Gloomtail's stomp: damage 8. */
 BattleWeapon weapon_bunbaba_fumituke_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -215,6 +234,7 @@ BattleWeapon weapon_bunbaba_fumituke_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 10, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Gloomtail's bite: damage 8. */
 BattleWeapon weapon_bunbaba_kamituki_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -254,6 +274,7 @@ BattleWeapon weapon_bunbaba_kamituki_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Gloomtail's poison breath: damage 8; inflicts Poison (50%). */
 BattleWeapon weapon_bunbaba_poison_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -296,6 +317,7 @@ BattleWeapon weapon_bunbaba_poison_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Gloomtail's earthquake: damage 10. */
 BattleWeapon weapon_bunbaba_eq_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -335,6 +357,7 @@ BattleWeapon weapon_bunbaba_eq_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Gloomtail's charge-up. */
 BattleWeapon weapon_bunbaba_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -370,6 +393,7 @@ BattleWeapon weapon_bunbaba_charge = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of Gloomtail's Mega Breath: damage 8. */
 BattleWeapon weapon_bunbaba_mega_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

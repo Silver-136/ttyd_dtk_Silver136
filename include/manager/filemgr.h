@@ -1,3 +1,5 @@
+// filemgr.c: the file manager (FileEntry, FileManagerWork): loads files into the smart heap and caches them by name.
+
 #pragma once
 
 #include "manager/dvdmgr.h"

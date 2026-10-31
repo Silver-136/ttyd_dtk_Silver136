@@ -1,3 +1,5 @@
+// Battle database of Fahr Outpost (bom.rel): stage data, enemy groups and the encounter tables of its maps.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_weapon_power.h"
@@ -43,6 +45,10 @@ NpcSetupBattleInfo btlsetup_bom_tbl[8];
 NpcTerritoryInfo btl_bom_setup_no_tbl[8];
 EvtWord bgset_bom_snow_event[4];
 
+/**
+ * Props of the Fahr Outpost battle stage: each entry names a model of the backdrop and where it stands, the
+ * last entries being the background layers.
+ */
 BattleStageObjectData bom_btlobject_data[] = {
     {"yuki_front", 2, 1, {0.0f, 0.0f, 76.0f}, 0, 60, {0}},
     {"yuki_back", 2, 1, {0.0f, 0.0f, -40.0f}, 10, 50, {0}},
@@ -57,6 +63,10 @@ BattleStageObjectData bom_btlobject_data[] = {
     {"C", 2, 3, {0}, 0, 60, {0}},
 };
 
+/**
+ * Battle stage of Fahr Outpost: the stage model directories, the props above, the backdrop weapons and the
+ * background event that runs during the fight.
+ */
 BattleStageData bom_btlstage_data[] = {
     {
         "bti_01", // mGlobalStageDataDir
@@ -503,6 +513,10 @@ NpcBattleSelect btlgrpsel_bom_btlno_bom_04_03_off[] = {
     {0},
 };
 
+/**
+ * Field battle setups of Fahr Outpost: one entry per battle id in btl_bom_setup_no_tbl, giving the stage, the
+ * group selection and the battle music.
+ */
 NpcSetupBattleInfo btlsetup_bom_tbl[] = {
     {
         /*"マップstg_07_0"*/"\x83\x7D\x83\x62\x83\x76\x73\x74\x67\x5F\x30\x37\x5F\x30", // name

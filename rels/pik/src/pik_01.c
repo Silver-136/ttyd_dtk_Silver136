@@ -149,6 +149,7 @@ static EVT_BEGIN(n_door_close)
     RETURN
 EVT_END()
 
+/** Doors and exits of pik_01: nw_bero to pik_04; n_bero to pik_02; dokan_1 to tik_17 (Rogueport Sewers). */
 static BeroEntry bero_data[] = {
     {
         "nw_bero", // hitName
@@ -484,14 +485,17 @@ EVT_BEGIN(miyageya_init)
     RETURN
 EVT_END()
 
+/** Items for request 29 when Little Narikin asks for a Shroom Cake: the Shroom Cake only, ended by -1. */
 s32 iri_29_item_tbl1[] = {
     ITEM_SHROOM_CAKE, -1,
 };
 
+/** Items for request 29 when Little Narikin asks for a Keelhaul Mango: the Keel Mango only, ended by -1. */
 s32 iri_29_item_tbl2[] = {
     ITEM_KEEL_MANGO, -1,
 };
 
+/** Items for request 29 when Little Narikin asks for a Fright Mask: the Fright Mask only, ended by -1. */
 s32 iri_29_item_tbl3[] = {
     ITEM_FRIGHT_MASK, -1,
 };
@@ -796,6 +800,7 @@ EVT_BEGIN(takun6_talk)
     RETURN
 EVT_END()
 
+/** NPCs of the town square: Detective Pennington and the souvenir shop owner. */
 static NpcSetupInfo npc_data[] = {
     {
         /*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3", // name

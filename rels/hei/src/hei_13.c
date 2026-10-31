@@ -23,6 +23,7 @@ static TreeAccess ki_data[2];
 EvtWord evt_anm_kan[59];
 EvtWord hei_13_init_evt[110];
 
+/** Doors of this room: the west exit (w_bero) to hei_00 and the east exit (e_bero) to hei_01. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -91,6 +92,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/** The tree Mario can hit in this field (a_ki_1). */
 static TreeAccess ki_data[] = {
     {0, "a_ki_1", "miki_", "ha_temae", "ha_usiro", NULL},
     {7, NULL, NULL, NULL, 0, NULL},

@@ -22,6 +22,7 @@ static HitDamageReturn hitDmgRetPoints[3];
 static EvtWord mobj_box00[34];
 EvtWord tik_21_init_evt[35];
 
+/** Doors of this room: the south exit back to tik_15. */
 static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName
@@ -87,6 +88,10 @@ EVT_BEGIN(hari_trap)
     RETURN
 EVT_END()
 
+/**
+ * Spots Mario is put back on after touching this room's hazards: mod_1 at its own position, mod_2 at
+ * (130, 0, -64).
+ */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_1", {0.0f, -1000.0f, 0.0f}},
     {"mod_2", {130.0f, 0.0f, -64.0f}},

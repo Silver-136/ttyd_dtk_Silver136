@@ -34,6 +34,10 @@ static EvtWord phase_event[2];
 static EvtWord attack_event[638];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Hyper Goomba:
+ * 8 HP, level 15, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_hyper_kuriboo = {
     UNIT_HYPER_GOOMBA, // mUnitType
     "btl_un_hyper_kuriboo", // name
@@ -82,6 +86,10 @@ BattleUnitKind unit_hyper_kuriboo = {
     data_table, // dataTable
 };
 
+/**
+ * Pose table of the Hyper Goomba:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KUR_N_1"},
     {POSE_TYPE_STOP, "KUR_Y_1"},
@@ -105,13 +113,16 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KUR_S_1"},
 };
 
+/** Event table of the Hyper Goomba: nothing special on a First Strike. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Defence of the Hyper Goomba's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Hyper Goomba's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -139,10 +150,12 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Hyper Goomba: a single part using the model "c_kuribo_h". */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_hyper_kuriboo", "c_kuribo_h", 0.0f, 0.0f, 0.0f, 0.0f, 22.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Hyper Goomba's attack: 2 damage to a single target, a jump-style hit. */
 static BattleWeapon weapon_kuriboo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -179,6 +192,7 @@ static BattleWeapon weapon_kuriboo_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Hyper Goomba's charge-up move (no damage, used on itself). */
 static BattleWeapon weapon_kuriboo_charge = {
     NULL, 0, // name..icon
     {0}, // pad_06

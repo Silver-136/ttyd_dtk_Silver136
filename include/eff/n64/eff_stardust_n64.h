@@ -1,3 +1,5 @@
+// eff_stardust_n64.c: stardust effect entry (effStardustN64Entry) and setters for color, scale and draw camera.
+
 #pragma once
 
 #include "driver/effdrv.h"

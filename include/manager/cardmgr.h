@@ -1,3 +1,5 @@
+// cardmgr.c: the memory card manager (CardMetadata and save file layout): mount, create, read and write the save file.
+
 #pragma once
 
 #include "evt/evt_badgeshop.h"

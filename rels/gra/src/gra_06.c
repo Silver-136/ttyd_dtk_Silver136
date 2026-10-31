@@ -108,6 +108,10 @@ EVT_BEGIN(gra_06_ido_in)
     RETURN
 EVT_END()
 
+/**
+ * Doors of this room: the north exit (n_bero) to jin_00 (Creepy Steeple), the south-west exit (sw_bero) to
+ * gra_05 and the hole (ana) to jin_09 (Creepy Steeple).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "n_bero", // hitName

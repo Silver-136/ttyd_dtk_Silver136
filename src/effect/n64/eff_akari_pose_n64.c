@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: akari (light) pose, count flares step through a texture sequence and fade around a point.
+
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -23,16 +25,19 @@ typedef struct EffAkariPoseN64Work {
     f32 scale;    // 0x34
 } EffAkariPoseN64Work;
 
+/** Flare size at each step of the 24-step sequence (type 0): pops to full size, then shrinks to almost nothing. */
 static f32 scale_data[] = {
     0.9f, 1.0f, 1.0f, 0.9f, 0.85f, 0.8f, 0.75f, 0.7f, 0.65f, 0.6f, 0.55f, 0.5f,
     0.45f, 0.4f, 0.35f, 0.3f, 0.25f, 0.2f, 0.15f, 0.1f, 0.05f, 0.03f, 0.02f, 0.01f,
 };
 
+/** Flare size at each step of the 12-step sequence (type 1): pops to full size, then shrinks to zero. */
 static f32 scale_data2[] = {
     0.9f, 1.0f, 1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.1f,
     0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
 };
 
+/** Camera-facing 16x16 quad each flare is drawn with. */
 static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 1024, 0, 0, 0, 0, 255},
@@ -40,13 +45,16 @@ static effN64Vtx size16x16_tex32x32_vtx[] = {
     {-8, 8, 0, 0, 1024, 0, 0, 0, 255},
 };
 
+/** Length in steps of the flare sequence for type 0 (24) and type 1 (12). */
 static s32 max_seq_num[] = {24, 12};
 
+/** Flare alpha at each step of the type 0 sequence: opaque for all 24 steps. */
 static u8 a_data[] = {
     0xFA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 };
 
+/** Flare alpha at each step of the type 1 sequence: opaque for 12 steps, invisible after. */
 static u8 a_data2[] = {
     0xFA, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

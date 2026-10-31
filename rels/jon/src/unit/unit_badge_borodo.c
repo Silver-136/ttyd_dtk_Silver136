@@ -166,6 +166,7 @@ static USER_FUNC(_steal_item) {
     return EVT_RETURN_DONE;
 }
 
+/** Unit data of the Badge Bandit: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_badge_borodo = {
     UNIT_BADGE_BANDIT, // mUnitType
     "btl_un_badge_borodo", // name
@@ -214,6 +215,7 @@ BattleUnitKind unit_badge_borodo = {
     data_table, // dataTable
 };
 
+/** Attack data for the Badge Bandit's charging dash (also used for the steal): 5 damage. */
 static BattleWeapon weapon_borodo_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -250,8 +252,10 @@ static BattleWeapon weapon_borodo_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Damage reduction of the Badge Bandit: none, every attack type does full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element response of the Badge Bandit: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -279,6 +283,7 @@ static StatusVulnerability regist = {
     60, // ohko
 };
 
+/** Pose table of the Badge Bandit: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -302,6 +307,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Pose table of the Badge Bandit: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table_item_have[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -327,6 +333,7 @@ static PoseTableEntry pose_table_item_have[] = {
 extern EvtWord _badge_borodo_emergency_revival_event[];
 #endif
 
+/** Data table of the Badge Bandit: event handlers keyed by tag (_badge_borodo_emergency_revival_event). */
 static BattleDataEntry data_table[] = {
 #ifdef VERSION_G8ME01
     {UNIT_DATA_EMERGENCY_REVIVAL_EVENT, _badge_borodo_emergency_revival_event},
@@ -334,6 +341,7 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of the Badge Bandit: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_badge_borodo", "c_borodo_t", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };

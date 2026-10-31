@@ -5,6 +5,7 @@
 DEMOPadStatus DemoPad[PAD_MAX_CONTROLLERS];
 u32 DemoNumValidPads;
 PADStatus Pad[PAD_MAX_CONTROLLERS];
+/** Bit of each controller port, used by DEMOPadRead to reset ports with no controller attached. */
 u32 PadChanMask[PAD_MAX_CONTROLLERS] = {PAD_CHAN0_BIT, PAD_CHAN1_BIT, PAD_CHAN2_BIT, PAD_CHAN3_BIT};
 
 void DEMOPadCopy(PADStatus* pad, DEMOPadStatus* dmpad) {

@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Ice Puff (`bllizard`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "eff/n64/eff_kumokumo_n64.h"
 #include "evt/evt_cmd.h"
@@ -46,6 +48,7 @@ static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[12];
 
+/** Unit data of the Ice Puff: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_bllizard = {
     UNIT_ICE_PUFF, // mUnitType
     "btl_un_bllizard", // name
@@ -94,8 +97,10 @@ BattleUnitKind unit_bllizard = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Ice Puff: none, every attack type does full damage. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element response of the Ice Puff: it takes extra damage from fire and is healed by ice. */
 static BattleUnitDefenseAttr defence_attr = {{0, 1, 3, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -123,10 +128,12 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Body part of the Ice Puff: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_bllizard", "c_kmoon_b", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 30, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table},
 };
 
+/** Attack data for the Ice Puff's ramming lunge: 4 damage. */
 static BattleWeapon weapon_bllizard_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -163,6 +170,7 @@ static BattleWeapon weapon_bllizard_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Ice Puff's icy breath on the whole party: 5 damage. */
 static BattleWeapon weapon_bllizard_bllizard_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -358,6 +366,7 @@ static EVT_BEGIN(bllizard_event)
     RETURN
 EVT_END()
 
+/** Pose table of the Ice Puff: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -378,6 +387,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Data table of the Ice Puff: event handlers keyed by tag (counter_event, dmg_first_attack_pos). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_ICE_EVENT, counter_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},

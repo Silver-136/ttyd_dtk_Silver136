@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: balloon that inflates to a target scale while rotating; type picks the shape.
+
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
 #include "driver/effdrv.h"
@@ -37,6 +39,7 @@ void effGetTexObjN64(u32 id, GXTexObj* obj);
 void effSetVtxDescN64(effN64Vtx* vtx);
 void tri1();
 
+/** Template vertices of the balloon, copied each frame before the 20 outline points are wobbled around it. */
 static effN64Vtx balloon_vtx[] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 255},
     {0, 0, 0, 0, 480, 0, 0, 0, 255},

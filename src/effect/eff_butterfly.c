@@ -1,3 +1,5 @@
+// Butterfly: forwards to the Paper Mario 64 butterfly effect (effButterflyN64Entry).
+
 #include "eff/eff_butterfly.h"
 #include "eff/n64/eff_butterfly_n64.h"
 

@@ -95,6 +95,10 @@ static EvtWord bunsin_event[152];
 static EvtWord spawn_event[76];
 static EvtWord wait_event[386];
 
+/**
+ * Unit data of the Dark Wizzerd in the Pit of 100 Trials: 10 HP, level 33;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_super_mahorn = {
     UNIT_DARK_WIZZERD, // mUnitType
     "btl_un_super_mahorn", // name
@@ -143,6 +147,10 @@ BattleUnitKind unit_super_mahorn = {
     data_table, // dataTable
 };
 
+/**
+ * Unit data of the Dark Wizzerd's illusion copy in the Pit of 100 Trials:
+ * 10 HP, level 1, with its own status table.
+ */
 static BattleUnitKind unit_super_mahorn_bunsin = {
     UNIT_DARK_WIZZERD_CLONE, // mUnitType
     "btl_un_super_mahorn_bunsin", // name
@@ -187,8 +195,16 @@ static BattleUnitKind unit_super_mahorn_bunsin = {
     (BattleDataEntry*)data_table_bunsin, // dataTable
 };
 
+/**
+ * Defence of the Dark Wizzerd against each element (normal, fire, ice, explosion, electric):
+ * 2 against every element, so each hit is cut by 2.
+ */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/**
+ * Damage modifiers of the Dark Wizzerd per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -241,6 +257,7 @@ static StatusVulnerability regist_bunsin = {
     0, // ohko
 };
 
+/** Parts of the Dark Wizzerd: 5 parts with their hit boxes, defence tables and pose tables. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_super_mahorn", "c_maho_b", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_super_mahorn", "c_maho_b", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
@@ -249,6 +266,7 @@ static BattleUnitKindPart parts[] = {
     {5, "btl_un_super_mahorn", "c_maho_b", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
 };
 
+/** Weapon of the Dark Wizzerd's magic blast at one target: damage 5. */
 static BattleWeapon weapon_mahorn_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -285,6 +303,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Dark Wizzerd's magic blast that hits the whole party: damage 5. */
 static BattleWeapon weapon_mahorn_all_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -326,6 +345,7 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Dark Wizzerd's punch: damage 5. */
 static BattleWeapon weapon_mahorn_attack_punch = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -362,6 +382,7 @@ static BattleWeapon weapon_mahorn_attack_punch = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Dark Wizzerd's spell that turns it invisible: inflicts Invisible. */
 static BattleWeapon weapon_mahorn_trans_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -399,6 +420,7 @@ static BattleWeapon weapon_mahorn_trans_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Dark Wizzerd's spell that makes it dodgy: inflicts Dodgy. */
 static BattleWeapon weapon_mahorn_yokeyoke_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -435,6 +457,7 @@ static BattleWeapon weapon_mahorn_yokeyoke_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Dark Wizzerd's spell that makes it huge: inflicts a size change. */
 static BattleWeapon weapon_mahorn_dekadeka_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -472,6 +495,7 @@ static BattleWeapon weapon_mahorn_dekadeka_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Dark Wizzerd's spell that raises its Defense: inflicts a defense change. */
 static BattleWeapon weapon_mahorn_katikati_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -510,6 +534,7 @@ static BattleWeapon weapon_mahorn_katikati_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Dark Wizzerd's healing spell. */
 static BattleWeapon weapon_mahorn_recover_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -544,6 +569,7 @@ static BattleWeapon weapon_mahorn_recover_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Setup used to spawn unit_super_mahorn_bunsin: unit kind, alliance, position and turn phase. */
 static BattleUnitSetup entry_mahorn = {
     &unit_super_mahorn_bunsin, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -674,6 +700,9 @@ static EVT_BEGIN(attack_event_bunsin)
     RETURN
 EVT_END()
 
+/**
+ * Pose table of the Dark Wizzerd: animation names for each pose type (idle, walk, hurt, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "MAH_N_1"},
     {POSE_TYPE_STOP, "MAH_Y_1"},
@@ -694,6 +723,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MAH_S_1"},
 };
 
+/**
+ * Data table of the Dark Wizzerd: event scripts
+ * and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, mahorn_subset_dead_event},
     {UNIT_DATA_BLOW_DEAD_EVENT, mahorn_subset_blow_dead_event},
@@ -702,6 +735,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Data table of an illusion copy of the Dark Wizzerd:
+ * event scripts and values the battle looks up by tag (damage reactions, dodge, first strike and so on).
+ */
 static BattleDataEntry data_table_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},

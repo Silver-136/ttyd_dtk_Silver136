@@ -83,6 +83,7 @@ EVT_BEGIN(evt_anim)
     RETURN
 EVT_END()
 
+/** The three points (x, y, z) of the blimp's flight path in the chapter title scene (evt_anim2). */
 static f32 spline_dt[] = {
     -808.0f, 971.0f, 4897.0f, -801.0f, 895.0f, 4359.0f, -744.0f, 880.0f,
     3982.0f,

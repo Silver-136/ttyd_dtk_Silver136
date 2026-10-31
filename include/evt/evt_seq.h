@@ -1,3 +1,5 @@
+// evt_seq.c: script commands that change or wait on the game sequence (seqdrv).
+
 #pragma once
 
 #include "driver/seqdrv.h"

@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: a flickering glowing orb that drifts, then flashes into expanding glow rings.
+
 #include "eff/n64/eff_release_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -39,6 +41,10 @@ typedef struct AnimeEntry {
 void effReleaseMain(EffectEntry* effect);
 void effReleaseDisp(CameraId cameraId, EffectEntry* effect);
 
+/**
+ * Growth of the orb's glow rings over the 30 steps after the release flash:
+ * size in hundredths and alpha per step.
+ */
 static AnimeEntry anime_data[30] = {
     {0x0064, 0x00FF},
     {0x00C8, 0x00FF},
@@ -72,6 +78,10 @@ static AnimeEntry anime_data[30] = {
     {0x0BB8, 0x0000},
 };
 
+/**
+ * The 30 steps over which the inner glow ring shrinks back and brightens:
+ * size in hundredths and alpha per step.
+ */
 AnimeEntry anime_data_2[30] = {
     {0x0BB8, 0x0000},
     {0x0B54, 0x0005},
@@ -105,6 +115,7 @@ AnimeEntry anime_data_2[30] = {
     {0x0064, 0x00FF},
 };
 
+/** 16x16 quad drawn for the orb's flickering core. */
 static effN64Vtx size16x16_tex64x64_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 2048, 0, 0, 0, 0, 255},
@@ -112,6 +123,7 @@ static effN64Vtx size16x16_tex64x64_vtx[] = {
     {-8, 8, 0, 0, 2048, 0, 0, 0, 255},
 };
 
+/** The ring strip as eight thin bands, each half mirrored, drawn in pairs from the outside in. */
 effN64Vtx size16x16_tex256x32_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 8192, 0, 0, 0, 0, 255},
@@ -147,6 +159,7 @@ effN64Vtx size16x16_tex256x32_vtx[] = {
     {-8, 8, 0, 8192, 0, 0, 0, 0, 255},
 };
 
+/** 16x16 quad lying flat in the ground plane, drawn for the large glow. */
 effN64Vtx size16x16_tex128x128_vtx[] = {
     {-8, 0, -8, 0, 0, 0, 0, 0, 255},
     {8, 0, -8, 4096, 0, 0, 0, 0, 255},
@@ -154,6 +167,7 @@ effN64Vtx size16x16_tex128x128_vtx[] = {
     {-8, 0, 8, 0, 4096, 0, 0, 0, 255},
 };
 
+/** The release flash as two mirrored halves of one 16x16 quad. */
 effN64Vtx size16x16_tex64x64_0_vtx[] = {
     {-8, -8, 0, 0, 0, 0, 0, 0, 255},
     {8, -8, 0, 2048, 0, 0, 0, 0, 255},
@@ -165,6 +179,7 @@ effN64Vtx size16x16_tex64x64_0_vtx[] = {
     {-8, 8, 0, 2048, 0, 0, 0, 0, 255},
 };
 
+/** Full-screen 640x480 rectangle drawn for the light-grey screen flash of variants 2 and 3. */
 effN64Vtx rectangle_vtx[] = {
     {0, 0, 0, 2048, 1024, 0, 0, 0, 255},
     {640, 0, 0, 0, 1024, 0, 0, 0, 255},

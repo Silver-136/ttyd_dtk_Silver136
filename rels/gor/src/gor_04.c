@@ -113,6 +113,10 @@ EvtWord gor_04_init_evt[255];
 EvtWord gor_04_init_evt[253];
 #endif
 
+/**
+ * Train wheels of the station: for each wheel map object, its radius class, the speed that drives it and its
+ * turning direction.
+ */
 static SharinData sharinDt[] = {
     {"sha_1_1", 0, 0, FLOAT(1.0f)},
     {"sha_1_2", 0, 0, FLOAT(1.0f)},
@@ -203,6 +207,10 @@ static EVT_BEGIN(evt_sharin)
     RETURN
 EVT_END()
 
+/**
+ * Connecting rods of the train: for each rod map object, its wheel class, driving speed, crank radius and
+ * turning direction.
+ */
 static ClankData clankDt[] = {
     {"bou_1", 0, 0, FLOAT(20.0f), FLOAT(1.0f)},
     {"bou_2", 1, 1, FLOAT(16.5f), FLOAT(1.0f)},
@@ -1058,6 +1066,10 @@ static EVT_BEGIN(peach_mail)
     RETURN
 EVT_END()
 
+/**
+ * Exits (beros) of this room: s_bero to gor_03, dokan_1 (script only), A_dokan_h00 (script only) and n_bero
+ * to rsh_01_a.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName
@@ -1386,6 +1398,7 @@ static EVT_BEGIN(luigi_talk)
     RETURN
 EVT_END()
 
+/** NPC setup of Luigi at the station. */
 static NpcSetupInfo luigiEnt[] = {
     {
         /*"ルイージ"*/"\x83\x8B\x83\x43\x81\x5B\x83\x57", // name
@@ -1426,6 +1439,7 @@ EVT_BEGIN(scream_talk)
     RETURN
 EVT_END()
 
+/** NPC setup of Su Creamy, Luigi's companion at the station. */
 NpcSetupInfo screamEnt[] = {
     {
         /*"ス・クリーミ"*/"\x83\x58\x81\x45\x83\x4E\x83\x8A\x81\x5B\x83\x7E", // name
@@ -1442,6 +1456,10 @@ NpcSetupInfo screamEnt[] = {
     {0},
 };
 
+/**
+ * NPC setup of the station: the blimp attendant, the station clerk, the Lakitu, the Toad woman, Baba and the
+ * flying Koopa.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"飛行船係員"*/"\x94\xF2\x8D\x73\x91\x44\x8C\x57\x88\xF5", // name

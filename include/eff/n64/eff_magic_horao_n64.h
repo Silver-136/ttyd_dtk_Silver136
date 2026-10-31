@@ -1,3 +1,5 @@
+// eff_magic_horao_n64.c: magic (horao) effect entry (effMagicHoraoN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

@@ -1,3 +1,5 @@
+// Pause menu: opening and closing the menu, item use from the menu, and the shared text and texture helpers.
+
 #include "win/win_main.h"
 #include "icon_ids.h"
 #include "eff/eff_recovery.h"
@@ -470,6 +472,10 @@ void winDispKoopa(CameraId camId, void* param) {
     winTexSet(0xB7, (Vec){ 0.0f, 50.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 }
 
+/**
+ * Language folders of the menu graphics (win.tpl), indexed by the game language;
+ * the menu loads its textures from them.
+ */
 static const WinLangTbl winLangTbl = {{
     "jp", "us",
 #ifdef VERSION_G8ME01

@@ -1,3 +1,5 @@
+// Battle unit data and scripts for Ms. Mowz (Chuchurina) as a partner.
+
 #include "version.h"
 #include "battle/battle.h"
 #include "battle/battle_database_common.h"
@@ -114,6 +116,11 @@ PoseTableEntry pose_table_chuchurina_stay[] = {
     {POSE_TYPE_ACTION, "PCH_S_1"},
 };
 
+/**
+ * Ms. Mowz's battle data events: Appeal (5), the reaction when an audience member is attacked (6), her move
+ * menu builder (1), nothing on a First Strike (48), the victory pose (64), an empty step run after a move's
+ * cost is paid (7) and the default spin when she superguards an attack (47).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_APPEAL_EVENT, chuchurina_appeal_event},
     {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
@@ -125,6 +132,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Ms. Mowz's parts, all model c_tyutyu: part 1 is her body; parts 2-4 are hidden, untargetable copies of her
+ * that pop out and dash around during Tease.
+ */
 BattleUnitKindPart unitpartsdata_Party_Chuchurina[] = {
     {1, "btl_un_chuchurina", "c_tyutyu", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table_chuchurina_stay},
     {2, "btl_un_chuchurina", "c_tyutyu", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_chuchurina_stay},
@@ -132,6 +143,10 @@ BattleUnitKindPart unitpartsdata_Party_Chuchurina[] = {
     {4, "btl_un_chuchurina", "c_tyutyu", 0.0f, 0.0f, 0.0f, 16.0f, 24.0f, 5.0f, 0.0f, 24.0f, 0.0f, 20, 24, 255, &defence, &defence_attr, kNotTargetable | kHidden | kNoShadow | kAbsolutePosition, 0, pose_table_chuchurina_stay},
 };
 
+/**
+ * Ms. Mowz's battle unit (name btl_un_chuchurina), used whenever she is the partner in a fight: size, hurt sounds,
+ * status table, four parts and init script. No HP gauge is drawn over her; her HP comes from the partner stats.
+ */
 BattleUnitKind unitdata_Party_Chuchurina = {
     UNIT_MS_MOWZ, // mUnitType
     "btl_un_chuchurina", // name
@@ -267,6 +282,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeft = {
 #endif
 };
 
+/** Love Slap's slap from the other side (2 damage), alternating with the one above. */
 BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
     "btl_wn_pcr_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -309,6 +325,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRight = {
 #endif
 };
 
+/** Love Slap's final slap (or one after a failed command), its power the command's gauge level. */
 BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
     "btl_wn_pcr_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -351,6 +368,7 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackLeftLast = {
 #endif
 };
 
+/** Love Slap's final slap from the other side, its power the command's gauge level. */
 BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
     "btl_wn_pcr_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -393,6 +411,11 @@ BattleWeapon partyWeapon_ChuchurinaNormalAttackRightLast = {
 #endif
 };
 
+/**
+ * Tease (btl_wn_pcr_madowase, 3 FP), run by partyChuchurinaAttack_MadowaseAttack: no damage, hits every enemy and
+ * can make them dizzy for 3 turns. The script applies a copy of it (_make_madowase_weapon) whose dizzy chance
+ * comes from the hold-and-release gauge command.
+ */
 BattleWeapon partyWeapon_ChuchurinaMadowaseAttack = {
     "btl_wn_pcr_madowase", // name
     ICON_PARTNER_MOVE_LV2, // icon
@@ -437,6 +460,10 @@ BattleWeapon partyWeapon_ChuchurinaMadowaseAttack = {
     {0, 0, 0, 100, 0, 0, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Kiss Thief (btl_wn_pcr_steal, 2 FP), run by partyChuchurinaAttack_ItemSteal: no damage, one frontmost enemy;
+ * with the stop-the-gauge command she steals its held item or badge.
+ */
 BattleWeapon partyWeapon_ChuchurinaItemSteal = {
     "btl_wn_pcr_steal", // name
     ICON_PARTNER_MOVE_LV1, // icon
@@ -476,6 +503,10 @@ BattleWeapon partyWeapon_ChuchurinaItemSteal = {
     {0, 0, 0, 100, 0, 0, 5, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Smooch (btl_wn_pcr_kiss, 10 FP), run by partyChuchurinaAttack_Kiss: always hits one ally, preferring one low on
+ * HP or in peril; restores HP by the gauge level reached by alternately tapping A and B.
+ */
 BattleWeapon partyWeapon_ChuchurinaKiss = {
     "btl_wn_pcr_kiss", // name
     ICON_PARTNER_MOVE_LV3, // icon
@@ -1995,10 +2026,13 @@ EVT_END_PAD()
 EVT_END()
 #endif
 
+/** Ms. Mowz's defence: 0 against every element. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Ms. Mowz's element reactions: none special, every element hits her normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Ms. Mowz's status vulnerabilities: base rate (100) for every status. */
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop

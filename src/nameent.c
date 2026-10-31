@@ -1,3 +1,5 @@
+// Name entry screen: the kana/latin character grid used to name a save file or Yoshi.
+
 #include "nameent.h"
 #include "system.h"
 #include "driver/dispdrv.h"
@@ -35,6 +37,11 @@ void nameEntDisp(CameraId cameraId, void* param);
 
 #define NAMEENT_COLS 14 // characters per row of hiragana_tbl, katakana_tbl and latin_tbl
 
+/**
+ * Hiragana grid of the name-entry screen, NAMEENT_COLS characters per row, in the order they are drawn.
+ * NULL marks an empty cell and a full-width space a blank key; cell 9 is patched at run time between the "n" kana
+ * and a blank, depending on the name type.
+ */
 const char* hiragana_tbl[] = {
     "\x82\xA0", "\x82\xA2", "\x82\xA4", "\x82\xA6", "\x82\xA8", "\x82\xED",
     "\x81\x40", "\x82\xF0", "\x81\x40", "\x82\xF1", "\x82\x4F", "\x82\x50",
@@ -59,6 +66,7 @@ const char* hiragana_tbl[] = {
     "\x81\x44", "\x81\x40", NULL,       NULL,       NULL,       NULL
 };
 
+/** Katakana grid of the name-entry screen: the same layout as hiragana_tbl, cell for cell. */
 const char* katakana_tbl[] = {
     "\x83\x41", "\x83\x43", "\x83\x45", "\x83\x47", "\x83\x49", "\x83\x8F",
     "\x81\x40", "\x83\x92", "\x81\x40", "\x83\x93", "\x82\x4F", "\x82\x50",

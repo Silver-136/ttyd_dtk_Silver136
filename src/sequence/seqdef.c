@@ -1,3 +1,5 @@
+// Sequence table: the init, main and exit functions of every game sequence.
+
 #include "driver/seqdrv.h"
 #include "evt/evt_snd.h"
 #include "seq/seq_logo.h"

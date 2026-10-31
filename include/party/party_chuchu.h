@@ -1,3 +1,5 @@
+// party_chuchu.c: Ms. Mowz's (chuchu) field partner functions (init, move, use, exit) and the treasure search.
+
 #pragma once
 
 #include "party.h"

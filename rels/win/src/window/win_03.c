@@ -85,6 +85,10 @@ EVT_BEGIN(cloud_in)
     RETURN
 EVT_END()
 
+/**
+ * Exits of this map: west to win_02, the pipe pair dokan_1/dokan_2 within this map,
+ * and Flurrie's door (n_bero) to win_04, which plays the wooden door sounds.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -308,6 +312,7 @@ EVT_BEGIN(tree_evt_01)
     RETURN
 EVT_END()
 
+/** Trees of this map that shake when Mario hammers them; the second drops a Star Piece once. */
 static TreeAccess tree_access_data[] = {
     {4, "A_tree_01", "S_tree_mki_01", "S_tree_ha01", 0, NULL},
     {4, "A_tree_02", "S_tree_mki_02", "S_tree_ha03", 0, tree_evt_01},

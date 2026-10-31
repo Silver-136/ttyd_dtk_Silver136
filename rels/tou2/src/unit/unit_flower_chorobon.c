@@ -1,3 +1,5 @@
+// unit_flower_chorobon: Flower Fuzzy, battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -35,6 +37,10 @@ static EvtWord return_event[24];
 static EvtWord drain_attack_event[911];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Flower Fuzzy: 6 HP and level 19, with its parts, status vulnerability, init event and
+ * event data table.
+ */
 BattleUnitKind unit_flower_chorobon = {
     UNIT_FLOWER_FUZZY, // mUnitType
     "btl_un_flower_chorobon", // name
@@ -83,8 +89,13 @@ BattleUnitKind unit_flower_chorobon = {
     data_table, // dataTable
 };
 
+/**
+ * Defense of the Flower Fuzzy against normal, fire, ice, explosion and electric attacks: none, so it takes
+ * full damage from every element.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Damage-type reactions of the Flower Fuzzy: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -112,10 +123,19 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * Parts of the Flower Fuzzy: a single body part (part 1, model c_chorobon_f), each with its defense
+ * tables, attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_flower_chorobon", "c_chorobon_f", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/**
+ * Weapon record of the Flower Fuzzy's HP drain attack: 3 damage, counts as a jump-type hit and ignores
+ * Defense.
+ * The Flower Fuzzy swells and heals by the damage dealt.
+ */
 static BattleWeapon weapon_chorobon_drain_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -152,6 +172,10 @@ static BattleWeapon weapon_chorobon_drain_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon record of the Flower Fuzzy's FP drain attack: no HP damage, counts as a jump-type hit and
+ * ignores Defense. The Flower Fuzzy gains the FP it drains.
+ */
 static BattleWeapon weapon_chorobon_drain_attack_fp = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -188,6 +212,10 @@ static BattleWeapon weapon_chorobon_drain_attack_fp = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Weapon record of the Flower Fuzzy's magic attack on the whole party: 3 damage, can hit several targets
+ * and ignores Defense.
+ */
 static BattleWeapon weapon_chorobon_magic_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -349,6 +377,10 @@ static EVT_BEGIN(magic_attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Weapon record for the Flower Fuzzy: a dummy record it takes when its bite is stopped by a shock or
+ * similar counter.
+ */
 static BattleWeapon weapon_chorobon_drain_attack_biribiri_counterd = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -403,6 +435,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "CBN_S_1"},
 };
 
+/**
+ * Event data table of the Flower Fuzzy: scripts that replace the standard handling for the counter-damage
+ * reactions (tags 25-36).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event},
@@ -467,6 +503,10 @@ static EVT_BEGIN(rabbit_move)
     RETURN
 EVT_END()
 
+/**
+ * Sound cues for the animations of the Flower Fuzzy: each entry plays a sound effect at a set time within
+ * a pose, such as SFX_ENM_CHORO2_MOVE1.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"CBN_S_1", 0.5833333f, NULL, "SFX_ENM_CHORO2_MOVE1", 0, 1},
     {"CBN_S_1", 0.8333333f, NULL, "SFX_ENM_CHORO2_WAIT2", 0, 1},

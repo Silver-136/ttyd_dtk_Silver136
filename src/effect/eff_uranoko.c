@@ -1,3 +1,5 @@
+// Uranoko: plays the MOBJ_EFF_uranoko model animation at a point, fading out at the end of its duration.
+
 #include "eff/eff_uranoko.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"

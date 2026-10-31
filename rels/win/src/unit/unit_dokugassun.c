@@ -46,6 +46,11 @@ static EvtWord normal_attack_event[386];
 static EvtWord charge_event[58];
 static EvtWord wait_event[13];
 
+/**
+ * Unit data of the Poison Puff (btl_un_dokugassun): 15 HP, level 34,
+ * a floating cloud that slams into a target for 8 damage or raises a poison barrier and then breathes poison
+ * gas on everyone. win.rel carries this copy, but no battle group of Boggly Woods places it.
+ */
 static BattleUnitKind unit_dokugassun = {
     UNIT_POISON_PUFF, // mUnitType
     "btl_un_dokugassun", // name
@@ -91,8 +96,10 @@ static BattleUnitKind unit_dokugassun = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
+/** Flat damage reduction of the Poison Puff against normal, fire, ice, explosion and electric hits: none. */
 static BattleUnitDefense defence = {0};
 
+/** Element attributes of the Poison Puff: none, so every element does its normal damage. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
 static StatusVulnerability regist = {
@@ -120,6 +127,10 @@ static StatusVulnerability regist = {
     20, // ohko
 };
 
+/**
+ * The Poison Puff's single part: the Puff model (c_kmoon_g), the main target;
+ * hammer-like and shell-toss moves cannot target it while it floats high.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -139,6 +150,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** The Poison Puff's body slam: 8 damage to one opposing target, a jump-like attack that can be guarded. */
 static BattleWeapon weapon_dokugassun_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -348,6 +360,10 @@ static EVT_BEGIN(poisongas_event)
     RETURN
 EVT_END()
 
+/**
+ * Poses of the Poison Puff: idle, status, hurt, move,
+ * charge and talking animations (the names have no prefix).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -368,6 +384,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Data table of the Poison Puff: event 43 does nothing (counter_event) and event 48 (First Strike)
+ * lowers the Puff to height 10.
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_POISON_EVENT, counter_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, dmg_first_attack_pos},

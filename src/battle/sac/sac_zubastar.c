@@ -1,3 +1,5 @@
+// Star-power special move Supernova (sac_zubastar): the star-stone game and its damage to all enemies.
+
 #include "eff/eff_starstone.h"
 #include "battle/battle.h"
 #include "driver/dispdrv.h"
@@ -97,6 +99,10 @@ typedef struct ZubaStarWork {
 ZubaStarWork* GetZubaStarPtr(void);
 
 
+/**
+ * Supernova's hit, given by marioAttackEvent_ZubaStar to every enemy: 0, 3, 6, 9, 12 or 15 damage by the
+ * minigame result (weaponGetPower_ZubaStar); it always hits, pierces defense and cannot be guarded.
+ */
 BattleWeapon weapon_zubastar = {
     "btl_wn_sac_zubastar", // name
     ICON_SAC_ZUBASTAR, // icon

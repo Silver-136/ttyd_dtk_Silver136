@@ -1,3 +1,5 @@
+// Paper Mario 64 smoke effect 6 (kemuri: smoke) at a point.
+
 #include "eff/n64/eff_kemuri6_n64.h"
 #include "eff/eff_n64.h"
 #include "driver/camdrv.h"
@@ -34,6 +36,7 @@ typedef struct EffKemuri6N64Work {
     u8 pad_48[8];    // 0x48
 } EffKemuri6N64Work;
 
+/** Camera-facing walking puff quad. */
 static effN64Vtx kmr_a_1_v[] = {
     {-8, 7, 0, 0, 0, 255, 255, 255, 255},
     {7, 7, 0, 512, 0, 255, 255, 255, 255},

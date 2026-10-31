@@ -1,3 +1,5 @@
+// eff_flame_n64.c: Paper Mario 64 Flame effect entry (effFlameN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

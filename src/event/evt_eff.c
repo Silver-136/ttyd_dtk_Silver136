@@ -1,3 +1,6 @@
+// Script commands that start effects by effect-set name: evt_eff for the GameCube effects,
+// evt_eff64 for the N64-style effects.
+
 #include "eff/n64/eff_thunderflare_n64.h"
 #include "mario/mario.h"
 #include "evt/evt_eff.h"

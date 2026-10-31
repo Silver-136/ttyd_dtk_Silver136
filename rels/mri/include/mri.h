@@ -1,3 +1,6 @@
+// The Great Tree (mri, mori: forest): declarations shared by the area's maps: their init events, the battle tables, and
+// the common door, planter and Puni events.
+
 #pragma once
 
 #include "dolphin/types.h"

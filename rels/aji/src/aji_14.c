@@ -51,6 +51,7 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
+/** Exit of this room: the west door to aji_10. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -385,6 +386,7 @@ EVT_BEGIN(evt_boss2)
     RETURN
 EVT_END()
 
+/** The two actors of the boss room: Lord Crump (kanbu) and the Magnus von Grapple 2.0 robot. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"幹部"*/"\x8A\xB2\x95\x94", // name

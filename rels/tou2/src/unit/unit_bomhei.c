@@ -1,3 +1,5 @@
+// unit_bomhei: Bob-omb, battle unit.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_event_default.h"
@@ -37,6 +39,10 @@ static EvtWord damage_event_spark[25];
 static EvtWord attack_event_spark[288];
 static EvtWord wait_event_spark[27];
 
+/**
+ * Unit kind of the Bob-omb (HP 4, level 12): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_bomhei = {
     UNIT_BOB_OMB, // mUnitType
     "btl_un_bomhei", // name
@@ -85,8 +91,10 @@ BattleUnitKind unit_bomhei = {
     data_table, // dataTable
 };
 
+/** Defence of the Bob-omb: 1 damage points off every hit. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Element reactions of the Bob-omb: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static PoseTableEntry pose_table[] = {
@@ -131,20 +139,27 @@ static PoseTableEntry pose_table_spark[] = {
     {POSE_TYPE_ACTION, "BOM_S_2"},
 };
 
+/** Data table of the Bob-omb: event handlers for a First Strike on it (no reaction). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Data table of the Bob-omb once its fuse is lit: a First Strike on it is ignored. */
 static BattleDataEntry data_table_spark[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Body part of the Bob-omb (model c_bomhey): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_bomhei", "c_bomhey", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterExplosive, pose_table},
 };
 
+/**
+ * Status vulnerability of the Bob-omb (percent chance to take each status): immune to poison;
+ * extra prone to electric shock; resists most other statuses.
+ */
 static StatusVulnerability regist = {
     70, // sleep
     100, // stop
@@ -170,6 +185,7 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/** Weapon of the Bob-omb's attack: 2 damage, shell-toss-type attack. */
 static BattleWeapon weapon_bomhei_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -206,6 +222,7 @@ static BattleWeapon weapon_bomhei_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Bob-omb's explosion: 5 damage, shell-toss-type attack. */
 static BattleWeapon weapon_bomhei_bomb = {
     NULL, 0, // name..icon
     {0}, // pad_06

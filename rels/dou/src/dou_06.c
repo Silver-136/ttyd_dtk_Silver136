@@ -11,6 +11,7 @@
 static BeroEntry bero_entry_data[3];
 EvtWord dou_06_init_evt[41];
 
+/** Exits (beros) of this room: w_bero to dou_05 and s_bero to dou_10. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

@@ -60,6 +60,7 @@ static EVT_BEGIN(w_door_open)
     RETURN
 EVT_END()
 
+/** Exit of this room: the west door to aji_11. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -104,6 +105,10 @@ EVT_BEGIN(peach_evt_bero)
     RETURN
 EVT_END()
 
+/**
+ * Replacement for the west door exit, swapped in with evt_bero_overwrite during Peach's scene so it leads on
+ * to aji_10 (e_bero).
+ */
 static BeroEntry bero_peach_data[] = {
     {
         "w_bero", // hitName
@@ -201,6 +206,7 @@ EVT_BEGIN(evt_gajigaji)
     RETURN
 EVT_END()
 
+/** Key item list for the item menu in the storage room: the Data Disk. */
 static s32 item_list[] = {
     ITEM_DATA_DISK, -1,
 };

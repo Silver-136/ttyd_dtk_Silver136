@@ -149,6 +149,10 @@ EVT_BEGIN(door05_open)
     RETURN
 EVT_END()
 
+/**
+ * Exits (beros) of this room: w_bero_1 to gon_04, w_bero_2 to gon_04, w_bero_3 to gon_04, w_bero_4 to gon_09,
+ * w_bero_5 to gon_10 and e_bero to gon_06.
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
@@ -738,6 +742,7 @@ EVT_BEGIN(main_1)
     RETURN
 EVT_END()
 
+/** Items offered in the item menu at the first lock: only the Castle Key (0x0C). */
 s32 key_tbl00[] = {
     ITEM_CASTLE_KEY_0x0C, -1,
 };
@@ -764,6 +769,7 @@ static EVT_BEGIN(evt_unlock00)
     RETURN
 EVT_END()
 
+/** Items offered in the item menu at the second lock: only the Castle Key (0x0E). */
 s32 key_tbl01[] = {
     ITEM_CASTLE_KEY_0x0E, -1,
 };

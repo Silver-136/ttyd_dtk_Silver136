@@ -366,6 +366,10 @@ EVT_BEGIN(n_4_door_close)
     RETURN
 EVT_END()
 
+/**
+ * Doors of the lobby: the front door out to the plaza (tou_01), the two arena doors to tou_03
+ * (ground floor and upper floor) and the two doors to the main corridor (tou_04).
+ */
 static BeroEntry bero_data[] = {
     {
         ("s_bero"), // hitName
@@ -1060,6 +1064,7 @@ static EVT_BEGIN(init_champ)
     RETURN
 EVT_END()
 
+/** Thirteen (x, z) points around the lobby that move_champ steps through; it does not use the values. */
 s32 move_pos[] = {
     0, 0, -100, -70, -225, 50, -230, 135,
     -105, 110, 10, -10, 135, 135, 220, 40,
@@ -1255,6 +1260,10 @@ EVT_BEGIN(talk_borodo)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the lobby: the two door guards, the madam, a reporter and two cameramen, two Toads, Toadette,
+ * the badge seller, Rawk Hawk, Jolene, the Shady Koopa, the two Iron Clefts and the Bandit.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガードマン１"*/"\203K\201[\203h\203}\203\223\202P", // name
@@ -1552,6 +1561,10 @@ EVT_BEGIN(evt_tougi2)
     RETURN
 EVT_END()
 
+/**
+ * Texture frames of the lobby fan crowd sprites: the Toad, Toadette and Lakitu walk cycles,
+ * grouped into animations by pose_init and registered with evt_ext_entry.
+ */
 ExtTexInfo ext_fan_data[] = {
     {("c_kinopio"), ("KNP_W_1"), 2.0f},
     {("c_kinopio"), ("KNP_W_1"), 6.0f},

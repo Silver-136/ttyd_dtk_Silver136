@@ -1,3 +1,6 @@
+// Font manager: loads the font file and draws text (strings, messages with tags, centred and rotated
+// text, edges, colour effects) glyph by glyph.
+
 #include "manager/fontmgr.h"
 #include "manager/dvdmgr.h"
 #include "driver/camdrv.h"

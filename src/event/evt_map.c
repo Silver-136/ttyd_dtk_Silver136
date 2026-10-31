@@ -1,3 +1,6 @@
+// Script commands for map objects and map-wide settings: animations, blend, fog, colour and
+// offscreen drawing (mapdrv).
+
 #include "eff/eff_fire.h"
 #include "driver/animdrv.h"
 #include "driver/hitdrv.h"

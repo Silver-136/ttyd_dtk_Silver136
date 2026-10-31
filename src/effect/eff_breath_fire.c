@@ -1,3 +1,5 @@
+// Fire breath: forwards to the Paper Mario 64 fire-breath effect (effBreathFireN64Entry).
+
 #include "eff/eff_breath_fire.h"
 #include "eff/n64/eff_breath_fire_n64.h"
 

@@ -1,3 +1,5 @@
+// animdrv.c: the animation driver (AnimData, AnimPoseNode): paper animation files, keyframes and pose drawing.
+
 #pragma once
 
 #include "manager/filemgr.h"

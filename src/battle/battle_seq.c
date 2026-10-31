@@ -1,3 +1,5 @@
+// Battle sequence: the phase and turn flow, and the action, move and command-selection steps of a battle.
+
 #include "battle/battle_seq.h"
 #include "battle/battle.h"
 #include "battle/battle_unit.h"
@@ -131,9 +133,15 @@ const BattleWeapon weapon_lucky_start = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Black: the colour of the curtain fade when the battle starts after the Glitz Pit rule banner. */
 static const GXColor c = {0, 0, 0, 0xFF};
+/** White: the window colour of the Glitz Pit rule banner drawn by _rule_disp. */
 static const GXColor color = {0xFF, 0xFF, 0xFF, 0xFF};
 
+/**
+ * Glitz Pit bonus-condition messages for minor-league fights, indexed by the battle's rule type ("a" = unused);
+ * _rule_disp shows the one for the fight before turn 1, e.g. "Don't use your jump!".
+ */
 const char* _rule_msg_table_2bu[] = {
     "a", "stg3_tou_cp_001", "a", "stg3_tou_cp_002", "a", "stg3_tou_cp_004", "stg3_tou_cp_008", "a",
     "a", "a", "a", "a", "a", "a", "a", "a",
@@ -146,6 +154,7 @@ const char* _rule_msg_table_2bu[] = {
     "a", "a", "a", "a",
 };
 
+/** Glitz Pit bonus-condition messages for major-league fights (top ten), by rule type; shown by _rule_disp. */
 const char* _rule_msg_table_1bu[] = {
     "test", "stg3_tou_cp_011", "a", "stg3_tou_cp_012", "a", "stg3_tou_cp_014", "stg3_tou_cp_019", "a",
     "a", "a", "a", "stg3_tou_cp_020", "a", "a", "a", "a",
@@ -158,6 +167,7 @@ const char* _rule_msg_table_1bu[] = {
     "stg3_tou_cp_023", "stg3_tou_cp_022", "a", "a",
 };
 
+/** Glitz Pit bonus-condition messages after chapter 3, by rule type; shown by _rule_disp. */
 const char* _rule_msg_table_after[] = {
     "a", "stg3_tou_cp_041", "a", "stg3_tou_cp_042", "a", "stg3_tou_cp_044", "stg3_tou_cp_049", "a",
     "a", "a", "a", "stg3_tou_cp_050", "a", "a", "a", "a",

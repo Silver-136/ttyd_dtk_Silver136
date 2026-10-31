@@ -84,6 +84,10 @@ f32 atmic_teresa_scale;
 ExtTexInfo teresa_ext_entry_data[17];
 EvtWord teresa_entry[19];
 
+/**
+ * Unit kind of the Atomic Boo:
+ * 40 HP, level 52, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_atmic_teresa = {
     UNIT_ATOMIC_BOO,
     "btl_un_atmic_teresa",
@@ -154,10 +158,16 @@ BattleUnitKind unit_atmic_teresa = {
     data_table,
 };
 
+/** Defence of the Atomic Boo's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Atomic Boo's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Pose table of the Atomic Boo:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -178,6 +188,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/** Pose table the Atomic Boo switches to once it has turned away and hides its face (kaokakusi). */
 PoseTableEntry pose_table_kaokakusi[] = {
     {POSE_TYPE_SLEEP, "A_1"},
     {POSE_TYPE_STOP, "A_1"},
@@ -198,10 +209,12 @@ PoseTableEntry pose_table_kaokakusi[] = {
     {POSE_TYPE_ACTION, "A_1"},
 };
 
+/** Event table of the Atomic Boo: empty, so it has no special reactions. */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Body part of the Atomic Boo: a single part using the model "c_atmic_trs". */
 static BattleUnitKindPart parts[] = {
     {
         1, "btl_un_atmic_teresa", "c_atmic_trs",
@@ -239,6 +252,7 @@ static StatusVulnerability regist = {
     5, // ohko
 };
 
+/** Atomic Boo's press (the smoosh): 4 damage to every target; flips shelled units and shatters freeze. */
 BattleWeapon weapon_atmic_teresa_press = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -358,6 +372,7 @@ BattleWeapon weapon_atmic_teresa_surprise = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Atomic Boo's breath: 3 damage to every target, less with each hit; shatters freeze. */
 BattleWeapon weapon_atmic_teresa_breath = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -901,20 +916,38 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Battle unit id of the Atomic Boo, stored by its script (-1 until then) for the small-Boo effect callbacks.
+ */
 s32 atmic_teresa_id[] = {
     -1,
 };
 
+/**
+ * Battle unit id of the Atomic Boo's current attack target,
+ * stored by its script (-1 until then) for the small-Boo effect callbacks.
+ */
 s32 target_unit_id[] = {
     -1,
 };
 
+/**
+ * Part id of the Atomic Boo's current attack target,
+ * stored by its script (-1 until then) for the small-Boo effect callbacks.
+ */
 s32 target_parts_id[] = {
     -1,
 };
 
+/**
+ * Size the small Boo sprites of the Atomic Boo's attacks grow or shrink toward each frame; 1.0 is full size.
+ */
 f32 atmic_teresa_scale = 1.0f;
 
+/**
+ * Sprite entries of the small Boos the Atomic Boo spawns during its attacks:
+ * the Boo model with the animation and starting frame of each.
+ */
 ExtTexInfo teresa_ext_entry_data[] = {
     {"c_teresa", "S_1", 0.0f},
     {"c_teresa", "S_1", 2.0f},

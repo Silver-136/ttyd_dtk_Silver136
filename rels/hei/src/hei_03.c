@@ -27,6 +27,7 @@ static EvtWord hashira_evt[132];
 EvtWord mon_msg[14];
 EvtWord hei_03_init_evt[165];
 
+/** Doors of this room: the west exit (w_bero) to hei_02 and the east exit (e_bero) to hei_04. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -77,6 +78,10 @@ static EVT_BEGIN(dead_evt2)
     RETURN
 EVT_END()
 
+/**
+ * The two Shinnosuke guards of the gate (Goomba enemies that stand beside the pillars); defeating either
+ * marks both as beaten.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"シンノスケ1"*/"\x83\x56\x83\x93\x83\x6D\x83\x58\x83\x50\x31", // name

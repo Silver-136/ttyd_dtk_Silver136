@@ -1,3 +1,7 @@
+// Animation driver: loads the paper animation files (.bin) and their textures, evaluates the
+// keyframes and draws the animation poses of Mario, the partners, NPCs and items. Many helpers here
+// are inlined into their callers.
+
 #include "driver/animdrv.h"
 #include <dolphin/os/OSFastCast.h>
 #include "driver/dispdrv.h"
@@ -276,12 +280,18 @@ extern f32 tanfTbl[0xB2];
 
 //.sdata
 s32 vivihimoTailGroupNo[4] ATTRIBUTE_ALIGN(32) = { 0, 2, -1, -1 };
+/**
+ * Vivian's hair (himo) swing data for each type:
+ * entry 0 none, 1-3 the three blocks of _vivihimoData (two floats per animation),
+ * filled from a/vivian.bin when the driver starts.
+ */
 void* vivihimoData[4] = {
     NULL,
     _vivihimoData[0],
     _vivihimoData[1],
     _vivihimoData[2],
 };
+/** Points at the animation driver's work (files, textures, pose pool, scratch buffers). */
 static AnimationWork* wp = &work;
 
 //.sbss

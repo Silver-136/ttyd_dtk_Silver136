@@ -1,3 +1,5 @@
+// eff_fukidashi.c: emote-bubble effect: effFukidashiEntry and its work data (EffFukidashiWork).
+
 #pragma once
 
 #include <dolphin/types.h>

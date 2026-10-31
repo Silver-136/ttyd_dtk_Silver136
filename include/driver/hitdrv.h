@@ -1,3 +1,5 @@
+// hitdrv.c: the hit driver (HitEntry, HitCheckQuery): map collision objects and the ray and sphere checks.
+
 #pragma once
 
 #include <dolphin/mtx.h>

@@ -1,3 +1,5 @@
+// eff_kemutest.c: burst-smoke entry (effKemuTestEntry), effKemuTestSetRxRz and effKemuTestDrawCam.
+
 #pragma once
 
 #include "driver/effdrv.h"

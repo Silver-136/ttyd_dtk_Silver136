@@ -1,3 +1,6 @@
+// Shadow Queen tornado (queen: the Shadow Queen): plays the MOBJ_EFF_queen_tornade model animation and fades out.
+// The duration argument sets how long it lasts (0 or less: until removed).
+
 #include "eff/eff_queen.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"

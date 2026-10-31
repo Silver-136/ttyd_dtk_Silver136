@@ -46,6 +46,10 @@ static EvtWord ceil_fall_ready_event[163];
 static EvtWord attack_event_ceil[426];
 static EvtWord wait_event_ceil[6];
 
+/**
+ * Unit data of the Red Spike Top: 5 HP and level 17, with its parts, status vulnerability, init event and
+ * event data table.
+ */
 BattleUnitKind unit_crimson_togemet = {
     UNIT_RED_SPIKY_BUZZY, // mUnitType
     "btl_un_crimson_togemet", // name
@@ -153,6 +157,10 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "TMT_S_3"},
 };
 
+/**
+ * Event data table of the Red Spike Top: scripts that replace the standard handling for being flipped over
+ * by a stomp (tag 13) and an attacker being hurt by its spiked head (tag 37).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
@@ -160,6 +168,10 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/**
+ * Event data table of the Red Spike Top while it hangs from the ceiling: scripts that replace the standard
+ * handling for the counter-damage reactions (from the ceiling) (tags 25-36).
+ */
 static BattleDataEntry data_table_ceil[] = {
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event_ceil},
     {UNIT_DATA_COUNTER_PREEMPTIVE_SPIKY_EVENT, counter_damage_event_ceil},
@@ -177,6 +189,7 @@ static BattleDataEntry data_table_ceil[] = {
     {0},
 };
 
+/** Weapon record of the Red Spike Top's spinning shell attack: 3 damage. */
 static BattleWeapon weapon_met_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -213,6 +226,7 @@ static BattleWeapon weapon_met_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon record of the Red Spike Top's drop from the ceiling: 5 damage and counts as a jump-type hit. */
 static BattleWeapon weapon_met_ceil_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -249,12 +263,25 @@ static BattleWeapon weapon_met_ceil_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defence of the Red Spike Top: 4 against normal, ice and electric hits;
+ * immune to fire and explosions (defence 99 cancels the hit).
+ */
 static BattleUnitDefense defence = {{4, 99, 4, 99, 4}};
 
+/** Damage-type reactions of the Red Spike Top: immune to fire and explosion. */
 static BattleUnitDefenseAttr defence_attr = {{0, 2, 0, 2, 0}};
 
+/**
+ * Defense of the Red Spike Top against normal, fire, ice, explosion and electric attacks while it is
+ * flipped onto its back: none, so it takes full damage from every element.
+ */
 static BattleUnitDefense defence_turn = {0};
 
+/**
+ * Damage-type reactions of the Red Spike Top while it is flipped onto its back: none, so every element
+ * hurts it normally.
+ */
 static BattleUnitDefenseAttr defence_attr_turn = {0};
 
 static StatusVulnerability regist = {
@@ -282,6 +309,10 @@ static StatusVulnerability regist = {
     95, // ohko
 };
 
+/**
+ * Parts of the Red Spike Top: a single body part (part 1, model c_met_h), each with its defense tables,
+ * attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_crimson_togemet", "c_met_h", 0.0f, 0.0f, 0.0f, 0.0f, 23.0f, 0.0f, 0.0f, 28.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, kCounterTopSpiky, pose_table},
 };

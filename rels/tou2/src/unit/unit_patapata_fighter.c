@@ -46,6 +46,10 @@ static EvtWord first_attack_event[302];
 static EvtWord attack_event[548];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the KP Paratroopa: 4 HP and level 9, with its parts, status vulnerability, init event and
+ * event data table.
+ */
 BattleUnitKind unit_patapata_fighter = {
     UNIT_KP_PARATROOPA, // mUnitType
     "btl_un_patapata_fighter", // name
@@ -94,6 +98,7 @@ BattleUnitKind unit_patapata_fighter = {
     data_table_patapata, // dataTable
 };
 
+/** Weapon record of the KP Paratroopa's dive attack: 2 damage. */
 static BattleWeapon weapon_patapata_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -130,8 +135,16 @@ static BattleWeapon weapon_patapata_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Defense of the KP Paratroopa against normal, fire, ice, explosion and electric attacks in its winged
+ * form: 1, 1, 1, 1, 1.
+ */
 static BattleUnitDefense defence_patapata = {{1, 1, 1, 1, 1}};
 
+/**
+ * Defense of the KP Paratroopa against normal, fire, ice, explosion and electric attacks in its winged
+ * form: none, so it takes full damage from every element.
+ */
 static BattleUnitDefenseAttr defence_patapata_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist_patapata = {
@@ -159,6 +172,10 @@ static StatusVulnerability regist_patapata = {
     100, // ohko
 };
 
+/**
+ * Parts of the KP Paratroopa in its winged form: a single body part (part 1, model c_touginoko), each with
+ * its defense tables, attributes and pose table.
+ */
 static BattleUnitKindPart parts_patapata[] = {
     {1, "btl_un_patapata_fighter", "c_touginoko", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence_patapata, &defence_patapata_attr, kMainPart | kGuardTargetPart | kIsWinged | kHammerlikeCannotTarget | kShellTosslikeCannotTarget, 0, pose_table_patapata},
 };
@@ -184,12 +201,20 @@ static PoseTableEntry pose_table_patapata[] = {
     {POSE_TYPE_ACTION, "PTP_S_1"},
 };
 
+/**
+ * Event data table of the KP Paratroopa in its winged form: scripts that replace the standard handling for
+ * being knocked out of the air (tag 14) and the battle opening with a First Strike on it (tag 48).
+ */
 static BattleDataEntry data_table_patapata[] = {
     {UNIT_DATA_DAMAGE_FALL_EVENT, dmg_fall_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, patapata_dmg_first_attack_pos},
     {0, NULL},
 };
 
+/**
+ * Sound cues for the animations of the KP Paratroopa: each entry plays a sound effect at a set time within
+ * a pose, such as SFX_ENM_PATA_WAIT1.
+ */
 static PoseSoundTiming pose_sound_timing_table[] = {
     {"PTP_S_1", 0.01f, NULL, "SFX_ENM_PATA_WAIT1", 0, 1},
     {"PTP_W_1", 0.01f, NULL, "SFX_ENM_PATA_MOVE1", 0, 1},
@@ -463,16 +488,26 @@ static PoseTableEntry pose_table_turn[] = {
     {POSE_TYPE_ACTION, "NKT_S_2"},
 };
 
+/**
+ * Event data table of the KP Paratroopa: scripts that replace the standard handling for being flipped over
+ * by a stomp (tag 13).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_TURN_EVENT, dmg_turn_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0},
 };
 
+/** Defense of the KP Paratroopa against normal, fire, ice, explosion and electric attacks: 1, 1, 1, 1, 1. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Damage-type reactions of the KP Paratroopa: none, so every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+/**
+ * Defense of the KP Paratroopa against normal, fire, ice, explosion and electric attacks while it is
+ * flipped onto its back: none, so it takes full damage from every element.
+ */
 static BattleUnitDefense defence_turn = {0};
 
 static StatusVulnerability regist = {
@@ -500,6 +535,10 @@ static StatusVulnerability regist = {
     100, // ohko
 };
 
+/**
+ * Parts of the KP Paratroopa: a single body part (part 1, model c_touginoko), each with its defense
+ * tables, attributes and pose table.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -519,6 +558,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon record of the KP Paratroopa's spinning shell attack: 2 damage and counts as a hammer-type hit. */
 static BattleWeapon weapon_nokonoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

@@ -1,3 +1,5 @@
+// Item driver: items on the field (drops, coins, pickups): spawning, bouncing, pickup and display.
+
 #include "evt/evt_msg.h"
 #include "driver/itemdrv.h"
 #include "eff/eff_itemget.h"

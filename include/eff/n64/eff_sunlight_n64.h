@@ -1,3 +1,5 @@
+// eff_sunlight_n64.c: sunlight effect entry (effSunlightN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

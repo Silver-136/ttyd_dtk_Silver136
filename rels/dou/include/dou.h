@@ -1,3 +1,5 @@
+// Declarations for the Pirate's Grotto (dou) module: map init scripts, battle setup tables, the Boat Curse lecture scripts, the bobbing-platform events and the area's battle units.
+
 #pragma once
 
 #include "dolphin/types.h"

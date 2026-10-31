@@ -25,6 +25,10 @@ static EvtWord start_avoid[26];
 static EvtWord attack_event[407];
 static EvtWord wait_event[6];
 
+/**
+ * Unit data of the Bombshell Bill: 3 HP, 32x26 units in size; ties together its sounds, parts,
+ * status vulnerability, init event and event table.
+ */
 BattleUnitKind unit_super_killer = {
     UNIT_BOMBSHELL_BILL, // mUnitType
     "btl_un_super_killer", // name
@@ -73,8 +77,10 @@ BattleUnitKind unit_super_killer = {
     data_table, // dataTable
 };
 
+/** Defence of the Bombshell Bill: 2 against every kind of hit. */
 static BattleUnitDefense defence = {{2, 2, 2, 2, 2}};
 
+/** Defence attributes of the Bombshell Bill: none, every element hits it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -102,10 +108,12 @@ static StatusVulnerability regist = {
     90, // ohko
 };
 
+/** Parts of the Bombshell Bill: 1 part (model c_kilr_g). */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_super_killer", "c_kilr_g", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of the Bombshell Bill (charge attack): targets one unit for 6 damage; used by attack_event. */
 static BattleWeapon weapon_killer_charge_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -163,6 +171,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KIL_S_1"},
 };
 
+/** Event table of the Bombshell Bill: it has no special event scripts. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},

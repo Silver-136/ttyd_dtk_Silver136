@@ -1,3 +1,5 @@
+// eff_bomhei_n64.c: Paper Mario 64 Bomhei effect entry (effBomheiN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

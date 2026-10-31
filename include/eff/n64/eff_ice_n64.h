@@ -1,3 +1,5 @@
+// eff_ice_n64.c: Paper Mario 64 Ice effect entry (effIceN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

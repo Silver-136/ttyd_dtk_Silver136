@@ -1,3 +1,5 @@
+// Charge glow (Charge): about 30 additive sparkle sprites around a point; types 0-2 pick the colour pair.
+
 #pragma defer_codegen off
 #include "eff/eff_charge.h"
 #include "driver/camdrv.h"

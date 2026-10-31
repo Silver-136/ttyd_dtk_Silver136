@@ -187,6 +187,7 @@ static EVT_BEGIN(s_door_close)
     RETURN
 EVT_END()
 
+/** Doors and exits of pik_02: s_bero to pik_01; dokan; h_dokan; h_bero to pik_03. */
 static BeroEntry bero_data[] = {
     {
         "s_bero", // hitName
@@ -268,6 +269,7 @@ EVT_BEGIN(out_room)
     RETURN
 EVT_END()
 
+/** Doors and exits of pik_02: s_bero to aji_10 (X-Naut Fortress). */
 BeroEntry s_bero_peach[] = {
     {
         "s_bero", // hitName
@@ -363,6 +365,7 @@ static EVT_BEGIN(baba_init)
     RETURN
 EVT_END()
 
+/** NPCs of the sanctum: Detective Pennington, Beldam, Marilyn, Doopliss, the Paragoomba and Kammy. */
 static NpcSetupInfo npc_data[] = {
     {
         /*"ポワン探偵"*/"\x83\x7C\x83\x8F\x83\x93\x92\x54\x92\xE3", // name

@@ -1,3 +1,5 @@
+// Paper Mario 64 effect: water gun (wgun) shot from one point toward another.
+
 #include "system.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"
@@ -179,6 +181,10 @@ void effOpukuWgunMain(EffectEntry* effect) {
     dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effOpukuWgunDisp, effect);
 }
 
+/**
+ * Alpha of each of the twelve water-gun ribbon points: solid along the shot,
+ * fading over the last three at the tail.
+ */
 static u8 a_data[12] = {255, 255, 255, 255, 255, 255, 255, 255, 255, 200, 128, 32};
 
 /**

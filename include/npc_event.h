@@ -1,3 +1,5 @@
+// npc_event.c: the field enemy and NPC behaviour scripts, per enemy kind (init, move, find, lost, return, blow, dead).
+
 #pragma once
 
 #include "dolphin/types.h"

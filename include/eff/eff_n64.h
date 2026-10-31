@@ -1,3 +1,5 @@
+// eff_n64.c: shared Paper Mario 64 effect support: init, texture lookup, effect set table, vertex/triangle helpers.
+
 #pragma once
 
 #include <dolphin/types.h>

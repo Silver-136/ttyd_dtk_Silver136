@@ -1,3 +1,5 @@
+// Koops effect (nokotarou: Koops) using the MOBJ_EFF_nokotarou3 animation, stretched from a start point to the current point.
+
 #include "eff/eff_nokotarou.h"
 #include "driver/animdrv.h"
 #include "driver/dispdrv.h"

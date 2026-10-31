@@ -1,3 +1,6 @@
+// Sleep: three sleep marks fade in one after another along a line from a point; the sleep status in battle.
+// The second argument is the lifetime in frames (0 or less: until removed).
+
 #include "eff/eff_sleep.h"
 #include "driver/camdrv.h"
 #include "driver/dispdrv.h"

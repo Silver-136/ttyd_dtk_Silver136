@@ -1,3 +1,5 @@
+// Star-power special move Earth Tremor (sac_deka): the timed-press game and its damage to every enemy.
+
 #include "battle/battle.h"
 #include "battle/battle_audience.h"
 #include "battle/battle_disp.h"

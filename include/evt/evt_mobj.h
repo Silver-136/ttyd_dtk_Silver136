@@ -1,3 +1,5 @@
+// evt_mobj.c: script commands for map objects (mobj): blocks, item boxes, save blocks and switches.
+
 #pragma once
 
 #include "evt/evt_cmd.h"

@@ -28,6 +28,10 @@ static EvtWord song_event[300];
 static EvtWord escape_event[96];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Crazee Dayzee:
+ * 7 HP, level 16, with its size, sounds and the links to its parts, status vulnerability and scripts.
+ */
 BattleUnitKind unit_pansy = {
     UNIT_CRAZEE_DAYZEE, // mUnitType
     "btl_un_pansy", // name
@@ -76,8 +80,10 @@ BattleUnitKind unit_pansy = {
     data_table, // dataTable
 };
 
+/** Defence of the Crazee Dayzee's body per damage type: 0 against every damage type. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Defence attributes of the Crazee Dayzee's body: none, so every damage type is dealt normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -105,10 +111,12 @@ static StatusVulnerability regist = {
     30, // ohko
 };
 
+/** Body part of the Crazee Dayzee: a single part using the model "c_pansy". */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_pansy", "c_pansy", 0.0f, 0.0f, 0.0f, 0.0f, 29.0f, 0.0f, 0.0f, 34.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Crazee Dayzee's attack: 2 damage to every target, a plain attack. */
 BattleWeapon weapon_pansy_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -187,6 +195,10 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/**
+ * Pose table of the Crazee Dayzee:
+ * the animation played for each pose type (idle, hurt, walk, run, attack and so on).
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "PAN_N_1"},
     {POSE_TYPE_STOP, "PAN_Y_1"},
@@ -208,6 +220,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "PAN_S_1"},
 };
 
+/** Event table of the Crazee Dayzee: nothing special on a First Strike. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},

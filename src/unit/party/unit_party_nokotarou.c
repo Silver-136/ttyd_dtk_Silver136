@@ -1,3 +1,5 @@
+// Battle unit data and scripts for Koops (Nokotarou) as a partner.
+
 #include "version.h"
 #include "icon_ids.h"
 #include "battle/battle.h"
@@ -112,6 +114,7 @@ PoseTableEntry pose_table_nokotarou_stay[] = {
     {POSE_TYPE_ACTION, "PNK_S_1"},
 };
 
+/** Koops's pose table while flipped on his back: mostly PNK_H_1, swapped in by dmg_turn_event and wakeup_event. */
 PoseTableEntry pose_table_nokotarou_turn[] = {
     {POSE_TYPE_FREEZE, "PNK_D_5"},
     {POSE_TYPE_STOP, "PNK_D_5"},
@@ -127,6 +130,12 @@ PoseTableEntry pose_table_nokotarou_turn[] = {
     {POSE_TYPE_ACTION, "PNK_H_1"},
 };
 
+/**
+ * Koops's battle data events: Appeal (5), the reaction when an audience member is attacked (6), the flip
+ * check when he is switched in (4), being flipped (13), his move menu builder (1), the turn-start flip
+ * countdown (2), nothing on a First Strike (48), the victory pose (64), an empty step run after a move's cost
+ * is paid (7), from JP on the revive handler (67), and the default spin when he superguards an attack (47).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_APPEAL_EVENT, nokotarou_appeal_event},
     {UNIT_DATA_ATTACK_AUDIENCE, attack_audience_event},
@@ -142,10 +151,15 @@ static BattleDataEntry data_table[] = {
     {0, NULL},
 };
 
+/** Koops's single body part: model c_pnk with his defence, element and pose tables; shelled, so it flips. */
 BattleUnitKindPart unitpartsdata_Party_Nokotarou[] = {
     {1, "btl_un_nokotarou", "c_pnk", 0.0f, 0.0f, 0.0f, 12.0f, 30.0f, 5.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kIsShelled, 0, pose_table_nokotarou_stay},
 };
 
+/**
+ * Koops's battle unit (name btl_un_nokotarou), used whenever he is the partner in a fight: size, hurt sounds,
+ * status table, body part and init script. No HP gauge is drawn over him; his HP comes from the partner stats.
+ */
 BattleUnitKind unitdata_Party_Nokotarou = {
     UNIT_KOOPS, // mUnitType
     "btl_un_nokotarou", // name
@@ -295,6 +309,10 @@ static EVT_BEGIN(wakeup_event)
     RETURN
 EVT_END()
 
+/**
+ * Koops's First Strike weapon (no menu name), run by partyNokotarouAttack_FirstAttack when he hits an enemy in the
+ * field: always hits the frontmost ground enemy for 2-5 by rank, no action command, shatters ice.
+ */
 BattleWeapon partyWeapon_NokotarouFirstAttack = {
     NULL, // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -332,6 +350,11 @@ BattleWeapon partyWeapon_NokotarouFirstAttack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Shell Toss (btl_wn_pnk_normal), Koops's free basic move, run by partyNokotarouAttack_NormalAttack: his shell hits
+ * the frontmost ground enemy after the hold-left-and-release command, power from his rank. Shatters ice, is usable
+ * while confused and is safe against most contact counters.
+ */
 BattleWeapon partyWeapon_NokotarouKouraAttack = {
     "btl_wn_pnk_normal", // name
     ICON_PARTNER_MOVE_NORMAL, // icon
@@ -374,6 +397,10 @@ BattleWeapon partyWeapon_NokotarouKouraAttack = {
 #endif
 };
 
+/**
+ * Power Shell (btl_wn_pnk_lv1, 3 FP), run by partyNokotarouAttack_SyubibinKoura: like Shell Toss, but the shell
+ * sweeps through every ground enemy.
+ */
 BattleWeapon partyWeapon_NokotarouSyubibinKoura = {
     "btl_wn_pnk_lv1", // name
     ICON_PARTNER_MOVE_LV1, // icon
@@ -421,6 +448,10 @@ BattleWeapon partyWeapon_NokotarouSyubibinKoura = {
 #endif
 };
 
+/**
+ * Shell Shield (btl_wn_pnk_lv2, 4 FP), run by partyNokotarouAttack_KouraGuard: targets Mario only and drops a giant
+ * shell (entry_koura) over him; the timed A press sets the shell's HP.
+ */
 BattleWeapon partyWeapon_NokotarouKouraGuard = {
     "btl_wn_pnk_lv2", // name
     ICON_PARTNER_MOVE_LV2, // icon
@@ -459,6 +490,10 @@ BattleWeapon partyWeapon_NokotarouKouraGuard = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/**
+ * Shell Slam (btl_wn_pnk_lv3_tsuranuki, 6 FP), run by partyNokotarouAttack_TsuranukiKoura: the shell pierces
+ * defence and hits every ground enemy; the damage is the gauge level from tilting the stick left repeatedly.
+ */
 BattleWeapon partyWeapon_NokotarouTsuranukiKoura = {
     "btl_wn_pnk_lv3_tsuranuki", // name
     ICON_PARTNER_MOVE_LV3, // icon
@@ -1761,12 +1796,16 @@ EVT_BEGIN(nokotarou_revive_event)
     RETURN
 EVT_END()
 
+/** Koops's defence while on his feet: 1 against every element, from his shell. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Koops's element reactions: none special, every element hits him normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/** Koops's defence while flipped on his back (dmg_turn_event): 0. */
 static BattleUnitDefense defence_turn = {0};
 
+/** Koops's status vulnerabilities: base rate (100) for every status. */
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -1811,6 +1850,10 @@ static EVT_BEGIN(wait_event)
     RETURN
 EVT_END()
 
+/**
+ * Setup for the giant shell (unit_koura) that Shell Shield spawns over Mario: on Mario's side, acting before the
+ * player, placed off screen until the move positions it.
+ */
 BattleUnitSetup entry_koura = {
     &unit_koura, // mUnitKindParams
     ALLIANCE_PLAYER, // alliance

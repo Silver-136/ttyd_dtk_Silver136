@@ -42,6 +42,10 @@ static EvtWord return_event[256];
 static EvtWord normal_attack_event[311];
 static EvtWord wait_event[6];
 
+/**
+ * Unit kind of the Piranha Plant (HP 15, level 33):
+ * its size, offsets, damage sounds, status vulnerability, parts and init event.
+ */
 static BattleUnitKind unit_pakkun_flower = {
     UNIT_PIRANHA_PLANT, // mUnitType
     "btl_un_pakkun_flower", // name
@@ -87,10 +91,13 @@ static BattleUnitKind unit_pakkun_flower = {
     (BattleDataEntry*)data_table, // dataTable
 };
 
+/** Defence of the Piranha Plant: no damage reduction. */
 static BattleUnitDefense defence = {0};
 
+/** Element reactions of the Piranha Plant: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {0};
 
+/** Status vulnerability of the Piranha Plant (percent chance to take each status): resists most statuses. */
 static StatusVulnerability regist = {
     100, // sleep
     70, // stop
@@ -116,6 +123,7 @@ static StatusVulnerability regist = {
     30, // ohko
 };
 
+/** Parts of the Piranha Plant : hit positions, defences, attributes and pose tables. */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -135,6 +143,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon of the Piranha Plant's attack: 9 damage, hammer-type contact attack. */
 static BattleWeapon weapon_pakkun_flower_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -237,6 +246,10 @@ static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_ACTION, "PKF_S_3"},
 };
 
+/**
+ * Data table of the Piranha Plant: event handlers for the counter-hit reactions (tags 25-36),
+ * the attacker hurt by its spikes and a First Strike on it (no reaction).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_THORN_HEAD_EVENT, dmg_avoid_counter_thorn_head_event},
     {UNIT_DATA_COUNTER_FRONT_SPIKY_EVENT, counter_damage_event},

@@ -1,3 +1,5 @@
+// E3 sequence: the trade-show chapter-select menu, still present in the retail builds.
+
 #include "seq/seq_e3.h"
 #include "demo/DEMOPad.h"
 #include "dolphin/gx/GXEnum.h"
@@ -48,6 +50,10 @@ static seq_e3_work work;
 //.sdata
 static seq_e3_work* wp = &work;
 #ifdef VERSION_G8ME01
+/**
+ * The four scenarios of the trade-show menu: the story progress each one starts at and where its box sits
+ * on screen, one box in each corner.
+ */
 seq_e3_entry e3_tbl[4] = {
     { 3, -140.0f, 100.0f },
     { 23, 140.0f, 100.0f },
@@ -55,6 +61,10 @@ seq_e3_entry e3_tbl[4] = {
     { 96, 140.0f, -100.0f },
 };
 #else
+/**
+ * The four scenarios of the trade-show menu: the story progress each one starts at and where its box sits
+ * on screen, one box in each corner.
+ */
 seq_e3_entry e3_tbl[3] = {
     { 23, -140.0f, 100.0f },
     { 35, 140.0f, 100.0f },

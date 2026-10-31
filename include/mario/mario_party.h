@@ -1,3 +1,5 @@
+// mario_party.c: Mario's side of the partners (partyJoin/partyLeft, marioPartyEntry/Hello/Goodbye, marioUseParty).
+
 #pragma once
 
 #include <dolphin/types.h>

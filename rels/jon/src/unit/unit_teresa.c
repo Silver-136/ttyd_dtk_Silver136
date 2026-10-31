@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Boo (`teresa`): parts, stats, poses and AI scripts.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_status_effect.h"
@@ -123,6 +125,10 @@ static USER_FUNC(teresa_check_trans) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Unit data of the Boo in the Pit of 100 Trials: 7 HP, level 17;
+ * names its parts, status table and init script.
+ */
 BattleUnitKind unit_teresa = {
     UNIT_BOO, // mUnitType
     "btl_un_teresa", // name
@@ -171,8 +177,16 @@ BattleUnitKind unit_teresa = {
     data_table, // dataTable
 };
 
+/**
+ * Defence of the Boo against each element (normal, fire, ice, explosion, electric):
+ * none, so every hit does its full damage.
+ */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/**
+ * Damage modifiers of the Boo per element (normal, fire, ice, explosion, electric):
+ * none, so no element is a weakness, an immunity or a heal.
+ */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -200,10 +214,12 @@ static StatusVulnerability regist = {
     10, // ohko
 };
 
+/** Part of the Boo: its one body part with hit box, defence tables and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_teresa", "c_teresa", 0.0f, 0.0f, 0.0f, 0.0f, 25.0f, 0.0f, 0.0f, 30.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
 
+/** Weapon of the Boo's slap: damage 3. */
 static BattleWeapon weapon_teresa_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -240,6 +256,7 @@ static BattleWeapon weapon_teresa_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Boo making itself invisible: inflicts Invisible. */
 static BattleWeapon weapon_teresa_trans_myself = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -277,6 +294,7 @@ static BattleWeapon weapon_teresa_trans_myself = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Boo making another Boo invisible: inflicts Invisible. */
 static BattleWeapon weapon_teresa_trans = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -314,6 +332,7 @@ static BattleWeapon weapon_teresa_trans = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Weapon of the Boo's move to a new spot. */
 static BattleWeapon weapon_teresa_move = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -348,6 +367,7 @@ static BattleWeapon weapon_teresa_move = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Pose table of the Boo: animation names for each pose type (idle, walk, hurt, attack and so on). */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "N_1"},
     {POSE_TYPE_STOP, "Y_1"},
@@ -368,6 +388,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "S_1"},
 };
 
+/**
+ * Data table of the Boo: event scripts and values the battle looks up by tag (damage reactions, dodge, first
+ * strike and so on).
+ */
 static BattleDataEntry data_table[] = {
     {0, NULL},
 };

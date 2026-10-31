@@ -1,3 +1,5 @@
+// eff_stone_smoke_n64.c: stone smoke entry (effStoneSmokeN64Entry) and work data (EffStoneSmokeN64Work).
+
 #pragma once
 
 #include <dolphin/types.h>

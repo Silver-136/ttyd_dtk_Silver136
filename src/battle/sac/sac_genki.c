@@ -1,3 +1,5 @@
+// Star-power special move Sweet Treat (sac_genki): the target game and its recovery effects.
+
 #include "version.h"
 #include "icon_ids.h"
 #include "mario/mario_pouch.h"

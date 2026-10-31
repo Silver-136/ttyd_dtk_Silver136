@@ -1,3 +1,5 @@
+// eff_water_damage_n64.c: water damage effect entry (effWaterDamageN64Entry).
+
 #pragma once
 
 #include "driver/effdrv.h"

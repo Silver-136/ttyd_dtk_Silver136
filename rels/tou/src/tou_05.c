@@ -117,6 +117,7 @@ EVT_BEGIN(n_bero_match_reset)
     RETURN
 EVT_END()
 
+/** Doors of Grubba's office: the north door back to the corridor (tou_04) and the west door to tou_13. */
 static BeroEntry bero_data[] = {
     {
         "n_bero", // hitName
@@ -537,6 +538,7 @@ static EVT_BEGIN(talk_kinoshikowa)
     RETURN
 EVT_END()
 
+/** NPCs of Grubba's office: Grubba and Jolene. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガンス"*/"\x83\x4B\x83\x93\x83\x58", // name

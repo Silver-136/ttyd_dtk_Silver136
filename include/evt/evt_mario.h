@@ -1,3 +1,5 @@
+// evt_mario.c: script commands that control Mario: position, movement, camera, flags and motions.
+
 #pragma once
 
 #include "evt/evt_cmd.h"

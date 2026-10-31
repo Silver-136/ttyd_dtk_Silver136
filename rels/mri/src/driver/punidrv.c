@@ -1,3 +1,6 @@
+// The Great Tree (mri): punidrv, the billboard renderer for the Puni crowd (a copy of the DOL extdrv): sorts the
+// poses by depth and draws each puni as a textured quad with its shadow.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
@@ -45,6 +48,10 @@ void puniInit(void) {
     wp->useFade = TRUE;
 }
 
+/**
+ * Sine of each whole degree from 0 to 449; the cosine is read 90 entries ahead (sintbl[deg + 90]) to move a
+ * position along a heading.
+ */
 static f32 sintbl[450] = {
     0.0f, 0.017452f, 0.034899f, 0.052336f, 0.069756f, 0.087156f, 0.104528f, 0.121869f,
     0.139173f, 0.156434f, 0.173648f, 0.190809f, 0.207912f, 0.224951f, 0.241922f, 0.258819f,

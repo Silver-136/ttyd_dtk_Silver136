@@ -1,3 +1,5 @@
+// evt_light.c: script commands for character and map lighting (lightdrv).
+
 #pragma once
 
 #include "evt/evt_cmd.h"

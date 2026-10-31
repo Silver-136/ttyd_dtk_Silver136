@@ -1,3 +1,5 @@
+// evt_pouch.c: script commands for Mario's pouch: items, coins, star pieces, badges, HP/FP and partners.
+
 #pragma once
 
 #include "evt/evt_cmd.h"

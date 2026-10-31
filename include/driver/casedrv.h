@@ -1,3 +1,5 @@
+// casedrv.c: the case driver (CaseSetup, CaseEntry): hit-object triggers that run an event script.
+
 #pragma once
 
 #include <dolphin/types.h>

@@ -1,3 +1,6 @@
+// Sandars: explosion; types 0-4 spawn a bomb burst (types 3 and 4 also play the EFF_bakuhatu "explosion" animation);
+// type 5 is a line of growing, spinning sprites.
+
 #include "eff/eff_sandars.h"
 #include "driver/animdrv.h"
 #include "driver/camdrv.h"
@@ -16,6 +19,7 @@ void effSandarsMain(EffectEntry* effect);
 void effSandarsDisp(CameraId cameraId, EffectEntry* effect);
 void effSandarsDisp2(CameraId cameraId, EffectEntry* effect);
 
+/** Size percentages per frame as each type 5 sprite grows in: up to 120%, then it collapses. */
 static u8 scale_data[] = { 0, 0, 0, 13, 0x1C, 0x2C, 0x3C, 0x4B, 0x59, 0x65, 0x6F, 0x75, 0x78, 0x4B, 0};
 
 /**

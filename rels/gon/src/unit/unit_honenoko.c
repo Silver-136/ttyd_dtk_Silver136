@@ -1,3 +1,5 @@
+// Dull Bones (honenoko): battle unit used in Hooktail Castle.
+
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
@@ -42,6 +44,7 @@ static EvtWord normal_attack_event[428];
 static EvtWord call_friend_event[311];
 static EvtWord wait_event[6];
 
+/** Unit data of the Dull Bones: 1 HP, level 9; the battle starts it from init_event. */
 BattleUnitKind unit_honenoko = {
     UNIT_DULL_BONES, // mUnitType
     "btl_un_honenoko", // name
@@ -90,8 +93,10 @@ BattleUnitKind unit_honenoko = {
     data_table, // dataTable
 };
 
+/** Defence of the Dull Bones: 1 against every element. */
 static BattleUnitDefense defence = {{1, 1, 1, 1, 1}};
 
+/** Elemental reactions of the Dull Bones: none, every element hurts it normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -119,6 +124,10 @@ static StatusVulnerability regist = {
     50, // ohko
 };
 
+/**
+ * Parts of the Dull Bones: part 1 is its body, part 2 the bone it throws, part 3 the piece it flings off when
+ * calling for help and part 4 the pile of bones that forms.
+ */
 static BattleUnitKindPart parts[] = {
     {
         1, // partNum
@@ -186,6 +195,7 @@ static BattleUnitKindPart parts[] = {
     },
 };
 
+/** Weapon data for the Dull Bones' bone throw: 2 damage, one target. */
 static BattleWeapon weapon_honenoko_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -222,6 +232,7 @@ static BattleWeapon weapon_honenoko_attack = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Setup for the new Dull Bones a Dull Bones calls in with its call-for-help move. */
 static BattleUnitSetup entry_honenoko = {
     &unit_honenoko, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -233,6 +244,9 @@ static BattleUnitSetup entry_honenoko = {
     NULL, // itemDropTable
 };
 
+/**
+ * Pose table of the Dull Bones: the animation each battle pose (idle, hurt, walk, attack and so on) plays.
+ */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "KRN_N_1"},
     {POSE_TYPE_STOP, "KRN_Y_1"},
@@ -255,6 +269,10 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "KRN_S_1"},
 };
 
+/**
+ * Event table of the Dull Bones: its defeat (dead_event, tag 49), its collapse into a pile of bones
+ * (fake_dead_event, tag 15) and the First Strike reaction (does nothing).
+ */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DEAD_EVENT, dead_event},
     {UNIT_DATA_FAKE_DEAD_EVENT, fake_dead_event},

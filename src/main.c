@@ -1,3 +1,5 @@
+// Program entry: initialises the game and runs the main loop (game update, draw, frame timing).
+
 #include "main.h"
 
 #include "mario/mariost.h"

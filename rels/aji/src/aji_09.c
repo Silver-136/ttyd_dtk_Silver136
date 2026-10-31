@@ -86,6 +86,7 @@ static EVT_BEGIN(s_door_close)
     RETURN
 EVT_END()
 
+/** Exit of this room: the south door to aji_01. */
 static BeroEntry bero_entry_data[] = {
     {
         "s_bero", // hitName
@@ -120,6 +121,10 @@ EVT_BEGIN(peach_evt_bero_out1)
     RETURN
 EVT_END()
 
+/**
+ * Replacement for the south door exit, swapped in with evt_bero_overwrite during Peach's scene so it leads
+ * on to aji_01 (n_bero_4).
+ */
 BeroEntry bero_data_peach1[] = {
     {
         "s_bero", // hitName
@@ -159,6 +164,10 @@ EVT_BEGIN(peach_evt_bero_out2)
     RETURN
 EVT_END()
 
+/**
+ * Replacement for the south door exit, swapped in with evt_bero_overwrite during Peach's scene so it leads
+ * on to aji_17 (w_bero).
+ */
 BeroEntry bero_data_peach2[] = {
     {
         "s_bero", // hitName
@@ -275,6 +284,7 @@ EVT_BEGIN(evt_kou2)
     RETURN
 EVT_END()
 
+/** Names of the locker parts (door and hit areas) that the room sets up; read until the terminator. */
 const char* rokka_data[] = {
     "R_door_1",
     "a_door_1",

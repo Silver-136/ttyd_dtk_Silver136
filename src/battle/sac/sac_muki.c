@@ -1,3 +1,5 @@
+// Star-power special move Power Lift (sac_muki): the cursor game that raises Mario's attack and defense.
+
 #include "eff/eff_starstone.h"
 #include "battle/battle.h"
 #include "eff/n64/eff_stamp_n64.h"
@@ -95,6 +97,10 @@ void main_cursor(void);
 
 EvtWord marioAttackEvent_Muki[254];
 
+/**
+ * Power Lift's weapon template (3 SP, targets Mario and the partner): set_weapon copies it and adds a sure
+ * 3-turn Attack or Defense boost of the points earned in the minigame.
+ */
 static BattleWeapon weapon = {
     "btl_wn_sac_mukimuki_body", // name
     ICON_SAC_MUKI, // icon

@@ -1,3 +1,5 @@
+// Pit of 100 Trials battle unit: the Wizzerd (`mahorn`): parts, stats, poses and AI scripts.
+
 #include "version.h"
 #include "eff/eff_mahorn2.h"
 #include "battle/battle_unit.h"
@@ -76,6 +78,7 @@ static EvtWord yokeyoke_magic_event[75];
 static EvtWord recover_magic_event[96];
 static EvtWord wait_event[386];
 
+/** Unit data of the Wizzerd: stats, sounds, attributes, parts, init script and data table. */
 BattleUnitKind unit_mahorn = {
     UNIT_WIZZERD, // mUnitType
     "btl_un_mahorn", // name
@@ -124,8 +127,10 @@ BattleUnitKind unit_mahorn = {
     data_table, // dataTable
 };
 
+/** Damage reduction of the Wizzerd: defence 3 against every attack type. */
 static BattleUnitDefense defence = {{3, 3, 3, 3, 3}};
 
+/** Element response of the Wizzerd: none, every attack type is treated normally. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
 static StatusVulnerability regist = {
@@ -153,6 +158,7 @@ static StatusVulnerability regist = {
     40, // ohko
 };
 
+/** Body parts of the Wizzerd: hit position, size, defence tables and attributes. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 0.0f, 30.0f, 0.0f, 0.0f, 40.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
     {2, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
@@ -161,6 +167,7 @@ static BattleUnitKindPart parts[] = {
     {5, "btl_un_mahorn", "c_maho", 0.0f, 0.0f, 0.0f, 5.0f, 30.0f, 0.0f, 0.0f, 35.0f, 0.0f, 20, 30, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart | kNotTargetable | kNoShadow, 0, pose_table},
 };
 
+/** Attack data for the Wizzerd's single-target magic: 6 damage. */
 static BattleWeapon weapon_mahorn_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -197,6 +204,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Wizzerd's magic on all enemies: 6 damage. */
 static BattleWeapon weapon_mahorn_all_attack_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -238,6 +246,7 @@ static BattleWeapon weapon_mahorn_all_attack_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Wizzerd's size-up spell: no damage, 100% size change. */
 static BattleWeapon weapon_mahorn_dekadeka_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -276,6 +285,7 @@ static BattleWeapon weapon_mahorn_dekadeka_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Wizzerd's defence-up spell: no damage, 100% defence change. */
 static BattleWeapon weapon_mahorn_katikati_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -315,6 +325,7 @@ static BattleWeapon weapon_mahorn_katikati_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Wizzerd's confusion spell: no damage, 50% Confusion. */
 BattleWeapon weapon_mahorn_confuse_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -354,6 +365,7 @@ BattleWeapon weapon_mahorn_confuse_magic = {
     {0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0}, // stageEffectRates
 };
 
+/** Attack data for the Wizzerd's healing spell: no damage. */
 static BattleWeapon weapon_mahorn_recover_magic = {
     NULL, 0, // name..icon
     {0}, // pad_06
@@ -461,6 +473,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Pose table of the Wizzerd: battle pose types mapped to animation names. */
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "MAH_N_1"},
     {POSE_TYPE_STOP, "MAH_Y_1"},
@@ -481,12 +494,14 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_ACTION, "MAH_S_1"},
 };
 
+/** Data table of the Wizzerd: event handlers keyed by tag (avoid_miss_event). */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},
     {0, NULL},
 };
 
+/** Data table of the Wizzerd, clone: event handlers keyed by tag (avoid_miss_event). */
 static BattleDataEntry data_table_bunsin[] = {
     {UNIT_DATA_AVOID_MISS_EVENT, avoid_miss_event},
     {UNIT_DATA_FIRST_ATTACK_POS_EVENT, btldefaultevt_Dummy},

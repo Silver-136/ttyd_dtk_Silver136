@@ -230,6 +230,10 @@ USER_FUNC(geso_set_checkpose) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Doors of this room: two west exits back to tik_01 (the lower one behind a bombable wall), a pair of pipes
+ * that link spots inside the room, the door to tik_13 and the pipe to Petal Meadows (hei_00).
+ */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero_1", // hitName
@@ -330,6 +334,10 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
+/**
+ * Stand-in for the Petal Meadows pipe until chapter 1 has begun: it leads to the chapter 1 title screen
+ * (sys_01, stg_1) instead. Swapped in by the map init script.
+ */
 static BeroEntry bero_entry_data2[] = {
     {
         "dokan", // hitName
@@ -368,6 +376,7 @@ EVT_BEGIN(geso_dead)
     RETURN
 EVT_END()
 
+/** NPCs of this room: the Blooper's tentacle, which starts the boss scene when Mario hits it. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ゲッソーのゲソ"*/"\x83\x51\x83\x62\x83\x5C\x81\x5B\x82\xCC\x83\x51\x83\x5C", // name
@@ -435,6 +444,7 @@ EVT_BEGIN(ukishima_move)
     RETURN
 EVT_END()
 
+/** Pose Mario takes when he checks the Blooper's tentacle: plain standing (M_S_1) instead of his look pose. */
 char geso_checkpose[] = "M_S_1";
 
 /**
@@ -785,6 +795,7 @@ static EVT_BEGIN(wall_bomb)
     RETURN
 EVT_END()
 
+/** Spots Mario is put back on after falling into the water of this room (the object's own position). */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"mod_1", {0.0f, -1000.0f, 0.0f}},
     {"mod_2", {0.0f, -1000.0f, 0.0f}},

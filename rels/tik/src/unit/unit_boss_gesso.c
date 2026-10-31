@@ -1,3 +1,5 @@
+// Rogueport Sewers (tik) battle unit: Blooper (gesso), the body: its parts, defence/status tables, and attack events.
+
 #include "eff/n64/eff_opuku_jetw_n64.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -67,6 +69,10 @@ EvtWord gesso_ikasumi_attack[193];
 static EvtWord wait_event[6];
 EvtWord dead_subevent[48];
 
+/**
+ * Unit kind of the Blooper (HP 12, level 41): its size, offsets, damage sounds, status vulnerability,
+ * parts and init event.
+ */
 BattleUnitKind unit_boss_gesso = {
     UNIT_BLOOPER, // mUnitType
     "btl_un_gesso", // name
@@ -115,10 +121,16 @@ BattleUnitKind unit_boss_gesso = {
     data_table, // dataTable
 };
 
+/** Defence of the Blooper: no damage reduction. */
 static BattleUnitDefense defence = {{0, 0, 0, 0, 0}};
 
+/** Element reactions of the Blooper: no special reaction to any element. */
 static BattleUnitDefenseAttr defence_attr = {{0, 0, 0, 0, 0}};
 
+/**
+ * Status vulnerability of the Blooper (percent chance to take each status):
+ * immune to fright, gale force, dodgy, invisibility and instant kill.
+ */
 static StatusVulnerability regist = {
     100, // sleep
     100, // stop
@@ -144,10 +156,13 @@ static StatusVulnerability regist = {
     0, // ohko
 };
 
+/** Defence of the Blooper (ceiling): 2 damage points off every hit. */
 BattleUnitDefense defence_ceil = {{2, 2, 2, 2, 2}};
 
+/** Element reactions of the Blooper (ceiling): no special reaction to any element. */
 BattleUnitDefenseAttr defence_attr_ceil = {0};
 
+/** Status vulnerability of the Blooper (ceiling) (percent chance to take each status): immune to sleep. */
 StatusVulnerability regist_ceil = {0};
 
 s32 R_defence_turn[] = {
@@ -204,11 +219,13 @@ PoseTableEntry gesso_pose_table_turn[] = {
     {POSE_TYPE_ACTION, "GSO_V_1"},
 };
 
+/** Data table of the Blooper: event handlers for the follow-up to its defeat. */
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_PRE_DEAD_EVENT, dead_subevent},
     {0, NULL},
 };
 
+/** Body part of the Blooper (model c_gesso): hit position, defences, attributes and pose table. */
 static BattleUnitKindPart parts[] = {
     {1, "btl_un_gesso", "c_gesso", 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 103, -175, 255, &defence, &defence_attr, kMainPart | kGuardTargetPart, 0, pose_table},
 };
@@ -337,6 +354,10 @@ static EVT_BEGIN(init_event)
     RETURN
 EVT_END()
 
+/**
+ * Spawn setup for the Blooper's left tentacle (L. Tentacle):
+ * starts off-screen on the enemy side until the Blooper moves it into place.
+ */
 BattleUnitSetup entry_gesso_left_arm_entry_data = {
     &unit_boss_gesso_left_arm, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -348,6 +369,10 @@ BattleUnitSetup entry_gesso_left_arm_entry_data = {
     NULL, // itemDropTable
 };
 
+/**
+ * Spawn setup for the Blooper's right tentacle (R. Tentacle):
+ * starts off-screen on the enemy side until the Blooper moves it into place.
+ */
 BattleUnitSetup entry_gesso_right_arm_entry_data = {
     &unit_boss_gesso_right_arm, // mUnitKindParams
     ALLIANCE_ENEMY, // alliance
@@ -542,6 +567,7 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
+/** Weapon of the Blooper's ink: 1 damage. */
 BattleWeapon weapon_gesso_ikasumi_attack = {
     NULL, 0, // name..icon
     {0}, // pad_06

@@ -1,3 +1,5 @@
+// EvtWord: the type of one script word, which holds a value or a pointer to a string, script or data table.
+
 #pragma once
 
 #include <dolphin/types.h>

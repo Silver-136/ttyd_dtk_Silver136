@@ -1,3 +1,5 @@
+// eff_scanning.c: scanning effect entry (effScanningEntry) and its work data (effScanningData).
+
 #pragma once
 
 #include <dolphin/types.h>

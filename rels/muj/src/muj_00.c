@@ -756,6 +756,10 @@ USER_FUNC(cam_test_func) {
     return EVT_RETURN_DONE;
 }
 
+/**
+ * Mass-NPC figure table of the beach crowd: model, animation set and start offset of each sailor (c_boro_k),
+ * X-Naut (c_zako_n) and c_elmos figure.
+ */
 static ExtTexInfo ext_entry_data[] = {
     {"c_boro_k", "S_1", 0.0f},
     {"c_boro_k", "S_1", 3.0f},
@@ -818,6 +822,7 @@ static ExtTexInfo ext_entry_data[] = {
     {0},
 };
 
+/** Frame sequence of the walking and standing sailors of the beach crowd, ended by -1. */
 static s16 suifu_animtbl[] = {
     0, 0, 0, 1, 1, 1, 2, 2,
     2, 3, 3, 3, 4, 4, 4, 5,
@@ -827,18 +832,21 @@ static s16 suifu_animtbl[] = {
     -1, 0,
 };
 
+/** Frame sequence of the running sailors of the crowd (the panic and the jumping fight), ended by -1. */
 s16 suifu_animtbl_run[] = {
     14, 14, 15, 15, 16, 16, 17, 17,
     18, 18, 19, 19, 20, 20, 21, 21,
     22, 22, 23, 23, -1, 0,
 };
 
+/** Frame sequence of the c_elmos crowd on the pirate ship, ended by -1. */
 static s16 elmos_animtbl[] = {
     24, 24, 25, 25, 26, 26, 27, 27,
     28, 28, 29, 29, 30, 30, 31, 31,
     32, 32, 33, 33, -1, 0,
 };
 
+/** Frame sequence of the X-Naut ship's crowd (mass NPCs 205 to 304), ended by -1. */
 static s16 dai3_animtbl[] = {
     34, 34, 34, 35, 35, 35, 36, 36,
     36, 37, 37, 37, 38, 38, 38, 39,
@@ -848,6 +856,7 @@ static s16 dai3_animtbl[] = {
     -1, 0,
 };
 
+/** Running frame sequence of the X-Naut ship's crowd, ended by -1. */
 s16 dai3_animtbl_run[] = {
     48, 48, 49, 49, 50, 50, 51, 51,
     52, 52, 53, 53, 54, 54, 55, 55,
@@ -1296,6 +1305,10 @@ static EVT_BEGIN(kiza_entry)
     RETURN
 EVT_END()
 
+/**
+ * NPCs of the beach: the rough sailor, Flavio, the bespectacled sailor, Lord Crump's officer disguise, the
+ * nervous sailor, sailors A, bomb, C, D and E, Cortez, Mony, Peeton and the Whacka.
+ */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"ガラの悪い水夫"*/"\x83\x4B\x83\x89\x82\xCC\x88\xAB\x82\xA2\x90\x85\x95\x76", // name
@@ -1465,6 +1478,7 @@ static NpcSetupInfo npcEnt[] = {
     {0},
 };
 
+/** Doors and exits of muj_00: e_bero to muj_01; n_bero to muj_10; n_bero_02 to dou_11 (Pirate's Grotto). */
 static BeroEntry bero_entry_data[] = {
     {
         "e_bero", // hitName
@@ -1594,6 +1608,7 @@ EVT_BEGIN(mujinto_hyochaku)
     RETURN
 EVT_END()
 
+/** Standing spots (x, y, z, facing) of the 95 sailors of the beach crowd, placed by suifu_random_sub. */
 s32 suifu_random_setup[] = {
     1289, 35, -419, 270, 1214, 35, -335, 90,
     1264, 35, -358, 270, 1306, 35, -462, 90,
@@ -2067,6 +2082,10 @@ static EVT_BEGIN(dai3_shurai_after)
     RETURN
 EVT_END()
 
+/**
+ * Positions (x, y, z, facing) of the 95 sailors on the pirate ship during the pirates versus X-Nauts fight,
+ * relative to the ship.
+ */
 s32 kaizoku_vs_dai3_suifupos[] = {
     -88, 115, -6, 270, -87, 115, 15, 270,
     -92, 115, 34, 270, -104, 115, 76, 270,
@@ -2118,6 +2137,10 @@ s32 kaizoku_vs_dai3_suifupos[] = {
     -61, 40, 65, 270,
 };
 
+/**
+ * Positions (x, y, z, facing) of the 100 c_elmos figures on the pirate ship during the fight, relative to the
+ * ship.
+ */
 s32 kaizoku_vs_dai3_elmospos[] = {
     51, 165, 25, 270, 34, 112, -63, 270,
     37, 158, 67, 270, 24, 191, 69, 270,
@@ -2245,6 +2268,10 @@ EVT_BEGIN(dai3_kurukuru)
     RETURN
 EVT_END()
 
+/**
+ * Positions (x, y, z) of the X-Naut ship's crowd (mass NPCs 205 to 304) around the ship centre, used by
+ * dai3_butai_setup.
+ */
 s32 kaizoku_vs_dai3_dai3pos[] = {
     107, 159, -120, 10, 245, -57, 8, 152,
     40, 100, 164, -87, 3, 121, -28, -13,
@@ -2514,6 +2541,7 @@ EVT_BEGIN(dai3_move_every)
     RETURN
 EVT_END()
 
+/** Spline points (x, y, z) of the X-Naut ship's approach path, followed by dai3_move_trace. */
 f32 dai3_spline_dt[] = {
     -1200.0f, 0.0f, -0.0f, -1100.5623f, 0.0f, -8.453464f, -293.84833f, 0.0f,
     399.23074f, 34.78095f, 0.0f, 432.56693f, 421.29593f, 0.0f, 248.42857f, 461.67648f,
@@ -2521,6 +2549,9 @@ f32 dai3_spline_dt[] = {
     -362.64764f, 0.0f, -332.12228f,
 };
 
+/**
+ * Spline points (x, y, z) of the pirate ship's sailing path toward the shore, followed by kaizoku_move_trace.
+ */
 f32 kaizoku_spline_dt[] = {
     -35.35443f, 0.0f, -1842.3301f, -144.56525f, 0.0f, -833.1615f, -259.41003f, 0.0f,
     -703.04047f, -643.16766f, 0.0f, -279.92737f, -441.1687f, 0.0f, 463.3269f, 122.979614f,
@@ -2920,11 +2951,13 @@ EVT_BEGIN(senin_kansei)
     RETURN
 EVT_END()
 
+/** Spline points of the short first leg of the X-Naut ship's retreat. */
 f32 dai3_taisan_spline_dt00[] = {
     -416.0f, 0.0f, -334.0f, -413.67612f, 0.0f, -365.46518f, -411.63168f, 0.0f,
     -404.80673f,
 };
 
+/** Spline points of the X-Naut ship's sail away (taisan, retreat) after the fight. */
 f32 dai3_taisan_spline_dt01[] = {
     -416.0f, 0.0f, -334.0f, -839.007f, 0.0f, -339.86542f, -1018.9882f, 0.0f,
     -346.33777f,
@@ -3088,6 +3121,7 @@ EVT_BEGIN(dai3_beat_back)
     RETURN
 EVT_END()
 
+/** Positions (x, y, z, facing) of the 95 sailors aboard the ship when the crew leaves Keelhaul Key. */
 s32 leave_island_suifupos[] = {
     565, 77, -606, 90, 574, 77, -612, 90,
     590, 77, -618, 90, 590, 77, -605, 90,
@@ -3750,6 +3784,10 @@ EVT_BEGIN(mony_peton_boarding)
     RETURN
 EVT_END()
 
+/**
+ * Return points of the hazard-water floors of the beach: the hit area and where Mario is put back after the
+ * water bites him.
+ */
 static HitDamageReturn hitDmgRetPoints[] = {
     {"A_yuka01", {1083.0f, 35.0f, -738.0f}},
     {"A_yuka06", {582.0f, 35.0f, -1173.0f}},

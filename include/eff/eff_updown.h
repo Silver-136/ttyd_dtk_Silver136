@@ -1,3 +1,5 @@
+// eff_updown.c: up/down number pop-up effect entry (effUpdownEntry).
+
 #pragma once
 
 #include "driver/effdrv.h"

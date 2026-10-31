@@ -1,3 +1,5 @@
+// Script commands for the battle stage: stage and audience darkness, stage lights.
+
 #include "battle/battle.h"
 #include "manager/evtmgr_cmd.h"
 #include <dolphin/mtx.h>

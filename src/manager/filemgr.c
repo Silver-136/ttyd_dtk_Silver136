@@ -1,3 +1,6 @@
+// File manager: loads files into the smart heap (synchronously or through dvdmgr), keeps them cached by
+// name, and makes the pointers inside texture and animation files absolute after loading.
+
 #include "version.h"
 #include "manager/filemgr.h"
 #include "dolphin/os.h"

@@ -51,6 +51,7 @@ EVT_BEGIN(win_05_door_close)
     RETURN
 EVT_END()
 
+/** The only exit of this room: the west door back to win_04, with its opening and closing animation. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName

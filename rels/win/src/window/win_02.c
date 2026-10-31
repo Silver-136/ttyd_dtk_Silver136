@@ -24,6 +24,7 @@ EvtWord evt_hikou_nobiru[203];
 static TreeAccess tree_access_data[3];
 EvtWord win_02_init_evt[87];
 
+/** Exits of this map: west to win_01, east to win_03, and the pipe pair dokan1/dokan2 within this map. */
 static BeroEntry bero_entry_data[] = {
     {
         "w_bero", // hitName
@@ -187,6 +188,7 @@ EVT_BEGIN(evt_hikou_nobiru)
     RETURN
 EVT_END()
 
+/** Trees of this map that shake when Mario hammers them; neither drops anything. */
 static TreeAccess tree_access_data[] = {
     {4, "A_tree_01", "S_tree_mki_01", "S_tree_ha01", 0, NULL},
     {4, "A_tree_02", "S_tree_mki_02", "S_tree_ha02", 0, NULL},

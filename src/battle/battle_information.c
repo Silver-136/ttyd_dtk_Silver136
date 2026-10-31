@@ -1,3 +1,5 @@
+// Battle information: the data passed in and out of a battle (mode, party, first strike, result, item drops).
+
 #include "battle/battle_information.h"
 #include "battle/battle.h"
 #include "evt/evt_cmd.h"

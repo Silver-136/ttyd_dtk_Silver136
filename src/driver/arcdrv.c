@@ -1,3 +1,6 @@
+// Archive driver: remembers where up to four loaded archives sit in memory, so other code can ask
+// whether an address belongs to one.
+
 #include "driver/arcdrv.h"
 #include <string.h>
 

@@ -1,3 +1,5 @@
+// evt_yuuranking: Pianta Parlor ranking board: score records and their display for the minigames.
+
 #include "version.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -21,6 +23,7 @@
 #include <dolphin/pad.h>
 #include "icon_ids.h"
 
+/** An opaque white colour constant that nothing in the results screen reads. */
 const GXColor yuuranking_unused_color = {0xFF, 0xFF, 0xFF, 0xFF};
 typedef struct YuuRankingWork {
     EventEntry* event;
