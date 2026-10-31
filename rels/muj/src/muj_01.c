@@ -2,6 +2,8 @@
 // dancers, and the crew's homesickness, split and persuasion (kyoshu_event, nakamaware_event, settoku_event).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_urouro.h"
+#include "evt/evt_window.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bg.h"
@@ -55,15 +57,12 @@ static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
 static USER_FUNC(delete_itemsel_table);
 USER_FUNC(evt_mario_get_reqdir);
-USER_FUNC(evt_win_item_select);
 static USER_FUNC(make_itemsel_table);
 USER_FUNC(muj_get_door_check);
 USER_FUNC(sekai_yami_omise);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 static USER_FUNC(yami_view);
 extern s32 envSetYami[];
 

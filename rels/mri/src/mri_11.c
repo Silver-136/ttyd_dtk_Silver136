@@ -1,6 +1,7 @@
 // mri_11 (巨木の中, The Great Tree): the second Jabbi hive (hachi): Jabbies 7-11 and the hive breaking open.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_urouro.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
@@ -24,8 +25,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 
 EvtWord toge_7_init[17];
 EvtWord toge_7_talk[44];

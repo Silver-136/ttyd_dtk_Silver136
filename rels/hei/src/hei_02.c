@@ -2,6 +2,7 @@
 // Field enemies, coins, a Star Piece and a POW Block.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
@@ -16,8 +17,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
 
 static BeroEntry bero_entry_data[3];
 EvtWord evt_ki_6[20];

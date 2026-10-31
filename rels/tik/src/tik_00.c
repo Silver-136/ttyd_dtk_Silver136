@@ -2,6 +2,7 @@
 // reading, the Star Piece collector (starmaniac) and other residents, and the teleporter (tensou).
 
 #include "version.h"
+#include "evt/evt_window.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
@@ -81,10 +82,6 @@ static USER_FUNC(evt_osreport);
 USER_FUNC(evt_uranaisi_msg_alloc);
 USER_FUNC(evt_uranaisi_msg_free);
 USER_FUNC(evt_uranaisi_msg_set);
-USER_FUNC(evt_win_coin_off);
-USER_FUNC(evt_win_coin_on);
-USER_FUNC(evt_win_coin_wait);
-USER_FUNC(evt_win_other_select);
 static USER_FUNC(scale_func);
 static USER_FUNC(setmertn);
 static USER_FUNC(ss_set);

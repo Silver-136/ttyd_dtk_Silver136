@@ -1,4 +1,5 @@
 #include "version.h"
+#include "zakogun.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_camera.h"
@@ -79,7 +80,6 @@ USER_FUNC(zakogun_attack1);
 USER_FUNC(zakogun_end_sukima);
 USER_FUNC(zakogun_start_sukima);
 USER_FUNC(zakogun_dead1);
-USER_FUNC(zakogun_get_kanbu_id_evtcmd);
 void zakogun_ext_main(void);
 void zakogun_ext_init(void);
 

@@ -2,6 +2,7 @@
 // shut in before the title match; exits to tou_04 and tou_09 (the shut-in scenes iris out to tou_03).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "tou.h"
@@ -26,8 +27,6 @@
 #include "driver/seqdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
 
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];

@@ -2,6 +2,7 @@
 // and lock; door to jin_07.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "jin.h"
@@ -25,9 +26,6 @@
 #include "driver/itemdrv.h"
 
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_win_item_select);
-USER_FUNC(mainwindow_opendisable);
-USER_FUNC(mainwindow_openenable);
 
 static EvtWord e_close[12];
 static EvtWord e_open[12];

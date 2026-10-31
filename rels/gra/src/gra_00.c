@@ -2,6 +2,7 @@
 // scenes with the fake Mario.
 
 #include "version.h"
+#include "evt/evt_window.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
@@ -38,10 +39,6 @@
 static USER_FUNC(cam_r);
 USER_FUNC(camera_yure);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_win_nameent_name);
-USER_FUNC(evt_win_nameent_off);
-USER_FUNC(evt_win_nameent_on);
-USER_FUNC(evt_win_nameent_wait);
 static USER_FUNC(zoom);
 void msg_callback(s32 type, void* param);
 

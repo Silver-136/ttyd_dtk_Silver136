@@ -1,6 +1,7 @@
 // Hooktail Castle (gon) lecture script: the paper genie (peramajin) teaches the slit move (squeezing through narrow gaps), run when the Paper Curse is found in gon_06.
 
 #include "icon_ids.h"
+#include "evt/evt_window.h"
 #include "eff/eff_fukidashi.h"
 #include "eff/eff_itemget.h"
 #include "battle/battle_unit.h"
@@ -67,8 +68,6 @@ static USER_FUNC(lecture_button_seq_wait);
 static USER_FUNC(lecture_button_set_icon_id);
 static USER_FUNC(lecture_button_set_pos);
 static USER_FUNC(lecture_button_set_seq);
-USER_FUNC(mainwindow_opendisable);
-USER_FUNC(mainwindow_openenable);
 static USER_FUNC(x_flag_get);
 static USER_FUNC(x_flag_set);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);

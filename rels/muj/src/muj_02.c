@@ -2,6 +2,7 @@
 // lost wedding ring (lost_wedding_ring); Fuzzies.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_eff.h"
@@ -43,7 +44,6 @@ void FontDrawString(f32 x, f32 y, const char* str);
 void printCount(CameraId camera, void* param);
 
 USER_FUNC(countDisp);
-USER_FUNC(evt_win_item_select);
 
 static BeroEntry bero_entry_data[4];
 EvtWord mony_peton_setup[139];

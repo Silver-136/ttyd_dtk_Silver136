@@ -2,6 +2,7 @@
 // Thunder Rage and HP Plus items; doors to eki_01 and eki_04.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
 #include "driver/envdrv.h"
@@ -28,8 +29,6 @@
 static smartEntry* ind_lp;
 void envGlareFilter(s32 on, s16 x0, s16 y0, s16 x1, s16 y1);
 
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
 static USER_FUNC(test_glare);
 static void sun_tev(MapTevCallbackInfo* info);
 

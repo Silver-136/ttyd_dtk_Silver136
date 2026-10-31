@@ -1,6 +1,7 @@
 // Scripts and commands for the item shops: the shop list window, buying, selling, shop points.
 
 #include "version.h"
+#include "evt/evt_window.h"
 #include "evt/evt_shop.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_case.h"
@@ -54,10 +55,6 @@ void help_main(WinMgrEntry* entry);
 void name_disp(WinMgrEntry* entry);
 
 USER_FUNC(disp_off);
-USER_FUNC(evt_win_coin_off);
-USER_FUNC(evt_win_coin_on);
-USER_FUNC(evt_win_coin_wait);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(get_ptr);
 USER_FUNC(get_value);
 

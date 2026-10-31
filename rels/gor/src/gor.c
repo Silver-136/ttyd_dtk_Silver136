@@ -2,6 +2,8 @@
 // Registers the init events of gor_00..gor_04 and gor_10..gor_12.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_urouro.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_mario.h"
 #include "evt/evt_msg.h"
@@ -29,9 +31,6 @@ extern voidfunctionptr _dtors[];
 static s32 gor_inemuri_snd_id;
 static char* gor_msg_cat_buf;
 
-USER_FUNC(evt_win_other_select);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 void _unresolved(void);
 void _epilog(void);
 void _prolog(void);

@@ -1,6 +1,7 @@
 // yuu_02 (遊技場, Pianta Parlor): minigame 3, Tube Mode (roll, rolling course); entered from gor_03.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_yuuranking.h"
 #include "evt/evt_cmd.h"
 #include "party.h"
 #include "cam_shift.h"
@@ -65,8 +66,6 @@ static void monte_disp(CameraId camera, void* param);
 static BOOL get_monte_check(Vec* a, Vec* b);
 void yuu_02_icon_monte_disp(CameraId camera, void* param);
 
-USER_FUNC(evt_yuuranking_alloc);
-USER_FUNC(evt_yuuranking_free);
 static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
 USER_FUNC(yuu_02_icon_monte_entry);
@@ -78,7 +77,6 @@ USER_FUNC(yuuminigame3_roll_fix_off);
 USER_FUNC(yuuminigame3_roll_fix_on);
 USER_FUNC(yuuminigame3_set_phase);
 USER_FUNC(yuuranking_get_monte);
-USER_FUNC(yuuranking_wait_button);
 BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, RollWork* data);
 USER_FUNC(yuu_02_icon_monte_onoff);
 void yuu_02_icon_monte_off(s32 idx);

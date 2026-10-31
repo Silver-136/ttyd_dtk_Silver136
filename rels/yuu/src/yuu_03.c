@@ -1,6 +1,7 @@
 // yuu_03 (遊技場, Pianta Parlor): minigame 4, Paper Mode (slit, squeezing through slots); entered from gor_03 or mon_10.
 
 #include "version.h"
+#include "evt/evt_yuuranking.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "cam_shift.h"
@@ -68,8 +69,6 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
 
 USER_FUNC(evt_ryushi);
 USER_FUNC(evt_ryushi_clr);
-USER_FUNC(evt_yuuranking_alloc);
-USER_FUNC(evt_yuuranking_free);
 USER_FUNC(re_init_yuunpc);
 USER_FUNC(yuu_03_icon_monte_entry);
 USER_FUNC(yuu_03_cam_shift_reset);
@@ -78,7 +77,6 @@ USER_FUNC(yuuminigame4_opening_on_off);
 USER_FUNC(yuuminigame4_set_phase);
 USER_FUNC(yuunpc_go);
 USER_FUNC(yuuranking_get_monte);
-USER_FUNC(yuuranking_wait_button);
 USER_FUNC(evt_ryushi_init);
 static USER_FUNC(evt_nomal_cange);
 USER_FUNC(evt_slit_cancel);

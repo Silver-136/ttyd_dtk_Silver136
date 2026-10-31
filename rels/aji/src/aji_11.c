@@ -2,6 +2,7 @@
 // (peach_evt_disksys), and the gnawing creature (gajigaji).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_case.h"
@@ -26,7 +27,6 @@
 #include "mario/mario_pouch.h"
 #include "driver/seqdrv.h"
 
-USER_FUNC(evt_win_item_select);
 USER_FUNC(map_anim_flag_off);
 static USER_FUNC(peach_evt_toumei);
 

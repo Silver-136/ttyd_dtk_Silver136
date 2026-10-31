@@ -2,6 +2,7 @@
 // machine, shrinks and grows, and turns invisible (peach_evt_kusuri_nomu).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_case.h"
@@ -46,7 +47,6 @@ s32 g_Kusuri_B;
 s32 g_Kusuri_G;
 s32 g_Kusuri_R;
 
-USER_FUNC(evt_win_item_select);
 USER_FUNC(kusuri_color_get);
 USER_FUNC(kusuri_color_init);
 USER_FUNC(kusuri_color_set);

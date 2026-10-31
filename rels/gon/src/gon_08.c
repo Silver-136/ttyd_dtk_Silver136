@@ -2,6 +2,7 @@
 // Nokkos (nokkosu) gives a side request with a Special Card reward; Life Shroom, floating block, Castle Key (0x0F) lock (story 52).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_npc.h"
@@ -26,7 +27,6 @@
 #include "driver/itemdrv.h"
 #include "gon.h"
 
-USER_FUNC(evt_win_item_select);
 
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];

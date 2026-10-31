@@ -2,6 +2,8 @@
 // (irai_14).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_win.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_eff.h"
 #include "evt/evt_map.h"
@@ -27,13 +29,8 @@
 #include "mario/mario_pouch.h"
 
 static USER_FUNC(effect_stardust);
-USER_FUNC(evt_unitwin_alloc);
-USER_FUNC(evt_unitwin_free);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(majinaisi_ryokin_kaisu);
 static USER_FUNC(setmertn);
-USER_FUNC(unitwincoin_disp_onoff);
-USER_FUNC(unitwincoin_wait);
 
 s32 majinaisi_ryokin_kaisu_tbl[6];
 static BeroEntry bero_entry_data[2];

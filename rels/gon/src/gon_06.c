@@ -2,6 +2,7 @@
 // Paper genie (peramajin) scene (story 43 to 45), Attack FX R item, Dry Bones-type enemies.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "pmario_sound.h"
 #include "evt/evt_cam.h"
@@ -33,7 +34,6 @@
 #include "driver/seqdrv.h"
 
 static USER_FUNC(bgm_start_wait);
-USER_FUNC(evt_win_item_select);
 static void majin_callback(s32 type);
 
 static EvtWord door01_close[12];

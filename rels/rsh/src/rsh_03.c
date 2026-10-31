@@ -2,6 +2,7 @@
 // and the lunch-missing mystery; doors to rsh_02 and rsh_04.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 #include "driver/mapdrv.h"
@@ -45,7 +46,6 @@ static char tmp[32];
 Vec camPt;
 Vec camAt;
 
-USER_FUNC(evt_win_item_select);
 USER_FUNC(fire);
 USER_FUNC(iri_22_make_item_tbl);
 static USER_FUNC(mario_flag);

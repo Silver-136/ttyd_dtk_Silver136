@@ -2,6 +2,7 @@
 // (tik_18_cloud_evt); a Magikoopa, a Koopatrol and Spanias.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_damage.h"
@@ -15,8 +16,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
 
 static BeroEntry bero_entry_data[5];
 EvtWord tik_18_cloud_evt[5];

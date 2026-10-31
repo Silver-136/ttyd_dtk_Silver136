@@ -1,4 +1,5 @@
 #include "system.h"
+#include "zakogun.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "battle/battle_camera.h"
@@ -73,7 +74,6 @@ USER_FUNC(shake_ceil);
 USER_FUNC(zakogun_attack2);
 USER_FUNC(zakogun_attack2_yusuri);
 USER_FUNC(zakogun_dead2);
-USER_FUNC(zakogun_ext_init2);
 USER_FUNC(down_ceil);
 
 BattleUnitKind unit_boss_gundan_zako_group2;

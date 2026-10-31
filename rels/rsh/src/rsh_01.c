@@ -2,6 +2,7 @@
 // waitress NPCs; doors to Rogueport (gor_04), Riverside (hom_00) and Poshley Heights (pik_00) stations.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "rsh.h"
@@ -27,7 +28,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-USER_FUNC(evt_win_item_select);
 
 EvtWord s_bero_close[12];
 EvtWord s_bero_open[12];

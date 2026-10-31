@@ -2,6 +2,7 @@
 // 7's cannon permit is given here.
 
 #include "driver/msgdrv.h"
+#include "evt/evt_window.h"
 #include "memory.h"
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -69,7 +70,6 @@ typedef struct ClankData {
 } ClankData;
 
 
-USER_FUNC(evt_win_item_select);
 USER_FUNC(img_flag);
 static USER_FUNC(ramp_r);
 USER_FUNC(under);

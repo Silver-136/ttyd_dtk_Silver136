@@ -2,6 +2,7 @@
 // (keihin) and badges, the clockwork (zenmai) switches.
 
 #include "version.h"
+#include "evt/evt_window.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -35,7 +36,6 @@
 void icon_disp(CameraId camera, void* param);
 
 USER_FUNC(evt_sousa_icon);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(item_chk);
 USER_FUNC(evt_itemNameToItemID);
 

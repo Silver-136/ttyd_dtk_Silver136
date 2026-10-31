@@ -2,6 +2,7 @@
 // Mario around.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
 #include "evt/evt_cam.h"
@@ -80,7 +81,6 @@ static void senkaron_ext_disp(CameraId camera, void* param);
 static void senkaron_ext_shadow_disp(CameraId camera, void* param);
 
 USER_FUNC(chk_mario_ctrloff);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(get_mario_y_pos);
 USER_FUNC(get_party_y_pos);
 USER_FUNC(kurokaron_flag_check);

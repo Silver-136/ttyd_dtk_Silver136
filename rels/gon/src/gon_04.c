@@ -2,6 +2,7 @@
 // Floating blocks and switches, a bridge raised by a blue switch (story 40, 48, 49).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "mario/mario_pouch.h"
@@ -33,7 +34,6 @@ typedef struct KemuriPos {
     s32 z;
 } KemuriPos;
 
-USER_FUNC(evt_win_item_select);
 
 static EvtWord w1_door_close[12];
 static EvtWord w1_door_open[12];

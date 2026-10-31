@@ -1,6 +1,7 @@
 // bom_02 (ボム村, Fahr Outpost): the east side of the village with the inn, the shop and General White's bed.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bg.h"
 #include "evt/evt_cam.h"
@@ -42,7 +43,6 @@
 
 static USER_FUNC(anim_tevcallback);
 static USER_FUNC(anim_tevcallback_mobj);
-USER_FUNC(evt_win_item_select);
 static USER_FUNC(yami_view);
 extern s32 envSetYami[];
 

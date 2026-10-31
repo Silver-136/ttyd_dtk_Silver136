@@ -2,6 +2,10 @@
 // exits to gor_01 and down to the underground (tik).
 
 #include "system.h"
+#include "evt/evt_cloud.h"
+#include "evt/evt_urouro.h"
+#include "evt/evt_win.h"
+#include "evt/evt_window.h"
 #include "manager/winmgr.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -89,17 +93,9 @@ static USER_FUNC(enzan_lw_load);
 static USER_FUNC(enzan_lw_save);
 static USER_FUNC(evt_StatusClose);
 static USER_FUNC(evt_StatusOpen);
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_get_mode);
-USER_FUNC(evt_cloud_init);
 USER_FUNC(evt_gor_door_in_info);
 USER_FUNC(evt_gor_door_out_info);
 USER_FUNC(evt_set_bgtpl);
-USER_FUNC(evt_win_coin_off);
-USER_FUNC(evt_win_coin_on);
-USER_FUNC(evt_win_coin_wait);
-USER_FUNC(evt_win_item_select);
-USER_FUNC(evt_win_other_select);
 USER_FUNC(get_camcurve);
 USER_FUNC(get_camcurve_init);
 USER_FUNC(iri_13_free_item_tbl);
@@ -113,11 +109,7 @@ USER_FUNC(set_talk_memory_ry);
 static USER_FUNC(setmertn);
 USER_FUNC(status_gauge_force_off);
 USER_FUNC(stonechangertn);
-USER_FUNC(unitwin_getpartylank);
-USER_FUNC(unitwin_setpartylank);
 USER_FUNC(get_mario_dir_target);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 void kuragarisan_msgcb(s32 type, void* param);
 static USER_FUNC(enzan_set_f_i);
 static USER_FUNC(enzan_set_i_f);

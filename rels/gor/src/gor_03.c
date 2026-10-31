@@ -2,6 +2,10 @@
 // doors to the minigame rooms yuu_00..yuu_03; exits to gor_01 and gor_04 (station).
 
 #include "version.h"
+#include "evt/evt_urouro.h"
+#include "evt/evt_win.h"
+#include "evt/evt_window.h"
+#include "evt/evt_yuuranking.h"
 #include "evt/evt_pouch.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -152,12 +156,6 @@ USER_FUNC(evt_exchange_msg_free);
 USER_FUNC(evt_exchange_msg_set);
 USER_FUNC(evt_goryuugijo_set_caseid);
 USER_FUNC(evt_goryuugijo_set_nowslot);
-USER_FUNC(evt_unitwin_alloc);
-USER_FUNC(evt_unitwin_free);
-USER_FUNC(evt_win_item_select);
-USER_FUNC(evt_win_other_select);
-USER_FUNC(evt_yuuranking_alloc);
-USER_FUNC(evt_yuuranking_free);
 USER_FUNC(exchange_ryokin_medal);
 static USER_FUNC(fall_rtn);
 USER_FUNC(get_mario_dispReqDir);
@@ -174,13 +172,7 @@ USER_FUNC(mario_walkpoint_enzan);
 USER_FUNC(minigameselect_msg_set);
 static USER_FUNC(setmertn);
 USER_FUNC(teresa_badge_item_list_init);
-USER_FUNC(unitwincoin_disp_onoff);
-USER_FUNC(unitwincoin_wait);
-USER_FUNC(unitwin_lottery_disp_onoff);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 static USER_FUNC(viewport);
-USER_FUNC(yuuranking_wait_button);
 void kuji_bomb_055_callback(s32 type, MsgWinData** work);
 USER_FUNC(evt_goryuugijo_get_caseid);
 

@@ -2,6 +2,7 @@
 // to las_18.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
 #include "evt/evt_cam.h"
@@ -31,7 +32,6 @@
 
 
 USER_FUNC(check_party_pos);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(make_kagi_tbl);
 USER_FUNC(temae_kesu);
 

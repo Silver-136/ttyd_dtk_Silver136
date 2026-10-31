@@ -1,6 +1,7 @@
 // tou_10 (闘技場, Glitz Pit): the minor-league locker room; exits to tou_03, tou_04, tou_05; Yoshi egg and fighter scenes.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
 #include "evt/evt_cam.h"
@@ -42,10 +43,6 @@
 USER_FUNC(evt_tou_get_fighter_info);
 USER_FUNC(evt_tou_get_ranking);
 USER_FUNC(evt_tou_get_rule_msg2);
-USER_FUNC(evt_win_nameent_name);
-USER_FUNC(evt_win_nameent_off);
-USER_FUNC(evt_win_nameent_on);
-USER_FUNC(evt_win_nameent_wait);
 static USER_FUNC(getYoshiColor);
 USER_FUNC(name_check);
 USER_FUNC(setYoshiColor);

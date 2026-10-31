@@ -2,6 +2,7 @@
 // Drifting barrels and bottles; doors to dou_04, dou_05, dou_09 and dou_12.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_damage.h"
@@ -25,7 +26,6 @@
 #include "driver/casedrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_win_item_select);
 
 EvtWord dou_03_custom[10];
 static BeroEntry bero_entry_data[8];

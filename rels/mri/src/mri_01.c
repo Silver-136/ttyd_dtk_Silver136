@@ -2,6 +2,7 @@
 // first X-Naut battle, the Magnus von Grapple fight with Lord Crump, the Crystal Star, and Bowser's interludes.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "kpa_act.h"
 #include "evt/evt_cmd.h"
 #include "countdown.h"
@@ -56,7 +57,6 @@ USER_FUNC(akari_charge_entry);
 USER_FUNC(bossrobot);
 USER_FUNC(elder_talk_sub_fadeoff);
 USER_FUNC(elder_talk_sub_punicheck);
-USER_FUNC(evt_win_item_select);
 static USER_FUNC(evtflash);
 void bossrobot_batu(CameraId camera, void* param);
 USER_FUNC(evt_countdown_stop);

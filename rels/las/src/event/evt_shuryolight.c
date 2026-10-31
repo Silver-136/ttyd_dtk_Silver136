@@ -1,6 +1,7 @@
 // Palace of Shadow (las, the "last" dungeon): the coloured lamps on Sir Grodus's (shuryo) field model and his staff, animated in the las_28 and las_29 scenes.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_shuryolight.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_sub.h"
 
@@ -30,10 +31,8 @@ USER_FUNC(evt_shuryolight_delete);
 static USER_FUNC(evt_shuryolight_run_tue_evt);
 USER_FUNC(evt_shuryolight_run_head_evt);
 static USER_FUNC(evt_shuryolight_run_power_evt);
-USER_FUNC(evt_shuryolight_run_evt);
 static USER_FUNC(evt_shuryolight_get_status);
 static USER_FUNC(evt_shuryolight_get_anim_time);
-USER_FUNC(evt_shuryolight_init);
 static s32 shuryolightRunEvt(EvtWord* code, s32 id);
 static void shuryolightSetAnim(s32 index, s32 anim);
 static void shuryolight_callback(void* param, s32 group, Mtx* modeling);

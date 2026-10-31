@@ -2,6 +2,7 @@
 // Has Hooktail's flyover, a Bowser cutscene leading to kpa_02, a pipe to tik_02 and the epilogue scene that goes to nok_01.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_eff.h"
@@ -55,7 +56,6 @@ void make_gonbaba_projection(CameraId camera, void* param);
 
 USER_FUNC(cam_test);
 USER_FUNC(dist_check);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(make_gonbaba_projection_evt);
 static USER_FUNC(proj_mtx);
 static USER_FUNC(proj_off);

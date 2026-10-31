@@ -3,6 +3,7 @@
 // Puni-item events.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "driver/mapdrv.h"
 #include "evt/evt_bero.h"
@@ -51,7 +52,6 @@ GXColor HSV2RGB(HSV hsv);
 PuniWork* puniGetPunigp(void);
 void puniModeWinjump(PuniData* puni);
 
-USER_FUNC(evt_win_item_select);
 void _prolog(void);
 void _epilog(void);
 void _unresolved(void);

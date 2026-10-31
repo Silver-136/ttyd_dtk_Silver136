@@ -2,6 +2,8 @@
 // leads to Twilight Trail (gra_00).
 
 #include "version.h"
+#include "evt/evt_urouro.h"
+#include "evt/evt_window.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -52,20 +54,15 @@ USER_FUNC(box_r);
 USER_FUNC(check_tabemono);
 USER_FUNC(chk_fuki);
 USER_FUNC(delete_item_list);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(get_item_list);
 USER_FUNC(ie2_npc_disp_off);
 USER_FUNC(ie2_npc_disp_on);
-USER_FUNC(mainwindow_opendisable);
-USER_FUNC(mainwindow_openenable);
 USER_FUNC(mobj_ry);
 static USER_FUNC(npc_process);
 static USER_FUNC(set_fook_evt);
 USER_FUNC(shop_item_disp_off);
 USER_FUNC(shop_item_disp_on);
 USER_FUNC(sleep_voice);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 static void majin_callback(s32 type);
 
 EvtWord villagerF_init[7];

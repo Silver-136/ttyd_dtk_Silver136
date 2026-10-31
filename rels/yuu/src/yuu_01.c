@@ -1,6 +1,7 @@
 // yuu_01 (遊技場, Pianta Parlor): minigame 2, Boat Mode (fune); entered from gor_03.
 
 #include "version.h"
+#include "evt/evt_yuuranking.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
@@ -80,8 +81,6 @@ static inline BOOL monte_check_inl(Vec* a, Vec* b) {
  */
 static inline f32 randRange(f32 d) { return irand(100.0f * d) / 100.0f; }
 
-USER_FUNC(evt_yuuranking_alloc);
-USER_FUNC(evt_yuuranking_free);
 static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
 USER_FUNC(yuu_01_cam_shift_reset);
@@ -90,7 +89,6 @@ USER_FUNC(yuuminigame2_opening_chk);
 USER_FUNC(yuuminigame2_opening_on_off);
 USER_FUNC(yuuminigame2_set_phase);
 USER_FUNC(yuuranking_get_monte);
-USER_FUNC(yuuranking_wait_button);
 BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, FuneWork* data);
 static BOOL get_monte_check(Vec* a, Vec* b);
 

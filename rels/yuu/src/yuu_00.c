@@ -2,6 +2,7 @@
 
 #pragma defer_codegen on
 #include "battle/battle_unit.h"
+#include "evt/evt_yuuranking.h"
 #include "evt/evt_cmd.h"
 #include "party.h"
 #include "cam_shift.h"
@@ -60,8 +61,6 @@ static Monte* monte_p;
 static void monte_disp(CameraId camera, void* param);
 
 USER_FUNC(evt_change_plane);
-USER_FUNC(evt_yuuranking_alloc);
-USER_FUNC(evt_yuuranking_free);
 static USER_FUNC(fall_rtn);
 static USER_FUNC(re_fall_rtn);
 USER_FUNC(yuu_00_cam_shift_reset);
@@ -69,7 +68,6 @@ USER_FUNC(yuuminigame1_opening_chk);
 USER_FUNC(yuuminigame1_opening_on_off);
 USER_FUNC(yuuminigame1_set_phase);
 USER_FUNC(yuuranking_get_monte);
-USER_FUNC(yuuranking_wait_button);
 BOOL yuuminigame1_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp, HikokiWork* data);
 
 static MonteTable montetable[4];

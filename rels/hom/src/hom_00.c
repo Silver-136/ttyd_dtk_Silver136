@@ -2,6 +2,7 @@
 // (eki_00) needs the Station Key.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
 #include "driver/envdrv.h"
@@ -43,7 +44,6 @@
 static smartEntry* ind_lp;
 void envGlareFilter(s32 on, s16 x0, s16 y0, s16 x1, s16 y1);
 
-USER_FUNC(evt_win_item_select);
 static USER_FUNC(test_glare);
 USER_FUNC(tokei);
 static void sun_tev(MapTevCallbackInfo* info);

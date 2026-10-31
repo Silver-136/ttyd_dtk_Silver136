@@ -2,6 +2,7 @@
 // switches and the card key (evt_key_get).
 
 #include "version.h"
+#include "evt/evt_window.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "manager/evtmgr_cmd.h"
@@ -53,7 +54,6 @@ typedef struct {
 } BeltWork;
 
 USER_FUNC(bg_cam_chk);
-USER_FUNC(evt_win_item_select);
 static USER_FUNC(mario_chk);
 USER_FUNC(hit_group_chk);
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);

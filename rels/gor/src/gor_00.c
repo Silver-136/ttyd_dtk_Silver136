@@ -2,6 +2,9 @@
 // Exits to gor_01 (central plaza); also the departure for Keelhaul Key (chapter 5).
 
 #include "version.h"
+#include "evt/evt_urouro.h"
+#include "evt/evt_win.h"
+#include "evt/evt_window.h"
 #include "kpa_act.h"
 #include "eff/eff_funemizu.h"
 #include "battle/battle_unit.h"
@@ -89,9 +92,6 @@ static USER_FUNC(cam_kaiten_init);
 static USER_FUNC(cam_kaiten_set_direct);
 static USER_FUNC(cam_kaiten_set_para);
 static USER_FUNC(delete_itemsel_table);
-USER_FUNC(evt_unitwin_alloc);
-USER_FUNC(evt_unitwin_free);
-USER_FUNC(evt_win_item_select);
 static USER_FUNC(fune_eff);
 USER_FUNC(fune_yure_func);
 USER_FUNC(fune_yure_func_init);
@@ -112,11 +112,7 @@ static USER_FUNC(make_itemsel_table);
 static USER_FUNC(scale_func);
 USER_FUNC(suifu100taikikan_away);
 USER_FUNC(suifu100taikikan_init);
-USER_FUNC(unitwincoin_disp_onoff);
-USER_FUNC(unitwincoin_wait);
 USER_FUNC(npc_all_delete);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 void gor_stg4_018_cb(s32 type, smartEntry* smart);
 void geundan1000tai_circle_pos(Vec* pos);
 static f32 accdec_type(s32 step, s32 total, f32 start, f32 end);

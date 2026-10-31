@@ -2,6 +2,7 @@
 // Rogueport-side copy of the helpers in the yuu REL.
 
 #include "version.h"
+#include "evt/evt_yuuranking.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
@@ -53,9 +54,6 @@ typedef struct YuuRankingWork {
 
 static USER_FUNC(evt_yuuranking_main_func);
 static USER_FUNC(yuuranking_get_monte);
-USER_FUNC(yuuranking_wait_button);
-USER_FUNC(evt_yuuranking_free);
-USER_FUNC(evt_yuuranking_alloc);
 static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max);
 static void evt_yuuranking_disp_func(CameraId camera, void* param);
 void gor_yuuranking_draw_msg_fit(f32 x, f32 y, f32 scale, const char* msg, s32 width);

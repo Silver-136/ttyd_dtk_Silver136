@@ -2,6 +2,7 @@
 // Save block, a badge chest and a hidden brick; doors to dou_03 and dou_06.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_hit.h"
@@ -35,7 +36,6 @@ static u8* _ap;
 static USER_FUNC(alpha_init_func);
 static USER_FUNC(alpha_set_func);
 USER_FUNC(cam_displacement);
-USER_FUNC(evt_win_item_select);
 static void alpha_tev(MapTevCallbackInfo* info);
 
 static BeroEntry bero_entry_data[5];

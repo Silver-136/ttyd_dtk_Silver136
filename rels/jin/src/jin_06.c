@@ -1,6 +1,7 @@
 // jin_06 (ダイム寺院, Creepy Steeple): room with a Flower Saver chest, a jump stand and a peel-away wall; doors to jin_07.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "jin.h"
@@ -20,8 +21,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
 USER_FUNC(evt_kagemario_init);
 
 static EvtWord w_close[12];

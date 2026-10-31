@@ -2,6 +2,7 @@
 // the Jabbies (puni_vs_toge).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_urouro.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
@@ -26,8 +27,6 @@
 #include "pmario_sound.h"
 
 
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 USER_FUNC(toge_enter_func00);
 
 EvtWord toge_1_init[17];

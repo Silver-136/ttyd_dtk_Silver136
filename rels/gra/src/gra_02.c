@@ -2,6 +2,8 @@
 // gra_03.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
+#include "evt/evt_urouro.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_hit.h"
 #include "evt/evt_map.h"
@@ -21,11 +23,7 @@
 #include "evt/evt_npc.h"
 
 static USER_FUNC(booboo_main);
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 
 EvtWord shopmaster_pig_init[14];
 EvtWord shopmaster_talk[33];

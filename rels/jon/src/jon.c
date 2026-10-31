@@ -3,6 +3,7 @@
 // setup tables.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "eff/eff_magic1_n64.h"
 #include "evt/evt_cam.h"
@@ -55,10 +56,6 @@ typedef void (*voidfunctionptr)(void);
 extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 
-USER_FUNC(evt_win_coin_off);
-USER_FUNC(evt_win_coin_on);
-USER_FUNC(evt_win_coin_wait);
-USER_FUNC(evt_win_other_select);
 static USER_FUNC(gonbaba_wait_landon);
 void iri_12_msgcb(s32 type, void* param);
 void _unresolved(void);

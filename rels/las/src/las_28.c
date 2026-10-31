@@ -1,6 +1,7 @@
 // las_28 (ラストダンジョン, Palace of Shadow): Sir Grodus (シュリョー) and then Bowser and Kammy Koopa.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_shuryolight.h"
 #include "eff/n64/eff_guruguru_n64.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -37,8 +38,6 @@
 static char name[8];
 
 static USER_FUNC(eff_guruguru);
-USER_FUNC(evt_shuryolight_init);
-USER_FUNC(evt_shuryolight_run_evt);
 USER_FUNC(evt_shuryolight_run_head_evt);
 static USER_FUNC(make_name);
 USER_FUNC(syuryo_baria);

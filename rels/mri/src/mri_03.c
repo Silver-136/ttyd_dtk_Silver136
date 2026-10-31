@@ -2,6 +2,7 @@
 // the Puni Elder and the Punies, the Elder's rescue and the Punies joining Mario.
 
 #include "mri_puni.h"
+#include "evt/evt_window.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
@@ -43,9 +44,6 @@ static u8* _ap;
 void puniMoveAtari(PuniData* puni, Vec pos, Vec dir, s32 flag, f32 speed);
 void puniModeEventparent(PuniData* puni);
 
-USER_FUNC(evt_win_item_desttable);
-USER_FUNC(evt_win_item_maketable);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(puni_away);
 USER_FUNC(puni_parent);
 static void alpha_tev(MapTevCallbackInfo* info);

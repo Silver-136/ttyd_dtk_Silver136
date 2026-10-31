@@ -1,4 +1,5 @@
 #include "battle/battle_unit.h"
+#include "evt/evt_urouro.h"
 #include "evt/evt_cmd.h"
 #include "driver/fadedrv.h"
 #include "eff/eff_magic1_n64.h"
@@ -75,8 +76,6 @@ USER_FUNC(eff_cam);
 USER_FUNC(eff_cam1);
 USER_FUNC(make_msg);
 static USER_FUNC(next);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 USER_FUNC(demo_draw);
 void demo_cap(void);
 USER_FUNC(demo_init);

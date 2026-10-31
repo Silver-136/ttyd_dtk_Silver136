@@ -2,6 +2,7 @@
 // panel (hikou).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
@@ -16,8 +17,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
 
 static BeroEntry bero_entry_data[5];
 static KusaAccess ueki_access_data[7];

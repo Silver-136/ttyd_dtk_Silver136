@@ -2,6 +2,7 @@
 // Vivian) stop Mario; paths to win_01 and win_06.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_urouro.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_eff.h"
@@ -31,8 +32,6 @@
 
 
 USER_FUNC(item_check_necklace_exist);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 USER_FUNC(win_item_move_3d_position);
 USER_FUNC(mariowalk_wait);
 

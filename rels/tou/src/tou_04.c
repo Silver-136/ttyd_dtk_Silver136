@@ -2,6 +2,7 @@
 // Connects tou_02, tou_03 and tou_05..tou_11.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_eff.h"
@@ -35,7 +36,6 @@
 #include "driver/seqdrv.h"
 
 USER_FUNC(evt_tou_get_ranking);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(kemuri_stop);
 static USER_FUNC(make_list);
 USER_FUNC(memoryRY);

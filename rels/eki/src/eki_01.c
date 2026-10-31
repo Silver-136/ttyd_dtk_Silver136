@@ -1,6 +1,8 @@
 // eki_01 (駅, Riverside Station): central hub: paper-fold (origami) switch, stairs, a key lock and six paper panels; doors to eki_00, eki_02 and eki_03.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "mario/mario_pouch.h"
@@ -15,9 +17,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_win_item_select);
 
 static EvtWord e_close[12];
 static EvtWord e_open[12];

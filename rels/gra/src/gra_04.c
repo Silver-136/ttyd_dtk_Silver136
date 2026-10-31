@@ -1,6 +1,7 @@
 // gra_04 (ウスグラの道, Twilight Trail): the woods between gra_03 and gra_05.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "gra.h"
@@ -17,9 +18,6 @@
 #include "driver/mapdrv.h"
 #include "pmario_sound.h"
 
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_cloud_set_cap_size);
 USER_FUNC(evt_kagemario_init);
 USER_FUNC(roll_release_check);
 

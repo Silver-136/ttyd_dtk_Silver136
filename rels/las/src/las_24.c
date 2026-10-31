@@ -1,6 +1,7 @@
 // las_24 (ラストダンジョン, Palace of Shadow): the room with the cloud blocks and the breaking floor.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "las.h"
@@ -21,8 +22,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
 #ifdef VERSION_G8ME01
 USER_FUNC(las_24_adjust_for_framerate);
 #endif

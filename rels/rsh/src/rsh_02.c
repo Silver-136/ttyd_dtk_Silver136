@@ -2,6 +2,7 @@
 // NPCs, overnight beds and the day-1/day-2 end scenes; doors to rsh_01 and rsh_03.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "driver/msgdrv.h"
 #include "evt/evt_cam.h"
@@ -39,7 +40,6 @@
 
 
 USER_FUNC(bgm_wait_stop);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(toron_check);
 void yuurei_callback(s32 type, void* param);
 void powan_callback(s32 type, void* param);

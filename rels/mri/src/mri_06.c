@@ -2,6 +2,8 @@
 // Jabbies appear; Punies 6-11, the rival Puni, a save block, a badge and a fake wall (nisekabe).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
+#include "evt/evt_urouro.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_sub.h"
@@ -26,10 +28,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 
 static EvtWord rival_init[21];
 static EvtWord rival_talk[20];

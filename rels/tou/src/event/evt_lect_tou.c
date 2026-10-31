@@ -1,4 +1,5 @@
 #include "icon_ids.h"
+#include "evt/evt_window.h"
 #include "eff/eff_mario_balloon.h"
 #include "eff/eff_fukidashi.h"
 #include "eff/eff_itemget.h"
@@ -83,8 +84,6 @@ static USER_FUNC(lecture_button_set_alpha);
 static USER_FUNC(lecture_button_set_icon_id);
 static USER_FUNC(lecture_button_set_pos);
 static USER_FUNC(lecture_button_set_seq);
-USER_FUNC(mainwindow_opendisable);
-USER_FUNC(mainwindow_openenable);
 static USER_FUNC(set_dir);
 static USER_FUNC(x_flag_get);
 static USER_FUNC(x_flag_set);

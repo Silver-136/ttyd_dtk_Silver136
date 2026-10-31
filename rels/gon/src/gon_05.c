@@ -2,6 +2,7 @@
 // Floating-block switch puzzles and locks opened with Castle Keys 0x0C and 0x0E (story 47).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "mario/mario_pouch.h"
@@ -22,7 +23,6 @@
 #include "driver/itemdrv.h"
 #include "gon.h"
 
-USER_FUNC(evt_win_item_select);
 
 static EvtWord door01_close[12];
 static EvtWord door01_open[12];

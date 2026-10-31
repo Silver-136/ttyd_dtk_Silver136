@@ -1,6 +1,8 @@
 // nok_00 (ノコ村, Petalburg): the west half of the village, with the gate to Petal Meadows (hei_01).
 
 #include "version.h"
+#include "evt/evt_urouro.h"
+#include "evt/evt_window.h"
 #include "kpa_act.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -50,11 +52,8 @@ typedef struct PosterWork {
 PosterWork* poster;
 void draw_poster(void* userdata, s32 group, Mtx* modeling);
 
-USER_FUNC(evt_win_item_select);
 USER_FUNC(pposter_init);
 USER_FUNC(pposter_nok_on);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 void nok_stg2_013_cb(s32 type, void** work);
 
 EvtWord nokonoko_A_init[27];

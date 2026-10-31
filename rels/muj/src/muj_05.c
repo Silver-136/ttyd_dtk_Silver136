@@ -2,6 +2,7 @@
 // eyes and the skull rock's opening into Pirate's Grotto (dou_00).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_case.h"
@@ -43,7 +44,6 @@ USER_FUNC(evt_dokuroiwa_command_check);
 USER_FUNC(evt_dokuroiwa_command_clear);
 USER_FUNC(evt_dokuroiwa_command_init);
 USER_FUNC(evt_dokuroiwa_command_set);
-USER_FUNC(evt_win_item_select);
 
 EvtWord sanders_rotate[28];
 EvtWord sanders_nakama_sub[13];

@@ -2,6 +2,9 @@
 // star-stone scenes. Hub between the harbor and the east and west sides.
 
 #include "eff/eff_starstone.h"
+#include "evt/evt_urouro.h"
+#include "evt/evt_win.h"
+#include "evt/evt_window.h"
 #include "kpa_act.h"
 #include "eff/eff_mahojin.h"
 #include "version.h"
@@ -93,14 +96,6 @@ static USER_FUNC(disp_off);
 static USER_FUNC(evt_StatusClose);
 static USER_FUNC(evt_StatusOpen);
 static USER_FUNC(evt_osreport);
-USER_FUNC(evt_unitwin_alloc);
-USER_FUNC(evt_unitwin_free);
-USER_FUNC(evt_unitwin_selltable_setup);
-USER_FUNC(evt_win_coin_off);
-USER_FUNC(evt_win_coin_on);
-USER_FUNC(evt_win_coin_wait);
-USER_FUNC(evt_win_item_select);
-USER_FUNC(evt_win_other_select);
 USER_FUNC(get_item_name);
 static USER_FUNC(get_value);
 USER_FUNC(house03_f1_fade_func);
@@ -114,15 +109,10 @@ static USER_FUNC(mario_keyoff_wait);
 USER_FUNC(nancy_block_func);
 USER_FUNC(nancy_block_init_func);
 static USER_FUNC(set_fook_evt);
-USER_FUNC(set_new_goods_list);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
-USER_FUNC(unitwin_get_work_ptr);
-USER_FUNC(unitwin_set_bought);
 USER_FUNC(badgeshop_special_cnt);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 USER_FUNC(wait_mahojin);
 static USER_FUNC(yami_view);
 BOOL chkCookItem(s32 item);

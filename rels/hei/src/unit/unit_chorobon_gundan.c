@@ -1,4 +1,5 @@
 #include "battle/battle_unit.h"
+#include "unit/unit_chorobon_gundan.h"
 #include "evt/evt_cmd.h"
 #include "libc_decls.h"
 #include "battle/battle_camera.h"
@@ -45,8 +46,6 @@ USER_FUNC(chorogun_dive_target);
 USER_FUNC(chorogun_escape);
 USER_FUNC(chorogun_get_alive_num);
 USER_FUNC(chorogun_set_target_id);
-USER_FUNC(chorogun_escape_all);
-USER_FUNC(chorogun_appear);
 void chorogun_ext_disp(CameraId camera, void* param);
 void chorogun_ext_main(void);
 void chorogun_ext_init(void);

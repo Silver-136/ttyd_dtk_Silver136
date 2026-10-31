@@ -1,6 +1,7 @@
 // las_29 (ラストダンジョン, Palace of Shadow): the Shadow Queen's chamber: the final battle and the ending scenes.
 
 #include "eff/eff_starstone.h"
+#include "evt/evt_shuryolight.h"
 #include "eff/n64/eff_pokopi_pcharge_n64.h"
 #include "eff/n64/eff_radiation_n64.h"
 #include "eff/n64/eff_pokopi_thunder_n64.h"
@@ -68,8 +69,6 @@ USER_FUNC(all_hikari_change_kuro);
 USER_FUNC(all_hikari_onoff);
 USER_FUNC(b_peach_thunder);
 USER_FUNC(evt_shuryolight_delete);
-USER_FUNC(evt_shuryolight_init);
-USER_FUNC(evt_shuryolight_run_evt);
 USER_FUNC(hikari_change);
 USER_FUNC(hikari_onoff);
 USER_FUNC(hikari_se);

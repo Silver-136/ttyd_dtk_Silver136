@@ -1,4 +1,5 @@
 #include "version.h"
+#include "zakogun.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
 #include "pmario_sound.h"
@@ -70,13 +71,11 @@ extern ZakoGun* zakogun;
 extern ZakoGunWork* work;
 double sqrt(double x);
 
-USER_FUNC(zakogun_escape3);
 USER_FUNC(zakogun_dead3);
 USER_FUNC(zakogun_attack3_3);
 USER_FUNC(zakogun_attack3_2);
 USER_FUNC(zakogun_attack3_1);
 USER_FUNC(zakogun_kanbu_on_ball);
-USER_FUNC(zakogun_get_kanbu_id_evtcmd);
 
 BattleUnitKind unit_boss_gundan_zako_group3;
 static BattleUnitDefense defence;

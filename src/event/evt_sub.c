@@ -2,6 +2,7 @@
 // countdowns, play time, area and language queries.
 
 #include "eff/eff_stageclear.h"
+#include "evt/evt_window.h"
 #include "version.h"
 #include "eff/eff_itemget.h"
 #include "icon_ids.h"
@@ -81,7 +82,6 @@ static const char coin_fmt[] = "%f%f%f";
 static const GXColor coin_black = {0x00, 0x00, 0x00, 0xFF};
 
 USER_FUNC(bgm_start_wait);
-USER_FUNC(evt_win_one_message);
 USER_FUNC(stone_bg);
 void coingetDisp(WinMgrEntry* entry);
 

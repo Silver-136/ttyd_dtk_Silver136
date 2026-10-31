@@ -2,6 +2,8 @@
 // Connects tou_04, tou_05 and tou_12.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_eff.h"
@@ -39,9 +41,6 @@
 
 s32* tbl;
 
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(free_tbl);
 static USER_FUNC(get_pos);
 USER_FUNC(iri_13_make_name);

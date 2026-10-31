@@ -2,6 +2,8 @@
 // Meadows (hei_02) and the pipe to Rogueport Sewers (tik_16).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_urouro.h"
+#include "evt/evt_window.h"
 #include "eff/eff_starstone.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bg.h"
@@ -43,12 +45,9 @@
 #include "nok.h"
 
 static USER_FUNC(anim_tevcallback);
-USER_FUNC(evt_win_item_select);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 static USER_FUNC(yami_view);
 void iri_08_msg(s32 type, void** work);
 extern s32 envSetYami[];

@@ -1,4 +1,5 @@
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "pmario_sound.h"
 #include "evt/evt_cam.h"
@@ -22,7 +23,6 @@
 #include "mario/mario_pouch.h"
 
 static USER_FUNC(bgm_start_wait);
-USER_FUNC(evt_win_item_select);
 static void majin_callback(s32 type);
 
 static BeroEntry bero_entry_data[2];

@@ -2,6 +2,7 @@
 // a key and lock, save block; doors to jin_01-06, Twilight Trail (gra_06) and Twilight Town (usu_00).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "sfx_name_word.h"
 #include "libc_decls.h"
@@ -80,7 +81,6 @@ void senteresa_loadRenderMode(void);
 static inline f32 cosf(f32 x) { return cos(x); }
 
 USER_FUNC(evt_kagemario_init);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(get_npc_color);
 USER_FUNC(teresa_eff);
 USER_FUNC(senteresa_mario_spd);

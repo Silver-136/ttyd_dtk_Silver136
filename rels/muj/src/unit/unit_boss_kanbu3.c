@@ -1,6 +1,7 @@
 // Keelhaul Key (muj) battle unit: Lord Crump (kanbu3): its parts, defence/status tables, and attack events.
 
 #include "battle/battle_unit.h"
+#include "zakogun.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_batstage.h"
 #include "evt/evt_eff.h"
@@ -33,8 +34,6 @@ extern BattleUnitKind unit_boss_gundan_zako_group2;
 extern BattleUnitKind unit_boss_gundan_zako_group3;
 extern BattleUnitKind unit_gundan_zako_magician;
 extern EvtWord zakogun_entry[];
-USER_FUNC(zakogun_escape3);
-USER_FUNC(zakogun_ext_init2);
 
 BattleUnitKind unit_boss_kanbu3;
 static BattleUnitDefense defence;

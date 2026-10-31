@@ -1,6 +1,8 @@
 // tou_01 (闘技場, Glitzville): the front plaza: stands, neon signs and townsfolk; leads to tou_00 and tou_02.
 
 #include "driver/mapdrv.h"
+#include "evt/evt_win.h"
+#include "evt/evt_window.h"
 #include "eff/eff_starstone.h"
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -66,10 +68,6 @@ static USER_FUNC(delete_npc_regl_evt);
 USER_FUNC(eff_sleep_off);
 USER_FUNC(eff_sleep_on);
 USER_FUNC(evt_tou_get_ranking);
-USER_FUNC(evt_unitwin_alloc);
-USER_FUNC(evt_unitwin_free);
-USER_FUNC(evt_win_coin_off);
-USER_FUNC(evt_win_coin_on);
 USER_FUNC(make_shadow);
 static USER_FUNC(mario_chk);
 static USER_FUNC(proj_mtx);
@@ -78,8 +76,6 @@ static USER_FUNC(proj_on);
 static USER_FUNC(starstone_entry);
 static USER_FUNC(starstone_set_pos);
 static USER_FUNC(starstone_set_ry);
-USER_FUNC(unitwincoin_disp_onoff);
-USER_FUNC(unitwincoin_wait);
 USER_FUNC(yami_oowareru_check);
 #ifdef VERSION_G8ME01
 USER_FUNC(tou_01_kanban_moji_flag_sync);

@@ -2,6 +2,7 @@
 // and the black key, and a meeting with the guide Puni.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_cloud.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_cam.h"
@@ -26,8 +27,6 @@
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
 
-USER_FUNC(evt_cloud_ent);
-USER_FUNC(evt_cloud_init);
 
 static BeroEntry bero_entry_data[5];
 static EvtWord puni_walk_se[20];

@@ -2,6 +2,7 @@
 // chandelier and mirror ball; exits west to win_03 and east through Flurrie's door to her bedroom win_05.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_window.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_eff.h"
@@ -61,7 +62,6 @@ USER_FUNC(evt_flower);
 USER_FUNC(evt_flower_end);
 USER_FUNC(evt_flower_end_main);
 USER_FUNC(evt_flower_init);
-USER_FUNC(evt_win_item_select);
 USER_FUNC(fade_alpha);
 USER_FUNC(flower_pos_report);
 USER_FUNC(ss_ch_check);

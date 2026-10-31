@@ -2,6 +2,7 @@
 // Grodus, Lord Crump and the Shadow Sirens.
 
 #include "battle/battle_unit.h"
+#include "evt/evt_shuryolight.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_cam.h"
 #include "evt/evt_eff.h"
@@ -39,8 +40,6 @@ typedef struct MonitorWork {
 static MonitorWork* monitor_wp;
 void monitor_cap_capture(CameraId cameraId, void* param);
 
-USER_FUNC(evt_shuryolight_init);
-USER_FUNC(evt_shuryolight_run_evt);
 USER_FUNC(monitor_cap_evt);
 USER_FUNC(monitor_cap_init);
 USER_FUNC(monitor_kanbu_flag_onoff);

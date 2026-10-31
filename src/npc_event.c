@@ -1,6 +1,7 @@
 // Field enemy and NPC behaviour scripts: the init, move, find, lose, blow and dead events of each enemy kind.
 
 #include "eff/eff_magic1_n64.h"
+#include "evt/evt_urouro.h"
 #include "eff/eff_fire.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_npc.h"
@@ -242,8 +243,6 @@ USER_FUNC(piders_get_height) {
 }
 
 USER_FUNC(piders_draw_yawn);
-USER_FUNC(urouro_init_func);
-USER_FUNC(urouro_main_func);
 USER_FUNC(gesso_ground_check);
 USER_FUNC(set_bottle_flag_init);
 USER_FUNC(npc_fire_eff_fadeout);

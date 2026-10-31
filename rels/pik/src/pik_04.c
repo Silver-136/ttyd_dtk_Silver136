@@ -2,6 +2,7 @@
 // X-Naut scene with Grodus (シュリョー) and Lord Crump (カンブー).
 
 #include "battle/battle_unit.h"
+#include "evt/evt_win.h"
 #include "evt/evt_cmd.h"
 #include "evt/evt_bero.h"
 #include "evt/evt_door.h"
@@ -38,10 +39,6 @@
 #include "driver/itemdrv.h"
 #include "mario/mario.h"
 
-USER_FUNC(evt_unitwin_alloc);
-USER_FUNC(evt_unitwin_free);
-USER_FUNC(unitwincoin_disp_onoff);
-USER_FUNC(unitwincoin_wait);
 
 static BeroEntry bero_data[3];
 static HitDamageReturn dmgReturnPt[9];
