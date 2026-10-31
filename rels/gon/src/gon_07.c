@@ -73,7 +73,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         12, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -90,7 +90,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -269,7 +269,7 @@ static EVT_BEGIN(bomb_wall_evt)
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("ofs"), 1, LW(0), LW(1), LW(2), LW(3))
         WAIT_FRAMES(1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_clear_virtual_point, STRING("img"))
         CALL(evt_img_onoff, STRING("img"), 1)
@@ -277,7 +277,7 @@ static EVT_BEGIN(bomb_wall_evt)
         CALL(evt_img_wait_animend, STRING("img"))
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_img_release, STRING("img"))
@@ -319,7 +319,7 @@ EVT_BEGIN(gon_07_init_evt)
         ELSE
         CALL(evt_hitobj_onoff, STRING("san"), 1, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     RETURN
 EVT_END()

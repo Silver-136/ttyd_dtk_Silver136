@@ -80,7 +80,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -98,7 +98,7 @@ static BeroEntry bero_entry_data[] = {
         3840, // type
         0, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, 0, NULL, // enterEvent..exitEvent
@@ -428,14 +428,14 @@ EVT_BEGIN(bomb_wall)
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("ofs"), 1, LW(0), LW(1), LW(2), LW(3))
         WAIT_FRAMES(1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_clear_virtual_point, STRING("img"))
         CALL(evt_img_onoff, STRING("img"), 1)
         CALL(evt_img_set_paper_anim, STRING("img"), STRING("A_1"))
         CALL(evt_img_wait_animend, STRING("img"))
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_img_onoff, STRING("img"), 0)
     CALL(evt_img_release, STRING("img"))

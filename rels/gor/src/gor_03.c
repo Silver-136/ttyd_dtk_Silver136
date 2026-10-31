@@ -688,7 +688,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         debug_event, // enterEvent
@@ -704,7 +704,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         debug_event, // enterEvent
@@ -721,7 +721,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         debug_event, // enterEvent
@@ -738,7 +738,7 @@ static BeroEntry bero_entry_data[] = {
         3840, // type
         0, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         debug_event, // enterEvent
@@ -755,7 +755,7 @@ static BeroEntry bero_entry_data[] = {
         8194, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -777,7 +777,7 @@ BeroEntry yuu_00_data[] = {
         8194, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -798,7 +798,7 @@ BeroEntry yuu_01_data[] = {
         8194, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -819,7 +819,7 @@ BeroEntry yuu_02_data[] = {
         8194, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -840,7 +840,7 @@ BeroEntry yuu_03_data[] = {
         8194, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -3609,7 +3609,7 @@ static NpcSetupInfo npcEnt[] = {
 static EVT_BEGIN(evt_door_01_00)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S_i01_doa_m"), 0, LW(0), 0)
@@ -3641,7 +3641,7 @@ EVT_END()
 EVT_BEGIN(evt_door_01_10)
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.5f))
     CALL(evt_mapobj_rotate, 1, STRING("S_i01_doa_o"), 0, LW(0), 0)
@@ -3677,7 +3677,7 @@ EVT_END()
 
 EVT_BEGIN(evt_door_01_0_close)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_46_BLIMP_TICKET)
         CALL(evt_door_end_wait)
         CALL(evt_mario_key_onoff, 0)
@@ -3761,7 +3761,7 @@ EVT_BEGIN(evt_door_01_1_close)
     CALL(evt_npc_flag_onoff, 1, STRING("ノコノコＡ"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 1, STRING("クリボー１"), NPC_FLAG_NO_DRAW)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_doa_m"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_i01_doa_o"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
@@ -4446,7 +4446,7 @@ EVT_END()
 
 EVT_BEGIN(wall_bomb_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSWF_GOR_03_WALL_BOMBED, 0)
         CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
@@ -4483,12 +4483,12 @@ static EVT_BEGIN(wall_bomb)
         CALL(evt_img_clear_virtual_point, STRING("capture_img"))
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after_01"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_ana_before"))

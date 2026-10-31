@@ -2174,7 +2174,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         dokan_1_evt, // enterEvent
@@ -2190,7 +2190,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2227,7 +2227,7 @@ static BeroEntry bero_oshimodo[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2279,7 +2279,7 @@ BeroEntry bero_koopa_dokan[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -3456,7 +3456,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_usu00"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_usu00"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_usu00"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("村人Ａ"), 1)
     CALL(anim_tevcallback, STRING("村人Ｂ"), 1)
     CALL(anim_tevcallback, STRING("村人Ｃ"), 1)
@@ -3575,7 +3575,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_position, STRING("カラスＥ"), 1000, -1000, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_usu00"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_usu00"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_usu00"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("おばさん"), 1)
     CALL(anim_tevcallback, STRING("子供１"), 1)
     CALL(anim_tevcallback, STRING("子供２"), 1)

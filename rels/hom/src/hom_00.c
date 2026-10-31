@@ -113,7 +113,7 @@ static BeroEntry bero_data[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         45, // length
         NULL, // enterEvent
@@ -131,7 +131,7 @@ static BeroEntry bero_data[] = {
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -154,7 +154,7 @@ BeroEntry bero_data_nidome[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         45, // length
         NULL, // enterEvent
@@ -478,7 +478,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_train)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
@@ -521,7 +521,7 @@ static EVT_BEGIN(evt_train)
     CALL(evt_snd_sfxoff, LW(10))
     SET_VALUE(GF(15), 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("eki_03_S"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group614"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group614"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)
     SPAWN_EVENT(PTR(hom_10_evt_resha_start))
@@ -594,7 +594,7 @@ EVT_BEGIN(evt_train_nidome)
     CALL(evt_snd_sfxoff, LW(10))
     SET_VALUE(GF(15), 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("eki_03_S"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("group614"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group614"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam_ctrl_onoff, 4, 0)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)

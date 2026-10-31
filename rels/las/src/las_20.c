@@ -77,7 +77,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -94,7 +94,7 @@ static BeroEntry bero_entry_data[] = {
         "s_bero_1", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -110,7 +110,7 @@ static BeroEntry bero_entry_data[] = {
         "s_bero_2", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -305,7 +305,7 @@ EVT_BEGIN(hosi_sw_check)
         LOOP(7)
             CALL(get_hosi_name, LW(0), LW(1), LW(2))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
             ADD(LW(0), 1)
         END_LOOP
         SET_VALUE(LW(0), 0)
@@ -313,7 +313,7 @@ EVT_BEGIN(hosi_sw_check)
         LOOP(50)
             CALL(get_hosi_name, LW(0), LW(2), LW(3))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, LW(3), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(3), MAP_OBJ_FLAG_HIDDEN)
             CALL(get_hosi_name, LW(1), LW(2), LW(3))
             CALL(evt_mapobj_flag_onoff, 1, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 0, LW(3), MAP_OBJ_FLAG_HIDDEN)
@@ -328,7 +328,7 @@ EVT_BEGIN(hosi_sw_check)
             END_IF
             CALL(get_hosi_name, LW(0), LW(2), LW(3))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(2), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, LW(3), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(3), MAP_OBJ_FLAG_HIDDEN)
             CALL(get_hosi_name, LW(1), LW(2), LW(3))
             CALL(evt_mapobj_flag_onoff, 1, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 0, LW(3), MAP_OBJ_FLAG_HIDDEN)
@@ -339,13 +339,13 @@ EVT_BEGIN(hosi_sw_check)
         END_LOOP
         CALL(get_hosi_name, LW(1), LW(2), LW(3))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(3), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(3), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(200)
         SET_VALUE(LW(0), 0)
         LOOP(7)
             CALL(get_hosi_name, LW(0), LW(1), LW(2))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(2), MAP_OBJ_FLAG_HIDDEN)
             ADD(LW(0), 1)
         END_LOOP
         CALL(evt_snd_sfxon, STRING("SFX_STG8_STAR_LIGHTUP2"), 0)
@@ -371,14 +371,14 @@ EVT_BEGIN(hosi_onoff)
     GET_INT_INDEXED(LW(2), LW(3))
     IF_INT_EQUAL(LW(3), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(0), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_HIDDEN)
         SET_INT_INDEXED(LW(2), 1)
         CALL(evt_mapobj_get_position, LW(0), LW(3), LW(4), LW(5))
         CALL(evt_eff64, 0, STRING("stardust_n64"), 2, LW(3), LW(4), LW(5), 30, 0, 0, 0, 0, 0, 0, 0)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_STAR_LIGHTUP1"), LW(3), LW(4), LW(5), 0)
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(0), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
         SET_INT_INDEXED(LW(2), 0)
     END_IF
     RETURN

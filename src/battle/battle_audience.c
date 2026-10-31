@@ -542,7 +542,7 @@ void BattleAudience_PerPhase(u32 value) {
 
     audience = BattleAudienceBaseGetPtr();
     if (value == BATTLE_PHASE_PLAYER && !(audience->flags & AUDIENCE_FLAG_EVENT_CTRL)) {
-        for (i = 0; i < 200; i++) {
+        for (i = 0; i < AUDIENCE_MEMBER_MAX; i++) {
             member = BattleAudienceGetPtr(i);
             if ((u8)BattleAudience_GetExist(i) == 1 && member->status == AUDIENCE_STATUS_ITEM_ON) {
                 if (member->itemId != -1) {

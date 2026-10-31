@@ -123,7 +123,7 @@ BattleUnitSetup btlparty_win_win_00_01_off_1[] = {
         &unit_monochrome_kurokumorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -165,7 +165,7 @@ BattleUnitSetup btlparty_win_win_00_01_on_1[] = {
         &unit_monochrome_kurokumorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -217,7 +217,7 @@ BattleUnitSetup btlparty_win_win_00_01_on_2[] = {
         &unit_monochrome_kurokumorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -269,7 +269,7 @@ BattleUnitSetup btlparty_win_win_00_01_on_3[] = {
         &unit_monochrome_kurokumorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -318,7 +318,7 @@ BattleUnitSetup btlparty_win_win_00_02_off_1[] = {
         &unit_monochrome_kurokumorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -360,7 +360,7 @@ BattleUnitSetup btlparty_win_win_00_02_on_1[] = {
         &unit_monochrome_kurokumorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -412,7 +412,7 @@ BattleUnitSetup btlparty_win_win_00_02_on_2[] = {
         &unit_monochrome_kurokumorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -503,7 +503,7 @@ BattleUnitSetup btlparty_win_win_00_03_on_1[] = {
         &unit_monochrome_kurokumorn, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -612,7 +612,7 @@ BattleUnitSetup btlparty_win_win_02_01_off_1[] = {
         &unit_monochrome_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -650,7 +650,7 @@ BattleUnitSetup btlparty_win_win_02_01_on_1[] = {
         &unit_monochrome_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -694,7 +694,7 @@ BattleUnitSetup btlparty_win_win_02_01_on_2[] = {
         &unit_monochrome_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -773,7 +773,7 @@ BattleUnitSetup btlparty_win_win_02_02_off_1[] = {
         &unit_monochrome_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -811,7 +811,7 @@ BattleUnitSetup btlparty_win_win_02_02_on_1[] = {
         &unit_monochrome_sinemon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -845,7 +845,7 @@ BattleUnitSetup btlparty_win_win_02_02_on_2[] = {
         &unit_monochrome_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -934,7 +934,7 @@ BattleUnitSetup btlparty_win_win_03_01_off_1[] = {
         &unit_monochrome_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1038,7 +1038,7 @@ BattleUnitSetup btlparty_win_win_03_01_on_2[] = {
         &unit_monochrome_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1143,7 +1143,7 @@ BattleUnitSetup btlparty_win_win_03_01_on_4[] = {
         &unit_monochrome_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork

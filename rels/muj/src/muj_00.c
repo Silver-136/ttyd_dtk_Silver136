@@ -1481,7 +1481,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1497,7 +1497,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1513,7 +1513,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero_02", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -3937,7 +3937,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
 #ifdef VERSION_G8ME01
@@ -3954,7 +3954,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_c"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_c"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_c"), STRING("S_c"))
         SET_VALUE(LW(0), 1)
@@ -3983,7 +3983,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hasi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_00"), MAP_OBJ_FLAG_HIDDEN)
@@ -3997,7 +3997,7 @@ EVT_BEGIN(muj_00_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_b"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_b"), 1, 1)
         CALL(evt_hit_bind_mapobj, STRING("A_b"), STRING("S_b"))
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hasi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hasi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_01"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_mizu_04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_mizu_00"), MAP_OBJ_FLAG_HIDDEN)

@@ -126,7 +126,7 @@ static BeroEntry bero_data[] = {
         1, // type
         4, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -143,7 +143,7 @@ static BeroEntry bero_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         evt_dakuto, // enterEvent
@@ -1255,7 +1255,7 @@ EVT_BEGIN(tou_05_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("fall"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_Y"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kuro_Y"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kuro_P"), MAP_OBJ_FLAG_HIDDEN)
@@ -1356,7 +1356,7 @@ EVT_BEGIN(tou_05_init_evt)
         CALL(evt_hitobj_onoff, STRING("a_haikikan"), 1, 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikikau_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("haikikau_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("haikikau_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
         CALL(evt_bero_get_entername, LW(0))

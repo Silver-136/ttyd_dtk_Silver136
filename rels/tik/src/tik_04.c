@@ -44,7 +44,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -60,7 +60,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero_1", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -76,7 +76,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero_5", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -93,7 +93,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_W, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -271,7 +271,7 @@ EVT_BEGIN(kaidan_pera)
     CALL(evt_img_clear_virtual_point, STRING("capture_img"))
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_dai_nise"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dai_6"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("s_dai_nise"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("win_1"))

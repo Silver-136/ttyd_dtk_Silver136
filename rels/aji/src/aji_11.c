@@ -69,7 +69,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -117,7 +117,7 @@ static BeroEntry bero_peach_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -345,7 +345,7 @@ EVT_BEGIN(aji_11_init_evt)
         END_IF
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor_02"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_45_PEACH_POTION_PUZZLE)
         IF_INT_LESS_OR_EQUAL(GSW_STORY_PROGRESS, STG5_46_PEACH_DISK_SEARCH)
             CALL(evt_mario_set_mode, 1)

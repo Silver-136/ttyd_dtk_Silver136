@@ -378,7 +378,7 @@ static BeroEntry bero_data[] = {
         1, // type
         0, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -396,7 +396,7 @@ static BeroEntry bero_data[] = {
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -414,7 +414,7 @@ static BeroEntry bero_data[] = {
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -432,7 +432,7 @@ static BeroEntry bero_data[] = {
         1, // type
         4, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -450,7 +450,7 @@ static BeroEntry bero_data[] = {
         1, // type
         4, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1067,7 +1067,7 @@ static EVT_BEGIN(init_champ)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), NPC_FLAG_INSTANT_TURN)
             BEGIN_INLINE_EVENT
                 CALL(evt_seq_wait, SEQ_GAME)
-                CALL(evt_npc_flag_onoff, 0, STRING(("me")), 32768)
+                CALL(evt_npc_flag_onoff, 0, STRING(("me")), NPC_FLAG_INSTANT_TURN)
             END_INLINE_EVENT
         END_IF
     END_SWITCH
@@ -1164,7 +1164,7 @@ EVT_BEGIN(init_shikowa)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), NPC_FLAG_INSTANT_TURN)
             BEGIN_INLINE_EVENT
                 CALL(evt_seq_wait, SEQ_GAME)
-                CALL(evt_npc_flag_onoff, 0, STRING(("me")), 32768)
+                CALL(evt_npc_flag_onoff, 0, STRING(("me")), NPC_FLAG_INSTANT_TURN)
             END_INLINE_EVENT
         END_IF
     END_SWITCH
@@ -1187,7 +1187,7 @@ static EVT_BEGIN(init_uranoko)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), NPC_FLAG_INSTANT_TURN)
             BEGIN_INLINE_EVENT
                 CALL(evt_seq_wait, SEQ_GAME)
-                CALL(evt_npc_flag_onoff, 0, STRING(("me")), 32768)
+                CALL(evt_npc_flag_onoff, 0, STRING(("me")), NPC_FLAG_INSTANT_TURN)
             END_INLINE_EVENT
         END_IF
     END_SWITCH
@@ -1211,7 +1211,7 @@ EVT_BEGIN(init_ironA)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), NPC_FLAG_INSTANT_TURN)
             BEGIN_INLINE_EVENT
                 CALL(evt_seq_wait, SEQ_GAME)
-                CALL(evt_npc_flag_onoff, 0, STRING(("me")), 32768)
+                CALL(evt_npc_flag_onoff, 0, STRING(("me")), NPC_FLAG_INSTANT_TURN)
             END_INLINE_EVENT
         END_IF
     END_SWITCH
@@ -1235,7 +1235,7 @@ EVT_BEGIN(init_ironB)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), NPC_FLAG_INSTANT_TURN)
             BEGIN_INLINE_EVENT
                 CALL(evt_seq_wait, SEQ_GAME)
-                CALL(evt_npc_flag_onoff, 0, STRING(("me")), 32768)
+                CALL(evt_npc_flag_onoff, 0, STRING(("me")), NPC_FLAG_INSTANT_TURN)
             END_INLINE_EVENT
         END_IF
     END_SWITCH
@@ -1259,7 +1259,7 @@ EVT_BEGIN(init_borodo)
             CALL(evt_npc_flag_onoff, 1, STRING(("me")), NPC_FLAG_INSTANT_TURN)
             BEGIN_INLINE_EVENT
                 CALL(evt_seq_wait, SEQ_GAME)
-                CALL(evt_npc_flag_onoff, 0, STRING(("me")), 32768)
+                CALL(evt_npc_flag_onoff, 0, STRING(("me")), NPC_FLAG_INSTANT_TURN)
             END_INLINE_EVENT
         END_IF
     END_SWITCH
@@ -2410,7 +2410,7 @@ EVT_BEGIN(tou_02_init_evt)
         SWITCH(LW(0))
             CASE_LESS(2)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("p_p_2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("p_p_3"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_p_2"), 1, 0)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 1)
@@ -2466,7 +2466,7 @@ EVT_BEGIN(tou_02_init_evt)
             CASE_LESS(11)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("p_p_2"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("p_p_3"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_3"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_p_2"), 1, 1)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 0)
             CALL(evt_cloud_init)
@@ -2478,7 +2478,7 @@ EVT_BEGIN(tou_02_init_evt)
             END_IF
             CASE_DEFAULT
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("p_p_1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("p_p_2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_3"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_p_2"), 1, 0)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 0)
@@ -2491,7 +2491,7 @@ EVT_BEGIN(tou_02_init_evt)
         SWITCH(LW(0))
             CASE_LESS(2)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_1_e"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("p_p_2_e"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_2_e"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("p_p_3_e"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_p_2"), 1, 0)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 1)
@@ -2547,7 +2547,7 @@ EVT_BEGIN(tou_02_init_evt)
             CASE_LESS(11)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_1_e"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("p_p_2_e"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("p_p_3_e"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_3_e"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_p_2"), 1, 1)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 0)
             CALL(evt_cloud_init)
@@ -2559,7 +2559,7 @@ EVT_BEGIN(tou_02_init_evt)
             END_IF
             CASE_DEFAULT
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("p_p_1_e"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("p_p_2_e"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_2_e"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("p_p_3_e"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_hitobj_onoff, STRING("a_p_p_2"), 1, 0)
             CALL(evt_hitobj_onoff, STRING("a_p_p_3"), 1, 0)

@@ -2618,7 +2618,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2634,7 +2634,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2650,7 +2650,7 @@ static BeroEntry bero_entry_data[] = {
         "s_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         christine_nakama_before, // enterEvent
@@ -3360,7 +3360,7 @@ EVT_BEGIN(house_03_f1_close)
     BEGIN_INLINE_EVENT
         WAIT_MS(1600)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_03_f1_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_03_f21_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_03_f21_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
         CALL(evt_mapobj_color, 1, STRING("S_ie_03_f21_doa"), 255, 255, 255, 255)
     END_INLINE_EVENT
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -3481,7 +3481,7 @@ EVT_BEGIN(house_03_f2_close)
     BEGIN_INLINE_EVENT
         WAIT_MS(1600)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_03_f1_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ie_03_f21_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_03_f21_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND | MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_INLINE_EVENT
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -4864,7 +4864,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_seq_wait, SEQ_GAME)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("キノじい"), 1)
     CALL(anim_tevcallback, STRING("ロテン１"), 1)
     CALL(anim_tevcallback, STRING("クリボー１"), 1)
@@ -4948,7 +4948,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_cam3d_evt_set, 0, 645, 824, 0, 55, 283, 0, EASING_SINE_IN_OUT)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback_mobj, STRING("mobj_save"), 1)
     CALL(anim_tevcallback_mobj, STRING("mobj_box00"), 1)
     CALL(yami_view, -800)

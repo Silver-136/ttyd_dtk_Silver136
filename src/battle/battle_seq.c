@@ -1884,7 +1884,7 @@ void btlseqPhase(BattleWork* wp) {
             break;
         case BATTLE_PHASE_END:
             BattleIncSeq(wp, SEQ_TURN);
-            BattleSetSeq(wp, SEQ_PHASE, 0x4000000);
+            BattleSetSeq(wp, SEQ_PHASE, BATTLE_PHASE_INIT);
             break;
     }
 }

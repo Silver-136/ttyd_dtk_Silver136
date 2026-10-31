@@ -580,7 +580,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -597,7 +597,7 @@ static BeroEntry bero_entry_data[] = {
         4096, // type
         0, // sfxId
         BERO_DIR_E, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, 0, NULL, // enterEvent..exitEvent
@@ -612,7 +612,7 @@ static BeroEntry bero_entry_data[] = {
         4098, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -628,7 +628,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -644,7 +644,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         first_evt_dokan, // enterEvent
@@ -666,7 +666,7 @@ static BeroEntry e3_bero[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1014,7 +1014,7 @@ USER_FUNC(hei_00_mario_keyoff_check) {
 EVT_BEGIN(setting_sun_stone)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("taiyou_ana"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 1)
             CALL(evt_mapobj_trans, 1, STRING("isi_4"), -80, 0, 0)
             CALL(evt_mapobj_trans, 1, STRING("taiyounoisi"), -80, 0, 0)
@@ -1046,7 +1046,7 @@ EVT_BEGIN(sun_stone_set_event)
         SET_VALUE(GSWF_HEI_SUN_STONE_PLACED, 1)
         CALL(evt_pouch_remove_item, ITEM_SUN_STONE, LW(0))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("taiyou_ana"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("taiyounoisi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, STRING("taiyounoisi"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_STONE_SET1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_msg_print, 0, STRING("stg1_hei_00_sun"), 0, 0)
@@ -1064,7 +1064,7 @@ EVT_END()
 EVT_BEGIN(setting_moon_stone)
     IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tuki_ana"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tukinoisi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("tukinoisi"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 1)
             CALL(evt_mapobj_trans, 1, STRING("isi_3"), 80, 0, 0)
             CALL(evt_mapobj_trans, 1, STRING("tukinoisi"), 80, 0, 0)
@@ -1096,7 +1096,7 @@ EVT_BEGIN(moon_stone_set_event)
         SET_VALUE(GSWF_HEI_MOON_STONE_PLACED, 1)
         CALL(evt_pouch_remove_item, ITEM_MOON_STONE, LW(0))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("tuki_ana"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("tukinoisi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("tukinoisi"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_get_position, STRING("tukinoisi"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG1_STONE_SET1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_msg_print, 0, STRING("stg1_hei_00_moon"), 0, 0)

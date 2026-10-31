@@ -2026,7 +2026,7 @@ PuniData* searchMikata(PuniData* self) {
     s32 i;
 
     for (i = 1; i < PUNI_SOLID_FIRST; i++, q++) {
-        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
+        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != PUNI_MODE_DAMAGE && q->mode != PUNI_MODE_WIND) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
                 minDist = d;
@@ -2050,7 +2050,7 @@ PuniData* searchTeki(PuniData* self) {
     PuniData* q = &Punidat[PUNI_ENEMY_FIRST];
     s32 i;
 
-    for (i = 110; i < 210; i++, q++) {
+    for (i = PUNI_ENEMY_FIRST; i < PUNI_ENEMY_END; i++, q++) {
         if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
@@ -2073,7 +2073,7 @@ PuniData* searchBattleMikata(PuniData* self) {
     s32 i;
 
     for (i = 1; i < PUNI_SOLID_FIRST; i++, q++) {
-        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
+        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != PUNI_MODE_DAMAGE && q->mode != PUNI_MODE_WIND) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
                 minDist = d;
@@ -2095,7 +2095,7 @@ static inline PuniData* searchBattleTeki_inl(PuniData* self) {
     PuniData* found = NULL;
 
     q = &Punidat[PUNI_ENEMY_FIRST];
-    for (i = 110; i < 210; i++) {
+    for (i = PUNI_ENEMY_FIRST; i < PUNI_ENEMY_END; i++) {
         if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != PUNI_MODE_DAMAGE && q->mode != PUNI_MODE_WIND) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
@@ -2125,7 +2125,7 @@ static inline PuniData* searchBattleMikata_inl(PuniData* self) {
 
     q = &Punidat[1];
     for (i = 1; i < PUNI_SOLID_FIRST; i++) {
-        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
+        if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != PUNI_MODE_DAMAGE && q->mode != PUNI_MODE_WIND) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
                 minDist = d;
@@ -2152,7 +2152,7 @@ PuniData* searchBattleTeki(PuniData* self) {
     PuniData* q = &Punidat[PUNI_ENEMY_FIRST];
     s32 i;
 
-    for (i = 110; i < 210; i++, q++) {
+    for (i = PUNI_ENEMY_FIRST; i < PUNI_ENEMY_END; i++, q++) {
         if ((q->flags & PUNI_FLAG_ACTIVE) && !(q->flags & PUNI_FLAG_DEAD) && q->mode != 9 && q->mode != 13) {
             f32 d = PSVECSquareDistance(&self->pos, &q->pos);
             if (d < minDist) {
@@ -2188,7 +2188,7 @@ void puniModeChangeAttack(void) {
         if (p->flags & PUNI_FLAG_ACTIVE) {
             switch (p->mode) {
             case PUNI_MODE_IDLE:
-            case 1:
+            case PUNI_MODE_JOIN:
             case 2:
             case 0x1d: {
                 PuniData* f;
@@ -2233,7 +2233,7 @@ void puniModeChangeAway(void) {
         }
         switch (p->mode) {
             case PUNI_MODE_IDLE:
-            case 1:
+            case PUNI_MODE_JOIN:
             case 2:
             case PUNI_MODE_MASS:
             case PUNI_MODE_HAGURE:
@@ -3017,7 +3017,7 @@ void puniModeDamage(PuniData* p) {
                     p->anim = 2;
                     p->modeStep = 0;
                 } else {
-                    p->mode = 0;
+                    p->mode = PUNI_MODE_IDLE;
                     p->anim = 0;
                     p->modeStep = 0;
                 }
@@ -3070,7 +3070,7 @@ void puniModePiyori(PuniData* p) {
                     p->anim = 2;
                     p->modeStep = 0;
                 } else {
-                    p->mode = 0;
+                    p->mode = PUNI_MODE_IDLE;
                     p->anim = 0;
                     p->modeStep = 0;
                 }
@@ -3080,7 +3080,7 @@ void puniModePiyori(PuniData* p) {
                 p->anim = 2;
 #endif
                 if (p->prevMode == PUNI_MODE_PARENT) {
-                    p->mode = 1;
+                    p->mode = PUNI_MODE_JOIN;
                 }
                 p->modeStep = 0;
             }
@@ -4788,16 +4788,16 @@ static inline void puniMoveHitInl(PuniData* p, Vec* s2, Vec* d2, f32 dist) {
 void puniMoveMain(PuniData* p) {
     switch (p->mode) {
         case PUNI_MODE_IDLE:
-        case 1:
+        case PUNI_MODE_JOIN:
         case 2:
         case PUNI_MODE_SEARCH:
-        case 7:
+        case PUNI_MODE_ATTACK:
         case PUNI_MODE_ESCAPE:
-        case 10:
+        case PUNI_MODE_PIYORI:
         case PUNI_MODE_STOP:
-        case 16:
+        case PUNI_MODE_HAGURE:
         case PUNI_MODE_DODAI:
-        case 25:
+        case PUNI_MODE_ENTER:
         case PUNI_MODE_EXIT:
         case PUNI_MODE_POINT: {
             Vec d2;
@@ -4895,7 +4895,7 @@ void puniMoveMain(PuniData* p) {
             puniSetYPosition(p);
             break;
         case PUNI_MODE_AWAYJUMP:
-        case 6:
+        case PUNI_MODE_AWAY:
         case PUNI_MODE_WIND:
             puniSetYPosition(p);
             break;
@@ -5868,7 +5868,7 @@ USER_FUNC(evt_puni_setup) {
             case BERO_DIR_W:
                 Punigp->flags |= PUNI_WORK_FLAG_PIPE_WEST;
                 break;
-            case 2:
+            case BERO_DIR_E:
                 Punigp->flags |= PUNI_WORK_FLAG_PIPE_EAST;
                 break;
             case 8:
@@ -6129,9 +6129,9 @@ void puniHagurePos(PuniData* p) {
 
     switch (p->mode) {
         case PUNI_MODE_FALL:
-        case 18:
+        case PUNI_MODE_PREUPDRAFT:
         case PUNI_MODE_UPDRAFT:
-        case 21:
+        case PUNI_MODE_FUNBARI:
         case PUNI_MODE_WATER: {
                 Vec v_ = {0.0f, -1000.0f, 0.0f};
                 p->pos = v_;
@@ -6224,7 +6224,7 @@ USER_FUNC(evt_puni_exit) {
             case BERO_DIR_W:
                 Punigp->flags |= PUNI_WORK_FLAG_PIPE_WEST;
                 break;
-            case 2:
+            case BERO_DIR_E:
                 Punigp->flags |= PUNI_WORK_FLAG_PIPE_EAST;
                 break;
             case 8:
@@ -7278,7 +7278,7 @@ EVT_BEGIN(mri_puninum_fadeout)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_puni_puninum_alpha, LW (0))
         WAIT_FRAMES(1)
-        IF_INT_EQUAL(4264967297, 0)
+        IF_INT_EQUAL(LW (1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
@@ -7292,7 +7292,7 @@ EVT_BEGIN(mri_puninum_fadein)
         CALL(evt_sub_intpl_msec_get_value)
         CALL(evt_puni_puninum_alpha, LW (0))
         WAIT_FRAMES(1)
-        IF_INT_EQUAL(4264967297, 0)
+        IF_INT_EQUAL(LW (1), 0)
             BREAK_LOOP
         END_IF
     END_LOOP
@@ -7313,10 +7313,10 @@ EVT_BEGIN(mri_puni_position_init)
         CALL(evt_puni_puninum_alpha, 0)
         WAIT_FRAMES(2)
         CALL(evt_bero_get_now_number, LW (10))
-        CALL(evt_bero_get_info_kinddir, 4264967306, 4264967296, 4264967297, 4264967298)
+        CALL(evt_bero_get_info_kinddir, LW (10), LW (0), LW (1), LW (2))
         CALL(evt_bero_get_info_nextarea, 4264967306, 4264967299, 4264967300)
         SET_VALUE(LF (0), 0)
-        IF_INT_EQUAL(4264967296, 2)
+        IF_INT_EQUAL(LW (0), 2)
             IF_INT_NOT_EQUAL(4264967299, 0)
                 SET_VALUE(LF (0), 1)
             END_IF
@@ -7334,11 +7334,11 @@ EVT_BEGIN(mri_puni_position_init)
         DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\217\254\223\256\225\250\212\326\214W\217\211\212\372\211\273"))
         DEBUG_PUT_REG(GSW (GSW_MRI_PUNI_CUR_MAP))
         DEBUG_PUT_REG(GSW (GSW_MRI_PUNI_PREV_MAP))
-        CALL(evt_bero_get_now_number, 4264967306)
+        CALL(evt_bero_get_now_number, LW (10))
         CALL(evt_bero_get_info_kinddir, 4264967306, 4264967296, 4264967297, 4264967298)
         CALL(evt_bero_get_info_nextarea, 4264967306, 4264967299, 4264967300)
         IF_INT_EQUAL(LW (0), 2)
-            IF_INT_NOT_EQUAL(4264967299, 0)
+            IF_INT_NOT_EQUAL(LW (3), 0)
                 SPAWN_EVENT(mri_puninum_fadein)
             END_IF
         END_IF
@@ -7351,7 +7351,7 @@ EVT_BEGIN(mri_puni_position_init)
         DEBUG_PUT_MSG(STRING("\203v\203j\212\326\214W\201F\216\237\202\314\216\300\215s\222\206\221\322\202\277"))
         CALL(evt_bero_exec_wait, 1)
         SET_VALUE(GSW (GSW_MRI_PUNI_PREV_MAP), GSW (GSW_MRI_PUNI_CUR_MAP))
-        CALL(evt_bero_get_now_number, 4264967306)
+        CALL(evt_bero_get_now_number, LW (10))
         CALL(evt_bero_get_info_kinddir, 4264967306, 4264967296, 4264967297, 4264967298)
         CALL(evt_bero_get_info_nextarea, 4264967306, 4264967299, 4264967300)
         IF_INT_EQUAL(LW (0), 1)
@@ -7361,7 +7361,7 @@ EVT_BEGIN(mri_puni_position_init)
             CALL(evt_bero_exec_onoff, 1, 268435456)
         END_IF
         IF_INT_EQUAL(LW (0), 2)
-            IF_INT_NOT_EQUAL(4264967299, 0)
+            IF_INT_NOT_EQUAL(LW (3), 0)
                 SPAWN_EVENT(mri_puninum_fadeout)
             END_IF
         END_IF
@@ -7424,23 +7424,23 @@ EVT_BEGIN(mri_puni_init)
         CASE_GREATER_OR_EQUAL(STORY_STG9_00_EPILOGUE)
         RETURN
         CASE_EQUAL(STORY_STG8_15_GRODUS)
-        CALL(evt_sub_get_mapname, 4264967296)
+        CALL(evt_sub_get_mapname, LW (0))
         IF_STR_NOT_EQUAL(4264967296, STRING("mri_00"))
             RETURN
         END_IF
         SET_VALUE(LF (0), 0)
         CALL(evt_bero_get_entername, LW (0))
         IF_STR_EQUAL(LW (0), STRING("sekai_yami1"))
-            SET_VALUE(4224967296, 1)
+            SET_VALUE(LF (0), 1)
         END_IF
         IF_STR_EQUAL(LW (0), STRING("minnnanokoe"))
-            SET_VALUE(4224967296, 1)
+            SET_VALUE(LF (0), 1)
         END_IF
         IF_INT_EQUAL(LF (0), 0)
             RETURN
         END_IF
         CASE_BETWEEN(STORY_STG2_26_PRAISE_FROM_THE_PUNI, STORY_STG8_14_01_QUEENS_CHAMBER)
-        CALL(evt_sub_get_mapname, 4264967296)
+        CALL(evt_sub_get_mapname, LW (0))
         IF_STR_NOT_EQUAL(4264967296, STRING("mri_00"))
             RETURN
         END_IF

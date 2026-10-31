@@ -914,7 +914,7 @@ void disp_texture(CameraId camId, void* param) {
         case 1:
         case 3:
         case 5:
-        case 9:
+        case FADE_IN_BLACK:
         case 11:
         case 14:
             if (work->entries[0].flags & FADE_FLAG_DONE) {

@@ -164,7 +164,7 @@ EVT_END()
  */
 EVT_BEGIN(jail_alpha)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_l_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_01"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_r_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
@@ -178,14 +178,14 @@ EVT_BEGIN(jail_alpha)
     CALL(evt_map_blend_set_flag, 1, STRING("プニ族"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("プニ族３"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("ガイドsp"), 2048)
-    CALL(evt_map_blend_set_flag, 1, STRING("ガイド妹sp"), 2048)
+    CALL(evt_map_blend_set_flag, 1, STRING("ガイド妹sp"), ANIM_MATERIAL_FLAG_NO_BLEND)
     CALL(evt_map_blend_set_flag, 1, STRING("ちびトゲsp"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("ライバルsp"), 2048)
     IF_INT_EQUAL(GSWF_MRI_03_RED_JAIL_UNLOCKED, 0)
         CALL(evt_map_blend_set_mobj_flag, 1, STRING("mobj_lock00"), 2048)
     END_IF
     IF_INT_EQUAL(GSWF_MRI_03_BLUE_JAIL_UNLOCKED, 0)
-        CALL(evt_map_blend_set_mobj_flag, 1, STRING("mobj_lock01"), 2048)
+        CALL(evt_map_blend_set_mobj_flag, 1, STRING("mobj_lock01"), ANIM_MATERIAL_FLAG_NO_BLEND)
     END_IF
     IF_INT_EQUAL(GSWF_STARPIECE_46, 0)
         CALL(evt_map_blend_set_mobj_flag, 1, STRING("kururin1"), 2048)
@@ -630,7 +630,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         bero_custom_00, // enterEvent
@@ -646,7 +646,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -867,7 +867,7 @@ EVT_END()
  */
 EVT_BEGIN(bluejail_alpha)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hako_l_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_doa"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_l_01"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_hako_r_saku"), MAP_OBJ_FLAG_NO_MAP_BLEND)
@@ -880,7 +880,7 @@ EVT_BEGIN(bluejail_alpha)
     CALL(evt_map_blend_set_flag, 1, STRING("ガイド"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("プニ族"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("ガイドsp"), 2048)
-    CALL(evt_map_blend_set_flag, 1, STRING("ガイド妹sp"), 2048)
+    CALL(evt_map_blend_set_flag, 1, STRING("ガイド妹sp"), ANIM_MATERIAL_FLAG_NO_BLEND)
     CALL(evt_map_blend_set_flag, 1, STRING("ちびトゲsp"), 2048)
     CALL(evt_map_blend_set_flag, 1, STRING("ライバルsp"), 2048)
     CALL(evt_map_set_blend, 0, 255, 255, 255, 255)
@@ -888,7 +888,7 @@ EVT_BEGIN(bluejail_alpha)
         CALL(evt_map_blend_set_mobj_flag, 1, STRING("mobj_lock00"), 2048)
     END_IF
     IF_INT_EQUAL(GSWF_MRI_03_BLUE_JAIL_UNLOCKED, 0)
-        CALL(evt_map_blend_set_mobj_flag, 1, STRING("mobj_lock01"), 2048)
+        CALL(evt_map_blend_set_mobj_flag, 1, STRING("mobj_lock01"), ANIM_MATERIAL_FLAG_NO_BLEND)
     END_IF
     RETURN
 EVT_END()

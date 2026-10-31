@@ -248,7 +248,7 @@ BattleUnitSetup btlparty_muj_muj_01_01[] = {
         &unit_hermos, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -291,7 +291,7 @@ BattleUnitSetup btlparty_muj_muj_05_01[] = {
         &unit_hermos, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -334,7 +334,7 @@ BattleUnitSetup btlparty_muj_muj_05_02[] = {
         &unit_hermos, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -445,7 +445,7 @@ BattleUnitSetup btlparty_muj_muj_02_01_off_02[] = {
         &unit_green_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -533,7 +533,7 @@ BattleUnitSetup btlparty_muj_muj_02_01_off_04[] = {
         &unit_green_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -811,7 +811,7 @@ BattleUnitSetup btlparty_muj_muj_03_01_off_01[] = {
         &unit_poison_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -845,7 +845,7 @@ BattleUnitSetup btlparty_muj_muj_03_01_off_02[] = {
         &unit_poison_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -889,7 +889,7 @@ BattleUnitSetup btlparty_muj_muj_03_01_off_03[] = {
         &unit_poison_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -933,7 +933,7 @@ BattleUnitSetup btlparty_muj_muj_03_02_off_01[] = {
         &unit_poison_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -967,7 +967,7 @@ BattleUnitSetup btlparty_muj_muj_03_02_off_02[] = {
         &unit_poison_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1011,7 +1011,7 @@ BattleUnitSetup btlparty_muj_muj_03_02_off_03[] = {
         &unit_poison_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1089,7 +1089,7 @@ BattleUnitSetup btlparty_muj_muj_03_04_off_02[] = {
         &unit_poison_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1133,7 +1133,7 @@ BattleUnitSetup btlparty_muj_muj_03_04_off_03[] = {
         &unit_poison_pakkun, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork

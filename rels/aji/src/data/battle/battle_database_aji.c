@@ -229,7 +229,7 @@ BattleUnitSetup btlparty_aji_aji_zako[] = {
         &unit_gundan_zako_elite, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -265,7 +265,7 @@ BattleUnitSetup btlparty_aji_aji_01_01_off_1[] = {
         &unit_gundan_zako_elite, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -299,7 +299,7 @@ BattleUnitSetup btlparty_aji_aji_01_02_off_1[] = {
         &unit_gundan_zako, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -475,7 +475,7 @@ BattleUnitSetup btlparty_aji_aji_01_06_off_1[] = {
         &unit_gundan_zako_elite, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -650,7 +650,7 @@ BattleUnitSetup btlparty_aji_aji_06_01_off_1[] = {
         &unit_gundan_zako_magician, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -738,7 +738,7 @@ BattleUnitSetup btlparty_aji_aji_09_01_off_1[] = {
         &unit_gundan_zako, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -825,7 +825,7 @@ BattleUnitSetup btlparty_aji_aji_13_01_off_1[] = {
         &unit_gundan_zako_magician, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork

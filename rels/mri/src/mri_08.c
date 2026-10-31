@@ -332,7 +332,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -348,7 +348,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -396,7 +396,7 @@ static EVT_BEGIN(puni_win_offscreen)
     CALL(evt_snd_sfxoff, GW(0))
     CALL(evt_snd_sfxon_3d, STRING("SFX_OFF2_TORIDE_BREAK2"), 400, 0, 0, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hati"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_patolight"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_patolight"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("A_hati"), 1, 0)
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)

@@ -197,7 +197,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -213,7 +213,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -229,7 +229,7 @@ static BeroEntry bero_entry_data[] = {
         "tensou", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2293,7 +2293,7 @@ EVT_BEGIN(evt_open_04_open)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_26_THE_HIDEOUT_EXPLODES)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_EQUAL(GW(10), 0)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
@@ -2307,7 +2307,7 @@ EVT_BEGIN(evt_open_04_open)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_EQUAL(GW(10), 0)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
             ELSE
@@ -2317,7 +2317,7 @@ EVT_BEGIN(evt_open_04_open)
         END_IF
         CASE_DEFAULT
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_EQUAL(GW(10), 0)
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
@@ -2731,7 +2731,7 @@ EVT_BEGIN(tensou_sw_event)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_SWITCH_WARP1"), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
         SPAWN_EVENT(PTR(tensou_anim_event))
         CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
@@ -2739,7 +2739,7 @@ EVT_BEGIN(tensou_sw_event)
         ELSE
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
             SPAWN_EVENT(PTR(tensou_anim_event))
             CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("tensou"), 0, PTR(tensou_event), 0)
@@ -2834,11 +2834,11 @@ EVT_BEGIN(hashira_bomb_sub)
         CALL(evt_img_clear_virtual_point, STRING("capture_img"))
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_mae"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_go"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_go"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_mae"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_go"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_go"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mapobj_clear_offscreen, 1, STRING("bom_mae"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)

@@ -434,7 +434,7 @@ EVT_BEGIN(tik_12_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("group2"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_kakoi"), MAP_OBJ_FLAG_NO_MAP_BLEND)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("mad"), MAP_OBJ_FLAG_NO_MAP_BLEND)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("majinai_BOX"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("majinai_BOX"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_kem"), MAP_ANIM_PLAY_LOOP, 0)
     RETURN
 EVT_END()

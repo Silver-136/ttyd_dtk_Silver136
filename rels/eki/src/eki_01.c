@@ -104,7 +104,7 @@ static BeroEntry bero_data[] = {
         1, // type
         3, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -122,7 +122,7 @@ static BeroEntry bero_data[] = {
         1, // type
         3, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -140,7 +140,7 @@ static BeroEntry bero_data[] = {
         1, // type
         3, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -177,7 +177,7 @@ static EVT_BEGIN(evt_origami)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_PERA_KAI_DOWN2"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dann"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_oritatami"), 1, 1)
     CALL(evt_map_playanim, STRING("anm_kaidan"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_map_checkanim, STRING("anm_kaidan"), LW(0), LW(1))

@@ -71,7 +71,7 @@ static BeroEntry bero_entry_data[] = {
         "s_bero_1", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -113,7 +113,7 @@ static BeroEntry bero_entry_data2[] = {
         2, // type
         0, // sfxId
         BERO_DIR_E, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -413,7 +413,7 @@ EVT_BEGIN(puni_switch)
     SET_VALUE(GSWF_TIK_03_SECRET_PASSAGE_OPEN, 1)
     CALL(evt_map_playanim, STRING("anm_para"), MAP_ANIM_PLAY_ONCE, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("kabe_1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("kabe_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("kabe_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_para_d"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("a_para_d1"), 1, 0)
     CALL_CHILD(PTR(anm_para_snd))

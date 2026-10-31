@@ -313,7 +313,7 @@ BattleUnitSetup btlparty_hei_hei_01_01_off_1[] = {
         &unit_kuriboo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -372,7 +372,7 @@ BattleUnitSetup btlparty_hei_hei_02_02_off_1[] = {
         &unit_nokonoko, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -527,7 +527,7 @@ BattleUnitSetup btlparty_hei_hei_04_01_off_1[] = {
         &unit_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -576,7 +576,7 @@ BattleUnitSetup btlparty_hei_hei_04_01_off_2[] = {
         &unit_nokonoko, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -664,7 +664,7 @@ BattleUnitSetup btlparty_hei_hei_04_02_off_2[] = {
         &unit_nokonoko, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -790,7 +790,7 @@ BattleUnitSetup btlparty_hei_hei_06_03_off_1[] = {
         &unit_nokonoko, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {130.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -829,7 +829,7 @@ BattleUnitSetup btlparty_hei_hei_06_03_off_2[] = {
         &unit_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 40.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -936,7 +936,7 @@ BattleUnitSetup btlparty_hei_hei_08_01_off_1[] = {
         &unit_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -994,7 +994,7 @@ BattleUnitSetup btlparty_hei_hei_09_01_off_1[] = {
         &unit_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1033,7 +1033,7 @@ BattleUnitSetup btlparty_hei_hei_09_01_off_2[] = {
         &unit_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1082,7 +1082,7 @@ BattleUnitSetup btlparty_hei_hei_09_03_off_1[] = {
         &unit_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1121,7 +1121,7 @@ BattleUnitSetup btlparty_hei_hei_09_03_off_2[] = {
         &unit_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1198,7 +1198,7 @@ BattleUnitSetup btlparty_hei_hei_11_01_off_1[] = {
         &unit_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1237,7 +1237,7 @@ BattleUnitSetup btlparty_hei_hei_11_01_off_2[] = {
         &unit_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1286,7 +1286,7 @@ BattleUnitSetup btlparty_hei_hei_11_03_off_1[] = {
         &unit_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1325,7 +1325,7 @@ BattleUnitSetup btlparty_hei_hei_11_03_off_2[] = {
         &unit_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1374,7 +1374,7 @@ BattleUnitSetup btlparty_hei_hei_12_01_off_1[] = {
         &unit_chorobon, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1432,7 +1432,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_off_1[] = {
         &unit_togekuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1471,7 +1471,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_1[] = {
         &unit_kuriboo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1520,7 +1520,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_2[] = {
         &unit_kuriboo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1589,7 +1589,7 @@ BattleUnitSetup btlparty_hei_hei_13_02_on_3[] = {
         &unit_kuriboo, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1648,7 +1648,7 @@ BattleUnitSetup btlparty_hei_hei_13_03_off_1[] = {
         &unit_togekuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1687,7 +1687,7 @@ BattleUnitSetup btlparty_hei_hei_13_03_on_1[] = {
         &unit_togekuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1775,7 +1775,7 @@ BattleUnitSetup btlparty_hei_hei_13_04_off_1[] = {
         &unit_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1814,7 +1814,7 @@ BattleUnitSetup btlparty_hei_hei_13_04_on_1[] = {
         &unit_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -1863,7 +1863,7 @@ BattleUnitSetup btlparty_hei_hei_13_04_on_2[] = {
         &unit_patakuri, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 40.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork

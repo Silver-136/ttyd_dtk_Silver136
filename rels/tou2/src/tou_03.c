@@ -892,7 +892,7 @@ static BeroEntry bero_data[] = {
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         w_open, // enterEvent
@@ -910,7 +910,7 @@ static BeroEntry bero_data[] = {
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         e_open, // enterEvent
@@ -928,7 +928,7 @@ static BeroEntry bero_data[] = {
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         s1_open, // enterEvent
@@ -946,7 +946,7 @@ static BeroEntry bero_data[] = {
         1, // type
         6, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         s2_open, // enterEvent
@@ -5613,7 +5613,7 @@ EVT_BEGIN(tou_03_init_evt)
         CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
 #ifdef VERSION_G8ME01
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_a"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_2_b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_b"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("s_bero_1"))
         CALL_CHILD(bero_case_switch_off)
 #else
@@ -5650,7 +5650,7 @@ EVT_BEGIN(tou_03_init_evt)
         CALL(evt_party_set_pos, 1, LW(0), LW(1), LW(2))
 #ifdef VERSION_G8ME01
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_a"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_2_b"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_2_b"), MAP_OBJ_FLAG_HIDDEN)
 #else
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("door_2_a")), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("door_2_b")), MAP_OBJ_FLAG_HIDDEN)

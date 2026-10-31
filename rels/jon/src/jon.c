@@ -247,7 +247,7 @@ EVT_BEGIN(jon_init_evt)
 #ifdef VERSION_G8ME01
                 IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
-                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+                    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
                     ELSE
 #endif
                 SET_VALUE(LF(0), 0)
@@ -271,18 +271,18 @@ EVT_BEGIN(jon_init_evt)
 #endif
                     ELSE
                     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
-                    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+                    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
 #ifdef VERSION_G8ME01
                     END_IF
 #endif
                 END_IF
                 ELSE
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
             END_IF
             ELSE
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
     END_IF
     IF_INT_NOT_EQUAL(GSW_PIT_FLOOR, 99)
@@ -1888,7 +1888,7 @@ BeroEntry bero_boss[] = {
         2, // type
         0, // sfxId
         BERO_DIR_UP, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1939,7 +1939,7 @@ BeroEntry bero_return[] = {
         2, // type
         0, // sfxId
         BERO_DIR_UP, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1971,7 +1971,7 @@ BeroEntry bero_return[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1993,7 +1993,7 @@ BeroEntry bero_return2[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2015,7 +2015,7 @@ BeroEntry bero_return3[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2094,7 +2094,7 @@ BeroEntry bero_prev_return[] = {
         2, // type
         0, // sfxId
         BERO_DIR_UP, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2131,7 +2131,7 @@ BeroEntry bero_prev_return2[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2155,7 +2155,7 @@ BeroEntry bero_prev_return3[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2179,7 +2179,7 @@ BeroEntry bero_prev_return4[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2236,7 +2236,7 @@ BeroEntry bero_normal[] = {
         2, // type
         0, // sfxId
         BERO_DIR_UP, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2273,7 +2273,7 @@ BeroEntry bero_normal2[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2295,7 +2295,7 @@ BeroEntry bero_normal3[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -2748,7 +2748,7 @@ EVT_BEGIN(evt_iri_30_bomb_rakugaki)
         CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("ofs"), 1, LW(0), LW(1), LW(2), LW(3))
         WAIT_FRAMES(1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_clear_virtual_point, STRING("img"))
         CALL(evt_img_onoff, STRING("img"), 1)
@@ -2756,7 +2756,7 @@ EVT_BEGIN(evt_iri_30_bomb_rakugaki)
         CALL(evt_img_wait_animend, STRING("img"))
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_img_release, STRING("img"))

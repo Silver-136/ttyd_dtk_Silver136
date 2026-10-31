@@ -212,7 +212,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -228,7 +228,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         look_large_door, // enterEvent
@@ -245,7 +245,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         0, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1611,16 +1611,16 @@ EVT_BEGIN(evt_mapwrite)
         BEGIN_INLINE_EVENT
             WAIT_MS(2000)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
             WAIT_MS(3250)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
             WAIT_MS(3500)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
             WAIT_MS(2700)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
         END_INLINE_EVENT
     END_IF
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 255, 4000)
@@ -2541,16 +2541,16 @@ EVT_BEGIN(mahojin_event7)
     BEGIN_INLINE_EVENT
         WAIT_MS(2000)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(3250)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(3500)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
         WAIT_MS(2700)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("door"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("n_yuka1"), MAP_OBJ_FLAG_HIDDEN)
     END_INLINE_EVENT
     WAIT_MS(14000)
     CALL(evt_mario_dispflag_onoff, 0, MARIO_DISP_FLAG_NO_REAR_POSE)

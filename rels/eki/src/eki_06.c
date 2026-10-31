@@ -65,7 +65,7 @@ static BeroEntry bero_data[] = {
         1, // type
         3, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -82,7 +82,7 @@ static BeroEntry bero_data[] = {
         "e_bero_2", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -168,7 +168,7 @@ EVT_BEGIN(evt_sw_complete)
     CALL(evt_cam3d_evt_set, -80, 202, 448, -80, 107, -92, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("origami"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_origami"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_hitobj_onoff, STRING("a_ori"), 1, 1)
     BEGIN_INLINE_EVENT
         CALL(evt_mapobj_get_position, STRING("origami"), LW(0), LW(1), LW(2))

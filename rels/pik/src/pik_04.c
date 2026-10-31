@@ -95,7 +95,7 @@ static BeroEntry bero_data[] = {
         "nw_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_NW, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -111,7 +111,7 @@ static BeroEntry bero_data[] = {
         "se_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_SE, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -322,7 +322,7 @@ EVT_BEGIN(imgstart)
     CALL(evt_mapobj_set_offscreen, 1, STRING("door_h"), STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("ERE"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_offscreen, STRING("店員女"), STRING("offscreen"))
     CALL(evt_npc_set_offscreen, STRING("キザ野郎"), STRING("offscreen"))
@@ -358,7 +358,7 @@ EVT_BEGIN(imgend)
     CALL(evt_mapobj_set_offscreen, 1, STRING("door_h"), STRING("offscreen"))
     CALL(evt_mapobj_clear_offscreen, 1, STRING("ERE"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hotel_naka"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("door_h"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_offscreen, STRING("店員女"), STRING("offscreen"))
     CALL(evt_npc_set_offscreen, STRING("キザ野郎"), STRING("offscreen"))

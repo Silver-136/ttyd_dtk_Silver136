@@ -392,7 +392,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -410,7 +410,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -428,7 +428,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -446,7 +446,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -464,7 +464,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -482,7 +482,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -500,7 +500,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -518,7 +518,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -536,7 +536,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -554,7 +554,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -572,7 +572,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -590,7 +590,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -608,7 +608,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -626,7 +626,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -651,7 +651,7 @@ BeroEntry e_bero_5_peach[] = {
         "e_bero_5", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -682,11 +682,11 @@ EVT_BEGIN(elv_unlock1)
     CALL(evt_win_item_select, 0, PTR(elv_key1), LW(0), 0)
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_pouch_remove_item, LW(0), LW(1))
         SET_VALUE(LW(0), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi1"), 0, PTR(ele_1), 0)
@@ -721,7 +721,7 @@ EVT_BEGIN(elv_unlock2)
     CALL(evt_win_item_select, 0, PTR(elv_key2), LW(0), 0)
     IF_INT_NOT_EQUAL(LW(0), -1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
@@ -1391,7 +1391,7 @@ static EVT_BEGIN(evt_elv_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi1"), 0, PTR(last_elv_lock), 0)
@@ -1419,11 +1419,11 @@ static EVT_BEGIN(evt_elv_init)
     END_SWITCH
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_15_ELEVATOR_ACTIVATED_2)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_ekagi4"), 0, PTR(elv_unlock2), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
@@ -1518,23 +1518,23 @@ EVT_BEGIN(evt_key_init)
         SET_VALUE(LW(0), STRING("w_bero_4"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights2_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights2_r"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights3_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights3_r"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights4_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights4_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights4_r"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights5_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights5_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights5_r"), MAP_OBJ_FLAG_HIDDEN)
         CASE_DEFAULT
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights2_r"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights2_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights3_r"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights3_m"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights4_r"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights4_r"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_lights4_m"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
     RETURN
@@ -1581,7 +1581,7 @@ EVT_BEGIN(evt_aikotoba)
         SET_VALUE(LW(0), STRING("e_bero_2"))
         CALL_CHILD(PTR(bero_case_switch_on))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights5_r"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights5_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1895,11 +1895,11 @@ EVT_BEGIN(peach_evt_ele_2)
     CALL(evt_cam3d_road_shift_onoff, 1)
     SET_VALUE(GW(1), LW(8))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_exit_case_evt)
     RETURN
@@ -1907,11 +1907,11 @@ EVT_END()
 
 EVT_BEGIN(peach_evt_ele_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_44_PEACH_TECS_REQUEST_2)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
@@ -1919,7 +1919,7 @@ EVT_BEGIN(peach_evt_ele_init)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi6_mid"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
@@ -1967,21 +1967,21 @@ EVT_BEGIN(peach_evt_key_init)
     END_IF
     IF_INT_EQUAL(LF(0), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero_4"), 0, PTR(peach_evt_door_stop), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights1_r"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights1_m"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights2_r"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights2_m"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights2_m"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero_3"), 0, PTR(peach_evt_door_stop), 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights3_r"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights3_m"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights3_m"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero_2"), 0, PTR(peach_evt_door_stop), 0)
     IF_INT_EQUAL(LF(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_lights4_r"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights4_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights4_m"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("n_bero_1"), 0, PTR(peach_evt_door_stop), 0)
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights4_r"), MAP_OBJ_FLAG_HIDDEN)
@@ -2294,10 +2294,10 @@ EVT_BEGIN(aji_01_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(evt_aikotoba), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights5_m"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_lights5_m"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_lights5_r"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     SPAWN_EVENT(PTR(evt_emergency))

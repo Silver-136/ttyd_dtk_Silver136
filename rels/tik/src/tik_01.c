@@ -80,7 +80,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero_1", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -96,7 +96,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_1", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -112,7 +112,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero_2", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -129,7 +129,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -146,7 +146,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_W, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         dokan_2_in_evt, // enterEvent
@@ -163,7 +163,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -179,7 +179,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -195,7 +195,7 @@ static BeroEntry bero_entry_data[] = {
         4098, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -211,7 +211,7 @@ static BeroEntry bero_entry_data[] = {
         4098, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -227,7 +227,7 @@ static BeroEntry bero_entry_data[] = {
         4096, // type
         0, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, 0, NULL, // enterEvent..exitEvent
@@ -242,7 +242,7 @@ static BeroEntry bero_entry_data[] = {
         4096, // type
         0, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, 0, NULL, // enterEvent..exitEvent
@@ -456,11 +456,11 @@ EVT_BEGIN(wall_bomb00)
         CALL(evt_img_clear_virtual_point, STRING("capture_img"))
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_kabe_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_kabe_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_kabe_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_kabe_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mapobj_clear_offscreen, 1, STRING("bom_kabe_1"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)
@@ -498,11 +498,11 @@ EVT_BEGIN(wall_bomb01)
         CALL(evt_img_clear_virtual_point, STRING("capture_img"))
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_kabe_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_kabe_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("bom_kabe_4"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bom_kabe_4"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mapobj_clear_offscreen, 1, STRING("bom_kabe_3"))
     CALL(evt_img_free_capture, STRING("capture_img"), 0)

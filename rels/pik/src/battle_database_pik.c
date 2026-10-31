@@ -77,7 +77,7 @@ BattleUnitSetup btlparty_pik_pik_06_01_off_1[] = {
         &unit_purple_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -111,7 +111,7 @@ BattleUnitSetup btlparty_pik_pik_06_02_off_1[] = {
         &unit_purple_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -179,7 +179,7 @@ BattleUnitSetup btlparty_pik_pik_06_04_off_1[] = {
         &unit_purple_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -213,7 +213,7 @@ BattleUnitSetup btlparty_pik_pik_06_05_off_1[] = {
         &unit_purple_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {110.0f, 0.0f, 10.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -247,7 +247,7 @@ BattleUnitSetup btlparty_pik_pik_06_06_off_1[] = {
         &unit_purple_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -325,7 +325,7 @@ BattleUnitSetup btlparty_pik_pik_06_08_off_1[] = {
         &unit_purple_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {90.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork
@@ -369,7 +369,7 @@ BattleUnitSetup btlparty_pik_pik_06_09_off_1[] = {
         &unit_purple_teresa, // mUnitKindParams
         ALLIANCE_ENEMY, // alliance
         {0}, // pad_05
-        0x4000004, // attackPhase
+        BATTLE_PHASE_ENEMY, // attackPhase
         {70.0f, 0.0f, 0.0f}, // position
         0, // hitOffsetX
         {0}, // unitWork

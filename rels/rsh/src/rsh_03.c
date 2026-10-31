@@ -219,7 +219,7 @@ static BeroEntry bero_data_a[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -237,7 +237,7 @@ static BeroEntry bero_data_a[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -260,7 +260,7 @@ static BeroEntry bero_data_b[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -278,7 +278,7 @@ static BeroEntry bero_data_b[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -301,7 +301,7 @@ static BeroEntry bero_data_c[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -319,7 +319,7 @@ static BeroEntry bero_data_c[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1665,7 +1665,7 @@ EVT_BEGIN(rsh_03_a_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_01_THE_CONDUCTOR, STG6_20_END_OF_DAY_1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_GREATER(GSW_STORY_PROGRESS, STG6_01_THE_CONDUCTOR)
             IF_INT_LESS(GSW_STORY_PROGRESS, STG6_05_GALLEY_KETTLE_DISCOVERED)
                 CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_yuka_simi"), 0, PTR(evt_yuka_simi), 0)
@@ -1673,12 +1673,12 @@ EVT_BEGIN(rsh_03_a_init_evt)
         END_IF
         CASE_DEFAULT
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
     SPAWN_EVENT(PTR(evt_sub_mail_event))
 #ifdef VERSION_G8ME01
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("open"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_open"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("I_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("Sp_open"), MAP_OBJ_FLAG_HIDDEN)
@@ -1709,7 +1709,7 @@ EVT_BEGIN(rsh_03_b_init_evt)
     CALL_CHILD(PTR(rsh_03_init_evt))
 #ifdef VERSION_G8ME01
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("open"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_open"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("I_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("Sp_open"), MAP_OBJ_FLAG_HIDDEN)
@@ -1759,12 +1759,12 @@ EVT_BEGIN(rsh_03_c_init_evt)
     CALL(fire, STRING("rousoku_2"))
 #ifdef VERSION_G8ME01
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_close"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("I_close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("Sp_close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("open"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_open"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("I_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("Sp_open"), MAP_OBJ_FLAG_HIDDEN)
@@ -1874,7 +1874,7 @@ EVT_BEGIN(rsh_03_init_evt_nidome)
     CALL_CHILD(PTR(evt_access_entry))
 #ifdef VERSION_G8ME01
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("open"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_open"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("D_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("I_open"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("Sp_open"), MAP_OBJ_FLAG_HIDDEN)
@@ -1904,7 +1904,7 @@ EVT_BEGIN(rsh_03_a_init_evt_nidome)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(rsh_03_init_evt_nidome))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -1930,10 +1930,10 @@ EVT_BEGIN(rsh_03_c_init_evt_nidome)
     CALL(fire, STRING("rousoku_1"))
     CALL(fire, STRING("rousoku_2"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shop_close_yuka1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("shop_close_sc"), MAP_OBJ_FLAG_HIDDEN)
 #ifdef VERSION_G8ME01
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("D_close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("F_close"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("I_close"), MAP_OBJ_FLAG_HIDDEN)

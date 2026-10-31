@@ -380,7 +380,7 @@ USER_FUNC(yuugijou_montemedal_keep) {
         yuwp->tokens = 0;
         yuwp->dispTokens = 0;
         yuwp->flags &= ~PARLOR_FLAG_TOKENS_OUT;
-        yuwp->flags &= ~1;
+        yuwp->flags &= ~PARLOR_FLAG_COUNTER_SHOWN;
     }
     return EVT_RETURN_DONE;
 }
@@ -390,7 +390,7 @@ USER_FUNC(yuugijou_montemedal_return) {
     if (!(yuwp->flags & PARLOR_FLAG_TOKENS_OUT)) {
         yuwp->dispTokens = yuwp->tokens = yuwp->keptTokens;
         yuwp->flags |= PARLOR_FLAG_TOKENS_OUT;
-        yuwp->flags |= 1;
+        yuwp->flags |= PARLOR_FLAG_COUNTER_SHOWN;
     }
     return EVT_RETURN_DONE;
 }

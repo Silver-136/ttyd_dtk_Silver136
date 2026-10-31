@@ -140,7 +140,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         first_time_w_bero, // enterEvent
@@ -157,7 +157,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_E, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -708,7 +708,7 @@ EVT_END()
  */
 static EVT_BEGIN(yuka_move)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_02_c"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_isk_03_c"), MAP_OBJ_FLAG_HIDDEN)
     LOOP(0)
         SET_VALUE(LW(2), GW(0))
         DIVIDE(LW(2), 100)

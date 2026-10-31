@@ -1066,7 +1066,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         bero_in_event, // enterEvent
@@ -1082,7 +1082,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero1", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         bero_in_event, // enterEvent
@@ -1137,12 +1137,12 @@ EVT_BEGIN(muj_00_door_open)
     CALL(evt_door_param, LW(0), 1, LW(1), LW(2), LW(3))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     CALL(evt_door_param, LW(0), 3, LW(1), LW(2))
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, LW(1), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND)
         CALL(evt_mapobj_flag_onoff, 1, 1, LW(1), MAP_OBJ_FLAG_NO_MAP_BLEND2)
     END_IF
     IF_INT_NOT_EQUAL(LW(2), 0)
@@ -1896,7 +1896,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_status_onoff, 1, STRING("店員"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ガラの悪い水夫"), 1)
     CALL(anim_tevcallback, STRING("水夫D"), 1)
     CALL(anim_tevcallback, STRING("オドオド水夫"), 1)
@@ -1993,7 +1993,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_position, STRING("店員"), 0, -1000, 0)
     CALL(evt_map_set_tevcallback, 1, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(1))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ガラの悪い水夫"), 1)
     CALL(anim_tevcallback, STRING("水夫D"), 1)
     CALL(anim_tevcallback, STRING("ボロ水夫A"), 1)

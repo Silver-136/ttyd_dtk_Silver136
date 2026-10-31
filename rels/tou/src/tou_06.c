@@ -116,7 +116,7 @@ static BeroEntry bero_data[] = {
         1, // type
         4, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -134,7 +134,7 @@ static BeroEntry bero_data[] = {
         1, // type
         4, // sfxId
         BERO_DIR_E, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -208,7 +208,7 @@ const char* cloud_kontena2_list[] = {
 
 EVT_BEGIN(evt_kontena2)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuda_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("fuda_3"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(GSWF_TOU_06_CONTAINER_2_BLOWN_AWAY, 1)
     RETURN

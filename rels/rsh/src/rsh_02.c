@@ -113,7 +113,7 @@ static BeroEntry bero_data_a[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -131,7 +131,7 @@ static BeroEntry bero_data_a[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -154,7 +154,7 @@ static BeroEntry bero_data_b[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -172,7 +172,7 @@ static BeroEntry bero_data_b[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -195,7 +195,7 @@ static BeroEntry bero_data_c[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -213,7 +213,7 @@ static BeroEntry bero_data_c[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1500,7 +1500,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
         CALL(evt_cam_road_reset)
         CALL(evt_cam_shift_reset)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
@@ -1630,7 +1630,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_24_A_VITAL_CLUE, STG6_24_02_ANOTHER_CLUE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_24_02_ANOTHER_CLUE)
             CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("a_kami"), 0, PTR(evt_daiji_kami), 0)
@@ -1638,7 +1638,7 @@ EVT_BEGIN(rsh_02_a_init_evt)
         SPAWN_EVENT(PTR(evt_toron_appear))
         CASE_DEFAULT
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
     END_SWITCH
 #ifdef VERSION_G8ME01
@@ -1664,7 +1664,7 @@ EVT_BEGIN(rsh_02_b_init_evt)
         CALL(evt_bero_get_info)
         CALL_CHILD(PTR(bero_case_entry))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
@@ -1684,7 +1684,7 @@ EVT_BEGIN(rsh_02_b_init_evt)
         CALL(evt_party_set_dir, 0, 270, 0)
         CALL(evt_cam_road_reset)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
@@ -1723,7 +1723,7 @@ EVT_BEGIN(rsh_02_c_init_evt)
         CALL(evt_party_set_dir, 0, 270, 0)
         CALL(evt_cam_road_reset)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
@@ -1827,9 +1827,9 @@ EVT_END()
 EVT_BEGIN(rsh_02_a_init_evt_nidome)
     CALL_CHILD(PTR(rsh_02_init_evt_nidome))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("s_yuka"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_yuka_simi"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_5"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LF(0), 0)
     CALL(evt_bero_get_entername, LW(0))
@@ -1858,7 +1858,7 @@ EVT_BEGIN(rsh_02_a_init_evt_nidome)
         CALL(evt_cam_road_reset)
         CALL(evt_cam_shift_reset)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
@@ -1866,7 +1866,7 @@ EVT_BEGIN(rsh_02_a_init_evt_nidome)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("tobira_5"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_5_kami_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("nidome"))
             BEGIN_INLINE_EVENT
@@ -1953,7 +1953,7 @@ EVT_BEGIN(rsh_02_b_init_evt_nidome)
         CALL(evt_cam_road_reset)
         CALL(evt_cam_shift_reset)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)
@@ -2019,7 +2019,7 @@ EVT_BEGIN(rsh_02_c_init_evt_nidome)
         CALL(evt_cam_road_reset)
         CALL(evt_cam_shift_reset)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("heya_3"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("haikei_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("heya_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("haikei_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("heya_5"), MAP_OBJ_FLAG_HIDDEN)

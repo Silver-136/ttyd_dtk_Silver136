@@ -767,7 +767,7 @@ BeroEntry bero_lostitem[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -790,7 +790,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         first_time_w_bero, // enterEvent
@@ -807,7 +807,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         0, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -825,7 +825,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1116,7 +1116,7 @@ EVT_BEGIN(open_bigtree)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_party_stop, 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_non"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tree_futa"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tree_futa"), MAP_OBJ_FLAG_HIDDEN)
     BEGIN_INLINE_EVENT
         LOOP(0)
             CALL(evt_mario_party_use_check, LW(0))

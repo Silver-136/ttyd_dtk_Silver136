@@ -494,7 +494,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         gor_02_event_00, // enterEvent
@@ -511,7 +511,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -734,7 +734,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
     CALL(evt_eff64, STRING("aaax"), STRING("lensflare_n64"), 0, -362, 44, -200, FLOAT(1.0f), -1, 0, 0, 0, 0, 0, 0)
     WAIT_MS(500)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_ao"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_i01_sui_aka"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_msg_print, 0, STRING("powerup_14"), 0, STRING("me"))
     CALL(bgScrollControll, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_FLAG_NO_MAP_BLEND)
@@ -6176,7 +6176,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_open_book"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tizu_on"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tizu_on"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_set_position, STRING("クリハカセ"), -140, 0, -225)
     CALL(evt_npc_flag_onoff, 1, STRING("クリハカセ"), NPC_FLAG_INSTANT_TURN)
     CALL(evt_npc_set_ry, STRING("クリハカセ"), 90)

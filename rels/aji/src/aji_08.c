@@ -101,7 +101,7 @@ static BeroEntry bero_entry_data[] = {
         1, // type
         10, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -119,7 +119,7 @@ static BeroEntry bero_entry_data[] = {
         3840, // type
         0, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, 0, // enterEvent..caseType
@@ -135,7 +135,7 @@ static BeroEntry bero_entry_data[] = {
         3840, // type
         0, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, 0, // enterEvent..caseType
@@ -151,7 +151,7 @@ static BeroEntry bero_entry_data[] = {
         3840, // type
         0, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, 0, // enterEvent..caseType
@@ -172,7 +172,7 @@ static BeroEntry bero_entry_data[] = {
  */
 EVT_BEGIN(heya_tenura_onoff)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_heya"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_tenura"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_tenura"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(LW(0), 0)
     LOOP(0)
         CALL(camAtY, LW(1))

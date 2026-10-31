@@ -827,7 +827,7 @@ EVT_END()
 static EVT_BEGIN(hom_10_evt_resha_left)
     CALL_CHILD(PTR(hom_10_evt_resha_sub))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_1"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("renketu_5"), MAP_OBJ_FLAG_HIDDEN)
     RETURN
@@ -887,7 +887,7 @@ static BeroEntry bero_data[] = {
         "se_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -904,7 +904,7 @@ static BeroEntry bero_data[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1917,20 +1917,20 @@ EVT_BEGIN(pik_00_init_evt)
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(PTR(hom_10_evt_resha_right))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
         ELSE
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("resha"))
             SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
             CALL_CHILD(PTR(hom_10_evt_resha_right))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("n_bero"))
             IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
                 CALL_CHILD(PTR(hom_10_evt_resha_right))
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
                 ELSE
                 CALL_CHILD(PTR(hom_10_evt_resha_left))
                 CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
@@ -1942,7 +1942,7 @@ EVT_BEGIN(pik_00_init_evt)
             SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
             CALL_CHILD(PTR(hom_10_evt_resha_left))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
         CALL(evt_sub_get_system_flag, LW(0))
@@ -1950,7 +1950,7 @@ EVT_BEGIN(pik_00_init_evt)
             IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
                 CALL_CHILD(PTR(hom_10_evt_resha_right))
                 CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
-                CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
                 ELSE
                 CALL_CHILD(PTR(hom_10_evt_resha_left))
                 CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
@@ -1963,7 +1963,7 @@ EVT_BEGIN(pik_00_init_evt)
             SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
             CALL_CHILD(PTR(hom_10_evt_resha_left))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_6"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("train_7"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
     END_IF

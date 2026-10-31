@@ -756,7 +756,7 @@ static BeroEntry bero_entry_data[] = {
         ("w_bero"), // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -772,7 +772,7 @@ static BeroEntry bero_entry_data[] = {
         ("e_bero"), // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1259,7 +1259,7 @@ EVT_BEGIN(cam_inside)
     CALL(evt_mapobj_rotate, 1, STRING(("s_ie_door")), 90, 0, 0)
     CALL(evt_mapobj_rotate, 1, STRING(("s_ie_kai")), 0, -90, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING(("S_ie_naka")), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("s_ie_kai")), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("s_ie_kai")), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -1271,7 +1271,7 @@ EVT_BEGIN(cam_inside2)
     CALL(evt_mapobj_rotate, 1, STRING(("s_ie_door")), 90, 0, 0)
     CALL(evt_mapobj_rotate, 1, STRING(("s_ie_kai")), 0, -90, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING(("S_ie_naka")), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("s_ie_kai")), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("s_ie_kai")), MAP_OBJ_FLAG_HIDDEN)
     RETURN
 EVT_END()
 
@@ -1651,7 +1651,7 @@ static EVT_BEGIN(evt_taihou)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("S_yuka2")), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING(("S_yuka3")), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING(("chika_off")), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING(("S_hikari")), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING(("S_hikari")), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_trans, 1, STRING(("chika_off")), 0, FLOAT(0.0f), 0)
     CALL(evt_snd_sfxon, STRING(("SFX_STG7_FLOOR_DOWN1")), LW(8))
     CALL(evt_sub_intpl_msec_init, EASING_LINEAR, 0, -20, 1000)

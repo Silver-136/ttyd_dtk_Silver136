@@ -292,7 +292,7 @@ USER_FUNC(evt_bero_get_info_length) {
     }
     switch (bero->type & BERO_TYPE_KIND_MASK) {
         case BERO_TYPE_ROAD:
-        case 3:
+        case BERO_TYPE_GATE:
         case BERO_TYPE_NONE:
             defaultLength = 30.0f;
             break;
@@ -409,7 +409,7 @@ static inline s32 bero_get_kind(BeroEntry* bero, s32 walk) {
         } else {
         switch (bero->type & BERO_TYPE_KIND_MASK) {
             case BERO_TYPE_ROAD:
-            case 1:
+            case BERO_TYPE_DOOR:
                 if (walk) {
                     for (i = 0, p = dirs; i < 8; i++, p++) {
                         if (!strncmp(*p, bero->hitName, strlen(*p))) {
@@ -1515,7 +1515,7 @@ EVT_BEGIN(bero_case_exec_pipe_sub)
         CASE_EQUAL(BERO_DIR_W)
         CALL(evt_mario_paper_pose_dokan, 5)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
-        CASE_EQUAL(2)
+        CASE_EQUAL(BERO_DIR_E)
         CALL(evt_mario_paper_pose_dokan, 5)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(8)
@@ -1626,7 +1626,7 @@ EVT_BEGIN(bero_case_exec_pipe)
         CASE_EQUAL(BERO_DIR_W)
         CALL(evt_mario_paper_pose_dokan, 5)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
-        CASE_EQUAL(2)
+        CASE_EQUAL(BERO_DIR_E)
         CALL(evt_mario_paper_pose_dokan, 5)
         CALL(evt_bero_move_mario_speed, FLOAT(60.0f))
         CASE_EQUAL(8)
@@ -1638,16 +1638,16 @@ EVT_BEGIN(bero_case_exec_pipe)
     END_SWITCH
     IF_BITS_CLEAR(LW(4), BERO_TYPE_FLAG_NO_FADE)
         SWITCH(LW(5))
-            CASE_EQUAL(6)
+            CASE_EQUAL(BERO_DIR_W)
             CALL(evt_fade_set_mapchange_type, 1, 45, 0, -1, -1)
             CALL(evt_fade_set_mapchange_type, 0, 45, 0, -1, -1)
-            CASE_EQUAL(2)
+            CASE_EQUAL(BERO_DIR_E)
             CALL(evt_fade_set_mapchange_type, 1, 47, 0, -1, -1)
             CALL(evt_fade_set_mapchange_type, 0, 47, 0, -1, -1)
-            CASE_EQUAL(8)
+            CASE_EQUAL(BERO_DIR_UP)
             CALL(evt_fade_set_mapchange_type, 1, 41, 0, -1, -1)
             CALL(evt_fade_set_mapchange_type, 0, 41, 0, -1, -1)
-            CASE_EQUAL(9)
+            CASE_EQUAL(BERO_DIR_DOWN)
             CALL(evt_fade_set_mapchange_type, 1, 43, 0, -1, -1)
             CALL(evt_fade_set_mapchange_type, 0, 43, 0, -1, -1)
         END_SWITCH
@@ -1917,7 +1917,7 @@ EVT_BEGIN(evt_bero_info_run)
     AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
     IF_INT_EQUAL(LW(0), BERO_TYPE_PIPE)
         SWITCH(LW(5))
-            CASE_EQUAL(6)
+            CASE_EQUAL(BERO_DIR_W)
             CALL(evt_mario_dokan_prepare, 4)
             CASE_EQUAL(BERO_DIR_E)
             CALL(evt_mario_dokan_prepare, 4)
@@ -1931,12 +1931,12 @@ EVT_BEGIN(evt_bero_info_run)
     IF_BITS_CLEAR(LW(4), BERO_TYPE_FLAG_NO_FADE)
         SET_VALUE(LW(0), LW(4))
         AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
-        IF_INT_EQUAL(LW(0), 2)
+        IF_INT_EQUAL(LW(0), BERO_TYPE_PIPE)
             SWITCH(LW(5))
                 CASE_EQUAL(BERO_DIR_W)
                 CALL(evt_fade_set_mapchange_type, 1, -1, -1, 46, 0)
                 CALL(evt_fade_set_mapchange_type, 0, -1, -1, 46, 0)
-                CASE_EQUAL(2)
+                CASE_EQUAL(BERO_DIR_E)
                 CALL(evt_fade_set_mapchange_type, 1, -1, -1, 48, 0)
                 CALL(evt_fade_set_mapchange_type, 0, -1, -1, 48, 0)
                 CASE_EQUAL(BERO_DIR_UP)
@@ -1960,7 +1960,7 @@ EVT_BEGIN(evt_bero_initial_pos)
     AND_RAW(LW(0), BERO_TYPE_KIND_MASK)
     SWITCH(LW(0))
         CASE_EQUAL(BERO_TYPE_NONE)
-        CASE_EQUAL(3)
+        CASE_EQUAL(BERO_TYPE_GATE)
         CALL(bero_get_position_normal, 0, FLOAT(0.0f))
         PEEK_FLOAT(LW(10), PTR(&BeroSX))
         PEEK_FLOAT(LW(11), PTR(&BeroSY))

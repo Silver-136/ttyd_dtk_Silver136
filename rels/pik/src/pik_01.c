@@ -157,7 +157,7 @@ static BeroEntry bero_data[] = {
         "nw_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_NW, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -174,7 +174,7 @@ static BeroEntry bero_data[] = {
         1, // type
         6, // sfxId
         BERO_DIR_NE, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -192,7 +192,7 @@ static BeroEntry bero_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1238,7 +1238,7 @@ static EVT_BEGIN(sekai_yami_evt)
     CALL(evt_npc_set_ry, STRING("ポワン探偵"), 270)
     CALL(evt_map_set_tevcallback, 3, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(3))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ポワン探偵"), 3)
     CALL(anim_tevcallback, STRING("ターくん５"), 3)
     CALL(evt_bg_set_color, 64, 64, 64, 255)
@@ -1289,7 +1289,7 @@ static EVT_BEGIN(minnnanokoe_evt)
     CALL(evt_npc_set_ry, STRING("ナリキンパパ"), 270)
     CALL(evt_map_set_tevcallback, 3, PTR(envSetYami))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S"), MAP_OBJ_TEV_CALLBACK(3))
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S"), MAP_OBJ_FLAG_DISPLAY_LIST)
     CALL(anim_tevcallback, STRING("ポワン探偵"), 3)
     CALL(anim_tevcallback, STRING("マダム"), 3)
     CALL(anim_tevcallback, STRING("コナリキン"), 3)

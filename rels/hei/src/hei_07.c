@@ -61,7 +61,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -78,7 +78,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -232,7 +232,7 @@ EVT_BEGIN(seikai_anime)
     ADD(LW(1), 150)
     CALL(evt_eff, STRING(""), STRING("confetti"), 3, LW(0), LW(1), LW(2), 160, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_seikai"), MAP_ANIM_PLAY_LOOP, 0)
     WAIT_MS(1800)
     RETURN
@@ -241,7 +241,7 @@ EVT_END()
 /** Stops the right-answer animation and turns the lights back to their idle state. */
 EVT_BEGIN(seikai_anime_stop)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_seikai"), MAP_ANIM_PLAY_ONCE, 0)
     RETURN
 EVT_END()
@@ -258,7 +258,7 @@ EVT_END()
 /** Stops the wrong-answer animation and turns the lights back to their idle state. */
 EVT_BEGIN(fuseikai_anime_stop)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_map_playanim, STRING("anm_fuseikai"), MAP_ANIM_PLAY_ONCE, 0)
     RETURN
 EVT_END()
@@ -380,7 +380,7 @@ EVT_BEGIN(offscreen_to_quiz)
     WAIT_FRAMES(1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hei_07"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hei_07_2"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_mario_set_pos, -85, 20, 0)
@@ -423,7 +423,7 @@ static EVT_BEGIN(offscreen_to_normal)
     CALL(evt_mapobj_clear_offscreen, 1, STRING("hei_07"))
     CALL(evt_offscreen_delete, STRING("offscreen"))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("hei_07"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("hei_07_2"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hei_07_2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_mario_set_pos, LW(0), 0, LW(2))
     CALL(evt_mario_cont_onoff, 1)

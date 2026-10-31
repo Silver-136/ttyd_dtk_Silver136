@@ -96,7 +96,7 @@ static BeroEntry bero_data_a[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -132,7 +132,7 @@ static BeroEntry bero_data_a[] = {
         1, // type
         17, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -158,7 +158,7 @@ static BeroEntry bero_data_b[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -194,7 +194,7 @@ static BeroEntry bero_data_b[] = {
         1, // type
         17, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -217,7 +217,7 @@ static BeroEntry bero_data_c[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -253,7 +253,7 @@ static BeroEntry bero_data_c[] = {
         1, // type
         17, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -563,7 +563,7 @@ NpcSetupInfo npc_data_2[] = {
 static EVT_BEGIN(evt_daiji_kami)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("yuka_3_kami"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 0, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("yuka_3"), MAP_OBJ_FLAG_HIDDEN)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_23_VITAL_PAPER)
     CALL(evt_item_entry, STRING("daiji"), ITEM_VITAL_PAPER, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_item_get_item, STRING("daiji"))
@@ -823,7 +823,7 @@ static BeroEntry bero_data_a_return[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -859,7 +859,7 @@ static BeroEntry bero_data_a_return[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -885,7 +885,7 @@ static BeroEntry bero_data_b_return[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -921,7 +921,7 @@ static BeroEntry bero_data_b_return[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -947,7 +947,7 @@ static BeroEntry bero_data_c_return[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -983,7 +983,7 @@ static BeroEntry bero_data_c_return[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1006,7 +1006,7 @@ BeroEntry gor_bero[] = {
         1, // type
         8, // sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent

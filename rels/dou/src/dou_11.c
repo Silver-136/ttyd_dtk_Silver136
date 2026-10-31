@@ -401,7 +401,7 @@ static BeroEntry bero_entry_data[] = {
         "w_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -417,7 +417,7 @@ static BeroEntry bero_entry_data[] = {
         "e_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -433,7 +433,7 @@ static BeroEntry bero_entry_data[] = {
         "n_bero", // hitName
         0, 0, // type..sfxId
         BERO_DIR_AUTO, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -450,7 +450,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -466,7 +466,7 @@ static BeroEntry bero_entry_data[] = {
         4098, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -482,7 +482,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -498,7 +498,7 @@ static BeroEntry bero_entry_data[] = {
         4098, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -514,7 +514,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -530,7 +530,7 @@ static BeroEntry bero_entry_data[] = {
         4098, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -546,7 +546,7 @@ static BeroEntry bero_entry_data[] = {
         2, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -562,7 +562,7 @@ static BeroEntry bero_entry_data[] = {
         4098, // type
         0, // sfxId
         BERO_DIR_DOWN, // directionId
-        100000, // centerPosition
+        BERO_POS_AUTO, // centerPosition
         0, 0, // centerPositionY..centerPositionZ
         -1, // length
         NULL, // enterEvent
@@ -1062,7 +1062,7 @@ EVT_BEGIN(ukishima_init2)
     IF_INT_LESS(LW(0), 2)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n03"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru_n04"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n04"), 1, 0)
     END_IF
     RETURN
@@ -1513,12 +1513,12 @@ static EVT_BEGIN(bombwall_bomb)
         CALL(evt_img_clear_virtual_point, STRING("capture_img"))
         CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_1"))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_img_wait_animend, STRING("capture_img"))
         ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
     CALL(evt_mapobj_clear_offscreen, 1, STRING("S_ana_before"))
@@ -1548,20 +1548,20 @@ EVT_END()
 
 static EVT_BEGIN(bombwall_init)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
-    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hibiato"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_hibimae"), MAP_OBJ_FLAG_HIDDEN)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS_OR_EQUAL(STG5_33_CORTEZ_AND_THE_TREASURE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hibimae"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("n_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
         CALL(evt_hitobj_attr_onoff, 1, 0, STRING("n_bero"), 4)
         CASE_BETWEEN(STG5_34_KICKED_OFF, STG5_35_ESCAPE_ROUTE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hibiato"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_before"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_before1"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("n_bero"))
         CALL_CHILD(PTR(bero_case_switch_off))
@@ -1570,7 +1570,7 @@ static EVT_BEGIN(bombwall_init)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("n_bero"), 0, PTR(bombwall_bomb), 0)
         CASE_GREATER_OR_EQUAL(STG5_36_HOLE_IN_THE_WALL)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_hibiato"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ana_after"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("n_bero"))
         CALL_CHILD(PTR(bero_case_switch_on))
         CALL(evt_hitobj_attr_onoff, 1, 1, STRING("n_bero"), 4)
@@ -2607,7 +2607,7 @@ EVT_BEGIN(dou_11_init_evt)
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_33_CORTEZ_AND_THE_TREASURE)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n03"), 1, 0)
-        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_taru_n04"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_taru_n04"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("A_taru_n04"), 1, 0)
     END_IF
     SPAWN_EVENT(PTR(haikei_funeyure))
