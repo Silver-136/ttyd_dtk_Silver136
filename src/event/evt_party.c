@@ -1,3 +1,4 @@
+#include "evt/evt_party.h"
 #include "driver/camdrv.h"
 #include "driver/hitdrv.h"
 #include "evt/evt_cmd.h"

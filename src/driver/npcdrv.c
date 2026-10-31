@@ -44,18 +44,21 @@
 #include "mot/mot_hammer.h"
 #include "driver/mapdrv.h"
 
-f32 cloudGetBreathPower(Vec pos, f32 width);
-
-void FontDrawStringShake(f32 x, f32 y, const char* message);
-ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
-
 #define NPC_RAD2DEG(r) ((r) * 57.29579f)
-USER_FUNC(evt_mario_get_pos);
 
 typedef struct NpcWork2 {
     NpcWork field;  // 0x0
     NpcWork battle; // 0x14
 } NpcWork2;
+
+// External APIs retained locally until their shared contracts are settled.
+f32 cloudGetBreathPower(Vec pos, f32 width);
+
+void FontDrawStringShake(f32 x, f32 y, const char* message);
+ItemEntry* itemEntry(const char* name, s32 itemId, u16 type, s32 collectFlag, EvtWord* evtCode, f32 x, f32 y, f32 z);
+
+USER_FUNC(evt_mario_get_pos);
+
 
 //.data
 char* luigi_pose[14][2] = { { "Z_1", "Z_1R" }, { "S_1", "S_1R" },   { "W_1", "W_1R" },   { "R_1", "R_1R" },

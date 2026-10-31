@@ -32,30 +32,6 @@ f32 partyUpdMoveSpd(PartyEntry* party);
 extern void party_set_behind_dir(PartyEntry* party);
 static void flyMain(PartyEntry* party);
 
-static inline void partyModeTail(PartyEntry* party) {
-    Vec pos;
-
-    party->moveDir = party->targetDir;
-    if (party->trigFlags & PARTY_TRIG_SPLASH) {
-        party->trigFlags &= ~PARTY_TRIG_SPLASH;
-        pos = party->position;
-        marioSetSplash(0, &pos);
-        party->splashTimer = 20;
-    }
-    if (--party->splashTimer < 0) {
-        party->splashTimer = 0;
-    }
-    if (party->runMode != 13) {
-        if (party->hitobjStandOn && (hitGetAttr(party->hitobjStandOn) & HIT_ATTR_TOGE)) {
-            partyChgRunMode(party, 13);
-        } else if (party->hitobjFront && (hitGetAttr(party->hitobjFront) & HIT_ATTR_TOGE)) {
-            partyChgRunMode(party, 13);
-        } else if (party->hitobjHead && (hitGetAttr(party->hitobjHead) & HIT_ATTR_TOGE)) {
-            partyChgRunMode(party, 13);
-        }
-    }
-}
-
 Footmark footmarkBuf[2][80];
 s32 writeId[2];
 s32 readId[2];
@@ -88,6 +64,31 @@ static const char* objNames[] = {
     "MOBJ_BlueTimerSwitch",
     NULL,
 };
+
+// Movement helper; definitions below retain their original order.
+static inline void partyModeTail(PartyEntry* party) {
+    Vec pos;
+
+    party->moveDir = party->targetDir;
+    if (party->trigFlags & PARTY_TRIG_SPLASH) {
+        party->trigFlags &= ~PARTY_TRIG_SPLASH;
+        pos = party->position;
+        marioSetSplash(0, &pos);
+        party->splashTimer = 20;
+    }
+    if (--party->splashTimer < 0) {
+        party->splashTimer = 0;
+    }
+    if (party->runMode != 13) {
+        if (party->hitobjStandOn && (hitGetAttr(party->hitobjStandOn) & HIT_ATTR_TOGE)) {
+            partyChgRunMode(party, 13);
+        } else if (party->hitobjFront && (hitGetAttr(party->hitobjFront) & HIT_ATTR_TOGE)) {
+            partyChgRunMode(party, 13);
+        } else if (party->hitobjHead && (hitGetAttr(party->hitobjHead) & HIT_ATTR_TOGE)) {
+            partyChgRunMode(party, 13);
+        }
+    }
+}
 
 Footmark* partyGetFootmarkPtr(s32 id) {
     return &footmarkBuf[id][readId[id]];

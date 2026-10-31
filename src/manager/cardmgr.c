@@ -13,12 +13,12 @@
 #include "evt/evt_yuugijou.h"
 #include "evt/evt_johoya.h"
 #include "mario/mariost.h"
+#include "libc_decls.h"
 
 //.rodata
 #include "assets/_mariost_icon_tex.inc"
 #include "assets/_mariost_icon_tlut.inc"
 #include "assets/_mariost_banner_tex.inc"
-#include "libc_decls.h"
 const char cardFileName[] = "mariost_save_file";
 #ifdef VERSION_G8ME01
 const char cardGameTitle[] = "Paper Mario";

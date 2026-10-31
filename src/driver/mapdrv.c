@@ -17,8 +17,32 @@
 #include "libc_decls.h"
 #include "driver/hitdrv.h"
 #include <string.h>
-static inline f32 sinf(f32 x) { return sin(x); }
 
+
+#define TWO_PI 6.28318530717958647692528676655900576839433879875021f
+
+typedef MapEntryAnimData MapAnim;
+
+//.bss
+MapError error_data[32];
+
+//.sbss
+GXColor paper_ambient;
+GXColor paperCraft_ambient;
+GXTexObj projTexObj;
+void* projTexImgRef;
+Mtx projMtx;
+BOOL __mapdrv_make_dl;
+BOOL disableMapDraw;
+s32 error_count;
+BOOL error_flag;
+MapObject* current_mp;
+BOOL mapClipOffFlag;
+s32 activeGroup;
+MapWork* mapWork; //allocates two entries
+
+
+// Implementation forward declarations; definitions retain target order.
 void mapBuildTexture(MapObject* obj, TEXPalette* texture, void* table);
 void _mapDispMapGrp(CameraId cam, MapObject* obj);
 void _mapDispMapGrp_NoMaterial(CameraId cam, MapObject* obj);
@@ -51,27 +75,7 @@ void mapDispMapObj(CameraId cam, MapObject* obj);
 void mapDispMapObj_bbox(CameraId cam, MapObject* obj);
 void mapDispMapObj_off(CameraId cam, MapObject* obj);
 
-#define TWO_PI 6.28318530717958647692528676655900576839433879875021f
-
-//.bss
-MapError error_data[32];
-
-//.sbss
-GXColor paper_ambient;
-GXColor paperCraft_ambient;
-GXTexObj projTexObj;
-void* projTexImgRef;
-Mtx projMtx;
-BOOL __mapdrv_make_dl;
-BOOL disableMapDraw;
-s32 error_count;
-BOOL error_flag;
-MapObject* current_mp;
-BOOL mapClipOffFlag;
-s32 activeGroup;
-MapWork* mapWork; //allocates two entries
-
-typedef MapEntryAnimData MapAnim;
+static inline f32 sinf(f32 x) { return sin(x); }
 
 void mapErrorEntry(s32 type, const char* name) {
     MapError* error = error_data;

@@ -5,7 +5,6 @@
 #include "mario/mariost.h"
 #include "manager/dvdmgr.h"
 #include "system.h"
-#include "texPalette.h"
 #include <dolphin/dvd.h>
 #include <string.h>
 #include "memory.h"
@@ -14,6 +13,9 @@
 #include <math.h>
 #include "driver/camdrv.h"
 #include "driver/fadedrv.h"
+
+// the work of the current mode: work[1] in battle, work[0] in the field
+#define envGetWork() (gp->inBattle ? &work[1] : &work[0])
 
 //.data
 
@@ -76,8 +78,6 @@ void envDisp_DepthOfField(void);
 void envDisp_Blur(void);
 void envDisp_FF(void);
 
-// the work of the current mode: work[1] in battle, work[0] in the field
-#define envGetWork() (gp->inBattle ? &work[1] : &work[0])
 
 static void _callback(s32 result, DVDFileInfo* fileInfo) {
     DVDEntry* handle = fileInfo->cb.userData;

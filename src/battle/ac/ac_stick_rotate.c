@@ -1,3 +1,4 @@
+#include "battle/ac/ac_table.h"
 #include "icon_ids.h"
 #include "battle/battle.h"
 #include "battle/battle_ac.h"
