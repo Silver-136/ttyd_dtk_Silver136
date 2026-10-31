@@ -453,11 +453,12 @@ void winDispKoopa(CameraId camId, void* param) {
     winTexSet(0xB7, (Vec){ 0.0f, 50.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
 }
 
+static const WinLangTbl winLangTbl = {{
+    "jp", "us",
 #ifdef VERSION_G8ME01
-static const WinLangTbl winLangTbl = { { "jp", "us", "ge", "fr", "sp", "it" } };
-#else
-static const WinLangTbl winLangTbl = { { "jp", "us" } };
+    "ge", "fr", "sp", "it"
 #endif
+}};
 
 
 EVT_BEGIN(kime_pose)

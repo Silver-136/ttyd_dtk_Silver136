@@ -101,11 +101,12 @@ static EffectWork work;
 
 //.sdata
 static EffectWork* wp = &work;
+const char* prefix_tbl[] = {
+    "jp", "us",
 #ifdef VERSION_G8ME01
-const char* prefix_tbl[7] = {"jp", "us", "ge", "fr", "sp", "it", "du"};
-#else
-const char* prefix_tbl[2] = {"jp", "us"};
+    "ge", "fr", "sp", "it", "du"
 #endif
+};
 
 static void _callback_tpl(s32 error, DVDFileInfo* info) {
     DVDEntry* entry = info->cb.userData;

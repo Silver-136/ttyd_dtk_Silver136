@@ -28,12 +28,16 @@ GXColor fontColTbl[3] = {
     {0xDC, 0xDC, 0xDC, 0xFF},
     {0xB4, 0x78, 0x14, 0xFF}
 };
+s32 charspace[VERSION_PICK(2, 7)] = {
+    4, 2,
 #ifdef VERSION_G8ME01
-s32 charspace[7] = {4, 2, 2, 2, 2, 2, 2};
+    2, 2, 2, 2, 2
+#endif
+};
+#ifdef VERSION_G8ME01
 const char* fontname[7] = {"papermarioset_JPN", "papermarioset_US", "papermarioset_EU", "papermarioset_EU",
     "papermarioset_EU", "papermarioset_EU", "papermarioset_US"};
 #else
-s32 charspace[2] = {4, 2};
 const char* fontname[2] = {"papermarioset_JPN", "popjoyB22"};
 #endif
 

@@ -735,12 +735,11 @@ s8* texid_jp_tbl[] = {
     prologue_jp_tbl, stage1_jp_tbl, stage2_jp_tbl, stage3_jp_tbl, stage4_jp_tbl, stage5_jp_tbl, stage6_jp_tbl, stage7_jp_tbl, stage8_jp_tbl,
 };
 
-#ifdef VERSION_G8ME01
 // US: one title texture set per language; -2 marks a word gap
 s8 prologue_us_tbl[] = {
+#ifdef VERSION_G8ME01
     19, 20, 21, 22, 21, 23, 24, 25, -1,
 #else
-s8 prologue_us_tbl[] = {
     17, 18, 19, 20, 19, 7, 21, 8, -1,
 #endif
 };

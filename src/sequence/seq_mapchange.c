@@ -104,17 +104,15 @@ void seq_mapChangeExit(SequenceWork* work) {
     dbg_lotteryinfo = FALSE;
 }
 
+typedef struct {
+    const char* s[VERSION_PICK(2, 7)];
+} LangTbl;
+static const LangTbl lang_tbl = {{
+    "jp", "us",
 #ifdef VERSION_G8ME01
-typedef struct {
-    const char* s[7];
-} LangTbl;
-static const LangTbl lang_tbl = {{"jp", "us", "ge", "fr", "sp", "it", "du"}};
-#else
-typedef struct {
-    const char* s[2];
-} LangTbl;
-static const LangTbl lang_tbl = {{"jp", "us"}};
+    "ge", "fr", "sp", "it", "du"
 #endif
+}};
 void seq_mapChangeMain(SequenceWork* work) {
     BOOL newarea = strcmp(_next_area, gp->currentAreaName) != 0;
     const char* area_name;

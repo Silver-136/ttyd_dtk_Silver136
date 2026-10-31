@@ -317,10 +317,11 @@ static PoseTableEntry pose_table_item_have[] = {
 
 #ifdef VERSION_G8ME01
 extern EvtWord _badge_borodo_emergency_revival_event[];
+#endif
+
 static BattleDataEntry data_table[] = {
+#ifdef VERSION_G8ME01
     {UNIT_DATA_EMERGENCY_REVIVAL_EVENT, _badge_borodo_emergency_revival_event},
-#else
-static BattleDataEntry data_table[] = {
 #endif
     {0, NULL},
 };

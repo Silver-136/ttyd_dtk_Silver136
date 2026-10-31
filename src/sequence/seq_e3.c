@@ -438,11 +438,12 @@ void e3Disp(CameraId cameraId, void* param) {
             }
 
             {
+                char* keys[] = {
 #ifdef VERSION_G8ME01
-                char* keys[4] = { "menu_monosiri_gor", "menu_monosiri_hei", "menu_monosiri_gon", "menu_monosiri_win" };
-#else
-                char* keys[3] = { "menu_monosiri_hei", "menu_monosiri_gon", "menu_monosiri_win" };
+                    "menu_monosiri_gor",
 #endif
+                    "menu_monosiri_hei", "menu_monosiri_gon", "menu_monosiri_win"
+                };
                 step = (i == wp->scenario) ? 0 : 10;
 
                 windowDispGX_Waku_col(0, (GXColor){ 0x4A, 0x56, 0xB5, 0xFF }, (((f32)step + e3_tbl[i].x) - 100.0f),

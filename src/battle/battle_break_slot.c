@@ -183,14 +183,9 @@ EVT_BEGIN(doku_kinoko_effect)
     RETURN
 EVT_END()
 
-#ifdef VERSION_G8ME01
-// US battle textures are 0x16 higher
-u16 tex_id_list_small[5] = {0x41, 0x43, 0x45, 0x44, 0x42};
-u16 tex_id_list_big[5] = {0x46, 0x48, 0x4A, 0x49, 0x47};
-#else
-u16 tex_id_list_small[5] = {0x2B, 0x2D, 0x2F, 0x2E, 0x2C};
-u16 tex_id_list_big[5] = {0x30, 0x32, 0x34, 0x33, 0x31};
-#endif
+// US battle textures are 0x16 higher; BTL_TEX uses JP-base IDs.
+u16 tex_id_list_small[5] = {BTL_TEX(0x2B), BTL_TEX(0x2D), BTL_TEX(0x2F), BTL_TEX(0x2E), BTL_TEX(0x2C)};
+u16 tex_id_list_big[5] = {BTL_TEX(0x30), BTL_TEX(0x32), BTL_TEX(0x34), BTL_TEX(0x33), BTL_TEX(0x31)};
 
 EVT_BEGIN(star_effect)
     RETURN

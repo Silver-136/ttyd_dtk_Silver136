@@ -91,12 +91,12 @@ void* msgSortDvdData;
 
 //.sdata
 MessageWork* msgw = &msgWork;
+const char* ErrMessage[VERSION_PICK(2, 7)] = {
+    R_no_messages_JP, R_no_messages_US,
 #ifdef VERSION_G8ME01
-const char* ErrMessage[7] = {R_no_messages_JP, R_no_messages_US, R_no_messages_DE, R_no_messages_FR,
-                             R_no_messages_ES, R_no_messages_IT, R_no_messages_DU};
-#else
-const char* ErrMessage[2] = {R_no_messages_JP, R_no_messages_US};
+    R_no_messages_DE, R_no_messages_FR, R_no_messages_ES, R_no_messages_IT, R_no_messages_DU
 #endif
+};
 const char* paperPoseTbl[6] = {
     "PM_Y_1B", "PM_Y_2B", "PM_F_1B",
     "PM_F_3B", "PM_C_1B", "PM_C_2B"

@@ -549,14 +549,15 @@ void winMarioDisp(s32 camId, void* param, s32 idx) {
             {"PV", "PF", "PT"},
             {"HP", "FP", "BP"},
         };
+#else
+        const char* const stat_name_tbl[3] = {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"};
+#endif
         const char* ruby[3] = {"msg_menu_mario_ruby_hp", "msg_menu_mario_ruby_fp", "msg_menu_mario_ruby_bp"};
 
+#ifdef VERSION_G8ME01
         rowL = 50.0f + (x - 270.0f) - 2.0f;
         nameW2 = FontGetMessageWidth(stat_name_tbl[gp->language][i]);
 #else
-        const char* const stat_name_tbl[3] = {"\x82\x67\x82\x6F", "\x82\x65\x82\x6F", "\x82\x61\x82\x6F"};
-        const char* ruby[3] = {"msg_menu_mario_ruby_hp", "msg_menu_mario_ruby_fp", "msg_menu_mario_ruby_bp"};
-
         rowA = 50.0f + (x - 270.0f) - 2.0f;
         nameW = FontGetMessageWidth(stat_name_tbl[i]);
 #endif

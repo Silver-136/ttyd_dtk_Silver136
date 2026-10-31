@@ -1304,11 +1304,12 @@ MonosiriWork* monosiriInit(s32 id, f32 x, f32 y) {
 
 void monosiriMain(MonosiriWork* m) {
     s32 group = gp->inBattle ? 1 : 0;
+    const char* lang[VERSION_PICK(2, 6)] = {
+        "jp", "us",
 #ifdef VERSION_G8ME01
-    const char* lang[6] = {"jp", "us", "ge", "fr", "sp", "it"};
-#else
-    const char* lang[2] = {"jp", "us"};
+        "ge", "fr", "sp", "it"
 #endif
+    };
 
     GXTexObj tex;
     TattleEntry* t;

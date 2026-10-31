@@ -67,25 +67,22 @@ s32 badge_bteresa_table_card_special[] = { //Pianta Parlor Special Card
     ITEM_MAPLE_SYRUP, ITEM_POWER_JUMP, ITEM_HP_PLUS, ITEM_FP_PLUS, ITEM_NULL
 };
 
+// US moves Multibounce from the Gold Card list to the Silver Card list.
+s32 badge_bteresa_table_card_silver[] = { // Pianta Parlor Silver Card
+    ITEM_GOLD_BAR_X3, ITEM_POWER_SMASH, ITEM_HP_PLUS_P,
 #ifdef VERSION_G8ME01
-// US moves Multibounce from the Gold Card list to the Silver Card list
-s32 badge_bteresa_table_card_silver[] = { //Pianta Parlor Silver Card
-    ITEM_GOLD_BAR_X3, ITEM_POWER_SMASH, ITEM_HP_PLUS_P, ITEM_MULTIBOUNCE, ITEM_NULL
-#else
-s32 badge_bteresa_table_card_silver[] = { //Pianta Parlor Silver Card
-    ITEM_GOLD_BAR_X3, ITEM_POWER_SMASH, ITEM_HP_PLUS_P, ITEM_NULL
+    ITEM_MULTIBOUNCE,
 #endif
+    ITEM_NULL
 };
 
-s32 badge_bteresa_table_card_gold[] = { //Pianta Parlor Gold Card
-#ifdef VERSION_G8ME01
-    ITEM_HAMMER_THROW, ITEM_POWER_RUSH, ITEM_TORNADO_JUMP, ITEM_POWER_RUSH_P, ITEM_NULL
-};
-#else
-    ITEM_HAMMER_THROW, ITEM_POWER_RUSH, ITEM_TORNADO_JUMP, ITEM_MULTIBOUNCE,
+s32 badge_bteresa_table_card_gold[] = { // Pianta Parlor Gold Card
+    ITEM_HAMMER_THROW, ITEM_POWER_RUSH, ITEM_TORNADO_JUMP,
+#ifndef VERSION_G8ME01
+    ITEM_MULTIBOUNCE,
+#endif
     ITEM_POWER_RUSH_P, ITEM_NULL
 };
-#endif
 
 s32 badge_bteresa_table_card_platinum[] = { //Pianta Parlor Platinum Card
     ITEM_QUAKE_HAMMER, ITEM_MONEY_MONEY, ITEM_ULTRA_SHROOM, ITEM_JAMMIN_JELLY, ITEM_NULL
