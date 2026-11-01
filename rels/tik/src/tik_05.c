@@ -1177,7 +1177,7 @@ broken_wp->pieces = smartAlloc(sizeof(BrokenPiece) * 31 * 39, 1);
                 }
                 if (dx || dy) {
 len = sqrtf(dx * dx + dy * dy);
-                    inv = dx / len;
+                    nx = dx / len;
                     ny = dy / len;
 } else {
                     nx = ny = len = 0.0f;

@@ -22,6 +22,9 @@
 #include "mario/mario_pouch.h"
 #include "pmario_sound.h"
 #include "driver/itemdrv.h"
+#if VERSION <= VERSION_DEMO_US
+#include "eff/eff_kemu_test.h"
+#endif
 
 #include "driver/mapdrv.h"
 #include "dolphin/gx.h"

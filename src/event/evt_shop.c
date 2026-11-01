@@ -1503,7 +1503,7 @@ USER_FUNC(point_wait) {
     ShopWork* wp = _wp;
     PouchData* pouch = pouchGetPtr();
 #if VERSION <= VERSION_DEMO_US
-return wp->points != SHOP_PTS(pouch) ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+return wp->points != pouch->shopPoints ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 #else
     if (wp->points != pouch->shopPoints) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
