@@ -1,3 +1,6 @@
 /* Precompiled header of the main.dol game units: the MSL math headers, compiled once and loaded before each unit. */
 #include <math.h>
+#if defined(VERSION_G8ME01_DEMO) || defined(VERSION_G8MJ01_DEMO)
+#define DTRIGF_PLAIN_DATA
+#endif
 #include <dtrigf.h>

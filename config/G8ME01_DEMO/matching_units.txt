@@ -93,6 +93,7 @@ MarioSt/TRK_MINNOW_DOLPHIN.a/usr_put
 MarioSt/ai/ai
 MarioSt/amcstubs/AmcExi2Stubs
 MarioSt/ar/ar
+MarioSt/ar/arq
 MarioSt/base/PPCArch
 MarioSt/battle/ac/ac_crane_timing
 MarioSt/battle/ac/ac_shot_target
@@ -101,6 +102,7 @@ MarioSt/battle/battle
 MarioSt/battle/battle_ac_help
 MarioSt/battle/battle_acrobat
 MarioSt/battle/battle_actrecord
+MarioSt/battle/battle_attack_audience
 MarioSt/battle/battle_audience_kinopio
 MarioSt/battle/battle_camera
 MarioSt/battle/battle_damage
@@ -144,6 +146,7 @@ MarioSt/database
 MarioSt/db/db
 MarioSt/demo/DEMOFont
 MarioSt/demo/DEMOPuts
+MarioSt/demo/DEMOStats
 MarioSt/driver/arcdrv
 MarioSt/driver/bgdrv
 MarioSt/driver/camdrv
@@ -159,6 +162,8 @@ MarioSt/driver/seqdrv
 MarioSt/driver/swdrv
 MarioSt/dsp/dsp
 MarioSt/dsp/dsp_debug
+MarioSt/dsp/dsp_task
+MarioSt/dvd/dvd
 MarioSt/dvd/dvdFatal
 MarioSt/dvd/dvderror
 MarioSt/dvd/dvdfs
@@ -185,6 +190,7 @@ MarioSt/effect/eff_itemget
 MarioSt/effect/eff_kemuri
 MarioSt/effect/eff_kemutest
 MarioSt/effect/eff_las_mon
+MarioSt/effect/eff_laser
 MarioSt/effect/eff_machinegun
 MarioSt/effect/eff_mahojin
 MarioSt/effect/eff_mahorn
@@ -273,6 +279,7 @@ MarioSt/effect/n64/eff_magic1_n64
 MarioSt/effect/n64/eff_magic2_n64
 MarioSt/effect/n64/eff_magic3_n64
 MarioSt/effect/n64/eff_magic_horao_n64
+MarioSt/effect/n64/eff_n64
 MarioSt/effect/n64/eff_opuku_jetwrain_n64
 MarioSt/effect/n64/eff_opuku_wcurtain_n64
 MarioSt/effect/n64/eff_opuku_wgun_n64
@@ -321,6 +328,7 @@ MarioSt/event/evt_img
 MarioSt/event/evt_item
 MarioSt/event/evt_johoya
 MarioSt/event/evt_light
+MarioSt/event/evt_lottery
 MarioSt/event/evt_map
 MarioSt/event/evt_memcard
 MarioSt/event/evt_movefloor
@@ -341,6 +349,7 @@ MarioSt/gx/GXBump
 MarioSt/gx/GXDisplayList
 MarioSt/gx/GXDraw
 MarioSt/gx/GXFifo
+MarioSt/gx/GXFrameBuf
 MarioSt/gx/GXGeometry
 MarioSt/gx/GXInit
 MarioSt/gx/GXLight
@@ -352,6 +361,7 @@ MarioSt/gx/GXTexture
 MarioSt/gx/GXTransform
 MarioSt/gxsub
 MarioSt/himo
+MarioSt/koopa
 MarioSt/koopa_motion
 MarioSt/kpa_act
 MarioSt/main
@@ -392,6 +402,7 @@ MarioSt/musyx/runtime/HARDWARE
 MarioSt/musyx/runtime/StdReverb/reverb
 MarioSt/musyx/runtime/StdReverb/reverb_fx
 MarioSt/musyx/runtime/dsp_import
+MarioSt/musyx/runtime/hw_aramdma
 MarioSt/musyx/runtime/hw_dolphin
 MarioSt/musyx/runtime/hw_dspctrl
 MarioSt/musyx/runtime/hw_memory
@@ -399,6 +410,7 @@ MarioSt/musyx/runtime/hw_volconv
 MarioSt/musyx/runtime/s_data
 MarioSt/musyx/runtime/seq
 MarioSt/musyx/runtime/seq_api
+MarioSt/musyx/runtime/snd3d
 MarioSt/musyx/runtime/snd_init
 MarioSt/musyx/runtime/snd_math
 MarioSt/musyx/runtime/snd_midictrl
@@ -413,6 +425,7 @@ MarioSt/musyx/runtime/synth_vsamples
 MarioSt/musyx/runtime/synthdata
 MarioSt/musyx/runtime/synthmacros
 MarioSt/musyx/runtime/synthvoice
+MarioSt/npc_event
 MarioSt/odenotstub/odenotstub
 MarioSt/os/OS
 MarioSt/os/OSAlarm
@@ -423,6 +436,7 @@ MarioSt/os/OSCache
 MarioSt/os/OSContext
 MarioSt/os/OSError
 MarioSt/os/OSExec
+MarioSt/os/OSFont
 MarioSt/os/OSInterrupt
 MarioSt/os/OSLink
 MarioSt/os/OSMemory
@@ -436,6 +450,7 @@ MarioSt/os/OSThread
 MarioSt/os/OSTime
 MarioSt/os/__ppc_eabi_init
 MarioSt/os/__start
+MarioSt/pad/Pad
 MarioSt/parse
 MarioSt/party/party_chuchu
 MarioSt/party/party_hit
@@ -462,8 +477,11 @@ MarioSt/sound
 MarioSt/system
 MarioSt/thp/THPAudio
 MarioSt/thp/THPDec
+MarioSt/unit/party/unit_party_yoshi
+MarioSt/unit/unit_object_switch
 MarioSt/unit/unit_system
 MarioSt/vi/vi
 MarioSt/window/win_badge
 MarioSt/window/win_item
+MarioSt/window/win_main
 MarioSt/window/win_party

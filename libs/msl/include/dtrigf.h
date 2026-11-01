@@ -9,6 +9,22 @@
  * only address each constant once, in the order that gives the original's storage order (a precompiled header
  * emits the constants in reverse order of first use). */
 
+#ifdef DTRIGF_PLAIN_DATA
+/* FAKE: the demos' main.dol units. The block as plain data (LLCOOLT's form): their static data keeps source order,
+ * which the inline-assembly form below would reverse. */
+typedef struct DtrigfPairedConstants {
+    long long negone_one_init;
+    long long negone_one;
+    long long one_negone_init;
+    long long one_negone;
+} DtrigfPairedConstants;
+
+static DtrigfPairedConstants sincosf_constants[2] = {
+    {(long long)0xBF8000003F800000, (long long)0xBF8000003F800000, 0x3F800000BF800000, 0x3F800000BF800000},
+    {(long long)0xBF8000003F800000, (long long)0xBF8000003F800000, 0x3F800000BF800000, 0x3F800000BF800000},
+};
+#else
+
 static inline void sincosf_f(void) {
     const long long one_negone = 0x3F800000BF800000;
     const long long negone_one = 0xBF8000003F800000;
@@ -52,5 +68,7 @@ static inline void sincosf_a(void) {
         la p, negone_one
     }
 }
+
+#endif // DTRIGF_PLAIN_DATA
 
 #endif
