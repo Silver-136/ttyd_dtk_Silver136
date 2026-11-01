@@ -87,7 +87,9 @@ BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
 USER_FUNC(yuu_02_icon_monte_onoff);
 
 Vec fukkipoint[15];
+#if VERSION > VERSION_DEMO_US
 EvtWord yuu_02_icon_monte_entry_evt[4];
+#endif
 static MonteTable montetable[11];
 static EvtWord minigame_view_monte[4];
 #if VERSION <= VERSION_DEMO_US

@@ -570,7 +570,9 @@ EvtWord fall2D_init_event[19];
 EvtWord fall2D_regl_event[34];
 EvtWord zakoM2D_init_event[37];
 EvtWord zakoM2D_move_event[95];
+#if VERSION > VERSION_DEMO_US
 EvtWord zakoM2D_find_event[179];
+#endif
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord zakoM2D_find_start_event[];
 #else

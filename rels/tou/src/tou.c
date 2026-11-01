@@ -219,7 +219,9 @@ static EvtWord evt_gardman[357];
 #else
 static EvtWord evt_gardman[VERSION_PICK(318, 335)];
 #endif
+#if VERSION > VERSION_DEMO_US
 EvtWord evt_gardman_spawn[4];
+#endif
 EvtWord evt_tou_match_make_default_sub[];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_tou_match_make_default[];

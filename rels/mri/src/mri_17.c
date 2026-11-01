@@ -49,7 +49,9 @@ static NpcSetupInfo npcEnt[4];
 static KusaAccess ueki_access_data[4];
 s16 trap_position[204];
 EvtWord trap_main[122];
+#if VERSION > VERSION_DEMO_US
 EvtWord trap_restore[59];
+#endif
 EvtWord wana_kemuri[130];
 EvtWord wana_offscreen[219];
 #include "version.h"

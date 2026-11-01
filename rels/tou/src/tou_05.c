@@ -41,7 +41,9 @@ void gans_msg_callback(s32 type, void** work);
 static EvtWord evt_dakuto[90];
 static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];
+#if VERSION > VERSION_DEMO_US
 EvtWord n_bero_match_reset[14];
+#endif
 static BeroEntry bero_data[3];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US

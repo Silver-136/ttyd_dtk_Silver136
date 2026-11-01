@@ -106,7 +106,9 @@ EvtWord talk_tenin[2];
 static EvtWord init_white[83];
 EvtWord mario_jump[];
 #if VERSION < VERSION_US
+#if VERSION > VERSION_DEMO_US
 EvtWord mario_jump_tail[6];
+#endif
 #endif
 s32 iri_25_item_tbl[2];
 #if VERSION <= VERSION_DEMO_US

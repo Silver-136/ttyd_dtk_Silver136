@@ -89,8 +89,12 @@ extern EvtWord ukishima_part2[];
 #else
 EvtWord ukishima_part2[50];
 #endif
+#if VERSION > VERSION_DEMO_US
 EvtWord ukishima_switch1_evt[23];
+#endif
+#if VERSION > VERSION_DEMO_US
 EvtWord ukishima_switch2_evt[23];
+#endif
 EvtWord torinoko_suifu_pukapuka[69];
 EvtWord _suifu_sakebu[101];
 EvtWord torinoko_suifu_sakebu[103];
@@ -102,7 +106,9 @@ extern EvtWord escapeway_event[];
 #else
 EvtWord escapeway_event[98];
 #endif
+#if VERSION > VERSION_DEMO_US
 EvtWord bombwall_escape_move[58];
+#endif
 #if VERSION <= VERSION_DEMO_US
 static EvtWord bombwall_bomb[181];
 #else

@@ -82,7 +82,9 @@ static USER_FUNC(evt_nomal_cange);
 USER_FUNC(evt_slit_cancel);
 USER_FUNC(yuu_03_icon_monte_restart);
 
+#if VERSION > VERSION_DEMO_US
 EvtWord yuu_03_icon_monte_entry_evt[4];
+#endif
 EvtWord ryushi_event[25];
 EvtWord yuu_03_kaijo_init[12];
 EvtWord yuu_03_kaijo_init2[12];

@@ -91,7 +91,9 @@ EvtWord subsetevt_binta_damage_right[48];
 EvtWord subsetevt_binta_damage_left_last[69];
 EvtWord subsetevt_binta_damage_right_last[69];
 EvtWord subsetevt_status_recovery[48];
+#if VERSION > VERSION_DEMO_US
 EvtWord subsetevt_check_target_movable[57];
+#endif
 EvtWord subsetevt_nodamage_motion[6];
 EvtWord subsetevt_regeneration[4];
 EvtWord subset_attack_ready_jump_event[2];

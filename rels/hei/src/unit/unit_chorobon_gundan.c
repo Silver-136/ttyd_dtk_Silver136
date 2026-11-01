@@ -84,7 +84,9 @@ static PoseTableEntry pose_table[15];
 static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
 BattleWeapon weapon_chorobon_gundan_attack;
+#if VERSION > VERSION_DEMO_US
 EvtWord chorogun_dead_reward[73];
+#endif
 static EvtWord init_event[26];
 #include "version.h"
 #if VERSION <= VERSION_DEMO_US
