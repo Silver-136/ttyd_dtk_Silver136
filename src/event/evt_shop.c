@@ -1090,215 +1090,81 @@ USER_FUNC(disp_list) {
  * Puts an item icon over each shelf, hides one-off items Mario already has (Contact Lens, the Super Luigi
  * books), gives the shopkeeper its talk script and starts the shop driver.
  */
+/**
+ * Sets up a shop on map load.
+ * args: the six shelf objects (map object and hit names), their items and prices,
+ * the shopkeeper data (NPC name, hook and after-buy scripts, message ids)
+ * and an optional sell-price override table.
+ * Puts an item icon over each shelf, hides one-off items Mario already has (Contact Lens, the Super Luigi
+ * books), gives the shopkeeper its talk script and starts the shop driver.
+ */
+USER_FUNC(evt_shop_setup) {
+    s32 i;
+    ShopWork* wp;
+    EvtWord* args = event->args;
+    ShopObj* objs = (ShopObj*)evtGetValue(event, args[0]);
+    ShopItem* items = (ShopItem*)evtGetValue(event, args[1]);
+    ShopperData* shopper = (ShopperData*)evtGetValue(event, args[2]);
+    ShopDb* db = (ShopDb*)evtGetValue(event, args[3]);
+    Vec pos;
+    char buf[32];
+
+    wp = _mapAlloc(sizeof(ShopWork));
+    memset(wp, 0, sizeof(ShopWork));
+    _wp = wp;
+    strncpy(mapname, gp->currentMapName, sizeof(gp->currentMapName) - 1);
+    wp->objs = objs;
+    wp->items = items;
+    wp->shopper = shopper;
+    wp->db = db;
+    wp->count = 6;
+    for (i = 0; i < wp->count; i++) {
+        mapObjGetPos(wp->objs[i].mobj, &pos);
+        mapObjFlagOn(wp->objs[i].mobj, MAP_OBJ_FLAG_DISABLED);
+        sprintf(buf, "shp%d", i);
+        iconEntry(buf, itemDataTable[wp->items[i].id].icon_id);
+        iconSetPos(buf, pos.x, pos.y + 6.0f, pos.z);
+        iconFlagOn(buf, ICON_FLAG_NO_MAP_BLEND);
+        wp->itemFlags[i] = 0;
+        if (wp->items[i].id == ITEM_CONTACT_LENS && pouchCheckItem(ITEM_CONTACT_LENS)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI1 && pouchCheckItem(ITEM_SUPER_LUIGI1)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI2 && pouchCheckItem(ITEM_SUPER_LUIGI2)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI3 && pouchCheckItem(ITEM_SUPER_LUIGI3)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI4 && pouchCheckItem(ITEM_SUPER_LUIGI4)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+        if (wp->items[i].id == ITEM_SUPER_LUIGI5 && pouchCheckItem(ITEM_SUPER_LUIGI5)) {
+            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
+        }
+    }
+    // FAKE: block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object
+    {
+        NpcEntry* npc = npcNameToPtr(shopper->name);
+        npc->talkEvt = shopper_talk_evt;
+    }
+    wp->mainEvt = evtEntryType(main_evt, 0, EVENT_START_IMMEDIATE, 0);
+    wp->mainEvt->lwData[0] = (EvtWord)wp;
+    for (i = 0; i < 3; i++) {
+        wp->win[i] = winMgrEntry(&window_desc[i]);
+    }
+    wp->sel = -1;
+#if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-/**
- * Sets up a shop on map load.
- * args: the six shelf objects (map object and hit names), their items and prices,
- * the shopkeeper data (NPC name, hook and after-buy scripts, message ids)
- * and an optional sell-price override table.
- * Puts an item icon over each shelf, hides one-off items Mario already has (Contact Lens, the Super Luigi
- * books), gives the shopkeeper its talk script and starts the shop driver.
- */
-USER_FUNC(evt_shop_setup) {
-    s32 i;
-    ShopWork* wp;
-    EvtWord* args = event->args;
-    ShopObj* objs = (ShopObj*)evtGetValue(event, args[0]);
-    ShopItem* items = (ShopItem*)evtGetValue(event, args[1]);
-    ShopperData* shopper = (ShopperData*)evtGetValue(event, args[2]);
-    ShopDb* db = (ShopDb*)evtGetValue(event, args[3]);
-    Vec pos;
-    char buf[32];
-
-    wp = _mapAlloc(sizeof(ShopWork));
-    memset(wp, 0, sizeof(ShopWork));
-    _wp = wp;
-    strncpy(mapname, gp->currentMapName, sizeof(gp->currentMapName) - 1);
-    wp->objs = objs;
-    wp->items = items;
-    wp->shopper = shopper;
-    wp->db = db;
-    wp->count = 6;
-    for (i = 0; i < wp->count; i++) {
-        mapObjGetPos(wp->objs[i].mobj, &pos);
-        mapObjFlagOn(wp->objs[i].mobj, MAP_OBJ_FLAG_DISABLED);
-        sprintf(buf, "shp%d", i);
-        iconEntry(buf, itemDataTable[wp->items[i].id].icon_id);
-        iconSetPos(buf, pos.x, pos.y + 6.0f, pos.z);
-        iconFlagOn(buf, ICON_FLAG_NO_MAP_BLEND);
-        wp->itemFlags[i] = 0;
-        if (wp->items[i].id == ITEM_CONTACT_LENS && pouchCheckItem(ITEM_CONTACT_LENS)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI1 && pouchCheckItem(ITEM_SUPER_LUIGI1)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI2 && pouchCheckItem(ITEM_SUPER_LUIGI2)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI3 && pouchCheckItem(ITEM_SUPER_LUIGI3)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI4 && pouchCheckItem(ITEM_SUPER_LUIGI4)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI5 && pouchCheckItem(ITEM_SUPER_LUIGI5)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-    }
-    // FAKE: block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object
-    {
-        NpcEntry* npc = npcNameToPtr(shopper->name);
-        npc->talkEvt = shopper_talk_evt;
-    }
-    wp->mainEvt = evtEntryType(main_evt, 0, EVENT_START_IMMEDIATE, 0);
-    wp->mainEvt->lwData[0] = (EvtWord)wp;
-    for (i = 0; i < 3; i++) {
-        wp->win[i] = winMgrEntry(&window_desc[i]);
-    }
-    wp->sel = -1;
     evtRunCaseEntry(CASE_FRONT_A, TRUE, "a_shop_keihin", 0, evt_shoplist, 0);
-    return EVT_RETURN_DONE;
-}
-#elif VERSION == VERSION_DEMO_US
-/**
- * Sets up a shop on map load.
- * args: the six shelf objects (map object and hit names), their items and prices,
- * the shopkeeper data (NPC name, hook and after-buy scripts, message ids)
- * and an optional sell-price override table.
- * Puts an item icon over each shelf, hides one-off items Mario already has (Contact Lens, the Super Luigi
- * books), gives the shopkeeper its talk script and starts the shop driver.
- */
-USER_FUNC(evt_shop_setup) {
-    s32 i;
-    ShopWork* wp;
-    EvtWord* args = event->args;
-    ShopObj* objs = (ShopObj*)evtGetValue(event, args[0]);
-    ShopItem* items = (ShopItem*)evtGetValue(event, args[1]);
-    ShopperData* shopper = (ShopperData*)evtGetValue(event, args[2]);
-    ShopDb* db = (ShopDb*)evtGetValue(event, args[3]);
-    Vec pos;
-    char buf[32];
-
-    wp = _mapAlloc(sizeof(ShopWork));
-    memset(wp, 0, sizeof(ShopWork));
-    _wp = wp;
-    strncpy(mapname, gp->currentMapName, sizeof(gp->currentMapName) - 1);
-    wp->objs = objs;
-    wp->items = items;
-    wp->shopper = shopper;
-    wp->db = db;
-    wp->count = 6;
-    for (i = 0; i < wp->count; i++) {
-        mapObjGetPos(wp->objs[i].mobj, &pos);
-        mapObjFlagOn(wp->objs[i].mobj, MAP_OBJ_FLAG_DISABLED);
-        sprintf(buf, "shp%d", i);
-        iconEntry(buf, itemDataTable[wp->items[i].id].icon_id);
-        iconSetPos(buf, pos.x, pos.y + 6.0f, pos.z);
-        iconFlagOn(buf, ICON_FLAG_NO_MAP_BLEND);
-        wp->itemFlags[i] = 0;
-        if (wp->items[i].id == ITEM_CONTACT_LENS && pouchCheckItem(ITEM_CONTACT_LENS)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI1 && pouchCheckItem(ITEM_SUPER_LUIGI1)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI2 && pouchCheckItem(ITEM_SUPER_LUIGI2)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI3 && pouchCheckItem(ITEM_SUPER_LUIGI3)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI4 && pouchCheckItem(ITEM_SUPER_LUIGI4)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI5 && pouchCheckItem(ITEM_SUPER_LUIGI5)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-    }
-    {
-        NpcEntry* npc = npcNameToPtr(shopper->name);
-        npc->talkEvt = shopper_talk_evt;
-    }
-    wp->mainEvt = evtEntryType(main_evt, 0, EVENT_START_IMMEDIATE, 0);
-    wp->mainEvt->lwData[0] = (EvtWord)wp;
-    for (i = 0; i < 3; i++) {
-        wp->win[i] = winMgrEntry(&window_desc[i]);
-    }
-    wp->sel = -1;
-    return EVT_RETURN_DONE;
-}
-#else
-/**
- * Sets up a shop on map load.
- * args: the six shelf objects (map object and hit names), their items and prices,
- * the shopkeeper data (NPC name, hook and after-buy scripts, message ids)
- * and an optional sell-price override table.
- * Puts an item icon over each shelf, hides one-off items Mario already has (Contact Lens, the Super Luigi
- * books), gives the shopkeeper its talk script and starts the shop driver.
- */
-USER_FUNC(evt_shop_setup) {
-    s32 i;
-    ShopWork* wp;
-    EvtWord* args = event->args;
-    ShopObj* objs = (ShopObj*)evtGetValue(event, args[0]);
-    ShopItem* items = (ShopItem*)evtGetValue(event, args[1]);
-    ShopperData* shopper = (ShopperData*)evtGetValue(event, args[2]);
-    ShopDb* db = (ShopDb*)evtGetValue(event, args[3]);
-    Vec pos;
-    char buf[32];
-
-    wp = _mapAlloc(sizeof(ShopWork));
-    memset(wp, 0, sizeof(ShopWork));
-    _wp = wp;
-    strncpy(mapname, gp->currentMapName, sizeof(gp->currentMapName) - 1);
-    wp->objs = objs;
-    wp->items = items;
-    wp->shopper = shopper;
-    wp->db = db;
-    wp->count = 6;
-    for (i = 0; i < wp->count; i++) {
-        mapObjGetPos(wp->objs[i].mobj, &pos);
-        mapObjFlagOn(wp->objs[i].mobj, MAP_OBJ_FLAG_DISABLED);
-        sprintf(buf, "shp%d", i);
-        iconEntry(buf, itemDataTable[wp->items[i].id].icon_id);
-        iconSetPos(buf, pos.x, pos.y + 6.0f, pos.z);
-        iconFlagOn(buf, ICON_FLAG_NO_MAP_BLEND);
-        wp->itemFlags[i] = 0;
-        if (wp->items[i].id == ITEM_CONTACT_LENS && pouchCheckItem(ITEM_CONTACT_LENS)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI1 && pouchCheckItem(ITEM_SUPER_LUIGI1)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI2 && pouchCheckItem(ITEM_SUPER_LUIGI2)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI3 && pouchCheckItem(ITEM_SUPER_LUIGI3)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI4 && pouchCheckItem(ITEM_SUPER_LUIGI4)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-        if (wp->items[i].id == ITEM_SUPER_LUIGI5 && pouchCheckItem(ITEM_SUPER_LUIGI5)) {
-            wp->itemFlags[i] |= SHOP_ITEM_FLAG_SOLD_OUT;
-        }
-    }
-    // FAKE: block-local NPC pointer; assigning through npcNameToPtr(shopper->name) directly changes the object
-    {
-        NpcEntry* npc = npcNameToPtr(shopper->name);
-        npc->talkEvt = shopper_talk_evt;
-    }
-    wp->mainEvt = evtEntryType(main_evt, 0, EVENT_START_IMMEDIATE, 0);
-    wp->mainEvt->lwData[0] = (EvtWord)wp;
-    for (i = 0; i < 3; i++) {
-        wp->win[i] = winMgrEntry(&window_desc[i]);
-    }
-    wp->sel = -1;
-    evtRunCaseEntry(CASE_FRONT_A, TRUE, "a_shop_keihin", 0, evt_shoplist, 0);
-    return EVT_RETURN_DONE;
-}
 #endif
+#else
+    evtRunCaseEntry(CASE_FRONT_A, TRUE, "a_shop_keihin", 0, evt_shoplist, 0);
+#endif
+    return EVT_RETURN_DONE;
+}
 
 /** Opens (args[0] nonzero) or closes the shop points window, starting its counter from the current points. */
 USER_FUNC(point_disp_onoff) {

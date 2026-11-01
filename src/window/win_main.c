@@ -832,7 +832,6 @@ EVT_BEGIN(evt_diary_read)
     RETURN
 EVT_END()
 
-#if VERSION == VERSION_DEMO_JP
 /**
  * The badge tutorial's text (lecture_badge_00..07) shown over the pause menu;
  * each wait step blocks until the player has made the input winLectureKeyMask allows for that step.
@@ -847,80 +846,9 @@ EVT_BEGIN(evt_lecture_msg)
     CALL(lecture_step_wait, 2)
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_02"), 0, 0)
+#if VERSION <= VERSION_DEMO_US
     CALL(lecture_step_wait, 5)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_03"), 0, 0)
-    CALL(lecture_step_wait, 6)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_04"), 0, 0)
-    CALL(lecture_step_wait, 7)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_05"), 0, 0)
-    CALL(lecture_step_wait, 8)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_06"), 0, 0)
-    CALL(lecture_step_wait, 9)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_07"), 0, 0)
-    CALL(lecture_step_wait, 10)
-    CALL(evt_msg_continue)
-    WAIT_MS(500)
-    RETURN
-EVT_END()
-#elif VERSION == VERSION_DEMO_US
-/**
- * The badge tutorial's text (lecture_badge_00..07) shown over the pause menu;
- * each wait step blocks until the player has made the input winLectureKeyMask allows for that step.
- * Started by winLectureOn.
- */
-EVT_BEGIN(evt_lecture_msg)
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_00"), 0, 0)
-    CALL(lecture_step_wait, 1)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_01"), 0, 0)
-    CALL(lecture_step_wait, 2)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_02"), 0, 0)
-    CALL(lecture_step_wait, 5)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_03"), 0, 0)
-    CALL(lecture_step_wait, 6)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_04"), 0, 0)
-    CALL(lecture_step_wait, 7)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_05"), 0, 0)
-    CALL(lecture_step_wait, 8)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_06"), 0, 0)
-    CALL(lecture_step_wait, 9)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_07"), 0, 0)
-    CALL(lecture_step_wait, 10)
-    CALL(evt_msg_continue)
-    WAIT_MS(500)
-    RETURN
-OPCODE_END_SCRIPT,
-    0 // US and the US demo: a trailing zero word in the object (the JP gap_05 data word)
-};
-static USER_FUNC(itemUseFunc) {
-    PartyEntry* party;
 #else
-/**
- * The badge tutorial's text (lecture_badge_00..07) shown over the pause menu;
- * each wait step blocks until the player has made the input winLectureKeyMask allows for that step.
- * Started by winLectureOn.
- */
-EVT_BEGIN(evt_lecture_msg)
-    WAIT_MS(1000)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_00"), 0, 0)
-    CALL(lecture_step_wait, 1)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_01"), 0, 0)
-    CALL(lecture_step_wait, 2)
-    CALL(evt_msg_continue)
-    CALL(evt_msg_print, 0, STRING("lecture_badge_02"), 0, 0)
 #if VERSION >= VERSION_US
     WAIT_MS(500)
     CALL(lecture_step_wait, 3)
@@ -932,6 +860,7 @@ EVT_BEGIN(evt_lecture_msg)
 #if VERSION >= VERSION_US
     WAIT_MS(500)
 #endif
+#endif
     CALL(evt_msg_continue)
     CALL(evt_msg_print, 0, STRING("lecture_badge_03"), 0, 0)
     CALL(lecture_step_wait, 6)
@@ -948,6 +877,19 @@ EVT_BEGIN(evt_lecture_msg)
     CALL(evt_msg_print, 0, STRING("lecture_badge_07"), 0, 0)
     CALL(lecture_step_wait, 10)
     CALL(evt_msg_continue)
+#if VERSION <= VERSION_DEMO_US
+    WAIT_MS(500)
+    RETURN
+#if VERSION == VERSION_DEMO_JP
+EVT_END()
+#else
+OPCODE_END_SCRIPT,
+    0 // US and the US demo: a trailing zero word in the object (the JP gap_05 data word)
+};
+static USER_FUNC(itemUseFunc) {
+    PartyEntry* party;
+#endif
+#else
 #if VERSION >= VERSION_US
     LOOP(0)
         IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG0_17_BADGE_TUTORIAL)

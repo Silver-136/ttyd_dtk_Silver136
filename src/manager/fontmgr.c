@@ -122,35 +122,25 @@ static inline void fontDrawCodeEdge(u16 code) {
 void fontmgrInit(void) {
 }
 
+/**
+ * Loads the font for the current language (US and PAL by gp->language, the US demo the US font,
+ * JP and the JP demo the Japanese one). Called from the logo sequence; does nothing once a font is loaded.
+ */
+void fontmgrTexSetup(void) {
+#if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-/**
- * Loads the font for the current language (US and PAL by gp->language, the US demo the US font,
- * JP and the JP demo the Japanese one). Called from the logo sequence; does nothing once a font is loaded.
- */
-void fontmgrTexSetup(void) {
     JUTFontSetup(0);
-}
-#elif VERSION == VERSION_DEMO_US
-/**
- * Loads the font for the current language (US and PAL by gp->language, the US demo the US font,
- * JP and the JP demo the Japanese one). Called from the logo sequence; does nothing once a font is loaded.
- */
-void fontmgrTexSetup(void) {
-    JUTFontSetup(1);
-}
 #else
-/**
- * Loads the font for the current language (US and PAL by gp->language, the US demo the US font,
- * JP and the JP demo the Japanese one). Called from the logo sequence; does nothing once a font is loaded.
- */
-void fontmgrTexSetup(void) {
+    JUTFontSetup(1);
+#endif
+#else
 #if VERSION >= VERSION_US
     JUTFontSetup(gp->language);
 #else
     JUTFontSetup(0);
 #endif
-}
 #endif
+}
 
 /** Starts a block of text drawing at full opacity; see FontDrawStart_alpha. */
 void FontDrawStart(void) {

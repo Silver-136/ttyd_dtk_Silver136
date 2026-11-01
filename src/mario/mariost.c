@@ -213,7 +213,6 @@ void gcRumbleCheck(void);
 void gcResetCheck(void);
 
 
-#if VERSION == VERSION_DEMO_JP
 /**
  * Start-up.
  * The demos have no error handler (they turn on the SDK's DVD fatal message instead),
@@ -222,242 +221,14 @@ void gcResetCheck(void);
  */
 void marioStInit(void) {
     static u8 stack[0x1000];
+#if VERSION <= VERSION_DEMO_US
     // the releases also start cold after a shutdown reset
     if (!OSIsRestart()
 ) {
-        DEMOInit(&GXNtsc480IntDfMarioSt);
-    } else {
-        switch (OSGetResetCode() & OS_RESET_HOTRESET) {
-            case 0:
-                DEMOInit(&GXNtsc480IntDfMarioSt);
-                break;
-            case 1:
-                DEMOInit(&GXNtsc480ProgMarioSt);
-                break;
-        }
-    }
-    DEMOEnableGPHangWorkaround(5);
-    DEMOPadInit();
-    DVDSetAutoFatalMessaging(TRUE);
-    GXSetCopyClear((GXColor){0, 0, 0, 0}, GX_MAX_Z24);
-    __GXSetIndirectMask(0);
-    memset(gp, 0, sizeof(GlobalWork));
-    gp->fbWidth = DEMOGetRenderModeObj()->fbWidth;
-    gp->efbHeight = DEMOGetRenderModeObj()->efbHeight;
-    if (OSIsRestart()) {
-        gp->flags |= GW_FLAG_VIDEO_MODE_SET;
-    }
-    gp->flags |= GW_FLAG_E3;
-    gp->rumbleEnabled = 1;
-    gp->soundMode = 0;
-
-    gp->retraceLocalTime = 0;
-    gp->retraceDeltaTime = 0;
-    gp->retraceTime = OSGetTime();
-
-    gp->renderFieldTime = 0;
-    gp->renderTime = 0;
-
-    gp->systemLv3Time = 0;
-    gp->systemLv2Time = 0;
-    gp->systemLv1Time = 0;
-    gp->systemLv0Time = 0;
-
-    gp->mapFadeOutType = FADE_IN_BLACK;
-    gp->mapFadeOutDuration = 300;
-    gp->mapFadeInType = FADE_OUT_BLACK;
-    gp->mapFadeInDuration = 300;
-    gp->areaFadeOutType = FADE_IN_BLACK;
-    gp->areaFadeOutDuration = 300;
-    gp->areaFadeInType = FADE_OUT_BLACK;
-    gp->areaFadeInDuration = 300;
-    gp->language = LANGUAGE_JP;
-    gp->framerate = 60;
-    gp->systemLevelFlags = 0;
-    badgeShop_init(); // Badge Shop
-    yuugijou_init();  // Pianta Parlor
-    johoya_init();
-    gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
-    VISetPostRetraceCallback(viPostCallback);
-    romFontInit();
-    OSCreateThread(&DvdCheckThread, gcDvdCheckThread, NULL, stack + sizeof(stack), sizeof(stack), 16, OS_THREAD_ATTR_DETACH);
-    DvdCheckTreadOn = TRUE;
-    OSResumeThread(&DvdCheckThread);
-    DVDMgrInit();
-    psndInit();
-    aramMgrInit();
-    fileInit();
-    smartInit();
-    dispInit();
-    camInit();
-    fontmgrInit();
-    windowInit();
-    mapInit();
-    hitInit();
-    itemInit();
-    iconInit();
-    fadeInit();
-    bgInit();
-    shadowInit();
-    evtmgrInit();
-    animInit();
-    msgInit();
-    npcInit();
-    mobjInit();
-    effInit();
-    marioInit();
-    caseInit();
-    imgInit();
-    lightInit();
-    offscreenInit();
-    arcInit();
-    extInit();
-    swInit();
-    cardInit();
-    winInit();
-    statusWinInit();
-    envInit();
-    countDownInit();
-    nameEntInit();
-    winMgrInit();
-    seqInit_MARIOSTORY();
-    seqSetSeq(SEQ_LOGO, NULL, NULL);
-    gp->soundMode = 0;
-    if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
-        SoundSetOutputMode(0);
-    } else {
-        SoundSetOutputMode(1);
-    }
-    none_key = OSGetTime();
-}
-#elif VERSION == VERSION_DEMO_US
-/**
- * Start-up.
- * The demos have no error handler (they turn on the SDK's DVD fatal message instead),
- * show English (US demo) or Japanese (JP demo) text whatever the console font,
- * set flag 4 on a restart and always set flag 0x1000.
- */
-void marioStInit(void) {
-    static u8 stack[0x1000];
-    // the releases also start cold after a shutdown reset
-    if (!OSIsRestart()
-) {
-        DEMOInit(&GXNtsc480IntDfMarioSt);
-    } else {
-        switch (OSGetResetCode() & OS_RESET_HOTRESET) {
-            case 0:
-                DEMOInit(&GXNtsc480IntDfMarioSt);
-                break;
-            case 1:
-                DEMOInit(&GXNtsc480ProgMarioSt);
-                break;
-        }
-    }
-    DEMOEnableGPHangWorkaround(5);
-    DEMOPadInit();
-    DVDSetAutoFatalMessaging(TRUE);
-    GXSetCopyClear((GXColor){0, 0, 0, 0}, GX_MAX_Z24);
-    __GXSetIndirectMask(0);
-    memset(gp, 0, sizeof(GlobalWork));
-    gp->fbWidth = DEMOGetRenderModeObj()->fbWidth;
-    gp->efbHeight = DEMOGetRenderModeObj()->efbHeight;
-    if (OSIsRestart()) {
-        gp->flags |= GW_FLAG_VIDEO_MODE_SET;
-    }
-    gp->flags |= GW_FLAG_E3;
-    gp->rumbleEnabled = 1;
-    gp->soundMode = 0;
-
-    gp->retraceLocalTime = 0;
-    gp->retraceDeltaTime = 0;
-    gp->retraceTime = OSGetTime();
-
-    gp->renderFieldTime = 0;
-    gp->renderTime = 0;
-
-    gp->systemLv3Time = 0;
-    gp->systemLv2Time = 0;
-    gp->systemLv1Time = 0;
-    gp->systemLv0Time = 0;
-
-    gp->mapFadeOutType = FADE_IN_BLACK;
-    gp->mapFadeOutDuration = 300;
-    gp->mapFadeInType = FADE_OUT_BLACK;
-    gp->mapFadeInDuration = 300;
-    gp->areaFadeOutType = FADE_IN_BLACK;
-    gp->areaFadeOutDuration = 300;
-    gp->areaFadeInType = FADE_OUT_BLACK;
-    gp->areaFadeInDuration = 300;
-    gp->language = LANGUAGE_US;
-    gp->framerate = 60;
-    gp->systemLevelFlags = 0;
-    badgeShop_init(); // Badge Shop
-    yuugijou_init();  // Pianta Parlor
-    johoya_init();
-    gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
-    VISetPostRetraceCallback(viPostCallback);
-    romFontInit();
-    OSCreateThread(&DvdCheckThread, gcDvdCheckThread, NULL, stack + sizeof(stack), sizeof(stack), 16, OS_THREAD_ATTR_DETACH);
-    DvdCheckTreadOn = TRUE;
-    OSResumeThread(&DvdCheckThread);
-    DVDMgrInit();
-    psndInit();
-    aramMgrInit();
-    fileInit();
-    smartInit();
-    dispInit();
-    camInit();
-    fontmgrInit();
-    windowInit();
-    mapInit();
-    hitInit();
-    itemInit();
-    iconInit();
-    fadeInit();
-    bgInit();
-    shadowInit();
-    evtmgrInit();
-    animInit();
-    msgInit();
-    npcInit();
-    mobjInit();
-    effInit();
-    marioInit();
-    caseInit();
-    imgInit();
-    lightInit();
-    offscreenInit();
-    arcInit();
-    extInit();
-    swInit();
-    cardInit();
-    winInit();
-    statusWinInit();
-    envInit();
-    countDownInit();
-    nameEntInit();
-    winMgrInit();
-    seqInit_MARIOSTORY();
-    seqSetSeq(SEQ_LOGO, NULL, NULL);
-    gp->soundMode = 0;
-    if (OSGetSoundMode() == OS_SOUND_MODE_MONO) {
-        SoundSetOutputMode(0);
-    } else {
-        SoundSetOutputMode(1);
-    }
-    none_key = OSGetTime();
-}
 #else
-/**
- * Start-up.
- * The demos have no error handler (they turn on the SDK's DVD fatal message instead),
- * show English (US demo) or Japanese (JP demo) text whatever the console font,
- * set flag 4 on a restart and always set flag 0x1000.
- */
-void marioStInit(void) {
-    static u8 stack[0x1000];
     // the releases also start cold after a shutdown reset
     if (!OSIsRestart() || (OSGetResetCode() & OS_RESET_SHUTDOWN)) {
+#endif
         DEMOInit(&GXNtsc480IntDfMarioSt);
     } else {
         switch (OSGetResetCode() & OS_RESET_HOTRESET) {
@@ -470,13 +241,24 @@ void marioStInit(void) {
         }
     }
     DEMOEnableGPHangWorkaround(5);
+#if VERSION <= VERSION_DEMO_US
+    DEMOPadInit();
+    DVDSetAutoFatalMessaging(TRUE);
+#else
     setupErrorHandler();
     DEMOPadInit();
+#endif
     GXSetCopyClear((GXColor){0, 0, 0, 0}, GX_MAX_Z24);
     __GXSetIndirectMask(0);
     memset(gp, 0, sizeof(GlobalWork));
     gp->fbWidth = DEMOGetRenderModeObj()->fbWidth;
     gp->efbHeight = DEMOGetRenderModeObj()->efbHeight;
+#if VERSION <= VERSION_DEMO_US
+    if (OSIsRestart()) {
+        gp->flags |= GW_FLAG_VIDEO_MODE_SET;
+    }
+    gp->flags |= GW_FLAG_E3;
+#endif
     gp->rumbleEnabled = 1;
     gp->soundMode = 0;
 
@@ -500,6 +282,14 @@ void marioStInit(void) {
     gp->areaFadeOutDuration = 300;
     gp->areaFadeInType = FADE_OUT_BLACK;
     gp->areaFadeInDuration = 300;
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
+    gp->language = LANGUAGE_JP;
+#else
+    gp->language = LANGUAGE_US;
+#endif
+    gp->framerate = 60;
+#else
 #if VERSION == VERSION_EU
     if (VIGetTvFormat() == VI_NTSC) {
         gp->framerate = 60;
@@ -549,14 +339,19 @@ void marioStInit(void) {
     }
     gp->framerate = 60;
 #endif
+#endif
     gp->systemLevelFlags = 0;
     badgeShop_init(); //Badge Shop
     yuugijou_init(); //Pianta Parlor
     johoya_init(); //information broker (johoya)
+#if VERSION <= VERSION_DEMO_US
+    gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
+#else
 #if VERSION >= VERSION_US
     gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 670 * 1024);
 #else
     gp->mapAlloc = __memAlloc(HEAP_DEFAULT, 660 * 1024);
+#endif
 #endif
     VISetPostRetraceCallback(viPostCallback);
     romFontInit();
@@ -608,82 +403,11 @@ void marioStInit(void) {
     } else {
         SoundSetOutputMode(1);
     }
-}
+#if VERSION <= VERSION_DEMO_US
+    none_key = OSGetTime();
 #endif
-
-#if VERSION == VERSION_DEMO_JP
-void marioStMain(void) {
-    int i;
-
-    while (gp->dvdError) {
-        OSYieldThread();
-    }
-    makeKey();
-    seqMain();
-    cardMain();
-    bgMain();
-    shadowMain();
-    animMain();
-    battleMain();
-    camMain();
-    windowMain();
-    mapMain();
-    hitMain();
-    evtmgrMain();
-    mapDisp();
-    marioMain();
-    mobjMain();
-    npcMain();
-    fadeMain();
-    imgMain();
-    lightMain();
-    offscreenMain();
-    itemMain();
-    caseMain();
-    iconMain();
-    extMain();
-    psndMain();
-    winMain();
-    statusWinMain();
-    envMain();
-    countDownMain();
-    nameEntMain();
-    winMgrMain();
-    effMain();
-    gcResetCheck();
-    if (gp->flags & GW_FLAG_E3) {
-        for (i = 0; i < 4; i++) {
-            if (gp->dirs[i])
-                break;
-            if (gp->button[i])
-                break;
-            if (gp->stickX[i])
-                break;
-            if (gp->stickY[i])
-                break;
-            if (gp->substickX[i])
-                break;
-            if (gp->substickY[i])
-                break;
-            if (gp->triggerLeft[i])
-                break;
-            if (gp->triggerRight[i])
-                break;
-        }
-        if (i >= 4) {
-            if (OSTicksToSeconds(OSGetTime() - none_key) > 60) {
-                if (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE) {
-                    gp->flags |= GW_FLAG_E3_TIMEOUT;
-} else {
-                    gp->resetType = 1;
-                }
-            }
-} else {
-            none_key = OSGetTime();
-        }
-    }
 }
-#elif VERSION == VERSION_DEMO_US
+
 void marioStMain(void) {
     int i;
 
@@ -725,6 +449,7 @@ void marioStMain(void) {
     gcResetCheck();
     if (gp->flags & GW_FLAG_E3) {
         for (i = 0; i < 4; i++) {
+#if VERSION <= VERSION_DEMO_US
             if (gp->dirs[i])
                 break;
             if (gp->button[i])
@@ -746,58 +471,13 @@ void marioStMain(void) {
             if (OSTicksToSeconds(OSGetTime() - none_key) > 60) {
                 if (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE) {
                     gp->flags |= GW_FLAG_E3_TIMEOUT;
+#if VERSION != VERSION_DEMO_JP
                     none_key = OSGetTime();
+#endif
 } else {
                     gp->resetType = 1;
                 }
-            }
-} else {
-            none_key = OSGetTime();
-        }
-    }
-}
 #else
-void marioStMain(void) {
-    int i;
-
-    while (gp->dvdError) {
-        OSYieldThread();
-    }
-    makeKey();
-    seqMain();
-    cardMain();
-    bgMain();
-    shadowMain();
-    animMain();
-    battleMain();
-    camMain();
-    windowMain();
-    mapMain();
-    hitMain();
-    evtmgrMain();
-    mapDisp();
-    marioMain();
-    mobjMain();
-    npcMain();
-    fadeMain();
-    imgMain();
-    lightMain();
-    offscreenMain();
-    itemMain();
-    caseMain();
-    iconMain();
-    extMain();
-    psndMain();
-    winMain();
-    statusWinMain();
-    envMain();
-    countDownMain();
-    nameEntMain();
-    winMgrMain();
-    effMain();
-    gcResetCheck();
-    if (gp->flags & GW_FLAG_E3) {
-        for (i = 0; i < 4; i++) {
             if (gp->dirs[i]) {
                 break;
             }
@@ -828,13 +508,13 @@ void marioStMain(void) {
             // (only read in kiosk mode, by seq_game and seq_battle).
             if (OSTicksToSeconds(OSGetTime() - none_key) > 120 && (seqGetSeq() == SEQ_GAME || seqGetSeq() == SEQ_BATTLE)) {
                 gp->flags |= GW_FLAG_E3_TIMEOUT;
+#endif
             }
         } else {
             none_key = OSGetTime();
         }
     }
 }
-#endif
 
 /** Draws the frame through the camera list (camDraw) and clears g_bFirstSmartAlloc after the first drawn frame. */
 void marioStDisp(void) {
@@ -1211,7 +891,7 @@ void gcRumbleCheck(void) {
     }
 }
 
-#if VERSION == VERSION_DEMO_JP
+#if VERSION <= VERSION_DEMO_US
 /**
  * The demos inline the reset check into its callers (the US demo also logs the reset);
  * their restart codes are only RESTART and HOTRESET.
@@ -1220,48 +900,9 @@ static inline void gcResetCheck(void) {
     u32 code;
 
     if (gp->resetType) {
-        VISetBlack(TRUE);
-        VIFlush();
-        VIWaitForRetrace();
-        VIWaitForRetrace();
-        VIWaitForRetrace();
-        psndExit();
-        DVDMgrDelete();
-        if (DvdCheckTreadOn) {
-            OSCancelThread(&DvdCheckThread);
-            DvdCheckTreadOn = FALSE;
-        }
-        while (cardIsExec()) {
-            cardMain();
-            VIWaitForRetrace();
-        }
-        if (gp->resetType != 2) {
-            if (!(gp->flags & GW_FLAG_VIDEO_MODE_SET)) {
-                code = OS_RESET_RESTART;
-            } else {
-                if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
-                    code = OS_RESET_RESTART;
-                } else {
-                    code = OS_RESET_HOTRESET;
-                }
-            }
-            OSResetSystem(OS_RESET_RESTART, code, FALSE);
-        } else {
-            OSResetSystem(OS_RESET_HOTRESET, 0, TRUE);
-        }
-        while (1) {}
-    }
-}
-#elif VERSION == VERSION_DEMO_US
-/**
- * The demos inline the reset check into its callers (the US demo also logs the reset);
- * their restart codes are only RESTART and HOTRESET.
- */
-static inline void gcResetCheck(void) {
-    u32 code;
-
-    if (gp->resetType) {
+#if VERSION != VERSION_DEMO_JP
         OSReport("\x83\x8A\x83\x5A\x83\x62\x83\x67\x8F\x88\x97\x9D\x8A\x4A\x8E\x6E\n");
+#endif
         VISetBlack(TRUE);
         VIFlush();
         VIWaitForRetrace();
@@ -1270,30 +911,6 @@ static inline void gcResetCheck(void) {
         psndExit();
         DVDMgrDelete();
         if (DvdCheckTreadOn) {
-            OSCancelThread(&DvdCheckThread);
-            DvdCheckTreadOn = FALSE;
-        }
-        while (cardIsExec()) {
-            cardMain();
-            VIWaitForRetrace();
-        }
-        if (gp->resetType != 2) {
-            if (!(gp->flags & GW_FLAG_VIDEO_MODE_SET)) {
-                code = OS_RESET_RESTART;
-            } else {
-                if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
-                    code = OS_RESET_RESTART;
-                } else {
-                    code = OS_RESET_HOTRESET;
-                }
-            }
-            OSResetSystem(OS_RESET_RESTART, code, FALSE);
-        } else {
-            OSResetSystem(OS_RESET_HOTRESET, 0, TRUE);
-        }
-        while (1) {}
-    }
-}
 #else
 /**
  * The demos inline the reset check into its callers (the US demo also logs the reset);
@@ -1315,6 +932,7 @@ void gcResetCheck(void) {
         psndExit();
         DVDMgrDelete();
         if ((OSGetCurrentThread() != &DvdCheckThread) && DvdCheckTreadOn) {
+#endif
             OSCancelThread(&DvdCheckThread);
             DvdCheckTreadOn = FALSE;
         }
@@ -1324,7 +942,11 @@ void gcResetCheck(void) {
         }
         if (gp->resetType != 2) {
             if (!(gp->flags & GW_FLAG_VIDEO_MODE_SET)) {
+#if VERSION <= VERSION_DEMO_US
+                code = OS_RESET_RESTART;
+#else
                 code = OS_RESET_SHUTDOWN;
+#endif
             } else {
                 if (!(gp->flags & GW_FLAG_PROGRESSIVE)) {
                     code = OS_RESET_RESTART;
@@ -1332,8 +954,10 @@ void gcResetCheck(void) {
                     code = OS_RESET_HOTRESET;
                 }
             }
+#if VERSION > VERSION_DEMO_US
 #if VERSION >= VERSION_US
             code |= gp->language << 2;
+#endif
 #endif
             OSResetSystem(OS_RESET_RESTART, code, FALSE);
         } else {
@@ -1342,4 +966,3 @@ void gcResetCheck(void) {
         while (1) {}
     }
 }
-#endif

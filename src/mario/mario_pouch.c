@@ -25,31 +25,15 @@ static PouchData* mpp;
  * Max HP of each partner by partner id (row) and HP level
  * (column: levels 0 to 2, then 200 for the cap).
  */
+#if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
 s16 _party_max_hp_table[8][4] = {
-    {0, 0, 0, 0},
-    {10, 20, 30, 200},
-    {10, 15, 25, 200},
-    {20, 30, 40, 200},
-    {10, 20, 30, 200},
-    {15, 25, 35, 200},
-    {15, 20, 30, 200},
-    {15, 20, 25, 200}
-};
-#elif VERSION == VERSION_DEMO_US
+#else
 s16 _party_max_hp_table[9][4] = {
-{0, 0, 0, 0},
-    {10, 20, 30, 200},
-    {10, 15, 25, 200},
-    {20, 30, 40, 200},
-    {10, 20, 30, 200},
-    {15, 25, 35, 200},
-    {15, 20, 30, 200},
-    {15, 20, 25, 200},
-{0, 0, 0, 0},
-};
+#endif
 #else
 s16 _party_max_hp_table[8][4] = {
+#endif
     {0, 0, 0, 0},
     {10, 20, 30, 200},
     {10, 15, 25, 200},
@@ -57,9 +41,17 @@ s16 _party_max_hp_table[8][4] = {
     {10, 20, 30, 200},
     {15, 25, 35, 200},
     {15, 20, 30, 200},
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
     {15, 20, 25, 200}
-};
+#else
+    {15, 20, 25, 200},
+{0, 0, 0, 0},
 #endif
+#else
+    {15, 20, 25, 200}
+#endif
+};
 
 /** The pouch (Mario's save data: items, badges, stats, partners, mail), allocated by pouchInit. */
 PouchData* pouchGetPtr(void) {

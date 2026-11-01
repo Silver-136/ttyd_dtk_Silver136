@@ -994,57 +994,9 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
         camSetTypePersp(CAMERA_3D);
 #if VERSION <= VERSION_DEMO_US
         mapBuildTexture(wp->entries[group].rootMapObj, wp->entries[group].tpl, wp->entries[group].textureTable);
-        {
-            Vec mn;
-            Vec mx;
-            mapGetBoundingBox(&mn, &mx);
-#define SET_BBOX_CORNER(idx, X, Y, Z)                \
-    {\
-        Vec v = {0.0f, 0.0f, 0.0f};       \
-        v.x = X;                          \
-        v.y = Y;                          \
-        v.z = Z;                          \
-        wp->entries[group].bbox[idx] = v; \
-    }
-            SET_BBOX_CORNER(0, mx.x, mx.y, mx.z)
-            SET_BBOX_CORNER(1, mn.x, mx.y, mx.z)
-            SET_BBOX_CORNER(2, mx.x, mn.y, mx.z)
-            SET_BBOX_CORNER(3, mx.x, mx.y, mn.z)
-            SET_BBOX_CORNER(4, mn.x, mn.y, mx.z)
-            SET_BBOX_CORNER(5, mx.x, mn.y, mn.z)
-            SET_BBOX_CORNER(6, mn.x, mx.y, mn.z)
-            SET_BBOX_CORNER(7, mn.x, mn.y, mn.z)
-#undef SET_BBOX_CORNER
-        }
-        mapLoadAnim_(group);
-    }
-    makeDisplayList(group);
-    {
-        MapWork* w3 = &mapWork[activeGroup];
-        MapObject* o = w3->entries[group].objects;
-        for (i = 0; i < w3->entries[group].numJoints; i++, o++) {
-            MapJointDrawMode* dm;
-            if (o->joints->partCount < 1 || o->joints->partCount > 8) {
-                continue;
-            }
-            dm = o->joints->drawMode;
-            if (dm->modeFlags & DRAW_MODE_MAP_LIGHTS) {
-                continue;
-            }
-            if (dm->lightMask) {
-                continue;
-            }
-            if (shadowGetCharShadowProjection() && (o->flags & MAP_OBJ_FLAG_CHAR_SHADOW)) {
-                continue;
-            }
-            if (!(w3->entries[group].flags & MAP_ENTRY_VER_1_02)) {
-                continue;
-            }
-            o->flags |= MAP_OBJ_FLAG_DISPLAY_LIST;
-        }
-    }
 #else
         mapBuildTexture(wp->entries[group].rootMapObj, wp->entries[group].tpl, (&wo->entries[group])->textureTable);
+#endif
         {
             Vec mn;
             Vec mx;
@@ -1094,6 +1046,7 @@ void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             o->flags |= MAP_OBJ_FLAG_DISPLAY_LIST;
         }
     }
+#if VERSION > VERSION_DEMO_US
     disableMapDraw = FALSE;
 #endif
 }

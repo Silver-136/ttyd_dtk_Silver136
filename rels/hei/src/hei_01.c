@@ -969,140 +969,61 @@ EVT_END()
  * bushes and the pipe in the grass, starts the flip bridge switch until the bridge story step, spawns Koops,
  * Nokorin and Goombella's tip scenes and the Peach mail scene, and starts the field music.
  */
+EVT_BEGIN(hei_01_init_evt)
+    SET_VALUE(LW(0), PTR(bero_entry_data))
+    CALL(evt_bero_get_info)
+    CALL_CHILD(PTR(evt_bero_info_run))
+    SET_VALUE(LW(0), STRING("dokan"))
+    CALL_CHILD(PTR(bero_case_switch_off))
+    CALL(evt_npc_setup, PTR(npcEnt))
+    CALL(evt_npc_change_fbat_mode, 1)
+    CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), 315, 60, -75, ITEM_FIRE_FLOWER, 0, GSWF_HEI_01_FIRE_FLOWER_BLOCK, 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 450, 40, -447, ITEM_TYPE_STILL, GSWF_STARPIECE_32, 0)
+    CALL(evt_item_set_scale, STRING("item_01"), FLOAT(0.5996094f))
+    SET_VALUE(LW(0), PTR(kusa_data))
+    CALL_CHILD(PTR(evt_sub_kusa_access_entry))
+    IF_INT_EQUAL(GSWF_HEI_01_BUSH_PIPE_REVEALED, 0)
+        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kusa_1"), 0, PTR(kusa_dokan), 0)
+    ELSE
+        CALL(evt_hitobj_onoff, STRING("a_kusa_1"), 0, 0)
+        CALL(evt_map_playanim, STRING("anm_kusa_1"), MAP_ANIM_PLAY_AT_END, 0)
+        SET_VALUE(LW(0), STRING("dokan"))
+        CALL_CHILD(PTR(bero_case_switch_on))
+    END_IF
+    CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hasi"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_hitobj_onoff, STRING("a_hasi"), 1, 0)
+        SET_VALUE(GW(0), 0)
+        CALL(evt_mobj_switch_blue, 2, STRING("bg_switch"), -8, 40, -450, PTR(bridge_evt), 0)
+    END_IF
+    SPAWN_EVENT(PTR(nokotaro_nakama))
+    SPAWN_EVENT(PTR(evt_nokorin))
+    CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
+    CALL_CHILD(PTR(evt_gazigazi_entry))
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_20_KOOPS_LEAVES)
+        SPAWN_EVENT(PTR(peach_mail))
+    END_IF
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI2"))
+    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("USIROKUSA"), MAP_OBJ_FLAG_CLIP)
+#if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-EVT_BEGIN(hei_01_init_evt)
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-    CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    SET_VALUE(LW(0), STRING("dokan"))
-    CALL_CHILD(PTR(bero_case_switch_off))
-    CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_npc_change_fbat_mode, 1)
-    CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), 315, 60, -75, ITEM_FIRE_FLOWER, 0, GSWF_HEI_01_FIRE_FLOWER_BLOCK, 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 450, 40, -447, ITEM_TYPE_STILL, GSWF_STARPIECE_32, 0)
-    CALL(evt_item_set_scale, STRING("item_01"), FLOAT(0.5996094f))
-    SET_VALUE(LW(0), PTR(kusa_data))
-    CALL_CHILD(PTR(evt_sub_kusa_access_entry))
-    IF_INT_EQUAL(GSWF_HEI_01_BUSH_PIPE_REVEALED, 0)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kusa_1"), 0, PTR(kusa_dokan), 0)
-    ELSE
-        CALL(evt_hitobj_onoff, STRING("a_kusa_1"), 0, 0)
-        CALL(evt_map_playanim, STRING("anm_kusa_1"), MAP_ANIM_PLAY_AT_END, 0)
-        SET_VALUE(LW(0), STRING("dokan"))
-        CALL_CHILD(PTR(bero_case_switch_on))
-    END_IF
-    CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hasi"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_hasi"), 1, 0)
-        SET_VALUE(GW(0), 0)
-        CALL(evt_mobj_switch_blue, 2, STRING("bg_switch"), -8, 40, -450, PTR(bridge_evt), 0)
-    END_IF
-    SPAWN_EVENT(PTR(nokotaro_nakama))
-    SPAWN_EVENT(PTR(evt_nokorin))
-    CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-    CALL_CHILD(PTR(evt_gazigazi_entry))
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_20_KOOPS_LEAVES)
-        SPAWN_EVENT(PTR(peach_mail))
-    END_IF
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI2"))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("USIROKUSA"), MAP_OBJ_FLAG_CLIP)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
         IF_INT_EQUAL(GSWF_HEI_01_GOOMBELLA_TATTLE_TIP_SEEN, 0)
             SPAWN_EVENT(PTR(christine_hei_01))
         END_IF
     END_IF
-    RETURN
-EVT_END()
-#elif VERSION == VERSION_DEMO_US
-EVT_BEGIN(hei_01_init_evt)
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-    CALL(evt_bero_get_info)
-    CALL_CHILD(evt_bero_info_run)
-    SET_VALUE(LW(0), STRING("dokan"))
-    CALL_CHILD(bero_case_switch_off)
-    CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_npc_change_fbat_mode, 1)
-    CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), 315, 60, -75, ITEM_FIRE_FLOWER, 0, GSWF_HEI_01_FIRE_FLOWER_BLOCK, 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 450, 40, -447, ITEM_TYPE_STILL, GSWF_STARPIECE_32, 0)
-    CALL(evt_item_set_scale, STRING("item_01"), FLOAT(0.5996094f))
-    SET_VALUE(LW(0), PTR(kusa_data))
-    CALL_CHILD(evt_sub_kusa_access_entry)
-    IF_INT_EQUAL(GSWF_HEI_01_BUSH_PIPE_REVEALED, 0)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kusa_1"), 0, PTR(kusa_dokan), 0)
-    ELSE
-        CALL(evt_hitobj_onoff, STRING("a_kusa_1"), 0, 0)
-        CALL(evt_map_playanim, STRING("anm_kusa_1"), MAP_ANIM_PLAY_AT_END, 0)
-        SET_VALUE(LW(0), STRING("dokan"))
-        CALL_CHILD(bero_case_switch_on)
-    END_IF
-    CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hasi"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_hasi"), 1, 0)
-        SET_VALUE(GW(0), 0)
-        CALL(evt_mobj_switch_blue, 2, STRING("bg_switch"), -8, 40, -450, PTR(bridge_evt), 0)
-    END_IF
-    SPAWN_EVENT(nokotaro_nakama)
-    SPAWN_EVENT(evt_nokorin)
-    CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-    CALL_CHILD(evt_gazigazi_entry)
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_20_KOOPS_LEAVES)
-        SPAWN_EVENT(peach_mail)
-    END_IF
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI2"))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("USIROKUSA"), MAP_OBJ_FLAG_CLIP)
-    RETURN
-EVT_END()
-#else
-EVT_BEGIN(hei_01_init_evt)
-    SET_VALUE(LW(0), PTR(bero_entry_data))
-    CALL(evt_bero_get_info)
-    CALL_CHILD(PTR(evt_bero_info_run))
-    SET_VALUE(LW(0), STRING("dokan"))
-    CALL_CHILD(PTR(bero_case_switch_off))
-    CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_npc_change_fbat_mode, 1)
-    CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), 315, 60, -75, ITEM_FIRE_FLOWER, 0, GSWF_HEI_01_FIRE_FLOWER_BLOCK, 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 450, 40, -447, ITEM_TYPE_STILL, GSWF_STARPIECE_32, 0)
-    CALL(evt_item_set_scale, STRING("item_01"), FLOAT(0.5996094f))
-    SET_VALUE(LW(0), PTR(kusa_data))
-    CALL_CHILD(PTR(evt_sub_kusa_access_entry))
-    IF_INT_EQUAL(GSWF_HEI_01_BUSH_PIPE_REVEALED, 0)
-        CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kusa_1"), 0, PTR(kusa_dokan), 0)
-    ELSE
-        CALL(evt_hitobj_onoff, STRING("a_kusa_1"), 0, 0)
-        CALL(evt_map_playanim, STRING("anm_kusa_1"), MAP_ANIM_PLAY_AT_END, 0)
-        SET_VALUE(LW(0), STRING("dokan"))
-        CALL_CHILD(PTR(bero_case_switch_on))
-    END_IF
-    CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("hasi"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_hitobj_onoff, STRING("a_hasi"), 1, 0)
-        SET_VALUE(GW(0), 0)
-        CALL(evt_mobj_switch_blue, 2, STRING("bg_switch"), -8, 40, -450, PTR(bridge_evt), 0)
-    END_IF
-    SPAWN_EVENT(PTR(nokotaro_nakama))
-    SPAWN_EVENT(PTR(evt_nokorin))
-    CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
-    CALL_CHILD(PTR(evt_gazigazi_entry))
-    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_20_KOOPS_LEAVES)
-        SPAWN_EVENT(PTR(peach_mail))
-    END_IF
-    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
-    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG1_HEI2"))
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("USIROKUSA"), MAP_OBJ_FLAG_CLIP)
-    IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
-        IF_INT_EQUAL(GSWF_HEI_01_GOOMBELLA_TATTLE_TIP_SEEN, 0)
-            SPAWN_EVENT(PTR(christine_hei_01))
-        END_IF
-    END_IF
-    RETURN
-EVT_END()
 #endif
+#else
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG1_01_THE_FLIP_BRIDGE)
+        IF_INT_EQUAL(GSWF_HEI_01_GOOMBELLA_TATTLE_TIP_SEEN, 0)
+            SPAWN_EVENT(PTR(christine_hei_01))
+        END_IF
+    END_IF
+#endif
+    RETURN
+EVT_END()
 
 /**
  * Script helper: sets the display direction of partner slot 0 to 0 when args[0] is past 180, otherwise to 180.

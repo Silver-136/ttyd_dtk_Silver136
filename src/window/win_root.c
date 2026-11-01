@@ -2883,34 +2883,6 @@ void winMailDisp(WindowWork* wp) {
 
             mail = mailGetPtr(wp->item.mail[wp->item.mailSel].id);
             if (mail->flags & MAIL_FLAG_PEACH) {
-#if VERSION <= VERSION_DEMO_US
-                col = (GXColor){0xD7, 0xAC, 0xBC, 0xFF};
-            } else if (mail->flags & MAIL_FLAG_TROUBLE) {
-                col = (GXColor){0xD3, 0xD7, 0xAC, 0xFF};
-            } else if (mail->flags & MAIL_FLAG_INFO) {
-                col = (GXColor){0xAC, 0xC2, 0xD7, 0xFF};
-            } else {
-                col = (GXColor){0xE1, 0xE1, 0xE1, 0xFF};
-            }
-            winTexInit((TEXPalette*)*wp->res->data);
-            winTexSet(0x77, (Vec){4.0f + (208.0f + wp->item.mailX), wp->item.mailY - 56.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, col);
-            winTexSet(0x5E, (Vec){72.0f + wp->item.mailX, wp->item.mailY - 56.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-            winTexSet(0x65 + (kind2 + 1) / 10, (Vec){2.0f + (88.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-            winTexSet(0x65 + (kind2 + 1) % 10, (Vec){2.0f + (104.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, white);
-            winFontInit();
-            winFontSetLabel((Vec){120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, mail->name);
-            GXSetScissor((u32)(32.0f + (304.0f + wp->item.mailX)), (u32)(72.0f + (240.0f - wp->item.mailY)), 0x158, 0xAE);
-            winTexInit((TEXPalette*)*wp->res->data);
-            winTexSet(0x77, (Vec){4.0f + (208.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 80.0f, 0.0f}, (Vec){1.0f, 7.5f, 1.0f}, col);
-            winFontInit();
-            winFontSetLabel((Vec){80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, (GXColor){0x00, 0x00, 0x00, 0xFF}, mail->body);
-            if (mail->flags & MAIL_FLAG_PICTURE) {
-                winTexInit((TEXPalette*)*wp->mailRes->data);
-                winTexSet(mail->icon, (Vec){210.0f + wp->item.mailX, (wp->item.mailY - (f32)((wp->item.mailLines - 3) * 21)) + (f32)(wp->item.mailLine * 21), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-}
-            GXSetScissor(0, 0, 0x260, 0x1E0);
-{
-#else
                 col = (GXColor){ 0xD7, 0xAC, 0xBC, 0xFF };
             } else if (mail->flags & MAIL_FLAG_TROUBLE) {
                 col = (GXColor){ 0xD3, 0xD7, 0xAC, 0xFF };
@@ -2925,15 +2897,29 @@ void winMailDisp(WindowWork* wp) {
             winTexSet(0x65 + (kind2 + 1) / 10, (Vec){ 2.0f + (88.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
             winTexSet(0x65 + (kind2 + 1) % 10, (Vec){ 2.0f + (104.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 3.0f, 0.0f }, (Vec){ 1.0f, 1.0f, 1.0f }, white);
             winFontInit();
+#if VERSION <= VERSION_DEMO_US
+            winFontSetLabel((Vec){120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, black, mail->name);
+            GXSetScissor((u32)(32.0f + (304.0f + wp->item.mailX)), (u32)(72.0f + (240.0f - wp->item.mailY)), 0x158, 0xAE);
+#else
 #if VERSION >= VERSION_US
             winFontSetWidth((Vec){ 120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, 230.0f, msgSearch(mail->name));
 #else
             winFontSetLabel((Vec){ 120.0f + wp->item.mailX, 8.0f + (wp->item.mailY - 56.0f), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, black, mail->name);
 #endif
             GXSetScissor((u32)(32.0f + (304.0f + wp->item.mailX)), (u32)(72.0f + (240.0f - wp->item.mailY)), 0x158, 0xB1);
+#endif
             winTexInit((TEXPalette*)*wp->res->data);
             winTexSet(0x77, (Vec){ 4.0f + (208.0f + wp->item.mailX), (wp->item.mailY - 56.0f) - 80.0f, 0.0f }, (Vec){ 1.0f, 7.5f, 1.0f }, col);
             winFontInit();
+#if VERSION <= VERSION_DEMO_US
+            winFontSetLabel((Vec){80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f}, (Vec){0.75f, 0.75f, 0.75f}, (GXColor){0x00, 0x00, 0x00, 0xFF}, mail->body);
+            if (mail->flags & MAIL_FLAG_PICTURE) {
+                winTexInit((TEXPalette*)*wp->mailRes->data);
+                winTexSet(mail->icon, (Vec){210.0f + wp->item.mailX, (wp->item.mailY - (f32)((wp->item.mailLines - 3) * 21)) + (f32)(wp->item.mailLine * 21), 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+}
+            GXSetScissor(0, 0, 0x260, 0x1E0);
+{
+#else
 #if VERSION >= VERSION_US
             winFontSetWidth((Vec){ 80.0f + wp->item.mailX, (wp->item.mailY - 80.0f) + (f32)(wp->item.mailLine * 21), 0.0f }, (Vec){ 0.75f, 0.75f, 0.75f }, (GXColor){ 0x00, 0x00, 0x00, 0xFF }, 280.0f, msgSearch(mail->body));
 #else
@@ -2949,19 +2935,15 @@ void winMailDisp(WindowWork* wp) {
                 winIconInit();
                 if (wp->item.mailLine == 0) {
                     if ((gp->retraceCount & 0x1F) < 0x14) {
-#if VERSION <= VERSION_DEMO_US
-                        winIconSet(ICON_ARROW_DOWN, (Vec){360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-                    }
-} else if (wp->item.mailLine + 8 == wp->item.mailLines) {
-    if ((gp->retraceCount & 0x1F) < 0x14) {
-                        winIconSet(ICON_ARROW_UP, (Vec){360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f}, (Vec){0.6f, 0.6f, 0.6f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-#else
                         winIconSet(ICON_ARROW_DOWN, (Vec){ 360.0f + wp->item.mailX, (20.0f + (wp->item.mailY - 230.0f)) - 24.0f, 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
                     }
+#if VERSION <= VERSION_DEMO_US
+                } else if (wp->item.mailLine + 8 == wp->item.mailLines) {
+#else
                 } else if (wp->item.mailLine + 6 == wp->item.mailLines) {
+#endif
                     if ((gp->retraceCount & 0x1F) < 0x14) {
                         winIconSet(ICON_ARROW_UP, (Vec){ 360.0f + wp->item.mailX, 24.0f + (20.0f + (wp->item.mailY - 230.0f)), 0.0f }, (Vec){ 0.6f, 0.6f, 0.6f }, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-#endif
                     }
                 } else {
                     if ((gp->retraceCount & 0x1F) < 0x14) {

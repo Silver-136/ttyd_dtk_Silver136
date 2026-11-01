@@ -5393,7 +5393,6 @@ static f32 ac_success_width_tbl[7][8] = {
  * Excellent) above the position args[1..3], kept on screen, with its sound.
  * The US release sizes the sign by a per-language width table (ac_success_width_tbl).
  */
-#if VERSION == VERSION_DEMO_JP
 /**
  * Script: shows the action command rating sign args[0] (0-2 Nice at growing sizes, then Good, Great, Wonderful,
  * Excellent) above the position args[1..3], kept on screen, with its sound.
@@ -5408,51 +5407,83 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     f32 h;
     const char* name;
     s32 eff;
-EffectEntry* entry;
+#if VERSION <= VERSION_DEMO_US
+    EffectEntry* entry;
 
     type = evtGetValue(event, args[0]);
+#if VERSION == VERSION_DEMO_JP
     scale = 0.75f;
+#else
+    scale = 0.65f;
+#endif
     pos.x = (f32)evtGetValue(event, args[1]);
     pos.y = (f32)evtGetValue(event, args[2]);
     pos.z = (f32)evtGetValue(event, args[3]);
     switch (type) {
         case 0:
+#if VERSION == VERSION_DEMO_JP
             scale *= 0.3f;
             name = "SFX_SYSTEM_NICE_25PERCENT1";
             w = 90.0f;
+#else
+            w = 120.0f;
+            scale *= 0.3f;
+            name = "SFX_SYSTEM_NICE_25PERCENT1";
+#endif
             eff = 0;
             break;
         case 1:
             scale *= 0.6f;
             name = "SFX_SYSTEM_NICE_50PERCENT1";
+#if VERSION == VERSION_DEMO_JP
             w = 90.0f;
+#else
+            w = 120.0f;
+#endif
             eff = 0;
             break;
         case 2:
             scale *= 1.2f;
             name = "SFX_SYSTEM_NICE1";
+#if VERSION == VERSION_DEMO_JP
             w = 90.0f;
+#else
+            w = 120.0f;
+#endif
             eff = 0;
             break;
         case 3:
             scale *= 1.2f;
             name = "SFX_SYSTEM_GOOD1";
+#if VERSION == VERSION_DEMO_JP
             w = 90.0f;
+#else
+            w = 120.0f;
+#endif
             eff = 1;
             break;
         case 4:
             scale *= 1.2f;
             name = "SFX_SYSTEM_GREAT1";
+#if VERSION == VERSION_DEMO_JP
             w = 120.0f;
+#else
+            w = 150.0f;
+#endif
             eff = 2;
             break;
         case 5:
             name = "SFX_SYSTEM_WONDERFUL1";
+#if VERSION == VERSION_DEMO_JP
             w = 150.0f;
+#else
+            w = 225.0f;
+#endif
             eff = 3;
             break;
         case 6:
             name = "SFX_SYSTEM_EXCELLENT1";
+#if VERSION == VERSION_DEMO_JP
             w = 180.0f;
             eff = 4;
             break;
@@ -5463,75 +5494,7 @@ default: return EVT_RETURN_DONE;
     if (pos.x + h > 160.0f) {
         pos.x = 160.0f - h;
 }
-    if (pos.y < 80.0f) {
-        entry = effNiceEntry(eff, pos.x - h, 50.0f + pos.y, pos.z);
-    } else {
-        entry = effNiceEntry(eff, pos.x - h, pos.y - 50.0f, pos.z);
-    }
-    ((NiceEffectWork*)entry->userdata)->overallScale = scale;
-    psndSFX_pit(psndSFXOn_3D(name, &pos), 0);
-    return EVT_RETURN_DONE;
-}
-#elif VERSION == VERSION_DEMO_US
-/**
- * Script: shows the action command rating sign args[0] (0-2 Nice at growing sizes, then Good, Great, Wonderful,
- * Excellent) above the position args[1..3], kept on screen, with its sound.
- * The US release sizes the sign by a per-language width table (ac_success_width_tbl).
- */
-USER_FUNC(btlevtcmd_ACSuccessEffect) {
-    EvtWord* args = event->args;
-    s32 type;
-    f32 scale;
-    f32 w;
-    Vec pos;
-    f32 h;
-    const char* name;
-    s32 eff;
-    EffectEntry* entry;
-
-    type = evtGetValue(event, args[0]);
-    scale = 0.65f;
-    pos.x = (f32)evtGetValue(event, args[1]);
-    pos.y = (f32)evtGetValue(event, args[2]);
-    pos.z = (f32)evtGetValue(event, args[3]);
-    switch (type) {
-        case 0:
-            w = 120.0f;
-            scale *= 0.3f;
-            name = "SFX_SYSTEM_NICE_25PERCENT1";
-            eff = 0;
-            break;
-        case 1:
-            scale *= 0.6f;
-            name = "SFX_SYSTEM_NICE_50PERCENT1";
-            w = 120.0f;
-            eff = 0;
-            break;
-        case 2:
-            scale *= 1.2f;
-            name = "SFX_SYSTEM_NICE1";
-            w = 120.0f;
-            eff = 0;
-            break;
-        case 3:
-            scale *= 1.2f;
-            name = "SFX_SYSTEM_GOOD1";
-            w = 120.0f;
-            eff = 1;
-            break;
-        case 4:
-            scale *= 1.2f;
-            name = "SFX_SYSTEM_GREAT1";
-            w = 150.0f;
-            eff = 2;
-            break;
-        case 5:
-            name = "SFX_SYSTEM_WONDERFUL1";
-            w = 225.0f;
-            eff = 3;
-            break;
-        case 6:
-            name = "SFX_SYSTEM_EXCELLENT1";
+#else
             w = 225.0f;
             eff = 4;
             break;
@@ -5540,30 +5503,8 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     }
     w += 20.0f;
     h = 0.5f * w;
-    if (pos.y < 80.0f) {
-        entry = effNiceEntry(eff, pos.x - h, 50.0f + pos.y, pos.z);
-    } else {
-        entry = effNiceEntry(eff, pos.x - h, pos.y - 50.0f, pos.z);
-    }
-    ((NiceEffectWork*)entry->userdata)->overallScale = scale;
-    psndSFX_pit(psndSFXOn_3D(name, &pos), 0);
-    return EVT_RETURN_DONE;
-}
+#endif
 #else
-/**
- * Script: shows the action command rating sign args[0] (0-2 Nice at growing sizes, then Good, Great, Wonderful,
- * Excellent) above the position args[1..3], kept on screen, with its sound.
- * The US release sizes the sign by a per-language width table (ac_success_width_tbl).
- */
-USER_FUNC(btlevtcmd_ACSuccessEffect) {
-    EvtWord* args = event->args;
-    s32 type;
-    f32 scale;
-    f32 w;
-    Vec pos;
-    f32 h;
-    const char* name;
-    s32 eff;
 #if VERSION >= VERSION_US
     s32 lang;
 #endif
@@ -5681,6 +5622,7 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
         pos.x = -180.0f + h;
 #endif
     }
+#endif
     if (pos.y < 80.0f) {
         entry = effNiceEntry(eff, pos.x - h, 50.0f + pos.y, pos.z);
     } else {
@@ -5690,7 +5632,6 @@ USER_FUNC(btlevtcmd_ACSuccessEffect) {
     psndSFX_pit(psndSFXOn_3D(name, &pos), 0);
     return EVT_RETURN_DONE;
 }
-#endif
 
 /** Script: sets (args[0] nonzero) or clears the flags args[1] in the running timing action command's work. */
 USER_FUNC(btlevtcmd_ac_timing_flag_onoff) {
