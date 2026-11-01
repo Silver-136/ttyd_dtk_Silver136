@@ -741,11 +741,7 @@ static inline void slitCamFix(void) {
 void mot_slit(void) {
     MarioWork* m = marioGetPtr();
     f32 d;
-#if VERSION <= VERSION_DEMO_US
     s32 st;
-#else
-    s16 st;
-#endif
     if (!m->controlStickSensitivity) {
         m->trigFlags &= ~MARIO_TRIG_FLAG_SLIT_KEEP_POSE;
     }

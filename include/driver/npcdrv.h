@@ -139,8 +139,7 @@ typedef struct NpcTribeInfo {
 } NpcTribeInfo;
 
 // NpcEntry.flags (also NpcSetupInfo.flags and NpcAiInfo.flags, copied in), named from npcMain, the npcdrv
-// helpers and the original AI type names in npc_data.c. 0x1000 and 0x2000 (wall probes through hitCheckAttr(4))
-// are not named.
+// helpers and the original AI type names in npc_data.c. 0x1000 is not named.
 typedef enum NpcFlags {
     NPC_FLAG_IN_USE = (1 << 0),                // 0x1, slot in use (npcEntry; npcDelete clears it)
     NPC_FLAG_READY = (1 << 1),                 // 0x2, initialised: updated, drawn, talkable, hittable

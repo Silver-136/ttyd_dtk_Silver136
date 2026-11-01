@@ -191,7 +191,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Exit event of Peach's door in Grodus's room: the guard (みはり) turns toward her
- * and gets an exclamation balloon for about 1.5 seconds; leaves LW(0) = 0 for the door code.
+ * and gets a type-1 balloon with duration 60 frames; leaves LW(0) = 0 for the door code.
  */
 static EVT_BEGIN(bero_peach_evt)
     BEGIN_INLINE_EVENT
@@ -233,7 +233,7 @@ static BeroEntry bero_peach_data[] = {
 
 /**
  * Script function: allocates the monitor's work area
- * and a 608 by 480 intensity texture buffer for the live image on Sir Grodus's monitor,
+ * and a texture buffer for the live image on Sir Grodus's monitor,
  * and clears its ready and officer flags.
  */
 USER_FUNC(monitor_cap_init) {
@@ -478,8 +478,7 @@ EVT_BEGIN(monitor_init)
 EVT_END()
 
 static EVT_BEGIN(peach_evt_stg1)
-    // The scene opens: Peach is led through the fortress by X-Naut underlings, with the screen narrowing to a
-    // letterbox.
+    // The scene opens with the viewport expanding from 1 by 1 to the full screen.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_fade_tec_onoff, 1, 0)
     CALL(viewport, 0, 0, 1, 1)
@@ -1281,7 +1280,7 @@ static EVT_BEGIN(peach_evt_stg6)
 EVT_END()
 
 /**
- * Unused test script (named eff_test, started by nothing in the game) for the N64-style charge effect
+ * Test script named eff_test for the N64-style charge effect
  * (akari_charge_n64) under the TEC fade: fade on, effect at (-300, 95, 200) after a second,
  * fade off a second later.
  */
@@ -1427,7 +1426,7 @@ static NpcSetupInfo npcEnt[] = {
  * after, lights up the control wall and the monitor animations,
  * and then starts the scene for Peach's current story point:
  * peach_evt_stg1 (the first Peach scene at STG1_17), peach_evt_stg2, stg3,
- * stg4 (Shadow Sirens and Doopliss), peach_evt_stg5 (at STG5_43 with the monitor),
+ * stg4, peach_evt_stg5 (at STG5_43 with the monitor),
  * the invisible watch at STG5_45 and 46, and peach_evt_stg6 at STG6_54_WELCOME_BACK.
  * The Barriern Custom guard is removed once Lord Crump is beaten.
  */

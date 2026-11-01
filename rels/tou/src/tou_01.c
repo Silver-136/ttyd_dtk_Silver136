@@ -454,8 +454,8 @@ EVT_BEGIN(evt_sakaba_4)
 EVT_END()
 
 /**
- * Opens or closes the tavern's front by running the four panel scripts in sequence (150 ms apart in the US and
- * later versions, 100 ms in JP), in forward or reverse order depending on LW(1).
+ * Runs four tavern panel scripts: US and PAL use 4,1,2,3 for LW(1) == 0 and 3,2,1,4 otherwise,
+ * 150 ms apart. JP and both demos always use 1,2,3,4, 100 ms apart.
  */
 EVT_BEGIN(evt_wall2)
     MULTIPLY_FLOAT(LW(0), FLOAT(0.5f))
@@ -574,7 +574,7 @@ EVT_END()
 /**
  * Looping decoration: the leaning sign object taore rocks about the Z axis (0 to 10, to -10,
  * to 10 and back to 0 degrees, over 1, 2, 2 and 1 seconds) and then rests for 3 seconds,
- * until global flag GF(10) is set, when it snaps upright.
+ * until GF(10) == 1 is observed during an interpolation loop, then resets upright after one frame.
  */
 static EVT_BEGIN(evt_kanban2)
     LOOP(0)
@@ -758,7 +758,7 @@ static USER_FUNC(proj_on) {
 }
 
 /**
- * Display callback: renders the blimp's silhouette from above into a 128x128 texture,
+ * Display callback: renders a scaled sphere from above into a 128x128 texture,
  * the source for the blimp shadow projected on the plaza.
  */
 // Render the sphere into the projected shadow texture, restoring viewport, projection and scissor afterward.
@@ -1188,7 +1188,7 @@ static EVT_BEGIN(talk_mama)
 EVT_END()
 
 /**
- * NPC init for the Goldbob family's son (コナリキン, konari):
+ * NPC init for コナリキン (konari):
  * placed at (-200, 0, 10) before STG5_65_TRAIN_TICKET and hidden below the map afterwards.
  */
 static EVT_BEGIN(init_konari)
@@ -1614,8 +1614,9 @@ EVT_BEGIN(talk_jugem_2)
 EVT_END()
 
 /**
- * NPC init for the beauty (bijyo): her position depends on story progress (placed at (610, 10, -120) during the
- * early Chapter 3 stage, elsewhere or absent otherwise, including after Mario leaves as champion).
+ * NPC init for the beauty (bijyo): the only assigned position is (610, 10, -120);
+ * branches without a position call leave her existing position unchanged.
+ * JP, US and PAL also test the storage-room talk and post-chapter departure flags; demos omit those tests.
  */
 EVT_BEGIN(init_bijyo)
     SWITCH(GSW_STORY_PROGRESS)
@@ -2240,7 +2241,7 @@ USER_FUNC(eff_sleep_on) {
     return EVT_RETURN_DONE;
 }
 
-/** Script helper: removes the sleeping "Z" effect. */
+/** Script helper: requests deletion of the named sleep effect. */
 USER_FUNC(eff_sleep_off) {
     EffectEntry* eff = effNameToPtr("eff_sleep");
 
@@ -2262,10 +2263,6 @@ static USER_FUNC(mario_chk) {
     return EVT_RETURN_DONE;
 }
 
-/**
- * Idle loop of the egg NPC: while the story is at STG3_11_RUNAWAY_EGG it pulses its scale between 100%
- * and 120% to look like it breathes in its sleep.
- */
 #if VERSION <= VERSION_DEMO_US
 /** The demo's champion reset: the releases use evt_rankingReset of tou.c, which also rebuilds the ranking. */
 static USER_FUNC(rankingReset) {
@@ -2318,7 +2315,7 @@ EVT_BEGIN(dummy)
     RETURN
 EVT_END()
 
-/** The hot dog vendor's interrupt script: chases the egg to its position and hops after it. */
+/** The hot dog vendor's interrupt script: repeatedly moves one tenth of the X/Z distance toward the egg. */
 EVT_BEGIN(hot_move_evt)
     CALL(evt_npc_flag_onoff, 0, STRING("ホットドッグ"), NPC_FLAG_NO_SHADOW)
     CALL(evt_npc_flag_onoff, 1, STRING("ホットドッグ"), NPC_FLAG_NO_WALL_COLLISION)
@@ -2369,9 +2366,9 @@ EVT_BEGIN(evt_oyaji_move)
 EVT_END()
 
 /**
- * Squash-and-stretch of the egg NPC ("たまご") over a hop of LW(3) milliseconds:
- * the width scale eases from 1.2 down to 0.9 and the height scale from 0.9 up to 1.1 (two inline events),
- * while the loop applies both scales to the egg every frame.
+ * Squash-and-stretch of the egg NPC ("たまご"): parallel width/height interpolations
+ * from 1.2 to 0.9 and 0.9 to 1.1 each last (LW(3) / 2) + 1 milliseconds.
+ * The application loop runs for the incoming LW(4) + 1 frame iterations.
  */
 static EVT_BEGIN(evt_tamago_scale)
     SET_FLOAT_VALUE(GW(10), FLOAT(1.1992188f))
@@ -2412,9 +2409,9 @@ static EVT_BEGIN(evt_tamago_scale)
 EVT_END()
 
 /**
- * Second squash-and-stretch step for the egg NPC ("たまご"), over LW(3) milliseconds:
- * the width eases from 0.9 back to 1.0 and the height from 1.1 back to 1.0,
- * and the loop applies the scales every frame (the settle after the hops of evt_tamago_scale).
+ * Second squash-and-stretch step for the egg NPC ("たまご"): parallel width/height interpolations
+ * from 0.9 to 1.0 and 1.1 to 1.0 each last (LW(3) / 2) + 1 milliseconds.
+ * The application loop runs for the incoming LW(4) + 1 frame iterations.
  */
 static EVT_BEGIN(evt_tamago_scale2)
     BEGIN_INLINE_EVENT
@@ -2461,8 +2458,8 @@ s32 yoshi_data[] = {
 };
 
 /**
- * Runaway egg scene: the egg NPC hops along the points in yoshi_data (ten jumps with random height and
- * squashing) away from the plaza, stopping if Mario takes control.
+ * Runaway egg scene: repeats the ten yoshi_data points with randomized jumps and squashing.
+ * The waypoint loop ends after two close approaches at jump endpoints while Mario's key/control checks pass.
  */
 // Two close approaches at jump endpoints end the chase; intervening misses do not reset the count.
 EVT_BEGIN(evt_tamago_move)
@@ -2563,7 +2560,7 @@ EVT_END()
 
 /**
  * Cutscene when Mario first sees the runaway egg:
- * he turns toward it, reacts with an exclamation bubble (stg3_tou_241), the camera frames it,
+ * he turns, prints stg3_tou_241 and starts a Mario-attached bubble effect, then the camera frames the egg,
  * and the story advances to STG3_10_MINORS_5TH_PL_EGG.
  */
 EVT_BEGIN(evt_tamago)
@@ -2605,9 +2602,9 @@ EVT_BEGIN(evt_tamago)
 EVT_END()
 
 /**
- * Talk script of the egg NPC (たまご): Mario picks it up,
- * the partner and the hot dog vendor talk about it (stg3_tou_247 to 250, with a yes/no prompt),
- * and the story advances to STG3_12_THE_MINI_YOSHI_EGG.
+ * Talk script of the egg NPC (たまご): sets STG3_12_THE_MINI_YOSHI_EGG near the start,
+ * prints stg3_tou_247 to stg3_tou_255 with choices at stg3_tou_247_yn and stg3_tou_253_yn,
+ * then replaces the map NPC with the following egg actor and saves the receipt time.
  */
 EVT_BEGIN(talk_tamago)
     CALL(evt_mario_key_onoff, 0)
@@ -2701,8 +2698,8 @@ EVT_BEGIN(talk_tamago)
 EVT_END()
 
 /**
- * Moves the blimp gondola ("gondora" map object) up or down with its sound and keeps Mario
- * and the partner standing on it.
+ * Moves the blimp gondola ("gondora" map object) up or down with its sound.
+ * Only when LW(2) == 1 are Mario and the main partner moved with it.
  */
 // LW(0)/LW(1) are lift heights; LW(2) selects whether Mario and the main partner move with the platform.
 EVT_BEGIN(evt_gondora_updown)
@@ -3028,10 +3025,9 @@ static USER_FUNC(yami_view) {
 }
 
 /**
- * Chapter 8 darkness scene setup: spawns the Toad guide (キノシコワ) at (4, 0, 420), parks the blimp,
- * a Lakitu and the stall vendor around the plaza,
- * hides the family and the two spectator Toads below the map and deletes the regular scripts of the Toad
- * and vendor.
+ * Chapter 8 darkness scene setup: spawns キノシコワ at (4, 0, 420), parks the blimp,
+ * ジュゲム1 and ロテン2 around the plaza, hides the family and two spectator Toads below the map,
+ * and stops any existing regular events of キノピオ1 and ロテン1.
  */
 static EVT_BEGIN(sekai_yami_npc_init)
     CALL(evt_npc_entry, STRING("キノシコワ"), STRING("c_ksikowa"))
@@ -3425,8 +3421,8 @@ static USER_FUNC(anim_tevcallback) {
 }
 
 /**
- * Script helper: args[0] = map object name, args[1] = index;
- * enables TEV callback `index` (0-15) on that object's model.
+ * Script helper: args[0] = mobj name, args[1] = index;
+ * enables TEV callback (index & 0xF) on that object's model.
  */
 static USER_FUNC(anim_tevcallback_mobj) {
     EvtWord* args = event->args;
@@ -3940,8 +3936,8 @@ static inline void kanbanCopyFlags(MapObject* kanban, const char* name) {
 }
 
 /**
- * Script helper: copies the display flags of the "kanban" sign's parts to its language-specific letter objects,
- * so only the right-language lettering shows. Blocks forever.
+ * Script helper: copies the "kanban" sign's no-map-blend exemptions to four localized letter objects.
+ * Blocks forever; language selection is handled by the init script.
  */
 USER_FUNC(tou_01_kanban_moji_flag_sync) {
     MapObject* kanban = mapGetMapObj("kanban");

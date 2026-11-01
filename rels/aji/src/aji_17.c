@@ -1,5 +1,5 @@
 // aji_17 (敵のアジト, X-Naut Fortress): TEC's room: Peach's talks with TEC, the e-mails to Mario, the dance
-// (peach_evt_dance), and TEC's shutdown (evt_emergency, evt_last).
+// (peach_evt_dance), and TEC's shutdown scene (peach_evt_stg6).
 
 #include "version.h"
 #include "driver/fadedrv.h"
@@ -175,7 +175,7 @@ s32 peach_evt_stg4_read_quiz_data(EventEntry* event, BOOL isFirstCall) {
 
 
 /**
- * Script function: waits until the channel 1 background music has actually started (psndBGMStartCheck),
+ * Script function: waits until channel 1's music has started or the channel is empty (psndBGMStartCheck),
  * so the dance can be timed to the waltz.
  */
 static s32 bgm_start_wait(EventEntry* event, BOOL isFirstCall) {
@@ -359,7 +359,7 @@ void noiseDisp(CameraId cameraId, void* param) {
 /**
  * Emergency lighting: waits until the story reaches STG7_25_THE_LAST_MAIL,
  * then fades the map's blend colour from white down to a red tint (green and blue to 96, 32 in the demos) over
- * one second and keeps it. Already at that story point it sets the tint at once. Every fortress map starts it.
+ * one second and keeps it. Already at that story point it sets the tint at once.
  */
 EVT_BEGIN(evt_emergency)
     IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG7_25_THE_LAST_MAIL)
@@ -726,8 +726,8 @@ EVT_BEGIN(evt_last2)
 EVT_END()
 
 /**
- * Camera sweep for the TEC room: slides the camera between two positions given in LW(0) to LW(2) over two
- * seconds, back and forth, forever.
+ * Rotates the map object named in LW(0) around Y between the angles in LW(1) and LW(2),
+ * taking two seconds each way and waiting one second at each end, forever.
  */
 EVT_BEGIN(evt_camera)
     SET_VALUE(LW(5), LW(0))
@@ -773,7 +773,7 @@ EVT_END()
 
 /**
  * Peach's first meeting with TEC (chapter 1): doors open and close with sound,
- * dialogue peach_aji_42 to 48 plays, the story progress becomes STG1_19_PEACH_TEC
+ * dialogue peach_aji_42 through peach_aji_72 plays, the story progress becomes STG1_19_PEACH_TEC
  * and the map changes to kpa_00 with the story-change fade.
  */
 static EVT_BEGIN(peach_evt_stg1)
@@ -1048,7 +1048,7 @@ static EVT_BEGIN(peach_evt_stg1)
         END_IF
     END_LOOP
     WAIT_MS(2000)
-    // The story advances to Peach's meeting with TEC, the game is saved and the map changes to kpa_00.
+    // The story advances to Peach's meeting with TEC, a save is offered and the map changes to kpa_00.
     SET_VALUE(GSW_STORY_PROGRESS, STG1_19_PEACH_TEC)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 1000)
@@ -1078,7 +1078,7 @@ static const Vec horogram_pos = {0.0f, 0.0f, 20.0f};
 static const Vec horogram_up = {0.0f, 1.0f, 0.0f};
 static const Vec horogram_target = {0.0f, 0.0f, 0.0f};
 
-/** The 15 points of a circle (radius about 110) that the dance partner steps around, one per beat. */
+/** The 15 positions of the dance path, advanced one per beat. */
 f32 move_pos_list[15][2] = {
     {0.0f, -80.0f},
     {39.37592f, -74.69887f},
@@ -1289,7 +1289,7 @@ EVT_BEGIN(dance_btn_disp)
     RETURN
 EVT_END()
 
-/** Marks the button bubble shown with a cross (batu = X mark) when the player pressed the wrong button. */
+/** Marks the shown dance prompt after a wrong or missing press. */
 EVT_BEGIN(dance_btn_batu)
     SWITCH(LW(1))
         CASE_EQUAL(0)
@@ -1350,7 +1350,7 @@ EVT_BEGIN(dance_btn_clear_all)
     RETURN
 EVT_END()
 
-/** Waits until the timer in LW(4) reaches 660 ms, the length of one dance move. */
+/** Waits until the stopwatch LW(12), read into LW(4), reaches 660 ms. */
 EVT_BEGIN(wait_action_time)
     LOOP(0)
         CALL(evt_sub_get_stopwatch, LW(12), LW(4))
@@ -1392,8 +1392,8 @@ EVT_END()
 
 /**
  * Peach's waltz with her hologram (the dance minigame in TEC's room):
- * to BGM_EVT_PEACH_WALTZ1, for 32 seconds, a random button prompt (A: step, B: turn, X: reverse) appears every
- * second beat; pressing the right button in time makes the couple do it and counts a point in LW(15),
+ * to BGM_EVT_PEACH_WALTZ1, random prompts (A: step, B: turn, X: reverse) are paced two seconds apart.
+ * Each round first checks for 32 seconds elapsed; pressing the right button in time counts a point in LW(15),
  * a wrong or missing press makes Peach stumble (SFX_PEACH_DANCE_NG1).
  * Afterwards the hologram fades out and the score is evaluated.
  */
@@ -1886,7 +1886,7 @@ static EVT_BEGIN(peach_evt_stg2)
 EVT_END()
 
 /**
- * Peach's chapter 3 scene with TEC: peach_aji_115 to 119_02 play,
+ * Peach's chapter 3 scene with TEC: peach_aji_115 through peach_aji_125 play,
  * then the map changes to aji_01 at the e_bero_5 entrance with a black fade.
  */
 static EVT_BEGIN(peach_evt_stg3)
@@ -1977,7 +1977,7 @@ static EVT_BEGIN(peach_evt_stg3)
 EVT_END()
 
 /**
- * Peach's second chapter 3 scene with TEC: doors open and close with sound, peach_aji_156 to 157_03 play,
+ * Peach's second chapter 3 scene with TEC: doors open and close with sound, peach_aji_156 through peach_aji_166 play,
  * the story progress becomes STG3_33_04_PEACH_BACK_TO_TEC and the map changes to mri_01.
  */
 static EVT_BEGIN(peach_evt_stg3_1)
@@ -2139,7 +2139,7 @@ static EVT_BEGIN(peach_evt_stg3_1)
         END_IF
     END_LOOP
     WAIT_MS(2000)
-    // The story advances, the game is saved and the map changes to mri_01.
+    // The story advances, a save is offered and the map changes to mri_01.
     SET_VALUE(GSW_STORY_PROGRESS, STG3_33_04_PEACH_BACK_TO_TEC)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
     CALL(evt_snd_envoff_f, PSND_FADEOUT, 1000)
@@ -2551,7 +2551,7 @@ static EVT_BEGIN(peach_evt_stg5)
 EVT_END()
 
 /**
- * Peach's second chapter 5 scene with TEC: peach_aji_260 to 264 play,
+ * Peach's second chapter 5 scene with TEC: peach_aji_260 through peach_aji_268 play,
  * the story progress becomes STG5_47_PEACH_TEC_TALK and the map changes to usu_00.
  */
 static EVT_BEGIN(peach_evt_stg5_1)
@@ -2689,7 +2689,7 @@ static EVT_BEGIN(peach_evt_stg5_1)
         END_IF
     END_LOOP
     WAIT_MS(2000)
-    // The story advances, the game is saved and the map changes to usu_00.
+    // The story advances, a save is offered and the map changes to usu_00.
     SET_VALUE(GSW_STORY_PROGRESS, STG5_47_PEACH_TEC_TALK)
     CALL(evt_peach_set_condition, 0)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 1000)
@@ -3073,28 +3073,28 @@ static EVT_BEGIN(peach_evt_stg6)
     RETURN
 EVT_END()
 
-/** Init of an X-Naut underling in TEC's room: runs the common NPC init and sets NPC_STATUS_FACE_MOVE_DIR. */
+/** Init of 手下１ in TEC's room: runs the common NPC init and sets NPC_STATUS_FACE_MOVE_DIR. */
 static EVT_BEGIN(teshita1_init)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
-/** Init of a second X-Naut underling in TEC's room: common NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
+/** Init of 手下２ in TEC's room: common NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
 static EVT_BEGIN(teshita2_init)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
-/** Init of Grodus (シュリョー) in TEC's room: common NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
+/** Init of シュリョー in TEC's room: common NPC init plus NPC_STATUS_FACE_MOVE_DIR. */
 static EVT_BEGIN(syuryo_init)
     CALL_CHILD(PTR(npc_init_evt))
     CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     RETURN
 EVT_END()
 
-/** Cast of TEC's room besides TEC: two X-Naut underlings and Sir Grodus. */
+/** NPC setup records for 手下１, 手下２ and シュリョー in TEC's room. */
 static NpcSetupInfo npcEnt[] = {
     {
         /*"手下１"*/"\216\350\211\272\202P", // name
@@ -3144,7 +3144,7 @@ EVT_BEGIN(aji_17_init_evt)
     SET_VALUE(LW(0), STRING("S_camera_1"))
     SET_VALUE(LW(1), -30)
     SET_VALUE(LW(2), 60)
-    // The camera sweep over TEC's room starts.
+    // Start the camera map-object rotations.
     SPAWN_EVENT(PTR(evt_camera))
     SET_VALUE(LW(0), STRING("S_camera_2"))
     SET_VALUE(LW(1), -60)
@@ -3217,7 +3217,7 @@ EVT_BEGIN(aji_17_init_evt)
             RETURN
         END_IF
     END_IF
-    // Otherwise the emergency lights start and the room's entrances are set up.
+    // Start the emergency-light task, which waits for its story point, and set up the entrances.
     SPAWN_EVENT(PTR(evt_emergency))
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
@@ -3298,8 +3298,8 @@ static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t) {
 
 /**
  * Draw callback that draws the dance hologram: the captured Peach picture (colour texture buf0, depth-like buf1)
- * on a quad at the hologram NPC's position, turned to face the camera (rotated 180 degrees when flag 4 is set),
- * blended with the NPC's colour.
+ * on a quad at the hologram NPC's position, with Y rotation derived from its direction and the camera yaw
+ * (plus 180 degrees when flag 4 is set), using the NPC's colour as the channel material.
  */
 void disp_horogram(CameraId cameraId, void* param) {
     GXCullMode cull;
@@ -3372,7 +3372,7 @@ s32 disp_horogram_evt(EventEntry* event, BOOL isFirstCall) {
 
 /**
  * Draw callback that renders the picture of the hologram:
- * picks the normal or the mirrored hologram NPC (ホログラム or ホログラム2) by its facing direction,
+ * with flag 1 set, picks the normal or mirrored hologram NPC by facing direction; otherwise uses the normal NPC,
  * sets up a 608 by 480 viewport and a close camera,
  * draws the NPC's pose into the frame buffer and copies the colour and depth into horogram_wp->buf0 and buf1.
  */
@@ -3501,7 +3501,7 @@ s32 get_local_rotate(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-/** Script function: sets the dance's local rotation angle to args[0] (radians), wrapped into 0 to 2 pi. */
+/** Script function: sets the dance's local rotation angle to args[0] (radians), adjusting by at most one revolution. */
 s32 set_local_rotate(EventEntry* event, BOOL isFirstCall) {
     f32 r;
 
@@ -3683,7 +3683,8 @@ s32 wait_move_end(EventEntry* event, BOOL isFirstCall) {
 /**
  * Script function: reads the controller's new button presses
  * and compares them with the expected button args[0] (1 = A, 2 = B, 0 = X).
- * Returns in args[1] 0 for nothing, 1 for the right button alone and 2 for any wrong button.
+ * Returns in args[1] 1 for the expected A/B/X button without either other dance button,
+ * 2 for other dance buttons without the expected one, and 0 otherwise. Other buttons are ignored.
  */
 s32 btn_check(EventEntry* event, BOOL isFirstCall) {
     EvtWord* args = event->args;
@@ -3745,7 +3746,7 @@ s32 set_npc_pos(EventEntry* event, BOOL isFirstCall) {
     return EVT_RETURN_DONE;
 }
 
-/** Script function: after a stumble puts Peach back into pose P_O_F_1 over 20 frames. */
+/** Script function: after a stumble requests pose P_O_F_1 starting at frame 20. */
 s32 peach_dance_after_fail(EventEntry* event, BOOL isFirstCall) {
     marioChgPoseTime("P_O_F_1", 20);
     return EVT_RETURN_DONE;

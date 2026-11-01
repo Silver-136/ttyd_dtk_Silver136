@@ -10857,7 +10857,7 @@ static inline void psndEnvDone(PaperSoundEnv* e) {
     }
 }
 
-/** Number of environment sounds in the table. */
+/** Number of environment names; also the terminating id in psenvlist. */
 #if VERSION <= VERSION_DEMO_US
 #define PSENV_COUNT 0x75
 

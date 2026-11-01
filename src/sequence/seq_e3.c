@@ -687,17 +687,17 @@ void e3Disp(CameraId cameraId, void* param) {
 #if VERSION == VERSION_DEMO_JP
         alpha = (s32)((f32)sin((f64)((f32)gp->retraceCount / 30.0f)) * 459.0f);
         if (alpha < 0) {
-                alpha = 0;
-            }
-            if (alpha > 255) {
-                alpha = 255;
-            }
+            alpha = 0;
+        }
+        if (alpha > 255) {
+            alpha = 255;
+        }
 
             winTexInit(*wp->handle->data);
             winTexSet(MODE_11, (Vec){0.0f, 0.0f, 0.0f}, (Vec){1.0f, 1.0f, 1.0f}, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             pressStartGX(alpha, 0.0f, -110.0f);
-} else {
-    winTexInit(*wp->handle->data);
+    } else {
+        winTexInit(*wp->handle->data);
         for (row = 0, py = -304; row < 40; row++, py += 16) {
             for (col = 0, px = 0; col < 32; col++, px += 16) {
                 winTexSet(MODE_5, (Vec){(f32)py, (f32)(240 - px), 0.0f}, (Vec){1.0f, 1.0f, 1.0f},
@@ -933,12 +933,7 @@ void e3Disp(CameraId cameraId, void* param) {
 }
 
 // FAKE: stand-in that nothing calls (the linker strips it); it only places 30.0f in the constant pool (JP and US); removing it changes the object
-#if VERSION == VERSION_DEMO_JP
-f32 forceSdata(void) {
-    return 30.0f;
-}
-#elif VERSION == VERSION_DEMO_US
-#else
+#if VERSION != VERSION_DEMO_US
 f32 forceSdata(void) {
     return 30.0f;
 }

@@ -151,9 +151,9 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Ambush at the west entrance: starts the danger BGM,
- * places the two X-Naut underlings (手下１ and ２) in front of the door, Mario is startled (exclamation balloon),
- * the grunts talk (stg7_aji_00_00_02 to 04) and attack in battle 6;
- * after the fight Mario and the partner comment (stg7_aji_00_00_06 to 08)
+ * places NPCs 手下１ and 手下２ in front of the door and starts type-0 fukidashi effects on Mario and the partner,
+ * prints stg7_aji_00_00_02 to 04 with those NPC names and starts battle 6;
+ * after the fight prints stg7_aji_00_00_06 and the partner messages stg7_aji_00_00_07 and 08
  * and the story moves to STG7_08_ELITE_X_NAUTS.
  */
 static EVT_BEGIN(first_evt)
@@ -275,7 +275,7 @@ static NpcSetupInfo npcEnt[] = {
  * starts the area music (BGM_STG7_DUN1 before STG7_08_ELITE_X_NAUTS, DUN2 after), sets up the exits,
  * the save and recovery blocks and the two X-Naut grunts (手下).
  * Before that story point it runs first_evt, the ambush where the two grunts attack Mario;
- * from STG7_25_THE_LAST_MAIL on, the west door w_bero is shut with evt_door_msg.
+ * from STG7_25_THE_LAST_MAIL through STG8_END_AFTER_THE_BATTLE, the west door w_bero is shut with evt_door_msg.
  */
 EVT_BEGIN(aji_00_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_08_ELITE_X_NAUTS)

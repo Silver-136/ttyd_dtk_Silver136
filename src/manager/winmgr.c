@@ -262,12 +262,6 @@ USER_FUNC(evt_win_party_lankup_chk) {
  */
 // Descriptive name (not in the symbol maps); placeholder unk_802399f8, JP 0x802399F8. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
-/**
- * The power-down shop's check (Rogueport Sewers, tik_11) before trading partner ranks:
- * sets args[0] to 1 when at least two partners have joined,
- * one of them can still be ranked up (same limit as evt_win_party_lankup_chk) and one has a rank to give;
- * otherwise 0.
- */
 USER_FUNC(evt_win_party_lankdown_chk) {
     PouchData* pouch;
     u16* p;
@@ -1060,7 +1054,6 @@ int select_comp_type(void* a, void* b) {
 
 #if VERSION >= VERSION_US
 /** US: badge list sorted by (buy price * 2 + 2) / 3 */
-// US: badge list sorted by (buy price * 2 + 2) / 3
 int select_comp_bteresa(void* a, void* b) {
     s32 x = (itemDataTable[((WinMgrSelectItem*)a)->id].buy_price * 2 + 2) / 3;
     s32 y = (itemDataTable[((WinMgrSelectItem*)b)->id].buy_price * 2 + 2) / 3;
@@ -1638,7 +1631,7 @@ static inline s32 select_party_icon(u16 id) {
  */
 #if VERSION <= VERSION_DEMO_US
 static void select_disp_party(WinMgrEntry* entry) {
-s32 i;
+    s32 i;
 #else
 void select_disp_party(WinMgrEntry* entry) {
 #if VERSION >= VERSION_US

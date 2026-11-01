@@ -1100,20 +1100,19 @@ void _GetExpIcon_End(BattleSeqEndWork* work) {
     }
 }
 
-// Two copies: the US release adds the upgrade-select prompt and cursor loop and reorders the closing events.
 #if VERSION >= VERSION_US
 USER_FUNC(_display_select_one_to_upgrade_text);
 USER_FUNC(_set_initial_upgrade_cursor_position);
 #endif
 
 /**
- * US and later level-up show, started by btlseqEnd when the Star Points reach 100.
+ * Level-up show, started by btlseqEnd when the Star Points reach 100.
  * The stage darkens and the curtains close (on a wide stage Mario and the partner walk off first and the
  * wide-stage flag is cleared), the nozzle objects lower,
  * confetti and the level-up effect play and Star Power refills,
  * a spotlight cone follows Mario while the enemies are hidden, Mario and the partner walk back on,
  * the HP/FP/BP blocks appear and the curtains open.
- * The select_HPFPBP prompt then stays up until the stick is pushed:
+ * In US and later, the select_HPFPBP prompt then stays up until the stick is pushed:
  * left picks BP, right picks HP, and the spotlight swings there.
  */
 EVT_BEGIN(_curtain_close_event)

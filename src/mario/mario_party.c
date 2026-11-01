@@ -29,13 +29,6 @@ static inline void marioPartyKillSlot1(void) {
     }
 }
 
-/**
- * Partner button check, run every frame from marioMain:
- * X arms MARIO_TRIG_FLAG_USE_PARTNER with a 5-frame partyUseDelay when Mario stands,
- * walks or dashes with a usable partner.
- * Airborne, field-battle locks, slits, an airborne Goombella or a busy Yoshi block or cancel it.
- * Always returns 0; marioUsePartyMain later fires the ability.
- */
 #if VERSION > VERSION_DEMO_US
 s32 marioUseParty(void) {
     MarioWork* mario = marioGetPtr();
@@ -102,11 +95,6 @@ s32 marioUseParty(void) {
 }
 #endif
 
-/**
- * Runs from partyMain while a partner is out: after the partner button,
- * counts down partyUseDelay and then calls partyDoWork to use the partner's field ability (returns its result,
- * else 0). Losing control (marioKeyOffChk) cancels.
- */
 // Descriptive name (not in the symbol maps; docs/NAME_PROVENANCE.md).
 #if VERSION > VERSION_DEMO_US
 /**
@@ -216,17 +204,12 @@ void marioPartyKill(void) {
     marioPartyKillSlot1();
 }
 
-/**
- * The PartyMember kind of the partner out with Mario (PARTY_MEMBER_GOOMBELLA, ...), or 0 when none.
- * Used by the pause menu, item menu and status window.
- */
 #if VERSION <= VERSION_DEMO_US
 /**
- * Partner button check, run every frame from marioMain:
- * X arms MARIO_TRIG_FLAG_USE_PARTNER with a 5-frame partyUseDelay when Mario stands,
- * walks or dashes with a usable partner.
- * Airborne, field-battle locks, slits, an airborne Goombella or a busy Yoshi block or cancel it.
- * Always returns 0; marioUsePartyMain later fires the ability.
+ * Demo partner button check: X arms MARIO_TRIG_FLAG_JABARA_CHK with a 5-frame partyUseDelay
+ * while Mario stands, walks or dashes with a usable partner.
+ * Subsequent calls count down the delay and return partyDoWork's result when it expires.
+ * Losing control clears the trigger; jumping, falling and airTimer also block or cancel it.
  */
 s32 marioUseParty(void) {
     MarioWork* mario = marioGetPtr();

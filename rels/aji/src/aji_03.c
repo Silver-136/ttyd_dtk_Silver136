@@ -186,7 +186,6 @@ EVT_END()
  * Swings the needle (hari) map object named in LW(10) (S_hari01 to S_hari06, started when the crane game is
  * switched on) around its Z axis: picks random target angles up to 90 degrees (alternating sides)
  * over 1.5 to 3 seconds each, until GF(15) is raised by a switch reset, then eases it back to 0 over one second.
- * Guess: the needles are dial pointers on the machinery.
  */
 static EVT_BEGIN(evt_hari)
     SET_VALUE(LW(6), LW(8))
@@ -243,7 +242,7 @@ EVT_END()
 /**
  * Opens and closes the crane's claw forever: the four claw arms (S_te_1_a/b, S_te_2_a/b) swing by 30 degrees
  * over one second and back.
- * GF(9) is 1 while the claw is open, so ufo_main can wait for it to be shut before lowering.
+ * GF(9) stays 1 through both motions, then becomes 0 for the two-frame wait before the next cycle.
  */
 EVT_BEGIN(ufo_hand)
     LOOP(0)
@@ -286,14 +285,14 @@ EVT_END()
 
 /**
  * Sets GF(10) to 1, the flag evt_ufo_sousaban raises while the crane is driven along X.
- * Nothing runs this script; evt_ufo_sousaban sets GF(10) itself.
+ * No calls to this script appear in this file; evt_ufo_sousaban sets GF(10) itself.
  */
 EVT_BEGIN(move_left)
     SET_VALUE(GF(10), 1)
     RETURN
 EVT_END()
 
-/** Sets GF(10) back to 0; unused, see move_left. */
+/** Sets GF(10) back to 0; no calls appear in this file. */
 EVT_BEGIN(move_left2)
     SET_VALUE(GF(10), 0)
     RETURN
@@ -301,20 +300,20 @@ EVT_END()
 
 /**
  * Sets GF(11) to 1, the flag evt_ufo_sousaban raises while the crane is driven along Z.
- * Nothing runs this script; evt_ufo_sousaban sets GF(11) itself.
+ * No calls to this script appear in this file; evt_ufo_sousaban sets GF(11) itself.
  */
 EVT_BEGIN(move_up)
     SET_VALUE(GF(11), 1)
     RETURN
 EVT_END()
 
-/** Sets GF(11) back to 0; unused, see move_up. */
+/** Sets GF(11) back to 0; no calls appear in this file. */
 EVT_BEGIN(move_up2)
     SET_VALUE(GF(11), 0)
     RETURN
 EVT_END()
 
-/** Closes the crane's claw (all three arm pairs rotate 30 degrees over one second) to grab a prize. */
+/** Rotates all three claw-arm pairs from 0 to 30 degrees over one second. */
 EVT_BEGIN(hand_success)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 3000, 1000)
     LABEL(0)
@@ -334,8 +333,8 @@ EVT_BEGIN(hand_success)
 EVT_END()
 
 /**
- * Closes the claw to 50 degrees over one second and opens it again: the missed-grab motion its name describes,
- * but nothing runs it (ufo_main calls hand_success whether item_chk finds a prize or not).
+ * Rotates the claw-arm pairs from 0 to 50 degrees and back, one second per step.
+ * No calls appear in this file; ufo_main calls hand_success for both item_chk results.
  */
 EVT_BEGIN(hand_fail)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 0, 5000, 1000)
@@ -369,7 +368,7 @@ EVT_BEGIN(hand_fail)
     RETURN
 EVT_END()
 
-/** Opens the claw back up over one second after the crane has carried a prize to the chute or come up empty. */
+/** Rotates the claw-arm pairs from 30 degrees back to 0 over one second. */
 EVT_BEGIN(hand_release)
     CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 3000, 0, 1000)
     LABEL(0)
@@ -563,7 +562,7 @@ EVT_END()
 /**
  * Powers up the crane: the machine's light S_hikari flickers on
  * and the prize-light balls S_tama_a/S_tama_b blink alternately and S_hikari rotates
- * until GF(14) (crane shut down), then ufo_main starts.
+ * until GF(14) (crane shut down). ufo_main starts after these inline events are launched.
  */
 EVT_BEGIN(evt_ufo_init)
     LOOP(3)
@@ -1019,7 +1018,7 @@ EVT_BEGIN(badge_evt3)
 EVT_END()
 
 EVT_BEGIN(aji_03_init_evt)
-    // The room's music and ambience start, and the crane lights are hidden.
+    // The room's music and ambience start, and S_hikari is hidden.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG7_DUN2"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG7_AJI3"))
 #if VERSION > VERSION_DEMO_US
@@ -1042,8 +1041,8 @@ EVT_BEGIN(aji_03_init_evt)
         SET_VALUE(GSWF_AJI_03_SWITCH_2_PRESSED, 1)
         SET_VALUE(GSWF_AJI_03_SWITCH_3_PRESSED, 1)
     END_IF
-    // Before the cog is inserted, the shelf door is the place to use it; afterwards the clockwork runs and the
-    // crane panel can be used.
+    // Before the cog is inserted, the shelf door is the place to use it; afterwards the clockwork runs.
+    // The crane panel is registered only when GSWF_AJI_03_SWITCH_PUZZLE_SOLVED is set.
     IF_INT_EQUAL(GSWF_AJI_03_COG_PLACED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_tanadoor_1"), 0, PTR(evt_haguruma), 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_zenmais_ari"), MAP_OBJ_FLAG_HIDDEN)
@@ -1152,7 +1151,6 @@ EVT_BEGIN(aji_03_init_evt)
     IF_INT_EQUAL(GSWF_STARPIECE_98, 0)
         CALL(evt_item_entry, STRING("keihin08"), ITEM_STAR_PIECE, -50, 50, -100, ITEM_TYPE_STILL, -1, PTR(badge_evt3))
     END_IF
-    // The emergency alarm script starts.
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN
 EVT_END()

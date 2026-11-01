@@ -54,7 +54,6 @@ EvtWord tou_00_init_evt[76];
 
 /**
  * Script helper: moves the 3D camera's start time back 2 s and the event's saved time back 3.5 s,
- * so the blimp fly-in scripted to a fixed duration lines up with the camera move.
  */
 USER_FUNC(time_shift) {
     CameraEntry* cam = camGetPtr(CAMERA_3D);
@@ -126,7 +125,7 @@ EVT_END()
 /**
  * Wing flap loop for the arena's decoration: the map objects hane_1 and hane_2 swing back
  * and forth about Z by 10 degrees.
- * 20% of the time they flutter three quick strokes (10 frames each way),
+ * For random values 0..19 out of 0..100, they flutter three quick strokes (10 frames each way),
  * otherwise they take one slow stroke (30 frames each way).
  */
 // Inclusive random 0..100 selects the fast flap for values 0..19.
@@ -254,7 +253,7 @@ EVT_BEGIN(evt_to_tou)
     RETURN
 EVT_END()
 
-/** Loop that glues Mario and his partner to the blimp gondola (gondora_1/gondora_2 map objects) while it moves. */
+/** Loop that places Mario and his partner relative to gondora_2 while it moves. */
 // The second lookup supplies the position used below; the first lookup is retained.
 EVT_BEGIN(evt_pos_keep)
     LOOP(0)
@@ -610,7 +609,7 @@ static EVT_BEGIN(hkoopa_init)
     RETURN
 EVT_END()
 
-/** Script helper: args[0] = smoke effect name, args[1] = distance; shifts that smoke puff effect along x each call. */
+/** Script helper: args[0] = smoke effect name, args[1] = distance; shifts that smoke puff along x after the first call. */
 // Follow the named effect until it disappears; the first call waits without moving it.
 USER_FUNC(kemuri_move) {
     EvtWord* args = event->args;

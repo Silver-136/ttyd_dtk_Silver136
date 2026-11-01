@@ -59,7 +59,7 @@ EvtWord yuucounter_window_null_evt[2];
 
 /**
  * Returns the bits of the counter's display flags selected by mask (1 hide, 2 freeze the value,
- * 4 restart the timer baseline), or 0 if no counter exists.
+ * 4 restart the timer baseline in retail versions), or 0 if no counter exists.
  */
 u32 yuucounter_flag(u32 mask) {
     if (_wp == NULL) {

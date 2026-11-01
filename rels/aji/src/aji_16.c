@@ -184,9 +184,9 @@ static BeroEntry bero_peach_data[] = {
 };
 
 /**
- * Sets up the Last Mail scene (aji_16 entered as "peach", STG7_25_THE_LAST_MAIL):
+ * Sets up the Last Mail scene when aji_16 is entered as "peach":
  * Mario and the partner are placed on the left,
- * a paper-flat Peach (P_Z_7) is put in the middle under soft focus and evt_last_mail starts.
+ * Peach uses paper animation P_Z_7 in the middle, soft focus is enabled and evt_last_mail starts.
  */
 EVT_BEGIN(evt_last_mail_init)
     CALL(evt_mario_key_onoff, 0)
@@ -230,8 +230,8 @@ EVT_BEGIN(evt_last_mail)
 EVT_END()
 
 /**
- * Opens the east door e_bero for Peach with the door sound bero_open_door_play_se (the door swings 180 degrees
- * over half a second).
+ * Opens the east door e_bero for Peach with bero_open_door_play_se,
+ * driving e_door_open's sliding leaves with values 0 to 180 over half a second.
  */
 EVT_BEGIN(peach_evt_door_open)
     CALL(evt_cam3d_evt_set, 35, 114, 334, 157, 54, 17, 1000, EASING_SINE_IN_OUT)

@@ -105,7 +105,7 @@ static BeroEntry bero_entry_data[] = {
 
 /**
  * Item-box script for the chest at "box": gives Mario the card key (ITEM_CARD_KEY_0x1D),
- * sets GSWF_AJI05_CARD_KEY_TAKEN, clears the A_no1 hit flag 2048,
+ * sets GSWF_AJI_05_LIT_FLOOR_DONE and clears HIT_ATTR_TOGE on the A_no1 hit group,
  * switches off the floor lights and makes the floor visibly flash between two states five times
  * while Mario turns to face east.
  */
@@ -137,7 +137,7 @@ static EVT_BEGIN(evt_box)
     RETURN
 EVT_END()
 
-/** Turns the glowing floor panels on by calling the _hikaru_on script function. */
+/** Shows the unlit panel objects by calling _hikaru_on. */
 static EVT_BEGIN(hikaru_on)
     CALL(_hikaru_on)
     RETURN
@@ -179,7 +179,7 @@ static EvtWord hikaru_yuka_init[] = {
 
 /**
  * Init script of aji_05, a second glowing-floor room like aji_02:
- * plays BGM_STG7_DUN2, sets up the exits and a Sleepy Sheep badge block,
+ * plays BGM_STG7_DUN2, sets up the exits and a ? block containing ITEM_SLEEPY_SHEEP,
  * and keeps the floor panels reacting to Mario (hikaru_yuka_init)
  * until the chest's card key has been taken (GSWF_AJI05_CARD_KEY_TAKEN);
  * afterwards the panel lights are all off.
@@ -276,8 +276,8 @@ static USER_FUNC(ride_chk) {
 
 /**
  * Script function that plays an electric shock when Mario is in the spike-damage motion
- * (MARIO_MOTION_DAMAGE_TOGE): SFX_STG7_ELECTRIC_SHOCK1 and a blue-green spark effect at his position,
- * once per hit.
+ * (MARIO_MOTION_DAMAGE_TOGE): SFX_STG7_ELECTRIC_SHOCK1 and a blue-green spark effect 30 units above him,
+ * once per entry into that motion.
  */
 static USER_FUNC(thunder_main) {
     MarioWork* mario = marioGetPtr();

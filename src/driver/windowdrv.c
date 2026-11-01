@@ -63,15 +63,13 @@ void windowInit(void) {
 #endif
 }
 
-/** new in retail */
-// Completion callback of the msgWindow.tpl DVD read in windowTexSetup (new in retail)
-// Descriptive name (not in the symbol maps); placeholder unk_8007f204, JP 0x8007F204. See docs/NAME_PROVENANCE.md.
 #if VERSION <= VERSION_DEMO_US
 void windowLoadTpl(const char* name);
 /** the demo loads msgWindow.tpl synchronously */
 void windowTexSetup(void) {
 #else
-/** new in retail */
+/** Completion callback of the msgWindow.tpl DVD read in windowTexSetup. */
+// Descriptive name (not in the symbol maps); placeholder unk_8007f204, JP 0x8007F204. See docs/NAME_PROVENANCE.md.
 void windowTexSetup_callback(s32 error, DVDFileInfo* info) {
     DVDEntry* entry = info->cb.userData;
 #endif
@@ -695,7 +693,7 @@ void windowDispGX_System(s32 type, u8 alpha, f32 x, f32 y, f32 width, f32 height
 /**
  * Draws one layer (dark = the shadow pass, else the face) of a speech balloon:
  * the frame for the window type (normal, boss, TEC-XX, Shadow Sirens)
- * and the tail from the balloon toward (tailX, tailY) as set by tailMode.
+ * and the tail from the balloon toward (tailX, tailY) as set by tailFlags.
  */
 void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, f32 y, f32 width, f32 height, f32 tailX, f32 tailY) {
     CameraEntry* camera;
@@ -1046,7 +1044,7 @@ void _windowDispGX_Message(s32 type, s32 tailFlags, u8 alpha, BOOL dark, f32 x, 
     }
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
 
-    // the speech tail pointing at (tailX, tailY): tailMode & 1 draws it, & 4 moves its base along the window, & 8
+    // the speech tail pointing at (tailX, tailY): tailFlags & 1 draws it, & 4 moves its base along the window, & 8
     // puts it on the other edge
     if (tailFlags & 1) {
         if (tailFlags & 4) {
@@ -1113,7 +1111,7 @@ end:
 #if VERSION > VERSION_DEMO_US
 BOOL tpl_loaded; // TRUE once msgWindow.tpl is unpacked and wakuTexObj is built (new in retail)
 #endif
-TEXPalette* winTpl; //new in retail
+TEXPalette* winTpl;
 
 /** Whether the window frame textures can be drawn; the demos load them synchronously and need no check. */
 static inline BOOL windowTplReady(void) {

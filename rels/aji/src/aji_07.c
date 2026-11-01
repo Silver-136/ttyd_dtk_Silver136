@@ -156,7 +156,7 @@ EVT_BEGIN(tensou_ride)
             BREAK_LOOP
         END_IF
     END_LOOP
-    // They spin faster and faster, shrink and rise out of sight.
+    // They shrink and rise while the spin continues.
     CALL(evt_mario_cam_off)
     CALL(evt_mario_cont_onoff, 0)
     CALL(evt_party_cont_onoff, 0, 0)

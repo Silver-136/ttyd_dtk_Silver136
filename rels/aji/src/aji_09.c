@@ -1,5 +1,5 @@
 // aji_09 (敵のアジト, X-Naut Fortress): the locker room: the changing booths (kou) and lockers (rokka) where
-// Peach puts on an X-Naut uniform (peach_evt_fuku_g).
+// Peach puts on an X-Naut uniform (peach_evt_kou_in).
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -249,8 +249,8 @@ EVT_END()
 /**
  * Case script for the second changing booth's curtain (A_kou2_ka_omo and A_kou2_ka_ura),
  * which also toggles open and closed through GF(1).
- * When the map is entered from the ceiling ("tenjo") Mario turns into 8-bit pixel Mario (dot_mario,
- * GSWF_AJI09_PIXEL_MARIO_ACTIVE) and BGM_EVT_DOT_MARIO1 plays while he stays in that form.
+ * With GSWF_AJI_09_DOT_MARIO_SEEN clear and entrance "tenjo", calls dot_mario and sets that flag.
+ * Opening the curtain with that flag set starts BGM_EVT_DOT_MARIO1.
  */
 EVT_BEGIN(evt_kou2)
     CALL(evt_hit_bind_mapobj, STRING("A_kou2_ka_omo"), STRING("S_kou2_ka"))

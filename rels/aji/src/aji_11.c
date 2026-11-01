@@ -1,5 +1,5 @@
 // aji_11 (敵のアジト, X-Naut Fortress): the storage room where Peach finds the disk on a shelf and plays it
-// (peach_evt_disksys), and the gnawing creature (gajigaji).
+// (peach_evt_disksys), with the gajigaji scripts.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -187,9 +187,9 @@ EVT_END()
 
 /**
  * Creates one of the background creatures (NPC LW(10) from c_gazigazi,
- * placed at a random spot on the floor at depth LW(11),
+ * placed at a random position with x from -300 to 300, y from 0 to 180 and depth LW(11),
  * scaled between 0.5 and 1.5) and makes it glide around the room at random forever.
- * Half of them also run the animation script evt_gajigaji_anim.
+ * A random draw from 0 to 100 below 50 also starts evt_gajigaji_anim.
  */
 EVT_BEGIN(evt_gajigaji_main)
     SET_VALUE(LW(10), LW(0))
@@ -306,8 +306,8 @@ EVT_END()
 
 /**
  * Case script of the shelf (tana) before the disk is found:
- * Peach looks at the shelf (peach_aji_245), takes the Data Disk (ITEM_DATA_DISK) and shows it (peach_aji_246),
- * sets GSWF_AJI11_PEACH5_DATA_DISK_TAKEN and attaches the console script to a_disksys.
+ * Prints peach_aji_245, gives ITEM_DATA_DISK and prints peach_aji_246;
+ * sets GSWF_AJI_11_DATA_DISK_TAKEN and registers the console script on a_disksys.
  */
 EVT_BEGIN(peach_evt_tana1)
     CALL(evt_mario_key_onoff, 0)
@@ -339,10 +339,9 @@ EVT_BEGIN(peach_evt_tana2)
 EVT_END()
 
 /**
- * Peach's chapter 5 setup of the storage room: if system flag bit 64 is set it clears it
- * and sets Peach's condition to 2, makes her invisible,
- * then attaches the shelf (tana) and disk system (a_disksys) scripts according to whether the data disk has been
- * taken or read.
+ * Peach's chapter 5 setup of the storage room: if system flag bit 64 is set, clears it and sets her condition to 2.
+ * Always calls peach_evt_toumei to zero the player scale, then registers the shelf (tana) and
+ * disk system (a_disksys) scripts according to whether the data disk has been taken or read.
  * It overwrites the w_bero exit with her own, and once says peach_aji_244 (GSWF_AJI11_PEACH5_ROOM_REMARK).
  */
 static EVT_BEGIN(peach_evt_stg5)

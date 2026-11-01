@@ -437,7 +437,7 @@ EVT_BEGIN(aji_18_init_evt)
             SPAWN_EVENT(PTR(evt_koopa_after))
         END_IF
     END_SWITCH
-    // The emergency lights start.
+    // Monitor for STG7_25_THE_LAST_MAIL before applying the emergency blend.
     SPAWN_EVENT(PTR(evt_emergency))
     RETURN
 EVT_END()

@@ -74,9 +74,7 @@ void seq_titleInit(SequenceWork* work) {
 }
 #endif
 
-/** Leaves the title sequence: frees mariost.tpl and fades out all sound unless going on to the file select. */
 #if VERSION <= VERSION_DEMO_US
-/** Later versions: titleInit does the setup, then the same flags are cleared. */
 void seq_titleInit(SequenceWork* work) {
     memset(wp2, 0, sizeof(TitleWork));
     wp2->texture = fileAllocf(4, "%s/mariost.tpl", getMarioStDvdRoot());

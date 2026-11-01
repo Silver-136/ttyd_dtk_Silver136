@@ -1,4 +1,4 @@
-// Camera shift: pans the field camera sideways with the C stick (L/R shift) and eases it back.
+// Camera shift: eases the field camera's sideways lead from Mario's horizontal stick input.
 
 #include "driver/camdrv.h"
 #include "mario/mario.h"

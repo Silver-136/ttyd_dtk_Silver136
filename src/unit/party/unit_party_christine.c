@@ -1494,7 +1494,6 @@ static EVT_BEGIN(attack_event)
     RETURN
 EVT_END()
 
-/** Victory reaction (data tag 64): Goombella's PKR_Y_1 cheer for 64 frames, then her stay pose. */
 #if VERSION > VERSION_DEMO_US
 /** Idle: plays the stay pose from the current pose table. */
 static EVT_BEGIN(wait_event)

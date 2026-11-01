@@ -3,8 +3,6 @@
 
 #include "version.h"
 #include "mario/mariost.h"
-// aji_19 (敵のアジト, X-Naut Fortress): the room reached from the Moon (moo_02), with the first-visit scene
-// (evt_hajimete).
 
 #include "battle/battle_unit.h"
 #include "evt/evt_cmd.h"
@@ -157,7 +155,7 @@ static BeroEntry bero_entry_data[] = {
 /**
  * First-visit scene of the fortress (aji_19, before STG7_07_01_INSIDE_THE_BUILDING):
  * the partner comments (stg7_aji_00_00_01), the story becomes STG7_07_01_INSIDE_THE_BUILDING
- * and the area name telop is shown.
+ * and telop 15 is requested.
  */
 EVT_BEGIN(evt_hajimete)
     CALL(evt_mario_key_onoff, 0)
@@ -247,15 +245,14 @@ static USER_FUNC(mario_chk) {
     return EVT_RETURN_BLOCK;
 }
 
-/** Whether the hit area target is group or one of its descendants. */
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
     // Compare joint names through the child-first search, excluding the root's siblings.
     return _hitIsGroupSub(target, group, FALSE);
 }
 
 /**
- * Recursive helper of hitIsGroup: whether the joint name of target equals that of node,
- * of any of node's descendants, or (when checkSibling is TRUE) of the siblings that follow.
+ * Searches by target joint name: visits node, then returns the child search directly when a child exists.
+ * Only a node without a child can continue to its following sibling when checkSibling is TRUE.
  */
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) {
     if (strcmp(target->joint->name, node->joint->name) == 0) {

@@ -106,16 +106,15 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Script function that attaches the two frame NPCs (枠 and 枠２) of the Magnus von Grapple 2.0 robots to the
- * robots' locator17 bone each frame, or hides them below the floor while the robot is below ground level,
- * and then moves all the robot's bone world positions out of sight (y = -1000). Blocks forever.
+ * Copies each robot's cached locator17 group position to its frame NPC (枠 or 枠２) while the robot's y >= 0,
+ * or sets the frame position to (0, -1000, 0) otherwise. Then resets all cached group positions
+ * to (0, -1000, 0). Blocks forever.
  */
 USER_FUNC(waku) {
     NpcEntry* npc;
     AnimationPose* pose;
     s32 i;
 
-    // Copy each visible robot locator to its arm, then move every cached world position below the scene.
     // ロボット
     npc = npcNameToPtr_NoAssert("ロボット");
     if (npc != NULL) {
@@ -169,7 +168,6 @@ USER_FUNC(waku) {
 /**
  * Creates the two frame NPCs 枠 and 枠２ (model c_mb_robo_2a, no shadow, animation L_1)
  * and starts waku, which keeps them on the locator17 bone of the robots ロボット and ロボット２.
- * Guess: c_mb_robo_2a is a part of the Magnus von Grapple 2.0 model that is drawn as its own NPC.
  */
 EVT_BEGIN(evt_robot_waku)
     CALL(evt_npc_entry, STRING("枠"), STRING("c_mb_robo_2a"))
@@ -191,7 +189,7 @@ EVT_END()
  * the story after this fight is STG7_20_LORD_CRUMP_DEFEATED)
  * and the robot (ロボット) are placed, BGM_EVT_MAGNUM_APP1 plays,
  * dialogue stg7_aji_36 to 41 plays with the partner, then the robot's battle (battle info 5) starts.
- * After the fight the partner talks (stg7_aji_42)
+ * After the fight the robot speaks stg7_aji_42
  * and the map changes to moo_04 at the evt_aji_14 entrance with a white fade.
  */
 static EVT_BEGIN(evt_boss)
@@ -210,7 +208,6 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_mov_pos2, -420, 0, FLOAT(80.0f))
     WAIT_MS(1000)
-    // Lord Crump waits in the boss room, laughing, as the boss music starts.
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_MAGNUM_APP1"))
     CALL(evt_msg_print, 0, STRING("stg7_aji_36"), 0, STRING("幹部"))
     WAIT_MS(300)

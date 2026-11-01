@@ -479,7 +479,8 @@ void npcDisp_blur(CameraId camId, void* param) {
 
 /**
  * Boot-time setup (from mariost.c): allocates the field and battle NPC tables,
- * the release_wp save area for battles and the FieldBattleData at gp->fbatData, all zeroed.
+ * the release_wp save area for battles and the FieldBattleData at gp->fbatData.
+ * Explicitly clears the NPC tables and FieldBattleData.
  */
 void npcInit(void) {
     FieldBattleData* data;
@@ -688,8 +689,7 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc);
 HitEntry* npcHitCheckSide(NpcEntry* npc, f32* outX, f32* outZ, f32* angle, f32 dx, f32 dz);
 void npcKoopaModeMain(void);
 #if VERSION >= VERSION_US
-/** US: probe the wall from a copy of the position first, then slide along it */
-// US: probe the wall from a copy of the position first, then slide along it
+/** US and later: probe the wall from a copy of the position first, then slide along it. */
 static inline void npcMoveSide(NpcEntry* entry, f32 mx, f32 mz) {
     f32 wx = entry->position.x;
     f32 wz = entry->position.z;
@@ -975,7 +975,7 @@ void npcMain(void) {
                             dz = m->position.z - entry->position.z;
                             dy = m->position.y - entry->position.y;
 #if VERSION >= VERSION_US
-                            // US: in the Bowser levels the search range shrinks with kpaGetLevel()
+                            // US and later: subtract a kpaGetLevel()-indexed offset from the search distance for 2D NPCs.
                             dist = sqrtf(dx * dx + dz * dz);
                             sd = dist;
                             if (entry->flags & NPC_FLAG_2D) {
@@ -1314,12 +1314,6 @@ void npcSetMarioAutoTalkPose(const char* stayPose, const char* talkPose) {
 
 #pragma opt_propagation off
 #pragma opt_lifetimes off
-/**
- * name is non-const as in the original: through a const char* the scheduler moves the first load up into the
- * register saves (MWCC treats const loads as not aliasing the stores).
- */
-// name is non-const as in the original: through a const char* the scheduler moves the first load up into the
-// register saves (MWCC treats const loads as not aliasing the stores).
 void npcSetTalkPose(char* name) {
     PartyEntry* party;
     NpcEntry* npc;
@@ -2270,7 +2264,7 @@ static inline void fbatRecoverItems(NpcEntry* npc) {
  * Skips the fight with a win when Bump Attack (or First Attack after Mario struck first) beats a weaker enemy;
  * otherwise starts the battle sequence and waits for it.
  * Afterwards: plays Merlee's coin bonus (coins x3) if her curse fired,
- * works out the coin drop (more with Money Money, +1 for a first-strike bonus), then kills the enemy's group,
+ * works out the coin drop (Money Money and NPC_BATTLE_EXTRA_COINS increase its multiplier), then kills the enemy's group,
  * or, if it still holds stolen items, keeps it alive and drops the recovered ones.
  * Fleeing (result 4) gives Mario 3 seconds of invincibility while he drops coins.
  */
@@ -2658,15 +2652,6 @@ typedef struct {
 static const SinTbl sSinTbl = {{0, 0, 0, 0, 45, 60, 90, 100, 101, 101, 101}};
 #endif
 
-/**
- * Finds the NPC Mario or the partner hits this frame.
- * flags pick the checks: 0x20 touch/jump, 0x40 hammer, 0x80 spin hammer, 0x100 Koops' shell,
- * 0x200 Bobbery's bomb; 0x10 also checks enemy contact (and no checks while invincible),
- * 0x1 tests only the current hammer frame instead of the whole swing,
- * 0x1000 tests enemies instead of friendly NPCs, 0x2000 only NPCs whose reactionFlags allow that hit,
- * without setting the banner.
- * Returns the closest NPC hit and writes the FbatHitResult (kind first) to the second argument if given.
- */
 #if VERSION <= VERSION_DEMO_US
 // FAKE: `(*(T*)&...)` reads, as in the retail form (FAKES.md, fbatHitCheck)
 #define FH_NPC_FILTER(f1000, bit)                                       \
@@ -3199,7 +3184,7 @@ BOOL npcCheckInterrupt(NpcEntry* npc) {
         } else if ((flags & NPC_INTERRUPT_FIND) && npc->findEvent && !(npc->statusFlags & NPC_STATUS_NO_FIND_ONCE) &&
 #if VERSION <= VERSION_DEMO_US
                    !(npc->flags & NPC_FLAG_NO_FIND)
-) {
+                   ) {
 #else
                    !(npc->flags & NPC_FLAG_NO_FIND) && !(flags & NPC_INTERRUPT_NO_FIND)) {
 #endif
@@ -3371,7 +3356,7 @@ void npcSetBattleInfo(NpcEntry* npc, s32 battleInfoId) {
 }
 
 /**
- * Freezes every enemy NPC (those with battle info) for an event: stops its move event and animation.
+ * Freezes every ready NPC marked NPC_FLAG_STOP_FOR_EVENT: stops its move event and animation.
  * Used by the pause menu, Mario taking damage, case events and a script helper.
  */
 void npcStopForEvent(void) {
@@ -3739,7 +3724,6 @@ void npcKoopaModeMain(void) {
     fire = jump;
     if (mario->characterId == CHARACTER_BOWSER) jump = kpaJumpChk();
     if (mario->characterId == CHARACTER_BOWSER) fire = kpaFireAttackCheck();
-    // FieldBattleData kpaJumpScore / kpaJumpKills / kpaComboCount, read through the byte pointer
     if (jump) {
         if (data->kpaJumpScore > 0 && data->kpaJumpKills >= 2) {
             Vec pos = mario->position;
@@ -3845,7 +3829,7 @@ void fbatSandersBombTriggerOn(void) {
 
 /**
  * Bowser stage score for a defeated enemy: 300 (400 for a bumped block, 0 for lava), +100 while invincible,
- * multiplied by the fire combo count, capped at 10000; jump kills also add to the multi-stomp bonus.
+ * multiplied by the fire combo count only for fire kills, capped at 10000; jump kills also add to the multi-stomp bonus.
  * Shows the score above it and returns it.
  */
 s32 npcCalcScore(NpcEntry* npc) {

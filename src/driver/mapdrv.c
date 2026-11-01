@@ -98,7 +98,6 @@ void mapDispOff(void) {
 }
 #endif
 
-/** Lets mapDisp draw the map again after mapDispOff. */
 // Descriptive name (not in the symbol maps).
 #if VERSION > VERSION_DEMO_US
 /** Lets mapDisp draw the map again after mapDispOff. */
@@ -1083,10 +1082,6 @@ void mapUnLoad(void) {
 }
 
 #if VERSION > VERSION_DEMO_US
-/**
- * The demo reads each map's LZ77-compressed archive "<root>/b/<map>" itself:
- * mapPreLoad starts the read, mapLoad unpacks it into the arc slot before loading the map.
- */
 BOOL mapPreLoad(const char* map) {
     return TRUE;
 }
@@ -1114,10 +1109,6 @@ void mapLoad(const char* map) {
 // split temp; split temps are created in order of the variables' first reference (i before wp before entry), which gives
 // the target's i r31 / wp r30 / entry r29. Code is otherwise identical.
 #pragma opt_common_subs off
-/**
- * Frees the battle stage maps (MapWork slot 1) at the end of a battle,
- * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
- */
 #if VERSION <= VERSION_DEMO_US
 /**
  * The demo reads each map's LZ77-compressed archive "<root>/b/<map>" itself:
@@ -1171,7 +1162,7 @@ void mapLoad(const char* map) {
  * then copies the field map's files back from ARAM and rebuilds its display lists so the field can resume.
  */
 void bmapUnLoad(void) {
-MapWork* wp2;
+    MapWork* wp2;
     MapEntry* entry3;
     int j;
     MapWork* wp;

@@ -6,10 +6,8 @@
 #include "driver/arcdrv.h"
 #if VERSION <= VERSION_DEMO_US
 #include "driver/animdrv.h"
-#include "driver/effdrv.h"
-#else
-#include "driver/effdrv.h"
 #endif
+#include "driver/effdrv.h"
 #include "driver/envdrv.h"
 #include "driver/fadedrv.h"
 #include "driver/icondrv.h"
@@ -53,10 +51,6 @@ static s32 logoAsyncFirst(void);
 #endif
 
 #if VERSION > VERSION_DEMO_US
-/**
- * The demos always start interlaced; the US demo also starts the logo files loading
- * and preloads the E3 demo's models and textures.
- */
 void seq_logoInit(SequenceWork* work) {
     memset(wp, 0, sizeof(LogoWork));
 #if VERSION >= VERSION_US
@@ -489,8 +483,6 @@ void seq_logoMain(SequenceWork* work) {
 }
 
 
-/** param is unused */
-//param is unused
 void logoDisp(CameraId camId, void* param) {
     GXRenderModeObj* rmode;
     f32 width, height, x, y;

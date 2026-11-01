@@ -1,4 +1,4 @@
-// tou_02 (闘技場, Glitz Pit): the entrance lobby with the fans and the reception; leads to tou_01, tou_03, tou_04.
+// tou_02 (闘技場, Glitz Pit): the lobby with the fan crowd; leads to tou_01, tou_03, tou_04.
 
 #include "version.h"
 #include "battle/battle_unit.h"
@@ -498,7 +498,7 @@ EVT_END()
 
 /**
  * NPC init for the left guard: stands at x = -470 until the guards step aside, then at -530;
- * absent when the story has moved on.
+ * at or after STG3_33_06_BOWSER_TREASURE, GSWF_TOU_02_GUARD_STEPPED_ASIDE selects between those positions.
  */
 EVT_BEGIN(init_gard1)
     SWITCH(GSW_STORY_PROGRESS)
@@ -648,7 +648,7 @@ EVT_END()
 
 /**
  * Talk script of the reporter: story-dependent lines (before Gonzales, until the boss battle,
- * then after the league reopens).
+ * then at or after STG3_32_BOSS_BATTLE, with rematch flags selecting further lines).
  */
 EVT_BEGIN(talk_repo)
     SWITCH(GSW_STORY_PROGRESS)
@@ -737,7 +737,7 @@ EVT_BEGIN(talk_cam1)
     RETURN
 EVT_END()
 
-/** NPC init for the second camera operator: stands at (80, 200, -125), or (30, 200, -60) before the arena intro. */
+/** Second camera operator: demos always use (80, 200, -125); retail uses it before the arena intro, then (30, 200, -60). */
 EVT_BEGIN(init_cam2)
 #if VERSION <= VERSION_DEMO_US
     CALL(evt_npc_set_position, STRING("me"), 80, 200, -125)
@@ -969,13 +969,13 @@ EVT_BEGIN(talk_kino5)
     RETURN
 EVT_END()
 
-/** NPC init for Toadette (kinopiko): placed at (-490, 0, 25). */
+/** NPC init for キノピコ: placed at (-490, 0, 25). */
 EVT_BEGIN(init_kinopiko)
     CALL(evt_npc_set_position, STRING("me"), -490, 0, 25)
     RETURN
 EVT_END()
 
-/** Talk script of Toadette: story-dependent lines. */
+/** Talk script of キノピコ: story-dependent lines. */
 EVT_BEGIN(talk_kinopiko)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_04_GONZALES_IS_BORN)
@@ -1064,8 +1064,8 @@ EVT_BEGIN(talk_kinopio_f)
 EVT_END()
 
 /**
- * NPC init for the mouse (chu): placed at (245, 0, 125) from Ms. Mowz's introduction,
- * otherwise hidden at y = -1000.
+ * NPC init for chu: placed at (245, 0, 125) before STG3_20_08_MS_MOWZ in demos
+ * or STG3_20_05_MAJORS_4TH_PL in retail; otherwise placed at y = -1000.
  */
 EVT_BEGIN(init_chu)
 #if VERSION <= VERSION_DEMO_US
@@ -1109,9 +1109,9 @@ EVT_BEGIN(talk_chu)
 EVT_END()
 
 /**
- * NPC init for the champion (Rawk Hawk) in the lobby:
+ * NPC init for チャンピョン in the lobby:
  * only at story stage STG3_33_06_BOWSER_TREASURE, when Mario did not leave as champion,
- * he stands at (-15, 0, 25) and faces Mario instantly until the first sequence frame has passed.
+ * he stands at (-15, 0, 25), with NPC_FLAG_INSTANT_TURN set until the sequence is SEQ_GAME.
  */
 static EVT_BEGIN(init_champ)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1194,7 +1194,7 @@ EVT_BEGIN(move_champ)
     RETURN
 EVT_END()
 
-/** Talk script of the champion in the lobby (stg3_tou_190), with the post-Chapter 3 line stg3_tou_479_02. */
+/** Champion talk: before STG3_33_06_BOWSER_TREASURE, stg3_tou_190_01 if the fan count is zero, otherwise stg3_tou_190; later stg3_tou_479_02. */
 EVT_BEGIN(talk_champ)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG3_33_06_BOWSER_TREASURE)
@@ -1211,7 +1211,7 @@ EVT_BEGIN(talk_champ)
 EVT_END()
 
 /**
- * NPC init for Jolene (キノシコワ): at STG3_33_06_BOWSER_TREASURE (after the Bowser interlude, before
+ * NPC init for キノシコワ: at STG3_33_06_BOWSER_TREASURE (after the Bowser interlude, before
  * Mario leaves Glitzville) she is placed at (-25, 0, 75) unless Mario left as champion.
  */
 EVT_BEGIN(init_shikowa)
@@ -1229,7 +1229,7 @@ EVT_BEGIN(init_shikowa)
     RETURN
 EVT_END()
 
-/** Talk script of Jolene: at STG3_33_06_BOWSER_TREASURE she says stg3_tou_479_01; otherwise nothing. */
+/** Talk script of キノシコワ: stg3_tou_479_01 at STG3_33_06_BOWSER_TREASURE; otherwise nothing. */
 EVT_BEGIN(talk_shikowa)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1239,9 +1239,9 @@ EVT_BEGIN(talk_shikowa)
 EVT_END()
 
 /**
- * NPC init for the Shady Koopa (ウラノコ) in the lobby:
+ * NPC init for ウラノコ in the lobby:
  * only at story stage STG3_33_06_BOWSER_TREASURE, when Mario did not leave as champion,
- * he stands at (-75, 0, 50) and faces Mario instantly until the first sequence frame has passed.
+ * he stands at (-75, 0, 50), with NPC_FLAG_INSTANT_TURN set until the sequence is SEQ_GAME.
  */
 static EVT_BEGIN(init_uranoko)
     SWITCH(GSW_STORY_PROGRESS)
@@ -1259,7 +1259,7 @@ static EVT_BEGIN(init_uranoko)
 EVT_END()
 
 /**
- * Talk script of the Shady Koopa: at story stage STG3_33_06_BOWSER_TREASURE he says stg3_tou_479_03;
+ * Talk script of ウラノコ: stg3_tou_479_03 at story stage STG3_33_06_BOWSER_TREASURE;
  * otherwise nothing.
  */
 static EVT_BEGIN(talk_uranoko)
@@ -1271,7 +1271,7 @@ static EVT_BEGIN(talk_uranoko)
 EVT_END()
 
 /**
- * NPC init for the first Iron Cleft (アイアンＡ): scaled 1.5 in x and y, and at
+ * NPC init for アイアンＡ: scaled 1.5 in x and y, and at
  * STG3_33_06_BOWSER_TREASURE placed at (-30, 0, -50) unless Mario left as champion.
  */
 EVT_BEGIN(init_ironA)
@@ -1290,7 +1290,7 @@ EVT_BEGIN(init_ironA)
     RETURN
 EVT_END()
 
-/** Talk script of the first Iron Cleft: stg3_tou_479_04 at STG3_33_06_BOWSER_TREASURE, otherwise nothing. */
+/** Talk script of アイアンＡ: stg3_tou_479_04 at STG3_33_06_BOWSER_TREASURE, otherwise nothing. */
 EVT_BEGIN(talk_ironA)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1300,7 +1300,7 @@ EVT_BEGIN(talk_ironA)
 EVT_END()
 
 /**
- * NPC init for the second Iron Cleft (アイアンＢ): scaled 1.5 in x and y, and at
+ * NPC init for アイアンＢ: scaled 1.5 in x and y, and at
  * STG3_33_06_BOWSER_TREASURE placed at (-60, 0, -25) unless Mario left as champion.
  */
 EVT_BEGIN(init_ironB)
@@ -1319,7 +1319,7 @@ EVT_BEGIN(init_ironB)
     RETURN
 EVT_END()
 
-/** Talk script of the second Iron Cleft: stg3_tou_479_05 at STG3_33_06_BOWSER_TREASURE, otherwise nothing. */
+/** Talk script of アイアンＢ: stg3_tou_479_05 at STG3_33_06_BOWSER_TREASURE, otherwise nothing. */
 EVT_BEGIN(talk_ironB)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1328,7 +1328,7 @@ EVT_BEGIN(talk_ironB)
     RETURN
 EVT_END()
 
-/** NPC init for the Bandit (borodo): placed at (-100, 0, 100) in the late Chapter 3 scene. */
+/** NPC init for ボロドー: placed at (-100, 0, 100) in the late Chapter 3 scene. */
 EVT_BEGIN(init_borodo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1344,7 +1344,7 @@ EVT_BEGIN(init_borodo)
     RETURN
 EVT_END()
 
-/** Talk script of the Bandit in the late Chapter 3 scene (stg3_tou_479_06). */
+/** Talk script of ボロドー in the late Chapter 3 scene (stg3_tou_479_06). */
 EVT_BEGIN(talk_borodo)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_EQUAL(STG3_33_06_BOWSER_TREASURE)
@@ -1354,8 +1354,7 @@ EVT_BEGIN(talk_borodo)
 EVT_END()
 
 /**
- * NPCs of the lobby: the two door guards, the madam, a reporter and two cameramen, two Toads, Toadette,
- * the badge seller, Rawk Hawk, Jolene, the Shady Koopa, the two Iron Clefts and the Bandit.
+ * Setup records for 16 lobby NPCs; キノピオ女 is initialized separately in tou_02_init_evt.
  */
 static NpcSetupInfo npcEnt[] = {
     {
@@ -1660,7 +1659,7 @@ EVT_BEGIN(evt_tougi2)
 EVT_END()
 
 /**
- * Texture frames of the lobby fan crowd sprites: the Toad, Toadette and Lakitu walk cycles,
+ * Texture frames of the lobby fan crowd sprites: c_kinopio, c_kinopiko and c_jugemu walk cycles,
  * grouped into animations by pose_init and registered with evt_ext_entry.
  */
 ExtTexInfo ext_fan_data[] = {
@@ -1987,7 +1986,7 @@ void ext_fan_main(void) {
             }
         }
     }
-    // Exclude hidden anchor fans and every fan that has left the walking state.
+    // Count walking fans; retail also excludes flagged actor anchors.
     fan_wp->count = fan_wp->num;
 
 #if VERSION > VERSION_DEMO_US
@@ -2356,7 +2355,7 @@ s32 check_hammer(Fan* fan) {
 }
 #pragma opt_propagation reset
 
-/** Script helper: args[0] receives the number of fans still in the lobby crowd. */
+/** Script helper: args[0] receives the walking-fan count; retail excludes flagged anchors, demos include the hidden Mario anchor. */
 s32 evt_end_count(EventEntry* event, BOOL isFirstCall) {
     evtSetValue(event, event->args[0], fan_wp->count);
     return EVT_RETURN_DONE;
@@ -2430,9 +2429,9 @@ static EVT_BEGIN(evt_poster_9)
 EVT_END()
 
 /**
- * Lobby scene spawned right after the Champ's Belt is taken away and the party healed (the Peach interlude):
+ * Lobby scene spawned at STG3_33_06_BOWSER_TREASURE after the Champ's Belt removal call:
  * Mario and the partner appear in the lobby with the doors hidden,
- * Jolene (キノシコワ) speaks (stg3_tou_479_00_01 to 05) with the champion and the Shady Koopa answering,
+ * stg3_tou_479_00_01, _02 and _05 use キノシコワ; _03 uses チャンピョン and _04 uses ウラノコ,
  * Mario nods and cheers, then they walk out and the map changes to tou_01 (bero a_door_mon).
  */
 static EVT_BEGIN(evt_after_peach)
@@ -2570,7 +2569,7 @@ EVT_BEGIN(tou_02_init_evt)
         SET_VALUE(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 1)
         SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)
     END_IF
-    // The big screen's animation and its sounds.
+    // Run anm_paneru with the SFX_STG3_AMB_OBJ_SCREEN1/2 cues.
     CALL(evt_map_playanim, STRING("anm_paneru"), MAP_ANIM_PLAY_LOOP, 0)
     BEGIN_INLINE_EVENT
         LOOP(0)

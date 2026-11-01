@@ -214,7 +214,7 @@ EVT_END()
 
 /**
  * Init script of aji_12, a glowing-floor room with 44 panels:
- * plays BGM_STG7_DUN2, sets up the exits and an HP Drain badge block, and,
+ * plays BGM_STG7_DUN2, sets up the exits and a ? block containing ITEM_HP_DRAIN_ITEM, and,
  * until the card key from the chest has been taken (GSWF_AJI12_CARD_KEY_TAKEN),
  * runs the floor puzzle (hikaru_yuka_init); afterwards the floor is switched off.
  */
@@ -244,8 +244,8 @@ EVT_END()
 
 /**
  * Script function that plays an electric shock when Mario is in the spike-damage motion
- * (MARIO_MOTION_DAMAGE_TOGE): SFX_STG7_ELECTRIC_SHOCK1 and a blue-green spark effect at his position,
- * once per hit.
+ * (MARIO_MOTION_DAMAGE_TOGE): SFX_STG7_ELECTRIC_SHOCK1 and a blue-green effect 30 units above his position,
+ * once per entry into that motion.
  */
 static USER_FUNC(thunder_main) {
     MarioWork* mario = marioGetPtr();

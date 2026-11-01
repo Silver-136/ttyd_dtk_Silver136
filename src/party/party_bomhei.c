@@ -164,7 +164,6 @@ u8 bomheiGetStatus(void) {
 }
 
 #if VERSION > VERSION_DEMO_US
-/** Party table exit handler (demo): drops Mario's carry flag, stops the bomb sounds and frees the use work. */
 void bomhei_exit(PartyEntry* party) {
     PartyEntry* p;
     party->playerPtr->flags &= ~MARIO_FLAG_IS_CARRYING_BOBBERY;

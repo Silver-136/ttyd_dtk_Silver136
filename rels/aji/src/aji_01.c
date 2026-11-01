@@ -1656,7 +1656,7 @@ static EVT_BEGIN(evt_elv_init)
     RETURN
 EVT_END()
 
-/** Case script of the locked exit e_bero_5 before Lord Crump is beaten: shows the locked-door text stg7_aji_71. */
+/** Case script of the locked exit e_bero_5 before Lord Crump is beaten: shows stg7_aji_71. */
 EVT_BEGIN(key_lock)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_msg_print, 0, STRING("stg7_aji_71"), 0, 0)
@@ -1838,8 +1838,8 @@ static EVT_BEGIN(peach_evt_stg1)
 EVT_END()
 
 /**
- * Peach's remark (peach_aji_39) on coming back from the shower,
- * shown once (GSWF_AJI16_PEACH1_AFTER_SHOWER_REMARK); she then goes back to her idle pose.
+ * Shows peach_aji_39 once, guarded by GSWF_AJI_01_PEACH_NOBODY_AROUND_SEEN,
+ * then sets pose P_S_1 and restores the P_S_1/P_T_1 talk poses.
  */
 static EVT_BEGIN(peach_evt_stg1_1)
     IF_INT_EQUAL(GSWF_AJI_01_PEACH_NOBODY_AROUND_SEEN, 1)
@@ -1859,7 +1859,7 @@ EVT_END()
 
 /**
  * Peach's first interlude (STG1_18_01_PEACH_AN_OPEN_DOOR):
- * once Peach (the "mario" actor) walks past x = 900 she is startled, the east door e5 opens,
+ * once Peach (the "mario" actor) reaches x >= 900, the east door e5 opens,
  * the e_bero_5 exit is overwritten with e_bero_5_peach and she says peach_aji_41.
  * GSWF_AJI01_PEACH1_DOOR_OPENED makes it run only once.
  */
@@ -1972,7 +1972,7 @@ EVT_END()
 
 /**
  * Peach scene for chapter 5, on entering through n_bero_1:
- * the guard (見張り) turns toward her, gets an exclamation balloon and speaks peach_aji_243.
+ * the guard (見張り) turns toward her, gets a type-1 balloon and speaks peach_aji_243.
  */
 static EVT_BEGIN(peach_evt_stg5_1)
     CALL(evt_seq_wait, SEQ_GAME)
@@ -2288,8 +2288,7 @@ EVT_END()
  */
 EVT_BEGIN(peach_evt_init)
     SET_VALUE(LW(15), 0)
-    // Peach's visit to the central hall: the game switches to Peach and, if she is in disguise, puts the
-    // X-Naut uniform back on.
+    // Continue only when the playable character is already Peach; restore the uniform when its flag is set.
     CALL(evt_mario_get_mode, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 1)
         RETURN
@@ -2345,7 +2344,7 @@ EVT_BEGIN(peach_evt_init)
             END_INLINE_EVENT
         END_IF
     END_IF
-    // TEC's request: Peach waits at the elevator while soldiers pass (peach_evt_stg3_1).
+    // At this story point, start peach_evt_stg3_1 to watch for Peach near the elevator.
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG3_33_01_PEACH_TECS_REQUEST)
         SPAWN_EVENT(PTR(peach_evt_stg3_1))
     END_IF
@@ -2462,7 +2461,7 @@ EVT_BEGIN(teshita2_talk)
     RETURN
 EVT_END()
 
-/** Patrol loop of the guard "me": walks 950 units to one side, turns around, walks back, forever. */
+/** Patrol loop of the guard "me": walks between x = 950 and -950 at z = -15, forever. */
 EVT_BEGIN(teshita2_regl)
     LOOP(0)
         CALL(evt_npc_move_position, STRING("me"), 950, -15, 0, 30, 0)
@@ -2561,9 +2560,9 @@ static NpcSetupInfo npcEnt[] = {
 
 /**
  * Init script of aji_01, the fortress's central hall:
- * first runs Peach's setup (peach_evt_init, which returns early for her scenes), builds the exits,
+ * first runs Peach's setup (peach_evt_init), builds the exits unless it sets LW(15) to 1,
  * locks the password door (A_kagi1, evt_aikotoba) until STG7_12_PASSWORD_ENTRY,
- * removes the Elite X-Naut group NPCs once Lord Crump is beaten or when entered in the end-of-game mode,
+ * removes the Elite X-Naut group NPCs once Lord Crump is beaten or when the playable character is Peach,
  * and otherwise starts BGM_STG7_DUN2 and the elevator and door lock setup.
  */
 EVT_BEGIN(aji_01_init_evt)

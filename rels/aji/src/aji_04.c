@@ -1,5 +1,5 @@
 // aji_04 (敵のアジト, X-Naut Fortress): the quiz room: the stone statue (sekizou) asks its quiz questions
-// (kuizu_sekizou); with two Yux.
+// (kuizu_sekizou); with two X-Yux.
 
 #include "version.h"
 #include "data_tables.h"
@@ -171,7 +171,7 @@ EVT_BEGIN(sekizou_kaiten)
 EVT_END()
 
 /**
- * Turns the statue's head back from LW(0) degrees to 0 over 500 ms with the quake sound SFX_STG7_QUAKE2;
+ * Turns the statue's head back from LW(0) degrees to 0 over LW(1) ms with the quake sound SFX_STG7_QUAKE2;
  * used between questions and at the end.
  */
 EVT_BEGIN(sekizou_kaiten2)
@@ -201,10 +201,6 @@ EVT_BEGIN(sekizou_talk)
 EVT_END()
 #endif
 
-/**
- * Pick-up event of the elevator key dropped after the quiz (ITEM_ELEVATOR_KEY_0x1C):
- * sets the story to STG7_14_ELEVATOR_KEY_B.
- */
 #if VERSION <= VERSION_DEMO_US
 /**
  * Makes the statue's lower jaw (kuti, kuti2) flap for three open-and-close cycles
@@ -245,7 +241,7 @@ EVT_END()
 
 /**
  * Sound track for the transition into the quiz view (spawned by offscreen_to_kuizu):
- * a hand-timed series of SFX_OFF1_PUZZLE1 ticks with waits of 83 to 666 ms.
+ * a hand-timed series of SFX_OFF1_PUZZLE1 ticks with waits of 16 to 666 ms.
  */
 static EVT_BEGIN(evt_down_snd)
     WAIT_MS(100)
@@ -306,7 +302,7 @@ EVT_END()
 
 /**
  * Timing script for the room unfolding back to normal:
- * a long run of short waits (16 to 83 ms) that spawns evt_up_snd_ several times, one per click of the animation.
+ * a long run of waits (16 to 666 ms) that spawns evt_up_snd_ several times, one per click of the animation.
  * Spawned by offscreen_to_normal.
  */
 static EVT_BEGIN(evt_up_snd__)
@@ -388,7 +384,7 @@ EVT_END()
 /**
  * Transition from the quiz screen back to the normal room:
  * captures the offscreen-rendered S_aji_04 into the capture_img image,
- * plays its paper animation A_2 (the room folds up out of the quiz view) with the sound track evt_up_snd__,
+ * plays its paper animation A_2 with the sound track evt_up_snd__,
  * then deletes the offscreen buffer, hides the quiz objects (S_kuizu, me_mae), shows the normal ones,
  * puts Mario at (-90, 0, -10) and the partner at (-105, 0, -20) and sets the fixed camera.
  */
@@ -479,10 +475,6 @@ EVT_BEGIN(quiz_ng)
     RETURN
 EVT_END()
 
-/**
- * Makes the statue's mouth (kuti, kuti2) open to 70 degrees and close again within 0.2 seconds;
- * spawned from kuti_callback while the statue's message is being printed.
- */
 #if VERSION > VERSION_DEMO_US
 EVT_BEGIN(UNK_0x00022be8)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
@@ -939,9 +931,9 @@ EVT_BEGIN(sekizou_init)
 EVT_END()
 
 /**
- * Message callback for the quiz texts: on the stg7_aji_06 question counts text pages (type 3) to play
- * SFX_STG7_QUIZ_START1 on the third page and switch to BGM_EVT_QUIZ2 on the fourth,
- * and on the other texts switches to BGM_EVT_QUIZ2 on the first page;
+ * Message callback for the quiz texts: on the stg7_aji_06 question counts page-advance notifications (type 3) to play
+ * SFX_STG7_QUIZ_START1 on the third notification and switch to BGM_EVT_QUIZ2 on the fourth,
+ * and on the other texts switches to BGM_EVT_QUIZ2 on the first type-3 notification;
  * from the JP release on, text type 5 also makes the statue's mouth flap.
  */
 static void callback(s32 type, void** work) {

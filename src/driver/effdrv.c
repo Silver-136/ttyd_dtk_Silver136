@@ -443,7 +443,7 @@ void effDelete(EffectEntry* effect) {
 }
 
 /**
- * Asks an effect to end: effects that handle their own fade-out (EFFECT_FLAG_SOFT_DELETE) only get a delete
+ * Asks an effect to end: effects that handle their own fade-out (EFFECT_FLAG_SOFT_DELETABLE) only get a delete
  * request and free themselves later; others are deleted at once.
  */
 void effSoftDelete(EffectEntry* effect) {

@@ -120,7 +120,7 @@ static BeroEntry bero_entry_data[] = {
     {0},
 };
 
-/** First safe route across the electrified floor, as the panel numbers to walk in order. */
+/** First safe route across the electrified floor, as panel numbers. */
 u8 root_0[] = {
     10, 9, 8, 7, 6, 5, 4, 3,
     2, 1,
@@ -182,8 +182,7 @@ EVT_END()
  * Item-box script for the chest at "box": gives Mario the elevator key (ITEM_ELEVATOR_KEY_0x1B)
  * and sets the story progress to STG7_09_ELEVATOR_KEY_A_LIT_FLOOR.
  * It then clears the shock flag 0x800 on A_no01 and on every panel (all_flag_off), so the floor no longer hurts,
- * and swaps the floor models yukayu1 and yukayu2 five times, ending with yukayu2 and "ato" shown,
- * while Mario turns to face away. Guess: the swap shows the power going off.
+ * and swaps the floor models yukayu1 and yukayu2 five times, ending with yukayu2 and "ato" shown.
  */
 static EVT_BEGIN(evt_box)
     CALL(evt_mario_key_onoff, 0)
@@ -257,7 +256,7 @@ static EvtWord hikaru_yuka_init[] = {
 
 /**
  * Peach's stage-1 variant of this room: hides Mario's model, places him at (-140, 10, 0),
- * hides the "no1" object and the floor lights, fades out after 1.5 seconds
+ * hides the "no1" object and the floor lights, waits 1.5 seconds
  * and changes map to aji_16 at the peach_evt_stg1 entrance.
  */
 static EVT_BEGIN(peach_evt_stg1)
@@ -385,8 +384,8 @@ static USER_FUNC(ride_chk) {
 
 /**
  * Script function that plays an electric shock when Mario is in the spike-damage motion
- * (MARIO_MOTION_DAMAGE_TOGE): the sound SFX_STG7_ELECTRIC_SHOCK1 and a blue-green spark effect at his position,
- * once per hit.
+ * (MARIO_MOTION_DAMAGE_TOGE): the sound SFX_STG7_ELECTRIC_SHOCK1 and a blue-green effect 30 units above his position,
+ * once per continuous entry into that motion.
  */
 static USER_FUNC(thunder_main) {
     MarioWork* mario = marioGetPtr();

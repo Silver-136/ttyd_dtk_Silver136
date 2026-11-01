@@ -173,8 +173,8 @@ static BeroEntry bero_entry_data[] = {
 };
 
 /**
- * Swaps the room model with the roof model by the camera height:
- * while the camera looks from y = 180 or higher the roof S_tenura is shown and the room S_heya hidden,
+ * Swaps the room model with the roof model by the camera target height:
+ * while the camera target is at y = 180 or higher the roof S_tenura is shown and the room S_heya hidden,
  * otherwise the other way round. Runs forever.
  */
 EVT_BEGIN(heya_tenura_onoff)
@@ -259,8 +259,8 @@ USER_FUNC(camAtY) {
     return EVT_RETURN_DONE;
 }
 /**
- * Script function: waits until paper-mode Mario is at a slit position (x below -200 or above 300, height 160 to
- * 169), then switches off the 3D camera control and stops the event whose ID is in LW(0),
+ * Script function: waits until paper-mode Mario is at a slit position (x below -200 or above 300, height strictly between
+ * 160 and 169), then switches off the 3D camera control and suspends the event whose ID is in LW(0),
  * the roof-swap script heya_tenura_onoff. Blocks until then.
  */
 USER_FUNC(slit_chk) {

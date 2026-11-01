@@ -528,7 +528,6 @@ s32 msgMain(smartEntry* smart) {
  * Draws the parsed message text of a window at (x, y):
  * the characters revealed so far on the current page, with colour, shaking, waves, ruby text,
  * inline icons and the key-wait star, faded by alpha.
- * Returns TRUE when something was drawn below the visible area.
  */
 BOOL msgDisp(smartEntry* smart, u8 alpha, f32 x, f32 y) {
     s32 al;
@@ -800,11 +799,6 @@ u16 hankakuSearch(char c);
  * word wrap and scrolling. Called when a window opens and for each added message.
  */
 #if VERSION == VERSION_DEMO_JP
-/**
- * Parses a message's markup into the window's character list:
- * text and Japanese ruby, <col>, <shake>, <wave>, <icon>, <k> key waits, <p> pages, <select>, speeds and waits,
- * word wrap and scrolling. Called when a window opens and for each added message.
- */
 void msgAnalize(smartEntry* smart, const char* msg) {
     u16 glyphD;
     s32 wwD;
@@ -876,8 +870,8 @@ f32 fv;
     u16 ih;
     f32 maxScale;
     const char* next;
-BOOL isHM;
-s32 i;
+    BOOL isHM;
+    s32 i;
     s32 j;
     s32 k;
     s32 half;
@@ -1160,9 +1154,9 @@ continue;
                     data->charCount++;
                 } else if (strcmp(tag, "nowinse") == 0) {
                     window->flags |= WINDOW_FLAG_NOWINSE;
-} else if (strcmp(tag, "icon") == 0) {
-    isHM = FALSE;
-    if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
+                } else if (strcmp(tag, "icon") == 0) {
+                    isHM = FALSE;
+                    if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
                         sscanf(args, "%d%f%d%d%d", &iconId, &iconScale, &iconOffX, &iconY, &iconAdvance);
                     } else {
                         sscanf(args, "%s%f%d%d%d", name, &iconScale, &iconOffX, &iconY, &iconAdvance);
@@ -1175,7 +1169,7 @@ continue;
                         }
                     }
                     if (!isHM)
-{
+                    {
                         entry->value = iconId;
                         // FAKE: called through a u16-parameter cast (target passes clrlwi r5 with no extsh to the s16 parameter)
                         ((void (*)(u16*, u16*, u16))iconGetWidthHight)(&iw, &ih, iconId);
@@ -1344,11 +1338,6 @@ continue;
     }
 }
 #elif VERSION == VERSION_DEMO_US
-/**
- * Parses a message's markup into the window's character list:
- * text and Japanese ruby, <col>, <shake>, <wave>, <icon>, <k> key waits, <p> pages, <select>, speeds and waits,
- * word wrap and scrolling. Called when a window opens and for each added message.
- */
 void msgAnalize(smartEntry* smart, const char* msg) {
     u16 glyphD;
     s32 wwD;
@@ -1420,7 +1409,7 @@ f32 fv;
     u16 ih;
     f32 maxScale;
     const char* next;
-s32 i;
+    s32 i;
     s32 j;
     s32 k;
     s32 half;
@@ -1703,8 +1692,8 @@ continue;
                     data->charCount++;
                 } else if (strcmp(tag, "nowinse") == 0) {
                     window->flags |= WINDOW_FLAG_NOWINSE;
-} else if (strcmp(tag, "icon") == 0) {
-    if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
+                } else if (strcmp(tag, "icon") == 0) {
+                    if ((((s8)args[0]) >= '0') && (((s8)args[0]) <= '9')) {
                         sscanf(args, "%d%f%d%d%d", &iconId, &iconScale, &iconOffX, &iconY, &iconAdvance);
                     } else {
                         sscanf(args, "%s%f%d%d%d", name, &iconScale, &iconOffX, &iconY, &iconAdvance);
@@ -1860,11 +1849,6 @@ continue;
     }
 }
 #else
-/**
- * Parses a message's markup into the window's character list:
- * text and Japanese ruby, <col>, <shake>, <wave>, <icon>, <k> key waits, <p> pages, <select>, speeds and waits,
- * word wrap and scrolling. Called when a window opens and for each added message.
- */
 void msgAnalize(smartEntry* smart, char* msg) {
     u16 glyphD;
     s32 wwD;

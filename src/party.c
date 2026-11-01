@@ -2367,10 +2367,6 @@ static inline void partyChgRunMo(PartyEntry* party) {
 }
 #endif
 
-/**
- * Seats the follower on Yoshi with Mario straight away (ride-Yoshi mode 12 at step 10), without shadow;
- * used by party_yoshi when Mario mounts Yoshi.
- */
 #if VERSION <= VERSION_DEMO_US
 #include "driver/hitdrv.h"
 #include "driver/npcdrv.h"

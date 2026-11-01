@@ -403,7 +403,7 @@ void (_mapFree)(MAPBASE_PARAM void* alloc) {
 #endif
 
 /**
- * Allocates the smart heap (the US and PAL releases use their whole smart heap, the demo a fixed 7 MiB)
+ * Allocates a fixed 7 MiB block from the default heap in the demos, or the dedicated smart heap minus 32 bytes in retail,
  * and resets its 0x800 block descriptors: all free, nothing allocated.
  * The first smartAlloc after this also frees group 3.
  */
@@ -467,7 +467,8 @@ void smartReInit(void) {
 
 #pragma dont_inline on
 /**
- * Frees every smart heap block of group type; freeing group 3 also frees the group 4 blocks.
+ * Frees the smart heap blocks of group type; group 4 blocks are demoted to group 3 instead of freed.
+ * A group 3 request also demotes the remaining group 4 blocks.
  * Called with group 1 on map changes (and by the demo movie), group 2 when a battle starts and ends.
  */
 void smartAutoFree(s32 allocType) {
@@ -660,9 +661,10 @@ smartEntry* smartAlloc(u32 size, u8 type) {
 }
 
 /**
- * Compacts the smart heap: slides every block down to close the gaps (moving loaded files through
- * fileGarbageMoveMem), leaving all free space after the last block.
- * A file still being read by the DVD thread is not moved. Waits for the GPU first, since textures may be in use.
+ * Compacts the smart heap by moving blocks toward its start and updating the free gaps.
+ * File-backed blocks move through fileGarbageMoveMem; other blocks use memmove.
+ * A block with file state 3 and a DVD entry is skipped unless called from dvdmgr_thread.
+ * Waits for the GPU first, since textures may be in use.
  */
 void smartGarbage(void) {
     u8* addr;

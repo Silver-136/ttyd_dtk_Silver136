@@ -1,4 +1,4 @@
-// Ice block (Ice): appears for the given duration, then shrinks away dripping smoke puffs; used for the frozen status.
+// Ice block (Ice): plays its final animation phase when the duration expires or soft deletion is requested.
 
 #include "version.h"
 #include "driver/camdrv.h"
@@ -921,7 +921,7 @@ MayaAnimData ice_effAnimDt = { { 0 }, 119.0f, &ice_effAnimRSTDt };
 static void effIceMain(EffectEntry* effect);
 static void effIceDisp(CameraId cameraId, EffectEntry* effect);
 
-/** Spawns an ice block at (x, y, z); duration <= 0 keeps it until soft-deleted. Used for the frozen status. */
+/** Spawns an ice block at (x, y, z); durations 1..999 count down, other values hold until soft-deleted. Used for the frozen status. */
 EffectEntry* effIceEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale) {
     EffectEntry* effect;
     EffIceWork* work;
@@ -953,7 +953,7 @@ EffectEntry* effIceEntry(s32 type, s32 duration, f32 x, f32 y, f32 z, f32 scale)
     return effect;
 }
 
-/** Plays the ice block's animation; soft delete jumps to its shrinking phase, which drips smoke puffs. */
+/** Plays the ice block's animation; soft delete starts its final animation phase at frame 90. */
 static void effIceMain(EffectEntry* effect) {
     EffIceWork* work = effect->userdata;
     Vec calcPos;

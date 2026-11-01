@@ -377,7 +377,7 @@ static BattleDataEntry data_table[] = {
 };
 
 /**
- * Body parts of Hooktail: 5 parts (models c_gonbaba and c_gonbaba4); the first is the body.
+ * Body parts of Hooktail: 3 parts (models c_gonbaba and c_gonbaba4); the first is the body.
  * Each part names its defence tables and pose table.
  */
 static BattleUnitKindPart parts[] = {

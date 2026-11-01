@@ -328,7 +328,7 @@ EvtWord tou_03_init_evt[VERSION_PICK(370, 372)];
 
 /**
  * Animation frames of the cardboard crowd in the stands:
- * model, animation and frame time of each texture frame for the Toad, Toadette, vendor (c_roten) and Lakitu
+ * model, animation and frame time of each texture frame for the Toad, female Toad, vendor (c_roten) and Lakitu
  * spectators.
  * evt_kyaku registers it with the billboard driver and pose_init groups the frames into animations.
  */
@@ -403,7 +403,7 @@ s32 _firstattack_setting(EventEntry* event, BOOL isFirstCall) {
 /**
  * Builds the audience animation table (kyaku_wp->anim) from ext_kyaku_data:
  * consecutive texture frames with the same model
- * and animation name are grouped into one entry holding the first frame, the frame count and the playback rate.
+ * and animation name are grouped into one entry holding the first frame, the frame count and the duration in frames.
  */
 static void pose_init(void) {
     char name[32];
@@ -463,7 +463,7 @@ static void pose_main(void) {
 }
 
 /**
- * Switches one spectator to the animation with the given model and animation name,
+ * Switches one spectator to the animation with the given model and animation name if it differs from the current one,
  * restarting it at a random time offset so the crowd does not move in step.
  */
 static void pose_change(Kyaku* kyaku, const char* name, const char* anim) {
@@ -487,8 +487,8 @@ void __tou_srand(u32 seed) {
 }
 
 /**
- * The arena's own copy of the C library's linear congruential rand():
- * returns 0..32767 and keeps the crowd layout reproducible.
+ * Linear congruential random generator returning 0..32767;
+ * a fixed seed keeps the crowd placement reproducible.
  */
 u32 __tou_rand(void) {
     x[0] = x[0] * 1103515245 + 12345;
@@ -505,8 +505,9 @@ static f32 randf(f32 min, f32 max) {
 /**
  * Init callback of the audience (kyaku) billboard set.
  * Places every spectator at a random spot in the stands:
- * 30% are near the ring floor, the rest on the high rows, found by dropping a ray onto the map hit geometry;
- * turns each toward the ring, hides those blocking the entrance view,
+ * each placement attempt chooses near-floor candidates when __tou_rand() % 100 < 30, otherwise farther candidates,
+ * and retries until its downward ray meets the required map hit geometry;
+ * hides spectators with z > 350 unless the entrance is s_bero_2,
  * and gives each a random animation (Toad, Toadette, vendor Toad or Lakitu).
  */
 void ext_kyaku_init(void) {
@@ -604,9 +605,8 @@ void ext_kyaku_init(void) {
 }
 
 /**
- * Spawns the four spectators the player can talk to (kyaku1 Toad, kyaku2 Toadette, kyaku3 vendor Toad,
- * kyaku4 Lakitu) near the entrance, with their position depending on
- * which door Mario came through (s_bero_2 is the upper balcony),
+ * Spawns four spectators (kyaku1 Toad, kyaku2 female Toad, kyaku3 vendor Toad,
+ * kyaku4 Lakitu), with their positions selected by whether the entrance is s_bero_2,
  * and registers the crowd billboard set with the extdrv drawer.
  */
 EVT_BEGIN(evt_kyaku)
@@ -1069,7 +1069,6 @@ EVT_BEGIN(evt_tougi)
     CALL(evt_msg_print, 0, PTR("stg3_tou_26"), 0, PTR(/*("\203`\203\203\203\223\203s\203\207\203\223")*/("\203`\203\203\203\223\203s\203\207\203\223")))
     WAIT_MS(300)
     CALL(evt_cam3d_evt_set, -85, 172, 326, -85, 96, -104, 1000, EASING_SINE_IN_OUT)
-    // Rawk Hawk backs off and flattens his opponent with a flying body slam that shakes the ring.
     CALL(evt_npc_get_position, STRING(/*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223"), LW(10), LW(11), LW(12))
     CALL(evt_npc_status_onoff, 1, STRING(/*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_get_position, STRING(/*"チャンピョン"*/"\203`\203\203\203\223\203s\203\207\203\223"), LW(0), LW(1), LW(2))
@@ -1250,7 +1249,7 @@ static NpcSetupInfo npcEnt[] = {
 
 /**
  * Puts Mario in his hurt pose (M_D_2) and the current partner in its matching defeated pose;
- * played after Mario loses a match. Also unlocks the pose lock on versions from JP on.
+ * played after Mario loses a match. Also sets the pose lock on versions from JP on.
  */
 EVT_BEGIN(evt_damage_pose)
 #if VERSION > VERSION_DEMO_US
@@ -1720,7 +1719,7 @@ EVT_END()
  * Bowser's ambush, played after a won match at rank 5 until GSWF_TOU_BOWSER_RAID_DONE is set:
  * Bowser crashes in (Bowser theme), taunts Mario and the battle starts (battle setup 24);
  * after it Grubba and Bowser comment on the result
- * and the music fades out (with story progress temporarily set so the right fade plays).
+ * and the music fades out with story progress temporarily set to STG4_00_WELCOME_TO_STAGE_4.
  */
 EVT_BEGIN(evt_random_battle2)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -1868,7 +1867,7 @@ EVT_END()
 /**
  * Entrance walk of one opponent into the ring: LW(0) = NPC name,
  * LW(1) = index in the team (picks its resting x and z lane).
- * It walks in from the east, waits, hops down three steps and stops at its place.
+ * It walks in from the east, waits, hops up three steps and stops at its place.
  * Used for the Iron Cleft-type opening (see evt_shinemon_opening).
  */
 EVT_BEGIN(evt_teki_nyuujyou)
@@ -1905,9 +1904,9 @@ EVT_END()
 
 /**
  * Entrance walk used by the default opening: LW(0) = NPC name, LW(1) = index in the team,
- * LW(2) = non-zero for the one-enemy layout.
- * The fighter walks in from the east and hops down three steps to its place (flying green Magikoopas hover and
- * drop in instead). A Burst Wanwan then starts burst_wangwang.
+ * LW(2) = 1 for the one-enemy layout.
+ * The fighter walks in from the east and hops up three steps to its place; the flying green Magikoopa
+ * branch raises all three jump destinations by 25. A Burst Wanwan then starts burst_wangwang.
  */
 EVT_BEGIN(evt_teki_nyuujyou_default)
     SWITCH(LW(1))
@@ -2488,7 +2487,7 @@ EVT_END()
 
 /**
  * First-time opening against the Iron Cleft fighters (the Armored Harriers, fighter 10):
- * Grubba explains the rules, spectators shout comments,
+ * Uses stg3_tou_257, stg3_tou_258_00 and the positional stg3_tou_258_01 through stg3_tou_258_04 messages;
  * the Iron Clefts march in through the east door and Grubba and both fighters exchange lines before the match.
  */
 EVT_BEGIN(evt_shinemon_opening)
@@ -3191,7 +3190,7 @@ EVT_END()
 
 /**
  * Victory scene after beating Rawk Hawk: his belt is hidden,
- * the winner and loser exchange lines (texts picked by story progress),
+ * Rawk Hawk and the announcer print messages selected by story progress,
  * confetti falls and the crowd speaks from the stands.
  */
 EVT_BEGIN(evt_champ_win)

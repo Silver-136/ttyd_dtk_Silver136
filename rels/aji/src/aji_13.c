@@ -111,8 +111,8 @@ EvtWord aji_13_init_evt[295];
 #endif
 
 /**
- * Recursive helper of hitIsGroup: whether the joint name of target equals that of node,
- * of any of node's descendants, or (when checkSibling is TRUE) of the siblings that follow.
+ * Searches by target joint name: visits node, then returns the child search directly when a child exists.
+ * Only a node without a child can continue to its following sibling when checkSibling is TRUE.
  */
 static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) {
     if (strcmp(target->joint->name, node->joint->name) == 0) {
@@ -128,7 +128,6 @@ static BOOL _hitIsGroupSub(HitEntry* target, HitEntry* node, BOOL checkSibling) 
     return FALSE;
 }
 
-/** Whether the hit area target is group itself or one of its descendants. */
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
     // Search by joint name, excluding the root sibling chain; child recursion skips the current node's siblings.
     return _hitIsGroupSub(target, group, FALSE);
@@ -216,7 +215,7 @@ EVT_END()
 
 /**
  * Entry event of the background-camera section:
- * after the entrance finishes it releases the keep-camera mode and switches on Y-following for Mario's camera,
+ * after the entrance finishes it enables Y-following for Mario's camera,
  * and returns LW(0) = 1, which makes evt_bero_mario_enter skip the normal walk-in.
  */
 static EVT_BEGIN(evt_haikei_in)
@@ -493,7 +492,7 @@ const char* name_tbl2[] = {
 /**
  * Script function that carries Mario and his partner on the moving platforms of the room:
  * every frame it measures how far each of the 13 platform groups in name_tbl moved
- * and adds that to the floor motion of whoever stands on it;
+ * and sets Mario's or partner slot 0's X/Z floor motion to 10 times that translation delta;
  * after STG7_17_CONVEYOR_BELT it pushes them along the conveyor belt A_bel at 0.6 per frame (scaled for
  * the frame rate on PAL); and on the six rotating platforms in name_tbl2 it moves Mario around the platform's
  * pivot by the angle the platform turned. Blocks forever.
@@ -677,7 +676,6 @@ EVT_BEGIN(move_up_down)
     IF_STR_EQUAL(LW(5), STRING("A_ugoku_2"))
         SET_VALUE(LW(3), 1)
         SET_VALUE(GF(1), 0)
-        // The first platform (A_ugoku_2) starts only after someone is standing on it.
         BEGIN_SIBLING_EVENT
             LOOP(0)
                 CALL(evt_mario_get_name_hitobj_head, LW(10))
@@ -923,7 +921,7 @@ EVT_END()
 
 /**
  * Clockwork switch script that reveals the off-screen staircase:
- * pans the camera to the stairs, builds a paper-and-offscreen image of S_kaidan (OFF_hei_07) that unfolds,
+ * pans the camera to the stairs, builds a paper-and-offscreen image of S_kaidan (OFF_hei_07) using animation A_1,
  * and sets the story progress to STG7_18_OFF_SCREEN_STAIRS.
  */
 static EVT_BEGIN(evt_sw)
@@ -967,7 +965,6 @@ EVT_END()
  * Swings the needle map object whose name is in LW(0) (S_hari01 to S_hari04, started by evt_ramp
  * when the conveyor belt is switched on) around its Z axis forever, to random angles up to 90 degrees
  * on alternating sides over 1.5 to 3 seconds each, like evt_hari in aji_03 but without a stop.
- * Guess: the needles are dial pointers on the machinery.
  */
 static EVT_BEGIN(evt_hari)
     SET_VALUE(LW(8), LW(0))
