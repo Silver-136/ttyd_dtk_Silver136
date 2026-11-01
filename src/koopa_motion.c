@@ -243,7 +243,7 @@ void kpa_walk(void) {
         m->currSubMotionId = 0;
         m->multiTimer = 0;
 #if VERSION <= VERSION_DEMO_US
-if (kpaGetStageViewType() == 0) {
+        if (kpaGetStageViewType() == 0) {
             if (m->controlStickSensitivity) {
                 kpaChgPose("KPA_W_1", "KPA2_W_1");
             } else if (!(m->kpaWork->flags & KPA_WORK_FLAG_WEARY)) {
@@ -535,7 +535,7 @@ void kpa_hip(void) {
         marioChgPose("KPA2_J_1C");
     }
 #if VERSION <= VERSION_DEMO_US
-if (mario->fallStartPos.y >= mario->position.y && ((u32)mario->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF) && mario->position.y > 75.0f) {
+    if (mario->fallStartPos.y >= mario->position.y && ((u32)mario->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF) && mario->position.y > 75.0f) {
 #else
     if (mario->fallStartPos.y >= mario->position.y && (mario->dispFlags & MARIO_DISP_FLAG_CAM_FOLLOW_Y_OFF)) {
 #endif
@@ -801,7 +801,7 @@ void kpaSwimMove(void) {
     }
     mario->kpaSpeed = spd;
 #if VERSION <= VERSION_DEMO_US
-moveSpeed = 0.03f * __fabsf(spd);
+    moveSpeed = 0.03f * __fabsf(spd);
     if (moveSpeed >= 1.0f) {
         moveSpeed = 1.0f;
 #else

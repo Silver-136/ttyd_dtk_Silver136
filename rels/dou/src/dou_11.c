@@ -71,28 +71,17 @@ EvtWord ukishima_check[40];
 static EvtWord ukishima_apper[286];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord ukishima_init1[];
-#else
-EvtWord ukishima_init1[34];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord ukishima_part1[];
-#else
-EvtWord ukishima_part1[50];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord ukishima_init2[];
-#else
-EvtWord ukishima_init2[34];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord ukishima_part2[];
 #else
+EvtWord ukishima_init1[34];
+EvtWord ukishima_part1[50];
+EvtWord ukishima_init2[34];
 EvtWord ukishima_part2[50];
 #endif
 #if VERSION > VERSION_DEMO_US
 EvtWord ukishima_switch1_evt[23];
-#endif
-#if VERSION > VERSION_DEMO_US
 EvtWord ukishima_switch2_evt[23];
 #endif
 EvtWord torinoko_suifu_pukapuka[69];
@@ -1141,7 +1130,7 @@ EVT_END()
  */
 EVT_BEGIN(ukishima_init1)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF_DOU_11_SWITCH_1_PRESSED, 0)
+    IF_INT_EQUAL(GSWF_DOU_11_SWITCH_1_PRESSED, 0)
 #else
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
     ADD(LW(0), GSWF_DOU_11_SWITCH_2_PRESSED)
@@ -1166,7 +1155,7 @@ EVT_BEGIN(ukishima_part1)
     CALL(evt_cam3d_evt_set, 280, 174, 527, 280, 79, -14, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF_DOU_11_SWITCH_1_PRESSED, 1)
+    SET_VALUE(GSWF_DOU_11_SWITCH_1_PRESSED, 1)
 #endif
     SET_VALUE(LW(2), STRING("S_taru_n01"))
     SET_VALUE(LW(3), STRING("A_taru_n01"))
@@ -1191,7 +1180,7 @@ EVT_END()
  */
 EVT_BEGIN(ukishima_init2)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF_DOU_11_SWITCH_2_PRESSED, 0)
+    IF_INT_EQUAL(GSWF_DOU_11_SWITCH_2_PRESSED, 0)
 #else
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)
     ADD(LW(0), GSWF_DOU_11_SWITCH_2_PRESSED)
@@ -1215,7 +1204,7 @@ EVT_BEGIN(ukishima_part2)
     CALL(evt_cam3d_evt_set, 525, 174, 527, 525, 79, -14, 500, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF_DOU_11_SWITCH_2_PRESSED, 1)
+    SET_VALUE(GSWF_DOU_11_SWITCH_2_PRESSED, 1)
 #endif
     SET_VALUE(LW(2), STRING("S_taru_n03"))
     SET_VALUE(LW(3), STRING("A_taru_n03"))
@@ -1706,7 +1695,7 @@ EVT_END()
 static EVT_BEGIN(bombwall_bomb)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_normalize)
+    CALL(evt_mario_normalize)
 #endif
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
@@ -2861,11 +2850,11 @@ EVT_BEGIN(dou_11_init_evt)
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mobj_switch_blue, 2, STRING("mobj01"), -220, 120, -450, PTR(ukishima_part1), GSWF_DOU_11_SWITCH_1_PRESSED)
-CALL(evt_mobj_switch_blue, 2, STRING("mobj02"), 80, 120, -450, PTR(ukishima_part2), GSWF_DOU_11_SWITCH_2_PRESSED)
-SPAWN_EVENT(ukishima_init1)
-    SPAWN_EVENT(ukishima_init2)
-IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_32_CORTEZS_WARNING)
+    CALL(evt_mobj_switch_blue, 2, STRING("mobj01"), -220, 120, -450, PTR(ukishima_part1), GSWF_DOU_11_SWITCH_1_PRESSED)
+    CALL(evt_mobj_switch_blue, 2, STRING("mobj02"), 80, 120, -450, PTR(ukishima_part2), GSWF_DOU_11_SWITCH_2_PRESSED)
+    SPAWN_EVENT(ukishima_init1)
+        SPAWN_EVENT(ukishima_init2)
+    IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_32_CORTEZS_WARNING)
 #else
     CALL(evt_mobj_switch_blue, 2, STRING("mobj01"), -220, 120, -450, PTR(ukishima_switch1_evt), GSWF_DOU_11_SWITCH_1_PRESSED)
     CALL(evt_mobj_switch_blue, 2, STRING("mobj02"), 80, 120, -450, PTR(ukishima_switch2_evt), GSWF_DOU_11_SWITCH_2_PRESSED)
@@ -2916,7 +2905,7 @@ IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG5_32_CORTEZS_WARNING)
     SET_VALUE(LW(1), 0)
     SPAWN_EVENT_GET_ID(PTR(dou_puka_event_main17), LW(10))
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF_DOU_11_SWITCH_1_PRESSED, 1)
+    IF_INT_EQUAL(GSWF_DOU_11_SWITCH_1_PRESSED, 1)
         SPAWN_EVENT(pukapuka_watari_init01)
 #else
     SET_VALUE(LW(0), GSWF_DOU_11_SWITCH_1_PRESSED)

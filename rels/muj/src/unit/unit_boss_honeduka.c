@@ -166,7 +166,7 @@ EVT_END()
 EVT_BEGIN(honeduka_damage_sub_event)
     CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_OWNER, LW(3))
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_RunDataEventChild, LW(3), 70)
+    CALL(btlevtcmd_RunDataEventChild, LW(3), 70)
 #else
     CALL(btlevtcmd_RunDataEventChild, LW(3), UNIT_DATA_WEAPON_BREAK_EVENT)
 #endif

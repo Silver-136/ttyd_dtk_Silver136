@@ -237,7 +237,7 @@ void mot_hip(void) {
         }
         fall = marioGetFallSpd();
 #if VERSION <= VERSION_DEMO_US
-hit = marioChkLandon(&y, fall);
+        hit = marioChkLandon(&y, fall);
 #else
         hit = marioSearchGround(&y, &tmp1, &tmp2, fall, fall);
 #endif
@@ -287,7 +287,7 @@ hit = marioChkLandon(&y, fall);
                 return;
             }
 #if VERSION <= VERSION_DEMO_US
-                psndSFXOn_3D((char*)0x159, &mario->position);
+            psndSFXOn_3D((char*)0x159, &mario->position);
 evtEntry(marioBgmodeChk() == 0 ? quake_evt : quake_bgmode_evt, 0, 0);
 #else
             psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_MARIO_HIO_DROP2), &mario->position);

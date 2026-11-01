@@ -994,7 +994,7 @@ static EVT_BEGIN(dokan_evt)
     CALL(evt_img_set_paper, STRING("img"), STRING("OFF_hei_00"))
     CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("offscreen"), 0, 0, 0, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_img_clear_virtual_point, STRING("img"))
+    CALL(evt_img_clear_virtual_point, STRING("img"))
 #else
     CALL(evt_img_set_virtual_point, STRING("img"), 150, 25, 20)
     CALL(evt_img_set_position, STRING("img"), 9, -14)
@@ -1093,7 +1093,7 @@ EVT_BEGIN(sun_stone_set_event)
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
         CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(itemsel_table00), LW(0))
+        CALL(evt_win_item_select, PTR(itemsel_table00), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(itemsel_table00), LW(0), 0)
 #endif
@@ -1147,7 +1147,7 @@ EVT_BEGIN(moon_stone_set_event)
     IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
         CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
+        CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(itemsel_table01), LW(0), 0)
 #endif

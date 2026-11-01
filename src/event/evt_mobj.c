@@ -5394,10 +5394,10 @@ EVT_BEGIN(kpa_pole)
 #endif
         LOOP(0)
 #if VERSION <= VERSION_DEMO_US
-        CALL(kpa_get_mario_pos, LW(0), LW(1), LW(2))
-        SUBTRACT_FLOAT(LW(1), FLOAT(1.5f))
-        CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
-        CALL(evt_mobj_get_position, LW(15), LW(3), LW(4), LW(5))
+            CALL(kpa_get_mario_pos, LW(0), LW(1), LW(2))
+            SUBTRACT_FLOAT(LW(1), FLOAT(1.5f))
+            CALL(evt_mario_set_pos, LW(0), LW(1), LW(2))
+            CALL(evt_mobj_get_position, LW(15), LW(3), LW(4), LW(5))
 #else
             CALL(evt_mobj_get_y_position, LW(15), LW(4))
 #endif

@@ -366,16 +366,16 @@ EVT_BEGIN(puni_return)
         CALL(evt_puni_get_lsw_index, LSW_MRI_PUNI_RECORDS, LW(11), LW(0), LW(1), LW(2), LW(3))
         CALL(evt_puni_get_flag, LW(10), LW(4))
 #if VERSION <= VERSION_DEMO_US
-IF_INT_NOT_EQUAL(LW(0), 0)
-IF_BITS_SET(LW(4), PUNI_FLAG_ACTIVE)
-DEBUG_PUT_MSG(STRING("長老の能力"))
-                DEBUG_PUT_MSG(STRING("プニ番号"))
-                DEBUG_PUT_REG(LW(11))
-DEBUG_PUT_MSG(STRING("同じエリアにいます"))
-ELSE
-READ_INT2(LW(12), LW(13))
-                CALL(evt_puni_set_lsw_index, LSW(0), LW(11), 0, 0, 0, 0)
-                CALL(evt_puni_init_puni, LW(10), 1, LW(12), 0, LW(13), 0)
+        IF_INT_NOT_EQUAL(LW(0), 0)
+        IF_BITS_SET(LW(4), PUNI_FLAG_ACTIVE)
+        DEBUG_PUT_MSG(STRING("長老の能力"))
+                        DEBUG_PUT_MSG(STRING("プニ番号"))
+                        DEBUG_PUT_REG(LW(11))
+        DEBUG_PUT_MSG(STRING("同じエリアにいます"))
+        ELSE
+        READ_INT2(LW(12), LW(13))
+                        CALL(evt_puni_set_lsw_index, LSW(0), LW(11), 0, 0, 0, 0)
+                        CALL(evt_puni_init_puni, LW(10), 1, LW(12), 0, LW(13), 0)
 #else
         CALL(evt_puni_get_trap_index, LW(10), LW(5))
         IF_INT_EQUAL(LW(10), 1)
@@ -559,7 +559,7 @@ static EVT_BEGIN(elder_talk)
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_msg_print, 0, STRING("irai_10_01"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(irai_item_tbl), LW(0))
+            CALL(evt_win_item_select, PTR(irai_item_tbl), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(irai_item_tbl), LW(0), 0)
 #endif
@@ -582,7 +582,7 @@ CALL(evt_win_item_select, PTR(irai_item_tbl), LW(0))
             IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 0)
                 CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
+                CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
 #else
                 CALL(evt_win_item_select, 0, PTR(iri_17_item_tbl), LW(0), 0)
 #endif
@@ -1188,7 +1188,7 @@ EVT_BEGIN(bigtree_firstbattle)
     CALL(evt_npc_wait_battle_end)
     CALL(evt_mario_key_onoff, 1)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSW_STORY_PROGRESS, STG2_11_X_NAUT_BATTLE)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_11_X_NAUT_BATTLE)
 #else
     CALL(evt_party_run, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_11_X_NAUT_BATTLE)
@@ -3150,13 +3150,13 @@ EVT_BEGIN(boss_battle_win)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(1100)
+        WAIT_MS(1100)
 #else
         WAIT_MS(600)
 #endif
         CALL(evt_npc_get_position, LW(11), LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-ADD(LW(0), -40)
+        ADD(LW(0), -40)
 #else
         ADD(LW(0), -80)
 #endif
@@ -3167,13 +3167,13 @@ ADD(LW(0), -40)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(1100)
+        WAIT_MS(1100)
 #else
         WAIT_MS(600)
 #endif
         CALL(evt_npc_get_position, LW(12), LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-ADD(LW(0), -40)
+        ADD(LW(0), -40)
 #else
         ADD(LW(0), -80)
 #endif
@@ -3183,13 +3183,13 @@ ADD(LW(0), -40)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(1700)
+        WAIT_MS(1700)
 #else
         WAIT_MS(1200)
 #endif
         CALL(evt_npc_get_position, LW(13), LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-ADD(LW(0), -40)
+        ADD(LW(0), -40)
 #else
         ADD(LW(0), -80)
 #endif
@@ -3199,13 +3199,13 @@ ADD(LW(0), -40)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(2000)
+        WAIT_MS(2000)
 #else
         WAIT_MS(1500)
 #endif
         CALL(evt_npc_get_position, LW(14), LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-ADD(LW(0), -40)
+        ADD(LW(0), -40)
 #else
         ADD(LW(0), -80)
 #endif
@@ -3274,7 +3274,7 @@ ADD(LW(0), -40)
     SET_VALUE(LW(0), 2)
     SET_VALUE(LW(1), LW(10))
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(evt_sub_starstone)
+    CALL_CHILD(evt_sub_starstone)
 #else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL_CHILD(PTR(evt_sub_starstone))

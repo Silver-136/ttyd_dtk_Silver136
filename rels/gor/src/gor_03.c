@@ -324,12 +324,9 @@ EvtWord evt_door_01_0_open[31];
 EvtWord evt_door_01_0_close[69];
 #if VERSION == VERSION_DEMO_JP
 EvtWord evt_door_01_1_open[25];
-#else
-EvtWord evt_door_01_1_open[132];
-#endif
-#if VERSION == VERSION_DEMO_JP
 EvtWord evt_door_01_1_close[39];
 #else
+EvtWord evt_door_01_1_open[132];
 EvtWord evt_door_01_1_close[146];
 #endif
 DoorParam door_data_01_0;
@@ -351,12 +348,9 @@ const char* door_data_02_1_npc[6];
 EvtWord desk_talk_check[173];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_02_1_open[];
-#else
-EvtWord evt_door_02_1_open[118];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_02_1_close[];
 #else
+EvtWord evt_door_02_1_open[118];
 EvtWord evt_door_02_1_close[48];
 #endif
 DoorParam door_data_02_1;
@@ -365,24 +359,18 @@ static EvtWord evt_wall_03[28];
 static const char* door_data_03_npc[2];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord door_data_03_open[];
-#else
-EvtWord door_data_03_open[17];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord door_data_03_close[];
 #else
+EvtWord door_data_03_open[17];
 EvtWord door_data_03_close[19];
 #endif
 static DoorParam door_data_03;
 static EvtWord evt_door_03_caseopen[6];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_door_03_open[165];
-#else
-static EvtWord evt_door_03_open[170];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord evt_door_03_close[14];
 #else
+static EvtWord evt_door_03_open[170];
 static EvtWord evt_door_03_close[19];
 #endif
 static DoorParam door_data_03_roll;
@@ -392,12 +380,9 @@ static EvtWord evt_wall_04[28];
 static const char* door_data_04_npc[3];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_door_04_open[12];
-#else
-static EvtWord evt_door_04_open[17];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_04_close_snd[];
 #else
+static EvtWord evt_door_04_open[17];
 EvtWord evt_door_04_close_snd[19];
 #endif
 static DoorParam door_data_04;
@@ -420,28 +405,19 @@ static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord majorin_nusumigiki[];
-#else
-EvtWord majorin_nusumigiki[331];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord yuureturn_rtn[];
 #else
+EvtWord majorin_nusumigiki[331];
 EvtWord yuureturn_rtn[101];
 #endif
 static EvtWord peach_mail[248];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord kuzi_bomb_talk_normal[];
-#else
-EvtWord kuzi_bomb_talk_normal[372];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord kuzi_bomb_talk_husei[];
-#else
-EvtWord kuzi_bomb_talk_husei[589];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord kuzi_bomb_bomb[];
 #else
+EvtWord kuzi_bomb_talk_normal[372];
+EvtWord kuzi_bomb_talk_husei[589];
 EvtWord kuzi_bomb_bomb[152];
 #endif
 EvtWord kuzi_keiziban_normal[];
@@ -1584,7 +1560,7 @@ EVT_BEGIN(maffiaboss_train_ticket)
     END_INLINE_EVENT
     CALL(evt_cam3d_evt_set, -584, 265, -145, -189, 200, -145, 500, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
 #else
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_CSN1"))
 #endif
@@ -1691,7 +1667,7 @@ CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
         CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_FF_GET_KEYITEM1"))
         WAIT_MS(2000)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
+        CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
 #else
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
@@ -2020,7 +1996,7 @@ EVT_BEGIN(maffia2_talk)
         CASE_LESS_OR_EQUAL(STG2_40_THOUSAND_YEAR_DOOR)
         CALL(evt_msg_print, 0, STRING("mac_2_044_03"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
+        CASE_EQUAL(STG2_44_FINDING_DON_PIANTA)
 #else
         CASE_BETWEEN(STG2_44_FINDING_DON_PIANTA, STG2_45_DAUGHTER_LOCATED)
         IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 0)
@@ -2182,7 +2158,7 @@ EVT_BEGIN(peton_talk_common)
                 ELSE
                 CALL(evt_msg_print, 0, STRING("irai_19_02"), 0, STRING("ピートン"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(iri_19_item_tbl), LW(0))
+                CALL(evt_win_item_select, PTR(iri_19_item_tbl), LW(0))
 #else
                 CALL(evt_win_item_select, 0, PTR(iri_19_item_tbl), LW(0), 0)
 #endif
@@ -2636,7 +2612,7 @@ EVT_BEGIN(bteresa_talk_sub_minigame)
         CALL(evt_msg_select, 0, STRING("bunny_teresa_yesno2"))
         IF_INT_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_print_add, 0, STRING("bunny_teresa_47"))
+            CALL(evt_msg_print_add, 0, STRING("bunny_teresa_47"))
 #else
             CALL(evt_msg_print_add, 0, STRING("bunny_teresa_48"))
 #endif
@@ -2666,7 +2642,7 @@ CALL(evt_msg_print_add, 0, STRING("bunny_teresa_47"))
     IF_INT_LESS(LW(0), LW(1))
         CALL(evt_msg_print_add, 0, STRING("bunny_teresa_35"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_print_add, 0, STRING("bunny_teresa_12"))
+        CALL(evt_msg_print_add, 0, STRING("bunny_teresa_12"))
 #endif
         RETURN
     END_IF
@@ -2945,7 +2921,7 @@ EVT_BEGIN(bteresa_table_talk)
     CALL(setmertn, STRING("バニーテレサ"))
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_stop, 0)
+    CALL(evt_party_stop, 0)
 #endif
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     // Trouble Center request 11 (bringing back Teresa's medals) is active: she hands over the reward.
@@ -3075,7 +3051,7 @@ CALL(evt_party_stop, 0)
     // Menu: Mario chooses a minigame, the prize exchange, or leaves.
     CALL(evt_exchange_msg_alloc)
 #if VERSION <= VERSION_DEMO_US
-LOOP(0)
+    LOOP(0)
 #endif
     CALL(minigameselect_msg_set, STRING("bunny_teresa_03"), LW(0))
     CALL(evt_msg_select, 1, LW(0))
@@ -3121,8 +3097,8 @@ LOOP(0)
     // Run the prize exchange or the chosen minigame.
     IF_INT_EQUAL(LW(0), 4)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_continue)
-CALL_CHILD(bteresa_talk_sub_keihin)
+        CALL(evt_msg_continue)
+        CALL_CHILD(bteresa_talk_sub_keihin)
 #else
         CALL_CHILD(PTR(bteresa_talk_sub_keihin))
 #endif
@@ -3130,12 +3106,12 @@ CALL_CHILD(bteresa_talk_sub_keihin)
         CALL_CHILD(PTR(bteresa_talk_sub_minigame))
     END_IF
 #if VERSION <= VERSION_DEMO_US
-END_LOOP
+    END_LOOP
 #endif
     LABEL(0)
     CALL(evt_exchange_msg_free)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_run, 0)
+    CALL(evt_party_run, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -3512,7 +3488,7 @@ static const I3 disp_slot_icons = {{ICON_BUTTON_A_ALT, ICON_BUTTON_A_ALT, ICON_B
 EVT_BEGIN(ranking_set)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_stop, 0)
+    CALL(evt_party_stop, 0)
 #endif
     CALL(evt_cam3d_evt_set, FLOAT(-541.8994f), FLOAT(115.5f), FLOAT(-115.0f), FLOAT(-197.0f), FLOAT(56.799805f), FLOAT(-115.0f), 600, EASING_SINE_IN_OUT)
     WAIT_MS(600)
@@ -3532,7 +3508,7 @@ CALL(evt_party_stop, 0)
     CALL(evt_cam3d_evt_off, 600, EASING_SINE_IN_OUT)
     WAIT_MS(600)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_run, 0)
+    CALL(evt_party_run, 0)
 #endif
     CALL(evt_mario_key_onoff, 1)
     RETURN
@@ -4956,7 +4932,7 @@ static const char* door_data_03_npc[] = {
  */
 EVT_BEGIN(door_data_03_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_hitobj_onoff, STRING("A_ie_04A"), 1, 0)
@@ -5052,7 +5028,7 @@ static EVT_BEGIN(evt_door_03_open)
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bero_n"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_hitobj_onoff, STRING("A_ie_04A"), 1, 0)
@@ -5145,7 +5121,7 @@ static const char* door_data_04_npc[] = {
  */
 static EVT_BEGIN(evt_door_04_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_hitobj_onoff, STRING("A_ie_03A"), 1, 0)
@@ -5316,7 +5292,7 @@ EVT_END()
  */
 EVT_BEGIN(uraguchi_tenin)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_move_position, STRING("店員"), -508, 24, 0, FLOAT(60.0f), 0)
+    CALL(evt_npc_move_position, STRING("店員"), -508, 24, 0, FLOAT(60.0f), 0)
 #else
     CALL(evt_npc_move_position, STRING("店員"), -490, 24, 0, FLOAT(60.0f), 0)
 #endif
@@ -5748,7 +5724,7 @@ EVT_END()
  */
 EVT_BEGIN(kuzi_bomb_talk_normal)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_unitwin_alloc)
+    CALL(evt_unitwin_alloc)
 #else
     CALL(evt_unitwin_alloc, 0)
 #endif
@@ -5867,7 +5843,7 @@ EVT_END()
 
 EVT_BEGIN(kuzi_bomb_talk_husei)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_unitwin_alloc)
+    CALL(evt_unitwin_alloc)
 #else
     CALL(evt_unitwin_alloc, 0)
 #endif
@@ -6034,7 +6010,7 @@ CALL(evt_unitwin_alloc)
     CALL(evt_npc_set_autotalkpose, STRING("グルメボム兵"), STRING("S_3"), STRING("T_3"))
     CALL(evt_npc_set_anim, STRING("グルメボム兵"), STRING("S_3"))
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(20000)
+    WAIT_MS(20000)
 #else
     WAIT_MS(3000)
     CALL(evt_snd_sfxon, STRING("SFX_STG7_TEC_SHUTDOWN1"), 0)
@@ -6479,9 +6455,9 @@ EVT_BEGIN(monte_evt_door_close)
     CALL(enzan_lw_save)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_stop, 0)
-CALL_CHILD(exchange_keep_sub)
-CALL(evt_party_run, 0)
+    CALL(evt_party_stop, 0)
+    CALL_CHILD(exchange_keep_sub)
+    CALL(evt_party_run, 0)
 #else
     CALL_CHILD(PTR(exchange_keep_sub))
 #endif
@@ -6930,7 +6906,7 @@ static USER_FUNC(fall_rtn) {
                 if (get_monte_check(&m->sub.pos, &marioGetPtr()->position) == TRUE) {
                     psndSFXOn_3D(sfx2, &m->sub.pos);
 #if VERSION <= VERSION_DEMO_US
-if (yuwp->tokens < 0x7FFFFFFF) {
+                    if (yuwp->tokens < 0x7FFFFFFF) {
 #else
                     if (yuwp->tokens < 99999) {
 #endif
@@ -6958,7 +6934,7 @@ if (yuwp->tokens < 0x7FFFFFFF) {
                 if (get_monte_check(&pos, &marioGetPtr()->position) == TRUE) {
                     psndSFXOn_3D(sfx3, &m->sub.pos);
 #if VERSION <= VERSION_DEMO_US
-if (yuwp->tokens < 0x7FFFFFFF) {
+                    if (yuwp->tokens < 0x7FFFFFFF) {
 #else
                     if (yuwp->tokens < 99999) {
 #endif
@@ -7466,7 +7442,7 @@ void goryuugijo_main_slot(EventEntry* event, BOOL isFirstCall) {
                 switch (gara2[0]) {
                     case 0:
 #if VERSION <= VERSION_DEMO_US
-data->monteCount = 5;
+                        data->monteCount = 5;
 #else
                         data->monteCount = 3;
 #endif

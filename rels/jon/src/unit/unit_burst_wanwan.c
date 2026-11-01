@@ -119,7 +119,7 @@ BattleUnitKind unit_burst_wanwan = {
     0, // turnOrder
     0, // turnOrderVariance
 #if VERSION <= VERSION_DEMO_US
--1,
+    -1,
 #endif
     0, // swallowChance
 #if VERSION > VERSION_DEMO_US
@@ -810,7 +810,7 @@ static USER_FUNC(chain_main) {
     dy = y1 - y2;
     dz = z1 - z2;
 #if VERSION <= VERSION_DEMO_US
-len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 7;
+    len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 7;
 #else
     len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 8;
 #endif
@@ -831,7 +831,7 @@ len = (f32)sqrt(dx * dx + dy * dy + dz * dz) / 7;
     y += 16.0f;
     BtlUnit_SetPartsPos(BtlUnit_GetPartsPtr(unit, 2), x, y, z);
 #if VERSION <= VERSION_DEMO_US
-for (i = 2; i <= 6; i++) {
+    for (i = 2; i <= 6; i++) {
 #else
     for (i = 2; i <= 7; i++) {
 #endif

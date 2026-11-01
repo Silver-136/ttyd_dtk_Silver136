@@ -117,12 +117,9 @@ NpcBattleSelect btlgrpsel_hei_btlno_hei_13_03_off[4];
 NpcBattleSelect btlgrpsel_hei_btlno_hei_13_04_off[4];
 #if VERSION <= VERSION_DEMO_US
 NpcSetupBattleInfo btlsetup_hei_tbl[26];
-#else
-NpcSetupBattleInfo btlsetup_hei_tbl[28];
-#endif
-#if VERSION <= VERSION_DEMO_US
 NpcTerritoryInfo btl_hei_setup_no_tbl[26];
 #else
+NpcSetupBattleInfo btlsetup_hei_tbl[28];
 NpcTerritoryInfo btl_hei_setup_no_tbl[28];
 #endif
 
@@ -141,7 +138,7 @@ BattleStageObjectData hei_btlobject_data[] = {
     {"hana_1", 2, 1, {100.0f, 0.0f, 76.0f}, 30, 30, {0}},
     {"hana_2", 2, 1, {-44.0f, 0.0f, 74.0f}, 0, 60, {0}},
 #if VERSION <= VERSION_DEMO_US
-{"saku_1", 2, 1, {-11.0f, 0.0f, -24.0f}, 10, 50, {0}},
+    {"saku_1", 2, 1, {-11.0f, 0.0f, -24.0f}, 10, 50, {0}},
 #else
     {"saku_1", 2, 1, {-24.0f, 0.0f, -39.0f}, 10, 50, {0}},
 #endif
@@ -2407,15 +2404,15 @@ NpcTerritoryInfo btl_hei_setup_no_tbl[] = {
     {"BTLNO_HEI_07_01", 14},
     {"BTLNO_HEI_08_01", 15},
 #if VERSION <= VERSION_DEMO_US
-{"BTLNO_HEI_09_01", 16},
-    {"BTLNO_HEI_09_03", 17},
-    {"BTLNO_HEI_10_01", 18},
-    {"BTLNO_HEI_11_01", 19},
-    {"BTLNO_HEI_11_03", 20},
-    {"BTLNO_HEI_12_01", 21},
-{"BTLNO_HEI_13_02", 22},
-    {"BTLNO_HEI_13_03", 23},
-    {"BTLNO_HEI_13_04", 24},
+    {"BTLNO_HEI_09_01", 16},
+        {"BTLNO_HEI_09_03", 17},
+        {"BTLNO_HEI_10_01", 18},
+        {"BTLNO_HEI_11_01", 19},
+        {"BTLNO_HEI_11_03", 20},
+        {"BTLNO_HEI_12_01", 21},
+    {"BTLNO_HEI_13_02", 22},
+        {"BTLNO_HEI_13_03", 23},
+        {"BTLNO_HEI_13_04", 24},
 #else
     {"BTLNO_HEI_08_02", 16},
     {"BTLNO_HEI_09_01", 17},

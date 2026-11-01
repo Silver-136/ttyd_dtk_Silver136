@@ -1516,7 +1516,7 @@ EVT_BEGIN(muj_00_door_open)
     CALL(evt_door_param, LW(0), 10, LW(1), LW(2), LW(3))
     CALL(evt_mario_party_door_move, LW(1), LW(3), FLOAT(135.0f))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_move_behind_mario, 0)
+    CALL(evt_party_move_behind_mario, 0)
     CALL(evt_party_move_behind_mario, 1)
 #endif
     CALL(evt_cam3d_evt_xyz_off, 0, EASING_SINE_IN_OUT)
@@ -1734,7 +1734,7 @@ static KinopioData kino_dt = {
     {0}, // breakfastPos
     10, // ryoukin
 #if VERSION <= VERSION_DEMO_US
-{399.0f, 16.0f, -185.0f},
+    {399.0f, 16.0f, -185.0f},
 #else
     {403.0f, 17.0f, -182.0f}, // bed
 #endif

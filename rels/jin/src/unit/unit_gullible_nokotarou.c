@@ -592,8 +592,8 @@ static EVT_BEGIN(attack_event_nokotarou_koura)
             CALL(btlevtcmd_StartAvoid, LW(3), DAMAGE_CODE_MISS)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 40)
-CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+        CALL(btlevtcmd_FaceDirectionAdd, LW(3), LW(0), 40)
+        CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
 #else
         CALL(btlevtcmd_FaceDirectionAdd, UNIT_ID_SELF, LW(0), 40)
         CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_FROM_TABLE, 0)

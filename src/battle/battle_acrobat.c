@@ -54,7 +54,7 @@ s32 BattleAcrobatMain(BattleWork* work) {
     }
     if ((work->badgeEquippedFlags & BATTLE_BADGE_TIMING_TUTOR) && (work->stylishCurFrame > work->stylishWindowStart && work->stylishCurFrame <= work->stylishWindowEnd)) {
 #if VERSION <= VERSION_DEMO_US
-dispEntry(CAMERA_3D, 900.0f, 1, _accrobat_timing_icon_disp, unit);
+        dispEntry(CAMERA_3D, 900.0f, 1, _accrobat_timing_icon_disp, unit);
 #else
         Vec pos = { 0 };
         pos.x = unit->position.x;

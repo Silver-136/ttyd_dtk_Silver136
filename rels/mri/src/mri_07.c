@@ -66,7 +66,7 @@ static ShopItem goods_list[] = {
 /** What the clerk buys from Mario and at what price (the trade-in list of the shop). */
 static ShopDb trade_list[] = {
 #if VERSION <= VERSION_DEMO_US
-{ITEM_HP_DRAIN_BADGE, 5, 0},
+    {ITEM_HP_DRAIN_BADGE, 5, 0},
 #else
     {ITEM_HP_DRAIN_ITEM, 5, 0},
 #endif

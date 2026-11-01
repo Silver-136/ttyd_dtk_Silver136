@@ -2328,7 +2328,7 @@ static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STORAGE_KEY_0x12, LW(0))
     IF_INT_GREATER(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+        CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
 #endif

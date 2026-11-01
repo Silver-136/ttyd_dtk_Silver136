@@ -1880,13 +1880,10 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     len = sqrtf((dx * dx) + (dz * dz));
     if (len > ((mario->wPlayerCollisionBox.z > 4.0f) ? (3.0f) : (1.5f))) {
         if (1) {
+        scale = 1.0f / len;
 #else
     len = sqrtf(dx * dx + dz * dz);
     if (len > (mario->wPlayerCollisionBox.z > 4.0f ? 3.0f : 1.5f)) {
-#endif
-#if VERSION <= VERSION_DEMO_US
-        scale = 1.0f / len;
-#else
         scale = 2.0f / len;
 #endif
         dx *= scale;
@@ -1900,7 +1897,7 @@ BOOL npcCheckHitMarioSide(NpcEntry* npc) {
     // FAKE: the height goes through the spare dz; passing mario->wPlayerCollisionBox.y directly changes the object
     dz = mario->wPlayerCollisionBox.y;
 #if VERSION <= VERSION_DEMO_US
-marioChkWallAround(&mario->position, 0.0f, 160.0f + angle, 20.0f, dz);
+    marioChkWallAround(&mario->position, 0.0f, 160.0f + angle, 20.0f, dz);
 #else
     marioChkWallAround(&mario->position, 0, 0.0f, 160.0f + angle, 20.0f, dz);
 #endif
@@ -2579,7 +2576,7 @@ void fbatEncountCheck(void) {
     if (data->mode == 1) {
         u32 *kind = (u32*)&data->hitKind;
 #if VERSION <= VERSION_DEMO_US
-npc = fbatHitCheck(FBAT_CHECK_REACTION | FBAT_CHECK_SHELL | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_CURRENT, kind);
+        npc = fbatHitCheck(FBAT_CHECK_REACTION | FBAT_CHECK_SHELL | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_CURRENT, kind);
 #else
         npc = fbatHitCheck(FBAT_CHECK_REACTION | FBAT_CHECK_BOMB | FBAT_CHECK_SHELL | FBAT_CHECK_HAMMER | FBAT_CHECK_JUMP | FBAT_CHECK_CURRENT, kind);
 #endif
@@ -2751,7 +2748,7 @@ void fbatBattleMode(void) {
     mario = marioGetPtr();
     cur->rotation.y = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-if ((u32)data->hitKind == FBAT_HIT_ENEMY_FIRST) {
+    if ((u32)data->hitKind == FBAT_HIT_ENEMY_FIRST) {
         marioChgPose("M_D_1");
 #else
     // FAKE: dead int-guarded re-definition keeps mario a named web (COLOURING M)
@@ -2779,7 +2776,7 @@ if ((u32)data->hitKind == FBAT_HIT_ENEMY_FIRST) {
                 break;
             }
 #if VERSION <= VERSION_DEMO_US
-data->target->interruptFlags = 0;
+            data->target->interruptFlags = 0;
 #else
             data->target->interruptFlags &= NPC_INTERRUPT_KEPT;
 #endif
@@ -2846,7 +2843,7 @@ data->target->interruptFlags = 0;
                     marioKeyOff();
                     wp = npcGetWorkPtrInline();
 #if VERSION <= VERSION_DEMO_US
-result = wp->total;
+                    result = wp->total;
                     for (num = 0, cur = wp->entries; num < result; num++, cur++) {
 #else
                     num = wp->total;
@@ -2872,7 +2869,7 @@ result = wp->total;
                 data->subState = 4;
                 wp = npcGetWorkPtrInline();
 #if VERSION <= VERSION_DEMO_US
-result = wp->total;
+                result = wp->total;
                 for (num = 0, cur = wp->entries; num < result; num++, cur++) {
 #else
                 num = wp->total;
@@ -2892,7 +2889,7 @@ result = wp->total;
             if (!gp->inBattle) {
                 FieldBattleInfo* info4;
 #if VERSION <= VERSION_DEMO_US
-s32 stolen;
+                s32 stolen;
 #endif
                 info4 = &data->info;
                 res = BattleInformationGetResult(info4);
@@ -3953,7 +3950,7 @@ BOOL npcCheckInterrupt(NpcEntry* npc) {
     evtGetPtrID(npc->regularEvtId);
     flags = npc->interruptFlags;
 #if VERSION <= VERSION_DEMO_US
-if (flags) {
+    if (flags) {
 #else
     if (flags & ~NPC_INTERRUPT_KEPT) {
 #endif
@@ -3995,7 +3992,7 @@ if (flags) {
             evtDeleteID(npc->regularEvtId);
             npc->regularEvtId = evt->eventId;
 #if VERSION <= VERSION_DEMO_US
-npc->interruptFlags = 0;
+            npc->interruptFlags = 0;
 #else
             npc->interruptFlags &= NPC_INTERRUPT_KEPT;
 #endif
@@ -4006,7 +4003,7 @@ npc->interruptFlags = 0;
         }
     }
 #if VERSION <= VERSION_DEMO_US
-npc->interruptFlags = 0;
+    npc->interruptFlags = 0;
 #else
     npc->interruptFlags &= NPC_INTERRUPT_KEPT;
 #endif

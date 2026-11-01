@@ -527,7 +527,7 @@ EVT_BEGIN(a_sekizou_1)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
 #else
         CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(1))
 #endif
@@ -652,8 +652,8 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
-SET_VALUE(GSW_STORY_PROGRESS, STG1_06_QUIZ)
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
+                SET_VALUE(GSW_STORY_PROGRESS, STG1_06_QUIZ)
 #else
                 CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(1))
                 SET_VALUE(GSW_STORY_PROGRESS, STG1_06_QUIZ)

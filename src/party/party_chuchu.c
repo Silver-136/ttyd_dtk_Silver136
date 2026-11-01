@@ -158,7 +158,7 @@ USER_FUNC(search_result) {
             return EVT_RETURN_DONE;
         }
 #if VERSION <= VERSION_DEMO_US
-psndSFXOn_3D((const char*)0x945, &party->position);
+        psndSFXOn_3D((const char*)0x945, &party->position);
 #else
         if (event->lwData[1] == 1) {
             if (party) {

@@ -509,7 +509,7 @@ void* loadDVD_callback(u32 offset, u32 bytes) {
 BOOL SoundLoadDVD2(const char* path) {
     DVDEntry* entry;
 #if VERSION <= VERSION_DEMO_US
-const char* root;
+    const char* root;
 #endif
     u32 length;
     void* pointer;
@@ -518,9 +518,9 @@ const char* root;
         return FALSE;
     }
 #if VERSION <= VERSION_DEMO_US
-root = getMarioStDvdRoot();
-    sprintf(_ssGetStr(), "%s/%s%s", root, path, ".pool");
-entry = DVDMgrOpen(_ssGetStr(), 2, 0);
+    root = getMarioStDvdRoot();
+        sprintf(_ssGetStr(), "%s/%s%s", root, path, ".pool");
+    entry = DVDMgrOpen(_ssGetStr(), 2, 0);
 #else
 
     sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), path, ".pool");
@@ -827,7 +827,7 @@ static inline void _ssDropStop(void) {
         if (sound.streams[i].flags) {
             stream = &sound.streams[i];
 #if VERSION <= VERSION_DEMO_US
-if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
+            if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
                 stream->flags |= SOUND_STREAM_FLAG_END;
                 continue;
 #else
@@ -912,7 +912,7 @@ BOOL SoundDropData(void) {
         if (sound.streams[i].flags) {
             stream = &sound.streams[i];
 #if VERSION <= VERSION_DEMO_US
-if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
+            if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
                 stream->flags |= SOUND_STREAM_FLAG_END;
                 continue;
 #else
@@ -1636,7 +1636,7 @@ static inline u32 _ssCalcLen(SoundStreamEntry* entry) {
         len = entry->size - entry->offset;
     } else {
 #if VERSION <= VERSION_DEMO_US
-if (entry->offset + 2 * SS_LOAD_BUFFER_SIZE > entry->size) {
+        if (entry->offset + 2 * SS_LOAD_BUFFER_SIZE > entry->size) {
             len -= (SS_LOAD_BUFFER_SIZE - (entry->size - (entry->offset + SS_LOAD_BUFFER_SIZE))) / 2;
 #else
         for (i = 2; i < 6; i++) {
@@ -1670,7 +1670,7 @@ inline void _ssDVDReadAsync(SoundStream* stream, int ch) {
         extra = entry->size + (0x20 - (entry->size % 0x20));
     }
 #if VERSION <= VERSION_DEMO_US
-aligned = len = _ssCalcLen(entry);
+    aligned = len = _ssCalcLen(entry);
     if (len < SS_LOAD_BUFFER_SIZE) {
         aligned = SS_LOAD_BUFFER_SIZE;
     }
@@ -1735,7 +1735,7 @@ void _ssDVDReadAsync_activeChk(s32 result, DVDFileInfo* fileInfo) {
 #endif
     int ch;
 #if VERSION <= VERSION_DEMO_US
-for (i = 0; i < 3; i++) {
+    for (i = 0; i < 3; i++) {
         stream = &sound.streams[i];
 #else
 
@@ -1783,7 +1783,7 @@ SoundIntOff();
                     stream->flags &= ~SOUND_STREAM_FLAG_READ_R;
                 }
 #if VERSION <= VERSION_DEMO_US
-SoundIntOn();
+                SoundIntOn();
 #endif
                 if (stream->count == 2) {
                     if (sound.coverState == 2 && stream->entries[0].loaded == 1 && stream->entries[1].loaded == 1) {
@@ -1793,9 +1793,9 @@ SoundIntOn();
                     sound.coverState = 0;
                 }
 #if VERSION <= VERSION_DEMO_US
-continue;
-}
-return;
+                continue;
+                }
+                return;
 #else
                 break;
 #endif
@@ -1827,7 +1827,7 @@ return;
             stream->entries[0].loaded = 0;
             stream->entries[1].loaded = 0;
 #if VERSION <= VERSION_DEMO_US
-if (stream->flags & SOUND_STREAM_FLAG_ADPCM) {
+            if (stream->flags & SOUND_STREAM_FLAG_ADPCM) {
                 stream->entries[0].srcPos = 0;
                 stream->entries[0].pos = 0;
                 stream->entries[1].srcPos = 0;
@@ -1841,7 +1841,7 @@ if (stream->flags & SOUND_STREAM_FLAG_ADPCM) {
             }
             SoundSSSetPanCh(i, stream->pan);
 #if VERSION <= VERSION_DEMO_US
-SoundIntOn();
+            SoundIntOn();
 #endif
             stream->flags |= SOUND_STREAM_FLAG_STARTED;
             break;
@@ -2460,10 +2460,10 @@ const char* paths[1];
         stream->flags |= SOUND_STREAM_FLAG_ARAM;
     }
 #if VERSION <= VERSION_DEMO_US
-sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), name, ".stm");
-paths[0] = _ssGetStr();
-    path = paths[0];
-if (!(stream->entries[0].dvd = DVDMgrOpen(path, 0, 0))) {
+    sprintf(_ssGetStr(), "%s/%s%s", getMarioStDvdRoot(), name, ".stm");
+    paths[0] = _ssGetStr();
+        path = paths[0];
+    if (!(stream->entries[0].dvd = DVDMgrOpen(path, 0, 0))) {
 #else
     paths[1] = getMarioStDvdRoot();
     sprintf(_ssGetStr(), "%s/%s%s", paths[1], name, ".stm");
@@ -2626,7 +2626,7 @@ void SoundSSPlayChEx_main(s32 result, DVDFileInfo* fileInfo) {
             }
         }
 #if VERSION <= VERSION_DEMO_US
-SoundSSSetPanCh(i, stream->pan);
+        SoundSSSetPanCh(i, stream->pan);
 #endif
         stream->fadeStep = stream->vol;
         stream->flags |= SOUND_STREAM_FLAG_FADEIN;
@@ -2657,7 +2657,7 @@ void SoundSSStopCh(s32 chan) {
     if (sound.streams[chan].flags) {
         stream = &sound.streams[chan];
 #if VERSION <= VERSION_DEMO_US
-if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
+        if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
             stream->flags |= SOUND_STREAM_FLAG_END;
             return;
         }
@@ -2669,7 +2669,7 @@ if (!(stream->flags & SOUND_STREAM_FLAG_STARTED)) {
         }
         stream->flags = 0;
 #if VERSION <= VERSION_DEMO_US
-SoundIntOff();
+        SoundIntOff();
 #endif
         DVDMgrClose(stream->entries[0].dvd);
         DVDMgrClose(stream->entries[1].dvd);

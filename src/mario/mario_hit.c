@@ -568,7 +568,7 @@ void marioChkGnd(void) {
     }
     if (mario->currMotionId != MARIO_MOTION_DAMAGE && mario->hitobjStandOn && (hitGetAttr(mario->hitobjStandOn) & HIT_ATTR_WATER_HAZARD)) {
 #if VERSION <= VERSION_DEMO_US
-if (mario->jumpVelocityY == 0.0f) {
+        if (mario->jumpVelocityY == 0.0f) {
 #else
         if (mario->jumpVelocityY >= 0.0f) {
 #endif
@@ -623,12 +623,12 @@ if (mario->jumpVelocityY == 0.0f) {
             marioChkGndRoll(mario);
         }
 #if VERSION <= VERSION_DEMO_US
-mario->trigFlags |= MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON;
+        mario->trigFlags |= MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON;
 #endif
         return;
     }
 #if VERSION <= VERSION_DEMO_US
-if (!(mario->flags & (MARIO_FLAG_PAPER_MODE | MARIO_FLAG_TUBE_MODE))) {
+    if (!(mario->flags & (MARIO_FLAG_PAPER_MODE | MARIO_FLAG_TUBE_MODE))) {
 #else
     if (!(mario->flags & MARIO_FLAG_TUBE_MODE)) {
 #endif
@@ -2506,7 +2506,7 @@ void marioSearchFrontWall_staying(f32 dz) {
     }
     pos = mario->position;
 #if VERSION <= VERSION_DEMO_US
-marioChkWallAround(&pos, 0.0f, dz, mario->wPlayerCollisionBox.z, mario->wPlayerCollisionBox.y);
+    marioChkWallAround(&pos, 0.0f, dz, mario->wPlayerCollisionBox.z, mario->wPlayerCollisionBox.y);
 #else
     marioChkWallAround(&pos, 0, 0.0f, dz, mario->wPlayerCollisionBox.z, mario->wPlayerCollisionBox.y);
 #endif
@@ -2593,7 +2593,7 @@ void marioCheckWall_roll(f32 dx, f32 dz) {
     }
     pos = mario->position;
 #if VERSION <= VERSION_DEMO_US
-marioChkWallAround(&pos, dx, dz, mario->wPlayerCollisionBox.z, mario->wPlayerCollisionBox.y);
+    marioChkWallAround(&pos, dx, dz, mario->wPlayerCollisionBox.z, mario->wPlayerCollisionBox.y);
 #else
     marioChkWallAround(&pos, 0, dx, dz, mario->wPlayerCollisionBox.z, mario->wPlayerCollisionBox.y);
 #endif

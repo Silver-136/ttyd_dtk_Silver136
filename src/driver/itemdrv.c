@@ -289,7 +289,7 @@ if (vivianGetStatus())
         }
     }
 #if VERSION <= VERSION_DEMO_US
-if (fbatMode != 0 && fbatMode != 1)
+    if (fbatMode != 0 && fbatMode != 1)
         return FALSE;
 #else
     if (fbatPreventMarioEventChk()) return FALSE;
@@ -368,7 +368,7 @@ if (gp->mapEventId)
         }
     }
 #if VERSION <= VERSION_DEMO_US
-if (fbatMode != 0 && fbatMode != 1)
+    if (fbatMode != 0 && fbatMode != 1)
         return FALSE;
     return TRUE;
 #else
@@ -482,7 +482,7 @@ void itemMain(void) {
                         }
                         hit = hitCheckFilter(NULL, &hitX, &hitY, &hitZ, &hitDist, &hitNX, &hitNY, &hitNZ, px, py, pz, 0.0f, -1.0f, 0.0f);
 #if VERSION <= VERSION_DEMO_US
-hit = hit ? hit : NULL;
+                        hit = hit ? hit : NULL;
 #else
                         if (hit) {
                             newY = hitY;
@@ -518,7 +518,7 @@ hit = hit ? hit : NULL;
                 break;
             case ITEM_MODE_DELETE:
 #if VERSION <= VERSION_DEMO_US
-itemCheckBadge(entry);
+                itemCheckBadge(entry);
 #endif
                 itemDelete(entry->name);
                 break;

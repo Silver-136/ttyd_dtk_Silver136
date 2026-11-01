@@ -158,7 +158,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_4 = {
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
 #if VERSION <= VERSION_DEMO_US
-{4, 0, 0, 0, 0, 0, 0, 0},
+    {4, 0, 0, 0, 0, 0, 0, 0},
 #else
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
 #endif
@@ -205,7 +205,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_3 = {
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
 #if VERSION <= VERSION_DEMO_US
-{4, 0, 0, 0, 0, 0, 0, 0},
+    {4, 0, 0, 0, 0, 0, 0, 0},
 #else
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
 #endif
@@ -252,7 +252,7 @@ static BattleWeapon weapon_sambo_mummy_head_attack_2 = {
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
 #if VERSION <= VERSION_DEMO_US
-{4, 0, 0, 0, 0, 0, 0, 0},
+    {4, 0, 0, 0, 0, 0, 0, 0},
 #else
     {3, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
 #endif
@@ -339,7 +339,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_4 = {
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
 #if VERSION <= VERSION_DEMO_US
-{3, 0, 0, 0, 0, 0, 0, 0},
+    {3, 0, 0, 0, 0, 0, 0, 0},
 #else
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
 #endif
@@ -380,7 +380,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_3 = {
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
 #if VERSION <= VERSION_DEMO_US
-{3, 0, 0, 0, 0, 0, 0, 0},
+    {3, 0, 0, 0, 0, 0, 0, 0},
 #else
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
 #endif
@@ -421,7 +421,7 @@ static BattleWeapon weapon_sambo_mummy_spike_attack_2 = {
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
 #if VERSION <= VERSION_DEMO_US
-{3, 0, 0, 0, 0, 0, 0, 0},
+    {3, 0, 0, 0, 0, 0, 0, 0},
 #else
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
 #endif

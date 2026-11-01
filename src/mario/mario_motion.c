@@ -316,8 +316,8 @@ void marioChgJumpStandMotion(f32 v) {
     if (marioChkSts(MARIO_STS_ROLL)) {
         mario->mot.jump.standHeight = v;
 #if VERSION <= VERSION_DEMO_US
-    } else
-if (mario->currMotionId == MARIO_MOTION_YOSHI) {
+        } else
+    if (mario->currMotionId == MARIO_MOTION_YOSHI) {
 #else
         effKemuriEntry(0, mario->position.x, mario->position.y, mario->position.z, 0.0f);
         marioChgMot(MARIO_MOTION_JUMP_STAND);
@@ -1478,7 +1478,7 @@ BOOL marioChkItemMotion(void) {
 /** Always 0: a left-over stick-rub check; marioMain's air movement would skip the stick while it returned nonzero. */
 s32 L_marioChkRub(void) {
 #if VERSION <= VERSION_DEMO_US
-MarioWork* mario = marioGetPtr();
+    MarioWork* mario = marioGetPtr();
 #endif
     return 0;
 }
@@ -1525,7 +1525,7 @@ s32 marioRollChgChk(void) {
 void marioChgMotJump2(void) {
     MarioWork* mario = marioGetPtr();
 #if VERSION <= VERSION_DEMO_US
-if (kpaGetBodyStatus() != KPA_BODY_SUBMERGED) {
+    if (kpaGetBodyStatus() != KPA_BODY_SUBMERGED) {
 #else
     if (kpaGetBodyStatus() != KPA_BODY_SUBMERGED && mario->currMotionId != MARIO_MOTION_ROLL) {
 #endif

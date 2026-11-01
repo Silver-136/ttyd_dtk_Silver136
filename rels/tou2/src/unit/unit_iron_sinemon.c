@@ -338,25 +338,25 @@ static EVT_BEGIN(phase_event)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-DEBUG_PUT_MSG(STRING("ぺぺぺまん２"))
-IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
+    DEBUG_PUT_MSG(STRING("ぺぺぺまん２"))
+    IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
 #else
     IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
 #endif
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-DEBUG_PUT_MSG(STRING("ぺぺぺまん３"))
+    DEBUG_PUT_MSG(STRING("ぺぺぺまん３"))
 #endif
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-DEBUG_PUT_MSG(STRING("ぺぺぺまん４"))
+        DEBUG_PUT_MSG(STRING("ぺぺぺまん４"))
 #endif
         CALL(btlevtcmd_get_turn, LW(0))
         IF_INT_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-DEBUG_PUT_MSG(STRING("ぺぺぺまん５"))
+            DEBUG_PUT_MSG(STRING("ぺぺぺまん５"))
 #endif
             CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_PARTNER)
             CALL(btlevtcmd_PhaseEventStartDeclare, UNIT_ID_SELF)

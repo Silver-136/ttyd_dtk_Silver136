@@ -564,7 +564,7 @@ HitEntry* partyChkFrontStep(PartyEntry* party, f32 range, f32* outY, f32* outDis
     }
     party->groundSlope = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-h = 0.5f * partyGetHeight(party);
+    h = 0.5f * partyGetHeight(party);
 #else
     h = partyGetHeight(party);
 #endif

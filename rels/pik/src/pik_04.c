@@ -65,22 +65,13 @@ static DoorParam door_2;
 EvtWord imginit[46];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord imgstart[];
-#else
-EvtWord imgstart[107];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord imgend[];
-#else
-EvtWord imgend[129];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_up[];
-#else
-EvtWord evt_up[402];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_down[];
 #else
+EvtWord imgstart[107];
+EvtWord imgend[129];
+EvtWord evt_up[402];
 EvtWord evt_down[404];
 #endif
 EvtWord init_miyage[8];
@@ -298,7 +289,7 @@ const char* hotel_npc[] = {
  */
 static EVT_BEGIN(door_2_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
@@ -1080,7 +1071,7 @@ static NpcSetupInfo npc_data[] = {
 EVT_BEGIN(evt_roten)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_unitwin_alloc)
+    CALL(evt_unitwin_alloc)
 #else
     CALL(evt_unitwin_alloc, 0)
 #endif
@@ -1160,7 +1151,7 @@ static KinopioData kino_dt = {
     {360.0f, 33.0f, -235.0f}, // breakfastPos
     30, // ryoukin
 #if VERSION <= VERSION_DEMO_US
-{295.0f, 1345.0f, 75.0f},
+    {295.0f, 1345.0f, 75.0f},
 #else
     {290.0f, 1345.0f, 80.0f}, // bed
 #endif

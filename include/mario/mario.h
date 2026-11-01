@@ -106,7 +106,7 @@ typedef enum MarioTrigFlags {
     MARIO_TRIG_FLAG_JABARA_MOVE_CHK = (1 << 21),
     MARIO_TRIG_FLAG_START_JABARA_SPIN = (1 << 22),
 #if VERSION <= VERSION_DEMO_US
-MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON = (1 << 24), // the demo also sets it on landing (marioChkGnd)
+    MARIO_TRIG_FLAG_SHIP_PLANE_EVT_ON = (1 << 24), // the demo also sets it on landing (marioChkGnd)
     MARIO_TRIG_FLAG_DISABLE_UNUSED_INPUT = (1 << 28),
     MARIO_TRIG_FLAG_DISABLE_TRIGGERS = (1 << 29),
     MARIO_TRIG_FLAG_DISABLE_SUB_STICK = (1 << 30),
@@ -142,7 +142,7 @@ typedef struct MarioMotSlit {      // mot_slit.c (paper slit / side-step)
     f32 pushDir;                   // 0x08, 0 or 180: slide direction relative to targetYaw while pushing a 0x2000 wall
     f32 lastY;                     // 0x0C, position.y last frame
 #if VERSION <= VERSION_DEMO_US
-s16 reserved_10; // 0x10, demo: mot_slit's second timer, accessed as MarioWork.slitTimer2
+    s16 reserved_10; // 0x10, demo: mot_slit's second timer, accessed as MarioWork.slitTimer2
     s16 resumeState;
 #else
     u8 pad10[4];                   // 0x10

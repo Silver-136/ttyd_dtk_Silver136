@@ -59,12 +59,9 @@ EvtWord oidasare_event[156];
 ExtTexInfo test_ext_entry_data[31];
 #if VERSION <= VERSION_DEMO_US
 static s16 suifu_animtbl[41];
-#else
-static s16 suifu_animtbl[42];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static s16 elmos_animtbl[21];
 #else
+static s16 suifu_animtbl[42];
 static s16 elmos_animtbl[22];
 #endif
 s32 senin_event_suifupos[380];
@@ -436,7 +433,7 @@ static s16 suifu_animtbl[] = {
     12, 12, 13, 13, 14, 14, 15, 15,
     16, 16, 17, 17, 18, 18, 19, 19,
 #if VERSION <= VERSION_DEMO_US
--1,
+    -1,
 #else
     -1, 0,
 #endif
@@ -447,7 +444,7 @@ static s16 elmos_animtbl[] = {
     20, 20, 21, 21, 22, 22, 23, 23,
     24, 24, 25, 25, 26, 26, 27, 27,
 #if VERSION <= VERSION_DEMO_US
-28, 28, 29, 29, -1,
+    28, 28, 29, 29, -1,
 #else
     28, 28, 29, 29, -1, 0,
 #endif

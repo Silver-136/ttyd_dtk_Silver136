@@ -64,12 +64,9 @@ EvtWord nisemario_init[22];
 static NpcSetupInfo npcEnt[7];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord jin_04_jumpstand[];
-#else
-EvtWord jin_04_jumpstand[181];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord jin_04_init_evt[];
 #else
+EvtWord jin_04_jumpstand[181];
 EvtWord jin_04_init_evt[103];
 #endif
 
@@ -310,7 +307,7 @@ EVT_BEGIN(irekawatta_mario)
     SET_VALUE(LW(0), -1)
     SET_VALUE(LW(1), STRING("rubystar"))
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(evt_sub_starstone)
+    CALL_CHILD(evt_sub_starstone)
 #endif
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
 #if VERSION > VERSION_DEMO_US
@@ -826,7 +823,7 @@ EVT_BEGIN(hontonosugata_mario)
     SET_VALUE(LW(0), 4)
     SET_VALUE(LW(1), STRING("rubystar"))
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(evt_sub_starstone)
+    CALL_CHILD(evt_sub_starstone)
 #else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL_CHILD(PTR(evt_sub_starstone))
@@ -1009,7 +1006,7 @@ EVT_BEGIN(jin_04_init_evt)
         CASE_EQUAL(STG4_10_DOOPLISS_BATTLE)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
+        CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
         CALL(evt_snd_set_rev_mode, 2)
 #else
         CALL(evt_snd_envoff, PSND_FADEOUT)
@@ -1022,7 +1019,7 @@ CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_JIN1"))
 #endif
     CALL(evt_snd_set_rev_mode, 2)
 #if VERSION <= VERSION_DEMO_US
-END_SWITCH
+    END_SWITCH
 #endif
     CALL(evt_kagemario_init)
     SET_VALUE(LW(0), PTR(bero_entry_data))

@@ -297,7 +297,7 @@ EVT_BEGIN(watergate_handle)
             RETURN
         END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
+        CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(itemsel_table), LW(0), 0)
 #endif

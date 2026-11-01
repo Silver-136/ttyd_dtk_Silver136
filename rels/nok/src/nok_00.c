@@ -305,7 +305,7 @@ EVT_BEGIN(nokonoko_F_talk)
             IF_INT_GREATER(LW(0), 0)
                 CALL(evt_msg_continue)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, 1, LW(0))
+                CALL(evt_win_item_select, 1, LW(0))
 #else
                 CALL(evt_win_item_select, 0, 1, LW(0), 0)
 #endif
@@ -367,7 +367,7 @@ CALL(evt_win_item_select, 1, LW(0))
             IF_INT_GREATER(LW(0), 0)
                 CALL(evt_msg_continue)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, 1, LW(0))
+                CALL(evt_win_item_select, 1, LW(0))
 #else
                 CALL(evt_win_item_select, 0, 1, LW(0), 0)
 #endif

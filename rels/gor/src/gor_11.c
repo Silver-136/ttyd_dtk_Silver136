@@ -21,12 +21,9 @@
 
 #if VERSION <= VERSION_DEMO_US
 static EvtWord epilogue_evt[58];
-#else
-static EvtWord epilogue_evt[62];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord gor_11_init_evt[];
 #else
+static EvtWord epilogue_evt[62];
 EvtWord gor_11_init_evt[29];
 #endif
 
@@ -68,7 +65,7 @@ EVT_BEGIN(gor_11_init_evt)
     CALL(evt_map_playanim, STRING("anm_umi"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_nami"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
+    IF_INT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
 #else
     CALL(evt_sub_get_system_flag, LW(0))
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)

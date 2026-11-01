@@ -271,8 +271,8 @@ BOOL pouchGetItem(ItemType type) {
     }
     if (type == ITEM_PIANTA_TOKEN) {
 #if VERSION <= VERSION_DEMO_US
-if (yuwp->tokens < 0x7FFFFFFF)
-{
+        if (yuwp->tokens < 0x7FFFFFFF)
+        {
 #else
         if (yuwp->tokens < 99999) {
 #endif
@@ -524,7 +524,7 @@ BOOL pouchRemoveItemIndex(ItemType type, s32 index) {
     for (i = index; i < maximum; p++, i++) {
         if (type == *p) {
 #if VERSION <= VERSION_DEMO_US
-pouchShiftDemo(table1, table2, i, maximum);
+            pouchShiftDemo(table1, table2, i, maximum);
 #else
             pouchShift(table1, table2, i, maximum);
 #endif
@@ -1566,7 +1566,7 @@ BOOL pouchUnEquipBadgeID(s32 badgeId) {
  */
 s32 pouchArriveBadge(s32 id) {
 #if VERSION <= VERSION_DEMO_US
-return badgeShop_add(bdsw->bargain_table, (s16)id, 1);
+    return badgeShop_add(bdsw->bargain_table, (s16)id, 1);
 #else
     return badgeShop_add(bdsw->special_table, (s16)id, 1);
 #endif

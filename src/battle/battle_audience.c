@@ -2647,7 +2647,7 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
 #endif
             scl[1][3] = scl[1][3] + (m->hopY + (-oy + m->position.y));
 #if VERSION <= VERSION_DEMO_US
-            scl[2][3] = scl[2][3] + (m->hopZ + (-oz + m->position.z));
+        scl[2][3] = scl[2][3] + (m->hopZ + (-oz + m->position.z));
 #endif
         } else {
 #if VERSION <= VERSION_DEMO_US
@@ -2689,8 +2689,8 @@ void BattleAudienceDispAudience(CameraId camId, void* param) {
             flip ^= 1;
         }
 #if VERSION <= VERSION_DEMO_US
-            if (flip == 1)
-                off += 4;
+        if (flip == 1)
+            off += 4;
 #else
         if (flip == 1) off += 4;
         GXSetChanMatColor(GX_COLOR0A0, (GXColor){cr, cg, cb, ca});
@@ -3123,7 +3123,7 @@ void BattleAudience_SetTarget(s32 index) {
     BattleAudienceMember* member;
     s32 i;
 #if VERSION <= VERSION_DEMO_US
-member = BattleAudienceGetPtr(index);
+    member = BattleAudienceGetPtr(index);
     if (member->status == 7 && member->itemId != -1) {
         member->flags |= AUDIENCE_MEMBER_FLAG_TARGETED;
 #else
@@ -3319,7 +3319,7 @@ s32 BattleAudience_HaitiRandForFallObject(void) {
     s32 row = irand(3);
     s32 col = 10;
 #if VERSION <= VERSION_DEMO_US
-irand(18);
+    irand(18);
 #else
 
     irand(12);
@@ -3327,21 +3327,21 @@ irand(18);
     switch (row) {
     case 0:
 #if VERSION <= VERSION_DEMO_US
-            col = irand(18) + 1;
+        col = irand(18) + 1;
 #else
         col = irand(12) + 4;
 #endif
         break;
     case 1:
 #if VERSION <= VERSION_DEMO_US
-            col = irand(16) + 2;
+        col = irand(16) + 2;
 #else
         col = irand(10) + 5;
 #endif
         break;
     case 2:
 #if VERSION <= VERSION_DEMO_US
-            col = irand(14) + 3;
+        col = irand(14) + 3;
 #else
         col = irand(8) + 6;
 #endif
@@ -5116,7 +5116,7 @@ void BattleAudience_Case_TurnEnd(void) {
 void BattleAudience_Case_Appeal(BattleUnit* unit) {
     BattleAudience* audience = BattleAudienceBaseGetPtr();
 #if VERSION <= VERSION_DEMO_US
-if (BattleAudience_GetPPAudienceNum() > 0) {
+    if (BattleAudience_GetPPAudienceNum() > 0) {
 #else
 
     if (BattleAudience_GetPPAudienceNum() > 0.0f) {

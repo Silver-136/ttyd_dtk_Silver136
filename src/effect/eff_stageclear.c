@@ -98,8 +98,6 @@ EVT_END()
 /** Letter textures of the stage-clear banner, Japanese then English, each with a matching shadow list. */
 #if VERSION > VERSION_DEMO_US
 static s32 tex_jp[] = {0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3};
-#endif
-#if VERSION > VERSION_DEMO_US
 s32 tex_shadow_jp[] = {0xA4, 0xA5, 0xA6, 0xA7, 0xA8, 0xA9, 0xAA, 0xAB};
 #endif
 /** Banner letters, shadows and letter count for each language. */

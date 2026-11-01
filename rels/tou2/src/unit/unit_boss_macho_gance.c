@@ -97,7 +97,7 @@ BattleUnitKind unit_boss_macho_gance = {
     1, // dangerHP
     1, // perilHP
 #if VERSION <= VERSION_DEMO_US
-70,
+    70,
 #else
     71, // level
 #endif
@@ -830,7 +830,7 @@ static EVT_BEGIN(phase_event)
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(0.0f), FLOAT(180.0f), LW(6))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(1.0f), FLOAT(1.1494141f), LW(7))
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
+                CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
 #else
                 CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), 1)
 #endif
@@ -848,7 +848,7 @@ CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(0.0f), FLOAT(-180.0f), LW(6))
                 CALL(wariai_enzan_1f, LW(5), 36, FLOAT(1.1494141f), FLOAT(1.2998047f), LW(7))
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
+                CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), LW(7))
 #else
                 CALL(btlevtcmd_SetBaseScale, UNIT_ID_SELF, LW(7), LW(7), 1)
 #endif

@@ -62,7 +62,7 @@ EvtWord aji_11_init_evt[111];
  */
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -79,7 +79,7 @@ EVT_END()
  */
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -265,7 +265,7 @@ EVT_BEGIN(peach_evt_disksys)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(item_list), LW(0))
+    CALL(evt_win_item_select, PTR(item_list), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(item_list), LW(0), 0)
     // Cancellation leaves the disk and the current interaction unchanged.

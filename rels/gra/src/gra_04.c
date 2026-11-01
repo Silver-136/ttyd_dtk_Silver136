@@ -25,12 +25,9 @@ USER_FUNC(roll_release_check);
 static EvtWord in_evt[5];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord out_evt[120];
-#else
-static EvtWord out_evt[142];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord out_evt2[82];
 #else
+static EvtWord out_evt[142];
 static EvtWord out_evt2[110];
 #endif
 static BeroEntry bero_entry_data[5];
@@ -64,7 +61,7 @@ static EVT_BEGIN(out_evt)
             CALL(evt_party_stop, 1)
             CALL(evt_party_move_pos2, 1, -375, -20, FLOAT(150.0f))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_stop, 1)
+            CALL(evt_party_stop, 1)
 #else
             CALL(evt_mario_kill_party, 1)
 #endif
@@ -77,7 +74,7 @@ CALL(evt_party_stop, 1)
             CALL(evt_party_stop, 0)
             CALL(evt_party_move_pos2, 0, -375, -25, FLOAT(150.0f))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_stop, 1)
+            CALL(evt_party_stop, 1)
 #else
             CALL(evt_mario_kill_party, 0)
 #endif

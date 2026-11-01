@@ -148,7 +148,7 @@ EVT_BEGIN(tik_18_init_evt)
     END_IF
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_01"), STRING("ue"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -30, ITEM_SLOW_SHROOM, 0, GSWF_TIK_18_SLOW_SHROOM_BLOCK, 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -30, ITEM_SLOW_SHROOM, 0, GSWF_TIK_18_SLOW_SHROOM_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_02"), 310, 0, -30, ITEM_GRADUAL_SYRUP, 0, GSWF_TIK_18_GRADUAL_SYRUP_BLOCK, 0)
 #else
     CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -38, ITEM_SLOW_SHROOM, 0, GSWF_TIK_18_SLOW_SHROOM_BLOCK, 0)

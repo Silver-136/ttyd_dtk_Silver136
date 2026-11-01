@@ -96,7 +96,7 @@ BattleUnitKind unit_boss_gesso_right_arm = {
     parts, // parts
     init_event, // initEventCode
 #if VERSION <= VERSION_DEMO_US
-data_table,
+    data_table,
 #else
     gesso_right_arm_data_table, // dataTable
 #endif

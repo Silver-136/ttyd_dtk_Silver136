@@ -944,7 +944,7 @@ static void ext_moamoa_main(void) {
         wp->angle = angleABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
         wp->dist = distABf(mario->position.x, mario->position.z, (*pose->mtx)[0][3], (*pose->mtx)[2][3]);
 #if VERSION <= VERSION_DEMO_US
-if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_HIT) && !hit && !(moa->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING))) {
+        if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_HIT) && !hit && !(moa->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING))) {
 #else
         if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && !(wp->flags & MOAMOA_WORK_FLAG_NO_HIT) && !marioKeyOffChk() && !marioCtrlOffChk() && !hit && !(moa->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING))) {
 #endif
@@ -1628,7 +1628,7 @@ EVT_BEGIN(evt_moamoa_help)
     SET_VALUE(LW(10), LW(0))
     CALL(evt_npc_get_position, LW(0), LW(1), LW(2), LW(3))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_sub_random, 180, LW(4))
+    CALL(evt_sub_random, 180, LW(4))
     ADD(LW(4), 90)
 #else
     CALL(evt_sub_random, 1000, LW(4))
@@ -1714,7 +1714,7 @@ static EVT_BEGIN(evt_moamoa_escape)
         CALL(evt_npc_move_position, STRING("\x8e\xd4\x8f\xb6"), -80, 22, 1000, 0, 1)
         CALL(evt_npc_set_ry, STRING("\x8e\xd4\x8f\xb6"), 90)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_npc_flag_onoff, 0, STRING("車掌"), NPC_FLAG_INTANGIBLE)
+    CALL(evt_npc_flag_onoff, 0, STRING("車掌"), NPC_FLAG_INTANGIBLE)
 #endif
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
@@ -1790,7 +1790,7 @@ static EVT_BEGIN(init_syashou)
     SWITCH(GSW_STORY_PROGRESS)
         CASE_BETWEEN(STG6_46_ENGINEER, STG6_48_SMORG_MIASMA)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_set_position, STRING("me"), -100, 0, 0)
+        CALL(evt_npc_set_position, STRING("me"), -100, 0, 0)
 #else
         CALL(evt_npc_set_position, STRING("me"), -115, 0, 20)
 #endif
@@ -2184,8 +2184,8 @@ EVT_BEGIN(rsh_05_init_evt_nidome)
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

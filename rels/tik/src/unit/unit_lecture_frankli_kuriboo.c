@@ -209,7 +209,7 @@ static EVT_BEGIN(phase_event)
             CALL(evt_btl_camera_set_moveto, 0, 71, 49, 213, 71, 35, 0, 30, 11)
             WAIT_FRAMES(30)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_02"), 0, UNIT_ID_SELF)
+            CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_02"), 0, UNIT_ID_SELF)
 #else
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_02"), 0, -2)
@@ -217,7 +217,7 @@ CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_02"), 0, UNIT_ID_SEL
             CALL(evt_btl_camera_set_moveto, 0, 111, 85, 213, 111, 71, 0, 30, 11)
             WAIT_FRAMES(30)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_03"), 0, UNIT_ID_SELF)
+            CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_03"), 0, UNIT_ID_SELF)
 #else
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
             CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_092_03"), 0, -2)

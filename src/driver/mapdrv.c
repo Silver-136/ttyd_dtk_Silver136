@@ -1120,7 +1120,7 @@ static void _mapLoad(MapWork* wp, BOOL group, const char* map) {
             Vec mx;
             mapGetBoundingBox(&mn, &mx);
 #define SET_BBOX_CORNER(idx, X, Y, Z)                \
-    {                                     \
+    {\
         Vec v = {0.0f, 0.0f, 0.0f};       \
         v.x = X;                          \
         v.y = Y;                          \
@@ -1566,7 +1566,7 @@ MapWork* wp2;
     arcDelete(2);
     memset(wp, 0, sizeof(MapWork));
 #if VERSION <= VERSION_DEMO_US
-j = 0;
+    j = 0;
 #else
     wp = mapWork;
     activeGroup = 0;
@@ -1574,10 +1574,10 @@ j = 0;
 #endif
         // the tpl ARAM copy is kept in the word after the entry (MAPENT_TPLARAM)
 #if VERSION <= VERSION_DEMO_US
-    {
-        s32 gz = 0;
-        if (gz != 0) {
-            j = 0;
+        {
+            s32 gz = 0;
+            if (gz != 0) {
+                j = 0;
 #else
         if (entry->datAram) {
             entry->dat = _mapAllocTail(entry->datSize);
@@ -1599,28 +1599,28 @@ j = 0;
     }
 }
 #if VERSION <= VERSION_DEMO_US
-    wp2 = mapWork;
-    activeGroup = j;
-    for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
+wp2 = mapWork;
+activeGroup = j;
+for (entry3 = wp2->entries; j < wp2->entries[0].count; entry3++, j++) {
 
-        // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
-        if (entry3->datAram) {
-            entry3->dat = _mapAllocTail(entry3->datSize);
-            entry3->tpl = _mapAllocTail(entry3->tplSize);
-            aramMgrToMram(entry3->datAram, entry3->dat);
-            aramMgrToMram(MAPENT_TPLARAM(entry3), entry3->tpl);
-            entry3->datAram = NULL;
-            MAPENT_TPLARAM(entry3) = NULL;
-        } else {
-            entry3->arcData = _mapAllocTail(entry3->arcSize);
-            aramMgrToMram(entry3->arcAram, entry3->arcData);
-            entry3->arcAram = NULL;
-        }
-        makeDisplayList(j);
+    // the tpl ARAM copy sits in the word after the entry (MAPENT_TPLARAM; a MapWork { count; entries@4 } layout was tried and changes codegen: the original addresses entries from wp itself)
+    if (entry3->datAram) {
+        entry3->dat = _mapAllocTail(entry3->datSize);
+        entry3->tpl = _mapAllocTail(entry3->tplSize);
+        aramMgrToMram(entry3->datAram, entry3->dat);
+        aramMgrToMram(MAPENT_TPLARAM(entry3), entry3->tpl);
+        entry3->datAram = NULL;
+        MAPENT_TPLARAM(entry3) = NULL;
+    } else {
+        entry3->arcData = _mapAllocTail(entry3->arcSize);
+        aramMgrToMram(entry3->arcAram, entry3->arcData);
+        entry3->arcAram = NULL;
     }
-    if (wp2->entries->arcData) {
-        arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
-    }
+    makeDisplayList(j);
+}
+if (wp2->entries->arcData) {
+    arcEntry(1, wp2->entries->arcData, wp2->entries->arcSize);
+}
 }
 #endif
 #pragma opt_common_subs reset
@@ -1653,14 +1653,14 @@ BOOL bmapPreLoad(const char* map, const char* map2) {
  */
 void bmapLoad(const char* map, const char* map2) {
 #if VERSION <= VERSION_DEMO_US
-char path[256];
+    char path[256];
 #endif
     MapWork* wp;
     MapEntry* entry;
     MapEntry* e;
     int i;
 #if VERSION <= VERSION_DEMO_US
-FileEntry* file;
+    FileEntry* file;
     u32 size;
     void* arc;
     u32 header;
@@ -1707,7 +1707,7 @@ FileEntry* file;
     activeGroup = 1;
     memset(wp, 0, sizeof(MapWork));
 #if VERSION <= VERSION_DEMO_US
-if (map != NULL) {
+    if (map != NULL) {
         sprintf(path, "%s/b/%s", getMarioStDvdRoot(), map);
         file = fileAlloc(path, 0);
         if (file != NULL) {
@@ -4926,7 +4926,7 @@ static void mapStrippedPool(const char** str, f32* val) {
     val[2] = 0.5f;
     val[3] = 2.0f;
 #if VERSION <= VERSION_DEMO_US
-str[1] = "%s/map/%s/map.dat";
+    str[1] = "%s/map/%s/map.dat";
 #else
     str[1] = "%s/m/%s/d";
 #endif

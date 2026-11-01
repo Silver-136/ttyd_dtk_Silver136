@@ -137,12 +137,9 @@ static EvtWord sekai_yami_npc[59];
 EvtWord sekai_yami_puni[70];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord sekai_yami_evt[286];
-#else
-static EvtWord sekai_yami_evt[322];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord minnnanokoe_evt[614];
 #else
+static EvtWord sekai_yami_evt[322];
 static EvtWord minnnanokoe_evt[620];
 #endif
 static EvtWord evt_switch_init[17];
@@ -438,7 +435,7 @@ static EVT_BEGIN(guide_talk)
         CASE_EQUAL(STG2_10_SECRET_ENTRANCE_REVEALED)
         CALL(evt_msg_print, 0, STRING("stg2_mri_e10_05"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-CASE_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
+        CASE_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
 #else
         CASE_GREATER_OR_EQUAL(STG2_26_PRAISE_FROM_THE_PUNI)
 #endif
@@ -952,13 +949,13 @@ static USER_FUNC(evt_cloud_main) {
         return EVT_RETURN_BLOCK;
     }
 #if VERSION <= VERSION_DEMO_US
-if (party->currentMemberId != 5) {
-        return EVT_RETURN_BLOCK;
-    }
-hit0 = (HitEntry*)cloudGetHitBreathout(0);
-    hit1 = (HitEntry*)cloudGetHitBreathout(1);
-    hit2 = (HitEntry*)cloudGetHitBreathout(2);
-    hit3 = (HitEntry*)cloudGetHitBreathout(3);
+    if (party->currentMemberId != 5) {
+            return EVT_RETURN_BLOCK;
+        }
+    hit0 = (HitEntry*)cloudGetHitBreathout(0);
+        hit1 = (HitEntry*)cloudGetHitBreathout(1);
+        hit2 = (HitEntry*)cloudGetHitBreathout(2);
+        hit3 = (HitEntry*)cloudGetHitBreathout(3);
 #else
     hit0 = cloudGetHitBreathout(0);
     hit1 = cloudGetHitBreathout(1);

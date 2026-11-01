@@ -47,12 +47,9 @@ EvtWord kpa_01_door_open[219];
 EvtWord kpa_01_door_close[237];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord kpa_01_touzyo_evt[];
-#else
-EvtWord kpa_01_touzyo_evt[217];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord kpa_01_syuppatu_evt[];
 #else
+EvtWord kpa_01_touzyo_evt[217];
 EvtWord kpa_01_syuppatu_evt[1729];
 #endif
 EvtWord kpa_01_pos_check[23];

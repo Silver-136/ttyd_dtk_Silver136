@@ -38,17 +38,11 @@ static EvtWord evt_unlock[11];
 EvtWord oumu_init[2];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord oumu_talk[];
-#else
-EvtWord oumu_talk[61];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord oumu_juyo_talk[];
-#else
-EvtWord oumu_juyo_talk[37];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord oumu_check[];
 #else
+EvtWord oumu_talk[61];
+EvtWord oumu_juyo_talk[37];
 EvtWord oumu_check[176];
 #endif
 static NpcSetupInfo npcEnt[2];
@@ -220,7 +214,7 @@ EVT_END()
  */
 EVT_BEGIN(oumu_talk)
 #if VERSION <= VERSION_DEMO_US
-SWITCH(GSW_STORY_PROGRESS)
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     SWITCH(GSW_STORY_PROGRESS)
@@ -252,7 +246,7 @@ EVT_END()
 EVT_BEGIN(oumu_juyo_talk)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF_JIN_08_PARROT_SECRET_HEARD, 0)
+    IF_INT_EQUAL(GSWF_JIN_08_PARROT_SECRET_HEARD, 0)
 #else
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     IF_INT_EQUAL(GSWF_JIN_08_PARROT_SECRET_HEARD, 0)
@@ -381,7 +375,7 @@ static EVT_BEGIN(lock_item_check)
     CALL(evt_pouch_check_item, ITEM_STEEPLE_KEY_0x17, LW(0))
     IF_INT_GREATER(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(lock_tbl), LW(0))
+        CALL(evt_win_item_select, PTR(lock_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(lock_tbl), LW(0), 0)
 #endif
@@ -401,7 +395,7 @@ static EVT_BEGIN(mobj_box01)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_POWER_PLUS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET)
+    CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
 #endif

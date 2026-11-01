@@ -31,8 +31,6 @@ extern voidfunctionptr _ctors[];
 extern voidfunctionptr _dtors[];
 #if VERSION > VERSION_DEMO_US
 static s32 gor_inemuri_snd_id;
-#endif
-#if VERSION > VERSION_DEMO_US
 static char* gor_msg_cat_buf;
 #endif
 
@@ -43,17 +41,11 @@ void _prolog(void);
 EvtWord gor_villager_urouro[19];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord inemuri_snd[];
-#else
-EvtWord inemuri_snd[27];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord mario_and_party_sleep[];
-#else
-EvtWord mario_and_party_sleep[259];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord luigi_gor_first_talk[];
 #else
+EvtWord inemuri_snd[27];
+EvtWord mario_and_party_sleep[259];
 EvtWord luigi_gor_first_talk[205];
 #endif
 
@@ -261,7 +253,7 @@ EVT_BEGIN(inemuri_snd)
     LABEL(0)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SLEEP1"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SLEEP1"), LW(0), LW(1), LW(2), 0)
 #else
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SLEEP1"), LW(0), LW(1), LW(2), LW(3))
     CALL(evt_gor_inemuri_snd_set, LW(3))
@@ -405,7 +397,7 @@ EVT_BEGIN(luigi_gor_first_talk)
         CALL(evt_mario_set_pose, STRING("M_I_2"))
         WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_LESS(GSW_STORY_PROGRESS, STG8_16_THE_RETURN_OF_THE_QUEEN)
+        IF_INT_LESS(GSW_STORY_PROGRESS, STG8_16_THE_RETURN_OF_THE_QUEEN)
             CALL(evt_msg_print, 0, STRING("gor_luigi_01"), 0, STRING("me"))
 #else
         IF_INT_LESS(GSW_STORY_PROGRESS, STG8_16_THE_RETURN_OF_THE_QUEEN)

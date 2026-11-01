@@ -477,7 +477,7 @@ static EVT_BEGIN(senkaron_event)
         LOOP(0)
             WAIT_FRAMES(1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+            CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             IF_INT_GREATER_OR_EQUAL(LW(0), 350)
 #else
             CALL(leader_touch_check)

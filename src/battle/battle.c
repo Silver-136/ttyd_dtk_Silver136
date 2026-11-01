@@ -346,7 +346,7 @@ BOOL Btl_UnitSetup(BattleWork* wp) {
 
     enemyData = groupSetup->enemyData;
 #if VERSION <= VERSION_DEMO_US
-heldItem = ITEM_NULL;
+    heldItem = ITEM_NULL;
 #endif
     for (i = 0; i < groupSetup->numEnemies; enemyData++, i++) {
         enemy = BtlUnit_Entry(enemyData);

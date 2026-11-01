@@ -222,7 +222,7 @@ void marioSetCharMode(s32 mode) {
             marioForceRollAnime();
             return;
 #if VERSION <= VERSION_DEMO_US
-    } else if (wp->currMotionId == MARIO_MOTION_SLIT) {
+        } else if (wp->currMotionId == MARIO_MOTION_SLIT) {
 #else
         } else if (wp->dispFlags & MARIO_DISP_FLAG_SLIT) {
 #endif
@@ -986,7 +986,7 @@ void marioReInit(void) {
     s32 charId;
     s32 dotFlag;
 #if VERSION <= VERSION_DEMO_US
-BOOL flag22;
+    BOOL flag22;
 #endif
     s32 poseId;
     s32 t;
@@ -998,7 +998,7 @@ BOOL flag22;
     f32 dirView;
     f32 moveDir;
 #if VERSION <= VERSION_DEMO_US
-flag22 = FALSE;
+    flag22 = FALSE;
     if ((wp = mp)->flags & 0x200000) {
         flag22 = TRUE;
     }
@@ -1035,7 +1035,7 @@ flag22 = FALSE;
     }
     memset(wp, 0, sizeof(MarioWork));
 #if VERSION <= VERSION_DEMO_US
-if (flag22) {
+    if (flag22) {
         wp->flags |= MARIO_FLAG_PARTY_WALK_DISABLED;
     }
 #endif
@@ -1290,7 +1290,7 @@ void marioMain(void) {
         }
         if (wp->currMotionId == MARIO_MOTION_VIVIAN) {
 #if VERSION <= VERSION_DEMO_US
-marioMove();
+            marioMove();
 #else
             marioChkGnd();
 #endif
@@ -1349,7 +1349,7 @@ marioMove();
             marioChkOverhead();
             marioMove();
 #if VERSION <= VERSION_DEMO_US
-if (wp->airTimer > 5) {
+            if (wp->airTimer > 5) {
 #else
             if (!marioChkRollMot2() && wp->airTimer > 5) {
 #endif
@@ -1369,7 +1369,7 @@ if (wp->airTimer > 5) {
                 marioFall();
                 if (wp->currMotionId != MARIO_MOTION_HIP && wp->currMotionId != MARIO_MOTION_HIP_2) {
 #if VERSION <= VERSION_DEMO_US
-if (wp->airTimer > 5) {
+                    if (wp->airTimer > 5) {
 #else
                     if (!marioChkRollMot2() && wp->airTimer > 5) {
 #endif
@@ -1468,7 +1468,7 @@ void marioCtrlOff2Main(void) {
         marioChkOverhead();
         marioMove();
 #if VERSION <= VERSION_DEMO_US
-if (wp->airTimer > 5) {
+        if (wp->airTimer > 5) {
 #else
         if (!marioChkRollMot() && wp->airTimer > 5) {
 #endif
@@ -1490,7 +1490,7 @@ if (wp->airTimer > 5) {
         marioFall();
         if (wp->currMotionId != MARIO_MOTION_HIP && wp->currMotionId != MARIO_MOTION_HIP_2) {
 #if VERSION <= VERSION_DEMO_US
-if (wp->airTimer > 5) {
+            if (wp->airTimer > 5) {
 #else
             if (!marioChkRollMot() && wp->airTimer > 5) {
 #endif
@@ -2556,7 +2556,7 @@ f32 yofs = 0.0f;
     MTXTrans(rotMtx,
         wp->dispOfs2.x + (wp->position.x + wp->dispOfs.x),
 #if VERSION <= VERSION_DEMO_US
-             yofs + (wp->dispOfs2.y + (wp->position.y + wp->dispOfs.y)),
+        yofs + (wp->dispOfs2.y + (wp->position.y + wp->dispOfs.y)),
 #else
         wp->dispOfs2.y + (wp->position.y + wp->dispOfs.y),
 #endif

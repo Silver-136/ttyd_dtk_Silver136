@@ -483,7 +483,7 @@ EVT_BEGIN(nokotaro_party_lecture)
     CALL(evt_msg_print, 0, STRING("lecture_friends_04_1"), 0, 0)
     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(100.0f), FLOAT(630.0f), FLOAT(45.0f), FLOAT(39.0f), FLOAT(-100.0f), 1000, EASING_LINEAR)
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(1000)
+    WAIT_MS(1000)
 #else
     WAIT_MS(1500)
 #endif
@@ -494,7 +494,7 @@ WAIT_MS(1000)
         WAIT_MS(500)
     END_LOOP
 #if VERSION <= VERSION_DEMO_US
-CALL(x_flag_set, 0, 1)
+    CALL(x_flag_set, 0, 1)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         SUBTRACT(LW(0), 30)
@@ -520,7 +520,7 @@ CALL(x_flag_set, 0, 1)
         CALL(evt_mario_get_pos, 0, LW(2), LW(3), LW(4))
         ADD(LW(2), -70)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF_HEI_KOOPS_LECTURE_SWITCH, 0)
+        SET_VALUE(GSWF_HEI_KOOPS_LECTURE_SWITCH, 0)
         CALL(evt_mobj_switch_blue, 0, LW(1), LW(2), LW(3), LW(4), 0, GSWF_HEI_KOOPS_LECTURE_SWITCH)
 #else
         ADD(LW(3), 100)
@@ -564,7 +564,7 @@ SET_VALUE(GSWF_HEI_KOOPS_LECTURE_SWITCH, 0)
             CALL(evt_msg_print_add, 0, STRING("lecture_friends_05_1"))
             CASE_EQUAL(1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_mov_pos2, 367, 74, FLOAT(135.0f))
+            CALL(evt_mario_mov_pos2, 367, 74, FLOAT(135.0f))
 #else
             CALL(evt_mario_mov_pos2, 367, -38, FLOAT(135.0f))
 #endif

@@ -113,27 +113,15 @@ static void alpha_tev(MapTevCallbackInfo* info);
 static ExtTexInfo ext_entry_data[59];
 #if VERSION <= VERSION_DEMO_US
 static s16 suifu_animtbl[41];
-#else
-static s16 suifu_animtbl[42];
-#endif
-#if VERSION <= VERSION_DEMO_US
 s16 suifu_animtbl_run[21];
-#else
-s16 suifu_animtbl_run[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static s16 elmos_animtbl[21];
-#else
-static s16 elmos_animtbl[22];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static s16 dai3_animtbl[41];
-#else
-static s16 dai3_animtbl[42];
-#endif
-#if VERSION <= VERSION_DEMO_US
 s16 dai3_animtbl_run[21];
 #else
+static s16 suifu_animtbl[42];
+s16 suifu_animtbl_run[22];
+static s16 elmos_animtbl[22];
+static s16 dai3_animtbl[42];
 s16 dai3_animtbl_run[22];
 #endif
 static EvtWord nannpc_mode_setup[98];
@@ -165,12 +153,9 @@ static EvtWord peton_init[2];
 static EvtWord peton_talk[30];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord koburon_init[];
-#else
-EvtWord koburon_init[31];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord koburon_regp[];
 #else
+EvtWord koburon_init[31];
 EvtWord koburon_regp[140];
 #endif
 EvtWord koburon_talk[87];
@@ -908,7 +893,7 @@ static s16 suifu_animtbl[] = {
     8, 8, 8, 9, 9, 9, 10, 10,
     10, 11, 11, 11, 12, 12, 12, 13,
 #if VERSION <= VERSION_DEMO_US
--1,
+    -1,
 #else
     -1, 0,
 #endif
@@ -919,7 +904,7 @@ s16 suifu_animtbl_run[] = {
     14, 14, 15, 15, 16, 16, 17, 17,
     18, 18, 19, 19, 20, 20, 21, 21,
 #if VERSION <= VERSION_DEMO_US
-22, 22, 23, 23, -1,
+    22, 22, 23, 23, -1,
 #else
     22, 22, 23, 23, -1, 0,
 #endif
@@ -930,7 +915,7 @@ static s16 elmos_animtbl[] = {
     24, 24, 25, 25, 26, 26, 27, 27,
     28, 28, 29, 29, 30, 30, 31, 31,
 #if VERSION <= VERSION_DEMO_US
-32, 32, 33, 33, -1,
+    32, 32, 33, 33, -1,
 #else
     32, 32, 33, 33, -1, 0,
 #endif
@@ -944,7 +929,7 @@ static s16 dai3_animtbl[] = {
     42, 42, 42, 43, 43, 43, 44, 44,
     44, 45, 45, 45, 46, 46, 46, 47,
 #if VERSION <= VERSION_DEMO_US
--1,
+    -1,
 #else
     -1, 0,
 #endif
@@ -955,7 +940,7 @@ s16 dai3_animtbl_run[] = {
     48, 48, 49, 49, 50, 50, 51, 51,
     52, 52, 53, 53, 54, 54, 55, 55,
 #if VERSION <= VERSION_DEMO_US
-56, 56, 57, 57, -1,
+    56, 56, 57, 57, -1,
 #else
     56, 56, 57, 57, -1, 0,
 #endif
@@ -1305,7 +1290,7 @@ EVT_BEGIN(koburon_init)
     CALL(evt_npc_get_position, STRING("me"), LW(3), LW(4), LW(5))
     CALL(evt_npc_set_position, STRING("me"), LW(3), -1000, LW(5))
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(LSWF(1), 0)
+    SET_VALUE(LSWF(1), 0)
 #else
     CALL(evt_npc_change_interrupt, STRING("me"), 6, 0)
     SET_VALUE(LSWF_MUJ_00_WHACKA_OUT, 0)
@@ -1351,8 +1336,8 @@ EVT_BEGIN(koburon_regp)
             CALL(evt_npc_set_position, STRING("me"), LW(3), 35, LW(5))
             CALL(evt_npc_set_anim, STRING("me"), STRING("A_1"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_KOBURON_OUT1"), LW(3), -29999996, LW(5), 0)
-SET_VALUE(LSWF(1), 1)
+            CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_KOBURON_OUT1"), LW(3), -29999996, LW(5), 0)
+            SET_VALUE(LSWF(1), 1)
 #else
             CALL(evt_snd_sfxon_3d, STRING("SFX_STG5_KOBURON_OUT1"), LW(3), 35, LW(5), 0)
             SET_VALUE(LSWF_MUJ_00_WHACKA_OUT, 1)
@@ -1406,7 +1391,7 @@ EVT_BEGIN(koburon_dead)
     CALL(evt_npc_set_damage_anim, STRING("me"))
     WAIT_MS(200)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
+    CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
 #endif
     ADD(LW(1), 30)
     ADD(LW(2), 10)
@@ -1902,7 +1887,7 @@ EVT_BEGIN(tama_shoot)
         ADD(LW(1), 130)
         SET_VALUE(LW(2), GW(15))
 #if VERSION <= VERSION_DEMO_US
-CALL(tama_shoot_kemuri_entry, LW(0), LW(1), LW(2), LW(10))
+        CALL(tama_shoot_kemuri_entry, LW(0), LW(1), LW(2), LW(10))
         CALL(tama_shoot_kemuri, LW(10), FLOAT(90.0f), FLOAT(90.0f))
 #else
         CALL(evt_eff, 0, STRING("kemuri_test"), 16, LW(0), LW(1), LW(2), FLOAT(3.0f), 0, 0, 0, 0, 0, 0, 0)

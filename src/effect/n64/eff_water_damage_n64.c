@@ -284,12 +284,12 @@ void effWaterDamageDisp(CameraId cameraId, EffectEntry* effect) {
 #endif
     GXTexObj texObj;
 #if VERSION <= VERSION_DEMO_US
-void* buffer;
-s32 i;
-    s32 alpha;
-    s32 ix;
-    s32 iy;
-s32 dx, dy;
+    void* buffer;
+    s32 i;
+        s32 alpha;
+        s32 ix;
+        s32 iy;
+    s32 dx, dy;
 #endif
     cam = camGetPtr(cameraId);
     work = effect->userdata;
@@ -333,7 +333,7 @@ s32 dx, dy;
     GXSetCullMode(GX_CULL_NONE);
     work++;
 #if VERSION <= VERSION_DEMO_US
-buffer = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), 4)->address;
+    buffer = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), 4)->address;
     GXSetTexCopySrc(0, 0, 608, 480);
     GXSetTexCopyDst(304, 240, GX_TF_RGB565, GX_TRUE);
     GXCopyTex(buffer, GX_FALSE);
@@ -346,7 +346,7 @@ buffer = smartAlloc(GXGetTexBufferSize(304, 240, GX_TF_RGB565, GX_FALSE, 0), 4)-
     GXLoadTexObj(&texObj, GX_TEXMAP1);
     for (i = 1; i < effect->count; i++, work++) {
 #if VERSION <= VERSION_DEMO_US
-dx = (s32)work->position.x + ix;
+        dx = (s32)work->position.x + ix;
         dy = (s32)work->position.y + iy;
         dx = dx < 0 ? -(dx & 0x7F) : (dx & 0x7F);
         dy = dy > 0 ? -(dy & 0x3F) : (dy & 0x3F);

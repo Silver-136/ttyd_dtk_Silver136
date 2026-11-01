@@ -70,17 +70,11 @@ static EvtWord wait_event[6];
 static EvtWord damage_event_ceil[49];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord counter_damage_event_ceil[70];
-#else
-static EvtWord counter_damage_event_ceil[76];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord ceil_fall_ready_event[157];
-#else
-static EvtWord ceil_fall_ready_event[163];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord attack_event_ceil[420];
 #else
+static EvtWord counter_damage_event_ceil[76];
+static EvtWord ceil_fall_ready_event[163];
 static EvtWord attack_event_ceil[426];
 #endif
 static EvtWord wait_event_ceil[6];
@@ -181,7 +175,7 @@ static BattleWeapon weapon_patamet_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
 #if VERSION <= VERSION_DEMO_US
-COUNTER_RESIST_FIERY | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST,
+    COUNTER_RESIST_FIERY | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_PAYBACK | COUNTER_RESIST_HOLD_FAST,
 #else
     COUNTER_RESIST_FIERY | COUNTER_RESIST_EXPLOSIVE | COUNTER_RESIST_VOLATILE_EXPLOSIVE | COUNTER_RESIST_HOLD_FAST, // counterResistFlags
 #endif
@@ -634,7 +628,7 @@ static BattleWeapon weapon_met_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
 #if VERSION <= VERSION_DEMO_US
-COUNTER_RESIST_ALL,
+    COUNTER_RESIST_ALL,
 #else
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
 #endif
@@ -675,7 +669,7 @@ static BattleWeapon weapon_met_ceil_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH | SPECIAL_FLIP_SHELLED | SPECIAL_GROUND_WINGED, // special
 #if VERSION <= VERSION_DEMO_US
-COUNTER_RESIST_ALL,
+    COUNTER_RESIST_ALL,
 #else
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
 #endif

@@ -306,8 +306,8 @@ EVT_BEGIN(evt_poster_12)
     CALL(evt_hitobj_onoff, STRING("a_kami_9"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("a_kami_5"), 1, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
-CALL_CHILD(evt_chk)
+    CALL(evt_hitobj_onoff, STRING("a_kami_2"), 1, 0)
+    CALL_CHILD(evt_chk)
 #else
     CALL_CHILD(PTR(evt_chk))
 #endif

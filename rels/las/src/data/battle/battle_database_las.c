@@ -18,8 +18,6 @@
 
 #if VERSION > VERSION_DEMO_US
 EffectEntry* hi_fire_eff[6];
-#endif
-#if VERSION > VERSION_DEMO_US
 s8 hi_fire_end_flag[4];
 #endif
 
@@ -2931,7 +2929,7 @@ NpcSetupBattleInfo btlsetup_las_tbl[] = {
         NULL, // altSelect
         btlgrpsel_las_btlno_las_bunbaba_off, // select
 #if VERSION <= VERSION_DEMO_US
-NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY,
+        NPC_BATTLE_MAX_COUNT | NPC_BATTLE_STORY,
 #else
         (NPC_BATTLE_NO_ESCAPE | NPC_BATTLE_NO_PARTY_ENTRY | NPC_BATTLE_STORY), // battleFlags
 #endif

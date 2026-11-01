@@ -384,14 +384,14 @@ void spot_square_disp(CameraId cameraId, void* param) {
 EVT_BEGIN(stop_wait_event)
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_MARIO)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
+    CALL(btlevtcmd_AnimeChangePose, UNIT_ID_MARIO, 1, STRING("M_S_1"))
 #else
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_MARIO, 1)
 #endif
     CALL(btlevtcmd_StopWaitEvent, UNIT_ID_PARTNER)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_PARTNER, LW(0))
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(0), BTL_POSE_STAY)
+    CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_PARTNER, LW(0), BTL_POSE_STAY)
 #else
     CALL(btlevtcmd_AnimeChangePoseFromTable, UNIT_ID_PARTNER, LW(0))
 #endif
@@ -578,7 +578,7 @@ EVT_BEGIN(actend_event)
                     CALL(evt_btl_camera_set_moveto, 0, -30, 29, 499, -30, -3, 5, 30, 11)
                     WAIT_FRAMES(120)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_014_2"), 0, UNIT_ID_LECTURE)
+                    CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_014_2"), 0, UNIT_ID_LECTURE)
 #else
                     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
                     CALL(evt_msg_print, MSG_PRINT_NO_SPEAKER, STRING("mac_0_b_t3_014_2"), 0, -6)

@@ -902,7 +902,7 @@ static USER_FUNC(evt_tou_get_next_match) {
         if (reverse) {
             evtSetValue(event, args[0], list[rank - 1]);
 #if VERSION <= VERSION_DEMO_US
-} else if (rank != num - 1) {
+        } else if (rank != num - 1) {
 #else
         } else if (rank + 1 < num) {
 #endif
@@ -1310,7 +1310,7 @@ static void rankingInit(void) {
             evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, TRUE);
         }
 #if VERSION <= VERSION_DEMO_US
-if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
 #else
 
         // If we're past this point in the story, Bandy Andy got "retired" and The Destructors were added.

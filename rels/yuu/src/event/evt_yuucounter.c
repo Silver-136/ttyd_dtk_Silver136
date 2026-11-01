@@ -52,8 +52,6 @@ USER_FUNC(yuucounter_disp_flag_onoff);
 static EvtWord main_evt[4];
 #if VERSION > VERSION_DEMO_US
 EvtWord yuucounter_window_disp_evt[6];
-#endif
-#if VERSION > VERSION_DEMO_US
 EvtWord yuucounter_window_null_evt[2];
 #endif
 

@@ -207,17 +207,11 @@ EvtWord evt_memcard_check[322];
 EvtWord evt_memcard_start[32];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_memcard_delete[];
-#else
-EvtWord evt_memcard_delete[80];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_memcard_copy[];
-#else
-EvtWord evt_memcard_copy[126];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_memcard_save[];
 #else
+EvtWord evt_memcard_delete[80];
+EvtWord evt_memcard_copy[126];
 EvtWord evt_memcard_save[510];
 #endif
 
@@ -800,8 +794,8 @@ EVT_BEGIN(evt_memcard_save)
 #endif
         IF_INT_EQUAL(LW(10), 23)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_msg_continue)
-        RETURN
+            CALL(evt_msg_continue)
+            RETURN
 #else
             GOTO(2)
             ELSE

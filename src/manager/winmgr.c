@@ -44,12 +44,9 @@ int select_comp_bteresa(void* a, void* b);
 void select_main(WinMgrEntry* entry);
 #if VERSION <= VERSION_DEMO_US
 static void select_disp(WinMgrEntry* entry);
-#else
-void select_disp(WinMgrEntry* entry);
-#endif
-#if VERSION <= VERSION_DEMO_US
 static void select_disp_party(WinMgrEntry* entry);
 #else
+void select_disp(WinMgrEntry* entry);
 void select_disp_party(WinMgrEntry* entry);
 #endif
 void select_disp_mario(WinMgrEntry* entry);

@@ -30,12 +30,9 @@ static BattleUnitDefenseAttr defence_attr;
 static StatusVulnerability regist;
 #if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table[7];
-#else
-static PoseTableEntry pose_table[9];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static PoseTableEntry pose_table_weak[7];
 #else
+static PoseTableEntry pose_table[9];
 static PoseTableEntry pose_table_weak[9];
 #endif
 static BattleDataEntry data_table[3];
@@ -1251,7 +1248,7 @@ static EVT_BEGIN(attack_event)
     SWITCH(LW(0))
         CASE_EQUAL(0)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_DrawLots, LW(0), 6, 30, 15, 10, 10, 10, 10)
+        CALL(btlevtcmd_DrawLots, LW(0), 6, 30, 15, 10, 10, 10, 10)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 6, 25, 20, 10, 10, 10, 10)
 #endif
@@ -1286,7 +1283,7 @@ CALL(btlevtcmd_DrawLots, LW(0), 6, 30, 15, 10, 10, 10, 10)
             SET_VALUE(LW(1), 20)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_DrawLots, LW(0), 7, 30, 15, 10, 10, 10, 10, LW(1))
+        CALL(btlevtcmd_DrawLots, LW(0), 7, 30, 15, 10, 10, 10, 10, LW(1))
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 7, 25, 20, 10, 10, 10, 10, LW(1))
 #endif
@@ -1324,7 +1321,7 @@ CALL(btlevtcmd_DrawLots, LW(0), 7, 30, 15, 10, 10, 10, 10, LW(1))
             SET_VALUE(LW(1), 50)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_DrawLots, LW(0), 7, 30, 15, 10, 10, 10, 10, LW(1))
+        CALL(btlevtcmd_DrawLots, LW(0), 7, 30, 15, 10, 10, 10, 10, LW(1))
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 7, 25, 20, 10, 10, 10, 10, LW(1))
 #endif

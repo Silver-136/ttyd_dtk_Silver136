@@ -217,7 +217,7 @@ void effKemuri10Main(EffectEntry* effect) {
         work++;
     }
 #if VERSION <= VERSION_DEMO_US
-dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri10Disp, effect);
+    dispEntry(CAMERA_3D, dispCalcZ(&position), 2, (DispCallback)effKemuri10Disp, effect);
 #else
     dispEntry((CameraId)camera, dispCalcZ(&position), 2, (DispCallback)effKemuri10Disp, effect);
 #endif

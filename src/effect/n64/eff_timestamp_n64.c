@@ -55,11 +55,7 @@ static u8 scale_data[4] = {120, 80, 40, 60};
  */
 #if VERSION > VERSION_DEMO_US
 static u8 colr[17] = {255, 255, 255, 198, 138, 130, 130, 130, 130, 130, 175, 215, 250, 255, 255, 255, 255};
-#endif
-#if VERSION > VERSION_DEMO_US
 static u8 colg[17] = {130, 130, 130, 130, 130, 165, 213, 255, 255, 255, 255, 255, 255, 225, 198, 159, 130};
-#endif
-#if VERSION > VERSION_DEMO_US
 static u8 colb[17] = {130, 196, 255, 255, 255, 255, 255, 255, 202, 144, 130, 130, 130, 130, 130, 130, 130};
 #endif
 

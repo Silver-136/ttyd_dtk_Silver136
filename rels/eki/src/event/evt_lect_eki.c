@@ -698,7 +698,7 @@ EVT_BEGIN(boots_lv3_juyoitem_lecture)
         CALL(evt_npc_set_ry, STRING("キノピコ"), 270)
         CALL(evt_npc_set_autotalkpose, STRING("キノピコ"), STRING("S_2"), STRING("T_2"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_print_add, 0, STRING("lecture_u_boots_10"))
+        CALL(evt_msg_print_add, 0, STRING("lecture_u_boots_10"))
 #else
         CALL(evt_msg_print, 0, STRING("lecture_u_boots_10"), 0, STRING("キノピコ"))
         // If he says "One more time" the loop repeats; otherwise it ends.

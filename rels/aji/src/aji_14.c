@@ -55,7 +55,7 @@ EvtWord aji_14_init_evt[71];
  */
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -72,7 +72,7 @@ EVT_END()
  */
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -233,7 +233,7 @@ static EVT_BEGIN(evt_boss)
     CALL(evt_cam3d_evt_set, -435, 40, 287, -435, 40, -13, 0, EASING_SINE_IN_OUT)
     WAIT_FRAMES(1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_stop, 0)
+    CALL(evt_party_stop, 0)
 #endif
     WAIT_MS(300)
     CALL(evt_msg_print_party, STRING("stg7_aji_37_01"))

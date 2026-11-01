@@ -74,12 +74,9 @@ BattleWeapon partyWeapon_VivianMagicalPowder;
 BattleWeapon partyWeapon_VivianCharmKissAttack;
 #if VERSION <= VERSION_DEMO_US
 EvtWord partyVivianAttack_NormalAttack[610];
-#else
-EvtWord partyVivianAttack_NormalAttack[581];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord partyVivianAttack_ShadowGuard[];
 #else
+EvtWord partyVivianAttack_NormalAttack[581];
 EvtWord partyVivianAttack_ShadowGuard[430];
 #endif
 EvtWord partyVivianAttack_MagicalPowder[VERSION_PICK(442, 448)];
@@ -1071,7 +1068,7 @@ EVT_BEGIN(partyVivianAttack_ShadowGuard)
         GOTO(90)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
+    CALL(btlevtcmd_GetResultPrizeLv, LW(3), 0, LW(6))
 #else
     CALL(btlevtcmd_GetResultPrizeLv, -1, 0, LW(6))
 #endif

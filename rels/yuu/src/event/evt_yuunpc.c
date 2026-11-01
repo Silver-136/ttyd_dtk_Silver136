@@ -1122,7 +1122,7 @@ void errper_set_rtn(YuuNpc* npc) {
         case 3:
         case 5:
 #if VERSION <= VERSION_DEMO_US
-npc->errper = -0.2f + 2.0f * (0.2f * (rand() / 32767.0f));
+            npc->errper = -0.2f + 2.0f * (0.2f * (rand() / 32767.0f));
 #else
             npc->errper = -0.25f + 2.0f * (0.25f * (rand() / 32767.0f));
 #endif
@@ -1130,7 +1130,7 @@ npc->errper = -0.2f + 2.0f * (0.2f * (rand() / 32767.0f));
         case -1:
         case 6:
 #if VERSION <= VERSION_DEMO_US
-npc->errper = -0.15f + 2.0f * (0.15f * (rand() / 32767.0f));
+            npc->errper = -0.15f + 2.0f * (0.15f * (rand() / 32767.0f));
 #else
             npc->errper = -0.25f + 2.0f * (0.25f * (rand() / 32767.0f));
 #endif
@@ -1241,7 +1241,7 @@ void ext_yuunpc_minigame4_init_sub(void) {
             } while (yuunpc_wp->slot[s] != -1);
             do {
 #if VERSION <= VERSION_DEMO_US
-v = irand(700) + 300;
+                v = irand(700) + 300;
 #else
                 v = irand(700) + 200;
 #endif
@@ -1255,7 +1255,7 @@ v = irand(700) + 300;
         npc->poseId = yuunpc_wp->numPoses;
         npc->id = i;
 #if VERSION <= VERSION_DEMO_US
-if (i < 300) {
+        if (i < 300) {
 #else
         if (i < 200) {
 #endif
@@ -1269,7 +1269,7 @@ if (i < 300) {
             PSMTXIdentity(*ext->mtx);
             z = 30.0f + (60.0f * (i % 4) + -750.0f);
 #if VERSION <= VERSION_DEMO_US
-(*ext->mtx)[0][3] = 13.333333f * row - 500.0f;
+            (*ext->mtx)[0][3] = 13.333333f * row - 500.0f;
 #else
             (*ext->mtx)[0][3] = 20.0f * row - 500.0f;
 #endif
@@ -1306,7 +1306,7 @@ if (i < 300) {
 
             npc->flags |= YUUNPC_FLAG_RUNNER;
 #if VERSION <= VERSION_DEMO_US
-m = i - 300;
+            m = i - 300;
 #else
             m = i - 200;
 #endif
@@ -1619,7 +1619,7 @@ void yuunpc_pose_minigame4_main(void) {
                 }
             }
 #if VERSION <= VERSION_DEMO_US
-if (irand(150) == 0) {
+            if (irand(150) == 0) {
 #else
             if (irand(100) == 0) {
 #endif
@@ -1711,14 +1711,14 @@ if (irand(150) == 0) {
                 case 5:
                 case 6:
 #if VERSION <= VERSION_DEMO_US
-if (h == 6) {
+                    if (h == 6) {
 #else
                     if (k == 6) {
 #endif
                         off = 0.0f;
                     } else {
 #if VERSION <= VERSION_DEMO_US
-                            off = (3 - (h - 2)) * 50.0f;
+                        off = (3 - (h - 2)) * 50.0f;
 #else
                         off = (3 - (k - 2)) * 50.0f;
 #endif
@@ -1726,7 +1726,7 @@ if (h == 6) {
                     npc->dest.x = yuunpc_snap(px + off);
                     {
 #if VERSION <= VERSION_DEMO_US
-f32 sp = ((npc->id % 101 - 50) / 50.0f) * 10.0f;
+                        f32 sp = ((npc->id % 101 - 50) / 50.0f) * 10.0f;
                             npc->dest.z = npc->pos.z >= 0.0f ? 125.0f + sp : -125.0f + sp;
 #else
                         f32 sp = ((npc->id % 101 - 50) / 50.0f) * (50.0f * (kind - 1) / 2.0f + 10.0f);
@@ -1905,7 +1905,7 @@ f32 sp = ((npc->id % 101 - 50) / 50.0f) * 10.0f;
                     case 5:
                     case 6:
 #if VERSION <= VERSION_DEMO_US
-{
+                    {
 #else
                     case 27:
                     case 28: {
@@ -1916,7 +1916,7 @@ f32 sp = ((npc->id % 101 - 50) / 50.0f) * 10.0f;
                                 d = 0.0f;
                             } else if (npc->pos.z > 0.0f) {
 #if VERSION <= VERSION_DEMO_US
-d = -(100.0f + w) + npc->pos.z;
+                                d = -(100.0f + w) + npc->pos.z;
 #else
                                 d = npc->pos.z - (150.0f - tt + w);
 #endif
@@ -1933,7 +1933,7 @@ d = -(100.0f + w) + npc->pos.z;
                         break;
                     }
 #if VERSION <= VERSION_DEMO_US
-d -= 20.0f;
+                    d -= 20.0f;
 #else
                     break;
                 }
@@ -1943,7 +1943,7 @@ d -= 20.0f;
                     d = 0.0f;
                 }
 #if VERSION <= VERSION_DEMO_US
-cnt = d / 1.6666666f;
+                cnt = d / 1.6666666f;
 #else
                 cnt = d / 0.0f;
 #endif
@@ -1974,7 +1974,7 @@ cnt = d / 1.6666666f;
                             n = 0;
                         } else {
 #if VERSION <= VERSION_DEMO_US
-n = (d - 50.0f) / 3.3333333f;
+                            n = (d - 50.0f) / 3.3333333f;
 #else
                             n = d / 2.9166667f;
 #endif
@@ -1999,7 +1999,7 @@ n = (d - 50.0f) / 3.3333333f;
                     } else {
                         cnt = 30;
 #if VERSION <= VERSION_DEMO_US
-n = (d - 50.0f) / 3.3333333f;
+                        n = (d - 50.0f) / 3.3333333f;
 #else
                         n = d / 2.9166667f;
 #endif
@@ -2051,14 +2051,14 @@ n = (d - 50.0f) / 3.3333333f;
                     case YUUNPC_TURN_AWAY:
                     case YUUNPC_TURN_BACK:
 #if VERSION <= VERSION_DEMO_US
-dz = 1.6666666f;
+                        dz = 1.6666666f;
 #else
                         dz = 0.0f;
 #endif
                         break;
                     case 0:
 #if VERSION <= VERSION_DEMO_US
-dz = 3.3333333f;
+                        dz = 3.3333333f;
 #else
                         dz = 2.9166667f;
 #endif
@@ -2075,14 +2075,14 @@ dz = 3.3333333f;
                     case YUUNPC_TURN_AWAY:
                     case YUUNPC_TURN_BACK:
 #if VERSION <= VERSION_DEMO_US
-dz = -1.6666666f;
+                        dz = -1.6666666f;
 #else
                         dz = -0.0f;
 #endif
                         break;
                     case 0:
 #if VERSION <= VERSION_DEMO_US
-dz = -3.3333333f;
+                        dz = -3.3333333f;
 #else
                         dz = -2.9166667f;
 #endif
@@ -2176,7 +2176,7 @@ dz = -3.3333333f;
                         }
                     }
 #if VERSION <= VERSION_DEMO_US
-t = gp->retraceCount;
+                    t = gp->retraceCount;
 #else
                     if (!(c28 & 0x3f)) {
                         t = gp->retraceCount + i;
@@ -2246,7 +2246,7 @@ t = gp->retraceCount;
                         }
                     }
 #if VERSION <= VERSION_DEMO_US
-t = gp->retraceCount;
+                    t = gp->retraceCount;
 #else
                     if (!(c27 & 0x3f)) {
                         t = gp->retraceCount + i;
@@ -2425,7 +2425,7 @@ EVT_BEGIN(evt_yuunpc_minigame4)
     CALL(evt_npc_flag_onoff, 1, STRING("yuusp1"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 1, STRING("yuusp2"), NPC_FLAG_NO_HIT)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_ext_entry, 1000, PTR(ext_yuunpc_minigame4_data), PTR(ext_yuunpc_minigame4_init), PTR(ext_yuunpc_minigame4_main), PTR(ext_yuunpc_dispent))
+    CALL(evt_ext_entry, 1000, PTR(ext_yuunpc_minigame4_data), PTR(ext_yuunpc_minigame4_init), PTR(ext_yuunpc_minigame4_main), PTR(ext_yuunpc_dispent))
 #else
     CALL(evt_ext_entry, 900, PTR(ext_yuunpc_minigame4_data), PTR(ext_yuunpc_minigame4_init), PTR(ext_yuunpc_minigame4_main), PTR(ext_yuunpc_dispent))
 #endif

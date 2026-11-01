@@ -495,7 +495,7 @@ USER_FUNC(evt_nannpc_entry) {
     for (i = 0, off = 0; i < w->num; off += sizeof(NanNPC), i++) {
         p = (NanNPC*)((u8*)w->npc + off);
 #if VERSION <= VERSION_DEMO_US
-str = nanNPCEntryName((char*)name);
+        str = nanNPCEntryName((char*)name);
 #else
         str = (char*)name;
         if (!((EvtWord)str & 0x80000000)) {
@@ -663,7 +663,7 @@ USER_FUNC(evt_nannpc_move_position2) {
     Vec step;
     args = event->args;
 #if VERSION <= VERSION_DEMO_US
-npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
+    npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
     now = gp->inBattle ? gp->renderTime : gp->renderFieldTime;
 #else
     npc = nanNPCSearch((char*)evtGetValue(event, args[0]));
@@ -700,7 +700,7 @@ npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
 USER_FUNC(evt_nannpc_jump_position) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_US
-NanNPC* npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
+    NanNPC* npc = nanNPCSearch2((char*)evtGetValue(event, args[0]));
 #else
     char* name = (char*)evtGetValue(event, args[0]);
     NanNPC* npc = nanNPCSearch(name);

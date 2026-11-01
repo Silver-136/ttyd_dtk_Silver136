@@ -105,17 +105,11 @@ static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord uranaisi_next_evt[];
-#else
-EvtWord uranaisi_next_evt[152];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord uranaisi_starpiece_evt[];
-#else
-EvtWord uranaisi_starpiece_evt[60];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord uranaisi_supercoin_evt[];
 #else
+EvtWord uranaisi_next_evt[152];
+EvtWord uranaisi_starpiece_evt[60];
 EvtWord uranaisi_supercoin_evt[60];
 #endif
 typedef struct CardName {
@@ -202,12 +196,9 @@ static EvtWord evt_door_04_01[12];
 static EvtWord evt_wall_04[15];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_open_04_open[];
-#else
-EvtWord evt_open_04_open[179];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord evt_door_04_close[85];
 #else
+EvtWord evt_open_04_open[179];
 static EvtWord evt_door_04_close[87];
 #endif
 static DoorParam door_data_04;
@@ -374,8 +365,8 @@ EVT_BEGIN(uranaisi_next_evt)
             ELSE
             IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_unitwin_alloc)
-            CALL(unitwincoin_disp_onoff, 1)
+                CALL(evt_unitwin_alloc)
+                            CALL(unitwincoin_disp_onoff, 1)
 #else
                 CALL(evt_win_coin_on, 0, LW(12))
 #endif
@@ -385,21 +376,21 @@ CALL(evt_unitwin_alloc)
                 CALL(uranaisi_ryokin, 0, LW(2))
                 CALL(evt_pouch_add_coin, LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(unitwincoin_wait)
+                CALL(unitwincoin_wait)
 #else
                 CALL(evt_win_coin_wait, LW(12))
 #endif
                 WAIT_MS(200)
 #if VERSION <= VERSION_DEMO_US
-CALL(unitwincoin_disp_onoff, 0)
-            CALL(evt_unitwin_free)
+                CALL(unitwincoin_disp_onoff, 0)
+                            CALL(evt_unitwin_free)
 #else
                 CALL(evt_win_coin_off, LW(12))
 #endif
                 ELSE
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_unitwin_alloc)
-            CALL(unitwincoin_disp_onoff, 1)
+                CALL(evt_unitwin_alloc)
+                            CALL(unitwincoin_disp_onoff, 1)
 #else
                 CALL(evt_win_coin_on, 0, LW(12))
 #endif
@@ -416,14 +407,14 @@ CALL(evt_unitwin_alloc)
                 CALL(uranaisi_ryokin, 0, LW(2))
                 CALL(evt_pouch_add_coin, LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(unitwincoin_wait)
+                CALL(unitwincoin_wait)
 #else
                 CALL(evt_win_coin_wait, LW(12))
 #endif
                 WAIT_MS(200)
 #if VERSION <= VERSION_DEMO_US
-CALL(unitwincoin_disp_onoff, 0)
-            CALL(evt_unitwin_free)
+                CALL(unitwincoin_disp_onoff, 0)
+                            CALL(evt_unitwin_free)
 #else
                 CALL(evt_win_coin_off, LW(12))
 #endif
@@ -455,7 +446,7 @@ EVT_BEGIN(uranaisi_starpiece_evt)
     CALL(uranaisi_starpiece_check, LW(0))
     IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_unitwin_alloc)
+        CALL(evt_unitwin_alloc)
         CALL(unitwincoin_disp_onoff, 1)
 #else
         CALL(evt_win_coin_on, 0, LW(12))
@@ -464,13 +455,13 @@ CALL(evt_unitwin_alloc)
         CALL(uranaisi_ryokin, 1, LW(2))
         CALL(evt_pouch_add_coin, LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(unitwincoin_wait)
+        CALL(unitwincoin_wait)
 #else
         CALL(evt_win_coin_wait, LW(12))
 #endif
         WAIT_MS(200)
 #if VERSION <= VERSION_DEMO_US
-CALL(unitwincoin_disp_onoff, 0)
+        CALL(unitwincoin_disp_onoff, 0)
         CALL(evt_unitwin_free)
 #else
         CALL(evt_win_coin_off, LW(12))
@@ -495,7 +486,7 @@ EVT_BEGIN(uranaisi_supercoin_evt)
     CALL(uranaisi_supercoin_check, LW(0))
     IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_unitwin_alloc)
+        CALL(evt_unitwin_alloc)
         CALL(unitwincoin_disp_onoff, 1)
 #else
         CALL(evt_win_coin_on, 0, LW(12))
@@ -504,13 +495,13 @@ CALL(evt_unitwin_alloc)
         CALL(uranaisi_ryokin, 2, LW(2))
         CALL(evt_pouch_add_coin, LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(unitwincoin_wait)
+        CALL(unitwincoin_wait)
 #else
         CALL(evt_win_coin_wait, LW(12))
 #endif
         WAIT_MS(200)
 #if VERSION <= VERSION_DEMO_US
-CALL(unitwincoin_disp_onoff, 0)
+        CALL(unitwincoin_disp_onoff, 0)
         CALL(evt_unitwin_free)
 #else
         CALL(evt_win_coin_off, LW(12))
@@ -1232,7 +1223,7 @@ EVT_BEGIN(uranaisi_table_talk)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     CALL(evt_npc_set_ry, STRING("me"), 180)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 0)
+    IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 0)
             IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_FIRST_TALK_DONE, 0)
 #else
     LOOP(0)
@@ -1276,8 +1267,8 @@ CALL(evt_unitwin_alloc)
         CALL(evt_uranaisi_msg_free)
         IF_INT_EQUAL(LW(0), 4)
 #if VERSION <= VERSION_DEMO_US
-CALL(unitwincoin_disp_onoff, 0)
-        CALL(evt_unitwin_free)
+            CALL(unitwincoin_disp_onoff, 0)
+                    CALL(evt_unitwin_free)
 #else
             CALL(evt_win_coin_off, LW(12))
 #endif
@@ -1290,8 +1281,8 @@ CALL(unitwincoin_disp_onoff, 0)
         IF_INT_LESS(LW(1), LW(2))
             CALL(evt_msg_print_add, 0, STRING("uranaisi_07"))
 #if VERSION <= VERSION_DEMO_US
-CALL(unitwincoin_disp_onoff, 0)
-        CALL(evt_unitwin_free)
+            CALL(unitwincoin_disp_onoff, 0)
+                    CALL(evt_unitwin_free)
 #else
             CALL(evt_win_coin_off, LW(12))
 #endif
@@ -1309,15 +1300,15 @@ CALL(unitwincoin_disp_onoff, 0)
         MULTIPLY(LW(2), -1)
         CALL(evt_pouch_add_coin, LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(unitwincoin_wait)
+        CALL(unitwincoin_wait)
 #else
         CALL(evt_win_coin_wait, LW(12))
 #endif
         WAIT_MS(200)
 #if VERSION <= VERSION_DEMO_US
-CALL(unitwincoin_disp_onoff, 0)
-    CALL(evt_unitwin_free)
-CALL_CHILD(uranai_init)
+        CALL(unitwincoin_disp_onoff, 0)
+            CALL(evt_unitwin_free)
+        CALL_CHILD(uranai_init)
 #else
         CALL(evt_win_coin_off, LW(12))
         CALL_CHILD(PTR(uranai_init))
@@ -1878,7 +1869,7 @@ static NpcSetupInfo npcEnt[] = {
         NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_SHADOW_NO_FLOOR, // flags
         0, // reactionFlags
 #if VERSION <= VERSION_DEMO_US
-npc_init_evt,
+        npc_init_evt,
 #else
         starmaniac_init, // initEvent
 #endif
@@ -2113,7 +2104,7 @@ EVT_END()
 EVT_BEGIN(evt_open_01)
     CALL(evt_mapobj_trans, 1, STRING("card"), 0, -1000, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_mapobj_trans, 1, STRING("ie_1_naka"), 0, FLOAT(0.19921875f), 0)
@@ -2571,7 +2562,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_open_04_open)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
 #else
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_26_THE_HIDEOUT_EXPLODES)
@@ -2612,16 +2603,16 @@ IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
 #endif
             ELSE
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
-        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
-        IF_INT_EQUAL(GW(10), 0)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
-        ELSE
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
-            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_4_1"), MAP_OBJ_FLAG_HIDDEN)
+            CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_4_2"), MAP_OBJ_FLAG_HIDDEN)
+            IF_INT_EQUAL(GW(10), 0)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
+            ELSE
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
+                CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("wa_pu"), MAP_OBJ_FLAG_HIDDEN)
 #else
             CALL(evt_mapobj_flag_onoff, 1, 0, STRING("sui__2"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, 1, 1, STRING("sui__1"), MAP_OBJ_FLAG_HIDDEN)
@@ -2829,7 +2820,7 @@ EVT_END()
 EVT_BEGIN(tensou_init_event)
     SET_VALUE(GW(10), 0)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
 #else
     SWITCH(GSW_STORY_PROGRESS)
         CASE_LESS(STG7_26_THE_HIDEOUT_EXPLODES)
@@ -2838,8 +2829,8 @@ IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
         CALL(evt_map_playanim, STRING("anm_Terop"), MAP_ANIM_PLAY_LOOP, 0)
         CALL(evt_map_playanim, STRING("anm_tiktik"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
-    END_IF
-IF_INT_EQUAL(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)
+        END_IF
+    IF_INT_EQUAL(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)
 #else
         CASE_LESS(STG9_02_RETURN_TO_ROGUEPORT)
         CASE_DEFAULT
@@ -3062,7 +3053,7 @@ EVT_END()
  */
 EVT_BEGIN(tensou_sw_event)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
 #else
     CALL(evt_snd_sfxon, STRING("SFX_STG7_SWITCH_WARP1"), 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
@@ -3278,7 +3269,7 @@ static EVT_BEGIN(mobj_box01)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_SOFT_STOMP, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET)
+    CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
 #endif

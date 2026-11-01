@@ -467,7 +467,7 @@ void seq_gameOverMain(SequenceWork* work) {
                 fadeEntry(FADE_IN_BLACK, 1000, color);
             }
 #if VERSION <= VERSION_DEMO_US
-psndBGMOn(PSND_FADEOUT, (char*)PSND_BGM_BATTLE_LOSE1);
+            psndBGMOn(PSND_FADEOUT, (char*)PSND_BGM_BATTLE_LOSE1);
 #endif
             marioReset();
             marioEntry();
@@ -500,7 +500,7 @@ psndBGMOn(PSND_FADEOUT, (char*)PSND_BGM_BATTLE_LOSE1);
                 break;
             }
 #if VERSION <= VERSION_DEMO_US
-gp->resetType = 1;
+            gp->resetType = 1;
 #else
             _relUnLoad();
             _unload("sys_00", NULL, NULL);

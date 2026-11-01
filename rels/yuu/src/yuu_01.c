@@ -105,12 +105,9 @@ EvtWord minigame02_start_cam[40];
 EvtWord minigame02_start_cam_cancel[17];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord minigame02_start[];
-#else
-EvtWord minigame02_start[101];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord minigame02_end[];
 #else
+EvtWord minigame02_start[101];
 EvtWord minigame02_end[172];
 #endif
 EvtWord yuu_01_init_evt[VERSION_PICK(1076, 1166)];
@@ -206,7 +203,7 @@ EVT_END()
  */
 EVT_BEGIN(yuu_01_kaijo_init2)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_set_pos, -670, 0, 200)
+    CALL(evt_mario_set_pos, -670, 0, 200)
 #else
     CALL(evt_mario_set_pos, -800, 0, 200)
 #endif
@@ -241,14 +238,14 @@ EVT_BEGIN(minigame02_start_cam)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_cam3d_evt_set, FLOAT(550.0f), FLOAT(565.0f), FLOAT(1185.0f), FLOAT(550.0f), FLOAT(75.0f), FLOAT(155.0f), 3000, EASING_LINEAR)
+    CALL(evt_cam3d_evt_set, FLOAT(550.0f), FLOAT(565.0f), FLOAT(1185.0f), FLOAT(550.0f), FLOAT(75.0f), FLOAT(155.0f), 3000, EASING_LINEAR)
 #else
     CALL(evt_cam3d_evt_set, FLOAT(550.0f), FLOAT(565.0f), FLOAT(1185.0f), FLOAT(550.0f), FLOAT(75.0f), FLOAT(155.0f), 4000, EASING_LINEAR)
 #endif
     WAIT_MS(500)
     CALL(evt_yuutitle_alloc, 0, 0, STRING("menu_title_minigame2"))
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(2000)
+    WAIT_MS(2000)
 #else
     WAIT_MS(3000)
 #endif
@@ -315,7 +312,7 @@ EVT_BEGIN(minigame02_start)
 #endif
     CALL(evt_mario_key_onoff, 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_yuucounter_alloc, 0, 70, 1, 120)
+    CALL(evt_yuucounter_alloc, 0, 70, 1, 120)
 #endif
     RETURN
 EVT_END()
@@ -1146,7 +1143,7 @@ BOOL yuuminigame2_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                     data->dist = PSVECMag(&data->dir);
                     PSVECNormalize(&data->dir, &data->dir);
 #if VERSION <= VERSION_DEMO_US
-data->timer = 240;
+                    data->timer = 240;
 #else
                     data->timer = 120;
 #endif
@@ -1211,7 +1208,7 @@ data->timer = 240;
                 data->dir.y = 0.0f;
                 PSVECNormalize(&data->dir, &data->dir);
 #if VERSION <= VERSION_DEMO_US
-PSVECScale(&data->dir, &ofs, data->timer >= 60 ? data->dist * ((data->timer - 60) / 180.0f) : 0.0f);
+                PSVECScale(&data->dir, &ofs, data->timer >= 60 ? data->dist * ((data->timer - 60) / 180.0f) : 0.0f);
 #else
                 PSVECScale(&data->dir, &ofs, data->timer >= 30 ? data->dist * ((data->timer - 30) / 90.0f) : 0.0f);
 #endif
@@ -1220,7 +1217,7 @@ PSVECScale(&data->dir, &ofs, data->timer >= 60 ? data->dist * ((data->timer - 60
                 mario->position.x = ofs.x;
                 mario->position.z = ofs.z;
 #if VERSION <= VERSION_DEMO_US
-mario->position.y = data->y - 30.0f * ((240 - data->timer) / 240.0f);
+                mario->position.y = data->y - 30.0f * ((240 - data->timer) / 240.0f);
 #else
                 mario->position.y = data->y - 30.0f * ((120 - data->timer) / 120.0f);
 #endif
@@ -1228,7 +1225,7 @@ mario->position.y = data->y - 30.0f * ((240 - data->timer) / 240.0f);
                     data->state++;
                     angle = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-data->timer = 60;
+                    data->timer = 60;
 #else
                     data->timer = 30;
 #endif
@@ -1240,7 +1237,7 @@ data->timer = 60;
                 data->timer--;
                 angle = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-mario->position.x = data->x + -100.0f * ((60 - data->timer) / 60.0f);
+                mario->position.x = data->x + -100.0f * ((60 - data->timer) / 60.0f);
 #else
                 mario->position.x = data->x + -100.0f * ((30 - data->timer) / 30.0f);
 #endif
@@ -1248,7 +1245,7 @@ mario->position.x = data->x + -100.0f * ((60 - data->timer) / 60.0f);
                 if (data->timer <= 0) {
                     data->state++;
 #if VERSION <= VERSION_DEMO_US
-data->timer = 60;
+                    data->timer = 60;
 #else
                     data->timer = 30;
 #endif
@@ -1258,7 +1255,7 @@ data->timer = 60;
                 data->timer--;
                 angle = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-mario->position.y = data->y - 30.0f * (data->timer / 60.0f);
+                mario->position.y = data->y - 30.0f * (data->timer / 60.0f);
 #else
                 mario->position.y = data->y - 30.0f * (data->timer / 30.0f);
 #endif
@@ -1314,7 +1311,7 @@ void yuuminigame_main_2fune(EventEntry* event, BOOL isFirstCall) {
             wp->subEvent = evtEntry(minigame02_end, 0, 0);
             wp->subEvent->lwData[0] = data->coins;
 #if VERSION <= VERSION_DEMO_US
-if (data->result == 0) {
+            if (data->result == 0) {
                 data->result += 2;
             } else if (data->result < 0) {
 #else

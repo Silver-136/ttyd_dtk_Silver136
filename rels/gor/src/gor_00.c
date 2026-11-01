@@ -259,18 +259,13 @@ EvtWord marco_run_away[100];
 EvtWord gorotsuki_kikan[];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord into_gor_ship[];
-#else
-EvtWord into_gor_ship[265];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord mony_peton_event[251];
 #else
+EvtWord into_gor_ship[265];
 EvtWord mony_run_away[108];
 #endif
 #if VERSION > VERSION_DEMO_US
 EvtWord peton_run_away[88];
-#endif
-#if VERSION > VERSION_DEMO_US
 EvtWord mony_peton_depart[VERSION_PICK(61, 64)];
 #endif
 EvtWord gor_00_koopa_evt[1095];
@@ -796,7 +791,7 @@ static EVT_BEGIN(marco_talk)
         // Bobbery is aboard: Flavio announces the voyage.
         CASE_EQUAL(STG4_37_TO_THE_PORT)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
+        IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
 #else
         SPAWN_EVENT(PTR(marco_party_move))
         IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
@@ -2209,7 +2204,7 @@ static NpcSetupInfo npcEnt[] = {
         0, // reactionFlags
         mony_init, // initEvent
 #if VERSION <= VERSION_DEMO_US
-NULL,
+        NULL,
 #else
         gor_00_mony_regl, // regularEvent
 #endif
@@ -2225,7 +2220,7 @@ NULL,
         0, // reactionFlags
         peton_init, // initEvent
 #if VERSION <= VERSION_DEMO_US
-NULL,
+        NULL,
 #else
         gor_00_peton_regl, // regularEvent
 #endif
@@ -2858,7 +2853,7 @@ EVT_BEGIN(enter_gorotsuki_town)
         END_LOOP
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-BEGIN_INLINE_EVENT
+    BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         SET_FLOAT_VALUE(LW(0), FLOAT(1.0f))
         LOOP(14)
@@ -6264,7 +6259,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_HP_DRAIN_BADGE, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
 #else
     CALL(evt_item_flag_on, STRING("item00"), 258)
 #endif
@@ -6282,7 +6277,7 @@ EVT_END()
  */
 static EVT_BEGIN(epilogue_npc_entry)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_delete, STRING("モニー"))
+    CALL(evt_npc_delete, STRING("モニー"))
     CALL(evt_npc_delete, STRING("ピートン"))
     CALL(evt_npc_delete, STRING("マルコ"))
     CALL(evt_npc_delete, STRING("水夫Ｃ"))
@@ -6549,7 +6544,7 @@ static EVT_BEGIN(epilogue_evt)
     WAIT_WHILE(GF(0))
     WAIT_MS(200)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_8"), STRING("P_T_14"))
+    CALL(evt_npc_set_autotalkpose, STRING("ピーチ姫"), STRING("P_S_8"), STRING("P_T_14"))
     CALL(evt_msg_print, 0, STRING("ep_20"), 0, STRING("ピーチ姫"))
 #endif
     CALL(evt_npc_set_anim, STRING("ピーチ姫"), STRING("P_S_7"))
@@ -7081,7 +7076,7 @@ EVT_BEGIN(return_gorotsuki_town)
         END_LOOP
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-BEGIN_INLINE_EVENT
+    BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         SET_FLOAT_VALUE(LW(0), FLOAT(1.0f))
         LOOP(14)

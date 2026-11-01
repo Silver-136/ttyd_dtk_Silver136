@@ -549,7 +549,7 @@ USER_FUNC(evt_npc_move_position) {
         }
     }
 #if VERSION <= VERSION_DEMO_US
-{
+    {
 #else
 
     // Advance the move offset along the heading (not while NPC_STATUS_STOPPED)
@@ -2175,7 +2175,7 @@ USER_FUNC(evt_npc_get_drop_item) {
         evtSetValue(event, index, 0);
     } else {
 #if VERSION <= VERSION_DEMO_US
-evtSetValue(event, index, 0);
+        evtSetValue(event, index, 0);
 #else
         evtSetValue(event, index, npc->battleInfo.itemDropped);
 #endif

@@ -1248,7 +1248,7 @@ EVT_BEGIN(evt_chk00)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0C, LW(0))
     IF_INT_GREATER(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(key_tbl00), LW(0))
+        CALL(evt_win_item_select, PTR(key_tbl00), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl00), LW(0), 0)
 #endif
@@ -1280,7 +1280,7 @@ EVT_BEGIN(evt_chk01)
     CALL(evt_pouch_check_item, ITEM_CASTLE_KEY_0x0E, LW(0))
     IF_INT_GREATER(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(key_tbl01), LW(0))
+        CALL(evt_win_item_select, PTR(key_tbl01), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl01), LW(0), 0)
 #endif

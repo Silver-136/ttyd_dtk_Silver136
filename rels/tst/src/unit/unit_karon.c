@@ -63,7 +63,7 @@ BattleUnitKind unit_karon = {
     0, // bonusExp
     2, // bonusCoin
 #if VERSION <= VERSION_DEMO_US
-100,
+    100,
 #else
     70, // bonusCoinRate
 #endif

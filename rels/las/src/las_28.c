@@ -336,7 +336,7 @@ EVT_BEGIN(syuryo_thunder)
     BEGIN_INLINE_EVENT
         WAIT_MS(200)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff, STRING(""), STRING("hit"), 2, LW(0), LW(1), LW(2), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff, STRING(""), STRING("hit"), 2, LW(0), LW(1), LW(2), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
         CALL(evt_eff, STRING(""), STRING("hit"), 2, LW(3), LW(4), LW(5), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("hit"), 2, LW(0), LW(1), LW(2), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
@@ -350,7 +350,7 @@ CALL(evt_eff, STRING(""), STRING("hit"), 2, LW(0), LW(1), LW(2), FLOAT(1.0f), 6,
     DIVIDE(LW(1), 2)
     DIVIDE(LW(2), 2)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff64, STRING(""), STRING("thunder_n64"), 5, LW(0), LW(1), LW(2), FLOAT(20.0f), FLOAT(37.0f), 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff64, STRING(""), STRING("thunder_n64"), 5, LW(0), LW(1), LW(2), FLOAT(20.0f), FLOAT(37.0f), 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff64, 0, STRING("thunder_n64"), 5, LW(0), LW(1), LW(2), FLOAT(20.0f), FLOAT(37.0f), 0, 0, 0, 0, 0, 0)
 #endif
@@ -371,13 +371,13 @@ CALL(evt_eff64, STRING(""), STRING("thunder_n64"), 5, LW(0), LW(1), LW(2), FLOAT
             CALL(evt_party_set_pose, 0, STRING("PYS_D_5"))
             CASE_EQUAL(6)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_set_pose, 0, STRING("PTR_D_5"))
+            CALL(evt_party_set_pose, 0, STRING("PTR_D_5"))
 #else
             CALL(evt_party_set_pose, 0, STRING("PTR_D_4"))
 #endif
             CASE_EQUAL(3)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_set_pose, 0, STRING("PBM_D_5"))
+            CALL(evt_party_set_pose, 0, STRING("PBM_D_5"))
 #else
             CALL(evt_party_set_pose, 0, STRING("D_4"))
 #endif
@@ -385,7 +385,7 @@ CALL(evt_party_set_pose, 0, STRING("PBM_D_5"))
             CALL(evt_party_set_pose, 0, STRING("PWD_D_5"))
             CASE_EQUAL(7)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_set_pose, 0, STRING("PCH_D_5"))
+            CALL(evt_party_set_pose, 0, STRING("PCH_D_5"))
 #else
             CALL(evt_party_set_pose, 0, STRING("PCH_D_4"))
 #endif
@@ -413,7 +413,7 @@ CALL(evt_party_set_pose, 0, STRING("PCH_D_5"))
             CALL(evt_party_set_pose, 0, STRING("PTR_D_3"))
             CASE_EQUAL(3)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_set_pose, 0, STRING("PBM_D_3"))
+            CALL(evt_party_set_pose, 0, STRING("PBM_D_3"))
 #else
             CALL(evt_party_set_pose, 0, STRING("D_3"))
 #endif
@@ -679,7 +679,7 @@ EVT_BEGIN(syuryo_evt)
     CALL(evt_npc_set_anim, STRING("ピーチ姫"), STRING("P_B_1F"))
     ADD(LW(1), 48)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff_fukidashi, FUKIDASHI_AT_POS, STRING(""), 0, 0, 0, LW(0), LW(1), LW(2), 0, 0, 60)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_POS, STRING(""), 0, 0, 0, LW(0), LW(1), LW(2), 0, 0, 60)
 #else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_POS, 0, 0, 0, 0, LW(0), LW(1), LW(2), 0, 0, 60)
 #endif
@@ -761,7 +761,7 @@ CALL(evt_eff_fukidashi, FUKIDASHI_AT_POS, STRING(""), 0, 0, 0, LW(0), LW(1), LW(
         CALL(evt_party_set_pose, 0, STRING("PWD_S_1"))
         CASE_EQUAL(3)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_set_pose, 0, STRING("PBM_S_1"))
+        CALL(evt_party_set_pose, 0, STRING("PBM_S_1"))
 #else
         CALL(evt_party_set_pose, 0, STRING("S_1"))
 #endif
@@ -869,7 +869,7 @@ EVT_BEGIN(koopa_evt)
     WAIT_MS(1000)
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_CEILING_BREAK1"), 75, 300, 0, LW(0))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, 75, 300, 0, 90, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, 75, 300, 0, 90, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff64, 0, STRING("hokori_n64"), 0, 75, 300, 0, 90, 0, 0, 0, 0, 0, 0, 0)
 #endif
@@ -889,7 +889,7 @@ CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, 75, 300, 0, 90, 0, 0, 0, 0,
     CALL(evt_snd_sfxoff, LW(0))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_CEILING_BREAK1"), 75, 300, 0, LW(0))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, 75, 300, 0, 72, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, 75, 300, 0, 72, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff64, 0, STRING("hokori_n64"), 0, 75, 300, 0, 72, 0, 0, 0, 0, 0, 0, 0)
 #endif
@@ -979,7 +979,7 @@ CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, 75, 300, 0, 72, 0, 0, 0, 0,
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.029296875f), FLOAT(0.0f), 1000)
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff, STRING(""), STRING("hit"), 0, LW(2), LW(0), LW(4), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff, STRING(""), STRING("hit"), 0, LW(2), LW(0), LW(4), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff, 0, STRING("hit"), 0, LW(2), LW(0), LW(4), FLOAT(1.0f), 6, 0, 0, 0, 0, 0, 0)
 #endif
@@ -1026,7 +1026,7 @@ CALL(evt_eff, STRING(""), STRING("hit"), 0, LW(2), LW(0), LW(4), FLOAT(1.0f), 6,
     END_INLINE_EVENT
     CALL(evt_npc_get_position, STRING("クッパ"), LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff64, STRING(""), STRING("kemuri1_n64"), 4, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff64, STRING(""), STRING("kemuri1_n64"), 4, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff64, 0, STRING("kemuri1_n64"), 4, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
 #endif
@@ -1108,7 +1108,7 @@ CALL(evt_eff64, STRING(""), STRING("kemuri1_n64"), 4, LW(0), LW(1), LW(2), 0, 0,
     CALL(evt_npc_get_position, STRING("クッパ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_KOOPA_SURPRISED1_1"), LW(0), LW(1), LW(2), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("クッパ"), 0, 0, 0, 0, 0, 0, 0, 30)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("クッパ"), 0, 0, 0, 0, 0, 0, 0, 30)
 #else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("クッパ"), 0, 0, 0, 0, 0, 0, 0, 30)
 #endif
@@ -1150,7 +1150,7 @@ CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("クッパ"), 0, 0,
     CALL(evt_npc_set_ry, STRING("ババ"), 90)
     WAIT_MS(800)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("ババ"), 0, 0, 0, 0, 0, 0, 0, 30)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("ババ"), 0, 0, 0, 0, 0, 0, 0, 30)
 #else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, 0, STRING("ババ"), 0, 0, 0, 0, 0, 0, 0, 30)
 #endif
@@ -1223,7 +1223,7 @@ CALL(evt_eff_fukidashi, FUKIDASHI_AT_NPC, STRING(""), STRING("ババ"), 0, 0, 0,
     CALL(evt_npc_battle_start, STRING("クッパ"))
     CALL(evt_npc_wait_battle_end)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_FADE_OUT)
+    CALL(evt_snd_bgmoff, PSND_FADE_OUT)
 #endif
     CALL(evt_eff_delete, STRING("baria"))
     CALL(evt_party_stop, 0)
@@ -1260,7 +1260,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_OUT)
     CALL(evt_mario_set_dir, 90, 300, 0)
     WAIT_MS(300)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
 #else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
 #endif
@@ -1282,7 +1282,7 @@ CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0
         CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_SURPRISED2_3"), LW(0), LW(1), LW(2), 0)
         CALL(evt_mario_set_pose, STRING("M_N_5B"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 36)
+        CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 36)
 #else
         CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36)
 #endif
@@ -1349,7 +1349,7 @@ static EVT_BEGIN(shan_init)
         CALL(evt_mapobj_get_position, LW(1), LW(2), LW(3), LW(4))
         SUBTRACT_FLOAT(LW(3), FLOAT(9.0f))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.69921875f), 1000, 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.69921875f), 1000, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.69921875f), 1000, 0, 0, 0, 0, 0, 0)
 #endif
@@ -1371,7 +1371,7 @@ EVT_BEGIN(las_28_init_evt)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS9"))
 #else
     CALL(evt_snd_set_rev_mode, 2)
 #endif
@@ -1446,8 +1446,8 @@ EVT_END()
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_US
-char name[8];
-s32 number;
+    char name[8];
+    s32 number;
 #endif
 
 #if VERSION <= VERSION_DEMO_US

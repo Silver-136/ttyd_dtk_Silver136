@@ -420,7 +420,7 @@ void btlDispMain(void) {
                         break;
                     default:
 #if VERSION <= VERSION_DEMO_US
-                            BtlUnit_SetPos(unit, tpos.x, tpos.y, tpos.z);
+                        BtlUnit_SetPos(unit, tpos.x, tpos.y, tpos.z);
 #else
                         BtlUnit_SetPos(unit, tpos.x, h, tpos.z);
 #endif

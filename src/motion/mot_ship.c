@@ -280,7 +280,7 @@ void mot_ship_post(void) {
         marioPaperOff();
     }
 #if VERSION <= VERSION_DEMO_US
-mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
+    mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
     mario->dispFlags &= ~MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
 #else
     mario->wPlayerCollisionBox.x = 20.0f;
@@ -294,7 +294,7 @@ mario->dispFlags &= ~MARIO_DISP_FLAG_NO_REAR_POSE;
         }
     }
 #if VERSION <= VERSION_DEMO_US
-{
+    {
         Vec zero = {0.0f, 0.0f, 0.0f};
         mario->dispOfs = zero;
     }
@@ -848,7 +848,7 @@ void mot_ship(void) {
             }
         } else {
 #if VERSION <= VERSION_DEMO_US
-if (m->displayDirection <= -540.0f) {
+            if (m->displayDirection <= -540.0f) {
                     m->displayDirection = -540.0f;
 #else
             if (m->displayDirection <= -360.0f) {
@@ -1060,7 +1060,7 @@ void shipMove(void) {
         marioGetPtr()->motShip->dispX += dx;
         marioGetPtr()->motShip->dispY += dz;
 #if VERSION <= VERSION_DEMO_US
-swirlMax = shipData[4];
+        swirlMax = shipData[4];
         if (marioGetPtr()->motShip->dispX > swirlMax) {
             swirlMax = shipData[4];
             marioGetPtr()->motShip->dispX = swirlMax;
@@ -1110,7 +1110,7 @@ swirlMax = shipData[4];
         } else {
             vx += ((tx - 1.0f) - vx) * shipData[rateIdx];
 #if VERSION <= VERSION_DEMO_US
-nmax = -max;
+            nmax = -max;
             if (vx <= nmax) {
                 vx = nmax;
 #else

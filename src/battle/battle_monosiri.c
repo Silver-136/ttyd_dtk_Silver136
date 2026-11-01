@@ -107,12 +107,9 @@ TattleEntry monosiriMessageTable[] = {
     {"btl_un_hatena", "btl_hlp_hatena", "menu_enemy_124", "c_ranpel", "Z_1", "menu_monosiri_jin"}, //0x4D (77)
 #if VERSION <= VERSION_DEMO_US
     {"btl_un_hatena", NULL, NULL, "c_kuribo", "KUR_Z_2", "menu_monosiri_gra"}, //0x4E (78)
-#else
-    {"btl_un_hatena", NULL, NULL, "c_ranpel", "Z_1", "menu_monosiri_gra"}, //0x4E (78)
-#endif
-#if VERSION <= VERSION_DEMO_US
     {"btl_un_rampell", NULL, NULL, "c_kuribo", "KUR_Z_2", "menu_monosiri_jin"}, //0x4F (79)
 #else
+    {"btl_un_hatena", NULL, NULL, "c_ranpel", "Z_1", "menu_monosiri_gra"}, //0x4E (78)
     {"btl_un_rampell", NULL, NULL, "c_ranpel", "Z_1", "menu_monosiri_jin"}, //0x4F (79)
 #endif
     {"btl_un_gullible_christine", NULL, NULL, "c_pkr", "PRK_Z_1", "menu_monosiri_jin"}, //0x50 (80)
@@ -181,42 +178,21 @@ TattleEntry monosiriMessageTable[] = {
     {"btl_un_rampell", "btl_hlp_ranperu_las", "menu_enemy_125", "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x87 (135)
 #if VERSION <= VERSION_DEMO_US
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_mario", "EM_Z_1", "menu_monosiri_nara"}, //0x88 (136)
-#else
-    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x88 (136)
-#endif
-#if VERSION <= VERSION_DEMO_US
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_pkr", "PRK_Z_1", "menu_monosiri_nara"}, //0x89 (137)
-#else
-    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x89 (137)
-#endif
-#if VERSION <= VERSION_DEMO_US
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_pnk", "PNK_Z_1", "menu_monosiri_nara"}, //0x8A (138)
-#else
-    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8A (138)
-#endif
-#if VERSION <= VERSION_DEMO_US
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_babyyoshi", "PYS_Z_1", "menu_monosiri_nara"}, //0x8B (139)
-#else
-    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8B (139)
-#endif
-#if VERSION <= VERSION_DEMO_US
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_windy", "PWD_Z_1", "menu_monosiri_nara"}, //0x8C (140)
-#else
-    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8C (140)
-#endif
-#if VERSION <= VERSION_DEMO_US
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_vivian", "PTR_M_1", "menu_monosiri_nara"}, //0x8D (141)
-#else
-    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8D (141)
-#endif
-#if VERSION <= VERSION_DEMO_US
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_bomt_n", "Z_1", "menu_monosiri_nara"}, //0x8E (142)
-#else
-    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8E (142)
-#endif
-#if VERSION <= VERSION_DEMO_US
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_tyutyu", "PCH_Z_1", "menu_monosiri_nara"}, //0x8F (143)
 #else
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x88 (136)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x89 (137)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8A (138)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8B (139)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8C (140)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8D (141)
+    {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8E (142)
     {"btl_un_rampell", "btl_hlp_ranperu_las", NULL, "c_ranpel", "Z_1", "menu_monosiri_nara"}, //0x8F (143)
 #endif
     {"btl_un_koopa", "btl_hlp_koopa", "menu_enemy_149", "c_koopa", "KPA_Z_1", "menu_monosiri_nara"}, //0x90 (144)

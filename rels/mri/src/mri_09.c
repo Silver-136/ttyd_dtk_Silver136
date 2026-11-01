@@ -173,7 +173,7 @@ static BeroEntry bero_entry_data[] = {
  */
 EVT_BEGIN(wall_roll_sub)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_paper_entry, LW(0))
+    CALL(evt_paper_entry, LW(0))
 #endif
     CALL(evt_img_entry, LW(2))
     CALL(evt_img_set_paper, LW(2), LW(0))
@@ -368,7 +368,7 @@ EVT_END()
 
 static EVT_BEGIN(breakyuka_init)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 1)
+    IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 1)
 #else
     IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 0)
 #endif

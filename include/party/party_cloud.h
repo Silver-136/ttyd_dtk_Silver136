@@ -38,8 +38,6 @@ struct HitEntry* cloudGetHitBreathout(s32 which); // 0 front, 1 down, 2-3 the tw
 void cloud_exit(PartyEntry* party);
 #if VERSION > VERSION_DEMO_US
 void cloud_hover_init(PartyEntry* party);
-#endif
-#if VERSION > VERSION_DEMO_US
 void cloud_hover_main(PartyEntry* party);
 #endif
 void cloud_init(PartyEntry* party);

@@ -234,12 +234,9 @@ DoorParam door;
 static BeroEntry bero_entry_data[3];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord first_evt[146];
-#else
-static EvtWord first_evt[148];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_bom_01_karakara[];
 #else
+static EvtWord first_evt[148];
 EvtWord evt_bom_01_karakara[123];
 #endif
 static ExtTexInfo ext_data[31];
@@ -797,7 +794,7 @@ static EVT_BEGIN(first_evt)
     CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_normalize)
+    CALL(evt_mario_normalize)
 #endif
     CALL(evt_cam3d_evt_set, 340, 100, -53, 340, 80, -302, 0, EASING_SINE_IN_OUT)
     CALL(evt_mario_set_pos, -580, 0, 0)
@@ -853,7 +850,7 @@ EVT_BEGIN(evt_bom_01_karakara)
     LOOP(0)
         CALL(evt_mapobj_get_position, LW(9), LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_AMB_WINDVANE1"), LW(0), LW(1), LW(2), LW(10))
+        CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_AMB_WINDVANE1"), LW(0), LW(1), LW(2), LW(10))
 #endif
         CALL(evt_sub_intpl_msec_init, EASING_SINE_OUT, 1, 10, 1000)
         LABEL(0)
@@ -881,7 +878,7 @@ CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_AMB_WINDVANE1"), LW(0), LW(1), LW(2), LW
         BEGIN_INLINE_EVENT
             WAIT_MS(900)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_sfxoff, LW(10))
+        CALL(evt_snd_sfxoff, LW(10))
 #endif
         END_INLINE_EVENT
         CALL(evt_sub_intpl_msec_init, EASING_SINE_OUT, 10, 1, 1000)
@@ -1462,7 +1459,7 @@ static EVT_BEGIN(evt_taihou)
     WAIT_FRAMES(1)
     CALL(evt_mario_cont_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
+    CALL(evt_npc_status_onoff, 1, STRING("me"), NPC_STATUS_FACE_MOVE_DIR)
     CALL(evt_npc_move_position, STRING("me"), -50, -40, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_move_position, STRING("me"), -55, -30, 0, FLOAT(80.0f), 1)
     CALL(evt_npc_move_position, STRING("me"), -45, 80, 0, FLOAT(80.0f), 1)

@@ -2572,7 +2572,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 1:
 #if VERSION <= VERSION_DEMO_US
-                    unit->attackEventCode = badgeWeapon_Charge.attackEvtScript;
+            unit->attackEventCode = badgeWeapon_Charge.attackEvtScript;
 #endif
             unit->attackEventFlags = 0;
             if (unit->currentKind == UNIT_MARIO) {
@@ -2589,7 +2589,7 @@ void _btlcmd_SetAttackEvent(BattleUnit* unit, BattleCommand* cmd) {
             break;
         case 2:
 #if VERSION <= VERSION_DEMO_US
-                    unit->attackEventCode = badgeWeapon_SuperCharge.attackEvtScript;
+            unit->attackEventCode = badgeWeapon_SuperCharge.attackEvtScript;
 #endif
             unit->attackEventFlags = 0;
             if (unit->currentKind == UNIT_MARIO) {

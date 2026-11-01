@@ -976,7 +976,7 @@ EVT_BEGIN(evt_item_use)
         WAIT_MS(1500)
         CALL(itemUseFunc2)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_set_breed_pose, 0, 1)
+        CALL(evt_party_set_breed_pose, 0, 1)
 #else
         CALL_CHILD(PTR(win_main_child_evt))
         CALL(evt_mario_set_normal_pose)
@@ -1061,7 +1061,7 @@ EVT_BEGIN(evt_diary_read)
     ADD(LW(2), 20)
     CALL(evt_npc_set_position, STRING("\202\344\202\244\202\352\202\242"), LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_APPEAR1"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_APPEAR1"), LW(0), LW(1), LW(2), 0)
 #else
     CALL(evt_snd_sfxon_3d, 132773, LW(0), LW(1), LW(2), 0)
 #endif
@@ -1074,7 +1074,7 @@ CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_APPEAR1"), LW(0), LW(1), LW(2), 0)
         CALL(evt_env_blur_on, 0, 0)
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+    CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG6_GHOST_SHAKE1"), LW(0), LW(1), LW(2), LW(3))
 #else
     CALL(evt_snd_sfxon, 132770, LW(3))

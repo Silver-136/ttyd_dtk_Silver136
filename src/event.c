@@ -566,7 +566,7 @@ EventData stage9_evt[] = {
     {0, 0, 0, 403, "STG9_00", "マリオの家２" NAME_EN("Mario's House 2"), "aaa_00", "epilogue2", NULL},
     {0, 1, 0, 404, "STG9_01", "スタッフロール" NAME_EN("End Credits"), "end_00", "", NULL},
 #if VERSION <= VERSION_DEMO_US
-{0, 1, 0, 405, "STG9_02", "クリア後（最初）" NAME_EN("Return to Rogueport"), "gor_00", "", NULL},
+    {0, 1, 0, 405, "STG9_02", "クリア後（最初）" NAME_EN("Return to Rogueport"), "gor_00", "", NULL},
 #else
     {0, 1, 0, 405, "STG9_02", "クリア後（最初）" NAME_EN("Return to Rogueport"), "gor_00", "", stg9_02_init},
 #endif

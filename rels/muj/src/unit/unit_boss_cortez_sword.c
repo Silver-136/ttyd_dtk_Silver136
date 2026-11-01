@@ -215,7 +215,7 @@ static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, cortez_damage_sub_event},
     {UNIT_DATA_DEAD_EVENT, cortez_weapon_dead_event},
 #if VERSION <= VERSION_DEMO_US
-{70, cortez_weapon_break_event},
+    {70, cortez_weapon_break_event},
 #else
     {UNIT_DATA_WEAPON_BREAK_EVENT, cortez_weapon_break_event},
 #endif
@@ -377,7 +377,7 @@ EVT_BEGIN(cortez_weapon_unison_phase_event)
             IF_INT_EQUAL(LW(0), 0)
                 CALL(btlevtcmd_GetUnitId, UNIT_ID_SELF, LW(9))
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(cortez_weapon_get_home_height)
+                CALL_CHILD(cortez_weapon_get_home_height)
 #else
                 IF_INT_EQUAL(LW(9), -1)
                     RETURN

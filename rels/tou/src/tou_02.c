@@ -741,7 +741,7 @@ EVT_END()
 /** NPC init for the second camera operator: stands at (80, 200, -125), or (30, 200, -60) before the arena intro. */
 EVT_BEGIN(init_cam2)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_set_position, STRING("me"), 80, 200, -125)
+    CALL(evt_npc_set_position, STRING("me"), 80, 200, -125)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_01_ARENA_INTRO_1F)
         CALL(evt_npc_set_position, STRING(("me")), 80, 200, -125)
@@ -1867,7 +1867,7 @@ void ext_fan_init(void) {
         }
     }
 #if VERSION <= VERSION_DEMO_US
-extGetPosePtr()->flags &= ~1;
+    extGetPosePtr()->flags &= ~1;
 #endif
     fan_wp->sfxId = psndSFXOn_3D("SFX_STG3_AUDIENCE_FAN1", &(Vec){0.0f, 0.0f, 0.0f});
     fan_wp->vol = psndSFX_get_vol(fan_wp->sfxId);
@@ -2010,24 +2010,24 @@ void ext_fan_main(void) {
                 s32 j;
                 Fan* other;
 #if VERSION <= VERSION_DEMO_US
-            f32 d;
+                f32 d;
 #endif
 
                 for (j = 0, other = fan_wp->fans; j < fan_wp->num; j++, other++) {
 #if VERSION <= VERSION_DEMO_US
-                if (other->state == 0 && fan != other && (d = PSVECSquareDistance(&fan->pos, &other->pos)) < 900.0f) {
+                    if (other->state == 0 && fan != other && (d = PSVECSquareDistance(&fan->pos, &other->pos)) < 900.0f) {
 #else
                     if (other->state == 0 && i != j && PSVECSquareDistance(&fan->pos, &other->pos) < 900.0f) {
 #endif
                         PSVECSubtract(&fan->pos, &other->pos, &dir);
 #if VERSION <= VERSION_DEMO_US
-                    if (d == 0.0f) {
-                        dir.x = d = 1.0f;
-                    }
+                        if (d == 0.0f) {
+                            dir.x = d = 1.0f;
+                        }
 #endif
                         dir.y = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-                    PSVECScale(&dir, &dir, 8.0f * (1.0f / d));
+                        PSVECScale(&dir, &dir, 8.0f * (1.0f / d));
 #else
                         PSVECNormalize(&dir, &dir);
                         PSVECScale(&dir, &dir, 5.0f);
@@ -2123,16 +2123,16 @@ void ext_fan_main(void) {
 #endif
         pose = extGetPosePtr();
 #if VERSION <= VERSION_DEMO_US
-    fan = fan_wp->fans;
-    for (i = 0; i < fan_wp->num; i++, pose++, fan++) {
-        f32 angle;
+        fan = fan_wp->fans;
+        for (i = 0; i < fan_wp->num; i++, pose++, fan++) {
+            f32 angle;
 
-        switch (fan->state) {
-            case 0:
-                PSVECAdd(&fan->pos, &fan->vel, &fan->pos);
-                PSVECScale(&fan->vel, &fan->vel, 0.6f);
-                if (fan->pos.z < -190.0f) {
-                    fan->pos.z = -190.0f;
+            switch (fan->state) {
+                case 0:
+                    PSVECAdd(&fan->pos, &fan->vel, &fan->pos);
+                    PSVECScale(&fan->vel, &fan->vel, 0.6f);
+                    if (fan->pos.z < -190.0f) {
+                        fan->pos.z = -190.0f;
 #else
         lfan = fan_wp->fans;
         for (li = 0; li < fan_wp->num; li++, pose++, lfan++) {
@@ -2157,8 +2157,8 @@ void ext_fan_main(void) {
 #endif
                     }
 #if VERSION <= VERSION_DEMO_US
-                if (fan->pos.z > 190.0f) {
-                    fan->pos.z = 190.0f;
+                    if (fan->pos.z > 190.0f) {
+                        fan->pos.z = 190.0f;
 #else
                     if (lfan->pos.x < -350.0f) {
                         lfan->pos.x = -350.0f;
@@ -2176,9 +2176,9 @@ void ext_fan_main(void) {
 #endif
                 case 10:
 #if VERSION <= VERSION_DEMO_US
-                fan->pos.y += fan->param.x;
-                fan->param.x -= fan->param.z;
-                angle = angleABf(fan->pos.x, fan->pos.z, fan->target.x, fan->target.z);
+                    fan->pos.y += fan->param.x;
+                    fan->param.x -= fan->param.z;
+                    angle = angleABf(fan->pos.x, fan->pos.z, fan->target.x, fan->target.z);
 #else
                     lfan->pos.y += lfan->param.x;
                     lfan->param.x -= lfan->param.z;
@@ -2186,10 +2186,10 @@ void ext_fan_main(void) {
 #endif
                     angle = 6.2831855f * angle / 360.0f;
 #if VERSION <= VERSION_DEMO_US
-                fan->pos.x += fan->param.y * polySinf(angle);
-                fan->pos.z += fan->param.y * -polyCosf(angle);
-                if (--fan->timer < 0) {
-                    fan->state = 100;
+                    fan->pos.x += fan->param.y * polySinf(angle);
+                    fan->pos.z += fan->param.y * -polyCosf(angle);
+                    if (--fan->timer < 0) {
+                        fan->state = 100;
 #else
                     lfan->pos.x += lfan->param.y * polySinf(angle);
                     lfan->pos.z += lfan->param.y * -polyCosf(angle);
@@ -2200,13 +2200,13 @@ void ext_fan_main(void) {
                     break;
                 case 20:
 #if VERSION <= VERSION_DEMO_US
-                if (--fan->timer > 0) {
-                    fan->target.x += fan->param.x;
-                    fan->target.y += fan->param.y;
-                    fan->target.z += fan->param.z;
-                    fan->pos.x += fan->target.x;
-                    fan->pos.y += fan->target.y;
-                    fan->pos.z += fan->target.z;
+                    if (--fan->timer > 0) {
+                        fan->target.x += fan->param.x;
+                        fan->target.y += fan->param.y;
+                        fan->target.z += fan->param.z;
+                        fan->pos.x += fan->target.x;
+                        fan->pos.y += fan->target.y;
+                        fan->pos.z += fan->target.z;
 #else
                     if (--lfan->timer > 0) {
                         lfan->target.x += lfan->param.x;
@@ -2218,7 +2218,7 @@ void ext_fan_main(void) {
 #endif
                     } else {
 #if VERSION <= VERSION_DEMO_US
-                    fan->state = 100;
+                        fan->state = 100;
 #else
                         lfan->state = 100;
 #endif
@@ -2226,8 +2226,8 @@ void ext_fan_main(void) {
                     break;
                 case 100:
 #if VERSION <= VERSION_DEMO_US
-                pose->flags &= ~3;
-                fan->state++;
+                    pose->flags &= ~3;
+                    fan->state++;
 #else
                     pose->flags &= ~(EXT_POSE_FLAG_VISIBLE | EXT_POSE_FLAG_BILLBOARD);
                     lfan->state++;
@@ -2237,7 +2237,7 @@ void ext_fan_main(void) {
                     break;
             }
 #if VERSION <= VERSION_DEMO_US
-        if (fan->state != 0) {
+            if (fan->state != 0) {
 #else
             if (lfan->flags & 1) {
                 fan_wp->count--;
@@ -2246,10 +2246,10 @@ void ext_fan_main(void) {
                 fan_wp->count--;
             }
 #if VERSION <= VERSION_DEMO_US
-        (*pose->mtx)[0][3] = fan->pos.x;
-        (*pose->mtx)[1][3] = fan->pos.y;
-        (*pose->mtx)[2][3] = fan->pos.z;
-        pose->dir = angleABf(target.x, target.z, fan->pos.x, fan->pos.z);
+            (*pose->mtx)[0][3] = fan->pos.x;
+            (*pose->mtx)[1][3] = fan->pos.y;
+            (*pose->mtx)[2][3] = fan->pos.z;
+            pose->dir = angleABf(target.x, target.z, fan->pos.x, fan->pos.z);
 #else
             (*pose->mtx)[0][3] = lfan->pos.x;
             (*pose->mtx)[1][3] = lfan->pos.y;
@@ -2282,7 +2282,7 @@ EVT_BEGIN(mario_momikucha_msg)
         MULTIPLY(LW(0), 1000)
         WAIT_MS(LW(0))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_get_pos, 0, LW(5), LW(7), LW(8))
+        CALL(evt_mario_get_pos, 0, LW(5), LW(7), LW(8))
         CALL(evt_sub_random, 100, LW(0))
         CALL(evt_sub_random, 100, LW(1))
 #else
@@ -2292,7 +2292,7 @@ CALL(evt_mario_get_pos, 0, LW(5), LW(7), LW(8))
         SUBTRACT(LW(0), 50)
         SUBTRACT(LW(1), 50)
 #if VERSION <= VERSION_DEMO_US
-ADD(LW(5), LW(0))
+        ADD(LW(5), LW(0))
         ADD(LW(8), LW(1))
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(5), LW(7), LW(8))
 #else

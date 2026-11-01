@@ -315,7 +315,7 @@ static EVT_BEGIN(sanders_talk)
             CALL(evt_msg_print, 0, STRING("stg5_muj_34_03"), 0, STRING("me"))
             ELSE
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
+            CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(itemsel_table01), LW(0), 0)
 #endif
@@ -852,7 +852,7 @@ EVT_BEGIN(dokuroiwa_touch)
 #endif
             CALL(evt_msg_print_party, STRING("stg5_muj_93_01_01"))
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 1)
+            SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 1)
 #else
             CALL(evt_party_run, 0)
             SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 1)
@@ -861,7 +861,7 @@ SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 1)
         CALL(evt_mario_key_onoff, 1)
         ELSE
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
+        CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(itemsel_table), LW(0), 0)
 #endif
@@ -1367,7 +1367,7 @@ EVT_BEGIN(muj_05_first)
 #endif
     CALL(evt_mario_normalize)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, 65536)
 #endif
     CALL(evt_msg_print, 0, STRING("stg5_muj_33"), 0, STRING("サンダース"))
     SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN, 1)

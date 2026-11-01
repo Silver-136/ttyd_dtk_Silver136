@@ -975,7 +975,7 @@ static EVT_BEGIN(attack_event)
             CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_BLIZZARD_WAIT, LW(0))
             IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-ADD(LW(14), 20)
+                ADD(LW(14), 20)
 #else
                 ADD(LW(14), 30)
 #endif

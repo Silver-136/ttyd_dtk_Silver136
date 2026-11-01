@@ -153,7 +153,7 @@ void mot_damage(void) {
         mario->baseSpeed = 0.0f;
         mario->multiTimer = 20;
 #if VERSION <= VERSION_DEMO_US
-if (mario->prevMotionId != MARIO_MOTION_YOSHI) {
+        if (mario->prevMotionId != MARIO_MOTION_YOSHI) {
 #else
         if (mario->prevMotionId != MARIO_MOTION_YOSHI && mario->prevMotionId != MARIO_MOTION_PLANE) {
 #endif

@@ -284,23 +284,17 @@ EvtWord evt_kurikuri_win[231];
 EvtWord evt_kurikuri_lose[];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_shinemon_opening[];
-#else
-EvtWord evt_shinemon_opening[647];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_shinemon_win[];
 #else
+EvtWord evt_shinemon_opening[647];
 EvtWord evt_shinemon_win[199];
 #endif
 EvtWord evt_shinemon_lose[];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_champ_opening[];
-#else
-EvtWord evt_champ_opening[556];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_champ_opening_re[];
 #else
+EvtWord evt_champ_opening[556];
 EvtWord evt_champ_opening_re[767];
 #endif
 EvtWord evt_champ_win[335];
@@ -1270,7 +1264,7 @@ static NpcSetupInfo npcEnt[] = {
  */
 EVT_BEGIN(evt_damage_pose)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_set_pose, STRING("M_D_2"))
+    CALL(evt_mario_set_pose, STRING("M_D_2"))
 #else
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_POSE_LOCK)
     CALL(evt_mario_set_pose, STRING(("M_D_2")))
@@ -2859,8 +2853,8 @@ EVT_BEGIN(evt_shinemon_opening)
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 30, -180)
-CALL(evt_msg_print, 0, STRING("stg3_tou_258_03"), 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 30, -180)
+        CALL(evt_msg_print, 0, STRING("stg3_tou_258_03"), 0, 0)
 #else
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 60, -180)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_258_03")), 0, 0)
@@ -2869,8 +2863,8 @@ CALL(evt_msg_print, 0, STRING("stg3_tou_258_03"), 0, 0)
     WAIT_MS(800)
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 30, 200)
-CALL(evt_msg_print, 0, STRING("stg3_tou_258_04"), 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 30, 200)
+        CALL(evt_msg_print, 0, STRING("stg3_tou_258_04"), 0, 0)
 #else
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 90, 200)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_258_04")), 0, 0)
@@ -2968,7 +2962,7 @@ EVT_BEGIN(evt_shinemon_win)
     SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
     CALL(evt_cam3d_evt_set, 60, 143, 263, 60, 95, -8, 0, EASING_LINEAR)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_set_position, STRING("敵１"), 55, 60, 0)
+    CALL(evt_npc_set_position, STRING("敵１"), 55, 60, 0)
     CALL(evt_npc_set_position, STRING("敵２"), 95, 60, 0)
     CALL(evt_npc_set_anim, STRING("敵１"), STRING("SIN_K_1"))
     CALL(evt_npc_set_anim, STRING("敵２"), STRING("SIN_K_1"))
@@ -3216,8 +3210,8 @@ EVT_BEGIN(evt_champ_opening)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 30, 300)
-CALL(evt_msg_print, 0, STRING("stg3_tou_430_04"), 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 30, 300)
+        CALL(evt_msg_print, 0, STRING("stg3_tou_430_04"), 0, 0)
 #else
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 30, 100)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_430_04")), 0, 0)
@@ -3292,11 +3286,11 @@ EVT_BEGIN(evt_champ_opening_re)
         CALL(evt_npc_move_position, STRING(("\223G\202P")), 450, 0, 0, FLOAT(60.0f), 1)
         WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_move_position, STRING("敵１"), 280, 0, 0, FLOAT(60.0f), 1)
-        CALL(evt_npc_jump_position_nohit, STRING("敵１"), 250, 20, 0, 500, 30)
-        CALL(evt_npc_jump_position_nohit, STRING("敵１"), 215, 40, 0, 500, 30)
-        CALL(evt_npc_jump_position_nohit, STRING("敵１"), 185, 60, 0, 500, 30)
-CALL(evt_npc_move_position, STRING("敵１"), 80, 0, 0, FLOAT(60.0f), 1)
+        CALL(evt_npc_move_position, STRING("敵１"), 280, 0, 0, FLOAT(60.0f), 1)
+                CALL(evt_npc_jump_position_nohit, STRING("敵１"), 250, 20, 0, 500, 30)
+                CALL(evt_npc_jump_position_nohit, STRING("敵１"), 215, 40, 0, 500, 30)
+                CALL(evt_npc_jump_position_nohit, STRING("敵１"), 185, 60, 0, 500, 30)
+        CALL(evt_npc_move_position, STRING("敵１"), 80, 0, 0, FLOAT(60.0f), 1)
 #else
         CALL(evt_npc_move_position, STRING(("\223G\202P")), 310, 0, 0, FLOAT(60.0f), 1)
         CALL(evt_npc_jump_position_nohit, STRING(("\223G\202P")), 280, 20, 0, 500, 30)
@@ -3424,7 +3418,7 @@ CALL(evt_npc_move_position, STRING("敵１"), 80, 0, 0, FLOAT(60.0f), 1)
     BEGIN_INLINE_EVENT
         WAIT_MS(300)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_move_pos2, 0, -280, 25, FLOAT(120.0f))
+        CALL(evt_party_move_pos2, 0, -280, 25, FLOAT(120.0f))
 #else
         CALL(evt_party_move_pos2, 0, -280, 25, FLOAT(60.0f))
 #endif
@@ -3436,7 +3430,7 @@ CALL(evt_party_move_pos2, 0, -280, 25, FLOAT(120.0f))
         CALL(evt_party_jump_pos, 0, -185, 60, 25, 400, 1, -1000)
         WAIT_FRAMES(1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_move_pos2, 0, -130, -25, FLOAT(120.0f))
+        CALL(evt_party_move_pos2, 0, -130, -25, FLOAT(120.0f))
 #else
         CALL(evt_party_move_pos2, 0, -130, -25, FLOAT(60.0f))
 #endif
@@ -3453,8 +3447,8 @@ CALL(evt_party_move_pos2, 0, -130, -25, FLOAT(120.0f))
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 30, -180)
-CALL(evt_msg_print, 0, STRING("stg3_tou_re_112"), 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 30, -180)
+        CALL(evt_msg_print, 0, STRING("stg3_tou_re_112"), 0, 0)
 #else
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -293, 60, -180)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_112")), 0, 0)
@@ -3463,8 +3457,8 @@ CALL(evt_msg_print, 0, STRING("stg3_tou_re_112"), 0, 0)
     WAIT_MS(500)
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 30, 300)
-CALL(evt_msg_print, 0, STRING("stg3_tou_re_113"), 0, 0)
+        CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 30, 300)
+        CALL(evt_msg_print, 0, STRING("stg3_tou_re_113"), 0, 0)
 #else
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, -272, 90, 300)
         CALL(evt_msg_print, 0, STRING(("stg3_tou_re_113")), 0, 0)
@@ -6579,14 +6573,14 @@ EVT_BEGIN(evt_watch_match)
         CALL(evt_npc_set_position, STRING(("\203K\203\223\203X")), 0, 60, -130)
         ELSE
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
             CALL(evt_npc_set_position, STRING("キノシコワ"), 0, 60, -130)
 #else
         CALL(evt_npc_set_position, STRING(("\203L\203m\203V\203R\203\217")), 0, 60, -130)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-END_IF
+    END_IF
     CALL(evt_npc_flag_onoff, 1, STRING("選手1"), NPC_FLAG_INTANGIBLE)
 #else
     CALL(evt_npc_flag_onoff, 1, STRING(("\221I\216\3501")), NPC_FLAG_INTANGIBLE)

@@ -1093,21 +1093,21 @@ static s32 yuu_kesan(s32 type, s32 score, s32 bonus, s32 mul, s32 max) {
     switch (type) {
         case 0:
 #if VERSION <= VERSION_DEMO_US
-ret = score / 25000;
+            ret = score / 25000;
 #else
             ret = score / 30000;
 #endif
             break;
         case 3:
 #if VERSION <= VERSION_DEMO_US
-ret = score / 10000;
+            ret = score / 10000;
 #else
             ret = (score - 74000) / 2000;
 #endif
             break;
         case 2:
 #if VERSION <= VERSION_DEMO_US
-ret = score / 10000;
+            ret = score / 10000;
 #else
             ret = (score - 109000) / 2000;
 #endif

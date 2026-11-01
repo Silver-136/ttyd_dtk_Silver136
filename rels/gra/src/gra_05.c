@@ -41,12 +41,9 @@ EvtWord gra_05_out_02[149];
 static EvtWord in_evt[5];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord out_evt[148];
-#else
-static EvtWord out_evt[113];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord out_evt2[130];
 #else
+static EvtWord out_evt[113];
 static EvtWord out_evt2[150];
 #endif
 static BeroEntry bero_entry_data[7];
@@ -209,7 +206,7 @@ static EVT_BEGIN(out_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(LF(0), 0)
+    SET_VALUE(LF(0), 0)
     SET_VALUE(LF(1), 0)
     CALL(evt_mario_get_exparty, LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -221,14 +218,14 @@ SET_VALUE(LF(0), 0)
     BEGIN_INLINE_EVENT_GET_ID(LW(10))
         CALL(evt_hit_get_position, STRING("ana_1"), LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-            CALL(evt_party_move_pos2, 1, LW(0), LW(2), FLOAT(150.0f))
-        END_INLINE_EVENT
-    END_IF
-    CALL(evt_mario_get_party, LW(0))
-    IF_INT_NOT_EQUAL(LW(0), 0)
-        SET_VALUE(LF(1), 1)
-        BEGIN_INLINE_EVENT_GET_ID(LW(11))
-            CALL(evt_hit_get_position, STRING("ana_1"), LW(0), LW(1), LW(2))
+        CALL(evt_party_move_pos2, 1, LW(0), LW(2), FLOAT(150.0f))
+    END_INLINE_EVENT
+END_IF
+CALL(evt_mario_get_party, LW(0))
+IF_INT_NOT_EQUAL(LW(0), 0)
+    SET_VALUE(LF(1), 1)
+    BEGIN_INLINE_EVENT_GET_ID(LW(11))
+        CALL(evt_hit_get_position, STRING("ana_1"), LW(0), LW(1), LW(2))
 #else
         CALL(evt_party_force_reset_outofscreen, 0)
 #endif
@@ -289,7 +286,7 @@ static EVT_BEGIN(out_evt2)
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FLD_JUMP1"), LW(0), LW(1), LW(2), 0)
     CALL(evt_mario_jump_pos, LW(0), LW(1), LW(2), 500, 0, -1000)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_set_pos, -250, -50, 0)
+    CALL(evt_mario_set_pos, -250, -50, 0)
 #else
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)

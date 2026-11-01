@@ -985,7 +985,7 @@ static EVT_BEGIN(lock_item_check)
     CALL(evt_pouch_check_item, ITEM_STEEPLE_KEY_0x16, LW(0))
     IF_INT_GREATER(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(lock_tbl), LW(0))
+        CALL(evt_win_item_select, PTR(lock_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(lock_tbl), LW(0), 0)
 #endif
@@ -1399,7 +1399,7 @@ static void senteresa_ext_main(void) {
     Vec v;
     Vec d;
 #if VERSION <= VERSION_DEMO_US
-if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && mp->paperAnimName != NULL && strcmp(mp->paperAnimName, "P_H_1C") == 0) {
+    if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && mp->paperAnimName != NULL && strcmp(mp->paperAnimName, "P_H_1C") == 0) {
 #else
 
     if (marioGetAngleKaitenHammer() > 0.0f) {
@@ -1556,7 +1556,7 @@ if (!(mp->dispFlags & MARIO_DISP_FLAG_POSE_LOCK) && mp->paperAnimName != NULL &&
                 v.y = (*pose->mtx)[1][3];
                 (*pose->mtx)[0][3] = g_vecRotCenter.x + v.x;
 #if VERSION <= VERSION_DEMO_US
-(*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].bobPhase) + v.y;
+                (*pose->mtx)[1][3] = 0.4f * sinf(1.2f * pTeresa[i].bobPhase) + v.y;
 #else
                 (*pose->mtx)[1][3] = v.y;
 #endif

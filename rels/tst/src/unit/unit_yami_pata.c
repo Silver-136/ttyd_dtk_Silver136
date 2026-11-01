@@ -65,7 +65,7 @@ BattleUnitKind unit_yami_pata = {
     17, // level
     0, // bonusExp
 #if VERSION <= VERSION_DEMO_US
-2,
+    2,
 #else
     1, // bonusCoin
 #endif
@@ -640,7 +640,7 @@ static BattleWeapon weapon_nokonoko_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
 #if VERSION <= VERSION_DEMO_US
-COUNTER_RESIST_ALL,
+    COUNTER_RESIST_ALL,
 #else
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
 #endif

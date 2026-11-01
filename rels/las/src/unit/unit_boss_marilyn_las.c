@@ -481,7 +481,7 @@ static EVT_BEGIN(attack_event)
         SET_VALUE(LW(2), 25)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_DrawLots, LW(0), 3, 50, 25, LW(2))
+    CALL(btlevtcmd_DrawLots, LW(0), 3, 50, 25, LW(2))
 #else
     CALL(btlevtcmd_DrawLots, LW(0), 3, 40, 35, LW(2))
 #endif

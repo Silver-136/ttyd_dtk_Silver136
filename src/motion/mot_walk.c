@@ -215,7 +215,7 @@ void mot_walk(void) {
         player->multiTimer = 0;
     }
 #if VERSION <= VERSION_DEMO_US
-if (strcmp(player->animName, "M_I_Y") == 0 || player->wMotionTimer > 0xA) {
+    if (strcmp(player->animName, "M_I_Y") == 0 || player->wMotionTimer > 0xA) {
 #else
     if (!(player->flags & MARIO_FLAG_IS_CARRYING_BOBBERY) &&
         (strcmp(player->animName, "M_I_Y") == 0 || player->wMotionTimer > 0xA)) {

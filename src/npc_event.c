@@ -396,17 +396,11 @@ EvtWord pakkun_attack_event[74];
 EvtWord pakkun_init_event[34];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord pakkun_move_event[];
-#else
-EvtWord pakkun_move_event[17];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord pakkun_find_event[];
-#else
-EvtWord pakkun_find_event[106];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord pakkun_return_event[];
 #else
+EvtWord pakkun_move_event[17];
+EvtWord pakkun_find_event[106];
 EvtWord pakkun_return_event[81];
 #endif
 EvtWord dokugassun_init_event[14];
@@ -444,12 +438,9 @@ EvtWord teresa_find_event[60];
 EvtWord teresa_lost_event[31];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord teresa_return_event[];
-#else
-EvtWord teresa_return_event[104];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord bubble_move_event[];
 #else
+EvtWord teresa_return_event[104];
 EvtWord bubble_move_event[159];
 #endif
 EvtWord bubble_find_event[63];
@@ -600,7 +591,7 @@ EVT_BEGIN(enemy_common_dead_event)
     CALL(evt_npc_get_drop_item, STRING("me"), LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
+        CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
 #else
         CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP_LOST_BADGE, -1, 0)
 #endif
@@ -609,7 +600,7 @@ CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
     CALL(evt_npc_get_drop_fixitem, STRING("me"), LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
+        CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
 #else
         CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP_LOST_BADGE, -1, 0)
 #endif
@@ -1062,7 +1053,7 @@ EVT_BEGIN(patakuri_return_event)
     CALL(evt_npc_sound_data_reset, STRING("me"))
     CALL(evt_npc_set_stay_anim, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_reverse_ry, STRING("me"))
+    CALL(evt_npc_reverse_ry, STRING("me"))
     WAIT_MS(500)
     CALL(evt_npc_reverse_ry, STRING("me"))
     WAIT_MS(500)
@@ -2307,7 +2298,7 @@ EVT_BEGIN(killer_dead_event)
     CALL(evt_npc_get_drop_item, STRING("me"), LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
+        CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
 #else
         CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP_LOST_BADGE, -1, 0)
 #endif
@@ -2316,7 +2307,7 @@ CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
     CALL(evt_npc_get_drop_fixitem, STRING("me"), LW(3))
     IF_INT_NOT_EQUAL(LW(3), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
+        CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP, -1, 0)
 #else
         CALL(evt_item_entry, 0, LW(3), LW(0), LW(1), LW(2), ITEM_TYPE_DROP_LOST_BADGE, -1, 0)
 #endif
@@ -3234,7 +3225,7 @@ EVT_BEGIN(pakkun_return_event)
     WAIT_FRAMES(10)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_HIT)
 #if VERSION <= VERSION_DEMO_US
-WAIT_FRAMES(20)
+    WAIT_FRAMES(20)
 #else
     WAIT_FRAMES(25)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_NO_FIND)
@@ -3299,7 +3290,7 @@ EVT_BEGIN(dokugassun_lost_event)
     CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_AUTO_MOVE_ANIM)
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff_fukidashi, 1, 0, STRING("me"), 1, 0, 0, 0, 0, 0, 0, 30)
+    CALL(evt_eff_fukidashi, 1, 0, STRING("me"), 1, 0, 0, 0, 0, 0, 0, 30)
 #endif
     CALL(evt_npc_reverse_ry, STRING("me"))
     WAIT_MS(500)
@@ -4142,7 +4133,7 @@ EVT_END()
 
 EVT_BEGIN(kamec_init_event)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
+    CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_MOVE_ANIM | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
 #else
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_UPDATE_BY_EVENT)
 #endif
@@ -4343,7 +4334,7 @@ EVT_BEGIN(kamec2_find_event)
     CALL(evt_npc_flag_onoff, 0, STRING("slave_0"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_set_attack_mode, STRING("slave_0"), 12)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_glide_position, STRING("slave_0"), LW(0), LW(1), LW(2), 1000, 0, FLOAT(0.0f), 0, 6)
+    CALL(evt_npc_glide_position, STRING("slave_0"), LW(0), LW(1), LW(2), 1000, 0, FLOAT(0.0f), 0, 6)
 #else
     CALL(evt_npc_glide_position, STRING("slave_0"), LW(0), LW(1), LW(2), 1000, 0, FLOAT(0.0f), 0, 3)
 #endif
@@ -5340,7 +5331,7 @@ EVT_BEGIN(zako2D_move_event)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_FLOOR_COLLISION)
         CALL(evt_npc_flag_onoff, 0, STRING("me"), NPC_FLAG_GRAVITY)
 #if VERSION <= VERSION_DEMO_US
-LOOP(30)
+        LOOP(30)
             CALL(evt_npc_status_onoff, 1, STRING("me"), 4096)
             WAIT_FRAMES(1)
         END_LOOP
@@ -5604,7 +5595,7 @@ EVT_BEGIN(zakoM2D_find_start_event)
         CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     END_SIBLING_EVENT
 #if VERSION <= VERSION_DEMO_US
-BEGIN_INLINE_EVENT
+    BEGIN_INLINE_EVENT
         CALL(evt_npc_set_anim, STRING("slave_0"), STRING("B_1"))
         CALL(evt_npc_set_ry, STRING("slave_0"), LW(0))
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
@@ -5698,7 +5689,7 @@ EVT_BEGIN(gesso2D_move_event)
             BREAK_LOOP
         END_IF
 #if VERSION <= VERSION_DEMO_US
-IF_INT_LESS(LW(1), 60)
+        IF_INT_LESS(LW(1), 60)
 #else
         IF_INT_LESS(LW(1), 90)
 #endif

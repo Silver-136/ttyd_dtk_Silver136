@@ -217,7 +217,7 @@ static EVT_BEGIN(chuchurina_sogu)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_bero_exec_onoff, 0, 2)
+        CALL(evt_bero_exec_onoff, 0, 2)
 #endif
         CALL(evt_puni_wait_systemmode, 2)
         CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
@@ -232,7 +232,7 @@ CALL(evt_bero_exec_onoff, 0, 2)
         CALL(evt_bero_exec_onoff, 1, 2)
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_seq_wait, 2)
+    CALL(evt_seq_wait, 2)
 #endif
     CALL(evt_npc_set_anim, STRING("第三勢力部下"), STRING("D_2"))
     CALL(evt_bero_exec_wait, 65536)
@@ -324,7 +324,7 @@ CALL(evt_seq_wait, 2)
     CALL(evt_npc_get_position, STRING("チュチュリーナ"), LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_STG2_CHURINA_ESCAPE1"), LW(0), LW(1), LW(2), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -18, 68, -120, 300, 20)
+    CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -18, 68, -120, 300, 20)
 #else
     CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -18, 135, -200, 300, 10)
 #endif

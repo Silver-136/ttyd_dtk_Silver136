@@ -105,12 +105,9 @@ EvtWord evt_key_get[5];
 static s32 key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_door_msg[85];
-#else
-static EvtWord evt_door_msg[87];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord aji_13_init_evt[];
 #else
+static EvtWord evt_door_msg[87];
 EvtWord aji_13_init_evt[295];
 #endif
 
@@ -145,7 +142,7 @@ static BOOL hitIsGroup(HitEntry* target, HitEntry* group) {
  */
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -162,7 +159,7 @@ EVT_END()
  */
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -179,7 +176,7 @@ EVT_END()
  */
 static EVT_BEGIN(e_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
 #endif
@@ -196,7 +193,7 @@ EVT_END()
  */
 static EVT_BEGIN(e_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
 #endif
@@ -905,7 +902,7 @@ ShikakeMoveTbl6 up_down_tbl = {
         {"A_ugoku_h_4", "S_ugoku_h_4", 0, 100, 3000},
         {"A_ugoku_h_5", "S_ugoku_h_5", 0, -200, 4000},
 #if VERSION <= VERSION_DEMO_US
-{"A_ugoku_h_6", "S_ugoku_h_6", 0, -150, 3000},
+        {"A_ugoku_h_6", "S_ugoku_h_6", 0, -150, 3000},
 #else
         {"A_ugoku_h_6", "S_ugoku_h_6", 40, -150, 3000},
 #endif
@@ -1135,7 +1132,7 @@ static EVT_BEGIN(evt_door_msg)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+    CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
 #endif
@@ -1266,7 +1263,7 @@ USER_FUNC(bg_cam_chk) {
 #endif
     CameraEntry* camera = camGetPtr(CAMERA_3D);
 #if VERSION <= VERSION_DEMO_US
-if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW)) {
+    if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW)) {
 #else
 
     if (marioBgmodeChk() && (camera->flags & CAMERA_FLAG_NO_Y_FOLLOW) && marioGetPtr()->airTimer == 0) {

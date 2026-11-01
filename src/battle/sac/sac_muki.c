@@ -396,7 +396,7 @@ void main_cursor(void) {
             if (ob) {
                 ob->kind = 5;
 #if VERSION <= VERSION_DEMO_US
-effHitEntry(0, 0x20, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
+                effHitEntry(0, 0x20, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
 #else
                 effHitEntry(0, 5, ob->pos.x, ob->pos.y, ob->pos.z, 1.0f);
 #endif

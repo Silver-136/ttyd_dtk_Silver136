@@ -29,12 +29,9 @@ static EvtWord switch_evt[46];
 static EvtWord hint_plate[14];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord kabenuke_check_evt[];
-#else
-EvtWord kabenuke_check_evt[42];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord las_12_init_evt[];
 #else
+EvtWord kabenuke_check_evt[42];
 EvtWord las_12_init_evt[62];
 #endif
 
@@ -130,7 +127,7 @@ EVT_BEGIN(kabenuke_check_evt)
         GOTO(0)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_cam_letter_box_disable, 1)
+    CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_mario_key_onoff, 0)
 #endif
     CALL(evt_snd_bgmoff, PSND_PAUSE)

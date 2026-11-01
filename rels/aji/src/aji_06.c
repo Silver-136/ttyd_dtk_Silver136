@@ -365,7 +365,7 @@ EVT_BEGIN(peach_evt_kusuri_select)
     END_IF
     IF_INT_EQUAL(LF(0), 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(kusuri_list), LW(1))
+        CALL(evt_win_item_select, PTR(kusuri_list), LW(1))
 #else
         CALL(evt_win_item_select, 0, PTR(kusuri_list), LW(1), 0)
 #endif

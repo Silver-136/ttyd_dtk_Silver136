@@ -88,7 +88,7 @@ BattleUnitKind unit_togenoko_ace = {
     1, // perilHP
     30, // level
 #if VERSION <= VERSION_DEMO_US
-0,
+    0,
 #else
     1, // bonusExp
 #endif
@@ -434,7 +434,7 @@ static BattleWeapon weapon_togenoko_shell_attack = {
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
 #if VERSION <= VERSION_DEMO_US
-{4, 0, 0, 0, 0, 0, 0, 0},
+    {4, 0, 0, 0, 0, 0, 0, 0},
 #else
     {5, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
 #endif
@@ -449,7 +449,7 @@ static BattleWeapon weapon_togenoko_shell_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
 #if VERSION <= VERSION_DEMO_US
-COUNTER_RESIST_ALL,
+    COUNTER_RESIST_ALL,
 #else
     COUNTER_RESIST_ALL & ~COUNTER_RESIST_PAYBACK, // counterResistFlags
 #endif
@@ -494,7 +494,7 @@ static BattleWeapon weapon_togenoko_charge = {
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
     0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
 #if VERSION <= VERSION_DEMO_US
-4,
+    4,
 #else
     5, // chargeStrength
 #endif

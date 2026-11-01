@@ -66,42 +66,21 @@ EvtWord kagi_rotate[69];
 s32 kagi_tbl[9];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord kagi1_evt[];
-#else
-EvtWord kagi1_evt[80];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord kagi2_evt[];
-#else
-EvtWord kagi2_evt[80];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord kagi3_evt[];
-#else
-EvtWord kagi3_evt[80];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord kagi4_evt[];
-#else
-EvtWord kagi4_evt[80];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord kagi5_evt[];
-#else
-EvtWord kagi5_evt[80];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord kagi6_evt[];
-#else
-EvtWord kagi6_evt[80];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord kagi7_evt[];
-#else
-EvtWord kagi7_evt[80];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord kagi8_evt[];
 #else
+EvtWord kagi1_evt[80];
+EvtWord kagi2_evt[80];
+EvtWord kagi3_evt[80];
+EvtWord kagi4_evt[80];
+EvtWord kagi5_evt[80];
+EvtWord kagi6_evt[80];
+EvtWord kagi7_evt[80];
 EvtWord kagi8_evt[80];
 #endif
 EvtWord daiza_up[201];
@@ -113,12 +92,9 @@ EvtWord kagi_8_syutugen[19];
 s32 daiza_key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord daiza_evt[];
-#else
-EvtWord daiza_evt[57];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord las_10_init_evt[];
 #else
+EvtWord daiza_evt[57];
 EvtWord las_10_init_evt[294];
 #endif
 
@@ -708,7 +684,7 @@ EVT_BEGIN(tenkyugi_evt)
     // Mario is startled as the tower shakes again.
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_2"), LW(0), LW(1), LW(2), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
 #else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
@@ -817,7 +793,7 @@ EVT_BEGIN(kagi1_evt)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, LW(0), LW(1))
+        CALL(evt_win_item_select, LW(0), LW(1))
 #else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
 #endif
@@ -852,7 +828,7 @@ EVT_BEGIN(kagi2_evt)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, LW(0), LW(1))
+        CALL(evt_win_item_select, LW(0), LW(1))
 #else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
 #endif
@@ -887,7 +863,7 @@ EVT_BEGIN(kagi3_evt)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, LW(0), LW(1))
+        CALL(evt_win_item_select, LW(0), LW(1))
 #else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
 #endif
@@ -922,7 +898,7 @@ EVT_BEGIN(kagi4_evt)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, LW(0), LW(1))
+        CALL(evt_win_item_select, LW(0), LW(1))
 #else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
 #endif
@@ -957,7 +933,7 @@ EVT_BEGIN(kagi5_evt)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, LW(0), LW(1))
+        CALL(evt_win_item_select, LW(0), LW(1))
 #else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
 #endif
@@ -992,7 +968,7 @@ EVT_BEGIN(kagi6_evt)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, LW(0), LW(1))
+        CALL(evt_win_item_select, LW(0), LW(1))
 #else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
 #endif
@@ -1027,7 +1003,7 @@ EVT_BEGIN(kagi7_evt)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, LW(0), LW(1))
+        CALL(evt_win_item_select, LW(0), LW(1))
 #else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
 #endif
@@ -1062,7 +1038,7 @@ EVT_BEGIN(kagi8_evt)
     CALL(make_kagi_tbl, LW(0), LW(1))
     IF_INT_GREATER(LW(1), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, LW(0), LW(1))
+        CALL(evt_win_item_select, LW(0), LW(1))
 #else
         CALL(evt_win_item_select, 0, LW(0), LW(1), 0)
 #endif
@@ -1353,7 +1329,7 @@ EVT_BEGIN(daiza_evt)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(daiza_key_tbl), LW(0))
+    CALL(evt_win_item_select, PTR(daiza_key_tbl), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(daiza_key_tbl), LW(0), 0)
 #endif

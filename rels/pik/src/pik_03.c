@@ -117,7 +117,7 @@ static EVT_BEGIN(evt_daiza)
     SET_VALUE(LW(0), 6)
     SET_VALUE(LW(1), STRING("star"))
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(evt_sub_starstone)
+    CALL_CHILD(evt_sub_starstone)
 #else
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 2000)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))

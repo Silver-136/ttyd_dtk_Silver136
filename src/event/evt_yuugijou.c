@@ -404,20 +404,20 @@ void monteCountDisp(void) {
             monte_snd_flag = 8;
         }
 #if VERSION <= VERSION_DEMO_US
-monte_snd_flag = 0;
+        monte_snd_flag = 0;
 #endif
         if (y != 0) {
             y = y / 10;
             if (y == 0) {
                 s32 sg;
 #if VERSION <= VERSION_DEMO_US
-                        if ((s32)yuwp->tokens > (s32)yuwp->dispTokens)
+                if ((s32)yuwp->tokens > (s32)yuwp->dispTokens)
 #else
                 if ((s32)yuwp->tokens > (s32)yuwp->dispTokens) {
 #endif
                     sg = 1;
 #if VERSION <= VERSION_DEMO_US
-                        else
+                else
 #else
                 } else {
 #endif
@@ -431,7 +431,7 @@ monte_snd_flag = 0;
         }
     }
 #if VERSION <= VERSION_DEMO_US
-monte_snd_flag = 0;
+    monte_snd_flag = 0;
 #else
     if (monte_snd_flag != 0) {
         monte_snd_flag--;
@@ -450,8 +450,8 @@ USER_FUNC(yuugijou_add_montemedal) {
     EvtWord* args = event->args;
     s32 immediate = evtGetValue(event, args[0]);
 #if VERSION <= VERSION_DEMO_US
-yuwp->tokens += evtGetValue(event, args[1]);
-if (immediate != 0)
+    yuwp->tokens += evtGetValue(event, args[1]);
+    if (immediate != 0)
 #else
     s32 sum = yuwp->tokens + evtGetValue(event, args[1]);
     if (sum < 99999) {

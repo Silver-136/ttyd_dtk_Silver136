@@ -94,8 +94,6 @@ static s8 funemizu_normal_tbl[] __attribute__((aligned(32))) = { 0, 0, 64};
 static u8 funemizu_color0_tbl[] __attribute__((aligned(32))) = { 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 #if VERSION > VERSION_DEMO_US
 static u8 funemizu_dl_0_1[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x07, 0x04, 0x00, 0x00, 0x07, 0x08, 0x00, 0x00, 0x08, 0x03, 0x00, 0x00, 0x05, 0x07, 0x00, 0x01, 0x06, 0x02, 0x00, 0x00, 0x03, 0x06, 0x00, 0x01, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00 };
-#endif
-#if VERSION > VERSION_DEMO_US
 static u8 funemizu_dl_0_2[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x04, 0x00, 0x00, 0x00, 0x02, 0x01, 0x00, 0x00, 0x00, 0x05, 0x00, 0x01, 0x01, 0x06, 0x00, 0x01, 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 #endif
 /** The three display lists of the type 0 wake's base layer, drawn with the sizes below. */
@@ -109,14 +107,8 @@ static u8* funemizu_dl_0_tbl[] = { funemizu_dl_0_0, funemizu_dl_0_1, funemizu_dl
 static u8 funemizu_dl_0_size_tbl[] = { 0x02, 0x01, 0x01};
 #if VERSION > VERSION_DEMO_US
 static u8 funemizu_dl_1_1[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x04, 0x12, 0x00, 0x00, 0x15, 0x15, 0x00, 0x01, 0x14, 0x11, 0x00, 0x00, 0x13, 0x10, 0x00, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-#endif
-#if VERSION > VERSION_DEMO_US
 static u8 funemizu_dl_1_2[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x04, 0x0E, 0x00, 0x00, 0x10, 0x0F, 0x00, 0x00, 0x0E, 0x13, 0x00, 0x01, 0x0F, 0x14, 0x00, 0x01, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-#endif
-#if VERSION > VERSION_DEMO_US
 static u8 funemizu_dl_1_3[] __attribute__((aligned(32))) = { 0x98, 0x00, 0x04, 0x15, 0x00, 0x01, 0x14, 0x14, 0x00, 0x01, 0x12, 0x10, 0x00, 0x00, 0x11, 0x0F, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-#endif
-#if VERSION > VERSION_DEMO_US
 static u8* funemizu_dl_1_tbl[] = { funemizu_dl_1_0, funemizu_dl_1_1, funemizu_dl_1_2, funemizu_dl_1_3 };
 #endif
 /**
@@ -350,7 +342,7 @@ void effFunemizuDisp(CameraId cameraId, EffectEntry* effect) {
     Mtx mtx;
     GXTexObj texObj;
 #if VERSION <= VERSION_DEMO_US
-f32 proj[7];
+    f32 proj[7];
     f32 vp[6];
     f32 sx, sy, sz;
     u8 argb[4];
@@ -366,7 +358,7 @@ f32 proj[7];
     cam = camGetPtr(cameraId);
     type = work->type;
 #if VERSION <= VERSION_DEMO_US
-GXSetProjection(cam->projection, cam->projType);
+    GXSetProjection(cam->projection, cam->projType);
     GXGetProjectionv(proj);
     GXGetViewportv(vp);
     GXProject(work->position.x, work->position.y, work->position.z, cam->view, proj, vp, &sx, &sy, &sz);
@@ -378,18 +370,18 @@ GXSetProjection(cam->projection, cam->projType);
 #endif
     if (type == 0) {
 #if VERSION <= VERSION_DEMO_US
-            {
-                s32 r = funemizu_color0_tbl[0];
-                s32 g = funemizu_color0_tbl[1];
-                s32 b = funemizu_color0_tbl[2];
-                r += (argb[1] - r) / 16;
-                g += (argb[2] - g) / 16;
-                b += (argb[3] - b) / 16;
-                funemizu_color0_tbl[0] = r;
-                funemizu_color0_tbl[1] = g;
-                funemizu_color0_tbl[2] = b;
-            }
-            DCFlushRange(funemizu_color0_tbl, 4);
+        {
+            s32 r = funemizu_color0_tbl[0];
+            s32 g = funemizu_color0_tbl[1];
+            s32 b = funemizu_color0_tbl[2];
+            r += (argb[1] - r) / 16;
+            g += (argb[2] - g) / 16;
+            b += (argb[3] - b) / 16;
+            funemizu_color0_tbl[0] = r;
+            funemizu_color0_tbl[1] = g;
+            funemizu_color0_tbl[2] = b;
+        }
+        DCFlushRange(funemizu_color0_tbl, 4);
 #else
         funemizu_color0_tbl[0] = color.r;
         funemizu_color0_tbl[1] = color.g;
@@ -397,24 +389,24 @@ GXSetProjection(cam->projection, cam->projType);
 #endif
     } else {
 #if VERSION <= VERSION_DEMO_US
-            {
-                s32 r = gor_fune_color0_tbl[0];
-                s32 g = gor_fune_color0_tbl[1];
-                s32 b = gor_fune_color0_tbl[2];
-                r += (argb[1] - r) / 16;
-                g += (argb[2] - g) / 16;
-                b += (argb[3] - b) / 16;
-                gor_fune_color0_tbl[0] = r;
-                gor_fune_color0_tbl[1] = g;
-                gor_fune_color0_tbl[2] = b;
-            }
-            DCFlushRange(gor_fune_color0_tbl, 4);
+        {
+            s32 r = gor_fune_color0_tbl[0];
+            s32 g = gor_fune_color0_tbl[1];
+            s32 b = gor_fune_color0_tbl[2];
+            r += (argb[1] - r) / 16;
+            g += (argb[2] - g) / 16;
+            b += (argb[3] - b) / 16;
+            gor_fune_color0_tbl[0] = r;
+            gor_fune_color0_tbl[1] = g;
+            gor_fune_color0_tbl[2] = b;
         }
+        DCFlushRange(gor_fune_color0_tbl, 4);
     }
-    if (work->cam != 4) {
-        gor_fune_color0_tbl[0] = 0x00;
-        gor_fune_color0_tbl[1] = 0x00;
-        gor_fune_color0_tbl[2] = 0xFF;
+}
+if (work->cam != 4) {
+    gor_fune_color0_tbl[0] = 0x00;
+    gor_fune_color0_tbl[1] = 0x00;
+    gor_fune_color0_tbl[2] = 0xFF;
 #else
         gor_fune_color0_tbl[0] = color.r;
         gor_fune_color0_tbl[1] = color.g;
@@ -573,7 +565,7 @@ void effFunemizuShibukiDisp(CameraId cameraId, EffectEntry* effect) {
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
 #if VERSION <= VERSION_DEMO_US
-GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
 #endif
     GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);

@@ -2122,7 +2122,7 @@ void mapGX(WindowWork* w, f32 x, f32 y) {
         for (i = 0; i < sizeof(tubuDt) / sizeof(TubuDt); i++) {
             t = &tubuDt[i];
 #if VERSION <= VERSION_DEMO_US
-if (swByteGet(0) < t->id)
+            if (swByteGet(0) < t->id)
                 break;
             {
 #else
@@ -2146,35 +2146,35 @@ if (swByteGet(0) < t->id)
             k = 1;
         } else if (sw >= STG2_41_FRANKLYS_HOUSE_STG_2 && sw < STG3_32_BOSS_BATTLE) {
 #if VERSION <= VERSION_DEMO_US
-id = ICON_SAC_SUKI;
+            id = ICON_SAC_SUKI;
 #else
             id = ICON_SAC_MUKI;
 #endif
             k = 2;
         } else if (sw >= STG3_51_FRANKLYS_HOUSE_STG_3 && sw < STG4_15_03_THE_RUBY_STAR) {
 #if VERSION <= VERSION_DEMO_US
-id = ICON_SAC_MUKI;
+            id = ICON_SAC_MUKI;
 #else
             id = ICON_SAC_SCISSOR;
 #endif
             k = 3;
         } else if (sw >= STG4_31_FRANKLYS_HOUSE_STG_4 && sw < STG5_43_X_NAUTS_RETREAT) {
 #if VERSION <= VERSION_DEMO_US
-id = ICON_SAC_ZUBASTAR;
+            id = ICON_SAC_ZUBASTAR;
 #else
             id = ICON_SAC_GENKI1;
 #endif
             k = 4;
         } else if (sw >= STG5_61_FRANKLYS_HOUSE_STG_5 && sw < STG6_53_THE_REAL_GARNET_STAR) {
 #if VERSION <= VERSION_DEMO_US
-id = ICON_SAC_SCISSOR;
+            id = ICON_SAC_SCISSOR;
 #else
             id = ICON_SAC_SUKI;
 #endif
             k = 5;
         } else if (sw >= STG6_71_FRANKLYS_HOUSE_STG_6 && sw < STG7_20_LORD_CRUMP_DEFEATED) {
 #if VERSION <= VERSION_DEMO_US
-id = ICON_SAC_GENKI1;
+            id = ICON_SAC_GENKI1;
 #else
             id = ICON_SAC_ZUBASTAR;
 #endif

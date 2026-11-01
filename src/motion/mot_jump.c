@@ -393,7 +393,7 @@ void mot_jump(void) {
         mario->currSubMotionId = 0;
         marioPreJump();
 #if VERSION <= VERSION_DEMO_US
-if (mario->currMotionId != MARIO_MOTION_JUMP_3) {
+        if (mario->currMotionId != MARIO_MOTION_JUMP_3) {
 #else
         if (mario->currMotionId == MARIO_MOTION_JUMP_3) {
             camFollowYOn();
@@ -486,7 +486,7 @@ void mot_upstairs(void) {
                 motSlitContinue();
             } else if (mario->dispFlags & MARIO_DISP_FLAG_SLIT) {
 #if VERSION <= VERSION_DEMO_US
-motSlitContinue2();
+                motSlitContinue2();
 #else
                 marioChgMot2(MARIO_MOTION_SLIT);
 #endif

@@ -406,7 +406,7 @@ EVT_BEGIN(aji_15_init_evt)
         CALL(evt_snd_envoff, PSND_FADEOUT)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(peach_evt_syawa_init)
+    CALL_CHILD(peach_evt_syawa_init)
     IF_INT_EQUAL(GSWF_AJI_15_VISITED, 0)
         SET_VALUE(GSWF_AJI_15_VISITED, 1)
 #else

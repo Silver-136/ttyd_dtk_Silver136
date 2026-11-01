@@ -142,7 +142,7 @@ static EVT_BEGIN(rousoku_init)
         CALL(evt_mapobj_get_position, LW(1), LW(2), LW(3), LW(4))
         SUBTRACT_FLOAT(LW(3), FLOAT(7.0f))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.5f), 1000, 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.5f), 1000, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.5f), 1000, 0, 0, 0, 0, 0, 0)
 #endif
@@ -193,7 +193,7 @@ EVT_BEGIN(las_30_init_evt)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
+    CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
 #else
     CALL(evt_snd_set_rev_mode, 2)
 #endif
@@ -202,9 +202,9 @@ CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 1150, 60, -125, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mobj_recovery_blk, STRING("r_blk"), 1, -1050, 860, -75, 0, 0)
-CALL(evt_mobj_itembox, STRING("mobj_box01"), -1150, 800, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_LAS_30_ULTRA_SHROOM_CHEST)
-    CALL(evt_mobj_itembox, STRING("mobj_box02"), 1050, 0, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_LAS_30_JAMMIN_JELLY_CHEST)
+    CALL(evt_mobj_recovery_blk, STRING("r_blk"), 1, -1050, 860, -75, 0, 0)
+    CALL(evt_mobj_itembox, STRING("mobj_box01"), -1150, 800, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_LAS_30_ULTRA_SHROOM_CHEST)
+        CALL(evt_mobj_itembox, STRING("mobj_box02"), 1050, 0, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_LAS_30_JAMMIN_JELLY_CHEST)
 #else
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 10, -1050, 860, -75, 0, 0)
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -1150, 800, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_LAS_30_ULTRA_SHROOM_CHEST)
@@ -222,8 +222,8 @@ EVT_END_PAD()
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_US
-char name[8];
-s32 number;
+    char name[8];
+    s32 number;
 #endif
 
 #if VERSION <= VERSION_DEMO_US

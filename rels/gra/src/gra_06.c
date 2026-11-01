@@ -316,7 +316,7 @@ EVT_BEGIN(first_gra06jin)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG4_JIN1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG4_GRA1"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_normalize)
+    CALL(evt_mario_normalize)
 #endif
     CALL(evt_party_stop, 0)
     CALL(evt_party_set_dir, 0, 90, 200)

@@ -93,12 +93,9 @@ EvtWord minigame04_start_cam[40];
 EvtWord minigame04_start_cam_cancel[20];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord minigame04_start[];
-#else
-EvtWord minigame04_start[91];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord minigame04_end[];
 #else
+EvtWord minigame04_start[91];
 EvtWord minigame04_end[256];
 #endif
 EvtWord yuu_03_init_evt[VERSION_PICK(26, 140)];
@@ -265,7 +262,7 @@ static USER_FUNC(evt_nomal_cange) {
 
     if (isFirstCall) {
 #if VERSION <= VERSION_DEMO_US
-marioRollCancel();
+        marioRollCancel();
 #else
         marioRollTryCancel();
 #endif
@@ -522,7 +519,7 @@ USER_FUNC(evt_ryushi) {
         case 3:
         case 4:
 #if VERSION <= VERSION_DEMO_US
-speed = 3.3333333f;
+            speed = 3.3333333f;
 #else
             speed = 2.9166667f;
 #endif
@@ -532,7 +529,7 @@ speed = 3.3333333f;
         case 7:
         case 8:
 #if VERSION <= VERSION_DEMO_US
-speed = 3.3333333f;
+            speed = 3.3333333f;
 #else
             speed = 2.9166667f;
 #endif
@@ -680,14 +677,14 @@ EVT_BEGIN(minigame04_start_cam)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_cam3d_evt_set, FLOAT(1285.0f), FLOAT(334.0f), FLOAT(850.0f), FLOAT(1285.0f), FLOAT(65.0f), FLOAT(-25.0f), 5000, EASING_LINEAR)
+    CALL(evt_cam3d_evt_set, FLOAT(1285.0f), FLOAT(334.0f), FLOAT(850.0f), FLOAT(1285.0f), FLOAT(65.0f), FLOAT(-25.0f), 5000, EASING_LINEAR)
 #else
     CALL(evt_cam3d_evt_set, FLOAT(1285.0f), FLOAT(334.0f), FLOAT(850.0f), FLOAT(1285.0f), FLOAT(65.0f), FLOAT(-25.0f), 10000, EASING_LINEAR)
 #endif
     WAIT_MS(1000)
     CALL(evt_yuutitle_alloc, 0, 0, STRING("menu_title_minigame4"))
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(2000)
+    WAIT_MS(2000)
 #else
     WAIT_MS(7000)
 #endif
@@ -744,7 +741,7 @@ EVT_BEGIN(minigame04_start)
     CALL(eff_call_minigame, 0, 0, 0, 500)
     WAIT_MS(3000)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_key_onoff, 1)
+    CALL(evt_mario_key_onoff, 1)
 #else
     CALL(evt_mario_set_enable_key, 352)
     CALL(evt_cam_letter_box_onoff, 0, 0)
@@ -767,40 +764,40 @@ EVT_BEGIN(minigame04_end)
 #endif
     CALL(evt_snd_sfxon, STRING("SFX_EVT_GAME_AUDIENCE2"), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_normalize)
+    CALL(evt_mario_normalize)
 #endif
     SET_VALUE(GW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_cam_y_off)
+    CALL(evt_mario_cam_y_off)
 #endif
     SET_VALUE(GF(0), 1)
     SET_VALUE(LW(3), 1)
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-        LOOP(0)
-            IF_INT_NOT_EQUAL(LW(3), 0)
-                IF_INT_LESS_OR_EQUAL(LW(1), -100)
-                    SET_VALUE(LW(3), 0)
-                    CALL(evt_slit_cancel)
-                    CALL(evt_mario_cam_y_off)
-                END_IF
-            END_IF
-            IF_INT_LESS_OR_EQUAL(LW(1), -500)
-                CALL(evt_mario_set_pos, LW(0), -500, LW(2))
-            ELSE
-                CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
-            END_IF
-            IF_INT_EQUAL(GF(0), 0)
-                BREAK_LOOP
-            END_IF
-            WAIT_FRAMES(1)
-        END_LOOP
-    END_INLINE_EVENT
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                LOOP(0)
+                    IF_INT_NOT_EQUAL(LW(3), 0)
+                        IF_INT_LESS_OR_EQUAL(LW(1), -100)
+                            SET_VALUE(LW(3), 0)
+                            CALL(evt_slit_cancel)
+                            CALL(evt_mario_cam_y_off)
+                        END_IF
+                    END_IF
+                    IF_INT_LESS_OR_EQUAL(LW(1), -500)
+                        CALL(evt_mario_set_pos, LW(0), -500, LW(2))
+                    ELSE
+                        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+                    END_IF
+                    IF_INT_EQUAL(GF(0), 0)
+                        BREAK_LOOP
+                    END_IF
+                    WAIT_FRAMES(1)
+                END_LOOP
+            END_INLINE_EVENT
 #endif
         // If Mario finished in time and is above the course, he walks on to the goal side (x 1650) on landing;
 #if VERSION <= VERSION_DEMO_US
-    BEGIN_INLINE_EVENT
+        BEGIN_INLINE_EVENT
 #else
         // otherwise the event just waits until he is standing on something.
         IF_INT_LESS(LW(0), 701)
@@ -823,7 +820,7 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                     IF_INT_LESS(LW(0), 1650)
 #if VERSION <= VERSION_DEMO_US
-                CALL(evt_nomal_cange)
+                        CALL(evt_nomal_cange)
 #else
                         CALL(evt_mario_normalize)
 #endif
@@ -1195,14 +1192,14 @@ BOOL yuuminigame4_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
                         speed = 0.0f;
                     } else {
 #if VERSION <= VERSION_DEMO_US
-speed = 1.6666666f;
+                        speed = 1.6666666f;
 #else
                         speed = 0.0f;
 #endif
                     }
                 } else {
 #if VERSION <= VERSION_DEMO_US
-speed = 3.3333333f;
+                    speed = 3.3333333f;
 #else
                     speed = 2.9166667f;
 #endif
@@ -1216,14 +1213,14 @@ speed = 3.3333333f;
                         speed = -0.0f;
                     } else {
 #if VERSION <= VERSION_DEMO_US
-speed = -1.6666666f;
+                        speed = -1.6666666f;
 #else
                         speed = -0.0f;
 #endif
                     }
                 } else {
 #if VERSION <= VERSION_DEMO_US
-speed = -3.3333333f;
+                    speed = -3.3333333f;
 #else
                     speed = -2.9166667f;
 #endif

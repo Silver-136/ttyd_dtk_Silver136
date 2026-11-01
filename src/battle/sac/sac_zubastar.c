@@ -719,7 +719,7 @@ USER_FUNC(zubastar_main) {
     case 28:
         w->cursor.timer = 30;
 #if VERSION <= VERSION_DEMO_US
-        fadeEntry(14, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}); // 14 = FADE_IN_WHITE in the demo
+    fadeEntry(14, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}); // 14 = FADE_IN_WHITE in the demo
 #endif
     case 30:
         w->cursor.pos = (Vec){0.0f, -1000.0f, 0.0f};

@@ -318,7 +318,7 @@ static EVT_BEGIN(evt_champion)
         CALL(evt_party_stop, 0)
         WAIT_MS(100)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_move_pos2, 0, 60, -100, FLOAT(60.0f))
+        CALL(evt_party_move_pos2, 0, 60, -100, FLOAT(60.0f))
 #else
         CALL(evt_party_move_pos2, 0, 70, -110, FLOAT(60.0f))
 #endif
@@ -1005,8 +1005,8 @@ EVT_BEGIN(tou_07_init_evt)
             CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_20_MAJORS_10TH_PLACE)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

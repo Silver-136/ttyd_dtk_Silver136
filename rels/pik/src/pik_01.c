@@ -97,12 +97,9 @@ EvtWord sebaschan_talk[8];
 EvtWord sebaschan_entry[35];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord koopa_door_evt[];
-#else
-EvtWord koopa_door_evt[227];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord pik_01_koopa_evt[];
 #else
+EvtWord koopa_door_evt[227];
 EvtWord pik_01_koopa_evt[241];
 #endif
 static EvtWord delete_npc_regl_evt[35];
@@ -590,7 +587,7 @@ EVT_BEGIN(konarikin_talk)
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_05"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(iri_29_item_tbl1), LW(0))
+                        CALL(evt_win_item_select, PTR(iri_29_item_tbl1), LW(0))
 #else
                         CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl1), LW(0), 0)
 #endif
@@ -609,7 +606,7 @@ CALL(evt_win_item_select, PTR(iri_29_item_tbl1), LW(0))
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_06"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(iri_29_item_tbl2), LW(0))
+                        CALL(evt_win_item_select, PTR(iri_29_item_tbl2), LW(0))
 #else
                         CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl2), LW(0), 0)
 #endif
@@ -628,7 +625,7 @@ CALL(evt_win_item_select, PTR(iri_29_item_tbl2), LW(0))
                     IF_INT_GREATER(LW(0), 0)
                         CALL(evt_msg_print, 0, STRING("irai_29_07"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(iri_29_item_tbl3), LW(0))
+                        CALL(evt_win_item_select, PTR(iri_29_item_tbl3), LW(0))
 #else
                         CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl3), LW(0), 0)
 #endif
@@ -1109,7 +1106,7 @@ EVT_BEGIN(koopa_door_evt)
     END_LOOP
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
+        CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         SET_VALUE(LW(3), 226)
         SET_VALUE(LW(5), -216)
         CALL(evt_sub_get_dir, LW(3), LW(5), LW(0), LW(2), LW(6))
@@ -1387,7 +1384,7 @@ static EVT_BEGIN(sekai_yami_evt)
         END_LOOP
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(3000)
+    WAIT_MS(3000)
 #else
     WAIT_MS(1000)
 #endif

@@ -3139,7 +3139,7 @@ void btlseqMove(BattleWork* wp) {
                     unit = BattleGetUnitPtr(wp, i);
                     if (unit) {
 #if VERSION <= VERSION_DEMO_US
-unit->tokenFlags &= TOKEN_FLAG_PERSISTENT;
+                        unit->tokenFlags &= TOKEN_FLAG_PERSISTENT;
 #else
                         unit->tokenFlags &= 0x80002000;
 #endif
@@ -3159,7 +3159,7 @@ unit->tokenFlags &= TOKEN_FLAG_PERSISTENT;
                     if (id != -1) {
                         unit = BattleGetUnitPtr(wp, id);
 #if VERSION <= VERSION_DEMO_US
-if (unit) {
+                        if (unit) {
 #else
                         if (unit && unit->movesRemaining > 0) {
 #endif
@@ -3288,7 +3288,7 @@ BOOL BattlePhaseEndCheck(void) {
         if (wp->movePriorityQueue[i] != -1) {
             unit = BattleGetUnitPtr(wp, wp->movePriorityQueue[i]);
 #if VERSION <= VERSION_DEMO_US
-if (unit && unit->moveState != 10 && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
+            if (unit && unit->moveState != 10 && !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
 #else
             if (unit && unit->moveState != 10 && unit->movesRemaining > 0 &&
                 !BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL)) {
@@ -3654,7 +3654,7 @@ void btlseqPhaseFirstProcess(BattleWork* wp) {
         if (unit) {
             unit->moveColorLv = 0xFF;
 #if VERSION <= VERSION_DEMO_US
-if (unit->moveState == 10) {
+            if (unit->moveState == 10) {
 #else
             if (unit->moveState == 10 && !BtlUnit_CheckStatus(unit, STATUS_SLOW)) {
 #endif

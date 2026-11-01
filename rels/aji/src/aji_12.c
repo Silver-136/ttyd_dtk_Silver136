@@ -51,7 +51,7 @@ EvtWord aji_12_init_evt[71];
  */
 static EVT_BEGIN(e_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
 #endif
@@ -68,7 +68,7 @@ EVT_END()
  */
 static EVT_BEGIN(e_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
 #endif

@@ -209,7 +209,7 @@ static void hitPreCheck(void) {
         hit = entry->hitEntries;
         for (j = 0; j < entry->hitNumJoints; j++, hit++) {
 #if VERSION <= VERSION_DEMO_US
-hit->flags |= HIT_FLAG_NO_GEOMETRY;
+            hit->flags |= HIT_FLAG_NO_GEOMETRY;
             if (hit->joint->partCount != 0) {
                 hit->flags &= ~HIT_FLAG_NO_GEOMETRY;
 #else
@@ -676,7 +676,7 @@ inline BOOL tempfunc(HitCheckQuery* query, HitVector* vector) {
     query->hitPos.y = query->targetPos.y - query->targetDistance;
     query->hitPos.z = query->targetPos.z;
 #if VERSION <= VERSION_DEMO_US
-query->hitNormal = vector->normal;
+    query->hitNormal = vector->normal;
 #endif
     if (dotProduct >= 0.0f) {
         query->hitNormal = vector->normal;
@@ -901,10 +901,10 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                         query->singleSided = 0;
                     }
 #if VERSION <= VERSION_DEMO_US
-                vector = hit->vectors;
-                for (k = 0; k < hit->vectorCount; k++, vector++) {
-                    if (query->singleSided == 0 || !(PSVECDotProduct(&vector->normal, &query->targetDir) >= 0.0f)) {
-                        if (tempfunc(query, vector) && (minDist < 0.0f || minDist > query->targetDistance)) {
+                    vector = hit->vectors;
+                    for (k = 0; k < hit->vectorCount; k++, vector++) {
+                        if (query->singleSided == 0 || !(PSVECDotProduct(&vector->normal, &query->targetDir) >= 0.0f)) {
+                            if (tempfunc(query, vector) && (minDist < 0.0f || minDist > query->targetDistance)) {
 #else
                     vec = entry->vectors;
                     for (i = 0; i < entry->vectorCount; i++, vec++) {
@@ -914,8 +914,8 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
 #endif
                                 minDist = query->targetDistance;
 #if VERSION <= VERSION_DEMO_US
-                            hitIdx = j;
-                            mapIdx = i;
+                                hitIdx = j;
+                                mapIdx = i;
 #else
                                 closest = entry;
 #endif
@@ -928,23 +928,23 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                 }
             }
 #if VERSION <= VERSION_DEMO_US
-    } else if (query->targetDir.y == 0.0f) {
-        for (mapEntry = map, i = 0; i < map->count; mapEntry++, i++) {
-            for (j = 0, hit2 = mapEntry->hitEntries; j < mapEntry->hitNumJoints; j++, hit2++) {
-                if (hit2->flags & (HIT_FLAG_NO_GEOMETRY | HIT_FLAG_DELETED | HIT_FLAG_OFF)) {
-                    continue;
+            } else if (query->targetDir.y == 0.0f) {
+                for (mapEntry = map, i = 0; i < map->count; mapEntry++, i++) {
+                    for (j = 0, hit2 = mapEntry->hitEntries; j < mapEntry->hitNumJoints; j++, hit2++) {
+                        if (hit2->flags & (HIT_FLAG_NO_GEOMETRY | HIT_FLAG_DELETED | HIT_FLAG_OFF)) {
+                            continue;
 #else
             entry = entry->siblingActive;
 #endif
         }
 #if VERSION <= VERSION_DEMO_US
-                if (callback != NULL && !callback(query, hit2)) {
-                    continue;
-                }
-                if (PSVECDistance(&endPos, &hit2->centerWorld) > reach + hit2->radius) {
-                    continue;
-                }
-                if (hit2->joint->drawMode->cullMode == 1) {
+    if (callback != NULL && !callback(query, hit2)) {
+        continue;
+    }
+    if (PSVECDistance(&endPos, &hit2->centerWorld) > reach + hit2->radius) {
+        continue;
+    }
+    if (hit2->joint->drawMode->cullMode == 1) {
 #else
     } else if (query->targetDir.x == 0.0f && query->targetDir.z == 0.0f) {
         if (query->targetDir.y == -1.0f) {
@@ -958,10 +958,10 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                             query->singleSided = 0;
                         }
 #if VERSION <= VERSION_DEMO_US
-                vector2 = hit2->vectors;
-                for (k = 0; k < hit2->vectorCount; k++, vector2++) {
-                    if (query->singleSided == 0 || !(PSVECDotProduct(&vector2->normal, &query->targetDir) >= 0.0f)) {
-                        if (checkTriVec_xz(query, vector2) && (minDist < 0.0f || minDist > query->targetDistance)) {
+                        vector2 = hit2->vectors;
+                        for (k = 0; k < hit2->vectorCount; k++, vector2++) {
+                            if (query->singleSided == 0 || !(PSVECDotProduct(&vector2->normal, &query->targetDir) >= 0.0f)) {
+                                if (checkTriVec_xz(query, vector2) && (minDist < 0.0f || minDist > query->targetDistance)) {
 #else
                         vector = entry->vectors;
                         for (i = 0; i < entry->vectorCount; i++, vector++) {
@@ -970,8 +970,8 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
 #endif
                                     minDist = query->targetDistance;
 #if VERSION <= VERSION_DEMO_US
-                            hitIdx = j;
-                            mapIdx = i;
+                                    hitIdx = j;
+                                    mapIdx = i;
 #else
                                     closest = entry;
 #endif
@@ -984,23 +984,23 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                     }
                 }
 #if VERSION <= VERSION_DEMO_US
-    } else {
-        for (mapEntry = map, i = 0; i < map->count; mapEntry++, i++) {
-            for (j = 0, hit3 = mapEntry->hitEntries; j < mapEntry->hitNumJoints; j++, hit3++) {
-                if (hit3->flags & (HIT_FLAG_NO_GEOMETRY | HIT_FLAG_DELETED | HIT_FLAG_OFF)) {
-                    continue;
+                } else {
+                    for (mapEntry = map, i = 0; i < map->count; mapEntry++, i++) {
+                        for (j = 0, hit3 = mapEntry->hitEntries; j < mapEntry->hitNumJoints; j++, hit3++) {
+                            if (hit3->flags & (HIT_FLAG_NO_GEOMETRY | HIT_FLAG_DELETED | HIT_FLAG_OFF)) {
+                                continue;
 #else
                 entry = entry->siblingActive;
 #endif
             }
 #if VERSION <= VERSION_DEMO_US
-                if (callback != NULL && !callback(query, hit3)) {
-                    continue;
-                }
-                if (PSVECDistance(&endPos, &hit3->centerWorld) > reach + hit3->radius) {
-                    continue;
-                }
-                if (hit3->joint->drawMode->cullMode == 1) {
+        if (callback != NULL && !callback(query, hit3)) {
+            continue;
+        }
+        if (PSVECDistance(&endPos, &hit3->centerWorld) > reach + hit3->radius) {
+            continue;
+        }
+        if (hit3->joint->drawMode->cullMode == 1) {
 #else
         } else if (query->targetDir.y == 1.0f) {
             while (entry != NULL) {
@@ -1013,10 +1013,10 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
                             query->singleSided = 0;
                         }
 #if VERSION <= VERSION_DEMO_US
-                vector3 = hit3->vectors;
-                for (k = 0; k < hit3->vectorCount; k++, vector3++) {
-                    if (query->singleSided == 0 || !(PSVECDotProduct(&vector3->normal, &query->targetDir) >= 0.0f)) {
-                        if (tempfunc3(query, vector3) && (minDist < 0.0f || minDist > query->targetDistance)) {
+                        vector3 = hit3->vectors;
+                        for (k = 0; k < hit3->vectorCount; k++, vector3++) {
+                            if (query->singleSided == 0 || !(PSVECDotProduct(&vector3->normal, &query->targetDir) >= 0.0f)) {
+                                if (tempfunc3(query, vector3) && (minDist < 0.0f || minDist > query->targetDistance)) {
 #else
                         vector = entry->vectors;
                         for (i = 0; i < entry->vectorCount; i++, vector++) {
@@ -1025,8 +1025,8 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
 #endif
                                     minDist = query->targetDistance;
 #if VERSION <= VERSION_DEMO_US
-                            hitIdx = j;
-                            mapIdx = i;
+                                    hitIdx = j;
+                                    mapIdx = i;
 #else
                                     closest = entry;
 #endif
@@ -1043,7 +1043,7 @@ HitEntry* hitCheckVecFilter(HitCheckQuery* query, HitFilterCallback callback) {
 #endif
             }
 #if VERSION <= VERSION_DEMO_US
-    if (hitIdx < 0) {
+        if (hitIdx < 0) {
 #else
         } else {
             goto any_direction;

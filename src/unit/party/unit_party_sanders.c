@@ -568,8 +568,8 @@ EVT_BEGIN(partySandersAttack_FirstAttack)
     DIVIDE(LW(6), 2)
     ADD(LW(1), LW(6))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
-CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
+    CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
 #else
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 10, 13)
@@ -1365,19 +1365,19 @@ EVT_BEGIN(partySandersAttack_SuperBombAttack)
         CALL(btlevtcmd_AcGetOutputParam, 2, LW(0))
         SWITCH(LW(0))
 #if VERSION <= VERSION_DEMO_US
-CASE_LESS_OR_EQUAL(2)
+            CASE_LESS_OR_EQUAL(2)
 #else
             CASE_LESS_OR_EQUAL(3)
 #endif
             SET_VALUE(LW(0), -1)
 #if VERSION <= VERSION_DEMO_US
-CASE_LESS_OR_EQUAL(4)
+            CASE_LESS_OR_EQUAL(4)
 #else
             CASE_LESS_OR_EQUAL(5)
 #endif
             SET_VALUE(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CASE_LESS_OR_EQUAL(6)
+            CASE_LESS_OR_EQUAL(6)
 #else
             CASE_LESS_OR_EQUAL(7)
 #endif
@@ -1563,7 +1563,7 @@ EVT_BEGIN(partySandersAttack_CounterSet)
         CALL(btlevtcmd_AcGetOutputParam, 0, LW(0))
         SUBTRACT(LW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(0), LW(6))
+        CALL(btlevtcmd_GetResultPrizeLv, LW(3), LW(0), LW(6))
 #else
         CALL(btlevtcmd_GetResultPrizeLv, -1, LW(0), LW(6))
 #endif
@@ -1803,7 +1803,7 @@ EVT_BEGIN(sanders_appeal_event)
     ADD(LW(1), LW(6))
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 0, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
+    CALL(evt_btl_camera_shake_h, 0, 2, 0, 10, 13)
 #else
     CALL(evt_btl_camera_shake_h, 0, 5, 0, 10, 13)
 #endif
@@ -1868,13 +1868,13 @@ static EVT_BEGIN(attack_audience_event)
     CALL(evt_snd_sfxoff, LW(14))
     CALL(btlevtcmd_SetScale, UNIT_ID_SELF, FLOAT(1.0f), FLOAT(1.0f), FLOAT(1.0f))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK4"), 0)
+    CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK4"), 0)
 #else
     CALL(evt_snd_sfxon, STRING("SFX_BTL_THUNDERS_ATTACK3"), 0)
 #endif
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff, STRING(""), STRING("sandars"), 3, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff, STRING(""), STRING("sandars"), 3, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff64, STRING(""), STRING("bomb_n64"), 1, LW(0), LW(1), LW(2), 0, 0, 0, 0, 0, 0, 0, 0)
 #endif

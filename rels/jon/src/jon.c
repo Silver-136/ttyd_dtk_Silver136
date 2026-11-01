@@ -481,7 +481,7 @@ NpcSetupInfo npcEnt_kuriboo[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -514,7 +514,7 @@ NpcSetupInfo npcEnt_patakuri[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -547,7 +547,7 @@ NpcSetupInfo npcEnt_hannya[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -580,7 +580,7 @@ NpcSetupInfo npcEnt_chorobon[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -613,7 +613,7 @@ NpcSetupInfo npcEnt_sinnosuke[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -646,7 +646,7 @@ NpcSetupInfo npcEnt_sinemon[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -679,7 +679,7 @@ NpcSetupInfo npcEnt_nokonoko[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -712,7 +712,7 @@ NpcSetupInfo npcEnt_patapata[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -745,7 +745,7 @@ NpcSetupInfo npcEnt_met[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -778,7 +778,7 @@ NpcSetupInfo npcEnt_patamet[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -811,7 +811,7 @@ NpcSetupInfo npcEnt_sambo[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -844,7 +844,7 @@ NpcSetupInfo npcEnt_honenoko[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -877,7 +877,7 @@ NpcSetupInfo npcEnt_karon[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -910,7 +910,7 @@ NpcSetupInfo npcEnt_dokugassun[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -942,7 +942,7 @@ NpcSetupInfo npcEnt_piders[] = {
         2, // territoryType
         {0.0f, 140.0f, 0.0f}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -975,7 +975,7 @@ NpcSetupInfo npcEnt_teresa[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -1008,7 +1008,7 @@ NpcSetupInfo npcEnt_hbom[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -1041,7 +1041,7 @@ NpcSetupInfo npcEnt_bubble[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -1073,7 +1073,7 @@ NpcSetupInfo npcEnt_wanwan[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -1106,7 +1106,7 @@ NpcSetupInfo npcEnt_mahoon[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -1139,7 +1139,7 @@ NpcSetupInfo npcEnt_pakkun[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -1172,7 +1172,7 @@ NpcSetupInfo npcEnt_togenoko[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -1205,7 +1205,7 @@ NpcSetupInfo npcEnt_basabasa2[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -1238,7 +1238,7 @@ NpcSetupInfo npcEnt_togedaruma[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -1271,7 +1271,7 @@ NpcSetupInfo npcEnt_pansy[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -1298,7 +1298,7 @@ NpcSetupInfo npcEnt_zonbaba[] = {
         2, // territoryType
         {0}, // territoryBase
 #if VERSION <= VERSION_DEMO_US
-{200.0f, 100.0f, 140.0f},
+        {200.0f, 100.0f, 140.0f},
 #else
         {150.0f, 100.0f, 100.0f}, // territoryLoiter
 #endif
@@ -1646,7 +1646,7 @@ EVT_BEGIN(enemy_setup)
     // Make the chosen spot the enemy's home, then arm its battle and watch for its defeat.
     CALL(evt_npc_get_position, STRING("敵"), LW(3), LW(4), LW(5))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_set_home_position, STRING("敵"), LW(3), LW(4), LW(5))
+    CALL(evt_npc_set_home_position, STRING("敵"), LW(3), LW(4), LW(5))
 #endif
     CALL(evt_npc_set_battle_info, STRING("敵"), LW(2))
     CALL(setup_npc_ex_para, STRING("敵"))
@@ -3388,7 +3388,7 @@ EVT_BEGIN(zonbaba_first_event)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("oFF_jon_06"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_seq_wait, SEQ_GAME)
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(4000)
+    WAIT_MS(4000)
 #else
     WAIT_MS(3500)
 #endif

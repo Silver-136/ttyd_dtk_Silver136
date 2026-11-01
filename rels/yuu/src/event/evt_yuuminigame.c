@@ -169,7 +169,7 @@ USER_FUNC(evt_yuuminigame_alloc) {
             wp->main = yuuminigame_main_4slit;
             wp->disp = yuuminigame_disp_4slit;
 #if VERSION <= VERSION_DEMO_US
-wp->data = _mapAlloc(0x24);
+            wp->data = _mapAlloc(0x24);
             memset(wp->data, 0, 0x24);
 #else
             wp->data = _mapAlloc(0x28);

@@ -54,22 +54,13 @@ static EvtWord evt_daiji_kami[41];
 EvtWord evt_pikary_arrival[141];
 #if VERSION <= VERSION_DEMO_US
 static const char* access_tbl[5];
-#else
-static const char* access_tbl[7];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord evt_access[14];
-#else
-static EvtWord evt_access[25];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord evt_access_entry[23];
-#else
-static EvtWord evt_access_entry[24];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord rsh_01_init_evt[];
 #else
+static const char* access_tbl[7];
+static EvtWord evt_access[25];
+static EvtWord evt_access_entry[24];
 EvtWord rsh_01_init_evt[190];
 #endif
 EvtWord rsh_01_a_init_evt[103];
@@ -409,7 +400,7 @@ static EVT_BEGIN(talk_madam_ring_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_200"), 0, STRING("マダム"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(item_tbl_madam), LW(1))
+    CALL(evt_win_item_select, PTR(item_tbl_madam), LW(1))
 #else
     CALL(evt_win_item_select, 0, PTR(item_tbl_madam), LW(1), 0)
 #endif
@@ -696,7 +687,7 @@ static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
 #if VERSION <= VERSION_DEMO_US
-READ_INT2(LW(0), LW(1))
+        READ_INT2(LW(0), LW(1))
 #else
         READ_INT3(LW(0), LW(1), LW(2))
 #endif
@@ -1139,8 +1130,8 @@ EVT_BEGIN(rsh_01_init_evt_nidome)
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

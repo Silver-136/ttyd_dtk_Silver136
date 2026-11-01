@@ -1602,7 +1602,7 @@ BattleWeapon ItemWeaponData_Koorino_Ibuki = {
     0, 0, 0, 0, 0, 0, 0, 0, // poisonStrength..burnChance
     0, // burnTime
 #if VERSION <= VERSION_DEMO_US
-100,
+    100,
 #else
     95, // freezeChance
 #endif
@@ -2090,7 +2090,7 @@ BattleWeapon ItemWeaponData_Nemure_Yoikoyo = {
     COUNTER_RESIST_ALL, // counterResistFlags
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
 #if VERSION <= VERSION_DEMO_US
-100,
+    100,
 #else
     95, // sleepChance
 #endif
@@ -2115,7 +2115,7 @@ EVT_BEGIN(ItemEvent_Stop_Watch_Core)
     CALL(btlevtcmd_check_battleflag, LW(0), BATTLE_FLAG_PARTY_IN_AUDIENCE)
     IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff64, 0, STRING("timestamp_n64"), 0, 0, 0, 0, FLOAT(1.0f), 200, 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff64, 0, STRING("timestamp_n64"), 0, 0, 0, 0, FLOAT(1.0f), 200, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff64, 0, STRING("timestamp_n64"), 0, 0, 0, 103, FLOAT(1.0f), 200, 0, 0, 0, 0, 0, 0)
 #endif
@@ -2206,7 +2206,7 @@ BattleWeapon ItemWeaponData_Stop_Watch = {
     TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
 #if VERSION <= VERSION_DEMO_US
-100,
+    100,
 #else
     95, // stopChance
 #endif
@@ -2984,7 +2984,7 @@ EVT_BEGIN(ItemEvent_Attiike_Shisshi)
     END_SIBLING_EVENT
     CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff64, STRING(""), STRING("holography_n64"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 120, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff64, STRING(""), STRING("holography_n64"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 120, 0, 0, 0, 0, 0, 0)
     WAIT_FRAMES(120)
 #else
     CALL(evt_eff64, 0, STRING("holography_n64"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 120, 0, 0, 0, 0, 0, 0)
@@ -4972,7 +4972,7 @@ EVT_BEGIN(ItemEvent_LastDinner)
     CALL(_full_ap_recover, LW(10))
     CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_SYSTEM_ON)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
+    CALL(evt_snd_sfxon_3d, STRING("SFX_ITEM_COOK_LAST3"), LW(0), LW(1), LW(2), 0)
 #endif
     CALL(evt_eff, 0, STRING("indirect"), 0, LW(0), LW(1), LW(2), 60, 0, 0, 0, 0, 0, 0, 0)
     CALL(evt_eff, 0, STRING("hit"), 0, LW(0), LW(1), LW(2), FLOAT(1.0f), 3, 0, 0, 0, 0, 0, 0)

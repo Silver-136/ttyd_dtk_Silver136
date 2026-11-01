@@ -1296,7 +1296,7 @@ BOOL chkCollision(f32* outY) {
         z = mario->motPlane->tipPos.z;
         mario->hitobjStandOn = NULL;
 #if VERSION <= VERSION_DEMO_US
-dist = 2.0f;
+        dist = 2.0f;
         hit = marioHitCheck(&ox, &oy, &oz, &dist, &nx, &ny, &nz, x, y, z, 0.0f, -1.0f, 0.0f);
 #else
         dist = 10.1f;

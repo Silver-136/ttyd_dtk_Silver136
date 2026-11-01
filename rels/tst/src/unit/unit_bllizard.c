@@ -71,7 +71,7 @@ BattleUnitKind unit_bllizard = {
     25, // level
     0, // bonusExp
 #if VERSION <= VERSION_DEMO_US
-2,
+    2,
 #else
     4, // bonusCoin
 #endif

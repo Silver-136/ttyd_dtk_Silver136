@@ -886,13 +886,13 @@ EVT_BEGIN(ship_majin_lecture)
         CALL(evt_msg_print_add, 0, STRING("stg1_gon_majin4_15_1"))
         CALL(evt_msg_select, 0, STRING("stg1_gon_majin4_16"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_continue)
+        CALL(evt_msg_continue)
 #endif
         CALL(evt_cam_letter_box_disable, 0)
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_mario_set_dir, 90, 300, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_toge, 1, 0, 0, 0)
+            CALL(evt_msg_toge, 1, 0, 0, 0)
             CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_17"), 0, STRING("ペラ魔人"))
 #else
             CALL(evt_msg_print_add, 0, STRING("stg1_gon_majin4_17"))
@@ -924,7 +924,7 @@ CALL(evt_msg_toge, 1, 0, 0, 0)
     END_INLINE_EVENT
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_18"), 0, STRING("ペラ魔人"))
+    CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_18"), 0, STRING("ペラ魔人"))
 #else
     CALL(evt_msg_print_add, 0, STRING("stg1_gon_majin4_18"))
 #endif
@@ -960,7 +960,7 @@ static USER_FUNC(evt_nomal_cange) {
 
     if (isFirstCall) {
 #if VERSION <= VERSION_DEMO_US
-marioRollCancel();
+        marioRollCancel();
 #else
         marioRollTryCancel();
 #endif

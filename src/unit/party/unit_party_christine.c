@@ -1797,7 +1797,7 @@ USER_FUNC(_set_hustle) {
             unit->movesRemaining++;
             unit->moveState = 0;
 #if VERSION <= VERSION_DEMO_US
-unit->activeTurns = 0;
+            unit->activeTurns = 0;
 #endif
             unit->moveColorLv = 0xFF;
 #if VERSION > VERSION_DEMO_US

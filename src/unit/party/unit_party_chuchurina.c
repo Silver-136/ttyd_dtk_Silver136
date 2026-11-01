@@ -57,12 +57,9 @@ BattleWeapon partyWeapon_ChuchurinaItemSteal;
 BattleWeapon partyWeapon_ChuchurinaKiss;
 #if VERSION <= VERSION_DEMO_US
 EvtWord partyChuchurinaAttack_NormalAttack[1578];
-#else
-EvtWord partyChuchurinaAttack_NormalAttack[1590];
-#endif
-#if VERSION <= VERSION_DEMO_US
 EvtWord partyChuchurinaAttack_MadowaseAttack[2030];
 #else
+EvtWord partyChuchurinaAttack_NormalAttack[1590];
 EvtWord partyChuchurinaAttack_MadowaseAttack[2020];
 #endif
 EvtWord partyChuchurinaAttack_ItemSteal[VERSION_PICK(788, 961)];

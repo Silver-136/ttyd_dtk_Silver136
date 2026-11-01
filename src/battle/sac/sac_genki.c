@@ -569,7 +569,7 @@ void main_weapon(s32 idx) {
         o->state = 3;
         effStardustN64Entry(5, o->pos.x, o->pos.y, o->pos.z, 10.0f);
 #if VERSION <= VERSION_DEMO_US
-effHitEntry(0, 10, o->pos.x, o->pos.y, o->pos.z, 1.0f);
+        effHitEntry(0, 10, o->pos.x, o->pos.y, o->pos.z, 1.0f);
 #else
         effHitEntry(0, 5, o->pos.x, o->pos.y, o->pos.z, 1.0f);
 #endif

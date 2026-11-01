@@ -668,8 +668,7 @@ EVT_END()
 EVT_BEGIN(btldefaultevt_Appeal)
     CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(0))
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, LW(0), POSE_TYPE_NEUTRAL)
-#if VERSION <= VERSION_DEMO_US
-#else
+#if VERSION > VERSION_DEMO_US
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))
     IF_INT_EQUAL(LW(0), 0)
 #endif
@@ -679,8 +678,7 @@ EVT_BEGIN(btldefaultevt_Appeal)
         ADD(LW(3), 35)
         SET_VALUE(LW(4), LW(2))
         ADD(LW(2), 250)
-#if VERSION <= VERSION_DEMO_US
-#else
+#if VERSION > VERSION_DEMO_US
     ELSE
         CALL(btlevtcmd_GetPos, UNIT_ID_SELF, LW(0), LW(1), LW(2))
         SET_VALUE(LW(3), LW(1))
@@ -974,16 +972,15 @@ EVT_BEGIN(btldefaultevt_SuitoruBadgeEffect)
     IF_INT_GREATER_OR_EQUAL(LW(5), 1)
         BEGIN_SIBLING_EVENT
             CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
-#if VERSION <= VERSION_DEMO_US
-#else
+#if VERSION > VERSION_DEMO_US
             CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
             CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(7))
             MULTIPLY_FLOAT(LW(7), LW(6))
 #endif
             CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(4), LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-ADD(LW(1), 50)
-CALL(evt_eff, STRING(""), STRING("recovery"), 0, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
+            ADD(LW(1), 50)
+            CALL(evt_eff, STRING(""), STRING("recovery"), 0, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
 #else
             ADD(LW(1), LW(7))
             CALL(evt_eff, 0, STRING("recovery"), 0, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
@@ -996,8 +993,7 @@ CALL(evt_eff, STRING(""), STRING("recovery"), 0, LW(0), LW(1), LW(2), LW(5), 0, 
     CALL(_get_flower_suitoru_point, UNIT_ID_SELF, LW(5))
     IF_INT_GREATER_OR_EQUAL(LW(5), 1)
         BEGIN_SIBLING_EVENT
-#if VERSION <= VERSION_DEMO_US
-#else
+#if VERSION > VERSION_DEMO_US
             CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(6))
             CALL(btlevtcmd_GetHeight, UNIT_ID_SELF, LW(7))
             MULTIPLY_FLOAT(LW(7), LW(6))
@@ -1005,8 +1001,8 @@ CALL(evt_eff, STRING(""), STRING("recovery"), 0, LW(0), LW(1), LW(2), LW(5), 0, 
             CALL(btlevtcmd_GetBodyId, UNIT_ID_SELF, LW(4))
             CALL(btlevtcmd_GetPartsPos, UNIT_ID_SELF, LW(4), LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-ADD(LW(1), 50)
-CALL(evt_eff, STRING(""), STRING("recovery"), 1, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
+            ADD(LW(1), 50)
+            CALL(evt_eff, STRING(""), STRING("recovery"), 1, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)
 #else
             ADD(LW(1), LW(7))
             CALL(evt_eff, 0, STRING("recovery"), 1, LW(0), LW(1), LW(2), LW(5), 0, 0, 0, 0, 0, 0, 0)

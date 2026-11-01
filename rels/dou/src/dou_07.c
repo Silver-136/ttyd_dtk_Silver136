@@ -48,12 +48,9 @@ static s32 key_tbl[2];
 EvtWord apper_elmos[43];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord peramajin_before[];
-#else
-EvtWord peramajin_before[396];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord peramajin_after[];
 #else
+EvtWord peramajin_before[396];
 EvtWord peramajin_after[297];
 #endif
 EvtWord dou_07_init_evt[89];
@@ -183,7 +180,7 @@ EVT_BEGIN(peramajin_before)
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_msg_print, 0, STRING("stg1_gon_majin4_09"), PTR(majin_callback), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(key_tbl), LW(10))
+        CALL(evt_win_item_select, PTR(key_tbl), LW(10))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(10), 0)
         // Mario cancels the menu: the chest sulks and stays shut.
@@ -285,7 +282,7 @@ EVT_BEGIN(peramajin_after)
     // The chest has opened: Mario receives the Boat Curse and the music changes.
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_normalize)
+    CALL(evt_mario_normalize)
 #endif
     CALL(evt_party_stop, 0)
     CALL(evt_mobj_wait_animation_end, STRING("mobj_box00"))

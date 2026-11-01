@@ -83,17 +83,11 @@ EvtWord shopper_talk_evt[];
 EvtWord first_shopping_evt[86];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord sell_evt[193];
-#else
-static EvtWord sell_evt[VERSION_PICK(196, 207)];
-#endif
-#if VERSION <= VERSION_DEMO_US
 EvtWord keep_evt[145];
-#else
-EvtWord keep_evt[VERSION_PICK(148, 167)];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord unkeep_evt[];
 #else
+static EvtWord sell_evt[VERSION_PICK(196, 207)];
+EvtWord keep_evt[VERSION_PICK(148, 167)];
 EvtWord unkeep_evt[147];
 #endif
 EvtWord point_evt[VERSION_PICK(15, 35)];
@@ -650,7 +644,7 @@ EVT_BEGIN(first_shopping_evt)
 EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
-                        static EVT_BEGIN(sell_evt)
+static EVT_BEGIN(sell_evt)
     CALL(sell_pouchcheck_func)
     IF_INT_EQUAL(LW(0), 0)
         CALL(get_msg, LW(10), 6, LW(14))
@@ -789,7 +783,7 @@ EVT_END()
 #endif
 
 #if VERSION <= VERSION_DEMO_US
-                        EVT_BEGIN(keep_evt)
+EVT_BEGIN(keep_evt)
     CALL(keep_pouchcheck_func)
     IF_INT_EQUAL(LW(0), 0)
         CALL(get_msg, LW(10), 12, LW(14))
@@ -926,7 +920,7 @@ EVT_BEGIN(unkeep_evt)
     CALL(evt_msg_print_add, 0, LW(14))
     LABEL(0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, 5, LW(1))
+    CALL(evt_win_item_select, 5, LW(1))
 #else
     CALL(evt_win_item_select, 1, 5, LW(1), LW(4))
 #endif
@@ -936,7 +930,7 @@ CALL(evt_win_item_select, 5, LW(1))
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_pouch_remove_keepitem, LW(1), LW(0))
+    CALL(evt_pouch_remove_keepitem, LW(1), LW(0))
 #else
     CALL(evt_pouch_remove_keepitem, LW(1), LW(4), LW(0))
 #endif
@@ -1564,7 +1558,7 @@ USER_FUNC(point_wait) {
     ShopWork* wp = _wp;
     PouchData* pouch = pouchGetPtr();
 #if VERSION <= VERSION_DEMO_US
-return wp->points != pouch->shopPoints ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
+    return wp->points != pouch->shopPoints ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 #else
     if (wp->points != pouch->shopPoints) {
         psndSFXOn(SFX_NAME_WORD(PSND_SFX_EVT_GAME_MONTE_COUNT1));
@@ -1886,7 +1880,7 @@ USER_FUNC(evt_shop_main_func) {
         return EVT_RETURN_BLOCK;
     }
 #if VERSION <= VERSION_DEMO_US
-if (winGhostDiaryChk()) {
+    if (winGhostDiaryChk()) {
 #else
     if (winGhostDiaryChk() || itemPickUpFromFieldCheck()) {
 #endif

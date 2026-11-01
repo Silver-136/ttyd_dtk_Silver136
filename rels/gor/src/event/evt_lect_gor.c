@@ -111,22 +111,13 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord christine_party_lecture_init[];
-#else
-EvtWord christine_party_lecture_init[46];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord christine_party_lecture[];
-#else
-EvtWord christine_party_lecture[125];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord chuchulina_party_lecture_init[];
-#else
-EvtWord chuchulina_party_lecture_init[51];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord chuchulina_party_lecture[];
 #else
+EvtWord christine_party_lecture_init[46];
+EvtWord christine_party_lecture[125];
+EvtWord chuchulina_party_lecture_init[51];
 EvtWord chuchulina_party_lecture[236];
 #endif
 static EvtWord all_party_lecture_otosub[11];

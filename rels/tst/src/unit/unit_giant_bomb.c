@@ -85,7 +85,7 @@ BattleUnitKind unit_giant_bomb = {
     1, // dangerHP
     1, // perilHP
 #if VERSION <= VERSION_DEMO_US
-48,
+    48,
 #else
     34, // level
     2, // bonusExp
@@ -247,7 +247,7 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     0, 0, 0, 0, 0, 0, 0, // burnChance..sizeChangeStrength
     100, // atkChangeChance
 #if VERSION <= VERSION_DEMO_US
-2,
+    2,
 #else
     3, // atkChangeTime
 #endif
@@ -289,7 +289,7 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
     0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
 #if VERSION <= VERSION_DEMO_US
-12,
+    12,
 #else
     9, // chargeStrength
 #endif

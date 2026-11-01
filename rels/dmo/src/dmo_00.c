@@ -128,7 +128,7 @@ USER_FUNC(demo_init) {
     if (fileAsyncf(FILE_TYPE_TPL, NULL, "%s/demo.tpl", getMarioStDvdRoot()) != 0U) {
         wp->tpl = fileAllocf(FILE_TYPE_TPL, "%s/demo.tpl", getMarioStDvdRoot());
 #if VERSION <= VERSION_DEMO_US
-if (seqGetPrevSeq() == SEQ_LOGO) {
+        if (seqGetPrevSeq() == SEQ_LOGO) {
 #endif
         gp->areaFadeOutType = FADE_IN_BLACK;
         gp->areaFadeOutDuration = 500;
@@ -627,7 +627,7 @@ USER_FUNC(make_msg) {
 
     width = FontGetMessageWidthLine(msgSearch((const char*)evtGetValue(event, args[0])), &lines);
 #if VERSION <= VERSION_DEMO_US
-sprintf(buf, "<clear><wpos %d %d %d %d><once_stop>", -width / 2 - 62, lines * 28 / 2 - 90, 400, 200);
+    sprintf(buf, "<clear><wpos %d %d %d %d><once_stop>", -width / 2 - 62, lines * 28 / 2 - 90, 400, 200);
 #else
     sprintf(buf, "<clear><wpos %d %d %d %d><once_stop>", -width / 2 - 62, lines * 28 / 2 - 84, 400, 200);
 #endif
@@ -665,7 +665,7 @@ EVT_BEGIN(demo_evt)
     SET_VALUE(GF(10), 0)
     SPAWN_EVENT_GET_ID(PTR(buttonCheck), GW(10))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_DEMO1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_DEMO1"))
 #else
     CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_DEMO1"))
 #endif
@@ -868,7 +868,7 @@ CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_DEMO1"))
     CALL(evt_npc_flag_onoff, 0, STRING("クリボー１"), NPC_FLAG_NO_DRAW)
     CALL(evt_npc_flag_onoff, 0, STRING("チューさん１"), NPC_FLAG_NO_DRAW)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 6000)
+    CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 6000)
 #else
     CALL(evt_mobj_flag_onoff, 0, STRING("hako"), MOBJ_FLAG_NO_DISP)
     CALL(evt_snd_bgmoff_f, PSND_FADEOUT | PSND_SLOT(1), 6000)
@@ -892,7 +892,7 @@ CALL(evt_snd_bgmoff_f, PSND_FADEOUT, 6000)
     // New music; Peach strolls in and complains that Toadsworth is always watching over her.
     WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_DEMO2"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_DEMO2"))
 #else
     CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_DEMO2"))
 #endif

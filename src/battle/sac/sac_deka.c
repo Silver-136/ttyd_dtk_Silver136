@@ -345,7 +345,7 @@ USER_FUNC(yuka_end) {
 #endif
     smartFree(w->mesh);
 #if VERSION <= VERSION_DEMO_US
-mapGrpFlagOff("stg_b_yuka", 0x400001);
+    mapGrpFlagOff("stg_b_yuka", 0x400001);
 #else
     w->mesh->address = NULL;
     mapGrpFlagOff("stg_b_yuka", (MAP_OBJ_FLAG_HIDDEN | MAP_OBJ_FLAG_KURURING));
@@ -1173,7 +1173,7 @@ EVT_BEGIN(marioAttackEvent_Deka)
     // The camera resets and the background and rippling floor are cleaned up.
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_DEFAULT)
 #if VERSION <= VERSION_DEMO_US
-CALL(yuka_end)
+    CALL(yuka_end)
 #endif
     CALL(btlevtcmd_SacBgsetMove, 1)
 #if VERSION <= VERSION_DEMO_US
@@ -1281,7 +1281,7 @@ void yuka_disp(CameraId cam, void* param) {
     w = get_ptr();
     camera = camGetPtr(cam);
 #if VERSION <= VERSION_DEMO_US
-{
+    {
 #else
     if (w->tex->address != NULL) {
 #endif

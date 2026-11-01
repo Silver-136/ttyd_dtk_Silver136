@@ -119,12 +119,9 @@ typedef struct ShelfAccessTbl3 {
 static ShelfAccessTbl3 access_tbl;
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_access[21];
-#else
-static EvtWord evt_access[32];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord evt_access_entry[24];
 #else
+static EvtWord evt_access[32];
 static EvtWord evt_access_entry[25];
 #endif
 static EvtWord evt_door_msg[102];
@@ -1812,7 +1809,7 @@ EVT_END()
 static ShelfAccessTbl3 access_tbl = {
     {
 #if VERSION <= VERSION_DEMO_US
-{"tana_3", "stg6_rsh_272", NULL},
+        {"tana_3", "stg6_rsh_272", NULL},
         {"tana_4", "stg6_rsh_273", NULL},
         {"tana_5", "stg6_rsh_274", evt_tana_5},
 #else
@@ -1849,7 +1846,7 @@ static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
 #if VERSION <= VERSION_DEMO_US
-READ_INT3(LW(0), LW(1), LW(2))
+        READ_INT3(LW(0), LW(1), LW(2))
 #else
         READ_INT4(LW(0), LW(1), LW(2), LW(3))
 #endif
@@ -2330,8 +2327,8 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

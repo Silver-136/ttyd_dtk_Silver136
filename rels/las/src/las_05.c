@@ -1702,7 +1702,7 @@ static EVT_BEGIN(key_check_evt)
     CALL(evt_pouch_check_item, ITEM_PALACE_KEY_0x2E, LW(0))
     IF_INT_GREATER(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+        CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
 #endif
@@ -1736,7 +1736,7 @@ static EVT_BEGIN(shan_init)
             CALL(evt_mapobj_get_position, LW(3), LW(4), LW(5), LW(6))
             SUBTRACT_FLOAT(LW(5), FLOAT(7.0f))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(4), LW(5), LW(6), FLOAT(0.7998047f), 1000, 0, 0, 0, 0, 0, 0)
+            CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(4), LW(5), LW(6), FLOAT(0.7998047f), 1000, 0, 0, 0, 0, 0, 0)
 #else
             CALL(evt_eff, 0, STRING("fire"), 3, LW(4), LW(5), LW(6), FLOAT(0.7998047f), 1000, 0, 0, 0, 0, 0, 0)
 #endif

@@ -1439,7 +1439,7 @@ void partyMoveCheckWall(PartyEntry* party) {
     Vec pos;
     HitEntry* hit;
 #if VERSION <= VERSION_DEMO_US
-f32 depth;
+    f32 depth;
 #endif
     pos = party->position;
     partyGetMoveDirSpd(party, &dir, &spd);
@@ -1453,7 +1453,7 @@ f32 depth;
     party->position.x = pos.x;
     party->position.z = pos.z;
 #if VERSION <= VERSION_DEMO_US
-hit = _partySearchGround(party, &pos.y, &depth, 10.0f, 10.0f);
+    hit = _partySearchGround(party, &pos.y, &depth, 10.0f, 10.0f);
 #else
     hit = partySearchGround(party, 10.0f, 10.0f);
     pos.y = party->groundY;
@@ -1499,7 +1499,7 @@ void partyGetMoveDirSpd(PartyEntry* party, f32* dir, f32* spd) {
             far = FALSE;
             p = anotherPartyGetPtr(1);
 #if VERSION <= VERSION_DEMO_US
-if (p) {
+            if (p) {
                 if (nokonokoGetStatus(p) == 3) {
 #else
             if (p && (nokonokoGetStatus(p) == 3 ||
@@ -1554,14 +1554,14 @@ s32 partyMarioHosei(PartyEntry* party) {
         ky = kx;
     } else {
 #if VERSION <= VERSION_DEMO_US
-kx = 0.1f;
+        kx = 0.1f;
 #else
         kx = 0.2f;
         kz = 0.15f;
 #endif
         ky = kx;
 #if VERSION <= VERSION_DEMO_US
-        kz = kx;
+    kz = kx;
 #else
     }
     if (mario->flags & MARIO_FLAG_IS_PUSHING) {
@@ -1771,7 +1771,7 @@ void partyWalkMain(PartyEntry* party) {
         other = anotherPartyGetPtr(party->currentSlotId);
         if (other) {
 #if VERSION <= VERSION_DEMO_US
-if ((other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == PARTY_RUN_USE) || nokonokoGetStatus(other) == 3) {
+            if ((other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == PARTY_RUN_USE) || nokonokoGetStatus(other) == 3) {
 #else
             if ((other->currentMemberId == PARTY_MEMBER_BOBBERY && other->runMode == PARTY_RUN_USE) || nokonokoGetStatus(other) == 3 ||
                 PSVECDistance(&mario->position, &other->position) >= 150.0f) {
@@ -1932,7 +1932,7 @@ void partyForceWalk(PartyEntry* party) {
     HitEntry* hit;
     s32 attr;
 #if VERSION <= VERSION_DEMO_US
-f32 gy;
+    f32 gy;
     f32 depth;
 #endif
     if (party->trigFlags & PARTY_TRIG_CHG_RUN_MODE) {
@@ -1970,7 +1970,7 @@ f32 gy;
             }
             party->flags &= ~PARTY_FLAG_IN_SHALLOW_WATER;
 #if VERSION <= VERSION_DEMO_US
-hit = _partySearchGround(party, &gy, &depth, 10.0f, 10.0f);
+            hit = _partySearchGround(party, &gy, &depth, 10.0f, 10.0f);
             if (hit && (hitGetAttr(hit) & HIT_ATTR_WATER_HAZARD)) {
 #else
             hit = partySearchGround(party, 10.0f, 10.0f);
@@ -2698,8 +2698,6 @@ BOOL partyGetAppearPos4(PartyEntry* party, Vec* out) {
 
 #if VERSION > VERSION_DEMO_US
 const Vec vec3_802ce0ac = {0.0f, 0.0f, 0.0f};
-#endif
-#if VERSION > VERSION_DEMO_US
 const Vec vec3_802ce0b8 = {0.0f, 0.0f, 0.0f};
 #endif
 

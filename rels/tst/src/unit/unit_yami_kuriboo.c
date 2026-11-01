@@ -43,13 +43,13 @@ BattleUnitKind unit_yami_kuriboo = {
     11, // level
     0, // bonusExp
 #if VERSION <= VERSION_DEMO_US
-1,
+    1,
 #else
     2, // bonusCoin
 #endif
     70, // bonusCoinRate
 #if VERSION <= VERSION_DEMO_US
-1,
+    1,
 #else
     0, // baseCoin
 #endif

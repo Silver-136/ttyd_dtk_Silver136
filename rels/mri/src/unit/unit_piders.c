@@ -62,12 +62,9 @@ static EvtWord entry_event[48];
 static EvtWord damage_event[10];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord dead_event[183];
-#else
-static EvtWord dead_event[189];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord blow_dead_event[98];
 #else
+static EvtWord dead_event[189];
 static EvtWord blow_dead_event[104];
 #endif
 static EvtWord battle_end_event[7];
@@ -79,12 +76,9 @@ static EvtWord attack_event[72];
 static EvtWord damage_check_event_sub[157];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord piders_attack_common_event1[187];
-#else
-static EvtWord piders_attack_common_event1[163];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord piders_attack_common_event1_2[128];
 #else
+static EvtWord piders_attack_common_event1[163];
 static EvtWord piders_attack_common_event1_2[109];
 #endif
 static EvtWord piders_attack_common_event2[47];
@@ -154,7 +148,7 @@ BattleUnitKind unit_piders = {
 #endif
     0, // itemStealParam
 #if VERSION <= VERSION_DEMO_US
-0,
+    0,
     0.0f,
     0.0f,
     0.0f,
@@ -969,7 +963,7 @@ static EVT_BEGIN(piders_attack_common_event1)
     CALL(btlevtcmd_SetPartsPos, UNIT_ID_SELF, 2, LW(0), LW(1), LW(2))
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
+    CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
     IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
     ELSE
@@ -1033,7 +1027,7 @@ static EVT_BEGIN(piders_attack_common_event1_2)
     CALL(btlevtcmd_OffPartsAttribute, UNIT_ID_SELF, 2, kHidden)
     CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_TINY, LW(0))
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(LW(0), 1)
+    IF_INT_EQUAL(LW(0), 1)
         CALL(btlevtcmd_SetPartsRotateOffset, UNIT_ID_SELF, 2, 0, 20, 0)
     ELSE
         CALL(btlevtcmd_CheckStatus, UNIT_ID_SELF, STATUS_HUGE, LW(0))

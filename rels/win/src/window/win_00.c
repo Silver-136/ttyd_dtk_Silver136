@@ -314,7 +314,7 @@ EVT_BEGIN(witchtrio_momeru)
 #endif
     CALL(evt_mario_normalize)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, 65536)
 #endif
     CALL(evt_npc_change_fbat_mode, 7)
     CALL(evt_npc_stop_for_event)
@@ -1095,13 +1095,13 @@ EVT_BEGIN(iri_28_init)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ROUST_THESE_CADS)
         SET_VALUE(GSW_TROUBLE_WORK(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_check, STRING("ドクガッスン１"), LW(0))
+        CALL(evt_npc_check, STRING("ドクガッスン１"), LW(0))
 #else
         CALL(evt_npc_check, STRING("パックン１"), LW(0))
 #endif
         IF_INT_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_change_interrupt, STRING("ドクガッスン１"), 8, PTR(iri_28_enemy_dead))
+            CALL(evt_npc_change_interrupt, STRING("ドクガッスン１"), 8, PTR(iri_28_enemy_dead))
 #else
             CALL(evt_npc_change_interrupt, STRING("パックン１"), 8, PTR(iri_28_enemy_dead))
 #endif
@@ -1109,13 +1109,13 @@ CALL(evt_npc_change_interrupt, STRING("ドクガッスン１"), 8, PTR(iri_28_en
             ADD(GSW_TROUBLE_WORK(0), 1)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_check, STRING("モノクロシンエモン"), LW(0))
+        CALL(evt_npc_check, STRING("モノクロシンエモン"), LW(0))
 #else
         CALL(evt_npc_check, STRING("シンエモン"), LW(0))
 #endif
         IF_INT_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_change_interrupt, STRING("モノクロシンエモン"), 8, PTR(iri_28_enemy_dead))
+            CALL(evt_npc_change_interrupt, STRING("モノクロシンエモン"), 8, PTR(iri_28_enemy_dead))
 #else
             CALL(evt_npc_change_interrupt, STRING("シンエモン"), 8, PTR(iri_28_enemy_dead))
 #endif
@@ -1123,13 +1123,13 @@ CALL(evt_npc_change_interrupt, STRING("モノクロシンエモン"), 8, PTR(iri
             ADD(GSW_TROUBLE_WORK(0), 1)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_check, STRING("ドクガッスン３"), LW(0))
+        CALL(evt_npc_check, STRING("ドクガッスン３"), LW(0))
 #else
         CALL(evt_npc_check, STRING("パックン２"), LW(0))
 #endif
         IF_INT_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_change_interrupt, STRING("ドクガッスン３"), 8, PTR(iri_28_enemy_dead))
+            CALL(evt_npc_change_interrupt, STRING("ドクガッスン３"), 8, PTR(iri_28_enemy_dead))
 #else
             CALL(evt_npc_change_interrupt, STRING("パックン２"), 8, PTR(iri_28_enemy_dead))
 #endif
@@ -1153,7 +1153,7 @@ EVT_BEGIN(win_00_init_evt)
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_check_delete, STRING("ドクガッスン１_2"))
+    CALL(evt_npc_check_delete, STRING("ドクガッスン１_2"))
     CALL(evt_npc_check_delete, STRING("モノクロシンエモン_2"))
     CALL(evt_npc_check_delete, STRING("ドクガッスン３_2"))
 #endif

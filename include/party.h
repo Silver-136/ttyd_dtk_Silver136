@@ -170,7 +170,7 @@ typedef struct PartyWorkVivian { // party_vivian.c
     u8 pad178[0x17C - 0x178];    // 0x178
     f32 followOfs;               // 0x17C, 0..-13, movePos distance behind Mario
 #if VERSION <= VERSION_DEMO_US
-s16 tailFlags;
+    s16 tailFlags;
 #else
     u8 pad180[0x182 - 0x180];    // 0x180
 #endif
@@ -238,7 +238,7 @@ typedef struct PartyEntry {
     const char* paperAnimName;          // 0x1C, partyChgPaper anim name, as MarioWork.paperAnimName
     u16 poseTime;                       // 0x20, cleared on every pose/paper change (MarioWork.poseTime)
 #if VERSION <= VERSION_DEMO_US
-u8 pad_22;      // 0x22, never accessed
+    u8 pad_22;      // 0x22, never accessed
     s8 splashTimer;
 #else
     u8 pad_22[0x24 - 0x22];             // 0x22, never accessed
@@ -269,7 +269,7 @@ u8 pad_22;      // 0x22, never accessed
     f32 homingDist;                     // 0x40, evt_party_set_homing_dist (default 50)
     u32 reserved_44;                    // 0x44, only set to 0x10
 #if VERSION <= VERSION_DEMO_US
-union {
+    union {
         s32 wallStuckCount; // 0x48, demo: frames the follow walk hit a wall with its target 100+ away in height
         // The demo's code never reads these three; they share bytes with wallStuckCount so that retail
         // code still compiles.
@@ -282,9 +282,9 @@ union {
     s8 noFloorFrames;                   // 0x4E, frames without floor
     s8 tailFlags;                       // 0x4F, Vivian: bit 0 = tail off
 #if VERSION <= VERSION_DEMO_US
-        };
     };
-    u8 pad_4C[0x4D - 0x4C];
+};
+u8 pad_4C[0x4D - 0x4C];
 #else
     u8 pad_50[0x51 - 0x50];             // 0x50, never accessed
 #endif

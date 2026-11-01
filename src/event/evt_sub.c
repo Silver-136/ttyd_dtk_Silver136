@@ -1603,8 +1603,8 @@ EVT_BEGIN(mail_evt_usu_01)
         SET_VALUE(LW(12), LW(2))
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 300, -2000, 300, 2000, LW(5))
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
+        CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 300, -2000, 300, 2000, LW(5))
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
 #else
         CALL(evt_sub_check_intersect, LW(0), LW(2), LW(10), LW(12), 110, -2000, 110, 2000, LW(5))
         IF_INT_EQUAL(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
@@ -2448,7 +2448,7 @@ USER_FUNC(evt_sub_get_coin) {
     Vec a = mario->position;
     Vec b = a;
 #if VERSION <= VERSION_DEMO_US
-Vec scr;
+    Vec scr;
 #endif
     f32 rad = reviseAngle((100.0f * camGetPtr(CAMERA_3D)->viewYaw + 5.0f) / 100.0f);
     f32 s;
@@ -2478,7 +2478,7 @@ Vec scr;
     switch (state) {
     case 0:
 #if VERSION <= VERSION_DEMO_US
-iconEntry2D("iraiCoin", ICON_ITEM_COIN);
+        iconEntry2D("iraiCoin", ICON_ITEM_COIN);
             getScreenPoint(&b, &scr);
             iconSetPos("iraiCoin", scr.x, scr.y, scr.z);
             iconFlagOn("iraiCoin", ICON_FLAG_HIDDEN);

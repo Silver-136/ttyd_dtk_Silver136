@@ -1135,7 +1135,7 @@ EVT_BEGIN(mega_attack_event)
     BEGIN_INLINE_EVENT
         WAIT_MS(1750)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_BREATH_FIRE1"), EVT_NULLPTR, 0, -300, 0, 0, EVT_NULLPTR)
+        CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_BREATH_FIRE1"), EVT_NULLPTR, 0, -300, 0, 0, EVT_NULLPTR)
 #else
         CALL(btlevtcmd_snd_se_offset, UNIT_ID_SELF, STRING("SFX_BOSS_GNB_MEGABREATH1"), EVT_NULLPTR, 0, -300, 0, 0, EVT_NULLPTR)
 #endif
@@ -1241,7 +1241,7 @@ static EVT_BEGIN(attack_event)
         CALL_CHILD(PTR(eq_attack_event))
         CASE_EQUAL(3)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_DrawLots, LW(0), 4, 10, 10, 20, 10)
+        CALL(btlevtcmd_DrawLots, LW(0), 4, 10, 10, 20, 10)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 4, 10, 10, 20, 15)
 #endif

@@ -148,7 +148,7 @@ EVT_BEGIN(muj_11_init_evt)
         SPAWN_EVENT(PTR(warning_event))
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mobj_recovery_blk, STRING("r_blk"), 12, 0, 60, -20, 0, 0)
+    CALL(evt_mobj_recovery_blk, STRING("r_blk"), 12, 0, 60, -20, 0, 0)
     CALL(evt_mobj_save_blk, STRING("s_blk"), 50, 60, -20, 0, 0)
 #endif
     RETURN

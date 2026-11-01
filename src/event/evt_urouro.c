@@ -151,8 +151,8 @@ USER_FUNC(urouro_main_func) {
             }
             npc->moveOffset.x = step * (f32)sin(npc->moveDir * 6.2831855f / 360.0f);
 #if VERSION <= VERSION_DEMO_US
-                temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
-                npc->moveOffset.z = step * -temp;
+            temp = (f32)cos(npc->moveDir * 6.2831855f / 360.0f);
+            npc->moveOffset.z = step * -temp;
 #else
             npc->moveOffset.z = step * -(f32)cos(npc->moveDir * 6.2831855f / 360.0f);
             sfxFlag = 0;

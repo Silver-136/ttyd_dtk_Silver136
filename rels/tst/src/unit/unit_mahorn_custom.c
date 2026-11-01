@@ -108,9 +108,9 @@ BattleUnitKind unit_mahorn_custom = {
     1, // dangerHP
     1, // perilHP
 #if VERSION <= VERSION_DEMO_US
-50,
-0,
-1,
+    50,
+    0,
+    1,
 #else
     36, // level
     2, // bonusExp
@@ -118,7 +118,7 @@ BattleUnitKind unit_mahorn_custom = {
 #endif
     70, // bonusCoinRate
 #if VERSION <= VERSION_DEMO_US
-5,
+    5,
 #else
     2, // baseCoin
 #endif
@@ -168,7 +168,7 @@ BattleUnitKind unit_mahorn_custom_bunsin = {
     1,
     1,
 #if VERSION <= VERSION_DEMO_US
-0,
+    0,
 #else
     2,
 #endif
@@ -326,7 +326,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
 #if VERSION <= VERSION_DEMO_US
-SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
 #else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
 #endif
@@ -713,8 +713,8 @@ static EVT_BEGIN(attack_event)
             LABEL(10)
             SET_VALUE(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-ADD(LW(0), 50)
-ADD(LW(0), 50)
+            ADD(LW(0), 50)
+            ADD(LW(0), 50)
 #else
             ADD(LW(0), 30)
             ADD(LW(0), 60)
@@ -728,7 +728,7 @@ ADD(LW(0), 50)
             SUBTRACT(LW(0), 1)
             CALL(evt_sub_random, LW(0), LW(1))
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(LW(0), 50)
+            SET_VALUE(LW(0), 50)
 #else
             SET_VALUE(LW(0), 30)
 #endif
@@ -738,7 +738,7 @@ SET_VALUE(LW(0), 50)
                 GOTO(99)
             END_IF
 #if VERSION <= VERSION_DEMO_US
-ADD(LW(0), 50)
+            ADD(LW(0), 50)
 #else
             ADD(LW(0), 60)
 #endif

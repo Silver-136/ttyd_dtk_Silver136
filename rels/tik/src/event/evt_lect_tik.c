@@ -708,7 +708,7 @@ EVT_BEGIN(plane_majin_lecture)
 #endif
                     CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(0.0f), FLOAT(42.0f), FLOAT(-101.799805f), 0, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
-CALL(x_flag_get, 1, LW(0))
+                CALL(x_flag_get, 1, LW(0))
 #else
                 END_IF
 #endif
@@ -744,7 +744,7 @@ CALL(x_flag_get, 1, LW(0))
             END_LOOP
         END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_cam_letter_box_disable, 1)
+        CALL(evt_cam_letter_box_disable, 1)
         CALL(mainwindow_opendisable)
         CALL(evt_mario_trigflag_onoff, 1, -2147483648)
         CALL(evt_mario_trigflag_onoff, 1, 1073741824)
@@ -754,7 +754,7 @@ CALL(evt_cam_letter_box_disable, 1)
 #endif
         LOOP(0)
 #if VERSION <= VERSION_DEMO_US
-CALL(lect_status_off)
+            CALL(lect_status_off)
             WAIT_FRAMES(1)
             CALL(evt_mario_get_motion, LW(3))
             IF_INT_EQUAL(LW(3), 24)
@@ -769,7 +769,7 @@ CALL(lect_status_off)
 #endif
         END_LOOP
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_key_onoff, 0)
+        CALL(evt_mario_key_onoff, 0)
         CALL(evt_mario_key_onoff, 0)
         CALL(lect_status_on)
         CALL(evt_mario_trigflag_onoff, 0, -2147483648)
@@ -826,7 +826,7 @@ CALL(evt_mario_key_onoff, 0)
         CALL(lecture_button_flag_on_off, 0, 2, 0)
         WAIT_MS(300)
 #if VERSION <= VERSION_DEMO_US
-CALL(dai_moveti_get, LW(0), LW(1), LW(2))
+        CALL(dai_moveti_get, LW(0), LW(1), LW(2))
         ADD_FLOAT(LW(0), FLOAT(700.0f))
         SUBTRACT_FLOAT(LW(1), FLOAT(260.0f))
         CALL(dai_moveti_set, LW(0), LW(1), LW(2))
@@ -837,7 +837,7 @@ CALL(dai_moveti_get, LW(0), LW(1), LW(2))
 #endif
         CALL(evt_msg_select, 0, STRING("mac_majin_17"))
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(LW(0), 0)
+        IF_INT_EQUAL(LW(0), 0)
             CALL(x_flag_set, 1, 2)
             CALL(x_flag_set, 0, 2)
             CALL(evt_mario_paper_plane, 0)
@@ -848,7 +848,7 @@ IF_INT_EQUAL(LW(0), 0)
         LOOP(0)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_LESS_OR_EQUAL(LW(1), -900)
+            IF_INT_LESS_OR_EQUAL(LW(1), -900)
 #else
             IF_INT_GREATER_OR_EQUAL(LW(1), -550)
 #endif
@@ -857,12 +857,12 @@ IF_INT_EQUAL(LW(0), 0)
             WAIT_FRAMES(1)
         END_LOOP
 #if VERSION <= VERSION_DEMO_US
-            CALL(evt_mario_cont_onoff, 0)
-            CALL(evt_mario_set_pos, -300, -600, 0)
-            CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(0.0f), FLOAT(42.0f), FLOAT(-101.799805f), EASING_LINEAR, 11)
-            CALL(evt_mario_set_pos, -300, -400, 0)
-            WAIT_MS(1000)
-            CALL(evt_mario_cont_onoff, 1)
+        CALL(evt_mario_cont_onoff, 0)
+        CALL(evt_mario_set_pos, -300, -600, 0)
+        CALL(evt_cam3d_evt_set_rel, FLOAT(0.0f), FLOAT(98.0f), FLOAT(558.0f), FLOAT(0.0f), FLOAT(42.0f), FLOAT(-101.799805f), EASING_LINEAR, 11)
+        CALL(evt_mario_set_pos, -300, -400, 0)
+        WAIT_MS(1000)
+        CALL(evt_mario_cont_onoff, 1)
 #else
         IF_INT_EQUAL(LW(3), 0)
             CALL(x_flag_set, 1, 2)
@@ -902,7 +902,7 @@ IF_INT_EQUAL(LW(0), 0)
     CALL(x_flag_set, 0, 2)
     CALL(evt_mario_paper_plane, 0)
 #if VERSION <= VERSION_DEMO_US
-LOOP(0)
+    LOOP(0)
         CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
         IF_INT_LESS_OR_EQUAL(LW(1), -850)
             BREAK_LOOP
@@ -963,7 +963,7 @@ static USER_FUNC(evt_nomal_cange) {
 
     if (isFirstCall) {
 #if VERSION <= VERSION_DEMO_US
-marioRollCancel();
+        marioRollCancel();
 #else
         marioRollTryCancel();
 #endif

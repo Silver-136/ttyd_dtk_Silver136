@@ -276,7 +276,7 @@ static BattleWeapon weapon_sambo_head_attack_1 = {
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
 #if VERSION <= VERSION_DEMO_US
-{3, 0, 0, 0, 0, 0, 0, 0},
+    {3, 0, 0, 0, 0, 0, 0, 0},
 #else
     {4, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
 #endif

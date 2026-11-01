@@ -74,7 +74,7 @@ static USER_FUNC(evt_cloud_main) {
         return EVT_RETURN_BLOCK;
     }
 #if VERSION <= VERSION_DEMO_US
-if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
+    if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
         return EVT_RETURN_BLOCK;
     }
 #endif
@@ -145,7 +145,7 @@ if (party->currentMemberId != PARTY_MEMBER_FLURRIE) {
                     y = 0;
                 }
 #if VERSION <= VERSION_DEMO_US
-if (w > gp->fbWidth) {
+                if (w > gp->fbWidth) {
                     w = gp->fbWidth;
 #else
                 if (w > gp->fbWidth - x) {

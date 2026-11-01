@@ -51,12 +51,9 @@ EvtWord tsuritenjo_event[143];
 static s32 key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_majin[404];
-#else
-static EvtWord evt_majin[409];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord evt_majin2[243];
 #else
+static EvtWord evt_majin[409];
 static EvtWord evt_majin2[241];
 #endif
 EvtWord gon_06_init_evt[340];
@@ -358,7 +355,7 @@ static EVT_BEGIN(evt_majin)
                 END_IF
             END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+            CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
             // Mario backs out of the menu and the chest tells him to use the key.
@@ -408,7 +405,7 @@ static EVT_BEGIN(evt_majin2)
     CALL(evt_npc_stop_for_event)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_normalize)
+    CALL(evt_mario_normalize)
 #endif
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_pouch_add_item, ITEM_PAPER_CURSE, LW(0))

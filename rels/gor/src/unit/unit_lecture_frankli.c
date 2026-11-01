@@ -34,12 +34,9 @@ static EvtWord attack_event[5];
 static EvtWord wait_event[6];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord lecAttackEvent_Jump[];
-#else
-EvtWord lecAttackEvent_Jump[735];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord lecAttackEvent_Hammer[];
 #else
+EvtWord lecAttackEvent_Jump[735];
 EvtWord lecAttackEvent_Hammer[651];
 #endif
 EvtWord lecture_end_event[51];
@@ -222,7 +219,7 @@ BattleWeapon _lec_weapon_hammer = {
  */
 static BattleDataEntry data_table[] = {
 #if VERSION <= VERSION_DEMO_US
-{67, &_lec_weapon_jump},
+    {67, &_lec_weapon_jump},
     {68, &_lec_weapon_hammer},
     {69, lecture_end_event},
 #else

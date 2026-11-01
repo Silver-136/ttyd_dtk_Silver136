@@ -360,7 +360,7 @@ void effSplashGetCol(CameraId cameraId, EffectEntry* effect) {
     }
     work->hasColor = 1;
 #if VERSION <= VERSION_DEMO_US
-if (strcmp(gp->currentMapName, "muj_02") == 0) {
+    if (strcmp(gp->currentMapName, "muj_02") == 0) {
         work->color.r = 0x20;
         work->color.g = 0x2C;
         work->color.b = 0x5D;
@@ -570,7 +570,7 @@ void effSplashDisp(CameraId cameraId, EffectEntry* effect) {
                 GXPosition3f32(b * sn, c, b * cs);
                 GXColor4u8((u8)(255.0f * r1), (u8)(255.0f * g1), (u8)(255.0f * b1), 255);
 #if VERSION <= VERSION_DEMO_US
-GXTexCoord2f32((f32)(k & 1), 2.1f);
+                GXTexCoord2f32((f32)(k & 1), 2.1f);
 #else
                 GXTexCoord2f32((f32)kb, 2.1f);
 #endif

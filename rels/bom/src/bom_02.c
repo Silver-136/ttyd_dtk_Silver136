@@ -890,7 +890,7 @@ static EVT_BEGIN(talk_murabito_h)
             CALL(evt_msg_select, 0, STRING("irai_26_03_s"))
             CALL(evt_msg_print_add, 0, STRING("irai_26_04"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(iri_26_item_tbl), LW(0))
+            CALL(evt_win_item_select, PTR(iri_26_item_tbl), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(iri_26_item_tbl), LW(0), 0)
 #endif
@@ -1115,7 +1115,7 @@ static EVT_BEGIN(talk_white)
                     CALL(evt_msg_print, 0, STRING("irai_25_19"), 0, STRING("ホワイト"))
                 END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(iri_25_item_tbl), LW(0))
+                CALL(evt_win_item_select, PTR(iri_25_item_tbl), LW(0))
 #else
                 CALL(evt_win_item_select, 0, PTR(iri_25_item_tbl), LW(0), 0)
 #endif
@@ -1786,7 +1786,7 @@ static EVT_BEGIN(sekai_yami_evt)
         CALL(evt_npc_reverse_ry, STRING("ボムヘイG"))
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 3000)
+    CALL(evt_cam_shake, 4, FLOAT(0.0f), FLOAT(0.009765625f), 3000)
 #endif
     SET_FLOAT_VALUE(LW(0), FLOAT(0.0068359375f))
     LOOP(5)
@@ -1870,7 +1870,7 @@ static KinopioData kino_dt = {
     {-425.0f, 50.0f, -200.0f}, // breakfastPos
     15, // ryoukin
 #if VERSION <= VERSION_DEMO_US
-{-291.0f, 46.0f, -225.0f},
+    {-291.0f, 46.0f, -225.0f},
 #else
     {-285.0f, 46.0f, -223.0f}, // bed
 #endif

@@ -217,8 +217,6 @@ u16 ShadowSizeTbl[4] = {0x190, 0x100, 0x80, 0x40};
 u8 cube_dl_bottom[32] ATTRIBUTE_ALIGN(32) = {
     0x80, 0x00, 0x04, 0x38, 0x01, 0x39, 0x01, 0x3A, 0x01, 0x3B, 0x01, 0x00,
 };
-#endif
-#if VERSION > VERSION_DEMO_US
 u8 cube_dl_side[32] ATTRIBUTE_ALIGN(32) = {
     0x98, 0x00, 0x0A, 0x35, 0x02, 0x38, 0x01, 0x36, 0x02, 0x39, 0x01, 0x37,
     0x02, 0x3A, 0x01, 0x38, 0x02, 0x3B, 0x01, 0x39, 0x02, 0x38, 0x01, 0x00,
@@ -328,7 +326,7 @@ static inline void shadowSetupPolygon(void) {
     GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
 #if VERSION <= VERSION_DEMO_US
-GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
 #else
     GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_RASA, GX_CA_ZERO);
 #endif
@@ -1159,7 +1157,7 @@ ShadowConfig* shadowGetProjShadowConfig(void) {
  */
 static inline void shadowCalcTexMtx(ProjShadowWork* wp, Mtx texMtx, Mtx depthMtx) {
 #if VERSION <= VERSION_DEMO_US
-u32 is16;
+    u32 is16;
 #endif
     ShadowConfig* cfg = &shadowConfig[wp->configIdx];
 #if VERSION > VERSION_DEMO_US

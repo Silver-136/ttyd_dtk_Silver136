@@ -216,7 +216,7 @@ void effPeachDustMain(EffectEntry* effect) {
             p->frame++;
             f = p->frame;
 #if VERSION <= VERSION_DEMO_US
-if (f - 1 < 25) {
+            if (f - 1 < 25) {
                 p->scale = 0.4f * (0.01f * scale_data[f - 1]);
 #else
             g = f - 1;

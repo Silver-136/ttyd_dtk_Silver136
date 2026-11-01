@@ -359,7 +359,7 @@ EVT_BEGIN(escape_chorogun_event)
     CALL(btlevtcmd_GetUnitWork, LW(4), UNIT_WORK_CHOROGUN, LW(3))
     CALL(btlevtcmd_KillUnit, LW(3), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_SetUnitWork, LW(4), UNIT_WORK_CHOROGUN_GONE, 1)
+    CALL(btlevtcmd_SetUnitWork, LW(4), UNIT_WORK_CHOROGUN_GONE, 1)
 #endif
     RETURN
 EVT_END()
@@ -421,7 +421,7 @@ static EVT_BEGIN(damage_event)
                         CALL(btlevtcmd_GetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN, LW(3))
                         CALL(btlevtcmd_KillUnit, LW(3), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, 1)
+                    CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_CHOROGUN_GONE, 1)
 #endif
                     END_IF
                 END_IF

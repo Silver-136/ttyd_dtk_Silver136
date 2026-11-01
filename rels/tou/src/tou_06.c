@@ -250,7 +250,7 @@ static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_STORAGE_KEY_0x13, LW(0))
     IF_INT_GREATER(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+        CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
 #endif
@@ -294,7 +294,7 @@ EVT_BEGIN(evt_chuchu)
     CALL(evt_npc_set_ry, STRING("チュチュリーナ"), 270)
     CALL(evt_seq_wait, SEQ_GAME)
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(1000)
+    WAIT_MS(1000)
 #else
     CALL(evt_bero_exec_wait, 65536)
     WAIT_MS(200)
@@ -308,7 +308,7 @@ WAIT_MS(1000)
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_set_dir_npc, 0, STRING("チュチュリーナ"))
+        CALL(evt_party_set_dir_npc, 0, STRING("チュチュリーナ"))
 #else
         CALL(evt_party_set_dir, 0, 270, 300)
 #endif

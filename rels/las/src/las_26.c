@@ -176,7 +176,7 @@ EVT_BEGIN(bonbaba_evt)
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1_3"), LW(0), LW(1), LW(2), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
 #else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
@@ -239,7 +239,7 @@ CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 
     CALL(evt_npc_battle_start, STRING("ボンババ"))
     CALL(evt_npc_wait_battle_end)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG8_LST3"))
+    CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG8_LST3"))
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_archi1"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_cam3d_evt_set, 0, 25, 845, 0, 100, 150, 0, EASING_SINE_IN_OUT)
@@ -352,7 +352,7 @@ CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG8_LST3"))
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_VOICE_MARIO_FIND1"), LW(0), LW(1), LW(2), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
+    CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 0, 0, 0, 0, 0, 0, 0, 60)
 #else
     CALL(evt_eff_fukidashi, FUKIDASHI_AT_MARIO, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60)
@@ -443,7 +443,7 @@ static EVT_BEGIN(sekai_yami_evt)
     WAIT_MS(1000)
     CALL(evt_snd_sfxon, STRING("SFX_STG8_CEILING_BREAK1"), LW(10))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, -58, 200, -280, 60, 0, 0, 0, 0, 0, 0, 0)
+    CALL(evt_eff64, STRING(""), STRING("hokori_n64"), 0, -58, 200, -280, 60, 0, 0, 0, 0, 0, 0, 0)
 #else
     CALL(evt_eff64, 0, STRING("hokori_n64"), 0, -58, 200, -280, 60, 0, 0, 0, 0, 0, 0, 0)
 #endif
@@ -531,7 +531,7 @@ EVT_BEGIN(las_26_init_evt)
 #endif
         ELSE
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
+            CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
 #else
             CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #endif

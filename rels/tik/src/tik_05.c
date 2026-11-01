@@ -1051,7 +1051,7 @@ void tiz_broken_draw(CameraId cameraId, void* param) {
     if (broken_wp->copied == 0) {
         GXSetTexCopySrc(0, 0, 608, 480);
 #if VERSION <= VERSION_DEMO_US
-GXSetTexCopyDst(608, 480, GX_TF_RGBA8, GX_FALSE);
+        GXSetTexCopyDst(608, 480, GX_TF_RGBA8, GX_FALSE);
 #else
         GXSetTexCopyDst(304, 240, GX_TF_RGB5A3, GX_TRUE);
 #endif
@@ -1061,7 +1061,7 @@ GXSetTexCopyDst(608, 480, GX_TF_RGBA8, GX_FALSE);
     }
     GXSetNumChans(0);
 #if VERSION <= VERSION_DEMO_US
-GXInitTexObj(&tex, broken_wp->tex->address, 608, 480, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
+    GXInitTexObj(&tex, broken_wp->tex->address, 608, 480, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 #else
     GXInitTexObj(&tex, broken_wp->tex->address, 304, 240, GX_TF_RGB5A3, GX_CLAMP, GX_CLAMP, GX_FALSE);
 #endif

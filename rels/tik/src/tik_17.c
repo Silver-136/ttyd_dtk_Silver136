@@ -247,7 +247,7 @@ static EVT_BEGIN(mobj_box01)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_FP_PLUS, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET)
+    CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
 #endif
@@ -276,7 +276,7 @@ EVT_BEGIN(tik_17_init_evt)
         CALL(evt_mobj_flag_onoff, 1, STRING("block"), MOBJ_FLAG_NO_CULL)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mobj_itembox, STRING("mobj_box01"), -125, 100, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_TIK_17_FP_PLUS_CHEST)
+    CALL(evt_mobj_itembox, STRING("mobj_box01"), -125, 100, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_TIK_17_FP_PLUS_CHEST)
 #else
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -125, 100, -110, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_TIK_17_FP_PLUS_CHEST)
 #endif

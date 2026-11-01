@@ -112,7 +112,7 @@ static BattleWeapon weapon = {
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
     0, 0, 0, 0, 0, 0, 0, // atkChangeTime..allergicTime
 #if VERSION <= VERSION_DEMO_US
-0,
+    0,
 #else
     100, // ohkoChance
 #endif

@@ -48,17 +48,11 @@ EvtWord n_bero_match_reset[14];
 static BeroEntry bero_data[3];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_takurami[];
-#else
-EvtWord evt_takurami[352];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_hiki_close[];
-#else
-EvtWord evt_hiki_close[86];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_hiki_open[];
 #else
+EvtWord evt_takurami[352];
+EvtWord evt_hiki_close[86];
 EvtWord evt_hiki_open[193];
 #endif
 static EvtWord init_gans[29];
@@ -171,7 +165,7 @@ static BeroEntry bero_data[] = {
         NULL, // enterEvent
         -1, // caseType
 #if VERSION <= VERSION_DEMO_US
-NULL,
+        NULL,
 #else
         n_bero_match_reset, // exitEvent
 #endif
@@ -336,7 +330,7 @@ EVT_BEGIN(evt_hiki_close)
     SET_VALUE(LW(8), LW(0))
     SET_VALUE(LW(9), LW(1))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 100, 0, 30)
+    CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 100, 0, 30)
     LOOP(31)
         CALL(evt_sub_intpl_get_value)
 #else
@@ -404,7 +398,7 @@ CALL(evt_mario_key_onoff, 0)
     SET_VALUE(LW(8), LW(0))
     SET_VALUE(LW(9), LW(1))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 100, 30)
+    CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 100, 30)
     LOOP(31)
         CALL(evt_sub_intpl_get_value)
 #else
@@ -1532,8 +1526,8 @@ EVT_BEGIN(tou_05_init_evt)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -1541,8 +1535,8 @@ CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

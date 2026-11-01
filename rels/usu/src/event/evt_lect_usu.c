@@ -696,7 +696,7 @@ static USER_FUNC(evt_nomal_cange) {
 
     if (isFirstCall) {
 #if VERSION <= VERSION_DEMO_US
-marioRollCancel();
+        marioRollCancel();
 #else
         marioRollTryCancel();
 #endif
@@ -1071,7 +1071,7 @@ EVT_BEGIN(roll_majin_lecture)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_13"), 0, STRING("ペラ魔人"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_14"), 0, STRING("ペラ魔人"))
 #else
     CALL(evt_msg_print_add, 0, STRING("stg4_usu_majin3_14"))
@@ -1138,20 +1138,20 @@ CALL(evt_msg_toge, 1, 0, 0, 0)
         CALL(lecture_button_seq_wait, 1, 1)
         WAIT_MS(300)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_print_add, 0, STRING("stg4_usu_majin3_18"))
+        CALL(evt_msg_print_add, 0, STRING("stg4_usu_majin3_18"))
 #else
         CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
         CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_18"), 0, STRING("ペラ魔人"))
 #endif
         CALL(evt_msg_select, 0, STRING("stg4_usu_majin3_19"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_continue)
+        CALL(evt_msg_continue)
 #endif
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_nomal_cange)
             CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_20"), 0, STRING("ペラ魔人"))
+            CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_20"), 0, STRING("ペラ魔人"))
 #else
             CALL(evt_msg_print_add, 0, STRING("stg4_usu_majin3_20"))
 #endif
@@ -1160,7 +1160,7 @@ CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_20"), 0, STRING("ペラ魔人"))
         END_IF
     END_LOOP
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_toge, 1, 0, 0, 0)
+    CALL(evt_msg_toge, 1, 0, 0, 0)
     CALL(evt_msg_print, 0, STRING("stg4_usu_majin3_20_1"), 0, STRING("ペラ魔人"))
 #else
     CALL(evt_msg_print_add, 0, STRING("stg4_usu_majin3_20_1"))

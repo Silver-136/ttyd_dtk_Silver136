@@ -220,7 +220,7 @@ void imgDisp(CameraId camId, void* param) {
     animPoseDrawMtx(entry->poseId, m3, 3, 0.0f, scale);
     animSetPaperTexMtx(NULL, NULL, NULL);
 #if VERSION <= VERSION_DEMO_US
-sysWaitDrawSync();
+    sysWaitDrawSync();
 #else
     e2 = wp->entries;
     for (i = 0; i < wp->count; i++, e2++) {
@@ -344,7 +344,7 @@ void imgCapture_Prim(ImageEntry* entry, s32 id) {
 #endif
     ImageShadow* sh = &entry->shadows[id];
 #if VERSION <= VERSION_DEMO_US
-void* src;
+    void* src;
 #endif
     s32 offId;
     u16 w, h;
@@ -361,7 +361,7 @@ void* src;
                 offscreenGetTexObj(offId, &obj, &buf);
                 if (obj) {
 #if VERSION <= VERSION_DEMO_US
-src = buf->address;
+                    src = buf->address;
 #endif
                     w = GXGetTexObjWidth(obj);
                     h = GXGetTexObjHeight(obj);
@@ -545,7 +545,7 @@ void imgMain(void) {
                 }
                 if (shadow != 3) {
 #if VERSION <= VERSION_DEMO_US
-dispEntry(entry->camId, 0.0f, 1, imgDisp, entry);
+                    dispEntry(entry->camId, 0.0f, 1, imgDisp, entry);
 #else
                     dispEntry(entry->camId, entry->order, 1, imgDisp, entry);
 #endif
@@ -711,7 +711,7 @@ void imgShadowDisp(CameraId camId, void* param) {
         return;
     }
 #if VERSION <= VERSION_DEMO_US
-animSetPaperTexMtx((void*)mp[0], (void*)mp[1], (void*)mp[2]);
+    animSetPaperTexMtx((void*)mp[0], (void*)mp[1], (void*)mp[2]);
 #else
     entry->flags &= ~IMAGE_FLAG_NO_CAPTURE;
     animSetPaperTexMtx(mp[0], mp[1], mp[2]);

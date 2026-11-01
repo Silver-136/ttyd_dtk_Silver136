@@ -667,7 +667,7 @@ USER_FUNC(evt_badgeShop_throw_get_kind_cnt) {
 
     for (count = 0, i = 0; i < BADGE_COUNT; i++) {
 #if VERSION <= VERSION_DEMO_US
-if ((badge = badgeShop_get(bdsw->bargain_table, (s16)(i + BADGE_MIN))) - badgeShop_ThrowCount(i + BADGE_MIN) > 0) {
+        if ((badge = badgeShop_get(bdsw->bargain_table, (s16)(i + BADGE_MIN))) - badgeShop_ThrowCount(i + BADGE_MIN) > 0) {
 #else
         badge = badgeShop_get(bdsw->bargain_table, (s16)(i + BADGE_MIN));
         if (badge > 0) {

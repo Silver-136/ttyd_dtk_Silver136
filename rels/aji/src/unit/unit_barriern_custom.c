@@ -246,7 +246,7 @@ static BattleWeapon weapon_wakka_attack = {
     TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
 #if VERSION <= VERSION_DEMO_US
-100,
+    100,
 #else
     80, // stopChance
 #endif
@@ -289,7 +289,7 @@ static BattleWeapon weapon_wawawa_attack = {
     TARGET_WEIGHT_UNUSED_2000 | TARGET_WEIGHT_RANDOM, // targetWeightFlags
     0, 0, // sleepChance..sleepTime
 #if VERSION <= VERSION_DEMO_US
-100,
+    100,
 #else
     80, // stopChance
 #endif

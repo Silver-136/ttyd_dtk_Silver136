@@ -201,8 +201,8 @@ static s32 wait_move_end_50hz(EventEntry* event, BOOL isFirstCall) {
  */
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_1")), 0, 0, LW(0))
@@ -219,8 +219,8 @@ EVT_END()
  */
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
-CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    CALL(evt_mapobj_trans, 0, STRING("S_door1_1"), 0, 0, LW(0))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
     CALL(evt_mapobj_trans, 0, STRING(("S_door1_1")), 0, 0, LW(0))
@@ -372,7 +372,7 @@ EVT_BEGIN(evt_emergency)
             WAIT_FRAMES(1)
         END_LOOP
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 32, 1000)
+        CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 32, 1000)
 #else
         CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 96, 1000)
 #endif
@@ -385,7 +385,7 @@ CALL(evt_sub_intpl_msec_init, EASING_SINE_IN_OUT, 255, 32, 1000)
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_map_set_blend, 0, 255, 32, 32, 255)
+    CALL(evt_map_set_blend, 0, 255, 32, 32, 255)
 #else
     CALL(evt_map_set_blend, 0, 255, 96, 96, 255)
 #endif

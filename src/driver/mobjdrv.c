@@ -1408,7 +1408,7 @@ void mobjCalcMtx2(MapObjectEntry* entry) {
  */
 BOOL mobjGetHint(MapObjectEntry* entry) {
 #if VERSION <= VERSION_DEMO_US
-return (entry->flags & MOBJ_FLAG_HINT) != 0;
+    return (entry->flags & MOBJ_FLAG_HINT) != 0;
 #else
     if (entry == NULL) {
         return FALSE;

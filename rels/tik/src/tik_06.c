@@ -301,7 +301,7 @@ EVT_END()
  */
 EVT_BEGIN(tik_06_init_evt)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
+    CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
 #else
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #endif

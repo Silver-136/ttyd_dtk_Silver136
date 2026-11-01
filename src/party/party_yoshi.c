@@ -153,7 +153,7 @@ void sweatMain(PartyEntry* party) {
 s32 yoshiGetStatus(void) {
     PartyEntry* party = partyGetPtr(marioGetPartyId());
 #if VERSION <= VERSION_DEMO_US
-s32 status = 3;
+    s32 status = 3;
 #else
     s32 status = YOSHI_STATUS_OTHER;
 #endif
@@ -405,7 +405,7 @@ void yoshi_init(PartyEntry* party) {
     party->moveKind = 0;
     party->height = 26.0f;
 #if VERSION <= VERSION_DEMO_US
-party->width = 28.0f;
+    party->width = 28.0f;
 #else
     party->width = 20.0f;
 #endif
@@ -1910,7 +1910,7 @@ void searchGround2(PartyEntry* party) {
 #endif
         L_sweatEntry(party, hit);
 #if VERSION <= VERSION_DEMO_US
-    if (hit == NULL) {
+        if (hit == NULL) {
 #endif
         return;
 #if VERSION <= VERSION_DEMO_US

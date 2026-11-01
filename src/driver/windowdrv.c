@@ -126,15 +126,15 @@ void windowTexSetup(void) {
 #endif
         UnpackTexPalette(winTpl);
 #if VERSION <= VERSION_DEMO_US
-    } else {
-        sprintf(path, "%s/%s", getMarioStDvdRoot(), name);
-        entry = DVDMgrOpen(path, 2, 0);
-        if (entry) {
-            len = OSRoundUp32B(DVDMgrGetLength(entry));
-            winTpl = __memAlloc(HEAP_DEFAULT, len);
-            DVDMgrRead(entry, winTpl, len, 0);
-            DVDMgrClose(entry);
-            UnpackTexPalette(winTpl);
+        } else {
+            sprintf(path, "%s/%s", getMarioStDvdRoot(), name);
+            entry = DVDMgrOpen(path, 2, 0);
+            if (entry) {
+                len = OSRoundUp32B(DVDMgrGetLength(entry));
+                winTpl = __memAlloc(HEAP_DEFAULT, len);
+                DVDMgrRead(entry, winTpl, len, 0);
+                DVDMgrClose(entry);
+                UnpackTexPalette(winTpl);
 #else
         wakuTexObj = __memAlloc(HEAP_DEFAULT, sizeof(GXTexObj) * winTpl->numDescriptors);
 

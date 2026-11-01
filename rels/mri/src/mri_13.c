@@ -294,7 +294,7 @@ USER_FUNC(evt_puni_force_pose) {
 /** Camera shake while the elevator platform moves (a long shake in the demo builds, five 1-second shakes later). */
 EVT_BEGIN(yuka_shake)
 #if VERSION <= VERSION_DEMO_US
-LOOP(0)
+    LOOP(0)
         CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 1500)
 #else
     LOOP(5)
@@ -310,7 +310,7 @@ EVT_END()
  */
 EVT_BEGIN(yuka_shake2)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
+    CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.009765625f), FLOAT(0.0f), 500)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0087890625f), FLOAT(0.0f), 1000)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0078125f), FLOAT(0.0f), 1000)
     CALL(evt_cam_shake, CAMERA_3D, FLOAT(0.0068359375f), FLOAT(0.0f), 1000)

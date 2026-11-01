@@ -442,7 +442,7 @@ BattleWeapon marioDefaultWeapon_FirstAttackUltraHammer = {
     1, // reserved_1B
     weaponGetPowerFromMarioHammerLv, // hpDamageFn
 #if VERSION <= VERSION_DEMO_US
-{1, 2, 2, 4, 4, 8, 0, 0},
+    {1, 2, 2, 4, 4, 8, 0, 0},
 #else
     {1, 2, 2, 4, 3, 6, 0, 0}, // hpDamageWork
 #endif

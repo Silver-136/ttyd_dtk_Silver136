@@ -566,7 +566,7 @@ EVT_BEGIN(boss_noko_talk)
                     // Request 17: the mayor takes the Routing Slip from Mario.
                     CALL(evt_msg_print, 0, STRING("irai_17_00"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
+                    CALL(evt_win_item_select, PTR(iri_17_item_tbl), LW(0))
 #else
                     CALL(evt_win_item_select, 0, PTR(iri_17_item_tbl), LW(0), 0)
 #endif
@@ -1650,7 +1650,7 @@ static EVT_BEGIN(evt_kusa_4)
     CALL(evt_item_delete_check, STRING("item_kusa_4"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
+        CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
 #else
         CALL(evt_item_entry, STRING("item_kusa_4"), ITEM_TURTLEY_LEAF, -407, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
 #endif
@@ -1669,7 +1669,7 @@ static EVT_BEGIN(evt_kusa_5)
     CALL(evt_item_delete_check, STRING("item_kusa_5"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
+        CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
 #else
         CALL(evt_item_entry, STRING("item_kusa_5"), ITEM_TURTLEY_LEAF, -452, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
 #endif
@@ -1688,7 +1688,7 @@ static EVT_BEGIN(evt_kusa_6)
     CALL(evt_item_delete_check, STRING("item_kusa_6"), LW(0))
     IF_INT_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
+        CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -148, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF(4), 0)
 #else
         CALL(evt_item_entry, STRING("item_kusa_6"), ITEM_TURTLEY_LEAF, -362, 70, -160, ITEM_TYPE_SCATTER_NO_PICKUP, LSWF_NOK_01_TURTLEY_LEAF, 0)
 #endif

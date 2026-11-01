@@ -105,7 +105,7 @@ EvtWord yuu_00_init_evt[11];
 
 static MonteTable montetable[] = {
 #if VERSION <= VERSION_DEMO_US
-{-1200.0f, -800.0f, 450.0f, 400.0f, 2},
+    {-1200.0f, -800.0f, 450.0f, 400.0f, 2},
     {-800.0f, -300.0f, 400.0f, 300.0f, 2},
     {-300.0f, 200.0f, 300.0f, 150.0f, 1},
 #else
@@ -355,7 +355,7 @@ EVT_BEGIN(minigame01_start_cam)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_cam3d_evt_set, FLOAT(700.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(700.0f), FLOAT(160.0f), FLOAT(-10.0f), 4000, EASING_LINEAR)
+    CALL(evt_cam3d_evt_set, FLOAT(700.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(700.0f), FLOAT(160.0f), FLOAT(-10.0f), 4000, EASING_LINEAR)
 #else
     CALL(evt_cam3d_evt_set, FLOAT(700.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(700.0f), FLOAT(160.0f), FLOAT(-10.0f), 6000, EASING_LINEAR)
 #endif
@@ -367,8 +367,8 @@ CALL(evt_cam3d_evt_set, FLOAT(700.0f), FLOAT(360.0f), FLOAT(1140.0f), FLOAT(700.
 #endif
     WAIT_MS(2000)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_yuutitle_free)
-WAIT_MS(1000)
+    CALL(evt_yuutitle_free)
+    WAIT_MS(1000)
 #endif
     RETURN
 EVT_END()

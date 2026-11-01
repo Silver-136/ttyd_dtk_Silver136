@@ -244,12 +244,9 @@ static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord hom_10_init_evt[104];
-#else
-static EvtWord hom_10_init_evt[140];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_resha_init[];
 #else
+static EvtWord hom_10_init_evt[140];
 EvtWord evt_resha_init[13];
 #endif
 static BeroEntry bero_data_a[2];
@@ -1029,7 +1026,7 @@ static void ext_moamoa_main(void) {
             cnt += 1.0f;
         }
 #if VERSION <= VERSION_DEMO_US
-if ((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(wp->flags & MOAMOA_WORK_FLAG_NO_HIT))) && (!hit)) && (!(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) {
+        if ((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(wp->flags & MOAMOA_WORK_FLAG_NO_HIT))) && (!hit)) && (!(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)))) {
 #else
         if (((((( wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && ( !(wp->flags & MOAMOA_WORK_FLAG_NO_HIT) )) && ( !marioKeyOffChk() )) && ( !marioCtrlOffChk() )) && ( !hit )) && ( !(m->flags & (MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING)) )) {
 #endif
@@ -1066,7 +1063,7 @@ if ((((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && (!(wp->flags & MOAMOA_WORK_FLAG_N
         }
         if ((wp->flags & MOAMOA_WORK_FLAG_ACTIVE) && ( !(m->flags & (MOAMOA_FLAG_TO_TARGET | MOAMOA_FLAG_HIT | MOAMOA_FLAG_ESCAPING | MOAMOA_FLAG_OFF_ROOF | MOAMOA_FLAG_FUSING))) ) {
 #if VERSION <= VERSION_DEMO_US
-if (mario->currMotionId == MARIO_MOTION_STAY || mario->currMotionId == MARIO_MOTION_WALK || mario->currMotionId == MARIO_MOTION_DASH) {
+            if (mario->currMotionId == MARIO_MOTION_STAY || mario->currMotionId == MARIO_MOTION_WALK || mario->currMotionId == MARIO_MOTION_DASH) {
 #else
             if ((( (mario->currMotionId == MARIO_MOTION_STAY ) || (( (u16)(mario->currMotionId - MARIO_MOTION_WALK) ) <= 1 )) || (( (u16)(mario->currMotionId - MARIO_MOTION_SLIT) ) <= 1 )) ||
                 ( mario->currMotionId == MARIO_MOTION_YOSHI) ) {
@@ -2634,8 +2631,8 @@ EVT_BEGIN(rsh_06_init_evt_nidome)
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+            CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

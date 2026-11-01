@@ -215,8 +215,6 @@ static void alpha_tev(MapTevCallbackInfo* info) {
 
 #if VERSION > VERSION_DEMO_US
 EvtWord gor_02_hitobj_off[27];
-#endif
-#if VERSION > VERSION_DEMO_US
 EvtWord gor_02_hitobj_on[54];
 #endif
 EvtWord gor_02_event_00[18];
@@ -248,14 +246,8 @@ EvtWord powerupya_direct_talk[96];
 #endif
 #if VERSION > VERSION_DEMO_US
 s32 powerupya_item_tbl[2];
-#endif
-#if VERSION > VERSION_DEMO_US
 EvtWord powerupya_stardust[32];
-#endif
-#if VERSION > VERSION_DEMO_US
 EvtWord powerupya_mario_move[48];
-#endif
-#if VERSION > VERSION_DEMO_US
 EvtWord powerupya_party_move[38];
 #endif
 #if VERSION <= VERSION_DEMO_US
@@ -343,12 +335,9 @@ static EvtWord evt_wall_01[15];
 static const char* door_data_01_npc[2];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_door_01_open[86];
-#else
-static EvtWord evt_door_01_open[88];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord evt_door_01_close[83];
 #else
+static EvtWord evt_door_01_open[88];
 static EvtWord evt_door_01_close[85];
 #endif
 static DoorParam door_data_01;
@@ -358,12 +347,9 @@ static EvtWord evt_wall_02[15];
 static const char* door_data_02_npc[2];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_02_open[];
-#else
-EvtWord evt_door_02_open[127];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_02_close[];
 #else
+EvtWord evt_door_02_open[127];
 EvtWord evt_door_02_close[76];
 #endif
 static DoorParam door_data_02;
@@ -436,12 +422,9 @@ const char* door_data_05_npc[4];
 const char* door_data_05_npc_01[3];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_05_open[];
-#else
-EvtWord evt_door_05_open[14];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_05_close[];
 #else
+EvtWord evt_door_05_open[14];
 EvtWord evt_door_05_close[23];
 #endif
 DoorParam door_data_05;
@@ -454,12 +437,9 @@ const char* door_data_06_npc[2];
 const char* door_data_06_npc_01[1];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_06_open[];
-#else
-EvtWord evt_door_06_open[14];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_door_06_close[];
 #else
+EvtWord evt_door_06_open[14];
 EvtWord evt_door_06_close[16];
 #endif
 DoorParam door_data_06;
@@ -536,12 +516,9 @@ EvtWord epigraphy_map_after_stage5[218];
 #endif
 #if VERSION == VERSION_DEMO_JP
 EvtWord epigraphy_map_after_stage6[225];
-#else
-EvtWord epigraphy_map_after_stage6[245];
-#endif
-#if VERSION == VERSION_DEMO_JP
 EvtWord kurihakase_after3minutes[172];
 #else
+EvtWord epigraphy_map_after_stage6[245];
 EvtWord kurihakase_after3minutes[177];
 #endif
 static HitDamageReturn hitDmgRetPoints[13];
@@ -565,17 +542,11 @@ s32 stg5_list[2];
 s32 stg6_list[1];
 #if VERSION <= VERSION_DEMO_US
 s32 stg7_list[9];
-#else
-s32 stg7_list[6];
-#endif
-#if VERSION <= VERSION_DEMO_US
 s32 stg8_list[9];
-#else
-s32 stg8_list[10];
-#endif
-#if VERSION <= VERSION_DEMO_US
 MonosiriFollow follow[9];
 #else
+s32 stg7_list[6];
+s32 stg8_list[10];
 MonosiriFollow follow[8];
 #endif
 EvtWord evt_monosiri[39];
@@ -1290,7 +1261,7 @@ EVT_BEGIN(powerupya_table_talk)
     CALL(evt_party_stop, 0)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF_GOR_MERLON_FIRST_TALK_DONE, 0)
+    IF_INT_EQUAL(GSWF_GOR_MERLON_FIRST_TALK_DONE, 0)
 #else
     CALL(evt_win_party_lankup_chk, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1468,7 +1439,7 @@ EVT_BEGIN(powerupya_orb_use)
 #endif
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-            CALL(evt_msg_print, 0, STRING("powerup_ev_02"), 0, STRING("me"))
+    CALL(evt_msg_print, 0, STRING("powerup_ev_02"), 0, STRING("me"))
 #else
     // Merlon reacts to the arrow and speaks.
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
@@ -1486,7 +1457,7 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 1)
+    SET_VALUE(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 1)
 #else
     // Merlon spins on the spot; star dust sprays and the shine sounds play.
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_2"))
@@ -1587,7 +1558,7 @@ EVT_BEGIN(powerupya_orb_use)
 #endif
     CALL(evt_msg_print, 0, STRING("powerup_ev_06"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF_GOR_UP_ARROW_USED, 1)
+    SET_VALUE(GSWF_GOR_UP_ARROW_USED, 1)
 #else
     // Mario and the partner walk over to the stone while Merlon picks it up.
     SPAWN_EVENT(PTR(powerupya_mario_move))
@@ -1624,10 +1595,10 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_msg_print, 0, STRING("powerup_ev_07"), 0, STRING("me"))
     CALL(evt_pouch_remove_item, ITEM_UP_ARROW, LW(0))
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
-            ELSE
-                CALL(evt_msg_print, 0, STRING("powerup_ev_03"), 0, STRING("me"))
-            END_IF
+    SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
+ELSE
+    CALL(evt_msg_print, 0, STRING("powerup_ev_03"), 0, STRING("me"))
+END_IF
         END_IF
         RETURN
     END_IF
@@ -2017,7 +1988,7 @@ static EVT_BEGIN(kurihakase_talk)
             SPAWN_EVENT(PTR(kurihakase_after3minutes))
         END_IF
 #if VERSION <= VERSION_DEMO_US
-CASE_LESS(STG7_03_GOLDBOB)
+        CASE_LESS(STG7_03_GOLDBOB)
 #else
         CASE_LESS(STG7_02_MAYOR_BOB)
         IF_INT_EQUAL(GSWF_BOM_FIRST_ARRIVAL_DONE, 0)
@@ -2029,7 +2000,7 @@ CASE_LESS(STG7_03_GOLDBOB)
                 CALL(evt_msg_print, 0, STRING("gor_02_026"), 0, STRING("me"))
             END_IF
 #if VERSION <= VERSION_DEMO_US
-        CASE_LESS(STG7_04_BACK_ONLINE)
+            CASE_LESS(STG7_04_BACK_ONLINE)
 #else
             ELSE
 #endif
@@ -2323,7 +2294,7 @@ static EVT_BEGIN(evt_chk)
     CALL(evt_pouch_check_item, ITEM_HOUSE_KEY, LW(0))
     IF_INT_GREATER(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+        CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
         CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
 #endif
@@ -2513,7 +2484,7 @@ EVT_BEGIN(tozokudan2_talk)
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_msg_print, 0, STRING("irai_01_02"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+            CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
 #endif
@@ -2821,7 +2792,7 @@ EVT_BEGIN(kuribo4_talk)
             IF_INT_GREATER_OR_EQUAL(LW(0), 1)
                 CALL(evt_msg_print, 0, STRING("irai_02_03"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(item_tbl), LW(0))
+                CALL(evt_win_item_select, PTR(item_tbl), LW(0))
 #else
                 CALL(evt_win_item_select, 0, PTR(item_tbl), LW(0), 0)
 #endif
@@ -2853,7 +2824,7 @@ CALL(evt_win_item_select, PTR(item_tbl), LW(0))
                     CALL(iri_13_update_item_tbl, LW(1), LW(0))
                     LOOP(0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, LW(1), LW(0))
+                        CALL(evt_win_item_select, LW(1), LW(0))
 #else
                         CALL(evt_win_item_select, 0, LW(1), LW(0), 0)
 #endif
@@ -2876,7 +2847,7 @@ CALL(evt_win_item_select, LW(1), LW(0))
                         END_IF
                         CALL(evt_msg_print, 0, STRING("irai_13_005"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, LW(1), LW(0))
+                        CALL(evt_win_item_select, LW(1), LW(0))
 #else
                         CALL(evt_win_item_select, 0, LW(1), LW(0), 0)
 #endif
@@ -3360,7 +3331,7 @@ static NpcSetupInfo npcEnt[] = {
         powerupya_init, // initEvent
         NULL, // regularEvent
 #if VERSION <= VERSION_DEMO_US
-powerupya_direct_talk,
+        powerupya_direct_talk,
 #else
         powerupya_talk, // talkEvent
 #endif
@@ -3573,7 +3544,7 @@ static const char* door_data_01_npc[] = {
 
 static EVT_BEGIN(evt_door_01_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
@@ -3706,7 +3677,7 @@ static const char* door_data_02_npc[] = {
  */
 EVT_BEGIN(evt_door_02_open)
 #if VERSION <= VERSION_DEMO_US
-SWITCH(GSW_STORY_PROGRESS)
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
     SWITCH(GSW_STORY_PROGRESS)
@@ -3762,7 +3733,7 @@ EVT_END()
  */
 EVT_BEGIN(evt_door_02_close)
 #if VERSION <= VERSION_DEMO_US
-SWITCH(GSW_STORY_PROGRESS)
+    SWITCH(GSW_STORY_PROGRESS)
 #else
     SPAWN_EVENT(PTR(gor_02_hitobj_on))
     SWITCH(GSW_STORY_PROGRESS)
@@ -4015,7 +3986,7 @@ EVT_END()
  */
 static EVT_BEGIN(evt_door_03_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
@@ -4177,7 +4148,7 @@ EVT_BEGIN(evt_door_03_roll_open)
         CALL(evt_mario_set_dir, 270, 0, 0)
         CALL(evt_mario_cancel_roll_motion)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
+    IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
 #else
     END_IF
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
@@ -4190,7 +4161,7 @@ IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
         CALL(evt_party_set_dir, 0, 270, 0)
         CALL(evt_party_set_dispdir, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
+    IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
 #else
     END_IF
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
@@ -4493,7 +4464,7 @@ const char* door_data_05_npc_01[] = {
  */
 EVT_BEGIN(evt_door_05_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
@@ -4667,7 +4638,7 @@ const char* door_data_06_npc_01[] = {
  */
 EVT_BEGIN(evt_door_06_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
@@ -4826,7 +4797,7 @@ USER_FUNC(evt_set_bgtpl) {
         name = gp->currentMapName;
     }
 #if VERSION <= VERSION_DEMO_US
-sprintf(path, "./bg/%s.tpl", name);
+    sprintf(path, "./bg/%s.tpl", name);
 #else
     sprintf(path, "./b/%s.tpl", name);
 #endif
@@ -7725,7 +7696,7 @@ static EVT_BEGIN(mobj_box01)
     CALL(evt_mobj_get_position, STRING("mobj_box01"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item01"), ITEM_DOUBLE_DIP, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item01"), ITEM_FLAG_NO_TOUCH)
 #else
     CALL(evt_item_flag_on, STRING("item01"), 258)
 #endif
@@ -7748,7 +7719,7 @@ s32 stg1_list[] = {
 /** Chapter 2 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 s32 stg2_list[] = {
 #if VERSION <= VERSION_DEMO_US
-29, 30, 34,
+    29, 30, 34,
 #else
     29, 30, 33, 34,
 #endif
@@ -7782,7 +7753,7 @@ s32 stg6_list[] = {
 /** Chapter 7 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 s32 stg7_list[] = {
 #if VERSION <= VERSION_DEMO_US
-114, 115, 116, 117, 118, 28, 120, 119, 121,
+    114, 115, 116, 117, 118, 28, 120, 119, 121,
 #else
     117, 118, 28, 120, 119, 121,
 #endif
@@ -7791,7 +7762,7 @@ s32 stg7_list[] = {
 /** Chapter 8 enemies whose Tattle entries Frankly's notes can fill in (enemy ids). */
 s32 stg8_list[] = {
 #if VERSION <= VERSION_DEMO_US
-131, 132, 133, 134, 135, 144, 146, 147,
+    131, 132, 133, 134, 135, 144, 146, 147,
     150,
 #else
     131, 132, 133, 134, 135, 144, 145, 146,
@@ -7807,7 +7778,7 @@ MonosiriFollow follow[] = {
     {23, stg0_list, 1},
     {56, stg1_list, 4},
 #if VERSION <= VERSION_DEMO_US
-{112, stg2_list, 3},
+    {112, stg2_list, 3},
 #else
     {112, stg2_list, 4},
 #endif

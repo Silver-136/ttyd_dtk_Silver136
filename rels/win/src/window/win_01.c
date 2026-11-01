@@ -322,13 +322,13 @@ static EVT_BEGIN(peach_mail)
 #endif
     IF_INT_EQUAL(LF(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_cam3d_evt_set, -184, 86, 262, -184, 38, -5, 1000, EASING_SINE_IN_OUT)
+        CALL(evt_cam3d_evt_set, -184, 86, 262, -184, 38, -5, 1000, EASING_SINE_IN_OUT)
 #else
         CALL(evt_cam3d_evt_set, -184, 86, LW(3), -184, 38, LW(4), 1000, EASING_SINE_IN_OUT)
 #endif
         ELSE
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_cam3d_evt_set, 184, 86, 262, 184, 38, -5, 1000, EASING_SINE_IN_OUT)
+        CALL(evt_cam3d_evt_set, 184, 86, 262, 184, 38, -5, 1000, EASING_SINE_IN_OUT)
 #else
         CALL(evt_cam3d_evt_set, 184, 86, LW(3), 184, 38, LW(4), 1000, EASING_SINE_IN_OUT)
 #endif

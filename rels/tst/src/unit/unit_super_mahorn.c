@@ -113,7 +113,7 @@ BattleUnitKind unit_super_mahorn = {
     33, // level
     0, // bonusExp
 #if VERSION <= VERSION_DEMO_US
-3,
+    3,
 #else
     2, // bonusCoin
 #endif
@@ -337,7 +337,7 @@ static BattleWeapon weapon_mahorn_attack_magic = {
     2, // reserved_6F
     NULL, // acHelpMsg
 #if VERSION <= VERSION_DEMO_US
-SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
+    SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH | SPECIAL_IGNORE_VULNERABILITY,
 #else
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_PIERCE_DEFENSE | SPECIAL_FREEZE_CRUSH, // special
 #endif
@@ -732,7 +732,7 @@ static EVT_BEGIN(attack_event)
 #endif
             ADD(LW(0), 60)
 #if VERSION <= VERSION_DEMO_US
-ADD(LW(0), 40)
+            ADD(LW(0), 40)
 #endif
             ADD(LW(0), 10)
             ADD(LW(0), 8)
@@ -743,7 +743,7 @@ ADD(LW(0), 40)
             SUBTRACT(LW(0), 1)
             CALL(evt_sub_random, LW(0), LW(1))
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(LW(0), 60)
+            SET_VALUE(LW(0), 60)
 #else
             SET_VALUE(LW(0), 30)
 #endif
@@ -753,7 +753,7 @@ SET_VALUE(LW(0), 60)
                 GOTO(99)
             END_IF
 #if VERSION <= VERSION_DEMO_US
-ADD(LW(0), 40)
+            ADD(LW(0), 40)
 #else
             ADD(LW(0), 60)
 #endif

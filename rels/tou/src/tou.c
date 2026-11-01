@@ -231,12 +231,9 @@ EvtWord evt_tou_match_make_default[303];
 EvtWord evt_talk_doku_cake[14];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_eat_doku_cake[];
-#else
-EvtWord evt_eat_doku_cake[270];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_doku_cake[];
 #else
+EvtWord evt_eat_doku_cake[270];
 EvtWord evt_doku_cake[234];
 #endif
 EvtWord evt_michel_1[39];
@@ -257,12 +254,9 @@ EvtWord evt_mail_1[157];
 EvtWord evt_mail_2[154];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_eat_cake[];
-#else
-EvtWord evt_eat_cake[157];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_cake_init[];
 #else
+EvtWord evt_eat_cake[157];
 EvtWord evt_cake_init[31];
 #endif
 EvtWord evt_cake[37];
@@ -369,7 +363,7 @@ static void rankingInit(void) {
             evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, 1);
         }
 #if VERSION <= VERSION_DEMO_US
-if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
+        if (evtGetValue(NULL, GSW_STORY_PROGRESS) >= STG3_20_06_RAWK_HAWKS_WARNING) {
 #else
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_JOINED)) {
 #endif
@@ -606,7 +600,7 @@ static USER_FUNC(evt_tou_get_next_match) {
         if (flag) {
             evtSetValue(event, args[0], list[rank - 1]);
 #if VERSION <= VERSION_DEMO_US
-} else if (rank != n - 1) {
+        } else if (rank != n - 1) {
 #else
         } else if (rank + 1 < n) {
 #endif
@@ -2555,7 +2549,7 @@ EVT_BEGIN(evt_tou_match_make_default)
             CASE_BETWEEN(STG3_20_13_MAJORS_1ST_PL, STG3_20_15_UNLOCKING_THE_DOOR)
             SET_VALUE(LF(10), 1)
 #if VERSION <= VERSION_DEMO_US
-CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
+            CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
 #else
             CASE_BETWEEN(STG3_30_A_NEW_CHAMPION, STG3_31_GRUBBAS_PLANS)
 #endif
@@ -2648,14 +2642,14 @@ EVT_BEGIN(evt_eat_doku_cake)
     BEGIN_INLINE_EVENT
         SUBTRACT(LW(2), 30)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(50.0f))
+        CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(50.0f))
 #else
         CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(80.0f))
 #endif
         CALL(evt_mario_adjust_dir)
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(50.0f))
+    CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(50.0f))
 #else
     CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(80.0f))
 #endif
@@ -3766,14 +3760,14 @@ EVT_BEGIN(evt_eat_cake)
         BEGIN_INLINE_EVENT
             SUBTRACT(LW(2), 30)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(50.0f))
+            CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(50.0f))
 #else
             CALL(evt_mario_mov_pos2, LW(0), LW(2), FLOAT(80.0f))
 #endif
             CALL(evt_mario_adjust_dir)
         END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(50.0f))
+        CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(50.0f))
 #else
         CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(80.0f))
 #endif

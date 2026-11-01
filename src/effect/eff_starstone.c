@@ -250,54 +250,24 @@ u8 diamond_5_color0_tbl[] __attribute__((aligned(32))) = { 0x4D, 0x71, 0xB4, 0xF
 u8 diamond_6_color0_tbl[] __attribute__((aligned(32))) = { 0xF0, 0x76, 0x19, 0xFF, 0x7E, 0x2D, 0x15, 0xFF, 0xB5, 0x41, 0x1E, 0xFF, 0x98, 0x36, 0x19, 0xFF, 0xD1, 0x67, 0x16, 0xFF, 0xF0, 0x8A, 0x08, 0xFF };
 #if VERSION > VERSION_DEMO_US
 s16 diamond_1_vertex_tbl[] __attribute__((aligned(32))) = { 18386, 5751, 0, 7281, 9135, 0, 0, 19109, 0, -7281, 9135, 0, -18386, 5751, 0, -11781, -4714, 0, -11363, -15863, 0, 0, -13273, 0, 11363, -15863, 0, 11781, -4714, 0, 6676, 1460, -6799, 0, 6311, -6799, -6676, 1460, -6799, -4126, -6387, -6799, 4126, -6387, -6799, 6676, 1460, 6799, 0, 6311, 6799, -6676, 1460, 6799, -4126, -6387, 6799, 4126, -6387, 6799, 18629, 5827, 0, 7377, 9256, 0, 0, 19362, 0, -7377, 9256, 0, -18629, 5827, 0, -11937, -4776, 0, -11513, -16072, 0, 0, -13449, 0, 11513, -16072, 0, 11937, -4776, 0, 6764, 1479, -6889, 0, 6394, -6889, -6764, 1479, -6889, -4180, -6472, -6889, 4180, -6472, -6889, 6764, 1479, 6889, 0, 6394, 6889, -6764, 1479, 6889, -4180, -6472, 6889, 4180, -6472, 6889};
-#endif
-#if VERSION > VERSION_DEMO_US
 s8 diamond_1_normal_tbl[] __attribute__((aligned(32))) = { 0, 28, 57, 25, 35, 47, 27, 9, 57, 0, 30, 56, -27, 9, 57, -25, 35, 47, -28, 10, 56, -17, -23, 57, -41, -12, 47, -19, -25, 55, 17, -23, 57, 0, -42, 47, 19, -25, 55, 41, -12, 47, 28, 10, 56, 27, 37, -44, 0, 28, -57, 26, 8, -57, 0, 30, -56, 34, 25, -47, -27, 37, -44, -26, 8, -57, -28, 10, -56, -12, 41, -47, -43, -14, -45, -16, -22, -57, -19, -25, -55, -42, -1, -47, 0, -44, -45, 16, -22, -57, 19, -25, -55, -9, -41, -47, 43, -14, -45, 28, 10, -56, 36, -22, -47, 42, -1, -47, 9, -41, -47, -36, -22, -47, -34, 25, -47, 12, 41, -47};
-#endif
-#if VERSION > VERSION_DEMO_US
 s16 diamond_1_texcoord0_tbl[] __attribute__((aligned(32))) = { 4505, 2867, 3276, 4505, 3276, -1228, 4915, -409, 4915, 2457, 1228, 0, 1638, 1228, 8192, 1638, 3276, 4096, 7372, 2867, 7782, 0, 5324, 2457, 3276, 2048, 3276, 2867, 1638, 5734, 1228, 3276, 13107, 4096, 15974, 9011, 11059, 3686, 16384, 3276, 10649, 8192, 10649, 6445, 10649, 0, 8601, 1229, 8601, 8192, 8601, 0, 10240, 3276, 9420, 3276, 11468, 4096, 15155, 5734, 14336, 7782, 16384, 4096, 11878, 4096, 12288, 3276, 9420, 10649, 10649, 2457};
-#endif
-#if VERSION > VERSION_DEMO_US
 u8 diamond_1_color0_tbl[] __attribute__((aligned(32))) = { 0xD7, 0xE0, 0xC2, 0xFF, 0xBD, 0xC2, 0xA6, 0xFF, 0xF0, 0xF0, 0xE4, 0xFF, 0xAB, 0xAC, 0x8F, 0xFF, 0xF5, 0xFF, 0xD9, 0xFF, 0xEE, 0xF5, 0xCF, 0x00, 0xE8, 0xEE, 0xC4, 0x4C, 0xEB, 0xF2, 0xCA, 0x00, 0xE7, 0xED, 0xC5, 0x4C, 0xEA, 0xEF, 0xC9, 0x00, 0xF9, 0xFF, 0xE0, 0x4C, 0xDB, 0xDE, 0xB5, 0x4C, 0xE0, 0xE4, 0xBA, 0x4C, 0xE0, 0xE5, 0xB9, 0x00, 0xD4, 0xD9, 0xA8, 0x4C, 0xC9, 0xCC, 0x9B, 0x4C, 0xDC, 0xE2, 0xB3, 0x4C };
 #endif
 /** Display lists of the round stone's first list set (Diamond Star, type 0), drawn with the sizes below. */
 #if VERSION > VERSION_DEMO_US
 u8* diamond_1_dl_0_tbl[] = { diamond_1_dl_0_0, diamond_1_dl_0_1, diamond_1_dl_0_2, diamond_1_dl_0_3, diamond_1_dl_0_4, diamond_1_dl_0_5, diamond_1_dl_0_6, diamond_1_dl_0_7, diamond_1_dl_0_8, diamond_1_dl_0_9, diamond_1_dl_0_10, diamond_1_dl_0_11, diamond_1_dl_0_12, diamond_1_dl_0_13, diamond_1_dl_0_14, diamond_1_dl_0_15, diamond_1_dl_0_16, diamond_1_dl_0_17, diamond_1_dl_0_18, diamond_1_dl_0_19, diamond_1_dl_0_20, diamond_1_dl_0_21, diamond_1_dl_0_22, diamond_1_dl_0_23, diamond_1_dl_0_24, diamond_1_dl_0_25, diamond_1_dl_0_26, diamond_1_dl_0_27, diamond_1_dl_0_28, diamond_1_dl_0_29, diamond_1_dl_0_30, diamond_1_dl_0_31, diamond_1_dl_0_32, diamond_1_dl_0_33 };
-#endif
-#if VERSION > VERSION_DEMO_US
 u8* diamond_1_dl_1_tbl[] = { diamond_1_dl_1_0, diamond_1_dl_1_1, diamond_1_dl_1_2, diamond_1_dl_1_3, diamond_1_dl_1_4, diamond_1_dl_1_5, diamond_1_dl_1_6, diamond_1_dl_1_7, diamond_1_dl_1_8, diamond_1_dl_1_9, diamond_1_dl_1_10, diamond_1_dl_1_11, diamond_1_dl_1_12, diamond_1_dl_1_13, diamond_1_dl_1_14, diamond_1_dl_1_15, diamond_1_dl_1_16, diamond_1_dl_1_17, diamond_1_dl_1_18, diamond_1_dl_1_19, diamond_1_dl_1_20, diamond_1_dl_1_21, diamond_1_dl_1_22, diamond_1_dl_1_23, diamond_1_dl_1_24, diamond_1_dl_1_25, diamond_1_dl_1_26, diamond_1_dl_1_27, diamond_1_dl_1_28, diamond_1_dl_1_29, diamond_1_dl_1_30, diamond_1_dl_1_31, diamond_1_dl_1_32, diamond_1_dl_1_33 };
-#endif
-#if VERSION > VERSION_DEMO_US
 s16 diamond_2_2_vertex_tbl[] __attribute__((aligned(32))) = { 0, 19362, 0, -7377, 9256, 0, -18629, 5827, 0, -11937, -4776, 0, -11513, -16072, 0, 0, -13449, 0, 0, 6394, -6889, -6764, 1479, -6889, -4180, -6472, -6889, 0, 6394, 6889, -6764, 1479, 6889, -4180, -6472, 6889, 0, -6472, 6889, 0, -6472, -6889, 18629, 5827, 0, 7377, 9256, 0, 11513, -16072, 0, 11937, -4776, 0, 6764, 1479, -6889, 4180, -6472, -6889, 6764, 1479, 6889, 4180, -6472, 6889, 0, 19362, 0, 0, 6394, 6889, 0, -6472, 6889, 0, -13449, 0, 0, 6394, -6889, 0, -6472, -6889, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-#endif
-#if VERSION > VERSION_DEMO_US
 s8 diamond_2_2_normal_tbl[] __attribute__((aligned(32))) = { -27, 9, 57, -25, 35, 47, -22, 22, 55, -28, 10, 56, -17, -23, 57, -41, -12, 47, -19, -25, 55, 4, -43, 46, -34, 25, 47, -27, 37, -44, -26, 8, -57, -14, 20, -58, -28, 10, -56, -12, 41, -47, -43, -14, -45, -16, -22, -57, -19, -25, -55, -42, -1, -47, 9, -41, -47, -36, -22, -47, -34, 25, -47, 0, -24, 59, 0, -44, -45, 0, -24, -59, 64, 0, 0, 22, 22, 55, 25, 35, 47, 27, 9, 57, 34, 25, 47, 17, -23, 57, -4, -43, 46, 19, -25, 55, 41, -12, 47, 28, 10, 56, 27, 37, -44, 14, 20, -58, 26, 8, -57, 34, 25, -47, 16, -22, -57, 19, -25, -55, -9, -41, -47, 43, -14, -45, 28, 10, -56, 36, -22, -47, 42, -1, -47, 12, 41, -47, -64, 0, 0};
-#endif
-#if VERSION > VERSION_DEMO_US
 s16 diamond_2_2_texcoord0_tbl[] __attribute__((aligned(32))) = { 6553, -2457, 9830, -819, 9830, 4915, 2457, 0, 6553, 4096, 6553, 5734, 3276, 11468, 15564, 0, 3276, 2457, 16550, 8838, 4305, 4774, 18862, 1581, 8181, 14022, -4062, 9959, -2478, 14802, 9011, 5734, 6553, 9011, 16384, 3276, 6553, 8192, 14745, 5734, 10649, 4915, 2457, 6553, 5444, 4661, 14936, 9098, 17729, 1931, -2035, 9571, 7456, 14008, -1345, 14452 };
-#endif
-#if VERSION > VERSION_DEMO_US
 u8* diamond_2_2_dl_0_tbl[] = { diamond_2_2_dl_0_0, diamond_2_2_dl_0_1, diamond_2_2_dl_0_2, diamond_2_2_dl_0_3, diamond_2_2_dl_0_4, diamond_2_2_dl_0_5, diamond_2_2_dl_0_6, diamond_2_2_dl_0_7, diamond_2_2_dl_0_8, diamond_2_2_dl_0_9, diamond_2_2_dl_0_10, diamond_2_2_dl_0_11, diamond_2_2_dl_0_12, diamond_2_2_dl_0_13, diamond_2_2_dl_0_14, diamond_2_2_dl_0_15, diamond_2_2_dl_0_16, diamond_2_2_dl_0_17, diamond_2_2_dl_0_18 };
-#endif
-#if VERSION > VERSION_DEMO_US
 u8* diamond_2_2_dl_1_tbl[] = { diamond_2_2_dl_1_0, diamond_2_2_dl_1_1, diamond_2_2_dl_1_2, diamond_2_2_dl_1_3, diamond_2_2_dl_1_4, diamond_2_2_dl_1_5, diamond_2_2_dl_1_6, diamond_2_2_dl_1_7, diamond_2_2_dl_1_8, diamond_2_2_dl_1_9, diamond_2_2_dl_1_10, diamond_2_2_dl_1_11, diamond_2_2_dl_1_12, diamond_2_2_dl_1_13, diamond_2_2_dl_1_14, diamond_2_2_dl_1_15, diamond_2_2_dl_1_16, diamond_2_2_dl_1_17, diamond_2_2_dl_1_18 };
-#endif
-#if VERSION > VERSION_DEMO_US
 s16 diamond_7_vertex_tbl[] __attribute__((aligned(32))) = { 18386, 5751, 0, 7281, 9135, 0, 0, 19109, 0, -7281, 9135, 0, -18386, 5751, 0, -11781, -4714, 0, -11363, -15863, 0, 0, -13273, 0, 11363, -15863, 0, 11781, -4714, 0, 6676, 1460, -6799, 0, 6311, -6799, -6676, 1460, -6799, -4126, -6387, -6799, 4126, -6387, -6799, 6676, 1460, 6799, 0, 6311, 6799, -6676, 1460, 6799, -4126, -6387, 6799, 4126, -6387, 6799, 18629, 5827, 0, 7377, 9256, 0, 0, 19362, 0, -7377, 9256, 0, -18629, 5827, 0, -11937, -4776, 0, -11513, -16072, 0, 0, -13449, 0, 11513, -16072, 0, 11937, -4776, 0, 6764, 1479, -6889, 0, 6394, -6889, -6764, 1479, -6889, -4180, -6472, -6889, 4180, -6472, -6889, 6764, 1479, 6889, 0, 6394, 6889, -6764, 1479, 6889, -4180, -6472, 6889, 4180, -6472, 6889, 0, 0, 0, 0, 0, 0, 0, 0 };
-#endif
-#if VERSION > VERSION_DEMO_US
 s8 diamond_7_normal_tbl[] __attribute__((aligned(32))) = { 0, 28, 57, 25, 35, 47, 27, 9, 57, 0, 30, 56, -27, 9, 57, -25, 35, 47, -28, 10, 56, -17, -23, 57, -41, -12, 47, -19, -25, 55, 17, -23, 57, 0, -42, 47, 19, -25, 55, 41, -12, 47, 28, 10, 56, 27, 37, -44, 0, 28, -57, 26, 8, -57, 0, 30, -56, 34, 25, -47, -27, 37, -44, -26, 8, -57, -28, 10, -56, -12, 41, -47, -43, -14, -45, -16, -22, -57, -19, -25, -55, -42, -1, -47, 0, -44, -45, 16, -22, -57, 19, -25, -55, -9, -41, -47, 43, -14, -45, 28, 10, -56, 36, -22, -47, 42, -1, -47, 9, -41, -47, -36, -22, -47, -34, 25, -47, 12, 41, -47};
-#endif
-#if VERSION > VERSION_DEMO_US
 s16 diamond_7_texcoord0_tbl[] __attribute__((aligned(32))) = { 4505, 2867, 3276, 4505, 3276, -1228, 4915, -409, 4915, 2457, 1228, 0, 1638, 1228, 8192, 1638, 3276, 4096, 7372, 2867, 7782, 0, 5324, 2457, 3276, 2048, 3276, 2867, 1638, 5734, 1228, 3276, 11401, 434, 15244, 4406, 11750, 9216, 14437, -1546, 16584, 528, 14591, 3420, 9379, 3635, 13010, -1400, 13985, 6751, 15234, 8192, 9341, 3612, 14929, 0, 15063, -2382, 17507, 1688, 15088, 6230, 12239, 4419, 7030, 4341, 10818, -818, 11287, 10220, 8631, 1980, 13880, 1609, 11810, 0, 14032, 8192, 10543, 5953, 11468, 4096, 8192, 3358, 16384, 0, 11763, 8192, 11269, 8192, 10640, 3129, 12288, 0, 13935, 3129, 13306, 8192, 15660, -3731, 15104, 1836, 12392, -2166, 11617, -43, 15126, 2852, 11321, 10251, 9999, 223, 15407, 1873, 10640, 9959, 8192, 8192, 12288, 6383, 11712, 7139, 10559, 4142, 12418, 67, 14437, -1546, 13304, 6896, 15661, -3731, 16384, 8192};
-#endif
-#if VERSION > VERSION_DEMO_US
 u8 diamond_7_color0_tbl[] __attribute__((aligned(32))) = { 0xCA, 0xDA, 0xEB, 0xFF, 0xB4, 0xD0, 0xE4, 0xFF, 0xD9, 0xEC, 0xF5, 0xFF, 0x8B, 0xA5, 0xBF, 0xFF, 0xE2, 0xF6, 0xFF, 0xFF, 0xD2, 0xE6, 0xF3, 0x66, 0xCA, 0xE0, 0xEF, 0x66, 0xCE, 0xE3, 0xF1, 0x66, 0xCB, 0xE3, 0xF1, 0x66, 0xC1, 0xD6, 0xE6, 0x66, 0xC2, 0xD8, 0xE6, 0x66, 0xA0, 0xBA, 0xD2, 0x66, 0xBD, 0xD2, 0xE4, 0x66, 0xAD, 0xC5, 0xDA, 0x66, 0xBB, 0xD3, 0xE6, 0x66, 0xD2, 0xE7, 0xF3, 0x66, 0xCF, 0xE3, 0xF1, 0x66, 0xC1, 0xD7, 0xE7, 0x66, 0xBE, 0xD3, 0xE5, 0x66 };
-#endif
-#if VERSION > VERSION_DEMO_US
 u8* diamond_7_dl_0_tbl[] = { diamond_7_dl_0_0, diamond_7_dl_0_1, diamond_7_dl_0_2, diamond_7_dl_0_3, diamond_7_dl_0_4, diamond_7_dl_0_5, diamond_7_dl_0_6, diamond_7_dl_0_7, diamond_7_dl_0_8, diamond_7_dl_0_9, diamond_7_dl_0_10, diamond_7_dl_0_11, diamond_7_dl_0_12, diamond_7_dl_0_13, diamond_7_dl_0_14, diamond_7_dl_0_15, diamond_7_dl_0_16, diamond_7_dl_0_17, diamond_7_dl_0_18, diamond_7_dl_0_19, diamond_7_dl_0_20, diamond_7_dl_0_21, diamond_7_dl_0_22, diamond_7_dl_0_23, diamond_7_dl_0_24, diamond_7_dl_0_25, diamond_7_dl_0_26, diamond_7_dl_0_27, diamond_7_dl_0_28, diamond_7_dl_0_29, diamond_7_dl_0_30, diamond_7_dl_0_31, diamond_7_dl_0_32, diamond_7_dl_0_33 };
-#endif
-#if VERSION > VERSION_DEMO_US
 u8* diamond_7_dl_1_tbl[] = { diamond_7_dl_1_0, diamond_7_dl_1_1, diamond_7_dl_1_2, diamond_7_dl_1_3, diamond_7_dl_1_4, diamond_7_dl_1_5, diamond_7_dl_1_6, diamond_7_dl_1_7, diamond_7_dl_1_8, diamond_7_dl_1_9, diamond_7_dl_1_10, diamond_7_dl_1_11, diamond_7_dl_1_12, diamond_7_dl_1_13, diamond_7_dl_1_14, diamond_7_dl_1_15, diamond_7_dl_1_16, diamond_7_dl_1_17, diamond_7_dl_1_18, diamond_7_dl_1_19, diamond_7_dl_1_20, diamond_7_dl_1_21, diamond_7_dl_1_22, diamond_7_dl_1_23, diamond_7_dl_1_24, diamond_7_dl_1_25, diamond_7_dl_1_26, diamond_7_dl_1_27, diamond_7_dl_1_28, diamond_7_dl_1_29, diamond_7_dl_1_30, diamond_7_dl_1_31, diamond_7_dl_1_32 };
 #endif
 #if VERSION <= VERSION_DEMO_US
@@ -603,7 +573,7 @@ void effStarStoneMain(EffectEntry* effect) {
         }
         if (w->state < 3 && cam == CAMERA_3D) {
 #if VERSION <= VERSION_DEMO_US
-shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale);
+            shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale);
 #else
             shadowSetMode(shadowEntry(w->position.x, w->position.y, w->position.z, 8.0f * w->scale), w->a);
 #endif
@@ -711,55 +681,55 @@ for (i = 0, size = diamond_1_dl_0_size_tbl, list = diamond_1_dl_0_tbl; i < sizeo
 #endif
     }
 #if VERSION <= VERSION_DEMO_US
-VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
-{
-            u8* sz;
-            u8** dl;
-            u32 n;
+    VTX_SETUP(diamond_1_vertex_tbl, diamond_1_normal_tbl, CLR_NONE, diamond_1_color0_tbl, diamond_1_texcoord0_tbl, 13);
+    {
+                u8* sz;
+                u8** dl;
+                u32 n;
 
-            for (n = 0, sz = diamond_1_dl_1_size_tbl, dl = diamond_1_dl_1_tbl; n < sizeof(diamond_1_dl_1_tbl) / sizeof(diamond_1_dl_1_tbl[0]); n++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz << 5);
+                for (n = 0, sz = diamond_1_dl_1_size_tbl, dl = diamond_1_dl_1_tbl; n < sizeof(diamond_1_dl_1_tbl) / sizeof(diamond_1_dl_1_tbl[0]); n++, sz++, dl++) {
+                    GXCallDisplayList(*dl, *sz << 5);
+                }
             }
-        }
-} else {
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
-{
-            u8* sz;
-            u8** dl;
-            u32 n;
+    } else {
+            VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
+    {
+                u8* sz;
+                u8** dl;
+                u32 n;
 
-            for (n = 0, sz = diamond_7_dl_0_size_tbl, dl = diamond_7_dl_0_tbl; n < sizeof(diamond_7_dl_0_tbl) / sizeof(diamond_7_dl_0_tbl[0]); n++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz << 5);
+                for (n = 0, sz = diamond_7_dl_0_size_tbl, dl = diamond_7_dl_0_tbl; n < sizeof(diamond_7_dl_0_tbl) / sizeof(diamond_7_dl_0_tbl[0]); n++, sz++, dl++) {
+                    GXCallDisplayList(*dl, *sz << 5);
+                }
             }
-        }
-VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
-{
-            u8* sz;
-            u8** dl;
-            u32 n;
+    VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
+    {
+                u8* sz;
+                u8** dl;
+                u32 n;
 
-            for (n = 0, sz = diamond_7_dl_1_size_tbl, dl = diamond_7_dl_1_tbl; n < sizeof(diamond_7_dl_1_tbl) / sizeof(diamond_7_dl_1_tbl[0]); n++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz << 5);
+                for (n = 0, sz = diamond_7_dl_1_size_tbl, dl = diamond_7_dl_1_tbl; n < sizeof(diamond_7_dl_1_tbl) / sizeof(diamond_7_dl_1_tbl[0]); n++, sz++, dl++) {
+                    GXCallDisplayList(*dl, *sz << 5);
+                }
             }
-        }
-}
-    GXSetNumChans(1);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
-    PSMTXTrans(m, w->texScrollX, w->texScrollY, 0.0f);
-    GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
-    GXSetNumTevStages(2);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
-    GXSetTevColor(GX_TEVREG0, (GXColor){w->r, w->g, w->b, w->a});
+    }
+        GXSetNumChans(1);
+        GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+        GXSetNumTexGens(1);
+        GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, GX_FALSE, GX_PTIDENTITY);
+        PSMTXTrans(m, w->texScrollX, w->texScrollY, 0.0f);
+        GXLoadTexMtxImm(m, GX_TEXMTX0, GX_MTX2x4);
+        GXSetNumTevStages(2);
+        GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
+        GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+        GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+        GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+        GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
+        GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
+        GXSetTevColor(GX_TEVREG0, (GXColor){w->r, w->g, w->b, w->a});
 #else
     DISP_MID(w)
 #endif
@@ -835,18 +805,18 @@ VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color
     }
 }
 #if VERSION <= VERSION_DEMO_US
-    } else {
-        VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
-        {
-            u8* sz;
-            u8** dl;
-            u32 n;
+} else {
+    VTX_SETUP(diamond_7_vertex_tbl, diamond_7_normal_tbl, CLR_ARRAY, diamond_7_color0_tbl, diamond_7_texcoord0_tbl, 13);
+    {
+        u8* sz;
+        u8** dl;
+        u32 n;
 
-            for (n = 0, sz = diamond_7_dl_1_size_tbl, dl = diamond_7_dl_1_tbl; n < sizeof(diamond_7_dl_1_tbl) / sizeof(diamond_7_dl_1_tbl[0]); n++, sz++, dl++) {
-                GXCallDisplayList(*dl, *sz << 5);
-            }
+        for (n = 0, sz = diamond_7_dl_1_size_tbl, dl = diamond_7_dl_1_tbl; n < sizeof(diamond_7_dl_1_tbl) / sizeof(diamond_7_dl_1_tbl[0]); n++, sz++, dl++) {
+            GXCallDisplayList(*dl, *sz << 5);
         }
     }
+}
 }
 #endif
 

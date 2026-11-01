@@ -123,7 +123,7 @@ EVT_BEGIN(majinaisi_table_talk)
     // She shows Mario's coins and the three prices; he can back out, or be turned away if he is short of coins.
     CALL(evt_msg_print_add, 0, STRING("majinaisi_04"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_unitwin_alloc)
+    CALL(evt_unitwin_alloc)
 #else
     CALL(evt_unitwin_alloc, 0)
 #endif
@@ -396,7 +396,7 @@ EVT_BEGIN(majinaisi_direct_talk)
                 IF_INT_GREATER(LW(0), 0)
                     CALL(evt_msg_print, 0, STRING("irai_14_04"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(iri_14_item_tbl), LW(0))
+                    CALL(evt_win_item_select, PTR(iri_14_item_tbl), LW(0))
 #else
                     CALL(evt_win_item_select, 0, PTR(iri_14_item_tbl), LW(0), 0)
 #endif

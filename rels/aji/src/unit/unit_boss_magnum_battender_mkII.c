@@ -73,11 +73,7 @@ EffectEntry* eff_suikomi;
 s32 screamId;
 #if VERSION > VERSION_DEMO_US
 s32 scream_fade_timer;
-#endif
-#if VERSION > VERSION_DEMO_US
 u8 scream_fade_start_vol;
-#endif
-#if VERSION > VERSION_DEMO_US
 u8 scream_fade_vol;
 #endif
 TargetWork* wp_target;
@@ -190,7 +186,7 @@ BattleUnitKind unit_boss_magnum_battender_mkII = {
     0.0f, // vivianOffsetX
     0.0f, // vivianOffsetZ
 #if VERSION <= VERSION_DEMO_US
-0.0f,
+    0.0f,
     60.0f,
     0.0f,
     -10.0f,
@@ -279,7 +275,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_FREEZE, "MGN_2D_1"},
     {POSE_TYPE_CONFUSE, "MGN_X_1"},
 #if VERSION <= VERSION_DEMO_US
-{POSE_TYPE_POISON, "MGN_S_1"},
+    {POSE_TYPE_POISON, "MGN_S_1"},
     {POSE_TYPE_DIZZY, "MGN_S_1"},
 #else
     {POSE_TYPE_POISON, "MGN_X_1"},
@@ -305,7 +301,7 @@ static PoseTableEntry pose_table_no_arm[] = {
     {POSE_TYPE_FREEZE, "MGN_2D_2"},
     {POSE_TYPE_CONFUSE, "MGN_X_2"},
 #if VERSION <= VERSION_DEMO_US
-{POSE_TYPE_POISON, "MGN_S_2"},
+    {POSE_TYPE_POISON, "MGN_S_2"},
     {POSE_TYPE_DIZZY, "MGN_S_2"},
 #else
     {POSE_TYPE_POISON, "MGN_X_2"},
@@ -786,15 +782,15 @@ USER_FUNC(aud_suikomi) {
         }
     }
 #if VERSION <= VERSION_DEMO_US
-if (done < 20) {
+    if (done < 20) {
         return EVT_RETURN_BLOCK;
 #else
     return done < 20 ? EVT_RETURN_BLOCK : EVT_RETURN_DONE;
 #endif
 }
 #if VERSION <= VERSION_DEMO_US
-    psndSFXOff(screamId);
-    return EVT_RETURN_DONE;
+psndSFXOff(screamId);
+return EVT_RETURN_DONE;
 }
 #endif
 
@@ -2179,8 +2175,8 @@ static BattleWeapon weapon_batten_rocket_attack = {
     NULL, // acHelpMsg
     SPECIAL_BADGE_POWER | SPECIAL_STATUS_POWER | SPECIAL_CHARGEABLE | SPECIAL_FREEZE_CRUSH, // special
 #if VERSION <= VERSION_DEMO_US
-COUNTER_RESIST_ALL & ~(COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_PREEMPTIVE_SPIKY),
-TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
+    COUNTER_RESIST_ALL & ~(COUNTER_RESIST_ELECTRIC | COUNTER_RESIST_PREEMPTIVE_SPIKY),
+    TARGET_WEIGHT_PREFER_FRONT | TARGET_WEIGHT_UNUSED_2000, // targetWeightFlags
 #else
     COUNTER_RESIST_ALL, // counterResistFlags
     0x2004, // targetWeightFlags

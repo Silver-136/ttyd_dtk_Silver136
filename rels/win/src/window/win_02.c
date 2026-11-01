@@ -24,12 +24,9 @@
 static BeroEntry bero_entry_data[5];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_hikou_nobiru_init[];
-#else
-EvtWord evt_hikou_nobiru_init[89];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_hikou_nobiru[];
 #else
+EvtWord evt_hikou_nobiru_init[89];
 EvtWord evt_hikou_nobiru[203];
 #endif
 static TreeAccess tree_access_data[3];
@@ -112,7 +109,7 @@ EVT_BEGIN(evt_hikou_nobiru_init)
     CALL(evt_hit_bind_mapobj, STRING("a_dai"), STRING("hikou"))
     CALL(evt_hit_bind_mapobj, STRING("a_hi"), STRING("hikou"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan_ha"))
+    CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan_ha"))
 #else
     CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan2"))
 #endif
@@ -160,7 +157,7 @@ EVT_BEGIN(evt_hikou_nobiru)
     CALL(evt_hit_bind_mapobj, STRING("a_dai"), STRING("hikou"))
     CALL(evt_hit_bind_mapobj, STRING("a_hi"), STRING("hikou"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan_ha"))
+    CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan_ha"))
 #else
     CALL(evt_hit_bind_mapobj, STRING("A_dokan1"), STRING("S_dokan2"))
 #endif

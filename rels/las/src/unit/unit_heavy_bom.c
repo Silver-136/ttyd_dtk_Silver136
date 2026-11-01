@@ -226,7 +226,7 @@ static BattleWeapon weapon_heavy_bomb_guard_2 = {
     0, 0, 0, 0, 0, 0, 0, // burnChance..sizeChangeStrength
     100, // atkChangeChance
 #if VERSION <= VERSION_DEMO_US
-2,
+    2,
 #else
     3, // atkChangeTime
 #endif
@@ -268,7 +268,7 @@ static BattleWeapon weapon_heavy_bomb_guard_3 = {
     0, 0, 0, 0, 0, 0, 0, 0, // burnChance..atkChangeChance
     0, 0, 0, 0, 0, 0, 0, 0, // atkChangeTime..ohkoChance
 #if VERSION <= VERSION_DEMO_US
-6,
+    6,
 #else
     3, // chargeStrength
 #endif

@@ -125,7 +125,7 @@ void effPointGetMain(EffectEntry* effect) {
     switch (work->state) {
         case 0:
 #if VERSION <= VERSION_DEMO_US
-work->position.x = intplGetValue(EASING_SINE_IN_OUT, -1000.0f, 50.0f * work->scale, work->timer, 45);
+            work->position.x = intplGetValue(EASING_SINE_IN_OUT, -1000.0f, 50.0f * work->scale, work->timer, 45);
 #else
             work->position.x = intplGetValue(EASING_SINE_IN_OUT, -1000.0f, 0.0f, work->timer, 45);
 #endif
@@ -148,7 +148,7 @@ work->position.x = intplGetValue(EASING_SINE_IN_OUT, -1000.0f, 50.0f * work->sca
             break;
         case 2:
 #if VERSION <= VERSION_DEMO_US
-work->position.x = intplGetValue(EASING_SINE_IN_OUT, 50.0f * work->scale, 1000.0f, work->timer, 60);
+            work->position.x = intplGetValue(EASING_SINE_IN_OUT, 50.0f * work->scale, 1000.0f, work->timer, 60);
 #else
             work->position.x = intplGetValue(EASING_SINE_IN_OUT, 0.0f, 1000.0f, work->timer, 60);
 #endif

@@ -93,7 +93,7 @@ s32 marioSlitButton(void) {
         return 0;
     }
 #if VERSION <= VERSION_DEMO_US
-if (!(mario->flags & MARIO_FLAG_PAPER_MODE)) {
+    if (!(mario->flags & MARIO_FLAG_PAPER_MODE)) {
 #else
     if (!(mario->dispFlags & MARIO_DISP_FLAG_SLIT)) {
 #endif
@@ -441,8 +441,8 @@ void marioSlitForceCancel(void) {
         m->flags &= ~MARIO_FLAG_PARTY_WALK_DISABLED;
         m->flags &= ~MARIO_FLAG_GONE_THROUGH_BARS;
 #if VERSION <= VERSION_DEMO_US
-m->wPlayerCollisionBox.x = 20.0f;
-m->dispFlags &= CLR_DISP;
+        m->wPlayerCollisionBox.x = 20.0f;
+        m->dispFlags &= CLR_DISP;
 #else
         m->wPlayerCollisionBox.x = 10.0f;
         m->dispFlags &= ~(MARIO_DISP_FLAG_LEFT_ONLY | MARIO_DISP_FLAG_RIGHT_ONLY | MARIO_DISP_FLAG_SLIT);
@@ -664,7 +664,7 @@ static inline BOOL slitContinueChk(void) {
     MarioWork* mario = marioGetPtr();
     Vec pos;
 #if VERSION <= VERSION_DEMO_US
-if (marioSlitButton() == 2) {
+    if (marioSlitButton() == 2) {
 #else
     if (marioSlitButton()) {
 #endif

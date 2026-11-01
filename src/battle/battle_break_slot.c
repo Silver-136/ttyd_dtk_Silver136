@@ -207,8 +207,6 @@ EVT_END()
 // US battle textures are 0x16 higher; BTL_TEX uses JP-base IDs.
 #if VERSION > VERSION_DEMO_US
 u16 tex_id_list_small[5] = {BTL_TEX(0x2B), BTL_TEX(0x2D), BTL_TEX(0x2F), BTL_TEX(0x2E), BTL_TEX(0x2C)};
-#endif
-#if VERSION > VERSION_DEMO_US
 u16 tex_id_list_big[5] = {BTL_TEX(0x30), BTL_TEX(0x32), BTL_TEX(0x34), BTL_TEX(0x33), BTL_TEX(0x31)};
 #endif
 

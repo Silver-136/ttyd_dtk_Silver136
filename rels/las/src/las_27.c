@@ -137,7 +137,7 @@ static EVT_BEGIN(shan_init)
         CALL(evt_mapobj_get_position, LW(1), LW(2), LW(3), LW(4))
         SUBTRACT_FLOAT(LW(3), FLOAT(9.0f))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.69921875f), 1000, 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff, STRING(""), STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.69921875f), 1000, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("fire"), 3, LW(2), LW(3), LW(4), FLOAT(0.69921875f), 1000, 0, 0, 0, 0, 0, 0)
 #endif
@@ -162,8 +162,8 @@ EVT_BEGIN(las_27_init_evt)
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 520, 60, -150, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mobj_recovery_blk, STRING("r_blk"), 5, 450, 60, -150, 0, 0)
-CALL_CHILD(shan_init)
+    CALL(evt_mobj_recovery_blk, STRING("r_blk"), 5, 450, 60, -150, 0, 0)
+    CALL_CHILD(shan_init)
 #else
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 10, 450, 60, -150, 0, 0)
     CALL_CHILD(PTR(shan_init))
@@ -175,8 +175,8 @@ EVT_END()
 static USER_FUNC(make_name) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_US
-char name[8];
-s32 number;
+    char name[8];
+    s32 number;
 #endif
 
 #if VERSION <= VERSION_DEMO_US

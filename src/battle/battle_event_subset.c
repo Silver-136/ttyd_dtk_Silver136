@@ -44,27 +44,15 @@ EvtWord subsetevt_dead_core_nospin_norotate[125];
 EvtWord btldefaultevt_avoid_guard[92];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord subsetevt_damage[];
-#else
-EvtWord subsetevt_damage[979];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord subsetevt_counter_damage[];
-#else
-EvtWord subsetevt_counter_damage[174];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord btldefaultevt_ChangePosition[];
-#else
-EvtWord btldefaultevt_ChangePosition[186];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord subsetevt_happy_heart[];
-#else
-EvtWord subsetevt_happy_heart[53];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord subsetevt_happy_flower[];
 #else
+EvtWord subsetevt_damage[979];
+EvtWord subsetevt_counter_damage[174];
+EvtWord btldefaultevt_ChangePosition[186];
+EvtWord subsetevt_happy_heart[53];
 EvtWord subsetevt_happy_flower[53];
 #endif
 EvtWord subsetevt_terror[51];
@@ -1021,7 +1009,7 @@ EVT_BEGIN(subsetevt_counter_damage)
         CALL(evt_snd_sfxon, STRING("SFX_BTL_ATTACK_MISS3"), 0)
         SET_VALUE(LW(14), POSE_TYPE_DAMAGE_TOP_SPIKY)
 #if VERSION <= VERSION_DEMO_US
-CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_FIERY)
+        CASE_OR_EQUAL(DAMAGE_CODE_COUNTER_FIERY)
 #else
         CASE_EQUAL(DAMAGE_CODE_COUNTER_FIERY)
         CALL(btlevtcmd_GetUnitKind, LW(10), LW(2))
@@ -1153,7 +1141,7 @@ EVT_BEGIN(subsetevt_happy_heart)
 #endif
                 END_IF
 #if VERSION <= VERSION_DEMO_US
-    WAIT_FRAMES(120)
+            WAIT_FRAMES(120)
 #else
             END_IF
         END_IF
@@ -1182,7 +1170,7 @@ EVT_BEGIN(subsetevt_happy_flower)
 #endif
                 END_IF
 #if VERSION <= VERSION_DEMO_US
-    WAIT_FRAMES(120)
+            WAIT_FRAMES(120)
 #else
             END_IF
         END_IF

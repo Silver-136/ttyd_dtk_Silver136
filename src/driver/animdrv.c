@@ -1667,7 +1667,7 @@ void animPoseMain(s32 poseId) {
                 hb = -2.0f * t3 + 3.0f * t2;
                 *(f32*)v = *(f32*)v + ((t + (t3 - 2.0f * t2)) * (dt * tanfTbl[(s8)d[2] + 0x59]) +
 #if VERSION <= VERSION_DEMO_US
-                                       hb * (0.0625f * (f32)(s8)d[1]) +
+                                hb * (0.0625f * (f32)(s8)d[1]) +
 #else
                                 hb * (0.0625f * x) +
 #endif
@@ -2160,19 +2160,19 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
 #endif
         s32 id;
 #if VERSION <= VERSION_DEMO_US
-    s32 wrapT;
-    TEXDescriptor* desc;
-    s32 bindId;
-    s32 wrapS;
-    s32 i;
-    GXTlutObj tlut;
-    TEXHeader* hdr;
-    GXTexObj obj;
-    s32 wrapFlags;
-    AnimPoseTexEntry* entry;
-    s32 tex2;
-    for (i = 0; i < texCount; i++) {
-        id = texIdRemap[(u32)((texCount - i) - 1)];
+        s32 wrapT;
+        TEXDescriptor* desc;
+        s32 bindId;
+        s32 wrapS;
+        s32 i;
+        GXTlutObj tlut;
+        TEXHeader* hdr;
+        GXTexObj obj;
+        s32 wrapFlags;
+        AnimPoseTexEntry* entry;
+        s32 tex2;
+        for (i = 0; i < texCount; i++) {
+            id = texIdRemap[(u32)((texCount - i) - 1)];
 #else
         // FAKE: (u32) index cast; texIdRemap[texCount - i[0] - 1] changes the object
         id = texIdRemap[(u32) ((texCount - i[0]) - 1)];
@@ -2258,31 +2258,31 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
         }
     }
 #if VERSION <= VERSION_DEMO_US
-    {
+        {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
-        // r22); j is a one-element array (an IRO temp, so j colours r20 and texMtx r21), and the dead gz guard keeps k = 0 from
-        // being propagated into j, giving the target's li r22,0 / mr r20,r22 (the guard leaves no code after RA)
-        s32 gz;
-        s32 texMtx;
-        f32 scaleS;
-        f32 scaleT;
-        f32 transS;
-        f32 transT;
-        Mtx m;
-        AnimTexMtx* anim;
-        f32 rotate;
-        Mtx tmp;
-        s32 j[1];
-        s32 k;
-        k = 0;
+    // r22); j is a one-element array (an IRO temp, so j colours r20 and texMtx r21), and the dead gz guard keeps k = 0 from
+    // being propagated into j, giving the target's li r22,0 / mr r20,r22 (the guard leaves no code after RA)
+    s32 gz;
+    s32 texMtx;
+    f32 scaleS;
+    f32 scaleT;
+    f32 transS;
+    f32 transT;
+    Mtx m;
+    AnimTexMtx* anim;
+    f32 rotate;
+    Mtx tmp;
+    s32 j[1];
+    s32 k;
+    k = 0;
 #endif
     // FAKE: dead int guard (no code after RA) keeps the three copies from being propagated away
     gz = 0;
     if (gz != 0) {
 #if VERSION <= VERSION_DEMO_US
-            k = 0;
+        k = 0;
 #else
         texCount = 0;
         texIdRemap = NULL;
@@ -2290,8 +2290,8 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
 #endif
     }
 #if VERSION <= VERSION_DEMO_US
-        for (j[0] = k; k < texCount; k++, j[0] += 3) {
-            anim = &animEntries[texIdRemap[(u32)((texCount - k) - 1)]];
+    for (j[0] = k; k < texCount; k++, j[0] += 3) {
+        anim = &animEntries[texIdRemap[(u32)((texCount - k) - 1)]];
 #else
     for (i[0] = 0; i[0] < texCount; i[0]++) {
         flags = 0;
@@ -2304,9 +2304,9 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
         transS = anim->transS;
         transT = anim->transT;
 #if VERSION <= VERSION_DEMO_US
-            rotate = anim->rotate;
-            if (scaleS == 1.0f && scaleT == 1.0f && transS == 0.0f && transT == 0.0f && rotate == 0.0f) {
-                GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), GX_IDENTITY, (GXBool)0, GX_PTIDENTITY);
+        rotate = anim->rotate;
+        if (scaleS == 1.0f && scaleT == 1.0f && transS == 0.0f && transT == 0.0f && rotate == 0.0f) {
+            GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), GX_IDENTITY, (GXBool)0, GX_PTIDENTITY);
 #else
         if (rotate != 0.0f) {
             flags |= 1;
@@ -2366,19 +2366,19 @@ static void animSetMaterial_Texture(s32 texCount, s32* texIdRemap, AnimPoseTexEn
 #endif
         }
 #if VERSION <= VERSION_DEMO_US
-            PSMTXIdentity(m);
-            PSMTXTrans(tmp, 0.5f, 0.5f, 0.0f);
-            PSMTXConcat(m, tmp, m);
-            PSMTXRotRad(tmp, 'z', 0.017453292f * (-rotate));
-            PSMTXConcat(m, tmp, m);
-            PSMTXTrans(tmp, -0.5f, -0.5f, 0.0f);
-            PSMTXConcat(m, tmp, m);
-            PSMTXTrans(tmp, transS, (1.0f - transT) - scaleT, 0.0f);
-            PSMTXConcat(m, tmp, m);
-            PSMTXScale(tmp, scaleS, scaleT, 0.0f);
-            PSMTXConcat(m, tmp, m);
-            texMtx = GX_TEXMTX0 + j[0];
-            GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), texMtx, (GXBool)0, GX_PTIDENTITY);
+        PSMTXIdentity(m);
+        PSMTXTrans(tmp, 0.5f, 0.5f, 0.0f);
+        PSMTXConcat(m, tmp, m);
+        PSMTXRotRad(tmp, 'z', 0.017453292f * (-rotate));
+        PSMTXConcat(m, tmp, m);
+        PSMTXTrans(tmp, -0.5f, -0.5f, 0.0f);
+        PSMTXConcat(m, tmp, m);
+        PSMTXTrans(tmp, transS, (1.0f - transT) - scaleT, 0.0f);
+        PSMTXConcat(m, tmp, m);
+        PSMTXScale(tmp, scaleS, scaleT, 0.0f);
+        PSMTXConcat(m, tmp, m);
+        texMtx = GX_TEXMTX0 + j[0];
+        GXSetTexCoordGen2((GXTexCoordID)k, GX_TG_MTX2x4, (GXTexGenSrc)(GX_TG_TEX0 + k), texMtx, (GXBool)0, GX_PTIDENTITY);
 #else
 
         j = (u32)i[0] * 3; // FAKE: unsigned multiply (i >= 0, same value) shifts loop-2 colouring toward target
@@ -2623,7 +2623,7 @@ void renderProc(s32 shapeId, s32 unused) {
         CameraEntry* camera;
         s32 index;
 #if VERSION <= VERSION_DEMO_US
-Mtx* model = g_modeling_mtx;
+        Mtx* model = g_modeling_mtx;
 #endif
         camera = camGetCurPtr();
 #if VERSION <= VERSION_DEMO_US

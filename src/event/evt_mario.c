@@ -1274,7 +1274,7 @@ USER_FUNC(evt_mario_set_talk_motion) {
 USER_FUNC(evt_mario_cancel_roll_motion) {
     if (isFirstCall) {
 #if VERSION <= VERSION_DEMO_US
-marioRollCancel();
+        marioRollCancel();
 #else
         marioRollTryCancel();
 #endif
@@ -1660,7 +1660,7 @@ USER_FUNC(evt_mario_party_bero_move) {
                 party->position = mp->position;
             }
 #if VERSION <= VERSION_DEMO_US
-party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
+            party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
 #else
             partyFollowCloseOn(party);
 #endif
@@ -1677,7 +1677,7 @@ party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
                 party->position = mp->position;
             }
 #if VERSION <= VERSION_DEMO_US
-party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
+            party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
 #else
             partyFollowCloseOn(party);
 #endif
@@ -1718,7 +1718,7 @@ party->trigFlags |= PARTY_TRIG_FOLLOW_CLOSE;
                 break;
             }
 #if VERSION <= VERSION_DEMO_US
-event->userdata[1] = sysMsec2Frame(400);
+            event->userdata[1] = sysMsec2Frame(400);
             event->userdata[0] = 6;
 #endif
             party = partyGetPtr(marioGetPartyId());
@@ -1951,7 +1951,7 @@ USER_FUNC(evt_mario_jump_jumpstand) {
         event->userdata[0] = 0;
         event->userdata[3] = 0;
 #if VERSION <= VERSION_DEMO_US
-if (mp->fallStartPos.y < mp->position.y) {
+        if (mp->fallStartPos.y < mp->position.y) {
 #else
         if (mode == 3) {
             event->userdata[3] = 2;
@@ -2009,7 +2009,7 @@ if (mp->fallStartPos.y < mp->position.y) {
                 event->userdata[0] = 10;
             }
 #if VERSION <= VERSION_DEMO_US
-marioChgMot(MARIO_MOTION_JUMP_3);
+            marioChgMot(MARIO_MOTION_JUMP_3);
 #endif
             event->userdata[2] = 0.5f * (f32)event->userdata[1] + 0.5f;
             if (event->userdata[0] == 10) {
@@ -2056,7 +2056,7 @@ marioChgMot(MARIO_MOTION_JUMP_3);
         case 10:
             if (mp->position.y < y2) {
 #if VERSION <= VERSION_DEMO_US
-if (!mode) {
+                if (!mode) {
 #else
                 if (!(mode & 1)) {
 #endif

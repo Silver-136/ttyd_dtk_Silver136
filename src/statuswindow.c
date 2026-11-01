@@ -742,7 +742,7 @@ void statusGetValue(StatusValue* values) {
         values->starPoints = pouchGetStarPoint();
         values->coins = pouchGetCoin();
 #if VERSION <= VERSION_DEMO_US
-if (!marioBgmodeChk()) {
+        if (!marioBgmodeChk()) {
             values->party = marioGetParty();
 #else
         values->party = !marioBgmodeChk() ? (s16)marioGetParty() : marioGetPtr()->prevPartyMemberId[0];
@@ -750,14 +750,14 @@ if (!marioBgmodeChk()) {
         values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
         values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
 #if VERSION <= VERSION_DEMO_US
-            if (values->party) {
-                wp->cur.lastParty = values->party;
-            }
-        } else {
-            values->party = wp->cur.lastParty;
-            values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
-            values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
-        }
+    if (values->party) {
+        wp->cur.lastParty = values->party;
+    }
+} else {
+    values->party = wp->cur.lastParty;
+    values->partyHp = pouchGetPtr()->partyData[values->party].currentHP;
+    values->partyMaxHp = pouchGetPtr()->partyData[values->party].maximumHP;
+}
 #endif
     } else {
         bw = _battleWorkPointer;
@@ -888,7 +888,7 @@ void valueUpdate(void) {
     }
     d = calcStep(v.coins, wp->cur.coins);
 #if VERSION <= VERSION_DEMO_US
-if (d && !(count % 6)) {
+    if (d && !(count % 6)) {
 #else
     if (d && !(count % 8)) {
 #endif

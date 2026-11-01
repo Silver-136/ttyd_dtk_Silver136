@@ -72,12 +72,9 @@ static EvtWord breakyuka_main[131];
 EvtWord strange_statue[56];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord switch_event[];
-#else
-EvtWord switch_event[41];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord mri_17_init_evt[];
 #else
+EvtWord switch_event[41];
 EvtWord mri_17_init_evt[208];
 #endif
 
@@ -435,11 +432,11 @@ EVT_BEGIN(trap_event)
         END_IF
     END_LOOP
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(mri_guide_goryu)
+    CALL_CHILD(mri_guide_goryu)
 #endif
     CALL(evt_puni_flag_onoff, 1, 0, PUNI_FLAG_SCRIPT_CONTROL)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
+    CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
 #else
     CALL(evt_puni_set_mode, 1, PUNI_MODE_INERT)
     CALL(evt_puni_get_position, 1, LW(0), LW(1), LW(2))
@@ -564,7 +561,7 @@ CALL(evt_npc_flag_onoff, 1, STRING("ガイド"), NPC_FLAG_TALK_POSE | NPC_FLAG_A
     CALL(evt_puni_flag_onoff, 1, 1, PUNI_FLAG_SCRIPT_CONTROL)
     CALL(evt_puni_set_position, 1, LW(0), LW(1), LW(2))
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSW_STORY_PROGRESS, STG2_21_BUBBLES_2)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_BUBBLES_2)
 #else
     CALL(evt_puni_set_mode, 1, PUNI_MODE_TRAP)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_BUBBLES_2)
@@ -753,7 +750,7 @@ static EVT_BEGIN(breakyuka_main)
         IF_INT_EQUAL(LW(12), 1)
             CALL(evt_puni_set_mode, LW(10), PUNI_MODE_HAGURE)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_puni_flag_onoff, LW(10), 1, 0xA00000)
+            CALL(evt_puni_flag_onoff, LW(10), 1, 0xA00000)
             CALL(evt_puni_set_trap_index, LW(10), 0)
 #else
             CALL(evt_puni_flag_onoff, LW(10), 1, 2097152)
@@ -808,7 +805,7 @@ EVT_BEGIN(switch_event)
 #endif
     CALL(evt_msg_print_party, STRING("stg2_mri_e18_00_10"))
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
+    SET_VALUE(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)
 #else
     CALL(evt_party_run, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG2_21_01_MYSTERY_PILLAR)

@@ -337,7 +337,7 @@ void mot_hammer(void) {
                 break;
             }
 #if VERSION <= VERSION_DEMO_US
-for (i = 0; i < 5; i++) {
+            for (i = 0; i < 5; i++) {
 #else
             // FAKE: unsigned compare of the s32 loop counter; i < 10 changes the object
             for (i = 0; (u32)i < 10; i++) {
@@ -804,7 +804,7 @@ HitEntry* hitEstimate(s32* out) {
     s32 i;
     f32 k5 = 5.0f;
 #if VERSION <= VERSION_DEMO_US
-f32 ang;
+    f32 ang;
 #endif
     mario = marioGetPtr();
     *out = 0;
@@ -820,7 +820,7 @@ f32 ang;
     sincosf(&s, &c, a);
     h = mario->wPlayerCollisionBox.y;
 #if VERSION <= VERSION_DEMO_US
-ang = 3.14159265f;
+    ang = 3.14159265f;
     cy = (f32)cos(ang);
 #else
     cy = (f32)cos(3.14159265f);
@@ -842,7 +842,7 @@ ang = 3.14159265f;
         }
     }
 #if VERSION <= VERSION_DEMO_US
-ang = 1.2217306f;
+    ang = 1.2217306f;
     cy = (f32)cos(ang);
 #else
     cy = (f32)cos(1.2217306f);
@@ -865,7 +865,7 @@ ang = 1.2217306f;
         }
     }
 #if VERSION <= VERSION_DEMO_US
-ang = 0.78539816f;
+    ang = 0.78539816f;
     cy = (f32)cos(ang);
 #else
     cy = (f32)cos(0.78539816f);
@@ -888,7 +888,7 @@ ang = 0.78539816f;
         }
     }
 #if VERSION <= VERSION_DEMO_US
-ang = 0.0f;
+    ang = 0.0f;
     cy = (f32)cos(ang);
 #else
     cy = (f32)cos(0.0f);

@@ -100,12 +100,9 @@ EvtWord minigame03_start_cam[40];
 EvtWord minigame03_start_cam_cancel[17];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord minigame03_start[];
-#else
-EvtWord minigame03_start[193];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord minigame03_end[];
 #else
+EvtWord minigame03_start[193];
 EvtWord minigame03_end[217];
 #endif
 EvtWord s_en1_turn[30];
@@ -131,7 +128,7 @@ Vec fukkipoint[] = {
     {1500.0f, 0.0f, 300.0f},
     {1550.0f, 0.0f, -300.0f},
 #if VERSION <= VERSION_DEMO_US
-{950.0f, 200.0f, -300.0f},
+    {950.0f, 200.0f, -300.0f},
 #else
     {925.0f, 200.0f, -300.0f},
 #endif
@@ -615,7 +612,7 @@ void yuuminigame_main_3roll(EventEntry* event, BOOL isFirstCall) {
             wp->subEvent = evtEntry(minigame03_end, 0, 0);
             wp->subEvent->lwData[0] = data->coins;
 #if VERSION <= VERSION_DEMO_US
-if (data->result == 0) {
+            if (data->result == 0) {
                 data->result += 2;
             } else if (data->result < 0) {
 #else
@@ -662,7 +659,7 @@ BOOL yuuminigame3_gamerule(EventEntry* event, BOOL isFirstCall, MiniGameWork* wp
         data->flags |= 2;
         data->jumpEvent = evtEntry(yuu_02_jumpret, 0, 0);
 #if VERSION <= VERSION_DEMO_US
-data->jumpEvent->lwData[0] = (s32)fukkipoint[data->index].x;
+        data->jumpEvent->lwData[0] = (s32)fukkipoint[data->index].x;
 #else
         data->jumpEvent->lwData[0] = (s32)fukkipoint[data->index].x + (fukkipoint[data->index].z >= 0.0f ? 5 : -5);
 #endif
@@ -753,7 +750,7 @@ EVT_BEGIN(yuu_02_jumpret)
 #endif
     WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_cam3d_evt_off, 3000, EASING_LINEAR)
+    CALL(evt_cam3d_evt_off, 3000, EASING_LINEAR)
     WAIT_MS(3000)
 #endif
     CALL(evt_cam_get_pos, CAMERA_3D, LW(7), LW(8), LW(9))
@@ -795,7 +792,7 @@ EVT_END()
  */
 EVT_BEGIN(yuu_02_kaijo_init2)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_set_pos, 300, 0, 300)
+    CALL(evt_mario_set_pos, 300, 0, 300)
 #else
     CALL(evt_mario_set_pos, 200, 0, 300)
 #endif
@@ -829,14 +826,14 @@ EVT_BEGIN(minigame03_start_cam)
     WAIT_FRAMES(1)
     CALL(evt_seq_wait, SEQ_GAME)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_cam3d_evt_set, FLOAT(1600.0f), FLOAT(573.0f), FLOAT(1333.0f), FLOAT(1600.0f), FLOAT(12.0f), FLOAT(-89.0f), 5000, EASING_LINEAR)
+    CALL(evt_cam3d_evt_set, FLOAT(1600.0f), FLOAT(573.0f), FLOAT(1333.0f), FLOAT(1600.0f), FLOAT(12.0f), FLOAT(-89.0f), 5000, EASING_LINEAR)
 #else
     CALL(evt_cam3d_evt_set, FLOAT(1600.0f), FLOAT(573.0f), FLOAT(1333.0f), FLOAT(1600.0f), FLOAT(12.0f), FLOAT(-89.0f), 8000, EASING_LINEAR)
 #endif
     WAIT_MS(1000)
     CALL(evt_yuutitle_alloc, 0, 0, STRING("menu_title_minigame3"))
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(2000)
+    WAIT_MS(2000)
 #else
     WAIT_MS(5000)
 #endif
@@ -936,7 +933,7 @@ EVT_BEGIN(minigame03_start)
 #endif
     CALL(evt_mario_key_onoff, 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_yuucounter_alloc, 0, 70, 1, 180)
+    CALL(evt_yuucounter_alloc, 0, 70, 1, 180)
 #endif
     RETURN
 EVT_END()

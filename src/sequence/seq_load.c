@@ -244,7 +244,7 @@ void seq_loadMain(SequenceWork* seq) {
                             wp->soundMode = 1;
                         } else {
 #if VERSION <= VERSION_DEMO_US
-                        SoundSetOutputMode(2);
+                            SoundSetOutputMode(2);
 #endif
                             wp->soundMode = 2;
 #if VERSION > VERSION_DEMO_US
@@ -2076,7 +2076,7 @@ void continueGame(void) {
             break;
         case 10:
 #if VERSION <= VERSION_DEMO_US
-gp->areaFadeInType = FADE_STORY_PEACH_A2;
+            gp->areaFadeInType = FADE_STORY_PEACH_A2;
             gp->areaFadeOutType = FADE_STORY_PEACH_A3;
 #else
             gp->areaFadeInType = 0;
@@ -2096,7 +2096,7 @@ gp->areaFadeInType = FADE_STORY_PEACH_A2;
             break;
         case 13:
 #if VERSION <= VERSION_DEMO_US
-gp->areaFadeInType = FADE_STORY_MARIO_A2;
+            gp->areaFadeInType = FADE_STORY_MARIO_A2;
             gp->areaFadeOutType = FADE_STORY_MARIO_A3;
 #else
             gp->areaFadeInType = 0;
@@ -2116,7 +2116,7 @@ gp->areaFadeInType = FADE_STORY_MARIO_A2;
             break;
         case 16:
 #if VERSION <= VERSION_DEMO_US
-gp->areaFadeInType = FADE_STORY_MARIO_A2;
+            gp->areaFadeInType = FADE_STORY_MARIO_A2;
             gp->areaFadeOutType = FADE_STORY_MARIO_A3;
 #else
             gp->areaFadeInType = 0;
@@ -2151,7 +2151,7 @@ gp->areaFadeInType = FADE_STORY_MARIO_A2;
             break;
         case 22:
 #if VERSION <= VERSION_DEMO_US
-gp->areaFadeInType = FADE_STORY_MARIO_A2;
+            gp->areaFadeInType = FADE_STORY_MARIO_A2;
             gp->areaFadeOutType = FADE_STORY_MARIO_A3;
 #else
             gp->areaFadeInType = 0;

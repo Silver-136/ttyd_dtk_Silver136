@@ -679,7 +679,7 @@ static PoseTableEntry pose_table_furafura[] = {
 static BattleDataEntry data_table[] = {
     {UNIT_DATA_DAMAGE_SUB_EVENT, damage_sub_event},
 #if VERSION <= VERSION_DEMO_US
-{50, dead_event},
+    {50, dead_event},
 #else
     {UNIT_DATA_DEAD_EVENT, dead_event},
 #endif
@@ -1796,7 +1796,7 @@ static EVT_BEGIN(dead_event)
 #endif
         IF_INT_NOT_EQUAL(LW(1), -1)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_KillUnit, LW(1), 1)
+            CALL(btlevtcmd_KillUnit, LW(1), 1)
 #else
             CALL(btlevtcmd_CheckDamageCode, LW(1), DAMAGE_RESULT_ZERO_HP, LW(2))
             IF_INT_EQUAL(LW(2), 0)

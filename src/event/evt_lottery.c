@@ -167,10 +167,10 @@ USER_FUNC(evt_lottery) {
 #endif
                         lot->todayNum = rand() % 10000;
 #if VERSION <= VERSION_DEMO_US
-                        if (lot->todayNum != lot->number) {
-                            break;
-                        }
+                    if (lot->todayNum != lot->number) {
+                        break;
                     }
+                }
 #else
                     } while (lot->todayNum == lot->number || lot->number % 1000 == lot->todayNum % 1000 ||
                         lot->number % 100 == lot->todayNum % 100 || lot->number % 10 == lot->todayNum % 10);

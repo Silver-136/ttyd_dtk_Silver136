@@ -3610,7 +3610,7 @@ void puniModeFall(PuniData* p) {
         p->vel.x = 0.0f;
         p->vel.y -= 0.45f;
 #if VERSION <= VERSION_DEMO_US
-PSVECNormalize(&p->vel, &dir);
+        PSVECNormalize(&p->vel, &dir);
 #else
         {
             Vec v = {0.0f, -1.0f, 0.0f};
@@ -5182,8 +5182,8 @@ void puniOption(void) {
     for (p = Punidat; p < Punidat + PUNI_DATA_MAX; p++) {
         p->flags &= ~PUNI_FLAG_NEAR;
 #if VERSION <= VERSION_DEMO_US
-    }
-    for (p = Punidat; p < Punidat + PUNI_DATA_MAX; p++) {
+        }
+        for (p = Punidat; p < Punidat + PUNI_DATA_MAX; p++) {
 #endif
         if (!(p->flags & PUNI_FLAG_ACTIVE) || !(p->flags & PUNI_FLAG_COLLIDE)) {
             continue;
@@ -5583,57 +5583,57 @@ void puni_puni_main(void) {
                     }
                 }
 #if VERSION <= VERSION_DEMO_US
-            switch (p->mode) {
-                case PUNI_MODE_IDLE:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeNormal(p);
-                    break;
-                case PUNI_MODE_JOIN:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeParentpre(p);
-                    break;
-                case PUNI_MODE_PARENT:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeParent(p);
-                    break;
-                case PUNI_MODE_SEARCH:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeSearch(p);
-                    break;
-                case PUNI_MODE_MASS:
-                    p->flags |= PUNI_FLAG_STRAY;
-                    puniModeMass(p);
-                    break;
-                case PUNI_MODE_AWAYJUMP:
-                    p->flags |= PUNI_FLAG_STRAY;
-                    puniModeAwayjump(p);
-                    break;
-                case PUNI_MODE_AWAY:
-                    p->flags |= PUNI_FLAG_STRAY;
-                    puniModeAway(p);
-                    break;
-                case PUNI_MODE_ATTACK:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeAttack(p);
-                    break;
-                case PUNI_MODE_DAMAGE:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeDamage(p);
-                    break;
-                case PUNI_MODE_PIYORI:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModePiyori(p);
-                    break;
-                case PUNI_MODE_ESCAPE:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeEscape(p);
-                    break;
-                case PUNI_MODE_RECOVER:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeRecover(p);
-                    break;
-                case PUNI_MODE_DEAD:
-                    p->flags &= ~PUNI_FLAG_STRAY;
+                switch (p->mode) {
+                    case PUNI_MODE_IDLE:
+                        p->flags &= ~PUNI_FLAG_STRAY;
+                        puniModeNormal(p);
+                        break;
+                    case PUNI_MODE_JOIN:
+                        p->flags &= ~PUNI_FLAG_STRAY;
+                        puniModeParentpre(p);
+                        break;
+                    case PUNI_MODE_PARENT:
+                        p->flags &= ~PUNI_FLAG_STRAY;
+                        puniModeParent(p);
+                        break;
+                    case PUNI_MODE_SEARCH:
+                        p->flags &= ~PUNI_FLAG_STRAY;
+                        puniModeSearch(p);
+                        break;
+                    case PUNI_MODE_MASS:
+                        p->flags |= PUNI_FLAG_STRAY;
+                        puniModeMass(p);
+                        break;
+                    case PUNI_MODE_AWAYJUMP:
+                        p->flags |= PUNI_FLAG_STRAY;
+                        puniModeAwayjump(p);
+                        break;
+                    case PUNI_MODE_AWAY:
+                        p->flags |= PUNI_FLAG_STRAY;
+                        puniModeAway(p);
+                        break;
+                    case PUNI_MODE_ATTACK:
+                        p->flags &= ~PUNI_FLAG_STRAY;
+                        puniModeAttack(p);
+                        break;
+                    case PUNI_MODE_DAMAGE:
+                        p->flags &= ~PUNI_FLAG_STRAY;
+                        puniModeDamage(p);
+                        break;
+                    case PUNI_MODE_PIYORI:
+                        p->flags &= ~PUNI_FLAG_STRAY;
+                        puniModePiyori(p);
+                        break;
+                    case PUNI_MODE_ESCAPE:
+                        p->flags &= ~PUNI_FLAG_STRAY;
+                        puniModeEscape(p);
+                        break;
+                    case PUNI_MODE_RECOVER:
+                        p->flags &= ~PUNI_FLAG_STRAY;
+                        puniModeRecover(p);
+                        break;
+                    case PUNI_MODE_DEAD:
+                        p->flags &= ~PUNI_FLAG_STRAY;
 #else
                 puniModeMain(p);
             }
@@ -5652,77 +5652,77 @@ void puni_puni_main(void) {
 #endif
 
 #if VERSION <= VERSION_DEMO_US
-                    // FAKE: the (u32) round trip keeps the name out of constant propagation, so its address is hoisted into a saved
-                    // register before the loop as in the demo.
-                    puniModeDeadSfx(p, (const char*)(u32)"SFX_STG2_FIGHT_TOGE3");
-                    break;
-                case PUNI_MODE_WIND:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeWind(p);
-                    break;
-                case PUNI_MODE_STOP:
-                    break;
-                case PUNI_MODE_CHECKPOS:
-                    p->flags |= PUNI_FLAG_STRAY;
-                    puniModeCheckPos(p);
-                    break;
-                case PUNI_MODE_HAGURE:
-                    p->flags |= PUNI_FLAG_STRAY;
-                    puniModeHagure(p);
-                    break;
-                case PUNI_MODE_PREUPDRAFT:
-                    p->flags |= PUNI_FLAG_STRAY;
-                    puniModePreupdraft(p);
-                    break;
-                case PUNI_MODE_UPDRAFT:
-                    p->flags |= PUNI_FLAG_STRAY;
-                    puniModeUpdraft(p);
-                    break;
-                case PUNI_MODE_WONDER:
-                    p->flags |= PUNI_FLAG_STRAY;
-                    // FAKE: same (u32) round trip as PUNI_MODE_DEAD.
-                    puniModeWonderSfx(p, (const char*)(u32) "SFX_STG2_SOAPBALL_BREAK1");
-                    break;
-                case PUNI_MODE_FUNBARI:
-                    p->flags |= PUNI_FLAG_STRAY;
-                    puniModeFunbari(p);
-                    break;
-                case PUNI_MODE_WATER:
-                    p->flags |= PUNI_FLAG_STRAY;
-                    puniModeWater(p);
-                    break;
-                case PUNI_MODE_FALL:
-                    p->flags |= PUNI_FLAG_STRAY;
-                    puniModeFall(p);
-                    break;
-                case PUNI_MODE_DODAI:
-                    p->flags |= PUNI_FLAG_STRAY;
-                    puniModeDodai(p);
-                    break;
-                case PUNI_MODE_TRAP:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeTrap(p);
-                    break;
-                case PUNI_MODE_ENTER:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeEnter(p);
-                    break;
-                case PUNI_MODE_EXIT:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeExit(p);
-                    break;
-                case PUNI_MODE_DOKAN:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeDokan(p);
-                    break;
-                case PUNI_MODE_POINT:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModePoint(p);
-                    break;
-                case PUNI_MODE_FUNC:
-                    p->flags &= ~PUNI_FLAG_STRAY;
-                    puniModeCustom(p);
-                    break;
+                // FAKE: the (u32) round trip keeps the name out of constant propagation, so its address is hoisted into a saved
+                // register before the loop as in the demo.
+                puniModeDeadSfx(p, (const char*)(u32)"SFX_STG2_FIGHT_TOGE3");
+                break;
+            case PUNI_MODE_WIND:
+                p->flags &= ~PUNI_FLAG_STRAY;
+                puniModeWind(p);
+                break;
+            case PUNI_MODE_STOP:
+                break;
+            case PUNI_MODE_CHECKPOS:
+                p->flags |= PUNI_FLAG_STRAY;
+                puniModeCheckPos(p);
+                break;
+            case PUNI_MODE_HAGURE:
+                p->flags |= PUNI_FLAG_STRAY;
+                puniModeHagure(p);
+                break;
+            case PUNI_MODE_PREUPDRAFT:
+                p->flags |= PUNI_FLAG_STRAY;
+                puniModePreupdraft(p);
+                break;
+            case PUNI_MODE_UPDRAFT:
+                p->flags |= PUNI_FLAG_STRAY;
+                puniModeUpdraft(p);
+                break;
+            case PUNI_MODE_WONDER:
+                p->flags |= PUNI_FLAG_STRAY;
+                // FAKE: same (u32) round trip as PUNI_MODE_DEAD.
+                puniModeWonderSfx(p, (const char*)(u32) "SFX_STG2_SOAPBALL_BREAK1");
+                break;
+            case PUNI_MODE_FUNBARI:
+                p->flags |= PUNI_FLAG_STRAY;
+                puniModeFunbari(p);
+                break;
+            case PUNI_MODE_WATER:
+                p->flags |= PUNI_FLAG_STRAY;
+                puniModeWater(p);
+                break;
+            case PUNI_MODE_FALL:
+                p->flags |= PUNI_FLAG_STRAY;
+                puniModeFall(p);
+                break;
+            case PUNI_MODE_DODAI:
+                p->flags |= PUNI_FLAG_STRAY;
+                puniModeDodai(p);
+                break;
+            case PUNI_MODE_TRAP:
+                p->flags &= ~PUNI_FLAG_STRAY;
+                puniModeTrap(p);
+                break;
+            case PUNI_MODE_ENTER:
+                p->flags &= ~PUNI_FLAG_STRAY;
+                puniModeEnter(p);
+                break;
+            case PUNI_MODE_EXIT:
+                p->flags &= ~PUNI_FLAG_STRAY;
+                puniModeExit(p);
+                break;
+            case PUNI_MODE_DOKAN:
+                p->flags &= ~PUNI_FLAG_STRAY;
+                puniModeDokan(p);
+                break;
+            case PUNI_MODE_POINT:
+                p->flags &= ~PUNI_FLAG_STRAY;
+                puniModePoint(p);
+                break;
+            case PUNI_MODE_FUNC:
+                p->flags &= ~PUNI_FLAG_STRAY;
+                puniModeCustom(p);
+                break;
 #else
                 p->breathPower = 0.0f;
                 if (Punigp->windDisabled == 0 && party != NULL) {
@@ -5758,8 +5758,8 @@ void puni_puni_main(void) {
                             }
                         }
 #if VERSION <= VERSION_DEMO_US
-    puniOption();
-    {
+                    puniOption();
+                    {
 #else
                     }
                 }
@@ -7392,7 +7392,7 @@ USER_FUNC(evt_puni_landon_check) {
     for (i = start; i < end; i++) {
         p = &Punidat[i];
 #if VERSION <= VERSION_DEMO_US
-if ((p->flags & PUNI_FLAG_ACTIVE) && p->pos.y != y) {
+        if ((p->flags & PUNI_FLAG_ACTIVE) && p->pos.y != y) {
 #else
         if ((p->flags & PUNI_FLAG_ACTIVE) && p->pos.y > y) {
 #endif

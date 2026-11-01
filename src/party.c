@@ -431,7 +431,7 @@ s32 partyKill2(s32 id) {
     player = party->playerPtr;
     party_dp = &partyDataTbl[partyGetPtr(player->currPartySlotId[id])->currentMemberId];
 #if VERSION <= VERSION_DEMO_US
-if (party_dp->exit_func) {
+    if (party_dp->exit_func) {
 #else
     if (party_dp->exit_func && party->runMode != PARTY_RUN_RIDE) {
 #endif
@@ -897,7 +897,7 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
 #endif
             }
 #if VERSION <= VERSION_DEMO_US
-    if (party->runMode == 4) {
+            if (party->runMode == 4) {
 #else
             break;
         case 4:
@@ -925,7 +925,7 @@ void _partyChgRunMode(PartyEntry* party, s32 prev, s32 mode) {
 #endif
             }
 #if VERSION <= VERSION_DEMO_US
-    partyUsePost(party);
+            partyUsePost(party);
 #else
             break;
         case 1:
@@ -970,7 +970,7 @@ void partyChgRunMode(PartyEntry* party, s32 mode) {
 // Descriptive name (not in the symbol maps).
 void partyForceChgRunMode(PartyEntry* party, s32 mode, s32 sub) {
 #if VERSION <= VERSION_DEMO_US
-partyLeaveRunMode(party);
+    partyLeaveRunMode(party);
 #else
     if (party->runMode != PARTY_RUN_FORCE_WALK && party->runMode != PARTY_RUN_USE) {
         party->prevRunMode = party->runMode;
@@ -1373,7 +1373,7 @@ s32 partyHelloMain(PartyEntry* party) {
         case 0: {
                 f32 x, y, z, h, dy;
 #if VERSION <= VERSION_DEMO_US
-psndSFXOn_3D((const char*)0x920, &party->position);
+                psndSFXOn_3D((const char*)0x920, &party->position);
 #endif
                 x = ((MarioWork*)mario)->position.x;
                 y = ((MarioWork*)mario)->position.y;
@@ -1438,10 +1438,10 @@ psndSFXOn_3D((const char*)0x920, &party->position);
                 }
                 ((PartyEntry*)party)->moveFrames = 0;
 #if VERSION <= VERSION_DEMO_US
-party->moveDir = ((MarioWork*)mario)->moveDirection;
-            party->targetDir = ((MarioWork*)mario)->directionView;
-            party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
-            party->displayDirection = ((MarioWork*)mario)->displayDirection;
+                party->moveDir = ((MarioWork*)mario)->moveDirection;
+                            party->targetDir = ((MarioWork*)mario)->directionView;
+                            party->displayDirectionTarget = ((MarioWork*)mario)->displayDirectionTarget;
+                            party->displayDirection = ((MarioWork*)mario)->displayDirection;
 #else
                 if (party->displayDirectionTarget >= 90.0f && party->displayDirectionTarget <= 270.0f) {
                     party->moveDir = partyToMovedir(party, 180.0f);
@@ -2332,8 +2332,8 @@ void partyRideMain(PartyEntry* party) {
         case 11: {
                 partyChgPoseId(party, 1);
 #if VERSION <= VERSION_DEMO_US
-party->velY = 0.0f;
-            party->scale = (Vec){0.0f, 0.0f, 0.0f};
+                party->velY = 0.0f;
+                            party->scale = (Vec){0.0f, 0.0f, 0.0f};
 #else
                 party->flags2 |= PARTY_DISP_FLAG_HIDE;
 #endif
@@ -3461,7 +3461,7 @@ void partyPreDisp(PartyEntry* party) {
         }
     }
 #if VERSION <= VERSION_DEMO_US
-if (party->currentMemberId == PARTY_MEMBER_VIVIAN && !(party->work.vivian.tailFlags & 1)) {
+    if (party->currentMemberId == PARTY_MEMBER_VIVIAN && !(party->work.vivian.tailFlags & 1)) {
 #else
     if (vivianDisplayTailCheck(party)) {
 #endif

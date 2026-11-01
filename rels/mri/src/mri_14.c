@@ -1111,7 +1111,7 @@ static EVT_BEGIN(punipuni_ball00)
         CALL_CHILD(PTR(mri_punipuni_itemset))
         SET_VALUE(GF(15), 0)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_22_LORD_CRUMP_APPEARS)
+        IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_22_LORD_CRUMP_APPEARS)
             CALL(evt_mario_key_onoff, 1)
             SET_VALUE(GF(10), 1)
             SPAWN_EVENT(punipuni_mario_halt)

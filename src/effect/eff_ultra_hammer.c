@@ -611,7 +611,7 @@ void effUltraHammerMain(EffectEntry* effect) {
             if (data->scroll < 25) {
                 data->offsetX = scroll_tbl[data->scroll];
 #if VERSION <= VERSION_DEMO_US
-data->scale = scale_tbl[data->scroll];
+                data->scale = scale_tbl[data->scroll];
 #else
                 data->scale = 3.5f;
 #endif

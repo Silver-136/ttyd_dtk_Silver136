@@ -282,7 +282,7 @@ void effMahorn2Disp(CameraId cameraId, EffectEntry *effect) {
             GXTexCoord2f32(0.0f, v);
         } else {
 #if VERSION <= VERSION_DEMO_US
-for (i = 0; i < 3; i++) {
+            for (i = 0; i < 3; i++) {
 #else
             s32 j;
             for (j = 0; j < 3; j++) {

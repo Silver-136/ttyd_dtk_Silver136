@@ -1857,7 +1857,7 @@ EVT_BEGIN(partyYoshiAttack_CallGuard)
         SET_VALUE(LW(2), 30)
     END_SWITCH
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_AcSetParamAll, 15, LW(0), 178, LW(1), LW(2), 17, 18, EVT_NULLPTR)
+    CALL(btlevtcmd_AcSetParamAll, 15, LW(0), 178, LW(1), LW(2), 17, 18, EVT_NULLPTR)
 #else
     CALL(btlevtcmd_AcSetParamAll, 15, LW(0), 178, LW(1), LW(2), 20, 61, EVT_NULLPTR)
 #endif
@@ -2591,7 +2591,7 @@ USER_FUNC(_gundan_yoshi_run_effect) {
             p = &w->parts[irand(256)];
             sc = 1.0f + 0.05f * (f32)irand(20);
 #if VERSION <= VERSION_DEMO_US
-effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(10), p->z, sc);
+            effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(10), p->z, sc);
 #else
             effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(15), 65.0f, sc);
 #endif
@@ -2612,7 +2612,7 @@ effKemuTestEntry(0, p->x, 5.0f + p->y + (f32)irand(10), p->z, sc);
         return EVT_RETURN_DONE;
     }
 #if VERSION <= VERSION_DEMO_US
-dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)_btlYoshiDisp, w);
+    dispEntry(CAMERA_3D, 0.0f, 2, (DispCallback)_btlYoshiDisp, w);
 #else
     for (i = 0; i < 256; i++) {
         // Every runner is sorted with the depth of p left by the loop above; the callback data still selects each runner.

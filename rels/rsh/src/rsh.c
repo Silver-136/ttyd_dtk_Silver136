@@ -783,7 +783,7 @@ EVT_BEGIN(evt_rsh_door_close)
     CALL(evt_img_free_capture, STRING("capture_img"), 1)
     CALL(evt_img_free_capture, STRING("capture_img"), 2)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 0, 0, 0, 608, 480)
+    CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 0, 0, 0, 608, 480)
     CALL(evt_img_alloc_capture, STRING("capture_img"), 1, STRING("offscreen"), 0, 0, 0, 608, 480)
     CALL(evt_img_alloc_capture, STRING("capture_img"), 2, STRING("offscreen"), 0, 0, 0, 608, 480)
 #else
@@ -803,7 +803,7 @@ CALL(evt_img_alloc_capture, STRING("capture_img"), 0, STRING("offscreen"), 0, 0,
         CALL(evt_snd_sfxon_3d, STRING("SFX_OFF6_ROOM_OUT1"), LW(0), LW(1), LW(2), 0)
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_img_set_virtual_point, STRING("capture_img"), 0, 0, -70)
+    CALL(evt_img_set_virtual_point, STRING("capture_img"), 0, 0, -70)
 #endif
     CALL(evt_img_set_paper_anim, STRING("capture_img"), STRING("A_2"))
     CALL(evt_img_onoff, STRING("capture_img"), 1)
@@ -813,7 +813,7 @@ CALL(evt_img_set_virtual_point, STRING("capture_img"), 0, 0, -70)
         CALL(evt_mario_mov_pos, LW(13), LW(12), 300)
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_img_wait_animend, STRING("capture_img"))
+    CALL(evt_img_wait_animend, STRING("capture_img"))
     CALL(evt_img_onoff, STRING("capture_img"), 0)
 #else
     BEGIN_INLINE_EVENT
@@ -822,7 +822,7 @@ CALL(evt_img_wait_animend, STRING("capture_img"))
         CALL(evt_mapobj_clear_offscreen, 1, LW(1))
         CALL(evt_mapobj_clear_offscreen, 1, LW(2))
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("rouka"), MAP_OBJ_FLAG_HIDDEN)
 #endif
         CALL(evt_npc_check, STRING("車掌"), LW(0))
         IF_INT_EQUAL(LW(0), 1)
@@ -832,7 +832,7 @@ CALL(evt_img_wait_animend, STRING("capture_img"))
             CALL(evt_npc_set_offscreen, STRING("車掌"), 0)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(simi_check)
+    CALL_CHILD(simi_check)
 #else
     END_INLINE_EVENT
     CALL(evt_img_wait_animend, STRING("capture_img"))
@@ -1674,7 +1674,7 @@ EVT_BEGIN(evt_rsh_04_rnd_npc_entry)
     CALL(evt_npc_entry, STRING("乗客４"), LW(1))
     CALL(evt_npc_set_tribe, STRING("乗客４"), LW(2))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_npc_set_position, STRING("乗客４"), -50, 30, -260)
+    CALL(evt_npc_set_position, STRING("乗客４"), -50, 30, -260)
 #else
     CALL(evt_npc_set_position, STRING("乗客４"), -85, 16, -255)
 #endif

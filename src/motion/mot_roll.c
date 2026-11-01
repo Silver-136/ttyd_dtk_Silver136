@@ -364,7 +364,7 @@ s32 marioRollCancel(void) {
 #endif
 }
 #if VERSION <= VERSION_DEMO_US
-    return ret;
+return ret;
 }
 #endif
 
@@ -2012,7 +2012,7 @@ void marioRollStrippedPool(void) {
     mario->dispOfs.x = 100.0f;
     mario->dispOfs.y = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-mario->jumpVelocityY = -1.0f;
+    mario->jumpVelocityY = -1.0f;
 #endif
     mario->dispOfs.z = 0.5f;
     mario->dispOfs2.x = 3.1415927f;

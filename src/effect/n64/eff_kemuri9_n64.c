@@ -27,7 +27,7 @@ typedef struct EffKemuri9N64Work {
     s32 counter;     // 0x28
     s32 life;        // 0x2C
 #if VERSION <= VERSION_DEMO_US
-f32 anim;
+    f32 anim;
 #else
     s32 texU;        // 0x30
     s32 texV;        // 0x34
@@ -79,7 +79,7 @@ EffectEntry* effKemuri9N64Entry(s32 type, s32 count, s32 life, f32 x, f32 y, f32
     work->counter = 0;
     work->life = life;
 #if VERSION <= VERSION_DEMO_US
-work->anim = 0.0f;
+    work->anim = 0.0f;
 #else
     work->texU = 0;
 #endif
@@ -129,7 +129,7 @@ void effKemuri9Main(EffectEntry* effect) {
     tmp.z = work->position.z;
     position = tmp;
 #if VERSION <= VERSION_DEMO_US
-work->anim = 8.0f * (f32)work->counter / (f32)work->life;
+    work->anim = 8.0f * (f32)work->counter / (f32)work->life;
 #else
     {
         s32 cur = (s32)(16.0f * (f32)work->frame / (f32)work->frameMax);

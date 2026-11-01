@@ -324,14 +324,14 @@ void bomhei_use(PartyEntry* party) {
             }
         }
 #if VERSION <= VERSION_DEMO_US
-    if (party->flags & PARTY_FLAG_IS_BEING_USED) {
-        mario = party->playerPtr;
+        if (party->flags & PARTY_FLAG_IS_BEING_USED) {
+            mario = party->playerPtr;
 #endif
         if (party->work.bomhei.state != 0x66) {
             if (mario->currMotionId == MARIO_MOTION_DAMAGE || mario->currMotionId == MARIO_MOTION_DAMAGE_TOGE) {
                 party->work.bomhei.state = 0x66;
 #if VERSION <= VERSION_DEMO_US
-            } else {
+                } else {
 #else
                 return;
             }
@@ -415,7 +415,7 @@ static inline BOOL bomheiChkHitAttr(PartyEntry* party) {
         if (attr & (HIT_ATTR_DAMAGE_LIQUID | HIT_ATTR_SPIKES)) {
             party->useMotionId = 60;
 #if VERSION <= VERSION_DEMO_US
-        } else if (attr & HIT_ATTR_WATER_HAZARD) {
+            } else if (attr & HIT_ATTR_WATER_HAZARD) {
 #else
             return TRUE;
         }
@@ -545,7 +545,7 @@ void bomhei_use_main(PartyEntry* party) {
         bomheiSetHoldPos(party);
         bomheiChkHitAttr(party);
 #if VERSION <= VERSION_DEMO_US
-if ((party->flags & PARTY_FLAG_IS_EVT_USE) || !(mario->buttonHold & PAD_BUTTON_X)) {
+        if ((party->flags & PARTY_FLAG_IS_EVT_USE) || !(mario->buttonHold & PAD_BUTTON_X)) {
 #else
         if ((party->flags & PARTY_FLAG_IS_EVT_USE) ||
             (mario->hitobjStandOn != NULL && mario->airTimer == 0 && !(mario->buttonHold & PAD_BUTTON_X))) {
@@ -558,7 +558,7 @@ if ((party->flags & PARTY_FLAG_IS_EVT_USE) || !(mario->buttonHold & PAD_BUTTON_X
     switch (party->useMotionId) {
     case 20:
 #if VERSION <= VERSION_DEMO_US
-party->work.bomhei.reserved_17C = psndSFXOn_3D((const char*)0x939, &party->playerPtr->position);
+        party->work.bomhei.reserved_17C = psndSFXOn_3D((const char*)0x939, &party->playerPtr->position);
 #else
         psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_THROW1), &party->playerPtr->position);
 #endif
@@ -603,14 +603,14 @@ party->work.bomhei.reserved_17C = psndSFXOn_3D((const char*)0x939, &party->playe
     case 22:
         partyMoveNoHosei(party);
 #if VERSION <= VERSION_DEMO_US
-if (party->hitobjStandOn != NULL) {
+        if (party->hitobjStandOn != NULL) {
 #else
         if (party->hitobjStandOn != NULL && !bomheiChkHitAttr(party)) {
 #endif
             party->useMotionId = !(BOMHEI_WORK(party)->flags & 4) ? 30 : 50;
         }
 #if VERSION <= VERSION_DEMO_US
-            bomheiChkHitAttr(party);
+        bomheiChkHitAttr(party);
 #endif
         break;
     case 30:
@@ -641,7 +641,7 @@ if (party->hitobjStandOn != NULL) {
         break;
     }
 #if VERSION <= VERSION_DEMO_US
-if (BOMHEI_WORK(party)->timer > 0) {
+    if (BOMHEI_WORK(party)->timer > 0) {
 #else
 
     if (party->useMotionId < 50 && BOMHEI_WORK(party)->timer > 0) {
@@ -705,7 +705,7 @@ if (BOMHEI_WORK(party)->timer > 0) {
             party->work.bomhei.sfxId = -1;
         }
 #if VERSION <= VERSION_DEMO_US
-party->work.bomhei.sfxId2 = psndSFXOn_3D((const char*)0x93D, &party->playerPtr->position);
+        party->work.bomhei.sfxId2 = psndSFXOn_3D((const char*)0x93D, &party->playerPtr->position);
 #else
         if ((u32)party->work.bomhei.sfxId2 == 0xFFFFFFFFU) {
             party->work.bomhei.sfxId2 = psndSFXOn_3D(SFX_NAME_WORD(PSND_SFX_PARTY_PBM_FUSE2), &party->playerPtr->position);
@@ -758,8 +758,8 @@ party->work.bomhei.sfxId2 = psndSFXOn_3D((const char*)0x93D, &party->playerPtr->
             evtEntryType(quake_evt, 0, 0, 0);
         }
 #if VERSION <= VERSION_DEMO_US
-psndSFXOn_3D((const char*)0x93B, &party->position);
-eff = effSandarsEntry(pouchGetPartyAttackLv((PartyId)3), party->position.x,
+        psndSFXOn_3D((const char*)0x93B, &party->position);
+        eff = effSandarsEntry(pouchGetPartyAttackLv((PartyId)3), party->position.x,
 #else
         eff = effSandarsEntry(pouchGetPartyAttackLv(PARTNER_BOBBERY), party->position.x,
 #endif
@@ -789,7 +789,7 @@ eff = effSandarsEntry(pouchGetPartyAttackLv((PartyId)3), party->position.x,
         if (--party->moveFrames <= 0) {
             Vec pos;
 #if VERSION <= VERSION_DEMO_US
-partyGetReturnPos(&pos);
+            partyGetReturnPos(&pos);
 #else
             partyGetAppearPos(party, &pos);
 #endif
@@ -810,14 +810,14 @@ partyGetReturnPos(&pos);
         HitEntry* hit;
         f32 limit;
 #if VERSION <= VERSION_DEMO_US
-f32 groundY, dropDepth;
+        f32 groundY, dropDepth;
 #endif
         f32 sx, sy, sz;
         if (37.0f + mario->position.y > party->position.y) {
             party->flags &= ~PARTY_FLAG_FORCE_FALL;
         }
 #if VERSION <= VERSION_DEMO_US
-hit = _partySearchGround(party, &groundY, &dropDepth, 11.0f, party->velY);
+        hit = _partySearchGround(party, &groundY, &dropDepth, 11.0f, party->velY);
 #else
         hit = partySearchGround(party, 11.0f, party->velY);
 #endif

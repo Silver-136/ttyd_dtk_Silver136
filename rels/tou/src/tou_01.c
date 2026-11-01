@@ -187,29 +187,20 @@ static EvtWord evt_tamago_scale2[83];
 s32 yoshi_data[30];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_tamago_move[];
-#else
-EvtWord evt_tamago_move[306];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_tamago[];
-#else
-EvtWord evt_tamago[100];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord talk_tamago[];
 #else
+EvtWord evt_tamago_move[306];
+EvtWord evt_tamago[100];
 EvtWord talk_tamago[321];
 #endif
 EvtWord evt_gondora_updown[143];
 EvtWord evt_gondora_mon[62];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_gondora[];
-#else
-EvtWord evt_gondora[169];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_gondora2[];
 #else
+EvtWord evt_gondora[169];
 EvtWord evt_gondora2[200];
 #endif
 EvtWord evt_search_light[82];
@@ -1896,7 +1887,7 @@ static EVT_BEGIN(talk_sarary)
         END_IF
         CALL(evt_msg_print_add, 0, STRING("irai_24_032"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_unitwin_alloc)
+        CALL(evt_unitwin_alloc)
 #else
         CALL(evt_unitwin_alloc, 0)
 #endif
@@ -2607,7 +2598,7 @@ EVT_BEGIN(evt_tamago)
     CALL(evt_cam3d_evt_set, -345, 169, 544, -345, 38, -204, 1000, EASING_SINE_IN_OUT)
     WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
-SPAWN_EVENT(evt_tamago_move)
+    SPAWN_EVENT(evt_tamago_move)
     SPAWN_EVENT(evt_oyaji_move)
 #else
     SET_VALUE(GF(0), 0)
@@ -3022,7 +3013,7 @@ EVT_BEGIN(evt_peach_after)
     CALL(evt_mario_set_pose, STRING("M_S_1"))
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
+    SET_VALUE(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
 #else
     CALL(evt_npc_set_position, STRING("美女"), 0, -1000, 0)
     SET_VALUE(GSW_STORY_PROGRESS, STG3_34_RETURN_TO_ROGUEPORT)
@@ -3567,7 +3558,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mobj_get_position, STRING("mobj_box00"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_POWER_PLUS_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET)
 #else
     CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH_GET | ITEM_FLAG_LOST_BADGE_TO_SHOP)
 #endif

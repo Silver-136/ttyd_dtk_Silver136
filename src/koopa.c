@@ -980,7 +980,7 @@ void kpaFireMain(void) {
             }
         }
 #if VERSION <= VERSION_DEMO_US
-{
+        {
             f32 sc;
             f32 base;
 #else
@@ -1017,7 +1017,7 @@ void kpaFireMain(void) {
 #endif
                         PSMTXTrans(m80, w->position.x, w->position.y, w->position.z);
 #if VERSION <= VERSION_DEMO_US
-                    PSMTXScale(mb0, sc, sc, sc);
+                        PSMTXScale(mb0, sc, sc, sc);
 #else
                         PSMTXScale(mb0, ballScale, ballScale, ballScale);
 #endif
@@ -1026,7 +1026,7 @@ void kpaFireMain(void) {
                         zero = *(Vec*)vec3_802fc920;
                         PSMTXMultVec(m80, &zero, &out);
 #if VERSION <= VERSION_DEMO_US
-                    hit = kpaFlameHitCheck(out.x, out.y, out.z, sc * base);
+                        hit = kpaFlameHitCheck(out.x, out.y, out.z, sc * base);
 #else
                         hit = kpaFlameHitCheck(out.x, out.y, out.z, f30);
 #endif

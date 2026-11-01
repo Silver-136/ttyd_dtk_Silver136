@@ -177,12 +177,9 @@ EvtWord tegami_init_evt[78];
 EvtWord evt_mezame[226];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord mezame_init_evt[];
-#else
-EvtWord mezame_init_evt[61];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord gor_10_init_evt[];
 #else
+EvtWord mezame_init_evt[61];
 EvtWord gor_10_init_evt[29];
 #endif
 
@@ -203,7 +200,7 @@ EVT_BEGIN(tegami_init_evt)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
     CALL(evt_map_playanim, STRING("anm_nami"), 1, 0)
 #endif
     BEGIN_INLINE_EVENT
@@ -406,7 +403,7 @@ EVT_BEGIN(mezame_init_evt)
     CALL(evt_mario_dispflag_onoff, 1, MARIO_DISP_FLAG_HIDE)
     CALL(evt_party_dispflg_onoff, 0, PARTY_DISP_FLAG_HIDE, 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_umi"), 1, 0)
     CALL(evt_map_playanim, STRING("anm_nami"), 1, 0)
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("marukongou"), MAP_OBJ_FLAG_HIDDEN)
@@ -434,7 +431,7 @@ EVT_END()
  */
 EVT_BEGIN(gor_10_init_evt)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_LESS(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG0_02_MARIOS_HOUSE)
         CALL_CHILD(tegami_init_evt)
 #else
     CALL(evt_map_playanim, STRING("anm_umi"), MAP_ANIM_PLAY_LOOP, 0)

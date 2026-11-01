@@ -278,7 +278,7 @@ EVT_BEGIN(meet_clouda2)
             IF_INT_GREATER_OR_EQUAL(LW(1), 50)
                 IF_INT_LESS(LW(1), 51)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
+                    CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
                     IF_INT_GREATER_OR_EQUAL(LW(1), 50)
                         IF_INT_LESS(LW(1), 51)
                             CALL(evt_party_get_pos, 1, LW(0), LW(1), LW(2))
@@ -287,10 +287,10 @@ CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
 #endif
                     BREAK_LOOP
 #if VERSION <= VERSION_DEMO_US
-                                END_IF
-                            END_IF
-                        END_IF
-                    END_IF
+                END_IF
+            END_IF
+        END_IF
+    END_IF
 #endif
                 END_IF
             END_IF
@@ -324,7 +324,7 @@ CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         SUBTRACT(LW(2), 50)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_move_pos2, 1, LW(0), LW(2), FLOAT(120.0f))
+    CALL(evt_party_move_pos2, 1, LW(0), LW(2), FLOAT(120.0f))
 #else
     CALL(evt_party_move_pos2, 1, 160, LW(2), FLOAT(120.0f))
     CALL(evt_party_set_dir, 1, 90, 200)
@@ -646,7 +646,7 @@ EVT_BEGIN(clouda_nakama)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(item_list), LW(0))
+    CALL(evt_win_item_select, PTR(item_list), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(item_list), LW(0), 0)
 #endif

@@ -47,10 +47,10 @@ FireScaleKey scale1[] = {
  */
 #if VERSION <= VERSION_DEMO_US
 FireScaleKey scale2[] = {
-    { 0, 1.0f },
-    { 100, 1.2f },
-    { 160, 0.95f },
-    { 200, 1.0f },
+    {0, 1.0f},
+    {100, 1.2f},
+    {160, 0.95f},
+    {200, 1.0f},
 };
 #endif
 static GXColor col_tbl[3][8] = {
@@ -640,7 +640,7 @@ void effFireDisp3(CameraId cameraId, EffectEntry* effect) {
     PSMTXConcat(trans, rot, mb0);
     PSMTXConcat(mb0, scaleMtx, mb0);
 #if VERSION <= VERSION_DEMO_US
-GXSetNumTevStages(2);
+    GXSetNumTevStages(2);
 #else
     GXSetNumTevStages(3);
 #endif

@@ -71,7 +71,7 @@ USER_FUNC(pre_kurio_use) {
         return EVT_RETURN_DONE;
     }
 #if VERSION <= VERSION_DEMO_US
-if (!(party->flags & PARTY_FLAG_IS_GROUNDED)) {
+    if (!(party->flags & PARTY_FLAG_IS_GROUNDED)) {
 #else
 
     if (party->flags2 & PARTY_DISP_FLAG_PAPER) {
@@ -276,7 +276,7 @@ USER_FUNC(post_kurio_use) {
         return EVT_RETURN_DONE;
     }
 #if VERSION <= VERSION_DEMO_US
-party->useMotionId = 10;
+    party->useMotionId = 10;
 #else
     party->useMotionId = 20;
 #endif

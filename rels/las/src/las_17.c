@@ -158,7 +158,7 @@ EVT_BEGIN(enemy4_dead_evt)
         WAIT_MS(500)
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG8_SWITCH_BIKKURI_APPEAR1"), -225, 60, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_eff, STRING(""), STRING("kemuri_test"), 7, -205, 60, 20, 1, 0, 0, 0, 0, 0, 0, 0)
+        CALL(evt_eff, STRING(""), STRING("kemuri_test"), 7, -205, 60, 20, 1, 0, 0, 0, 0, 0, 0, 0)
 #else
         CALL(evt_eff, 0, STRING("kemuri_test"), 7, -205, 60, 20, 1, 0, 0, 0, 0, 0, 0, 0)
 #endif

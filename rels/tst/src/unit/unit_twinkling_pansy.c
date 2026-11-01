@@ -297,7 +297,7 @@ static EVT_BEGIN(twink_event)
     ADD(LW(1), 20)
     CALL(btlevtcmd_GetStatusMg, UNIT_ID_SELF, LW(3))
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY(LW(1), LW(3))
+    MULTIPLY(LW(1), LW(3))
 #else
     MULTIPLY_FLOAT(LW(1), LW(3))
 #endif
@@ -367,7 +367,7 @@ static EVT_BEGIN(song_event)
         END_LOOP
     END_SIBLING_EVENT
 #if VERSION <= VERSION_DEMO_US
-WAIT_FRAMES(60)
+    WAIT_FRAMES(60)
     WAIT_FRAMES(60)
 #else
     WAIT_FRAMES(120)

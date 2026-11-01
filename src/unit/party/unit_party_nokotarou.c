@@ -74,12 +74,9 @@ static EvtWord _koura_rotate_stop[13];
 EvtWord partyNokotarouAttack_FirstAttack[236];
 #if VERSION <= VERSION_DEMO_US
 EvtWord partyNokotarouAttack_NormalAttack[769];
-#else
-EvtWord partyNokotarouAttack_NormalAttack[VERSION_PICK(793, 804)];
-#endif
-#if VERSION <= VERSION_DEMO_US
 EvtWord partyNokotarouAttack_SyubibinKoura[667];
 #else
+EvtWord partyNokotarouAttack_NormalAttack[VERSION_PICK(793, 804)];
 EvtWord partyNokotarouAttack_SyubibinKoura[VERSION_PICK(691, 702)];
 #endif
 EvtWord partyNokotarouAttack_KouraGuard[];
@@ -2920,7 +2917,7 @@ static EVT_BEGIN(attack_audience_event)
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(8.0f))
     CALL(btlevtcmd_FaceDirectionSub, UNIT_ID_SELF, LW(0), 15)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
+    CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, -1, 0)
 #else
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), LW(1), LW(2), 0, MOVE_SOUND_NONE, 0)
 #endif

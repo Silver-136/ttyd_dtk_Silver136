@@ -1001,7 +1001,7 @@ s32 scissor_damage(EventEntry* evt, BOOL first) {
             s32 res;
             if (BtlUnit_CheckStatus(unit, STATUS_INSTANT_KILL) != 1 && !(part->attributes & kClone) && !(part->attributes & kImmuneToDamageAndStatus) &&
 #if VERSION <= VERSION_DEMO_US
-!(part->attributes & kNotTargetable) && *(s8*)part->defenseAttr != DEFENSE_ATTR_IMMUNE_EXCEPT_GULP) {
+                !(part->attributes & kNotTargetable) && *(s8*)part->defenseAttr != DEFENSE_ATTR_IMMUNE_EXCEPT_GULP) {
 #else
                 !(part->attributes & kNotTargetable) && part->defenseAttr->defenseAttrs[ELEMENT_NORMAL] != DEFENSE_ATTR_IMMUNE_EXCEPT_GULP &&
                 part->defenseAttr->defenseAttrs[ELEMENT_NORMAL] != DEFENSE_ATTR_IMMUNE) {
@@ -1166,7 +1166,7 @@ void scissor_disp_control(CameraId camera, void* param) {
     f32* pts = (f32*)w->points;
     s32 i;
 #if VERSION <= VERSION_DEMO_US
-BattleWork* wp;
+    BattleWork* wp;
     BattleUnit* unit;
     Vec pos;
     Vec a;
@@ -1229,57 +1229,57 @@ wp = _battleWorkPointer;
 #endif
 }
 #if VERSION <= VERSION_DEMO_US
-        width = unit->cutWidth * unit->sizeMultiplier;
-        height = unit->cutHeight * unit->sizeMultiplier;
-        BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
-        pos.x = unit->cutBaseOffset.x * unit->sizeMultiplier + pos.x;
-        hw = 0.5f * width;
-        hh = 0.5f * height;
-        pos.y = sign * (unit->cutBaseOffset.y * unit->sizeMultiplier) + pos.y;
-        a.x = pos.x - hw;
-        a.y = pos.y + hh;
-        a.z = pos.z;
-        btlGetScreenPoint(&a, &a);
-        b.x = pos.x + hw;
-        b.y = pos.y + hh;
-        b.z = pos.z;
-        btlGetScreenPoint(&b, &b);
-        GXBegin(0xA8, 0, 2);
-        GXPosition3f32(a.x, a.y, 0.0f);
-        GXPosition3f32(b.x, b.y, 0.0f);
-        a.x = pos.x + hw;
-        a.y = pos.y + hh;
-        a.z = pos.z;
-        btlGetScreenPoint(&a, &a);
-        b.x = pos.x + hw;
-        b.y = pos.y - hh;
-        b.z = pos.z;
-        btlGetScreenPoint(&b, &b);
-        GXBegin(0xA8, 0, 2);
-        GXPosition3f32(a.x, a.y, 0.0f);
-        GXPosition3f32(b.x, b.y, 0.0f);
-        a.x = pos.x + hw;
-        a.y = pos.y - hh;
-        a.z = pos.z;
-        btlGetScreenPoint(&a, &a);
-        b.x = pos.x - hw;
-        b.y = pos.y - hh;
-        b.z = pos.z;
-        btlGetScreenPoint(&b, &b);
-        GXBegin(0xA8, 0, 2);
-        GXPosition3f32(a.x, a.y, 0.0f);
-        GXPosition3f32(b.x, b.y, 0.0f);
-        a.x = pos.x - hw;
-        a.y = pos.y - hh;
-        a.z = pos.z;
-        btlGetScreenPoint(&a, &a);
-        b.x = pos.x - hw;
-        b.y = pos.y + hh;
-        b.z = pos.z;
-        btlGetScreenPoint(&b, &b);
-        GXBegin(0xA8, 0, 2);
-        GXPosition3f32(a.x, a.y, 0.0f);
-        GXPosition3f32(b.x, b.y, 0.0f);
+width = unit->cutWidth * unit->sizeMultiplier;
+height = unit->cutHeight * unit->sizeMultiplier;
+BtlUnit_GetPos(unit, &pos.x, &pos.y, &pos.z);
+pos.x = unit->cutBaseOffset.x * unit->sizeMultiplier + pos.x;
+hw = 0.5f * width;
+hh = 0.5f * height;
+pos.y = sign * (unit->cutBaseOffset.y * unit->sizeMultiplier) + pos.y;
+a.x = pos.x - hw;
+a.y = pos.y + hh;
+a.z = pos.z;
+btlGetScreenPoint(&a, &a);
+b.x = pos.x + hw;
+b.y = pos.y + hh;
+b.z = pos.z;
+btlGetScreenPoint(&b, &b);
+GXBegin(0xA8, 0, 2);
+GXPosition3f32(a.x, a.y, 0.0f);
+GXPosition3f32(b.x, b.y, 0.0f);
+a.x = pos.x + hw;
+a.y = pos.y + hh;
+a.z = pos.z;
+btlGetScreenPoint(&a, &a);
+b.x = pos.x + hw;
+b.y = pos.y - hh;
+b.z = pos.z;
+btlGetScreenPoint(&b, &b);
+GXBegin(0xA8, 0, 2);
+GXPosition3f32(a.x, a.y, 0.0f);
+GXPosition3f32(b.x, b.y, 0.0f);
+a.x = pos.x + hw;
+a.y = pos.y - hh;
+a.z = pos.z;
+btlGetScreenPoint(&a, &a);
+b.x = pos.x - hw;
+b.y = pos.y - hh;
+b.z = pos.z;
+btlGetScreenPoint(&b, &b);
+GXBegin(0xA8, 0, 2);
+GXPosition3f32(a.x, a.y, 0.0f);
+GXPosition3f32(b.x, b.y, 0.0f);
+a.x = pos.x - hw;
+a.y = pos.y - hh;
+a.z = pos.z;
+btlGetScreenPoint(&a, &a);
+b.x = pos.x - hw;
+b.y = pos.y + hh;
+b.z = pos.z;
+btlGetScreenPoint(&b, &b);
+GXBegin(0xA8, 0, 2);
+GXPosition3f32(a.x, a.y, 0.0f);
+GXPosition3f32(b.x, b.y, 0.0f);
     }
 }
 #endif
@@ -1423,7 +1423,7 @@ EVT_BEGIN(marioAttackEvent_Scissor)
         WAIT_FRAMES(30)
         CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_FREE)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_btl_camera_set_moveto, 0, 75, 120, 600, 75, 70, 0, 30, 0)
+        CALL(evt_btl_camera_set_moveto, 0, 75, 120, 600, 75, 70, 0, 30, 0)
 #else
         CALL(evt_btl_camera_set_moveto, 0, 75, 105, 600, 75, 55, 0, 30, 0)
 #endif

@@ -30,12 +30,9 @@ static BeroEntry bero_entry_data[2];
 static s32 key_tbl[2];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord evt_majin[485];
-#else
-static EvtWord evt_majin[487];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord evt_majin2[239];
 #else
+static EvtWord evt_majin[487];
 static EvtWord evt_majin2[237];
 #endif
 EvtWord tik_19_init_evt[52];
@@ -159,7 +156,7 @@ static EVT_BEGIN(evt_majin)
             CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
             CALL(evt_msg_print, 0, STRING("mac_majin_10"), PTR(majin_callback), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(key_tbl), LW(0))
+            CALL(evt_win_item_select, PTR(key_tbl), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(key_tbl), LW(0), 0)
 #endif
@@ -210,7 +207,7 @@ EVT_END()
 static EVT_BEGIN(evt_majin2)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_normalize)
+    CALL(evt_mario_normalize)
 #endif
     CALL(evt_mobj_wait_animation_end, STRING("box"))
     CALL(evt_pouch_add_item, ITEM_PLANE_CURSE, LW(0))

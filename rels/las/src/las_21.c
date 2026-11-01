@@ -39,17 +39,11 @@ EvtWord floatblk_shake[27];
 EvtWord floatblk_evt[336];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord floatblk21_1_evt[];
-#else
-EvtWord floatblk21_1_evt[62];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord floatblk21_2_evt[];
-#else
-EvtWord floatblk21_2_evt[62];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord las_21_init_evt[];
 #else
+EvtWord floatblk21_1_evt[62];
+EvtWord floatblk21_2_evt[62];
 EvtWord las_21_init_evt[211];
 #endif
 
@@ -420,7 +414,7 @@ EVT_END()
  */
 EVT_BEGIN(floatblk21_1_evt)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(LSWF(8), 0)
+    IF_INT_EQUAL(LSWF(8), 0)
 #else
     SET_TYPE(239)
     IF_INT_EQUAL(LSWF_LAS_21_BLK1_LOWERED, 0)
@@ -455,7 +449,7 @@ EVT_END()
  */
 EVT_BEGIN(floatblk21_2_evt)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(LSWF(9), 0)
+    IF_INT_EQUAL(LSWF(9), 0)
 #else
     SET_TYPE(239)
     IF_INT_EQUAL(LSWF_LAS_21_BLK2_LOWERED, 0)

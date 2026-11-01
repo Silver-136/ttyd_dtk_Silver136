@@ -601,7 +601,7 @@ EVT_BEGIN(talk_yuurei)
         CASE_LESS(STG6_18_BLANKET_EXCHANGE)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_135"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(item_tbl2), LW(1))
+        CALL(evt_win_item_select, PTR(item_tbl2), LW(1))
 #else
         CALL(evt_win_item_select, 0, PTR(item_tbl2), LW(1), 0)
 #endif
@@ -1137,7 +1137,7 @@ EVT_BEGIN(evt_toron_catch)
     SET_VALUE(GSW_STORY_PROGRESS, STG6_26_ZIP_TOAD_CAUGHT)
     CALL(evt_bero_mapchange, STRING("rsh_02_b"), STRING("w_bero"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mario_key_onoff, 1)
+    CALL(evt_mario_key_onoff, 1)
 #endif
     RETURN
 EVT_END()
@@ -1209,7 +1209,7 @@ EVT_BEGIN(evt_toron_catch2)
     CALL(evt_mario_set_dir_npc, STRING("サラリーマン"))
     LOOP(0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(item_tbl), LW(1))
+        CALL(evt_win_item_select, PTR(item_tbl), LW(1))
 #else
         CALL(evt_win_item_select, 0, PTR(item_tbl), LW(1), 0)
 #endif
@@ -2092,8 +2092,8 @@ EVT_BEGIN(rsh_02_init_evt_nidome)
         CALL_CHILD(PTR(evt_rsh_rnd_npc_init))
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF_STARPIECE_82)
-CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF_SHINE_34, 0)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF_STARPIECE_82)
+    CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF_SHINE_34, 0)
 #else
     CALL_CHILD(PTR(evt_access_entry))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF_STARPIECE_82)
@@ -2114,8 +2114,8 @@ CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF_SHINE_34, 0)
             IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
+                CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
                 CALL(evt_snd_envoff, PSND_FADEOUT)
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

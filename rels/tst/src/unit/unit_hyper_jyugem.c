@@ -56,7 +56,7 @@ BattleUnitKind unit_hyper_jyugem = {
     1, // perilHP
     26, // level
 #if VERSION <= VERSION_DEMO_US
-0,
+    0,
 #endif
     1, // bonusExp
 #if VERSION > VERSION_DEMO_US
@@ -64,7 +64,7 @@ BattleUnitKind unit_hyper_jyugem = {
 #endif
     70, // bonusCoinRate
 #if VERSION <= VERSION_DEMO_US
-2,
+    2,
 #else
     1, // baseCoin
 #endif
@@ -524,13 +524,13 @@ static EVT_BEGIN(attack_event)
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_DrawLots, LW(0), 2, 34, 116)
+        CALL(btlevtcmd_DrawLots, LW(0), 2, 34, 116)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 2, 40, 90)
 #endif
     ELSE
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_DrawLots, LW(0), 2, 34, 82)
+        CALL(btlevtcmd_DrawLots, LW(0), 2, 34, 82)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 2, 40, 70)
 #endif
@@ -582,13 +582,13 @@ CALL(btlevtcmd_DrawLots, LW(0), 2, 34, 82)
     CALL(btlevtcmd_get_turn, LW(0))
     IF_INT_LESS_OR_EQUAL(LW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_DrawLots, LW(0), 3, 33, 33, 50)
+        CALL(btlevtcmd_DrawLots, LW(0), 3, 33, 33, 50)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 3, 30, 30, 30)
 #endif
     ELSE
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_DrawLots, LW(0), 3, 33, 33, 16)
+        CALL(btlevtcmd_DrawLots, LW(0), 3, 33, 33, 16)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 3, 30, 30, 10)
 #endif

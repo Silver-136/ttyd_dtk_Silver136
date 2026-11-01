@@ -682,7 +682,7 @@ static EVT_BEGIN(attack_event)
         CALL(btlevtcmd_SetUnitWork, UNIT_ID_SELF, UNIT_WORK_ATTACK_STEP, 3)
         CASE_DEFAULT
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_DrawLots, LW(0), 4, 20, 30, 0, 30)
+        CALL(btlevtcmd_DrawLots, LW(0), 4, 20, 30, 0, 30)
 #else
         CALL(btlevtcmd_DrawLots, LW(0), 4, 20, 20, 0, 40)
 #endif

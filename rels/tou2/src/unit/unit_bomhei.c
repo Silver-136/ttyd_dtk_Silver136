@@ -130,7 +130,7 @@ static PoseTableEntry pose_table_spark[] = {
     {POSE_TYPE_CONFUSE, "BOM_K_2"},
     {POSE_TYPE_POISON, "BOM_X_2"},
 #if VERSION <= VERSION_DEMO_US
-{POSE_TYPE_DIZZY, "BSA_X_2"},
+    {POSE_TYPE_DIZZY, "BSA_X_2"},
 #else
     {POSE_TYPE_DIZZY, "BOM_X_2"},
 #endif
@@ -411,7 +411,7 @@ static EVT_BEGIN(attack_event)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
 #else
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
 #endif
@@ -478,7 +478,7 @@ CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
     CALL(btlevtcmd_MovePosition, UNIT_ID_SELF, LW(0), 0, LW(2), 0, MOVE_SOUND_FROM_TABLE, 1)
     CALL(btlevtcmd_AnimeChangePose, UNIT_ID_SELF, 1, STRING("BOM_N_1"))
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(1000)
+    WAIT_MS(1000)
 #else
     WAIT_MS(500)
 #endif
@@ -503,7 +503,7 @@ WAIT_MS(1000)
     CALL(btlevtcmd_SetMoveSoundDataWork, UNIT_ID_SELF, STRING("SFX_ENM_BOMB_MOVE4"), STRING("SFX_ENM_BOMB_MOVE4"), 0, 10, 10, 0, 0)
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_RUN)
 #if VERSION <= VERSION_DEMO_US
-CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
+    CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(4.0f))
 #else
     CALL(btlevtcmd_SetMoveSpeed, UNIT_ID_SELF, FLOAT(5.0f))
 #endif
@@ -567,7 +567,7 @@ static EVT_BEGIN(attack_event_spark)
     CALL(evt_btl_camera_set_mode, BTL_CAM_PRI_NORMAL, BTL_CAM_MODE_UNIT_TO_UNIT)
     CALL(evt_btl_camera_set_homing_unit, 0, UNIT_ID_SELF, LW(3))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
+    CALL(evt_btl_camera_set_moveSpeedLv, 0, 1)
 #else
     CALL(evt_btl_camera_set_moveSpeedLv, 0, 2)
 #endif

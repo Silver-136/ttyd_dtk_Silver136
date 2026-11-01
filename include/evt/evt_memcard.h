@@ -18,8 +18,6 @@ extern EvtWord evt_memcard_save_wrapper[];
 extern EvtWord evt_memcard_start[];
 #if VERSION > VERSION_DEMO_US
 USER_FUNC(memcard_buf_reset);
-#endif
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(memcard_code);
 #endif
 USER_FUNC(memcard_copy);
@@ -32,8 +30,6 @@ USER_FUNC(memcard_ipl);
 USER_FUNC(memcard_load);
 #if VERSION > VERSION_DEMO_US
 USER_FUNC(memcard_watch_chk);
-#endif
-#if VERSION > VERSION_DEMO_US
 USER_FUNC(memcard_watch_end);
 #endif
 USER_FUNC(memcard_watch_start);

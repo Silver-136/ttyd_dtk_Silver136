@@ -433,7 +433,7 @@ void effRecoveryMain(EffectEntry* effect) {
                     p->timer++;
                     p->position.x = intplGetValue(EASING_QUADRATIC_IN, p->position.x, 0.0f, p->timer, 16);
 #if VERSION <= VERSION_DEMO_US
-p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, -30.0f, p->timer, 16);
+                    p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, -30.0f, p->timer, 16);
 #else
                     p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, baseY, p->timer, 16);
 #endif
@@ -454,7 +454,7 @@ p->position.y = intplGetValue(EASING_QUADRATIC_IN, p->position.y, -30.0f, p->tim
                 if (type != 7 && type != 8) {
                     Vec sfxPos;
 #if VERSION <= VERSION_DEMO_US
-s32 count = amount * 10;
+                    s32 count = amount * 10;
                     if (count > 100) {
                         count = 100;
                     }

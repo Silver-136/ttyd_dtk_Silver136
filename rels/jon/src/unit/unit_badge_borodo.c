@@ -319,7 +319,7 @@ static PoseTableEntry pose_table[] = {
     {POSE_TYPE_RUN_HOME, "R_1"},
     {POSE_TYPE_WALK, "W_1"},
 #if VERSION <= VERSION_DEMO_US
-{POSE_TYPE_DANGER, "I_1"},
+    {POSE_TYPE_DANGER, "I_1"},
     {POSE_TYPE_PERIL, "I_1"},
 #else
     {POSE_TYPE_DANGER, "X_1"},
@@ -336,7 +336,7 @@ static PoseTableEntry pose_table_item_have[] = {
     {POSE_TYPE_FREEZE, "Y_1"},
     {POSE_TYPE_CONFUSE, "K_1"},
 #if VERSION <= VERSION_DEMO_US
-{POSE_TYPE_POISON, "I_1"},
+    {POSE_TYPE_POISON, "I_1"},
     {POSE_TYPE_DIZZY, "I_1"},
 #else
     {POSE_TYPE_POISON, "X_1"},

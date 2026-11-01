@@ -648,7 +648,7 @@ void _load(const char* prevMapName, const char* newMapName, const char* beroName
     }
     setupDataLoad(map->mapName);
 #if VERSION <= VERSION_DEMO_US
-sprintf(mapFile, "./bg/%s.tpl", newMapName);
+    sprintf(mapFile, "./bg/%s.tpl", newMapName);
 #else
     sprintf(mapFile, "./b/%s.tpl", newMapName);
 #endif

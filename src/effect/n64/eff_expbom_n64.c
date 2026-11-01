@@ -85,7 +85,7 @@ EffectEntry* effExpBomN64Entry(f32 x, f32 y, f32 z) {
         data->offsetX = 0.0f;
         data->offsetY = 0.0f;
 #if VERSION <= VERSION_DEMO_US
-sv = bom_dir[i];
+        sv = bom_dir[i];
         spd = 2.0f * bom_spd[i];
         rad = ((6.2831855f * (90.0f + sv)) / 360.0f);
 #else
@@ -181,8 +181,8 @@ void effExpBomDisp(CameraId camId, void* param) {
     PSMTXConcat(mtx, rot, base);
     PSMTXConcat(camera->view, base, base);
 #if VERSION <= VERSION_DEMO_US
-for (i = 0; i < ((EffectEntry*)param)->count; i++, data++) {
-if (data->lifeLeft < 0 || data->startDelay >= 0)
+    for (i = 0; i < ((EffectEntry*)param)->count; i++, data++) {
+    if (data->lifeLeft < 0 || data->startDelay >= 0)
 #else
     for (i = 0, scl = bom_scale, ry = bom_ry; i < ((EffectEntry*)param)->count; scl++, ry++, i++, data++) {
         if (data->lifeLeft < 0 || data->startDelay >= 0) {
@@ -203,7 +203,7 @@ if (data->lifeLeft < 0 || data->startDelay >= 0)
 #endif
         PSMTXTrans(mtx, data->offsetX, data->offsetY, 0.0f);
 #if VERSION <= VERSION_DEMO_US
-PSMTXScale(scale, bom_scale[i], bom_scale[i], bom_scale[i]);
+        PSMTXScale(scale, bom_scale[i], bom_scale[i], bom_scale[i]);
         PSMTXRotRad(rot, 'z', 0.017453292f * bom_ry[i]);
 #else
         PSMTXScale(scale, *scl, *scl, *scl);

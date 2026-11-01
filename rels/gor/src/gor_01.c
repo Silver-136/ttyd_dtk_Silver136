@@ -73,7 +73,7 @@ typedef struct ShopSel {
     u8 field_0x0[8];
     s32* items;
 #if VERSION <= VERSION_DEMO_US
-u8 field_0xC[0x18 - 0xC];
+    u8 field_0xC[0x18 - 0xC];
 #else
     u8 field_0xC[0x24 - 0xC];
 #endif
@@ -122,22 +122,16 @@ extern s32 envSetYami[];
 
 #if VERSION == VERSION_DEMO_JP
 static EvtWord sell_evt[116];
-#else
-static EvtWord sell_evt[VERSION_PICK(135, 146)];
-#endif
-#if VERSION == VERSION_DEMO_JP
 EvtWord zaiko_buy_evt[151];
 #else
+static EvtWord sell_evt[VERSION_PICK(135, 146)];
 EvtWord zaiko_buy_evt[VERSION_PICK(174, 185)];
 #endif
 #if VERSION <= VERSION_DEMO_US
 static EvtWord buy_evt[41];
-#else
-static EvtWord buy_evt[53];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord badgeshopper_talk_evt[];
 #else
+static EvtWord buy_evt[53];
 EvtWord badgeshopper_talk_evt[38];
 #endif
 EvtWord badgemaster_init[36];
@@ -349,8 +343,6 @@ EvtWord gor_01_init_evt[VERSION_PICK(546, 548)];
 #endif
 #if VERSION > VERSION_DEMO_US
 SimpleRecipe R_simple_recipe_table[26];
-#endif
-#if VERSION > VERSION_DEMO_US
 CookRecipe R_cookbook_recipe_table[VERSION_PICK(289, 292)];
 #endif
 s32 R_mystery_cook_list[20];
@@ -2543,7 +2535,7 @@ EVT_END()
 
 EVT_BEGIN(bottakuru_init)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_LESS(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
+    IF_INT_LESS(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG1_17_FATHER_SON_REUNITED)
 #endif
@@ -2552,7 +2544,7 @@ IF_INT_LESS(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)
     END_IF
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
+    SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
 #else
     CALL(evt_npc_set_ry, STRING("me"), 90)
     SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
@@ -3843,7 +3835,7 @@ EVT_BEGIN(evt_open_02_01_f2)
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_unitwin_alloc)
+    CALL(evt_unitwin_alloc)
 #else
     CALL(evt_unitwin_alloc, 1)
 #endif
@@ -5943,7 +5935,7 @@ EVT_BEGIN(iri_09_tentyo_talk)
                 CALL(evt_msg_continue)
                 CALL(iri_09_item_tbl_make, LW(0), LW(1))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, LW(1), LW(2))
+                CALL(evt_win_item_select, LW(1), LW(2))
 #else
                 CALL(evt_win_item_select, 0, LW(1), LW(2), 0)
 #endif
@@ -6443,7 +6435,7 @@ static EVT_BEGIN(epilogue_evt)
     CALL(evt_npc_flag_onoff, 1, STRING("バッジ店長"), NPC_FLAG_NO_HIT | NPC_FLAG_AUTO_MOVE_ANIM | NPC_FLAG_NO_WALL_COLLISION)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_ie_02_f2_naka"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_unitwin_alloc)
+    CALL(evt_unitwin_alloc)
 #else
     CALL(evt_unitwin_alloc, 1)
 #endif
@@ -8039,9 +8031,9 @@ USER_FUNC(make_item_tbl) {
             item = pouchHaveItem(i);
             if (item != 0) {
 #if VERSION <= VERSION_DEMO_US
-            if (skip == item) {
-                skip = 0;
-            } else {
+                if (skip == item) {
+                    skip = 0;
+                } else {
 #endif
                 item_tbl[n] = item;
                 n++;

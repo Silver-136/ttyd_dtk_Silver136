@@ -105,7 +105,7 @@ USER_FUNC(evt_pouch_add_keepitem) {
 USER_FUNC(evt_pouch_remove_keepitem) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_US
-if (pouchRemoveKeepItem(evtGetValue(event, args[0]))) {
+    if (pouchRemoveKeepItem(evtGetValue(event, args[0]))) {
         evtSetValue(event, args[1], 0);
 #else
     s32 id = evtGetValue(event, args[0]);

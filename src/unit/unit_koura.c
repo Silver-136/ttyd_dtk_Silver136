@@ -223,7 +223,7 @@ static EVT_BEGIN(phase_event)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_BEFORE_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(koura_open)
+        CALL_CHILD(koura_open)
 #else
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_GREATER(LW(0), 0)
@@ -234,7 +234,7 @@ CALL_CHILD(koura_open)
     CALL(btlevtcmd_CheckPhase, LW(0), BATTLE_PHASE_AFTER_PLAYER)
     IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(koura_close)
+        CALL_CHILD(koura_close)
 #else
         CALL(btlevtcmd_GetHp, UNIT_ID_SELF, LW(0))
         IF_INT_GREATER(LW(0), 0)
@@ -338,7 +338,7 @@ EVT_BEGIN(damage_core)
     END_SWITCH
     CALL(btlevtcmd_AnimeChangePoseType, UNIT_ID_SELF, 1, POSE_TYPE_DAMAGE)
 #if VERSION <= VERSION_DEMO_US
-WAIT_FRAMES(30)
+    WAIT_FRAMES(30)
 #else
     WAIT_MS(500)
 #endif

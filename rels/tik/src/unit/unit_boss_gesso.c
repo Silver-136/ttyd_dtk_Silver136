@@ -175,7 +175,7 @@ s32 R_defence_attr_turn[] = {
 
 s32 R_regist_turn[] = {
 #if VERSION <= VERSION_DEMO_US
-0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0,
 #else
     1684300900, 1684300900, 1684300900, 1684300800, 6579200, 0,
 #endif
@@ -184,7 +184,7 @@ s32 R_regist_turn[] = {
 static PoseTableEntry pose_table[] = {
     {POSE_TYPE_SLEEP, "GSO_N2_1"},
 #if VERSION <= VERSION_DEMO_US
-{POSE_TYPE_STOP, "GSO_K2_1"},
+    {POSE_TYPE_STOP, "GSO_K2_1"},
     {POSE_TYPE_FREEZE, "GSO_K2_1"},
 #else
     {POSE_TYPE_STOP, "GSO_D2_2"},
@@ -203,7 +203,7 @@ static PoseTableEntry pose_table[] = {
 static PoseTableEntry pose_table_ceil[] = {
     {POSE_TYPE_SLEEP, "GSO_N1_1"},
 #if VERSION <= VERSION_DEMO_US
-{POSE_TYPE_STOP, "GSO_K1_1"},
+    {POSE_TYPE_STOP, "GSO_K1_1"},
     {POSE_TYPE_FREEZE, "GSO_K1_1"},
 #else
     {POSE_TYPE_STOP, "GSO_D1_3"},
@@ -223,7 +223,7 @@ static PoseTableEntry pose_table_ceil[] = {
 PoseTableEntry gesso_pose_table_turn[] = {
     {POSE_TYPE_SLEEP, "GSO_N3_1"},
 #if VERSION <= VERSION_DEMO_US
-{POSE_TYPE_STOP, "GSO_K3_1"},
+    {POSE_TYPE_STOP, "GSO_K3_1"},
     {POSE_TYPE_FREEZE, "GSO_K3_1"},
 #else
     {POSE_TYPE_STOP, "GSO_D3_2"},

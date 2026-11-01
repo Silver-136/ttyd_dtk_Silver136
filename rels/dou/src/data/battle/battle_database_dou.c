@@ -203,7 +203,7 @@ BattleStageData dou_btlstage_data[] = {
         bgset_dou_wave_event, // bgBEvt
         NULL, 0, // bgCEvt..reserved_1B0
 #if VERSION <= VERSION_DEMO_US
-0, // disableBgA1Destroy
+        0, // disableBgA1Destroy
         0, // disableBgA2Destroy
         0,
 #else

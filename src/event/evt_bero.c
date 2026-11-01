@@ -1390,7 +1390,7 @@ EVT_END()
 
 EVT_BEGIN(bero_case_exec_none)
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(bero_case_init_check)
+    CALL_CHILD(bero_case_init_check)
 #else
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(bero_case_init_check))
@@ -1414,7 +1414,7 @@ EVT_END()
 
 EVT_BEGIN(bero_case_exec_road)
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(bero_case_init_check)
+    CALL_CHILD(bero_case_init_check)
 #else
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(bero_case_init_check))
@@ -1718,7 +1718,7 @@ EVT_BEGIN(bero_case_exec_pipe)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(bero_case_init_check)
+    CALL_CHILD(bero_case_init_check)
 #else
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(bero_case_init_check))
@@ -1780,7 +1780,7 @@ EVT_END()
 /** Exit trigger for gates: after bero_case_init_check, changes map straight away. */
 EVT_BEGIN(bero_case_exec_gate)
 #if VERSION <= VERSION_DEMO_US
-CALL_CHILD(bero_case_init_check)
+    CALL_CHILD(bero_case_init_check)
 #else
     CALL(evt_mario_key_onoff, 0)
     CALL_CHILD(PTR(bero_case_init_check))

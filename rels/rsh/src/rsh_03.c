@@ -118,17 +118,11 @@ EvtWord evt_shop_door_init[36];
 static EvtWord evt_yuka_simi[45];
 #if VERSION <= VERSION_DEMO_US
 static const char* access_tbl[11];
-#else
-static const char* access_tbl[16];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord evt_access[14];
-#else
-static EvtWord evt_access[25];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord evt_access_entry[23];
 #else
+static const char* access_tbl[16];
+static EvtWord evt_access[25];
 static EvtWord evt_access_entry[24];
 #endif
 EvtWord rsh_03_init_evt[269];
@@ -399,7 +393,7 @@ s32 item_tbl_cook[] = {
 EVT_BEGIN(talk_cook_nabe_return)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_70_00"), 0, STRING("コック"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(item_tbl_cook), LW(1))
+    CALL(evt_win_item_select, PTR(item_tbl_cook), LW(1))
 #else
     CALL(evt_win_item_select, 0, PTR(item_tbl_cook), LW(1), 0)
 #endif
@@ -1907,7 +1901,7 @@ static EVT_BEGIN(evt_access_entry)
     SET_INT_READ_ADDR(PTR(&access_tbl))
     LOOP(0)
 #if VERSION <= VERSION_DEMO_US
-READ_INT2(LW(0), LW(1))
+        READ_INT2(LW(0), LW(1))
 #else
         READ_INT3(LW(0), LW(1), LW(2))
 #endif

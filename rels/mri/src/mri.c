@@ -132,12 +132,9 @@ EvtWord mri_countdown[174];
 EvtWord mri_waterfall_effect[26];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord mri_guide_hagure_check[];
-#else
-EvtWord mri_guide_hagure_check[50];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord mri_guide_goryu[];
 #else
+EvtWord mri_guide_hagure_check[50];
 EvtWord mri_guide_goryu[63];
 #endif
 EvtWord mri_puni_walk_se[20];
@@ -410,7 +407,7 @@ s32 mri_itemsel_table[] = {
  */
 EVT_BEGIN(mri_punipuni_setup)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_entry, LW(10), ITEM_PUNI_ORB, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
+    CALL(evt_item_entry, LW(10), ITEM_PUNI_ORB, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
 #else
     CALL(evt_item_entry, LW(10), ITEM_PUNI_ORB, 0, -20000, 0, ITEM_TYPE_STILL, -1, 0)
 #endif
@@ -427,7 +424,7 @@ EVT_BEGIN(mri_punipuni_itemselect)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(mri_itemsel_table), LW(0))
+    CALL(evt_win_item_select, PTR(mri_itemsel_table), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(mri_itemsel_table), LW(0), 0)
 #endif
@@ -452,7 +449,7 @@ EVT_BEGIN(mri_punipuni_itemremove)
     CALL(evt_target_flag_onoff, LW(11), 1, 1)
     CALL(evt_pouch_add_item, ITEM_PUNI_ORB, LW(0))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_set_position, LW(10), 0, -1000, 0)
+    CALL(evt_item_set_position, LW(10), 0, -1000, 0)
 #else
     CALL(evt_item_set_position, LW(10), 0, -20000, 0)
 #endif

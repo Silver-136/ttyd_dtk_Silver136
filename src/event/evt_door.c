@@ -74,12 +74,9 @@ EvtWord in_dooranim[134];
 EvtWord out_dooranim[121];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord house_in[];
-#else
-EvtWord house_in[216];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord house_out[];
 #else
+EvtWord house_in[216];
 EvtWord house_out[196];
 #endif
 EvtWord evt_door_setup[56];

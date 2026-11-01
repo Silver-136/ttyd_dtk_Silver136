@@ -975,7 +975,7 @@ static s16 elmos_animtbl[] = {
     0, 1, 2, 3, 4, 5, 6, 7,
     8, 9, 10, 11, 12, 13, 14, 15,
 #if VERSION <= VERSION_DEMO_US
-16, 17, 18, 19, -1,
+    16, 17, 18, 19, -1,
 #else
     16, 17, 18, 19, -1, 0,
 #endif
@@ -2000,7 +2000,7 @@ EVT_BEGIN(anm_yure)
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
+            CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
 #else
             CALL(fune_curve_pos)
             CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), LW(7), LW(8), LW(9))
@@ -2023,7 +2023,7 @@ CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
             CALL(evt_sub_intpl_msec_get_value)
             DIVIDE_FLOAT(LW(0), FLOAT(100.0f))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
+            CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), GW(0), GW(1), GW(2))
 #else
             CALL(fune_curve_pos)
             CALL(evt_mapobj_trans, 1, STRING("S_fune_m"), LW(7), LW(8), LW(9))
@@ -2195,7 +2195,7 @@ static void draw(CameraId camera, void* param) {
  */
 static EVT_BEGIN(evt_prologue)
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(4000)
+    WAIT_MS(4000)
 #else
     WAIT_MS(500)
     // The opening title scene: music starts and the logo appears.
@@ -2422,7 +2422,7 @@ EVT_BEGIN(muj_20_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     IF_STR_EQUAL(LW(0), STRING("prologue"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_OPENING1"))
+        CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_OPENING1"))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_OPN_MUJ1"))
 #endif
         CALL(evt_cam3d_evt_set, 0, 367, 2093, 0, 343, -115, 0, EASING_SINE_IN_OUT)

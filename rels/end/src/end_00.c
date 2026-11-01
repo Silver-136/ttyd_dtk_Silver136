@@ -98,25 +98,16 @@ typedef struct CreditActor {
 EndWork end_work;
 #if VERSION > VERSION_DEMO_US
 s32 (*end_moa_chain_group)[2];
-#endif
-#if VERSION > VERSION_DEMO_US
 s32* end_moa_chain_count;
-#endif
-#if VERSION > VERSION_DEMO_US
 ExtTexInfo* end_moa_ext_data;
-#endif
-#if VERSION > VERSION_DEMO_US
 EndMoa* end_moa_tbl;
 #endif
 extern EndWork* end_wp;
 #if VERSION <= VERSION_DEMO_US
 extern CreditMsg end_staff_roll_msg_tbl[];
-#else
-extern CreditMsg end_staff_roll_msg_tbl[50];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern CreditNpc R_credits_npc_info[151];
 #else
+extern CreditMsg end_staff_roll_msg_tbl[50];
 extern CreditNpc R_credits_npc_info[152];
 #endif
 static inline f32 tanf(f32 x) { return tan(x); }
@@ -169,78 +160,35 @@ EvtWord end_00_init_evt[63];
 EvtWord end_credit_gesso_evt[48];
 #if VERSION <= VERSION_DEMO_US
 extern EvtWord end_credit_gonbaba_evt[];
-#else
-EvtWord end_credit_gonbaba_evt[89];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord end_credit_batten2_evt[];
-#else
-EvtWord end_credit_batten2_evt[54];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord end_credit_atomic_evt[];
-#else
-EvtWord end_credit_atomic_evt[60];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord end_credit_korutesu_evt[];
-#else
-EvtWord end_credit_korutesu_evt[81];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord end_credit_para_evt[];
-#else
-EvtWord end_credit_para_evt[50];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord end_credit_batten_evt[];
 #else
+EvtWord end_credit_gonbaba_evt[89];
+EvtWord end_credit_batten2_evt[54];
+EvtWord end_credit_atomic_evt[60];
+EvtWord end_credit_korutesu_evt[81];
+EvtWord end_credit_para_evt[50];
 EvtWord end_credit_batten_evt[83];
 #endif
 EvtWord end_credit_queen_evt[];
 #if VERSION > VERSION_DEMO_US
 EvtWord end_credit_moamoa_evt[108];
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_negone_one_374[2] __attribute__((aligned(8)));
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_neg_one_382;
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00___local_PI_383;
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00___local_3PIO2_385;
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_one_negone_373[2] __attribute__((aligned(8)));
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00___local_PIO2_384;
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_one_381;
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_negone_one_360[2] __attribute__((aligned(8)));
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_neg_one_365;
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00___local_PI_366;
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00___local_3PIO2_368;
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_one_negone_359[2] __attribute__((aligned(8)));
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00___local_PIO2_367;
-#endif
-#if VERSION > VERSION_DEMO_US
 f32 fd_end_00_one_364;
 #endif
 
@@ -1033,7 +981,7 @@ EVT_BEGIN(end_credit_npc_parade)
         END_INLINE_EVENT
         IF_INT_EQUAL(LW(1), 1)
 #if VERSION <= VERSION_DEMO_US
-WAIT_MS(2000)
+            WAIT_MS(2000)
 #else
             WAIT_MS(1920)
         END_IF
@@ -1591,17 +1539,17 @@ EVT_BEGIN(end_00_init_evt)
     SET_VALUE(GF(10), 0)
     CALL(evt_end_staff_roll_init)
 #if VERSION <= VERSION_DEMO_US
-BEGIN_INLINE_EVENT
-        CALL(evt_end_credit_npc_preload)
-    END_INLINE_EVENT
-SPAWN_EVENT(end_credit_npc_parade)
+    BEGIN_INLINE_EVENT
+            CALL(evt_end_credit_npc_preload)
+        END_INLINE_EVENT
+    SPAWN_EVENT(end_credit_npc_parade)
 #else
     SPAWN_EVENT(PTR(end_credit_npc_parade))
 #endif
     BEGIN_INLINE_EVENT
         CALL(evt_end_staff_roll_msg_main)
 #if VERSION <= VERSION_DEMO_US
-SPAWN_EVENT(end_return_title_evt)
+    SPAWN_EVENT(end_return_title_evt)
 #endif
     END_INLINE_EVENT
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STAFF_ROLL1"))

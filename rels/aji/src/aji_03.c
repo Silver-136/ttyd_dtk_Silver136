@@ -85,7 +85,7 @@ EvtWord aji_03_init_evt[525];
  */
 static EVT_BEGIN(e_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
 #endif
@@ -102,7 +102,7 @@ EVT_END()
  */
 static EVT_BEGIN(e_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(-0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(-0.25f))
 #endif
@@ -965,7 +965,7 @@ static EVT_BEGIN(evt_haguruma)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(haguruma_tbl), LW(0))
+    CALL(evt_win_item_select, PTR(haguruma_tbl), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(haguruma_tbl), LW(0), 0)
 #endif

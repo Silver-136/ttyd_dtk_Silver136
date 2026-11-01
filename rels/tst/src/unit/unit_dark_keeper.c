@@ -44,7 +44,7 @@ BattleUnitKind unit_dark_keeper = {
     1, // perilHP
     28, // level
 #if VERSION <= VERSION_DEMO_US
-0,
+    0,
 #else
     1, // bonusExp
 #endif
@@ -172,7 +172,7 @@ static BattleWeapon weapon_monban_attack = {
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
 #if VERSION <= VERSION_DEMO_US
-{5, 0, 0, 0, 0, 0, 0, 0},
+    {5, 0, 0, 0, 0, 0, 0, 0},
 #else
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
 #endif
@@ -213,7 +213,7 @@ static BattleWeapon weapon_monban_throw_attack = {
     1, // reserved_1B
     weaponGetPowerDefault, // hpDamageFn
 #if VERSION <= VERSION_DEMO_US
-{5, 0, 0, 0, 0, 0, 0, 0},
+    {5, 0, 0, 0, 0, 0, 0, 0},
 #else
     {6, 0, 0, 0, 0, 0, 0, 0}, // hpDamageWork
 #endif

@@ -997,7 +997,7 @@ static EVT_BEGIN(evt_train)
 #endif
     CALL(evt_hitobj_onoff, STRING("n_bero"), 1, 0)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)
+    SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_SLIDE1_3"), LW(0), LW(1), LW(2), 0)
@@ -1011,7 +1011,7 @@ SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)
     END_IF
     CALL(evt_cam_ctrl_onoff, CAMERA_3D, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_party_stop, 0)
+    CALL(evt_party_stop, 0)
     WAIT_MS(200)
 #endif
     CALL(evt_mario_mov_pos2, -215, -360, FLOAT(80.0f))
@@ -1416,7 +1416,7 @@ static EVT_BEGIN(talk_mama)
                 // Trouble Center request 29: Goldbob's wife asks what Mario needs, and he shows the Present.
                 CALL(evt_msg_print, 0, STRING("irai_29_14"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(iri_29_item_tbl), LW(0))
+                CALL(evt_win_item_select, PTR(iri_29_item_tbl), LW(0))
 #else
                 CALL(evt_win_item_select, 0, PTR(iri_29_item_tbl), LW(0), 0)
 #endif
@@ -1578,7 +1578,7 @@ static EVT_BEGIN(talk_madam_ring_return)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_msg_print, 0, STRING("stg6_pik_04_06"), 0, STRING("マダム"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(item_tbl_madam), LW(1))
+    CALL(evt_win_item_select, PTR(item_tbl_madam), LW(1))
 #else
     CALL(evt_win_item_select, 0, PTR(item_tbl_madam), LW(1), 0)
 #endif
@@ -1606,7 +1606,7 @@ static EVT_BEGIN(talk_madam)
         IF_INT_GREATER(LW(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_23_01"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(iri_23_item_tbl), LW(0))
+            CALL(evt_win_item_select, PTR(iri_23_item_tbl), LW(0))
 #else
             CALL(evt_win_item_select, 0, PTR(iri_23_item_tbl), LW(0), 0)
 #endif
@@ -2032,7 +2032,7 @@ EVT_BEGIN(evt_seacret)
     CALL(evt_img_alloc_capture, STRING("img"), 0, STRING("ofs"), 1, 0, 0, 0, 0)
     CALL(evt_img_alloc_capture, STRING("img"), 2, STRING("ofs"), 1, 0, 0, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_img_set_position, STRING("img"), -4, -298)
+    CALL(evt_img_set_position, STRING("img"), -4, -298)
     CALL(evt_img_set_virtual_point, STRING("img"), 0, 0, 5)
 #else
     CALL(evt_img_clear_virtual_point, STRING("img"))
@@ -2042,7 +2042,7 @@ CALL(evt_img_set_position, STRING("img"), -4, -298)
     CALL(evt_img_onoff, STRING("img"), 1)
     CALL(img_flag)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mapobj_flag_onoff, 1, 1, STRING("e"), MAP_OBJ_FLAG_HIDDEN)
+    CALL(evt_mapobj_flag_onoff, 1, 1, STRING("e"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ie_1_sakai"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_set_offscreen, 1, STRING("e"), STRING("ofs"))
     CALL(evt_mapobj_set_offscreen, 1, STRING("ie_1_sakai"), STRING("ofs"))
@@ -2079,7 +2079,7 @@ static EVT_BEGIN(mobj_box00)
     CALL(evt_mobj_get_position, STRING("mobj_badge_gat"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item00"), ITEM_HP_DRAIN_P, LW(0), LW(1), LW(2), ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
+    CALL(evt_item_flag_on, STRING("item00"), ITEM_FLAG_NO_TOUCH)
 #else
     CALL(evt_item_flag_on, STRING("item00"), 258)
 #endif
@@ -2098,7 +2098,7 @@ EVT_END()
  */
 EVT_BEGIN(pik_00_init_evt)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
+    SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG6_54_WELCOME_BACK)
         SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(hom_10_evt_resha_right)
@@ -2209,7 +2209,7 @@ SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("bero_"), MAP_OBJ_FLAG_CLIP)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("ie_1_N"), MAP_OBJ_FLAG_CLIP)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_run_case_evt, CASE_UNDER, 1, STRING("a_home_yuka"), 0, PTR(erase_house), 0)
+    CALL(evt_run_case_evt, CASE_UNDER, 1, STRING("a_home_yuka"), 0, PTR(erase_house), 0)
     CALL(evt_run_case_evt, CASE_NOT_UNDER, 1, STRING("a_home_yuka"), 0, PTR(appear_house), 0)
 #else
     BEGIN_INLINE_EVENT

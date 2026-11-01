@@ -82,7 +82,7 @@ static USER_FUNC(make_list) {
  */
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -99,7 +99,7 @@ EVT_END()
  */
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -116,7 +116,7 @@ EVT_END()
  */
 static EVT_BEGIN(e_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -133,7 +133,7 @@ EVT_END()
  */
 static EVT_BEGIN(e_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -207,7 +207,7 @@ EVT_BEGIN(evt_machine)
     END_IF
     CALL(make_list)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(key_list), LW(10))
+    CALL(evt_win_item_select, PTR(key_list), LW(10))
 #else
     CALL(evt_win_item_select, 0, PTR(key_list), LW(10), 0)
 #endif

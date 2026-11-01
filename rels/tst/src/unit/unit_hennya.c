@@ -39,7 +39,7 @@ BattleUnitKind unit_hennya = {
     1, // dangerHP
     1, // perilHP
 #if VERSION <= VERSION_DEMO_US
-36,
+    36,
     0,
 #else
     33, // level

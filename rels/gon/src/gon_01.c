@@ -376,7 +376,7 @@ EVT_BEGIN(gon_01_GATEEVENT_evt)
     CALL(evt_party_stop, 0)
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_msg_print_party, STRING("E3_stg1_gon_00"))
+    CALL(evt_msg_print_party, STRING("E3_stg1_gon_00"))
 #else
     CALL(evt_mario_get_party, LW(0))
     SWITCH(LW(0))

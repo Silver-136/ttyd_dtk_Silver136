@@ -68,8 +68,6 @@ EvtWord quiz_ng[21];
 #endif
 #if VERSION > VERSION_DEMO_US
 EvtWord UNK_0x00022be8[21];
-#endif
-#if VERSION > VERSION_DEMO_US
 EvtWord UNK_0x00022c3c[66];
 #endif
 #if VERSION >= VERSION_US
@@ -95,7 +93,7 @@ EvtWord aji_04_init_evt[55];
  */
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -112,7 +110,7 @@ EVT_END()
  */
 static EVT_BEGIN(w_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -465,7 +463,7 @@ EVT_BEGIN(quiz_ok)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("dennshoku"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("dennshoku_2"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_map_playanim, STRING("anm_seikai"), 1, 0)
+    CALL(evt_map_playanim, STRING("anm_seikai"), 1, 0)
 #else
     CALL(evt_map_playanim, STRING("anm_seikai"), MAP_ANIM_PLAY_ONCE, 0)
 #endif

@@ -145,7 +145,7 @@ EvtWord aji_01_init_evt[171];
  */
 static EVT_BEGIN(w1_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -162,7 +162,7 @@ EVT_END()
  */
 static EVT_BEGIN(w1_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -179,7 +179,7 @@ EVT_END()
  */
 static EVT_BEGIN(e1_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -196,7 +196,7 @@ EVT_END()
  */
 static EVT_BEGIN(e1_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -213,7 +213,7 @@ EVT_END()
  */
 static EVT_BEGIN(w2_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -230,7 +230,7 @@ EVT_END()
  */
 static EVT_BEGIN(w2_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -247,7 +247,7 @@ EVT_END()
  */
 static EVT_BEGIN(e2_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -264,7 +264,7 @@ EVT_END()
  */
 static EVT_BEGIN(e2_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -378,7 +378,7 @@ EVT_END()
  */
 EVT_BEGIN(w3_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -391,7 +391,7 @@ EVT_END()
 /** Closing step of door w3 (S_door5_1/S_door5_2 along Z); the same slide as w3_door_open. */
 EVT_BEGIN(w3_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -408,7 +408,7 @@ EVT_END()
  */
 static EVT_BEGIN(e3_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -425,7 +425,7 @@ EVT_END()
  */
 static EVT_BEGIN(e3_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -441,7 +441,7 @@ EVT_END()
  */
 EVT_BEGIN(w4_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -454,7 +454,7 @@ EVT_END()
 /** Closing step of door w4 (S_door11_1/S_door11_2 along Z); the same slide as w4_door_open. */
 EVT_BEGIN(w4_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -470,7 +470,7 @@ EVT_END()
  */
 EVT_BEGIN(e4_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -483,7 +483,7 @@ EVT_END()
 /** Closing step of door e4 (S_door12_1/S_door12_2 along Z); the same slide as e4_door_open. */
 EVT_BEGIN(e4_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -499,7 +499,7 @@ EVT_END()
  */
 EVT_BEGIN(w5_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -512,7 +512,7 @@ EVT_END()
 /** Closing step of door w5 (S_door13_1/S_door13_2 along Z); the same slide as w5_door_open. */
 EVT_BEGIN(w5_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -528,7 +528,7 @@ EVT_END()
  */
 EVT_BEGIN(e5_door_open)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -541,7 +541,7 @@ EVT_END()
 /** Closing step of door e5 (S_door14_1/S_door14_2 along Z); the same slide as e5_door_open. */
 EVT_BEGIN(e5_door_close)
 #if VERSION <= VERSION_DEMO_US
-MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
+    MULTIPLY_FLOAT(LW(0), FLOAT(0.22167969f))
 #else
     MULTIPLY_FLOAT(LW(0), FLOAT(0.25f))
 #endif
@@ -857,7 +857,7 @@ EVT_BEGIN(elv_unlock1)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(elv_key1), LW(0))
+    CALL(evt_win_item_select, PTR(elv_key1), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(elv_key1), LW(0), 0)
 #endif
@@ -905,7 +905,7 @@ EVT_BEGIN(elv_unlock2)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_win_item_select, PTR(elv_key2), LW(0))
+    CALL(evt_win_item_select, PTR(elv_key2), LW(0))
 #else
     CALL(evt_win_item_select, 0, PTR(elv_key2), LW(0), 0)
 #endif
@@ -2632,14 +2632,14 @@ EVT_BEGIN(peach_evt_ele_init)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG5_44_PEACH_TECS_REQUEST_2)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi4_aka"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
 #else
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_aka"), MAP_OBJ_FLAG_HIDDEN)
 #endif
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_ekagi6_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi4_mid"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
+        CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
 #else
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("S_ekagi5_mid"), MAP_OBJ_FLAG_HIDDEN)
 #endif

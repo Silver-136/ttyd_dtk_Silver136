@@ -71,17 +71,11 @@ static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
 #if VERSION <= VERSION_DEMO_US
 static EvtWord hom_10_init_evt[104];
-#else
-static EvtWord hom_10_init_evt[140];
-#endif
-#if VERSION <= VERSION_DEMO_US
 static EvtWord evt_train[252];
-#else
-static EvtWord evt_train[284];
-#endif
-#if VERSION <= VERSION_DEMO_US
 extern EvtWord evt_train2[];
 #else
+static EvtWord hom_10_init_evt[140];
+static EvtWord evt_train[284];
 EvtWord evt_train2[287];
 #endif
 static EvtWord peach_mail[235];
@@ -849,7 +843,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_train)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)
+    SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)
 #else
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))

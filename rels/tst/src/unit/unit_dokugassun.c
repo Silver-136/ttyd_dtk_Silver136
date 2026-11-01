@@ -65,7 +65,7 @@ BattleUnitKind unit_dokugassun = {
     1, // dangerHP
     1, // perilHP
 #if VERSION <= VERSION_DEMO_US
-45,
+    45,
     0,
     1,
 #else
@@ -291,7 +291,7 @@ static EVT_BEGIN(attack_event)
         GOTO(99)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(LW(0), 70)
+    SET_VALUE(LW(0), 70)
     ADD(LW(0), 30)
 #else
     SET_VALUE(LW(0), 65)
@@ -300,7 +300,7 @@ SET_VALUE(LW(0), 70)
     SUBTRACT(LW(0), 1)
     CALL(evt_sub_random, LW(0), LW(1))
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(LW(0), 70)
+    SET_VALUE(LW(0), 70)
 #else
     SET_VALUE(LW(0), 65)
 #endif

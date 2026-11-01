@@ -1145,6 +1145,7 @@ void BtlUnit_GetStatus(BattleUnit* unit, s8 type, s8* turns, s8* strength) {
  * or Allergic or Payback is set to 0 turns, which the demos treat as set.
  */
 BOOL BtlUnit_SetStatus(BattleUnit* unit, StatusEffectType type, s8 turns, s8 strength) {
+    switch ((s8)type) {
 #else
 /**
  * Stores a status effect's turns and strength (Charge adds to its strength, capped 0..99).
@@ -1154,10 +1155,6 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, StatusEffectType type, s8 turns, s8 str
  * or Allergic or Payback is set to 0 turns, which the demos treat as set.
  */
 BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
-#endif
-#if VERSION <= VERSION_DEMO_US
-    switch ((s8)type) {
-#else
     switch (type) {
 #endif
         case STATUS_SLEEP:
@@ -1282,7 +1279,7 @@ BOOL BtlUnit_SetStatus(BattleUnit* unit, s8 type, s8 turns, s8 strength) {
             if (unit->chargeStrength < 0) {
                 unit->chargeStrength = 0;
 #if VERSION <= VERSION_DEMO_US
-            } else if (unit->chargeStrength > 99) {
+                } else if (unit->chargeStrength > 99) {
 #else
                 return FALSE;
             }
