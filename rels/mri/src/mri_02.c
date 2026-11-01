@@ -469,7 +469,7 @@ EVT_BEGIN(mri_02_init_evt)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG2_16_THE_PUNI_ELDERS_POWERS)
         SPAWN_EVENT(PTR(dokan_init))
         BEGIN_INLINE_EVENT
-            CALL(evt_bero_exec_wait, 65536)
+            CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
             CALL(evt_puni_dokan_onoff, STRING("dokan2"), 1)
         END_INLINE_EVENT
     END_IF

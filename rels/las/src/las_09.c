@@ -1071,7 +1071,7 @@ EVT_BEGIN(las_09_init_evt)
             CALL(evt_party_set_dir, 0, 90, 0)
             BEGIN_INLINE_EVENT
                 CALL(evt_seq_wait, SEQ_GAME)
-                CALL(evt_bero_exec_wait, 65536)
+                CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
                 SPAWN_EVENT(PTR(majyorin_evt_main))
             END_INLINE_EVENT
         ELSE

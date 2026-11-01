@@ -774,7 +774,7 @@ static EVT_BEGIN(epilogue_evt2)
     // A spotlight closes in on Mario; the story progress is set to the epilogue and the ending starts at
     // end_00.
     CALL(evt_fade_set_spot_pos, LW(0), LW(1), LW(2))
-    CALL(evt_fade_entry, 4, 3000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_SPOT, 3000, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(3000)
     SET_VALUE(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)

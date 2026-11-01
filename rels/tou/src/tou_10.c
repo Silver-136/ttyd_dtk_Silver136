@@ -1849,7 +1849,7 @@ EVT_END()
 
 EVT_BEGIN(first_tamago)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -30, -90, FLOAT(80.0f))
         CALL(evt_mario_set_dir, 90, 300, 0)

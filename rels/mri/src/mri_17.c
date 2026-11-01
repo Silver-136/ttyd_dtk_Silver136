@@ -776,7 +776,7 @@ EVT_END()
  */
 EVT_BEGIN(strange_statue)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_party_stop, 0)
     WAIT_MS(500)
     CALL(evt_party_move_pos2, 0, 50, -50, FLOAT(120.0f))

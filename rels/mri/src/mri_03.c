@@ -670,14 +670,14 @@ static NpcSetupInfo npcEnt[] = {
 EVT_BEGIN(bero_custom_00)
     SET_VALUE(GF(0), 1)
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_12_01_A_DARK_FIGURE)
-        CALL(evt_bero_exec_onoff, 0, 4)
+        CALL(evt_bero_exec_onoff, 0, BERO_EXEC_KEEP_MOVING)
         BEGIN_INLINE_EVENT
             WAIT_MS(2000)
-            CALL(evt_bero_exec_onoff, 0, 2)
+            CALL(evt_bero_exec_onoff, 0, BERO_EXEC_MARIO_MOVING)
             WAIT_MS(1000)
             SET_VALUE(GF(0), 0)
-            CALL(evt_bero_exec_onoff, 1, 2)
-            CALL(evt_bero_exec_onoff, 1, 4)
+            CALL(evt_bero_exec_onoff, 1, BERO_EXEC_MARIO_MOVING)
+            CALL(evt_bero_exec_onoff, 1, BERO_EXEC_KEEP_MOVING)
         END_INLINE_EVENT
     END_IF
     SET_VALUE(LW(0), 0)
@@ -1489,7 +1489,7 @@ EVT_BEGIN(toraware_elder)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_puni_wait_systemmode, 2)
 #endif
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_WHILE(GF(0))
     BEGIN_INLINE_EVENT
         CALL(evt_mario_set_dir, 270, 200, 0)
@@ -1625,7 +1625,7 @@ EVT_BEGIN(guide_sister_before)
     CALL(evt_puni_wait_systemmode, 2)
     CALL(evt_mario_set_dir, 270, 0, 0)
     CALL(evt_party_set_dir, 0, 270, 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(500)
     CALL_CHILD(PTR(mri_guide_hagure_check))
     IF_INT_NOT_EQUAL(LW(1), 0)

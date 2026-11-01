@@ -608,11 +608,11 @@ EVT_BEGIN(moving_floor_bero_check)
         RETURN
     END_IF
     LOOP(0)
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 
         // debug text (Shift-JIS): waiting for the auto-delete check
         DEBUG_PUT_MSG(STRING("\216\251\223\256\215\355\217\234\203`\203F\203b\203N\221\322\202\277"))
-        CALL(evt_bero_exec_wait, 1)
+        CALL(evt_bero_exec_wait, BERO_EXEC_BUSY)
         CALL(evt_bero_get_now_number, LW(10))
         CALL(evt_bero_get_info_nextarea, LW(10), LW(3), LW(4))
         IF_INT_NOT_EQUAL(LW(3), 0)

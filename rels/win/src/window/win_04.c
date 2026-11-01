@@ -246,7 +246,7 @@ static BeroEntry bero_entry_data[] = {
 EVT_BEGIN(meet_clouda)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_mario_normalize)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
     CALL(evt_party_move_pos2, 1, -110, 0, FLOAT(120.0f))

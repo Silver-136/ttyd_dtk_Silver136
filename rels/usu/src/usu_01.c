@@ -3133,7 +3133,7 @@ EVT_BEGIN(evt_monban_buta)
         RETURN
     END_IF
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL_CHILD(PTR(evt_monban_buta_main))
     CALL(evt_mario_key_onoff, 1)
     RETURN

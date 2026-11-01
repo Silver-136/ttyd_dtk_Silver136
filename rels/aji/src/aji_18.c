@@ -288,7 +288,7 @@ EVT_END()
 static EVT_BEGIN(evt_koopa_after)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, 75, 0, FLOAT(80.0f))
     END_INLINE_EVENT

@@ -2995,7 +2995,7 @@ EVT_BEGIN(evt_peach_after)
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_cam3d_evt_set, 0, 130, 134, 0, 75, -312, 0, EASING_SINE_IN_OUT)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -25, -305, FLOAT(80.0f))
         CALL(evt_mario_set_dir, 90, 300, 0)

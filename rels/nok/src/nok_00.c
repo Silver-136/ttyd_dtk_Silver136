@@ -1187,7 +1187,7 @@ EVT_BEGIN(nok_00_koopa_evt)
 
     // The story advances and the game is saved.
     SET_VALUE(GSW_STORY_PROGRESS, STG2_25_05_BOWSER_PETALBURG)
-    CALL(evt_fade_entry, 6, 300, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_SPOT_3D, 300, 0, 0, 0)
     CALL(evt_fade_end_wait)
     WAIT_MS(2000)
     SET_VALUE(LF(10), 0)

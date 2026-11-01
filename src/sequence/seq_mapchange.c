@@ -307,7 +307,7 @@ void seq_mapChangeMain(SequenceWork* work) {
         work->state++;
         break;
     case 6:
-        if (!(camGetPtr(CAMERA_2D)->flags & CAMERA_FLAG_LETTER_BOX_OFF) && !(bero_get_BeroEXEC() & 1) &&
+        if (!(camGetPtr(CAMERA_2D)->flags & CAMERA_FLAG_LETTER_BOX_OFF) && !(bero_get_BeroEXEC() & BERO_EXEC_BUSY) &&
             (!marioChkKey() || !marioChkCtrl())) {
             camGetPtr(CAMERA_2D)->flags |= (CAMERA_FLAG_LETTER_BOX | CAMERA_FLAG_LETTER_BOX_INSTANT);
         }

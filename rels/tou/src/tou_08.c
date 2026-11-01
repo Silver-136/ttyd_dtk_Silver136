@@ -90,7 +90,7 @@ EvtWord tou_08_init_evt[289];
 static EVT_BEGIN(evt_toile)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
         CALL(evt_mario_key_onoff, 0)
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         CALL(evt_mario_mov_pos2, -265, 125, FLOAT(80.0f))
         CALL(evt_party_stop, 0)
         CALL(evt_party_set_dir, 0, 90, 200)
@@ -1021,7 +1021,7 @@ EVT_END()
 
 EVT_BEGIN(evt_tou_08_cake)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_npc_get_position, STRING("ウラノコ"), LW(0), LW(1), LW(2))
     CALL(evt_cam3d_evt_set, LW(0), 90, 283, LW(0), 45, -9, 1000, EASING_SINE_IN_OUT)
     BEGIN_INLINE_EVENT

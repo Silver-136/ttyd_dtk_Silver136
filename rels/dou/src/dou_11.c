@@ -1639,11 +1639,11 @@ EVT_END()
 EVT_BEGIN(escapeway_event)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION > VERSION_DEMO_US
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_mario_normalize)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("stg5_dou_17_01"), 0, STRING("水夫D"))

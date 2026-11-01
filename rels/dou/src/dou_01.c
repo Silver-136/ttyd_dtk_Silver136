@@ -69,7 +69,7 @@ static EVT_BEGIN(korutesu_event)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION > VERSION_DEMO_US
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
 #endif
     CALL(evt_mario_normalize)
 #if VERSION <= VERSION_DEMO_US

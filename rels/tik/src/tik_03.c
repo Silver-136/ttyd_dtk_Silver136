@@ -258,7 +258,7 @@ EVT_BEGIN(puni_soguu_3)
     // Mario arrives; Punio spots him and scurries off to the west end of the room.
     CALL(evt_mario_key_onoff, 0)
     CALL(evt_seq_wait, SEQ_GAME)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     WAIT_MS(200)
     CALL(evt_mario_normalize)
     WAIT_MS(200)

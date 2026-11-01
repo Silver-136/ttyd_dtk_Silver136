@@ -702,8 +702,8 @@ USER_FUNC(zubastar_main) {
             w->cursor.timer = 27;
             w->cursor.f4 = 0;
 #if VERSION <= VERSION_DEMO_US
-            // The demo flashes the screen from here (15 = FADE_OUT_WHITE: demo fade types are 2 lower).
-            fadeEntry(15, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
+            // The demo flashes the screen from here.
+            fadeEntry(FADE_OUT_WHITE, 1, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
             btl_camera_shake_h(0, 5.0f, 0.0f, 30, 0);
 #else
             btl_camera_shake_h(0, 8.0f, 0.0f, 30, 0);
@@ -719,7 +719,7 @@ USER_FUNC(zubastar_main) {
     case 28:
         w->cursor.timer = 30;
 #if VERSION <= VERSION_DEMO_US
-        fadeEntry(14, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF}); // 14 = FADE_IN_WHITE in the demo
+        fadeEntry(FADE_IN_WHITE, 150, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
 #endif
     case 30:
         w->cursor.pos = (Vec){0.0f, -1000.0f, 0.0f};

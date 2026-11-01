@@ -115,7 +115,7 @@ static BeroEntry bero_entry_data[] = {
  */
 EVT_BEGIN(warning_event)
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     BEGIN_INLINE_EVENT
         CALL(evt_snd_sfxon, STRING("SFX_STG5_ELMOS_VOICE1"), 0)

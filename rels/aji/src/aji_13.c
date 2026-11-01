@@ -219,7 +219,7 @@ EVT_END()
  */
 static EVT_BEGIN(evt_haikei_in)
     BEGIN_INLINE_EVENT
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         WAIT_FRAMES(10)
         CALL(evt_mario_cam_keep_off)
         CALL(evt_mario_cam_y_on)

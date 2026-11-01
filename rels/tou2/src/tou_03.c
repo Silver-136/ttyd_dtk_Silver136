@@ -653,7 +653,7 @@ static s32 inta_tex[] __attribute__((aligned(32))) = {
  * and LW(9) from 0 to 90 degrees over 500 ms and plays the door-fall sound at Mario.
  */
 EVT_BEGIN(open_main)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_sub_intpl_msec_init, EASING_CUBIC_IN, 0, 180, 500)
     LABEL(0)
     CALL(evt_sub_intpl_msec_get_value)
@@ -811,7 +811,7 @@ EVT_END()
  */
 static EVT_BEGIN(s1_open)
     BEGIN_INLINE_EVENT
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         SET_VALUE(LW(8), STRING("door_2_a"))
         SET_VALUE(LW(9), STRING("door_2_b"))
         CALL_CHILD(PTR(open_main))
@@ -875,7 +875,7 @@ EVT_END()
  */
 static EVT_BEGIN(s2_open)
     BEGIN_INLINE_EVENT
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         SET_VALUE(LW(8), STRING("door_3_a"))
         SET_VALUE(LW(9), STRING("door_3_b"))
         CALL_CHILD(PTR(open_main))

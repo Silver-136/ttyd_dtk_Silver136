@@ -188,7 +188,7 @@ EVT_BEGIN(evt_mri_door_open)
     BEGIN_INLINE_EVENT
         WAIT_MS(1000)
         CALL(evt_bero_mario_go)
-        CALL(evt_bero_exec_onoff, 0, 268435456)
+        CALL(evt_bero_exec_onoff, 0, BERO_EXEC_MRI_DOOR_GO)
     END_INLINE_EVENT
     CALL_CHILD(PTR(evt_mri_door_open_pure))
     RETURN

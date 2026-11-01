@@ -115,7 +115,7 @@ static NpcSetupInfo npcEnt[] = {
  */
 static EVT_BEGIN(evt_haikei_in)
     BEGIN_INLINE_EVENT
-        CALL(evt_bero_exec_wait, 65536)
+        CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
         WAIT_FRAMES(10)
         CALL(evt_mario_cam_keep_off)
         CALL(evt_mario_cam_y_on)
@@ -361,7 +361,7 @@ EVT_BEGIN(sanders_funto)
 
     // Mario arrives at the bridge: control is taken and the exit is waited out.
     CALL(evt_mario_key_onoff, 0)
-    CALL(evt_bero_exec_wait, 65536)
+    CALL(evt_bero_exec_wait, BERO_EXEC_ENTRY_DONE)
     CALL(evt_mario_normalize)
     CALL(evt_party_stop, 0)
 

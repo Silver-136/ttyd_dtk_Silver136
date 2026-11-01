@@ -441,7 +441,7 @@ EVT_BEGIN(kinopio_house_talk_evt)
 #if VERSION >= VERSION_US
     CALL(evt_fade_entry, FADE_OUT_SPOT, 6000, 0, 0, 0)
 #else
-    CALL(evt_fade_entry, 4, 3000, 0, 0, 0)
+    CALL(evt_fade_entry, FADE_OUT_SPOT, 3000, 0, 0, 0)
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_fade_set_spot_pos, LW(0), LW(1), LW(2))
