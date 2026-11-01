@@ -41,9 +41,17 @@ static EvtWord init_event[41];
 static EvtWord chain_event[23];
 static EvtWord damage_event[33];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord counter_damage_event[];
+#else
 static EvtWord counter_damage_event[115];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord counter_damage_event[];
 #else
 static EvtWord counter_damage_event[68];
+#endif
 #endif
 static EvtWord dead_event[200];
 static EvtWord attack_event[452];
@@ -51,9 +59,17 @@ static EvtWord wait_event[476];
 static EvtWord sound_gensui_event[22];
 static EvtWord wait_sound_event1[25];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_sound_event2[];
+#else
 static EvtWord wait_sound_event2[11];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_sound_event2[];
 #else
 static EvtWord wait_sound_event2[12];
+#endif
 #endif
 
 /**

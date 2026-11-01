@@ -52,7 +52,11 @@ static EvtWord dead_event[122];
 EvtWord majo_unison_phase_event[238];
 static EvtWord unison_phase_event[83];
 static EvtWord phase_event[332];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event[];
+#else
 static EvtWord attack_event[389];
+#endif
 #if VERSION >= VERSION_US
 static EvtWord kagenuke_attack_event[225];
 #else

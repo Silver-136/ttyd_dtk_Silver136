@@ -39,7 +39,11 @@ static BeroEntry bero_entry_data[2];
 static EvtWord chibitoge_init[21];
 static EvtWord chibitoge_talk[111];
 static NpcSetupInfo npcEnt[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord chuchurina_sogu[];
+#else
 static EvtWord chuchurina_sogu[814];
+#endif
 EvtWord black_shadow[341];
 static EvtWord evt_ueki_02[20];
 static KusaAccess ueki_access_data[5];
@@ -371,7 +375,7 @@ CALL(evt_npc_jump_position_nohit, STRING("チュチュリーナ"), -18, 68, -120
     WAIT_MS(500)
     // He drops the Red Key, which pops out of him.
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(GSWF_MRI04_RED_KEY_TAKEN), 0)
+    CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_04_RED_KEY, 0)
 #else
     CALL(evt_item_entry, STRING("item_key"), ITEM_RED_KEY, 60, 0, 0, ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_MRI_04_RED_KEY, 0)
 #endif

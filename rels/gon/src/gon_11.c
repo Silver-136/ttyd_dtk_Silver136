@@ -85,7 +85,11 @@ static BeroEntry bero_entry_data[2];
 static EvtWord gonbaba_standup_shake[23];
 static EvtWord gonbaba_fog_change[87];
 static EvtWord gonbaba_down_shake[83];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord gonbaba_event[];
+#else
 EvtWord gonbaba_event[1410];
+#endif
 static const char* capturemap[2];
 static Vec v_list[8];
 static EvtWord evt_cloud_main_evt[4];
@@ -93,7 +97,11 @@ EvtWord iri_16_box_evt[33];
 EvtWord iri_16_cloud_evt[36];
 EvtWord iri_16_touch_evt[2];
 static EvtWord iri_16_init[57];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord gon_11_init_evt[];
+#else
 EvtWord gon_11_init_evt[101];
+#endif
 
 /** Exit event of the lair door: fades out the cutscene music on channel 1 and returns 0 to the door code. */
 EVT_BEGIN(evt_sound)
@@ -263,7 +271,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_mario_normalize)
     // If the intro was already seen, skip straight to the aftermath.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GON11_HOOKTAIL_INTRO_SKIP), 1)
+    IF_INT_EQUAL(GSWF_GON_11_HOOKTAIL_INTRO_SKIP, 1)
 #else
     IF_INT_EQUAL(GSWF_GON_11_HOOKTAIL_INTRO_SKIP, 1)
 #endif
@@ -522,7 +530,7 @@ EVT_BEGIN(gonbaba_event)
         CALL(evt_mario_hello_party, 0, 2)
         CALL(evt_party_stop, 0)
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_GON11_KOOPS_SWAPPED_IN), 1)
+        SET_VALUE(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
 #else
         SET_VALUE(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
 #endif
@@ -530,7 +538,7 @@ EVT_BEGIN(gonbaba_event)
     CALL(evt_mario_set_pos, 25, 10, 200)
     CALL(evt_party_set_pos, 0, -25, 10, 200)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GON11_KOOPS_SWAPPED_IN), 1)
+    IF_INT_EQUAL(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
 #else
     IF_INT_EQUAL(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
 #endif
@@ -572,7 +580,7 @@ EVT_BEGIN(gonbaba_event)
     END_LOOP
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GON11_KOOPS_SWAPPED_IN), 1)
+    IF_INT_EQUAL(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
 #else
     IF_INT_EQUAL(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
 #endif

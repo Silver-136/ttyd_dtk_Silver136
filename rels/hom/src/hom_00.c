@@ -67,7 +67,11 @@ EvtWord talk_ekiin2[28];
 static NpcSetupInfo npc_data[9];
 EvtWord evt_bridge_down[144];
 static s32 key_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_chk[];
+#else
 static EvtWord evt_chk[23];
+#endif
 static EvtWord evt_lock[10];
 EvtWord evt_train_door[13];
 static EvtWord evt_train[262];
@@ -825,7 +829,7 @@ CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
 CALL(evt_mobj_save_blk, STRING("mobj_save"), -175, 140, -170, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 15, -125, 140, -170, 0, 0)
     // The train is placed on the correct side of the platform.
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+    IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(hom_10_evt_resha_right)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_4"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("train_5"), MAP_OBJ_FLAG_HIDDEN)
@@ -854,7 +858,7 @@ END_IF
         END_LOOP
     END_INLINE_EVENT
     // The drawbridge scene, the doors, and the arrival scenes of the first and second visits.
-    IF_INT_EQUAL(GSWF(GSWF_EKI00_BRIDGE_LOWER_SCENE), 1)
+    IF_INT_EQUAL(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
         SPAWN_EVENT(evt_bridge_down)
         RETURN
     END_IF
@@ -877,7 +881,7 @@ END_IF
     END_IF
     // The station door stays locked until the Station Key has been used.
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_29_STATION_DOOR_UNLOCKED)
-        CALL(evt_mobj_lock, STRING("lock"), 24, -260, 90, -190, 0, PTR(evt_chk), PTR(evt_lock), GSWF(GSWF_HOM00_STATION_DOOR_UNLOCKED))
+        CALL(evt_mobj_lock, STRING("lock"), 24, -260, 90, -190, 0, PTR(evt_chk), PTR(evt_lock), GSWF_HOM_00_STATION_DOOR_LOCK)
         SET_VALUE(LW(0), 1)
         CALL_CHILD(bero_case_switch_off)
     END_IF

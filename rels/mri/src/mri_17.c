@@ -52,15 +52,31 @@ EvtWord trap_main[122];
 EvtWord trap_restore[59];
 EvtWord wana_kemuri[130];
 EvtWord wana_offscreen[219];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord trap_event[];
+#else
 EvtWord trap_event[716];
+#endif
 EvtWord trap_check[185];
 static EvtWord punipuni_ball00_init[34];
 static EvtWord punipuni_ball00[45];
 static EvtWord breakyuka_init[11];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord breakyuka_main[];
+#else
 static EvtWord breakyuka_main[131];
+#endif
 EvtWord strange_statue[56];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord switch_event[];
+#else
 EvtWord switch_event[41];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mri_17_init_evt[];
+#else
 EvtWord mri_17_init_evt[208];
+#endif
 
 /**
  * Enter script of the east pipe: the first time Mario comes in,
@@ -867,7 +883,7 @@ EVT_BEGIN(mri_17_init_evt)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_dai_mae"), 0, PTR(punipuni_ball00), 0)
 #if VERSION <= VERSION_DEMO_US
     SPAWN_EVENT(breakyuka_init)
-    CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, -35, 1, PTR(breakyuka_main), GSWF(GSWF_MRI17_FLOOR_BROKEN))
+    CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, -35, 1, PTR(breakyuka_main), GSWF_MRI_17_BREAKING_FLOOR_BROKEN)
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG2_21_01_MYSTERY_PILLAR)
 #else
     SPAWN_EVENT(PTR(breakyuka_init))
@@ -877,7 +893,7 @@ EVT_BEGIN(mri_17_init_evt)
         CALL(evt_mobj_switch_blue, 1, STRING("switch"), 60, -309, 53, PTR(switch_event), 0)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 168, -310, -44, ITEM_TYPE_STILL, GSWF(GSWF_MRI17_STAR_PIECE), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 168, -310, -44, ITEM_TYPE_STILL, GSWF_STARPIECE_50, 0)
     SWITCH(GSW(GSW_STORY_PROGRESS))
 #else
     CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 168, -310, -44, ITEM_TYPE_STILL, GSWF_STARPIECE_50, 0)

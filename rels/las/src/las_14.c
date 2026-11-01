@@ -77,7 +77,11 @@ static EvtWord evt_cloud_main_evt[4];
 static EvtWord cloud_evt[35];
 EvtWord touch_evt[2];
 static EvtWord hint_plate[14];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_14_init_evt[];
+#else
 EvtWord las_14_init_evt[81];
+#endif
 
 /**
  * Calls the evt_img_alloc_capture script command from C:
@@ -336,7 +340,7 @@ EVT_BEGIN(las_14_init_evt)
 #endif
     CALL(evt_hitobj_onoff, STRING("A_taka"), 1, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_LAS14_FLURRIE_GUST_SOLVED), 0)
+    IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)
 #else
     IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)
 #endif
@@ -347,8 +351,8 @@ EVT_BEGIN(las_14_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_kura"), 1, 0)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS14_KEY_CHEST_OPENED))
-    IF_INT_EQUAL(GSWF(GSWF_LAS14_FLURRIE_GUST_SOLVED), 0)
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_14_PALACE_KEY_CHEST)
+    IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)
 #else
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_14_PALACE_KEY_CHEST)
     IF_INT_EQUAL(GSWF_LAS_14_WALL_BLOWN_AWAY, 0)

@@ -86,7 +86,11 @@ EvtWord peach_evt_kaihei_close_all[28];
 s32 kusuri_tyogo_list[8];
 s32 kusuri_list[5];
 s32 kusuri_id[4];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord peach_evt_kusuri_select[];
+#else
 EvtWord peach_evt_kusuri_select[73];
+#endif
 EvtWord peach_evt_pick_kusuri[55];
 EvtWord peach_evt_check_all_kusuri_set[72];
 EvtWord peach_evt_kusuri_dasu[141];

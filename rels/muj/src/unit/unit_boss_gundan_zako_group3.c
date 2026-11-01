@@ -89,9 +89,17 @@ static EvtWord init_event[21];
 static EvtWord damage_event[129];
 static EvtWord dead_event[136];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event[];
+#else
 static EvtWord attack_event[260];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event[];
 #else
 static EvtWord attack_event[287];
+#endif
 #endif
 static EvtWord hit_check_event[119];
 static EvtWord wait_event[6];

@@ -27,7 +27,11 @@
 EvtWord bero_in[45];
 EvtWord bero_out[53];
 static BeroEntry bero_data[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_daiza[];
+#else
 static EvtWord evt_daiza[28];
+#endif
 EvtWord pik_03_init_evt[113];
 
 /**

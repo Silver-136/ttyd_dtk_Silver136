@@ -30,14 +30,30 @@
 
 USER_FUNC(waku);
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_close[];
+#else
 static EvtWord w_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_open[];
+#else
 static EvtWord w_door_open[22];
+#endif
 static BeroEntry bero_entry_data[2];
 EvtWord evt_robot_waku[34];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_boss[];
+#else
 static EvtWord evt_boss[797];
+#endif
 EvtWord evt_boss2[147];
 static NpcSetupInfo npcEnt[3];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_14_init_evt[];
+#else
 EvtWord aji_14_init_evt[71];
+#endif
 
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US

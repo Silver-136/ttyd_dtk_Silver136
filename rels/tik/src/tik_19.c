@@ -27,8 +27,16 @@ static void majin_callback(s32 type);
 
 static BeroEntry bero_entry_data[2];
 static s32 key_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_majin[];
+#else
 static EvtWord evt_majin[487];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_majin2[];
+#else
 static EvtWord evt_majin2[237];
+#endif
 EvtWord tik_19_init_evt[52];
 
 /** Doors of this room: the south exit back to tik_04. */
@@ -64,7 +72,7 @@ static EVT_BEGIN(evt_majin)
     CALL(evt_party_stop, 0)
     CALL(evt_party_stop, 1)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TIK19_BLACK_CHEST_TALKED), 0)
+    IF_INT_EQUAL(GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE, 0)
 #else
     IF_INT_EQUAL(GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE, 0)
 #endif
@@ -137,7 +145,7 @@ static EVT_BEGIN(evt_majin)
         CALL(evt_msg_print, 0, STRING("mac_majin_08"), PTR(majin_callback), 0)
         CALL(evt_mobj_exec_cancel, STRING("box"))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_TIK19_BLACK_CHEST_TALKED), 1)
+        SET_VALUE(GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE, 1)
 #else
         SET_VALUE(GSWF_TIK_19_BLACK_CHEST_FIRST_TALK_DONE, 1)
 #endif
@@ -277,7 +285,7 @@ CALL(evt_mario_normalize)
     CALL(evt_msg_print_party, STRING("mac_majin_20"))
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW(GSW_STORY_PROGRESS), STG0_12_02_PAPER_MAGE_1)
-    SET_VALUE(GSWF(GSWF_TIK19_BLACK_CHEST_OPENED), 1)
+    SET_VALUE(GSWF_TIK_19_BLACK_CHEST_OPENED, 1)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG0_12_02_PAPER_MAGE_1)
     SET_VALUE(GSWF_TIK_19_BLACK_CHEST_OPENED, 1)

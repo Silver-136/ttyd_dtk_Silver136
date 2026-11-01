@@ -93,7 +93,11 @@ static USER_FUNC(lect_mario_ido_sum);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
 EvtWord plane_majin_lecture_init[73];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord plane_majin_lecture[];
+#else
 EvtWord plane_majin_lecture[715];
+#endif
 
 /**
  * Linear interpolation helper for lect_mario_ido_sum:

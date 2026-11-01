@@ -86,7 +86,11 @@ EvtWord talk_powan_repeat[43];
 static EvtWord init_powan[64];
 static EvtWord talk_powan[204];
 static NpcSetupInfo npc_data[7];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_tana_5[];
+#else
 EvtWord evt_tana_5[50];
+#endif
 /* shelf access table read by READ_INT4: hit, msg, event, second msg; a NULL hit ends it */
 typedef struct ShelfAccess {
     const char* hit;
@@ -101,8 +105,16 @@ typedef struct ShelfAccessTbl3 {
     const char* end[1];
 } ShelfAccessTbl3;
 static ShelfAccessTbl3 access_tbl;
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_access[];
+#else
 static EvtWord evt_access[32];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_access_entry[];
+#else
 static EvtWord evt_access_entry[25];
+#endif
 static EvtWord evt_door_msg[102];
 EvtWord evt_narikin_room[87];
 EvtWord evt_powan_room[83];
@@ -112,13 +124,25 @@ EvtWord rsh_04_init_evt[214];
 EvtWord rsh_04_init_evt[201];
 #endif
 EvtWord rsh_04_a_init_evt[96];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord rsh_04_b_init_evt[];
+#else
 EvtWord rsh_04_b_init_evt[44];
+#endif
 static const char* window_tbl[4];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord rsh_04_c_init_evt[];
+#else
 EvtWord rsh_04_c_init_evt[67];
+#endif
 static BeroEntry bero_data_a_return[3];
 static BeroEntry bero_data_b_return[3];
 static BeroEntry bero_data_c_return[3];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord rsh_04_init_evt_nidome[];
+#else
 EvtWord rsh_04_init_evt_nidome[149];
+#endif
 EvtWord rsh_04_a_init_evt_nidome[28];
 EvtWord rsh_04_b_init_evt_nidome[28];
 EvtWord rsh_04_c_init_evt_nidome[38];
@@ -803,7 +827,7 @@ static s32 item_tbl2[] = {
 static EVT_BEGIN(talk_syashou)
     SWITCH(GSW(GSW_STORY_PROGRESS))
         CASE_BETWEEN(STG6_12_GIVE_AUTOGRAPH, STG6_18_BLANKET_EXCHANGE)
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     END_SWITCH
     SWITCH(GSW(GSW_STORY_PROGRESS))
         CASE_LESS(STG6_01_THE_CONDUCTOR)
@@ -832,16 +856,16 @@ static EVT_BEGIN(talk_syashou)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_84_01"), 0, 0)
         CASE_LESS(STG6_12_GIVE_AUTOGRAPH)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_105"), 0, 0)
-        SET_VALUE(GSWF(GSWF_RSH04_CONDUCTOR_AUTOGRAPH_TALK), 1)
+        SET_VALUE(GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD, 1)
         CALL_CHILD(evt_rsh_konarikin_irai_party_talk)
-        IF_INT_EQUAL(GSWF(GSWF_RSH04_BUB_NO_AUTOGRAPH_AGAIN), 1)
+        IF_INT_EQUAL(GSWF_RSH_BUB_HINT_REPEATED, 1)
             IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_10_THE_CONDUCTOR_ZIP_TOAD)
                 SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_10_THE_CONDUCTOR_ZIP_TOAD)
             END_IF
         END_IF
         CASE_LESS(STG6_13_TALK_TO_THE_CONDUCTOR)
-        IF_INT_EQUAL(GSWF(GSWF_RSH04_CONDUCTOR_NIGHT_FIRST_TALK), 0)
-            SET_VALUE(GSWF(GSWF_RSH04_CONDUCTOR_NIGHT_FIRST_TALK), 1)
+        IF_INT_EQUAL(GSWF_RSH_CONDUCTOR_BLANKET_TALK_DONE, 0)
+            SET_VALUE(GSWF_RSH_CONDUCTOR_BLANKET_TALK_DONE, 1)
             // The night talk: he asks Mario to help.
             CALL(evt_msg_print, 0, STRING("stg6_rsh_111"), 0, 0)
         ELSE
@@ -896,13 +920,13 @@ CALL(evt_msg_print, 0, STRING("stg6_rsh_143"), 0, 0)
         CASE_DEFAULT
         CALL(evt_sub_get_mapname, LW(0))
         IF_STR_EQUAL(LW(0), STRING("rsh_04_a"))
-            IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_POSHLEY), 1)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_09_1"), 0, 0)
                 RETURN
             END_IF
             CALL(evt_msg_print, 0, STRING("stg6_rsh_c_09"), 0, 0)
         ELSE
-            IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_13"), 0, 0)
             ELSE
 CALL(evt_msg_print, 0, STRING("stg6_rsh_c_14"), 0, 0)
@@ -1359,7 +1383,7 @@ static EVT_BEGIN(talk_konari)
         CASE_LESS(STG6_07_SYLVIA)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_90"), 0, 0)
         CASE_LESS(STG6_09_BUBS_REQUEST)
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
         IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_08_BUB)
             SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_08_BUB)
             // He asks Mario for an autograph.
@@ -1379,13 +1403,13 @@ static EVT_BEGIN(talk_konari)
         // With the Autograph, Mario can hand it over.
         CALL(evt_pouch_check_item, ITEM_AUTOGRAPH, LW(0))
         IF_INT_LESS_OR_EQUAL(LW(0), 0)
-            IF_INT_EQUAL(GSWF(GSWF_RSH04_BUB_NO_AUTOGRAPH_FIRST), 0)
+            IF_INT_EQUAL(GSWF_RSH_BUB_HINT_GIVEN, 0)
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_95"), 0, 0)
-                SET_VALUE(GSWF(GSWF_RSH04_BUB_NO_AUTOGRAPH_FIRST), 1)
+                SET_VALUE(GSWF_RSH_BUB_HINT_GIVEN, 1)
             ELSE
                 CALL(evt_msg_print, 0, STRING("stg6_rsh_95_01"), 0, 0)
-                SET_VALUE(GSWF(GSWF_RSH04_BUB_NO_AUTOGRAPH_AGAIN), 1)
-                IF_INT_EQUAL(GSWF(GSWF_RSH04_CONDUCTOR_AUTOGRAPH_TALK), 1)
+                SET_VALUE(GSWF_RSH_BUB_HINT_REPEATED, 1)
+                IF_INT_EQUAL(GSWF_RSH_CONDUCTOR_BUB_HINT_HEARD, 1)
                     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_10_THE_CONDUCTOR_ZIP_TOAD)
                         SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_10_THE_CONDUCTOR_ZIP_TOAD)
                     END_IF
@@ -1408,7 +1432,7 @@ CALL(evt_msg_print, 0, STRING("stg6_rsh_97"), 0, 0)
                     CALL(evt_msg_print, 0, STRING("stg6_rsh_99"), 0, 0)
                     CALL(evt_pouch_remove_item, ITEM_AUTOGRAPH, LW(0))
                     SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_12_GIVE_AUTOGRAPH)
-                    SET_VALUE(GSWF(GSWF_RSH04_SHINE_SPRITE_AUTOGRAPH), 1)
+                    SET_VALUE(GSWF_SHINE_35, 1)
                 END_IF
             END_IF
         END_IF
@@ -1712,7 +1736,7 @@ static NpcSetupInfo npc_data[] = {
 
 EVT_BEGIN(evt_tana_5)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_RSH04_STAR_PIECE_SHELF), 1)
+    IF_INT_EQUAL(GSWF_STARPIECE_85, 1)
 #else
     IF_INT_EQUAL(GSWF_STARPIECE_85, 1)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
@@ -1730,7 +1754,7 @@ EVT_BEGIN(evt_tana_5)
     CALL(evt_item_flag_on, STRING("_item00"), ITEM_FLAG_NO_TOUCH_GET)
     CALL(evt_item_get_item, STRING("_item00"))
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_RSH04_STAR_PIECE_SHELF), 1)
+    SET_VALUE(GSWF_STARPIECE_85, 1)
 #else
     SET_VALUE(GSWF_STARPIECE_85, 1)
 #endif
@@ -2035,7 +2059,7 @@ EVT_END()
 /** Init script of rsh_04_b (first visit): doors (a scripted entry skips the normal door run), shared init. */
 EVT_BEGIN(rsh_04_b_init_evt)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_RSH_SCRIPTED_ENTRY_PENDING), 0)
+    IF_INT_EQUAL(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
 #else
     IF_INT_EQUAL(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
 #endif
@@ -2048,7 +2072,7 @@ EVT_BEGIN(rsh_04_b_init_evt)
 #endif
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_RSH_SCRIPTED_ENTRY_PENDING), 0)
+        SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
 #else
         SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
 #endif
@@ -2088,7 +2112,7 @@ static const char* window_tbl[] = {
  */
 EVT_BEGIN(rsh_04_c_init_evt)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_RSH_SCRIPTED_ENTRY_PENDING), 0)
+    IF_INT_EQUAL(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
 #else
     IF_INT_EQUAL(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
 #endif
@@ -2101,7 +2125,7 @@ EVT_BEGIN(rsh_04_c_init_evt)
 #endif
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_RSH_SCRIPTED_ENTRY_PENDING), 0)
+        SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
 #else
         SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 0)
 #endif
@@ -2275,9 +2299,9 @@ static BeroEntry bero_data_c_return[] = {
  */
 EVT_BEGIN(rsh_04_init_evt_nidome)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_RIVERSIDE), 0)
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_POSHLEY), 0)
-            IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+    IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
+        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
 #else
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
@@ -2285,7 +2309,7 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
 #endif
                 CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+                IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
 #else
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
 #endif
@@ -2329,27 +2353,27 @@ EVT_BEGIN(rsh_04_init_evt_nidome)
 #endif
     CALL(evt_npc_setup, PTR(npc_data))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_POSHLEY), 1)
+    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
 #else
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
 #endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+        IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
 #else
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
 #endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

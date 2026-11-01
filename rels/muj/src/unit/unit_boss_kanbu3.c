@@ -58,9 +58,17 @@ static EvtWord damage_event[337];
 static EvtWord damage_event[315];
 #endif
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[];
+#else
 static EvtWord dead_event[393];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[];
 #else
 static EvtWord dead_event[402];
+#endif
 #endif
 static EvtWord phase_event[55];
 EvtWord call_event[284];

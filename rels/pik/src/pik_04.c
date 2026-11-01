@@ -55,14 +55,34 @@ EvtWord evt_door_h[22];
 EvtWord evt_door2_h[19];
 EvtWord evt_wall_h[12];
 const char* hotel_npc[3];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord door_2_open[];
+#else
 static EvtWord door_2_open[18];
+#endif
 static EvtWord door_2_close[14];
 static DoorParam door_2;
 EvtWord imginit[46];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord imgstart[];
+#else
 EvtWord imgstart[107];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord imgend[];
+#else
 EvtWord imgend[129];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_up[];
+#else
 EvtWord evt_up[402];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_down[];
+#else
 EvtWord evt_down[404];
+#endif
 EvtWord init_miyage[8];
 EvtWord talk_miyage[2];
 static EvtWord talk_musume[20];
@@ -81,14 +101,22 @@ EvtWord talk_takun3[28];
 static EvtWord init_kiza[13];
 static EvtWord talk_kiza[8];
 static NpcSetupInfo npc_data[9];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_roten[];
+#else
 EvtWord evt_roten[113];
+#endif
 EvtWord evt_kinopio_to_bed[29];
 EvtWord evt_kinopio_from_bed[27];
 static KinopioData kino_dt;
 static EvtWord epilogue_npc_entry[169];
 static EvtWord epilogue_evt_sub[91];
 static EvtWord epilogue_evt[63];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord pik_04_init_evt[];
+#else
 EvtWord pik_04_init_evt[166];
+#endif
 
 /** Doors and exits of pik_04: nw_bero to pik_00; se_bero to pik_01. */
 static BeroEntry bero_data[] = {
@@ -266,8 +294,8 @@ const char* hotel_npc[] = {
 
 static EVT_BEGIN(door_2_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("ERE"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -1299,8 +1327,8 @@ EVT_BEGIN(pik_04_init_evt)
     CALL(evt_hitobj_attr_onoff, 1, 1, STRING("se_bero"), HIT_ATTR_NPC_ONLY)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_roten"), 0, PTR(evt_roten), 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -250, 5, -425, ITEM_TYPE_STILL, GSWF(GSWF_PIK04_STAR_PIECE), 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -305, 0, 105, ITEM_TYPE_STILL, GSWF(GSWF_PIK04_INN_COUPON), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -250, 5, -425, ITEM_TYPE_STILL, GSWF_STARPIECE_90, 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -305, 0, 105, ITEM_TYPE_STILL, GSWF_PIK_04_INN_COUPON, 0)
     CALL_CHILD(imginit)
 #else
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -250, 5, -425, ITEM_TYPE_STILL, GSWF_STARPIECE_90, 0)

@@ -50,7 +50,11 @@ EvtWord mony_peton_setup[139];
 EvtWord lost_wedding_ring_sub[4];
 EvtWord lost_wedding_ring[395];
 static s32 itemsel_table00[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord wedding_ring_consign[];
+#else
 EvtWord wedding_ring_consign[30];
+#endif
 EvtWord find_wedding_ring[];
 static EvtWord mony_init[19];
 EvtWord mony_peton_regl[97];

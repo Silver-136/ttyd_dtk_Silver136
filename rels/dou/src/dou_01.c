@@ -16,7 +16,11 @@
 
 
 static BeroEntry bero_entry_data[3];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord korutesu_event[];
+#else
 static EvtWord korutesu_event[74];
+#endif
 EvtWord dou_01_init_evt[48];
 
 /** Exits (beros) of this room: w_bero to dou_00 and e_bero to dou_02. */

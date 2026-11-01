@@ -37,7 +37,11 @@ static EvtWord box_evt[30];
 EvtWord vivian_check[92];
 static EvtWord switch_evt[48];
 static EvtWord hint_plate[14];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_18_init_evt[];
+#else
 EvtWord las_18_init_evt[71];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -222,14 +226,14 @@ EVT_BEGIN(las_18_init_evt)
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_bero_info_run)
-    CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 75, 60, 0, PTR(switch_evt), GSWF(GSWF_LAS18_SWITCH_PRESSED))
+    CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 75, 60, 0, PTR(switch_evt), GSWF_LAS_18_SWITCH_PRESSED)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 75, 60, 0, PTR(switch_evt), GSWF_LAS_18_SWITCH_PRESSED)
 #endif
     CALL(evt_mobj_flag_onoff, 1, STRING("switch"), MOBJ_FLAG_NO_SHADOW)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_LAS18_SWITCH_PRESSED), 0)
+    IF_INT_EQUAL(GSWF_LAS_18_SWITCH_PRESSED, 0)
         SPAWN_EVENT(vivian_check)
 #else
     IF_INT_EQUAL(GSWF_LAS_18_SWITCH_PRESSED, 0)
@@ -237,8 +241,8 @@ EVT_BEGIN(las_18_init_evt)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS18_KEY_CHEST_OPENED))
-    IF_INT_EQUAL(GSWF(GSWF_LAS18_SWITCH_PRESSED), 0)
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_18_PALACE_KEY_CHEST)
+    IF_INT_EQUAL(GSWF_LAS_18_SWITCH_PRESSED, 0)
 #else
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_18_PALACE_KEY_CHEST)
     IF_INT_EQUAL(GSWF_LAS_18_SWITCH_PRESSED, 0)

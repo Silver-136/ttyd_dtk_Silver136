@@ -30,8 +30,16 @@
 USER_FUNC(map_anim_flag_off);
 static USER_FUNC(peach_evt_toumei);
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_close[];
+#else
 static EvtWord w_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_open[];
+#else
 static EvtWord w_door_open[22];
+#endif
 static BeroEntry bero_entry_data[2];
 EvtWord peach_evt_bero[50];
 static BeroEntry bero_peach_data[2];
@@ -40,11 +48,19 @@ EvtWord evt_gajigaji_anim[13];
 EvtWord evt_gajigaji_main[96];
 EvtWord evt_gajigaji[50];
 static s32 item_list[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord peach_evt_disksys[];
+#else
 EvtWord peach_evt_disksys[164];
+#endif
 EvtWord peach_evt_tana1[50];
 EvtWord peach_evt_tana2[31];
 static EvtWord peach_evt_stg5[105];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_11_init_evt[];
+#else
 EvtWord aji_11_init_evt[111];
+#endif
 
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
@@ -241,7 +257,7 @@ static s32 item_list[] = {
 EVT_BEGIN(peach_evt_disksys)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI11_PEACH5_DATA_DISK_TAKEN), 0)
+    IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_TAKEN, 0)
 #else
     IF_INT_EQUAL(GSWF_AJI_11_DATA_DISK_TAKEN, 0)
 #endif
@@ -282,7 +298,7 @@ CALL(evt_win_item_select, PTR(item_list), LW(0))
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("monitor_03"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_msg_print, 0, STRING("peach_aji_248"), 0, STRING("mario"))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_AJI11_PEACH5_DISK_READ), 1)
+        SET_VALUE(GSWF_AJI_11_DATA_DISK_PLAYED, 1)
 #else
         SET_VALUE(GSWF_AJI_11_DATA_DISK_PLAYED, 1)
 #endif
@@ -400,7 +416,7 @@ EVT_BEGIN(aji_11_init_evt)
     CALL(evt_map_playanim, STRING("mizutama_2"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_00_START)
-        IF_INT_EQUAL(GSWF(GSWF_AJI11_CARD_KEY_TAKEN), 0)
+        IF_INT_EQUAL(GSWF_AJI_11_CARD_KEY, 0)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG7_00_START)
         IF_INT_EQUAL(GSWF_AJI_11_CARD_KEY, 0)

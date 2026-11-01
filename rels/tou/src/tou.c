@@ -194,7 +194,11 @@ void _epilog(void);
 void _prolog(void);
 
 const char* lockerDt[46];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_close[];
+#else
 EvtWord evt_close[188];
+#endif
 static EvtWord evt_open[VERSION_PICK(165, 173)];
 EvtWord evt_tou_locker_init[109];
 EvtWord evt_tou_monitor_on[18];
@@ -213,10 +217,22 @@ EvtWord talk_gardman[191];
 static EvtWord evt_gardman[VERSION_PICK(318, 335)];
 EvtWord evt_gardman_spawn[4];
 EvtWord evt_tou_match_make_default_sub[];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_tou_match_make_default[];
+#else
 EvtWord evt_tou_match_make_default[303];
+#endif
 EvtWord evt_talk_doku_cake[14];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_eat_doku_cake[];
+#else
 EvtWord evt_eat_doku_cake[270];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_doku_cake[];
+#else
 EvtWord evt_doku_cake[234];
+#endif
 EvtWord evt_michel_1[39];
 EvtWord evt_michel_2[42];
 EvtWord evt_michel_3_sub[97];
@@ -229,8 +245,16 @@ EvtWord evt_michel_8[VERSION_PICK(620, 616)];
 EvtWord evt_michel_9[40];
 EvtWord evt_mail_1[157];
 EvtWord evt_mail_2[154];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_eat_cake[];
+#else
 EvtWord evt_eat_cake[157];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_cake_init[];
+#else
 EvtWord evt_cake_init[31];
+#endif
 EvtWord evt_cake[37];
 static EvtWord evt_koopa_after[5];
 EvtWord evt_mail_3[157];
@@ -337,27 +361,27 @@ static void rankingInit(void) {
         rank_wp->entries[21].flags |= RANK_FLAG_HIDDEN;
         rank_wp->entries[22].flags |= RANK_FLAG_HIDDEN;
 #if VERSION <= VERSION_DEMO_US
-        if (evtGetValue(NULL, GSWF(GSWF_TOU_RANK12_KING_K_GONE))) {
+        if (evtGetValue(NULL, GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED)) {
 #else
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED)) {
 #endif
             rank_wp->entries[18].flags |= RANK_FLAG_HIDDEN;
         }
 #if VERSION <= VERSION_DEMO_US
-        if (evtGetValue(NULL, GSWF(GSWF_TOU_RANK11_SWOOPS_JOINS))) {
+        if (evtGetValue(NULL, GSWF_GLITZ_PIT_SIR_SWOOP_JOINED)) {
 #else
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_SIR_SWOOP_JOINED)) {
 #endif
             rank_wp->entries[21].flags &= ~RANK_FLAG_HIDDEN;
 #if VERSION <= VERSION_DEMO_US
-            if (!evtGetValue(NULL, GSWF(GSWF_TOU_SWOOPS_ADDED))) {
+            if (!evtGetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED)) {
 #else
             if (!evtGetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED)) {
 #endif
                 rank_wp->entries[21].flags |= RANK_FLAG_BEATEN;
             }
 #if VERSION <= VERSION_DEMO_US
-            evtSetValue(NULL, GSWF(GSWF_TOU_SWOOPS_ADDED), 1);
+            evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, 1);
 #else
             evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, 1);
 #endif
@@ -370,14 +394,14 @@ if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG3_20_06_RAWK_HAWKS_WARNING)
             rank_wp->entries[11].flags |= RANK_FLAG_HIDDEN;
             rank_wp->entries[22].flags &= ~RANK_FLAG_HIDDEN;
 #if VERSION <= VERSION_DEMO_US
-            if (!evtGetValue(NULL, GSWF(GSWF_TOU_SPINIA_ADDED))) {
+            if (!evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED)) {
 #else
             if (!evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED)) {
 #endif
                 rank_wp->entries[22].flags |= RANK_FLAG_BEATEN;
             }
 #if VERSION <= VERSION_DEMO_US
-            evtSetValue(NULL, GSWF(GSWF_TOU_SPINIA_ADDED), 1);
+            evtSetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED, 1);
 #else
             evtSetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED, 1);
 #endif
@@ -585,7 +609,7 @@ USER_FUNC(evt_tou_get_ranking) {
 static USER_FUNC(evt_tou_get_next_match) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_US
-    s32 flag = evtGetValue(event, GSWF(GSWF_TOU_LAST_RULE_MET));
+    s32 flag = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
 #else
     s32 flag = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
 #endif
@@ -2120,12 +2144,12 @@ CALL(evt_party_stop, 0)
         CALL(evt_mapobj_get_position, STRING("gamen"), LW(0), LW(1), LW(2))
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_next_match, LW(0))
-        SET_VALUE(GSW(GSW_TOU_OPPONENT_ID), LW(0))
+        SET_VALUE(GSW_GLITZ_PIT_OPPONENT, LW(0))
         CALL(evt_tou_get_fighter_info, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
         IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
             IF_INT_EQUAL(LW(3), 10)
-                IF_INT_EQUAL(GSWF(GSWF_TOU_IRON_CLEFTS_OPENING_SEEN), 0)
+                IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_OPENING_SEEN, 0)
 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00_01"), 0, STRING("ガンス"), LW(3), LW(1))
 ELSE
 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_107_00"), 0, STRING("ガンス"), LW(3), LW(1))
@@ -2142,7 +2166,7 @@ END_IF
         CALL(evt_mapobj_get_position, STRING("gamenn"), LW(0), LW(1), LW(2))
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_next_match, LW(0))
-        SET_VALUE(GSW(GSW_TOU_OPPONENT_ID), LW(0))
+        SET_VALUE(GSW_GLITZ_PIT_OPPONENT, LW(0))
         CALL(evt_tou_get_fighter_info, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
         IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
@@ -2158,9 +2182,9 @@ END_IF
 CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコワ"), LW(3), LW(1))
 END_IF
         END_IF
-        IF_INT_EQUAL(GSW(GSW_TOU_OPPONENT_ID), 0)
-            IF_INT_EQUAL(GSWF(GSWF_TOU_CHAMP_OPENING_SEEN), 0)
-                SET_VALUE(GSWF(GSWF_TOU_TITLE_MATCH_RESERVED), 1)
+        IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 0)
+            IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
+                SET_VALUE(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
             END_IF
         END_IF
     END_IF
@@ -2169,7 +2193,7 @@ END_IF
         CALL(evt_mapobj_get_position, STRING("gamenn"), LW(0), LW(1), LW(2))
         CALL(evt_msg_toge, MSG_TOGE_AT_POS, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_next_match, LW(0))
-        SET_VALUE(GSW(GSW_TOU_OPPONENT_ID), LW(0))
+        SET_VALUE(GSW_GLITZ_PIT_OPPONENT, LW(0))
         CALL(evt_tou_get_fighter_info, LW(0), LW(1), LW(2))
         CALL(evt_tou_get_fighter_rank, LW(0), LW(3))
         IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
@@ -2179,10 +2203,10 @@ CALL(evt_msg_print_insert, 0, STRING("stg3_tou_re_361"), 0, STRING("キノシコ
 END_IF
     END_IF
     // The special condition for this match is read out and stored for the battle.
-    CALL(evt_tou_get_rule_info, GSW(GSW_TOU_OPPONENT_ID), LW(10), LW(13), LW(14), LW(15))
-    SET_VALUE(GSW(GSW_TOU_MATCH_RULE), LW(13))
-    SET_VALUE(GSW(GSW_TOU_MATCH_RULE_PARAM1), LW(14))
-    SET_VALUE(GSW(GSW_TOU_MATCH_RULE_PARAM2), LW(15))
+    CALL(evt_tou_get_rule_info, GSW_GLITZ_PIT_OPPONENT, LW(10), LW(13), LW(14), LW(15))
+    SET_VALUE(GSW_GLITZ_PIT_CONDITION, LW(13))
+    SET_VALUE(GSW_GLITZ_PIT_CONDITION_PARAM, LW(14))
+    SET_VALUE(GSW_GLITZ_PIT_CONDITION_PARAM2, LW(15))
     CALL(evt_msg_print_add, 0, LW(10))
     // The screen goes dark and the guard is sent for.
     CALL_CHILD(evt_tou_monitor_off)
@@ -2197,18 +2221,18 @@ CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     // At 3rd place the poisoned cake is delivered once.
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(LW(0), 3)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_POISON_CAKE_EVENT), 0)
-            SET_VALUE(GSWF(GSWF_TOU_POISON_CAKE_EVENT), 1)
+        IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_DELIVERED, 0)
+            SET_VALUE(GSWF_TOU_POISON_CAKE_DELIVERED, 1)
             CALL_CHILD(evt_doku_cake)
         END_IF
     END_IF
     // The guard comes to fetch Mario; booking King K's match plays his good-luck scene the first time.
     SPAWN_EVENT(evt_gardman)
-    SET_VALUE(GSWF(GSWF_TOU_MATCH_RESERVED), 1)
+    SET_VALUE(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
-        IF_INT_EQUAL(GSW(GSW_TOU_OPPONENT_ID), 18)
-            IF_INT_EQUAL(GSWF(GSWF_TOU_KING_K_MATCH_SCENE), 0)
-                SET_VALUE(GSWF(GSWF_TOU_KING_K_MATCH_SCENE), 1)
+        IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 18)
+            IF_INT_EQUAL(GSWF_TOU_KING_K_PREMATCH_TALK_SEEN, 0)
+                SET_VALUE(GSWF_TOU_KING_K_PREMATCH_TALK_SEEN, 1)
                 CALL_CHILD(evt_michel_1)
             END_IF
         END_IF
@@ -2534,9 +2558,9 @@ CASE_EQUAL(STG3_31_GRUBBAS_PLANS)
         END_IF
 #if VERSION <= VERSION_DEMO_US
         // A match already booked is repeated with its opponent and condition; otherwise a new one is booked.
-        IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESERVED), 1)
-            CALL(evt_tou_get_fighter_info, GSW(GSW_TOU_OPPONENT_ID), LW(0), LW(1))
-            CALL(evt_tou_get_rule_msg2, GSW(GSW_TOU_MATCH_RULE), LW(2))
+        IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
+            CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
+            CALL(evt_tou_get_rule_msg2, GSW_GLITZ_PIT_CONDITION, LW(2))
 #else
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
             CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
@@ -2665,8 +2689,8 @@ CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(50.0f))
     WAIT_MS(300)
 #if VERSION <= VERSION_DEMO_US
     // The cake is gone and the partner is poisoned: all partners leave the party until after the next match.
-    SET_VALUE(GSWF(GSWF_TOU_POISON_CAKE_ON_TABLE), 0)
-    SET_VALUE(GSWF(GSWF_TOU_PARTNER_POISONED), 1)
+    SET_VALUE(GSWF_TOU_POISON_CAKE_ON_TABLE_UNUSED, 0)
+    SET_VALUE(GSWF_TOU_POISON_CAKE_EATEN, 1)
 #else
     SET_VALUE(GSWF_TOU_POISON_CAKE_ON_TABLE_UNUSED, 0)
     SET_VALUE(GSWF_TOU_POISON_CAKE_EATEN, 1)
@@ -2683,7 +2707,7 @@ CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(50.0f))
 #endif
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
@@ -2784,7 +2808,7 @@ EVT_BEGIN(evt_doku_cake)
         END_IF
     END_LOOP
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_TOU_POISON_CAKE_ON_TABLE), 1)
+    SET_VALUE(GSWF_TOU_POISON_CAKE_ON_TABLE_UNUSED, 1)
 #else
     SET_VALUE(GSWF_TOU_POISON_CAKE_ON_TABLE_UNUSED, 1)
 #endif
@@ -3771,7 +3795,7 @@ CALL(evt_party_move_pos2, 0, LW(0), LW(2), FLOAT(50.0f))
         CALL(evt_pouch_mario_recovery)
         CALL(evt_pouch_all_party_recovery)
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_TOU_CAKE_WAITING), 0)
+        SET_VALUE(GSWF_TOU_CAKE_ON_TABLE, 0)
 #else
         SET_VALUE(GSWF_TOU_CAKE_ON_TABLE, 0)
         CALL(evt_party_flg_onoff, 0, 16777216, 0)
@@ -3790,8 +3814,8 @@ EVT_BEGIN(evt_cake_init)
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(LW(0), 6)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TOU_CAKE_EVENT_DONE), 0)
-            IF_INT_EQUAL(GSWF(GSWF_TOU_CAKE_WAITING), 0)
+        IF_INT_EQUAL(GSWF_TOU_RANK_6_CAKE_DONE, 0)
+            IF_INT_EQUAL(GSWF_TOU_CAKE_ON_TABLE, 0)
 #else
         IF_INT_EQUAL(GSWF_TOU_RANK_6_CAKE_DONE, 0)
             IF_INT_EQUAL(GSWF_TOU_CAKE_ON_TABLE, 0)
@@ -4061,7 +4085,7 @@ EVT_BEGIN(evt_tou_match_after_default)
     // Back in the locker room: the partner is hidden for the Yoshi egg scenes,
     // and the Shady Koopa and Cleftor are placed where needed.
     SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(GSW(GSW_TOU_OPPONENT_ID), 10)
+    IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 10)
         CALL(chk, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             SET_VALUE(LF(0), 1)
@@ -4080,9 +4104,9 @@ EVT_BEGIN(evt_tou_match_after_default)
             END_IF
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU_POISON_CAKE_EVENT), 1)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_PARTNER_POISON_CURED), 0)
-            IF_INT_EQUAL(GSWF(GSWF_TOU_PARTNER_POISONED), 0)
+    IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_DELIVERED, 1)
+        IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
+            IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 0)
                 CALL(evt_npc_flag_onoff, 0, STRING("ウラノコ"), NPC_FLAG_TALK_POSE | NPC_FLAG_AUTO_MOVE_ANIM)
                 CALL(evt_npc_set_anim, STRING("ウラノコ"), STRING("NKT_K_2"))
             ELSE
@@ -4092,7 +4116,7 @@ EVT_BEGIN(evt_tou_match_after_default)
     END_IF
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(LW(0), 11)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_RANK11_SWOOPS_JOINS), 0)
+        IF_INT_EQUAL(GSWF_GLITZ_PIT_SIR_SWOOP_JOINED, 0)
             CALL(evt_npc_check, STRING("ガンガン"), LW(0))
             IF_INT_EQUAL(LW(0), 1)
                 CALL(evt_npc_set_position, STRING("ガンガン"), 95, 0, 50)
@@ -4138,7 +4162,7 @@ EVT_BEGIN(evt_tou_match_after_default)
     WAIT_MS(1000)
     // Fight money for the match, more for a win.
     CALL(evt_tou_get_ranking, LW(0))
-    IF_INT_EQUAL(GSWF(GSWF_TOU_LAST_MATCH_WON), 1)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT, 1)
         CALL(fight_money, LW(0), 1, LW(10))
     ELSE
         CALL(fight_money, LW(0), 0, LW(10))
@@ -4149,7 +4173,7 @@ EVT_BEGIN(evt_tou_match_after_default)
     SET_VALUE(LF(13), 0)
     // Minor-league room: Jolene pays out, first telling Mario if he has dropped back to the minors.
     IF_INT_EQUAL(LF(0), 1)
-        IF_INT_LESS(GSW(GSW_TOU_RANK_BEFORE_MATCH), 11)
+        IF_INT_LESS(GSW_GLITZ_PIT_RANK_BEFORE_MATCH, 11)
             CALL(evt_msg_print, 0, STRING("stg3_tou_114_00"), 0, STRING("キノシコワ"))
             WAIT_MS(300)
             CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("A_1"))
@@ -4198,7 +4222,7 @@ CALL_CHILD(evt_tou_ranking_msg)
     END_IF
     // Major-league room: Jolene pays out, announcing a lost title or a return from the minors.
     IF_INT_EQUAL(LF(1), 1)
-        SWITCH(GSW(GSW_TOU_RANK_BEFORE_MATCH))
+        SWITCH(GSW_GLITZ_PIT_RANK_BEFORE_MATCH)
             CASE_LESS(1)
             CALL(evt_msg_print, 0, STRING("stg3_tou_365_00"), 0, STRING("キノシコワ"))
             WAIT_MS(300)
@@ -4222,7 +4246,7 @@ CALL_CHILD(evt_tou_ranking_msg)
             WAIT_MS(600)
             CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("S_1"))
             SET_VALUE(LF(11), 1)
-            SET_VALUE(GSWF(GSWF_TOU_REMATCH_MAJORS_LEFT), 0)
+            SET_VALUE(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 0)
             CASE_GREATER(10)
             CALL(evt_msg_print, 0, STRING("stg3_tou_365_03_00"), 0, STRING("キノシコワ"))
             WAIT_MS(300)
@@ -4272,7 +4296,7 @@ CALL_CHILD(evt_tou_ranking_msg)
     END_IF
     // Champion's room: Jolene pays out, welcoming Mario back if he won the title back.
     IF_INT_EQUAL(LF(2), 1)
-        IF_INT_GREATER(GSW(GSW_TOU_RANK_BEFORE_MATCH), 0)
+        IF_INT_GREATER(GSW_GLITZ_PIT_RANK_BEFORE_MATCH, 0)
             CALL(evt_msg_print, 0, STRING("stg3_tou_365_04_00"), 0, STRING("キノシコワ"))
             WAIT_MS(300)
             CALL(evt_npc_set_anim, STRING("キノシコワ"), STRING("A_1"))
@@ -4369,13 +4393,13 @@ CALL_CHILD(evt_tou_ranking_msg)
     END_LOOP
     // After the poisoned cake: a poisoned partner recovers and everyone rejoins;
     // otherwise the Shady Koopa who ate it lies numb.
-    IF_INT_EQUAL(GSWF(GSWF_TOU_POISON_CAKE_EVENT), 1)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_PARTNER_POISON_CURED), 0)
-            IF_INT_EQUAL(GSWF(GSWF_TOU_PARTNER_POISONED), 1)
+    IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_DELIVERED, 1)
+        IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
+            IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
                 CALL(evt_mario_set_dir, 270, 300, 0)
                 CALL(evt_party_stop, 0)
                 WAIT_MS(300)
-                IF_INT_EQUAL(GSWF(GSWF_TOU_LAST_MATCH_WON), 1)
+                IF_INT_EQUAL(GSWF_GLITZ_PIT_BEAT_LAST_OPPONENT, 1)
                     CALL(evt_msg_print_party, STRING("stg3_tou_306"))
                 ELSE
                     CALL(evt_msg_print_party, STRING("stg3_tou_307"))
@@ -4410,7 +4434,7 @@ CALL_CHILD(evt_tou_ranking_msg)
                 CALL(evt_msg_print_party, STRING("stg3_tou_307_03"))
                 CALL(evt_party_run, 0)
             END_IF
-            SET_VALUE(GSWF(GSWF_TOU_PARTNER_POISON_CURED), 1)
+            SET_VALUE(GSWF_TOU_POISON_CAKE_RECOVERED, 1)
         END_IF
     END_IF
     // The partner reacts to a demotion, a lost title, a promotion or a regained title
@@ -4419,7 +4443,7 @@ CALL_CHILD(evt_tou_ranking_msg)
         CALL(evt_mario_set_dir, 270, 300, 0)
         CALL(evt_msg_print_party, STRING("stg3_tou_114"))
         IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
-            SET_VALUE(GSWF(GSWF_TOU_REMATCH_MAJORS_LEFT), 1)
+            SET_VALUE(GSWF_TOU_REMATCH_DEMOTED_TO_MINORS, 1)
         END_IF
     END_IF
     IF_INT_EQUAL(LF(11), 1)
@@ -4439,7 +4463,7 @@ CALL_CHILD(evt_tou_ranking_msg)
     // After the Iron Clefts match the egg hatches into Yoshi (or Pogo has a word);
     // otherwise the egg says hello.
     SET_VALUE(LF(0), 0)
-    IF_INT_EQUAL(GSW(GSW_TOU_OPPONENT_ID), 10)
+    IF_INT_EQUAL(GSW_GLITZ_PIT_OPPONENT, 10)
         CALL(chk, LW(0))
         IF_INT_EQUAL(LW(0), 0)
             IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
@@ -4466,44 +4490,44 @@ CALL_CHILD(evt_tou_ranking_msg)
     CALL(evt_tou_get_ranking, LW(0))
     SWITCH(LW(0))
         CASE_EQUAL(18)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_RANK18_SCENE), 0)
-            SET_VALUE(GSWF(GSWF_TOU_RANK18_SCENE), 1)
+        IF_INT_EQUAL(GSWF_TOU_RANK_18_KING_K_TALK_DONE, 0)
+            SET_VALUE(GSWF_TOU_RANK_18_KING_K_TALK_DONE, 1)
             CALL_CHILD(evt_michel_2)
         END_IF
         CASE_EQUAL(17)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_RANK17_SCENE), 0)
-            SET_VALUE(GSWF(GSWF_TOU_RANK17_SCENE), 1)
+        IF_INT_EQUAL(GSWF_TOU_RANK_17_KING_K_TALK_DONE, 0)
+            SET_VALUE(GSWF_TOU_RANK_17_KING_K_TALK_DONE, 1)
             CALL_CHILD(evt_michel_3)
         END_IF
         CASE_EQUAL(16)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_RANK16_SCENE), 0)
-            SET_VALUE(GSWF(GSWF_TOU_RANK16_SCENE), 1)
+        IF_INT_EQUAL(GSWF_TOU_RANK_16_KING_K_TALK_DONE, 0)
+            SET_VALUE(GSWF_TOU_RANK_16_KING_K_TALK_DONE, 1)
             CALL_CHILD(evt_michel_4)
         END_IF
         CASE_EQUAL(15)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_RANK15_SCENE), 0)
-            SET_VALUE(GSWF(GSWF_TOU_RANK15_SCENE), 1)
+        IF_INT_EQUAL(GSWF_TOU_RANK_15_KING_K_TALK_DONE, 0)
+            SET_VALUE(GSWF_TOU_RANK_15_KING_K_TALK_DONE, 1)
             CALL_CHILD(evt_michel_5)
         END_IF
         CASE_EQUAL(14)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_RANK14_SCENE), 0)
-            SET_VALUE(GSWF(GSWF_TOU_RANK14_SCENE), 1)
+        IF_INT_EQUAL(GSWF_TOU_RANK_14_KING_K_TALK_DONE, 0)
+            SET_VALUE(GSWF_TOU_RANK_14_KING_K_TALK_DONE, 1)
             CALL_CHILD(evt_michel_6)
         END_IF
         CASE_EQUAL(13)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_RANK13_SCENE), 0)
-            SET_VALUE(GSWF(GSWF_TOU_RANK13_SCENE), 1)
+        IF_INT_EQUAL(GSWF_TOU_RANK_13_KING_K_TALK_DONE, 0)
+            SET_VALUE(GSWF_TOU_RANK_13_KING_K_TALK_DONE, 1)
             CALL_CHILD(evt_michel_7)
         END_IF
         CASE_EQUAL(12)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_RANK12_KING_K_GONE), 0)
-            SET_VALUE(GSWF(GSWF_TOU_RANK12_KING_K_GONE), 1)
+        IF_INT_EQUAL(GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED, 0)
+            SET_VALUE(GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED, 1)
             CALL(evt_npc_set_position, STRING("マイケル"), 0, -1000, 0)
             CALL(evt_rankingReInit)
         END_IF
         CASE_EQUAL(11)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_RANK11_SWOOPS_JOINS), 0)
-            SET_VALUE(GSWF(GSWF_TOU_RANK11_SWOOPS_JOINS), 1)
+        IF_INT_EQUAL(GSWF_GLITZ_PIT_SIR_SWOOP_JOINED, 0)
+            SET_VALUE(GSWF_GLITZ_PIT_SIR_SWOOP_JOINED, 1)
             CALL_CHILD(evt_michel_8)
             CALL(evt_rankingReInit)
         END_IF
@@ -4511,42 +4535,42 @@ CALL_CHILD(evt_tou_ranking_msg)
         CASE_EQUAL(10)
         CASE_EQUAL(9)
         CASE_EQUAL(8)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_MAIL1_RECEIVED), 0)
-            SET_VALUE(GSWF(GSWF_TOU_MAIL1_RECEIVED), 1)
+        IF_INT_EQUAL(GSWF_TOU_RANK_8_MAIL_DONE, 0)
+            SET_VALUE(GSWF_TOU_RANK_8_MAIL_DONE, 1)
             CALL_CHILD(evt_mail_1)
         END_IF
         CASE_EQUAL(7)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_MAIL2_RECEIVED), 0)
-            SET_VALUE(GSWF(GSWF_TOU_MAIL2_RECEIVED), 1)
+        IF_INT_EQUAL(GSWF_TOU_RANK_7_MAIL_DONE, 0)
+            SET_VALUE(GSWF_TOU_RANK_7_MAIL_DONE, 1)
             CALL_CHILD(evt_mail_2)
         END_IF
         CASE_EQUAL(6)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_CAKE_EVENT_DONE), 0)
-            SET_VALUE(GSWF(GSWF_TOU_CAKE_EVENT_DONE), 1)
+        IF_INT_EQUAL(GSWF_TOU_RANK_6_CAKE_DONE, 0)
+            SET_VALUE(GSWF_TOU_RANK_6_CAKE_DONE, 1)
             CALL_CHILD(evt_cake)
         END_IF
         CASE_EQUAL(5)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_BOWSER_RAID_DONE), 0)
-            SET_VALUE(GSWF(GSWF_TOU_BOWSER_RAID_DONE), 1)
+        IF_INT_EQUAL(GSWF_TOU_RANK_5_BOWSER_EVENT_DONE, 0)
+            SET_VALUE(GSWF_TOU_RANK_5_BOWSER_EVENT_DONE, 1)
             CALL_CHILD(evt_koopa_after)
         END_IF
-        IF_INT_EQUAL(GSWF(GSWF_TOU_CAKE_WAITING), 1)
+        IF_INT_EQUAL(GSWF_TOU_CAKE_ON_TABLE, 1)
             CALL_CHILD(evt_tou_08_cake)
         END_IF
         CASE_EQUAL(4)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_MAIL3_RECEIVED), 0)
-            SET_VALUE(GSWF(GSWF_TOU_MAIL3_RECEIVED), 1)
+        IF_INT_EQUAL(GSWF_TOU_RANK_4_MAIL_DONE, 0)
+            SET_VALUE(GSWF_TOU_RANK_4_MAIL_DONE, 1)
             CALL_CHILD(evt_mail_3)
         END_IF
         CASE_EQUAL(3)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_MAIL4_RECEIVED), 0)
-            SET_VALUE(GSWF(GSWF_TOU_MAIL4_RECEIVED), 1)
+        IF_INT_EQUAL(GSWF_GLITZ_PIT_DESTRUCTORS_JOINED, 0)
+            SET_VALUE(GSWF_GLITZ_PIT_DESTRUCTORS_JOINED, 1)
             CALL_CHILD(evt_mail_4)
 END_IF
         CASE_EQUAL(2)
         CASE_EQUAL(1)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_RANK1_SCENE), 0)
-            SET_VALUE(GSWF(GSWF_TOU_RANK1_SCENE), 1)
+        IF_INT_EQUAL(GSWF_TOU_RANK_1_MAIL_DONE, 0)
+            SET_VALUE(GSWF_TOU_RANK_1_MAIL_DONE, 1)
             CALL_CHILD(evt_mail_5)
         END_IF
     END_SWITCH

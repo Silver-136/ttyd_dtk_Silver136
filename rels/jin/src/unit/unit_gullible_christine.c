@@ -30,15 +30,31 @@ static EvtWord gparty_zoom_christine[19];
 static EvtWord init_event_christine[42];
 EvtWord damage_event_christine[22];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_christine[];
+#else
 static EvtWord dead_event_christine[126];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_christine[];
 #else
 static EvtWord dead_event_christine[147];
 #endif
+#endif
 static EvtWord attack_event_christine[690];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event_christine[];
+#else
 static EvtWord wait_event_christine[6];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event_christine[];
 #else
 static EvtWord wait_event_christine[7];
+#endif
 #endif
 
 /**

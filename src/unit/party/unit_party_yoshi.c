@@ -111,7 +111,11 @@ EvtWord partyYoshiAttack_NormalAttack[1025];
 EvtWord partyYoshiAttack_Nomikomi[1000];
 EvtWord partyYoshiAttack_EggAttack[1266];
 EvtWord _egg_attack_event[195];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord partyYoshiAttack_CallGuard[];
+#else
 EvtWord partyYoshiAttack_CallGuard[553];
+#endif
 EvtWord yoshi_appeal_event[39];
 static EvtWord party_win_reaction[25];
 static EvtWord attack_audience_event[290];

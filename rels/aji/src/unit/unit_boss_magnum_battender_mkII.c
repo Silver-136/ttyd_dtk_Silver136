@@ -122,15 +122,27 @@ static EvtWord init_event[92];
 static EvtWord waku_event[23];
 static EvtWord damage_event[111];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[];
+#else
 static EvtWord dead_event[216];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[];
 #else
 static EvtWord dead_event[234];
+#endif
 #endif
 static EvtWord entry_event[78];
 static EvtWord attack_event[320];
 EvtWord drill_attack_event[392];
 EvtWord boomerang_attack_event[324];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aud_attack_event[];
+#else
 EvtWord aud_attack_event[823];
+#endif
 EvtWord aud_attack_event_sub[139];
 static EvtWord arm_bunri_event[199];
 static EvtWord arm_return_event[151];

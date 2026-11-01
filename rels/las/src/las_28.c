@@ -54,14 +54,38 @@ EvtWord koopa_talk[8];
 static EvtWord baba_init[7];
 static EvtWord baba_talk[8];
 static NpcSetupInfo npcEnt[5];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord first_evt[];
+#else
 static EvtWord first_evt[170];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord syuryo_thunder[];
+#else
 EvtWord syuryo_thunder[419];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord syuryo_evt[];
+#else
 EvtWord syuryo_evt[1254];
+#endif
 EvtWord gareki_fall[45];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord koopa_evt[];
+#else
 EvtWord koopa_evt[1671];
+#endif
 static EvtWord shuryolight_init[18];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord shan_init[];
+#else
 static EvtWord shan_init[46];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_28_init_evt[];
+#else
 EvtWord las_28_init_evt[238];
+#endif
 
 /**
  * Script helper: creates the glowing barrier ("baria", the Shuryo effect at double scale) around Princess

@@ -59,12 +59,24 @@ static PoseTableEntry pose_table_weak[9];
 static BattleDataEntry data_table[3];
 static BattleUnitKindPart parts[3];
 static EvtWord battle_entry_event[375];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord negotiation_event[];
+#else
 EvtWord negotiation_event[1786];
+#endif
 EvtWord gon_extra_eaten_event[389];
 static EvtWord damage_event[10];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord gonbaba_damage_sub_event[];
+#else
 EvtWord gonbaba_damage_sub_event[574];
+#endif
 static EvtWord dead_event[283];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord init_event[];
+#else
 static EvtWord init_event[160];
+#endif
 static EvtWord phase_event[2];
 static EvtWord attack_event[56];
 static EvtWord fumituke_attack_event[386];

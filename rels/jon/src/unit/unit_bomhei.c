@@ -33,13 +33,25 @@ static EvtWord bomb_event[106];
 static EvtWord init_event[42];
 static EvtWord damage_event[58];
 static EvtWord change_spark_event[70];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event[];
+#else
 static EvtWord attack_event[440];
+#endif
 static EvtWord wait_event[6];
 static EvtWord damage_event_spark[25];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event_spark[];
+#else
 static EvtWord attack_event_spark[292];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event_spark[];
 #else
 static EvtWord attack_event_spark[288];
+#endif
 #endif
 static EvtWord wait_event_spark[27];
 

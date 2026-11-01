@@ -62,7 +62,11 @@ static EvtWord damage_event[22];
 static EvtWord dead_event[172];
 static EvtWord phase_event[134];
 static EvtWord harf_hp_event[94];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event[];
+#else
 static EvtWord attack_event[110];
+#endif
 static EvtWord hip_attack_event[VERSION_PICK(431, 432)];
 static EvtWord bite_attack_event[278];
 static EvtWord critical_bite_attack_event[261];

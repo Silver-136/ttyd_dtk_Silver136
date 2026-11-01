@@ -102,13 +102,21 @@ static EvtWord evt_gardman[202];
 static EvtWord evt_gardman[198];
 #endif
 EvtWord evt_match_make_sub[138];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_match_make[];
+#else
 EvtWord evt_match_make[116];
+#endif
 static EvtWord bed_entry[10];
 EvtWord evt_okorareru[301];
 EvtWord evt_syorui[92];
 EvtWord first_tamago[52];
 static EvtWord evt_block[5];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tou_10_init_evt[];
+#else
 EvtWord tou_10_init_evt[254];
+#endif
 
 /** Script helper: args[0] receives 1 if Mario's key input or control is currently disabled, else 0. */
 // Descriptive name (not in the symbol maps); placeholder unk_tou_00006e5c, JP tou .text+0x6D98. See docs/NAME_PROVENANCE.md.
@@ -1734,9 +1742,9 @@ EVT_BEGIN(evt_match_make)
     SWITCH(LW(0))
         CASE_EQUAL(0)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESERVED), 1)
-            CALL(evt_tou_get_fighter_info, GSW(GSW_TOU_OPPONENT_ID), LW(0), LW(1))
-            CALL(evt_tou_get_rule_msg2, GSW(GSW_TOU_MATCH_RULE), LW(2))
+        IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
+            CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
+            CALL(evt_tou_get_rule_msg2, GSW_GLITZ_PIT_CONDITION, LW(2))
 #else
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
             CALL(evt_tou_get_fighter_info, GSW_GLITZ_PIT_OPPONENT, LW(0), LW(1))
@@ -1757,7 +1765,7 @@ EVT_BEGIN(evt_match_make)
         CALL(evt_set_dir_to_target, STRING("キノシコワ"), STRING("mario"))
         CALL(evt_mario_set_dir_npc, STRING("キノシコワ"))
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESERVED), 0)
+        IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 0)
 #else
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 0)
 #endif
@@ -1936,7 +1944,7 @@ EVT_BEGIN(tou_10_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -1945,7 +1953,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -1955,7 +1963,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
     END_SWITCH
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TOU_EGG_STORY_SKIP), 1)
+    IF_INT_EQUAL(GSWF_TOU_10_JUMP_STORY_TO_EGG, 1)
         IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
             SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
 #else
@@ -1997,7 +2005,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
     CALL_CHILD(evt_tou_monitor_init)
     // The huge yellow block until it is broken.
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_03_THE_YELLOW_BLOCK)
-        CALL(evt_mobj_lv_blk, STRING("blk"), -280, 0, 100, PTR(evt_block), GSWF(GSWF_TOU10_BIG_BLOCK_BROKEN), STRING("MOBJ_Lv1BigBigBlock"))
+        CALL(evt_mobj_lv_blk, STRING("blk"), -280, 0, 100, PTR(evt_block), GSWF_TOU_10_BIG_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
 #else
     CALL_CHILD(PTR(evt_tou_monitor_init))
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_03_THE_YELLOW_BLOCK)
@@ -2028,9 +2036,9 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
     // After a match: Goombella, Koops and Flurrie rejoin if the cake poisoning was never cured,
     // then the matching after-match scene plays.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 1)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_PARTNER_POISONED), 1)
-            IF_INT_EQUAL(GSWF(GSWF_TOU_PARTNER_POISON_CURED), 0)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
+        IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
+            IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
 #else
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
         IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
@@ -2044,9 +2052,9 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 1)
-        SET_VALUE(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 0)
-        SWITCH(GSW(GSW_TOU_OPPONENT_ID))
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
+        SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
+        SWITCH(GSW_GLITZ_PIT_OPPONENT)
 #else
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
         SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
@@ -2054,8 +2062,8 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
 #endif
             CASE_EQUAL(19)
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_TOU10_FIRST_MATCH_AFTER_SEEN), 0)
-                SET_VALUE(GSWF(GSWF_TOU10_FIRST_MATCH_AFTER_SEEN), 1)
+            IF_INT_EQUAL(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN, 0)
+                SET_VALUE(GSWF_TOU_GOOMBA_BROS_AFTER_MATCH_SEEN, 1)
                 IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
                     SPAWN_EVENT(evt_saisyo_after)
 #else
@@ -2122,8 +2130,8 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
     END_IF
 #if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_12_THE_MINI_YOSHI_EGG)
-        IF_INT_EQUAL(GSWF(GSWF_TOU10_EGG_HINT_CHECKED), 0)
-            IF_INT_GREATER_OR_EQUAL(GSW(GSW_TOU_IRON_CLEFTS_LOSSES), 2)
+        IF_INT_EQUAL(GSWF_TOU_10_HARRIERS_PEP_TALK_CHECKED, 0)
+            IF_INT_GREATER_OR_EQUAL(GSW_TOU_ARMORED_HARRIERS_LOSS_COUNT, 2)
                 SPAWN_EVENT(first_tamago)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_12_THE_MINI_YOSHI_EGG)
@@ -2134,7 +2142,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
             END_IF
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_TOU10_EGG_HINT_CHECKED), 1)
+        SET_VALUE(GSWF_TOU_10_HARRIERS_PEP_TALK_CHECKED, 1)
 #else
         SET_VALUE(GSWF_TOU_10_HARRIERS_PEP_TALK_CHECKED, 1)
 #endif

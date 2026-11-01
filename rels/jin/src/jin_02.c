@@ -24,7 +24,11 @@ EvtWord n1_close[12];
 EvtWord n1_open[12];
 static BeroEntry bero_entry_data[3];
 static EvtWord cam_shake[62];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_kaidan_temae[];
+#else
 EvtWord evt_kaidan_temae[144];
+#endif
 EvtWord jin_02_init_evt[33];
 
 /**
@@ -146,7 +150,7 @@ EVT_BEGIN(evt_kaidan_temae)
 #endif
         CALL(evt_party_stop, 0)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_JIN_ENDLESS_STAIRS_REACTION_SEEN), 0)
+        IF_INT_EQUAL(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 0)
 #else
         IF_INT_EQUAL(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 0)
 #endif
@@ -183,7 +187,7 @@ EVT_BEGIN(evt_kaidan_temae)
         END_IF
 #if VERSION <= VERSION_DEMO_US
         CALL_CHILD(cam_shake)
-        IF_INT_EQUAL(GSWF(GSWF_JIN_ENDLESS_STAIRS_REACTION_SEEN), 0)
+        IF_INT_EQUAL(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 0)
 #else
         CALL_CHILD(PTR(cam_shake))
         IF_INT_EQUAL(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 0)
@@ -192,7 +196,7 @@ EVT_BEGIN(evt_kaidan_temae)
             DELETE_EVENT(LW(3))
             DELETE_EVENT(LW(4))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_JIN_ENDLESS_STAIRS_REACTION_SEEN), 1)
+            SET_VALUE(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 1)
 #else
             SET_VALUE(GSWF_JIN_STAIRS_SWITCH_FIRST_USE_SEEN, 1)
 #endif

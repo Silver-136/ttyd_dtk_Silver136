@@ -218,7 +218,11 @@ NpcBattleSelect btlgrpsel_las_btlno_las_25_06_off[2];
 NpcSetupBattleInfo btlsetup_las_tbl[61];
 NpcTerritoryInfo btl_las_setup_no_tbl[61];
 EvtWord bgset_las_gear_event[38];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord stg_08_1_init_sub_event[];
+#else
 EvtWord stg_08_1_init_sub_event[97];
+#endif
 EvtWord stg_08_1_init_event[4];
 EvtWord stg_08_6_init_sub_event[46];
 EvtWord stg_08_6_init_event[4];

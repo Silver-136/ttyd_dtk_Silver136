@@ -160,19 +160,39 @@ static EvtWord mony_init[2];
 static EvtWord mony_talk[30];
 static EvtWord peton_init[2];
 static EvtWord peton_talk[30];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord koburon_init[];
+#else
 EvtWord koburon_init[31];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord koburon_regp[];
+#else
 EvtWord koburon_regp[140];
+#endif
 EvtWord koburon_talk[87];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord koburon_dead[];
+#else
 EvtWord koburon_dead[139];
+#endif
 EvtWord koburon_evt[24];
 static EvtWord kiza_talk[8];
 static EvtWord kiza_entry[30];
 static NpcSetupInfo npcEnt[15];
 static BeroEntry bero_entry_data[4];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mujinto_hyochaku[];
+#else
 EvtWord mujinto_hyochaku[297];
+#endif
 s32 suifu_random_setup[380];
 EvtWord suifu_random_sub[123];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tama_shoot[];
+#else
 EvtWord tama_shoot[69];
+#endif
 EvtWord npc_kyorokyoro[39];
 EvtWord dai3_shurai_sub[1112];
 EvtWord dai3_shurai[53];
@@ -224,7 +244,11 @@ EvtWord muj_gor_ship_sub[33];
 static EvtWord muj_gor_ship[53];
 static EvtWord ship_pera[115];
 EvtWord muj_gor_ship_start[245];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord into_muj_ship[];
+#else
 EvtWord into_muj_ship[173];
+#endif
 EvtWord mony_peton_boarding_sub[67];
 EvtWord mony_peton_boarding[115];
 static HitDamageReturn hitDmgRetPoints[8];
@@ -1384,7 +1408,7 @@ CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_item_entry, STRING("item_99"), ITEM_WHACKA_BUMP, LW(0), LW(1), LW(2), ITEM_TYPE_FALL_NO_PICKUP, -1, 0)
     WAIT_MS(400)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_MUJ00_WHACKA_BUMPS), 7)
+    IF_INT_EQUAL(GSW_MUJ_WHACKA_HIT_COUNT, 7)
 #else
     IF_INT_EQUAL(GSW_MUJ_WHACKA_HIT_COUNT, 7)
 #endif
@@ -1414,7 +1438,7 @@ CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_1"))
     WAIT_MS(100)
 #if VERSION <= VERSION_DEMO_US
-    ADD(GSW(GSW_MUJ00_WHACKA_BUMPS), 1)
+    ADD(GSW_MUJ_WHACKA_HIT_COUNT, 1)
     SET_VALUE(LSWF(2), 1)
 #else
     ADD(GSW_MUJ_WHACKA_HIT_COUNT, 1)
@@ -1426,7 +1450,7 @@ CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
     CALL(evt_npc_change_interrupt, STRING("me"), 1, 0)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_MUJ00_KOBURON_FIRST_TALK), 1)
+    SET_VALUE(GSWF_MUJ_WHACKA_FIRST_TALK_DONE, 1)
 #else
     SET_VALUE(GSWF_MUJ_WHACKA_FIRST_TALK_DONE, 1)
 #endif

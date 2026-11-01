@@ -31,15 +31,27 @@ static USER_FUNC(ride_chk);
 static USER_FUNC(thunder_main);
 static USER_FUNC(loop_onoff);
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e_door_close[];
+#else
 static EvtWord e_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e_door_open[];
+#else
 static EvtWord e_door_open[22];
+#endif
 static BeroEntry bero_entry_data[2];
 static EvtWord evt_box[95];
 static EvtWord hikaru_on[4];
 static EvtWord hikaru_off[4];
 static HitDamageReturn dmgReturnPt[2];
 static EvtWord hikaru_yuka_init[48];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_05_init_evt[];
+#else
 EvtWord aji_05_init_evt[77];
+#endif
 
 static EVT_BEGIN(e_door_close)
 #if VERSION <= VERSION_DEMO_US
@@ -184,7 +196,7 @@ EVT_BEGIN(aji_05_init_evt)
 #endif
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("no1"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI05_CARD_KEY_TAKEN), 0)
+    IF_INT_EQUAL(GSWF_AJI_05_LIT_FLOOR_DONE, 0)
         CALL_CHILD(hikaru_yuka_init)
 #else
     IF_INT_EQUAL(GSWF_AJI_05_LIT_FLOOR_DONE, 0)
@@ -203,7 +215,7 @@ EVT_BEGIN(aji_05_init_evt)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -75, 60, -125, ITEM_SLEEPY_SHEEP, 0, GSWF(GSWF_AJI05_SLEEPY_SHEEP_BLOCK_HIT), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), -75, 60, -125, ITEM_SLEEPY_SHEEP, 0, GSWF_AJI_05_SLEEPY_SHEEP_BLOCK, 0)
     SPAWN_EVENT(evt_emergency)
 #else
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -75, 60, -125, ITEM_SLEEPY_SHEEP, 0, GSWF_AJI_05_SLEEPY_SHEEP_BLOCK, 0)
@@ -272,7 +284,7 @@ if (strcmp(mario->hitobjUnder->joint->name, hitName) == 0) {
         }
     }
 #if VERSION <= VERSION_DEMO_US
-    if (evtGetValue(event, GSWF(GSWF_AJI05_CARD_KEY_TAKEN))) {
+    if (evtGetValue(event, GSWF_AJI_05_LIT_FLOOR_DONE)) {
 #else
     if (evtGetValue(event, GSWF_AJI_05_LIT_FLOOR_DONE)) {
 #endif

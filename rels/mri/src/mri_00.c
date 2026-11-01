@@ -96,7 +96,11 @@ static f32 spline_dt[24];
 EvtWord seal_bigtree[213];
 EvtWord seal_bigtree2[143];
 static EvtWord guide_init[72];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord guide_talk[];
+#else
 static EvtWord guide_talk[29];
+#endif
 static EvtWord rival_init[21];
 static EvtWord rival_talk[8];
 static EvtWord chibitoge_init[25];
@@ -127,12 +131,24 @@ static const char* capturemap[4];
 static EvtWord evt_cloud_main_evt[4];
 f32 guide_move_data[15];
 EvtWord open_bigtree[446];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mario_see_you[];
+#else
 EvtWord mario_see_you[210];
+#endif
 EvtWord puni_set[59];
 static EvtWord sekai_yami_npc[59];
 EvtWord sekai_yami_puni[70];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord sekai_yami_evt[];
+#else
 static EvtWord sekai_yami_evt[322];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord minnnanokoe_evt[];
+#else
 static EvtWord minnnanokoe_evt[620];
+#endif
 static EvtWord evt_switch_init[17];
 #if VERSION >= VERSION_US
 EvtWord mri_00_init_evt[377];
@@ -1961,11 +1977,11 @@ CALL(evt_map_playanim, STRING("hikari_01"), MAP_ANIM_PLAY_LOOP, 0)
         END_IF
     END_IF
     // The FP Plus badge sits on the ground until Mario picks it up.
-    CALL(evt_item_entry, STRING("i"), ITEM_FP_PLUS, 528, 0, 110, ITEM_TYPE_GROUND, GSWF(GSWF_MRI00_FP_PLUS_TAKEN), 0)
+    CALL(evt_item_entry, STRING("i"), ITEM_FP_PLUS, 528, 0, 110, ITEM_TYPE_GROUND, GSWF_MRI_00_FP_PLUS, 0)
     CALL(evt_npc_setup, PTR(npcEnt))
     IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_10_SECRET_ENTRANCE_REVEALED)
         IF_INT_LESS_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_25_AFTER_THE_BOSS_BATTLE)
-            IF_INT_EQUAL(GSWF(GSWF_MRI00_PUNIO_FOLLOWING), 1)
+            IF_INT_EQUAL(GSWF_MRI_00_PUNIO_LEFT_WITH_MARIO, 1)
                 // While Punio follows Mario, the three dancer Punies dance in the yard.
                 CALL_CHILD(odoriko_1_init)
                 CALL_CHILD(odoriko_2_init)

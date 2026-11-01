@@ -73,7 +73,11 @@ EvtWord init_ramp[17];
 EvtWord patakuri_init[7];
 static EvtWord baba_init[7];
 static NpcSetupInfo npc_data[7];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_garnet[];
+#else
 EvtWord evt_garnet[562];
+#endif
 static EvtWord evt_sw[89];
 EvtWord evt_kaiga[14];
 static EvtWord evt_daiza[27];

@@ -120,7 +120,11 @@ EvtWord init_repo[8];
 EvtWord talk_repo[112];
 EvtWord init_cam1[8];
 EvtWord talk_cam1[112];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord init_cam2[];
+#else
 EvtWord init_cam2[19];
+#endif
 EvtWord talk_cam2[112];
 EvtWord init_kino4[13];
 EvtWord reg_kino4[31];
@@ -131,7 +135,11 @@ EvtWord init_kinopiko[8];
 EvtWord talk_kinopiko[112];
 EvtWord init_kinopio_f[8];
 EvtWord talk_kinopio_f[112];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord init_chu[];
+#else
 EvtWord init_chu[20];
+#endif
 EvtWord talk_chu[67];
 static EvtWord init_champ[32];
 s32 move_pos[26];
@@ -148,10 +156,22 @@ EvtWord talk_ironB[13];
 EvtWord init_borodo[32];
 EvtWord talk_borodo[13];
 static NpcSetupInfo npcEnt[17];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_tougi2[];
+#else
 EvtWord evt_tougi2[285];
+#endif
 ExtTexInfo ext_fan_data[28];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mario_momikucha_msg[];
+#else
 EvtWord mario_momikucha_msg[111];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_momikucha[];
+#else
 EvtWord evt_momikucha[105];
+#endif
 static EvtWord evt_key[173];
 static EvtWord evt_poster_1[5];
 static EvtWord evt_poster_2[5];
@@ -895,7 +915,7 @@ ELSE
         END_SWITCH
         CASE_DEFAULT
         // After chapter 3: a farewell, or comments on Mario's return to the league.
-        IF_INT_EQUAL(GSWF(GSWF_TOU_REENTERED_LEAGUE), 0)
+        IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
             CALL(evt_mario_get_party, LW(0))
             IF_INT_EQUAL(LW(0), 4)
                 CALL(evt_msg_print_insert, 0, STRING("stg3_npc_02_06_07_yos"), 0, 0, LW(10))
@@ -920,7 +940,7 @@ ELSE
                     CALL(evt_msg_print, 0, STRING("stg3_npc_re_032_1"), 0, 0)
                 END_IF
                 CASE_DEFAULT
-                IF_INT_EQUAL(GSWF(GSWF_TOU_REMATCH_PROMOTED), 0)
+                IF_INT_EQUAL(GSWF_TOU_REMATCH_PROMOTED_TO_MAJORS, 0)
                     CALL(evt_mario_get_party, LW(0))
                     IF_INT_EQUAL(LW(0), 4)
                         CALL(evt_msg_print_insert, 0, STRING("stg3_npc_re_031_yos"), 0, 0, LW(10))
@@ -1799,7 +1819,7 @@ EVT_BEGIN(evt_tougi2)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_TOU_ARENA_INTRO_TO_LOBBY), 0)
+    SET_VALUE(GSWF_TOU_02_ARENA_TOUR_RETURN, 0)
     SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_01_ARENA_INTRO_1F)
 #else
     SET_VALUE(GSWF_TOU_02_ARENA_TOUR_RETURN, 0)
@@ -2376,8 +2396,8 @@ EVT_BEGIN(evt_momikucha)
     SET_VALUE(GF(10), 0)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_06_1ST_MATCH)
-        IF_INT_EQUAL(GSWF(GSWF_TOU02_LOBBY_CROWD_SEEN), 0)
-            SET_VALUE(GSWF(GSWF_TOU02_LOBBY_CROWD_SEEN), 1)
+        IF_INT_EQUAL(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 0)
+            SET_VALUE(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 1)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG3_06_1ST_MATCH)
         IF_INT_EQUAL(GSWF_TOU_02_FANS_MOB_RAWK_HAWK_SEEN, 0)
@@ -2390,8 +2410,8 @@ EVT_BEGIN(evt_momikucha)
     CALL(evt_tou_get_ranking, LW(0))
     IF_INT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TOU02_LOBBY_CROWD_CHAMP_SEEN), 0)
-            SET_VALUE(GSWF(GSWF_TOU02_LOBBY_CROWD_CHAMP_SEEN), 1)
+        IF_INT_EQUAL(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 0)
+            SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)
 #else
         IF_INT_EQUAL(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 0)
             SET_VALUE(GSWF_TOU_02_FANS_MOB_MARIO_SEEN, 1)

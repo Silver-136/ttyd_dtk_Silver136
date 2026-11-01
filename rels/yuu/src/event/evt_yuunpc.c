@@ -106,7 +106,11 @@ s32 chusan_act_tbl[8];
 EvtWord evt_yuunpc_minigame1[69];
 EvtWord evt_yuunpc_minigame2[69];
 EvtWord evt_yuunpc_minigame3[69];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_yuunpc_minigame4[];
+#else
 EvtWord evt_yuunpc_minigame4[167];
+#endif
 
 /**
  * Sine table in 1-degree steps over 450 degrees, so entry a + 90 gives the cosine;

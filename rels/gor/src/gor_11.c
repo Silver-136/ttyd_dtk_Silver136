@@ -18,8 +18,16 @@
 #include "party.h"
 
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord epilogue_evt[];
+#else
 static EvtWord epilogue_evt[62];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord gor_11_init_evt[];
+#else
 EvtWord gor_11_init_evt[29];
+#endif
 
 static EVT_BEGIN(epilogue_evt)
     CALL(evt_snd_bgmoff, PSND_FADEOUT)

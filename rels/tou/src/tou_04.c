@@ -64,21 +64,37 @@ static EvtWord n1_door_close[22];
 static EvtWord n2_door_open[22];
 static EvtWord n2_door_close[22];
 static BeroEntry bero_data[12];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord move_g[];
+#else
 EvtWord move_g[233];
+#endif
 EvtWord move_g_1_dokimasen[25];
 EvtWord init_g_1[59];
 EvtWord move_g_1_dokimasu[51];
 EvtWord talk_g_1[90];
 EvtWord move_g_1[52];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord init_g_2[];
+#else
 EvtWord init_g_2[26];
+#endif
 EvtWord talk_g_2[59];
 EvtWord move_g_2[56];
 EvtWord init_g_3[30];
 EvtWord talk_g_3[39];
 EvtWord move_g_3[37];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord move_g_4_dokimasen[];
+#else
 EvtWord move_g_4_dokimasen[36];
+#endif
 EvtWord init_g_4[];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord talk_g_4[];
+#else
 EvtWord talk_g_4[271];
+#endif
 EvtWord move_g_4[81];
 EvtWord init_g_5[2];
 EvtWord talk_g_5[2];
@@ -100,7 +116,11 @@ EvtWord talk_g_10[25];
 EvtWord init_g_11[29];
 EvtWord talk_g_11[25];
 static EvtWord init_champ[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord init_brots[];
+#else
 static EvtWord init_brots[58];
+#endif
 static EvtWord talk_brots[149];
 static NpcSetupInfo npcEnt[16];
 EvtWord evt_drop[33];
@@ -115,7 +135,11 @@ EvtWord evt_gardman4[177];
 static EvtWord evt_toile[107];
 static EvtWord evt_toile2[107];
 static s32 key_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_chk[];
+#else
 static EvtWord evt_chk[23];
+#endif
 static EvtWord evt_lock[14];
 EvtWord evt_souko_talk[272];
 EvtWord evt_bred_nigeru[116];
@@ -995,33 +1019,33 @@ EVT_BEGIN(talk_g_4)
         CALL(evt_npc_get_position, STRING("me"), LW(0), LW(1), LW(2))
         IF_INT_EQUAL(LW(0), -350)
 #if VERSION <= VERSION_DEMO_US
-            SWITCH(GSW(GSW_TROUBLE_ACTIVE))
+            SWITCH(GSW_TROUBLE_ACCEPTED)
 #else
             SWITCH(GSW_TROUBLE_ACCEPTED)
 #endif
                 CASE_EQUAL(13)
                 CALL(evt_msg_print, 0, STRING("stg3_tou_re_311"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_TOU04_REMATCH_JOLENE_CALL), 1)
+                SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
 #else
                 SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
 #endif
                 CASE_EQUAL(23)
                 CALL(evt_msg_print, 0, STRING("stg3_tou_re_311"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_TOU04_REMATCH_JOLENE_CALL), 1)
+                SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
 #else
                 SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
 #endif
                 CASE_DEFAULT
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_EQUAL(GSWF(GSWF_TOU_REENTERED_LEAGUE), 0)
+                IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
 #else
                 IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
 #endif
                     CALL(evt_msg_print, 0, STRING("stg3_tou_re_310"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-                    SET_VALUE(GSWF(GSWF_TOU04_REMATCH_GUARD_TALK), 1)
+                    SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
 #else
                     SET_VALUE(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
 #endif
@@ -1059,7 +1083,7 @@ EVT_BEGIN(talk_g_4)
             ELSE
 #if VERSION <= VERSION_DEMO_US
             // Otherwise he points Mario to Ms. Jolene, who is just inside.
-            SWITCH(GSW(GSW_TROUBLE_ACTIVE))
+            SWITCH(GSW_TROUBLE_ACCEPTED)
 #else
             SWITCH(GSW_TROUBLE_ACCEPTED)
 #endif
@@ -2476,32 +2500,32 @@ EVT_BEGIN(tou_04_init_evt)
     CALL(evt_cam_road_reset)
     SPAWN_EVENT(evt_drop)
     CALL(evt_npc_setup, PTR(npcEnt))
-    CALL(evt_item_entry, STRING("item_01"), ITEM_LAST_STAND, 515, 15, 125, ITEM_TYPE_STILL, GSWF(GSWF_TOU04_LAST_STAND), 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_LAST_STAND, 515, 15, 125, ITEM_TYPE_STILL, GSWF_TOU_04_LAST_STAND, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save1"), -520, 60, -110, 0, 0)
     CALL(evt_mobj_save_blk, STRING("mobj_save3"), 450, 60, -465, 0, 0)
     // If one of the pending escort scenes is waiting (Grubba, or Jolene bringing Mario to the minors,
     // majors or champion's room), Mario and his partner start in place for it and it runs.
     SET_VALUE(LW(1), 0)
-    IF_INT_EQUAL(GSWF(GSWF_TOU_GRUBBA_ESCORT_PENDING), 1)
+    IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
         CALL(kemuri_stop)
         CALL(evt_mario_set_pos, -350, 0, -580)
         CALL(evt_party_set_pos, 0, -350, 0, -600)
         SET_VALUE(LW(1), 1)
         SPAWN_EVENT(evt_gans)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU_JOLENE_ESCORT_1_PENDING), 1)
+    IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MINORS, 1)
         CALL(kemuri_stop)
         CALL(evt_mario_set_pos, -390, 0, -510)
         CALL(evt_party_set_pos, 0, -390, 0, -510)
         SPAWN_EVENT(evt_kinoshikowa)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU_JOLENE_ESCORT_MAJORS_PENDING), 1)
+    IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MAJORS, 1)
         CALL(kemuri_stop)
         CALL(evt_mario_set_pos, -390, 0, -510)
         CALL(evt_party_set_pos, 0, -390, 0, -510)
         SPAWN_EVENT(evt_kinoshikowa2)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU_JOLENE_ESCORT_CHAMP_PENDING), 1)
+    IF_INT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
         CALL(kemuri_stop)
         CALL(evt_mario_set_pos, -625, 0, -300)
         CALL(evt_party_set_pos, 0, -630, 0, -300)
@@ -2518,11 +2542,11 @@ EVT_BEGIN(tou_04_init_evt)
                 CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
                 CASE_DEFAULT
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
                 CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
@@ -2534,38 +2558,38 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
         END_IF
     END_IF
     // Reset the guard-escort flags so only the one for the trip about to run stays set.
-    IF_INT_EQUAL(GSWF(GSWF_TOU_TITLE_MATCH_RESERVED), 1)
-        SET_VALUE(GSWF(GSWF_TOU04_GUARD_ESCORT_MINORS), 0)
-        SET_VALUE(GSWF(GSWF_TOU04_GUARD_ESCORT_MAJORS), 0)
-        SET_VALUE(GSWF(GSWF_TOU04_GUARD_ESCORT_TITLE_ROOM), 1)
-        SET_VALUE(GSWF(GSWF_TOU04_GUARD_ESCORT_CHAMP_ROOM), 0)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
+        SET_VALUE(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 0)
+        SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 0)
+        SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 1)
+        SET_VALUE(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 0)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU04_ARRIVED_FROM_TOILET_A), 1)
-        SET_VALUE(GSWF(GSWF_TOU04_GUARD_ESCORT_MINORS), 0)
-        SET_VALUE(GSWF(GSWF_TOU04_GUARD_ESCORT_MAJORS), 0)
-        SET_VALUE(GSWF(GSWF_TOU04_GUARD_ESCORT_TITLE_ROOM), 0)
-        SET_VALUE(GSWF(GSWF_TOU04_GUARD_ESCORT_CHAMP_ROOM), 0)
+    IF_INT_EQUAL(GSWF_TOU_09_TOILET_WARP_PENDING, 1)
+        SET_VALUE(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 0)
+        SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 0)
+        SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 0)
+        SET_VALUE(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 0)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU04_ARRIVED_FROM_TOILET_B), 1)
-        SET_VALUE(GSWF(GSWF_TOU04_GUARD_ESCORT_MINORS), 0)
-        SET_VALUE(GSWF(GSWF_TOU04_GUARD_ESCORT_MAJORS), 0)
-        SET_VALUE(GSWF(GSWF_TOU04_GUARD_ESCORT_TITLE_ROOM), 0)
-        SET_VALUE(GSWF(GSWF_TOU04_GUARD_ESCORT_CHAMP_ROOM), 0)
+    IF_INT_EQUAL(GSWF_TOU_08_TOILET_WARP_PENDING, 1)
+        SET_VALUE(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 0)
+        SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 0)
+        SET_VALUE(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 0)
+        SET_VALUE(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 0)
     END_IF
     // Run the guard escort for the trip that is pending (minors, majors, title room or champion's room),
     // with Mario placed at its starting door.
-    IF_INT_EQUAL(GSWF(GSWF_TOU04_GUARD_ESCORT_MINORS), 1)
+    IF_INT_EQUAL(GSWF_TOU_04_GUARD_1_ESCORT_UNUSED, 1)
         CALL(evt_mario_set_pos, -625, 0, 300)
         CALL(evt_party_set_pos, 0, -640, 0, 300)
         SPAWN_EVENT(evt_gardman)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU04_GUARD_ESCORT_MAJORS), 1)
+    IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_UNUSED, 1)
         CALL(evt_mario_set_pos, -625, 0, -300)
         CALL(evt_party_set_pos, 0, -640, 0, -300)
         CALL(evt_party_set_pos, 1, 0, -1000, 0)
         SPAWN_EVENT(evt_gardman2)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU04_GUARD_ESCORT_TITLE_ROOM), 1)
+    IF_INT_EQUAL(GSWF_TOU_04_GUARD_3_ESCORT_TO_TOU_11, 1)
         CALL(evt_mario_set_pos, -625, 0, -300)
         CALL(evt_party_set_pos, 0, -640, 0, -300)
         CALL(evt_party_set_pos, 1, 0, -1000, 0)
@@ -2573,7 +2597,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
         CALL(evt_party_set_dir, 0, 270, 0)
         SPAWN_EVENT(evt_gardman3)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU04_GUARD_ESCORT_CHAMP_ROOM), 1)
+    IF_INT_EQUAL(GSWF_TOU_04_GUARD_6_ESCORT_UNUSED, 1)
         CALL(evt_mario_set_pos, 350, 0, -580)
         CALL(evt_party_set_pos, 0, 350, 0, -600)
         CALL(evt_party_set_pos, 1, 0, -1000, 0)
@@ -2581,14 +2605,14 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
     END_IF
     // Coming back from the toilets, Mario appears by the toilet door
     // and its scene runs instead of the usual setup.
-    IF_INT_EQUAL(GSWF(GSWF_TOU04_ARRIVED_FROM_TOILET_A), 1)
+    IF_INT_EQUAL(GSWF_TOU_09_TOILET_WARP_PENDING, 1)
         CALL(evt_mario_set_pos, 530, 0, 530)
         CALL(evt_party_set_pos, 0, 530, 0, 530)
         CALL(evt_cam_road_reset)
         SPAWN_EVENT(evt_toile)
         RETURN
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU04_ARRIVED_FROM_TOILET_B), 1)
+    IF_INT_EQUAL(GSWF_TOU_08_TOILET_WARP_PENDING, 1)
         CALL(evt_mario_set_pos, 530, 0, 530)
         CALL(evt_party_set_pos, 0, 530, 0, 530)
         CALL(evt_cam_road_reset)
@@ -2636,7 +2660,7 @@ CASE_LESS(STG3_04_GONZALES_IS_BORN)
         CALL_CHILD(bero_case_switch_on)
     END_IF
     IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_21_1ST_MATCH_WITH_RAWK_HAWK)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_CHAMP_OPENING_SEEN), 0)
+        IF_INT_EQUAL(GSWF_TOU_RAWK_HAWK_OPENING_SEEN, 0)
             SET_VALUE(LW(0), 10)
             CALL_CHILD(bero_case_switch_on)
             SET_VALUE(LW(0), 0)
@@ -2659,15 +2683,15 @@ CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("w_bero"), 0, PTR(boss_msg), 0)
 END_IF
     // After Grubba's plans, the guard's office door stays shut unless Mario was called back by Jolene.
     IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_31_GRUBBAS_PLANS)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_LEFT_AS_CHAMPION), 0)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
             SET_VALUE(LW(0), 5)
             CALL_CHILD(bero_case_switch_on)
         ELSE
-            IF_INT_EQUAL(GSWF(GSWF_TOU04_REMATCH_JOLENE_CALL), 1)
+            IF_INT_EQUAL(GSWF_TOU_04_GUARD_4_LET_IN_TROUBLE, 1)
                 SET_VALUE(LW(0), 5)
                 CALL_CHILD(bero_case_switch_on)
             END_IF
-            IF_INT_EQUAL(GSWF(GSWF_TOU04_REMATCH_GUARD_TALK), 1)
+            IF_INT_EQUAL(GSWF_TOU_04_GUARD_4_LET_IN_REMATCH, 1)
 SET_VALUE(LW(0), 5)
                 CALL_CHILD(bero_case_switch_on)
 END_IF
@@ -2675,12 +2699,12 @@ END_IF
     END_IF
     // Housekeeping: a poisoned partner is removed, and a pending match sends the partner away.
     CALL(evt_cam_road_reset)
-    IF_INT_EQUAL(GSWF(GSWF_TOU_PARTNER_POISONED), 1)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_PARTNER_POISON_CURED), 0)
+    IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_EATEN, 1)
+        IF_INT_EQUAL(GSWF_TOU_POISON_CAKE_RECOVERED, 0)
             CALL(evt_mario_kill_party, 0)
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESERVED), 1)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
         CALL(evt_party_set_pos, 1, 0, -1000, 0)
         CALL(evt_party_stop, 1)
         CALL(evt_mario_clear_party, 1)
@@ -2688,15 +2712,15 @@ END_IF
     // The storage room is locked until Mario has the key;
     // when he is a top-eleven fighter the storage-room talk starts.
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_07_00_STORAGE_ROOM_UNLOCKED)
-        CALL(evt_mobj_lock, STRING("lock"), ITEM_STORAGE_KEY_0x12, 0, 10, -550, 0, PTR(evt_chk), PTR(evt_lock), GSWF(GSWF_TOU04_STORAGE_LOCK_OPEN))
+        CALL(evt_mobj_lock, STRING("lock"), ITEM_STORAGE_KEY_0x12, 0, 10, -550, 0, PTR(evt_chk), PTR(evt_lock), GSWF_TOU_04_STORAGE_DOOR_UNLOCKED)
         SET_VALUE(LW(0), STRING("s_bero_4"))
         CALL_CHILD(bero_case_switch_off)
     ELSE
         SET_VALUE(LW(0), STRING("s_bero_4"))
         CALL_CHILD(bero_case_switch_on)
     END_IF
-    IF_INT_NOT_EQUAL(GSWF(GSWF_TOU_JOLENE_ESCORT_MAJORS_PENDING), 1)
-        IF_INT_NOT_EQUAL(GSWF(GSWF_TOU_JOLENE_ESCORT_CHAMP_PENDING), 1)
+    IF_INT_NOT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_MAJORS, 1)
+        IF_INT_NOT_EQUAL(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
             CALL(evt_tou_get_ranking, LW(0))
             IF_INT_LESS_OR_EQUAL(LW(0), 11)
                 IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_07_00_STORAGE_ROOM_UNLOCKED)

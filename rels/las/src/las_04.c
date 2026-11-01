@@ -89,7 +89,11 @@ EvtWord firebar_coin[68];
 FirebarSetup firebardesc[7];
 EvtWord firebar_evt[102];
 static HitDamageReturn dmgRetPoint[4];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_04_init_evt[];
+#else
 EvtWord las_04_init_evt[55];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -873,7 +877,7 @@ EVT_BEGIN(las_04_init_evt)
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("hamon"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_brick, STRING("mobj_01"), 0, 150, 0, ITEM_BOOS_SHEET, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF(GSWF_LAS04_BOOS_SHEET_BRICK))
+    CALL(evt_mobj_brick, STRING("mobj_01"), 0, 150, 0, ITEM_BOOS_SHEET, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_LAS_04_BOOS_SHEET_HIDDEN_BLOCK)
 #else
     CALL(evt_mobj_brick, STRING("mobj_01"), 0, 150, 0, ITEM_BOOS_SHEET, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_LAS_04_BOOS_SHEET_HIDDEN_BLOCK)
 #endif

@@ -77,7 +77,11 @@ static EvtWord evt_kime_pose[52];
 static EvtWord evt_taihou[190];
 EvtWord urotuku_white[190];
 static EvtWord init_soncho[13];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord talk_soncho[];
+#else
 static EvtWord talk_soncho[421];
+#endif
 static EvtWord init_murabito_e[2];
 #if VERSION >= VERSION_US
 static EvtWord talk_murabito_e[281];
@@ -90,7 +94,11 @@ static EvtWord init_murabito_g[17];
 static EvtWord talk_murabito_g[81];
 static EvtWord init_murabito_h[2];
 s32 iri_26_item_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord talk_murabito_h[];
+#else
 static EvtWord talk_murabito_h[151];
+#endif
 static EvtWord init_murabito_i[2];
 static EvtWord talk_murabito_i[44];
 EvtWord init_tenin[8];
@@ -101,7 +109,11 @@ EvtWord mario_jump[];
 EvtWord mario_jump_tail[6];
 #endif
 s32 iri_25_item_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord talk_white[];
+#else
 static EvtWord talk_white[117];
+#endif
 EvtWord iri_25_white_bed[363];
 EvtWord evt_white_bed[505];
 static EvtWord kiza_talk[28];
@@ -111,10 +123,18 @@ static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[13];
 static ShopperData35 shopper_data;
+#if VERSION <= VERSION_DEMO_US
+static EvtWord sekai_yami_evt[];
+#else
 static EvtWord sekai_yami_evt[459];
+#endif
 static EvtWord minnnanokoe_evt[183];
 static KinopioData kino_dt;
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord bom_02_init_evt[];
+#else
 EvtWord bom_02_init_evt[312];
+#endif
 
 /**
  * Door callback for the inn door (ie1): LW(0) is the opening angle;
@@ -533,8 +553,8 @@ static EVT_BEGIN(talk_soncho)
         CALL(evt_mario_get_party, LW(0))
         IF_INT_NOT_EQUAL(LW(0), 3)
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_BOM02_MAYOR_FIRST_TALK), 0)
-                SET_VALUE(GSWF(GSWF_BOM02_MAYOR_FIRST_TALK), 1)
+            IF_INT_EQUAL(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 0)
+                SET_VALUE(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 1)
 #else
             IF_INT_EQUAL(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 0)
                 SET_VALUE(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 1)
@@ -571,8 +591,8 @@ static EVT_BEGIN(talk_soncho)
             CALL(evt_mario_set_dir, 90, 200, 0)
             CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_BOM02_MAYOR_FIRST_TALK), 0)
-                SET_VALUE(GSWF(GSWF_BOM02_MAYOR_FIRST_TALK), 1)
+            IF_INT_EQUAL(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 0)
+                SET_VALUE(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 1)
 #else
             IF_INT_EQUAL(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 0)
                 SET_VALUE(GSWF_BOM_MAYOR_FIRST_TALK_DONE, 1)
@@ -638,14 +658,14 @@ static EVT_BEGIN(talk_soncho)
         CASE_LESS(STG7_03_GOLDBOB)
         SET_VALUE(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_PIK00_GOLDBOB_CANNON_APPROVAL), 1)
+        IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
 #else
         IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 1)
 #endif
             ADD(LW(0), 1)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_BOM02_GENERAL_WHITE_WOKEN), 1)
+        IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 1)
 #else
         IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 1)
 #endif
@@ -662,7 +682,7 @@ static EVT_BEGIN(talk_soncho)
             END_IF
             CASE_EQUAL(1)
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_PIK00_GOLDBOB_CANNON_APPROVAL), 0)
+            IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
 #else
             IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
 #endif
@@ -670,8 +690,8 @@ static EVT_BEGIN(talk_soncho)
                 CALL(evt_msg_print, 0, STRING("stg7_bom_38_01"), 0, STRING("me"))
             END_IF
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_BOM02_GENERAL_WHITE_WOKEN), 0)
-                IF_INT_EQUAL(GSWF(GSWF_STG7_WHITE_TWILIGHT_HINT), 0)
+            IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 0)
+                IF_INT_EQUAL(GSWF_USU_GENERAL_WHITE_HINT_HEARD, 0)
 #else
             IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 0)
                 IF_INT_EQUAL(GSWF_USU_GENERAL_WHITE_HINT_HEARD, 0)
@@ -904,7 +924,7 @@ s32 iri_26_item_tbl[] = {
 
 static EVT_BEGIN(talk_murabito_h)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_I_CANT_SPEAK)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_CANT_SPEAK)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_CANT_SPEAK)
 #endif
@@ -932,8 +952,8 @@ CALL(evt_win_item_select, PTR(iri_26_item_tbl), LW(0))
                 CALL(evt_msg_print, 0, STRING("irai_26_05"), 0, 0)
                 CALL(evt_sub_get_coin, 20)
 #if VERSION <= VERSION_DEMO_US
-                CALL(evt_sub_save_playtime, GSW(GSW_BOM02_TROUBLE26_TIME))
-                SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+                CALL(evt_sub_save_playtime, GSW_BOM_I_CANT_SPEAK_TIME_UNUSED)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #else
                 CALL(evt_sub_save_playtime, GSW_BOM_I_CANT_SPEAK_TIME_UNUSED)
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
@@ -1142,7 +1162,7 @@ s32 iri_25_item_tbl[] = {
  */
 static EVT_BEGIN(talk_white)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_DELIVERY_PLEASE)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
 #endif
@@ -2025,10 +2045,10 @@ EVT_BEGIN(bom_02_init_evt)
 #endif
     // Shine Sprite block, the spinning floor panel, the Star Piece and Inn Coupon pickups and the save block.
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_powerupblk, STRING("pblk01"), 425, 0, -45, 0, GSWF(GSWF_BOM02_SHINE_SPRITE), 0)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -30, 0, 115, STRING("S_wakuaaa"), 125, GSWF(GSWF_BOM02_STAR_PIECE_PANEL))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 210, 30, -168, ITEM_TYPE_STILL, GSWF(GSWF_BOM02_STAR_PIECE), 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -220, 5, -115, ITEM_TYPE_STILL, GSWF(GSWF_BOM02_INN_COUPON), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk01"), 425, 0, -45, 0, GSWF_SHINE_40, 0)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -30, 0, 115, STRING("S_wakuaaa"), 125, GSWF_STARPIECE_94)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 210, 30, -168, ITEM_TYPE_STILL, GSWF_STARPIECE_93, 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_INN_COUPON, -220, 5, -115, ITEM_TYPE_STILL, GSWF_BOM_02_INN_COUPON, 0)
 #else
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 425, 0, -45, 0, GSWF_SHINE_40, 0)
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -30, 0, 115, STRING("S_wakuaaa"), 125, GSWF_STARPIECE_94)
@@ -2064,8 +2084,8 @@ EVT_BEGIN(bom_02_init_evt)
     CALL(evt_map_playanim, STRING("yuge"), MAP_ANIM_PLAY_LOOP, 0)
     // Once the twilight hint has been given and White is still asleep, his bed can be bounced on.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_STG7_WHITE_TWILIGHT_HINT), 1)
-        IF_INT_EQUAL(GSWF(GSWF_BOM02_GENERAL_WHITE_WOKEN), 0)
+    IF_INT_EQUAL(GSWF_USU_GENERAL_WHITE_HINT_HEARD, 1)
+        IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 0)
 #else
     IF_INT_EQUAL(GSWF_USU_GENERAL_WHITE_HINT_HEARD, 1)
         IF_INT_EQUAL(GSWF_BOM_GENERAL_WHITE_AGREED, 0)
@@ -2081,7 +2101,7 @@ EVT_BEGIN(bom_02_init_evt)
     CALL(evt_map_replace_mapobj, STRING("hi6"), 1)
     // Trouble Center job 25 (the package for White): his bed can be bounced on to wake him.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_DELIVERY_PLEASE)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_DELIVERY_PLEASE)
 #endif
@@ -2097,7 +2117,7 @@ EVT_BEGIN(bom_02_init_evt)
     IF_INT_EQUAL(LF(0), 0)
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 1)
 #if VERSION <= VERSION_DEMO_US
-            CALL(evt_item_entry, STRING("iri_30"), ITEM_SNOW_BUNNY, 50, 0, 35, ITEM_TYPE_STILL, GSWF(GSWF_BOM02_TROUBLE30_SNOW_BUNNY_REWARD), 0)
+            CALL(evt_item_entry, STRING("iri_30"), ITEM_SNOW_BUNNY, 50, 0, 35, ITEM_TYPE_STILL, GSWF_BOM_02_SNOW_BUNNY, 0)
 #else
             CALL(evt_item_entry, STRING("iri_30"), ITEM_SNOW_BUNNY, 50, 0, 35, ITEM_TYPE_STILL, GSWF_BOM_02_SNOW_BUNNY, 0)
 #endif

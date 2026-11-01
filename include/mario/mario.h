@@ -303,6 +303,12 @@ typedef struct MarioStayWork {     // US only, MarioWork 0x2AC: mot_stay's count
     s32 holdTimer;                 // 0x2B0, only cleared on US
     s32 deepSleepTimer;            // 0x2B4, marioChkDeepSleep
 } MarioStayWork;
+#elif VERSION <= VERSION_DEMO_US
+typedef struct MarioStayWork {     // demo: inside the motion work at 0x10, another order than US
+    s32 jabaraWait;
+    s32 deepSleepTimer;            // marioChkDeepSleep
+    s32 holdTimer;
+} MarioStayWork;
 #endif
 
 /* MarioWork.characterId: who the player controls (marioSetCharMode) */
@@ -526,7 +532,7 @@ u32 enableKeyMask; // 0x284 JP, 0x290 US: evt_mario_set_enable_key; 0 = all butt
     f32 dirEvtTargetDir;     // 0x294
     s32 dirEvtMsec;          // 0x298
     s32 dirEvtFrame;
-union {
+    union {
         MarioMotWork mot; // 0x2A0 JP
         struct {
             u8 pad_hipAngle[4]; // mot.hip.angle
@@ -536,12 +542,12 @@ union {
             u8 pad_stay[0x10];  // motion work up to mot_stay's counters
             MarioStayWork stay; // 0x2B0 JP: mot_stay's counters, inside the motion work
         };
-struct {
+        struct {
             u8 pad_slit[0x10]; // mot.slit up to its second timer
             s16 slitTimer2;    // demo: mot_slit's second timer, inside the motion work
         };
-};
-u8 pad_2BC[0x2C0 - 0x2BC]; // 0x2BC, never accessed
+    };
+    u8 pad_2BC[0x2C0 - 0x2BC]; // 0x2BC, never accessed
     s16 coinDropTimer;         // 0x2C0, set to 3 s by npcdrv (with muteki); marioMain drops a coin every 30 frames
     u8 pad_2C2[0x2C4 - 0x2C2]; // 0x2C2, never accessed
     f32 kpaSpeed;

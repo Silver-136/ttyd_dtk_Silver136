@@ -53,9 +53,17 @@ EvtWord korutesu_rotate2[28];
 EvtWord korutesu_large[56];
 EvtWord korutesu_blur[43];
 static EvtWord starstone_fuwafuwa[53];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord korutesu_event[];
+#else
 static EvtWord korutesu_event[627];
+#endif
 EvtWord korutesu_event_after[140];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kosho_event[];
+#else
 EvtWord kosho_event[517];
+#endif
 EvtWord coin_effect[151];
 EvtWord muj_12_init_evt[60];
 

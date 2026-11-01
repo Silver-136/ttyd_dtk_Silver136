@@ -93,7 +93,11 @@ EvtWord aunt_init[22];
 EvtWord aunt_pig_init[29];
 EvtWord iri_20_out_house[407];
 EvtWord iri_20_aunt_to_house[149];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aunt_talk[];
+#else
 EvtWord aunt_talk[687];
+#endif
 EvtWord childA_init[7];
 EvtWord childA_talk[31];
 EvtWord childB_init[7];
@@ -121,7 +125,11 @@ EvtWord musume_c_pig_entry[15];
 static EvtWord urouro_move[24];
 EvtWord urouro_move_semai[24];
 static NpcSetupInfo npcEnt[24];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord village_chief_change_pig_event[];
+#else
 EvtWord village_chief_change_pig_event[166];
+#endif
 EvtWord evt_mon_open[112];
 static EvtWord cam_up[34];
 static EvtWord cam_down[8];
@@ -164,7 +172,11 @@ EvtWord evt_monban_buta[18];
 EvtWord evt_monban_buta2[17];
 EvtWord evt_monban_look[119];
 static s32 lock_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord lock_item_check[];
+#else
 static EvtWord lock_item_check[41];
+#endif
 EvtWord unlock[13];
 static ShopObj obj_list[6];
 static ShopItem goods_list[6];
@@ -175,15 +187,27 @@ EvtWord shopper_talk2[11];
 static BoobooName booboo_name[8];
 EvtWord evt_roll_get[2];
 static s32 key_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_majin[];
+#else
 static EvtWord evt_majin[330];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_majin2[];
+#else
 static EvtWord evt_majin2[237];
+#endif
 EvtWord tree_onoff[57];
 static EvtWord evt_ki_1[12];
 static EvtWord evt_ki_2[20];
 static EvtWord evt_ki_3[20];
 static TreeAccess tree_tbl[5];
 EvtWord usu_01_tree_init[7];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mobj_box00[];
+#else
 static EvtWord mobj_box00[34];
+#endif
 EvtWord usu_01_init_evt[350];
 
 /** Init script of villager F: enables move/talk animation. */
@@ -812,7 +836,7 @@ EVT_END()
 
 EVT_BEGIN(aunt_talk)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_TELL_THAT_PERSON)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_TELL_THAT_PERSON)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_TELL_THAT_PERSON)
 #endif
@@ -934,7 +958,7 @@ CALL_CHILD(iri_20_aunt_to_house)
                     CALL(evt_item_get_item, STRING("sd"))
                     CALL(evt_item_get_item_end_wait, STRING("sd"))
 #if VERSION <= VERSION_DEMO_US
-                    SET_VALUE(GSWF(GSWF_USU01_TROUBLE20_METEOR_MEAL_TAKEN), 1)
+                    SET_VALUE(GSWF_USU_01_METEOR_MEAL, 1)
 #else
                     SET_VALUE(GSWF_USU_01_METEOR_MEAL, 1)
 #endif
@@ -946,7 +970,7 @@ CALL_CHILD(iri_20_aunt_to_house)
                     CALL(evt_npc_move_position, STRING("me"), -363, -152, 0, 40, 0)
                     WAIT_MS(300)
 #if VERSION <= VERSION_DEMO_US
-                    CALL(evt_item_entry, STRING("iri_20"), ITEM_METEOR_MEAL, -345, 20, -132, ITEM_TYPE_STILL, GSWF(GSWF_USU01_TROUBLE20_METEOR_MEAL_TAKEN), 0)
+                    CALL(evt_item_entry, STRING("iri_20"), ITEM_METEOR_MEAL, -345, 20, -132, ITEM_TYPE_STILL, GSWF_USU_01_METEOR_MEAL, 0)
 #else
                     CALL(evt_item_entry, STRING("iri_20"), ITEM_METEOR_MEAL, -345, 20, -132, ITEM_TYPE_STILL, GSWF_USU_01_METEOR_MEAL, 0)
 #endif
@@ -958,8 +982,8 @@ CALL_CHILD(iri_20_aunt_to_house)
                 // the trouble is solved and the children cheer (irai_20_015 to 017).
                 CALL(evt_msg_print, 0, STRING("irai_20_014"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-                CALL(evt_sub_save_playtime, GSW(GSW_USU01_TROUBLE20_TIME))
-                SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+                CALL(evt_sub_save_playtime, GSW_USU_TROUBLE_20_DONE_TIME)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #else
                 CALL(evt_sub_save_playtime, GSW_USU_TROUBLE_20_DONE_TIME)
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
@@ -989,7 +1013,7 @@ CALL_CHILD(iri_20_aunt_to_house)
 #endif
         CASE_LESS(STG4_10_DOOPLISS_BATTLE)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_USU01_MOTHER_TURNED_PIG), 0)
+        IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 0)
 #else
         IF_INT_EQUAL(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 0)
 #endif
@@ -1075,7 +1099,7 @@ CALL(evt_win_item_select, LW(0), LW(1))
                 CALL(evt_msg_print, 0, STRING("stg4_usu_73"), 0, STRING("子供Ｃ"))
             END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_USU01_MOTHER_TURNED_PIG), 1)
+            SET_VALUE(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
 #else
             SET_VALUE(GSWF_USU_01_AUNT_TURNED_INTO_PIG, 1)
 #endif
@@ -1945,7 +1969,7 @@ CALL_CHILD(cam_up)
                 CALL_CHILD(cam_down)
                 // The first time, Vivian and Mario step aside and she proposes searching under Creepy Steeple
                 // for the villain's real name (stg4_usu_149_viv, 150_viv).
-                IF_INT_EQUAL(GSWF(GSWF_USU01_CROWS_PARTNER_REACTION), 0)
+                IF_INT_EQUAL(GSWF_USU_01_CROWS_FG_PARTNER_TALK_DONE, 0)
                     CALL(evt_party_cont_onoff, 0, 1)
                     LOOP(0)
                         CALL(evt_party_get_status, 6, LW(0))
@@ -1968,7 +1992,7 @@ CALL_CHILD(cam_up)
                     CALL(evt_mario_set_pose, STRING("M_S_1"))
                     CALL(evt_msg_print_party, STRING("stg4_usu_150"))
                     WAIT_MS(300)
-                    SET_VALUE(GSWF(GSWF_USU01_CROWS_PARTNER_REACTION), 1)
+                    SET_VALUE(GSWF_USU_01_CROWS_FG_PARTNER_TALK_DONE, 1)
                     CALL(evt_party_cont_onoff, 0, 0)
                     CALL(evt_party_run, 0)
                 END_IF
@@ -3483,7 +3507,7 @@ CALL(evt_win_item_select, PTR(lock_tbl), LW(0))
         END_IF
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_USU01_SHOPKEEPER_ASKED_HELP), 1)
+        IF_INT_EQUAL(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 1)
 #else
         IF_INT_EQUAL(GSWF_USU_01_SHOP_WIFE_FIRST_TALK_DONE, 1)
 #endif
@@ -3618,7 +3642,7 @@ static EVT_BEGIN(evt_majin)
     CALL(evt_mario_mov_pos2, -235, -370, FLOAT(80.0f))
     CALL(evt_mario_set_dir, 90, 200, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_USU01_BLACK_CHEST_FIRST_TALK), 0)
+    IF_INT_EQUAL(GSWF_USU_01_BLACK_CHEST_FIRST_TALK_DONE, 0)
 #else
     IF_INT_EQUAL(GSWF_USU_01_BLACK_CHEST_FIRST_TALK_DONE, 0)
 #endif
@@ -3666,7 +3690,7 @@ static EVT_BEGIN(evt_majin)
         // The chest is left alone and the first talk is recorded.
         CALL(evt_mobj_exec_cancel, STRING("pera_box"))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_USU01_BLACK_CHEST_FIRST_TALK), 1)
+        SET_VALUE(GSWF_USU_01_BLACK_CHEST_FIRST_TALK_DONE, 1)
 #else
         SET_VALUE(GSWF_USU_01_BLACK_CHEST_FIRST_TALK_DONE, 1)
 #endif
@@ -3787,7 +3811,7 @@ CALL(evt_mario_normalize)
     CALL(evt_paper_delete, STRING("OFF_d_kusya"))
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW(GSW_STORY_PROGRESS), STG4_04_01_PAPER_MAGE_TUBE_MOD)
-    SET_VALUE(GSWF(GSWF_USU01_BLACK_CHEST_OPENED), 1)
+    SET_VALUE(GSWF_USU_01_BLACK_CHEST_OPENED, 1)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG4_04_01_PAPER_MAGE_TUBE_MOD)
     SET_VALUE(GSWF_USU_01_BLACK_CHEST_OPENED, 1)

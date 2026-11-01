@@ -786,7 +786,7 @@ sel->items[sel->numItems++].id = id;
             for (i = 0; party_id_table[i] != 0; i++) {
                 if (partyChkJoin(party_id_table[i])) {
                     sel->items[sel->numItems].id = i;
-                    if (!evtGetValue(NULL, GSWF(GSWF_MERLON_FIRST_UPGRADE_DONE))) {
+                    if (!evtGetValue(NULL, GSWF_GOR_UP_ARROW_USED)) {
                         if (pouch->partyData[party_id_table[i]].techLevel >= 1) {
                             sel->items[sel->numItems].flags |= (SELECT_ITEM_GRAY | SELECT_ITEM_DISABLED);
                         }
@@ -883,7 +883,7 @@ break;
             memset(sel->items, 0, 0x10);
             sel->numItems = 0;
             for (i = 0; i < 4; i++) {
-                m = badge_bottakuru_table[evtGetValue(NULL, GSW(GSW_BADGESHOP_BARGAIN_SLOTS) + i)];
+                m = badge_bottakuru_table[evtGetValue(NULL, GSW_BADGESHOP_CHARLIETON_STOCK + i)];
                 if (m) {
                     sel->items[sel->numItems++].id = m;
                 }
@@ -1451,7 +1451,7 @@ s32 winMgrSelectOther(WinMgrSelect* sel, EventEntry* evt) {
                 evt->lwData[1] = id;
                 evt->lwData[2] = (EvtWord)VERSION_PICK(itemDataTable[id].id, msgSearch(itemDataTable[id].name));
 #if VERSION <= VERSION_DEMO_US
-                evt->lwData[3] = ((evtGetValue(NULL, GSW(GSW_JON_FLOOR)) + 11) * itemDataTable[id].buy_price) / 10;
+                evt->lwData[3] = ((evtGetValue(NULL, GSW_PIT_FLOOR) + 11) * itemDataTable[id].buy_price) / 10;
 #else
                 evt->lwData[3] = ((evtGetValue(NULL, GSW_PIT_FLOOR) + 11) * itemDataTable[id].buy_price) / 10;
 #endif
@@ -1702,7 +1702,7 @@ show = FALSE;
                     show = TRUE;
                     break;
                 case 15:
-                    price = item->buy_price * (evtGetValue(NULL, GSW(GSW_JON_FLOOR)) + 11) / 10;
+                    price = item->buy_price * (evtGetValue(NULL, GSW_PIT_FLOOR) + 11) / 10;
                     show = TRUE;
                     break;
                 case 16:

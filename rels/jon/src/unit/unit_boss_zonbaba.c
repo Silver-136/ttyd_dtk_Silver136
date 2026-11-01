@@ -58,7 +58,11 @@ static EvtWord kamituki_attack_event[141];
 EvtWord breath1_attack_event[315];
 EvtWord breath2_attack_event[320];
 EvtWord recover_event[88];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event[];
+#else
 static EvtWord attack_event[282];
+#endif
 static EvtWord wait_event[6];
 
 /** Unit data of Bonetail: stats, sounds, attributes, parts, init script and data table. */

@@ -101,12 +101,28 @@ s32 hoko_tbl[22];
 static MonteTable montetable[6];
 static EvtWord minigame_view_monte[4];
 EvtWord yuu_01_kaijo_init[12];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord yuu_01_kaijo_init2[];
+#else
 EvtWord yuu_01_kaijo_init2[12];
+#endif
 EvtWord minigame02_main[37];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord minigame02_start_cam[];
+#else
 EvtWord minigame02_start_cam[40];
+#endif
 EvtWord minigame02_start_cam_cancel[17];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord minigame02_start[];
+#else
 EvtWord minigame02_start[101];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord minigame02_end[];
+#else
 EvtWord minigame02_end[172];
+#endif
 EvtWord yuu_01_init_evt[VERSION_PICK(1076, 1166)];
 
 /**
@@ -354,7 +370,7 @@ EVT_BEGIN(minigame02_end)
     END_IF
     IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_YUU_MINIGAME_QUIT), 1)
+        SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
 #else
         SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
 #endif

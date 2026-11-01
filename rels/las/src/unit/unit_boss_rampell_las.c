@@ -68,15 +68,31 @@ static EvtWord damage_event[22];
 static EvtWord dead_event[261];
 static EvtWord unison_phase_event[87];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord phase_event[];
+#else
 static EvtWord phase_event[61];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord phase_event[];
 #else
 static EvtWord phase_event[68];
 #endif
+#endif
 static EvtWord attack_event[29];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord ogg_attack_event[];
+#else
 static EvtWord ogg_attack_event[481];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord ogg_attack_event[];
 #else
 static EvtWord ogg_attack_event[491];
+#endif
 #endif
 static EvtWord wait_event[6];
 static BattleUnitDefense defence_fmario;
@@ -112,11 +128,23 @@ static EvtWord fmario_zoom_christine[19];
 static EvtWord gparty_zoom_christine[19];
 static EvtWord init_event_christine[72];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_christine[];
+#else
 static EvtWord dead_event_christine[73];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_christine[];
 #else
 static EvtWord dead_event_christine[80];
 #endif
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event_christine[];
+#else
 static EvtWord attack_event_christine[690];
+#endif
 static EvtWord wait_event_christine[6];
 static BattleWeapon enemyWeapon_NokotarouKouraAttack;
 static BattleWeapon enemyWeapon_NokotarouShubibinAttack;
@@ -131,17 +159,33 @@ static EvtWord wakeup_event[67];
 static EvtWord init_event_nokotarou[92];
 static EvtWord damage_event_nokotarou[6];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_nokotarou[];
+#else
 static EvtWord dead_event_nokotarou[73];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_nokotarou[];
 #else
 static EvtWord dead_event_nokotarou[80];
+#endif
 #endif
 static EvtWord _change_koura_pose[34];
 static EvtWord _change_koura_pose_fast[34];
 static EvtWord _restore_koura_pose[47];
 static EvtWord _koura_rotate_start[99];
 static EvtWord _koura_rotate_stop[13];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event_nokotarou[];
+#else
 static EvtWord attack_event_nokotarou[33];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event_nokotarou_koura[];
+#else
 static EvtWord attack_event_nokotarou_koura[393];
+#endif
 static EvtWord attack_event_nokotarou_shubibin[339];
 static EvtWord wait_event_nokotarou[6];
 static BattleWeapon enemyWeapon_ClaudaNormalAttack;
@@ -152,9 +196,17 @@ static BattleDataEntry data_table_clauda[2];
 static BattleUnitKindPart parts_clauda[1];
 static EvtWord init_event_clauda[80];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_clauda[];
+#else
 static EvtWord dead_event_clauda[73];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_clauda[];
 #else
 static EvtWord dead_event_clauda[80];
+#endif
 #endif
 static EvtWord attack_event_clauda[393];
 static EvtWord wait_event_clauda[6];
@@ -166,9 +218,17 @@ static BattleDataEntry data_table_yoshi[2];
 static BattleUnitKindPart parts_yoshi[1];
 static EvtWord init_event_yoshi[54];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_yoshi[];
+#else
 static EvtWord dead_event_yoshi[73];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_yoshi[];
 #else
 static EvtWord dead_event_yoshi[80];
+#endif
 #endif
 static EvtWord attack_event_yoshi[748];
 static EvtWord wait_event_yoshi[6];
@@ -181,7 +241,11 @@ BattleWeapon weapon_vivian_kagenuke_attack;
 static EvtWord vivian_down[19];
 static EvtWord vivian_up[27];
 EvtWord init_event_vivian[64];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord dead_event_vivian[];
+#else
 EvtWord dead_event_vivian[80];
+#endif
 EvtWord attack_event_vivian[222];
 EvtWord wait_event_vivian[6];
 BattleUnitDefense defence_sanders;
@@ -191,7 +255,11 @@ BattleDataEntry data_table_sanders[2];
 BattleUnitKindPart parts_sanders[1];
 BattleWeapon enemyWeapon_SandersNormalAttack;
 EvtWord init_event_sanders[51];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord dead_event_sanders[];
+#else
 EvtWord dead_event_sanders[80];
+#endif
 EvtWord attack_event_sanders[24];
 EvtWord attack_event_sanders_normal[325];
 EvtWord wait_event_sanders[6];
@@ -205,7 +273,11 @@ BattleWeapon enemyWeapon_ChuchurinaNormalAttackL;
 BattleWeapon enemyWeapon_ChuchurinaNormalAttackRlast;
 BattleWeapon enemyWeapon_ChuchurinaNormalAttackLlast;
 EvtWord init_event_chuchurina[51];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord dead_event_chuchurina[];
+#else
 EvtWord dead_event_chuchurina[80];
+#endif
 EvtWord attack_event_chuchurina[24];
 EvtWord attack_event_chuchurina_normal[831];
 EvtWord wait_event_chuchurina[6];

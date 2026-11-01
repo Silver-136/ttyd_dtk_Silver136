@@ -42,7 +42,11 @@ BeroEntry bero_data_peach1[2];
 EvtWord peach_evt_bero_out2[25];
 BeroEntry bero_data_peach2[2];
 EvtWord evt_kou1[115];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_kou2[];
+#else
 EvtWord evt_kou2[155];
+#endif
 const char* rokka_data[21];
 EvtWord evt_rokka_open[127];
 EvtWord evt_rokka_close[165];
@@ -248,7 +252,7 @@ EVT_BEGIN(evt_kou2)
     CALL(evt_hit_bind_mapobj, STRING("A_kou2_ka_omo"), STRING("S_kou2_ka"))
     CALL(evt_hit_bind_mapobj, STRING("A_kou2_ka_ura"), STRING("S_kou2_ka"))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI09_PIXEL_MARIO_ACTIVE), 0)
+    IF_INT_EQUAL(GSWF_AJI_09_DOT_MARIO_SEEN, 0)
 #else
     IF_INT_EQUAL(GSWF_AJI_09_DOT_MARIO_SEEN, 0)
 #endif
@@ -261,7 +265,7 @@ EVT_BEGIN(evt_kou2)
             CALL(dot_mario)
             WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_AJI09_PIXEL_MARIO_ACTIVE), 1)
+            SET_VALUE(GSWF_AJI_09_DOT_MARIO_SEEN, 1)
 #else
             SET_VALUE(GSWF_AJI_09_DOT_MARIO_SEEN, 1)
 #endif
@@ -276,7 +280,7 @@ EVT_BEGIN(evt_kou2)
         CALL(evt_mapobj_get_position, STRING("S_kou2_ka"), LW(0), LW(1), LW(2))
         CALL(evt_snd_sfxon_3d, STRING("SFX_STG7_CURTAIN_OPEN1"), LW(0), LW(1), LW(2), 0)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_AJI09_PIXEL_MARIO_ACTIVE), 1)
+        IF_INT_EQUAL(GSWF_AJI_09_DOT_MARIO_SEEN, 1)
 #else
         IF_INT_EQUAL(GSWF_AJI_09_DOT_MARIO_SEEN, 1)
 #endif
@@ -866,7 +870,7 @@ CALL(evt_mario_key_onoff, 1)
         END_INLINE_EVENT
     END_IF
 IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_53_THE_REAL_GARNET_STAR)
-        CALL(evt_item_entry, STRING("item_00"), ITEM_REPEL_CAPE, -180, 12, -135, ITEM_TYPE_STILL, GSWF(GSWF_AJI09_REPEL_CAPE_TAKEN), 0)
+        CALL(evt_item_entry, STRING("item_00"), ITEM_REPEL_CAPE, -180, 12, -135, ITEM_TYPE_STILL, GSWF(4213), 0)
     END_IF
 SPAWN_EVENT(evt_emergency)
     CALL(evt_mario_get_mode, LW(0))

@@ -63,7 +63,11 @@ static NpcSetupInfo npcEnt[7];
 static EvtWord evt_sensyu[70];
 EvtWord evt_1st_sub[107];
 static EvtWord evt_1st_leagu[747];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_toile_door[];
+#else
 EvtWord evt_toile_door[236];
+#endif
 EvtWord evt_toile_door2[136];
 #if VERSION >= VERSION_US
 EvtWord evt_champion_win[290];
@@ -774,8 +778,8 @@ EVT_END()
 // This entrance is available only for the first title-match escape; the return path is separate.
 EVT_BEGIN(evt_toile_door)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TOU_TITLE_MATCH_RESERVED), 0)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESERVED), 1)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
+        IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
 #else
     IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 0)
         IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_RESERVED, 1)
@@ -966,7 +970,7 @@ CALL(evt_item_entry, STRING("belt"), ITEM_CHAMPS_BELT, 0, -1000, 0, ITEM_TYPE_ST
     BEGIN_INLINE_EVENT
         CALL(evt_mario_mov_pos2, -5, -200, FLOAT(60.0f))
     END_INLINE_EVENT
-    SET_VALUE(GSWF(GSWF_TOU_JOLENE_ESCORT_CHAMP_PENDING), 1)
+    SET_VALUE(GSWF_TOU_JOLENE_ESCORT_TO_CHAMP_ROOM, 1)
     CALL(evt_bero_mapchange, STRING("tou_04"), 0)
     RETURN
 EVT_END()
@@ -1329,16 +1333,16 @@ EVT_BEGIN(tou_08_init_evt)
             SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_MAJORS_10TH_PLACE)
         END_IF
     END_SWITCH
-    IF_INT_EQUAL(GSWF(GSWF_TOU08_SKIP_TO_143), 1)
-        SET_VALUE(GSWF(GSWF_TOU08_SKIP_TO_143), 0)
+    IF_INT_EQUAL(GSWF_TOU_08_JUMP_STORY_CONFISCATED, 1)
+        SET_VALUE(GSWF_TOU_08_JUMP_STORY_CONFISCATED, 0)
         SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_04_CONFISCATED)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU08_SKIP_TO_144), 1)
-        SET_VALUE(GSWF(GSWF_TOU08_SKIP_TO_144), 0)
+    IF_INT_EQUAL(GSWF_TOU_08_JUMP_STORY_MAJORS_4TH, 1)
+        SET_VALUE(GSWF_TOU_08_JUMP_STORY_MAJORS_4TH, 0)
         SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_05_MAJORS_4TH_PL)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU08_SKIP_TO_153), 1)
-        SET_VALUE(GSWF(GSWF_TOU08_SKIP_TO_153), 0)
+    IF_INT_EQUAL(GSWF_TOU_08_JUMP_STORY_MAJORS_1ST, 1)
+        SET_VALUE(GSWF_TOU_08_JUMP_STORY_MAJORS_1ST, 0)
         SET_VALUE(GSW(GSW_STORY_PROGRESS), STG3_20_13_MAJORS_1ST_PL)
     END_IF
     // Doors, the Ice Storm badge, lockers, the fighters, the match terminal and monitor,
@@ -1346,7 +1350,7 @@ EVT_BEGIN(tou_08_init_evt)
     SET_VALUE(LW(0), PTR(bero_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
-CALL(evt_item_entry, STRING("item_01"), ITEM_ICE_STORM, -120, 12, -135, ITEM_TYPE_STILL, GSWF(GSWF_TOU08_ICE_STORM), 0)
+CALL(evt_item_entry, STRING("item_01"), ITEM_ICE_STORM, -120, 12, -135, ITEM_TYPE_STILL, GSWF_TOU_08_ICE_STORM, 0)
 CALL_CHILD(evt_tou_locker_init)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("fuku_M"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_npc_setup, PTR(npcEnt))
@@ -1362,14 +1366,14 @@ CALL_CHILD(evt_tou_locker_init)
     CALL(evt_hitobj_name_callback, STRING("a_b_H"), PTR(bed_entry))
     CALL(evt_sub_animgroup_async, STRING("p_slit"))
     // After a match: the title win scene at rank 0, otherwise the default after-match scene.
-    IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 1)
-        SET_VALUE(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 0)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
+        SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         CALL(evt_tou_get_ranking, LW(0))
         IF_INT_EQUAL(LW(0), 0)
-            SET_VALUE(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 1)
+            SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
             SPAWN_EVENT(evt_champion_win)
         ELSE
 SPAWN_EVENT(evt_tou_match_after_default)
@@ -1387,30 +1391,30 @@ END_IF
             CASE_BETWEEN(STG3_00_WELCOME_TO_GLITZVILLE, STG3_12_THE_MINI_YOSHI_EGG)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             CASE_GREATER_OR_EQUAL(STG3_33_PEACH_THE_SECRET_WEAPON)
             IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             END_IF
             CASE_DEFAULT
-            IF_INT_NOT_EQUAL(GSWF(GSWF_TOU_PROMOTION_PENDING), 1)
+            IF_INT_NOT_EQUAL(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 1)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
             ELSE
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
             END_IF
         END_SWITCH
     END_SWITCH
     // The promotion scene, Shady Koopa's word about the cake, and the epilogue.
-    IF_INT_EQUAL(GSWF(GSWF_TOU_PROMOTION_PENDING), 1)
-        SET_VALUE(GSWF(GSWF_TOU_PROMOTION_PENDING), 0)
+    IF_INT_EQUAL(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 1)
+        SET_VALUE(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 0)
         SPAWN_EVENT(evt_1st_leagu)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TOU_CAKE_WAITING), 1)
+    IF_INT_EQUAL(GSWF_TOU_CAKE_ON_TABLE, 1)
         SPAWN_EVENT(evt_tou_08_cake)
     END_IF
     IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)

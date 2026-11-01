@@ -37,12 +37,24 @@ static PoseSoundTiming pose_sound_timing_table[4];
 EvtWord gold_chorobon_rabbit_move[123];
 BattleUnitSetup entry_chorogun;
 EvtWord call_chorogun_event[67];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord escape_chorogun_event[];
+#else
 EvtWord escape_chorogun_event[50];
+#endif
 static EvtWord init_event[43];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord damage_event[];
+#else
 static EvtWord damage_event[108];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord damage_event[];
 #else
 static EvtWord damage_event[131];
+#endif
 #endif
 static EvtWord counter_damage_event[30];
 static EvtWord return_event[24];

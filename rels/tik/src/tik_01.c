@@ -38,7 +38,11 @@ EvtWord ashioto[35];
 EvtWord gorotuki_sanninngumi[694];
 EvtWord wall_bomb00[139];
 EvtWord wall_bomb01[140];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mobj_box00[];
+#else
 static EvtWord mobj_box00[34];
+#endif
 EvtWord tik_01_init_evt[208];
 
 /**
@@ -557,26 +561,26 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(tik_01_init_evt)
-IF_INT_EQUAL(GSWF(GSWF_TIK01_BGM_STARTED), 1)
+IF_INT_EQUAL(GSWF_TIK_01_ENTERED, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     ELSE
         CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_TIK1"), 3000)
-        SET_VALUE(GSWF(GSWF_TIK01_BGM_STARTED), 1)
+        SET_VALUE(GSWF_TIK_01_ENTERED, 1)
     END_IF
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_TIK1"))
     CALL(evt_snd_set_rev_mode, 2)
     SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
-    IF_INT_EQUAL(GSWF(GSWF_GOR01_LENS_ARRIVED), 0)
-        IF_INT_EQUAL(GSWF(GSWF_GOR01_LENS_ORDERED_ALT), 1)
+    IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 0)
+        IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ORDERED_LATE, 1)
             IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_17_FATHER_SON_REUNITED)
-                SET_VALUE(GSWF(GSWF_GOR01_LENS_ARRIVED), 1)
+                SET_VALUE(GSWF_GOR_CONTACT_LENS_ARRIVED, 1)
             END_IF
         END_IF
     END_IF
     CALL(evt_paper_entry, STRING("OFF_d_bom_ver2"))
-    IF_INT_EQUAL(GSWF(GSWF_TIK01_WALL1_BOMBED), 0)
+    IF_INT_EQUAL(GSWF_TIK_01_WALL_BOMBED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dom_kabe_2"), 1, 0)
         CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_dom_kabe_1"), 0, PTR(wall_bomb00), 0)
@@ -584,7 +588,7 @@ IF_INT_EQUAL(GSWF(GSWF_TIK01_BGM_STARTED), 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_dom_kabe_1"), 1, 0)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TIK01_WALL2_BOMBED), 0)
+    IF_INT_EQUAL(GSWF_TIK_01_EAST_WALL_BOMBED, 0)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_4"), MAP_OBJ_FLAG_HIDDEN)
         SET_VALUE(LW(0), STRING("e_bero_2"))
         CALL_CHILD(bero_case_switch_off)
@@ -593,8 +597,8 @@ IF_INT_EQUAL(GSWF(GSWF_TIK01_BGM_STARTED), 1)
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("bom_kabe_3"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), 540, 125, -100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF(GSWF_TIK01_DEFEND_PLUS_P_CHEST_OPENED))
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -100, 0, 50, STRING("jimen"), 125, GSWF(GSWF_TIK01_STAR_PIECE_PANEL))
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), 540, 125, -100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_TIK_01_DEFEND_PLUS_P_CHEST)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -100, 0, 50, STRING("jimen"), 125, GSWF_STARPIECE_22)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -455, 135, -60, 0, 0)
     SET_VALUE(LW(0), STRING("ugo_yuka_1"))
     SET_VALUE(LW(1), STRING("a_ugo_yuka_1"))

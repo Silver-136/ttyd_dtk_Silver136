@@ -75,15 +75,31 @@ static BeroEntry e3_bero[2];
 static EvtWord cam_shake[33];
 static EvtWord cam_shake2[27];
 EvtWord evt_snd[234];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord moji_msg[];
+#else
 EvtWord moji_msg[22];
+#endif
 static EvtWord switch_evt[303];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dokan_evt[];
+#else
 static EvtWord dokan_evt[345];
+#endif
 EvtWord setting_sun_stone[43];
 static s32 itemsel_table00[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord sun_stone_set_event[];
+#else
 EvtWord sun_stone_set_event[68];
+#endif
 EvtWord setting_moon_stone[43];
 static s32 itemsel_table01[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord moon_stone_set_event[];
+#else
 EvtWord moon_stone_set_event[68];
+#endif
 static EvtWord ki_data_evt_01[20];
 EvtWord ki_data_evt_02[20];
 static TreeAccess ki_data[4];
@@ -1096,7 +1112,7 @@ static s32 itemsel_table00[] = {
  */
 EVT_BEGIN(sun_stone_set_event)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_HEI00_SUN_STONE_PLACED), 0)
+    IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
 #else
     IF_INT_EQUAL(GSWF_HEI_SUN_STONE_PLACED, 0)
 #endif
@@ -1111,7 +1127,7 @@ CALL(evt_win_item_select, PTR(itemsel_table00), LW(0))
             RETURN
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_HEI00_SUN_STONE_PLACED), 1)
+        SET_VALUE(GSWF_HEI_SUN_STONE_PLACED, 1)
 #else
         SET_VALUE(GSWF_HEI_SUN_STONE_PLACED, 1)
 #endif
@@ -1162,7 +1178,7 @@ static s32 itemsel_table01[] = {
  */
 EVT_BEGIN(moon_stone_set_event)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_HEI00_MOON_STONE_PLACED), 0)
+    IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
 #else
     IF_INT_EQUAL(GSWF_HEI_MOON_STONE_PLACED, 0)
 #endif
@@ -1177,7 +1193,7 @@ CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
             RETURN
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_HEI00_MOON_STONE_PLACED), 1)
+        SET_VALUE(GSWF_HEI_MOON_STONE_PLACED, 1)
 #else
         SET_VALUE(GSWF_HEI_MOON_STONE_PLACED, 1)
 #endif

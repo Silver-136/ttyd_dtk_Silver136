@@ -23,7 +23,11 @@ static EvtWord e2_door_close[22];
 static EvtWord e2_door_open[22];
 static EvtWord door_matigai_evt[16];
 static BeroEntry bero_entry_data[5];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_07_init_evt[];
+#else
 EvtWord las_07_init_evt[57];
+#endif
 
 /**
  * Door animation script (closing) for the west (door 1) door,
@@ -249,9 +253,9 @@ EVT_BEGIN(las_07_init_evt)
         CALL(evt_cam_road_reset)
     END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -100, 60, -300, ITEM_COIN, 0, GSWF(GSWF_LAS07_COIN_BLOCK_HIT), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj01"), 100, 60, -300, ITEM_JAMMIN_JELLY, 0, GSWF(GSWF_LAS07_JAMMIN_JELLY_BLOCK_HIT), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), 0, 60, -300, ITEM_P_UP_D_DOWN_P, 0, GSWF(GSWF_LAS07_P_UP_D_DOWN_P_BLOCK_HIT), 1)
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), -100, 60, -300, ITEM_COIN, 0, GSWF_LAS_07_COIN_BLOCK, 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj01"), 100, 60, -300, ITEM_JAMMIN_JELLY, 0, GSWF_LAS_07_JAMMIN_JELLY_BLOCK, 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), 0, 60, -300, ITEM_P_UP_D_DOWN_P, 0, GSWF_LAS_07_P_UP_D_DOWN_P_BADGE_BLOCK, 1)
 #else
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -100, 60, -300, ITEM_COIN, 0, GSWF_LAS_07_COIN_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj01"), 100, 60, -300, ITEM_JAMMIN_JELLY, 0, GSWF_LAS_07_JAMMIN_JELLY_BLOCK, 0)

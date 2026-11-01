@@ -20,7 +20,11 @@ static BattleDataEntry data_table[2];
 static BattleUnitKindPart parts[1];
 static EvtWord init_event[21];
 static EvtWord damage_event[10];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord honeduka_damage_sub_event[];
+#else
 EvtWord honeduka_damage_sub_event[14];
+#endif
 static EvtWord wait_event[6];
 
 /**

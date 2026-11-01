@@ -37,10 +37,18 @@ EvtWord kaitendai_evt[312];
 static EvtWord dai_evt[13];
 static s32 key_tbl[2];
 static EvtWord key_evt[5];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord key_check_evt[];
+#else
 static EvtWord key_check_evt[23];
+#endif
 static EvtWord unlock_evt[10];
 static EvtWord mobj_box00[34];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_22_init_evt[];
+#else
 EvtWord las_22_init_evt[150];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -492,8 +500,8 @@ EVT_BEGIN(las_22_init_evt)
     CALL(evt_hitobj_onoff, STRING("A_move_dai"), 0, 0)
     CALL(evt_mobj_switch_red, 0, STRING("dai_switch"), 100, -409, -10, PTR(dai_evt), 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), -660, -500, 100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF(GSWF_LAS22_ITEMBOX_00))
-    CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -150, 220, -100, ITEM_LIFE_SHROOM, 0, GSWF(GSWF_LAS22_LIFE_SHROOM_BLOCK_HIT), 0)
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), -660, -500, 100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_LAS_22_SHOOTING_STAR_CHEST)
+    CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -150, 220, -100, ITEM_LIFE_SHROOM, 0, GSWF_LAS_22_LIFE_SHROOM_BLOCK, 0)
 #else
     CALL(evt_mobj_itembox, STRING("mobj_box00"), -660, -500, 100, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_LAS_22_SHOOTING_STAR_CHEST)
     CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -150, 220, -100, ITEM_LIFE_SHROOM, 0, GSWF_LAS_22_LIFE_SHROOM_BLOCK, 0)
@@ -508,7 +516,7 @@ EVT_BEGIN(las_22_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_10_LOCK)
-        CALL(evt_mobj_lock, STRING("lock"), 47, -695, 50, 0, 90, PTR(key_check_evt), PTR(unlock_evt), GSWF(GSWF_LAS22_DOOR_UNLOCKED))
+        CALL(evt_mobj_lock, STRING("lock"), 47, -695, 50, 0, 90, PTR(key_check_evt), PTR(unlock_evt), GSWF_LAS_22_DOOR_UNLOCKED)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_10_LOCK)
         CALL(evt_mobj_lock, STRING("lock"), 47, -695, 50, 0, 90, PTR(key_check_evt), PTR(unlock_evt), GSWF_LAS_22_DOOR_UNLOCKED)

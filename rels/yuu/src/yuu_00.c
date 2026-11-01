@@ -79,7 +79,11 @@ EvtWord yuu_00_kaijo_init[12];
 EvtWord yuu_00_kaijo_init2[12];
 EvtWord light_sub_event[497];
 EvtWord minigame01_main[35];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord minigame01_start_cam[];
+#else
 EvtWord minigame01_start_cam[40];
+#endif
 EvtWord minigame01_start_cam_cancel[20];
 #if VERSION >= VERSION_US
 EvtWord minigame01_start[1504];
@@ -1122,7 +1126,7 @@ CALL(evt_mario_adjust_dir)
     END_IF
     // Quitting sends Mario back through the pipe to gor_03.
     IF_INT_NOT_EQUAL(LW(0), 0)
-        SET_VALUE(GSWF(GSWF_YUU_MINIGAME_QUIT), 1)
+        SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
         CALL(evt_mario_set_prev_party_pos, 0, 0, -1000, 0)
         CALL(evt_mario_set_prev_party_pos, 1, 0, -1000, 0)
         CALL(evt_snd_bgmoff, PSND_FADEOUT)

@@ -35,12 +35,20 @@ static USER_FUNC(ss_set);
 static BeroEntry bero_entry_data[7];
 static EvtWord cam_shake[33];
 static EvtWord cam_shake2[27];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord water_shikake[];
+#else
 EvtWord water_shikake[312];
+#endif
 EvtWord bar_shikake[7];
 EvtWord bar_shikake_up[7];
 EvtWord switch_up_down[106];
 static HitDamageReturn hitDmgRetPoints[5];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mobj_box00[];
+#else
 static EvtWord mobj_box00[34];
+#endif
 EvtWord mri_16_init_evt[282];
 
 /**
@@ -228,7 +236,7 @@ EVT_BEGIN(water_shikake)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_mario_normalize)
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(3))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(3))
 #else
     BEGIN_INLINE_EVENT
         CALL(evt_mario_wait_landon)

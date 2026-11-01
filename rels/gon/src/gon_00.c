@@ -13,7 +13,11 @@
 
 static BeroEntry bero_entry_data[4];
 static BeroEntry e3_bero[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord gon_00_init_evt[];
+#else
 EvtWord gon_00_init_evt[77];
+#endif
 
 /** Exits (beros) of this room: w_bero to hei_00, e_bero_1 to gon_01 and e_bero_3 to gon_01. */
 static BeroEntry bero_entry_data[] = {

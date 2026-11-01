@@ -31,7 +31,11 @@ static EvtWord door01_close[22];
 static EvtWord door01_open[22];
 static BeroEntry bero_entry_data[5];
 EvtWord honenoko_oidasare_evt[466];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord gon_01_GATEEVENT_evt[];
+#else
 EvtWord gon_01_GATEEVENT_evt[151];
+#endif
 static HitDamageReturn hitDmgRetPoints[17];
 EvtWord gon_01_init_evt[102];
 

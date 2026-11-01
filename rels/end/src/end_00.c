@@ -140,21 +140,61 @@ void _unresolved(void);
 void _epilog(void);
 void _prolog(void);
 
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord end_credit_npc_parade[];
+#else
 EvtWord end_credit_npc_parade[44];
+#endif
 EvtWord end_image_blend_loop[123];
 #if VERSION >= VERSION_US
 // US: "THE END" texture per language (indexed by gp->language)
 #endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord end_image_main_evt[];
+#else
 EvtWord end_image_main_evt[187];
+#endif
 EvtWord end_return_title_evt[];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord end_00_init_evt[];
+#else
 EvtWord end_00_init_evt[63];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord end_credit_gesso_evt[];
+#else
 EvtWord end_credit_gesso_evt[48];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord end_credit_gonbaba_evt[];
+#else
 EvtWord end_credit_gonbaba_evt[89];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord end_credit_batten2_evt[];
+#else
 EvtWord end_credit_batten2_evt[54];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord end_credit_atomic_evt[];
+#else
 EvtWord end_credit_atomic_evt[60];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord end_credit_korutesu_evt[];
+#else
 EvtWord end_credit_korutesu_evt[81];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord end_credit_para_evt[];
+#else
 EvtWord end_credit_para_evt[50];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord end_credit_batten_evt[];
+#else
 EvtWord end_credit_batten_evt[83];
+#endif
 EvtWord end_credit_queen_evt[];
 EvtWord end_credit_moamoa_evt[108];
 #if VERSION > VERSION_DEMO_US

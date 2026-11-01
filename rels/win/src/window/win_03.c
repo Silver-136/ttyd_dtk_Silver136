@@ -38,13 +38,21 @@ EvtWord clouda_house_out[19];
 EvtWord cloud_out[12];
 EvtWord cloud_in[12];
 static BeroEntry bero_entry_data[5];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord lookat_house[];
+#else
 EvtWord lookat_house[45];
+#endif
 static EvtWord cloud_toujou[76];
 EvtWord cloud_lostitem[215];
 EvtWord tree_evt_01[20];
 static TreeAccess tree_access_data[5];
 EvtWord dummy_event[4];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord win_03_init_evt[];
+#else
 EvtWord win_03_init_evt[108];
+#endif
 
 /**
  * Bero enter script of Flurrie's front door: locks Mario's keys
@@ -375,8 +383,8 @@ EVT_BEGIN(win_03_init_evt)
     CALL_CHILD(evt_sub_tree_access_entry)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 7, 425, 60, 75, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("i"), ITEM_VOLT_SHROOM, 475, 0, -60, ITEM_TYPE_STILL, GSWF(GSWF_WIN03_VOLT_SHROOM_TAKEN), 0)
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -150, 0, -30, ITEM_TYPE_STILL, GSWF(GSWF_WIN03_STAR_PIECE), 0)
+    CALL(evt_item_entry, STRING("i"), ITEM_VOLT_SHROOM, 475, 0, -60, ITEM_TYPE_STILL, GSWF_WIN_03_VOLT_SHROOM, 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -150, 0, -30, ITEM_TYPE_STILL, GSWF_STARPIECE_43, 0)
 #else
     CALL(evt_item_entry, STRING("i"), ITEM_VOLT_SHROOM, 475, 0, -60, ITEM_TYPE_STILL, GSWF_WIN_03_VOLT_SHROOM, 0)
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -150, 0, -30, ITEM_TYPE_STILL, GSWF_STARPIECE_43, 0)

@@ -52,7 +52,11 @@ static EvtWord evt_up_snd__[76];
 EvtWord offscreen_to_quiz[101];
 static EvtWord offscreen_to_normal[100];
 QuizEntry quiz_data[8];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord a_sekizou_1[];
+#else
 EvtWord a_sekizou_1[1018];
+#endif
 EvtWord hei_07_init_evt[114];
 
 /** Doors of this room: the west exit (w_bero) to hei_06 and the pipe (dokan) to hei_10. */
@@ -539,7 +543,7 @@ EVT_BEGIN(a_sekizou_1)
         CALL(evt_mario_key_onoff, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(1))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
 #else
         CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(1))
 #endif
@@ -566,7 +570,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(1))
     WAIT_MS(1500)
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     // Quiz loop: each round reads a question from quiz_data and Mario picks an answer; sometimes the statue
 #else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -633,7 +637,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(1))
         CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #endif
@@ -717,7 +721,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(1))
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(1))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1))
 SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_06_QUIZ)
 #else
                 CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(1))
@@ -885,7 +889,7 @@ SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_06_QUIZ)
                 CALL(evt_mario_key_onoff, 1)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG1_HEI1"))
 #if VERSION <= VERSION_DEMO_US
-                CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(1) | PSND_QUICK)
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(1) | PSND_QUICK)
                 SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_06_QUIZ)
 #else
                 CALL(evt_snd_bgmoff, PSND_QUICK | PSND_SILENT | PSND_SILENT_LEVEL(1))

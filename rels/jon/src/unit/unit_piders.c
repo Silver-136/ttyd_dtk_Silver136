@@ -60,14 +60,30 @@ static EvtWord yarn_event[44];
 static EvtWord entry_event[48];
 static EvtWord damage_event[10];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[];
+#else
 static EvtWord dead_event[183];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[];
 #else
 static EvtWord dead_event[189];
 #endif
+#endif
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord blow_dead_event[];
+#else
 static EvtWord blow_dead_event[98];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord blow_dead_event[];
 #else
 static EvtWord blow_dead_event[104];
+#endif
 #endif
 static EvtWord battle_end_event[7];
 static EvtWord yure_event[76];
@@ -76,8 +92,16 @@ static EvtWord move_kuuchu_event[54];
 static EvtWord unison_phase_event[120];
 static EvtWord attack_event[72];
 static EvtWord damage_check_event_sub[157];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord piders_attack_common_event1[];
+#else
 static EvtWord piders_attack_common_event1[163];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord piders_attack_common_event1_2[];
+#else
 static EvtWord piders_attack_common_event1_2[109];
+#endif
 static EvtWord piders_attack_common_event2[47];
 static EvtWord piders_attack_common_event3[70];
 static EvtWord normal_attack_event[87];
@@ -86,9 +110,17 @@ static EvtWord renzoku_attack_event_sub[55];
 static EvtWord renzoku_attack_event_sub_no_last[10];
 static EvtWord renzoku_attack_event_sub_last[79];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event[];
+#else
 static EvtWord wait_event[6];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event[];
 #else
 static EvtWord wait_event[7];
+#endif
 #endif
 
 /**

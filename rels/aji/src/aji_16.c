@@ -44,7 +44,11 @@ static EvtWord peach_evt_stg2[107];
 static EvtWord peach_evt_stg3[158];
 static EvtWord peach_evt_stg6[138];
 static EvtWord peach_evt_door_stop[18];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_16_init_evt[];
+#else
 EvtWord aji_16_init_evt[167];
+#endif
 
 /**
  * Door close animation step: moves the two door leaves S_door1_1
@@ -480,7 +484,7 @@ EVT_BEGIN(aji_16_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_18_PEACH_CAUGHT)
-        IF_INT_EQUAL(GSWF(GSWF_AJI15_PEACH1_SHOWER_ROOM_ENTERED), 1)
+        IF_INT_EQUAL(GSWF_AJI_15_VISITED, 1)
             SPAWN_EVENT(peach_evt_stg1_1)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG1_18_PEACH_CAUGHT)
@@ -491,7 +495,7 @@ EVT_BEGIN(aji_16_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_25_AFTER_THE_BOSS_BATTLE)
-        IF_INT_EQUAL(GSWF(GSWF_AJI16_PEACH2_SCENE_DONE), 0)
+        IF_INT_EQUAL(GSWF_AJI_16_PEACH_STG2_SCENE_SEEN, 0)
             SPAWN_EVENT(peach_evt_stg2)
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_25_AFTER_THE_BOSS_BATTLE)

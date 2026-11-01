@@ -78,7 +78,11 @@ static EvtWord evt_unlock[7];
 static NpcSetupInfo npcEnt[2];
 static ExtTexInfo senteresa_ext_entry_data[5];
 EvtWord evt_teresa_box_open[576];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord jin_07_init_evt[];
+#else
 EvtWord jin_07_init_evt[151];
+#endif
 
 /**
  * Door animation callback: closes door08 as Mario arrives through w_bero_1 (from jin_08);
@@ -689,9 +693,9 @@ EVT_BEGIN(jin_07_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
 #if VERSION <= VERSION_DEMO_US
     SPAWN_EVENT(jin_07_juyo_oumu_vivian)
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 220, 75, -20, ITEM_TYPE_STILL, GSWF(GSWF_JIN07_STAR_PIECE), 0)
-    IF_INT_NOT_EQUAL(GSWF(GSWF_STG4_DROP_IN_ENTRANCE), 0)
-        SET_VALUE(GSWF(GSWF_STG4_DROP_IN_ENTRANCE), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 220, 75, -20, ITEM_TYPE_STILL, GSWF_STARPIECE_69, 0)
+    IF_INT_NOT_EQUAL(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 0)
+        SET_VALUE(GSWF_JIN_SCRIPTED_ENTRY_PENDING, 0)
 #else
     SPAWN_EVENT(PTR(jin_07_juyo_oumu_vivian))
     CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 220, 75, -20, ITEM_TYPE_STILL, GSWF_STARPIECE_69, 0)
@@ -715,7 +719,7 @@ EVT_BEGIN(jin_07_init_evt)
         END_INLINE_EVENT
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_JIN08_DOOR_UNLOCKED), 1)
+    IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 1)
 #else
     IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 1)
 #endif
@@ -734,7 +738,7 @@ EVT_BEGIN(jin_07_init_evt)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_JIN08_DOOR_UNLOCKED), 0)
+    IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 0)
 #else
     IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 0)
 #endif

@@ -62,7 +62,11 @@ static BeroEntry bero_data_b[3];
 static BeroEntry bero_data_c[3];
 EvtWord init_cook[29];
 s32 item_tbl_cook[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord talk_cook_nabe_return[];
+#else
 EvtWord talk_cook_nabe_return[47];
+#endif
 s32 iri_22_item_tbl[4];
 EvtWord talk_cook[];
 static EvtWord init_waitless[29];
@@ -94,7 +98,11 @@ static ShopDb trade_list[18];
 static ShopperData35 shopper_data;
 EvtWord shop_door_open[27];
 EvtWord shop_door_close[31];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_shop_open[];
+#else
 EvtWord evt_shop_open[267];
+#endif
 #if VERSION >= VERSION_US
 EvtWord evt_shop_close[420];
 #else
@@ -107,8 +115,16 @@ static const char* access_tbl[11];
 #else
 static const char* access_tbl[16];
 #endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_access[];
+#else
 static EvtWord evt_access[25];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_access_entry[];
+#else
 static EvtWord evt_access_entry[24];
+#endif
 EvtWord rsh_03_init_evt[269];
 #if VERSION >= VERSION_US
 EvtWord rsh_03_a_init_evt[141];
@@ -383,7 +399,7 @@ CALL(evt_win_item_select, PTR(item_tbl_cook), LW(1))
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_RSH03_STAR_PIECE_GALLEY_POT), 1)
+        SET_VALUE(GSWF_STARPIECE_83, 1)
 #else
         SET_VALUE(GSWF_STARPIECE_83, 1)
 #endif
@@ -402,7 +418,7 @@ s32 iri_22_item_tbl[] = {
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(talk_cook)
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_GET_THESE_INGREDIENTS)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_GET_THESE_INGREDIENTS)
         CALL(iri_22_make_item_tbl, LW(0), LW(1))
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
@@ -460,7 +476,7 @@ SWITCH(LW(1))
         IF_INT_EQUAL(GSW_TROUBLE_WORK(0), 7)
             CALL(evt_msg_print_add, 0, STRING("irai_22_13"))
             CALL(evt_sub_get_coin, 40)
-            SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+            SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
             SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_GET_THESE_INGREDIENTS), 1)
             // With all three delivered, the request is recorded as solved.
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
@@ -489,7 +505,7 @@ SWITCH(LW(1))
         CASE_LESS(STG6_02_A_CASE_OF_LOST_STEW)
         CALL(evt_msg_print, 0, STRING("stg6_rsh_19"), 0, 0)
         CASE_LESS(STG6_05_GALLEY_KETTLE_DISCOVERED)
-        IF_INT_EQUAL(GSWF(GSWF_RSH03_PENNINGTON_LUNCH_CASE_TALK), 0)
+        IF_INT_EQUAL(GSWF_RSH_PENNINGTON_ACCUSED_MARIO, 0)
             CALL(evt_msg_print, 0, STRING("stg6_rsh_40"), 0, 0)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg6_rsh_50_1"), 0, 0)
@@ -674,7 +690,7 @@ s32 item_tbl_waitless[] = {
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(talk_waitless_pias_return)
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_npc_get_reglid, STRING("ウェイトレス"), LW(10))
     DELETE_EVENT(LW(10))
     CALL(evt_msg_print, 0, STRING("stg6_rsh_195"), 0, STRING("ウェイトレス"))
@@ -686,7 +702,7 @@ CALL(evt_npc_set_autotalkpose, STRING("me"), STRING("S_1"), STRING("T_4"))
 CALL(evt_item_entry, STRING("orei"), ITEM_STAR_PIECE, 0, 0, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
         CALL(evt_item_get_item, STRING("orei"))
         CALL(evt_item_get_item_end_wait, STRING("orei"))
-        SET_VALUE(GSWF(GSWF_RSH03_STAR_PIECE_WAITRESS), 1)
+        SET_VALUE(GSWF_STARPIECE_84, 1)
 CALL(evt_msg_print, 0, STRING("stg6_rsh_197"), 0, STRING("ウェイトレス"))
 CALL(evt_npc_set_anim, STRING("ウェイトレス"), STRING("A_1"))
         WAIT_MS(500)
@@ -698,9 +714,9 @@ CALL(evt_pouch_remove_item, ITEM_SHELL_EARRINGS, LW(0))
     CALL(evt_npc_restart_regular_event, STRING("ウェイトレス"))
     SWITCH(GSW(GSW_STORY_PROGRESS))
         CASE_BETWEEN(STG6_27_RIVERSIDE_STATION, STG6_42_DRAWBRIDGE_DOWN)
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_BETWEEN(STG6_49_POSHLEY_HEIGHTS, STG6_55_04_BOWSER_RAWK_HAWK)
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         CASE_DEFAULT
         CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     END_SWITCH
@@ -2175,11 +2191,11 @@ EVT_END()
  */
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(rsh_03_init_evt_nidome)
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_RIVERSIDE), 0)
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_POSHLEY), 0)
-            IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+    IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
+        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
                 CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
-                IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+                IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
                     CALL(evt_map_playanim, STRING("hai_sora"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_yama"), MAP_ANIM_PLAY_LOOP, 0)
                     CALL(evt_map_playanim, STRING("hai_iwayama"), MAP_ANIM_PLAY_LOOP, 0)
@@ -2196,15 +2212,15 @@ EVT_BEGIN(rsh_03_init_evt_nidome)
     CALL(evt_npc_setup, PTR(npc_data))
     CALL_CHILD(evt_shop_door_init)
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_POSHLEY), 1)
+    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
     ELSE
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+        IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
             CALL(evt_sub_get_mapname, LW(0))
             IF_STR_EQUAL(LW(0), STRING("rsh_03_a"))

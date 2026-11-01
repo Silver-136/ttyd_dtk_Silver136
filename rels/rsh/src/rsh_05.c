@@ -163,15 +163,31 @@ static s32 evt_moamoa_fusion(EventEntry* event, BOOL isFirstCall);
 static ExtTexInfo ext_moamoa_data[47];
 static EvtWord evt_moamoa_init[57];
 static EvtWord evt_meet_moamoa[185];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_moamoa_help[];
+#else
 EvtWord evt_moamoa_help[166];
+#endif
 EvtWord evt_moamoa_escape0[15];
 EvtWord evt_moamoa_escape1[15];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_moamoa_escape[];
+#else
 static EvtWord evt_moamoa_escape[205];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_moamoa_escape[];
 #else
 static EvtWord evt_moamoa_escape[228];
 #endif
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord init_syashou[];
+#else
 static EvtWord init_syashou[30];
+#endif
 static EvtWord talk_syashou[19];
 static EvtWord init_waitless[30];
 static EvtWord talk_waitless[19];
@@ -196,7 +212,11 @@ static EvtWord evt_access2[47];
 static EvtWord evt_access_entry[31];
 EvtWord rsh_05_init_evt[96];
 EvtWord rsh_05_a_init_evt[103];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord rsh_05_init_evt_nidome[];
+#else
 EvtWord rsh_05_init_evt_nidome[59];
+#endif
 EvtWord rsh_05_a_init_evt_nidome[29];
 
 /**
@@ -2237,9 +2257,9 @@ EVT_END()
  */
 EVT_BEGIN(rsh_05_init_evt_nidome)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_RIVERSIDE), 0)
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_POSHLEY), 0)
-            IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+    IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
+        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
 #else
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
@@ -2251,27 +2271,27 @@ EVT_BEGIN(rsh_05_init_evt_nidome)
     END_IF
     CALL(evt_npc_setup, PTR(npc_data))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_POSHLEY), 1)
+    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
 #else
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
 #endif
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+        IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
 #else
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
 #endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

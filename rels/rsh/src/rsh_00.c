@@ -84,7 +84,11 @@ static BeroEntry bero_data_c[2];
 EvtWord evt_handle[107];
 EvtWord regu_unten[210];
 static EvtWord init_unten[17];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord talk_unten[];
+#else
 static EvtWord talk_unten[236];
+#endif
 static NpcSetupInfo npc_data[2];
 static const char* access_tbl[5];
 static EvtWord evt_access[14];
@@ -94,7 +98,11 @@ EvtWord rsh_00_a_init_evt[51];
 EvtWord rsh_00_b_init_evt[11];
 static const char* window_tbl[5];
 EvtWord rsh_00_c_init_evt[16];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord rsh_00_init_evt_nidome[];
+#else
 EvtWord rsh_00_init_evt_nidome[164];
+#endif
 EvtWord rsh_00_a_init_evt_nidome[11];
 EvtWord rsh_00_b_init_evt_nidome[11];
 EvtWord rsh_00_c_init_evt_nidome[16];
@@ -949,7 +957,7 @@ CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_ANIM)
         CASE_DEFAULT
         // After the story he comments on where the train is.
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_POSHLEY), 1)
+        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
 #else
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
 #endif
@@ -957,7 +965,7 @@ CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_TALK_ANIM)
             RETURN
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+        IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
 #else
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
 #endif
@@ -1154,9 +1162,9 @@ EVT_END()
 
 EVT_BEGIN(rsh_00_init_evt_nidome)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_RIVERSIDE), 0)
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_POSHLEY), 0)
-            IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+    IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
+        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
 #else
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
@@ -1164,7 +1172,7 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
 #endif
                 CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+                IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
 #else
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
 #endif
@@ -1186,20 +1194,20 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
     CALL(evt_sub_get_mapname, LW(0))
     IF_STR_NOT_EQUAL(LW(0), STRING("rsh_00_c"))
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_zentai"), 125, GSWF(GSWF_RSH00_STAR_PIECE_PANEL))
+        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_zentai"), 125, GSWF_STARPIECE_81)
 #else
         CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_zentai"), 125, GSWF_STARPIECE_81)
 #endif
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF(GSWF_RSH00_STAR_PIECE_PANEL))
+        CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF_STARPIECE_81)
 #else
         CALL(evt_mobj_kururing_floor, STRING("kururin1"), -132, 0, -95, STRING("s_yuka1"), 125, GSWF_STARPIECE_81)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_access_entry)
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_POSHLEY), 1)
+    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
 #else
     CALL_CHILD(PTR(evt_access_entry))
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
@@ -1207,9 +1215,9 @@ EVT_BEGIN(rsh_00_init_evt_nidome)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 END_IF
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
 #else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
         ELSE
@@ -1218,7 +1226,7 @@ END_IF
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

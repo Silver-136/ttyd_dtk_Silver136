@@ -92,27 +92,51 @@ static const char* pika_tbl_rsh_06[10];
 static EvtWord hom_10_evt_resha_sub[102];
 static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord hom_10_init_evt[];
+#else
 static EvtWord hom_10_init_evt[140];
+#endif
 EvtWord resha_noru[8];
 static BeroEntry bero_data[3];
 static const char* name_tbl[6];
 EvtWord evt_pik_yajirushi[71];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_train[];
+#else
 static EvtWord evt_train[295];
+#endif
 EvtWord init_ekiin[8];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord talk_ekiin[];
+#else
 EvtWord talk_ekiin[146];
+#endif
 static EvtWord init_papa[8];
 EvtWord talk_papa_taihou_kyoka[VERSION_PICK(403, 405)];
 static EvtWord talk_papa[141];
 static EvtWord init_mama[8];
 s32 iri_29_item_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord talk_mama[];
+#else
 static EvtWord talk_mama[318];
+#endif
 static EvtWord init_konari[13];
 static EvtWord talk_konari[58];
 static EvtWord init_madam[8];
 static s32 item_tbl_madam[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord talk_madam_ring_return[];
+#else
 static EvtWord talk_madam_ring_return[54];
+#endif
 s32 iri_23_item_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord talk_madam[];
+#else
 static EvtWord talk_madam[185];
+#endif
 static EvtWord init_sarary[12];
 static EvtWord talk_sarary[8];
 static NpcSetupInfo npc_data[7];
@@ -133,9 +157,21 @@ static DoorParam door_2;
 EvtWord evt_rot_door_sub[63];
 EvtWord evt_rot_door[9];
 EvtWord evt_pik_00_arrival[86];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_seacret[];
+#else
 EvtWord evt_seacret[131];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mobj_box00[];
+#else
 static EvtWord mobj_box00[34];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord pik_00_init_evt[];
+#else
 EvtWord pik_00_init_evt[410];
+#endif
 
 /** Return point of the hazard floor mod_1 of the station area. */
 static HitDamageReturn dmgReturnPt[] = {
@@ -839,7 +875,7 @@ static EVT_BEGIN(hom_10_init_evt)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+    IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(hom_10_evt_resha_right)
         CALL_CHILD(hom_10_evt_resha_start3)
 #else
@@ -976,7 +1012,7 @@ static EVT_BEGIN(evt_train)
 #endif
     CALL(evt_hitobj_onoff, STRING("n_bero"), 1, 0)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF(GSWF_RSH02_SHELF_DRIED_SHROOM), 0)
+SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)
 #endif
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_snd_sfxon_3d, STRING("SFX_DOOR_OPEN_SLIDE1_3"), LW(0), LW(1), LW(2), 0)
@@ -1058,16 +1094,16 @@ CALL(evt_party_stop, 0)
     WAIT_MS(10000)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_56_ROGUEPORT_STATION)
-        SET_VALUE(GSWF(GSWF_RSH_NEW_RIDE_PENDING), 1)
+        SET_VALUE(GSWF_RSH_NEW_PASSENGERS_PENDING, 1)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SET_VALUE(GSWF_RSH_NEW_PASSENGERS_PENDING, 1)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 1)
-    SET_VALUE(GSWF(GSWF_TRAIN_AT_POSHLEY), 0)
-SET_VALUE(GSWF(GSWF_TRAIN_DEPARTED), 1)
+    SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
+    SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
+SET_VALUE(GSWF_HOM_TRAIN_BOARDED_UNUSED, 1)
 #else
     SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
     SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
@@ -1076,7 +1112,7 @@ SET_VALUE(GSWF(GSWF_TRAIN_DEPARTED), 1)
 #endif
     WAIT_FRAMES(1)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_TRAIN_LEG), 2)
+    SET_VALUE(GSW_HOM_TRAIN_LEG, 2)
 #else
     SET_VALUE(GSW_HOM_TRAIN_LEG, 2)
 #endif
@@ -1108,7 +1144,7 @@ EVT_BEGIN(talk_ekiin)
         RETURN
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+        IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
 #else
         IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
 #endif
@@ -1143,7 +1179,7 @@ EVT_BEGIN(talk_ekiin)
                 CALL(evt_npc_move_position, STRING("me"), -260, -335, 0, FLOAT(120.0f), 1)
                 CALL(evt_npc_set_ry, STRING("me"), 90)
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_TRAIN_ARRIVED_POSHLEY), 0)
+                SET_VALUE(GSWF_RSH_TRAIN_AT_POSHLEY, 0)
 CALL_CHILD(evt_train)
 #else
                 SET_VALUE(GSWF_RSH_TRAIN_AT_POSHLEY, 0)
@@ -1410,7 +1446,7 @@ s32 iri_29_item_tbl[] = {
  */
 static EVT_BEGIN(talk_mama)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_HELP_ME_MAKE_UP)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
 #endif
@@ -1517,8 +1553,8 @@ CALL(evt_win_item_select, PTR(iri_29_item_tbl), LW(0))
         CALL(evt_msg_print, 0, STRING("stg7_pik_21_1"), 0, 0)
         CASE_LESS_OR_EQUAL(STG8_END_AFTER_THE_BATTLE)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_PIK00_GOLDBOB_CANNON_APPROVAL), 0)
-            IF_INT_EQUAL(GSWF(GSWF_PIK00_GOLDBOB_CANNON_FIRST_TALK), 0)
+        IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
+            IF_INT_EQUAL(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 0)
 #else
         IF_INT_EQUAL(GSWF_PIK_GOLDBOB_PERMISSION_GIVEN, 0)
             IF_INT_EQUAL(GSWF_PIK_GOLDBOB_CANNON_TALK_DONE, 0)
@@ -1589,7 +1625,7 @@ static s32 item_tbl_madam[] = {
 
 static EVT_BEGIN(talk_madam_ring_return)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #endif
@@ -1605,7 +1641,7 @@ CALL(evt_win_item_select, PTR(item_tbl_madam), LW(1))
         CALL(evt_msg_print, 0, STRING("stg6_pik_04_08"), 0, STRING("マダム"))
         CALL(evt_pouch_remove_item, ITEM_GOLD_RING, LW(0))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_PIK00_GOLD_RING_RETURNED), 1)
+        SET_VALUE(GSWF_PIK_MADAM_GOLD_RING_RETURNED, 1)
 #else
         SET_VALUE(GSWF_PIK_MADAM_GOLD_RING_RETURNED, 1)
 #endif
@@ -1623,7 +1659,7 @@ s32 iri_23_item_tbl[] = {
 
 static EVT_BEGIN(talk_madam)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_I_MUST_HAVE_THAT_BOOK)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_MUST_HAVE_THAT_BOOK)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_MUST_HAVE_THAT_BOOK)
 #endif
@@ -1643,7 +1679,7 @@ CALL(evt_win_item_select, PTR(iri_23_item_tbl), LW(0))
                 CALL(evt_item_get_item_end_wait, STRING("mg2"))
                 CALL(evt_msg_print, 0, STRING("irai_23_03"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #else
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #endif
@@ -1656,10 +1692,10 @@ CALL(evt_win_item_select, PTR(iri_23_item_tbl), LW(0))
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_RSH_TOODLES_HELP_ACCEPTED), 0)
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-        IF_INT_EQUAL(GSWF(GSWF_RSH_TOODLES_ASKED_HELP), 0)
-            SET_VALUE(GSWF(GSWF_RSH_TOODLES_ASKED_HELP), 1)
+    IF_INT_EQUAL(GSWF_RSH_MADAM_RING_REQUEST_ACCEPTED, 0)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+        IF_INT_EQUAL(GSWF_RSH_MADAM_RING_REQUEST_HEARD, 0)
+            SET_VALUE(GSWF_RSH_MADAM_RING_REQUEST_HEARD, 1)
 #else
     IF_INT_EQUAL(GSWF_RSH_MADAM_RING_REQUEST_ACCEPTED, 0)
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -1674,7 +1710,7 @@ CALL(evt_win_item_select, PTR(iri_23_item_tbl), LW(0))
         IF_INT_EQUAL(LW(0), 0)
             CALL(evt_msg_print_add, 0, STRING("stg6_pik_04_02"))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_RSH_TOODLES_HELP_ACCEPTED), 1)
+            SET_VALUE(GSWF_RSH_MADAM_RING_REQUEST_ACCEPTED, 1)
 #else
             SET_VALUE(GSWF_RSH_MADAM_RING_REQUEST_ACCEPTED, 1)
 #endif
@@ -1702,7 +1738,7 @@ CALL(evt_win_item_select, PTR(iri_23_item_tbl), LW(0))
         CALL(evt_msg_print, 0, STRING("stg6_pik_04"), 0, 0)
         CASE_DEFAULT
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_PIK00_GOLD_RING_RETURNED), 0)
+        IF_INT_EQUAL(GSWF_PIK_MADAM_GOLD_RING_RETURNED, 0)
 #else
         IF_INT_EQUAL(GSWF_PIK_MADAM_GOLD_RING_RETURNED, 0)
 #endif
@@ -2154,9 +2190,9 @@ EVT_END()
  */
 EVT_BEGIN(pik_00_init_evt)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF(GSWF_TRAIN_AT_POSHLEY), 1)
+SET_VALUE(GSWF_HOM_TRAIN_AT_POSHLEY, 1)
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_54_WELCOME_BACK)
-        SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+        SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(hom_10_evt_resha_right)
 #else
     SET_VALUE(GF(11), 0)
@@ -2171,7 +2207,7 @@ SET_VALUE(GSWF(GSWF_TRAIN_AT_POSHLEY), 1)
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("resha"))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+            SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
             CALL_CHILD(hom_10_evt_resha_right)
 #else
             SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
@@ -2182,7 +2218,7 @@ SET_VALUE(GSWF(GSWF_TRAIN_AT_POSHLEY), 1)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("n_bero"))
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
                 CALL_CHILD(hom_10_evt_resha_right)
 #else
             IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
@@ -2203,7 +2239,7 @@ SET_VALUE(GSWF(GSWF_TRAIN_AT_POSHLEY), 1)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("se_bero"))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 1)
+            SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
             CALL_CHILD(hom_10_evt_resha_left)
 #else
             SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
@@ -2216,7 +2252,7 @@ SET_VALUE(GSWF(GSWF_TRAIN_AT_POSHLEY), 1)
         CALL(evt_sub_get_system_flag, LW(0))
         IF_BITS_SET(LW(0), GW_FLAG_SAVE_LOADED)
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
                 CALL_CHILD(hom_10_evt_resha_right)
 #else
             IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
@@ -2238,7 +2274,7 @@ SET_VALUE(GSWF(GSWF_TRAIN_AT_POSHLEY), 1)
         CALL(evt_sub_get_system_flag, LW(0))
         IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 1)
+            SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
             CALL_CHILD(hom_10_evt_resha_left)
 #else
             SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
@@ -2266,10 +2302,10 @@ SET_VALUE(GSWF(GSWF_TRAIN_AT_POSHLEY), 1)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -100, 60, 25, 0, 0)
     // Place the spinning platform, the HP Drain P chest and the two Star Pieces.
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 8, -5, 130, STRING("jimenn"), 125, GSWF(GSWF_PIK00_STAR_PIECE_PANEL))
-    CALL(evt_mobj_itembox, STRING("mobj_badge_gat"), -225, 15, -15, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF(GSWF_PIK00_HP_DRAIN_P_CHEST_OPENED))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 488, 0, 15, ITEM_TYPE_STILL, GSWF(GSWF_PIK00_STAR_PIECE_1), 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, -460, 0, 100, ITEM_TYPE_STILL, GSWF(GSWF_PIK00_STAR_PIECE_2), 0)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 8, -5, 130, STRING("jimenn"), 125, GSWF_STARPIECE_88)
+    CALL(evt_mobj_itembox, STRING("mobj_badge_gat"), -225, 15, -15, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_PIK_00_HP_DRAIN_P_CHEST)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 488, 0, 15, ITEM_TYPE_STILL, GSWF_STARPIECE_87, 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, -460, 0, 100, ITEM_TYPE_STILL, GSWF_STARPIECE_89, 0)
 #else
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 8, -5, 130, STRING("jimenn"), 125, GSWF_STARPIECE_88)
     CALL(evt_mobj_itembox, STRING("mobj_badge_gat"), -225, 15, -15, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_PIK_00_HP_DRAIN_P_CHEST)
@@ -2312,7 +2348,7 @@ SET_VALUE(GSWF(GSWF_TRAIN_AT_POSHLEY), 1)
         WAIT_FRAMES(1)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 1)
+    IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
 #else
     IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
 #endif

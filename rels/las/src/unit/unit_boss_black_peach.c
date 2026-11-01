@@ -179,62 +179,158 @@ BattleUnitSetup entry_shadow_hand_1;
 BattleUnitSetup entry_shadow_hand_2;
 BattleUnitSetup entry_shadow_hand_small;
 EvtWord peach_init_event[170];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord peach_entry_event[];
+#else
 EvtWord peach_entry_event[62];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord peach_damage_event[];
+#else
 EvtWord peach_damage_event[17];
+#endif
 EvtWord peach_change_evt[556];
 EvtWord peach_phase_event[46];
 EvtWord peach_dead_event[11];
 EvtWord peack_attack_black_thunder[147];
 EvtWord peack_attack_black_energy[125];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord peack_attack_dark_drag[];
+#else
 EvtWord peack_attack_dark_drag[525];
+#endif
 EvtWord peack_attack_drain[526];
 EvtWord peach_attack_event[85];
 EvtWord peach_wait_event[6];
 EvtWord queen_init_event[225];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_first_attack_message_evt[];
+#else
 EvtWord queen_first_attack_message_evt[55];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_next_attack_message_evt[];
+#else
 EvtWord queen_next_attack_message_evt[55];
+#endif
 EvtWord queen_last_attack_message_evt[56];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_change_hand_small_evt[];
+#else
 EvtWord queen_change_hand_small_evt[75];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_change_hand_big_evt[];
+#else
 EvtWord queen_change_hand_big_evt[90];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_hand_big_life_check_evt[];
+#else
 EvtWord queen_hand_big_life_check_evt[75];
+#endif
 EvtWord queen_hand_small_life_check_evt[40];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_hp_drain_evt[];
+#else
 EvtWord queen_hp_drain_evt[316];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_hp_drain_evt_miss[];
+#else
 EvtWord queen_hp_drain_evt_miss[41];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_first_damage_evt[];
+#else
 EvtWord queen_first_damage_evt[74];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_2_hp_msg_evt[];
+#else
 EvtWord queen_2_hp_msg_evt[39];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_4_hp_msg_evt[];
+#else
 EvtWord queen_4_hp_msg_evt[39];
+#endif
 EvtWord queen_dead_hp_msg_evt[88];
 EvtWord queen_phase_event[208];
 EvtWord queen_attack_black_thunder[197];
 EvtWord queen_attack_charge[166];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_attack_black_wave[];
+#else
 EvtWord queen_attack_black_wave[445];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_attack_black_energy[];
+#else
 EvtWord queen_attack_black_energy[164];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_attack_bress1[];
+#else
 EvtWord queen_attack_bress1[276];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_attack_bress2[];
+#else
 EvtWord queen_attack_bress2[276];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_attack_bress3[];
+#else
 EvtWord queen_attack_bress3[278];
+#endif
 EvtWord queen_attack_event[163];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_damage_event[];
+#else
 EvtWord queen_damage_event[63];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_dead_event[];
+#else
 EvtWord queen_dead_event[347];
+#endif
 EvtWord queen_wait_event[10];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_entry_event[];
+#else
 EvtWord queen_entry_event[62];
+#endif
 EvtWord queen_hand_1_init_event[107];
 EvtWord queen_hand_1_press_attack[343];
 EvtWord queen_hand_1_drain_attack[408];
 EvtWord queen_hand_1_attack_event[41];
 EvtWord queen_hand_1_damage_event[24];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_hand_1_dead_event[];
+#else
 EvtWord queen_hand_1_dead_event[41];
+#endif
 EvtWord queen_hand_1_wait_event[6];
 EvtWord queen_hand_2_init_event[113];
 EvtWord queen_hand_2_attack_event[41];
 EvtWord queen_hand_2_damage_event[24];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_hand_2_dead_event[];
+#else
 EvtWord queen_hand_2_dead_event[41];
+#endif
 EvtWord queen_hand_2_wait_event[6];
 EvtWord queen_hand_small_init_event[96];
 EvtWord queen_hand_small_drag_attack[];
 EvtWord queen_hand_small_1000hand_attack[VERSION_PICK(266, 274)];
 EvtWord queen_hand_small_attack_event[35];
 EvtWord queen_hand_small_damage_event[48];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord queen_hand_small_dead_event[];
+#else
 EvtWord queen_hand_small_dead_event[32];
+#endif
 EvtWord queen_hand_small_wait_event[6];
 
 /**

@@ -70,7 +70,11 @@ EvtWord miyageya_init[24];
 s32 iri_29_item_tbl1[2];
 s32 iri_29_item_tbl2[2];
 s32 iri_29_item_tbl3[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord konarikin_talk[];
+#else
 EvtWord konarikin_talk[426];
+#endif
 EvtWord konarikin_init[29];
 EvtWord narikin_papa_mama_talk[55];
 EvtWord narikin_papa_init[23];
@@ -91,15 +95,31 @@ EvtWord resaresa_talk[8];
 EvtWord resaresa_entry[35];
 EvtWord sebaschan_talk[8];
 EvtWord sebaschan_entry[35];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord koopa_door_evt[];
+#else
 EvtWord koopa_door_evt[227];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord pik_01_koopa_evt[];
+#else
 EvtWord pik_01_koopa_evt[241];
+#endif
 static EvtWord delete_npc_regl_evt[35];
 static EvtWord sekai_yami_shake[11];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord sekai_yami_evt[];
+#else
 static EvtWord sekai_yami_evt[140];
+#endif
 static EvtWord minnnanokoe_evt[391];
 static EvtWord evt_switch_init[17];
 EvtWord iri_27_npc_entry[26];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord pik_01_init_evt[];
+#else
 EvtWord pik_01_init_evt[486];
+#endif
 
 /**
  * Script helper: stores 1 in args[0] if Mario is wearing the green Luigi colours (marioGetColor() == 1), else 0.
@@ -548,7 +568,7 @@ s32 iri_29_item_tbl3[] = {
  */
 EVT_BEGIN(konarikin_talk)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_HELP_ME_MAKE_UP)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_ME_MAKE_UP)
 #endif
@@ -653,7 +673,7 @@ CALL(evt_win_item_select, PTR(iri_29_item_tbl3), LW(0))
             CALL(evt_npc_move_position, STRING("me"), -222, -225, 0, 120, 0)
             CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+            SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #else
             SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #endif
@@ -1577,7 +1597,7 @@ EVT_BEGIN(pik_01_init_evt)
     // Register the exits and the Shine Sprite block.
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_bero_info_run)
-    CALL(evt_mobj_powerupblk, STRING("pblk01"), 400, 95, 125, 0, GSWF(GSWF_PIK01_SHINE_SPRITE), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk01"), 400, 95, 125, 0, GSWF_SHINE_38, 0)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_powerupblk, STRING("pblk01"), 400, 95, 125, 0, GSWF_SHINE_38, 0)
@@ -1670,7 +1690,7 @@ EVT_BEGIN(pik_01_init_evt)
     CALL(evt_npc_setup, PTR(npc_data))
     IF_INT_EQUAL(LF(1), 0)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_I_WANNA_MEET_LUIGI)
+        IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_I_WANNA_MEET_LUIGI)
             // Place the NPCs: Luigi for request 27 and the epilogue ghosts.
             CALL_CHILD(iri_27_npc_entry)
 #else
@@ -1680,7 +1700,7 @@ EVT_BEGIN(pik_01_init_evt)
         END_IF
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_I_WANNA_MEET_LUIGI), 1)
 #if VERSION <= VERSION_DEMO_US
-            CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF(GSWF_PIK01_TROUBLE27_CAKE_REWARD), 0)
+            CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF_PIK_01_CHOCO_CAKE, 0)
 #else
             CALL(evt_item_entry, STRING("iri_27"), ITEM_CHOCO_CAKE, -246, 15, 246, ITEM_TYPE_STILL, GSWF_PIK_01_CHOCO_CAKE, 0)
 #endif

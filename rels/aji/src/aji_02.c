@@ -38,8 +38,16 @@ static USER_FUNC(ride_chk);
 static USER_FUNC(thunder_main);
 static USER_FUNC(loop_onoff);
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_close[];
+#else
 static EvtWord w_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_open[];
+#else
 static EvtWord w_door_open[22];
+#endif
 static BeroEntry bero_entry_data[2];
 u8 root_0[10];
 u8 root_1[14];
@@ -56,7 +64,11 @@ static EvtWord evt_box[95];
 static HitDamageReturn dmgReturnPt[2];
 static EvtWord hikaru_yuka_init[83];
 static EvtWord peach_evt_stg1[56];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_02_init_evt[];
+#else
 EvtWord aji_02_init_evt[125];
+#endif
 
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
@@ -319,7 +331,7 @@ IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_00_START)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("ato"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -125, 60, -125, ITEM_SUPER_SHROOM, 0, GSWF(GSWF_AJI02_SUPER_SHROOM_BLOCK_HIT), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), -125, 60, -125, ITEM_SUPER_SHROOM, 0, GSWF_AJI_02_SUPER_SHROOM_BLOCK, 0)
     SPAWN_EVENT(evt_emergency)
 #else
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -125, 60, -125, ITEM_SUPER_SHROOM, 0, GSWF_AJI_02_SUPER_SHROOM_BLOCK, 0)

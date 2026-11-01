@@ -41,9 +41,17 @@ static EvtWord init_event_sub[47];
 static EvtWord dmg_avoid_counter_thorn_head_event[76];
 static EvtWord damage_event[102];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord phase_event[];
+#else
 static EvtWord phase_event[196];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord phase_event[];
 #else
 static EvtWord phase_event[188];
+#endif
 #endif
 static EvtWord attack_event[385];
 static EvtWord wait_event[6];
@@ -340,7 +348,7 @@ static EVT_BEGIN(phase_event)
     END_IF
 #if VERSION <= VERSION_DEMO_US
 DEBUG_PUT_MSG(STRING("ぺぺぺまん２"))
-IF_INT_EQUAL(GSWF(GSWF_TOU_IRON_CLEFTS_BEATEN), 1)
+IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
 #else
     IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_BEATEN, 1)
 #endif
@@ -367,7 +375,7 @@ DEBUG_PUT_MSG(STRING("ぺぺぺまん５"))
             WAIT_FRAMES(30)
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_OFF)
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_TOU_IRON_CLEFTS_INTRO_SEEN), 0)
+            IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
 #else
             IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
 #endif
@@ -407,8 +415,8 @@ DEBUG_PUT_MSG(STRING("ぺぺぺまん５"))
             END_IF
             CALL(btlevtcmd_StatusWindowOnOff, STATUS_WINDOW_EVENT_ON)
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_TOU_IRON_CLEFTS_INTRO_SEEN), 0)
-                SET_VALUE(GSWF(GSWF_TOU_IRON_CLEFTS_INTRO_SEEN), 1)
+            IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
+                SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 1)
 #else
             IF_INT_EQUAL(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 0)
                 SET_VALUE(GSWF_TOU_ARMORED_HARRIERS_INTRO_SEEN, 1)

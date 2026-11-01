@@ -154,13 +154,25 @@ EvtWord maiframeanimcheck[21];
 static EvtWord init_event[149];
 static EvtWord entry_event[94];
 static EvtWord damage_event[47];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord damage_sub_event[];
+#else
 EvtWord damage_sub_event[148];
+#endif
 static EvtWord phase_event[28];
 EvtWord monster_before_phase_event[195];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[];
+#else
 static EvtWord dead_event[126];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[];
 #else
 static EvtWord dead_event[165];
+#endif
 #endif
 static Vec splineTableIn1_1[5];
 static Vec splineTableIn2_1[5];
@@ -194,9 +206,17 @@ EvtWord batten_leader_shikaeshi_attack_event[176];
 EvtWord batten_leader_yokeyoke_attack_event[176];
 EvtWord batten_leader_stop_attack_event[328];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event[];
+#else
 static EvtWord wait_event[15];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event[];
 #else
 static EvtWord wait_event[16];
+#endif
 #endif
 
 /**

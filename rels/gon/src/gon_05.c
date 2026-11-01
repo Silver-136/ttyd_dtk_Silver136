@@ -49,10 +49,18 @@ EvtWord main_1[465];
 EvtWord main_1[491];
 #endif
 s32 key_tbl00[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_chk00[];
+#else
 EvtWord evt_chk00[23];
+#endif
 static EvtWord evt_unlock00[10];
 s32 key_tbl01[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_chk01[];
+#else
 EvtWord evt_chk01[23];
+#endif
 static EvtWord evt_unlock01[10];
 static EvtWord key_get[5];
 EvtWord gon_05_init_evt[338];

@@ -30,7 +30,11 @@ EvtWord evt_slit1[15];
 EvtWord evt_slit2[15];
 static BeroEntry bero_entry_data[5];
 EvtWord heya_tenura_onoff[68];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_08_init_evt[];
+#else
 EvtWord aji_08_init_evt[148];
+#endif
 
 /**
  * Door open animation step: moves the two door leaves S_door1_2
@@ -220,7 +224,7 @@ EVT_BEGIN(aji_08_init_evt)
     CALL(evt_map_playanim, STRING("awa1"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("awa2"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -975, 170, 75, ITEM_TYPE_STILL, GSWF(GSWF_AJI08_STAR_PIECE), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -975, 170, 75, ITEM_TYPE_STILL, GSWF_STARPIECE_99, 0)
 #else
     CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -975, 170, 75, ITEM_TYPE_STILL, GSWF_STARPIECE_99, 0)
 #endif

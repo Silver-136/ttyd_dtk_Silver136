@@ -26,8 +26,16 @@ static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord rousoku_init[];
+#else
 static EvtWord rousoku_init[46];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_06_init_evt[];
+#else
 EvtWord las_06_init_evt[56];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -157,7 +165,7 @@ EVT_BEGIN(las_06_init_evt)
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_bero_info_run)
-    CALL(evt_mobj_badgeblk, STRING("mobj00"), -550, 480, 60, ITEM_ULTRA_SHROOM, 0, GSWF(GSWF_LAS06_ULTRA_SHROOM_BLOCK_HIT), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj00"), -550, 480, 60, ITEM_ULTRA_SHROOM, 0, GSWF_LAS_06_ULTRA_SHROOM_BLOCK, 0)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_badgeblk, STRING("mobj00"), -550, 480, 60, ITEM_ULTRA_SHROOM, 0, GSWF_LAS_06_ULTRA_SHROOM_BLOCK, 0)

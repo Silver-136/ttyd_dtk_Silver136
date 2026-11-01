@@ -50,7 +50,11 @@ static EvtWord kizayarou_talk[8];
 static EvtWord kizayarou_init[38];
 static NpcSetupInfo npcEnt[5];
 static BeroEntry bero_entry_data[3];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord witchtrio_momeru[];
+#else
 EvtWord witchtrio_momeru[880];
+#endif
 EvtWord majorin_have_picture[25];
 EvtWord witchtrio_picture[533];
 EvtWord mario_vs_witchtrio[554];
@@ -63,8 +67,16 @@ static EvtWord ki_data_evt_01[20];
 static TreeAccess tree_access_data[10];
 EvtWord iri_28_enemy_all_dead[148];
 EvtWord iri_28_enemy_dead[13];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord iri_28_init[];
+#else
 EvtWord iri_28_init[60];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord win_00_init_evt[];
+#else
 EvtWord win_00_init_evt[85];
+#endif
 
 /**
  * Init script of Vivian in Boggly Woods: clears her battle-info flag.
@@ -1092,7 +1104,7 @@ EVT_END()
 
 EVT_BEGIN(iri_28_init)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_ROUST_THESE_CADS)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ROUST_THESE_CADS)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ROUST_THESE_CADS)
 #endif
@@ -1155,7 +1167,7 @@ EVT_BEGIN(win_00_init_evt)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG2_WIN1"))
     CALL(evt_npc_setup, PTR(npcEnt))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_WIN00_NECKLACE_TAKEN), 1)
+    IF_INT_EQUAL(GSWF_WIN_00_NECKLACE, 1)
         IF_INT_LESS_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_25_AFTER_THE_BOSS_BATTLE)
             CALL_CHILD(kizayarou_init)
 #else
@@ -1207,14 +1219,14 @@ CALL(evt_npc_check_delete, STRING("ドクガッスン１_2"))
     END_IF
 #if VERSION <= VERSION_DEMO_US
     IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_08_SHADOW_SIRENS_LOSE)
-        CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, -361, 0, -22, ITEM_TYPE_STILL, GSWF(GSWF_WIN00_NECKLACE_TAKEN), PTR(get_necklace))
+        CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, -361, 0, -22, ITEM_TYPE_STILL, GSWF_WIN_00_NECKLACE, PTR(get_necklace))
 #else
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG2_08_SHADOW_SIRENS_LOSE)
         CALL(evt_item_entry, STRING("necklace"), ITEM_NECKLACE, -361, 0, -22, ITEM_TYPE_STILL, GSWF_WIN_00_NECKLACE, PTR(get_necklace))
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("i"), ITEM_HONEY_SYRUP, 385, 0, -115, ITEM_TYPE_GROUND, GSWF(GSWF_WIN00_HONEY_SYRUP_TAKEN), 0)
+    CALL(evt_item_entry, STRING("i"), ITEM_HONEY_SYRUP, 385, 0, -115, ITEM_TYPE_GROUND, GSWF_WIN_00_HONEY_SYRUP, 0)
     CALL_CHILD(iri_28_init)
 #else
     CALL(evt_item_entry, STRING("i"), ITEM_HONEY_SYRUP, 385, 0, -115, ITEM_TYPE_GROUND, GSWF_WIN_00_HONEY_SYRUP, 0)

@@ -59,7 +59,11 @@ EvtWord kpa_init[49];
 EvtWord kpa_read_mobj[291];
 EvtWord kpa_coin_evt[7];
 EvtWord kpa_read_item[34];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kpa_dead[];
+#else
 EvtWord kpa_dead[168];
+#endif
 EvtWord kpa_fall_sub[37];
 EvtWord kpa_bgm_change[180];
 EvtWord kpa_stage_start[168];
@@ -347,8 +351,8 @@ EVT_BEGIN(kpa_dead)
         WAIT_FRAMES(1)
     END_LOOP
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_LESS(GSW(GSW_KPA_LIVES), 99)
-        ADD(GSW(GSW_KPA_LIVES), 1)
+    IF_INT_LESS(GSW_KPA_TRY_COUNT, 99)
+        ADD(GSW_KPA_TRY_COUNT, 1)
 #else
     IF_INT_LESS(GSW_KPA_TRY_COUNT, 99)
         ADD(GSW_KPA_TRY_COUNT, 1)

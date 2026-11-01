@@ -69,7 +69,11 @@ EvtWord nokonoko_C_talk[44];
 EvtWord nokonoko_D_talk[52];
 s32 iri_15_item_tbl1[2];
 s32 iri_15_item_tbl2[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord nokonoko_F_talk[];
+#else
 EvtWord nokonoko_F_talk[318];
+#endif
 static EvtWord init_white[24];
 static EvtWord talk_white[36];
 static EvtWord kizayarou_regl[19];
@@ -90,7 +94,11 @@ static ShopItem goods_list[6];
 static ShopDb trade_list[13];
 static ShopperData35 shopper_data;
 static KinopioData kino_dt;
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord first_time_camera[];
+#else
 EvtWord first_time_camera[195];
+#endif
 static HitDamageReturn hitDmgRetPoints[10];
 EvtWord nok_00_koopa_npc_entry[35];
 EvtWord nok_00_koopa_evt[1250];
@@ -285,7 +293,7 @@ s32 iri_15_item_tbl2[] = {
 
 EVT_BEGIN(nokonoko_F_talk)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_THE_FOOD_I_WANT)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_THE_FOOD_I_WANT)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_THE_FOOD_I_WANT)
 #endif
@@ -337,8 +345,8 @@ CALL(evt_win_item_select, 1, LW(0))
                     CALL(evt_item_get_item_end_wait, STRING("df"))
                     CALL(evt_msg_print, 0, STRING("irai_15_007"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-                    CALL(evt_sub_save_playtime, GSW(GSW_NOK00_TROUBLE15_TIME))
-                    SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+                    CALL(evt_sub_save_playtime, GSW_NOK_FOOD_I_WANT_DONE_TIME_UNUSED)
+                    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #else
                     CALL(evt_sub_save_playtime, GSW_NOK_FOOD_I_WANT_DONE_TIME_UNUSED)
                     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)

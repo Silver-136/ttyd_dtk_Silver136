@@ -25,7 +25,11 @@ static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord chibitoge_nakama[];
+#else
 EvtWord chibitoge_nakama[287];
+#endif
 static EvtWord chibitoge_init[29];
 static EvtWord chibitoge_talk[4];
 EvtWord punishop_init[12];
@@ -151,7 +155,7 @@ EVT_BEGIN(chibitoge_nakama)
         CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
         CALL(evt_puni_init_puni, 3, 1, LW(0), LW(1), LW(2), 0)
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_MRI_JABBI_IN_PUNI_GROUP), 1)
+        SET_VALUE(GSWF_MRI_JABBLE_JOINED, 1)
 #else
         SET_VALUE(GSWF_MRI_JABBLE_JOINED, 1)
 #endif

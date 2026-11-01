@@ -27,7 +27,11 @@ static EvtWord box_evt[30];
 static EvtWord switch_evt[62];
 static EvtWord block_break[22];
 static EvtWord hint_plate[14];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_11_init_evt[];
+#else
 EvtWord las_11_init_evt[96];
+#endif
 
 /**
  * Door animation script (closing) for the east door, used as the enter/exit animation of this room's bero entry.
@@ -144,13 +148,13 @@ EVT_BEGIN(las_11_init_evt)
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_bero_info_run)
-    CALL(evt_mobj_lv_blk, STRING("stone1"), 150, 50, 0, PTR(block_break), GSWF(GSWF_LAS_TOWER_BIG_BLOCK_A), STRING("MOBJ_Lv2BigBlock"))
-    CALL(evt_mobj_lv_blk, STRING("stone2"), -150, 0, 75, PTR(block_break), GSWF(GSWF_LAS_TOWER_BIG_BLOCK_B), STRING("MOBJ_Lv2BigBlock"))
-    CALL(evt_mobj_lv_blk, STRING("metal1"), 150, 0, 75, 0, GSWF(GSWF_LAS_TOWER_BIG_BLOCK_C), STRING("MOBJ_Lv3BigBlock"))
-    CALL(evt_mobj_lv_blk, STRING("metal2"), -150, 50, 0, 0, GSWF(GSWF_LAS_TOWER_BIG_BLOCK_D), STRING("MOBJ_Lv3BigBlock"))
-    CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -150, 110, -10, PTR(switch_evt), GSWF(GSWF_LAS11_FLOAT_SWITCH_PRESSED))
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS11_KEY_CHEST_OPENED))
-    IF_INT_EQUAL(GSWF(GSWF_LAS11_FLOAT_SWITCH_PRESSED), 0)
+    CALL(evt_mobj_lv_blk, STRING("stone1"), 150, 50, 0, PTR(block_break), GSWF_LAS_11_15_BIG_BLOCK_1_BROKEN, STRING("MOBJ_Lv2BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("stone2"), -150, 0, 75, PTR(block_break), GSWF_LAS_11_15_BIG_BLOCK_2_BROKEN, STRING("MOBJ_Lv2BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("metal1"), 150, 0, 75, 0, GSWF_LAS_11_15_BIG_BLOCK_3_BROKEN, STRING("MOBJ_Lv3BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("metal2"), -150, 50, 0, 0, GSWF_LAS_11_15_BIG_BLOCK_4_BROKEN, STRING("MOBJ_Lv3BigBlock"))
+    CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -150, 110, -10, PTR(switch_evt), GSWF_LAS_11_SWITCH_PRESSED)
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_11_PALACE_KEY_CHEST)
+    IF_INT_EQUAL(GSWF_LAS_11_SWITCH_PRESSED, 0)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_lv_blk, STRING("stone1"), 150, 50, 0, PTR(block_break), GSWF_LAS_11_15_BIG_BLOCK_1_BROKEN, STRING("MOBJ_Lv2BigBlock"))

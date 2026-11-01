@@ -40,7 +40,11 @@ EvtWord evt_tojikome_nidome[104];
 EvtWord evt_tojikome_sandome[37];
 static EvtWord evt_tojikome_msg[30];
 EvtWord evt_postar[23];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tou_11_init_evt[];
+#else
 EvtWord tou_11_init_evt[178];
+#endif
 
 /**
  * Door animation callback for the north door (door_1), opening: LW(0) is the swing angle;
@@ -327,7 +331,7 @@ EVT_BEGIN(tou_11_init_evt)
 #endif
     CALL(evt_npc_setup, PTR(npcEnt))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TOU11_POSTER_BLOWN), 0)
+    IF_INT_EQUAL(GSWF_TOU_11_POSTER_BLOWN_AWAY, 0)
 #else
     IF_INT_EQUAL(GSWF_TOU_11_POSTER_BLOWN_AWAY, 0)
 #endif
@@ -377,7 +381,7 @@ SPAWN_EVENT(evt_tojikome_sandome)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TOU_TITLE_MATCH_RESERVED), 1)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
 #else
     IF_INT_EQUAL(GSWF_GLITZ_PIT_TITLE_MATCH_BOOKED, 1)
 #endif
@@ -399,7 +403,7 @@ SPAWN_EVENT(evt_tojikome_sandome)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -408,7 +412,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

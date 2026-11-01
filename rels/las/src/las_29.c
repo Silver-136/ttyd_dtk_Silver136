@@ -103,7 +103,11 @@ EvtWord hikari_off_evt[42];
 EvtWord hikari_on_evt[63];
 EvtWord flush_on[106];
 EvtWord flush_off[106];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord last_evt_1[];
+#else
 EvtWord last_evt_1[1078];
+#endif
 #if VERSION >= VERSION_US
 EvtWord last_evt_2[358];
 #else
@@ -4549,7 +4553,7 @@ EVT_BEGIN(las_29_init_evt)
         IF_STR_EQUAL(LW(15), STRING("minnnanokoe"))
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_STG8_VOICE1"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS8"))
-            CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 CALL(rousoku_init, 1)
             SPAWN_EVENT(shuryolight_delete)
             SPAWN_EVENT(last_evt_3_2)

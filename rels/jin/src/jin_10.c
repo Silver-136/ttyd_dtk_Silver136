@@ -28,7 +28,11 @@ USER_FUNC(set_pos);
 static EvtWord door_close[12];
 static EvtWord door_open[12];
 static BeroEntry bero_entry_data[3];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord push_evt[];
+#else
 static EvtWord push_evt[132];
+#endif
 EvtWord unpush_evt[252];
 EvtWord vivi_chk[42];
 EvtWord jin_10_init_evt[59];

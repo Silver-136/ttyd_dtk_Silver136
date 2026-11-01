@@ -31,7 +31,11 @@ static BeroEntry bero_entry_data[2];
 EvtWord peach_evt_yuge[43];
 EvtWord peach_evt_syawa_main[798];
 EvtWord peach_evt_syawa_init[63];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_15_init_evt[];
+#else
 EvtWord aji_15_init_evt[58];
+#endif
 
 /**
  * Door close animation step: moves the two door leaves S_door1_1
@@ -407,8 +411,8 @@ EVT_BEGIN(aji_15_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
 CALL_CHILD(peach_evt_syawa_init)
-    IF_INT_EQUAL(GSWF(GSWF_AJI15_PEACH1_SHOWER_ROOM_ENTERED), 0)
-        SET_VALUE(GSWF(GSWF_AJI15_PEACH1_SHOWER_ROOM_ENTERED), 1)
+    IF_INT_EQUAL(GSWF_AJI_15_VISITED, 0)
+        SET_VALUE(GSWF_AJI_15_VISITED, 1)
 #else
     CALL(evt_snd_set_rev_mode, 1)
     CALL_CHILD(PTR(peach_evt_syawa_init))

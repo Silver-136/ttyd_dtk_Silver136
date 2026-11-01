@@ -90,14 +90,34 @@ Vec fukkipoint[15];
 EvtWord yuu_02_icon_monte_entry_evt[4];
 static MonteTable montetable[11];
 static EvtWord minigame_view_monte[4];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord yuu_02_jumpret[];
+#else
 EvtWord yuu_02_jumpret[164];
+#endif
 EvtWord yuu_02_kaijo_init[12];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord yuu_02_kaijo_init2[];
+#else
 EvtWord yuu_02_kaijo_init2[12];
+#endif
 EvtWord minigame03_main[33];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord minigame03_start_cam[];
+#else
 EvtWord minigame03_start_cam[40];
+#endif
 EvtWord minigame03_start_cam_cancel[17];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord minigame03_start[];
+#else
 EvtWord minigame03_start[193];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord minigame03_end[];
+#else
 EvtWord minigame03_end[217];
+#endif
 EvtWord s_en1_turn[30];
 #if VERSION >= VERSION_US
 EvtWord yuu_02_init_evt[262];
@@ -961,7 +981,7 @@ EVT_BEGIN(minigame03_end)
     END_IF
     IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_YUU_MINIGAME_QUIT), 1)
+        SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
 #else
         SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
 #endif

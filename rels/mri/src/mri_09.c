@@ -36,13 +36,21 @@
 
 BeroEntry bero_bluejail[1];
 static BeroEntry bero_entry_data[5];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord wall_roll_sub[];
+#else
 EvtWord wall_roll_sub[96];
+#endif
 #if VERSION >= VERSION_US
 EvtWord wall_roll[272];
 #else
 EvtWord wall_roll[264];
 #endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord breakyuka_init[];
+#else
 static EvtWord breakyuka_init[17];
+#endif
 static EvtWord breakyuka_main[9];
 static KusaAccess ueki_access_data[6];
 EvtWord slot00_event[52];
@@ -239,7 +247,7 @@ WAIT_MS(500)
     CALL(evt_hitobj_onoff, STRING("A_isk_01A"), 1, 0)
     CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 1)
     CALL(evt_hitobj_onoff, STRING("A_f2_rak04"), 1, 0)
-    SET_VALUE(GSWF(GSWF_MRI09_WALL_PANELS_ROLLED), 1)
+    SET_VALUE(GSWF_MRI_09_WALL_PUZZLE_SOLVED, 1)
 CALL(evt_puni_all_fall_check)
     CALL(evt_puni_set_maze)
     CALL(evt_cam3d_evt_off, 300, EASING_SINE_IN_OUT)
@@ -342,7 +350,7 @@ EVT_END()
 
 static EVT_BEGIN(breakyuka_init)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF(GSWF_MRI09_FLOOR_BROKEN), 1)
+IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 1)
 #else
     IF_INT_EQUAL(GSWF_MRI_09_BREAKING_FLOOR_BROKEN, 0)
 #endif
@@ -611,11 +619,11 @@ CASE_GREATER_OR_EQUAL(STG2_21_02_MATCHING_THE_PATTERNS)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak03"), 1, 1)
         CALL(evt_hitobj_onoff, STRING("A_f2_rak04"), 1, 0)
     END_SWITCH
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), 125, 0, 25, MOBJ_ITEMBOX_NORMAL, 0, PTR(get_blue_jail_key), GSWF(GSWF_MRI09_BLUE_KEY_CHEST_OPENED))
-    CALL(evt_item_entry, STRING("item100"), ITEM_CHARGE, -250, -234, 75, ITEM_TYPE_STILL, GSWF(GSWF_MRI09_CHARGE_TAKEN), 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk1"), 0, -174, -125, 0, GSWF(GSWF_MRI09_SHINE_SPRITE), 0)
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), 125, 0, 25, MOBJ_ITEMBOX_NORMAL, 0, PTR(get_blue_jail_key), GSWF_MRI_09_BLUE_KEY_CHEST)
+    CALL(evt_item_entry, STRING("item100"), ITEM_CHARGE, -250, -234, 75, ITEM_TYPE_STILL, GSWF_MRI_09_CHARGE, 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk1"), 0, -174, -125, 0, GSWF_SHINE_18, 0)
     SPAWN_EVENT(breakyuka_init)
-    CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, 75, 1, PTR(breakyuka_main), GSWF(GSWF_MRI09_FLOOR_BROKEN))
+    CALL(evt_mobj_breaking_floor, STRING("mobj_bf00"), 0, 0, 75, 1, PTR(breakyuka_main), GSWF_MRI_09_BREAKING_FLOOR_BROKEN)
     RETURN
 EVT_END()
 #else

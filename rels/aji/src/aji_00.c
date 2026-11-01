@@ -25,15 +25,35 @@
 #include "mario/mario.h"
 
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_close[];
+#else
 static EvtWord w_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_open[];
+#else
 static EvtWord w_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e_door_close[];
+#else
 static EvtWord e_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e_door_open[];
+#else
 static EvtWord e_door_open[22];
+#endif
 static BeroEntry bero_entry_data[3];
 static EvtWord first_evt[333];
 static EvtWord evt_door_msg[14];
 static NpcSetupInfo npcEnt[3];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_00_init_evt[];
+#else
 EvtWord aji_00_init_evt[91];
+#endif
 
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US

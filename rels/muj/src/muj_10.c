@@ -51,7 +51,11 @@ static EvtWord door_custom[53];
 static EvtWord bero_in_event[80];
 static BeroEntry bero_entry_data[3];
 EvtWord nazo_event[178];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord oidasare_event[];
+#else
 EvtWord oidasare_event[156];
+#endif
 ExtTexInfo test_ext_entry_data[31];
 #if VERSION <= VERSION_DEMO_US
 static s16 suifu_animtbl[41];

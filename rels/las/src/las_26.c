@@ -40,12 +40,24 @@ static EvtWord w_door_close[22];
 static EvtWord w_door_open[22];
 static BeroEntry bero_entry_data[3];
 static EvtWord box_evt[30];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord bonbaba_evt[];
+#else
 EvtWord bonbaba_evt[819];
+#endif
 EvtWord bonbaba_init[62];
 static NpcSetupInfo npcEnt[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord sekai_yami_evt[];
+#else
 static EvtWord sekai_yami_evt[118];
+#endif
 EvtWord bomb_wall[155];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_26_init_evt[];
+#else
 EvtWord las_26_init_evt[194];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -283,7 +295,7 @@ CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG8_LST3"))
     WAIT_MS(1000)
     // His mouth opens and he spits out the chest holding the Star Key.
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_itembox, STRING("box"), 270, 60, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS26_STAR_KEY_CHEST_OPENED))
+    CALL(evt_mobj_itembox, STRING("box"), 270, 60, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)
 #else
     CALL(evt_mobj_itembox, STRING("box"), 270, 60, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)
 #endif
@@ -560,7 +572,7 @@ CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
     CALL(evt_bero_get_info)
     CALL(evt_npc_setup, PTR(npcEnt))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_LAS26_WALL_BOMBED), 0)
+    IF_INT_EQUAL(GSWF_LAS_26_WALL_BOMBED, 0)
 #else
     IF_INT_EQUAL(GSWF_LAS_26_WALL_BOMBED, 0)
 #endif
@@ -605,7 +617,7 @@ CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
         CALL(evt_hitobj_onoff, STRING("baba"), 1, 0)
         CASE_GREATER_OR_EQUAL(STG8_04_GLOOMTAIL)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_LAS26_GLOOMTAIL_BODY_CLEARED), 0)
+        IF_INT_EQUAL(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 0)
 #else
         IF_INT_EQUAL(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 0)
 #endif
@@ -618,7 +630,7 @@ CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
     END_SWITCH
 #if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_04_GLOOMTAIL)
-        CALL(evt_mobj_itembox, STRING("box"), 270, 0, 178, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS26_STAR_KEY_CHEST_OPENED))
+        CALL(evt_mobj_itembox, STRING("box"), 270, 0, 178, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_04_GLOOMTAIL)
         CALL(evt_mobj_itembox, STRING("box"), 270, 0, 178, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_26_STAR_KEY_CHEST)
@@ -633,8 +645,8 @@ CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG8_LST3"))
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 1000, 60, -150, ITEM_ULTRA_SHROOM, 0, GSWF(GSWF_LAS26_ULTRA_SHROOM_BLOCK_HIT), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 1365, 60, -150, ITEM_JAMMIN_JELLY, 0, GSWF(GSWF_LAS26_JAMMIN_JELLY_BLOCK_HIT), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_01"), 1000, 60, -150, ITEM_ULTRA_SHROOM, 0, GSWF_LAS_26_ULTRA_SHROOM_BLOCK, 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 1365, 60, -150, ITEM_JAMMIN_JELLY, 0, GSWF_LAS_26_JAMMIN_JELLY_BLOCK, 0)
 #else
     CALL(evt_mobj_badgeblk, STRING("mobj_01"), 1000, 60, -150, ITEM_ULTRA_SHROOM, 0, GSWF_LAS_26_ULTRA_SHROOM_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_02"), 1365, 60, -150, ITEM_JAMMIN_JELLY, 0, GSWF_LAS_26_JAMMIN_JELLY_BLOCK, 0)

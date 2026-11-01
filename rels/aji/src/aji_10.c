@@ -48,10 +48,26 @@ static USER_FUNC(peach_set_pose);
 static USER_FUNC(viewport);
 
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_close[];
+#else
 static EvtWord w_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_open[];
+#else
 static EvtWord w_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e_door_close[];
+#else
 static EvtWord e_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e_door_open[];
+#else
 static EvtWord e_door_open[22];
+#endif
 static BeroEntry bero_entry_data[3];
 static EvtWord bero_peach_evt[30];
 static BeroEntry bero_peach_data[2];
@@ -73,7 +89,11 @@ static EvtWord teshita3_init[9];
 EvtWord kanbu_init[9];
 static EvtWord syuryo_init[24];
 static NpcSetupInfo npcEnt[9];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_10_init_evt[];
+#else
 EvtWord aji_10_init_evt[279];
+#endif
 
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
@@ -1552,8 +1572,8 @@ EVT_BEGIN(aji_10_init_evt)
     END_IF
     // The visited flag is already set before this test; retain the event words.
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_AJI10_VISITED), 1)
-    IF_INT_EQUAL(GSWF(GSWF_AJI10_VISITED), 0)
+    SET_VALUE(GSWF_AJI_10_VISITED, 1)
+    IF_INT_EQUAL(GSWF_AJI_10_VISITED, 0)
 #else
     SET_VALUE(GSWF_AJI_10_VISITED, 1)
     IF_INT_EQUAL(GSWF_AJI_10_VISITED, 0)
@@ -1574,7 +1594,7 @@ EVT_BEGIN(aji_10_init_evt)
     IF_INT_EQUAL(LW(0), 1)
         CALL(evt_mario_kill_party, 0)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_AJI09_PEACH3_DISGUISED), 1)
+        IF_INT_EQUAL(GSWF_AJI_PEACH_IN_UNIFORM, 1)
 #else
         IF_INT_EQUAL(GSWF_AJI_PEACH_IN_UNIFORM, 1)
 #endif

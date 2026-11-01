@@ -890,7 +890,7 @@ USER_FUNC(evt_tou_get_fighter_info) {
 static USER_FUNC(evt_tou_get_next_match) {
     EvtWord* args = event->args;
 #if VERSION <= VERSION_DEMO_US
-    BOOL reverse = evtGetValue(event, GSWF(GSWF_TOU_LAST_RULE_MET));
+    BOOL reverse = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
 #else
     BOOL reverse = evtGetValue(event, GSWF_GLITZ_PIT_CONDITION_KEPT);
 #endif
@@ -1316,7 +1316,7 @@ static void rankingInit(void) {
 
         // If we're past this point in the story, hide King K
 #if VERSION <= VERSION_DEMO_US
-        if (evtGetValue(NULL, GSWF(GSWF_TOU_RANK12_KING_K_GONE))) {
+        if (evtGetValue(NULL, GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED)) {
 #else
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_KP_KOOPAS_RETIRED)) {
 #endif
@@ -1325,21 +1325,21 @@ static void rankingInit(void) {
 
         // If we're past this story, Sir Swoop has been introduced
 #if VERSION <= VERSION_DEMO_US
-        if (evtGetValue(NULL, GSWF(GSWF_TOU_RANK11_SWOOPS_JOINS))) {
+        if (evtGetValue(NULL, GSWF_GLITZ_PIT_SIR_SWOOP_JOINED)) {
 #else
         if (evtGetValue(NULL, GSWF_GLITZ_PIT_SIR_SWOOP_JOINED)) {
 #endif
             rank_wp->entries[FIGHTER_SWOOPS].flags &= ~RANK_HIDDEN;
 
 #if VERSION <= VERSION_DEMO_US
-            if (!evtGetValue(NULL, GSWF(GSWF_TOU_SWOOPS_ADDED))) {
+            if (!evtGetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED)) {
 #else
             if (!evtGetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED)) {
 #endif
                 rank_wp->entries[FIGHTER_SWOOPS].flags |= RANK_BELOW;
             }
 #if VERSION <= VERSION_DEMO_US
-            evtSetValue(NULL, GSWF(GSWF_TOU_SWOOPS_ADDED), TRUE);
+            evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, TRUE);
 #else
             evtSetValue(NULL, GSWF_GLITZ_PIT_WINGS_OF_NIGHT_PLACED, TRUE);
 #endif
@@ -1355,14 +1355,14 @@ if (evtGetValue(NULL, GSW(GSW_STORY_PROGRESS)) >= STG3_20_06_RAWK_HAWKS_WARNING)
             rank_wp->entries[FIGHTER_SPINIA].flags &= ~RANK_HIDDEN;
 
 #if VERSION <= VERSION_DEMO_US
-            if (!evtGetValue(NULL, GSWF(GSWF_TOU_SPINIA_ADDED))) {
+            if (!evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED)) {
 #else
             if (!evtGetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED)) {
 #endif
                 rank_wp->entries[FIGHTER_SPINIA].flags |= RANK_BELOW;
             }
 #if VERSION <= VERSION_DEMO_US
-            evtSetValue(NULL, GSWF(GSWF_TOU_SPINIA_ADDED), TRUE);
+            evtSetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED, TRUE);
 #else
             evtSetValue(NULL, GSWF_GLITZ_PIT_DESTRUCTORS_PLACED, TRUE);
 #endif

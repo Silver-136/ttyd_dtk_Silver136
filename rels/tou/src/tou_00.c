@@ -37,11 +37,19 @@ static USER_FUNC(npc_set_pos);
 static EvtWord evt_tou_balloon[85];
 static EvtWord evt_light[66];
 static EvtWord evt_wing[125];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_to_tou[];
+#else
 EvtWord evt_to_tou[293];
+#endif
 EvtWord evt_pos_keep[39];
 EvtWord evt_to_gor[247];
 const char* kemuri_name[5];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tou_00_koopa_evt[];
+#else
 EvtWord tou_00_koopa_evt[678];
+#endif
 static EvtWord hkoopa_init[7];
 static NpcSetupInfo npcEnt[2];
 EvtWord evt_skip[43];
@@ -175,7 +183,7 @@ EVT_BEGIN(evt_to_tou)
     WAIT_FRAMES(1)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG3_URN1"), 18000)
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
     CALL(evt_snd_bgmon_f_d, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG3_URN1"), 18000, 18000)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

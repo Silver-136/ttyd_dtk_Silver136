@@ -242,8 +242,16 @@ static const char* pika_tbl_rsh_06[10];
 static EvtWord hom_10_evt_resha_sub[102];
 static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord hom_10_init_evt[];
+#else
 static EvtWord hom_10_init_evt[140];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_resha_init[];
+#else
 EvtWord evt_resha_init[13];
+#endif
 static BeroEntry bero_data_a[2];
 static EvtWord evt_moamoa_init[187];
 EvtWord evt_great_moamoa[737];
@@ -251,7 +259,11 @@ const char* pose_name[8];
 EvtWord moamoa_debug[230];
 EvtWord rsh_06_init_evt[84];
 EvtWord rsh_06_a_init_evt[32];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord rsh_06_init_evt_nidome[];
+#else
 EvtWord rsh_06_init_evt_nidome[41];
+#endif
 EvtWord rsh_06_a_init_evt_nidome[11];
 
 /**
@@ -2325,7 +2337,7 @@ static EVT_BEGIN(hom_10_init_evt)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+    IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(hom_10_evt_resha_right)
         CALL_CHILD(hom_10_evt_resha_start3)
 #else
@@ -2766,7 +2778,7 @@ EVT_END()
 EVT_BEGIN(rsh_06_init_evt_nidome)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_resha_init)
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_POSHLEY), 1)
+    IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
 #else
     CALL_CHILD(PTR(evt_resha_init))
     IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
@@ -2774,20 +2786,20 @@ EVT_BEGIN(rsh_06_init_evt_nidome)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+        IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
 #else
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
 #endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envoff, PSND_FADEOUT)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

@@ -17,7 +17,11 @@
 
 static BeroEntry bero_entry_data[7];
 static HitDamageReturn hitDmgRetPoints[13];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tik_15_init_evt[];
+#else
 EvtWord tik_15_init_evt[91];
+#endif
 
 /**
  * Doors of this room: the pipes to tik_04 and tik_01, two west exits to tik_16, the east exit to tik_20
@@ -185,10 +189,10 @@ EVT_BEGIN(tik_15_init_evt)
         CALL(evt_npc_check_delete, STRING("カメック"))
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_lv_blk, STRING("block00"), -370, 0, -25, 0, GSWF(GSWF_TIK15_BIG_BLOCK_A_BROKEN), STRING("MOBJ_Lv1BigBlock"))
-    CALL(evt_mobj_lv_blk, STRING("block01"), -420, 0, -25, 0, GSWF(GSWF_TIK15_BIG_BLOCK_B_BROKEN), STRING("MOBJ_Lv1BigBlock"))
-CALL(evt_mobj_badgeblk, STRING("mobj_01"), 50, 0, -30, ITEM_MUSHROOM, 0, GSWF(GSWF_TIK15_MUSHROOM_BLOCK_HIT), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_02"), -140, 0, -30, ITEM_FIRE_FLOWER, 0, GSWF(GSWF_TIK15_FIRE_FLOWER_BLOCK_HIT), 0)
+    CALL(evt_mobj_lv_blk, STRING("block00"), -370, 0, -25, 0, GSWF_TIK_15_LV1_BIG_BLOCK_1_BROKEN, STRING("MOBJ_Lv1BigBlock"))
+    CALL(evt_mobj_lv_blk, STRING("block01"), -420, 0, -25, 0, GSWF_TIK_15_LV1_BIG_BLOCK_2_BROKEN, STRING("MOBJ_Lv1BigBlock"))
+CALL(evt_mobj_badgeblk, STRING("mobj_01"), 50, 0, -30, ITEM_MUSHROOM, 0, GSWF_TIK_15_MUSHROOM_BLOCK, 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_02"), -140, 0, -30, ITEM_FIRE_FLOWER, 0, GSWF_TIK_15_FIRE_FLOWER_BLOCK, 0)
 #else
     CALL(evt_mobj_lv_blk, STRING("block00"), -370, 0, -25, 0, GSWF_TIK_15_LV1_BIG_BLOCK_1_BROKEN, STRING("MOBJ_Lv1BigBlock"))
     CALL(evt_mobj_lv_blk, STRING("block01"), -420, 0, -25, 0, GSWF_TIK_15_LV1_BIG_BLOCK_2_BROKEN, STRING("MOBJ_Lv1BigBlock"))

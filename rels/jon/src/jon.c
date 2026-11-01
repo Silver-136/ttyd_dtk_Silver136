@@ -97,12 +97,20 @@ NpcSetupInfo npcEnt_basabasa2[2];
 NpcSetupInfo npcEnt_togedaruma[2];
 NpcSetupInfo npcEnt_pansy[2];
 NpcSetupInfo npcEnt_zonbaba[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord enemy_setup[];
+#else
 EvtWord enemy_setup[1055];
+#endif
 s32 treasure_tbl[10];
 EvtWord evt_open_box[46];
 static EvtWord move_event[55];
 EvtWord get_map_name[111];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord talk_idouya[];
+#else
 EvtWord talk_idouya[141];
+#endif
 NpcSetupInfo npcEnt_idouya[2];
 EvtWord idouya_setup[38];
 #if VERSION >= VERSION_US
@@ -155,7 +163,11 @@ EvtWord evt_iri_30_bomb_rakugaki[154];
 static EvtWord gonbaba_standup_shake[23];
 static EvtWord gonbaba_fog_change[87];
 static EvtWord gonbaba_down_shake[83];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord zonbaba_first_event[];
+#else
 EvtWord zonbaba_first_event[677];
+#endif
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(jon_init_evt)
@@ -164,34 +176,34 @@ EVT_BEGIN(jon_init_evt)
     IF_BITS_SET(LW(0), GW_FLAG_NO_ENTRANCE)
         CALL(evt_sub_get_mapname, LW(0))
         IF_STR_EQUAL(LW(0), STRING("jon_00"))
-            SET_VALUE(GSW(GSW_JON_FLOOR), 0)
+            SET_VALUE(GSW_PIT_FLOOR, 0)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("jon_01"))
-            SET_VALUE(GSW(GSW_JON_FLOOR), 50)
+            SET_VALUE(GSW_PIT_FLOOR, 50)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("jon_02"))
-            SET_VALUE(GSW(GSW_JON_FLOOR), 80)
+            SET_VALUE(GSW_PIT_FLOOR, 80)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("jon_03"))
-            SET_VALUE(GSW(GSW_JON_FLOOR), 9)
+            SET_VALUE(GSW_PIT_FLOOR, 9)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("jon_04"))
-            SET_VALUE(GSW(GSW_JON_FLOOR), 49)
+            SET_VALUE(GSW_PIT_FLOOR, 49)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("jon_05"))
-            SET_VALUE(GSW(GSW_JON_FLOOR), 79)
+            SET_VALUE(GSW_PIT_FLOOR, 79)
         END_IF
         IF_STR_EQUAL(LW(0), STRING("jon_06"))
-            SET_VALUE(GSW(GSW_JON_FLOOR), 99)
+            SET_VALUE(GSW_PIT_FLOOR, 99)
         END_IF
     END_IF
     // Remember the deepest floor reached, then set up the signboard, the mover, the trader and the enemies of
     // this floor.
-    SET_VALUE(LSW(0), GSW(GSW_JON_FLOOR))
+    SET_VALUE(LSW(0), GSW_PIT_FLOOR)
     SET_VALUE(LW(0), LSW(0))
     ADD(LW(0), 1)
-    IF_INT_GREATER(LW(0), GSW(GSW_JON_DEEPEST_FLOOR))
-        SET_VALUE(GSW(GSW_JON_DEEPEST_FLOOR), LW(0))
+    IF_INT_GREATER(LW(0), GSW_JON_DEEPEST_LEVEL)
+        SET_VALUE(GSW_JON_DEEPEST_LEVEL, LW(0))
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kanban"), 0, PTR(evt_kanban), 0)
     CALL_CHILD(idouya_setup)
@@ -199,7 +211,7 @@ EVT_BEGIN(jon_init_evt)
     CALL_CHILD(enemy_setup)
     // Choose the floor layout from the floor number: the boss floor, a rest-room floor, the floor before one,
     // or a plain floor.
-    SET_VALUE(LW(0), GSW(GSW_JON_FLOOR))
+    SET_VALUE(LW(0), GSW_PIT_FLOOR)
     ADD(LW(0), 1)
     SET_VALUE(LW(1), LW(0))
     MODULO(LW(1), 10)
@@ -238,10 +250,10 @@ END_SWITCH
     // On floor 50 the graffiti wall of Trouble Center job 30 shows its before or after state and reacts to
     // Bobbery.
     IF_STR_EQUAL(LW(0), STRING("jon_04"))
-        IF_INT_EQUAL(GSW(GSW_JON_FLOOR), 49)
+        IF_INT_EQUAL(GSW_PIT_FLOOR, 49)
             IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ERASE_THAT_GRAFFITI), 0)
 SET_VALUE(LF(0), 0)
-                    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_ERASE_THAT_GRAFFITI)
+                    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                         IF_INT_EQUAL(GSWF_TROUBLE_WORK(1), 1)
                             SET_VALUE(LF(0), 1)
                         END_IF
@@ -249,7 +261,7 @@ SET_VALUE(LF(0), 0)
                     IF_INT_EQUAL(LF(0), 0)
                         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("after"), MAP_OBJ_FLAG_HIDDEN)
                         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_touch_rakugaki), LW(0))
-IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_ERASE_THAT_GRAFFITI)
+IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ERASE_THAT_GRAFFITI)
                         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 1)
 CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("a_rakugaki"), 0, PTR(evt_iri_30_bomb_rakugaki), LW(1))
                             CALL(evt_set_case_wrk, LW(1), 15, LW(0))
@@ -268,7 +280,7 @@ END_IF
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("s_rakugaki"), MAP_OBJ_FLAG_HIDDEN)
         END_IF
     END_IF
-    IF_INT_NOT_EQUAL(GSW(GSW_JON_FLOOR), 99)
+    IF_INT_NOT_EQUAL(GSW_PIT_FLOOR, 99)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_100DN1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
         CALL(evt_snd_set_rev_mode, 1)
@@ -1299,7 +1311,7 @@ EVT_BEGIN(enemy_setup)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(LW(0), GSW(GSW_JON_FLOOR))
+    SET_VALUE(LW(0), GSW_PIT_FLOOR)
 #else
     SET_VALUE(LW(0), GSW_PIT_FLOOR)
 #endif
@@ -1313,7 +1325,7 @@ EVT_BEGIN(enemy_setup)
     // Look up this floor's species and battle, create the enemy NPC and pick a random spot for it on the left
     // or right half of the room.
 #if VERSION <= VERSION_DEMO_US
-    CALL(enemy_info, GSW(GSW_JON_FLOOR), LW(0), LW(1), LW(2))
+    CALL(enemy_info, GSW_PIT_FLOOR, LW(0), LW(1), LW(2))
 #else
     CALL(enemy_info, GSW_PIT_FLOOR, LW(0), LW(1), LW(2))
 #endif
@@ -1652,7 +1664,7 @@ CALL(evt_npc_set_home_position, STRING("敵"), LW(3), LW(4), LW(5))
             GOTO(1)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(LW(0), GSW(GSW_JON_FLOOR))
+        SET_VALUE(LW(0), GSW_PIT_FLOOR)
 #else
         SET_VALUE(LW(0), GSW_PIT_FLOOR)
 #endif
@@ -1665,7 +1677,7 @@ CALL(evt_npc_set_home_position, STRING("敵"), LW(3), LW(4), LW(5))
 #endif
             ELSE
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_JON_BONETAIL_DEFEATED), 1)
+            SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)
 #else
             SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)
 #endif
@@ -1786,14 +1798,14 @@ EVT_BEGIN(talk_idouya)
     SWITCH(LW(0))
         CASE_EQUAL(0)
 #if VERSION <= VERSION_DEMO_US
-        ADD(GSW(GSW_JON_FLOOR), 2)
+        ADD(GSW_PIT_FLOOR, 2)
         CALL_CHILD(get_map_name)
         SET_VALUE(LW(1), STRING("dokan_2"))
 #endif
         SET_VALUE(LW(2), 10)
         CASE_EQUAL(1)
 #if VERSION <= VERSION_DEMO_US
-        ADD(GSW(GSW_JON_FLOOR), 5)
+        ADD(GSW_PIT_FLOOR, 5)
         CALL_CHILD(get_map_name)
         SET_VALUE(LW(1), STRING("dokan_2"))
         SET_VALUE(LW(2), 10)
@@ -1858,7 +1870,7 @@ EVT_BEGIN(talk_idouya)
     CALL(evt_fade_set_mapchange_type, 1, FADE_OUT_BLACK, 300, FADE_IN_BLACK, 300)
     IF_STR_EQUAL(LW(0), STRING("tik_06"))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSW(GSW_JON_FLOOR), 0)
+        SET_VALUE(GSW_PIT_FLOOR, 0)
 #else
         SET_VALUE(GSW_PIT_FLOOR, 0)
 #endif
@@ -3357,14 +3369,14 @@ EVT_BEGIN(zonbaba_first_event)
     // Arriving on floor 100 for the first time: Bonetail is hidden underground and the chest is not placed
     // yet; if he was already beaten the room is set up with only the chest.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_JON_BONETAIL_DEFEATED), 1)
+    IF_INT_EQUAL(GSWF_PIT_BONETAIL_DEFEATED, 1)
 #else
     IF_INT_EQUAL(GSWF_PIT_BONETAIL_DEFEATED, 1)
 #endif
         CALL(evt_npc_set_position, STRING("敵"), 0, -1000, 0)
         CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY | NPC_FLAG_FLOOR_COLLISION | NPC_FLAG_GRAVITY)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_mobj_itembox, STRING("box"), 270, 0, 200, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF(GSWF_JON_FLOOR100_CHEST_OPENED))
+        CALL(evt_mobj_itembox, STRING("box"), 270, 0, 200, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
 #else
         CALL(evt_mobj_itembox, STRING("box"), 270, 0, 200, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
 #endif
@@ -3475,7 +3487,7 @@ WAIT_MS(4000)
     WAIT_MS(1000)
     // His mouth opens and the treasure chest tumbles out, bouncing across the floor.
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_itembox, STRING("box"), 250, 60, 0, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF(GSWF_JON_FLOOR100_CHEST_OPENED))
+    CALL(evt_mobj_itembox, STRING("box"), 250, 60, 0, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
 #else
     CALL(evt_mobj_itembox, STRING("box"), 250, 60, 0, MOBJ_ITEMBOX_BIG, 0, PTR(evt_open_box), GSWF_PIT_100_RETURN_POSTAGE_CHEST)
 #endif
@@ -3551,10 +3563,10 @@ WAIT_MS(4000)
     CALL(evt_npc_flag_onoff, 1, STRING("敵"), NPC_FLAG_NO_HIT)
     CALL(evt_npc_flag_onoff, 0, STRING("敵"), NPC_FLAG_ENEMY)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_JON_BONETAIL_DEFEATED), 1)
+    SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)
     IF_INT_EQUAL(GSWF_TROUBLE_WORK(GSW_TROUBLE_ACTIVE), 12)
-        IF_INT_EQUAL(GSWF(GSWF_TROUBLE_WORK_1), 1)
-            IF_INT_EQUAL(GSWF(GSWF_TROUBLE_WORK_2), 0)
+        IF_INT_EQUAL(GSWF(5406), 1)
+            IF_INT_EQUAL(GSWF(5407), 0)
 #else
     SET_VALUE(GSWF_PIT_BONETAIL_DEFEATED, 1)
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_MY_DADDY)

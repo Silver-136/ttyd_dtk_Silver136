@@ -40,9 +40,21 @@ void _epilog(void);
 void _prolog(void);
 
 EvtWord gor_villager_urouro[19];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord inemuri_snd[];
+#else
 EvtWord inemuri_snd[27];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mario_and_party_sleep[];
+#else
 EvtWord mario_and_party_sleep[259];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord luigi_gor_first_talk[];
+#else
 EvtWord luigi_gor_first_talk[205];
+#endif
 
 /**
  * REL prolog for the Rogueport module: runs the static constructors
@@ -373,7 +385,7 @@ EVT_END()
 EVT_BEGIN(luigi_gor_first_talk)
     CALL(evt_party_stop, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GOR_LUIGI_FIRST_TALK), 0)
+    IF_INT_EQUAL(GSWF_GOR_LUIGI_FIRST_TALK_DONE, 0)
 #else
     IF_INT_EQUAL(GSWF_GOR_LUIGI_FIRST_TALK_DONE, 0)
 #endif
@@ -400,7 +412,7 @@ IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_16_THE_RETURN_OF_THE_QUEEN)
         CALL(evt_mario_set_pose, STRING("M_N_5B"))
         WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_GOR_LUIGI_FIRST_TALK), 1)
+        SET_VALUE(GSWF_GOR_LUIGI_FIRST_TALK_DONE, 1)
 #else
         SET_VALUE(GSWF_GOR_LUIGI_FIRST_TALK_DONE, 1)
 #endif

@@ -99,7 +99,11 @@ static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 EvtWord boots_lv3_juyoitem_lecture_init[104];
 EvtWord boots_lv3_juyoitem_lecture_sub01[29];
 EvtWord boots_lv3_juyoitem_lecture_sub02[78];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord boots_lv3_juyoitem_lecture[];
+#else
 EvtWord boots_lv3_juyoitem_lecture[479];
+#endif
 EvtWord all_juyoitem_lecture_rel[252];
 
 /**

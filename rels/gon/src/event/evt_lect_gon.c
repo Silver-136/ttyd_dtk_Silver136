@@ -91,7 +91,11 @@ static USER_FUNC(evt_nomal_cange);
 static USER_FUNC(bgm_start_wait);
 
 EvtWord slit_majin_lecture_init[26];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord slit_majin_lecture[];
+#else
 EvtWord slit_majin_lecture[390];
+#endif
 
 /**
  * Linear blend used by lect_mario_ido_sum: returns (total - elapsed) / total of end plus elapsed / total of

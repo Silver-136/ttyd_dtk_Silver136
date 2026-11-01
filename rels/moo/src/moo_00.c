@@ -43,7 +43,11 @@ static BeroEntry bero_entry_data[3];
 static f32 spline_dt[9];
 static EvtWord party_damage_pose[52];
 EvtWord party_damage_pose2[52];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_first[];
+#else
 static EvtWord evt_first[525];
+#endif
 #if VERSION >= VERSION_US
 EvtWord rock_main[105];
 #else

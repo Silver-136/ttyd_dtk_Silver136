@@ -87,10 +87,22 @@ EvtWord ryushi_event[25];
 EvtWord yuu_03_kaijo_init[12];
 EvtWord yuu_03_kaijo_init2[12];
 EvtWord minigame04_main[33];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord minigame04_start_cam[];
+#else
 EvtWord minigame04_start_cam[40];
+#endif
 EvtWord minigame04_start_cam_cancel[20];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord minigame04_start[];
+#else
 EvtWord minigame04_start[91];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord minigame04_end[];
+#else
 EvtWord minigame04_end[256];
+#endif
 EvtWord yuu_03_init_evt[VERSION_PICK(26, 140)];
 
 /** Resets the camera shift offset (camShiftReset) so the camera returns to its normal framing after the minigame. */
@@ -855,7 +867,7 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     // Quitting sends Mario back through the pipe to gor_03.
     IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_YUU_MINIGAME_QUIT), 1)
+        SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
 #else
         SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 1)
 #endif

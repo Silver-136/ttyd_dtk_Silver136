@@ -35,15 +35,39 @@ static EvtWord evt_open[73];
 EvtWord evt_open_kagi[73];
 static EvtWord evt_unlock[11];
 EvtWord oumu_init[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord oumu_talk[];
+#else
 EvtWord oumu_talk[61];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord oumu_juyo_talk[];
+#else
 EvtWord oumu_juyo_talk[37];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord oumu_check[];
+#else
 EvtWord oumu_check[176];
+#endif
 static NpcSetupInfo npcEnt[2];
 static s32 lock_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord lock_item_check[];
+#else
 static EvtWord lock_item_check[23];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mobj_box01[];
+#else
 static EvtWord mobj_box01[34];
+#endif
 static EvtWord mobj_box02[34];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord jin_08_init_evt[];
+#else
 EvtWord jin_08_init_evt[138];
+#endif
 
 /**
  * Door animation callback: closes door07 as Mario arrives through e_bero_1 (from jin_07);
@@ -247,14 +271,14 @@ EVT_END()
 EVT_BEGIN(oumu_juyo_talk)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF(GSWF_JIN08_PARROT_REVEALED_DOOPLISS_NAME), 0)
+IF_INT_EQUAL(GSWF_JIN_08_PARROT_SECRET_HEARD, 0)
 #else
     CALL(evt_msg_toge, MSG_TOGE_NONE, 0, 0, 0)
     IF_INT_EQUAL(GSWF_JIN_08_PARROT_SECRET_HEARD, 0)
 #endif
         CALL(evt_msg_print, 0, STRING("stg4_jin_43"), 0, STRING("オウム"))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_JIN08_PARROT_REVEALED_DOOPLISS_NAME), 1)
+        SET_VALUE(GSWF_JIN_08_PARROT_SECRET_HEARD, 1)
         SET_VALUE(LSWF(1), 1)
 #else
         SET_VALUE(GSWF_JIN_08_PARROT_SECRET_HEARD, 1)
@@ -470,7 +494,7 @@ EVT_BEGIN(jin_08_init_evt)
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa"), 0, 0, 0)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_JIN08_STEEPLE_KEY_TAKEN), 0)
+    IF_INT_EQUAL(GSWF_JIN_08_STEEPLE_KEY_TAKEN, 0)
 #else
     IF_INT_EQUAL(GSWF_JIN_08_STEEPLE_KEY_TAKEN, 0)
 #endif
@@ -480,8 +504,8 @@ EVT_BEGIN(jin_08_init_evt)
         CALL(evt_mapobj_rotate, 1, STRING("hako_futa2"), -90, 0, 0)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_lock, STRING("mobj_lock00"), 23, 195, 10, 25, 270, PTR(lock_item_check), PTR(evt_unlock), GSWF(GSWF_JIN08_DOOR_UNLOCKED))
-    IF_INT_EQUAL(GSWF(GSWF_JIN08_DOOR_UNLOCKED), 1)
+    CALL(evt_mobj_lock, STRING("mobj_lock00"), 23, 195, 10, 25, 270, PTR(lock_item_check), PTR(evt_unlock), GSWF_JIN_08_DOOR_UNLOCKED)
+    IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 1)
 #else
     CALL(evt_mobj_lock, STRING("mobj_lock00"), 23, 195, 10, 25, 270, PTR(lock_item_check), PTR(evt_unlock), GSWF_JIN_08_DOOR_UNLOCKED)
     IF_INT_EQUAL(GSWF_JIN_08_DOOR_UNLOCKED, 1)
@@ -501,9 +525,9 @@ EVT_BEGIN(jin_08_init_evt)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 115, 0, 105, STRING("group87"), 125, GSWF(GSWF_JIN08_STAR_PIECE_PANEL))
-CALL(evt_mobj_itembox, STRING("mobj_box01"), 80, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF(GSWF_JIN08_POWER_PLUS_CHEST_OPENED))
-CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -80, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF(GSWF_JIN08_MR_SOFTENER_CHEST_OPENED))
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 115, 0, 105, STRING("group87"), 125, GSWF_STARPIECE_70)
+CALL(evt_mobj_itembox, STRING("mobj_box01"), 80, 0, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_JIN_08_POWER_PLUS_CHEST)
+CALL(evt_mobj_itembox, STRING("mobj_box02"), 120, 0, -80, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_JIN_08_MR_SOFTENER_CHEST)
 SPAWN_EVENT(oumu_check)
 #else
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), 115, 0, 105, STRING("group87"), 125, GSWF_STARPIECE_70)

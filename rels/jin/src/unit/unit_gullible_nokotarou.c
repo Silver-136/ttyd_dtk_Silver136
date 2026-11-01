@@ -33,9 +33,17 @@ static EvtWord wakeup_event[67];
 static EvtWord init_event_nokotarou[62];
 static EvtWord damage_event_nokotarou[24];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_nokotarou[];
+#else
 static EvtWord dead_event_nokotarou[156];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_nokotarou[];
 #else
 static EvtWord dead_event_nokotarou[177];
+#endif
 #endif
 static EvtWord _change_koura_pose[34];
 static EvtWord _change_koura_pose_fast[34];
@@ -43,7 +51,11 @@ static EvtWord _restore_koura_pose[47];
 static EvtWord _koura_rotate_start[99];
 static EvtWord _koura_rotate_stop[13];
 static EvtWord attack_event_nokotarou[33];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event_nokotarou_koura[];
+#else
 static EvtWord attack_event_nokotarou_koura[393];
+#endif
 static EvtWord attack_event_nokotarou_shubibin[339];
 static EvtWord wait_event_nokotarou[6];
 

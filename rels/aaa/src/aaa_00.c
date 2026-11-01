@@ -59,7 +59,11 @@ static const char* ie_npc[2];
 static EvtWord door_1_open[12];
 static EvtWord door_1_close[14];
 static DoorParam door_1;
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_prologue[];
+#else
 static EvtWord evt_prologue[713];
+#endif
 #if VERSION >= VERSION_US
 EvtWord evt_prologue2[196];
 #else
@@ -361,8 +365,8 @@ static EVT_BEGIN(evt_prologue)
     CALL(evt_bg_set_color, 0, 0, 0, 255)
     WAIT_FRAMES(1)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))

@@ -135,7 +135,11 @@ EvtWord gor_00_peton_regl[VERSION_PICK(9, 11)];
 static EvtWord peton_talk[28];
 static EvtWord marco_init[32];
 EvtWord marco_party_move[120];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord marco_talk[];
+#else
 static EvtWord marco_talk[364];
+#endif
 EvtWord garawaru_urouro2[25];
 static EvtWord garawaru_init[74];
 EvtWord garawaru_regl[60];
@@ -172,9 +176,17 @@ static EvtWord sanders_init[42];
 static EvtWord sanders_talk[8];
 static EvtWord korutesu_init[19];
 static EvtWord korutesu_talk[33];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tentyou_init[];
+#else
 EvtWord tentyou_init[36];
+#endif
 EvtWord tentyou_talk[14];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tenin_init[];
+#else
 EvtWord tenin_init[36];
+#endif
 EvtWord tenin_talk[14];
 static EvtWord borodo2_init[42];
 static EvtWord borodo2_escape[43];
@@ -199,9 +211,17 @@ EvtWord ship_a_animation[132];
 static EvtWord ship_pera[119];
 EvtWord enter_gorotsuki_town_init[58];
 EvtWord christine_osoware_setup[82];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord enter_gorotsuki_town[];
+#else
 EvtWord enter_gorotsuki_town[594];
+#endif
 EvtWord christine_osoware[357];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord gundan1000tai_beforebattle[];
+#else
 EvtWord gundan1000tai_beforebattle[524];
+#endif
 static EvtWord _kemuri_sub[56];
 EvtWord gundan1000tai_kemuri[VERSION_PICK(20, 16)];
 EvtWord gundan1000tai_zaza_se[61];
@@ -221,11 +241,23 @@ Vec suifu100kaidanDOWN[];
 Vec suifu100kaidanUP[];
 EvtWord marco_run_away[100];
 EvtWord gorotsuki_kikan[];
-EvtWord into_gor_ship[265];
 #if VERSION <= VERSION_DEMO_US
+extern EvtWord into_gor_ship[];
+#else
+EvtWord into_gor_ship[265];
+#endif
+#if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mony_peton_event[];
+#else
 static EvtWord mony_peton_event[251];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mony_run_away[];
 #else
 EvtWord mony_run_away[108];
+#endif
 #endif
 #if VERSION > VERSION_DEMO_US
 EvtWord peton_run_away[88];
@@ -248,15 +280,31 @@ EvtWord gor_muj_ship_pera[115];
 EvtWord gor_muj_ship_start[258];
 EvtWord tsumini[212];
 static HitDamageReturn dmgRetPoint[VERSION_PICK(4, 6)];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mobj_box00[];
+#else
 static EvtWord mobj_box00[34];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord epilogue_npc_entry[];
+#else
 static EvtWord epilogue_npc_entry[340];
+#endif
 EvtWord punio_kinoko[22];
 EvtWord puniko_kinoko[22];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord epilogue_evt[];
+#else
 static EvtWord epilogue_evt[1520];
+#endif
 EvtWord epilogue_npc_entry2[30];
 static EvtWord epilogue_evt2[74];
 EvtWord return_gorotsuki_town_init[25];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord return_gorotsuki_town[];
+#else
 EvtWord return_gorotsuki_town[625];
+#endif
 EvtWord gor_00_init_evt[VERSION_PICK(537, 540)];
 
 /**
@@ -728,7 +776,7 @@ static EVT_BEGIN(marco_talk)
 #endif
         CASE_EQUAL(STG4_33_MEET_BOBBERY)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_GOR02_BOBBERY_DENIED), 0)
+        IF_INT_EQUAL(GSWF_GOR_BOBBERY_FIRST_DENIAL_HEARD, 0)
 #else
         IF_INT_EQUAL(GSWF_GOR_BOBBERY_FIRST_DENIAL_HEARD, 0)
 #endif
@@ -742,7 +790,7 @@ static EVT_BEGIN(marco_talk)
         // Bobbery is aboard: Flavio announces the voyage.
         CASE_EQUAL(STG4_37_TO_THE_PORT)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF(GSWF_GOR00_FLAVIO_READY_TO_SAIL), 1)
+IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
 #else
         SPAWN_EVENT(PTR(marco_party_move))
         IF_INT_EQUAL(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
@@ -758,7 +806,7 @@ IF_INT_EQUAL(GSWF(GSWF_GOR00_FLAVIO_READY_TO_SAIL), 1)
         WAIT_MS(500)
         CALL(evt_msg_print, 0, STRING("mac_4_090"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_GOR00_FLAVIO_READY_TO_SAIL), 1)
+        SET_VALUE(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
 #else
         SET_VALUE(GSWF_GOR_FLAVIO_SET_SAIL_TALK_DONE, 1)
 #endif
@@ -1266,7 +1314,7 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(suifubomb_a_talk)
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_IM_HUNGRY)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IM_HUNGRY)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             CALL(evt_msg_print, 0, STRING("irai_06_001"), 0, STRING("me"))
             SET_VALUE(GSWF_TROUBLE_WORK(0), 1)
@@ -1289,7 +1337,7 @@ CALL(delete_itemsel_table)
             CALL(evt_msg_print, 0, STRING("irai_06_003"), 0, STRING("me"))
             CALL(evt_sub_get_coin, 11)
             CALL(evt_msg_print, 0, STRING("irai_06_005"), 0, STRING("me"))
-            SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+            SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
             SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_IM_HUNGRY), 1)
             CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
         END_IF
@@ -1709,7 +1757,7 @@ EVT_BEGIN(mokorim_talk)
     SWITCH(GSW(GSW_STORY_PROGRESS))
         CASE_BETWEEN(STG0_15_THE_PEDESTAL, STG3_END_TO_STAGE_4)
         // Lumpy has already received three investments: he only thanks Mario.
-        IF_INT_EQUAL(GSW(GSW_GOR00_LUMPY_INVESTMENTS), 3)
+        IF_INT_EQUAL(GSW_GOR_LUMPY_INVESTMENT_COUNT, 3)
             CALL(evt_msg_print, 0, STRING("salari_before_010"), 0, 0)
             RETURN
         END_IF
@@ -1718,8 +1766,8 @@ EVT_BEGIN(mokorim_talk)
         WAIT_MS(800)
         // First meeting: Lumpy recognizes Mario, introduces himself and asks for an investment (danger music
         // plays).
-        IF_INT_EQUAL(GSWF(GSWF_GOR00_LUMPY_FIRST_TALK), 0)
-            SET_VALUE(GSWF(GSWF_GOR00_LUMPY_FIRST_TALK), 1)
+        IF_INT_EQUAL(GSWF_GOR_LUMPY_FIRST_TALK_DONE, 0)
+            SET_VALUE(GSWF_GOR_LUMPY_FIRST_TALK_DONE, 1)
             CALL(evt_snd_bgmoff, PSND_PAUSE)
             CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_DANGER3"))
             SET_VALUE(LF(15), 1)
@@ -1757,8 +1805,8 @@ CALL(unitwincoin_disp_onoff, 1)
                     CALL(evt_npc_jump_position_nohit, STRING("me"), LW(0), LW(1), LW(2), 200, 10)
                     WAIT_FRAMES(1)
                 END_LOOP
-                ADD(GSW(GSW_GOR00_LUMPY_INVESTMENTS), 1)
-                IF_INT_EQUAL(GSW(GSW_GOR00_LUMPY_INVESTMENTS), 3)
+                ADD(GSW_GOR_LUMPY_INVESTMENT_COUNT, 1)
+                IF_INT_EQUAL(GSW_GOR_LUMPY_INVESTMENT_COUNT, 3)
                     CALL(evt_msg_print, 0, STRING("salari_before_007"), 0, 0)
                 ELSE
                     CALL(evt_msg_print, 0, STRING("salari_before_006"), 0, 0)
@@ -1786,8 +1834,8 @@ CALL(unitwincoin_disp_onoff, 1)
         // After the Rogueport station chapter: Lumpy has returned from the desert.
         CASE_GREATER_OR_EQUAL(STG6_56_ROGUEPORT_STATION)
         // First return visit: Lumpy reveals he struck oil and shares his story.
-        IF_INT_EQUAL(GSWF(GSWF_GOR00_LUMPY_RETURN_TALK), 0)
-            SET_VALUE(GSWF(GSWF_GOR00_LUMPY_RETURN_TALK), 1)
+        IF_INT_EQUAL(GSWF_GOR_LUMPY_REPAYMENT_DONE, 0)
+            SET_VALUE(GSWF_GOR_LUMPY_REPAYMENT_DONE, 1)
             CALL(evt_cam3d_evt_set, 500, 120, 90, 500, 55, -280, 800, EASING_SINE_IN_OUT)
             WAIT_MS(800)
             CALL(evt_msg_print, 0, STRING("salari_after_000"), 0, 0)
@@ -1813,9 +1861,9 @@ CALL(evt_mario_set_pose, STRING("M_N_7"))
             WAIT_MS(800)
             // Mario had invested: Lumpy repays with a bonus (300, 500/600 or 999 coins by number of
             // investments).
-            IF_INT_GREATER(GSW(GSW_GOR00_LUMPY_INVESTMENTS), 0)
+            IF_INT_GREATER(GSW_GOR_LUMPY_INVESTMENT_COUNT, 0)
                 CALL(evt_msg_print, 0, STRING("salari_after_002"), 0, 0)
-                SWITCH(GSW(GSW_GOR00_LUMPY_INVESTMENTS))
+                SWITCH(GSW_GOR_LUMPY_INVESTMENT_COUNT)
                     CASE_EQUAL(1)
                     SET_VALUE(LW(0), 300)
                     CASE_EQUAL(2)
@@ -5174,7 +5222,7 @@ EVT_BEGIN(into_gor_ship)
     WAIT_MS(1000)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(7))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
 #else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
 #endif
@@ -7116,7 +7164,7 @@ CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_EQUAL(LW(0), STRING("epilogue2"))
             CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_ENDING2"), 800)
-            CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(8))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(8))
             CALL(evt_snd_envoff, PSND_FADEOUT)
         ELSE
             CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_ENDING2"), 800)
@@ -7124,12 +7172,12 @@ CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
         END_IF
         CASE_EQUAL(STG5_58_FAIR_WINDS)
         CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(7) | PSND_QUICK)
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7) | PSND_QUICK)
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
         CASE_DEFAULT
-        IF_INT_NOT_EQUAL(GSWF(GSWF_GOR00_SHIP_ARRIVAL_PENDING), 1)
+        IF_INT_NOT_EQUAL(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
-            CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(7))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
         END_IF
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR0"))
     END_SWITCH
@@ -7169,9 +7217,9 @@ CALL_CHILD(luigi_npcEnt)
     CALL(evt_hitobj_onoff, STRING("A_fune_C"), 1, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_fune_c"), MAP_OBJ_FLAG_CLIP)
     // Place the spin panel, the item box and the Star Piece.
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 110, 15, -440, STRING("S_ground"), 125, GSWF(GSWF_GOR00_STAR_PIECE_PANEL))
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), -500, 15, -200, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF(GSWF_GOR00_ITEMBOX_00))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -390, 15, -65, ITEM_TYPE_STILL, GSWF(GSWF_GOR00_STAR_PIECE), 0)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 110, 15, -440, STRING("S_ground"), 125, GSWF_STARPIECE_01)
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), -500, 15, -200, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_GOR_00_HP_DRAIN_CHEST)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, -390, 15, -65, ITEM_TYPE_STILL, GSWF_STARPIECE_00, 0)
     // Start the harbor background task, the Peach mail event and the Frankie and Francesca reaction when their
     // stage is reached.
     IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
@@ -7181,7 +7229,7 @@ CALL_CHILD(luigi_npcEnt)
         SPAWN_EVENT(peach_mail)
     END_IF
     IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_45_DAUGHTER_LOCATED)
-        IF_INT_EQUAL(GSWF(GSWF_GOR00_FRANKIE_FRANCESCA_AFTER_SEEN), 0)
+        IF_INT_EQUAL(GSWF_GOR_00_RUNAWAYS_REMARK_DONE, 0)
             CALL(evt_run_case_evt, CASE_STAND_ON, 1, STRING("A_oku_yuka_01"), 0, PTR(mony_peton_after), 0)
         END_IF
     END_IF
@@ -7246,14 +7294,14 @@ SPAWN_EVENT(gorotsuki_kikan)
         IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG9_01_END_CREDITS)
             IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG5_58_FAIR_WINDS)
                 CALL_CHILD(gor_muj_ship_init)
-                IF_INT_EQUAL(GSWF(GSWF_GOR00_SHIP_ARRIVAL_AT_DOCK), 1)
-                    SET_VALUE(GSWF(GSWF_GOR00_SHIP_ARRIVAL_AT_DOCK), 0)
+                IF_INT_EQUAL(GSWF_GOR_00_PLACE_BY_SHIP, 1)
+                    SET_VALUE(GSWF_GOR_00_PLACE_BY_SHIP, 0)
                     CALL(evt_mario_set_pos, 190, 15, 225)
                     CALL(evt_party_set_pos, 0, 225, 15, 220)
                 ELSE
-                    IF_INT_EQUAL(GSWF(GSWF_GOR00_SHIP_ARRIVAL_PENDING), 1)
-                        SET_VALUE(GSWF(GSWF_GOR00_SHIP_ARRIVAL_PENDING), 0)
-                        SET_VALUE(GSWF(GSWF_SHIP_TRAVEL_ACTIVE), 0)
+                    IF_INT_EQUAL(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
+                        SET_VALUE(GSWF_MUJ_SAILING_TO_ROGUEPORT, 0)
+                        SET_VALUE(GSWF_MUJ_ARRIVED_BY_SHIP_UNUSED, 0)
                         SPAWN_EVENT(into_gor_ship)
                     END_IF
                 END_IF

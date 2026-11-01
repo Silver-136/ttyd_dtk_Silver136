@@ -142,11 +142,19 @@ EvtWord anm_wakka[40];
 EvtWord anm_entotsu[33];
 EvtWord anm_neji[33];
 EvtWord anm_yure[];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_prologue[];
+#else
 static EvtWord evt_prologue[182];
+#endif
 static EvtWord epilogue_npc_entry[25];
 EvtWord fune_move[136];
 static EvtWord epilogue_evt[97];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord muj_20_init_evt[];
+#else
 EvtWord muj_20_init_evt[362];
+#endif
 
 /**
  * Day turns to night: plays the "hiru_yoru" map animation (sky, lights and sea colours) at 4x speed
@@ -2377,7 +2385,7 @@ EVT_BEGIN(muj_20_init_evt)
     CALL(evt_map_playanim, STRING("kumo"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
     // Pick the music and scene for the ship's crossing to or from Rogueport.
-    IF_INT_EQUAL(GSWF(GSWF_GOR00_SAIL_TO_KEELHAUL), 1)
+    IF_INT_EQUAL(GSWF_GOR_SAILING_TO_KEELHAUL, 1)
 #else
     IF_INT_EQUAL(GSWF_GOR_SAILING_TO_KEELHAUL, 1)
 #endif
@@ -2390,7 +2398,7 @@ EVT_BEGIN(muj_20_init_evt)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GOR00_SHIP_ARRIVAL_PENDING), 1)
+    IF_INT_EQUAL(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
 #else
     IF_INT_EQUAL(GSWF_MUJ_SAILING_TO_ROGUEPORT, 1)
 #endif

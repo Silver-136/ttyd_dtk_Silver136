@@ -112,10 +112,22 @@ static void polygon(f32 x, f32 y, f32 w, f32 h, f32 s, f32 t);
 #define SAVE_EVT evt_memcard_save
 #endif
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_close[];
+#else
 static EvtWord w_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_open[];
+#else
 static EvtWord w_door_open[22];
+#endif
 static BeroEntry bero_entry_data[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_emergency[];
+#else
 EvtWord evt_emergency[48];
+#endif
 EvtWord evt_last[728];
 EvtWord evt_last2[339];
 EvtWord evt_camera[68];
@@ -3260,7 +3272,7 @@ EVT_BEGIN(aji_17_init_evt)
     // Mario's visits: at the story point after the Moon, the first visit restores HP and FP and plays TEC's
     // farewell (evt_last); the second plays the aftermath (evt_last2).
     IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_25_00_1_BOWSER_POSHLEY_SANCTUM)
-        IF_INT_EQUAL(GSWF(GSWF_AJI17_POST_BOSS_SCENE_STARTED), 0)
+        IF_INT_EQUAL(GSWF_AJI_17_LAST_SCENE_SEEN, 0)
             CALL(evt_mario_get_party, LW(15))
             IF_INT_EQUAL(LW(15), 0)
                 CALL(evt_mario_set_party, 0, 1)
@@ -3268,7 +3280,7 @@ EVT_BEGIN(aji_17_init_evt)
 CALL(evt_pouch_mario_recovery)
                 CALL(evt_pouch_all_party_recovery)
             END_IF
-SET_VALUE(GSWF(GSWF_AJI17_POST_BOSS_SCENE_STARTED), 1)
+SET_VALUE(GSWF_AJI_17_LAST_SCENE_SEEN, 1)
             SPAWN_EVENT(evt_last)
         ELSE
             SPAWN_EVENT(evt_last2)

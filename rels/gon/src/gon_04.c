@@ -67,7 +67,11 @@ EvtWord evt_hashi_pera0[16];
 EvtWord evt_hashi_pera1[16];
 EvtWord evt_hashi[50];
 static s32 key_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_chk[];
+#else
 static EvtWord evt_chk[23];
+#endif
 static EvtWord evt_unlock[10];
 static EvtWord key_get[5];
 EvtWord gon_04_init_evt[382];
@@ -744,7 +748,7 @@ EVT_END()
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(evt_gon_04flowblock_updown2)
 CALL(evt_mobj_hitevt_onoff, STRING("me"), 0)
-    IF_INT_NOT_EQUAL(GSWF(GSWF_GON04_BIG_BLOCK_A_BROKEN), 0)
+    IF_INT_NOT_EQUAL(GSWF_GON_04_LV1_BIG_BLOCK_BROKEN, 0)
         // The block only moves once big block A in this room has been broken.
         // Decide the direction from the saved state: a low block will rise 200 units, a raised one will sink
         // back.

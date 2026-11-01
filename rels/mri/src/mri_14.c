@@ -66,7 +66,11 @@ static EvtWord yuka_move[96];
 static EvtWord yuka_check[116];
 static KusaAccess ueki_access_data[7];
 static EvtWord punipuni_ball00_init[35];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord punipuni_ball00[];
+#else
 static EvtWord punipuni_ball00[57];
+#endif
 EvtWord mri_14_init_evt[179];
 
 /**
@@ -1074,7 +1078,7 @@ EVT_END()
 static EVT_BEGIN(punipuni_ball00)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_MRI14_ORB_ON_PEDESTAL), 0)
+    IF_INT_EQUAL(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
         CALL_CHILD(mri_punipuni_itemselect)
 #else
     IF_INT_EQUAL(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
@@ -1084,7 +1088,7 @@ static EVT_BEGIN(punipuni_ball00)
             GOTO(100)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_MRI14_ORB_ON_PEDESTAL), 1)
+        SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 1)
 #else
         SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 1)
 #endif
@@ -1107,7 +1111,7 @@ IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_22_LORD_CRUMP_APPEARS)
 #endif
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_MRI14_ORB_ON_PEDESTAL), 0)
+        SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
 #else
         SET_VALUE(GSWF_MRI_14_PUNI_ORB_PLACED, 0)
 #endif

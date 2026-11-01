@@ -77,7 +77,11 @@ USER_FUNC(demo_draw);
 USER_FUNC(demo_init);
 
 EvtWord buttonCheck[32];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord demo_evt[];
+#else
 EvtWord demo_evt[1489];
+#endif
 static EvtWord koushukei_dai[63];
 EvtWord roten_move[25];
 EvtWord kuribo_move[25];

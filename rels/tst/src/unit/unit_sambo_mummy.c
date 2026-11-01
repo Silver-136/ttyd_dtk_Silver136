@@ -39,7 +39,11 @@ static PoseTableEntry pose_table_parts[3];
 static BattleDataEntry data_table[8];
 static BattleUnitKindPart parts[5];
 static EvtWord init_event[54];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dmg_avoid_counter_thorn_side_event[];
+#else
 static EvtWord dmg_avoid_counter_thorn_side_event[51];
+#endif
 static EvtWord damage_event[34];
 static EvtWord damage_event_bodylost[273];
 static EvtWord subset_dmg_sambo_fall[152];

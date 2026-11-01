@@ -45,7 +45,11 @@ static EvtWord n_door_close[22];
 static EvtWord n_door_open[22];
 static BeroEntry bero_entry_data[8];
 static HitDamageReturn dmgRetPoint[58];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord first_evt[];
+#else
 static EvtWord first_evt[210];
+#endif
 EvtWord bomb_wanwan[149];
 EvtWord bomb_wanwan1_evt[27];
 EvtWord bomb_wanwan2_evt[27];
@@ -59,7 +63,11 @@ static NpcSetupInfo npcEnt[4];
 EvtWord majyorin_evt_npc_entry[26];
 EvtWord majyorin_evt_main[652];
 EvtWord majyorin_evt[55];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_09_init_evt[];
+#else
 EvtWord las_09_init_evt[257];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -1056,7 +1064,7 @@ EVT_BEGIN(las_09_init_evt)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_LAS09_CHOMP_STATUE_1_BOMBED), 0)
+    IF_INT_EQUAL(GSWF_LAS_09_CHAIN_CHOMP_1_BLOWN_UP, 0)
 #else
     IF_INT_EQUAL(GSWF_LAS_09_CHAIN_CHOMP_1_BLOWN_UP, 0)
 #endif
@@ -1066,7 +1074,7 @@ EVT_BEGIN(las_09_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_wan1"), 0, 0)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_LAS09_CHOMP_STATUE_2_BOMBED), 0)
+    IF_INT_EQUAL(GSWF_LAS_09_CHAIN_CHOMP_2_BLOWN_UP, 0)
 #else
     IF_INT_EQUAL(GSWF_LAS_09_CHAIN_CHOMP_2_BLOWN_UP, 0)
 #endif
@@ -1076,9 +1084,9 @@ EVT_BEGIN(las_09_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_wan2"), 0, 0)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_switch_blue, 2, STRING("switch1"), -540, 10, -1300, PTR(switch_1_evt), GSWF(GSWF_LAS09_SWITCH_1_PRESSED))
-    CALL(evt_mobj_switch_blue, 2, STRING("switch2"), 540, 10, -1300, PTR(switch_2_evt), GSWF(GSWF_LAS09_SWITCH_2_PRESSED))
-    IF_INT_EQUAL(GSWF(GSWF_LAS09_SWITCH_1_PRESSED), 1)
+    CALL(evt_mobj_switch_blue, 2, STRING("switch1"), -540, 10, -1300, PTR(switch_1_evt), GSWF_LAS_09_SWITCH_1_PRESSED)
+    CALL(evt_mobj_switch_blue, 2, STRING("switch2"), 540, 10, -1300, PTR(switch_2_evt), GSWF_LAS_09_SWITCH_2_PRESSED)
+    IF_INT_EQUAL(GSWF_LAS_09_SWITCH_1_PRESSED, 1)
 #else
     CALL(evt_mobj_switch_blue, 2, STRING("switch1"), -540, 10, -1300, PTR(switch_1_evt), GSWF_LAS_09_SWITCH_1_PRESSED)
     CALL(evt_mobj_switch_blue, 2, STRING("switch2"), 540, 10, -1300, PTR(switch_2_evt), GSWF_LAS_09_SWITCH_2_PRESSED)
@@ -1091,7 +1099,7 @@ EVT_BEGIN(las_09_init_evt)
         CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change"), STRING("Ship_Change2"))
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_LAS09_SWITCH_2_PRESSED), 1)
+    IF_INT_EQUAL(GSWF_LAS_09_SWITCH_2_PRESSED, 1)
 #else
     IF_INT_EQUAL(GSWF_LAS_09_SWITCH_2_PRESSED, 1)
 #endif
@@ -1135,7 +1143,7 @@ EVT_BEGIN(las_09_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_04_GLOOMTAIL)
-        SET_VALUE(GSWF(GSWF_LAS26_GLOOMTAIL_BODY_CLEARED), 1)
+        SET_VALUE(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 1)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_04_GLOOMTAIL)
         SET_VALUE(GSWF_LAS_09_VISITED_AFTER_GLOOMTAIL, 1)

@@ -29,10 +29,18 @@ static EvtWord w_door_open[22];
 static EvtWord e_door_close[22];
 static EvtWord e_door_open[22];
 static BeroEntry bero_entry_data[3];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord rousoku_init[];
+#else
 static EvtWord rousoku_init[46];
+#endif
 static EvtWord mobj_box01[34];
 static EvtWord mobj_box02[34];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_30_init_evt[];
+#else
 EvtWord las_30_init_evt[71];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -202,8 +210,8 @@ CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG8_LAS1"))
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 1150, 60, -125, 0, 0)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_mobj_recovery_blk, STRING("r_blk"), 1, -1050, 860, -75, 0, 0)
-CALL(evt_mobj_itembox, STRING("mobj_box01"), -1150, 800, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF(GSWF_LAS30_ITEMBOX_01))
-    CALL(evt_mobj_itembox, STRING("mobj_box02"), 1050, 0, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF(GSWF_LAS30_ITEMBOX_02))
+CALL(evt_mobj_itembox, STRING("mobj_box01"), -1150, 800, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_LAS_30_ULTRA_SHROOM_CHEST)
+    CALL(evt_mobj_itembox, STRING("mobj_box02"), 1050, 0, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box02), GSWF_LAS_30_JAMMIN_JELLY_CHEST)
 #else
     CALL(evt_mobj_recovery_blk, STRING("r_blk"), 10, -1050, 860, -75, 0, 0)
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -1150, 800, -75, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_LAS_30_ULTRA_SHROOM_CHEST)

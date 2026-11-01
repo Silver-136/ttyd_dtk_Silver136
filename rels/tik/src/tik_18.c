@@ -20,7 +20,11 @@
 static BeroEntry bero_entry_data[5];
 EvtWord tik_18_cloud_evt[5];
 static HitDamageReturn hitDmgRetPoints[13];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tik_18_init_evt[];
+#else
 EvtWord tik_18_init_evt[96];
+#endif
 
 /** Doors of this room: the pipes to tik_06 and tik_07 and two east exits to tik_17. */
 static BeroEntry bero_entry_data[] = {
@@ -140,7 +144,7 @@ EVT_BEGIN(tik_18_init_evt)
 #endif
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TIK18_CLOUD_BLOWN), 0)
+    IF_INT_EQUAL(GSWF_TIK_18_WALL_BLOWN_AWAY, 0)
 #else
     IF_INT_EQUAL(GSWF_TIK_18_WALL_BLOWN_AWAY, 0)
 #endif
@@ -163,8 +167,8 @@ EVT_BEGIN(tik_18_init_evt)
     END_IF
     CALL(evt_map_entry_airport_harbor, 1, STRING("S_Ship_Change_01"), STRING("ue"))
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -30, ITEM_SLOW_SHROOM, 0, GSWF(GSWF_TIK18_SLOW_SHROOM_BLOCK_HIT), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 310, 0, -30, ITEM_GRADUAL_SYRUP, 0, GSWF(GSWF_TIK18_GRADUAL_SYRUP_BLOCK_HIT), 0)
+CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -30, ITEM_SLOW_SHROOM, 0, GSWF_TIK_18_SLOW_SHROOM_BLOCK, 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_02"), 310, 0, -30, ITEM_GRADUAL_SYRUP, 0, GSWF_TIK_18_GRADUAL_SYRUP_BLOCK, 0)
 #else
     CALL(evt_mobj_badgeblk, STRING("mobj_01"), 110, 0, -38, ITEM_SLOW_SHROOM, 0, GSWF_TIK_18_SLOW_SHROOM_BLOCK, 0)
     CALL(evt_mobj_badgeblk, STRING("mobj_02"), 310, 0, -38, ITEM_GRADUAL_SYRUP, 0, GSWF_TIK_18_GRADUAL_SYRUP_BLOCK, 0)

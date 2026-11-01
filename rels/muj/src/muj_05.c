@@ -47,11 +47,19 @@ USER_FUNC(evt_dokuroiwa_command_set);
 
 EvtWord sanders_rotate[28];
 EvtWord sanders_nakama_sub[13];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord sanders_nakama[];
+#else
 EvtWord sanders_nakama[173];
+#endif
 static EvtWord sanders_init[51];
 static s32 itemsel_table01[2];
 EvtWord sanders_talk_sub[70];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord sanders_talk[];
+#else
 static EvtWord sanders_talk[178];
+#endif
 static EvtWord marco_init[24];
 static EvtWord marco_talk[146];
 static EvtWord erumosu_regl[4];
@@ -73,7 +81,11 @@ EvtWord redeye_flush[78];
 EvtWord dokuroiwa_flush[51];
 s32 command_seikai[7];
 static s32 itemsel_table[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord dokuroiwa_touch[];
+#else
 EvtWord dokuroiwa_touch[127];
+#endif
 EvtWord case_event_entry[45];
 EvtWord case_event_delete[42];
 EvtWord penalty_event[187];
@@ -89,7 +101,11 @@ EvtWord iwa02_nonride_a[5];
 static EvtWord bombwall_bomb[143];
 EvtWord dokuroiwa_bomb[309];
 EvtWord dokuroiwa_init[123];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord muj_05_first[];
+#else
 EvtWord muj_05_first[26];
+#endif
 EvtWord yure_yashi_ha1[180];
 EvtWord yure_yashi[88];
 static EvtWord evt_kusa_1[20];
@@ -346,7 +362,7 @@ CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
         END_IF
         CASE_EQUAL(STG5_18_BOBBERY_RESCUE_2)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_MUJ05_BOBBERY_FIRST_TALK_238), 0)
+        IF_INT_EQUAL(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 0)
 #else
         IF_INT_EQUAL(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 0)
 #endif
@@ -359,7 +375,7 @@ CALL(evt_win_item_select, PTR(itemsel_table01), LW(0))
             CALL(evt_eff_fukidashi, FUKIDASHI_AT_PARTNER, STRING(""), 0, 1, 0, 0, 0, 0, 0, 0, 60)
             WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_MUJ05_BOBBERY_FIRST_TALK_238), 1)
+            SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 1)
 #else
             SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_TALK_DONE, 1)
 #endif
@@ -879,7 +895,7 @@ EVT_BEGIN(dokuroiwa_touch)
 #endif
             CALL(evt_msg_print_party, STRING("stg5_muj_93_01_01"))
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF(GSWF_MUJ05_SKULL_ROCK_EXAMINED), 1)
+SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 1)
 #else
             CALL(evt_party_run, 0)
             SET_VALUE(GSWF_MUJ_05_SKULL_ROCK_EXAMINED, 1)
@@ -922,7 +938,7 @@ CALL(evt_win_item_select, PTR(itemsel_table), LW(0))
         END_INLINE_EVENT
         CALL(evt_mario_dump_item, ITEM_SKULL_GEM)
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_MUJ05_SKULL_GEM_PLACED), 1)
+        SET_VALUE(GSWF_MUJ_05_SKULL_GEM_PLACED, 1)
 #else
         SET_VALUE(GSWF_MUJ_05_SKULL_GEM_PLACED, 1)
 #endif
@@ -1407,7 +1423,7 @@ CALL(evt_bero_exec_wait, 65536)
 #endif
     CALL(evt_msg_print, 0, STRING("stg5_muj_33"), 0, STRING("サンダース"))
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_MUJ05_FIRST_VISIT_SCENE), 1)
+    SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN, 1)
 #else
     SET_VALUE(GSWF_MUJ_05_BOBBERY_FIRST_SCENE_SEEN, 1)
 #endif

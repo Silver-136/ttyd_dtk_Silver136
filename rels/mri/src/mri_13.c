@@ -43,10 +43,22 @@ static EvtWord punipuni_ball00_init[54];
 static EvtWord punipuni_ball00[68];
 static EvtWord yuka_init[48];
 EvtWord yuka_slot[113];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord yuka_shake[];
+#else
 EvtWord yuka_shake[11];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord yuka_shake2[];
+#else
 EvtWord yuka_shake2[68];
+#endif
 static EvtWord yuka_check[133];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord yuka_event[];
+#else
 EvtWord yuka_event[421];
+#endif
 static EvtWord evt_f1_ueki_01[20];
 static KusaAccess ueki_access_data[7];
 EvtWord mri_13_init_evt[205];
@@ -411,7 +423,7 @@ EVT_BEGIN(yuka_event)
         CALL(evt_party_get_pos, 0, LW(0), LW(1), LW(2))
         CALL(evt_sub_area_check, 1, -50, 60, 60, LW(0), LW(2), LW(15))
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_MRI13_ORB_ON_PEDESTAL), 1)
+        IF_INT_EQUAL(GSWF_MRI_13_PUNI_ORB_PLACED, 1)
 #else
         IF_INT_EQUAL(GSWF_MRI_13_PUNI_ORB_PLACED, 1)
 #endif

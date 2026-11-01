@@ -50,9 +50,17 @@ static EvtWord fumituke_attack_event[356];
 static EvtWord kamituki_attack_event[141];
 EvtWord eq_attack_event[177];
 EvtWord poison_attack_event[261];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mega_attack_event[];
+#else
 EvtWord mega_attack_event[256];
+#endif
 static EvtWord charge_event[55];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event[];
+#else
 static EvtWord attack_event[237];
+#endif
 static EvtWord wait_event[6];
 
 /**

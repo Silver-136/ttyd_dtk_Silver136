@@ -59,10 +59,26 @@ USER_FUNC(hit_group_chk);
 #endif
 static BOOL hitIsGroup(HitEntry* target, HitEntry* group);
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_close[];
+#else
 static EvtWord w_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_open[];
+#else
 static EvtWord w_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e_door_close[];
+#else
 static EvtWord e_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e_door_open[];
+#else
 static EvtWord e_door_open[22];
+#endif
 EvtWord evt_snd_stop[12];
 static EvtWord evt_haikei_in[16];
 static BeroEntry bero_entry_data[15];
@@ -101,8 +117,16 @@ static EvtWord evt_ramp[68];
 EvtWord evt_bcv_sw[99];
 EvtWord evt_key_get[5];
 static s32 key_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_door_msg[];
+#else
 static EvtWord evt_door_msg[87];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_13_init_evt[];
+#else
 EvtWord aji_13_init_evt[295];
+#endif
 
 /**
  * Recursive helper of hitIsGroup: whether the joint name of target equals that of node,
@@ -1126,7 +1150,7 @@ EVT_BEGIN(aji_13_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_dai3"), MAP_OBJ_FLAG_CLIP)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_17_CONVEYOR_BELT)
-        CALL(evt_mobj_switch_blue, 0, STRING("bcv_sw"), -150, 0, 100, PTR(evt_bcv_sw), GSWF(GSWF_AJI13_CONVEYOR_SWITCH_PRESSED))
+        CALL(evt_mobj_switch_blue, 0, STRING("bcv_sw"), -150, 0, 100, PTR(evt_bcv_sw), GSWF_AJI_13_CONVEYOR_SWITCH_PRESSED)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_17_CONVEYOR_BELT)
         CALL(evt_mobj_switch_blue, 0, STRING("bcv_sw"), -150, 0, 100, PTR(evt_bcv_sw), GSWF_AJI_13_CONVEYOR_SWITCH_PRESSED)
@@ -1157,7 +1181,7 @@ EVT_BEGIN(aji_13_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("meta_4_2"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI13_CARD_KEY_TAKEN), 0)
+    IF_INT_EQUAL(GSWF_AJI_13_CARD_KEY, 0)
 #else
     IF_INT_EQUAL(GSWF_AJI_13_CARD_KEY, 0)
 #endif
@@ -1165,7 +1189,7 @@ EVT_BEGIN(aji_13_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_18_OFF_SCREEN_STAIRS)
-        CALL(evt_mobj_switch_blue, 0, STRING("sw"), 650, 200, 100, PTR(evt_sw), GSWF(GSWF_AJI13_STAIRS_SWITCH_PRESSED))
+        CALL(evt_mobj_switch_blue, 0, STRING("sw"), 650, 200, 100, PTR(evt_sw), GSWF_AJI_13_STAIRS_SWITCH_PRESSED)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_18_OFF_SCREEN_STAIRS)
         CALL(evt_mobj_switch_blue, 0, STRING("sw"), 650, 200, 100, PTR(evt_sw), GSWF_AJI_13_STAIRS_SWITCH_PRESSED)
@@ -1194,7 +1218,7 @@ EVT_BEGIN(aji_13_init_evt)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), 200, 60, 100, 0, 0)
     CALL(evt_mobj_recovery_blk, STRING("mobj_recover"), 10, 300, 60, 100, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF(GSWF_AJI13_ULTRA_SHROOM), 0)
+    CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF_AJI_13_ULTRA_SHROOM, 0)
 IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_20_LORD_CRUMP_DEFEATED)
 #else
     CALL(evt_item_entry, STRING("item00"), ITEM_ULTRA_SHROOM, -670, 320, -450, ITEM_TYPE_STILL, GSWF_AJI_13_ULTRA_SHROOM, 0)

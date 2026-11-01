@@ -45,8 +45,16 @@ void kpa_stg1_034_cb(s32 type, smartEntry* smart);
 
 EvtWord kpa_01_door_open[219];
 EvtWord kpa_01_door_close[237];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kpa_01_touzyo_evt[];
+#else
 EvtWord kpa_01_touzyo_evt[217];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kpa_01_syuppatu_evt[];
+#else
 EvtWord kpa_01_syuppatu_evt[1729];
+#endif
 EvtWord kpa_01_pos_check[23];
 EvtWord douzou_1_touch_evt[19];
 EvtWord douzou_2_touch_evt[19];
@@ -1200,7 +1208,7 @@ EVT_BEGIN(kpa_01_init_evt)
         SPAWN_EVENT(kpa_01_pos_check)
         CASE_EQUAL(STG1_19_01_BOWSER_BOWSER_CASTLE)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(7))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
 #else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(7))
 #endif

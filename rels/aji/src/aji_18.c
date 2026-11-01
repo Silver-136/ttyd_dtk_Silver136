@@ -32,12 +32,32 @@ s32 key_list[4];
 static USER_FUNC(make_list);
 static USER_FUNC(sysflag);
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_close[];
+#else
 static EvtWord w_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_open[];
+#else
 static EvtWord w_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e_door_close[];
+#else
 static EvtWord e_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e_door_open[];
+#else
 static EvtWord e_door_open[22];
+#endif
 static BeroEntry bero_entry_data[3];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_machine[];
+#else
 EvtWord evt_machine[266];
+#endif
 EvtWord key_lock_koujyou[14];
 static EvtWord evt_koopa_after[118];
 #if VERSION >= VERSION_US
@@ -189,7 +209,7 @@ CALL(evt_win_item_select, PTR(key_list), LW(10))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_AJI18_CARD_KEY_SLOT_1), 1)
+            SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
 #else
             SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
 #endif
@@ -205,7 +225,7 @@ CALL(evt_win_item_select, PTR(key_list), LW(10))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_AJI18_CARD_KEY_SLOT_2), 1)
+            SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
 #else
             SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
 #endif
@@ -221,7 +241,7 @@ CALL(evt_win_item_select, PTR(key_list), LW(10))
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
             CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_AJI18_CARD_KEY_SLOT_3), 1)
+            SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
 #else
             SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
 #endif
@@ -235,9 +255,9 @@ CALL(evt_win_item_select, PTR(key_list), LW(10))
         CASE_DEFAULT
     END_SWITCH
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_1), 1)
-        IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_2), 1)
-            IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_3), 1)
+    IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
+        IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
+            IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
                 SET_VALUE(GSW(GSW_STORY_PROGRESS), STG7_16_FACTORY_DOOR)
 #else
     IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
@@ -346,25 +366,25 @@ SET_VALUE(LW(0), PTR(bero_entry_data))
     // From the factory-door story point on, all three card-key slots count as filled; each slot shows green
     // when filled and red when empty.
     IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG7_16_FACTORY_DOOR)
-        SET_VALUE(GSWF(GSWF_AJI18_CARD_KEY_SLOT_1), 1)
-        SET_VALUE(GSWF(GSWF_AJI18_CARD_KEY_SLOT_2), 1)
-        SET_VALUE(GSWF(GSWF_AJI18_CARD_KEY_SLOT_3), 1)
+        SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
+        SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
+        SET_VALUE(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_1), 1)
+    IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi1_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi1_mid"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_2), 1)
+    IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
     ELSE
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi2_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi2_mid"), MAP_OBJ_FLAG_HIDDEN)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_3), 1)
+    IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 1)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_kagi3_aka"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_kagi3_mid"), MAP_OBJ_FLAG_HIDDEN)
     ELSE
@@ -378,15 +398,15 @@ SET_VALUE(LW(0), PTR(bero_entry_data))
     ADD(LW(0), LW(1))
     CALL(evt_pouch_check_item, ITEM_CARD_KEY_0x1F, LW(1))
     ADD(LW(0), LW(1))
-    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_1), 0)
+    IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_1_FILLED, 0)
         SET_VALUE(LW(0), 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi1"), 0, PTR(evt_machine), 0)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_2), 0)
+    IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_2_FILLED, 0)
         SET_VALUE(LW(0), 1)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi2"), 0, PTR(evt_machine), 0)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_AJI18_CARD_KEY_SLOT_3), 0)
+    IF_INT_EQUAL(GSWF_AJI_18_CARD_KEY_SLOT_3_FILLED, 0)
         SET_VALUE(LW(0), 2)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_kagi3"), 0, PTR(evt_machine), 0)
     END_IF

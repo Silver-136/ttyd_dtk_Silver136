@@ -74,9 +74,17 @@ BattleWeapon weapon_chorobon_gundan_attack;
 EvtWord chorogun_dead_reward[73];
 static EvtWord init_event[26];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord damage_event[];
+#else
 static EvtWord damage_event[80];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord damage_event[];
 #else
 static EvtWord damage_event[59];
+#endif
 #endif
 static EvtWord attack_event[217];
 static EvtWord wait_event[6];

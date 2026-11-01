@@ -189,11 +189,27 @@ USER_FUNC(memcard_write) {
 }
 
 EvtWord evt_memcard_nosave[19];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_memcard_check[];
+#else
 EvtWord evt_memcard_check[322];
+#endif
 EvtWord evt_memcard_start[32];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_memcard_delete[];
+#else
 EvtWord evt_memcard_delete[80];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_memcard_copy[];
+#else
 EvtWord evt_memcard_copy[126];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_memcard_save[];
+#else
 EvtWord evt_memcard_save[510];
+#endif
 
 /**
  * Tells the player they can continue without saving and asks yes or no;
@@ -589,7 +605,7 @@ EVT_BEGIN(evt_memcard_save)
     // Remember the save kind and write the save file.
     LABEL(1)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_SAVE_RESUME_KIND), LW(10))
+    SET_VALUE(GSW_SAVE_RESUME_POINT, LW(10))
 #else
     SET_VALUE(GSW_SAVE_RESUME_POINT, LW(10))
 #endif

@@ -46,8 +46,16 @@ static NpcSetupInfo npcEnt[2];
 static BeroEntry bero_entry_data[2];
 static s32 key_tbl[2];
 EvtWord apper_elmos[43];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord peramajin_before[];
+#else
 EvtWord peramajin_before[396];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord peramajin_after[];
+#else
 EvtWord peramajin_after[297];
+#endif
 EvtWord dou_07_init_evt[89];
 
 /** Registration script of the Ember (エルモス, erumosu) enemy: does nothing. */

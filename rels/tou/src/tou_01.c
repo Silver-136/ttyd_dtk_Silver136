@@ -116,7 +116,11 @@ static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[13];
 static ShopperData35 shopper_data;
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_hotdog[];
+#else
 EvtWord evt_hotdog[86];
+#endif
 EvtWord evt_ship_shadow[91];
 EvtWord init_hikuu[12];
 EvtWord talk_hikuu[84];
@@ -152,15 +156,27 @@ EvtWord init_jugem_1[8];
 EvtWord talk_jugem_1[112];
 EvtWord init_jugem_2[12];
 EvtWord talk_jugem_2[112];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord init_bijyo[];
+#else
 EvtWord init_bijyo[40];
+#endif
 EvtWord talk_bijyo[112];
 static EvtWord init_kiza[21];
 static EvtWord talk_kiza[60];
 static EvtWord init_sarary[12];
 EvtWord select_number[44];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord talk_sarary[];
+#else
 static EvtWord talk_sarary[479];
+#endif
 static NpcSetupInfo npcEnt[20];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_uron[];
+#else
 EvtWord evt_uron[195];
+#endif
 EvtWord evt_tamago_sleep[56];
 EvtWord dummy[2];
 EvtWord hot_move_evt[66];
@@ -169,25 +185,61 @@ EvtWord evt_oyaji_move[60];
 static EvtWord evt_tamago_scale[89];
 static EvtWord evt_tamago_scale2[83];
 s32 yoshi_data[30];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_tamago_move[];
+#else
 EvtWord evt_tamago_move[306];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_tamago[];
+#else
 EvtWord evt_tamago[100];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord talk_tamago[];
+#else
 EvtWord talk_tamago[321];
+#endif
 EvtWord evt_gondora_updown[143];
 EvtWord evt_gondora_mon[62];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_gondora[];
+#else
 EvtWord evt_gondora[169];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_gondora2[];
+#else
 EvtWord evt_gondora2[200];
+#endif
 EvtWord evt_search_light[82];
 EvtWord evt_dummy_sw[178];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_peach_after[];
+#else
 EvtWord evt_peach_after[92];
+#endif
 static EvtWord sekai_yami_npc_init[84];
 static EvtWord sekai_yami_npc[65];
 static EvtWord sekai_yami_evt[215];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord minnnanokoe_npc_entry[];
+#else
 static EvtWord minnnanokoe_npc_entry[175];
+#endif
 static EvtWord minnnanokoe_evt[446];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_telbox[];
+#else
 EvtWord evt_telbox[124];
+#endif
 EvtWord evt_mail[175];
 static EvtWord evt_key[7];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mobj_box00[];
+#else
 static EvtWord mobj_box00[36];
+#endif
 EvtWord tou_01_init_evt[];
 
 /** Script helper: turns off projected-texture shading (the blimp shadow) on Mario's and the partners' models. */
@@ -1726,7 +1778,7 @@ EVT_END()
 static EVT_BEGIN(talk_sarary)
     // During his Trouble Center request: Mario and the partner walk over to him.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_SECURITY_CODE)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SECURITY_CODE)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SECURITY_CODE)
 #endif
@@ -1839,7 +1891,7 @@ static EVT_BEGIN(talk_sarary)
                 CALL(evt_npc_wait_pera, STRING("サラリーマン"))
                 WAIT_MS(300)
 #if VERSION <= VERSION_DEMO_US
-                CALL(evt_item_entry, STRING("iri_24"), ITEM_HOT_SAUCE, -265, 10, -70, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_TROUBLE24_ITEM_LEFT), 0)
+                CALL(evt_item_entry, STRING("iri_24"), ITEM_HOT_SAUCE, -265, 10, -70, ITEM_TYPE_STILL, GSWF_TOU_01_HOT_SAUCE_REWARD, 0)
 #else
                 CALL(evt_item_entry, STRING("iri_24"), ITEM_HOT_SAUCE, -265, 10, -70, ITEM_TYPE_STILL, GSWF_TOU_01_HOT_SAUCE_REWARD, 0)
 #endif
@@ -1853,14 +1905,14 @@ static EVT_BEGIN(talk_sarary)
                 CALL(evt_item_get_item, STRING("rk"))
                 CALL(evt_item_get_item_end_wait, STRING("rk"))
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_TOU01_TROUBLE24_ITEM_LEFT), 1)
+                SET_VALUE(GSWF_TOU_01_HOT_SAUCE_REWARD, 1)
 #else
                 SET_VALUE(GSWF_TOU_01_HOT_SAUCE_REWARD, 1)
 #endif
             END_IF
             CALL(evt_msg_print, 0, STRING("irai_24_027"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+            SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #else
             SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #endif
@@ -2771,7 +2823,7 @@ EVT_BEGIN(talk_tamago)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_sub_save_playtime, GSW(GSW_TOU_EGG_TIME))
+    CALL(evt_sub_save_playtime, GSW_TOU_EGG_RECEIVED_TIME)
 #else
     CALL(evt_sub_save_playtime, GSW_TOU_EGG_RECEIVED_TIME)
 #endif
@@ -2982,8 +3034,8 @@ EVT_BEGIN(evt_gondora2)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_gondora_mon)
     IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG3_34_RETURN_TO_ROGUEPORT)
-        IF_INT_EQUAL(GSWF(GSWF_TOU_LEFT_AS_CHAMPION), 0)
-            SET_VALUE(GSWF(GSWF_TOU_LEFT_AS_CHAMPION), 1)
+        IF_INT_EQUAL(GSWF_TOU_LEFT_AFTER_CHAPTER, 0)
+            SET_VALUE(GSWF_TOU_LEFT_AFTER_CHAPTER, 1)
 CALL(rankingReset)
 #else
     CALL_CHILD(PTR(evt_gondora_mon))
@@ -3683,15 +3735,15 @@ EVT_BEGIN(tou_01_init_evt)
     CALL(evt_bero_get_info)
     CALL_CHILD(evt_bero_info_run)
     CALL(evt_mobj_save_blk, STRING("mobj_save"), -225, 70, -225, 0, 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk01"), 245, 100, -220, 0, GSWF(GSWF_TOU01_SHINE_SPRITE), 0)
-    CALL(evt_mobj_brick, STRING("hblk01"), 245, 10, -220, ITEM_COIN, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF(GSWF_TOU01_COIN_BRICK))
-    CALL(evt_mobj_itembox, STRING("mobj_box00"), 700, 160, -10, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF(GSWF_TOU01_ITEMBOX_00))
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 0, 0, 800, STRING("jimen"), 125, GSWF(GSWF_TOU01_STAR_PIECE_PANEL))
-    CALL(evt_item_entry, STRING("item_03"), ITEM_STAR_PIECE, 675, 10, -165, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_STAR_PIECE_1), 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, -785, 10, 390, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_STAR_PIECE_2), 0)
-    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, 60, 30, -365, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_STAR_PIECE_3), 0)
-    CALL(evt_item_entry, STRING("item_04"), ITEM_STAR_PIECE, 615, 160, -75, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_STAR_PIECE_4), 0)
-    CALL(evt_item_entry, STRING("item_05"), ITEM_INN_COUPON, 450, 10, -90, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_INN_COUPON), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk01"), 245, 100, -220, 0, GSWF_SHINE_21, 0)
+    CALL(evt_mobj_brick, STRING("hblk01"), 245, 10, -220, ITEM_COIN, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_TOU_01_COIN_HIDDEN_BLOCK)
+    CALL(evt_mobj_itembox, STRING("mobj_box00"), 700, 160, -10, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box00), GSWF_TOU_01_POWER_PLUS_P_CHEST)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), 0, 0, 800, STRING("jimen"), 125, GSWF_STARPIECE_55)
+    CALL(evt_item_entry, STRING("item_03"), ITEM_STAR_PIECE, 675, 10, -165, ITEM_TYPE_STILL, GSWF_STARPIECE_51, 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, -785, 10, 390, ITEM_TYPE_STILL, GSWF_STARPIECE_52, 0)
+    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, 60, 30, -365, ITEM_TYPE_STILL, GSWF_STARPIECE_53, 0)
+    CALL(evt_item_entry, STRING("item_04"), ITEM_STAR_PIECE, 615, 160, -75, ITEM_TYPE_STILL, GSWF_STARPIECE_54, 0)
+    CALL(evt_item_entry, STRING("item_05"), ITEM_INN_COUPON, 450, 10, -90, ITEM_TYPE_STILL, GSWF_TOU_01_INN_COUPON, 0)
     // The NPCs are left out when Mario arrives for the chapter 8 scenes.
     SET_VALUE(LF(0), 0)
     IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_15_GRODUS)
@@ -3710,7 +3762,7 @@ EVT_BEGIN(tou_01_init_evt)
     END_IF
     // Hot Sauce left on the ground after the salaryman's request.
     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SECURITY_CODE), 1)
-        CALL(evt_item_entry, STRING("iri_24"), ITEM_HOT_SAUCE, -265, 10, -70, ITEM_TYPE_STILL, GSWF(GSWF_TOU01_TROUBLE24_ITEM_LEFT), 0)
+        CALL(evt_item_entry, STRING("iri_24"), ITEM_HOT_SAUCE, -265, 10, -70, ITEM_TYPE_STILL, GSWF_TOU_01_HOT_SAUCE_REWARD, 0)
     END_IF
     // The shop and tavern doors, the looping map animations, the searchlights and the telephone box.
     SET_VALUE(LW(0), PTR(&door_1))
@@ -3738,12 +3790,12 @@ EVT_BEGIN(tou_01_init_evt)
     CALL(evt_map_entry_airport_harbor, 0, STRING("hikou"), STRING("a_hi1"))
     // Until the hidden switch is spun, the neon sign hangs loose and the tavern stairs are blocked;
     // afterwards it is fixed.
-    IF_INT_EQUAL(GSWF(GSWF_TOU01_HIDDEN_SWITCH), 0)
+    IF_INT_EQUAL(GSWF_TOU_01_TORNADO_SWITCH_PRESSED, 0)
         CALL(evt_mapobj_flag_onoff, 1, 0, STRING("neon_1"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("neon_2"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_mapobj_flag_onoff, 1, 1, STRING("neon_3"), MAP_OBJ_FLAG_HIDDEN)
         CALL(evt_hitobj_onoff, STRING("a_sak_kaidan"), 1, 0)
-        CALL(evt_mobj_tornadoswitch_blue, 0, STRING("dummy_sw"), 735, 10, 455, PTR(evt_dummy_sw), GSWF(GSWF_TOU01_HIDDEN_SWITCH))
+        CALL(evt_mobj_tornadoswitch_blue, 0, STRING("dummy_sw"), 735, 10, 455, PTR(evt_dummy_sw), GSWF_TOU_01_TORNADO_SWITCH_PRESSED)
         SET_VALUE(GF(10), 0)
         SPAWN_EVENT(evt_kanban2)
     ELSE

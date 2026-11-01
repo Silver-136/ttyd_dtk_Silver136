@@ -18,7 +18,11 @@ static EvtWord e_close[12];
 static EvtWord e_open[12];
 static BeroEntry bero_entry_data[3];
 EvtWord warning_event[38];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord muj_11_init_evt[];
+#else
 EvtWord muj_11_init_evt[35];
+#endif
 
 /**
  * Enter hook of the west door (w_bero, from muj_10, enter anime type 5): turns S_doa_l to LW(0) x 0.444 degrees;

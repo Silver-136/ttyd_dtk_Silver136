@@ -75,7 +75,11 @@ BattleWeapon partyWeapon_VivianShadowGuard;
 BattleWeapon partyWeapon_VivianMagicalPowder;
 BattleWeapon partyWeapon_VivianCharmKissAttack;
 EvtWord partyVivianAttack_NormalAttack[581];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord partyVivianAttack_ShadowGuard[];
+#else
 EvtWord partyVivianAttack_ShadowGuard[430];
+#endif
 EvtWord partyVivianAttack_MagicalPowder[VERSION_PICK(442, 448)];
 EvtWord partyVivianAttack_CharmKissAttack[464];
 EvtWord vivian_shadow_tail_event[78];

@@ -36,9 +36,21 @@ static BeroEntry w_bero_mapchg[1];
 EvtWord floatblk_stop_se[47];
 EvtWord floatblk_shake[27];
 EvtWord floatblk_evt[336];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord floatblk21_1_evt[];
+#else
 EvtWord floatblk21_1_evt[62];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord floatblk21_2_evt[];
+#else
 EvtWord floatblk21_2_evt[62];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_21_init_evt[];
+#else
 EvtWord las_21_init_evt[211];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -568,7 +580,7 @@ EVT_BEGIN(las_21_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_06_MOVING_PLANETS)
-        IF_INT_EQUAL(GSWF(GSWF_LAS19_SWITCH1_ON), 0)
+        IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG8_06_MOVING_PLANETS)
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
@@ -578,7 +590,7 @@ EVT_BEGIN(las_21_init_evt)
             SET_VALUE(LW(0), -580)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_LAS19_SWITCH2_ON), 0)
+        IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
 #else
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
 #endif

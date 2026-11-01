@@ -105,7 +105,11 @@ static EvtWord musume_c_entry[30];
 static NpcSetupInfo npcEnt[17];
 static EvtWord bero_in_event[5];
 static BeroEntry bero_entry_data[3];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord muj_00_door_open[];
+#else
 EvtWord muj_00_door_open[247];
+#endif
 EvtWord muj_00_door_close[22];
 static const char* mise_npc[2];
 EvtWord mise_data_open[32];
@@ -332,7 +336,7 @@ EVT_END()
 static EVT_BEGIN(marco_talk)
     SWITCH(GSW(GSW_STORY_PROGRESS))
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_17_WINE_OBTAINED)
-        IF_INT_EQUAL(GSWF(GSWF_MUJ01_TIMID_SAILOR_PERSUADED), 0)
+        IF_INT_EQUAL(GSWF_MUJ_01_BOBBERY_MISSING_SCENE_SEEN, 0)
             // While Bobbery is being found, the timid sailor must first be persuaded.
             CALL_CHILD(settoku_event_main)
         END_IF
@@ -342,10 +346,10 @@ static EVT_BEGIN(marco_talk)
         // Flavio asks what Mario has found.
         CALL(evt_msg_print, 0, STRING("stg5_muj_22_0"), 0, STRING("me"))
         CASE_BETWEEN(STG5_13_BOBBERY_THE_BRIDGE, STG5_13_BOBBERY_THE_BRIDGE)
-        IF_INT_EQUAL(GSWF(GSWF_MUJ01_FLAVIO_FIRST_TALK_234), 0)
+        IF_INT_EQUAL(GSWF_MUJ_01_FLAVIO_RESCUE_ORDER_HEARD, 0)
             // Flavio brushes off talk of the admiral and tells Mario to hurry.
             CALL(evt_msg_print, 0, STRING("stg5_muj_31"), 0, STRING("me"))
-            SET_VALUE(GSWF(GSWF_MUJ01_FLAVIO_FIRST_TALK_234), 1)
+            SET_VALUE(GSWF_MUJ_01_FLAVIO_RESCUE_ORDER_HEARD, 1)
         ELSE
             CALL(evt_msg_print, 0, STRING("stg5_muj_32"), 0, STRING("me"))
         END_IF

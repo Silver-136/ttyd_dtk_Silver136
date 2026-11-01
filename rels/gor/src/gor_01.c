@@ -122,8 +122,16 @@ extern s32 envSetYami[];
 
 static EvtWord sell_evt[VERSION_PICK(135, 146)];
 EvtWord zaiko_buy_evt[VERSION_PICK(174, 185)];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord buy_evt[];
+#else
 static EvtWord buy_evt[53];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord badgeshopper_talk_evt[];
+#else
 EvtWord badgeshopper_talk_evt[38];
+#endif
 EvtWord badgemaster_init[36];
 EvtWord badgemaster_talk[76];
 EvtWord kinoji_init[2];
@@ -166,7 +174,11 @@ EvtWord chusan2_init[2];
 EvtWord chusan2_talk[76];
 static EvtWord bomhei_init[2];
 EvtWord bomhei_talk[76];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord bottakuru_init[];
+#else
 EvtWord bottakuru_init[25];
+#endif
 EvtWord bottakuru_talk[VERSION_PICK(292, 314)];
 static EvtWord luigi_init[43];
 static EvtWord luigi_talk[4];
@@ -210,7 +222,11 @@ EvtWord evt_wall_02_f2[41];
 const char* badgemise_npc[3];
 EvtWord evt_badge_dummy[VERSION_PICK(128, 139)];
 UnitWinSell uwnobj_list[6];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_open_02_01_f2[];
+#else
 EvtWord evt_open_02_01_f2[22];
+#endif
 EvtWord evt_close_sub[6];
 EvtWord evt_close_02_01_f2[16];
 DoorParam door_data_02_f2;
@@ -259,7 +275,11 @@ EvtWord bar_door_anime[99];
 EvtWord christine_nakama_init[58];
 EvtWord christine_nakama[760];
 EvtWord maffia_turn[84];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord maffia_assault[];
+#else
 EvtWord maffia_assault[797];
+#endif
 EvtWord christine_nakama_after[82];
 EvtWord box_copy[19];
 EvtWord ultrahammer_check[222];
@@ -275,14 +295,22 @@ static EvtWord sekai_yami_npc[59];
 static EvtWord sekai_yami_evt[185];
 static EvtWord minnnanokoe_evt[397];
 EvtWord iri_09_init[10];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord iri_09_tentyo_talk[];
+#else
 EvtWord iri_09_tentyo_talk[172];
+#endif
 s32 iri_16_item_tbl[2];
 static EvtWord iri_16_init[34];
 EvtWord iri_16_tyutyu_talk[445];
 EvtWord marco_jewel[22];
 static EvtWord epilogue_npc_entry[48];
 static EvtWord epilogue_evt_sub[160];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord epilogue_evt[];
+#else
 static EvtWord epilogue_evt[313];
+#endif
 #if VERSION >= VERSION_US
 EvtWord dai_disp[52];
 #endif
@@ -728,9 +756,9 @@ EVT_BEGIN(badgeshopper_talk_evt)
     CALL(evt_mario_key_onoff, 0)
     CALL(unitwin_get_work_ptr, LW(10))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GOR01_BADGE_SHOP_FIRST_TALK), 0)
+    IF_INT_EQUAL(GSWF(2), 0)
         CALL_CHILD(first_shopping_evt)
-        SET_VALUE(GSWF(GSWF_GOR01_BADGE_SHOP_FIRST_TALK), 1)
+        SET_VALUE(GSWF(2), 1)
         CALL(evt_mario_key_onoff, 1)
         RETURN
     END_IF
@@ -1047,7 +1075,7 @@ CALL(evt_party_run, 0)
     CALL(evt_party_run, 1)
 CALL(evt_mario_key_onoff, 1)
     // Story flag set: the gate to the west side is now blocked.
-    SET_VALUE(GSWF(GSWF_GOR01_ZESS_BLOCKS_GATE), 1)
+    SET_VALUE(GSWF_GOR_ZESS_T_BLOCKING_WEST_GATE, 1)
     RETURN
 EVT_END()
 #else
@@ -1372,7 +1400,7 @@ s32 item_tbl_nancy[] = {
  */
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(nancy_talk)
-    IF_INT_EQUAL(GSWF(GSWF_GOR01_LENS_DELIVERED), 0)
+    IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         CALL(evt_pouch_check_item, ITEM_CONTACT_LENS, LW(0))
         IF_INT_GREATER_OR_EQUAL(LW(0), 1)
             CALL(evt_msg_print, 0, STRING("gor_01_008"), 0, STRING("me"))
@@ -1416,7 +1444,7 @@ CALL(evt_npc_set_ry, STRING("me"), 270)
             SET_VALUE(LW(0), STRING("w_bero"))
             CALL_CHILD(bero_case_switch_on)
             CALL(evt_hitobj_attr_onoff, 1, 1, STRING("w_bero"), 8388612)
-            SET_VALUE(GSWF(GSWF_GOR01_LENS_DELIVERED), 1)
+            SET_VALUE(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 1)
             CALL(evt_door_set_param, GW(6), 0, PTR(&door_data_01_npc))
         END_IF
     ELSE
@@ -2435,7 +2463,7 @@ IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG2_25_AFTER_THE_BOSS_BATTLE)
     END_IF
     CALL(evt_npc_flag_onoff, 1, STRING("me"), NPC_FLAG_NO_WALL_COLLISION)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF(GSWF_GOR01_CHARLIETON_BOUGHT), 0)
+SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
 #else
     CALL(evt_npc_set_ry, STRING("me"), 90)
     SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
@@ -2457,11 +2485,11 @@ EVT_BEGIN(bottakuru_talk)
         RETURN
     END_IF
     // Charlieton's sales pitch (a longer one on the first visit), then he asks if Mario wants to shop.
-    IF_INT_EQUAL(GSWF(GSWF_GOR01_CHARLIETON_FIRST_TALK), 0)
+    IF_INT_EQUAL(GSWF_GOR_CHARLIETON_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("bottakuru_00"), 0, STRING("me"))
-        SET_VALUE(GSWF(GSWF_GOR01_CHARLIETON_FIRST_TALK), 1)
+        SET_VALUE(GSWF_GOR_CHARLIETON_FIRST_TALK_DONE, 1)
     ELSE
-        IF_INT_EQUAL(GSWF(GSWF_GOR01_CHARLIETON_BOUGHT), 0)
+        IF_INT_EQUAL(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 0)
             CALL(evt_msg_print, 0, STRING("bottakuru_01"), 0, STRING("me"))
         ELSE
             CALL(evt_msg_print, 0, STRING("bottakuru_02"), 0, STRING("me"))
@@ -2521,7 +2549,7 @@ EVT_BEGIN(bottakuru_talk)
     CALL(evt_win_coin_wait, LW(12))
     WAIT_MS(500)
     CALL(evt_win_coin_off, LW(12))
-    SET_VALUE(GSWF(GSWF_GOR01_CHARLIETON_BOUGHT), 1)
+    SET_VALUE(GSWF_GOR_CHARLIETON_BOUGHT_THIS_VISIT, 1)
     // Charlieton thanks Mario; if he is now sold out or Mario has no coins left the visit ends, otherwise he
     // offers more.
     CALL(evt_badgeShop_bottakuru_get_kind_cnt, LW(0))
@@ -3579,9 +3607,9 @@ EVT_BEGIN(evt_badge_dummy)
     CALL(disp_off, LW(10))
     CALL(evt_set_dir_to_target, STRING("バッジ店員"), STRING("mario"))
     CALL(evt_mario_set_dir_npc, STRING("バッジ店員"))
-    IF_INT_EQUAL(GSWF(GSWF_GOR01_BADGE_SHOP_FIRST_TALK), 0)
+    IF_INT_EQUAL(GSWF(2), 0)
         CALL_CHILD(first_shopping_evt)
-        SET_VALUE(GSWF(GSWF_GOR01_BADGE_SHOP_FIRST_TALK), 1)
+        SET_VALUE(GSWF(2), 1)
         RETURN
     END_IF
     CALL(unitwincoin_disp_onoff, 1)
@@ -3701,8 +3729,8 @@ UnitWinSell uwnobj_list[] = {
  */
 EVT_BEGIN(evt_open_02_01_f2)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -5874,7 +5902,7 @@ CALL(evt_win_item_select, LW(1), LW(2))
                 CALL(evt_item_get_item_end_wait, STRING("uk"))
                 CALL(evt_msg_print, 0, STRING("irai_09_006"), 0, STRING("店長"))
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #else
                 SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #endif
@@ -5921,7 +5949,7 @@ EVT_END()
  */
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(iri_16_tyutyu_talk)
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_ELUSIVE_BADGE)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_ELUSIVE_BADGE)
         // Ms. Mowz's own theme replaces the plaza music for the whole talk.
         CALL(evt_snd_bgmoff_f, PSND_PAUSE, 2000)
         CALL(evt_snd_bgmoff, PSND_PAUSE)
@@ -5970,7 +5998,7 @@ IF_INT_NOT_EQUAL(LW(0), -1)
                         CALL(evt_item_entry, STRING("mb"), ITEM_ATTACK_FX_B, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                         CALL(evt_item_get_item, STRING("mb"))
                         CALL(evt_item_get_item_end_wait, STRING("mb"))
-                        SET_VALUE(GSWF(GSWF_GOR01_TROUBLE16_BADGE_LEFT), 1)
+                        SET_VALUE(GSWF_GOR_01_MS_MOWZ_ATTACK_FX_B, 1)
                     ELSE
                         // Badge list full: she hops over the rooftops and leaves the badge on the ground for
                         // Mario to pick up later.
@@ -6013,7 +6041,7 @@ IF_INT_NOT_EQUAL(LW(0), -1)
                         CALL(evt_npc_wait_pera, STRING("チュチュリーナ"))
                         CALL(evt_npc_flag_onoff, 0, STRING("チュチュリーナ"), NPC_FLAG_NO_HIT | NPC_FLAG_NO_WALL_COLLISION)
                         CALL(evt_msg_print, 0, STRING("irai_16_05_2"), 0, STRING("チュチュリーナ"))
-                        CALL(evt_item_entry, STRING("iri_16"), ITEM_ATTACK_FX_B, -150, 153, -120, ITEM_TYPE_STILL, GSWF(GSWF_GOR01_TROUBLE16_BADGE_LEFT), 0)
+                        CALL(evt_item_entry, STRING("iri_16"), ITEM_ATTACK_FX_B, -150, 153, -120, ITEM_TYPE_STILL, GSWF_GOR_01_MS_MOWZ_ATTACK_FX_B, 0)
                     END_IF
                     // She thanks Mario with a kiss.
                     CALL(evt_msg_print, 0, STRING("irai_16_06"), 0, STRING("チュチュリーナ"))
@@ -6043,7 +6071,7 @@ WAIT_MS(800)
                     SET_VALUE(LW(8), STRING("チュチュリーナ"))
                     SET_VALUE(LW(9), PARTY_MEMBER_MS_MOWZ)
                     CALL_CHILD(all_party_lecture)
-                    SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+                    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
                     // The request is marked solved and the Trouble Center completion message appears.
                     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_ELUSIVE_BADGE), 1)
                     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
@@ -6504,26 +6532,26 @@ EVT_BEGIN(gor_01_init_evt)
         CALL_CHILD(christine_nakama_init)
     END_IF
     IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG0_07_GOOMBELLA_JOINS)
-        IF_INT_EQUAL(GSWF(GSWF_GOR01_GOOMBELLA_SAVE_TALK_DONE), 0)
+        IF_INT_EQUAL(GSWF_GOR_01_SAVE_REMINDER_DONE, 0)
             SPAWN_EVENT(christine_nakama_after)
         END_IF
     END_IF
     // The ordered contact lens arrives once the story has moved on or enough time has passed.
-    IF_INT_EQUAL(GSWF(GSWF_GOR01_LENS_ARRIVED), 0)
-        IF_INT_EQUAL(GSWF(GSWF_GOR01_LENS_ORDERED), 1)
+    IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 0)
+        IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ORDERED_EARLY, 1)
             IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_17_FATHER_SON_REUNITED)
-                SET_VALUE(GSWF(GSWF_GOR01_LENS_ARRIVED), 1)
+                SET_VALUE(GSWF_GOR_CONTACT_LENS_ARRIVED, 1)
             END_IF
         END_IF
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_GOR01_LENS_ARRIVED), 0)
+    IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 0)
         IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG1_17_FATHER_SON_REUNITED)
-            SET_VALUE(LW(0), GSWF(GSWF_GOR01_LENS_ORDERED))
-            ADD(LW(0), GSWF(GSWF_GOR01_LENS_ORDERED_ALT))
+            SET_VALUE(LW(0), GSWF_GOR_CONTACT_LENS_ORDERED_EARLY)
+            ADD(LW(0), GSWF_GOR_CONTACT_LENS_ORDERED_LATE)
             IF_INT_NOT_EQUAL(LW(0), 0)
-                CALL(evt_sub_load_progresstime, GSW(GSW_GOR01_LENS_ORDER_TIME), LW(0))
+                CALL(evt_sub_load_progresstime, GSW_GOR_CONTACT_LENS_ORDER_TIME, LW(0))
                 IF_INT_GREATER_OR_EQUAL(LW(0), 90000)
-                    SET_VALUE(GSWF(GSWF_GOR01_LENS_ARRIVED), 1)
+                    SET_VALUE(GSWF_GOR_CONTACT_LENS_ARRIVED, 1)
                 END_IF
             END_IF
         END_IF
@@ -6540,11 +6568,11 @@ EVT_BEGIN(gor_01_init_evt)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 185, 60, -55, 0, 0)
     END_IF
     // Star Piece panels and the hidden Star Pieces.
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -455, 0, -260, STRING("S_ground"), 125, GSWF(GSWF_GOR01_STAR_PIECE_PANEL_1))
-    CALL(evt_mobj_kururing_floor, STRING("kururin2"), 0, 0, 450, STRING("S_ground"), 125, GSWF(GSWF_GOR01_STAR_PIECE_PANEL_2))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 490, 0, 245, ITEM_TYPE_STILL, GSWF(GSWF_GOR01_STAR_PIECE_1), 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 550, 0, -150, ITEM_TYPE_STILL, GSWF(GSWF_GOR01_STAR_PIECE_2), 0)
-    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -565, 162, -160, ITEM_TYPE_STILL, GSWF(GSWF_GOR01_STAR_PIECE_3), 0)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -455, 0, -260, STRING("S_ground"), 125, GSWF_STARPIECE_02)
+    CALL(evt_mobj_kururing_floor, STRING("kururin2"), 0, 0, 450, STRING("S_ground"), 125, GSWF_STARPIECE_06)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 490, 0, 245, ITEM_TYPE_STILL, GSWF_STARPIECE_03, 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 550, 0, -150, ITEM_TYPE_STILL, GSWF_STARPIECE_04, 0)
+    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -565, 162, -160, ITEM_TYPE_STILL, GSWF_STARPIECE_05, 0)
     // Until Flavio's talk the Skull Gem lies on the ground.
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG4_32_CHATTING_WITH_FLAVIO)
         CALL(evt_item_entry, STRING("\x83\x68\x83\x4E\x83\x8D\x83\x57\x83\x85\x83\x47\x83\x8B"), ITEM_SKULL_GEM, 315, 20, -125, ITEM_TYPE_STILL, -1, 0)
@@ -6552,7 +6580,7 @@ EVT_BEGIN(gor_01_init_evt)
 CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), GW(8))
     END_IF
     // Open the building doors, depending on story progress and whether the lens was delivered.
-    IF_INT_EQUAL(GSWF(GSWF_GOR01_LENS_DELIVERED), 0)
+    IF_INT_EQUAL(GSWF_GOR_ZESS_T_GOT_CONTACT_LENS, 0)
         SET_VALUE(LW(0), PTR(&door_data_01))
     ELSE
         SET_VALUE(LW(0), PTR(&door_data_01_01))
@@ -6562,7 +6590,7 @@ CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), 
     CALL_CHILD(evt_door_entry)
     SET_VALUE(LW(0), PTR(&door_data_02_f1))
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG4_32_CHATTING_WITH_FLAVIO)
-        IF_INT_EQUAL(GSWF(GSWF_GOR01_LENS_ARRIVED), 1)
+        IF_INT_EQUAL(GSWF_GOR_CONTACT_LENS_ARRIVED, 1)
             SET_VALUE(LW(0), PTR(&door_data_02_f1_01))
         END_IF
     END_IF
@@ -6589,17 +6617,17 @@ CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), 
     SPAWN_EVENT(gor_goki2_urouro)
     // Trouble Center request items and NPCs, except during the darkness scenes.
     IF_INT_EQUAL(LF(1), 0)
-        IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NEED_A_KEY)
+        IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
             CALL(evt_item_entry, STRING("item_key00"), ITEM_HOUSE_KEY, -280, 153, -100, ITEM_TYPE_GROUND, GSWF_TROUBLE_WORK(0), 0)
         END_IF
         CALL_CHILD(borodo2_init)
         SPAWN_EVENT(iri_09_init)
         SPAWN_EVENT(iri_16_init)
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_ELUSIVE_BADGE), 1)
-            CALL(evt_item_entry, STRING("iri_16"), ITEM_ATTACK_FX_B, -150, 153, -120, ITEM_TYPE_STILL, GSWF(GSWF_GOR01_TROUBLE16_BADGE_LEFT), 0)
+            CALL(evt_item_entry, STRING("iri_16"), ITEM_ATTACK_FX_B, -150, 153, -120, ITEM_TYPE_STILL, GSWF_GOR_01_MS_MOWZ_ATTACK_FX_B, 0)
         END_IF
         IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
-            CALL(evt_item_entry, STRING("iri_18"), ITEM_HONEY_SHROOM, -440, 30, -80, ITEM_TYPE_STILL, GSWF(GSWF_GOR01_TROUBLE18_ITEM_LEFT), 0)
+            CALL(evt_item_entry, STRING("iri_18"), ITEM_HONEY_SHROOM, -440, 30, -80, ITEM_TYPE_STILL, GSWF_GOR_01_ZESS_T_HONEY_SHROOM, 0)
         END_IF
     END_IF
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_keizi_mae"), 0, PTR(keijiban_omote_joho), 0)
@@ -6607,11 +6635,11 @@ CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_jewel"), 0, PTR(marco_jewel), 
     // The Ultra Hammer chest: on the roof until it has fallen, then on the ground.
     CALL(evt_pouch_check_item, ITEM_ULTRA_HAMMER, LW(0))
     IF_INT_EQUAL(LW(0), 0)
-        IF_INT_EQUAL(GSWF(GSWF_GOR01_ULTRA_HAMMER_CHEST_FALLEN), 0)
-CALL(evt_mobj_itembox, STRING("mobj_box00"), 340, 146, -20, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF(GSWF_GOR01_ULTRA_HAMMER_CHEST_OPENED))
+        IF_INT_EQUAL(GSWF_GOR_01_ULTRA_HAMMER_CHEST_FELL, 0)
+CALL(evt_mobj_itembox, STRING("mobj_box00"), 340, 146, -20, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF_GOR_01_ULTRA_HAMMER_CHEST)
 SPAWN_EVENT(ultrahammer_check)
         ELSE
-            CALL(evt_mobj_itembox, STRING("mobj_box00"), 275, 0, 75, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF(GSWF_GOR01_ULTRA_HAMMER_CHEST_OPENED))
+            CALL(evt_mobj_itembox, STRING("mobj_box00"), 275, 0, 75, MOBJ_ITEMBOX_BIG, 0, PTR(ultrahammer_get), GSWF_GOR_01_ULTRA_HAMMER_CHEST)
         END_IF
     END_IF
     // Map object culling for the fence, stage and houses.
@@ -8075,7 +8103,7 @@ SET_VALUE(LW(14), 0)
     CALL(evt_npc_wait_pera, STRING("ナンシー"))
     CALL(evt_npc_flag_onoff, 0, STRING("ナンシー"), NPC_FLAG_NO_HIT)
     // Trouble Center job 18: Zess T. has asked Mario to find a Cookbook.
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_SEEKING_LEGENDARY_BOOK)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
         IF_INT_EQUAL(GSWF_TROUBLE_WORK(0), 0)
             // First time: she explains the request and the book she wants.
             CALL(evt_msg_print, 0, STRING("irai_18_001"), 0, STRING("ナンシー"))
@@ -8138,7 +8166,7 @@ ELSE
                     CALL(evt_item_entry, STRING("hk"), ITEM_HONEY_SHROOM, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
                     CALL(evt_item_get_item, STRING("hk"))
                     CALL(evt_item_get_item_end_wait, STRING("hk"))
-                    SET_VALUE(GSWF(GSWF_GOR01_TROUBLE18_ITEM_LEFT), 1)
+                    SET_VALUE(GSWF_GOR_01_ZESS_T_HONEY_SHROOM, 1)
                 ELSE
                     // Pouch full: she leaves the Honey Shroom on the ground for him to pick up.
                     CALL(evt_msg_print_add, 0, STRING("irai_18_006_1"))
@@ -8146,7 +8174,7 @@ ELSE
                     WAIT_FRAMES(1)
                     CALL(evt_npc_wait_pera, STRING("ナンシー"))
                     WAIT_MS(300)
-                    CALL(evt_item_entry, STRING("iri_18"), ITEM_HONEY_SHROOM, -440, 30, -80, ITEM_TYPE_STILL, GSWF(GSWF_GOR01_TROUBLE18_ITEM_LEFT), 0)
+                    CALL(evt_item_entry, STRING("iri_18"), ITEM_HONEY_SHROOM, -440, 30, -80, ITEM_TYPE_STILL, GSWF_GOR_01_ZESS_T_HONEY_SHROOM, 0)
                     WAIT_MS(300)
                     CALL(evt_npc_set_ry, STRING("ナンシー"), 90)
                     WAIT_FRAMES(1)
@@ -8155,7 +8183,7 @@ ELSE
                 // Request complete: she can now cook with two ingredients, and the Trouble Center marks it
                 // done.
                 CALL(evt_msg_print, 0, STRING("irai_18_007"), 0, STRING("ナンシー"))
-                SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+                SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
                 SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 1)
                 CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
                 CALL(evt_mario_key_onoff, 1)
@@ -8172,28 +8200,28 @@ ELSE
         END_IF
     END_IF
     // First visit after the lens: Zess T. introduces herself and her cooking service.
-    IF_INT_EQUAL(GSWF(GSWF_GOR01_ZESS_INTRO_DONE), 0)
-        IF_INT_NOT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_SEEKING_LEGENDARY_BOOK)
+    IF_INT_EQUAL(GSWF_GOR_ZESS_T_COOKING_INTRO_DONE, 0)
+        IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
             IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 0)
                 CALL(evt_msg_print, 0, STRING("gor_01_cook_000"), 0, STRING("ナンシー"))
             END_IF
         END_IF
         CALL(evt_msg_print_add, 0, STRING("gor_01_cook_001"))
-        SET_VALUE(GSWF(GSWF_GOR01_ZESS_INTRO_DONE), 1)
+        SET_VALUE(GSWF_GOR_ZESS_T_COOKING_INTRO_DONE, 1)
     ELSE
         // Later visits: she asks if Mario wants her to cook, with a hint about the Cookbook once the story has
         // reached Chapter 4.
         IF_INT_EQUAL(LSWF(1), 0)
             SET_VALUE(LF(0), 0)
             IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_15_05_PEACH_X_NAUT_PHD_REPORT)
-                IF_INT_NOT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_SEEKING_LEGENDARY_BOOK)
+                IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
                     IF_INT_EQUAL(GSWF_TROUBLE_DONE(TROUBLE_SEEKING_LEGENDARY_BOOK), 0)
                         SET_VALUE(LF(0), 1)
                     END_IF
                 END_IF
             END_IF
             IF_INT_EQUAL(LF(0), 0)
-                IF_INT_NOT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_SEEKING_LEGENDARY_BOOK)
+                IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
                     CALL(evt_msg_print, 0, STRING("gor_01_cook_002"), 0, STRING("ナンシー"))
                 ELSE
                     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_002"))
@@ -8202,7 +8230,7 @@ ELSE
                 CALL(evt_msg_print, 0, STRING("gor_01_cook_003"), 0, STRING("ナンシー"))
             END_IF
         ELSE
-            IF_INT_NOT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_SEEKING_LEGENDARY_BOOK)
+            IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SEEKING_LEGENDARY_BOOK)
                 CALL(evt_msg_print, 0, STRING("gor_01_cook_004"), 0, STRING("ナンシー"))
             ELSE
                 CALL(evt_msg_print_add, 0, STRING("gor_01_cook_004"))
@@ -8328,7 +8356,7 @@ END_IF
     CALL(evt_msg_print_add, 0, STRING("gor_01_cook_022"))
     CALL(evt_item_entry, STRING("cook"), LW(2), 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
     CALL(evt_item_get_item, STRING("cook"))
-    SET_VALUE(GSWF(GSWF_RECIPE_LOG_UNLOCKED), 1)
+    SET_VALUE(GSWF_GOR_ZESS_T_DISH_RECEIVED, 1)
     CALL(cooking_flag, LW(2))
     CALL(evt_msg_print, 0, STRING("gor_01_cook_023"), 0, STRING("ナンシー"))
     GOTO(5)

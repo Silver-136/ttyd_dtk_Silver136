@@ -29,9 +29,17 @@ static EvtWord e2_door_open[22];
 static BeroEntry bero_entry_data[5];
 static BeroEntry w_bero_mapchg[1];
 static s32 key_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord key_check_evt[];
+#else
 static EvtWord key_check_evt[23];
+#endif
 static EvtWord unlock_evt[10];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_25_init_evt[];
+#else
 EvtWord las_25_init_evt[174];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -318,8 +326,8 @@ EVT_BEGIN(las_25_init_evt)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_lock, STRING("lock"), 48, 690, -380, 0, -90, PTR(key_check_evt), PTR(unlock_evt), GSWF(GSWF_LAS25_DOOR_UNLOCKED))
-    IF_INT_EQUAL(GSWF(GSWF_LAS25_DOOR_UNLOCKED), 0)
+    CALL(evt_mobj_lock, STRING("lock"), 48, 690, -380, 0, -90, PTR(key_check_evt), PTR(unlock_evt), GSWF_LAS_25_DOOR_UNLOCKED)
+    IF_INT_EQUAL(GSWF_LAS_25_DOOR_UNLOCKED, 0)
 #else
     CALL(evt_mobj_lock, STRING("lock"), 48, 690, -380, 0, -90, PTR(key_check_evt), PTR(unlock_evt), GSWF_LAS_25_DOOR_UNLOCKED)
     IF_INT_EQUAL(GSWF_LAS_25_DOOR_UNLOCKED, 0)
@@ -334,8 +342,8 @@ EVT_BEGIN(las_25_init_evt)
     CALL(evt_mobj_jumpstand_blue, 0, STRING("jump"), 720, -675, -600, 75, 0, 0)
     CALL(evt_mobj_flag_onoff, 0, STRING("jump"), MOBJ_FLAG_GRAVITY)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("item02"), ITEM_LIFE_SHROOM, 225, -350, 0, ITEM_TYPE_STILL, GSWF(GSWF_LAS25_LIFE_SHROOM_ITEM02), 0)
-    CALL(evt_item_entry, STRING("item03"), ITEM_SHOOTING_STAR, 375, -450, 0, ITEM_TYPE_STILL, GSWF(GSWF_LAS25_SHOOTING_STAR_ITEM03), 0)
+    CALL(evt_item_entry, STRING("item02"), ITEM_LIFE_SHROOM, 225, -350, 0, ITEM_TYPE_STILL, GSWF_LAS_25_LIFE_SHROOM, 0)
+    CALL(evt_item_entry, STRING("item03"), ITEM_SHOOTING_STAR, 375, -450, 0, ITEM_TYPE_STILL, GSWF_LAS_25_SHOOTING_STAR, 0)
 #else
     CALL(evt_item_entry, STRING("item02"), ITEM_LIFE_SHROOM, 225, -350, 0, ITEM_TYPE_STILL, GSWF_LAS_25_LIFE_SHROOM, 0)
     CALL(evt_item_entry, STRING("item03"), ITEM_SHOOTING_STAR, 375, -450, 0, ITEM_TYPE_STILL, GSWF_LAS_25_SHOOTING_STAR, 0)

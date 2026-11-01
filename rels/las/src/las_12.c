@@ -26,8 +26,16 @@ static BeroEntry bero_entry_data[2];
 static EvtWord box_evt[30];
 static EvtWord switch_evt[46];
 static EvtWord hint_plate[14];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kabenuke_check_evt[];
+#else
 EvtWord kabenuke_check_evt[42];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_12_init_evt[];
+#else
 EvtWord las_12_init_evt[62];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -112,7 +120,7 @@ EVT_END()
 
 EVT_BEGIN(kabenuke_check_evt)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_LAS12_WALL_PASSED), 1)
+    IF_INT_EQUAL(GSWF_LAS_12_PASSED_THROUGH_WALL, 1)
 #else
     IF_INT_EQUAL(GSWF_LAS_12_PASSED_THROUGH_WALL, 1)
 #endif
@@ -134,7 +142,7 @@ CALL(evt_cam_letter_box_disable, 1)
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_FADEIN, 0)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_LAS12_WALL_PASSED), 1)
+    SET_VALUE(GSWF_LAS_12_PASSED_THROUGH_WALL, 1)
 CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
 #else
@@ -158,9 +166,9 @@ EVT_BEGIN(las_12_init_evt)
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_bero_info_run)
-    CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 150, 60, 0, PTR(switch_evt), GSWF(GSWF_LAS12_FLOAT_SWITCH_PRESSED))
-    CALL(evt_mobj_itembox, STRING("box"), -150, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS12_KEY_CHEST_OPENED))
-    IF_INT_EQUAL(GSWF(GSWF_LAS12_FLOAT_SWITCH_PRESSED), 0)
+    CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 150, 60, 0, PTR(switch_evt), GSWF_LAS_12_SWITCH_PRESSED)
+    CALL(evt_mobj_itembox, STRING("box"), -150, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_12_PALACE_KEY_CHEST)
+    IF_INT_EQUAL(GSWF_LAS_12_SWITCH_PRESSED, 0)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), 150, 60, 0, PTR(switch_evt), GSWF_LAS_12_SWITCH_PRESSED)

@@ -50,7 +50,11 @@ static BeroEntry bero_entry_data[3];
 static NpcSetupInfo npcEnt[2];
 static TreeAccess tree_tbl[2];
 EvtWord evt_majin_key[5];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord gra_00_init_evt[];
+#else
 EvtWord gra_00_init_evt[74];
+#endif
 
 /**
  * Doopliss's torn-paper entrance: loads the torn-paper cutout (OFF_d_yabu_small) as an image,
@@ -657,8 +661,8 @@ EVT_BEGIN(gra_00_init_evt)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_sub_tree_access_entry)
     CALL(evt_mobj_brick, STRING("blk01"), 250, 15, 100, 0, 0, 0, LSWF(1))
-    CALL(evt_mobj_brick, STRING("blk02"), -265, 60, -85, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF(GSWF_GRA00_COIN_BLOCK_EMPTIED))
-    IF_INT_EQUAL(GSWF(GSWF_GRA00_BLACK_KEY_TAKEN), 0)
+    CALL(evt_mobj_brick, STRING("blk02"), -265, 60, -85, ITEM_NULL, MOBJ_BRICK_TEN_COIN, 0, GSWF_GRA_00_TEN_COIN_BRICK)
+    IF_INT_EQUAL(GSWF_GRA_00_BLACK_KEY, 0)
 #else
     CALL_CHILD(PTR(evt_sub_tree_access_entry))
     CALL(evt_mobj_brick, STRING("blk01"), 250, 15, 100, ITEM_NULL, MOBJ_BRICK_PLAIN, 0, LSWF_GRA_00_BRICK_BLK01)

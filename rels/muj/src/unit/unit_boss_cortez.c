@@ -118,9 +118,17 @@ static EvtWord damage_event[70];
 EvtWord cortez_ac_counter_damage_event[98];
 static EvtWord avoid_thorn_event[89];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord phase_event[];
+#else
 static EvtWord phase_event[184];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord phase_event[];
 #else
 static EvtWord phase_event[196];
+#endif
 #endif
 EvtWord attack_event_mode1[44];
 EvtWord attack_event_mode2[47];
@@ -130,9 +138,17 @@ EvtWord at2_hone_rain_attack_event[605];
 EvtWord _bone_rain_event[114];
 EvtWord attack_event_mode3[52];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_audience_event[];
+#else
 static EvtWord attack_audience_event[198];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_audience_event[];
 #else
 static EvtWord attack_audience_event[247];
+#endif
 #endif
 EvtWord at3_kamitsuki_attack[264];
 EvtWord at1_normal_attack[205];
@@ -145,14 +161,38 @@ BattleUnitSetup entry_saber;
 EvtWord cortez_reset_pose_table[450];
 static EvtWord cortez_damage_sub_event[153];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[];
+#else
 static EvtWord dead_event[1007];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event[];
 #else
 static EvtWord dead_event[1033];
 #endif
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mode2_rib_open_event[];
+#else
 EvtWord mode2_rib_open_event[54];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mode2_rib_close_event[];
+#else
 EvtWord mode2_rib_close_event[54];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mode2_honeduka_damage_event[];
+#else
 EvtWord mode2_honeduka_damage_event[76];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mode_change_event[];
+#else
 EvtWord mode_change_event[111];
+#endif
 
 /**
  * Unit data of Cortez: 20 HP, 250x170 units in size; ties together its sounds, parts, status vulnerability,

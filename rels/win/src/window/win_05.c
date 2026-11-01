@@ -27,7 +27,11 @@
 EvtWord win_05_door_open[10];
 EvtWord win_05_door_close[10];
 static BeroEntry bero_entry_data[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord item_get00[];
+#else
 static EvtWord item_get00[34];
+#endif
 static EvtWord cloud_toujou[126];
 EvtWord win_05_init_evt[42];
 

@@ -33,7 +33,11 @@ static HitDamageReturn dmgRetPoint[3];
 const char* toge_data[18];
 EvtWord toge_evt_sub[121];
 EvtWord toge_evt[86];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_03_init_evt[];
+#else
 EvtWord las_03_init_evt[32];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -255,7 +259,7 @@ EVT_BEGIN(las_03_init_evt)
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_bero_info_run)
-    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -350, 0, -100, ITEM_ALL_OR_NOTHING, 0, GSWF(GSWF_LAS03_ALL_OR_NOTHING_BLOCK_HIT), 1)
+    CALL(evt_mobj_badgeblk, STRING("mobj_badge_gat"), -350, 0, -100, ITEM_ALL_OR_NOTHING, 0, GSWF_LAS_03_ALL_OR_NOTHING_BADGE_BLOCK, 1)
     SPAWN_EVENT(toge_evt)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))

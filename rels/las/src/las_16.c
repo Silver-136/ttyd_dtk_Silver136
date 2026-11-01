@@ -29,7 +29,11 @@ static BeroEntry bero_entry_data[2];
 static EvtWord box_evt[30];
 static EvtWord bomb_wall_evt[206];
 static EvtWord hint_plate[14];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_16_init_evt[];
+#else
 EvtWord las_16_init_evt[84];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -174,7 +178,7 @@ EVT_BEGIN(las_16_init_evt)
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_bero_info_run)
-    IF_INT_EQUAL(GSWF(GSWF_LAS16_WALL_BOMBED), 0)
+    IF_INT_EQUAL(GSWF_LAS_16_WALL_BOMBED, 0)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_EQUAL(GSWF_LAS_16_WALL_BOMBED, 0)
@@ -189,7 +193,7 @@ EVT_BEGIN(las_16_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_ana_before"), 1, 0)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_itembox, STRING("box"), 150, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS16_KEY_CHEST_OPENED))
+    CALL(evt_mobj_itembox, STRING("box"), 150, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_16_PALACE_KEY_CHEST)
 #else
     CALL(evt_mobj_itembox, STRING("box"), 150, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_16_PALACE_KEY_CHEST)
 #endif

@@ -35,7 +35,11 @@ EvtWord peach_init[12];
 static NpcSetupInfo npcEnt[2];
 EvtWord fune_yure[42];
 static EvtWord epilogue_evt[344];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord muj_21_init_evt[];
+#else
 EvtWord muj_21_init_evt[58];
+#endif
 
 /** Init event of Princess Peach in the ending scene: places her at (62, 28, 44) on the deck facing right. */
 EVT_BEGIN(peach_init)

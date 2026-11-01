@@ -32,9 +32,17 @@ static EvtWord switch_evt[46];
 EvtWord enemy1_dead_evt[11];
 EvtWord enemy2_dead_evt[11];
 EvtWord enemy3_dead_evt[11];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord enemy4_dead_evt[];
+#else
 EvtWord enemy4_dead_evt[102];
+#endif
 static EvtWord hint_plate[24];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_17_init_evt[];
+#else
 EvtWord las_17_init_evt[123];
+#endif
 
 /**
  * Door animation script (closing) for the east door, used as the enter/exit animation of this room's bero entry.
@@ -138,9 +146,9 @@ EVT_END()
 EVT_BEGIN(enemy4_dead_evt)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(enemy_common_dead_event)
-    IF_INT_EQUAL(GSW(GSW_LAS17_ENEMY_ORDER), 3)
-        SET_VALUE(GSW(GSW_LAS17_ENEMY_ORDER), 4)
-        SET_VALUE(GSWF(GSWF_LAS17_ENEMIES_BEATEN_IN_ORDER), 1)
+    IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 3)
+        SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 4)
+        SET_VALUE(GSWF_LAS_17_ENEMIES_IN_ORDER_UNUSED, 1)
 #else
     CALL_CHILD(PTR(enemy_common_dead_event))
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 3)
@@ -166,7 +174,7 @@ CALL(evt_eff, STRING(""), STRING("kemuri_test"), 7, -205, 60, 20, 1, 0, 0, 0, 0,
 #endif
         WAIT_MS(100)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -225, 60, 0, PTR(switch_evt), GSWF(GSWF_LAS17_SWITCH_PRESSED))
+        CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -225, 60, 0, PTR(switch_evt), GSWF_LAS_17_SWITCH_PRESSED)
 #else
         CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -225, 60, 0, PTR(switch_evt), GSWF_LAS_17_SWITCH_PRESSED)
 #endif
@@ -210,8 +218,8 @@ EVT_BEGIN(las_17_init_evt)
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_bero_info_run)
-    IF_INT_LESS(GSW(GSW_LAS17_ENEMY_ORDER), 4)
-        SET_VALUE(GSW(GSW_LAS17_ENEMY_ORDER), 0)
+    IF_INT_LESS(GSW_LAS_17_ENEMY_ORDER_STATE, 4)
+        SET_VALUE(GSW_LAS_17_ENEMY_ORDER_STATE, 0)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_LESS(GSW_LAS_17_ENEMY_ORDER_STATE, 4)
@@ -227,8 +235,8 @@ EVT_BEGIN(las_17_init_evt)
     CALL(evt_npc_change_interrupt, STRING("ノコノコ"), 8, PTR(enemy3_dead_evt))
     CALL(evt_npc_change_interrupt, STRING("シンノスケ"), 8, PTR(enemy4_dead_evt))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_LAS17_ENEMY_ORDER), 4)
-        CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -225, 60, 0, PTR(switch_evt), GSWF(GSWF_LAS17_SWITCH_PRESSED))
+    IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 4)
+        CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -225, 60, 0, PTR(switch_evt), GSWF_LAS_17_SWITCH_PRESSED)
 #else
     IF_INT_EQUAL(GSW_LAS_17_ENEMY_ORDER_STATE, 4)
         CALL(evt_mobj_floatswitch_blue, 0, STRING("switch"), -225, 60, 0, PTR(switch_evt), GSWF_LAS_17_SWITCH_PRESSED)
@@ -239,8 +247,8 @@ EVT_BEGIN(las_17_init_evt)
         CALL(evt_npc_check_delete, STRING("シンノスケ"))
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS17_KEY_CHEST_OPENED))
-    IF_INT_EQUAL(GSWF(GSWF_LAS17_SWITCH_PRESSED), 0)
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_17_PALACE_KEY_CHEST)
+    IF_INT_EQUAL(GSWF_LAS_17_SWITCH_PRESSED, 0)
 #else
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_17_PALACE_KEY_CHEST)
     IF_INT_EQUAL(GSWF_LAS_17_SWITCH_PRESSED, 0)

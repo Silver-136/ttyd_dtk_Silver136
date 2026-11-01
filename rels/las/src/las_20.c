@@ -30,7 +30,11 @@ static EvtWord haguruma_evt[194];
 static EvtWord dai_evt[13];
 const char* hosi_name[14];
 EvtWord hosi_sw_check[303];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord hosi_onoff[];
+#else
 EvtWord hosi_onoff[69];
+#endif
 EvtWord hosi_02_sw_evt[15];
 EvtWord hosi_03_sw_evt[15];
 EvtWord hosi_04_sw_evt[15];
@@ -39,7 +43,11 @@ EvtWord hosi_06_sw_evt[15];
 EvtWord hosi_07_sw_evt[15];
 EvtWord hosi_08_sw_evt[15];
 EvtWord hosi_init[175];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_20_init_evt[];
+#else
 EvtWord las_20_init_evt[103];
+#endif
 
 /**
  * Door animation script (closing) for the east door, used as the enter/exit animation of this room's bero entry.
@@ -542,8 +550,8 @@ EVT_BEGIN(las_20_init_evt)
     CALL(evt_mobj_switch_red, 0, STRING("dai_switch"), -250, -290, 100, PTR(dai_evt), 0)
 #if VERSION <= VERSION_DEMO_US
     SPAWN_EVENT(hosi_init)
-    CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 295, -440, -15, ITEM_REPEL_CAPE, 0, GSWF(GSWF_LAS20_REPEL_CAPE_BLOCK_HIT), 0)
-    CALL(evt_mobj_badgeblk, STRING("mobj_item01"), 640, -320, -135, ITEM_LIFE_SHROOM, 0, GSWF(GSWF_LAS20_LIFE_SHROOM_BLOCK_HIT), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 295, -440, -15, ITEM_REPEL_CAPE, 0, GSWF_LAS_20_REPEL_CAPE_BLOCK, 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_item01"), 640, -320, -135, ITEM_LIFE_SHROOM, 0, GSWF_LAS_20_LIFE_SHROOM_BLOCK, 0)
 #else
     SPAWN_EVENT(PTR(hosi_init))
     CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 295, -440, -15, ITEM_REPEL_CAPE, 0, GSWF_LAS_20_REPEL_CAPE_BLOCK, 0)

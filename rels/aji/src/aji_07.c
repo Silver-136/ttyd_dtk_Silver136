@@ -36,7 +36,11 @@ static EvtWord s_door_close[22];
 static BeroEntry bero_entry_data[2];
 EvtWord tensou_ride[245];
 EvtWord tensou_switch[62];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_tensou2[];
+#else
 EvtWord evt_tensou2[216];
+#endif
 EvtWord tensou_init[69];
 static EvtWord evt_haguruma[5];
 EvtWord aji_07_init_evt[];
@@ -338,7 +342,7 @@ SET_VALUE(LW(0), PTR(bero_entry_data))
     CALL(evt_map_playanim, STRING("anm_PC"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_terop"), MAP_ANIM_PLAY_LOOP, 0)
     CALL(evt_map_playanim, STRING("anm_tiktik"), MAP_ANIM_PLAY_LOOP, 0)
-    IF_INT_EQUAL(GSWF(GSWF_AJI07_COG_TAKEN), 0)
+    IF_INT_EQUAL(GSWF_AJI_07_COG, 0)
         CALL(evt_item_entry, STRING("haguruma"), ITEM_COG, -65, 100, -120, ITEM_TYPE_STILL, -1, PTR(evt_haguruma))
     END_IF
     CALL(evt_bero_get_entername, LW(0))

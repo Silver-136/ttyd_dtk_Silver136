@@ -182,11 +182,19 @@ BeroEntry yuu_03_data[1];
 EvtWord maffiaboss_ticket_put[31];
 EvtWord maffiaboss_ticket_check[241];
 EvtWord maffiaboss_init[73];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord maffiaboss_maffiaboss[];
+#else
 EvtWord maffiaboss_maffiaboss[495];
+#endif
 EvtWord maffiaboss_airship_ticket[768];
 EvtWord maffiaboss_teshita_irai[253];
 EvtWord maffiaboss_train_ticket_init[50];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord maffiaboss_train_ticket[];
+#else
 EvtWord maffiaboss_train_ticket[824];
+#endif
 EvtWord maffiaboss_talk_common[106];
 EvtWord maffiaboss_talk[10];
 EvtWord maffiaboss_desk_talk[VERSION_PICK(46, 54)];
@@ -198,16 +206,28 @@ EvtWord maffiaboss_nekomu02[14];
 EvtWord maffia1_init[23];
 EvtWord maffia1_talk[128];
 EvtWord maffia2_init[23];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord maffia2_talk[];
+#else
 EvtWord maffia2_talk[128];
+#endif
 EvtWord maffia3_init[8];
 EvtWord maffia3_talk[68];
 static EvtWord mony_init[54];
 static EvtWord mony_talk[53];
 static EvtWord peton_init[69];
 s32 iri_19_item_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord peton_talk_common[];
+#else
 EvtWord peton_talk_common[235];
+#endif
 static EvtWord peton_talk[4];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord peton_desk_talk[];
+#else
 EvtWord peton_desk_talk[47];
+#endif
 static EvtWord init_gurume[28];
 static EvtWord talk_gurume[4];
 static EvtWord luigi_init[18];
@@ -224,9 +244,17 @@ EvtWord gor_03_dokan_init_evt[35];
 EvtWord gor_03_dokan_up_evt[60];
 EvtWord gor_03_dokan_down_evt[63];
 ExchangeRyokin exchange_ryokin_medal_tbl[9][3];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord bteresa_talk_sub_minigame[];
+#else
 EvtWord bteresa_talk_sub_minigame[245];
+#endif
 EvtWord bteresa_talk_sub_keihin[VERSION_PICK(220, 242)];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord bteresa_table_talk[];
+#else
 EvtWord bteresa_table_talk[437];
+#endif
 EvtWord bteresa_init[18];
 EvtWord bteresa_talk[81];
 EvtWord kyaku1_init[2];
@@ -242,7 +270,11 @@ SlotDrum drumname[2];
 EvtWord* slotevttbl[2];
 s32 slotgara[2][3][8];
 s32 upsidegara[2][3][8];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord ranking_set[];
+#else
 EvtWord ranking_set[65];
+#endif
 EvtWord exchange_set[VERSION_PICK(195, 210)];
 EvtWord roten_4_init[13];
 EvtWord roten_4_regl[19];
@@ -251,7 +283,11 @@ EvtWord kinopiko_a_init[8];
 EvtWord kinopiko_a_talk[68];
 static EvtWord kinopiko_b_init[13];
 EvtWord kinopiko_b_regl[19];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord kinopiko_b_talk[];
+#else
 static EvtWord kinopiko_b_talk[159];
+#endif
 EvtWord kinopio_a_init[8];
 EvtWord kinopio_a_talk[68];
 EvtWord kokinopio_a_init[8];
@@ -289,53 +325,121 @@ EvtWord evt_door_02_11[15];
 EvtWord evt_wall_02_1[28];
 const char* door_data_02_1_npc[6];
 EvtWord desk_talk_check[173];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_door_02_1_open[];
+#else
 EvtWord evt_door_02_1_open[118];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_door_02_1_close[];
+#else
 EvtWord evt_door_02_1_close[48];
+#endif
 DoorParam door_data_02_1;
 static EvtWord evt_door_03_00[12];
 static EvtWord evt_wall_03[28];
 static const char* door_data_03_npc[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord door_data_03_open[];
+#else
 EvtWord door_data_03_open[17];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord door_data_03_close[];
+#else
 EvtWord door_data_03_close[19];
+#endif
 static DoorParam door_data_03;
 static EvtWord evt_door_03_caseopen[6];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_door_03_open[];
+#else
 static EvtWord evt_door_03_open[170];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_door_03_close[];
+#else
 static EvtWord evt_door_03_close[19];
+#endif
 static DoorParam door_data_03_roll;
 static EvtWord evt_door_03_entry[24];
 static EvtWord evt_door_04_00[12];
 static EvtWord evt_wall_04[28];
 static const char* door_data_04_npc[3];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_door_04_open[];
+#else
 static EvtWord evt_door_04_open[17];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_door_04_close_snd[];
+#else
 EvtWord evt_door_04_close_snd[19];
+#endif
 static DoorParam door_data_04;
 EvtWord evt_door_04_caseclose[6];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_door_04_close[];
+#else
 static EvtWord evt_door_04_close[70];
+#endif
 DoorParam door_data_04_roll;
 static EvtWord evt_door_04_entry[20];
 EvtWord wall_bomb_init[51];
 static EvtWord wall_bomb[146];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord uraguchi_tenin[];
+#else
 EvtWord uraguchi_tenin[23];
+#endif
 EvtWord uraguchi_event[323];
 EvtWord uraguchi_check[34];
 static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord majorin_nusumigiki[];
+#else
 EvtWord majorin_nusumigiki[331];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord yuureturn_rtn[];
+#else
 EvtWord yuureturn_rtn[101];
+#endif
 static EvtWord peach_mail[248];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kuzi_bomb_talk_normal[];
+#else
 EvtWord kuzi_bomb_talk_normal[372];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kuzi_bomb_talk_husei[];
+#else
 EvtWord kuzi_bomb_talk_husei[589];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kuzi_bomb_bomb[];
+#else
 EvtWord kuzi_bomb_bomb[152];
+#endif
 EvtWord kuzi_keiziban_normal[];
 EvtWord kuzi_keiziban_husei[14];
 EvtWord kuzi_bomb_talk[16];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kuzi_keiziban_entry[];
+#else
 EvtWord kuzi_keiziban_entry[27];
+#endif
 EvtWord tenin_fuwafuwa[7];
 EvtWord casino_fuwafuwa[7];
 EvtWord debug_event_mode[144];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord monte_evt_door_close[];
+#else
 EvtWord monte_evt_door_close[16];
+#endif
 EvtWord monte_evt_door_entry[73];
 EvtWord gor_03_init_evt[VERSION_PICK(462, 681)];
 
@@ -1643,7 +1747,7 @@ CALL(evt_snd_bgmon, PSND_FADEOUT | PSND_SLOT(1), STRING("BGM_STG0_CSN1"))
     CALL(evt_snd_bgmoff, PSND_FADEOUT | PSND_SLOT(1))
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     SET_VALUE(GF(5), 1)
@@ -2075,7 +2179,7 @@ EVT_BEGIN(peton_talk_common)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_IMPORTANT_THING)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IMPORTANT_THING)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_IMPORTANT_THING)
 #endif
@@ -2120,7 +2224,7 @@ CALL(evt_win_item_select, PTR(iri_19_item_tbl), LW(0))
                         CALL(evt_npc_set_ry, STRING("ピートン"), 90)
                     END_SWITCH
 #if VERSION <= VERSION_DEMO_US
-                    SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+                    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #else
                     SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #endif
@@ -2689,9 +2793,9 @@ EVT_BEGIN(bteresa_talk_sub_keihin)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_64"), 0, STRING("me"))
         GOTO(0)
     END_IF
-    IF_INT_EQUAL(GSWF(GSWF_GOR03_PRIZE_EXCHANGE_EXPLAINED), 0)
+    IF_INT_EQUAL(GSWF_GOR_PARLOR_PRIZE_INTRO_DONE, 0)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_60"), 0, STRING("me"))
-        SET_VALUE(GSWF(GSWF_GOR03_PRIZE_EXCHANGE_EXPLAINED), 1)
+        SET_VALUE(GSWF_GOR_PARLOR_PRIZE_INTRO_DONE, 1)
     END_IF
     LABEL(1)
     CALL(yuugijou_set_yupflag, 1)
@@ -2892,7 +2996,7 @@ CALL(evt_party_stop, 0)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     // Trouble Center request 11 (bringing back Teresa's medals) is active: she hands over the reward.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_PLAY_WITH_ME)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_PLAY_WITH_ME)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_PLAY_WITH_ME)
 #endif
@@ -2911,7 +3015,7 @@ CALL(evt_party_stop, 0)
         CALL(evt_msg_print, 0, STRING("irai_11_004"), 0, STRING("me"))
         // The request is finished and marked solved.
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #else
         SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #endif
@@ -2939,7 +3043,7 @@ CALL(evt_party_stop, 0)
     // Check whether Mario carries a membership card for a minigame that is still locked.
     SET_VALUE(LW(1), 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_YUU_PLANE_GAME_UNLOCKED), 0)
+    IF_INT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
 #else
     IF_INT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
 #endif
@@ -2949,7 +3053,7 @@ CALL(evt_party_stop, 0)
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_YUU_BOAT_GAME_UNLOCKED), 0)
+    IF_INT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
 #else
     IF_INT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
 #endif
@@ -2959,7 +3063,7 @@ CALL(evt_party_stop, 0)
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_YUU_TUBE_GAME_UNLOCKED), 0)
+    IF_INT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
 #else
     IF_INT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
 #endif
@@ -2969,7 +3073,7 @@ CALL(evt_party_stop, 0)
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_YUU_PAPER_GAME_UNLOCKED), 0)
+    IF_INT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
 #else
     IF_INT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
 #endif
@@ -2982,14 +3086,14 @@ CALL(evt_party_stop, 0)
     IF_INT_NOT_EQUAL(LW(1), 0)
         CALL(evt_msg_print, 0, STRING("bunny_teresa_42"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_YUU_PLANE_GAME_UNLOCKED), 0)
+        IF_INT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
 #else
         IF_INT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
 #endif
             CALL(evt_pouch_check_item, ITEM_SPECIAL_CARD, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_YUU_PLANE_GAME_UNLOCKED), 1)
+                SET_VALUE(GSWF_GOR_PLANE_GAME_UNLOCKED, 1)
 #else
                 SET_VALUE(GSWF_GOR_PLANE_GAME_UNLOCKED, 1)
 #endif
@@ -2997,14 +3101,14 @@ CALL(evt_party_stop, 0)
             END_IF
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_YUU_PAPER_GAME_UNLOCKED), 0)
+        IF_INT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
 #else
         IF_INT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
 #endif
             CALL(evt_pouch_check_item, ITEM_SILVER_CARD, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_YUU_PAPER_GAME_UNLOCKED), 1)
+                SET_VALUE(GSWF_GOR_PAPER_GAME_UNLOCKED, 1)
 #else
                 SET_VALUE(GSWF_GOR_PAPER_GAME_UNLOCKED, 1)
 #endif
@@ -3012,14 +3116,14 @@ CALL(evt_party_stop, 0)
             END_IF
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_YUU_TUBE_GAME_UNLOCKED), 0)
+        IF_INT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
 #else
         IF_INT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
 #endif
             CALL(evt_pouch_check_item, ITEM_GOLD_CARD, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_YUU_TUBE_GAME_UNLOCKED), 1)
+                SET_VALUE(GSWF_GOR_TUBE_GAME_UNLOCKED, 1)
 #else
                 SET_VALUE(GSWF_GOR_TUBE_GAME_UNLOCKED, 1)
 #endif
@@ -3027,14 +3131,14 @@ CALL(evt_party_stop, 0)
             END_IF
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_YUU_BOAT_GAME_UNLOCKED), 0)
+        IF_INT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
 #else
         IF_INT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
 #endif
             CALL(evt_pouch_check_item, ITEM_PLATINUM_CARD, LW(0))
             IF_INT_NOT_EQUAL(LW(0), 0)
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_YUU_BOAT_GAME_UNLOCKED), 1)
+                SET_VALUE(GSWF_GOR_BOAT_GAME_UNLOCKED, 1)
 #else
                 SET_VALUE(GSWF_GOR_BOAT_GAME_UNLOCKED, 1)
 #endif
@@ -3042,7 +3146,7 @@ CALL(evt_party_stop, 0)
             END_IF
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_GOR03_PARLOR_CARD_SHOWN_THIS_VISIT), 1)
+        SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 1)
 #else
         SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 1)
 #endif
@@ -3050,28 +3154,28 @@ CALL(evt_party_stop, 0)
         ELSE
         SET_VALUE(LW(14), 0)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_PLANE_GAME_UNLOCKED), 0)
+        IF_INT_NOT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
 #else
         IF_INT_NOT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
 #endif
             SET_VALUE(LW(14), 1)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_PAPER_GAME_UNLOCKED), 0)
+        IF_INT_NOT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
 #else
         IF_INT_NOT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
 #endif
             SET_VALUE(LW(14), 1)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_TUBE_GAME_UNLOCKED), 0)
+        IF_INT_NOT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
 #else
         IF_INT_NOT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
 #endif
             SET_VALUE(LW(14), 1)
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_BOAT_GAME_UNLOCKED), 0)
+        IF_INT_NOT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
 #else
         IF_INT_NOT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
 #endif
@@ -3080,9 +3184,9 @@ CALL(evt_party_stop, 0)
     END_IF
     // Teresa greets Mario: a first greeting, a repeat greeting, or the epilogue greeting.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GOR03_PARLOR_CARD_SHOWN_THIS_VISIT), 0)
+    IF_INT_EQUAL(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 0)
         IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG9_00_EPILOGUE)
-            IF_INT_EQUAL(GSWF(GSWF_GOR03_PARLOR_FIRST_GREETING), 0)
+            IF_INT_EQUAL(GSWF_GOR_PARLOR_ATTENDANT_FIRST_TALK, 0)
 #else
     IF_INT_EQUAL(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 0)
         IF_INT_LESS(GSW_STORY_PROGRESS, STG9_00_EPILOGUE)
@@ -3090,7 +3194,7 @@ CALL(evt_party_stop, 0)
 #endif
                 CALL(evt_msg_print, 0, STRING("bunny_teresa_00"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_GOR03_PARLOR_FIRST_GREETING), 1)
+                SET_VALUE(GSWF_GOR_PARLOR_ATTENDANT_FIRST_TALK, 1)
 #else
                 SET_VALUE(GSWF_GOR_PARLOR_ATTENDANT_FIRST_TALK, 1)
 #endif
@@ -3101,7 +3205,7 @@ CALL(evt_party_stop, 0)
             CALL(evt_msg_print, 0, STRING("bunny_teresa_01_1"), 0, STRING("me"))
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_GOR03_PARLOR_CARD_SHOWN_THIS_VISIT), 1)
+        SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 1)
 #else
         SET_VALUE(GSWF_GOR_PARLOR_GREETED_THIS_VISIT, 1)
 #endif
@@ -3119,7 +3223,7 @@ LOOP(0)
         // Map the menu choice to a game, skipping games that are not unlocked yet.
         LOOP(0)
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_PLANE_GAME_UNLOCKED), 0)
+                IF_INT_NOT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
 #else
             IF_INT_NOT_EQUAL(GSWF_GOR_PLANE_GAME_UNLOCKED, 0)
 #endif
@@ -3130,7 +3234,7 @@ LOOP(0)
                 ADD(LW(0), 1)
             END_IF
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_PAPER_GAME_UNLOCKED), 0)
+                IF_INT_NOT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
 #else
             IF_INT_NOT_EQUAL(GSWF_GOR_PAPER_GAME_UNLOCKED, 0)
 #endif
@@ -3141,7 +3245,7 @@ LOOP(0)
                 ADD(LW(0), 1)
             END_IF
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_TUBE_GAME_UNLOCKED), 0)
+                IF_INT_NOT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
 #else
             IF_INT_NOT_EQUAL(GSWF_GOR_TUBE_GAME_UNLOCKED, 0)
 #endif
@@ -3152,7 +3256,7 @@ LOOP(0)
                 ADD(LW(0), 1)
             END_IF
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_BOAT_GAME_UNLOCKED), 0)
+                IF_INT_NOT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
 #else
             IF_INT_NOT_EQUAL(GSWF_GOR_BOAT_GAME_UNLOCKED, 0)
 #endif
@@ -3612,10 +3716,10 @@ CALL(yuugijou_get_takeoutflag, LW(0))
     END_IF
     CALL(evt_msg_toge, MSG_TOGE_AT_POS, FLOAT(-147.0f), FLOAT(82.19922f), FLOAT(-307.8994f))
     // The Pianta Changer greets Mario, explaining the rates the first time.
-    IF_INT_EQUAL(GSWF(GSWF_GOR03_PIANTA_CHANGER_INTRO), 0)
+    IF_INT_EQUAL(GSWF_GOR_PIANTA_CHANGER_FIRST_USE_DONE, 0)
         CALL(exchange_ryokin_medal, 0, LW(1), LW(2))
 CALL(evt_msg_print_insert, 0, STRING("exchange_mess_00"), 0, 0, LW(1), LW(2))
-SET_VALUE(GSWF(GSWF_GOR03_PIANTA_CHANGER_INTRO), 1)
+SET_VALUE(GSWF_GOR_PIANTA_CHANGER_FIRST_USE_DONE, 1)
     ELSE
         CALL(evt_msg_print, 0, STRING("exchange_mess_01"), 0, 0)
     END_IF
@@ -4494,8 +4598,8 @@ EVT_END()
  */
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(evt_door_01_1_open)
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(50))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(50))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     CALL(evt_mobj_check, STRING("pblk2"), LW(0))
     IF_INT_NOT_EQUAL(LW(0), 0)
@@ -4962,8 +5066,8 @@ static const char* door_data_03_npc[] = {
 
 EVT_BEGIN(door_data_03_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_hitobj_onoff, STRING("A_ie_04A"), 1, 0)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -5050,8 +5154,8 @@ static EVT_BEGIN(evt_door_03_open)
     CALL(evt_run_case_evt, CASE_FRONT, 1, LW(3), 0, PTR(evt_door_03_caseopen), 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("S_bero_n"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_hitobj_onoff, STRING("A_ie_04A"), 1, 0)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -5135,8 +5239,8 @@ static const char* door_data_04_npc[] = {
 
 static EVT_BEGIN(evt_door_04_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_hitobj_onoff, STRING("A_ie_03A"), 1, 0)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -5740,8 +5844,8 @@ CALL(evt_unitwin_alloc)
     WAIT_MS(800)
 #if VERSION <= VERSION_DEMO_US
     // First visit: Lucky explains the lottery and offers Mario a number.
-    IF_INT_EQUAL(GSWF(GSWF_GOR03_LOTTERY_EXPLAINED), 0)
-        SET_VALUE(GSWF(GSWF_GOR03_LOTTERY_EXPLAINED), 1)
+    IF_INT_EQUAL(GSWF_GOR_LOTTERY_FIRST_TALK_DONE, 0)
+        SET_VALUE(GSWF_GOR_LOTTERY_FIRST_TALK_DONE, 1)
 #else
     IF_INT_EQUAL(GSWF_GOR_LOTTERY_FIRST_TALK_DONE, 0)
         SET_VALUE(GSWF_GOR_LOTTERY_FIRST_TALK_DONE, 1)
@@ -6575,7 +6679,7 @@ EVT_END()
 EVT_BEGIN(gor_03_init_evt)
 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR4"))
-IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_MINIGAME_QUIT), 0)
+IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         CALL(evt_mario_normalize)
     END_IF
     // The minigame pipe, the exits, the townsfolk and Luigi are set up.
@@ -6601,7 +6705,7 @@ IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_MINIGAME_QUIT), 0)
     CALL(evt_map_playanim, STRING("mizu"), MAP_ANIM_PLAY_LOOP, 0)
     SET_VALUE(LW(0), PTR(&door_data_01_0))
     CALL_CHILD(evt_door_entry)
-    IF_INT_EQUAL(GSWF(GSWF_GOR03_SYNDICATE_BACKDOOR_OPEN), 1)
+    IF_INT_EQUAL(GSWF_GOR_03_BACK_DOOR_PASSWORD_DONE, 1)
         SET_VALUE(LW(0), PTR(&door_data_01_1))
         CALL_CHILD(evt_door_entry)
     END_IF
@@ -6623,12 +6727,12 @@ IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_MINIGAME_QUIT), 0)
     SPAWN_EVENT(wall_bomb_init)
     CALL(evt_run_case_evt, CASE_BOBBERY, 1, STRING("A_ana_ana"), 0, PTR(wall_bomb), 0)
     CALL(evt_shop_setup, PTR(obj_list), PTR(goods_list), PTR(&shopper_data), PTR(trade_list))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 550, 0, 180, ITEM_TYPE_STILL, GSWF(GSWF_GOR03_STAR_PIECE_1), 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, -585, 0, 220, ITEM_TYPE_STILL, GSWF(GSWF_GOR03_STAR_PIECE_2), 0)
-    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, 220, 10, 225, ITEM_TYPE_STILL, GSWF(GSWF_GOR03_STAR_PIECE_3), 0)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -200, 0, 125, STRING("S_ground_A"), 125, GSWF(GSWF_GOR03_STAR_PIECE_PANEL))
-    CALL(evt_mobj_powerupblk, STRING("pblk1"), 250, 60, -510, 0, GSWF(GSWF_GOR03_SHINE_SPRITE_1), 90)
-    CALL(evt_mobj_powerupblk, STRING("pblk2"), -563, 0, -150, 0, GSWF(GSWF_GOR03_SHINE_SPRITE_2), 90)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 550, 0, 180, ITEM_TYPE_STILL, GSWF_STARPIECE_13, 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, -585, 0, 220, ITEM_TYPE_STILL, GSWF_STARPIECE_14, 0)
+    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, 220, 10, 225, ITEM_TYPE_STILL, GSWF_STARPIECE_15, 0)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -200, 0, 125, STRING("S_ground_A"), 125, GSWF_STARPIECE_12)
+    CALL(evt_mobj_powerupblk, STRING("pblk1"), 250, 60, -510, 0, GSWF_SHINE_02, 90)
+    CALL(evt_mobj_powerupblk, STRING("pblk2"), -563, 0, -150, 0, GSWF_SHINE_03, 90)
     // The hedges: all are hidden, then the ones matching the current chapter are shown.
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas01"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, 1, 1, STRING("S_kou_kusas02"), MAP_OBJ_FLAG_HIDDEN)
@@ -6667,8 +6771,8 @@ IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_MINIGAME_QUIT), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_gb_a"), 0, PTR(ranking_set), 0)
     CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("A_mot_a"), 0, PTR(exchange_set), 0)
     // Returning from a minigame starts the return scene.
-    IF_INT_NOT_EQUAL(GSWF(GSWF_YUU_MINIGAME_QUIT), 0)
-        SET_VALUE(GSWF(GSWF_YUU_MINIGAME_QUIT), 0)
+    IF_INT_NOT_EQUAL(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
+        SET_VALUE(GSWF_GOR_RETURNING_FROM_MINIGAME, 0)
         SPAWN_EVENT(yuureturn_rtn)
     END_IF
     // After chapter 3, when Mario returns to Rogueport, the message from Peach arrives.
@@ -6686,7 +6790,7 @@ IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_41_FRANKLYS_HOUSE_STG_2)
         SPAWN_EVENT(maffiaboss_maffiaboss)
     END_IF
     IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG2_45_DAUGHTER_LOCATED)
-        IF_INT_EQUAL(GSWF(GSWF_GOR03_DON_PIANTA_TICKET_GIVEN), 0)
+        IF_INT_EQUAL(GSWF_GOR_DON_PIANTA_TICKET_SCENE_DONE, 0)
             SPAWN_EVENT(maffiaboss_airship_ticket)
         END_IF
     END_IF
@@ -7822,9 +7926,9 @@ USER_FUNC(kuzi_get_keihin) {
     switch (evtGetValue(event, args[0])) {
         case 0:
 #if VERSION <= VERSION_DEMO_US
-            if (!evtGetValue(NULL, GSWF(GSWF_GOR03_LOTTERY_FIRST_RESULT_A))) {
+            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN)) {
 item = ITEM_MUSHROOM;
-evtSetValue(NULL, GSWF(GSWF_GOR03_LOTTERY_FIRST_RESULT_A), 1);
+evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN, 1);
 #else
             if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_1_PRIZE_GIVEN)) {
                 item = ITEM_POWER_PLUS;
@@ -7836,9 +7940,9 @@ evtSetValue(NULL, GSWF(GSWF_GOR03_LOTTERY_FIRST_RESULT_A), 1);
             break;
         case 1:
 #if VERSION <= VERSION_DEMO_US
-            if (!evtGetValue(NULL, GSWF(GSWF_GOR03_LOTTERY_FIRST_RESULT_B))) {
+            if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN)) {
 item = ITEM_MUSHROOM;
-evtSetValue(NULL, GSWF(GSWF_GOR03_LOTTERY_FIRST_RESULT_B), 1);
+evtSetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN, 1);
 #else
             if (!evtGetValue(NULL, GSWF_GOR_LOTTERY_NUMBER_2_PRIZE_GIVEN)) {
                 item = ITEM_LUCKY_DAY;

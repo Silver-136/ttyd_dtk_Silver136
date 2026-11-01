@@ -38,20 +38,48 @@ EvtWord subsetevt_dead[608];
 EvtWord subsetevt_dead_core[193];
 EvtWord subsetevt_dead_core_nospin_norotate[125];
 EvtWord btldefaultevt_avoid_guard[92];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord subsetevt_damage[];
+#else
 EvtWord subsetevt_damage[979];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord subsetevt_counter_damage[];
+#else
 EvtWord subsetevt_counter_damage[174];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord btldefaultevt_ChangePosition[];
+#else
 EvtWord btldefaultevt_ChangePosition[186];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord subsetevt_happy_heart[];
+#else
 EvtWord subsetevt_happy_heart[53];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord subsetevt_happy_flower[];
+#else
 EvtWord subsetevt_happy_flower[53];
+#endif
 EvtWord subsetevt_terror[51];
 EvtWord subsetevt_blow_damage[69];
 EvtWord subsetevt_blow_dead[76];
 EvtWord subsetevt_shot_damage[31];
 EvtWord subsetevt_shot_damage_kaiten[288];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord subsetevt_shot_damage_ultra[];
+#else
 EvtWord subsetevt_shot_damage_ultra[429];
+#endif
 EvtWord subsetevt_swallow_failed_damage[55];
 EvtWord subsetevt_swallow_spew_damage[55];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord subsetevt_swallow_shot_damage[];
+#else
 EvtWord subsetevt_swallow_shot_damage[342];
+#endif
 EvtWord subset_ultra_hammer_acrobat_damage_event[63];
 EvtWord subsetevt_confuse_flustered[43];
 EvtWord subsetevt_binta_damage_left[48];

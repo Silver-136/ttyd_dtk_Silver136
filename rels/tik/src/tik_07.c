@@ -34,7 +34,11 @@ static BeroEntry bero_entry_data2[2];
 EvtWord tik_07_down_evt[];
 static EvtWord peach_mail[188];
 static EvtWord evt_block[8];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mobj_box00[];
+#else
 static EvtWord mobj_box00[34];
+#endif
 EvtWord tik_07_init_evt[323];
 
 EVT_BEGIN(bero_00_open_door)

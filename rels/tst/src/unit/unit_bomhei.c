@@ -29,25 +29,57 @@ static BattleUnitKindPart parts[1];
 static StatusVulnerability regist;
 static BattleWeapon weapon_bomhei_attack;
 static BattleWeapon weapon_bomhei_bomb;
+#if VERSION <= VERSION_DEMO_US
+static EvtWord bomb_event[];
+#else
 static EvtWord bomb_event[106];
+#endif
 static EvtWord init_event[42];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord damage_event[];
+#else
 static EvtWord damage_event[55];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord damage_event[];
 #else
 static EvtWord damage_event[58];
 #endif
+#endif
 static EvtWord change_spark_event[70];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event[];
+#else
 static EvtWord attack_event[440];
+#endif
 static EvtWord wait_event[6];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord damage_event_spark[];
+#else
 static EvtWord damage_event_spark[22];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord damage_event_spark[];
 #else
 static EvtWord damage_event_spark[25];
 #endif
+#endif
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event_spark[];
+#else
 static EvtWord attack_event_spark[286];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord attack_event_spark[];
 #else
 static EvtWord attack_event_spark[288];
+#endif
 #endif
 static EvtWord wait_event_spark[27];
 

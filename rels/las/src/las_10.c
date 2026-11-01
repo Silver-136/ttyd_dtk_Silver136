@@ -59,18 +59,54 @@ const char* kabe_list_2[8];
 const char* kabe_list_3[8];
 EvtWord las_10_temae_kabe[12];
 static EvtWord first_evt[182];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tenkyugi_evt[];
+#else
 EvtWord tenkyugi_evt[311];
+#endif
 EvtWord tenkyugi_evt2[134];
 EvtWord kagi_rotate[69];
 s32 kagi_tbl[9];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kagi1_evt[];
+#else
 EvtWord kagi1_evt[80];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kagi2_evt[];
+#else
 EvtWord kagi2_evt[80];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kagi3_evt[];
+#else
 EvtWord kagi3_evt[80];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kagi4_evt[];
+#else
 EvtWord kagi4_evt[80];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kagi5_evt[];
+#else
 EvtWord kagi5_evt[80];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kagi6_evt[];
+#else
 EvtWord kagi6_evt[80];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kagi7_evt[];
+#else
 EvtWord kagi7_evt[80];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kagi8_evt[];
+#else
 EvtWord kagi8_evt[80];
+#endif
 EvtWord daiza_up[201];
 EvtWord kagi_8_off[48];
 const char* daiza_name[25];
@@ -78,8 +114,16 @@ EvtWord kagi_8_on[365];
 EvtWord kagi_8_init[11];
 EvtWord kagi_8_syutugen[19];
 s32 daiza_key_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord daiza_evt[];
+#else
 EvtWord daiza_evt[57];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_10_init_evt[];
+#else
 EvtWord las_10_init_evt[294];
+#endif
 
 /**
  * Script helper: collects the Riddle Tower keys (items 0x26..0x2D, the eight Palace keys) Mario carries into
@@ -796,9 +840,9 @@ CALL(evt_win_item_select, LW(0), LW(1))
     SET_VALUE(LW(1), STRING("A113_daiza1"))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(kagi_rotate)
-    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_1), 1)
-    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
-    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+    SET_VALUE(GSWF_LAS_10_KEY_SLOT_1_FILLED, 1)
+    ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
+    IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(tenkyugi_evt)
 #else
     CALL_CHILD(PTR(kagi_rotate))
@@ -839,9 +883,9 @@ CALL(evt_win_item_select, LW(0), LW(1))
     SET_VALUE(LW(1), STRING("A113_daiza2"))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(kagi_rotate)
-    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_2), 1)
-    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
-    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+    SET_VALUE(GSWF_LAS_10_KEY_SLOT_2_FILLED, 1)
+    ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
+    IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(tenkyugi_evt)
 #else
     CALL_CHILD(PTR(kagi_rotate))
@@ -882,9 +926,9 @@ CALL(evt_win_item_select, LW(0), LW(1))
     SET_VALUE(LW(1), STRING("A113_daiza3"))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(kagi_rotate)
-    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_3), 1)
-    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
-    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+    SET_VALUE(GSWF_LAS_10_KEY_SLOT_3_FILLED, 1)
+    ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
+    IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(tenkyugi_evt)
 #else
     CALL_CHILD(PTR(kagi_rotate))
@@ -925,9 +969,9 @@ CALL(evt_win_item_select, LW(0), LW(1))
     SET_VALUE(LW(1), STRING("A113_daiza4"))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(kagi_rotate)
-    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_4), 1)
-    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
-    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+    SET_VALUE(GSWF_LAS_10_KEY_SLOT_4_FILLED, 1)
+    ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
+    IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(tenkyugi_evt)
 #else
     CALL_CHILD(PTR(kagi_rotate))
@@ -968,9 +1012,9 @@ CALL(evt_win_item_select, LW(0), LW(1))
     SET_VALUE(LW(1), STRING("A113_daiza5"))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(kagi_rotate)
-    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_5), 1)
-    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
-    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+    SET_VALUE(GSWF_LAS_10_KEY_SLOT_5_FILLED, 1)
+    ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
+    IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(tenkyugi_evt)
 #else
     CALL_CHILD(PTR(kagi_rotate))
@@ -1011,9 +1055,9 @@ CALL(evt_win_item_select, LW(0), LW(1))
     SET_VALUE(LW(1), STRING("A113_daiza6"))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(kagi_rotate)
-    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_6), 1)
-    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
-    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+    SET_VALUE(GSWF_LAS_10_KEY_SLOT_6_FILLED, 1)
+    ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
+    IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(tenkyugi_evt)
 #else
     CALL_CHILD(PTR(kagi_rotate))
@@ -1054,9 +1098,9 @@ CALL(evt_win_item_select, LW(0), LW(1))
     SET_VALUE(LW(1), STRING("A113_daiza7"))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(kagi_rotate)
-    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_7), 1)
-    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
-    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+    SET_VALUE(GSWF_LAS_10_KEY_SLOT_7_FILLED, 1)
+    ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
+    IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(tenkyugi_evt)
 #else
     CALL_CHILD(PTR(kagi_rotate))
@@ -1097,9 +1141,9 @@ CALL(evt_win_item_select, LW(0), LW(1))
     SET_VALUE(LW(1), STRING("A113_daiza8"))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(kagi_rotate)
-    SET_VALUE(GSWF(GSWF_LAS10_TOWER_LOCK_8), 1)
-    ADD(GSW(GSW_LAS10_KEYS_USED), 1)
-    IF_INT_EQUAL(GSW(GSW_LAS10_KEYS_USED), 8)
+    SET_VALUE(GSWF_LAS_10_KEY_SLOT_8_FILLED, 1)
+    ADD(GSW_LAS_10_PALACE_KEYS_SET, 1)
+    IF_INT_EQUAL(GSW_LAS_10_PALACE_KEYS_SET, 8)
         CALL_CHILD(tenkyugi_evt)
 #else
     CALL_CHILD(PTR(kagi_rotate))
@@ -1439,7 +1483,7 @@ EVT_BEGIN(las_10_init_evt)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_bero_info_run)
     SPAWN_EVENT(las_10_temae_kabe)
-    IF_INT_EQUAL(GSWF(GSWF_LAS10_RIDDLE_TOWER_ENTERED), 0)
+    IF_INT_EQUAL(GSWF_LAS_10_FIRST_CUTSCENE_SEEN, 0)
         SPAWN_EVENT(first_evt)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))

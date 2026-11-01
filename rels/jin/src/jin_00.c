@@ -109,7 +109,11 @@ EvtWord e1_close[12];
 EvtWord e2_open[12];
 EvtWord e2_close[12];
 EvtWord jin_00_dai[16];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord jin_00_dai_in_sub[];
+#else
 EvtWord jin_00_dai_in_sub[83];
+#endif
 EvtWord jin_00_dai_in[9];
 static EvtWord check_roll[16];
 EvtWord teresa_n_fadein[48];
@@ -125,7 +129,11 @@ static EvtWord push_evt[297];
 EvtWord nopush_evt[5];
 static EvtWord evt_key[5];
 static s32 lock_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord lock_item_check[];
+#else
 static EvtWord lock_item_check[23];
+#endif
 static EvtWord evt_unlock[10];
 EvtWord tyuou_teresa_kusukusu[42];
 EvtWord tyuou_teresa_look_mario[14];
@@ -136,7 +144,11 @@ EvtWord temae_teresa_init[21];
 EvtWord atomic_teresa_init[2];
 static NpcSetupInfo npcEnt[12];
 static ExtTexInfo senteresa_ext_entry_data[47];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord senteresa_evt[];
+#else
 EvtWord senteresa_evt[1248];
+#endif
 EvtWord jin_00_init_evt[221];
 
 /**
@@ -2151,7 +2163,7 @@ EVT_BEGIN(senteresa_evt)
                 WAIT_FRAMES(1)
             END_LOOP
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_JIN00_BOOS_CARRIED_MARIO_OUT), 1)
+            SET_VALUE(GSWF_JIN_BOOS_THREW_MARIO_OUT, 1)
 #else
             SET_VALUE(GSWF_JIN_BOOS_THREW_MARIO_OUT, 1)
 #endif
@@ -2349,7 +2361,7 @@ EVT_BEGIN(senteresa_evt)
     // After the fight the Lucky Start pops out, the remaining Boos are blown away and the Atomic Boo is
     // marked as defeated.
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("item_99"), ITEM_LUCKY_START, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF(GSWF_JIN00_ATOMIC_BOO_LUCKY_START_TAKEN), 0)
+    CALL(evt_item_entry, STRING("item_99"), ITEM_LUCKY_START, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_JIN_00_LUCKY_START, 0)
 #else
     CALL(evt_item_entry, STRING("item_99"), ITEM_LUCKY_START, LW(0), LW(1), LW(2), ITEM_TYPE_SCATTER_NO_PICKUP, GSWF_JIN_00_LUCKY_START, 0)
     CALL(evt_item_flag_on, STRING("item_99"), ITEM_FLAG_BADGE_RETURN)
@@ -2372,7 +2384,7 @@ EVT_BEGIN(senteresa_evt)
     CALL(senteresa_end)
     CALL(evt_mario_key_onoff, 1)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_JIN00_ATOMIC_BOO_DEFEATED), 1)
+    SET_VALUE(GSWF_JIN_00_ATOMIC_BOO_DEFEATED, 1)
 #else
     SET_VALUE(GSWF_JIN_00_ATOMIC_BOO_DEFEATED, 1)
 #endif

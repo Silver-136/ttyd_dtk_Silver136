@@ -42,8 +42,16 @@ static void callback(s32 type, void** work);
 void kuti_callback(s32 type, void** work);
 #endif
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_close[];
+#else
 static EvtWord w_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w_door_open[];
+#else
 static EvtWord w_door_open[22];
+#endif
 static BeroEntry bero_entry_data[2];
 EvtWord sekizou_kaiten[81];
 EvtWord sekizou_kaiten2[56];
@@ -58,8 +66,16 @@ QuizEntry kuizu_data[7];
 #if VERSION > VERSION_DEMO_US
 EvtWord UNK_0x00022a90[46];
 #endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord quiz_ok[];
+#else
 EvtWord quiz_ok[19];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord quiz_ng[];
+#else
 EvtWord quiz_ng[21];
+#endif
 #if VERSION > VERSION_DEMO_US
 EvtWord UNK_0x00022be8[21];
 #endif
@@ -72,7 +88,11 @@ EvtWord kuizu_sekizou[980];
 EvtWord kuizu_sekizou[920];
 #endif
 EvtWord sekizou_init[47];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_04_init_evt[];
+#else
 EvtWord aji_04_init_evt[55];
+#endif
 
 static EVT_BEGIN(w_door_close)
 #if VERSION <= VERSION_DEMO_US
@@ -555,7 +575,7 @@ CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_QUIZ1"))
     SET_VALUE(LW(15), 0)
     // The questions are read one at a time from the quiz table; each is multiple choice.
     SET_INT_READ_ADDR(PTR(&kuizu_data))
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     LOOP(0)
         READ_INT4(LW(9), LW(10), LW(11), LW(12))
 SET_VALUE(LF(0), 0)

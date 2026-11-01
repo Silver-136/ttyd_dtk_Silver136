@@ -50,10 +50,18 @@ static PoseTableEntry pose_table[5];
 static BattleDataEntry data_table[1];
 static BattleUnitKindPart parts[1];
 EvtWord _test_event[20];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord stop_wait_event[];
+#else
 EvtWord stop_wait_event[20];
+#endif
 static EvtWord init_event[61];
 static EvtWord phase_event[105];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord actend_event[];
+#else
 EvtWord actend_event[538];
+#endif
 static EvtWord damage_event[75];
 static EvtWord wait_event[6];
 

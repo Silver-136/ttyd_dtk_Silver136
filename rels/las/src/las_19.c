@@ -34,7 +34,11 @@ EvtWord change_map_evt[359];
 static EvtWord switch1_evt[13];
 static EvtWord switch2_evt[13];
 static EvtWord cloud_evt[5];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_19_init_evt[];
+#else
 EvtWord las_19_init_evt[205];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -435,7 +439,7 @@ EVT_BEGIN(las_19_init_evt)
         CALL(evt_mobj_switch_float_blk, STRING("switch1"), 375, -320, -45, STRING(""), 2, PTR(switch1_evt), 0)
         CALL(evt_mobj_switch_float_blk, STRING("switch2"), 450, -320, -45, STRING(""), 0, PTR(switch2_evt), 0)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_LAS19_SWITCH1_ON), 0)
+        IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
 #else
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_1_ON, 0)
 #endif
@@ -444,7 +448,7 @@ EVT_BEGIN(las_19_init_evt)
             CALL(evt_mobj_set_anim, STRING("switch1"), STRING("S_1"))
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_LAS19_SWITCH2_ON), 0)
+        IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
 #else
         IF_INT_EQUAL(GSWF_LAS_19_SWITCH_2_ON, 0)
 #endif
@@ -454,7 +458,7 @@ EVT_BEGIN(las_19_init_evt)
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 30, -440, -40, ITEM_THUNDER_RAGE, 0, GSWF(GSWF_LAS19_THUNDER_RAGE_BLOCK_HIT), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 30, -440, -40, ITEM_THUNDER_RAGE, 0, GSWF_LAS_19_THUNDER_RAGE_BLOCK, 0)
 #else
     CALL(evt_mobj_badgeblk, STRING("mobj_item00"), 30, -440, -40, ITEM_THUNDER_RAGE, 0, GSWF_LAS_19_THUNDER_RAGE_BLOCK, 0)
 #endif

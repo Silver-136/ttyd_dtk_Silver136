@@ -61,7 +61,11 @@ EvtWord kami_offscreen_check[41];
 EvtWord evt_rsh_door_init[23];
 EvtWord evt_rsh_door_entry[46];
 EvtWord evt_rsh_door_open[];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_rsh_door_close[];
+#else
 EvtWord evt_rsh_door_close[404];
+#endif
 EvtWord evt_rsh_window[30];
 RshRndNpc rsh_01_rnd_npc_1[5];
 RshRndNpc rsh_01_rnd_npc_2[3];
@@ -127,7 +131,11 @@ EvtWord evt_rsh_01_rnd_npc_entry[137];
 NpcSetupInfo rsh_03_rnd_npc_2_ent[2];
 EvtWord evt_rsh_03_rnd_npc_entry[95];
 NpcSetupInfo rsh_04_rnd_npc_3_ent[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_rsh_04_rnd_npc_entry[];
+#else
 EvtWord evt_rsh_04_rnd_npc_entry[185];
+#endif
 
 /**
  * Shows the stained floor object (s_yuka_simi, probably the spilled stew) in rsh_02_a
@@ -388,7 +396,7 @@ CALL(evt_hitobj_attr_onoff, 0, 0, LW(4), 8388608)
                 CALL(evt_mario_key_onoff, 1)
                 // During the vital clue stage the background music dips for the ghost scenes.
                 CASE_BETWEEN(STG6_24_A_VITAL_CLUE, STG6_24_02_ANOTHER_CLUE)
-                CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
                 // When the conductor appears, the partner comments on entering cabin 5.
                 CASE_EQUAL(STG6_43_CONDUCTOR_APPEARS)
                 CALL(evt_mario_key_onoff, 0)
@@ -434,13 +442,13 @@ END_IF
     END_IF
     IF_INT_EQUAL(LF(0), 1)
         IF_STR_EQUAL(LW(1), STRING("heya_4"))
-            IF_INT_EQUAL(GSWF(GSWF_RSH02_GOURMET_CABIN_TALK), 1)
-                SET_VALUE(GSWF(GSWF_RSH02_CABIN4_ENTERED_AFTER_GOURMET), 1)
+            IF_INT_EQUAL(GSWF_RSH_GOURMET_NOISE_TALK_DONE, 1)
+                SET_VALUE(GSWF_RSH_NOISY_ROOM_CHECKED, 1)
             END_IF
-            IF_INT_EQUAL(GSWF(GSWF_RSH02_GHOST_APPEARED), 1)
-                CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(10))
+            IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
+                CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(0))
             END_IF
-SET_VALUE(GSWF(GSWF_RSH02_INSIDE_CABIN4), 1)
+SET_VALUE(GSWF_RSH_02_IN_ROOM_4, 1)
         END_IF
     END_IF
     SET_VALUE(LF(0), 0)
@@ -457,10 +465,10 @@ SET_VALUE(GSWF(GSWF_RSH02_INSIDE_CABIN4), 1)
     IF_INT_EQUAL(LF(0), 1)
         IF_STR_EQUAL(LW(1), STRING("heya_5"))
             // Remember which cabin Mario is now inside.
-            SET_VALUE(GSWF(GSWF_RSH04_INSIDE_CABIN5), 1)
+            SET_VALUE(GSWF_RSH_04_IN_ROOM_5, 1)
         END_IF
         IF_STR_EQUAL(LW(1), STRING("heya_3"))
-            SET_VALUE(GSWF(GSWF_RSH04_INSIDE_CABIN3), 1)
+            SET_VALUE(GSWF_RSH_04_IN_ROOM_3, 1)
         END_IF
     END_IF
     RETURN
@@ -699,7 +707,7 @@ EVT_BEGIN(evt_rsh_door_close)
             IF_STR_EQUAL(LW(0), STRING("rsh_04_a"))
                 WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_RSH_SCRIPTED_ENTRY_PENDING), 1)
+                SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
 #else
                 SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
 #endif
@@ -717,7 +725,7 @@ EVT_BEGIN(evt_rsh_door_close)
             IF_STR_EQUAL(LW(0), STRING("rsh_04_b"))
                 WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_RSH_SCRIPTED_ENTRY_PENDING), 1)
+                SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
 #else
                 SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
 #endif
@@ -734,8 +742,8 @@ EVT_BEGIN(evt_rsh_door_close)
         CALL(evt_sub_get_mapname, LW(10))
         IF_STR_EQUAL(LW(10), STRING("rsh_02_c"))
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_RSH02_GHOST_VOICE_HEARD), 0)
-                SET_VALUE(GSWF(GSWF_RSH02_GHOST_VOICE_HEARD), 1)
+            IF_INT_EQUAL(GSWF_RSH_GHOST_DIARY_WARNING_SEEN, 0)
+                SET_VALUE(GSWF_RSH_GHOST_DIARY_WARNING_SEEN, 1)
 #else
             IF_INT_EQUAL(GSWF_RSH_GHOST_DIARY_WARNING_SEEN, 0)
                 SET_VALUE(GSWF_RSH_GHOST_DIARY_WARNING_SEEN, 1)
@@ -778,7 +786,7 @@ EVT_BEGIN(evt_rsh_door_close)
 #endif
             IF_STR_EQUAL(LW(1), STRING("heya_4"))
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_EQUAL(GSWF(GSWF_RSH02_GHOST_APPEARED), 1)
+                IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
 #else
                 IF_INT_EQUAL(GSWF_RSH_GHOST_APPEARED, 1)
 #endif
@@ -789,9 +797,9 @@ EVT_BEGIN(evt_rsh_door_close)
     END_INLINE_EVENT
     // Remember that Mario is no longer inside a cabin.
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_RSH04_INSIDE_CABIN5), 0)
-    SET_VALUE(GSWF(GSWF_RSH04_INSIDE_CABIN3), 0)
-    SET_VALUE(GSWF(GSWF_RSH02_INSIDE_CABIN4), 0)
+    SET_VALUE(GSWF_RSH_04_IN_ROOM_5, 0)
+    SET_VALUE(GSWF_RSH_04_IN_ROOM_3, 0)
+    SET_VALUE(GSWF_RSH_02_IN_ROOM_4, 0)
 #else
     SET_VALUE(GSWF_RSH_04_IN_ROOM_5, 0)
     SET_VALUE(GSWF_RSH_04_IN_ROOM_3, 0)

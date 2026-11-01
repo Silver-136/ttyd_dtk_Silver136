@@ -49,7 +49,11 @@ static const char* pika_tbl_rsh_06[10];
 static EvtWord hom_10_evt_resha_sub[102];
 EvtWord hom_10_evt_resha_right[35];
 EvtWord hom_10_evt_resha_left[28];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord hom_10_init_evt[];
+#else
 EvtWord hom_10_init_evt[140];
+#endif
 
 /** Wheels of the train that spin while it runs: map object, wheel size, speed source and spin direction. */
 static SharinData sharinDt[] = {
@@ -743,7 +747,7 @@ EVT_BEGIN(hom_10_init_evt)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+    IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(hom_10_evt_resha_right)
         CALL_CHILD(hom_10_evt_resha_start3)
 #else

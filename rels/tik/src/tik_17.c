@@ -30,8 +30,16 @@ static EvtWord evt_switch_00[56];
 static EvtWord evt_switch_01_init[26];
 static EvtWord evt_switch_01_after[11];
 static EvtWord evt_switch_01[56];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mobj_box01[];
+#else
 static EvtWord mobj_box01[34];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tik_17_init_evt[];
+#else
 EvtWord tik_17_init_evt[116];
+#endif
 
 /**
  * Doors of this room: two west exits to tik_18, two east exits to tik_16, and the pipes to Poshley Heights
@@ -286,8 +294,8 @@ EVT_BEGIN(tik_17_init_evt)
 #endif
     CALL(evt_map_playanim, STRING("anm_mizu"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_lv_blk, STRING("block"), 0, 0, 0, 0, GSWF(GSWF_TIK17_BIG_BLOCK_BROKEN), STRING("MOBJ_Lv2BigBigBlock"))
-    IF_INT_EQUAL(GSWF(GSWF_TIK17_BIG_BLOCK_BROKEN), 0)
+    CALL(evt_mobj_lv_blk, STRING("block"), 0, 0, 0, 0, GSWF_TIK_17_LV2_BIGBIG_BLOCK_BROKEN, STRING("MOBJ_Lv2BigBigBlock"))
+    IF_INT_EQUAL(GSWF_TIK_17_LV2_BIGBIG_BLOCK_BROKEN, 0)
 #else
     CALL(evt_mobj_lv_blk, STRING("block"), 0, 0, 0, 0, GSWF_TIK_17_LV2_BIGBIG_BLOCK_BROKEN, STRING("MOBJ_Lv2BigBigBlock"))
     IF_INT_EQUAL(GSWF_TIK_17_LV2_BIGBIG_BLOCK_BROKEN, 0)
@@ -295,7 +303,7 @@ EVT_BEGIN(tik_17_init_evt)
         CALL(evt_mobj_flag_onoff, 1, STRING("block"), MOBJ_FLAG_NO_CULL)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mobj_itembox, STRING("mobj_box01"), -125, 100, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF(GSWF_TIK17_FP_PLUS_CHEST_OPENED))
+CALL(evt_mobj_itembox, STRING("mobj_box01"), -125, 100, -125, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_TIK_17_FP_PLUS_CHEST)
 #else
     CALL(evt_mobj_itembox, STRING("mobj_box01"), -125, 100, -110, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_TIK_17_FP_PLUS_CHEST)
 #endif
@@ -311,8 +319,8 @@ CALL(evt_mobj_itembox, STRING("mobj_box01"), -125, 100, -125, MOBJ_ITEMBOX_NORMA
     SET_VALUE(LW(12), 0)
 #if VERSION <= VERSION_DEMO_US
     SPAWN_EVENT(moving_floor)
-    CALL(evt_mobj_tornadoswitch_blue, 0, STRING("switch00"), -125, 0, 0, PTR(evt_switch_00), GSWF(GSWF_TIK17_PIPE_PIK_OPEN))
-    CALL(evt_mobj_tornadoswitch_blue, 0, STRING("switch01"), 125, 0, 0, PTR(evt_switch_01), GSWF(GSWF_TIK17_PIPE_MUJ_OPEN))
+    CALL(evt_mobj_tornadoswitch_blue, 0, STRING("switch00"), -125, 0, 0, PTR(evt_switch_00), GSWF_TIK_17_PIK_PIPE_RAISED)
+    CALL(evt_mobj_tornadoswitch_blue, 0, STRING("switch01"), 125, 0, 0, PTR(evt_switch_01), GSWF_TIK_17_MUJ_PIPE_RAISED)
 #else
     SPAWN_EVENT(PTR(moving_floor))
     CALL(evt_mobj_tornadoswitch_blue, 0, STRING("switch00"), -125, 0, 0, PTR(evt_switch_00), GSWF_TIK_17_PIK_PIPE_RAISED)

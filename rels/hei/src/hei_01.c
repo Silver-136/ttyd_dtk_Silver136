@@ -66,8 +66,16 @@ EvtWord nokorin_pose[57];
 EvtWord evt_nokorin[869];
 static NpcSetupInfo npcEnt[3];
 static HitDamageReturn hitDmgRetPoints[3];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord peach_mail[];
+#else
 static EvtWord peach_mail[287];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord christine_hei_01[];
+#else
 EvtWord christine_hei_01[46];
+#endif
 EvtWord hei_01_init_evt[148];
 
 /** Exit event for the map's exits: just returns 0 in LW(0) so the exit proceeds. */
@@ -952,7 +960,7 @@ CALL(evt_bero_exec_wait, 65536)
     CALL(evt_mario_set_pose, STRING("M_N_2"))
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_HEI01_GOOMBELLA_TIP_GIVEN), 1)
+    SET_VALUE(GSWF_HEI_01_GOOMBELLA_TATTLE_TIP_SEEN, 1)
 #else
     SET_VALUE(GSWF_HEI_01_GOOMBELLA_TATTLE_TIP_SEEN, 1)
 #endif
@@ -1022,12 +1030,12 @@ EVT_BEGIN(hei_01_init_evt)
     CALL_CHILD(bero_case_switch_off)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(evt_npc_change_fbat_mode, 1)
-    CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), 315, 60, -75, ITEM_FIRE_FLOWER, 0, GSWF(GSWF_HEI01_FIRE_FLOWER_BLOCK_HIT), 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 450, 40, -447, ITEM_TYPE_STILL, GSWF(GSWF_HEI01_STAR_PIECE), 0)
+    CALL(evt_mobj_badgeblk, STRING("mobj_hatenablk"), 315, 60, -75, ITEM_FIRE_FLOWER, 0, GSWF_HEI_01_FIRE_FLOWER_BLOCK, 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 450, 40, -447, ITEM_TYPE_STILL, GSWF_STARPIECE_32, 0)
     CALL(evt_item_set_scale, STRING("item_01"), FLOAT(0.5996094f))
     SET_VALUE(LW(0), PTR(kusa_data))
     CALL_CHILD(evt_sub_kusa_access_entry)
-    IF_INT_EQUAL(GSWF(GSWF_HEI01_BUSH_PIPE_REVEALED), 0)
+    IF_INT_EQUAL(GSWF_HEI_01_BUSH_PIPE_REVEALED, 0)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, STRING("a_kusa_1"), 0, PTR(kusa_dokan), 0)
     ELSE
         CALL(evt_hitobj_onoff, STRING("a_kusa_1"), 0, 0)

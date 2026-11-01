@@ -41,14 +41,46 @@ USER_FUNC(get_password);
 static USER_FUNC(peach_evt_toumei);
 static USER_FUNC(peach_set_pose);
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w1_door_open[];
+#else
 static EvtWord w1_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w1_door_close[];
+#else
 static EvtWord w1_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e1_door_open[];
+#else
 static EvtWord e1_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e1_door_close[];
+#else
 static EvtWord e1_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w2_door_open[];
+#else
 static EvtWord w2_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord w2_door_close[];
+#else
 static EvtWord w2_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e2_door_open[];
+#else
 static EvtWord e2_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e2_door_close[];
+#else
 static EvtWord e2_door_close[22];
+#endif
 static EvtWord n1_door_open[22];
 static EvtWord n1_door_close[22];
 static EvtWord n2_door_open[22];
@@ -57,24 +89,80 @@ EvtWord n3_door_open[22];
 EvtWord n3_door_close[22];
 EvtWord n4_door_open[22];
 EvtWord n4_door_close[22];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord w3_door_open[];
+#else
 EvtWord w3_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord w3_door_close[];
+#else
 EvtWord w3_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e3_door_open[];
+#else
 static EvtWord e3_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e3_door_close[];
+#else
 static EvtWord e3_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord w4_door_open[];
+#else
 EvtWord w4_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord w4_door_close[];
+#else
 EvtWord w4_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord e4_door_open[];
+#else
 EvtWord e4_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord e4_door_close[];
+#else
 EvtWord e4_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord w5_door_open[];
+#else
 EvtWord w5_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord w5_door_close[];
+#else
 EvtWord w5_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord e5_door_open[];
+#else
 EvtWord e5_door_open[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord e5_door_close[];
+#else
 EvtWord e5_door_close[22];
+#endif
 static BeroEntry bero_entry_data[15];
 BeroEntry e_bero_5_peach[2];
 s32 elv_key1[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord elv_unlock1[];
+#else
 EvtWord elv_unlock1[131];
+#endif
 s32 elv_key2[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord elv_unlock2[];
+#else
 EvtWord elv_unlock2[131];
+#endif
 EvtWord ele1_door_open[139];
 EvtWord ele1_door_close[139];
 #if VERSION >= VERSION_US
@@ -104,7 +192,11 @@ static EvtWord peach_evt_stg5[51];
 static EvtWord peach_evt_stg5_1[46];
 static EvtWord peach_evt_door_stop[14];
 EvtWord peach_evt_ele_2[505];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord peach_evt_ele_init[];
+#else
 EvtWord peach_evt_ele_init[177];
+#endif
 EvtWord peach_evt_key_init[178];
 EvtWord peach_evt_init[365];
 static EvtWord teshita1_init[42];
@@ -116,7 +208,11 @@ static EvtWord teshita3_init[46];
 EvtWord teshita3_talk[14];
 EvtWord teshita3_regl[35];
 static NpcSetupInfo npcEnt[4];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_01_init_evt[];
+#else
 EvtWord aji_01_init_evt[171];
+#endif
 
 static EVT_BEGIN(w1_door_open)
 #if VERSION <= VERSION_DEMO_US

@@ -940,7 +940,7 @@ USER_FUNC(evt_unitwin_select_func) {
                 event->lwData[0] = 1;
                 event->lwData[1] = badge_bottakuru100_table[i];
                 event->lwData[2] = (EvtWord)itemDataTable[event->lwData[1]].id;
-                event->lwData[3] = ((evtGetValue(NULL, GSW(GSW_JON_FLOOR)) + 11) * itemDataTable[event->lwData[1]].buy_price) / 10;
+                event->lwData[3] = ((evtGetValue(NULL, GSW_PIT_FLOOR) + 11) * itemDataTable[event->lwData[1]].buy_price) / 10;
                 event->lwData[4] = itemDataTable[event->lwData[1]].bp_cost;
                 wp->mode = 0;
                 return EVT_RETURN_YIELD;
@@ -987,7 +987,7 @@ USER_FUNC(evt_unitwin_select_func) {
                         n++;
                     }
                 }
-                if (!evtGetValue(event, GSWF(GSWF_MERLON_FIRST_UPGRADE_DONE))) {
+                if (!evtGetValue(event, GSWF_GOR_UP_ARROW_USED)) {
                     if (pouch->partyData[party_id_table[i]].techLevel < 1) {
                         ng = 0;
                     } else {

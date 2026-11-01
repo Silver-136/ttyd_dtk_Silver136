@@ -29,10 +29,18 @@ static EvtWord w_door_open[12];
 static EvtWord w_door_close[12];
 EvtWord evt_in[68];
 static BeroEntry bero_data[4];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_toile[];
+#else
 static EvtWord evt_toile[201];
+#endif
 static EvtWord evt_toile2[136];
 static EvtWord evt_tojikome_msg[30];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tou_09_init_evt[];
+#else
 EvtWord tou_09_init_evt[84];
+#endif
 
 /**
  * Door animation callback for the room door (door_1), opening: LW(0) is the swing angle;
@@ -345,7 +353,7 @@ EVT_BEGIN(tou_09_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -354,7 +362,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

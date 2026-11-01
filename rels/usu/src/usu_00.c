@@ -118,12 +118,20 @@ EvtWord villagerK_talk[65];
 EvtWord village_chief_init[20];
 EvtWord village_chief_pig_init[27];
 s32 iri_15_item_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord village_chief_talk[];
+#else
 EvtWord village_chief_talk[199];
+#endif
 EvtWord chief_mario_talk_init[183];
 EvtWord chief_mario_talk[55];
 static EvtWord vivian_init[44];
 static s32 key_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord vivian_talk[];
+#else
 static EvtWord vivian_talk[29];
+#endif
 EvtWord nise_mario_talk[8];
 EvtWord christine_talk[8];
 EvtWord nokotaro_talk[8];
@@ -140,8 +148,16 @@ EvtWord usu00_stage4_coming_event[839];
 EvtWord usu00_3witch_init[41];
 EvtWord usu00_3witch_event[275];
 EvtWord gra00_2witch_find_ranpel_event[197];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord usu00_vivian_cry_event[];
+#else
 EvtWord usu00_vivian_cry_event[58];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord usu00_vivian_joinup_event[];
+#else
 EvtWord usu00_vivian_joinup_event[608];
+#endif
 static EvtWord cam_up[34];
 static EvtWord cam_down[8];
 EvtWord usu00_check_vivian[33];
@@ -215,7 +231,11 @@ static EvtWord sekai_yami_shake[11];
 static EvtWord sekai_yami_evt[260];
 static EvtWord minnnanokoe_npc_entry[94];
 static EvtWord minnnanokoe_evt[381];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_after_peach[];
+#else
 static EvtWord evt_after_peach[151];
+#endif
 static EvtWord epilogue_npc_entry[48];
 static EvtWord epilogue_evt_sub[167];
 static EvtWord epilogue_evt[73];
@@ -580,7 +600,7 @@ s32 iri_15_item_tbl[] = {
  */
 EVT_BEGIN(village_chief_talk)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NEWSLETTER)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
 #endif
@@ -609,7 +629,7 @@ CALL(evt_win_item_select, PTR(iri_15_item_tbl), LW(0))
                         CALL(evt_sub_get_coin, 30)
                         CALL(evt_msg_print, 0, STRING("irai_17_05"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-                        SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+                        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #else
                         SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #endif
@@ -634,8 +654,8 @@ CALL(evt_win_item_select, PTR(iri_15_item_tbl), LW(0))
         CALL(evt_msg_print, 0, STRING("stg4_usu_22"), 0, STRING("me"))
         CASE_LESS(STG4_14_NAME_GUESSING)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_USU00_MAYOR_NAMELESS_FIRST_TALK), 0)
-            SET_VALUE(GSWF(GSWF_USU00_MAYOR_NAMELESS_FIRST_TALK), 1)
+        IF_INT_EQUAL(GSWF_USU_00_MAYOR_SHADOW_TALK_DONE, 0)
+            SET_VALUE(GSWF_USU_00_MAYOR_SHADOW_TALK_DONE, 1)
 #else
         IF_INT_EQUAL(GSWF_USU_00_MAYOR_SHADOW_TALK_DONE, 0)
             SET_VALUE(GSWF_USU_00_MAYOR_SHADOW_TALK_DONE, 1)
@@ -1635,7 +1655,7 @@ CALL(evt_snd_bgmon, PSND_FADE_OUT, STRING("BGM_STG4_USU1"))
     WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW(GSW_STORY_PROGRESS), STG4_13_VIVIAN_JOINS)
-    SET_VALUE(GSWF(GSWF_STG4_MARIO_IS_SHADOW), 0)
+    SET_VALUE(GSWF_JIN_TRADING_PLACES_ACTIVE, 0)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG4_13_VIVIAN_JOINS)
     SET_VALUE(GSWF_JIN_TRADING_PLACES_ACTIVE, 0)
@@ -4376,7 +4396,7 @@ END_IF
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 365, 60, -50, 0, 0)
     END_IF
     IF_INT_EQUAL(GF(1), 0)
-        CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -220, 0, -225, ITEM_TYPE_STILL, GSWF(GSWF_USU00_STAR_PIECE), 0)
+        CALL(evt_item_entry, STRING("item00"), ITEM_STAR_PIECE, -220, 0, -225, ITEM_TYPE_STILL, GSWF_STARPIECE_62, 0)
     END_IF
     CALL_CHILD(evt_usu_kagemario_party_kill)
     CALL(evt_npc_setup, PTR(npcEnt))

@@ -32,7 +32,11 @@ EvtWord switch_check[114];
 static EvtWord switch1_evt[11];
 static EvtWord switch2_evt[15];
 static EvtWord hint_plate[14];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_13_init_evt[];
+#else
 EvtWord las_13_init_evt[79];
+#endif
 
 /**
  * Door animation script (closing) for the east door, used as the enter/exit animation of this room's bero entry.
@@ -179,11 +183,11 @@ EVT_BEGIN(las_13_init_evt)
     CALL(evt_bero_get_info)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_bero_info_run)
-    IF_INT_EQUAL(GSWF(GSWF_LAS13_RED_SWITCHES_SOLVED), 0)
+    IF_INT_EQUAL(GSWF_LAS_13_SWITCH_PUZZLE_SOLVED, 0)
         SET_VALUE(LSW(1), 0)
         SET_VALUE(LSW(2), 0)
-        CALL(evt_mobj_floatswitch_red, 0, STRING("switch1"), 150, 60, 0, PTR(switch1_evt), GSWF(GSWF_LAS13_RED_SWITCHES_SOLVED))
-        CALL(evt_mobj_floatswitch_red, 0, STRING("switch2"), -150, 60, 0, PTR(switch2_evt), GSWF(GSWF_LAS13_RED_SWITCHES_SOLVED))
+        CALL(evt_mobj_floatswitch_red, 0, STRING("switch1"), 150, 60, 0, PTR(switch1_evt), GSWF_LAS_13_SWITCH_PUZZLE_SOLVED)
+        CALL(evt_mobj_floatswitch_red, 0, STRING("switch2"), -150, 60, 0, PTR(switch2_evt), GSWF_LAS_13_SWITCH_PUZZLE_SOLVED)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
     IF_INT_EQUAL(GSWF_LAS_13_SWITCH_PUZZLE_SOLVED, 0)
@@ -194,8 +198,8 @@ EVT_BEGIN(las_13_init_evt)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS13_KEY_CHEST_OPENED))
-    IF_INT_EQUAL(GSWF(GSWF_LAS13_RED_SWITCHES_SOLVED), 0)
+    CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_13_PALACE_KEY_CHEST)
+    IF_INT_EQUAL(GSWF_LAS_13_SWITCH_PUZZLE_SOLVED, 0)
 #else
     CALL(evt_mobj_itembox, STRING("box"), 0, 0, 0, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_13_PALACE_KEY_CHEST)
     IF_INT_EQUAL(GSWF_LAS_13_SWITCH_PUZZLE_SOLVED, 0)

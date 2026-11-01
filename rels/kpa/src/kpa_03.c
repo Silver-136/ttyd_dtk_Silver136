@@ -124,7 +124,7 @@ static EVT_BEGIN(jumpstand_evt)
     DELETE_EVENT(GW(15))
 BEGIN_INLINE_EVENT
         WAIT_MS(600)
-        CALL(evt_koopa_get_level, GSW(GSW_KPA_BOWSER_POWER))
+        CALL(evt_koopa_get_level, GSW_KPA_BOWSER_LEVEL)
         CALL(evt_bero_mapchange, STRING("kpa_04"), STRING("kpa_next_map"))
     END_INLINE_EVENT
     BEGIN_INLINE_EVENT

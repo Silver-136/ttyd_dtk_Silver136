@@ -28,7 +28,11 @@ static EvtWord iri_12_makkino_talk[7];
 static EvtWord iri_12_init[85];
 static EvtWord evt_kanban[16];
 static EvtWord evt_kanban2[45];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tik_06_init_evt[];
+#else
 EvtWord tik_06_init_evt[47];
+#endif
 
 /**
  * Pushes Mario back when he tries to use the blocked pipe (oshimodo = push back):
@@ -301,7 +305,7 @@ CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_TIK1"))
     CALL_CHILD(iri_12_init)
     CALL(evt_mobj_signboard, STRING("board"), -50, 0, 50, PTR(evt_kanban), LSWF(0))
     CALL(evt_mobj_signboard, STRING("board2"), 50, 0, -250, PTR(evt_kanban2), LSWF(0))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 290, 0, -50, ITEM_TYPE_STILL, GSWF(GSWF_TIK06_STAR_PIECE), 0)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 290, 0, -50, ITEM_TYPE_STILL, GSWF_STARPIECE_26, 0)
 #else
     CALL_CHILD(PTR(evt_bero_info_run))
     CALL_CHILD(PTR(iri_12_init))

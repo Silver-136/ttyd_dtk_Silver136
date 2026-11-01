@@ -106,19 +106,39 @@ static ShopObj obj_list[6];
 static ShopItem goods_list[6];
 static ShopDb trade_list[12];
 static ShopperData35 shopper_data;
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord uranaisi_next_evt[];
+#else
 EvtWord uranaisi_next_evt[152];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord uranaisi_starpiece_evt[];
+#else
 EvtWord uranaisi_starpiece_evt[60];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord uranaisi_supercoin_evt[];
+#else
 EvtWord uranaisi_supercoin_evt[60];
+#endif
 typedef struct CardName {
     const char* name;
     s32 value;
 } CardName;
 static CardName name_tbl[9];
 EvtWord evt_uranai_cap[4];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord uranai_init[];
+#else
 EvtWord uranai_init[147];
+#endif
 EvtWord uranai_main[595];
 EvtWord uranai_exit[98];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord uranaisi_table_talk[];
+#else
 EvtWord uranaisi_table_talk[226];
+#endif
 EvtWord uranaisi_direct_talk[8];
 EvtWord uranaisi_init[10];
 #if VERSION > VERSION_DEMO_US
@@ -148,7 +168,11 @@ EvtWord evt_wall_01_01[66];
 EvtWord evt_wall_01_02[66];
 static const char* door_data_01_npc[2];
 static EvtWord evt_wall_01[12];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_open_01[];
+#else
 EvtWord evt_open_01[39];
+#endif
 EvtWord evt_close_01[60];
 static DoorParam door_data_01;
 static EvtWord evt_door_02_00[12];
@@ -175,24 +199,48 @@ static DoorParam door_data_03;
 static EvtWord evt_door_04_00[12];
 static EvtWord evt_door_04_01[12];
 static EvtWord evt_wall_04[15];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_open_04_open[];
+#else
 EvtWord evt_open_04_open[179];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_door_04_close[];
+#else
 static EvtWord evt_door_04_close[87];
+#endif
 static DoorParam door_data_04;
 EvtWord evt_door_stg7_open[27];
 EvtWord evt_door_stg7_close[7];
 static EvtWord evt_door_04_entry[64];
 EvtWord tensou_return[243];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tensou_init_event[];
+#else
 EvtWord tensou_init_event[182];
+#endif
 EvtWord tensou_event[209];
 EvtWord tensou_anim_event[30];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tensou_sw_event[];
+#else
 EvtWord tensou_sw_event[94];
+#endif
 EvtWord kurihakase_event[221];
 EvtWord hashira_bomb_sub[144];
 EvtWord hashira_bomb[45];
 static EvtWord epilogue_npc_entry[25];
 static EvtWord epilogue_evt[127];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mobj_box01[];
+#else
 static EvtWord mobj_box01[34];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tik_00_init_evt[];
+#else
 EvtWord tik_00_init_evt[214];
+#endif
 
 /**
  * Doors of the underground town: the west exit to tik_07,
@@ -1181,8 +1229,8 @@ EVT_BEGIN(uranaisi_table_talk)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
     CALL(evt_npc_set_ry, STRING("me"), 180)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF(GSWF_TIK00_MERLUVLEE_SESSION), 0)
-            IF_INT_EQUAL(GSWF(GSWF_TIK00_MERLUVLEE_MET), 0)
+IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 0)
+            IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_FIRST_TALK_DONE, 0)
 #else
     LOOP(0)
         IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 0)
@@ -1190,21 +1238,21 @@ IF_INT_EQUAL(GSWF(GSWF_TIK00_MERLUVLEE_SESSION), 0)
 #endif
                 CALL(evt_msg_print, 0, STRING("uranaisi_00"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_TIK00_MERLUVLEE_MET), 1)
-                SET_VALUE(GSWF(GSWF_TIK00_MERLUVLEE_GREETED), 1)
+                SET_VALUE(GSWF_TIK_00_MERLUVLEE_FIRST_TALK_DONE, 1)
+                SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 1)
 #else
                 SET_VALUE(GSWF_TIK_00_MERLUVLEE_FIRST_TALK_DONE, 1)
                 SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 1)
 #endif
                 ELSE
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_EQUAL(GSWF(GSWF_TIK00_MERLUVLEE_GREETED), 0)
+                IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 0)
 #else
                 IF_INT_EQUAL(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 0)
 #endif
                     CALL(evt_msg_print, 0, STRING("uranaisi_01"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-                    SET_VALUE(GSWF(GSWF_TIK00_MERLUVLEE_GREETED), 1)
+                    SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 1)
 #else
                     SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 1)
 #endif
@@ -1225,7 +1273,7 @@ IF_INT_EQUAL(GSWF(GSWF_TIK00_MERLUVLEE_SESSION), 0)
         // A menu lists the three readings with their prices (My Next Path, Star Pieces, Shine Sprites);
         // cancelling ends the talk.
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_TIK00_MERLUVLEE_SESSION), 1)
+        SET_VALUE(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 1)
 CALL(evt_unitwin_alloc)
     CALL(unitwincoin_disp_onoff, 1)
 #else
@@ -1371,9 +1419,9 @@ EVT_BEGIN(starmaniac_talk)
         CALL(evt_msg_print, 0, STRING("starmaniac_02"), 0, STRING("me"))
         RETURN
     END_IF
-IF_INT_EQUAL(GSWF(GSWF_TIK00_DAZZLE_FIRST_TALK), 0)
+IF_INT_EQUAL(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("starmaniac_00"), 0, STRING("me"))
-        SET_VALUE(GSWF(GSWF_TIK00_DAZZLE_FIRST_TALK), 1)
+        SET_VALUE(GSWF_TIK_00_DAZZLE_FIRST_TALK_DONE, 1)
     ELSE
         CALL(evt_msg_print, 0, STRING("starmaniac_01"), 0, STRING("me"))
     END_IF
@@ -2086,8 +2134,8 @@ EVT_END()
 EVT_BEGIN(evt_open_01)
     CALL(evt_mapobj_trans, 1, STRING("card"), 0, -1000, 0)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_mapobj_trans, 1, STRING("ie_1_naka"), 0, FLOAT(0.19921875f), 0)
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -2603,8 +2651,8 @@ IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_26_THE_HIDEOUT_EXPLODES)
         END_IF
 #if VERSION <= VERSION_DEMO_US
     END_IF
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     END_SWITCH
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -2620,7 +2668,7 @@ static EVT_BEGIN(evt_door_04_close)
     CALL(evt_snd_env_lpf, 0, 0)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_26_THE_HIDEOUT_EXPLODES)
-        IF_INT_EQUAL(GSWF(GSWF_TIK00_TELEPORT_ROOM_COMMENT), 0)
+        IF_INT_EQUAL(GSWF_TIK_00_DOOR_04_TALK_DONE, 0)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG7_26_THE_HIDEOUT_EXPLODES)
         IF_INT_EQUAL(GSWF_TIK_00_DOOR_04_TALK_DONE, 0)
@@ -2637,7 +2685,7 @@ static EVT_BEGIN(evt_door_04_close)
             CALL(evt_party_set_dir, 0, 90, 200)
             CALL(evt_msg_print_party, STRING("tik_00_tensou_1"))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_TIK00_TELEPORT_ROOM_COMMENT), 1)
+            SET_VALUE(GSWF_TIK_00_DOOR_04_TALK_DONE, 1)
 #else
             SET_VALUE(GSWF_TIK_00_DOOR_04_TALK_DONE, 1)
 #endif
@@ -2825,7 +2873,7 @@ IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG7_26_THE_HIDEOUT_EXPLODES)
         CALL(evt_map_playanim, STRING("anm_tiktik"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
     END_IF
-IF_INT_EQUAL(GSWF(GSWF_TIK00_TELEPORTER_ARRIVAL), 0)
+IF_INT_EQUAL(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)
 #else
         CASE_LESS(STG9_02_RETURN_TO_ROGUEPORT)
         CASE_DEFAULT
@@ -2838,7 +2886,7 @@ IF_INT_EQUAL(GSWF(GSWF_TIK00_TELEPORTER_ARRIVAL), 0)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_TIK00_TELEPORTER_ARRIVAL), 0)
+    SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)
 #else
     SET_VALUE(GSWF_AJI_TELEPORT_TO_TIK_PENDING, 0)
 #endif
@@ -2864,14 +2912,14 @@ IF_INT_EQUAL(GSWF(GSWF_TIK00_TELEPORTER_ARRIVAL), 0)
 #endif
         CASE_LESS(STG7_26_THE_HIDEOUT_EXPLODES)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TIK00_TELEPORT_RETURN_COMMENT), 0)
+        IF_INT_EQUAL(GSWF_TIK_00_TELEPORT_ARRIVAL_TALK_DONE, 0)
 #else
         IF_INT_EQUAL(GSWF_TIK_00_TELEPORT_ARRIVAL_TALK_DONE, 0)
 #endif
             WAIT_MS(1500)
             CALL(evt_msg_print_party, STRING("tik_00_tensou_0"))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_TIK00_TELEPORT_RETURN_COMMENT), 1)
+            SET_VALUE(GSWF_TIK_00_TELEPORT_ARRIVAL_TALK_DONE, 1)
 #else
             SET_VALUE(GSWF_TIK_00_TELEPORT_ARRIVAL_TALK_DONE, 1)
 #endif
@@ -3331,8 +3379,8 @@ EVT_BEGIN(tik_00_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     CALL(johoya_data_alloc, STRING("jketi_code"))
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_TIK00_MERLUVLEE_SESSION), 0)
-    SET_VALUE(GSWF(GSWF_TIK00_MERLUVLEE_GREETED), 0)
+    SET_VALUE(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 0)
+    SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 0)
 #else
     SET_VALUE(GSWF_TIK_00_MERLUVLEE_ASKED_THIS_VISIT, 0)
     SET_VALUE(GSWF_TIK_00_MERLUVLEE_GREETED_THIS_VISIT, 0)
@@ -3379,12 +3427,12 @@ EVT_BEGIN(tik_00_init_evt)
 #if VERSION <= VERSION_DEMO_US
     SPAWN_EVENT(moving_floor)
     SPAWN_EVENT(hashira_bomb)
-    CALL(evt_mobj_powerupblk, STRING("pblk1"), 525, 209, -175, 0, GSWF(GSWF_TIK00_SHINE_SPRITE), 0)
-    CALL(evt_mobj_itembox, STRING("mobj_box01"), -375, -60, 320, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF(GSWF_TIK00_SOFT_STOMP_CHEST_OPENED))
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -220, 95, -360, STRING("ie_3_naka"), 125, GSWF(GSWF_TIK00_STAR_PIECE_PANEL))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 460, -40, 215, ITEM_TYPE_STILL, GSWF(GSWF_TIK00_STAR_PIECE_1), 0)
-    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 530, 20, -220, ITEM_TYPE_STILL, GSWF(GSWF_TIK00_STAR_PIECE_2), 0)
-    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -530, 20, -220, ITEM_TYPE_STILL, GSWF(GSWF_TIK00_STAR_PIECE_3), 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk1"), 525, 209, -175, 0, GSWF_SHINE_05, 0)
+    CALL(evt_mobj_itembox, STRING("mobj_box01"), -375, -60, 320, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_TIK_00_SOFT_STOMP_CHEST)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -220, 95, -360, STRING("ie_3_naka"), 125, GSWF_STARPIECE_21)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 460, -40, 215, ITEM_TYPE_STILL, GSWF_STARPIECE_18, 0)
+    CALL(evt_item_entry, STRING("item_01"), ITEM_STAR_PIECE, 530, 20, -220, ITEM_TYPE_STILL, GSWF_STARPIECE_19, 0)
+    CALL(evt_item_entry, STRING("item_02"), ITEM_STAR_PIECE, -530, 20, -220, ITEM_TYPE_STILL, GSWF_STARPIECE_20, 0)
     IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
 #else
     SPAWN_EVENT(PTR(moving_floor))

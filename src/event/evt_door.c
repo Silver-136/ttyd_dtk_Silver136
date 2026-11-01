@@ -72,14 +72,26 @@ EvtWord in_houseanim[80];
 EvtWord out_houseanim[72];
 EvtWord in_dooranim[134];
 EvtWord out_dooranim[121];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord house_in[];
+#else
 EvtWord house_in[216];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord house_out[];
+#else
 EvtWord house_out[196];
+#endif
 EvtWord evt_door_setup[56];
 EvtWord door_dark[34];
 EvtWord door_dark2[34];
 EvtWord door_light[30];
 EvtWord door_light2[30];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_door_open[];
+#else
 EvtWord evt_door_open[508];
+#endif
 #if VERSION >= VERSION_US
 EvtWord evt_door_open_bom_01[336];
 #else
@@ -480,8 +492,8 @@ EVT_BEGIN(house_in)
     END_IF
     POKE_INT(1, PTR(&DoorFLAG))
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))

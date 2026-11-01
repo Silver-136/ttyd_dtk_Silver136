@@ -44,7 +44,11 @@ static EvtWord dai_evt[17];
 static EvtWord dai_evt[13];
 #endif
 static EvtWord box_evt[33];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord las_24_init_evt[];
+#else
 EvtWord las_24_init_evt[190];
+#endif
 
 /**
  * Door animation script (closing) for the west door, used as the enter/exit animation of this room's bero entry.
@@ -341,7 +345,7 @@ EVT_BEGIN(las_24_init_evt)
     CALL(evt_map_playanim, STRING("kusari"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG8_12_LARGE_STONE_BLOCK)
-        IF_INT_EQUAL(GSWF(GSWF_LAS24_BLOCK_UNCOVERED), 0)
+        IF_INT_EQUAL(GSWF_LAS_24_HAKO_BLOWN_AWAY, 0)
 #else
     IF_INT_LESS(GSW_STORY_PROGRESS, STG8_12_LARGE_STONE_BLOCK)
         IF_INT_EQUAL(GSWF_LAS_24_HAKO_BLOWN_AWAY, 0)
@@ -357,15 +361,15 @@ EVT_BEGIN(las_24_init_evt)
         CALL(evt_hitobj_onoff, STRING("A_hako"), 1, 0)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_lv_blk, STRING("blk"), -495, 100, 0, 0, GSWF(GSWF_LAS24_BIG_BLOCK_BROKEN), STRING("MOBJ_Lv2BigBigBlock"))
-    IF_INT_EQUAL(GSWF(GSWF_LAS24_BIG_BLOCK_BROKEN), 0)
+    CALL(evt_mobj_lv_blk, STRING("blk"), -495, 100, 0, 0, GSWF_LAS_24_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv2BigBigBlock"))
+    IF_INT_EQUAL(GSWF_LAS_24_BIG_BLOCK_BROKEN, 0)
 #else
     CALL(evt_mobj_lv_blk, STRING("blk"), -495, 100, 0, 0, GSWF_LAS_24_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv2BigBigBlock"))
     IF_INT_EQUAL(GSWF_LAS_24_BIG_BLOCK_BROKEN, 0)
 #endif
         CALL(evt_mobj_flag_onoff, 0, STRING("blk"), MOBJ_FLAG_GRAVITY)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_LAS24_BLOCK_UNCOVERED), 0)
+        IF_INT_EQUAL(GSWF_LAS_24_HAKO_BLOWN_AWAY, 0)
 #else
         IF_INT_EQUAL(GSWF_LAS_24_HAKO_BLOWN_AWAY, 0)
 #endif
@@ -374,7 +378,7 @@ EVT_BEGIN(las_24_init_evt)
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_breaking_floor, STRING("brkflr"), -500, 100, 0, 0, PTR(break_floor_evt), GSWF(GSWF_LAS24_FLOOR_BROKEN))
+    CALL(evt_mobj_breaking_floor, STRING("brkflr"), -500, 100, 0, 0, PTR(break_floor_evt), GSWF_LAS_24_FLOOR_BROKEN)
 #else
     CALL(evt_mobj_breaking_floor, STRING("brkflr"), -500, 100, 0, 0, PTR(break_floor_evt), GSWF_LAS_24_FLOOR_BROKEN)
 #endif
@@ -384,9 +388,9 @@ EVT_BEGIN(las_24_init_evt)
     CALL(evt_hitobj_onoff, STRING("A_move_dai"), 0, 0)
     CALL(evt_mobj_floatswitch_red, 0, STRING("dai_switch"), -150, -440, 75, PTR(dai_evt), 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -625, -200, -100, ITEM_COIN, 0, GSWF(GSWF_LAS24_COIN_BLOCK_HIT), 0)
-    CALL(evt_mobj_brick, STRING("mobj_kakusi"), -625, -115, -100, ITEM_POINT_SWAP, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF(GSWF_LAS24_POINT_SWAP_HIDDEN_BLOCK_HIT))
-    CALL(evt_mobj_itembox, STRING("box"), -255, -380, 75, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF(GSWF_LAS24_KEY_CHEST_OPENED))
+    CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -625, -200, -100, ITEM_COIN, 0, GSWF_LAS_24_COIN_BLOCK, 0)
+    CALL(evt_mobj_brick, STRING("mobj_kakusi"), -625, -115, -100, ITEM_POINT_SWAP, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_LAS_24_POINT_SWAP_HIDDEN_BLOCK)
+    CALL(evt_mobj_itembox, STRING("box"), -255, -380, 75, MOBJ_ITEMBOX_NORMAL, 0, PTR(box_evt), GSWF_LAS_24_PALACE_KEY_CHEST)
 #else
     CALL(evt_mobj_badgeblk, STRING("mobj_hatena_gat"), -625, -200, -100, ITEM_COIN, 0, GSWF_LAS_24_COIN_BLOCK, 0)
     CALL(evt_mobj_brick, STRING("mobj_kakusi"), -625, -115, -100, ITEM_POINT_SWAP, MOBJ_BRICK_HIDDEN_ITEM, 0, GSWF_LAS_24_POINT_SWAP_HIDDEN_BLOCK)

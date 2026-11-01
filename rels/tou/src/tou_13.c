@@ -22,7 +22,11 @@ static BeroEntry bero_data[3];
 static EvtWord evt_dakuto[44];
 EvtWord evt_nusumi[182];
 static EvtWord evt_first[42];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tou_13_init_evt[];
+#else
 EvtWord tou_13_init_evt[117];
+#endif
 
 /** Exits of this passage: east to the champion's room tou_07 and west to Grubba's office tou_05. */
 static BeroEntry bero_data[] = {
@@ -157,7 +161,7 @@ EVT_BEGIN(tou_13_init_evt)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU7"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -166,7 +170,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU7"))
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -191,7 +195,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
         SET_VALUE(LF(0), 1)
         CASE_DEFAULT
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TOU13_DUCT_EXIT_OPEN_REVISIT), 0)
+        IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
 #else
         IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
 #endif

@@ -37,9 +37,17 @@ static USER_FUNC(setmertn);
 s32 majinaisi_ryokin_kaisu_tbl[6];
 static BeroEntry bero_entry_data[2];
 EvtWord suisyou_kirakira[30];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord majinaisi_table_talk[];
+#else
 EvtWord majinaisi_table_talk[877];
+#endif
 s32 iri_14_item_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord majinaisi_direct_talk[];
+#else
 EvtWord majinaisi_direct_talk[108];
+#endif
 EvtWord majinaisi_init[10];
 static NpcSetupInfo npcEnt[2];
 EvtWord tik_12_init_evt[58];
@@ -372,7 +380,7 @@ s32 iri_14_item_tbl[] = {
  */
 EVT_BEGIN(majinaisi_direct_talk)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_HEARTFUL_CAKE_RECIPE)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HEARTFUL_CAKE_RECIPE)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HEARTFUL_CAKE_RECIPE)
 #endif
@@ -400,7 +408,7 @@ CALL(evt_win_item_select, PTR(iri_14_item_tbl), LW(0))
                         CALL(evt_msg_print, 0, STRING("irai_14_05"), 0, 0)
                         CALL(evt_sub_get_coin, 30)
 #if VERSION <= VERSION_DEMO_US
-                        SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+                        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #else
                         SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #endif

@@ -58,7 +58,11 @@ EvtWord init_yuurei[250];
 static EvtWord evt_shake[39];
 EvtWord evt_shake2[6];
 static s32 item_tbl2[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord talk_yuurei[];
+#else
 EvtWord talk_yuurei[451];
+#endif
 static EvtWord init_toron[41];
 static EvtWord talk_toron[8];
 static EvtWord talk_sarary[8];
@@ -70,9 +74,17 @@ EvtWord evt_1day_end[68];
 EvtWord evt_2day_end[68];
 EvtWord evt_normal_yado[119];
 EvtWord evt_bed[22];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_toron_catch[];
+#else
 EvtWord evt_toron_catch[281];
+#endif
 static s32 item_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_toron_catch2[];
+#else
 EvtWord evt_toron_catch2[359];
+#endif
 #if VERSION >= VERSION_US
 EvtWord evt_toron_appear[437];
 #else
@@ -86,8 +98,16 @@ static EvtWord evt_daiji_kami[88];
 static EvtWord evt_yuka_simi[45];
 static EvtWord evt_access[14];
 static EvtWord evt_access2[44];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_access_entry[];
+#else
 static EvtWord evt_access_entry[62];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord rsh_02_init_evt[];
+#else
 EvtWord rsh_02_init_evt[247];
+#endif
 #if VERSION >= VERSION_US
 EvtWord rsh_02_a_init_evt[687];
 #else
@@ -96,9 +116,17 @@ EvtWord rsh_02_a_init_evt[685];
 EvtWord rsh_02_b_init_evt[168];
 static const char* window_tbl[4];
 EvtWord rsh_02_c_init_evt[142];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord rsh_02_init_evt_nidome[];
+#else
 EvtWord rsh_02_init_evt_nidome[208];
+#endif
 EvtWord rsh_02_a_init_evt_nidome[337];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord rsh_02_b_init_evt_nidome[];
+#else
 EvtWord rsh_02_b_init_evt_nidome[213];
+#endif
 EvtWord rsh_02_c_init_evt_nidome[136];
 EvtWord evt_nidome_bed[126];
 
@@ -605,14 +633,14 @@ CALL(evt_win_item_select, PTR(item_tbl2), LW(1))
             CALL(evt_snd_bgmon, PSND_SLOT(1), STRING("BGM_EVT_STG5_GHOST1"))
             CALL(evt_msg_print, 0, STRING("stg6_rsh_138"), 0, 0)
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_RSH02_GHOST_TALK_ACTIVE), 1)
+            SET_VALUE(GSWF_RSH_GHOST_FADE_HOLD, 1)
 #else
             // Wait for the background alpha loop to acknowledge its hold before changing the ghost directly.
             SET_VALUE(GSWF_RSH_GHOST_FADE_HOLD, 1)
 #endif
             LOOP(0)
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_EQUAL(GSWF(GSWF_RSH02_GHOST_FADE_PAUSED), 1)
+                IF_INT_EQUAL(GSWF_RSH_GHOST_FADE_HELD, 1)
 #else
                 IF_INT_EQUAL(GSWF_RSH_GHOST_FADE_HELD, 1)
 #endif
@@ -687,7 +715,7 @@ CALL(evt_win_item_select, PTR(item_tbl2), LW(1))
                 END_IF
             END_LOOP
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_RSH02_GHOST_TALK_ACTIVE), 0)
+            SET_VALUE(GSWF_RSH_GHOST_FADE_HOLD, 0)
 #else
             SET_VALUE(GSWF_RSH_GHOST_FADE_HOLD, 0)
 #endif
@@ -1135,7 +1163,7 @@ EVT_BEGIN(evt_toron_catch)
     CALL(evt_msg_print, 0, STRING("stg6_rsh_182"), 0, STRING("トロン"))
     CALL(evt_snd_bgmoff, PSND_FADEOUT)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_RSH_SCRIPTED_ENTRY_PENDING), 1)
+    SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
 #else
     SET_VALUE(GSWF_RSH_EVENT_ENTRY_PENDING, 1)
 #endif
@@ -1726,8 +1754,8 @@ EVT_BEGIN(rsh_02_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_access_entry)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF(GSWF_RSH02_STAR_PIECE_PANEL))
-CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF(GSWF_RSH02_SHINE_SPRITE), 0)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF_STARPIECE_82)
+CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF_SHINE_34, 0)
 #else
     CALL_CHILD(PTR(evt_access_entry))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF_STARPIECE_82)
@@ -1757,7 +1785,7 @@ CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF(GSWF_RSH02_SH
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_HOM1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
@@ -1771,7 +1799,7 @@ CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF(GSWF_RSH02_SH
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
@@ -2098,9 +2126,9 @@ EVT_END()
  */
 EVT_BEGIN(rsh_02_init_evt_nidome)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_RIVERSIDE), 0)
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_POSHLEY), 0)
-            IF_INT_EQUAL(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+    IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
+        IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
+            IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
 #else
     IF_INT_EQUAL(GSWF_HOM_TRAIN_STOPPED_AT_RIVERSIDE, 0)
         IF_INT_EQUAL(GSWF_HOM_TRAIN_AT_POSHLEY, 0)
@@ -2108,7 +2136,7 @@ EVT_BEGIN(rsh_02_init_evt_nidome)
 #endif
                 CALL(evt_map_playanim, STRING("yure"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+                IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
 #else
                 IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
 #endif
@@ -2150,8 +2178,8 @@ EVT_BEGIN(rsh_02_init_evt_nidome)
 #endif
     CALL(evt_npc_setup, PTR(npc_data))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_RSH_NEW_RIDE_PENDING), 1)
-        SET_VALUE(GSWF(GSWF_RSH_NEW_RIDE_PENDING), 0)
+    IF_INT_EQUAL(GSWF_RSH_NEW_PASSENGERS_PENDING, 1)
+        SET_VALUE(GSWF_RSH_NEW_PASSENGERS_PENDING, 0)
         CALL_CHILD(evt_rsh_rnd_npc_init)
 #else
     IF_INT_EQUAL(GSWF_RSH_NEW_PASSENGERS_PENDING, 1)
@@ -2160,8 +2188,8 @@ EVT_BEGIN(rsh_02_init_evt_nidome)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF(GSWF_RSH02_STAR_PIECE_PANEL))
-CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF(GSWF_RSH02_SHINE_SPRITE), 0)
+CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF_STARPIECE_82)
+CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF_SHINE_34, 0)
 #else
     CALL_CHILD(PTR(evt_access_entry))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -70, 0, -125, STRING("heya_4"), 125, GSWF_STARPIECE_82)
@@ -2173,33 +2201,33 @@ CALL(evt_mobj_powerupblk, STRING("pblk00"), -310, 0, -130, 0, GSWF(GSWF_RSH02_SH
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
         CALL(evt_snd_envoff, PSND_FADEOUT)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+        CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
         CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_POSHLEY), 1)
+        IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
 #else
         IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_POSHLEY, 1)
 #endif
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG6_PIK1"))
             CALL(evt_snd_envoff, PSND_FADEOUT)
 #if VERSION <= VERSION_DEMO_US
-            CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
             ELSE
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
+            IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
 #else
             IF_INT_EQUAL(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
 #endif
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR5"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
                 CALL(evt_snd_envoff, PSND_FADEOUT)
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))

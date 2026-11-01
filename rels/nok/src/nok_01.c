@@ -73,7 +73,11 @@ EvtWord boss_noko_open_gate[184];
 EvtWord boss_noko_open_gate[181];
 #endif
 static s32 iri_17_item_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord boss_noko_talk[];
+#else
 EvtWord boss_noko_talk[352];
+#endif
 EvtWord nokorin_init[30];
 #if VERSION == VERSION_US
 EvtWord nokorin_talk[281];
@@ -101,7 +105,11 @@ static const char* ie_npc[2];
 static const char* ie_map[2];
 static HouseParam ie_data;
 static HitDamageReturn hitDmgRetPoints[13];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord nokotarou_tabidachi[];
+#else
 EvtWord nokotarou_tabidachi[328];
+#endif
 EvtWord nokotarou_tabidachi_init[89];
 static EvtWord sekai_yami_npc[59];
 static EvtWord sekai_yami_evt[234];
@@ -111,9 +119,21 @@ EvtWord e3_talk[12];
 static EvtWord epilogue_npc_entry[31];
 static EvtWord epilogue_evt_sub[194];
 static EvtWord epilogue_evt[148];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_kusa_4[];
+#else
 static EvtWord evt_kusa_4[25];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_kusa_5[];
+#else
 static EvtWord evt_kusa_5[25];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_kusa_6[];
+#else
 static EvtWord evt_kusa_6[25];
+#endif
 static KusaAccess kusa_data[4];
 EvtWord nok_01_init_evt[337];
 
@@ -482,7 +502,7 @@ static s32 iri_17_item_tbl[] = {
 
 EVT_BEGIN(boss_noko_talk)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_LISTEN_TO_ME)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_LISTEN_TO_ME)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_LISTEN_TO_ME)
 #endif
@@ -523,7 +543,7 @@ EVT_BEGIN(boss_noko_talk)
             CALL(evt_item_entry, STRING("item_irai"), ITEM_TURTLEY_LEAF, 0, -1000, 0, ITEM_TYPE_STILL_NO_TOUCH, -1, 0)
             CALL(evt_item_get_item, STRING("item_irai"))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_NOK01_TURTLEY_LEAF_TAKEN), 1)
+            SET_VALUE(GSWF_NOK_01_LISTEN_TO_ME_TURTLEY_LEAF, 1)
 #else
             SET_VALUE(GSWF_NOK_01_LISTEN_TO_ME_TURTLEY_LEAF, 1)
 #endif
@@ -535,7 +555,7 @@ EVT_BEGIN(boss_noko_talk)
             CALL(evt_npc_move_position, STRING("me"), -317, -350, 0, 40, 0)
             WAIT_MS(300)
 #if VERSION <= VERSION_DEMO_US
-            CALL(evt_item_entry, STRING("iri_08"), ITEM_TURTLEY_LEAF, -317, 128, -374, ITEM_TYPE_STILL, GSWF(GSWF_NOK01_TURTLEY_LEAF_TAKEN), 0)
+            CALL(evt_item_entry, STRING("iri_08"), ITEM_TURTLEY_LEAF, -317, 128, -374, ITEM_TYPE_STILL, GSWF_NOK_01_LISTEN_TO_ME_TURTLEY_LEAF, 0)
 #else
             CALL(evt_item_entry, STRING("iri_08"), ITEM_TURTLEY_LEAF, -317, 128, -374, ITEM_TYPE_STILL, GSWF_NOK_01_LISTEN_TO_ME_TURTLEY_LEAF, 0)
 #endif
@@ -549,7 +569,7 @@ EVT_BEGIN(boss_noko_talk)
         // Request 8 is marked solved.
         CALL(evt_msg_print, 0, STRING("irai_08_004"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+        SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #else
         SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
 #endif
@@ -558,7 +578,7 @@ EVT_BEGIN(boss_noko_talk)
         RETURN
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NEWSLETTER)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEWSLETTER)
 #endif
@@ -1169,7 +1189,7 @@ EVT_BEGIN(nokotarou_tabidachi)
     CALL(evt_set_dir_to_target, STRING("クリスチーヌ"), STRING("ノコタロウ"))
     CALL(evt_msg_print, 0, STRING("stg1_nok_96"), 0, STRING("クリスチーヌ"))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GON11_KOOPS_SWAPPED_IN), 1)
+    IF_INT_EQUAL(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
 #else
     IF_INT_EQUAL(GSWF_GON_11_KOOPS_SWAPPED_IN, 1)
 #endif

@@ -168,18 +168,38 @@ static EvtWord e_door_open[12];
 static EvtWord s_door_close[22];
 static EvtWord s_door_open[22];
 static BeroEntry bero_data[3];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_bridge[];
+#else
 EvtWord evt_bridge[14];
+#endif
 EvtWord evt_bridge2[118];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_origami[];
+#else
 static EvtWord evt_origami[198];
+#endif
 static EvtWord evt_moamoa_init[29];
 static EvtWord evt_meet_moamoa[215];
 static EvtWord evt_moamoa_escape[47];
 EvtWord evt_elv_rumble[60];
 static EvtWord evt_elv_init[49];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_elv_down[];
+#else
 EvtWord evt_elv_down[554];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_elv_up[];
+#else
 EvtWord evt_elv_up[456];
+#endif
 static s32 item_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_elv[];
+#else
 EvtWord evt_elv[61];
+#endif
 EvtWord evt_elv_nomsg[14];
 static EvtWord evt_head[42];
 static EvtWord evt_kanban[14];
@@ -1496,7 +1516,7 @@ EVT_BEGIN(evt_bridge)
     CALL(evt_mario_key_onoff, 0)
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_mario_normalize)
-SET_VALUE(GSWF(GSWF_EKI00_BRIDGE_LOWER_SCENE), 1)
+SET_VALUE(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
 #else
     WAIT_MS(500)
     SET_VALUE(GSWF_EKI_BRIDGE_LOWERING_IN_PROGRESS, 1)
@@ -1574,7 +1594,7 @@ WAIT_MS(LW(1))
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("n_kabe"), MAP_OBJ_FLAG_HIDDEN)
     WAIT_MS(1000)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF(GSWF_EKI00_BRIDGE_SWITCH_PRESSED))
+    CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF_EKI_00_BRIDGE_SWITCH_PRESSED)
 #else
     CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF_EKI_00_BRIDGE_SWITCH_PRESSED)
 #endif
@@ -1907,7 +1927,7 @@ IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_41_ORIGAMI_STAIRS)
         CALL(evt_del_case_evt, 0, GW(10))
     END_IF
 IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_41_ORIGAMI_STAIRS)
-        CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF(GSWF_EKI00_BRIDGE_SWITCH_PRESSED))
+        CALL(evt_mobj_switch_blue, 0, STRING("bridge_sw"), -220, 60, 0, PTR(evt_bridge), GSWF_EKI_00_BRIDGE_SWITCH_PRESSED)
 #else
     END_SWITCH
     IF_INT_EQUAL(GSW_STORY_PROGRESS, STG6_41_ORIGAMI_STAIRS)

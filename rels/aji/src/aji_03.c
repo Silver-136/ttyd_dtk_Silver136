@@ -39,8 +39,16 @@ USER_FUNC(evt_sousa_icon);
 USER_FUNC(item_chk);
 USER_FUNC(evt_itemNameToItemID);
 
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e_door_close[];
+#else
 static EvtWord e_door_close[22];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord e_door_open[];
+#else
 static EvtWord e_door_open[22];
+#endif
 static BeroEntry bero_entry_data[2];
 EvtWord evt_kaitentou[44];
 EvtWord evt_kaitentou2[44];
@@ -64,11 +72,19 @@ EvtWord evt_sw0[72];
 EvtWord evt_sw1[72];
 EvtWord evt_sw2[72];
 s32 haguruma_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_haguruma[];
+#else
 static EvtWord evt_haguruma[132];
+#endif
 EvtWord badge_evt[5];
 EvtWord badge_evt2[5];
 EvtWord badge_evt3[5];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord aji_03_init_evt[];
+#else
 EvtWord aji_03_init_evt[525];
+#endif
 
 static EVT_BEGIN(e_door_close)
 #if VERSION <= VERSION_DEMO_US
@@ -968,7 +984,7 @@ CALL(evt_win_item_select, PTR(haguruma_tbl), LW(0))
 #endif
         CALL(evt_pouch_remove_item, LW(0), LW(1))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_AJI03_COG_INSERTED), 1)
+        SET_VALUE(GSWF_AJI_03_COG_PLACED, 1)
 #else
         SET_VALUE(GSWF_AJI_03_COG_PLACED, 1)
 #endif
@@ -1032,10 +1048,10 @@ EVT_BEGIN(aji_03_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("meta_3_2"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
     // If the crane was already activated in an earlier visit, all three crane buttons count as pressed.
-    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_ACTIVATED), 1)
-        SET_VALUE(GSWF(GSWF_AJI03_CRANE_BUTTON_1), 1)
-        SET_VALUE(GSWF(GSWF_AJI03_CRANE_BUTTON_2), 1)
-        SET_VALUE(GSWF(GSWF_AJI03_CRANE_BUTTON_3), 1)
+    IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
+        SET_VALUE(GSWF_AJI_03_SWITCH_1_PRESSED, 1)
+        SET_VALUE(GSWF_AJI_03_SWITCH_2_PRESSED, 1)
+        SET_VALUE(GSWF_AJI_03_SWITCH_3_PRESSED, 1)
 #else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
         SET_VALUE(GSWF_AJI_03_SWITCH_1_PRESSED, 1)
@@ -1046,7 +1062,7 @@ EVT_BEGIN(aji_03_init_evt)
     // Before the cog is inserted, the shelf door is the place to use it; afterwards the clockwork runs and the
     // crane panel can be used.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI03_COG_INSERTED), 0)
+    IF_INT_EQUAL(GSWF_AJI_03_COG_PLACED, 0)
 #else
     IF_INT_EQUAL(GSWF_AJI_03_COG_PLACED, 0)
 #endif
@@ -1056,7 +1072,7 @@ EVT_BEGIN(aji_03_init_evt)
         CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_zenmais_nashi"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
         SPAWN_EVENT(evt_zenmai)
-        IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_ACTIVATED), 1)
+        IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
 #else
         SPAWN_EVENT(PTR(evt_zenmai))
         IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
@@ -1065,8 +1081,8 @@ EVT_BEGIN(aji_03_init_evt)
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI03_COG_INSERTED), 1)
-        IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_ACTIVATED), 0)
+    IF_INT_EQUAL(GSWF_AJI_03_COG_PLACED, 1)
+        IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 0)
 #else
     IF_INT_EQUAL(GSWF_AJI_03_COG_PLACED, 1)
         IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 0)
@@ -1088,7 +1104,7 @@ EVT_BEGIN(aji_03_init_evt)
     // The three crane buttons blink until the player has pressed them, and the lit or unlit versions of their
     // parts are shown.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_ACTIVATED), 0)
+    IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 0)
 #else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 0)
 #endif
@@ -1104,7 +1120,7 @@ EVT_BEGIN(aji_03_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_pato2"), MAP_OBJ_FLAG_HIDDEN)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_pato3"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_BUTTON_1), 1)
+    IF_INT_EQUAL(GSWF_AJI_03_SWITCH_1_PRESSED, 1)
 #else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_1_PRESSED, 1)
 #endif
@@ -1124,7 +1140,7 @@ EVT_BEGIN(aji_03_init_evt)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_BUTTON_2), 1)
+    IF_INT_EQUAL(GSWF_AJI_03_SWITCH_2_PRESSED, 1)
 #else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_2_PRESSED, 1)
 #endif
@@ -1144,7 +1160,7 @@ EVT_BEGIN(aji_03_init_evt)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_BUTTON_3), 1)
+    IF_INT_EQUAL(GSWF_AJI_03_SWITCH_3_PRESSED, 1)
 #else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_3_PRESSED, 1)
 #endif
@@ -1166,7 +1182,7 @@ EVT_BEGIN(aji_03_init_evt)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 1, STRING("S_pato4"), MAP_OBJ_FLAG_HIDDEN)
 #if VERSION <= VERSION_DEMO_US
     // Guess: the spinning lamps (kaitentou) and hands (hari) start moving once the crane is active.
-    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_ACTIVATED), 1)
+    IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
 #else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
 #endif
@@ -1195,7 +1211,7 @@ EVT_BEGIN(aji_03_init_evt)
     END_IF
 #if VERSION <= VERSION_DEMO_US
     // The metal covers are shown or hidden according to whether the crane is active.
-    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_ACTIVATED), 1)
+    IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
 #else
     IF_INT_EQUAL(GSWF_AJI_03_SWITCH_PUZZLE_SOLVED, 1)
 #endif
@@ -1219,7 +1235,7 @@ EVT_BEGIN(aji_03_init_evt)
     CALL(evt_item_entry, STRING("keihin02"), ITEM_COIN, -50, 50, 100, ITEM_TYPE_STILL, -1, 0)
     CALL(evt_item_entry, STRING("keihin03"), ITEM_COIN, -150, 50, 0, ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_PRIZE_A), 0)
+    IF_INT_EQUAL(GSWF_AJI_03_FEELING_FINE, 0)
 #else
     IF_INT_EQUAL(GSWF_AJI_03_FEELING_FINE, 0)
 #endif
@@ -1227,7 +1243,7 @@ EVT_BEGIN(aji_03_init_evt)
     END_IF
     CALL(evt_item_entry, STRING("keihin05"), ITEM_COIN, -50, 50, 0, ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI03_CRANE_PRIZE_B), 0)
+    IF_INT_EQUAL(GSWF_AJI_03_FEELING_FINE_P, 0)
 #else
     IF_INT_EQUAL(GSWF_AJI_03_FEELING_FINE_P, 0)
 #endif
@@ -1235,7 +1251,7 @@ EVT_BEGIN(aji_03_init_evt)
     END_IF
     CALL(evt_item_entry, STRING("keihin07"), ITEM_COIN, -100, 50, -100, ITEM_TYPE_STILL, -1, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_AJI03_STAR_PIECE_PRIZE), 0)
+    IF_INT_EQUAL(GSWF_STARPIECE_98, 0)
 #else
     IF_INT_EQUAL(GSWF_STARPIECE_98, 0)
 #endif

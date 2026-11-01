@@ -55,7 +55,11 @@ EvtWord btldefaultevt_avoid_counter_event[34];
 EvtWord btldefaultevt_ProtectPartner[10];
 EvtWord btldefaultevt_Dummy[2];
 EvtWord btldefaultevt_Wait[5];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord btldefaultevt_LectureEnd[];
+#else
 EvtWord btldefaultevt_LectureEnd[6];
+#endif
 EvtWord btldefaultevt_Defend[7];
 EvtWord btldefaultevt_DefendParty[7];
 

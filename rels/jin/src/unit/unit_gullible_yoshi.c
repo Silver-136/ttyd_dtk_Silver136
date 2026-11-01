@@ -25,15 +25,31 @@ static BattleUnitKindPart parts_yoshi[1];
 static EvtWord init_event_yoshi[24];
 EvtWord damage_event_yoshi[22];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_yoshi[];
+#else
 static EvtWord dead_event_yoshi[156];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord dead_event_yoshi[];
 #else
 static EvtWord dead_event_yoshi[177];
 #endif
+#endif
 static EvtWord attack_event_yoshi[748];
 #if VERSION <= VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event_yoshi[];
+#else
 static EvtWord wait_event_yoshi[6];
+#endif
+#else
+#if VERSION <= VERSION_DEMO_US
+static EvtWord wait_event_yoshi[];
 #else
 static EvtWord wait_event_yoshi[7];
+#endif
 #endif
 
 /**

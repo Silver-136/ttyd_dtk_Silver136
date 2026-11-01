@@ -69,9 +69,21 @@ static const char* pika_tbl_rsh_06[10];
 static EvtWord hom_10_evt_resha_sub[102];
 static EvtWord hom_10_evt_resha_right[35];
 static EvtWord hom_10_evt_resha_left[28];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord hom_10_init_evt[];
+#else
 static EvtWord hom_10_init_evt[140];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_train[];
+#else
 static EvtWord evt_train[284];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_train2[];
+#else
 EvtWord evt_train2[287];
+#endif
 static EvtWord peach_mail[235];
 static BeroEntry bero_entry_data[5];
 EvtWord hikosenkakari_init[5];
@@ -801,7 +813,7 @@ static EVT_BEGIN(hom_10_init_evt)
     CALL(evt_party_set_pos, 0, 0, -1000, 0)
     CALL(evt_party_set_pos, 1, 0, -1000, 0)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+    IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
         CALL_CHILD(hom_10_evt_resha_right)
         CALL_CHILD(hom_10_evt_resha_start3)
 #else
@@ -844,7 +856,7 @@ EVT_END()
 
 static EVT_BEGIN(evt_train)
 #if VERSION <= VERSION_DEMO_US
-SET_VALUE(GSWF(GSWF_RSH02_SHELF_DRIED_SHROOM), 0)
+SET_VALUE(GSWF_RSH_02_DRIED_SHROOM_DRAWER, 0)
 #else
     CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
     CALL(evt_party_get_pos, 0, LW(3), LW(4), LW(5))
@@ -909,24 +921,24 @@ SET_VALUE(GSWF(GSWF_RSH02_SHELF_DRIED_SHROOM), 0)
     WAIT_MS(9500)
 #if VERSION <= VERSION_DEMO_US
     IF_INT_GREATER_OR_EQUAL(GSW(GSW_STORY_PROGRESS), STG6_56_ROGUEPORT_STATION)
-        SET_VALUE(GSWF(GSWF_RSH_NEW_RIDE_PENDING), 1)
+        SET_VALUE(GSWF_RSH_NEW_PASSENGERS_PENDING, 1)
 #else
     IF_INT_GREATER_OR_EQUAL(GSW_STORY_PROGRESS, STG6_56_ROGUEPORT_STATION)
         SET_VALUE(GSWF_RSH_NEW_PASSENGERS_PENDING, 1)
 #endif
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
-    SET_VALUE(GSWF(GSWF_TRAIN_DEPARTED), 1)
+    SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
+    SET_VALUE(GSWF_HOM_TRAIN_BOARDED_UNUSED, 1)
 #else
     SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
     SET_VALUE(GSWF_HOM_TRAIN_BOARDED_UNUSED, 1)
 #endif
     WAIT_FRAMES(1)
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSW(GSW_TRAIN_LEG), 0)
-    SET_VALUE(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 0)
-SET_VALUE(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 0)
+    SET_VALUE(GSW_HOM_TRAIN_LEG, 0)
+    SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 0)
+SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 0)
 IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_00_START)
 #else
     SET_VALUE(GSW_HOM_TRAIN_LEG, 0)
@@ -1055,8 +1067,8 @@ EVT_BEGIN(evt_train2)
 #endif
     // Until Mario reads it, Peach's mail scene plays.
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
-SET_VALUE(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 1)
+    SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
+SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
     // Until Mario reads it, Peach's mail scene plays.
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG6_57_A_MAIL_FROM_PEACH)
         SPAWN_EVENT(peach_mail)
@@ -2259,8 +2271,8 @@ EVT_BEGIN(gor_04_init_evt)
         CALL(evt_mobj_save_blk, STRING("mobj_save"), 140, 60, 85, 0, 0)
     END_IF
     // The spinning panel with a Star Piece, and another Star Piece on the floor, are placed.
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -510, 80, 120, STRING("S_ground"), 125, GSWF(GSWF_GOR04_STAR_PIECE_PANEL))
-    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, ITEM_TYPE_STILL, GSWF(GSWF_GOR04_STAR_PIECE), 0)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -510, 80, 120, STRING("S_ground"), 125, GSWF_STARPIECE_16)
+    CALL(evt_item_entry, STRING("item_00"), ITEM_STAR_PIECE, 475, 0, 100, ITEM_TYPE_STILL, GSWF_STARPIECE_17, 0)
     SPAWN_EVENT(evt_wing)
     // Stepping on the blimp platform starts the blimp ride.
     CALL(evt_run_case_evt, CASE_STAND_ON_A, 1, STRING("A_noriba"), 0, PTR(evt_hikousen), 0)
@@ -2276,15 +2288,15 @@ EVT_BEGIN(gor_04_init_evt)
     CALL(evt_bero_get_entername, LW(0))
     // Entering through the train door means this is the return trip, and the train is at Rogueport.
     IF_STR_EQUAL(LW(0), STRING("n_bero"))
-        SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 1)
-        SET_VALUE(GSWF(GSWF_TRAIN_ARRIVED_ROGUEPORT), 1)
-SET_VALUE(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 1)
+        SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
+        SET_VALUE(GSWF_RSH_TRAIN_AT_ROGUEPORT, 1)
+SET_VALUE(GSWF_HOM_TRAIN_AT_ROGUEPORT, 1)
     ELSE
-        SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 0)
+        SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 0)
     END_IF
     // Arriving from Poshley Heights on the train plays the station-arrival scene.
     IF_STR_EQUAL(LW(0), STRING("resha_return"))
-        SET_VALUE(GSWF(GSWF_TRAIN_RETURN_TRIP), 1)
+        SET_VALUE(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
         CALL_CHILD(hom_10_evt_resha_left)
         CALL_CHILD(hom_10_evt_resha_stop)
         SPAWN_EVENT(evt_train2)
@@ -2292,7 +2304,7 @@ SET_VALUE(GSWF(GSWF_TRAIN_AT_ROGUEPORT), 1)
         CALL_CHILD(bero_case_switch_on)
     ELSE
         // Otherwise, the train sits at the platform in the correct state for the trip direction.
-        IF_INT_EQUAL(GSWF(GSWF_TRAIN_RETURN_TRIP), 1)
+        IF_INT_EQUAL(GSWF_HOM_TRAIN_BOUND_FOR_ROGUEPORT, 1)
             CALL_CHILD(hom_10_evt_resha_left)
             SET_VALUE(LW(0), STRING("n_bero"))
             CALL_CHILD(bero_case_switch_on)

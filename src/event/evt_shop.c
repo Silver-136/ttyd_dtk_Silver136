@@ -87,7 +87,11 @@ static EvtWord sell_evt[193];
 static EvtWord sell_evt[VERSION_PICK(196, 207)];
 #endif
 EvtWord keep_evt[VERSION_PICK(148, 167)];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord unkeep_evt[];
+#else
 EvtWord unkeep_evt[147];
+#endif
 EvtWord point_evt[VERSION_PICK(15, 35)];
 EvtWord evt_shoplist[10];
 static EvtWord main_evt[4];
@@ -1796,7 +1800,7 @@ USER_FUNC(evt_shop_main_func) {
     if (!strncmp(gp->currentMapName, "rsh_03", strlen("rsh_03")) &&
 #if VERSION <= VERSION_DEMO_US
         evtGetValue(event, GSW(GSW_STORY_PROGRESS)) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW(GSW_STORY_PROGRESS)) < STG6_48_SMORG_MIASMA &&
-        !evtGetValue(event, GSWF(GSWF_RSH03_SHOP_CLERK_WOKEN))) {
+        !evtGetValue(event, GSWF_RSH_03_SHOP_CLERK_REVIVED)) {
 #else
         evtGetValue(event, GSW_STORY_PROGRESS) >= STG6_45_DAY_3_STARTS && evtGetValue(event, GSW_STORY_PROGRESS) < STG6_48_SMORG_MIASMA &&
         !evtGetValue(event, GSWF_RSH_03_SHOP_CLERK_REVIVED)) {

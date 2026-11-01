@@ -42,10 +42,22 @@ static EvtWord door02_close[12];
 static EvtWord door02_open[12];
 static BeroEntry bero_entry_data[3];
 EvtWord evt_ori_open[130];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tsuritenjo_event[];
+#else
 EvtWord tsuritenjo_event[143];
+#endif
 static s32 key_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_majin[];
+#else
 static EvtWord evt_majin[409];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_majin2[];
+#else
 static EvtWord evt_majin2[241];
+#endif
 EvtWord gon_06_init_evt[340];
 
 /**
@@ -271,7 +283,7 @@ static EVT_BEGIN(evt_majin)
     CALL(evt_mario_adjust_dir)
     // First visit: the chest talks to Mario.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GON06_BLACK_CHEST_TALKED), 0)
+    IF_INT_EQUAL(GSWF_GON_06_BLACK_CHEST_FIRST_TALK_DONE, 0)
 #else
     IF_INT_EQUAL(GSWF_GON_06_BLACK_CHEST_FIRST_TALK_DONE, 0)
 #endif
@@ -332,7 +344,7 @@ static EVT_BEGIN(evt_majin)
         // The talk is over: the chest keeps the story-flag so it only plays once.
         CALL(evt_mobj_exec_cancel, STRING("box"))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_GON06_BLACK_CHEST_TALKED), 1)
+        SET_VALUE(GSWF_GON_06_BLACK_CHEST_FIRST_TALK_DONE, 1)
 #else
         SET_VALUE(GSWF_GON_06_BLACK_CHEST_FIRST_TALK_DONE, 1)
 #endif
@@ -478,7 +490,7 @@ CALL(evt_mario_normalize)
     CALL(evt_paper_delete, STRING("OFF_d_kusya"))
 #if VERSION <= VERSION_DEMO_US
     SET_VALUE(GSW(GSW_STORY_PROGRESS), STG1_13_01_01_PAPER_MAGE_2)
-    SET_VALUE(GSWF(GSWF_GON06_BLACK_CHEST_OPENED), 1)
+    SET_VALUE(GSWF_GON_06_BLACK_CHEST_OPENED, 1)
 #else
     SET_VALUE(GSW_STORY_PROGRESS, STG1_13_01_01_PAPER_MAGE_2)
     SET_VALUE(GSWF_GON_06_BLACK_CHEST_OPENED, 1)

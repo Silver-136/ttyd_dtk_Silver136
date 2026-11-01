@@ -108,16 +108,40 @@ static USER_FUNC(x_flag_wait);
 static USER_FUNC(x_flag_add);
 static f32 lect_mario_ido_sub(f32 elapsed, f32 total, f32 end, f32 start);
 
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord christine_party_lecture_init[];
+#else
 EvtWord christine_party_lecture_init[46];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord christine_party_lecture[];
+#else
 EvtWord christine_party_lecture[125];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord chuchulina_party_lecture_init[];
+#else
 EvtWord chuchulina_party_lecture_init[51];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord chuchulina_party_lecture[];
+#else
 EvtWord chuchulina_party_lecture[236];
+#endif
 static EvtWord all_party_lecture_otosub[11];
 EvtWord all_party_lecture[482];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord hammer_lv3_juyoitem_lecture_init[];
+#else
 EvtWord hammer_lv3_juyoitem_lecture_init[107];
+#endif
 EvtWord hammer_lv3_juyoitem_lecture_sub01[29];
 EvtWord hammer_lv3_juyoitem_lecture_sub02[65];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord hammer_lv3_juyoitem_lecture[];
+#else
 EvtWord hammer_lv3_juyoitem_lecture[718];
+#endif
 EvtWord all_juyoitem_lecture_rel[252];
 
 /**

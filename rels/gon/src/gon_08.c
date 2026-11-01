@@ -43,7 +43,11 @@ static EvtWord main_0[465];
 static EvtWord main_0[491];
 #endif
 static s32 key_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_chk[];
+#else
 static EvtWord evt_chk[23];
+#endif
 static EvtWord evt_unlock[10];
 EvtWord nokkosu_init[16];
 #if VERSION >= VERSION_US
@@ -716,8 +720,8 @@ CALL(evt_item_entry, STRING("irai_item"), ITEM_SPECIAL_CARD, 0, -1000, 0, ITEM_T
 CALL(evt_npc_jump_position_nohit, STRING("me"), -66, 100, -112, 800, 220)
     CALL(evt_npc_set_position, STRING("me"), 0, -1000, 0)
     // The time is recorded and the request is marked solved.
-    CALL(evt_sub_save_playtime, GSW(GSW_GON08_TROUBLE07_TIME))
-    SET_VALUE(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NONE)
+    CALL(evt_sub_save_playtime, GSW_GON_TRY_TO_FIND_ME_DONE_TIME_UNUSED)
+    SET_VALUE(GSW_TROUBLE_ACCEPTED, TROUBLE_NONE)
     SET_VALUE(GSWF_TROUBLE_DONE(TROUBLE_TRY_TO_FIND_ME), 1)
     CALL(evt_msg_print, 0, STRING("sys_request_finish"), 0, 0)
     RETURN

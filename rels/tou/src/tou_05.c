@@ -43,9 +43,21 @@ static EvtWord n_door_open[12];
 static EvtWord n_door_close[12];
 EvtWord n_bero_match_reset[14];
 static BeroEntry bero_data[3];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_takurami[];
+#else
 EvtWord evt_takurami[352];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_hiki_close[];
+#else
 EvtWord evt_hiki_close[86];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_hiki_open[];
+#else
 EvtWord evt_hiki_open[193];
+#endif
 static EvtWord init_gans[29];
 static EvtWord talk_gans[182];
 static EvtWord init_kinoshikowa[18];
@@ -54,11 +66,19 @@ static NpcSetupInfo npcEnt[3];
 static EvtWord evt_kinoshikowa[222];
 static EvtWord evt_sensyu[430];
 EvtWord evt_sensyu2[208];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_1st_leagu[];
+#else
 static EvtWord evt_1st_leagu[467];
+#endif
 EvtWord evt_nozoki_msg[33];
 EvtWord evt_nozoki[769];
 EvtWord evt_sensyu_reentry[293];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tou_05_init_evt[];
+#else
 EvtWord tou_05_init_evt[445];
+#endif
 
 /**
  * Entrance script for the air duct: puts Mario and the partner at the duct mouth and walks them out of it.
@@ -464,15 +484,15 @@ CALL(evt_sub_intpl_init, EASING_SINE_IN_OUT, 0, 100, 30)
     // The other drawer holds a Star Piece, which Mario takes the first time only.
     IF_STR_EQUAL(LW(0), STRING("hikidasi_N"))
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TOU05_DRAWER_STAR_PIECE_TAKEN), 0)
+        IF_INT_EQUAL(GSWF_TOU_05_DRAWER_STAR_PIECE, 0)
 #else
         IF_INT_EQUAL(GSWF_TOU_05_DRAWER_STAR_PIECE, 0)
 #endif
             CALL(evt_item_entry, STRING("item02"), ITEM_STAR_PIECE, 0, -1000, 0, ITEM_TYPE_STILL, -1, 0)
             CALL(evt_item_get_item, STRING("item02"))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_TOU05_DRAWER_STAR_PIECE_TAKEN), 1)
-            SET_VALUE(GSWF(GSWF_TOU05_STAR_PIECE_DRAWER), 1)
+            SET_VALUE(GSWF_TOU_05_DRAWER_STAR_PIECE, 1)
+            SET_VALUE(GSWF_STARPIECE_58, 1)
 #else
             SET_VALUE(GSWF_TOU_05_DRAWER_STAR_PIECE, 1)
             SET_VALUE(GSWF_STARPIECE_58, 1)
@@ -1120,7 +1140,7 @@ static EVT_BEGIN(evt_1st_leagu)
     CALL(evt_party_run, 0)
     CALL(evt_mario_mov_pos2, 0, -200, FLOAT(60.0f))
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_TOU_JOLENE_ESCORT_MAJORS_PENDING), 1)
+    SET_VALUE(GSWF_TOU_JOLENE_ESCORT_TO_MAJORS, 1)
 #else
     SET_VALUE(GSWF_TOU_JOLENE_ESCORT_TO_MAJORS, 1)
 #endif
@@ -1452,7 +1472,7 @@ EVT_BEGIN(tou_05_init_evt)
 #endif
     CALL(evt_map_playanim, STRING("anm_camera"), MAP_ANIM_PLAY_LOOP, 0)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, -135, 0, 105, ITEM_TYPE_STILL, GSWF(GSWF_TOU05_STAR_PIECE), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, -135, 0, 105, ITEM_TYPE_STILL, GSWF_STARPIECE_57, 0)
 #else
     CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, -135, 0, 105, ITEM_TYPE_STILL, GSWF_STARPIECE_57, 0)
     CALL(evt_mapobj_flag_onoff, MAPOBJ_GROUP, 0, STRING("paifu"), MAP_OBJ_FLAG_CLIP)
@@ -1559,7 +1579,7 @@ EVT_BEGIN(tou_05_init_evt)
 #endif
         SET_VALUE(LW(0), 1)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TOU_GRUBBA_ESCORT_PENDING), 0)
+        IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 0)
             SPAWN_EVENT(evt_sensyu)
 #else
         IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 0)
@@ -1567,7 +1587,7 @@ EVT_BEGIN(tou_05_init_evt)
 #endif
             ELSE
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_TOU_GRUBBA_ESCORT_PENDING), 0)
+            SET_VALUE(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 0)
             SPAWN_EVENT(evt_sensyu2)
 #else
             SET_VALUE(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 0)
@@ -1576,7 +1596,7 @@ EVT_BEGIN(tou_05_init_evt)
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TOU_PROMOTION_PENDING), 1)
+    IF_INT_EQUAL(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 1)
 #else
     IF_INT_EQUAL(GSWF_TOU_PROMOTION_TO_MAJORS_PENDING, 1)
 #endif
@@ -1610,7 +1630,7 @@ EVT_BEGIN(tou_05_init_evt)
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -1619,7 +1639,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
                 CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
                 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
                 CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -1642,7 +1662,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
         SET_VALUE(LF(0), 1)
         CASE_DEFAULT
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TOU13_DUCT_EXIT_OPEN_REVISIT), 0)
+        IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
 #else
         IF_INT_EQUAL(GSWF_TOU_13_DUCT_EXIT_REOPENED, 0)
 #endif
@@ -1669,7 +1689,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
         CALL(evt_bero_get_entername, LW(0))
         IF_STR_NOT_EQUAL(LW(0), STRING("fall"))
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_TOU_REENTERED_LEAGUE), 0)
+            IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)
                 SPAWN_EVENT(evt_sensyu_reentry)
 #else
             IF_INT_EQUAL(GSWF_TOU_REMATCH_REGISTERED, 0)

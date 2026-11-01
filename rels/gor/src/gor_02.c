@@ -220,13 +220,21 @@ EvtWord gor_02_hitobj_on[54];
 EvtWord gor_02_event_00[18];
 EvtWord gor_02_event_01[30];
 static BeroEntry bero_entry_data[3];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord powerupya_party_lank_rtn[];
+#else
 EvtWord powerupya_party_lank_rtn[786];
+#endif
 #if VERSION >= VERSION_US
 EvtWord powerupya_party_rtn[170];
 #else
 EvtWord powerupya_party_rtn[167];
 #endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord powerupya_table_talk[];
+#else
 EvtWord powerupya_table_talk[91];
+#endif
 EvtWord powerupya_direct_talk[96];
 #if VERSION > VERSION_DEMO_US
 s32 powerupya_item_tbl[2];
@@ -234,7 +242,11 @@ s32 powerupya_item_tbl[2];
 EvtWord powerupya_stardust[32];
 EvtWord powerupya_mario_move[48];
 EvtWord powerupya_party_move[38];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord powerupya_orb_use[];
+#else
 EvtWord powerupya_orb_use[544];
+#endif
 EvtWord powerupya_talk[119];
 EvtWord mapball_init[19];
 EvtWord powerupya_init[58];
@@ -244,20 +256,32 @@ EvtWord johoyaperfect_talk[169];
 EvtWord johoyaperfect_talk[146];
 #endif
 static EvtWord kurihakase_init[134];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord kurihakase_talk[];
+#else
 static EvtWord kurihakase_talk[421];
+#endif
 EvtWord oyabun_init[7];
 EvtWord oyabun_talk[364];
 EvtWord tozokudan1_init[36];
 EvtWord tozokudan1_talk[285];
 EvtWord tozokudan2_init[24];
 static s32 key_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_chk[];
+#else
 static EvtWord evt_chk[23];
+#endif
 EvtWord tozokudan2_house_door[139];
 EvtWord mario_yokeru[127];
 EvtWord evt_unlock_mario[78];
 static EvtWord evt_unlock[6];
 EvtWord evt_unlock_npc[97];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tozokudan2_talk[];
+#else
 EvtWord tozokudan2_talk[121];
+#endif
 EvtWord tozokudan3_init[17];
 EvtWord tozokudan3_talk[22];
 EvtWord sanders_open_door[56];
@@ -270,7 +294,11 @@ static EvtWord sanders_talk[574];
 EvtWord kuribo4_init[13];
 EvtWord kuribo4_regl[19];
 static s32 item_tbl[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kuribo4_talk[];
+#else
 EvtWord kuribo4_talk[276];
+#endif
 EvtWord chusan3_init[2];
 EvtWord chusan3_talk[76];
 EvtWord roten3_init[2];
@@ -291,15 +319,31 @@ static EvtWord evt_door_01_00[12];
 static EvtWord evt_door_01_01[12];
 static EvtWord evt_wall_01[15];
 static const char* door_data_01_npc[2];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_door_01_open[];
+#else
 static EvtWord evt_door_01_open[88];
+#endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_door_01_close[];
+#else
 static EvtWord evt_door_01_close[85];
+#endif
 static DoorParam door_data_01;
 static EvtWord evt_door_02_00[12];
 EvtWord evt_door_02_01[12];
 static EvtWord evt_wall_02[15];
 static const char* door_data_02_npc[2];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_door_02_open[];
+#else
 EvtWord evt_door_02_open[127];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_door_02_close[];
+#else
 EvtWord evt_door_02_close[76];
+#endif
 static DoorParam door_data_02;
 EvtWord evt_door_02_entry[64];
 static EvtWord evt_door_03_00[12];
@@ -312,13 +356,21 @@ static EvtWord evt_door_03_close[178];
 #else
 static EvtWord evt_door_03_close[166];
 #endif
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_door_03_open[];
+#else
 static EvtWord evt_door_03_open[14];
+#endif
 static DoorParam door_data_03;
 EvtWord evt_door_sanders_open[27];
 EvtWord evt_door_sanders_close[27];
 static EvtWord evt_door_03_entry[64];
 static EvtWord evt_door_03_caseopen[51];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_door_03_roll_open[];
+#else
 EvtWord evt_door_03_roll_open[163];
+#endif
 EvtWord evt_door_03_roll_close[12];
 EvtWord evt_wall_03_roll[15];
 static DoorParam door_data_03_roll;
@@ -348,8 +400,16 @@ EvtWord evt_door_05_00[12];
 EvtWord evt_wall_05[28];
 const char* door_data_05_npc[4];
 const char* door_data_05_npc_01[3];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_door_05_open[];
+#else
 EvtWord evt_door_05_open[14];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_door_05_close[];
+#else
 EvtWord evt_door_05_close[23];
+#endif
 DoorParam door_data_05;
 EvtWord evt_door_06_00[12];
 EvtWord evt_wall_06_00[62];
@@ -358,8 +418,16 @@ EvtWord evt_wall_06_02[62];
 EvtWord evt_wall_06[12];
 const char* door_data_06_npc[2];
 const char* door_data_06_npc_01[1];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_door_06_open[];
+#else
 EvtWord evt_door_06_open[14];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_door_06_close[];
+#else
 EvtWord evt_door_06_close[16];
+#endif
 DoorParam door_data_06;
 EvtWord evt_gor_door_open_sanders[80];
 EvtWord evt_gor_door_open_sub[44];
@@ -417,7 +485,11 @@ EvtWord kurihakase_after3minutes[177];
 static HitDamageReturn hitDmgRetPoints[13];
 static EvtWord gor_goki1_urouro[116];
 static EvtWord gor_goki2_urouro[109];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mobj_box01[];
+#else
 static EvtWord mobj_box01[34];
+#endif
 s32 stg0_list[1];
 s32 stg1_list[4];
 #if VERSION <= VERSION_DEMO_US
@@ -458,7 +530,11 @@ static EvtWord epilogue_evt[101];
 EvtWord dearu_event[13];
 EvtWord front_wall_keshi[27];
 EvtWord tobiori_check[48];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord gor_02_init_evt[];
+#else
 EvtWord gor_02_init_evt[543];
+#endif
 
 #if VERSION > VERSION_DEMO_US
 EVT_BEGIN(gor_02_hitobj_off)
@@ -878,7 +954,7 @@ EVT_BEGIN(powerupya_party_lank_rtn)
     // The glow fades.
     CALL(evt_eff_softdelete, STRING("aaax"))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_MERLON_FIRST_UPGRADE_DONE), 0)
+    IF_INT_EQUAL(GSWF_GOR_UP_ARROW_USED, 0)
 #else
     IF_INT_EQUAL(GSWF_GOR_UP_ARROW_USED, 0)
 #endif
@@ -1133,7 +1209,7 @@ EVT_BEGIN(powerupya_table_talk)
     CALL(evt_party_stop, 0)
     CALL(evt_set_dir_to_target, STRING("me"), STRING("mario"))
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF(GSWF_GOR02_MERLON_FIRST_TALK), 0)
+IF_INT_EQUAL(GSWF_GOR_MERLON_FIRST_TALK_DONE, 0)
 #else
     CALL(evt_win_party_lankup_chk, LW(0))
     IF_INT_EQUAL(LW(0), 0)
@@ -1144,21 +1220,21 @@ IF_INT_EQUAL(GSWF(GSWF_GOR02_MERLON_FIRST_TALK), 0)
 #endif
         CALL(evt_msg_print, 0, STRING("powerup_00"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_GOR02_MERLON_FIRST_TALK), 1)
-        SET_VALUE(GSWF(GSWF_GOR02_MERLON_GREETED_THIS_VISIT), 1)
+        SET_VALUE(GSWF_GOR_MERLON_FIRST_TALK_DONE, 1)
+        SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
 #else
         SET_VALUE(GSWF_GOR_MERLON_FIRST_TALK_DONE, 1)
         SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
 #endif
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_GOR02_MERLON_GREETED_THIS_VISIT), 0)
+        IF_INT_EQUAL(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 0)
 #else
         IF_INT_EQUAL(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 0)
 #endif
             CALL(evt_msg_print, 0, STRING("powerup_00_01"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_GOR02_MERLON_GREETED_THIS_VISIT), 1)
+            SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
 #else
             SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 1)
 #endif
@@ -1282,8 +1358,8 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(powerupya_direct_talk)
-    IF_INT_EQUAL(GSWF(GSWF_GOR02_MERLON_PORTENT_PENDING), 1)
-        IF_INT_EQUAL(GSWF(GSWF_GOR02_MERLON_PORTENT_TOLD), 0)
+    IF_INT_EQUAL(GSWF_GOR_MERLON_HINT_PENDING, 1)
+        IF_INT_EQUAL(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 0)
             CALL(evt_msg_print, 0, STRING("powerup_ev_01"), 0, STRING("me"))
             CALL(evt_cam3d_evt_set, -355, 114, 371, -355, 45, -23, 500, EASING_SINE_IN_OUT)
 #else
@@ -1326,7 +1402,7 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
     WAIT_MS(500)
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_GOR02_MERLON_PORTENT_TOLD), 1)
+            SET_VALUE(GSWF_GOR_MERLON_STAR_CHART_HINT_DONE, 1)
 #else
     // Merlon spins on the spot; star dust sprays and the shine sounds play.
     CALL(evt_npc_set_anim, STRING("me"), STRING("S_2"))
@@ -1427,7 +1503,7 @@ EVT_BEGIN(powerupya_orb_use)
 #endif
     CALL(evt_msg_print, 0, STRING("powerup_ev_06"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_MERLON_FIRST_UPGRADE_DONE), 1)
+                SET_VALUE(GSWF_GOR_UP_ARROW_USED, 1)
 #else
     // Mario and the partner walk over to the stone while Merlon picks it up.
     SPAWN_EVENT(PTR(powerupya_mario_move))
@@ -1464,7 +1540,7 @@ EVT_BEGIN(powerupya_orb_use)
     CALL(evt_msg_print, 0, STRING("powerup_ev_07"), 0, STRING("me"))
     CALL(evt_pouch_remove_item, ITEM_UP_ARROW, LW(0))
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_GOR02_MERLON_PORTENT_PENDING), 0)
+                SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
             ELSE
                 CALL(evt_msg_print, 0, STRING("powerup_ev_03"), 0, STRING("me"))
             END_IF
@@ -1578,9 +1654,9 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 EVT_BEGIN(johoyaperfect_talk)
-    IF_INT_EQUAL(GSWF(GSWF_GOR02_GRIFTY_FIRST_TALK), 0)
+    IF_INT_EQUAL(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 0)
         CALL(evt_msg_print, 0, STRING("johoyaperfect_00"), 0, STRING("me"))
-        SET_VALUE(GSWF(GSWF_GOR02_GRIFTY_FIRST_TALK), 1)
+        SET_VALUE(GSWF_GOR_GRIFTY_FIRST_TALK_DONE, 1)
 END_IF
 CALL(johoya_data_alloc, STRING("jperfect_code"))
         CALL(evt_win_coin_on, 0, LW(12))
@@ -1767,14 +1843,14 @@ static EVT_BEGIN(kurihakase_talk)
         CALL(evt_msg_print, 0, STRING("mac_3_000"), 0, STRING("me"))
         CASE_LESS(STG4_00_WELCOME_TO_STAGE_4)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TIK08_TWILIGHT_PIPE_REACHED), 0)
+        IF_INT_EQUAL(GSWF_TIK_08_PIPE_REJECTED, 0)
 #else
         IF_INT_EQUAL(GSWF_TIK_08_PIPE_REJECTED, 0)
 #endif
             CALL(evt_msg_print, 0, STRING("gor_02_019"), 0, STRING("me"))
             ELSE
 #if VERSION <= VERSION_DEMO_US
-            IF_INT_EQUAL(GSWF(GSWF_GOR02_FRANKLY_DARKLY_HINT), 0)
+            IF_INT_EQUAL(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 0)
 #else
             IF_INT_EQUAL(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 0)
 #endif
@@ -1788,7 +1864,7 @@ static EVT_BEGIN(kurihakase_talk)
                 WAIT_MS(1000)
                 CALL(evt_msg_print, 0, STRING("mac_3_010"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_GOR02_FRANKLY_DARKLY_HINT), 1)
+                SET_VALUE(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 1)
 #else
                 SET_VALUE(GSWF_GOR_FRANKLY_DARKLY_HINT_DONE, 1)
 #endif
@@ -1808,7 +1884,7 @@ static EVT_BEGIN(kurihakase_talk)
         CASE_EQUAL(STG4_33_MEET_BOBBERY)
         CALL(evt_msg_print, 0, STRING("mac_4_048"), 0, STRING("me"))
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_GOR_BOBBERY_HOUSE_KNOWN), 1)
+        SET_VALUE(GSWF_GOR_BOBBERY_HOME_LEARNED, 1)
 #else
         SET_VALUE(GSWF_GOR_BOBBERY_HOME_LEARNED, 1)
 #endif
@@ -1828,8 +1904,8 @@ static EVT_BEGIN(kurihakase_talk)
         CALL(evt_msg_print, 0, STRING("mac_6_000"), 0, STRING("me"))
         CASE_EQUAL(STG6_71_FRANKLYS_HOUSE_STG_6)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_sub_load_progresstime, GSW(GSW_GOR02_FRANKLY_STG6_TIME), LW(0))
-        IF_INT_EQUAL(GSWF(GSWF_GOR02_FRANKLY_STG6_RESEARCH), 1)
+        CALL(evt_sub_load_progresstime, GSW_GOR_FRANKLY_STG6_START_TIME, LW(0))
+        IF_INT_EQUAL(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
 #else
         CALL(evt_sub_load_progresstime, GSW_GOR_FRANKLY_STG6_START_TIME, LW(0))
         IF_INT_EQUAL(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
@@ -1889,7 +1965,7 @@ CASE_LESS(STG7_03_GOLDBOB)
         CALL(evt_msg_print, 0, STRING("gor_02_028"), 0, STRING("me"))
         CASE_GREATER_OR_EQUAL(STG9_00_EPILOGUE)
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_GOR02_FRANKLY_FINAL_TALK), 0)
+        IF_INT_EQUAL(GSWF_GOR_FRANKLY_EPILOGUE_TALK_DONE, 0)
 #else
         IF_INT_EQUAL(GSWF_GOR_FRANKLY_EPILOGUE_TALK_DONE, 0)
 #endif
@@ -1903,7 +1979,7 @@ CASE_LESS(STG7_03_GOLDBOB)
             CALL(evt_msg_print, 0, STRING("gor_02_029_02"), 0, STRING("me"))
             CALL(evt_mario_set_pose, STRING("M_S_1"))
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_GOR02_FRANKLY_FINAL_TALK), 1)
+            SET_VALUE(GSWF_GOR_FRANKLY_EPILOGUE_TALK_DONE, 1)
 #else
             SET_VALUE(GSWF_GOR_FRANKLY_EPILOGUE_TALK_DONE, 1)
 #endif
@@ -2364,7 +2440,7 @@ EVT_END()
  */
 EVT_BEGIN(tozokudan2_talk)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NEED_A_KEY)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
 #endif
@@ -2681,7 +2757,7 @@ static s32 item_tbl[] = {
 
 EVT_BEGIN(kuribo4_talk)
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_SAFE_DELIVERY)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SAFE_DELIVERY)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_SAFE_DELIVERY)
 #endif
@@ -2706,7 +2782,7 @@ CALL(evt_win_item_select, PTR(item_tbl), LW(0))
         END_IF
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_HELP_WANTED)
+    IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
 #else
     IF_INT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_HELP_WANTED)
 #endif
@@ -3452,8 +3528,8 @@ static const char* door_data_01_npc[] = {
 
 static EVT_BEGIN(evt_door_01_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -3484,7 +3560,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
         CALL(evt_item_set_position, STRING("item_star3"), LW(0), LW(1), LW(2))
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_GOR02_MERLON_GREETED_THIS_VISIT), 0)
+    SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 0)
 #else
     SET_VALUE(GSWF_GOR_MERLON_GREETED_THIS_VISIT, 0)
 #endif
@@ -3602,7 +3678,7 @@ SWITCH(GSW(GSW_STORY_PROGRESS))
         CASE_OR_EQUAL(STG5_60_RETURN_TO_KEELHAUL)
         CASE_OR_EQUAL(STG6_70_THOUSAND_YEAR_DOOR)
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+        CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
         CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #endif
@@ -3611,7 +3687,7 @@ SWITCH(GSW(GSW_STORY_PROGRESS))
         CASE_EQUAL(STG6_71_FRANKLYS_HOUSE_STG_6)
         CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_EVT_FRANKURI1"))
 #if VERSION <= VERSION_DEMO_US
-        CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+        CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
         CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #endif
@@ -3619,8 +3695,8 @@ SWITCH(GSW(GSW_STORY_PROGRESS))
         CASE_DEFAULT
 #if VERSION <= VERSION_DEMO_US
         IF_INT_NOT_EQUAL(GSW(GSW_STORY_PROGRESS), STG8_END_AFTER_THE_BATTLE)
-            CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-            CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+            CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
         IF_INT_NOT_EQUAL(GSW_STORY_PROGRESS, STG8_END_AFTER_THE_BATTLE)
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -3689,8 +3765,8 @@ SWITCH(GSW(GSW_STORY_PROGRESS))
         CALL(evt_snd_env_lpf, 0, 0)
     END_SWITCH
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GOR02_FRANKLY_STG6_RESEARCH), 1)
-        SET_VALUE(GSWF(GSWF_GOR02_FRANKLY_STG6_RESEARCH), 0)
+    IF_INT_EQUAL(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
+        SET_VALUE(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 0)
 #else
     IF_INT_EQUAL(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
         SET_VALUE(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 0)
@@ -3817,7 +3893,7 @@ CALL(evt_snd_bgmon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_envon, PSND_CONTINUE | PSND_UNSILENT, 0)
     CALL(evt_snd_env_lpf, 0, 0)
     IF_INT_EQUAL(GSW(GSW_STORY_PROGRESS), STG4_34_BOBBERY_DECLINES)
-        IF_INT_EQUAL(GSWF(GSWF_GOR02_BOBBERY_DECLINE_SCENE_DONE), 0)
+        IF_INT_EQUAL(GSWF_GOR_BOBBERY_DECLINE_REMARK_DONE, 0)
             CALL(evt_door_end_wait)
             CALL(evt_mario_key_onoff, 0)
             CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
@@ -3832,7 +3908,7 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
             WAIT_MS(1000)
             CALL(evt_mario_set_pose, STRING("M_S_1"))
 CALL(evt_msg_print_party, STRING("mac_4_059"))
-SET_VALUE(GSWF(GSWF_GOR02_BOBBERY_DECLINE_SCENE_DONE), 1)
+SET_VALUE(GSWF_GOR_BOBBERY_DECLINE_REMARK_DONE, 1)
             CALL(evt_mario_key_onoff, 1)
         END_IF
     END_IF
@@ -3920,8 +3996,8 @@ EVT_END()
 
 static EVT_BEGIN(evt_door_03_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -4070,8 +4146,8 @@ EVT_BEGIN(evt_door_03_roll_open)
     CALL(evt_cam_ctrl_onoff, 4, 0)
     CALL(evt_hitobj_onoff, STRING("A_i03_rol"), 1, 1)
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -4087,7 +4163,7 @@ EVT_BEGIN(evt_door_03_roll_open)
         CALL(evt_mario_set_dir, 270, 0, 0)
         CALL(evt_mario_cancel_roll_motion)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF(GSWF_GOR02_BOBBERY_DOOR_OPEN), 0)
+IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
 #else
     END_IF
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
@@ -4100,7 +4176,7 @@ IF_INT_EQUAL(GSWF(GSWF_GOR02_BOBBERY_DOOR_OPEN), 0)
         CALL(evt_party_set_dir, 0, 270, 0)
         CALL(evt_party_set_dispdir, 0, 0)
 #if VERSION <= VERSION_DEMO_US
-IF_INT_EQUAL(GSWF(GSWF_GOR02_BOBBERY_DOOR_OPEN), 0)
+IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
 #else
     END_IF
     IF_INT_EQUAL(GSWF_GOR_BOBBERY_DOOR_UNLOCKED, 0)
@@ -4203,8 +4279,8 @@ EVT_END()
 
 #if VERSION <= VERSION_DEMO_US
 static EVT_BEGIN(evt_door_04_open)
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
@@ -4383,8 +4459,8 @@ const char* door_data_05_npc_01[] = {
  */
 EVT_BEGIN(evt_door_05_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -4557,8 +4633,8 @@ const char* door_data_06_npc_01[] = {
  */
 EVT_BEGIN(evt_door_06_open)
 #if VERSION <= VERSION_DEMO_US
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     SPAWN_EVENT(PTR(gor_02_hitobj_off))
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
@@ -6181,7 +6257,7 @@ CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
     CALL(evt_snd_bgmon_f, PSND_FADEIN | PSND_FADEOUT, STRING("BGM_STG0_GOR1"), 2000)
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-SET_VALUE(GSWF(GSWF_GOR02_FIRST_EPIGRAPHY_DONE), 1)
+SET_VALUE(GSWF_GOR_FRANKLY_FIRST_MAP_READ, 1)
 SET_VALUE(GSW(GSW_STORY_PROGRESS), STG0_16_FRANKLYS_HOUSE)
     RETURN
 EVT_END()
@@ -6785,7 +6861,7 @@ EVT_BEGIN(epigraphy_map_after_stage3)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("mac_3_005"), 0, STRING("クリハカセ"))
     WAIT_FRAMES(1)
-    IF_INT_EQUAL(GSWF(GSWF_TIK08_TWILIGHT_PIPE_REACHED), 0)
+    IF_INT_EQUAL(GSWF_TIK_08_PIPE_REJECTED, 0)
         CALL(evt_msg_print_party, STRING("mac_3_006"))
     ELSE
         CALL(evt_msg_print_party, STRING("mac_3_007"))
@@ -7220,11 +7296,11 @@ EVT_BEGIN(epigraphy_map_after_stage6)
     CALL_CHILD(book_open)
     WAIT_MS(500)
     CALL(evt_msg_print, 0, STRING("mac_6_005_01"), 0, STRING("クリハカセ"))
-    CALL(evt_sub_save_playtime, GSW(GSW_GOR02_FRANKLY_STG6_TIME))
+    CALL(evt_sub_save_playtime, GSW_GOR_FRANKLY_STG6_START_TIME)
     CALL(evt_cam3d_evt_off, 500, EASING_SINE_IN_OUT)
 CALL(evt_party_run, 0)
     CALL(evt_mario_key_onoff, 1)
-    SET_VALUE(GSWF(GSWF_GOR02_FRANKLY_STG6_RESEARCH), 1)
+    SET_VALUE(GSWF_GOR_FRANKLY_STG6_SAID_WAIT, 1)
     SET_VALUE(GSW(GSW_STORY_PROGRESS), STG6_71_FRANKLYS_HOUSE_STG_6)
 RETURN
 EVT_END()
@@ -7343,8 +7419,8 @@ CALL(evt_mario_key_onoff, 1)
     CALL(evt_cam_letter_box_disable, 0)
     CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG0_GOR1"))
     CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG0_GOR3"))
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 CALL(evt_snd_env_lpf, 0, 800)
     RETURN
 EVT_END()
@@ -7822,7 +7898,7 @@ EVT_BEGIN(gor_02_init_evt)
 #endif
         ELSE
 #if VERSION <= VERSION_DEMO_US
-        SET_VALUE(GSWF(GSWF_GOR02_MERLON_PORTENT_PENDING), 0)
+        SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
 #else
         SET_VALUE(GSWF_GOR_MERLON_HINT_PENDING, 0)
 #endif
@@ -7848,15 +7924,15 @@ EVT_BEGIN(gor_02_init_evt)
     CALL(evt_hit_damage_return_set, PTR(hitDmgRetPoints))
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_gazigazi_entry)
-    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -220, 0, 50, STRING("S_yuka_A01"), 125, GSWF(GSWF_GOR02_STAR_PIECE_PANEL_1))
-    CALL(evt_mobj_kururing_floor, STRING("kururin2"), 500, 124, -75, STRING("S_i06_kabe_01A"), 125, GSWF(GSWF_GOR02_STAR_PIECE_PANEL_2))
-    CALL(evt_mobj_itembox, STRING("mobj_box01"), 175, -50, 350, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF(GSWF_GOR02_ITEMBOX_01))
-    CALL(evt_mobj_powerupblk, STRING("pblk1"), -250, 288, -500, 0, GSWF(GSWF_GOR02_SHINE_SPRITE_1), 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk2"), -30, 60, -215, 0, GSWF(GSWF_GOR02_SHINE_SPRITE_2), 0)
-    CALL(evt_mobj_powerupblk, STRING("pblk3"), 540, 60, -260, 0, GSWF(GSWF_GOR02_SHINE_SPRITE_3), 0)
-    CALL(evt_item_entry, STRING("item_star1"), ITEM_STAR_PIECE, -3, 40, -325, ITEM_TYPE_STILL, GSWF(GSWF_GOR02_STAR_PIECE_1), 0)
-    CALL(evt_item_entry, STRING("item_star2"), ITEM_STAR_PIECE, 65, 150, -165, ITEM_TYPE_STILL, GSWF(GSWF_GOR02_STAR_PIECE_2), 0)
-    CALL(evt_item_entry, STRING("item_star3"), ITEM_STAR_PIECE, 50, 0, -390, ITEM_TYPE_STILL, GSWF(GSWF_GOR02_STAR_PIECE_3), 0)
+    CALL(evt_mobj_kururing_floor, STRING("kururin1"), -220, 0, 50, STRING("S_yuka_A01"), 125, GSWF_STARPIECE_07)
+    CALL(evt_mobj_kururing_floor, STRING("kururin2"), 500, 124, -75, STRING("S_i06_kabe_01A"), 125, GSWF_STARPIECE_11)
+    CALL(evt_mobj_itembox, STRING("mobj_box01"), 175, -50, 350, MOBJ_ITEMBOX_NORMAL, 0, PTR(mobj_box01), GSWF_GOR_02_DOUBLE_DIP_CHEST)
+    CALL(evt_mobj_powerupblk, STRING("pblk1"), -250, 288, -500, 0, GSWF_SHINE_00, 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk2"), -30, 60, -215, 0, GSWF_SHINE_01, 0)
+    CALL(evt_mobj_powerupblk, STRING("pblk3"), 540, 60, -260, 0, GSWF_SHINE_04, 0)
+    CALL(evt_item_entry, STRING("item_star1"), ITEM_STAR_PIECE, -3, 40, -325, ITEM_TYPE_STILL, GSWF_STARPIECE_08, 0)
+    CALL(evt_item_entry, STRING("item_star2"), ITEM_STAR_PIECE, 65, 150, -165, ITEM_TYPE_STILL, GSWF_STARPIECE_09, 0)
+    CALL(evt_item_entry, STRING("item_star3"), ITEM_STAR_PIECE, 50, 0, -390, ITEM_TYPE_STILL, GSWF_STARPIECE_10, 0)
 #else
     CALL_CHILD(PTR(evt_gazigazi_entry))
     CALL(evt_mobj_kururing_floor, STRING("kururin1"), -220, 0, 50, STRING("S_yuka_A01"), 125, GSWF_STARPIECE_07)
@@ -7904,7 +7980,7 @@ EVT_BEGIN(gor_02_init_evt)
     CALL(evt_door_data_copy, LW(0), GW(11))
     SET_VALUE(LW(0), GW(11))
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_NOT_EQUAL(GSW(GSW_TROUBLE_ACTIVE), TROUBLE_NEED_A_KEY)
+    IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
 #else
     IF_INT_NOT_EQUAL(GSW_TROUBLE_ACCEPTED, TROUBLE_NEED_A_KEY)
 #endif
@@ -7929,8 +8005,8 @@ EVT_BEGIN(gor_02_init_evt)
         CALL(evt_run_case_evt, CASE_FRONT_A, 1, LW(3), 0, PTR(evt_door_open), 0)
     END_IF
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_GOR02_HOUSE_KEY_RETURNED), 0)
-        CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_HOUSE_KEY, 446, 18, 50, 0, PTR(evt_chk), PTR(evt_unlock), GSWF(GSWF_GOR02_HOUSE_KEY_RETURNED))
+    IF_INT_EQUAL(GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED, 0)
+        CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_HOUSE_KEY, 446, 18, 50, 0, PTR(evt_chk), PTR(evt_unlock), GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED)
 #else
     IF_INT_EQUAL(GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED, 0)
         CALL(evt_mobj_lock, STRING("mobj_lock00"), ITEM_HOUSE_KEY, 446, 18, 50, 0, PTR(evt_chk), PTR(evt_unlock), GSWF_GOR_02_HOUSE_KEY_LOCK_UNLOCKED)
@@ -8033,7 +8109,7 @@ EVT_BEGIN(gor_02_init_evt)
     SPAWN_EVENT(gor_goki1_urouro)
     SPAWN_EVENT(gor_goki2_urouro)
     SPAWN_EVENT(gor_irai_init)
-    IF_INT_EQUAL(GSWF(GSWF_GOR02_WALL_COVER_BLOWN), 0)
+    IF_INT_EQUAL(GSWF_GOR_02_HIDDEN_WALL_BLOWN_AWAY, 0)
 #else
     SPAWN_EVENT(PTR(evt_gor_offscren_door_entry))
     SPAWN_EVENT(PTR(gor_goki1_urouro))
@@ -8047,7 +8123,7 @@ EVT_BEGIN(gor_02_init_evt)
         BEGIN_INLINE_EVENT
             LOOP(0)
 #if VERSION <= VERSION_DEMO_US
-                IF_INT_EQUAL(GSWF(GSWF_GOR02_WALL_COVER_BLOWN), 1)
+                IF_INT_EQUAL(GSWF_GOR_02_HIDDEN_WALL_BLOWN_AWAY, 1)
 #else
                 IF_INT_EQUAL(GSWF_GOR_02_HIDDEN_WALL_BLOWN_AWAY, 1)
 #endif

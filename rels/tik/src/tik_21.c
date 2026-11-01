@@ -22,7 +22,11 @@
 static BeroEntry bero_entry_data[2];
 EvtWord hari_trap[107];
 static HitDamageReturn hitDmgRetPoints[3];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord mobj_box00[];
+#else
 static EvtWord mobj_box00[34];
+#endif
 EvtWord tik_21_init_evt[35];
 
 /** Doors of this room: the south exit back to tik_15. */

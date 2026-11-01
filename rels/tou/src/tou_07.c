@@ -58,8 +58,16 @@ static EvtWord init_gans[2];
 static EvtWord talk_gans[2];
 static NpcSetupInfo npcEnt[4];
 static EvtWord evt_sensyu[169];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_champion[];
+#else
 static EvtWord evt_champion[578];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord evt_champion_re[];
+#else
 EvtWord evt_champion_re[308];
+#endif
 static EvtWord evt_dakuto[39];
 EvtWord evt_dakuto2[44];
 #if VERSION >= VERSION_US
@@ -69,7 +77,11 @@ EvtWord evt_tou_bed[432];
 #endif
 static EvtWord bed_entry[10];
 static EvtWord mobj_box00[34];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tou_07_init_evt[];
+#else
 EvtWord tou_07_init_evt[286];
+#endif
 
 #if VERSION >= VERSION_US
 
@@ -591,7 +603,7 @@ EVT_BEGIN(evt_champion_re)
     END_LOOP
     // The rematch champion flag is set and control returns to Mario.
 #if VERSION <= VERSION_DEMO_US
-    SET_VALUE(GSWF(GSWF_TOU_REMATCH_CHAMPION), 1)
+    SET_VALUE(GSWF_TOU_CHAMPION_TITLE_REGAINED, 1)
 #else
     SET_VALUE(GSWF_TOU_CHAMPION_TITLE_REGAINED, 1)
 #endif
@@ -952,7 +964,7 @@ EVT_BEGIN(tou_07_init_evt)
     CALL(evt_npc_setup, PTR(npcEnt))
     // If Mario has no rank left to climb, the story jumps to the new-champion point.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 0)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
 #else
     IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
 #endif
@@ -990,7 +1002,7 @@ EVT_BEGIN(tou_07_init_evt)
         SET_VALUE(LF(0), 1)
         CASE_DEFAULT
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TOU07_DUCT_ENTRY_OPEN_REVISIT), 0)
+        IF_INT_EQUAL(GSWF_TOU_07_VENT_REOPENED, 0)
 #else
         IF_INT_EQUAL(GSWF_TOU_07_VENT_REOPENED, 0)
 #endif
@@ -1012,8 +1024,8 @@ EVT_BEGIN(tou_07_init_evt)
 #if VERSION <= VERSION_DEMO_US
     CALL_CHILD(evt_tou_monitor_init)
     // Back from a match: choose the music, then run the title ceremony or champion scene that fits the story.
-    IF_INT_EQUAL(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 1)
-        SET_VALUE(GSWF(GSWF_TOU_MATCH_RESULT_PENDING), 0)
+    IF_INT_EQUAL(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 1)
+        SET_VALUE(GSWF_GLITZ_PIT_MATCH_JUST_ENDED, 0)
         SWITCH(GSW(GSW_STORY_PROGRESS))
 #else
     CALL_CHILD(PTR(evt_tou_monitor_init))
@@ -1025,7 +1037,7 @@ EVT_BEGIN(tou_07_init_evt)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
-            CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
@@ -1033,7 +1045,7 @@ EVT_BEGIN(tou_07_init_evt)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
-            CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif
@@ -1060,7 +1072,7 @@ EVT_BEGIN(tou_07_init_evt)
             RETURN
         END_IF
 #if VERSION <= VERSION_DEMO_US
-        IF_INT_EQUAL(GSWF(GSWF_TOU_REMATCH_CHAMPION), 0)
+        IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
             SPAWN_EVENT(evt_champion_re)
 #else
         IF_INT_EQUAL(GSWF_TOU_CHAMPION_TITLE_REGAINED, 0)
@@ -1077,7 +1089,7 @@ EVT_BEGIN(tou_07_init_evt)
     END_IF
     // Otherwise, the pending Grubba escort starts his speech scene.
 #if VERSION <= VERSION_DEMO_US
-    IF_INT_EQUAL(GSWF(GSWF_TOU_GRUBBA_ESCORT_PENDING), 1)
+    IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
 #else
     IF_INT_EQUAL(GSWF_TOU_GRUBBA_WALK_TALK_PENDING, 1)
 #endif
@@ -1108,7 +1120,7 @@ EVT_BEGIN(tou_07_init_evt)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -1116,7 +1128,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
             CASE_DEFAULT
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU1"))
 #if VERSION <= VERSION_DEMO_US
-            CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+            CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #endif

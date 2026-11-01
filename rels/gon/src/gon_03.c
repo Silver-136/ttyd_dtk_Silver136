@@ -79,7 +79,11 @@ static EvtWord door02_open[12];
 static BeroEntry bero_entry_data[3];
 const char* nokotaro_pose[2];
 EvtWord tegami_event[305];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord senkaron_event[];
+#else
 static EvtWord senkaron_event[579];
+#endif
 static EvtWord key_get[5];
 EvtWord gon_03_init_evt[256];
 EvtWord richard_init_event[29];
@@ -432,7 +436,7 @@ static EVT_BEGIN(senkaron_event)
         SET_VALUE(LW(0), STRING("w_bero"))
 #if VERSION <= VERSION_DEMO_US
         CALL_CHILD(bero_case_switch_off)
-        IF_INT_EQUAL(GSWF(GSWF_GON03_PUSHING_COMMENT), 0)
+        IF_INT_EQUAL(GSWF_GON_03_PUSHING_TALK_DONE, 0)
 #else
         CALL_CHILD(PTR(bero_case_switch_off))
         IF_INT_EQUAL(GSWF_GON_03_PUSHING_TALK_DONE, 0)
@@ -447,7 +451,7 @@ static EVT_BEGIN(senkaron_event)
                 CALL(evt_msg_print, 0, STRING("stg1_gon_12"), 0, STRING("party"))
             END_SWITCH
 #if VERSION <= VERSION_DEMO_US
-            SET_VALUE(GSWF(GSWF_GON03_PUSHING_COMMENT), 1)
+            SET_VALUE(GSWF_GON_03_PUSHING_TALK_DONE, 1)
 #else
             SET_VALUE(GSWF_GON_03_PUSHING_TALK_DONE, 1)
 #endif
@@ -523,9 +527,9 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
                     END_LOOP
                 END_INLINE_EVENT
 #if VERSION <= VERSION_DEMO_US
-                SET_VALUE(GSWF(GSWF_GON03_PUSHED_OUT), 1)
-                IF_INT_EQUAL(GSWF(GSWF_GON03_PUSHED_OUT_ONCE), 0)
-                    SET_VALUE(GSWF(GSWF_GON03_PUSHED_OUT_ONCE), 1)
+                SET_VALUE(GSWF_GON_03_PUSHED_OUT_PENDING, 1)
+                IF_INT_EQUAL(GSWF_GON_03_PUSHED_OUT_ONCE, 0)
+                    SET_VALUE(GSWF_GON_03_PUSHED_OUT_ONCE, 1)
 #else
                 SET_VALUE(GSWF_GON_03_PUSHED_OUT_PENDING, 1)
                 IF_INT_EQUAL(GSWF_GON_03_PUSHED_OUT_ONCE, 0)
@@ -533,7 +537,7 @@ CALL(evt_mario_get_pos, 0, LW(0), LW(1), LW(2))
 #endif
                     ELSE
 #if VERSION <= VERSION_DEMO_US
-                    SET_VALUE(GSWF(GSWF_GON03_PUSHED_OUT_TWICE), 1)
+                    SET_VALUE(GSWF_GON_03_PUSHED_OUT_AGAIN, 1)
 #else
                     SET_VALUE(GSWF_GON_03_PUSHED_OUT_AGAIN, 1)
 #endif

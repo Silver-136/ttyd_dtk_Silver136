@@ -25,7 +25,11 @@ extern s32 hei_test_water_tev[];
 
 static BeroEntry bero_entry_data[2];
 static EvtWord evt_chorobon[136];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord hei_08_init_evt[];
+#else
 EvtWord hei_08_init_evt[104];
+#endif
 
 /** Doors of this room: the east exit (e_bero) to hei_09. */
 static BeroEntry bero_entry_data[] = {

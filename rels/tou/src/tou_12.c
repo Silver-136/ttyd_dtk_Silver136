@@ -26,7 +26,11 @@ static EvtWord w_door_open[12];
 static EvtWord w_door_close[12];
 static BeroEntry bero_data[2];
 static EvtWord evt_kinoshikowa[111];
+#if VERSION <= VERSION_DEMO_US
+static EvtWord evt_block_broken[];
+#else
 static EvtWord evt_block_broken[57];
+#endif
 static EvtWord init_michel[22];
 EvtWord init_michel_dummy[12];
 static EvtWord talk_michel[8];
@@ -36,7 +40,11 @@ static EvtWord talk_brots[91];
 static EvtWord init_kinoshikowa[2];
 static EvtWord talk_kinoshikowa[2];
 static NpcSetupInfo npcEnt[6];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tou_12_init_evt[];
+#else
 EvtWord tou_12_init_evt[133];
+#endif
 
 /**
  * Door animation callback for the west door (door_1), opening: LW(0) is the swing angle;
@@ -331,7 +339,7 @@ EVT_BEGIN(tou_12_init_evt)
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -340,7 +348,7 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
             CALL(evt_snd_bgmon, PSND_FADEOUT, STRING("BGM_STG3_TOU2"))
 #if VERSION <= VERSION_DEMO_US
 CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU2"))
-CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
+CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
 #else
             CALL(evt_snd_envon, PSND_RESTART | PSND_FADEIN, STRING("ENV_STG3_TOU6"))
             CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(6))
@@ -359,9 +367,9 @@ CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(6))
 #endif
     CALL(evt_npc_setup, PTR(npcEnt))
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 190, 0, 30, ITEM_TYPE_STILL, GSWF(GSWF_TOU12_STAR_PIECE), 0)
+    CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 190, 0, 30, ITEM_TYPE_STILL, GSWF_STARPIECE_60, 0)
     IF_INT_LESS(GSW(GSW_STORY_PROGRESS), STG3_20_16_FLATTENED)
-        CALL(evt_mobj_lv_blk, STRING("aa"), 125, 0, 0, PTR(evt_block_broken), GSWF(GSWF_TOU12_BIG_BLOCK_BROKEN), STRING("MOBJ_Lv1BigBigBlock"))
+        CALL(evt_mobj_lv_blk, STRING("aa"), 125, 0, 0, PTR(evt_block_broken), GSWF_TOU_12_BIG_BIG_BLOCK_BROKEN, STRING("MOBJ_Lv1BigBigBlock"))
 #else
     CALL(evt_item_entry, STRING("item01"), ITEM_STAR_PIECE, 190, 0, 30, ITEM_TYPE_STILL, GSWF_STARPIECE_60, 0)
     IF_INT_LESS(GSW_STORY_PROGRESS, STG3_20_16_FLATTENED)

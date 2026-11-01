@@ -260,22 +260,38 @@ USER_FUNC(chain_main);
 USER_FUNC(kamec_fire_magic_delete);
 USER_FUNC(kamec_fire_magic);
 
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord enemy_common_dead_event[];
+#else
 EvtWord enemy_common_dead_event[156];
+#endif
 EvtWord enemy_event_dead_event_sub[36];
 EvtWord enemy_common_blow_event[13];
 EvtWord enemy_2d_common_dead_event[415];
 EvtWord _2d_dead_rotate_event[];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord testenemynpc_move_event[];
+#else
 EvtWord testenemynpc_move_event[13];
+#endif
 EvtWord npc_urouro_move_event[21];
 EvtWord npc_urouro_return_event[37];
 EvtWord kuriboo_move_event[39];
 EvtWord kuriboo_find_event[54];
 EvtWord kuriboo_lost_event[31];
 EvtWord kuriboo_return_event[37];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord patakuri_move_event[];
+#else
 EvtWord patakuri_move_event[148];
+#endif
 EvtWord patakuri_find_event[90];
 EvtWord patakuri_lost_event[31];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord patakuri_return_event[];
+#else
 EvtWord patakuri_return_event[170];
+#endif
 EvtWord nokonoko_shell_return_event[50];
 EvtWord nokonoko_init_event[28];
 EvtWord nokonoko_move_event[58];
@@ -303,7 +319,11 @@ EvtWord met_move_event[54];
 EvtWord met_find_event[269];
 EvtWord met_lost_event[43];
 EvtWord met_return_event[51];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord patamet_move_event[];
+#else
 EvtWord patamet_move_event[151];
+#endif
 EvtWord patamet_find_event[108];
 EvtWord patamet_lost_event[34];
 EvtWord patamet_return_event[143];
@@ -336,7 +356,11 @@ EvtWord honenoko2_lost_event[36];
 EvtWord honenoko2_return_event[46];
 EvtWord killer_init_event[19];
 EvtWord killer_move_event[79];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord killer_dead_event[];
+#else
 EvtWord killer_dead_event[156];
+#endif
 EvtWord killer_cannon_init_event[13];
 EvtWord killer_cannon_move_event[157];
 EvtWord sambo_move_event[22];
@@ -378,13 +402,29 @@ EvtWord piders_find_event[206];
 EvtWord piders_blow_event[13];
 EvtWord pakkun_attack_event[74];
 EvtWord pakkun_init_event[34];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord pakkun_move_event[];
+#else
 EvtWord pakkun_move_event[17];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord pakkun_find_event[];
+#else
 EvtWord pakkun_find_event[106];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord pakkun_return_event[];
+#else
 EvtWord pakkun_return_event[81];
+#endif
 EvtWord dokugassun_init_event[14];
 EvtWord dokugassun_move_event[153];
 EvtWord dokugassun_find_event[69];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord dokugassun_lost_event[];
+#else
 EvtWord dokugassun_lost_event[27];
+#endif
 EvtWord dokugassun_return_event[158];
 EvtWord basabasa_init_event[17];
 #if VERSION >= VERSION_US
@@ -395,15 +435,31 @@ EvtWord basabasa_move_event[67];
 EvtWord basabasa_find_event[69];
 EvtWord basabasa_lost_event[31];
 EvtWord basabasa_return_event[44];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord basabasa2_move_event[];
+#else
 EvtWord basabasa2_move_event[148];
+#endif
 EvtWord basabasa2_find_event[60];
 EvtWord basabasa2_lost_event[31];
 EvtWord basabasa2_return_event[140];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord teresa_move_event[];
+#else
 EvtWord teresa_move_event[165];
+#endif
 EvtWord teresa_find_event[60];
 EvtWord teresa_lost_event[31];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord teresa_return_event[];
+#else
 EvtWord teresa_return_event[104];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord bubble_move_event[];
+#else
 EvtWord bubble_move_event[159];
+#endif
 EvtWord bubble_find_event[63];
 EvtWord bubble_lost_event[34];
 EvtWord bubble_return_event[151];
@@ -413,7 +469,11 @@ EvtWord hbom_lost_event[31];
 EvtWord hbom_return_event[37];
 EvtWord zakowiz_init_event[38];
 EvtWord zakowiz_move_event[70];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord zakowiz_find_event[];
+#else
 EvtWord zakowiz_find_event[159];
+#endif
 EvtWord zakowiz_lost_event[18];
 EvtWord zakowiz_return_event[37];
 EvtWord zakowiz_blow_event[19];
@@ -422,20 +482,36 @@ EvtWord hannya_find_event[86];
 EvtWord hannya_lost_event[23];
 EvtWord hannya_return_event[29];
 EvtWord mahoon_init_event[120];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mahoon_move_event[];
+#else
 EvtWord mahoon_move_event[259];
+#endif
 EvtWord mahoon_dead_event[24];
 EvtWord mahoon_find_event[177];
 EvtWord mahoon_lost_event[142];
 EvtWord mahoon_return_event[251];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kamec_init_event[];
+#else
 EvtWord kamec_init_event[54];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kamec_move_event[];
+#else
 EvtWord kamec_move_event[177];
+#endif
 EvtWord kamec_find_event[150];
 EvtWord kamec_lost_event[31];
 EvtWord kamec_return_event[150];
 EvtWord kamec_blow_event[19];
 EvtWord kamec2_init_event[54];
 EvtWord kamec2_move_event[58];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord kamec2_find_event[];
+#else
 EvtWord kamec2_find_event[153];
+#endif
 EvtWord kamec2_lost_event[31];
 EvtWord kamec2_return_event[37];
 EvtWord kamec2_blow_event[19];
@@ -482,7 +558,11 @@ EvtWord kuriboo2D_init_event[22];
 EvtWord kuriboo2D_move_event[72];
 EvtWord kuriboo2D_find_event[70];
 EvtWord zako2D_init_event[27];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord zako2D_move_event[];
+#else
 EvtWord zako2D_move_event[244];
+#endif
 EvtWord zako2D_find_event[74];
 EvtWord dokan2D_init_event[19];
 EvtWord dokan2D_regl_event[48];
@@ -491,9 +571,17 @@ EvtWord fall2D_regl_event[34];
 EvtWord zakoM2D_init_event[37];
 EvtWord zakoM2D_move_event[95];
 EvtWord zakoM2D_find_event[179];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord zakoM2D_find_start_event[];
+#else
 EvtWord zakoM2D_find_start_event[88];
+#endif
 EvtWord gesso2D_init_event[34];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord gesso2D_move_event[];
+#else
 EvtWord gesso2D_move_event[262];
+#endif
 
 /**
  * Dead event of most field enemies, run when the enemy is beaten in battle or killed on the field:

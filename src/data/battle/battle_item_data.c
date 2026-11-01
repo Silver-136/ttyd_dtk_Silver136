@@ -95,7 +95,11 @@ BattleWeapon ItemWeaponData_Teki_Yokeeru;
 BattleWeapon ItemWeaponData_Madowaseno_Kona;
 EvtWord ItemEvent_Nemure_Yoikoyo[VERSION_PICK(57, 91)];
 BattleWeapon ItemWeaponData_Nemure_Yoikoyo;
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord ItemEvent_Stop_Watch_Core[];
+#else
 EvtWord ItemEvent_Stop_Watch_Core[143];
+#endif
 EvtWord ItemEvent_Stop_Watch[86];
 BattleWeapon ItemWeaponData_Stop_Watch;
 EvtWord ItemEvent_Guruguru_Memawashi[35];
@@ -117,7 +121,11 @@ EvtWord ItemEvent_Jiwajiwa_Syrup[14];
 BattleWeapon ItemWeaponData_Jiwajiwa_Syrup;
 EvtWord ItemEvent_Irekaeeru[157];
 BattleWeapon ItemWeaponData_Irekaeeru;
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord ItemEvent_Attiike_Shisshi[];
+#else
 EvtWord ItemEvent_Attiike_Shisshi[167];
+#endif
 BattleWeapon ItemWeaponData_Attiike_Shisshi;
 EvtWord ItemEvent_Naniga_Okorukana[207];
 BattleWeapon ItemWeaponData_Naniga_Okorukana;
@@ -151,7 +159,11 @@ BattleWeapon ItemWeaponData_KachikachiDish;
 BattleWeapon ItemWeaponData_BomberEgg;
 EvtWord ItemEvent_Poison_Kinoko[86];
 BattleWeapon ItemWeaponData_PoisonKinoko;
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord ItemEvent_LastDinner[];
+#else
 EvtWord ItemEvent_LastDinner[228];
+#endif
 BattleWeapon ItemWeaponData_LastDinner;
 EvtWord ItemEvent_Kaminari_Dokkan[7];
 EvtWord ItemEvent_Kaminari_Gorogoro[7];

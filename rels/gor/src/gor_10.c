@@ -168,10 +168,22 @@ static USER_FUNC(depth) {
     return EVT_RETURN_BLOCK;
 }
 
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord tegami_init_evt[];
+#else
 EvtWord tegami_init_evt[78];
+#endif
 EvtWord evt_mezame[226];
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord mezame_init_evt[];
+#else
 EvtWord mezame_init_evt[61];
+#endif
+#if VERSION <= VERSION_DEMO_US
+extern EvtWord gor_10_init_evt[];
+#else
 EvtWord gor_10_init_evt[29];
+#endif
 
 /**
  * Prologue of the game (before STG0_02_MARIOS_HOUSE):
@@ -182,8 +194,8 @@ EVT_BEGIN(tegami_init_evt)
     CALL(evt_snd_envoff, PSND_PAUSE)
     CALL(evt_snd_envon, PSND_FADEIN | PSND_SLOT(1), STRING("ENV_STG0_GOR6"))
 #if VERSION <= VERSION_DEMO_US
-    CALL(evt_snd_bgmoff, PSND_FADE_DIP_TO(4))
-    CALL(evt_snd_envoff, PSND_FADE_DIP_TO(4))
+    CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
+    CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
 #else
     CALL(evt_snd_bgmoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
     CALL(evt_snd_envoff, PSND_SILENT | PSND_SILENT_LEVEL(4))
