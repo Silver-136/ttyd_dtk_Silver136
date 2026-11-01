@@ -910,174 +910,13 @@ EVT_END()
 
 
 
+#if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
 static USER_FUNC(itemUseFunc) {
     PartyEntry* party;
+#endif
     MarioWork* mario;
     ItemData* item;
-    item = &itemDataTable[event->lwData[10]];
-    mario = marioGetPtr();
-    party = partyGetPtr(0);
-    if (isFirstCall) {
-        cnt = 0;
-    }
-    switch (cnt) {
-        case 0:
-            statusWinForceOpen();
-            if (event->lwData[11] == 0) {
-                pouchSetHP(pouchGetHP() + item->hp_restored);
-                pouchSetFP(pouchGetFP() + item->fp_restored);
-                pouchSetAP(pouchGetAP() + item->sp_restored);
-            } else {
-                pouchSetPartyHP(event->lwData[11], pouchGetPartyHP(event->lwData[11]) + item->hp_restored);
-                pouchSetFP(pouchGetFP() + item->fp_restored);
-                pouchSetAP(pouchGetAP() + item->sp_restored);
-            }
-            cnt++;
-            break;
-        case 1:
-            if (event->lwData[11]) {
-                cnt = 200;
-                break;
-            }
-            if (!item->hp_restored) {
-                cnt = 100;
-                break;
-            }
-            effRecoveryEntry(0, item->hp_restored, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y, mario->position.z);
-            cnt++;
-            break;
-        case 31:
-            cnt++;
-            break;
-        case 60:
-            cnt = 100;
-            break;
-        case 100:
-            if (!item->fp_restored) {
-                cnt = 999;
-                break;
-            }
-            effRecoveryEntry(1, item->fp_restored, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y, mario->position.z);
-        case 130:
-            cnt = 999;
-            break;
-        case 200:
-            if (!item->hp_restored) {
-                cnt = 300;
-                break;
-            }
-            effRecoveryEntry(0, item->hp_restored, party->position.x, party->position.y + party->height, party->position.z);
-cnt++;
-            break;
-        case 230:
-            cnt++;
-            break;
-        case 260:
-            cnt = 300;
-            break;
-        case 300:
-            if (!item->fp_restored) {
-                cnt = 999;
-                break;
-            }
-            effRecoveryEntry(1, item->fp_restored, party->position.x, party->position.y + party->height, party->position.z);
-            cnt++;
-            break;
-        case 330:
-            cnt = 999;
-            break;
-        case 999:
-        case 1000:
-            return EVT_RETURN_DONE;
-        default:
-            cnt++;
-            break;
-    }
-    return EVT_RETURN_BLOCK;
-}
-#elif VERSION == VERSION_DEMO_US
-    MarioWork* mario;
-    ItemData* item;
-    item = &itemDataTable[event->lwData[10]];
-    mario = marioGetPtr();
-    party = partyGetPtr(0);
-    if (isFirstCall) {
-        cnt = 0;
-    }
-    switch (cnt) {
-        case 0:
-            statusWinForceOpen();
-            if (event->lwData[11] == 0) {
-                pouchSetHP(pouchGetHP() + item->hp_restored);
-                pouchSetFP(pouchGetFP() + item->fp_restored);
-                pouchSetAP(pouchGetAP() + item->sp_restored);
-            } else {
-                pouchSetPartyHP(event->lwData[11], pouchGetPartyHP(event->lwData[11]) + item->hp_restored);
-                pouchSetFP(pouchGetFP() + item->fp_restored);
-                pouchSetAP(pouchGetAP() + item->sp_restored);
-            }
-            cnt++;
-            break;
-        case 1:
-            if (event->lwData[11]) {
-                cnt = 200;
-                break;
-            }
-            if (!item->hp_restored) {
-                cnt = 100;
-                break;
-            }
-            effRecoveryEntry(0, item->hp_restored, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y, mario->position.z);
-            cnt++;
-            break;
-        case 31:
-            cnt++;
-            break;
-        case 60:
-            cnt = 100;
-            break;
-        case 100:
-            if (!item->fp_restored) {
-                cnt = 999;
-                break;
-            }
-            effRecoveryEntry(1, item->fp_restored, mario->position.x, mario->position.y + mario->wPlayerCollisionBox.y, mario->position.z);
-        case 130:
-            cnt = 999;
-            break;
-        case 200:
-            if (!item->hp_restored) {
-                cnt = 300;
-                break;
-            }
-            effRecoveryEntry(0, item->hp_restored, party->position.x, party->position.y + party->height, party->position.z);
-cnt++;
-            break;
-        case 230:
-            cnt++;
-            break;
-        case 260:
-            cnt = 300;
-            break;
-        case 300:
-            if (!item->fp_restored) {
-                cnt = 999;
-                break;
-            }
-            effRecoveryEntry(1, item->fp_restored, party->position.x, party->position.y + party->height, party->position.z);
-            cnt++;
-            break;
-        case 330:
-            cnt = 999;
-            break;
-        case 999:
-        case 1000:
-            return EVT_RETURN_DONE;
-        default:
-            cnt++;
-            break;
-    }
 #else
 USER_FUNC(itemUseFunc) {
     PartyEntry* party;
@@ -1085,6 +924,7 @@ USER_FUNC(itemUseFunc) {
     ItemData* item;
     EffectEntry* eff;
 
+#endif
     item = &itemDataTable[event->lwData[10]];
     mario = marioGetPtr();
     party = partyGetPtr(0);
@@ -1138,8 +978,12 @@ USER_FUNC(itemUseFunc) {
                 cnt = 300;
                 break;
             }
+#if VERSION <= VERSION_DEMO_US
+            effRecoveryEntry(0, item->hp_restored, party->position.x, party->position.y + party->height, party->position.z);
+#else
             eff = effRecoveryEntry(0, item->hp_restored, party->position.x, party->position.y + party->height, party->position.z);
             ((RecoveryWork*)eff->userdata)->baseY = -party->height * HALF_F;
+#endif
             cnt++;
             break;
         case 230:
@@ -1168,55 +1012,38 @@ USER_FUNC(itemUseFunc) {
     }
     return EVT_RETURN_BLOCK;
 }
-#endif
-
-/** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
+#if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
 /** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
 USER_FUNC(itemUseFunc2) {
-    statusWinForceOff();
-    return EVT_RETURN_DONE;
-}
-#elif VERSION == VERSION_DEMO_US
-    return EVT_RETURN_BLOCK;
-}
+#else
 
 /** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
 static USER_FUNC(itemUseFunc2) {
-    statusWinForceOff();
+#endif
 #else
+
+/** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
 /** evt_item_use's last step: hides the status window that itemUseFunc forced open. */
 USER_FUNC(itemUseFunc2) {
+#endif
     statusWinForceOff();
     return EVT_RETURN_DONE;
 }
-#endif
-
+#if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
 /** Sets args[0] to 1 if Mario is in his 8-bit form (WIN_FLAG_8BIT_MARIO), else 0; picks the partner pose script. */
 USER_FUNC(famicom_check) {
-    EvtWord* args = event->args;
-
-    if (wp->flags & WINDOW_FLAG_8BIT) {
-        evtSetValue(event, args[0], 1);
-    } else {
-        evtSetValue(event, args[0], 0);
-    }
-    return EVT_RETURN_DONE;
-}
-#elif VERSION == VERSION_DEMO_US
-    return EVT_RETURN_DONE;
-}
+#else
 
 /** Sets args[0] to 1 if Mario is in his 8-bit form (WIN_FLAG_8BIT_MARIO), else 0; picks the partner pose script. */
 static USER_FUNC(famicom_check) {
-    EvtWord* args = event->args;
-    if (wp->flags & WINDOW_FLAG_8BIT) {
-        evtSetValue(event, args[0], 1);
-    }
+#endif
 #else
+
 /** Sets args[0] to 1 if Mario is in his 8-bit form (WIN_FLAG_8BIT_MARIO), else 0; picks the partner pose script. */
 USER_FUNC(famicom_check) {
+#endif
     EvtWord* args = event->args;
 
     if (wp->flags & WINDOW_FLAG_8BIT) {
@@ -1226,37 +1053,41 @@ USER_FUNC(famicom_check) {
     }
     return EVT_RETURN_DONE;
 }
-#endif
-
-/** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
+#if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
 /** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
 USER_FUNC(party_color) {
-    EvtWord* args = event->args;
-
-    evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
-    return EVT_RETURN_DONE;
-}
-#elif VERSION == VERSION_DEMO_US
-    else {
-        evtSetValue(event, args[0], 0);
-    }
-    return EVT_RETURN_DONE;
-}
+#else
 
 /** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
 static USER_FUNC(party_color) {
-    EvtWord* args = event->args;
-    evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
+#endif
 #else
+
+/** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
 /** Sets args[0] to Yoshi's color (pouchGetPartyColor(4)) for the 8-bit item pose. */
 USER_FUNC(party_color) {
+#endif
     EvtWord* args = event->args;
 
     evtSetValue(event, args[0], pouchGetPartyColor(PARTNER_YOSHI));
     return EVT_RETURN_DONE;
 }
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
+/**
+ * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
+ * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
+ */
+USER_FUNC(cam_r) {
+#else
+/**
+ * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
+ * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
+ */
+static USER_FUNC(cam_r) {
 #endif
+#else
 
 // Descriptive name (not in the symbol maps); placeholder unk_80177cf8, JP 0x80177CF8. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
@@ -1270,69 +1101,16 @@ USER_FUNC(all_party_slit_off) {
  * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
  * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
  */
-#if VERSION == VERSION_DEMO_JP
 /**
  * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
  * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
  */
 USER_FUNC(cam_r) {
-    CameraEntry* cam;
-    Vec v;
-    f32 s;
-
-    cam = camGetPtr(CAMERA_3D);
-    cam->rollAngle += 3.0f;
-    s = (f32)sin((f32)(u32)gp->retraceCount / 10.0f);
-    PSVECSubtract(&cam->cameraAt, &cam->cameraPos, &v);
-    PSVECScale(&v, &v, 0.2f * s);
-    cam->viewOffset.x = v.x;
-    cam->viewOffset.y = v.y;
-    cam->viewOffset.z = v.z;
-    return EVT_RETURN_BLOCK;
-}
-#elif VERSION == VERSION_DEMO_US
-#else
-/**
- * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
- * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
- */
-USER_FUNC(cam_r) {
-    CameraEntry* cam;
-    Vec v;
-    f32 s;
-
-    cam = camGetPtr(CAMERA_3D);
-    cam->rollAngle += 3.0f;
-    s = (f32)sin((f32)(u32)gp->retraceCount / 10.0f);
-    PSVECSubtract(&cam->cameraAt, &cam->cameraPos, &v);
-    PSVECScale(&v, &v, 0.2f * s);
-    cam->viewOffset.x = v.x;
-    cam->viewOffset.y = v.y;
-    cam->viewOffset.z = v.z;
-    return EVT_RETURN_BLOCK;
-}
 #endif
-
-/** TRUE while the Ragged Diary scene runs or the game is in Game Over; evt_shop and evt_win use it to hold off. */
-#if VERSION == VERSION_DEMO_JP
-/** TRUE while the Ragged Diary scene runs or the game is in Game Over; evt_shop and evt_win use it to hold off. */
-BOOL winGhostDiaryChk(void) {
-    if (wp->menuState == WIN_MENU_DIARY_WAIT) {
-        return TRUE;
-    }
-    return seqGetSeq() == SEQ_GAME_OVER;
-}
-#elif VERSION == VERSION_DEMO_US
-    return EVT_RETURN_DONE;
-}
-/**
- * Ragged Diary scene camera: rolls the 3D camera 3 degrees per frame and sways it toward
- * and away from its target. Never finishes; runs in an inline event until the Game Over sequence takes over.
- */
-static USER_FUNC(cam_r) {
     CameraEntry* cam;
     Vec v;
     f32 s;
+
     cam = camGetPtr(CAMERA_3D);
     cam->rollAngle += 3.0f;
     s = (f32)sin((f32)(u32)gp->retraceCount / 10.0f);
@@ -1345,11 +1123,6 @@ static USER_FUNC(cam_r) {
 }
 
 /** TRUE while the Ragged Diary scene runs or the game is in Game Over; evt_shop and evt_win use it to hold off. */
-BOOL winGhostDiaryChk(void) {
-    if (wp->menuState == WIN_MENU_DIARY_WAIT) {
-        return TRUE;
-    }
-#else
 /** TRUE while the Ragged Diary scene runs or the game is in Game Over; evt_shop and evt_win use it to hold off. */
 BOOL winGhostDiaryChk(void) {
     if (wp->menuState == WIN_MENU_DIARY_WAIT) {
@@ -1357,74 +1130,41 @@ BOOL winGhostDiaryChk(void) {
     }
     return seqGetSeq() == SEQ_GAME_OVER;
 }
-#endif
 
-#if VERSION == VERSION_DEMO_JP
 const char* winMainStrippedTpl(void) {
-    return WIN_DIR "%s/win.tpl";
-}
-#elif VERSION == VERSION_DEMO_US
-    return seqGetSeq() == SEQ_GAME_OVER;
-}
-
-// FAKE: stand-in for a function the linker stripped; it only keeps the original's path format string
-// in its place in .rodata.
-const char* winMainStrippedTpl(void) {
+#if VERSION <= VERSION_DEMO_US
     return WIN_DIR "%s/win.tpl";
 #else
-const char* winMainStrippedTpl(void) {
     return "%s/w/%s/win.tpl";
-}
 #endif
-
-/** Prepares the font renderer for the winFontSet* calls that follow. */
-#if VERSION == VERSION_DEMO_JP
-/** Prepares the font renderer for the winFontSet* calls that follow. */
-void winFontInit(void) {
-    FontDrawStart();
-}
-#elif VERSION == VERSION_DEMO_US
 }
 
 /** Prepares the font renderer for the winFontSet* calls that follow. */
-void winFontInit(void) {
-    FontDrawStart();
-#else
 /** Prepares the font renderer for the winFontSet* calls that follow. */
 void winFontInit(void) {
     FontDrawStart();
 }
-#endif
 
 /** Pre-US winFontSet: always formats into a 1 KB buffer, then draws it. */
-#if VERSION == VERSION_DEMO_JP
 /** Pre-US winFontSet: always formats into a 1 KB buffer, then draws it. */
 void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-char buf[0x400];
-Mtx trans;
-    Mtx scl;
-    va_list args;
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    PSMTXTrans(trans, pos.x, pos.y, pos.z);
-    PSMTXScale(scl, scale.x, scale.y, scale.z);
-    PSMTXConcat(trans, scl, trans);
-    FontDrawColor(color);
-    FontDrawMessageMtx(trans, buf);
-}
-#elif VERSION == VERSION_DEMO_US
+#if VERSION <= VERSION_DEMO_US
+    char buf[0x400];
 #else
-/** Pre-US winFontSet: always formats into a 1 KB buffer, then draws it. */
-void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION >= VERSION_US
     char buf[0x1000];
     const char* msg = fmt;
 #else
     char buf[0x400];
 #endif
+#endif
     Mtx trans;
     Mtx scl;
     va_list args;
+#if VERSION <= VERSION_DEMO_US
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);
+#else
 
 #if VERSION >= VERSION_US
     if (strstr(fmt, "%")) {
@@ -1436,10 +1176,18 @@ void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     va_start(args, fmt);
     vsprintf(buf, fmt, args);
 #endif
+#endif
     PSMTXTrans(trans, pos.x, pos.y, pos.z);
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
+#if VERSION <= VERSION_DEMO_US
+    FontDrawMessageMtx(trans, buf);
+}
+/** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
+void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
+    char buf[0x400];
+#else
 #if VERSION >= VERSION_US
     FontDrawMessageMtx(trans, msg);
 }
@@ -1465,29 +1213,8 @@ void winFontSetWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* f
     FontDrawMessageMtx(trans, buf);
 #endif
 }
-#endif
 
 /** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
-#if VERSION == VERSION_DEMO_JP
-/** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
-void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-char buf[0x400];
-Mtx trans;
-    Mtx scl;
-    va_list args;
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    {
-        s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
-        PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z);
-    }
-    PSMTXScale(scl, scale.x, scale.y, scale.z);
-    PSMTXConcat(trans, scl, trans);
-    FontDrawColor(color);
-    FontDrawStringMtx(trans, buf);
-}
-#elif VERSION == VERSION_DEMO_US
-#else
 /** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
 void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION >= VERSION_US
@@ -1496,9 +1223,23 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #else
     char buf[0x400];
 #endif
+#endif
     Mtx trans;
     Mtx scl;
     va_list args;
+#if VERSION <= VERSION_DEMO_US
+    va_start(args, fmt);
+#if VERSION == VERSION_DEMO_JP
+    vsprintf(buf, fmt, args);
+#else
+    do {
+        vsprintf(buf, fmt, args);
+    }
+    while (0);
+#endif
+    {
+        s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
+#else
 #if VERSION >= VERSION_US
     s32 ref;
 
@@ -1520,18 +1261,30 @@ void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     {
         s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
 #endif
+#endif
         PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z);
     }
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
+#if VERSION <= VERSION_DEMO_US
+    FontDrawStringMtx(trans, buf);
+}
+/** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
+void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
+    char buf[0x400];
+    Mtx trans;
+    Mtx scl;
+    va_list args;
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);
+#else
 #if VERSION >= VERSION_US
     FontDrawStringMtx(trans, msg);
 #else
     FontDrawStringMtx(trans, buf);
 #endif
 }
-#endif
 
 /** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
 #if VERSION == VERSION_EU
@@ -1571,25 +1324,6 @@ void winFontSetRWidth(Vec pos, Vec scale, GXColor color, f32 width, const char* 
 
 /** Draws formatted text as a plain string with the font's outline (edge) turned on. */
 #endif
-#if VERSION == VERSION_DEMO_JP
-/** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
-void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-char buf[0x400];
-Mtx trans;
-    Mtx scl;
-    va_list args;
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    PSMTXTrans(trans, pos.x, pos.y, pos.z);
-    PSMTXScale(scl, scale.x, scale.y, scale.z);
-    PSMTXConcat(trans, scl, trans);
-    FontDrawColor(color);
-    FontDrawEdge();
-    FontDrawStringMtx(trans, buf);
-    FontDrawEdgeOff();
-}
-#elif VERSION == VERSION_DEMO_US
-#else
 /** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
 void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
 #if VERSION >= VERSION_US
@@ -1612,11 +1346,16 @@ void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
     va_start(args, fmt);
     vsprintf(buf, fmt, args);
 #endif
+#endif
     PSMTXTrans(trans, pos.x, pos.y, pos.z);
     PSMTXScale(scl, scale.x, scale.y, scale.z);
     PSMTXConcat(trans, scl, trans);
     FontDrawColor(color);
     FontDrawEdge();
+#if VERSION <= VERSION_DEMO_US
+    FontDrawStringMtx(trans, buf);
+    FontDrawEdgeOff();
+#else
 #if VERSION >= VERSION_US
     FontDrawStringMtx(trans, msg);
     FontDrawEdgeOff();
@@ -1643,100 +1382,27 @@ void winFontSetEdgeWidth(Vec pos, Vec scale, GXColor color, f32 width, const cha
     FontDrawStringMtx(trans, buf);
     FontDrawEdgeOff();
 #endif
+#endif
+}
+
+/** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
+/** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
+void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
+    Mtx trans;
+    Mtx scl;
+
+    if (msg) {
+        PSMTXTrans(trans, pos.x, pos.y, pos.z);
+        PSMTXScale(scl, scale.x, scale.y, scale.z);
+        PSMTXConcat(trans, scl, trans);
+        FontDrawColor(color);
+        FontDrawMessageMtx(trans, msgSearch(msg));
+    }
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
 }
 #endif
-
-/** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
-#if VERSION == VERSION_DEMO_JP
-/** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
-void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
-    Mtx trans;
-    Mtx scl;
-
-    if (msg) {
-        PSMTXTrans(trans, pos.x, pos.y, pos.z);
-        PSMTXScale(scl, scale.x, scale.y, scale.z);
-        PSMTXConcat(trans, scl, trans);
-        FontDrawColor(color);
-        FontDrawMessageMtx(trans, msgSearch(msg));
-    }
-}
-#elif VERSION == VERSION_DEMO_US
-}
-/** Pre-US winFontSet: always formats into a 1 KB buffer, then draws it. */
-void winFontSet(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-    char buf[0x400];
-    Mtx trans;
-    Mtx scl;
-    va_list args;
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    PSMTXTrans(trans, pos.x, pos.y, pos.z);
-    PSMTXScale(scl, scale.x, scale.y, scale.z);
-    PSMTXConcat(trans, scl, trans);
-    FontDrawColor(color);
-    FontDrawMessageMtx(trans, buf);
-}
-/** Pre-US winFontSetR: always right-aligns to the full-width "９９９". */
-void winFontSetR(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-    char buf[0x400];
-    Mtx trans;
-    Mtx scl;
-    va_list args;
-    va_start(args, fmt);
-    do {
-        vsprintf(buf, fmt, args);
-    }
-    while (0);
-    {
-        s32 w = FontGetMessageWidth("９９９") - FontGetMessageWidth(buf);
-        PSMTXTrans(trans, pos.x + scale.x * w, pos.y, pos.z);
-    }
-    PSMTXScale(scl, scale.x, scale.y, scale.z);
-    PSMTXConcat(trans, scl, trans);
-    FontDrawColor(color);
-    FontDrawStringMtx(trans, buf);
-}
-/** Pre-US winFontSetEdge: always formats into a 1 KB buffer. */
-void winFontSetEdge(Vec pos, Vec scale, GXColor color, const char* fmt, ...) {
-    char buf[0x400];
-    Mtx trans;
-    Mtx scl;
-    va_list args;
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    PSMTXTrans(trans, pos.x, pos.y, pos.z);
-    PSMTXScale(scl, scale.x, scale.y, scale.z);
-    PSMTXConcat(trans, scl, trans);
-    FontDrawColor(color);
-    FontDrawEdge();
-    FontDrawStringMtx(trans, buf);
-    FontDrawEdgeOff();
-}
-/** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
-void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
-    Mtx trans;
-    Mtx scl;
-    if (msg) {
-        PSMTXTrans(trans, pos.x, pos.y, pos.z);
-        PSMTXScale(scl, scale.x, scale.y, scale.z);
-        PSMTXConcat(trans, scl, trans);
-        FontDrawColor(color);
-        FontDrawMessageMtx(trans, msgSearch(msg));
-    }
 #else
-/** Looks up message id msg (msgSearch) and draws it; does nothing for NULL. */
-void winFontSetLabel(Vec pos, Vec scale, GXColor color, const char* msg) {
-    Mtx trans;
-    Mtx scl;
-
-    if (msg) {
-        PSMTXTrans(trans, pos.x, pos.y, pos.z);
-        PSMTXScale(scl, scale.x, scale.y, scale.z);
-        PSMTXConcat(trans, scl, trans);
-        FontDrawColor(color);
-        FontDrawMessageMtx(trans, msgSearch(msg));
-    }
 }
 #endif
 
@@ -1771,60 +1437,64 @@ void winFontSetPitch(f32 pitch, Vec pos, Vec scale, GXColor color, const char* f
 #endif
 
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
-#if VERSION == VERSION_DEMO_JP
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
-void winTexInit(TEXPalette* texture) {
-    winTexTpl = texture;
-    GXSetCullMode(GX_CULL_NONE);
-    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-    GXSetNumChans(0);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-}
-#elif VERSION == VERSION_DEMO_US
-#else
+#if VERSION <= VERSION_DEMO_US
 /** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
-void winTexInit(TEXPalette* texture) {
-    winTexTpl = texture;
-    GXSetCullMode(GX_CULL_NONE);
-    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
-    GXSetNumChans(0);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetNumTexGens(1);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+#if VERSION != VERSION_DEMO_JP
+    va_list args;
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);
+    FontDrawColor(color);
+    FontDrawScaleVec(scale);
+    ((void (*)(Vec*, const char*, f32))FontDrawStringVecPitch)(&pos, buf, pitch);
 }
+/** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
 #endif
+#endif
+void winTexInit(TEXPalette* texture) {
+    winTexTpl = texture;
+    GXSetCullMode(GX_CULL_NONE);
+    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
+    GXSetNumChans(0);
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+#else
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
+#endif
+#else
+    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+#endif
+    GXSetNumTevStages(1);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+#else
+    GXSetNumTexGens(1u);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
+#endif
+#else
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+#endif
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+}
 
 /**
  * Draws texture textureId of the current TPL centred at translate, sized texture size times scale,
  * tinted by color in 2D camera space. Alpha below 255 blends; opaque draws use an alpha test instead.
  */
-#if VERSION == VERSION_DEMO_JP
 /**
  * Draws texture textureId of the current TPL centred at translate, sized texture size times scale,
  * tinted by color in 2D camera space. Alpha below 255 blends; opaque draws use an alpha test instead.
@@ -1856,53 +1526,18 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
     GXLoadPosMtxImm(m, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-0.5f, -0.5f, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(HALF_F, -0.5f, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(HALF_F, HALF_F, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-    GXPosition3f32(-0.5f, HALF_F, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-}
-#elif VERSION == VERSION_DEMO_US
 #else
-/**
- * Draws texture textureId of the current TPL centred at translate, sized texture size times scale,
- * tinted by color in 2D camera space. Alpha below 255 blends; opaque draws use an alpha test instead.
- */
-void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
-    Mtx trans;
-    Mtx scl;
-    Mtx m;
-    GXTexObj obj;
-    f32 sy;
-
-    if (color.a != 0xFF) {
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_TRUE);
-        GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    } else {
-        GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_FALSE);
-        GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
-        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    }
-    TEXGetGXTexObjFromPalette(winTexTpl, &obj, textureId);
-    GXInitTexObjLOD(&obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    GXSetTevColor(GX_TEVREG0, color);
-    PSMTXTrans(trans, translate.x, translate.y, translate.z);
-    sy = scale.y * GXGetTexObjHeight(&obj);
-    PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
-    PSMTXConcat(trans, scl, m);
-    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
+    GXLoadPosMtxImm(m, 0);
+    GXSetCurrentMtx(0);
+#endif
+#else
     GXLoadPosMtxImm(m, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
+#endif
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
@@ -1913,7 +1548,8 @@ void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
     GXPosition3f32(-0.5f, HALF_F, 0.0f);
     GXTexCoord2f32(0.0f, 0.0f);
 }
-#endif
+/** winTexSet with the quad rotated rot degrees about the screen's z axis. */
+#if VERSION > VERSION_DEMO_US
 
 // Descriptive name (not in the symbol maps); placeholder unk_80177008, JP 0x80177008. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
@@ -1952,8 +1588,8 @@ void winTexSetNearest(u32 textureId, Vec translate, Vec scale, GXColor color) {
 #endif
 
 /** winTexSet with the quad rotated rot degrees about the screen's z axis. */
-#if VERSION == VERSION_DEMO_JP
 /** winTexSet with the quad rotated rot degrees about the screen's z axis. */
+#endif
 void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 rot) {
     Mtx trans;
     Mtx scl;
@@ -1984,314 +1620,18 @@ void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 ro
     PSMTXConcat(trans, r, m);
     PSMTXConcat(m, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-    GXLoadPosMtxImm(m, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-0.5f, -0.5f, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(HALF_F, -0.5f, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(HALF_F, HALF_F, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-    GXPosition3f32(-0.5f, HALF_F, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-}
-#elif VERSION == VERSION_DEMO_US
-#else
-/** winTexSet with the quad rotated rot degrees about the screen's z axis. */
-void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 rot) {
-    Mtx trans;
-    Mtx scl;
-    Mtx r;
-    Mtx m;
-    GXTexObj obj;
-    f32 sy;
-
-    if (color.a != 0xFF) {
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_TRUE);
-        GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    } else {
-        GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_FALSE);
-        GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
-        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    }
-    TEXGetGXTexObjFromPalette(winTexTpl, &obj, textureId);
-    GXInitTexObjLOD(&obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    GXSetTevColor(GX_TEVREG0, color);
-    PSMTXTrans(trans, translate.x, translate.y, translate.z);
-    PSMTXRotRad(r, 'z', 0.017453292f * rot);
-    sy = scale.y * GXGetTexObjHeight(&obj);
-    PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
-    PSMTXConcat(trans, r, m);
-    PSMTXConcat(m, scl, m);
-    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-    GXLoadPosMtxImm(m, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-0.5f, -0.5f, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(HALF_F, -0.5f, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(HALF_F, HALF_F, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-    GXPosition3f32(-0.5f, HALF_F, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-}
-#endif
-
-/**
- * Two-texture variant of winTexInit: stage 0 takes the first texture's color,
- * stage 1 multiplies by the tint and takes the second texture's alpha,
- * so the second texture works as a mask (used for menu tab labels).
- */
+#if VERSION <= VERSION_DEMO_US
 #if VERSION == VERSION_DEMO_JP
-/**
- * Two-texture variant of winTexInit: stage 0 takes the first texture's color,
- * stage 1 multiplies by the tint and takes the second texture's alpha,
- * so the second texture works as a mask (used for menu tab labels).
- */
-void winTexInit_x2(TEXPalette* texture) {
-    winTexInit(texture);
-    GXSetNumTexGens(2);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-    GXSetNumTevStages(2);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
-}
-#elif VERSION == VERSION_DEMO_US
-#else
-/**
- * Two-texture variant of winTexInit: stage 0 takes the first texture's color,
- * stage 1 multiplies by the tint and takes the second texture's alpha,
- * so the second texture works as a mask (used for menu tab labels).
- */
-void winTexInit_x2(TEXPalette* texture) {
-    winTexInit(texture);
-    GXSetNumTexGens(2);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
-    GXSetNumTevStages(2);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
-}
-#endif
-
-/** Draws textureId1 masked by textureId2 (see winTexInit_x2), blended, sized from the second texture. */
-#if VERSION == VERSION_DEMO_JP
-/** Draws textureId1 masked by textureId2 (see winTexInit_x2), blended, sized from the second texture. */
-void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXColor color) {
-    Mtx trans;
-    Mtx scl;
-    Mtx m;
-    GXTexObj obj;
-    f32 sy;
-
-    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-    GXSetZCompLoc(GX_TRUE);
-    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    TEXGetGXTexObjFromPalette(winTexTpl, &obj, textureId1);
-    GXInitTexObjLOD(&obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    TEXGetGXTexObjFromPalette(winTexTpl, &obj, textureId2);
-    GXInitTexObjLOD(&obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP1);
-    GXSetTevColor(GX_TEVREG0, color);
-    PSMTXTrans(trans, translate.x, translate.y, translate.z);
-    sy = scale.y * GXGetTexObjHeight(&obj);
-    PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
-    PSMTXConcat(trans, scl, m);
-    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
     GXLoadPosMtxImm(m, GX_PNMTX0);
     GXSetCurrentMtx(GX_PNMTX0);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-0.5f, -0.5f, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(HALF_F, -0.5f, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(HALF_F, HALF_F, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-    GXPosition3f32(-0.5f, HALF_F, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-}
-#elif VERSION == VERSION_DEMO_US
 #else
-/** Draws textureId1 masked by textureId2 (see winTexInit_x2), blended, sized from the second texture. */
-void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXColor color) {
-    Mtx trans;
-    Mtx scl;
-    Mtx m;
-    GXTexObj obj;
-    f32 sy;
-
-    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-    GXSetZCompLoc(GX_TRUE);
-    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-    GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    TEXGetGXTexObjFromPalette(winTexTpl, &obj, textureId1);
-    GXInitTexObjLOD(&obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    TEXGetGXTexObjFromPalette(winTexTpl, &obj, textureId2);
-    GXInitTexObjLOD(&obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP1);
-    GXSetTevColor(GX_TEVREG0, color);
-    PSMTXTrans(trans, translate.x, translate.y, translate.z);
-    sy = scale.y * GXGetTexObjHeight(&obj);
-    PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
-    PSMTXConcat(trans, scl, m);
-    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-    GXLoadPosMtxImm(m, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-0.5f, -0.5f, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(HALF_F, -0.5f, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(HALF_F, HALF_F, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-    GXPosition3f32(-0.5f, HALF_F, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-}
-#endif
-
-/** Sets up GX for winIconSet (no TPL; icons come from the icon driver). */
-#if VERSION == VERSION_DEMO_JP
-/** Sets up GX for winIconSet (no TPL; icons come from the icon driver). */
-void winIconInit(void) {
-    winTexInit(NULL);
-}
-#elif VERSION == VERSION_DEMO_US
-    va_list args;
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    FontDrawColor(color);
-    FontDrawScaleVec(scale);
-    ((void (*)(Vec*, const char*, f32))FontDrawStringVecPitch)(&pos, buf, pitch);
-}
-/** Selects the texture palette (TPL) that winTexSet draws from and sets up GX for one textured, color-tinted quad. */
-void winTexInit(TEXPalette* texture) {
-    winTexTpl = texture;
-    GXSetCullMode(GX_CULL_NONE);
-    GXSetFog(GX_FOG_NONE, 0.0f, 0.0f, 0.0f, 0.0f, (GXColor){0xFF, 0xFF, 0xFF, 0xFF});
-    GXSetNumChans(0);
-    GXSetChanCtrl(GX_COLOR0A0, GX_FALSE, GX_SRC_REG, GX_SRC_REG, 0, GX_DF_NONE, GX_AF_NONE);
-    GXSetNumTevStages(1);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C0, GX_CC_TEXC, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_A0, GX_CA_TEXA, GX_CA_ZERO);
-    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetNumTexGens(1u);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
-    GXClearVtxDesc();
-    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-}
-
-/**
- * Draws texture textureId of the current TPL centred at translate, sized texture size times scale,
- * tinted by color in 2D camera space. Alpha below 255 blends; opaque draws use an alpha test instead.
- */
-void winTexSet(u32 textureId, Vec translate, Vec scale, GXColor color) {
-    Mtx trans;
-    Mtx scl;
-    Mtx m;
-    GXTexObj obj;
-    f32 sy;
-    if (color.a != 0xFF) {
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_TRUE);
-        GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    }
-    else {
-        GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_FALSE);
-        GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
-        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    }
-    TEXGetGXTexObjFromPalette(winTexTpl, &obj, textureId);
-    GXInitTexObjLOD(&obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    GXSetTevColor(GX_TEVREG0, color);
-    PSMTXTrans(trans, translate.x, translate.y, translate.z);
-    sy = scale.y * GXGetTexObjHeight(&obj);
-    PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
-    PSMTXConcat(trans, scl, m);
-    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-0.5f, -0.5f, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(HALF_F, -0.5f, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(HALF_F, HALF_F, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-    GXPosition3f32(-0.5f, HALF_F, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-}
-/** winTexSet with the quad rotated rot degrees about the screen's z axis. */
-void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 rot) {
-    Mtx trans;
-    Mtx scl;
-    Mtx r;
-    Mtx m;
-    GXTexObj obj;
-    f32 sy;
-    if (color.a != 0xFF) {
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_TRUE);
-        GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    }
-    else {
-        GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_FALSE);
-        GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
-        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    }
-    TEXGetGXTexObjFromPalette(winTexTpl, &obj, textureId);
-    GXInitTexObjLOD(&obj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    GXSetTevColor(GX_TEVREG0, color);
-    PSMTXTrans(trans, translate.x, translate.y, translate.z);
-    PSMTXRotRad(r, 'z', 0.017453292f * rot);
-    sy = scale.y * GXGetTexObjHeight(&obj);
-    PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
-    PSMTXConcat(trans, r, m);
-    PSMTXConcat(m, scl, m);
-    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-    GXLoadPosMtxImm(m, 0);
-    GXSetCurrentMtx(0);
+#endif
+#else
+    GXLoadPosMtxImm(m, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+#endif
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
@@ -2308,11 +1648,26 @@ void winTexSetRot(u32 textureId, Vec translate, Vec scale, GXColor color, f32 ro
  * stage 1 multiplies by the tint and takes the second texture's alpha,
  * so the second texture works as a mask (used for menu tab labels).
  */
+/**
+ * Two-texture variant of winTexInit: stage 0 takes the first texture's color,
+ * stage 1 multiplies by the tint and takes the second texture's alpha,
+ * so the second texture works as a mask (used for menu tab labels).
+ */
 void winTexInit_x2(TEXPalette* texture) {
     winTexInit(texture);
     GXSetNumTexGens(2);
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+#else
     GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
     GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
+#endif
+#else
+    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+    GXSetTexCoordGen(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
+#endif
     GXSetNumTevStages(2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -2329,12 +1684,14 @@ void winTexInit_x2(TEXPalette* texture) {
 }
 
 /** Draws textureId1 masked by textureId2 (see winTexInit_x2), blended, sized from the second texture. */
+/** Draws textureId1 masked by textureId2 (see winTexInit_x2), blended, sized from the second texture. */
 void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
     Mtx m;
     GXTexObj obj;
     f32 sy;
+
     GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
     GXSetZCompLoc(GX_TRUE);
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
@@ -2351,8 +1708,18 @@ void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXCo
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
+    GXLoadPosMtxImm(m, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+#else
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
+#endif
+#else
+    GXLoadPosMtxImm(m, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+#endif
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
@@ -2365,20 +1732,15 @@ void winTexSet_x2(u32 textureId1, u32 textureId2, Vec translate, Vec scale, GXCo
 }
 
 /** Sets up GX for winIconSet (no TPL; icons come from the icon driver). */
-void winIconInit(void) {
-    winTexInit(NULL);
-#else
 /** Sets up GX for winIconSet (no TPL; icons come from the icon driver). */
 void winIconInit(void) {
     winTexInit(NULL);
 }
-#endif
 
 /**
  * Sets up GX so the following winIconSet draws a grayscale icon (R, G and B summed at 1/3 each);
  * used for badges that cost more BP than Mario has left.
  */
-#if VERSION == VERSION_DEMO_JP
 /**
  * Sets up GX so the following winIconSet draws a grayscale icon (R, G and B summed at 1/3 each);
  * used for badges that cost more BP than Mario has left.
@@ -2402,202 +1764,12 @@ void winIconGrayInit(void) {
     GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C1, GX_CC_TEXC, GX_CC_CPREV);
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
     GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP2);
-    GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C1, GX_CC_TEXC, GX_CC_CPREV);
-    GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-    GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP3);
-    GXSetTevOrder(GX_TEVSTAGE3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
-    GXSetTevSwapMode(GX_TEVSTAGE3, GX_TEV_SWAP0, GX_TEV_SWAP0);
-}
-#elif VERSION == VERSION_DEMO_US
-#else
-/**
- * Sets up GX so the following winIconSet draws a grayscale icon (R, G and B summed at 1/3 each);
- * used for badges that cost more BP than Mario has left.
- */
-void winIconGrayInit(void) {
-    winTexInit(NULL);
-    GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_RED, GX_CH_RED, GX_CH_ALPHA);
-    GXSetTevSwapModeTable(GX_TEV_SWAP2, GX_CH_GREEN, GX_CH_GREEN, GX_CH_GREEN, GX_CH_ALPHA);
-    GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_BLUE, GX_CH_BLUE, GX_CH_BLUE, GX_CH_ALPHA);
-    GXSetTevColor(GX_TEVREG1, (GXColor){ 0x55, 0x55, 0x55, 0xFF });
-    GXSetNumTevStages(4);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP1);
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C1, GX_CC_TEXC, GX_CC_CPREV);
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP2);
-    GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_C1, GX_CC_TEXC, GX_CC_CPREV);
-    GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-    GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP3);
-    GXSetTevOrder(GX_TEVSTAGE3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_ZERO, GX_CC_C0, GX_CC_CPREV, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_A0, GX_CA_APREV, GX_CA_ZERO);
-    GXSetTevSwapMode(GX_TEVSTAGE3, GX_TEV_SWAP0, GX_TEV_SWAP0);
-}
-#endif
-
-/**
- * Draws item/menu icon iconId centred at translate, scaled and tinted, with linear filtering.
- * One icon id is remapped to its neighbour (ICON_115 to ICON_114).
- */
-#if VERSION == VERSION_DEMO_JP
-/**
- * Draws item/menu icon iconId centred at translate, scaled and tinted, with linear filtering.
- * One icon id is remapped to its neighbour (ICON_115 to ICON_114).
- */
-void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
-    Mtx trans;
-    Mtx scl;
-    Mtx m;
-    GXTexObj obj;
-    f32 sy;
-    if (iconId == ICON_115) {
-        iconId = ICON_114;
-    }
-    iconGetTexObj(&obj, iconId);
-    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    if (color.a != 0xFF) {
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_TRUE);
-        GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    } else {
-        GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_FALSE);
-        GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
-        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    }
-    GXSetTevColor(GX_TEVREG0, color);
-    PSMTXTrans(trans, translate.x, translate.y, translate.z);
-    sy = scale.y * GXGetTexObjHeight(&obj);
-    PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
-    PSMTXConcat(trans, scl, m);
-    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-    GXLoadPosMtxImm(m, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-0.5f, -0.5f, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(HALF_F, -0.5f, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(HALF_F, HALF_F, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-    GXPosition3f32(-0.5f, HALF_F, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP0);
-}
-#elif VERSION == VERSION_DEMO_US
-#else
-/**
- * Draws item/menu icon iconId centred at translate, scaled and tinted, with linear filtering.
- * One icon id is remapped to its neighbour (ICON_115 to ICON_114).
- */
-void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
-    Mtx trans;
-    Mtx scl;
-    Mtx m;
-    GXTexObj obj;
-    f32 sy;
-
-    if (iconId == ICON_115) {
-        iconId = ICON_114;
-    }
-    iconGetTexObj(&obj, iconId);
-    GXInitTexObjLOD(&obj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, GX_FALSE, GX_FALSE, GX_ANISO_1);
-    GXLoadTexObj(&obj, GX_TEXMAP0);
-    if (color.a != 0xFF) {
-        GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_TRUE);
-        GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
-        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    } else {
-        GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
-        GXSetZCompLoc(GX_FALSE);
-        GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
-        GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    }
-    GXSetTevColor(GX_TEVREG0, color);
-    PSMTXTrans(trans, translate.x, translate.y, translate.z);
-    sy = scale.y * GXGetTexObjHeight(&obj);
-    PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
-    PSMTXConcat(trans, scl, m);
-    PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
-    GXLoadPosMtxImm(m, GX_PNMTX0);
-    GXSetCurrentMtx(GX_PNMTX0);
-    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-    GXPosition3f32(-0.5f, -0.5f, 0.0f);
-    GXTexCoord2f32(0.0f, 1.0f);
-    GXPosition3f32(HALF_F, -0.5f, 0.0f);
-    GXTexCoord2f32(1.0f, 1.0f);
-    GXPosition3f32(HALF_F, HALF_F, 0.0f);
-    GXTexCoord2f32(1.0f, 0.0f);
-    GXPosition3f32(-0.5f, HALF_F, 0.0f);
-    GXTexCoord2f32(0.0f, 0.0f);
-    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
-    GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP0);
-}
-#endif
-
-// Descriptive name (not in the symbol maps); placeholder unk_80175eb0, JP 0x80175EB0. See docs/NAME_PROVENANCE.md.
-#if VERSION == VERSION_DEMO_JP
-static USER_FUNC(lecture_step_wait) {
-    s32 n = evtGetValue(event, event->args[0]);
-    if (wp->lectureStep < n) {
-        return EVT_RETURN_BLOCK;
-    }
-    return EVT_RETURN_DONE;
-}
-#elif VERSION == VERSION_DEMO_US
-}
-
-/**
- * Sets up GX so the following winIconSet draws a grayscale icon (R, G and B summed at 1/3 each);
- * used for badges that cost more BP than Mario has left.
- */
-void winIconGrayInit(void) {
-    winTexInit(NULL);
-    GXSetTevSwapModeTable(GX_TEV_SWAP1, GX_CH_RED, GX_CH_RED, GX_CH_RED, GX_CH_ALPHA);
-    GXSetTevSwapModeTable(GX_TEV_SWAP2, GX_CH_GREEN, GX_CH_GREEN, GX_CH_GREEN, GX_CH_ALPHA);
-    GXSetTevSwapModeTable(GX_TEV_SWAP3, GX_CH_BLUE, GX_CH_BLUE, GX_CH_BLUE, GX_CH_ALPHA);
-    GXSetTevColor(GX_TEVREG1, (GXColor){0x55, 0x55, 0x55, 0xFF});
-    GXSetNumTevStages(4);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
-    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP1);
-    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
-    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
-    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_C1, GX_CC_TEXC, GX_CC_CPREV);
-    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
-    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP2);
+#if VERSION <= VERSION_DEMO_US
+#if VERSION != VERSION_DEMO_JP
     if (!GX_TEVSTAGE2 && !GX_TEVSTAGE2 && !GX_TEVSTAGE2) {
     }
+#endif
+#endif
     GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, GX_TRUE, GX_TEVPREV);
@@ -2616,12 +1788,17 @@ void winIconGrayInit(void) {
  * Draws item/menu icon iconId centred at translate, scaled and tinted, with linear filtering.
  * One icon id is remapped to its neighbour (ICON_115 to ICON_114).
  */
+/**
+ * Draws item/menu icon iconId centred at translate, scaled and tinted, with linear filtering.
+ * One icon id is remapped to its neighbour (ICON_115 to ICON_114).
+ */
 void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     Mtx trans;
     Mtx scl;
     Mtx m;
     GXTexObj obj;
     f32 sy;
+
     if (iconId == ICON_115) {
         iconId = ICON_114;
     }
@@ -2633,8 +1810,7 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
         GXSetZCompLoc(GX_TRUE);
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
         GXSetZMode(GX_FALSE, GX_ALWAYS, GX_FALSE);
-    }
-    else {
+    } else {
         GXSetBlendMode(GX_BM_NONE, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR);
         GXSetZCompLoc(GX_FALSE);
         GXSetAlphaCompare(GX_GEQUAL, 0x80, GX_AOP_OR, GX_NEVER, 0);
@@ -2646,8 +1822,18 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     PSMTXScale(scl, scale.x * GXGetTexObjWidth(&obj), sy, scale.z);
     PSMTXConcat(trans, scl, m);
     PSMTXConcat(camGetPtr(CAMERA_2D)->view, m, m);
+#if VERSION <= VERSION_DEMO_US
+#if VERSION == VERSION_DEMO_JP
+    GXLoadPosMtxImm(m, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+#else
     GXLoadPosMtxImm(m, 0);
     GXSetCurrentMtx(0);
+#endif
+#else
+    GXLoadPosMtxImm(m, GX_PNMTX0);
+    GXSetCurrentMtx(GX_PNMTX0);
+#endif
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
     GXPosition3f32(-0.5f, -0.5f, 0.0f);
     GXTexCoord2f32(0.0f, 1.0f);
@@ -2662,6 +1848,7 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
     GXSetTevSwapMode(GX_TEVSTAGE2, GX_TEV_SWAP0, GX_TEV_SWAP0);
 }
 
+#if VERSION <= VERSION_DEMO_US
 /**
  * evt_lecture_msg step: blocks until the tutorial has reached step args[0].
  * While waiting it lets input through (clears WIN_FLAG_LECTURE_KEY_MASK), and masks it again once the step is reached.
@@ -2669,19 +1856,32 @@ void winIconSet(s32 iconId, Vec translate, Vec scale, GXColor color) {
 static USER_FUNC(lecture_step_wait) {
     s32 n = evtGetValue(event, event->args[0]);
 #else
+// Descriptive name (not in the symbol maps); placeholder unk_80175eb0, JP 0x80175EB0. See docs/NAME_PROVENANCE.md.
 USER_FUNC(lecture_step_wait) {
     s32 n = evtGetValue(event, event->args[0]);
 
     if (isFirstCall) {
         wp->flags &= ~WINDOW_FLAG_LECTURE_KEY_MASK;
     }
+#endif
     if (wp->lectureStep < n) {
         return EVT_RETURN_BLOCK;
     }
+#if VERSION <= VERSION_DEMO_US
+    return EVT_RETURN_DONE;
+}
+/**
+ * Badge tutorial input filter, run by winMain each frame:
+ * while the tutorial is on, only the input the current step asks for gets through and doing it advances lectureStep:
+ * steps 0-1 take A (read from the pad and swallowed), 2-4 Right, 5-8 A, 9 Start. In JP and later nothing gets
+ * through while WIN_FLAG_LECTURE_KEY_MASK is set (outside the script's wait steps).
+ */
+static void winLectureKeyMask(void) {
+    if (wp->flags & WINDOW_FLAG_LECTURE) {
+#else
     wp->flags |= WINDOW_FLAG_LECTURE_KEY_MASK;
     return EVT_RETURN_DONE;
 }
-#endif
 
 // Descriptive name (not in the symbol maps); placeholder unk_80175e98, JP 0x80175E98. See docs/NAME_PROVENANCE.md.
 #if VERSION > VERSION_DEMO_US
@@ -2691,121 +1891,6 @@ USER_FUNC(lecture_key_mask_off) {
 }
 #endif
 
-#if VERSION == VERSION_DEMO_JP
-/**
- * Badge tutorial input filter, run by winMain each frame:
- * while the tutorial is on, only the input the current step asks for gets through and doing it advances lectureStep:
- * steps 0-1 take A (read from the pad and swallowed), 2-4 Right, 5-8 A, 9 Start. In JP and later nothing gets
- * through while WIN_FLAG_LECTURE_KEY_MASK is set (outside the script's wait steps).
- */
-static void winLectureKeyMask(void) {
-    if (wp->flags & WINDOW_FLAG_LECTURE) {
-        switch (wp->lectureStep) {
-            case 0:
-            case 1:
-                wp->buttonTrg = 0;
-                wp->buttonRep = 0;
-                wp->dirTrg = 0;
-                wp->dirRep = 0;
-                if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                    wp->lectureStep++;
-                }
-                break;
-            case 2:
-            case 3:
-            case 4:
-                wp->buttonTrg = 0;
-                wp->buttonRep = 0;
-                wp->dirTrg &= DEMO_STICK_RIGHT;
-                wp->dirRep &= DEMO_STICK_RIGHT;
-                if (wp->dirTrg || wp->dirRep) {
-                    wp->lectureStep++;
-                }
-                break;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                wp->buttonTrg &= PAD_BUTTON_A;
-                wp->buttonRep &= PAD_BUTTON_A;
-                wp->dirTrg = 0;
-                wp->dirRep = 0;
-                if (wp->buttonTrg || wp->buttonRep) {
-                    wp->lectureStep++;
-                }
-                break;
-            case 9:
-                wp->buttonTrg &= PAD_BUTTON_START;
-                wp->buttonRep &= PAD_BUTTON_START;
-                wp->dirTrg = 0;
-                wp->dirRep = 0;
-                if (wp->buttonTrg || wp->buttonRep) {
-                    wp->lectureStep++;
-                }
-                break;
-        }
-    }
-}
-#elif VERSION == VERSION_DEMO_US
-    if (wp->lectureStep < n) {
-        return EVT_RETURN_BLOCK;
-    }
-    return EVT_RETURN_DONE;
-}
-/**
- * Badge tutorial input filter, run by winMain each frame:
- * while the tutorial is on, only the input the current step asks for gets through and doing it advances lectureStep:
- * steps 0-1 take A (read from the pad and swallowed), 2-4 Right, 5-8 A, 9 Start. In JP and later nothing gets
- * through while WIN_FLAG_LECTURE_KEY_MASK is set (outside the script's wait steps).
- */
-static void winLectureKeyMask(void) {
-    if (wp->flags & WINDOW_FLAG_LECTURE) {
-        switch (wp->lectureStep) {
-            case 0:
-            case 1:
-                wp->buttonTrg = 0;
-                wp->buttonRep = 0;
-                wp->dirTrg = 0;
-                wp->dirRep = 0;
-                if (keyGetButtonTrg(0) & PAD_BUTTON_A) {
-                    wp->lectureStep++;
-                }
-                break;
-            case 2:
-            case 3:
-            case 4:
-                wp->buttonTrg = 0;
-                wp->buttonRep = 0;
-                wp->dirTrg &= DEMO_STICK_RIGHT;
-                wp->dirRep &= DEMO_STICK_RIGHT;
-                if (wp->dirTrg || wp->dirRep) {
-                    wp->lectureStep++;
-                }
-                break;
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-                wp->buttonTrg &= PAD_BUTTON_A;
-                wp->buttonRep &= PAD_BUTTON_A;
-                wp->dirTrg = 0;
-                wp->dirRep = 0;
-                if (wp->buttonTrg || wp->buttonRep) {
-                    wp->lectureStep++;
-                }
-                break;
-            case 9:
-                wp->buttonTrg &= PAD_BUTTON_START;
-                wp->buttonRep &= PAD_BUTTON_START;
-                wp->dirTrg = 0;
-                wp->dirRep = 0;
-                if (wp->buttonTrg || wp->buttonRep) {
-                    wp->lectureStep++;
-                }
-                break;
-        }
-    }
-#else
 /**
  * Badge tutorial input filter, run by winMain each frame:
  * while the tutorial is on, only the input the current step asks for gets through and doing it advances lectureStep:
@@ -2821,6 +1906,7 @@ void winLectureKeyMask(void) {
             wp->dirRep = 0;
             return;
         }
+#endif
         switch (wp->lectureStep) {
             case 0:
             case 1:
@@ -2867,38 +1953,25 @@ void winLectureKeyMask(void) {
         }
     }
 }
-#endif
 
 /**
  * Starts the badge tutorial menu (from Rogueport, gor_02):
  * sets the tutorial flag, which opens the menu straight away, and starts evt_lecture_msg.
  */
-#if VERSION == VERSION_DEMO_JP
 /**
  * Starts the badge tutorial menu (from Rogueport, gor_02):
  * sets the tutorial flag, which opens the menu straight away, and starts evt_lecture_msg.
  */
 void winLectureOn(void) {
     wp->flags |= WINDOW_FLAG_LECTURE;
-    wp->lectureStep = 0;
-    wp->lectureEvent = evtEntry(evt_lecture_msg, 0, 0);
-}
-#elif VERSION == VERSION_DEMO_US
-#else
-/**
- * Starts the badge tutorial menu (from Rogueport, gor_02):
- * sets the tutorial flag, which opens the menu straight away, and starts evt_lecture_msg.
- */
-void winLectureOn(void) {
-    wp->flags |= WINDOW_FLAG_LECTURE;
+#if VERSION > VERSION_DEMO_US
     wp->flags |= WINDOW_FLAG_LECTURE_KEY_MASK;
+#endif
     wp->lectureStep = 0;
     wp->lectureEvent = evtEntry(evt_lecture_msg, 0, 0);
 }
-#endif
 
 /** TRUE while the badge tutorial's text script is still running; once it ends, clears the tutorial flag. */
-#if VERSION == VERSION_DEMO_JP
 /** TRUE while the badge tutorial's text script is still running; once it ends, clears the tutorial flag. */
 BOOL winLectureCheck(void) {
     if ((wp->flags & WINDOW_FLAG_LECTURE) && evtCheckID(wp->lectureEvent->eventId)) {
@@ -2907,65 +1980,12 @@ BOOL winLectureCheck(void) {
     wp->flags &= ~WINDOW_FLAG_LECTURE;
     return FALSE;
 }
-#elif VERSION == VERSION_DEMO_US
-}
-
-/**
- * Starts the badge tutorial menu (from Rogueport, gor_02):
- * sets the tutorial flag, which opens the menu straight away, and starts evt_lecture_msg.
- */
-void winLectureOn(void) {
-    wp->flags |= WINDOW_FLAG_LECTURE;
-    wp->lectureStep = 0;
-    wp->lectureEvent = evtEntry(evt_lecture_msg, 0, 0);
-}
-
-/** TRUE while the badge tutorial's text script is still running; once it ends, clears the tutorial flag. */
-BOOL winLectureCheck(void) {
-
-    if ((wp->flags & WINDOW_FLAG_LECTURE) && evtCheckID(wp->lectureEvent->eventId)) {
-        return TRUE;
-    }
-#else
-/** TRUE while the badge tutorial's text script is still running; once it ends, clears the tutorial flag. */
-BOOL winLectureCheck(void) {
-    if ((wp->flags & WINDOW_FLAG_LECTURE) && evtCheckID(wp->lectureEvent->eventId)) {
-        return TRUE;
-    }
-    wp->flags &= ~WINDOW_FLAG_LECTURE;
-    return FALSE;
-}
-#endif
 
 
 // FAKE: the global 0.5f (a real .sdata2 object) is `volatile` so each HALF_F use loads it; a plain const changes
 // the object in both versions
-#if VERSION == VERSION_DEMO_JP
 const volatile f32 float_0p5_8041dc98 __attribute__((aligned(8))) = 0.5f;
-#elif VERSION == VERSION_DEMO_US
-#else
-const volatile f32 float_0p5_8041dc98 __attribute__((aligned(8))) = 0.5f;
-#endif
 
-#if VERSION == VERSION_DEMO_JP
 void winMainStrippedPool(f32* f, s32 i) {
     *f = (f32)i;
 }
-#elif VERSION == VERSION_DEMO_US
-    wp->flags &= ~WINDOW_FLAG_LECTURE;
-    return FALSE;
-}
-
-// FAKE: see HALF_F at the top; volatile keeps each use a load from this word.
-const volatile f32 float_0p5_8041dc98 __attribute__((aligned(8))) = 0.5f;
-
-// FAKE: stand-in for a function the linker stripped; it only keeps the original's int-to-float
-// conversion constant in its place in .sdata2.
-void winMainStrippedPool(f32* f, s32 i) {
-    *f = (f32)i;
-}
-#else
-void winMainStrippedPool(f32* f, s32 i) {
-    *f = (f32)i;
-}
-#endif
