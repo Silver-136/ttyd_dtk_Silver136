@@ -408,7 +408,7 @@ void mot_roll_post(void) {
         }
     }
     marioSetSpec();
-    mario->rollFlags = 0;
+    mario->rollFlags = ROLL_STATE_NONE;
     mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
     mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
     mario->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -465,7 +465,7 @@ void marioRollForceCancel(void) {
             }
         }
         marioSetSpec();
-        mario->rollFlags = 0;
+        mario->rollFlags = ROLL_STATE_NONE;
         mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
         mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};
         mario->rot = (Vec){0.0f, 0.0f, 0.0f};
@@ -528,7 +528,7 @@ void marioReInit_roll(void) {
     mario->trigFlags &= ~MARIO_TRIG_FLAG_IS_STARTING_NEW_MOTION;
     mario->currMotionId = MARIO_MOTION_ROLL;
     mario->flags |= MARIO_FLAG_TUBE_MODE;
-    mario->rollFlags = 0x10;
+    mario->rollFlags = ROLL_STATE_ROLLING;
     marioPaperOn("p_roll");
     marioChgPose("M_I_U");
     marioChgPaper("PM_R_1B");
@@ -638,7 +638,7 @@ void mot_roll(void) {
 #endif
         marioGetRubInit();
         mario->flags |= MARIO_FLAG_TUBE_MODE;
-        mario->rollFlags = 0x10;
+        mario->rollFlags = ROLL_STATE_ROLLING;
         mario->dispFlags |= MARIO_DISP_FLAG_NO_DIR_FLIP;
         mario->dispFlags |= MARIO_DISP_FLAG_NO_MAKE_DISP_DIR;
         marioPaperOn("p_roll");
@@ -781,7 +781,7 @@ void mot_roll(void) {
                 mario->directionView = 90.0f;
             }
             marioSetSpec();
-            mario->rollFlags = 0;
+            mario->rollFlags = ROLL_STATE_NONE;
 #if VERSION <= VERSION_DEMO_US
             mario->rotOfs = (Vec){0.0f, 0.0f, 0.0f};
             mario->dispOfs = (Vec){0.0f, 0.0f, 0.0f};

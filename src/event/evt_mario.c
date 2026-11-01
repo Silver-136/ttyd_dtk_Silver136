@@ -892,7 +892,7 @@ USER_FUNC(evt_mario_normalize) {
         case 1:
             ret = 0;
             if (mp->currMotionId == MARIO_MOTION_ROLL) {
-                if (mp->rollFlags == 0) {
+                if (mp->rollFlags == ROLL_STATE_NONE) {
                     event->userdata[0] = 2;
                 }
             } else if (mp->currMotionId == MARIO_MOTION_SLIT) {

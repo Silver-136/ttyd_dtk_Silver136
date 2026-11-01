@@ -124,6 +124,12 @@ typedef enum MarioTrigFlags {
 
 /* ---- (1) per-motion scratch views: MarioWork.mot, 0x2A0 JP / 0x2B8 US, 0x1C bytes ----
  * Each motion reuses the block with its own types. Offsets are relative to the block. */
+// MarioWork.rollFlags: evt_mario waits for NONE
+enum {
+    ROLL_STATE_NONE = 0,
+    ROLL_STATE_ROLLING = 0x10,
+};
+
 typedef struct MarioMotJabara {    // mot_jabara.c (spring jump)
     s32 reserved_0;                      // 0x00, cleared on entry
     f32 dir;                       // 0x04, displayDirectionTarget at the start

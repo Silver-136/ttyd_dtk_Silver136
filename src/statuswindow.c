@@ -343,16 +343,16 @@ void statusWinDisp(CameraId camId, void* param) {
         }
         if (!blinkOn) {
             blink = wp->blink;
-            if (blink & 1 && i == 1) {
+            if (blink & STATUS_BLINK_MARIO_HP && i == 1) {
                 continue;
             }
-            if (blink & 2 && i == 4) {
+            if (blink & STATUS_BLINK_FP && i == 4) {
                 continue;
             }
-            if (blink & 0x10 && i == 8) {
+            if (blink & STATUS_BLINK_COINS && i == 8) {
                 continue;
             }
-            if (blink & 4 && i == 12) {
+            if (blink & STATUS_BLINK_STAR_POWER && i == 12) {
                 continue;
             }
         }
@@ -362,19 +362,19 @@ void statusWinDisp(CameraId camId, void* param) {
         iconDispGxCol(m, ICON_FLAG_2D, e->iconId, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
     }
 
-    if (!(wp->blink & 1) || blinkOn) {
+    if (!(wp->blink & STATUS_BLINK_MARIO_HP) || blinkOn) {
         numDisp(120.0f + x - 6.0f - 10.0f, 2.0f + (y - 38.0f), wp->cur.hp, 0);
     }
     numDisp(186.0f + x - 6.0f - 10.0f, 3.0f + (y - 38.0f), wp->cur.maxHp, 1);
-    if (!(wp->blink & 2) || blinkOn) {
+    if (!(wp->blink & STATUS_BLINK_FP) || blinkOn) {
         numDisp(292.0f + x - 6.0f, 2.0f + (y - 38.0f), wp->cur.fp, 0);
     }
     numDisp(358.0f + x - 6.0f, 3.0f + (y - 38.0f), wp->cur.maxFp, 1);
     numDisp(462.0f + x, 2.0f + (y - 38.0f), wp->cur.starPoints, 0);
-    if (!(wp->blink & 0x10) || blinkOn) {
+    if (!(wp->blink & STATUS_BLINK_COINS) || blinkOn) {
         numDisp(572.0f + x, 2.0f + (y - 38.0f), wp->cur.coins, 0);
     }
-    if (!(wp->blink & 4) || blinkOn) {
+    if (!(wp->blink & STATUS_BLINK_STAR_POWER) || blinkOn) {
         gaugeDisp(wp->cur.ap, 260.0f + x, 4.0f + (y - 87.0f));
     }
 
@@ -408,7 +408,7 @@ void statusWinDisp(CameraId camId, void* param) {
         }
         e = partysDt;
         for (i = 0; i < sizeof(partysDt) / sizeof(partysDt[0]); i++, e++) {
-            if (wp->blink & 8 && !blinkOn && i == 1) {
+            if (wp->blink & STATUS_BLINK_PARTY_HP && !blinkOn && i == 1) {
                 continue;
             }
             MTXTrans(m, x + (f32)e->xpos, y - (f32)e->ypos, 0.0f);
@@ -416,7 +416,7 @@ void statusWinDisp(CameraId camId, void* param) {
             MTXConcat(m, s, m);
             iconDispGxCol(m, ICON_FLAG_2D, e->iconId, (GXColor){ 0xFF, 0xFF, 0xFF, 0xFF });
         }
-        if (!(wp->blink & 8) || blinkOn) {
+        if (!(wp->blink & STATUS_BLINK_PARTY_HP) || blinkOn) {
             numDisp(120.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyHp, 0);
         }
         numDisp(186.0f + x - 6.0f - 10.0f, 4.0f + (2.0f + (y - 78.0f)), wp->cur.partyMaxHp, 1);
@@ -547,14 +547,14 @@ BOOL valueCheck(void) {
     statusGetValue(&v);
     if (wp->cur.hp != v.hp) {
         changed = TRUE;
-        wp->pendingBlink |= 1;
+        wp->pendingBlink |= STATUS_BLINK_MARIO_HP;
     }
     if (wp->cur.maxHp != v.maxHp) {
         changed = TRUE;
     }
     if (wp->cur.fp != v.fp) {
         changed = TRUE;
-        wp->pendingBlink |= 2;
+        wp->pendingBlink |= STATUS_BLINK_FP;
     }
     if (wp->cur.maxFp != v.maxFp) {
         changed = TRUE;
@@ -570,7 +570,7 @@ BOOL valueCheck(void) {
     } else if (wp->cur.party) {
         if (wp->cur.partyHp != v.partyHp) {
             changed = TRUE;
-            wp->pendingBlink |= 8;
+            wp->pendingBlink |= STATUS_BLINK_PARTY_HP;
         }
         if (wp->cur.partyMaxHp != v.partyMaxHp) {
             changed = TRUE;
@@ -581,7 +581,7 @@ BOOL valueCheck(void) {
     }
     if (wp->cur.coins != v.coins) {
         changed = TRUE;
-        wp->pendingBlink |= 0x10;
+        wp->pendingBlink |= STATUS_BLINK_COINS;
     }
     if (!changed) {
         if (wp->pendingBlink != 0U) {
@@ -771,7 +771,7 @@ Vec statusGetApPos(void) {
 /** Makes the Star Power number blink for frames, replacing any other blink. */
 void statusAPBlink(s32 frames) {
     wp->blink = 0;
-    wp->blink |= 4;
+    wp->blink |= STATUS_BLINK_STAR_POWER;
     wp->blinkTimer = frames;
 }
 
@@ -784,19 +784,19 @@ void statusClearBlink(void) {
 
 /** Makes the FP number blink for frames. */
 void statusFPBlink(s32 frames) {
-    wp->blink |= 2;
+    wp->blink |= STATUS_BLINK_FP;
     wp->blinkTimer = frames;
 }
 
 /** Makes Mario's HP number blink for frames. */
 void statusMarioHPBlink(s32 frames) {
-    wp->blink |= 1;
+    wp->blink |= STATUS_BLINK_MARIO_HP;
     wp->blinkTimer = frames;
 }
 
 /** Makes the partner's HP number blink for frames. */
 void statusPartyHPBlink(s32 frames) {
-    wp->blink |= 8;
+    wp->blink |= STATUS_BLINK_PARTY_HP;
     wp->blinkTimer = frames;
 }
 
